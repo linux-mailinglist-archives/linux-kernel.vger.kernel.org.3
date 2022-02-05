@@ -2,123 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 295D44AA8AA
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 13:17:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25B254AA8C0
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 13:27:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379841AbiBEMRR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 07:17:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37898 "EHLO
+        id S1348925AbiBEM1y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 07:27:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348925AbiBEMRP (ORCPT
+        with ESMTP id S232229AbiBEM1w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 07:17:15 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14658C061346;
-        Sat,  5 Feb 2022 04:17:15 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id my12-20020a17090b4c8c00b001b528ba1cd7so8699238pjb.1;
-        Sat, 05 Feb 2022 04:17:15 -0800 (PST)
+        Sat, 5 Feb 2022 07:27:52 -0500
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6A69C061346
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Feb 2022 04:27:48 -0800 (PST)
+Received: by mail-yb1-xb32.google.com with SMTP id j2so26769915ybu.0
+        for <linux-kernel@vger.kernel.org>; Sat, 05 Feb 2022 04:27:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=uqGnPKycliIrfQeJhWM/nWoXkY9Kuok+TUu6COA/cjQ=;
-        b=gxLi54I26BgtahUJQEkgF9JqusmDqrlAc13CmdieV7SiDJH3DcqP0z2LhBxVg3Iq1A
-         lD/p06xRzuAt9Pw31JxTtXh1AEGg3EPAMfKWScbtAmdH3RXhddHlb8dteRl9jcq9O4Y5
-         +4jiSzjbisMuFsMq1WD+4490KodpBRR82P12S+fSwXRRI5stCqR3F3crzNdDGYSvfnUk
-         sPZEQU4CvqW/k/e2jpAx6T7j+K1kFFOv35R6vUBgnQChaJJkuH/pS6wlJmPF1IYLlqh4
-         xpCZN3hAy4AAY7Tr1xYlCLQKHXqAVhhcYl+IZgWCFw+D79ZLuJpnb+F+M5lPjZTDapOk
-         rxPg==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=K0TXX0HcAAdILSf1Xr6CI0TmKyZq0bWXmyWtV08FgQ4=;
+        b=EMGvLSzzEHh7OxpO0knPPN1LY+ww9zKIb2KgkaqSzilJqC2fDxjTAvhwReQcb0uMyQ
+         Okfux9KTlP8Wy9GANPGDktwe2NM9lODyzy2li4XF6AQwZDJE6IH90+achtne1P6Gb//4
+         PtLeS8jxkYUyXMfac3qwzQLQ9Bbb7ly/2jPCKHeiXxRCdKOSxPR1dI7JquHRQw2Ts91r
+         V8L/LBq15WJMnTmRcRmuP7D35+/v+V1+3bEK+OsVbbawwtgad/uXtN4HtVneOE6yZgSG
+         K45br0M16vxxKf4RtR8PBLvfcUcEYzs000nptnoELGnt8eFdeLCTrgdDRkKG5TOKxom+
+         SKZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=uqGnPKycliIrfQeJhWM/nWoXkY9Kuok+TUu6COA/cjQ=;
-        b=7NVBhc8+sUvfq3bvrjBvFKuLNE82V/hP6+aMbGYrw9tF9HnKYVz129lWEDL9F5skMW
-         yZ36TMZYSB8fiAvdpwcQGO8GA5W0P/ScqMexxOHm/IPY2ed6I0XckGI2JRi8l5XWkWsE
-         8cf2Cg6RTY3V8As2JeFCLn9jFLnvvOxqwAEiVCPJ3esx7CPVibzADObSS5AIPYGHz6/+
-         D+NF9+7hjhvnO5E6XOmyHPtUvJBX76ha136LAcvPHns/7SB4Y5os2Dbicyz2/xyeLDee
-         1K1HjPf9vpjVgix/Y2i4O1RYhggnmUYLC95klnxhhkNNzwDDBtEqY24FCeWZ28d4j6ix
-         bRpg==
-X-Gm-Message-State: AOAM531/0rjztXhQT70igL8DFd3kz9jejN9ga1SlMjLlxAnZylqrtoeh
-        Y5D94tUUJEvoxaEoPkbdVE0=
-X-Google-Smtp-Source: ABdhPJw0Sz2DUXfgdU65gdyvhLEyFIAQkBjm1zUqJayPu4sxNQo7PaZgd0aK7QrbqQN5iAVH9IzuCA==
-X-Received: by 2002:a17:902:c9c2:: with SMTP id q2mr8055131pld.18.1644063434622;
-        Sat, 05 Feb 2022 04:17:14 -0800 (PST)
-Received: from [192.168.1.33] (154.red-83-50-83.dynamicip.rima-tde.net. [83.50.83.154])
-        by smtp.gmail.com with ESMTPSA id lr7sm5716192pjb.42.2022.02.05.04.17.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 05 Feb 2022 04:17:14 -0800 (PST)
-Sender: =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= 
-        <philippe.mathieu.daude@gmail.com>
-Message-ID: <1415e1d2-eca4-aa36-6ef0-708b8290089d@amsat.org>
-Date:   Sat, 5 Feb 2022 13:17:10 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=K0TXX0HcAAdILSf1Xr6CI0TmKyZq0bWXmyWtV08FgQ4=;
+        b=YQ1WqOI+vPl9PAt0k2pY27/Mwr+BkRj5x5TonNkoVBBDNoF7O1gjgG1e2GvZbGgrON
+         p3jThfVNO437wFqZ1nlAXnSAN76kKZCKimKkASt4iD4lre/zVDN/Y/SpUgaXyzqA8UAi
+         rRmT8PpzMXChcx6kis6M/6pp57ijWpQOODjL/kQYMnfq1wdmQkBWUGyJuTYr0MCe87nw
+         9kvqNbEw5ES+7zFF1GSOALZuZ7U6eRyTugBqcA0rAahIOendIMKyuO/ZD0M7YQsXMhb5
+         KQ/j06W0WyqZ9kt/KIetVGSpf+7xjwrY+ghCaMJz97Pry+E9aRsucibI5ua052gIDAmC
+         XsGQ==
+X-Gm-Message-State: AOAM530HXHwTJS1ZFE7o3AjOod5uTJZDnjeTeFm3NJJqlOls6qdOtyjY
+        Xk4ySeVlFUKNdAYaLw0ubpAKXlRqY+OS6orB2Ho3nA==
+X-Google-Smtp-Source: ABdhPJx/NVjIhFLMG0Ydj2VKZamA+Fivfz+nJNLFGukf2rfyQy5dOZEHZdaNreI1dcHUHdydczRJZtw9XEJZuXIF0lw=
+X-Received: by 2002:a81:310:: with SMTP id 16mr3238118ywd.35.1644064067928;
+ Sat, 05 Feb 2022 04:27:47 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.1
-Subject: Re: [PATCH v3 2/4] clk: loongson1: Terminate clk_div_table with
- sentinel element
-Content-Language: en-US
-To:     =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
-        linux-clk@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mips@vger.kernel.org,
-        Keguang Zhang <keguang.zhang@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Yang Ling <gnaygnil@gmail.com>
-References: <20220205005232.772726-1-j.neuschaefer@gmx.net>
- <20220205005232.772726-3-j.neuschaefer@gmx.net>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>
-In-Reply-To: <20220205005232.772726-3-j.neuschaefer@gmx.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <Yfm1IHmoGdyUR81T@carbon.dhcp.thefacebook.com>
+In-Reply-To: <Yfm1IHmoGdyUR81T@carbon.dhcp.thefacebook.com>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Sat, 5 Feb 2022 20:27:09 +0800
+Message-ID: <CAMZfGtU+RGm-4AjLoiRnhcMxuVz=Uwf_VkQuHMNFKwSo15CyvQ@mail.gmail.com>
+Subject: Re: [PATCH RESEND] mm: memcg: synchronize objcg lists with a
+ dedicated spinlock
+To:     Roman Gushchin <guro@fb.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Alexander Egorenkov <egorenar@linux.ibm.com>,
+        Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Jeremy Linton <jeremy.linton@arm.com>,
+        Cgroups <cgroups@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/2/22 01:52, Jonathan Neuschäfer wrote:
-> In order that the end of a clk_div_table can be detected, it must be
-> terminated with a sentinel element (.div = 0).
-> 
-> Fixes: b4626a7f4892 ("CLK: Add Loongson1C clock support")
-> Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
-> Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
-> ---
-> 
-> v3:
-> - no changes
-> 
-> v2:
-> - Add Fixes and R-b tags
-> ---
->   drivers/clk/loongson1/clk-loongson1c.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/clk/loongson1/clk-loongson1c.c b/drivers/clk/loongson1/clk-loongson1c.c
-> index 703f87622cf5f..a6f9f20fc8b99 100644
-> --- a/drivers/clk/loongson1/clk-loongson1c.c
-> +++ b/drivers/clk/loongson1/clk-loongson1c.c
-> @@ -37,6 +37,7 @@ static const struct clk_div_table ahb_div_table[] = {
->   	[1] = { .val = 1, .div = 4 },
->   	[2] = { .val = 2, .div = 3 },
->   	[3] = { .val = 3, .div = 3 },
-> +	[4] = { /* sentinel */ },
+On Wed, Feb 2, 2022 at 6:33 AM Roman Gushchin <guro@fb.com> wrote:
+>
+> Alexander reported a circular lock dependency revealed by the mmap1
+> ltp test:
+>   LOCKDEP_CIRCULAR (suite: ltp, case: mtest06 (mmap1))
+>           WARNING: possible circular locking dependency detected
+>           5.17.0-20220113.rc0.git0.f2211f194038.300.fc35.s390x+debug #1 Not tainted
+>           ------------------------------------------------------
+>           mmap1/202299 is trying to acquire lock:
+>           00000001892c0188 (css_set_lock){..-.}-{2:2}, at: obj_cgroup_release+0x4a/0xe0
+>           but task is already holding lock:
+>           00000000ca3b3818 (&sighand->siglock){-.-.}-{2:2}, at: force_sig_info_to_task+0x38/0x180
+>           which lock already depends on the new lock.
+>           the existing dependency chain (in reverse order) is:
+>           -> #1 (&sighand->siglock){-.-.}-{2:2}:
+>                  __lock_acquire+0x604/0xbd8
+>                  lock_acquire.part.0+0xe2/0x238
+>                  lock_acquire+0xb0/0x200
+>                  _raw_spin_lock_irqsave+0x6a/0xd8
+>                  __lock_task_sighand+0x90/0x190
+>                  cgroup_freeze_task+0x2e/0x90
+>                  cgroup_migrate_execute+0x11c/0x608
+>                  cgroup_update_dfl_csses+0x246/0x270
+>                  cgroup_subtree_control_write+0x238/0x518
+>                  kernfs_fop_write_iter+0x13e/0x1e0
+>                  new_sync_write+0x100/0x190
+>                  vfs_write+0x22c/0x2d8
+>                  ksys_write+0x6c/0xf8
+>                  __do_syscall+0x1da/0x208
+>                  system_call+0x82/0xb0
+>           -> #0 (css_set_lock){..-.}-{2:2}:
+>                  check_prev_add+0xe0/0xed8
+>                  validate_chain+0x736/0xb20
+>                  __lock_acquire+0x604/0xbd8
+>                  lock_acquire.part.0+0xe2/0x238
+>                  lock_acquire+0xb0/0x200
+>                  _raw_spin_lock_irqsave+0x6a/0xd8
+>                  obj_cgroup_release+0x4a/0xe0
+>                  percpu_ref_put_many.constprop.0+0x150/0x168
+>                  drain_obj_stock+0x94/0xe8
+>                  refill_obj_stock+0x94/0x278
+>                  obj_cgroup_charge+0x164/0x1d8
+>                  kmem_cache_alloc+0xac/0x528
+>                  __sigqueue_alloc+0x150/0x308
+>                  __send_signal+0x260/0x550
+>                  send_signal+0x7e/0x348
+>                  force_sig_info_to_task+0x104/0x180
+>                  force_sig_fault+0x48/0x58
+>                  __do_pgm_check+0x120/0x1f0
+>                  pgm_check_handler+0x11e/0x180
+>           other info that might help us debug this:
+>            Possible unsafe locking scenario:
+>                  CPU0                    CPU1
+>                  ----                    ----
+>             lock(&sighand->siglock);
+>                                          lock(css_set_lock);
+>                                          lock(&sighand->siglock);
+>             lock(css_set_lock);
+>            *** DEADLOCK ***
+>           2 locks held by mmap1/202299:
+>            #0: 00000000ca3b3818 (&sighand->siglock){-.-.}-{2:2}, at: force_sig_info_to_task+0x38/0x180
+>            #1: 00000001892ad560 (rcu_read_lock){....}-{1:2}, at: percpu_ref_put_many.constprop.0+0x0/0x168
+>           stack backtrace:
+>           CPU: 15 PID: 202299 Comm: mmap1 Not tainted 5.17.0-20220113.rc0.git0.f2211f194038.300.fc35.s390x+debug #1
+>           Hardware name: IBM 3906 M04 704 (LPAR)
+>           Call Trace:
+>            [<00000001888aacfe>] dump_stack_lvl+0x76/0x98
+>            [<0000000187c6d7be>] check_noncircular+0x136/0x158
+>            [<0000000187c6e888>] check_prev_add+0xe0/0xed8
+>            [<0000000187c6fdb6>] validate_chain+0x736/0xb20
+>            [<0000000187c71e54>] __lock_acquire+0x604/0xbd8
+>            [<0000000187c7301a>] lock_acquire.part.0+0xe2/0x238
+>            [<0000000187c73220>] lock_acquire+0xb0/0x200
+>            [<00000001888bf9aa>] _raw_spin_lock_irqsave+0x6a/0xd8
+>            [<0000000187ef6862>] obj_cgroup_release+0x4a/0xe0
+>            [<0000000187ef6498>] percpu_ref_put_many.constprop.0+0x150/0x168
+>            [<0000000187ef9674>] drain_obj_stock+0x94/0xe8
+>            [<0000000187efa464>] refill_obj_stock+0x94/0x278
+>            [<0000000187eff55c>] obj_cgroup_charge+0x164/0x1d8
+>            [<0000000187ed8aa4>] kmem_cache_alloc+0xac/0x528
+>            [<0000000187bf2eb8>] __sigqueue_alloc+0x150/0x308
+>            [<0000000187bf4210>] __send_signal+0x260/0x550
+>            [<0000000187bf5f06>] send_signal+0x7e/0x348
+>            [<0000000187bf7274>] force_sig_info_to_task+0x104/0x180
+>            [<0000000187bf7758>] force_sig_fault+0x48/0x58
+>            [<00000001888ae160>] __do_pgm_check+0x120/0x1f0
+>            [<00000001888c0cde>] pgm_check_handler+0x11e/0x180
+>           INFO: lockdep is turned off.
+>
+> In this example a slab allocation from __send_signal() caused a
+> refilling and draining of a percpu objcg stock, resulted in a
+> releasing of another non-related objcg. Objcg release path requires
+> taking the css_set_lock, which is used to synchronize objcg lists.
+>
+> This can create a circular dependency with the sighandler lock,
+> which is taken with the locked css_set_lock by the freezer code
+> (to freeze a task).
+>
+> In general it seems that using css_set_lock to synchronize objcg lists
+> makes any slab allocations and deallocation with the locked
+> css_set_lock and any intervened locks risky.
+>
+> To fix the problem and make the code more robust let's stop using
+> css_set_lock to synchronize objcg lists and use a new dedicated
+> spinlock instead.
+>
+> Fixes: bf4f059954dc ("mm: memcg/slab: obj_cgroup API")
+> Signed-off-by: Roman Gushchin <guro@fb.com>
+> Reported-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+> Tested-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+> Reviewed-by: Waiman Long <longman@redhat.com>
+> Cc: Tejun Heo <tj@kernel.org>
+> Cc: Johannes Weiner <hannes@cmpxchg.org>
+> Cc: Shakeel Butt <shakeelb@google.com>
+> Cc: Jeremy Linton <jeremy.linton@arm.com>
+> Cc: cgroups@vger.kernel.org
 
-Sorry for being nitpicky here, but we don't need the trailing comma,
-since this is the last entry.
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
 
->   };
-> 
->   void __init ls1x_clk_init(void)
-> --
-> 2.34.1
-> 
-
+Thanks.

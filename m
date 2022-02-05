@@ -2,89 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA66D4AA632
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 04:26:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 196304AA635
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 04:27:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379174AbiBED06 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 22:26:58 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:53368 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232093AbiBED05 (ORCPT
+        id S1379189AbiBED13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 22:27:29 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:33678 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232093AbiBED10 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 22:26:57 -0500
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 15DE7472;
-        Sat,  5 Feb 2022 04:26:55 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1644031616;
-        bh=M+Z2tUMN6VKAi5ODQ4SChm7l3WTsONh75s17OSEBxAU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ShcgrnsG329P7DXt11eyuTz/9Ab3J050Cau5KA/N8B/U6OwxUZxMLqxcM23fYGM1B
-         4LzXVSMoWzzbhYY8U3A2dHLK2HVA7Y1oVNBd73EU+SnyLe1tN7bC0Jxs2MJcAuAMwc
-         e0ZoOTYoSyqRqU3EAA2rMUQ/U7f6s1f6BieYamBc=
-Date:   Sat, 5 Feb 2022 05:26:31 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/8] media: imx: imx7_mipi_csis: store colorspace in
- set_fmt as well
-Message-ID: <Yf3uZ9fzQ4UM76gs@pendragon.ideasonboard.com>
-References: <20220204121514.2762676-1-alexander.stein@ew.tq-group.com>
- <20220204121514.2762676-6-alexander.stein@ew.tq-group.com>
+        Fri, 4 Feb 2022 22:27:26 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BE39AB83938;
+        Sat,  5 Feb 2022 03:27:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4E22C340E8;
+        Sat,  5 Feb 2022 03:27:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644031643;
+        bh=KCoKMnSN8XeAkkrt4NMq0x8wGofgwF4v98ZOjZJ/OpI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=rjP393CHvDx8PFubO7Ox4ZDVwt5wOL/0EfquqUWUqG9TCLF/W0NNHWTwCQBzYa7rG
+         oWxiXZVPjY4ZH4xSQqXWLnkVancCEc/ehnyl+3o68G/r08L9CLEvxgFFS6m4ehp0JA
+         GPldCZk0kFQS242FlZSyRonZc5Ub4Zl6Z2hu0ksPXJ4UO753hC1DJtyANcASDJUZxF
+         MmYipDkO1a9nQCBvy0Aj/BfbN4I8a31V9AsSIKLIV/MUbfyC6HXA2h1D1hEpAg2OOB
+         NgTfIxBY67vtUzj8rCiSsZZiai8NG7GxXZpR8XUjWspj6jnsSo2axvKOb0IzO17gOy
+         KAdKuT5hD79Ow==
+Date:   Fri, 4 Feb 2022 19:27:21 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Prasanna Vengateshan <prasanna.vengateshan@microchip.com>
+Cc:     <andrew@lunn.ch>, <netdev@vger.kernel.org>, <olteanv@gmail.com>,
+        <robh+dt@kernel.org>, <UNGLinuxDriver@microchip.com>,
+        <Woojung.Huh@microchip.com>, <hkallweit1@gmail.com>,
+        <linux@armlinux.org.uk>, <davem@davemloft.net>,
+        <linux-kernel@vger.kernel.org>, <vivien.didelot@gmail.com>,
+        <f.fainelli@gmail.com>, <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v7 net-next 07/10] net: dsa: microchip: add support for
+ ethtool port counters
+Message-ID: <20220204192721.21835705@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20220204174500.72814-8-prasanna.vengateshan@microchip.com>
+References: <20220204174500.72814-1-prasanna.vengateshan@microchip.com>
+        <20220204174500.72814-8-prasanna.vengateshan@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220204121514.2762676-6-alexander.stein@ew.tq-group.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alexander,
+On Fri, 4 Feb 2022 23:14:57 +0530 Prasanna Vengateshan wrote:
+> +static void lan937x_get_strings(struct dsa_switch *ds, int port, u32 stringset,
+> +				uint8_t *buf)
 
-Thank you for the patch.
+not stdint types in the kernel, please use u8 instead
 
-On Fri, Feb 04, 2022 at 01:15:11PM +0100, Alexander Stein wrote:
-> Without this the default (SMPTE 170M) from init_cfg stays unchanged.
-> Even after configuring 'srgb' colorspace (or 'raw')
-> $ media-ctl -V "'csis-32e30000.mipi-csi':0 [colorspace:srgb]"
-> the colorspace does not change at all:
-> $ media-ctl --get-v4l2 "'csis-32e30000.mipi-csi':0"
->   [fmt:SRGGB10_1X10/1920x1080 field:none colorspace:smpte170m xfer:709
->    ycbcr:601 quantization:lim-range]
-> 
-> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> ---
->  drivers/staging/media/imx/imx7-mipi-csis.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
-> index a22d0e6b3d44..7b0e57efcf82 100644
-> --- a/drivers/staging/media/imx/imx7-mipi-csis.c
-> +++ b/drivers/staging/media/imx/imx7-mipi-csis.c
-> @@ -1062,6 +1062,7 @@ static int mipi_csis_set_fmt(struct v4l2_subdev *sd,
->  	fmt->code = csis_fmt->code;
->  	fmt->width = sdformat->format.width;
->  	fmt->height = sdformat->format.height;
-> +	fmt->colorspace = sdformat->format.colorspace;
+> +{
+> +	struct ksz_device *dev = ds->priv;
+> +	int i;
+> +
+> +	if (stringset != ETH_SS_STATS)
+> +		return;
+> +
+> +	for (i = 0; i < dev->mib_cnt; i++) {
+> +		memcpy(buf + i * ETH_GSTRING_LEN, lan937x_mib_names[i].string,
+> +		       ETH_GSTRING_LEN);
+> +	}
 
-Looks good, but shouldn't you also store the other colorspace-related
-fields (ycbcr_enc, quantization and xfer_func) ?
+parenthesis unnecessary around single expression
 
->  	sdformat->format = *fmt;
-
--- 
-Regards,
-
-Laurent Pinchart
+Also check out ethtool_sprintf(), although not strictly necessary since
+you're not formatting

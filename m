@@ -2,148 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02C4D4AA504
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 01:25:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0C364AA507
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 01:26:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378162AbiBEAZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 19:25:43 -0500
-Received: from mga12.intel.com ([192.55.52.136]:35453 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231908AbiBEAZm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 19:25:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644020742; x=1675556742;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=seqp1K4lOkMWSGy1QhjFDo6IEhqcwqjPfzMecDFWN9w=;
-  b=ZFwLYyvxCzmk5Nrjx85Sj6V0uKDqIPO2daFfUMW+Vew/+/izlEvxpvOA
-   wmOb61KGsutm3y0sMHYn4YA+E2sLZWaT3oiJwnTyedGvv2EvcfLLfTp10
-   juvh/adooxISGZkZtIM1ngUfFzsUZboSarIndRGvHLSgluVJ7o++Nm1ar
-   f5QrTLzjOlYqihUbK1lqLDUYNOoxcmZQQqBERSZ6oytVqyD/08OIWN56X
-   urIPcMpR6hyqPADw1T+CZ4syZLaCiZDEamcsgVQNA+oUaZ7mh4/mGkYLR
-   HEIHyONZZLLcLN2VW2w+xJvzkNhGxkpToT3rfPhDZcL/gP/AClZklti4B
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="228438547"
-X-IronPort-AV: E=Sophos;i="5.88,344,1635231600"; 
-   d="scan'208";a="228438547"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 16:25:42 -0800
-X-IronPort-AV: E=Sophos;i="5.88,344,1635231600"; 
-   d="scan'208";a="539361229"
-Received: from otcwcpicx3.sc.intel.com ([172.25.55.73])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 16:25:41 -0800
-Date:   Fri, 4 Feb 2022 16:25:34 -0800
-From:   Fenghua Yu <fenghua.yu@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Ravi V Shankar <ravi.v.shankar@intel.com>,
-        iommu@lists.linux-foundation.org, x86 <x86@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 04/11] kernel/fork: Initialize mm's PASID
-Message-ID: <Yf3D/ij6S8AbMwpF@otcwcpicx3.sc.intel.com>
-References: <20220128202905.2274672-1-fenghua.yu@intel.com>
- <20220128202905.2274672-5-fenghua.yu@intel.com>
- <87wniab4kb.ffs@tglx>
+        id S1378735AbiBEA0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 19:26:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60302 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231908AbiBEA0G (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 19:26:06 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C05FC00056B
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 16:26:03 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id i30so6433965pfk.8
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 16:26:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MUcDtskC/MpS1ZZYsW5rzEoA89IqcWaCPaEQuwNjGpE=;
+        b=d7pedpjch1Lrd1t3Fdos5da71cQzVEkApNy3lDkZeNPnRzGcMsGhUKj2e76y7InELE
+         /BWb0JleoeX4IX0GkpSNmm3Wism63RVG4MxHo+/9jJd5Mh7LOCQCJhZtiv9wzvbE5KHr
+         1SCI7SgELEonxw5i//0r0DFKgCgRY/hhO/cdYK+Uf9Z5IYxnW7KjWtdyBq2dDkFNGpY5
+         kVHGjGVyWSLzjUj+SSnZJ3xFuywhq6jDUWDbRIRSpmCIRyC33+huPSnh6iXaJ3PwCdHx
+         0StsZReligTszxbvTbG3rVuIsfJd+hyTKlCBBfT44CVLJLY9vS/yIFsWYS1ziATlouyW
+         FiBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MUcDtskC/MpS1ZZYsW5rzEoA89IqcWaCPaEQuwNjGpE=;
+        b=u0jXBmvoqpSa122tESXO91SiWpDIuCHr9aAVSjz5hP11nvMm9FjI6y13cYIgZ2NuGi
+         Pe7OAyBk0l9DxR4a/gNfHEzYz74CPKTYau6tHbc1WdyjxrP27A48cCRnML1r0J3jnHGg
+         utlD87HJmdnQ4F+tBR56MDjV77Z2wZVkG092elXPvMr5BFJ8gXZHY1n3AvOwfN7jsNNU
+         SUzc/oA4SWb04nNrhtaDBeWp131UArrOtYN9afnatLakyepfOws7BQw5wcxFP1XJxHF1
+         G1E+f2Fosj8f2PCM97MMppYA9F1bEB//fpyq3SP7dYvAooFY+RhSgz1Ea7kfeQyrnge+
+         z3tg==
+X-Gm-Message-State: AOAM530o5OIry95mwwEFc12JCRVgXA5o83Ntharj6En4F2rXSpvwT96y
+        7CCFPFGVbhQsMSWhg3IqKnINQS3D3abrUzRIAPGrrg==
+X-Google-Smtp-Source: ABdhPJwIycZ0HR6zcJpAF3BkyOAcyZe/Fas9H2CdLd+q+wYSW2HXplSTFHEREKCmLs+bwT0AdjuRiVCsWI+hMa/2gf0=
+X-Received: by 2002:a63:550f:: with SMTP id j15mr1222755pgb.40.1644020763110;
+ Fri, 04 Feb 2022 16:26:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87wniab4kb.ffs@tglx>
+References: <20220127175505.851391-1-ira.weiny@intel.com> <20220127175505.851391-39-ira.weiny@intel.com>
+ <CAPcyv4iYOGD2XpmO3RH+wViuXx8EYrq-BK7vuKv6we+KR60YCg@mail.gmail.com>
+ <20220205000953.GD785175@iweiny-DESK2.sc.intel.com> <CAPcyv4jmnUbywDcXOAL9DwKxGaUf9cw9iDYbDcz6_CHyYPtytw@mail.gmail.com>
+In-Reply-To: <CAPcyv4jmnUbywDcXOAL9DwKxGaUf9cw9iDYbDcz6_CHyYPtytw@mail.gmail.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Fri, 4 Feb 2022 16:25:52 -0800
+Message-ID: <CAPcyv4iLVh_BesJLcZb=Pktd-h5x6-xuos5Cj4TzuWYC=Q-vLg@mail.gmail.com>
+Subject: Re: [PATCH V8 38/44] memremap_pages: Define pgmap_mk_{readwrite|noaccess}()
+ calls
+To:     Ira Weiny <ira.weiny@intel.com>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Thomas,
+On Fri, Feb 4, 2022 at 4:19 PM Dan Williams <dan.j.williams@intel.com> wrote:
+>
+> On Fri, Feb 4, 2022 at 4:10 PM Ira Weiny <ira.weiny@intel.com> wrote:
+> >
+> > On Fri, Feb 04, 2022 at 10:35:59AM -0800, Dan Williams wrote:
+> > > On Thu, Jan 27, 2022 at 9:55 AM <ira.weiny@intel.com> wrote:
+> > > >
+> >
+> > [snip]
+> >
+> > I'll address the other comments later but wanted to address the idea below.
+> >
+> > > > diff --git a/include/linux/sched.h b/include/linux/sched.h
+> > > > index f5b2be39a78c..5020ed7e67b7 100644
+> > > > --- a/include/linux/sched.h
+> > > > +++ b/include/linux/sched.h
+> > > > @@ -1492,6 +1492,13 @@ struct task_struct {
+> > > >         struct callback_head            l1d_flush_kill;
+> > > >  #endif
+> > > >
+> > > > +#ifdef CONFIG_DEVMAP_ACCESS_PROTECTION
+> > > > +       /*
+> > > > +        * NOTE: pgmap_prot_count is modified within a single thread of
+> > > > +        * execution.  So it does not need to be atomic_t.
+> > > > +        */
+> > > > +       u32                             pgmap_prot_count;
+> > > > +#endif
+> > >
+> > > It's not at all clear why the task struct needs to be burdened with
+> > > this accounting. Given that a devmap instance is needed to manage page
+> > > protections, why not move the nested protection tracking to a percpu
+> > > variable relative to an @pgmap arg? Something like:
+> > >
+> > > void __pgmap_mk_readwrite(struct dev_pagemap *pgmap)
+> > > {
+> > >        migrate_disable();
+> > >        preempt_disable();
+> >
+> > Why burden threads like this?  kmap_local_page() is perfectly able to migrate
+> > or be preempted?
+> >
+> > I think this is way to restrictive.
+>
+> kmap_local_page() holds migrate_disable() over the entire mapping, so
+> we're only talking about preempt_disable(). I tend to think that
+> bloating task_struct for something that is rarely used "kmap on dax
+> pmem pages" is not the right tradeoff.
 
-On Sat, Feb 05, 2022 at 12:22:12AM +0100, Thomas Gleixner wrote:
-> On Fri, Jan 28 2022 at 12:28, Fenghua Yu wrote:
-> > A new mm doesn't have a PASID yet when it's created. Initialize
-> > the mm's PASID on fork() or for init_mm to INVALID_IOASID (-1).
-> 
-> I must be missing something here.
-> 
-> > diff --git a/include/linux/sched/mm.h b/include/linux/sched/mm.h
-> > index aa5f09ca5bcf..c74d1edbac2f 100644
-> > --- a/include/linux/sched/mm.h
-> > +++ b/include/linux/sched/mm.h
-> > @@ -8,6 +8,7 @@
-> >  #include <linux/mm_types.h>
-> >  #include <linux/gfp.h>
-> >  #include <linux/sync_core.h>
-> > +#include <linux/ioasid.h>
-> >  
-> >  /*
-> >   * Routines for handling mm_structs
-> > @@ -433,4 +434,13 @@ static inline void membarrier_update_current_mm(struct mm_struct *next_mm)
-> >  }
-> >  #endif
-> >  
-> > +#ifdef CONFIG_IOMMU_SVA
-> > +static inline void mm_pasid_init(struct mm_struct *mm)
-> > +{
-> > +	mm->pasid = INVALID_IOASID;
-> > +}
-> > +#else
-> > +static inline void mm_pasid_init(struct mm_struct *mm) {}
-> > +#endif
-> > +
-> >  #endif /* _LINUX_SCHED_MM_H */
-> 
-> So this adds mm_pasid_init() to linux/sched/mm.h which replaces:
-> 
-> > -static void mm_init_pasid(struct mm_struct *mm)
-> > -{
-> > -#ifdef CONFIG_IOMMU_SVA
-> > -	mm->pasid = INIT_PASID;
-> > -#endif
-> > -}
-> > -
-> 
-> I.e. already existing code which is initializing mm->pasid with
-> INIT_PASID (0) while the replacement initializes it with INVALID_IOASID
-> (-1).
-> 
-> The change log does not have any information about why INIT_PASID is the
-> wrong initialization value and why this change is not having any side
-> effects.
-
-I should add the following info in the commit message to explain why
-change INIT_PASID (0) to INVALID_IOASID (-1):
-
-INIT_PASID (0) is reserved for kernel legacy DMA PASID. It cannot be
-allocated to a user process. Initialize the process's PASID to 0 may
-cause confusion that why the process uses reserved kernel legacy DMA
-PASID. Initializing the PASID to INVALID_IOASID (-1) explicitly
-tells the process doesn't have a valid PASID yet initially.
-
-Is it OK for you?
-
-> 
-> It neither mentions why having this in a global available header makes
-> sense when the only call site is in the C file from which the already
-> existing function is removed.
-
-This series defines three helpers mm_pasid_init(), mm_pasid_set(), and
-mm_pasid_drop() in mm because they handle the pasid member in mm_struct
-and should be part of mm operations. I explained why mm_pasid_set() and
-mm_pasid_drop() are defined in mm, but I didn't explain why mm_pasid_init()
-is define in mm.
-
-Is it OK to add the following explanation on why mm_pasid_init() is defined?
-
-mm_pasid_init() is defined in mm and replaces mm_init_pasid() because
-the PASID init operation initializes the pasid member in mm_struct and
-should be part of mm operations.
-
-Thanks,
-
--Fenghua
+Now, I can see an argument that promoting kmap_local_page() to
+preempt_disable() could cause problems, but I'd like help confirming
+that before committing to extending task_struct.

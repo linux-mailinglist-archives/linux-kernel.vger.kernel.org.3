@@ -2,74 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04A384AA514
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 01:31:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 995964AA519
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 01:33:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378792AbiBEAbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 19:31:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33396 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378782AbiBEAb2 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 19:31:28 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15A22DF8E3CC;
-        Fri,  4 Feb 2022 16:31:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A747C61D38;
-        Sat,  5 Feb 2022 00:31:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1ABE8C004E1;
-        Sat,  5 Feb 2022 00:31:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644021087;
-        bh=q3Yih5XixSjxwdzRqf1AAkWP1dP8EZSIU2HR3ZpqdWM=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=LVapDQUtZdo4ImBuwmNk7lUOG6kC4ANuVOKvewpNS2eOcZj9vP1GnSqz4g0WoJf0J
-         DJ+9c2sxxaRbLOYhFozto3LWRD6S0TN135/opMaoeyGZAXSF7Bu1FGbfSjiLejyNNa
-         Oz+PAuGb19DZBNodzELuOCulzIUucdKwLhLp1/1w0v4+PzHihpgCRXEAWuY7qC/jT0
-         JG1oMfVCfJdVm9DeC3AB2ZYo5LgXBm85j0UAMsw4McErFCOgahpwZWjgaHIk4G/nyo
-         CfhyEhK+ZY34v2v1IoWl4L98GIP+smQNHfa9GuRvCGebDw3uIbLwx1mC8yVdStfz2y
-         MOBmQRRWN1GaQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0900BC6D4EA;
-        Sat,  5 Feb 2022 00:31:27 +0000 (UTC)
-Subject: Re: [GIT PULL] Please pull RDMA subsystem changes
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220204235922.GA2979630@nvidia.com>
-References: <20220204235922.GA2979630@nvidia.com>
-X-PR-Tracked-List-Id: <linux-rdma.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220204235922.GA2979630@nvidia.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git tags/for-linus
-X-PR-Tracked-Commit-Id: f3136c4ce7acf64bee43135971ca52a880572e32
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 0457e5153e0e8420134f60921349099e907264ca
-Message-Id: <164402108702.12045.16716679454452985582.pr-tracker-bot@kernel.org>
-Date:   Sat, 05 Feb 2022 00:31:27 +0000
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+        id S1378799AbiBEAdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 19:33:19 -0500
+Received: from mga03.intel.com ([134.134.136.65]:14907 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238078AbiBEAdS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 19:33:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644021198; x=1675557198;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=aJYy2vf0HRnoLnCXkWAcUv8uWypmISO27TeIxy+WR4A=;
+  b=O17IQto5nuUcBPq6QoyohHFQ6WAfXi7yKr1P9ptA3eAxz99+DffuMS8O
+   TPQHUlvQWWknkfGSGGbAivrbldfBrLreMoymlRhhl+gAXc1doqZMAgEWd
+   b8vcPGddJd50hRpXwOBYqxUU08tdvYIUL2utSB/OVC5JOvc1/o3jqF4Ou
+   VVNY83srmyOqiAkHONvvb9qdcQRg+G3I4BTovoItk0xjK6xU4zbq4fFZ8
+   js1aDAAksXtJb5ZX5kAAJWJC6rZIFXu2u2QlVCy9zOvVvWFSDShHMDN7h
+   VfV9M4K66zcM2jXdBAqlcn5dnumxiWkUtMwOcI7LqENUoSC75DFowhE+e
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="248416524"
+X-IronPort-AV: E=Sophos;i="5.88,344,1635231600"; 
+   d="scan'208";a="248416524"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 16:33:17 -0800
+X-IronPort-AV: E=Sophos;i="5.88,344,1635231600"; 
+   d="scan'208";a="535684857"
+Received: from otcwcpicx3.sc.intel.com ([172.25.55.73])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 16:33:17 -0800
+Date:   Fri, 4 Feb 2022 16:33:16 -0800
+From:   Fenghua Yu <fenghua.yu@intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>,
+        iommu@lists.linux-foundation.org, x86 <x86@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 05/11] iommu/sva: Assign a PASID to mm on PASID
+ allocation and free it on mm exit
+Message-ID: <Yf3FzOUSRpFUdM/q@otcwcpicx3.sc.intel.com>
+References: <20220128202905.2274672-1-fenghua.yu@intel.com>
+ <20220128202905.2274672-6-fenghua.yu@intel.com>
+ <87r18ib2zz.ffs@tglx>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87r18ib2zz.ffs@tglx>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 4 Feb 2022 19:59:22 -0400:
+On Sat, Feb 05, 2022 at 12:56:00AM +0100, Thomas Gleixner wrote:
+> On Fri, Jan 28 2022 at 12:28, Fenghua Yu wrote:
+> > To avoid complexity of updating each thread's PASID status (e.g. sending
+> > IPI to update IA32_PASID MSR) on allocating and freeing PASID, once
+> > allocated and assigned to an mm, the PASID stays with the mm for the
+> > rest of the mm's lifetime. A reference to the PASID is taken on
+> > allocating the PASID. Binding/unbinding the PASID won't change refcount.
+> > The reference is dropped on mm exit and thus the PASID is freed.
+> >
+> > Two helpers mm_pasid_set() and mm_pasid_drop() are defined in mm because
+> > the PASID operations handle the pasid member in mm_struct and should be
+> > part of mm operations. Because IOASID's reference count is not used any
+> > more and removed, unused ioasid_get() and iommu_sva_free_pasid()
+> > are deleted and ioasid_put() is renamed to ioasid_free().
+> >
+> > 20-bit PASID allows up to 1M processes bound to PASIDs at the same time.
+> > With cgroups and other controls that might limit the number of process
+> > creation, the limited number of PASIDs is not a realistic issue for
+> > lazy PASID free.
+> 
+> Please take a step back and think hard about it whether that changelog
+> makes sense to you a year from now.
+> 
+> Let me walk you through:
+> 
+> > To avoid complexity of updating each thread's PASID status (e.g. sending
+> > IPI to update IA32_PASID MSR) on allocating and freeing PASID, once
+> > allocated and assigned to an mm, the PASID stays with the mm for the
+> > rest of the mm's lifetime.
+> 
+> You are missing the oportunity to tell a story about the history of this
+> decision here:
+> 
+>   PASIDs are process wide. It was attempted to use refcounted PASIDs to
+>   free them when the last thread drops the refcount. This turned out to
+>   be complex and error prone. Given the fact that the PASID space is 20
+>   bits, which allows up to 1M processes to have a PASID associated
+>   concurrently, PASID resource exhaustion is not a realistic concern.
+> 
+>   Therefore it was decided to simplify the approach and stick with lazy
+>   on demand PASID allocation, but drop the eager free approach and make
+>   a allocated PASID lifetime bound to the life time of the process.
+> 
+> > A reference to the PASID is taken on allocating the
+> > PASID. Binding/unbinding the PASID won't change refcount.  The
+> > reference is dropped on mm exit and thus the PASID is freed.
+> 
+> There is no refcount in play anymore, right? So how does this part of
+> the changelog make any sense?
+> 
+> This is followed by:
+> 
+> > Two helpers mm_pasid_set() and mm_pasid_drop() are defined in mm because
+> > the PASID operations handle the pasid member in mm_struct and should be
+> > part of mm operations. Because IOASID's reference count is not used any
+> > more and removed, unused ioasid_get() and iommu_sva_free_pasid()
+> > are deleted and ioasid_put() is renamed to ioasid_free().
+> 
+> which does not provide much rationale and just blurbs about _what_ the
+> patch is doing and not about the why and the connection to the
+> above. And the refcount removal section contradicts the stale text
+> above.
+> 
+> So this paragraph should be something like this:
+> 
+>   Get rid of the refcounting mechanisms and replace/rename the
+>   interfaces to reflect this new approach.
+> 
+> Hmm?
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git tags/for-linus
+Sure. I will update the commit message with your comments.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/0457e5153e0e8420134f60921349099e907264ca
+Thanks.
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+-Fenghua

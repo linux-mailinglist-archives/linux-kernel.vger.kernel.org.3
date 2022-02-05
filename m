@@ -2,85 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACF424AAABD
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 18:58:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66E064AAABF
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 18:59:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380804AbiBER6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 12:58:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60846 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235159AbiBER6c (ORCPT
+        id S1380833AbiBER7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 12:59:33 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:46950 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1380816AbiBER7a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 12:58:32 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23784C061348
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Feb 2022 09:58:30 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id m4so29425287ejb.9
-        for <linux-kernel@vger.kernel.org>; Sat, 05 Feb 2022 09:58:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WXQN/i75UpM9/xOZNnsDaFN+ADwpyirVq8QEFHiKvd0=;
-        b=PegbMigLRlHjM3CKIz16Ycv/mUvmdJBAgkBr/+/h71H9yIQ6RZwnx+IWeyI1/NTm4M
-         /5lz8h/5g1V7wYcwxakyZ4E+oaHWUKSOgTQ9YQscYwglYW6V3XUOJPlUjOmt6Z1RcQtm
-         jzvZ7KpvdoX49rGUYwPTVXdujyDcjBUJ8A2lY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WXQN/i75UpM9/xOZNnsDaFN+ADwpyirVq8QEFHiKvd0=;
-        b=VYnfZifMXQ0EhdQv5j088sFEGkfXc/tntiXKhtL6kGQGu2ZniqFV9CM9CYFWgE9UYI
-         38fiqNHBVDPsSQ+c8nnQmc0PrEB/ffbUksEUC1o3F+LgkoTmAMM2MqdTX1YVxk2/wxrv
-         aeypXGuyHim34I8TostcJ/OxYlQ8InkwlBUaDB0ga5IdBGCQj5N7nWCZz2zqb4AhbdHd
-         pSWdp7YhV2ew23nG1yPGA++AMKcuALnXtoZmhS8+Xv6MTkYYEXlLj0w1yRamsZRqJa0u
-         wdT3mHNytNq+C+l2WBOwVqmzvxNwccJodAEHvyrw2wurtv3R5RE3KNPyPCgqrwb8lZ20
-         vXpg==
-X-Gm-Message-State: AOAM530gmK+k2mH+UOcgYak9L+S2H5G3H80vTCkVX32aufARer9/Qw2d
-        XZ3A2hjGzvaq7wDmhWqIz3V9vPOAUlwsO7xU
-X-Google-Smtp-Source: ABdhPJwtxcGjsCieva6iOS3JcZcgH+5PtiI0snBuib4jDBPsA6mRxq1OCx7W7dRUg1TtLGBdlNl1Qw==
-X-Received: by 2002:a17:907:7ea5:: with SMTP id qb37mr3830023ejc.573.1644083908005;
-        Sat, 05 Feb 2022 09:58:28 -0800 (PST)
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com. [209.85.221.41])
-        by smtp.gmail.com with ESMTPSA id c11sm2607375edx.42.2022.02.05.09.58.26
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 05 Feb 2022 09:58:26 -0800 (PST)
-Received: by mail-wr1-f41.google.com with SMTP id s10so14697584wra.5
-        for <linux-kernel@vger.kernel.org>; Sat, 05 Feb 2022 09:58:26 -0800 (PST)
-X-Received: by 2002:a5d:500c:: with SMTP id e12mr3760593wrt.193.1644083904052;
- Sat, 05 Feb 2022 09:58:24 -0800 (PST)
-MIME-Version: 1.0
-References: <20220205110717.16946-1-jgross@suse.com>
-In-Reply-To: <20220205110717.16946-1-jgross@suse.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 5 Feb 2022 09:58:08 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wjp-h4bFWsWSPQ+5o6iuiPwiFNRNxfDSaDjURzVU6Af7A@mail.gmail.com>
-Message-ID: <CAHk-=wjp-h4bFWsWSPQ+5o6iuiPwiFNRNxfDSaDjURzVU6Af7A@mail.gmail.com>
-Subject: Re: [GIT PULL] xen: branch for v5.17-rc3
-To:     Juergen Gross <jgross@suse.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        xen-devel@lists.xenproject.org,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+        Sat, 5 Feb 2022 12:59:30 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EFA95B80CAC;
+        Sat,  5 Feb 2022 17:59:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A23F6C340E8;
+        Sat,  5 Feb 2022 17:59:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644083967;
+        bh=CGAwSsF+d1JCAM602DJ7DXSX3ofHbKXlLW2z0yqc8lU=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=imWIbYZpoxZGebqXERyQIP95n5Y0OaICv5zXt3tLnkCyAeLwkSZmfwqnRyvUW1tpA
+         AcmmjvhL954zNbbZN80PKRi1RV3AMVSajTERSiWEmw8pFPByVMCHivHR86fAOJw9AX
+         v/8FTp+dxEZ7C3ab3pT8DN737ZUi0RGGllxd/oTP4S0W0dw+5Ro4rfLPgqmFHb0gEq
+         aNgXqIaLpSWf34OVie0Lnh0dTFfSxtG4lLPJ5ZyMTEo2lkGPVJFGfwfN6bCR2HuMpH
+         2Dh46CrphMM/Ln3wcY2FBSBPBs1A/ixfe2i+/ugbK4pykc7v47xS6zrNGpDo+aalEU
+         VcTAMP02hW0MQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 90664E5869F;
+        Sat,  5 Feb 2022 17:59:27 +0000 (UTC)
+Subject: Re: [GIT PULL] KVM fixes for Linux 5.17-rc3
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220205060919.88656-1-pbonzini@redhat.com>
+References: <20220205060919.88656-1-pbonzini@redhat.com>
+X-PR-Tracked-List-Id: <kvm.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220205060919.88656-1-pbonzini@redhat.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
+X-PR-Tracked-Commit-Id: 7e6a6b400db8048bd1c06e497e338388413cf5bc
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 5fdb26213fcb912955e0c9eacbe2b8961628682f
+Message-Id: <164408396758.20735.17451039880823459064.pr-tracker-bot@kernel.org>
+Date:   Sat, 05 Feb 2022 17:59:27 +0000
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 5, 2022 at 3:07 AM Juergen Gross <jgross@suse.com> wrote:
->
-> Please git pull the following tag:
->
->  git://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git for-linus-5.17a-rc3-tag
+The pull request you sent on Sat,  5 Feb 2022 01:09:19 -0500:
 
-Diffstat? Shortlog?
+> https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
 
-This is not a valid pull request.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/5fdb26213fcb912955e0c9eacbe2b8961628682f
 
-           Linus
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

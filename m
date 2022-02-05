@@ -2,107 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 143314AAC6F
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 21:18:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3A6D4AAC75
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 21:21:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381179AbiBEUSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 15:18:25 -0500
-Received: from mail-io1-f71.google.com ([209.85.166.71]:57106 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241319AbiBEUSX (ORCPT
+        id S1381225AbiBEUVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 15:21:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39602 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232428AbiBEUVu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 15:18:23 -0500
-Received: by mail-io1-f71.google.com with SMTP id q24-20020a5d8358000000b006133573a011so6030204ior.23
-        for <linux-kernel@vger.kernel.org>; Sat, 05 Feb 2022 12:18:23 -0800 (PST)
+        Sat, 5 Feb 2022 15:21:50 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE11C061348;
+        Sat,  5 Feb 2022 12:21:49 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id y5-20020a17090aca8500b001b8127e3d3aso9429396pjt.3;
+        Sat, 05 Feb 2022 12:21:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=BelwKvGiNngYmwb1phL2hLEVwXRxowUsIgvaDY3aEhc=;
+        b=S8VIICqQ4Esj/K7s636jZYgXjT+rBr1k8//aD6RwoFudz36QJzH7ba1Gv5Pig6JtFB
+         57bZR+Rxw+cOERbx3Bmkw/vRZnd91e2qlHN3w4nP1cJJY6yLoajMqahDoeL+TXAfHxb4
+         v+oBUIIp4GE383R4w56a8alreRrd95AtXjs+XUSBYG032joUj7m+qRKnWSS31AomhqE6
+         WNpbt1gEnUR2LbNhzUyj+TzwzFYzoftixchVYyShJthta7LEND3i7IumHeSH5gxuuquF
+         yvGdB9yZBWnyPPLm3lfp37YASgToGwcW9UqUO/YfaKyUNnsvz6r6USo6aQ/JG4bAjdyi
+         x9Lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=//IpWN0Kyb3zdaJDZWQVUdBv0C1amCkj+8BKi6AK2E8=;
-        b=jE8iHsgZx1ZfV4nKPiFeW6zwsG+cRsWiN5Ez9+6C31GYP8CXMLEIohNsZ4bW+JyKu1
-         bF+G74wW44sZbz3Rwu4CYgY8gwxmlEmJcKRbtRcJ0KjE5+BgyCYH6zEBdZN5TULhE0Jo
-         947EQ/3lN2BNJn8fvA7r/CB6rnL5ujhlC9MaRzBNv+Va3zxGsuRjjwCNPEYqIMHxIVXo
-         EeoO7t0vP/SdZC6pJ0I8gpe7W9ZWAi455ZqG3OuKogTlA4wH035+U+ho3uVjjP+clCcF
-         9osc0GH1oHxyS2G862OQn64wfXpTUblZ1Sq7kf9PyGNH0rBg1vVzp/0UYmEaZIsEqohI
-         xtVA==
-X-Gm-Message-State: AOAM5330a1V0qvlQAxYpTd+C4uyhV/MRMP5285aDLS8MjLtp3xsH+16D
-        etrplQm5Ansm0mPuKV4AaEKZzjwSVAbHw3ReEraAYX6L2LdR
-X-Google-Smtp-Source: ABdhPJzhnyzMxtbaHXNJiT1k74YVxhCWjxXPME4lFoT8tI7K+SyNyfciNozxXMu79sQ46O/u0++E7iSm/HIuYe/CYp/FV8FIddR+
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=BelwKvGiNngYmwb1phL2hLEVwXRxowUsIgvaDY3aEhc=;
+        b=ojYMJ8Gj8+qxBZ8kw3pqbsUC0yiQmNXh52IriaUMIMYmfoGnp52kl1auYr0gMUU9pp
+         27QVEJ6h/UD3pxHwSFcMMMrsdeQE64OIp78pxTtVrTfXezmxPuge66vUj6Jp12zgGodu
+         BXNn1cwweXa2O4XFf+GTrQyLLlND4hekHiE/s1u1vKPAgzCW+QK37dzADZsuzfDszrX+
+         hZ/GCoC7KZIjxe4/DzGSoYhz3l60a+6MhqizTqxFeWKI4DmpWma37rYSWAbHCxkkcHt/
+         zyGOVKNe0Q4N+ThwX++dxxXNtVbjHu5gDqLFVgf4oV/L9sJu+aVdq4lCQEm/MzKa0Pp4
+         7QEw==
+X-Gm-Message-State: AOAM532icQgU9/eaDgoWuWZq3AJRzYMgv3geUuG3WmdnXbR2ext5+xAB
+        nKbAYxRSAEBa7i18r3kb5XODtuBbU7dBZU/gLdk=
+X-Google-Smtp-Source: ABdhPJxjjaAO4+JvF6zsK509l0ZyRJEcv9J8F7QurQJrAt2Z309n50xEgtBefayuJQd5KG4TJ/898MwjPME4pGTMEPc=
+X-Received: by 2002:a17:903:2350:: with SMTP id c16mr9700042plh.4.1644092508735;
+ Sat, 05 Feb 2022 12:21:48 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:389a:: with SMTP id b26mr2580834jav.158.1644092303434;
- Sat, 05 Feb 2022 12:18:23 -0800 (PST)
-Date:   Sat, 05 Feb 2022 12:18:23 -0800
-In-Reply-To: <000000000000f0196305d219b2fe@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b968f305d74b1195@google.com>
-Subject: Re: [syzbot] WARNING in __dma_map_sg_attrs
-From:   syzbot <syzbot+10e27961f4da37c443b2@syzkaller.appspotmail.com>
-To:     christian.koenig@amd.com, dri-devel@lists.freedesktop.org,
-        hch@lst.de, iommu@lists.linux-foundation.org,
-        linaro-mm-sig-owner@lists.linaro.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, m.szyprowski@samsung.com,
-        robin.murphy@arm.com, sumit.semwal@linaro.org,
-        syzkaller-bugs@googlegroups.com
+References: <87fsozek0j.ffs@tglx> <a7e59ae16e0e05579b087caf4045e42b174e2167.camel@intel.com>
+ <3421da7fc8474b6db0e265b20ffd28d0@AcuMS.aculab.com> <CAMe9rOonepEiRyoAyTGkDMQQhuyuoP4iTZJJhKGxgnq9vv=dLQ@mail.gmail.com>
+ <9f948745435c4c9273131146d50fe6f328b91a78.camel@intel.com>
+In-Reply-To: <9f948745435c4c9273131146d50fe6f328b91a78.camel@intel.com>
+From:   "H.J. Lu" <hjl.tools@gmail.com>
+Date:   Sat, 5 Feb 2022 12:21:12 -0800
+Message-ID: <CAMe9rOq8LNdOdrVoVegyF9_DY6te+zGUJ7WQewWZ6sS1zag2Rw@mail.gmail.com>
+Subject: Re: [PATCH 00/35] Shadow stacks for userspace
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "David.Laight@aculab.com" <David.Laight@aculab.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "oleg@redhat.com" <oleg@redhat.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>, "arnd@arndb.de" <arnd@arndb.de>,
+        "Moreira, Joao" <joao.moreira@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "Dave.Martin@arm.com" <Dave.Martin@arm.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On Sat, Feb 5, 2022 at 12:15 PM Edgecombe, Rick P
+<rick.p.edgecombe@intel.com> wrote:
+>
+> On Sat, 2022-02-05 at 05:29 -0800, H.J. Lu wrote:
+> > On Sat, Feb 5, 2022 at 5:27 AM David Laight <David.Laight@aculab.com>
+> > wrote:
+> > >
+> > > From: Edgecombe, Rick P
+> > > > Sent: 04 February 2022 01:08
+> > > > Hi Thomas,
+> > > >
+> > > > Thanks for feedback on the plan.
+> > > >
+> > > > On Thu, 2022-02-03 at 22:07 +0100, Thomas Gleixner wrote:
+> > > > > > Until now, the enabling effort was trying to support both
+> > > > > > Shadow
+> > > > > > Stack and IBT.
+> > > > > > This history will focus on a few areas of the shadow stack
+> > > > > > development history
+> > > > > > that I thought stood out.
+> > > > > >
+> > > > > >        Signals
+> > > > > >        -------
+> > > > > >        Originally signals placed the location of the shadow
+> > > > > > stack
+> > > > > > restore
+> > > > > >        token inside the saved state on the stack. This was
+> > > > > > problematic from a
+> > > > > >        past ABI promises perspective. So the restore location
+> > > > > > was
+> > > > > > instead just
+> > > > > >        assumed from the shadow stack pointer. This works
+> > > > > > because in
+> > > > > > normal
+> > > > > >        allowed cases of calling sigreturn, the shadow stack
+> > > > > > pointer
+> > > > > > should be
+> > > > > >        right at the restore token at that time. There is no
+> > > > > > alternate shadow
+> > > > > >        stack support. If an alt shadow stack is added later
+> > > > > > we
+> > > > > > would
+> > > > > >        need to
+> > > > >
+> > > > > So how is that going to work? altstack is not an esoteric
+> > > > > corner
+> > > > > case.
+> > > >
+> > > > My understanding is that the main usages for the signal stack
+> > > > were
+> > > > handling stack overflows and corruption. Since the shadow stack
+> > > > only
+> > > > contains return addresses rather than large stack allocations,
+> > > > and is
+> > > > not generally writable or pivotable, I thought there was a good
+> > > > possibility an alt shadow stack would not end up being especially
+> > > > useful. Does it seem like reasonable guesswork?
+> > >
+> > > The other 'problem' is that it is valid to longjump out of a signal
+> > > handler.
+> > > These days you have to use siglongjmp() not longjmp() but it is
+> > > still used.
+> > >
+> > > It is probably also valid to use siglongjmp() to jump from a nested
+> > > signal handler into the outer handler.
+> > > Given both signal handlers can have their own stack, there can be
+> > > three
+> > > stacks involved.
+>
+> So the scenario is?
+>
+> 1. Handle signal 1
+> 2. sigsetjmp()
+> 3. signalstack()
+> 4. Handle signal 2 on alt stack
+> 5. siglongjmp()
+>
+> I'll check that it is covered by the tests, but I think it should work
+> in this series that has no alt shadow stack. I have only done a high
+> level overview of how the shadow stack stuff, that doesn't involve the
+> kernel, works in glibc. Sounds like I'll need to do a deeper dive.
+>
+> > >
+> > > I think the shadow stack pointer has to be in ucontext - which also
+> > > means the application can change it before returning from a signal.
+>
+> Yes we might need to change it to support alt shadow stacks. Can you
+> elaborate why you think it has to be in ucontext? I was thinking of
+> looking at three options for storing the ssp:
+>  - Stored in the shadow stack like a token using WRUSS from the kernel.
+>  - Stored on the kernel side using a hashmap that maps ucontext or
+>    sigframe userspace address to ssp (this is of course similar to
+>    storing in ucontext, except that the user can=E2=80=99t change the ssp=
+).
+>  - Stored writable in userspace in ucontext.
+>
+> But in this version, without alt shadow stacks, the shadow stack
+> pointer is not stored in ucontext. This causes the limitation that
+> userspace can only call sigreturn when it has returned back to a point
+> where there is a restore token on the shadow stack (which was placed
+> there by the kernel). This doesn=E2=80=99t mean it can=E2=80=99t switch t=
+o a different
+> shadow stack or handle a nested signal, but it limits the possibility
+> for calling sigreturn with a totally different sigframe (like CRIU and
+> SROP attacks do). It should hopefully be a helpful, protective
+> limitation for most apps and I'm hoping CRIU can be fixed without
+> removing it.
+>
+> I am not aware of other limitations to signals (besides normal shadow
+> stack enforcement), but I could be missing it. And people's skepticism
+> is making me want to go back over it with more scrutiny.
+>
+> > > In much the same way as all the segment registers can be changed
+> > > leading to all the nasty bugs when the final 'return to user' code
+> > > traps in kernel when loading invalid segment registers or executing
+> > > iret.
+>
+> I don't think this is as difficult to avoid because userspace ssp has
+> its own register that should not be accessed at that point, but I have
+> not given this aspect enough analysis. Thanks for bringing it up.
+>
+> > >
+> > > Hmmm... do shadow stacks mean that longjmp() has to be a system
+> > > call?
+> >
+> > No.  setjmp/longjmp save and restore shadow stack pointer.
+> >
+>
+> It sounds like it would help to write up in a lot more detail exactly
+> how all the signal and specialer stack manipulation scenarios work in
+> glibc.
+>
 
-HEAD commit:    0457e5153e0e Merge tag 'for-linus' of git://git.kernel.org..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=11b2637c700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6f043113811433a5
-dashboard link: https://syzkaller.appspot.com/bug?extid=10e27961f4da37c443b2
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11c65542700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1163f480700000
+setjmp/longjmp work on the same sigjmp_buf.  Shadow stack pointer
+is saved and restored, just like any other callee-saved registers.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+10e27961f4da37c443b2@syzkaller.appspotmail.com
 
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 3595 at kernel/dma/mapping.c:188 __dma_map_sg_attrs+0x181/0x1f0 kernel/dma/mapping.c:188
-Modules linked in:
-CPU: 0 PID: 3595 Comm: syz-executor249 Not tainted 5.17.0-rc2-syzkaller-00316-g0457e5153e0e #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:__dma_map_sg_attrs+0x181/0x1f0 kernel/dma/mapping.c:188
-Code: 00 00 00 00 00 fc ff df 48 c1 e8 03 80 3c 10 00 75 71 4c 8b 3d c0 83 b5 0d e9 db fe ff ff e8 b6 0f 13 00 0f 0b e8 af 0f 13 00 <0f> 0b 45 31 e4 e9 54 ff ff ff e8 a0 0f 13 00 49 8d 7f 50 48 b8 00
-RSP: 0018:ffffc90002a07d68 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffff88807e25e2c0 RSI: ffffffff81649e91 RDI: ffff88801b848408
-RBP: ffff88801b848000 R08: 0000000000000002 R09: ffff88801d86c74f
-R10: ffffffff81649d72 R11: 0000000000000001 R12: 0000000000000002
-R13: ffff88801d86c680 R14: 0000000000000001 R15: 0000000000000000
-FS:  0000555556e30300(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00000000200000cc CR3: 000000001d74a000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- dma_map_sgtable+0x70/0xf0 kernel/dma/mapping.c:264
- get_sg_table.isra.0+0xe0/0x160 drivers/dma-buf/udmabuf.c:72
- begin_cpu_udmabuf+0x130/0x1d0 drivers/dma-buf/udmabuf.c:126
- dma_buf_begin_cpu_access+0xfd/0x1d0 drivers/dma-buf/dma-buf.c:1164
- dma_buf_ioctl+0x259/0x2b0 drivers/dma-buf/dma-buf.c:363
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:874 [inline]
- __se_sys_ioctl fs/ioctl.c:860 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:860
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f62fcf530f9
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffe3edab9b8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f62fcf530f9
-RDX: 0000000020000200 RSI: 0000000040086200 RDI: 0000000000000006
-RBP: 00007f62fcf170e0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f62fcf17170
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-
+--=20
+H.J.

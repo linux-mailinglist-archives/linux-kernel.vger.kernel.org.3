@@ -2,157 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF8DA4AA95B
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 15:12:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8F554AA961
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 15:20:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380098AbiBEOMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 09:12:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36034 "EHLO
+        id S1380109AbiBEOUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 09:20:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239170AbiBEOMi (ORCPT
+        with ESMTP id S1380113AbiBEOUU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 09:12:38 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A8A5C061346
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Feb 2022 06:12:37 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id e3so2584125wra.0
-        for <linux-kernel@vger.kernel.org>; Sat, 05 Feb 2022 06:12:37 -0800 (PST)
+        Sat, 5 Feb 2022 09:20:20 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C01C061346;
+        Sat,  5 Feb 2022 06:20:20 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id y17so7589659plg.7;
+        Sat, 05 Feb 2022 06:20:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=algolia.com; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=OOEtnw8xKF5peU7h9AlWIN/mhVNk/Fs8o4NsdA8KyPE=;
-        b=pV7Xh5PnAO84jxxZcVD7WuvvvlbgYHisTwMUv0V5B/KP970NuI64fOESHlXxNqVcvL
-         +cEFxbGZnxGBRL+2kvt9KpGLcTOh1uQcCx+lyKSlVOmeOw4Pon3Z2MlTrKgwOc3oqQ9E
-         YukEJg7wApWSZr6zOzZMkWkyQ+NZ0CQq1vH0Q=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fXpUWimVQCvLi12RE7G95TNrEuugIM/jhy8DgSTBsu8=;
+        b=qLWx413D4IciL39NYeWr8qU1KR5zagd8EE38Tq5GVf3hMtZW9LxygN0yy4Sa4G3nK5
+         o7XjAajXRMf22xa6ELrr0cEaDEXotb5UzArukoNtgfGjDRUSdt+7iyJXwik0SHr9Wodh
+         yljY+pGNwNds9QoYnXSPvr51dv6aOyDrGAhTYjB8BrhXAFdzEi1BB/kqxntwvbR2GUeY
+         b9ZEp1bPcveeUhL+pWpSX54NZ/noE5QErwkq5YbhW788sNH/8JdQx4bZ/H1DqmzfaZfU
+         IXI+p9FgouIgMakWQ0kSdXK+ETMqZybLhlyTcP+2my+FKNPyJmA5vcuryETrXoHZjX+w
+         PZuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=OOEtnw8xKF5peU7h9AlWIN/mhVNk/Fs8o4NsdA8KyPE=;
-        b=kCZgqa6HRAmvuW51smNm4jV04EJ2YMoG6RhVpu7r5PsxSimmUhNFV+EAXcjCEG69pO
-         G90ZoFYv1esH+2sNcYdwB3DFKJiOJhBsze3m9Rhw7mVKkAnDJn2gwBuKMBzDMAJJDzLh
-         Icr0nzS7W+5IRVsxMhOCedg8ytDhrrknPTL8YPnEHQLJj+PPM90okMPJdGXq5wGmeE0K
-         V9ksbm6q7GEdghmusThCpgrFHljrYZQou8VC0lMpWQwxSH8Cv8CwHnm7QPpQeOuUhlfC
-         YjnEK7qb7zTwbRriW5HwxOLwifN9/wXzeFr9Ol/UeMpKzBwxZPFvP6nWQPD+K5ypEzML
-         6MJw==
-X-Gm-Message-State: AOAM533pfoyN8uHP1pnu6v1ZCzddcJ6p5spoJS2pHJSkMpfaoEw16n7I
-        zmjU2Ztj6Vn90FuSFGiPrSiRMBSy0qzwVg==
-X-Google-Smtp-Source: ABdhPJwLqN0XhniFdPIk8WXQzvVT7Vuni7tXNmCF6Ihnkq6oGE2q5M7SCowUOUlIzmzpco8yS8r+Tg==
-X-Received: by 2002:a05:6000:184a:: with SMTP id c10mr3157663wri.212.1644070355724;
-        Sat, 05 Feb 2022 06:12:35 -0800 (PST)
-Received: from xavier-xps ([2a01:e0a:830:d971:752e:e19b:a691:2171])
-        by smtp.gmail.com with ESMTPSA id g6sm4559293wrq.97.2022.02.05.06.12.34
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fXpUWimVQCvLi12RE7G95TNrEuugIM/jhy8DgSTBsu8=;
+        b=6v9nLDz74/m9uyx3Ra9uBoZQQFhWb5y/DJahe+JwRaP4t8NNieDfllPVYBq/WhG1VT
+         6w/d5fAOpKvG9YY54eGRDvLAjotiPq0A1HJzm69bMw6Eo3wYihqB5EUAgvSR4BabXexq
+         yDbUNNBSO4HbTxYiRMNUWNfTjX/Wg6WUgQ6M9HYD0egGhMmpm3ipGECEkXjbiKbXfxOI
+         EvmIuTzhOFSHOPFDGM/HmX6qSKKRnkcHPRO+6hrJDHV/j7Fb4T5RrAsKrqOPTndFnIaw
+         isSXQzWb0YR7Bv394fYtVVNH45wRg1VWOjCTz+A1PcNKI5lpWqeS08WMjpOSVyxeEqwI
+         dsKA==
+X-Gm-Message-State: AOAM531sNyuL6i1H7S6sxzNSTt1MZgu9HBhoiqSygFLQIxwExeSBbGbn
+        j6bEAhBNrzE7Zclvtdll94UXPT7kmEHYbsLx
+X-Google-Smtp-Source: ABdhPJyXegnm+lnzB5nkdEiKy52n6ZgRIAHvhTy7NkETaaV3Ff/WvmUvrYGZRioCcZJITPM0NbegOw==
+X-Received: by 2002:a17:90b:1e07:: with SMTP id pg7mr8738115pjb.97.1644070819294;
+        Sat, 05 Feb 2022 06:20:19 -0800 (PST)
+Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
+        by smtp.gmail.com with ESMTPSA id lx4sm5795622pjb.44.2022.02.05.06.20.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Feb 2022 06:12:35 -0800 (PST)
-Date:   Sat, 5 Feb 2022 15:12:33 +0100
-From:   Xavier Roche <xavier.roche@algolia.com>
+        Sat, 05 Feb 2022 06:20:17 -0800 (PST)
+From:   Stafford Horne <shorne@gmail.com>
 To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Xavier Roche <xavier.roche@algolia.com>,
-        Hugh Dickins <hughd@google.com>,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: [PATCH RFC v1] tmpfs: support for file creation time
-Message-ID: <20220205141233.GA938324@xavier-xps>
+Cc:     Stafford Horne <shorne@gmail.com>,
+        Brian Cain <bcain@codeaurora.org>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Mike Rapoport <rppt@kernel.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
+        linux-hexagon@vger.kernel.org, openrisc@lists.librecores.org
+Subject: [PATCH] mm: Remove mmu_gathers storage from remaining architectures
+Date:   Sat,  5 Feb 2022 23:19:53 +0900
+Message-Id: <20220205141956.3315419-1-shorne@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Various filesystems (including ext4) now support file creation time.
-This patch tentatively adds such support for tmpfs-based filesystems.
+Originally the mmu_gathers were removed in commit 1c3951769621 ("mm: now
+that all old mmu_gather code is gone, remove the storage").  However,
+the openrisc and hexagon architecture were merged around the same time
+and mmu_gathers was not removed.
 
-The reason is that creation time has been supported on an increasing number
-of filesystems (this information can be retrieved through the statx()
-userland function), and its support for tmpfs would add consistency.
-Example of use includes checking the creation time of an ephemeral status file
-being updated (such as a "work in progress" placeholder), to get two time
-points (starting point and last update).
+This patch removes them from openrisc, hexagon and nds32:
 
-Note that I am nothing but a new contributor, and while this patch has
-been tested (and userland results checked), the logic might be broken.
+Noticed while cleaning this warning:
 
-Signed-off-by: Xavier Roche <xavier.roche@algolia.com>
+    arch/openrisc/mm/init.c:41:1: warning: symbol 'mmu_gathers' was not declared. Should it be static?
+
+Signed-off-by: Stafford Horne <shorne@gmail.com>
 ---
- include/linux/shmem_fs.h |  1 +
- mm/shmem.c               | 11 +++++++++++
- 2 files changed, 12 insertions(+)
+ arch/hexagon/mm/init.c  | 2 --
+ arch/nds32/mm/init.c    | 1 -
+ arch/openrisc/mm/init.c | 2 --
+ 3 files changed, 5 deletions(-)
 
-diff --git a/include/linux/shmem_fs.h b/include/linux/shmem_fs.h
-index e65b80ed09e7..29787767c3b9 100644
---- a/include/linux/shmem_fs.h
-+++ b/include/linux/shmem_fs.h
-@@ -25,6 +25,7 @@ struct shmem_inode_info {
- 	struct simple_xattrs	xattrs;		/* list of xattrs */
- 	atomic_t		stop_eviction;	/* hold when working on inode */
- 	struct inode		vfs_inode;
-+	struct timespec64	i_crtime;	/* file creation time */
- };
+diff --git a/arch/hexagon/mm/init.c b/arch/hexagon/mm/init.c
+index f01e91e10d95..3167a3b5c97b 100644
+--- a/arch/hexagon/mm/init.c
++++ b/arch/hexagon/mm/init.c
+@@ -29,8 +29,6 @@ int max_kernel_seg = 0x303;
+ /*  indicate pfn's of high memory  */
+ unsigned long highstart_pfn, highend_pfn;
  
- struct shmem_sb_info {
-diff --git a/mm/shmem.c b/mm/shmem.c
-index a09b29ec2b45..5a3907712c4f 100644
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -1061,6 +1061,12 @@ static int shmem_getattr(struct user_namespace *mnt_userns,
- 	if (shmem_is_huge(NULL, inode, 0))
- 		stat->blksize = HPAGE_PMD_SIZE;
+-DEFINE_PER_CPU(struct mmu_gather, mmu_gathers);
+-
+ /* Default cache attribute for newly created page tables */
+ unsigned long _dflt_cache_att = CACHEDEF;
  
-+	if ((request_mask & STATX_BTIME)) {
-+		stat->result_mask |= STATX_BTIME;
-+		stat->btime.tv_sec = info->i_crtime.tv_sec;
-+		stat->btime.tv_nsec = info->i_crtime.tv_nsec;
-+	}
-+
- 	return 0;
- }
+diff --git a/arch/nds32/mm/init.c b/arch/nds32/mm/init.c
+index f63f839738c4..825c85cab1a1 100644
+--- a/arch/nds32/mm/init.c
++++ b/arch/nds32/mm/init.c
+@@ -18,7 +18,6 @@
+ #include <asm/tlb.h>
+ #include <asm/page.h>
  
-@@ -2265,6 +2271,7 @@ static struct inode *shmem_get_inode(struct super_block *sb, const struct inode
- 		atomic_set(&info->stop_eviction, 0);
- 		info->seals = F_SEAL_SEAL;
- 		info->flags = flags & VM_NORESERVE;
-+		info->i_crtime = inode->i_mtime;
- 		INIT_LIST_HEAD(&info->shrinklist);
- 		INIT_LIST_HEAD(&info->swaplist);
- 		simple_xattrs_init(&info->xattrs);
-@@ -3196,6 +3203,7 @@ static ssize_t shmem_listxattr(struct dentry *dentry, char *buffer, size_t size)
- #endif /* CONFIG_TMPFS_XATTR */
+-DEFINE_PER_CPU(struct mmu_gather, mmu_gathers);
+ DEFINE_SPINLOCK(anon_alias_lock);
+ extern pgd_t swapper_pg_dir[PTRS_PER_PGD];
  
- static const struct inode_operations shmem_short_symlink_operations = {
-+	.getattr	= shmem_getattr,
- 	.get_link	= simple_get_link,
- #ifdef CONFIG_TMPFS_XATTR
- 	.listxattr	= shmem_listxattr,
-@@ -3203,6 +3211,7 @@ static const struct inode_operations shmem_short_symlink_operations = {
- };
+diff --git a/arch/openrisc/mm/init.c b/arch/openrisc/mm/init.c
+index 97305bde1b16..3a021ab6f1ae 100644
+--- a/arch/openrisc/mm/init.c
++++ b/arch/openrisc/mm/init.c
+@@ -38,8 +38,6 @@
  
- static const struct inode_operations shmem_symlink_inode_operations = {
-+	.getattr	= shmem_getattr,
- 	.get_link	= shmem_get_link,
- #ifdef CONFIG_TMPFS_XATTR
- 	.listxattr	= shmem_listxattr,
-@@ -3790,6 +3799,7 @@ static const struct inode_operations shmem_inode_operations = {
+ int mem_init_done;
  
- static const struct inode_operations shmem_dir_inode_operations = {
- #ifdef CONFIG_TMPFS
-+	.getattr	= shmem_getattr,
- 	.create		= shmem_create,
- 	.lookup		= simple_lookup,
- 	.link		= shmem_link,
-@@ -3811,6 +3821,7 @@ static const struct inode_operations shmem_dir_inode_operations = {
- };
- 
- static const struct inode_operations shmem_special_inode_operations = {
-+	.getattr	= shmem_getattr,
- #ifdef CONFIG_TMPFS_XATTR
- 	.listxattr	= shmem_listxattr,
- #endif
+-DEFINE_PER_CPU(struct mmu_gather, mmu_gathers);
+-
+ static void __init zone_sizes_init(void)
+ {
+ 	unsigned long max_zone_pfn[MAX_NR_ZONES] = { 0 };
 -- 
-2.25.1
+2.31.1
 

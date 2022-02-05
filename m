@@ -2,195 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9659E4AA579
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 02:55:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 323F74AA57C
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 02:56:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378929AbiBEBzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 20:55:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34360 "EHLO
+        id S1378938AbiBEBzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 20:55:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378667AbiBEBzo (ORCPT
+        with ESMTP id S1378667AbiBEBzt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 20:55:44 -0500
-Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 463F3C061347
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 17:55:44 -0800 (PST)
-Received: by mail-oo1-xc36.google.com with SMTP id c7-20020a4ad207000000b002e7ab4185d2so6694920oos.6
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 17:55:44 -0800 (PST)
+        Fri, 4 Feb 2022 20:55:49 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DBE3C061346
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 17:55:48 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id o16-20020a17090aac1000b001b62f629953so14681964pjq.3
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 17:55:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hsH4XSzPvplGNuSkHB3Wuw3VI1CbzbgPtHERwTztYTU=;
-        b=k+Ar6VYgB1tXJyhXbcDwM3+8R2RK3yTrevfyDo6jWTGg7kG4hdCtRcQF+Y1JO9XGBY
-         6sdT9BYf38NTEQELRFDj8kIn1317hb9Pg44IV92CzRnGgFtMBWPh/ex8krLEJ4OFR32g
-         yn7pff6De1KqLuHd+rjlZ2qL5OpFtlnn+rgmmFMX1u3M7chUlcKGq/ac8Aj/oqZRhtkA
-         WBXFU4YXdzTyeYfZGNdyb5nObWwpA00vVdw6D1md0O3RtDGGL5vRlFScvH5mOwCirVcN
-         rhA9hWlAR0hWiIlZTyfxuWwFBGd0C0hoQU4R4YMpjroQI3DoulCy1wfe5p53nyIyY4in
-         GShg==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=hGTVW+01e4GIAkWOjoFjzjXZ+1intL+wDAwZzXY0atY=;
+        b=MKyUMfHjlP5/X/3UuWqXNYJLGgIfTcrMciakaNzzdl5lJSqfrUaaYEygfM0LRmxhOs
+         fw6VQzFRdQQS9LGthD5la6HPu7wjOr4eBuXNeuQpQiSy7Zi0S3mhtvRyxIuOgvEBueGQ
+         Cyjl//36hjg0rLX6YXFubWfp0VLeNtiZQ26SqNw7w6wDFYbS/sOQrz4rLh5iSiAIq87l
+         ntU2ZymE3/eEO7ZdR6Gn5814oVCx0HsotkhlahfaX6mPky2zND6sXRtO6M3meyMvQ2q4
+         dZxORk6lg4X98K8vzE0i6JFArp4i+tI82K/464s+Z74VIpUSuEOF8rplAqWyeuYcG7h8
+         U5tQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hsH4XSzPvplGNuSkHB3Wuw3VI1CbzbgPtHERwTztYTU=;
-        b=ZmyTj7WnQwwUhNdPnLdO7MMcJi+iWAYVXP+oOLKF/LNbOHGwaYE5W4HexwaZNzjXBq
-         xi0O3AgaPL6CR2SaD22kWwvRutslrIS2DZCSul7UcjiQA4Z7v/kd6/qG2pXfMypCUuc6
-         AWs6CY8JuBEy6YDIXna+ai4/PAxVK9JI7K77Ql45R+nX1yTLe3bdrbwSZCoUp1PLu/FQ
-         ikz/ozn0rn6EtGp+LYxkuzh+ujcoYlwwaXHxmki10ldwV2jRKQ9rnIlr7kAv1i83xT2M
-         xwFoj9lM2qiJMRuEdNdLx0mkTg4za8u/yfxWJUwr2B+RInFCDq5Y4G5aUzoAzMW0wJUq
-         ndNw==
-X-Gm-Message-State: AOAM531I+eNJ+Qz6kLuhG4WsJN1rApDfxbP5OJuHjQmeFKq6s/Vfqk5l
-        os40gzQUo0HPcv74pQdm9IeAncnPIsrC1ka0kBwYMg==
-X-Google-Smtp-Source: ABdhPJy0A+9GRscp1BaRP0N6zCOdlAtZFSTW6xYR0MyWybosHHvdX+gXO40emPtaYzyn8mvUHzK9Y4smLbJChvyPyTw=
-X-Received: by 2002:a05:6871:581:: with SMTP id u1mr464555oan.139.1644026142231;
- Fri, 04 Feb 2022 17:55:42 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=hGTVW+01e4GIAkWOjoFjzjXZ+1intL+wDAwZzXY0atY=;
+        b=RT109szqRxE+ZmTSPvbdxKeMu0kXXlOBx8o4PZ/fDkdo+oCiG2fJcrz0NpT6+1T3Cm
+         Ld1c+OMqPO120fz7zzK3LdUpx2BG/V5vCIHiijowg9e/CfHVPp4JODD9bAGCMBrd1Rzn
+         H5UH0NgRe4K4Hvb7yAp6Qipqo2oHMhwXNYM7Pdyp2p13jd0GyOmY8vE82IeMYgNrR5Uh
+         zqk39+ROGe4IHQhHefjAMGnOX39ObyE3fHq2dN8sqAT0RPoeP1o5Eud+4eHrS0nOp0CS
+         r34Z5nI+betXW1DKHM05miK67P4sgrpf7SJ0V3SwhE2eEjeax+Yu2Mt8Kp++RiAYqZPc
+         8q5w==
+X-Gm-Message-State: AOAM5332pNdqHaehVGzwrLddGjBaqqAZ8ESCatK49D9Mb4KLxzSl406E
+        dCrFPv91f+g+APFQ8dcEfbI=
+X-Google-Smtp-Source: ABdhPJzkj9ah/MKJt0tBrGU4CnDflWStMfgavXmyxNOSvps0iRQxrimCRm86/5KuVkfVZjtIIJTnPw==
+X-Received: by 2002:a17:902:e803:: with SMTP id u3mr5800746plg.41.1644026147342;
+        Fri, 04 Feb 2022 17:55:47 -0800 (PST)
+Received: from [10.200.0.18] ([85.203.23.14])
+        by smtp.gmail.com with ESMTPSA id y41sm3913585pfa.213.2022.02.04.17.55.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Feb 2022 17:55:46 -0800 (PST)
+Message-ID: <8fa82beb-468c-afb0-3eed-4240200395a3@gmail.com>
+Date:   Sat, 5 Feb 2022 09:55:36 +0800
 MIME-Version: 1.0
-References: <20211130074221.93635-1-likexu@tencent.com> <20211130074221.93635-3-likexu@tencent.com>
-In-Reply-To: <20211130074221.93635-3-likexu@tencent.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Fri, 4 Feb 2022 17:55:31 -0800
-Message-ID: <CALMp9eQG7eqq+u3igApsRDV=tt0LdjZzmD_dC8zw=gt=f5NjSA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/6] KVM: x86/pmu: Refactoring find_arch_event() to pmc_perf_hw_id()
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Like Xu <likexu@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [BUG] gpu: drm: radeon: two possible deadlocks involving locking
+ and waiting
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        alexander.deucher@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
+        daniel@ffwll.ch
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <d5e4460f-7e26-81d2-2efe-6f47760b78d2@gmail.com>
+ <7cdc2d3f-df52-f7a9-15bf-fe4bc01d3c4f@amd.com>
+From:   Jia-Ju Bai <baijiaju1990@gmail.com>
+In-Reply-To: <7cdc2d3f-df52-f7a9-15bf-fe4bc01d3c4f@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 11:42 PM Like Xu <like.xu.linux@gmail.com> wrote:
+Hi Christian,
+
+Thanks for the reply :)
+
+On 2022/2/1 15:56, Christian König wrote:
+> Hi Jia-Ju,
 >
-> From: Like Xu <likexu@tencent.com>
+> interesting that you have found those issues with an automated tool.
 >
-> The find_arch_event() returns a "unsigned int" value,
-> which is used by the pmc_reprogram_counter() to
-> program a PERF_TYPE_HARDWARE type perf_event.
+> And yes that is a well design flaw within the radeon driver which can 
+> happen on hardware faults, e.g. when radeon_ring_backup() needs to be 
+> called.
+
+In fact, my tool finds dozens of similar possible deadlocks caused by 
+wait_event_timeout() in radeon_fence_wait_seq_timeout().
+There are three other examples in Linux 5.16:
+
+#BUG 1
+radeon_dpm_change_power_state_locked()
+   mutex_lock(&rdev->ring_lock); --> Line 1133 (Lock A)
+   radeon_fence_wait_empty()
+     radeon_fence_wait_seq_timeout()
+       wait_event_timeout(rdev->fence_queue, ...) --> Line 504 (Wait X)
+
+radeon_fence_driver_fini()
+   mutex_lock(&rdev->ring_lock); --> Line 917 (Lock A)
+   wake_up_all(&rdev->fence_queue); --> Line 927 (Wake X)
+
+#BUG 2
+radeon_set_pm_profile()
+   mutex_lock(&rdev->pm.mutex); --> Line 382 (Lock A)
+   radeon_pm_set_clocks()
+     radeon_fence_wait_empty()
+       radeon_fence_wait_seq_timeout()
+         wait_event_timeout(rdev->fence_queue, ...) --> Line 504 (Wait X)
+
+radeon_dynpm_idle_work_handler()
+   mutex_lock(&rdev->pm.mutex); --> Line 1861 (Lock A)
+   radeon_fence_count_emitted()
+     radeon_fence_process()
+       wake_up_all(&rdev->fence_queue); --> Line 323 (Wake X)
+
+#BUG 3
+radeon_pm_fini_old()
+   mutex_lock(&rdev->pm.mutex); --> Line 1642 (Lock A)
+   radeon_pm_set_clocks()
+     radeon_fence_wait_empty()
+       radeon_fence_wait_seq_timeout()
+         wait_event_timeout(rdev->fence_queue, ...) --> Line 504 (Wait X)
+
+radeon_dynpm_idle_work_handler()
+   mutex_lock(&rdev->pm.mutex); --> Line 1861 (Lock A)
+   radeon_fence_count_emitted()
+     radeon_fence_process()
+       wake_up_all(&rdev->fence_queue); --> Line 323 (Wake X)
+
+Thus, to fix these possible deadlocks, we could moditify the code 
+related to radeon_fence_wait_seq_timeout().
+But I am not quite familar with the radeon driver, so I am not sure how 
+to moditify the code properly.
+
 >
-> The returned value is actually the kernel defined gernic
-> perf_hw_id, let's rename it to pmc_perf_hw_id() with simpler
-> incoming parameters for better self-explanation.
+> But that happens so rarely and the driver is not developed further 
+> that we decided to not address this any more.
+
+Ah, okay.
+
 >
-> Signed-off-by: Like Xu <likexu@tencent.com>
-> ---
->  arch/x86/kvm/pmu.c           | 8 +-------
->  arch/x86/kvm/pmu.h           | 3 +--
->  arch/x86/kvm/svm/pmu.c       | 8 ++++----
->  arch/x86/kvm/vmx/pmu_intel.c | 9 +++++----
->  4 files changed, 11 insertions(+), 17 deletions(-)
+> Regards,
+> Christian.
 >
-> diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
-> index 09873f6488f7..3b3ccf5b1106 100644
-> --- a/arch/x86/kvm/pmu.c
-> +++ b/arch/x86/kvm/pmu.c
-> @@ -174,7 +174,6 @@ static bool pmc_resume_counter(struct kvm_pmc *pmc)
->  void reprogram_gp_counter(struct kvm_pmc *pmc, u64 eventsel)
->  {
->         unsigned config, type = PERF_TYPE_RAW;
-> -       u8 event_select, unit_mask;
->         struct kvm *kvm = pmc->vcpu->kvm;
->         struct kvm_pmu_event_filter *filter;
->         int i;
-> @@ -206,17 +205,12 @@ void reprogram_gp_counter(struct kvm_pmc *pmc, u64 eventsel)
->         if (!allow_event)
->                 return;
+> Am 01.02.22 um 08:40 schrieb Jia-Ju Bai:
+>> Hello,
+>>
+>> My static analysis tool reports a possible deadlock in the radeon 
+>> driver in Linux 5.16:
+>>
+>> #BUG 1
+>> radeon_dpm_change_power_state_locked()
+>>   mutex_lock(&rdev->ring_lock); --> Line 1133 (Lock A)
+>>   radeon_fence_wait_empty()
+>>     radeon_fence_wait_seq_timeout()
+>>       wait_event_timeout(rdev->fence_queue, ...) --> Line 504 (Wait X)
+>>
+>> radeon_ring_backup()
+>>   mutex_lock(&rdev->ring_lock); --> Line 289(Lock A)
+>>   radeon_fence_count_emitted()
+>>     radeon_fence_process()
+>>       wake_up_all(&rdev->fence_queue); --> Line 323 (Wake X)
+>>
+>> When radeon_dpm_change_power_state_locked() is executed, "Wait X" is 
+>> performed by holding "Lock A". If radeon_ring_backup() is executed at 
+>> this time, "Wake X" cannot be performed to wake up "Wait X" in 
+>> radeon_dpm_change_power_state_locked(), because "Lock A" has been 
+>> already hold by radeon_dpm_change_power_state_locked(), causing a 
+>> possible deadlock.
+>> I find that "Wait X" is performed with a timeout 
+>> MAX_SCHEDULE_TIMEOUT, to relieve the possible deadlock; but I think 
+>> this timeout can cause inefficient execution.
+>>
+>> #BUG 2
+>> radeon_ring_lock()
+>>   mutex_lock(&rdev->ring_lock); --> Line 147 (Lock A)
+>>   radeon_ring_alloc()
+>>     radeon_fence_wait_next()
+>>       radeon_fence_wait_seq_timeout()
+>>         wait_event_timeout(rdev->fence_queue, ...) --> Line 504 (Wait X)
+>>
+>> radeon_ring_backup()
+>>   mutex_lock(&rdev->ring_lock); --> Line 289(Lock A)
+>>   radeon_fence_count_emitted()
+>>     radeon_fence_process()
+>>       wake_up_all(&rdev->fence_queue); --> Line 323 (Wake X)
+>>
+>> When radeon_ring_lock() is executed, "Wait X" is performed by holding 
+>> "Lock A". If radeon_ring_backup() is executed at this time, "Wake X" 
+>> cannot be performed to wake up "Wait X" in radeon_ring_lock(), 
+>> because "Lock A" has been already hold by radeon_ring_lock(), causing 
+>> a possible deadlock.
+>> I find that "Wait X" is performed with a timeout 
+>> MAX_SCHEDULE_TIMEOUT, to relieve the possible deadlock; but I think 
+>> this timeout can cause inefficient execution.
+>>
+>> I am not quite sure whether these possible problems are real and how 
+>> to fix them if they are real.
+>> Any feedback would be appreciated, thanks :)
+>>
+>>
+>> Best wishes,
+>> Jia-Ju Bai
+>>
 >
-> -       event_select = eventsel & ARCH_PERFMON_EVENTSEL_EVENT;
-> -       unit_mask = (eventsel & ARCH_PERFMON_EVENTSEL_UMASK) >> 8;
-> -
->         if (!(eventsel & (ARCH_PERFMON_EVENTSEL_EDGE |
->                           ARCH_PERFMON_EVENTSEL_INV |
->                           ARCH_PERFMON_EVENTSEL_CMASK |
->                           HSW_IN_TX |
->                           HSW_IN_TX_CHECKPOINTED))) {
-> -               config = kvm_x86_ops.pmu_ops->find_arch_event(pmc_to_pmu(pmc),
-> -                                                     event_select,
-> -                                                     unit_mask);
-> +               config = kvm_x86_ops.pmu_ops->pmc_perf_hw_id(pmc);
->                 if (config != PERF_COUNT_HW_MAX)
->                         type = PERF_TYPE_HARDWARE;
->         }
-> diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
-> index 59d6b76203d5..dd7dbb1c5048 100644
-> --- a/arch/x86/kvm/pmu.h
-> +++ b/arch/x86/kvm/pmu.h
-> @@ -24,8 +24,7 @@ struct kvm_event_hw_type_mapping {
->  };
->
->  struct kvm_pmu_ops {
-> -       unsigned (*find_arch_event)(struct kvm_pmu *pmu, u8 event_select,
-> -                                   u8 unit_mask);
-> +       unsigned int (*pmc_perf_hw_id)(struct kvm_pmc *pmc);
->         unsigned (*find_fixed_event)(int idx);
->         bool (*pmc_is_enabled)(struct kvm_pmc *pmc);
->         struct kvm_pmc *(*pmc_idx_to_pmc)(struct kvm_pmu *pmu, int pmc_idx);
-> diff --git a/arch/x86/kvm/svm/pmu.c b/arch/x86/kvm/svm/pmu.c
-> index 0cf05e4caa4c..fb0ce8cda8a7 100644
-> --- a/arch/x86/kvm/svm/pmu.c
-> +++ b/arch/x86/kvm/svm/pmu.c
-> @@ -138,10 +138,10 @@ static inline struct kvm_pmc *get_gp_pmc_amd(struct kvm_pmu *pmu, u32 msr,
->         return &pmu->gp_counters[msr_to_index(msr)];
->  }
->
-> -static unsigned amd_find_arch_event(struct kvm_pmu *pmu,
-> -                                   u8 event_select,
-> -                                   u8 unit_mask)
-> +static unsigned int amd_pmc_perf_hw_id(struct kvm_pmc *pmc)
->  {
-> +       u8 event_select = pmc->eventsel & ARCH_PERFMON_EVENTSEL_EVENT;
-On AMD, the event select is 12 bits.
-> +       u8 unit_mask = (pmc->eventsel & ARCH_PERFMON_EVENTSEL_UMASK) >> 8;
->         int i;
->
->         for (i = 0; i < ARRAY_SIZE(amd_event_mapping); i++)
-> @@ -323,7 +323,7 @@ static void amd_pmu_reset(struct kvm_vcpu *vcpu)
->  }
->
->  struct kvm_pmu_ops amd_pmu_ops = {
-> -       .find_arch_event = amd_find_arch_event,
-> +       .pmc_perf_hw_id = amd_pmc_perf_hw_id,
->         .find_fixed_event = amd_find_fixed_event,
->         .pmc_is_enabled = amd_pmc_is_enabled,
->         .pmc_idx_to_pmc = amd_pmc_idx_to_pmc,
-> diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
-> index b7ab5fd03681..67a0188ecdc5 100644
-> --- a/arch/x86/kvm/vmx/pmu_intel.c
-> +++ b/arch/x86/kvm/vmx/pmu_intel.c
-> @@ -68,10 +68,11 @@ static void global_ctrl_changed(struct kvm_pmu *pmu, u64 data)
->                 reprogram_counter(pmu, bit);
->  }
->
-> -static unsigned intel_find_arch_event(struct kvm_pmu *pmu,
-> -                                     u8 event_select,
-> -                                     u8 unit_mask)
-> +static unsigned int intel_pmc_perf_hw_id(struct kvm_pmc *pmc)
->  {
-> +       struct kvm_pmu *pmu = pmc_to_pmu(pmc);
-> +       u8 event_select = pmc->eventsel & ARCH_PERFMON_EVENTSEL_EVENT;
-> +       u8 unit_mask = (pmc->eventsel & ARCH_PERFMON_EVENTSEL_UMASK) >> 8;
->         int i;
->
->         for (i = 0; i < ARRAY_SIZE(intel_arch_events); i++)
-> @@ -719,7 +720,7 @@ static void intel_pmu_cleanup(struct kvm_vcpu *vcpu)
->  }
->
->  struct kvm_pmu_ops intel_pmu_ops = {
-> -       .find_arch_event = intel_find_arch_event,
-> +       .pmc_perf_hw_id = intel_pmc_perf_hw_id,
->         .find_fixed_event = intel_find_fixed_event,
->         .pmc_is_enabled = intel_pmc_is_enabled,
->         .pmc_idx_to_pmc = intel_pmc_idx_to_pmc,
-> --
-> 2.33.1
->
+

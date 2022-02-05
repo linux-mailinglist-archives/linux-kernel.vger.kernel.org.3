@@ -2,300 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3539A4AA53F
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 02:09:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD23B4AA543
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 02:17:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378840AbiBEBJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 20:09:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52258 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233537AbiBEBJz (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 20:09:55 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2CAFC0364AC
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 17:09:53 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id e81-20020a25d354000000b0061b1a807047so8238258ybf.14
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 17:09:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=X+MdotQVqzVb5iXMvO6xGd1RHiGCWDiHkvIyMF2FOY0=;
-        b=C8R5oslCrSyXVPbUJZjth0sKEh7ZqhfDRMqOEJhmB02X3vddsEJLOQbhl8t4S8d1r9
-         KKTVSgutxJuB44dnY9Gt+a/I1DrkjN3bqXvZffpy9V/Xl+h2GcR0H0BHrA/jU7L/SxKx
-         7F363Jl98FxssQoT+V65ntuNIv0CCHCZ1icMj1O7gfO4bJPzrY540bGb+V1ZguJrQvq/
-         uXxtgcQb5xQlI7O4FBymQk0uM5VQRz8zuggG8fQ8jSIOdFc1zfomWC0xdliPvdTvZfLW
-         DbH74Y3G5A6Rj9CkGAQ1rdXHp28lx9floyf2Mxyh6pSltNy7MR71apDUCgmryZp8PGDq
-         APdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=X+MdotQVqzVb5iXMvO6xGd1RHiGCWDiHkvIyMF2FOY0=;
-        b=E9ED9P2G6Rsf6FAy21mbv1YRpq7S26Wvggei+L6GYNPMsqYVMcZKD5pABNF2nO4Bb6
-         ImytwU0NfMFqQUU7sbs03YB7h/FaqxPMJXcgCBftD+zmOMlVeEujaMPaWpypKi5Nc5yr
-         lHSAdJ4TJ3Eyjxs0yodbS0kV4giYagB35RZmImqwyGj6FjA7n9h5Mgjui0JujqVFBq6q
-         MbumatNlgz/ierdVVwts07fX1338WTK5wG4qnv2XholJYYvzl/Iss2lc08A9xWfL5cE1
-         zGuMRE2qE4rtNi1A96jp34We1uexwTIxB1Xo6ItEMWJrHY3r/3dgxjKWfpdd1r8nzOiQ
-         DsHw==
-X-Gm-Message-State: AOAM531tnozRQkIfB4AYbfb6kbclqj6p48W9ZlXdXe4WFY6Pe3hTKfwU
-        C2VqMKlhv1reCrqUh7fwTKT6SS+hvjns
-X-Google-Smtp-Source: ABdhPJxvEV6msjvuMrQPnotYMSgN0sAIhlm7DqvPYrkUtsSGf9X+KNhx3pWhCEcM8TskdJ09CyZx5cAJ4gI0
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:2e3f:a36f:e557:9b6d])
- (user=irogers job=sendgmr) by 2002:a05:690c:309:: with SMTP id
- bg9mr1783100ywb.135.1644023393029; Fri, 04 Feb 2022 17:09:53 -0800 (PST)
-Date:   Fri,  4 Feb 2022 17:09:41 -0800
-Message-Id: <20220205010941.1065469-1-irogers@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.0.263.gb82422642f-goog
-Subject: [PATCH] perf stat: Fix display of grouped aliased events.
-From:   Ian Rogers <irogers@google.com>
-To:     vineet.singh@intel.com, perry.taylor@intel.com,
-        caleb.biggers@intel.com, asaf.yaffe@intel.com,
-        kshipra.bopardikar@intel.com,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        James Clark <james.clark@arm.com>,
-        John Garry <john.garry@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Cc:     Stephane Eranian <eranian@google.com>,
-        Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_40,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75,
-        USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+        id S1378858AbiBEBRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 20:17:13 -0500
+Received: from mga14.intel.com ([192.55.52.115]:26193 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1378852AbiBEBRL (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 20:17:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644023831; x=1675559831;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=uHn93oKNgTpPSTexIzqu/Jqpy30iL5ZfSMF1VUbeB1Y=;
+  b=FnRSkfMGCd496MltnEHMn2A5tCW3pn+Ah5iN6yg+10iujL4DCAyHrub7
+   WlwGM2nGYbq6fAWZTRXkYQcL/2Tt4w7oC6bdSJUlMckMlCthGd8kwPyvJ
+   jCpothEHFafJkZ3wMhGSsC1givAJ23dX3ABslVcnl3vR16vfym2kA0B3V
+   8oUoNS3+fc+DDcBmEflGaZQJ7zVU1EdfsSiVpzx8P9xspFMGHnbHfa7XF
+   3PF17TjqCslElogxjRwCSRzD4Dayb0UH9AQF/7dfb7+5tqt0CJ6xAAd8E
+   GrAC0RVLGSCQPgstCcwSnI1rs/OIO8r0H/t3GRfF3PsXaO/E5HXsiB40i
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="248685450"
+X-IronPort-AV: E=Sophos;i="5.88,344,1635231600"; 
+   d="scan'208";a="248685450"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 17:17:06 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,344,1635231600"; 
+   d="scan'208";a="539373447"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 04 Feb 2022 17:17:04 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nG9hI-000YPj-1n; Sat, 05 Feb 2022 01:17:04 +0000
+Date:   Sat, 5 Feb 2022 09:16:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Nick Alcock <nick.alcock@oracle.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Kris Van Hees <kris.van.hees@oracle.com>
+Subject: [oracle-dtrace:v2/5.17-rc2 6/10] kernel/kallsyms.c:775:3: error:
+ expected expression
+Message-ID: <202202050909.66P7tRUv-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-An event may have a number of uncore aliases that when added to
-the evlist are consecutive. If there are multiple uncore events
-in a group then parse_events__set_leader_for_uncore_aliase will
-reorder the evlist so that events on the same PMU are
-adjacent. collect_all_aliases assumes that aliases are in blocks
-so that only the first counter is printed and all others are
-marked merged. The reordering for groups breaks the assumption
-and so all counts are printed. This change removes the assumption
-from collect_all_aliases that the events are in blocks and
-instead processes the entire evlist.
+tree:   https://github.com/oracle/dtrace-linux-kernel v2/5.17-rc2
+head:   47946e7b2e2319f39cbb7f8aaa294298c2dec5b4
+commit: ea16e4ce65d8342913051086a89eac87dc54aced [6/10] kallsyms: add /proc/kallmodsyms
+config: s390-randconfig-r032-20220130 (https://download.01.org/0day-ci/archive/20220205/202202050909.66P7tRUv-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a73e4ce6a59b01f0e37037761c1e6889d539d233)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/oracle/dtrace-linux-kernel/commit/ea16e4ce65d8342913051086a89eac87dc54aced
+        git remote add oracle-dtrace https://github.com/oracle/dtrace-linux-kernel
+        git fetch --no-tags oracle-dtrace v2/5.17-rc2
+        git checkout ea16e4ce65d8342913051086a89eac87dc54aced
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
 
-Before:
-```
-$ perf stat -e '{UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE,UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE},duration_time' -a -A -- sleep 1
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
- Performance counter stats for 'system wide':
+All error/warnings (new ones prefixed by >>):
 
-CPU0                  256,866      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU36                 494,413      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU0                      967      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU36                   1,738      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU0                  285,161      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU36                 429,920      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU0                      955      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU36                   1,443      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU0                  310,753      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU36                 416,657      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU0                    1,231      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU36                   1,573      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU0                  416,067      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU36                 405,966      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU0                    1,481      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU36                   1,447      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU0                  312,911      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU36                 408,154      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU0                    1,086      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU36                   1,380      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU0                  333,994      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU36                 370,349      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU0                    1,287      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU36                   1,335      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU0                  188,107      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU36                 302,423      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU0                      701      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU36                   1,070      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU0                  307,221      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU36                 383,642      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU0                    1,036      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU36                   1,158      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU0                  318,479      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU36                 821,545      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU0                    1,028      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU36                   2,550      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU0                  227,618      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU36                 372,272      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU0                      903      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU36                   1,456      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU0                  376,783      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU36                 419,827      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU0                    1,406      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU36                   1,453      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU0                  286,583      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU36                 429,956      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU0                      999      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU36                   1,436      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU0                  313,867      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU36                 370,159      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU0                    1,114      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU36                   1,291      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU0                  342,083      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU36                 409,111      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU0                    1,399      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU36                   1,684      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU0                  365,828      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU36                 376,037      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU0                    1,378      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU36                   1,411      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU0                  382,456      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU36                 621,743      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU0                    1,232      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU36                   1,955      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU0                  342,316      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU36                 385,067      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU0                    1,176      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU36                   1,268      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU0                  373,588      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU36                 386,163      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU0                    1,394      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU36                   1,464      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU0                  381,206      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU36                 546,891      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU0                    1,266      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU36                   1,712      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU0                  221,176      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU36                 392,069      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU0                      831      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU36                   1,456      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU0                  355,401      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU36                 705,595      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU0                    1,235      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU36                   2,216      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU0                  371,436      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU36                 428,103      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU0                    1,306      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU36                   1,442      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU0                  384,352      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU36                 504,200      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU0                    1,468      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU36                   1,860      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU0                  228,856      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU36                 287,976      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU0                      832      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU36                   1,060      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU0                  215,121      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU36                 334,162      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU0                      681      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU36                   1,026      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU0                  296,179      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU36                 436,083      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU0                    1,084      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU36                   1,525      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU0                  262,296      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU36                 416,573      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU0                      986      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU36                   1,533      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU0                  285,852      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU36                 359,842      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU0                    1,073      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU36                   1,326      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU0                  303,379      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU36                 367,222      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU0                    1,008      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU36                   1,156      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU0                  273,487      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU36                 425,449      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU0                      932      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU36                   1,367      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU0                  297,596      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU36                 414,793      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU0                    1,140      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU36                   1,601      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU0                  342,365      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU36                 360,422      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU0                    1,291      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU36                   1,342      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU0                  327,196      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU36                 580,858      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU0                    1,122      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU36                   2,014      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU0                  296,564      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU36                 452,817      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU0                    1,087      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU36                   1,694      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU0                  375,002      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU36                 389,393      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU0                    1,478      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU36                   1,540      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU0                  365,213      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU36                 594,685      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU0                    1,401      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU36                   2,222      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU0            1,000,749,060 ns   duration_time
+   In file included from kernel/kallsyms.c:25:
+   In file included from include/linux/filter.h:12:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from kernel/kallsyms.c:25:
+   In file included from include/linux/filter.h:12:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from kernel/kallsyms.c:25:
+   In file included from include/linux/filter.h:12:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   kernel/kallsyms.c:666:12: warning: no previous prototype for function 'arch_get_kallsym' [-Wmissing-prototypes]
+   int __weak arch_get_kallsym(unsigned int symnum, unsigned long *value,
+              ^
+   kernel/kallsyms.c:666:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int __weak arch_get_kallsym(unsigned int symnum, unsigned long *value,
+   ^
+   static 
+>> kernel/kallsyms.c:775:3: error: expected expression
+                   unsigned long mod_idx = (unsigned long) -1;
+                   ^
+>> kernel/kallsyms.c:806:28: warning: comparison between pointer and integer ('unsigned long' and 'char (*)[]') [-Wpointer-integer-compare]
+                     if (likely(iter->value != &_etext))
+                                ~~~~~~~~~~~ ^  ~~~~~~~
+   include/linux/compiler.h:77:40: note: expanded from macro 'likely'
+   # define likely(x)      __builtin_expect(!!(x), 1)
+                                               ^
+   kernel/kallsyms.c:804:17: warning: unused variable 'endstr' [-Wunused-variable]
+                     const char *endstr;
+                                 ^
+   15 warnings and 1 error generated.
 
-       1.000749060 seconds time elapsed
-```
 
-After:
+vim +775 kernel/kallsyms.c
 
-```
- Performance counter stats for 'system wide':
+   755	
+   756	/* Returns space to next name. */
+   757	static unsigned long get_ksymbol_core(struct kallsym_iter *iter, int kallmodsyms)
+   758	{
+   759		unsigned off = iter->nameoff;
+   760	
+   761		iter->exported = 0;
+   762		iter->value = kallsyms_sym_address(iter->pos);
+   763	
+   764		iter->type = kallsyms_get_symbol_type(off);
+   765	
+   766		iter->module_name[0] = '\0';
+   767		iter->builtin_module_names = NULL;
+   768	
+   769		off = kallsyms_expand_symbol(off, iter->name, ARRAY_SIZE(iter->name));
+   770	#ifdef CONFIG_KALLMODSYMS
+   771		if (kallmodsyms) {
+   772			unsigned long mod_idx = (unsigned long) -1;
+   773	
+   774			if (kallsyms_module_offsets)
+ > 775			unsigned long mod_idx = (unsigned long) -1;
+   776	
+   777			if (kallsyms_module_offsets)
+   778				mod_idx =
+   779				  get_builtin_module_idx(iter->value,
+   780							 iter->hint_builtin_module_idx);
+   781	
+   782			/*
+   783			 * This is a built-in module iff the tables of built-in modules
+   784			 * (address->module name mappings) and module names are known,
+   785			 * and if the address was found there, and if the corresponding
+   786			 * module index is nonzero, and iff this is a text (or weak)
+   787			 * symbol.  All other cases mean off the end of the binary or in
+   788			 * a non-modular range in between one or more modules.  (Also
+   789			 * guard against a corrupt kallsyms_objfiles array pointing off
+   790			 * the end of kallsyms_modules.)
+   791			 */
+   792			if (kallsyms_modules != NULL && kallsyms_module_names != NULL &&
+   793			    (iter->type == 't' || iter->type == 'T' ||
+   794			     iter->type == 'w' || iter->type == 'W') &&
+   795			    mod_idx != (unsigned long) -1 &&
+   796			    kallsyms_modules[mod_idx] != 0 &&
+   797			    kallsyms_modules[mod_idx] < kallsyms_module_names_len) {
+   798			  /*
+   799			   * Rule out (rare) section start/end symbols which might
+   800			   * overlap the last symbol in .text.  (Will also hit at most
+   801			   * one symbol which really is in a built-in module, but only
+   802			   * if that symbol is zero-length.)
+   803			   */
+   804			  const char *endstr;
+   805	
+ > 806			  if (likely(iter->value != &_etext))
+   807			    iter->builtin_module_names =
+   808			      &kallsyms_module_names[kallsyms_modules[mod_idx]];
+   809			}
+   810			iter->hint_builtin_module_idx = mod_idx;
+   811		}
+   812	#endif
+   813		return off - iter->nameoff;
+   814	}
+   815	
 
-CPU0               20,547,434      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU36              45,202,862      UNC_CHA_TOR_OCCUPANCY.IA_MISS_DRD_REMOTE
-CPU0                   82,001      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU36                 159,688      UNC_CHA_TOR_INSERTS.IA_MISS_DRD_REMOTE
-CPU0            1,000,464,828 ns   duration_time
-
-       1.000464828 seconds time elapsed
-```
-
-Fixes: 3cdc5c2cb924 ("perf parse-events: Handle uncore event aliases in small groups properly")
-Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/stat-display.c | 19 ++++++++++---------
- 1 file changed, 10 insertions(+), 9 deletions(-)
-
-diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
-index 5db83e51ceef..9cbe351b141f 100644
---- a/tools/perf/util/stat-display.c
-+++ b/tools/perf/util/stat-display.c
-@@ -585,15 +585,16 @@ static void collect_all_aliases(struct perf_stat_config *config, struct evsel *c
- 
- 	alias = list_prepare_entry(counter, &(evlist->core.entries), core.node);
- 	list_for_each_entry_continue (alias, &evlist->core.entries, core.node) {
--		if (strcmp(evsel__name(alias), evsel__name(counter)) ||
--		    alias->scale != counter->scale ||
--		    alias->cgrp != counter->cgrp ||
--		    strcmp(alias->unit, counter->unit) ||
--		    evsel__is_clock(alias) != evsel__is_clock(counter) ||
--		    !strcmp(alias->pmu_name, counter->pmu_name))
--			break;
--		alias->merged_stat = true;
--		cb(config, alias, data, false);
-+		/* Merge events with the same name, etc. but on different PMUs. */
-+		if (!strcmp(evsel__name(alias), evsel__name(counter)) &&
-+			alias->scale == counter->scale &&
-+			alias->cgrp == counter->cgrp &&
-+			!strcmp(alias->unit, counter->unit) &&
-+			evsel__is_clock(alias) == evsel__is_clock(counter) &&
-+			strcmp(alias->pmu_name, counter->pmu_name)) {
-+			alias->merged_stat = true;
-+			cb(config, alias, data, false);
-+		}
- 	}
- }
- 
--- 
-2.35.0.263.gb82422642f-goog
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

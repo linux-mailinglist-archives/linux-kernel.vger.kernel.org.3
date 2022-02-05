@@ -2,247 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B06C4AA720
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 07:29:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A8FC4AA722
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 07:33:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378324AbiBEG2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 01:28:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42364 "EHLO
+        id S1378872AbiBEGdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 01:33:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346922AbiBEG23 (ORCPT
+        with ESMTP id S236390AbiBEGdC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 01:28:29 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5AD0C061348
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 22:28:28 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id p5so24825631ybd.13
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 22:28:28 -0800 (PST)
+        Sat, 5 Feb 2022 01:33:02 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A939C061347
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 22:33:01 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id i34so16776862lfv.2
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 22:33:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=q2b6hK+TBoO9q6ZGhN1bE+KXFAoRmLEloZyJgK+U1JQ=;
-        b=o31QP92Fg6G5lmCy0TzA1/oG5PcR7pc7EEnxGtmc6ahV53+FXD4+1dm09BD5M45Ldn
-         WKZrbDOg3wGh2Yf6RDy+izhDhuHx7xf9SeIy2GSFLawZs8Y33j8p/672HJ+i9pMNTwBi
-         GPyc5kWukRVpJkCsIKS2fuUxz2Llcy8pNkF2eMitkumQ0G7Xg2dZIzEouXXF8L71EcqU
-         xTvXr65izGe9fbdvASZvINTkshE3ZyV8/yM2mShIzYEewaegNC/dcCeHXSbdFahdKZXP
-         YZHZYWfyJljCqmrYEnsLyvdsGIlMiraCazt5QP0i1wRqsa5KEMUivRMkMs5b/TNWfSUd
-         cIog==
+         :cc;
+        bh=/I4uenCSy6lKFDX+vozXBZPrlb1lnpOy6352DMFUA8c=;
+        b=rq24Q2AFZ5EoKbcKKkftdHvOqnaftuHw87PzEuO4Mjmi1KqZOJK69ovDu1K371qjBa
+         DDXJPDZ5iX4ThIye9JZjA2NYYesaKh5lmhtCUGiaiPvTBSGYOHsfEDC7tWjBLd5UMeH6
+         aXnz2Zsy56u1y56TWSMCmsF7fdOuvjRD7VnTOQ/3O7r9FkAo/Wgn2dO/rw7JyRF+qMVi
+         Y16QISg8FsYxTHzUdTSgWMBIIeCFS1VUMWekJa2tm+xEjI2i5VVGl1QFlgpqm/WWipFc
+         dXw/5OF4N74vt8K7liy4FV/Ft+nh9VV0VjvUzwmEIkzWBGVdm/CYbNPjpL9xlOI8KcgU
+         4e8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=q2b6hK+TBoO9q6ZGhN1bE+KXFAoRmLEloZyJgK+U1JQ=;
-        b=Z4A2dhh/bHgw3/2I4fVGeiAbf2pNgSKs2up5V/NUjPHoHl4YVlIm/9j4KzNo1QDR/J
-         pR6hSc11qpDbmrbGKVIKye/eo94fd5oTu3bEYY0vG9vpcBZv9BxuRLvvawjlpx5MoY8P
-         7QUxIKEuReNQaxR02JSHg3LT/8ZyaKLt2PwusHvLe3y1UfwTnfKbnM+hfmZ97dyl2TQT
-         5VDcZdtjxym7cc0iPa7/Ny6DRMVeopRbwLvKyYh4fkMHb8PUfguMscP9/QzH0jpCqrdb
-         zeyD64B2yckNIfnj+bp7VFlZYfSdMUwRbe9v/ijIZG3ottD2mA/53m1I7ZIJ76hNUweg
-         gh2g==
-X-Gm-Message-State: AOAM530KzGuNjnoYXHqwPh/HIc0+N3qhE1uklGse8Wu61NPXLgnDZAWC
-        2wIhCncMas6DV8LGcB4emSDqorbmo6WlGjwdsys8VQ==
-X-Google-Smtp-Source: ABdhPJzaJv84AqXc6f2Bj8Au0jGzmLUAZAArTjnZb7B66h4ZVFxqRGLDGMHSFofY8r8vEjlgqz2MS+joywbhODnvPus=
-X-Received: by 2002:a25:d8d0:: with SMTP id p199mr2415880ybg.704.1644042507670;
- Fri, 04 Feb 2022 22:28:27 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=/I4uenCSy6lKFDX+vozXBZPrlb1lnpOy6352DMFUA8c=;
+        b=x7KZTR8khLHLCg36fu9TvqyFZIwEg5+lgsYkeo/g7DSsGoG82vqt+GEjhsWNYqtbCu
+         H07C9dxy033v0uJ7ibWCnOX6aQyf2lCJoDOjcLm4bpvYxTUFGQ11Pp3Dr74qnCM3T/t1
+         iQtv/3SXS1mtsScktJiMDjWvjzf1n/WEg8yM9YZcmEb6i2+/i6sDpFOxbsA6GHky0UNH
+         bxmdo46Mz4AHIPOpeipF4cgNggNDN4Sy8ZOZe1dshlRE7GB3FUkyCZU773SuxBgQbRIZ
+         KlILehJxVkg2mn2b1n0fhOSgjPUDxXxlwSBIfqvVMgysUW1kHKqF+IrNhx7dYchCjGnV
+         cy6A==
+X-Gm-Message-State: AOAM531OWv0K+W9phFrOgSShOc2LGbmmpOQ+yjQZiT/L/248upxz0rO6
+        iErMvAHhF+e67htvT3o1k/6wv5LauDkC/PKKYlmajQ==
+X-Google-Smtp-Source: ABdhPJzBS0ATlNIJS0wbnbUmcCt1uFbSET2zzNCr5rG+3DvrfqXNdkPOzH/OnKXNo0LNwTjK2rMAXmYqafs8B4rB57A=
+X-Received: by 2002:a05:6512:10ce:: with SMTP id k14mr1651918lfg.210.1644042778863;
+ Fri, 04 Feb 2022 22:32:58 -0800 (PST)
 MIME-Version: 1.0
-References: <20220204091917.166033635@linuxfoundation.org>
-In-Reply-To: <20220204091917.166033635@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Sat, 5 Feb 2022 11:58:16 +0530
-Message-ID: <CA+G9fYuQkEFqsDDe-OQdpkpJSAxNN08iXqX5vHT5zE8BRbAj0g@mail.gmail.com>
-Subject: Re: [PATCH 5.16 00/43] 5.16.6-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
+References: <20220125051736.2981459-1-shakeelb@google.com>
+In-Reply-To: <20220125051736.2981459-1-shakeelb@google.com>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Fri, 4 Feb 2022 22:32:47 -0800
+Message-ID: <CALvZod6Tdb76hvg+GA+5mvFWrkHi2nNXJ64TLmhUisZVxbLsiQ@mail.gmail.com>
+Subject: Re: [PATCH] mm: io_uring: allow oom-killer from io_uring_setup
+To:     Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>, io-uring@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 4 Feb 2022 at 14:56, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Mon, Jan 24, 2022 at 9:17 PM Shakeel Butt <shakeelb@google.com> wrote:
 >
-> This is the start of the stable review cycle for the 5.16.6 release.
-> There are 43 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+> On an overcommitted system which is running multiple workloads of
+> varying priorities, it is preferred to trigger an oom-killer to kill a
+> low priority workload than to let the high priority workload receiving
+> ENOMEMs. On our memory overcommitted systems, we are seeing a lot of
+> ENOMEMs instead of oom-kills because io_uring_setup callchain is using
+> __GFP_NORETRY gfp flag which avoids the oom-killer. Let's remove it and
+> allow the oom-killer to kill a lower priority job.
 >
-> Responses should be made by Sun, 06 Feb 2022 09:19:05 +0000.
-> Anything received after that time might be too late.
+> Signed-off-by: Shakeel Butt <shakeelb@google.com>
+
+Jens, any comments or concerns on this patch?
+
+> ---
+>  fs/io_uring.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
 >
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.16.6-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.16.y
-> and the diffstat can be found below.
+> diff --git a/fs/io_uring.c b/fs/io_uring.c
+> index e54c4127422e..d9eeb202363c 100644
+> --- a/fs/io_uring.c
+> +++ b/fs/io_uring.c
+> @@ -8928,10 +8928,9 @@ static void io_mem_free(void *ptr)
 >
-> thanks,
+>  static void *io_mem_alloc(size_t size)
+>  {
+> -       gfp_t gfp_flags = GFP_KERNEL | __GFP_ZERO | __GFP_NOWARN | __GFP_COMP |
+> -                               __GFP_NORETRY | __GFP_ACCOUNT;
+> +       gfp_t gfp = GFP_KERNEL_ACCOUNT | __GFP_ZERO | __GFP_NOWARN | __GFP_COMP;
 >
-> greg k-h
-
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 5.16.6-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-5.16.y
-* git commit: f58321948b36b3589e2af9c3fc5718862597e364
-* git describe: v5.16.5-45-gf58321948b36
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.16.y/build/v5.16=
-.5-45-gf58321948b36
-
-## Test Regressions (compared to v5.16.5)
-No test regressions found.
-
-## Metric regressions (compared to v5.16.5)
-No test regressions found.
-
-## Test fixes (compared to v5.16.5)
-No test fixes found.
-
-##  Metric fixes (compared to v5.16.5)
-No metric fixes found.
-
-## Test result summary
-total: 104848, pass: 89220, fail: 1185, skip: 13345, xfail: 1098
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 263 total, 261 passed, 2 failed
-* arm64: 42 total, 39 passed, 3 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 40 total, 37 passed, 3 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 37 total, 35 passed, 2 failed
-* parisc: 14 total, 14 passed, 0 failed
-* powerpc: 56 total, 50 passed, 6 failed
-* riscv: 28 total, 22 passed, 6 failed
-* s390: 22 total, 20 passed, 2 failed
-* sh: 26 total, 24 passed, 2 failed
-* sparc: 14 total, 14 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 42 total, 39 passed, 3 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-lkdtm
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-
---=20
-Linaro LKFT
-https://lkft.linaro.org
+> -       return (void *) __get_free_pages(gfp_flags, get_order(size));
+> +       return (void *) __get_free_pages(gfp, get_order(size));
+>  }
+>
+>  static unsigned long rings_size(unsigned sq_entries, unsigned cq_entries,
+> --
+> 2.35.0.rc0.227.g00780c9af4-goog
+>

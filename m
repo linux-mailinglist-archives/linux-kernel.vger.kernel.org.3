@@ -2,93 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D9FE4AACC2
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 22:50:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D52DD4AACC7
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 22:59:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350279AbiBEVuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 16:50:02 -0500
-Received: from mail.baikalelectronics.com ([87.245.175.226]:41858 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230390AbiBEVuA (ORCPT
+        id S1359668AbiBEV7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 16:59:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33074 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240342AbiBEV7Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 16:50:00 -0500
-Received: from mail.baikalelectronics.ru (unknown [192.168.51.25])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 3339E8001D4C;
-        Sun,  6 Feb 2022 00:49:57 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.ru 3339E8001D4C
+        Sat, 5 Feb 2022 16:59:16 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B00C061353;
+        Sat,  5 Feb 2022 13:59:15 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id p22-20020a17090adf9600b001b8783b2647so3310157pjv.5;
+        Sat, 05 Feb 2022 13:59:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baikalelectronics.ru; s=mail; t=1644097798;
-        bh=CjuqZZNusyyBrdQUX0NyOK0jjIqNInUwEk3UWH6pwes=;
-        h=From:To:CC:Subject:Date:From;
-        b=jBiPyX8xNcjihqTEJEPTl+Hem6IwT8aXywyq32MwCG1iKLhZieq5LByVIVowMgMBw
-         zyjBgYysuPsDa84IkcQwFkVESR9sJ88nnhANGZ54dgXKiImgvx5WykHMSFjcf5NYWy
-         F4JtQUthTlRUh7H1iqy82+PoojNu8+8w5Ad/Na8o=
-Received: from localhost (192.168.168.10) by mail (192.168.51.25) with
- Microsoft SMTP Server (TLS) id 15.0.1395.4; Sun, 6 Feb 2022 00:49:41 +0300
-From:   Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Ron Madrid <ron_madrid@sbcglobal.net>
-CC:     Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        <stable@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH net] net: phy: marvell: Fix MDI-x polarity setting in 88e1118-compatible PHYs
-Date:   Sun, 6 Feb 2022 00:49:51 +0300
-Message-ID: <20220205214951.60371-1-Pavel.Parkhomenko@baikalelectronics.ru>
+        d=gmail.com; s=20210112;
+        h=subject:to:references:cc:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding;
+        bh=PWXw56wMSVUiQo+0Y/X1ZEc8HwPwp/sCbKGTlf6LMjs=;
+        b=akjLYJsZTcN5ZzBMtnld1Izt5WF6Pacjnxu649A2A34JBhKdoWD0qdk0G2DxkdH930
+         sWwEuVv7ldvooEhDVXBqvE/hPzyAsIorqDfQf9Y9Whdi/w+RTKvj5PD+BKVOH9/moJc9
+         Os3dgxRTGCSzVc/4SsVQGgMtZsCUXUY1TSV5Zr5YjWEoasYoYdpepnGCAPzxU+GtpldA
+         +QPrQ9nVvE//sBu/vf4BaRAE7iLhi38L/WNUwHA60Ag/kAhNqRvkl7cbEgZj9CV2nrkU
+         2IuUTRiTsT+JMaToV/giN+oFjjmwBXNekLrsqHJEuOAPZc0MdYCI/Bbd/Gn0uBnT1r44
+         W2Rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
+        bh=PWXw56wMSVUiQo+0Y/X1ZEc8HwPwp/sCbKGTlf6LMjs=;
+        b=J3d1r2OpRnvt3NX2lJmWa9Xpcfsgt9fjueLWupQdQIMnjxlAQGqO/mdDqP0Be5JdEe
+         FVSqCKTzbdfkDKuoL3kdB1Y49Il8expDdXFbIFqA/EffQi/NbUzd4w7P4+xuXefFDoSV
+         T+M8nCjfD6caJ5n1kNyzE69w4HwNhkWbTP7/tg+C4uqIv8Jx65n+8onhJ0rIrCCYvOOn
+         t3y1aK11OjIuONI2eL664UcRvpqpyLWF6KYWCrIT2fdkl2AG2NQL8tj7x22ofL51cvOR
+         KgKh1eH9WqxgxCPwUewopSVQYKgEtUSxjJAvFUOIJFXr7uwHcfjHmsiJBc9zSKliULbQ
+         QVcA==
+X-Gm-Message-State: AOAM530EJqjMilZwEgxITV/tQ5dcmWzgniK16LJ4VVRuwl8TzBcWy+eS
+        WINphj4NtlyMgUDuCGMtMoKl3ZCITQk=
+X-Google-Smtp-Source: ABdhPJzX5yjwAdDFdotVdtPaI3Ecrj5KkR50/7owTP98UVyuhWA/p5XLhclwXNQNWdHJIve3p5BDUw==
+X-Received: by 2002:a17:902:e88b:: with SMTP id w11mr9531591plg.153.1644098354413;
+        Sat, 05 Feb 2022 13:59:14 -0800 (PST)
+Received: from [10.1.1.24] (222-155-5-102-adsl.sparkbb.co.nz. [222.155.5.102])
+        by smtp.gmail.com with ESMTPSA id lp17sm17664003pjb.25.2022.02.05.13.59.09
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 05 Feb 2022 13:59:13 -0800 (PST)
+Subject: Re: Regression in 5.17-rc1 on pata-falcon
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+References: <20220128173006.1713210-1-geert@linux-m68k.org>
+ <63c80eba-7c55-2a92-8078-c63cec3c9efb@gmail.com>
+ <8913a0a2-9496-143c-18c2-f3023fd37ba0@gmail.com>
+ <8d215dab-cd0f-452b-281b-f67c9324b53b@gmail.com>
+ <CAMuHMdVnkvSCHKt5ouZP7HrMBg7nPg7fjiio-KVJ7dehA=FwyQ@mail.gmail.com>
+Cc:     linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Laibin Qiu <qiulaibin@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-block <linux-block@vger.kernel.org>
+From:   Michael Schmitz <schmitzmic@gmail.com>
+Message-ID: <eb5fc9ae-45a7-44d3-0238-5cdaa1ae3558@gmail.com>
+Date:   Sun, 6 Feb 2022 10:59:07 +1300
+User-Agent: Mozilla/5.0 (X11; Linux ppc; rv:45.0) Gecko/20100101
+ Icedove/45.4.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+In-Reply-To: <CAMuHMdVnkvSCHKt5ouZP7HrMBg7nPg7fjiio-KVJ7dehA=FwyQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When setting up autonegotiation for 88E1118R and compatible PHYs,
-a software reset of PHY is issued before setting up polarity.
-This is incorrect as changes of MDI Crossover Mode bits are
-disruptive to the normal operation and must be followed by a
-software reset to take effect. Let's patch m88e1118_config_aneg()
-to fix the issue mentioned before by invoking software reset
-of the PHY just after setting up MDI-x polarity.
+Hi Geert, Jens,
 
-Fixes: 605f196efbf8 ("phy: Add support for Marvell 88E1118 PHY")
-Signed-off-by: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
-Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
-Suggested-by: Andrew Lunn <andrew@lunn.ch>
-Cc: stable@vger.kernel.org
----
- drivers/net/phy/marvell.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+thanks for the hint - applying 10825410b956dc1e on top of 5.17-rc1 does 
+indeed fix the issue.
 
-diff --git a/drivers/net/phy/marvell.c b/drivers/net/phy/marvell.c
-index fa71fb7a66b5..ab063961ac00 100644
---- a/drivers/net/phy/marvell.c
-+++ b/drivers/net/phy/marvell.c
-@@ -1213,16 +1213,15 @@ static int m88e1118_config_aneg(struct phy_device *phydev)
- {
- 	int err;
- 
--	err = genphy_soft_reset(phydev);
-+	err = marvell_set_polarity(phydev, phydev->mdix_ctrl);
- 	if (err < 0)
- 		return err;
- 
--	err = marvell_set_polarity(phydev, phydev->mdix_ctrl);
-+	err = genphy_config_aneg(phydev);
- 	if (err < 0)
- 		return err;
- 
--	err = genphy_config_aneg(phydev);
--	return 0;
-+	return genphy_soft_reset(phydev);
- }
- 
- static int m88e1118_config_init(struct phy_device *phydev)
--- 
-2.32.0
+nr_tags == 1 on the Falcon may explain why I ran into this. Oddly 
+enough, I have the same on ARAnyM. Adding a second 'disk' there does 
+reproduce the issue on ARAnyM though. nr_tags == 1 && nr_disks > 1 
+appears to be sufficient to reproduce this.
 
+I surmised I couldn't be the only one to run into this, but hadn't seen 
+any other reports yet.
+
+Cheers,
+
+	Michael
+
+
+Am 05.02.2022 um 21:31 schrieb Geert Uytterhoeven:
+> Hi Michael,
+>
+> On Sat, Feb 5, 2022 at 1:04 AM Michael Schmitz <schmitzmic@gmail.com> wrote:
+>> commit 180dccb0dba4f5e84a4a70c1be1d34cbb6528b32 (blk-mq: fix tag_get
+>> wait task can't be awakened) does cause a regression on my m68k hardware
+>> test rig (m68k Falcon030, IDE disk attached through pata-falcon driver
+>> which does use polled IO instead of interrupts, so may be a little on
+>> the slow side).
+>
+>> Bisection between v5.16 and v5.17-rc1 points to
+>> 180dccb0dba4f5e84a4a70c1be1d34cbb6528b32 as the culprit, which is
+>> corroborated by reverting that commit in v5.17-rc1 and booting as
+>> rapidly as before.
+>
+> Now you know the culprit, it looks like several other people ran into this.
+> Does this fix help?
+> https://lore.kernel.org/all/1643040870.3bwvk3sis4.none@localhost/
+>
+> It is commit 10825410b956dc1e ("blk-mq: Fix wrong wakeup
+> batch configuration which will cause hang") in v5.17-rc2.
+>
+> Gr{oetje,eeting}s,
+>
+>                         Geert
+>
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+>
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds
+>

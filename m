@@ -2,103 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E31504AA978
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 15:36:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0048C4AA97A
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 15:39:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380157AbiBEOgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 09:36:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41316 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232237AbiBEOgA (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 09:36:00 -0500
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF638C061346
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Feb 2022 06:35:59 -0800 (PST)
-Received: by mail-io1-xd2f.google.com with SMTP id 9so11094235iou.2
-        for <linux-kernel@vger.kernel.org>; Sat, 05 Feb 2022 06:35:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=NjsPCeTC6AUkI8iof6mArRIBPDUlUNHR5425CjSvoh8=;
-        b=eGlpEo3z+gzLBu5G7H5LmXRPryG0RtMHZzksWu5Z/iUr1LMJoZOJyxSK7ZPWRoTf5K
-         oiM26sl93ASyPjf/tAwpjhGQ63nVtJX2uWs2zKn4ZlHjaPXb83Ym4ZFi9htRPq5uc68R
-         5SJT7XQROBDUeY3TBHtjwBTuQU1CbLCHYvnt9WhfItczA/nEV368DCotFvC+gWZjMHXC
-         CUbKrb3rexLDXKvoZoEDViVdOLGMRCX70g0vXVoXBsbbnjGiTN6FeDgXUL2t11HyPHob
-         G7SR8AvZXmK/gOwsFJHWMfkTFYRcCEdG1YJ/lV+U5C7GvVTUOyNb9HtbYn3dcEIRM7ag
-         rrCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=NjsPCeTC6AUkI8iof6mArRIBPDUlUNHR5425CjSvoh8=;
-        b=hv99Z1ygM02tQAuNzRxR06jn89XGWMgF6wwJnnftpb33xEJtETHzymir+LTTCv8Shq
-         D8PAXRsOWTU9JBc55oYlweHZOR2srCU4Bqy1P3hlltEqkClM1VMg9PPmsQzl8gtRH/m6
-         5AicmJQzKmYaKeRdMFZBs4WL8kl3vepGLqb7H+vcLaqZNJU3Y8yTJK9b6vKq6KSGhOD0
-         jhxwXMnRjIwlVZvvr0XcqVq+rw59l2MjuQDwWP69OPuQObiSvNYY+7gYwmBDMBL8lhAM
-         +NAGdN4vVETekKxtU9pMA1WenBw2BGxxUxaibfUX/+oOVuWm3rL8eFm13VSgvccboJHA
-         1yAw==
-X-Gm-Message-State: AOAM531NyLYtMimFv6jKIyquQOsDyPSkVukgaEWnnPk5vxQRxfxf4K6Q
-        rwwD5w4nbvqjcqTWgBDOgw7yOw==
-X-Google-Smtp-Source: ABdhPJysYIy8PYpFRsfsGIcf17EpGmomFVV2qtwyh3u9IcOWqh+a/JNbOKiOqv1WAIE3TsYPL25NIQ==
-X-Received: by 2002:a05:6602:490:: with SMTP id y16mr1828196iov.162.1644071759212;
-        Sat, 05 Feb 2022 06:35:59 -0800 (PST)
-Received: from [172.22.22.26] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.googlemail.com with ESMTPSA id s6sm2472869ilt.16.2022.02.05.06.35.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 05 Feb 2022 06:35:58 -0800 (PST)
-Message-ID: <83c63043-dac1-2bd3-81ad-d591becf46a5@linaro.org>
-Date:   Sat, 5 Feb 2022 08:35:57 -0600
+        id S1380165AbiBEOjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 09:39:37 -0500
+Received: from mga07.intel.com ([134.134.136.100]:6081 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232237AbiBEOjg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 5 Feb 2022 09:39:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644071976; x=1675607976;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ZuHP55oHeCD9u+vcg1mVnXr+bJf+2J8ot3B/dgxjiqU=;
+  b=FYILHmXsKB2evhZ1YwwnQ2/o362UNembpajkvlBODOSwRmqvZRPQXH9e
+   cznn48AgpbFn5TqbK36YK3VZDERbjiyVEKBH2lhp5yOvJKY5gt+nAXQtA
+   VY4i0+xvKv0nyj4O/Rkt8qonuSu9uQVw0644+XTfKg1CLAwbbi4Ryk09T
+   9Us1Y6WRtgFPxgNIqvZ0LrGyEVvmE6zMGSuAdDrwXo/spAPZXtZzDsUSU
+   Uk1nFDXCzpV4hgWQTnqv0xNEmoNxCHxwZhaQveYqKBWV0iLXOwKkJi2nV
+   BeKUyhpUi/Sbs22XS9LyQTpZT0GKtTPNI5QWAZAs2riLrC+dAR/e98K34
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="311814397"
+X-IronPort-AV: E=Sophos;i="5.88,345,1635231600"; 
+   d="scan'208";a="311814397"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2022 06:39:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,345,1635231600"; 
+   d="scan'208";a="483913723"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 05 Feb 2022 06:39:35 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nGMDu-000Z9T-Co; Sat, 05 Feb 2022 14:39:34 +0000
+Date:   Sat, 5 Feb 2022 22:38:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [asahilinux:smc/work 7/11] lib/vsprintf.c:1783:30: sparse: sparse:
+ cast to restricted __le32
+Message-ID: <202202052230.9Ehn5qnV-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH net-next 3/7] net: ipa: use interconnect bulk
- enable/disable operations
-Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     davem@davemloft.net, djakov@kernel.org, bjorn.andersson@linaro.org,
-        mka@chromium.org, evgreen@chromium.org, cpratapa@codeaurora.org,
-        avuyyuru@codeaurora.org, jponduru@codeaurora.org,
-        subashab@codeaurora.org, elder@kernel.org, netdev@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220204195044.1082026-1-elder@linaro.org>
- <20220204195044.1082026-4-elder@linaro.org>
- <20220204202336.67c95e15@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-From:   Alex Elder <elder@linaro.org>
-In-Reply-To: <20220204202336.67c95e15@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/4/22 10:23 PM, Jakub Kicinski wrote:
-> On Fri,  4 Feb 2022 13:50:40 -0600 Alex Elder wrote:
->> The power interconnect array is now an array of icc_bulk_data
->> structures, which is what the interconnect bulk enable and disable
->> functions require.
->>
->> Get rid of ipa_interconnect_enable() and ipa_interconnect_disable(),
->> and just call icc_bulk_enable() and icc_bulk_disable() instead.
->>
->> Signed-off-by: Alex Elder <elder@linaro.org>
-> 
-> We got a kbuild bot complaint here, for some reason off-list.
-> Let me drop it from PW for now.
+tree:   https://github.com/AsahiLinux/linux smc/work
+head:   fc848a39b71518ca1661de7057b87cb0e8cac9f9
+commit: 0e3932a4e2deead01a96dd51a0b3676f55ea80f6 [7/11] lib/vsprintf: Add support for generic FOURCCs by extending %p4cc
+config: arc-randconfig-s032-20220130 (https://download.01.org/0day-ci/archive/20220205/202202052230.9Ehn5qnV-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/AsahiLinux/linux/commit/0e3932a4e2deead01a96dd51a0b3676f55ea80f6
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux smc/work
+        git checkout 0e3932a4e2deead01a96dd51a0b3676f55ea80f6
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arc SHELL=/bin/bash
 
-OK.  I guess the interconnect code isn't ready for COMPILE_TEST.
-I'll investigate that a little more and if we can get past that
-I'll send out a new version.  Not sure how long that will take
-though...
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks, I retract this series for now.
 
-					-Alex
+sparse warnings: (new ones prefixed by >>)
+>> lib/vsprintf.c:1783:30: sparse: sparse: cast to restricted __le32
+>> lib/vsprintf.c:1783:30: sparse: sparse: cast to restricted __le32
+>> lib/vsprintf.c:1783:30: sparse: sparse: cast to restricted __le32
+>> lib/vsprintf.c:1783:30: sparse: sparse: cast to restricted __le32
+>> lib/vsprintf.c:1783:30: sparse: sparse: cast to restricted __le32
+>> lib/vsprintf.c:1783:30: sparse: sparse: cast to restricted __le32
+>> lib/vsprintf.c:1786:30: sparse: sparse: cast to restricted __be32
+
+vim +1783 lib/vsprintf.c
+
+  1757	
+  1758	static noinline_for_stack
+  1759	char *fourcc_string(char *buf, char *end, const u32 *fourcc,
+  1760			    struct printf_spec spec, const char *fmt)
+  1761	{
+  1762		char output[sizeof("0123 little-endian (0x01234567)")];
+  1763		char *p = output;
+  1764		unsigned int i;
+  1765		bool pix_fmt = false;
+  1766		u32 val = *fourcc;
+  1767		u32 cval = *fourcc;
+  1768	
+  1769		if (fmt[1] != 'c')
+  1770			return error_string(buf, end, "(%p4?)", spec);
+  1771	
+  1772		if (check_pointer(&buf, end, fourcc, spec))
+  1773			return buf;
+  1774	
+  1775		switch (fmt[2]) {
+  1776		case 'h':
+  1777			cval = val = *fourcc;
+  1778			break;
+  1779		case 'r':
+  1780			cval = val = swab32(*fourcc);
+  1781			break;
+  1782		case 'l':
+> 1783			cval = val = le32_to_cpu(*fourcc);
+  1784			break;
+  1785		case 'b':
+> 1786			cval = val = be32_to_cpu(*fourcc);
+  1787			break;
+  1788		case 'c':
+  1789			val = *fourcc & ~BIT(31);
+  1790			/* Pixel formats are printed LSB-first */
+  1791			cval = swab32(val);
+  1792			pix_fmt = true;
+  1793			break;
+  1794		default:
+  1795			return error_string(buf, end, "(%p4?)", spec);
+  1796		}
+  1797	
+  1798		for (i = 0; i < sizeof(*fourcc); i++) {
+  1799			unsigned char c = cval >> ((3 - i) * 8);
+  1800	
+  1801			/* Print non-control ASCII characters as-is, dot otherwise */
+  1802			*p++ = isascii(c) && isprint(c) ? c : '.';
+  1803		}
+  1804	
+  1805		if (pix_fmt) {
+  1806			strcpy(p, *fourcc & BIT(31) ? " big-endian" : " little-endian");
+  1807			p += strlen(p);
+  1808		}
+  1809	
+  1810		*p++ = ' ';
+  1811		*p++ = '(';
+  1812		p = special_hex_number(p, output + sizeof(output) - 2, val, sizeof(u32));
+  1813		*p++ = ')';
+  1814		*p = '\0';
+  1815	
+  1816		return string(buf, end, output, spec);
+  1817	}
+  1818	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,105 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B4124AA54F
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 02:30:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB5D04AA555
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 02:36:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378871AbiBEB2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 20:28:09 -0500
-Received: from mga09.intel.com ([134.134.136.24]:52642 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1349644AbiBEB2H (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 20:28:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644024487; x=1675560487;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XdxtJJTIZE+WWUJgQ9TXZkuAz5xg8F2S74fBeUfPYaU=;
-  b=JWdopyCFqxJ+1qPn5CP+3jkQdNBpAwJqRMyEpei/DkrT2U4nVjS/mJfT
-   KKP0m4OsgYjmW0sCOa0V2wycUGtnT0RKVMi/XpWrxvDjjV0HiISTb3vjL
-   70KFrSqUXcBIGFUOWQriafvOrbZRk4ktgN6NsdTD0VI9UUUOYqMHEI/NU
-   bnVv0CtJ+gbH9pqPz3+Z0gtIjMeCImjbJLjkKFgHk+oHmeR9cNTOY5mt2
-   DHNTqpTGnNxyxvO6ooHOOhOO0bOeP9yMFsLbE3kZsY+cY5Kk6dLiDOPcN
-   WK8IFS11tvYPyx5EtMqpPaye5HlT/u0yauvX9c2OgnPVqpkYMdLEXOTbp
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="248234775"
-X-IronPort-AV: E=Sophos;i="5.88,344,1635231600"; 
-   d="scan'208";a="248234775"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 17:28:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,344,1635231600"; 
-   d="scan'208";a="584300475"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 04 Feb 2022 17:28:04 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nG9rw-000YQN-9r; Sat, 05 Feb 2022 01:28:04 +0000
-Date:   Sat, 5 Feb 2022 09:27:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hsin-Yi Wang <hsinyi@chromium.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, Xin Ji <xji@analogixsemi.com>
-Cc:     kbuild-all@lists.01.org, devicetree@vger.kernel.org,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        David Airlie <airlied@linux.ie>,
-        Jonas Karlman <jonas@kwiboo.se>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v6 3/4] drm/bridge: anx7625: Support reading edid through
- aux channel
-Message-ID: <202202050942.C6c0MD0r-lkp@intel.com>
-References: <20220203141023.570180-3-hsinyi@chromium.org>
+        id S1378879AbiBEBgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 20:36:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58070 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230309AbiBEBf7 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 20:35:59 -0500
+Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8439CC061346;
+        Fri,  4 Feb 2022 17:35:56 -0800 (PST)
+Received: by mail-ua1-x932.google.com with SMTP id b37so13675964uad.12;
+        Fri, 04 Feb 2022 17:35:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=tZR3UiQjuZ3E4E4YIGJytgfZZs1q2BPvs+JB9ytaoRw=;
+        b=DN0ma292xvwZ0EUXamExIIa9xpKjA0BuY2oJhNZ4840bg2atTKmlHOkoh3Nf1Y70n+
+         NjDXPwPQP2D/1DqpGJTdhaREWFtVL/q+cC5IrJq1uHX8Yb0CLSSNmwngsBXFBmyEVgb3
+         UbRJ7EV2Cy2zifYK6mTPZPash4IXDEsHCgq5tmHhk9QnVOtVsdM80K8PqH2WKsStsc6J
+         wBqSR2Wtp+LXoGXQunCVAcavHYSh0nKtcBowgUSMwaVbxf7B4cQiJRk4gMqpYDS/Lnuz
+         PlQF3V/pOKoJuTTsEMeI+3ncTKnun/sbml+XetFCtPfgwPb44cnmC4I3d57lksm6tDUx
+         BRmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=tZR3UiQjuZ3E4E4YIGJytgfZZs1q2BPvs+JB9ytaoRw=;
+        b=VDrN8O86hkaXhzd/b7NIrl8z1TL8E+EnWCokbDXu1lZAt8kiDsuaOCaq639vQpnAO9
+         LsCIWtyYF+mCs8lsn4T8qXbIgq6ezuEL24hJv6/ZVqIjdbLLYVNrZaeHaTp3XPZAQgNg
+         KUMMvSWE6JV6Bf7jLanWW8ug3m1aZb9oVQL0+UKiblNPpvdR/cRYU0WN5x/2mQ2H+5oP
+         iGvlJSdfgJ1Z1PjgkWCTt62rKZzkuMQudtRcN3h8n5GQrjukZppnEI0LY/llZ2mykrOP
+         dhxTzYQhYqD39RGjIlEGMvsDHFBv/9OSujGgA39aHK/ezFRG/cAPNylG7d4+a4fs8jbe
+         NY5Q==
+X-Gm-Message-State: AOAM531aIR1nA6ALPDQeiGv5xo1VOaXtLvbcP4a+2D68RGL6TX5kqcNN
+        k4nacJ5ew0k/cMqwjnEKzRdV0Ox5SI1K1e0ye0w=
+X-Google-Smtp-Source: ABdhPJyKCb8zMQ7Q7Q/EDZecwGYGAwHbZhz6M0cjEYvNJaP/6PD5vXx5uHfGrZI2rLby3Be5CPI9HcbMatC4WMkeCGM=
+X-Received: by 2002:a67:f3d9:: with SMTP id j25mr1919842vsn.84.1644024955422;
+ Fri, 04 Feb 2022 17:35:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220203141023.570180-3-hsinyi@chromium.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220202201437.7718-1-davispuh@gmail.com> <20220204162821.GD14046@twin.jikos.cz>
+In-Reply-To: <20220204162821.GD14046@twin.jikos.cz>
+From:   =?UTF-8?B?RMSBdmlzIE1vc8SBbnM=?= <davispuh@gmail.com>
+Date:   Sat, 5 Feb 2022 03:35:44 +0200
+Message-ID: <CAOE4rSwu9Ond3qO2ADA=HPo5bRPq2BgBvJF6=J8efhzL73rrqg@mail.gmail.com>
+Subject: Re: [PATCH] btrfs: send: in case of IO error log inode
+To:     David Sterba <dsterba@suse.cz>,
+        =?UTF-8?B?RMSBdmlzIE1vc8SBbnM=?= <davispuh@gmail.com>,
+        BTRFS <linux-btrfs@vger.kernel.org>, Chris Mason <clm@fb.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hsin-Yi,
+piektd., 2022. g. 4. febr., plkst. 18:29 =E2=80=94 lietot=C4=81js David Ste=
+rba
+(<dsterba@suse.cz>) rakst=C4=ABja:
+>
+> On Wed, Feb 02, 2022 at 10:14:37PM +0200, D=C4=81vis Mos=C4=81ns wrote:
+> > Currently if we get IO error while doing send then we abort without
+> > logging information about which file caused issue.
+> > So log inode to help with debugging.
+>
+> The Signed-off-by tag is missing.
+>
 
-Thank you for the patch! Yet something to improve:
+Yeah I forgot.
 
-[auto build test ERROR on drm/drm-next]
-[cannot apply to robh/for-next drm-intel/for-linux-next v5.17-rc2]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> > ---
+> >  fs/btrfs/send.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/fs/btrfs/send.c b/fs/btrfs/send.c
+> > index d8ccb62aa7d2..945d9c01d902 100644
+> > --- a/fs/btrfs/send.c
+> > +++ b/fs/btrfs/send.c
+> > @@ -5000,6 +5000,7 @@ static int put_file_data(struct send_ctx *sctx, u=
+64 offset, u32 len)
+> >                       if (!PageUptodate(page)) {
+> >                               unlock_page(page);
+> >                               put_page(page);
+> > +                             btrfs_err(fs_info, "received IO error for=
+ inode=3D%llu", sctx->cur_ino);
+>
+> A message here makes sense. I'd make it more explicit that it's for send
+> (the word "received" is kind of confusing), the inode number is not
+> unique identifier so the root id should be also printed, it's available
+> from the sctx->send_root and maybe also the file offset (taken from the
+> associated page by page_offset()).
 
-url:    https://github.com/0day-ci/linux/commits/Hsin-Yi-Wang/drm-bridge-anx7625-send-DPCD-command-to-downstream/20220203-221108
-base:   git://anongit.freedesktop.org/drm/drm drm-next
-config: arm64-randconfig-c023-20220130 (https://download.01.org/0day-ci/archive/20220205/202202050942.C6c0MD0r-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/45f3728b61c8cb8d53d13d88c33c4f58630dcea6
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Hsin-Yi-Wang/drm-bridge-anx7625-send-DPCD-command-to-downstream/20220203-221108
-        git checkout 45f3728b61c8cb8d53d13d88c33c4f58630dcea6
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   aarch64-linux-ld: Unexpected GOT/PLT entries detected!
-   aarch64-linux-ld: Unexpected run-time procedure linkages detected!
-   aarch64-linux-ld: ID map text too big or misaligned
-   aarch64-linux-ld: drivers/gpu/drm/bridge/analogix/anx7625.o: in function `anx7625_bridge_detach':
->> anx7625.c:(.text+0x5e0): undefined reference to `drm_dp_aux_unregister'
-   aarch64-linux-ld: drivers/gpu/drm/bridge/analogix/anx7625.o: in function `anx7625_bridge_attach':
->> anx7625.c:(.text+0x674): undefined reference to `drm_dp_aux_register'
-   aarch64-linux-ld: drivers/gpu/drm/bridge/analogix/anx7625.o: in function `anx7625_i2c_probe':
->> anx7625.c:(.text+0x1b48): undefined reference to `drm_dp_aux_init'
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thanks! Will submit v2

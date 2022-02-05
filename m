@@ -2,117 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D05AE4AA715
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 07:16:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23D414AA717
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 07:21:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377204AbiBEGQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 01:16:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39622 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344027AbiBEGQ0 (ORCPT
+        id S1351184AbiBEGVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 01:21:21 -0500
+Received: from mail.parknet.co.jp ([210.171.160.6]:33048 "EHLO
+        mail.parknet.co.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234888AbiBEGVS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 01:16:26 -0500
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60FF1C061355
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 22:16:15 -0800 (PST)
-Received: by mail-pf1-x449.google.com with SMTP id bd15-20020a056a00278f00b004c7617c47dbso4171527pfb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 22:16:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=gl5quSdllNcUacMKlmR/GX6m0ySmM7gXrjH2h0fLFis=;
-        b=k4s/EOHI5SkfQ/d0UUqb8GX2z6Ce6Lhbe9VyYzflbUbVqkEcqKoIT405legl1l1G9H
-         0LtiZ9GVVpmNS/bzvqhj36O0+XomRL5lESVXo9g2luEU8fxWuqsYZO0z5l5h0uB3TktM
-         4vzjLaKiw/asf0HjqXXSXxm38k9CL7AHnB1ZE15f2KH39fBh9jNLns6IulaaXt/QqpIj
-         BlOHRTrGfPG+kR3ZGqZhVnUQ2YRRASX9unJPA+RKruvP7V2Rf4YnC6Zzeq4jHfT9kuiF
-         g1jInl0XsUPMOLmiaZpVLGSwaEYZyuzFV/rkdPUpYIAk9KuepjkCgGqyy4IPzjLx298r
-         79Fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=gl5quSdllNcUacMKlmR/GX6m0ySmM7gXrjH2h0fLFis=;
-        b=2+mT6ZzNHjy2X2hh6JQtOTX846iPc4hEXE9cKvMhKIyY89E3Yx19Q6XlAmEfBqbhps
-         lDXjAu6hdjcije31YDTbbMdqGZBqdt91ez3LB6lBY+GVo0FW/xdlFSM9MoeUMihsca3n
-         WC1MORpdaNclxrZ8lVTuUA94rImFQwhLRdFbQrlX1tzpdTG2A2vjhxsRCtjn3Ldwcv3Q
-         +E+egqkUgdVw0utic7PvFEDVP0PYoY9nKNYW1uYW63JTMbdA53PijMN3VXW5kQLH3Je3
-         pnJfWMhv68CX+KyKbGJ6D+6/TTwvjeAiJ0hBfuTsmlc8SfClaJIurDH0Qw03XyCYJ18w
-         TOXQ==
-X-Gm-Message-State: AOAM532ijkjuvVMcr4JMJD/OK7LzaJef8lQFxiEqAmharbtPG1j29Ehm
-        NRStHaDjcvJHVzdqr/4MEBTBRlRRu0A4RA==
-X-Google-Smtp-Source: ABdhPJx2m8RdzEoyIpk9k4NiaQjQnuEukVSy4CM20gGV0C+JQh7BvtxJaH7Z1ADicaL/uNmztUFBbprPwjYXZA==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a62:8c14:: with SMTP id
- m20mr6528807pfd.6.1644041774840; Fri, 04 Feb 2022 22:16:14 -0800 (PST)
-Date:   Sat,  5 Feb 2022 14:15:38 +0800
-In-Reply-To: <20220205061539.273330-1-davidgow@google.com>
-Message-Id: <20220205061539.273330-3-davidgow@google.com>
-Mime-Version: 1.0
-References: <20220205061539.273330-1-davidgow@google.com>
-X-Mailer: git-send-email 2.35.0.263.gb82422642f-goog
-Subject: [PATCH 3/3] list: test: Add a test for list_entry_is_head()
-From:   David Gow <davidgow@google.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>
-Cc:     David Gow <davidgow@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+        Sat, 5 Feb 2022 01:21:18 -0500
+Received: from ibmpc.myhome.or.jp (server.parknet.ne.jp [210.171.168.39])
+        by mail.parknet.co.jp (Postfix) with ESMTPSA id 6080C15F939;
+        Sat,  5 Feb 2022 15:21:17 +0900 (JST)
+Received: from devron.myhome.or.jp (foobar@devron.myhome.or.jp [192.168.0.3])
+        by ibmpc.myhome.or.jp (8.16.1/8.16.1/Debian-2) with ESMTPS id 2156LFF3086298
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Sat, 5 Feb 2022 15:21:16 +0900
+Received: from devron.myhome.or.jp (foobar@localhost [127.0.0.1])
+        by devron.myhome.or.jp (8.16.1/8.16.1/Debian-2) with ESMTPS id 2156LF5X368767
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Sat, 5 Feb 2022 15:21:15 +0900
+Received: (from hirofumi@localhost)
+        by devron.myhome.or.jp (8.16.1/8.16.1/Submit) id 2156LFsS368766;
+        Sat, 5 Feb 2022 15:21:15 +0900
+From:   OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
+To:     Gwendal Grignou <gwendal@chromium.org>
+Cc:     dlunev@chromium.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Revert "fat: add simple validation for directory inode"
+References: <20220204062232.3410036-1-gwendal@chromium.org>
+Date:   Sat, 05 Feb 2022 15:21:15 +0900
+In-Reply-To: <20220204062232.3410036-1-gwendal@chromium.org> (Gwendal
+        Grignou's message of "Thu, 3 Feb 2022 22:22:32 -0800")
+Message-ID: <8735kxx290.fsf@mail.parknet.co.jp>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/29.0.50 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The list_entry_is_head() macro was added[1] after the list KUnit tests,
-so wasn't tested. Add a new KUnit test to complete the set.
+Gwendal Grignou <gwendal@chromium.org> writes:
 
-[1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e130816164e244b692921de49771eeb28205152d
+> This reverts commit a3082d526f2d406d4b488e49a508a0062a23314f.
+>
+> The reverted commit adds check for FAT images. However, the tools used
+> for creating images for the Lego Mindstrom EV3 are not adding '.' and
+> '..' entry in the 'Projects' directory.
+> Without this fix, the kernel can not fill the inode structure for
+> 'Projects' directory.
+>
+> See https://github.com/microsoft/pxt-ev3/issues/980
+> And https://github.com/microsoft/uf2-linux/issues/6
 
-Signed-off-by: David Gow <davidgow@google.com>
----
- lib/list-test.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+Looks like the bug of those tools. If you want to add the workaround for
+those tools, it should not break sane format.
 
-diff --git a/lib/list-test.c b/lib/list-test.c
-index 7ce7eaebe060..4cd06a9fc73c 100644
---- a/lib/list-test.c
-+++ b/lib/list-test.c
-@@ -538,6 +538,18 @@ static void list_test_list_entry(struct kunit *test)
- 				struct list_test_struct, list));
- }
- 
-+static void list_test_list_entry_is_head(struct kunit *test)
-+{
-+	struct list_test_struct test_struct1, test_struct2;
-+	LIST_HEAD(list);
-+
-+	list_add_tail(&test_struct1.list, &list);
-+	list_add_tail(&test_struct2.list, &list);
-+
-+	KUNIT_EXPECT_FALSE(test, list_entry_is_head((&test_struct1), &list, list));
-+	KUNIT_EXPECT_FALSE(test, list_entry_is_head((&test_struct2), &list, list));
-+}
-+
- static void list_test_list_first_entry(struct kunit *test)
- {
- 	struct list_test_struct test_struct1, test_struct2;
-@@ -753,6 +765,7 @@ static struct kunit_case list_test_cases[] = {
- 	KUNIT_CASE(list_test_list_splice_init),
- 	KUNIT_CASE(list_test_list_splice_tail_init),
- 	KUNIT_CASE(list_test_list_entry),
-+	KUNIT_CASE(list_test_list_entry_is_head),
- 	KUNIT_CASE(list_test_list_first_entry),
- 	KUNIT_CASE(list_test_list_last_entry),
- 	KUNIT_CASE(list_test_list_first_entry_or_null),
+I.e. the workaround should at least set the directory link count to work
+rmdir(2) without warnings, then should test other operations if works
+well.
+
+Thanks.
 -- 
-2.35.0.263.gb82422642f-goog
-
+OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>

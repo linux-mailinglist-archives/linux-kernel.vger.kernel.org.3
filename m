@@ -2,99 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 205724AAAD7
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 19:24:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85B6B4AAADD
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 19:24:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380868AbiBESX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 13:23:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38406 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239916AbiBESX4 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 13:23:56 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D794CC061348;
-        Sat,  5 Feb 2022 10:23:55 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id st12so4579080ejc.4;
-        Sat, 05 Feb 2022 10:23:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hljRiwUaJx2liFaatlBcu9XFcu5/tSdIbOS8E9f9SGI=;
-        b=m3DxUyXJ4COw4ctXg46SjnWBzhy9ruHWy3IU0xJw5i73uhbAgQtKXqr1M3nM+Ue9B9
-         r0F+nqvCecE9j4qe5ym1utGedfl2WssmKCtl0qLOWVjPZB1titxt0XeEpWLSxshHsCpa
-         3ux9lbn96pCStJY25KstP9Ab7jlOyEF8PPxE5ZVEXw6mlnm4iIKTse8WPKZbHg+UTRBo
-         15VUQgtQ4JlYpKlHwrWbfX5iVei0Qk8zeW+Bm/ubdnGQETEU6zUAsor+fBIJw/GiUs6W
-         yaYI8uCPqo1koAnQ6KYjyFTk+OPVYQ3SlPokg04cAH5YU95P3edSAwjO/zGP9h3Ez7HO
-         wk3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hljRiwUaJx2liFaatlBcu9XFcu5/tSdIbOS8E9f9SGI=;
-        b=tg87tnKuZU9Ge30U1Vgf8rno1p+aE2bcMpmsRZjhdmH+j3b9yA9j77t8zVkmKt9vhn
-         O3600oSeyZwBBFK8nv5OaamgyB5EayKFsAbWGmT1ad5H7R/FTrdQM+8Y69ElKbcKAXwr
-         xnrIyqVg8EkgzlGCBoO/BJdphZMsdLtJNYIyHShqVPJ+ysGTYnq4Bz+o6me8MQD/2tZ5
-         ZYy/HjCW6zvbHLEfx1tKFocu++DQ4qziXXL/0Uz8Ly2ItsUrqrnffAhD/sPGvpeyLQ0C
-         AEShJmMg3X3PLayUys0d6oi58utBeGjjSjZyNCnbuKxDvjd+DGdGCiSV0I1Zptf8GjZc
-         TGkg==
-X-Gm-Message-State: AOAM532IFajV3l3nvkEHVsXyjbFwKRNUqFHChh9tw1+GYGf3XGphhVLl
-        oYh+GS1XKK4y7Ap5HmWulmglqU3YSRqeKSuhmWgogjDOR/g=
-X-Google-Smtp-Source: ABdhPJy/lJ3b38JmZK6y60u22QFoOwviNN2J4Xvpqrsr/7wLlXmuly0rLTFOWcJ+IcReW7di/+P1bIYfg64Q0WXd73s=
-X-Received: by 2002:a17:907:94d5:: with SMTP id dn21mr4056889ejc.77.1644085434229;
- Sat, 05 Feb 2022 10:23:54 -0800 (PST)
-MIME-Version: 1.0
-References: <20220130161101.1067691-1-liambeguin@gmail.com>
- <20220130161101.1067691-7-liambeguin@gmail.com> <5da96dc7-696b-1bc0-a111-f6108ecfa54c@axentia.se>
- <YfmJ3P1gYaEkVjlY@shaak> <20220205175404.451c5c56@jic23-huawei>
-In-Reply-To: <20220205175404.451c5c56@jic23-huawei>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 5 Feb 2022 20:23:18 +0200
-Message-ID: <CAHp75Vef4kYqQsd+4A=MQANhEQwvO7N53aB0ypPO-QwDuUZJ8w@mail.gmail.com>
-Subject: Re: [PATCH v13 06/11] iio: afe: rescale: make use of units.h
+        id S1380887AbiBESYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 13:24:47 -0500
+Received: from mga12.intel.com ([192.55.52.136]:52614 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231970AbiBESYp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 5 Feb 2022 13:24:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644085485; x=1675621485;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kwdT3oPchGN+YP/B5MlgIYEIHZ80n73Pyrl4jYokB0U=;
+  b=FHJt5M3jdVDNQX27zzu+2cNdi0GYxR/g3FB3z2PkORXMtJc3VFvmu8hE
+   5UINF6lHU/sBV5mbgEG6UB/oeflMNC884X9jwTqsAEeW+Jd103jqYYC+x
+   7hDRDq36nhsWze+blI6BNzOkKQi0/p/+LzcY7Tw5DL2U0Yd87IJzs4xn2
+   7STCWsiyliF8HgbNtuTbv2vwdkdM4Ili+qrhIhoX0VUz+PvKwvRf4kHx0
+   5XxzfWbRRtEZXVlRGMx+C8s4LwoxV5+vUwp7erLYHPnqSZmHAvpy6uZS8
+   GTkOFRHmBZn//0AjBNUyF0QXgKIhtVDiWfhGekiIVKqsrbgNKZT2QOwpd
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="228499102"
+X-IronPort-AV: E=Sophos;i="5.88,346,1635231600"; 
+   d="scan'208";a="228499102"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2022 10:24:44 -0800
+X-IronPort-AV: E=Sophos;i="5.88,346,1635231600"; 
+   d="scan'208";a="524662254"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2022 10:24:43 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nGPip-001LL8-CX;
+        Sat, 05 Feb 2022 20:23:43 +0200
+Date:   Sat, 5 Feb 2022 20:23:43 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Liam Beguin <liambeguin@gmail.com>, Peter Rosin <peda@axentia.se>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+        Lars-Peter Clausen <lars@metafoo.de>
+Subject: Re: [PATCH v1 2/2] iio: temperature: ltc2983: Make use of device
+ properties
+Message-ID: <Yf7ArwPrN34drkcv@smile.fi.intel.com>
+References: <20220203114506.53904-1-andriy.shevchenko@linux.intel.com>
+ <20220203114506.53904-2-andriy.shevchenko@linux.intel.com>
+ <20220205171454.49a7225c@jic23-huawei>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220205171454.49a7225c@jic23-huawei>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 5, 2022 at 7:47 PM Jonathan Cameron <jic23@kernel.org> wrote:
-> On Tue, 1 Feb 2022 14:28:28 -0500
-> Liam Beguin <liambeguin@gmail.com> wrote:
+On Sat, Feb 05, 2022 at 05:14:54PM +0000, Jonathan Cameron wrote:
+> On Thu,  3 Feb 2022 13:45:06 +0200
+> Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+> 
+> > Convert the module to be property provider agnostic and allow
+> > it to be used on non-OF platforms.
+> 
+> This description needs expansion as it's not a straight forward
+> conversion.
+> 
+> Also, complex enough that I definitely want more eyes and preferably
+> some testing.
+
+That's fair. I also spent most of the time on this change in comparison to the
+whole bundle.
 
 ...
 
-> Not sure if it would help but maybe it's worth a local define
-> of something like
->
-> #define MULT9 1000000000LL
-> to loose the association with any particular SI basis and
-> just indicate it's a bit number being used to retain precision
-> in some maths?  Would need a comment to stop people sending
-> patches to replace it with GIGA though ;)
->
-> My ultimate preference here is for whatever works for Peter and
-> Liam as the people who are mostly likely to have to deal
-> with any changes to this driver in the future.
+> > +#include <asm/byteorder.h>
+> > +#include <asm/unaligned.h>
 
-SI multipliers are for values with the physical meaning. While Peter
-found them confusing, it's a pretty much win in my opinion when we
-talk about data from nature. For the pure mathematical scale it may be
-confusing.
+> This may well be a valid addition but it's not called out in the patch
+> description.
+
+This is a side effect of the change. Below I will try to explain, tell me if
+that is what you want to be added to the commit message (feel free to correct
+my English).
+
+The conversion slightly changes the logic behind property reading for the
+configuration values. Original code allocates just as much memory as needed.
+Then for each separate 32- or 64-bit value it reads it from the property
+and converts to a raw one which will be fed to the sensor. In the new code
+we allocated the amount of memory needed to retrieve all values at once from
+the property and then convert them as required.
+
+...
+
+> >  	if (st->custom_table_size + new_custom->size >
+> > -	    (LTC2983_CUST_SENS_TBL_END_REG -
+> > -	     LTC2983_CUST_SENS_TBL_START_REG) + 1) {
+> > +	    (LTC2983_CUST_SENS_TBL_END_REG - LTC2983_CUST_SENS_TBL_START_REG) + 1) {
+> 
+> Shouldn't really be in this patch. Or at very least call out that there is
+> whitespace cleanup in the patch description.
+
+Good catch! It's a leftover, one case became a patch 1 in this series.
+
+...
+
+> > +	if (is_steinhart)
+> > +		ret = fwnode_property_read_u32_array(fn, propname, new_custom->table, n_entries);
+> > +	else
+> > +		ret = fwnode_property_read_u64_array(fn, propname, new_custom->table, n_entries);
+> > +	if (ret < 0)
+> > +		return ERR_PTR(ret);
+> > +
+> > +	/*
+> > +	 * Steinhart sensors are configured with raw values in the device tree.
+> > +	 * For the other sensors we must convert the value to raw. The odd
+> > +	 * index's correspond to temperatures and always have 1/1024 of
+> > +	 * resolution. Temperatures also come in Kelvin, so signed values is
+> > +	 * not possible.
+> > +	 */
+> > +	if (is_steinhart) {
+> 
+> Perhaps would be cleaner to combine this if else with the one above at the cost
+> of duplicating the if (ret < 0) check.
+
+OK, I'm fine with either approach.
+
+> > +		cpu_to_be32_array(new_custom->table, new_custom->table, n_entries);
+> 
+> I completely failed to register the hand coded big endian conversion.  Nice
+> tidy up.  However, definitely something to call out in the patch description.
+
+See above.
+
+> > +	} else {
+> > +		for (index = 0; index < n_entries; index++) {
+> > +			u64 temp = ((u64 *)new_custom->table)[index];
+> >  
+> >  			if ((index % 2) != 0)
+> >  				temp = __convert_to_raw(temp, 1024);
+> > @@ -445,16 +459,9 @@ static struct ltc2983_custom_sensor *__ltc2983_custom_sensor_new(
+> >  				temp = __convert_to_raw_sign(temp, resolution);
+> >  			else
+> >  				temp = __convert_to_raw(temp, resolution);
+> > -		} else {
+> > -			u32 t32;
+> >  
+> > -			of_property_read_u32_index(np, propname, index, &t32);
+> > -			temp = t32;
+> > +			put_unaligned_be24(temp, new_custom->table + index * 3);
+> >  		}
+> > -
+> > -		for (j = 0; j < n_size; j++)
+> > -			new_custom->table[tbl++] =
+> > -				temp >> (8 * (n_size - j - 1));
+> >  	}
+
+...
+
+> >  		if (IS_ERR(rtd->custom)) {
+> > -			of_node_put(phandle);
+> > +			fwnode_handle_put(ref);
+> 
+> I guess there was a bunch of cut and paste in this driver ;) Same question as below
+> on whether we can just use a goto here to share the put in the fail path.
+
+Probably as separate (preparatory) patch?
+
+> >  			return ERR_CAST(rtd->custom);
+> >  		}
+
+...
+
+> >  		if (IS_ERR(thermistor->custom)) {
+> > -			of_node_put(phandle);
+> > +			fwnode_handle_put(ref);
+> >  			return ERR_CAST(thermistor->custom);
+> 
+> Obviously not due to this patch, but this is odd.  Why have one error path
+> that doesn't use the goto faill;?
+> If you could tidy that up and add a note on it to the patch description
+> that would be great.
+
+Same answer as above.
+
+> >  		}
 
 -- 
 With Best Regards,
 Andy Shevchenko
+
+

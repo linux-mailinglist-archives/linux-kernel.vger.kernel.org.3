@@ -2,93 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 257684AA7B4
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 09:32:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 392194AA7B5
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 09:35:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378878AbiBEIcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 03:32:08 -0500
-Received: from mail-ua1-f42.google.com ([209.85.222.42]:42618 "EHLO
-        mail-ua1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237940AbiBEIcF (ORCPT
+        id S1379515AbiBEIfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 03:35:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43654 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347634AbiBEIfN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 03:32:05 -0500
-Received: by mail-ua1-f42.google.com with SMTP id e17so14679911uad.9;
-        Sat, 05 Feb 2022 00:32:05 -0800 (PST)
+        Sat, 5 Feb 2022 03:35:13 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D17F2C061346
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Feb 2022 00:35:12 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id e16so7032311pgn.4
+        for <linux-kernel@vger.kernel.org>; Sat, 05 Feb 2022 00:35:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=fkTkvIP1ksf7uTo0WnrI6Zk5yqUnR9qRAK3kp+P4vDY=;
+        b=fqqbL8yWOsB5S0NTjUYHVzDu7PhUUHegmjtvvDjiaYvMfTU3zZQr/614rjpSeXFbft
+         AS+xTziB6ewRkCK+rBFa+gF+cWjcgddMKVhGA+n0pjFZnCDRlmzIDeM/wODugoOQu5LA
+         opknqAI0tqtX1TmFVYs/uNhjxKhKUCHNAjGDnwpifTVWys4fy5Tq/yX8jMxRPmqpKESW
+         w7NgShoRNevZUoeud2rcs6mfmGDm1wjO6vQfEMcZ5oWfzrTdgOycKZ8Cf50+NIy9b5AZ
+         /lQeiij9jeCnbMZgHTJzPWVfc2XZ8IDfYmFs9PeZAud0Uaa9rkYwkLkJpMsbdioUsvtQ
+         hPtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7YGDXhWoC0YDK4LN4ffYmnnoBIU82UZ+ZgHex0wJpV0=;
-        b=UncjMw8rqY4UjHLo07WkzkBdCSnTOrfNQv0PISQI9WHY90YdCZm0595xuRp/8pUT6F
-         Av40KqNEsbtUlDl6jGjXLit0+aDWWCkcpGiuzpP31QQYLfRKbG1mZgkc2JweVviP3m/W
-         Mpn4t5FUv+0uH+lez2d0cJjUF8Z5t9MLIIWj78fhxL0lf07W+1/4lkG0R//umphWYbv5
-         /FV27L/nm52kX9Ih0PS2vpDUrg5H/gTg378xgKfyTcUksZYw4XNmdFYbKe2fhJ6I95kp
-         igOoT/pKQJEBuY3VCaO3WyoiyNu+os8U8tAxbpiTZwbDR6LXv58+S7mFCxwdGLHbPtmO
-         QMkg==
-X-Gm-Message-State: AOAM530wLwwginW4T8y4k0zJ3XKIGhx+Mfd0gOVAmcBqtHtxx4xuqnhq
-        TkiW4A4N2urqzacp5v0uOfM1wjy2KElHFQ==
-X-Google-Smtp-Source: ABdhPJy7ZLCm1kKQr1s9QL09MgO6qIPHGSmkklGiAIjhqlHgQpBqjv19XbQW/j31Ag9ZvWyQ3QDkeA==
-X-Received: by 2002:ab0:5a70:: with SMTP id m45mr918793uad.84.1644049924889;
-        Sat, 05 Feb 2022 00:32:04 -0800 (PST)
-Received: from mail-ua1-f49.google.com (mail-ua1-f49.google.com. [209.85.222.49])
-        by smtp.gmail.com with ESMTPSA id 10sm1515017uaq.9.2022.02.05.00.32.04
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=fkTkvIP1ksf7uTo0WnrI6Zk5yqUnR9qRAK3kp+P4vDY=;
+        b=m5KPCnaW0/92a7tESs5kX874TpoK4J0eezj2VCxLOuQX8tfXaILxEBzoDzshokV8d+
+         h4LNNpAyuIf1hdA2WLWedCKn6IE5Y/iHOU+78QdxdMv0wF+paWhALzmil5IvEk4JUE3R
+         mKQ+UtCoeXCOa/qsBhIs/E3Sr7xs+QhrT7SugSffUuaZLae37FZglxYRSdg+01zq0ME2
+         uiLGkvCehqlgcwu6Ch9Ope8INnLMHPWwDxLcZWMrboMdRr2aPCD19EgAOjWFFnwnypsT
+         RpSLgx82liy3zlB4gp3dglo5gJKqaFrJKm3z8g3ZoADKjK4r9hrry6VAruk0BJS6ilcj
+         A5SQ==
+X-Gm-Message-State: AOAM533LPa0M+gBLX3jeWjMPzRpRfKW6FtgRga8A6WWicnGsbz98YgNq
+        W0wqBxty6DKr7MwSEdNT/NdB2tRu1Lw=
+X-Google-Smtp-Source: ABdhPJy4ozOluUsw3pYt4DEbQwtRPlGsYNOpKrCYISePCyXP9c62YLMDcZebemo/Y2YW0KO5JY2WWA==
+X-Received: by 2002:a05:6a00:728:: with SMTP id 8mr6969207pfm.27.1644050111634;
+        Sat, 05 Feb 2022 00:35:11 -0800 (PST)
+Received: from [192.168.1.100] ([166.111.139.99])
+        by smtp.gmail.com with ESMTPSA id x18sm4845251pfc.123.2022.02.05.00.35.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 05 Feb 2022 00:32:04 -0800 (PST)
-Received: by mail-ua1-f49.google.com with SMTP id v5so3712575uam.3;
-        Sat, 05 Feb 2022 00:32:04 -0800 (PST)
-X-Received: by 2002:ab0:384c:: with SMTP id h12mr469698uaw.122.1644049923955;
- Sat, 05 Feb 2022 00:32:03 -0800 (PST)
+        Sat, 05 Feb 2022 00:35:10 -0800 (PST)
+Subject: Re: [BUG] staging: wfx: possible deadlock in wfx_conf_tx() and
+ wfx_add_interface()
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     jerome.pouiller@silabs.com, Greg KH <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <6f489bf2-bac0-8030-7ea5-6f5c12daa568@gmail.com>
+ <20220201113303.3883-1-hdanton@sina.com>
+From:   Jia-Ju Bai <baijiaju1990@gmail.com>
+Message-ID: <77de47d2-3dfb-e329-5a86-74a115de9fcd@gmail.com>
+Date:   Sat, 5 Feb 2022 16:34:50 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-References: <20220128173006.1713210-1-geert@linux-m68k.org>
- <63c80eba-7c55-2a92-8078-c63cec3c9efb@gmail.com> <8913a0a2-9496-143c-18c2-f3023fd37ba0@gmail.com>
- <8d215dab-cd0f-452b-281b-f67c9324b53b@gmail.com>
-In-Reply-To: <8d215dab-cd0f-452b-281b-f67c9324b53b@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Sat, 5 Feb 2022 09:31:52 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVnkvSCHKt5ouZP7HrMBg7nPg7fjiio-KVJ7dehA=FwyQ@mail.gmail.com>
-Message-ID: <CAMuHMdVnkvSCHKt5ouZP7HrMBg7nPg7fjiio-KVJ7dehA=FwyQ@mail.gmail.com>
-Subject: Re: Regression in 5.17-rc1 on pata-falcon (was: Re: [PATCH] m68k: mm:
- Remove check for VM_IO to fix deferred I/O)
-To:     Michael Schmitz <schmitzmic@gmail.com>
-Cc:     linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Laibin Qiu <qiulaibin@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-block <linux-block@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20220201113303.3883-1-hdanton@sina.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael,
 
-On Sat, Feb 5, 2022 at 1:04 AM Michael Schmitz <schmitzmic@gmail.com> wrote:
-> commit 180dccb0dba4f5e84a4a70c1be1d34cbb6528b32 (blk-mq: fix tag_get
-> wait task can't be awakened) does cause a regression on my m68k hardware
-> test rig (m68k Falcon030, IDE disk attached through pata-falcon driver
-> which does use polled IO instead of interrupts, so may be a little on
-> the slow side).
 
-> Bisection between v5.16 and v5.17-rc1 points to
-> 180dccb0dba4f5e84a4a70c1be1d34cbb6528b32 as the culprit, which is
-> corroborated by reverting that commit in v5.17-rc1 and booting as
-> rapidly as before.
+On 2022/2/1 19:33, Hillf Danton wrote:
+> On Tue, 1 Feb 2022 15:09:34 +0800 Jia-Ju Bai wrote:
+>> Hello,
+>>
+>> My static analysis tool reports a possible deadlock in the wfx driver in
+>> Linux 5.16:
+>>
+>> wfx_conf_tx()
+>>     mutex_lock(&wdev->conf_mutex); --> Line 225 (Lock A)
+>>     wfx_update_pm()
+>>       wait_for_completion_timeout(&wvif->set_pm_mode_complete, ...); -->
+>> Line 3019 (Wait X)
+>>
+>> wfx_add_interface()
+>>     mutex_lock(&wdev->conf_mutex); --> Line 737 (Lock A)
+>>     complete(&wvif->set_pm_mode_complete); --> Line 758 (Wake X)
+>>
+>> When wfx_conf_tx() is executed, "Wait X" is performed by holding "Lock
+>> A". If wfx_add_interface() is executed at this time, "Wake X" cannot be
+>> performed to wake up "Wait X" in wfx_conf_tx(), because "Lock A" has
+>> been already hold by wfx_conf_tx(), causing a possible deadlock.
+>> I find that "Wait X" is performed with a timeout, to relieve the
+>> possible deadlock; but I think this timeout can cause inefficient execution.
+>>
+>> I am not quite sure whether this possible problem is real and how to fix
+>> it if it is real.
+>> Any feedback would be appreciated, thanks :)
+>>
+>>
+>> Best wishes,
+>> Jia-Ju Bai
+> Hey Jia-Ju
+>
+> Thank you for reporting it.
+>
+> Given the init_completion() prior to complete() in wfx_add_interface(),
+> no waiter is waken up by the complete(), so it has nothing to do with
+> the waiter in the conf path.
 
-Now you know the culprit, it looks like several other people ran into this.
-Does this fix help?
-https://lore.kernel.org/all/1643040870.3bwvk3sis4.none@localhost/
+Hi Hillf,
 
-It is commit 10825410b956dc1e ("blk-mq: Fix wrong wakeup
-batch configuration which will cause hang") in v5.17-rc2.
+Thanks for your reply and detailed explanation :)
 
-Gr{oetje,eeting}s,
+>
+> BTW if the unusual wfx init is a real use case then we can add a new helper.
+>
+> Mind introducing your toy to LKML? How much time have you been put in it?
+> Its current status and future works?
 
-                        Geert
+Do you mean my static analysis tool that generated the report?
+In fact, I spent 3-4 months of my part time on implementing this tool, 
+which can detect deadlocks caused by locking cycles and improper 
+waiting/waking operations.
+This tool still reports some false positives, due to missing some 
+special patterns in the kernel code, such as "init_completion() prior to 
+complete()" in this false bug.
+Thus, I am improving the tool to reduce false positives now.
+Any suggestion on deadlock detection or the tool would be appreciated, 
+thanks :)
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Best wishes,
+Jia-Ju Bai

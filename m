@@ -2,135 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EBF74AA8F1
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 14:00:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E040E4AA8FB
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 14:05:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379912AbiBENAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 08:00:02 -0500
-Received: from mout.gmx.net ([212.227.15.18]:44621 "EHLO mout.gmx.net"
+        id S1379920AbiBENFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 08:05:31 -0500
+Received: from mga03.intel.com ([134.134.136.65]:8073 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1355661AbiBENAA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 08:00:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1644065980;
-        bh=1IqmQjorxNrt4F6tQMG/nOvbNUC2Mp91gxt+Hj3iYgM=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=Yf+xTvUfGhHGSnWu8+qcktMONlYsx28bdHok1EnRV5Zrnmjxzw7QnUSX30oTZ6CpR
-         Rin1hFmG3tHBAaLSZOtjd8gtm4Q4lHWa/bSrbkraznBxMZJmTISL7DcgfuRGnd7PCy
-         bznsbp1EfE8jS4eRthWPnAVVDfP9G3Y2wIGWhqxU=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mg6e4-1mZ0ks0VTS-00haJx; Sat, 05
- Feb 2022 13:59:40 +0100
-Date:   Sat, 5 Feb 2022 13:59:39 +0100
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     Philippe =?utf-8?Q?Mathieu-Daud=C3=A9?= <f4bug@amsat.org>
-Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        Keguang Zhang <keguang.zhang@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Yang Ling <gnaygnil@gmail.com>
-Subject: Re: [PATCH v3 2/4] clk: loongson1: Terminate clk_div_table with
- sentinel element
-Message-ID: <Yf50uxydH7sttAVY@latitude>
-References: <20220205005232.772726-1-j.neuschaefer@gmx.net>
- <20220205005232.772726-3-j.neuschaefer@gmx.net>
- <1415e1d2-eca4-aa36-6ef0-708b8290089d@amsat.org>
+        id S1346507AbiBENF2 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 5 Feb 2022 08:05:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644066328; x=1675602328;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=P8ih86m6G0IyyDLA73dvPC4Mr4i85BIOOZC9rN0gCSw=;
+  b=WTQkS3qMbTkm+Qt1PmmEmNVZCcs1z1vSGuJRqN2tKBHqZAIYxC2fdj/v
+   T4qLLwAOh8fxwnyVq49WdN3maHvSh63ophR5FgfBpnS7zdl1jfagjbUQO
+   62gRi0npht6pwzNOFY9FRryRU/l8rkxFWU6sm6RBRcU11z8Tloa7GE5AW
+   7qxgpPfTLRwJh/E0X828tSDbRxirL82egkfuUuDhFNg47+Po5PpRanjGI
+   6FFjOi2QgT33tOWfdvCIPdy/s7Pr9++2y3TNUmuu8Lyclk3QPMIJ3ks08
+   5fBK9hyNQzb5zCgPgfCmhVUqw3pf1m/Jztogpq+PONZvJ3/Qaj+ugPyNZ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="248459692"
+X-IronPort-AV: E=Sophos;i="5.88,345,1635231600"; 
+   d="scan'208";a="248459692"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2022 05:05:27 -0800
+X-IronPort-AV: E=Sophos;i="5.88,345,1635231600"; 
+   d="scan'208";a="567007845"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2022 05:05:23 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nGKjm-001GmE-8z;
+        Sat, 05 Feb 2022 15:04:22 +0200
+Date:   Sat, 5 Feb 2022 15:04:22 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-fbdev@vger.kernel.org, Sam Ravnborg <sam@ravnborg.org>,
+        dri-devel@lists.freedesktop.org,
+        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-pwm@vger.kernel.org
+Subject: Re: [PATCH v2 2/4] drm/tiny: Add driver for Solomon SSD130X OLED
+ displays
+Message-ID: <Yf511hhojzIXcNXp@smile.fi.intel.com>
+References: <20220204134347.1187749-1-javierm@redhat.com>
+ <20220204134347.1187749-3-javierm@redhat.com>
+ <Yf03sCSuQwHKvgA9@smile.fi.intel.com>
+ <d4e8c16c-5586-3233-0b99-be15a4c0f7aa@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="HXzDeesQ95HhXOjX"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1415e1d2-eca4-aa36-6ef0-708b8290089d@amsat.org>
-X-Provags-ID: V03:K1:BrbQdp4GKw/jCPwkILQyxzKGlwAlUaOqAdpuJXjWj9+S7tOnyNs
- /0rpgH5rFBDcvHMz1UDgngnbQFaVrpE69Nmb9b9Y1/2hVs6Ysp3hpsjHEPmI/mm+HjAGP/+
- nzy01N4E9WNbB5jydL8+IgYm/kXnBRyslTiUFWD2HEqiVLw9tvWz7hMaBXUZa4Xi1iKGIuZ
- Tv0bMY+3B0nbpCfr+ggAQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:0QZG7XUGy58=:m5P+A9LQ8kYOHU+LAHsnFR
- rxZ22AJ1toKvSE64l/pALe273Y3qPctoWy+vRRoqUyVYJ2cj6lH9/5J0z2CKZkcBsLWPV4xhX
- SNlbgCF26OSMGv7deK/GDeX0H/K7zdwraWDhu5e5v5eHkNF0giJlxtcxPq2fGFBxtKdAqjktC
- wr0kNIpbUQSFGj1iW4WYRSF8opLaIWjoxo+zV9m8lMyU8m2UJLZmabzeoT+vMQQX4RShkCxdQ
- IZtR4tZOby2ePxdpj1XM8SiXBAjZp0Sxu19J77AlwxVXWjyE1CskOS2cbDp3AQSHRo8DldKl2
- r7xmb7qnuhnT/Y2ce1F0HkQq/bu22Nc5z2zCbJseJby8EKkt/s0RZa1RXCrITtNoHfl8itp0S
- MCY/aZKMdmjIHfmqSHVj/hSyIdMy//pC++f3TBfkfD7ORezpf2h15QnKzt/6rBLYOwwx/Nidu
- 5KTQARHmmDPNkz+aIXsPJ8oOaIYfbk/ArdUJ/XqGpz2F3Pqstt+QOjiHhilixnvNUtyXClVal
- +03zIoxH77aMNziouf/9hMTSxqbV7yBCJwBiRbpVaLpauVTRhSwRFqifjx1AI2r013YxsFueq
- C+giweY5xmRgcsAQ1BgIuUqmETGNpc772Rn5WJ4QaZjVdfvqLO0rZC11uH60+yS9RkCWZiTdm
- k5HjF/5U0Bv9yxzWRF1n1SkNrjJonYT5G0sYID48SQsEPcMnZq9/ybzG+mhpQUtsShkO+t5m7
- 6V2SSe+GKzc0nQD8UZMXFbBLfxk8kBWaFy2AmyVeH5C6D0BneQTG2Y0lxLuMP0KzDGmVBubNz
- rIjqWmFYr9eOpfHVhOWkdnDxu4cvWTGYTRMJ4p6LxGvVXa4RKN9uLa7N0fsfuR+lYS6lCYa5M
- 76zGgO/KmexeEaCA/ntgrFdxdqGZED2y5UpbrCrJDlqqUnaH8QOZ1iuB+NnkVww+w5EZVzhAD
- RNC/5N/c3r6A6eFJ3o95DERgfFQkGW2HhwWb3X2IVN5qkKAOTi0Fu3IyvStYxipMJJsTDubr6
- /SSuUxD4+gK7k+Xhe5k1uHNVAGQn9M7UjVlUgqAiIHitkD5YcaFz5V/F7ClLHAPGIYBrzyqvT
- TKVhVC5nb/qpOI=
+In-Reply-To: <d4e8c16c-5586-3233-0b99-be15a4c0f7aa@redhat.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Feb 04, 2022 at 08:19:12PM +0100, Javier Martinez Canillas wrote:
+> On 2/4/22 15:26, Andy Shevchenko wrote:
+> > On Fri, Feb 04, 2022 at 02:43:45PM +0100, Javier Martinez Canillas wrote:
 
---HXzDeesQ95HhXOjX
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+...
 
-On Sat, Feb 05, 2022 at 01:17:10PM +0100, Philippe Mathieu-Daud=C3=A9 wrote:
-> On 5/2/22 01:52, Jonathan Neusch=C3=A4fer wrote:
-> > In order that the end of a clk_div_table can be detected, it must be
-> > terminated with a sentinel element (.div =3D 0).
-> >=20
-> > Fixes: b4626a7f4892 ("CLK: Add Loongson1C clock support")
-> > Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-> > Reviewed-by: Philippe Mathieu-Daud=C3=A9 <f4bug@amsat.org>
-> > ---
-> >=20
-> > v3:
-> > - no changes
-> >=20
-> > v2:
-> > - Add Fixes and R-b tags
-> > ---
-> >   drivers/clk/loongson1/clk-loongson1c.c | 1 +
-> >   1 file changed, 1 insertion(+)
-> >=20
-> > diff --git a/drivers/clk/loongson1/clk-loongson1c.c b/drivers/clk/loong=
-son1/clk-loongson1c.c
-> > index 703f87622cf5f..a6f9f20fc8b99 100644
-> > --- a/drivers/clk/loongson1/clk-loongson1c.c
-> > +++ b/drivers/clk/loongson1/clk-loongson1c.c
-> > @@ -37,6 +37,7 @@ static const struct clk_div_table ahb_div_table[] =3D=
- {
-> >   	[1] =3D { .val =3D 1, .div =3D 4 },
-> >   	[2] =3D { .val =3D 2, .div =3D 3 },
-> >   	[3] =3D { .val =3D 3, .div =3D 3 },
-> > +	[4] =3D { /* sentinel */ },
->=20
-> Sorry for being nitpicky here, but we don't need the trailing comma,
-> since this is the last entry.
+> >> +struct ssd130x_device {
+> >> +	struct drm_device drm;
+> >> +	struct drm_simple_display_pipe pipe;
+> >> +	struct drm_display_mode mode;
+> >> +	struct drm_connector connector;
+> > 
+> > 
+> >> +	struct i2c_client *client;
+> > 
+> > Can we logically separate hw protocol vs hw interface from day 1, please?
+> > This will allow to add SPI support for this panel much easier.
+> > 
+> > Technically I would like to see here
+> > 
+> > 	struct device *dev;
+> >
+> > and probably (I haven't looked into design)
+> > 
+> > 	struct ssd130x_ops *ops;
+> > 
+> > or something alike.
+> 
+> Sure. I wanted to keep the driver simple, making the writes bus agnostic and
+> adding a level of indirection would make it more complex. But I agree that
+> it will also make easier to add more buses later. I will do that for v3.
 
-Good point.
+I have SSD1306 display with SPI interface and I'm not able to test your series.
+With the above it at least gives me a point to consider helping (coding and
+testing)  with SPI one.
 
-Thanks,
-Jonathan
+...
 
---HXzDeesQ95HhXOjX
-Content-Type: application/pgp-signature; name="signature.asc"
+> >> +	if (!fb)
+> >> +		return;
+> > 
+> > Can it happen?
+> 
+> I don't know, but saw that the handler of other drivers checked for this so
+> preferred to play safe and do the same.
 
------BEGIN PGP SIGNATURE-----
+So, either cargo-cult or indeed it may happen. Somebody may conduct a research
+on this...
 
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmH+dLoACgkQCDBEmo7z
-X9tZsg/+KEJgbQUsX59zGsXcTp9JTu2ZhvyRUZU1Us8T3jTG0jvjS3Itl+tqRX2M
-P/sphmKa34AVJKfK0NDW0JUToT46cRzaR9xgHE1MFoKmyWHqQymhuOTWeQthDH4R
-0+wHNt7PAQvY5r29873yrzEQU+0sN5iuydaiI5DecaYtz0w3pxltraEUHZ0CK5kw
-wuLoDZC56058LeXmCm5TOzAe+kGAoNhaEd1glLZbyBl5iGnAoi0gadJNZaGBjjx9
-yURq3t9/j4mHqcrFaBLhNysQaNtJyMxijy06BRzzywEPfigdRBE2/1gLAbeR6YeT
-PIKGTxGme/UdPHrhG5A+VEHwMHxn5q4ktWP2IKIiV1lhCUoklTdn8bSNHD/3XJYI
-0IruXzxigB2W0JLCW5q8L0MXL7BWFG7S3kCTpD3JG8BAIFuG58haNTIEiBO/Hl/d
-mnx6Ys+FLXA0k2v170vEDUHVmiC5xoNBsiaUaLJ+VzpTQlDrz899BZKMjsG9a8vq
-BXbLBYqhX44BCyvTy4F35AjWMjn3jJrtY7510ubk4/fKIy4yxb/Yth1rk2In3v1I
-ktydv164jCDiRHDjI1oJDGGTgK/5fN0InbxpdoaIJTNJhT/osiVcKbPAsSZPGSul
-Xc9wHQM3RPTKbDCAiKaEEHkodiJ2b6W0w9sVEW6bU68sbDVvm9w=
-=4g7R
------END PGP SIGNATURE-----
+...
 
---HXzDeesQ95HhXOjX--
+> >> +	drm_mode_probed_add(connector, mode);
+> >> +	drm_set_preferred_mode(connector, mode->hdisplay, mode->vdisplay);
+> >> +
+> >> +	return 1;
+> > 
+> > Positive code, what is the meaning of it?
+> 
+> It's the number of connector modes. The driver only supports 1.
+
+A comment then?
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

@@ -2,180 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCB024AAA99
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 18:31:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 299134AAA86
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 18:24:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380716AbiBERbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 12:31:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54458 "EHLO
+        id S1380683AbiBERYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 12:24:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243210AbiBERbP (ORCPT
+        with ESMTP id S1376612AbiBERYr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 12:31:15 -0500
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF20FC061348;
-        Sat,  5 Feb 2022 09:31:14 -0800 (PST)
-Received: by mail-io1-xd35.google.com with SMTP id q204so11435184iod.8;
-        Sat, 05 Feb 2022 09:31:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=B7ae3D4rUnPUq4I9rkec078QG4GFhhpI1PCfRmSdqos=;
-        b=McF5SpS9uR6S3+wV5rih2BZn+qMTwPrlPwUEkJxqgxHwtuxY4ReOk9dRX/BsDuXSqA
-         g3A9RAoyUANhoZTAsU9tGbXU7/uNnRk8PiWPHT+1+lm322xVAVFTVIs1jxuJoCGKt/GY
-         Lv9xTskkBU6j8+AvHoPI0O5twj4Na0FDIqAjii4vObStOObLrEQbibhpHQk6pzlnJK9b
-         rwbXMfznsjSKW1auXJ9DmgMCE4jv27ILw0LTKXjOhC0m2Psl9+PEjoNMI/T0BvqhMVyA
-         1pgG0F4b4oWRmZaT0eYBmHiub2MNosMG3n1gFdDTcmwmcsV2qKlbcowRU8fjTYjlC2+r
-         2hWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=B7ae3D4rUnPUq4I9rkec078QG4GFhhpI1PCfRmSdqos=;
-        b=xDWgyxhCCFRddfaCK3kOaTKhwLGpny2StknQ58O5IBwMHq7EB7ISeul5/xKTfPMjYP
-         JZYfeNDBFf9AuDak313akQ1OcAtSa1RmqjBiM3kay7obaadZUi8D9oaa0vCjoH7Mxzk5
-         wNaNTEHTmdrfJziLhpoAyxEuUFGaRoKGCJMaYC4dCCSx1NV5llJXywDtT8/Q+vQy7UOG
-         HUduKHBtueYeuKOAzqVXAvLDB+EQGrfAFNOY6WTh/Lw/m4NcGTyN9QNicxBMQlGbNi9a
-         5mmWgYjP4ZdpUvBCJfrfpS3paY14nLLRxEgMn8sU1QdE/bj7P1U6fnT4KgiRio5q4jSR
-         Artg==
-X-Gm-Message-State: AOAM532OhVohxf6ssindLeCe68d6CpRbk5sNgoft/nla3ewmELF4Ek5m
-        RTGh8rO6zF6oiuiRruu4Jbk=
-X-Google-Smtp-Source: ABdhPJyyUoWTSY4SmqrymwmRBM9J91E4h4KDEuhqUZtNHpf83yzAPDEu8RtaPhuYUT4zYQIcx6dJ2A==
-X-Received: by 2002:a05:6638:1ea:: with SMTP id t10mr2119175jaq.77.1644082274143;
-        Sat, 05 Feb 2022 09:31:14 -0800 (PST)
-Received: from aford-IdeaCentre-A730.lan ([2601:448:8400:9e8:3c7c:8f64:a6ca:72d3])
-        by smtp.gmail.com with ESMTPSA id n3sm2750839ioz.9.2022.02.05.09.31.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Feb 2022 09:31:13 -0800 (PST)
-From:   Adam Ford <aford173@gmail.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     aford@beaconembedded.com, Adam Ford <aford173@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64: dts: imx8mm-beacon: Enable PCIe
-Date:   Sat,  5 Feb 2022 11:31:01 -0600
-Message-Id: <20220205173102.970040-1-aford173@gmail.com>
-X-Mailer: git-send-email 2.32.0
+        Sat, 5 Feb 2022 12:24:47 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 595F7C061348;
+        Sat,  5 Feb 2022 09:24:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B977D61143;
+        Sat,  5 Feb 2022 17:24:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03E90C340E8;
+        Sat,  5 Feb 2022 17:24:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644081885;
+        bh=6w/99GRGMgWgYWe4X+KfojXSRYWk/PfNkbE0hES5fiM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=vEptM6qr2UhahzEMsHKHAI5fI/NvwY4hHTg5yr6Nwen7w0VGgwmS1F7ntE3krzCWJ
+         EJX4oTvBObppZGwzwEMahBSyBLY/gPloCdWW1EqguPmwMkRTyW7kIbvHbRVvdRu6BV
+         N9BARRQfKKvVPUQhd5/6xrZZGCxDqq2DhaPHDqC81mx1/d2Ua7yLXBepVOMyIhjQuS
+         i3iRMYcPArqq+B68TBnTyFopBk9cNNvfh9q5JcEKcK3DeT/l0cV83F26XBGpR2Yobw
+         RLPKjpYEiQx8Kk/UGGB2pTJBU+8Z/CY34M/R+Mv7+CVx5e3sMcWkitA58bohHPT6sK
+         d8ay07M1QlJ7Q==
+Date:   Sat, 5 Feb 2022 17:31:14 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Subject: Re: [PATCH v2 1/1] iio: trigger: stm32-timer: Make use of device
+ properties
+Message-ID: <20220205173114.5a60fc47@jic23-huawei>
+In-Reply-To: <20220202204112.57095-1-andriy.shevchenko@linux.intel.com>
+References: <20220202204112.57095-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The baseboard supports a PCIe slot with a 100MHz reference clock,
-but it's controlled by a different GPIO, so a gated clock is
-required.
+On Wed,  2 Feb 2022 22:41:12 +0200
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
 
-Signed-off-by: Adam Ford <aford173@gmail.com>
+> Convert the module to be property provider agnostic and allow
+> it to be used on non-OF platforms.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Looks fine to me.  The stm32 drivers are well maintained so I'll
+leave this one on list a little longer for feedback.
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-beacon-baseboard.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-beacon-baseboard.dtsi
-index 0fb95f4a5e78..1af3b0a7c4c1 100644
---- a/arch/arm64/boot/dts/freescale/imx8mm-beacon-baseboard.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mm-beacon-baseboard.dtsi
-@@ -3,6 +3,8 @@
-  * Copyright 2020 Compass Electronics Group, LLC
-  */
- 
-+#include <dt-bindings/phy/phy-imx8-pcie.h>
-+
- / {
- 	leds {
- 		compatible = "gpio-leds";
-@@ -34,6 +36,19 @@ led3 {
- 		};
- 	};
- 
-+	pcie0_refclk: pcie0-refclk {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <100000000>;
-+	};
-+
-+	pcie0_refclk_gated:  pcie0-refclk-gated {
-+		compatible = "gpio-gate-clock";
-+		clocks = <&pcie0_refclk>;
-+		#clock-cells = <0>;
-+		enable-gpios = <&pca6416_1 2 GPIO_ACTIVE_LOW>;
-+	};
-+
- 	reg_audio: regulator-audio {
- 		compatible = "regulator-fixed";
- 		regulator-name = "3v3_aud";
-@@ -53,6 +68,16 @@ reg_camera: regulator-camera {
- 		startup-delay-us = <100000>;
- 	};
- 
-+	reg_pcie0: regulator-pcie {
-+		compatible = "regulator-fixed";
-+		regulator-name = "pci_pwr_en";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		enable-active-high;
-+		gpio = <&pca6416_1 1 GPIO_ACTIVE_HIGH>;
-+		startup-delay-us = <100000>;
-+	};
-+
- 	reg_usdhc2_vmmc: regulator-usdhc2 {
- 		compatible = "regulator-fixed";
- 		regulator-name = "VSD_3V3";
-@@ -191,6 +216,32 @@ imx8mm_mipi_csi_in: endpoint {
- 	};
- };
- 
-+&pcie_phy {
-+	fsl,refclk-pad-mode = <IMX8_PCIE_REFCLK_PAD_INPUT>;
-+	fsl,tx-deemph-gen1 = <0x2d>;
-+	fsl,tx-deemph-gen2 = <0xf>;
-+	fsl,clkreq-unsupported;
-+	clocks = <&pcie0_refclk_gated>;
-+	clock-names = "ref";
-+	status = "okay";
-+};
-+
-+&pcie0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_pcie0>;
-+	reset-gpio = <&gpio4 21 GPIO_ACTIVE_LOW>;
-+	clocks = <&clk IMX8MM_CLK_PCIE1_ROOT>, <&clk IMX8MM_CLK_PCIE1_AUX>,
-+		 <&pcie0_refclk_gated>;
-+	clock-names = "pcie", "pcie_aux", "pcie_bus";
-+	assigned-clocks = <&clk IMX8MM_CLK_PCIE1_AUX>,
-+			  <&clk IMX8MM_CLK_PCIE1_CTRL>;
-+	assigned-clock-rates = <10000000>, <250000000>;
-+	assigned-clock-parents = <&clk IMX8MM_SYS_PLL2_50M>,
-+				 <&clk IMX8MM_SYS_PLL2_250M>;
-+	vpcie-supply = <&reg_pcie0>;
-+	status = "okay";
-+};
-+
- &sai3 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_sai3>;
-@@ -273,6 +324,12 @@ MX8MM_IOMUXC_SAI2_MCLK_GPIO4_IO27		0x19
- 		>;
- 	};
- 
-+	pinctrl_pcie0: pcie0grp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_SAI2_RXFS_GPIO4_IO21       0x41
-+		>;
-+	};
-+
- 	pinctrl_sai3: sai3grp {
- 		fsl,pins = <
- 			MX8MM_IOMUXC_SAI3_TXFS_SAI3_TX_SYNC     0xd6
--- 
-2.32.0
++Cc: Fabrice
+
+> ---
+> v2: dropped depends on OF
+>  drivers/iio/trigger/Kconfig               |  2 +-
+>  drivers/iio/trigger/stm32-timer-trigger.c | 11 ++++++-----
+>  2 files changed, 7 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/iio/trigger/Kconfig b/drivers/iio/trigger/Kconfig
+> index 8cef2f7452e8..7ecb69725b1d 100644
+> --- a/drivers/iio/trigger/Kconfig
+> +++ b/drivers/iio/trigger/Kconfig
+> @@ -38,7 +38,7 @@ config IIO_STM32_LPTIMER_TRIGGER
+>  
+>  config IIO_STM32_TIMER_TRIGGER
+>  	tristate "STM32 Timer Trigger"
+> -	depends on (ARCH_STM32 && OF && MFD_STM32_TIMERS) || COMPILE_TEST
+> +	depends on (ARCH_STM32 && MFD_STM32_TIMERS) || COMPILE_TEST
+>  	help
+>  	  Select this option to enable STM32 Timer Trigger
+>  
+> diff --git a/drivers/iio/trigger/stm32-timer-trigger.c b/drivers/iio/trigger/stm32-timer-trigger.c
+> index 4f9461e1412c..5049d9ecfc1a 100644
+> --- a/drivers/iio/trigger/stm32-timer-trigger.c
+> +++ b/drivers/iio/trigger/stm32-timer-trigger.c
+> @@ -11,9 +11,10 @@
+>  #include <linux/iio/timer/stm32-timer-trigger.h>
+>  #include <linux/iio/trigger.h>
+>  #include <linux/mfd/stm32-timers.h>
+> +#include <linux/mod_devicetable.h>
+>  #include <linux/module.h>
+>  #include <linux/platform_device.h>
+> -#include <linux/of_device.h>
+> +#include <linux/property.h>
+>  
+>  #define MAX_TRIGGERS 7
+>  #define MAX_VALIDS 5
+> @@ -771,11 +772,11 @@ static int stm32_timer_trigger_probe(struct platform_device *pdev)
+>  	unsigned int index;
+>  	int ret;
+>  
+> -	if (of_property_read_u32(dev->of_node, "reg", &index))
+> -		return -EINVAL;
+> +	ret = device_property_read_u32(dev, "reg", &index);
+> +	if (ret)
+> +		return ret;
+>  
+> -	cfg = (const struct stm32_timer_trigger_cfg *)
+> -		of_match_device(dev->driver->of_match_table, dev)->data;
+> +	cfg = device_get_match_data(dev);
+>  
+>  	if (index >= ARRAY_SIZE(triggers_table) ||
+>  	    index >= cfg->num_valids_table)
 

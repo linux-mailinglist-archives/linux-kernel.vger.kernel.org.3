@@ -2,74 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 562374AACBC
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 22:33:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D9FE4AACC2
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 22:50:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377948AbiBEVdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 16:33:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55718 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232507AbiBEVdn (ORCPT
+        id S1350279AbiBEVuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 16:50:02 -0500
+Received: from mail.baikalelectronics.com ([87.245.175.226]:41858 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230390AbiBEVuA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 16:33:43 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0779AC061348
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Feb 2022 13:33:41 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id n8so7113794wmk.3
-        for <linux-kernel@vger.kernel.org>; Sat, 05 Feb 2022 13:33:41 -0800 (PST)
+        Sat, 5 Feb 2022 16:50:00 -0500
+Received: from mail.baikalelectronics.ru (unknown [192.168.51.25])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 3339E8001D4C;
+        Sun,  6 Feb 2022 00:49:57 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.ru 3339E8001D4C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=4D2XO13bmKH6KEZ3rCIFVRJ29Rca69+/OJs6jQDOjGo=;
-        b=gYvmip7okyn/CUPiuGkGtwNastzNfrEtY7Ice8pj0uAN9OWYDgQNcGSctl1EymGBDy
-         HWm1/oKyNbW/X6pLs/mMPZiSFJ4fiwm5g5VAwHDBnc77/Zb1L4mtQWbcIVQG6xBf7fFT
-         WkLpbuy6feDNRmc2EBA4RZ8Wuevw9YTzsCXNyQQH5TSJqce5PO29gQadx9tk8r7/YmE7
-         jpHHdDIlQwcqiRwYHpKzCN21T/nNVcxnnhQz/FPIFdSLqsH4BX6u3OTty7F76RNGYejl
-         hAMz69kdJkyIBEQ/QRPEq3Y+RfZc6jLi0jgP+OWH+W6s95fcQI6a0V+UpTkI5LlRDBzV
-         t6vg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=4D2XO13bmKH6KEZ3rCIFVRJ29Rca69+/OJs6jQDOjGo=;
-        b=QOmFJyfJSpatSminKm0by3uF449glfi4dUYvakn7GW95nRm4ilvIfTcPICEQF+zZCA
-         ZJX3i0u5CKIHDcwFY1HrnM+KLJTcg9J7I5Q5/nGRjtm/75v1ViFilAG7impin/+baYCQ
-         tirPBkxCbGgrKWCU5VB0VeMO9Xl++NBKsj8lEpTbg0VhErax1pLhDfNR27bpsTprlKF3
-         anJcMIwXzHJ1OP6KS9DXgMwXOstwF1E8uTrRxKlRVMo1JGW3eUXaCUFy8E3ra7nk/r9q
-         3HAIkdyzThHNjp1kydZtiChcyEUqB89ENQ0gDYEOW/Oh/mPVv6cq8Jj8z87PO4/CD+81
-         qCGg==
-X-Gm-Message-State: AOAM53092jUY1bM2wI3plErll0gF08cVzKgjnJqczvo3KmHJhT2O2L7d
-        tv4Lq6hvQYVyPtV/4CaxfKh/AY0O/mGYqb6StSk=
-X-Google-Smtp-Source: ABdhPJw7pJoqyRJY1Y/eKFjPdvs03zurSgRqpOaU0QE2lXbLJV4liTAP71Ouzf3AelpxVgkNmWkk5jbNv4n6SVI/4Xc=
-X-Received: by 2002:a05:600c:4f53:: with SMTP id m19mr8102883wmq.150.1644096820394;
- Sat, 05 Feb 2022 13:33:40 -0800 (PST)
+        d=baikalelectronics.ru; s=mail; t=1644097798;
+        bh=CjuqZZNusyyBrdQUX0NyOK0jjIqNInUwEk3UWH6pwes=;
+        h=From:To:CC:Subject:Date:From;
+        b=jBiPyX8xNcjihqTEJEPTl+Hem6IwT8aXywyq32MwCG1iKLhZieq5LByVIVowMgMBw
+         zyjBgYysuPsDa84IkcQwFkVESR9sJ88nnhANGZ54dgXKiImgvx5WykHMSFjcf5NYWy
+         F4JtQUthTlRUh7H1iqy82+PoojNu8+8w5Ad/Na8o=
+Received: from localhost (192.168.168.10) by mail (192.168.51.25) with
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Sun, 6 Feb 2022 00:49:41 +0300
+From:   Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Ron Madrid <ron_madrid@sbcglobal.net>
+CC:     Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        <stable@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH net] net: phy: marvell: Fix MDI-x polarity setting in 88e1118-compatible PHYs
+Date:   Sun, 6 Feb 2022 00:49:51 +0300
+Message-ID: <20220205214951.60371-1-Pavel.Parkhomenko@baikalelectronics.ru>
 MIME-Version: 1.0
-Received: by 2002:a5d:4ec8:0:0:0:0:0 with HTTP; Sat, 5 Feb 2022 13:33:39 -0800 (PST)
-Reply-To: mmd475644@gmail.com
-From:   "Dr. Irene Lam" <confianzayrentabilidad@gmail.com>
-Date:   Sat, 5 Feb 2022 13:33:39 -0800
-Message-ID: <CANrrfX6SVB4oux07RQS69RLW1w5xTU_fZR1vmtotC+YFOYgpcw@mail.gmail.com>
-Subject: Good Day,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.3 required=5.0 tests=BAYES_40,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-I'm Dr. Irene Lam, how are you doing ope you are in good health, the
-Board director
-try to reach you on phone several times Meanwhile, your number was not
-connecting. before he ask me to send you an email to hear from you if
-you are fine. hoping to hear from you soonest.
+When setting up autonegotiation for 88E1118R and compatible PHYs,
+a software reset of PHY is issued before setting up polarity.
+This is incorrect as changes of MDI Crossover Mode bits are
+disruptive to the normal operation and must be followed by a
+software reset to take effect. Let's patch m88e1118_config_aneg()
+to fix the issue mentioned before by invoking software reset
+of the PHY just after setting up MDI-x polarity.
 
-Sincerely
-Dr. Irene Lam
+Fixes: 605f196efbf8 ("phy: Add support for Marvell 88E1118 PHY")
+Signed-off-by: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
+Suggested-by: Andrew Lunn <andrew@lunn.ch>
+Cc: stable@vger.kernel.org
+---
+ drivers/net/phy/marvell.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/net/phy/marvell.c b/drivers/net/phy/marvell.c
+index fa71fb7a66b5..ab063961ac00 100644
+--- a/drivers/net/phy/marvell.c
++++ b/drivers/net/phy/marvell.c
+@@ -1213,16 +1213,15 @@ static int m88e1118_config_aneg(struct phy_device *phydev)
+ {
+ 	int err;
+ 
+-	err = genphy_soft_reset(phydev);
++	err = marvell_set_polarity(phydev, phydev->mdix_ctrl);
+ 	if (err < 0)
+ 		return err;
+ 
+-	err = marvell_set_polarity(phydev, phydev->mdix_ctrl);
++	err = genphy_config_aneg(phydev);
+ 	if (err < 0)
+ 		return err;
+ 
+-	err = genphy_config_aneg(phydev);
+-	return 0;
++	return genphy_soft_reset(phydev);
+ }
+ 
+ static int m88e1118_config_init(struct phy_device *phydev)
+-- 
+2.32.0
+

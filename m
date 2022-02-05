@@ -2,71 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40B8C4AA80F
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 11:23:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB5BF4AA811
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 11:25:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379495AbiBEKXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 05:23:25 -0500
-Received: from isilmar-4.linta.de ([136.243.71.142]:57378 "EHLO
-        isilmar-4.linta.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377656AbiBEKXY (ORCPT
+        id S1379668AbiBEKZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 05:25:21 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:56028 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1379582AbiBEKZQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 05:23:24 -0500
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-Received: from owl.dominikbrodowski.net (owl.brodo.linta [10.2.0.111])
-        by isilmar-4.linta.de (Postfix) with ESMTPSA id 24D932013AF;
-        Sat,  5 Feb 2022 10:23:22 +0000 (UTC)
-Received: by owl.dominikbrodowski.net (Postfix, from userid 1000)
-        id 9F54C811AC; Sat,  5 Feb 2022 11:23:14 +0100 (CET)
-Date:   Sat, 5 Feb 2022 11:23:14 +0100
-From:   Dominik Brodowski <linux@dominikbrodowski.net>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Kees Cook <keescook@chromium.org>,
-        Manuel Lauss <manuel.lauss@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH] pcmcia: db1xxx_ss: restrict to MIPS_DB1XXX boards
-Message-ID: <Yf5QEpz0FeXjBOcB@owl.dominikbrodowski.net>
-References: <20220123174031.3109-1-rdunlap@infradead.org>
+        Sat, 5 Feb 2022 05:25:16 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8A614B800A0;
+        Sat,  5 Feb 2022 10:25:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CED48C340E8;
+        Sat,  5 Feb 2022 10:25:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1644056714;
+        bh=m5/8Lj0nKxs/YQ8i1NLT5kNMA/irs6BRBsv3oIJ/Pok=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=t9Wf7YX/pe4yj5VB4fEwkCMwe+EpK1xTkK91h0DFzTlTpEB/W9uG5ujnFnK6aFVq2
+         Xh36OHA8mxopKwjU2KM3iP5h4t62eJGohHxFO4z8T2BGffJWh17H7+XudSDGCYW74y
+         14mEONEO+ilPkBH+O+ZOLKitTpd87tNpOLWr/wqw=
+Date:   Sat, 5 Feb 2022 11:25:11 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Pavel Machek <pavel@denx.de>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Marco Elver <elver@google.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>
+Subject: Re: [PATCH 5.10 08/25] perf: Rework perf_event_exit_event()
+Message-ID: <Yf5QhydMcw5IcJj9@kroah.com>
+References: <20220204091914.280602669@linuxfoundation.org>
+ <20220204091914.560626177@linuxfoundation.org>
+ <20220204093734.GA27857@amd>
+ <Yfz0nWtyap5Y3ogJ@kroah.com>
+ <20220204101249.GB27857@amd>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220123174031.3109-1-rdunlap@infradead.org>
+In-Reply-To: <20220204101249.GB27857@amd>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Sun, Jan 23, 2022 at 09:40:31AM -0800 schrieb Randy Dunlap:
-> When the MIPS_ALCHEMY board selection is MIPS_XXS1500 instead of
-> MIPS_DB1XXX, the PCMCIA driver 'db1xxx_ss' has build errors due
-> to missing DB1XXX symbols. The PCMCIA driver should be restricted
-> to MIPS_DB1XXX instead of MIPS_ALCHEMY to fix this build error.
+On Fri, Feb 04, 2022 at 11:12:49AM +0100, Pavel Machek wrote:
+> On Fri 2022-02-04 10:40:45, Greg Kroah-Hartman wrote:
+> > On Fri, Feb 04, 2022 at 10:37:35AM +0100, Pavel Machek wrote:
+> > > Hi!
+> > > 
+> > > > From: Peter Zijlstra <peterz@infradead.org>
+> > > > 
+> > > > commit ef54c1a476aef7eef26fe13ea10dc090952c00f8 upstream.
+> > > > 
+> > > > Make perf_event_exit_event() more robust, such that we can use it from
+> > > > other contexts. Specifically the up and coming remove_on_exec.
+> > > 
+> > > Do we need this in 5.10? AFAICT the remove_on_exec work is not queued
+> > > for 5.10, and this patch is buggy and needs following one to fix it
+> > > up.
+> > 
+> > It's needed by the following patch, which says 5.10 is affected.
 > 
-> ERROR: modpost: "bcsr_read" [drivers/pcmcia/db1xxx_ss.ko] undefined!
-> ERROR: modpost: "bcsr_mod" [drivers/pcmcia/db1xxx_ss.ko] undefined!
+> 9/25 says this patch broke 5.10: Fixes: ef54c1a476ae ("perf: Rework
+> perf_event_exit_event()"). 8/25 is not claiming to fix anything.
 > 
-> Fixes: 42a4f17dc356 ("MIPS: Alchemy: remove SOC_AU1X00 in favor of MIPS_ALCHEMY")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Manuel Lauss <manuel.lauss@gmail.com>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: linux-mips@vger.kernel.org
+> Simply drop 8/25 and 9/25, and 5.10 is okay...
 
-Applied to -pcmcia, thanks!
+Ah, yeah, the patch this was to fix was added and then reverted which
+confused things.  I'll go drop both of these now, thanks.
 
-	Dominik
+greg k-h

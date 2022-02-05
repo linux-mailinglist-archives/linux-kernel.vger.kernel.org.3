@@ -2,130 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 811114AA50C
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 01:27:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 053754AA512
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 01:31:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378767AbiBEA1w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 19:27:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60730 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231908AbiBEA1u (ORCPT
+        id S1378773AbiBEAbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 19:31:19 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:59046 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352482AbiBEAbS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 19:27:50 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7AD3DF8E3CC
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 16:27:49 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id z131so6284626pgz.12
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 16:27:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=14C76zcAecy6QkWHP0x84SCdOoX/8DbylNPgLbpYjVc=;
-        b=X97Crus95tXaoDwfIJoGl2bEuTJAEN2K54jJx2q4aiiLLJIzjMJ7iLTq5Dl8c3R5dY
-         slANIi5qTT+DjREN3JOUw0xpn7Z1pVLp0FhIbExQZXEvGw4DvVzSP2ZIkhaXorrK37xX
-         S0wjr1n+BW0R0iYPH6ogu0j9LGqn86XQPLMrtTzKSWcQH2xfic9tJn4b/Sn4tfHZgJM8
-         d/eyZJVoBD2jSczF7U/WoFRia4KybaLygQERn0C6JFM9BpL+U2ID687u+5pSNzPACfNl
-         Vz+doDFhgnY1jaxMVfxVo/6d+xodSXwgbRjNeP8AMOpQ6yBljPhrtRhoQ5vi9MenaEq1
-         t0Jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=14C76zcAecy6QkWHP0x84SCdOoX/8DbylNPgLbpYjVc=;
-        b=MgMtTNtoLrmzdP5GKsphs4h4bTeahjFH4Att4BytRdWrizVyS0OHURfSsNR9OLzgUM
-         CQ7wSSrRv0ltGykyHNQh9n+9yadWaxMPtkB1aFN4h+Rz4FxHiTNU3mZXQk9ybmHE5eka
-         4BD7kHZ31ezCZXYXH3gOH9G+s6DU7RVjezcvu8R3M3KZGxo8ACF+nAswtSgAEROcB45A
-         V3oC9oem2DOqDImhw1GYh2/QyqkBtctyITQ9vVToug3Q4MMzpV1mKTmKX0FyImN2+Dtt
-         92HGVHPEBrUAZbPOE57KuetSYgdo5IYkGlvjIN1YbLyZ1i77S4ml56mluCYFAnBWHGi7
-         epLg==
-X-Gm-Message-State: AOAM533BRHzT7illP4eRWyxxC6k45T+9KEcbS62NxKgbpBJRNW59gIaN
-        onnAXDDeQntXEgFxupMYut+2xhb0NNHR5iVbsrbu2A==
-X-Google-Smtp-Source: ABdhPJx0ty69M690qLEIZqimTrLV7otaDN5/K4DfNw6zW7VTs6llpgC2ebPpiGNE8qwFPN/B7arSerygletp8NkiZgE=
-X-Received: by 2002:a62:784b:: with SMTP id t72mr5702587pfc.86.1644020869332;
- Fri, 04 Feb 2022 16:27:49 -0800 (PST)
+        Fri, 4 Feb 2022 19:31:18 -0500
+Received: from [192.168.1.17] (unknown [192.182.151.181])
+        by linux.microsoft.com (Postfix) with ESMTPSA id E3C7820B6C61;
+        Fri,  4 Feb 2022 16:31:17 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E3C7820B6C61
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1644021078;
+        bh=hu1H4uGZ0JEPq7xzJcNDhKMllfxHPdflVQYUNHmN5wo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=QPOBabXajrruzMbBRSBn/Kn7xuQkGiScEdYIXUdixSNT8M4v6Uv0EYbbCFchACF0l
+         Pa3x31JZSYbVwBnNU/9xlpEYYchkDUw12IBBe350o6KMAAvZKGYAYZe2ijL4n6Z7/R
+         IoviCnt47T4PdTGaVVLl6/ENfRBT7YeQ3qJLMr1Y=
+Message-ID: <de6d6bd8-889f-45d6-b45e-7ed8cac3e54b@linux.microsoft.com>
+Date:   Fri, 4 Feb 2022 16:31:17 -0800
 MIME-Version: 1.0
-References: <20220127175505.851391-1-ira.weiny@intel.com> <20220127175505.851391-39-ira.weiny@intel.com>
- <CAPcyv4iYOGD2XpmO3RH+wViuXx8EYrq-BK7vuKv6we+KR60YCg@mail.gmail.com>
- <20220205000953.GD785175@iweiny-DESK2.sc.intel.com> <CAPcyv4jmnUbywDcXOAL9DwKxGaUf9cw9iDYbDcz6_CHyYPtytw@mail.gmail.com>
- <CAPcyv4iLVh_BesJLcZb=Pktd-h5x6-xuos5Cj4TzuWYC=Q-vLg@mail.gmail.com>
-In-Reply-To: <CAPcyv4iLVh_BesJLcZb=Pktd-h5x6-xuos5Cj4TzuWYC=Q-vLg@mail.gmail.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Fri, 4 Feb 2022 16:27:38 -0800
-Message-ID: <CAPcyv4gUSDwvOysAMM59yVsERtYpA_kY6s4=xunkjc2eJ8Mi1w@mail.gmail.com>
-Subject: Re: [PATCH V8 38/44] memremap_pages: Define pgmap_mk_{readwrite|noaccess}()
- calls
-To:     Ira Weiny <ira.weiny@intel.com>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v1 0/9] drivers: hv: dxgkrnl: Driver overview
+Content-Language: en-US
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org, spronovo@microsoft.com,
+        gregkh@linuxfoundation.org
+References: <cover.1641937419.git.iourit@linux.microsoft.com>
+ <Yd9SQxTznfHGjuDD@archlinux-ax161>
+ <bd36b131-be23-6f4d-16cf-a549a6533f34@linux.microsoft.com>
+ <YfCVi/TGD9Dnf9CG@dev-arch.archlinux-ax161>
+From:   Iouri Tarassov <iourit@linux.microsoft.com>
+In-Reply-To: <YfCVi/TGD9Dnf9CG@dev-arch.archlinux-ax161>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 4, 2022 at 4:25 PM Dan Williams <dan.j.williams@intel.com> wrote:
->
-> On Fri, Feb 4, 2022 at 4:19 PM Dan Williams <dan.j.williams@intel.com> wrote:
-> >
-> > On Fri, Feb 4, 2022 at 4:10 PM Ira Weiny <ira.weiny@intel.com> wrote:
-> > >
-> > > On Fri, Feb 04, 2022 at 10:35:59AM -0800, Dan Williams wrote:
-> > > > On Thu, Jan 27, 2022 at 9:55 AM <ira.weiny@intel.com> wrote:
-> > > > >
-> > >
-> > > [snip]
-> > >
-> > > I'll address the other comments later but wanted to address the idea below.
-> > >
-> > > > > diff --git a/include/linux/sched.h b/include/linux/sched.h
-> > > > > index f5b2be39a78c..5020ed7e67b7 100644
-> > > > > --- a/include/linux/sched.h
-> > > > > +++ b/include/linux/sched.h
-> > > > > @@ -1492,6 +1492,13 @@ struct task_struct {
-> > > > >         struct callback_head            l1d_flush_kill;
-> > > > >  #endif
-> > > > >
-> > > > > +#ifdef CONFIG_DEVMAP_ACCESS_PROTECTION
-> > > > > +       /*
-> > > > > +        * NOTE: pgmap_prot_count is modified within a single thread of
-> > > > > +        * execution.  So it does not need to be atomic_t.
-> > > > > +        */
-> > > > > +       u32                             pgmap_prot_count;
-> > > > > +#endif
-> > > >
-> > > > It's not at all clear why the task struct needs to be burdened with
-> > > > this accounting. Given that a devmap instance is needed to manage page
-> > > > protections, why not move the nested protection tracking to a percpu
-> > > > variable relative to an @pgmap arg? Something like:
-> > > >
-> > > > void __pgmap_mk_readwrite(struct dev_pagemap *pgmap)
-> > > > {
-> > > >        migrate_disable();
-> > > >        preempt_disable();
-> > >
-> > > Why burden threads like this?  kmap_local_page() is perfectly able to migrate
-> > > or be preempted?
-> > >
-> > > I think this is way to restrictive.
-> >
-> > kmap_local_page() holds migrate_disable() over the entire mapping, so
-> > we're only talking about preempt_disable(). I tend to think that
-> > bloating task_struct for something that is rarely used "kmap on dax
-> > pmem pages" is not the right tradeoff.
->
-> Now, I can see an argument that promoting kmap_local_page() to
-> preempt_disable() could cause problems, but I'd like help confirming
-> that before committing to extending task_struct.
 
-...as I say that it occurs to me that the whole point of
-kmap_local_page() is to be better than kmap_atomic() and this undoes
-that. I'd at least like that documented as the reason that task_struct
-needs to carry a new field.
+On 1/25/2022 4:27 PM, Nathan Chancellor wrote:
+> Hi Iouri,
+>
+> On Wed, Jan 12, 2022 at 03:39:13PM -0800, Iouri Tarassov wrote:
+> > 
+> drivers/hv/dxgkrnl/dxgvmbus.c: In function ‘dxgvmb_send_query_alloc_residency’:
+> drivers/hv/dxgkrnl/dxgvmbus.c:147:16: warning: array subscript ‘struct dxgvmbusmsg[0]’ is partly outside array bounds of ‘struct dxgvmbusmsgres[1]’ [-Warray-bounds]
+>    147 |         if (msg->hdr && (char *)msg->hdr != msg->msg_on_stack)
+>        |             ~~~^~~~~
+> drivers/hv/dxgkrnl/dxgvmbus.c:1882:31: note: while referencing ‘msg’
+>   1882 |         struct dxgvmbusmsgres msg = {.hdr = NULL};
+>        |                               ^~~
+
+Hi Nathan,
+
+I fixed the issue with the ioctls array.
+
+Regarding the warning above, it looks like a compiler error. I do not 
+see where the out of bounds access is.
+I tried GCC-11 version 11.2.0 and this warning is not there.
+
+Thanks
+
+Iouri
+

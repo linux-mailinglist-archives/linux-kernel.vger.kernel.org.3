@@ -2,128 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F7A54AA874
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 12:53:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8A9D4AA876
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 12:53:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376667AbiBELxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 06:53:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60058 "EHLO
+        id S1377536AbiBELxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 06:53:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358354AbiBELxQ (ORCPT
+        with ESMTP id S1358916AbiBELx3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 06:53:16 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7953C061347
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Feb 2022 03:53:14 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id o1-20020a1c4d01000000b0034d95625e1fso11149172wmh.4
-        for <linux-kernel@vger.kernel.org>; Sat, 05 Feb 2022 03:53:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=conchuod-ie.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=rtVdDv1SeuwFPst+Z3HZwK7VoU9zHizWiVCZ6cJ+BIo=;
-        b=cITyTzHhFb0YMzr+7/e0HR4JRCbfeP0KZUPmTysb/4NCGjw33dKpu8L8wjGdrraAy3
-         gV0ontgxmFJZX9kz8NpfJuYkSi6dCKmFGv7wOyu0tLnIIAzj1iyKmi12nCzjq6HauMdu
-         Mobbeh7Myhso5XnpHy2OQnfrc7DX76yyUQX02j1eDINyAdE8cSsvDhwHPpJ2uKiUgjRo
-         VkGC3wQDdc6Vx7VTELanwNrv6LBW+AQIKz8nLyweRXKMiLW3uld6/Vna14X8txEtoDzz
-         +yqWSte/QpfEf0iIq7hgR3lplxyZhXVkBYzF3GmJGCfSmPdfrxqMt0FChwfmBf+GDV3u
-         XEDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=rtVdDv1SeuwFPst+Z3HZwK7VoU9zHizWiVCZ6cJ+BIo=;
-        b=1979oZ9tZPQcdZWpZvqFiS+K3F4D+3Ecfn1cV6DLXWjV3XCWpvt6DZuj8erJuTgPO0
-         D3/ABx0dO5OcoNmbIRzCkrJ42SOp7gwmfqBHoivwpfEkj8KX36IeOq3C2bTBJwmsX8Sl
-         wRF1SOcvwiKR0bta9+wEKUhti0ypKsqwhywQNyPzyUmXvuEksWk03JdQ0Xe9rU4TE8Dc
-         GbuSX+syY2Y7Fl8ftN70TMzUUKTgCnJ5xu/a6nVmMY2niFS8pB2pJyV8AXuQqJ9vWsWJ
-         K4Z+9RDzjaw0MU2UoVvFSFOu46hvxaNkBKn8KBbEOyp00KaeUJy8zAvfIF0cPL/w8OYo
-         gkLw==
-X-Gm-Message-State: AOAM5335Ke1ayFAfyEAAO6HOgHpKF8MDUkRQhzKww2bcqpaJ3yONk4Ft
-        U6x9yGARqGbKMux1YgkVS7scMA==
-X-Google-Smtp-Source: ABdhPJxeJTKPg8tXjCf0sXV/a7RsIqYexP/xQzazsuPTUGiHexWKDv2XfFJqtgOghrL+rcR9WPkPWg==
-X-Received: by 2002:a1c:4e07:: with SMTP id g7mr6209206wmh.38.1644061993045;
-        Sat, 05 Feb 2022 03:53:13 -0800 (PST)
-Received: from [192.168.2.116] ([109.78.72.167])
-        by smtp.gmail.com with ESMTPSA id o2sm12859992wmq.21.2022.02.05.03.53.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 05 Feb 2022 03:53:12 -0800 (PST)
-Message-ID: <81cb8c53-c703-1a44-11cd-9f79e169147d@conchuod.ie>
-Date:   Sat, 5 Feb 2022 11:53:10 +0000
+        Sat, 5 Feb 2022 06:53:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCEDBC061347;
+        Sat,  5 Feb 2022 03:53:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CFF460C8E;
+        Sat,  5 Feb 2022 11:53:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FDF1C340E8;
+        Sat,  5 Feb 2022 11:53:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1644062007;
+        bh=lUBbvL5wH7PnC+Gd4WGcambxq9nvtgxEqvEU6mzfiRo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bhK7ZDiqSab8DUUIr/SuKZlRlf3Apz37KIjRYW5ESXygnA1T0E43ssRgZ5oS8jDVy
+         fHty8+NsYap5H0Zd3LnvjrPWKJ3lzbeZGnt6gYrVB3f+QTmCnfocYQvJf6oJNCE7nB
+         gHo2Js3WCg6ZXbimc4OenCAYUOfWqV9zA4w2F/7U=
+Date:   Sat, 5 Feb 2022 12:53:24 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Alexey Khoroshilov <khoroshilov@ispras.ru>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Michael Stapelberg <michael+drm@stapelberg.ch>,
+        Maxime Ripard <maxime@cerno.tech>
+Subject: Re: [PATCH 5.10 12/25] drm/vc4: hdmi: Make sure the device is
+ powered with CEC
+Message-ID: <Yf5lNIJnvhP4ajam@kroah.com>
+References: <20220204091914.280602669@linuxfoundation.org>
+ <20220204091914.688259001@linuxfoundation.org>
+ <91a59ee1-cca4-8d0c-4f86-388434eb5a39@ispras.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v5 03/12] dt-bindings: i2c: add bindings for microchip
- mpfs i2c
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>, Conor.Dooley@microchip.com
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, jassisinghbrar@gmail.com,
-        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
-        lee.jones@linaro.org, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, geert@linux-m68k.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-riscv@lists.infradead.org, krzysztof.kozlowski@canonical.com,
-        bin.meng@windriver.com, heiko@sntech.de, Lewis.Hanly@microchip.com,
-        Daire.McNamara@microchip.com, Ivan.Griffin@microchip.com,
-        atishp@rivosinc.com
-References: <20220131114726.973690-1-conor.dooley@microchip.com>
- <20220131114726.973690-4-conor.dooley@microchip.com>
- <CAL_JsqJkFaGmpAi3eEUROWyOr_PQEZ209TneLhsOkpf3w8jQdw@mail.gmail.com>
- <84e1d43f-4d3d-1501-5bc1-c982272e1ce3@microchip.com>
- <Yf2scqKFRFwWBIlC@robh.at.kernel.org>
-From:   Conor Dooley <mail@conchuod.ie>
-In-Reply-To: <Yf2scqKFRFwWBIlC@robh.at.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <91a59ee1-cca4-8d0c-4f86-388434eb5a39@ispras.ru>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 04/02/2022 22:45, Rob Herring wrote:
-> On Mon, Jan 31, 2022 at 03:55:32PM +0000, Conor.Dooley@microchip.com wrote:
->> On 31/01/2022 15:39, Rob Herring wrote:
->>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
->>>
->>> On Mon, Jan 31, 2022 at 5:45 AM <conor.dooley@microchip.com> wrote:
->>>>
->>>> From: Conor Dooley <conor.dooley@microchip.com>
->>>>
->>>> Add device tree bindings for the i2c controller on
->>>> the Microchip PolarFire SoC.
->>>>
->>>> Reviewed-by: Rob Herring <robh@kernel.org>
->>>>
->>>
->>> There should not be a blank line here.
->>>
->>> Also, tags should be in chronological order typically. If Daire sent
->>> this patch out with my tag, then the order is correct. If I gave it on
->>> a version you sent, then it goes between Daire's and your S-o-b which
->>> is the case here.
->> Oh, thanks. Probably been messing this up right/left/centre.
->>
->> On another note, I know I'm still missing a RB still on some of the
->> bindings, but what is the acceptance path for this series?
->> Any left over bindings not taken by subsystems via yourself and the dts
->> changes via Palmer's tree?
+On Sat, Feb 05, 2022 at 02:40:37PM +0300, Alexey Khoroshilov wrote:
+> On 04.02.2022 12:20, Greg Kroah-Hartman wrote:
+> > From: Maxime Ripard <maxime@cerno.tech>
+> > 
+> > Commit 20b0dfa86bef0e80b41b0e5ac38b92f23b6f27f9 upstream.
+> > 
+> > The original commit depended on a rework commit (724fc856c09e ("drm/vc4:
+> > hdmi: Split the CEC disable / enable functions in two")) that
+> > (rightfully) didn't reach stable.
+> > 
+> > However, probably because the context changed, when the patch was
+> > applied to stable the pm_runtime_put called got moved to the end of the
+> > vc4_hdmi_cec_adap_enable function (that would have become
+> > vc4_hdmi_cec_disable with the rework) to vc4_hdmi_cec_init.
+> > 
+> > This means that at probe time, we now drop our reference to the clocks
+> > and power domains and thus end up with a CPU hang when the CPU tries to
+> > access registers.
+> > 
+> > The call to pm_runtime_resume_and_get() is also problematic since the
+> > .adap_enable CEC hook is called both to enable and to disable the
+> > controller. That means that we'll now call pm_runtime_resume_and_get()
+> > at disable time as well, messing with the reference counting.
+> > 
+> > The behaviour we should have though would be to have
+> > pm_runtime_resume_and_get() called when the CEC controller is enabled,
+> > and pm_runtime_put when it's disabled.
+> > 
+> > We need to move things around a bit to behave that way, but it aligns
+> > stable with upstream.
+> > 
+> > Cc: <stable@vger.kernel.org> # 5.10.x
+> > Cc: <stable@vger.kernel.org> # 5.15.x
+> > Cc: <stable@vger.kernel.org> # 5.16.x
+> > Reported-by: Michael Stapelberg <michael+drm@stapelberg.ch>
+> > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > ---
+> >  drivers/gpu/drm/vc4/vc4_hdmi.c |   27 ++++++++++++++-------------
+> >  1 file changed, 14 insertions(+), 13 deletions(-)
+> > 
+> > --- a/drivers/gpu/drm/vc4/vc4_hdmi.c
+> > +++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
+> > @@ -1402,18 +1402,18 @@ static int vc4_hdmi_cec_adap_enable(stru
+> >  	u32 val;
+> >  	int ret;
+> >  
+> > -	ret = pm_runtime_resume_and_get(&vc4_hdmi->pdev->dev);
+> > -	if (ret)
+> > -		return ret;
+> > -
+> > -	val = HDMI_READ(HDMI_CEC_CNTRL_5);
+> > -	val &= ~(VC4_HDMI_CEC_TX_SW_RESET | VC4_HDMI_CEC_RX_SW_RESET |
+> > -		 VC4_HDMI_CEC_CNT_TO_4700_US_MASK |
+> > -		 VC4_HDMI_CEC_CNT_TO_4500_US_MASK);
+> > -	val |= ((4700 / usecs) << VC4_HDMI_CEC_CNT_TO_4700_US_SHIFT) |
+> > -	       ((4500 / usecs) << VC4_HDMI_CEC_CNT_TO_4500_US_SHIFT);
+> > -
+> >  	if (enable) {
+> > +		ret = pm_runtime_resume_and_get(&vc4_hdmi->pdev->dev);
+> > +		if (ret)
+> > +			return ret;
+> > +
+> > +		val = HDMI_READ(HDMI_CEC_CNTRL_5);
+> > +		val &= ~(VC4_HDMI_CEC_TX_SW_RESET | VC4_HDMI_CEC_RX_SW_RESET |
+> > +			 VC4_HDMI_CEC_CNT_TO_4700_US_MASK |
+> > +			 VC4_HDMI_CEC_CNT_TO_4500_US_MASK);
+> > +		val |= ((4700 / usecs) << VC4_HDMI_CEC_CNT_TO_4700_US_SHIFT) |
+> > +			((4500 / usecs) << VC4_HDMI_CEC_CNT_TO_4500_US_SHIFT);
+> > +
+> >  		HDMI_WRITE(HDMI_CEC_CNTRL_5, val |
+> >  			   VC4_HDMI_CEC_TX_SW_RESET | VC4_HDMI_CEC_RX_SW_RESET);
+> >  		HDMI_WRITE(HDMI_CEC_CNTRL_5, val);
+> > @@ -1439,7 +1439,10 @@ static int vc4_hdmi_cec_adap_enable(stru
+> >  		HDMI_WRITE(HDMI_CEC_CPU_MASK_SET, VC4_HDMI_CPU_CEC);
+> >  		HDMI_WRITE(HDMI_CEC_CNTRL_5, val |
+> >  			   VC4_HDMI_CEC_TX_SW_RESET | VC4_HDMI_CEC_RX_SW_RESET);
+> > +
+> > +		pm_runtime_put(&vc4_hdmi->pdev->dev);
+> >  	}
+> > +
+> >  	return 0;
+> >  }
+> >  
+> > @@ -1531,8 +1534,6 @@ static int vc4_hdmi_cec_init(struct vc4_
+> >  	if (ret < 0)
+> >  		goto err_delete_cec_adap;
+> >  
+> > -	pm_runtime_put(&vc4_hdmi->pdev->dev);
+> > -
+> >  	return 0;
+> >  
+> >  err_delete_cec_adap:
+> > 
+> > 
 > 
-> They should go via subsystems. I can take if you want, but not with
-> missing dependencies. I need my tree working.
+> The patch has moved initialization of val local variable into if
+> (enable) branch. But the variable is used in in the else branch as well.
+> As a result we write of its initialized value here:
+> 
+>     HDMI_WRITE(HDMI_CEC_CNTRL_5, val |
+>          VC4_HDMI_CEC_TX_SW_RESET | VC4_HDMI_CEC_RX_SW_RESET);
+> 
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+> 
+> static
+> int vc4_hdmi_cec_adap_enable(struct cec_adapter *adap, bool enable)
+> {
+>   struct vc4_hdmi *vc4_hdmi = cec_get_drvdata(adap);
+>   /* clock period in microseconds */
+>   const u32 usecs = 1000000 / CEC_CLOCK_FREQ;
+>   u32 val;
+>   int ret;
+> 
+>   if (enable) {
+>     ret = pm_runtime_resume_and_get(&vc4_hdmi->pdev->dev);
+>     if (ret)
+>       return ret;
+> 
+>     val = HDMI_READ(HDMI_CEC_CNTRL_5);
+>     .....
+> 
+>   } else {
+>     HDMI_WRITE(HDMI_CEC_CPU_MASK_SET, VC4_HDMI_CPU_CEC);
+>     HDMI_WRITE(HDMI_CEC_CNTRL_5, val |  <------------------ UNINIT VALUE
+>          VC4_HDMI_CEC_TX_SW_RESET | VC4_HDMI_CEC_RX_SW_RESET);
+> 
+>     pm_runtime_put(&vc4_hdmi->pdev->dev);
+>   }
+> 
+>   return 0;
+> }
 
-I should just drop the dependency on the clock binding from the 
-examples, not really much reason to have it there. Still a dep. for the 
-device tree itself but would just make it easier for the bindings 
-themselves.
+So what does this mean?  That this backport is incorrect and should be
+dropped?  Or that the original commit was wrong?  Or something else?
 
-Conor.
+confused,
+
+greg k-h

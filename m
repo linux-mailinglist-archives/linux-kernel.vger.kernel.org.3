@@ -2,166 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 433304AA5A8
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 03:21:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19BEF4AA5B2
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 03:23:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378966AbiBECVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 21:21:54 -0500
-Received: from mail-oi1-f176.google.com ([209.85.167.176]:39803 "EHLO
-        mail-oi1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240608AbiBECVw (ORCPT
+        id S1378976AbiBECXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 21:23:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40664 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238225AbiBECXT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 21:21:52 -0500
-Received: by mail-oi1-f176.google.com with SMTP id s24so2993370oic.6;
-        Fri, 04 Feb 2022 18:21:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=x01t8Em5FbScKdEl6NTYvjfFK/JKC2XROUz3tUIaZiA=;
-        b=5MkdsD+VPTY18dfupGhUnfR0p2DKo2P+cP4N0IEv3suHSk2rYAfvkCJ2CBnV6H7fjo
-         K8GTKS0THnByw0G6Ml4D6WFbaflHW/TE/vXtj7bCGAgaeMe8oex9Gt4jq2bx8Tf+HaJL
-         iJWIxJ3X2y8HBji2XTYi0RG6CpZA6QL4UcuflDD7FCvrkJJ/8DIvJQ1sY44yn4OHI/qh
-         ic1lgcVfgPPq4cKozn2yiRJsTPfhPvMVq8zvz400XQovBuAAx7Rg4pE3JNo0xjWTxIs1
-         +4PnXmBrEaUC+5VABbdwFx8+6XQ0YI/U+r93OcCSwjKpBhXi9iJGyqlWVR9yFKFeaR25
-         yKnQ==
-X-Gm-Message-State: AOAM532HhWBjoBHQgCzXk0lOyjeq0Zh2wZCKZWk7U5WJhCxRHOH9Y2M4
-        fT+luYOsMJh96M5+qaPAQl1WbdhlZA==
-X-Google-Smtp-Source: ABdhPJwaCW2JlKmM1j4e+8o9k+dZOzXdZmkWT3Y9RpLjzqp0tqfiOSWWCn1nu2hItqJRMDxALj69pw==
-X-Received: by 2002:a05:6808:2002:: with SMTP id q2mr862579oiw.71.1644027712076;
-        Fri, 04 Feb 2022 18:21:52 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id n128sm1489830oia.6.2022.02.04.18.21.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 18:21:51 -0800 (PST)
-Received: (nullmailer pid 3629269 invoked by uid 1000);
-        Sat, 05 Feb 2022 02:21:50 -0000
-Date:   Fri, 4 Feb 2022 20:21:50 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Patrick Rudolph <patrick.rudolph@9elements.com>
-Cc:     Peter Rosin <peda@axentia.se>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [v3 1/3] dt-bindings: i2c: Add Maxim MAX735x/MAX736x variants
-Message-ID: <Yf3fPmoqTukCVM8w@robh.at.kernel.org>
-References: <20220120121314.463944-1-patrick.rudolph@9elements.com>
- <20220120121314.463944-2-patrick.rudolph@9elements.com>
+        Fri, 4 Feb 2022 21:23:19 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F33D8C061347;
+        Fri,  4 Feb 2022 18:23:18 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A876E472;
+        Sat,  5 Feb 2022 03:23:15 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1644027795;
+        bh=8Gxgs/LVp8UXOT1xU7N2J6LDQ9LAZmNhrPd3LDIdlMo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NCNAtwUHtLHwGFxaEF2imjparL0hfE4rzgnfLYW6qlioSE7/xW5JH9C1IJPEBx2ru
+         4DT6SluBZkEN+jVpXsMh3VN9pXV0FcCvKOXCs/jOvYZaKXArGVhsjCUQym1zsKPI2B
+         TefR05bvw6QBik7WRO50TPU5MSRMbP+xQBioJDj0=
+Date:   Sat, 5 Feb 2022 04:22:51 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     jeanmichel.hautbois@ideasonboard.com,
+        linux-arm-kernel@lists.infradead.org,
+        dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
+        kernel-list@raspberrypi.com, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        lukasz@jany.st, mchehab@kernel.org, naush@raspberrypi.com,
+        robh@kernel.org, tomi.valkeinen@ideasonboard.com,
+        nsaenz@kernel.org, bcm-kernel-feedback-list@broadcom.com
+Subject: Re: (EXT) [RFC PATCH v4 03/12] dt-bindings: media: Add bindings for
+ bcm2835-unicam
+Message-ID: <Yf3fe2F88SNcl2Jd@pendragon.ideasonboard.com>
+References: <20220203175009.558868-1-jeanmichel.hautbois@ideasonboard.com>
+ <20220203175009.558868-4-jeanmichel.hautbois@ideasonboard.com>
+ <7954256.DvuYhMxLoT@steina-w>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220120121314.463944-2-patrick.rudolph@9elements.com>
+In-Reply-To: <7954256.DvuYhMxLoT@steina-w>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 01:13:11PM +0100, Patrick Rudolph wrote:
-> Update the pca954x bindings to add support for the Maxim MAX735x/MAX736x
-> chips. The functionality will be provided by the exisintg pca954x driver.
-> 
-> While on it make the interrupts support conditionally as not all of the
-> existing chips have interrupts.
-> 
-> For chips that are powered off by default add an optional regulator
-> called vdd-supply.
-> 
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> ---
->  .../bindings/i2c/i2c-mux-pca954x.yaml         | 43 ++++++++++++++-----
->  1 file changed, 33 insertions(+), 10 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-> index 9f1726d0356b..e7650e2a777e 100644
-> --- a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-> @@ -4,21 +4,47 @@
->  $id: http://devicetree.org/schemas/i2c/i2c-mux-pca954x.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
->  
-> -title: NXP PCA954x I2C bus switch
-> +title: NXP PCA954x I2C and compatible bus switches
->  
->  maintainers:
->    - Laurent Pinchart <laurent.pinchart@ideasonboard.com>
->  
->  description:
-> -  The binding supports NXP PCA954x and PCA984x I2C mux/switch devices.
-> +  The binding supports NXP PCA954x and PCA984x I2C mux/switch devices,
-> +  and the Maxim MAX735x and MAX736x I2C mux/switch devices.
->  
->  allOf:
->    - $ref: /schemas/i2c/i2c-mux.yaml#
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - maxim,max7367
-> +              - maxim,max7369
-> +              - nxp,pca9542
-> +              - nxp,pca9543
-> +              - nxp,pca9544
-> +              - nxp,pca9545
-> +    then:
-> +      properties:
-> +        interrupts: true
+Hi Alexander,
 
-Now any number of interrupts are valid and undefined.
+On Fri, Feb 04, 2022 at 09:50:06AM +0100, Alexander Stein wrote:
+> Am Donnerstag, 3. Februar 2022, 18:50:00 CET schrieb Jean-Michel Hautbois:
+> > Introduce the dt-bindings documentation for bcm2835 CCP2/CSI2 Unicam
+> > camera interface. Also add a MAINTAINERS entry for it.
+> > 
+> > Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+> > Signed-off-by: Naushir Patuck <naush@raspberrypi.com>
+> > Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
+> > 
+> > ---
+> > v4:
+> > - make MAINTAINERS its own patch
+> > - describe the reg and clocks correctly
+> > - use a vendor entry for the number of data lanes
+> > ---
+> >  .../bindings/media/brcm,bcm2835-unicam.yaml   | 110 ++++++++++++++++++
+> >  1 file changed, 110 insertions(+)
+> >  create mode 100644
+> > Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
+> > 
+> > diff --git
+> > a/Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
+> > b/Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml new file
+> > mode 100644
+> > index 000000000000..0725a0267c60
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
+> > @@ -0,0 +1,110 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/media/brcm,bcm2835-unicam.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Broadcom BCM283x Camera Interface (Unicam)
+> > +
+> > +maintainers:
+> > +  - Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>
+> > +
+> > +description: |-
+> > +  The Unicam block on BCM283x SoCs is the receiver for either
+> > +  CSI-2 or CCP2 data from image sensors or similar devices.
+> > +
+> > +  The main platform using this SoC is the Raspberry Pi family of boards.
+> > +  On the Pi the VideoCore firmware can also control this hardware block,
+> > +  and driving it from two different processors will cause issues.
+> > +  To avoid this, the firmware checks the device tree configuration
+> > +  during boot. If it finds device tree nodes starting by csi then
+> > +  it will stop the firmware accessing the block, and it can then
+> > +  safely be used via the device tree binding.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: brcm,bcm2835-unicam
+> > +
+> > +  reg:
+> > +    items:
+> > +      - description: Unicam block.
+> > +      - description: Clock Manager Image (CMI) block.
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +
+> > +  clocks:
+> > +    items:
+> > +      - description: Clock to drive the LP state machine of Unicam.
+> > +      - description: Clock for the vpu (core clock).
+> > +
+> > +  clock-names:
+> > +    items:
+> > +      - const: lp
+> > +      - const: vpu
+> > +
+> > +  power-domains:
+> > +    items:
+> > +      - description: Unicam power domain
+> > +
+> > +  brcm,num-data-lanes:
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    enum: [ 2, 4 ]
+> > +    description: Number of data lanes on the csi bus
+> 
+> There is already data-lanes in Documentation/devicetree/bindings/media/video-
+> interfaces.yaml. AFAICS these two are identical. Can't the video-
+> interface.yaml be used for this? I'm no expert TBH.
 
-> +
-> +        "#interrupt-cells":
-> +          const: 2
-> +
-> +        interrupt-controller: true
->  
->  properties:
->    compatible:
->      oneOf:
->        - enum:
-> +          - maxim,max7356
-> +          - maxim,max7357
-> +          - maxim,max7358
-> +          - maxim,max7367
-> +          - maxim,max7368
-> +          - maxim,max7369
->            - nxp,pca9540
->            - nxp,pca9542
->            - nxp,pca9543
-> @@ -38,14 +64,6 @@ properties:
->    reg:
->      maxItems: 1
->  
-> -  interrupts:
-> -    maxItems: 1
-> -
-> -  "#interrupt-cells":
-> -    const: 2
-> -
-> -  interrupt-controller: true
-> -
->    reset-gpios:
->      maxItems: 1
->  
-> @@ -59,6 +77,9 @@ properties:
->      description: if present, overrides i2c-mux-idle-disconnect
->      $ref: /schemas/mux/mux-controller.yaml#/properties/idle-state
->  
-> +  vdd-supply:
-> +    description: A voltage regulator supplying power to the chip.
-> +
->  required:
->    - compatible
->    - reg
-> @@ -79,6 +100,8 @@ examples:
->              #size-cells = <0>;
->              reg = <0x74>;
->  
-> +            vdd-supply = <&p3v3>;
-> +
->              interrupt-parent = <&ipic>;
->              interrupts = <17 IRQ_TYPE_LEVEL_LOW>;
->              interrupt-controller;
-> -- 
-> 2.34.1
-> 
-> 
+This is the number of data lanes that the Unicam instance supports.
+There are two Unicam instances, and they can have 2 or 4 data lanes
+depending on the SoC. The data-lanes endpoint property indicates the
+number of lanes used on a particular board.
+
+-- 
+Regards,
+
+Laurent Pinchart

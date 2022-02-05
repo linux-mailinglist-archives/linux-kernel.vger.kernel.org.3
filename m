@@ -2,79 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C50BD4AA65B
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 05:03:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D20E54AA65D
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 05:03:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379293AbiBEEDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 23:03:01 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:57492 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239965AbiBEEC7 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 23:02:59 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 39EE861182;
-        Sat,  5 Feb 2022 04:02:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4053CC340E8;
-        Sat,  5 Feb 2022 04:02:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644033778;
-        bh=c3EdVIr+qi9Rx5v8/PHg5sm7wCbJ8Yeb5ODBDIoL6n4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=p+NtqexJKDbSUr+I10mtVeNBMbz7msVPlFS/AQF5VrRVnF2yWSK+PVRS64E/f66e7
-         7rI2eG5IMe/4wtqveNffMgtILn/MCjeVVTPR33Jxtxqfsn9m5o9MF2ffT+/wi7iE7F
-         ZnrzXLPp1LBQA/uXYUbVUSYLDN7dthhJHH9AqVUWRW/riqiN//P5f1eRtDW4iK1MbQ
-         JlE0rf1UluIvMYViQj6ZnCL64JuwQuRo6ABWrs1m/SCrhrAL6pfKaoQK7u+2f/XOI6
-         N51c5bo60QqRubHiY1arsJpTvgFdJOdpTo6prBDASJzj7s0HiIGN3SvfUsA1mVGy/O
-         TyUrOFPMc9saQ==
-Date:   Fri, 4 Feb 2022 20:02:56 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     <Pavel.Parkhomenko@baikalelectronics.ru>
-Cc:     <michael@stapelberg.de>, <afleming@gmail.com>,
-        <f.fainelli@gmail.com>, <andrew@lunn.ch>,
-        <Alexey.Malahov@baikalelectronics.ru>,
-        <Sergey.Semin@baikalelectronics.ru>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] net: phy: marvell: Fix RGMII Tx/Rx delays setting in
- 88e1121-compatible PHYs
-Message-ID: <20220204200256.641d757b@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <96759fee7240fd095cb9cc1f6eaf2d9113b57cf0.camel@baikalelectronics.ru>
-References: <96759fee7240fd095cb9cc1f6eaf2d9113b57cf0.camel@baikalelectronics.ru>
+        id S1379307AbiBEEDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 23:03:25 -0500
+Received: from helcar.hmeau.com ([216.24.177.18]:33954 "EHLO fornost.hmeau.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1379299AbiBEEDT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 23:03:19 -0500
+Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
+        by fornost.hmeau.com with smtp (Exim 4.92 #5 (Debian))
+        id 1nGCI3-0001kj-W9; Sat, 05 Feb 2022 15:03:13 +1100
+Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Sat, 05 Feb 2022 15:03:11 +1100
+Date:   Sat, 5 Feb 2022 15:03:11 +1100
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Corentin Labbe <clabbe@baylibre.com>
+Cc:     davem@davemloft.net, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] crypto: engine: disable BH during completion
+Message-ID: <Yf32/7Vi/Y7VtE3/@gondor.apana.org.au>
+References: <20220127133332.4011509-1-clabbe@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220127133332.4011509-1-clabbe@baylibre.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 4 Feb 2022 05:29:11 +0000
-Pavel.Parkhomenko@baikalelectronics.ru wrote:
-> It is mandatory for a software to issue a reset upon modifying RGMII
-> Receive Timing Control and RGMII Transmit Timing Control bit fields of MAC
-> Specific Control register 2 (page 2, register 21) otherwise the changes
-> won't be perceived by the PHY (the same is applicable for a lot of other
-> registers). Not setting the RGMII delays on the platforms that imply
-> it's being done on the PHY side will consequently cause the traffic loss.
-> We discovered that the denoted soft-reset is missing in the
-> m88e1121_config_aneg() method for the case if the RGMII delays are
-> modified but the MDIx polarity isn't changed or the auto-negotiation is
-> left enabled, thus causing the traffic loss on our platform with Marvell
-> Alaska 88E1510 installed. Let's fix that by issuing the soft-reset if the
-> delays have been actually set in the m88e1121_config_aneg_rgmii_delays()
-> method.
+On Thu, Jan 27, 2022 at 01:33:32PM +0000, Corentin Labbe wrote:
+> When doing iperf over ipsec with crypto hardware sun8i-ce, I hit some
+> spinlock recursion bug.
 > 
-> Fixes: d6ab93364734 ("net: phy: marvell: Avoid unnecessary soft reset")
-> Signed-off-by: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
-> Reviewed-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> Cc: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Cc: netdev@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
+> This is due to crypto/crypto_engine not disabling BH when calling
+> completion function.
+> 
+> Fixes: 735d37b5424b ("crypto: engine - Introduce the block request crypto engine framework")
+> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+> ---
+>  crypto/crypto_engine.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/crypto/crypto_engine.c b/crypto/crypto_engine.c
+> index fb07da9920ee..b3844f6d98a3 100644
+> --- a/crypto/crypto_engine.c
+> +++ b/crypto/crypto_engine.c
+> @@ -7,6 +7,7 @@
+>   * Author: Baolin Wang <baolin.wang@linaro.org>
+>   */
+>  
+> +#include <linux/bottom_half.h>
+>  #include <linux/err.h>
+>  #include <linux/delay.h>
+>  #include <linux/device.h>
+> @@ -53,7 +54,9 @@ static void crypto_finalize_request(struct crypto_engine *engine,
+>  				dev_err(engine->dev, "failed to unprepare request\n");
+>  		}
+>  	}
+> +	local_bh_disable();
+>  	req->complete(req, err);
+> +	local_bh_enable();
 
-Appears not to apply to net, please rebase on top of:
+Most other drivers call this function in softirq context.  In
+general crypto API callback functions expect to be called in softirq
+context.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/
+So I think we should fix the driver to do the bh disable instead.
 
-and repost (do keep Russell's tag and address Andrew's question).
+However, it's probably a good idea to add a check in this spot to
+detect drivers that are calling this in the wrong context, e.g.,
+lockdep_assert_in_softirq().
+
+Thanks,
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt

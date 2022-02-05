@@ -2,129 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA2C94AACA6
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 22:13:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 562374AACBC
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 22:33:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381439AbiBEVNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 16:13:13 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:59758
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233073AbiBEVNM (ORCPT
+        id S1377948AbiBEVdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 16:33:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55718 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232507AbiBEVdn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 16:13:12 -0500
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com [209.85.128.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id E54C23FE4B
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Feb 2022 21:13:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1644095590;
-        bh=nz2Z4bFotqetThuLUskNVZCWGhwv1YrdlfnjDQe5gQs=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=K0puRBppIpE4rnEKVNnKGfOPwH0dhCZq5XLEdIgCOBGZByOikF33flBu2vbchkgEJ
-         74GKJBsu7xZoKu7/wzGJ7dxbzIsjbturV6JFTk8SlCLw3jZbSNmHwGEJp/SiMxTxH1
-         E/tl2PinE41s5nJH+FFUhmoL8/K0fTenK8d8irWz7Kc9pa26KlN3EciJwQlxWzm818
-         yoUFnz/zOyBUFv33vWOtK/vTMKaClWwyHRUFL+blv47CDPU1YgEsUOoloQcJ0xQVQ2
-         TbmmnU7W5BAPyiSysO4LM3DW38fqbe8E62+hzmuejUMp3IJyMBsLLQ/IiOpvVU644O
-         K9pfcTyAi2YxA==
-Received: by mail-wm1-f69.google.com with SMTP id s187-20020a1ca9c4000000b0037bb8547d64so584896wme.0
-        for <linux-kernel@vger.kernel.org>; Sat, 05 Feb 2022 13:13:10 -0800 (PST)
+        Sat, 5 Feb 2022 16:33:43 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0779AC061348
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Feb 2022 13:33:41 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id n8so7113794wmk.3
+        for <linux-kernel@vger.kernel.org>; Sat, 05 Feb 2022 13:33:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=4D2XO13bmKH6KEZ3rCIFVRJ29Rca69+/OJs6jQDOjGo=;
+        b=gYvmip7okyn/CUPiuGkGtwNastzNfrEtY7Ice8pj0uAN9OWYDgQNcGSctl1EymGBDy
+         HWm1/oKyNbW/X6pLs/mMPZiSFJ4fiwm5g5VAwHDBnc77/Zb1L4mtQWbcIVQG6xBf7fFT
+         WkLpbuy6feDNRmc2EBA4RZ8Wuevw9YTzsCXNyQQH5TSJqce5PO29gQadx9tk8r7/YmE7
+         jpHHdDIlQwcqiRwYHpKzCN21T/nNVcxnnhQz/FPIFdSLqsH4BX6u3OTty7F76RNGYejl
+         hAMz69kdJkyIBEQ/QRPEq3Y+RfZc6jLi0jgP+OWH+W6s95fcQI6a0V+UpTkI5LlRDBzV
+         t6vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=nz2Z4bFotqetThuLUskNVZCWGhwv1YrdlfnjDQe5gQs=;
-        b=prwdYqjsSYv43bADxLLLBbOVtHvI2i9FAR2y251V5Q/jxkYWq88EELOP8QPAhqzngd
-         uEBwqute1FKXHbj3D9KrP5UknBUARVVyquy4T1JE8F0y/o6UKSp7YI0xnaCkQksfldBS
-         SCvqQJyZHulwJ4x3zDv1to8Sl8/op1q4iIo6zUZ1mPW/o8A+OjlRF8VYjVNXVDVuJ2/V
-         zBQOmm8/Ii1gt02K/tLE+8zM4n8oBAKUsDhIvmVOqCHdzgVhvKVo+qgtZIpFmjpWTGvA
-         2Ot03i++zsLp7bNB8UvnGMhtFhV6TjXVcMr00kQq8vfajlydYvAyAFqVDOAHLTg+8em8
-         h6Yg==
-X-Gm-Message-State: AOAM533Ba4+yMNHKwBmD81UF6DwZ+H6MWPg9kMoYD31+ncY9LnHnZ7xt
-        TG+6nw6HFxsjuFf2Xdp1OCQoYhC6JdCOLFZ3DA1DW9ScqevAHxxXJhZB5dEq991bIIQQ6IQopV5
-        FnxeS/eduYXlC90zRMiw9l6vh8kXOr3P76C9TloE6GXKghCq1897C3ydIEw==
-X-Received: by 2002:a05:6000:1707:: with SMTP id n7mr4286322wrc.234.1644095590469;
-        Sat, 05 Feb 2022 13:13:10 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx0O5lMWQqmnSzmHWQqbnIIH10oDMuf24v+GRzu1vHjjMNiBTdjAaypokB3rE4ZxL9Iq0Fr05Wxc5BZQWT7mig=
-X-Received: by 2002:a05:6000:1707:: with SMTP id n7mr4286310wrc.234.1644095590242;
- Sat, 05 Feb 2022 13:13:10 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=4D2XO13bmKH6KEZ3rCIFVRJ29Rca69+/OJs6jQDOjGo=;
+        b=QOmFJyfJSpatSminKm0by3uF449glfi4dUYvakn7GW95nRm4ilvIfTcPICEQF+zZCA
+         ZJX3i0u5CKIHDcwFY1HrnM+KLJTcg9J7I5Q5/nGRjtm/75v1ViFilAG7impin/+baYCQ
+         tirPBkxCbGgrKWCU5VB0VeMO9Xl++NBKsj8lEpTbg0VhErax1pLhDfNR27bpsTprlKF3
+         anJcMIwXzHJ1OP6KS9DXgMwXOstwF1E8uTrRxKlRVMo1JGW3eUXaCUFy8E3ra7nk/r9q
+         3HAIkdyzThHNjp1kydZtiChcyEUqB89ENQ0gDYEOW/Oh/mPVv6cq8Jj8z87PO4/CD+81
+         qCGg==
+X-Gm-Message-State: AOAM53092jUY1bM2wI3plErll0gF08cVzKgjnJqczvo3KmHJhT2O2L7d
+        tv4Lq6hvQYVyPtV/4CaxfKh/AY0O/mGYqb6StSk=
+X-Google-Smtp-Source: ABdhPJw7pJoqyRJY1Y/eKFjPdvs03zurSgRqpOaU0QE2lXbLJV4liTAP71Ouzf3AelpxVgkNmWkk5jbNv4n6SVI/4Xc=
+X-Received: by 2002:a05:600c:4f53:: with SMTP id m19mr8102883wmq.150.1644096820394;
+ Sat, 05 Feb 2022 13:33:40 -0800 (PST)
 MIME-Version: 1.0
-References: <20211129173637.303201-1-robh@kernel.org> <Yf2wTLjmcRj+AbDv@xps13.dannf>
- <CAL_Jsq+4b4Yy8rJGJv9j9j_TCm6mTAkW5fzcDuuW-jOoiZ2GLg@mail.gmail.com>
-In-Reply-To: <CAL_Jsq+4b4Yy8rJGJv9j9j_TCm6mTAkW5fzcDuuW-jOoiZ2GLg@mail.gmail.com>
-From:   dann frazier <dann.frazier@canonical.com>
-Date:   Sat, 5 Feb 2022 14:12:57 -0700
-Message-ID: <CALdTtnuK+D7gNbEDgHbrc29pFFCR3XYAHqrK3=X_hQxUx-Seow@mail.gmail.com>
-Subject: Re: [PATCH] PCI: xgene: Fix IB window setup
-To:     Rob Herring <robh@kernel.org>
-Cc:     Toan Le <toan@os.amperecomputing.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Andrew Murray <amurray@thegoodpenguin.co.uk>,
-        =?UTF-8?Q?St=C3=A9phane_Graber?= <stgraber@ubuntu.com>,
-        stable <stable@vger.kernel.org>, PCI <linux-pci@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Received: by 2002:a5d:4ec8:0:0:0:0:0 with HTTP; Sat, 5 Feb 2022 13:33:39 -0800 (PST)
+Reply-To: mmd475644@gmail.com
+From:   "Dr. Irene Lam" <confianzayrentabilidad@gmail.com>
+Date:   Sat, 5 Feb 2022 13:33:39 -0800
+Message-ID: <CANrrfX6SVB4oux07RQS69RLW1w5xTU_fZR1vmtotC+YFOYgpcw@mail.gmail.com>
+Subject: Good Day,
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.3 required=5.0 tests=BAYES_40,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ****
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 5, 2022 at 9:05 AM Rob Herring <robh@kernel.org> wrote:
->
-> On Fri, Feb 4, 2022 at 5:01 PM dann frazier <dann.frazier@canonical.com> =
-wrote:
-> >
-> > On Mon, Nov 29, 2021 at 11:36:37AM -0600, Rob Herring wrote:
-> > > Commit 6dce5aa59e0b ("PCI: xgene: Use inbound resources for setup")
-> > > broke PCI support on XGene. The cause is the IB resources are now sor=
-ted
-> > > in address order instead of being in DT dma-ranges order. The result =
-is
-> > > which inbound registers are used for each region are swapped. I don't
-> > > know the details about this h/w, but it appears that IB region 0
-> > > registers can't handle a size greater than 4GB. In any case, limiting
-> > > the size for region 0 is enough to get back to the original assignmen=
-t
-> > > of dma-ranges to regions.
-> >
-> > hey Rob!
-> >
-> > I've been seeing a panic on HP Moonshoot m400 cartridges (X-Gene1) -
-> > only during network installs - that I also bisected down to commit
-> > 6dce5aa59e0b ("PCI: xgene: Use inbound resources for setup"). I was
-> > hoping that this patch that fixed the issue on St=C3=A9phane's X-Gene2
-> > system would also fix my issue, but no luck. In fact, it seems to just
-> > makes it fail differently. Reverting both patches is required to get a
-> > v5.17-rc kernel to boot.
-> >
-> > I've collected the following logs - let me know if anything else would
-> > be useful.
-> >
-> > 1) v5.17-rc2+ (unmodified):
-> >    http://dannf.org/bugs/m400-no-reverts.log
-> >    Note that the mlx4 driver fails initialization.
-> >
-> > 2) v5.17-rc2+, w/o the commit that fixed St=C3=A9phane's system:
-> >    http://dannf.org/bugs/m400-xgene2-fix-reverted.log
-> >    Note the mlx4 MSI-X timeout, and later panic.
-> >
-> > 3) v5.17-rc2+, w/ both commits reverted (works)
-> >    http://dannf.org/bugs/m400-both-reverted.log
->
-> The ranges and dma-ranges addresses don't appear to match up with any
-> upstream dts files. Can you send me the DT?
+-- 
+I'm Dr. Irene Lam, how are you doing ope you are in good health, the
+Board director
+try to reach you on phone several times Meanwhile, your number was not
+connecting. before he ask me to send you an email to hear from you if
+you are fine. hoping to hear from you soonest.
 
-Sure: http://dannf.org/bugs/fdt
-
- -dann
-
-> Otherwise, we're going to need some debugging added to
-> xgene_pcie_setup_ib_reg() to see if the register setup changed. I can
-> come up with something next week.
->
-> Rob
+Sincerely
+Dr. Irene Lam

@@ -2,156 +2,317 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54E234AAF91
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 14:49:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E8A44AAF96
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 14:56:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240324AbiBFNtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 08:49:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48480 "EHLO
+        id S240410AbiBFN4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 08:56:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240386AbiBFNtX (ORCPT
+        with ESMTP id S239910AbiBFN4C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 08:49:23 -0500
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86065C0401C3
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 05:49:21 -0800 (PST)
-Received: by mail-io1-f70.google.com with SMTP id y4-20020a056602200400b006101b618529so7047983iod.19
-        for <linux-kernel@vger.kernel.org>; Sun, 06 Feb 2022 05:49:21 -0800 (PST)
+        Sun, 6 Feb 2022 08:56:02 -0500
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C2A6C06173B;
+        Sun,  6 Feb 2022 05:56:00 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id p125so9319727pga.2;
+        Sun, 06 Feb 2022 05:56:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=MVGrK19E00WWSz2xPXsV4Xp+Zqzss5NIyuH9iJU5vD8=;
+        b=ldAyo+nvz7JEjtwsPQzFtrf8tgNEzMeI1EpU7z2uQe8Ou7qfBtUlTb8zWFKXWfJVNO
+         IgTsIfh2TOWT2fdCQHL1wx1NztHRnKkuScEkZkkb06O5pFdc2Nw0zK0D2AtffuIzV2hP
+         3oD1taMD9HfEKyGDkbKSt6prPDtIyaZx2H19J74Ro0wvaI8FaPgcZhWHOR7cPR2pREcX
+         den0kzpHQl7VrK1dNoE2gg5Fe2Ny53z5NKeuZgOmWCIKuss/13XJiMzFKuYS4sT5EMz4
+         tiED6lO5CYEHathDk3HHEYY1c3oaELn76rwqMOGEwpHP+YP4cwDNM4RWLOSKP028DO0o
+         V9Vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=2BjaMGDo4/nb0cgziCObjwAIJLqV0IFNYkvzhO5UBCM=;
-        b=ehjd5lecASwBdqY7AL4MTGfMvThioU+xEOnjiWZVIbkfw6ly92OM2y92/UGr1tU1cP
-         2ILiIJX3mlylQeNa9lIXCJwSUtZ5lyDGtlAH5qiUyqDhxQjbO28ZPy+niS5ax1t1kYz7
-         oUPpMPVcbNWgQV+AqDbe6v3W/Zh8ycJkQZ0sJ9mch95TJf9iw/wV6LweR2QoXzfAf6HX
-         QGOYBJz1R4cdLBWS5Xve+/Wa8XOg4H9kFPUysSEaPY2JEqylLX+obQzF62HsMlO5YKMx
-         DOAlOoNDDvhPGqYvt401IQp7tYYxlqNMkJYfRR+mKMPOYz4vMZ5YRlZU982RNvUuGY5n
-         LY7w==
-X-Gm-Message-State: AOAM532eZ3Fs7UwHmvDpam5li0AiyxCiGrIkzFJpeerrik9pHMkDXt6a
-        i1FExOSjBt83M6+HH+KBNAh/bqaDVDLppBYscexza0HQOefp
-X-Google-Smtp-Source: ABdhPJyrtf9K1fc0nnjSzQa41PslNz5JT188h0hOhiBRCbCMRX44ELEtSDOus0Y+q8gBFL3acNPlpTbI7OjY+y+Meg2n+cuzPMFu
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=MVGrK19E00WWSz2xPXsV4Xp+Zqzss5NIyuH9iJU5vD8=;
+        b=r4Fi3etWF3BhcJ50PcQxnHvR4yCqp2lXsbZQefJ3BN9KjmgZ26DzPDQ2cBZySp0oxA
+         pmfih7GH3i9uhJJ8iNzeroDRNTqmqtRRacDMcaBfHoW/TU2hmheZwhQaXNbO9dGt88PC
+         NIJ7Lo1ihw2PjOW+xqUPpsqv8SOo+ggw51JKaPyV7KTLKVq9oRptZh69bk19tYEHxcC+
+         gn5ZK3KYfIMMNGeNWsd+vQEZx9xe78KoQ8w+h9RZ8q/w40M5xYq+wKU/JOCVTjgOSYbp
+         xf3uIwHyYXlx2ixmPdiL+j4eSl9Yoma7SFYRDS5MJa1na5OPY8VMx1FpbzHpueCQIhSz
+         XaJg==
+X-Gm-Message-State: AOAM533w7N2qdbxvd+1MphaBKB02yhbUgC9oWExyD7illFWB2sEz8z1m
+        wjsydMcw0+VpPi11kSOlJuWa/O07yTIOhxV0gNY=
+X-Google-Smtp-Source: ABdhPJx0HBjkPWB7u5rUo6zw67cBZFkL7uxuqdb41P/l+hmcppImyJXTZMvU6fhEDX6A3eULvwe0URSGe9Pfhaofkjk=
+X-Received: by 2002:a65:414a:: with SMTP id x10mr5913538pgp.125.1644155759850;
+ Sun, 06 Feb 2022 05:55:59 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:164f:: with SMTP id a15mr3896146jat.272.1644155360871;
- Sun, 06 Feb 2022 05:49:20 -0800 (PST)
-Date:   Sun, 06 Feb 2022 05:49:20 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000003d898d05d759c00a@google.com>
-Subject: [syzbot] kernel BUG in ext4_es_cache_extent
-From:   syzbot <syzbot+c7358a3cd05ee786eb31@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        tytso@mit.edu
+References: <87fsozek0j.ffs@tglx> <a7e59ae16e0e05579b087caf4045e42b174e2167.camel@intel.com>
+ <3421da7fc8474b6db0e265b20ffd28d0@AcuMS.aculab.com> <CAMe9rOonepEiRyoAyTGkDMQQhuyuoP4iTZJJhKGxgnq9vv=dLQ@mail.gmail.com>
+ <9f948745435c4c9273131146d50fe6f328b91a78.camel@intel.com> <782f27dbe6fc419a8946eeb426253e28@AcuMS.aculab.com>
+In-Reply-To: <782f27dbe6fc419a8946eeb426253e28@AcuMS.aculab.com>
+From:   "H.J. Lu" <hjl.tools@gmail.com>
+Date:   Sun, 6 Feb 2022 05:55:24 -0800
+Message-ID: <CAMe9rOoyrWXe9Zuxoat74kPW=kdjWXvbcQY=5RFu2nJACDvnOQ@mail.gmail.com>
+Subject: Re: [PATCH 00/35] Shadow stacks for userspace
+To:     David Laight <David.Laight@aculab.com>
+Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "oleg@redhat.com" <oleg@redhat.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>, "arnd@arndb.de" <arnd@arndb.de>,
+        "Moreira, Joao" <joao.moreira@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "Dave.Martin@arm.com" <Dave.Martin@arm.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Sun, Feb 6, 2022 at 5:42 AM David Laight <David.Laight@aculab.com> wrote=
+:
+>
+> From: Edgecombe, Rick P
+> > Sent: 05 February 2022 20:15
+> >
+> > On Sat, 2022-02-05 at 05:29 -0800, H.J. Lu wrote:
+> > > On Sat, Feb 5, 2022 at 5:27 AM David Laight <David.Laight@aculab.com>
+> > > wrote:
+> > > >
+> > > > From: Edgecombe, Rick P
+> > > > > Sent: 04 February 2022 01:08
+> > > > > Hi Thomas,
+> > > > >
+> > > > > Thanks for feedback on the plan.
+> > > > >
+> > > > > On Thu, 2022-02-03 at 22:07 +0100, Thomas Gleixner wrote:
+> > > > > > > Until now, the enabling effort was trying to support both
+> > > > > > > Shadow
+> > > > > > > Stack and IBT.
+> > > > > > > This history will focus on a few areas of the shadow stack
+> > > > > > > development history
+> > > > > > > that I thought stood out.
+> > > > > > >
+> > > > > > >        Signals
+> > > > > > >        -------
+> > > > > > >        Originally signals placed the location of the shadow
+> > > > > > > stack
+> > > > > > > restore
+> > > > > > >        token inside the saved state on the stack. This was
+> > > > > > > problematic from a
+> > > > > > >        past ABI promises perspective. So the restore location
+> > > > > > > was
+> > > > > > > instead just
+> > > > > > >        assumed from the shadow stack pointer. This works
+> > > > > > > because in
+> > > > > > > normal
+> > > > > > >        allowed cases of calling sigreturn, the shadow stack
+> > > > > > > pointer
+> > > > > > > should be
+> > > > > > >        right at the restore token at that time. There is no
+> > > > > > > alternate shadow
+> > > > > > >        stack support. If an alt shadow stack is added later
+> > > > > > > we
+> > > > > > > would
+> > > > > > >        need to
+> > > > > >
+> > > > > > So how is that going to work? altstack is not an esoteric
+> > > > > > corner
+> > > > > > case.
+> > > > >
+> > > > > My understanding is that the main usages for the signal stack
+> > > > > were
+> > > > > handling stack overflows and corruption. Since the shadow stack
+> > > > > only
+> > > > > contains return addresses rather than large stack allocations,
+> > > > > and is
+> > > > > not generally writable or pivotable, I thought there was a good
+> > > > > possibility an alt shadow stack would not end up being especially
+> > > > > useful. Does it seem like reasonable guesswork?
+> > > >
+> > > > The other 'problem' is that it is valid to longjump out of a signal
+> > > > handler.
+> > > > These days you have to use siglongjmp() not longjmp() but it is
+> > > > still used.
+> > > >
+> > > > It is probably also valid to use siglongjmp() to jump from a nested
+> > > > signal handler into the outer handler.
+> > > > Given both signal handlers can have their own stack, there can be
+> > > > three
+> > > > stacks involved.
+> >
+> > So the scenario is?
+> >
+> > 1. Handle signal 1
+> > 2. sigsetjmp()
+> > 3. signalstack()
+> > 4. Handle signal 2 on alt stack
+> > 5. siglongjmp()
+> >
+> > I'll check that it is covered by the tests, but I think it should work
+> > in this series that has no alt shadow stack. I have only done a high
+> > level overview of how the shadow stack stuff, that doesn't involve the
+> > kernel, works in glibc. Sounds like I'll need to do a deeper dive.
+>
+> The posix/xopen definition for setjmp/longjmp doesn't require such
+> longjmp requests to work.
+>
+> Although they still have to do something that doesn't break badly.
+> Aborting the process is probably fine!
+>
+> > > > I think the shadow stack pointer has to be in ucontext - which also
+> > > > means the application can change it before returning from a signal.
+> >
+> > Yes we might need to change it to support alt shadow stacks. Can you
+> > elaborate why you think it has to be in ucontext? I was thinking of
+> > looking at three options for storing the ssp:
+> >  - Stored in the shadow stack like a token using WRUSS from the kernel.
+> >  - Stored on the kernel side using a hashmap that maps ucontext or
+> >    sigframe userspace address to ssp (this is of course similar to
+> >    storing in ucontext, except that the user can=E2=80=99t change the s=
+sp).
+> >  - Stored writable in userspace in ucontext.
+> >
+> > But in this version, without alt shadow stacks, the shadow stack
+> > pointer is not stored in ucontext. This causes the limitation that
+> > userspace can only call sigreturn when it has returned back to a point
+> > where there is a restore token on the shadow stack (which was placed
+> > there by the kernel). This doesn=E2=80=99t mean it can=E2=80=99t switch=
+ to a different
+> > shadow stack or handle a nested signal, but it limits the possibility
+> > for calling sigreturn with a totally different sigframe (like CRIU and
+> > SROP attacks do). It should hopefully be a helpful, protective
+> > limitation for most apps and I'm hoping CRIU can be fixed without
+> > removing it.
+> >
+> > I am not aware of other limitations to signals (besides normal shadow
+> > stack enforcement), but I could be missing it. And people's skepticism
+> > is making me want to go back over it with more scrutiny.
+> >
+> > > > In much the same way as all the segment registers can be changed
+> > > > leading to all the nasty bugs when the final 'return to user' code
+> > > > traps in kernel when loading invalid segment registers or executing
+> > > > iret.
+> >
+> > I don't think this is as difficult to avoid because userspace ssp has
+> > its own register that should not be accessed at that point, but I have
+> > not given this aspect enough analysis. Thanks for bringing it up.
+>
+> So the user ssp isn't saved (or restored) by the trap entry/exit.
+> So it needs to be saved by the context switch code?
+> Much like the user segment registers?
+> So you are likely to get the same problems if restoring it can fault
+> in kernel (eg for a non-canonical address).
+>
+> > > > Hmmm... do shadow stacks mean that longjmp() has to be a system
+> > > > call?
+> > >
+> > > No.  setjmp/longjmp save and restore shadow stack pointer.
+>
+> Ok, I was thinking that direct access to the user ssp would be
+> a privileged operation.
 
-syzbot found the following issue on:
+User space can only pop shadow stack.  longjmp does
 
-HEAD commit:    9f7fb8de5d9b Merge tag 'spi-fix-v5.17-rc2' of git://git.ke..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=148d0304700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b4a89edfcc8f7c74
-dashboard link: https://syzkaller.appspot.com/bug?extid=c7358a3cd05ee786eb31
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=124e0abfb00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1758f610700000
+#ifdef SHADOW_STACK_POINTER_OFFSET
+# if IS_IN (libc) && defined SHARED && defined FEATURE_1_OFFSET
+/* Check if Shadow Stack is enabled.  */
+testl $X86_FEATURE_1_SHSTK, %fs:FEATURE_1_OFFSET
+jz L(skip_ssp)
+# else
+xorl %eax, %eax
+# endif
+/* Check and adjust the Shadow-Stack-Pointer.  */
+/* Get the current ssp.  */
+rdsspq %rax
+/* And compare it with the saved ssp value.  */
+subq SHADOW_STACK_POINTER_OFFSET(%rdi), %rax
+je L(skip_ssp)
+/* Count the number of frames to adjust and adjust it
+   with incssp instruction.  The instruction can adjust
+   the ssp by [0..255] value only thus use a loop if
+   the number of frames is bigger than 255.  */
+negq %rax
+shrq $3, %rax
+/* NB: We saved Shadow-Stack-Pointer of setjmp.  Since we are
+       restoring Shadow-Stack-Pointer of setjmp's caller, we
+       need to unwind shadow stack by one more frame.  */
+addq $1, %rax
 
-Bisection is inconclusive: the issue happens on the oldest tested release.
+movl $255, %ebx
+L(loop):
+cmpq %rbx, %rax
+cmovb %rax, %rbx
+incsspq %rbx
+subq %rbx, %rax
+ja L(loop)
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=12758738700000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=11758738700000
-console output: https://syzkaller.appspot.com/x/log.txt?x=16758738700000
+L(skip_ssp):
+#endif
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+c7358a3cd05ee786eb31@syzkaller.appspotmail.com
+> If it can be written you don't really have to worry about what code
+> is trying to do - it can actually do what it likes.
+> It just catches unintentional operations (like buffer overflows).
+>
+> Was there any 'spare' space in struct jmpbuf ?
 
-loop0: detected capacity change from 0 to 1051
-EXT4-fs (loop0): ext4_check_descriptors: Checksum for group 0 failed (60935!=0)
-EXT4-fs (loop0): mounted filesystem without journal. Quota mode: writeback.
-------------[ cut here ]------------
-kernel BUG at fs/ext4/extents_status.c:899!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 3587 Comm: syz-executor288 Not tainted 5.17.0-rc2-syzkaller-00039-g9f7fb8de5d9b #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:ext4_es_cache_extent+0x4e8/0x550 fs/ext4/extents_status.c:899
-Code: 00 48 c7 c7 e0 6c c1 89 c6 05 71 25 6f 0b 01 e8 b0 b6 f6 06 e9 5a ff ff ff e8 94 9d 68 ff 0f 0b e9 d7 fc ff ff e8 88 9d 68 ff <0f> 0b e8 81 9d 68 ff 0f 0b e9 13 fe ff ff e8 25 df af ff e9 c2 fb
-RSP: 0018:ffffc90001abee80 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 00000000000013de RCX: 0000000000000000
-RDX: ffff88807deb0000 RSI: ffffffff820fd0f8 RDI: 0000000000000003
-RBP: ffff888074e6f048 R08: 00000000ffffffff R09: 0000000000000000
-R10: ffffffff820fce3c R11: 0000000000000000 R12: 0000000000000001
-R13: 00000000ffffffff R14: 1ffff92000357dd1 R15: 00008f1cffffffff
-FS:  0000555556ad6300(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f117149e4b0 CR3: 000000007cc1f000 CR4: 0000000000350ee0
-Call Trace:
- <TASK>
- ext4_cache_extents+0x13e/0x2d0 fs/ext4/extents.c:518
- ext4_find_extent+0x8f6/0xd10 fs/ext4/extents.c:916
- ext4_ext_map_blocks+0x1e2/0x5f30 fs/ext4/extents.c:4098
- ext4_map_blocks+0x9ca/0x18a0 fs/ext4/inode.c:563
- ext4_getblk+0x553/0x6b0 fs/ext4/inode.c:849
- ext4_bread_batch+0x7c/0x550 fs/ext4/inode.c:923
- __ext4_find_entry+0x482/0x1050 fs/ext4/namei.c:1600
- ext4_lookup_entry fs/ext4/namei.c:1701 [inline]
- ext4_lookup fs/ext4/namei.c:1769 [inline]
- ext4_lookup+0x4fc/0x730 fs/ext4/namei.c:1760
- __lookup_slow+0x24c/0x480 fs/namei.c:1707
- lookup_slow fs/namei.c:1724 [inline]
- walk_component+0x40f/0x6a0 fs/namei.c:2020
- link_path_walk.part.0+0x7ef/0xf70 fs/namei.c:2347
- link_path_walk fs/namei.c:2272 [inline]
- path_openat+0x266/0x2940 fs/namei.c:3605
- do_filp_open+0x1aa/0x400 fs/namei.c:3636
- do_sys_openat2+0x16d/0x4d0 fs/open.c:1214
- do_sys_open fs/open.c:1230 [inline]
- __do_sys_openat fs/open.c:1246 [inline]
- __se_sys_openat fs/open.c:1241 [inline]
- __x64_sys_openat+0x13f/0x1f0 fs/open.c:1241
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f8e44f22f19
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fff98aa3238 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f8e44f22f19
-RDX: 000000000000c880 RSI: 0000000020000100 RDI: 0000000000000005
-RBP: 00007f8e44ee27b0 R08: 0000000800000015 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f8e44ee2840
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:ext4_es_cache_extent+0x4e8/0x550 fs/ext4/extents_status.c:899
-Code: 00 48 c7 c7 e0 6c c1 89 c6 05 71 25 6f 0b 01 e8 b0 b6 f6 06 e9 5a ff ff ff e8 94 9d 68 ff 0f 0b e9 d7 fc ff ff e8 88 9d 68 ff <0f> 0b e8 81 9d 68 ff 0f 0b e9 13 fe ff ff e8 25 df af ff e9 c2 fb
-RSP: 0018:ffffc90001abee80 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 00000000000013de RCX: 0000000000000000
-RDX: ffff88807deb0000 RSI: ffffffff820fd0f8 RDI: 0000000000000003
-RBP: ffff888074e6f048 R08: 00000000ffffffff R09: 0000000000000000
-R10: ffffffff820fce3c R11: 0000000000000000 R12: 0000000000000001
-R13: 00000000ffffffff R14: 1ffff92000357dd1 R15: 00008f1cffffffff
-FS:  0000555556ad6300(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f117149e4b0 CR3: 000000007cc1f000 CR4: 0000000000350ee0
+By pure luck, we have ONE spare space in sigjmp_buf.
 
+> Otherwise you can only enable shadow stacks if everything has been
+> recompiled - including any shared libraries the might be dlopen()ed.
+> (or does the compiler invent an alloca() call somehow for a
+> size that comes back from glibc?)
+>
+> I've never really considered how setjmp/longjmp handle callee saved
+> register variables (apart from it being hard).
+> The original pdp11 implementation probably only needed to save r6 and r7.
+>
+> What does happen to all the 'extended state' that XSAVE handles?
+> IIRC all the AVX registers are caller saved (so should probably
+> be zerod), but some of the SSE ones are callee saved, and one or
+> two of the fpu flags are sticky and annoying enough the save/restore
+> at the best of times.
+>
+> > It sounds like it would help to write up in a lot more detail exactly
+> > how all the signal and specialer stack manipulation scenarios work in
+> > glibc.
+>
+> Some cross references might have made people notice that the ucontext
+> extensions for AVX512 (if not earlier ones) broke the minimal/default
+> signal stack size.
+>
+>         David
+>
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+--=20
+H.J.

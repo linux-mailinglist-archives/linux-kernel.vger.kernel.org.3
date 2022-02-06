@@ -2,124 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A4184AB160
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 19:46:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58F534AB161
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 19:49:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244169AbiBFSqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 13:46:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57580 "EHLO
+        id S1346603AbiBFStV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 13:49:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232836AbiBFSqs (ORCPT
+        with ESMTP id S229594AbiBFStS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 13:46:48 -0500
-Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48FB1C06173B;
-        Sun,  6 Feb 2022 10:46:47 -0800 (PST)
-Received: by mail-oo1-f52.google.com with SMTP id v17-20020a4ac911000000b002eac41bb3f4so11293843ooq.10;
-        Sun, 06 Feb 2022 10:46:47 -0800 (PST)
+        Sun, 6 Feb 2022 13:49:18 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C6C6C043184
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 10:49:17 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id h125so9727987pgc.3
+        for <linux-kernel@vger.kernel.org>; Sun, 06 Feb 2022 10:49:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2v4Bkm8br56s9qLPALsh3pbC7ql67TUJ0yFnLPxLRHk=;
+        b=bHu48kLEfO0BvtG6X0aiGbTtRNOUTWieaRIPaWNVq0kGREyeoBqdU0yjw4IOPe9Tj0
+         nAeJ7SVbj1adJGvHFKz1t/wqHo3Mbb0w2OoGbI2MoGZAFeXUAzWY7vREhLb1/qR4N82D
+         TvFOCCgbiwXQhtyaCLILTjc57sTV0acdHDw/0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=FNvvSF/XGKK6zmkaAdsGDR7wXk1nrQ8gxJ4ArdT4S0s=;
-        b=C4G7iv5rJSPp7zCZs+10PDBvLco60oyHERmALmswQlB/+4c8HqscsHNKc0HR4cDr9J
-         GyXckvshD+qnyhHHMQIFUiT6sdgTuJCj4vb//JydQP2Jzb7sxa38jq1y8XQZQ25KbGHR
-         e0a+lYKLX+GNJhbKqh53CzWVIl+W/9Nlzc0XTE5XiozQUxi5dIXirs7CLr6BAymQPgQ8
-         T+nXCjpYWyc2xAG7He1emmDjRPkrXSBEyc8C+1XycOqux6L4S0xFgw4N/vaTbF8nk2Uy
-         x6vPA1iR+iTK4XPpt9BIdsRpjs2ZH06/k7/XjtEaXOBOTJOW3Ta5tCARSQjVtv/hdDu4
-         rVwA==
-X-Gm-Message-State: AOAM5334b26qUTTUAukSwaDeSCK0kEQDaK81jViXqP+LLGNeTygU+nVt
-        SoVPngZuuHnfU0nHRtpO2w==
-X-Google-Smtp-Source: ABdhPJyygVn+coOiAAa9SX41FonfloJDi8YPPOaW3QvJEzjcIz4SXPLYTfAFsXCfBZinTyUjb0xxfQ==
-X-Received: by 2002:a05:6870:76ae:: with SMTP id dx46mr2598733oab.17.1644173206566;
-        Sun, 06 Feb 2022 10:46:46 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id m7sm3129558ots.32.2022.02.06.10.46.45
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2v4Bkm8br56s9qLPALsh3pbC7ql67TUJ0yFnLPxLRHk=;
+        b=RU7QfOImDDSba/77mFy0bUXGGic1rL/8dIg333RJN4czGaVtr/rt9BMEp0+CwFkctZ
+         SB11Qwp+hgBs+FYqAJ0jcecGos7yqjKRESpvXl6kiSvQO/WXo8PIwcWnUd3zHD39Ho1J
+         Hr6API2lb3kG5oRxpaZgVEH6IqFiwe+0360YWaTqpoGZ9srmrKS/RHBrilP3nzXZlgth
+         ySazmuGZFnfA/v7hJx1//CWs9Q7TQohB0spdMJHFRx+P+pN3SahKho4k7V8hFeYWoYaT
+         7gfhZFD7ULtBehheVGrRljlM5h/+90mKdJ/9LzKAev6qiwNJF+jZF55qv/lsyKUDKLHo
+         EW/Q==
+X-Gm-Message-State: AOAM5305d6exMfYfYAJq4+6LHxAIWC/zUkVRjQmx3aTyFZY7jCsHRB5H
+        zaxGIsPaQpcFS5MIAV+GYzkHmw==
+X-Google-Smtp-Source: ABdhPJyWqmFuqt/fFPdQlg8sO5tyPVSj3BV1IVOc6TI82qubKGsKg0BvZ/UnZK/5jEFTljEBuu8E2Q==
+X-Received: by 2002:a63:e04a:: with SMTP id n10mr6839350pgj.487.1644173356941;
+        Sun, 06 Feb 2022 10:49:16 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id k9sm1758823pgg.50.2022.02.06.10.49.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Feb 2022 10:46:45 -0800 (PST)
-Received: (nullmailer pid 2818867 invoked by uid 1000);
-        Sun, 06 Feb 2022 18:46:44 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Luca Ceresoli <luca@lucaceresoli.net>
-Cc:     matti.vaittinen@fi.rohmeurope.com,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Peter Rosin <peda@axentia.se>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-i2c@vger.kernel.org, Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>
-In-Reply-To: <20220206115939.3091265-5-luca@lucaceresoli.net>
-References: <20220206115939.3091265-1-luca@lucaceresoli.net> <20220206115939.3091265-5-luca@lucaceresoli.net>
-Subject: Re: [RFCv3 4/6] media: dt-bindings: add DS90UB954-Q1 video deserializer
-Date:   Sun, 06 Feb 2022 12:46:44 -0600
-Message-Id: <1644173204.724898.2818866.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Sun, 06 Feb 2022 10:49:16 -0800 (PST)
+Date:   Sun, 6 Feb 2022 10:49:15 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Alexander Popov <alex.popov@linux.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 2/3] gcc-plugins/stackleak: Exactly match strings instead
+ of prefixes
+Message-ID: <202202061046.040D6A0A0@keescook>
+References: <20220206174508.2425076-1-keescook@chromium.org>
+ <20220206174508.2425076-3-keescook@chromium.org>
+ <CAHk-=wg5oaiJty+pCLd7aS3c-86=JDvF_vuaUvyq+Yo6+cKhyg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wg5oaiJty+pCLd7aS3c-86=JDvF_vuaUvyq+Yo6+cKhyg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 06 Feb 2022 12:59:37 +0100, Luca Ceresoli wrote:
-> Describe the Texas Instruments DS90UB954-Q1, a 2-input MIPI CSI-2 video
-> deserializer with I2C Address Translator and remote GPIOs.
+On Sun, Feb 06, 2022 at 10:34:11AM -0800, Linus Torvalds wrote:
+> On Sun, Feb 6, 2022 at 9:45 AM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > +       return !strncmp(TREE_STRING_POINTER(node), string, length);
 > 
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> Why is this "strncmp()"? That makes no sense when you've just checked
+> the exact lengths of both sides.
 > 
-> ---
+> You're not comparing strings any more, you've already checked the end
+> of the string - you are comparing memory contents.
 > 
-> Changes RFCv2 -> RFCv3:
+> So make it just do a "memcmp()".
+
+Yeah, good point. I'll change this for v2, pending more feedback.
+
+> > +#define STRING_EQUAL(node, str)        string_equal(node, str, strlen(str))
 > 
->  - rewrite in yaml
->  - use new layout based on remote-chips under the main deser node
->  - new clock configuration based on common clock framework
+> .. and please change this name too, since it's not comparing two
+> strings. The first argument is something else entirely.
 > 
-> Changes RFCv1 -> RFCv2:
-> 
->  - add explicit aliases for the FPD-link RX ports (optional)
->  - add proper remote GPIO description
-> ---
->  .../bindings/media/i2c/ti,ds90ub954-q1.yaml   | 235 ++++++++++++++++++
->  MAINTAINERS                                   |   6 +
->  2 files changed, 241 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub954-q1.yaml
-> 
+> It's checking the node value of a section, give it some name related to that.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Technically, yes. The naming bikeshed here is odd since it's called
+"STRING" by gcc internals, and it *might* be a "C string", etc etc. I'll
+rename it...
 
-yamllint warnings/errors:
+> I do also get the feeling that the nodes should actually be checked to
+> be a STRING_CST rather than these blind TREE_VALUE() following things,
+> but I don't really know the rules for gcc plugin internals very well -
+> or at all, really.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/media/i2c/ti,ds90ub954-q1.yaml: properties:reg-names: {'description': 'Names of I2C address used to communicate with the chip, must match\nthe "reg" values; mandatory if there are 2 or more addresses.\n"main" is the main I2C address, used to access shared registers.\n"rxport0" and "rxport1" are the I2C alias to access FPD-link RX\nport specific registers; must not be used by other slaves on the\nsame bus. "ser0" and "ser1" are the I2C alias to access the remote\nserializer connected on each FPD-link RX port; must not be used by\nother slaves on the same bus.\n', 'minItems': 1, 'maxItems': 5, 'items': [{'const': 'main'}, {'const': 'rxport0'}, {'const': 'rxport1'}, {'const': 'ser0'}, {'const': 'ser1'}]} should not be valid under {'required': ['maxItems']}
-	hint: "maxItems" is not needed with an "items" list
-	from schema $id: http://devicetree.org/meta-schemas/items.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/media/i2c/ti,ds90ub954-q1.yaml: ignoring, error in schema: properties: reg-names
-Documentation/devicetree/bindings/media/i2c/ti,ds90ub954-q1.example.dt.yaml:0:0: /example-0/i2c@0/deser@3d: failed to match any schema with compatible: ['ti,ds90ub954-q1']
+I'll double-check this, but if it's not a STRING_CST something else has
+gone very wrong already. But I'm a fan of robustness, so sure. :)
 
-doc reference errors (make refcheckdocs):
+-Kees
 
-See https://patchwork.ozlabs.org/patch/1588972
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+-- 
+Kees Cook

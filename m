@@ -2,122 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 998D44AB263
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 22:33:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0E064AB265
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 22:33:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239145AbiBFVdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 16:33:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49066 "EHLO
+        id S242474AbiBFVd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 16:33:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbiBFVdP (ORCPT
+        with ESMTP id S235404AbiBFVdx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 16:33:15 -0500
-Received: from mx1.smtp.larsendata.com (mx1.smtp.larsendata.com [91.221.196.215])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5D1EC06173B
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 13:33:13 -0800 (PST)
-Received: from mail01.mxhotel.dk (mail01.mxhotel.dk [91.221.196.236])
-        by mx1.smtp.larsendata.com (Halon) with ESMTPS
-        id 87b6f5d4-8794-11ec-b20b-0050568c148b;
-        Sun, 06 Feb 2022 21:34:14 +0000 (UTC)
-Received: from ravnborg.org (80-162-45-141-cable.dk.customer.tdc.net [80.162.45.141])
+        Sun, 6 Feb 2022 16:33:53 -0500
+X-Greylist: delayed 12031 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Feb 2022 13:33:52 PST
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C9B3C06173B
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 13:33:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: sam@ravnborg.org)
-        by mail01.mxhotel.dk (Postfix) with ESMTPSA id F280B194BAB;
-        Sun,  6 Feb 2022 22:33:11 +0100 (CET)
-Date:   Sun, 6 Feb 2022 22:33:09 +0100
-X-Report-Abuse-To: abuse@mxhotel.dk
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     robert.foss@linaro.org, jernej.skrabec@gmail.com, jonas@kwiboo.se,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        kieran.bingham@ideasonboard.com,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Laurent.pinchart@ideasonboard.com, biju.das.jz@bp.renesas.com
-Subject: Re: [PATCH v3] drm/bridge: dw-hdmi: use safe format when first in
- bridge chain
-Message-ID: <YgA+lcSNaQ2x4Wef@ravnborg.org>
-References: <20220204143337.89221-1-narmstrong@baylibre.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2B2FBB80EBC
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 21:33:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF9CBC340E9;
+        Sun,  6 Feb 2022 21:33:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644183230;
+        bh=h2SajfhFf8TtHLMiyVXH0IM+grwV0nx1jK8VevBkp+o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qgC+G0VLvmJHtYN9yV9jHhyBdM2VnP7MAqeIWcilx+Gh+pSysK/c1VAwtpgnLkVZC
+         3csqQGfetTG/+vLf2+PWyPDuguuhF9yB6zQcZh7PpCvwR1HA4J5u+gjtXa1u+zBJ0T
+         f5XOHhO40wDysggrbLCTEkyU9CE+WsbIvOT6gntWJbqTnQSqSIhnwRFlGFw5fz/uGL
+         d9FbIS34Jsa1nszqjLrF4s70MSEdCBzUE/b9k8hZQLAiypK5FmYIW2puwUt1HrfLyg
+         nclj03z7rEz+2iPckBLa4axUsOPfSUgFXZVp9Nh17IQWvdKfzX6X9ogAosL7JZzA2b
+         lrEbKPI+FPYnA==
+Date:   Sun, 6 Feb 2022 23:33:40 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 41/75] hexagon: Add pmd_pfn()
+Message-ID: <YgA+tGqw70ZBTu/1@kernel.org>
+References: <20220204195852.1751729-1-willy@infradead.org>
+ <20220204195852.1751729-42-willy@infradead.org>
+ <YgAPtxN7WW222SFI@kernel.org>
+ <YgAztSuYrKXZBgJx@casper.infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220204143337.89221-1-narmstrong@baylibre.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <YgAztSuYrKXZBgJx@casper.infradead.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Neail,
+On Sun, Feb 06, 2022 at 08:46:45PM +0000, Matthew Wilcox wrote:
+> On Sun, Feb 06, 2022 at 08:13:11PM +0200, Mike Rapoport wrote:
+> > On Fri, Feb 04, 2022 at 07:58:18PM +0000, Matthew Wilcox (Oracle) wrote:
+> > > I need to use this function in common code, so define it for hexagon.
+> > > 
+> > > Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> > > ---
+> > >  arch/hexagon/include/asm/pgtable.h | 3 ++-
+> > 
+> > Why hexagon out of all architectures?
+> > What about m68k, nios2, nds32 etc?
 
-On Fri, Feb 04, 2022 at 03:33:37PM +0100, Neil Armstrong wrote:
-> When the dw-hdmi bridge is in first place of the bridge chain, this
-> means there is no way to select an input format of the dw-hdmi HW
-> component.
-> 
-> Since introduction of display-connector, negotiation was broken since
-> the dw-hdmi negotiation code only worked when the dw-hdmi bridge was
-> in last position of the bridge chain or behind another bridge also
-> supporting input & output format negotiation.
-> 
-> Commit 7cd70656d128 ("drm/bridge: display-connector: implement bus fmts callbacks")
-> was introduced to make negotiation work again by making display-connector
-> act as a pass-through concerning input & output format negotiation.
-> 
-> But in the case where the dw-hdmi is single in the bridge chain, for
-> example on Renesas SoCs, with the display-connector bridge the dw-hdmi
-> is no more single, breaking output format.
+> Presumably they don't support CONFIG_TRANSPARENT_HUGEPAGE.
+> This code isn't compiled when THP are disabled; at least I haven't
+> had a buildbot complaint for any other architectures.
 
-I have forgotten all the details during my leave from drm, so I
-may miss something obvious.
-This fix looks like it papers over some general thingy with the
-format negotiation.
+m68k defconfig fails:
 
-We do not want to see the below in all display drivers, so
-I assume the right fix is to stuff it in somewhere in the framework.
-
-Or do I miss something?
-
-	Sam
-
-
+  CC      mm/page_vma_mapped.o
+mm/page_vma_mapped.c: In function 'page_vma_mapped_walk':
+mm/page_vma_mapped.c:219:20: error: implicit declaration of function 'pmd_pfn'; did you mean 'pmd_off'? [-Werror=implicit-function-declaration]
+  219 |     if (!check_pmd(pmd_pfn(pmde), pvmw))
+      |                    ^~~~~~~
+      |                    pmd_off
 > 
-> Reported-by: Biju Das <biju.das.jz@bp.renesas.com>
-> Bisected-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-> Tested-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-> Fixes: 7cd70656d128 ("drm/bridge: display-connector: implement bus fmts callbacks").
-> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-> Reviewed-by: Robert Foss <robert.foss@linaro.org>
-> ---
-> Changes since v2:
-> - Add rob's r-b
-> - Fix invalid Fixes commit hash
+> > > +#define pmd_pfn(pmd)	(pmd_val(pmd) >> PAGE_SHIFT)
+> > 
+> > I'd put it in include/linux/pgtable.h inside #ifndef pmd_pfn
 > 
-> Changes since v1:
-> - Remove bad fix in dw_hdmi_bridge_atomic_get_input_bus_fmts
-> - Fix typos in commit message
+> That's completely upside down.  pmd_pfn() should be defined by each
+> architecture (because generic code can't know anything about the format
+> of PMDs); if anything pmd_page() should be defined in linux/pgtable.h
+> in terms of pmd_pfn.
 > 
->  drivers/gpu/drm/bridge/synopsys/dw-hdmi.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-> index 54d8fdad395f..97cdc61b57f6 100644
-> --- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-> +++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-> @@ -2551,8 +2551,9 @@ static u32 *dw_hdmi_bridge_atomic_get_output_bus_fmts(struct drm_bridge *bridge,
->  	if (!output_fmts)
->  		return NULL;
->  
-> -	/* If dw-hdmi is the only bridge, avoid negociating with ourselves */
-> -	if (list_is_singular(&bridge->encoder->bridge_chain)) {
-> +	/* If dw-hdmi is the first or only bridge, avoid negociating with ourselves */
-> +	if (list_is_singular(&bridge->encoder->bridge_chain) ||
-> +	    list_is_first(&bridge->chain_node, &bridge->encoder->bridge_chain)) {
->  		*num_output_fmts = 1;
->  		output_fmts[0] = MEDIA_BUS_FMT_FIXED;
->  
-> -- 
-> 2.25.1
+> I'm not signing up to do that work as part of this series.  That seems
+> like a distraction.
+
+-- 
+Sincerely yours,
+Mike.

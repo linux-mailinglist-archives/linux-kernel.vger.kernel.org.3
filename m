@@ -2,176 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3BF74AB2BF
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 23:44:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC4884AB2C7
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 00:02:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347425AbiBFWoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 17:44:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44040 "EHLO
+        id S245218AbiBFW75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 17:59:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232490AbiBFWow (ORCPT
+        with ESMTP id S232490AbiBFW7x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 17:44:52 -0500
-Received: from mail.cs.msu.ru (mx.cs.msu.ru [188.44.42.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36012C06173B;
-        Sun,  6 Feb 2022 14:44:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=cs.msu.ru;
-        s=dkim; h=Subject:In-Reply-To:Content-Type:MIME-Version:References:Message-ID
-        :Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=sMiUCqd3ioodflV6KZvkF4VCu6/X+yPX+o+Ps7GHE0o=; b=WZu8rPUpzzQdwfUUbKU00/Eoue
-        DfdT2EIUC4ChyvthnFdPH/jE539S1pZ56xcQxsmg2CjWCBe/SiK6iCqKfb0KPZftIUjS1V1SNgK6A
-        Mk82dzZo/MkOFG2Fbu9hpohc4TIoT5zv9eOccXnolLlUl89wVXeuDprrA712JkvgOFldg48XrIdRt
-        +0lvvFvaEWCJ3GFlhtDF0ADgv8cWymvICECVS3iNTFkYWspVHpRhY2d9ivyQpmkegV0AmvYs7ataL
-        805PIODNE/x8QiuaH1RYV2WPhJo/4c8KeaTETMwRELK8o4IggwWkPOhqXDA+5mS+mpUnCmitFhEKR
-        5jddxf0g==;
-Received: from [37.204.119.143] (port=42160 helo=cello)
-        by mail.cs.msu.ru with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2 (FreeBSD))
-        (envelope-from <ar@cs.msu.ru>)
-        id 1nGqGN-000KfL-Ji; Mon, 07 Feb 2022 01:44:09 +0300
-Date:   Mon, 7 Feb 2022 01:44:05 +0300
-From:   Arseny Maslennikov <ar@cs.msu.ru>
-To:     Walt Drummond <walt@drummond.us>
-Cc:     agordeev@linux.ibm.com, arnd@arndb.de, benh@kernel.crashing.org,
-        borntraeger@de.ibm.com, chris@zankel.net, davem@davemloft.net,
-        gregkh@linuxfoundation.org, hca@linux.ibm.com, deller@gmx.de,
-        ink@jurassic.park.msu.ru, James.Bottomley@hansenpartnership.com,
-        jirislaby@kernel.org, mattst88@gmail.com, jcmvbkbc@gmail.com,
-        mpe@ellerman.id.au, paulus@samba.org, rth@twiddle.net,
-        dalias@libc.org, tsbogend@alpha.franken.de, gor@linux.ibm.com,
-        ysato@users.osdn.me, linux-kernel@vger.kernel.org,
-        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
-Message-ID: <YgBPNYhs/H0DwePH@cello>
-References: <20220206154856.2355838-1-walt@drummond.us>
- <20220206154856.2355838-4-walt@drummond.us>
- <YgA8uIVSX5WSC6Wr@cello>
+        Sun, 6 Feb 2022 17:59:53 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1622FC06173B
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 14:59:52 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id e3so7753245wra.0
+        for <linux-kernel@vger.kernel.org>; Sun, 06 Feb 2022 14:59:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gtVyQ9OIy3W70tzrc/QwpbNSPSmW2PK9iGxGNB2+tTg=;
+        b=KRtfiJN2D4GP5yydji7nB7zqBvhBqjbIcYQEuTQz6Or/omSyf0Fe+YjEEYDi0YzC7n
+         8phn+krhMrLfwS/X9mniksXur3a4QmvXpXNGQ1bj/JvJZ9rn1Mr7WAu2ESNvNutdzgN8
+         uLmCEVtVudeqYl1+8nAC8XmzIKPemhDx4HcMNQHfRUSb40l3zi8Ri+6lEPMfla8v2kkh
+         xuewyJjMt9PLytwIjMqvAF/nMTik/27PIb1rBc/KbZKyRqE4Cl3nqeUluWCzwleyu+Ma
+         dLCvHGft9HYYdpuvfdxLXiXQDy5T1XXECMqnIM6OR5rKNjVAEfkeWkQ6fV9kB07YOVMI
+         OsEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gtVyQ9OIy3W70tzrc/QwpbNSPSmW2PK9iGxGNB2+tTg=;
+        b=1KP4PsMSMV8KNSDZyW//aQUdkli6gE5y7Bzj78UjR3KFqMTvqikUN4CegRNMiEvEHX
+         muym5mMRnXO1w9Te43mFowl02YkR6/03SDwx86V18blUQteAxVa2W0I0pKVSEIHdm2Ws
+         wkgq0J4frbk4eDmAU/I5l506OjHz8bST8n3BelzQ5McISgWL2bALYeqMe2/qPeRbrcpM
+         Tmbo5ZeLBggIbnJxZC1D4qetiNSGUVSw8mcQKsietbvTIjn2TCuvGdI2pN+1WDkNh168
+         iujr2v8PwSeJi2wZn5Qo6vqQSrl+A8uydRxx0+oWztr7lNOgLeElvia5+hsRWOQcuFx/
+         SVjA==
+X-Gm-Message-State: AOAM533khcsgSgsAyAkIccCvx0hDG34lUxWFjdf3L23kv8YGggHrXP7+
+        ArpuMXNk9xBzRHJWAXL7fM6wZIct5xA=
+X-Google-Smtp-Source: ABdhPJyzaTXFCeSv21+oGxPjW6XSMiy3B1J9oEUIlUz5u21K5Yy3zXd4MdZXDWana+2InS7ugB7IGw==
+X-Received: by 2002:adf:eac5:: with SMTP id o5mr7914359wrn.655.1644188390463;
+        Sun, 06 Feb 2022 14:59:50 -0800 (PST)
+Received: from localhost.localdomain (host-95-245-2-16.retail.telecomitalia.it. [95.245.2.16])
+        by smtp.gmail.com with ESMTPSA id t18sm8514637wri.34.2022.02.06.14.59.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Feb 2022 14:59:49 -0800 (PST)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Subject: [PATCH] staging: r8188eu: Use kzalloc() with GFP_ATOMIC in atomic context
+Date:   Sun,  6 Feb 2022 23:59:43 +0100
+Message-Id: <20220206225943.7848-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="svn0gnZfWDGyJk09"
-Content-Disposition: inline
-In-Reply-To: <YgA8uIVSX5WSC6Wr@cello>
-OpenPGP: url=http://grep.cs.msu.ru/~ar/pgp-key.asc
-X-SA-Exim-Connect-IP: 37.204.119.143
-X-SA-Exim-Mail-From: ar@cs.msu.ru
-Subject: Re: [PATCH v2 3/3] vstatus: Display an informational message when
- the VSTATUS character is pressed or TIOCSTAT ioctl is called.
-X-SA-Exim-Version: 4.2.1
-X-SA-Exim-Scanned: No (on mail.cs.msu.ru); Unknown failure
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Use the GFP_ATOMIC flag of kzalloc() with two memory allocation in
+rtw_set_key(). This function is called while holding spinlocks and with
+disabled bottom halves, therefore it is not allowed to sleep. With the
+GFP_ATOMIC type flag, the allocation is high priority and cannot sleep.
 
---svn0gnZfWDGyJk09
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This issue is detected by Smatch which emits the following warning:
+drivers/staging/r8188eu/core/rtw_pwrctrl.c:79 ips_leave() warn: sleeping in atomic context
+drivers/staging/r8188eu/core/rtw_pwrctrl.c:81 ips_leave() warn: sleeping in atomic context
 
-On Mon, Feb 07, 2022 at 12:25:21AM +0300, Arseny Maslennikov wrote:
-> On Sun, Feb 06, 2022 at 07:48:54AM -0800, Walt Drummond wrote:
-> > @@ -2430,6 +2459,11 @@ static int n_tty_ioctl(struct tty_struct *tty, s=
-truct file *file,
-> >  			retval =3D read_cnt(ldata);
-> >  		up_write(&tty->termios_rwsem);
-> >  		return put_user(retval, (unsigned int __user *) arg);
-> > +	case TIOCSTAT:
->=20
-> Perhaps we want to guard this (example pseudocode follows):
->=20
-> 		if (*our ldisc is not n_tty*)
-> 			return an error like -ENOTTY;
->=20
-> ...since kerninfo is useless for non-UI ttys, e. g. serial device
-> drivers, and this ioctl could mess them up if this code path can be
-> taken. (I have not verified this kind of breakage is possible.) Please
-> see the complete rationale below, this paragraph is an illustrational
-> note for it.
+The calls chain (in reverse order) is the following:
 
-Oh wait, this *is* n_tty_ioctl(), so the ioctl is n_tty-specific. This
-makes the case below even clearer.
-I've been clumsy, sorry about that.
+rtw_set_key()
+-> ips_leave()
+-> -> rtw_pwr_wakeup()
+-> -> -> rtw_set_802_11_disassociate()
 
-> > diff --git a/drivers/tty/tty_io.c b/drivers/tty/tty_io.c
-> > index 6616d4a0d41d..f2f4f48ea502 100644
-> > --- a/drivers/tty/tty_io.c
-> > +++ b/drivers/tty/tty_io.c
-> > @@ -125,7 +125,7 @@ struct ktermios tty_std_termios =3D {	/* for the be=
-nefit of tty drivers  */
-> >  	.c_oflag =3D OPOST | ONLCR,
-> >  	.c_cflag =3D B38400 | CS8 | CREAD | HUPCL,
-> >  	.c_lflag =3D ISIG | ICANON | ECHO | ECHOE | ECHOK |
-> > -		   ECHOCTL | ECHOKE | IEXTEN,
-> > +		   ECHOCTL | ECHOKE | IEXTEN | NOKERNINFO,
->=20
-> Does this mean that nokerninfo is on by default? Do we have a reason to
-> do that?
->=20
-> As of this patch we require icanon and iexten to be set for the message
-> to be composed and printed. An experiment shows PTY encapsulation
-> programs like openssh turn off both those flags on the tty they run on
-> before they take control (contrary to what has been said in LWN), so
-> they are unimpacted.
->=20
-> The termios(3) page from man-pages states:
->    Raw mode
->        cfmakeraw() sets the terminal to something like the "raw"  mode
->        of  the old Version 7 terminal driver: input is available char=E2=
-=80=90
->        acter by character, echoing is disabled, and all  special  pro=E2=
-=80=90
->        cessing  of  terminal  input and output characters is disabled.
->        The terminal attributes are set as follows:
->=20
->            termios_p->c_iflag &=3D ~(IGNBRK | BRKINT | PARMRK | ISTRIP
->                            | INLCR | IGNCR | ICRNL | IXON);
->            termios_p->c_oflag &=3D ~OPOST;
->            termios_p->c_lflag &=3D ~(ECHO | ECHONL | ICANON | ISIG | IEXT=
-EN);
->            termios_p->c_cflag &=3D ~(CSIZE | PARENB);
->            termios_p->c_cflag |=3D CS8;
->=20
-> So any program which uses this API effectively turns off kerninfo as
-> implemented here.
->=20
-> There are 2 ways n_tty_status() can be called as of this patch: either
-> from inside n_tty or via TIOCSTAT. The first path can't be taken on ttys
-> whose ldisc is not N_TTY, ...
+The disabilitation of bottom halves and the acquisition of a spinlock is in
+rtw_set_802_11_disassociate().
 
-The second path is OK as well.
+After the changes, the post-commit hook output the following messages:
 
-> Given all this, is there any other reason to enable nokerninfo (i. e.
-> disable status message) by default?
+CHECK: Prefer kzalloc(sizeof(*pcmd)...) over kzalloc(sizeof(struct cmd_obj)...)
++       pcmd = kzalloc(sizeof(struct cmd_obj), GFP_ATOMIC);
 
---svn0gnZfWDGyJk09
-Content-Type: application/pgp-signature; name="signature.asc"
+CHECK: Prefer kzalloc(sizeof(*psetkeyparm)...) over kzalloc(sizeof(struct setkey_parm)...)
++       psetkeyparm = kzalloc(sizeof(struct setkey_parm), GFP_ATOMIC).
 
------BEGIN PGP SIGNATURE-----
+According to the above "CHECK[S]", use the preferred style in the first
+kzalloc().
 
-iQIzBAEBCgAdFiEE56JD3UKTLEu/ddrm9dQjyAYL01AFAmIATy0ACgkQ9dQjyAYL
-01BThhAAyojlvq3x6fFW7k+F5Rtcr5jxVEKrP8xCWEudyGFTFGl/swNMGGOpBxCU
-eAd/mhCEXEt8QpI/F0wowD7QpFhpWDzTuXQ/LUUyu1VJURaKeH05zrT6AComAyz4
-Y0xowt5LE0NLBUhnhCPckh26xJw+8ThB1C8rEq0FX9YrnGDaFtMhgZ4vIfpxHpe1
-G+rTk18gFuNPZ8b6mknle7fgPWDxpnNQ0qs/aA56EAzdVVJcrwaWaw3GSnnvn/gQ
-lvW8i/lSyIxF19Df8bsCEk01bEuHebBRck7wnT/PSkh2oP7lDBWJ38lWzHyTiQIU
-w0k6/7PzyGdy23T7HCMApyaXSYzX6qHPwFo43nR4k5bYa+74RUBoxckJlv4E/7y/
-jCzcbdIFuWhGwK2R6Wjlw/i/awuBIRrIcBTNqz1OGUxyKEj7Oo45BtQoEh1bxAyn
-O/IDgY0riOZcB0MdPyUvWlpAvdAhBgxfPVVNDttm5CG/qBt8LLnLB/cYfSW6eUGq
-FDGxXTcM02iFrVnzb010DgbV8v8T2ijwVNDkv3QoOk4uz4l+nbwXlKoGcBkT0ipx
-RKXSBlAZcf1UOntNvCX0bTW0k2h7lfLiuUFxc/VasYl3rt/1Y6wfBlv7HpqMPt3I
-2ER6KCbkih5045twm/xub9qDsnanN6q4ck5lprnO1T4rDPVXvH4=
-=jF16
------END PGP SIGNATURE-----
+Fixes: 79f712ea994d ("staging: r8188eu: Remove wrappers for kalloc() and kzalloc()")
+Fixes: 15865124feed ("staging: r8188eu: introduce new core dir for RTL8188eu driver")
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+---
+ drivers/staging/r8188eu/core/rtw_mlme.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---svn0gnZfWDGyJk09--
+diff --git a/drivers/staging/r8188eu/core/rtw_mlme.c b/drivers/staging/r8188eu/core/rtw_mlme.c
+index 038bddc361c3..860835e29b79 100644
+--- a/drivers/staging/r8188eu/core/rtw_mlme.c
++++ b/drivers/staging/r8188eu/core/rtw_mlme.c
+@@ -1600,12 +1600,12 @@ int rtw_set_key(struct adapter *adapter, struct security_priv *psecuritypriv, in
+ 	struct mlme_priv		*pmlmepriv = &adapter->mlmepriv;
+ 	int	res = _SUCCESS;
+ 
+-	pcmd = kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
++	pcmd = kzalloc(sizeof(*pcmd), GFP_ATOMIC);
+ 	if (!pcmd) {
+ 		res = _FAIL;  /* try again */
+ 		goto exit;
+ 	}
+-	psetkeyparm = kzalloc(sizeof(struct setkey_parm), GFP_KERNEL);
++	psetkeyparm = kzalloc(sizeof(*psetkeyparm), GFP_ATOMIC);
+ 	if (!psetkeyparm) {
+ 		kfree(pcmd);
+ 		res = _FAIL;
+-- 
+2.34.1
+

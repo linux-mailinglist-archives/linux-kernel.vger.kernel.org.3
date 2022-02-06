@@ -2,103 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30A574AAF6C
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 14:20:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EF904AAF72
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 14:28:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbiBFNUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 08:20:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39722 "EHLO
+        id S239700AbiBFN2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 08:28:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236136AbiBFNUH (ORCPT
+        with ESMTP id S239584AbiBFN2d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 08:20:07 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AAE6C06173B;
-        Sun,  6 Feb 2022 05:20:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=VZNTySQNOEJV6cg8aeFhpGWvoK8qXx/LSgdAWKilKGg=; b=POsbBsdfqCpbbBE0cZsLonbq5E
-        6LY/eZpph1oztJdK37sbbD8H0+NL6Zfsj1etmucw3QP0K6935G5RyKtkFEG2dcF2EK36HSg2OL4+7
-        HK6vmx1MBYwjNQDJe5To01TxMc7AWlRhwt7ncOTpOq56T6li9Mh6i7l8PKPFJTZvc1KzYKJVevJU3
-        ySm/d0yi8usPXN3jEhtkrCcg+7D066l1eh17QUoDw9JZ/xP93sNIPZwiQPNfta2umwOF70UYzwBuH
-        /SkMo9VsD/t1hQiI9BUp1gQWDw3unofdzSVO814HXLUUdiSil2ozFGO12znOHQqSjeHHesG7T86Si
-        fO3ZLUDg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nGhRi-007QWu-BE; Sun, 06 Feb 2022 13:19:16 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E94303002C3;
-        Sun,  6 Feb 2022 14:19:12 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id CB55C2CA50E00; Sun,  6 Feb 2022 14:19:12 +0100 (CET)
-Date:   Sun, 6 Feb 2022 14:19:12 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "H.J. Lu" <hjl.tools@gmail.com>
-Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "David.Laight@aculab.com" <David.Laight@aculab.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "oleg@redhat.com" <oleg@redhat.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>, "arnd@arndb.de" <arnd@arndb.de>,
-        "Moreira, Joao" <joao.moreira@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "Dave.Martin@arm.com" <Dave.Martin@arm.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>
-Subject: Re: [PATCH 00/35] Shadow stacks for userspace
-Message-ID: <Yf/K0NCTbjWfO5K6@hirez.programming.kicks-ass.net>
-References: <87fsozek0j.ffs@tglx>
- <a7e59ae16e0e05579b087caf4045e42b174e2167.camel@intel.com>
- <3421da7fc8474b6db0e265b20ffd28d0@AcuMS.aculab.com>
- <CAMe9rOonepEiRyoAyTGkDMQQhuyuoP4iTZJJhKGxgnq9vv=dLQ@mail.gmail.com>
- <9f948745435c4c9273131146d50fe6f328b91a78.camel@intel.com>
- <CAMe9rOq8LNdOdrVoVegyF9_DY6te+zGUJ7WQewWZ6sS1zag2Rw@mail.gmail.com>
+        Sun, 6 Feb 2022 08:28:33 -0500
+Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47E3BC06173B;
+        Sun,  6 Feb 2022 05:28:31 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R381e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V3h9.oE_1644154108;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V3h9.oE_1644154108)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Sun, 06 Feb 2022 21:28:28 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     viro@zeniv.linux.org.uk
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next] fs: Remove two excess function parameters in kernel-doc comment
+Date:   Sun,  6 Feb 2022 21:28:26 +0800
+Message-Id: <20220206132826.1523-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMe9rOq8LNdOdrVoVegyF9_DY6te+zGUJ7WQewWZ6sS1zag2Rw@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 05, 2022 at 12:21:12PM -0800, H.J. Lu wrote:
+Remove the excess @opened in finish_open() and @cred in vfs_open()
+kernel-doc comment to remove warnings found by running scripts/kernel-doc,
+which is caused by using 'make W=1'.
 
-> setjmp/longjmp work on the same sigjmp_buf.  Shadow stack pointer
-> is saved and restored, just like any other callee-saved registers.
+fs/open.c:1048: warning: Excess function parameter 'opened' description
+in 'finish_open'
+fs/open.c:1090: warning: Excess function parameter 'cred' description in
+'vfs_open'
 
-How is having that shadow stack pointer in user-writable memory not a
-problem? That seems like a prime target to subvert the whole shadow
-stack machinery.
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ fs/open.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/fs/open.c b/fs/open.c
+index cf4cddc4e3f5..dbfb99a95ec0 100644
+--- a/fs/open.c
++++ b/fs/open.c
+@@ -1030,7 +1030,6 @@ static int do_dentry_open(struct file *f,
+  * @file: file pointer
+  * @dentry: pointer to dentry
+  * @open: open callback
+- * @opened: state of open
+  *
+  * This can be used to finish opening a file passed to i_op->atomic_open().
+  *
+@@ -1084,7 +1083,6 @@ EXPORT_SYMBOL(file_path);
+  * vfs_open - open the file at the given path
+  * @path: path to open
+  * @file: newly allocated file with f_flag initialized
+- * @cred: credentials to use
+  */
+ int vfs_open(const struct path *path, struct file *file)
+ {
+-- 
+2.20.1.7.g153144c
+

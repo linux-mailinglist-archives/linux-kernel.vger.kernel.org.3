@@ -2,224 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C125D4AB0F5
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 18:34:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0FE94AB0F4
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 18:32:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344357AbiBFRc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 12:32:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33266 "EHLO
+        id S1344306AbiBFRcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 12:32:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344299AbiBFRc4 (ORCPT
+        with ESMTP id S230187AbiBFRcq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 12:32:56 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6C6EC043184
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 09:32:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0A33BB80D85
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 17:32:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B702C340E9;
-        Sun,  6 Feb 2022 17:32:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644168771;
-        bh=gMzTBBMdtxGO63UBF7sMhkDOFkmpPJGG4DrBI60H7XI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZpHsZnKDuay4orHTkL7iABQfZys5FNg9nzVBH9pWshMv7m2AbhzsUSXjrJpMT5xOR
-         Z600e1yOGAqURhfOtuaGsUk7BSufjfeOSZ+3IW1hdzYYmNdieE7+FRajsEuzRrrrrA
-         BAElRv7ZKCB1T1nD3mhmHYUvf3CuxapODK3fBN4wrmmGWUBM0KhLaCo3z/IeNLQFrS
-         ZZ6t0TCpOzmoU5mxUjovXZOeIQvMgEi5V8pIRkQ/nhJOmekxHIoQj4c78dv3vURQ7T
-         pAxfFlvWdZwo2UoWbeAhPYy9SlFU/5y5KysxAfSwsqfgKCTQUZCjp9bEDUk6qoUb2h
-         u0tA8ieFfbQzA==
-Date:   Mon, 7 Feb 2022 01:25:03 +0800
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Changbin Du <changbin.du@gmail.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] riscv: fix oops caused by irq on/off tracer
-Message-ID: <YgAEb425uqy5/dw1@xhacker>
-References: <20220129004226.32868-1-changbin.du@gmail.com>
+        Sun, 6 Feb 2022 12:32:46 -0500
+Received: from mail-oo1-xc29.google.com (mail-oo1-xc29.google.com [IPv6:2607:f8b0:4864:20::c29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4550C06173B;
+        Sun,  6 Feb 2022 09:32:45 -0800 (PST)
+Received: by mail-oo1-xc29.google.com with SMTP id t75-20020a4a3e4e000000b002e9c0821d78so11212012oot.4;
+        Sun, 06 Feb 2022 09:32:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=QjHen6OmxYmZmraosC3kIdd7lHywcpDr7IMXtC6KPtk=;
+        b=RewyujGZgeFv48JLa5eXek4Te5TO+ekg9lL6MPdVdzfA36Jy6YRQEjTLJg12tgfxU0
+         kOBukbSGKuwzkAeFYIY/PfAxjw/RWaLmxKXCOqOghmU4m6YjCDJPNzqOwnjpDhSJ2Tq6
+         cBJTujVC2ZExRh4iHRy1dFqlNUa4SP1MQ3BvgjTf2teXMBZ1ekG/EdbH6s/v2I6kXN1o
+         twHOuSxWnR5e4T4mwQYcd7l/bCFn02nTWqtfVorJb4YiwrbqbTthjlfiBsw2kd08wxT7
+         Sht993jbaGl/888LJLXg2sFdn7ewna0pE/1ZBAcRSD73+ok2OciQMLN83Jos+1MKsbSm
+         KQzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=QjHen6OmxYmZmraosC3kIdd7lHywcpDr7IMXtC6KPtk=;
+        b=5Eu1h/Cp+dq0XH2C9T5DR4bnBtLE0AS0d6gO9/gy9GxtpeEzSqIGcEHJDe1luut85F
+         Lau3c1S9vKN05wWNuGWGcrmNNBywRgCjvNm26OxtXayH2ZgKdF7SiK92FsHQe3r6ogiq
+         stlEkNxsaPdJH2gcKfncnKDXnYd1SyZdGJkAfnOmNRKBYOzXFMtrsI84Y9w6bEEUuPMk
+         KxD0VynpSMHhLzw8beU+X9XgH60tLDrWlzHLhCv6BwCxJRgBOTh1drP4wDIJq292uhQr
+         LOrSljzbixDuQT68GMlqSu/8RJ7cV1OJ9L9lpzBFcBdk3zFSAO2wwhlOmn63hHzOvzlZ
+         Rs7g==
+X-Gm-Message-State: AOAM533c4MjN7fl3lRtivEcdVgtJgVA6GiElgwMLbhSG27i0anmQP+v0
+        zriOR4sM8wuJJkymj6RtxUwOGHP2OIlCcQ==
+X-Google-Smtp-Source: ABdhPJyJtywanNHbmDYLjsoy4PXeZvvmggx0s3aSm4sZ5s+9vd8L72cu2rkjdxBBP5Atf+7vxyEwOQ==
+X-Received: by 2002:a05:6870:9484:: with SMTP id w4mr3149910oal.335.1644168765102;
+        Sun, 06 Feb 2022 09:32:45 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d7sm2998029otf.66.2022.02.06.09.32.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 06 Feb 2022 09:32:44 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <5309198e-8ed0-4deb-6cd3-bd35732ed9b5@roeck-us.net>
+Date:   Sun, 6 Feb 2022 09:32:42 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220129004226.32868-1-changbin.du@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 5.15 05/32] drm/vc4: hdmi: Make sure the device is powered
+ with CEC
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Michael Stapelberg <michael+drm@stapelberg.ch>,
+        Maxime Ripard <maxime@cerno.tech>
+References: <20220204091915.247906930@linuxfoundation.org>
+ <20220204091915.421812582@linuxfoundation.org>
+ <20220205171238.GA3073350@roeck-us.net> <Yf66Y2/N0nh9tMxT@kroah.com>
+ <20220205184108.GA3084817@roeck-us.net> <Yf+6gxmQnlbngqwm@kroah.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <Yf+6gxmQnlbngqwm@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 29, 2022 at 08:42:26AM +0800, Changbin Du wrote:
-> The trace_hardirqs_on/off requires at least two parent call frames.
-> If not, the code generated by CALLER_ADDR1 (aka. ftrace_return_address(1))
-> could trigger memory access fault.
+On 2/6/22 04:09, Greg Kroah-Hartman wrote:
+> On Sat, Feb 05, 2022 at 10:41:08AM -0800, Guenter Roeck wrote:
+>> Hi Greg,
+>>
+>> On Sat, Feb 05, 2022 at 06:56:51PM +0100, Greg Kroah-Hartman wrote:
+>> [ ... ]
+>>>
+>>> Yeah, something is really wrong here.  I'm going to go revert this for
+>>> now and push out a new set of releases with that fixed.
+>>
+>> If you pull a release for that, can you possibly revert 9de2b9286a6
+>> ("ASoC: mediatek: Check for error clk pointer") as well ? It does not
+>> realy fix anything but breaks pretty much all Mediatek systems using
+>> the mtk-scpsys driver. I sent a revert request
+>> 	https://lore.kernel.org/lkml/20220205014755.699603-1-linux@roeck-us.net/
+>> but the it looks like the submitter keeps defending their patch. In the
+>> current state, pretty much all stable release starting with v4.19.y won't
+>> work for affected systems due to this patch.
 > 
-> [    0.039615][    T0] Unable to handle kernel NULL pointer dereference at virtual address 00000000000000f8
-> [    0.041925][    T0] Oops [#1]
-> [    0.042063][    T0] Modules linked in:
-> [    0.042864][    T0] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.17.0-rc1-00233-g9a20c48d1ed2 #29
-> [    0.043568][    T0] Hardware name: riscv-virtio,qemu (DT)
-> [    0.044343][    T0] epc : trace_hardirqs_on+0x56/0xe2
-> [    0.044601][    T0]  ra : restore_all+0x12/0x6e
-> [    0.044721][    T0] epc : ffffffff80126a5c ra : ffffffff80003b94 sp : ffffffff81403db0
-> [    0.044801][    T0]  gp : ffffffff8163acd8 tp : ffffffff81414880 t0 : 0000000000000020
-> [    0.044882][    T0]  t1 : 0098968000000000 t2 : 0000000000000000 s0 : ffffffff81403de0
-> [    0.044967][    T0]  s1 : 0000000000000000 a0 : 0000000000000001 a1 : 0000000000000100
-> [    0.045046][    T0]  a2 : 0000000000000000 a3 : 0000000000000000 a4 : 0000000000000000
-> [    0.045124][    T0]  a5 : 0000000000000000 a6 : 0000000000000000 a7 : 0000000054494d45
-> [    0.045210][    T0]  s2 : ffffffff80003b94 s3 : ffffffff81a8f1b0 s4 : ffffffff80e27b50
-> [    0.045289][    T0]  s5 : ffffffff81414880 s6 : ffffffff8160fa00 s7 : 00000000800120e8
-> [    0.045389][    T0]  s8 : 0000000080013100 s9 : 000000000000007f s10: 0000000000000000
-> [    0.045474][    T0]  s11: 0000000000000000 t3 : 7fffffffffffffff t4 : 0000000000000000
-> [    0.045548][    T0]  t5 : 0000000000000000 t6 : ffffffff814aa368
-> [    0.045620][    T0] status: 0000000200000100 badaddr: 00000000000000f8 cause: 000000000000000d
-> [    0.046402][    T0] [<ffffffff80003b94>] restore_all+0x12/0x6e
+> I don't see anyone objecting to the revert in that thread (or any
+> responses at all.)  I'll queue up a revert for the next round of
+> releases until this all gets worked out.
 > 
 
-Hi Changbin,
+The discussion isn't easy to find, or at least I only found it
+after writing the revert. It is at
 
-Could you please provide the reproduce steps? It looks a bit
-interesting.
+https://lore.kernel.org/all/trinity-2a727d96-0335-4d03-8f30-e22a0e10112d-1643363480085@3c-app-gmx-bap33/
 
-> To fix above issue, here we add one extra level wrapper so they can be
-> safely called by low level entry code.
-> 
-> Signed-off-by: Changbin Du <changbin.du@gmail.com>
-> 
-> ---
-> v2: fix compile warning.
-> ---
->  arch/riscv/kernel/Makefile    |  2 ++
->  arch/riscv/kernel/entry.S     | 10 +++++-----
->  arch/riscv/kernel/trace_irq.c | 26 ++++++++++++++++++++++++++
->  arch/riscv/kernel/trace_irq.h | 11 +++++++++++
->  4 files changed, 44 insertions(+), 5 deletions(-)
->  create mode 100644 arch/riscv/kernel/trace_irq.c
->  create mode 100644 arch/riscv/kernel/trace_irq.h
-> 
-> diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-> index 612556faa527..ffc87e76b1dd 100644
-> --- a/arch/riscv/kernel/Makefile
-> +++ b/arch/riscv/kernel/Makefile
-> @@ -51,6 +51,8 @@ obj-$(CONFIG_MODULE_SECTIONS)	+= module-sections.o
->  obj-$(CONFIG_FUNCTION_TRACER)	+= mcount.o ftrace.o
->  obj-$(CONFIG_DYNAMIC_FTRACE)	+= mcount-dyn.o
->  
-> +obj-$(CONFIG_TRACE_IRQFLAGS)	+= trace_irq.o
-> +
->  obj-$(CONFIG_RISCV_BASE_PMU)	+= perf_event.o
->  obj-$(CONFIG_PERF_EVENTS)	+= perf_callchain.o
->  obj-$(CONFIG_HAVE_PERF_REGS)	+= perf_regs.o
-> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-> index ed29e9c8f660..d6a46ed0bf05 100644
-> --- a/arch/riscv/kernel/entry.S
-> +++ b/arch/riscv/kernel/entry.S
-> @@ -108,7 +108,7 @@ _save_context:
->  .option pop
->  
->  #ifdef CONFIG_TRACE_IRQFLAGS
-> -	call trace_hardirqs_off
-> +	call __trace_hardirqs_off
->  #endif
->  
->  #ifdef CONFIG_CONTEXT_TRACKING
-> @@ -143,7 +143,7 @@ skip_context_tracking:
->  	li t0, EXC_BREAKPOINT
->  	beq s4, t0, 1f
->  #ifdef CONFIG_TRACE_IRQFLAGS
-> -	call trace_hardirqs_on
-> +	call __trace_hardirqs_on
->  #endif
->  	csrs CSR_STATUS, SR_IE
->  
-> @@ -234,7 +234,7 @@ ret_from_exception:
->  	REG_L s0, PT_STATUS(sp)
->  	csrc CSR_STATUS, SR_IE
->  #ifdef CONFIG_TRACE_IRQFLAGS
-> -	call trace_hardirqs_off
-> +	call __trace_hardirqs_off
->  #endif
->  #ifdef CONFIG_RISCV_M_MODE
->  	/* the MPP value is too large to be used as an immediate arg for addi */
-> @@ -270,10 +270,10 @@ restore_all:
->  	REG_L s1, PT_STATUS(sp)
->  	andi t0, s1, SR_PIE
->  	beqz t0, 1f
-> -	call trace_hardirqs_on
-> +	call __trace_hardirqs_on
->  	j 2f
->  1:
-> -	call trace_hardirqs_off
-> +	call __trace_hardirqs_off
->  2:
->  #endif
->  	REG_L a0, PT_STATUS(sp)
-> diff --git a/arch/riscv/kernel/trace_irq.c b/arch/riscv/kernel/trace_irq.c
-> new file mode 100644
-> index 000000000000..fc194c56a35d
-> --- /dev/null
-> +++ b/arch/riscv/kernel/trace_irq.c
-> @@ -0,0 +1,26 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2022 Changbin Du <changbin.du@gmail.com>
-> + */
-> +
-> +#include <linux/irqflags.h>
-> +#include <linux/kprobes.h>
-> +#include "trace_irq.h"
-> +
-> +/**
-> + * trace_hardirqs_on/off requires at least two parent call frames.
-> + * Here we add one extra level so they can be safely called by low
-> + * level entry code.
-> + */
-
-Hmm, I believe there's elegant solution without this grue, maybe
-fix in stacktrace implementation or something else?
-
-
-> +
-> +void __trace_hardirqs_on(void)
-> +{
-> +	trace_hardirqs_on();
-> +}
-> +NOKPROBE_SYMBOL(__trace_hardirqs_on);
-> +
-> +void __trace_hardirqs_off(void)
-> +{
-> +	trace_hardirqs_off();
-> +}
-> +NOKPROBE_SYMBOL(__trace_hardirqs_off);
-> diff --git a/arch/riscv/kernel/trace_irq.h b/arch/riscv/kernel/trace_irq.h
-> new file mode 100644
-> index 000000000000..99fe67377e5e
-> --- /dev/null
-> +++ b/arch/riscv/kernel/trace_irq.h
-> @@ -0,0 +1,11 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (C) 2022 Changbin Du <changbin.du@gmail.com>
-> + */
-> +#ifndef __TRACE_IRQ_H
-> +#define __TRACE_IRQ_H
-> +
-> +void __trace_hardirqs_on(void);
-> +void __trace_hardirqs_off(void);
-> +
-> +#endif /* __TRACE_IRQ_H */
-> -- 
-> 2.32.0
-> 
-> 
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+Guenter

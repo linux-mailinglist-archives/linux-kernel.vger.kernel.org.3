@@ -2,65 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13E0F4AAD65
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 02:46:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB98A4AAD64
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 02:46:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243635AbiBFBh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 20:37:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60020 "EHLO
+        id S1357301AbiBFBqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 20:46:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236788AbiBFBhZ (ORCPT
+        with ESMTP id S236788AbiBFBqE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 20:37:25 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0639C043186
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Feb 2022 17:37:23 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id g15-20020a17090a67cf00b001b7d5b6bedaso9825784pjm.4
-        for <linux-kernel@vger.kernel.org>; Sat, 05 Feb 2022 17:37:23 -0800 (PST)
+        Sat, 5 Feb 2022 20:46:04 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26B0DC043186;
+        Sat,  5 Feb 2022 17:46:03 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id y9so1796588pjf.1;
+        Sat, 05 Feb 2022 17:46:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=6mFSwGBPOZsE7a1cgWRID5EHNWk+ZhfB1q2JvQgUDwI=;
-        b=ciZWL8D5CFhtiST14Sqo4qF/rwTY2ztJMTrb6IlD9FaI9uggUxZQrmx04VV4IQwCOe
-         1TLK4ZVuF19B8U88LMpYJSi1W5BAPk6Y5loDK0C3bgaS+sHZzmpZlkWqCgTC0bmCAyte
-         OtKKvPhHiGcduVDlvAo9ltfjMuMmY1wvpyAPf4rhkLa3LXeeDMdSaeXGbQ0LyJJJJmqk
-         5kW8GiBQpZXUovo3szFA86i2dxdHGwKOauMM912siyI7oDM6xdIHNlkyf/P3VIrtxarR
-         BNcjWGrLkQOw6ebKMrReiE+0QfFkRTaHb1qlK2xpJrYweZ72Grj2KsqTxcSAM8OBMnTL
-         q6FQ==
+        bh=q+3p4iPoAuDe6IQHUpiM97wxc+cfuSo072IauohFRPY=;
+        b=HDazBo9gw+zTBrBLCTLkikT4SmMAYY+bqMRZxcJP5GC04RVn5yBJ00hRswiyKJCUsc
+         80vuZgSHSvWW749XcAkJFjdspTlCiEcMxatTNBKfmyXSsvSIorNPGnX4XjrKzC3ntLaq
+         D9/3PDItV1FCTaYQJqW5gpPx67gGotQK6tKY87f7ogDNwVklVXB7sewCiyk7IQvFHCMf
+         HnLLp//UGoGt+pW+CkD4l95wN/AtZF6VZOlWVRoKW4+opc8QGXjcLjmzudTPUVwf2Hsv
+         KBT7WY1nzTbqmx9WIpLZilEZdH7ZwLqxRZDeFVhybg9pAU8arALBmqiMAIlsqFFFKjYv
+         HaTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=6mFSwGBPOZsE7a1cgWRID5EHNWk+ZhfB1q2JvQgUDwI=;
-        b=AIwjHjS8gQ0e0Q7Ix7HDHrSf+6rIN4dmxmSvtvTwQqfBELBIzzXKPq8eL1XPlC6trN
-         Ead5M/YiF0wIJXgu3SSoqLDuRfK/fPyIE+c+H9X8uk7pNeBbv922jlzRsL35ZMtuyLua
-         fqQRdHLztKhNcOJVaR/3V0SzBLcdHoh5TOC3JXjS9yHWvVUl1HVu70EmWH2gS2g5AJD9
-         yPdyakzWeqDmO8tW6Tm4TxE3+2WdAJxF1ibHxpB7GBbXlhQVlWvGV642ODN+SBc1c3Az
-         E3MfRZi5gU4TDYNbHA6xOOIydhzKfhaABxtCTSLdy6tumfNoT/IarnUKvtHD8qJaI1ZI
-         pUQg==
-X-Gm-Message-State: AOAM531BtO3MO4AzPZIdNClAwmFsyG4Wp0wgMwBAZXlW6hMMTp9hXe+I
-        sV0Rj1PWGEhrvBNHapoLf5awgkIpZ9rNPXZU
-X-Google-Smtp-Source: ABdhPJwp+qgBaFHo0lFLIMWjdiii5+2Fj8XyAM4FkWeotmkVKR5vhv6g1S27wCu/Z4owZIAw2kNHvw==
-X-Received: by 2002:a17:90b:1c0f:: with SMTP id oc15mr10941960pjb.17.1644111442857;
-        Sat, 05 Feb 2022 17:37:22 -0800 (PST)
-Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
-        by smtp.gmail.com with ESMTPSA id rj1sm6145982pjb.49.2022.02.05.17.37.21
+        bh=q+3p4iPoAuDe6IQHUpiM97wxc+cfuSo072IauohFRPY=;
+        b=tyx7QUg2PdiltW+h+5XC4xn5IzUFMURlR7TZ+1lYUWQ48A9tAdfh+B43IZhj5YK6Eo
+         YDBnGZUA9MUypabuROw2yMWDC4+I4j2yWzl7i3o5qYYguY+mYTBD99G+Zoh5PnGulpiV
+         VPdpIaEeS2J4Bs5c/OdaEmQwGLzxnh91FL9aRhN/y4aCdnV1tygT/O7O0CdBLirlpkUd
+         V5DLKX6LO9xsP6LMlzvEbO7yeN5uwv6O0CsoyoRIsBHpBZivDZeTzUTDHqM2ifufJig4
+         VXulCFikvr+mLTKJqXHN7q8p/pfGGdgC0IIl5rRjBRpsemlA6akEGUcndLUfUE/rqKij
+         4WyA==
+X-Gm-Message-State: AOAM5320ngkFkQd7UmD5VWa8Id4FQzcmwZTGm+vjy7dLfStelOx0YcX6
+        fDUoEfW5/asj/4jZ1J/2cfo=
+X-Google-Smtp-Source: ABdhPJzumaU8Mo2A3CFHZub70Sioa5qjRh0p9sXlTHvemh3vQWwIRTb9xR/2aFurOI5VzAHYCALs5g==
+X-Received: by 2002:a17:90b:1e0e:: with SMTP id pg14mr11179738pjb.4.1644111962515;
+        Sat, 05 Feb 2022 17:46:02 -0800 (PST)
+Received: from charizard.lan (c-67-165-113-11.hsd1.wa.comcast.net. [67.165.113.11])
+        by smtp.gmail.com with ESMTPSA id j23sm4869829pgb.75.2022.02.05.17.46.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Feb 2022 17:37:22 -0800 (PST)
-From:   Stafford Horne <shorne@gmail.com>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Stafford Horne <shorne@gmail.com>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        openrisc@lists.librecores.org
-Subject: [PATCH] openrisc: remove CONFIG_SET_FS
-Date:   Sun,  6 Feb 2022 10:36:47 +0900
-Message-Id: <20220206013648.3491865-1-shorne@gmail.com>
-X-Mailer: git-send-email 2.31.1
+        Sat, 05 Feb 2022 17:46:01 -0800 (PST)
+From:   Andrey Smirnov <andrew.smirnov@gmail.com>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Thinh Nguyen <thinhn@synopsys.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: dwc3: Don't switch OTG -> peripheral if extcon is present
+Date:   Sat,  5 Feb 2022 17:45:32 -0800
+Message-Id: <20220206014532.372109-1-andrew.smirnov@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,143 +69,199 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the address space override API set_fs() used for User Mode Linux.
-User address space is now limited to TASK_SIZE.
+It is necessary that:
 
-To support this we implement and wire in __get_kernel_nofault and
-__set_kernel_nofault.
+   ROLE_SWITCH && device_property_read_bool(dwc->dev, "usb-role-switch")
 
-The function user_addr_max is removed as there is a default definition
-provided when CONFIG_SET_FS is not used.
+is true in order for dwc3_get_dr_mode() to _not_ force us from OTG to
+PERIPHERAL mode here:
 
-Signed-off-by: Stafford Horne <shorne@gmail.com>
+   if (mode == USB_DR_MODE_OTG &&
+       (!IS_ENABLED(CONFIG_USB_ROLE_SWITCH) ||
+        !device_property_read_bool(dwc->dev, "usb-role-switch")) &&
+	!DWC3_VER_IS_PRIOR(DWC3, 330A))
+	mode = USB_DR_MODE_PERIPHERAL;
+
+and dwc3_drd_init() to be called later in dwc3_core_init_mode(). To
+avoid always ignoring extcon device returned by dwc3_get_extcon()
+modify the above check to also account for dwc->edev.
+
+Cc: Felipe Balbi <balbi@kernel.org>
+Cc: Thinh Nguyen <thinhn@synopsys.com>
+Cc: linux-usb@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
 ---
- arch/openrisc/Kconfig                   |  1 -
- arch/openrisc/include/asm/thread_info.h |  7 ----
- arch/openrisc/include/asm/uaccess.h     | 48 +++++++++++--------------
- 3 files changed, 20 insertions(+), 36 deletions(-)
 
-diff --git a/arch/openrisc/Kconfig b/arch/openrisc/Kconfig
-index bf047dca7ec6..ceda77fb8bc8 100644
---- a/arch/openrisc/Kconfig
-+++ b/arch/openrisc/Kconfig
-@@ -36,7 +36,6 @@ config OPENRISC
- 	select ARCH_WANT_FRAME_POINTERS
- 	select GENERIC_IRQ_MULTI_HANDLER
- 	select MMU_GATHER_NO_RANGE if MMU
--	select SET_FS
- 	select TRACE_IRQFLAGS_SUPPORT
- 
- config CPU_BIG_ENDIAN
-diff --git a/arch/openrisc/include/asm/thread_info.h b/arch/openrisc/include/asm/thread_info.h
-index 659834ab87fa..4af3049c34c2 100644
---- a/arch/openrisc/include/asm/thread_info.h
-+++ b/arch/openrisc/include/asm/thread_info.h
-@@ -40,18 +40,12 @@
-  */
- #ifndef __ASSEMBLY__
- 
--typedef unsigned long mm_segment_t;
--
- struct thread_info {
- 	struct task_struct	*task;		/* main task structure */
- 	unsigned long		flags;		/* low level flags */
- 	__u32			cpu;		/* current CPU */
- 	__s32			preempt_count; /* 0 => preemptable, <0 => BUG */
- 
--	mm_segment_t		addr_limit; /* thread address space:
--					       0-0x7FFFFFFF for user-thead
--					       0-0xFFFFFFFF for kernel-thread
--					     */
- 	__u8			supervisor_stack[0];
- 
- 	/* saved context data */
-@@ -71,7 +65,6 @@ struct thread_info {
- 	.flags		= 0,				\
- 	.cpu		= 0,				\
- 	.preempt_count	= INIT_PREEMPT_COUNT,		\
--	.addr_limit	= KERNEL_DS,			\
- 	.ksp            = 0,                            \
+Previous discussion:
+
+https://lore.kernel.org/linux-usb/20220131192102.4115473-1-andrew.smirnov@gmail.com/
+
+ drivers/usb/dwc3/core.c | 55 ++++++++++++++++++++++++++++++++++++++++-
+ drivers/usb/dwc3/drd.c  | 50 -------------------------------------
+ 2 files changed, 54 insertions(+), 51 deletions(-)
+
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index f2448d0a9d39..0ae152e47a00 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -23,6 +23,7 @@
+ #include <linux/delay.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/of.h>
++#include <linux/of_graph.h>
+ #include <linux/acpi.h>
+ #include <linux/pinctrl/consumer.h>
+ #include <linux/reset.h>
+@@ -84,7 +85,7 @@ static int dwc3_get_dr_mode(struct dwc3 *dwc)
+ 		 * mode. If the controller supports DRD but the dr_mode is not
+ 		 * specified or set to OTG, then set the mode to peripheral.
+ 		 */
+-		if (mode == USB_DR_MODE_OTG &&
++		if (mode == USB_DR_MODE_OTG && !dwc->edev &&
+ 		    (!IS_ENABLED(CONFIG_USB_ROLE_SWITCH) ||
+ 		     !device_property_read_bool(dwc->dev, "usb-role-switch")) &&
+ 		    !DWC3_VER_IS_PRIOR(DWC3, 330A))
+@@ -1462,6 +1463,51 @@ static void dwc3_check_params(struct dwc3 *dwc)
+ 	}
  }
- 
-diff --git a/arch/openrisc/include/asm/uaccess.h b/arch/openrisc/include/asm/uaccess.h
-index 120f5005461b..cc9c5d8fd183 100644
---- a/arch/openrisc/include/asm/uaccess.h
-+++ b/arch/openrisc/include/asm/uaccess.h
-@@ -23,36 +23,12 @@
- #include <asm/page.h>
- #include <asm/extable.h>
- 
--/*
-- * The fs value determines whether argument validity checking should be
-- * performed or not.  If get_fs() == USER_DS, checking is performed, with
-- * get_fs() == KERNEL_DS, checking is bypassed.
-- *
-- * For historical reasons, these macros are grossly misnamed.
-- */
--
--/* addr_limit is the maximum accessible address for the task. we misuse
-- * the KERNEL_DS and USER_DS values to both assign and compare the
-- * addr_limit values through the equally misnamed get/set_fs macros.
-- * (see above)
-- */
--
--#define KERNEL_DS	(~0UL)
--
--#define USER_DS		(TASK_SIZE)
--#define get_fs()	(current_thread_info()->addr_limit)
--#define set_fs(x)	(current_thread_info()->addr_limit = (x))
--
--#define uaccess_kernel()	(get_fs() == KERNEL_DS)
--
- /* Ensure that the range from addr to addr+size is all within the process'
-  * address space
-  */
- static inline int __range_ok(unsigned long addr, unsigned long size)
+
++static struct extcon_dev *dwc3_get_extcon(struct dwc3 *dwc)
++{
++	struct device *dev = dwc->dev;
++	struct device_node *np_phy;
++	struct extcon_dev *edev = NULL;
++	const char *name;
++
++	if (device_property_read_bool(dev, "extcon"))
++		return extcon_get_edev_by_phandle(dev, 0);
++
++	/*
++	 * Device tree platforms should get extcon via phandle.
++	 * On ACPI platforms, we get the name from a device property.
++	 * This device property is for kernel internal use only and
++	 * is expected to be set by the glue code.
++	 */
++	if (device_property_read_string(dev, "linux,extcon-name", &name) == 0) {
++		edev = extcon_get_extcon_dev(name);
++		if (!edev)
++			return ERR_PTR(-EPROBE_DEFER);
++
++		return edev;
++	}
++
++	/*
++	 * Try to get an extcon device from the USB PHY controller's "port"
++	 * node. Check if it has the "port" node first, to avoid printing the
++	 * error message from underlying code, as it's a valid case: extcon
++	 * device (and "port" node) may be missing in case of "usb-role-switch"
++	 * or OTG mode.
++	 */
++	np_phy = of_parse_phandle(dev->of_node, "phys", 0);
++	if (of_graph_is_present(np_phy)) {
++		struct device_node *np_conn;
++
++		np_conn = of_graph_get_remote_node(np_phy, -1, -1);
++		if (np_conn)
++			edev = extcon_find_edev_by_node(np_conn);
++		of_node_put(np_conn);
++	}
++	of_node_put(np_phy);
++
++	return edev;
++}
++
+ static int dwc3_probe(struct platform_device *pdev)
  {
--	const mm_segment_t fs = get_fs();
--
--	return size <= fs && addr <= (fs - size);
-+	return size <= TASK_SIZE && addr <= (TASK_SIZE - size);
- }
- 
- #define access_ok(addr, size)						\
-@@ -241,6 +217,25 @@ do {									\
- 		(__typeof__((x)-(x)))__gu_tmp);		\
- }
- 
-+#define __get_kernel_nofault(dst, src, type, label)	\
-+{							\
-+	type __user *p = (type __force __user *)(src);	\
-+	type data;					\
-+	if (__get_user(data, p))			\
-+		goto label;				\
-+	*(type *)dst = data;				\
-+}
-+
-+#define __put_kernel_nofault(dst, src, type, label)	\
-+{							\
-+	type __user *p = (type __force __user *)(dst);	\
-+	type data = *(type *)src;			\
-+	if (__put_user(data, p))			\
-+		goto label;				\
-+}
-+
-+#define HAVE_GET_KERNEL_NOFAULT
-+
- /* more complex routines */
- 
- extern unsigned long __must_check
-@@ -268,9 +263,6 @@ clear_user(void __user *addr, unsigned long size)
- 	return size;
- }
- 
--#define user_addr_max() \
--	(uaccess_kernel() ? ~0UL : TASK_SIZE)
--
- extern long strncpy_from_user(char *dest, const char __user *src, long count);
- 
- extern __must_check long strnlen_user(const char __user *str, long n);
--- 
-2.31.1
+ 	struct device		*dev = &pdev->dev;
+@@ -1561,6 +1607,13 @@ static int dwc3_probe(struct platform_device *pdev)
+ 		goto err2;
+ 	}
 
++	dwc->edev = dwc3_get_extcon(dwc);
++	if (IS_ERR(dwc->edev)) {
++		ret = PTR_ERR(dwc->edev);
++		dev_err_probe(dwc->dev, ret, "failed to get extcon");
++		goto err3;
++	}
++
+ 	ret = dwc3_get_dr_mode(dwc);
+ 	if (ret)
+ 		goto err3;
+diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
+index e2b68bb770d1..9a414edc439a 100644
+--- a/drivers/usb/dwc3/drd.c
++++ b/drivers/usb/dwc3/drd.c
+@@ -8,7 +8,6 @@
+  */
+
+ #include <linux/extcon.h>
+-#include <linux/of_graph.h>
+ #include <linux/platform_device.h>
+ #include <linux/property.h>
+
+@@ -438,51 +437,6 @@ static int dwc3_drd_notifier(struct notifier_block *nb,
+ 	return NOTIFY_DONE;
+ }
+
+-static struct extcon_dev *dwc3_get_extcon(struct dwc3 *dwc)
+-{
+-	struct device *dev = dwc->dev;
+-	struct device_node *np_phy;
+-	struct extcon_dev *edev = NULL;
+-	const char *name;
+-
+-	if (device_property_read_bool(dev, "extcon"))
+-		return extcon_get_edev_by_phandle(dev, 0);
+-
+-	/*
+-	 * Device tree platforms should get extcon via phandle.
+-	 * On ACPI platforms, we get the name from a device property.
+-	 * This device property is for kernel internal use only and
+-	 * is expected to be set by the glue code.
+-	 */
+-	if (device_property_read_string(dev, "linux,extcon-name", &name) == 0) {
+-		edev = extcon_get_extcon_dev(name);
+-		if (!edev)
+-			return ERR_PTR(-EPROBE_DEFER);
+-
+-		return edev;
+-	}
+-
+-	/*
+-	 * Try to get an extcon device from the USB PHY controller's "port"
+-	 * node. Check if it has the "port" node first, to avoid printing the
+-	 * error message from underlying code, as it's a valid case: extcon
+-	 * device (and "port" node) may be missing in case of "usb-role-switch"
+-	 * or OTG mode.
+-	 */
+-	np_phy = of_parse_phandle(dev->of_node, "phys", 0);
+-	if (of_graph_is_present(np_phy)) {
+-		struct device_node *np_conn;
+-
+-		np_conn = of_graph_get_remote_node(np_phy, -1, -1);
+-		if (np_conn)
+-			edev = extcon_find_edev_by_node(np_conn);
+-		of_node_put(np_conn);
+-	}
+-	of_node_put(np_phy);
+-
+-	return edev;
+-}
+-
+ #if IS_ENABLED(CONFIG_USB_ROLE_SWITCH)
+ #define ROLE_SWITCH 1
+ static int dwc3_usb_role_switch_set(struct usb_role_switch *sw,
+@@ -575,10 +529,6 @@ int dwc3_drd_init(struct dwc3 *dwc)
+ {
+ 	int ret, irq;
+
+-	dwc->edev = dwc3_get_extcon(dwc);
+-	if (IS_ERR(dwc->edev))
+-		return PTR_ERR(dwc->edev);
+-
+ 	if (ROLE_SWITCH &&
+ 	    device_property_read_bool(dwc->dev, "usb-role-switch")) {
+ 		ret = dwc3_setup_role_switch(dwc);
+--
+2.25.1

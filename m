@@ -2,85 +2,686 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA6BE4AB256
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 22:28:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A3B94AB258
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 22:30:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239976AbiBFV23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 16:28:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47316 "EHLO
+        id S232244AbiBFVaq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 16:30:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231356AbiBFV22 (ORCPT
+        with ESMTP id S229780AbiBFVao (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 16:28:28 -0500
-Received: from mx2.smtp.larsendata.com (mx2.smtp.larsendata.com [91.221.196.228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DAA7C06173B
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 13:28:26 -0800 (PST)
-Received: from mail01.mxhotel.dk (mail01.mxhotel.dk [91.221.196.236])
-        by mx2.smtp.larsendata.com (Halon) with ESMTPS
-        id dc254daa-8793-11ec-ac19-0050568cd888;
-        Sun, 06 Feb 2022 21:29:26 +0000 (UTC)
-Received: from ravnborg.org (80-162-45-141-cable.dk.customer.tdc.net [80.162.45.141])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: sam@ravnborg.org)
-        by mail01.mxhotel.dk (Postfix) with ESMTPSA id 99971194B04;
-        Sun,  6 Feb 2022 22:28:20 +0100 (CET)
-Date:   Sun, 6 Feb 2022 22:28:17 +0100
-X-Report-Abuse-To: abuse@mxhotel.dk
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Tomohito Esaki <etom@igel.co.jp>
-Cc:     dri-devel@lists.freedesktop.org, kernel test robot <lkp@intel.com>,
-        Kevin Tang <kevin3.tang@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        linux-kernel@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: Re: [PATCH] drm/sprd: remove allow_fb_modifiers setting
-Message-ID: <YgA9cT282QBruk2g@ravnborg.org>
-References: <20220204023635.15496-1-etom@igel.co.jp>
+        Sun, 6 Feb 2022 16:30:44 -0500
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EAC2C06173B
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 13:30:42 -0800 (PST)
+Received: by mail-qt1-x82e.google.com with SMTP id y8so10495396qtn.8
+        for <linux-kernel@vger.kernel.org>; Sun, 06 Feb 2022 13:30:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :mime-version;
+        bh=tUIqQ2p0G6WShoIuBqH0f6GkLa0ney9dB+6lc0wk7bU=;
+        b=WNPCX3JvZ+6TN332rdpbt1cu6Ly4l5OqSKWxkaAd5TUHTqWSGGBTX2VdNMZgCRbfh0
+         sL5HvgwMH3RGFFz74/cPIpVCiafXDspgIJyXJatfqVn04UsxReaeZFaB/KAHoysbj/Bg
+         A8HmFp2Id+V0itLoV0XpZJ4yBYi0lv+7jZ/gopeuThiPBPhL+nt1IC/8eGFnWjy7RnM+
+         6XIv0pTvd9jtbRUVuQ7NwZwF2ZZF7xtYJoaRCbE0s/HSlJMEv7fcvzZ045YxN09THG56
+         Q2vqxQwxgRqD6fFJWwmgkCRgOhASOxTARfTjtSJixNMQWq+cOK5LYgJXEJ3O2Ce654Kv
+         VQrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:mime-version;
+        bh=tUIqQ2p0G6WShoIuBqH0f6GkLa0ney9dB+6lc0wk7bU=;
+        b=zAcEq+v0BFDLankRspcBAjtnL+9GSYDl8lXNUJOcXpgYIlwo82fBL/YC8waAlCFF1z
+         6Hvq8bBARWhzY1jWHbu2mYLO/bxz3yaYtJGk1E+7gszTgnQPOgGZ6WTVTK4m5qndxOMc
+         bB34hXfusR3VPTp/I5y1RYL2MilwvtSDTip5jku1JtWM2xe7MhVhUzVb6Tt9aYBGpYUt
+         5wPkSamh+295dxbOT44bGGqIqoWgUVC5tUPt+M1SveLXla7RofDUFVEN5os0VexIiEHG
+         62DM2D3dvm0UGKibF48lQLXRZbzm1P5xcHpsyuG02XXFIkRKEJHcZ41u6gMBUB051DZp
+         c/zw==
+X-Gm-Message-State: AOAM533VDpgYEe9znd7kfPEayBaKkyGZvjTAhH8Fj6cVQI8+f/UsG3ik
+        kX5hb7jsks3peP8iy7PITjLU6g==
+X-Google-Smtp-Source: ABdhPJwEAMOfiimbrj6oVInUt7dIObUuaAT9yYeaWl8DMyfvCiSy1dMCYg7A4r2IZ0oElw2k8LUMjA==
+X-Received: by 2002:a05:622a:547:: with SMTP id m7mr6038021qtx.604.1644183041161;
+        Sun, 06 Feb 2022 13:30:41 -0800 (PST)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id l9sm4624636qkp.38.2022.02.06.13.30.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Feb 2022 13:30:40 -0800 (PST)
+Date:   Sun, 6 Feb 2022 13:30:38 -0800 (PST)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.anvils
+To:     Andrew Morton <akpm@linux-foundation.org>
+cc:     Michal Hocko <mhocko@suse.com>, Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Rik van Riel <riel@surriel.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Yu Zhao <yuzhao@google.com>, Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH 01/13] mm/munlock: delete page_mlock() and all its works
+In-Reply-To: <8e4356d-9622-a7f0-b2c-f116b5f2efea@google.com>
+Message-ID: <5ed1f01-3e7e-7e26-cc1-2b7a574e2147@google.com>
+References: <8e4356d-9622-a7f0-b2c-f116b5f2efea@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220204023635.15496-1-etom@igel.co.jp>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tomohito,
+We have recommended some applications to mlock their userspace, but that
+turns out to be counter-productive: when many processes mlock the same
+file, contention on rmap's i_mmap_rwsem can become intolerable at exit: it
+is needed for write, to remove any vma mapping that file from rmap's tree;
+but hogged for read by those with mlocks calling page_mlock() (formerly
+known as try_to_munlock()) on *each* page mapped from the file (the
+purpose being to find out whether another process has the page mlocked,
+so therefore it should not be unmlocked yet).
 
-On Fri, Feb 04, 2022 at 11:36:35AM +0900, Tomohito Esaki wrote:
-> Remove allow_fb_modifiers setting in this driver. The allow_fb_modifiers
-> flag was removed.
-> 
-> Signed-off-by: Tomohito Esaki <etom@igel.co.jp>
-> Fixes: 3d082157a242 ("drm: remove allow_fb_modifiers")
-> Reported-by: kernel test robot <lkp@intel.com>
-> ---
->  drivers/gpu/drm/sprd/sprd_drm.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/sprd/sprd_drm.c b/drivers/gpu/drm/sprd/sprd_drm.c
-> index a077e2d4d721..54c851bccf5b 100644
-> --- a/drivers/gpu/drm/sprd/sprd_drm.c
-> +++ b/drivers/gpu/drm/sprd/sprd_drm.c
-> @@ -43,7 +43,6 @@ static void sprd_drm_mode_config_init(struct drm_device *drm)
->  	drm->mode_config.min_height = 0;
->  	drm->mode_config.max_width = 8192;
->  	drm->mode_config.max_height = 8192;
-> -	drm->mode_config.allow_fb_modifiers = true;
->  
->  	drm->mode_config.funcs = &sprd_drm_mode_config_funcs;
->  	drm->mode_config.helper_private = &sprd_drm_mode_config_helper;
+Several optimizations have been made in the past: one is to skip
+page_mlock() when mapcount tells that nothing else has this page
+mapped; but that doesn't help at all when others do have it mapped.
+This time around, I initially intended to add a preliminary search
+of the rmap tree for overlapping VM_LOCKED ranges; but that gets
+messy with locking order, when in doubt whether a page is actually
+present; and risks adding even more contention on the i_mmap_rwsem.
 
-Thanks, this partially fixed my arm build.
-Pushed to drm-misc-next and should appear in -next within some days.
+A solution would be much easier, if only there were space in struct page
+for an mlock_count... but actually, most of the time, there is space for
+it - an mlocked page spends most of its life on an unevictable LRU, but
+since 3.18 removed the scan_unevictable_pages sysctl, that "LRU" has
+been redundant.  Let's try to reuse its page->lru.
 
-	Sam
+But leave that until a later patch: in this patch, clear the ground by
+removing page_mlock(), and all the infrastructure that has gathered
+around it - which mostly hinders understanding, and will make reviewing
+new additions harder.  Don't mind those old comments about THPs, they
+date from before 4.5's refcounting rework: splitting is not a risk here.
+
+Just keep a minimal version of munlock_vma_page(), as reminder of what it
+should attend to (in particular, the odd way PGSTRANDED is counted out of
+PGMUNLOCKED), and likewise a stub for munlock_vma_pages_range().  Move
+unchanged __mlock_posix_error_return() out of the way, down to above its
+caller: this series then makes no further change after mlock_fixup().
+
+Signed-off-by: Hugh Dickins <hughd@google.com>
+---
+ include/linux/rmap.h |   6 -
+ mm/internal.h        |   2 +-
+ mm/mlock.c           | 377 +++----------------------------------------
+ mm/rmap.c            |  80 ---------
+ 4 files changed, 25 insertions(+), 440 deletions(-)
+
+diff --git a/include/linux/rmap.h b/include/linux/rmap.h
+index e704b1a4c06c..dc48aa8c2c94 100644
+--- a/include/linux/rmap.h
++++ b/include/linux/rmap.h
+@@ -237,12 +237,6 @@ unsigned long page_address_in_vma(struct page *, struct vm_area_struct *);
+  */
+ int folio_mkclean(struct folio *);
+ 
+-/*
+- * called in munlock()/munmap() path to check for other vmas holding
+- * the page mlocked.
+- */
+-void page_mlock(struct page *page);
+-
+ void remove_migration_ptes(struct page *old, struct page *new, bool locked);
+ 
+ /*
+diff --git a/mm/internal.h b/mm/internal.h
+index d80300392a19..e48c486d5ddf 100644
+--- a/mm/internal.h
++++ b/mm/internal.h
+@@ -409,7 +409,7 @@ static inline void munlock_vma_pages_all(struct vm_area_struct *vma)
+  * must be called with vma's mmap_lock held for read or write, and page locked.
+  */
+ extern void mlock_vma_page(struct page *page);
+-extern unsigned int munlock_vma_page(struct page *page);
++extern void munlock_vma_page(struct page *page);
+ 
+ extern int mlock_future_check(struct mm_struct *mm, unsigned long flags,
+ 			      unsigned long len);
+diff --git a/mm/mlock.c b/mm/mlock.c
+index 8f584eddd305..544c18ce2c58 100644
+--- a/mm/mlock.c
++++ b/mm/mlock.c
+@@ -46,12 +46,6 @@ EXPORT_SYMBOL(can_do_mlock);
+  * be placed on the LRU "unevictable" list, rather than the [in]active lists.
+  * The unevictable list is an LRU sibling list to the [in]active lists.
+  * PageUnevictable is set to indicate the unevictable state.
+- *
+- * When lazy mlocking via vmscan, it is important to ensure that the
+- * vma's VM_LOCKED status is not concurrently being modified, otherwise we
+- * may have mlocked a page that is being munlocked. So lazy mlock must take
+- * the mmap_lock for read, and verify that the vma really is locked
+- * (see mm/rmap.c).
+  */
+ 
+ /*
+@@ -106,299 +100,28 @@ void mlock_vma_page(struct page *page)
+ 	}
+ }
+ 
+-/*
+- * Finish munlock after successful page isolation
+- *
+- * Page must be locked. This is a wrapper for page_mlock()
+- * and putback_lru_page() with munlock accounting.
+- */
+-static void __munlock_isolated_page(struct page *page)
+-{
+-	/*
+-	 * Optimization: if the page was mapped just once, that's our mapping
+-	 * and we don't need to check all the other vmas.
+-	 */
+-	if (page_mapcount(page) > 1)
+-		page_mlock(page);
+-
+-	/* Did try_to_unlock() succeed or punt? */
+-	if (!PageMlocked(page))
+-		count_vm_events(UNEVICTABLE_PGMUNLOCKED, thp_nr_pages(page));
+-
+-	putback_lru_page(page);
+-}
+-
+-/*
+- * Accounting for page isolation fail during munlock
+- *
+- * Performs accounting when page isolation fails in munlock. There is nothing
+- * else to do because it means some other task has already removed the page
+- * from the LRU. putback_lru_page() will take care of removing the page from
+- * the unevictable list, if necessary. vmscan [page_referenced()] will move
+- * the page back to the unevictable list if some other vma has it mlocked.
+- */
+-static void __munlock_isolation_failed(struct page *page)
+-{
+-	int nr_pages = thp_nr_pages(page);
+-
+-	if (PageUnevictable(page))
+-		__count_vm_events(UNEVICTABLE_PGSTRANDED, nr_pages);
+-	else
+-		__count_vm_events(UNEVICTABLE_PGMUNLOCKED, nr_pages);
+-}
+-
+ /**
+  * munlock_vma_page - munlock a vma page
+  * @page: page to be unlocked, either a normal page or THP page head
+- *
+- * returns the size of the page as a page mask (0 for normal page,
+- *         HPAGE_PMD_NR - 1 for THP head page)
+- *
+- * called from munlock()/munmap() path with page supposedly on the LRU.
+- * When we munlock a page, because the vma where we found the page is being
+- * munlock()ed or munmap()ed, we want to check whether other vmas hold the
+- * page locked so that we can leave it on the unevictable lru list and not
+- * bother vmscan with it.  However, to walk the page's rmap list in
+- * page_mlock() we must isolate the page from the LRU.  If some other
+- * task has removed the page from the LRU, we won't be able to do that.
+- * So we clear the PageMlocked as we might not get another chance.  If we
+- * can't isolate the page, we leave it for putback_lru_page() and vmscan
+- * [page_referenced()/try_to_unmap()] to deal with.
+  */
+-unsigned int munlock_vma_page(struct page *page)
++void munlock_vma_page(struct page *page)
+ {
+-	int nr_pages;
+-
+-	/* For page_mlock() and to serialize with page migration */
++	/* Serialize with page migration */
+ 	BUG_ON(!PageLocked(page));
+-	VM_BUG_ON_PAGE(PageTail(page), page);
+-
+-	if (!TestClearPageMlocked(page)) {
+-		/* Potentially, PTE-mapped THP: do not skip the rest PTEs */
+-		return 0;
+-	}
+-
+-	nr_pages = thp_nr_pages(page);
+-	mod_zone_page_state(page_zone(page), NR_MLOCK, -nr_pages);
+-
+-	if (!isolate_lru_page(page))
+-		__munlock_isolated_page(page);
+-	else
+-		__munlock_isolation_failed(page);
+-
+-	return nr_pages - 1;
+-}
+-
+-/*
+- * convert get_user_pages() return value to posix mlock() error
+- */
+-static int __mlock_posix_error_return(long retval)
+-{
+-	if (retval == -EFAULT)
+-		retval = -ENOMEM;
+-	else if (retval == -ENOMEM)
+-		retval = -EAGAIN;
+-	return retval;
+-}
+-
+-/*
+- * Prepare page for fast batched LRU putback via putback_lru_evictable_pagevec()
+- *
+- * The fast path is available only for evictable pages with single mapping.
+- * Then we can bypass the per-cpu pvec and get better performance.
+- * when mapcount > 1 we need page_mlock() which can fail.
+- * when !page_evictable(), we need the full redo logic of putback_lru_page to
+- * avoid leaving evictable page in unevictable list.
+- *
+- * In case of success, @page is added to @pvec and @pgrescued is incremented
+- * in case that the page was previously unevictable. @page is also unlocked.
+- */
+-static bool __putback_lru_fast_prepare(struct page *page, struct pagevec *pvec,
+-		int *pgrescued)
+-{
+-	VM_BUG_ON_PAGE(PageLRU(page), page);
+-	VM_BUG_ON_PAGE(!PageLocked(page), page);
+-
+-	if (page_mapcount(page) <= 1 && page_evictable(page)) {
+-		pagevec_add(pvec, page);
+-		if (TestClearPageUnevictable(page))
+-			(*pgrescued)++;
+-		unlock_page(page);
+-		return true;
+-	}
+-
+-	return false;
+-}
+-
+-/*
+- * Putback multiple evictable pages to the LRU
+- *
+- * Batched putback of evictable pages that bypasses the per-cpu pvec. Some of
+- * the pages might have meanwhile become unevictable but that is OK.
+- */
+-static void __putback_lru_fast(struct pagevec *pvec, int pgrescued)
+-{
+-	count_vm_events(UNEVICTABLE_PGMUNLOCKED, pagevec_count(pvec));
+-	/*
+-	 *__pagevec_lru_add() calls release_pages() so we don't call
+-	 * put_page() explicitly
+-	 */
+-	__pagevec_lru_add(pvec);
+-	count_vm_events(UNEVICTABLE_PGRESCUED, pgrescued);
+-}
+ 
+-/*
+- * Munlock a batch of pages from the same zone
+- *
+- * The work is split to two main phases. First phase clears the Mlocked flag
+- * and attempts to isolate the pages, all under a single zone lru lock.
+- * The second phase finishes the munlock only for pages where isolation
+- * succeeded.
+- *
+- * Note that the pagevec may be modified during the process.
+- */
+-static void __munlock_pagevec(struct pagevec *pvec, struct zone *zone)
+-{
+-	int i;
+-	int nr = pagevec_count(pvec);
+-	int delta_munlocked = -nr;
+-	struct pagevec pvec_putback;
+-	struct lruvec *lruvec = NULL;
+-	int pgrescued = 0;
+-
+-	pagevec_init(&pvec_putback);
+-
+-	/* Phase 1: page isolation */
+-	for (i = 0; i < nr; i++) {
+-		struct page *page = pvec->pages[i];
+-		struct folio *folio = page_folio(page);
+-
+-		if (TestClearPageMlocked(page)) {
+-			/*
+-			 * We already have pin from follow_page_mask()
+-			 * so we can spare the get_page() here.
+-			 */
+-			if (TestClearPageLRU(page)) {
+-				lruvec = folio_lruvec_relock_irq(folio, lruvec);
+-				del_page_from_lru_list(page, lruvec);
+-				continue;
+-			} else
+-				__munlock_isolation_failed(page);
+-		} else {
+-			delta_munlocked++;
+-		}
++	VM_BUG_ON_PAGE(PageTail(page), page);
+ 
+-		/*
+-		 * We won't be munlocking this page in the next phase
+-		 * but we still need to release the follow_page_mask()
+-		 * pin. We cannot do it under lru_lock however. If it's
+-		 * the last pin, __page_cache_release() would deadlock.
+-		 */
+-		pagevec_add(&pvec_putback, pvec->pages[i]);
+-		pvec->pages[i] = NULL;
+-	}
+-	if (lruvec) {
+-		__mod_zone_page_state(zone, NR_MLOCK, delta_munlocked);
+-		unlock_page_lruvec_irq(lruvec);
+-	} else if (delta_munlocked) {
+-		mod_zone_page_state(zone, NR_MLOCK, delta_munlocked);
+-	}
++	if (TestClearPageMlocked(page)) {
++		int nr_pages = thp_nr_pages(page);
+ 
+-	/* Now we can release pins of pages that we are not munlocking */
+-	pagevec_release(&pvec_putback);
+-
+-	/* Phase 2: page munlock */
+-	for (i = 0; i < nr; i++) {
+-		struct page *page = pvec->pages[i];
+-
+-		if (page) {
+-			lock_page(page);
+-			if (!__putback_lru_fast_prepare(page, &pvec_putback,
+-					&pgrescued)) {
+-				/*
+-				 * Slow path. We don't want to lose the last
+-				 * pin before unlock_page()
+-				 */
+-				get_page(page); /* for putback_lru_page() */
+-				__munlock_isolated_page(page);
+-				unlock_page(page);
+-				put_page(page); /* from follow_page_mask() */
+-			}
++		mod_zone_page_state(page_zone(page), NR_MLOCK, -nr_pages);
++		if (!isolate_lru_page(page)) {
++			putback_lru_page(page);
++			count_vm_events(UNEVICTABLE_PGMUNLOCKED, nr_pages);
++		} else if (PageUnevictable(page)) {
++			count_vm_events(UNEVICTABLE_PGSTRANDED, nr_pages);
+ 		}
+ 	}
+-
+-	/*
+-	 * Phase 3: page putback for pages that qualified for the fast path
+-	 * This will also call put_page() to return pin from follow_page_mask()
+-	 */
+-	if (pagevec_count(&pvec_putback))
+-		__putback_lru_fast(&pvec_putback, pgrescued);
+-}
+-
+-/*
+- * Fill up pagevec for __munlock_pagevec using pte walk
+- *
+- * The function expects that the struct page corresponding to @start address is
+- * a non-TPH page already pinned and in the @pvec, and that it belongs to @zone.
+- *
+- * The rest of @pvec is filled by subsequent pages within the same pmd and same
+- * zone, as long as the pte's are present and vm_normal_page() succeeds. These
+- * pages also get pinned.
+- *
+- * Returns the address of the next page that should be scanned. This equals
+- * @start + PAGE_SIZE when no page could be added by the pte walk.
+- */
+-static unsigned long __munlock_pagevec_fill(struct pagevec *pvec,
+-			struct vm_area_struct *vma, struct zone *zone,
+-			unsigned long start, unsigned long end)
+-{
+-	pte_t *pte;
+-	spinlock_t *ptl;
+-
+-	/*
+-	 * Initialize pte walk starting at the already pinned page where we
+-	 * are sure that there is a pte, as it was pinned under the same
+-	 * mmap_lock write op.
+-	 */
+-	pte = get_locked_pte(vma->vm_mm, start,	&ptl);
+-	/* Make sure we do not cross the page table boundary */
+-	end = pgd_addr_end(start, end);
+-	end = p4d_addr_end(start, end);
+-	end = pud_addr_end(start, end);
+-	end = pmd_addr_end(start, end);
+-
+-	/* The page next to the pinned page is the first we will try to get */
+-	start += PAGE_SIZE;
+-	while (start < end) {
+-		struct page *page = NULL;
+-		pte++;
+-		if (pte_present(*pte))
+-			page = vm_normal_page(vma, start, *pte);
+-		/*
+-		 * Break if page could not be obtained or the page's node+zone does not
+-		 * match
+-		 */
+-		if (!page || page_zone(page) != zone)
+-			break;
+-
+-		/*
+-		 * Do not use pagevec for PTE-mapped THP,
+-		 * munlock_vma_pages_range() will handle them.
+-		 */
+-		if (PageTransCompound(page))
+-			break;
+-
+-		get_page(page);
+-		/*
+-		 * Increase the address that will be returned *before* the
+-		 * eventual break due to pvec becoming full by adding the page
+-		 */
+-		start += PAGE_SIZE;
+-		if (pagevec_add(pvec, page) == 0)
+-			break;
+-	}
+-	pte_unmap_unlock(pte, ptl);
+-	return start;
+ }
+ 
+ /*
+@@ -413,75 +136,11 @@ static unsigned long __munlock_pagevec_fill(struct pagevec *pvec,
+  *
+  * Returns with VM_LOCKED cleared.  Callers must be prepared to
+  * deal with this.
+- *
+- * We don't save and restore VM_LOCKED here because pages are
+- * still on lru.  In unmap path, pages might be scanned by reclaim
+- * and re-mlocked by page_mlock/try_to_unmap before we unmap and
+- * free them.  This will result in freeing mlocked pages.
+  */
+ void munlock_vma_pages_range(struct vm_area_struct *vma,
+ 			     unsigned long start, unsigned long end)
+ {
+-	vma->vm_flags &= VM_LOCKED_CLEAR_MASK;
+-
+-	while (start < end) {
+-		struct page *page;
+-		unsigned int page_mask = 0;
+-		unsigned long page_increm;
+-		struct pagevec pvec;
+-		struct zone *zone;
+-
+-		pagevec_init(&pvec);
+-		/*
+-		 * Although FOLL_DUMP is intended for get_dump_page(),
+-		 * it just so happens that its special treatment of the
+-		 * ZERO_PAGE (returning an error instead of doing get_page)
+-		 * suits munlock very well (and if somehow an abnormal page
+-		 * has sneaked into the range, we won't oops here: great).
+-		 */
+-		page = follow_page(vma, start, FOLL_GET | FOLL_DUMP);
+-
+-		if (page && !IS_ERR(page)) {
+-			if (PageTransTail(page)) {
+-				VM_BUG_ON_PAGE(PageMlocked(page), page);
+-				put_page(page); /* follow_page_mask() */
+-			} else if (PageTransHuge(page)) {
+-				lock_page(page);
+-				/*
+-				 * Any THP page found by follow_page_mask() may
+-				 * have gotten split before reaching
+-				 * munlock_vma_page(), so we need to compute
+-				 * the page_mask here instead.
+-				 */
+-				page_mask = munlock_vma_page(page);
+-				unlock_page(page);
+-				put_page(page); /* follow_page_mask() */
+-			} else {
+-				/*
+-				 * Non-huge pages are handled in batches via
+-				 * pagevec. The pin from follow_page_mask()
+-				 * prevents them from collapsing by THP.
+-				 */
+-				pagevec_add(&pvec, page);
+-				zone = page_zone(page);
+-
+-				/*
+-				 * Try to fill the rest of pagevec using fast
+-				 * pte walk. This will also update start to
+-				 * the next page to process. Then munlock the
+-				 * pagevec.
+-				 */
+-				start = __munlock_pagevec_fill(&pvec, vma,
+-						zone, start, end);
+-				__munlock_pagevec(&pvec, zone);
+-				goto next;
+-			}
+-		}
+-		page_increm = 1 + page_mask;
+-		start += page_increm * PAGE_SIZE;
+-next:
+-		cond_resched();
+-	}
++	/* Reimplementation to follow in later commit */
+ }
+ 
+ /*
+@@ -645,6 +304,18 @@ static unsigned long count_mm_mlocked_page_nr(struct mm_struct *mm,
+ 	return count >> PAGE_SHIFT;
+ }
+ 
++/*
++ * convert get_user_pages() return value to posix mlock() error
++ */
++static int __mlock_posix_error_return(long retval)
++{
++	if (retval == -EFAULT)
++		retval = -ENOMEM;
++	else if (retval == -ENOMEM)
++		retval = -EAGAIN;
++	return retval;
++}
++
+ static __must_check int do_mlock(unsigned long start, size_t len, vm_flags_t flags)
+ {
+ 	unsigned long locked;
+diff --git a/mm/rmap.c b/mm/rmap.c
+index 6a1e8c7f6213..7ce7f1946cff 100644
+--- a/mm/rmap.c
++++ b/mm/rmap.c
+@@ -1996,76 +1996,6 @@ void try_to_migrate(struct page *page, enum ttu_flags flags)
+ 		rmap_walk(page, &rwc);
+ }
+ 
+-/*
+- * Walks the vma's mapping a page and mlocks the page if any locked vma's are
+- * found. Once one is found the page is locked and the scan can be terminated.
+- */
+-static bool page_mlock_one(struct page *page, struct vm_area_struct *vma,
+-				 unsigned long address, void *unused)
+-{
+-	struct page_vma_mapped_walk pvmw = {
+-		.page = page,
+-		.vma = vma,
+-		.address = address,
+-	};
+-
+-	/* An un-locked vma doesn't have any pages to lock, continue the scan */
+-	if (!(vma->vm_flags & VM_LOCKED))
+-		return true;
+-
+-	while (page_vma_mapped_walk(&pvmw)) {
+-		/*
+-		 * Need to recheck under the ptl to serialise with
+-		 * __munlock_pagevec_fill() after VM_LOCKED is cleared in
+-		 * munlock_vma_pages_range().
+-		 */
+-		if (vma->vm_flags & VM_LOCKED) {
+-			/*
+-			 * PTE-mapped THP are never marked as mlocked; but
+-			 * this function is never called on a DoubleMap THP,
+-			 * nor on an Anon THP (which may still be PTE-mapped
+-			 * after DoubleMap was cleared).
+-			 */
+-			mlock_vma_page(page);
+-			/*
+-			 * No need to scan further once the page is marked
+-			 * as mlocked.
+-			 */
+-			page_vma_mapped_walk_done(&pvmw);
+-			return false;
+-		}
+-	}
+-
+-	return true;
+-}
+-
+-/**
+- * page_mlock - try to mlock a page
+- * @page: the page to be mlocked
+- *
+- * Called from munlock code. Checks all of the VMAs mapping the page and mlocks
+- * the page if any are found. The page will be returned with PG_mlocked cleared
+- * if it is not mapped by any locked vmas.
+- */
+-void page_mlock(struct page *page)
+-{
+-	struct rmap_walk_control rwc = {
+-		.rmap_one = page_mlock_one,
+-		.done = page_not_mapped,
+-		.anon_lock = page_lock_anon_vma_read,
+-
+-	};
+-
+-	VM_BUG_ON_PAGE(!PageLocked(page) || PageLRU(page), page);
+-	VM_BUG_ON_PAGE(PageCompound(page) && PageDoubleMap(page), page);
+-
+-	/* Anon THP are only marked as mlocked when singly mapped */
+-	if (PageTransCompound(page) && PageAnon(page))
+-		return;
+-
+-	rmap_walk(page, &rwc);
+-}
+-
+ #ifdef CONFIG_DEVICE_PRIVATE
+ struct make_exclusive_args {
+ 	struct mm_struct *mm;
+@@ -2291,11 +2221,6 @@ static struct anon_vma *rmap_walk_anon_lock(struct page *page,
+  *
+  * Find all the mappings of a page using the mapping pointer and the vma chains
+  * contained in the anon_vma struct it points to.
+- *
+- * When called from page_mlock(), the mmap_lock of the mm containing the vma
+- * where the page was found will be held for write.  So, we won't recheck
+- * vm_flags for that VMA.  That should be OK, because that vma shouldn't be
+- * LOCKED.
+  */
+ static void rmap_walk_anon(struct page *page, struct rmap_walk_control *rwc,
+ 		bool locked)
+@@ -2344,11 +2269,6 @@ static void rmap_walk_anon(struct page *page, struct rmap_walk_control *rwc,
+  *
+  * Find all the mappings of a page using the mapping pointer and the vma chains
+  * contained in the address_space struct it points to.
+- *
+- * When called from page_mlock(), the mmap_lock of the mm containing the vma
+- * where the page was found will be held for write.  So, we won't recheck
+- * vm_flags for that VMA.  That should be OK, because that vma shouldn't be
+- * LOCKED.
+  */
+ static void rmap_walk_file(struct page *page, struct rmap_walk_control *rwc,
+ 		bool locked)
+-- 
+2.34.1
+

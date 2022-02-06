@@ -2,88 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3871B4AB0A9
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 17:32:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4287C4AB0AD
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 17:41:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239590AbiBFQ2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 11:28:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42746 "EHLO
+        id S242910AbiBFQln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 11:41:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233293AbiBFQ2P (ORCPT
+        with ESMTP id S233293AbiBFQlk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 11:28:15 -0500
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 562E8C06173B;
-        Sun,  6 Feb 2022 08:28:14 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=xuyu@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V3h3zbK_1644164890;
-Received: from localhost(mailfrom:xuyu@linux.alibaba.com fp:SMTPD_---0V3h3zbK_1644164890)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 07 Feb 2022 00:28:11 +0800
-From:   Xu Yu <xuyu@linux.alibaba.com>
-To:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Cc:     arnd@arndb.de, gregkh@linuxfoundation.org, viro@zeniv.linux.org.uk,
-        dhowells@redhat.com
-Subject: [PATCH] chardev: call tty_init() in real chrdev_init()
-Date:   Mon,  7 Feb 2022 00:27:31 +0800
-Message-Id: <4e753e51d0516413fbf557cf861d654ca73486cc.1644164597.git.xuyu@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.2432.ga663e714
+        Sun, 6 Feb 2022 11:41:40 -0500
+X-Greylist: delayed 11005 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Feb 2022 08:41:38 PST
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E79C06173B;
+        Sun,  6 Feb 2022 08:41:38 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 3597F1EC01B7;
+        Sun,  6 Feb 2022 17:41:33 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1644165693;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=Vf4uD77Lu81fzkyJFDjIK5AMPQsw8mdt+0qd3hoteKA=;
+        b=X1KzWt4kENbpoTW5g4vozGTNQPANq18LmTnDQ2DAE9tecHwlnKNuJDnjMhSDBVQt8EaGwK
+        isUMnTdSEnFc/dKWxahkZF0HJVXNcVjviK3CObEDSaAHBkUH1eycmrApfzGxtn8PhJEQQg
+        A9rixKjewzIEXSDO6AianN5uLuVtyhM=
+Date:   Sun, 6 Feb 2022 17:41:26 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Brijesh Singh <brijesh.singh@amd.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v9 33/43] x86/compressed: Add SEV-SNP feature
+ detection/setup
+Message-ID: <Yf/6NhnS50UDv4xV@zn.tnic>
+References: <20220128171804.569796-1-brijesh.singh@amd.com>
+ <20220128171804.569796-34-brijesh.singh@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220128171804.569796-34-brijesh.singh@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is confusing that tty_init() in called in the initialization of
-memdev, i.e., static chr_dev_init().
+On Fri, Jan 28, 2022 at 11:17:54AM -0600, Brijesh Singh wrote:
+> +static struct cc_setup_data *get_cc_setup_data(struct boot_params *bp)
+> +{
+> +	struct setup_data *hdr = (struct setup_data *)bp->hdr.setup_data;
+> +
+> +	while (hdr) {
+> +		if (hdr->type == SETUP_CC_BLOB)
+> +			return (struct cc_setup_data *)hdr;
+> +		hdr = (struct setup_data *)hdr->next;
+> +	}
+> +
+> +	return NULL;
+> +}
 
-Through blame, it is introduced by commit 31d1d48e199e ("Fix init
-ordering of /dev/console vs callers of modprobe"), which fixes the
-initialization order of /dev/console driver. However, there seems
-to be a typo in the patch, i.e., chrdev_init, instead of chr_dev_init.
+Merge that function into its only caller.
 
-This fixes the typo, IIUC.
+...
 
-Note that the return value of tty_init() is always 0, and thus no error
-handling is provided in chrdev_init().
+> +static struct cc_blob_sev_info *snp_find_cc_blob(struct boot_params *bp)
 
-Fixes: 31d1d48e199e ("Fix init ordering of /dev/console vs callers of modprobe")
-Signed-off-by: Xu Yu <xuyu@linux.alibaba.com>
----
- drivers/char/mem.c | 2 +-
- fs/char_dev.c      | 1 +
- 2 files changed, 2 insertions(+), 1 deletion(-)
+static function, no need for the "snp_" prefix. Please audit all your
+patches for that and remove that prefix from all static functions.
 
-diff --git a/drivers/char/mem.c b/drivers/char/mem.c
-index cc296f0823bd..8c90881f8115 100644
---- a/drivers/char/mem.c
-+++ b/drivers/char/mem.c
-@@ -775,7 +775,7 @@ static int __init chr_dev_init(void)
- 			      NULL, devlist[minor].name);
- 	}
- 
--	return tty_init();
-+	return 0;
- }
- 
- fs_initcall(chr_dev_init);
-diff --git a/fs/char_dev.c b/fs/char_dev.c
-index ba0ded7842a7..fc042a0a098f 100644
---- a/fs/char_dev.c
-+++ b/fs/char_dev.c
-@@ -667,6 +667,7 @@ static struct kobject *base_probe(dev_t dev, int *part, void *data)
- void __init chrdev_init(void)
- {
- 	cdev_map = kobj_map_init(base_probe, &chrdevs_lock);
-+	tty_init();
- }
- 
- 
+> +{
+> +	struct cc_blob_sev_info *cc_info;
+> +
+> +	cc_info = snp_find_cc_blob_efi(bp);
+> +	if (cc_info)
+> +		goto found_cc_info;
+> +
+> +	cc_info = snp_find_cc_blob_setup_data(bp);
+> +	if (!cc_info)
+> +		return NULL;
+> +
+> +found_cc_info:
+> +	if (cc_info->magic != CC_BLOB_SEV_HDR_MAGIC)
+> +		sev_es_terminate(SEV_TERM_SET_GEN, GHCB_SNP_UNSUPPORTED);
+> +
+> +	return cc_info;
+> +}
+> +
+> +bool snp_init(struct boot_params *bp)
+> +{
+> +	struct cc_blob_sev_info *cc_info;
+> +
+> +	if (!bp)
+> +		return false;
+> +
+> +	cc_info = snp_find_cc_blob(bp);
+> +	if (!cc_info)
+> +		return false;
+> +
+> +	/*
+> +	 * Pass run-time kernel a pointer to CC info via boot_params so EFI
+> +	 * config table doesn't need to be searched again during early startup
+> +	 * phase.
+> +	 */
+> +	bp->cc_blob_address = (u32)(unsigned long)cc_info;
+> +
+> +	/*
+> +	 * Indicate SEV-SNP based on presence of SEV-SNP-specific CC blob.
+> +	 * Subsequent checks will verify SEV-SNP CPUID/MSR bits.
+> +	 */
+
+Put that comment over the function name.
+
+Thx.
+
 -- 
-2.20.1.2432.ga663e714
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette

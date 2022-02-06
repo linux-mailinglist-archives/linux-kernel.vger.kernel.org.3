@@ -2,221 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E6E44AAE52
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 09:17:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C2974AAE63
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 09:22:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230264AbiBFIRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 03:17:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40498 "EHLO
+        id S231543AbiBFIWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 03:22:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbiBFIRR (ORCPT
+        with ESMTP id S231391AbiBFIWF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 03:17:17 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3B81C061355
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 00:17:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644135436; x=1675671436;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=mn1XED8XlaIYsTY2D7jzK3yR3KsSDh6aZVBtlOCTdUc=;
-  b=RcdtdUPACtG83a2nGciu4eFe41gM3lexw5Ky4Y3aUCr9EDsKlkyr1ygb
-   AB93oNxZ46GRWsUqVcn3Lk25OTdPl41tWg2p7TmV/bef84dZMARf5Phv3
-   LO9couqG9IVyGZlmUoTlbGEq+qBpRIOjcdKOLOdlAx4Mhh4olLFrxJ+hW
-   B8Kk+nCGMKLAANFgSF2CcPijuwpVd4l5zhSQKyqLVaQKLAJ4zp44UwR6M
-   YDdwxFtyxOEk7hNf0e9oqKMqWhTIXDA8RswAGnkdo2DpYwGqJjuichl02
-   UB/xCF/MFU5Sw0pVpc3jBn3A2GcP2dhQPC0+NofN9RdKe1+9IbEhlLaIE
+        Sun, 6 Feb 2022 03:22:05 -0500
+X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Feb 2022 00:22:04 PST
+Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4680C06173B;
+        Sun,  6 Feb 2022 00:22:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1644135724; x=1675671724;
+  h=from:to:subject:date:message-id:references:in-reply-to:
+   content-transfer-encoding:mime-version;
+  bh=LXJmdmXIlbupWIOKOLkNrPeJs0vMWbv7X8P5f+nne7s=;
+  b=SKMhPCMCvFwUtnVo4AMYq0rkw/VmeEsv4mGRvagujofPeEhvfOawwzDI
+   vYK92gs6IYV2zGyD5WtAkkYgUwICtwGEbr3OTatVo3N+JbIlNwAVg2kaj
+   8fGbXzCkuH4m6sTLQsvAuZdGhfL1x2VGGsNPOyKzAe/e+lufDd8zWOnI/
+   HYJT6Wp0Z7SiuV3SI0RTsVdUGmZxhGc0Y5D1T7DiT29YG9Sss1ZScD8Yk
+   IZl5HaJvX1gnlETbnByiIKtu65xYB13l9QWa1GXyVmTvBfII9RpjCSPtF
+   2RTkmkhTqPeV6o8tVtVi9vQXE2oe8+9Px2cSr5mL3QFN2nQZ0n1tumlIm
    w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10249"; a="228533156"
-X-IronPort-AV: E=Sophos;i="5.88,347,1635231600"; 
-   d="scan'208";a="228533156"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2022 00:17:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,347,1635231600"; 
-   d="scan'208";a="567159791"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 06 Feb 2022 00:17:13 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nGcjQ-000a6N-Vs; Sun, 06 Feb 2022 08:17:12 +0000
-Date:   Sun, 6 Feb 2022 16:16:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Helge Deller <deller@gmx.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Subject: drivers/video/fbdev/core/fbcon.c:1028:6: warning: variable 'cap' set
- but not used
-Message-ID: <202202061640.zSayOYxO-lkp@intel.com>
+X-IronPort-AV: E=Sophos;i="5.88,347,1635177600"; 
+   d="scan'208";a="192254478"
+Received: from mail-dm6nam11lp2177.outbound.protection.outlook.com (HELO NAM11-DM6-obe.outbound.protection.outlook.com) ([104.47.57.177])
+  by ob1.hgst.iphmx.com with ESMTP; 06 Feb 2022 16:20:59 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=O/7T6HnUclDyZYA/sEmkkwY6/SDAkqhrEqIhrvfLISAKGM4QXZ8BFAPM3m3vFNcqWl+UIUjXt0xXqfvxy2Ac3Zn1Dbm/qR/H93Eo8EQBwNigQHWWJgHO5+nXR/yIMxuiOVk1AD0Oppgs0/LY+4JXEM/HMqnsKUBRSlRzWYTqrVjSS7snVYYn0VI6jhrdXu75bBB8krhyM8xvtXt3Qq5kdSzGieklBT2CLOszHgwCa6Q8iuxTjzJ+tiReXO4Mgy1NKsd5ryTxw9GiwxYOa4HBybA44Z2U78z1E5pbPkXyqRyIuRJr9FgW0K1E4XRY1ZdbHk9iTpTA8QcNea24Z1++0w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LXJmdmXIlbupWIOKOLkNrPeJs0vMWbv7X8P5f+nne7s=;
+ b=kcoOzZQYxwJgkzwUgFkjfDaMu4XwIXxKwfEnoBKcNKk4ZPWnmwca35pVOL2lObJABb7/TpQSW9IUMLFl+RP6ljKRE4HjIOLRBR3XC41c5MlaDwT48lGFdsFwPhEztsWXvuIfVR26TxdWZsviwv06gfstm+CglvCQdA1abSbU1VpFliT4H31YozpaYIRVEt6cCASmMTNGAsNGVelfUi4KTyW9v4iw5zr9qN2VyjOUCuFVI0x2tOiVy0IEwhY8Q+emaa/v8O20wW/tDFMy5bYPw5sP+qdfm06n29v+X9+xnNIB9FfDfKiH6gJFo90mRZhmcoA2hjkAL1dbsDX/+nrEjw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LXJmdmXIlbupWIOKOLkNrPeJs0vMWbv7X8P5f+nne7s=;
+ b=E75FW+mFZdFgRpF5NuUREwHO3WWHN30Njb4SE4BarKzdu3w2KUpcffP3H8NOll+eLlH3ZviPy1ptJJBaSYnlwWmGPbA5hV+CdjmaZTF9JFVK5x+zTAiu+TezD3fXCpmN5B0GKZPBF2v1l4jXM6bx5A1+kisMypiRQS+gXp9STNI=
+Received: from DM6PR04MB6575.namprd04.prod.outlook.com (2603:10b6:5:1b7::7) by
+ BN0PR04MB8093.namprd04.prod.outlook.com (2603:10b6:408:15c::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Sun, 6 Feb
+ 2022 08:20:58 +0000
+Received: from DM6PR04MB6575.namprd04.prod.outlook.com
+ ([fe80::14b1:1b88:427:df7]) by DM6PR04MB6575.namprd04.prod.outlook.com
+ ([fe80::14b1:1b88:427:df7%6]) with mapi id 15.20.4951.018; Sun, 6 Feb 2022
+ 08:20:58 +0000
+From:   Avri Altman <Avri.Altman@wdc.com>
+To:     Kiwoong Kim <kwmad.kim@samsung.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "cang@codeaurora.org" <cang@codeaurora.org>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "sc.suh@samsung.com" <sc.suh@samsung.com>,
+        "hy50.seo@samsung.com" <hy50.seo@samsung.com>,
+        "sh425.lee@samsung.com" <sh425.lee@samsung.com>,
+        "bhoon95.kim@samsung.com" <bhoon95.kim@samsung.com>,
+        "vkumar.1997@samsung.com" <vkumar.1997@samsung.com>
+Subject: RE: [PATCH v1] scsi: ufs: remove clk_scaling_lock when clkscaling
+ isn't supported.
+Thread-Topic: [PATCH v1] scsi: ufs: remove clk_scaling_lock when clkscaling
+ isn't supported.
+Thread-Index: AQHYGmPQ8Ff+rACVsk6i/i0BNavg3ayGLxRw
+Date:   Sun, 6 Feb 2022 08:20:58 +0000
+Message-ID: <DM6PR04MB657519E60FAFA19434531CE2FC2B9@DM6PR04MB6575.namprd04.prod.outlook.com>
+References: <CGME20220205074128epcas2p40901c37a7328e825d8697f8d3269edba@epcas2p4.samsung.com>
+ <1644046760-83345-1-git-send-email-kwmad.kim@samsung.com>
+In-Reply-To: <1644046760-83345-1-git-send-email-kwmad.kim@samsung.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wdc.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 5c8daa28-e61f-4152-a004-08d9e9499a78
+x-ms-traffictypediagnostic: BN0PR04MB8093:EE_
+x-microsoft-antispam-prvs: <BN0PR04MB80939021948A29B7FEFA7D50FC2B9@BN0PR04MB8093.namprd04.prod.outlook.com>
+wdcipoutbound: EOP-TRUE
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: asgvkm700VGo+QOi72G+thvBRbszJ8DLWrxFfgnrl/HX4pEqu/qo3VX6kM8LlZV+gqFf2k22mcJiUCWsGa6mtjeufz6pnrQre/wbgkJQpLeFZOhE7lONwX/nUMhnpNqPGbwqHfgMupEziEWU6PQNDC2nOWpC++k6vdh8XeVkkXgHFhRhpw33biBI72m2Z9sr8cdc8Ntsqubfz6vsSOQ/OJOz2wLDQ/UJlgDO5PJ1MLu4aB/B04Pm/BE89RK89WZaZHcqvdbce7/Ll0LQ5HYzylcm2dH5soauh5hmHIbqG8l7Hy7BydNvywOR+hl7xULzwK5IpFPBu+EufON4Xzs2Jg0v0EVGZGcl+44lp32GtN9VnjSjd/GzVh3D31zCil6Ol0TlLYsD0pHGyeNTyA6nGJT1Z4+gCNyYwlQCjHc6r33ImxUOSvH1F9qXGR4BI7jp1I/qiKeN70TS0tYS7VswNRvz0s08jmZqotaxlZnF/8duC2ucoAb4h+V0AnXciIPYykd0pPxYQyaUt4xrRdtCZMMdg/g00YwjoSUepMHlGEcXcIDmdQfHDSF3hvVGbCEo+eq5curEw1Qi0qldRhSbf7u3dfG9C8erDsyUBzeDbphzZxHyQJbnSj2+HEPq0BU9YeoJBlZzX0mNYK1E8hasZueIIQ8gXLncSHvnjnMcYfQfda1w6GUIEerPpPYBg8vxHzXNkYt9xqRiLJxy0cihjvyxPrx1n13n5CbMx0HK6WM=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR04MB6575.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(76116006)(66946007)(66556008)(66446008)(66476007)(64756008)(122000001)(8676002)(8936002)(38070700005)(26005)(186003)(316002)(921005)(71200400001)(86362001)(7416002)(5660300002)(38100700002)(52536014)(9686003)(33656002)(82960400001)(6506007)(7696005)(83380400001)(55016003)(508600001)(2906002)(110136005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?aWI2eXdqM0hDNFUrZTdsSWZPZi9TZjhlcG00K05yVUJJYUlBTENHR3p0Z2R1?=
+ =?utf-8?B?MjNXL3ZvazZhZ2ZvQ2hPTVJLRjV3ZmMxU1BzaWlXVExSK0I1eVhadkVrUy96?=
+ =?utf-8?B?a2szVDZOZDVvZ1FxQ1FFY014Q2lOWWlnNUVKdkxSWktkd0JjRi8rTTlVRnF4?=
+ =?utf-8?B?empLeThIbzBremRBYTE2MnpKNmh4VmRQQ2dIdENRS1dIaWl0S2J5aTVsN2xD?=
+ =?utf-8?B?TktpYk5wa1hTcHJRV3VLS0kwejVDNnNkSC9yMDRnUkFPREJoTVJSV254SFJs?=
+ =?utf-8?B?RlE0MU9tc09qcVl3MFJrMU9aZDVFQ1RyVGFwbjc4MUNGTHk0TjBSakVnWDZ6?=
+ =?utf-8?B?RjNDVC82dG8yYTF3R2ZhK3hhajM2SU04MFhpU0tFODFmVmtrNFFQSkJDcXRj?=
+ =?utf-8?B?S2FiNEdvRDczL01FZnhjNnB2cVQ5ZWtIcW5oclJ0anY2Z3hYRkJFRHNIQ0Vx?=
+ =?utf-8?B?aFdWVW5nZ2dUN2p3d2NKMnpYU21lZ1ZrcEFpejlrWW1GWFdOTFNRQ2FLSlUv?=
+ =?utf-8?B?dENjMjBPa2F5NXBiUmZuTmZ1RlpFVWk0cmRkVnRxNnhISmNIVTYxYXdKWDR1?=
+ =?utf-8?B?eHBsWm9keGZxamtzeWt5b1dLaW1WclNONXppT1R0b3B0ZkZETlg5bU5vamht?=
+ =?utf-8?B?Rk1UeDExUXN0NmFGY0lSZU51YU9ydTdTaTZHRHpuNk9xL0dqdXlrOXM4TzEr?=
+ =?utf-8?B?enBBMGl1SVJKWXlLV3ArS3NCYXJPdk1wS1hJWko3R1doVEorNXU5aVlTOUI0?=
+ =?utf-8?B?a3JOVUE5RGo1Unh1ODlIZWhyR0lxcnZjZTdnMmVpS0lsVHRqVnJUYTVKMnh3?=
+ =?utf-8?B?QjNzU0tMVlJxZElwLzd3Z1hLRnlJWUtJaGJkNVZ3dmhKVFFjcmU0WjFtSXF0?=
+ =?utf-8?B?bjFjM1cyeG8vZkQwcXZXVnZKWUU5S3VpckEvZWJPTDdvT2dTbFhFMFNMQ0ZM?=
+ =?utf-8?B?TFNJMUtlQmtPRG5UUjZ0OGRKaVJWZXdxQlVDNVMwdC90MFQ4S0JtZ1JQWlBV?=
+ =?utf-8?B?UGNkdlJIY3VsaEFEVjNBUlJ5KzJZYTN4QnhiVEZxdHpiWDdhYStxd2w3OVkw?=
+ =?utf-8?B?RWtZQTQvaTZzREI0QkF1YVhYUEUzb2o5RHRZMFMrNTY1Mm5scGpBaUJpeDNO?=
+ =?utf-8?B?MG51ck5Ob2dpbjNlK29RRzZtTTZLd2dNbUhJOHNoOXlNUXZMVUVZN2RIY2NQ?=
+ =?utf-8?B?aXJIa3pzZGJZVHZjQ3MvN1BXclZNank1UktBdmVFd3pObFBXdElqRG1DN3pn?=
+ =?utf-8?B?a0dNZ2lLNzBja2FUTm5QcWt0UWhGMlNYQ0RtREsyLzg4Q1dIT0ovZXAydDh4?=
+ =?utf-8?B?b055L0EzYXNNSG1YcDdPSmhXSnFNZXZQY0F6T3lPazZJYUhiZDFENTQxakJT?=
+ =?utf-8?B?UHlaMVBYcTZsMCtjQWl0dnNnZFNnT2M3TVhIVUVZTWZGWmE0UmJVWDFPMGVo?=
+ =?utf-8?B?d2JLL25CekY0b3pCOTFNMm5CQ2hscDMyTllrdXd5SzZXVGsreFRoMC9CdDlJ?=
+ =?utf-8?B?NDVqK2RicVpLM3JPemFlOE1HME9IcW9MMHE4dmwrV3I1c0FCd3JCeThpSENB?=
+ =?utf-8?B?RkZTOHc5ZHc4bHBRMUhsbFpmTndCRWF1TUYrTEdEWTJPQTJoV1Y5TzR2YTNz?=
+ =?utf-8?B?TkcreUd4RFdOdmRNd3lRZ0YxMG92S3NDNmtadmorM1dqKzYvQ0Z0TEJ3aEdK?=
+ =?utf-8?B?c2lKeFJCcUE5UFlLVEZrSzJabHhnMXB1Qm81ZGNZR3NlTC8vZGN2b2ppdU5x?=
+ =?utf-8?B?T2J4cmlha2dSVGJHRThIKzA3TjlYSnU4eCt4bVlQTUVXc3BWUXF3R0xaMjNw?=
+ =?utf-8?B?ODE2SkJBNTJjR09qd0dsYU4vUnIwZWFhNndIK1JEbVJlTFhWTk1TelJQakhn?=
+ =?utf-8?B?Z0JPVmVVaGprTE40UFRkdjVXUldTdC9JWERWZURTR0VXMnN6dS9JclV1UFdh?=
+ =?utf-8?B?TEFaMWYxWWJSaFNwbm5XRGZodWZpTHZjMHZwSVhxNExKcXVmbWhNbW5xemNR?=
+ =?utf-8?B?Z0tBVnZpcGIxVTJOcUQ5M1VoOFZkR2lxSWx5MC9KMGh0SXowd213Q01qT0o0?=
+ =?utf-8?B?WlgvQ1AxeUFWbm1sNEl1NjJJazlNcytGU1VFOHhKY2lzekFCTnpndWgrNk9E?=
+ =?utf-8?B?K00vemdBV2YzL25FelRzbi9kWVROTzI1c1JCNW5GTnpEbllRSk1kZmYxWFZh?=
+ =?utf-8?B?TlE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR04MB6575.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5c8daa28-e61f-4152-a004-08d9e9499a78
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Feb 2022 08:20:58.0461
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 534vzWXZr1hbUx7dvSqxsMjqIao0SVOReka3YP43MhY07hp1Zysh8XbjRMNw0Qc2RbEwrc7DiodTSpsMMdKa8Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR04MB8093
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   90c9e950c0def5c354b4a6154a2ddda3e5f214ac
-commit: a3f781a9d6114c1d1e01defb7aa234dec45d2a5f fbcon: Add option to enable legacy hardware acceleration
-date:   4 days ago
-config: i386-randconfig-a003 (https://download.01.org/0day-ci/archive/20220206/202202061640.zSayOYxO-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a3f781a9d6114c1d1e01defb7aa234dec45d2a5f
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout a3f781a9d6114c1d1e01defb7aa234dec45d2a5f
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/video/fbdev/core/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   drivers/video/fbdev/core/fbcon.c: In function 'fbcon_init':
->> drivers/video/fbdev/core/fbcon.c:1028:6: warning: variable 'cap' set but not used [-Wunused-but-set-variable]
-    1028 |  int cap, ret;
-         |      ^~~
-
-
-vim +/cap +1028 drivers/video/fbdev/core/fbcon.c
-
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1019  
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1020  static void fbcon_init(struct vc_data *vc, int init)
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1021  {
-1f4ed2fb01f80f drivers/video/fbdev/core/fbcon.c Daniel Vetter             2019-05-28  1022  	struct fb_info *info;
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1023  	struct fbcon_ops *ops;
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1024  	struct vc_data **default_mode = vc->vc_display_fg;
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1025  	struct vc_data *svc = *default_mode;
-50233393f0cf9b drivers/video/fbdev/core/fbcon.c Daniel Vetter             2019-05-28  1026  	struct fbcon_display *t, *p = &fb_display[vc->vc_num];
-a1ac250a82a5e9 drivers/video/fbdev/core/fbcon.c Peilin Ye                 2020-11-12  1027  	int logo = 1, new_rows, new_cols, rows, cols;
-87ab9f6b741734 drivers/video/fbdev/core/fbcon.c Helge Deller              2022-02-02 @1028  	int cap, ret;
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1029  
-1f4ed2fb01f80f drivers/video/fbdev/core/fbcon.c Daniel Vetter             2019-05-28  1030  	if (WARN_ON(info_idx == -1))
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1031  	    return;
-306958e8e8d150 drivers/video/console/fbcon.c    Adrian Bunk               2005-05-01  1032  
-1f4ed2fb01f80f drivers/video/fbdev/core/fbcon.c Daniel Vetter             2019-05-28  1033  	if (con2fb_map[vc->vc_num] == -1)
-1f4ed2fb01f80f drivers/video/fbdev/core/fbcon.c Daniel Vetter             2019-05-28  1034  		con2fb_map[vc->vc_num] = info_idx;
-1f4ed2fb01f80f drivers/video/fbdev/core/fbcon.c Daniel Vetter             2019-05-28  1035  
-1f4ed2fb01f80f drivers/video/fbdev/core/fbcon.c Daniel Vetter             2019-05-28  1036  	info = registered_fb[con2fb_map[vc->vc_num]];
-87ab9f6b741734 drivers/video/fbdev/core/fbcon.c Helge Deller              2022-02-02  1037  	cap = info->flags;
-306958e8e8d150 drivers/video/console/fbcon.c    Adrian Bunk               2005-05-01  1038  
-3c5a1b111373e6 drivers/video/fbdev/core/fbcon.c Andreas Schwab            2019-05-06  1039  	if (logo_shown < 0 && console_loglevel <= CONSOLE_LOGLEVEL_QUIET)
-10993504d64735 drivers/video/fbdev/core/fbcon.c Prarit Bhargava           2019-02-08  1040  		logo_shown = FBCON_LOGO_DONTSHOW;
-10993504d64735 drivers/video/fbdev/core/fbcon.c Prarit Bhargava           2019-02-08  1041  
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1042  	if (vc != svc || logo_shown == FBCON_LOGO_DONTSHOW ||
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1043  	    (info->fix.type == FB_TYPE_TEXT))
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1044  		logo = 0;
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1045  
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1046  	if (var_to_display(p, &info->var, info))
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1047  		return;
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1048  
-d1baa4ffa677bf drivers/video/console/fbcon.c    Antonino A. Daplas        2007-07-17  1049  	if (!info->fbcon_par)
-d1baa4ffa677bf drivers/video/console/fbcon.c    Antonino A. Daplas        2007-07-17  1050  		con2fb_acquire_newinfo(vc, info, vc->vc_num, -1);
-d1baa4ffa677bf drivers/video/console/fbcon.c    Antonino A. Daplas        2007-07-17  1051  
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1052  	/* If we are not the first console on this
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1053  	   fb, copy the font from that console */
-e614b18dcedb24 drivers/video/console/fbcon.c    Antonino A. Daplas        2006-06-26  1054  	t = &fb_display[fg_console];
-e614b18dcedb24 drivers/video/console/fbcon.c    Antonino A. Daplas        2006-06-26  1055  	if (!p->fontdata) {
-e614b18dcedb24 drivers/video/console/fbcon.c    Antonino A. Daplas        2006-06-26  1056  		if (t->fontdata) {
-e614b18dcedb24 drivers/video/console/fbcon.c    Antonino A. Daplas        2006-06-26  1057  			struct vc_data *fvc = vc_cons[fg_console].d;
-e614b18dcedb24 drivers/video/console/fbcon.c    Antonino A. Daplas        2006-06-26  1058  
-e614b18dcedb24 drivers/video/console/fbcon.c    Antonino A. Daplas        2006-06-26  1059  			vc->vc_font.data = (void *)(p->fontdata =
-e614b18dcedb24 drivers/video/console/fbcon.c    Antonino A. Daplas        2006-06-26  1060  						    fvc->vc_font.data);
-e614b18dcedb24 drivers/video/console/fbcon.c    Antonino A. Daplas        2006-06-26  1061  			vc->vc_font.width = fvc->vc_font.width;
-e614b18dcedb24 drivers/video/console/fbcon.c    Antonino A. Daplas        2006-06-26  1062  			vc->vc_font.height = fvc->vc_font.height;
-a1ac250a82a5e9 drivers/video/fbdev/core/fbcon.c Peilin Ye                 2020-11-12  1063  			vc->vc_font.charcount = fvc->vc_font.charcount;
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1064  			p->userfont = t->userfont;
-e614b18dcedb24 drivers/video/console/fbcon.c    Antonino A. Daplas        2006-06-26  1065  
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1066  			if (p->userfont)
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1067  				REFCOUNT(p->fontdata)++;
-e614b18dcedb24 drivers/video/console/fbcon.c    Antonino A. Daplas        2006-06-26  1068  		} else {
-e614b18dcedb24 drivers/video/console/fbcon.c    Antonino A. Daplas        2006-06-26  1069  			const struct font_desc *font = NULL;
-e614b18dcedb24 drivers/video/console/fbcon.c    Antonino A. Daplas        2006-06-26  1070  
-e614b18dcedb24 drivers/video/console/fbcon.c    Antonino A. Daplas        2006-06-26  1071  			if (!fontname[0] || !(font = find_font(fontname)))
-e614b18dcedb24 drivers/video/console/fbcon.c    Antonino A. Daplas        2006-06-26  1072  				font = get_default_font(info->var.xres,
-2d2699d9849248 drivers/video/console/fbcon.c    Antonino A. Daplas        2007-05-08  1073  							info->var.yres,
-2d2699d9849248 drivers/video/console/fbcon.c    Antonino A. Daplas        2007-05-08  1074  							info->pixmap.blit_x,
-2d2699d9849248 drivers/video/console/fbcon.c    Antonino A. Daplas        2007-05-08  1075  							info->pixmap.blit_y);
-e614b18dcedb24 drivers/video/console/fbcon.c    Antonino A. Daplas        2006-06-26  1076  			vc->vc_font.width = font->width;
-e614b18dcedb24 drivers/video/console/fbcon.c    Antonino A. Daplas        2006-06-26  1077  			vc->vc_font.height = font->height;
-e614b18dcedb24 drivers/video/console/fbcon.c    Antonino A. Daplas        2006-06-26  1078  			vc->vc_font.data = (void *)(p->fontdata = font->data);
-a1ac250a82a5e9 drivers/video/fbdev/core/fbcon.c Peilin Ye                 2020-11-12  1079  			vc->vc_font.charcount = font->charcount;
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1080  		}
-e614b18dcedb24 drivers/video/console/fbcon.c    Antonino A. Daplas        2006-06-26  1081  	}
-e614b18dcedb24 drivers/video/console/fbcon.c    Antonino A. Daplas        2006-06-26  1082  
-b8c909454f046b drivers/video/console/fbcon.c    Antonino A. Daplas        2005-09-09  1083  	vc->vc_can_do_color = (fb_get_color_depth(&info->var, &info->fix)!=1);
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1084  	vc->vc_complement_mask = vc->vc_can_do_color ? 0x7700 : 0x0800;
-a1ac250a82a5e9 drivers/video/fbdev/core/fbcon.c Peilin Ye                 2020-11-12  1085  	if (vc->vc_font.charcount == 256) {
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1086  		vc->vc_hi_font_mask = 0;
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1087  	} else {
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1088  		vc->vc_hi_font_mask = 0x100;
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1089  		if (vc->vc_can_do_color)
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1090  			vc->vc_complement_mask <<= 1;
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1091  	}
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1092  
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1093  	if (!*svc->vc_uni_pagedir_loc)
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1094  		con_set_default_unimap(svc);
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1095  	if (!*vc->vc_uni_pagedir_loc)
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1096  		con_copy_unimap(vc, svc);
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1097  
-e4fc27618b7523 drivers/video/console/fbcon.c    Antonino A. Daplas        2005-11-08  1098  	ops = info->fbcon_par;
-f235f664a8afab drivers/video/console/fbcon.c    Scot Doyle                2015-10-09  1099  	ops->cur_blink_jiffies = msecs_to_jiffies(vc->vc_cur_blink_ms);
-c9e6a36492504e drivers/video/fbdev/core/fbcon.c Hans de Goede             2017-11-25  1100  
-2428e59b530928 drivers/video/console/fbcon.c    Marcin Slusarz            2008-02-06  1101  	p->con_rotate = initial_rotation;
-c9e6a36492504e drivers/video/fbdev/core/fbcon.c Hans de Goede             2017-11-25  1102  	if (p->con_rotate == -1)
-c9e6a36492504e drivers/video/fbdev/core/fbcon.c Hans de Goede             2017-11-25  1103  		p->con_rotate = info->fbcon_rotate_hint;
-c9e6a36492504e drivers/video/fbdev/core/fbcon.c Hans de Goede             2017-11-25  1104  	if (p->con_rotate == -1)
-f2f4946b0adfd6 drivers/video/fbdev/core/fbcon.c Hans de Goede             2017-11-25  1105  		p->con_rotate = FB_ROTATE_UR;
-c9e6a36492504e drivers/video/fbdev/core/fbcon.c Hans de Goede             2017-11-25  1106  
-b73deed32d0874 drivers/video/console/fbcon.c    Antonino A. Daplas        2006-01-09  1107  	set_blitting_type(vc, info);
-e4fc27618b7523 drivers/video/console/fbcon.c    Antonino A. Daplas        2005-11-08  1108  
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1109  	cols = vc->vc_cols;
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1110  	rows = vc->vc_rows;
-e4fc27618b7523 drivers/video/console/fbcon.c    Antonino A. Daplas        2005-11-08  1111  	new_cols = FBCON_SWAP(ops->rotate, info->var.xres, info->var.yres);
-e4fc27618b7523 drivers/video/console/fbcon.c    Antonino A. Daplas        2005-11-08  1112  	new_rows = FBCON_SWAP(ops->rotate, info->var.yres, info->var.xres);
-e4fc27618b7523 drivers/video/console/fbcon.c    Antonino A. Daplas        2005-11-08  1113  	new_cols /= vc->vc_font.width;
-e4fc27618b7523 drivers/video/console/fbcon.c    Antonino A. Daplas        2005-11-08  1114  	new_rows /= vc->vc_font.height;
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1115  
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1116  	/*
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1117  	 * We must always set the mode. The mode of the previous console
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1118  	 * driver could be in the same resolution but we are using different
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1119  	 * hardware so we have to initialize the hardware.
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1120  	 *
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1121  	 * We need to do it in fbcon_init() to prevent screen corruption.
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1122  	 */
-6ca8dfd78187d8 drivers/video/console/fbcon.c    Jiri Slaby                2016-06-23  1123  	if (con_is_visible(vc) && vc->vc_mode == KD_TEXT) {
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1124  		if (info->fbops->fb_set_par &&
-0fcf6ada2b8eb4 drivers/video/console/fbcon.c    Florian Tobias Schandinat 2009-09-22  1125  		    !(ops->flags & FBCON_FLAGS_INIT)) {
-0fcf6ada2b8eb4 drivers/video/console/fbcon.c    Florian Tobias Schandinat 2009-09-22  1126  			ret = info->fbops->fb_set_par(info);
-0fcf6ada2b8eb4 drivers/video/console/fbcon.c    Florian Tobias Schandinat 2009-09-22  1127  
-0fcf6ada2b8eb4 drivers/video/console/fbcon.c    Florian Tobias Schandinat 2009-09-22  1128  			if (ret)
-0fcf6ada2b8eb4 drivers/video/console/fbcon.c    Florian Tobias Schandinat 2009-09-22  1129  				printk(KERN_ERR "fbcon_init: detected "
-0fcf6ada2b8eb4 drivers/video/console/fbcon.c    Florian Tobias Schandinat 2009-09-22  1130  					"unhandled fb_set_par error, "
-0fcf6ada2b8eb4 drivers/video/console/fbcon.c    Florian Tobias Schandinat 2009-09-22  1131  					"error code %d\n", ret);
-0fcf6ada2b8eb4 drivers/video/console/fbcon.c    Florian Tobias Schandinat 2009-09-22  1132  		}
-0fcf6ada2b8eb4 drivers/video/console/fbcon.c    Florian Tobias Schandinat 2009-09-22  1133  
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1134  		ops->flags |= FBCON_FLAGS_INIT;
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1135  	}
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1136  
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1137  	ops->graphics = 0;
-^1da177e4c3f41 drivers/video/console/fbcon.c    Linus Torvalds            2005-04-16  1138  
-
-:::::: The code at line 1028 was first introduced by commit
-:::::: 87ab9f6b7417349aa197a6c7098d4fdd4beebb74 Revert "fbcon: Disable accelerated scrolling"
-
-:::::: TO: Helge Deller <deller@gmx.de>
-:::::: CC: Daniel Vetter <daniel.vetter@ffwll.ch>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+IA0KPiBjbGtfc2NhbGluZ19sb2NrIGlzIHRvIHByZXZlbnQgZnJvbSBydW5uaW5nIGNsa3NjYWxp
+bmcgcmVsYXRlZCBvcGVyYXRpb25zDQo+IHdpdGggb3RoZXJzIHdoaWNoIG1pZ2h0IGJlIGFmZmVj
+dGVkIGJ5IHRoZSBvcGVyYXRpb25zIGNvbmN1cnJlbnRseS4NCj4gSSB0aGluayBpdCBsb29rcyBo
+YXJkd2FyZSBzcGVjaWZpYy4NCj4gSWYgdGhlIGZlYXR1cmUgaXNuJ3Qgc3VwcG9ydGVkLCBJIHRo
+aW5rIHRoZXJlIGlzIG5vIHJlYXNvbnRvIHByZXZlbnQgZnJvbQ0KICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICBeXl4gcmVhc29uIHRvIA0KDQo+IHJ1bm5pbmcgb3RoZXIgZnVuY3Rpb25z
+LCBzdWNoIGFzIHVmc2hjZF9xdWV1ZWNvbW1hbmQgYW5kDQpJdCBpcyBubyBsb25nZXIgdXNlZCBp
+biBxdWV1ZWNvbW1hbmQgc2luY2UgNTY3NWMzODFlYTUxIGFuZCA4ZDA3N2VkZTQ4YzENCg0KPiB1
+ZnNoY2RfZXhlY19kZXZfY21kLCBjb25jdXJyZW50bHkuDQo+IA0KPiBTbyBJIGFkZCBhIGNvbmRp
+dGlvbiBhdCBzb21lIHBvaW50cyBwcm90ZWN0aW5nIHdpdGggY2xrX3NjYWxpbmdfbG9jay4NCkJ1
+dCB5b3Ugc3RpbGwgbmVlZCBhIHdheSB0byBzZXJpYWxpemUgZGV2aWNlIG1hbmFnZW1lbnQgY29t
+bWFuZHMuDQoNClRoYW5rcywNCkF2cmkNCg0KPiANCj4gU2lnbmVkLW9mZi1ieTogS2l3b29uZyBL
+aW0gPGt3bWFkLmtpbUBzYW1zdW5nLmNvbT4NCj4gLS0tDQo+ICBkcml2ZXJzL3Njc2kvdWZzL3Vm
+c2hjZC5jIHwgMjEgKysrKysrKysrKysrKystLS0tLS0tDQo+ICAxIGZpbGUgY2hhbmdlZCwgMTQg
+aW5zZXJ0aW9ucygrKSwgNyBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJz
+L3Njc2kvdWZzL3Vmc2hjZC5jIGIvZHJpdmVycy9zY3NpL3Vmcy91ZnNoY2QuYw0KPiBpbmRleCA0
+NjBkMmI0Li44NDcxYzkwIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL3Njc2kvdWZzL3Vmc2hjZC5j
+DQo+ICsrKyBiL2RyaXZlcnMvc2NzaS91ZnMvdWZzaGNkLmMNCj4gQEAgLTI5ODAsNyArMjk4MCw4
+IEBAIHN0YXRpYyBpbnQgdWZzaGNkX2V4ZWNfZGV2X2NtZChzdHJ1Y3QgdWZzX2hiYSAqaGJhLA0K
+PiAgICAgICAgIC8qIFByb3RlY3RzIHVzZSBvZiBoYmEtPnJlc2VydmVkX3Nsb3QuICovDQo+ICAg
+ICAgICAgbG9ja2RlcF9hc3NlcnRfaGVsZCgmaGJhLT5kZXZfY21kLmxvY2spOw0KPiANCj4gLSAg
+ICAgICBkb3duX3JlYWQoJmhiYS0+Y2xrX3NjYWxpbmdfbG9jayk7DQo+ICsgICAgICAgaWYgKHVm
+c2hjZF9pc19jbGtzY2FsaW5nX3N1cHBvcnRlZChoYmEpKQ0KPiArICAgICAgICAgICAgICAgZG93
+bl9yZWFkKCZoYmEtPmNsa19zY2FsaW5nX2xvY2spOw0KPiANCj4gICAgICAgICBscmJwID0gJmhi
+YS0+bHJiW3RhZ107DQo+ICAgICAgICAgV0FSTl9PTihscmJwLT5jbWQpOw0KPiBAQCAtMjk5OCw3
+ICsyOTk5LDggQEAgc3RhdGljIGludCB1ZnNoY2RfZXhlY19kZXZfY21kKHN0cnVjdCB1ZnNfaGJh
+ICpoYmEsDQo+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIChzdHJ1Y3QgdXRw
+X3VwaXVfcmVxICopbHJicC0+dWNkX3JzcF9wdHIpOw0KPiANCj4gIG91dDoNCj4gLSAgICAgICB1
+cF9yZWFkKCZoYmEtPmNsa19zY2FsaW5nX2xvY2spOw0KPiArICAgICAgIGlmICh1ZnNoY2RfaXNf
+Y2xrc2NhbGluZ19zdXBwb3J0ZWQoaGJhKSkNCj4gKyAgICAgICAgICAgICAgIHVwX3JlYWQoJmhi
+YS0+Y2xrX3NjYWxpbmdfbG9jayk7DQo+ICAgICAgICAgcmV0dXJuIGVycjsNCj4gIH0NCj4gDQo+
+IEBAIC02MDE0LDcgKzYwMTYsOCBAQCBzdGF0aWMgdm9pZCB1ZnNoY2RfZXJyX2hhbmRsaW5nX3By
+ZXBhcmUoc3RydWN0DQo+IHVmc19oYmEgKmhiYSkNCj4gICAgICAgICAgICAgICAgIGlmICh1ZnNo
+Y2RfaXNfY2xrc2NhbGluZ19zdXBwb3J0ZWQoaGJhKSAmJg0KPiAgICAgICAgICAgICAgICAgICAg
+IGhiYS0+Y2xrX3NjYWxpbmcuaXNfZW5hYmxlZCkNCj4gICAgICAgICAgICAgICAgICAgICAgICAg
+dWZzaGNkX3N1c3BlbmRfY2xrc2NhbGluZyhoYmEpOw0KPiAtICAgICAgICAgICAgICAgdWZzaGNk
+X2Nsa19zY2FsaW5nX2FsbG93KGhiYSwgZmFsc2UpOw0KPiArICAgICAgICAgICAgICAgaWYgKHVm
+c2hjZF9pc19jbGtzY2FsaW5nX3N1cHBvcnRlZChoYmEpKQ0KPiArICAgICAgICAgICAgICAgICAg
+ICAgICB1ZnNoY2RfY2xrX3NjYWxpbmdfYWxsb3coaGJhLCBmYWxzZSk7DQo+ICAgICAgICAgfQ0K
+PiAgICAgICAgIHVmc2hjZF9zY3NpX2Jsb2NrX3JlcXVlc3RzKGhiYSk7DQo+ICAgICAgICAgLyog
+RHJhaW4gdWZzaGNkX3F1ZXVlY29tbWFuZCgpICovDQo+IEBAIC02MjQ3LDcgKzYyNTAsOCBAQCBz
+dGF0aWMgdm9pZCB1ZnNoY2RfZXJyX2hhbmRsZXIoc3RydWN0IHdvcmtfc3RydWN0DQo+ICp3b3Jr
+KQ0KPiAgICAgICAgICAgICAgICAgICogSG9sZCB0aGUgc2NhbGluZyBsb2NrIGp1c3QgaW4gY2Fz
+ZSBkZXYgY21kcw0KPiAgICAgICAgICAgICAgICAgICogYXJlIHNlbnQgdmlhIGJzZyBhbmQvb3Ig
+c3lzZnMuDQo+ICAgICAgICAgICAgICAgICAgKi8NCj4gLSAgICAgICAgICAgICAgIGRvd25fd3Jp
+dGUoJmhiYS0+Y2xrX3NjYWxpbmdfbG9jayk7DQo+ICsgICAgICAgICAgICAgICBpZiAodWZzaGNk
+X2lzX2Nsa3NjYWxpbmdfc3VwcG9ydGVkKGhiYSkpDQo+ICsgICAgICAgICAgICAgICAgICAgICAg
+IGRvd25fd3JpdGUoJmhiYS0+Y2xrX3NjYWxpbmdfbG9jayk7DQo+ICAgICAgICAgICAgICAgICBo
+YmEtPmZvcmNlX3BtYyA9IHRydWU7DQo+ICAgICAgICAgICAgICAgICBwbWNfZXJyID0gdWZzaGNk
+X2NvbmZpZ19wd3JfbW9kZShoYmEsICYoaGJhLT5wd3JfaW5mbykpOw0KPiAgICAgICAgICAgICAg
+ICAgaWYgKHBtY19lcnIpIHsNCj4gQEAgLTYyNTcsNyArNjI2MSw4IEBAIHN0YXRpYyB2b2lkIHVm
+c2hjZF9lcnJfaGFuZGxlcihzdHJ1Y3Qgd29ya19zdHJ1Y3QNCj4gKndvcmspDQo+ICAgICAgICAg
+ICAgICAgICB9DQo+ICAgICAgICAgICAgICAgICBoYmEtPmZvcmNlX3BtYyA9IGZhbHNlOw0KPiAg
+ICAgICAgICAgICAgICAgdWZzaGNkX3ByaW50X3B3cl9pbmZvKGhiYSk7DQo+IC0gICAgICAgICAg
+ICAgICB1cF93cml0ZSgmaGJhLT5jbGtfc2NhbGluZ19sb2NrKTsNCj4gKyAgICAgICAgICAgICAg
+IGlmICh1ZnNoY2RfaXNfY2xrc2NhbGluZ19zdXBwb3J0ZWQoaGJhKSkNCj4gKyAgICAgICAgICAg
+ICAgICAgICAgICAgdXBfd3JpdGUoJmhiYS0+Y2xrX3NjYWxpbmdfbG9jayk7DQo+ICAgICAgICAg
+ICAgICAgICBzcGluX2xvY2tfaXJxc2F2ZShoYmEtPmhvc3QtPmhvc3RfbG9jaywgZmxhZ3MpOw0K
+PiAgICAgICAgIH0NCj4gDQo+IEBAIC02NzUzLDcgKzY3NTgsOCBAQCBzdGF0aWMgaW50IHVmc2hj
+ZF9pc3N1ZV9kZXZtYW5fdXBpdV9jbWQoc3RydWN0DQo+IHVmc19oYmEgKmhiYSwNCj4gICAgICAg
+ICAvKiBQcm90ZWN0cyB1c2Ugb2YgaGJhLT5yZXNlcnZlZF9zbG90LiAqLw0KPiAgICAgICAgIGxv
+Y2tkZXBfYXNzZXJ0X2hlbGQoJmhiYS0+ZGV2X2NtZC5sb2NrKTsNCj4gDQo+IC0gICAgICAgZG93
+bl9yZWFkKCZoYmEtPmNsa19zY2FsaW5nX2xvY2spOw0KPiArICAgICAgIGlmICh1ZnNoY2RfaXNf
+Y2xrc2NhbGluZ19zdXBwb3J0ZWQoaGJhKSkNCj4gKyAgICAgICAgICAgICAgIGRvd25fcmVhZCgm
+aGJhLT5jbGtfc2NhbGluZ19sb2NrKTsNCj4gDQo+ICAgICAgICAgbHJicCA9ICZoYmEtPmxyYlt0
+YWddOw0KPiAgICAgICAgIFdBUk5fT04obHJicC0+Y21kKTsNCj4gQEAgLTY4MjIsNyArNjgyOCw4
+IEBAIHN0YXRpYyBpbnQgdWZzaGNkX2lzc3VlX2Rldm1hbl91cGl1X2NtZChzdHJ1Y3QNCj4gdWZz
+X2hiYSAqaGJhLA0KPiAgICAgICAgIHVmc2hjZF9hZGRfcXVlcnlfdXBpdV90cmFjZShoYmEsIGVy
+ciA/IFVGU19RVUVSWV9FUlIgOg0KPiBVRlNfUVVFUllfQ09NUCwNCj4gICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgKHN0cnVjdCB1dHBfdXBpdV9yZXEgKilscmJwLT51Y2RfcnNw
+X3B0cik7DQo+IA0KPiAtICAgICAgIHVwX3JlYWQoJmhiYS0+Y2xrX3NjYWxpbmdfbG9jayk7DQo+
+ICsgICAgICAgaWYgKHVmc2hjZF9pc19jbGtzY2FsaW5nX3N1cHBvcnRlZChoYmEpKQ0KPiArICAg
+ICAgICAgICAgICAgdXBfcmVhZCgmaGJhLT5jbGtfc2NhbGluZ19sb2NrKTsNCj4gICAgICAgICBy
+ZXR1cm4gZXJyOw0KPiAgfQ0KPiANCj4gLS0NCj4gMi43LjQNCg0K

@@ -2,64 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E989C4AAF1A
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 12:57:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D465A4AAF1B
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 12:58:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234924AbiBFL5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 06:57:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43188 "EHLO
+        id S235004AbiBFL6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 06:58:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230450AbiBFL5k (ORCPT
+        with ESMTP id S230450AbiBFL6d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 06:57:40 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175E9C06173B
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 03:57:39 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id B2B731F386;
-        Sun,  6 Feb 2022 11:57:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1644148658; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=lXWmmTdhvW3m3FoSvMNy7hJzOUL/JeKwiFt5MfL4S4E=;
-        b=lDtTqd7W7qMCbopO3F/iV4K/5DaQq6et3HsDDiwQTjdN6Qx3GFmUqa+qFLDuFAp1n8bkec
-        GtGpkkYVivmWueEMRbp3s8HFdwKy9L2YQgC8XlJPMUFTbNygYOfX0Cnht1tec1Iddzzsdr
-        jyHu6fnBuigktCtLk3p5eTTzhQnGWGA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1644148658;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=lXWmmTdhvW3m3FoSvMNy7hJzOUL/JeKwiFt5MfL4S4E=;
-        b=E89r91XHkvISjcRXWXr8fdaFFZWZOkXoyXfDzjuCQHesnf/vxxHVjaZCaa1fTAflvNd3K9
-        zdg5Gtd3sewLJ8Dw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9B19A13A47;
-        Sun,  6 Feb 2022 11:57:38 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id UdunJLK3/2HbLAAAMHmgww
-        (envelope-from <bp@suse.de>); Sun, 06 Feb 2022 11:57:38 +0000
-Date:   Sun, 6 Feb 2022 12:57:36 +0100
-From:   Borislav Petkov <bp@suse.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] irq/urgent for v5.17-rc3
-Message-ID: <Yf+3sIvPPnPkv5Jg@zn.tnic>
+        Sun, 6 Feb 2022 06:58:33 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 882BBC06173B;
+        Sun,  6 Feb 2022 03:58:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=u8y8YnXoDgPdri5nDxHCd/Dt45QdXd7r35iYZRYPKgI=; b=BkygttVrImN6pKWoJ8l/7fwIhJ
+        XYVZCmGlNE8ZjFHEW2SPgQkaRnw5X3DNcTza1gdcgv1icWVdRpsVVXmjGl6oPiTKCX3+1Erpse07v
+        /9THscrbp3IB/AqKDTtKNITe2JOXT2Q7waWWIZU93z4m/+gHPsTq2CroDf7bf4wdBpW1el7w4DyX4
+        Oj3HpoBDTOU3m6rkw4XyoSG7LybN9GZI6vrflgktjE1IzRLUjLN+bUEe4gN8irmKKAaHa7RSw6Rgs
+        dU4sm95LpZwPFuyNXDu9rW4WgSbtZTBXIk+AsFYOgnLbrXhaCdKdEyNjl4dd52RxLSts0hojJZ5pp
+        7wwim/fw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nGgBO-00Dsz0-Fz; Sun, 06 Feb 2022 11:58:18 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id AEC9898622D; Sun,  6 Feb 2022 12:58:16 +0100 (CET)
+Date:   Sun, 6 Feb 2022 12:58:16 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Alexander Popov <alex.popov@linux.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] gcc-plugins/stackleak: Use noinstr in favor of notrace
+Message-ID: <20220206115816.GA23216@worktop.programming.kicks-ass.net>
+References: <20220202001918.4104428-1-keescook@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <20220202001918.4104428-1-keescook@chromium.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,39 +56,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Tue, Feb 01, 2022 at 04:19:18PM -0800, Kees Cook wrote:
+> While the stackleak plugin was already using notrace, objtool is now a
+> bit more picky. Update the notrace uses to noinstr. Silences these
+> warnings:
+> 
+> vmlinux.o: warning: objtool: do_syscall_64()+0x9: call to stackleak_track_stack() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: do_int80_syscall_32()+0x9: call to stackleak_track_stack() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: exc_general_protection()+0x22: call to stackleak_track_stack() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: fixup_bad_iret()+0x20: call to stackleak_track_stack() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: do_machine_check()+0x27: call to stackleak_track_stack() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: .text+0x5346e: call to stackleak_erase() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: .entry.text+0x143: call to stackleak_erase() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: .entry.text+0x10eb: call to stackleak_erase() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: .entry.text+0x17f9: call to stackleak_erase() leaves .noinstr.text section
+> 
+> Cc: Alexander Popov <alex.popov@linux.com>
+> Suggested-by: Peter Zijlstra <peterz@infradead.org>
+> Link: https://lore.kernel.org/lkml/YYENAKB0igNFnFmK@hirez.programming.kicks-ass.net/
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+> Is it correct to exclude .noinstr.text here? That means any functions called in
+> there will have their stack utilization untracked. This doesn't seem right to me,
+> though. Shouldn't stackleak_track_stack() just be marked noinstr instead?
 
-please pull a single urgent IRQ fix for 5.17.
+This patch is right. stackleak_track_stack() cannot be marked noinstr
+becaues it accesses things that might not be there.
 
-Thx.
+Consider what happens if we pull the PTI page-table swap into the
+noinstr C part.
 
----
+> @@ -446,6 +447,8 @@ static bool stackleak_gate(void)
+>  			return false;
+>  		if (!strncmp(TREE_STRING_POINTER(section), ".meminit.text", 13))
+>  			return false;
+> +		if (!strncmp(TREE_STRING_POINTER(section), ".noinstr.text", 13))
+> +			return false;
 
-The following changes since commit 26291c54e111ff6ba87a164d85d4a4e134b7315c:
+For paranoia's sake I'd like .entry.text added there as well.
 
-  Linux 5.17-rc2 (2022-01-30 15:37:07 +0200)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/irq_urgent_for_v5.17_rc3
-
-for you to fetch changes up to dd7f5a11ac5a6f733f422dc22b4d145d3260304e:
-
-  PCI/MSI: Remove bogus warning in pci_irq_get_affinity() (2022-02-04 09:54:20 +0100)
-
-----------------------------------------------------------------
-- Remove a bogus warning introduced by the recent PCI MSI irq affinity
-overhaul
-
-----------------------------------------------------------------
-Thomas Gleixner (1):
-      PCI/MSI: Remove bogus warning in pci_irq_get_affinity()
-
- drivers/pci/msi/msi.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
--- 
-Regards/Gruss,
-    Boris.
-
-SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg
+>  	}
+>  
+>  	return track_frame_size >= 0;

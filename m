@@ -2,47 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CC034AB027
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 16:16:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 659274AB02A
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 16:19:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243415AbiBFPQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 10:16:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48430 "EHLO
+        id S243512AbiBFPTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 10:19:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231978AbiBFPQJ (ORCPT
+        with ESMTP id S231978AbiBFPTO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 10:16:09 -0500
+        Sun, 6 Feb 2022 10:19:14 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77321C06173B;
-        Sun,  6 Feb 2022 07:16:07 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90A54C06173B;
+        Sun,  6 Feb 2022 07:19:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3AFD261159;
-        Sun,  6 Feb 2022 15:16:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64982C340E9;
-        Sun,  6 Feb 2022 15:16:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 25EE06112C;
+        Sun,  6 Feb 2022 15:19:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97CEDC340E9;
+        Sun,  6 Feb 2022 15:19:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644160565;
-        bh=Y8VcKo3DL6npDATUf9pAG87BPAfF8L5OzuX8FsTtTlk=;
+        s=k20201202; t=1644160752;
+        bh=CrKWLnFtz+agz6KlLPQCTPkXtniFpFUkLyFU3p2QN2w=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=JeHVmfEiu4eIMO9aKfTeN34C/qW5pgniMXwmc9k5V7EvzOS66vdv0LbQg6+3WWTWi
-         8nW8vlgXIQkQa+wrEEKf3kfDHAOcPk2OruiNNu4U6FNdY/pTgWXcu+eOZzsFq2VBPs
-         3UvK5URie5cj0OBFSpoGtFNpQgwkqHsULNJLH+IwcoYHfLNPgXdgMRVn8H91epDIVB
-         aUFhFXlAA9n1emVuF4GPu/9dRUndQJc4b5zbelysT09HUD7H7benpnuhbYz443Kwes
-         4e9BgpoUpK8ciU2HhzIfLG4bnNKqME3Nv1yAsPBeQ8GlKuHd3bmfLbNs0bY0IoXRmo
-         +LWWmwspMUgrw==
-Date:   Sun, 6 Feb 2022 15:22:37 +0000
+        b=SkMZcgd4DLbNyFC45jXwa0k2rrwmW8vx5JMDaDfboNTUqCtBPzs2oLD/FjI2SDpPD
+         RbZWQz1DVpWptqK3auRL1iWQ2yzp+roJ3n8gjhp4QDggj2lpD4cCX4pHaFJw1Vpsne
+         JVzdRBndQfugEeA2DGJZKcO5Ab45UH/fEQLK54vOLoFAohM8fycYZ3ezQhwM9pn8PO
+         Z2NXRyflG8LFdPEwwnUyJPDBvodANOD6p/nwNPZ6keovmd7jpCB3Tkm+qTtUOjYU0L
+         qZQWns22LlCuQYGCSkc9UpBvBzfU6TMqg5K0GeUX2WdJp01rN4lIy8IFr/iNy+cytS
+         7jz6ggsm2vmIg==
+Date:   Sun, 6 Feb 2022 15:25:44 +0000
 From:   Jonathan Cameron <jic23@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     Antoniu Miclaus <antoniu.miclaus@analog.com>, robh+dt@kernel.org,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 1/4] iio:frequency:admv1014: add support for ADMV1014
-Message-ID: <20220206152237.03f15456@jic23-huawei>
-In-Reply-To: <Yf7AjXsRuhFeFTpD@smile.fi.intel.com>
-References: <20220131100102.15372-1-antoniu.miclaus@analog.com>
-        <Yf7AjXsRuhFeFTpD@smile.fi.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>,
+        Lars-Peter Clausen <lars@metafoo.de>
+Subject: Re: [PATCH v1 2/2] iio: temperature: ltc2983: Make use of device
+ properties
+Message-ID: <20220206152544.613c828e@jic23-huawei>
+In-Reply-To: <Yf7ArwPrN34drkcv@smile.fi.intel.com>
+References: <20220203114506.53904-1-andriy.shevchenko@linux.intel.com>
+        <20220203114506.53904-2-andriy.shevchenko@linux.intel.com>
+        <20220205171454.49a7225c@jic23-huawei>
+        <Yf7ArwPrN34drkcv@smile.fi.intel.com>
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -57,283 +60,146 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 5 Feb 2022 20:23:09 +0200
-Andy Shevchenko <andriy.shevchenko@intel.com> wrote:
+On Sat, 5 Feb 2022 20:23:43 +0200
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
 
-> On Mon, Jan 31, 2022 at 12:00:59PM +0200, Antoniu Miclaus wrote:
-> > The ADMV1014 is a silicon germanium (SiGe), wideband,
-> > microwave downconverter optimized for point to point microwave
-> > radio designs operating in the 24 GHz to 44 GHz frequency range.  
+> On Sat, Feb 05, 2022 at 05:14:54PM +0000, Jonathan Cameron wrote:
+> > On Thu,  3 Feb 2022 13:45:06 +0200
+> > Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+> >   
+> > > Convert the module to be property provider agnostic and allow
+> > > it to be used on non-OF platforms.  
+> > 
+> > This description needs expansion as it's not a straight forward
+> > conversion.
+> > 
+> > Also, complex enough that I definitely want more eyes and preferably
+> > some testing.  
 > 
-> Excellent job!
-> A few comments / questions below.
-Emails crossed. Given outstanding comments here I've dropped the
-series again for now until these are dealt with.
+> That's fair. I also spent most of the time on this change in comparison to the
+> whole bundle.
+> 
+> ...
+> 
+> > > +#include <asm/byteorder.h>
+> > > +#include <asm/unaligned.h>  
+> 
+> > This may well be a valid addition but it's not called out in the patch
+> > description.  
+> 
+> This is a side effect of the change. Below I will try to explain, tell me if
+> that is what you want to be added to the commit message (feel free to correct
+> my English).
 
-Thanks,
-
-Jonathan
+I figured that out whilst it was sending but didn't hit cancel fast enough! :)
 
 > 
-> ...
-> 
-> > +config ADMV1014
-> > +	tristate "Analog Devices ADMV1014 Microwave Downconverter"
-> > +	depends on SPI && COMMON_CLK && 64BIT  
-> 
-> Why 64BIT only?
-> 
-> ..
-> 
-> > +enum {
-> > +	ADMV1014_IQ_MODE,
-> > +	ADMV1014_IF_MODE  
-> 
-> + Comma.
-> 
-> > +};
-> > +
-> > +enum {
-> > +	ADMV1014_SE_MODE_POS = 6,
-> > +	ADMV1014_SE_MODE_NEG = 9,
-> > +	ADMV1014_SE_MODE_DIFF = 12  
-> 
-> + Comma.
-> 
-> > +};  
-> 
-> > +
-> > +enum {
-> > +	ADMV1014_CALIBSCALE_COARSE,
-> > +	ADMV1014_CALIBSCALE_FINE,
-> > +};  
+> The conversion slightly changes the logic behind property reading for the
+> configuration values. Original code allocates just as much memory as needed.
+> Then for each separate 32- or 64-bit value it reads it from the property
+> and converts to a raw one which will be fed to the sensor. In the new code
+> we allocated the amount of memory needed to retrieve all values at once from
+> the property and then convert them as required.
+
+Good description to put in the patch description.
+
 > 
 > ...
 > 
-> > +	int ret;
-> > +	struct spi_transfer t = {0};  
+> > >  	if (st->custom_table_size + new_custom->size >
+> > > -	    (LTC2983_CUST_SENS_TBL_END_REG -
+> > > -	     LTC2983_CUST_SENS_TBL_START_REG) + 1) {
+> > > +	    (LTC2983_CUST_SENS_TBL_END_REG - LTC2983_CUST_SENS_TBL_START_REG) + 1) {  
+> > 
+> > Shouldn't really be in this patch. Or at very least call out that there is
+> > whitespace cleanup in the patch description.  
 > 
-> {} would suffice.
-> Also, can we here and everywhere else use reversed xmas tree order?
-> 
-> 	struct spi_transfer t = {};
-> 	int ret;
-> 
-> ...
-> 
-> > +	st->data[0] = ADMV1014_READ | FIELD_PREP(ADMV1014_REG_ADDR_READ_MSK, reg);
-> > +	st->data[1] = 0x0;
-> > +	st->data[2] = 0x0;  
-> 
-> 0x0 --> 0
-> 
-> Or I would rather put it cleaner with
-> 
-> 	put_unaligned_be16(...);
-> 
-> (or is it le16?)
+> Good catch! It's a leftover, one case became a patch 1 in this series.
 > 
 > ...
 > 
-> > +	t.len = 3;  
+> > > +	if (is_steinhart)
+> > > +		ret = fwnode_property_read_u32_array(fn, propname, new_custom->table, n_entries);
+> > > +	else
+> > > +		ret = fwnode_property_read_u64_array(fn, propname, new_custom->table, n_entries);
+> > > +	if (ret < 0)
+> > > +		return ERR_PTR(ret);
+> > > +
+> > > +	/*
+> > > +	 * Steinhart sensors are configured with raw values in the device tree.
+> > > +	 * For the other sensors we must convert the value to raw. The odd
+> > > +	 * index's correspond to temperatures and always have 1/1024 of
+> > > +	 * resolution. Temperatures also come in Kelvin, so signed values is
+> > > +	 * not possible.
+> > > +	 */
+> > > +	if (is_steinhart) {  
+> > 
+> > Perhaps would be cleaner to combine this if else with the one above at the cost
+> > of duplicating the if (ret < 0) check.  
 > 
-> sizeof()?
+> OK, I'm fine with either approach.
 > 
-> ...
+> > > +		cpu_to_be32_array(new_custom->table, new_custom->table, n_entries);  
+> > 
+> > I completely failed to register the hand coded big endian conversion.  Nice
+> > tidy up.  However, definitely something to call out in the patch description.  
 > 
-> > +	put_unaligned_be24(FIELD_PREP(ADMV1014_REG_DATA_MSK, val) |
-> > +			   FIELD_PREP(ADMV1014_REG_ADDR_WRITE_MSK, reg), &st->data[0]);  
+> See above.
 > 
-> Looking at the above I think the proper one will be byte assignment + put_unaligned_be16().
-> 
-> ...
-> 
-> > +	return spi_write(st->spi, &st->data[0], 3);  
-> 
-> sizeof() ?
-> 
-> ...
-> 
-> > +	if (rate >= (5400 * HZ_PER_MHZ) && rate <= (7000 * HZ_PER_MHZ))
-> > +		filt_raw = 15;  
-> 
-> > +	else if (rate >= (5400 * HZ_PER_MHZ) && rate <= (8000 * HZ_PER_MHZ))  
-> 
-> What's the point to have 5400 here? Shouldn't be 7000?
-> 
-> > +		filt_raw = 10;
-> > +	else if (rate >= (6600 * HZ_PER_MHZ) && rate <= (9200 * HZ_PER_MHZ))
-> > +		filt_raw = 5;
-> > +	else
-> > +		filt_raw = 0;  
-> 
-> ...
-> 
-> > +		vcm_comp = 1050 + (i * 50) + (i / 8 * 50);  
-> 
-> 		vcm_comp = 1050 + mult_frac(i, 450, 8);
-> 		// alternatively mult_frac(i * 50, 9, 8)
-> 
-> ?
-> 
-> > +		if (vcm_mv != vcm_comp)
-> > +			continue;  
-> 
-> ...
-> 
-> > +	ret = kstrtou32(buf, 10, &data);  
-> 
-> Should be kstrtouint(). Please check all such calls to be in align with the
-> type of variables that are used as a receptor.
-> 
-> > +	if (ret)
-> > +		return ret;  
+> > > +	} else {
+> > > +		for (index = 0; index < n_entries; index++) {
+> > > +			u64 temp = ((u64 *)new_custom->table)[index];
+> > >  
+> > >  			if ((index % 2) != 0)
+> > >  				temp = __convert_to_raw(temp, 1024);
+> > > @@ -445,16 +459,9 @@ static struct ltc2983_custom_sensor *__ltc2983_custom_sensor_new(
+> > >  				temp = __convert_to_raw_sign(temp, resolution);
+> > >  			else
+> > >  				temp = __convert_to_raw(temp, resolution);
+> > > -		} else {
+> > > -			u32 t32;
+> > >  
+> > > -			of_property_read_u32_index(np, propname, index, &t32);
+> > > -			temp = t32;
+> > > +			put_unaligned_be24(temp, new_custom->table + index * 3);
+> > >  		}
+> > > -
+> > > -		for (j = 0; j < n_size; j++)
+> > > -			new_custom->table[tbl++] =
+> > > -				temp >> (8 * (n_size - j - 1));
+> > >  	}  
 > 
 > ...
 > 
-> > +	switch ((u32)private) {  
+> > >  		if (IS_ERR(rtd->custom)) {
+> > > -			of_node_put(phandle);
+> > > +			fwnode_handle_put(ref);  
+> > 
+> > I guess there was a bunch of cut and paste in this driver ;) Same question as below
+> > on whether we can just use a goto here to share the put in the fail path.  
 > 
-> Why casting? Switch-case with castings is quite unusual.
+> Probably as separate (preparatory) patch?
+
+Perfect
+
 > 
-> > +	}  
-> 
-> ...
-> 
-> > +	return ret ? ret : len;  
-> 
-> 	return ret ?: len; ?
-> 
-> ...
-> 
-> > +static const char * const admv1014_reg_name[] = {
-> > +	 "vcm", "vcc-if-bb", "vcc-vga", "vcc-vva", "vcc-lna-3p3", "vcc-lna-1p5",
-> > +	 "vcc-bg", "vcc-quad", "vcc-mixer"  
-> 
-> 4 or 5 on one line is easier to read and follow the index (if needed).
-> Also add a comma to the end.
-> 
-> > +};  
+> > >  			return ERR_CAST(rtd->custom);
+> > >  		}  
 > 
 > ...
 > 
-> > +#define ADMV1014_CHAN_IQ(_channel, rf_comp) {				\
-> > +	.type = IIO_ALTVOLTAGE,						\
-> > +	.modified = 1,							\
-> > +	.output = 0,							\
-> > +	.indexed = 1,							\
-> > +	.channel2 = IIO_MOD_##rf_comp,					\
-> > +	.channel = _channel,						\
-> > +	.info_mask_separate = BIT(IIO_CHAN_INFO_PHASE) |		\
-> > +		BIT(IIO_CHAN_INFO_OFFSET),				\
-> > +	.info_mask_shared_by_type = BIT(IIO_CHAN_INFO_CALIBSCALE)	\  
+> > >  		if (IS_ERR(thermistor->custom)) {
+> > > -			of_node_put(phandle);
+> > > +			fwnode_handle_put(ref);
+> > >  			return ERR_CAST(thermistor->custom);  
+> > 
+> > Obviously not due to this patch, but this is odd.  Why have one error path
+> > that doesn't use the goto faill;?
+> > If you could tidy that up and add a note on it to the patch description
+> > that would be great.  
 > 
-> + Comma, same for the rest similar cases below.
+> Same answer as above.
 > 
-> > +	}  
-> 
-> ...
-> 
-> > +#define ADMV1014_CHAN_CALIBSCALE(_channel, rf_comp, _admv1014_ext_info) {	\
-> > +	.type = IIO_ALTVOLTAGE,							\
-> > +	.modified = 1,								\
-> > +	.output = 0,								\
-> > +	.indexed = 1,								\
-> > +	.channel2 = IIO_MOD_##rf_comp,						\
-> > +	.channel = _channel,							\
-> > +	.ext_info = _admv1014_ext_info						\  
-> 
-> + Comma.
-> 
-> > +	}
-> > +
-> > +static const struct iio_chan_spec admv1014_channels_iq[] = {
-> > +	ADMV1014_CHAN_IQ(0, I),
-> > +	ADMV1014_CHAN_IQ(0, Q),
-> > +	ADMV1014_CHAN_POWER(0)  
-> 
-> + Comma.
-> 
-> > +};
-> > +
-> > +static const struct iio_chan_spec admv1014_channels_if[] = {
-> > +	ADMV1014_CHAN_IF(0, I),
-> > +	ADMV1014_CHAN_IF(0, Q),
-> > +	ADMV1014_CHAN_CALIBSCALE(0, I, admv1014_ext_info),
-> > +	ADMV1014_CHAN_CALIBSCALE(0, Q, admv1014_ext_info),
-> > +	ADMV1014_CHAN_POWER(0)  
-> 
-> + Comma.
-> 
-> > +};  
-> 
-> ...
-> 
-> > +	enable_reg = FIELD_PREP(ADMV1014_P1DB_COMPENSATION_MSK, st->p1db_comp ? 3 : 0) |  
-> 
-> 3 --> GENMASK() ?
-> 
-> > +		     FIELD_PREP(ADMV1014_IF_AMP_PD_MSK, !(st->input_mode)) |
-> > +		     FIELD_PREP(ADMV1014_BB_AMP_PD_MSK, st->input_mode) |
-> > +		     FIELD_PREP(ADMV1014_DET_EN_MSK, st->det_en);
-> > +
-> > +	return __admv1014_spi_update_bits(st, ADMV1014_REG_ENABLE, enable_reg_msk, enable_reg);
-> > +}  
-> 
-> ...
-> 
-> > +	str = "iq";
-> > +	device_property_read_string(&spi->dev, "adi,input-mode", &str);
-> > +
-> > +	if (!strcmp(str, "iq"))
-> > +		st->input_mode = ADMV1014_IQ_MODE;
-> > +	else if (!strcmp(str, "if"))
-> > +		st->input_mode = ADMV1014_IF_MODE;
-> > +	else
-> > +		return -EINVAL;  
-> 
-> Please, put the array of strings near to the enums and use match-string here.
-> Something like:
-> 
-> static const char const *mode_names = { "iq", "if" };
-> 
-> 	ret = device_property_read_string(&spi->dev, "adi,input-mode", &str);
-> 	if (ret)
-> 		input_mode = ...
-> 	else {
-> 		ret = match_string();
-> 		if (ret < 0)
-> 			return ret;
-> 		input_mode = ret;
-> 	}
-> 
-> ...
-> 
-> > +	str = "diff";
-> > +	device_property_read_string(&spi->dev, "adi,quad-se-mode", &str);
-> > +
-> > +	if (!strcmp(str, "diff"))
-> > +		st->quad_se_mode = ADMV1014_SE_MODE_DIFF;
-> > +	else if (!strcmp(str, "se-pos"))
-> > +		st->quad_se_mode = ADMV1014_SE_MODE_POS;
-> > +	else if (!strcmp(str, "se-neg"))
-> > +		st->quad_se_mode = ADMV1014_SE_MODE_NEG;
-> > +	else
-> > +		return -EINVAL;  
-> 
-> Ditto.
-> 
-> While in the above case no win in LOCs, here already a little win.
-> The most important not that, the possibility to extend without changing the
-> code much.
-> 
-> ...
-> 
-> > +	st->clkin = devm_clk_get(&spi->dev, "lo_in");  
-> 
-> Perhaps _optional?
-> 
-> > +	if (IS_ERR(st->clkin))
-> > +		return dev_err_probe(&spi->dev, PTR_ERR(st->clkin),
-> > +				     "failed to get the LO input clock\n");  
+> > >  		}  
 > 
 

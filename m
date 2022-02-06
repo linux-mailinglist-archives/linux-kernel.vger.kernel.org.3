@@ -2,73 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BABD84AAD7F
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 03:22:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FF194AAD7B
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 03:18:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381613AbiBFCWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 21:22:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43904 "EHLO
+        id S1381584AbiBFCSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 21:18:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348364AbiBFCWN (ORCPT
+        with ESMTP id S1348364AbiBFCSI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 21:22:13 -0500
-X-Greylist: delayed 4335 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 05 Feb 2022 18:22:13 PST
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33458C043186
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Feb 2022 18:22:13 -0800 (PST)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21609rth009008;
-        Sun, 6 Feb 2022 01:09:50 GMT
+        Sat, 5 Feb 2022 21:18:08 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC7CC043186
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Feb 2022 18:18:07 -0800 (PST)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 215JXofV007408;
+        Sun, 6 Feb 2022 01:09:51 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : content-transfer-encoding : content-type :
- mime-version; s=corp-2021-07-09;
- bh=JsM8+KDYdKDwAcfCrAbFfQ6CIN/j4iXJjj/4+A2eas0=;
- b=NCgT0Jyn0hs2dJj7Yk8HOCImPEHl+QvBFmt2igWClRthIHz1DjV+57P01vbPbc3ZeeZK
- Nj5P1SeXgZcaFJk8owWy1QYabP8mQbn54r9MRCCo2C5CEotKKhv9+ggFXuz+lToQi5Ps
- 5i++kh7/ylueacjkPXamcLhNPjkpHNEOXJOdYzGiA0ckg9hGX1/zTBA2XqbXe6T4Vaq+
- SYiAniW2tqmHi9bCJ1LGF8qzG7atVrPddGDEpqAC3m1RlEMsqMolpaAygXF1rU5yEboo
- UGsV4Fh+5NSajhTsQw+OhqwxUNSZ+oAYz/b93PGFx/hODHEXkIxHJf5ob+bcHxEKKIQ7 3g== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3e1fu2j2kh-1
+ subject : date : message-id : in-reply-to : references :
+ content-transfer-encoding : content-type : mime-version;
+ s=corp-2021-07-09; bh=lrqpq6IoCWrPdDLDJOV+NUYMYprJ4k5bUqgJNg/bM4g=;
+ b=QxJmuDnIg6ZqenDPuSMtc1qJdav7zMDB4DyuDRn9tIXW74rQP5ZUfUlDTlBpWbBGS4CB
+ oQHP5AthhT3hKYSaz4n6XwSRR2eIOjtbB+Iupn7XVKu/Nmr0OWInQanQzbxj0QIH65Ki
+ VO6qhU4Btylj6kYZAOMuGc4W2vlTlLFPdjLkgkbmYfH0e+vSLOnViX7ZV3+de+Cjel4a
+ OXaEM/xKg5vWVU/ol4x9xNHzyAsHRehC67gs9DiSgt8A//e2dYIN25EAzuvr7nNpYued
+ UjgFWGRHfj/ms+79ZLY4qWpq1+Hd2TCxkTw5VoXVXuHkaEJJMmlIN5YAAir/IRYrbmzN 1A== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3e1gussy1n-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Sun, 06 Feb 2022 01:09:50 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 21615caZ015154;
-        Sun, 6 Feb 2022 01:09:49 GMT
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 21615v7o035580;
+        Sun, 6 Feb 2022 01:09:50 GMT
 Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2176.outbound.protection.outlook.com [104.47.57.176])
-        by userp3030.oracle.com with ESMTP id 3e1eburra4-1
+        by aserp3030.oracle.com with ESMTP id 3e1f9bgxjd-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 06 Feb 2022 01:09:48 +0000
+        Sun, 06 Feb 2022 01:09:50 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=B1BVOym8gLGzAxSVCiEXGvYZFFZUCiU4Q67ZvhGSa2i6qll3u8ALrXad2amyqgpYC3wb9WDT+tSy3sK9RWxNilQSKjl5uJyoxnxq1cEDYqBHCf/P6Q6agFm9y1HREwbhIrsM2eGVQnNMufw7iTa4Lq4V12xbYc5L06FjHxeGDYXZ9orkTjWVv77ZuqHCnrXQUxv24w+aGYV1g3XlfaxCOKwe1tohknIX2J165rfi/dTD2F0ENO6hcpPflz6vHB76Yp8nlmAxBxgje/Kc7r2Slm1vlTHTLVY4cYOL82smOxlwhTe7h9/hYBeTslpkqIrPpanCPaqpeGrfHQRlSDZ67A==
+ b=aajeD0kLGX7YYvt89iyNln59RQSNswJfzNdFFnDIEgfIG1+arp5YBxBUMFd7Gw9od4QLOqoHr+9vAWy5Pn3J3Vv0dFyS9qDr6T7nHJauSpQCjmrbR7WBpPS+4hY90t3+7fdZ3DHSUwUVYcAuItt93XAMaRF2OuTIMed2ox9XDc9FdyRhllV3jFO9B+CtAOeSTzjYPH7I3jSkTEex4R0ZCu3Zos5RL0m7Y7Bog6SaDWG/BiZcHYdV4OIhs4km3l5gH0CmffM0A7jzUO/GK+NnsuaJ6RC1SdANvKpLaY7259qfhwBKPFZgNlhdWkhkEsfJCIKBS9EMSWaT04LFjw4Wag==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JsM8+KDYdKDwAcfCrAbFfQ6CIN/j4iXJjj/4+A2eas0=;
- b=lw4oxQ9wDlx+yIRjdc8pagpW3wkcFrRhfLNaC0Iw+sUmblctwmoDmcQ6HLwzgFohH/8fP3cl9QGPxPrH3W/p/JxxnwTY4pBtIfwktu8s9P8drN8KqyY2hMllQhsJ1Vdw+g547oKn1oYiPziqsE4wGFEzuV2XxAHRlOxemaFGbVQedPh0/V5q+WqVGw4IDS7og+CgkTeVLLy4LPlTCr4YfKe3PlT6FA4t87xxSn18fOuDiAMC5SO+jlM1FV8vZO4mlLwLcS5+/AQ5v5Fx86qIRrbbUGuQ851K/jjND9tM2Vbt+GD+vnwl9xo5nXRn1BJro7OAJQhNDsalKRzA6Th9EQ==
+ bh=lrqpq6IoCWrPdDLDJOV+NUYMYprJ4k5bUqgJNg/bM4g=;
+ b=Bet9bz4iA4dmkYhHqcW1dO1sGUJp2MjNffRAF02j2jOLXAxZkLdm4dHLBzyWRZ+XBnsLwN8O4DS1gad5Wc6AKe5YvA1Hk8uVpfhyS+l7AH9SnextyaRngWs/5D7bz8OIR/rgH53+i0PBPvcl2hRb3I5gqWN8JXxWzbFKU7hj4Y00Qqt8sp7as23kgLon96WfdljQd3qVd4sEaDnU80aoK187CCuHxG3r1S5+t4ZJpK36o41cAz+qVO3zsdDev2P7bnM57H99E7EQeTiMaSG74njgi1/cK2drOZBmM4H4T4zDFeHrx1nOYWadrcQd01ksQEAJ5jF/2f0TtKz9P6OFyw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JsM8+KDYdKDwAcfCrAbFfQ6CIN/j4iXJjj/4+A2eas0=;
- b=uH9EhYb14ChWWlO7I8Pc4bR+AXBAs7xJ0vHEzX4eeRTAzLt45HYg/MRRXjOKEuj83Y0w1FY40Wq17q+4TUx+u8sdC3pYBk1sOvO+fuV9kS9XFn9U80yBZSg0r18VUV9UXW4clOWOlzT59cgzvnM09vJK5Vk8gic3doifOzyJlSk=
+ bh=lrqpq6IoCWrPdDLDJOV+NUYMYprJ4k5bUqgJNg/bM4g=;
+ b=qAOiYKXAC1olXLiX9wrHAcy8vu3LR1d+bLJU6+PqkJS9JLBz2CnSz4L19DTcC18Yb0DAPVMx17v26rp/lGeRdF9sGhlklYxZxyaxTCIh3rh71xAz0FB912C9wGbHakRl902/yYbd8scynK6wZ5IY22nct18FoCgbcK1KJBuB5Nc=
 Received: from CO1PR10MB4468.namprd10.prod.outlook.com (2603:10b6:303:6c::24)
  by MN2PR10MB4079.namprd10.prod.outlook.com (2603:10b6:208:1b9::12) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Sun, 6 Feb
- 2022 01:09:46 +0000
+ 2022 01:09:48 +0000
 Received: from CO1PR10MB4468.namprd10.prod.outlook.com
  ([fe80::a5d1:ed4:5ab6:e9b1]) by CO1PR10MB4468.namprd10.prod.outlook.com
  ([fe80::a5d1:ed4:5ab6:e9b1%3]) with mapi id 15.20.4951.017; Sun, 6 Feb 2022
- 01:09:46 +0000
+ 01:09:48 +0000
 From:   Imran Khan <imran.f.khan@oracle.com>
 To:     tj@kernel.org, gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH v5 0/2] kernfs: use hashed mutex and spinlock in place of global ones.
-Date:   Sun,  6 Feb 2022 12:09:23 +1100
-Message-Id: <20220206010925.1033990-1-imran.f.khan@oracle.com>
+Subject: [PATCH v5 1/2] kernfs: use hashed mutex and spinlock in place of global ones.
+Date:   Sun,  6 Feb 2022 12:09:24 +1100
+Message-Id: <20220206010925.1033990-2-imran.f.khan@oracle.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220206010925.1033990-1-imran.f.khan@oracle.com>
+References: <20220206010925.1033990-1-imran.f.khan@oracle.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-ClientProxiedBy: SYCPR01CA0019.ausprd01.prod.outlook.com
@@ -76,62 +77,62 @@ X-ClientProxiedBy: SYCPR01CA0019.ausprd01.prod.outlook.com
  (2603:10b6:303:6c::24)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 14ac61c7-056a-4b15-6430-08d9e90d5d72
+X-MS-Office365-Filtering-Correlation-Id: 897fa74a-11a0-4b58-de75-08d9e90d5e6c
 X-MS-TrafficTypeDiagnostic: MN2PR10MB4079:EE_
-X-Microsoft-Antispam-PRVS: <MN2PR10MB4079FD63A36446BDFBAEFC41B02B9@MN2PR10MB4079.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:220;
+X-Microsoft-Antispam-PRVS: <MN2PR10MB4079B0167AF05207147CD565B02B9@MN2PR10MB4079.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Te93HRhFaD5Sw2cSfqpdQoWltdE8Uag/8J/uM0VRmjgsMOa/eXsUxtH2CjBpTEuZby4HdyJcwC5cyHOZ7jbyv+nFhmFvAW8+EAGXxWX+icSdGF+cPv2RFKgDKsAuQmvZSPJG5/0oRrEOuFqZoxCcQ2Tz/yTqGzyuc/qKOD10nYdPanv8kATPcGaawFWawXwFMpRwYR4DLvR4sX8uQ/Fm1MIGIhke37D84+29eL/mLrDZkisxwvWj3N8PDTmfW/NQ/y5RzM2z6/Y0k056Bqwb0QrjMClKbV+bf17uSxc+gyE9bIs43gobv/5BhWhf1PlJUXADDqK+0iraQCAf+KwN84OcuBD9uhQTusEAGMY84B2w75aRplJxlVrOe+OJQoftvncOveVsI+EZXFoqO1JdUXunHB7wzA3ZBB5zCHbvwIDJa9RAcdQ0cB20JU0jzw3lfUctse7rKwtuUCmlkbvV3SyxB8v+wiu1MBAHZi2Kan9i0HzDf4n1t3QMi7I1Xlf54ckxpiRyarOXpo9+nLzgIg9wMam2vYFW9DATRen7yi7C7hAlvP2OeAiBJlbgSxQUVvgoYniLEFIJuDdGn87RH1M2oHiVKn1w6EMWKQFcMXMkYZEdTbw+VVchGxZDJ0s0rkpOI914ywAGHc8SEoiaFUniy06rvDFsQgPJz1f5koRlNPdKRVhAnn6LSPQejRrw3QvCPT/RC7HWmg8GDxy5Yg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4468.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(66476007)(66556008)(66946007)(6486002)(38100700002)(6506007)(86362001)(508600001)(8936002)(8676002)(4326008)(316002)(6666004)(38350700002)(52116002)(6512007)(2616005)(36756003)(5660300002)(1076003)(186003)(26005)(103116003)(2906002)(83380400001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: we8OIEdlMwtWw800myat6lr6rUVeCn5vDyfO6ZzjksEi4tO5O3diQkIkIhglsrgoo0jLV7BJcJNUocn/UfpHYvL6tFq6Ir7bIfH661SezYeJtN+xdqS4gTjwo9V+LoMd9UQ5P6HF9V+ti85UD1EPF2r+Oh3cN+Q2+4bIRR/X2YISbAwhI88UQ2JTmzhAXtgJs+kbI+2llpC38yhhJt77eA+dPUyP28PdJ8+ZJhOz1cSjQhL+YzMEoA94YMW0qWLeghmDNOjXGF/T+F6pwF/LfGqoFK/ihvCOXyI6t3ywnvOaidjiRSiv0Ksg/DN5neCzx7n55I4noK3KVJqw1f9AbQV+cpR/GUV1ADkXvPXsJHEnMeTeOtgfNBSDoADapImuWKkuZE0AGjAujYDWGCi5vqN2JBvuVsTBxQ93PQIVVsr5tKx2LCN55HW8tcJhiy0CAFlQgFCAQf8E6PqRySJYUrIO2yu2Y6xPkRn7nTbo0lWXYdfyi/FAEqsLT3Fc+aq8eH/+fhIoXhPPZTyCD1Z+4QASSSw6KnIUX08xNVbAslcAngv4d1rOfrvQMga96CbetMDvIZxY1U1C9aABwNUUYH655pZMX7P7X7amKljR7moCPK3c9SMLFpODD+zaHHnnXGcZJKI+gfBZOmgcYjPEoTfy+5SuWdOgmQ7ivy/KvlnxQr8nCQ2hn02uhvyMvXix3P7Xs35k9UXEIrRanI4WJA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4468.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(66476007)(66556008)(66946007)(6486002)(38100700002)(6506007)(86362001)(508600001)(8936002)(8676002)(4326008)(316002)(6666004)(38350700002)(52116002)(6512007)(2616005)(36756003)(5660300002)(1076003)(186003)(26005)(103116003)(2906002)(83380400001)(30864003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?b6gGjgMU08WlwyOSgHp6bA3vXe+bXOjyFZW/If4D5lKvMn1ARy1nVGz76Sfd?=
- =?us-ascii?Q?mCJ4q+mDOkFxDlzHreLpiFKPewAbF8s/79CewphYMIVSeDZymLQyUSQqU6qy?=
- =?us-ascii?Q?g4H9uldUe+PeuCuP9IuKtJkJRpZH51r4JJqPeVqQpP+YHp+aBqbERaJlEaFP?=
- =?us-ascii?Q?+G1PZCdGnGkZVSwfPM5MLYAC8VZ0SGtHatvuaCgyN8S0Ns65hgX62GCxF5cy?=
- =?us-ascii?Q?RYV/E1RESvq08AiiuL3A+RZ5DR9Cjkx4mPpSz7x9/xCR3qVc9dWlBaXVi8SG?=
- =?us-ascii?Q?vVjLkP4PgilEgJjTUx7gFTTdKbHGS9JlL4FK95lD2KkliZM1W8h2o61NSLA+?=
- =?us-ascii?Q?spNTtu5YR+eN+AytIkVjwYxBFB16XBgvW9ejUspbcZwFLWgY527srN4XIzUp?=
- =?us-ascii?Q?TIAODF5PehG2mMEKNMaTd/bLMGaAes+R5XyW6kVKTXWoBB/lP8zLbLRKycrC?=
- =?us-ascii?Q?CT9cD/GIvBxuC346gZ1u9t6DxvcZzr3Xkkbdpmxl/12XYeRPFoTVEJsQuR3y?=
- =?us-ascii?Q?cc/SjOWFg7+iEgPV1olRReKVtyvN09JEdyPbWzazuQbZtbK7WjENqYsrZm5j?=
- =?us-ascii?Q?iZ2WZC5XiO58mcbgdLS8qZkCDWunH5Lwg8eUx/WJMiPt+KqORS9ntJeFtZLh?=
- =?us-ascii?Q?QPkr+RWoabP6lguIrvbcwJTX4to3nJRmccDvfQVmc/GcXQTWE23WXuJXl6C/?=
- =?us-ascii?Q?gvw1K6MF5U3PC3i8vI1fVRycvzJLJcP9usvi1Ae8S0Bj2yWC96E2AoYDu2yH?=
- =?us-ascii?Q?7lezpW4yLxVvRjm1kOmgG7ysGmfdc/cHIkiIj+RDjGZnNuBnyEUPIAvByvfI?=
- =?us-ascii?Q?8GU8TwzU5PfJz6vHxJtlJOHPVJ+DTDFCJjVyeDMj5AckokkhW8a2wowzt/pj?=
- =?us-ascii?Q?WpeZrupytBUTflVhDwMCR6PdWsvw772Fy/x1aQ6h9hUhpJhlK8NlT6wQtJhn?=
- =?us-ascii?Q?2UjKynyiDZIa8NCB+VhLcE9zQy28HYOD47c9XOH/DJ7OatEXazIA4e9t0cK7?=
- =?us-ascii?Q?lEJQdiiJ5FU1oRlp7/PVysBChxs2PDOAFxmZAQLQVXiQhuL6k85SbnK+pTcP?=
- =?us-ascii?Q?oqSGpjCKzDGpgqy9wkFaktVCtZbg0ING5MfM6e9hAv892kBf8ABxqP/pKuVg?=
- =?us-ascii?Q?4eN8kGcXelYLGYR8756P/tyMBkaE0yWP/7dBddF9DPWHfahuPe4DCmETravR?=
- =?us-ascii?Q?L8PRIMQ0y+WJjg8kz5g3JVL3Kjm2wLWPjGR5ALFNK7OiwEeB0X23sf2T5Mt2?=
- =?us-ascii?Q?v2TagzawoCw1N2cqlshQrKSQZX9MHRZxGVBYxwA+v2wueD1gIkMbukipPzKI?=
- =?us-ascii?Q?Zn+4jp23P+vW3S1uSqglSazy7jSIXZwdOmgvtyqiojyHrRI0T8fvyV7xYPcQ?=
- =?us-ascii?Q?ArMxTVHsfS7N7ue2qEswIMr0+hdE8HtQpthy5r83LEUM1F3eTM/4owAUJZuj?=
- =?us-ascii?Q?JZGIzjheb0Uso2BbOoY8GLZ3RXZxAc8CKXd78YFKcicE75/N1zRpBK24Gg8d?=
- =?us-ascii?Q?n11OT4nTzuLmuBez6L9RiSipamIcANmvF0JtFL0t87NYKQEeKQnWm7FoaC62?=
- =?us-ascii?Q?06Ptr5c6kmBppyQCRn6NwVAd0vUDV28E0YkODecEMF9oPtinnMV0Co/ZEfO+?=
- =?us-ascii?Q?MmlOpnDj8J375VIWjAzoTv8=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?YSHW7/akOSQom3ForVBarYQ5qhU8d/CLIvUNSd86V3FJkS0vMfQwMLxS2kZp?=
+ =?us-ascii?Q?XdiS0A6/UR8MFb4ATjDwcVNQnoISztOiosSNjFI17UwDLTiaMYfE0HlVOw6i?=
+ =?us-ascii?Q?VTtus28IDwlDzVb0AMQJgF5t+e+314bullebmLhASUDrT8PDwdyMeX5xudfX?=
+ =?us-ascii?Q?Rqhk8YkQY8xJJk3KKqaXnvomFc52mmDn0w2S8Uxy++v2es1EPQ+g0jqhUHTc?=
+ =?us-ascii?Q?fvE5fJ3f0QbxxNe3/fbSrZRKM23/ErucGMjhd1sBnTu90HfgD51OcPAVYOZ4?=
+ =?us-ascii?Q?sXrX/7/tB9n52uHHRCXUd4QqQDK5IBCv9E+mbcGxVCelXjzQjc2gLgSLS0lz?=
+ =?us-ascii?Q?1bcSFzgI1Ob0aIdCmnlmJ21ZyA+L+pzeURTQAbvqal/x3ktk1gT11dNebNef?=
+ =?us-ascii?Q?EyLlmFxTID6fGBmZCKsb/c46D48aKyjHqwlVF9cY0Up3l51U1xaydu1rGYdV?=
+ =?us-ascii?Q?kCxn1T3gp1PDgpbERBkIe4f2VzXVm7XMEfSzYnh0qCT2H6S4u4UNu1xq3WBn?=
+ =?us-ascii?Q?bEjREfTQJ2n95KJYPzoEXx6JKrUP/ktFFZS6b4ydgugDuJp+Uwsxsz36OUDI?=
+ =?us-ascii?Q?ABl29eDenUakSOgBvGl/4dFknPo2NFYgzJqcMP+pInp5dDiW3yA1dxu3E1BJ?=
+ =?us-ascii?Q?XGIaA63tZxT4JG+5gsztVdQAEj0dpPxy8ZtTR4rhsLw+489yWcHo0eWdPMfQ?=
+ =?us-ascii?Q?Ktb11UxJzoIcmYIAthxisyOxeTb3AWJuMB3cuYwpd5biYYK5aYlOK0d80J61?=
+ =?us-ascii?Q?ceBi3GH+eHIqgfhp0LXqXQNUexBcUfMeGRRH3SBPpFB6v66J2czv5tl1PZOn?=
+ =?us-ascii?Q?IlTez0qdR4qHA0u2n3OYb9Pi25YbIx4kHjYzxiXywQSe7Mdv0TGb+rFJPtQM?=
+ =?us-ascii?Q?KpWOaiw0HVulbaVgL+yevG/eUYEW3MtIxnIx5pclCifNQvkehfC5vEOsIn5N?=
+ =?us-ascii?Q?36yB/zL0C0c3Y9Kd4nRnhQ2q2jKsgbfLvMVeubes/kCO9iHgz3WTttvYAiTr?=
+ =?us-ascii?Q?XeQyM1EwdIF64F37Btpwf75NbxKHmMIBEeH9/vhh8d6be8mQHt/8TMpHO85W?=
+ =?us-ascii?Q?vK9iPBcCwyf/JQFhXybeZ7dyRlTsZQ0+tXyCKrEM0rPy7m5tdPBCYVrqx+4n?=
+ =?us-ascii?Q?Zft40C0SLplh+r3nlY+udUOWM7TJbkFAeP+3COhUsFT40pvb6m8T7PgygNeP?=
+ =?us-ascii?Q?GpymsGFj0cUTgXQp/RpwW1mIoBFOTwsOWNHTARueqKuCosecye1IhS4xJqlG?=
+ =?us-ascii?Q?1x+sqDWoOP1LrifbjE9GV1MN+e0lPmEkVT8PsdtI2Ovkh7IzDO9fdfCBi0lW?=
+ =?us-ascii?Q?wPbnABMKFDNEuLwF1EqYA1SK5rBg/Zik7JgxrkiE+B9kkq/qZRrUWGcVI03Q?=
+ =?us-ascii?Q?ZNqEdEqdXGjA0MXC8DRzhunXxIWkDfC/GrqSoPUdbcYQ7nggKgHB+2pje3bf?=
+ =?us-ascii?Q?Pl9SjktjMEfQgIpOQRJsmnBXHkEXHmAOce4OFeH/LendN7Az1Hy14Vz+s7gU?=
+ =?us-ascii?Q?3a6jKY3BBqjI7XOL7wYSgo6oyJ2bTBz8rDJtR3GqwNSWWOz7e2/BoSW/AZhA?=
+ =?us-ascii?Q?5ksMyyTLMxB1JGX5p5MI7K+G7vkLRS4DPrbC4whrrcEYDMLxVktQA2jRarSw?=
+ =?us-ascii?Q?lqJFidBc0GNJ3jkXm7znN5U=3D?=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 14ac61c7-056a-4b15-6430-08d9e90d5d72
+X-MS-Exchange-CrossTenant-Network-Message-Id: 897fa74a-11a0-4b58-de75-08d9e90d5e6c
 X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4468.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Feb 2022 01:09:46.3291
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Feb 2022 01:09:48.2049
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: a+7XptdIyXUcMrIlkD4327TpuS0Tvf5nPUFkr0VMEJcKjq7lgReAs9DWGd81blnEBPeftV5fXToSacZPr+f2Lg==
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1QGPgugeHAP/O2OHi03Shs9b8/VFETjHpgNoiiw1OKGLtMVM97iVwh+12o8wdHcfGIVJnYjoAPfP9rssL8XCsg==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR10MB4079
 X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10249 signatures=673430
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 suspectscore=0
- mlxlogscore=612 mlxscore=0 adultscore=0 malwarescore=0 spamscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 adultscore=0
+ mlxlogscore=999 suspectscore=0 mlxscore=0 phishscore=0 malwarescore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
  definitions=main-2202060005
-X-Proofpoint-ORIG-GUID: 7uJXEOlSUI0X_RmQ5jWxYL2nKcouKZTi
-X-Proofpoint-GUID: 7uJXEOlSUI0X_RmQ5jWxYL2nKcouKZTi
+X-Proofpoint-ORIG-GUID: ptD0e4r1Iu6oFTtgAHrVsLqIooq6JpiD
+X-Proofpoint-GUID: ptD0e4r1Iu6oFTtgAHrVsLqIooq6JpiD
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -142,234 +143,354 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reduce contention around global locks used in kernfs.
+Right now a global mutex (kernfs_open_file_mutex) protects list of
+kernfs_open_file instances corresponding to a sysfs attribute. So even
+if different tasks are opening or closing different sysfs files they
+can contend on osq_lock of this mutex. The contention is more apparent
+in large scale systems with few hundred CPUs where most of the CPUs have
+running tasks that are opening, accessing or closing sysfs files at any
+point of time. Since each list of kernfs_open_file belongs to a
+kernfs_open_node instance which in turn corresponds to one kernfs_node,
+moving global kernfs_open_file_mutex within kernfs_node would sound like
+fixing this contention but it has unwanted side effect of bloating up
+kernfs_node size and hence kobject memory usage.
 
-The current kernfs design makes use of 3 global locks to synchronize
-various operations. There are a few other global locks as well but
-they are used for specific cases and hence don't cause severe contention.
+Also since kernfs_node->attr.open points to kernfs_open_node instance
+corresponding to the kernfs_node, we can use a kernfs_node specific
+spinlock in place of current global spinlock i.e kernfs_open_node_lock.
+But this approach will increase kobject memory usage as well.
 
-The above mentioned 3 main global locks used in kernfs are:
+Use per-fs hashed locks in place of above mentioned global locks to reduce
+kernfs access contention without increasing kobject memory usage.
 
-1. A global mutex, kernfs_open_file_mutex, to protect the list of
-kernfs_open_file instances correspondng to a sysfs attribute.
+Signed-off-by: Imran Khan <imran.f.khan@oracle.com>
+---
+ fs/kernfs/dir.c             |  5 +++
+ fs/kernfs/file.c            | 61 ++++++++++++++++---------------------
+ fs/kernfs/kernfs-internal.h | 51 +++++++++++++++++++++++++++++++
+ include/linux/kernfs.h      | 39 ++++++++++++++++++++++++
+ 4 files changed, 122 insertions(+), 34 deletions(-)
 
-2. A global spinlock, kernfs_open_node_lock, to protect
-kernfs_node->attr.open which points to kernfs_open_node instance
-corresponding to a kernfs_node.
-
-3. A global per-fs rw semaphore, root->kernfs_rwsem, to synchronize most
-of the other operations like adding, removing, renaming etc. of a file
-or directory.
-
-Since these locks are global, they can cause contention when multiple
-(for example few hundred) applications try to access sysfs (or other kernfs
-based file system) files in parallel, even if the applications are
-accessing different and unrelated files.
-
-For example on a system with 384 cores, if I run 200 instances of an
-application which is mostly executing the following loop:
-
-  for (int loop = 0; loop <100 ; loop++)
-  {
-    for (int port_num = 1; port_num < 2; port_num++)
-    {
-      for (int gid_index = 0; gid_index < 254; gid_index++ )
-      {
-        char ret_buf[64], ret_buf_lo[64];
-        char gid_file_path[1024];
-
-        int      ret_len;
-        int      ret_fd;
-        ssize_t  ret_rd;
-
-        ub4  i, saved_errno;
-
-        memset(ret_buf, 0, sizeof(ret_buf));
-        memset(gid_file_path, 0, sizeof(gid_file_path));
-
-        ret_len = snprintf(gid_file_path, sizeof(gid_file_path),
-                           "/sys/class/infiniband/%s/ports/%d/gids/%d",
-                           dev_name,
-                           port_num,
-                           gid_index);
-
-        ret_fd = open(gid_file_path, O_RDONLY | O_CLOEXEC);
-        if (ret_fd < 0)
-        {
-          printf("Failed to open %s\n", gid_file_path);
-          continue;
-        }
-
-        /* Read the GID */
-        ret_rd = read(ret_fd, ret_buf, 40);
-
-        if (ret_rd == -1)
-        {
-          printf("Failed to read from file %s, errno: %u\n",
-                 gid_file_path, saved_errno);
-
-          continue;
-        }
-
-        close(ret_fd);
-      }
-    }
-
-I can see contention around above mentioned locks as follows:
-
--   54.07%    53.60%  showgids         [kernel.kallsyms]       [k] osq_lock
-   - 53.60% __libc_start_main
-      - 32.29% __GI___libc_open
-           entry_SYSCALL_64_after_hwframe
-           do_syscall_64
-           sys_open
-           do_sys_open
-           do_filp_open
-           path_openat
-           vfs_open
-           do_dentry_open
-           kernfs_fop_open
-           mutex_lock
-         - __mutex_lock_slowpath
-            - 32.23% __mutex_lock.isra.5
-                 osq_lock
-      - 21.31% __GI___libc_close
-           entry_SYSCALL_64_after_hwframe
-           do_syscall_64
-           exit_to_usermode_loop
-           task_work_run
-           ____fput
-           __fput
-           kernfs_fop_release
-           kernfs_put_open_node.isra.8
-           mutex_lock
-         - __mutex_lock_slowpath
-            - 21.28% __mutex_lock.isra.5
-                 osq_lock
-
--   10.49%    10.39%  showgids         [kernel.kallsyms]      [k] down_read
-     10.39% __libc_start_main
-        __GI___libc_open
-        entry_SYSCALL_64_after_hwframe
-        do_syscall_64
-        sys_open
-        do_sys_open
-        do_filp_open
-      - path_openat
-         - 9.72% link_path_walk
-            - 5.21% inode_permission
-               - __inode_permission
-                  - 5.21% kernfs_iop_permission
-                       down_read
-            - 4.08% walk_component
-                 lookup_fast
-               - d_revalidate.part.24
-                  - 4.08% kernfs_dop_revalidate
-
--    7.48%     7.41%  showgids         [kernel.kallsyms]       [k] up_read
-     7.41% __libc_start_main
-        __GI___libc_open
-        entry_SYSCALL_64_after_hwframe
-        do_syscall_64
-        sys_open
-        do_sys_open
-        do_filp_open
-      - path_openat
-         - 7.01% link_path_walk
-            - 4.12% inode_permission
-               - __inode_permission
-                  - 4.12% kernfs_iop_permission
-                       up_read
-            - 2.61% walk_component
-                 lookup_fast
-               - d_revalidate.part.24
-                  - 2.61% kernfs_dop_revalidate
-
-Moreover this run of 200 application isntances takes 32-34 secs. to
-complete.                                                     
-
-This patch set is reducing the above mentioned contention by replacing
-these global locks with hashed locks. 
-
-For example with the patched kernel and on the same test setup, we no
-longer see contention around osq_lock (i.e kernfs_open_file_mutex) and also
-contention around per-fs kernfs_rwsem has reduced significantly as well.
-This can be seen in the following perf snippet:
-
--    1.66%     1.65%  showgids         [kernel.kallsyms]      [k] down_read
-     1.65% __libc_start_main
-        __GI___libc_open
-        entry_SYSCALL_64_after_hwframe
-        do_syscall_64
-        sys_open
-        do_sys_open
-        do_filp_open
-      - path_openat
-         - 1.62% link_path_walk
-            - 0.98% inode_permission
-               - __inode_permission
-                  + 0.98% kernfs_iop_permission
-            - 0.52% walk_component
-                 lookup_fast
-               - d_revalidate.part.24
-                  - 0.52% kernfs_dop_revalidate
-
--    1.12%     1.11%  showgids         [kernel.kallsyms]      [k] up_read
-     1.11% __libc_start_main
-        __GI___libc_open
-        entry_SYSCALL_64_after_hwframe
-        do_syscall_64
-        sys_open
-        do_sys_open
-        do_filp_open
-      - path_openat
-         - 1.11% link_path_walk
-            - 0.69% inode_permission
-               - __inode_permission
-                  - 0.69% kernfs_iop_permission
-                       up_read
-
-Moreover the test execution time has reduced from 32-34 secs to 18-19 secs.
-
-The patches of this patchset introduce following chanages:
-
-PATCH-1: Make global kernfs_open_file_mutex and kernfs_open_node_lock
-	 per-fs hashed locks, where address of a kernfs_node acts as hash key.
-	 This results in kernfs_node objects, whose address give the
-	 different hash value, using different kernfs_open_file_mutex
-	 and kernfs_open_node_lock rather than all kernfs_node objects
-	 using the same kernfs_open_file_mutex and kernfs_open_node_lock
-	 as was the case earlier.
-
-PATCH-2: Replace per-fs single rw semaphore with per-fs hashed semaphore,
-	 where address of a kernfs_node acts as hash key to reduce contention
-	 around single per-fs rw semaphore.
-
-------------------------------------------------------------------
-Changes since v4:
- - Removed compilation warnings reported by the 0-day bot.
-
-Changes since v3:
- - Make open_file_mutex and open_node_lock per-fs.
- - Replace per-fs rwsem with per-fs hashed rwsem.
-   (Suggested by Tejun Heo <tj@kernel.org>)
-
-
-Imran Khan (2):
-  kernfs: use hashed mutex and spinlock in place of global ones.
-  kernfs: Replace per-fs global rwsem with per-fs hashed rwsem.
-
- fs/kernfs/dir.c             | 281 +++++++++++++++++++++++++-----------
- fs/kernfs/file.c            |  67 ++++-----
- fs/kernfs/inode.c           |  22 +--
- fs/kernfs/kernfs-internal.h | 163 +++++++++++++++++++++
- fs/kernfs/mount.c           |  13 +-
- fs/kernfs/symlink.c         |   5 +-
- include/linux/kernfs.h      |  44 +++++-
- 7 files changed, 445 insertions(+), 150 deletions(-)
-
-
-base-commit: a70bf4a85b43cb952bd39dd948b103b1b3eb2cf8
+diff --git a/fs/kernfs/dir.c b/fs/kernfs/dir.c
+index e6d9772ddb4ca..d26fb3bffda92 100644
+--- a/fs/kernfs/dir.c
++++ b/fs/kernfs/dir.c
+@@ -909,6 +909,7 @@ struct kernfs_root *kernfs_create_root(struct kernfs_syscall_ops *scops,
+ {
+ 	struct kernfs_root *root;
+ 	struct kernfs_node *kn;
++	int lock_count;
+ 
+ 	root = kzalloc(sizeof(*root), GFP_KERNEL);
+ 	if (!root)
+@@ -916,6 +917,10 @@ struct kernfs_root *kernfs_create_root(struct kernfs_syscall_ops *scops,
+ 
+ 	idr_init(&root->ino_idr);
+ 	init_rwsem(&root->kernfs_rwsem);
++	for (lock_count = 0; lock_count < NR_KERNFS_LOCKS; lock_count++) {
++		spin_lock_init(&root->open_node_locks[lock_count].lock);
++		mutex_init(&root->open_file_mutex[lock_count].lock);
++	}
+ 	INIT_LIST_HEAD(&root->supers);
+ 
+ 	/*
+diff --git a/fs/kernfs/file.c b/fs/kernfs/file.c
+index 9414a7a60a9f4..018d038b72fdd 100644
+--- a/fs/kernfs/file.c
++++ b/fs/kernfs/file.c
+@@ -18,20 +18,6 @@
+ 
+ #include "kernfs-internal.h"
+ 
+-/*
+- * There's one kernfs_open_file for each open file and one kernfs_open_node
+- * for each kernfs_node with one or more open files.
+- *
+- * kernfs_node->attr.open points to kernfs_open_node.  attr.open is
+- * protected by kernfs_open_node_lock.
+- *
+- * filp->private_data points to seq_file whose ->private points to
+- * kernfs_open_file.  kernfs_open_files are chained at
+- * kernfs_open_node->files, which is protected by kernfs_open_file_mutex.
+- */
+-static DEFINE_SPINLOCK(kernfs_open_node_lock);
+-static DEFINE_MUTEX(kernfs_open_file_mutex);
+-
+ struct kernfs_open_node {
+ 	atomic_t		refcnt;
+ 	atomic_t		event;
+@@ -524,10 +510,11 @@ static int kernfs_get_open_node(struct kernfs_node *kn,
+ 				struct kernfs_open_file *of)
+ {
+ 	struct kernfs_open_node *on, *new_on = NULL;
+-
++	struct mutex *mutex = NULL;
++	spinlock_t *lock = NULL;
+  retry:
+-	mutex_lock(&kernfs_open_file_mutex);
+-	spin_lock_irq(&kernfs_open_node_lock);
++	mutex = kernfs_open_file_mutex_lock(kn);
++	lock = kernfs_open_node_lock(kn);
+ 
+ 	if (!kn->attr.open && new_on) {
+ 		kn->attr.open = new_on;
+@@ -540,8 +527,8 @@ static int kernfs_get_open_node(struct kernfs_node *kn,
+ 		list_add_tail(&of->list, &on->files);
+ 	}
+ 
+-	spin_unlock_irq(&kernfs_open_node_lock);
+-	mutex_unlock(&kernfs_open_file_mutex);
++	spin_unlock_irq(lock);
++	mutex_unlock(mutex);
+ 
+ 	if (on) {
+ 		kfree(new_on);
+@@ -575,10 +562,14 @@ static void kernfs_put_open_node(struct kernfs_node *kn,
+ 				 struct kernfs_open_file *of)
+ {
+ 	struct kernfs_open_node *on = kn->attr.open;
++	struct mutex *mutex = NULL;
++	spinlock_t *lock = NULL;
+ 	unsigned long flags;
+ 
+-	mutex_lock(&kernfs_open_file_mutex);
+-	spin_lock_irqsave(&kernfs_open_node_lock, flags);
++	mutex = kernfs_open_file_mutex_lock(kn);
++	lock = kernfs_open_node_lock_ptr(kn);
++
++	spin_lock_irqsave(lock, flags);
+ 
+ 	if (of)
+ 		list_del(&of->list);
+@@ -588,8 +579,8 @@ static void kernfs_put_open_node(struct kernfs_node *kn,
+ 	else
+ 		on = NULL;
+ 
+-	spin_unlock_irqrestore(&kernfs_open_node_lock, flags);
+-	mutex_unlock(&kernfs_open_file_mutex);
++	spin_unlock_irqrestore(lock, flags);
++	mutex_unlock(mutex);
+ 
+ 	kfree(on);
+ }
+@@ -729,11 +720,11 @@ static void kernfs_release_file(struct kernfs_node *kn,
+ 	/*
+ 	 * @of is guaranteed to have no other file operations in flight and
+ 	 * we just want to synchronize release and drain paths.
+-	 * @kernfs_open_file_mutex is enough.  @of->mutex can't be used
++	 * @open_file_mutex is enough.  @of->mutex can't be used
+ 	 * here because drain path may be called from places which can
+ 	 * cause circular dependency.
+ 	 */
+-	lockdep_assert_held(&kernfs_open_file_mutex);
++	lockdep_assert_held(kernfs_open_file_mutex_ptr(kn));
+ 
+ 	if (!of->released) {
+ 		/*
+@@ -750,11 +741,12 @@ static int kernfs_fop_release(struct inode *inode, struct file *filp)
+ {
+ 	struct kernfs_node *kn = inode->i_private;
+ 	struct kernfs_open_file *of = kernfs_of(filp);
++	struct mutex *lock = NULL;
+ 
+ 	if (kn->flags & KERNFS_HAS_RELEASE) {
+-		mutex_lock(&kernfs_open_file_mutex);
++		lock = kernfs_open_file_mutex_lock(kn);
+ 		kernfs_release_file(kn, of);
+-		mutex_unlock(&kernfs_open_file_mutex);
++		mutex_unlock(lock);
+ 	}
+ 
+ 	kernfs_put_open_node(kn, of);
+@@ -769,19 +761,21 @@ void kernfs_drain_open_files(struct kernfs_node *kn)
+ {
+ 	struct kernfs_open_node *on;
+ 	struct kernfs_open_file *of;
++	struct mutex *mutex = NULL;
++	spinlock_t *lock = NULL;
+ 
+ 	if (!(kn->flags & (KERNFS_HAS_MMAP | KERNFS_HAS_RELEASE)))
+ 		return;
+ 
+-	spin_lock_irq(&kernfs_open_node_lock);
++	lock = kernfs_open_node_lock(kn);
+ 	on = kn->attr.open;
+ 	if (on)
+ 		atomic_inc(&on->refcnt);
+-	spin_unlock_irq(&kernfs_open_node_lock);
++	spin_unlock_irq(lock);
+ 	if (!on)
+ 		return;
+ 
+-	mutex_lock(&kernfs_open_file_mutex);
++	mutex = kernfs_open_file_mutex_lock(kn);
+ 
+ 	list_for_each_entry(of, &on->files, list) {
+ 		struct inode *inode = file_inode(of->file);
+@@ -793,8 +787,7 @@ void kernfs_drain_open_files(struct kernfs_node *kn)
+ 			kernfs_release_file(kn, of);
+ 	}
+ 
+-	mutex_unlock(&kernfs_open_file_mutex);
+-
++	mutex_unlock(mutex);
+ 	kernfs_put_open_node(kn, NULL);
+ }
+ 
+@@ -922,13 +915,13 @@ void kernfs_notify(struct kernfs_node *kn)
+ 		return;
+ 
+ 	/* kick poll immediately */
+-	spin_lock_irqsave(&kernfs_open_node_lock, flags);
++	spin_lock_irqsave(kernfs_open_node_lock_ptr(kn), flags);
+ 	on = kn->attr.open;
+ 	if (on) {
+ 		atomic_inc(&on->event);
+ 		wake_up_interruptible(&on->poll);
+ 	}
+-	spin_unlock_irqrestore(&kernfs_open_node_lock, flags);
++	spin_unlock_irqrestore(kernfs_open_node_lock_ptr(kn), flags);
+ 
+ 	/* schedule work to kick fsnotify */
+ 	spin_lock_irqsave(&kernfs_notify_lock, flags);
+diff --git a/fs/kernfs/kernfs-internal.h b/fs/kernfs/kernfs-internal.h
+index f9cc912c31e1b..cc49a6cd94154 100644
+--- a/fs/kernfs/kernfs-internal.h
++++ b/fs/kernfs/kernfs-internal.h
+@@ -31,6 +31,7 @@ struct kernfs_iattrs {
+ 	atomic_t		user_xattr_size;
+ };
+ 
++
+ /* +1 to avoid triggering overflow warning when negating it */
+ #define KN_DEACTIVATED_BIAS		(INT_MIN + 1)
+ 
+@@ -147,4 +148,54 @@ void kernfs_drain_open_files(struct kernfs_node *kn);
+  */
+ extern const struct inode_operations kernfs_symlink_iops;
+ 
++static inline spinlock_t *kernfs_open_node_lock_ptr(struct kernfs_node *kn)
++{
++	struct kernfs_root *root;
++	int idx = hash_ptr(kn, NR_KERNFS_LOCK_BITS);
++
++	root = kernfs_root(kn);
++
++	return &root->open_node_locks[idx].lock;
++}
++
++static inline spinlock_t *kernfs_open_node_lock(struct kernfs_node *kn)
++{
++	struct kernfs_root *root;
++	spinlock_t *lock;
++	int idx = hash_ptr(kn, NR_KERNFS_LOCK_BITS);
++
++	root = kernfs_root(kn);
++
++	lock = &root->open_node_locks[idx].lock;
++
++	spin_lock_irq(lock);
++
++	return lock;
++}
++
++static inline struct mutex *kernfs_open_file_mutex_ptr(struct kernfs_node *kn)
++{
++	struct kernfs_root *root;
++	int idx = hash_ptr(kn, NR_KERNFS_LOCK_BITS);
++
++	root = kernfs_root(kn);
++
++	return &root->open_file_mutex[idx].lock;
++}
++
++static inline struct mutex *kernfs_open_file_mutex_lock(struct kernfs_node *kn)
++{
++	struct kernfs_root *root;
++	struct mutex *lock;
++	int idx = hash_ptr(kn, NR_KERNFS_LOCK_BITS);
++
++	root = kernfs_root(kn);
++
++	lock = &root->open_file_mutex[idx].lock;
++
++	mutex_lock(lock);
++
++	return lock;
++}
++
+ #endif	/* __KERNFS_INTERNAL_H */
+diff --git a/include/linux/kernfs.h b/include/linux/kernfs.h
+index 861c4f0f8a29f..5bf9f02ce9dce 100644
+--- a/include/linux/kernfs.h
++++ b/include/linux/kernfs.h
+@@ -18,6 +18,8 @@
+ #include <linux/uidgid.h>
+ #include <linux/wait.h>
+ #include <linux/rwsem.h>
++#include <linux/spinlock.h>
++#include <linux/cache.h>
+ 
+ struct file;
+ struct dentry;
+@@ -34,6 +36,40 @@ struct kernfs_fs_context;
+ struct kernfs_open_node;
+ struct kernfs_iattrs;
+ 
++/*
++ * NR_KERNFS_LOCK_BITS determines size (NR_KERNFS_LOCKS) of hash
++ * table of locks.
++ * Having a small hash table would impact scalability, since
++ * more and more kernfs_node objects will end up using same lock
++ * and having a very large hash table would waste memory.
++ *
++ * At the moment size of hash table of locks is being set based on
++ * the number of CPUs as follows:
++ *
++ * NR_CPU      NR_KERNFS_LOCK_BITS      NR_KERNFS_LOCKS
++ *   1                  1                       2
++ *  2-3                 2                       4
++ *  4-7                 4                       16
++ *  8-15                6                       64
++ *  16-31               8                       256
++ *  32 and more         10                      1024
++ */
++#ifdef CONFIG_SMP
++#define NR_KERNFS_LOCK_BITS (2 * (ilog2(NR_CPUS < 32 ? NR_CPUS : 32)))
++#else
++#define NR_KERNFS_LOCK_BITS     1
++#endif
++
++#define NR_KERNFS_LOCKS     (1 << NR_KERNFS_LOCK_BITS)
++
++struct kernfs_open_node_lock {
++	spinlock_t lock;
++} ____cacheline_aligned_in_smp;
++
++struct kernfs_open_file_mutex {
++	struct mutex lock;
++} ____cacheline_aligned_in_smp;
++
+ enum kernfs_node_type {
+ 	KERNFS_DIR		= 0x0001,
+ 	KERNFS_FILE		= 0x0002,
+@@ -90,6 +126,7 @@ enum kernfs_root_flag {
+ 	KERNFS_ROOT_SUPPORT_USER_XATTR		= 0x0008,
+ };
+ 
++
+ /* type-specific structures for kernfs_node union members */
+ struct kernfs_elem_dir {
+ 	unsigned long		subdirs;
+@@ -201,6 +238,8 @@ struct kernfs_root {
+ 
+ 	wait_queue_head_t	deactivate_waitq;
+ 	struct rw_semaphore	kernfs_rwsem;
++	struct kernfs_open_node_lock open_node_locks[NR_KERNFS_LOCKS];
++	struct kernfs_open_file_mutex open_file_mutex[NR_KERNFS_LOCKS];
+ };
+ 
+ struct kernfs_open_file {
 -- 
 2.30.2
 

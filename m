@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8EA14AB0B0
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 17:42:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B711F4AB0B3
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 17:42:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245040AbiBFQmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 11:42:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46200 "EHLO
+        id S245355AbiBFQmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 11:42:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244713AbiBFQmG (ORCPT
+        with ESMTP id S245027AbiBFQmI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 11:42:06 -0500
+        Sun, 6 Feb 2022 11:42:08 -0500
 Received: from polaris.svanheule.net (polaris.svanheule.net [IPv6:2a00:c98:2060:a004:1::200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CDDCC043186
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 08:42:05 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C00C06173B
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 08:42:07 -0800 (PST)
 Received: from terra.local.svanheule.net (unknown [IPv6:2a02:a03f:eafe:c901:f5f1:f284:117e:4f61])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: sander@svanheule.net)
-        by polaris.svanheule.net (Postfix) with ESMTPSA id 47C1F29DB9C;
-        Sun,  6 Feb 2022 17:42:02 +0100 (CET)
+        by polaris.svanheule.net (Postfix) with ESMTPSA id DA4BA29DB9D;
+        Sun,  6 Feb 2022 17:42:03 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
-        s=mail1707; t=1644165722;
+        s=mail1707; t=1644165724;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=rEQ9cqYoaVQN5SO3fVE+TSXFtNjs8xiiLcUWEVph9r0=;
-        b=ecx+fzGVW6uipzqPuruoSu7RF5e5KgRo7iuzoz3QDt2gdjB/qFdXL2oaNWMUdm95zIqxXZ
-        CTDXACoF+CJdJw+awsJgnqzJkJIfMgUDeMzIf7y4R3zVOhb6iGbnnVoTYsixcRKw+orSIa
-        oaj+2pNy7dRbKApvkHCt5f0rZEG2QbAYkJ3p/GLQviFDMltU55cL6RBFiwZQYll7xWQxh4
-        4b2x06HoBZjfisKm11gm5TASjWN4EY5EaDyNsYJmBVRJIL/I5dEeXaTEE8VMtwj+M43ytG
-        Vl/0ftx5eEQP7Mt8fPDkdanU8bJNLkJ+7zfuTucTOlNLqhuUS7bqSVg9kzFQlg==
+        bh=9A1S2X5VUAC5ZNhhTte8U2IjYOlEwZr++dBF3T1yWEs=;
+        b=7VwKFJePvupxrxp2rUh3/sAQnTY66WYTlIDu5EO5/tP3a99czAg4V7oaZugilmZ/U0stBb
+        NdAZqFjBUMpKKmPe2KZf5HKyPS5FpF9jhuRu9hJOp9qG+Ln67gr1jrOZbhFAObBc0wApam
+        wFo54hMTObC4wiUFT/dYlZ/C/Dt0jvbnXBClGFXB2msCu3Y+KV6ATg51L6HgfzEY3wv5WE
+        GRZ7vphH/Y75futOFi1fJMpt/0NeIJVwkRxNeb3RzwF7vqdeW2iv77K5Pp0JXw6b2OXHPb
+        EImS17rPO5A7bU4AZdXrfi3HseeNdF4wGbjqBNN90aRTa1Oa8MXOrIKj9P+c6A==
 From:   Sander Vanheule <sander@svanheule.net>
 To:     Marc Zyngier <maz@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         devicetree@vger.kernel.org
@@ -42,9 +42,9 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Bert Vermeulen <bert@biot.com>,
         John Crispin <john@phrozen.org>, linux-kernel@vger.kernel.org,
         Sander Vanheule <sander@svanheule.net>
-Subject: [PATCH v4 1/3] dt-bindings: interrupt-controller: realtek,rtl-intc: require parents
-Date:   Sun,  6 Feb 2022 17:41:51 +0100
-Message-Id: <d1920b7b0b882512e628b4e4e93fa8fef1b5364a.1644165421.git.sander@svanheule.net>
+Subject: [PATCH v4 2/3] irqchip/realtek-rtl: use parent interrupts
+Date:   Sun,  6 Feb 2022 17:41:52 +0100
+Message-Id: <ad04133f2adb39fed2f6060f1460dd0446f98eed.1644165421.git.sander@svanheule.net>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1644165421.git.sander@svanheule.net>
 References: <cover.1644165421.git.sander@svanheule.net>
@@ -52,7 +52,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,153 +60,202 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The interrupt router has 32 inputs, and up to 15 outputs connected to
-the MIPS CPU's interrupts. The way these are mapped to each other is
-runtime configurable. This controller can also mask individual interrupt
-sources, and has a status register to indicate pending interrupts. This
-means the controller is not transparent, and the use of "interrupt-map"
-inappropriate. Instead, a list of parent interrupts should be specified.
+The interrupt-map property for "realtek,rtl-intc" has been deprecated in
+favor of a list of parent interrupts. Drop the open-coded parser for
+interrupt-map, and use the first parent interrupt instead. If no parent
+was provided, the driver will assume that this is the first hardware
+interrupt of the SoC's MIPS CPU.
 
-Two-part compatibles are introduced to be able to require "interrupts"
-for new devicetrees. The relevant descriptions are extended or added to
-more clearly describe the functionality of this controller. The old
-compatible, with "interrupt-map" and "#address-cells", is deprecated.
-Interrupt specifiers for new compatibles will require two cells, to
-indicate the output selection.
+All SoC interrupts were treated equally, independent of which output
+they were actually routed to. This means the driver might as well route
+all interrupts to the first output, and achieve the same behaviour.
 
-To prevent spurious changes to the binding when more SoCs are added,
-"allOf" is used with one "if", and the compatible enum only has one
-item.
-
-The example is updated to provide a correct example for RTL8380 SoCs.
+Without the interrupt-map property, interrupt routing information is no
+longer available at initialisation. Routing setup will now happen later,
+when a hardware interrupt is mapped by the subsystem.
 
 Signed-off-by: Sander Vanheule <sander@svanheule.net>
 ---
-Changes in v4:
-- Indicate more clearly that the controller is not transparent.
----
- .../realtek,rtl-intc.yaml                     | 82 ++++++++++++++-----
- 1 file changed, 62 insertions(+), 20 deletions(-)
+ drivers/irqchip/irq-realtek-rtl.c | 133 ++++++++++++++----------------
+ 1 file changed, 61 insertions(+), 72 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/realtek,rtl-intc.yaml b/Documentation/devicetree/bindings/interrupt-controller/realtek,rtl-intc.yaml
-index 9e76fff20323..f212962afd62 100644
---- a/Documentation/devicetree/bindings/interrupt-controller/realtek,rtl-intc.yaml
-+++ b/Documentation/devicetree/bindings/interrupt-controller/realtek,rtl-intc.yaml
-@@ -6,6 +6,14 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/irqchip/irq-realtek-rtl.c b/drivers/irqchip/irq-realtek-rtl.c
+index 50a56820c99b..388f4a7bfb80 100644
+--- a/drivers/irqchip/irq-realtek-rtl.c
++++ b/drivers/irqchip/irq-realtek-rtl.c
+@@ -21,11 +21,33 @@
+ #define RTL_ICTL_IRR2		0x10
+ #define RTL_ICTL_IRR3		0x14
  
- title: Realtek RTL SoC interrupt controller devicetree bindings
- 
-+description:
-+  Interrupt controller and router for Realtek MIPS SoCs, allowing each SoC
-+  interrupt to be routed to one parent CPU (hardware) interrupt, or left
-+  disconnected.
-+  All connected input lines from SoC peripherals can be masked individually,
-+  and an interrupt status register is present to indicate which interrupts are
-+  pending.
++#define RTL_ICTL_NUM_INPUTS	32
 +
- maintainers:
-   - Birger Koblitz <mail@birger-koblitz.de>
-   - Bert Vermeulen <bert@biot.com>
-@@ -13,45 +21,79 @@ maintainers:
+ #define REG(x)		(realtek_ictl_base + x)
  
- properties:
-   compatible:
--    const: realtek,rtl-intc
-+    oneOf:
-+      - items:
-+          - enum:
-+              - realtek,rtl8380-intc
-+          - const: realtek,rtl-intc
-+      - const: realtek,rtl-intc
-+        deprecated: true
+ static DEFINE_RAW_SPINLOCK(irq_lock);
+ static void __iomem *realtek_ictl_base;
  
--  "#interrupt-cells":
--    const: 1
-+  "#interrupt-cells": true
++/*
++ * IRR0-IRR3 store 4 bits per interrupt, but Realtek uses inverted numbering,
++ * placing IRQ 31 in the first four bits. A routing value of '0' means the
++ * interrupt is left disconnected. Routing values {1..15} connect to output
++ * lines {0..14}.
++ */
++#define IRR_OFFSET(idx)		(4 * (3 - (idx * 4) / 32))
++#define IRR_SHIFT(idx)		((idx * 4) % 32)
++
++static inline void write_irr(void __iomem *irr0, int idx, u32 value)
++{
++	unsigned int offset = IRR_OFFSET(idx);
++	unsigned int shift = IRR_SHIFT(idx);
++	u32 irr;
++
++	irr = readl(irr0 + offset) & ~(0xf << shift);
++	irr |= (value & 0xf) << shift;
++	writel(irr, irr0 + offset);
++}
++
+ static void realtek_ictl_unmask_irq(struct irq_data *i)
+ {
+ 	unsigned long flags;
+@@ -62,8 +84,14 @@ static struct irq_chip realtek_ictl_irq = {
  
-   reg:
-     maxItems: 1
+ static int intc_map(struct irq_domain *d, unsigned int irq, irq_hw_number_t hw)
+ {
++	unsigned long flags;
++
+ 	irq_set_chip_and_handler(irq, &realtek_ictl_irq, handle_level_irq);
  
-   interrupts:
--    maxItems: 1
-+    minItems: 1
-+    maxItems: 15
-+    description:
-+      List of parent interrupts, in the order that they are connected to this
-+      interrupt router's outputs.
++	raw_spin_lock_irqsave(&irq_lock, flags);
++	write_irr(REG(RTL_ICTL_IRR0), hw, 1);
++	raw_spin_unlock_irqrestore(&irq_lock, flags);
++
+ 	return 0;
+ }
  
-   interrupt-controller: true
+@@ -95,90 +123,51 @@ static void realtek_irq_dispatch(struct irq_desc *desc)
+ 	chained_irq_exit(chip, desc);
+ }
  
--  "#address-cells":
--    const: 0
+-/*
+- * SoC interrupts are cascaded to MIPS CPU interrupts according to the
+- * interrupt-map in the device tree. Each SoC interrupt gets 4 bits for
+- * the CPU interrupt in an Interrupt Routing Register. Max 32 SoC interrupts
+- * thus go into 4 IRRs. A routing value of '0' means the interrupt is left
+- * disconnected. Routing values {1..15} connect to output lines {0..14}.
+- */
+-static int __init map_interrupts(struct device_node *node, struct irq_domain *domain)
+-{
+-	struct device_node *cpu_ictl;
+-	const __be32 *imap;
+-	u32 imaplen, soc_int, cpu_int, tmp, regs[4];
+-	int ret, i, irr_regs[] = {
+-		RTL_ICTL_IRR3,
+-		RTL_ICTL_IRR2,
+-		RTL_ICTL_IRR1,
+-		RTL_ICTL_IRR0,
+-	};
+-	u8 mips_irqs_set;
 -
--  interrupt-map:
--    description: Describes mapping from SoC interrupts to CPU interrupts
+-	ret = of_property_read_u32(node, "#address-cells", &tmp);
+-	if (ret || tmp)
+-		return -EINVAL;
 -
- required:
-   - compatible
-   - reg
-   - "#interrupt-cells"
-   - interrupt-controller
--  - "#address-cells"
--  - interrupt-map
-+
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          const: realtek,rtl-intc
-+    then:
-+      properties:
-+        "#interrupt-cells":
-+          const: 1
-+
-+        "#address-cells":
-+          const: 0
-+
-+        interrupt-map: true
-+      required:
-+        - "#address-cells"
-+        - interrupt-map
-+    else:
-+      properties:
-+        "#interrupt-cells":
-+          description:
-+            Two cells to specify which line to connect to, and which output it should
-+            be routed to. Both cells use a zero-based index.
-+          const: 2
-+      required:
-+        - interrupts
+-	imap = of_get_property(node, "interrupt-map", &imaplen);
+-	if (!imap || imaplen % 3)
+-		return -EINVAL;
+-
+-	mips_irqs_set = 0;
+-	memset(regs, 0, sizeof(regs));
+-	for (i = 0; i < imaplen; i += 3 * sizeof(u32)) {
+-		soc_int = be32_to_cpup(imap);
+-		if (soc_int > 31)
+-			return -EINVAL;
+-
+-		cpu_ictl = of_find_node_by_phandle(be32_to_cpup(imap + 1));
+-		if (!cpu_ictl)
+-			return -EINVAL;
+-		ret = of_property_read_u32(cpu_ictl, "#interrupt-cells", &tmp);
+-		if (ret || tmp != 1)
+-			return -EINVAL;
+-		of_node_put(cpu_ictl);
+-
+-		cpu_int = be32_to_cpup(imap + 2);
+-		if (cpu_int > 7 || cpu_int < 2)
+-			return -EINVAL;
+-
+-		if (!(mips_irqs_set & BIT(cpu_int))) {
+-			irq_set_chained_handler_and_data(cpu_int, realtek_irq_dispatch,
+-							 domain);
+-			mips_irqs_set |= BIT(cpu_int);
+-		}
+-
+-		/* Use routing values (1..6) for CPU interrupts (2..7) */
+-		regs[(soc_int * 4) / 32] |= (cpu_int - 1) << (soc_int * 4) % 32;
+-		imap += 3;
+-	}
+-
+-	for (i = 0; i < 4; i++)
+-		writel(regs[i], REG(irr_regs[i]));
+-
+-	return 0;
+-}
+-
+ static int __init realtek_rtl_of_init(struct device_node *node, struct device_node *parent)
+ {
++	struct of_phandle_args oirq;
+ 	struct irq_domain *domain;
+-	int ret;
++	unsigned int soc_irq;
++	int parent_irq;
  
- additionalProperties: false
+ 	realtek_ictl_base = of_iomap(node, 0);
+ 	if (!realtek_ictl_base)
+ 		return -ENXIO;
  
- examples:
-   - |
-     intc: interrupt-controller@3000 {
--      compatible = "realtek,rtl-intc";
--      #interrupt-cells = <1>;
-+      compatible = "realtek,rtl8380-intc", "realtek,rtl-intc";
-+      #interrupt-cells = <2>;
-       interrupt-controller;
--      reg = <0x3000 0x20>;
--      #address-cells = <0>;
--      interrupt-map =
--              <31 &cpuintc 2>,
--              <30 &cpuintc 1>,
--              <29 &cpuintc 5>;
-+      reg = <0x3000 0x18>;
+-	/* Disable all cascaded interrupts */
++	/* Disable all cascaded interrupts and clear routing */
+ 	writel(0, REG(RTL_ICTL_GIMR));
++	for (soc_irq = 0; soc_irq < RTL_ICTL_NUM_INPUTS; soc_irq++)
++		write_irr(REG(RTL_ICTL_IRR0), soc_irq, 0);
 +
-+      interrupt-parent = <&cpuintc>;
-+      interrupts = <2>, <3>, <4>, <5>, <6>;
-+    };
++	if (WARN_ON(!of_irq_count(node))) {
++		/*
++		 * If DT contains no parent interrupts, assume MIPS CPU IRQ 2
++		 * (HW0) is connected to the first output. This is the case for
++		 * all known hardware anyway. "interrupt-map" is deprecated, so
++		 * don't bother trying to parse that.
++		 */
++		oirq.np = of_find_compatible_node(NULL, NULL, "mti,cpu-interrupt-controller");
++		oirq.args_count = 1;
++		oirq.args[0] = 2;
 +
-+    irq-consumer@0 {
-+      reg = <0 4>;
-+      interrupt-parent = <&intc>;
-+      interrupts =
-+        <19 3>, /* IRQ 19, routed to output 3 (cpuintc 5) */
-+        <18 4>; /* IRQ 18, routed to output 4 (cpuintc 6) */
-     };
++		parent_irq = irq_create_of_mapping(&oirq);
++
++		of_node_put(oirq.np);
++	} else {
++		parent_irq = of_irq_get(node, 0);
++	}
++
++	if (parent_irq < 0)
++		return parent_irq;
++	else if (!parent_irq)
++		return -ENODEV;
+ 
+-	domain = irq_domain_add_simple(node, 32, 0,
++	domain = irq_domain_add_simple(node, RTL_ICTL_NUM_INPUTS, 0,
+ 				       &irq_domain_ops, NULL);
++	if (!domain)
++		return -ENOMEM;
+ 
+-	ret = map_interrupts(node, domain);
+-	if (ret) {
+-		pr_err("invalid interrupt map\n");
+-		return ret;
+-	}
++	irq_set_chained_handler_and_data(parent_irq, realtek_irq_dispatch, domain);
+ 
+ 	return 0;
+ }
 -- 
 2.34.1
 

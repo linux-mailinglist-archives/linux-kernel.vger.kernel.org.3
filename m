@@ -2,82 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A7394AAD2E
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 01:26:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 668AE4AAD31
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 01:29:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347433AbiBFA0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 19:26:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41186 "EHLO
+        id S1381268AbiBFA3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 19:29:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiBFA0a (ORCPT
+        with ESMTP id S229454AbiBFA3p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 19:26:30 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B65C6C061348
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Feb 2022 16:26:28 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id s13so31011421ejy.3
-        for <linux-kernel@vger.kernel.org>; Sat, 05 Feb 2022 16:26:28 -0800 (PST)
+        Sat, 5 Feb 2022 19:29:45 -0500
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3634CC061348
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Feb 2022 16:29:45 -0800 (PST)
+Received: by mail-qk1-x72a.google.com with SMTP id b35so8055967qkp.6
+        for <linux-kernel@vger.kernel.org>; Sat, 05 Feb 2022 16:29:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QomwG8aKVU6gZfNh33WY4knCAq7doZFqpgAkZRU7DKE=;
-        b=TqfCXlCrF5np6P+9RVE7A4t95MezAf6PXyBfvqkG3WH0Y2LhYUhQ7xZU348M2EQwXo
-         yph9JsnbiwOeLU+optgxJYZKCU98C4ivEaX1qyXpN2zVHV2SiNdlLDXa4iOHv3ZWjPDj
-         08moA1MuwkCErVctRdsek+vT96pvnXMxcNB/1bLZKLKZxLeWSwlv4ZSsfblgBHZ/znNP
-         3kT06B8xNBLv0jA62SGeVlLv1IZvAY/0bdlrOZ7tb6zkQoids/z94gVuuT0GRtexh1na
-         +y/vby2S01aMQf4tfoodjfDfO2UQpT8s1wJC8fHgJ3YRsAm7C3qLm3T9Q/D6wVqSJsOg
-         m7OA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qeONPiUHU0AkiH7BV62IDzBx2bto00KJNgoRZxV98iA=;
+        b=kQSC1Pe05Uz4giRgdSeG/dUCvYdNhR3xP6xWEaZUv4NLV0xtqB6Y8J6m3Y/jxAZzkG
+         QKc3MZOU4uIN7QPRnEj07KCQBXw93RTvFJqYM9cX6FonzmotOQwCJLHpFCWULcpBgCUr
+         h1zH734FivNvSBPPLS0za7XIMRMd8ApdcczRb3Mg8qXmttgMILXJUYGQ+jJwR8i5j48c
+         pcps2HslqXkZx4TUARgZBGBi8uBvao/mJ9jvbDowV0y4MU0x9/Q4isB16P+IV8ZIqRUM
+         NKjaNR3OBveIcHkM8N83VH6XWkY0hj49Kc/KXE5NTBCU22/WkmWFZ7Y5WinkNWL+HXSL
+         ISEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QomwG8aKVU6gZfNh33WY4knCAq7doZFqpgAkZRU7DKE=;
-        b=qxg2h2Iw3jm/JA0iWR49RvDOGtp3lpZpv0rCnIuL3FbKDmfw7Mv28ew3zYW+UDSg6L
-         YjoZG4Y3qsfcoTJRaIMqMWZ0vkvYeA796eTYUZLM8ReBnpv1ctYx+jAs0tsNnfe7xOb1
-         U3IlloI9h+oXxTmRUo4WxPZZwXFAB8UEvP5prlIKDjEG6QUI26c32IBeTfSldfWWZaYa
-         ujtyIid93LEEBfQEjhC7bm2mpdc18ndl4n8GTof/tPTp7gevHhgeAtiMCCaBclniRfv/
-         BxS/GAWuV2BqgmTD3VH5APym3Rn1IIMgMz6nRlbenmdL4x7FXeVPH1HGN7XBI5G+jU1V
-         XxOw==
-X-Gm-Message-State: AOAM533tdjAKBPHuzgAnsyip56QDSWZVVFuzHb+DOowQruO8i8/2zetT
-        Nxw8UO/2r0USEZJscuzEStvhYUhaSLOsVRh7dJs=
-X-Google-Smtp-Source: ABdhPJxmUgrGEUgO1Tc5DTPebOU/NsqNqOt5UuHP2/OCgWaT1XXHg9aOz+b4C19fq5Zex6GNxhn7SCNYz4YnCvziaEc=
-X-Received: by 2002:a17:907:1115:: with SMTP id qu21mr2401621ejb.192.1644107187128;
- Sat, 05 Feb 2022 16:26:27 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qeONPiUHU0AkiH7BV62IDzBx2bto00KJNgoRZxV98iA=;
+        b=h5DWux0KorSYKN7QrRYY8WsvdvtrID6IXZtE2cazfiTqoEVeLJlgBHNMpx+kuct7M4
+         7oz/nbQi9O7/Ttypv2JGaoZsf2Y/Uo5rpfRTRzKoqVI518tGS/TFz0a83a1YT718GUyi
+         nvCqdsOxg7+Qu9G5fTfGnygUiJVW8ZfjUCSaqQhoJEnTbAGLLlT6RGOh8iTRVMZUNLep
+         aD6S91/zINx6ywV11/Srb3C/3QxjI+71XKodtMK/6m/QGf09jZHy1RMp0IY/yECgpcl7
+         pJmslNkFGJydAma55nrfzMBXEtoO1KA7ulpCHEp5q5sccsPjiG5LCPO+F+pIs/P61JYY
+         R55g==
+X-Gm-Message-State: AOAM532ggJkoEy+H+vkcwS7JrSNoYVuRnMTpOuFo3y0fO3U5ncuKqWt6
+        GmDIN02k+aGTLJTOmbWTn6swFm+oHs/QKi1a
+X-Google-Smtp-Source: ABdhPJyV6jCtE/ezy346p9XWtZmyqXQshDZ6e6xVjWH6u7KSk2N9qiqrZZ2LUd/VmVvRAHZ3Xi3htQ==
+X-Received: by 2002:a05:620a:40cc:: with SMTP id g12mr3136238qko.308.1644107384324;
+        Sat, 05 Feb 2022 16:29:44 -0800 (PST)
+Received: from WRT-WX9.. ([207.246.89.135])
+        by smtp.gmail.com with ESMTPSA id w10sm3843598qtj.73.2022.02.05.16.29.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 05 Feb 2022 16:29:43 -0800 (PST)
+From:   Changbin Du <changbin.du@gmail.com>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Changbin Du <changbin.du@gmail.com>
+Subject: [PATCH v3] riscv: fix oops caused by irqsoff latency tracer
+Date:   Sun,  6 Feb 2022 08:29:33 +0800
+Message-Id: <20220206002933.437563-1-changbin.du@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <YfK9DSMFabjYm/MV@BLR-5CG11610CF.amd.com> <CAGsJ_4xL3tynB9P=rKMoX2otW4bMMU5Z-P9zSudMV3+fr2hpXw@mail.gmail.com>
- <20220128071337.GC618915@linux.vnet.ibm.com> <CAGsJ_4yoUONACY-j+9XxSNC0VgmdyRdHC=z87dWvZvVSASzXRQ@mail.gmail.com>
- <20220201093859.GE618915@linux.vnet.ibm.com> <CAGsJ_4z8cer7Y5si+J_=awQetFJZMVeaQ+RDSXQz9EGOPTGMQg@mail.gmail.com>
- <20220204073317.GG618915@linux.vnet.ibm.com> <CAGsJ_4xjgy3D0VzbTdmJihJ+nut_NeTEb4krh8jup4rbvTY_ww@mail.gmail.com>
- <CAGsJ_4zVEjFYoff=x=Y3i9xPxoi891x-gkfA6Lsdc+yT2ykRmQ@mail.gmail.com>
- <88e9287ef7a86f24999af00f90d6f122de024979.camel@linux.intel.com> <20220205171647.GA567616@chenyu-desktop>
-In-Reply-To: <20220205171647.GA567616@chenyu-desktop>
-From:   Barry Song <21cnbao@gmail.com>
-Date:   Sun, 6 Feb 2022 13:26:15 +1300
-Message-ID: <CAGsJ_4wEGEXTSByOiifjcXB_hm4phd7C-z-jmAf9JfoxYgm8gQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] sched/fair: Scan cluster before scanning LLC in
- wake-up path
-To:     Chen Yu <yu.c.chen@intel.com>
-Cc:     Tim Chen <tim.c.chen@linux.intel.com>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        "Gautham R. Shenoy" <gautham.shenoy@amd.com>,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        prime.zeng@huawei.com,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        ego@linux.vnet.ibm.com, Linuxarm <linuxarm@huawei.com>,
-        Barry Song <song.bao.hua@hisilicon.com>,
-        Guodong Xu <guodong.xu@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -88,125 +70,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 6, 2022 at 6:16 AM Chen Yu <yu.c.chen@intel.com> wrote:
->
-> On Fri, Feb 04, 2022 at 09:41:21AM -0800, Tim Chen wrote:
-> > On Fri, 2022-02-04 at 23:49 +1300, Barry Song wrote:
-> > > On Fri, Feb 4, 2022 at 11:28 PM Barry Song <21cnbao@gmail.com> wrote:
-> > > > On Fri, Feb 4, 2022 at 8:33 PM Srikar Dronamraju
-> > > > <srikar@linux.vnet.ibm.com> wrote:
-> > > > > * Barry Song <21cnbao@gmail.com> [2022-02-02 09:20:32]:
-> > > > >
-> > > > > > On Tue, Feb 1, 2022 at 10:39 PM Srikar Dronamraju
-> > > > > > <srikar@linux.vnet.ibm.com> wrote:
-> > > > > > > * Barry Song <21cnbao@gmail.com> [2022-01-28 07:40:15]:
-> > > > > > >
-> > > > > > > > On Fri, Jan 28, 2022 at 8:13 PM Srikar Dronamraju
-> > > > > > > > <srikar@linux.vnet.ibm.com> wrote:
-> > > > > > > > > * Barry Song <21cnbao@gmail.com> [2022-01-28 09:21:08]:
-> > > > > > > > >
-> > > > > > > > > > On Fri, Jan 28, 2022 at 4:41 AM Gautham R. Shenoy
-> > > > > > > > > > <gautham.shenoy@amd.com> wrote:
-> > > > > > > > > > > On Wed, Jan 26, 2022 at 04:09:47PM +0800, Yicong Yang
-> > > > > > > > > > > wrote:
-> > > > > > > > > > > > From: Barry Song <song.bao.hua@hisilicon.com>
-> > > > > > > > > > > >
-> > > > > > > > I am sorry I didn't get your question. Currently the code
-> > > > > > > > works as below:
-> > > > > > > > if task A wakes up task B, and task A is in LLC0 and task B
-> > > > > > > > is in LLC1.
-> > > > > > > > we will scan the cluster of A before scanning the whole
-> > > > > > > > LLC0, in this case,
-> > > > > > > > cluster of A is the closest sibling, so it is the better
-> > > > > > > > choice than other CPUs
-> > > > > > > > which are in LLC0 but not in the cluster of A.
-> > > > > > >
-> > > > > > > Yes, this is right.
-> > > > > > >
-> > > > > > > > But we do scan all cpus of LLC0
-> > > > > > > > afterwards if we fail to find an idle CPU in the cluster.
-> > > > > > >
-> > > > > > > However my reading of the patch, before we can scan other
-> > > > > > > clusters within
-> > > > > > > the LLC (aka LLC0), we have a check in scan cluster which
-> > > > > > > says
-> > > > > > >
-> > > > > > >         /* Don't ping-pong tasks in and out cluster
-> > > > > > > frequently */
-> > > > > > >         if (cpus_share_resources(target, prev_cpu))
-> > > > > > >            return target;
-> > > > > > >
-> > > > > > > My reading of this is, ignore other clusters (at this point,
-> > > > > > > we know there
-> > > > > > > are no idle CPUs in this cluster. We don't know if there are
-> > > > > > > idle cpus in
-> > > > > > > them or not) if the previous CPU and target CPU happen to be
-> > > > > > > from the same
-> > > > > > > cluster. This effectively means we are given preference to
-> > > > > > > cache over idle
-> > > > > > > CPU.
-> > > > > >
-> > > > > > Note we only ignore other cluster while prev_cpu and target are
-> > > > > > in same
-> > > > > > cluster. if the condition is false, we are not ignoring other
-> > > > > > cpus. typically,
-> > > > > > if waker is the target, and wakee is the prev_cpu, that means
-> > > > > > if they are
-> > > > > > already in one cluster, we don't stupidly spread them in
-> > > > > > select_idle_cpu() path
-> > > > > > as benchmark shows we are losing. so, yes, we are giving
-> > > > > > preference to
-> > > > > > cache over CPU.
-> > > > >
-> > > > > We already figured out that there are no idle CPUs in this
-> > > > > cluster. So dont
-> > > > > we gain performance by picking a idle CPU/core in the
-> > > > > neighbouring cluster.
-> > > > > If there are no idle CPU/core in the neighbouring cluster, then
-> > > > > it does make
-> > > > > sense to fallback on the current cluster.
-> > > >
-> > > >
-> >
-> > We may need to take into consideration the utilization and
-> > load average for the source and target cluster to make
-> > better decision of whether it is worth placing the
-> > task in the next cluster.  If the load of the target
-> > cluster is too high, it is not worth pushing the task there.
-> >
-> > Those stats can be gathered during load balancing without adding
-> > overhead in the hot task wakeup path.
-> >
-> > Chen Yu played around with cutting off the idle CPU search
-> > in a LLC based on such stats and he saw some good
-> > improvements over the default.
-> >
-> Yes, we used the sum of percpu util_avg to estimate if the LLC domain
-> is overloaded. If it is too busy, skip searching for an idle cpu/core in
-> that LLC domain. The util_avg is a metric of accumulated historic
-> activity, which might be more accurate than instantaneous metrics(such as
-> rq->nr_running) on calculating the probability of find an idle cpu.
-> So far this change has shown some benefits in several microbenchmarks and
-> OLTP benchmark when the system is quite busy. That change has introduced a
-> per-LLC-domain flag to indicate whether the LLC domain is oveloaded,
-> it seems that this flag could also be extended for cluster domain.
-> Maybe I could post the draft patch to see if it would be helpful for this
-> cluster patch serie.
+The trace_hardirqs_{on,off}() requires at least two parent call frames.
+This because these two functions use macro 'CALLER_ADDR1' (aka.
+__builtin_return_address(1)) to acquire caller info. If there's no enough
+frames, the code generated the macro could trigger memory access fault.
 
-yes. please send. my feeling is that select_idle_cpu() can select an "idle"cpu
-which is actually very busy, but can be in "idle" state for a very
-short period. it
-is not always correct to get this kind of "idle" cpu. It could be
-better to be still.
-I am not quite sure your patch is directly related with clusters, but we will
-try to figure out some connection, maybe we can integrate your patch into
-this series afterwards.
+[    0.039615][    T0] Unable to handle kernel NULL pointer dereference at virtual address 00000000000000f8
+[    0.041925][    T0] Oops [#1]
+[    0.042063][    T0] Modules linked in:
+[    0.042864][    T0] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.17.0-rc1-00233-g9a20c48d1ed2 #29
+[    0.043568][    T0] Hardware name: riscv-virtio,qemu (DT)
+[    0.044343][    T0] epc : trace_hardirqs_on+0x56/0xe2
+[    0.044601][    T0]  ra : restore_all+0x12/0x6e
+[    0.044721][    T0] epc : ffffffff80126a5c ra : ffffffff80003b94 sp : ffffffff81403db0
+[    0.044801][    T0]  gp : ffffffff8163acd8 tp : ffffffff81414880 t0 : 0000000000000020
+[    0.044882][    T0]  t1 : 0098968000000000 t2 : 0000000000000000 s0 : ffffffff81403de0
+[    0.044967][    T0]  s1 : 0000000000000000 a0 : 0000000000000001 a1 : 0000000000000100
+[    0.045046][    T0]  a2 : 0000000000000000 a3 : 0000000000000000 a4 : 0000000000000000
+[    0.045124][    T0]  a5 : 0000000000000000 a6 : 0000000000000000 a7 : 0000000054494d45
+[    0.045210][    T0]  s2 : ffffffff80003b94 s3 : ffffffff81a8f1b0 s4 : ffffffff80e27b50
+[    0.045289][    T0]  s5 : ffffffff81414880 s6 : ffffffff8160fa00 s7 : 00000000800120e8
+[    0.045389][    T0]  s8 : 0000000080013100 s9 : 000000000000007f s10: 0000000000000000
+[    0.045474][    T0]  s11: 0000000000000000 t3 : 7fffffffffffffff t4 : 0000000000000000
+[    0.045548][    T0]  t5 : 0000000000000000 t6 : ffffffff814aa368
+[    0.045620][    T0] status: 0000000200000100 badaddr: 00000000000000f8 cause: 000000000000000d
+[    0.046402][    T0] [<ffffffff80003b94>] restore_all+0x12/0x6e
 
->
-> thanks,
-> Chenyu
-> > Tim
-> >
+To fix above issue, here we add one extra level wrapper so they can be
+safely called by low level entry code.
 
-Thanks
-Barry
+Signed-off-by: Changbin Du <changbin.du@gmail.com>
+
+---
+v3: fix warning reported by documentation system.
+v2: fix compile warning.
+---
+ arch/riscv/kernel/Makefile    |  2 ++
+ arch/riscv/kernel/entry.S     | 10 +++++-----
+ arch/riscv/kernel/trace_irq.c | 26 ++++++++++++++++++++++++++
+ arch/riscv/kernel/trace_irq.h | 11 +++++++++++
+ 4 files changed, 44 insertions(+), 5 deletions(-)
+ create mode 100644 arch/riscv/kernel/trace_irq.c
+ create mode 100644 arch/riscv/kernel/trace_irq.h
+
+diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
+index 612556faa527..ffc87e76b1dd 100644
+--- a/arch/riscv/kernel/Makefile
++++ b/arch/riscv/kernel/Makefile
+@@ -51,6 +51,8 @@ obj-$(CONFIG_MODULE_SECTIONS)	+= module-sections.o
+ obj-$(CONFIG_FUNCTION_TRACER)	+= mcount.o ftrace.o
+ obj-$(CONFIG_DYNAMIC_FTRACE)	+= mcount-dyn.o
+ 
++obj-$(CONFIG_TRACE_IRQFLAGS)	+= trace_irq.o
++
+ obj-$(CONFIG_RISCV_BASE_PMU)	+= perf_event.o
+ obj-$(CONFIG_PERF_EVENTS)	+= perf_callchain.o
+ obj-$(CONFIG_HAVE_PERF_REGS)	+= perf_regs.o
+diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+index ed29e9c8f660..d6a46ed0bf05 100644
+--- a/arch/riscv/kernel/entry.S
++++ b/arch/riscv/kernel/entry.S
+@@ -108,7 +108,7 @@ _save_context:
+ .option pop
+ 
+ #ifdef CONFIG_TRACE_IRQFLAGS
+-	call trace_hardirqs_off
++	call __trace_hardirqs_off
+ #endif
+ 
+ #ifdef CONFIG_CONTEXT_TRACKING
+@@ -143,7 +143,7 @@ skip_context_tracking:
+ 	li t0, EXC_BREAKPOINT
+ 	beq s4, t0, 1f
+ #ifdef CONFIG_TRACE_IRQFLAGS
+-	call trace_hardirqs_on
++	call __trace_hardirqs_on
+ #endif
+ 	csrs CSR_STATUS, SR_IE
+ 
+@@ -234,7 +234,7 @@ ret_from_exception:
+ 	REG_L s0, PT_STATUS(sp)
+ 	csrc CSR_STATUS, SR_IE
+ #ifdef CONFIG_TRACE_IRQFLAGS
+-	call trace_hardirqs_off
++	call __trace_hardirqs_off
+ #endif
+ #ifdef CONFIG_RISCV_M_MODE
+ 	/* the MPP value is too large to be used as an immediate arg for addi */
+@@ -270,10 +270,10 @@ restore_all:
+ 	REG_L s1, PT_STATUS(sp)
+ 	andi t0, s1, SR_PIE
+ 	beqz t0, 1f
+-	call trace_hardirqs_on
++	call __trace_hardirqs_on
+ 	j 2f
+ 1:
+-	call trace_hardirqs_off
++	call __trace_hardirqs_off
+ 2:
+ #endif
+ 	REG_L a0, PT_STATUS(sp)
+diff --git a/arch/riscv/kernel/trace_irq.c b/arch/riscv/kernel/trace_irq.c
+new file mode 100644
+index 000000000000..54324d1bcc25
+--- /dev/null
++++ b/arch/riscv/kernel/trace_irq.c
+@@ -0,0 +1,26 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2022 Changbin Du <changbin.du@gmail.com>
++ */
++
++#include <linux/irqflags.h>
++#include <linux/kprobes.h>
++#include "trace_irq.h"
++
++/*
++ * trace_hardirqs_on/off requires at least two parent call frames.
++ * Here we add one extra level so they can be safely called by low
++ * level entry code.
++ */
++
++void __trace_hardirqs_on(void)
++{
++	trace_hardirqs_on();
++}
++NOKPROBE_SYMBOL(__trace_hardirqs_on);
++
++void __trace_hardirqs_off(void)
++{
++	trace_hardirqs_off();
++}
++NOKPROBE_SYMBOL(__trace_hardirqs_off);
+diff --git a/arch/riscv/kernel/trace_irq.h b/arch/riscv/kernel/trace_irq.h
+new file mode 100644
+index 000000000000..99fe67377e5e
+--- /dev/null
++++ b/arch/riscv/kernel/trace_irq.h
+@@ -0,0 +1,11 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2022 Changbin Du <changbin.du@gmail.com>
++ */
++#ifndef __TRACE_IRQ_H
++#define __TRACE_IRQ_H
++
++void __trace_hardirqs_on(void);
++void __trace_hardirqs_off(void);
++
++#endif /* __TRACE_IRQ_H */
+-- 
+2.32.0
+

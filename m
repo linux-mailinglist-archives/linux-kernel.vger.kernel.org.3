@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA4F24AAF66
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 14:15:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B0954AAF67
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 14:15:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239217AbiBFNPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 08:15:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37892 "EHLO
+        id S239270AbiBFNPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 08:15:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239122AbiBFNPA (ORCPT
+        with ESMTP id S239148AbiBFNPE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 08:15:00 -0500
-X-Greylist: delayed 61 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Feb 2022 05:14:59 PST
+        Sun, 6 Feb 2022 08:15:04 -0500
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE7B7C043185
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 05:14:59 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5DD8C0401D4
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 05:15:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644153299; x=1675689299;
+  t=1644153303; x=1675689303;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=U6BBGporoVrZr7YK63C/FFdib3p/4tlmXRfeHe6CJ2k=;
-  b=UR4vPpGXUGqblMjQaKlG3dBOule/ZVVbhkPISgiML+cWKPfLilAelYm+
-   iwBepfLGYjhbau0l2hz6Xu0iwo4YrtpSV/XCp/J2MXbJgdAui4L3a6TOs
-   1nHNfhUL1g4bRPxTuiJEmHoKpsKR2IHa3ZNPcke/TJInG6/0kesGphHsh
-   Nx6jKi1RrwqKjgzwzJfwClthGiu0ts5mUTJ5GkWpRJua1xgi/OSEAmNPu
-   xqs+N4xedoUS1DFiptjoOdITREHyc/8pYNpkytW8oyxIw86dUryYsRsKV
-   rKQ8HnVuVX+w+q9X3tki1JyV56wklMuASHolJEvyeobZwYU8gW55SqRI5
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10249"; a="235980846"
+  bh=eGox3Yf4XWGQ1c5FMtf03cjheHt9V9zlk4JcBPEf4Xk=;
+  b=D7+ijM4b4FzJbkrdkiIHLmMYNY1Ctr0KD56IeZ0yPi7D0fHKZB9lPgxI
+   bVCVPQN/1cN5+w4NRoXxQ7ILR7K5Q8f7PYyQtRUp2i9gifxt4hKK00v0F
+   ewH9jYfS5IJWBrOW3AwWgDTIOYc6YS/04yceslL9byGkSgnu+EIcEo9vB
+   lEjDaaGtkpivHn7blkwaZVSY2x/sWxo6ontE/fXcmBiLbHIDX7qH+3bQL
+   A1dQh7l6hZ9Ve3FsjydGqmcWK00cY71lq9uBp/uVL60oMm9TVS84MpzsC
+   IlmSpOtSg82U51jmhjuZjKfTMqbCMrw2H+ss9oQ3NeCa6zfq/0KNA8Yjm
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10249"; a="235980851"
 X-IronPort-AV: E=Sophos;i="5.88,347,1635231600"; 
-   d="scan'208";a="235980846"
+   d="scan'208";a="235980851"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2022 05:13:58 -0800
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2022 05:14:02 -0800
 X-IronPort-AV: E=Sophos;i="5.88,347,1635231600"; 
-   d="scan'208";a="539750942"
+   d="scan'208";a="539750967"
 Received: from sannilnx.jer.intel.com ([10.12.231.79])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2022 05:13:54 -0800
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2022 05:13:58 -0800
 From:   Alexander Usyskin <alexander.usyskin@intel.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jani Nikula <jani.nikula@linux.intel.com>,
@@ -48,10 +47,11 @@ To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 Cc:     Tomas Winkler <tomas.winkler@intel.com>,
         Alexander Usyskin <alexander.usyskin@intel.com>,
         Vitaly Lubart <vitaly.lubart@intel.com>,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v5 4/5] mei: gsc: add runtime pm handlers
-Date:   Sun,  6 Feb 2022 15:13:21 +0200
-Message-Id: <20220206131322.3246403-5-alexander.usyskin@intel.com>
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Ashutosh Dixit <ashutosh.dixit@intel.com>
+Subject: [PATCH v5 5/5] mei: gsc: retrieve the firmware version
+Date:   Sun,  6 Feb 2022 15:13:22 +0200
+Message-Id: <20220206131322.3246403-6-alexander.usyskin@intel.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220206131322.3246403-1-alexander.usyskin@intel.com>
 References: <20220206131322.3246403-1-alexander.usyskin@intel.com>
@@ -67,99 +67,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tomas Winkler <tomas.winkler@intel.com>
+Add a hook to retrieve the firmware version of the
+GSC devices to bus-fixup.
+GSC has a different MKHI clients GUIDs but the same message structure
+to retrieve the firmware version as MEI so mei_fwver() can be reused.
 
-Implement runtime handlers for mei-gsc, to track
-idle state of the device properly.
-
-CC: Rodrigo Vivi <rodrigo.vivi@intel.com>
-Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
+CC: Ashutosh Dixit <ashutosh.dixit@intel.com>
 Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
+Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
 ---
-V4: drop debug prints
 V5: Rebase
 ---
- drivers/misc/mei/gsc-me.c | 67 ++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 66 insertions(+), 1 deletion(-)
+ drivers/misc/mei/bus-fixup.c | 25 +++++++++++++++++++++++++
+ drivers/misc/mei/hw-me.c     |  2 ++
+ 2 files changed, 27 insertions(+)
 
-diff --git a/drivers/misc/mei/gsc-me.c b/drivers/misc/mei/gsc-me.c
-index cf427f6fdec9..dac482ddab51 100644
---- a/drivers/misc/mei/gsc-me.c
-+++ b/drivers/misc/mei/gsc-me.c
-@@ -152,7 +152,72 @@ static int __maybe_unused mei_gsc_pm_resume(struct device *device)
- 	return 0;
+diff --git a/drivers/misc/mei/bus-fixup.c b/drivers/misc/mei/bus-fixup.c
+index 67844089db21..59506ba6fc48 100644
+--- a/drivers/misc/mei/bus-fixup.c
++++ b/drivers/misc/mei/bus-fixup.c
+@@ -30,6 +30,12 @@ static const uuid_le mei_nfc_info_guid = MEI_UUID_NFC_INFO;
+ #define MEI_UUID_MKHIF_FIX UUID_LE(0x55213584, 0x9a29, 0x4916, \
+ 			0xba, 0xdf, 0xf, 0xb7, 0xed, 0x68, 0x2a, 0xeb)
+ 
++#define MEI_UUID_IGSC_MKHI UUID_LE(0xE2C2AFA2, 0x3817, 0x4D19, \
++			0x9D, 0x95, 0x06, 0xB1, 0x6B, 0x58, 0x8A, 0x5D)
++
++#define MEI_UUID_IGSC_MKHI_FIX UUID_LE(0x46E0C1FB, 0xA546, 0x414F, \
++			0x91, 0x70, 0xB7, 0xF4, 0x6D, 0x57, 0xB4, 0xAD)
++
+ #define MEI_UUID_HDCP UUID_LE(0xB638AB7E, 0x94E2, 0x4EA2, \
+ 			      0xA5, 0x52, 0xD1, 0xC5, 0x4B, 0x62, 0x7F, 0x04)
+ 
+@@ -241,6 +247,23 @@ static void mei_mkhi_fix(struct mei_cl_device *cldev)
+ 	mei_cldev_disable(cldev);
  }
  
--static SIMPLE_DEV_PM_OPS(mei_gsc_pm_ops, mei_gsc_pm_suspend, mei_gsc_pm_resume);
-+static int __maybe_unused mei_gsc_pm_runtime_idle(struct device *device)
++static void mei_gsc_mkhi_ver(struct mei_cl_device *cldev)
 +{
-+	struct mei_device *dev = dev_get_drvdata(device);
-+
-+	if (!dev)
-+		return -ENODEV;
-+	if (mei_write_is_idle(dev))
-+		pm_runtime_autosuspend(device);
-+
-+	return -EBUSY;
-+}
-+
-+static int  __maybe_unused mei_gsc_pm_runtime_suspend(struct device *device)
-+{
-+	struct mei_device *dev = dev_get_drvdata(device);
-+	struct mei_me_hw *hw;
 +	int ret;
 +
-+	if (!dev)
-+		return -ENODEV;
++	/* No need to enable the client if nothing is needed from it */
++	if (!cldev->bus->fw_f_fw_ver_supported)
++		return;
 +
-+	mutex_lock(&dev->device_lock);
++	ret = mei_cldev_enable(cldev);
++	if (ret)
++		return;
 +
-+	if (mei_write_is_idle(dev)) {
-+		hw = to_me_hw(dev);
-+		hw->pg_state = MEI_PG_ON;
-+		ret = 0;
-+	} else {
-+		ret = -EAGAIN;
-+	}
-+
-+	mutex_unlock(&dev->device_lock);
-+
-+	return ret;
++	ret = mei_fwver(cldev);
++	if (ret < 0)
++		dev_err(&cldev->dev, "FW version command failed %d\n", ret);
++	mei_cldev_disable(cldev);
 +}
-+
-+static int __maybe_unused mei_gsc_pm_runtime_resume(struct device *device)
-+{
-+	struct mei_device *dev = dev_get_drvdata(device);
-+	struct mei_me_hw *hw;
-+	irqreturn_t irq_ret;
-+
-+	if (!dev)
-+		return -ENODEV;
-+
-+	mutex_lock(&dev->device_lock);
-+
-+	hw = to_me_hw(dev);
-+	hw->pg_state = MEI_PG_OFF;
-+
-+	mutex_unlock(&dev->device_lock);
-+
-+	irq_ret = mei_me_irq_thread_handler(1, dev);
-+	if (irq_ret != IRQ_HANDLED)
-+		dev_err(dev->dev, "thread handler fail %d\n", irq_ret);
-+
-+	return 0;
-+}
-+
-+static const struct dev_pm_ops mei_gsc_pm_ops = {
-+	SET_SYSTEM_SLEEP_PM_OPS(mei_gsc_pm_suspend,
-+				mei_gsc_pm_resume)
-+	SET_RUNTIME_PM_OPS(mei_gsc_pm_runtime_suspend,
-+			   mei_gsc_pm_runtime_resume,
-+			   mei_gsc_pm_runtime_idle)
-+};
+ /**
+  * mei_wd - wd client on the bus, change protocol version
+  *   as the API has changed.
+@@ -492,6 +515,8 @@ static struct mei_fixup {
+ 	MEI_FIXUP(MEI_UUID_NFC_HCI, mei_nfc),
+ 	MEI_FIXUP(MEI_UUID_WD, mei_wd),
+ 	MEI_FIXUP(MEI_UUID_MKHIF_FIX, mei_mkhi_fix),
++	MEI_FIXUP(MEI_UUID_IGSC_MKHI, mei_gsc_mkhi_ver),
++	MEI_FIXUP(MEI_UUID_IGSC_MKHI_FIX, mei_gsc_mkhi_ver),
+ 	MEI_FIXUP(MEI_UUID_HDCP, whitelist),
+ 	MEI_FIXUP(MEI_UUID_ANY, vt_support),
+ 	MEI_FIXUP(MEI_UUID_PAVP, whitelist),
+diff --git a/drivers/misc/mei/hw-me.c b/drivers/misc/mei/hw-me.c
+index 9748d14849a1..7e77328142ff 100644
+--- a/drivers/misc/mei/hw-me.c
++++ b/drivers/misc/mei/hw-me.c
+@@ -1577,12 +1577,14 @@ static const struct mei_cfg mei_me_pch15_sps_cfg = {
+ static const struct mei_cfg mei_me_gsc_cfg = {
+ 	MEI_CFG_TYPE_GSC,
+ 	MEI_CFG_PCH8_HFS,
++	MEI_CFG_FW_VER_SUPP,
+ };
  
- static const struct auxiliary_device_id mei_gsc_id_table[] = {
- 	{
+ /* Graphics System Controller Firmware Interface */
+ static const struct mei_cfg mei_me_gscfi_cfg = {
+ 	MEI_CFG_TYPE_GSCFI,
+ 	MEI_CFG_PCH8_HFS,
++	MEI_CFG_FW_VER_SUPP,
+ };
+ 
+ /*
 -- 
 2.32.0
 

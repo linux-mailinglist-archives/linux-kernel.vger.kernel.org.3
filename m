@@ -2,59 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0537A4AAFA2
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 14:58:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D922F4AAF70
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 14:22:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240765AbiBFN6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 08:58:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51000 "EHLO
+        id S239456AbiBFNWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 08:22:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240726AbiBFN6D (ORCPT
+        with ESMTP id S236136AbiBFNW2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 08:58:03 -0500
-Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net [89.40.174.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39291C043182;
-        Sun,  6 Feb 2022 05:58:01 -0800 (PST)
-Received: from [77.244.183.192] (port=63680 helo=melee.fritz.box)
-        by hostingweb31.netsons.net with esmtpa (Exim 4.94.2)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1nGgDP-00059v-Lj; Sun, 06 Feb 2022 13:00:23 +0100
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-To:     linux-media@vger.kernel.org, linux-i2c@vger.kernel.org
-Cc:     Luca Ceresoli <luca@lucaceresoli.net>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Peter Rosin <peda@axentia.se>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        matti.vaittinen@fi.rohmeurope.com
-Subject: [RFCv3 6/6] media: ds90ub953: new driver for TI DS90UB953-Q1 video serializer
-Date:   Sun,  6 Feb 2022 12:59:39 +0100
-Message-Id: <20220206115939.3091265-7-luca@lucaceresoli.net>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220206115939.3091265-1-luca@lucaceresoli.net>
-References: <20220206115939.3091265-1-luca@lucaceresoli.net>
+        Sun, 6 Feb 2022 08:22:28 -0500
+X-Greylist: delayed 1859 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Feb 2022 05:22:27 PST
+Received: from mx0b-00128a01.pphosted.com (mx0b-00128a01.pphosted.com [148.163.139.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8587C043182;
+        Sun,  6 Feb 2022 05:22:27 -0800 (PST)
+Received: from pps.filterd (m0167090.ppops.net [127.0.0.1])
+        by mx0b-00128a01.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 216CUTfQ004702;
+        Sun, 6 Feb 2022 07:51:05 -0500
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2175.outbound.protection.outlook.com [104.47.57.175])
+        by mx0b-00128a01.pphosted.com (PPS) with ESMTPS id 3e1prahv7u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 06 Feb 2022 07:51:05 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Lxyp7UM6D6PzzqPsQC9sQo+fV5PkBOocrZn//HhWQCixA2ZROP2f/LOSyr9eFGjR+4RnQFojU9wbbm5Wst9tpPkvu8ZdrSBxtiZmk/H2sW0tZqT1VY1Rs0G7egQ5Zl/VEj65scAKVAHpZk5ytjx5yHLeOCNdDc1i8TWia1nITBz6vyq3dToArK0zEdoidDlLJySfYVNtLJ9ESrwCCP44MaH0MzPmE2m7lo/ZSpFgVPWuPcK2o56IOercr5Siwaf80tsSHClbwrzsNmXmuVGCDByQTN2X8bxhI7tP38upwMaM3QNdxMmmcG4V3Glc1nOrgyk9p4K931fp7iN+yfGtrg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nlleXgQSmR8jBzGBrSQremahWp1pDQ1E5usaSF2RQc8=;
+ b=llliEzRY5HLQkgDSVGz0630UF5gFkwnKcOpsEkwRu7wEJJSepM1OOcQKkCbmM9tVyc8PVGWwJEnP+0rCVMIRXUqrjAeVtISBbm8EfYqCNXkJC9Hy3uGGnbgexpb3PrChn1XGlulefFR3+53QEGuSEdaW1XZUCW0adrGwBV7j7J9JWEKxi8WXVKfDbBABJxHE3M7addb56GWnCt9SrHSvTtYr/fdYtahZDQQc5sqQ++G13+77YaqwZLajgGRUmTKjF/7LsXu9YxNO6NKHIr0UfT2b99sLua34rl6zMxeDcVvM0tZFiyHdKFK/pSl3nTw0HEmFbYnnKG8tYCoXfmgxgA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=analog.onmicrosoft.com; s=selector2-analog-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nlleXgQSmR8jBzGBrSQremahWp1pDQ1E5usaSF2RQc8=;
+ b=yv2k2Binz7WdM2lZyIoegtbZSOJP96OtnXImvd8T++CEc+lR2zzCqFounaxHhYgy29X+z4om4WgwjFwqOaUehIryj69SimNBVbJ49vg2NjZVtlE1ITrmS8zh5Fw+yKGk+XlAANlDv9Ifgr3r2lfrYC2A80rCnxMvGlR0T+UY5pA=
+Received: from PH0PR03MB6786.namprd03.prod.outlook.com (2603:10b6:510:122::7)
+ by MW4PR03MB6508.namprd03.prod.outlook.com (2603:10b6:303:127::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Sun, 6 Feb
+ 2022 12:51:02 +0000
+Received: from PH0PR03MB6786.namprd03.prod.outlook.com
+ ([fe80::c5c3:7910:36e8:73a5]) by PH0PR03MB6786.namprd03.prod.outlook.com
+ ([fe80::c5c3:7910:36e8:73a5%6]) with mapi id 15.20.4951.018; Sun, 6 Feb 2022
+ 12:51:01 +0000
+From:   "Sa, Nuno" <Nuno.Sa@analog.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jonathan Cameron <jic23@kernel.org>
+CC:     "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>
+Subject: RE: [PATCH v1 2/2] iio: temperature: ltc2983: Make use of device
+ properties
+Thread-Topic: [PATCH v1 2/2] iio: temperature: ltc2983: Make use of device
+ properties
+Thread-Index: AQHYGPN7UgnVJVVaykahp8u/ZY/uwayFNeEAgAATOoCAATK/UA==
+Date:   Sun, 6 Feb 2022 12:51:00 +0000
+Message-ID: <PH0PR03MB6786C5F8E528249EBA938070992B9@PH0PR03MB6786.namprd03.prod.outlook.com>
+References: <20220203114506.53904-1-andriy.shevchenko@linux.intel.com>
+ <20220203114506.53904-2-andriy.shevchenko@linux.intel.com>
+ <20220205171454.49a7225c@jic23-huawei> <Yf7ArwPrN34drkcv@smile.fi.intel.com>
+In-Reply-To: <Yf7ArwPrN34drkcv@smile.fi.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-ref: =?iso-8859-1?Q?PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcbnNhXGFwcG?=
+ =?iso-8859-1?Q?RhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEy?=
+ =?iso-8859-1?Q?OWUzNWJcbXNnc1xtc2ctNzA2N2U4ZTMtODc0Yi0xMWVjLThiYzAtZmM3Nz?=
+ =?iso-8859-1?Q?c0MjFmY2FlXGFtZS10ZXN0XDcwNjdlOGU1LTg3NGItMTFlYy04YmMwLWZj?=
+ =?iso-8859-1?Q?Nzc3NDIxZmNhZWJvZHkudHh0IiBzej0iNDMyNyIgdD0iMTMyODg2MjU0Nj?=
+ =?iso-8859-1?Q?I5OTUzOTU2IiBoPSJxcWFsazVwR1BtWnhBVHhkZDh5NHJBSHM3R2M9IiBp?=
+ =?iso-8859-1?Q?ZD0iIiBibD0iMCIgYm89IjEiIGNpPSJjQUFBQUVSSFUxUlNSVUZOQ2dVQU?=
+ =?iso-8859-1?Q?FFb0NBQUNrSWNBeVdCdllBWWhvbnJadmtnTHRpR2lldG0rU0F1MERBQUFB?=
+ =?iso-8859-1?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBSEFBQUFEYUFRQUFBQUFBQUFBQUFBQU?=
+ =?iso-8859-1?Q?FBQUFBQUFBQUFBRUFBUUFCQUFBQVZJRXZvUUFBQUFBQUFBQUFBQUFBQUo0?=
+ =?iso-8859-1?Q?QUFBQmhBR1FBYVFCZkFITUFaUUJqQUhVQWNnQmxBRjhBY0FCeUFHOEFhZ0?=
+ =?iso-8859-1?Q?JsQUdNQWRBQnpBRjhBWmdCaEFHd0Fjd0JsQUY4QVpnQnZBSE1BYVFCMEFH?=
+ =?iso-8859-1?Q?a0FkZ0JsQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQU?=
+ =?iso-8859-1?Q?FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?iso-8859-1?Q?QUFBQUFBQUFBQUFBQUFBQUFFQUFBQUFBQUFBQWdBQUFBQUFuZ0FBQUdFQV?=
+ =?iso-8859-1?Q?pBQnBBRjhBY3dCbEFHTUFkUUJ5QUdVQVh3QndBSElBYndCcUFHVUFZd0Iw?=
+ =?iso-8859-1?Q?QUhNQVh3QjBBR2tBWlFCeUFERUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQU?=
+ =?iso-8859-1?Q?FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?iso-8859-1?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQU?=
+ =?iso-8859-1?Q?FBQUFBQUFBQUFBUUFBQUFBQUFBQUNBQUFBQUFDZUFBQUFZUUJrQUdrQVh3?=
+ =?iso-8859-1?Q?QnpBR1VBWXdCMUFISUFaUUJmQUhBQWNnQnZBR29BWlFCakFIUUFjd0JmQU?=
+ =?iso-8859-1?Q?hRQWFRQmxBSElBTWdBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?iso-8859-1?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQU?=
+ =?iso-8859-1?Q?FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?iso-8859-1?Q?QUFBQkFBQUFBQUFBQUFJQUFBQUFBQT09Ii8+PC9tZXRhPg=3D=3D?=
+x-dg-rorf: true
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 23c0a46c-5d62-4e92-1e41-08d9e96f5439
+x-ms-traffictypediagnostic: MW4PR03MB6508:EE_
+x-microsoft-antispam-prvs: <MW4PR03MB6508D4A465719C1C705DB6A5992B9@MW4PR03MB6508.namprd03.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: HaVRZUwP73dWIxVvMnadAWSh/ARRd1qP9q97sLHXP6CkJ7RwLWiaI+wPsqDVKFHRvbYP/U6Yq2xoM4lOjGZKaKFD0V9XE68Y8gG8tJZZyVN1uQU7EjQW5tR3TNmAT+pPQiu0R+GHkOmjmHA4adrCXiZKgfqBzwhOygmcWa6D2A8kr4STzBCJrob+Kcea9h+6fPxOEEGvRD0r/O4DRB4yxfKfXPPKa1vXWJ2BbGIGxJvta24fvXirObwp4SwnZCEwr5aAeDv6dw756BiIDEA+n5CHUAEF+DTfkqpob7yMiaQ2mH2ZjzIizUO2yB1S7eEzS47VcxJ++d34N7H7/tUBVnXbj9LZOvtZU7PJBfJGaKm1wYo9HfizUfFiTfBzHfeLja8XvH8MdWcZsrN4qqzFlZckX6szLz3Lj9jHnncg0nIdF+A0vh4oHxqfBLuqTtBMD5KuNmcODc/I4P4agdOzLKJRCc0vG1L4iigWgb0BYfYJXPazC3Bd50FCBSy0T0TYeh6QpDjtpM+/zLRecc9TorvEPi/Ydcy02I/NKJejjDnL9T6O4czF9FBx1zzcX8ZzZ6pwtceqzOI1H3T0WlD1JPxD1fITis0Xe7p3Qsv50rqQzh8YcDWgEOduZUOurCOI02nicT9/Tew/Jr5lTpSVC8wHv7AAypXoPKN6LhgUTw+7Q/+fYDHbwYcjXT3XT/ZIyQ/QjcSdPZAoTBp9+E1B8w==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR03MB6786.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(122000001)(4326008)(55016003)(54906003)(186003)(110136005)(5660300002)(71200400001)(9686003)(83380400001)(52536014)(2906002)(66446008)(64756008)(33656002)(66946007)(66556008)(66476007)(38100700002)(8936002)(8676002)(76116006)(508600001)(316002)(6506007)(7696005)(86362001)(53546011)(38070700005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?fWtHoDFaZt/UtY7PERuXB6dFEY3D+ukJ+bH64ST70rS5Ho/nqr6bnmpM8z?=
+ =?iso-8859-1?Q?i+gn/bjm09NnHiNXhUdD5vQUKvTOdOQHvlyvK+NXs1k4jYSnpSUw27jMdR?=
+ =?iso-8859-1?Q?D017S+CBJhOBSEN9rmm1aNiUrXULcyVl5lpLdafxlhXSvyTt1WJawHcC+2?=
+ =?iso-8859-1?Q?mcTqatLJqcxGU9HOnzfDLsgn+bNDPNzoCnwVtKS67K51tnXsPryKYpNaTf?=
+ =?iso-8859-1?Q?2OZTYqdFVJGiyw+QJmCG188EUWFGoSqElXQk2G1Lkb2KRXGGmtuj/nZhJn?=
+ =?iso-8859-1?Q?HskOMkBc0w9p/gmkgKwESvZMoPlf8ajJVaT5UQdtur4dttjL7XrtVBHjX3?=
+ =?iso-8859-1?Q?ExV48EmU9YxpBcJFhFR5wUslavAIDeJzpYsgL2wY0F5nFmon9UQ6qtcRRk?=
+ =?iso-8859-1?Q?4NEaa1XY9CJy7irucg7IzWMJGkx2zcASjj98WuQCngizZoVnwor1cstZS2?=
+ =?iso-8859-1?Q?P6xlHHA9VmZivcQFfE2z+3LK1BXmpJFhLveJcMADONBB246LiluY0Gvedf?=
+ =?iso-8859-1?Q?6OENzsRaIbDBcJ/ZLmGPzVpPW+0039WoPVTs2UHPUDnqvc5xw6pUKeJgB8?=
+ =?iso-8859-1?Q?+V97jSxQvg8ileuMBiX0KiTU4mPuVnkrVmbsb2bhdrmENhwzTCtcFa/qRD?=
+ =?iso-8859-1?Q?2UpYOqunxBR8NF4won0KCegNnt9Sl7lLxp7g6UW+SDXIxpws4rglqu/KVx?=
+ =?iso-8859-1?Q?gOjiRmxjpnvcDhpX8y5LtwVtKHReaeU3601NoVgCjNveFAziHKo+QDL4Q5?=
+ =?iso-8859-1?Q?KqZTDqbxdHIE2tjMKIO8Z+IVXFXKHuI856vVM4ppmBdKuDMSn1J7/yut/p?=
+ =?iso-8859-1?Q?gi2olohalx3kXZpBb9ZwssOu4vQOS8ctc4pBwQXMYUke5oPpWsSlEUOLJb?=
+ =?iso-8859-1?Q?PvaZ5lKJIrr1bfbLkfGzts5Nt6r5sCEJhnd1iPeJN5C1CcTU9EtmFYA02v?=
+ =?iso-8859-1?Q?BpTKjoDD1KF4HciaaXsvjk+bJJO4avOPABSvwUF1CvzblGDTL5tscVWJK5?=
+ =?iso-8859-1?Q?D18/eXeceWIjb12JX4nBPVkgo18q0qz9V9psrnGnvgKG7aNyDTk5xQFfa/?=
+ =?iso-8859-1?Q?nI6hUWIiP1WsLAj+EHgPmS+bJdrzcknRzroqK4O4rf1dMi8aTfWuO3uXdR?=
+ =?iso-8859-1?Q?NBhnUYl+/4fgb8GIKKq1ig0YYu/EmPWXk9iN34/6oVQmSW37tX7aqp35f6?=
+ =?iso-8859-1?Q?Rn64eUbe8vpUbmiYa4TWUIeg6c3ZJ+h4CzsJu6S1lvr/AzCx3f7Uo/7pxr?=
+ =?iso-8859-1?Q?I/DSx7TjjkX9puVy4kIhFkcmtCOqtQJUtJ6JVpHK5TycJ23m3iXYGuJ70j?=
+ =?iso-8859-1?Q?OshsTUEO/i2I2zyVYga51J/IJqBjs/wIvlJTkaDBNiXI7uLTMY9NIFD9uc?=
+ =?iso-8859-1?Q?kS/b4dWAtMCWPaKivp76pze18rtlV0WNGoLqCi8atE5M05FRUxUpP1zBlB?=
+ =?iso-8859-1?Q?TiNEAnDu7uq8f1fyGWgAc5f76mTTdpWVJONd/aZFJWouCqt15cYGycUuu0?=
+ =?iso-8859-1?Q?uPnfAix96NO7sRhB0rmDFeZ1O3cbUpExOiErxw0poO1ycQWjlwQpJtw4WN?=
+ =?iso-8859-1?Q?a0vCKwrF5AwCet8ecJr7BtBzwn8lqv02tCVzaW0Iak5Poq6tLSmTSE9URO?=
+ =?iso-8859-1?Q?PxQin1BJZ1SiqSc1mpBXZ+JQ3hsFP3y24rkzPlfB8GBm1tLlr6Ul/9Bj2H?=
+ =?iso-8859-1?Q?dEuU3QKSBoVBUYzyS95UHnYnIZwxtCU4GXvZ3evK5oCWk/quB0yv40yG0x?=
+ =?iso-8859-1?Q?CxCw=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca+lucaceresoli.net/only user confirmed/virtual account not confirmed
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-OriginatorOrg: analog.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR03MB6786.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 23c0a46c-5d62-4e92-1e41-08d9e96f5439
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Feb 2022 12:51:00.9870
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: T48HqCXuSPvMJnbDQ3aBvJ8Otj+D3o+7Z+66kC/bv5qUfySnikgiIc34dp9dAAUCDa12ovsZpkMuT3IZXj5JoQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR03MB6508
+X-Proofpoint-GUID: 2As4rr35qd_HqYjcrTZjHNTBVFw3IJUH
+X-Proofpoint-ORIG-GUID: 2As4rr35qd_HqYjcrTZjHNTBVFw3IJUH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-06_03,2022-02-03_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ lowpriorityscore=0 adultscore=0 malwarescore=0 mlxlogscore=999 mlxscore=0
+ suspectscore=0 spamscore=0 phishscore=0 bulkscore=0 clxscore=1011
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202060096
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,644 +167,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a driver for the TI DS90UB953-Q1, a MIPI CSI-2 video serializer that
-forwards a MIPI CSI-2 input video stream over an FPD Link 3 connection to a
-remote deserializer. It also allows access to I2C and GPIO from the
-deserializer.
+Hi all,
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> -----Original Message-----
+> From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Sent: Saturday, February 5, 2022 7:24 PM
+> To: Jonathan Cameron <jic23@kernel.org>
+> Cc: linux-iio@vger.kernel.org; linux-kernel@vger.kernel.org; Sa, Nuno
+> <Nuno.Sa@analog.com>; Lars-Peter Clausen <lars@metafoo.de>
+> Subject: Re: [PATCH v1 2/2] iio: temperature: ltc2983: Make use of
+> device properties
+>=20
+> [External]
+>=20
+> On Sat, Feb 05, 2022 at 05:14:54PM +0000, Jonathan Cameron wrote:
+> > On Thu,  3 Feb 2022 13:45:06 +0200
+> > Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+> >
+> > > Convert the module to be property provider agnostic and allow
+> > > it to be used on non-OF platforms.
+> >
+> > This description needs expansion as it's not a straight forward
+> > conversion.
+> >
+> > Also, complex enough that I definitely want more eyes and
+> preferably
+> > some testing.
+>=20
+> That's fair. I also spent most of the time on this change in comparison
+> to the
+> whole bundle.
+>=20
+> ...
+>=20
+> > > +#include <asm/byteorder.h>
+> > > +#include <asm/unaligned.h>
+>=20
+> > This may well be a valid addition but it's not called out in the patch
+> > description.
+>=20
+> This is a side effect of the change. Below I will try to explain, tell me=
+ if
+> that is what you want to be added to the commit message (feel free to
+> correct
+> my English).
+>=20
+> The conversion slightly changes the logic behind property reading for
+> the
+> configuration values. Original code allocates just as much memory as
+> needed.
+> Then for each separate 32- or 64-bit value it reads it from the property
+> and converts to a raw one which will be fed to the sensor. In the new
+> code
+> we allocated the amount of memory needed to retrieve all values at
+> once from
+> the property and then convert them as required.
 
----
+Yeah, I understood what you are doing... We allocate some extra bytes so
+that we can simplify a lot the logic to get, convert and put back the prope=
+rties
+in the table... And since we are only writing the __real__ table size into =
+the device
+I'm fairly positive this works. However, I do agree with Jonathan and I wou=
+ld
+be more confident to give this a test before being applied...
 
-Changes RFCv2 -> v3:
+That said, I'm off till the end of the month (just doing minor stuff like r=
+eplying
+to emails :)), so if we can hold this one, I will test it first thing I'm b=
+ack in the
+office.
 
- - expose error counters in sysfs
- - avoid spurions "Cannot read register" during reset
- - add sysfs attribute for error status
- - add vendor prefix to DT property gpio-functions
- - use common clock framework, expose CLK_OUT as a clock
- - code reorganization and cleanups
 
-Changes RFCv1 -> RFCv2: none, this patch is new in RFCv2
----
- MAINTAINERS                   |   1 +
- drivers/media/i2c/Kconfig     |  10 +
- drivers/media/i2c/Makefile    |   1 +
- drivers/media/i2c/ds90ub953.c | 560 ++++++++++++++++++++++++++++++++++
- 4 files changed, 572 insertions(+)
- create mode 100644 drivers/media/i2c/ds90ub953.c
+> ...
+>=20
+> > >  	if (st->custom_table_size + new_custom->size >
+> > > -	    (LTC2983_CUST_SENS_TBL_END_REG -
+> > > -	     LTC2983_CUST_SENS_TBL_START_REG) + 1) {
+> > > +	    (LTC2983_CUST_SENS_TBL_END_REG -
+> LTC2983_CUST_SENS_TBL_START_REG) + 1) {
+> >
+> > Shouldn't really be in this patch. Or at very least call out that there=
+ is
+> > whitespace cleanup in the patch description.
+>=20
+> Good catch! It's a leftover, one case became a patch 1 in this series.
+>=20
+> ...
+>=20
+> > > +	if (is_steinhart)
+> > > +		ret =3D fwnode_property_read_u32_array(fn,
+> propname, new_custom->table, n_entries);
+> > > +	else
+> > > +		ret =3D fwnode_property_read_u64_array(fn,
+> propname, new_custom->table, n_entries);
+> > > +	if (ret < 0)
+> > > +		return ERR_PTR(ret);
+> > > +
+> > > +	/*
+> > > +	 * Steinhart sensors are configured with raw values in the
+> device tree.
+> > > +	 * For the other sensors we must convert the value to raw. The
+> odd
+> > > +	 * index's correspond to temperatures and always have 1/1024
+> of
+> > > +	 * resolution. Temperatures also come in Kelvin, so signed
+> values is
+> > > +	 * not possible.
+> > > +	 */
+> > > +	if (is_steinhart) {
+> >
+> > Perhaps would be cleaner to combine this if else with the one above
+> at the cost
+> > of duplicating the if (ret < 0) check.
+>=20
+> OK, I'm fine with either approach.
+>=20
+> > > +		cpu_to_be32_array(new_custom->table,
+> new_custom->table, n_entries);
+> >
+> > I completely failed to register the hand coded big endian conversion.
+> Nice
+> > tidy up.  However, definitely something to call out in the patch
+> description.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 5aeb557ab5da..85fc43ff22d9 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -19095,6 +19095,7 @@ M:	Luca Ceresoli <luca@lucaceresoli.net>
- L:	linux-media@vger.kernel.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/media/i2c/ti,ds90ub953-q1.yaml
-+F:	drivers/media/i2c/ds90ub953.c
- F:	include/dt-bindings/media/ds90ub953.h
- 
- TEXAS INSTRUMENTS DS90UB954 VIDEO DESERIALIZER DRIVER
-diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-index 9a02444bd647..d84e7679d0ed 100644
---- a/drivers/media/i2c/Kconfig
-+++ b/drivers/media/i2c/Kconfig
-@@ -492,6 +492,16 @@ config VIDEO_DS90UB954
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called ds90ub954.
- 
-+config VIDEO_DS90UB953
-+	tristate "TI DS90UB953-Q1 serializer"
-+	help
-+	  Device driver for the Texas Instruments "DS90UB953-Q1
-+	  FPD-Link III 4.16-Gbps Serializer With CSI-2 Interface for
-+	  2.3MP/60fps Cameras, RADAR, and Other Sensors".
-+
-+	  To compile this driver as a module, choose M here: the
-+	  module will be called ds90ub953.
-+
- comment "Video and audio decoders"
- 
- config VIDEO_SAA717X
-diff --git a/drivers/media/i2c/Makefile b/drivers/media/i2c/Makefile
-index 84e9ad00236a..178de6ad736c 100644
---- a/drivers/media/i2c/Makefile
-+++ b/drivers/media/i2c/Makefile
-@@ -136,6 +136,7 @@ obj-$(CONFIG_VIDEO_MAX9271_LIB)	+= max9271.o
- obj-$(CONFIG_VIDEO_RDACM20)	+= rdacm20.o
- obj-$(CONFIG_VIDEO_RDACM21)	+= rdacm21.o
- obj-$(CONFIG_VIDEO_DS90UB954)	+= ds90ub954.o
-+obj-$(CONFIG_VIDEO_DS90UB953)	+= ds90ub953.o
- obj-$(CONFIG_VIDEO_ST_MIPID02) += st-mipid02.o
- 
- obj-$(CONFIG_SDR_MAX2175) += max2175.o
-diff --git a/drivers/media/i2c/ds90ub953.c b/drivers/media/i2c/ds90ub953.c
-new file mode 100644
-index 000000000000..d4f4621d66eb
---- /dev/null
-+++ b/drivers/media/i2c/ds90ub953.c
-@@ -0,0 +1,560 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/**
-+ * Driver for the Texas Instruments DS90UB953-Q1 video serializer
-+ *
-+ * Copyright (c) 2019 Luca Ceresoli <luca@lucaceresoli.net>
-+ */
-+
-+#include <linux/clk.h>
-+#include <linux/clk-provider.h>
-+#include <linux/i2c.h>
-+#include <linux/init.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/delay.h>
-+#include <linux/rational.h>
-+#include <linux/slab.h>
-+#include <linux/sysfs.h>
-+#include <dt-bindings/media/ds90ub953.h>
-+
-+#define DS90_NUM_GPIOS			4  /* Physical GPIO pins */
-+
-+
-+#define DS90_REG_DEVICE_ID		0x00
-+
-+#define DS90_REG_RESET_CTL		0x01
-+#define DS90_REG_RESET_CTL_RESTART_AUTOLOAD	BIT(2)
-+#define DS90_REG_RESET_CTL_DIGITAL_RESET_1	BIT(1)
-+#define DS90_REG_RESET_CTL_DIGITAL_RESET_0	BIT(0)
-+
-+#define DS90_REG_GENERAL_CFG		0x02
-+#define DS90_REG_MODE_SEL		0x03
-+#define DS90_REG_BC_MODE_SELECT		0x04
-+#define DS90_REG_PLLCLK_CTRL		0x05
-+#define DS90_REG_CLKOUT_CTRL0		0x06
-+#define DS90_REG_CLKOUT_CTRL1		0x07
-+#define DS90_REG_BCC_WATCHDOG		0x08
-+#define DS90_REG_I2C_CONTROL1		0x09
-+#define DS90_REG_I2C_CONTROL2		0x0A
-+#define DS90_REG_SCL_HIGH_TIME		0x0B
-+#define DS90_REG_SCL_LOW_TIME		0x0C
-+
-+#define DS90_REG_LOCAL_GPIO_DATA	0x0D
-+#define DS90_REG_LOCAL_GPIO_DATA_RMTEN(n)	BIT((n) + 4)
-+#define DS90_REG_LOCAL_GPIO_DATA_OUT_SRC(n)	BIT((n) + 4)
-+
-+#define DS90_REG_GPIO_INPUT_CTRL	0x0E
-+#define DS90_REG_GPIO_INPUT_CTRL_INPUT_EN(n)	BIT((n))
-+#define DS90_REG_GPIO_INPUT_CTRL_OUT_EN(n)	BIT((n) + 4)
-+
-+#define DS90_REG_DVP_CFG		0x10
-+#define DS90_REG_DVP_DT			0x11
-+#define DS90_REG_FORCE_BIST_ERR		0x13
-+#define DS90_REG_REMOTE_BIST_CTRL	0x14
-+#define DS90_REG_SENSOR_VGAIN		0x15
-+#define DS90_REG_SENSOR_CTRL0		0x17
-+#define DS90_REG_SENSOR_CTRL1		0x18
-+#define DS90_REG_SENSOR_V0_THRESH	0x19
-+#define DS90_REG_SENSOR_V1_THRESH	0x1A
-+#define DS90_REG_SENSOR_T_THRESH	0x1B
-+#define DS90_REG_SENSOR_T_THRESH	0x1B
-+#define DS90_REG_ALARM_CSI_EN		0x1C
-+#define DS90_REG_ALARM_SENSE_EN		0x1D
-+#define DS90_REG_ALARM_BC_EN		0x1E
-+
-+#define DS90_REG_CSI_POL_SEL		0x20
-+#define DS90_REG_CSI_POL_SEL_POLARITY_CLK0	BIT(4)
-+
-+#define DS90_REG_CSI_LP_POLARITY	0x21
-+#define DS90_REG_CSI_LP_POLARITY_POL_LP_CLK0	BIT(4)
-+
-+#define DS90_REG_CSI_EN_HSRX		0x22
-+#define DS90_REG_CSI_EN_LPRX		0x23
-+#define DS90_REG_CSI_EN_RXTERM		0x24
-+#define DS90_REG_CSI_PKT_HDR_TINIT_CTRL 0x31
-+#define DS90_REG_BCC_CONFIG		0x32
-+#define DS90_REG_DATAPATH_CTL1		0x33
-+#define DS90_REG_REMOTE_PAR_CAP1	0x35
-+#define DS90_REG_DES_ID			0x37
-+#define DS90_REG_SLAVE_ID_0		0x39
-+#define DS90_REG_SLAVE_ID_1		0x3A
-+#define DS90_REG_SLAVE_ID_2		0x3B
-+#define DS90_REG_SLAVE_ID_3		0x3C
-+#define DS90_REG_SLAVE_ID_4		0x3D
-+#define DS90_REG_SLAVE_ID_5		0x3E
-+#define DS90_REG_SLAVE_ID_6		0x3F
-+#define DS90_REG_SLAVE_ID_7		0x40
-+#define DS90_REG_SLAVE_ID_ALIAS_0	0x41
-+#define DS90_REG_SLAVE_ID_ALIAS_0	0x41
-+#define DS90_REG_SLAVE_ID_ALIAS_1	0x42
-+#define DS90_REG_SLAVE_ID_ALIAS_2	0x43
-+#define DS90_REG_SLAVE_ID_ALIAS_3	0x44
-+#define DS90_REG_SLAVE_ID_ALIAS_4	0x45
-+#define DS90_REG_SLAVE_ID_ALIAS_5	0x46
-+#define DS90_REG_SLAVE_ID_ALIAS_6	0x47
-+#define DS90_REG_SLAVE_ID_ALIAS_7	0x48
-+#define DS90_REG_BC_CTRL		0x49
-+#define DS90_REG_REV_MASK_ID		0x50
-+
-+#define DS90_REG_DEVICE_STS		0x51
-+#define DS90_REG_DEVICE_STS_CFG_INIT_DONE	BIT(6)
-+
-+#define DS90_REG_GENERAL_STATUS		0x52
-+#define DS90_REG_GPIO_PIN_STS		0x53
-+#define DS90_REG_BIST_ERR_CNT		0x54
-+#define DS90_REG_CRC_ERR_CNT1		0x55
-+#define DS90_REG_CRC_ERR_CNT2		0x56
-+#define DS90_REG_SENSOR_STATUS		0x57
-+#define DS90_REG_SENSOR_V0		0x58
-+#define DS90_REG_SENSOR_V1		0x59
-+#define DS90_REG_SENSOR_T		0x5A
-+#define DS90_REG_SENSOR_T		0x5A
-+#define DS90_REG_CSI_ERR_CNT		0x5C
-+#define DS90_REG_CSI_ERR_STATUS		0x5D
-+#define DS90_REG_CSI_ERR_DLANE01	0x5E
-+#define DS90_REG_CSI_ERR_DLANE23	0x5F
-+#define DS90_REG_CSI_ERR_CLK_LANE	0x60
-+#define DS90_REG_CSI_PKT_HDR_VC_ID	0x61
-+#define DS90_REG_PKT_HDR_WC_LSB		0x62
-+#define DS90_REG_PKT_HDR_WC_MSB		0x63
-+#define DS90_REG_CSI_ECC		0x64
-+#define DS90_REG_IND_ACC_CTL		0xB0
-+#define DS90_REG_IND_ACC_ADDR		0xB1
-+#define DS90_REG_IND_ACC_DATA		0xB2
-+#define DS90_REG_FPD3_RX_ID0		0xF0
-+#define DS90_REG_FPD3_RX_ID1		0xF1
-+#define DS90_REG_FPD3_RX_ID2		0xF2
-+#define DS90_REG_FPD3_RX_ID3		0xF3
-+#define DS90_REG_FPD3_RX_ID4		0xF4
-+#define DS90_REG_FPD3_RX_ID5		0xF5
-+
-+struct ds90_data {
-+	struct i2c_client      *client;
-+	struct clk        *line_rate_clk;
-+
-+	struct clk_hw      clk_out_hw;
-+
-+	u32 gpio_func[DS90_NUM_GPIOS];
-+	bool inv_clock_pol;
-+
-+	u64 csi_err_cnt;
-+
-+	u8 clkout_mul;
-+	u8 clkout_div;
-+	u8 clkout_ctrl0;
-+	u8 clkout_ctrl1;
-+};
-+
-+/* -----------------------------------------------------------------------------
-+ * Basic device access
-+ */
-+static s32 ds90_read(const struct ds90_data *ds90, u8 reg)
-+{
-+	s32 ret;
-+
-+	ret = i2c_smbus_read_byte_data(ds90->client, reg);
-+	if (ret < 0)
-+		dev_err(&ds90->client->dev, "Cannot read register 0x%02x!\n",
-+			reg);
-+
-+	return ret;
-+}
-+
-+static s32 ds90_write(const struct ds90_data *ds90, u8 reg, u8 val)
-+{
-+	s32 ret;
-+
-+	ret = i2c_smbus_write_byte_data(ds90->client, reg, val);
-+	if (ret < 0)
-+		dev_err(&ds90->client->dev, "Cannot write register 0x%02x!\n",
-+			reg);
-+
-+	return ret;
-+}
-+
-+/*
-+ * Reset via registers (useful from remote).
-+ * Note: the procedure is undocumented, but this one seems to work.
-+ */
-+static void ds90_soft_reset(struct ds90_data *ds90)
-+{
-+	int retries = 10;
-+	s32 ret;
-+
-+	while (retries-- > 0) {
-+		ret = ds90_write(ds90, DS90_REG_RESET_CTL,
-+				 DS90_REG_RESET_CTL_DIGITAL_RESET_1);
-+		if (ret >= 0)
-+			break;
-+		usleep_range(1000, 3000);
-+	}
-+
-+	retries = 10;
-+	while (retries-- > 0) {
-+		usleep_range(1000, 3000);
-+		ret = ds90_read(ds90, DS90_REG_DEVICE_STS);
-+		if (ret >= 0 && (ret & DS90_REG_DEVICE_STS_CFG_INIT_DONE))
-+			break;
-+	}
-+}
-+
-+/* -----------------------------------------------------------------------------
-+ * sysfs
-+ */
-+
-+static ssize_t bc_crc_err_cnt_show(struct device *dev,
-+				   struct device_attribute *attr, char *buf)
-+{
-+	struct ds90_data *ds90 = dev_get_drvdata(dev);
-+	s32 lsb = ds90_read(ds90, DS90_REG_CRC_ERR_CNT1);
-+	s32 msb = ds90_read(ds90, DS90_REG_CRC_ERR_CNT2);
-+	int val;
-+
-+	if (lsb < 0)
-+		return lsb;
-+	if (msb < 0)
-+		return msb;
-+
-+	val = (msb << 8) | lsb;
-+
-+	return sprintf(buf, "%d\n", val);
-+}
-+
-+static ssize_t csi_err_cnt_show(struct device *dev,
-+				struct device_attribute *attr, char *buf)
-+{
-+	struct ds90_data *ds90 = dev_get_drvdata(dev);
-+	s32 val = ds90_read(ds90, DS90_REG_CSI_ERR_CNT);
-+
-+	if (val > 0)
-+		ds90->csi_err_cnt += val;
-+
-+	return sprintf(buf, "%llu\n", ds90->csi_err_cnt);
-+}
-+
-+static ssize_t csi_err_status_show(struct device *dev,
-+				   struct device_attribute *attr, char *buf)
-+{
-+	struct ds90_data *ds90 = dev_get_drvdata(dev);
-+	s32 val = ds90_read(ds90, DS90_REG_CSI_ERR_STATUS);
-+
-+	return sprintf(buf, "0x%02x\n", val);
-+}
-+
-+static DEVICE_ATTR_RO(bc_crc_err_cnt);
-+static DEVICE_ATTR_RO(csi_err_cnt);
-+static DEVICE_ATTR_RO(csi_err_status);
-+
-+static struct attribute *ds90_attributes[] = {
-+	&dev_attr_bc_crc_err_cnt.attr,
-+	&dev_attr_csi_err_cnt.attr,
-+	&dev_attr_csi_err_status.attr,
-+	NULL
-+};
-+
-+static const struct attribute_group ds90_attr_group = {
-+	.attrs		= ds90_attributes,
-+};
-+
-+/* -----------------------------------------------------------------------------
-+ * Clock output
-+ */
-+
-+/*
-+ * Assume mode 0 "CSI-2 Synchronous mode" (strap, reg 0x03) is always
-+ * used. In this mode all clocks are derived from the deserializer. Other
-+ * modes are not implemented.
-+ */
-+
-+/*
-+ * We always use 4 as a pre-divider (HS_CLK_DIV = 2).
-+ *
-+ * According to the datasheet:
-+ * - "HS_CLK_DIV typically should be set to either 16, 8, or 4 (default)."
-+ * - "if it is not possible to have an integer ratio of N/M, it is best to
-+ *    select a smaller value for HS_CLK_DIV.
-+ *
-+ * For above reasons the default HS_CLK_DIV seems the best in the average
-+ * case. Use always that value to keep the code simple.
-+ */
-+static const unsigned long hs_clk_div = 2;
-+static const unsigned long prediv = (1 << hs_clk_div);
-+
-+static unsigned long ds90_clkout_recalc_rate(struct clk_hw *hw,
-+					     unsigned long parent_rate)
-+{
-+	struct ds90_data *ds90 = container_of(hw, struct ds90_data, clk_out_hw);
-+	s32 ctrl0 = ds90_read(ds90, DS90_REG_CLKOUT_CTRL0);
-+	s32 ctrl1 = ds90_read(ds90, DS90_REG_CLKOUT_CTRL1);
-+	unsigned long mul, div, ret;
-+
-+	if (ctrl0 < 0 || ctrl1 < 0) {
-+		// Perhaps link down, use cached values
-+		ctrl0 = ds90->clkout_ctrl0;
-+		ctrl1 = ds90->clkout_ctrl1;
-+	}
-+
-+	mul = ctrl0 & 0x1f;
-+	div = ctrl1 & 0xff;
-+
-+	if (div == 0)
-+		return 0;
-+
-+	ret = parent_rate / prediv * mul / div;
-+
-+	return ret;
-+}
-+
-+static long ds90_clkout_round_rate(struct clk_hw *hw, unsigned long rate,
-+				   unsigned long *parent_rate)
-+{
-+	struct ds90_data *ds90 = container_of(hw, struct ds90_data, clk_out_hw);
-+	struct device *dev = &ds90->client->dev;
-+	unsigned long mul, div, res;
-+
-+	rational_best_approximation(rate, *parent_rate / prediv,
-+				    (1 << 5) - 1, (1 << 8) - 1,
-+				    &mul, &div);
-+	ds90->clkout_mul = mul;
-+	ds90->clkout_div = div;
-+
-+	res = *parent_rate / prediv * ds90->clkout_mul / ds90->clkout_div;
-+
-+	dev_dbg(dev, "%lu / %lu * %lu / %lu = %lu (wanted %lu)",
-+		*parent_rate, prediv, mul, div, res, rate);
-+
-+	return res;
-+}
-+
-+static int ds90_clkout_set_rate(struct clk_hw *hw, unsigned long rate,
-+			    unsigned long parent_rate)
-+{
-+	struct ds90_data *ds90 = container_of(hw, struct ds90_data, clk_out_hw);
-+
-+	ds90->clkout_ctrl0 = (hs_clk_div << 5) | ds90->clkout_mul;
-+	ds90->clkout_ctrl1 = ds90->clkout_div;
-+
-+	ds90_write(ds90, DS90_REG_CLKOUT_CTRL0, ds90->clkout_ctrl0);
-+	ds90_write(ds90, DS90_REG_CLKOUT_CTRL1, ds90->clkout_ctrl1);
-+
-+	return 0;
-+}
-+
-+static const struct clk_ops ds90_clkout_ops = {
-+	.recalc_rate	= ds90_clkout_recalc_rate,
-+	.round_rate	= ds90_clkout_round_rate,
-+	.set_rate	= ds90_clkout_set_rate,
-+};
-+
-+static int ds90_register_clkout(struct ds90_data *ds90)
-+{
-+	struct device *dev = &ds90->client->dev;
-+	const char *parent_names[1] = { __clk_get_name(ds90->line_rate_clk) };
-+	const struct clk_init_data init = {
-+		.name         = kasprintf(GFP_KERNEL, "%s.clk_out", dev_name(dev)),
-+		.ops          = &ds90_clkout_ops,
-+		.parent_names = parent_names,
-+		.num_parents  = 1,
-+	};
-+	int err;
-+
-+	ds90->clk_out_hw.init = &init;
-+
-+	err = devm_clk_hw_register(dev, &ds90->clk_out_hw);
-+	kfree(init.name); /* clock framework made a copy of the name */
-+	if (err)
-+		return dev_err_probe(dev, err, "Cannot register clock HW\n");
-+
-+	err = devm_of_clk_add_hw_provider(dev, of_clk_hw_simple_get, &ds90->clk_out_hw);
-+	if (err)
-+		return dev_err_probe(dev, err, "Cannot add OF clock provider\n");
-+
-+	return 0;
-+}
-+
-+/* -----------------------------------------------------------------------------
-+ * GPIOs
-+ */
-+
-+static void ds90_configure_gpios(struct ds90_data *ds90)
-+{
-+	u8 gpio_input_ctrl = 0;
-+	u8 local_gpio_data = 0;
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(ds90->gpio_func); i++) {
-+		switch (ds90->gpio_func[i]) {
-+		case DS90_GPIO_FUNC_INPUT:
-+			gpio_input_ctrl |= DS90_REG_GPIO_INPUT_CTRL_INPUT_EN(i);
-+			break;
-+		case DS90_GPIO_FUNC_OUTPUT_REMOTE:
-+			gpio_input_ctrl |= DS90_REG_GPIO_INPUT_CTRL_OUT_EN(i);
-+			local_gpio_data |= DS90_REG_LOCAL_GPIO_DATA_RMTEN(i);
-+			break;
-+		}
-+	}
-+
-+	ds90_write(ds90, DS90_REG_LOCAL_GPIO_DATA, local_gpio_data);
-+	ds90_write(ds90, DS90_REG_GPIO_INPUT_CTRL, gpio_input_ctrl);
-+	/* TODO setting DATAPATH_CTL1 is needed for inputs? */
-+}
-+
-+/* -----------------------------------------------------------------------------
-+ * Core
-+ */
-+
-+static int ds90_configure(struct ds90_data *ds90)
-+{
-+	struct device *dev = &ds90->client->dev;
-+	s32 rev_mask;
-+	int err;
-+
-+	rev_mask = ds90_read(ds90, DS90_REG_REV_MASK_ID);
-+	if (rev_mask < 0) {
-+		err = rev_mask;
-+		dev_err(dev, "Cannot read first register (%d), abort\n", err);
-+		return err;
-+	}
-+
-+	dev_dbg_once(dev, "rev/mask %02x\n", rev_mask);
-+
-+	/* I2C fast mode 400 kHz */
-+	/* TODO compute values from REFCLK */
-+	ds90_write(ds90, DS90_REG_SCL_HIGH_TIME, 0x13);
-+	ds90_write(ds90, DS90_REG_SCL_LOW_TIME,  0x26);
-+
-+	ds90_write(ds90, DS90_REG_CLKOUT_CTRL0, ds90->clkout_ctrl0);
-+	ds90_write(ds90, DS90_REG_CLKOUT_CTRL1, ds90->clkout_ctrl1);
-+
-+	if (ds90->inv_clock_pol) {
-+		ds90_write(ds90,
-+			   DS90_REG_CSI_POL_SEL,
-+			   DS90_REG_CSI_POL_SEL_POLARITY_CLK0);
-+		ds90_write(ds90,
-+			   DS90_REG_CSI_LP_POLARITY,
-+			   DS90_REG_CSI_LP_POLARITY_POL_LP_CLK0);
-+	}
-+
-+	ds90_configure_gpios(ds90);
-+
-+	return 0;
-+}
-+
-+static int ds90_parse_dt(struct ds90_data *ds90)
-+{
-+	struct device_node *np = ds90->client->dev.of_node;
-+	struct device *dev = &ds90->client->dev;
-+	int err;
-+	int i;
-+
-+	if (!np) {
-+		dev_err(dev, "OF: no device tree node!\n");
-+		return -ENOENT;
-+	}
-+
-+	/* optional, if absent all GPIO pins are unused */
-+	err = of_property_read_u32_array(np, "ti,gpio-functions", ds90->gpio_func,
-+					ARRAY_SIZE(ds90->gpio_func));
-+	if (err && err != -EINVAL)
-+		dev_err(dev, "DT: invalid ti,gpio-functions property (%d)", err);
-+
-+	for (i = 0; i < ARRAY_SIZE(ds90->gpio_func); i++) {
-+		if (ds90->gpio_func[i] >= DS90_GPIO_N_FUNCS) {
-+			dev_err(dev,
-+				"Unknown ti,gpio-functions value %u for GPIO%d of %pOF",
-+				ds90->gpio_func[i], i, np);
-+			return -EINVAL;
-+		}
-+	}
-+
-+	ds90->inv_clock_pol = of_property_read_bool(np, "ti,ds90ub953-q1-clk-inv-pol-quirk");
-+
-+	return 0;
-+}
-+
-+static int ds90_probe(struct i2c_client *client)
-+{
-+	struct device *dev = &client->dev;
-+	struct ds90_data *ds90;
-+	int err;
-+
-+	dev_dbg(dev, "probing, addr 0x%02x\n", client->addr);
-+
-+	ds90 = devm_kzalloc(dev, sizeof(*ds90), GFP_KERNEL);
-+	if (!ds90)
-+		return -ENOMEM;
-+
-+	ds90->client = client;
-+	i2c_set_clientdata(client, ds90);
-+
-+	/* Default values for clock multiplier and divider registers */
-+	ds90->clkout_ctrl0 = 0x41;
-+	ds90->clkout_ctrl1 = 0x28;
-+
-+	ds90->line_rate_clk = devm_clk_get(dev, NULL);
-+	if (IS_ERR(ds90->line_rate_clk))
-+		return dev_err_probe(dev, PTR_ERR(ds90->line_rate_clk),
-+				     "Cannot get line rate clock\n");
-+	dev_dbg(dev, "line rate: %10lu Hz\n", clk_get_rate(ds90->line_rate_clk));
-+
-+	err = ds90_register_clkout(ds90);
-+	if (err)
-+		return err;
-+
-+	err = ds90_parse_dt(ds90);
-+	if (err)
-+		goto err_parse_dt;
-+
-+	err = sysfs_create_group(&dev->kobj, &ds90_attr_group);
-+	if (err)
-+		goto err_sysfs;
-+
-+	ds90_soft_reset(ds90);
-+	ds90_configure(ds90);
-+
-+	dev_info(dev, "Ready\n");
-+
-+	return 0;
-+
-+err_sysfs:
-+err_parse_dt:
-+	return err;
-+}
-+
-+static int ds90_remove(struct i2c_client *client)
-+{
-+	dev_info(&client->dev, "Removing\n");
-+	return 0;
-+}
-+
-+static const struct i2c_device_id ds90_id[] = {
-+	{ "ds90ub953-q1", 0 },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(i2c, ds90_id);
-+
-+#ifdef CONFIG_OF
-+static const struct of_device_id ds90_dt_ids[] = {
-+	{ .compatible = "ti,ds90ub953-q1", },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, ds90_dt_ids);
-+#endif
-+
-+static struct i2c_driver ds90ub953_driver = {
-+	.probe_new	= ds90_probe,
-+	.remove		= ds90_remove,
-+	.id_table	= ds90_id,
-+	.driver = {
-+		.name	= "ds90ub953",
-+		.owner = THIS_MODULE,
-+		.of_match_table = of_match_ptr(ds90_dt_ids),
-+	},
-+};
-+
-+module_i2c_driver(ds90ub953_driver);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("Texas Instruments DS90UB953-Q1 CSI-2 serializer driver");
-+MODULE_AUTHOR("Luca Ceresoli <luca@lucaceresoli.net>");
--- 
-2.25.1
+The hand coded big endian was done to not have to make a distinction betwee=
+n
+3 and 4 bytes properties. With these changes it does not make sense anymore
+to have it...
 
+- Nuno S=E1

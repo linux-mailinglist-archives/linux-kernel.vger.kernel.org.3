@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB6024AB23D
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 22:13:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15EEB4AB23E
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 22:13:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239077AbiBFVNb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 16:13:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42248 "EHLO
+        id S239469AbiBFVNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 16:13:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235202AbiBFVNZ (ORCPT
+        with ESMTP id S236160AbiBFVN0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 16:13:25 -0500
+        Sun, 6 Feb 2022 16:13:26 -0500
 Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51746C06173B;
-        Sun,  6 Feb 2022 13:13:24 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id s13so36368474ejy.3;
-        Sun, 06 Feb 2022 13:13:24 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F1A7C061348;
+        Sun,  6 Feb 2022 13:13:25 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id og43so12388415ejc.0;
+        Sun, 06 Feb 2022 13:13:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=f9FB0LY+dCar991Pis7i7FQYT3UDxcaUPHPXiBU054c=;
-        b=GubcTaPPqQu/HO2US1FaY5R8FchW29Wzy8xA3a4yguDXqK/21y75jxJKV8RYGK2I1y
-         HHQ1WC5lGSX9aze8mS+J2j7fLVXIV22CLpPf3FUoGT/fBp9x7d5xdCFgKx83XoYvoiRt
-         ioX0lAW6MiAWqEmvnXm8eFmld0ZO2NksIrfKCPZvHkyA5R5+DWwtbI8MHUKJz6onPcAo
-         icJLlSKnClSLN3nFubtGGCTmSb0TaRUb0zv8UYU+I1gMu1hQ0dvaFW+lcbDIsf2RoFlx
-         Vct/YoRMa82i1LxUrWIHHnr8TB7KA3VhiuJX/fgsm93hV0iKgX/YONF9xqBxF0SBH9eR
-         O4Xg==
+        bh=H15gy/ocJ3lh6QLJW7NZUAAdGXjkh3lMGdqvh2wTFcg=;
+        b=Y0/MU4FG+6LgCIomPN00Q09bWAxvZLMzxzYHgX2LiVkVv9St7b7ERcMUULcag+i2B1
+         dJ6D1Q+KTLNu+ROBs+8IT+ujxrsWiDDqKL9oqhwJRwe9MUFdQbKZOa9ssa8UZo5t2qfT
+         ox9H3ctO/RyntTrwDgJ9QJJkZ4cun/O3KrpjqMOFLu4kcYo5JBcGLFU9KBG4HP7iTp/D
+         dD4z4oah/XyjCjIwIi/fUGwvVdi+Zt9FXJtgeDDVcMzRQ9ZVHATszL5YzShdo4pfKsug
+         L5fU4AUYgahDKQAVV5OyIO/YFh8AzbepVKbwaajjCM1D+WUaQGzyFOEi7WY1IXRhYWp8
+         b+Lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=f9FB0LY+dCar991Pis7i7FQYT3UDxcaUPHPXiBU054c=;
-        b=Lxk/iaOq98XHf9vTkkPjRNAAVywVp5280pLOWuqljwcHRSEiE2r5zGx4Uvh5QRcid9
-         fhcf0HLxb+7fPyX/S0xJ0I5P1H6Sz96J70lPXvIkDA5LPwby/PUFYujzrm0rwpNUccWA
-         6kiUUg8YAsGd7a4wef6A4T3KYWqRKjrB2u7/riEwiHSeKwf3SFpXmaEeHcKOqIllqcu9
-         a0uIT2b3ckynX74OPn2viakvpjeGgJUn1DNW2FCLrvtrB7aUhiDSV11EEK0cV+I+A0mP
-         +KH3QcphpguQzutUNiT2Uwc7wdgDExj2nzqhQFztrVf0+a6p4fx73DPbbUvdhbYTzujC
-         EwpQ==
-X-Gm-Message-State: AOAM530DkhmEGhkmEWKZ4TnLav4VYzhNkGlZZLfG9me5KY6kvj+OW3Tm
-        xuvfx0qinHf16lBGji31hhU=
-X-Google-Smtp-Source: ABdhPJxq/rLEG4mVhe4ens6tStaUaHT2AdS4YzbzI36FZq+SI4SZKnxDouaN4HtFALEECHtzTxqeMg==
-X-Received: by 2002:a17:907:6d1b:: with SMTP id sa27mr7420122ejc.166.1644182002726;
-        Sun, 06 Feb 2022 13:13:22 -0800 (PST)
+        bh=H15gy/ocJ3lh6QLJW7NZUAAdGXjkh3lMGdqvh2wTFcg=;
+        b=fkTxYgMIS13b6JruRVHB58cDkbzFBMRoEV44nvHR9uzOxD8L4GHLEh8ryuytQfqC2o
+         V3YEBCqY9qHRz5rsshteakM5/IqvZ7Fq6bHV7q+l38J8T+cO2dNVMFRRvCBtrypeG59q
+         2BCkm6kAmAUqEqOQ2Dl1QNeOUBEvIEUNDAYuqxIt0LVhG8WjhlD1sTAZDEYwN9yXmeYj
+         CYqPeg1impeQBhaPMUBr0yt07OEqIzOJPb/onAguw/GlmXdlKa2pWdSLfyepTyATIhXQ
+         0maWG25sXWWypxCjUNgww5bsW60gaxoztXrSa4ebUSz32VMujfl4BlXegcfDAhQiqASa
+         wNYw==
+X-Gm-Message-State: AOAM532xO/yzx+xbvKOjljfEYVvpPTbln/LYRpfL/njUDECY1AaJ5I5p
+        qr107osF6heiNrdRRS9SXjU=
+X-Google-Smtp-Source: ABdhPJwZ4ohwiIIoL1XPwpl7Te3h6v+tUWNTtRaXiz87yedhSc1V3hapNWXVlUJbjzt6cZyqFN5RKw==
+X-Received: by 2002:a17:907:3e0c:: with SMTP id hp12mr7519857ejc.685.1644182004124;
+        Sun, 06 Feb 2022 13:13:24 -0800 (PST)
 Received: from demon-pc.localdomain ([79.119.107.253])
-        by smtp.gmail.com with ESMTPSA id a4sm1248598edr.33.2022.02.06.13.13.21
+        by smtp.gmail.com with ESMTPSA id a4sm1248598edr.33.2022.02.06.13.13.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Feb 2022 13:13:22 -0800 (PST)
+        Sun, 06 Feb 2022 13:13:23 -0800 (PST)
 From:   Cosmin Tanislav <demonsingur@gmail.com>
 X-Google-Original-From: Cosmin Tanislav <cosmin.tanislav@analog.com>
 Cc:     cosmin.tanislav@analog.com, demonsingur@gmail.com,
@@ -55,9 +55,9 @@ Cc:     cosmin.tanislav@analog.com, demonsingur@gmail.com,
         Michael Hennerich <Michael.Hennerich@analog.com>,
         Rob Herring <robh+dt@kernel.org>, linux-iio@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 1/5] iio: introduce mag_referenced
-Date:   Sun,  6 Feb 2022 23:13:03 +0200
-Message-Id: <20220206211307.1564647-2-cosmin.tanislav@analog.com>
+Subject: [PATCH v4 2/5] iio: ABI: document mag_referenced
+Date:   Sun,  6 Feb 2022 23:13:04 +0200
+Message-Id: <20220206211307.1564647-3-cosmin.tanislav@analog.com>
 X-Mailer: git-send-email 2.35.0
 In-Reply-To: <20220206211307.1564647-1-cosmin.tanislav@analog.com>
 References: <20220206211307.1564647-1-cosmin.tanislav@analog.com>
@@ -89,47 +89,46 @@ Add a new event type that makes this behavior clear.
 
 Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
 ---
- drivers/iio/industrialio-event.c | 1 +
- include/uapi/linux/iio/types.h   | 1 +
- tools/iio/iio_event_monitor.c    | 1 +
- 3 files changed, 3 insertions(+)
+ Documentation/ABI/testing/sysfs-bus-iio | 26 +++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-diff --git a/drivers/iio/industrialio-event.c b/drivers/iio/industrialio-event.c
-index d0732eac0f0a..ce8b102ce52f 100644
---- a/drivers/iio/industrialio-event.c
-+++ b/drivers/iio/industrialio-event.c
-@@ -230,6 +230,7 @@ static const char * const iio_ev_type_text[] = {
- 	[IIO_EV_TYPE_THRESH_ADAPTIVE] = "thresh_adaptive",
- 	[IIO_EV_TYPE_MAG_ADAPTIVE] = "mag_adaptive",
- 	[IIO_EV_TYPE_CHANGE] = "change",
-+	[IIO_EV_TYPE_MAG_REFERENCED] = "mag_referenced",
- };
+diff --git a/Documentation/ABI/testing/sysfs-bus-iio b/Documentation/ABI/testing/sysfs-bus-iio
+index c551301b33f1..41c1e3e1bf30 100644
+--- a/Documentation/ABI/testing/sysfs-bus-iio
++++ b/Documentation/ABI/testing/sysfs-bus-iio
+@@ -1213,6 +1213,32 @@ Description:
+ 		number or direction is not specified, applies to all channels of
+ 		this type.
  
- static const char * const iio_ev_dir_text[] = {
-diff --git a/include/uapi/linux/iio/types.h b/include/uapi/linux/iio/types.h
-index 48c13147c0a8..472cead10d8d 100644
---- a/include/uapi/linux/iio/types.h
-+++ b/include/uapi/linux/iio/types.h
-@@ -104,6 +104,7 @@ enum iio_event_type {
- 	IIO_EV_TYPE_THRESH_ADAPTIVE,
- 	IIO_EV_TYPE_MAG_ADAPTIVE,
- 	IIO_EV_TYPE_CHANGE,
-+	IIO_EV_TYPE_MAG_REFERENCED,
- };
- 
- enum iio_event_direction {
-diff --git a/tools/iio/iio_event_monitor.c b/tools/iio/iio_event_monitor.c
-index b94a16ba5c6c..2f4581658859 100644
---- a/tools/iio/iio_event_monitor.c
-+++ b/tools/iio/iio_event_monitor.c
-@@ -68,6 +68,7 @@ static const char * const iio_ev_type_text[] = {
- 	[IIO_EV_TYPE_THRESH_ADAPTIVE] = "thresh_adaptive",
- 	[IIO_EV_TYPE_MAG_ADAPTIVE] = "mag_adaptive",
- 	[IIO_EV_TYPE_CHANGE] = "change",
-+	[IIO_EV_TYPE_MAG_REFERENCED] = "mag_referenced",
- };
- 
- static const char * const iio_ev_dir_text[] = {
++What:		/sys/.../iio:deviceX/events/in_accel_mag_referenced_en
++What:		/sys/.../iio:deviceX/events/in_accel_mag_referenced_rising_en
++What:		/sys/.../iio:deviceX/events/in_accel_mag_referenced_falling_en
++What:		/sys/.../iio:deviceX/events/in_accel_y_mag_referenced_en
++What:		/sys/.../iio:deviceX/events/in_accel_y_mag_referenced_rising_en
++What:		/sys/.../iio:deviceX/events/in_accel_y_mag_referenced_falling_en
++KernelVersion:	5.18
++Contact:	linux-iio@vger.kernel.org
++Description:
++		Similar to in_accel_mag[_y][_rising|_falling]_en, but the event
++		value is relative to a reference magnitude. The reference magnitude
++		includes the graviational acceleration.
++
++What:		/sys/.../iio:deviceX/events/in_accel_mag_referenced_value
++What:		/sys/.../iio:deviceX/events/in_accel_mag_referenced_rising_value
++What:		/sys/.../iio:deviceX/events/in_accel_mag_referenced_falling_value
++What:		/sys/.../iio:deviceX/events/in_accel_y_mag_referenced_value
++What:		/sys/.../iio:deviceX/events/in_accel_y_mag_referenced_rising_value
++What:		/sys/.../iio:deviceX/events/in_accel_y_mag_referenced_falling_value
++KernelVersion:	5.18
++Contact:	linux-iio@vger.kernel.org
++Description:
++		The value to which the reference magnitude of the channel is
++		compared. If the axis is not specified, it applies to all channels
++		of this type.
++
+ What:		/sys/.../events/in_steps_change_en
+ KernelVersion:	4.0
+ Contact:	linux-iio@vger.kernel.org
 -- 
 2.35.0
 

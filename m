@@ -2,160 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 046694AAF06
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 12:36:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69EB34AAEFD
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 12:30:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234336AbiBFLf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 06:35:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35930 "EHLO
+        id S233942AbiBFL34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 06:29:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234155AbiBFLf5 (ORCPT
+        with ESMTP id S233668AbiBFL3w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 06:35:57 -0500
-X-Greylist: delayed 546 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Feb 2022 03:35:56 PST
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 729BCC06173B;
-        Sun,  6 Feb 2022 03:35:56 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 0B7473201D7C;
-        Sun,  6 Feb 2022 06:26:47 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Sun, 06 Feb 2022 06:26:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=qciHEBrtufsFgTJmS
-        CoqEjSJb7jQh8MaOov+ID8TdGg=; b=ExvBl4UuI0iIsGA2LIUN7nQvTTn602OQr
-        pKKbiF+Vh5e4nhEmRQYsQmco/KY7CY9KFzW2Kq56aACJukwEu0RfzpQDwBFGVAE7
-        ucPlSDSDPljQ34KWjXvV/2LReXcWINuo9VSpYji1WKxQcVo2l27wlZlKZisABUam
-        Yv1g9wk9EZTbqg2371rmxOLUNr2sFj0hgEiENYUm9UnnYhGdCLJR8BxtDZ1uKzew
-        gqe0jhtxqqv8K1GcVEBg2cdFGQo/ir/w49hsMTSP5RDDIINufifRbccQsI3sjpyE
-        QaVLlKKGPrSr0HuXDxrlhaLF9bZHegesOA66USFjdd9rkDuGFSC1w==
-X-ME-Sender: <xms:drD_YaZE7v5IzpdmMlU95T2ZYIh4-oXec4b2rnAWDM3K6yKKo2sk8g>
-    <xme:drD_YdZ6HiIgy-dq4dgIqEYV4RCulxyW5w2ItNjn9zQX29yMmb-DZY5nhJb8pkzKf
-    Tia7kfQjHCXHP4>
-X-ME-Received: <xmr:drD_YU_p_rHXy4jk80eqbjDqv4X3BwQ9lTjLGHR8vp2SHoDk_zmfN2bEDnaJEmTrXW5ycddsHi_5CuD-ndyNJkNJr_EfUA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrheefgddvjecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepkfguohcuufgt
-    hhhimhhmvghluceoihguohhstghhsehiughoshgthhdrohhrgheqnecuggftrfgrthhtvg
-    hrnheptdffkeekfeduffevgeeujeffjefhtefgueeugfevtdeiheduueeukefhudehleet
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepihguoh
-    hstghhsehiughoshgthhdrohhrgh
-X-ME-Proxy: <xmx:d7D_Ycq83ap47MsxsSU8L67VpT-UvH6-qQ-Ed-gcDhwrcF1oLHCePw>
-    <xmx:d7D_YVqigmrbgH39eRHYqU4P8DDIp7AeUN6W6fric6BGZc1mJbeoUQ>
-    <xmx:d7D_YaSYWu-vXcbbY_-OAsyRGGNWi7Dp0xmMkthChEFROq98Wynk0g>
-    <xmx:d7D_YWcfrp0ZAv7c_6Qkl9NcInvTP-UKQB4GAz_B0mVunoVzPpXM9Q>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 6 Feb 2022 06:26:46 -0500 (EST)
-Date:   Sun, 6 Feb 2022 13:26:41 +0200
-From:   Ido Schimmel <idosch@idosch.org>
-To:     menglong8.dong@gmail.com
-Cc:     kuba@kernel.org, dsahern@kernel.org, nhorman@tuxdriver.com,
-        davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rostedt@goodmis.org,
-        Menglong Dong <imagedong@tencent.com>
-Subject: Re: [PATCH v6 net-next] net: drop_monitor: support drop reason
-Message-ID: <Yf+wcVAAWzmSz93n@shredder>
-References: <20220205081738.565394-1-imagedong@tencent.com>
+        Sun, 6 Feb 2022 06:29:52 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F31C06173B
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 03:29:51 -0800 (PST)
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id E858D40326
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 11:29:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644146989;
+        bh=Rt0CLAsAt//yNIPsU1fxnJ6fI6vrkoAOGL9+IE9dY2A=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=gEi4HPpTjvGOU6wOy6bUg12Hgp7jpWTSEydlYTD5GdRNqXujH3rVFhpnDyI0ddlV8
+         xKXqbs5IugrnWmJ0CUN50LXvTbZad2xmL9tyPAZ/lJcl2zUs+97VpO4yJ05DwuryoW
+         Sobd+dsITUIe4Nj5S0NUEJNAXXGFnN0tIYBB9OqOAW6eOQ2MeIQa2rzEWeimIR1i8D
+         NZYd1PVEoh/dWRn46b4p+Nyqs0QXjo4AUjXLhlkB0fsHba+exN5YgAFAFjS9B61Ut5
+         +R8xrYE5usxKKpqDeoV5vlx0c9+ELFSmebnRTz9ScxUkRKjzFk22/7vd/gFk+naxB7
+         q7XTuWQPWB1XA==
+Received: by mail-ed1-f71.google.com with SMTP id b26-20020a056402139a00b004094fddbbdfso5988164edv.12
+        for <linux-kernel@vger.kernel.org>; Sun, 06 Feb 2022 03:29:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Rt0CLAsAt//yNIPsU1fxnJ6fI6vrkoAOGL9+IE9dY2A=;
+        b=W5MxWVTV8a2o/z5HAtQ/5l2sMvU358ytNAaMKfoTqeyy3ZE2A4LjiLSY6nLxC70xPh
+         A1Yq9UIc45on5M8PxZ3Lyvjori1MMQ6aXizXs0mB68JuHXKXGjz1UIaA4lPvMMThkBWn
+         Q1+mBPFpusYVaZlXInldtmZs+ojMTVIeZAG6Dd9Uw3dGfOn7ftRvhJssrSxhtVuF8o7w
+         zYNLtHF3yvcgsPMb5mCFj7wckg8px+ok6LC03GGERA/xgnDmpCgp+zE1ip4kx9vBJooN
+         vFnEvUwZHj/1+Y7Eq7g6fMphuzAzLtGuB3sOXeRKDrBWO41ojgrBjNauvXq4XcRZNrtR
+         2V8Q==
+X-Gm-Message-State: AOAM531uiRb2zDLTpuLDxgr+VgkEw1qIGaY6RzZD4C2WcC/EAQ00pIM6
+        7AXj07hcjvLkpr7rC50KNw75ecl/QCxIKdvjkCZ9U+gWCc7wD8I/t1tGts/9OFOu/0ji1fZDJ4w
+        f3SK9kicLmoQMNQdmwafJXusYhaGGHR9ewAQKadIPvg==
+X-Received: by 2002:a05:6402:520d:: with SMTP id s13mr8442912edd.132.1644146987547;
+        Sun, 06 Feb 2022 03:29:47 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyQUy24RjHPXGNrYXXd4Ep/1rz7beCD0Lisb4rFEaHdqI4+hhfFuwh3fhCM8vUwP90U+Eq35g==
+X-Received: by 2002:a05:6402:520d:: with SMTP id s13mr8442890edd.132.1644146987417;
+        Sun, 06 Feb 2022 03:29:47 -0800 (PST)
+Received: from [192.168.0.83] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id ec40sm1776603edb.68.2022.02.06.03.29.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 06 Feb 2022 03:29:46 -0800 (PST)
+Message-ID: <04ef74c4-71f6-559c-f054-5267086abc22@canonical.com>
+Date:   Sun, 6 Feb 2022 12:29:45 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220205081738.565394-1-imagedong@tencent.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH V1 07/10] arm64: tegra: Enable PCIe slots in P3737-0000
+ board
+Content-Language: en-US
+To:     Vidya Sagar <vidyas@nvidia.com>, bhelgaas@google.com,
+        lorenzo.pieralisi@arm.com, robh+dt@kernel.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com
+Cc:     kishon@ti.com, vkoul@kernel.org, kw@linux.com,
+        p.zabel@pengutronix.de, mperttunen@nvidia.com,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, kthota@nvidia.com,
+        mmaddireddy@nvidia.com, sagar.tv@gmail.com
+References: <20220205162144.30240-1-vidyas@nvidia.com>
+ <20220205162144.30240-8-vidyas@nvidia.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220205162144.30240-8-vidyas@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 05, 2022 at 04:17:38PM +0800, menglong8.dong@gmail.com wrote:
-> diff --git a/net/core/drop_monitor.c b/net/core/drop_monitor.c
-> index 7b288a121a41..1180f1a28599 100644
-> --- a/net/core/drop_monitor.c
-> +++ b/net/core/drop_monitor.c
-> @@ -48,6 +48,16 @@
->  static int trace_state = TRACE_OFF;
->  static bool monitor_hw;
->  
-> +#undef EM
-> +#undef EMe
-> +
-> +#define EM(a, b)	[a] = #b,
-> +#define EMe(a, b)	[a] = #b
-> +
-> +static const char *drop_reasons[SKB_DROP_REASON_MAX + 1] = {
-> +	TRACE_SKB_DROP_REASON
-> +};
-> +
->  /* net_dm_mutex
->   *
->   * An overall lock guarding every operation coming from userspace.
-> @@ -126,6 +136,7 @@ struct net_dm_skb_cb {
->  		struct devlink_trap_metadata *hw_metadata;
->  		void *pc;
->  	};
-> +	enum skb_drop_reason reason;
->  };
->  
->  #define NET_DM_SKB_CB(__skb) ((struct net_dm_skb_cb *)&((__skb)->cb[0]))
-> @@ -498,6 +509,7 @@ static void net_dm_packet_trace_kfree_skb_hit(void *ignore,
->  {
->  	ktime_t tstamp = ktime_get_real();
->  	struct per_cpu_dm_data *data;
-> +	struct net_dm_skb_cb *cb;
->  	struct sk_buff *nskb;
->  	unsigned long flags;
->  
-> @@ -508,7 +520,9 @@ static void net_dm_packet_trace_kfree_skb_hit(void *ignore,
->  	if (!nskb)
->  		return;
->  
-> -	NET_DM_SKB_CB(nskb)->pc = location;
-> +	cb = NET_DM_SKB_CB(nskb);
-> +	cb->reason = reason;
-> +	cb->pc = location;
->  	/* Override the timestamp because we care about the time when the
->  	 * packet was dropped.
->  	 */
-> @@ -606,8 +620,9 @@ static int net_dm_packet_report_in_port_put(struct sk_buff *msg, int ifindex,
->  static int net_dm_packet_report_fill(struct sk_buff *msg, struct sk_buff *skb,
->  				     size_t payload_len)
->  {
-> -	u64 pc = (u64)(uintptr_t) NET_DM_SKB_CB(skb)->pc;
-> +	struct net_dm_skb_cb *cb = NET_DM_SKB_CB(skb);
->  	char buf[NET_DM_MAX_SYMBOL_LEN];
-> +	unsigned int reason;
->  	struct nlattr *attr;
->  	void *hdr;
->  	int rc;
-> @@ -620,10 +635,16 @@ static int net_dm_packet_report_fill(struct sk_buff *msg, struct sk_buff *skb,
->  	if (nla_put_u16(msg, NET_DM_ATTR_ORIGIN, NET_DM_ORIGIN_SW))
->  		goto nla_put_failure;
->  
-> -	if (nla_put_u64_64bit(msg, NET_DM_ATTR_PC, pc, NET_DM_ATTR_PAD))
-> +	if (nla_put_u64_64bit(msg, NET_DM_ATTR_PC, (u64)(uintptr_t)cb->pc,
-> +			      NET_DM_ATTR_PAD))
-> +		goto nla_put_failure;
-> +
-> +	reason = (unsigned int)cb->reason;
-> +	if (reason < SKB_DROP_REASON_MAX &&
-> +	    nla_put_string(msg, NET_DM_ATTR_REASON, drop_reasons[reason]))
-
-You need to make sure 'msg' has enough room for this attribute. Account
-for it in net_dm_packet_report_size()
-
->  		goto nla_put_failure;
->  
-> -	snprintf(buf, sizeof(buf), "%pS", NET_DM_SKB_CB(skb)->pc);
-> +	snprintf(buf, sizeof(buf), "%pS", cb->pc);
->  	if (nla_put_string(msg, NET_DM_ATTR_SYMBOL, buf))
->  		goto nla_put_failure;
->  
-> -- 
-> 2.27.0
+On 05/02/2022 17:21, Vidya Sagar wrote:
+> Enable PCIe controller nodes to enable respective PCIe slots on
+> P3737-0000 board. Following is the ownership of slots by different
+> PCIe controllers.
+> Controller-1 : On-board Broadcom WiFi controller
+> Controller-4 : M.2 Key-M slot
+> Controller-5 : CEM form-factor x8 slot
 > 
+> Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
+> ---
+>  .../nvidia/tegra234-p3737-0000+p3701-0000.dts | 26 +++++++++++++++++++
+>  1 file changed, 26 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts b/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
+> index efbbb878ba5a..b819e1133bc4 100644
+> --- a/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
+> +++ b/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
+> @@ -21,4 +21,30 @@
+>  	serial {
+>  		status = "okay";
+>  	};
+> +
+> +	pcie@14100000 {
+> +		status = "okay";
+> +
+> +		phys = <&p2u_hsio_3>;
+> +		phy-names = "p2u-0";
+> +	};
+> +
+> +	pcie@14160000 {
+> +		status = "okay";
+> +
+> +		phys = <&p2u_hsio_4>, <&p2u_hsio_5>, <&p2u_hsio_6>,
+> +		       <&p2u_hsio_7>;
+> +		phy-names = "p2u-0", "p2u-1", "p2u-2", "p2u-3";
+> +	};
+> +
+> +	pcie@141a0000 {
+> +		status = "okay";
+> +
+> +		phys = <&p2u_nvhs_0>, <&p2u_nvhs_1>, <&p2u_nvhs_2>,
+> +		       <&p2u_nvhs_3>, <&p2u_nvhs_4>, <&p2u_nvhs_5>,
+> +		       <&p2u_nvhs_6>, <&p2u_nvhs_7>;
+> +		phy-names = "p2u-0", "p2u-1", "p2u-2", "p2u-3", "p2u-4",
+> +			    "p2u-5", "p2u-6", "p2u-7";
+> +	};
+> +
+
+No need for trailing new line.
+
+>  };
+
+
+Best regards,
+Krzysztof

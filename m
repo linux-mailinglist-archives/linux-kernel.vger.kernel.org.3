@@ -2,124 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C417A4AAF1C
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 13:01:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E1DB4AAF1D
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 13:04:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235091AbiBFMBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 07:01:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44420 "EHLO
+        id S235213AbiBFMEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 07:04:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230450AbiBFMB2 (ORCPT
+        with ESMTP id S230450AbiBFMEq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 07:01:28 -0500
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5EA5C06173B
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 04:01:27 -0800 (PST)
-Received: by mail-oi1-x22d.google.com with SMTP id s185so14125267oie.3
-        for <linux-kernel@vger.kernel.org>; Sun, 06 Feb 2022 04:01:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=Pp+I75epMV+BmhPOmXiVI+uznZlIMxkRLCzkT77FiqA=;
-        b=OZS9exAxPbSsHsAy/6CMBrHstL+Jrqqm11q7ztNfho9fv0L4E2R+mFmEg5wmxaJpMq
-         wxB8ZDxbJGhzpbvDmfFHu/zCXpBLeSjYiDLlqqxbr+d3RuGfnyTzsXeKtav4+MYjbBq7
-         H4tRDerLO36yxHkWR7aDU7Im8aWdksIAmS0fA6kCxvu+Fr2Na9Tb/n/4UXnHdVmc2vSI
-         uazGz+nbsc8fqzlrdSs6Uw5dVIZNxax2RCbAuoaPu3Cek93NFe1xh3FI/zdzr7o37HrX
-         escktGyFHz6F4kK4QtXKy5BOoZs7hE3EEPm2TeaJ5JxL1Mgu8kzI43Nnvm+4370kb7U5
-         QQlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=Pp+I75epMV+BmhPOmXiVI+uznZlIMxkRLCzkT77FiqA=;
-        b=q2WCE02AogbWNMEOT8xx8MwBknNIUp2NZu1rYowue5PH+9PTtLqVzUUjJEIQnMaCYj
-         CTwt8axETAP6M5Uqd/v/K+Ts5vpuGAikAGO/8NfThZg1ittJd/+yD73i+0upCSEpXs0O
-         eQxilsneBaJFuzQ4zFXtahzwYrGO8FJL1O9zda+AExNbdQW5+zYiUFO05hSoS4rlmp5O
-         tglM+NUWzrkHnxtPimiRVd1EQ2B4TEGQIjIoQgwl8s7Q9E4E6vLTIslE73Aqn+kpjvTb
-         nfqDCVtEAlDAuKD6y3HVhRRFcr+sFTqZmjXyl7YS2dyTDiJdt6XJ1jcxDM3sJr7cuOj7
-         8ayw==
-X-Gm-Message-State: AOAM532i7bAfWy0J0poqhHlU/TVMWqM8YIL50Jd9GuA0Ec33KFqPUDrd
-        bUrakFWZhZMqxS2ehwVW34k=
-X-Google-Smtp-Source: ABdhPJxFAoDxEyCGm8mMXiFpmuI8DUrpwCvFWZ8wwetNh+NdC+VEiiHb6Sy8wo75PGr8c2NFiROZ1Q==
-X-Received: by 2002:a05:6808:8d:: with SMTP id s13mr3198748oic.227.1644148887048;
-        Sun, 06 Feb 2022 04:01:27 -0800 (PST)
-Received: from quaco.ghostprotocols.net ([179.97.37.151])
-        by smtp.gmail.com with ESMTPSA id n13sm3054331ooj.34.2022.02.06.04.01.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Feb 2022 04:01:26 -0800 (PST)
-From:   arnaldo.melo@gmail.com
-X-Google-Original-From: Arnaldo Carvalho de Melo <acme@kernel.org>, Arnaldo Carvalho de Melo <acme@redhat.com>
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 8949D404A6; Sun,  6 Feb 2022 09:01:23 -0300 (-03)
-Date:   Sun, 6 Feb 2022 09:01:23 -0300
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Janosch Frank <frankja@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [PATCH 1/1] tools headers UAPI: Sync linux/kvm.h with the kernel
- sources
-Message-ID: <Yf+4k5Fs5Q3HdSG9@kernel.org>
+        Sun, 6 Feb 2022 07:04:46 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F0D7C06173B
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 04:04:46 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id C348D1F388;
+        Sun,  6 Feb 2022 12:04:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1644149084; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=JCESBuGwPcCoo6/FD02wmmBvkT7cKAmsuSA9CBFZY1w=;
+        b=xmWQv4eQoGcnZHRerQ9YTSNmlHniypsIZQ7hzMUXCbiokrha68FPFKDwRzxh8c0UY5hGLz
+        Mh4tDbwA3Yq9wRzwkh+v9Uv/X9mQq4VqoxkI6V3dfsB3VLaa7y/9juWQi2BBVAHP6cV+0b
+        +oxhrD6r5G6N3cQLq24g/DM1SYawTOA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1644149084;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=JCESBuGwPcCoo6/FD02wmmBvkT7cKAmsuSA9CBFZY1w=;
+        b=4CmC1V21/NQ+il0NfR6C1aGYAF1BNNPN8px3n57LrlyOPpsbYDVreqI25l/UpQeitKOSgz
+        eijFtJc1iRR1C7AQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A1296139EF;
+        Sun,  6 Feb 2022 12:04:44 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id fFDNJVy5/2GsLgAAMHmgww
+        (envelope-from <bp@suse.de>); Sun, 06 Feb 2022 12:04:44 +0000
+Date:   Sun, 6 Feb 2022 13:04:43 +0100
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] objtool/urgent for v5.17-rc3
+Message-ID: <Yf+5W4f+kpNuGl+a@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Just FYI, I'm carrying this in the perf tools tree.
+Hi Linus,
+
+please pull a single objtool urgent fix for 5.17.
+
+Thx.
 
 ---
 
-To pick the changes in:
+The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
 
-  f6c6804c43fa18d3 ("kvm: Move KVM_GET_XSAVE2 IOCTL definition at the end of kvm.h")
+  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
 
-That just rebuilds perf, as these patches don't add any new KVM ioctl to
-be harvested for the the 'perf trace' ioctl syscall argument
-beautifiers.
+are available in the Git repository at:
 
-This is also by now used by tools/testing/selftests/kvm/, a simple test
-build succeeded.
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/objtool_urgent_for_v5.17_rc3
 
-This silences this perf build warning:
+for you to fetch changes up to 82880283d7fcd0a1d20964a56d6d1a5cc0df0713:
 
-  Warning: Kernel ABI header at 'tools/include/uapi/linux/kvm.h' differs from latest version at 'include/uapi/linux/kvm.h'
-  diff -u tools/include/uapi/linux/kvm.h include/uapi/linux/kvm.h
+  objtool: Fix truncated string warning (2022-01-24 10:09:06 -0800)
 
-Cc: Janosch Frank <frankja@linux.ibm.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
- tools/include/uapi/linux/kvm.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+----------------------------------------------------------------
+- Fix a potential truncated string warning triggered by gcc12
 
-diff --git a/tools/include/uapi/linux/kvm.h b/tools/include/uapi/linux/kvm.h
-index b46bcdb0cab1a369..5191b57e156220bd 100644
---- a/tools/include/uapi/linux/kvm.h
-+++ b/tools/include/uapi/linux/kvm.h
-@@ -1624,9 +1624,6 @@ struct kvm_enc_region {
- #define KVM_S390_NORMAL_RESET	_IO(KVMIO,   0xc3)
- #define KVM_S390_CLEAR_RESET	_IO(KVMIO,   0xc4)
- 
--/* Available with KVM_CAP_XSAVE2 */
--#define KVM_GET_XSAVE2		  _IOR(KVMIO,  0xcf, struct kvm_xsave)
--
- struct kvm_s390_pv_sec_parm {
- 	__u64 origin;
- 	__u64 length;
-@@ -2048,4 +2045,7 @@ struct kvm_stats_desc {
- 
- #define KVM_GET_STATS_FD  _IO(KVMIO,  0xce)
- 
-+/* Available with KVM_CAP_XSAVE2 */
-+#define KVM_GET_XSAVE2		  _IOR(KVMIO,  0xcf, struct kvm_xsave)
-+
- #endif /* __LINUX_KVM_H */
+----------------------------------------------------------------
+Sergei Trofimovich (1):
+      objtool: Fix truncated string warning
+
+ tools/objtool/check.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
 -- 
-2.34.1
+Regards/Gruss,
+    Boris.
 
+SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg

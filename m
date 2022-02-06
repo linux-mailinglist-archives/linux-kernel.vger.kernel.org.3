@@ -2,131 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F40694AAF4C
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 13:56:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D4484AAFC3
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 14:59:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236151AbiBFMz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 07:55:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59192 "EHLO
+        id S233300AbiBFN7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 08:59:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235893AbiBFMzz (ORCPT
+        with ESMTP id S241785AbiBFN6v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 07:55:55 -0500
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5E68C06173B;
-        Sun,  6 Feb 2022 04:55:53 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R411e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V3gnuuW_1644152150;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V3gnuuW_1644152150)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Sun, 06 Feb 2022 20:55:51 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     jejb@linux.ibm.com
-Cc:     martin.petersen@oracle.com, jinpu.wang@cloud.ionos.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] scsi: pm8001: clean up some inconsistent indenting
-Date:   Sun,  6 Feb 2022 20:55:48 +0800
-Message-Id: <20220206125548.110945-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Sun, 6 Feb 2022 08:58:51 -0500
+Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net [89.40.174.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C00C03FED7;
+        Sun,  6 Feb 2022 05:58:44 -0800 (PST)
+Received: from [77.244.183.192] (port=63680 helo=melee.fritz.box)
+        by hostingweb31.netsons.net with esmtpa (Exim 4.94.2)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1nGgCy-00059v-LP; Sun, 06 Feb 2022 12:59:56 +0100
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+To:     linux-media@vger.kernel.org, linux-i2c@vger.kernel.org
+Cc:     Luca Ceresoli <luca@lucaceresoli.net>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Peter Rosin <peda@axentia.se>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        matti.vaittinen@fi.rohmeurope.com
+Subject: [RFCv3 0/6] Hi,
+Date:   Sun,  6 Feb 2022 12:59:33 +0100
+Message-Id: <20220206115939.3091265-1-luca@lucaceresoli.net>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca+lucaceresoli.net/only user confirmed/virtual account not confirmed
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Eliminate the follow smatch warning:
-drivers/scsi/pm8001/pm8001_ctl.c:760 pm8001_update_flash() warn:
-inconsistent indenting
+this RFCv3, codename "FOSDEM Fries", of RFC patches to support the TI
+DS90UB9xx serializer/deserializer chipsets with I2C address translation.
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- drivers/scsi/pm8001/pm8001_ctl.c | 65 +++++++++++++++++---------------
- 1 file changed, 35 insertions(+), 30 deletions(-)
+I sent RFCv2 back in 2019 (!). After that I have applied most of the
+improvements proposed during code review, most notably device tree
+representation and proper use of kernel abstractions for clocks and GPIO. I
+have also done many improvements all over the drivers code.
 
-diff --git a/drivers/scsi/pm8001/pm8001_ctl.c b/drivers/scsi/pm8001/pm8001_ctl.c
-index 41a63c9b719b..213ebf39261f 100644
---- a/drivers/scsi/pm8001/pm8001_ctl.c
-+++ b/drivers/scsi/pm8001/pm8001_ctl.c
-@@ -755,36 +755,41 @@ static int pm8001_update_flash(struct pm8001_hba_info *pm8001_ha)
- 			fwControl->retcode = 0;/* OUT */
- 			fwControl->offset = loopNumber * IOCTL_BUF_SIZE;/*OUT */
- 
--		/* for the last chunk of data in case file size is not even with
--		4k, load only the rest*/
--		if (((loopcount-loopNumber) == 1) &&
--			((partitionSize + HEADER_LEN) % IOCTL_BUF_SIZE)) {
--			fwControl->len =
--				(partitionSize + HEADER_LEN) % IOCTL_BUF_SIZE;
--			memcpy((u8 *)fwControl->buffer,
--				(u8 *)pm8001_ha->fw_image->data + sizeRead,
--				(partitionSize + HEADER_LEN) % IOCTL_BUF_SIZE);
--			sizeRead +=
--				(partitionSize + HEADER_LEN) % IOCTL_BUF_SIZE;
--		} else {
--			memcpy((u8 *)fwControl->buffer,
--				(u8 *)pm8001_ha->fw_image->data + sizeRead,
--				IOCTL_BUF_SIZE);
--			sizeRead += IOCTL_BUF_SIZE;
--		}
--
--		pm8001_ha->nvmd_completion = &completion;
--		ret = PM8001_CHIP_DISP->fw_flash_update_req(pm8001_ha, payload);
--		if (ret) {
--			pm8001_ha->fw_status = FAIL_OUT_MEMORY;
--			goto out;
--		}
--		wait_for_completion(&completion);
--		if (fwControl->retcode > FLASH_UPDATE_IN_PROGRESS) {
--			pm8001_ha->fw_status = fwControl->retcode;
--			ret = -EFAULT;
--			goto out;
--		}
-+			/* for the last chunk of data in case file
-+			 * size is not even with 4k, load only the rest
-+			 */
-+			if (((loopcount-loopNumber) == 1) &&
-+				((partitionSize + HEADER_LEN) % IOCTL_BUF_SIZE)) {
-+				fwControl->len =
-+					(partitionSize + HEADER_LEN) %
-+					IOCTL_BUF_SIZE;
-+				memcpy((u8 *)fwControl->buffer,
-+					(u8 *)pm8001_ha->fw_image->data + sizeRead,
-+					(partitionSize + HEADER_LEN) %
-+					IOCTL_BUF_SIZE);
-+				sizeRead +=
-+					(partitionSize + HEADER_LEN) %
-+					IOCTL_BUF_SIZE;
-+			} else {
-+				memcpy((u8 *)fwControl->buffer,
-+					(u8 *)pm8001_ha->fw_image->data + sizeRead,
-+					IOCTL_BUF_SIZE);
-+				sizeRead += IOCTL_BUF_SIZE;
-+			}
-+
-+			pm8001_ha->nvmd_completion = &completion;
-+			ret = PM8001_CHIP_DISP->fw_flash_update_req(pm8001_ha,
-+				payload);
-+			if (ret) {
-+				pm8001_ha->fw_status = FAIL_OUT_MEMORY;
-+				goto out;
-+			}
-+			wait_for_completion(&completion);
-+			if (fwControl->retcode > FLASH_UPDATE_IN_PROGRESS) {
-+				pm8001_ha->fw_status = fwControl->retcode;
-+				ret = -EFAULT;
-+				goto out;
-+			}
- 		}
- 	}
- out:
+However I still don't consider these drivers "ready", hence the RFC status.
+
+One reason is that, while the I2C ATR idea has been considered good by
+Wolfram, its implementation requires I2C core changes that have been tried
+but never made it to mainline. I think that discussion needs to be reopened
+and work has to be done on that side. Thus for the time being this code
+still has the alias pool: it is an interim solution until I2C core is
+ready.
+
+Also be aware that the only hardware where I sould test this code runs a
+v4.19 kernel. I cannot guarantee it will work perfectly on mainline.
+
+And since my hardware has only one camera connected to each deserializer I
+dropped support. However I wrote the code to be able to easily add support
+for 2 and 4 camera inputs as well as 2 CSI-2 outputs (DS90UB960).
+
+Finally, I dropped all attempts at supporting hotplug. The goals I had 2+
+years ago are not reasonably doable even with current kernels. Luckily all
+the users that I talked with are happy without hotplug. For this reason I
+simplified the serializer management in the DS90UB954 driver by keeping the
+serializer always instantiated.
+
+Even with the above limitations I felt I'd send this v3 anyway since
+several people have contacted me since v2 asking whether this
+implementation has made progress towards mainline. Some even improved on
+top of my code it their own forks. As I cannot afford to work on this topic
+in the near future, here is the latest and greatest version I can produce,
+with all the improvements I made so far.
+
+That's all, enjoy the code!
+
+References:
+
+[RFCv2] https://lore.kernel.org/lkml/20190723203723.11730-1-luca@lucaceresoli.net/
+[RFCv1] https://lore.kernel.org/linux-media/20190108223953.9969-1-luca@lucaceresoli.net/
+
+Best regards.
+Luca
+
+Luca Ceresoli (6):
+  i2c: core: let adapters be notified of client attach/detach
+  i2c: add I2C Address Translator (ATR) support
+  media: dt-bindings: add DS90UB953-Q1 video serializer
+  media: dt-bindings: add DS90UB954-Q1 video deserializer
+  media: ds90ub954: new driver for TI DS90UB954-Q1 video deserializer
+  media: ds90ub953: new driver for TI DS90UB953-Q1 video serializer
+
+ .../bindings/media/i2c/ti,ds90ub953-q1.yaml   |   96 +
+ .../bindings/media/i2c/ti,ds90ub954-q1.yaml   |  235 +++
+ MAINTAINERS                                   |   22 +
+ drivers/i2c/Kconfig                           |    9 +
+ drivers/i2c/Makefile                          |    1 +
+ drivers/i2c/i2c-atr.c                         |  557 ++++++
+ drivers/i2c/i2c-core-base.c                   |   18 +-
+ drivers/media/i2c/Kconfig                     |   22 +
+ drivers/media/i2c/Makefile                    |    3 +
+ drivers/media/i2c/ds90ub953.c                 |  560 ++++++
+ drivers/media/i2c/ds90ub954.c                 | 1648 +++++++++++++++++
+ include/dt-bindings/media/ds90ub953.h         |   16 +
+ include/linux/i2c-atr.h                       |   82 +
+ include/linux/i2c.h                           |   16 +
+ 14 files changed, 3284 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub953-q1.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub954-q1.yaml
+ create mode 100644 drivers/i2c/i2c-atr.c
+ create mode 100644 drivers/media/i2c/ds90ub953.c
+ create mode 100644 drivers/media/i2c/ds90ub954.c
+ create mode 100644 include/dt-bindings/media/ds90ub953.h
+ create mode 100644 include/linux/i2c-atr.h
+
 -- 
-2.20.1.7.g153144c
+2.25.1
 

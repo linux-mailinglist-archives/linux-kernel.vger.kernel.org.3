@@ -2,109 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BC3D4AAEF9
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 12:20:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 046694AAF06
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 12:36:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233894AbiBFLUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 06:20:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59608 "EHLO
+        id S234336AbiBFLf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 06:35:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233668AbiBFLUf (ORCPT
+        with ESMTP id S234155AbiBFLf5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 06:20:35 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFFD1C06173B
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 03:20:34 -0800 (PST)
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 37C993F1D9
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 11:20:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1644146433;
-        bh=i9EmgtpGx11cIwj9ugumfjV3EWt5zkLMtmnd8R60n7Y=;
-        h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-         In-Reply-To:Content-Type;
-        b=OHCBK+38VgZXKF5G6HYcbeW6H7MaOuapXe2nwJJZEmwow0vTHHn+oyITmUhtDIBXT
-         ghZhmqUXE/41HR1BRlGWQ+FsAh25UClC+lr6dpduT83t9Oxl0wWlnB2Cs8DRB11Qx3
-         1vqPaCXJi0a5pFkzwYNCTZEYAF/cmQhozrtw3Cn0atT+mnitWJFuV4NkHwjgoBOWfm
-         UfudiiR10FVKDH2/dQTF0Q4e0pmEXMxxhDUeW1BVACwgMwOkpZgAH0S7u6IJCtV6XW
-         4R+7cdp9w0PEjhAjTaLdd4qr4rJp0CooGbns8nrOO1RIRXUdH8gzRNTB/NNa6wGbAn
-         +UHf7+xx7a7jQ==
-Received: by mail-ed1-f69.google.com with SMTP id j1-20020aa7c341000000b0040417b84efeso5937180edr.21
-        for <linux-kernel@vger.kernel.org>; Sun, 06 Feb 2022 03:20:33 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=i9EmgtpGx11cIwj9ugumfjV3EWt5zkLMtmnd8R60n7Y=;
-        b=HrqxhaNigt0AgyXzWgQdhfQ5QYnSPPbjPnR1Z6FWRlVlSy3a5HlpylyHEXf/R2fLT9
-         gXQZK66qGNb3YHLzkfHXmvtzRpFswUgq6+tX9OdnlFPE9d8kELUuyEi3M/PFTEkyO+Q0
-         6e4RHTNr7W6O1aqlKBS8FLpJDj6yE2zeUyDnqUelIcCfMfsiy77MMYluF2uAnKT5WiYF
-         DhG0BAdEmZsEvqauPKJo3G8MICzoISWW7wHThOkj/DIpp4FpZR9g1cueDO6qQCHVIxsj
-         3MhnUQObbxYXDeosa880fOVvgQ4mSdQtd5Tn2EN+JVj0VmtU1KfqvxWh5kch+PZQIW88
-         V7Jw==
-X-Gm-Message-State: AOAM533zbMeJIDAgYjG96es80Gui6UvNGYgYYdZF4cozMJ3PIqdUlQhW
-        Dv+tM75tFFHwpmjC/FkEbQwdoZBN7G3cVxrr/G6rkn2gI5XFuVVHMZfRFtcxB+hCS9hNW0sOEze
-        j6swW4NoguFaF+GZpqlKgIUgtUXh6Z3P6riyap3Zq0w==
-X-Received: by 2002:a05:6402:1348:: with SMTP id y8mr8346017edw.280.1644146432933;
-        Sun, 06 Feb 2022 03:20:32 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyM2MpDLbrWLUvev/UnRu1x/U4jhDAWB4t25fgpTsPk+WChLF/e6D7bPJYyfCy/mfRoie7AXg==
-X-Received: by 2002:a05:6402:1348:: with SMTP id y8mr8346009edw.280.1644146432830;
-        Sun, 06 Feb 2022 03:20:32 -0800 (PST)
-Received: from [192.168.0.83] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id q5sm237027eds.82.2022.02.06.03.20.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 06 Feb 2022 03:20:31 -0800 (PST)
-Message-ID: <a5bbf115-21a2-7d63-6744-72487b9e756a@canonical.com>
-Date:   Sun, 6 Feb 2022 12:20:30 +0100
+        Sun, 6 Feb 2022 06:35:57 -0500
+X-Greylist: delayed 546 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Feb 2022 03:35:56 PST
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 729BCC06173B;
+        Sun,  6 Feb 2022 03:35:56 -0800 (PST)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 0B7473201D7C;
+        Sun,  6 Feb 2022 06:26:47 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Sun, 06 Feb 2022 06:26:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=qciHEBrtufsFgTJmS
+        CoqEjSJb7jQh8MaOov+ID8TdGg=; b=ExvBl4UuI0iIsGA2LIUN7nQvTTn602OQr
+        pKKbiF+Vh5e4nhEmRQYsQmco/KY7CY9KFzW2Kq56aACJukwEu0RfzpQDwBFGVAE7
+        ucPlSDSDPljQ34KWjXvV/2LReXcWINuo9VSpYji1WKxQcVo2l27wlZlKZisABUam
+        Yv1g9wk9EZTbqg2371rmxOLUNr2sFj0hgEiENYUm9UnnYhGdCLJR8BxtDZ1uKzew
+        gqe0jhtxqqv8K1GcVEBg2cdFGQo/ir/w49hsMTSP5RDDIINufifRbccQsI3sjpyE
+        QaVLlKKGPrSr0HuXDxrlhaLF9bZHegesOA66USFjdd9rkDuGFSC1w==
+X-ME-Sender: <xms:drD_YaZE7v5IzpdmMlU95T2ZYIh4-oXec4b2rnAWDM3K6yKKo2sk8g>
+    <xme:drD_YdZ6HiIgy-dq4dgIqEYV4RCulxyW5w2ItNjn9zQX29yMmb-DZY5nhJb8pkzKf
+    Tia7kfQjHCXHP4>
+X-ME-Received: <xmr:drD_YU_p_rHXy4jk80eqbjDqv4X3BwQ9lTjLGHR8vp2SHoDk_zmfN2bEDnaJEmTrXW5ycddsHi_5CuD-ndyNJkNJr_EfUA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrheefgddvjecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepkfguohcuufgt
+    hhhimhhmvghluceoihguohhstghhsehiughoshgthhdrohhrgheqnecuggftrfgrthhtvg
+    hrnheptdffkeekfeduffevgeeujeffjefhtefgueeugfevtdeiheduueeukefhudehleet
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepihguoh
+    hstghhsehiughoshgthhdrohhrgh
+X-ME-Proxy: <xmx:d7D_Ycq83ap47MsxsSU8L67VpT-UvH6-qQ-Ed-gcDhwrcF1oLHCePw>
+    <xmx:d7D_YVqigmrbgH39eRHYqU4P8DDIp7AeUN6W6fric6BGZc1mJbeoUQ>
+    <xmx:d7D_YaSYWu-vXcbbY_-OAsyRGGNWi7Dp0xmMkthChEFROq98Wynk0g>
+    <xmx:d7D_YWcfrp0ZAv7c_6Qkl9NcInvTP-UKQB4GAz_B0mVunoVzPpXM9Q>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 6 Feb 2022 06:26:46 -0500 (EST)
+Date:   Sun, 6 Feb 2022 13:26:41 +0200
+From:   Ido Schimmel <idosch@idosch.org>
+To:     menglong8.dong@gmail.com
+Cc:     kuba@kernel.org, dsahern@kernel.org, nhorman@tuxdriver.com,
+        davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rostedt@goodmis.org,
+        Menglong Dong <imagedong@tencent.com>
+Subject: Re: [PATCH v6 net-next] net: drop_monitor: support drop reason
+Message-ID: <Yf+wcVAAWzmSz93n@shredder>
+References: <20220205081738.565394-1-imagedong@tencent.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 4/5] dt-bindings: memory: lpddr3-timings: convert to
- dtschema
-Content-Language: en-US
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20220205120043.8337-1-krzysztof.kozlowski@canonical.com>
- <20220205120043.8337-5-krzysztof.kozlowski@canonical.com>
- <a204a4eb-6615-26db-facf-ad284c1732d7@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <a204a4eb-6615-26db-facf-ad284c1732d7@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220205081738.565394-1-imagedong@tencent.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/02/2022 19:50, Dmitry Osipenko wrote:
-> 05.02.2022 15:00, Krzysztof Kozlowski пишет:
->> +  reg:
->> +    maxItems: 1
->> +    description: |
->> +      Maximum DDR clock frequency for the speed-bin, in Hz.
+On Sat, Feb 05, 2022 at 04:17:38PM +0800, menglong8.dong@gmail.com wrote:
+> diff --git a/net/core/drop_monitor.c b/net/core/drop_monitor.c
+> index 7b288a121a41..1180f1a28599 100644
+> --- a/net/core/drop_monitor.c
+> +++ b/net/core/drop_monitor.c
+> @@ -48,6 +48,16 @@
+>  static int trace_state = TRACE_OFF;
+>  static bool monitor_hw;
+>  
+> +#undef EM
+> +#undef EMe
+> +
+> +#define EM(a, b)	[a] = #b,
+> +#define EMe(a, b)	[a] = #b
+> +
+> +static const char *drop_reasons[SKB_DROP_REASON_MAX + 1] = {
+> +	TRACE_SKB_DROP_REASON
+> +};
+> +
+>  /* net_dm_mutex
+>   *
+>   * An overall lock guarding every operation coming from userspace.
+> @@ -126,6 +136,7 @@ struct net_dm_skb_cb {
+>  		struct devlink_trap_metadata *hw_metadata;
+>  		void *pc;
+>  	};
+> +	enum skb_drop_reason reason;
+>  };
+>  
+>  #define NET_DM_SKB_CB(__skb) ((struct net_dm_skb_cb *)&((__skb)->cb[0]))
+> @@ -498,6 +509,7 @@ static void net_dm_packet_trace_kfree_skb_hit(void *ignore,
+>  {
+>  	ktime_t tstamp = ktime_get_real();
+>  	struct per_cpu_dm_data *data;
+> +	struct net_dm_skb_cb *cb;
+>  	struct sk_buff *nskb;
+>  	unsigned long flags;
+>  
+> @@ -508,7 +520,9 @@ static void net_dm_packet_trace_kfree_skb_hit(void *ignore,
+>  	if (!nskb)
+>  		return;
+>  
+> -	NET_DM_SKB_CB(nskb)->pc = location;
+> +	cb = NET_DM_SKB_CB(nskb);
+> +	cb->reason = reason;
+> +	cb->pc = location;
+>  	/* Override the timestamp because we care about the time when the
+>  	 * packet was dropped.
+>  	 */
+> @@ -606,8 +620,9 @@ static int net_dm_packet_report_in_port_put(struct sk_buff *msg, int ifindex,
+>  static int net_dm_packet_report_fill(struct sk_buff *msg, struct sk_buff *skb,
+>  				     size_t payload_len)
+>  {
+> -	u64 pc = (u64)(uintptr_t) NET_DM_SKB_CB(skb)->pc;
+> +	struct net_dm_skb_cb *cb = NET_DM_SKB_CB(skb);
+>  	char buf[NET_DM_MAX_SYMBOL_LEN];
+> +	unsigned int reason;
+>  	struct nlattr *attr;
+>  	void *hdr;
+>  	int rc;
+> @@ -620,10 +635,16 @@ static int net_dm_packet_report_fill(struct sk_buff *msg, struct sk_buff *skb,
+>  	if (nla_put_u16(msg, NET_DM_ATTR_ORIGIN, NET_DM_ORIGIN_SW))
+>  		goto nla_put_failure;
+>  
+> -	if (nla_put_u64_64bit(msg, NET_DM_ATTR_PC, pc, NET_DM_ATTR_PAD))
+> +	if (nla_put_u64_64bit(msg, NET_DM_ATTR_PC, (u64)(uintptr_t)cb->pc,
+> +			      NET_DM_ATTR_PAD))
+> +		goto nla_put_failure;
+> +
+> +	reason = (unsigned int)cb->reason;
+> +	if (reason < SKB_DROP_REASON_MAX &&
+> +	    nla_put_string(msg, NET_DM_ATTR_REASON, drop_reasons[reason]))
+
+You need to make sure 'msg' has enough room for this attribute. Account
+for it in net_dm_packet_report_size()
+
+>  		goto nla_put_failure;
+>  
+> -	snprintf(buf, sizeof(buf), "%pS", NET_DM_SKB_CB(skb)->pc);
+> +	snprintf(buf, sizeof(buf), "%pS", cb->pc);
+>  	if (nla_put_string(msg, NET_DM_ATTR_SYMBOL, buf))
+>  		goto nla_put_failure;
+>  
+> -- 
+> 2.27.0
 > 
-> Why max-freq is specified as a register? At minimum this is inconsistent
-> with the lpddr2 binding.
-
-First of all, this is a conversion, so the bindings already specified
-max-freq that way.
-Second, I don't know. I think this was some Lukasz's workaround for
-device node without unit address, but I don't see the reason now why it
-was needed.
-
-We could unify it with DDR2 by deprecating 'reg' and introducing
-'max-freq', in separate commit. But you know, existing bindings are
-already there...
-
-Best regards,
-Krzysztof

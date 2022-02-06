@@ -2,134 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1907F4AADAF
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 05:31:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38CCA4AADF5
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 06:33:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229565AbiBFE30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 23:29:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45330 "EHLO
+        id S229726AbiBFFdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 00:33:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiBFE3X (ORCPT
+        with ESMTP id S229436AbiBFFdO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 23:29:23 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1AC0C06173B;
-        Sat,  5 Feb 2022 20:29:21 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id z5so8613460plg.8;
-        Sat, 05 Feb 2022 20:29:21 -0800 (PST)
+        Sun, 6 Feb 2022 00:33:14 -0500
+Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86AE1C06173B;
+        Sat,  5 Feb 2022 21:33:13 -0800 (PST)
+Received: by mail-oo1-xc2a.google.com with SMTP id r15-20020a4ae5cf000000b002edba1d3349so9941988oov.3;
+        Sat, 05 Feb 2022 21:33:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Jdhw7mSR7V7cNcaM0UCeu+GU2bmiq3T19a9N118Zppg=;
-        b=Cd+ijFk/74tk8ZNujs8fsDYd1sTXI5V/wGkDR0Fi92TrXWNha4DUr2B62eZNiFm4lw
-         lornrc25uXGBV8m9I7uqUKok5hGpfLrnjmPt3u1ZAFfeKVXtpqOkOCJO/EWgx7vrWJdC
-         2WF5ogO26iW7WTGKMGpEJCJHESEVdlI/DG5JWyEXLoLBDVvyvDEwTUW7/RkDop7INl44
-         LckVO0k9clUROBR5+IgXhfP2UEB3gr23nWPfxBaoldKDCj015MM60H/CEiKLVTh2EH24
-         nTFIlyztZGJ2gDziCu6w5Q09K/7k9n5eCid3hIs94RwI4c7UFNw/xvjtTykZ7uImKVAl
-         KBow==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=MDwo1QignIVmB9o/CHw5md1FjaCAoJt0+t4hgZ76n4k=;
+        b=Ro9lbYd46vZhD5iB3lGlnpfI0K/fSBCxaQH60HL4hY1Sd+vwjJYmnXRwe6Ab/a3N27
+         btjwGxB1cKNKVgkhqT+LeUmenrboGbi8sXG1Jv59eugwo+C4lQ7rgjF655N9kVyDE3T7
+         kOaRRTcepyvsaWo7D9nA3spXl8VILyaQ9FJSMtpgKASrRGpbAPVpXiXBT38MzD5EKY09
+         QmFaDSr1wmlxTnUDB6N7ap1SOxaP7Z+ZU/e0FQGhN+QaQ9pbK3xmUM5sr9o5slbvVN/Y
+         u22/+U8WIrZZEM7uYdKWSGz9wx0p/0iDbGJPhwoAGyhOPd/+vsEhlM/uhxAdiWa8cgBt
+         twUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Jdhw7mSR7V7cNcaM0UCeu+GU2bmiq3T19a9N118Zppg=;
-        b=dixe0EsVrjLPWcomXwFVfdeclgc46Ei/g3+zP2aTNNxQJxzcnap9dqSDhfLW5RqSEl
-         kgk4Qt3Yssu6JSFWkS+b+Zi8/BMs2/NBR/zzJCzFTFx6zIrLWh0FlNfdBxlYg00j6DU5
-         KHBMiaiD23ppilF52kaR5xq6o0DwohKPxJbDAmn9lVeAUj1G0CfMpcPOIV3Uvpxta83h
-         /Mcsbj1MvASdATbPZiwFI5C6fFwe/xizfqeOl1svodQgfDKqrS5yzNgH/ZnrAMwHTAWF
-         Y+5CFMZcXXz4VaMiqtUHafhbYIfxY5M+muOGo1esFARZjezL5+mcllapVLLY1jg+DpDd
-         5YPQ==
-X-Gm-Message-State: AOAM5303UEZwtxnqrDMw3kMP6gG6avflh7MzxSFlPxMo+5zoFxq1MnZ2
-        GTPG6czZXc/C/FRjGe8wPeeyVOsffDzIMlo6OLqdS8Xe
-X-Google-Smtp-Source: ABdhPJxSbBYDlrcxjq4UdQFxjJ6+qrQz4UnDrLrww5Fn3AkoCYVzGO+fdu52p+w79IDqfhZo1gZK2VPPm5RnUpN047Y=
-X-Received: by 2002:a17:90b:4ac6:: with SMTP id mh6mr7409716pjb.138.1644121761313;
- Sat, 05 Feb 2022 20:29:21 -0800 (PST)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=MDwo1QignIVmB9o/CHw5md1FjaCAoJt0+t4hgZ76n4k=;
+        b=xVckakbkA7IOJvJv9Kxb2ENlZpmsBFLmvD2+we7na1wCLMDfgq7LI6AiJlnXZRJcXJ
+         hpJABcmWZHQapNWA1PWQxdrdo++da5aZgAz0/PhRgDGFQphIl9/bzKN08Z2qR25ZlP0W
+         d46P95fEMTnvx/ZGtx08nkfO8cDpsbOPINoVqXhLi4XFb7IRQuUG07py4T/R8rYfdJNi
+         zOlRM2WKiUrbsAdbQUk6uhxm8ekhsTj30d8L3sBBSqNoP8/jDwykMSB9hSbt9YyM+iYw
+         1KZGrlfWYtRp3KgUS96xV9RwIsoEThJSe9VHWPeKmd5ygUILcZrK2N++QM2fhS14Ftyt
+         CKEA==
+X-Gm-Message-State: AOAM530W7/CABU7/tn9mPbocoB3+wbmDG0JlKeWHwnFoS6DzZrSmRJEu
+        NeOhl1IN9iuxeQI7jQlf/DM=
+X-Google-Smtp-Source: ABdhPJxepkoupKH3w33rjx0UGoytxYV1Ko641roE4vZtXBtqhX65mttCOM97I/Zy5Bik6d89dGs03g==
+X-Received: by 2002:a05:6870:6296:: with SMTP id s22mr2630790oan.231.1644125592001;
+        Sat, 05 Feb 2022 21:33:12 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 124sm2759971oif.7.2022.02.05.21.33.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 05 Feb 2022 21:33:11 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sat, 5 Feb 2022 21:33:09 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Andrey Smirnov <andrew.smirnov@gmail.com>
+Cc:     platform-driver-x86@vger.kernel.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] platform/x86: Add Steam Deck driver
+Message-ID: <20220206053309.GA3140643@roeck-us.net>
+References: <20220206022023.376142-1-andrew.smirnov@gmail.com>
 MIME-Version: 1.0
-References: <20220201205534.1962784-1-haoluo@google.com> <20220201205534.1962784-6-haoluo@google.com>
- <20220203180414.blk6ou3ccmod2qck@ast-mbp.dhcp.thefacebook.com>
- <CA+khW7jkJbvQrTx4oPJAoBZ0EOCtr3C2PKbrzhxj-7euBK8ojg@mail.gmail.com>
- <CAADnVQLZZ3SM2CDxnzgOnDgRtGU7+6wT9u5v4oFas5MnZF6DsQ@mail.gmail.com> <CA+khW7i+TScwPZ6-rcFKiXtxMm8hiZYJGH-wYb=7jBvDWg8pJQ@mail.gmail.com>
-In-Reply-To: <CA+khW7i+TScwPZ6-rcFKiXtxMm8hiZYJGH-wYb=7jBvDWg8pJQ@mail.gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Sat, 5 Feb 2022 20:29:10 -0800
-Message-ID: <CAADnVQ+-29CS7nSXghKMgZjKte84L0nRDegUE0ObFm3d7E=eWw@mail.gmail.com>
-Subject: Re: [PATCH RFC bpf-next v2 5/5] selftests/bpf: test for pinning for
- cgroup_view link
-To:     Hao Luo <haoluo@google.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Joe Burton <jevburton.kernel@gmail.com>,
-        Stanislav Fomichev <sdf@google.com>, bpf <bpf@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220206022023.376142-1-andrew.smirnov@gmail.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 4, 2022 at 10:27 AM Hao Luo <haoluo@google.com> wrote:
-> >
-> > > In our use case, we can't ask the users who create cgroups to do the
-> > > pinning. Pinning requires root privilege. In our use case, we have
-> > > non-root users who can create cgroup directories and still want to
-> > > read bpf stats. They can't do pinning by themselves. This is why
-> > > inheritance is a requirement for us. With inheritance, they only need
-> > > to mkdir in cgroupfs and bpffs (unprivileged operations), no pinning
-> > > operation is required. Patch 1-4 are needed to implement inheritance.
-> > >
-> > > It's also not a good idea in our use case to add a userspace
-> > > privileged process to monitor cgroupfs operations and perform the
-> > > pinning. It's more complex and has a higher maintenance cost and
-> > > runtime overhead, compared to the solution of asking whoever makes
-> > > cgroups to mkdir in bpffs. The other problem is: if there are nodes in
-> > > the data center that don't have the userspace process deployed, the
-> > > stats will be unavailable, which is a no-no for some of our users.
-> >
-> > The commit log says that there will be a daemon that does that
-> > monitoring of cgroupfs. And that daemon needs to mkdir
-> > directories in bpffs when a new cgroup is created, no?
-> > The kernel is only doing inheritance of bpf progs into
-> > new dirs. I think that daemon can pin as well.
-> >
-> > The cgroup creation is typically managed by an agent like systemd.
-> > Sounds like you have your own agent that creates cgroups?
-> > If so it has to be privileged and it can mkdir in bpffs and pin too ?
->
-> Ah, yes, we have our own daemon to manage cgroups. That daemon creates
-> the top-level cgroup for each job to run inside. However, the job can
-> create its own cgroups inside the top-level cgroup, for fine grained
-> resource control. This doesn't go through the daemon. The job-created
-> cgroups don't have the pinned objects and this is a no-no for our
-> users.
+On Sat, Feb 05, 2022 at 06:20:23PM -0800, Andrey Smirnov wrote:
+> Add a driver exposing various bits and pieces of functionality
+> provided by Steam Deck specific VLV0100 device presented by EC
+> firmware. This includes but not limited to:
+> 
+>     - CPU/device's fan control
+>     - Read-only access to DDIC registers
+>     - Battery tempreature measurements
+>     - Various display related control knobs
+>     - USB Type-C connector event notification
+> 
+> Cc: Hans de Goede <hdegoede@redhat.com>
+> Cc: Mark Gross <markgross@kernel.org>
+> Cc: Jean Delvare <jdelvare@suse.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: linux-kernel@vger.kernel.org (open list)
+> Cc: platform-driver-x86@vger.kernel.org
+> Cc: linux-hwmon@vger.kernel.org
+> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+> ---
+> 
+...
+> +
+> +static umode_t
+> +steamdeck_is_visible(struct kobject *kobj, struct attribute *attr, int index)
+> +{
+> +	return attr->mode;
+> +}
 
-We can whitelist certain tracepoints to be sleepable and extend
-tp_btf prog type to include everything from prog_type_syscall.
-Such prog would attach to cgroup_mkdir and cgroup_release
-and would call bpf_sys_bpf() helper to pin progs in new bpffs dirs.
-We can allow prog_type_syscall to do mkdir in bpffs as well.
+This is unnecessary. Using attr->mode is the default operation if there
+is no is_visible function.
 
-This feature could be useful for similar monitoring/introspection tasks.
-We can write a program that would monitor bpf prog load/unload
-and would pin an iterator prog that would show debug info about a prog.
-Like cat /sys/fs/bpf/progs.debug shows a list of loaded progs.
-With this feature we can implement:
-ls /sys/fs/bpf/all_progs.debug/
-and each loaded prog would have a corresponding file.
-The file name would be a program name, for example.
-cat /sys/fs/bpf/all_progs.debug/my_prog
-would pretty print info about 'my_prog' bpf program.
-
-This way the kernfs/cgroupfs specific logic from patches 1-4
-will not be necessary.
-
-wdyt?
+Guenter

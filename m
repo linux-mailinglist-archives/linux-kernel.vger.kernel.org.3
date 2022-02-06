@@ -2,45 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 382BB4AB0CD
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 18:03:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6329A4AB0D9
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 18:09:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343653AbiBFRDd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 12:03:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53098 "EHLO
+        id S1343890AbiBFRJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 12:09:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237377AbiBFRD3 (ORCPT
+        with ESMTP id S232559AbiBFRJr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 12:03:29 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DF69C06173B;
-        Sun,  6 Feb 2022 09:03:28 -0800 (PST)
+        Sun, 6 Feb 2022 12:09:47 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1056C06173B;
+        Sun,  6 Feb 2022 09:09:45 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2484D611BE;
-        Sun,  6 Feb 2022 17:03:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ACE4C340E9;
-        Sun,  6 Feb 2022 17:03:26 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 46609CE0DAF;
+        Sun,  6 Feb 2022 17:09:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B199BC340E9;
+        Sun,  6 Feb 2022 17:09:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644167007;
-        bh=CxNZhf0Rj0X+y+VCbMTPfy1hriBWerZmKT41tTRAYzk=;
+        s=korg; t=1644167382;
+        bh=PPbNG5fmfqWCiX5JD0R+wVYBnW27nFjoMGlmUI9GqcM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sDoAKbPGicUgOwtqu8mIQK6uUNLfBO9/kmCWiamx3/iJ1TyJmOZRiTgR9u9ausvhA
-         AI5midU3xIJ9Iuvrv+STI+6/9rYA2X2w6QKMHaU2E5LgGK+5cv+f6Kr4yQfVx1GS4v
-         E889lgGqdYzvQBDKQ/rOfdjTJmnzBPCjaHjfCcd4=
-Date:   Sun, 6 Feb 2022 18:03:15 +0100
+        b=T1Vq0bswugrIIVt1NcP4G0M3SzYsegwJ+hGStHbC8sx8+/rayHkVmg9ehCGPWEojy
+         +ZBI/c2VKn5o83yWzyBlgIzD9cF3yIb0hojVC4StZ96Muse6a7zGVQ1V80daR6Bdnm
+         gSTdwnOQP+jcGvxucliytsQWfQDFfumxPJBfG4/s=
+Date:   Sun, 6 Feb 2022 18:09:27 +0100
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Xu Yu <xuyu@linux.alibaba.com>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        arnd@arndb.de, viro@zeniv.linux.org.uk, dhowells@redhat.com
-Subject: Re: [PATCH] chardev: call tty_init() in real chrdev_init()
-Message-ID: <Yf//U1s3DbTuSqo2@kroah.com>
-References: <4e753e51d0516413fbf557cf861d654ca73486cc.1644164597.git.xuyu@linux.alibaba.com>
+To:     Walt Drummond <walt@drummond.us>
+Cc:     agordeev@linux.ibm.com, arnd@arndb.de, benh@kernel.crashing.org,
+        borntraeger@de.ibm.com, chris@zankel.net, davem@davemloft.net,
+        hca@linux.ibm.com, deller@gmx.de, ink@jurassic.park.msu.ru,
+        James.Bottomley@hansenpartnership.com, jirislaby@kernel.org,
+        mattst88@gmail.com, jcmvbkbc@gmail.com, mpe@ellerman.id.au,
+        paulus@samba.org, rth@twiddle.net, dalias@libc.org,
+        tsbogend@alpha.franken.de, gor@linux.ibm.com, ysato@users.osdn.me,
+        linux-kernel@vger.kernel.org, ar@cs.msu.ru,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] status: Add user space API definitions for
+ VSTATUS, NOKERNINFO and TIOCSTAT
+Message-ID: <YgAAx3OQPAC1+fws@kroah.com>
+References: <20220206154856.2355838-1-walt@drummond.us>
+ <20220206154856.2355838-3-walt@drummond.us>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4e753e51d0516413fbf557cf861d654ca73486cc.1644164597.git.xuyu@linux.alibaba.com>
+In-Reply-To: <20220206154856.2355838-3-walt@drummond.us>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -51,64 +64,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 12:27:31AM +0800, Xu Yu wrote:
-> It is confusing that tty_init() in called in the initialization of
-> memdev, i.e., static chr_dev_init().
+On Sun, Feb 06, 2022 at 07:48:53AM -0800, Walt Drummond wrote:
+> Add definitions for the VSTATUS control character, and the NOKERNINFO
+> local control flag in the termios struct, and add an ioctl number for
+> the ioctl TIOCSTAT.  Also add a default VSTATUS character (Ctrl-T)
+> default valuses in termios.c_cc.  Do this for all architectures.
 > 
-> Through blame, it is introduced by commit 31d1d48e199e ("Fix init
-> ordering of /dev/console vs callers of modprobe"), which fixes the
-> initialization order of /dev/console driver. However, there seems
-> to be a typo in the patch, i.e., chrdev_init, instead of chr_dev_init.
-> 
-> This fixes the typo, IIUC.
-> 
-> Note that the return value of tty_init() is always 0, and thus no error
-> handling is provided in chrdev_init().
-> 
-> Fixes: 31d1d48e199e ("Fix init ordering of /dev/console vs callers of modprobe")
-> Signed-off-by: Xu Yu <xuyu@linux.alibaba.com>
+> Signed-off-by: Walt Drummond <walt@drummond.us>
 > ---
->  drivers/char/mem.c | 2 +-
->  fs/char_dev.c      | 1 +
->  2 files changed, 2 insertions(+), 1 deletion(-)
+>  arch/alpha/include/asm/termios.h         | 4 ++--
+>  arch/alpha/include/uapi/asm/ioctls.h     | 1 +
+>  arch/alpha/include/uapi/asm/termbits.h   | 2 ++
+>  arch/ia64/include/asm/termios.h          | 4 ++--
+>  arch/ia64/include/uapi/asm/termbits.h    | 2 ++
+>  arch/mips/include/asm/termios.h          | 4 ++--
+>  arch/mips/include/uapi/asm/ioctls.h      | 1 +
+>  arch/mips/include/uapi/asm/termbits.h    | 2 ++
+>  arch/parisc/include/asm/termios.h        | 4 ++--
+>  arch/parisc/include/uapi/asm/ioctls.h    | 1 +
+>  arch/parisc/include/uapi/asm/termbits.h  | 2 ++
+>  arch/powerpc/include/asm/termios.h       | 4 ++--
+>  arch/powerpc/include/uapi/asm/ioctls.h   | 2 ++
+>  arch/powerpc/include/uapi/asm/termbits.h | 2 ++
+>  arch/s390/include/asm/termios.h          | 4 ++--
+>  arch/sh/include/uapi/asm/ioctls.h        | 1 +
+>  arch/sparc/include/uapi/asm/ioctls.h     | 1 +
+>  arch/sparc/include/uapi/asm/termbits.h   | 2 ++
+>  arch/xtensa/include/uapi/asm/ioctls.h    | 1 +
+>  include/asm-generic/termios.h            | 4 ++--
+>  include/uapi/asm-generic/ioctls.h        | 1 +
+>  include/uapi/asm-generic/termbits.h      | 2 ++
+>  22 files changed, 37 insertions(+), 14 deletions(-)
 > 
-> diff --git a/drivers/char/mem.c b/drivers/char/mem.c
-> index cc296f0823bd..8c90881f8115 100644
-> --- a/drivers/char/mem.c
-> +++ b/drivers/char/mem.c
-> @@ -775,7 +775,7 @@ static int __init chr_dev_init(void)
->  			      NULL, devlist[minor].name);
->  	}
+> diff --git a/arch/alpha/include/asm/termios.h b/arch/alpha/include/asm/termios.h
+> index b7c77bb1bfd2..d28ddc649286 100644
+> --- a/arch/alpha/include/asm/termios.h
+> +++ b/arch/alpha/include/asm/termios.h
+> @@ -8,9 +8,9 @@
+>  	werase=^W	kill=^U		reprint=^R	sxtc=\0
+>  	intr=^C		quit=^\		susp=^Z		<OSF/1 VDSUSP>
+>  	start=^Q	stop=^S		lnext=^V	discard=^U
+> -	vmin=\1		vtime=\0
+> +	vmin=\1		vtime=\0        status=^T
+>  */
+> -#define INIT_C_CC "\004\000\000\177\027\025\022\000\003\034\032\000\021\023\026\025\001\000"
+> +#define INIT_C_CC "\004\000\000\177\027\025\022\000\003\034\032\000\021\023\026\025\001\000\024"
 >  
-> -	return tty_init();
-> +	return 0;
->  }
+>  /*
+>   * Translate a "termio" structure into a "termios". Ugh.
+> diff --git a/arch/alpha/include/uapi/asm/ioctls.h b/arch/alpha/include/uapi/asm/ioctls.h
+> index 971311605288..70fdeab2b5f2 100644
+> --- a/arch/alpha/include/uapi/asm/ioctls.h
+> +++ b/arch/alpha/include/uapi/asm/ioctls.h
+> @@ -124,5 +124,6 @@
 >  
->  fs_initcall(chr_dev_init);
-> diff --git a/fs/char_dev.c b/fs/char_dev.c
-> index ba0ded7842a7..fc042a0a098f 100644
-> --- a/fs/char_dev.c
-> +++ b/fs/char_dev.c
-> @@ -667,6 +667,7 @@ static struct kobject *base_probe(dev_t dev, int *part, void *data)
->  void __init chrdev_init(void)
->  {
->  	cdev_map = kobj_map_init(base_probe, &chrdevs_lock);
-> +	tty_init();
->  }
+>  #define TIOCMIWAIT	0x545C	/* wait for a change on serial input line(s) */
+>  #define TIOCGICOUNT	0x545D	/* read serial port inline interrupt counts */
+> +#define TIOCSTAT	_IO('T', 0x5E)	/* display process group stats on tty */
 >  
+>  #endif /* _ASM_ALPHA_IOCTLS_H */
+> diff --git a/arch/alpha/include/uapi/asm/termbits.h b/arch/alpha/include/uapi/asm/termbits.h
+> index 4575ba34a0ea..9a1b9aa92d29 100644
+> --- a/arch/alpha/include/uapi/asm/termbits.h
+> +++ b/arch/alpha/include/uapi/asm/termbits.h
+> @@ -70,6 +70,7 @@ struct ktermios {
+>  #define VDISCARD 15
+>  #define VMIN 16
+>  #define VTIME 17
+> +#define VSTATUS 18
+>  
+>  /* c_iflag bits */
+>  #define IGNBRK	0000001
+> @@ -203,6 +204,7 @@ struct ktermios {
+>  #define PENDIN	0x20000000
+>  #define IEXTEN	0x00000400
+>  #define EXTPROC	0x10000000
+> +#define NOKERNINFO 0x40000000
 
-You just changed the ordering sequence here, are you SURE this is
-correct?
+Here, and elsewhere, you seem to mix tabs and spaces.  Please use what
+is in the original file (tabs here.)
 
-How was this tested?  Did you verify that the problem that the original
-commit here was fixing is now not happening again?
+>  /* Values for the ACTION argument to `tcflow'.  */
+>  #define	TCOOFF		0
+> diff --git a/arch/ia64/include/asm/termios.h b/arch/ia64/include/asm/termios.h
+> index 589c026444cc..40e83f9b6ead 100644
+> --- a/arch/ia64/include/asm/termios.h
+> +++ b/arch/ia64/include/asm/termios.h
+> @@ -15,9 +15,9 @@
+>  	eof=^D		vtime=\0	vmin=\1		sxtc=\0
+>  	start=^Q	stop=^S		susp=^Z		eol=\0
+>  	reprint=^R	discard=^U	werase=^W	lnext=^V
+> -	eol2=\0
+> +	eol2=\0         status=^T
 
-And what real problem is this solving?  How did you hit the issue that
-this solves?
-
-And finally, yes, it is not good to throw away the return value of
-tty_init().  If it really can not return anything but 0, then let us
-make it a void function first.
+Same here.  And for the other files in this patch.  Let's keep them
+unified please.
 
 thanks,
 

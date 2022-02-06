@@ -2,59 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92A344AAF8A
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 14:47:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54E234AAF91
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 14:49:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240089AbiBFNrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 08:47:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47748 "EHLO
+        id S240324AbiBFNtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 08:49:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239883AbiBFNrt (ORCPT
+        with ESMTP id S240386AbiBFNtX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 08:47:49 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45DD5C06173B;
-        Sun,  6 Feb 2022 05:47:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CBFDC61014;
-        Sun,  6 Feb 2022 13:47:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8B58C340E9;
-        Sun,  6 Feb 2022 13:47:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644155267;
-        bh=LZnVpND4TW3EHGCa7Bt7E3If2oojjj22Tn2/52XBPWk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=E1qW8ITUFwf/4dD8xfL6W4dli7he4xICS2fT/MdB/6tJEcaA70T/dYcYtwDTnq2uk
-         oAXe6wB6eF86RKy5yWv+qSeCmNmZmOZHDRoTlhjpUPKE5m87Bhqfdm0rfdmjUYls2T
-         B79dM9UwHBqXG67B+euhaPL8jtPv3VCbdOUDMArafxSz9yNecXuB7P59vwEcCOe+Q0
-         doHGn8ocBdGFwZJhaVUz29Owl0WzhS5Snt3AI2izgjlTQg/6t/kTdfwV/8tHN0UYVx
-         kcSRny6koAdIsxsRYumo6sL+/F4Gwhs5hYEVW0rbERA5tN9W/JS7e/whyiGhdSZ5vT
-         2+VPkEHMYtT9Q==
-Date:   Sun, 6 Feb 2022 14:47:41 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     "Anton V. Boyarshinov" <boyarsh@altlinux.org>
-Cc:     viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org,
-        ebiederm@xmission.com, legion@kernel.org, ldv@altlinux.org,
-        linux-kernel@vger.kernel.org, kernel-hardening@lists.openwall.com,
-        Christoph Hellwig <hch@lst.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH] Add ability to disallow idmapped mounts
-Message-ID: <20220206134741.ze3e4ndzxrckdiz5@wittgenstein>
-References: <20220204065338.251469-1-boyarsh@altlinux.org>
- <20220204094515.6vvxhzcyemvrb2yy@wittgenstein>
- <20220204132616.28de9c4a@tower>
- <20220204151032.7q22hgzcil4hqvkl@wittgenstein>
- <20220205105758.1623e78d@tower>
+        Sun, 6 Feb 2022 08:49:23 -0500
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86065C0401C3
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 05:49:21 -0800 (PST)
+Received: by mail-io1-f70.google.com with SMTP id y4-20020a056602200400b006101b618529so7047983iod.19
+        for <linux-kernel@vger.kernel.org>; Sun, 06 Feb 2022 05:49:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=2BjaMGDo4/nb0cgziCObjwAIJLqV0IFNYkvzhO5UBCM=;
+        b=ehjd5lecASwBdqY7AL4MTGfMvThioU+xEOnjiWZVIbkfw6ly92OM2y92/UGr1tU1cP
+         2ILiIJX3mlylQeNa9lIXCJwSUtZ5lyDGtlAH5qiUyqDhxQjbO28ZPy+niS5ax1t1kYz7
+         oUPpMPVcbNWgQV+AqDbe6v3W/Zh8ycJkQZ0sJ9mch95TJf9iw/wV6LweR2QoXzfAf6HX
+         QGOYBJz1R4cdLBWS5Xve+/Wa8XOg4H9kFPUysSEaPY2JEqylLX+obQzF62HsMlO5YKMx
+         DOAlOoNDDvhPGqYvt401IQp7tYYxlqNMkJYfRR+mKMPOYz4vMZ5YRlZU982RNvUuGY5n
+         LY7w==
+X-Gm-Message-State: AOAM532eZ3Fs7UwHmvDpam5li0AiyxCiGrIkzFJpeerrik9pHMkDXt6a
+        i1FExOSjBt83M6+HH+KBNAh/bqaDVDLppBYscexza0HQOefp
+X-Google-Smtp-Source: ABdhPJyrtf9K1fc0nnjSzQa41PslNz5JT188h0hOhiBRCbCMRX44ELEtSDOus0Y+q8gBFL3acNPlpTbI7OjY+y+Meg2n+cuzPMFu
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220205105758.1623e78d@tower>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6638:164f:: with SMTP id a15mr3896146jat.272.1644155360871;
+ Sun, 06 Feb 2022 05:49:20 -0800 (PST)
+Date:   Sun, 06 Feb 2022 05:49:20 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003d898d05d759c00a@google.com>
+Subject: [syzbot] kernel BUG in ext4_es_cache_extent
+From:   syzbot <syzbot+c7358a3cd05ee786eb31@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,82 +53,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 05, 2022 at 10:57:58AM +0300, Anton V. Boyarshinov wrote:
-> В Fri, 4 Feb 2022 16:10:32 +0100
-> Christian Brauner <brauner@kernel.org> пишет:
-> 
-> 
-> > > It turns off much more than idmapped mounts only. More fine grained
-> > > control seems better for me.  
-> > 
-> > If you allow user namespaces and not idmapped mounts you haven't reduced
-> > your attack surface.
-> 
-> I have. And many other people have. People who have creating user
-> namespaces by unpriviliged user disabled. I find it sad that we have no
-> tool in mainline kernel to limit users access to creating user
-> namespaces except complete disabling them. But many distros have that
-> tools. Different tools with different interfaces and semantics :(
-> 
-> And at least one major GNU/Linux distro disabled idmapped mounts
-> unconditionally. If I were the author of this functionality, I would
-> prefer to have a knob then have it unavailible for for so many users. But as you wish.
- 
-You're talking about the author of the allegations being involved in
-disabling idmapped mounts for rhel under [2] as I was told.
- 
-If a downstream distro wants to disable this feature based on
-allegations we've refuted multiple times then we can't stop them from
-doing so.
+Hello,
 
-The only disconcerting thing is that this helps spreads misinformation
-as evidenced by this patch. The allegations and refutation around them
-are all visible and I've linked to them in the initial reply.
+syzbot found the following issue on:
 
-This is a root-only accessible feature with a massive testsuite and
-being used for 2 years. Each bug fixed gets its own regression test
-right away. We will of course take and upstream patches that fix actual
-clearly reported bugs.
- 
-In the end it is not different from say Archlinux [1] having had user
-namespaces disabled for 5+ years from their introduction in 2013
-onwards and many other examples. Downstream distros can make whatever
-choice they want and diverge from upstream.
- 
-In any case, I'll be on vacation for about 2 weeks with very limited
-access to internet going forward.
- 
-[1]: https://bugs.archlinux.org/task/36969
-[2]: https://gitlab.com/redhat/centos-stream/src/kernel/centos-stream-9/-/merge_requests/131
+HEAD commit:    9f7fb8de5d9b Merge tag 'spi-fix-v5.17-rc2' of git://git.ke..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=148d0304700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b4a89edfcc8f7c74
+dashboard link: https://syzkaller.appspot.com/bug?extid=c7358a3cd05ee786eb31
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=124e0abfb00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1758f610700000
 
-> 
-> > An unprivileged user can reach much more
-> > exploitable code simply via unshare -user --map-root -mount which we
-> > still allow upstream without a second thought even with all the past and
-> > present exploits (see
-> > https://www.openwall.com/lists/oss-security/2022/01/29/1 for a current
-> > one from this January).
-> > 
-> > >   
-> > > > They can neither
-> > > > be created as an unprivileged user nor can they be created inside user
-> > > > namespaces.  
-> > > 
-> > > But actions of fully privileged user can open non-obvious ways to
-> > > privilege escalation.  
-> > 
-> > A fully privileged user potentially being able to cause issues is really
-> > not an argument; especially not for a new sysctl.
-> > You need root to create idmapped mounts and you need root to turn off
-> > the new knob.
-> > 
-> > It also trivially applies to a whole slew of even basic kernel tunables
-> > basically everything that can be reached by unprivileged users after a
-> > privileged user has turned it on or configured it.
-> > 
-> > After 2 years we haven't seen any issue with this code and while I'm not
-> > promising that there won't ever be issues - nobody can do that - the
-> > pure suspicion that there could be some is not a justification for
-> > anything.
-> 
-> 
+Bisection is inconclusive: the issue happens on the oldest tested release.
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=12758738700000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=11758738700000
+console output: https://syzkaller.appspot.com/x/log.txt?x=16758738700000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+c7358a3cd05ee786eb31@syzkaller.appspotmail.com
+
+loop0: detected capacity change from 0 to 1051
+EXT4-fs (loop0): ext4_check_descriptors: Checksum for group 0 failed (60935!=0)
+EXT4-fs (loop0): mounted filesystem without journal. Quota mode: writeback.
+------------[ cut here ]------------
+kernel BUG at fs/ext4/extents_status.c:899!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 3587 Comm: syz-executor288 Not tainted 5.17.0-rc2-syzkaller-00039-g9f7fb8de5d9b #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:ext4_es_cache_extent+0x4e8/0x550 fs/ext4/extents_status.c:899
+Code: 00 48 c7 c7 e0 6c c1 89 c6 05 71 25 6f 0b 01 e8 b0 b6 f6 06 e9 5a ff ff ff e8 94 9d 68 ff 0f 0b e9 d7 fc ff ff e8 88 9d 68 ff <0f> 0b e8 81 9d 68 ff 0f 0b e9 13 fe ff ff e8 25 df af ff e9 c2 fb
+RSP: 0018:ffffc90001abee80 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 00000000000013de RCX: 0000000000000000
+RDX: ffff88807deb0000 RSI: ffffffff820fd0f8 RDI: 0000000000000003
+RBP: ffff888074e6f048 R08: 00000000ffffffff R09: 0000000000000000
+R10: ffffffff820fce3c R11: 0000000000000000 R12: 0000000000000001
+R13: 00000000ffffffff R14: 1ffff92000357dd1 R15: 00008f1cffffffff
+FS:  0000555556ad6300(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f117149e4b0 CR3: 000000007cc1f000 CR4: 0000000000350ee0
+Call Trace:
+ <TASK>
+ ext4_cache_extents+0x13e/0x2d0 fs/ext4/extents.c:518
+ ext4_find_extent+0x8f6/0xd10 fs/ext4/extents.c:916
+ ext4_ext_map_blocks+0x1e2/0x5f30 fs/ext4/extents.c:4098
+ ext4_map_blocks+0x9ca/0x18a0 fs/ext4/inode.c:563
+ ext4_getblk+0x553/0x6b0 fs/ext4/inode.c:849
+ ext4_bread_batch+0x7c/0x550 fs/ext4/inode.c:923
+ __ext4_find_entry+0x482/0x1050 fs/ext4/namei.c:1600
+ ext4_lookup_entry fs/ext4/namei.c:1701 [inline]
+ ext4_lookup fs/ext4/namei.c:1769 [inline]
+ ext4_lookup+0x4fc/0x730 fs/ext4/namei.c:1760
+ __lookup_slow+0x24c/0x480 fs/namei.c:1707
+ lookup_slow fs/namei.c:1724 [inline]
+ walk_component+0x40f/0x6a0 fs/namei.c:2020
+ link_path_walk.part.0+0x7ef/0xf70 fs/namei.c:2347
+ link_path_walk fs/namei.c:2272 [inline]
+ path_openat+0x266/0x2940 fs/namei.c:3605
+ do_filp_open+0x1aa/0x400 fs/namei.c:3636
+ do_sys_openat2+0x16d/0x4d0 fs/open.c:1214
+ do_sys_open fs/open.c:1230 [inline]
+ __do_sys_openat fs/open.c:1246 [inline]
+ __se_sys_openat fs/open.c:1241 [inline]
+ __x64_sys_openat+0x13f/0x1f0 fs/open.c:1241
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f8e44f22f19
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fff98aa3238 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f8e44f22f19
+RDX: 000000000000c880 RSI: 0000000020000100 RDI: 0000000000000005
+RBP: 00007f8e44ee27b0 R08: 0000000800000015 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f8e44ee2840
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:ext4_es_cache_extent+0x4e8/0x550 fs/ext4/extents_status.c:899
+Code: 00 48 c7 c7 e0 6c c1 89 c6 05 71 25 6f 0b 01 e8 b0 b6 f6 06 e9 5a ff ff ff e8 94 9d 68 ff 0f 0b e9 d7 fc ff ff e8 88 9d 68 ff <0f> 0b e8 81 9d 68 ff 0f 0b e9 13 fe ff ff e8 25 df af ff e9 c2 fb
+RSP: 0018:ffffc90001abee80 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 00000000000013de RCX: 0000000000000000
+RDX: ffff88807deb0000 RSI: ffffffff820fd0f8 RDI: 0000000000000003
+RBP: ffff888074e6f048 R08: 00000000ffffffff R09: 0000000000000000
+R10: ffffffff820fce3c R11: 0000000000000000 R12: 0000000000000001
+R13: 00000000ffffffff R14: 1ffff92000357dd1 R15: 00008f1cffffffff
+FS:  0000555556ad6300(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f117149e4b0 CR3: 000000007cc1f000 CR4: 0000000000350ee0
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

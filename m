@@ -2,100 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5C404AB190
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 20:01:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05AB74AB198
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 20:17:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239707AbiBFTBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 14:01:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34320 "EHLO
+        id S231601AbiBFTRJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 14:17:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230336AbiBFTBp (ORCPT
+        with ESMTP id S229904AbiBFTRH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 14:01:45 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E35C06173B;
-        Sun,  6 Feb 2022 11:01:43 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sun, 6 Feb 2022 14:17:07 -0500
+X-Greylist: delayed 598 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Feb 2022 11:17:04 PST
+Received: from ixit.cz (ip-94-112-206-30.net.upcbroadband.cz [94.112.206.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C3B6C06173B
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 11:17:04 -0800 (PST)
+Received: from newone.lan (_gateway [10.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C8E731EC0441;
-        Sun,  6 Feb 2022 20:01:37 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1644174097;
+        by ixit.cz (Postfix) with ESMTPSA id D335E20056;
+        Sun,  6 Feb 2022 20:07:03 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
+        t=1644174423;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=ChxamsEn4wVXVgyKqugsP7LdW1mp5Q8UXz53U1t1exI=;
-        b=W7H33NnTuF0YEUxMSx9nd8PnP7sMY8KRbI4CpEqeB6JvNk5Dg8rN6021MmzubsWWibJktB
-        Q3Px8g3dthyfnnteq9VMx1c1DBoG1ZqoinUJL8ZBKBuWxfzIAikUkCzwKR3UDc1xCODOON
-        kgSm9z+VuDVmE7m406H2ipIB07ANU6U=
-Date:   Sun, 6 Feb 2022 20:01:31 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Brijesh Singh <brijesh.singh@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        Borislav Petkov <bp@suse.de>
-Subject: Re: [PATCH v9 35/43] x86/compressed: Export and rename
- add_identity_map()
-Message-ID: <YgAbC0T5iVRBxemW@zn.tnic>
-References: <20220128171804.569796-1-brijesh.singh@amd.com>
- <20220128171804.569796-36-brijesh.singh@amd.com>
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=UJwP4f8oteGGn0vzBKGJSEJApAsEqkPzF2JBHrzRrEU=;
+        b=XdwP9KlByhvaZk6RpTlP3n7bvBlVvaJEY0wOdmjpVjh9o+ZCDhOIAin+BxypxJJWPFz9tc
+        1tv1U19vlvL4nOe+DWibYnuffvyO5KiR2YR4V8E1sWXSOed3B6p/OkyNuV2g9SKByp84lB
+        LVNdHesUXiWXTBNdo4XI4r35pdaYtWE=
+From:   David Heidelberg <david@ixit.cz>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     ~okias/devicetree@lists.sr.ht, David Heidelberg <david@ixit.cz>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/panel: JDI LT070ME05000 remove useless warning
+Date:   Sun,  6 Feb 2022 20:07:02 +0100
+Message-Id: <20220206190702.450643-1-david@ixit.cz>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220128171804.569796-36-brijesh.singh@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam: Yes
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_RDNS_DYNAMIC_FP,
+        RDNS_DYNAMIC,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 11:17:56AM -0600, Brijesh Singh wrote:
-> From: Michael Roth <michael.roth@amd.com>
-> 
-> SEV-specific code will need to add some additional mappings, but doing
-> this within ident_map_64.c requires some SEV-specific helpers to be
-> exported and some SEV-specific struct definitions to be pulled into
-> ident_map_64.c. Instead, export add_identity_map() so SEV-specific (and
-> other subsystem-specific) code can be better contained outside of
-> ident_map_64.c.
-> 
-> While at it, rename the function to kernel_add_identity_map(), similar
-> to the kernel_ident_mapping_init() function it relies upon.
+Do as most of panel and in case of deffered probe, don't print error.
 
-Add here:
+Fixes warning:
+panel-jdi-lt070me05000 4700000.dsi.0: cannot get enable-gpio -517
 
-"No functional changes."
+Signed-off-by: David Heidelberg <david@ixit.cz>
+---
+ drivers/gpu/drm/panel/panel-jdi-lt070me05000.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/gpu/drm/panel/panel-jdi-lt070me05000.c b/drivers/gpu/drm/panel/panel-jdi-lt070me05000.c
+index ea0e7221e706..b5c0b51dc146 100644
+--- a/drivers/gpu/drm/panel/panel-jdi-lt070me05000.c
++++ b/drivers/gpu/drm/panel/panel-jdi-lt070me05000.c
+@@ -408,7 +408,8 @@ static int jdi_panel_add(struct jdi_panel *jdi)
+ 	jdi->enable_gpio = devm_gpiod_get(dev, "enable", GPIOD_OUT_LOW);
+ 	if (IS_ERR(jdi->enable_gpio)) {
+ 		ret = PTR_ERR(jdi->enable_gpio);
+-		dev_err(dev, "cannot get enable-gpio %d\n", ret);
++		if (ret != -EPROBE_DEFER)
++			dev_err(dev, "cannot get enable-gpio %d\n", ret);
+ 		return ret;
+ 	}
+ 
 -- 
-Regards/Gruss,
-    Boris.
+2.34.1
 
-https://people.kernel.org/tglx/notes-about-netiquette

@@ -2,219 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B6FC4AB0F0
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 18:23:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C125D4AB0F5
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 18:34:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344121AbiBFRXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 12:23:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58942 "EHLO
+        id S1344357AbiBFRc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 12:32:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230187AbiBFRXi (ORCPT
+        with ESMTP id S1344299AbiBFRc4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 12:23:38 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3267C06173B;
-        Sun,  6 Feb 2022 09:23:36 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id b9so22656376lfq.6;
-        Sun, 06 Feb 2022 09:23:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=DZ5wjKqdD4TOpUJAi2NdV3t9go691za/EKfx/PAIrRE=;
-        b=ke/mkrDrFNo/Hys09oQTVDx/tPAMh8uwUaeWxjMUi9yAqTMBjeqcRSZqI1FLkfjmbq
-         KPQX8oeXfbq5K+Vxi2H5MiZHZSRQI4dCm2z4pLEHh4FkGttMdfrpveAGjeIHDAqGGwDd
-         /5Zxv66RdSa21j9lGSh0es1OYkJpqKiA8a9QDzYKWRT0CH6NuWmRjOgfDwdVwavNdU4z
-         Z4FFleRc3v+wOs1iNmcXKF6Cw0BFh/YBnj0LEq9yQe45zXHRewEqjwH+HiE6JHNKRD+h
-         bM4GWAiMljukALizvHG4DEFNLFAzlO2yOvpHdmvTN2n0f6lI7wBv80oqVh4zmqqq33n0
-         oZOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=DZ5wjKqdD4TOpUJAi2NdV3t9go691za/EKfx/PAIrRE=;
-        b=Bgp+SX2tf2sSAKmMJO4/b/TugssM40Uj4UQnQb9ia5MG/1nv+ywL0J21Pbr8IVSvs8
-         kieS5dBLpoo+/lIymITBiiGJWOb+YfiSZEBjv/jtV0CdDMP6mhruUa8lukmZDZmrdUWk
-         5osvnn2KGeSRTkMCYdeaSE3zP3HNKtXc05gvVGoaA5xY9kPpVxOdoBhoGccX+9TzxFFt
-         MvvE/HMhhIDEu2VKFyvNJ9TycLXLpTqOPk0QuET2HYLbU5juoI1Onut0FTKw2TaaNBU7
-         Thi3GZo2ykuRIqnT+aBqPvhjZjeTA/reua9eukKWq+je6gwNyCHpjEI5j7IaRduI4Dfm
-         Sd8Q==
-X-Gm-Message-State: AOAM531CQSrNwpFu/yG7Ur70p/Pt22bu9rnJ5RvOT6jAzI+wl74XHs7v
-        PN9dqAMnkD99poNgiynKbIFKg9ywwFDJ+g==
-X-Google-Smtp-Source: ABdhPJyI2INFDQ9ECmeCNbGeCgArPLiJ4rd3qowK0jikNBNRB1r6KD0EMtuhM06s+RxJ/XYHE3wxeQ==
-X-Received: by 2002:ac2:5e64:: with SMTP id a4mr5874900lfr.674.1644168214696;
-        Sun, 06 Feb 2022 09:23:34 -0800 (PST)
-Received: from [192.168.1.11] ([94.103.224.201])
-        by smtp.gmail.com with ESMTPSA id t12sm1276573ljc.97.2022.02.06.09.23.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 06 Feb 2022 09:23:34 -0800 (PST)
-Message-ID: <7dbe85db-92b8-68bd-d008-33a4be9a55b9@gmail.com>
-Date:   Sun, 6 Feb 2022 20:23:32 +0300
+        Sun, 6 Feb 2022 12:32:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6C6EC043184
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 09:32:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0A33BB80D85
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 17:32:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B702C340E9;
+        Sun,  6 Feb 2022 17:32:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644168771;
+        bh=gMzTBBMdtxGO63UBF7sMhkDOFkmpPJGG4DrBI60H7XI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZpHsZnKDuay4orHTkL7iABQfZys5FNg9nzVBH9pWshMv7m2AbhzsUSXjrJpMT5xOR
+         Z600e1yOGAqURhfOtuaGsUk7BSufjfeOSZ+3IW1hdzYYmNdieE7+FRajsEuzRrrrrA
+         BAElRv7ZKCB1T1nD3mhmHYUvf3CuxapODK3fBN4wrmmGWUBM0KhLaCo3z/IeNLQFrS
+         ZZ6t0TCpOzmoU5mxUjovXZOeIQvMgEi5V8pIRkQ/nhJOmekxHIoQj4c78dv3vURQ7T
+         pAxfFlvWdZwo2UoWbeAhPYy9SlFU/5y5KysxAfSwsqfgKCTQUZCjp9bEDUk6qoUb2h
+         u0tA8ieFfbQzA==
+Date:   Mon, 7 Feb 2022 01:25:03 +0800
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Changbin Du <changbin.du@gmail.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] riscv: fix oops caused by irq on/off tracer
+Message-ID: <YgAEb425uqy5/dw1@xhacker>
+References: <20220129004226.32868-1-changbin.du@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH RFT] net: asix: add proper error handling of usb read
- errors
-Content-Language: en-US
-To:     davem@davemloft.net, kuba@kernel.org, linux@rempel-privat.de,
-        andrew@lunn.ch, oneukum@suse.com, robert.foss@collabora.com,
-        freddy@asix.com.tw
-Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+6ca9f7867b77c2d316ac@syzkaller.appspotmail.com
-References: <20220105131952.15693-1-paskripkin@gmail.com>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <20220105131952.15693-1-paskripkin@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220129004226.32868-1-changbin.du@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/5/22 16:19, Pavel Skripkin wrote:
-> Syzbot once again hit uninit value in asix driver. The problem still the
-> same -- asix_read_cmd() reads less bytes, than was requested by caller.
+On Sat, Jan 29, 2022 at 08:42:26AM +0800, Changbin Du wrote:
+> The trace_hardirqs_on/off requires at least two parent call frames.
+> If not, the code generated by CALLER_ADDR1 (aka. ftrace_return_address(1))
+> could trigger memory access fault.
 > 
-> Since all read requests are performed via asix_read_cmd() let's catch
-> usb related error there and add __must_check notation to be sure all
-> callers actually check return value.
+> [    0.039615][    T0] Unable to handle kernel NULL pointer dereference at virtual address 00000000000000f8
+> [    0.041925][    T0] Oops [#1]
+> [    0.042063][    T0] Modules linked in:
+> [    0.042864][    T0] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.17.0-rc1-00233-g9a20c48d1ed2 #29
+> [    0.043568][    T0] Hardware name: riscv-virtio,qemu (DT)
+> [    0.044343][    T0] epc : trace_hardirqs_on+0x56/0xe2
+> [    0.044601][    T0]  ra : restore_all+0x12/0x6e
+> [    0.044721][    T0] epc : ffffffff80126a5c ra : ffffffff80003b94 sp : ffffffff81403db0
+> [    0.044801][    T0]  gp : ffffffff8163acd8 tp : ffffffff81414880 t0 : 0000000000000020
+> [    0.044882][    T0]  t1 : 0098968000000000 t2 : 0000000000000000 s0 : ffffffff81403de0
+> [    0.044967][    T0]  s1 : 0000000000000000 a0 : 0000000000000001 a1 : 0000000000000100
+> [    0.045046][    T0]  a2 : 0000000000000000 a3 : 0000000000000000 a4 : 0000000000000000
+> [    0.045124][    T0]  a5 : 0000000000000000 a6 : 0000000000000000 a7 : 0000000054494d45
+> [    0.045210][    T0]  s2 : ffffffff80003b94 s3 : ffffffff81a8f1b0 s4 : ffffffff80e27b50
+> [    0.045289][    T0]  s5 : ffffffff81414880 s6 : ffffffff8160fa00 s7 : 00000000800120e8
+> [    0.045389][    T0]  s8 : 0000000080013100 s9 : 000000000000007f s10: 0000000000000000
+> [    0.045474][    T0]  s11: 0000000000000000 t3 : 7fffffffffffffff t4 : 0000000000000000
+> [    0.045548][    T0]  t5 : 0000000000000000 t6 : ffffffff814aa368
+> [    0.045620][    T0] status: 0000000200000100 badaddr: 00000000000000f8 cause: 000000000000000d
+> [    0.046402][    T0] [<ffffffff80003b94>] restore_all+0x12/0x6e
 > 
-> So, this patch adds sanity check inside asix_read_cmd(), that simply
-> checks if bytes read are not less, than was requested and adds missing
-> error handling of asix_read_cmd() all across the driver code.
+
+Hi Changbin,
+
+Could you please provide the reproduce steps? It looks a bit
+interesting.
+
+> To fix above issue, here we add one extra level wrapper so they can be
+> safely called by low level entry code.
 > 
-> Fixes: d9fe64e51114 ("net: asix: Add in_pm parameter")
-> Reported-and-tested-by: syzbot+6ca9f7867b77c2d316ac@syzkaller.appspotmail.com
-> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+> Signed-off-by: Changbin Du <changbin.du@gmail.com>
+> 
 > ---
-
-gentle ping :)
-
->   drivers/net/usb/asix.h         |  4 ++--
->   drivers/net/usb/asix_common.c  | 19 +++++++++++++------
->   drivers/net/usb/asix_devices.c | 21 ++++++++++++++++++---
->   3 files changed, 33 insertions(+), 11 deletions(-)
+> v2: fix compile warning.
+> ---
+>  arch/riscv/kernel/Makefile    |  2 ++
+>  arch/riscv/kernel/entry.S     | 10 +++++-----
+>  arch/riscv/kernel/trace_irq.c | 26 ++++++++++++++++++++++++++
+>  arch/riscv/kernel/trace_irq.h | 11 +++++++++++
+>  4 files changed, 44 insertions(+), 5 deletions(-)
+>  create mode 100644 arch/riscv/kernel/trace_irq.c
+>  create mode 100644 arch/riscv/kernel/trace_irq.h
 > 
-> diff --git a/drivers/net/usb/asix.h b/drivers/net/usb/asix.h
-> index 2a1e31defe71..4334aafab59a 100644
-> --- a/drivers/net/usb/asix.h
-> +++ b/drivers/net/usb/asix.h
-> @@ -192,8 +192,8 @@ extern const struct driver_info ax88172a_info;
->   /* ASIX specific flags */
->   #define FLAG_EEPROM_MAC		(1UL << 0)  /* init device MAC from eeprom */
->   
-> -int asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
-> -		  u16 size, void *data, int in_pm);
-> +int __must_check asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
-> +			       u16 size, void *data, int in_pm);
->   
->   int asix_write_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
->   		   u16 size, void *data, int in_pm);
-> diff --git a/drivers/net/usb/asix_common.c b/drivers/net/usb/asix_common.c
-> index 71682970be58..524805285019 100644
-> --- a/drivers/net/usb/asix_common.c
-> +++ b/drivers/net/usb/asix_common.c
-> @@ -11,8 +11,8 @@
->   
->   #define AX_HOST_EN_RETRIES	30
->   
-> -int asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
-> -		  u16 size, void *data, int in_pm)
-> +int __must_check asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
-> +			       u16 size, void *data, int in_pm)
->   {
->   	int ret;
->   	int (*fn)(struct usbnet *, u8, u8, u16, u16, void *, u16);
-> @@ -27,9 +27,12 @@ int asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
->   	ret = fn(dev, cmd, USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
->   		 value, index, data, size);
->   
-> -	if (unlikely(ret < 0))
-> +	if (unlikely(ret < size)) {
-> +		ret = ret < 0 ? ret : -ENODATA;
+> diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
+> index 612556faa527..ffc87e76b1dd 100644
+> --- a/arch/riscv/kernel/Makefile
+> +++ b/arch/riscv/kernel/Makefile
+> @@ -51,6 +51,8 @@ obj-$(CONFIG_MODULE_SECTIONS)	+= module-sections.o
+>  obj-$(CONFIG_FUNCTION_TRACER)	+= mcount.o ftrace.o
+>  obj-$(CONFIG_DYNAMIC_FTRACE)	+= mcount-dyn.o
+>  
+> +obj-$(CONFIG_TRACE_IRQFLAGS)	+= trace_irq.o
 > +
->   		netdev_warn(dev->net, "Failed to read reg index 0x%04x: %d\n",
->   			    index, ret);
-> +	}
->   
->   	return ret;
->   }
-> @@ -79,7 +82,7 @@ static int asix_check_host_enable(struct usbnet *dev, int in_pm)
->   				    0, 0, 1, &smsr, in_pm);
->   		if (ret == -ENODEV)
->   			break;
-> -		else if (ret < sizeof(smsr))
-> +		else if (ret < 0)
->   			continue;
->   		else if (smsr & AX_HOST_EN)
->   			break;
-> @@ -579,8 +582,12 @@ int asix_mdio_read_nopm(struct net_device *netdev, int phy_id, int loc)
->   		return ret;
->   	}
->   
-> -	asix_read_cmd(dev, AX_CMD_READ_MII_REG, phy_id,
-> -		      (__u16)loc, 2, &res, 1);
-> +	ret = asix_read_cmd(dev, AX_CMD_READ_MII_REG, phy_id,
-> +			    (__u16)loc, 2, &res, 1);
-> +	if (ret < 0) {
-> +		mutex_unlock(&dev->phy_mutex);
-> +		return ret;
-> +	}
->   	asix_set_hw_mii(dev, 1);
->   	mutex_unlock(&dev->phy_mutex);
->   
-> diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
-> index 4514d35ef4c4..6b2fbdf4e0fd 100644
-> --- a/drivers/net/usb/asix_devices.c
-> +++ b/drivers/net/usb/asix_devices.c
-> @@ -755,7 +755,12 @@ static int ax88772_bind(struct usbnet *dev, struct usb_interface *intf)
->   	priv->phy_addr = ret;
->   	priv->embd_phy = ((priv->phy_addr & 0x1f) == 0x10);
->   
-> -	asix_read_cmd(dev, AX_CMD_STATMNGSTS_REG, 0, 0, 1, &chipcode, 0);
-> +	ret = asix_read_cmd(dev, AX_CMD_STATMNGSTS_REG, 0, 0, 1, &chipcode, 0);
-> +	if (ret < 0) {
-> +		netdev_dbg(dev->net, "Failed to read STATMNGSTS_REG: %d\n", ret);
-> +		return ret;
-> +	}
+>  obj-$(CONFIG_RISCV_BASE_PMU)	+= perf_event.o
+>  obj-$(CONFIG_PERF_EVENTS)	+= perf_callchain.o
+>  obj-$(CONFIG_HAVE_PERF_REGS)	+= perf_regs.o
+> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+> index ed29e9c8f660..d6a46ed0bf05 100644
+> --- a/arch/riscv/kernel/entry.S
+> +++ b/arch/riscv/kernel/entry.S
+> @@ -108,7 +108,7 @@ _save_context:
+>  .option pop
+>  
+>  #ifdef CONFIG_TRACE_IRQFLAGS
+> -	call trace_hardirqs_off
+> +	call __trace_hardirqs_off
+>  #endif
+>  
+>  #ifdef CONFIG_CONTEXT_TRACKING
+> @@ -143,7 +143,7 @@ skip_context_tracking:
+>  	li t0, EXC_BREAKPOINT
+>  	beq s4, t0, 1f
+>  #ifdef CONFIG_TRACE_IRQFLAGS
+> -	call trace_hardirqs_on
+> +	call __trace_hardirqs_on
+>  #endif
+>  	csrs CSR_STATUS, SR_IE
+>  
+> @@ -234,7 +234,7 @@ ret_from_exception:
+>  	REG_L s0, PT_STATUS(sp)
+>  	csrc CSR_STATUS, SR_IE
+>  #ifdef CONFIG_TRACE_IRQFLAGS
+> -	call trace_hardirqs_off
+> +	call __trace_hardirqs_off
+>  #endif
+>  #ifdef CONFIG_RISCV_M_MODE
+>  	/* the MPP value is too large to be used as an immediate arg for addi */
+> @@ -270,10 +270,10 @@ restore_all:
+>  	REG_L s1, PT_STATUS(sp)
+>  	andi t0, s1, SR_PIE
+>  	beqz t0, 1f
+> -	call trace_hardirqs_on
+> +	call __trace_hardirqs_on
+>  	j 2f
+>  1:
+> -	call trace_hardirqs_off
+> +	call __trace_hardirqs_off
+>  2:
+>  #endif
+>  	REG_L a0, PT_STATUS(sp)
+> diff --git a/arch/riscv/kernel/trace_irq.c b/arch/riscv/kernel/trace_irq.c
+> new file mode 100644
+> index 000000000000..fc194c56a35d
+> --- /dev/null
+> +++ b/arch/riscv/kernel/trace_irq.c
+> @@ -0,0 +1,26 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2022 Changbin Du <changbin.du@gmail.com>
+> + */
 > +
->   	chipcode &= AX_CHIPCODE_MASK;
->   
->   	ret = (chipcode == AX_AX88772_CHIPCODE) ? ax88772_hw_reset(dev, 0) :
-> @@ -920,11 +925,21 @@ static int ax88178_reset(struct usbnet *dev)
->   	int gpio0 = 0;
->   	u32 phyid;
->   
-> -	asix_read_cmd(dev, AX_CMD_READ_GPIOS, 0, 0, 1, &status, 0);
-> +	ret = asix_read_cmd(dev, AX_CMD_READ_GPIOS, 0, 0, 1, &status, 0);
-> +	if (ret < 0) {
-> +		netdev_dbg(dev->net, "Failed to read GPIOS: %d\n", ret);
-> +		return ret;
-> +	}
+> +#include <linux/irqflags.h>
+> +#include <linux/kprobes.h>
+> +#include "trace_irq.h"
 > +
->   	netdev_dbg(dev->net, "GPIO Status: 0x%04x\n", status);
->   
->   	asix_write_cmd(dev, AX_CMD_WRITE_ENABLE, 0, 0, 0, NULL, 0);
-> -	asix_read_cmd(dev, AX_CMD_READ_EEPROM, 0x0017, 0, 2, &eeprom, 0);
-> +	ret = asix_read_cmd(dev, AX_CMD_READ_EEPROM, 0x0017, 0, 2, &eeprom, 0);
-> +	if (ret < 0) {
-> +		netdev_dbg(dev->net, "Failed to read EEPROM: %d\n", ret);
-> +		return ret;
-> +	}
-> +
->   	asix_write_cmd(dev, AX_CMD_WRITE_DISABLE, 0, 0, 0, NULL, 0);
->   
->   	netdev_dbg(dev->net, "EEPROM index 0x17 is 0x%04x\n", eeprom);
+> +/**
+> + * trace_hardirqs_on/off requires at least two parent call frames.
+> + * Here we add one extra level so they can be safely called by low
+> + * level entry code.
+> + */
+
+Hmm, I believe there's elegant solution without this grue, maybe
+fix in stacktrace implementation or something else?
 
 
-
-
-With regards,
-Pavel Skripkin
+> +
+> +void __trace_hardirqs_on(void)
+> +{
+> +	trace_hardirqs_on();
+> +}
+> +NOKPROBE_SYMBOL(__trace_hardirqs_on);
+> +
+> +void __trace_hardirqs_off(void)
+> +{
+> +	trace_hardirqs_off();
+> +}
+> +NOKPROBE_SYMBOL(__trace_hardirqs_off);
+> diff --git a/arch/riscv/kernel/trace_irq.h b/arch/riscv/kernel/trace_irq.h
+> new file mode 100644
+> index 000000000000..99fe67377e5e
+> --- /dev/null
+> +++ b/arch/riscv/kernel/trace_irq.h
+> @@ -0,0 +1,11 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) 2022 Changbin Du <changbin.du@gmail.com>
+> + */
+> +#ifndef __TRACE_IRQ_H
+> +#define __TRACE_IRQ_H
+> +
+> +void __trace_hardirqs_on(void);
+> +void __trace_hardirqs_off(void);
+> +
+> +#endif /* __TRACE_IRQ_H */
+> -- 
+> 2.32.0
+> 
+> 
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv

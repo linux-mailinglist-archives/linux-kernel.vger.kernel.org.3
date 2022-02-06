@@ -2,109 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38CCA4AADF5
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 06:33:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81B9E4AAE32
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 07:12:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbiBFFdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 00:33:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59764 "EHLO
+        id S229754AbiBFFzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 00:55:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiBFFdO (ORCPT
+        with ESMTP id S229436AbiBFFzR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 00:33:14 -0500
-Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86AE1C06173B;
-        Sat,  5 Feb 2022 21:33:13 -0800 (PST)
-Received: by mail-oo1-xc2a.google.com with SMTP id r15-20020a4ae5cf000000b002edba1d3349so9941988oov.3;
-        Sat, 05 Feb 2022 21:33:13 -0800 (PST)
+        Sun, 6 Feb 2022 00:55:17 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C68BC06173B
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Feb 2022 21:55:16 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id a8so8828483pfa.6
+        for <linux-kernel@vger.kernel.org>; Sat, 05 Feb 2022 21:55:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=MDwo1QignIVmB9o/CHw5md1FjaCAoJt0+t4hgZ76n4k=;
-        b=Ro9lbYd46vZhD5iB3lGlnpfI0K/fSBCxaQH60HL4hY1Sd+vwjJYmnXRwe6Ab/a3N27
-         btjwGxB1cKNKVgkhqT+LeUmenrboGbi8sXG1Jv59eugwo+C4lQ7rgjF655N9kVyDE3T7
-         kOaRRTcepyvsaWo7D9nA3spXl8VILyaQ9FJSMtpgKASrRGpbAPVpXiXBT38MzD5EKY09
-         QmFaDSr1wmlxTnUDB6N7ap1SOxaP7Z+ZU/e0FQGhN+QaQ9pbK3xmUM5sr9o5slbvVN/Y
-         u22/+U8WIrZZEM7uYdKWSGz9wx0p/0iDbGJPhwoAGyhOPd/+vsEhlM/uhxAdiWa8cgBt
-         twUw==
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=QllGcs8jzslhBf9s27Nd7fCzfzy4T3imE/YP1j3Ms3c=;
+        b=l6+4DZO0eT+NO+dc2mLF5dsgbs9+drsyJuMcPj3hNHjIyyhgmfWhsgIhnPVEqTl5ww
+         7FzxZ/fU5knE1fPFx4tIU/J4vN6P/zg+2FlLqnzbfaQtgYbVCa80fa5eoJDg1FXjZgWl
+         E6vEYJjrEHyVeZT0He2n+JdsXJWNn5ZiOgWJ5EI87v6Ws7+8itqaInyWZChB1UyZNrGw
+         VVASpSMs23kvPx0gnd+LJJiGXPYuLxow4ztB4FHAtb2F0HIzaKCUOCKmUtrWgwfvmLN8
+         pgoAyL1hbOEqz8yniKBpweAIYxoYEMfQdI6I12tyEzpKhSJCN49BMspFGUKUyrONhYko
+         MRiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=MDwo1QignIVmB9o/CHw5md1FjaCAoJt0+t4hgZ76n4k=;
-        b=xVckakbkA7IOJvJv9Kxb2ENlZpmsBFLmvD2+we7na1wCLMDfgq7LI6AiJlnXZRJcXJ
-         hpJABcmWZHQapNWA1PWQxdrdo++da5aZgAz0/PhRgDGFQphIl9/bzKN08Z2qR25ZlP0W
-         d46P95fEMTnvx/ZGtx08nkfO8cDpsbOPINoVqXhLi4XFb7IRQuUG07py4T/R8rYfdJNi
-         zOlRM2WKiUrbsAdbQUk6uhxm8ekhsTj30d8L3sBBSqNoP8/jDwykMSB9hSbt9YyM+iYw
-         1KZGrlfWYtRp3KgUS96xV9RwIsoEThJSe9VHWPeKmd5ygUILcZrK2N++QM2fhS14Ftyt
-         CKEA==
-X-Gm-Message-State: AOAM530W7/CABU7/tn9mPbocoB3+wbmDG0JlKeWHwnFoS6DzZrSmRJEu
-        NeOhl1IN9iuxeQI7jQlf/DM=
-X-Google-Smtp-Source: ABdhPJxepkoupKH3w33rjx0UGoytxYV1Ko641roE4vZtXBtqhX65mttCOM97I/Zy5Bik6d89dGs03g==
-X-Received: by 2002:a05:6870:6296:: with SMTP id s22mr2630790oan.231.1644125592001;
-        Sat, 05 Feb 2022 21:33:12 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 124sm2759971oif.7.2022.02.05.21.33.10
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=QllGcs8jzslhBf9s27Nd7fCzfzy4T3imE/YP1j3Ms3c=;
+        b=VEQIxTCSxmyJEb99W7iOhNrXak0YeNnvBEy7G4tD0H7Jkjlrc06MU2T92eoRoBteP+
+         WseHv5rujgpkfqL1lepsujJnKFyxCjQwj3OfgmMiZ8nvntmck3OO4nTGPQ131pdNZb3Z
+         FEqIrmIuoWooGK1ZXDLPVoGFCNCPu4ZzwnGPpKQ5F+fI/Lf56ynPrZRmCJgeaCre9rX2
+         yg0dv+P1W+bVKqTCZxfss2EPeBsGQkIpBq//Ou9RW+6UT21SwpM5/bjqavnvoU8pvr5s
+         XT2p52WPnebFjoIPoE9WKtLRjAQYCA+tP2mEafw8Xn1/TpmdbW8OZZxA8SEv26xRXeGJ
+         clFw==
+X-Gm-Message-State: AOAM533DehNpufoRL/MUGjLDd0NMfRAkpJwXHD6/rnUwzOXcvMlc/U2G
+        EESP6Et8BnaZGryWqVMNqKE=
+X-Google-Smtp-Source: ABdhPJxmThNqiX6NqrU4WsRYYdLRfnbKATWJt3yOAjweie1fwvFZ++Dq7mGovWp/DrwF6mynq4CL/Q==
+X-Received: by 2002:a05:6a00:194d:: with SMTP id s13mr10230054pfk.22.1644126915744;
+        Sat, 05 Feb 2022 21:55:15 -0800 (PST)
+Received: from mail.google.com ([124.157.67.163])
+        by smtp.gmail.com with ESMTPSA id o1sm8311886pfu.88.2022.02.05.21.55.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Feb 2022 21:33:11 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 5 Feb 2022 21:33:09 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Andrey Smirnov <andrew.smirnov@gmail.com>
-Cc:     platform-driver-x86@vger.kernel.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] platform/x86: Add Steam Deck driver
-Message-ID: <20220206053309.GA3140643@roeck-us.net>
-References: <20220206022023.376142-1-andrew.smirnov@gmail.com>
+        Sat, 05 Feb 2022 21:55:15 -0800 (PST)
+Date:   Sun, 6 Feb 2022 18:55:09 +1300
+From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+To:     gregkh@linuxfoundation.org, paulo.miguel.almeida.rodenas@gmail.com,
+        realwakka@gmail.com
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH] staging: pi433: remove register debug dev_dbg stmts using
+ DEBUG_VALUES
+Message-ID: <Yf9ivRB5qpmA5rY2@mail.google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220206022023.376142-1-andrew.smirnov@gmail.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 05, 2022 at 06:20:23PM -0800, Andrey Smirnov wrote:
-> Add a driver exposing various bits and pieces of functionality
-> provided by Steam Deck specific VLV0100 device presented by EC
-> firmware. This includes but not limited to:
-> 
->     - CPU/device's fan control
->     - Read-only access to DDIC registers
->     - Battery tempreature measurements
->     - Various display related control knobs
->     - USB Type-C connector event notification
-> 
-> Cc: Hans de Goede <hdegoede@redhat.com>
-> Cc: Mark Gross <markgross@kernel.org>
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: linux-kernel@vger.kernel.org (open list)
-> Cc: platform-driver-x86@vger.kernel.org
-> Cc: linux-hwmon@vger.kernel.org
-> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
-> ---
-> 
-...
-> +
-> +static umode_t
-> +steamdeck_is_visible(struct kobject *kobj, struct attribute *attr, int index)
-> +{
-> +	return attr->mode;
-> +}
+Which the recent addition of the debugfs dentry (regs), users can now
+obtain rf69 register values without having to tweak constants
+(DEBUG_VALUES) and recompile the pi433 module source code in order to
+see those values.
 
-This is unnecessary. Using attr->mode is the default operation if there
-is no is_visible function.
+This patch removes code blocks made obsolete by debugfs regs file.
 
-Guenter
+Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+---
+ drivers/staging/pi433/rf69.c | 37 ++----------------------------------
+ 1 file changed, 2 insertions(+), 35 deletions(-)
+
+diff --git a/drivers/staging/pi433/rf69.c b/drivers/staging/pi433/rf69.c
+index 2ab3bf46e37d..bf26aef69daa 100644
+--- a/drivers/staging/pi433/rf69.c
++++ b/drivers/staging/pi433/rf69.c
+@@ -8,8 +8,6 @@
+ 
+ /* enable prosa debug info */
+ #undef DEBUG
+-/* enable print of values on reg access */
+-#undef DEBUG_VALUES
+ /* enable print of values on fifo access */
+ #undef DEBUG_FIFO_ACCESS
+ 
+@@ -26,48 +24,17 @@
+ 
+ u8 rf69_read_reg(struct spi_device *spi, u8 addr)
+ {
+-	int retval;
+-
+-	retval = spi_w8r8(spi, addr);
+-
+-#ifdef DEBUG_VALUES
+-	if (retval < 0)
+-		/*
+-		 * should never happen, since we already checked,
+-		 * that module is connected. Therefore no error
+-		 * handling, just an optional error message...
+-		 */
+-		dev_dbg(&spi->dev, "read 0x%x FAILED\n", addr);
+-	else
+-		dev_dbg(&spi->dev, "read 0x%x from reg 0x%x\n", retval, addr);
+-#endif
+-
+-	return retval;
++	return spi_w8r8(spi, addr);
+ }
+ 
+ static int rf69_write_reg(struct spi_device *spi, u8 addr, u8 value)
+ {
+-	int retval;
+ 	char buffer[2];
+ 
+ 	buffer[0] = addr | WRITE_BIT;
+ 	buffer[1] = value;
+ 
+-	retval = spi_write(spi, &buffer, 2);
+-
+-#ifdef DEBUG_VALUES
+-	if (retval < 0)
+-		/*
+-		 * should never happen, since we already checked,
+-		 * that module is connected. Therefore no error
+-		 * handling, just an optional error message...
+-		 */
+-		dev_dbg(&spi->dev, "write 0x%x to 0x%x FAILED\n", value, addr);
+-	else
+-		dev_dbg(&spi->dev, "wrote 0x%x to reg 0x%x\n", value, addr);
+-#endif
+-
+-	return retval;
++	return spi_write(spi, &buffer, ARRAY_SIZE(buffer));
+ }
+ 
+ /*-------------------------------------------------------------------------*/
+-- 
+2.34.1
+

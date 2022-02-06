@@ -2,155 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 660F04AB266
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 22:34:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C19664AB267
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 22:35:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242511AbiBFVeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 16:34:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49738 "EHLO
+        id S242581AbiBFVe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 16:34:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234250AbiBFVeS (ORCPT
+        with ESMTP id S237986AbiBFVe4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 16:34:18 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0CB1C061348
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 13:34:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=yhLq6k+SiBfLbUNlAZzRc0sHOynAv+Blm2Wv7duBKBQ=; b=TFzNCu8KldoloZOsL6YkqZRCf3
-        kD93aS0vN7nY8NOw2NCLFfQFAN4Hkjda1gW/qHGu5ZeezeFQxYGcAg7xqWYIV16dCyZ5ntI/D5MxC
-        lJGpiuJZKW7SQYYQePpIorQURk/9Rl7dVK9oQBWQEOy+byCaODu5rdoKmxaYIp5lvT6OspS13wldT
-        +aq8LD1Ni5+ufujKFvwvcEQ/eTUWvetKzZ0xM18nssMRmTnCuzvbx2v0Ouyrclw4ZLGwyznX5qMQt
-        abKdFBeAKJmHKftajgvDBuCbhNcI8Wr0R+dKuH6NVEYAp4fX+GXYJkPqKBOfSIn5ioSgNpqaVzPTo
-        Eu3HI4fA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nGpAa-00FhXG-G1; Sun, 06 Feb 2022 21:34:04 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 28CDE3002DB;
-        Sun,  6 Feb 2022 22:34:00 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 0EF892B37BEB0; Sun,  6 Feb 2022 22:34:00 +0100 (CET)
-Date:   Sun, 6 Feb 2022 22:33:59 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Song Liu <song@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        Yonghong Song <yhs@fb.com>, Rik van Riel <riel@surriel.com>
-Subject: Re: [PATCH] perf: fix GPF in perf_cgroup_switch()
-Message-ID: <YgA+x1CtlkqH2XcC@hirez.programming.kicks-ass.net>
-References: <20220204004057.2961252-1-song@kernel.org>
+        Sun, 6 Feb 2022 16:34:56 -0500
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFBF1C06173B
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 13:34:55 -0800 (PST)
+Received: by mail-qk1-x731.google.com with SMTP id 200so9542775qki.2
+        for <linux-kernel@vger.kernel.org>; Sun, 06 Feb 2022 13:34:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :mime-version;
+        bh=aN9jBUAYtXHCGaaeDEIY7w9yB+GjJ5YgDtHsb77P658=;
+        b=WpVzCKTSSVi6GoYJEZT6vLbf1sd7YZmUJrQ6su8wcqoyJi5mMuPwdKm+TX3wj+cPOF
+         Onecd/s03fPVi3QTwLUozKzP+43eWRkt6eQGfAw+Eav1oQ8wH7lbwdDtAp6zNMltTqX1
+         daklbwZttoGb5ecV4vugBaGIyH1JP3g/07jFiOz+xLSBztZiZrBo5yTKBH2WfqzC6dcQ
+         Xdd7czT4qmQsV224vt9lD1L4jsep2PPVpmCW+69lyEWmIeKHt4Kpg4nFyr7jQ3QQqc7C
+         bbC842ieUWUA5hDtgLSyrj9rpWkBbIbq3cfLoiCemQ3Fee3xqz3hn/yId77xktb0Jh6K
+         I14Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:mime-version;
+        bh=aN9jBUAYtXHCGaaeDEIY7w9yB+GjJ5YgDtHsb77P658=;
+        b=zDkIVRHtwVB00LJTNuoMm3pks7y5qGLkuO2uPgJxqqSgS9UMy2UTwLwsA0ns3+mfDW
+         3UhIco0MP6WjGBWMVkUVXm3V30q+Onn06F5iQuJnuf1j9l95Vzd5IvjABiRje52KXPu1
+         0TI3f2Ko0KnBZZozozUhg9Fk/FQhCoEL6+EFAGu66oKkpBsjI3v9wFj+/NY/oUioPSWi
+         rk74yYJ6Bo0MSV2Y4xYPidX+zT9HXxxytmKgac8v4DTmQqeXgtkiqsTMKuXLF2h/jDZP
+         O21rDWpLrKwNy5AMCsObnhskA1Yi5x/snvibGKBdfamn3RqQSeOcFay0kkHLa03ynf/b
+         NMmw==
+X-Gm-Message-State: AOAM531CVaEYElPvOTbXlj+j/y2GooIOeHhend18huBg85yReXuKwHAt
+        f1hHiZP0c0CVdveG6peA+sfWEQ==
+X-Google-Smtp-Source: ABdhPJxujpl+3AC442NQ22lFrdKNnJHbmm/WntCsFSP6F26ynHKhbaiKOWngjy9Dx/FenVb41XuHdg==
+X-Received: by 2002:a37:658b:: with SMTP id z133mr4932257qkb.119.1644183294804;
+        Sun, 06 Feb 2022 13:34:54 -0800 (PST)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id br30sm4544545qkb.67.2022.02.06.13.34.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Feb 2022 13:34:54 -0800 (PST)
+Date:   Sun, 6 Feb 2022 13:34:51 -0800 (PST)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.anvils
+To:     Andrew Morton <akpm@linux-foundation.org>
+cc:     Michal Hocko <mhocko@suse.com>, Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Rik van Riel <riel@surriel.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Yu Zhao <yuzhao@google.com>, Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH 03/13] mm/munlock: delete munlock_vma_pages_all(), allow
+ oomreap
+In-Reply-To: <8e4356d-9622-a7f0-b2c-f116b5f2efea@google.com>
+Message-ID: <8dddb3d4-361-da5-538-3f3ae1b326b@google.com>
+References: <8e4356d-9622-a7f0-b2c-f116b5f2efea@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220204004057.2961252-1-song@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 03, 2022 at 04:40:57PM -0800, Song Liu wrote:
-> GPF is observed in perf_cgroup_switch():
-> 
-> [ 2683.232477] general protection fault, probably for non-canonical address 0xdeacffffffffff90: 0000 [#1] SMP
-> [ 2683.251802] CPU: 30 PID: 0 Comm: swapper/30 Kdump: loaded Tainted: G S
-> [ 2683.273726] Hardware name: Quanta Twin Lakes MP/Twin Lakes Passive MP,
-> [ 2683.291129] RIP: 0010:perf_cgroup_switch+0xc0/0x170
-> [ 2683.300889] Code: 85 ff ff 48 8b 83 00 01 00 00 48 85 c0 74 04 c6 40 08 \
->          00 c6 43 08 00 48 8b 83 70 01 00 00 48 8d 98 90 fe ff ff 48 39 c5 \
->          74 7d <8b> 83 e4 00 00 00 85 c0 0f 84 89 00 00 00 4c 8b bb 00 01 00 00 48
-> [ 2683.338455] RSP: 0018:ffffc9000021fdb0 EFLAGS: 00010002
-> [ 2683.348904] RAX: dead000000000100 RBX: deacffffffffff90 RCX: 000000000000038f
-> [ 2683.363176] RDX: 0000000000000007 RSI: 0000000000000400 RDI: 0000000000000000
-> [ 2683.377447] RBP: ffff88903ffa77b0 R08: 0000000300000003 R09: 0000000000000004
-> [ 2683.391718] R10: 0000000000000003 R11: 0000000000000001 R12: 0000000000000002
-> [ 2683.405989] R13: 0000000000000000 R14: ffff8881013fdc00 R15: 0000000000000000
-> [ 2683.420261] FS:  0000000000000000(0000) GS:ffff88903ff80000(0000) knlGS:0000000000000000
-> [ 2683.436446] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [ 2683.447937] CR2: 00007ffafb956020 CR3: 0000000141cd7005 CR4: 00000000007706e0
-> [ 2683.462209] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> [ 2683.476481] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> [ 2683.490752] PKRU: 55555554
-> [ 2683.496160] Call Trace:
-> [ 2683.501048]  __perf_event_task_sched_in+0xb3/0x200
-> [ 2683.510632]  finish_task_switch+0x186/0x270
-> [ 2683.518999]  __schedule+0x3b1/0x850
-> [ 2683.525973]  ? cpuidle_enter_state+0xa7/0x340
-> [ 2683.534687]  ? update_ts_time_stats+0x51/0x70
-> [ 2683.543399]  schedule_idle+0x1e/0x40
-> [ 2683.550548]  do_idle+0x148/0x200
-> [ 2683.557001]  cpu_startup_entry+0x19/0x20
-> [ 2683.564843]  start_secondary+0x104/0x140
-> [ 2683.572688]  secondary_startup_64_no_verify+0xb0/0xbb
+munlock_vma_pages_range() will still be required, when munlocking but
+not munmapping a set of pages; but when unmapping a pte, the mlock count
+will be maintained in much the same way as it will be maintained when
+mapping in the pte.  Which removes the need for munlock_vma_pages_all()
+on mlocked vmas when munmapping or exiting: eliminating the catastrophic
+contention on i_mmap_rwsem, and the need for page lock on the pages.
 
-Please, don't put splats in changelogs like this, simply put the
-relevant information in. Which you've already done below, so the above
-is completely redundant.
+There is still a need to update locked_vm accounting according to the
+munmapped vmas when munmapping: do that in detach_vmas_to_be_unmapped().
+exit_mmap() does not need locked_vm updates, so delete unlock_range().
 
-> 
-> which indicates list corruption on cgrp_cpuctx_list. This happens on the
-> following path:
-> 
->   perf_cgroup_switch: list_for_each_entry(cgrp_cpuctx_list)
->       cpu_ctx_sched_in
->          ctx_sched_in
->             ctx_pinned_sched_in
->               merge_sched_in
->                   perf_cgroup_event_disable: remove the event from the list
-> 
-> To repro this on Intel CPUs:
-> 
->   /* occupy all counters with pinned events (watchdog uses another) */
->   perf stat -e cycles:D,cycles:D,cycles:D,cycles:D,cycles:D -a &
->   /* add a pinned cgroup event */
->   perf stat -e cycles:D -G my-cgroup
->   /* GPF immediately */
+And wasn't I the one who forbade the OOM reaper to attack mlocked vmas,
+because of the uncertainty in blocking on all those page locks?
+No fear of that now, so permit the OOM reaper on mlocked vmas.
 
-Luckily this requires root, but please don't hand reproducers like this
-to the kiddies :/
-
-> Fix this with list_for_each_entry_safe().
-
-*sigh*
-
-You forgot Fixes, I'm thinking this is due to commit: 058fe1c0440e6.
-
-With all that, I seem to end up with the below.
-
+Signed-off-by: Hugh Dickins <hughd@google.com>
 ---
-Subject: perf: Fix list corruption in perf_cgroup_switch()
-From: Song Liu <song@kernel.org>
-Date: Thu, 3 Feb 2022 16:40:57 -0800
+ mm/internal.h | 16 ++--------------
+ mm/madvise.c  |  5 +++++
+ mm/mlock.c    |  4 ++--
+ mm/mmap.c     | 32 ++------------------------------
+ mm/oom_kill.c |  2 +-
+ 5 files changed, 12 insertions(+), 47 deletions(-)
 
-From: Song Liu <song@kernel.org>
+diff --git a/mm/internal.h b/mm/internal.h
+index e48c486d5ddf..f235aa92e564 100644
+--- a/mm/internal.h
++++ b/mm/internal.h
+@@ -71,11 +71,6 @@ void free_pgtables(struct mmu_gather *tlb, struct vm_area_struct *start_vma,
+ 		unsigned long floor, unsigned long ceiling);
+ void pmd_install(struct mm_struct *mm, pmd_t *pmd, pgtable_t *pte);
+ 
+-static inline bool can_madv_lru_vma(struct vm_area_struct *vma)
+-{
+-	return !(vma->vm_flags & (VM_LOCKED|VM_HUGETLB|VM_PFNMAP));
+-}
+-
+ struct zap_details;
+ void unmap_page_range(struct mmu_gather *tlb,
+ 			     struct vm_area_struct *vma,
+@@ -398,12 +393,8 @@ extern long populate_vma_page_range(struct vm_area_struct *vma,
+ extern long faultin_vma_page_range(struct vm_area_struct *vma,
+ 				   unsigned long start, unsigned long end,
+ 				   bool write, int *locked);
+-extern void munlock_vma_pages_range(struct vm_area_struct *vma,
+-			unsigned long start, unsigned long end);
+-static inline void munlock_vma_pages_all(struct vm_area_struct *vma)
+-{
+-	munlock_vma_pages_range(vma, vma->vm_start, vma->vm_end);
+-}
++extern int mlock_future_check(struct mm_struct *mm, unsigned long flags,
++			      unsigned long len);
+ 
+ /*
+  * must be called with vma's mmap_lock held for read or write, and page locked.
+@@ -411,9 +402,6 @@ static inline void munlock_vma_pages_all(struct vm_area_struct *vma)
+ extern void mlock_vma_page(struct page *page);
+ extern void munlock_vma_page(struct page *page);
+ 
+-extern int mlock_future_check(struct mm_struct *mm, unsigned long flags,
+-			      unsigned long len);
+-
+ /*
+  * Clear the page's PageMlocked().  This can be useful in a situation where
+  * we want to unconditionally remove a page from the pagecache -- e.g.,
+diff --git a/mm/madvise.c b/mm/madvise.c
+index 5604064df464..ae35d72627ef 100644
+--- a/mm/madvise.c
++++ b/mm/madvise.c
+@@ -530,6 +530,11 @@ static void madvise_cold_page_range(struct mmu_gather *tlb,
+ 	tlb_end_vma(tlb, vma);
+ }
+ 
++static inline bool can_madv_lru_vma(struct vm_area_struct *vma)
++{
++	return !(vma->vm_flags & (VM_LOCKED|VM_HUGETLB|VM_PFNMAP));
++}
++
+ static long madvise_cold(struct vm_area_struct *vma,
+ 			struct vm_area_struct **prev,
+ 			unsigned long start_addr, unsigned long end_addr)
+diff --git a/mm/mlock.c b/mm/mlock.c
+index 544c18ce2c58..d148da934fe9 100644
+--- a/mm/mlock.c
++++ b/mm/mlock.c
+@@ -137,8 +137,8 @@ void munlock_vma_page(struct page *page)
+  * Returns with VM_LOCKED cleared.  Callers must be prepared to
+  * deal with this.
+  */
+-void munlock_vma_pages_range(struct vm_area_struct *vma,
+-			     unsigned long start, unsigned long end)
++static void munlock_vma_pages_range(struct vm_area_struct *vma,
++				    unsigned long start, unsigned long end)
+ {
+ 	/* Reimplementation to follow in later commit */
+ }
+diff --git a/mm/mmap.c b/mm/mmap.c
+index 1e8fdb0b51ed..64b5985b5295 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -2674,6 +2674,8 @@ detach_vmas_to_be_unmapped(struct mm_struct *mm, struct vm_area_struct *vma,
+ 	vma->vm_prev = NULL;
+ 	do {
+ 		vma_rb_erase(vma, &mm->mm_rb);
++		if (vma->vm_flags & VM_LOCKED)
++			mm->locked_vm -= vma_pages(vma);
+ 		mm->map_count--;
+ 		tail_vma = vma;
+ 		vma = vma->vm_next;
+@@ -2778,22 +2780,6 @@ int split_vma(struct mm_struct *mm, struct vm_area_struct *vma,
+ 	return __split_vma(mm, vma, addr, new_below);
+ }
+ 
+-static inline void
+-unlock_range(struct vm_area_struct *start, unsigned long limit)
+-{
+-	struct mm_struct *mm = start->vm_mm;
+-	struct vm_area_struct *tmp = start;
+-
+-	while (tmp && tmp->vm_start < limit) {
+-		if (tmp->vm_flags & VM_LOCKED) {
+-			mm->locked_vm -= vma_pages(tmp);
+-			munlock_vma_pages_all(tmp);
+-		}
+-
+-		tmp = tmp->vm_next;
+-	}
+-}
+-
+ /* Munmap is split into 2 main parts -- this part which finds
+  * what needs doing, and the areas themselves, which do the
+  * work.  This now handles partial unmappings.
+@@ -2874,12 +2860,6 @@ int __do_munmap(struct mm_struct *mm, unsigned long start, size_t len,
+ 			return error;
+ 	}
+ 
+-	/*
+-	 * unlock any mlock()ed ranges before detaching vmas
+-	 */
+-	if (mm->locked_vm)
+-		unlock_range(vma, end);
+-
+ 	/* Detach vmas from rbtree */
+ 	if (!detach_vmas_to_be_unmapped(mm, vma, prev, end))
+ 		downgrade = false;
+@@ -3147,20 +3127,12 @@ void exit_mmap(struct mm_struct *mm)
+ 		 * Nothing can be holding mm->mmap_lock here and the above call
+ 		 * to mmu_notifier_release(mm) ensures mmu notifier callbacks in
+ 		 * __oom_reap_task_mm() will not block.
+-		 *
+-		 * This needs to be done before calling unlock_range(),
+-		 * which clears VM_LOCKED, otherwise the oom reaper cannot
+-		 * reliably test it.
+ 		 */
+ 		(void)__oom_reap_task_mm(mm);
+-
+ 		set_bit(MMF_OOM_SKIP, &mm->flags);
+ 	}
+ 
+ 	mmap_write_lock(mm);
+-	if (mm->locked_vm)
+-		unlock_range(mm->mmap, ULONG_MAX);
+-
+ 	arch_exit_mmap(mm);
+ 
+ 	vma = mm->mmap;
+diff --git a/mm/oom_kill.c b/mm/oom_kill.c
+index 832fb330376e..6b875acabd1e 100644
+--- a/mm/oom_kill.c
++++ b/mm/oom_kill.c
+@@ -526,7 +526,7 @@ bool __oom_reap_task_mm(struct mm_struct *mm)
+ 	set_bit(MMF_UNSTABLE, &mm->flags);
+ 
+ 	for (vma = mm->mmap ; vma; vma = vma->vm_next) {
+-		if (!can_madv_lru_vma(vma))
++		if (vma->vm_flags & (VM_HUGETLB|VM_PFNMAP))
+ 			continue;
+ 
+ 		/*
+-- 
+2.34.1
 
-There's list corruption on cgrp_cpuctx_list. This happens on the
-following path:
-
-  perf_cgroup_switch: list_for_each_entry(cgrp_cpuctx_list)
-      cpu_ctx_sched_in
-         ctx_sched_in
-            ctx_pinned_sched_in
-              merge_sched_in
-                  perf_cgroup_event_disable: remove the event from the list
-
-Use list_for_each_entry_safe() to allow removing an entry during
-iteration.
-
-Fixes: 058fe1c0440e ("perf/core: Make cgroup switch visit only cpuctxs with cgroup events")
-Signed-off-by: Song Liu <song@kernel.org>
-Reviewed-by: Rik van Riel <riel@surriel.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20220204004057.2961252-1-song@kernel.org
----
-
-does that work for you?

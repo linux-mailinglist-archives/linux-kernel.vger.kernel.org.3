@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32CFD4AB274
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 22:44:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 440C14AB275
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 22:46:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243247AbiBFVn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 16:43:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53446 "EHLO
+        id S243840AbiBFVp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 16:45:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230392AbiBFVn5 (ORCPT
+        with ESMTP id S230392AbiBFVpz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 16:43:57 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 039B8C06173B
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 13:43:57 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id r27so15138711oiw.4
-        for <linux-kernel@vger.kernel.org>; Sun, 06 Feb 2022 13:43:56 -0800 (PST)
+        Sun, 6 Feb 2022 16:45:55 -0500
+Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A888EC061348
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 13:45:54 -0800 (PST)
+Received: by mail-oo1-xc2e.google.com with SMTP id u47-20020a4a9732000000b00316d0257de0so8759212ooi.7
+        for <linux-kernel@vger.kernel.org>; Sun, 06 Feb 2022 13:45:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:from:to:cc:subject:in-reply-to:message-id:references
          :mime-version;
-        bh=VKjWDSDEqSXkMBseTZ4kYaUBzUWcD2iDw3Sk4fM5TfU=;
-        b=oVJyzbVxwCoRIqqb/a/jVLhXKxolruR0BPQ8MlppBLhDAxgdTVmRqTo1aYZcsaaG4g
-         3xQgZjoFD68v2KcCXOqkiU/cWafPHJ+re0aEizZ7t+agvr2mUknoVNKNN4VimGs/YYFC
-         tT38/gyOPGVipPYXv1SEL1yq7KCGb/m+UeDMiMXYinOrz+VvVbXl7zD6wWSKxKJznOul
-         W2pFIzlEpSJdqEW0MCSuBLXTqafil/jxo19+1kIugDEwkUmODuhmfeAsWf9GCHlm9Axk
-         VxoJCzuhezM3XkDxD1pq0WAq53gzsvlpI9d838/fizl5cHG5ut0LUmtUmmfLFIcZX6/a
-         lXXw==
+        bh=AZqi60Yr8HuyENh7V3NHOA86mYT9XQfDwkJWeap6Hv4=;
+        b=EgwdjpiSVtHtN8gYa4GpexZ70qbUL2NhrWgKXCXX2LBjGnHl6TuVJ82lRvT9pl11bg
+         GJZIbQQd9vEHvf9Zaur5QaXjfBcZlU0agDbAgqx6EwcJhU9ycAqDSyi/QUJ4XFJ9K08N
+         OTfMUECr1/9GvCfG3nvoih7TFdihwBIYkxfomgc/AvmEnFFzxUAaoRPOqI1otAkhH5Vh
+         DFi2Jxxxg0xETEmbuQ7CygU4Gh9Xkuh1ncDOi+CmXMyWjIvMfQfyvE3qLgldgW/7DMeW
+         zorJdpcn6kqIrFJ70Po9q2a1vrjeggAUpPytS5SWHMYC5ktbrUb60kJ9zlyBYyveZZjp
+         uDEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
          :references:mime-version;
-        bh=VKjWDSDEqSXkMBseTZ4kYaUBzUWcD2iDw3Sk4fM5TfU=;
-        b=kPN87afnnuj/CY5zFcTeFDxaHAkk5aCUUpX6ta4heCJPO2rwv86FpgagJldCVqysUH
-         JVUHipxauSXLcXa2v411gpBuIj1H6Nw2xCYZK5Yu/Pnk9jND0pF98FhUeIz457GZMRpH
-         RRcgNXedjQx8NTEHmDEo5fZm1HiZzA5A0bvS8rYUNxIsJfdyqqz3y3WKv6XyXH7vpsdy
-         3Gxsy08OA7eD0GsBVYGWVxzHqpwa0c1AdBAIcfJ9YkGo2nh+oTEE0A3fauWVAB5vPxFA
-         aa8EEssX11qgXrtpECOovlUKJZ5XXoOwFhFwFKzcUKi8CCZk5EMju8MrBSF4m4MMIR0M
-         qmMA==
-X-Gm-Message-State: AOAM532UdcSbUR9n4AVsZM/HR8z9E1gi+SGpVH4V2TSmDUZMlVz3BjYu
-        c0HLnClCFSNDblMVSLe/mKG8qA==
-X-Google-Smtp-Source: ABdhPJyHq22zIK1nECWEXuekkWijhLH6Ab/9ickoD6sMJ6sbVBKBP6Z+c1YzZyQaPuloMWoBb56QTQ==
-X-Received: by 2002:a05:6808:1b0d:: with SMTP id bx13mr5911648oib.178.1644183835825;
-        Sun, 06 Feb 2022 13:43:55 -0800 (PST)
+        bh=AZqi60Yr8HuyENh7V3NHOA86mYT9XQfDwkJWeap6Hv4=;
+        b=RKaHdumQb9Q5A8O9TH/IWCMfa2pniETSc2swziZvEeAHKpqW3UuNBBYfMm8/rUWCWA
+         FD4dm33trCr4QKzqAIQlksRD3Fjka+vLfL4JVy2L/zl1AayZJmWb2BVHOYSI5WOzZghv
+         LRhZTU9GIh8w68OLFreLhIslaFR5TTlEo2LaPFV2+YPZZa3tIFVYaEcGCfScZQ+CdBJe
+         FPfgpeJUH3t0visGISKkkZlW2jRTSVnDLOoM6rRhJ3Rk17MZ+0oW1TdB+GVn0W306nq0
+         qBT/s18v+cas6drVFjJUytWIASflGoUjTbnFk0yeH5z1OkVuMasjpaNv8O8a9v5/trcY
+         zPmw==
+X-Gm-Message-State: AOAM53368fmxPdsEq+AeTIXmEnzFu2OCpxuS3VhbwVIOqKf4qDeIU/xC
+        QsN/scP2P3ncVHboBssne8utnw==
+X-Google-Smtp-Source: ABdhPJwuhT+ew2mJdr3D6cKZkrBLmmLSOMdPtFq393BKGZKWDkUv4JaIpVMPIZUPwS+O+DyMnFtz2g==
+X-Received: by 2002:a4a:b2ca:: with SMTP id l10mr2861159ooo.13.1644183953803;
+        Sun, 06 Feb 2022 13:45:53 -0800 (PST)
 Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id x19sm3271502otj.59.2022.02.06.13.43.53
+        by smtp.gmail.com with ESMTPSA id n24sm3442036oao.40.2022.02.06.13.45.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Feb 2022 13:43:55 -0800 (PST)
-Date:   Sun, 6 Feb 2022 13:43:53 -0800 (PST)
+        Sun, 06 Feb 2022 13:45:53 -0800 (PST)
+Date:   Sun, 6 Feb 2022 13:45:50 -0800 (PST)
 From:   Hugh Dickins <hughd@google.com>
 X-X-Sender: hugh@ripple.anvils
 To:     Andrew Morton <akpm@linux-foundation.org>
@@ -63,10 +63,10 @@ cc:     Michal Hocko <mhocko@suse.com>, Vlastimil Babka <vbabka@suse.cz>,
         Yu Zhao <yuzhao@google.com>, Greg Thelen <gthelen@google.com>,
         Shakeel Butt <shakeelb@google.com>,
         linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH 08/13] mm/migrate: __unmap_and_move() push good newpage to
- LRU
+Subject: [PATCH 09/13] mm/munlock: delete smp_mb() from
+ __pagevec_lru_add_fn()
 In-Reply-To: <8e4356d-9622-a7f0-b2c-f116b5f2efea@google.com>
-Message-ID: <33fb71cf-ea55-123a-bf9d-fdad297cae1@google.com>
+Message-ID: <9121d34d-4889-51f1-56c7-255138f43b8d@google.com>
 References: <8e4356d-9622-a7f0-b2c-f116b5f2efea@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -81,77 +81,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Compaction, NUMA page movement, THP collapse/split, and memory failure
-do isolate unevictable pages from their "LRU", losing the record of
-mlock_count in doing so (isolators are likely to use page->lru for their
-own private lists, so mlock_count has to be presumed lost).
-
-That's unfortunate, and we should put in some work to correct that: one
-can imagine a function to build up the mlock_count again - but it would
-require i_mmap_rwsem for read, so be careful where it's called.  Or
-page_referenced_one() and try_to_unmap_one() might do that extra work.
-
-But one place that can very easily be improved is page migration's
-__unmap_and_move(): a small adjustment to where the successful new page
-is put back on LRU, and its mlock_count (if any) is built back up by
-remove_migration_ptes().
+My reading of comment on smp_mb__after_atomic() in __pagevec_lru_add_fn()
+says that it can now be deleted; and that remains so when the next patch
+is added.
 
 Signed-off-by: Hugh Dickins <hughd@google.com>
 ---
- mm/migrate.c | 31 +++++++++++++++++++------------
- 1 file changed, 19 insertions(+), 12 deletions(-)
+ mm/swap.c | 37 +++++++++----------------------------
+ 1 file changed, 9 insertions(+), 28 deletions(-)
 
-diff --git a/mm/migrate.c b/mm/migrate.c
-index 7c4223ce2500..f4bcf1541b62 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -1032,6 +1032,21 @@ static int __unmap_and_move(struct page *page, struct page *newpage,
- 	if (!page_mapped(page))
- 		rc = move_to_new_page(newpage, page, mode);
+diff --git a/mm/swap.c b/mm/swap.c
+index 682a03301a2c..3f770b1ea2c1 100644
+--- a/mm/swap.c
++++ b/mm/swap.c
+@@ -1025,37 +1025,18 @@ static void __pagevec_lru_add_fn(struct folio *folio, struct lruvec *lruvec)
  
-+	/*
-+	 * When successful, push newpage to LRU immediately: so that if it
-+	 * turns out to be an mlocked page, remove_migration_ptes() will
-+	 * automatically build up the correct newpage->mlock_count for it.
-+	 *
-+	 * We would like to do something similar for the old page, when
-+	 * unsuccessful, and other cases when a page has been temporarily
-+	 * isolated from the unevictable LRU: but this case is the easiest.
-+	 */
-+	if (rc == MIGRATEPAGE_SUCCESS) {
-+		lru_cache_add(newpage);
-+		if (page_was_mapped)
-+			lru_add_drain();
-+	}
-+
- 	if (page_was_mapped)
- 		remove_migration_ptes(page,
- 			rc == MIGRATEPAGE_SUCCESS ? newpage : page, false);
-@@ -1045,20 +1060,12 @@ static int __unmap_and_move(struct page *page, struct page *newpage,
- 	unlock_page(page);
- out:
+ 	VM_BUG_ON_FOLIO(folio_test_lru(folio), folio);
+ 
++	folio_set_lru(folio);
  	/*
--	 * If migration is successful, decrease refcount of the newpage
-+	 * If migration is successful, decrease refcount of the newpage,
- 	 * which will not free the page because new page owner increased
--	 * refcounter. As well, if it is LRU page, add the page to LRU
--	 * list in here. Use the old state of the isolated source page to
--	 * determine if we migrated a LRU page. newpage was already unlocked
--	 * and possibly modified by its owner - don't rely on the page
--	 * state.
-+	 * refcounter.
+-	 * A folio becomes evictable in two ways:
+-	 * 1) Within LRU lock [munlock_vma_page() and __munlock_pagevec()].
+-	 * 2) Before acquiring LRU lock to put the folio on the correct LRU
+-	 *    and then
+-	 *   a) do PageLRU check with lock [check_move_unevictable_pages]
+-	 *   b) do PageLRU check before lock [clear_page_mlock]
+-	 *
+-	 * (1) & (2a) are ok as LRU lock will serialize them. For (2b), we need
+-	 * following strict ordering:
+-	 *
+-	 * #0: __pagevec_lru_add_fn		#1: clear_page_mlock
+-	 *
+-	 * folio_set_lru()			folio_test_clear_mlocked()
+-	 * smp_mb() // explicit ordering	// above provides strict
+-	 *					// ordering
+-	 * folio_test_mlocked()			folio_test_lru()
++	 * Is an smp_mb__after_atomic() still required here, before
++	 * folio_evictable() tests PageMlocked, to rule out the possibility
++	 * of stranding an evictable folio on an unevictable LRU?  I think
++	 * not, because munlock_page() only clears PageMlocked while the LRU
++	 * lock is held.
+ 	 *
+-	 *
+-	 * if '#1' does not observe setting of PG_lru by '#0' and
+-	 * fails isolation, the explicit barrier will make sure that
+-	 * folio_evictable check will put the folio on the correct
+-	 * LRU. Without smp_mb(), folio_set_lru() can be reordered
+-	 * after folio_test_mlocked() check and can make '#1' fail the
+-	 * isolation of the folio whose mlocked bit is cleared (#0 is
+-	 * also looking at the same folio) and the evictable folio will
+-	 * be stranded on an unevictable LRU.
++	 * (That is not true of __page_cache_release(), and not necessarily
++	 * true of release_pages(): but those only clear PageMlocked after
++	 * put_page_testzero() has excluded any other users of the page.)
  	 */
--	if (rc == MIGRATEPAGE_SUCCESS) {
--		if (unlikely(!is_lru))
--			put_page(newpage);
--		else
--			putback_lru_page(newpage);
--	}
-+	if (rc == MIGRATEPAGE_SUCCESS)
-+		put_page(newpage);
- 
- 	return rc;
- }
+-	folio_set_lru(folio);
+-	smp_mb__after_atomic();
+-
+ 	if (folio_evictable(folio)) {
+ 		if (was_unevictable)
+ 			__count_vm_events(UNEVICTABLE_PGRESCUED, nr_pages);
 -- 
 2.34.1
 

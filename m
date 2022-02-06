@@ -2,492 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 949E24AB2D5
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 00:59:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D46F4AB2E0
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 01:03:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242839AbiBFXzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 18:55:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60596 "EHLO
+        id S242980AbiBGADe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 19:03:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242736AbiBFXzl (ORCPT
+        with ESMTP id S242994AbiBGADc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 18:55:41 -0500
-X-Greylist: delayed 302 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Feb 2022 15:55:39 PST
-Received: from m228-4.mailgun.net (m228-4.mailgun.net [159.135.228.4])
-        by lindbergh.monkeyblade.net (Postfix) with UTF8SMTPS id B9D6FC06173B
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 15:55:39 -0800 (PST)
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=michaelkloos.com; q=dns/txt;
- s=k1; t=1644191739; h=Content-Transfer-Encoding: MIME-Version:
- Message-Id: Date: Subject: Cc: To: From: Sender;
- bh=lPHLi9yJkqpBbLmzeoZtWgY1g6dQQ2nlOT3/RY8V494=; b=Z1825I6NqCw7OT9xY0IAPuIluf6lelu84/gHwyaNDIfB87d7f0bSLuUQTWEzXy5VG8bw8IC6
- XnTmKl2ROFVEP7enpXlccsaMyCeaAbCK2CDLCPHUkYWaRtjbSNX2Bn+YQD+edYCnNBdE0KRO
- U9Wyjox5sbghrztf8JrdiWA+u0Y=
-X-Mailgun-Sending-Ip: 159.135.228.4
-X-Mailgun-Sid: WyI5NjYzNiIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgIjQ4Y2MwIl0=
-Received: from drop1.michaelkloos.com (drop1.michaelkloos.com
- [67.205.190.89]) by smtp-out-n07.prod.us-west-2.postgun.com with SMTP id
- 62005eccc0fa212db32ddda6 (version=TLS1.3, cipher=TLS_AES_128_GCM_SHA256);
- Sun, 06 Feb 2022 23:50:36 GMT
-Sender: michael@michaelkloos.com
-Received: from qpc.home.michaelkloos.com (cpe-173-88-115-50.columbus.res.rr.com [173.88.115.50])
-        by drop1.michaelkloos.com (Postfix) with ESMTPSA id D40B1400EC;
-        Sun,  6 Feb 2022 23:50:34 +0000 (UTC)
-From:   "Michael T. Kloos" <michael@michaelkloos.com>
-To:     David Laight <David.Laight@ACULAB.COM>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        "Michael T. Kloos" <michael@michaelkloos.com>
-Subject: [PATCH v5] riscv: Fixed misaligned memory access.  Fixed pointer comparison.
-Date:   Sun,  6 Feb 2022 18:50:22 -0500
-Message-Id: <20220206235022.1133995-1-michael@michaelkloos.com>
-X-Mailer: git-send-email 2.34.1
+        Sun, 6 Feb 2022 19:03:32 -0500
+X-Greylist: delayed 571 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Feb 2022 16:03:30 PST
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E912C06173B;
+        Sun,  6 Feb 2022 16:03:29 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id E5B52360FCC;
+        Sun,  6 Feb 2022 18:53:56 -0500 (EST)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id qCDmv1sssdj6; Sun,  6 Feb 2022 18:53:56 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 423253611AC;
+        Sun,  6 Feb 2022 18:53:56 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 423253611AC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1644191636;
+        bh=7H047Zo1N1+uZqBGqXhve5zp5Ovo3/WcmoeG+ihz6CE=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=T3VDDiv0Touz7GFuXOYpoI9oCLZQcc5rkph0H/dhTifNqJqTLNPVFaW6qipYb0vXp
+         G2j7k1+gosinc5vBCItDhTo64jERJCxAdOGy15QjRitw58Y4Pj5F5pQhhUe53RLxnJ
+         sje8HmE7S3mk6FjnH1r15l+b8tjZScBY0hZaInsgYrpFIpwSNPj9JPGUQXDghX968g
+         oTvbpapOGpSQKLuwrkDoaWmC2d6sGf89N1zlwvoMf1+kET/IElELdzWkmo1Ppo4Dxd
+         AcSsc3OqGD/jQmdYVTAMeKiOH2B1xplTqOy+5W0jXH2QL+WF01Mb7Nbugh4y7AI7CS
+         5oxp4+u3Bkhgg==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id QUeyeigDF4Rh; Sun,  6 Feb 2022 18:53:56 -0500 (EST)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id 2E1F5360D6D;
+        Sun,  6 Feb 2022 18:53:56 -0500 (EST)
+Date:   Sun, 6 Feb 2022 18:53:56 -0500 (EST)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api <linux-api@vger.kernel.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Florian Weimer <fw@deneb.enyo.de>,
+        David Laight <David.Laight@aculab.com>,
+        carlos <carlos@redhat.com>, Peter Oskolkov <posk@posk.io>,
+        libc-coord@lists.openwall.com
+Message-ID: <1576236784.46087.1644191636055.JavaMail.zimbra@efficios.com>
+In-Reply-To: <YgBCdExhei7VmfHd@hirez.programming.kicks-ass.net>
+References: <20220203193853.21511-1-mathieu.desnoyers@efficios.com> <YgBCdExhei7VmfHd@hirez.programming.kicks-ass.net>
+Subject: Re: [RFC PATCH 1/3] rseq: Introduce feature size and alignment ELF
+ auxiliary vector entries
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4203 (ZimbraWebClient - FF96 (Linux)/8.8.15_GA_4203)
+Thread-Topic: rseq: Introduce feature size and alignment ELF auxiliary vector entries
+Thread-Index: H40c2UEJQsV5nzI4UFsy4Q8I+aXV2A==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rewrote the RISC-V memmove() assembly implementation.  The
-previous implementation did not check memory alignment and it
-compared 2 pointers with a signed comparison.  The misaligned
-memory access would cause the kernel to crash on systems that
-did not emulate it in firmware and did not support it in hardware.
-Firmware emulation is slow and may not exist.  The RISC-V spec
-does not guarantee that support for misaligned memory accesses
-will exist.  It should not be depended on.
+----- On Feb 6, 2022, at 4:49 PM, Peter Zijlstra peterz@infradead.org wrote:
 
-This patch now checks for XLEN granularity of co-alignment between
-the pointers.  Failing that, copying is done by loading from the 2
-contiguous and naturally aligned XLEN memory locations containing
-the overlapping XLEN sized data to be copied.  The data is shifted
-into the correct place and binary or'ed together on each
-iteration.  The result is then stored into the corresponding
-naturally aligned XLEN sized location in the destination.  For
-unaligned data at the terminations of the regions to be copied
-or for copies less than (2 * XLEN) in size, byte copy is used.
+> On Thu, Feb 03, 2022 at 02:38:51PM -0500, Mathieu Desnoyers wrote:
+> 
+>> @@ -286,6 +287,10 @@ create_elf_tables(struct linux_binprm *bprm, const struct
+>> elfhdr *exec,
+>>  	if (bprm->have_execfd) {
+>>  		NEW_AUX_ENT(AT_EXECFD, bprm->execfd);
+>>  	}
+>> +#ifdef CONFIG_RSEQ
+>> +	NEW_AUX_ENT(AT_RSEQ_FEATURE_SIZE, offsetof(struct rseq, end));
+> 
+> I've gotta ask, what's up with offsetof(, end) vs sizeof() ?
 
-This patch also now uses unsigned comparison for the pointers and
-migrates to the newer assembler annotations from the now deprecated
-ones.
+sizeof() includes the 12 bytes of padding at the end of struct rseq, for a
+total of 32 bytes (currently). offsetof(, end) is currently 20 bytes, which
+is the offset exactly after the last field.
 
-[v3]
+For the "feature size" (meaning the populated fields), we really want a size
+that excludes padding.
 
-Fixed the build issue reported by the test robot.  Changed the
-copy implementation based on the suggestion by David Laight.
+Thanks,
 
-One change that could potentially still be made is to roll one
-of the values loaded in the copy loop into the next iteration
-of the fixup loop, rather than reloading both values from memory
-on each iteration.  It would require some more logic and I'm
-really not sure that it is worth it.  It could be added in a
-later patch.  For now, this fixes the issues I set out to fix.
+Mathieu
 
-[v4]
+> 
+>> +	NEW_AUX_ENT(AT_RSEQ_ALIGN, __alignof__(struct rseq));
+> > +#endif
 
-I could not resist implementing the optimization I mentioned in
-my v3 notes.  I have implemented the roll over of data by cpu
-register in the misaligned fixup copy loops.  Now, only one load
-from memory is required per iteration of the loop.
-
-[v5]
-
-Optimized copy loops by replacing the unconditional jumps to
-conditional branches with conditional branches themselves,
-spaced loads and the use of the loaded data to minimize pipeline
-stalling on in-order CPUs, and unrolled the misaligned copy loop
-by one iteration.
-
-Signed-off-by: Michael T. Kloos <michael@michaelkloos.com>
----
- arch/riscv/lib/memmove.S | 369 ++++++++++++++++++++++++++++++++-------
- 1 file changed, 309 insertions(+), 60 deletions(-)
-
-diff --git a/arch/riscv/lib/memmove.S b/arch/riscv/lib/memmove.S
-index 07d1d2152ba5..598a3f214ef8 100644
---- a/arch/riscv/lib/memmove.S
-+++ b/arch/riscv/lib/memmove.S
-@@ -1,64 +1,313 @@
--/* SPDX-License-Identifier: GPL-2.0 */
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2022 Michael T. Kloos <michael@michaelkloos.com>
-+ */
- 
- #include <linux/linkage.h>
- #include <asm/asm.h>
- 
--ENTRY(__memmove)
--WEAK(memmove)
--        move    t0, a0
--        move    t1, a1
--
--        beq     a0, a1, exit_memcpy
--        beqz    a2, exit_memcpy
--        srli    t2, a2, 0x2
--
--        slt     t3, a0, a1
--        beqz    t3, do_reverse
--
--        andi    a2, a2, 0x3
--        li      t4, 1
--        beqz    t2, byte_copy
--
--word_copy:
--        lw      t3, 0(a1)
--        addi    t2, t2, -1
--        addi    a1, a1, 4
--        sw      t3, 0(a0)
--        addi    a0, a0, 4
--        bnez    t2, word_copy
--        beqz    a2, exit_memcpy
--        j       byte_copy
--
--do_reverse:
--        add     a0, a0, a2
--        add     a1, a1, a2
--        andi    a2, a2, 0x3
--        li      t4, -1
--        beqz    t2, reverse_byte_copy
--
--reverse_word_copy:
--        addi    a1, a1, -4
--        addi    t2, t2, -1
--        lw      t3, 0(a1)
--        addi    a0, a0, -4
--        sw      t3, 0(a0)
--        bnez    t2, reverse_word_copy
--        beqz    a2, exit_memcpy
--
--reverse_byte_copy:
--        addi    a0, a0, -1
--        addi    a1, a1, -1
--
--byte_copy:
--        lb      t3, 0(a1)
--        addi    a2, a2, -1
--        sb      t3, 0(a0)
--        add     a1, a1, t4
--        add     a0, a0, t4
--        bnez    a2, byte_copy
--
--exit_memcpy:
--        move a0, t0
--        move a1, t1
--        ret
--END(__memmove)
-+SYM_FUNC_START(__memmove)
-+SYM_FUNC_START_WEAK(memmove)
-+	/*
-+	 * Returns
-+	 *   a0 - dest
-+	 *
-+	 * Parameters
-+	 *   a0 - Inclusive first byte of dest
-+	 *   a1 - Inclusive first byte of src
-+	 *   a2 - Length of copy n
-+	 *
-+	 * Because the return matches the parameter register a0,
-+	 * we will not clobber or modify that register.
-+	 *
-+	 * Note: This currently only works on little-endian.
-+	 * To port to big-endian, reverse the direction of shifts
-+	 * in the 2 misaligned fixup copy loops.
-+	 */
-+
-+	/* Return if nothing to do */
-+	beq a0, a1, 20f /* Return from memmove */
-+	beqz a2, 20f /* Return from memmove */
-+
-+	/*
-+	 * Register Uses
-+	 *      Forward Copy: a3 - Index counter of src
-+	 *      Reverse Copy: a4 - Index counter of src
-+	 *      Forward Copy: t3 - Index counter of dest
-+	 *      Reverse Copy: t4 - Index counter of dest
-+	 *   Both Copy Modes: t5 - Inclusive first multibyte/aligned of dest
-+	 *   Both Copy Modes: t6 - Non-Inclusive last multibyte/aligned of dest
-+	 *   Both Copy Modes: t0 - Link / Temporary for load-store
-+	 *   Both Copy Modes: t1 - Temporary for load-store
-+	 *   Both Copy Modes: t2 - Temporary for load-store
-+	 *   Both Copy Modes: a5 - dest to src alignment offset
-+	 *   Both Copy Modes: a6 - Shift ammount
-+	 *   Both Copy Modes: a7 - Inverse Shift ammount
-+	 *   Both Copy Modes: a2 - Alternate breakpoint for unrolled loops
-+	 */
-+
-+	/*
-+	 * Solve for some register values now.
-+	 * Byte copy does not need t5 or t6.
-+	 */
-+	add  t3, a0, zero
-+	add  t4, a0, a2
-+	add  a3, a1, zero
-+	add  a4, a1, a2
-+
-+	/*
-+	 * Byte copy if copying less than (2 * SZREG) bytes. This can
-+	 * cause problems with the bulk copy implementation and is
-+	 * small enough not to bother.
-+	 */
-+	andi t0, a2, -(2 * SZREG)
-+	beqz t0, 21f
-+
-+	/*
-+	 * Now solve for t5 and t6.
-+	 */
-+	andi t5, t3, -SZREG
-+	andi t6, t4, -SZREG
-+	/*
-+	 * If dest(Register t3) rounded down to the nearest naturally
-+	 * aligned SZREG address, does not equal dest, then add SZREG
-+	 * to find the low-bound of SZREG alignment in the dest memory
-+	 * region.  Note that this could overshoot the dest memory
-+	 * region if n is less than SZREG.  This is one reason why
-+	 * we always byte copy if n is less than SZREG.
-+	 * Otherwise, dest is already naturally aligned to SZREG.
-+	 */
-+	beq  t5, t3, 1f
-+		addi t5, t5, SZREG
-+	1:
-+
-+	/*
-+	 * If the dest and src are co-aligned to SZREG, then there is
-+	 * no need for the full rigmarole of a full misaligned fixup copy.
-+	 * Instead, do a simpler co-aligned copy.
-+	 */
-+	xor  t0, a0, a1
-+	andi t1, t0, (SZREG - 1)
-+	beqz t1, 26f
-+	/* Fall through to misaligned fixup copy */
-+
-+1: /* Misaligned fixup copy */
-+	bltu a1, a0, 4f /* Misaligned fixup copy: Reverse */
-+
-+3: /* Misaligned fixup copy: Forward */
-+	jal  t0, 24f /* Byte copy until aligned: Forward */
-+
-+	andi a5, a3, (SZREG - 1) /* Find the alignment offset of src (a3) */
-+	slli a6, a5, 3 /* Multiply by 8 to convert that to bits to shift */
-+	sub  a5, a3, t3 /* Find the difference between src and dest */
-+	andi a3, a3, -SZREG /* Align the src pointer */
-+	addi a2, t6, SZREG /* The other breakpoint for the unrolled loop*/
-+
-+	/*
-+	 * Compute The Inverse Shift
-+	 * a7 = XLEN - a6 = XLEN + -a6
-+	 * 2s complement negation to find the negative: -a6 = ~a6 + 1
-+	 * Add that to XLEN.  XLEN = SZREG * 8.
-+	 */
-+	not  a7, a6
-+	addi a7, a7, (SZREG * 8 + 1)
-+
-+	/*
-+	 * Fix Misalignment Copy Loop - Forward
-+	 * load_val0 = load_ptr[0];
-+	 * do {
-+	 * 	load_val1 = load_ptr[1];
-+	 * 	store_ptr += 2;
-+	 * 	store_ptr[0 - 2] = (load_val0 >> {a6}) | (load_val1 << {a7});
-+	 *
-+	 * 	if (store_ptr == {a2})
-+	 * 		break;
-+	 *
-+	 * 	load_val0 = load_ptr[2];
-+	 * 	load_ptr += 2;
-+	 * 	store_ptr[1 - 2] = (load_val1 >> {a6}) | (load_val0 << {a7});
-+	 *
-+	 * } while (store_ptr != store_ptr_end);
-+	 * store_ptr = store_ptr_end;
-+	 */
-+	REG_L t0, (0 * SZREG)(a3)
-+	1:
-+	REG_L t1, (1 * SZREG)(a3)
-+	addi  t3, t3, (2 * SZREG)
-+	srl   t0, t0, a6
-+	sll   t2, t1, a7
-+	or    t2, t0, t2
-+	REG_S t2, ((0 * SZREG) - (2 * SZREG))(t3)
-+
-+	beq   t3, a2, 2f
-+
-+	REG_L t0, (2 * SZREG)(a3)
-+	addi  a3, a3, (2 * SZREG)
-+	srl   t1, t1, a6
-+	sll   t2, t0, a7
-+	or    t2, t1, t2
-+	REG_S t2, ((1 * SZREG) - (2 * SZREG))(t3)
-+
-+	bne   t3, t6, 1b
-+	2:
-+	mv    t3, t6 /* Fix the dest pointer in case the loop was broken */
-+
-+	add  a3, t3, a5 /* Restore the src pointer */
-+	j 22f /* Byte copy: Forward */ /* Copy any remaining bytes */
-+
-+4: /* Misaligned fixup copy: Reverse */
-+	jal  t0, 25f /* Byte copy until aligned: Reverse */
-+
-+	andi a5, a4, (SZREG - 1) /* Find the alignment offset of src (a4) */
-+	slli a6, a5, 3 /* Multiply by 8 to convert that to bits to shift */
-+	sub  a5, a4, t4 /* Find the difference between src and dest */
-+	andi a4, a4, -SZREG /* Align the src pointer */
-+	addi a2, t5, -SZREG /* The other breakpoint for the unrolled loop*/
-+
-+	/*
-+	 * Compute The Inverse Shift
-+	 * a7 = XLEN - a6 = XLEN + -a6
-+	 * 2s complement negation to find the negative: -a6 = ~a6 + 1
-+	 * Add that to XLEN.  XLEN = SZREG * 8.
-+	 */
-+	not  a7, a6
-+	addi a7, a7, (SZREG * 8 + 1)
-+
-+	/*
-+	 * Fix Misalignment Copy Loop - Reverse
-+	 * load_val1 = load_ptr[0];
-+	 * do {
-+	 * 	load_val0 = load_ptr[-1];
-+	 * 	store_ptr -= 2;
-+	 * 	store_ptr[1] = (load_val0 >> {a6}) | (load_val1 << {a7});
-+	 *
-+	 * 	if (store_ptr == {a2})
-+	 * 		break;
-+	 *
-+	 * 	load_val1 = load_ptr[-2];
-+	 * 	load_ptr -= 2;
-+	 * 	store_ptr[0] = (load_val1 >> {a6}) | (load_val0 << {a7});
-+	 *
-+	 * } while (store_ptr != store_ptr_end);
-+	 * store_ptr = store_ptr_end;
-+	 */
-+	REG_L t1, ( 0 * SZREG)(a4)
-+	1:
-+	REG_L t0, (-1 * SZREG)(a4)
-+	addi  t4, t4, (-2 * SZREG)
-+	sll   t1, t1, a7
-+	srl   t2, t0, a6
-+	or    t2, t1, t2
-+	REG_S t2, ( 1 * SZREG)(t4)
-+
-+	beq   t4, a2, 2f
-+
-+	REG_L t1, (-2 * SZREG)(a4)
-+	addi  a4, a4, (-2 * SZREG)
-+	sll   t0, t0, a7
-+	srl   t2, t1, a6
-+	or    t2, t0, t2
-+	REG_S t2, ( 0 * SZREG)(t4)
-+
-+	bne   t4, t5, 1b
-+	2:
-+	mv    t4, t5 /* Fix the dest pointer in case the loop was broken */
-+
-+	add  a4, t4, a5 /* Restore the src pointer */
-+	j 23f /* Byte copy: Reverse */ /* Copy any remaining bytes */
-+
-+/*
-+ * Simple copy loops for SZREG co-aligned memory locations.
-+ * These also make calls to do byte copies for any unaligned
-+ * data at their terminations.
-+ */
-+26: /* Co-Aligned copy */
-+	bltu a1, a0, 3f /* Co-Aligned copy: Reverse */
-+
-+2: /* Co-Aligned copy: Forward */
-+	jal t0, 24f /* Byte copy until aligned: Forward */
-+
-+	1:
-+	REG_L t1, ( 0 * SZREG)(a3)
-+	addi  a3, a3, SZREG
-+	addi  t3, t3, SZREG
-+	REG_S t1, (-1 * SZREG)(t3)
-+	bne   t3, t6, 1b
-+	j 22f /* Byte copy: Forward */
-+
-+3: /* Co-Aligned copy: Reverse */
-+	jal t0, 25f /* Byte copy until aligned: Reverse */
-+
-+	1:
-+	REG_L t1, (-1 * SZREG)(a4)
-+	addi  a4, a4, -SZREG
-+	addi  t4, t4, -SZREG
-+	REG_S t1, ( 0 * SZREG)(t4)
-+	bne   t4, t5, 1b
-+	j 23f /* Byte copy: Reverse */
-+
-+/*
-+ * These are basically sub-functions within the function.  They
-+ * are used to byte copy until the dest pointer is in alignment.
-+ * At which point, a bulk copy method can be used by the
-+ * calling code.  These work on the same registers as the bulk
-+ * copy loops.  Therefore, the register values can be picked
-+ * up from where they were left and we avoid code duplication
-+ * without any overhead except the call in and return jumps.
-+ */
-+24: /* Byte copy until aligned: Forward */
-+	beq  t3, t5, 2f
-+	1:
-+	lb   t1,  0(a3)
-+	addi a3, a3, 1
-+	addi t3, t3, 1
-+	sb   t1, -1(t3)
-+	bne  t3, t5, 1b
-+	2:
-+	jalr zero, 0x0(t0) /* Return to multibyte copy loop */
-+
-+25: /* Byte copy until aligned: Reverse */
-+	beq  t4, t6, 2f
-+	1:
-+	lb   t1, -1(a4)
-+	addi a4, a4, -1
-+	addi t4, t4, -1
-+	sb   t1,  0(t4)
-+	bne  t4, t6, 1b
-+	2:
-+	jalr zero, 0x0(t0) /* Return to multibyte copy loop */
-+
-+/*
-+ * Simple byte copy loops.
-+ * These will byte copy until they reach the end of data to copy.
-+ * At that point, they will call to return from memmove.
-+ */
-+21: /* Byte copy */
-+	bltu a1, a0, 23f /* Byte copy: Reverse */
-+
-+22: /* Byte copy: Forward */
-+	beq  t3, t4, 2f
-+	1:
-+	lb   t1,  0(a3)
-+	addi a3, a3, 1
-+	addi t3, t3, 1
-+	sb   t1, -1(t3)
-+	bne  t3, t4, 1b
-+	2:
-+	ret
-+
-+23: /* Byte copy: Reverse */
-+	beq  t4, t3, 2f
-+	1:
-+	lb   t1, -1(a4)
-+	addi a4, a4, -1
-+	addi t4, t4, -1
-+	sb   t1,  0(t4)
-+	bne  t4, t3, 1b
-+	2:
-+
-+20: /* Return from memmove */
-+	ret
-+
-+SYM_FUNC_END(memmove)
-+SYM_FUNC_END(__memmove)
 -- 
-2.34.1
-
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com

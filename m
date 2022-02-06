@@ -2,108 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC3AF4AAF18
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 12:55:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5614D4AAF0B
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 12:53:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234802AbiBFLyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 06:54:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41614 "EHLO
+        id S234679AbiBFLwz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 06:52:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230450AbiBFLx6 (ORCPT
+        with ESMTP id S232442AbiBFLtN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 06:53:58 -0500
-X-Greylist: delayed 338 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Feb 2022 03:53:57 PST
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 662EEC043182;
-        Sun,  6 Feb 2022 03:53:57 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Sun, 6 Feb 2022 06:49:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF3D0C06173B;
+        Sun,  6 Feb 2022 03:49:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id E50981F388;
-        Sun,  6 Feb 2022 11:48:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1644148097; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=oZ8Xjdv7kG8lFnid5+17QkbF2b+qiSsMNHXutjmdMEg=;
-        b=tiUwKLqNr+bIivolGbXjhA3SSj5fUtJEk3SvW7u25jvrDHHQy6eppBiVQ2bDYwqlfAfoNn
-        +haXTf7RP9uBRC8nteS9lr/dCeS0oMmuSfatIght2otsecrKEKWC5CsxopSrFK+IFIm2tA
-        xKXcd6rTD0uFR2RP+37gcHCs0lOIWeo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1644148097;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=oZ8Xjdv7kG8lFnid5+17QkbF2b+qiSsMNHXutjmdMEg=;
-        b=qihg8HdpLQQ5h7f+8TqvjbwKVVoD2NjiqqB5DN59UZwccj5UIM/hJ4fR82WAMJkZKIMXlj
-        3viFNOKYe9WuMVAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CDB1613A47;
-        Sun,  6 Feb 2022 11:48:17 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Ql//MIG1/2ELKgAAMHmgww
-        (envelope-from <bp@suse.de>); Sun, 06 Feb 2022 11:48:17 +0000
-Date:   Sun, 6 Feb 2022 12:48:10 +0100
-From:   Borislav Petkov <bp@suse.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-edac <linux-edac@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] EDAC fixes for v5.17-rc3
-Message-ID: <Yf+1ehVTFHkihPfd@zn.tnic>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CFF4760F6C;
+        Sun,  6 Feb 2022 11:49:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EE0EC340E9;
+        Sun,  6 Feb 2022 11:49:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644148151;
+        bh=GE5zisvutsw9w2qD1E89YL/IvhBKC7xdtqeCkuIuvTE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TKM2BN93Bml0pC3w73cDNXtO3IOG5s4eQfMMUFJRY97h1mB5KS5W0EofRYF8YVbgp
+         x17EF9MxHJPsBLzd+MRnUj5KW3b49q91J7waIXOb6VzZaNixG8h64Q5CoPfcnGmY/S
+         JfKYFL+PgdClqvjbVPhZHWiFpMRvPT1BNDqjv/rNEKllmM3bu2tv6x3jUu0DYWnjEZ
+         ZqV5bCKiut8zMuXEG4uRlr9ZJS4hXplrvrgLe4Zx/zd6C2+L688bL/pX5bhLUx3CFf
+         tIpmSZYUibwtXHz8FnUQkVpDMlfUsbGXOOzAVcOHj5Zn6oFyoyz3gKWRz5AogeUu7S
+         3YKjS+P7lRc1Q==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 734BC404A6; Sun,  6 Feb 2022 08:49:09 -0300 (-03)
+Date:   Sun, 6 Feb 2022 08:49:09 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Masanari Iida <standby24x7@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>
+Subject: Re: [PATCH] perf bpf: Fix a typo in bpf_counter_cgroup.c
+Message-ID: <Yf+1tRRYT9W8qgqO@kernel.org>
+References: <20211225005558.503935-1-standby24x7@gmail.com>
+ <CAM9d7cj0dQvoio-T0yNZzo+AGGDxCFtRWuDxBunFEkipWtDxZA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAM9d7cj0dQvoio-T0yNZzo+AGGDxCFtRWuDxBunFEkipWtDxZA@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Em Tue, Dec 28, 2021 at 10:25:08AM -0800, Namhyung Kim escreveu:
+> Hello,
+> 
+> On Fri, Dec 24, 2021 at 4:57 PM Masanari Iida <standby24x7@gmail.com> wrote:
+> >
+> > This patch fixes a spelling typo in error message.
+> >
+> > Signed-off-by: Masanari Iida <standby24x7@gmail.com>
+> 
+> Acked-by: Namhyung Kim <namhyung@kernel.org>
+> 
+> Thanks,
+> Namhyung
 
-please pull two urgent EDAC fixes for 5.17.
+Thanks, applied.
 
-Thx.
+- Arnaldo
 
----
-
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
-
-  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_urgent_for_v5.17_rc3
-
-for you to fetch changes up to dfd0dfb9a7cc04acf93435b440dd34c2ca7b4424:
-
-  EDAC/xgene: Fix deferred probing (2022-01-30 01:06:35 +0100)
-
-----------------------------------------------------------------
-- Fix altera and xgene EDAC drivers to propagate the correct error code
-from platform_get_irq() so that deferred probing still works
-
-----------------------------------------------------------------
-Sergey Shtylyov (2):
-      EDAC/altera: Fix deferred probing
-      EDAC/xgene: Fix deferred probing
-
- drivers/edac/altera_edac.c | 2 +-
- drivers/edac/xgene_edac.c  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ 
+> 
+> > ---
+> >  tools/perf/util/bpf_counter_cgroup.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/tools/perf/util/bpf_counter_cgroup.c b/tools/perf/util/bpf_counter_cgroup.c
+> > index cbc6c2bca488..fea5f2ca03f6 100644
+> > --- a/tools/perf/util/bpf_counter_cgroup.c
+> > +++ b/tools/perf/util/bpf_counter_cgroup.c
+> > @@ -266,7 +266,7 @@ static int bperf_cgrp__read(struct evsel *evsel)
+> >                 idx = evsel->core.idx;
+> >                 err = bpf_map_lookup_elem(reading_map_fd, &idx, values);
+> >                 if (err) {
+> > -                       pr_err("bpf map lookup falied: idx=%u, event=%s, cgrp=%s\n",
+> > +                       pr_err("bpf map lookup failed: idx=%u, event=%s, cgrp=%s\n",
+> >                                idx, evsel__name(evsel), evsel->cgrp->name);
+> >                         goto out;
+> >                 }
+> > --
+> > 2.25.0
+> >
 
 -- 
-Regards/Gruss,
-    Boris.
 
-SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg
+- Arnaldo

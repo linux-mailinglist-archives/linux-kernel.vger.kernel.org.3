@@ -2,49 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77DB24AB112
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 18:51:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F0F04AB10A
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 18:45:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345268AbiBFRvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 12:51:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40304 "EHLO
+        id S1344991AbiBFRpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 12:45:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239745AbiBFRvn (ORCPT
+        with ESMTP id S233776AbiBFRpP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 12:51:43 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F3CC043184
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 09:51:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DE4B608D5
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 17:51:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4E8EC340E9;
-        Sun,  6 Feb 2022 17:51:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644169901;
-        bh=PgP3XA+R87hLDRANpjuRku4aVM76Q9vxTvvDIf8+XYU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=MvdOGZ/muD3iuxKGNPy5RTPuuwrBO1mMdpCUkVaEYwiLfAFhHGcQD69qu4WCWSpgR
-         cgWyLcZObA1dIVF41cqV8UOV1m4j/d+PzaV68pqMSFbLqbJZtpp1UQPpjHTdt7oupt
-         pP96cn6nV93W/UX84tMlFLntO75wBzWXNrTumm4GOtsZiMo/AH6NLU2qfZAxhkoIAF
-         w8e7YfpRC5H0nCj5F2C4Bb+QZmnXhgZl5hFebuKax+FJHqPrBDI6kMPryVpc2z2IKq
-         Y2T/L1ikQBCvpFRSpP2j9vE2LVLLbpfEmcTtVpkQZY8fLvZl+jJzud6cafnpZYfEkf
-         WltLtSivvaxMw==
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH] riscv: reduce THREAD_SIZE from 16KB to 8KB for RV64
-Date:   Mon,  7 Feb 2022 01:43:59 +0800
-Message-Id: <20220206174359.2986-1-jszhang@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Sun, 6 Feb 2022 12:45:15 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6A2AC043185
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 09:45:12 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id u12so2368573plq.10
+        for <linux-kernel@vger.kernel.org>; Sun, 06 Feb 2022 09:45:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=v6O2o8pG50xk23PLXPp5+UKk+LzVl21UwSd+T/RY4xM=;
+        b=Js3Gu6abALq+9Rw5jzow76VsWNdYKgRb3cosC0c+nCrMduq/KxnH9S9oDgjFr1Y38O
+         Kg8zxMG/u1p32rKiag+YvBC1OUgV+iFZMgQPspJlzvA7k0Om8N6Sro+XLP+MHYlqBke3
+         Cx6xWQIcYFEChSDwzbfJsPiNZYZgBW/w+DHBE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=v6O2o8pG50xk23PLXPp5+UKk+LzVl21UwSd+T/RY4xM=;
+        b=22o3Ug7IoVC19sJdhg9R0fGe9d6M/pSMxXX/ABPNcCeQsKQw6k6fz5lDZ1lWHwQYVR
+         vQCQLZkO/y5JQjkhXBt7wnjnqJudRDyEU9kAfE3JybSSKAAajii3ZRP6jUKiE5GdQI4h
+         Tvx7ESwL2D/Tbegxdwj5QB+uIFmB5SvhJV6vkhOMr8fngVvBef+wNKGYHLCxxWs6AS8q
+         ZWM+wPMFbwywRFN0GHKqqWifT1YltZ7jPAGAyxW6oNzK9oLnst8FxhUIWZ2D1iU43hb6
+         FvLJrShM7pEk2h1qcpJdGIQ/JCL2/ulaBwJX/ranvdDxKxk9ngwowDpoEgaf39Q+ooD/
+         TkRg==
+X-Gm-Message-State: AOAM531tqEsrrk6Raqzi0oqQWAqK9VjPYkQEEGlxrN+nxPcF5KSfpK7u
+        WSsXnCrFwoRpJxhyqwlKIkjwJQ==
+X-Google-Smtp-Source: ABdhPJxSvg4hChq0huexNav4rWvjba195f+0fA1dkTHKBmy7VjbGGLnAN+3xEAuI9rFWpjLkyYPwNg==
+X-Received: by 2002:a17:90a:ec0b:: with SMTP id l11mr14212735pjy.200.1644169512190;
+        Sun, 06 Feb 2022 09:45:12 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id c12sm9988585pfl.130.2022.02.06.09.45.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Feb 2022 09:45:11 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Alexander Popov <alex.popov@linux.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH 0/3] gcc-plugins/stackleak: Ignore .noinstr.text and .entry.text
+Date:   Sun,  6 Feb 2022 09:45:05 -0800
+Message-Id: <20220206174508.2425076-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=759; h=from:subject; bh=9Mpxe73Kgm9+18b3DRYv4LkxSc2djAQZd/LwhBPfIKg=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiAAkidd+gsthX8X4I2aZfDT4Z+LaGVX4rQib9in1s dFliP0+JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYgAJIgAKCRCJcvTf3G3AJhiID/ 4yXopOsjb2jNaBgv82czSWfbFloMfBRc9u6JvZQI/3D6b7aEnC9U4dhHnZBamcKRz6axTehlK6WwSV bUsZ7IN/8jafYXD6xLg8q1XPUFDb7DHxoncKSSzSaCbqGIDgMP8QqX5Rv8zbAy2F5s6dbDZgYrq2yP IvC6nGBc9DsFkbHKHzeN6wWSL2chZOXinqJDqTcC6E20r2FKsYbBnN8bBDKb5qTGi8iqgRzUoFW6yP vqO5u4AIujbIY2wl8yFSwDfRHaOKHCgGgLGy1r1wyz8egJdgksUjajewORaCowrNVEkD3Cf+uGThZC BCOhZEUwgs/7xycCK7wzpumWAGYBbJAiHGLaqYlPiRE321q7cAgHWyENloEfaB+2cRuNE01pkd1BbC jzxiUAOvzbeTt+lzdh4W69JjQ8Aeu/rBVbcqefQVhwBRf+zntZYvW4xm0oXFxeffSgTWSTV89XF4Yh 54BL1yGQKIcKiV5jZk8wzYT2a4ZemmapQVtcVIbgvjYPsze/d92lmsJqxI/M1izyzuSzJxyaC2AUW9 Gn5Yj8N3l932eHuDYYR5cl2p5Aa8XjRVHS4qHNZXsVOVxqJRmzpUoUGDk6Ub7aGakDiaqKCeOvPKZU 7mUMLYPmU0L//Y/zttSZi1IF30Aoy8ZNGQJlW+LecLNLpE0wbkW+gFy755Ww==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,30 +73,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After irq stack is supported, it's possible to use small THREAD_SIZE.
-In fact, I tested this patch on a Lichee RV board, looks good so far.
+Out of an abundance of caution, do not perform stack depth analysis on
+.noinstr.text and .entry.text section functions, as it may be possible
+that "current" is not sane.
 
-Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
----
- arch/riscv/include/asm/thread_info.h | 4 ----
- 1 file changed, 4 deletions(-)
+Additionally, to verify results, the verbose mode is wired up the Kconfig,
+and the string matching is refactored for correctness.
 
-diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/asm/thread_info.h
-index 67387a8bcb34..fdbf3890a1ab 100644
---- a/arch/riscv/include/asm/thread_info.h
-+++ b/arch/riscv/include/asm/thread_info.h
-@@ -12,11 +12,7 @@
- #include <linux/const.h>
- 
- /* thread information allocation */
--#ifdef CONFIG_64BIT
--#define THREAD_SIZE_ORDER	(2)
--#else
- #define THREAD_SIZE_ORDER	(1)
--#endif
- #define THREAD_SIZE		(PAGE_SIZE << THREAD_SIZE_ORDER)
- 
- #define IRQ_STACK_SIZE		THREAD_SIZE
+-Kees
+
+Kees Cook (3):
+  gcc-plugins/stackleak: Provide verbose mode
+  gcc-plugins/stackleak: Exactly match strings instead of prefixes
+  gcc-plugins/stackleak: Ignore .noinstr.text and .entry.text
+
+ scripts/Makefile.gcc-plugins           |  2 ++
+ scripts/gcc-plugins/stackleak_plugin.c | 29 ++++++++++++++++++++++----
+ security/Kconfig.hardening             | 10 +++++++++
+ 3 files changed, 37 insertions(+), 4 deletions(-)
+
 -- 
-2.34.1
+2.30.2
 

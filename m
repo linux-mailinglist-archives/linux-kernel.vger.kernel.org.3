@@ -2,72 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D2E54AB10D
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 18:45:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21A7A4AB118
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 18:54:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345182AbiBFRpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 12:45:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37990 "EHLO
+        id S1345350AbiBFRyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 12:54:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344844AbiBFRpR (ORCPT
+        with ESMTP id S232592AbiBFRyf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 12:45:17 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B853C0401C0
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 09:45:12 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id q132so9626696pgq.7
-        for <linux-kernel@vger.kernel.org>; Sun, 06 Feb 2022 09:45:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Vqdb+IjvR7W8E5ZbYWXJikM0js3mZmH+zUbAZQxhgw8=;
-        b=CD2cSm+Jq/YqWHrsk91+IgI6ZtNrSFWIZi4U225H/t3jQslCYy7ZusGLWFch+Nqa5o
-         6cf8TP6OuQL4NNV/YI9/dN29UEneYoQDDCjSI2vFPM0k+6gBBXmBNREyEc2cLADqQR98
-         3+OJykZ7Y+YwhWGkvn/y6NFZOkBdehWpaiagw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Vqdb+IjvR7W8E5ZbYWXJikM0js3mZmH+zUbAZQxhgw8=;
-        b=14DvGd6EoN6FdSu7VXJbpCrgNBxx3migwyyXYFA1Cfjmp4820ShKeC7muie8UvnLI9
-         8jn101qXtggaIutP5iHgp7Z0Oz9RZ6End3bV4xWCg4k3mDL8uJS8b3wOjZvfXp/HFuw2
-         bT3r07dRag8fWGkFtmXfRR8zGpAIwY3H615RDm/4J1lkikh3NvV+cvxdpiydXgSU39As
-         jakbcjgOiY38x0iyYG1QmxKj0KzN6azz8/pcAywes5A/m1P6sJeXKxa+YxneOV15s5cZ
-         sHx51+BQ4YZrPD0lOUMk7yb07wymCC/0J6baMs2NEb3euHYRLeNlbAXzKao3Hmd5nF96
-         Su0w==
-X-Gm-Message-State: AOAM532oH/RCYBLzWyTBbXR61aPuRTLY+vXbTN1vuW4BoyPHV75RPzBI
-        XUhZ2fBrXKfyekRcgKkj/XlCIQ==
-X-Google-Smtp-Source: ABdhPJyEofsTh8CiCMqluEuIuZ1SrpnKNOKrVsxFi0C1QiJP1PbwZoDra0ohb1ZaCI+aRJ92f52J5w==
-X-Received: by 2002:aa7:9d9b:: with SMTP id f27mr12269201pfq.84.1644169512496;
-        Sun, 06 Feb 2022 09:45:12 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id f3sm9537609pfe.67.2022.02.06.09.45.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Feb 2022 09:45:11 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Alexander Popov <alex.popov@linux.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH 3/3] gcc-plugins/stackleak: Ignore .noinstr.text and .entry.text
-Date:   Sun,  6 Feb 2022 09:45:08 -0800
-Message-Id: <20220206174508.2425076-4-keescook@chromium.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220206174508.2425076-1-keescook@chromium.org>
-References: <20220206174508.2425076-1-keescook@chromium.org>
+        Sun, 6 Feb 2022 12:54:35 -0500
+X-Greylist: delayed 315 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Feb 2022 09:54:33 PST
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1FECC043184;
+        Sun,  6 Feb 2022 09:54:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1644170072;
+        bh=yn5JeOkppnD0tGfSCvueihPF+e+1FFRHsDAP44tpu0A=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=DndPjgzVbgVlCdctnu+YOe0OBCZQ5U+9xrRQWL3E7EsIpH+uqMz6vGi15Jt6NVTPs
+         SxDoA6HfPxR6bs0fvXg76U2uMVljQGysoMbC+wry0pnJvgjiCPiFoiFJN06yQtQSq0
+         mKE/0lPjrqPRFxF77UJbNu/RnvcEILriVe1zGNDI=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.86.27] ([95.91.192.147]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MAwXr-1nS4Kj3eEz-00BHk2; Sun, 06
+ Feb 2022 18:49:01 +0100
+Message-ID: <f676e339-5808-2163-2afd-ea254cfb2684@rempel-privat.de>
+Date:   Sun, 6 Feb 2022 18:48:56 +0100
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1210; h=from:subject; bh=pVDpB0fLeXzkw7qtOTlz2Xjee/LCaGQ3lZV5lGGvWcE=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiAAkjkTUerpEggmIzHyPJuyDEgbgzPKYmgGRrnVOi cs5tNtOJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYgAJIwAKCRCJcvTf3G3AJhwwEA CMMwXjllOJPlCgUdB/Vxpjt1yZo3bgDDu0djnWckBM5Fdstv8Pm9MoCDUdWaCOhgCM5JWYowz91COz e4xHfc0WiPZE9YvNSQ/HjlAewWRP0D4Qdfz3hRfxBL2h2lqOAD/kqbkbJutoB0FvsaR743uPk9lfsY S904GcaCkeMn7wBkzR/jEiJht7Z0TmKDahakj5yOfUiQXKckEO/k+NqdrfxjEQdJlJgNHusa9aREVG z4M/hxIuTSBZNjkI/zU/CJtPsZcxODRzsof+af4XcbH/wWHZGetGx2MyTThL381ZheVCCz/MPjvhDN 1OBV4wRzNrTCWrsUAiTCGLFgcAa6quWbqGJQ7Vg++5UXXjY0bxWSCea4ouYA9G8uLyUhUYjkp1ch30 yozbt2bpcWX5uwGFrIO/yjv52WnpDwwpSLnkbNkDiJSVRkMtAmoN7npt5M/stzHbZgEISVGONmcbNl cJERD8Whq8p9RQUM5KuSTCfl/BMoxDfDuZfINCB6TCG497jTLQq0+OEJ2D+9XklmTFYmVn5JqIjK32 SQxtSUW2Rg+2barzot9TFsjVzZXaXAO9ntsYn4Blm4vWEFxvaaBkJAy0OuBRU2HFA1Ib6MUxBLe9Es gqI1DbTc5+7Aw8Uzt1vfvxXR9+2IKquvEnSkrNpMrLT6gWPd801T5o2S9Hbw==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH RFT] net: asix: add proper error handling of usb read
+ errors
+Content-Language: en-US
+To:     Pavel Skripkin <paskripkin@gmail.com>, davem@davemloft.net,
+        kuba@kernel.org, andrew@lunn.ch, oneukum@suse.com,
+        robert.foss@collabora.com, freddy@asix.com.tw
+Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        syzbot+6ca9f7867b77c2d316ac@syzkaller.appspotmail.com
+References: <20220105131952.15693-1-paskripkin@gmail.com>
+ <7dbe85db-92b8-68bd-d008-33a4be9a55b9@gmail.com>
+From:   Oleksij Rempel <linux@rempel-privat.de>
+In-Reply-To: <7dbe85db-92b8-68bd-d008-33a4be9a55b9@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:ogiNkPRfVD7er2HY8jDw3fJHT8IWv+jZw7C4hxqJgCNurxo4kxX
+ 7P2drfrdw826WnAmJddx9xLl2//DEGJaqCarPLrbmpJsqFHwrSn8YbT8+54WZnz6gbB4rwp
+ +/vG9O7weJJEEkm+Wd9LH0D0o73uAV9jGpPgUQ8LiZJ3bT8wgTV6Nf7qEaldbooz+2btQQe
+ VuNfi/PIt4wgAKN9Nyk5A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:sDslPLSxVgE=:irwCf0SrJagZK9QOHvtnQL
+ LN1VWkoEgE/tYd+SfKWKJIX9WDMKAI/Gy595HT7w953fB8s4/2JGD7TzQSeZBiKpUl1LlYuuM
+ Q5RtrI4vZypV9zj/J0fzzLU2cIzumf1NzmKyJQNR4tZzIJHoy6pRdM3JAwu62xvQqJDLYISfE
+ ZPRUSE2RwoN2Ripo4lW1ZDJH0zCX4lkqrC7qGfzjHavjDWLDSj8kShaXBWwHPIW+2uVTGdqw3
+ vJlrbPeoATjjrXGEtj3n1fLXI/KXcUKu7ELqbIuJp0eMK+6ko0admp7qlXUGUsyASfaOGw8q1
+ 8PESRaeNFcS2KYiO1Ddv+LQXO2Xni0TX+unlECS6fsJdX3MzbQaZy2lYepdMvBQnchiKytwTP
+ MXkzksuGxTsdHL3/IMkNNr5HxmVCSaDCObRQZ8PvNGnrMAPWgnNutizjRjPgtLWY0OatBp8Y3
+ Dnx+rYILWDC/N4RUPKztz+7BeVLaqwDS/mUypBfw7y7aVa59vNvpJ8kwbQpywifOCnoStmEzC
+ aGDLcjK4MVk0ANs+Kw2nMM7TFxANrWxGuSK2hBK7FBPRNv+si7J6mLHeSVhUrFxf3BaNR+D7D
+ E9Gi/rkeFUOayIkaaehhOpiu4b1eM8LFiCX9p42vBrdpy8fJZsrdC+RAkbM2T7/v+EqMOBnuU
+ gsDjnATVcS+nojo2dk+KB1zVYUK6NoVSjsUUWfYspTA9+xA3klyPwYc4g8EOnGuXNpbmVTxTm
+ d2VrpNCiJjjelhRF3JqJe5DpboQYHtJ/2RaR3vMwamn0Poq31EdRCQgA5py4O493qxneXqy/4
+ hu/f0+aEWGXk4IJAgZ4nPq0aQ9kiM/9ec+Z/uL226yz+2g5Dmm/6rBs0ymJcY7YffPRrB1Iji
+ tIWC/5hbB7r25UFZZtRIO5eicgjTtkPMEB+9sB631iUJ2OkAF5nQ3QNm9TdIhBJO9IE2iZW6S
+ 9WERGkpdBU9uLQ+lSoKSIE3mD4Cd07lh8qq70s7xv8d5bkbCPxWPcc3gxD914JRyRib3FFLLy
+ O2Ayz5xdlqWFr8M4Vkkuet8SsCuK2KxsDz1qE8rpzprjatM8o/23bo7gaWOi6p+HEe7nE3y3c
+ gR56gg4X3AhT2g=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,40 +78,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The .noinstr.text section functions may not have "current()" sanely
-available. Similarly true for .entry.text, though such a check is
-currently redundant. Add a check for both. In an x86_64 defconfig build,
-the following functions no longer receive stackleak instrumentation:
+Am 06.02.22 um 18:23 schrieb Pavel Skripkin:
+> On 1/5/22 16:19, Pavel Skripkin wrote:
+>> Syzbot once again hit uninit value in asix driver. The problem still th=
+e
+>> same -- asix_read_cmd() reads less bytes, than was requested by caller.
+>>
+>> Since all read requests are performed via asix_read_cmd() let's catch
+>> usb related error there and add __must_check notation to be sure all
+>> callers actually check return value.
+>>
+>> So, this patch adds sanity check inside asix_read_cmd(), that simply
+>> checks if bytes read are not less, than was requested and adds missing
+>> error handling of asix_read_cmd() all across the driver code.
+>>
+>> Fixes: d9fe64e51114 ("net: asix: Add in_pm parameter")
+>> Reported-and-tested-by: syzbot+6ca9f7867b77c2d316ac@syzkaller.appspotma=
+il.com
+>> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+>> ---
+>
+> gentle ping :)
 
-	__do_fast_syscall_32()
-	do_int80_syscall_32()
-	do_machine_check()
-	do_syscall_64()
-	exc_general_protection()
-	fixup_bad_iret()
+Please resend patch against latest net-next with "net-next" tag instead of=
+ "RFT".
 
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
-Cc: Alexander Popov <alex.popov@linux.com>
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- scripts/gcc-plugins/stackleak_plugin.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/scripts/gcc-plugins/stackleak_plugin.c b/scripts/gcc-plugins/stackleak_plugin.c
-index 623bcad6d0c7..c8dc7fe4f959 100644
---- a/scripts/gcc-plugins/stackleak_plugin.c
-+++ b/scripts/gcc-plugins/stackleak_plugin.c
-@@ -463,6 +463,10 @@ static bool stackleak_gate(void)
- 			return false;
- 		if (STRING_EQUAL(section, ".meminit.text"))
- 			return false;
-+		if (STRING_EQUAL(section, ".noinstr.text"))
-+			return false;
-+		if (STRING_EQUAL(section, ".entry.text"))
-+			return false;
- 	}
- 
- 	return track_frame_size >= 0;
--- 
-2.30.2
-
+=2D-
+Regards,
+Oleksij

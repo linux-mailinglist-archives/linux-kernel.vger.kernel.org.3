@@ -2,77 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D1DC4AB046
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 16:36:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DECA4AB051
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 16:43:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243941AbiBFPfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 10:35:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54450 "EHLO
+        id S244027AbiBFPnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 10:43:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233954AbiBFPfx (ORCPT
+        with ESMTP id S233564AbiBFPnc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 10:35:53 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44210C06173B;
-        Sun,  6 Feb 2022 07:35:51 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id u6so22282317lfm.10;
-        Sun, 06 Feb 2022 07:35:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=lXH9W2UPYnqV3aAat/o8IqUOFsVADH6rgPsLKGvLDNw=;
-        b=YpuqMo0/ZVHVPkxA/ddPz72Wo0vzlX3wUJiTWGevARBQDfOpYTwBwWe0gcU2+NKaYk
-         RxDUrPyXt1iYPgt3Eu8buAKGyQ1Wj38K1cV/OB/yDcKLI1v3otJVoZvjz3jw4g6jZPb6
-         3nvS137TwRxStoNb4FDHglQLHGF6IGuxnZR+A+Ol8umrLfB3/Zsmbft0ZPQ8a/tJpWyp
-         /oo3L50nEPHSjT1HLTYK1vHq5dt5b3plSDD7kBy9YWcjCuc1Z77qRU3BQlErt2aQPlae
-         7OMaeKtzqmdlaT5BclZMrf6vvAcBPe466QvyYaV/u/AZyzkUDktosCUNMqf/VrZxLRou
-         pWuA==
+        Sun, 6 Feb 2022 10:43:32 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B82B8C06173B
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 07:43:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644162210;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ExlSUsP6fIrRLknDC2nQTzRHSOOXRnoF0vynoyNz4PA=;
+        b=bzO2b4ZMA9/Jmx5Vdw4EEU+aVYfNV5PIeg7uWuq0iK4+rcDWs8MxK3j7D6afdRudGG70ty
+        WBvFBy+izV9VIdv1cIh7rwGtytA/2U6cugEj9j8bkm9CraBBvqnyUKRxcsOZ1Ggwcd/UAU
+        zC2rua+ea/GYf/LjBcyTrXvsDk/PJ+0=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-388-5Cvslm_KOQWhbaNsyj0a9Q-1; Sun, 06 Feb 2022 10:43:29 -0500
+X-MC-Unique: 5Cvslm_KOQWhbaNsyj0a9Q-1
+Received: by mail-qt1-f200.google.com with SMTP id c15-20020ac87dcf000000b002d0a849c0beso9157940qte.16
+        for <linux-kernel@vger.kernel.org>; Sun, 06 Feb 2022 07:43:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=lXH9W2UPYnqV3aAat/o8IqUOFsVADH6rgPsLKGvLDNw=;
-        b=NNLouzNRRzvlA2uu8yM/bK/7t0MC1A140wh08Fkbwq6kJ14rJNGT+xTe0qhUhTWVJn
-         1H5RnuZ+9khRHtLJoNcQCCFxby7+4aPpY7p7XnpxgL89J+jQfEaO7+sB3+X3eNUD6DIa
-         ybGUB51+cYtQXb0CDveJFmJfZm+aY4YFv9kVW9SdcwXUr9qzv/oSAZvQclI1wwbnywlh
-         771LDv+OEHZRfLDG/pUL+r/VELjwa/rw0AVV/6DjfNrz04RipXy8MZheFamPvx1eXqBA
-         Uba+aaJd1B09tAzFRvhUPTmCgERCosOdnGcnGP4EBh2kw8kpEQqZ/UamH8vEn9Wyk9cG
-         mTUw==
-X-Gm-Message-State: AOAM532+jdMuwqpCXbioQQhs9xzY5Zk06qqgwGJH++8IoIgqlrVcAiDc
-        9+slgtx9ioyEvNtJUSN204Q=
-X-Google-Smtp-Source: ABdhPJxc2cNeHKXgw3XaDtDkn1pg8+BRyC2PfbVRpVXxUhMCENtGewUFb0Z4gBJ8D8RSVl6ao9IvTw==
-X-Received: by 2002:a05:6512:3f13:: with SMTP id y19mr5658866lfa.25.1644161749697;
-        Sun, 06 Feb 2022 07:35:49 -0800 (PST)
-Received: from [192.168.2.145] (109-252-138-165.dynamic.spd-mgts.ru. [109.252.138.165])
-        by smtp.googlemail.com with ESMTPSA id t10sm1129565lfe.215.2022.02.06.07.35.48
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=ExlSUsP6fIrRLknDC2nQTzRHSOOXRnoF0vynoyNz4PA=;
+        b=OmmsDQJF3e0O48pGkpPT743aLspDFSY9vJK0KnV+lmHHa3G6sE3XCpeSlxfuCx5ROL
+         LZiLxlgcHSs3T0sChCHuH+LYS3QGeCc4s5zZDu5cs2RrFitSHMLbSZ2Zac7KzFfCJaKH
+         CHdLWFLwpcF6y1YtUtoxakIbYAYRhuRVUovISY+b6KWHfzkizF7rqXBvU0gX8ioaHiqd
+         lCYq9auZVES20zRCyv6nNCFf0mSSNM5xR4qyocyR27m3kltFb+zEwiFa9BeO5tVzpuHk
+         ngKTuJ0plOu4jybypGh3v1OQxl2opqS9EP92AibYw90F9BnvqTZMtC6dZly8W7utEIdR
+         8tGQ==
+X-Gm-Message-State: AOAM533HIsFwM4fl54mlregifC7LqR7G0ybDJBqgJTAghbpFD6kOGDNq
+        m3JRwpuGM87LqdFrLUsbP9RDnyoRf0zrGNLu5jtuRsyCdlVAVaCYGtzxq5OZA9NpY5Q9d1cjD4q
+        5G1Rpfc7H9cQ/2hUJWOsxOCIS
+X-Received: by 2002:a05:620a:2592:: with SMTP id x18mr4325677qko.578.1644162209252;
+        Sun, 06 Feb 2022 07:43:29 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyqWLADdqijhyerKNhUtVZWu2qMA0+Uqm58RfBgXo/CmR1A9L3X8bLbkl+oLtymrGyNCX+xPA==
+X-Received: by 2002:a05:620a:2592:: with SMTP id x18mr4325665qko.578.1644162209011;
+        Sun, 06 Feb 2022 07:43:29 -0800 (PST)
+Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id m130sm3961412qke.55.2022.02.06.07.43.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 06 Feb 2022 07:35:49 -0800 (PST)
-Message-ID: <255e0ce7-f9dd-8fa7-db5b-0dac69310ed6@gmail.com>
-Date:   Sun, 6 Feb 2022 18:35:48 +0300
+        Sun, 06 Feb 2022 07:43:28 -0800 (PST)
+Subject: Re: [RFC PATCH 3/5] firmware_loader: Split fw_sysfs support from
+ fallback
+To:     Russ Weight <russell.h.weight@intel.com>, mcgrof@kernel.org,
+        gregkh@linuxfoundation.org, rafael@kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     lgoncalv@redhat.com, yilun.xu@intel.com, hao.wu@intel.com,
+        matthew.gerlach@intel.com, basheer.ahmed.muddebihal@intel.com,
+        tianfei.zhang@intel.com
+References: <20220203213053.360190-1-russell.h.weight@intel.com>
+ <20220203213053.360190-4-russell.h.weight@intel.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <487b45dc-edd3-4406-7f06-9dc68e330623@redhat.com>
+Date:   Sun, 6 Feb 2022 07:43:25 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 8/8] ARM: dts: exynos: remove deprecated unit address
- for LPDDR3 timings on Odroid
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220206135807.211767-1-krzysztof.kozlowski@canonical.com>
- <20220206135918.211990-1-krzysztof.kozlowski@canonical.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <20220206135918.211990-1-krzysztof.kozlowski@canonical.com>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20220203213053.360190-4-russell.h.weight@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Language: en-US
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,41 +86,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-06.02.2022 16:59, Krzysztof Kozlowski пишет:
-> Passing maximum frequency of LPDDR3 memory timings as unit address was
-> deprecated in favor of 'max-freq' property.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> ---
->  arch/arm/boot/dts/exynos5422-odroid-core.dtsi | 7 ++-----
->  1 file changed, 2 insertions(+), 5 deletions(-)
-> 
-> diff --git a/arch/arm/boot/dts/exynos5422-odroid-core.dtsi b/arch/arm/boot/dts/exynos5422-odroid-core.dtsi
-> index 2f65dcf6ba73..35818c4cd852 100644
-> --- a/arch/arm/boot/dts/exynos5422-odroid-core.dtsi
-> +++ b/arch/arm/boot/dts/exynos5422-odroid-core.dtsi
-> @@ -333,8 +333,6 @@ samsung_K3QF2F20DB: lpddr3 {
->  		compatible	= "samsung,K3QF2F20DB", "jedec,lpddr3";
->  		density		= <16384>;
->  		io-width	= <32>;
-> -		#address-cells	= <1>;
-> -		#size-cells	= <0>;
->  
->  		tRFC-min-tck		= <17>;
->  		tRRD-min-tck		= <2>;
-> @@ -358,10 +356,9 @@ samsung_K3QF2F20DB: lpddr3 {
->  		tCKESR-min-tck		= <2>;
->  		tMRD-min-tck		= <5>;
->  
-> -		timings_samsung_K3QF2F20DB_800mhz: timings@800000000 {
-> +		timings_samsung_K3QF2F20DB_800mhz: timings {
->  			compatible	= "jedec,lpddr3-timings";
-> -			/* workaround: 'reg' shows max-freq */
-> -			reg		= <800000000>;
-> +			max-freq	= <800000000>;
->  			min-freq	= <100000000>;
->  			tRFC		= <65000>;
->  			tRRD		= <6000>;
 
-Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
+On 2/3/22 1:30 PM, Russ Weight wrote:
+> In preparation for sharing the "loading" and "data" sysfs nodes with the
+> new firmware upload support, split out sysfs functionality from fallback.c
+> and fallback.h into fw_sysfs.c and fw_sysfs.h. This includes the firmware
+> class driver code that is associated with the sysfs files and the
+> fw_fallback_config support for the timeout sysfs node.
+>
+> CONFIG_FW_LOADER_SYSFS is created and is selected by
+> CONFIG_FW_LOADER_USER_HELPER in order to include fw_sysfs.o in
+> firmware_class-objs.
+>
+> This is mostly just a code reorganization. There are a few symbols that
+> change in scope, and these can be identified by looking at the header
+> file changes. A few white-space warnings from checkpatch are also
+> addressed in this patch.
+>
+> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+
+Consider how bisectable and reviewable this patch is.
+
+I think this patch should be first since reorganizing should not depend 
+on anything new.
+
+Other users of fallback will want to know if this change is going to 
+break them, so the reorganization should be as mechanical as possible to 
+make the review as easy as possible and easy to revert if something goes 
+wrong.  Ex/ the whitespace changes made as a separate patch to the old 
+file, not embedded in the new file.  The new Kconfig added later if needed.
+
+Also consider if this move is needed at all, generalizing in the 
+existing file is ok.
+
+Tom
 

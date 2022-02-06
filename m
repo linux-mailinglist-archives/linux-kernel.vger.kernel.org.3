@@ -2,144 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C5A44AB0F1
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 18:25:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 543BE4AB0EC
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 18:18:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344172AbiBFRZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 12:25:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59648 "EHLO
+        id S1344021AbiBFRSi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 12:18:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230187AbiBFRZk (ORCPT
+        with ESMTP id S230187AbiBFRSg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 12:25:40 -0500
-X-Greylist: delayed 465 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Feb 2022 09:25:39 PST
-Received: from relay4.hostedemail.com (relay4.hostedemail.com [64.99.140.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71376C06173B
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 09:25:39 -0800 (PST)
-Received: from omf17.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay12.hostedemail.com (Postfix) with ESMTP id 5A8AF120714;
-        Sun,  6 Feb 2022 17:17:53 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf17.hostedemail.com (Postfix) with ESMTPA id A466018;
-        Sun,  6 Feb 2022 17:17:08 +0000 (UTC)
-Message-ID: <8536ca17c2945cb77c506d99eff5ccc42e71f2f3.camel@perches.com>
-Subject: Re: [PATCH] staging: octeon-usb: Fix 'should not end with '(''
-From:   Joe Perches <joe@perches.com>
-To:     David Laight <David.Laight@ACULAB.COM>,
-        "'joelcchangg@gmail.com'" <joelcchangg@gmail.com>,
-        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "gregkh@linuxfoundation.com" <gregkh@linuxfoundation.com>
-Date:   Sun, 06 Feb 2022 09:17:45 -0800
-In-Reply-To: <c0b504dd1f254f19b6ff60948684303b@AcuMS.aculab.com>
-References: <20220206074615.3527-1-joelcchangg@gmail.com>
-         <c0b504dd1f254f19b6ff60948684303b@AcuMS.aculab.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Sun, 6 Feb 2022 12:18:36 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84734C06173B;
+        Sun,  6 Feb 2022 09:18:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=WZawEW9E5ypY6Rh387lFEt31JC2J35mGwrAMc0/AAzo=; b=XzNSINIBxMQVdoTpXXnrPQzf2q
+        pk211w38Qs3kErnL+k8t7syiQ5zoeirAlUJzTwt8Pa9w4ZsO1Q3czT///aWzv7KhIoCecbc2T1dX4
+        sjLBD4lghAlPv2APe5J7BKKvuLm3XrBMLH4Eu944Sdxm+MUow+GPxxZuB18qF4hLE3cGvLXfGnzXs
+        QD1nvXzPzUX1jbTLT2bjSfxfuhBGI9gQ7wZBi1lNKWSiuAye/avfUJ898gwSmhNRXsRy2CJxNHXsm
+        ZTjfU1x3MY16/PXPNMnO7py0r3uzDheMhlQYjjPXtjhf1N3lH4RyYMcosQcRnwBHcNOS4qfrs/K+7
+        MGhNDhOQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:57066)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1nGlBA-0000Ad-EQ; Sun, 06 Feb 2022 17:18:24 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1nGlB6-00073Y-AG; Sun, 06 Feb 2022 17:18:20 +0000
+Date:   Sun, 6 Feb 2022 17:18:20 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Raag Jadav <raagjadav@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Steen Hegelund <steen.hegelund@microchip.com>,
+        Bjarni Jonasson <bjarni.jonasson@microchip.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: phy: mscc: enable MAC SerDes autonegotiation
+Message-ID: <YgAC3I/7EENrN8r7@shell.armlinux.org.uk>
+References: <1644043492-31307-1-git-send-email-raagjadav@gmail.com>
+ <Yf6QbbqaxZhZPUdC@lunn.ch>
+ <20220206171234.GA5778@localhost>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Stat-Signature: qg4yiupiwhcsqe6n45gxqr7fdpk59b16
-X-Rspamd-Server: rspamout03
-X-Rspamd-Queue-Id: A466018
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1+fnhxLHTdi5aumjIE+T5F75ykVyJ/qk3Y=
-X-HE-Tag: 1644167828-153419
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220206171234.GA5778@localhost>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2022-02-06 at 14:16 +0000, David Laight wrote:
-> From: joelcchangg@gmail.com
-> > Sent: 06 February 2022 07:46
-> > 
-> > This patch fixes the checkpatch.pl check:
-> > 
-> > CHECK: Line should not end with '('
-[]
-> > diff --git a/drivers/staging/octeon-usb/octeon-hcd.c b/drivers/staging/octeon-usb/octeon-hcd.c
-[]
-> > @@ -1792,23 +1792,18 @@ static void cvmx_usb_start_channel(struct octeon_hcd *usb, int channel,
-> >  	case CVMX_USB_TRANSFER_INTERRUPT:
-> >  		break;
-> >  	case CVMX_USB_TRANSFER_ISOCHRONOUS:
-> > -		if (!cvmx_usb_pipe_needs_split(usb, pipe)) {
-> > +		if (!cvmx_usb_pipe_needs_split(usb, pipe) &&
-> > +		    pipe->transfer_dir == CVMX_USB_DIRECTION_OUT) {
-> >  			/*
-> >  			 * ISO transactions require different PIDs depending on
-> >  			 * direction and how many packets are needed
-> >  			 */
-> > -			if (pipe->transfer_dir == CVMX_USB_DIRECTION_OUT) {
-> > -				if (pipe->multi_count < 2) /* Need DATA0 */
-> > -					USB_SET_FIELD32(
-> > -						CVMX_USBCX_HCTSIZX(channel,
-> > -								   usb->index),
-> > +			if (pipe->multi_count < 2) /* Need DATA0 */
-> > +				USB_SET_FIELD32(CVMX_USBCX_HCTSIZX(channel, usb->index),
-> >  						cvmx_usbcx_hctsizx, pid, 0);
-> > -				else /* Need MDATA */
-> > -					USB_SET_FIELD32(
-> > -						CVMX_USBCX_HCTSIZX(channel,
-> > -								   usb->index),
-> > +			else /* Need MDATA */
-> > +				USB_SET_FIELD32(CVMX_USBCX_HCTSIZX(channel, usb->index),
-> >  						cvmx_usbcx_hctsizx, pid, 3);
-> > -			}
-> >  		}
-> >  		break;
-> >  	}
-> 
-> What has that hunk got to do with the patch description?
+On Sun, Feb 06, 2022 at 10:42:34PM +0530, Raag Jadav wrote:
+> Once the PHY auto-negotiates parameters such as speed and duplex mode
+> with its link partner over the copper link as per IEEE 802.3 Clause 27,
+> the link partner’s capabilities are then transferred by PHY to MAC
+> over 1000BASE-X or SGMII link using the auto-negotiation functionality
+> defined in IEEE 802.3z Clause 37.
 
-Nothing and this should be revisited or explained much more
-as it seems to change the logic.
+This is slightly incorrect. 1000BASE-X is only capable of operating at
+gigabit speed, not at 100M or 10M.
 
-> > @@ -2121,17 +2116,17 @@ static void cvmx_usb_complete(struct octeon_hcd *usb,
-> >   *
-> >   * Returns: Transaction or NULL on failure.
-> >   */
-> > -static struct cvmx_usb_transaction *cvmx_usb_submit_transaction(
-> > -				struct octeon_hcd *usb,
-> > -				struct cvmx_usb_pipe *pipe,
-> > -				enum cvmx_usb_transfer type,
-> > -				u64 buffer,
-> > -				int buffer_length,
-> > -				u64 control_header,
-> > -				int iso_start_frame,
-> > -				int iso_number_packets,
-> > -				struct cvmx_usb_iso_packet *iso_packets,
-> > -				struct urb *urb)
-> > +static struct cvmx_usb_transaction *cvmx_usb_submit_transaction(struct octeon_hcd *usb,
-> > +								struct cvmx_usb_pipe *pipe,
-> > +								enum cvmx_usb_transfer type,
-> > +								u64 buffer,
-> > +								int buffer_length,
-> > +								u64 control_header,
-> > +								int iso_start_frame,
-> > +								int iso_number_packets,
-> > +								struct cvmx_usb_iso_packet
-> > +									*iso_packets,
-> > +								struct urb *urb)
-> 
-> Those lines are now far longer than is 'nice'.
+The PHY _might_ signal the copper side pause resolution via the
+1000BASE-X negotiation word, and even rarer would be whether operating
+at 1G FD or 1G HD.
 
-True.
+Out of the two, only SGMII is capable of operating at 1G, 100M and 10M,
+FD or HD. No pause resolution is passed. SGMII is not an 802.3 defined
+protocol, it's an adaption of 1000BASE-X by Cisco.
 
-This _might_ be better with the return type on a separate line
-
-Something like:
-
-static struct cvmx_usb_transaction *
-cvmx_usb_submit_transaction(struct octeon_hcd *usb, struct cvmx_usb_pipe *pipe,
-			    enum cvmx_usb_transfer type,
-			    u64 buffer, int buffer_length,
-			    u64 control_header, int iso_start_frame,
-			    int iso_number_packets,
-			    struct cvmx_usb_iso_packet *iso_packets,
-			    struct urb *urb)
-
-
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

@@ -2,266 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB98A4AAD64
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 02:46:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEA8C4AAD68
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 02:49:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357301AbiBFBqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 20:46:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33836 "EHLO
+        id S1381536AbiBFBtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 20:49:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236788AbiBFBqE (ORCPT
+        with ESMTP id S1381214AbiBFBs7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 20:46:04 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26B0DC043186;
-        Sat,  5 Feb 2022 17:46:03 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id y9so1796588pjf.1;
-        Sat, 05 Feb 2022 17:46:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=q+3p4iPoAuDe6IQHUpiM97wxc+cfuSo072IauohFRPY=;
-        b=HDazBo9gw+zTBrBLCTLkikT4SmMAYY+bqMRZxcJP5GC04RVn5yBJ00hRswiyKJCUsc
-         80vuZgSHSvWW749XcAkJFjdspTlCiEcMxatTNBKfmyXSsvSIorNPGnX4XjrKzC3ntLaq
-         D9/3PDItV1FCTaYQJqW5gpPx67gGotQK6tKY87f7ogDNwVklVXB7sewCiyk7IQvFHCMf
-         HnLLp//UGoGt+pW+CkD4l95wN/AtZF6VZOlWVRoKW4+opc8QGXjcLjmzudTPUVwf2Hsv
-         KBT7WY1nzTbqmx9WIpLZilEZdH7ZwLqxRZDeFVhybg9pAU8arALBmqiMAIlsqFFFKjYv
-         HaTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=q+3p4iPoAuDe6IQHUpiM97wxc+cfuSo072IauohFRPY=;
-        b=tyx7QUg2PdiltW+h+5XC4xn5IzUFMURlR7TZ+1lYUWQ48A9tAdfh+B43IZhj5YK6Eo
-         YDBnGZUA9MUypabuROw2yMWDC4+I4j2yWzl7i3o5qYYguY+mYTBD99G+Zoh5PnGulpiV
-         VPdpIaEeS2J4Bs5c/OdaEmQwGLzxnh91FL9aRhN/y4aCdnV1tygT/O7O0CdBLirlpkUd
-         V5DLKX6LO9xsP6LMlzvEbO7yeN5uwv6O0CsoyoRIsBHpBZivDZeTzUTDHqM2ifufJig4
-         VXulCFikvr+mLTKJqXHN7q8p/pfGGdgC0IIl5rRjBRpsemlA6akEGUcndLUfUE/rqKij
-         4WyA==
-X-Gm-Message-State: AOAM5320ngkFkQd7UmD5VWa8Id4FQzcmwZTGm+vjy7dLfStelOx0YcX6
-        fDUoEfW5/asj/4jZ1J/2cfo=
-X-Google-Smtp-Source: ABdhPJzumaU8Mo2A3CFHZub70Sioa5qjRh0p9sXlTHvemh3vQWwIRTb9xR/2aFurOI5VzAHYCALs5g==
-X-Received: by 2002:a17:90b:1e0e:: with SMTP id pg14mr11179738pjb.4.1644111962515;
-        Sat, 05 Feb 2022 17:46:02 -0800 (PST)
-Received: from charizard.lan (c-67-165-113-11.hsd1.wa.comcast.net. [67.165.113.11])
-        by smtp.gmail.com with ESMTPSA id j23sm4869829pgb.75.2022.02.05.17.46.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Feb 2022 17:46:01 -0800 (PST)
-From:   Andrey Smirnov <andrew.smirnov@gmail.com>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
-        Thinh Nguyen <thinhn@synopsys.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: dwc3: Don't switch OTG -> peripheral if extcon is present
-Date:   Sat,  5 Feb 2022 17:45:32 -0800
-Message-Id: <20220206014532.372109-1-andrew.smirnov@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Sat, 5 Feb 2022 20:48:59 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B70C043187
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Feb 2022 17:48:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644112138; x=1675648138;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=l7lv/jUnJXVEXg8Gp6rvibwC9ywQ924Ks4bLlQTQmb8=;
+  b=nlr4LHf6QVOJgGDwiASb3jQ8MPYp3kRVQvSshx5aQ+jP7ZqkGsVWorRO
+   A1vZD6tzswv9wWEPyFR1lGenqs8onYi7uu+nNIEl/nX/lQ4ykBdY74HYu
+   vpSMVYrkM5yd6FnJ1vqnT5Nu9J1Yr7rIa/P7M8WmM+f3l5U3MhXdPUbIQ
+   g4/6A7oo8aV8FHluR0StEtN55PfVLUiyS2VCgs5rJ/3zq+0Ll8yUdYzmr
+   7UFoVvu/sInVw2BJLX3zFnMpuw6P+Rd0HkL+0rrKU0BWp14Tg+QUmOVEQ
+   xWzjYhexEHcFtpqQnvvnM7+pxpEUpupkq7nUPXFX059j364Pth/GUyFUZ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10249"; a="235946849"
+X-IronPort-AV: E=Sophos;i="5.88,346,1635231600"; 
+   d="scan'208";a="235946849"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2022 17:48:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,346,1635231600"; 
+   d="scan'208";a="584486248"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 05 Feb 2022 17:48:56 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nGWff-000ZjT-UD; Sun, 06 Feb 2022 01:48:55 +0000
+Date:   Sun, 6 Feb 2022 09:48:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Gwendal Grignou <gwendal@chromium.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>
+Subject: powerpc-linux-ld: warning: orphan section `.init.plt' from
+ `drivers/platform/chrome/cros_ec_trace.o' being placed in section
+ `.init.plt'
+Message-ID: <202202060652.lkqKaFAm-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is necessary that:
+Hi Gwendal,
 
-   ROLE_SWITCH && device_property_read_bool(dwc->dev, "usb-role-switch")
+FYI, the error/warning still remains.
 
-is true in order for dwc3_get_dr_mode() to _not_ force us from OTG to
-PERIPHERAL mode here:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   90c9e950c0def5c354b4a6154a2ddda3e5f214ac
+commit: d453ceb6549af8798913de6a20444cb7200fdb69 platform/chrome: sensorhub: Add trace events for sample
+date:   6 months ago
+config: powerpc-randconfig-c004-20220206 (https://download.01.org/0day-ci/archive/20220206/202202060652.lkqKaFAm-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d453ceb6549af8798913de6a20444cb7200fdb69
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout d453ceb6549af8798913de6a20444cb7200fdb69
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash
 
-   if (mode == USB_DR_MODE_OTG &&
-       (!IS_ENABLED(CONFIG_USB_ROLE_SWITCH) ||
-        !device_property_read_bool(dwc->dev, "usb-role-switch")) &&
-	!DWC3_VER_IS_PRIOR(DWC3, 330A))
-	mode = USB_DR_MODE_PERIPHERAL;
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-and dwc3_drd_init() to be called later in dwc3_core_init_mode(). To
-avoid always ignoring extcon device returned by dwc3_get_extcon()
-modify the above check to also account for dwc->edev.
+All warnings (new ones prefixed by >>):
 
-Cc: Felipe Balbi <balbi@kernel.org>
-Cc: Thinh Nguyen <thinhn@synopsys.com>
-Cc: linux-usb@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+>> powerpc-linux-ld: warning: orphan section `.init.plt' from `drivers/platform/chrome/cros_ec_trace.o' being placed in section `.init.plt'
+   powerpc-linux-ld: drivers/gpu/drm/drm_fb_helper.o: in function `drm_fb_helper_set_suspend':
+   drm_fb_helper.c:(.text+0x3b0): undefined reference to `fb_set_suspend'
+   powerpc-linux-ld: drivers/gpu/drm/drm_fb_helper.o: in function `drm_fb_helper_resume_worker':
+   drm_fb_helper.c:(.text+0x3f0): undefined reference to `fb_set_suspend'
+   powerpc-linux-ld: drivers/gpu/drm/drm_fb_helper.o: in function `drm_fb_helper_unregister_fbi':
+   drm_fb_helper.c:(.text+0x604): undefined reference to `unregister_framebuffer'
+   powerpc-linux-ld: drivers/gpu/drm/drm_fb_helper.o: in function `drm_fb_helper_fini':
+   drm_fb_helper.c:(.text+0x6a0): undefined reference to `fb_dealloc_cmap'
+   powerpc-linux-ld: drm_fb_helper.c:(.text+0x6ac): undefined reference to `framebuffer_release'
+   powerpc-linux-ld: drivers/gpu/drm/drm_fb_helper.o: in function `drm_fb_helper_sys_read':
+   drm_fb_helper.c:(.text+0x7d8): undefined reference to `fb_sys_read'
+   powerpc-linux-ld: drivers/gpu/drm/drm_fb_helper.o: in function `drm_fb_helper_alloc_fbi':
+   drm_fb_helper.c:(.text+0x1a78): undefined reference to `framebuffer_alloc'
+   powerpc-linux-ld: drm_fb_helper.c:(.text+0x1a9c): undefined reference to `fb_alloc_cmap'
+   powerpc-linux-ld: drm_fb_helper.c:(.text+0x1adc): undefined reference to `fb_dealloc_cmap'
+   powerpc-linux-ld: drm_fb_helper.c:(.text+0x1b1c): undefined reference to `framebuffer_release'
+   powerpc-linux-ld: drivers/gpu/drm/drm_fb_helper.o: in function `drm_fb_helper_generic_probe':
+   drm_fb_helper.c:(.text+0x1cb4): undefined reference to `fb_deferred_io_init'
+   powerpc-linux-ld: drivers/gpu/drm/drm_fb_helper.o: in function `__drm_fb_helper_initial_config_and_unlock':
+   drm_fb_helper.c:(.text+0x1e18): undefined reference to `register_framebuffer'
+   powerpc-linux-ld: drivers/gpu/drm/drm_fb_helper.o: in function `drm_fb_helper_set_suspend_unlocked':
+   drm_fb_helper.c:(.text+0x282c): undefined reference to `fb_set_suspend'
+   powerpc-linux-ld: drivers/gpu/drm/drm_fb_helper.o: in function `drm_fb_helper_sys_write':
+   drm_fb_helper.c:(.text+0x2ec0): undefined reference to `fb_sys_write'
+   powerpc-linux-ld: drivers/gpu/drm/drm_fb_helper.o: in function `drm_fb_helper_sys_fillrect':
+   drm_fb_helper.c:(.text+0x2f38): undefined reference to `sys_fillrect'
+   powerpc-linux-ld: drivers/gpu/drm/drm_fb_helper.o: in function `drm_fb_helper_sys_copyarea':
+   drm_fb_helper.c:(.text+0x2f90): undefined reference to `sys_copyarea'
+   powerpc-linux-ld: drivers/gpu/drm/drm_fb_helper.o: in function `drm_fb_helper_sys_imageblit':
+   drm_fb_helper.c:(.text+0x2fe8): undefined reference to `sys_imageblit'
+   powerpc-linux-ld: drivers/gpu/drm/drm_fb_helper.o: in function `drm_fb_helper_cfb_fillrect':
+   drm_fb_helper.c:(.text+0x3040): undefined reference to `cfb_fillrect'
+   powerpc-linux-ld: drivers/gpu/drm/drm_fb_helper.o: in function `drm_fb_helper_cfb_copyarea':
+   drm_fb_helper.c:(.text+0x3098): undefined reference to `cfb_copyarea'
+   powerpc-linux-ld: drivers/gpu/drm/drm_fb_helper.o: in function `drm_fb_helper_cfb_imageblit':
+   drm_fb_helper.c:(.text+0x30f0): undefined reference to `cfb_imageblit'
+   powerpc-linux-ld: drivers/gpu/drm/drm_fb_helper.o: in function `drm_fbdev_fb_imageblit':
+   drm_fb_helper.c:(.text+0x315c): undefined reference to `cfb_imageblit'
+   powerpc-linux-ld: drm_fb_helper.c:(.text+0x3170): undefined reference to `sys_imageblit'
+   powerpc-linux-ld: drivers/gpu/drm/drm_fb_helper.o: in function `drm_fbdev_fb_copyarea':
+   drm_fb_helper.c:(.text+0x31e0): undefined reference to `cfb_copyarea'
+   powerpc-linux-ld: drm_fb_helper.c:(.text+0x31f4): undefined reference to `sys_copyarea'
+   powerpc-linux-ld: drivers/gpu/drm/drm_fb_helper.o: in function `drm_fbdev_fb_fillrect':
+   drm_fb_helper.c:(.text+0x3264): undefined reference to `cfb_fillrect'
+   powerpc-linux-ld: drm_fb_helper.c:(.text+0x3278): undefined reference to `sys_fillrect'
+   powerpc-linux-ld: drivers/gpu/drm/drm_fb_helper.o: in function `drm_fbdev_cleanup':
+   drm_fb_helper.c:(.text+0x3314): undefined reference to `fb_deferred_io_cleanup'
+   powerpc-linux-ld: drivers/gpu/drm/drm_fb_helper.o: in function `drm_fbdev_client_unregister':
+   drm_fb_helper.c:(.text+0x3418): undefined reference to `unregister_framebuffer'
+
 ---
-
-Previous discussion:
-
-https://lore.kernel.org/linux-usb/20220131192102.4115473-1-andrew.smirnov@gmail.com/
-
- drivers/usb/dwc3/core.c | 55 ++++++++++++++++++++++++++++++++++++++++-
- drivers/usb/dwc3/drd.c  | 50 -------------------------------------
- 2 files changed, 54 insertions(+), 51 deletions(-)
-
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index f2448d0a9d39..0ae152e47a00 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -23,6 +23,7 @@
- #include <linux/delay.h>
- #include <linux/dma-mapping.h>
- #include <linux/of.h>
-+#include <linux/of_graph.h>
- #include <linux/acpi.h>
- #include <linux/pinctrl/consumer.h>
- #include <linux/reset.h>
-@@ -84,7 +85,7 @@ static int dwc3_get_dr_mode(struct dwc3 *dwc)
- 		 * mode. If the controller supports DRD but the dr_mode is not
- 		 * specified or set to OTG, then set the mode to peripheral.
- 		 */
--		if (mode == USB_DR_MODE_OTG &&
-+		if (mode == USB_DR_MODE_OTG && !dwc->edev &&
- 		    (!IS_ENABLED(CONFIG_USB_ROLE_SWITCH) ||
- 		     !device_property_read_bool(dwc->dev, "usb-role-switch")) &&
- 		    !DWC3_VER_IS_PRIOR(DWC3, 330A))
-@@ -1462,6 +1463,51 @@ static void dwc3_check_params(struct dwc3 *dwc)
- 	}
- }
-
-+static struct extcon_dev *dwc3_get_extcon(struct dwc3 *dwc)
-+{
-+	struct device *dev = dwc->dev;
-+	struct device_node *np_phy;
-+	struct extcon_dev *edev = NULL;
-+	const char *name;
-+
-+	if (device_property_read_bool(dev, "extcon"))
-+		return extcon_get_edev_by_phandle(dev, 0);
-+
-+	/*
-+	 * Device tree platforms should get extcon via phandle.
-+	 * On ACPI platforms, we get the name from a device property.
-+	 * This device property is for kernel internal use only and
-+	 * is expected to be set by the glue code.
-+	 */
-+	if (device_property_read_string(dev, "linux,extcon-name", &name) == 0) {
-+		edev = extcon_get_extcon_dev(name);
-+		if (!edev)
-+			return ERR_PTR(-EPROBE_DEFER);
-+
-+		return edev;
-+	}
-+
-+	/*
-+	 * Try to get an extcon device from the USB PHY controller's "port"
-+	 * node. Check if it has the "port" node first, to avoid printing the
-+	 * error message from underlying code, as it's a valid case: extcon
-+	 * device (and "port" node) may be missing in case of "usb-role-switch"
-+	 * or OTG mode.
-+	 */
-+	np_phy = of_parse_phandle(dev->of_node, "phys", 0);
-+	if (of_graph_is_present(np_phy)) {
-+		struct device_node *np_conn;
-+
-+		np_conn = of_graph_get_remote_node(np_phy, -1, -1);
-+		if (np_conn)
-+			edev = extcon_find_edev_by_node(np_conn);
-+		of_node_put(np_conn);
-+	}
-+	of_node_put(np_phy);
-+
-+	return edev;
-+}
-+
- static int dwc3_probe(struct platform_device *pdev)
- {
- 	struct device		*dev = &pdev->dev;
-@@ -1561,6 +1607,13 @@ static int dwc3_probe(struct platform_device *pdev)
- 		goto err2;
- 	}
-
-+	dwc->edev = dwc3_get_extcon(dwc);
-+	if (IS_ERR(dwc->edev)) {
-+		ret = PTR_ERR(dwc->edev);
-+		dev_err_probe(dwc->dev, ret, "failed to get extcon");
-+		goto err3;
-+	}
-+
- 	ret = dwc3_get_dr_mode(dwc);
- 	if (ret)
- 		goto err3;
-diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
-index e2b68bb770d1..9a414edc439a 100644
---- a/drivers/usb/dwc3/drd.c
-+++ b/drivers/usb/dwc3/drd.c
-@@ -8,7 +8,6 @@
-  */
-
- #include <linux/extcon.h>
--#include <linux/of_graph.h>
- #include <linux/platform_device.h>
- #include <linux/property.h>
-
-@@ -438,51 +437,6 @@ static int dwc3_drd_notifier(struct notifier_block *nb,
- 	return NOTIFY_DONE;
- }
-
--static struct extcon_dev *dwc3_get_extcon(struct dwc3 *dwc)
--{
--	struct device *dev = dwc->dev;
--	struct device_node *np_phy;
--	struct extcon_dev *edev = NULL;
--	const char *name;
--
--	if (device_property_read_bool(dev, "extcon"))
--		return extcon_get_edev_by_phandle(dev, 0);
--
--	/*
--	 * Device tree platforms should get extcon via phandle.
--	 * On ACPI platforms, we get the name from a device property.
--	 * This device property is for kernel internal use only and
--	 * is expected to be set by the glue code.
--	 */
--	if (device_property_read_string(dev, "linux,extcon-name", &name) == 0) {
--		edev = extcon_get_extcon_dev(name);
--		if (!edev)
--			return ERR_PTR(-EPROBE_DEFER);
--
--		return edev;
--	}
--
--	/*
--	 * Try to get an extcon device from the USB PHY controller's "port"
--	 * node. Check if it has the "port" node first, to avoid printing the
--	 * error message from underlying code, as it's a valid case: extcon
--	 * device (and "port" node) may be missing in case of "usb-role-switch"
--	 * or OTG mode.
--	 */
--	np_phy = of_parse_phandle(dev->of_node, "phys", 0);
--	if (of_graph_is_present(np_phy)) {
--		struct device_node *np_conn;
--
--		np_conn = of_graph_get_remote_node(np_phy, -1, -1);
--		if (np_conn)
--			edev = extcon_find_edev_by_node(np_conn);
--		of_node_put(np_conn);
--	}
--	of_node_put(np_phy);
--
--	return edev;
--}
--
- #if IS_ENABLED(CONFIG_USB_ROLE_SWITCH)
- #define ROLE_SWITCH 1
- static int dwc3_usb_role_switch_set(struct usb_role_switch *sw,
-@@ -575,10 +529,6 @@ int dwc3_drd_init(struct dwc3 *dwc)
- {
- 	int ret, irq;
-
--	dwc->edev = dwc3_get_extcon(dwc);
--	if (IS_ERR(dwc->edev))
--		return PTR_ERR(dwc->edev);
--
- 	if (ROLE_SWITCH &&
- 	    device_property_read_bool(dwc->dev, "usb-role-switch")) {
- 		ret = dwc3_setup_role_switch(dwc);
---
-2.25.1
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

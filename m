@@ -2,2063 +2,426 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09A814AB244
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 22:13:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57CFD4AB292
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 23:08:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238812AbiBFVNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 16:13:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42560 "EHLO
+        id S1344660AbiBFWIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 17:08:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242027AbiBFVNk (ORCPT
+        with ESMTP id S233328AbiBFWIn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 16:13:40 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0FC7C0401C3;
-        Sun,  6 Feb 2022 13:13:33 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id l25so5470643eda.12;
-        Sun, 06 Feb 2022 13:13:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=DoEXdosX+52G+d9zjAWeDRnyh53G6GFZtM3TQqXmDa4=;
-        b=LXYzLG2exbfbImo7Kj0NVNUZDdK031taP+LMWhGdzXvf1Vg3XenexLyvP/JIrOUTQW
-         yTqZtbohTx3b2MIOcv3UvYZO3tEZH34BuaF7uceBFCDBN4tPaBYRrDijownlR8SFgECU
-         4pdi2imap6VSvCC+DLTcOADKLg/GM0Fi4968W5VXKMBdaaJYQKOiahCEI04RZC9G3o55
-         FQHlSbv3QHMDQpKLFyPJehL/a5NSk8P9bZTHJNIRu5VJzkvxy1rY9GgCalgAysAEOW6E
-         DIKZZiOj3l0S/yUDKJ4F1ggiwxbOnwCMFGOptpeE74jX8Z47n3/bN+BTYURfRG3FLlV2
-         Ok8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=DoEXdosX+52G+d9zjAWeDRnyh53G6GFZtM3TQqXmDa4=;
-        b=7/HzQxl76IcbLuaTdDJi/vjnZyEhJAkrh/Qn3DTTTdDpGM3zgOduHl6s5qyAv4BinA
-         UITmm1z01fVgxplFJQzuD/wgELv/Q6CFcPPZHhwI0CphSi67DfluqNMKdIeYtEWYiUJ8
-         g/Lj9Sja7PI8huhOVBHvI7/zbBCVMdCmFf4Kb/F4n7S+7MMJWG1uMs3Ha0pZ8nDoQgzF
-         OY25ONzz6nJqrU9cJIn85ZKwn7dROnVnZu/jzedkuZGKA2z11fbt27Mow08b3vcJpjX+
-         K50pkZyy81zqscJAxjv5lug6NeWQJJkEfY4S1UgFWhbGaRgjv+t9FOUyEOJc68ntMis3
-         dfxw==
-X-Gm-Message-State: AOAM531Ddpg59SoUfbzSfhtWfXP20+ZZxbUE9o7qgakZYRVAqvWkwdZc
-        HrDHyEJoxYbEGp53BsRaJFm/5L52h/g=
-X-Google-Smtp-Source: ABdhPJzI+oj8piihIparpQFSWFay6CLn9MDuS0ZDv1y/3rqADLkYV9R5bjUipFzSGkEmGnnPYahunQ==
-X-Received: by 2002:a05:6402:2806:: with SMTP id h6mr10819373ede.223.1644182011295;
-        Sun, 06 Feb 2022 13:13:31 -0800 (PST)
-Received: from demon-pc.localdomain ([79.119.107.253])
-        by smtp.gmail.com with ESMTPSA id a4sm1248598edr.33.2022.02.06.13.13.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Feb 2022 13:13:30 -0800 (PST)
-From:   Cosmin Tanislav <demonsingur@gmail.com>
-X-Google-Original-From: Cosmin Tanislav <cosmin.tanislav@analog.com>
-Cc:     cosmin.tanislav@analog.com, demonsingur@gmail.com,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 5/5] iio: accel: add ADXL367 driver
-Date:   Sun,  6 Feb 2022 23:13:07 +0200
-Message-Id: <20220206211307.1564647-6-cosmin.tanislav@analog.com>
-X-Mailer: git-send-email 2.35.0
-In-Reply-To: <20220206211307.1564647-1-cosmin.tanislav@analog.com>
-References: <20220206211307.1564647-1-cosmin.tanislav@analog.com>
+        Sun, 6 Feb 2022 17:08:43 -0500
+X-Greylist: delayed 2546 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Feb 2022 14:08:40 PST
+Received: from mail.cs.msu.ru (mx.cs.msu.ru [188.44.42.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C388C06173B;
+        Sun,  6 Feb 2022 14:08:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=cs.msu.ru;
+        s=dkim; h=Subject:In-Reply-To:Content-Type:MIME-Version:References:Message-ID
+        :Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=SxElmGiCpa8m1ttzwycKf6rNtuPLNfb+V62BNUAdLwg=; b=GCGa0r/JMRst3k0T4kvuqMtmnm
+        bYqLwcXpy7VwbY0jiAxAhDOfOHj3EizHt9h+5wU/l3FE4VTHo3G45rP9rgU7oAIWXezqr1svJh3no
+        6E+4c9JW1vf/TBg2U9VoE1UoBToIbpJLf78cGsC7AWJ8lS6szf+eON7wWDr36Hq5B4MgJFcQs+Gk3
+        uohu2Yvsa/Ail1L87AIuAU+gaXmyph2G0PRKUKNTNPEyFDE2LOOLcqnF75CWVfPcdRjUpyIVyy4bv
+        OImXUVa/a3rD0QPMZIalkgxbgZhvi/VmILcpoxcxqVsTxyH6Stk9bDKZaf+7EXY0QhyZyHAD3BqQ6
+        3WQJSQdQ==;
+Received: from [37.204.119.143] (port=42158 helo=cello)
+        by mail.cs.msu.ru with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2 (FreeBSD))
+        (envelope-from <ar@cs.msu.ru>)
+        id 1nGp27-000LqO-MT; Mon, 07 Feb 2022 00:25:21 +0300
+Date:   Mon, 7 Feb 2022 00:25:12 +0300
+From:   Arseny Maslennikov <ar@cs.msu.ru>
+To:     Walt Drummond <walt@drummond.us>
+Cc:     agordeev@linux.ibm.com, arnd@arndb.de, benh@kernel.crashing.org,
+        borntraeger@de.ibm.com, chris@zankel.net, davem@davemloft.net,
+        gregkh@linuxfoundation.org, hca@linux.ibm.com, deller@gmx.de,
+        ink@jurassic.park.msu.ru, James.Bottomley@hansenpartnership.com,
+        jirislaby@kernel.org, mattst88@gmail.com, jcmvbkbc@gmail.com,
+        mpe@ellerman.id.au, paulus@samba.org, rth@twiddle.net,
+        dalias@libc.org, tsbogend@alpha.franken.de, gor@linux.ibm.com,
+        ysato@users.osdn.me, linux-kernel@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
+Message-ID: <YgA8uIVSX5WSC6Wr@cello>
+References: <20220206154856.2355838-1-walt@drummond.us>
+ <20220206154856.2355838-4-walt@drummond.us>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="cO02Fnj5BNdGOJp4"
+Content-Disposition: inline
+In-Reply-To: <20220206154856.2355838-4-walt@drummond.us>
+OpenPGP: url=http://grep.cs.msu.ru/~ar/pgp-key.asc
+X-SA-Exim-Connect-IP: 37.204.119.143
+X-SA-Exim-Mail-From: ar@cs.msu.ru
+Subject: Re: [PATCH v2 3/3] vstatus: Display an informational message when
+ the VSTATUS character is pressed or TIOCSTAT ioctl is called.
+X-SA-Exim-Version: 4.2.1
+X-SA-Exim-Scanned: No (on mail.cs.msu.ru); Unknown failure
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ADXL367 is an ultralow power, 3-axis MEMS accelerometer.
 
-The ADXL367 does not alias input signals to achieve ultralow power
-consumption, it samples the full bandwidth of the sensor at all
-data rates. Measurement ranges of +-2g, +-4g, and +-8g are available,
-with a resolution of 0.25mg/LSB on the +-2 g range.
+--cO02Fnj5BNdGOJp4
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-In addition to its ultralow power consumption, the ADXL367
-has many features to enable true system level power reduction.
-It includes a deep multimode output FIFO, a built-in micropower
-temperature sensor, and an internal ADC for synchronous conversion
-of an additional analog input.
+On Sun, Feb 06, 2022 at 07:48:54AM -0800, Walt Drummond wrote:
+> When triggered by pressing the VSTATUS key or calling the TIOCSTAT
+> ioctl, the n_tty line discipline will display a message on the user's
+> tty that provides basic information about the system and an
+> 'interesting' process in the current foreground process group, eg:
+>=20
+>   load: 0.58  cmd: sleep 744474 [sleeping] 0.36r 0.00u 0.00s 0% 772k
+>=20
+> The status message provides:
+>  - System load average
+>  - Command name and process id (from the perspective of the session)
+>  - Scheduler state
+>  - Total wall-clock run time
+>  - User space run time
+>  - System space run time
+>  - Percentage of on-cpu time
+>  - Resident set size
+>=20
+> The message is only displayed when the tty has the VSTATUS character
+> set, the local flags ICANON and IEXTEN are enabled and NOKERNINFO is
+> disabled; it is always displayed when TIOCSTAT is called regardless of
+> tty settings.
+>=20
+> Signed-off-by: Walt Drummond <walt@drummond.us>
+> ---
+>  drivers/tty/Makefile       |   2 +-
+>  drivers/tty/n_tty.c        |  34 +++++++
+>  drivers/tty/n_tty_status.c | 181 +++++++++++++++++++++++++++++++++++++
+>  drivers/tty/tty_io.c       |   2 +-
+>  include/linux/tty.h        |   5 +
+>  5 files changed, 222 insertions(+), 2 deletions(-)
+>  create mode 100644 drivers/tty/n_tty_status.c
+>=20
+> <...>
+> @@ -2430,6 +2459,11 @@ static int n_tty_ioctl(struct tty_struct *tty, str=
+uct file *file,
+>  			retval =3D read_cnt(ldata);
+>  		up_write(&tty->termios_rwsem);
+>  		return put_user(retval, (unsigned int __user *) arg);
+> +	case TIOCSTAT:
 
-Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
----
- MAINTAINERS                     |    8 +
- drivers/iio/accel/Kconfig       |   27 +
- drivers/iio/accel/Makefile      |    3 +
- drivers/iio/accel/adxl367.c     | 1585 +++++++++++++++++++++++++++++++
- drivers/iio/accel/adxl367.h     |   23 +
- drivers/iio/accel/adxl367_i2c.c |   90 ++
- drivers/iio/accel/adxl367_spi.c |  164 ++++
- 7 files changed, 1900 insertions(+)
- create mode 100644 drivers/iio/accel/adxl367.c
- create mode 100644 drivers/iio/accel/adxl367.h
- create mode 100644 drivers/iio/accel/adxl367_i2c.c
- create mode 100644 drivers/iio/accel/adxl367_spi.c
+Perhaps we want to guard this (example pseudocode follows):
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a2c8699e9e41..3b5393bb6fee 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -606,6 +606,14 @@ F:	drivers/iio/accel/adxl355_core.c
- F:	drivers/iio/accel/adxl355_i2c.c
- F:	drivers/iio/accel/adxl355_spi.c
- 
-+ADXL367 THREE-AXIS DIGITAL ACCELEROMETER DRIVER
-+M:	Cosmin Tanislav <cosmin.tanislav@analog.com>
-+L:	linux-iio@vger.kernel.org
-+S:	Supported
-+W:	http://ez.analog.com/community/linux-device-drivers
-+F:	Documentation/devicetree/bindings/iio/accel/adi,adxl367.yaml
-+F:	drivers/iio/accel/adxl367*
-+
- ADXL372 THREE-AXIS DIGITAL ACCELEROMETER DRIVER
- M:	Michael Hennerich <michael.hennerich@analog.com>
- S:	Supported
-diff --git a/drivers/iio/accel/Kconfig b/drivers/iio/accel/Kconfig
-index eb17ca40e08a..eac3f02662ae 100644
---- a/drivers/iio/accel/Kconfig
-+++ b/drivers/iio/accel/Kconfig
-@@ -123,6 +123,33 @@ config ADXL355_SPI
- 	  will be called adxl355_spi and you will also get adxl355_core
- 	  for the core module.
- 
-+config ADXL367
-+	tristate
-+	select IIO_BUFFER
-+	select IIO_TRIGGERED_BUFFER
-+
-+config ADXL367_SPI
-+	tristate "Analog Devices ADXL367 3-Axis Accelerometer SPI Driver"
-+	depends on SPI
-+	select ADXL367
-+	select REGMAP_SPI
-+	help
-+	  Say yes here to add support for the Analog Devices ADXL367 triaxial
-+	  acceleration sensor.
-+	  To compile this driver as a module, choose M here: the
-+	  module will be called adxl367_spi.
-+
-+config ADXL367_I2C
-+	tristate "Analog Devices ADXL367 3-Axis Accelerometer I2C Driver"
-+	depends on I2C
-+	select ADXL367
-+	select REGMAP_I2C
-+	help
-+	  Say yes here to add support for the Analog Devices ADXL367 triaxial
-+	  acceleration sensor.
-+	  To compile this driver as a module, choose M here: the
-+	  module will be called adxl367_i2c.
-+
- config ADXL372
- 	tristate
- 	select IIO_BUFFER
-diff --git a/drivers/iio/accel/Makefile b/drivers/iio/accel/Makefile
-index d03e2f6bba08..4d8792668838 100644
---- a/drivers/iio/accel/Makefile
-+++ b/drivers/iio/accel/Makefile
-@@ -15,6 +15,9 @@ obj-$(CONFIG_ADXL345_SPI) += adxl345_spi.o
- obj-$(CONFIG_ADXL355) += adxl355_core.o
- obj-$(CONFIG_ADXL355_I2C) += adxl355_i2c.o
- obj-$(CONFIG_ADXL355_SPI) += adxl355_spi.o
-+obj-$(CONFIG_ADXL367) += adxl367.o
-+obj-$(CONFIG_ADXL367_I2C) += adxl367_i2c.o
-+obj-$(CONFIG_ADXL367_SPI) += adxl367_spi.o
- obj-$(CONFIG_ADXL372) += adxl372.o
- obj-$(CONFIG_ADXL372_I2C) += adxl372_i2c.o
- obj-$(CONFIG_ADXL372_SPI) += adxl372_spi.o
-diff --git a/drivers/iio/accel/adxl367.c b/drivers/iio/accel/adxl367.c
-new file mode 100644
-index 000000000000..cac47db7d89c
---- /dev/null
-+++ b/drivers/iio/accel/adxl367.c
-@@ -0,0 +1,1585 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Copyright (C) 2021 Analog Devices, Inc.
-+ * Author: Cosmin Tanislav <cosmin.tanislav@analog.com>
-+ */
-+
-+#include <linux/bitfield.h>
-+#include <linux/bitops.h>
-+#include <linux/iio/buffer.h>
-+#include <linux/iio/events.h>
-+#include <linux/iio/iio.h>
-+#include <linux/iio/kfifo_buf.h>
-+#include <linux/iio/sysfs.h>
-+#include <linux/interrupt.h>
-+#include <linux/irq.h>
-+#include <linux/module.h>
-+#include <linux/regmap.h>
-+#include <linux/regulator/consumer.h>
-+#include <asm/unaligned.h>
-+
-+#include "adxl367.h"
-+
-+#define ADXL367_REG_DEVID		0x00
-+#define ADXL367_DEVID_AD		0xAD
-+
-+#define ADXL367_REG_STATUS		0x0B
-+#define ADXL367_STATUS_INACT_MASK	BIT(5)
-+#define ADXL367_STATUS_ACT_MASK		BIT(4)
-+#define ADXL367_STATUS_FIFO_FULL_MASK	BIT(2)
-+
-+#define ADXL367_FIFO_ENT_H_MASK		GENMASK(1, 0)
-+
-+#define ADXL367_REG_X_DATA_H		0x0E
-+#define ADXL367_REG_Y_DATA_H		0x10
-+#define ADXL367_REG_Z_DATA_H		0x12
-+#define ADXL367_REG_TEMP_DATA_H		0x14
-+#define ADXL367_REG_EX_ADC_DATA_H	0x16
-+#define ADXL367_DATA_MASK		GENMASK(15, 2)
-+
-+#define ADXL367_TEMP_25C		165
-+#define ADXL367_TEMP_PER_C		54
-+
-+#define ADXL367_VOLTAGE_OFFSET		8192
-+#define ADXL367_VOLTAGE_MAX_MV		1000
-+#define ADXL367_VOLTAGE_MAX_RAW		GENMASK(13, 0)
-+
-+#define ADXL367_REG_RESET		0x1F
-+#define ADXL367_RESET_CODE		0x52
-+
-+#define ADXL367_REG_THRESH_ACT_H	0x20
-+#define ADXL367_REG_THRESH_INACT_H	0x23
-+#define ADXL367_THRESH_MAX		GENMASK(12, 0)
-+#define ADXL367_THRESH_VAL_H_MASK	GENMASK(12, 6)
-+#define ADXL367_THRESH_H_MASK		GENMASK(6, 0)
-+#define ADXL367_THRESH_VAL_L_MASK	GENMASK(5, 0)
-+#define ADXL367_THRESH_L_MASK		GENMASK(7, 2)
-+
-+#define ADXL367_REG_TIME_ACT		0x22
-+#define ADXL367_REG_TIME_INACT_H	0x25
-+#define ADXL367_TIME_ACT_MAX		GENMASK(7, 0)
-+#define ADXL367_TIME_INACT_MAX		GENMASK(15, 0)
-+#define ADXL367_TIME_INACT_VAL_H_MASK	GENMASK(15, 8)
-+#define ADXL367_TIME_INACT_H_MASK	GENMASK(7, 0)
-+#define ADXL367_TIME_INACT_VAL_L_MASK	GENMASK(7, 0)
-+#define ADXL367_TIME_INACT_L_MASK	GENMASK(7, 0)
-+
-+#define ADXL367_REG_ACT_INACT_CTL	0x27
-+#define ADXL367_ACT_EN_MASK		GENMASK(1, 0)
-+#define ADXL367_ACT_LINKLOOP_MASK	GENMASK(5, 4)
-+
-+#define ADXL367_REG_FIFO_CTL		0x28
-+#define ADXL367_FIFO_CTL_FORMAT_MASK	GENMASK(6, 3)
-+#define ADXL367_FIFO_CTL_MODE_MASK	GENMASK(1, 0)
-+
-+#define ADXL367_REG_FIFO_SAMPLES	0x29
-+#define ADXL367_FIFO_SIZE		512
-+#define ADXL367_FIFO_MAX_WATERMARK	511
-+
-+#define ADXL367_SAMPLES_VAL_H_MASK	BIT(8)
-+#define ADXL367_SAMPLES_H_MASK		BIT(2)
-+#define ADXL367_SAMPLES_VAL_L_MASK	GENMASK(7, 0)
-+#define ADXL367_SAMPLES_L_MASK		GENMASK(7, 0)
-+
-+#define ADXL367_REG_INT1_MAP		0x2A
-+#define ADXL367_INT_INACT_MASK		BIT(5)
-+#define ADXL367_INT_ACT_MASK		BIT(4)
-+#define ADXL367_INT_FIFO_WATERMARK_MASK	BIT(2)
-+
-+#define ADXL367_REG_FILTER_CTL		0x2C
-+#define ADXL367_FILTER_CTL_RANGE_MASK	GENMASK(7, 6)
-+#define ADXL367_2G_RANGE_1G		4095
-+#define ADXL367_2G_RANGE_100MG		409
-+#define ADXL367_FILTER_CTL_ODR_MASK	GENMASK(2, 0)
-+
-+#define ADXL367_REG_POWER_CTL		0x2D
-+#define ADXL367_POWER_CTL_MODE_MASK	GENMASK(1, 0)
-+
-+#define ADXL367_REG_ADC_CTL		0x3C
-+#define ADXL367_REG_TEMP_CTL		0x3D
-+#define ADXL367_ADC_EN_MASK		BIT(0)
-+
-+enum adxl367_range {
-+	ADXL367_2G_RANGE,
-+	ADXL367_4G_RANGE,
-+	ADXL367_8G_RANGE,
-+};
-+
-+enum adxl367_fifo_mode {
-+	ADXL367_FIFO_MODE_DISABLED = 0b00,
-+	ADXL367_FIFO_MODE_STREAM = 0b10,
-+};
-+
-+enum adxl367_fifo_format {
-+	ADXL367_FIFO_FORMAT_XYZ,
-+	ADXL367_FIFO_FORMAT_X,
-+	ADXL367_FIFO_FORMAT_Y,
-+	ADXL367_FIFO_FORMAT_Z,
-+	ADXL367_FIFO_FORMAT_XYZT,
-+	ADXL367_FIFO_FORMAT_XT,
-+	ADXL367_FIFO_FORMAT_YT,
-+	ADXL367_FIFO_FORMAT_ZT,
-+	ADXL367_FIFO_FORMAT_XYZA,
-+	ADXL367_FIFO_FORMAT_XA,
-+	ADXL367_FIFO_FORMAT_YA,
-+	ADXL367_FIFO_FORMAT_ZA,
-+};
-+
-+enum adxl367_op_mode {
-+	ADXL367_OP_STANDBY = 0b00,
-+	ADXL367_OP_MEASURE = 0b10,
-+};
-+
-+enum adxl367_act_proc_mode {
-+	ADXL367_LOOPED = 0b11,
-+};
-+
-+enum adxl367_act_en_mode {
-+	ADXL367_ACT_DISABLED = 0b00,
-+	ADCL367_ACT_REF_ENABLED = 0b11,
-+};
-+
-+enum adxl367_activity_type {
-+	ADXL367_ACTIVITY,
-+	ADXL367_INACTIVITY,
-+};
-+
-+enum adxl367_odr {
-+	ADXL367_ODR_12P5HZ,
-+	ADXL367_ODR_25HZ,
-+	ADXL367_ODR_50HZ,
-+	ADXL367_ODR_100HZ,
-+	ADXL367_ODR_200HZ,
-+	ADXL367_ODR_400HZ,
-+};
-+
-+struct adxl367_state {
-+	const struct adxl367_ops	*ops;
-+	void				*context;
-+
-+	struct device			*dev;
-+	struct regmap			*regmap;
-+
-+	struct regulator_bulk_data	regulators[2];
-+
-+	/*
-+	 * Synchronize access to members of driver state, and ensure atomicity
-+	 * of consecutive regmap operations.
-+	 */
-+	struct mutex		lock;
-+
-+	enum adxl367_odr	odr;
-+	enum adxl367_range	range;
-+
-+	unsigned int	act_threshold;
-+	unsigned int	act_time_ms;
-+	unsigned int	inact_threshold;
-+	unsigned int	inact_time_ms;
-+
-+	unsigned int	fifo_set_size;
-+	unsigned int	fifo_watermark;
-+
-+	__be16		fifo_buf[ADXL367_FIFO_SIZE] ____cacheline_aligned;
-+	__be16		sample_buf;
-+	u8		act_threshold_buf[2];
-+	u8		inact_time_buf[2];
-+	u8		status_buf[3];
-+};
-+
-+static const unsigned int adxl367_threshold_h_reg_tbl[] = {
-+	[ADXL367_ACTIVITY]   = ADXL367_REG_THRESH_ACT_H,
-+	[ADXL367_INACTIVITY] = ADXL367_REG_THRESH_INACT_H,
-+};
-+
-+static const unsigned int adxl367_act_en_shift_tbl[] = {
-+	[ADXL367_ACTIVITY]   = 0,
-+	[ADXL367_INACTIVITY] = 2,
-+};
-+
-+static const unsigned int adxl367_act_int_mask_tbl[] = {
-+	[ADXL367_ACTIVITY]   = ADXL367_INT_ACT_MASK,
-+	[ADXL367_INACTIVITY] = ADXL367_INT_INACT_MASK,
-+};
-+
-+static const int adxl367_samp_freq_tbl[][2] = {
-+	[ADXL367_ODR_12P5HZ] = {12, 500000},
-+	[ADXL367_ODR_25HZ]   = {25, 0},
-+	[ADXL367_ODR_50HZ]   = {50, 0},
-+	[ADXL367_ODR_100HZ]  = {100, 0},
-+	[ADXL367_ODR_200HZ]  = {200, 0},
-+	[ADXL367_ODR_400HZ]  = {400, 0},
-+};
-+
-+/* (g * 2) * 9.80665 * 1000000 / (2^14 - 1) */
-+static const int adxl367_range_scale_tbl[][2] = {
-+	[ADXL367_2G_RANGE] = {0, 2394347},
-+	[ADXL367_4G_RANGE] = {0, 4788695},
-+	[ADXL367_8G_RANGE] = {0, 9577391},
-+};
-+
-+static const int adxl367_range_scale_factor_tbl[] = {
-+	[ADXL367_2G_RANGE] = 1,
-+	[ADXL367_4G_RANGE] = 2,
-+	[ADXL367_8G_RANGE] = 4,
-+};
-+
-+enum {
-+	ADXL367_X_CHANNEL_INDEX,
-+	ADXL367_Y_CHANNEL_INDEX,
-+	ADXL367_Z_CHANNEL_INDEX,
-+	ADXL367_TEMP_CHANNEL_INDEX,
-+	ADXL367_EX_ADC_CHANNEL_INDEX
-+};
-+
-+#define ADXL367_X_CHANNEL_MASK		BIT(ADXL367_X_CHANNEL_INDEX)
-+#define ADXL367_Y_CHANNEL_MASK		BIT(ADXL367_Y_CHANNEL_INDEX)
-+#define ADXL367_Z_CHANNEL_MASK		BIT(ADXL367_Z_CHANNEL_INDEX)
-+#define ADXL367_TEMP_CHANNEL_MASK	BIT(ADXL367_TEMP_CHANNEL_INDEX)
-+#define ADXL367_EX_ADC_CHANNEL_MASK	BIT(ADXL367_EX_ADC_CHANNEL_INDEX)
-+
-+static const unsigned long adxl367_channel_masks[] = {
-+	[ADXL367_FIFO_FORMAT_XYZ]  = ADXL367_X_CHANNEL_MASK
-+				     | ADXL367_Y_CHANNEL_MASK
-+				     | ADXL367_Z_CHANNEL_MASK,
-+	[ADXL367_FIFO_FORMAT_X]    = ADXL367_X_CHANNEL_MASK,
-+	[ADXL367_FIFO_FORMAT_Y]    = ADXL367_Y_CHANNEL_MASK,
-+	[ADXL367_FIFO_FORMAT_Z]    = ADXL367_Z_CHANNEL_MASK,
-+	[ADXL367_FIFO_FORMAT_XYZT] = ADXL367_X_CHANNEL_MASK
-+				     | ADXL367_Y_CHANNEL_MASK
-+				     | ADXL367_Z_CHANNEL_MASK
-+				     | ADXL367_TEMP_CHANNEL_MASK,
-+	[ADXL367_FIFO_FORMAT_XT]   = ADXL367_X_CHANNEL_MASK
-+				     | ADXL367_TEMP_CHANNEL_MASK,
-+	[ADXL367_FIFO_FORMAT_YT]   = ADXL367_Y_CHANNEL_MASK
-+				     | ADXL367_TEMP_CHANNEL_MASK,
-+	[ADXL367_FIFO_FORMAT_ZT]   = ADXL367_Z_CHANNEL_MASK
-+				     | ADXL367_TEMP_CHANNEL_MASK,
-+	[ADXL367_FIFO_FORMAT_XYZA] = ADXL367_X_CHANNEL_MASK
-+				     | ADXL367_Y_CHANNEL_MASK
-+				     | ADXL367_Z_CHANNEL_MASK
-+				     | ADXL367_EX_ADC_CHANNEL_MASK,
-+	[ADXL367_FIFO_FORMAT_XA]   = ADXL367_X_CHANNEL_MASK
-+				     | ADXL367_EX_ADC_CHANNEL_MASK,
-+	[ADXL367_FIFO_FORMAT_YA]   = ADXL367_Y_CHANNEL_MASK
-+				     | ADXL367_EX_ADC_CHANNEL_MASK,
-+	[ADXL367_FIFO_FORMAT_ZA]   = ADXL367_Z_CHANNEL_MASK
-+				     | ADXL367_EX_ADC_CHANNEL_MASK,
-+	0,
-+};
-+
-+static int adxl367_set_measure_en(struct adxl367_state *st, bool en)
-+{
-+	enum adxl367_op_mode op_mode = en ? ADXL367_OP_MEASURE
-+					  : ADXL367_OP_STANDBY;
-+	int ret;
-+
-+	ret = regmap_update_bits(st->regmap, ADXL367_REG_POWER_CTL,
-+				 ADXL367_POWER_CTL_MODE_MASK,
-+				 FIELD_PREP(ADXL367_POWER_CTL_MODE_MASK,
-+					    op_mode));
-+	if (ret)
-+		return ret;
-+
-+	/*
-+	 * Wait for acceleration output to settle after entering
-+	 * measure mode.
-+	 */
-+	if (en)
-+		msleep(100);
-+
-+	return 0;
-+}
-+
-+static void adxl367_scale_act_thresholds(struct adxl367_state *st,
-+					 enum adxl367_range old_range,
-+					 enum adxl367_range new_range)
-+{
-+	st->act_threshold = st->act_threshold
-+			    * adxl367_range_scale_factor_tbl[old_range]
-+			    / adxl367_range_scale_factor_tbl[new_range];
-+	st->inact_threshold = st->inact_threshold
-+			      * adxl367_range_scale_factor_tbl[old_range]
-+			      / adxl367_range_scale_factor_tbl[new_range];
-+}
-+
-+static int _adxl367_set_act_threshold(struct adxl367_state *st,
-+				      enum adxl367_activity_type act,
-+				      unsigned int threshold)
-+{
-+	u8 reg = adxl367_threshold_h_reg_tbl[act];
-+	int ret;
-+
-+	if (threshold > ADXL367_THRESH_MAX)
-+		return -EINVAL;
-+
-+	st->act_threshold_buf[0] = FIELD_PREP(ADXL367_THRESH_H_MASK,
-+					      FIELD_GET(ADXL367_THRESH_VAL_H_MASK,
-+							threshold));
-+	st->act_threshold_buf[1] = FIELD_PREP(ADXL367_THRESH_L_MASK,
-+					      FIELD_GET(ADXL367_THRESH_VAL_L_MASK,
-+							threshold));
-+
-+	ret = regmap_bulk_write(st->regmap, reg, st->act_threshold_buf,
-+				sizeof(st->act_threshold_buf));
-+	if (ret)
-+		return ret;
-+
-+	if (act == ADXL367_ACTIVITY)
-+		st->act_threshold = threshold;
-+	else
-+		st->inact_threshold = threshold;
-+
-+	return 0;
-+}
-+
-+static int adxl367_set_act_threshold(struct adxl367_state *st,
-+				     enum adxl367_activity_type act,
-+				     unsigned int threshold)
-+{
-+	int ret;
-+
-+	mutex_lock(&st->lock);
-+
-+	ret = adxl367_set_measure_en(st, false);
-+	if (ret)
-+		goto out;
-+
-+	ret = _adxl367_set_act_threshold(st, act, threshold);
-+	if (ret)
-+		goto out;
-+
-+	ret = adxl367_set_measure_en(st, true);
-+
-+out:
-+	mutex_unlock(&st->lock);
-+
-+	return ret;
-+}
-+
-+static int adxl367_set_act_proc_mode(struct adxl367_state *st,
-+				     enum adxl367_act_proc_mode mode)
-+{
-+	return regmap_update_bits(st->regmap, ADXL367_REG_ACT_INACT_CTL,
-+				  ADXL367_ACT_LINKLOOP_MASK,
-+				  FIELD_PREP(ADXL367_ACT_LINKLOOP_MASK,
-+					     mode));
-+}
-+
-+static int adxl367_set_act_interrupt_en(struct adxl367_state *st,
-+					enum adxl367_activity_type act,
-+					bool en)
-+{
-+	unsigned int mask = adxl367_act_int_mask_tbl[act];
-+
-+	return regmap_update_bits(st->regmap, ADXL367_REG_INT1_MAP,
-+				  mask, en ? mask : 0);
-+}
-+
-+static int adxl367_get_act_interrupt_en(struct adxl367_state *st,
-+					enum adxl367_activity_type act,
-+					bool *en)
-+{
-+	unsigned int mask = adxl367_act_int_mask_tbl[act];
-+	unsigned int val;
-+	int ret;
-+
-+	ret = regmap_read(st->regmap, ADXL367_REG_INT1_MAP, &val);
-+	if (ret)
-+		return ret;
-+
-+	*en = !!(val & mask);
-+
-+	return 0;
-+}
-+
-+static int adxl367_set_act_en(struct adxl367_state *st,
-+			      enum adxl367_activity_type act,
-+			      enum adxl367_act_en_mode en)
-+{
-+	unsigned int ctl_shift = adxl367_act_en_shift_tbl[act];
-+
-+	return regmap_update_bits(st->regmap, ADXL367_REG_ACT_INACT_CTL,
-+				  ADXL367_ACT_EN_MASK << ctl_shift,
-+				  en << ctl_shift);
-+}
-+
-+static int adxl367_set_fifo_watermark_interrupt_en(struct adxl367_state *st,
-+						   bool en)
-+{
-+	return regmap_update_bits(st->regmap, ADXL367_REG_INT1_MAP,
-+				  ADXL367_INT_FIFO_WATERMARK_MASK,
-+				  en ? ADXL367_INT_FIFO_WATERMARK_MASK : 0);
-+}
-+
-+static int adxl367_get_fifo_mode(struct adxl367_state *st,
-+				 enum adxl367_fifo_mode *fifo_mode)
-+{
-+	unsigned int val;
-+	int ret;
-+
-+	ret = regmap_read(st->regmap, ADXL367_REG_FIFO_CTL, &val);
-+	if (ret)
-+		return ret;
-+
-+	*fifo_mode = FIELD_GET(ADXL367_FIFO_CTL_MODE_MASK, val);
-+
-+	return 0;
-+}
-+
-+static int adxl367_set_fifo_mode(struct adxl367_state *st,
-+				 enum adxl367_fifo_mode fifo_mode)
-+{
-+	return regmap_update_bits(st->regmap, ADXL367_REG_FIFO_CTL,
-+				  ADXL367_FIFO_CTL_MODE_MASK,
-+				  FIELD_PREP(ADXL367_FIFO_CTL_MODE_MASK,
-+					     fifo_mode));
-+}
-+
-+static int adxl367_set_fifo_format(struct adxl367_state *st,
-+				   enum adxl367_fifo_format fifo_format)
-+{
-+	return regmap_update_bits(st->regmap, ADXL367_REG_FIFO_CTL,
-+				  ADXL367_FIFO_CTL_FORMAT_MASK,
-+				  FIELD_PREP(ADXL367_FIFO_CTL_FORMAT_MASK,
-+					     fifo_format));
-+}
-+
-+static int adxl367_set_fifo_samples(struct adxl367_state *st,
-+				    unsigned int fifo_watermark,
-+				    unsigned int fifo_set_size)
-+{
-+	unsigned int fifo_samples = fifo_watermark * fifo_set_size;
-+	unsigned int fifo_samples_h, fifo_samples_l;
-+	int ret;
-+
-+	if (fifo_samples > ADXL367_FIFO_MAX_WATERMARK)
-+		fifo_samples = ADXL367_FIFO_MAX_WATERMARK;
-+
-+	if (fifo_set_size == 0)
-+		return 0;
-+
-+	fifo_samples /= fifo_set_size;
-+
-+	fifo_samples_h = FIELD_PREP(ADXL367_SAMPLES_H_MASK,
-+				    FIELD_GET(ADXL367_SAMPLES_VAL_H_MASK,
-+					      fifo_samples));
-+	fifo_samples_l = FIELD_PREP(ADXL367_SAMPLES_L_MASK,
-+				    FIELD_GET(ADXL367_SAMPLES_VAL_L_MASK,
-+					      fifo_samples));
-+
-+	ret = regmap_update_bits(st->regmap, ADXL367_REG_FIFO_CTL,
-+				 ADXL367_SAMPLES_H_MASK, fifo_samples_h);
-+	if (ret)
-+		return ret;
-+
-+	return regmap_update_bits(st->regmap, ADXL367_REG_FIFO_SAMPLES,
-+				  ADXL367_SAMPLES_L_MASK, fifo_samples_l);
-+}
-+
-+static int adxl367_set_fifo_set_size(struct adxl367_state *st,
-+				     unsigned int fifo_set_size)
-+{
-+	int ret;
-+
-+	ret = adxl367_set_fifo_samples(st, st->fifo_watermark, fifo_set_size);
-+	if (ret)
-+		return ret;
-+
-+	st->fifo_set_size = fifo_set_size;
-+
-+	return 0;
-+}
-+
-+static int adxl367_set_fifo_watermark(struct adxl367_state *st,
-+				      unsigned int fifo_watermark)
-+{
-+	int ret;
-+
-+	ret = adxl367_set_fifo_samples(st, fifo_watermark, st->fifo_set_size);
-+	if (ret)
-+		return ret;
-+
-+	st->fifo_watermark = fifo_watermark;
-+
-+	return 0;
-+}
-+
-+static int adxl367_set_range(struct iio_dev *indio_dev,
-+			     enum adxl367_range range)
-+{
-+	struct adxl367_state *st = iio_priv(indio_dev);
-+	int ret;
-+
-+	ret = iio_device_claim_direct_mode(indio_dev);
-+	if (ret)
-+		return ret;
-+
-+	mutex_lock(&st->lock);
-+
-+	ret = adxl367_set_measure_en(st, false);
-+	if (ret)
-+		goto out;
-+
-+	ret = regmap_update_bits(st->regmap, ADXL367_REG_FILTER_CTL,
-+				 ADXL367_FILTER_CTL_RANGE_MASK,
-+				 FIELD_PREP(ADXL367_FILTER_CTL_RANGE_MASK,
-+					    range));
-+	if (ret)
-+		goto out;
-+
-+	adxl367_scale_act_thresholds(st, st->range, range);
-+
-+	/* Activity thresholds depend on range */
-+	ret = _adxl367_set_act_threshold(st, ADXL367_ACTIVITY,
-+					 st->act_threshold);
-+	if (ret)
-+		goto out;
-+
-+	ret = _adxl367_set_act_threshold(st, ADXL367_INACTIVITY,
-+					 st->inact_threshold);
-+	if (ret)
-+		goto out;
-+
-+	ret = adxl367_set_measure_en(st, true);
-+	if (ret)
-+		goto out;
-+
-+	st->range = range;
-+
-+out:
-+	mutex_unlock(&st->lock);
-+
-+	iio_device_release_direct_mode(indio_dev);
-+
-+	return ret;
-+}
-+
-+static int adxl367_time_ms_to_samples(struct adxl367_state *st, unsigned int ms)
-+{
-+	int freq_hz = adxl367_samp_freq_tbl[st->odr][0];
-+	int freq_microhz = adxl367_samp_freq_tbl[st->odr][1];
-+	/* Scale to decihertz to prevent precision loss in 12.5Hz case. */
-+	int freq_dhz = freq_hz * 10 + freq_microhz / 100000;
-+
-+	return DIV_ROUND_CLOSEST(ms * freq_dhz, 10000);
-+}
-+
-+static int _adxl367_set_act_time_ms(struct adxl367_state *st, unsigned int ms)
-+{
-+	unsigned int val = adxl367_time_ms_to_samples(st, ms);
-+	int ret;
-+
-+	if (val > ADXL367_TIME_ACT_MAX)
-+		val = ADXL367_TIME_ACT_MAX;
-+
-+	ret = regmap_write(st->regmap, ADXL367_REG_TIME_ACT, val);
-+	if (ret)
-+		return ret;
-+
-+	st->act_time_ms = ms;
-+
-+	return 0;
-+}
-+
-+static int _adxl367_set_inact_time_ms(struct adxl367_state *st, unsigned int ms)
-+{
-+	unsigned int val = adxl367_time_ms_to_samples(st, ms);
-+	int ret;
-+
-+	if (val > ADXL367_TIME_INACT_MAX)
-+		val = ADXL367_TIME_INACT_MAX;
-+
-+	st->inact_time_buf[0] = FIELD_PREP(ADXL367_TIME_INACT_H_MASK,
-+					   FIELD_GET(ADXL367_TIME_INACT_VAL_H_MASK,
-+						     val));
-+	st->inact_time_buf[1] = FIELD_PREP(ADXL367_TIME_INACT_L_MASK,
-+					   FIELD_GET(ADXL367_TIME_INACT_VAL_L_MASK,
-+						     val));
-+
-+	ret = regmap_bulk_write(st->regmap, ADXL367_REG_TIME_INACT_H,
-+				st->inact_time_buf, sizeof(st->inact_time_buf));
-+	if (ret)
-+		return ret;
-+
-+	st->inact_time_ms = ms;
-+
-+	return 0;
-+}
-+
-+static int adxl367_set_act_time_ms(struct adxl367_state *st,
-+				   enum adxl367_activity_type act,
-+				   unsigned int ms)
-+{
-+	int ret;
-+
-+	mutex_lock(&st->lock);
-+
-+	ret = adxl367_set_measure_en(st, false);
-+	if (ret)
-+		goto out;
-+
-+	if (act == ADXL367_ACTIVITY)
-+		ret = _adxl367_set_act_time_ms(st, ms);
-+	else
-+		ret = _adxl367_set_inact_time_ms(st, ms);
-+
-+	if (ret)
-+		goto out;
-+
-+	ret = adxl367_set_measure_en(st, true);
-+
-+out:
-+	mutex_unlock(&st->lock);
-+
-+	return ret;
-+}
-+
-+static int _adxl367_set_odr(struct adxl367_state *st, enum adxl367_odr odr)
-+{
-+	int ret;
-+
-+	ret = regmap_update_bits(st->regmap, ADXL367_REG_FILTER_CTL,
-+				 ADXL367_FILTER_CTL_ODR_MASK,
-+				 FIELD_PREP(ADXL367_FILTER_CTL_ODR_MASK,
-+					    odr));
-+	if (ret)
-+		return ret;
-+
-+	/* Activity timers depend on ODR */
-+	ret = _adxl367_set_act_time_ms(st, st->act_time_ms);
-+	if (ret)
-+		return ret;
-+
-+	ret = _adxl367_set_inact_time_ms(st, st->inact_time_ms);
-+	if (ret)
-+		return ret;
-+
-+	st->odr = odr;
-+
-+	return 0;
-+}
-+
-+static int adxl367_set_odr(struct iio_dev *indio_dev, enum adxl367_odr odr)
-+{
-+	struct adxl367_state *st = iio_priv(indio_dev);
-+	int ret;
-+
-+	ret = iio_device_claim_direct_mode(indio_dev);
-+	if (ret)
-+		return ret;
-+
-+	mutex_lock(&st->lock);
-+
-+	ret = adxl367_set_measure_en(st, false);
-+	if (ret)
-+		goto out;
-+
-+	ret = _adxl367_set_odr(st, odr);
-+	if (ret)
-+		goto out;
-+
-+	ret = adxl367_set_measure_en(st, true);
-+
-+out:
-+	mutex_unlock(&st->lock);
-+
-+	iio_device_release_direct_mode(indio_dev);
-+
-+	return ret;
-+}
-+
-+static int adxl367_set_temp_adc_en(struct adxl367_state *st, unsigned int reg,
-+				   bool en)
-+{
-+	return regmap_update_bits(st->regmap, reg, ADXL367_ADC_EN_MASK,
-+				  en ? ADXL367_ADC_EN_MASK : 0);
-+}
-+
-+static int adxl367_set_temp_adc_reg_en(struct adxl367_state *st,
-+				       unsigned int reg, bool en)
-+{
-+	int ret;
-+
-+	switch (reg) {
-+	case ADXL367_REG_TEMP_DATA_H:
-+		ret = adxl367_set_temp_adc_en(st, ADXL367_REG_TEMP_CTL, en);
-+		break;
-+	case ADXL367_REG_EX_ADC_DATA_H:
-+		ret = adxl367_set_temp_adc_en(st, ADXL367_REG_ADC_CTL, en);
-+		break;
-+	default:
-+		return 0;
-+	}
-+
-+	if (ret)
-+		return ret;
-+
-+	if (en)
-+		msleep(100);
-+
-+	return 0;
-+}
-+
-+static int adxl367_set_temp_adc_mask_en(struct adxl367_state *st,
-+					const unsigned long *active_scan_mask,
-+					bool en)
-+{
-+	if (*active_scan_mask & ADXL367_TEMP_CHANNEL_MASK)
-+		return adxl367_set_temp_adc_en(st, ADXL367_REG_TEMP_CTL, en);
-+	else if (*active_scan_mask & ADXL367_EX_ADC_CHANNEL_MASK)
-+		return adxl367_set_temp_adc_en(st, ADXL367_REG_ADC_CTL, en);
-+
-+	return 0;
-+}
-+
-+static int adxl367_find_odr(struct adxl367_state *st, int val, int val2,
-+			    enum adxl367_odr *odr)
-+{
-+	size_t size = ARRAY_SIZE(adxl367_samp_freq_tbl);
-+	int i;
-+
-+	for (i = 0; i < size; i++)
-+		if (val == adxl367_samp_freq_tbl[i][0] &&
-+		    val2 == adxl367_samp_freq_tbl[i][1])
-+			break;
-+
-+	if (i == size)
-+		return -EINVAL;
-+
-+	*odr = i;
-+
-+	return 0;
-+}
-+
-+static int adxl367_find_range(struct adxl367_state *st, int val, int val2,
-+			      enum adxl367_range *range)
-+{
-+	size_t size = ARRAY_SIZE(adxl367_range_scale_tbl);
-+	int i;
-+
-+	for (i = 0; i < size; i++)
-+		if (val == adxl367_range_scale_tbl[i][0] &&
-+		    val2 == adxl367_range_scale_tbl[i][1])
-+			break;
-+
-+	if (i == size)
-+		return -EINVAL;
-+
-+	*range = i;
-+
-+	return 0;
-+}
-+
-+static int adxl367_read_sample(struct iio_dev *indio_dev,
-+			       struct iio_chan_spec const *chan,
-+			       int *val)
-+{
-+	struct adxl367_state *st = iio_priv(indio_dev);
-+	u16 sample;
-+	int ret;
-+
-+	ret = iio_device_claim_direct_mode(indio_dev);
-+	if (ret)
-+		return ret;
-+
-+	mutex_lock(&st->lock);
-+
-+	ret = adxl367_set_temp_adc_reg_en(st, chan->address, true);
-+	if (ret)
-+		goto out;
-+
-+	ret = regmap_bulk_read(st->regmap, chan->address, &st->sample_buf,
-+			       sizeof(st->sample_buf));
-+	if (ret)
-+		goto out;
-+
-+	sample = FIELD_GET(ADXL367_DATA_MASK, be16_to_cpu(st->sample_buf));
-+	*val = sign_extend32(sample, chan->scan_type.realbits - 1);
-+
-+	ret = adxl367_set_temp_adc_reg_en(st, chan->address, false);
-+
-+out:
-+	mutex_unlock(&st->lock);
-+
-+	iio_device_release_direct_mode(indio_dev);
-+
-+	return ret ?: IIO_VAL_INT;
-+}
-+
-+static int adxl367_get_status(struct adxl367_state *st, u8 *status,
-+			      u16 *fifo_entries)
-+{
-+	int ret;
-+
-+	/* Read STATUS, FIFO_ENT_L and FIFO_ENT_H */
-+	ret = regmap_bulk_read(st->regmap, ADXL367_REG_STATUS,
-+			       st->status_buf, sizeof(st->status_buf));
-+	if (ret)
-+		return ret;
-+
-+	st->status_buf[2] &= ADXL367_FIFO_ENT_H_MASK;
-+
-+	*status = st->status_buf[0];
-+	*fifo_entries = get_unaligned_le16(&st->status_buf[1]);
-+
-+	return 0;
-+}
-+
-+static bool adxl367_push_event(struct iio_dev *indio_dev, u8 status)
-+{
-+	unsigned int ev_dir;
-+
-+	if (FIELD_GET(ADXL367_STATUS_ACT_MASK, status))
-+		ev_dir = IIO_EV_DIR_RISING;
-+	else if (FIELD_GET(ADXL367_STATUS_INACT_MASK, status))
-+		ev_dir = IIO_EV_DIR_FALLING;
-+	else
-+		return false;
-+
-+	iio_push_event(indio_dev,
-+		       IIO_MOD_EVENT_CODE(IIO_ACCEL, 0, IIO_MOD_X_OR_Y_OR_Z,
-+					  IIO_EV_TYPE_THRESH, ev_dir),
-+		       iio_get_time_ns(indio_dev));
-+
-+	return true;
-+}
-+
-+static bool adxl367_push_fifo_data(struct iio_dev *indio_dev, u8 status,
-+				   u16 fifo_entries)
-+{
-+	struct adxl367_state *st = iio_priv(indio_dev);
-+	int ret;
-+	int i;
-+
-+	if (!FIELD_GET(ADXL367_STATUS_FIFO_FULL_MASK, status))
-+		return false;
-+
-+	fifo_entries -= fifo_entries % st->fifo_set_size;
-+
-+	ret = st->ops->read_fifo(st->context, st->fifo_buf, fifo_entries);
-+	if (ret) {
-+		dev_err(st->dev, "Failed to read FIFO: %d\n", ret);
-+		return true;
-+	}
-+
-+	for (i = 0; i < fifo_entries; i += st->fifo_set_size)
-+		iio_push_to_buffers(indio_dev, &st->fifo_buf[i]);
-+
-+	return true;
-+}
-+
-+static irqreturn_t adxl367_irq_handler(int irq, void *private)
-+{
-+	struct iio_dev *indio_dev = private;
-+	struct adxl367_state *st = iio_priv(indio_dev);
-+	u16 fifo_entries;
-+	bool handled;
-+	u8 status;
-+	int ret;
-+
-+	ret = adxl367_get_status(st, &status, &fifo_entries);
-+	if (ret)
-+		return IRQ_NONE;
-+
-+	handled |= adxl367_push_event(indio_dev, status);
-+	handled |= adxl367_push_fifo_data(indio_dev, status, fifo_entries);
-+
-+	return handled ? IRQ_HANDLED : IRQ_NONE;
-+}
-+
-+static int adxl367_reg_access(struct iio_dev *indio_dev,
-+			      unsigned int reg,
-+			      unsigned int writeval,
-+			      unsigned int *readval)
-+{
-+	struct adxl367_state *st = iio_priv(indio_dev);
-+
-+	if (readval)
-+		return regmap_read(st->regmap, reg, readval);
-+	else
-+		return regmap_write(st->regmap, reg, writeval);
-+}
-+
-+static int adxl367_read_raw(struct iio_dev *indio_dev,
-+			    struct iio_chan_spec const *chan,
-+			    int *val, int *val2, long info)
-+{
-+	struct adxl367_state *st = iio_priv(indio_dev);
-+
-+	switch (info) {
-+	case IIO_CHAN_INFO_RAW:
-+		return adxl367_read_sample(indio_dev, chan, val);
-+	case IIO_CHAN_INFO_SCALE:
-+		switch (chan->type) {
-+		case IIO_ACCEL:
-+			mutex_lock(&st->lock);
-+			*val = adxl367_range_scale_tbl[st->range][0];
-+			*val2 = adxl367_range_scale_tbl[st->range][1];
-+			mutex_unlock(&st->lock);
-+			return IIO_VAL_INT_PLUS_NANO;
-+		case IIO_TEMP:
-+			*val = 1000;
-+			*val2 = ADXL367_TEMP_PER_C;
-+			return IIO_VAL_FRACTIONAL;
-+		case IIO_VOLTAGE:
-+			*val = ADXL367_VOLTAGE_MAX_MV;
-+			*val2 = ADXL367_VOLTAGE_MAX_RAW;
-+			return IIO_VAL_FRACTIONAL;
-+		default:
-+			return -EINVAL;
-+		}
-+	case IIO_CHAN_INFO_OFFSET:
-+		switch (chan->type) {
-+		case IIO_TEMP:
-+			*val = 25 * ADXL367_TEMP_PER_C - ADXL367_TEMP_25C;
-+			return IIO_VAL_INT;
-+		case IIO_VOLTAGE:
-+			*val = ADXL367_VOLTAGE_OFFSET;
-+			return IIO_VAL_INT;
-+		default:
-+			return -EINVAL;
-+		}
-+	case IIO_CHAN_INFO_SAMP_FREQ:
-+		mutex_lock(&st->lock);
-+		*val = adxl367_samp_freq_tbl[st->odr][0];
-+		*val2 = adxl367_samp_freq_tbl[st->odr][1];
-+		mutex_unlock(&st->lock);
-+		return IIO_VAL_INT_PLUS_MICRO;
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static int adxl367_write_raw(struct iio_dev *indio_dev,
-+			     struct iio_chan_spec const *chan,
-+			     int val, int val2, long info)
-+{
-+	struct adxl367_state *st = iio_priv(indio_dev);
-+	int ret;
-+
-+	switch (info) {
-+	case IIO_CHAN_INFO_SAMP_FREQ: {
-+		enum adxl367_odr odr;
-+
-+		ret = adxl367_find_odr(st, val, val2, &odr);
-+		if (ret)
-+			return ret;
-+
-+		return adxl367_set_odr(indio_dev, odr);
-+	}
-+	case IIO_CHAN_INFO_SCALE: {
-+		enum adxl367_range range;
-+
-+		ret = adxl367_find_range(st, val, val2, &range);
-+		if (ret)
-+			return ret;
-+
-+		return adxl367_set_range(indio_dev, range);
-+	}
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static int adxl367_write_raw_get_fmt(struct iio_dev *indio_dev,
-+				     struct iio_chan_spec const *chan,
-+				     long info)
-+{
-+	switch (info) {
-+	case IIO_CHAN_INFO_SCALE:
-+		if (chan->type != IIO_ACCEL)
-+			return -EINVAL;
-+
-+		return IIO_VAL_INT_PLUS_NANO;
-+	default:
-+		return IIO_VAL_INT_PLUS_MICRO;
-+	}
-+}
-+
-+static int adxl367_read_avail(struct iio_dev *indio_dev,
-+			      struct iio_chan_spec const *chan,
-+			      const int **vals, int *type, int *length,
-+			      long info)
-+{
-+	switch (info) {
-+	case IIO_CHAN_INFO_SCALE:
-+		if (chan->type != IIO_ACCEL)
-+			return -EINVAL;
-+
-+		*vals = (int *)adxl367_range_scale_tbl;
-+		*type = IIO_VAL_INT_PLUS_NANO;
-+		*length = ARRAY_SIZE(adxl367_range_scale_tbl) * 2;
-+		return IIO_AVAIL_LIST;
-+	case IIO_CHAN_INFO_SAMP_FREQ:
-+		*vals = (int *)adxl367_samp_freq_tbl;
-+		*type = IIO_VAL_INT_PLUS_MICRO;
-+		*length = ARRAY_SIZE(adxl367_samp_freq_tbl) * 2;
-+		return IIO_AVAIL_LIST;
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static int adxl367_read_event_value(struct iio_dev *indio_dev,
-+				    const struct iio_chan_spec *chan,
-+				    enum iio_event_type type,
-+				    enum iio_event_direction dir,
-+				    enum iio_event_info info,
-+				    int *val, int *val2)
-+{
-+	struct adxl367_state *st = iio_priv(indio_dev);
-+
-+	switch (info) {
-+	case IIO_EV_INFO_VALUE: {
-+		switch (dir) {
-+		case IIO_EV_DIR_RISING:
-+			mutex_lock(&st->lock);
-+			*val = st->act_threshold;
-+			mutex_unlock(&st->lock);
-+			return IIO_VAL_INT;
-+		case IIO_EV_DIR_FALLING:
-+			mutex_lock(&st->lock);
-+			*val = st->inact_threshold;
-+			mutex_unlock(&st->lock);
-+			return IIO_VAL_INT;
-+		default:
-+			return -EINVAL;
-+		}
-+	}
-+	case IIO_EV_INFO_PERIOD:
-+		switch (dir) {
-+		case IIO_EV_DIR_RISING:
-+			mutex_lock(&st->lock);
-+			*val = st->act_time_ms;
-+			mutex_unlock(&st->lock);
-+			*val2 = 1000;
-+			return IIO_VAL_FRACTIONAL;
-+		case IIO_EV_DIR_FALLING:
-+			mutex_lock(&st->lock);
-+			*val = st->inact_time_ms;
-+			mutex_unlock(&st->lock);
-+			*val2 = 1000;
-+			return IIO_VAL_FRACTIONAL;
-+		default:
-+			return -EINVAL;
-+		}
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static int adxl367_write_event_value(struct iio_dev *indio_dev,
-+				     const struct iio_chan_spec *chan,
-+				     enum iio_event_type type,
-+				     enum iio_event_direction dir,
-+				     enum iio_event_info info,
-+				     int val, int val2)
-+{
-+	struct adxl367_state *st = iio_priv(indio_dev);
-+
-+	switch (info) {
-+	case IIO_EV_INFO_VALUE:
-+		if (val < 0)
-+			return -EINVAL;
-+
-+		switch (dir) {
-+		case IIO_EV_DIR_RISING:
-+			return adxl367_set_act_threshold(st, ADXL367_ACTIVITY, val);
-+		case IIO_EV_DIR_FALLING:
-+			return adxl367_set_act_threshold(st, ADXL367_INACTIVITY, val);
-+		default:
-+			return -EINVAL;
-+		}
-+	case IIO_EV_INFO_PERIOD:
-+		if (val < 0)
-+			return -EINVAL;
-+
-+		val = val * 1000 + DIV_ROUND_UP(val2, 1000);
-+		switch (dir) {
-+		case IIO_EV_DIR_RISING:
-+			return adxl367_set_act_time_ms(st, ADXL367_ACTIVITY, val);
-+		case IIO_EV_DIR_FALLING:
-+			return adxl367_set_act_time_ms(st, ADXL367_INACTIVITY, val);
-+		default:
-+			return -EINVAL;
-+		}
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static int adxl367_read_event_config(struct iio_dev *indio_dev,
-+				     const struct iio_chan_spec *chan,
-+				     enum iio_event_type type,
-+				     enum iio_event_direction dir)
-+{
-+	struct adxl367_state *st = iio_priv(indio_dev);
-+	bool en;
-+	int ret;
-+
-+	switch (dir) {
-+	case IIO_EV_DIR_RISING:
-+		ret = adxl367_get_act_interrupt_en(st, ADXL367_ACTIVITY, &en);
-+		return ret ?: en;
-+	case IIO_EV_DIR_FALLING:
-+		ret = adxl367_get_act_interrupt_en(st, ADXL367_INACTIVITY, &en);
-+		return ret ?: en;
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static int adxl367_write_event_config(struct iio_dev *indio_dev,
-+				      const struct iio_chan_spec *chan,
-+				      enum iio_event_type type,
-+				      enum iio_event_direction dir,
-+				      int state)
-+{
-+	struct adxl367_state *st = iio_priv(indio_dev);
-+	enum adxl367_activity_type act;
-+	int ret;
-+
-+	switch (dir) {
-+	case IIO_EV_DIR_RISING:
-+		act = ADXL367_ACTIVITY;
-+		break;
-+	case IIO_EV_DIR_FALLING:
-+		act = ADXL367_INACTIVITY;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	ret = iio_device_claim_direct_mode(indio_dev);
-+	if (ret)
-+		return ret;
-+
-+	mutex_lock(&st->lock);
-+
-+	ret = adxl367_set_measure_en(st, false);
-+	if (ret)
-+		goto out;
-+
-+	ret = adxl367_set_act_interrupt_en(st, act, state);
-+	if (ret)
-+		goto out;
-+
-+	ret = adxl367_set_act_en(st, act, state ? ADCL367_ACT_REF_ENABLED
-+						: ADXL367_ACT_DISABLED);
-+	if (ret)
-+		goto out;
-+
-+	ret = adxl367_set_measure_en(st, true);
-+
-+out:
-+	mutex_unlock(&st->lock);
-+
-+	iio_device_release_direct_mode(indio_dev);
-+
-+	return ret;
-+}
-+
-+static ssize_t adxl367_get_fifo_enabled(struct device *dev,
-+					struct device_attribute *attr,
-+					char *buf)
-+{
-+	struct adxl367_state *st = iio_priv(dev_to_iio_dev(dev));
-+	enum adxl367_fifo_mode fifo_mode;
-+	int ret;
-+
-+	ret = adxl367_get_fifo_mode(st, &fifo_mode);
-+	if (ret)
-+		return ret;
-+
-+	return sysfs_emit(buf, "%d\n", fifo_mode != ADXL367_FIFO_MODE_DISABLED);
-+}
-+
-+static ssize_t adxl367_get_fifo_watermark(struct device *dev,
-+					  struct device_attribute *attr,
-+					  char *buf)
-+{
-+	struct adxl367_state *st = iio_priv(dev_to_iio_dev(dev));
-+	unsigned int fifo_watermark;
-+
-+	mutex_lock(&st->lock);
-+	fifo_watermark = st->fifo_watermark;
-+	mutex_unlock(&st->lock);
-+
-+	return sysfs_emit(buf, "%d\n", fifo_watermark);
-+}
-+
-+static IIO_CONST_ATTR(hwfifo_watermark_min, "1");
-+static IIO_CONST_ATTR(hwfifo_watermark_max,
-+		      __stringify(ADXL367_FIFO_MAX_WATERMARK));
-+static IIO_DEVICE_ATTR(hwfifo_watermark, 0444,
-+		       adxl367_get_fifo_watermark, NULL, 0);
-+static IIO_DEVICE_ATTR(hwfifo_enabled, 0444,
-+		       adxl367_get_fifo_enabled, NULL, 0);
-+
-+static const struct attribute *adxl367_fifo_attributes[] = {
-+	&iio_const_attr_hwfifo_watermark_min.dev_attr.attr,
-+	&iio_const_attr_hwfifo_watermark_max.dev_attr.attr,
-+	&iio_dev_attr_hwfifo_watermark.dev_attr.attr,
-+	&iio_dev_attr_hwfifo_enabled.dev_attr.attr,
-+	NULL,
-+};
-+
-+static int adxl367_set_watermark(struct iio_dev *indio_dev, unsigned int val)
-+{
-+	struct adxl367_state *st  = iio_priv(indio_dev);
-+	int ret;
-+
-+	if (val > ADXL367_FIFO_MAX_WATERMARK)
-+		return -EINVAL;
-+
-+	mutex_lock(&st->lock);
-+
-+	ret = adxl367_set_measure_en(st, false);
-+	if (ret)
-+		goto out;
-+
-+	ret = adxl367_set_fifo_watermark(st, val);
-+	if (ret)
-+		goto out;
-+
-+	ret = adxl367_set_measure_en(st, true);
-+
-+out:
-+	mutex_unlock(&st->lock);
-+
-+	return ret;
-+}
-+
-+static bool adxl367_find_mask_fifo_format(const unsigned long *scan_mask,
-+					  enum adxl367_fifo_format *fifo_format)
-+{
-+	size_t size = ARRAY_SIZE(adxl367_channel_masks) - 1;
-+	int i;
-+
-+	for (i = 0; i < size; i++)
-+		if (*scan_mask == adxl367_channel_masks[i])
-+			break;
-+
-+	if (i == size)
-+		return false;
-+
-+	*fifo_format = i;
-+
-+	return true;
-+}
-+
-+static int adxl367_update_scan_mode(struct iio_dev *indio_dev,
-+				    const unsigned long *active_scan_mask)
-+{
-+	struct adxl367_state *st  = iio_priv(indio_dev);
-+	enum adxl367_fifo_format fifo_format;
-+	unsigned int fifo_set_size;
-+	int ret;
-+
-+	if (!adxl367_find_mask_fifo_format(active_scan_mask, &fifo_format))
-+		return -EINVAL;
-+
-+	fifo_set_size = bitmap_weight(active_scan_mask, indio_dev->masklength);
-+
-+	mutex_lock(&st->lock);
-+
-+	ret = adxl367_set_measure_en(st, false);
-+	if (ret)
-+		goto out;
-+
-+	ret = adxl367_set_fifo_format(st, fifo_format);
-+	if (ret)
-+		goto out;
-+
-+	ret = adxl367_set_fifo_set_size(st, fifo_set_size);
-+	if (ret)
-+		goto out;
-+
-+	ret = adxl367_set_measure_en(st, true);
-+
-+out:
-+	mutex_unlock(&st->lock);
-+
-+	return ret;
-+}
-+
-+static int adxl367_buffer_postenable(struct iio_dev *indio_dev)
-+{
-+	struct adxl367_state *st = iio_priv(indio_dev);
-+	int ret;
-+
-+	mutex_lock(&st->lock);
-+
-+	ret = adxl367_set_temp_adc_mask_en(st, indio_dev->active_scan_mask,
-+					   true);
-+	if (ret)
-+		goto out;
-+
-+	ret = adxl367_set_measure_en(st, false);
-+	if (ret)
-+		goto out;
-+
-+	ret = adxl367_set_fifo_watermark_interrupt_en(st, true);
-+	if (ret)
-+		goto out;
-+
-+	ret = adxl367_set_fifo_mode(st, ADXL367_FIFO_MODE_STREAM);
-+	if (ret)
-+		goto out;
-+
-+	ret = adxl367_set_measure_en(st, true);
-+
-+out:
-+	mutex_unlock(&st->lock);
-+
-+	return ret;
-+}
-+
-+static int adxl367_buffer_predisable(struct iio_dev *indio_dev)
-+{
-+	struct adxl367_state *st = iio_priv(indio_dev);
-+	int ret;
-+
-+	mutex_lock(&st->lock);
-+
-+	ret = adxl367_set_measure_en(st, false);
-+	if (ret)
-+		goto out;
-+
-+	ret = adxl367_set_fifo_mode(st, ADXL367_FIFO_MODE_DISABLED);
-+	if (ret)
-+		goto out;
-+
-+	ret = adxl367_set_fifo_watermark_interrupt_en(st, false);
-+	if (ret)
-+		goto out;
-+
-+	ret = adxl367_set_measure_en(st, true);
-+	if (ret)
-+		return ret;
-+
-+	ret = adxl367_set_temp_adc_mask_en(st, indio_dev->active_scan_mask,
-+					   false);
-+
-+out:
-+	mutex_unlock(&st->lock);
-+
-+	return ret;
-+}
-+
-+static const struct iio_buffer_setup_ops adxl367_buffer_ops = {
-+	.postenable = adxl367_buffer_postenable,
-+	.predisable = adxl367_buffer_predisable,
-+};
-+
-+static const struct iio_info adxl367_info = {
-+	.read_raw = adxl367_read_raw,
-+	.write_raw = adxl367_write_raw,
-+	.write_raw_get_fmt = adxl367_write_raw_get_fmt,
-+	.read_avail = adxl367_read_avail,
-+	.read_event_config = adxl367_read_event_config,
-+	.write_event_config = adxl367_write_event_config,
-+	.read_event_value = adxl367_read_event_value,
-+	.write_event_value = adxl367_write_event_value,
-+	.debugfs_reg_access = adxl367_reg_access,
-+	.hwfifo_set_watermark = adxl367_set_watermark,
-+	.update_scan_mode = adxl367_update_scan_mode,
-+};
-+
-+static const struct iio_event_spec adxl367_events[] = {
-+	{
-+		.type = IIO_EV_TYPE_MAG_REFERENCED,
-+		.dir = IIO_EV_DIR_RISING,
-+		.mask_shared_by_type = BIT(IIO_EV_INFO_ENABLE) |
-+				       BIT(IIO_EV_INFO_PERIOD) |
-+				       BIT(IIO_EV_INFO_VALUE),
-+	},
-+	{
-+		.type = IIO_EV_TYPE_MAG_REFERENCED,
-+		.dir = IIO_EV_DIR_FALLING,
-+		.mask_shared_by_type = BIT(IIO_EV_INFO_ENABLE) |
-+				       BIT(IIO_EV_INFO_PERIOD) |
-+				       BIT(IIO_EV_INFO_VALUE),
-+	},
-+};
-+
-+#define ADXL367_ACCEL_CHANNEL(index, reg, axis) {			\
-+	.type = IIO_ACCEL,						\
-+	.address = (reg),						\
-+	.modified = 1,							\
-+	.channel2 = IIO_MOD_##axis,					\
-+	.info_mask_separate = BIT(IIO_CHAN_INFO_RAW),			\
-+	.info_mask_shared_by_type = BIT(IIO_CHAN_INFO_SCALE),		\
-+	.info_mask_shared_by_type_available = BIT(IIO_CHAN_INFO_SCALE),	\
-+	.info_mask_shared_by_all = BIT(IIO_CHAN_INFO_SAMP_FREQ),	\
-+	.info_mask_shared_by_all_available =				\
-+			BIT(IIO_CHAN_INFO_SAMP_FREQ),			\
-+	.event_spec = adxl367_events,					\
-+	.num_event_specs = ARRAY_SIZE(adxl367_events),			\
-+	.scan_index = (index),						\
-+	.scan_type = {							\
-+		.sign = 's',						\
-+		.realbits = 14,						\
-+		.storagebits = 16,					\
-+		.endianness = IIO_BE,					\
-+	},								\
-+}
-+
-+#define ADXL367_CHANNEL(index, reg, _type) {				\
-+	.type = (_type),						\
-+	.address = (reg),						\
-+	.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) |			\
-+			      BIT(IIO_CHAN_INFO_OFFSET) |		\
-+			      BIT(IIO_CHAN_INFO_SCALE),			\
-+	.info_mask_shared_by_all = BIT(IIO_CHAN_INFO_SAMP_FREQ),	\
-+	.scan_index = (index),						\
-+	.scan_type = {							\
-+		.sign = 's',						\
-+		.realbits = 14,						\
-+		.storagebits = 16,					\
-+		.endianness = IIO_BE,					\
-+	},								\
-+}
-+
-+static const struct iio_chan_spec adxl367_channels[] = {
-+	ADXL367_ACCEL_CHANNEL(ADXL367_X_CHANNEL_INDEX, ADXL367_REG_X_DATA_H, X),
-+	ADXL367_ACCEL_CHANNEL(ADXL367_Y_CHANNEL_INDEX, ADXL367_REG_Y_DATA_H, Y),
-+	ADXL367_ACCEL_CHANNEL(ADXL367_Z_CHANNEL_INDEX, ADXL367_REG_Z_DATA_H, Z),
-+	ADXL367_CHANNEL(ADXL367_TEMP_CHANNEL_INDEX, ADXL367_REG_TEMP_DATA_H,
-+			IIO_TEMP),
-+	ADXL367_CHANNEL(ADXL367_EX_ADC_CHANNEL_INDEX, ADXL367_REG_EX_ADC_DATA_H,
-+			IIO_VOLTAGE),
-+};
-+
-+static int adxl367_verify_devid(struct adxl367_state *st)
-+{
-+	unsigned int val;
-+	int ret;
-+
-+	ret = regmap_read_poll_timeout(st->regmap, ADXL367_REG_DEVID, val,
-+				       val == ADXL367_DEVID_AD, 1000, 10000);
-+	if (ret)
-+		return dev_err_probe(st->dev, -ENODEV,
-+				     "Invalid dev id 0x%02X, expected 0x%02X\n",
-+				     val, ADXL367_DEVID_AD);
-+
-+	return 0;
-+}
-+
-+static int adxl367_setup(struct adxl367_state *st)
-+{
-+	int ret;
-+
-+	ret = _adxl367_set_act_threshold(st, ADXL367_ACTIVITY,
-+					 ADXL367_2G_RANGE_1G);
-+	if (ret)
-+		return ret;
-+
-+	ret = _adxl367_set_act_threshold(st, ADXL367_INACTIVITY,
-+					 ADXL367_2G_RANGE_100MG);
-+	if (ret)
-+		return ret;
-+
-+	ret = adxl367_set_act_proc_mode(st, ADXL367_LOOPED);
-+	if (ret)
-+		return ret;
-+
-+	ret = _adxl367_set_odr(st, ADXL367_ODR_400HZ);
-+	if (ret)
-+		return ret;
-+
-+	ret = _adxl367_set_act_time_ms(st, 10);
-+	if (ret)
-+		return ret;
-+
-+	ret = _adxl367_set_inact_time_ms(st, 10000);
-+	if (ret)
-+		return ret;
-+
-+	return adxl367_set_measure_en(st, true);
-+}
-+
-+static void adxl367_disable_regulators(void *data)
-+{
-+	struct adxl367_state *st = data;
-+
-+	regulator_bulk_disable(ARRAY_SIZE(st->regulators), st->regulators);
-+}
-+
-+int adxl367_probe(struct device *dev, const struct adxl367_ops *ops,
-+		  void *context, struct regmap *regmap, int irq)
-+{
-+	struct iio_dev *indio_dev;
-+	struct adxl367_state *st;
-+	int ret;
-+
-+	indio_dev = devm_iio_device_alloc(dev, sizeof(*st));
-+	if (!indio_dev)
-+		return -ENOMEM;
-+
-+	st = iio_priv(indio_dev);
-+	st->dev = dev;
-+	st->regmap = regmap;
-+	st->context = context;
-+	st->ops = ops;
-+
-+	mutex_init(&st->lock);
-+
-+	indio_dev->channels = adxl367_channels;
-+	indio_dev->num_channels = ARRAY_SIZE(adxl367_channels);
-+	indio_dev->available_scan_masks = adxl367_channel_masks;
-+	indio_dev->name = "adxl367";
-+	indio_dev->info = &adxl367_info;
-+	indio_dev->modes = INDIO_DIRECT_MODE;
-+
-+	st->regulators[0].supply = "vdd";
-+	st->regulators[1].supply = "vddio";
-+
-+	ret = devm_regulator_bulk_get(st->dev, ARRAY_SIZE(st->regulators),
-+				      st->regulators);
-+	if (ret)
-+		return dev_err_probe(st->dev, ret,
-+				     "Failed to get regulators\n");
-+
-+	ret = regulator_bulk_enable(ARRAY_SIZE(st->regulators), st->regulators);
-+	if (ret)
-+		return dev_err_probe(st->dev, ret,
-+				     "Failed to enable regulators\n");
-+
-+	ret = devm_add_action_or_reset(st->dev, adxl367_disable_regulators, st);
-+	if (ret)
-+		return dev_err_probe(st->dev, ret,
-+				     "Failed to add regulators disable action\n");
-+
-+	ret = regmap_write(st->regmap, ADXL367_REG_RESET, ADXL367_RESET_CODE);
-+	if (ret)
-+		return ret;
-+
-+	ret = adxl367_verify_devid(st);
-+	if (ret)
-+		return ret;
-+
-+	ret = adxl367_setup(st);
-+	if (ret)
-+		return ret;
-+
-+	ret = devm_iio_kfifo_buffer_setup_ext(st->dev, indio_dev,
-+					      INDIO_BUFFER_SOFTWARE,
-+					      &adxl367_buffer_ops,
-+					      adxl367_fifo_attributes);
-+	if (ret)
-+		return ret;
-+
-+	ret = devm_request_threaded_irq(st->dev, irq, NULL,
-+					adxl367_irq_handler, IRQF_ONESHOT,
-+					indio_dev->name, indio_dev);
-+	if (ret)
-+		return dev_err_probe(st->dev, ret, "Failed to request irq\n");
-+
-+	return devm_iio_device_register(dev, indio_dev);
-+}
-+EXPORT_SYMBOL_NS_GPL(adxl367_probe, ADXL367);
-+
-+MODULE_AUTHOR("Cosmin Tanislav <cosmin.tanislav@analog.com>");
-+MODULE_DESCRIPTION("Analog Devices ADXL367 3-axis accelerometer driver");
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/iio/accel/adxl367.h b/drivers/iio/accel/adxl367.h
-new file mode 100644
-index 000000000000..4a42622149b1
---- /dev/null
-+++ b/drivers/iio/accel/adxl367.h
-@@ -0,0 +1,23 @@
-+/* SPDX-License-Identifier: GPL-2.0+ */
-+/*
-+ * Copyright (C) 2021 Analog Devices, Inc.
-+ * Author: Cosmin Tanislav <cosmin.tanislav@analog.com>
-+ */
-+
-+#ifndef _ADXL367_H_
-+#define _ADXL367_H_
-+
-+#include <linux/types.h>
-+
-+struct device;
-+struct regmap;
-+
-+struct adxl367_ops {
-+	int (*read_fifo)(void *context, __be16 *fifo_buf,
-+			 unsigned int fifo_entries);
-+};
-+
-+int adxl367_probe(struct device *dev, const struct adxl367_ops *ops,
-+		  void *context, struct regmap *regmap, int irq);
-+
-+#endif /* _ADXL367_H_ */
-diff --git a/drivers/iio/accel/adxl367_i2c.c b/drivers/iio/accel/adxl367_i2c.c
-new file mode 100644
-index 000000000000..250ccd50d964
---- /dev/null
-+++ b/drivers/iio/accel/adxl367_i2c.c
-@@ -0,0 +1,90 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Copyright (C) 2021 Analog Devices, Inc.
-+ * Author: Cosmin Tanislav <cosmin.tanislav@analog.com>
-+ */
-+
-+#include <linux/i2c.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/module.h>
-+#include <linux/regmap.h>
-+
-+#include "adxl367.h"
-+
-+#define ADXL367_I2C_FIFO_DATA	0x42
-+
-+struct adxl367_i2c_state {
-+	struct regmap *regmap;
-+};
-+
-+static bool adxl367_readable_noinc_reg(struct device *dev, unsigned int reg)
-+{
-+	return reg == ADXL367_I2C_FIFO_DATA;
-+}
-+
-+static int adxl367_i2c_read_fifo(void *context, __be16 *fifo_buf,
-+				 unsigned int fifo_entries)
-+{
-+	struct adxl367_i2c_state *st = context;
-+
-+	return regmap_noinc_read(st->regmap, ADXL367_I2C_FIFO_DATA, fifo_buf,
-+				 fifo_entries * sizeof(*fifo_buf));
-+}
-+
-+static const struct regmap_config adxl367_i2c_regmap_config = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+	.readable_noinc_reg = adxl367_readable_noinc_reg,
-+};
-+
-+static const struct adxl367_ops adxl367_i2c_ops = {
-+	.read_fifo = adxl367_i2c_read_fifo,
-+};
-+
-+static int adxl367_i2c_probe(struct i2c_client *client,
-+			     const struct i2c_device_id *id)
-+{
-+	struct adxl367_i2c_state *st;
-+	struct regmap *regmap;
-+
-+	st = devm_kzalloc(&client->dev, sizeof(*st), GFP_KERNEL);
-+	if (!st)
-+		return -ENOMEM;
-+
-+	regmap = devm_regmap_init_i2c(client, &adxl367_i2c_regmap_config);
-+	if (IS_ERR(regmap))
-+		return PTR_ERR(regmap);
-+
-+	st->regmap = regmap;
-+
-+	return adxl367_probe(&client->dev, &adxl367_i2c_ops, st, regmap,
-+			     client->irq);
-+}
-+
-+static const struct i2c_device_id adxl367_i2c_id[] = {
-+	{ "adxl367", 0 },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(i2c, adxl367_i2c_id);
-+
-+static const struct of_device_id adxl367_of_match[] = {
-+	{ .compatible = "adi,adxl367" },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, adxl367_of_match);
-+
-+static struct i2c_driver adxl367_i2c_driver = {
-+	.driver = {
-+		.name = "adxl367_i2c",
-+		.of_match_table = adxl367_of_match,
-+	},
-+	.probe = adxl367_i2c_probe,
-+	.id_table = adxl367_i2c_id,
-+};
-+
-+module_i2c_driver(adxl367_i2c_driver);
-+
-+MODULE_IMPORT_NS(ADXL367);
-+MODULE_AUTHOR("Cosmin Tanislav <cosmin.tanislav@analog.com>");
-+MODULE_DESCRIPTION("Analog Devices ADXL367 3-axis accelerometer I2C driver");
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/iio/accel/adxl367_spi.c b/drivers/iio/accel/adxl367_spi.c
-new file mode 100644
-index 000000000000..072c76d4c921
---- /dev/null
-+++ b/drivers/iio/accel/adxl367_spi.c
-@@ -0,0 +1,164 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Copyright (C) 2021 Analog Devices, Inc.
-+ * Author: Cosmin Tanislav <cosmin.tanislav@analog.com>
-+ */
-+
-+#include <linux/mod_devicetable.h>
-+#include <linux/module.h>
-+#include <linux/regmap.h>
-+#include <linux/spi/spi.h>
-+
-+#include "adxl367.h"
-+
-+#define ADXL367_SPI_WRITE_COMMAND	0x0A
-+#define ADXL367_SPI_READ_COMMAND	0x0B
-+#define ADXL367_SPI_FIFO_COMMAND	0x0D
-+
-+struct adxl367_spi_state {
-+	struct spi_device	*spi;
-+
-+	struct spi_message	reg_write_msg;
-+	struct spi_transfer	reg_write_xfer[2];
-+
-+	struct spi_message	reg_read_msg;
-+	struct spi_transfer	reg_read_xfer[2];
-+
-+	struct spi_message	fifo_msg;
-+	struct spi_transfer	fifo_xfer[2];
-+
-+	/*
-+	 * DMA (thus cache coherency maintenance) requires the
-+	 * transfer buffers to live in their own cache lines.
-+	 */
-+	u8			reg_write_tx_buf[1] ____cacheline_aligned;
-+	u8			reg_read_tx_buf[2];
-+	u8			fifo_tx_buf[1];
-+};
-+
-+static int adxl367_read_fifo(void *context, __be16 *fifo_buf,
-+			     unsigned int fifo_entries)
-+{
-+	struct adxl367_spi_state *st = context;
-+
-+	st->fifo_xfer[1].rx_buf = fifo_buf;
-+	st->fifo_xfer[1].len = fifo_entries * sizeof(*fifo_buf);
-+
-+	return spi_sync(st->spi, &st->fifo_msg);
-+}
-+
-+static int adxl367_read(void *context, const void *reg_buf, size_t reg_size,
-+			void *val_buf, size_t val_size)
-+{
-+	struct adxl367_spi_state *st = context;
-+	u8 reg = ((const u8 *)reg_buf)[0];
-+
-+	st->reg_read_tx_buf[1] = reg;
-+	st->reg_read_xfer[1].rx_buf = val_buf;
-+	st->reg_read_xfer[1].len = val_size;
-+
-+	return spi_sync(st->spi, &st->reg_read_msg);
-+}
-+
-+static int adxl367_write(void *context, const void *val_buf, size_t val_size)
-+{
-+	struct adxl367_spi_state *st = context;
-+
-+	st->reg_write_xfer[1].tx_buf = val_buf;
-+	st->reg_write_xfer[1].len = val_size;
-+
-+	return spi_sync(st->spi, &st->reg_write_msg);
-+}
-+
-+static struct regmap_bus adxl367_spi_regmap_bus = {
-+	.read = adxl367_read,
-+	.write = adxl367_write,
-+};
-+
-+static const struct regmap_config adxl367_spi_regmap_config = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+};
-+
-+static const struct adxl367_ops adxl367_spi_ops = {
-+	.read_fifo = adxl367_read_fifo,
-+};
-+
-+static int adxl367_spi_probe(struct spi_device *spi)
-+{
-+	struct adxl367_spi_state *st;
-+	struct regmap *regmap;
-+
-+	st = devm_kzalloc(&spi->dev, sizeof(*st), GFP_KERNEL);
-+	if (!st)
-+		return -ENOMEM;
-+
-+	st->spi = spi;
-+
-+	/*
-+	 * Xfer:   [XFR1] [           XFR2           ]
-+	 * Master:  0x0A   ADDR DATA0 DATA1 ... DATAN
-+	 * Slave:   ....   ..........................
-+	 */
-+	st->reg_write_tx_buf[0] = ADXL367_SPI_WRITE_COMMAND;
-+	st->reg_write_xfer[0].tx_buf = st->reg_write_tx_buf;
-+	st->reg_write_xfer[0].len = sizeof(st->reg_write_tx_buf);
-+	spi_message_init_with_transfers(&st->reg_write_msg,
-+					st->reg_write_xfer, 2);
-+
-+	/*
-+	 * Xfer:   [   XFR1  ] [         XFR2        ]
-+	 * Master:  0x0B ADDR   .....................
-+	 * Slave:   .........   DATA0 DATA1 ... DATAN
-+	 */
-+	st->reg_read_tx_buf[0] = ADXL367_SPI_READ_COMMAND;
-+	st->reg_read_xfer[0].tx_buf = st->reg_read_tx_buf;
-+	st->reg_read_xfer[0].len = sizeof(st->reg_read_tx_buf);
-+	spi_message_init_with_transfers(&st->reg_read_msg,
-+					st->reg_read_xfer, 2);
-+
-+	/*
-+	 * Xfer:   [XFR1] [         XFR2        ]
-+	 * Master:  0x0D   .....................
-+	 * Slave:   ....   DATA0 DATA1 ... DATAN
-+	 */
-+	st->fifo_tx_buf[0] = ADXL367_SPI_FIFO_COMMAND;
-+	st->fifo_xfer[0].tx_buf = st->fifo_tx_buf;
-+	st->fifo_xfer[0].len = sizeof(st->fifo_tx_buf);
-+	spi_message_init_with_transfers(&st->fifo_msg, st->fifo_xfer, 2);
-+
-+	regmap = devm_regmap_init(&spi->dev, &adxl367_spi_regmap_bus, st,
-+				  &adxl367_spi_regmap_config);
-+	if (IS_ERR(regmap))
-+		return PTR_ERR(regmap);
-+
-+	return adxl367_probe(&spi->dev, &adxl367_spi_ops, st, regmap, spi->irq);
-+}
-+
-+static const struct spi_device_id adxl367_spi_id[] = {
-+	{ "adxl367", 0 },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(spi, adxl367_spi_id);
-+
-+static const struct of_device_id adxl367_of_match[] = {
-+	{ .compatible = "adi,adxl367" },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, adxl367_of_match);
-+
-+static struct spi_driver adxl367_spi_driver = {
-+	.driver = {
-+		.name = "adxl367_spi",
-+		.of_match_table = adxl367_of_match,
-+	},
-+	.probe = adxl367_spi_probe,
-+	.id_table = adxl367_spi_id,
-+};
-+
-+module_spi_driver(adxl367_spi_driver);
-+
-+MODULE_IMPORT_NS(ADXL367);
-+MODULE_AUTHOR("Cosmin Tanislav <cosmin.tanislav@analog.com>");
-+MODULE_DESCRIPTION("Analog Devices ADXL367 3-axis accelerometer SPI driver");
-+MODULE_LICENSE("GPL");
--- 
-2.35.0
+		if (*our ldisc is not n_tty*)
+			return an error like -ENOTTY;
 
+=2E..since kerninfo is useless for non-UI ttys, e. g. serial device
+drivers, and this ioctl could mess them up if this code path can be
+taken. (I have not verified this kind of breakage is possible.) Please
+see the complete rationale below, this paragraph is an illustrational
+note for it.
+
+> +		down_read(&tty->termios_rwsem);
+> +		n_tty_status(tty);
+> +		up_read(&tty->termios_rwsem);
+> +		return 0;
+>  	default:
+>  		return n_tty_ioctl_helper(tty, file, cmd, arg);
+>  	}
+> diff --git a/drivers/tty/n_tty_status.c b/drivers/tty/n_tty_status.c
+> new file mode 100644
+> index 000000000000..f0e053651368
+> --- /dev/null
+> +++ b/drivers/tty/n_tty_status.c
+> @@ -0,0 +1,181 @@
+> +// SPDX-License-Identifier: GPL-1.0+
+> +/*
+> + * n_tty_status.c --- implements VSTATUS and TIOCSTAT from BSD
+> + *
+> + * Display a basic status message containing information about the
+> + * foreground process and system load on the users tty, triggered by
+> + * the VSTATUS character or TIOCSTAT. Ex,
+> + *
+> + *   load: 14.11  cmd: tcsh 19623 [running] 185756.62r 88.00u 17.50s 0% =
+4260k
+> + *
+> + */
+> +
+> +#include <linux/tty.h>
+> +#include <linux/mm.h>
+> +#include <linux/sched/loadavg.h>
+> +#include <linux/sched/mm.h>
+> +
+> +/* Convert nanoseconds into centiseconds */
+> +static inline long ns_to_cs(long l)
+> +{
+> +	return l / (NSEC_PER_MSEC * 10);
+> +
+> +}
+> +
+> +/* We want the pid from the context of session */
+> +static inline pid_t __get_pid(struct task_struct *tsk, struct tty_struct=
+ *tty)
+> +{
+> +	struct pid_namespace *ns;
+> +
+> +	spin_lock_irq(&tty->ctrl.lock);
+> +	ns =3D ns_of_pid(tty->ctrl.session);
+> +	spin_unlock_irq(&tty->ctrl.lock);
+> +
+> +	return __task_pid_nr_ns(tsk, PIDTYPE_PID, ns);
+> +}
+> +
+> +/* This is the same odd "bitmap" described in
+> + * fs/proc/array.c:get_task_state().  Consistency with standard
+> + * implementations of VSTATUS requires a different set of state
+> + * names.
+
+As far as I can remember, VSTATUS is not subject to any standard, so no
+implementation is *standard* by any means. The 2 most popular libre &
+open source BSD derivatives implement the VSTATUS message with different
+details (e. g. OpenBSD does not check for column 0, FreeBSD does) and
+use different message formats.
+We are not obliged to copy the message format or the task state names
+=66rom another system (which most likely uses a different set of task
+states, or might change its task state set independently of Linux),
+especially since the message is not part of any API and is not even
+readable by processes who read or write on the terminal.
+
+(If the terminal is a pty, then there is a user process which has
+possession of an fd to the pty master, but anyway it can not =E2=80=94 and
+should not =E2=80=94 distinguish between terminal output produced by proces=
+ses
+or by the ldisc.)
+
+> + */
+> +static const char * const task_state_name_array[] =3D {
+> +	"running",
+> +	"sleeping",
+> +	"disk sleep",
+> +	"stopped",
+> +	"tracing stop",
+> +	"dead",
+> +	"zombie",
+> +	"parked",
+> +	"idle",
+> +};
+> +
+> +static inline const char *get_task_state_name(struct task_struct *tsk)
+> +{
+> +	BUILD_BUG_ON(1 + ilog2(TASK_REPORT_MAX) !=3D ARRAY_SIZE(task_state_name=
+_array));
+> +	return task_state_name_array[task_state_index(tsk)];
+> +}
+> +
+> <...>
+> +size_t n_tty_get_status(struct tty_struct *tty, char *msg, size_t msglen)
+> +{
+> +	struct task_struct *p;
+> +	struct mm_struct *mm;
+> +	struct rusage rusage;
+> +	unsigned long loadavg[3];
+> +	uint64_t pcpu, cputime, wallclock;
+> +	struct timespec64 utime, stime, rtime;
+> +	char tname[TASK_COMM_LEN];
+> +	unsigned int pid;
+> +	char *state;
+> +	unsigned long rss =3D 0;
+> +	size_t len =3D 0;
+> +
+> +	get_avenrun(loadavg, FIXED_1/200, 0);
+> +	len =3D scnprintf(msg + len, msglen - len, "load: %lu.%02lu  ",
+> +			LOAD_INT(loadavg[0]), LOAD_FRAC(loadavg[0]));
+> +
+> +	if (tty->ctrl.session =3D=3D NULL) {
+> +		len +=3D scnprintf(msg + len, msglen - len,
+> +				 "not a controlling terminal\n");
+> +		goto out;
+> +	}
+> +
+> +	if (tty->ctrl.pgrp =3D=3D NULL) {
+> +		len +=3D scnprintf(msg + len, msglen - len,
+> +				 "no foreground process group\n");
+> +		goto out;
+> +	}
+> +
+> +	/* Note that if p is refcounted */
+> +	p =3D pick_process(tty);
+> +	if (p =3D=3D NULL) {
+> +		len +=3D scnprintf(msg + len, msglen - len,
+> +				 "empty foreground process group\n");
+> +		goto out;
+> +	}
+> +
+> +	mm =3D get_task_mm(p);
+> +	if (mm) {
+> +		rss =3D get_mm_rss(mm) * PAGE_SIZE / 1024;
+> +		mmput(mm);
+> +	}
+> +	get_task_comm(tname, p);
+> +	getrusage(p, RUSAGE_BOTH, &rusage);
+> +	pid =3D __get_pid(p, tty);
+> +	state =3D (char *) get_task_state_name(p);
+> +	wallclock =3D ktime_get_ns() - p->start_time;
+> +	put_task_struct(p);
+> +
+> +	/* After this point, any of the information we have on p might
+> +	 * become stale.  It's OK if the status message is a little bit
+> +	 * lossy.
+> +	 */
+
+=2E..By the moment the user sees the status message, the presented
+information is a bit stale anyway, but still relevant. :)
+
+> +
+> +	utime.tv_sec =3D rusage.ru_utime.tv_sec;
+> +	utime.tv_nsec =3D rusage.ru_utime.tv_usec * NSEC_PER_USEC;
+> +	stime.tv_sec =3D rusage.ru_stime.tv_sec;
+> +	stime.tv_nsec =3D rusage.ru_stime.tv_usec * NSEC_PER_USEC;
+> +	rtime =3D ns_to_timespec64(wallclock);
+> +
+> +	cputime =3D timespec64_to_ns(&utime) + timespec64_to_ns(&stime);
+> +	pcpu =3D div64_u64(cputime * 100, wallclock);
+
+Other reviewers have mentioned that this number does not make too much
+sense, as we can see the dividend and the divisor in the message. It
+would make more sense to display CPU consumption by the process in a
+recent enough time window, or some other "hogginess" estimate, but I
+doubt this information is available.
+
+> +
+> +	len +=3D scnprintf(msg + len, msglen - len,
+> +			 /* task, PID, task state */
+> +			 "cmd: %s %d [%s] "
+> +			 /* rtime,    utime,      stime,      %cpu   rss */
+> +			 "%llu.%02lur %llu.%02luu %llu.%02lus %llu%% %luk\n",
+> +			 tname,	pid, state,
+> +			 rtime.tv_sec, ns_to_cs(rtime.tv_nsec),
+> +			 utime.tv_sec, ns_to_cs(utime.tv_nsec),
+> +			 stime.tv_sec, ns_to_cs(stime.tv_nsec),
+> +			 pcpu, rss);
+> +
+> +out:
+> +	return len;
+> +}
+> diff --git a/drivers/tty/tty_io.c b/drivers/tty/tty_io.c
+> index 6616d4a0d41d..f2f4f48ea502 100644
+> --- a/drivers/tty/tty_io.c
+> +++ b/drivers/tty/tty_io.c
+> @@ -125,7 +125,7 @@ struct ktermios tty_std_termios =3D {	/* for the bene=
+fit of tty drivers  */
+>  	.c_oflag =3D OPOST | ONLCR,
+>  	.c_cflag =3D B38400 | CS8 | CREAD | HUPCL,
+>  	.c_lflag =3D ISIG | ICANON | ECHO | ECHOE | ECHOK |
+> -		   ECHOCTL | ECHOKE | IEXTEN,
+> +		   ECHOCTL | ECHOKE | IEXTEN | NOKERNINFO,
+
+Does this mean that nokerninfo is on by default? Do we have a reason to
+do that?
+
+As of this patch we require icanon and iexten to be set for the message
+to be composed and printed. An experiment shows PTY encapsulation
+programs like openssh turn off both those flags on the tty they run on
+before they take control (contrary to what has been said in LWN), so
+they are unimpacted.
+
+The termios(3) page from man-pages states:
+   Raw mode
+       cfmakeraw() sets the terminal to something like the "raw"  mode
+       of  the old Version 7 terminal driver: input is available char=E2=80=
+=90
+       acter by character, echoing is disabled, and all  special  pro=E2=80=
+=90
+       cessing  of  terminal  input and output characters is disabled.
+       The terminal attributes are set as follows:
+
+           termios_p->c_iflag &=3D ~(IGNBRK | BRKINT | PARMRK | ISTRIP
+                           | INLCR | IGNCR | ICRNL | IXON);
+           termios_p->c_oflag &=3D ~OPOST;
+           termios_p->c_lflag &=3D ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN=
+);
+           termios_p->c_cflag &=3D ~(CSIZE | PARENB);
+           termios_p->c_cflag |=3D CS8;
+
+So any program which uses this API effectively turns off kerninfo as
+implemented here.
+
+There are 2 ways n_tty_status() can be called as of this patch: either
+=66rom inside n_tty or via TIOCSTAT. The first path can't be taken on ttys
+whose ldisc is not N_TTY, the second path we can fix as proposed in the
+comment to the TIOCSTAT hunk if needed. IOW, we can make this safe for
+device drivers.
+
+Given all this, is there any other reason to enable nokerninfo (i. e.
+disable status message) by default?
+
+>  	.c_cc =3D INIT_C_CC,
+>  	.c_ispeed =3D 38400,
+>  	.c_ospeed =3D 38400,
+> diff --git a/include/linux/tty.h b/include/linux/tty.h
+> index cbe5d535a69d..2e483708608c 100644
+> --- a/include/linux/tty.h
+> +++ b/include/linux/tty.h
+> @@ -49,6 +49,7 @@
+>  #define WERASE_CHAR(tty) ((tty)->termios.c_cc[VWERASE])
+>  #define LNEXT_CHAR(tty)	((tty)->termios.c_cc[VLNEXT])
+>  #define EOL2_CHAR(tty) ((tty)->termios.c_cc[VEOL2])
+> +#define STATUS_CHAR(tty) ((tty)->termios.c_cc[VSTATUS])
+> =20
+>  #define _I_FLAG(tty, f)	((tty)->termios.c_iflag & (f))
+>  #define _O_FLAG(tty, f)	((tty)->termios.c_oflag & (f))
+> @@ -114,6 +115,7 @@
+>  #define L_PENDIN(tty)	_L_FLAG((tty), PENDIN)
+>  #define L_IEXTEN(tty)	_L_FLAG((tty), IEXTEN)
+>  #define L_EXTPROC(tty)	_L_FLAG((tty), EXTPROC)
+> +#define L_NOKERNINFO(tty) _L_FLAG((tty), NOKERNINFO)
+> =20
+>  struct device;
+>  struct signal_struct;
+> @@ -389,6 +391,9 @@ extern void __init n_tty_init(void);
+>  static inline void n_tty_init(void) { }
+>  #endif
+> =20
+> +/* n_tty_status.c */
+> +size_t n_tty_get_status(struct tty_struct *tty, char *msg, size_t msglen=
+);
+> +
+>  /* tty_audit.c */
+>  #ifdef CONFIG_AUDIT
+>  extern void tty_audit_exit(void);
+> --=20
+> 2.30.2
+
+Thanks!
+
+--cO02Fnj5BNdGOJp4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEE56JD3UKTLEu/ddrm9dQjyAYL01AFAmIAPLEACgkQ9dQjyAYL
+01Ag7RAAmK3xEYPAUMsDOh6NTQA+bHGadAkr7e+kP0tXcw62AxX2RuQbcnsNTacC
+9qVRPO/Lciq2gZn2RbnVBnopWk3DVytbUyec2+gda6HBaAWeepNvJ1+rhBf6AvDX
+yeT08qSWN9G01/2ttjpcHmzf6t792yKFdl1fvFwq0B3urw+xF7G7ggzzwSACZxpG
+mpxil/UrtdWuCta9dm4/mA/2UaxVmcqNa2p1vs1zMVJ4cQG/Ldg82bOj1gGQV1Xo
+kGsRbZLATp3gBOA1nr9uAfz1UkSNJ3wslU0GivZcN2fxPtyECDq0WTzoeyfVKC2d
+bNToXaYb1mpFvmHXZQq1PlMmd8ZP13nNhnrCzk3ZA5zGohH6K00IwTQiIqtLBiaK
+dDkZtdCkWkJbxU3VgUaLrc61PXMyUcVv8Yaos44OcLKOouibrlKEXjunx2B5k1UP
+1damdqoB+9UL4LuujG4Kk77rrU5w59uB9BvOOdqeDMv2S0cZkc7MpY7kNuhBaeJf
+vlM1wQ/I3fr1hEq2IOCEeIbTtUbwiJ1e82lt4lrORYIg05M0MhQbJyloqNh//ZTn
+X6oufrmy7jWl7SNUi8xvmxb1QI4zGO2BZepUtBbFRgSy4GYdoUNlbpZ6PnV9vN8/
+/QZlbMo4Qv8WdD+MTEiYK4EM9oTYkBiCQPvuda9RO5EcOt4I1zs=
+=9D2m
+-----END PGP SIGNATURE-----
+
+--cO02Fnj5BNdGOJp4--

@@ -2,85 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EC7B4AB170
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 19:56:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6E764AB189
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 19:59:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242249AbiBFS4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 13:56:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60474 "EHLO
+        id S1347261AbiBFS7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 13:59:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229883AbiBFS4P (ORCPT
+        with ESMTP id S232224AbiBFS66 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 13:56:15 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D08AC06173B;
-        Sun,  6 Feb 2022 10:56:13 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: usama.anjum)
-        with ESMTPSA id 5D0931F43BF4
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644173771;
-        bh=uaaZrJJw9JcGOK9PIknY172Q55CYu4/NTeJTumEesbs=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=dbVC8Y8YrXLz3RhNZsLuwYFgNVjGwim+vJxB+I1yyVSrr/rDNEL9KlaC12Id4b325
-         U3NPu5bFpGd8B9YwK7Bo3KDux1ODIFTiVSVujobY7/noLhOS0Rl9ynQFcCg5XNBv9d
-         FL0SiWmCPSqXncJW3NWv+dE2HfiQTQgDzd609eTrmfJnjnmt0vARMedVV0lS5UcyLj
-         3LZtq0WZgQjoqwM8En1PqXgc4v8erpDzlJiADGvHPzn2PvzpROQsq8ICa9hf88VxOs
-         5YALWhlwgqeLapJ3L4L6J7qqLpsNRb+1z6SrmkX+2+fe9XkUxm+cu5WjVA8stF5Uc8
-         D+ajJEHaJB3Hg==
-Message-ID: <ca9c39a2-7910-c61f-7b0a-308685490f5e@collabora.com>
-Date:   Sun, 6 Feb 2022 23:56:05 +0500
+        Sun, 6 Feb 2022 13:58:58 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E880C06173B;
+        Sun,  6 Feb 2022 10:58:58 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id r29so3249851wrr.13;
+        Sun, 06 Feb 2022 10:58:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=D1XGDo7HWBYqlIqWiIbQqMrJ0Zd1l02kRDCl5/xbN/E=;
+        b=Kdm5D/r38tPmeacBocAQqjmMHMH/diSFSp5O4m8liTUwABbg5i2BPMEfqPIcAlsamz
+         yypWEbbga1Hbh92mHAN7DcHS4sDoAyuRcD6L5yP0krVJq0+Klwyysh5sStL1wG+mNAwT
+         HTwk9kQRguKlaAqfGQ53B+diRmwiiOVSRLzG0vcVBgBz6PTvI4g6oIrlXjKVvNXpCsn0
+         zRqPVyoPzp/dsNeyoDAInBt+1D8KkpCNJVpr7OK1T4eCBRN9ZOuqFiQ/zKPvkzrDIomM
+         jjnAvAh4D3OFnJj9aYEGtZB8BgvA7bFXpONQwpRoXj2nFBJhyPIhp5UZTNMl60iudCF6
+         7bZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=D1XGDo7HWBYqlIqWiIbQqMrJ0Zd1l02kRDCl5/xbN/E=;
+        b=vwFk/DQxrEs0+3v2PyFtziKVzL+1HD0KP3XMD2F4iut8A4IeOQcpCLq88bSdJQCLTe
+         vzuMGOS7JbZNU2WScC32SvKnbRdZUURjg1e5CINzFYXA4Nm0+kxhzsZ62htcVnJDa79y
+         Qx1YRyJXx4x0D1STONzn7bRAu8Xuk9Ba4dOAFEg845tOwb20G4+pfYx9ggjFa5+P34P/
+         iYzyL78g9udfhU2vAHAlBpWwbI0n2KCY0voN8S94jHWvTIT7+ISINk28/UPzlAi65agw
+         RROJPYJ/nVGwRjQpVYvABRPeXWVniBMNKVsQUFhPwCJ4COVIXFgPnAR8XhpAav4CAgKI
+         Oh3g==
+X-Gm-Message-State: AOAM530zcE78LFBQtzQOf47GPr0kH7kRgyE2edyc8Ywn5+i24jrWJlwb
+        /Ol8S5sDFJTRXsmIq2121UYCT0Q68Q1jhw==
+X-Google-Smtp-Source: ABdhPJwwbd5/AolYOzqZ6pAHSDpsUDxjmIcqRaDKWBU+u9WWNliS9a0giPbbPdTKY/wg40OAQ1ev9Q==
+X-Received: by 2002:a05:6000:1144:: with SMTP id d4mr2580636wrx.716.1644173936560;
+        Sun, 06 Feb 2022 10:58:56 -0800 (PST)
+Received: from localhost.localdomain ([141.72.243.13])
+        by smtp.gmail.com with ESMTPSA id j5sm7498008wrq.31.2022.02.06.10.58.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Feb 2022 10:58:56 -0800 (PST)
+From:   Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
+To:     mosescb.dev@gmail.com
+Cc:     andriy.shevchenko@linux.intel.com, gregkh@linuxfoundation.org,
+        joe@perches.com, kitakar@gmail.com,
+        laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        mchehab@kernel.org, sakari.ailus@linux.intel.com,
+        tomi.valkeinen@ideasonboard.com, dan.carpenter@oracle.com
+Subject: [PATCH] staging: media: atomisp: Use GENMASK instead of manual masking
+Date:   Sun,  6 Feb 2022 19:58:30 +0100
+Message-Id: <20220206185830.39360-1-mosescb.dev@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Cc:     usama.anjum@collabora.com, kernel@collabora.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] selftests: futex: set DEFAULT_INSTALL_HDR_PATH
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>,
-        Shuah Khan <shuah@kernel.org>
-References: <20220119103332.2887370-1-usama.anjum@collabora.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <20220119103332.2887370-1-usama.anjum@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thoughts?
+There is a GENMASK macro available in linux/bits.h, for masking.
 
-On 1/19/22 3:33 PM, Muhammad Usama Anjum wrote:
-> If only futex selftest is compiled, uapi header files are copied to the
-> selftests/futex/functional directory. This copy isn't needed. Set the
-> DEFAULT_INSTALL_HDR_PATH variable to 1 to use the default header install
-> path only. This removes extra copy of header file.
-> 
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> ---
->  tools/testing/selftests/futex/functional/Makefile | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/tools/testing/selftests/futex/functional/Makefile b/tools/testing/selftests/futex/functional/Makefile
-> index 5cc38de9d8ea..9a8c3700d773 100644
-> --- a/tools/testing/selftests/futex/functional/Makefile
-> +++ b/tools/testing/selftests/futex/functional/Makefile
-> @@ -24,6 +24,7 @@ TEST_PROGS := run.sh
->  
->  top_srcdir = ../../../../..
->  KSFT_KHDR_INSTALL := 1
-> +DEFAULT_INSTALL_HDR_PATH := 1
->  include ../../lib.mk
->  
->  $(TEST_GEN_FILES): $(HEADERS)
+Example: GENMASK(3, 0) = 0b00001111 (same as (1 << 4) - 1)
+
+Signed-off-by: Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
+---
+ drivers/staging/media/atomisp/pci/atomisp_compat_css20.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c b/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
+index 1173be0e72b0..a345fa1d7de9 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
+@@ -40,6 +40,7 @@
+ 
+ #include <linux/io.h>
+ #include <linux/pm_runtime.h>
++#include <linux/bits.h>
+ 
+ /* Assume max number of ACC stages */
+ #define MAX_ACC_STAGES	20
+@@ -1913,11 +1914,11 @@ void atomisp_css_input_set_mode(struct atomisp_sub_device *asd,
+ 			    &asd->stream_env[ATOMISP_INPUT_STREAM_GENERAL].stream_config;
+ 		s_config->mode = IA_CSS_INPUT_MODE_TPG;
+ 		s_config->source.tpg.mode = IA_CSS_TPG_MODE_CHECKERBOARD;
+-		s_config->source.tpg.x_mask = (1 << 4) - 1;
++		s_config->source.tpg.x_mask = GENMASK(3, 0);
+ 		s_config->source.tpg.x_delta = -2;
+-		s_config->source.tpg.y_mask = (1 << 4) - 1;
++		s_config->source.tpg.y_mask = GENMASK(3, 0);
+ 		s_config->source.tpg.y_delta = 3;
+-		s_config->source.tpg.xy_mask = (1 << 8) - 1;
++		s_config->source.tpg.xy_mask = GENMASK(7, 0);
+ 		return;
+ 	}
+ 
+-- 
+2.30.2
+

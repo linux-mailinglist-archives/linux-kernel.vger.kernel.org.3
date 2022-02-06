@@ -2,115 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CB8B4AAEDC
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 11:37:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBA314AAEF1
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 12:10:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233522AbiBFKhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 05:37:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48768 "EHLO
+        id S233650AbiBFLKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 06:10:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231180AbiBFKhM (ORCPT
+        with ESMTP id S232212AbiBFLKO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 05:37:12 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7247FC06109E
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 02:37:12 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1nGeuc-0002la-07; Sun, 06 Feb 2022 11:36:54 +0100
-Message-ID: <a45010a4-2b86-aa22-d7bd-3c4839356cf1@pengutronix.de>
-Date:   Sun, 6 Feb 2022 11:36:48 +0100
+        Sun, 6 Feb 2022 06:10:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00F5CC043182;
+        Sun,  6 Feb 2022 03:10:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 48C1AB80DAB;
+        Sun,  6 Feb 2022 11:10:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E9B61C340F1;
+        Sun,  6 Feb 2022 11:10:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644145809;
+        bh=9DnAaA54D2U8FgFr+Le60PYyPQ5oSY9JqsZU6+t8T3I=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=C3seOVieluEfeBtKZ7ukwLw2FiJWUxXIHSCn1mn9xF994dNMURr6vTvF5w1G3Z4zX
+         ZamTPPIlqlLhmKzwQ+KeBabVfPWW1dIUYX8dAFWqoZSSf1ry2wFwmnCJ+u0G+WApH1
+         VoL6wb2qhkhzZaSJ68V5qddIOO0/J5vQK0+ULa/tZHPRLkIK3cONux4LDaAFbYR8j5
+         UWSLgr/WW2OSyzYJfW4Wixd6+DqBBLY2ikNZT7XJLleZJbDfWHYB0CD+Vku6fn96gs
+         0E9biPAh9ZnFr9IK51OMVnwdJhnQ8Qqq47zIrBXlAwPYFh5mZ7q7AZDP500LCo5YW2
+         qw4D8vbJePKxA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CFAEFE6D44F;
+        Sun,  6 Feb 2022 11:10:08 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-Subject: Re: [PATCH] KEYS: trusted: fix crash when TPM/TEE are built as module
-To:     Tong Zhang <ztong0001@gmail.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Andreas Rammhold <andreas@rammhold.de>
-References: <20220204200342.48665-1-ztong0001@gmail.com>
-Content-Language: en-US
-In-Reply-To: <20220204200342.48665-1-ztong0001@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] net: phy: marvell: Fix MDI-x polarity setting in
+ 88e1118-compatible PHYs
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164414580884.29882.11773038139519237231.git-patchwork-notify@kernel.org>
+Date:   Sun, 06 Feb 2022 11:10:08 +0000
+References: <20220205214951.60371-1-Pavel.Parkhomenko@baikalelectronics.ru>
+In-Reply-To: <20220205214951.60371-1-Pavel.Parkhomenko@baikalelectronics.ru>
+To:     Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+Cc:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
+        davem@davemloft.net, kuba@kernel.org, ron_madrid@sbcglobal.net,
+        Alexey.Malahov@baikalelectronics.ru,
+        Sergey.Semin@baikalelectronics.ru, fancer.lancer@gmail.com,
+        stable@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Tong,
+Hello:
 
-On 04.02.22 21:03, Tong Zhang wrote:
-> when TCG_TPM and TEE are built as module, trusted_key_sources will be an
-> empty array, loading it won't do what it is supposed to do and unloading
-> it will cause kernel crash.
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-Jarkko reported picking up an equivalent fix two months ago:
-https://lkml.kernel.org/keyrings/YadRAWbl2aiapf8l@iki.fi/
-
-But it seems to have never made it to Linus.
-
-Cheers,
-Ahmad
-
+On Sun, 6 Feb 2022 00:49:51 +0300 you wrote:
+> When setting up autonegotiation for 88E1118R and compatible PHYs,
+> a software reset of PHY is issued before setting up polarity.
+> This is incorrect as changes of MDI Crossover Mode bits are
+> disruptive to the normal operation and must be followed by a
+> software reset to take effect. Let's patch m88e1118_config_aneg()
+> to fix the issue mentioned before by invoking software reset
+> of the PHY just after setting up MDI-x polarity.
 > 
-> To reproduce:
-> $ modprobe trusted
-> $ modprobe -r trusted
-> 
-> [  173.749423] Unable to handle kernel NULL pointer dereference at virtual address 00000000
-> [  173.755268] Backtrace:
-> [  173.755378]  cleanup_trusted [trusted] from sys_delete_module+0x15c/0x22c
-> [  173.755589]  sys_delete_module from ret_fast_syscall+0x0/0x1c
-> 
-> To fix this issue, we also need to check CONFIG_TCG_TPM_MODULE and
-> CONFIG_TEE_MODULE.
-> 
-> Fixes: 5d0682be3189 ("KEYS: trusted: Add generic trusted keys framework")
-> Signed-off-by: Tong Zhang <ztong0001@gmail.com>
-> ---
->  security/keys/trusted-keys/trusted_core.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/security/keys/trusted-keys/trusted_core.c b/security/keys/trusted-keys/trusted_core.c
-> index d5c891d8d353..b3a3b2f2d4a4 100644
-> --- a/security/keys/trusted-keys/trusted_core.c
-> +++ b/security/keys/trusted-keys/trusted_core.c
-> @@ -27,10 +27,10 @@ module_param_named(source, trusted_key_source, charp, 0);
->  MODULE_PARM_DESC(source, "Select trusted keys source (tpm or tee)");
->  
->  static const struct trusted_key_source trusted_key_sources[] = {
-> -#if defined(CONFIG_TCG_TPM)
-> +#if defined(CONFIG_TCG_TPM) || defined(CONFIG_TCG_TPM_MODULE)
->  	{ "tpm", &trusted_key_tpm_ops },
->  #endif
-> -#if defined(CONFIG_TEE)
-> +#if defined(CONFIG_TEE) || defined(CONFIG_TEE_MODULE)
->  	{ "tee", &trusted_key_tee_ops },
->  #endif
->  };
+> [...]
 
+Here is the summary with links:
+  - [net] net: phy: marvell: Fix MDI-x polarity setting in 88e1118-compatible PHYs
+    https://git.kernel.org/netdev/net/c/aec12836e719
 
+You are awesome, thank you!
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

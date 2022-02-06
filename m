@@ -2,127 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D01B94AB1F4
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 21:11:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D23524AB203
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 21:23:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244156AbiBFULQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 15:11:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53494 "EHLO
+        id S244684AbiBFUXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 15:23:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231982AbiBFULP (ORCPT
+        with ESMTP id S231982AbiBFUXR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 15:11:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1EC3C06173B;
-        Sun,  6 Feb 2022 12:11:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3785B60F9E;
-        Sun,  6 Feb 2022 20:11:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10199C340E9;
-        Sun,  6 Feb 2022 20:11:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644178272;
-        bh=jljw/NXDE01h/Pq3byW2tpFU83OPdtk2kq8rd42Jk1c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nhvpRiAHeyPnhoPW5AJYz7sXsz9qtFaixezo/f6lKIoTinmiRK/0KfhqtTjkJMiZA
-         C1eoikWCvjFFaQoyqdBqnt61Sxj9tcqo0hoj4c33suJ2iCZVvxedjh6hh9d879NQUy
-         D91VqLaA4kYzRnFvGL+lqISffF5jEMJeJz/KehV/F5DPWnP4iRK5HBxqJZ8N5Qpqov
-         u/68l4FbFrs1dFjSIxxVA0bjW0xDBeDhMAwDNgmwQeGdSpN03gGah6Mw9+50+gKID4
-         mgmnJ0HiCVk6qrLd1K0L185npwEZ8epAYyk8NiTmVh/xeQiJvC8hROwGWHFXO+yTZR
-         g2rbP6e0rw9Lw==
-Date:   Sun, 6 Feb 2022 21:11:06 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     greybus-dev@lists.linaro.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Alex Elder <elder@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        UNGLinuxDriver@microchip.com,
-        Woojung Huh <woojung.huh@microchip.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>
-Subject: Re: [PATCH v2 1/7] genirq: Provide generic_handle_irq_safe().
-Message-ID: <YgArWgyvy9xF3V5Q@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        greybus-dev@lists.linaro.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Alex Elder <elder@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>, Johan Hovold <johan@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>, UNGLinuxDriver@microchip.com,
-        Woojung Huh <woojung.huh@microchip.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>
-References: <20220131123404.175438-1-bigeasy@linutronix.de>
- <20220131123404.175438-2-bigeasy@linutronix.de>
+        Sun, 6 Feb 2022 15:23:17 -0500
+X-Greylist: delayed 345 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Feb 2022 12:23:16 PST
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71035C06173B;
+        Sun,  6 Feb 2022 12:23:16 -0800 (PST)
+Received: from g550jk.localnet (mobiledyn-62-240-134-151.mrsn.at [62.240.134.151])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id D8C72CDF2E;
+        Sun,  6 Feb 2022 20:17:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1644178648; bh=690FBrexPdoV7NM0ztCyeAbjMDRItqMT8QQiwsTCIIM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=MLezyn++G1Se1/xSc1aKBxr9QvWyZ9bMtflmNDUCNs8UkRiG20J3OHnzsP/qos2rd
+         L97w9d2Edpc6sj5AaAXRUss+wTHtDaWvla70a4R/JdPQe2rzH7I2IdeUSgg1Vy4sjU
+         suN8/7rQ310/I3W2t75CcYiy8SezI/tXWllHszhA=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     Stephan Gerhold <stephan@gerhold.net>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: Re: [PATCH 09/15] rpmsg: smd: Drop unnecessary condition for channel creation
+Date:   Sun, 06 Feb 2022 21:17:22 +0100
+Message-ID: <2615776.mvXUDI8C0e@g550jk>
+In-Reply-To: <Yfhjil3pfZLa5g3j@builder.lan>
+References: <20220112194118.178026-1-luca@z3ntu.xyz> <YeRILypv8ajssNae@gerhold.net> <Yfhjil3pfZLa5g3j@builder.lan>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="agAcRzQ1V4vmM4bn"
-Content-Disposition: inline
-In-Reply-To: <20220131123404.175438-2-bigeasy@linutronix.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Bjorn,
 
---agAcRzQ1V4vmM4bn
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Montag, 31. J=E4nner 2022 23:32:42 CET Bjorn Andersson wrote:
+> On Sun 16 Jan 10:30 CST 2022, Stephan Gerhold wrote:
+> > On Sun, Jan 16, 2022 at 05:08:29PM +0100, Luca Weiss wrote:
+> > > On Mittwoch, 12. J=E4nner 2022 22:39:53 CET Stephan Gerhold wrote:
+> > > > On Wed, Jan 12, 2022 at 08:40:58PM +0100, Luca Weiss wrote:
+> > > > > From: Vladimir Lypak <vladimir.lypak@gmail.com>
+> > > > >=20
+> > > > > RPM Firmware on variety of newer SoCs such as MSM8917 (also likely
+> > > > > MSM8937, MSM8940, MSM8952), MSM8953 and on some MSM8916 devices)
+> > > > > doesn't
+> > > > > initiate opening of the SMD channel if it was previously opened by
+> > > > > bootloader. This doesn't allow probing of smd-rpm driver on such
+> > > > > devices
+> > > > > because there is a check that requires RPM this behaviour.
+> > > > >=20
+> > > > > Signed-off-by: Vladimir Lypak <vladimir.lypak@gmail.com>
+> > > > > Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> > > > > Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> > > >=20
+> > > > This is effectively a "Revert "Revert "rpmsg: smd: Create device for
+> > > > all
+> > > > channels""":
+> > > >=20
+> > > > https://lore.kernel.org/linux-arm-msm/20171212235857.10432-3-bjorn.=
+and
+> > > > ersson @linaro.org/
+> > > > https://lore.kernel.org/linux-arm-msm/20180315181244.8859-1-bjorn.a=
+nde
+> > > > rsson
+> > > > @linaro.org/
+> > > >=20
+> > > > Won't this cause the same regression reported by Srinivas again?
+> > >=20
+> > > Do you have any suggestion on another way to solve this? Without this
+> > > commit the regulators just won't probe at all, I haven't looked very
+> > > deep into it though given this patch solves it.
+> > >=20
+> > > I guess worst case it'll become a devicetree property to enable this
+> > > quirk?
+> >=20
+> > My spontaneous suggestion would be to skip the check only for the
+> > "rpm_requests" channel, e.g. something like
+> >=20
+> > 	if (remote_state !=3D SMD_CHANNEL_OPENING &&
+> > =09
+> > 	    remote_state !=3D SMD_CHANNEL_OPENED &&
+> > 	    strcmp(channel->name, "rpm_requests")
+> > 	=09
+> > 		continue;
+> >=20
+> > This will avoid changing the behavior for anything but the RPM channel.
+> > I don't think anything else is affected by the same problem (since the
+> > bootloader or earlier firmware should not make use of any other channel=
+).
+> > Also, we definitely *always* want to open the channel to the RPM because
+> > otherwise almost everything breaks.
+>=20
+> Last time this came up I asked if someone could test if the RPM is stuck
+> in the state machine trying to close the channel and as such we could
+> kick it by making sure that we "ack" the closing of the channel and
+> hence it would come back up again.
+>=20
+> But I don't remember seeing any outcome of this.
+
+Do you have a link to this or should I go digging in the archives?
+
+Regards
+Luca
+
+>=20
+> > Many solutions are possible though so at the end it is mostly up to
+> > Bjorn to decide I think. :)
+>=20
+> I would prefer to get an answer to above question, but if that doesn't
+> work (or look like crap) I'm willing to take your suggestion of skipping
+> the continue for the rpm_requests channel. Obviously with a comment
+> above describing why we're carrying that special case.
+>=20
+> Regards,
+> Bjorn
 
 
-> + * This function can be called any context (IRQ or process context). It will
-
-"from any context"
-
-> + * report an error if not invoked from IRQ context and the irq has been marked
-> + * to enforce IRQ-contex only.
-
-"IRQ-context"
-
-Other than that, the paragraph is really helpful now IMO. So with the
-above fixed, you may add:
-
-Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
 
---agAcRzQ1V4vmM4bn
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIAK1UACgkQFA3kzBSg
-KbbBQA//be5yTyPptkcw8xl8xEjjuosJmrSOMBREgzarO4DbrPX/pC/W0Nak54bs
-UnjGfnRDFQXa2krCIIbZmmwtCLKftVVbqB5eFFJ/Y6uM/pa2hKgli0sNfHJ2p++i
-jT01vDRqxEjyA795yxeF8nD3/xkmIM49A5hbPq7yW6YTGF8VJ6Qhe+5vWpMoNqFH
-6KoSHGUFpwCgVBEadLhdV8a0OpSrjPTs+MOZhWL+IIpb3Ay+tztQpUL1f2ncnlG/
-Sq5E7KPuKem03swyvKmFcn1fl+R3eLy7ueoHbXeyfKDi8eqLImP1ZYwfq0K+LwKK
-O2LHRkXcrPnHM/lSt9dQDbJNY9J6wzav77BzF9zS8e23KhPlTlidSDHWwgtkq2vj
-yr825hAIMoecoj8t4pgpSDYyyw9rnSeGwmB7AFWZctzLoaLtdGBZrIZKJv4ZM5bH
-p79anJodYwJEVRRvj3t1ZA+vH8n4TThUG6RFWV18a9rLUi1N/YvwsZO7wTf9Msw6
-lnL8iMPAcHpx0byMztoiHybZsmoV4eKGteuu1dwt0CK7Vz1MMKOgQKkLtq1NzWUe
-5DEWew6kXfumd6/yxKJV4i0Zj21mzkjWAtFYk/JXenTGN42RRCErqCFCbZ2qOHq/
-26QRgRBrQ+i9B3h91gLA2r7T7+UTcboUEhA8zhvvf8omx/gYw0M=
-=mPjB
------END PGP SIGNATURE-----
-
---agAcRzQ1V4vmM4bn--

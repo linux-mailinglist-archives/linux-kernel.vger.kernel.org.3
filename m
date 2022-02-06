@@ -2,144 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57CCF4AB122
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 18:59:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58DF14AB137
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 19:28:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345803AbiBFR7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 12:59:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42996 "EHLO
+        id S1345896AbiBFS2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 13:28:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345435AbiBFR7m (ORCPT
+        with ESMTP id S230006AbiBFS2X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 12:59:42 -0500
-Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D9FC06173B
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 09:59:41 -0800 (PST)
-Received: from ipservice-092-217-075-184.092.217.pools.vodafone-ip.de ([92.217.75.184] helo=martin-debian-2.paytec.ch)
-        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <martin@kaiser.cx>)
-        id 1nGlp4-0002n8-1H; Sun, 06 Feb 2022 18:59:38 +0100
-From:   Martin Kaiser <martin@kaiser.cx>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Michael Straube <straube.linux@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH 5/5] staging: r8188eu: remove ishighspeed from dvobj_priv
-Date:   Sun,  6 Feb 2022 18:59:25 +0100
-Message-Id: <20220206175925.461426-6-martin@kaiser.cx>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220206175925.461426-1-martin@kaiser.cx>
-References: <20220206175925.461426-1-martin@kaiser.cx>
+        Sun, 6 Feb 2022 13:28:23 -0500
+X-Greylist: delayed 1582 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Feb 2022 10:28:21 PST
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 160CFC06173B;
+        Sun,  6 Feb 2022 10:28:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
+        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
+        In-Reply-To:References; bh=/8tPNhnmKNqwNI2GwJ1u5pVwv907hfEX8rrGwiFxMM8=; b=dl
+        XuCEYwo3gFWPQbeuANJDhxAM8CTKgrsz3WhXKSrLbI/5d9Yk3IoTKKc++vKZLa7X2pEZ1ivFIdH4a
+        gRCAlhtGhvrgWkKYkdpn1pBI9tcCLi15RfDJ07hBFk/nIxUPNC1godBA++221YH4pFetZN5kXKtZJ
+        6Yr0ZoVkg+U2jn8=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nGlr3-004Wpn-KU; Sun, 06 Feb 2022 19:01:41 +0100
+Date:   Sun, 6 Feb 2022 19:01:41 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Raag Jadav <raagjadav@gmail.com>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Steen Hegelund <steen.hegelund@microchip.com>,
+        Bjarni Jonasson <bjarni.jonasson@microchip.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: phy: mscc: enable MAC SerDes autonegotiation
+Message-ID: <YgANBQjsrmK+T/N+@lunn.ch>
+References: <1644043492-31307-1-git-send-email-raagjadav@gmail.com>
+ <Yf6QbbqaxZhZPUdC@lunn.ch>
+ <20220206171234.GA5778@localhost>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220206171234.GA5778@localhost>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There's no need to store the usb device speed in struct dvobj_priv.
+On Sun, Feb 06, 2022 at 10:42:34PM +0530, Raag Jadav wrote:
+> On Sat, Feb 05, 2022 at 03:57:49PM +0100, Andrew Lunn wrote:
+> > On Sat, Feb 05, 2022 at 12:14:52PM +0530, Raag Jadav wrote:
+> > > Enable MAC SerDes autonegotiation to distinguish between
+> > > 1000BASE-X, SGMII and QSGMII MAC.
+> > 
+> > How does autoneg help you here? It just tells you about duplex, pause
+> > etc. It does not indicate 1000BaseX, SGMII etc. The PHY should be
+> > using whatever mode it was passed in phydev->interface, which the MAC
+> > sets when it calls the connection function. If the PHY dynamically
+> > changes its host side mode as a result of what that line side is
+> > doing, it should also change phydev->interface. However, as far as i
+> > can see, the mscc does not do this.
+> >
+> 
+> Once the PHY auto-negotiates parameters such as speed and duplex mode
+> with its link partner over the copper link as per IEEE 802.3 Clause 27,
+> the link partner’s capabilities are then transferred by PHY to MAC
+> over 1000BASE-X or SGMII link using the auto-negotiation functionality
+> defined in IEEE 802.3z Clause 37.
 
-We can read the speed from struct usb_device. dvobj_priv has a pointer
-to the usb_device.
+None of this allows you to distinguish between 1000BASE-X, SGMII and
+QSGMII, which is what the commit message says.
 
-Signed-off-by: Martin Kaiser <martin@kaiser.cx>
----
- drivers/staging/r8188eu/core/rtw_iol.c      | 4 +++-
- drivers/staging/r8188eu/hal/usb_halinit.c   | 4 ++--
- drivers/staging/r8188eu/include/drv_types.h | 1 -
- drivers/staging/r8188eu/include/usb_ops.h   | 2 +-
- drivers/staging/r8188eu/os_dep/usb_intf.c   | 8 --------
- 5 files changed, 6 insertions(+), 13 deletions(-)
+It does allow you to get duplex, pause, and maybe speed via in band
+signalling. But you should also be getting the same information out of
+band, via the phylib callback.
 
-diff --git a/drivers/staging/r8188eu/core/rtw_iol.c b/drivers/staging/r8188eu/core/rtw_iol.c
-index 923da2a9f6ae..26f2a6fc3f38 100644
---- a/drivers/staging/r8188eu/core/rtw_iol.c
-+++ b/drivers/staging/r8188eu/core/rtw_iol.c
-@@ -68,8 +68,10 @@ bool rtw_IOL_applied(struct adapter  *adapter)
- 	if (1 == adapter->registrypriv.fw_iol)
- 		return true;
- 
--	if ((2 == adapter->registrypriv.fw_iol) && (!adapter_to_dvobj(adapter)->ishighspeed))
-+	if ((2 == adapter->registrypriv.fw_iol) &&
-+	    (!(adapter_to_dvobj(adapter)->pusbdev->speed == USB_SPEED_HIGH)))
- 		return true;
-+
- 	return false;
- }
- 
-diff --git a/drivers/staging/r8188eu/hal/usb_halinit.c b/drivers/staging/r8188eu/hal/usb_halinit.c
-index 03966a1e247e..e3a28c443f24 100644
---- a/drivers/staging/r8188eu/hal/usb_halinit.c
-+++ b/drivers/staging/r8188eu/hal/usb_halinit.c
-@@ -48,7 +48,7 @@ void rtl8188eu_interface_configure(struct adapter *adapt)
- 	struct hal_data_8188e *haldata = &adapt->haldata;
- 	struct dvobj_priv	*pdvobjpriv = adapter_to_dvobj(adapt);
- 
--	if (pdvobjpriv->ishighspeed)
-+	if (pdvobjpriv->pusbdev->speed == USB_SPEED_HIGH)
- 		haldata->UsbBulkOutSize = USB_HIGH_SPEED_BULK_SIZE;/* 512 bytes */
- 	else
- 		haldata->UsbBulkOutSize = USB_FULL_SPEED_BULK_SIZE;/* 64 bytes */
-@@ -105,7 +105,7 @@ static void _InitInterrupt(struct adapter *Adapter)
- 	/*  1; Use bulk endpoint to upload interrupt pkt, */
- 	usb_opt = rtw_read8(Adapter, REG_USB_SPECIAL_OPTION);
- 
--	if (!adapter_to_dvobj(Adapter)->ishighspeed)
-+	if (!(adapter_to_dvobj(Adapter)->pusbdev->speed == USB_SPEED_HIGH))
- 		usb_opt = usb_opt & (~INT_BULK_SEL);
- 	else
- 		usb_opt = usb_opt | (INT_BULK_SEL);
-diff --git a/drivers/staging/r8188eu/include/drv_types.h b/drivers/staging/r8188eu/include/drv_types.h
-index 618a6529192b..894e70a0d506 100644
---- a/drivers/staging/r8188eu/include/drv_types.h
-+++ b/drivers/staging/r8188eu/include/drv_types.h
-@@ -137,7 +137,6 @@ struct dvobj_priv {
- 
- /*-------- below is for USB INTERFACE --------*/
- 
--	u8	ishighspeed;
- 	u8	RtNumOutPipes;
- 
- 	struct usb_interface *pusbintf;
-diff --git a/drivers/staging/r8188eu/include/usb_ops.h b/drivers/staging/r8188eu/include/usb_ops.h
-index 0a1155bbc7b8..62e4706c0497 100644
---- a/drivers/staging/r8188eu/include/usb_ops.h
-+++ b/drivers/staging/r8188eu/include/usb_ops.h
-@@ -55,7 +55,7 @@ static inline u8 rtw_usb_bulk_size_boundary(struct adapter *padapter,
- 	u8 rst = true;
- 	struct dvobj_priv *pdvobjpriv = adapter_to_dvobj(padapter);
- 
--	if (pdvobjpriv->ishighspeed)
-+	if (pdvobjpriv->pusbdev->speed == USB_SPEED_HIGH)
- 		rst = (0 == (buf_len) % USB_HIGH_SPEED_BULK_SIZE) ?
- 		      true : false;
- 	else
-diff --git a/drivers/staging/r8188eu/os_dep/usb_intf.c b/drivers/staging/r8188eu/os_dep/usb_intf.c
-index 10c33e2ae3bc..cd7f28d25c47 100644
---- a/drivers/staging/r8188eu/os_dep/usb_intf.c
-+++ b/drivers/staging/r8188eu/os_dep/usb_intf.c
-@@ -117,14 +117,6 @@ static struct dvobj_priv *usb_dvobj_init(struct usb_interface *usb_intf)
- 	if (rt_num_in_pipes != 1)
- 		goto err;
- 
--	if (pusbd->speed == USB_SPEED_HIGH) {
--		pdvobjpriv->ishighspeed = true;
--		DBG_88E("USB_SPEED_HIGH\n");
--	} else {
--		pdvobjpriv->ishighspeed = false;
--		DBG_88E("NON USB_SPEED_HIGH\n");
--	}
--
- 	/* 3 misc */
- 	rtw_reset_continual_urb_error(pdvobjpriv);
- 
--- 
-2.30.2
+There are some MACs which don't seem to work correctly without the in
+band signalling, so maybe that is your problem? Please could you give
+more background about your problem, what MAC and PHY combination are
+you using, what problem you are seeing, etc.
+
+    Andrew
 

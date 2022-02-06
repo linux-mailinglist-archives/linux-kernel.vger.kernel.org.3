@@ -2,119 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33E8E4AB061
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 16:46:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAAAE4AB073
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 16:59:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243061AbiBFPq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 10:46:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57790 "EHLO
+        id S244213AbiBFP7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 10:59:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233564AbiBFPqU (ORCPT
+        with ESMTP id S240665AbiBFP7u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 10:46:20 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BADA9C06173B;
-        Sun,  6 Feb 2022 07:46:19 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DB7381EC032C;
-        Sun,  6 Feb 2022 16:46:13 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1644162374;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=I2ZGpe+v4nEY0jmVxtOXpQHTFNc9Pxn4PtQ3aRV2Qtc=;
-        b=CzcdKA8p9YEvjhiMkLz+0axjH596hm96hf61Ug0DiAzxmxq/rAY/+rv8CDyZa2vlSc5JjM
-        ZPo2fVWy148tDei8z8wsvYq9jNWZ+yI5KVCTDWmPBbGdMjx/hyzfSGtHgdPX7HpkdqxhXa
-        FEwZlI0OUAR4cZVrZex7WvXBG3Y1J1E=
-Date:   Sun, 6 Feb 2022 16:46:08 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Michael Roth <michael.roth@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>, brijesh.singh@amd.com,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-Subject: Re: [PATCH v9 38/43] x86/sev: Use firmware-validated CPUID for
- SEV-SNP guests
-Message-ID: <Yf/tQPqbP97lrVpg@zn.tnic>
-References: <20220128171804.569796-1-brijesh.singh@amd.com>
- <20220128171804.569796-39-brijesh.singh@amd.com>
- <20220205171901.kt47bahdmh64b45x@amd.com>
+        Sun, 6 Feb 2022 10:59:50 -0500
+X-Greylist: delayed 493 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Feb 2022 07:59:49 PST
+Received: from talisker.home.drummond.us (drummond.us [74.95.14.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A459CC043184
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 07:59:49 -0800 (PST)
+Received: from talisker.home.drummond.us (localhost [127.0.0.1])
+        by talisker.home.drummond.us (8.15.2/8.15.2/Debian-20) with ESMTP id 216Fn9HY2355931;
+        Sun, 6 Feb 2022 07:49:09 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=home.drummond.us;
+        s=default; t=1644162549;
+        bh=lh62Ew6xc+1J56dda/HpT63a00cvbUs7Fsz625WMbNo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=IMvAAykX2zxhJdzSUi0tXykKGnnaIw9PnTefGLd/FLsa7mUt+ApvNnkAxjiOG8CF2
+         UlzPW6Xir5kCCxWqfEYN3bIysHzhkbkxqZusgCedJCPZpR4o4Wb9ogF4kWDlkyeDok
+         LYTlYz986m951X3ZrowlNl0r0VwywtHKololqrw2XNSuGipoLq/s7ikn04KsKL39ad
+         cghaP14NzAPk6+6NHZRQNYCkgXjNw40CyY51sGcQ4cQ0Jz7V27lPAVlzAd+Dvjlk4C
+         ETy1ibTEQwbii5XPOQWd239kGFK+1TUd3H++9y9iz3njdjgvynb9MImSqqhM8JhwF+
+         VSCoxgC9Bxkaw==
+Received: (from walt@localhost)
+        by talisker.home.drummond.us (8.15.2/8.15.2/Submit) id 216Fn0TW2355912;
+        Sun, 6 Feb 2022 07:49:00 -0800
+From:   Walt Drummond <walt@drummond.us>
+To:     agordeev@linux.ibm.com, arnd@arndb.de, benh@kernel.crashing.org,
+        borntraeger@de.ibm.com, chris@zankel.net, davem@davemloft.net,
+        gregkh@linuxfoundation.org, hca@linux.ibm.com, deller@gmx.de,
+        ink@jurassic.park.msu.ru, James.Bottomley@HansenPartnership.com,
+        jirislaby@kernel.org, mattst88@gmail.com, jcmvbkbc@gmail.com,
+        mpe@ellerman.id.au, paulus@samba.org, rth@twiddle.net,
+        dalias@libc.org, tsbogend@alpha.franken.de, gor@linux.ibm.com,
+        ysato@users.osdn.me
+Cc:     linux-kernel@vger.kernel.org, ar@cs.msu.ru, walt@drummond.us,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
+Subject: [PATCH v2 0/3] vstatus: TTY status message request
+Date:   Sun,  6 Feb 2022 07:48:51 -0800
+Message-Id: <20220206154856.2355838-1-walt@drummond.us>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220205171901.kt47bahdmh64b45x@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 05, 2022 at 11:19:01AM -0600, Michael Roth wrote:
-> I mentioned the concern you raised about out-of-spec hypervisors
-> using non-zero for Reserved fields, and potentially breaking future
-> guests that attempt to make use of them if they ever get re-purposed
-> for some other functionality, but their take on that is that such a
-> hypervisor is clearly out-of-spec, and would not be supported.
+This patchset adds TTY status message request feature to the n_tty
+line dicipline.  This feature prints a brief message containing basic
+system and process group information to a user's TTY in response to a
+new control character in the line dicipline (default Ctrl-T) or the
+TIOCSTAT ioctl.  The message contains the current system load, the
+name and PID of an interesting process in the forground process group,
+it's run time, percent CPU usage and RSS.  An example of this message
+is:
 
-Yah, like stating that something should not be done in the spec is
-going to stop people from doing it anyway. You folks need to understand
-one thing: the smaller the attack surface, the better. And you need to
-*enforce* that - not state it in a spec. No one cares about the spec
-when it comes to poking holes in the architecture. And people do poke
-and will poke holes *especially* in this architecture, as its main goal
-is security.
+  load: 0.31  cmd: sleep 3616843 [sleeping] 0.36r 0.00u 0.00s 0% 696k
 
-> Another possibility is enforcing 0 in the firmware itself.
+This feature is in many other Unix systems, both current and
+historical.  In other implementations, this feature would also send
+SIGINFO to the process group; this implementation does not.
 
-Yes, this is the thing to do. If they're going to be reused in the
-future, then guests can be changed to handle that. Like we do all the
-time anyway.
+User API visible changes are limited to:
+ - The addition of VSTATUS in termios.c_cc[]
+ - The addition of NOKERNINFO bit in termios.l_cflags
+ - The addition of the TIOCSTAT ioctl number
 
-> So given their guidance on the Reserved fields, and your guidance
-> on not doing the other sanity-checks, my current plan to to drop
-> snp_check_cpuid_table() completely for v10, but if you have other
-> thoughts on that just let me know.
+None of these changes break the existing kernel api as the termios
+structure on all architectures has enough space in the control
+character array (.c_cc) for the new character.
 
-Yes, and pls fix the firmware to zero them out, because from reading
-your very detailed explanation - btw, thanks for taking the time to
-explain properly what's not in the ABI doc:
+Walt Drummond (3):
+  vstatus: Allow the n_tty line dicipline to write to a user tty
+  status: Add user space API definitions for VSTATUS, NOKERNINFO and
+    TIOCSTAT
+  vstatus: Display an informational message when the VSTATUS character
+    is pressed or TIOCSTAT ioctl is called.
 
-https://lore.kernel.org/r/20220205154243.s33gwghqwbb4efyl@amd.com
-
-it sounds like those two input fields are not really needed. So the
-earlier you fix them in the firmware and deprecate them, the better.
-
-Thx!
+ arch/alpha/include/asm/termios.h         |   4 +-
+ arch/alpha/include/uapi/asm/ioctls.h     |   1 +
+ arch/alpha/include/uapi/asm/termbits.h   |   2 +
+ arch/ia64/include/asm/termios.h          |   4 +-
+ arch/ia64/include/uapi/asm/termbits.h    |   2 +
+ arch/mips/include/asm/termios.h          |   4 +-
+ arch/mips/include/uapi/asm/ioctls.h      |   1 +
+ arch/mips/include/uapi/asm/termbits.h    |   2 +
+ arch/parisc/include/asm/termios.h        |   4 +-
+ arch/parisc/include/uapi/asm/ioctls.h    |   1 +
+ arch/parisc/include/uapi/asm/termbits.h  |   2 +
+ arch/powerpc/include/asm/termios.h       |   4 +-
+ arch/powerpc/include/uapi/asm/ioctls.h   |   2 +
+ arch/powerpc/include/uapi/asm/termbits.h |   2 +
+ arch/s390/include/asm/termios.h          |   4 +-
+ arch/sh/include/uapi/asm/ioctls.h        |   1 +
+ arch/sparc/include/uapi/asm/ioctls.h     |   1 +
+ arch/sparc/include/uapi/asm/termbits.h   |   2 +
+ arch/xtensa/include/uapi/asm/ioctls.h    |   1 +
+ drivers/tty/Makefile                     |   2 +-
+ drivers/tty/n_tty.c                      | 103 +++++++++----
+ drivers/tty/n_tty_status.c               | 181 +++++++++++++++++++++++
+ drivers/tty/tty_io.c                     |   2 +-
+ include/asm-generic/termios.h            |   4 +-
+ include/linux/tty.h                      |   7 +-
+ include/uapi/asm-generic/ioctls.h        |   1 +
+ include/uapi/asm-generic/termbits.h      |   2 +
+ 27 files changed, 301 insertions(+), 45 deletions(-)
+ create mode 100644 drivers/tty/n_tty_status.c
 
 -- 
-Regards/Gruss,
-    Boris.
+2.30.2
 
-https://people.kernel.org/tglx/notes-about-netiquette

@@ -2,111 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 707524AB00E
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 15:45:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EF804AB010
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 15:55:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243162AbiBFOpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 09:45:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40210 "EHLO
+        id S243232AbiBFOxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 09:53:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231978AbiBFOph (ORCPT
+        with ESMTP id S231978AbiBFOxA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 09:45:37 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ED158C043183
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 06:45:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644158735;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CH0OWcXnRkrjgrCYXVT/t1v7cfdo23G2D1dLRWzwJxk=;
-        b=cqMEdtWl92deT1ocafFua67NZniUYSCHAyP95ihMMhfjxXHiUXwA/rIoBF+m3dxw0vIdNX
-        QSo9tzr2CGnVGABMNjaALYIVQL9jYN6tTywEqv5MZlhFL1LqURQmUvfzHncxWqj3HzJHlr
-        E1eaBSLVEToNREa1rtd79BRXDwG8G2E=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-557-JeVKA7KKM6OQ1dODVfDZyQ-1; Sun, 06 Feb 2022 09:45:34 -0500
-X-MC-Unique: JeVKA7KKM6OQ1dODVfDZyQ-1
-Received: by mail-wm1-f69.google.com with SMTP id 130-20020a1c0288000000b0037bc5cbd027so439640wmc.8
-        for <linux-kernel@vger.kernel.org>; Sun, 06 Feb 2022 06:45:34 -0800 (PST)
+        Sun, 6 Feb 2022 09:53:00 -0500
+Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546C6C06173B
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 06:52:59 -0800 (PST)
+Received: by mail-ua1-x92a.google.com with SMTP id r8so19133410uaj.0
+        for <linux-kernel@vger.kernel.org>; Sun, 06 Feb 2022 06:52:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/FqBgKkEp48YXOFOA5wzxrOSHuuh4qZgyEe5RGqRigo=;
+        b=pp7TcDiuO8DE7JxuY9v1mSiV1R7xPDiAjN3tfkfzMturFK7xzBQNPzTZ9RwvbrBl3J
+         nbPOWJ5K34vDFBLoN8aDfRzcejDXVIENcjVL/n5FRMUxE6BgLujzvoR69Nk7iKa6cYJ0
+         HYYv8OTLXWKq7WTj7RhN0WrUAhuTGJUob4tlwWEBKFhSFNRFHEynoQl8XcOqd66Toh3Q
+         uvR14nze/A8b6Zpaa2ZWrHGbTjX4GcRxzAALZQLqVMBpOXTx1Atn1Tz1sB/Ybvab25Pi
+         X1fZH1tXfpvkX85I4MkMHjbjcpN/PNw3eI+Rb3ZmiJ4/neLm7zXDjJMbsUOwJJB2njz1
+         8waA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=CH0OWcXnRkrjgrCYXVT/t1v7cfdo23G2D1dLRWzwJxk=;
-        b=N0+133OVWtZB3boRsSV0t12gRsA6MpYDIFYVTQbGs9gVmA6ZG2r5Df8Vx3gZksT/rd
-         9EqIuAefj6aQbNl6KmCwoYI7qr2bnIgG8f6IXv47zT3JQoZQtgaXrrmt429j6MfWQ8gW
-         wo14oZvKyWG++25fhbUOaeNL6WCH91uX7VRSvPjKl0WY6hQTV5ALpVyamABajfNI6SO1
-         9UzYkChBYxinsUqm9+n63ZvoDCI1kmk4bMe3444OJYxxwlMXibxhAirpobzLyfaWcynF
-         ajHonpGrqq5KI8OsUvutOtgNA2O8LXu/RNmCUDe2bYcBsSEjnEfu0RooccKvL4VhhjSF
-         Z8Hw==
-X-Gm-Message-State: AOAM530BQHb6r5C4gdJuPkZHCmrRRaMfcIhfwWpwJ6YyjSkkBjUK6K97
-        pV9/OWAJ876zAzePr5nV/t0PHESXqe1esgwisXPXFG3L9e/HIenkgESvOPONhGe4rVahr4r2edu
-        EKIauTIykbSZDMDYZIt9EU48=
-X-Received: by 2002:a7b:c109:: with SMTP id w9mr5994541wmi.118.1644158733673;
-        Sun, 06 Feb 2022 06:45:33 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxhVXuM05zPsQbFNQ6KgmTUd3qNI7Oc/pZQt1LG4yuxaUGPKGMhRbsUz+3ZndnHcYmWWvT0vA==
-X-Received: by 2002:a7b:c109:: with SMTP id w9mr5994534wmi.118.1644158733557;
-        Sun, 06 Feb 2022 06:45:33 -0800 (PST)
-Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id o29sm5890498wro.47.2022.02.06.06.45.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Feb 2022 06:45:33 -0800 (PST)
-Date:   Sun, 6 Feb 2022 14:45:32 +0000
-From:   Aaron Tomlin <atomlin@redhat.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Michal Suchanek <msuchanek@suse.de>,
-        "cl@linux.com" <cl@linux.com>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "jeyu@kernel.org" <jeyu@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        "atomlin@atomlin.com" <atomlin@atomlin.com>,
-        "ghalat@redhat.com" <ghalat@redhat.com>,
-        "allen.lkml@gmail.com" <allen.lkml@gmail.com>,
-        "void@manifault.com" <void@manifault.com>,
-        "joe@perches.com" <joe@perches.com>
-Subject: Re: [RFC PATCH v4 00/13] module: core code clean up
-Message-ID: <20220206144532.wbei7fn77fqrpk5j@ava.usersys.com>
-X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
-X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
-References: <20220130213214.1042497-1-atomlin@redhat.com>
- <Yfsf2SGELhQ71Ovo@bombadil.infradead.org>
- <30f0da92-17b0-4130-20d1-9fea8b81cdbc@csgroup.eu>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/FqBgKkEp48YXOFOA5wzxrOSHuuh4qZgyEe5RGqRigo=;
+        b=XmJTe+v+RIaNqwdu+qdeAXNmvoBhp87q7dSV2UXMWVtv2ygD4QDNgENSdKwk+2piGq
+         MDGl7VwwFd55DeOokA9sODK7SAKm8D0vqZswj/slIpz1mOOPNIRTGTNKpwbRgHXF9age
+         7WziNEHVwx7xG4uKq7LLtDvYvYg+wBPlgwEl2am6QXy516dnnRXDydyGe3sPLVZgZbHk
+         lv5y9+hzPHqTvGvjooPfk/grYLsDoz9yAt9MoIrY3tgVexb2Mmq2qfB2EBpUDGd5NXIn
+         BRZx9FXVZWg0g6qiSOoMxjCMRnmGDSbLlvDZFYL+JoF4lzlfn7IDVE+PsuoIEGIBhbMQ
+         J1Jg==
+X-Gm-Message-State: AOAM532tOg0cHjQe2D3LDwJbi8hDHTMEqXh13FoZAm0W6ui8fxWcH5Y9
+        qRi0sLbZcpwSj2mHe8ghSCkVX5izQj983XJB7o0=
+X-Google-Smtp-Source: ABdhPJyZ5aSDW0doLYdRW0LQjO+3o9/9x2Sp/CTv8IDgyPMyomuCKsQpOiyuc4MUjtf0nI+7iR67MSRnKlu+ov+u9vs=
+X-Received: by 2002:a67:e158:: with SMTP id o24mr3257698vsl.17.1644159178430;
+ Sun, 06 Feb 2022 06:52:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <30f0da92-17b0-4130-20d1-9fea8b81cdbc@csgroup.eu>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220204195852.1751729-1-willy@infradead.org> <20220204195852.1751729-21-willy@infradead.org>
+In-Reply-To: <20220204195852.1751729-21-willy@infradead.org>
+From:   Mark Hemment <markhemm@googlemail.com>
+Date:   Sun, 6 Feb 2022 14:52:46 +0000
+Message-ID: <CANe_+Ugjtu2zw8i3CyCU3mu71L7Gh_etuj_5t64Bx7y7+fj2jA@mail.gmail.com>
+Subject: Re: [PATCH 20/75] mm/gup: Convert gup_pte_range() to use a folio
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        William Kucharski <william.kucharski@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 2022-02-03 07:48 +0000, Christophe Leroy wrote:
-> All function prototypes in header files are pointlessly prepended with 
-> 'extern' keyword. This was done that way in the old days, but has been 
-> deprecated as this keyword does nothing on function prototypes but adds 
-> visual pollution when looking at the files.
+On Fri, 4 Feb 2022 at 20:21, Matthew Wilcox (Oracle)
+<willy@infradead.org> wrote:
+>
+> We still call try_grab_folio() once per PTE; a future patch could
+> optimise to just adjust the reference count for each page within
+> the folio.
+>
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> Reviewed-by: John Hubbard <jhubbard@nvidia.com>
+> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+> Reviewed-by: William Kucharski <william.kucharski@oracle.com>
+> ---
+>  mm/gup.c | 16 +++++++---------
+>  1 file changed, 7 insertions(+), 9 deletions(-)
+>
+> diff --git a/mm/gup.c b/mm/gup.c
+> index 00227b2cb1cf..44281350db1a 100644
+> --- a/mm/gup.c
+> +++ b/mm/gup.c
+> @@ -2252,7 +2252,8 @@ static int gup_pte_range(pmd_t pmd, unsigned long addr, unsigned long end,
+>         ptem = ptep = pte_offset_map(&pmd, addr);
+>         do {
+>                 pte_t pte = ptep_get_lockless(ptep);
+> -               struct page *head, *page;
+> +               struct page *page;
+> +               struct folio *folio;
+>
+>                 /*
+>                  * Similar to the PMD case below, NUMA hinting must take slow
+> @@ -2279,22 +2280,20 @@ static int gup_pte_range(pmd_t pmd, unsigned long addr, unsigned long end,
+>                 VM_BUG_ON(!pfn_valid(pte_pfn(pte)));
+>                 page = pte_page(pte);
+>
+> -               head = try_grab_compound_head(page, 1, flags);
+> -               if (!head)
+> +               folio = try_grab_folio(page, 1, flags);
+> +               if (!folio)
+>                         goto pte_unmap;
+>
+>                 if (unlikely(page_is_secretmem(page))) {
+> -                       put_compound_head(head, 1, flags);
+> +                       gup_put_folio(folio, 1, flags);
+>                         goto pte_unmap;
+>                 }
+>
+>                 if (unlikely(pte_val(pte) != pte_val(*ptep))) {
+> -                       put_compound_head(head, 1, flags);
+> +                       gup_put_folio(folio, 1, flags);
+>                         goto pte_unmap;
+>                 }
+>
+> -               VM_BUG_ON_PAGE(compound_head(page) != head, page);
+> -
+>                 /*
+>                  * We need to make the page accessible if and only if we are
+>                  * going to access its content (the FOLL_PIN case).  Please
+> @@ -2308,10 +2307,9 @@ static int gup_pte_range(pmd_t pmd, unsigned long addr, unsigned long end,
+>                                 goto pte_unmap;
+>                         }
 
-Christophe,
+V. Minor/nit: Above the "goto pte_unmap;" is the code block;
+           if (flags & FOLL_PIN) {
+                        ret = arch_make_page_accessible(page);
+                        if (ret) {
+                                unpin_user_page(page);
+                                goto pte_unmap;
+                        }
+                }
+Other conditions which goto pte_unmap, after successful
+try_grab_folio(), call gup_put_folio() (rather than
+unpin_user_page()).
+No change in functionality, but suggest calling gup_put_folio() here
+too for consistency.
 
-Firstly, thanks for your initial feedback.
-I will address the above.
-
-
-Kind regards,
-
--- 
-Aaron Tomlin
-
+Cheers,
+Mark

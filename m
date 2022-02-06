@@ -2,99 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E8F44AB1D3
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 20:50:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 249F34AB1CF
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Feb 2022 20:50:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241913AbiBFTup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 14:50:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47720 "EHLO
+        id S239326AbiBFTug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 14:50:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241858AbiBFTuj (ORCPT
+        with ESMTP id S238605AbiBFTue (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 14:50:39 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA02C043185;
-        Sun,  6 Feb 2022 11:50:38 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 52E9E1EC0441;
-        Sun,  6 Feb 2022 20:50:33 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1644177033;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=fNe0TAkFnnYgWsvJiKmoAN6OEJNdqTl6uz93GELhOKY=;
-        b=CUZBqkas4atRQCcdM5RawWNOriI+3V2cJQl2gXMZGWXOZSDmfxwMNXgNEkvQRRdd+yvMTK
-        UvKhQzmv6jEB0Dh3ootLqi+aVoGzIVYO7uEkkq//uwaSbbCFCAOkEVVyiioB77MyiIiaEQ
-        irRUp3MjTMTYXG/RZqZbZu4NceAESsw=
-Date:   Sun, 6 Feb 2022 20:50:28 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Brijesh Singh <brijesh.singh@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-Subject: Re: [PATCH v9 38/43] x86/sev: Use firmware-validated CPUID for
- SEV-SNP guests
-Message-ID: <YgAmhHv+kVtkIUB8@zn.tnic>
-References: <20220128171804.569796-1-brijesh.singh@amd.com>
- <20220128171804.569796-39-brijesh.singh@amd.com>
+        Sun, 6 Feb 2022 14:50:34 -0500
+Received: from relay.hostedemail.com (relay.hostedemail.com [64.99.140.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A596AC06173B
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 11:50:33 -0800 (PST)
+Received: from omf15.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay13.hostedemail.com (Postfix) with ESMTP id 93013611B0;
+        Sun,  6 Feb 2022 19:50:32 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf15.hostedemail.com (Postfix) with ESMTPA id 8CD6C1D;
+        Sun,  6 Feb 2022 19:50:13 +0000 (UTC)
+Message-ID: <d9ce0f60350b867e65bb0a05f961c42d6c20d4db.camel@perches.com>
+Subject: Re: [PATCH] staging: octeon-usb: Fix 'should not end with '(''
+From:   Joe Perches <joe@perches.com>
+To:     David Laight <David.Laight@ACULAB.COM>,
+        "'joelcchangg@gmail.com'" <joelcchangg@gmail.com>,
+        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "gregkh@linuxfoundation.com" <gregkh@linuxfoundation.com>
+Date:   Sun, 06 Feb 2022 11:50:30 -0800
+In-Reply-To: <8536ca17c2945cb77c506d99eff5ccc42e71f2f3.camel@perches.com>
+References: <20220206074615.3527-1-joelcchangg@gmail.com>
+         <c0b504dd1f254f19b6ff60948684303b@AcuMS.aculab.com>
+         <8536ca17c2945cb77c506d99eff5ccc42e71f2f3.camel@perches.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220128171804.569796-39-brijesh.singh@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 8CD6C1D
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Stat-Signature: opnfayb4ossgottt4rcdkdm717cqr87t
+X-Rspamd-Server: rspamout07
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1/XFceJYsvyMkGaDDxP5UWNelFbS+zOkY8=
+X-HE-Tag: 1644177013-779463
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 11:17:59AM -0600, Brijesh Singh wrote:
-> +/*
-> + * It is useful from an auditing/testing perspective to provide an easy way
-> + * for the guest owner to know that the CPUID table has been initialized as
-> + * expected, but that initialization happens too early in boot to print any
-> + * sort of indicator, and there's not really any other good place to do it.
+On Sun, 2022-02-06 at 09:17 -0800, Joe Perches wrote:
+> On Sun, 2022-02-06 at 14:16 +0000, David Laight wrote:
+> > From: joelcchangg@gmail.com
+> > > Sent: 06 February 2022 07:46
+[]
+> This _might_ be better with the return type on a separate line
+> 
+> Something like:
+> 
+> static struct cvmx_usb_transaction *
+> cvmx_usb_submit_transaction(struct octeon_hcd *usb, struct cvmx_usb_pipe *pipe,
+> 			    enum cvmx_usb_transfer type,
+> 			    u64 buffer, int buffer_length,
+> 			    u64 control_header, int iso_start_frame,
+> 			    int iso_number_packets,
+> 			    struct cvmx_usb_iso_packet *iso_packets,
+> 			    struct urb *urb)
 
-If you really wanna do it - and I think it might make sense to be able
-to dump that table for debugging or whatever purposes, you could define
-a cmdline parameter like
+As this is a static function only used by this compilation unit,
+it's maybe even better removing the unnecessary cvmx_usb_ prefix too.
 
-	sev=debug
+Maybe a bunch of unnecessary prefix removals...
 
-or so, which would enable checking and dumping of the cpuid table.
 
-For example...
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette

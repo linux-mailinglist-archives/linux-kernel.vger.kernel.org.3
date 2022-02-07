@@ -2,65 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E34324ABF1F
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 14:23:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78FE24ABEF4
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 14:23:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1448560AbiBGNL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 08:11:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47512 "EHLO
+        id S1348084AbiBGNMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 08:12:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445240AbiBGMlq (ORCPT
+        with ESMTP id S1445378AbiBGMmC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 07:41:46 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52BDBE031016
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 04:33:17 -0800 (PST)
+        Mon, 7 Feb 2022 07:42:02 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40597E0321DD
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 04:33:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644237197; x=1675773197;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vhBTmSn8UkwEjJUl4ynGb5kIz8nOXSvEwd6JGQ6YNy8=;
-  b=ABFF0jbt9bD8QBR9MYcd7MFWyf5rwaJVjImMDNTHcMLkYTQI1qa1+AQI
-   rpx0pCFIG5Sd5BhE/l2FqAZLBaQtibUz36FnsWqMF37AdyD/9ahJqT5Al
-   oxz5GWWh6HraxHYNAO5zebXZ+3rAPqAHgUZ88zHpeVM82lC/uqfjiAo3A
-   d7YzbKIHC7b8+HOIZFAah7MaqAOw9GIphfPZi3ZoiJ5r8jJzsEteonG7P
-   qz5cV9GBTob6siimsajLIEKYbubAZLHd7WVq89ID94uAR30FcKCqtmy7k
-   jmG6lQnsLgnQAlznypBX9RiYoZnluWunWMyya6VlD93+gm/0IZCyn/UlZ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10250"; a="228674150"
+  t=1644237211; x=1675773211;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=x6kFVrzT05XFotdvtiT0qifyAXqqSEHdTPezDSU7rR8=;
+  b=IA3ugXAmGTNY+s33704DvbybAOE4u7SFDXBSSy6J4RbFtRdGukYN5Zhi
+   dc5JVkLKVPw+qblq6ac8h4qkBe/m7sooZFPKvSgRLJFZVDKJ09DE2kY/c
+   ht5P5HAhs5lWeA7JYT/VmxXbqgXfopqary0wkevQiNcbXWL0mG20pddl4
+   lAhxeQIs6BMeD64skdRuEEF/Rj97JROIVZ3DBhyXZCJHIVyQCmjaoNwXA
+   RIr8vR3Q9ShumJ9khH0+ZJB/wBA2Y8FtgInZvi6iUsYlDslBpRUA461Ti
+   rFLcmwJhZHkLnjhItMH+FowAOvj90T6WCzcTe2cMBcLZFDjRJfX+t6Fe6
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10250"; a="247538984"
 X-IronPort-AV: E=Sophos;i="5.88,349,1635231600"; 
-   d="scan'208";a="228674150"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 04:32:13 -0800
+   d="scan'208";a="247538984"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 04:33:30 -0800
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,349,1635231600"; 
-   d="scan'208";a="621535538"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 04:32:11 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nH3Al-001tq2-Md;
-        Mon, 07 Feb 2022 14:31:11 +0200
-Date:   Mon, 7 Feb 2022 14:31:11 +0200
+   d="scan'208";a="484406335"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga006.jf.intel.com with ESMTP; 07 Feb 2022 04:33:28 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 57F393ED; Mon,  7 Feb 2022 14:33:43 +0200 (EET)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
-Cc:     gregkh@linuxfoundation.org, joe@perches.com, kitakar@gmail.com,
-        laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        mchehab@kernel.org, sakari.ailus@linux.intel.com,
-        tomi.valkeinen@ideasonboard.com, dan.carpenter@oracle.com
-Subject: Re: [PATCH] staging: media: atomisp: Use GENMASK instead of manual
- masking
-Message-ID: <YgERD7JdlqdaNHuA@smile.fi.intel.com>
-References: <20220206185830.39360-1-mosescb.dev@gmail.com>
+To:     Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?UTF-8?q?Jan=20D=C4=85bro=C5=9B?= <jsd@semihalf.com>
+Subject: [PATCH v2 1/1] bitfield: Add explicit inclusions to the example
+Date:   Mon,  7 Feb 2022 14:33:41 +0200
+Message-Id: <20220207123341.47533-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220206185830.39360-1-mosescb.dev@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,54 +62,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 06, 2022 at 07:58:30PM +0100, Moses Christopher Bollavarapu wrote:
-> There is a GENMASK macro available in linux/bits.h, for masking.
-> 
-> Example: GENMASK(3, 0) = 0b00001111 (same as (1 << 4) - 1)
+It's not obvious that bitfield.h doesn't guarantee the bits.h
+inclusion and the example in the former is confusing. Some
+developers think that it's okay to just include bitfield.h to
+get it working. Change example to explicitly include necessary
+headers in order to avoid confusion.
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Fixes: 3e9b3112ec74 ("add basic register-field manipulation macros")
+Depends-on: 8bd9cb51daac ("locking/atomics, asm-generic: Move some macros from <linux/bitops.h> to a new <linux/bits.h> file")
+Reported-by: Jan Dąbroś <jsd@semihalf.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+v2: used full paths
+ include/linux/bitfield.h | 3 +++
+ 1 file changed, 3 insertions(+)
 
-> Signed-off-by: Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
-> ---
->  drivers/staging/media/atomisp/pci/atomisp_compat_css20.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c b/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
-> index 1173be0e72b0..a345fa1d7de9 100644
-> --- a/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
-> +++ b/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
-> @@ -40,6 +40,7 @@
->  
->  #include <linux/io.h>
->  #include <linux/pm_runtime.h>
-
-> +#include <linux/bits.h>
-
-Probably this can be still ordered.
-
->  /* Assume max number of ACC stages */
->  #define MAX_ACC_STAGES	20
-> @@ -1913,11 +1914,11 @@ void atomisp_css_input_set_mode(struct atomisp_sub_device *asd,
->  			    &asd->stream_env[ATOMISP_INPUT_STREAM_GENERAL].stream_config;
->  		s_config->mode = IA_CSS_INPUT_MODE_TPG;
->  		s_config->source.tpg.mode = IA_CSS_TPG_MODE_CHECKERBOARD;
-> -		s_config->source.tpg.x_mask = (1 << 4) - 1;
-> +		s_config->source.tpg.x_mask = GENMASK(3, 0);
->  		s_config->source.tpg.x_delta = -2;
-> -		s_config->source.tpg.y_mask = (1 << 4) - 1;
-> +		s_config->source.tpg.y_mask = GENMASK(3, 0);
->  		s_config->source.tpg.y_delta = 3;
-> -		s_config->source.tpg.xy_mask = (1 << 8) - 1;
-> +		s_config->source.tpg.xy_mask = GENMASK(7, 0);
->  		return;
->  	}
->  
-> -- 
-> 2.30.2
-> 
-
+diff --git a/include/linux/bitfield.h b/include/linux/bitfield.h
+index 6093fa6db260..c9be1657f03d 100644
+--- a/include/linux/bitfield.h
++++ b/include/linux/bitfield.h
+@@ -19,6 +19,9 @@
+  *
+  * Example:
+  *
++ *  #include <linux/bitfield.h>
++ *  #include <linux/bits.h>
++ *
+  *  #define REG_FIELD_A  GENMASK(6, 0)
+  *  #define REG_FIELD_B  BIT(7)
+  *  #define REG_FIELD_C  GENMASK(15, 8)
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.34.1
 

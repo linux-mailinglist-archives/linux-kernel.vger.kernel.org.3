@@ -2,153 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BE5B4ACA6C
+	by mail.lfdr.de (Postfix) with ESMTP id CAE674ACA6D
 	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 21:28:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242770AbiBGU1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 15:27:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49552 "EHLO
+        id S242897AbiBGU1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 15:27:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233366AbiBGUY1 (ORCPT
+        with ESMTP id S232919AbiBGUY0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 15:24:27 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0C72FC0401E1
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 12:24:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644265465;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9T/OvHQML0n7t8483X0s9RB1P7k3PGxeDBNyGeKNXxg=;
-        b=gq1JiwiMhVRICsyRsLLPMuVjgxY3NuFaWNOyW3mIw1C3bCv7egaV8L8z1YeyRdPdG9TAQb
-        h15HpVxTIPRuJ9nWzPi3GKlhQHu5alQQw5exNpK8mf24IsMq3fIDWukQsAm7//3E1VVt2E
-        Bd65DYJYsIcjG+2BY6kE0Y+h+tei39k=
-Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
- [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-503-QjTbS4zmPG-IIYEL_gW-WA-1; Mon, 07 Feb 2022 15:24:24 -0500
-X-MC-Unique: QjTbS4zmPG-IIYEL_gW-WA-1
-Received: by mail-lj1-f200.google.com with SMTP id c31-20020a2ebf1f000000b0022d87a28911so4919396ljr.1
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 12:24:24 -0800 (PST)
+        Mon, 7 Feb 2022 15:24:26 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E81EC0401DA;
+        Mon,  7 Feb 2022 12:24:25 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id c15so21337953ljf.11;
+        Mon, 07 Feb 2022 12:24:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0QZUBGn5Vf3a75LS52BCKhCqw6Mtv6YRAewQwFkN9YU=;
+        b=HhaDozkIYW6SQNj1SQEVEcn2tye5SwdgIeieSdv/hIXRvmL1r923vLwDCNEEGwxBgy
+         ejLv9/tQuSRFUF6C7yjnA3fjs9L1IZyReulArI7kR7mayrLqFa+Pu+f1s6gYvelTFBt4
+         hKPqwWco2L3GIx8GWLseYf5rrUEGQKsJFMY0Jhq9deKERJj8heycEDGAXc6H2Mlq8GUJ
+         KWLysWMrukYAbLX/0qbqPZ3ZcmXbbq6Pt85S7Edf48M0a1LqXGXmv5gXzx4AHPW06Sb2
+         Tfogob6yzAnGUGavRbX4E61OEUFN9jaWmhYiqYCD3J2RRxJeibyNkh7HBXNBFzbTkg65
+         raiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9T/OvHQML0n7t8483X0s9RB1P7k3PGxeDBNyGeKNXxg=;
-        b=trMpr9zZItA2QVjTHq4+9y0TVSEEOTF+WfG0ACCrC6ce8RE3xfh/eG35ILmA9bF/u4
-         IwgnPbpzZHON4eZ4Z+c12FjL3UPJt5fYRlWWrRqbDU9aYWAI/BCu0IRD0Zp4nGBJ8FKX
-         +tNu6m6AX1gFkWLusJTj161aw0toMn6a+OJXUXt5FHeNV2y+3K8X6aqWjghPeg4BtSgu
-         y6pBb4PnnA8VHcm/2zqVLrwETcfZaPymuTjRWHoI4EKfCLyEQx68NJhz92AXDLUPwZg8
-         wMbbUGiZuRRonO/c0Tlzk/oMFFieN2fmzoeqlFfP9MZIhxHxZ6Ykl4DaBDbOs6WrQcM7
-         YYSw==
-X-Gm-Message-State: AOAM530aZZVzeG8WKbnyVxUGj0obF87FmCuLBIReUGlpN8N/mQV5nRM/
-        9WSjY61+tCXTcyzqQdl7Jox+DMjK8E1ubTgt3Mxtf1ccCRhZFhxex959V2+KCpArn3wKv/zdzTw
-        NWeERvEebVaJLZk45N6Hkqabau4xnUQUxgKFOkRUr
-X-Received: by 2002:a05:651c:1213:: with SMTP id i19mr745449lja.116.1644265463147;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0QZUBGn5Vf3a75LS52BCKhCqw6Mtv6YRAewQwFkN9YU=;
+        b=Xrqxxh0nU7e/xPggz6YBaLVbFHCaTbKhA+9J275ZHIqGcCKjL3jZxntApVSNz5NjgC
+         21WPRwAVDnZgsw7Y74uGrwUllrtBogWHQGEWuLHAJ7qFvtBVr2XfzND6X0300NaQlSeD
+         n6eTzsGgY2iR4zykNjWRY3OSfgllVfaVj/ErKvMlUzdNUquDmsijYtIgBhHcM0ZoP7jM
+         pqxBMN0JeI4KuJKe6+bjBxdSC1IPAkMYxmsD01jLZ3OF5Uf9zacjm+fIXaWraa6RdcHS
+         NF8pgT/pjVJEivAJv4pLGl536KV3BlqfFQNE4K8uW7EH8l2A3rfoUCJWicxZR+vc6k7e
+         BCXw==
+X-Gm-Message-State: AOAM531Y7GuYkyLrSM+MC9p0uAhECLXt1iZLj2sSYcIayRP+j5l7NaFz
+        A6Gz0MT2e8T25VVi8MDInRo=
+X-Google-Smtp-Source: ABdhPJz4tTPcQksNjB3XhXBM2BhaAlFbe5VIPLCf72OHyrbnaTGpDRyfcnx/8nTl/uDcOydHOb1FUw==
+X-Received: by 2002:a2e:8447:: with SMTP id u7mr734250ljh.516.1644265463369;
         Mon, 07 Feb 2022 12:24:23 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwuUh1S24KOapaXqUTbR/PE5isBkVVKCEATv0reBXJDNNQwUC3D72GSr/G+3NpnX4u042B4PjJAmEV12JsYe7E=
-X-Received: by 2002:a05:651c:1213:: with SMTP id i19mr745427lja.116.1644265462882;
- Mon, 07 Feb 2022 12:24:22 -0800 (PST)
+Received: from localhost.localdomain ([94.103.224.201])
+        by smtp.gmail.com with ESMTPSA id n16sm1625618lfq.113.2022.02.07.12.24.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Feb 2022 12:24:22 -0800 (PST)
+From:   Pavel Skripkin <paskripkin@gmail.com>
+To:     ath9k-devel@qca.qualcomm.com, kvalo@kernel.org,
+        davem@davemloft.net, kuba@kernel.org, toke@toke.dk,
+        linville@tuxdriver.com
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        syzbot+03110230a11411024147@syzkaller.appspotmail.com,
+        syzbot+c6dde1f690b60e0b9fbe@syzkaller.appspotmail.com
+Subject: [PATCH v3 1/2] ath9k: fix use-after-free in ath9k_hif_usb_rx_cb
+Date:   Mon,  7 Feb 2022 23:24:18 +0300
+Message-Id: <80962aae265995d1cdb724f5362c556d494c7566.1644265120.git.paskripkin@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220205081658.562208-1-leobras@redhat.com> <20220205081658.562208-2-leobras@redhat.com>
- <f2b0cac2-2f8a-60e8-616c-73825b3f62a6@redhat.com>
-In-Reply-To: <f2b0cac2-2f8a-60e8-616c-73825b3f62a6@redhat.com>
-From:   Leonardo Bras Soares Passos <leobras@redhat.com>
-Date:   Mon, 7 Feb 2022 17:24:11 -0300
-Message-ID: <CAJ6HWG7DV-AeWyXxGwMMV61BejcCdpTc=U+4U6eY4gx4hfhP-g@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] x86/kvm/fpu: Mask guest fpstate->xfeatures with guest_supported_xcr0
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Paolo,
+Syzbot reported use-after-free Read in ath9k_hif_usb_rx_cb(). The
+problem was in incorrect htc_handle->drv_priv initialization.
 
-On Mon, Feb 7, 2022 at 10:30 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
->
-> On 2/5/22 09:16, Leonardo Bras wrote:
-> > During host/guest switch (like in kvm_arch_vcpu_ioctl_run()), the kernel
-> > swaps the fpu between host/guest contexts, by using fpu_swap_kvm_fpstate().
-> >
-> > When xsave feature is available, the fpu swap is done by:
-> > - xsave(s) instruction, with guest's fpstate->xfeatures as mask, is used
-> >    to store the current state of the fpu registers to a buffer.
-> > - xrstor(s) instruction, with (fpu_kernel_cfg.max_features &
-> >    XFEATURE_MASK_FPSTATE) as mask, is used to put the buffer into fpu regs.
-> >
-> > For xsave(s) the mask is used to limit what parts of the fpu regs will
-> > be copied to the buffer. Likewise on xrstor(s), the mask is used to
-> > limit what parts of the fpu regs will be changed.
-> >
-> > The mask for xsave(s), the guest's fpstate->xfeatures, is defined on
-> > kvm_arch_vcpu_create(), which (in summary) sets it to all features
-> > supported by the cpu which are enabled on kernel config.
-> >
-> > This means that xsave(s) will save to guest buffer all the fpu regs
-> > contents the cpu has enabled when the guest is paused, even if they
-> > are not used.
-> >
-> > This would not be an issue, if xrstor(s) would also do that.
-> >
-> > xrstor(s)'s mask for host/guest swap is basically every valid feature
-> > contained in kernel config, except XFEATURE_MASK_PKRU.
-> > According to kernel src, it is instead switched in switch_to() and
-> > flush_thread().
->
-> Hi Leonardo, is this an issue when patch 2 is applied?
+Probable call trace which can trigger use-after-free:
 
-Yes.
-This issue happens on host/guest context switch, instead of KVM_{GET,SET}_XSAVE,
-so this bug will be triggered whenever the guest doesn't support PKRU
-but the host
-does, without any interference of above IOCTLs.
-In fact, IIUC,  even if we are able to fix the feature bit with
-KVM_SET_XSAVE, it would
-come back after another host/guest context switch if we don't fix
-vcpu->arch.guest_fpu.fpstate->xfeatures.
+ath9k_htc_probe_device()
+  /* htc_handle->drv_priv = priv; */
+  ath9k_htc_wait_for_target()      <--- Failed
+  ieee80211_free_hw()		   <--- priv pointer is freed
 
-> With this patch,
-> we have to reason about the effect of calling KVM_SET_CPUID2 twice calls
-> back to back.  I think an "&=" would be wrong in that case.
+<IRQ>
+...
+ath9k_hif_usb_rx_cb()
+  ath9k_hif_usb_rx_stream()
+   RX_STAT_INC()		<--- htc_handle->drv_priv access
 
-So, you suggest something like this ?
+In order to not add fancy protection for drv_priv we can move
+htc_handle->drv_priv initialization at the end of the
+ath9k_htc_probe_device() and add helper macro to make
+all *_STAT_* macros NULL save.
 
-vcpu->arch.guest_fpu.fpstate->xfeatures =
-        fpu_user_cfg.default_features & vcpu->arch.guest_supported_xcr0;
+Fixes: fb9987d0f748 ("ath9k_htc: Support for AR9271 chipset.")
+Reported-and-tested-by: syzbot+03110230a11411024147@syzkaller.appspotmail.com
+Reported-and-tested-by: syzbot+c6dde1f690b60e0b9fbe@syzkaller.appspotmail.com
+Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+---
 
+Changes since v2:
+	- My send-email script forgot, that mailing lists exist.
+	  Added back all related lists
 
->
-> On the other hand, with patch 2 the change is only in the KVM_SET_XSAVE
-> output, which is much more self-contained.
+Changes since v1:
+	- Removed clean-ups and moved them to 2/2
 
-Agree, but they solve different sources of the same issue.
-Patch 2 will only address a bug that can happen if userspace mistakenly
-tries to set a feature the guest does not support.
+---
+ drivers/net/wireless/ath/ath9k/htc.h          | 10 +++++-----
+ drivers/net/wireless/ath/ath9k/htc_drv_init.c |  3 ++-
+ 2 files changed, 7 insertions(+), 6 deletions(-)
 
->
-> Thanks,
-
-Thank you!
-
-Best regards,
-Leo
-[...]
+diff --git a/drivers/net/wireless/ath/ath9k/htc.h b/drivers/net/wireless/ath/ath9k/htc.h
+index 6b45e63fae4b..141642e5e00d 100644
+--- a/drivers/net/wireless/ath/ath9k/htc.h
++++ b/drivers/net/wireless/ath/ath9k/htc.h
+@@ -327,11 +327,11 @@ static inline struct ath9k_htc_tx_ctl *HTC_SKB_CB(struct sk_buff *skb)
+ }
+ 
+ #ifdef CONFIG_ATH9K_HTC_DEBUGFS
+-
+-#define TX_STAT_INC(c) (hif_dev->htc_handle->drv_priv->debug.tx_stats.c++)
+-#define TX_STAT_ADD(c, a) (hif_dev->htc_handle->drv_priv->debug.tx_stats.c += a)
+-#define RX_STAT_INC(c) (hif_dev->htc_handle->drv_priv->debug.skbrx_stats.c++)
+-#define RX_STAT_ADD(c, a) (hif_dev->htc_handle->drv_priv->debug.skbrx_stats.c += a)
++#define __STAT_SAVE(expr) (hif_dev->htc_handle->drv_priv ? (expr) : 0)
++#define TX_STAT_INC(c) __STAT_SAVE(hif_dev->htc_handle->drv_priv->debug.tx_stats.c++)
++#define TX_STAT_ADD(c, a) __STAT_SAVE(hif_dev->htc_handle->drv_priv->debug.tx_stats.c += a)
++#define RX_STAT_INC(c) __STAT_SAVE(hif_dev->htc_handle->drv_priv->debug.skbrx_stats.c++)
++#define RX_STAT_ADD(c, a) __STAT_SAVE(hif_dev->htc_handle->drv_priv->debug.skbrx_stats.c += a)
+ #define CAB_STAT_INC   priv->debug.tx_stats.cab_queued++
+ 
+ #define TX_QSTAT_INC(q) (priv->debug.tx_stats.queue_stats[q]++)
+diff --git a/drivers/net/wireless/ath/ath9k/htc_drv_init.c b/drivers/net/wireless/ath/ath9k/htc_drv_init.c
+index ff61ae34ecdf..07ac88fb1c57 100644
+--- a/drivers/net/wireless/ath/ath9k/htc_drv_init.c
++++ b/drivers/net/wireless/ath/ath9k/htc_drv_init.c
+@@ -944,7 +944,6 @@ int ath9k_htc_probe_device(struct htc_target *htc_handle, struct device *dev,
+ 	priv->hw = hw;
+ 	priv->htc = htc_handle;
+ 	priv->dev = dev;
+-	htc_handle->drv_priv = priv;
+ 	SET_IEEE80211_DEV(hw, priv->dev);
+ 
+ 	ret = ath9k_htc_wait_for_target(priv);
+@@ -965,6 +964,8 @@ int ath9k_htc_probe_device(struct htc_target *htc_handle, struct device *dev,
+ 	if (ret)
+ 		goto err_init;
+ 
++	htc_handle->drv_priv = priv;
++
+ 	return 0;
+ 
+ err_init:
+-- 
+2.34.1
 

@@ -2,46 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D712B4ABD04
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:55:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 358684ABC26
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:45:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388624AbiBGLoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:44:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45976 "EHLO
+        id S1384923AbiBGLam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:30:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385837AbiBGLcr (ORCPT
+        with ESMTP id S1357487AbiBGLXL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:32:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CBB5C043181;
-        Mon,  7 Feb 2022 03:32:46 -0800 (PST)
+        Mon, 7 Feb 2022 06:23:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C5C6C043181;
+        Mon,  7 Feb 2022 03:23:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 564B2B80EC3;
-        Mon,  7 Feb 2022 11:32:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 717FAC004E1;
-        Mon,  7 Feb 2022 11:32:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C2496B81028;
+        Mon,  7 Feb 2022 11:23:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9594C004E1;
+        Mon,  7 Feb 2022 11:23:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233564;
-        bh=4jVbnwfVC3bF207Ch0FiydCtVRc8MucTpP3gbvg3VWc=;
+        s=korg; t=1644232987;
+        bh=YT8gsCAg7F7T3vjACjvYf0OXzG7CD0BJNhqoexsczrg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m8lieLTQs9tksiOZnPLQwP0FPEujde2GbR25deL5t/kvpZn3vVOyturPU9oH6OVwN
-         bZ/6ICU36FbM7W7YDP2gOqqrpYwoynYgweFmHYQSOd11Dptf9ptUygtxk6WF/u5GCu
-         AES8CXp/hDvEglzHJHRjw1ith9Kht4J9kKxEhKKc=
+        b=TJl7+4huupDfTjFMXEC15HFeQGYIb9E9yNdlJUQa+tvMQMQRDfCiatPM6eWNiGbwd
+         7lxnJ1nqkrrVn2P3wD6H4CYBMCbeQQaQ8/P96hFJ9Q02lXY/pRoaMCYhsSvRYIEFfT
+         rv1ty4LwXaqikOVil87ayX8+XTKc9rtFI2ezLXrc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Subject: [PATCH 5.16 050/126] RDMA/siw: Fix refcounting leak in siw_create_qp()
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Mark Brown <broonie@kernel.org>,
+        James Liao <jamesjj.liao@mediatek.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 5.10 23/74] Revert "ASoC: mediatek: Check for error clk pointer"
 Date:   Mon,  7 Feb 2022 12:06:21 +0100
-Message-Id: <20220207103805.844976517@linuxfoundation.org>
+Message-Id: <20220207103757.999234038@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
-References: <20220207103804.053675072@linuxfoundation.org>
+In-Reply-To: <20220207103757.232676988@linuxfoundation.org>
+References: <20220207103757.232676988@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,35 +59,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Guenter Roeck <linux@roeck-us.net>
 
-commit a75badebfdc0b3823054bedf112edb54d6357c75 upstream.
+This reverts commit d491a2c2cf96f9f3d855cf0bcd807d48ccb98e81 which is
+commit 9de2b9286a6dd16966959b3cb34fc2ddfd39213e upstream
 
-The atomic_inc() needs to be paired with an atomic_dec() on the error
-path.
+With this patch in the tree, Chromebooks running the affected hardware
+no longer boot. Bisect points to this patch, and reverting it fixes
+the problem.
 
-Fixes: 514aee660df4 ("RDMA: Globally allocate and release QP memory")
-Link: https://lore.kernel.org/r/20220118091104.GA11671@kili
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
-Reviewed-by: Bernard Metzler <bmt@zurich.ibm.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+An analysis of the code with this patch applied shows:
+
+        ret = init_clks(pdev, clk);
+        if (ret)
+                return ERR_PTR(ret);
+...
+                for (j = 0; j < MAX_CLKS && data->clk_id[j]; j++) {
+                        struct clk *c = clk[data->clk_id[j]];
+
+                        if (IS_ERR(c)) {
+                                dev_err(&pdev->dev, "%s: clk unavailable\n",
+                                        data->name);
+                                return ERR_CAST(c);
+                        }
+
+                        scpd->clk[j] = c;
+                }
+
+Not all clocks in the clk_names array have to be present. Only the clocks
+in the data->clk_id array are actually needed. The code already checks if
+the required clocks are available and bails out if not. The assumption that
+all clocks have to be present is wrong, and commit 9de2b9286a6d needs to be
+reverted.
+
+Fixes: 9de2b9286a6d ("ASoC: mediatek: Check for error clk pointer")
+Cc: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: James Liao <jamesjj.liao@mediatek.com>
+Cc: Kevin Hilman <khilman@baylibre.com>
+Cc: Matthias Brugger <matthias.bgg@gmail.com
+Cc: Frank Wunderlich <frank-w@public-files.de>
+Cc: Daniel Golle <daniel@makrotopia.org>
+Link: https://lore.kernel.org/lkml/20220205014755.699603-1-linux@roeck-us.net/
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/infiniband/sw/siw/siw_verbs.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/soc/mediatek/mtk-scpsys.c |   15 ++++-----------
+ 1 file changed, 4 insertions(+), 11 deletions(-)
 
---- a/drivers/infiniband/sw/siw/siw_verbs.c
-+++ b/drivers/infiniband/sw/siw/siw_verbs.c
-@@ -311,7 +311,8 @@ int siw_create_qp(struct ib_qp *ibqp, st
+--- a/drivers/soc/mediatek/mtk-scpsys.c
++++ b/drivers/soc/mediatek/mtk-scpsys.c
+@@ -411,17 +411,12 @@ out:
+ 	return ret;
+ }
  
- 	if (atomic_inc_return(&sdev->num_qp) > SIW_MAX_QP) {
- 		siw_dbg(base_dev, "too many QP's\n");
--		return -ENOMEM;
-+		rv = -ENOMEM;
-+		goto err_atomic;
- 	}
- 	if (attrs->qp_type != IB_QPT_RC) {
- 		siw_dbg(base_dev, "only RC QP's supported\n");
+-static int init_clks(struct platform_device *pdev, struct clk **clk)
++static void init_clks(struct platform_device *pdev, struct clk **clk)
+ {
+ 	int i;
+ 
+-	for (i = CLK_NONE + 1; i < CLK_MAX; i++) {
++	for (i = CLK_NONE + 1; i < CLK_MAX; i++)
+ 		clk[i] = devm_clk_get(&pdev->dev, clk_names[i]);
+-		if (IS_ERR(clk[i]))
+-			return PTR_ERR(clk[i]);
+-	}
+-
+-	return 0;
+ }
+ 
+ static struct scp *init_scp(struct platform_device *pdev,
+@@ -431,7 +426,7 @@ static struct scp *init_scp(struct platf
+ {
+ 	struct genpd_onecell_data *pd_data;
+ 	struct resource *res;
+-	int i, j, ret;
++	int i, j;
+ 	struct scp *scp;
+ 	struct clk *clk[CLK_MAX];
+ 
+@@ -486,9 +481,7 @@ static struct scp *init_scp(struct platf
+ 
+ 	pd_data->num_domains = num;
+ 
+-	ret = init_clks(pdev, clk);
+-	if (ret)
+-		return ERR_PTR(ret);
++	init_clks(pdev, clk);
+ 
+ 	for (i = 0; i < num; i++) {
+ 		struct scp_domain *scpd = &scp->domains[i];
 
 

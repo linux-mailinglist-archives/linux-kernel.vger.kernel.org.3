@@ -2,130 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63C494AC7D2
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 18:49:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8E294AC87E
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 19:24:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242434AbiBGRqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 12:46:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56192 "EHLO
+        id S239142AbiBGSYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 13:24:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384311AbiBGRgy (ORCPT
+        with ESMTP id S235799AbiBGSWR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 12:36:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33FB7C0401D5;
-        Mon,  7 Feb 2022 09:36:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E5717B815C6;
-        Mon,  7 Feb 2022 17:36:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51C3CC004E1;
-        Mon,  7 Feb 2022 17:36:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644255410;
-        bh=/7YN1m76qf4snYDMVXR15LGTPvRjVN/AzA2qo6qhVtI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=sIIeoPL8OANAhj44U1X2u3zQNXXTY1oNGPK1fQdVT33tNkvktg0GpxHLyNj3K0x0Y
-         wtLfKFRIAPZAXgk6+w5ADLpkcGocrbN7xLd3pMhnGVkDs7MLXNgdzQHEBb+dHjMOCA
-         lPu5UbwA4JkRzAAZglw0pPUuwOTIVReV56CBlvm1GdMxqXbvCjeYYGxm1aKC3/xnlE
-         LVAsPetTzl99KaBACPC+Q4vhd2QS7IScea5Vt041eaunVaLh9tAUgXN4J26/cEi2V1
-         gqn18+3Cut7ljOd6vFbBscsv+wvwpDnmq2ODyZpbafGo39RxgCSfqrEsbZ3+4IsH09
-         yhC3Bq8NCI8wg==
-Date:   Mon, 7 Feb 2022 11:36:48 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Vidya Sagar <vidyas@nvidia.com>
-Cc:     bhelgaas@google.com, lorenzo.pieralisi@arm.com, robh+dt@kernel.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com, kishon@ti.com,
-        vkoul@kernel.org, kw@linux.com, krzysztof.kozlowski@canonical.com,
-        p.zabel@pengutronix.de, mperttunen@nvidia.com,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, kthota@nvidia.com,
-        mmaddireddy@nvidia.com, sagar.tv@gmail.com
-Subject: Re: [PATCH V1 09/10] PCI: Disable MSI for Tegra234 root ports
-Message-ID: <20220207173648.GA402391@bhelgaas>
+        Mon, 7 Feb 2022 13:22:17 -0500
+X-Greylist: delayed 2640 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 10:22:15 PST
+Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1123AC0401D9
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 10:22:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:MIME-Version:Date:
+        Message-ID:From:References:Cc:To:content-disposition;
+        bh=fEpCgCTX3h2p5UN6S8G2mb2i3aC8G4ppdXgJ4LAUOGU=; b=XtZxNl7rveoZfo3hm92UT9KtIn
+        TtfEzS/obXfk3nfrPZQaNcvNJUwwbQ6FzvaeEldi8mcXvPcHXrxfFOT99cxGORMyDdpOVPqYgWzhi
+        NJnUpgdumuFyV2Tyl4IQts6oBLVaEJ6HMSLjCaSC8BxCiLvC8sRYx1T5KoSKEkaCFuFOKFauwDLJT
+        qDYAHUO9NbVOKwEI0y/pDnprLXyf0uJTBMutoNPy5QjfIiwWCMAn64wh72jOJz0AvGzbx5ngPzJla
+        9IgNxQUju0gJaTa8Q0ExQHFh65YjcZN7/8ClykiaX2fTLk5f5rYdLc6sSPtEu6A4YR4u/mO5qpQUx
+        bob8LGjg==;
+Received: from guinness.priv.deltatee.com ([172.16.1.162])
+        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <logang@deltatee.com>)
+        id 1nH7xp-00EVc6-C4; Mon, 07 Feb 2022 10:38:09 -0700
+To:     Christoph Hellwig <hch@lst.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dan Williams <dan.j.williams@intel.com>
+Cc:     Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        nvdimm@lists.linux.dev, linux-mm@kvack.org
+References: <20220207063249.1833066-1-hch@lst.de>
+ <20220207063249.1833066-7-hch@lst.de>
+From:   Logan Gunthorpe <logang@deltatee.com>
+Message-ID: <a8c54032-3347-c999-d644-02e6e7d2bfa4@deltatee.com>
+Date:   Mon, 7 Feb 2022 10:38:06 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220205162144.30240-10-vidyas@nvidia.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220207063249.1833066-7-hch@lst.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-CA
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 172.16.1.162
+X-SA-Exim-Rcpt-To: linux-mm@kvack.org, nvdimm@lists.linux.dev, nouveau@lists.freedesktop.org, dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org, rcampbell@nvidia.com, apopple@nvidia.com, jgg@ziepe.ca, lyude@redhat.com, kherbst@redhat.com, bskeggs@redhat.com, Xinhui.Pan@amd.com, christian.koenig@amd.com, alexander.deucher@amd.com, Felix.Kuehling@amd.com, dan.j.williams@intel.com, akpm@linux-foundation.org, hch@lst.de
+X-SA-Exim-Mail-From: logang@deltatee.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
+Subject: Re: [PATCH 6/8] mm: don't include <linux/memremap.h> in <linux/mm.h>
+X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
+X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 05, 2022 at 09:51:43PM +0530, Vidya Sagar wrote:
-> Tegra234 PCIe rootports don't generate MSI interrupts for PME and AER
-> events. Since PCIe spec (Ref: r4.0 sec 7.7.1.2 and 7.7.2.2) doesn't support
-> using a mix of INTx and MSI/MSI-X, MSI needs to be disabled to avoid root
-> ports service drivers registering their respective ISRs with MSI interrupt
-> and to let only INTx be used for all events.
 
-s/rootports/root ports/ to match other usage here.
 
-This argument matches that in 8c7e96d3fe75 ("PCI: Disable MSI for
-Tegra root ports") [1], but that's not quite what sec 7.7.1.2 and
-7.7.2.2 say.  Those sections talk about what happens when both MSI and
-MSI-X are disabled:
-
-  If MSI and MSI-X are both disabled, the Function requests servicing
-  using INTx interrupts (if supported).
-
-but they don't say anything about what happens when MSI or MSI-X is
-*enabled*.
-
-I think a better citation is PCIe r6.0, sec 6.1.4.3, which says:
-
-  While enabled for MSI or MSI-X operation, a Function is prohibited
-  from using INTx interrupts (if implemented) to request service (MSI,
-  MSI-X, and INTx are mutually exclusive).
-
-Can you please update the comment in the code and this commit log to
-cite PCIe r6.0, sec 6.1.4.3 instead, and to clarify that these Tegra
-devices always use INTx for PME and AER, even when MSI/MSI-X is
-enabled?
-
-Why do these Tegra quirks use DECLARE_PCI_FIXUP_CLASS_EARLY() instead
-of just DECLARE_PCI_FIXUP_EARLY()?  quirk_al_msi_disable() uses the
-_CLASS version because the same Device ID is used for non-Root Port
-devices.  Is the same true here, or could these use
-DECLARE_PCI_FIXUP_EARLY()?
-
-There are many quirks that disable MSI, and they're a mixture of EARLY
-and FINAL.  They should probably all be the same.
-
-[1] https://git.kernel.org/linus/8c7e96d3fe75
-
-> Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
-> ---
->  drivers/pci/quirks.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
+On 2022-02-06 11:32 p.m., Christoph Hellwig wrote:
+> Move the check for the actual pgmap types that need the free at refcount
+> one behavior into the out of line helper, and thus avoid the need to
+> pull memremap.h into mm.h.
 > 
-> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-> index d2dd6a6cda60..3ac5c45e61a1 100644
-> --- a/drivers/pci/quirks.c
-> +++ b/drivers/pci/quirks.c
-> @@ -2747,6 +2747,15 @@ DECLARE_PCI_FIXUP_CLASS_EARLY(PCI_VENDOR_ID_NVIDIA, 0x10e5,
->  DECLARE_PCI_FIXUP_CLASS_EARLY(PCI_VENDOR_ID_NVIDIA, 0x10e6,
->  			      PCI_CLASS_BRIDGE_PCI, 8,
->  			      pci_quirk_nvidia_tegra_disable_rp_msi);
-> +DECLARE_PCI_FIXUP_CLASS_EARLY(PCI_VENDOR_ID_NVIDIA, 0x229a,
-> +			      PCI_CLASS_BRIDGE_PCI, 8,
-> +			      pci_quirk_nvidia_tegra_disable_rp_msi);
-> +DECLARE_PCI_FIXUP_CLASS_EARLY(PCI_VENDOR_ID_NVIDIA, 0x229c,
-> +			      PCI_CLASS_BRIDGE_PCI, 8,
-> +			      pci_quirk_nvidia_tegra_disable_rp_msi);
-> +DECLARE_PCI_FIXUP_CLASS_EARLY(PCI_VENDOR_ID_NVIDIA, 0x229e,
-> +			      PCI_CLASS_BRIDGE_PCI, 8,
-> +			      pci_quirk_nvidia_tegra_disable_rp_msi);
->  
->  /*
->   * Some versions of the MCP55 bridge from Nvidia have a legacy IRQ routing
-> -- 
-> 2.17.1
-> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+
+I've noticed mm/memcontrol.c uses is_device_private_page() and also
+needs a memremap.h include added to compile with my configuration.
+
+Logan

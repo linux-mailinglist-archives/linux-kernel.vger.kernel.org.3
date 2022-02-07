@@ -2,66 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 851AD4AC363
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 16:30:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCDD24AC361
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 16:30:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359019AbiBGP3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 10:29:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39746 "EHLO
+        id S1354816AbiBGP3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 10:29:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443868AbiBGPQI (ORCPT
+        with ESMTP id S1442422AbiBGPQw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 10:16:08 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 55C03C03E96D
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 07:15:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644246945;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=yRS0jwicXufc7zZ+ZjLAedvo4qD1/VIqyE355apXrv8=;
-        b=bbWNLUnN/+aOIdXG1SWJgPcKTauFo5YCyt0aZdXi18iyjqUN1UhkmHfmTQaP0x2CK7jF+b
-        zKV2Dm+6l+IYzapCGXW8mvWFNJY+A1Uugg08ApcuXvcoDJR8Y4IXq3YV+LVAL0k4CeIlAM
-        fsWErq2OjR6SnSU+UjabzclbZh74L3o=
-Received: from mail-yb1-f198.google.com (mail-yb1-f198.google.com
- [209.85.219.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-631-neyFT63nOFSBzSrThIra2Q-1; Mon, 07 Feb 2022 10:15:44 -0500
-X-MC-Unique: neyFT63nOFSBzSrThIra2Q-1
-Received: by mail-yb1-f198.google.com with SMTP id y4-20020a5b0f44000000b00611862e546dso28936959ybr.7
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 07:15:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=yRS0jwicXufc7zZ+ZjLAedvo4qD1/VIqyE355apXrv8=;
-        b=moJpIyCz1nySaZkEp7fbRGrsgsXyG0TFOmAs9VibSvIYrT/adAvJVpyliKXRszZCYg
-         zFNbtxPk92pblZrDAhv1zN6EnRzSh4mAVzB6paV4VIuyNtAquyDPMAG9PELdYMGHom5a
-         e1P5awx6fqRWJ9wOGgscZeQpTIJNz82a6rMJdmCrCOBH0wpxQPMjqKTuxeVS7zi5vCaf
-         YQfMZbh4VxtXlKbg3NMUxMFV+f9w666GyN9lszJigKk7/eF9CMbHMLBzj1sIiwWmVy27
-         ZwOMriFg81kGX+96cvFX3QUiNG8woOH+uRJld/md2q2CymsoAWfR7Vc1vN7LDKr0eaBN
-         2d6Q==
-X-Gm-Message-State: AOAM530BGCgNGSUSlgxs5B6VUX3Ux4++ky2XK2eGiu+h4IWCKIddIReB
-        zuOGifyFHsZhrI5RUgBHo+dhrwoSBJT3PqZOnYL1BPdU/+YAx+SQ5ZSLOjLjQUU929PyVSWobda
-        3JhhzAD7NLn15fjy87NRxXE2Dud8RZWNX8Wex63Ql
-X-Received: by 2002:a25:eb06:: with SMTP id d6mr154240ybs.318.1644246943914;
-        Mon, 07 Feb 2022 07:15:43 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwXeoD3ojnTOZwKa5lUfxhmIBl5fyP9msdolVbDq/zqr50MBXuutrVFsOhfOWyA9jOd9gjS0pyGenm4USUc87Y=
-X-Received: by 2002:a25:eb06:: with SMTP id d6mr154219ybs.318.1644246943702;
- Mon, 07 Feb 2022 07:15:43 -0800 (PST)
-MIME-Version: 1.0
-From:   Ondrej Mosnacek <omosnace@redhat.com>
-Date:   Mon, 7 Feb 2022 16:15:27 +0100
-Message-ID: <CAFqZXNt0Xp1j7+hTrV9XZ936Yz+H8Le0pqazhLr3drO0tEzB2w@mail.gmail.com>
-Subject: Semantics vs. usage of mutex_is_locked()
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>
-Cc:     Linux kernel mailing list <linux-kernel@vger.kernel.org>,
-        SElinux list <selinux@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Mon, 7 Feb 2022 10:16:52 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71C52C0401C1;
+        Mon,  7 Feb 2022 07:16:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id DC869CE111C;
+        Mon,  7 Feb 2022 15:16:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2AE0C004E1;
+        Mon,  7 Feb 2022 15:16:47 +0000 (UTC)
+From:   Clark Williams <williams@redhat.com>
+Subject: [ANNOUNCE] 5.15.21-rt30
+Date:   Mon, 07 Feb 2022 15:15:48 -0000
+Message-ID: <164424694842.617748.13169079401287172941@puck.lan>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Carsten Emde <C.Emde@osadl.org>,
+        John Kacur <jkacur@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Daniel Wagner <daniel.wagner@suse.com>,
+        Tom Zanussi <tom.zanussi@linux.intel.com>,
+        Clark Williams <williams@redhat.com>,
+        Pavel Machek <pavel@denx.de>
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,HK_RANDOM_ENVFROM,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,53 +47,161 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hello RT-list!
 
-(This is addressed mainly to the kernel/locking/ maintainers.)
+I'm pleased to announce the 5.15.21-rt30 stable release.
 
-In security/selinux/ima.c, we have two functions for which we want to
-assert the expected locking status of a mutex. In the first function
-we expect the caller to obtain the lock, so we have
-`WARN_ON(!mutex_is_locked(&state->policy_mutex));` there. The second
-one, on the contrary, takes the lock on its own, so there is an
-inverse assert (that the caller hasn't already taken the lock) -
-`WARN_ON(mutex_is_locked(&state->policy_mutex));`.
+You can get this release via the git tree at:
 
-Recently, I got a report that the second WARN_ON() got triggered,
-while there was no function in the call chain that could have taken
-the lock. Looking into it, I realized that mutex_is_locked() actually
-doesn't check what we assumed ("Are we holding the lock?"), but
-instead answers the question "Is any task holding the lock?". So in
-theory it can happen that the second WARN_ON() gets hit randomly in an
-otherwise correct code simply because some other task happens to be
-holding the mutex. Similarly, the first assert might not catch all
-cases where taking the mutex was forgotten, because another task may
-be holding it, making the assert pass.
+  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
 
-Grepping the whole tree for mutex_is_locked finds about 300 uses, the
-vast majority of which are variations of the
-warn-if-mutex-not-locked-by-us pattern. Then there are a handful of
-cases where the usage of mutex_is_locked() seems correct and a few
-cases of the inverse warn-if-mutex-already-locked-by-us pattern.
+  branch: v5.15-rt
+  Head SHA1: d6b72436d0aa760a7c15f12baa9dfaddc10e9014
 
-It seems like introducing a new helper with the "is the mutex locked
-by current task?" semantics would be fairly straightforward, however
-fixing all the mutex_is_locked() misuses would be a rather big and
-noisy patch(set). That said, would it be okay if I send patches that
-introduce a new helper and only fix misuses that can lead to wrong
-behavior when the code is correct (e.g. can yield a false positive
-WARNING/BUG) and documentation? That should be a reasonably small set
-of changes, yet should take care of the most important issues. If
-anyone cares enough for the rest, they can always send further
-patches.
+Or to build 5.15.21-rt30 directly, the following patches should be applied:
 
-Also, any opinions on the name of the new helper? Perhaps
-mutex_is_held()? Or mutex_is_locked_by_current()?
+  https://www.kernel.org/pub/linux/kernel/v5.x/linux-5.15.tar.xz
 
-Thanks,
+  https://www.kernel.org/pub/linux/kernel/v5.x/patch-5.15.21.xz
 
---
-Ondrej Mosnacek
-Software Engineer, Linux Security - SELinux kernel
-Red Hat, Inc.
+  https://www.kernel.org/pub/linux/kernel/projects/rt/5.15/patch-5.15.21-rt30.patch.xz
 
+
+You can also build from 5.15.19-rt29 by applying the incremental patch:
+
+  https://www.kernel.org/pub/linux/kernel/projects/rt/5.15/incr/patch-5.15.19-rt29-rt30.patch.xz
+
+Enjoy!
+Clark
+
+Changes from v5.15.19-rt29:
+---
+
+Alex Elder (2):
+      net: ipa: use a bitmap for endpoint replenish_enabled
+      net: ipa: prevent concurrent replenish
+
+Christoph Fritz (1):
+      ovl: fix NULL pointer dereference in copy up warning
+
+Clark Williams (2):
+      Merge tag 'v5.15.21' into v5.15-rt
+      Linux 5.15.21-rt30
+
+Dan Carpenter (1):
+      fanotify: Fix stale file descriptor in copy_event_to_user()
+
+Dima Chumak (1):
+      net/mlx5: Fix offloading with ESWITCH_IPV4_TTL_MODIFY_ENABLE
+
+Eric Dumazet (4):
+      net: sched: fix use-after-free in tc_new_tfilter()
+      rtnetlink: make sure to refresh master_dev/m_ops in __rtnl_newlink()
+      af_packet: fix data-race in packet_setsockopt / packet_setsockopt
+      tcp: add missing tcp_skb_can_collapse() test in tcp_shift_skb_data()
+
+Eric W. Biederman (1):
+      cgroup-v1: Require capabilities to set release_agent
+
+Gal Pressman (1):
+      net/mlx5e: Fix module EEPROM query
+
+Georgi Valkov (1):
+      ipheth: fix EOVERFLOW in ipheth_rcvbulk_callback
+
+Greg Kroah-Hartman (4):
+      Linux 5.15.20
+      Revert "drm/vc4: hdmi: Make sure the device is powered with CEC"
+      Revert "drm/vc4: hdmi: Make sure the device is powered with CEC" again
+      Linux 5.15.21
+
+J. Bruce Fields (2):
+      lockd: fix server crash on reboot of client holding lock
+      lockd: fix failure to cleanup client locks
+
+Jedrzej Jagielski (1):
+      i40e: Fix reset bw limit when DCB enabled with 1 TC
+
+John Hubbard (1):
+      Revert "mm/gup: small refactoring: simplify try_grab_page()"
+
+Karen Sornek (1):
+      i40e: Fix reset path while removing the driver
+
+Lukas Wunner (1):
+      PCI: pciehp: Fix infinite loop in IRQ handler upon power fault
+
+Maher Sanalla (1):
+      net/mlx5: Use del_timer_sync in fw reset flow of halting poll
+
+Maor Dickman (2):
+      net/mlx5e: Fix handling of wrong devices during bond netevent
+      net/mlx5: E-Switch, Fix uninitialized variable modact
+
+Maxim Mikityanskiy (1):
+      net/mlx5e: Don't treat small ceil values as unlimited in HTB offload
+
+Maxime Ripard (1):
+      drm/vc4: hdmi: Make sure the device is powered with CEC
+
+Miklos Szeredi (1):
+      ovl: don't fail copy up if no fileattr support on upper
+
+Paolo Abeni (1):
+      selftests: mptcp: fix ipv6 routing setup
+
+Raed Salem (1):
+      net/mlx5e: IPsec: Fix tunnel mode crypto offload for non TCP/UDP traffic
+
+Raju Rangoju (1):
+      net: amd-xgbe: ensure to reset the tx_timer_active flag
+
+Roi Dayan (1):
+      net/mlx5: Bridge, Fix devlink deadlock on net namespace deletion
+
+Sasha Neftin (1):
+      e1000e: Handshake with CSME starts from ADL platforms
+
+Shyam Sundar S K (1):
+      net: amd-xgbe: Fix skb data length underflow
+
+Tianchen Ding (1):
+      cpuset: Fix the bug that subpart_cpus updated wrongly in update_cpumask()
+
+Vlad Buslov (2):
+      net/mlx5: Bridge, take rtnl lock in init error handler
+      net/mlx5: Bridge, ensure dev_name is null-terminated
+---
+Makefile                                           |  2 +-
+ drivers/gpu/drm/vc4/vc4_hdmi.c                     | 10 +------
+ drivers/net/ethernet/amd/xgbe/xgbe-drv.c           | 14 ++++++++-
+ drivers/net/ethernet/intel/e1000e/netdev.c         |  6 ++--
+ drivers/net/ethernet/intel/i40e/i40e.h             |  1 +
+ drivers/net/ethernet/intel/i40e/i40e_main.c        | 31 +++++++++++++++++--
+ drivers/net/ethernet/mellanox/mlx5/core/en/qos.c   |  3 +-
+ .../net/ethernet/mellanox/mlx5/core/en/rep/bond.c  | 32 +++++++++-----------
+ .../ethernet/mellanox/mlx5/core/en/rep/bridge.c    |  6 ++--
+ .../mellanox/mlx5/core/en_accel/ipsec_rxtx.c       | 13 ++++++--
+ .../net/ethernet/mellanox/mlx5/core/esw/bridge.c   |  4 +++
+ .../mlx5/core/esw/diag/bridge_tracepoint.h         |  2 +-
+ drivers/net/ethernet/mellanox/mlx5/core/fw_reset.c |  2 +-
+ .../ethernet/mellanox/mlx5/core/lib/fs_chains.c    |  9 +++---
+ drivers/net/ethernet/mellanox/mlx5/core/port.c     |  9 +++---
+ drivers/net/ipa/ipa_endpoint.c                     | 21 ++++++++++---
+ drivers/net/ipa/ipa_endpoint.h                     | 17 +++++++++--
+ drivers/net/usb/ipheth.c                           |  6 ++--
+ drivers/pci/hotplug/pciehp_hpc.c                   |  7 +++--
+ fs/lockd/svcsubs.c                                 | 18 ++++++-----
+ fs/notify/fanotify/fanotify_user.c                 |  6 ++--
+ fs/overlayfs/copy_up.c                             | 16 ++++++++--
+ kernel/cgroup/cgroup-v1.c                          | 14 +++++++++
+ kernel/cgroup/cpuset.c                             |  3 +-
+ localversion-rt                                    |  2 +-
+ mm/gup.c                                           | 35 ++++++++++++++++++----
+ net/core/rtnetlink.c                               |  6 ++--
+ net/ipv4/tcp_input.c                               |  2 ++
+ net/packet/af_packet.c                             |  8 +++--
+ net/sched/cls_api.c                                | 11 ++++---
+ tools/testing/selftests/net/mptcp/mptcp_join.sh    |  5 ++--
+ 31 files changed, 229 insertions(+), 92 deletions(-)
+---

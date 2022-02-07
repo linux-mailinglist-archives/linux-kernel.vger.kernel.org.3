@@ -2,53 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33FC34ABBEA
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:44:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5ED14AB9FE
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:26:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386174AbiBGLdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:33:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36588 "EHLO
+        id S1382504AbiBGLT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:19:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234936AbiBGLZC (ORCPT
+        with ESMTP id S1358828AbiBGLOp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:25:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32FCEC043189;
-        Mon,  7 Feb 2022 03:25:01 -0800 (PST)
+        Mon, 7 Feb 2022 06:14:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E229AC0401E2;
+        Mon,  7 Feb 2022 03:14:27 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BCDE76077B;
-        Mon,  7 Feb 2022 11:25:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69A43C004E1;
-        Mon,  7 Feb 2022 11:24:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D79FB61314;
+        Mon,  7 Feb 2022 11:14:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC878C004E1;
+        Mon,  7 Feb 2022 11:14:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233100;
-        bh=UBUGUaJZe93yLz+nk7Ton8WJCc+VGhP2Z/SUcF67TSE=;
+        s=korg; t=1644232452;
+        bh=41Bn7dpcwKdRVGJAeUT3KkBCidaikRKvL17gJkZ77QY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D1QCKwMvqrqOY0PBmIDwvsgpmfBWF561OZJGbdMc+oizXCQ/u/1+F/GKaVoqbI2VB
-         Z5WGPTW8JfAp+GA9nrVU9z4Ai28ziNIDvL6IFZ+oWrQueZuwplzPzJzG5ykmS2sJEd
-         MGrZQV7D45NGNmhtx8xUC8YbdneSCOX2cH46DXMQ=
+        b=Q/LuXbeiUy6Al3WDahQfzypVBFL++yOLzEC49PcmRp9g2DRoc50APPXVJao5DJm3d
+         jYxIZt9foqLqGzQa45SVydbowbv+DL8rti43Qy5FWasaLBnDYCg9bMie7N5v2/BtnU
+         m2hB3VedQkdDlkxJ01DcMNIFtd9dX8W427bR375w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Shakeel Butt <shakeelb@google.com>,
-        Manfred Spraul <manfred@colorfullife.com>,
-        Arnd Bergmann <arnd@arndb.de>, Yang Guang <cgel.zte@gmail.com>,
-        Davidlohr Bueso <dbueso@suse.de>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Bhaskar Chowdhury <unixbhaskar@gmail.com>,
-        Vasily Averin <vvs@virtuozzo.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.15 004/110] ipc/sem: do not sleep with a spin lock held
+        stable@vger.kernel.org, Jon Hunter <jonathanh@nvidia.com>
+Subject: [PATCH 4.19 14/86] usb: common: ulpi: Fix crash in ulpi_match()
 Date:   Mon,  7 Feb 2022 12:05:37 +0100
-Message-Id: <20220207103802.427673715@linuxfoundation.org>
+Message-Id: <20220207103758.026314966@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
-References: <20220207103802.280120990@linuxfoundation.org>
+In-Reply-To: <20220207103757.550973048@linuxfoundation.org>
+References: <20220207103757.550973048@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -63,52 +53,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+From: Jon Hunter <jonathanh@nvidia.com>
 
-commit 520ba724061cef59763e2b6f5b26e8387c2e5822 upstream.
+commit 2e3dd4a6246945bf84ea6f478365d116e661554c upstream.
 
-We can't call kvfree() with a spin lock held, so defer it.
+Commit 7495af930835 ("ARM: multi_v7_defconfig: Enable drivers for
+DragonBoard 410c") enables the CONFIG_PHY_QCOM_USB_HS for the ARM
+multi_v7_defconfig. Enabling this Kconfig is causing the kernel to crash
+on the Tegra20 Ventana platform in the ulpi_match() function.
 
-Link: https://lkml.kernel.org/r/20211223031207.556189-1-chi.minghao@zte.com.cn
-Fixes: fc37a3b8b438 ("[PATCH] ipc sem: use kvmalloc for sem_undo allocation")
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-Reviewed-by: Shakeel Butt <shakeelb@google.com>
-Reviewed-by: Manfred Spraul <manfred@colorfullife.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Yang Guang <cgel.zte@gmail.com>
-Cc: Davidlohr Bueso <dbueso@suse.de>
-Cc: Randy Dunlap <rdunlap@infradead.org>
-Cc: Bhaskar Chowdhury <unixbhaskar@gmail.com>
-Cc: Vasily Averin <vvs@virtuozzo.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+The Qualcomm USB HS PHY driver that is enabled by CONFIG_PHY_QCOM_USB_HS,
+registers a ulpi_driver but this driver does not provide an 'id_table',
+so when ulpi_match() is called on the Tegra20 Ventana platform, it
+crashes when attempting to deference the id_table pointer which is not
+valid. The Qualcomm USB HS PHY driver uses device-tree for matching the
+ULPI driver with the device and so fix this crash by using device-tree
+for matching if the id_table is not valid.
+
+Fixes: ef6a7bcfb01c ("usb: ulpi: Support device discovery via DT")
+Cc: stable <stable@vger.kernel.org>
+Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
+Link: https://lore.kernel.org/r/20220117150039.44058-1-jonathanh@nvidia.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- ipc/sem.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/usb/common/ulpi.c |    7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
---- a/ipc/sem.c
-+++ b/ipc/sem.c
-@@ -1964,6 +1964,7 @@ static struct sem_undo *find_alloc_undo(
- 	 */
- 	un = lookup_undo(ulp, semid);
- 	if (un) {
-+		spin_unlock(&ulp->lock);
- 		kvfree(new);
- 		goto success;
- 	}
-@@ -1976,9 +1977,8 @@ static struct sem_undo *find_alloc_undo(
- 	ipc_assert_locked_object(&sma->sem_perm);
- 	list_add(&new->list_id, &sma->list_id);
- 	un = new;
--
--success:
- 	spin_unlock(&ulp->lock);
-+success:
- 	sem_unlock(sma, -1);
- out:
- 	return un;
+--- a/drivers/usb/common/ulpi.c
++++ b/drivers/usb/common/ulpi.c
+@@ -39,8 +39,11 @@ static int ulpi_match(struct device *dev
+ 	struct ulpi *ulpi = to_ulpi_dev(dev);
+ 	const struct ulpi_device_id *id;
+ 
+-	/* Some ULPI devices don't have a vendor id so rely on OF match */
+-	if (ulpi->id.vendor == 0)
++	/*
++	 * Some ULPI devices don't have a vendor id
++	 * or provide an id_table so rely on OF match.
++	 */
++	if (ulpi->id.vendor == 0 || !drv->id_table)
+ 		return of_driver_match_device(dev, driver);
+ 
+ 	for (id = drv->id_table; id->vendor; id++)
 
 

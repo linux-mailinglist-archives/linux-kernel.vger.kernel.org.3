@@ -2,248 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFB184AB84F
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 11:13:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 348704AB92F
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 11:59:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353414AbiBGKJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 05:09:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43430 "EHLO
+        id S1352364AbiBGK4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 05:56:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352325AbiBGKA0 (ORCPT
+        with ESMTP id S1345973AbiBGKtk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 05:00:26 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB025C043181;
-        Mon,  7 Feb 2022 02:00:24 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 47D961F43D76
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644228021;
-        bh=C6ahXcGBr3wYvchAhyVsk7tAn1/VzH+lrX2SOz7k5LU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=en+A+ujlU32xmni49UHQs2C5/vrYE7HalLjBIO4xXfMDnYOj1bjpDYOcdDTb+c/Ob
-         2sBZ/f9AwZ7mkzWoCOTVsPVDTUnY8msojKcGtlc48aH0RCKoyW/a6gUvXHiboufPdQ
-         u4kK/FepuqLnObZd9EljObZL5xhbKAsd/F4pN4wwEb+KCLAlFVY4Yj7OWKsfHWxHgs
-         ZJuJMeQlHnLzRpkVLs+dyzr7+gVShpHsF8Cpm4aFbHBTJGcjzNgfMbzUQ9cbzz1g0k
-         wIopPqak1XVIJNxkat+Y81V3Cvp+SjMuz/+D4exsoe8NRa6pgtRy7piosNJ5tWowwN
-         z31K2vKS3GHFg==
-Message-ID: <02d0dba2-ffc8-1bf1-d8a7-f7fa19f2c7ed@collabora.com>
-Date:   Mon, 7 Feb 2022 11:00:18 +0100
+        Mon, 7 Feb 2022 05:49:40 -0500
+X-Greylist: delayed 2922 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 02:49:39 PST
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6914C043181
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 02:49:39 -0800 (PST)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2179CZSj016591;
+        Mon, 7 Feb 2022 11:00:37 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=veZo0P/JfQdRJDIli6sGt4ZGDkxpZF8WrXm4WgcbFDs=;
+ b=LyOM7OE32aQxV9zw7duuPrfrJldOPTSzvtdbO7khQHp6VH6nsQS/1nDO1hXbZLmJq3nw
+ 7PsdcbDW2DruY7hmskH5TenmUVY9yx7uJ5i1DaUsAgLg+HOCJUkGv7VGwAMsVAtu4F96
+ sCJ/nB5vp27U2qF3aQGMcKiyNcnqc+aDARpliHA9q4KtKmWvBpM2371vS0moSutXQlXv
+ JD7nJX3nfnuqtwSrLyWpVfNb7yZ7m865ES71jT5FzTN6K3vYc11iMh0Vob87hfDscjJB
+ 3OMPkL/dsoItJkdZBEb9HLlQ9rzsqz2u0jZF322OtUadHKol830UF6t/NX5nkfrXyXfN /w== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3e30kg08hy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Feb 2022 11:00:37 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 5343C10002A;
+        Mon,  7 Feb 2022 11:00:35 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 3EFD9212FC5;
+        Mon,  7 Feb 2022 11:00:35 +0100 (CET)
+Received: from [10.129.7.146] (10.75.127.49) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 7 Feb
+ 2022 11:00:34 +0100
+Message-ID: <7bd0a0a9-4015-b54c-f745-f813496be61b@foss.st.com>
+Date:   Mon, 7 Feb 2022 11:00:34 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH] usb: host: xhci-mtk: Simplify supplies handling with
- regulator_bulk
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 5/5] drm/stm: ltdc: add support of ycbcr pixel formats
 Content-Language: en-US
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     mathias.nyman@intel.com, gregkh@linuxfoundation.org,
-        matthias.bgg@gmail.com, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220118133348.111860-1-angelogioacchino.delregno@collabora.com>
- <91bb8078e2d0824c325eb3819e59cdcb65b68a4e.camel@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <91bb8078e2d0824c325eb3819e59cdcb65b68a4e.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Nathan Chancellor <nathan@kernel.org>
+CC:     Philippe Cornu <philippe.cornu@foss.st.com>,
+        Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20211215214843.20703-1-yannick.fertre@foss.st.com>
+ <Yfq3XwozrxYaFhgD@dev-arch.archlinux-ax161>
+From:   yannick Fertre <yannick.fertre@foss.st.com>
+In-Reply-To: <Yfq3XwozrxYaFhgD@dev-arch.archlinux-ax161>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.75.127.49]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-07_03,2022-02-07_01,2021-12-02_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 20/01/22 07:50, Chunfeng Yun ha scritto:
-> On Tue, 2022-01-18 at 14:33 +0100, AngeloGioacchino Del Regno wrote:
->> Remove the custom functions xhci_mtk_ldos_{enable,disable}() by
->> switching to using regulator_bulk to perform the very same thing,
->> as the regulators are always either both enabled or both disabled.
+Hi Nathan,
+
+On 2/2/22 17:54, Nathan Chancellor wrote:
+> Hi Yannick,
+> 
+> On Wed, Dec 15, 2021 at 10:48:43PM +0100, Yannick Fertre wrote:
+>> This patch adds the following YCbCr input pixel formats on the latest
+>> LTDC hardware version:
 >>
->> Signed-off-by: AngeloGioacchino Del Regno <
->> angelogioacchino.delregno@collabora.com>
->> ---
->>   drivers/usb/host/xhci-mtk.c | 56 ++++++++++++-----------------------
->> --
->>   drivers/usb/host/xhci-mtk.h |  4 +--
->>   2 files changed, 20 insertions(+), 40 deletions(-)
+>> 1 plane  (co-planar)  : YUYV, YVYU, UYVY, VYUY
+>> 2 planes (semi-planar): NV12, NV21
+>> 3 planes (full-planar): YU12=I420=DRM YUV420, YV12=DRM YVU420
 >>
->> diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-
->> mtk.c
->> index 62c835d446be..3b81931e5b77 100644
->> --- a/drivers/usb/host/xhci-mtk.c
->> +++ b/drivers/usb/host/xhci-mtk.c
->> @@ -395,31 +395,6 @@ static int xhci_mtk_clks_get(struct xhci_hcd_mtk
->> *mtk)
->>   	return devm_clk_bulk_get_optional(mtk->dev, BULK_CLKS_NUM,
->> clks);
->>   }
->>   
->> -static int xhci_mtk_ldos_enable(struct xhci_hcd_mtk *mtk)
->> -{
->> -	int ret;
->> -
->> -	ret = regulator_enable(mtk->vbus);
->> -	if (ret) {
->> -		dev_err(mtk->dev, "failed to enable vbus\n");
->> -		return ret;
->> -	}
->> -
->> -	ret = regulator_enable(mtk->vusb33);
->> -	if (ret) {
->> -		dev_err(mtk->dev, "failed to enable vusb33\n");
->> -		regulator_disable(mtk->vbus);
->> -		return ret;
->> -	}
->> -	return 0;
->> -}
->> -
->> -static void xhci_mtk_ldos_disable(struct xhci_hcd_mtk *mtk)
->> -{
->> -	regulator_disable(mtk->vbus);
->> -	regulator_disable(mtk->vusb33);
->> -}
->> -
->>   static void xhci_mtk_quirks(struct device *dev, struct xhci_hcd
->> *xhci)
->>   {
->>   	struct usb_hcd *hcd = xhci_to_hcd(xhci);
->> @@ -475,6 +450,10 @@ static int xhci_mtk_setup(struct usb_hcd *hcd)
->>   	return ret;
->>   }
->>   
->> +static const char * const xhci_mtk_supply_names[] = {
->> +	"vusb33", "vbus",
->> +};
+>> Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+> 
+> <snip>
+> 
+>> +static inline void ltdc_set_ycbcr_config(struct drm_plane *plane, u32 drm_pix_fmt)
+>> +{
+>> +	struct ltdc_device *ldev = plane_to_ltdc(plane);
+>> +	struct drm_plane_state *state = plane->state;
+>> +	u32 lofs = plane->index * LAY_OFS;
+>> +	u32 val;
 >> +
->>   static const struct xhci_driver_overrides xhci_mtk_overrides
->> __initconst = {
->>   	.reset = xhci_mtk_setup,
->>   	.add_endpoint = xhci_mtk_add_ep,
->> @@ -507,17 +486,18 @@ static int xhci_mtk_probe(struct
->> platform_device *pdev)
->>   		return -ENOMEM;
->>   
->>   	mtk->dev = dev;
->> -	mtk->vbus = devm_regulator_get(dev, "vbus");
->> -	if (IS_ERR(mtk->vbus)) {
->> -		dev_err(dev, "fail to get vbus\n");
->> -		return PTR_ERR(mtk->vbus);
->> -	}
->> +	mtk->num_supplies = ARRAY_SIZE(xhci_mtk_supply_names);
->> +	mtk->supplies = devm_kcalloc(dev, mtk->num_supplies,
->> +				     sizeof(*mtk->supplies),
->> GFP_KERNEL);
->> +	if (!mtk->supplies)
->> +		return -ENOMEM;
->>   
->> -	mtk->vusb33 = devm_regulator_get(dev, "vusb33");
->> -	if (IS_ERR(mtk->vusb33)) {
->> -		dev_err(dev, "fail to get vusb33\n");
->> -		return PTR_ERR(mtk->vusb33);
->> -	}
->> +	regulator_bulk_set_supply_names(mtk->supplies,
->> xhci_mtk_supply_names,
->> +					mtk->num_supplies);
+>> +	switch (drm_pix_fmt) {
+>> +	case DRM_FORMAT_YUYV:
+>> +		val = (YCM_I << 4) | LxPCR_YF | LxPCR_CBF;
+>> +		break;
+>> +	case DRM_FORMAT_YVYU:
+>> +		val = (YCM_I << 4) | LxPCR_YF;
+>> +		break;
+>> +	case DRM_FORMAT_UYVY:
+>> +		val = (YCM_I << 4) | LxPCR_CBF;
+>> +		break;
+>> +	case DRM_FORMAT_VYUY:
+>> +		val = (YCM_I << 4);
+>> +		break;
+>> +	case DRM_FORMAT_NV12:
+>> +		val = (YCM_SP << 4) | LxPCR_CBF;
+>> +		break;
+>> +	case DRM_FORMAT_NV21:
+>> +		val = (YCM_SP << 4);
+>> +		break;
+>> +	case DRM_FORMAT_YUV420:
+>> +	case DRM_FORMAT_YVU420:
+>> +		val = (YCM_FP << 4);
+>> +		break;
+>> +	default:
+>> +		/* RGB or not a YCbCr supported format */
+>> +		break;
+>> +	}
 >> +
->> +	ret = devm_regulator_bulk_get(dev, mtk->num_supplies, mtk-
->>> supplies);
->> +	if (ret)
->> +		return dev_err_probe(dev, ret, "Failed to get
->> regulators\n");
->>   
->>   	ret = xhci_mtk_clks_get(mtk);
->>   	if (ret)
->> @@ -558,7 +538,7 @@ static int xhci_mtk_probe(struct platform_device
->> *pdev)
->>   	pm_runtime_enable(dev);
->>   	pm_runtime_get_sync(dev);
->>   
->> -	ret = xhci_mtk_ldos_enable(mtk);
->> +	ret = regulator_bulk_enable(mtk->num_supplies, mtk->supplies);
->>   	if (ret)
->>   		goto disable_pm;
->>   
->> @@ -667,7 +647,7 @@ static int xhci_mtk_probe(struct platform_device
->> *pdev)
->>   	clk_bulk_disable_unprepare(BULK_CLKS_NUM, mtk->clks);
->>   
->>   disable_ldos:
->> -	xhci_mtk_ldos_disable(mtk);
->> +	regulator_bulk_disable(mtk->num_supplies, mtk->supplies);
->>   
->>   disable_pm:
->>   	pm_runtime_put_noidle(dev);
->> @@ -695,7 +675,7 @@ static int xhci_mtk_remove(struct platform_device
->> *pdev)
->>   	usb_put_hcd(hcd);
->>   	xhci_mtk_sch_exit(mtk);
->>   	clk_bulk_disable_unprepare(BULK_CLKS_NUM, mtk->clks);
->> -	xhci_mtk_ldos_disable(mtk);
->> +	regulator_bulk_disable(mtk->num_supplies, mtk->supplies);
->>   
->>   	pm_runtime_disable(dev);
->>   	pm_runtime_put_noidle(dev);
->> diff --git a/drivers/usb/host/xhci-mtk.h b/drivers/usb/host/xhci-
->> mtk.h
->> index 4b1ea89f959a..9b78cd2ba0ac 100644
->> --- a/drivers/usb/host/xhci-mtk.h
->> +++ b/drivers/usb/host/xhci-mtk.h
->> @@ -150,9 +150,9 @@ struct xhci_hcd_mtk {
->>   	int num_u3_ports;
->>   	int u2p_dis_msk;
->>   	int u3p_dis_msk;
->> -	struct regulator *vusb33;
->> -	struct regulator *vbus;
->>   	struct clk_bulk_data clks[BULK_CLKS_NUM];
->> +	struct regulator_bulk_data *supplies;
->> +	u8 num_supplies;
-> Could you please help to change it like as clock bulk?
+>> +	/* Enable limited range */
+>> +	if (state->color_range == DRM_COLOR_YCBCR_LIMITED_RANGE)
+>> +		val |= LxPCR_YREN;
+>> +
+>> +	/* enable ycbcr conversion */
+>> +	val |= LxPCR_YCEN;
+>> +
+>> +	regmap_write(ldev->regmap, LTDC_L1PCR + lofs, val);
+>> +}
 > 
-> 1. #define BULK_REGULATORS_NUM 2; then define @supplies array,
+> This patch as commit 484e72d3146b ("drm/stm: ltdc: add support of ycbcr
+> pixel formats") in -next introduced the following clang warning:
 > 
->          struct regulator_bulk_data supplies[BULK_REGULATORS_NUM];
+> drivers/gpu/drm/stm/ltdc.c:625:2: warning: variable 'val' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
+>          default:
+>          ^~~~~~~
+> drivers/gpu/drm/stm/ltdc.c:635:2: note: uninitialized use occurs here
+>          val |= LxPCR_YCEN;
+>          ^~~
+> drivers/gpu/drm/stm/ltdc.c:600:9: note: initialize the variable 'val' to silence this warning
+>          u32 val;
+>                 ^
+>                  = 0
+> 1 warning generated.
 > 
-> 2. also add a helper to get regulator bulk; e.g.
+> Would it be okay to just return in the default case (maybe with a
+> message about an unsupported format?) or should there be another fix?
 > 
-> static int xhci_mtk_regulators_get(struct xhci_hcd_mtk *mtk)
-> {
->      struct regulator_bulk_data *supplies = mtk->supplies;
-> 
->      supplies[0].supply = "vusb33";
->      supplies[1].supply = "vbus";
-> 
->      return devm_regulator_bulk_get(mtk->dev, BUL
-> K_REGULATORS_NUM, supplies);
-> }
+> Cheers,
 
-Hello Chunfeng,
-I chose to go for this way to enhance the implementation flexibility: like that,
-any future SoC that needs different regulators (more vregs, less, different names)
-will simply need a new array of vreg names, like:
 
-static const char * const xhci_mtk_mtxxxx_supply_names[] = {
-	"vusb33", "vbus", "another-supply", "and-another-one",
-};
+Thanks for your help.
+It'okay for a message for unsupported format with a return in the 
+default case.
+Do you want create & push the patch?
 
-Other than enhancing flexibility, this will also make sure that we don't allocate
-more regulator_bulk_data entries than needed, enhancing memory usage.
-
-Your proposal, though, is valid if you are sure that future SoCs will have only
-and always these two power supplies and nothing else...
-
-Regards,
-Angelo
-
-> 
-> Thanks a lot
-> 
-> 
->>   	unsigned int has_ippc:1;
->>   	unsigned int lpm_support:1;
->>   	unsigned int u2_lpm_disable:1;
-> 
+Best regards

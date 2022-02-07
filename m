@@ -2,126 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53FF84AB8A5
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 11:29:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DBE44AB90D
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 11:52:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241142AbiBGKY4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 05:24:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54852 "EHLO
+        id S239522AbiBGKtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 05:49:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352754AbiBGKWx (ORCPT
+        with ESMTP id S234200AbiBGKng (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 05:22:53 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D84FBC043188
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 02:22:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644229372;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2smJ/GlsLCD4bPAcOtXvALm5pEn5dU6rKnsOljI8KSo=;
-        b=Xf7UbQquJIXbvEWSX6hyv9QGpoOj4YVDWVM0fONsNAyWJOrj+IiNGxqOpkQHhXSpy5S/hJ
-        em3AZSU+b91fhfOT0mFA3X0y1SOWq68qXylB63fmskfYYUSJZjiATdt2Et6SFGK9NxAVPJ
-        J5KvvYOclSAke6fP+7oPrsHch8wPkZs=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-65-idtXnJI4OrGmulbvj6Mxvg-1; Mon, 07 Feb 2022 05:22:46 -0500
-X-MC-Unique: idtXnJI4OrGmulbvj6Mxvg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3B34A1800D50;
-        Mon,  7 Feb 2022 10:22:42 +0000 (UTC)
-Received: from oldenburg.str.redhat.com (unknown [10.39.193.205])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 23E96607B6;
-        Mon,  7 Feb 2022 10:22:21 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     "'Edgecombe, Rick P'" <rick.p.edgecombe@intel.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "oleg@redhat.com" <oleg@redhat.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>, "arnd@arndb.de" <arnd@arndb.de>,
-        "Moreira, Joao" <joao.moreira@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "Dave.Martin@arm.com" <Dave.Martin@arm.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>
-Subject: Re: [PATCH 00/35] Shadow stacks for userspace
-References: <87fsozek0j.ffs@tglx>
-        <a7e59ae16e0e05579b087caf4045e42b174e2167.camel@intel.com>
-        <3421da7fc8474b6db0e265b20ffd28d0@AcuMS.aculab.com>
-        <CAMe9rOonepEiRyoAyTGkDMQQhuyuoP4iTZJJhKGxgnq9vv=dLQ@mail.gmail.com>
-        <9f948745435c4c9273131146d50fe6f328b91a78.camel@intel.com>
-        <782f27dbe6fc419a8946eeb426253e28@AcuMS.aculab.com>
-Date:   Mon, 07 Feb 2022 11:22:20 +0100
-In-Reply-To: <782f27dbe6fc419a8946eeb426253e28@AcuMS.aculab.com> (David
-        Laight's message of "Sun, 6 Feb 2022 13:42:42 +0000")
-Message-ID: <8735kvm0wz.fsf@oldenburg.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+        Mon, 7 Feb 2022 05:43:36 -0500
+X-Greylist: delayed 600 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 02:43:34 PST
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 151D2C043189
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 02:43:34 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 595B811B3;
+        Mon,  7 Feb 2022 02:26:20 -0800 (PST)
+Received: from [10.57.70.156] (unknown [10.57.70.156])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F01BB3F718;
+        Mon,  7 Feb 2022 02:26:18 -0800 (PST)
+Message-ID: <f17da9b7-1642-762c-0854-e131e3c2f438@arm.com>
+Date:   Mon, 7 Feb 2022 10:26:15 +0000
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH 1/2] iommu/arm-smmu-v3: Avoid open coded arithmetic in
+ memory allocation
+Content-Language: en-GB
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Will Deacon <will@kernel.org>, Joerg Roedel <joro@8bytes.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux-foundation.org
+References: <de9e8705169b5dc873f6ce9f9a17598de89aa6a7.1644081032.git.christophe.jaillet@wanadoo.fr>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <de9e8705169b5dc873f6ce9f9a17598de89aa6a7.1644081032.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* David Laight:
+On 2022-02-05 17:10, Christophe JAILLET wrote:
+> kmalloc_array()/kcalloc() should be used to avoid potential overflow when
+> a multiplication is needed to compute the size of the requested memory.
+> 
+> So turn a devm_kzalloc()+explicit size computation into an equivalent
+> devm_kcalloc().
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> This is NOT compile tested.
+> I don't have the needed cross compiling tools.
 
-> Was there any 'spare' space in struct jmpbuf ?
+FYI, https://cdn.kernel.org/pub/tools/crosstool/
 
-jmp_buf in glibc looks like this:
+Either way, the patch looks reasonable, thanks!
 
-(gdb) ptype/o jmp_buf
-type = struct __jmp_buf_tag {
-/*      0      |      64 */    __jmp_buf __jmpbuf;
-/*     64      |       4 */    int __mask_was_saved;
-/* XXX  4-byte hole      */
-/*     72      |     128 */    __sigset_t __saved_mask;
+Acked-by: Robin Murphy <robin.murphy@arm.com>
 
-                               /* total size (bytes):  200 */
-                             } [1]
-(gdb) ptype/o __jmp_buf
-type = long [8]
-
-The glibc ABI reserves space for 1024 signals, something that Linux is
-never going to implement.  We can use that space to store a few extra
-registers in __save_mask.  There is a complication because the
-pthread_cancel unwinding allocates only space for the __jmpbuf member.
-Fortunately, we do not need to unwind the shadow stack for thread
-cancellation, so we don't need that extra space in that case.
-
-Thanks,
-Florian
-
+> ---
+>   drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> index 6dc6d8b6b368..14d06aad0726 100644
+> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> @@ -2981,10 +2981,10 @@ static int arm_smmu_init_l1_strtab(struct arm_smmu_device *smmu)
+>   {
+>   	unsigned int i;
+>   	struct arm_smmu_strtab_cfg *cfg = &smmu->strtab_cfg;
+> -	size_t size = sizeof(*cfg->l1_desc) * cfg->num_l1_ents;
+>   	void *strtab = smmu->strtab_cfg.strtab;
+>   
+> -	cfg->l1_desc = devm_kzalloc(smmu->dev, size, GFP_KERNEL);
+> +	cfg->l1_desc = devm_kcalloc(smmu->dev, cfg->num_l1_ents,
+> +				    sizeof(*cfg->l1_desc), GFP_KERNEL);
+>   	if (!cfg->l1_desc)
+>   		return -ENOMEM;
+>   

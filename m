@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DECD34ABA33
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:27:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F2D54AB9A6
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:24:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383098AbiBGLVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:21:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54198 "EHLO
+        id S1355699AbiBGLMo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:12:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378830AbiBGLP4 (ORCPT
+        with ESMTP id S241766AbiBGLJ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:15:56 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07957C0401C2;
-        Mon,  7 Feb 2022 03:15:52 -0800 (PST)
+        Mon, 7 Feb 2022 06:09:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54EFFC043189;
+        Mon,  7 Feb 2022 03:09:25 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 45E5661261;
-        Mon,  7 Feb 2022 11:15:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3064AC004E1;
-        Mon,  7 Feb 2022 11:15:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1833FB80EE8;
+        Mon,  7 Feb 2022 11:09:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36DC4C004E1;
+        Mon,  7 Feb 2022 11:09:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232551;
-        bh=FvBWJosJtyYm8g+flOJrSFqn3OnIohx9YKXeucM2Fw8=;
+        s=korg; t=1644232162;
+        bh=JE/jV0p/vLig4xTmzfQk4lQFfn7O51vh4mZW9DF20YE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YFAXM5y3Xj7EDwfJraAuA7548gS4l8JsMPA/IyE00wNe4DI5SYQCSGsBLtSByFxYg
-         +Ciu0BUbD4k8bk3D0AE24jhJui++zz+4xiDoTQOH8qqlxPM5FXnCOd7rZCDESXcfYi
-         WdPKyI/LRs8JjpacJS7+31hur+OcT4fj3INJRrm4=
+        b=Jim5i8dYX+IxzhKmooh5bFqB4lPY17AR5h5inImjSYmhHQOAq1TO5Y4nC6jqP0kEt
+         hfnkYagFTiYP6AfUbkdYjrgIGlgXBEbXpUMMTGMHmf1GMDycShyDguzHMcDk02O9Z6
+         QqX/zDzDFV3tw0fZH+VWV4PTaaL7Ic9TkFgjAARg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Florian Westphal <fw@strlen.de>,
-        Pablo Neira Ayuso <pablo@netfilter.org>
-Subject: [PATCH 4.19 46/86] netfilter: nat: remove l4 protocol port rovers
+        stable@vger.kernel.org, Nick Lopez <github@glowingmonkey.org>,
+        Ilia Mirkin <imirkin@alum.mit.edu>,
+        Karol Herbst <kherbst@redhat.com>
+Subject: [PATCH 4.9 36/48] drm/nouveau: fix off by one in BIOS boundary checking
 Date:   Mon,  7 Feb 2022 12:06:09 +0100
-Message-Id: <20220207103759.060180554@linuxfoundation.org>
+Message-Id: <20220207103753.513983395@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103757.550973048@linuxfoundation.org>
-References: <20220207103757.550973048@linuxfoundation.org>
+In-Reply-To: <20220207103752.341184175@linuxfoundation.org>
+References: <20220207103752.341184175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,183 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florian Westphal <fw@strlen.de>
+From: Nick Lopez <github@glowingmonkey.org>
 
-commit 6ed5943f8735e2b778d92ea4d9805c0a1d89bc2b upstream.
+commit 1b777d4d9e383d2744fc9b3a09af6ec1893c8b1a upstream.
 
-This is a leftover from days where single-cpu systems were common:
-Store last port used to resolve a clash to use it as a starting point when
-the next conflict needs to be resolved.
+Bounds checking when parsing init scripts embedded in the BIOS reject
+access to the last byte. This causes driver initialization to fail on
+Apple eMac's with GeForce 2 MX GPUs, leaving the system with no working
+console.
 
-When we have parallel attempt to connect to same address:port pair,
-its likely that both cores end up computing the same "available" port,
-as both use same starting port, and newly used ports won't become
-visible to other cores until the conntrack gets confirmed later.
+This is probably only seen on OpenFirmware machines like PowerPC Macs
+because the BIOS image provided by OF is only the used parts of the ROM,
+not a power-of-two blocks read from PCI directly so PCs always have
+empty bytes at the end that are never accessed.
 
-One of the cores then has to drop the packet at insertion time because
-the chosen new tuple turns out to be in use after all.
-
-Lets simplify this: remove port rover and use a pseudo-random starting
-point.
-
-Note that this doesn't make netfilter default to 'fully random' mode;
-the 'rover' was only used if NAT could not reuse source port as-is.
-
-Signed-off-by: Florian Westphal <fw@strlen.de>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Signed-off-by: Nick Lopez <github@glowingmonkey.org>
+Fixes: 4d4e9907ff572 ("drm/nouveau/bios: guard against out-of-bounds accesses to image")
+Cc: <stable@vger.kernel.org> # v4.10+
+Reviewed-by: Ilia Mirkin <imirkin@alum.mit.edu>
+Reviewed-by: Karol Herbst <kherbst@redhat.com>
+Signed-off-by: Karol Herbst <kherbst@redhat.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220122081906.2633061-1-github@glowingmonkey.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/net/netfilter/nf_nat_l4proto.h |    2 +-
- net/netfilter/nf_nat_proto_common.c    |    8 ++------
- net/netfilter/nf_nat_proto_dccp.c      |    5 +----
- net/netfilter/nf_nat_proto_sctp.c      |    5 +----
- net/netfilter/nf_nat_proto_tcp.c       |    5 +----
- net/netfilter/nf_nat_proto_udp.c       |   10 ++--------
- 6 files changed, 8 insertions(+), 27 deletions(-)
+ drivers/gpu/drm/nouveau/nvkm/subdev/bios/base.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/include/net/netfilter/nf_nat_l4proto.h
-+++ b/include/net/netfilter/nf_nat_l4proto.h
-@@ -74,7 +74,7 @@ void nf_nat_l4proto_unique_tuple(const s
- 				 struct nf_conntrack_tuple *tuple,
- 				 const struct nf_nat_range2 *range,
- 				 enum nf_nat_manip_type maniptype,
--				 const struct nf_conn *ct, u16 *rover);
-+				 const struct nf_conn *ct);
- 
- int nf_nat_l4proto_nlattr_to_range(struct nlattr *tb[],
- 				   struct nf_nat_range2 *range);
---- a/net/netfilter/nf_nat_proto_common.c
-+++ b/net/netfilter/nf_nat_proto_common.c
-@@ -38,8 +38,7 @@ void nf_nat_l4proto_unique_tuple(const s
- 				 struct nf_conntrack_tuple *tuple,
- 				 const struct nf_nat_range2 *range,
- 				 enum nf_nat_manip_type maniptype,
--				 const struct nf_conn *ct,
--				 u16 *rover)
-+				 const struct nf_conn *ct)
- {
- 	unsigned int range_size, min, max, i;
- 	__be16 *portptr;
-@@ -86,16 +85,13 @@ void nf_nat_l4proto_unique_tuple(const s
- 	} else if (range->flags & NF_NAT_RANGE_PROTO_OFFSET) {
- 		off = (ntohs(*portptr) - ntohs(range->base_proto.all));
- 	} else {
--		off = *rover;
-+		off = prandom_u32();
+--- a/drivers/gpu/drm/nouveau/nvkm/subdev/bios/base.c
++++ b/drivers/gpu/drm/nouveau/nvkm/subdev/bios/base.c
+@@ -38,7 +38,7 @@ nvbios_addr(struct nvkm_bios *bios, u32
+ 		*addr += bios->imaged_addr;
  	}
  
- 	for (i = 0; ; ++off) {
- 		*portptr = htons(min + off % range_size);
- 		if (++i != range_size && nf_nat_used_tuple(tuple, ct))
- 			continue;
--		if (!(range->flags & (NF_NAT_RANGE_PROTO_RANDOM_ALL|
--					NF_NAT_RANGE_PROTO_OFFSET)))
--			*rover = off;
- 		return;
+-	if (unlikely(*addr + size >= bios->size)) {
++	if (unlikely(*addr + size > bios->size)) {
+ 		nvkm_error(&bios->subdev, "OOB %d %08x %08x\n", size, p, *addr);
+ 		return false;
  	}
- }
---- a/net/netfilter/nf_nat_proto_dccp.c
-+++ b/net/netfilter/nf_nat_proto_dccp.c
-@@ -18,8 +18,6 @@
- #include <net/netfilter/nf_nat_l3proto.h>
- #include <net/netfilter/nf_nat_l4proto.h>
- 
--static u_int16_t dccp_port_rover;
--
- static void
- dccp_unique_tuple(const struct nf_nat_l3proto *l3proto,
- 		  struct nf_conntrack_tuple *tuple,
-@@ -27,8 +25,7 @@ dccp_unique_tuple(const struct nf_nat_l3
- 		  enum nf_nat_manip_type maniptype,
- 		  const struct nf_conn *ct)
- {
--	nf_nat_l4proto_unique_tuple(l3proto, tuple, range, maniptype, ct,
--				    &dccp_port_rover);
-+	nf_nat_l4proto_unique_tuple(l3proto, tuple, range, maniptype, ct);
- }
- 
- static bool
---- a/net/netfilter/nf_nat_proto_sctp.c
-+++ b/net/netfilter/nf_nat_proto_sctp.c
-@@ -12,8 +12,6 @@
- 
- #include <net/netfilter/nf_nat_l4proto.h>
- 
--static u_int16_t nf_sctp_port_rover;
--
- static void
- sctp_unique_tuple(const struct nf_nat_l3proto *l3proto,
- 		  struct nf_conntrack_tuple *tuple,
-@@ -21,8 +19,7 @@ sctp_unique_tuple(const struct nf_nat_l3
- 		  enum nf_nat_manip_type maniptype,
- 		  const struct nf_conn *ct)
- {
--	nf_nat_l4proto_unique_tuple(l3proto, tuple, range, maniptype, ct,
--				    &nf_sctp_port_rover);
-+	nf_nat_l4proto_unique_tuple(l3proto, tuple, range, maniptype, ct);
- }
- 
- static bool
---- a/net/netfilter/nf_nat_proto_tcp.c
-+++ b/net/netfilter/nf_nat_proto_tcp.c
-@@ -18,8 +18,6 @@
- #include <net/netfilter/nf_nat_l4proto.h>
- #include <net/netfilter/nf_nat_core.h>
- 
--static u16 tcp_port_rover;
--
- static void
- tcp_unique_tuple(const struct nf_nat_l3proto *l3proto,
- 		 struct nf_conntrack_tuple *tuple,
-@@ -27,8 +25,7 @@ tcp_unique_tuple(const struct nf_nat_l3p
- 		 enum nf_nat_manip_type maniptype,
- 		 const struct nf_conn *ct)
- {
--	nf_nat_l4proto_unique_tuple(l3proto, tuple, range, maniptype, ct,
--				    &tcp_port_rover);
-+	nf_nat_l4proto_unique_tuple(l3proto, tuple, range, maniptype, ct);
- }
- 
- static bool
---- a/net/netfilter/nf_nat_proto_udp.c
-+++ b/net/netfilter/nf_nat_proto_udp.c
-@@ -17,8 +17,6 @@
- #include <net/netfilter/nf_nat_l3proto.h>
- #include <net/netfilter/nf_nat_l4proto.h>
- 
--static u16 udp_port_rover;
--
- static void
- udp_unique_tuple(const struct nf_nat_l3proto *l3proto,
- 		 struct nf_conntrack_tuple *tuple,
-@@ -26,8 +24,7 @@ udp_unique_tuple(const struct nf_nat_l3p
- 		 enum nf_nat_manip_type maniptype,
- 		 const struct nf_conn *ct)
- {
--	nf_nat_l4proto_unique_tuple(l3proto, tuple, range, maniptype, ct,
--				    &udp_port_rover);
-+	nf_nat_l4proto_unique_tuple(l3proto, tuple, range, maniptype, ct);
- }
- 
- static void
-@@ -78,8 +75,6 @@ static bool udp_manip_pkt(struct sk_buff
- }
- 
- #ifdef CONFIG_NF_NAT_PROTO_UDPLITE
--static u16 udplite_port_rover;
--
- static bool udplite_manip_pkt(struct sk_buff *skb,
- 			      const struct nf_nat_l3proto *l3proto,
- 			      unsigned int iphdroff, unsigned int hdroff,
-@@ -103,8 +98,7 @@ udplite_unique_tuple(const struct nf_nat
- 		     enum nf_nat_manip_type maniptype,
- 		     const struct nf_conn *ct)
- {
--	nf_nat_l4proto_unique_tuple(l3proto, tuple, range, maniptype, ct,
--				    &udplite_port_rover);
-+	nf_nat_l4proto_unique_tuple(l3proto, tuple, range, maniptype, ct);
- }
- 
- const struct nf_nat_l4proto nf_nat_l4proto_udplite = {
 
 

@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27D1F4ABC56
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:47:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1084A4ABBF2
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:44:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386320AbiBGLeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:34:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35528 "EHLO
+        id S1386302AbiBGLeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:34:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383831AbiBGLXl (ORCPT
+        with ESMTP id S1383838AbiBGLXl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 7 Feb 2022 06:23:41 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8B3EC0401C2;
-        Mon,  7 Feb 2022 03:23:37 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D468C0401D2;
+        Mon,  7 Feb 2022 03:23:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A51C6B81028;
-        Mon,  7 Feb 2022 11:23:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E66E3C004E1;
-        Mon,  7 Feb 2022 11:23:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E905FB80EC3;
+        Mon,  7 Feb 2022 11:23:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D0A8C004E1;
+        Mon,  7 Feb 2022 11:23:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233015;
-        bh=RvuDaYRuaj5nY8GNjEn5EiyUfTzSdHrWzSwRtuJGEV4=;
+        s=korg; t=1644233018;
+        bh=ea+hcjM0+kOavuGX3yikwa9yDCSL8uxSQ/4hJSNZOyg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pNN8ucsfppJtqn2M1eMfoPzLWNTyIZJrPSRRgpa9NIKvmI9hcBrG+jfXxeDweMYZo
-         bJIZHm+HWbDit/L5884mj57d9Bc0QWDj9THKszYzs3im4F4nqNlXfGpwwgV3ye29EY
-         fB5J0YwuLdLJpfmpZQJ8BOuvtyc1x1RO1NEZjij0=
+        b=N62zlb3BhWCUjssygwtYgYsqCLk8pFpyeswgC2FOenLLRUIQgKH87bEgazAacIKV5
+         emXla4kQ9IXmovnx1QDY/L25HRSwn6QFVSGwM3MMpCG6zSr/Y2r+WzR11F2dJN6Q8w
+         SkLRMTT6P4wFhOevz5RZ1ZCoCF9YxfzLPdYgU9V0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kyle Huey <me@kylehuey.com>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, stable@kernel.org
-Subject: [PATCH 5.10 64/74] x86/perf: Default set FREEZE_ON_SMI for all
-Date:   Mon,  7 Feb 2022 12:07:02 +0100
-Message-Id: <20220207103759.331714765@linuxfoundation.org>
+        stable@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Borislav Petkov <bp@suse.de>, Dinh Nguyen <dinguyen@kernel.org>
+Subject: [PATCH 5.10 65/74] EDAC/altera: Fix deferred probing
+Date:   Mon,  7 Feb 2022 12:07:03 +0100
+Message-Id: <20220207103759.362697287@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220207103757.232676988@linuxfoundation.org>
 References: <20220207103757.232676988@linuxfoundation.org>
@@ -55,58 +54,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
+From: Sergey Shtylyov <s.shtylyov@omp.ru>
 
-commit a01994f5e5c79d3a35e5e8cf4252c7f2147323c3 upstream.
+commit 279eb8575fdaa92c314a54c0d583c65e26229107 upstream.
 
-Kyle reported that rr[0] has started to malfunction on Comet Lake and
-later CPUs due to EFI starting to make use of CPL3 [1] and the PMU
-event filtering not distinguishing between regular CPL3 and SMM CPL3.
+The driver overrides the error codes returned by platform_get_irq() to
+-ENODEV for some strange reason, so if it returns -EPROBE_DEFER, the
+driver will fail the probe permanently instead of the deferred probing.
+Switch to propagating the proper error codes to platform driver code
+upwards.
 
-Since this is a privilege violation, default disable SMM visibility
-where possible.
+  [ bp: Massage commit message. ]
 
-Administrators wanting to observe SMM cycles can easily change this
-using the sysfs attribute while regular users don't have access to
-this file.
-
-[0] https://rr-project.org/
-
-[1] See the Intel white paper "Trustworthy SMM on the Intel vPro Platform"
-at https://bugzilla.kernel.org/attachment.cgi?id=300300, particularly the
-end of page 5.
-
-Reported-by: Kyle Huey <me@kylehuey.com>
-Suggested-by: Andrew Cooper <Andrew.Cooper3@citrix.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Cc: stable@kernel.org
-Link: https://lkml.kernel.org/r/YfKChjX61OW4CkYm@hirez.programming.kicks-ass.net
+Fixes: 71bcada88b0f ("edac: altera: Add Altera SDRAM EDAC support")
+Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Acked-by: Dinh Nguyen <dinguyen@kernel.org>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220124185503.6720-2-s.shtylyov@omp.ru
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/events/intel/core.c |   13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ drivers/edac/altera_edac.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/arch/x86/events/intel/core.c
-+++ b/arch/x86/events/intel/core.c
-@@ -4353,6 +4353,19 @@ static __initconst const struct x86_pmu
- 	.lbr_read		= intel_pmu_lbr_read_64,
- 	.lbr_save		= intel_pmu_lbr_save,
- 	.lbr_restore		= intel_pmu_lbr_restore,
-+
-+	/*
-+	 * SMM has access to all 4 rings and while traditionally SMM code only
-+	 * ran in CPL0, 2021-era firmware is starting to make use of CPL3 in SMM.
-+	 *
-+	 * Since the EVENTSEL.{USR,OS} CPL filtering makes no distinction
-+	 * between SMM or not, this results in what should be pure userspace
-+	 * counters including SMM data.
-+	 *
-+	 * This is a clear privilege issue, therefore globally disable
-+	 * counting SMM by default.
-+	 */
-+	.attr_freeze_on_smi	= 1,
- };
+--- a/drivers/edac/altera_edac.c
++++ b/drivers/edac/altera_edac.c
+@@ -349,7 +349,7 @@ static int altr_sdram_probe(struct platf
+ 	if (irq < 0) {
+ 		edac_printk(KERN_ERR, EDAC_MC,
+ 			    "No irq %d in DT\n", irq);
+-		return -ENODEV;
++		return irq;
+ 	}
  
- static __init void intel_clovertown_quirk(void)
+ 	/* Arria10 has a 2nd IRQ */
 
 

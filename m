@@ -2,100 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 340354ACA68
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 21:28:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 633604ACA65
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 21:27:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242326AbiBGU1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 15:27:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49520 "EHLO
+        id S241843AbiBGU05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 15:26:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232631AbiBGUYY (ORCPT
+        with ESMTP id S234543AbiBGUYc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 15:24:24 -0500
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E73FCC0401DA;
-        Mon,  7 Feb 2022 12:24:23 -0800 (PST)
-Received: by mail-ot1-f51.google.com with SMTP id w27-20020a9d5a9b000000b005a17d68ae89so11720869oth.12;
-        Mon, 07 Feb 2022 12:24:23 -0800 (PST)
+        Mon, 7 Feb 2022 15:24:32 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA3DC0401DA;
+        Mon,  7 Feb 2022 12:24:31 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id z4so14391444lfg.5;
+        Mon, 07 Feb 2022 12:24:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=gItGRtBFmuDCuiCd8LZimI8CT8KycScnCN76eWqmpsI=;
+        b=EvGmrX7VLUplcnT7jV/mKf7O+C+eUWXMUppPpYkx6X9DhLk8AvGTjImHanjDBoSfid
+         p+e+YTlRflPL2Ke4p+llrqzuoi+T9WduxnN4OGM6oMSCpsVjeJ9O7fZl8wqmLC7LBbYm
+         Lcnl9+KHWE/ges8niXD9d1f2MdpOQ89TbyZVvnUk+yvUZzfyPqnIrX9SFEdoC7Q5HR/G
+         jZMVmTDWmlvagkAEzMUAUzGHXSJ6ljsOL3VfU1f1tZK9bfUFP5YPVV0UOJOy6vu241i/
+         AJ+LjR7N37F6Zvsuc/Xfcf2LKt1YDeC+cYmpFjapst9HF1Ag1KTjQRJQugX45T/JUfjf
+         noPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=EFWtFTnJpSwgLhq6r6w4pljMn11UZ/W2WRxEYkJ+EFo=;
-        b=EWQYWDvMP14NMq9n9nT2w0JNJOKihtGznqMZHqLmgc2GI2r07Wx+d/ZEZnmhOPtIMk
-         LWqwsCXx1KfgMp60WtJ3DFBGUsXkGHo8sPpzDn1+FtPYuDoLY/3NDrS51w2m0XngiNoR
-         wPA4kubFYLDH0WfrN+NI1KaDANN75+bjcOE76QoLyxzB7eC5Ca7VgnsRcUeASwX8/yq+
-         5MllNMpsy0G3VuRw9pvefvWnqhUFNANPHaQxtuC312R+K0MzNW0Nws6eViAizdO4+wRb
-         ePqCvG6F+uBaMW2AAsyU4Qi8wffMK2V3hdzrD1P6U6KvQfLSzN9lsJif74al3l7OOX1/
-         dECA==
-X-Gm-Message-State: AOAM531r/GHZpkl+DAUUyEtTafBdCOIwRiy7F0S1bMYM4an5Rj/5f1F3
-        fuS/09ZxqICGhyax1Ig6OA==
-X-Google-Smtp-Source: ABdhPJzIJJnRLqMqAko/qcvW1Ml8GLbpjAmJwz23gPjyPp+3wC0WwIXhPvIoYhJfcemgMiOGVIFG9g==
-X-Received: by 2002:a9d:6d07:: with SMTP id o7mr609746otp.363.1644265463239;
-        Mon, 07 Feb 2022 12:24:23 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id c6sm4282542ooo.19.2022.02.07.12.24.21
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=gItGRtBFmuDCuiCd8LZimI8CT8KycScnCN76eWqmpsI=;
+        b=eMB3YV6/oC9E+9DhfI8U3BY4t1gXAnaEp7iRYeUHXCIuPyJe5vxQrdWZ5hxl5/D9dM
+         ilL2o6A7b/yOAdfBGYg1V9tdj6p7QCQvbqhlk2jgRehWWRw2oHM/YQ/D+8UWmzG/820M
+         ObTbrqCDci8aHltmBb4upgCl14NFHJBGhwGtTnC347+OCkWeZPAL+RHsxNfz16qzX8vC
+         R8Q0juoiRKbQe3I9x0DFu7zg5bpkmi/QkOdti5EsJxu815TnLKTE3sxbgH6RigsEL0ev
+         ySa2PBH+BMcIeOrdjZBquivmsH9zwnIT+DzjkhJ1kLLZBBrjhE/HOnXzyTOvk11UpigF
+         mrcw==
+X-Gm-Message-State: AOAM531OxE4SopaEjVezmel34xcXD8ckR/Zem1nb68iYOcR6pAa03EVb
+        5cl/PCsc2/XNO7rNj5PnVHEaoQbhZrncEg==
+X-Google-Smtp-Source: ABdhPJz7L7ywOhhkq7VsLw/TZyIlGHs1A43QzxAPf71xzK7cAl3+cKVgqJvVR4mIAjJjhLs6FT83Fg==
+X-Received: by 2002:a05:6512:234a:: with SMTP id p10mr767844lfu.15.1644265469479;
+        Mon, 07 Feb 2022 12:24:29 -0800 (PST)
+Received: from localhost.localdomain ([94.103.224.201])
+        by smtp.gmail.com with ESMTPSA id m7sm1759127ljh.47.2022.02.07.12.24.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 12:24:22 -0800 (PST)
-Received: (nullmailer pid 846789 invoked by uid 1000);
-        Mon, 07 Feb 2022 20:24:21 -0000
-Date:   Mon, 7 Feb 2022 14:24:21 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Sander Vanheule <sander@svanheule.net>
-Cc:     John Crispin <john@phrozen.org>, Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Bert Vermeulen <bert@biot.com>,
-        Birger Koblitz <mail@birger-koblitz.de>
-Subject: Re: [PATCH v4 1/3] dt-bindings: interrupt-controller:
- realtek,rtl-intc: require parents
-Message-ID: <YgF/9bUh5WOjbd1e@robh.at.kernel.org>
-References: <cover.1644165421.git.sander@svanheule.net>
- <d1920b7b0b882512e628b4e4e93fa8fef1b5364a.1644165421.git.sander@svanheule.net>
+        Mon, 07 Feb 2022 12:24:28 -0800 (PST)
+From:   Pavel Skripkin <paskripkin@gmail.com>
+To:     ath9k-devel@qca.qualcomm.com, kvalo@kernel.org,
+        davem@davemloft.net, kuba@kernel.org, toke@toke.dk,
+        linville@tuxdriver.com
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>
+Subject: [PATCH v3 2/2] ath9k: htc: clean up *STAT_* macros
+Date:   Mon,  7 Feb 2022 23:24:25 +0300
+Message-Id: <28c83b99b8fea0115ad7fbda7cc93a86468ec50d.1644265120.git.paskripkin@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <80962aae265995d1cdb724f5362c556d494c7566.1644265120.git.paskripkin@gmail.com>
+References: <80962aae265995d1cdb724f5362c556d494c7566.1644265120.git.paskripkin@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d1920b7b0b882512e628b4e4e93fa8fef1b5364a.1644165421.git.sander@svanheule.net>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 06 Feb 2022 17:41:51 +0100, Sander Vanheule wrote:
-> The interrupt router has 32 inputs, and up to 15 outputs connected to
-> the MIPS CPU's interrupts. The way these are mapped to each other is
-> runtime configurable. This controller can also mask individual interrupt
-> sources, and has a status register to indicate pending interrupts. This
-> means the controller is not transparent, and the use of "interrupt-map"
-> inappropriate. Instead, a list of parent interrupts should be specified.
-> 
-> Two-part compatibles are introduced to be able to require "interrupts"
-> for new devicetrees. The relevant descriptions are extended or added to
-> more clearly describe the functionality of this controller. The old
-> compatible, with "interrupt-map" and "#address-cells", is deprecated.
-> Interrupt specifiers for new compatibles will require two cells, to
-> indicate the output selection.
-> 
-> To prevent spurious changes to the binding when more SoCs are added,
-> "allOf" is used with one "if", and the compatible enum only has one
-> item.
-> 
-> The example is updated to provide a correct example for RTL8380 SoCs.
-> 
-> Signed-off-by: Sander Vanheule <sander@svanheule.net>
-> ---
-> Changes in v4:
-> - Indicate more clearly that the controller is not transparent.
-> ---
->  .../realtek,rtl-intc.yaml                     | 82 ++++++++++++++-----
->  1 file changed, 62 insertions(+), 20 deletions(-)
-> 
+I've changed *STAT_* macros a bit in previous patch and I seems like
+they become really unreadable. Align these macros definitions to make
+code cleaner.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Also fixed following checkpatch warning
+
+ERROR: Macros with complex values should be enclosed in parentheses
+
+Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+---
+
+Changes since v2:
+	- My send-email script forgot, that mailing lists exist.
+	  Added back all related lists
+	- Fixed checkpatch warning
+
+Changes since v1:
+	- Added this patch
+
+---
+ drivers/net/wireless/ath/ath9k/htc.h | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/net/wireless/ath/ath9k/htc.h b/drivers/net/wireless/ath/ath9k/htc.h
+index 141642e5e00d..b4755e21a501 100644
+--- a/drivers/net/wireless/ath/ath9k/htc.h
++++ b/drivers/net/wireless/ath/ath9k/htc.h
+@@ -327,14 +327,14 @@ static inline struct ath9k_htc_tx_ctl *HTC_SKB_CB(struct sk_buff *skb)
+ }
+ 
+ #ifdef CONFIG_ATH9K_HTC_DEBUGFS
+-#define __STAT_SAVE(expr) (hif_dev->htc_handle->drv_priv ? (expr) : 0)
+-#define TX_STAT_INC(c) __STAT_SAVE(hif_dev->htc_handle->drv_priv->debug.tx_stats.c++)
+-#define TX_STAT_ADD(c, a) __STAT_SAVE(hif_dev->htc_handle->drv_priv->debug.tx_stats.c += a)
+-#define RX_STAT_INC(c) __STAT_SAVE(hif_dev->htc_handle->drv_priv->debug.skbrx_stats.c++)
+-#define RX_STAT_ADD(c, a) __STAT_SAVE(hif_dev->htc_handle->drv_priv->debug.skbrx_stats.c += a)
+-#define CAB_STAT_INC   priv->debug.tx_stats.cab_queued++
+-
+-#define TX_QSTAT_INC(q) (priv->debug.tx_stats.queue_stats[q]++)
++#define __STAT_SAVE(expr)	(hif_dev->htc_handle->drv_priv ? (expr) : 0)
++#define TX_STAT_INC(c)		__STAT_SAVE(hif_dev->htc_handle->drv_priv->debug.tx_stats.c++)
++#define TX_STAT_ADD(c, a)	__STAT_SAVE(hif_dev->htc_handle->drv_priv->debug.tx_stats.c += a)
++#define RX_STAT_INC(c)		__STAT_SAVE(hif_dev->htc_handle->drv_priv->debug.skbrx_stats.c++)
++#define RX_STAT_ADD(c, a)	__STAT_SAVE(hif_dev->htc_handle->drv_priv->debug.skbrx_stats.c += a)
++#define CAB_STAT_INC		(priv->debug.tx_stats.cab_queued++)
++
++#define TX_QSTAT_INC(q)		(priv->debug.tx_stats.queue_stats[q]++)
+ 
+ void ath9k_htc_err_stat_rx(struct ath9k_htc_priv *priv,
+ 			   struct ath_rx_status *rs);
+-- 
+2.34.1
+

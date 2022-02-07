@@ -2,142 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31B284ABE20
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:05:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 146FF4ABE0F
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:05:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390993AbiBGL6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:58:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37942 "EHLO
+        id S1384770AbiBGL47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:56:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384694AbiBGL3g (ORCPT
+        with ESMTP id S1385218AbiBGLbX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:29:36 -0500
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B02D7C03FEDE;
-        Mon,  7 Feb 2022 03:28:00 -0800 (PST)
-Received: by mail-yb1-xb31.google.com with SMTP id 192so12698434ybd.10;
-        Mon, 07 Feb 2022 03:28:00 -0800 (PST)
+        Mon, 7 Feb 2022 06:31:23 -0500
+Received: from mail-oo1-xc29.google.com (mail-oo1-xc29.google.com [IPv6:2607:f8b0:4864:20::c29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7924EC02C451
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 03:29:42 -0800 (PST)
+Received: by mail-oo1-xc29.google.com with SMTP id b15-20020a4a878f000000b002dccc412166so13216479ooi.11
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 03:29:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=WxR2Iy/hInfRurGC4IqSW6zQNPBVhusP7UDER7Bropk=;
-        b=dM/Tj7tr2LUBDshsrOWdnnxklmal1W15fzaCMCTQao60SujrYlghFjzCZqhB+TbXPg
-         SNiOS8RZv7OSiyaTF5lQUgyXXzQ5qk7uzVO0FRedzzIzg+4TH7RbSMTNxlmZp6P+uWVL
-         VDLP7pEQ/S1P4B0O2raEMVLXjsaZlYgyDr81GJ6N8sozwIJEoB4X10TS5RwIxV2N1AiR
-         U98git0f+YOsHGF/WZ+ZG+fh6OCtO2xL+/n+aw8SCpvayTQ2NxZY+26jLKGL5ZnuTABM
-         wuCGy+k17X1+6muAZPANzXCoA+E661hCCnVsugwiE4H5KXJW2l8u+l5N9zRLo+EVUc9T
-         QhcQ==
+         :cc;
+        bh=GdrAEtpSp9knE3dG4N9tmiah7mkkROzWWe9VwwtgIEE=;
+        b=hm9BqMPBVXryDOYxjtgkzshKUBUyISC+PQUo9JZc0hU2pX+klK/9GoBimwmV4SbPbs
+         Cqktu28LyobNhdW4hSKY5KtDI2UWmSNcgeBjPTEd7B4KB0hv2NV+qWzvuHN6+SkOtFu5
+         TiwDUyoGDQxMO8KHFSZQJ2fIbs8XY6z6xtTOFXXwph0LDKis4tf2aBVt2bTqxORAi41k
+         0mvxrR6ZwQGJIQ4JCZ1rPHseamYb5bXnm/00ermwgNFOxidmOYZNjcSWxwjAfipHHjP3
+         5kb+IMCddLCjqQ0SjILaVak/wEXI3KPC55ZNGDUEu9H22th2mZrQCZFD6FlRu9EAsZ9l
+         NCiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=WxR2Iy/hInfRurGC4IqSW6zQNPBVhusP7UDER7Bropk=;
-        b=vZq03RefnM94OAbM4Q446MKPqNP3ZvecgHlXCpOfCe5x+Qft1iP6r4jU6AnIdox7hv
-         Zddo/KTQS3YxCQb7BfetCcHUtyualrug92fqd+5JxkbsA4PVG6pOxOEW9dfHbbEBytCM
-         YS4FZoHqphSfDqqmlowT/AqXwZ5dnn3mz8E9OTRiviGLuUP/0CfYw1/4EshKzwmLGr4J
-         Kz4H15U1DRoC8nlGYbh5+EaeqzfpGydkF4XOXqaDtFSY86BGmzfeTKFCIL9ug1KIj4TK
-         sZuyvAogU2oMdhpnF/fmDPBsSb5YlP+xWtG9EEe68HmhfWeWbvTn5YSkq4Q7k6EY9G7g
-         ggBw==
-X-Gm-Message-State: AOAM532SzYU2zleXDECEFrGak6OCZS6vfu+1Mza7nDORlYom3qgGqYw4
-        3MivUOVjfSdNtw1PSp9YeeV1rKeCHIJBZ2kP4hoqoC9qhFcYUg==
-X-Google-Smtp-Source: ABdhPJxrPoHymoNp9oAgOQoocWDdgId4VRyqnJQ7fnjIlGyC/SUXMPUZyDHFDRdUTKXD9oDRLRxiKidiAB5GKIuYBc4=
-X-Received: by 2002:a81:6f56:: with SMTP id k83mr10773035ywc.58.1644233279890;
- Mon, 07 Feb 2022 03:27:59 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=GdrAEtpSp9knE3dG4N9tmiah7mkkROzWWe9VwwtgIEE=;
+        b=QItJaengzk2efCYw9uRCn5+QMJ0OQZBQJx53/CTh55KoFBulFuSayTE6Ut0AIwrYCe
+         t46xBqesoAlZhLMFvay5Jb4sJl53xDLc8yf+Sw43K9tE0CjSrgUF0S7x8Tg8k5XWCCj6
+         F4Ans+LQ2GiV+LKB9cZY+39okXIO5YEuKBFxCQEnaZ9whVSFbVKV3cBgRiLvdidkUNzD
+         NJrmVGph5nWsVy5Bo+MmHTn079pSAibejqHdklQrzLiSsZiu8HVFYDPkKmaSKZC+X5ys
+         kFOeR0209FfDBIcjGlYNGZc5HdxvADYHDpDrkVlQj3ZA0spDYhMMHv13ZtuOeHPfFemM
+         N2Bw==
+X-Gm-Message-State: AOAM532yitkYqwPuEbfwo/3r/CPkGNx02dXSpS1p0Kec0vVPqguYLxBy
+        ej9GXBaOEmYm9iktfpDMpK+HW2Veq2ncTWLUhcILug==
+X-Google-Smtp-Source: ABdhPJyznrMFFiZoDqOMDlGRTRqArtq67oollYysU5ym1cWQLUvuAwYKu1pUfSpdvfjbXzTs/4WO2obpDRUITFEc+0s=
+X-Received: by 2002:a05:6870:7715:: with SMTP id dw21mr3643420oab.38.1644233381454;
+ Mon, 07 Feb 2022 03:29:41 -0800 (PST)
 MIME-Version: 1.0
-References: <1644213481-20321-1-git-send-email-hammerh0314@gmail.com>
- <1644213481-20321-3-git-send-email-hammerh0314@gmail.com> <YgDHwgg0s6U3bFxF@kroah.com>
-In-Reply-To: <YgDHwgg0s6U3bFxF@kroah.com>
-From:   hammer hsieh <hammerh0314@gmail.com>
-Date:   Mon, 7 Feb 2022 19:28:13 +0800
-Message-ID: <CAOX-t55sbxd6rvkafnw-m1nYMuEZTsKOkBBftqSoKxocxSZbJQ@mail.gmail.com>
-Subject: Re: [PATCH v7 2/2] serial:sunplus-uart:Add Sunplus SoC UART Driver
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     robh+dt@kernel.org, linux-serial@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiri Slaby <jirislaby@kernel.org>, p.zabel@pengutronix.de,
-        wells.lu@sunplus.com, "hammer.hsieh" <hammer.hsieh@sunplus.com>
+References: <0000000000001e0ba105d5c2dede@google.com> <000000000000fbf22d05d74d08fb@google.com>
+ <20220207103009.id72sr4dtghgzp5f@work>
+In-Reply-To: <20220207103009.id72sr4dtghgzp5f@work>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Mon, 7 Feb 2022 12:29:30 +0100
+Message-ID: <CACT4Y+Z-R1swsyGrdgy89zHvmAa8tsBVE=mLngsapr5qPre9ZQ@mail.gmail.com>
+Subject: Re: [syzbot] general protection fault in ext4_fill_super
+To:     Lukas Czerner <lczerner@redhat.com>
+Cc:     syzbot <syzbot+138c9e58e3cb22eae3b4@syzkaller.appspotmail.com>,
+        adilger.kernel@dilger.ca, cmaiolino@redhat.com,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
+        syzkaller-bugs@googlegroups.com, tytso@mit.edu
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greg KH <gregkh@linuxfoundation.org> =E6=96=BC 2022=E5=B9=B42=E6=9C=887=E6=
-=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=883:18=E5=AF=AB=E9=81=93=EF=BC=9A
+On Mon, 7 Feb 2022 at 11:30, Lukas Czerner <lczerner@redhat.com> wrote:
 >
-> On Mon, Feb 07, 2022 at 01:58:01PM +0800, Hammer Hsieh wrote:
-> > Add Sunplus SoC UART Driver
+> On Sat, Feb 05, 2022 at 02:39:06PM -0800, syzbot wrote:
+> > syzbot has bisected this issue to:
+> >
+> > commit cebe85d570cf84804e848332d6721bc9e5300e07
+> > Author: Lukas Czerner <lczerner@redhat.com>
+> > Date:   Wed Oct 27 14:18:56 2021 +0000
+> >
+> >     ext4: switch to the new mount api
+> >
+> > bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14902978700000
+> > start commit:   0457e5153e0e Merge tag 'for-linus' of git://git.kernel.org..
+> > git tree:       upstream
+> > final oops:     https://syzkaller.appspot.com/x/report.txt?x=16902978700000
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=12902978700000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=cd57c0f940a9a1ec
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=138c9e58e3cb22eae3b4
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17f7004fb00000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=178cf108700000
+> >
+> > Reported-by: syzbot+138c9e58e3cb22eae3b4@syzkaller.appspotmail.com
+> > Fixes: cebe85d570cf ("ext4: switch to the new mount api")
+> >
+> > For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 > >
 >
-> We need more of a changelog comment here please.  Describe the hardware,
-> what the new tty name you are using, and other stuff.  Be descriptive.
+> I believe that this has been fixed with upstream commit
 >
-
-I will describe as below.
-Add Sunplus SoC UART Driver.
-SP7021 UART block contains 5 UARTs.
-There are UART0~4 that supported in SP7021, the features list as below.
-Support Full-duplex communication.
-Support data packet length configurable.
-Support stop bit number configurable.
-Support force break condition.
-Support baud rate configurable.
-Support error detection and report.
-Support RXD Noise Rejection Vote configurable.
-
-UART0 pinout only support TX/RX two pins.
-UART1 to UART4 pinout support TX/RX/CTS/RTS four pins.
-Normally UART0 used for kernel console, also can be used for normal uart.
-Command line set "console=3DttySUP0,115200", SUP means Sunplus Uart Port.
-UART driver probe will create path named "/dev/ttySUPx".
-
-https://sunplus.atlassian.net/wiki/spaces/doc/pages/1873412290/13.+Universa=
-l+Asynchronous+Receiver+Transmitter+UART
-
-> > --- a/include/uapi/linux/serial_core.h
-> > +++ b/include/uapi/linux/serial_core.h
-> > @@ -274,4 +274,7 @@
-> >  /* Freescale LINFlexD UART */
-> >  #define PORT_LINFLEXUART     122
-> >
-> > +/* Sunplus UART */
-> > +#define PORT_SUNPLUS 123
+> commit 7c268d4ce2d3761f666a9950b029c8902bfab710
+> Author: Lukas Czerner <lczerner@redhat.com>
+> Date:   Wed Jan 19 14:02:09 2022 +0100
 >
-> Why is this needed?  Are you going to require this in some userspace
-> code?  If not, please do not add it.
+>     ext4: fix potential NULL pointer dereference in ext4_fill_super()
 >
-
-In serial_core.c (line 3014) uart_add_one_port( )
-It will call uart_configure_port( ).
-In my uart driver probe set port->flags=3DUPF_BOOT_AUTOCONF.
-I try to remove port define and remove  sunplus_config_port( )
- and just add a "sunplus_uart" for in sunplus_type( ).
-And my uart console not work with PuTTY tool.
-
-I try to do another test as below.
-static const char *sunplus_type(struct uart_port *port)
-{
-        return "sunplus_uart";
-}
-static void sunplus_config_port(struct uart_port *port, int type)
-{
-        if (type & UART_CONFIG_TYPE)
-                port->type =3D "sunplus_uart"; //type define is unsigned in=
-t
-}
-Uart console works, but port->type should be unsigned int , not string.
-So compile will warning " assignment makes integer from pointer
-without a cast [-Wint-conversion]".
-
-I think I should keep the current submit code.
-
-> thanks,
+>     By mistake we fail to return an error from ext4_fill_super() in case
+>     that ext4_alloc_sbi() fails to allocate a new sbi. Instead we just set
+>     the ret variable and allow the function to continue which will later
+>     lead to a NULL pointer dereference. Fix it by returning -ENOMEM in the
+>     case ext4_alloc_sbi() fails.
 >
-> greg k-h
+>     Fixes: cebe85d570cf ("ext4: switch to the new mount api")
+>     Reported-by: kernel test robot <lkp@intel.com>
+>     Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+>     Signed-off-by: Lukas Czerner <lczerner@redhat.com>
+>     Link: https://lore.kernel.org/r/20220119130209.40112-1-lczerner@redhat.com
+>     Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+>     Cc: stable@kernel.org
+
+
+Let's tell syzbot then:
+
+#syz fix: ext4: fix potential NULL pointer dereference in ext4_fill_super()
+
+Thanks

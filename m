@@ -2,112 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D4254ACC0B
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 23:27:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B0D24ACC15
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 23:34:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244497AbiBGW11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 17:27:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50984 "EHLO
+        id S244594AbiBGWe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 17:34:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235284AbiBGW1Z (ORCPT
+        with ESMTP id S238052AbiBGWe2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 17:27:25 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 703C0C0612A4
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 14:27:25 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id y7so6980476plp.2
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 14:27:25 -0800 (PST)
+        Mon, 7 Feb 2022 17:34:28 -0500
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E4DDC0612A4
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 14:34:27 -0800 (PST)
+Received: by mail-oi1-x231.google.com with SMTP id m10so18707868oie.2
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 14:34:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linuxtx.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=dxXiujdV1Ye+Cmvn3SWeLCaDnS5aOnzlIhHA3x8Gejo=;
-        b=UYI6kZ037l3T0VF8gYm/wUEepKooca1xA8Iag8c+2cw+3BoivpO+UrFvl6hUJfwYge
-         I9HnHdPq4Z2XwX8Wi41y7Wae5z3pTvuqo616go/DNmSLyL1AQZJVpp31W4cQVERXi/Di
-         /qbsOuvm3/8zIU07ERU0sM+P3QCmPgf5OnJei/PE54jPMnIIdyFC8xeVNb04auyslH/t
-         Pinu47Cmq6j5sQPNe/CzQDKMjuri4ec/yEyR09HgZf7JQAYhkpRfNfX9NbDSR+WM96YA
-         YCbNZijfULS8Y9lHoOcgGOyAknNneGDbJ9HwhEQk61y9o2K4dc+Toxc28Albb88IZfuU
-         96XQ==
+        bh=jZpXna9RakCKkgXGAFhti4wc05ngWfCJ4E7jcKRY2H4=;
+        b=eZanaDLiv1hJcEwlxqmy0AJ7x+q9T4OvmtYZ8B2Yc55juThoXIGjgkg8RYy1qxJuXx
+         JHAEaTni7L8CZqYwNGrDoo5LUyjO6Y5vnqsVfR0P9W0Y40jCMS6mfD6vnl7ic4L086Dt
+         Jlcf9lTGh9S5tJpRQizAahaC+b88QiEWGNl+8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=dxXiujdV1Ye+Cmvn3SWeLCaDnS5aOnzlIhHA3x8Gejo=;
-        b=5Du2sMUs0KsXWjJfshulM2U2geA3KaB/sABOSqVaPeDOTpJadCU69Y78ooGd3CiLu8
-         x6nOOEQgGwVo753Xf+E1JIfcYAhcDMNzHyR3SnUAl/1su4CsuihsI4NuNTh9TmWOuz5r
-         PyqrWD9NTPN9ju70Atm4/x7m3FH3oCvRpJtqNmqhe2m1PNz4jWx6W6wm4SUwFuG9OwpS
-         F/zZyKJxE0/E4w9PTpR7hWZNFLq69+O+A9QU8MOZtXU3etR6sD5xMrAr0xYjhnGkIFcr
-         13mjKeTdEY9OvMNYEszfyACZlPORO87xQqAVTKN1fIfsywOXQqVeVPkiYIO6bYx6rqnE
-         exBA==
-X-Gm-Message-State: AOAM530V4XmPrzRhCMwwu3ZRCbfaU/E2oTtES/1KCwL6G+1HnIEktf/z
-        3SGHhX5RTxXyVX66YS7DW8WtYA==
-X-Google-Smtp-Source: ABdhPJw3D/PPI3EjClKd4HAAD3rdiq0imztKnb02/aKzUBf4ti5fN6L9aDFSgjQrEsVoJ9cj6bCJBw==
-X-Received: by 2002:a17:90a:4811:: with SMTP id a17mr1113366pjh.159.1644272844772;
-        Mon, 07 Feb 2022 14:27:24 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id b14sm13427701pfm.17.2022.02.07.14.27.24
+        bh=jZpXna9RakCKkgXGAFhti4wc05ngWfCJ4E7jcKRY2H4=;
+        b=QVw+8qLAHUebQrRWNGcW+rfaKCi9/1XoyuD4n5+UQQgta0BRIkB09Li0M5DE/h/0id
+         WZL/dmBsVJJuCjgquG/VVxKoAbRxVNglFnhoTBNtL6YxnQXXCNIp1Wn1vQ//UQzhFqQo
+         pb4XlDMOngOQtyMrwItSa1U+4YH5ZmDjpN+8CrTbm5OK1iFobb/9rLzC1KrcNvj38nQi
+         ztrzfXtxMPZEe2ransSwPYqBa1eB7kMH4/I7ltxiUGIMudrD5kk8AeZxwk9nkjqWE4VO
+         EDvQY4MknYdPXWUwEQg9kcZ/uWy9E1NJQLOLtybmcU9naHBbx7yxSnXcRneB6/O+5SV8
+         pvfg==
+X-Gm-Message-State: AOAM533Al2rKNp3N+UauvLlVw0BBfUUI31bxP6ndrAzqiFVeLGAcTzXn
+        Ibk4gkS9YEzzOfgVnSI4WcKanQ==
+X-Google-Smtp-Source: ABdhPJz8cJPnojSXGkuYGPCtnTXScbq+YaH87iccoI/UR4HFfH/DkAwdJhhFBXNp6jCFhJLpeQuGrA==
+X-Received: by 2002:aca:41c5:: with SMTP id o188mr534669oia.160.1644273267306;
+        Mon, 07 Feb 2022 14:34:27 -0800 (PST)
+Received: from fedora64.linuxtx.org (104-189-158-32.lightspeed.rcsntx.sbcglobal.net. [104.189.158.32])
+        by smtp.gmail.com with ESMTPSA id d21sm4452745otq.68.2022.02.07.14.34.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 14:27:24 -0800 (PST)
-Date:   Mon, 7 Feb 2022 22:27:20 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@intel.com,
-        luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, tony.luck@intel.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv2 20/29] x86/tdx: Get page shared bit info from the TDX
- module
-Message-ID: <YgGcyGYDHf2KywD9@google.com>
-References: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
- <20220124150215.36893-21-kirill.shutemov@linux.intel.com>
- <87iltyw2et.ffs@tglx>
+        Mon, 07 Feb 2022 14:34:26 -0800 (PST)
+Date:   Mon, 7 Feb 2022 16:34:25 -0600
+From:   Justin Forbes <jmforbes@linuxtx.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.16 000/127] 5.16.8-rc2 review
+Message-ID: <YgGecQQ6T1+W0s8s@fedora64.linuxtx.org>
+References: <20220207133856.644483064@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87iltyw2et.ffs@tglx>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220207133856.644483064@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 02, 2022, Thomas Gleixner wrote:
-> On Mon, Jan 24 2022 at 18:02, Kirill A. Shutemov wrote:
-> > +static void tdx_get_info(void)
-> > +{
-> > +	struct tdx_module_output out;
-> > +	u64 ret;
-> > +
-> > +	/*
-> > +	 * TDINFO TDX module call is used to get the TD execution environment
-> > +	 * information like GPA width, number of available vcpus, debug mode
-> > +	 * information, etc. More details about the ABI can be found in TDX
-> > +	 * Guest-Host-Communication Interface (GHCI), sec 2.4.2 TDCALL
-> > +	 * [TDG.VP.INFO].
-> > +	 */
-> > +	ret = __tdx_module_call(TDX_GET_INFO, 0, 0, 0, 0, &out);
-> > +
-> > +	/* Non zero return value indicates buggy TDX module, so panic */
+On Mon, Feb 07, 2022 at 03:04:44PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.16.8 release.
+> There are 127 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Can you please get rid of these useless comments all over the place. The
-> panic() message tells the same story. Please document the non-obvious
-> things.
+> Responses should be made by Wed, 09 Feb 2022 13:38:34 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.8-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-And why isn't there a tdx_module_call() wrapper to panic() on failure?  IIRC,
-that's why the asm routines had the double underscore, but that detail appears
-to have been lost.  E.g. __tdx_module_call(TDX_GET_VEINFO, ...) in patch 04 should
-also panic, but it currently morphs the #VE into a #GP if it can't retrieve the
-info, which will lead to weird "#GPs" on things like vanilla MOV instructions if
-something does go wrong.  TDX_ACCEPT_PAGE is the only call into the TDX Module
-for which failure is not fatal.
+Tested rc2 against the Fedora build system (aarch64, armv7, ppc64le,
+s390x, x86_64), and boot tested x86_64. No regressions noted.
+
+Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>

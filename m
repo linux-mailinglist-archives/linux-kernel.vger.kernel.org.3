@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09CE54ABA38
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:27:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56AFA4AB9F3
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:26:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383209AbiBGLVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:21:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54486 "EHLO
+        id S1382357AbiBGLS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:18:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379137AbiBGLQJ (ORCPT
+        with ESMTP id S1356779AbiBGLNk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:16:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930E0C0401CC;
-        Mon,  7 Feb 2022 03:16:06 -0800 (PST)
+        Mon, 7 Feb 2022 06:13:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A40DC043181;
+        Mon,  7 Feb 2022 03:13:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 39694B81028;
-        Mon,  7 Feb 2022 11:16:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5754FC004E1;
-        Mon,  7 Feb 2022 11:16:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 06A2561380;
+        Mon,  7 Feb 2022 11:13:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC782C340F0;
+        Mon,  7 Feb 2022 11:13:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232563;
-        bh=cqdxJHRXvkiuPyL1bxilU0eE4v8ZoH9JbzQvJTgPsB0=;
+        s=korg; t=1644232419;
+        bh=FiHCycypaGmh6ZE4s8cl9YhCQrEHuZt+aoReo8QuKOE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BLe7bW9rVBKqrPBskKNTFYSuoy8imUy/n0IsjMy5if9RaHvUxCEcKM7KZ+3Jr4lRC
-         BT1uw+0hHSy25ltrQDmmbOhD+IaclVt3VnBPt56VrYZOuZqQTExRcGRlVYXrXXaF0u
-         OGMFJECD6TefoQBhdCtvZAXx3cxY5xa7NnoK9OJc=
+        b=FsOU274KnPthb7p/JThL3bC3EeakbNcOa7Qysx6RMznk4MIhA891UbwWUS4Mp5cCr
+         KK87AnVV9C3AV/tbdufNQwRx8ClkQZN9T/oHPaeI3BRjBrxrjKCkBLQ79331gQMlV8
+         67P+dWKIvEpcHqG+EXdJzFn4TClZT+ZVUrv92URM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sudheesh Mavila <sudheesh.mavila@amd.com>,
-        Raju Rangoju <Raju.Rangoju@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.19 50/86] net: amd-xgbe: ensure to reset the tx_timer_active flag
+        stable@vger.kernel.org, Dmitry Monakhov <dmonakhov@openvz.org>,
+        Dmitry Ivanov <dmitry.ivanov2@hpe.com>,
+        Alexey Lyashkov <alexey.lyashkov@hpe.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 4.14 51/69] block: bio-integrity: Advance seed correctly for larger interval sizes
 Date:   Mon,  7 Feb 2022 12:06:13 +0100
-Message-Id: <20220207103759.194851868@linuxfoundation.org>
+Message-Id: <20220207103757.299374694@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103757.550973048@linuxfoundation.org>
-References: <20220207103757.550973048@linuxfoundation.org>
+In-Reply-To: <20220207103755.604121441@linuxfoundation.org>
+References: <20220207103755.604121441@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,37 +57,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Raju Rangoju <Raju.Rangoju@amd.com>
+From: Martin K. Petersen <martin.petersen@oracle.com>
 
-commit 7674b7b559b683478c3832527c59bceb169e701d upstream.
+commit b13e0c71856817fca67159b11abac350e41289f5 upstream.
 
-Ensure to reset the tx_timer_active flag in xgbe_stop(),
-otherwise a port restart may result in tx timeout due to
-uncleared flag.
+Commit 309a62fa3a9e ("bio-integrity: bio_integrity_advance must update
+integrity seed") added code to update the integrity seed value when
+advancing a bio. However, it failed to take into account that the
+integrity interval might be larger than the 512-byte block layer
+sector size. This broke bio splitting on PI devices with 4KB logical
+blocks.
 
-Fixes: c635eaacbf77 ("amd-xgbe: Remove Tx coalescing")
-Co-developed-by: Sudheesh Mavila <sudheesh.mavila@amd.com>
-Signed-off-by: Sudheesh Mavila <sudheesh.mavila@amd.com>
-Signed-off-by: Raju Rangoju <Raju.Rangoju@amd.com>
-Acked-by: Tom Lendacky <thomas.lendacky@amd.com>
-Link: https://lore.kernel.org/r/20220127060222.453371-1-Raju.Rangoju@amd.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+The seed value should be advanced by bio_integrity_intervals() and not
+the number of sectors.
+
+Cc: Dmitry Monakhov <dmonakhov@openvz.org>
+Cc: stable@vger.kernel.org
+Fixes: 309a62fa3a9e ("bio-integrity: bio_integrity_advance must update integrity seed")
+Tested-by: Dmitry Ivanov <dmitry.ivanov2@hpe.com>
+Reported-by: Alexey Lyashkov <alexey.lyashkov@hpe.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Link: https://lore.kernel.org/r/20220204034209.4193-1-martin.petersen@oracle.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/amd/xgbe/xgbe-drv.c |    2 ++
- 1 file changed, 2 insertions(+)
+ block/bio-integrity.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/ethernet/amd/xgbe/xgbe-drv.c
-+++ b/drivers/net/ethernet/amd/xgbe/xgbe-drv.c
-@@ -722,7 +722,9 @@ static void xgbe_stop_timers(struct xgbe
- 		if (!channel->tx_ring)
- 			break;
+--- a/block/bio-integrity.c
++++ b/block/bio-integrity.c
+@@ -417,7 +417,7 @@ void bio_integrity_advance(struct bio *b
+ 	struct blk_integrity *bi = blk_get_integrity(bio->bi_disk);
+ 	unsigned bytes = bio_integrity_bytes(bi, bytes_done >> 9);
  
-+		/* Deactivate the Tx timer */
- 		del_timer_sync(&channel->tx_timer);
-+		channel->tx_timer_active = 0;
- 	}
+-	bip->bip_iter.bi_sector += bytes_done >> 9;
++	bip->bip_iter.bi_sector += bio_integrity_intervals(bi, bytes_done >> 9);
+ 	bvec_iter_advance(bip->bip_vec, &bip->bip_iter, bytes);
  }
- 
+ EXPORT_SYMBOL(bio_integrity_advance);
 
 

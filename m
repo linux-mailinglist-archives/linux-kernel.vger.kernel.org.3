@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53A704ABB9F
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:39:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 093094ABCD6
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:50:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384607AbiBGL30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:29:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34586 "EHLO
+        id S1387981AbiBGLm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:42:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383471AbiBGLWg (ORCPT
+        with ESMTP id S1384646AbiBGL3a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:22:36 -0500
+        Mon, 7 Feb 2022 06:29:30 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A616C043188;
-        Mon,  7 Feb 2022 03:22:36 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2286C02B5ED;
+        Mon,  7 Feb 2022 03:27:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9AA046126D;
-        Mon,  7 Feb 2022 11:22:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6828BC004E1;
-        Mon,  7 Feb 2022 11:22:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7796D60A71;
+        Mon,  7 Feb 2022 11:27:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 431F1C004E1;
+        Mon,  7 Feb 2022 11:27:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232955;
-        bh=i9zk4AcF9jXF72YBlRloYKPoP25ixnHr83HDUf618Wo=;
+        s=korg; t=1644233267;
+        bh=VQ0um3hPcWFFTWCtrxqzMA54VF4LBJGzFd1GZ0+xhEQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MS1VHRim+fI0z8xgLjeJq2Q9ns1Z3nVkv2lGvrLEmsrewiMpIhRhv0RlaiMw8rdna
-         G/froI2xql0Ec47+HBuHpIMeajgcMrz8OSnoMj6RIF5PGwc0nIjX176q8BzLeE8dvk
-         SaFANGB2obaO63ao/TBcoHlZBmglsCbeAW2M0vs4=
+        b=VxVrbIZYvR9+gABOA9Uxgp+f6mq5VlNl4fUF59VvC1WUC7bjRCQ7xE/luiZp4/Iyo
+         aOKnsfALkocaxtVG/OgIzQeTDmrhp3xAmZmJm+v/sZ7FI7BQ78r3tWy19fV0Io2DDY
+         47mEf/CKpFMV5scFFPvMz0ecnSFcSlBs/j/xt4u0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,19 +36,19 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
         <ville.syrjala@linux.intel.com>,
         Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-Subject: [PATCH 5.10 44/74] drm/i915/overlay: Prevent divide by zero bugs in scaling
+Subject: [PATCH 5.15 069/110] drm/i915/overlay: Prevent divide by zero bugs in scaling
 Date:   Mon,  7 Feb 2022 12:06:42 +0100
-Message-Id: <20220207103758.663881010@linuxfoundation.org>
+Message-Id: <20220207103804.624178325@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103757.232676988@linuxfoundation.org>
-References: <20220207103757.232676988@linuxfoundation.org>
+In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
+References: <20220207103802.280120990@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,7 +82,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/drivers/gpu/drm/i915/display/intel_overlay.c
 +++ b/drivers/gpu/drm/i915/display/intel_overlay.c
-@@ -932,6 +932,9 @@ static int check_overlay_dst(struct inte
+@@ -959,6 +959,9 @@ static int check_overlay_dst(struct inte
  	const struct intel_crtc_state *pipe_config =
  		overlay->crtc->config;
  

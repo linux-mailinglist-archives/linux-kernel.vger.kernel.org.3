@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2225F4ABCFC
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:55:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F25744ABBDA
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:44:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388550AbiBGLn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:43:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38422 "EHLO
+        id S1385927AbiBGLdG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:33:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384438AbiBGL2E (ORCPT
+        with ESMTP id S1383127AbiBGLVj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:28:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 978B2C03C198;
-        Mon,  7 Feb 2022 03:26:23 -0800 (PST)
+        Mon, 7 Feb 2022 06:21:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 157CCC0401ED;
+        Mon,  7 Feb 2022 03:21:31 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7417CB811B2;
-        Mon,  7 Feb 2022 11:26:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AED8C004E1;
-        Mon,  7 Feb 2022 11:26:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C016DB81028;
+        Mon,  7 Feb 2022 11:21:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 196C4C004E1;
+        Mon,  7 Feb 2022 11:21:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233178;
-        bh=4jVbnwfVC3bF207Ch0FiydCtVRc8MucTpP3gbvg3VWc=;
+        s=korg; t=1644232889;
+        bh=0cHK4kI7oB+4nl48C8/PSNfoVr5JtJ7//C89PqRan88=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tevySV0x6JfPleny8H+fp9yJlyehMcvxsjCQ+OwprlD6nr6poe+yvVztbadJeVa+e
-         6WTNFIJdngHxz3DB75DKaIHJwOnb0gTOG0sOLJDupQFDw7MFNBK2m034PJWQqqEHwr
-         BrFZClW4XSfCcDWgMTCqBsw5boiBVzaki3pM/wD8=
+        b=bkq/E+PDc0ZvvYy64FPupBdCHRSi8n7xnTkhRhhsgYu7PAPwhbQWGHnd8rCYWboHB
+         WMbp/1+nP/jghYOg5GtDEEMx0sBT1u//X1q8jBq4oYEbG5TPbZSofDlL7KZSFK51t5
+         ESphpfABaBgpwVQT42hTi36Ef3+rWQA0ndQsYZpE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Subject: [PATCH 5.15 041/110] RDMA/siw: Fix refcounting leak in siw_create_qp()
+        stable@vger.kernel.org, Uday Shankar <ushankar@purestorage.com>,
+        James Smart <jsmart2021@gmail.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Christoph Hellwig <hch@lst.de>
+Subject: [PATCH 5.10 16/74] nvme-fabrics: fix state check in nvmf_ctlr_matches_baseopts()
 Date:   Mon,  7 Feb 2022 12:06:14 +0100
-Message-Id: <20220207103803.670073400@linuxfoundation.org>
+Message-Id: <20220207103757.765200459@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
-References: <20220207103802.280120990@linuxfoundation.org>
+In-Reply-To: <20220207103757.232676988@linuxfoundation.org>
+References: <20220207103757.232676988@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,35 +56,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Uday Shankar <ushankar@purestorage.com>
 
-commit a75badebfdc0b3823054bedf112edb54d6357c75 upstream.
+commit 6a51abdeb259a56d95f13cc67e3a0838bcda0377 upstream.
 
-The atomic_inc() needs to be paired with an atomic_dec() on the error
-path.
+Controller deletion/reset, immediately followed by or concurrent with
+a reconnect, is hard failing the connect attempt resulting in a
+complete loss of connectivity to the controller.
 
-Fixes: 514aee660df4 ("RDMA: Globally allocate and release QP memory")
-Link: https://lore.kernel.org/r/20220118091104.GA11671@kili
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
-Reviewed-by: Bernard Metzler <bmt@zurich.ibm.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+In the connect request, fabrics looks for an existing controller with
+the same address components and aborts the connect if a controller
+already exists and the duplicate connect option isn't set. The match
+routine filters out controllers that are dead or dying, so they don't
+interfere with the new connect request.
+
+When NVME_CTRL_DELETING_NOIO was added, it missed updating the state
+filters in the nvmf_ctlr_matches_baseopts() routine. Thus, when in this
+new state, it's seen as a live controller and fails the connect request.
+
+Correct by adding the DELETING_NIO state to the match checks.
+
+Fixes: ecca390e8056 ("nvme: fix deadlock in disconnect during scan_work and/or ana_work")
+Cc: <stable@vger.kernel.org> # v5.7+
+Signed-off-by: Uday Shankar <ushankar@purestorage.com>
+Reviewed-by: James Smart <jsmart2021@gmail.com>
+Reviewed-by: Sagi Grimberg <sagi@grimberg.me>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/infiniband/sw/siw/siw_verbs.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/nvme/host/fabrics.h |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/infiniband/sw/siw/siw_verbs.c
-+++ b/drivers/infiniband/sw/siw/siw_verbs.c
-@@ -311,7 +311,8 @@ int siw_create_qp(struct ib_qp *ibqp, st
- 
- 	if (atomic_inc_return(&sdev->num_qp) > SIW_MAX_QP) {
- 		siw_dbg(base_dev, "too many QP's\n");
--		return -ENOMEM;
-+		rv = -ENOMEM;
-+		goto err_atomic;
- 	}
- 	if (attrs->qp_type != IB_QPT_RC) {
- 		siw_dbg(base_dev, "only RC QP's supported\n");
+--- a/drivers/nvme/host/fabrics.h
++++ b/drivers/nvme/host/fabrics.h
+@@ -153,6 +153,7 @@ nvmf_ctlr_matches_baseopts(struct nvme_c
+ 			struct nvmf_ctrl_options *opts)
+ {
+ 	if (ctrl->state == NVME_CTRL_DELETING ||
++	    ctrl->state == NVME_CTRL_DELETING_NOIO ||
+ 	    ctrl->state == NVME_CTRL_DEAD ||
+ 	    strcmp(opts->subsysnqn, ctrl->opts->subsysnqn) ||
+ 	    strcmp(opts->host->nqn, ctrl->opts->host->nqn) ||
 
 

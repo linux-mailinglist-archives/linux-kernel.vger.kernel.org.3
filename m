@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67C734ABA22
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:27:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D92A4AB95C
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:23:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359784AbiBGLUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:20:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53584 "EHLO
+        id S1355106AbiBGLMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:12:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377482AbiBGLPa (ORCPT
+        with ESMTP id S1355402AbiBGLIj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:15:30 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9325C03FEC4;
-        Mon,  7 Feb 2022 03:15:07 -0800 (PST)
+        Mon, 7 Feb 2022 06:08:39 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADEE8C043189;
+        Mon,  7 Feb 2022 03:08:38 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E6AEA6142D;
-        Mon,  7 Feb 2022 11:15:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4DB5C340F6;
-        Mon,  7 Feb 2022 11:15:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BD5C611AA;
+        Mon,  7 Feb 2022 11:08:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECAE0C004E1;
+        Mon,  7 Feb 2022 11:08:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232506;
-        bh=G2GXwaG7VfYaeJ0AwilszI2RAd+XAFkHHjVYCZ5A+JA=;
+        s=korg; t=1644232117;
+        bh=bUfL19lQYyh/uVh/2uT7PbGVoJgRER1O9iE2p8Nq4wY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q0a17t8Kfe379omtsiuXEtBc7YejPFr3uIEG9vlQGiESfHeAY+mMp7vWAJFajl2bv
-         ByJRjL7ABqUOmyyI10fanmjIewP9PWVEbHhyYk0c0aCfsL+p/HOb+Q2U83qs0hUWJf
-         rLit0v8QSZG3GMG6sbdcCQLB+CPYYbCTiAVyg13Y=
+        b=CDKYKHiUidJUMzgoW83jl3ovvvOdFoocxVIms4XcjGeHNAA7oCNg14lAikZ6K+OHf
+         nh33nHxqroGVfACjEPNEkxcp1B7YugJMN69onGQKCLx/ihGn/F60V+OsnxYKJr6k8+
+         djIVVtPbxO2X3kxvsZFNnMZ/zvjwqvL79caFMmD4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lyu Tao <tao.lyu@epfl.ch>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <Anna.Schumaker@Netapp.com>
-Subject: [PATCH 4.19 32/86] NFSv4: Handle case where the lookup of a directory fails
+        stable@vger.kernel.org,
+        Xianting Tian <xianting.tian@linux.alibaba.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 22/48] drm/msm: Fix wrong size calculation
 Date:   Mon,  7 Feb 2022 12:05:55 +0100
-Message-Id: <20220207103758.589658540@linuxfoundation.org>
+Message-Id: <20220207103753.062497895@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103757.550973048@linuxfoundation.org>
-References: <20220207103757.550973048@linuxfoundation.org>
+In-Reply-To: <20220207103752.341184175@linuxfoundation.org>
+References: <20220207103752.341184175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,47 +56,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Trond Myklebust <trond.myklebust@hammerspace.com>
+From: Xianting Tian <xianting.tian@linux.alibaba.com>
 
-commit ac795161c93699d600db16c1a8cc23a65a1eceaf upstream.
+commit 0a727b459ee39bd4c5ced19d6024258ac87b6b2e upstream.
 
-If the application sets the O_DIRECTORY flag, and tries to open a
-regular file, nfs_atomic_open() will punt to doing a regular lookup.
-If the server then returns a regular file, we will happily return a
-file descriptor with uninitialised open state.
+For example, memory-region in .dts as below,
+	reg = <0x0 0x50000000 0x0 0x20000000>
 
-The fix is to return the expected ENOTDIR error in these cases.
+We can get below values,
+struct resource r;
+r.start = 0x50000000;
+r.end	= 0x6fffffff;
 
-Reported-by: Lyu Tao <tao.lyu@epfl.ch>
-Fixes: 0dd2b474d0b6 ("nfs: implement i_op->atomic_open()")
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
-Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
+So the size should be:
+size = r.end - r.start + 1 = 0x20000000
+
+Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+Fixes: 072f1f9168ed ("drm/msm: add support for "stolen" mem")
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Link: https://lore.kernel.org/r/20220112123334.749776-1-xianting.tian@linux.alibaba.com
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/nfs/dir.c |   13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ drivers/gpu/drm/msm/msm_drv.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/fs/nfs/dir.c
-+++ b/fs/nfs/dir.c
-@@ -1626,6 +1626,19 @@ out:
+--- a/drivers/gpu/drm/msm/msm_drv.c
++++ b/drivers/gpu/drm/msm/msm_drv.c
+@@ -297,7 +297,7 @@ static int msm_init_vram(struct drm_devi
+ 		of_node_put(node);
+ 		if (ret)
+ 			return ret;
+-		size = r.end - r.start;
++		size = r.end - r.start + 1;
+ 		DRM_INFO("using VRAM carveout: %lx@%pa\n", size, &r.start);
  
- no_open:
- 	res = nfs_lookup(dir, dentry, lookup_flags);
-+	if (!res) {
-+		inode = d_inode(dentry);
-+		if ((lookup_flags & LOOKUP_DIRECTORY) && inode &&
-+		    !S_ISDIR(inode->i_mode))
-+			res = ERR_PTR(-ENOTDIR);
-+	} else if (!IS_ERR(res)) {
-+		inode = d_inode(res);
-+		if ((lookup_flags & LOOKUP_DIRECTORY) && inode &&
-+		    !S_ISDIR(inode->i_mode)) {
-+			dput(res);
-+			res = ERR_PTR(-ENOTDIR);
-+		}
-+	}
- 	if (switched) {
- 		d_lookup_done(dentry);
- 		if (!res)
+ 		/* if we have no IOMMU, then we need to use carveout allocator.
 
 

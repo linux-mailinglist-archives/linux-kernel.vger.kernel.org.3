@@ -2,141 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 748E04AC0F6
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 15:21:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A1C04AC102
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 15:21:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388960AbiBGOTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 09:19:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45738 "EHLO
+        id S1391218AbiBGOTa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 09:19:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389690AbiBGNx1 (ORCPT
+        with ESMTP id S1389764AbiBGNxq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 08:53:27 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C63AC0401D3
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 05:53:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=WdC5enyHEX5cT/Hdfk7cPIpuNF5Us7feBKn0FjxV/qc=; b=r05eC816PeaQpyvcJPj2dEiDH2
-        5LMXZxa3ZeUW7LtOAkjdj70S38uFdsMEyJTWoSvwxIHdxhngjbKVOm3n8nMCKAN0kdqiQiGTYKRDZ
-        NdZe8/0ekqnxzUHGbTjRFjTw48tgR7X/5SbJT1n1rAAueRFhJb4/CKoGnyrW5tzpF6fwO0haElQSi
-        Mn07u+JZdJTZFZqje+vDb+BqAXdJSn4AYR31fNhzsAH1YAaDa5xcfENZPG93UruRBwGCwI8Lyfq2u
-        +OQY7wZ0TPlJFEYHyOdne8qSiPnUkHURxAX02ae6g2M9sHY0bDUrd/T+UpsQgOXlsIsCWoEIiRL4s
-        Jp/sKX2g==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nH4Rq-0011kd-Om; Mon, 07 Feb 2022 13:52:54 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 2FD02986235; Mon,  7 Feb 2022 14:52:53 +0100 (CET)
-Date:   Mon, 7 Feb 2022 14:52:53 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Chen Yu <yu.c.chen@intel.com>
-Cc:     linux-kernel@vger.kernel.org, Tim Chen <tim.c.chen@intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Barry Song <21cnbao@gmail.com>,
-        Barry Song <song.bao.hua@hisilicon.com>,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        Aubrey Li <aubrey.li@intel.com>,
-        Len Brown <len.brown@intel.com>,
-        Zhang Rui <rui.zhang@intel.com>
-Subject: Re: [PATCH][RFC] sched: Stop searching for idle cpu if the LLC
- domain is overloaded
-Message-ID: <20220207135253.GF23216@worktop.programming.kicks-ass.net>
-References: <20220207034013.599214-1-yu.c.chen@intel.com>
+        Mon, 7 Feb 2022 08:53:46 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A2CC043181;
+        Mon,  7 Feb 2022 05:53:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=ZCBQfIgsaaqGa9NdTBKby2K4luKCO2x9ltO+P32Dy1E=; b=ZQvMoWmrRru7q2T1QO7Q5DY945
+        INsEvCnlxHc53LgeQB7iZK2L/tRVPegucijhvHQqRM0tcryCYciDk5ehjRhxBTgklPMWc1M1hwcep
+        J6001389zlRq0WJ1gXvPebIKhQm+OxtecXRCxDHiEZS10LnSSwLo+bjo6Wl58ueAV0Qc=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nH4SS-004dvH-6g; Mon, 07 Feb 2022 14:53:32 +0100
+Date:   Mon, 7 Feb 2022 14:53:32 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Ido Schimmel <idosch@idosch.org>
+Cc:     Hans Schultz <schultz.hans@gmail.com>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Hans Schultz <schultz.hans+netdev@gmail.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <nikolay@nvidia.com>,
+        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org
+Subject: Re: [PATCH net-next 1/4] net: bridge: Add support for bridge port in
+ locked mode
+Message-ID: <YgEkXARS160I9Ooe@lunn.ch>
+References: <20220207100742.15087-1-schultz.hans+netdev@gmail.com>
+ <20220207100742.15087-2-schultz.hans+netdev@gmail.com>
+ <YgD5MglBy/UbN0uX@shredder>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220207034013.599214-1-yu.c.chen@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <YgD5MglBy/UbN0uX@shredder>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 11:40:13AM +0800, Chen Yu wrote:
-> It would be ideal to have a crystal ball to predict the success rate
-> of finding an idle cpu/core in the LLC. If it is doomed to fail,
-> there is no need to search in the LLC domain. There are many potential
-> metrics which could be used to predict the success rate. And the
-> metric should be carefully chosen that, it should help reduce the
-> unnecessary cpu runqueue scan, but meanwhile not give up the opportunity
-> to find an idle cpu.
+> > +	if (p->flags & BR_PORT_LOCKED) {
+> > +		fdb_entry = br_fdb_find_rcu(br, eth_hdr(skb)->h_source, vid);
+> > +		if (!(fdb_entry && fdb_entry->dst == p))
+> > +			goto drop;
 > 
-> Choose average cpu utilization as the candidate, since the util_avg is
-> a metric of accumulated historic activity, which seems to be more accurate
-> than instantaneous metrics(such as rq->nr_running) on calculating the probability
-> of find an idle cpu. Only when the average cpu utilization has reaches
-> 85% of the total cpu capacity, this domain is regarded as overloaded.
-> The reason to choose 85% is that, this is the threshold of an overloaded
-> LLC sched group(imbalance_pct = 117, threshold = 100 / 117 * 100%).
+> I'm not familiar with 802.1X so I have some questions:
 
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 5146163bfabb..1a58befe892d 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
+Me neither.
 
-> @@ -6280,6 +6281,10 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
->  	if (!this_sd)
->  		return -1;
->  
-> +	sd_share = rcu_dereference(per_cpu(sd_llc_shared, target));
-> +	if (sd_share && READ_ONCE(sd_share->overloaded))
-> +		return -1;
-> +
->  	cpumask_and(cpus, sched_domain_span(sd), p->cpus_ptr);
->  
->  	if (sched_feat(SIS_PROP) && !has_idle_core) {
+> 
+> 1. Do we need to differentiate between no FDB entry and an FDB entry
+> pointing to a different port than we expect?
 
-> @@ -9268,6 +9275,29 @@ static inline void update_sd_lb_stats(struct lb_env *env, struct sd_lb_stats *sd
->  		WRITE_ONCE(rd->overutilized, SG_OVERUTILIZED);
->  		trace_sched_overutilized_tp(rd, SG_OVERUTILIZED);
->  	}
-> +
-> +	/*
-> +	 * Check if the LLC domain is overloaded. The overload hint
-> +	 * could be used to skip the LLC domain idle cpu search in
-> +	 * select_idle_cpu(). The update of this hint occurs during
-> +	 * periodic load balancing, rather than frequent newidle balance.
-> +	 */
-> +	if (env->idle != CPU_NEWLY_IDLE &&
-> +	    env->sd->span_weight == per_cpu(sd_llc_size, env->dst_cpu)) {
-> +		struct sched_domain_shared *sd_share =
-> +			rcu_dereference(per_cpu(sd_llc_shared, env->dst_cpu));
-> +
-> +		if (!sd_share)
-> +			return;
-> +
-> +		/*
-> +		 * Derived from group_is_overloaded(). The default imbalance_pct
-> +		 * is 117 on LLC domain, which means the threshold of average
-> +		 * utilization is 85%.
-> +		 */
-> +		WRITE_ONCE(sd_share->overloaded, (sds->total_capacity * 100) <
-> +			   (sum_util * env->sd->imbalance_pct));
-> +	}
->  }
+And extending that question, a static vs a dynamic entry?
 
-So the only problem I have with this is that this is somewhat of a
-binary toggle. The moment we hit that magical 85% we suddenly change
-behaviour.
-
-Would it not be possible to replace the SIS_PROP logic with something
-based on this sum_util metric? Such that when sum_util is very low we
-scan more, while when sum_util hits 85% we naturally stop scanning
-entirely.
-
-That way the behaviour is gradual.
+    Andrew

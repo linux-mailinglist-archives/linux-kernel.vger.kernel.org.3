@@ -2,175 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25C1B4ABD35
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:59:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31B284ABE20
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:05:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381407AbiBGLkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:40:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37306 "EHLO
+        id S1390993AbiBGL6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:58:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384679AbiBGL3e (ORCPT
+        with ESMTP id S1384694AbiBGL3g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:29:34 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69BBCC03E91C
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 03:27:55 -0800 (PST)
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id B72B13F4B4
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 11:27:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1644233273;
-        bh=Tn4bc4zR8BLXzuWSYuCglM3OFSG7x0cpAc4I3hArdaE=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=DSFyRfh3ruPfe387MPeKtzA1Ni5+75V6zKBlM2VVthksiWqYuET8qSJdN5ppvbgsq
-         KaHF7PRf/LPMYa885BFyIgOsRpOOvnvIvPnMFm8QFphZGkk1fL1DwIqp2rX4nBuj0L
-         jk7SkH4eJrmaBFpeuT8O9BzKo+3zPRFx8oHHM0inLp3zQH5tF9OqeCV9ccTFRuNEKs
-         WYM/BRs2kWjnH1yhaaabTCOarLF72O4XWE1Htc2dZklDquGQqoTvFfHa3u87BKnvYd
-         1rez0O07Tbh0sciGUm9/j3MCTGfk9q5OIfQkFvu7KHN+FKe7wxpZzUuf0DGdZiaADG
-         zOTU4S70QKOJg==
-Received: by mail-ed1-f70.google.com with SMTP id k5-20020a508ac5000000b00408dec8390aso7593875edk.13
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 03:27:53 -0800 (PST)
+        Mon, 7 Feb 2022 06:29:36 -0500
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B02D7C03FEDE;
+        Mon,  7 Feb 2022 03:28:00 -0800 (PST)
+Received: by mail-yb1-xb31.google.com with SMTP id 192so12698434ybd.10;
+        Mon, 07 Feb 2022 03:28:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=WxR2Iy/hInfRurGC4IqSW6zQNPBVhusP7UDER7Bropk=;
+        b=dM/Tj7tr2LUBDshsrOWdnnxklmal1W15fzaCMCTQao60SujrYlghFjzCZqhB+TbXPg
+         SNiOS8RZv7OSiyaTF5lQUgyXXzQ5qk7uzVO0FRedzzIzg+4TH7RbSMTNxlmZp6P+uWVL
+         VDLP7pEQ/S1P4B0O2raEMVLXjsaZlYgyDr81GJ6N8sozwIJEoB4X10TS5RwIxV2N1AiR
+         U98git0f+YOsHGF/WZ+ZG+fh6OCtO2xL+/n+aw8SCpvayTQ2NxZY+26jLKGL5ZnuTABM
+         wuCGy+k17X1+6muAZPANzXCoA+E661hCCnVsugwiE4H5KXJW2l8u+l5N9zRLo+EVUc9T
+         QhcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Tn4bc4zR8BLXzuWSYuCglM3OFSG7x0cpAc4I3hArdaE=;
-        b=GLz2HHWbRX2QiPR6TLvhihmN8+tIvBYIWz2T678o4f5pkl7pgjpSvCNQbM0twX6pYM
-         Fk8eu9DG3IhVYSy2IJ8BKLDbgzFUjRzp64LDl1mQ9dUoYGnuujWqy3mJ3HenToUrYYkf
-         KlTnqkL5brb82xPsKD0iPodyFZBoyLF8vNYpyvBU0/BU34prJrsYnkoia8WHjN0FlY2j
-         GAPdQ6ldMd8nDEcWzK04eEarQOOhK0qQvMhfkOtkFBjLNxoxA9aHUGVL/4gWN/ug6GIw
-         UTnOyh42ke7g97AS5shO5lswvbTP/+GK2n63ITrxtPKDWxaoLKttpVgqSyF8sCur8wDv
-         OudQ==
-X-Gm-Message-State: AOAM530sBf1xJWkdylxNlF+vpbHiP0VmzBiYXThZ6vTiv5qjqSyIymj6
-        H8JPkPXVzC3AqASH2QKA5AbW9MmWcbe/CWfHFHfCT0zWBAO0sQOthP+Gj0pFXWGq9ZHBQE7JmoZ
-        ucgqY62HayaN1hveta0nb11muxBDYyzMGrwfWaAzGnw==
-X-Received: by 2002:a05:6402:881:: with SMTP id e1mr11159387edy.234.1644233273263;
-        Mon, 07 Feb 2022 03:27:53 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz4ZPRw7J+5pEKOaY5Z7jldo/XTG3FVjdDvBj6oSzyzQCPUO8pkxiH+YwKpJrz6QXStMDjdRQ==
-X-Received: by 2002:a05:6402:881:: with SMTP id e1mr11159366edy.234.1644233273056;
-        Mon, 07 Feb 2022 03:27:53 -0800 (PST)
-Received: from [192.168.0.87] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id z19sm3611505eji.87.2022.02.07.03.27.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Feb 2022 03:27:52 -0800 (PST)
-Message-ID: <a3ef9a3d-951e-c7b2-f4e5-ec613997501e@canonical.com>
-Date:   Mon, 7 Feb 2022 12:27:50 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=WxR2Iy/hInfRurGC4IqSW6zQNPBVhusP7UDER7Bropk=;
+        b=vZq03RefnM94OAbM4Q446MKPqNP3ZvecgHlXCpOfCe5x+Qft1iP6r4jU6AnIdox7hv
+         Zddo/KTQS3YxCQb7BfetCcHUtyualrug92fqd+5JxkbsA4PVG6pOxOEW9dfHbbEBytCM
+         YS4FZoHqphSfDqqmlowT/AqXwZ5dnn3mz8E9OTRiviGLuUP/0CfYw1/4EshKzwmLGr4J
+         Kz4H15U1DRoC8nlGYbh5+EaeqzfpGydkF4XOXqaDtFSY86BGmzfeTKFCIL9ug1KIj4TK
+         sZuyvAogU2oMdhpnF/fmDPBsSb5YlP+xWtG9EEe68HmhfWeWbvTn5YSkq4Q7k6EY9G7g
+         ggBw==
+X-Gm-Message-State: AOAM532SzYU2zleXDECEFrGak6OCZS6vfu+1Mza7nDORlYom3qgGqYw4
+        3MivUOVjfSdNtw1PSp9YeeV1rKeCHIJBZ2kP4hoqoC9qhFcYUg==
+X-Google-Smtp-Source: ABdhPJxrPoHymoNp9oAgOQoocWDdgId4VRyqnJQ7fnjIlGyC/SUXMPUZyDHFDRdUTKXD9oDRLRxiKidiAB5GKIuYBc4=
+X-Received: by 2002:a81:6f56:: with SMTP id k83mr10773035ywc.58.1644233279890;
+ Mon, 07 Feb 2022 03:27:59 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v1 1/6] dt-bindings: i2c: npcm: support NPCM845
-Content-Language: en-US
-To:     Tyrone Ting <warp5tw@gmail.com>, avifishman70@gmail.com,
-        tmaimon77@gmail.com, tali.perry1@gmail.com, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com, robh+dt@kernel.org,
-        semen.protsenko@linaro.org, yangyicong@hisilicon.com,
-        wsa@kernel.org, jie.deng@intel.com, sven@svenpeter.dev,
-        bence98@sch.bme.hu, lukas.bulwahn@gmail.com, arnd@arndb.de,
-        olof@lixom.net, andriy.shevchenko@linux.intel.com,
-        tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
-        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
-        kfting@nuvoton.com
-Cc:     openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220207063338.6570-1-warp5tw@gmail.com>
- <20220207063338.6570-2-warp5tw@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220207063338.6570-2-warp5tw@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <1644213481-20321-1-git-send-email-hammerh0314@gmail.com>
+ <1644213481-20321-3-git-send-email-hammerh0314@gmail.com> <YgDHwgg0s6U3bFxF@kroah.com>
+In-Reply-To: <YgDHwgg0s6U3bFxF@kroah.com>
+From:   hammer hsieh <hammerh0314@gmail.com>
+Date:   Mon, 7 Feb 2022 19:28:13 +0800
+Message-ID: <CAOX-t55sbxd6rvkafnw-m1nYMuEZTsKOkBBftqSoKxocxSZbJQ@mail.gmail.com>
+Subject: Re: [PATCH v7 2/2] serial:sunplus-uart:Add Sunplus SoC UART Driver
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     robh+dt@kernel.org, linux-serial@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiri Slaby <jirislaby@kernel.org>, p.zabel@pengutronix.de,
+        wells.lu@sunplus.com, "hammer.hsieh" <hammer.hsieh@sunplus.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/02/2022 07:33, Tyrone Ting wrote:
-> From: Tyrone Ting <kfting@nuvoton.com>
-> 
-> This commit adds compatible and syscon description for NPCM845 i2c module.
+Greg KH <gregkh@linuxfoundation.org> =E6=96=BC 2022=E5=B9=B42=E6=9C=887=E6=
+=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=883:18=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On Mon, Feb 07, 2022 at 01:58:01PM +0800, Hammer Hsieh wrote:
+> > Add Sunplus SoC UART Driver
+> >
+>
+> We need more of a changelog comment here please.  Describe the hardware,
+> what the new tty name you are using, and other stuff.  Be descriptive.
+>
 
-Do not use "This commit" but instead:
-https://elixir.bootlin.com/linux/v5.13/source/Documentation/process/submitting-patches.rst#L89
+I will describe as below.
+Add Sunplus SoC UART Driver.
+SP7021 UART block contains 5 UARTs.
+There are UART0~4 that supported in SP7021, the features list as below.
+Support Full-duplex communication.
+Support data packet length configurable.
+Support stop bit number configurable.
+Support force break condition.
+Support baud rate configurable.
+Support error detection and report.
+Support RXD Noise Rejection Vote configurable.
 
-> 
-> Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller driver")
-> Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
-> Signed-off-by: Tali Perry <tali.perry1@gmail.com>
-> ---
->  .../bindings/i2c/nuvoton,npcm7xx-i2c.yaml     | 21 ++++++++++++++-----
->  1 file changed, 16 insertions(+), 5 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/nuvoton,npcm7xx-i2c.yaml b/Documentation/devicetree/bindings/i2c/nuvoton,npcm7xx-i2c.yaml
-> index 128444942aec..05e58f44b03a 100644
-> --- a/Documentation/devicetree/bindings/i2c/nuvoton,npcm7xx-i2c.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/nuvoton,npcm7xx-i2c.yaml
-> @@ -7,17 +7,22 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: nuvoton NPCM7XX I2C Controller Device Tree Bindings
->  
->  description: |
-> -  The NPCM750x includes sixteen I2C bus controllers. All Controllers support
-> -  both master and slave mode. Each controller can switch between master and slave
-> -  at run time (i.e. IPMB mode). Each controller has two 16 byte HW FIFO for TX and
-> -  RX.
-> +  The NPCM7XX includes sixteen I2C bus controllers and the NPCM8XX includes
-> +  twenty-seven I2C bus controllers. NPCM8XX controllers 24-26 are connected on I2C
-> +  pins in parallel to controllers 8-10.
-> +  All controllers support both master and slave mode.
-> +  Each controller can switch between master and slave at run time (i.e. IPMB mode).
-> +  NPCM7XX I2C controller has two 16 byte HW FIFO for TX and RX and NPCM8XX I2C
-> +  controller has two 32 byte HW FIFO for TX and RX.
->  
->  maintainers:
->    - Tali Perry <tali.perry1@gmail.com>
->  
->  properties:
->    compatible:
-> -    const: nuvoton,npcm750-i2c
-> +    enum:
-> +      - nuvoton,npcm750-i2c
-> +      - nuvoton,npcm845-i2c
->  
->    reg:
->      maxItems: 1
-> @@ -36,11 +41,16 @@ properties:
->      default: 100000
->      enum: [100000, 400000, 1000000]
->  
-> +  syscon:
-> +    $ref: "/schemas/types.yaml#/definitions/phandle"
-> +    description: The phandle of system manager register node.
-> +
->  required:
->    - compatible
->    - reg
->    - interrupts
->    - clocks
-> +  - syscon
+UART0 pinout only support TX/RX two pins.
+UART1 to UART4 pinout support TX/RX/CTS/RTS four pins.
+Normally UART0 used for kernel console, also can be used for normal uart.
+Command line set "console=3DttySUP0,115200", SUP means Sunplus Uart Port.
+UART driver probe will create path named "/dev/ttySUPx".
 
-This breaks ABI of existing DTS. Actually your driver change does it but
-here it is explicit...
+https://sunplus.atlassian.net/wiki/spaces/doc/pages/1873412290/13.+Universa=
+l+Asynchronous+Receiver+Transmitter+UART
 
->  
->  allOf:
->    - $ref: /schemas/i2c/i2c-controller.yaml#
-> @@ -57,6 +67,7 @@ examples:
->          clock-frequency = <100000>;
->          interrupts = <GIC_SPI 64 IRQ_TYPE_LEVEL_HIGH>;
->          compatible = "nuvoton,npcm750-i2c";
-> +        syscon = <&gcr>;
->      };
->  
->  ...
+> > --- a/include/uapi/linux/serial_core.h
+> > +++ b/include/uapi/linux/serial_core.h
+> > @@ -274,4 +274,7 @@
+> >  /* Freescale LINFlexD UART */
+> >  #define PORT_LINFLEXUART     122
+> >
+> > +/* Sunplus UART */
+> > +#define PORT_SUNPLUS 123
+>
+> Why is this needed?  Are you going to require this in some userspace
+> code?  If not, please do not add it.
+>
 
+In serial_core.c (line 3014) uart_add_one_port( )
+It will call uart_configure_port( ).
+In my uart driver probe set port->flags=3DUPF_BOOT_AUTOCONF.
+I try to remove port define and remove  sunplus_config_port( )
+ and just add a "sunplus_uart" for in sunplus_type( ).
+And my uart console not work with PuTTY tool.
 
-Best regards,
-Krzysztof
+I try to do another test as below.
+static const char *sunplus_type(struct uart_port *port)
+{
+        return "sunplus_uart";
+}
+static void sunplus_config_port(struct uart_port *port, int type)
+{
+        if (type & UART_CONFIG_TYPE)
+                port->type =3D "sunplus_uart"; //type define is unsigned in=
+t
+}
+Uart console works, but port->type should be unsigned int , not string.
+So compile will warning " assignment makes integer from pointer
+without a cast [-Wint-conversion]".
+
+I think I should keep the current submit code.
+
+> thanks,
+>
+> greg k-h

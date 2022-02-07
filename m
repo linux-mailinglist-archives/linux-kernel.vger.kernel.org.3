@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2127A4ABBAB
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:39:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC6614AB977
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:23:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384695AbiBGL3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:29:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34600 "EHLO
+        id S1356242AbiBGLM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:12:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383483AbiBGLWk (ORCPT
+        with ESMTP id S1346277AbiBGLJt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:22:40 -0500
+        Mon, 7 Feb 2022 06:09:49 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A02AC043181;
-        Mon,  7 Feb 2022 03:22:39 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57674C043181;
+        Mon,  7 Feb 2022 03:09:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D009F61380;
-        Mon,  7 Feb 2022 11:22:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8964DC004E1;
-        Mon,  7 Feb 2022 11:22:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B7E1B61261;
+        Mon,  7 Feb 2022 11:09:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7ADC9C004E1;
+        Mon,  7 Feb 2022 11:09:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232958;
-        bh=OItqso0sCJtmD1G4NoDFiCdXogSvDlQgXz28I1duIro=;
+        s=korg; t=1644232187;
+        bh=A73VDMZcIsuiSE1vytGOv6KnVkctfiB40PR3pOzmyJY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SmRyvKa+kdJqj2j2fRypF03OsudKGry9yL28tDR9zOuR0FoLyHCNiTKD3YA7jWhMP
-         BgmeqylLvoImFPSRji8mqngtO0VIc+yUzoVSwvapZHcd2Zr79T6t8y2+H9XsYSdts4
-         RUOHlz1oCeXxjQ0e8b0/uKMRlmypUjOhe8jkFfXY=
+        b=tlczAESGOFMMkwyNez/AXNDs8Mnn6H72JVWaAkkxd/ujkpIcH+2Qj/xqfyCQBg5st
+         HsfdB7aMkxi0iDO/hJspXqaQg9Y6K0Vwp4xte7QCN2pOUj8MG8AXhboTYp3rxxoVYw
+         Xt+Y1j3MvJb0XR1gfOfvHQxolKbJlzEqiIJyWUhg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mike Rapoport <rppt@linux.ibm.com>,
-        Christian Dietrich <stettberger@dokucode.de>,
-        Khalid Aziz <khalid.aziz@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.10 18/74] mm/pgtable: define pte_index so that preprocessor could recognize it
+        stable@vger.kernel.org, Guangwu Zhang <guazhang@redhat.com>,
+        Saurav Kashyap <skashyap@marvell.com>,
+        John Meneghini <jmeneghi@redhat.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH 4.9 43/48] scsi: bnx2fc: Make bnx2fc_recv_frame() mp safe
 Date:   Mon,  7 Feb 2022 12:06:16 +0100
-Message-Id: <20220207103757.833909941@linuxfoundation.org>
+Message-Id: <20220207103753.730454805@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103757.232676988@linuxfoundation.org>
-References: <20220207103757.232676988@linuxfoundation.org>
+In-Reply-To: <20220207103752.341184175@linuxfoundation.org>
+References: <20220207103752.341184175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,39 +56,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mike Rapoport <rppt@linux.ibm.com>
+From: John Meneghini <jmeneghi@redhat.com>
 
-commit 314c459a6fe0957b5885fbc65c53d51444092880 upstream.
+commit 936bd03405fc83ba039d42bc93ffd4b88418f1d3 upstream.
 
-Since commit 974b9b2c68f3 ("mm: consolidate pte_index() and
-pte_offset_*() definitions") pte_index is a static inline and there is
-no define for it that can be recognized by the preprocessor.  As a
-result, vm_insert_pages() uses slower loop over vm_insert_page() instead
-of insert_pages() that amortizes the cost of spinlock operations when
-inserting multiple pages.
+Running tests with a debug kernel shows that bnx2fc_recv_frame() is
+modifying the per_cpu lport stats counters in a non-mpsafe way.  Just boot
+a debug kernel and run the bnx2fc driver with the hardware enabled.
 
-Link: https://lkml.kernel.org/r/20220111145457.20748-1-rppt@kernel.org
-Fixes: 974b9b2c68f3 ("mm: consolidate pte_index() and pte_offset_*() definitions")
-Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-Reported-by: Christian Dietrich <stettberger@dokucode.de>
-Reviewed-by: Khalid Aziz <khalid.aziz@oracle.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+[ 1391.699147] BUG: using smp_processor_id() in preemptible [00000000] code: bnx2fc_
+[ 1391.699160] caller is bnx2fc_recv_frame+0xbf9/0x1760 [bnx2fc]
+[ 1391.699174] CPU: 2 PID: 4355 Comm: bnx2fc_l2_threa Kdump: loaded Tainted: G    B
+[ 1391.699180] Hardware name: HP ProLiant DL120 G7, BIOS J01 07/01/2013
+[ 1391.699183] Call Trace:
+[ 1391.699188]  dump_stack_lvl+0x57/0x7d
+[ 1391.699198]  check_preemption_disabled+0xc8/0xd0
+[ 1391.699205]  bnx2fc_recv_frame+0xbf9/0x1760 [bnx2fc]
+[ 1391.699215]  ? do_raw_spin_trylock+0xb5/0x180
+[ 1391.699221]  ? bnx2fc_npiv_create_vports.isra.0+0x4e0/0x4e0 [bnx2fc]
+[ 1391.699229]  ? bnx2fc_l2_rcv_thread+0xb7/0x3a0 [bnx2fc]
+[ 1391.699240]  bnx2fc_l2_rcv_thread+0x1af/0x3a0 [bnx2fc]
+[ 1391.699250]  ? bnx2fc_ulp_init+0xc0/0xc0 [bnx2fc]
+[ 1391.699258]  kthread+0x364/0x420
+[ 1391.699263]  ? _raw_spin_unlock_irq+0x24/0x50
+[ 1391.699268]  ? set_kthread_struct+0x100/0x100
+[ 1391.699273]  ret_from_fork+0x22/0x30
+
+Restore the old get_cpu/put_cpu code with some modifications to reduce the
+size of the critical section.
+
+Link: https://lore.kernel.org/r/20220124145110.442335-1-jmeneghi@redhat.com
+Fixes: d576a5e80cd0 ("bnx2fc: Improve stats update mechanism")
+Tested-by: Guangwu Zhang <guazhang@redhat.com>
+Acked-by: Saurav Kashyap <skashyap@marvell.com>
+Signed-off-by: John Meneghini <jmeneghi@redhat.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/pgtable.h |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/scsi/bnx2fc/bnx2fc_fcoe.c |   21 +++++++++++++--------
+ 1 file changed, 13 insertions(+), 8 deletions(-)
 
---- a/include/linux/pgtable.h
-+++ b/include/linux/pgtable.h
-@@ -44,6 +44,7 @@ static inline unsigned long pte_index(un
- {
- 	return (address >> PAGE_SHIFT) & (PTRS_PER_PTE - 1);
- }
-+#define pte_index pte_index
+--- a/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
++++ b/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
+@@ -521,7 +521,8 @@ static int bnx2fc_l2_rcv_thread(void *ar
  
- #ifndef pmd_index
- static inline unsigned long pmd_index(unsigned long address)
+ static void bnx2fc_recv_frame(struct sk_buff *skb)
+ {
+-	u32 fr_len;
++	u64 crc_err;
++	u32 fr_len, fr_crc;
+ 	struct fc_lport *lport;
+ 	struct fcoe_rcv_info *fr;
+ 	struct fc_stats *stats;
+@@ -553,6 +554,11 @@ static void bnx2fc_recv_frame(struct sk_
+ 	skb_pull(skb, sizeof(struct fcoe_hdr));
+ 	fr_len = skb->len - sizeof(struct fcoe_crc_eof);
+ 
++	stats = per_cpu_ptr(lport->stats, get_cpu());
++	stats->RxFrames++;
++	stats->RxWords += fr_len / FCOE_WORD_TO_BYTE;
++	put_cpu();
++
+ 	fp = (struct fc_frame *)skb;
+ 	fc_frame_init(fp);
+ 	fr_dev(fp) = lport;
+@@ -604,16 +610,15 @@ static void bnx2fc_recv_frame(struct sk_
+ 		return;
+ 	}
+ 
+-	stats = per_cpu_ptr(lport->stats, smp_processor_id());
+-	stats->RxFrames++;
+-	stats->RxWords += fr_len / FCOE_WORD_TO_BYTE;
++	fr_crc = le32_to_cpu(fr_crc(fp));
+ 
+-	if (le32_to_cpu(fr_crc(fp)) !=
+-			~crc32(~0, skb->data, fr_len)) {
+-		if (stats->InvalidCRCCount < 5)
++	if (unlikely(fr_crc != ~crc32(~0, skb->data, fr_len))) {
++		stats = per_cpu_ptr(lport->stats, get_cpu());
++		crc_err = (stats->InvalidCRCCount++);
++		put_cpu();
++		if (crc_err < 5)
+ 			printk(KERN_WARNING PFX "dropping frame with "
+ 			       "CRC error\n");
+-		stats->InvalidCRCCount++;
+ 		kfree_skb(skb);
+ 		return;
+ 	}
 
 

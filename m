@@ -2,174 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 113F24AB4DC
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 07:41:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07A674AB4DF
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 07:41:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345925AbiBGGgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 01:36:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60674 "EHLO
+        id S1353362AbiBGGho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 01:37:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236921AbiBGGbR (ORCPT
+        with ESMTP id S241011AbiBGGcX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 01:31:17 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2823C0401C4
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 22:30:57 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id 192so11310127pfz.3
-        for <linux-kernel@vger.kernel.org>; Sun, 06 Feb 2022 22:30:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=NsFZzRzWxi9SLwITfrc8E6h9ajUabmlo1GhXmJ+C3hc=;
-        b=WAlvS5EXiVRFIZe8CQYOYmWuBeX252Ah939fQC4xFyJiOgiQOqKLCEZ9w/rsR6+gi6
-         9ofS/fBv7QwPpn/VyFviNxUjm4OSgt5WaUQ38ohiXY8yU3zjlUJ1Yvbtqkq/Q0hEdem+
-         vOL4LBrdoiDalFZWuSYY69OLG3uLZfb1ktFR1Bo8AZaDqbbY/rsgggVvLIGRaCKEw8tO
-         M6ffn1560ArOL3Xpl5xg0EVvQnm6FsEePBN54U5qe7xAaGTB4ob9FbVdBbdf9fWl+Xe5
-         0rS+pkIIUcoKVFmz3iMt4cxeBgkdGefflHbs0Y4BJCec9H7Tu+D3zt+hkDIKrAumXmsr
-         epUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=NsFZzRzWxi9SLwITfrc8E6h9ajUabmlo1GhXmJ+C3hc=;
-        b=PRF7ct7NG5lCPM+xysCnRRIbpO+oGvJbPg8UM2MhAp/P0UPeObZBUasXAaoScvCIk1
-         4XQKj8BMMNzy3AeV70irZnToSrS12dQIrtvebTVLGblhHBD90s+qPz7G4qcAzxn4sH8k
-         xBaux4hJ69xfvB9ZA4EElH+lJc9JsoUbHPJd2FEjjYN8nfq2+ASLgzuMQ4eCtoFcPUPs
-         Nwr1wgqFXK3R3daKWY/P/nscNrjqKkPM+yeyUEu/jhW8JLFYdRjeikJc5afVH/TOSJDk
-         4nAGGuiEBMnpeju1YLv1J9ODMI2Are/pEsPHQ8NpCJnHkHdA0kM09ccE80DvvctbxJXe
-         3pow==
-X-Gm-Message-State: AOAM531zyXz0cmySvvK2r/3k5z9vDd+77AxfjzbSrd78bNQ2czcZZrif
-        R61xjk4Sx6onxPDraFWQL87ywA==
-X-Google-Smtp-Source: ABdhPJztzK0ckN9GMQ0TxEmrpCSlWLQmxoXoG9PxqUVTiaqQJQd7I9kf9tGQI9fcbpFkt9zsEeErKA==
-X-Received: by 2002:aa7:84d5:: with SMTP id x21mr14270143pfn.72.1644215456964;
-        Sun, 06 Feb 2022 22:30:56 -0800 (PST)
-Received: from hsinchu16.internal.sifive.com (59-124-168-89.hinet-ip.hinet.net. [59.124.168.89])
-        by smtp.gmail.com with ESMTPSA id i10sm5266634pjd.2.2022.02.06.22.30.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Feb 2022 22:30:56 -0800 (PST)
-From:   Zong Li <zong.li@sifive.com>
-To:     robh+dt@kernel.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, krzysztof.kozlowski@canonical.com,
-        conor.dooley@microchip.com, geert@linux-m68k.org,
-        bin.meng@windriver.com, green.wan@sifive.com, vkoul@kernel.org,
-        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Cc:     Zong Li <zong.li@sifive.com>
-Subject: [PATCH v5 3/3] dmaengine: sf-pdma: Get number of channel by device tree
-Date:   Mon,  7 Feb 2022 14:30:40 +0800
-Message-Id: <df6c8d1c701b33fa735dd072de3cb585dc60f2c9.1644215230.git.zong.li@sifive.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1644215230.git.zong.li@sifive.com>
-References: <cover.1644215230.git.zong.li@sifive.com>
+        Mon, 7 Feb 2022 01:32:23 -0500
+Received: from relay4.hostedemail.com (relay4.hostedemail.com [64.99.140.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 138F9C043181
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 22:32:22 -0800 (PST)
+Received: from omf20.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay11.hostedemail.com (Postfix) with ESMTP id 10DEC80294;
+        Mon,  7 Feb 2022 06:32:21 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf20.hostedemail.com (Postfix) with ESMTPA id 086812002E;
+        Mon,  7 Feb 2022 06:32:14 +0000 (UTC)
+Message-ID: <62a6db49ef29745514b0263b9bb39b5a16f90efe.camel@perches.com>
+Subject: Re: [PATCH] Staging : android: Struct file_operations should be
+ const
+From:   Joe Perches <joe@perches.com>
+To:     Leonardo Araujo <leonardo.aa88@gmail.com>,
+        gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
+Date:   Sun, 06 Feb 2022 22:32:14 -0800
+In-Reply-To: <20220207031711.13644-1-leonardo.aa88@gmail.com>
+References: <20220207031711.13644-1-leonardo.aa88@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Stat-Signature: 8dikj3qm5jo846ci3kktjr9bssgn3eqo
+X-Rspamd-Server: rspamout03
+X-Rspamd-Queue-Id: 086812002E
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1/tJ4keTdXdL28cbp7ERmXh3BWFz4CR16g=
+X-HE-Tag: 1644215534-707106
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It currently assumes that there are always four channels, it would
-cause the error if there is actually less than four channels. Change
-that by getting number of channel from device tree.
+On Mon, 2022-02-07 at 00:17 -0300, Leonardo Araujo wrote:
+> From: "Leonardo Araujo" <leonardo.aa88@gmail.com>
+> 
+> WARNING: struct file_operations should normally be const
 
-For backwards-compatibility, it uses the default value (i.e. 4) when
-there is no 'dma-channels' information in dts.
+Always compile the files modified by a patch before you send it out.
 
-Signed-off-by: Zong Li <zong.li@sifive.com>
----
- drivers/dma/sf-pdma/sf-pdma.c | 21 ++++++++++++++-------
- drivers/dma/sf-pdma/sf-pdma.h |  8 ++------
- 2 files changed, 16 insertions(+), 13 deletions(-)
+[]
+> diff --git a/drivers/staging/android/ashmem.c b/drivers/staging/android/ashmem.c
+[]
+> @@ -377,7 +377,7 @@ ashmem_vmfile_get_unmapped_area(struct file *file, unsigned long addr,
+>  
+>  static int ashmem_mmap(struct file *file, struct vm_area_struct *vma)
+>  {
+> -	static struct file_operations vmfile_fops;
+> +	static const struct file_operations vmfile_fops;
+>  	struct ashmem_area *asma = file->private_data;
+>  	int ret = 0;
+>  
 
-diff --git a/drivers/dma/sf-pdma/sf-pdma.c b/drivers/dma/sf-pdma/sf-pdma.c
-index f12606aeff87..2ae10b61dfa1 100644
---- a/drivers/dma/sf-pdma/sf-pdma.c
-+++ b/drivers/dma/sf-pdma/sf-pdma.c
-@@ -482,9 +482,7 @@ static void sf_pdma_setup_chans(struct sf_pdma *pdma)
- static int sf_pdma_probe(struct platform_device *pdev)
- {
- 	struct sf_pdma *pdma;
--	struct sf_pdma_chan *chan;
- 	struct resource *res;
--	int len, chans;
- 	int ret;
- 	const enum dma_slave_buswidth widths =
- 		DMA_SLAVE_BUSWIDTH_1_BYTE | DMA_SLAVE_BUSWIDTH_2_BYTES |
-@@ -492,13 +490,21 @@ static int sf_pdma_probe(struct platform_device *pdev)
- 		DMA_SLAVE_BUSWIDTH_16_BYTES | DMA_SLAVE_BUSWIDTH_32_BYTES |
- 		DMA_SLAVE_BUSWIDTH_64_BYTES;
- 
--	chans = PDMA_NR_CH;
--	len = sizeof(*pdma) + sizeof(*chan) * chans;
--	pdma = devm_kzalloc(&pdev->dev, len, GFP_KERNEL);
-+	pdma = devm_kzalloc(&pdev->dev, sizeof(*pdma), GFP_KERNEL);
- 	if (!pdma)
- 		return -ENOMEM;
- 
--	pdma->n_chans = chans;
-+	ret = of_property_read_u32(pdev->dev.of_node, "dma-channels",
-+				   &pdma->n_chans);
-+	if (ret) {
-+		dev_notice(&pdev->dev, "set number of channels to default value: 4\n");
-+		pdma->n_chans = PDMA_MAX_NR_CH;
-+	}
-+
-+	if (pdma->n_chans > PDMA_MAX_NR_CH) {
-+		dev_err(&pdev->dev, "the number of channels exceeds the maximum\n");
-+		return -EINVAL;
-+	}
- 
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	pdma->membase = devm_ioremap_resource(&pdev->dev, res);
-@@ -556,7 +562,7 @@ static int sf_pdma_remove(struct platform_device *pdev)
- 	struct sf_pdma_chan *ch;
- 	int i;
- 
--	for (i = 0; i < PDMA_NR_CH; i++) {
-+	for (i = 0; i < pdma->n_chans; i++) {
- 		ch = &pdma->chans[i];
- 
- 		devm_free_irq(&pdev->dev, ch->txirq, ch);
-@@ -574,6 +580,7 @@ static int sf_pdma_remove(struct platform_device *pdev)
- 
- static const struct of_device_id sf_pdma_dt_ids[] = {
- 	{ .compatible = "sifive,fu540-c000-pdma" },
-+	{ .compatible = "sifive,pdma0" },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, sf_pdma_dt_ids);
-diff --git a/drivers/dma/sf-pdma/sf-pdma.h b/drivers/dma/sf-pdma/sf-pdma.h
-index 0c20167b097d..8127d792f639 100644
---- a/drivers/dma/sf-pdma/sf-pdma.h
-+++ b/drivers/dma/sf-pdma/sf-pdma.h
-@@ -22,11 +22,7 @@
- #include "../dmaengine.h"
- #include "../virt-dma.h"
- 
--#define PDMA_NR_CH					4
--
--#if (PDMA_NR_CH != 4)
--#error "Please define PDMA_NR_CH to 4"
--#endif
-+#define PDMA_MAX_NR_CH					4
- 
- #define PDMA_BASE_ADDR					0x3000000
- #define PDMA_CHAN_OFFSET				0x1000
-@@ -118,7 +114,7 @@ struct sf_pdma {
- 	void __iomem            *membase;
- 	void __iomem            *mappedbase;
- 	u32			n_chans;
--	struct sf_pdma_chan	chans[PDMA_NR_CH];
-+	struct sf_pdma_chan	chans[PDMA_MAX_NR_CH];
- };
- 
- #endif /* _SF_PDMA_H */
--- 
-2.31.1
+<apply patch>
+$ make allyesconfig
+$ make drivers/staging/android/ashmem.o
+[...]
+  CC      drivers/staging/android/ashmem.o
+drivers/staging/android/ashmem.c: In function ‘ashmem_mmap’:
+drivers/staging/android/ashmem.c:431:37: error: assignment of read-only variable ‘vmfile_fops’
+  431 |                         vmfile_fops = *vmfile->f_op;
+      |                                     ^
+drivers/staging/android/ashmem.c:432:42: error: assignment of member ‘mmap’ in read-only object
+  432 |                         vmfile_fops.mmap = ashmem_vmfile_mmap;
+      |                                          ^
+drivers/staging/android/ashmem.c:433:55: error: assignment of member ‘get_unmapped_area’ in read-only object
+  433 |                         vmfile_fops.get_unmapped_area =
+      |                                                       ^
+make[3]: *** [scripts/Makefile.build:289: drivers/staging/android/ashmem.o] Error 1
+make[2]: *** [scripts/Makefile.build:572: drivers/staging/android] Error 2
+make[1]: *** [scripts/Makefile.build:572: drivers/staging] Error 2
+make: *** [Makefile:1965: drivers] Error 2
+
+
 

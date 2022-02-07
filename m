@@ -2,66 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99C6A4AC2A7
+	by mail.lfdr.de (Postfix) with ESMTP id 4BE2F4AC2A6
 	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 16:12:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442874AbiBGPKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 10:10:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53456 "EHLO
+        id S1442855AbiBGPKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 10:10:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442174AbiBGOrf (ORCPT
+        with ESMTP id S1442170AbiBGOrf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 7 Feb 2022 09:47:35 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F2F6C03FEC8
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 06:47:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644245254; x=1675781254;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NFLLMgHFBwJhXlvHAadZYGDnNUvR3br8H3+mEqUjtmU=;
-  b=letVqL7r5qDZWN5FA2kSPQjtJ609ua40T6/6oSIeVldElGad1PyThpTd
-   oin7uWk6HlLXO/aM5dKdP+EVk3txPdYIqAtLDaazJGjavAmsynO4w69Yv
-   bFBFfHzXlnjvjWV82QDjwo4ihQeZ/jQH46OtAE7Xy5duegwkHAjEgEGQV
-   du8IWPlc5kTKsLohMyZbgQCly2ylJQL4LQYY3Nx7lW84BI9eKciUDL5CN
-   vCxebE8vcjAG5FSvribO9dA8G7BmgcI4J25PVGcXY+GYGUFV5cdBs/Zfc
-   7B96qZ3K9Yqs+rmVpf5dcozyIbiPMh3BdsMCBwlFD1Dh+UcmnjJ0BsagG
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10250"; a="247564159"
-X-IronPort-AV: E=Sophos;i="5.88,350,1635231600"; 
-   d="scan'208";a="247564159"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 06:47:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,350,1635231600"; 
-   d="scan'208";a="677776693"
-Received: from lkp-server01.sh.intel.com (HELO 9dd77a123018) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 07 Feb 2022 06:47:32 -0800
-Received: from kbuild by 9dd77a123018 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nH5Ih-0000d5-KG; Mon, 07 Feb 2022 14:47:31 +0000
-Date:   Mon, 7 Feb 2022 22:47:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Zhi Wang <zhi.wang.linux@gmail.com>, hch@lst.de, jgg@nvidia.com,
-        jani.nikula@linux.intel.com
-Cc:     kbuild-all@lists.01.org, Zhi Wang <zhi.wang.linux@gmail.com>,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Terrence Xu <terrence.xu@intel.com>,
-        intel-gvt-dev@lists.freedesktop.org
-Subject: Re: [Intel-gfx] [PATCH 1/3] i915/gvt: Introduce the mmio_table.c to
- support VFIO new mdev API
-Message-ID: <202202072226.kzm2Qm5q-lkp@intel.com>
-References: <20220127120508.11330-1-zhi.a.wang@intel.com>
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7742CC03FEC5;
+        Mon,  7 Feb 2022 06:47:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 32F13B8112E;
+        Mon,  7 Feb 2022 14:47:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5927FC004E1;
+        Mon,  7 Feb 2022 14:47:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644245252;
+        bh=823u3Op3WC/cpHw0jFq2FcbGrRnHMEfr+lxNki6buM4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VtR4Lc2o/2f2O1v+eJk5kB/88OB8coFXuZfqbBDd6ZbxbPM8t/pDkFnqT71Qbz6Cd
+         6A0Z3AYCW/QWWqGrcrJLRx7O25UDAuWh10K8SvOA9bQiitl58S07ikxj2XB7VuCTdp
+         nBVJp6BHDKzRVPILgzMn8JA9vTmpSE3n/EheNADnXpuXZj4Z5Qb21oSIHfSEhwG+9E
+         3btfgGN6huk3PLYw07XHo7R1/n8VaKM4Ip9F2jMPZ8BzAh75BvLSDwwTQx2gKyxSwZ
+         QYKpQR9SLtrGeT4MPhlIRqogpf5FueORddYBT7gTm+K6eVUgdHH3f31EPfMVfnlD1d
+         UxrNXBWczu0Kw==
+Date:   Mon, 7 Feb 2022 15:47:28 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     f.fainelli@gmail.com, rjui@broadcom.com, sbranden@broadcom.com,
+        nsaenz@kernel.org, krzk@kernel.org, stefan.wahren@i2se.com,
+        nh6z@nh6z.net, eric@anholt.net, linux-i2c@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] i2c: bcm2835: Fix the error handling in
+ 'bcm2835_i2c_probe()'
+Message-ID: <YgExAGEN91QEnObO@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        f.fainelli@gmail.com, rjui@broadcom.com, sbranden@broadcom.com,
+        nsaenz@kernel.org, krzk@kernel.org, stefan.wahren@i2se.com,
+        nh6z@nh6z.net, eric@anholt.net, linux-i2c@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+References: <338008c444af4785a07fb5a402b60225a4964ae9.1629484876.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="hummrw8NxFlbNLQO"
 Content-Disposition: inline
-In-Reply-To: <20220127120508.11330-1-zhi.a.wang@intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <338008c444af4785a07fb5a402b60225a4964ae9.1629484876.git.christophe.jaillet@wanadoo.fr>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,49 +68,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zhi,
 
-I love your patch! Perhaps something to improve:
+--hummrw8NxFlbNLQO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[auto build test WARNING on drm-tip/drm-tip]
-[also build test WARNING on next-20220207]
-[cannot apply to drm-intel/for-linux-next hch-configfs/for-next v5.17-rc3]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+On Fri, Aug 20, 2021 at 08:43:33PM +0200, Christophe JAILLET wrote:
+> Some resource should be released if an error occurs in
+> 'bcm2835_i2c_probe()'.
+> Add an error handling path and the needed 'clk_disable_unprepare()' and
+> 'clk_rate_exclusive_put()' calls.
+>=20
+> While at it, rework the bottom of the function to use this newly added
+> error handling path and have an explicit and more standard "return 0;" at
+> the end of the normal path.
+>=20
+> Fixes: bebff81fb8b9 ("i2c: bcm2835: Model Divider in CCF")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-url:    https://github.com/0day-ci/linux/commits/Zhi-Wang/i915-gvt-Introduce-the-mmio_table-c-to-support-VFIO-new-mdev-API/20220127-200727
-base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
-config: x86_64-rhel-8.3-kselftests (https://download.01.org/0day-ci/archive/20220207/202202072226.kzm2Qm5q-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/0day-ci/linux/commit/533f92651a7a56481a053f1e04dc5a5ec024ffb9
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Zhi-Wang/i915-gvt-Introduce-the-mmio_table-c-to-support-VFIO-new-mdev-API/20220127-200727
-        git checkout 533f92651a7a56481a053f1e04dc5a5ec024ffb9
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Sadly, noone tested it but I think it is good to avoid the resource
+leaks. So, rebased and applied to for-next, thanks! Please kindly check
+if I rebased correctly the irq error case (once I pushed out).
 
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/gpu/drm/i915/gvt/handlers.c:45:6: sparse: sparse: symbol 'intel_gvt_match_device' was not declared. Should it be static?
+--hummrw8NxFlbNLQO
+Content-Type: application/pgp-signature; name="signature.asc"
 
-vim +/intel_gvt_match_device +45 drivers/gpu/drm/i915/gvt/handlers.c
+-----BEGIN PGP SIGNATURE-----
 
-12d14cc43b3470 Zhi Wang 2016-08-30  44  
-12d14cc43b3470 Zhi Wang 2016-08-30 @45  bool intel_gvt_match_device(struct intel_gvt *gvt,
-12d14cc43b3470 Zhi Wang 2016-08-30  46  		unsigned long device)
-12d14cc43b3470 Zhi Wang 2016-08-30  47  {
-533f92651a7a56 Zhi Wang 2022-01-27  48  	return intel_gvt_get_device_type(gvt->gt->i915) & device;
-12d14cc43b3470 Zhi Wang 2016-08-30  49  }
-12d14cc43b3470 Zhi Wang 2016-08-30  50  
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIBMPwACgkQFA3kzBSg
+KbZFKhAAi5cesS0ucf8ZPQrs1eGglGGzCUhyOm3t8uff8TDyHkmFfRSu9xG2Dwh9
+ie1QiIKrf+qHPLVIsd9DXn+vYbOs/oF4B4uLEJ37RCbADAIX90YwY8x9w+txWBtv
+5Jj3RRtqrFafNBS8ml2efRbiftcNT8ii9K3yxw3p3a4RNaFBPUkw0ccAcna6kHhk
+v0rHg4JxjilGg92qO1QWdJZ1y419qGxHtOL3kCUx9M+CTgGkTEivkqnCoHkjz7z9
+piN3FvfZ2ZrfuzVC65iU5YseCpaPiKwWcKVeaKPAvVvEpa4LCzfgn/Jo/T9kCnzc
+mRO+dwpJO0xPVYcQhHVz4HM5m0MVNywFpxnvLMygSxq4LXQYzUAv/v1I6qkfUrAi
+S7eJ5bkE0ngrEZgrdTGZW+O8FaJmek3KqDVmYcOZRPfzUH6Qcw6qYtEe1JepOTd0
+FYgsjz5C2oi5IzRHg2RSFreyoIRf2DqD4YxUkvMXFFkMfA/P1RRKOKJ9eHv1Q8L+
+ItFxhffLAA5BaKXE/ZxOdOKVFhfWY8xhb/phE9XmHzTlX1vPMI+e33eJRp9dz26b
+qWuYmUkEnhm1U+BvUt9gQLSQa9eRH0Nce6E8/4rmQJGQDFSX61NHIUtGAbWe6pm+
+zL+nxrjRIh7EPUTqs/7QlXCHfZZfGUbn0NTrtZXZes5cdOYsn2g=
+=UMF4
+-----END PGP SIGNATURE-----
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+--hummrw8NxFlbNLQO--

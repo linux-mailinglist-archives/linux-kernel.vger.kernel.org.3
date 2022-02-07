@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2F0A4ABDDE
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:05:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25AAF4ABC4F
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:46:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389293AbiBGLsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:48:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46644 "EHLO
+        id S1385428AbiBGLbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:31:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386438AbiBGLei (ORCPT
+        with ESMTP id S1382918AbiBGLVJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:34:38 -0500
+        Mon, 7 Feb 2022 06:21:09 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20BDC043181;
-        Mon,  7 Feb 2022 03:34:37 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71208C0401C1;
+        Mon,  7 Feb 2022 03:20:45 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5FC9EB80EC3;
-        Mon,  7 Feb 2022 11:34:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B6CCC340EB;
-        Mon,  7 Feb 2022 11:34:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 15558B811B2;
+        Mon,  7 Feb 2022 11:20:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CDF1C340EB;
+        Mon,  7 Feb 2022 11:20:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233675;
-        bh=oockd+H0nbljZXJvxJaW8xs5secCp/bASldZOrm0rlE=;
+        s=korg; t=1644232832;
+        bh=72vwZ6kvzEMAGleLWY/VTPiDOeZhPnE8/1zmPpNqG64=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Hnepjqggb4fFZ9QXOCbVAQQABUx+CXgXD2Yv8vnLY7PMRj0FhtupB5N10n3CxUDQM
-         TyZgbY+4qIDcHfeR/KRwnQaqjF90l/NkamH8zdrBl0nV78xJRT9j6CkJNO5rBl7FuD
-         U1elwJ4ryMNHmsTnbIYuzDG/rcxSKdzPtjRlEZgc=
+        b=C9NKp5bQa3fG4t1/fwHJvMS9/Yf9EzWcL3kYZY2zdpEhENQ4LTHDMBT4xwbpeYhJb
+         1ETBGfdUrMPRln4QxQiip1OQkiko+727iOVa3QI5rrtHcoA39t345VVRPs+Y+aYz7f
+         aR0YmRjVR6UYpkfvmyuHpZ2laDI5C7zJfdC4v4OU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.16 084/126] ASoC: fsl: Add missing error handling in pcm030_fabric_probe
+        stable@vger.kernel.org,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: [PATCH 5.4 39/44] selftests: futex: Use variable MAKE instead of make
 Date:   Mon,  7 Feb 2022 12:06:55 +0100
-Message-Id: <20220207103807.005469068@linuxfoundation.org>
+Message-Id: <20220207103754.426846865@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
-References: <20220207103804.053675072@linuxfoundation.org>
+In-Reply-To: <20220207103753.155627314@linuxfoundation.org>
+References: <20220207103753.155627314@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,48 +56,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
 
-commit fb25621da5702c104ce0a48de5b174ced09e5b4e upstream.
+commit b9199181a9ef8252e47e207be8c23e1f50662620 upstream.
 
-Add the missing platform_device_put() and platform_device_del()
-before return from pcm030_fabric_probe in the error handling case.
+Recursive make commands should always use the variable MAKE, not the
+explicit command name ‘make’. This has benefits and removes the
+following warning when multiple jobs are used for the build:
 
-Fixes: c912fa913446 ("ASoC: fsl: register the wm9712-codec")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220127131336.30214-1-linmq006@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+make[2]: warning: jobserver unavailable: using -j1.  Add '+' to parent make rule.
+
+Fixes: a8ba798bc8ec ("selftests: enable O and KBUILD_OUTPUT")
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Reviewed-by: André Almeida <andrealmeid@collabora.com>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/fsl/pcm030-audio-fabric.c |   11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ tools/testing/selftests/futex/Makefile |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/sound/soc/fsl/pcm030-audio-fabric.c
-+++ b/sound/soc/fsl/pcm030-audio-fabric.c
-@@ -93,16 +93,21 @@ static int pcm030_fabric_probe(struct pl
- 		dev_err(&op->dev, "platform_device_alloc() failed\n");
- 
- 	ret = platform_device_add(pdata->codec_device);
--	if (ret)
-+	if (ret) {
- 		dev_err(&op->dev, "platform_device_add() failed: %d\n", ret);
-+		platform_device_put(pdata->codec_device);
-+	}
- 
- 	ret = snd_soc_register_card(card);
--	if (ret)
-+	if (ret) {
- 		dev_err(&op->dev, "snd_soc_register_card() failed: %d\n", ret);
-+		platform_device_del(pdata->codec_device);
-+		platform_device_put(pdata->codec_device);
-+	}
- 
- 	platform_set_drvdata(op, pdata);
--
- 	return ret;
-+
- }
- 
- static int pcm030_fabric_remove(struct platform_device *op)
+--- a/tools/testing/selftests/futex/Makefile
++++ b/tools/testing/selftests/futex/Makefile
+@@ -11,7 +11,7 @@ all:
+ 	@for DIR in $(SUBDIRS); do		\
+ 		BUILD_TARGET=$(OUTPUT)/$$DIR;	\
+ 		mkdir $$BUILD_TARGET  -p;	\
+-		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;\
++		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$DIR $@;\
+ 		if [ -e $$DIR/$(TEST_PROGS) ]; then \
+ 			rsync -a $$DIR/$(TEST_PROGS) $$BUILD_TARGET/; \
+ 		fi \
+@@ -32,6 +32,6 @@ override define CLEAN
+ 	@for DIR in $(SUBDIRS); do		\
+ 		BUILD_TARGET=$(OUTPUT)/$$DIR;	\
+ 		mkdir $$BUILD_TARGET  -p;	\
+-		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;\
++		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$DIR $@;\
+ 	done
+ endef
 
 

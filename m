@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AB5A4ABDF6
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:05:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE2A24ABD73
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:00:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389674AbiBGLuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:50:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37660 "EHLO
+        id S1389130AbiBGLqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:46:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384862AbiBGLaZ (ORCPT
+        with ESMTP id S1386206AbiBGLd5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:30:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFF46C03CA4A;
-        Mon,  7 Feb 2022 03:28:42 -0800 (PST)
+        Mon, 7 Feb 2022 06:33:57 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 133FEC043181;
+        Mon,  7 Feb 2022 03:33:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 08BD66077B;
-        Mon,  7 Feb 2022 11:28:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFBAFC340F1;
-        Mon,  7 Feb 2022 11:28:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C3C1BB8102E;
+        Mon,  7 Feb 2022 11:33:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9334C004E1;
+        Mon,  7 Feb 2022 11:33:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233321;
-        bh=D1iJwyfsHLPr5Rqzs8UxZzRupRZ+cg/8d6hqnSL8FKo=;
+        s=korg; t=1644233634;
+        bh=wgI2JfwnGs9YATRBKGTUEYM00WplHCkNomidae7ocq0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n/buLgWiw/FS/tztTRImwJpwLkPd6pp65n2AJGtT1ZmHl1vKjrS1fCOVL4mDVPTyC
-         dYlUUl6syHS63Tl6RBbiwxAmDzmcgzuCdYzSX8sEXtty42qpTcF5AvisArZp7pRibg
-         NMXv10V1npBZrwqAo9XEPRpM7ktav+0iG342GcdM=
+        b=E5hJrcYu2fgD30Z5xz5W3arU6JP9ykG3Zt4ozcxDXkAgl688Ufa1Mce1Vhi+K8J8S
+         XBUdt69pqAsuki+d4es/NBP7AM+XvedSWvp4p4W9VawdiRQvljzqk2LKyiDCiRfZUk
+         FEiRktLy6wEXGDtAVTsYjTzm2h8/HnmRuvpuX2Ek=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Subject: [PATCH 5.15 054/110] IB/hfi1: Fix tstats alloc and dealloc
+        Guennadi Liakhovetski <guennadi.liakhovetski@linux.intel.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.16 056/126] ALSA: hda: Skip codec shutdown in case the codec is not registered
 Date:   Mon,  7 Feb 2022 12:06:27 +0100
-Message-Id: <20220207103804.114482943@linuxfoundation.org>
+Message-Id: <20220207103806.052435714@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
-References: <20220207103802.280120990@linuxfoundation.org>
+In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
+References: <20220207103804.053675072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,75 +56,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>
+From: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
 
-commit e5cce44aff3be9ad2cd52f63f35edbd706181d50 upstream.
+commit 1c7f0e349aa5f8f80b1cac3d4917405332e14cdf upstream.
 
-The tstats allocation is done in the accelerated ndo_init function but the
-allocation is not tested to succeed.
+If the codec->registered is not set then it means that pm_runtime is
+not yet enabled and the codec->pcm_list_head has not been initialized.
 
-The deallocation is not done in the accelerated ndo_uninit function.
+The access to the not initialized pcm_list_head will lead a kernel crash
+during shutdown.
 
-Resolve issues by testing for an allocation failure and adding the
-free_percpu in the uninit function.
-
-Fixes: aa0616a9bd52 ("IB/hfi1: switch to core handling of rx/tx byte/packet counters")
-Link: https://lore.kernel.org/r/1642287756-182313-5-git-send-email-mike.marciniszyn@cornelisnetworks.com
-Reviewed-by: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
-Signed-off-by: Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+Reported-by: Guennadi Liakhovetski <guennadi.liakhovetski@linux.intel.com>
+Signed-off-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
+Tested-by: Guennadi Liakhovetski <guennadi.liakhovetski@linux.intel.com>
+Fixes: b98444ed597d ("ALSA: hda: Suspend codec at shutdown")
+Link: https://lore.kernel.org/r/20220201112144.29411-1-peter.ujfalusi@linux.intel.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/infiniband/hw/hfi1/ipoib_main.c |   14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ sound/pci/hda/hda_codec.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/drivers/infiniband/hw/hfi1/ipoib_main.c
-+++ b/drivers/infiniband/hw/hfi1/ipoib_main.c
-@@ -22,26 +22,35 @@ static int hfi1_ipoib_dev_init(struct ne
- 	int ret;
- 
- 	dev->tstats = netdev_alloc_pcpu_stats(struct pcpu_sw_netstats);
-+	if (!dev->tstats)
-+		return -ENOMEM;
- 
- 	ret = priv->netdev_ops->ndo_init(dev);
- 	if (ret)
--		return ret;
-+		goto out_ret;
- 
- 	ret = hfi1_netdev_add_data(priv->dd,
- 				   qpn_from_mac(priv->netdev->dev_addr),
- 				   dev);
- 	if (ret < 0) {
- 		priv->netdev_ops->ndo_uninit(dev);
--		return ret;
-+		goto out_ret;
- 	}
- 
- 	return 0;
-+out_ret:
-+	free_percpu(dev->tstats);
-+	dev->tstats = NULL;
-+	return ret;
- }
- 
- static void hfi1_ipoib_dev_uninit(struct net_device *dev)
+--- a/sound/pci/hda/hda_codec.c
++++ b/sound/pci/hda/hda_codec.c
+@@ -3000,6 +3000,10 @@ void snd_hda_codec_shutdown(struct hda_c
  {
- 	struct hfi1_ipoib_dev_priv *priv = hfi1_ipoib_priv(dev);
+ 	struct hda_pcm *cpcm;
  
-+	free_percpu(dev->tstats);
-+	dev->tstats = NULL;
++	/* Skip the shutdown if codec is not registered */
++	if (!codec->registered)
++		return;
 +
- 	hfi1_netdev_remove_data(priv->dd, qpn_from_mac(priv->netdev->dev_addr));
+ 	list_for_each_entry(cpcm, &codec->pcm_list_head, list)
+ 		snd_pcm_suspend_all(cpcm->pcm);
  
- 	priv->netdev_ops->ndo_uninit(dev);
-@@ -166,6 +175,7 @@ static void hfi1_ipoib_netdev_dtor(struc
- 	hfi1_ipoib_rxq_deinit(priv->netdev);
- 
- 	free_percpu(dev->tstats);
-+	dev->tstats = NULL;
- }
- 
- static void hfi1_ipoib_set_id(struct net_device *dev, int id)
 
 

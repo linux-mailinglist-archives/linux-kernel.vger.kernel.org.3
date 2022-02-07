@@ -2,43 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74A544ACC45
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 23:48:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A137E4ACC4C
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 23:50:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245110AbiBGWsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 17:48:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58732 "EHLO
+        id S245154AbiBGWtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 17:49:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234031AbiBGWsA (ORCPT
+        with ESMTP id S231463AbiBGWts (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 17:48:00 -0500
-Received: from smtp.smtpout.orange.fr (smtp10.smtpout.orange.fr [80.12.242.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 585D5C0612A4
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 14:47:59 -0800 (PST)
-Received: from pop-os.home ([90.126.236.122])
-        by smtp.orange.fr with ESMTPA
-        id HCncnIqRubnFGHCncnWXsD; Mon, 07 Feb 2022 23:47:57 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Mon, 07 Feb 2022 23:47:57 +0100
-X-ME-IP: 90.126.236.122
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux-foundation.org
-Subject: [PATCH v2 2/2] iommu/arm-smmu-v3: Simplify memory allocation
-Date:   Mon,  7 Feb 2022 23:47:55 +0100
-Message-Id: <598bd905103dcbe5653a54bb0dfb5a8597728214.1644274051.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <3f7b9b202c6b6f5edc234ab7af5f208fbf8bc944.1644274051.git.christophe.jaillet@wanadoo.fr>
-References: <3f7b9b202c6b6f5edc234ab7af5f208fbf8bc944.1644274051.git.christophe.jaillet@wanadoo.fr>
+        Mon, 7 Feb 2022 17:49:48 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68F52C061355;
+        Mon,  7 Feb 2022 14:49:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644274187; x=1675810187;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=kCrDIOrEFsaqkXzsZbh8yWB/DwYaGsvCXUnA57EV60o=;
+  b=WJXmPv2BjjL6DfXYwYsIBdAdfdhF9CFbHiMIAZtBYux70MVKmBgz83ZS
+   Ny6HdO/W7RljLfbi5MYWYuMy/fdFBrjAjAoQl4LfchVXzWww7mRXUhyjd
+   M6fEvyrtC/AHHYxKhC/aQb5YJQhyi+GKbyTrHW3JpOfZ1iRahdws+N4O3
+   9vmyP2MrFDsM3MITWnod+HZCKDdFpROaZaXcaD0kMPXJbxxh+RpZP6YwC
+   0THtEHQRgMlgp38sOg3abYKTfzn+3mzicF0R5KuP67Ldl225p7vg5Gmlb
+   KkNgfyESWnAYd5OBXn5EyxMLJatP1v7M/WfvjPeRvJrFiE/4XtENEO65c
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="248772691"
+X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
+   d="scan'208";a="248772691"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 14:49:46 -0800
+X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
+   d="scan'208";a="525309179"
+Received: from hgrunes-mobl1.amr.corp.intel.com (HELO [10.251.3.57]) ([10.251.3.57])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 14:49:45 -0800
+Message-ID: <d53abb4b-2459-e1f7-3b7f-a8017cdd3757@intel.com>
+Date:   Mon, 7 Feb 2022 14:49:45 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
+        kcc@google.com, eranian@google.com
+Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
+ <20220130211838.8382-5-rick.p.edgecombe@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCH 04/35] x86/cpufeatures: Introduce CPU setup and option
+ parsing for CET
+In-Reply-To: <20220130211838.8382-5-rick.p.edgecombe@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,63 +90,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use devm_bitmap_zalloc() instead of hand writing it.
+>   * Some CPU features depend on higher CPUID levels, which may not always
+>   * be available due to CPUID level capping or broken virtualization
+> @@ -1261,6 +1269,9 @@ static void __init cpu_parse_early_param(void)
+>  	if (cmdline_find_option_bool(boot_command_line, "noxsaves"))
+>  		setup_clear_cpu_cap(X86_FEATURE_XSAVES);
+>  
+> +	if (cmdline_find_option_bool(boot_command_line, "no_user_shstk"))
+> +		setup_clear_cpu_cap(X86_FEATURE_SHSTK);
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-This is NOT compile tested.
-I don't have the needed cross compiling tools.
+Given this:
 
-v2: - remove the dev_err() message
-    - remove the 'bitmap' variable
-    - update the error handling path to be more future proof and return
-      an explicit 0 in the success path
----
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 22 +++++----------------
- 1 file changed, 5 insertions(+), 17 deletions(-)
+	https://lore.kernel.org/all/20220127115626.14179-2-bp@alien8.de/
 
-diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-index 14d06aad0726..bbc4eeb42811 100644
---- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-+++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-@@ -2911,32 +2911,20 @@ static int arm_smmu_init_one_queue(struct arm_smmu_device *smmu,
- 	return 0;
- }
- 
--static void arm_smmu_cmdq_free_bitmap(void *data)
--{
--	unsigned long *bitmap = data;
--	bitmap_free(bitmap);
--}
--
- static int arm_smmu_cmdq_init(struct arm_smmu_device *smmu)
- {
--	int ret = 0;
- 	struct arm_smmu_cmdq *cmdq = &smmu->cmdq;
- 	unsigned int nents = 1 << cmdq->q.llq.max_n_shift;
--	atomic_long_t *bitmap;
- 
- 	atomic_set(&cmdq->owner_prod, 0);
- 	atomic_set(&cmdq->lock, 0);
- 
--	bitmap = (atomic_long_t *)bitmap_zalloc(nents, GFP_KERNEL);
--	if (!bitmap) {
--		dev_err(smmu->dev, "failed to allocate cmdq bitmap\n");
--		ret = -ENOMEM;
--	} else {
--		cmdq->valid_map = bitmap;
--		devm_add_action(smmu->dev, arm_smmu_cmdq_free_bitmap, bitmap);
--	}
-+	cmdq->valid_map = (atomic_long_t *)devm_bitmap_zalloc(smmu->dev, nents,
-+							      GFP_KERNEL);
-+	if (!cmdq->valid_map)
-+		return -ENOMEM;
- 
--	return ret;
-+	return 0;
- }
- 
- static int arm_smmu_init_queues(struct arm_smmu_device *smmu)
--- 
-2.32.0
-
+I'd probably yank the command-line option out of this series, or stick
+it in a separate patch that you tack on to the end.

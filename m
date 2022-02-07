@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF9B74ABA5E
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:28:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 833704ABC4C
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:46:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245755AbiBGLXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:23:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56674 "EHLO
+        id S1385356AbiBGLbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:31:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379451AbiBGLSB (ORCPT
+        with ESMTP id S1382702AbiBGLUo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:18:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 374DCC0401C9;
-        Mon,  7 Feb 2022 03:17:54 -0800 (PST)
+        Mon, 7 Feb 2022 06:20:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63CB3C03E903;
+        Mon,  7 Feb 2022 03:20:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C42FB61314;
-        Mon,  7 Feb 2022 11:17:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B92BC340EB;
-        Mon,  7 Feb 2022 11:17:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6593461468;
+        Mon,  7 Feb 2022 11:20:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47BACC340F0;
+        Mon,  7 Feb 2022 11:20:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232673;
-        bh=n/RJ37BfvaQCe9xTuupKRuHFLifrohdspvASD97qDXA=;
+        s=korg; t=1644232817;
+        bh=p/9Eah5nhtugNJaw6mXassHwYlybfO93r0QZ0+5hfdo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zB9N5OMBvkgHAq6S8u+kH9eBYcFFLTFVglAuKoiToCTRgWPnMwiNnOyykRch/6BHO
-         UgsVJCh1o82O+nbjbuOnoJVYFugdyhr5OgMi/bOojBX8T7N5cSaBnfxMHB51pgAJ6H
-         BORxEjvXQOtOSELaTNt7AvIh7jdwofQTKPHvab7A=
+        b=jtqrvA1LFzS/DFL6sNHGarqqIGZJoQAQH1Xww+tzlXd5pB9oGZictZ3MIKFI8MNVF
+         yaz9pek2fjlVC7KYkYKt4YCR/UUZOTHagFHwXyU01mi33sATuUke/RXwVNBBMdybAK
+         JZHMiLsClMZ7rwo6iONv2M4cI7q78EygD/FhzCJ8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Whitney <enwlinux@gmail.com>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        Jan Kara <jack@suse.cz>, Theodore Tso <tytso@mit.edu>,
-        stable@kernel.org
-Subject: [PATCH 4.19 86/86] ext4: fix error handling in ext4_restore_inline_data()
-Date:   Mon,  7 Feb 2022 12:06:49 +0100
-Message-Id: <20220207103800.504129882@linuxfoundation.org>
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH 5.4 34/44] ASoC: cpcap: Check for NULL pointer after calling of_get_child_by_name
+Date:   Mon,  7 Feb 2022 12:06:50 +0100
+Message-Id: <20220207103754.262182914@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103757.550973048@linuxfoundation.org>
-References: <20220207103757.550973048@linuxfoundation.org>
+In-Reply-To: <20220207103753.155627314@linuxfoundation.org>
+References: <20220207103753.155627314@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,60 +54,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ritesh Harjani <riteshh@linux.ibm.com>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-commit 897026aaa73eb2517dfea8d147f20ddb0b813044 upstream.
+commit f7a6021aaf02088870559f82fc13c58cda7fea1a upstream.
 
-While running "./check -I 200 generic/475" it sometimes gives below
-kernel BUG(). Ideally we should not call ext4_write_inline_data() if
-ext4_create_inline_data() has failed.
+If the device does not exist, of_get_child_by_name() will return NULL
+pointer.
+And devm_snd_soc_register_component() does not check it.
+Also, I have noticed that cpcap_codec_driver has not been used yet.
+Therefore, it should be better to check it in order to avoid the future
+dereference of the NULL pointer.
 
-<log snip>
-[73131.453234] kernel BUG at fs/ext4/inline.c:223!
-
-<code snip>
- 212 static void ext4_write_inline_data(struct inode *inode, struct ext4_iloc *iloc,
- 213                                    void *buffer, loff_t pos, unsigned int len)
- 214 {
-<...>
- 223         BUG_ON(!EXT4_I(inode)->i_inline_off);
- 224         BUG_ON(pos + len > EXT4_I(inode)->i_inline_size);
-
-This patch handles the error and prints out a emergency msg saying potential
-data loss for the given inode (since we couldn't restore the original
-inline_data due to some previous error).
-
-[ 9571.070313] EXT4-fs (dm-0): error restoring inline_data for inode -- potential data loss! (inode 1703982, error -30)
-
-Reported-by: Eric Whitney <enwlinux@gmail.com>
-Signed-off-by: Ritesh Harjani <riteshh@linux.ibm.com>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Link: https://lore.kernel.org/r/9f4cd7dfd54fa58ff27270881823d94ddf78dd07.1642416995.git.riteshh@linux.ibm.com
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Cc: stable@kernel.org
+Fixes: f6cdf2d3445d ("ASoC: cpcap: new codec")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Link: https://lore.kernel.org/r/20220111025048.524134-1-jiasheng@iscas.ac.cn
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ext4/inline.c |   10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ sound/soc/codecs/cpcap.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/fs/ext4/inline.c
-+++ b/fs/ext4/inline.c
-@@ -1125,7 +1125,15 @@ static void ext4_restore_inline_data(han
- 				     struct ext4_iloc *iloc,
- 				     void *buf, int inline_size)
+--- a/sound/soc/codecs/cpcap.c
++++ b/sound/soc/codecs/cpcap.c
+@@ -1541,6 +1541,8 @@ static int cpcap_codec_probe(struct plat
  {
--	ext4_create_inline_data(handle, inode, inline_size);
-+	int ret;
-+
-+	ret = ext4_create_inline_data(handle, inode, inline_size);
-+	if (ret) {
-+		ext4_msg(inode->i_sb, KERN_EMERG,
-+			"error restoring inline_data for inode -- potential data loss! (inode %lu, error %d)",
-+			inode->i_ino, ret);
-+		return;
-+	}
- 	ext4_write_inline_data(inode, iloc, buf, 0, inline_size);
- 	ext4_set_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA);
- }
+ 	struct device_node *codec_node =
+ 		of_get_child_by_name(pdev->dev.parent->of_node, "audio-codec");
++	if (!codec_node)
++		return -ENODEV;
+ 
+ 	pdev->dev.of_node = codec_node;
+ 
 
 

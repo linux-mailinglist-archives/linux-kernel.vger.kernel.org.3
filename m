@@ -2,92 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80BDA4ACCFC
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:06:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A8B64ACCE5
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:06:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344390AbiBHBDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 20:03:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34760 "EHLO
+        id S1344440AbiBHBDd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 20:03:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233614AbiBGW7v (ORCPT
+        with ESMTP id S237905AbiBGXAr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 17:59:51 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BA325C061355
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 14:59:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644274789;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Bnau9CF87D4QKdmu69lAwZ00eJ3tC98GJMWAAtS2j3I=;
-        b=f6BH0r4C4f6VC4hTyeXCg+HO6s2D0wJcJmouQAoI6P3w23FPUDeuo+MT/mkzwGiuYcmAEw
-        iqyIV4yAMhgyf8Ot2Uf0pVWuXxKUdxNxJ3Us7eiYab8T/c6f6m9LNioCV+wVypouCnDKzN
-        CuOiPWLLrav8a4JaShiUS/tGaPgp6KI=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-623-kW419P1ZMaWwRRHYI5XK4g-1; Mon, 07 Feb 2022 17:59:48 -0500
-X-MC-Unique: kW419P1ZMaWwRRHYI5XK4g-1
-Received: by mail-ed1-f70.google.com with SMTP id 30-20020a508e5e000000b0040f6642e814so2649681edx.19
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 14:59:48 -0800 (PST)
+        Mon, 7 Feb 2022 18:00:47 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5ADDC061355
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 15:00:46 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id n32so15594572pfv.11
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 15:00:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=4ssq4yNo39SDas6BkL3oT8hb7H7gYR4kWKE8uNUgLE4=;
+        b=aIYxgg61HPWoxIUwjIKs0S5jNPjG1J4R47Q4ppiPWrfD/NoOpJuf8R2tVizBaJllJ6
+         nwpr9CnMW0ZQ7PgmNDMpy3BKO1xECJibComaSEhc2QnZ9iyDGC7X4JEQ1U/nMGS7qxUk
+         qmgQWwprlFAgX6SzqI6s3OA/JglXYNKEuIqUnUbQUNValgoAPzbvstUJOn5oWr+PcGmt
+         XydZFJJWRaqWlyNp2uko+KsAyJPjAt9jByjAHrUL28hVgUamOYw40gZBJhus5lA0/HJb
+         wFGopc/rowmDxmJXQS039g1PFABK5QquUfEXiTuYabrMFruGQTcPQOYxuDVGBkblWxbU
+         bL/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Bnau9CF87D4QKdmu69lAwZ00eJ3tC98GJMWAAtS2j3I=;
-        b=mPdNlENwNJVwaML+BiE3l3JgB6xVjymrSsrqoi7BEpyGwOY7+0Fiqrd2mKKw2me90J
-         qhQptn6URqasF97WgbR1Co1iTHDfn7QfEQ6Y6wtmEYWLal3F4HOa94QPPDumlbw4zE2W
-         QkXWz5cOYBt8oCtzKCQzoiFkpktmAmric7X8TTqWxEQIJxM8bRK7uYFHumEHh3daKZEd
-         U6XrFA8Sf8uf2yNWOLmZEA9V0okWkT+fBIV0DDwtQrypg0rmnYMwUDDUFQnhm8gwKep6
-         JLX9mof/V2Hf0W2hnfK/NBG8SSf/9mfAlKZtpAtfCEuuCu4fiy47tgfRAm6VfpjAp7Zo
-         p/VA==
-X-Gm-Message-State: AOAM530tFR8KJWOKw+yF2VQ9TxdoQfkceOaEPY2he1OQ+VGh6Il6xHAf
-        VibcwcAalkacK4MujLPWFg3R3IacNw+WB74cPa451DhZ1se5EifuXU65nHSe3DjcVOJ7fQvU42W
-        uLCC0fm4QR6xCGZP5zN/tKK4B
-X-Received: by 2002:a17:906:9be4:: with SMTP id de36mr1454949ejc.228.1644274787601;
-        Mon, 07 Feb 2022 14:59:47 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy8MWWraIY8T3/LyKPGWgEowe7FNqRNvfwZuGjrKHYEhXBRtbBb3xXR2xxiJSYMAdjMBIKuSA==
-X-Received: by 2002:a17:906:9be4:: with SMTP id de36mr1454932ejc.228.1644274787439;
-        Mon, 07 Feb 2022 14:59:47 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id cz12sm833369edb.30.2022.02.07.14.59.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Feb 2022 14:59:46 -0800 (PST)
-Message-ID: <2b1d142e-e06c-3f38-32f5-d14de7dca289@redhat.com>
-Date:   Mon, 7 Feb 2022 23:59:45 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4ssq4yNo39SDas6BkL3oT8hb7H7gYR4kWKE8uNUgLE4=;
+        b=oYNDj93a3Py969LR3UMCI+LPhNaEnSmPihhb17fG1tZ0z02nQTRYnIzLiAYf1sbV5f
+         XJiDQkf5d5WDX4Vt+HsE/vRZ+04Bf8pI0l0HuWCf5/NqXkLCxnS/4RovTJaln+LVeNr0
+         qE2wYm5TJIZ5vaET64W60Y3PSfJxDZuPMneULp6fJjg3I1/6od1wAVCtHI+myGSfO/Oj
+         14vfD3pTX5wGuVa/N8Jl9qjDIBP5ZRBLTVqOLLQkESCMOlPS5KOuW6N97a6OAPvuoCMc
+         mRjrOMo0MS5+Dwj35zU6iU8L1X1wdfr3J7Pqw9QuTzHHKXW82UDBI/auNojKR1u9TgIH
+         cKwA==
+X-Gm-Message-State: AOAM533gtvO0ee2AfDQRqsVMK33sRKluUj4tGlY0Mfld/XZDewAQKMIL
+        gqL8LrGZ+vjKSFtXY7f7FI90OA==
+X-Google-Smtp-Source: ABdhPJxDt2Bx0sSctwiwvIZpSWaYgpGzNcVgYODKJKciJnR8lRL/MJMXOlJI4y2JlDQZWj1uTHFnKw==
+X-Received: by 2002:a63:2543:: with SMTP id l64mr871382pgl.302.1644274845958;
+        Mon, 07 Feb 2022 15:00:45 -0800 (PST)
+Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
+        by smtp.gmail.com with ESMTPSA id u2sm13678446pfk.15.2022.02.07.15.00.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Feb 2022 15:00:45 -0800 (PST)
+Date:   Mon, 7 Feb 2022 23:00:41 +0000
+From:   David Matlack <dmatlack@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        seanjc@google.com, vkuznets@redhat.com
+Subject: Re: [PATCH 21/23] KVM: MMU: store shadow_root_level into mmu_role
+Message-ID: <YgGkmWg7MfEIkjxf@google.com>
+References: <20220204115718.14934-1-pbonzini@redhat.com>
+ <20220204115718.14934-22-pbonzini@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v1 1/2] x86/kvm/fpu: Mask guest fpstate->xfeatures with
- guest_supported_xcr0
-Content-Language: en-US
-To:     Leonardo Bras Soares Passos <leobras@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220205081658.562208-1-leobras@redhat.com>
- <20220205081658.562208-2-leobras@redhat.com>
- <f2b0cac2-2f8a-60e8-616c-73825b3f62a6@redhat.com>
- <CAJ6HWG7DV-AeWyXxGwMMV61BejcCdpTc=U+4U6eY4gx4hfhP-g@mail.gmail.com>
- <8bf8ba96-94a8-663a-ccbf-ffeab087c370@redhat.com>
- <CAJ6HWG5sD06=ZMtrcSJ+O3ZH0xVeR7gC8+9o5hq+evXh43Vn_w@mail.gmail.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <CAJ6HWG5sD06=ZMtrcSJ+O3ZH0xVeR7gC8+9o5hq+evXh43Vn_w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220204115718.14934-22-pbonzini@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,37 +72,263 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/7/22 23:45, Leonardo Bras Soares Passos wrote:
-> On Mon, Feb 7, 2022 at 6:00 PM Paolo Bonzini <pbonzini@redhat.com> wrote:
->>
->> On 2/7/22 21:24, Leonardo Bras Soares Passos wrote:
->>>> With this patch,
->>>> we have to reason about the effect of calling KVM_SET_CPUID2 twice calls
->>>> back to back.  I think an "&=" would be wrong in that case.
->>>
->>> So, you suggest something like this ?
->>>
->>> vcpu->arch.guest_fpu.fpstate->xfeatures =
->>>          fpu_user_cfg.default_features & vcpu->arch.guest_supported_xcr0;
->>>
->>
->> Yes, but you need to change user_xfeatures instead of xfeatures.
->> KVM_GET_XSAVE and KVM_SET_XSAVE will take it into account automatically:
->>
->> - KVM_GET_XSAVE: fpu_copy_guest_fpstate_to_uabi -> __copy_xstate_to_uabi_buf
->>
->> - KVM_SET_XSAVE: fpu_copy_uabi_to_guest_fpstate ->
->> copy_uabi_from_kernel_to_xstate -> copy_uabi_to_xstate ->
->> validate_user_xstate_buffer
+On Fri, Feb 04, 2022 at 06:57:16AM -0500, Paolo Bonzini wrote:
+> mmu_role.level is always the same value as shadow_level:
+> 
+> - kvm_mmu_get_tdp_level(vcpu) when going through init_kvm_tdp_mmu
+> 
+> - the level argument when going through kvm_init_shadow_ept_mmu
+> 
+> - it's assigned directly from new_role.base.level when going
+>   through shadow_mmu_init_context
+> 
+> Remove the duplication and get the level directly from the role.
+> 
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+
+nit: How about the following for the shortlog?
+
+KVM: MMU: Replace shadow_root_level with mmu_role.level
+
+Otherwise,
+
+Reviewed-by: David Matlack <dmatlack@google.com>
+
+> ---
+>  arch/x86/include/asm/kvm_host.h |  1 -
+>  arch/x86/kvm/mmu.h              |  2 +-
+>  arch/x86/kvm/mmu/mmu.c          | 36 +++++++++++++++------------------
+>  arch/x86/kvm/mmu/tdp_mmu.c      |  2 +-
+>  arch/x86/kvm/svm/svm.c          |  2 +-
+>  arch/x86/kvm/vmx/vmx.c          |  2 +-
+>  6 files changed, 20 insertions(+), 25 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index b0085c54786c..867fc82f1de5 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -433,7 +433,6 @@ struct kvm_mmu {
+>  	union kvm_mmu_role cpu_role;
+>  	union kvm_mmu_page_role mmu_role;
+>  	u8 root_level;
+> -	u8 shadow_root_level;
+>  	bool direct_map;
+>  	struct kvm_mmu_root_info prev_roots[KVM_MMU_NUM_PREV_ROOTS];
+>  
+> diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
+> index 51faa2c76ca5..43b99308cb0e 100644
+> --- a/arch/x86/kvm/mmu.h
+> +++ b/arch/x86/kvm/mmu.h
+> @@ -112,7 +112,7 @@ static inline void kvm_mmu_load_pgd(struct kvm_vcpu *vcpu)
+>  		return;
+>  
+>  	static_call(kvm_x86_load_mmu_pgd)(vcpu, root_hpa,
+> -					  vcpu->arch.mmu->shadow_root_level);
+> +					  vcpu->arch.mmu->mmu_role.level);
+>  }
+>  
+>  struct kvm_page_fault {
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 6f9d876ce429..4d1fa87718f8 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -2143,7 +2143,7 @@ static void shadow_walk_init_using_root(struct kvm_shadow_walk_iterator *iterato
+>  {
+>  	iterator->addr = addr;
+>  	iterator->shadow_addr = root;
+> -	iterator->level = vcpu->arch.mmu->shadow_root_level;
+> +	iterator->level = vcpu->arch.mmu->mmu_role.level;
+>  
+>  	if (iterator->level >= PT64_ROOT_4LEVEL &&
+>  	    vcpu->arch.mmu->root_level < PT64_ROOT_4LEVEL &&
+> @@ -3254,7 +3254,7 @@ void kvm_mmu_free_roots(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu,
+>  					   &invalid_list);
+>  
+>  	if (free_active_root) {
+> -		if (mmu->shadow_root_level >= PT64_ROOT_4LEVEL &&
+> +		if (mmu->mmu_role.level >= PT64_ROOT_4LEVEL &&
+>  		    (mmu->root_level >= PT64_ROOT_4LEVEL || mmu->direct_map)) {
+>  			mmu_free_root_page(kvm, &mmu->root_hpa, &invalid_list);
+>  		} else if (mmu->pae_root) {
+> @@ -3329,7 +3329,7 @@ static hpa_t mmu_alloc_root(struct kvm_vcpu *vcpu, gfn_t gfn, gva_t gva,
+>  static int mmu_alloc_direct_roots(struct kvm_vcpu *vcpu)
+>  {
+>  	struct kvm_mmu *mmu = vcpu->arch.mmu;
+> -	u8 shadow_root_level = mmu->shadow_root_level;
+> +	u8 shadow_root_level = mmu->mmu_role.level;
+>  	hpa_t root;
+>  	unsigned i;
+>  	int r;
+> @@ -3479,7 +3479,7 @@ static int mmu_alloc_shadow_roots(struct kvm_vcpu *vcpu)
+>  	 */
+>  	if (mmu->root_level >= PT64_ROOT_4LEVEL) {
+>  		root = mmu_alloc_root(vcpu, root_gfn, 0,
+> -				      mmu->shadow_root_level, false);
+> +				      mmu->mmu_role.level, false);
+>  		mmu->root_hpa = root;
+>  		goto set_root_pgd;
+>  	}
+> @@ -3495,7 +3495,7 @@ static int mmu_alloc_shadow_roots(struct kvm_vcpu *vcpu)
+>  	 * the shadow page table may be a PAE or a long mode page table.
+>  	 */
+>  	pm_mask = PT_PRESENT_MASK | shadow_me_mask;
+> -	if (mmu->shadow_root_level >= PT64_ROOT_4LEVEL) {
+> +	if (mmu->mmu_role.level >= PT64_ROOT_4LEVEL) {
+>  		pm_mask |= PT_ACCESSED_MASK | PT_WRITABLE_MASK | PT_USER_MASK;
+>  
+>  		if (WARN_ON_ONCE(!mmu->pml4_root)) {
+> @@ -3504,7 +3504,7 @@ static int mmu_alloc_shadow_roots(struct kvm_vcpu *vcpu)
+>  		}
+>  		mmu->pml4_root[0] = __pa(mmu->pae_root) | pm_mask;
+>  
+> -		if (mmu->shadow_root_level == PT64_ROOT_5LEVEL) {
+> +		if (mmu->mmu_role.level == PT64_ROOT_5LEVEL) {
+>  			if (WARN_ON_ONCE(!mmu->pml5_root)) {
+>  				r = -EIO;
+>  				goto out_unlock;
+> @@ -3529,9 +3529,9 @@ static int mmu_alloc_shadow_roots(struct kvm_vcpu *vcpu)
+>  		mmu->pae_root[i] = root | pm_mask;
+>  	}
+>  
+> -	if (mmu->shadow_root_level == PT64_ROOT_5LEVEL)
+> +	if (mmu->mmu_role.level == PT64_ROOT_5LEVEL)
+>  		mmu->root_hpa = __pa(mmu->pml5_root);
+> -	else if (mmu->shadow_root_level == PT64_ROOT_4LEVEL)
+> +	else if (mmu->mmu_role.level == PT64_ROOT_4LEVEL)
+>  		mmu->root_hpa = __pa(mmu->pml4_root);
+>  	else
+>  		mmu->root_hpa = __pa(mmu->pae_root);
+> @@ -3547,7 +3547,7 @@ static int mmu_alloc_shadow_roots(struct kvm_vcpu *vcpu)
+>  static int mmu_alloc_special_roots(struct kvm_vcpu *vcpu)
+>  {
+>  	struct kvm_mmu *mmu = vcpu->arch.mmu;
+> -	bool need_pml5 = mmu->shadow_root_level > PT64_ROOT_4LEVEL;
+> +	bool need_pml5 = mmu->mmu_role.level > PT64_ROOT_4LEVEL;
+>  	u64 *pml5_root = NULL;
+>  	u64 *pml4_root = NULL;
+>  	u64 *pae_root;
+> @@ -3559,7 +3559,7 @@ static int mmu_alloc_special_roots(struct kvm_vcpu *vcpu)
+>  	 * on demand, as running a 32-bit L1 VMM on 64-bit KVM is very rare.
+>  	 */
+>  	if (mmu->direct_map || mmu->root_level >= PT64_ROOT_4LEVEL ||
+> -	    mmu->shadow_root_level < PT64_ROOT_4LEVEL)
+> +	    mmu->mmu_role.level < PT64_ROOT_4LEVEL)
+>  		return 0;
+>  
+>  	/*
+> @@ -4145,7 +4145,7 @@ static bool fast_pgd_switch(struct kvm_vcpu *vcpu, gpa_t new_pgd,
+>  	 * having to deal with PDPTEs. We may add support for 32-bit hosts/VMs
+>  	 * later if necessary.
+>  	 */
+> -	if (mmu->shadow_root_level >= PT64_ROOT_4LEVEL &&
+> +	if (mmu->mmu_role.level >= PT64_ROOT_4LEVEL &&
+>  	    mmu->root_level >= PT64_ROOT_4LEVEL)
+>  		return cached_root_available(vcpu, new_pgd, new_role);
+>  
+> @@ -4408,17 +4408,17 @@ static void reset_shadow_zero_bits_mask(struct kvm_vcpu *vcpu,
+>  	struct rsvd_bits_validate *shadow_zero_check;
+>  	int i;
+>  
+> -	WARN_ON_ONCE(context->shadow_root_level < PT32E_ROOT_LEVEL);
+> +	WARN_ON_ONCE(context->mmu_role.level < PT32E_ROOT_LEVEL);
+>  
+>  	shadow_zero_check = &context->shadow_zero_check;
+>  	__reset_rsvds_bits_mask(shadow_zero_check, reserved_hpa_bits(),
+> -				context->shadow_root_level, uses_nx,
+> +				context->mmu_role.level, uses_nx,
+>  				guest_can_use_gbpages(vcpu), is_pse, is_amd);
+>  
+>  	if (!shadow_me_mask)
+>  		return;
+>  
+> -	for (i = context->shadow_root_level; --i >= 0;) {
+> +	for (i = context->mmu_role.level; --i >= 0;) {
+>  		shadow_zero_check->rsvd_bits_mask[0][i] &= ~shadow_me_mask;
+>  		shadow_zero_check->rsvd_bits_mask[1][i] &= ~shadow_me_mask;
+>  	}
+> @@ -4445,7 +4445,7 @@ reset_tdp_shadow_zero_bits_mask(struct kvm_mmu *context)
+>  
+>  	if (boot_cpu_is_amd())
+>  		__reset_rsvds_bits_mask(shadow_zero_check, reserved_hpa_bits(),
+> -					context->shadow_root_level, false,
+> +					context->mmu_role.level, false,
+>  					boot_cpu_has(X86_FEATURE_GBPAGES),
+>  					false, true);
+>  	else
+> @@ -4456,7 +4456,7 @@ reset_tdp_shadow_zero_bits_mask(struct kvm_mmu *context)
+>  	if (!shadow_me_mask)
+>  		return;
+>  
+> -	for (i = context->shadow_root_level; --i >= 0;) {
+> +	for (i = context->mmu_role.level; --i >= 0;) {
+>  		shadow_zero_check->rsvd_bits_mask[0][i] &= ~shadow_me_mask;
+>  		shadow_zero_check->rsvd_bits_mask[1][i] &= ~shadow_me_mask;
+>  	}
+> @@ -4735,7 +4735,6 @@ static void init_kvm_tdp_mmu(struct kvm_vcpu *vcpu, union kvm_mmu_role cpu_role)
+>  	context->page_fault = kvm_tdp_page_fault;
+>  	context->sync_page = nonpaging_sync_page;
+>  	context->invlpg = NULL;
+> -	context->shadow_root_level = kvm_mmu_get_tdp_level(vcpu);
+>  	context->direct_map = true;
+>  	context->get_guest_pgd = get_cr3;
+>  	context->get_pdptr = kvm_pdptr_read;
+> @@ -4773,7 +4772,6 @@ static void shadow_mmu_init_context(struct kvm_vcpu *vcpu, struct kvm_mmu *conte
+>  	context->root_level = cpu_role.base.level;
+>  
+>  	reset_guest_paging_metadata(vcpu, context);
+> -	context->shadow_root_level = mmu_role.level;
+>  }
+>  
+>  static void kvm_init_shadow_mmu(struct kvm_vcpu *vcpu,
+> @@ -4852,8 +4850,6 @@ void kvm_init_shadow_ept_mmu(struct kvm_vcpu *vcpu, bool execonly,
+>  		context->cpu_role.as_u64 = new_role.as_u64;
+>  		context->mmu_role.word = new_role.base.word;
+>  
+> -		context->shadow_root_level = level;
+> -
+>  		context->page_fault = ept_page_fault;
+>  		context->gva_to_gpa = ept_gva_to_gpa;
+>  		context->sync_page = ept_sync_page;
+> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> index dd4c78833016..9fb6d983bae9 100644
+> --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> @@ -1697,7 +1697,7 @@ int kvm_tdp_mmu_get_walk(struct kvm_vcpu *vcpu, u64 addr, u64 *sptes,
+>  	gfn_t gfn = addr >> PAGE_SHIFT;
+>  	int leaf = -1;
+>  
+> -	*root_level = vcpu->arch.mmu->shadow_root_level;
+> +	*root_level = vcpu->arch.mmu->mmu_role.level;
+>  
+>  	tdp_mmu_for_each_pte(iter, mmu, gfn, gfn + 1) {
+>  		leaf = iter.level;
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index 7b5345a66117..5a1d552b535b 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -3815,7 +3815,7 @@ static void svm_load_mmu_pgd(struct kvm_vcpu *vcpu, hpa_t root_hpa,
+>  		hv_track_root_tdp(vcpu, root_hpa);
+>  
+>  		cr3 = vcpu->arch.cr3;
+> -	} else if (vcpu->arch.mmu->shadow_root_level >= PT64_ROOT_4LEVEL) {
+> +	} else if (vcpu->arch.mmu->mmu_role.level >= PT64_ROOT_4LEVEL) {
+>  		cr3 = __sme_set(root_hpa) | kvm_get_active_pcid(vcpu);
+>  	} else {
+>  		/* PCID in the guest should be impossible with a 32-bit MMU. */
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index 8ac5a6fa7720..5e2c865a04ff 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -2965,7 +2965,7 @@ static void vmx_flush_tlb_current(struct kvm_vcpu *vcpu)
+>  
+>  	if (enable_ept)
+>  		ept_sync_context(construct_eptp(vcpu, root_hpa,
+> -						mmu->shadow_root_level));
+> +						mmu->mmu_role.level));
+>  	else
+>  		vpid_sync_context(vmx_get_current_vpid(vcpu));
+>  }
+> -- 
+> 2.31.1
 > 
 > 
-> Ok, I understand how this replaces patch 2/2, so no issue on that.
-> 
-> About patch 1/2,  you suggest that instead of fixing what we save in
-> the regs buffer, we fix only what we want to return to the user when
-> they call KVM_GET_XSAVE, is that correct?
-
-Yes, exactly.
-
-Paolo
-

@@ -2,108 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ADC54AC0FC
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 15:21:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 852A84AC0EF
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 15:21:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390160AbiBGOTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 09:19:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52594 "EHLO
+        id S242634AbiBGOSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 09:18:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390596AbiBGN7D (ORCPT
+        with ESMTP id S1390703AbiBGN7q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 08:59:03 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1F2FC043189;
-        Mon,  7 Feb 2022 05:59:02 -0800 (PST)
-Received: from fraeml703-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JsnhL2S46z67wM9;
-        Mon,  7 Feb 2022 21:54:58 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml703-chm.china.huawei.com (10.206.15.52) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.21; Mon, 7 Feb 2022 14:58:59 +0100
-Received: from localhost (10.202.226.41) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Mon, 7 Feb
- 2022 13:58:59 +0000
-Date:   Mon, 7 Feb 2022 13:58:58 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Massimo Toscanelli <massimo.toscanelli@leica-geosystems.com>
-CC:     <linux-kernel@vger.kernel.org>, <jic23@kernel.org>,
-        <lars@metafoo.de>, <linus.walleij@linaro.org>,
-        <caihuoqing@baidu.com>, <aardelean@deviqon.com>,
-        <andy.shevchenko@gmail.com>, <hdegoede@redhat.com>,
-        <Qing-wu.Li@leica-geosystems.com.cn>, <stephan@gerhold.net>,
-        <linux-iio@vger.kernel.org>,
-        <bsp-development.geo@leica-geosystems.com>
-Subject: Re: [PATCH RESEND 0/2] Solve data access delay of ST sensors
-Message-ID: <20220207135858.00000745@Huawei.com>
-In-Reply-To: <20220207090443.3710425-1-massimo.toscanelli@leica-geosystems.com>
-References: <20220204192552.428433-1-massimo.toscanelli@leica-geosystems.com>
-        <20220207090443.3710425-1-massimo.toscanelli@leica-geosystems.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Mon, 7 Feb 2022 08:59:46 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5DE8C0401C1;
+        Mon,  7 Feb 2022 05:59:45 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id r29so7007928wrr.13;
+        Mon, 07 Feb 2022 05:59:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=mcWbPuUD9zG5TmO7Q6+xyivnOj6cc3M0HEAfvxU+7N0=;
+        b=itcITwBvp8aqCL8K9Inahp3hlAut70WgrUe2y7ZIrA9VKxPz5YUyvnE3a6pyDhe7A5
+         9vh8ylalPe4+CfW7VnQE6FYt0nWmKLEUUimUbA5rYZRjK6R/yR/rnCzDMvMwOGqwR/Zi
+         hZMn8ocr5DmpXhxBGcPQUF59bHnfxyRNzw9w21vKyd8f6n3YNIgvLlDsCdVZB41xbJNh
+         rOJIDTfuOSzYS4lLL/sIW6fSo6jCT0OF5a+UjFIc0coPFk15bf2HDT8tVKRWAPjCj7yU
+         YgAlaJkL6dDuWNxsVtQu0zHa2myy9fMZ2AJufcculCPCgrzfcE7r/xpAKnBJUON6DL2u
+         CeEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=mcWbPuUD9zG5TmO7Q6+xyivnOj6cc3M0HEAfvxU+7N0=;
+        b=j3Gl14xoooPcjP0mo/aGRjYZL25QLYbD8byGfeFDpuxkgVYIOxjTyV1EpWTsHp97x3
+         9BG808HY0RBpvkxum89K7bU4RcCqKN9ay+VFYVQ9Hh7M7BryB2a1DApk4pR5hBB9OOdX
+         ioGI0nLq+kcxC1UgDfVzdduWUmI+vK+lzSQuR4+CNU+QFuLAtOp/CF2YWEFUDjw1FfX5
+         LmbreM0KP1wZSVFa8gZ52vLlgvjaJeCJP3jDCNgtajD6qL0UumEO7PfunoNbN4y3TeVH
+         D3iujowfkeqao+weeGKMWzUlWXX7fRQ8CPDmelrNC4y5ZllZxMbb64ibm5TOGJa2O4h7
+         1/+A==
+X-Gm-Message-State: AOAM533WlbpllNtbtjjP7s2C9OjNbhHQkAMrWVyQy0y9XUaqRwwV/4bZ
+        t7vsNoT4FMNpVxyXuWUq7Yfodq/3WGA=
+X-Google-Smtp-Source: ABdhPJwoYphSKekOyNfRZroxq98own7clIJ9kHg2JAwpfGVrwxrfnBnu7pYQNCeL7DH24pgwwfvC9g==
+X-Received: by 2002:adf:f312:: with SMTP id i18mr9978656wro.441.1644242384384;
+        Mon, 07 Feb 2022 05:59:44 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id x7sm9910183wrt.77.2022.02.07.05.59.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Feb 2022 05:59:43 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] iio: adc: cpcap-adc: remove redundant assignment to variable cal_data_diff
+Date:   Mon,  7 Feb 2022 13:59:43 +0000
+Message-Id: <20220207135943.340629-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.41]
-X-ClientProxiedBy: lhreml733-chm.china.huawei.com (10.201.108.84) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon,  7 Feb 2022 09:04:41 +0000
-Massimo Toscanelli <massimo.toscanelli@leica-geosystems.com> wrote:
+The variable cal_data_diff is being assigned a value that is never read,
+it is being re-assigned later on with a new value in both paths of an
+if statement. The assignment is redundant, so remove it.
 
-> Reading raw data from ST sensors implies enabling the device and
-> waiting for its activation.
-> This leads to significant delays every time the data is fetched,
-> especially if the operation has to be repeated.
-> 
-> The introduction of the 'always_on' flag as sysfs attribute can
-> solve this issue, by allowing the user to keep the device enabled
-> during the entire read session and therefore, to perform a much
-> faster data access.
-> 
-> This implementation has been already tested on a ST magnetometer.
-> 
-> I forgot to add maintainers as recepients, so I resend the patches.
-> 
-> Massimo Toscanelli (2):
->   iio: st_sensors: add always_on flag
->   iio: st_magn_core.c: activate always_on attribute
-> 
->  .../iio/common/st_sensors/st_sensors_core.c   | 85 +++++++++++++++++--
->  drivers/iio/magnetometer/st_magn_core.c       |  2 +
->  include/linux/iio/common/st_sensors.h         | 14 +++
->  3 files changed, 96 insertions(+), 5 deletions(-)
-> 
-> 
-> base-commit: dcb85f85fa6f142aae1fe86f399d4503d49f2b60
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/iio/adc/cpcap-adc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Hi Massimo,
+diff --git a/drivers/iio/adc/cpcap-adc.c b/drivers/iio/adc/cpcap-adc.c
+index 40e59f4c95bc..b6c4ef70484e 100644
+--- a/drivers/iio/adc/cpcap-adc.c
++++ b/drivers/iio/adc/cpcap-adc.c
+@@ -474,7 +474,7 @@ static int cpcap_adc_calibrate_one(struct cpcap_adc *ddata,
+ 	for (i = 0; i < CPCAP_ADC_MAX_RETRIES; i++) {
+ 		calibration_data[0]  = 0;
+ 		calibration_data[1]  = 0;
+-		cal_data_diff = 0;
++
+ 		cpcap_adc_setup_calibrate(ddata, channel);
+ 		error = regmap_read(ddata->reg, calibration_register,
+ 				    &calibration_data[0]);
+-- 
+2.34.1
 
-The standard approach to avoiding rapid power up and power down cycles
-is to use runtime_pm with autosuspend and a period set at a period
-of perhaps 1 second.  Would that work for you?  You'll pay the costs
-of power up only on the first read after a period of not reading.
-
-Exposing the control to userspace for this sort of thing is normally
-a bad idea because userspace generally has no idea if it should use it
-as there is no clean way of telling userspace the costs of not using
-it (as those will be device specific).
-
-If you have a usecase that requires regular reading you should also
-think about whether using the buffered interface is more appropriate.
-IIRC that will keep these devices powered up continuously whilst
-the buffer is enabled and will provide a lower overhead way of
-reading data than sysfs reads.
-
-Jonathan

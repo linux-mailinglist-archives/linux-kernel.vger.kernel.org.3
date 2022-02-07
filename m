@@ -2,122 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0A874AC45C
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 16:53:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67B574AC45F
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 16:53:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352750AbiBGPvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 10:51:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59614 "EHLO
+        id S1377132AbiBGPvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 10:51:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386614AbiBGPrN (ORCPT
+        with ESMTP id S1356919AbiBGPru (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 10:47:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57565C0401C1
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 07:47:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CEAAFB8105D
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 15:47:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA01DC340EF;
-        Mon,  7 Feb 2022 15:47:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644248830;
-        bh=LdSadHOKGFFrAfu0I2Qkry7wLCE2PrwoIGXW+wZTZtY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=T7B0mK+u3e3kI992aSXF6HWThT+Dt14mr2tDh4CXWp1dCLGuRisy8vuaTrVo8C2t6
-         yAzOMTKry8iNg9WpcQt0GiLfK3hAyjvJlm+3DGXeogx469hSnGlUMWyCE3zjQ+foNJ
-         uhJo4s75lP6YiLkqAbmV+s9H6cBQkg8TLJB+1Ca+OQ52B/cL8Aa/klLVpBYnmuBQUk
-         MjAl+VSE7AP1HRlKpJ9S7f0OhzIV1sZuyIJ7E0m3NA+TV+ufPiqBFxVtsvwaeyqOb7
-         LBjmaGCRXqhkiO8vwEpKM2uk0TjkVgZ+YR4AK8YoZnw+7U93mJOsVFlCD4z7lgdyTL
-         NVsCMO51oVh9g==
-Date:   Mon, 7 Feb 2022 16:47:07 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Marcelo Tosatti <mtosatti@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, Nitesh Lal <nilal@redhat.com>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Christoph Lameter <cl@linux.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alex Belits <abelits@belits.com>, Peter Xu <peterx@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Oscar Shiang <oscar0225@livemail.tw>
-Subject: Re: [patch v11 10/13] KVM: x86: process isolation work from VM-entry
- code path
-Message-ID: <20220207154707.GC526451@lothringen>
-References: <20220204173537.429902988@fedora.localdomain>
- <20220204173554.897857855@fedora.localdomain>
+        Mon, 7 Feb 2022 10:47:50 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3740C0401C1;
+        Mon,  7 Feb 2022 07:47:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=4r4fwg2Jt/Ek25Xo6fonjBQ+D000c2reLDmY5W0tK0o=; b=duJXrWdNEv0Tx43zBxRsTH01w5
+        3+oOJtYgIj6WL2FZsDK+WDaK3EDmy3jtR8u8FwGAm4CiSYyHGzUQx/ZUyi+J18I48I5pHYmUI/9vF
+        qIxLw0Bpyxjz/2If4gs9UXF59hJ7wuJE5YB4OpW7xj/9dtcFPM8ELwTYtN2ccXZmvqWyMl1IAbzrm
+        y0PtkiG6jHSYjznbWBWdQekVumGySSPn4LLlA2NBQwqELo/1BNd1WhCgSbsmiCWRiG9AWFS0h86r4
+        7m4f4uJUD4c92Ivu0Gjeyp0yOSKy17IViVsq6twtC/2/DIcmHz43Z1YHfLOLAeQ6Umh48A1NQMcA7
+        n+HBe/zQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nH6Eu-007oGI-V1; Mon, 07 Feb 2022 15:47:41 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 2BE2E986235; Mon,  7 Feb 2022 16:47:39 +0100 (CET)
+Date:   Mon, 7 Feb 2022 16:47:39 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Ondrej Mosnacek <omosnace@redhat.com>
+Cc:     Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
+        SElinux list <selinux@vger.kernel.org>
+Subject: Re: Semantics vs. usage of mutex_is_locked()
+Message-ID: <20220207154739.GH23216@worktop.programming.kicks-ass.net>
+References: <CAFqZXNt0Xp1j7+hTrV9XZ936Yz+H8Le0pqazhLr3drO0tEzB2w@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220204173554.897857855@fedora.localdomain>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAFqZXNt0Xp1j7+hTrV9XZ936Yz+H8Le0pqazhLr3drO0tEzB2w@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 04, 2022 at 02:35:47PM -0300, Marcelo Tosatti wrote:
-> VM-entry code path is an entry point similar to userspace return
-> when task isolation is concerned.
-> 
-> Call isolation_exit_to_user_mode before VM-enter.
-> 
-> Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
-> 
-> ---
-> v11
-> - Add TIF_TASK_ISOL bit to thread info flags and use it
->   to decide whether to perform task isolation work on
->   return to userspace                                   (Frederic W. Weisbecker)
-> 
->  include/linux/entry-kvm.h |    4 +++-
->  kernel/entry/kvm.c        |   18 ++++++++++++++----
->  2 files changed, 17 insertions(+), 5 deletions(-)
-> 
-> Index: linux-2.6/kernel/entry/kvm.c
-> ===================================================================
-> --- linux-2.6.orig/kernel/entry/kvm.c
-> +++ linux-2.6/kernel/entry/kvm.c
-> @@ -2,6 +2,7 @@
->  
->  #include <linux/entry-kvm.h>
->  #include <linux/kvm_host.h>
-> +#include <linux/task_isolation.h>
->  
->  static int xfer_to_guest_mode_work(struct kvm_vcpu *vcpu, unsigned long ti_work)
->  {
-> @@ -22,6 +23,9 @@ static int xfer_to_guest_mode_work(struc
->  		if (ti_work & _TIF_NOTIFY_RESUME)
->  			tracehook_notify_resume(NULL);
->  
-> +		if (ti_work & _TIF_TASK_ISOL)
-> +			task_isol_exit_to_user_mode();
-> +
->  		ret = arch_xfer_to_guest_mode_handle_work(vcpu, ti_work);
->  		if (ret)
->  			return ret;
-> 
-> 
+On Mon, Feb 07, 2022 at 04:15:27PM +0100, Ondrej Mosnacek wrote:
+> Also, any opinions on the name of the new helper? Perhaps
+> mutex_is_held()? Or mutex_is_locked_by_current()?
 
-Do you need this?
-
-diff --git a/include/linux/entry-kvm.h b/include/linux/entry-kvm.h
-index 07c878d6e323..3588d6071caf 100644
---- a/include/linux/entry-kvm.h
-+++ b/include/linux/entry-kvm.h
-@@ -18,7 +18,7 @@
- 
- #define XFER_TO_GUEST_MODE_WORK						\
- 	(_TIF_NEED_RESCHED | _TIF_SIGPENDING | _TIF_NOTIFY_SIGNAL |	\
--	 _TIF_NOTIFY_RESUME | ARCH_XFER_TO_GUEST_MODE_WORK)
-+	 _TIF_NOTIFY_RESUME | _TIF_TASK_ISOL | ARCH_XFER_TO_GUEST_MODE_WORK)
- 
- struct kvm_vcpu;
- 
+lockdep_assert_held*() and friends work on mutexes just fine.

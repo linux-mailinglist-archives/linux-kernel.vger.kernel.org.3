@@ -2,83 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 283514AC99D
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 20:34:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCF074AC99C
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 20:34:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240154AbiBGTbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 14:31:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51624 "EHLO
+        id S232855AbiBGTdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 14:33:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239977AbiBGT1d (ORCPT
+        with ESMTP id S240570AbiBGTbQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 14:27:33 -0500
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68865C0401DA
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 11:27:32 -0800 (PST)
-Received: by mail-qt1-x832.google.com with SMTP id y8so12833474qtn.8
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 11:27:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=BoyrZhI/SFo2F7HoszDIan4CMWU1RWbm6+Gl19zQGEA=;
-        b=Ch8C10PSNgUgzrJSYUwNmUYPnK3KqD5nVzs8U25K8dQe5Nz0RHnqD34dfcVzOfHQn0
-         Z7A2NrwTV3T8U5qAOPkdl18fdhCkDtt27sDhMF9az9KwL3bhZc1wWsNakacs8mHp4+2i
-         ATHSdkH9LZE8z74Q7FsDuavDIliXPR3QE65Wv381+/ZcyQuEMN7ZFrlis4MW0UWFA66p
-         hAq2I0gQh10LCJLc1hBJhl0b+SX/rRCFuGSDgkT7h5GKbOua68a4YV58mo6/qZ9LpsXw
-         xHl/NBuQ1Pg3+hWr0zmMYM2z5/HBKY5RxkuejNX/FdePkUnSlgZKK24pt/x4bYmxOQsS
-         FISQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=BoyrZhI/SFo2F7HoszDIan4CMWU1RWbm6+Gl19zQGEA=;
-        b=FOduVdFoxQ4kWlAEYnZvnWy8KvrB5L+jraxuFt8UnPqM9Lys6gxtwnxRcT2XMBkerj
-         7cQkm+H+m++7sokBWRfPhBcqYWmBMttNWqliO0QN5bUVafb0N5OLkfcZLxkqtB4tmZVZ
-         5IT2sUdfXja4wALf95XBborP1WhegwRi1f3rzEyUHlzqiJJUhT0mSYgZ3R1sMazrBQYY
-         1EDvdPlHdxxHDWRgu4Sf2fNQKY8nwZKnSXTXbU7gtBmOrjxNNqQZqOqUQlLJ1q2dzU80
-         15p41JmXKciY32g0sokJguGFysIavl4iodMg5Z89LJJzgByKbSiYJzkM4/bDPQ96c/ol
-         D9Cg==
-X-Gm-Message-State: AOAM531NGst26nx58BPPRooRdHKBixqNVW9GH/t50MMp7oRACCqnKGXc
-        xHxKdTFiqymxlNseGxq4Z/9xHw==
-X-Google-Smtp-Source: ABdhPJxE/dHX+9xmPplXl1VvJP7kBTi3tiLgJTGk2+Y/ZJni8J0n6I1+6ACqdKe2xRydNCRf+KVUww==
-X-Received: by 2002:ac8:7ca4:: with SMTP id z4mr750427qtv.526.1644262051598;
-        Mon, 07 Feb 2022 11:27:31 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id de15sm5546110qkb.107.2022.02.07.11.27.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 11:27:31 -0800 (PST)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1nH9fe-000HwP-GM; Mon, 07 Feb 2022 15:27:30 -0400
-Date:   Mon, 7 Feb 2022 15:27:30 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        nvdimm@lists.linux.dev, linux-mm@kvack.org
-Subject: Re: [PATCH 4/8] mm: move free_devmap_managed_page to memremap.c
-Message-ID: <20220207192730.GE49147@ziepe.ca>
-References: <20220207063249.1833066-1-hch@lst.de>
- <20220207063249.1833066-5-hch@lst.de>
+        Mon, 7 Feb 2022 14:31:16 -0500
+Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7454BC0401E2
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 11:31:15 -0800 (PST)
+Received: (wp-smtpd smtp.tlen.pl 30676 invoked from network); 7 Feb 2022 20:31:11 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
+          t=1644262271; bh=NcB9gVIjMBjGgdZ9AjtkcBv3gMoo7EkfWZ8DssZzUZc=;
+          h=Subject:To:Cc:From;
+          b=gVZCqvKDnZVfPgusVMyDK+QwLyDaymw9BcNNOa6OTYRNXvtiuDu6jCuH58VoEv1M3
+           tk8R0vinsLujdFXbUywNyiivhhmoiMhV4j2SXQipxq3wZaly+OkEGvJcxvXuMaqEIq
+           yKhkD0CmidAj351JzJWsqN/ni+FrWH28+Hcqg8fQ=
+Received: from aaem217.neoplus.adsl.tpnet.pl (HELO [192.168.1.22]) (mat.jonczyk@o2.pl@[83.4.116.217])
+          (envelope-sender <mat.jonczyk@o2.pl>)
+          by smtp.tlen.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
+          for <hdegoede@redhat.com>; 7 Feb 2022 20:31:11 +0100
+Message-ID: <b0642e67-7752-8d27-9e67-7e9a493adb08@o2.pl>
+Date:   Mon, 7 Feb 2022 20:31:07 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220207063249.1833066-5-hch@lst.de>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH 1/2] x86/Kconfig: move and modify CONFIG_I8K
+Content-Language: en-GB
+To:     Hans de Goede <hdegoede@redhat.com>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-hwmon@vger.kernel.org
+Cc:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Mark Gross <markgross@kernel.org>
+References: <20220207182940.242838-1-mat.jonczyk@o2.pl>
+ <43bfd6d9-58a3-6f9c-0848-4ef147552afb@redhat.com>
+From:   =?UTF-8?Q?Mateusz_Jo=c5=84czyk?= <mat.jonczyk@o2.pl>
+In-Reply-To: <43bfd6d9-58a3-6f9c-0848-4ef147552afb@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-WP-MailID: 39cfd62f4e752cf0cc3fb42c12cb8ded
+X-WP-AV: skaner antywirusowy Poczty o2
+X-WP-SPAM: NO 0000000 [UUNE]                               
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,17 +61,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 07:32:45AM +0100, Christoph Hellwig wrote:
-> free_devmap_managed_page has nothing to do with the code in swap.c,
-> move it to live with the rest of the code for devmap handling.
-> 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> ---
->  include/linux/mm.h |  1 -
->  mm/memremap.c      | 21 +++++++++++++++++++++
->  mm/swap.c          | 23 -----------------------
->  3 files changed, 21 insertions(+), 24 deletions(-)
+W dniu 07.02.2022 o 19:51, Hans de Goede pisze:
+> Hi,
+>
+> On 2/7/22 19:29, Mateusz Jończyk wrote:
+>> In Kconfig, inside the "Processor type and features" menu, there is
+>> the CONFIG_I8K option: "Dell i8k legacy laptop support". This is
+>> very confusing - enabling CONFIG_I8K is not required for the kernel to
+>> support old Dell laptops. This option is specific to the dell-smm-hwmon
+>> driver, which mostly exports some hardware monitoring information and
+>> allows the user to change fan speed.
+>>
+>> This option is misplaced, so move CONFIG_I8K to drivers/hwmon/Kconfig,
+>> where it belongs.
+>>
+>> Also, modify the dependency order - change
+>>         select SENSORS_DELL_SMM
+>> to
+>>         depends on SENSORS_DELL_SMM
+>> as it is just a configuration option of dell-smm-hwmon. This includes
+>> changing the option type from tristate to bool. It was tristate because
+>> it could select CONFIG_SENSORS_DELL_SMM=m .
+>>
+>> When running "make oldconfig" on configurations with
+>> CONFIG_SENSORS_DELL_SMM enabled , this change will result in an
+>> additional question (which could be printed several times during
+>> bisecting). I think that tidying up the configuration is worth it,
+>> though.
+>>
+>> Next patch tweaks the description of CONFIG_I8K.
+>>
+>> [snip]
+> For other reviewers, the only consumer of the CONFIG_I8K
+> option is drivers/hwmon/dell-smm-hwmon.c
+> which has a couple of:
+> "#if IS_ENABLED(CONFIG_I8K)" checks to enable its old
+> legacy /proc/i8k interface.
+>
+> So this move definitely makes sense.
+>
+> I wonder if it would not be better to just completely drop
+> the old  /proc/i8k interface though ?
 
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+No!!! I use it. The problem is that the laptop (2010-ish Dell Latitude E6500)
+has only three fan power levels: off, mild and full. So I think it is
+not well-suited to traditional fancontrol. On the other hand,
+i8kmon (slightly modified), which is designed for a small number of fan power levels,
+works well.
 
-Jason
+> With that said, this series looks good to me, so:
+>
+> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+>
+> for the series.
+
+Thanks,
+
+Mateusz
+
+> Regards,
+>
+> Hans
+>
+>
+

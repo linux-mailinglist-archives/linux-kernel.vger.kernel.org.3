@@ -2,52 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEC4E4ACAA2
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 21:47:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30B024ACAB7
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 21:48:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232849AbiBGUru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 15:47:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53350 "EHLO
+        id S235949AbiBGUsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 15:48:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239826AbiBGUcl (ORCPT
+        with ESMTP id S242637AbiBGUkG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 15:32:41 -0500
+        Mon, 7 Feb 2022 15:40:06 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42420C0401DA;
-        Mon,  7 Feb 2022 12:32:40 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44D92C0401DA
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 12:40:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 075F8B816F3;
-        Mon,  7 Feb 2022 20:32:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC8BCC004E1;
-        Mon,  7 Feb 2022 20:32:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644265957;
-        bh=qA17gMhLSyJTGkg5IG50iMqfuUUw7uCTxGT40buJCL4=;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 05270B81157
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 20:40:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A39B2C340EE;
+        Mon,  7 Feb 2022 20:40:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1644266402;
+        bh=rf8gPOUN5xstVP7dA1npNbWM8q6AFZtBXiHOYtQg9Cc=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=KK+IljrjgG5EfwFp52wkU7rrpkEVMmErHv0ovxwMWKJBsekOrkdiXT/F5dglBKU2i
-         s3Ycx7lGx3IutqVVivrp3g303jjVDYr1rJ6yLN3kTV/4A6HLsYxM1Nk59zIZYvxpAL
-         ByygAUgvH2cG/SXBVs/+pRtMbJ5Ku3nHFEPo6BSb6vS9rQFRQpo6jYRlBwI294KcR1
-         jp2WNrRr/vWfkVaeruLBKTC+eArD+rSJHVlRRCqWaQH1b3t99EitB9f24ESgEOnzyb
-         9l1oBAETt8kgRlmNnqQG7hv+/K+5P7YQAGJKbqvEG96XRjbZfmLaGyiak3nvH2eMEI
-         i/UP9AJapKKqQ==
-Date:   Mon, 7 Feb 2022 20:39:10 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Jia-Ju Bai <baijiaju1990@gmail.com>
-Cc:     lars@metafoo.de, valek@2n.cz, gwendal@chromium.org,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [BUG] iio: light: opt3001: possible deadlock in
- opt3001_read_raw() and opt3001_irq()
-Message-ID: <20220207203910.76ba3f2e@jic23-huawei>
-In-Reply-To: <f04b6000-f128-f928-0e3e-e3acc206d2d1@gmail.com>
-References: <f04b6000-f128-f928-0e3e-e3acc206d2d1@gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        b=ZmMoxaILZCQ1Z8+Rw+tECtxqVH+UqOhIRSjRZsplt0uiPd/zUNiEtdFt4AvBx8OAa
+         6epZplVOVDsfv9ZR9+RP18fVCUjnqHkJtiG6s220QyxssWrhTw4ahDBoN6v4HkHjwY
+         P63xwfuMhcFEYQZQpWATVU/wtKSkiQsuW8ErMmQ4=
+Date:   Mon, 7 Feb 2022 12:40:02 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH] mm: Outline copy_overflow()
+Message-Id: <20220207124002.edd04bf6d2abac8a01e35144@linux-foundation.org>
+In-Reply-To: <b9a31b025e729394e7081257870f0a0e73355a04.1644229010.git.christophe.leroy@csgroup.eu>
+References: <b9a31b025e729394e7081257870f0a0e73355a04.1644229010.git.christophe.leroy@csgroup.eu>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,70 +51,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 7 Feb 2022 23:41:49 +0800
-Jia-Ju Bai <baijiaju1990@gmail.com> wrote:
+On Mon,  7 Feb 2022 11:55:18 +0100 Christophe Leroy <christophe.leroy@csgroup.eu> wrote:
 
-> Hello,
->=20
-> My static analysis tool reports a possible deadlock in the opt3001=20
-> driver in Linux 5.16:
->=20
-> opt3001_read_raw()
->  =C2=A0 mutex_lock(&opt->lock); --> Line 399 (Lock A)
->  =C2=A0 opt3001_get_lux()
->  =C2=A0=C2=A0=C2=A0 wait_event_timeout(opt->result_ready_queue, ...) --> =
-Line 276 (Wait X)
->  =C2=A0 mutex_lock(&opt->lock); --> Line 412 (Unlock A)
->=20
-> opt3001_irq()
->  =C2=A0 mutex_lock(&opt->lock); --> Line 693 (Lock A)
->  =C2=A0 mutex_unlock(&opt->lock); --> Line 730 (Unlock A)
->  =C2=A0 wake_up(&opt->result_ready_queue); --> Line 733 (Wake X)
->=20
-> When opt3001_read_raw() is executed, "Wait X" is performed by holding=20
-> "Lock A". If opt3001_irq() is executed at this time, "Wake X" cannot be=20
-> performed to wake up "Wait X" in opt3001_read_raw(), because "Lock A"=20
-> has been already hold by opt3001_read_raw(), causing a possible deadlock.
-> I find that "Wait X" is performed with a timeout, to relieve the=20
-> possible deadlock; but I think this timeout can cause inefficient executi=
-on.
-Hi Jia-Ju Bai,
+> While building a small config with CONFIG_CC_OPTIMISE_FOR_SIZE,
+> I ended up with more than 50 times the following function in vmlinux:
+> 
+> 	c00243bc <copy_overflow>:
+> 	c00243bc:	94 21 ff f0 	stwu    r1,-16(r1)
+> 	c00243c0:	7c 85 23 78 	mr      r5,r4
+> 	c00243c4:	7c 64 1b 78 	mr      r4,r3
+> 	c00243c8:	3c 60 c0 62 	lis     r3,-16286
+> 	c00243cc:	7c 08 02 a6 	mflr    r0
+> 	c00243d0:	38 63 5e e5 	addi    r3,r3,24293
+> 	c00243d4:	90 01 00 14 	stw     r0,20(r1)
+> 	c00243d8:	4b ff 82 45 	bl      c001c61c <__warn_printk>
+> 	c00243dc:	0f e0 00 00 	twui    r0,0
+> 	c00243e0:	80 01 00 14 	lwz     r0,20(r1)
+> 	c00243e4:	38 21 00 10 	addi    r1,r1,16
+> 	c00243e8:	7c 08 03 a6 	mtlr    r0
+> 	c00243ec:	4e 80 00 20 	blr
+> 
+> That function being a non conditional warning on an error path,
+> it is not worth inlining.
+> 
+> Outline it.
 
-There is a quirk in here thatyou haven't mentioned.  The "magic"
-opt->ok_to_ignore_lock.
+"uninline" is the conventional term for this.
 
-So there are two cases:
-1) No irq in use.  In that case the opt3001_irq() will never run and we
-   just sleep + check a status flag. That's the best we can do without
-   an interrupt.
-2) irq in use, the ok_to_ignore_lock =3D true statement occurs and
-   in the opt3001_irq() the locks are never taken hence no deadlock.
+> This reduces the size of vmlinux by almost 4kbytes.
 
-It is a very odd bit of code though so I'd be surprised if a static
-analyser hadn't highlighted it as a possible deadlock!
+Did you consider uninlining check_copy_size() instead?
 
-Now, I'm not immediately sure why the driver is done like this as opposed
-to a more complete wait_for_completion() in read_raw(), complete() in the i=
-rq
-handler and do the actual read of the data back in read_raw().
-It's probably related to the other interrupt sources that we need to
-differentiate from in the interrupt handler.
-
-The lock definition is missing an documentation of exactly what it's scope
-is which definitely doesn't help us understand this unusual structure.
-
-Thanks,
-
-Jonathan
-
-
->=20
-> I am not quite sure whether this possible problem is real and how to fix=
-=20
-> it if it is real.
-> Any feedback would be appreciated, thanks :)
->=20
->=20
-> Best wishes,
-> Jia-Ju Bai
 

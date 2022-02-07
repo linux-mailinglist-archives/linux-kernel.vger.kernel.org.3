@@ -2,145 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 546EE4AC9FB
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 21:01:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DAD84AC9F3
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 20:57:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240786AbiBGT43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 14:56:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37576 "EHLO
+        id S236962AbiBGT4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 14:56:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241619AbiBGT4H (ORCPT
+        with ESMTP id S241660AbiBGTvK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 14:56:07 -0500
-X-Greylist: delayed 439 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 11:56:00 PST
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B829C0401DA
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 11:56:00 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 0B5BA32021EF;
-        Mon,  7 Feb 2022 14:48:38 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Mon, 07 Feb 2022 14:48:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; bh=qdPXUDXW0aWei852djVIbEVF7fBHoOacUefmwT
-        P0fCc=; b=bi/WHUxYvVRZjQyTlknYCHJeQMVWYxRb/Q7v1d5jNgl8PMPLZnN+oK
-        PZHcJZB0W+rJlmgOXXrZKZSGHgvSWDrSGJg7LwTjpMnvqpsu4HF+qpe5YGpgf+YU
-        vU4vId0T+Tu7hrix4zNsThBb0a1AqOZxHGqDW68tZOP0jM41SMikxS0ROl7KG/0m
-        DcFVYlpo4012Zk3GrYh3QYmMkaTqI0+M15x1IaX+YyJzikP3+rNTCAbEtlI/SDSS
-        RdVte8p3PWRvw4wdMaiPjA2MrPLgTtrRwZRR2wSWmV4hzPz9Ld5NmEGSPfo4lrpm
-        g5TKMyWJT2axAIMQpiJ2nnzZvGoXjmPA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=qdPXUDXW0aWei852d
-        jVIbEVF7fBHoOacUefmwTP0fCc=; b=X8oxJSUyDYqjyPsclY8hXODNNK7GNG/j8
-        8uwEFOkjA/bFxuwIoLsmJmeHOjGijvMYDe4Qtqy62H/yDAL452HA8WNVPj+MnBJM
-        willU6XxPgsm2wvF2z731SkDXnJZtUaMKLxPvkI2yFBChBdUhPjvipnPPLqgEFqy
-        P+EYmx112jHIILKtFWt6uTwdrNaFWL2Lys7Xbc7TA2mnrhtRJxHQgPOUUX399cIq
-        7HV4ibI6ID3nBULOBw3/hsvfIzfE5mWchUiCCiC8KN71kLIBl1VjvRQk+0yIqFnR
-        x88koNgbNpXu5XmxbpOIZ+srGVlVH/+fQSz0nMPIEK0qTkQCcoIeA==
-X-ME-Sender: <xms:lncBYhudkACCwopqxxvI-RF1RDk6crTe4RXjDl6jW-01Umpc7wHJQg>
-    <xme:lncBYqdCk7FlZmRRcln65BKvjYzvzBA-WWQrNiGpLfHbMTPmOxitB9N0Umn9QRgJW
-    UlH07az-CflUs91QY4>
-X-ME-Received: <xmr:lncBYkzD6SRY47uMdnyPlGgHFRR0B-jFNzpfeWAQBo2gUXQNVwKyeRK4E-4t12hrhSUdUHTnCXyhuYJ9CthcAtRmsP-Pr4VEBZFhNTU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrheehgdduvdeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepkedutdelhfeijeeuudetgfdttdeiteeiuddvtddutdeitefgheeiffdvvefg
-    tedvnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdptddurdhorhhgpdhgihhthhhusg
-    hushgvrhgtohhnthgvnhhtrdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghr
-    rghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:lncBYoPb8fOzA9_92AYWo-ncaXGSEkWzqC8LpNcTxHHtvYalityakA>
-    <xmx:lncBYh_tOVw1s1c115aCyYmDs6cQG9DaUr3AS0xxx5ia8tOVUASlJA>
-    <xmx:lncBYoVsLkuLwbaQJ-PFOh-DOkrSk1sYdd32HRiy2eh66EqQ5hgetA>
-    <xmx:lncBYjLfAyHCYQB8xfHFmQQZgFHhtcw_ZFXuFKQT-R9iqdmnvDP2LA>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 7 Feb 2022 14:48:37 -0500 (EST)
-Date:   Mon, 7 Feb 2022 20:48:35 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Samuel Holland <samuel@sholland.org>, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [sunxi:sunxi/clk-for-5.18 2/2]
- drivers/clk/sunxi-ng/ccu-sun6i-rtc.h:6:10: fatal error:
- dt-bindings/clock/sun6i-rtc.h: No such file or directory
-Message-ID: <20220207194835.tsxmhaibya3kbban@houat>
-References: <202202072224.hjVEpIij-lkp@intel.com>
+        Mon, 7 Feb 2022 14:51:10 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4695C0401E1
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 11:51:09 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id n32so14811835pfv.11
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 11:51:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=vzlzaB5S/veay9fPsYouwaa7Ye2duYzjZ7MsDyh1dr4=;
+        b=DWvVdPKojL+uX+8p3r/iCjkHgAERiMri1PzoB/Zo0kSnzI46zwpN2j6TOjDnLPvwVf
+         hAbDf2McKmU2wDKHc+DePunkStheTMA5WRL1xC6HZRU5UBDR2TbsJO1UPDT1jxnBUXMV
+         WhX37VktCtbWWXdlT+u9fYjz806AJFbK+zXU/1L6ZZeHcj0C/iES3inbmXTCs+1MTMjP
+         XZk9QIg6fRn7NLS2LC5rdI80mmJXYEW5tlbZbrl99GdkVMk8BOgyhLlPPL2DSq0BCxIN
+         yiN8vAxFu2y8FTQtM7uDKGpGPF0cehnZuJEoyK5Qk+/nuFvzXpsVX5Ozn1xE1xE7acTH
+         fPcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vzlzaB5S/veay9fPsYouwaa7Ye2duYzjZ7MsDyh1dr4=;
+        b=hjk7eLMuxrQjkZVsCdNADupMJXZ7zbgA5oHUhnPTRu4eqtITgGToaFdhMRDmvxQcIa
+         hEevBaV6EROLd3ZSlPLJ+qGs7AHYspwWMwX8WfmvjBg4M78Mulco5nBGjFN8GmXU2jrL
+         j0yk8k/+DjeNto3+VPwSvKokN3FbKnZuCWhBBXknM9ZNOvDyW2894geryW+m3caqU4D7
+         gOzSj1Lh5D0FqpzJdvMRxkjib9RUnt/JW97s1wGM338LYoygeeoKu5WXJfmctUYW72Rz
+         +4jmPSD0eOKEnkaoAqOqqoXfJ0f6czcZAYSznDZ0Z8yM2HcClPDxl1NUfjcMcj92BKKt
+         Buhg==
+X-Gm-Message-State: AOAM5324GtadnDXNzCFfQV4NsiLbFowW9BhoS5jfCajI9Sd6GP2BVIL1
+        +T5DAzFMxxI5unDiYiq8TSb/gA==
+X-Google-Smtp-Source: ABdhPJxckrgaXyzE7hXmoCqcM4bymTTt+24ecIBSNEEEv8MA5Bd9AJg0cUoNit9K9VB1eF832B7YIQ==
+X-Received: by 2002:a05:6a00:244e:: with SMTP id d14mr968685pfj.45.1644263469165;
+        Mon, 07 Feb 2022 11:51:09 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id c18sm12636184pfp.181.2022.02.07.11.51.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Feb 2022 11:51:08 -0800 (PST)
+Date:   Mon, 7 Feb 2022 19:51:05 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Hou Wenlong <houwenlong.hwl@antgroup.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] KVM: x86: Fix wrong privilege check for code segment
+ in __load_segment_descriptor()
+Message-ID: <YgF4KX90nxxyaDcN@google.com>
+References: <cover.1642669684.git.houwenlong.hwl@antgroup.com>
+ <ed8917d7bab80a1c1a130beae45c7d6ecdef47fc.1642669684.git.houwenlong.hwl@antgroup.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="stq24hziqrn6og6t"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202202072224.hjVEpIij-lkp@intel.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <ed8917d7bab80a1c1a130beae45c7d6ecdef47fc.1642669684.git.houwenlong.hwl@antgroup.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jan 20, 2022, Hou Wenlong wrote:
+> Code segment descriptor can be loaded by jmp/call/ret, iret
+> and int. The privilege checks are different between those
+> instructions above realmode. Although, the emulator has
+> use x86_transfer_type enumerate to differentiate them, but
+> it is not really used in __load_segment_descriptor(). Note,
+> far jump/call to call gate, task gate or task state segment
+> are not implemented in emulator.
+> 
+> As for far jump/call to code segment, if DPL > CPL for conforming
+> code or (RPL > CPL or DPL != CPL) for non-conforming code, it
+> should trigger #GP. The current checks are ok.
+> 
+> As for far return, if RPL < CPL or DPL > RPL for conforming
+> code or DPL != RPL for non-conforming code, it should trigger #GP.
+> Outer level return is not implemented above virtual-8086 mode in
+> emulator. So it implies that RPL <= CPL, but the current checks
+> wouldn't trigger #GP if RPL < CPL.
+> 
+> As for code segment loading in task switch, if DPL > RPL for conforming
+> code or DPL != RPL for non-conforming code, it should trigger #TS. Since
+> segment selector is loaded before segment descriptor when load state from
+> tss, it implies that RPL = CPL, so the current checks are ok.
+> 
+> The only problem in current implementation is mssing RPL < CPL check for
+> far return. However, change code to follow the manual is better.
+> 
+> Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
+> ---
 
---stq24hziqrn6og6t
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Sean Christopherson <seanjc@google.com>
 
-On Mon, Feb 07, 2022 at 10:47:22PM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git s=
-unxi/clk-for-5.18
-> head:   4f88abd86756e574c733d2ca14676be335cc0058
-> commit: 4f88abd86756e574c733d2ca14676be335cc0058 [2/2] clk: sunxi-ng: Add=
- support for the sun6i RTC clocks
-> config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/202=
-20207/202202072224.hjVEpIij-lkp@intel.com/config)
-> compiler: powerpc-linux-gcc (GCC) 11.2.0
-> reproduce (this is a W=3D1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
-n/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git=
-/commit/?id=3D4f88abd86756e574c733d2ca14676be335cc0058
->         git remote add sunxi https://git.kernel.org/pub/scm/linux/kernel/=
-git/sunxi/linux.git
->         git fetch --no-tags sunxi sunxi/clk-for-5.18
->         git checkout 4f88abd86756e574c733d2ca14676be335cc0058
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-11.2.0 make.cro=
-ss O=3Dbuild_dir ARCH=3Dpowerpc SHELL=3D/bin/bash
->=20
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->=20
-> All errors (new ones prefixed by >>):
->=20
->    In file included from drivers/clk/sunxi-ng/ccu-sun6i-rtc.c:18:
-> >> drivers/clk/sunxi-ng/ccu-sun6i-rtc.h:6:10: fatal error: dt-bindings/cl=
-ock/sun6i-rtc.h: No such file or directory
->        6 | #include <dt-bindings/clock/sun6i-rtc.h>
->          |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    compilation terminated.
+>  arch/x86/kvm/emulate.c | 30 ++++++++++++++++++++++--------
+>  1 file changed, 22 insertions(+), 8 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+> index 864db6fbe8db..b7ce2a85e58e 100644
+> --- a/arch/x86/kvm/emulate.c
+> +++ b/arch/x86/kvm/emulate.c
+> @@ -1631,14 +1631,28 @@ static int __load_segment_descriptor(struct x86_emulate_ctxt *ctxt,
+>  		if (!(seg_desc.type & 8))
+>  			goto exception;
+>  
+> -		if (seg_desc.type & 4) {
+> -			/* conforming */
+> -			if (dpl > cpl)
+> -				goto exception;
+> -		} else {
+> -			/* nonconforming */
+> -			if (rpl > cpl || dpl != cpl)
+> -				goto exception;
 
-I've dropped these patches for now
+A comment here would be mildly helpful, e.g.
 
-Maxime
+		/* RET can never return to an inner privilege level. */
+> +		if (transfer == X86_TRANSFER_RET && rpl < cpl)
+> +			goto exception;
 
---stq24hziqrn6og6t
-Content-Type: application/pgp-signature; name="signature.asc"
+And then as a follow-up patch, I think we can/should move the unhandled outer
+privilege level logic here to make it easier to understand why the checks for RET
+are incomplete, e.g.
 
------BEGIN PGP SIGNATURE-----
+diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+index a885b53dc7cc..a7cecd7beb91 100644
+--- a/arch/x86/kvm/emulate.c
++++ b/arch/x86/kvm/emulate.c
+@@ -1631,8 +1631,15 @@ static int __load_segment_descriptor(struct x86_emulate_ctxt *ctxt,
+                if (!(seg_desc.type & 8))
+                        goto exception;
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYgF3kwAKCRDj7w1vZxhR
-xdnSAQCaVOCYToJfqw3QTOuUdyxnRGuSxI1ewUGBJiv3+KKkYgEA68loh+EJyzml
-P3VWzq6xeFWP7fLMxPjw37+zqurzLQ8=
-=aDZc
------END PGP SIGNATURE-----
-
---stq24hziqrn6og6t--
+-               if (transfer == X86_TRANSFER_RET && rpl < cpl)
+-                       goto exception;
++               if (transfer == X86_TRANSFER_RET) {
++                       /* RET can never return to an inner privilege level. */
++                       if (rpl < cpl)
++                               goto exception;
++                       /* Outer-privilege level return is not implemented */
++                       if (rpl > cpl)
++                               return X86EMUL_UNHANDLEABLE;
++               }
++
+                if (transfer == X86_TRANSFER_RET || X86_TRANSFER_TASK_SWITCH) {
+                        if (seg_desc.type & 4) {
+                                /* conforming */
+@@ -2227,9 +2234,6 @@ static int em_ret_far(struct x86_emulate_ctxt *ctxt)
+        rc = emulate_pop(ctxt, &cs, ctxt->op_bytes);
+        if (rc != X86EMUL_CONTINUE)
+                return rc;
+-       /* Outer-privilege level return is not implemented */
+-       if (ctxt->mode >= X86EMUL_MODE_PROT16 && (cs & 3) > cpl)
+-               return X86EMUL_UNHANDLEABLE;
+        rc = __load_segment_descriptor(ctxt, (u16)cs, VCPU_SREG_CS, cpl,
+                                       X86_TRANSFER_RET,
+                                       &new_desc);

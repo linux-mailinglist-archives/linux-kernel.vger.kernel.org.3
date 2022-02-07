@@ -2,141 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4A1E4AC01D
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 14:52:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 766A34AC024
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 14:52:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388840AbiBGNua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 08:50:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53976 "EHLO
+        id S1388996AbiBGNu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 08:50:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386900AbiBGNQo (ORCPT
+        with ESMTP id S1449196AbiBGNRn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 08:16:44 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4698DC043188
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 05:16:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644239803; x=1675775803;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=NVBwUuQV6ckVxuAoKC8BjePGv50m0lO/JPE38dD/qM8=;
-  b=CmXvauUjZZbIIfNPVh+k0BShnTLGfzJRBMroGEeS9B/eHH8WlI5ze6V1
-   XWSHUThGTkaBVOqVd6SDF+BgB/CC++v8ILzLh5yzNVJuhPdw5pGAu1jUx
-   sbDWVyHAzSDrx11L7+mixrOcvih0NEPtVHFpdZFsxAz56poTYHznaCOg8
-   Szz/SWZRkXB7Rk57suxbpiB0Afni8J0+lU+WmTKd6Ium/OPtWATstyzXD
-   kbe45vRMYRhgN8jvkJ52kbey+CaLXvYtdz4/DPRqRUAJf8fLUuI+lpXYo
-   u2FZCWFXHMpqHNLavJCtoZTvZnHZUN8TEGQfHz4WXYHRO9nOKG5I8WOht
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10250"; a="335115028"
-X-IronPort-AV: E=Sophos;i="5.88,349,1635231600"; 
-   d="scan'208";a="335115028"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 05:16:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,349,1635231600"; 
-   d="scan'208";a="770630442"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga006.fm.intel.com with ESMTP; 07 Feb 2022 05:16:41 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 8AB70509; Mon,  7 Feb 2022 15:16:56 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Rodolfo Giometti <giometti@enneenne.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH v3 1/1] pps: generators: pps_gen_parport: Switch to use module_parport_driver()
-Date:   Mon,  7 Feb 2022 15:16:52 +0200
-Message-Id: <20220207131652.13316-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 7 Feb 2022 08:17:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F76AC0401EA
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 05:17:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 15A99B81230
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 13:17:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3B55C004E1;
+        Mon,  7 Feb 2022 13:17:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644239848;
+        bh=16LtBqoEMMiLQCTXhAEgcV9F72cfpCz0MRGQUmR5x/Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SgzKT68Bq710WvquBg7y3NXAM/Iod+ZcAnvjYD4VuMtrTAlVXobLNEETmL7Ka43+q
+         O/qgHMj1k3EiUFzAaOkrPMrDz00JbP0nN81GwmlLoCCzDQMr/jta4Yidb8LYZeg4Ad
+         tgP+eraON92tLnXxTcgHuY+6+oge+kIq9UlsiO0mZnVRIdVMfS1tQebItQU3r4huO3
+         TUlINgq3vqORn+YQVHyQn33n8RnBFZWZN/lPeDpPC7wPrAlpZvJsMnbepGjlE7tbww
+         m9C5A9zx3AXoqecq6FwbsyI9XKQtFyQYYxrMngH+GixVeoH/xE23LGmEV6eMrl2XBK
+         +82yZslluD8gw==
+Date:   Mon, 7 Feb 2022 13:17:23 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        James Liao <jamesjj.liao@mediatek.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Daniel Golle <daniel@makrotopia.org>
+Subject: Re: [PATCH] Revert "ASoC: mediatek: Check for error clk pointer"
+Message-ID: <YgEb42YZI1iKwqiS@sirena.org.uk>
+References: <20220205014755.699603-1-linux@roeck-us.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Aqk5F9s36CVnq371"
+Content-Disposition: inline
+In-Reply-To: <20220205014755.699603-1-linux@roeck-us.net>
+X-Cookie: Never give an inch!
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Switch to use module_parport_driver() to reduce boilerplate code.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Acked-by: Rodolfo Giometti <giometti@enneenne.com>
----
-v3: added Ack (Rodolfo), Cc'ed to Greg for picking it up
- drivers/pps/generators/pps_gen_parport.c | 42 ++++--------------------
- 1 file changed, 7 insertions(+), 35 deletions(-)
+--Aqk5F9s36CVnq371
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/drivers/pps/generators/pps_gen_parport.c b/drivers/pps/generators/pps_gen_parport.c
-index 6a1af7664f3b..fba6c490977c 100644
---- a/drivers/pps/generators/pps_gen_parport.c
-+++ b/drivers/pps/generators/pps_gen_parport.c
-@@ -20,8 +20,6 @@
- #include <linux/hrtimer.h>
- #include <linux/parport.h>
- 
--#define DRVDESC "parallel port PPS signal generator"
--
- #define SIGNAL		0
- #define NO_SIGNAL	PARPORT_CONTROL_STROBE
- 
-@@ -180,6 +178,11 @@ static void parport_attach(struct parport *port)
- {
- 	struct pardev_cb pps_cb;
- 
-+	if (send_delay > SEND_DELAY_MAX) {
-+		pr_err("delay value should be not greater then %d\n", SEND_DELAY_MAX);
-+		return -EINVAL;
-+	}
-+
- 	if (attached) {
- 		/* we already have a port */
- 		return;
-@@ -231,39 +234,8 @@ static struct parport_driver pps_gen_parport_driver = {
- 	.detach = parport_detach,
- 	.devmodel = true,
- };
--
--/* module staff */
--
--static int __init pps_gen_parport_init(void)
--{
--	int ret;
--
--	pr_info(DRVDESC "\n");
--
--	if (send_delay > SEND_DELAY_MAX) {
--		pr_err("delay value should be not greater"
--				" then %d\n", SEND_DELAY_MAX);
--		return -EINVAL;
--	}
--
--	ret = parport_register_driver(&pps_gen_parport_driver);
--	if (ret) {
--		pr_err("unable to register with parport\n");
--		return ret;
--	}
--
--	return  0;
--}
--
--static void __exit pps_gen_parport_exit(void)
--{
--	parport_unregister_driver(&pps_gen_parport_driver);
--	pr_info("hrtimer avg error is %ldns\n", hrtimer_error);
--}
--
--module_init(pps_gen_parport_init);
--module_exit(pps_gen_parport_exit);
-+module_parport_driver(pps_gen_parport_driver);
- 
- MODULE_AUTHOR("Alexander Gordeev <lasaine@lvk.cs.msu.su>");
--MODULE_DESCRIPTION(DRVDESC);
-+MODULE_DESCRIPTION("parallel port PPS signal generator");
- MODULE_LICENSE("GPL");
--- 
-2.34.1
+On Fri, Feb 04, 2022 at 05:47:55PM -0800, Guenter Roeck wrote:
+> This reverts commit 9de2b9286a6dd16966959b3cb34fc2ddfd39213e.
 
+Please submit patches using subject lines reflecting the style for the
+subsystem, this makes it easier for people to identify relevant patches.
+Look at what existing commits in the area you're changing are doing and
+make sure your subject lines visually resemble what they're doing.
+There's no need to resubmit to fix this alone.
+
+Please include human readable descriptions of things like commits and
+issues being discussed in e-mail in your mails, this makes them much
+easier for humans to read especially when they have no internet access.
+I do frequently catch up on my mail on flights or while otherwise
+travelling so this is even more pressing for me than just being about
+making things a bit easier to read.
+
+--Aqk5F9s36CVnq371
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIBG+IACgkQJNaLcl1U
+h9BJnQf+KcWHmQpnCUz7tmRRQV7SHRdfESvOFdafzfZcgMvJqn170QtNLNqQak4h
+P0b+AzksW4Ku0XUDtG22ToW3GL6xaahhdK3z1BIBHv42kHlClcOwqtoaLSEV0q4h
+OxIEZaiwRFDLX/a0NByy2M3WThSg9SO6W8wnCXGeghAN9nl3tZgIefVg9Vbns/FF
+xHtph1zJ8BEHT8c3k6diVcVIWObQNx2Tsyli6hk78+NgCl2vbLLp7tmxIqPM5/iN
+mBYNXhOhFl/Fzq5qAOMqTs8/3EWGpXq8ddodg7xO1JgNLLiMI+C3XZUkn8A0l2Y3
+Un2z1wcm9xs2FfCnpoxOpM6hJxoTTA==
+=v5Ec
+-----END PGP SIGNATURE-----
+
+--Aqk5F9s36CVnq371--

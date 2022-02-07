@@ -2,250 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82C874AC1A7
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 15:49:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3BA84AC1A2
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 15:49:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382902AbiBGOnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 09:43:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43380 "EHLO
+        id S1382790AbiBGOnc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 09:43:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237782AbiBGO2q (ORCPT
+        with ESMTP id S1392368AbiBGO31 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 09:28:46 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B547DC0401C2
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 06:28:44 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1nH507-0005mA-VU; Mon, 07 Feb 2022 15:28:19 +0100
-Message-ID: <b231b498-c8d2-28af-ce66-db8c168047f7@pengutronix.de>
-Date:   Mon, 7 Feb 2022 15:28:10 +0100
+        Mon, 7 Feb 2022 09:29:27 -0500
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E684AC0401C3
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 06:29:23 -0800 (PST)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4JspS22MSMz9sSr;
+        Mon,  7 Feb 2022 15:29:22 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id dOz3A4mIe6Sr; Mon,  7 Feb 2022 15:29:22 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4JspS21WlXz9sSq;
+        Mon,  7 Feb 2022 15:29:22 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id E342B8B770;
+        Mon,  7 Feb 2022 15:29:21 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id om8gFrsfA6rV; Mon,  7 Feb 2022 15:29:21 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id C48188B76C;
+        Mon,  7 Feb 2022 15:29:21 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 217ETCrr1245796
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Mon, 7 Feb 2022 15:29:12 +0100
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 217ETBfP1245795;
+        Mon, 7 Feb 2022 15:29:11 +0100
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org
+Subject: [PATCH] ilog2: Force inlining of __ilog2_u32() and __ilog2_u64()
+Date:   Mon,  7 Feb 2022 15:29:08 +0100
+Message-Id: <803a2ac3d923ebcfd0dd40f5886b05cae7bb0aba.1644243860.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-Subject: Re: [BUG] mtd: cfi_cmdset_0002: write regression since v4.17-rc1
-To:     Tokunori Ikegami <ikegami.t@gmail.com>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        linux-mtd@lists.infradead.org, Joakim.Tjernlund@infinera.com,
-        miquel.raynal@bootlin.com, vigneshr@ti.com, richard@nod.at,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-Cc:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Brian Norris <computersforpeace@gmail.com>,
-        David Woodhouse <dwmw2@infradead.org>, marek.vasut@gmail.com,
-        cyrille.pitchen@wedev4u.fr,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linuxppc-dev@lists.ozlabs.org
-References: <b687c259-6413-26c9-d4c9-b3afa69ea124@pengutronix.de>
- <dff2abcc-5813-2f2c-35ba-f03cd1f35ac3@leemhuis.info>
- <e11b76dc-5539-fb7e-da1c-a5005713d6b0@gmail.com>
- <3dbbcee5-81fc-cdf5-9f8b-b6ccb95beddc@pengutronix.de>
- <0f2cfcac-83ca-51a9-f92c-ff6495dca1d7@gmail.com>
-Content-Language: en-US
-In-Reply-To: <0f2cfcac-83ca-51a9-f92c-ff6495dca1d7@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1644244146; l=3187; s=20211009; h=from:subject:message-id; bh=LbJyGmP0iWIV+hgEVGW0oqWQQm1oTy/XNUfH89Xt7zQ=; b=mNHf9SFAjgfitOeHz35BBXMOILPxupHhNaZkP1W+y+gPMKMHKePKlO4d50S4Lfmb78ZD9UoznNAk UQK1iUI1BJvp1QJ1fm+xY+UP2EbLYWNqfZaA/vyQGESu5PZDni/A
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Tokunori-san,
+Building a kernel with CONFIG_CC_OPTIMISE_FOR_SIZE leads to
+__ilog2_u32() being duplicated 50 times and __ilog2_u64() 3 times
+in vmlinux on a tiny powerpc32 config.
 
-On 29.01.22 19:01, Tokunori Ikegami wrote:
-> Hi Ahmad-san,
-> 
-> Thanks for your investigation.
-> 
->> The issue is still there with #define FORCE_WORD_WRITE 1:
->>
->>    jffs2: Write clean marker to block at 0x000a0000 failed: -5
->>    MTD do_write_oneword_once(): software timeout
-> Which kernel version has been tested about this?
+__ilog2_u32() being 2 instructions it is not worth being kept out
+of line, so force inlining. Allthough the u64 version is a bit bigger,
+there is still a small benefit in keeping it inlined. On a 64 bits
+config there's a real benefit.
 
-I last tested with v5.10.30, but I had briefly tried v5.16-rc as well
-when first debugging this issue.
+With this change the size of vmlinux text is reduced by 1 kbytes,
+which is approx 50% more than the size of the removed functions.
 
-I have rebased onto v5.17-rc2 now and will use that for further tests.
-The same issue with word write forcing is reproducible there as well.
+Before the patch there is for instance:
 
-> Since the buffered writes disabled by 7e4404113686 for S29GL256N and tested on kernel 5.10.16.
-> So I would like to confirm if the issue depended on the CPU or kernel version, etc.
-> Note: The chips S29GL064N and S29GL256N seem different the flash Mb size basically.
+	c00d2a94 <__ilog2_u32>:
+	c00d2a94:	7c 63 00 34 	cntlzw  r3,r3
+	c00d2a98:	20 63 00 1f 	subfic  r3,r3,31
+	c00d2a9c:	4e 80 00 20 	blr
 
-I see. To be extra sure, I have replaced 0x2201 with 0x0c01 to hit
-the same code paths, but no improvement.
+	c00d36d8 <__order_base_2>:
+	c00d36d8:	28 03 00 01 	cmplwi  r3,1
+	c00d36dc:	40 81 00 2c 	ble     c00d3708 <__order_base_2+0x30>
+	c00d36e0:	94 21 ff f0 	stwu    r1,-16(r1)
+	c00d36e4:	7c 08 02 a6 	mflr    r0
+	c00d36e8:	38 63 ff ff 	addi    r3,r3,-1
+	c00d36ec:	90 01 00 14 	stw     r0,20(r1)
+	c00d36f0:	4b ff f3 a5 	bl      c00d2a94 <__ilog2_u32>
+	c00d36f4:	80 01 00 14 	lwz     r0,20(r1)
+	c00d36f8:	38 63 00 01 	addi    r3,r3,1
+	c00d36fc:	7c 08 03 a6 	mtlr    r0
+	c00d3700:	38 21 00 10 	addi    r1,r1,16
+	c00d3704:	4e 80 00 20 	blr
+	c00d3708:	38 60 00 00 	li      r3,0
+	c00d370c:	4e 80 00 20 	blr
 
->> Doesn't seem to be a buffered write issue here though as the writes
->> did work fine before dfeae1073583. Any other ideas?
-> At first I thought the issue is possible to be resolved by using the word write instead of the buffered writes.
-> Now I am thinking to disable the changes dfeae1073583 partially with any condition if possible.
+With the patch it has become:
 
-What seems to work for me is checking if chip_good or chip_ready
-and map_word is equal to 0xFF. I can't justify why this is ok though.
-(Worst case bus is floating at this point of time and Hi-Z is read
-as 0xff on CPU data lines...)
+	c00d356c <__order_base_2>:
+	c00d356c:	28 03 00 01 	cmplwi  r3,1
+	c00d3570:	40 81 00 14 	ble     c00d3584 <__order_base_2+0x18>
+	c00d3574:	38 63 ff ff 	addi    r3,r3,-1
+	c00d3578:	7c 63 00 34 	cntlzw  r3,r3
+	c00d357c:	20 63 00 20 	subfic  r3,r3,32
+	c00d3580:	4e 80 00 20 	blr
+	c00d3584:	38 60 00 00 	li      r3,0
+	c00d3588:	4e 80 00 20 	blr
 
-> By the way could you please let me know the chip information for more detail? (For example model number, cycle and device ID, etc.)
+No more need for __order_base_2() to setup a stack frame and
+save/restore caller address. And the following 'add 1' is
+merged in the substract.
 
-I can't read it off the chip, but vendor uses S29GL064N90FFI02 or S29GL964N11FFI02.
-Kernel reports it with:
-ff800000.flash: Found 1 x16 devices at 0x0 in 8-bit bank. Manufacturer ID 0x000001 Chip ID 0x000c01
+Another typical use of it:
 
-I am not sure what you mean with cycle. If you tell me what
-command to run, I can paste the output.
+	c080ff28 <hugepagesz_setup>:
+	...
+	c080fff8:	7f c3 f3 78 	mr      r3,r30
+	c080fffc:	4b 8f 81 f1 	bl      c01081ec <__ilog2_u32>
+	c0810000:	38 63 ff f2 	addi    r3,r3,-14
+	...
 
-Thanks,
-Ahmad
+Becomes
 
+	c080ff1c <hugepagesz_setup>:
+	...
+	c080ffec:	7f c3 00 34 	cntlzw  r3,r30
+	c080fff0:	20 63 00 11 	subfic  r3,r3,17
+	...
 
+Here no need to move r30 argument to r3 then substract 14 to result. Just work
+on r30 and merge the 'sub 14' with the 'sub from 31'.
 
-> 
-> Regards,
-> Ikegami
-> 
-> 
-> On 2021/12/14 16:23, Thorsten Leemhuis wrote:
-> 
->>>> [TLDR: adding this regression to regzbot; most of this mail is compiled
->>>> from a few templates paragraphs some of you might have seen already.]
->>>>
->>>> Hi, this is your Linux kernel regression tracker speaking.
->>>>
->>>> Top-posting for once, to make this easy accessible to everyone.
->>>>
->>>> Thanks for the report.
->>>>
->>>> Adding the regression mailing list to the list of recipients, as it
->>>> should be in the loop for all regressions, as explained here:
->>>> https://www.kernel.org/doc/html/latest/admin-guide/reporting-issues.html
->>>>
->>>> To be sure this issue doesn't fall through the cracks unnoticed, I'm
->>>> adding it to regzbot, my Linux kernel regression tracking bot:
->>>>
->>>> #regzbot ^introduced dfeae1073583
->>>> #regzbot title mtd: cfi_cmdset_0002: flash write accesses on the
->>>> hardware fail on a PowerPC MPC8313 to a 8-bit-parallel S29GL064N flash
->>>> #regzbot ignore-activity
->>>>
->>>> Reminder: when fixing the issue, please add a 'Link:' tag with the URL
->>>> to the report (the parent of this mail), then regzbot will automatically
->>>> mark the regression as resolved once the fix lands in the appropriate
->>>> tree. For more details about regzbot see footer.
->>>>
->>>> Sending this to everyone that got the initial report, to make all aware
->>>> of the tracking. I also hope that messages like this motivate people to
->>>> directly get at least the regression mailing list and ideally even
->>>> regzbot involved when dealing with regressions, as messages like this
->>>> wouldn't be needed then.
->>>>
->>>> Don't worry, I'll send further messages wrt to this regression just to
->>>> the lists (with a tag in the subject so people can filter them away), as
->>>> long as they are intended just for regzbot. With a bit of luck no such
->>>> messages will be needed anyway.
->>>>
->>>> Ciao, Thorsten (wearing his 'Linux kernel regression tracker' hat).
->>>>
->>>> P.S.: As a Linux kernel regression tracker I'm getting a lot of reports
->>>> on my table. I can only look briefly into most of them. Unfortunately
->>>> therefore I sometimes will get things wrong or miss something important.
->>>> I hope that's not the case here; if you think it is, don't hesitate to
->>>> tell me about it in a public reply. That's in everyone's interest, as
->>>> what I wrote above might be misleading to everyone reading this; any
->>>> suggestion I gave thus might sent someone reading this down the wrong
->>>> rabbit hole, which none of us wants.
->>>>
->>>> BTW, I have no personal interest in this issue, which is tracked using
->>>> regzbot, my Linux kernel regression tracking bot
->>>> (https://linux-regtracking.leemhuis.info/regzbot/). I'm only posting
->>>> this mail to get things rolling again and hence don't need to be CC on
->>>> all further activities wrt to this regression.
->>>>
->>>> On 13.12.21 14:24, Ahmad Fatoum wrote:
->>>>> Hi,
->>>>>
->>>>> I've been investigating a breakage on a PowerPC MPC8313: The SoC is connected
->>>>> via the "Enhanced Local Bus Controller" to a 8-bit-parallel S29GL064N flash,
->>>>> which is represented as a memory-mapped cfi-flash.
->>>>>
->>>>> The regression began in v4.17-rc1 with
->>>>>
->>>>>     dfeae1073583 ("mtd: cfi_cmdset_0002: Change write buffer to check correct value")
->>>>>
->>>>> and causes all flash write accesses on the hardware to fail. Example output
->>>>> after v5.1-rc2[1]:
->>>>>
->>>>>     root@host:~# mount -t jffs2 /dev/mtdblock0 /mnt
->>>>>     MTD do_write_buffer_wait(): software timeout, address:0x000c000b.
->>>>>     jffs2: Write clean marker to block at 0x000c0000 failed: -5
->>>>>
->>>>> This issue still persists with v5.16-rc. Reverting aforementioned patch fixes
->>>>> it, but I am still looking for a change that keeps both Tokunori's and my
->>>>> hardware happy.
->>>>>
->>>>> What Tokunori's patch did is that it strengthened the success condition
->>>>> for flash writes:
->>>>>
->>>>>    - Prior to the patch, DQ polling was done until bits
->>>>>      stopped toggling. This was taken as an indicator that the write succeeded
->>>>>      and was reported up the stack. i.e. success condition is chip_ready()
->>>>>
->>>>>    - After the patch, polling continues until the just written data is
->>>>>      actually read back, i.e. success condition is chip_good()
->>>>>
->>>>> This new condition never holds for me, when DQ stabilizes, it reads 0xFF,
->>>>> never the just written data. The data is still written and can be read back
->>>>> on subsequent reads, just not at that point of time in the poll loop.
->>>>>
->>>>> We haven't had write issues for the years predating that patch. As the
->>>>> regression has been mainline for a while, I am wondering what about my setup
->>>>> that makes it pop up here, but not elsewhere?
->>>>>
->>>>> I consulted the data sheet[2] and found Figure 27, which describes DQ polling
->>>>> during embedded algorithms. DQ switches from status output to "True" (I assume
->>>>> True == all bits set == 0xFF) until CS# is reasserted.
->>>>>
->>>>> I compared with another chip's datasheet, and it (Figure 8.4) doesn't describe
->>>>> such an intermittent "True" state. In any case, the driver polls a few hundred
->>>>> times, however, before giving up, so there should be enough CS# toggles.
->>>>>
->>>>>
->>>>> Locally, I'll revert this patch for now. I think accepting 0xFF as a success
->>>>> condition may be appropriate, but I don't yet have the rationale to back it up.
->>>>>
->>>>> I am investigating this some more, probably with a logic trace, but I wanted
->>>>> to report this in case someone has pointers and in case other people run into
->>>>> the same issue.
->>>>>
->>>>>
->>>>> Cheers,
->>>>> Ahmad
->>>>>
->>>>> [1] Prior to d9b8a67b3b95 ("mtd: cfi: fix deadloop in cfi_cmdset_0002.c do_write_buffer")
->>>>>       first included with v5.1-rc2, failing writes just hung indefinitely in kernel space.
->>>>>       That's fixed, but the writes still fail.
->>>>>
->>>>> [2]: 001-98525 Rev. *B, https://www.infineon.com/dgdl/Infineon-S29GL064N_S29GL032N_64_Mbit_32_Mbit_3_V_Page_Mode_MirrorBit_Flash-DataSheet-v03_00-EN.pdf?fileId=8ac78c8c7d0d8da4017d0ed556fd548b
->>>>>
->>>>> [3]: https://www.mouser.com/datasheet/2/268/SST39VF1601C-SST39VF1602C-16-Mbit-x16-Multi-Purpos-709008.pdf
->>>>>        Note that "true data" means valid data here, not all bits one.
->>>>>
->>
-> 
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ include/linux/log2.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-
+diff --git a/include/linux/log2.h b/include/linux/log2.h
+index df0b155c2141..9f30d087a128 100644
+--- a/include/linux/log2.h
++++ b/include/linux/log2.h
+@@ -18,7 +18,7 @@
+  * - the arch is not required to handle n==0 if implementing the fallback
+  */
+ #ifndef CONFIG_ARCH_HAS_ILOG2_U32
+-static inline __attribute__((const))
++static __always_inline __attribute__((const))
+ int __ilog2_u32(u32 n)
+ {
+ 	return fls(n) - 1;
+@@ -26,7 +26,7 @@ int __ilog2_u32(u32 n)
+ #endif
+ 
+ #ifndef CONFIG_ARCH_HAS_ILOG2_U64
+-static inline __attribute__((const))
++static __always_inline __attribute__((const))
+ int __ilog2_u64(u64 n)
+ {
+ 	return fls64(n) - 1;
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.33.1
+

@@ -2,120 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C1804AC45B
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 16:52:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB7604AC463
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 16:53:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343622AbiBGPva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 10:51:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56330 "EHLO
+        id S1384896AbiBGPv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 10:51:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385641AbiBGPot (ORCPT
+        with ESMTP id S1378595AbiBGPt5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 10:44:49 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C076C0401E6;
-        Mon,  7 Feb 2022 07:44:46 -0800 (PST)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 217Esqsd030207;
-        Mon, 7 Feb 2022 15:44:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=jOhZpDNAvGlx7JL+JuWldFRo7QkbLt/2NFIFiLXgya8=;
- b=AqaFISx6+gUOBnC0vR5PiJCz4h3L4LakeVoLlFxq/TETQLIoFVLnhQENrF36ySUXOL2y
- eKAy9xLeAQH3iQVWd2CPa66aGlBEL/pJvSwyXC2yULIUS8TDbNOA+pbggLs6SamLaqmY
- arUWLDWAhjpAEcMqDr/ckFTbGt9SkYgYWnUPDgAm2WLN+aFOrySeOgu1xbMs7IkaGckb
- 9LocmVsOR81w9PXjqf0+Yqq8yDOeNa8rqcENH/VyUPc7GRUnL3h1v1r5XvndmyrY6Yqq
- 0mS983Av1lYa9rNYyzZChDLKVkR7f2RrOuFrPdp9O24hjlWt3pZv9rwqL9mNbJTFWrxK Lw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e22st02wm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 07 Feb 2022 15:44:46 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 217FJkHp027799;
-        Mon, 7 Feb 2022 15:44:45 GMT
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e22st02w0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 07 Feb 2022 15:44:45 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 217FhWnM011652;
-        Mon, 7 Feb 2022 15:44:44 GMT
-Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
-        by ppma02wdc.us.ibm.com with ESMTP id 3e2f8mjcxf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 07 Feb 2022 15:44:44 +0000
-Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
-        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 217Fig8v35389830
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 7 Feb 2022 15:44:42 GMT
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C02CA6A063;
-        Mon,  7 Feb 2022 15:44:42 +0000 (GMT)
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CCBC46A058;
-        Mon,  7 Feb 2022 15:44:40 +0000 (GMT)
-Received: from [9.211.136.120] (unknown [9.211.136.120])
-        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Mon,  7 Feb 2022 15:44:40 +0000 (GMT)
-Message-ID: <f0a3fc18-aedc-7215-06f1-7a8e68032155@linux.ibm.com>
-Date:   Mon, 7 Feb 2022 10:44:40 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 30/30] MAINTAINERS: additional files related kvm s390
- pci passthrough
-Content-Language: en-US
-To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com, pmorel@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
-        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Christian Borntraeger <borntraeger@de.ibm.com>
-References: <20220204211536.321475-1-mjrosato@linux.ibm.com>
- <20220204211536.321475-31-mjrosato@linux.ibm.com>
- <9a186055-2637-0113-18be-ab08b5db1c74@linux.ibm.com>
-From:   Matthew Rosato <mjrosato@linux.ibm.com>
-In-Reply-To: <9a186055-2637-0113-18be-ab08b5db1c74@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Sk1YmCfl_cCtPj7dVZB7Q2HNaotvq7Jn
-X-Proofpoint-ORIG-GUID: esDzGk1kIB0F5c_Gy_mzP4RmcPDmmcY5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-07_05,2022-02-07_02,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- priorityscore=1501 spamscore=0 suspectscore=0 malwarescore=0 mlxscore=0
- mlxlogscore=999 impostorscore=0 bulkscore=0 adultscore=0 clxscore=1015
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202070097
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 7 Feb 2022 10:49:57 -0500
+X-Greylist: delayed 301 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 07:49:56 PST
+Received: from so254-9.mailgun.net (so254-9.mailgun.net [198.61.254.9])
+        by lindbergh.monkeyblade.net (Postfix) with UTF8SMTPS id CFF74C0401D2
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 07:49:56 -0800 (PST)
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1644248996; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=2yxEWoGWybWm+EWzW1VAE3C5MPy0zhkD2Pst4w6ox5s=;
+ b=N+wOMipwJzrfFVCe21xKtVtaHiguBVGmgtNQebZAbkFzyorWpyF6ZWZMIINXB4/pjnLjB+im
+ pJ7r1z3g/lNx818NYJPfaX+mVZG+FaOUctzbXUOEIDLyRifMnV0b9JpU4WsA16jvabrqVkXg
+ bU3fvtlUfwVzq5tMzwR/paVpZ+Q=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n01.prod.us-west-2.postgun.com with SMTP id
+ 62013e7519d16b66a9ea982e (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 07 Feb 2022 15:44:53
+ GMT
+Sender: nitirawa=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 9918DC43150; Mon,  7 Feb 2022 15:44:53 +0000 (UTC)
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: nitirawa)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id E43E8C43639;
+        Mon,  7 Feb 2022 15:44:49 +0000 (UTC)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+Date:   Mon, 07 Feb 2022 21:14:49 +0530
+From:   nitirawa@codeaurora.org
+To:     Vidya Sagar <vidyas@nvidia.com>, Keith Busch <kbusch@kernel.org>
+Cc:     Keith Busch <kbusch@kernel.org>, rafael.j.wysocki@intel.com,
+        hch@lst.de, bhelgaas@google.com, mmaddireddy@nvidia.com,
+        kthota@nvidia.com, sagar.tv@gmail.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: Query related to shutting down NVMe during system suspend
+In-Reply-To: <cc0b6768-5722-2277-6e51-75baf3311dc5@nvidia.com>
+References: <65b836cd-8d5d-b9c2-eb8f-2ee3ef46112b@nvidia.com>
+ <20220201163054.GA2838889@dhcp-10-100-145-180.wdc.com>
+ <0bd9fdc1-99d4-1c59-7343-3708b331b2b5@nvidia.com>
+ <24710253b2e34dfdd81ebe1f46b84652@codeaurora.org>
+ <cc0b6768-5722-2277-6e51-75baf3311dc5@nvidia.com>
+Message-ID: <c2255367927729ee00c42ae4148c1301@codeaurora.org>
+X-Sender: nitirawa@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/7/22 8:04 AM, Christian Borntraeger wrote:
+On 2022-02-07 17:41, Vidya Sagar wrote:
+> On 2/7/2022 4:27 PM, nitirawa@codeaurora.org wrote:
+>> External email: Use caution opening links or attachments
+>> 
+>> 
+>> On 2022-02-01 22:28, Vidya Sagar wrote:
+>>> Thanks for the super quick reply and I couldn't agree more.
+>>> 
+>>> On 2/1/2022 10:00 PM, Keith Busch wrote:
+>>>> External email: Use caution opening links or attachments
+>>>> 
+>>>> 
+>>>> On Tue, Feb 01, 2022 at 09:52:28PM +0530, Vidya Sagar wrote:
+>>>>> Hi Rafael & Christoph,
+>>>>> My query is regarding the comment and the code that follows after 
+>>>>> it
+>>>>> at
+>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/nvme/host/pci.c?h=v5.17-rc2#n3243 
+>>>>> What I understood from it is that, there is an underlying 
+>>>>> assumption
+>>>>> that the power to the devices is not removed during the suspend 
+>>>>> call.
+>>>>> In the case of device-tree based platforms like Tegra194, power is
+>>>>> indeed removed to the devices during suspend-resume process. Hence,
+>>>>> the
+>>>>> NVMe devices need to be taken through the shutdown path 
+>>>>> irrespective
+>>>>> of
+>>>>> whether the ASPM states are enabled or not.
+>>>>> I would like to hear from you the best method to follow to achieve
+>>>>> this.
+>>>> 
+>>>> Since platform makers can't converge on how to let a driver know 
+>>>> what
+>>>> it's supposed to do, I suggest we default to the simple shutdown
+>>>> suspend
+>>>> all the time. We can add a module parameter to let a user request 
+>>>> nvme
+>>>> power management if they really want it. No matter what we do here,
+>>>> someone is going to complain, but at least simple shutdown is 
+>>>> safe...
+>>>> 
+>> 
+>> Hi Vidya,
+>> 
+>> Are you planning to add module parameter based on above discussion. I
+>> see similar behaviour even with  qualcomm platform.
+>> 
+>> [  119.994092] nvme nvme0: I/O 9 QID 0 timeout, reset controller
+>> [  120.006612] PM: dpm_run_callback(): pci_pm_resume+0x0/0xe4 returns
+>> -16
+>> [  120.013502] nvme 0001:01:00.0: PM: pci_pm_resume+0x0/0xe4 returned
+>> -16 after 60059958 usecs
+>> [  120.022239] nvme 0001:01:00.0: PM: failed to resume async: error 
+>> -16
+> Not really.
+> Keith Busch has already pushed a patch to fix it in a different way
+> and issue is resolved (on Tegra platforms) with that patch.
+> https://lore.kernel.org/all/20220201165006.3074615-1-kbusch@kernel.org/
+> is that patch.
 > 
-> 
-> Am 04.02.22 um 22:15 schrieb Matthew Rosato:
->> Add entries from the s390 kvm subdirectory related to pci passthrough.
->>
->> Acked-by: Christian Borntraeger <borntraeger@de.ibm.com>
-> 
-> 
-> Can you change that to  borntraeger@linux.ibm.com ?
-> 
+> Thanks & Regards,
+> Vidya Sagar
+>> 
+>> Regards,
+>> Nitin
+>> 
+>> 
 
-Sure.  It looks like this happened on some of the earlier patches in 
-this series too, I'll go ahead and adjust them all.
+Thanks Vidya for pointing out the patch . This patch worked for us as 
+well.
+@keith - Please can we get this merged .
+
+Regards,
+Nitin

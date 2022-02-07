@@ -2,103 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 103CD4AC1B1
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 15:49:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D092A4AC100
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 15:21:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382983AbiBGOnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 09:43:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42292 "EHLO
+        id S1391089AbiBGOTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 09:19:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1392293AbiBGO0J (ORCPT
+        with ESMTP id S1381876AbiBGOL7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 09:26:09 -0500
-X-Greylist: delayed 972 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 06:26:05 PST
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C034C0401C1
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 06:26:05 -0800 (PST)
-Received: from kwepemi500005.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Jsp0N0MWqzccn5;
-        Mon,  7 Feb 2022 22:08:52 +0800 (CST)
-Received: from kwepemm600001.china.huawei.com (7.193.23.3) by
- kwepemi500005.china.huawei.com (7.221.188.179) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 7 Feb 2022 22:09:51 +0800
-Received: from [10.174.176.245] (10.174.176.245) by
- kwepemm600001.china.huawei.com (7.193.23.3) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 7 Feb 2022 22:09:50 +0800
-To:     David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, <edumazet@google.com>,
-        <yoshfuji@linux-ipv6.org>, <dsahern@kernel.org>
-CC:     <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-From:   "wanghai (M)" <wanghai38@huawei.com>
-Subject: [BUG] net: ipv4: The sent udp broadcast message may be converted to
- an arp request message
-Message-ID: <55a04a8f-56f3-f73c-2aea-2195923f09d1@huawei.com>
-Date:   Mon, 7 Feb 2022 22:09:49 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Mon, 7 Feb 2022 09:11:59 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EFC8C0401C3;
+        Mon,  7 Feb 2022 06:11:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=sDZcTdthLVK7szlPjHCIXwYM3fqcQ0lcfaos24QABmA=; b=LvNO9O05ToAroojyVi6aHCQaRS
+        dC7qLtE2VC8YDQdSfZ9POLjxHBaCIWSlqe/ZfgIjZJy84PnuCYfSXutlvg1b5R+uZ2u/hlr+4hvqF
+        5GhHNaKH5r+QPhn1paF71BWfbHkFNIhxwVKP/SEiTPbMYChP0JLSaHAEtsBeB+KSEI/YBGkGCKybX
+        HwvQoIsYPX6hbjg1hVG2dmMT8NEPIrYQXzQe7zXhXfMnoGquHQJ6eYe/99epJBP8Bp7so5C3VOacM
+        B9bfg4hn5jUkmrmdseQMKaHH4g3h24RjAIlfuFscgxxq7N18A/mZ0vmAxGNT2C4JWmUOp9zXHE1GP
+        ptE9TbcA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nH4jy-007mzB-Gg; Mon, 07 Feb 2022 14:11:38 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 9378E986235; Mon,  7 Feb 2022 15:11:36 +0100 (CET)
+Date:   Mon, 7 Feb 2022 15:11:36 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Zhipeng Xie <xiezhipeng1@huawei.com>
+Cc:     mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@redhat.com,
+        namhyung@kernel.org, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Fix perf_mmap fail when CONFIG_PERF_USE_VMALLOC enabled
+Message-ID: <20220207141136.GG23216@worktop.programming.kicks-ass.net>
+References: <20220207170259.2566-1-xiezhipeng1@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.245]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600001.china.huawei.com (7.193.23.3)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220207170259.2566-1-xiezhipeng1@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-I found a bug, but I don't know how to fix it. Anyone have some good ideas?
+Your $Subject needs a subsystem prefix.
 
-This bug will cause udp broadcast messages not to be sent, but instead send
-non-expected arp request messages.
+On Mon, Feb 07, 2022 at 12:02:59PM -0500, Zhipeng Xie wrote:
+> when CONFIG_PERF_USE_VMALLOC is enabled, rb->nr_pages is always
+> equal to 1 in rb_alloc, causing perf_mmap return -EINVAL when mmap.
+> Fix this problem using data_page_nr.
 
-Deleting the ip while sending udp broadcast messages and then configuring
-the ip again will probably trigger the bug.
+How can this be? This would mean that any arch that selects that hasn't
+worked for forever ?! That seems unlikely.
 
-The following is the timing diagram of the bug, cpu0 sends a broadcast
-message and cpu1 deletes the routing table at the appropriate time.
+> Signed-off-by: Zhipeng Xie <xiezhipeng1@huawei.com>
 
-cpu0                                        cpu1
-send()
-   udp_sendmsg()
-     ip_route_output_flow()
-     |  fib_lookup()
-     udp_send_skb()
-       ip_send_skb()
-         ip_finish_output2()
-
-                                             ifconfig eth0:2 down
-                                               fib_del_ifaddr
-                                                 fib_table_delete // 
-delete fib table
-
-           ip_neigh_for_gw()
-           |  ip_neigh_gw4()
-           |    __ipv4_neigh_lookup_noref()
-           |    __neigh_create()
-           |      tbl->constructor(n) --> arp_constructor()
-           |        neigh->type = inet_addr_type_dev_table(); // no 
-route, neigh->type = RTN_UNICAST
-           neigh_output() // unicast, send an arp request and create an 
-exception arp entry
-
-After the above operation, an abnormal arp entry will be generated. If
-the ip is configured again(ifconfig eth0:2 12.0.208.0), the abnormal arp
-entry will still exist, and the udp broadcast message will be converted
-to an arp request message when it is sent.
-
-Any feedback would be appreciated, thanks.
-
--- 
-Wang Hai
-
+If this is correct; this is also missing a Fixes: tag.

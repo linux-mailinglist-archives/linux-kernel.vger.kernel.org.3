@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 673704ABD0B
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:55:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5944E4ABD57
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:59:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388714AbiBGLog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:44:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46036 "EHLO
+        id S1387489AbiBGLlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:41:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385888AbiBGLc6 (ORCPT
+        with ESMTP id S1359536AbiBGL2p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:32:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77FBDC043181;
-        Mon,  7 Feb 2022 03:32:57 -0800 (PST)
+        Mon, 7 Feb 2022 06:28:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61325C08E834;
+        Mon,  7 Feb 2022 03:26:53 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 15FD560A69;
-        Mon,  7 Feb 2022 11:32:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAC07C004E1;
-        Mon,  7 Feb 2022 11:32:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7AEA4B80EBD;
+        Mon,  7 Feb 2022 11:26:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8882EC004E1;
+        Mon,  7 Feb 2022 11:26:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233576;
-        bh=u8o5PCQAyIhvn8HqQIszupSztvY2NwO4h4QsnvWbks0=;
+        s=korg; t=1644233212;
+        bh=JE/jV0p/vLig4xTmzfQk4lQFfn7O51vh4mZW9DF20YE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ze/sdS+0Ua3L8CxKh6A3Dw2ziDX1/Iujdvz32+6NJX0Wqhh2CpBhuvRvM2jgNwpGW
-         RvAtqkW7yJApCyfgocg/45SUUtk8DsmSRTyjqyqyzCD/F7gIY0wNIFeWeSCG+//i9D
-         q8M7vVhCrK9ez4iF+ELSP0ZEmezi8d42mn8JIVIw=
+        b=BP7sXMhYgMS2DG8/uPFdX2hu/5CxNecOti5C+3D7ws6gK7Ku/EOwTbDhw/4u6Dt49
+         01RNpocPsuNhxpVZ+/hQtlz1r65OFtXeBEgji7dSqaXt3N8vsn8MymuQbSakHqIzZ4
+         J/lUGsTZqTPsHYXRSC42nuX6YK7fFIG/8ZzFOZFA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Jos=C3=A9=20Roberto=20de=20Souza?= <jose.souza@intel.com>,
-        Imre Deak <imre.deak@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        Chia-Lin Kao <acelan.kao@canonical.com>
-Subject: [PATCH 5.16 023/126] drm/i915/adlp: Fix TypeC PHY-ready status readout
+        stable@vger.kernel.org, Nick Lopez <github@glowingmonkey.org>,
+        Ilia Mirkin <imirkin@alum.mit.edu>,
+        Karol Herbst <kherbst@redhat.com>
+Subject: [PATCH 5.15 021/110] drm/nouveau: fix off by one in BIOS boundary checking
 Date:   Mon,  7 Feb 2022 12:05:54 +0100
-Message-Id: <20220207103804.958489222@linuxfoundation.org>
+Message-Id: <20220207103802.973694188@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
-References: <20220207103804.053675072@linuxfoundation.org>
+In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
+References: <20220207103802.280120990@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,45 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Imre Deak <imre.deak@intel.com>
+From: Nick Lopez <github@glowingmonkey.org>
 
-commit 3c6f13ad723e7206f03bb2752b01d18202b7fc9d upstream.
+commit 1b777d4d9e383d2744fc9b3a09af6ec1893c8b1a upstream.
 
-The TCSS_DDI_STATUS register is indexed by tc_port not by the FIA port
-index, fix this up. This only caused an issue on TC#3/4 ports in legacy
-mode, as in all other cases the two indices either match (on TC#1/2) or
-the TCSS_DDI_STATUS_READY flag is set regardless of something being
-connected or not (on TC#1/2/3/4 in dp-alt and tbt-alt modes).
+Bounds checking when parsing init scripts embedded in the BIOS reject
+access to the last byte. This causes driver initialization to fail on
+Apple eMac's with GeForce 2 MX GPUs, leaving the system with no working
+console.
 
-Reported-and-tested-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
-Fixes: 55ce306c2aa1 ("drm/i915/adl_p: Implement TC sequences")
-Closes: https://gitlab.freedesktop.org/drm/intel/-/issues/4698
-Cc: José Roberto de Souza <jose.souza@intel.com>
-Cc: <stable@vger.kernel.org> # v5.14+
-Signed-off-by: Imre Deak <imre.deak@intel.com>
-Reviewed-by: José Roberto de Souza <jose.souza@intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220126104356.2022975-1-imre.deak@intel.com
-(cherry picked from commit 516b33460c5bee78b2055637b0547bdb0e6af754)
-Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+This is probably only seen on OpenFirmware machines like PowerPC Macs
+because the BIOS image provided by OF is only the used parts of the ROM,
+not a power-of-two blocks read from PCI directly so PCs always have
+empty bytes at the end that are never accessed.
+
+Signed-off-by: Nick Lopez <github@glowingmonkey.org>
+Fixes: 4d4e9907ff572 ("drm/nouveau/bios: guard against out-of-bounds accesses to image")
+Cc: <stable@vger.kernel.org> # v4.10+
+Reviewed-by: Ilia Mirkin <imirkin@alum.mit.edu>
+Reviewed-by: Karol Herbst <kherbst@redhat.com>
+Signed-off-by: Karol Herbst <kherbst@redhat.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220122081906.2633061-1-github@glowingmonkey.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/i915/display/intel_tc.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/nouveau/nvkm/subdev/bios/base.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/gpu/drm/i915/display/intel_tc.c
-+++ b/drivers/gpu/drm/i915/display/intel_tc.c
-@@ -345,10 +345,11 @@ static bool icl_tc_phy_status_complete(s
- static bool adl_tc_phy_status_complete(struct intel_digital_port *dig_port)
- {
- 	struct drm_i915_private *i915 = to_i915(dig_port->base.base.dev);
-+	enum tc_port tc_port = intel_port_to_tc(i915, dig_port->base.port);
- 	struct intel_uncore *uncore = &i915->uncore;
- 	u32 val;
+--- a/drivers/gpu/drm/nouveau/nvkm/subdev/bios/base.c
++++ b/drivers/gpu/drm/nouveau/nvkm/subdev/bios/base.c
+@@ -38,7 +38,7 @@ nvbios_addr(struct nvkm_bios *bios, u32
+ 		*addr += bios->imaged_addr;
+ 	}
  
--	val = intel_uncore_read(uncore, TCSS_DDI_STATUS(dig_port->tc_phy_fia_idx));
-+	val = intel_uncore_read(uncore, TCSS_DDI_STATUS(tc_port));
- 	if (val == 0xffffffff) {
- 		drm_dbg_kms(&i915->drm,
- 			    "Port %s: PHY in TCCOLD, assuming not complete\n",
+-	if (unlikely(*addr + size >= bios->size)) {
++	if (unlikely(*addr + size > bios->size)) {
+ 		nvkm_error(&bios->subdev, "OOB %d %08x %08x\n", size, p, *addr);
+ 		return false;
+ 	}
 
 

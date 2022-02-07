@@ -2,57 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81BAE4ABC91
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:49:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED7ED4ABA27
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:27:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386849AbiBGLhy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:37:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37362 "EHLO
+        id S1382821AbiBGLUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:20:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355803AbiBGL0B (ORCPT
+        with ESMTP id S1378063AbiBGLPn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:26:01 -0500
+        Mon, 7 Feb 2022 06:15:43 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CAA8C03E968;
-        Mon,  7 Feb 2022 03:25:38 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CE2FC0401CE;
+        Mon,  7 Feb 2022 03:15:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B32BEB80EC3;
-        Mon,  7 Feb 2022 11:25:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6A65C004E1;
-        Mon,  7 Feb 2022 11:25:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BEB94B811AF;
+        Mon,  7 Feb 2022 11:15:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7FEFC004E1;
+        Mon,  7 Feb 2022 11:15:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233133;
-        bh=LLYIADvuVzP5s+T9xBErFHnFjFO3FixGAqGldwSpfRM=;
+        s=korg; t=1644232521;
+        bh=F1s5gUhACbxYTgy3q4vT3rcy4q4s2APu8H8KOKKraCE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SQbRX+/rnigdCUOpT2p5+Zbp9lDJpqpCxfWnIqZY1fCbIlQXdCk51Pt/GEd9ETtQU
-         TJ9/z4aqnKZFlgallqZIZYyvW3o5j0PWGWGjbCxJC7++b8oHNfYwWe8rdMPOoprSv+
-         Y5phggj+l5LqF41pelcg4tqJro4wuIB1SNy/ZsPI=
+        b=ZGqUVtfHTnNGBdpkKlCwHD16JczQ8bUiaGZ4dSCGWZZ1b2IRCp0K/GEqd8W57nAq2
+         qW4miE4gpPQrZSCAwnqvzOmfC5qsA/PQDl/eNyubxlBHEWhFZ68I6daIfyt6OIr+os
+         L2MY9ZyMsdmTOLGgF+AzOUaevAlew+SyOpeuVUY0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Zi Yan <ziy@nvidia.com>, David Rientjes <rientjes@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Paul Turner <pjt@google.com>, Wei Xu <weixugc@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.15 027/110] mm/debug_vm_pgtable: remove pte entry from the page table
+        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        syzbot <syzkaller@googlegroups.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 4.19 37/86] ipv6: annotate accesses to fn->fn_sernum
 Date:   Mon,  7 Feb 2022 12:06:00 +0100
-Message-Id: <20220207103803.165197284@linuxfoundation.org>
+Message-Id: <20220207103758.744907067@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
-References: <20220207103802.280120990@linuxfoundation.org>
+In-Reply-To: <20220207103757.550973048@linuxfoundation.org>
+References: <20220207103757.550973048@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -67,75 +55,188 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pasha Tatashin <pasha.tatashin@soleen.com>
+From: Eric Dumazet <edumazet@google.com>
 
-commit fb5222aae64fe25e5f3ebefde8214dcf3ba33ca5 upstream.
+commit aafc2e3285c2d7a79b7ee15221c19fbeca7b1509 upstream.
 
-Patch series "page table check fixes and cleanups", v5.
+struct fib6_node's fn_sernum field can be
+read while other threads change it.
 
-This patch (of 4):
+Add READ_ONCE()/WRITE_ONCE() annotations.
 
-The pte entry that is used in pte_advanced_tests() is never removed from
-the page table at the end of the test.
+Do not change existing smp barriers in fib6_get_cookie_safe()
+and __fib6_update_sernum_upto_root()
 
-The issue is detected by page_table_check, to repro compile kernel with
-the following configs:
+syzbot reported:
 
-CONFIG_DEBUG_VM_PGTABLE=y
-CONFIG_PAGE_TABLE_CHECK=y
-CONFIG_PAGE_TABLE_CHECK_ENFORCED=y
+BUG: KCSAN: data-race in fib6_clean_node / inet6_csk_route_socket
 
-During the boot the following BUG is printed:
+write to 0xffff88813df62e2c of 4 bytes by task 1920 on cpu 1:
+ fib6_clean_node+0xc2/0x260 net/ipv6/ip6_fib.c:2178
+ fib6_walk_continue+0x38e/0x430 net/ipv6/ip6_fib.c:2112
+ fib6_walk net/ipv6/ip6_fib.c:2160 [inline]
+ fib6_clean_tree net/ipv6/ip6_fib.c:2240 [inline]
+ __fib6_clean_all+0x1a9/0x2e0 net/ipv6/ip6_fib.c:2256
+ fib6_flush_trees+0x6c/0x80 net/ipv6/ip6_fib.c:2281
+ rt_genid_bump_ipv6 include/net/net_namespace.h:488 [inline]
+ addrconf_dad_completed+0x57f/0x870 net/ipv6/addrconf.c:4230
+ addrconf_dad_work+0x908/0x1170
+ process_one_work+0x3f6/0x960 kernel/workqueue.c:2307
+ worker_thread+0x616/0xa70 kernel/workqueue.c:2454
+ kthread+0x1bf/0x1e0 kernel/kthread.c:359
+ ret_from_fork+0x1f/0x30
 
-  debug_vm_pgtable: [debug_vm_pgtable         ]: Validating architecture page table helpers
-  ------------[ cut here ]------------
-  kernel BUG at mm/page_table_check.c:162!
-  invalid opcode: 0000 [#1] PREEMPT SMP PTI
-  CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.16.0-11413-g2c271fe77d52 #3
-  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.15.0-0-g2dd4b9b3f840-prebuilt.qemu.org 04/01/2014
-  ...
+read to 0xffff88813df62e2c of 4 bytes by task 15701 on cpu 0:
+ fib6_get_cookie_safe include/net/ip6_fib.h:285 [inline]
+ rt6_get_cookie include/net/ip6_fib.h:306 [inline]
+ ip6_dst_store include/net/ip6_route.h:234 [inline]
+ inet6_csk_route_socket+0x352/0x3c0 net/ipv6/inet6_connection_sock.c:109
+ inet6_csk_xmit+0x91/0x1e0 net/ipv6/inet6_connection_sock.c:121
+ __tcp_transmit_skb+0x1323/0x1840 net/ipv4/tcp_output.c:1402
+ tcp_transmit_skb net/ipv4/tcp_output.c:1420 [inline]
+ tcp_write_xmit+0x1450/0x4460 net/ipv4/tcp_output.c:2680
+ __tcp_push_pending_frames+0x68/0x1c0 net/ipv4/tcp_output.c:2864
+ tcp_push+0x2d9/0x2f0 net/ipv4/tcp.c:725
+ mptcp_push_release net/mptcp/protocol.c:1491 [inline]
+ __mptcp_push_pending+0x46c/0x490 net/mptcp/protocol.c:1578
+ mptcp_sendmsg+0x9ec/0xa50 net/mptcp/protocol.c:1764
+ inet6_sendmsg+0x5f/0x80 net/ipv6/af_inet6.c:643
+ sock_sendmsg_nosec net/socket.c:705 [inline]
+ sock_sendmsg net/socket.c:725 [inline]
+ kernel_sendmsg+0x97/0xd0 net/socket.c:745
+ sock_no_sendpage+0x84/0xb0 net/core/sock.c:3086
+ inet_sendpage+0x9d/0xc0 net/ipv4/af_inet.c:834
+ kernel_sendpage+0x187/0x200 net/socket.c:3492
+ sock_sendpage+0x5a/0x70 net/socket.c:1007
+ pipe_to_sendpage+0x128/0x160 fs/splice.c:364
+ splice_from_pipe_feed fs/splice.c:418 [inline]
+ __splice_from_pipe+0x207/0x500 fs/splice.c:562
+ splice_from_pipe fs/splice.c:597 [inline]
+ generic_splice_sendpage+0x94/0xd0 fs/splice.c:746
+ do_splice_from fs/splice.c:767 [inline]
+ direct_splice_actor+0x80/0xa0 fs/splice.c:936
+ splice_direct_to_actor+0x345/0x650 fs/splice.c:891
+ do_splice_direct+0x106/0x190 fs/splice.c:979
+ do_sendfile+0x675/0xc40 fs/read_write.c:1245
+ __do_sys_sendfile64 fs/read_write.c:1310 [inline]
+ __se_sys_sendfile64 fs/read_write.c:1296 [inline]
+ __x64_sys_sendfile64+0x102/0x140 fs/read_write.c:1296
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-The entry should be properly removed from the page table before the page
-is released to the free list.
+value changed: 0x0000026f -> 0x00000271
 
-Link: https://lkml.kernel.org/r/20220131203249.2832273-1-pasha.tatashin@soleen.com
-Link: https://lkml.kernel.org/r/20220131203249.2832273-2-pasha.tatashin@soleen.com
-Fixes: a5c3b9ffb0f4 ("mm/debug_vm_pgtable: add tests validating advanced arch page table helpers")
-Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-Reviewed-by: Zi Yan <ziy@nvidia.com>
-Tested-by: Zi Yan <ziy@nvidia.com>
-Acked-by: David Rientjes <rientjes@google.com>
-Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
-Cc: Paul Turner <pjt@google.com>
-Cc: Wei Xu <weixugc@google.com>
-Cc: Greg Thelen <gthelen@google.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Mike Rapoport <rppt@kernel.org>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: H. Peter Anvin <hpa@zytor.com>
-Cc: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
-Cc: Jiri Slaby <jirislaby@kernel.org>
-Cc: Muchun Song <songmuchun@bytedance.com>
-Cc: Hugh Dickins <hughd@google.com>
-Cc: <stable@vger.kernel.org>	[5.9+]
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Reported by Kernel Concurrency Sanitizer on:
+CPU: 0 PID: 15701 Comm: syz-executor.2 Not tainted 5.16.0-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+
+The Fixes tag I chose is probably arbitrary, I do not think
+we need to backport this patch to older kernels.
+
+Fixes: c5cff8561d2d ("ipv6: add rcu grace period before freeing fib6_node")
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Reported-by: syzbot <syzkaller@googlegroups.com>
+Link: https://lore.kernel.org/r/20220120174112.1126644-1-eric.dumazet@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/debug_vm_pgtable.c |    2 ++
- 1 file changed, 2 insertions(+)
+ include/net/ip6_fib.h |    2 +-
+ net/ipv6/ip6_fib.c    |   23 +++++++++++++----------
+ net/ipv6/route.c      |    2 +-
+ 3 files changed, 15 insertions(+), 12 deletions(-)
 
---- a/mm/debug_vm_pgtable.c
-+++ b/mm/debug_vm_pgtable.c
-@@ -171,6 +171,8 @@ static void __init pte_advanced_tests(st
- 	ptep_test_and_clear_young(args->vma, args->vaddr, args->ptep);
- 	pte = ptep_get(args->ptep);
- 	WARN_ON(pte_young(pte));
-+
-+	ptep_get_and_clear_full(args->mm, args->vaddr, args->ptep, 1);
+--- a/include/net/ip6_fib.h
++++ b/include/net/ip6_fib.h
+@@ -243,7 +243,7 @@ static inline bool fib6_get_cookie_safe(
+ 	fn = rcu_dereference(f6i->fib6_node);
+ 
+ 	if (fn) {
+-		*cookie = fn->fn_sernum;
++		*cookie = READ_ONCE(fn->fn_sernum);
+ 		/* pairs with smp_wmb() in fib6_update_sernum_upto_root() */
+ 		smp_rmb();
+ 		status = true;
+--- a/net/ipv6/ip6_fib.c
++++ b/net/ipv6/ip6_fib.c
+@@ -112,7 +112,7 @@ void fib6_update_sernum(struct net *net,
+ 	fn = rcu_dereference_protected(f6i->fib6_node,
+ 			lockdep_is_held(&f6i->fib6_table->tb6_lock));
+ 	if (fn)
+-		fn->fn_sernum = fib6_new_sernum(net);
++		WRITE_ONCE(fn->fn_sernum, fib6_new_sernum(net));
  }
  
- static void __init pte_savedwrite_tests(struct pgtable_debug_args *args)
+ /*
+@@ -544,12 +544,13 @@ static int fib6_dump_table(struct fib6_t
+ 		spin_unlock_bh(&table->tb6_lock);
+ 		if (res > 0) {
+ 			cb->args[4] = 1;
+-			cb->args[5] = w->root->fn_sernum;
++			cb->args[5] = READ_ONCE(w->root->fn_sernum);
+ 		}
+ 	} else {
+-		if (cb->args[5] != w->root->fn_sernum) {
++		int sernum = READ_ONCE(w->root->fn_sernum);
++		if (cb->args[5] != sernum) {
+ 			/* Begin at the root if the tree changed */
+-			cb->args[5] = w->root->fn_sernum;
++			cb->args[5] = sernum;
+ 			w->state = FWS_INIT;
+ 			w->node = w->root;
+ 			w->skip = w->count;
+@@ -1203,7 +1204,7 @@ static void __fib6_update_sernum_upto_ro
+ 	/* paired with smp_rmb() in rt6_get_cookie_safe() */
+ 	smp_wmb();
+ 	while (fn) {
+-		fn->fn_sernum = sernum;
++		WRITE_ONCE(fn->fn_sernum, sernum);
+ 		fn = rcu_dereference_protected(fn->parent,
+ 				lockdep_is_held(&rt->fib6_table->tb6_lock));
+ 	}
+@@ -1983,8 +1984,8 @@ static int fib6_clean_node(struct fib6_w
+ 	};
+ 
+ 	if (c->sernum != FIB6_NO_SERNUM_CHANGE &&
+-	    w->node->fn_sernum != c->sernum)
+-		w->node->fn_sernum = c->sernum;
++	    READ_ONCE(w->node->fn_sernum) != c->sernum)
++		WRITE_ONCE(w->node->fn_sernum, c->sernum);
+ 
+ 	if (!c->func) {
+ 		WARN_ON_ONCE(c->sernum == FIB6_NO_SERNUM_CHANGE);
+@@ -2332,7 +2333,7 @@ static void ipv6_route_seq_setup_walk(st
+ 	iter->w.state = FWS_INIT;
+ 	iter->w.node = iter->w.root;
+ 	iter->w.args = iter;
+-	iter->sernum = iter->w.root->fn_sernum;
++	iter->sernum = READ_ONCE(iter->w.root->fn_sernum);
+ 	INIT_LIST_HEAD(&iter->w.lh);
+ 	fib6_walker_link(net, &iter->w);
+ }
+@@ -2360,8 +2361,10 @@ static struct fib6_table *ipv6_route_seq
+ 
+ static void ipv6_route_check_sernum(struct ipv6_route_iter *iter)
+ {
+-	if (iter->sernum != iter->w.root->fn_sernum) {
+-		iter->sernum = iter->w.root->fn_sernum;
++	int sernum = READ_ONCE(iter->w.root->fn_sernum);
++
++	if (iter->sernum != sernum) {
++		iter->sernum = sernum;
+ 		iter->w.state = FWS_INIT;
+ 		iter->w.node = iter->w.root;
+ 		WARN_ON(iter->w.skip);
+--- a/net/ipv6/route.c
++++ b/net/ipv6/route.c
+@@ -2320,7 +2320,7 @@ static void ip6_link_failure(struct sk_b
+ 			if (from) {
+ 				fn = rcu_dereference(from->fib6_node);
+ 				if (fn && (rt->rt6i_flags & RTF_DEFAULT))
+-					fn->fn_sernum = -1;
++					WRITE_ONCE(fn->fn_sernum, -1);
+ 			}
+ 		}
+ 		rcu_read_unlock();
 
 

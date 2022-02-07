@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 991984ACD32
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:07:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9364B4ACD00
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:07:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344696AbiBHBDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 20:03:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35642 "EHLO
+        id S1344626AbiBHBDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 20:03:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245441AbiBGXD3 (ORCPT
+        with ESMTP id S245459AbiBGXDa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 18:03:29 -0500
+        Mon, 7 Feb 2022 18:03:30 -0500
 Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FAE8C043181
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 15:03:29 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36AF2C0612A4
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 15:03:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644275009; x=1675811009;
+  t=1644275010; x=1675811010;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=qAN6i2tcGpKHAdLmfykkJrrQYTFoSpMh8/ZHA7l/RSs=;
-  b=GpP7HVsV0ZT44Q5jMpLdlHIl/lreOIp502LymK7yz2L5lx8uTeLcNobf
-   FE2YGwq+yLLs7g0Y7mXF4QBSCF7whIi4u4tkwhOxn3LO7S0EtV73tq27k
-   p9UMKLvR56USnH13L286N7eqdmDqxMTh+aMPqSXOKksd5t3tinXW1LSNO
-   p4DJAhCWqLvYpziUD2R8XCrOy4cI/mQxnK2JJU044eq2mG48CLtLHzxrJ
-   4Pg4L8W7CUZXcO7eSZW62csizyxwZYQpFe9pO3sw39vkYFPSQDZXkhlrU
-   FiQuU4uwudCFlEnNQDa5sxsJjm7BBVpdNYzwQ2+/yPsvvXKGFKOAEFqk0
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="229475017"
+  bh=G2ko2lJpyoW8LzCkDhi+2nZvr53q38fpGk6sB2Ue41w=;
+  b=lJIboQtle/aq9nhdr4qja4xr8ksiEiC18tskTCVi3qQDGfzQN4+ljJMS
+   mptSYo/41KEZbS4E5pk5KKW6WFMDpL6Kd7buBHX5skx+DQLb6IT1dTY5M
+   Sja6qBCHHf3LTDQFsEn3TrZQdzC8tANx7YCa2YQTa3rwQLQiiYliIltnq
+   j/wAxMP4ldLYg7HX4gflDAKFyxMqkBELeX3J5igCDhIWYRwrF1RnpR6gf
+   TdiZWaIlASQBACnlSBTO1/adbz9/YA8Dbc72quHRlbk+tGDouY2Enl4WG
+   wyqTQTBoMUcsMU4hwaVN5E0ZU1LUUJa0URoNNEJG3Hrrx6bYUWofJVaME
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="229475019"
 X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
-   d="scan'208";a="229475017"
+   d="scan'208";a="229475019"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
   by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 15:03:06 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
-   d="scan'208";a="540324076"
+   d="scan'208";a="540324084"
 Received: from otcwcpicx3.sc.intel.com ([172.25.55.73])
   by orsmga008.jf.intel.com with ESMTP; 07 Feb 2022 15:03:05 -0800
 From:   Fenghua Yu <fenghua.yu@intel.com>
@@ -54,9 +54,9 @@ To:     "Thomas Gleixner" <tglx@linutronix.de>,
 Cc:     iommu@lists.linux-foundation.org, "x86" <x86@kernel.org>,
         "linux-kernel" <linux-kernel@vger.kernel.org>,
         Fenghua Yu <fenghua.yu@intel.com>
-Subject: [PATCH v4 07/11] sched: Define and initialize a flag to identify valid PASID in the task
-Date:   Mon,  7 Feb 2022 15:02:50 -0800
-Message-Id: <20220207230254.3342514-8-fenghua.yu@intel.com>
+Subject: [PATCH v4 08/11] x86/traps: Demand-populate PASID MSR via #GP
+Date:   Mon,  7 Feb 2022 15:02:51 -0800
+Message-Id: <20220207230254.3342514-9-fenghua.yu@intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220207230254.3342514-1-fenghua.yu@intel.com>
 References: <20220207230254.3342514-1-fenghua.yu@intel.com>
@@ -72,15 +72,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
+All tasks start with PASID state disabled. This means that the first
+time they execute an ENQCMD instruction they will take a #GP fault.
 
-Add a new single bit field to the task structure to track whether this task
-has initialized the IA32_PASID MSR to the mm's PASID.
+Modify the #GP fault handler to check if the "mm" for the task has
+already been allocated a PASID. If so, try to fix the #GP fault by
+loading the IA32_PASID MSR.
 
-Initialize the field to zero when creating a new task with fork/clone.
-
-Signed-off-by: Peter Zijlstra <peterz@infradead.org>
-Co-developed-by: Fenghua Yu <fenghua.yu@intel.com>
 Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
 Reviewed-by: Tony Luck <tony.luck@intel.com>
 Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
@@ -89,41 +87,98 @@ v4:
 - Add "Reviewed-by: Thomas Gleixner <tglx@linutronix.de>" (Thomas).
 
 v2:
-- Change condition to more accurate CONFIG_IOMMU_SVA (Jacob)
+- Directly write IA32_PASID MSR in fixup while local IRQ is still disabled
+  (Thomas)
+- Move #ifdef over to CONFIG_IOMMU_SVA since it is what
+  defines mm->pasid and ->pasid_activated (Dave Hansen).
+- Rename try_fixup_pasid() -> try_fixup_enqcmd_gp(). This
+  code really is highly specific to ENQCMD, not PASIDs (Dave Hansen).
+- Add lockdep assert and comment about context (Dave Hansen).
+- Re-flow the if() mess (Dave Hansen).
 
- include/linux/sched.h | 3 +++
- kernel/fork.c         | 4 ++++
- 2 files changed, 7 insertions(+)
+ arch/x86/kernel/traps.c | 55 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 55 insertions(+)
 
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index 75ba8aa60248..4e5de3aed410 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -938,6 +938,9 @@ struct task_struct {
- 	/* Recursion prevention for eventfd_signal() */
- 	unsigned			in_eventfd_signal:1;
- #endif
+diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
+index c9d566dcf89a..7ef00dee35be 100644
+--- a/arch/x86/kernel/traps.c
++++ b/arch/x86/kernel/traps.c
+@@ -39,6 +39,7 @@
+ #include <linux/io.h>
+ #include <linux/hardirq.h>
+ #include <linux/atomic.h>
++#include <linux/ioasid.h>
+ 
+ #include <asm/stacktrace.h>
+ #include <asm/processor.h>
+@@ -559,6 +560,57 @@ static bool fixup_iopl_exception(struct pt_regs *regs)
+ 	return true;
+ }
+ 
++/*
++ * The unprivileged ENQCMD instruction generates #GPs if the
++ * IA32_PASID MSR has not been populated.  If possible, populate
++ * the MSR from a PASID previously allocated to the mm.
++ */
++static bool try_fixup_enqcmd_gp(void)
++{
 +#ifdef CONFIG_IOMMU_SVA
-+	unsigned			pasid_activated:1;
-+#endif
- 
- 	unsigned long			atomic_flags; /* Flags requiring atomic access. */
- 
-diff --git a/kernel/fork.c b/kernel/fork.c
-index c03c6682464c..51fd1df994b7 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -968,6 +968,10 @@ static struct task_struct *dup_task_struct(struct task_struct *orig, int node)
- 	tsk->use_memdelay = 0;
- #endif
- 
-+#ifdef CONFIG_IOMMU_SVA
-+	tsk->pasid_activated = 0;
-+#endif
++	u32 pasid;
 +
- #ifdef CONFIG_MEMCG
- 	tsk->active_memcg = NULL;
- #endif
++	/*
++	 * MSR_IA32_PASID is managed using XSAVE.  Directly
++	 * writing to the MSR is only possible when fpregs
++	 * are valid and the fpstate is not.  This is
++	 * guaranteed when handling a userspace exception
++	 * in *before* interrupts are re-enabled.
++	 */
++	lockdep_assert_irqs_disabled();
++
++	/*
++	 * Hardware without ENQCMD will not generate
++	 * #GPs that can be fixed up here.
++	 */
++	if (!cpu_feature_enabled(X86_FEATURE_ENQCMD))
++		return false;
++
++	pasid = current->mm->pasid;
++
++	/*
++	 * If the mm has not been allocated a
++	 * PASID, the #GP can not be fixed up.
++	 */
++	if (!pasid_valid(pasid))
++		return false;
++
++	/*
++	 * Did this thread already have its PASID activated?
++	 * If so, the #GP must be from something else.
++	 */
++	if (current->pasid_activated)
++		return false;
++
++	wrmsrl(MSR_IA32_PASID, pasid | MSR_IA32_PASID_VALID);
++	current->pasid_activated = 1;
++
++	return true;
++#else
++	return false;
++#endif
++}
++
+ DEFINE_IDTENTRY_ERRORCODE(exc_general_protection)
+ {
+ 	char desc[sizeof(GPFSTR) + 50 + 2*sizeof(unsigned long) + 1] = GPFSTR;
+@@ -567,6 +619,9 @@ DEFINE_IDTENTRY_ERRORCODE(exc_general_protection)
+ 	unsigned long gp_addr;
+ 	int ret;
+ 
++	if (user_mode(regs) && try_fixup_enqcmd_gp())
++		return;
++
+ 	cond_local_irq_enable(regs);
+ 
+ 	if (static_cpu_has(X86_FEATURE_UMIP)) {
 -- 
 2.35.1
 

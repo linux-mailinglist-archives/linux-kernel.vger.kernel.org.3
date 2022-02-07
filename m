@@ -2,122 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9798E4ACD76
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:08:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07EEC4ACDCF
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:18:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343853AbiBHBG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 20:06:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48958 "EHLO
+        id S1343501AbiBHBGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 20:06:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343872AbiBHAA7 (ORCPT
+        with ESMTP id S1343745AbiBGXyq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 19:00:59 -0500
-X-Greylist: delayed 406 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 16:00:55 PST
-Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1FCC0612A4;
-        Mon,  7 Feb 2022 16:00:55 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.west.internal (Postfix) with ESMTP id 5FB362B001F4;
-        Mon,  7 Feb 2022 18:54:06 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Mon, 07 Feb 2022 18:54:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; bh=7T1gb9q/dG3+e+
-        HVYc4URRtl0zI51K/MI/cYy1EcerM=; b=SDYv224gBZ5TT66LpyAI9ivK3tYsVZ
-        GBDiKxzdAELBE+LHIad5qxjwoVvgShjRZqvs1T+iE1ug4DfXaHnPXWqu3w3dW6iS
-        VWYhOUl/EqRiKCBjT+8acRD/NDUoFmg5rDbRyxEem25KtRpeEtsIn3OmVvQ1o06O
-        /uqL4Hxvu1eOldEvKivAb8tYgEdUAQSxU1Mkq6qXmntsEwnrRGo26NV31u68KB62
-        pUUkKRlaMcTRtlWJ21rw2p46tK/w0LVXTHjN6vY6X7GLaePGA86U3dyc2+cE58bi
-        p4llC4FgLAdhQXgDDIqSD7J/XMQiPkeJqz7AKEjiOTDKs39DBr95K10g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; bh=7T1gb9q/dG3+e+HVYc4URRtl0zI51K/MI/cYy1Ece
-        rM=; b=dLl3ZpuPFU64fHFzudMdRGhNEh23o8k+blqkqXrk485ZDHglhYjDWyueC
-        5REvXvS1FtUvdEeK4if4sRQffIpOKH7TEaO+zUNr+oqz4k5vHKGcV3VWNNpmM1mx
-        NX5EkDA1FyaHWQTEKowbGpsbqvyhCJM9q55+c3e1dOLBzDS4VXQQM2f0ZrUZ3vnL
-        m4BPwW+hlb7MdHrWwZc6R/Pq7jca+ihKDFWK59yYtCMUr5CdDixJsYXdhTX9L/es
-        yqH0pAQTvLaBul6yAU/SIpiJLEYxfAGmIw6zcqG7DMHNGiLMp1yDaSbNwN/o/Gmz
-        H2HlSD5bqBi3RplwL/SnkD0wD0KUQ==
-X-ME-Sender: <xms:HLEBYg6jw33gP6tAXBkbbBPNm4gGLbfE98ysR-hGoL_Ozu60Rylstw>
-    <xme:HLEBYh4dqQ3adV6Qd1t2gCrgiDnlBoAzzy10EMDTx_34cils8jIJ2dFvr7LpOjpgw
-    OkkCQNwtrwns3djTA>
-X-ME-Received: <xmr:HLEBYvexMpT1Ym7Mbdz_UUlt-gJcQg9yRVtICaIGsb8uWm1ySPLnl9dFPKc6UB_tgm8zQRI_kif1DqEn5HzNmLdboZvH6x0-qMysB0BXYv2pXglTTIPAfvhT_w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrheeigddugecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefuvfhfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghmuhgv
-    lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtf
-    frrghtthgvrhhnpefgveffteelheffjeeukedvkedviedtheevgeefkeehueeiieeuteeu
-    gfettdeggeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:HLEBYlIcESxYubPnsfJoYBFrpQV7Eca9oPiwAtrBPV0poWN-8a0Tew>
-    <xmx:HLEBYkJ_lpYGg0JrkD8SfUuIEutebjO3VnO7aYSFpLvmu_rCRQzf0w>
-    <xmx:HLEBYmwXKGJNpft6ZS79msn9_tfLg7HwdqRIBM_EBdjbuyZTxtrRXg>
-    <xmx:HbEBYnZPQRdSjNs7ec0qiolHyDVZ8LMFS3OghivBTbNnBGrprWFMS9OcNV8>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 7 Feb 2022 18:54:03 -0500 (EST)
-Subject: Re: (subset) [PATCH v3 5/6] clk: sunxi-ng: Add support for the sun6i
- RTC clocks
-To:     Maxime Ripard <maxime@cerno.tech>, Chen-Yu Tsai <wens@csie.org>,
-        linux-sunxi@lists.linux.dev, Maxime Ripard <mripard@kernel.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Alessandro Zummo <a.zummo@towertech.it>
-References: <20220203021736.13434-1-samuel@sholland.org>
- <20220203021736.13434-6-samuel@sholland.org>
- <164422443570.21572.13511859513410998733.b4-ty@cerno.tech>
-From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <bb05bc64-2a9e-fe21-5a69-0ea31134e978@sholland.org>
-Date:   Mon, 7 Feb 2022 17:54:02 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Mon, 7 Feb 2022 18:54:46 -0500
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D12BC061355;
+        Mon,  7 Feb 2022 15:54:46 -0800 (PST)
+Received: by mail-io1-xd34.google.com with SMTP id r144so19067042iod.9;
+        Mon, 07 Feb 2022 15:54:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IsFG5/GvZCP7d6Q7fgcMRKXpI72aUAEHst1zGwkjpaw=;
+        b=Ttmc6V889RmJ6MHAGUJtazmXijIa85n3LlNxupw3lelmko7Xng3pDOFVybhEpsG35n
+         8eEmXbgeqYzvp7n83Y8J2m/Zcklhm/ey9Cpj+PHrOUD6qhvBjd3E4Wq/OogBqZk2k8Aa
+         txj0Wd9LNQanpICfBvecoBB7NpS5RSDwWr7G972OZVZynLwy06wLHYb6NJOjgS0tNb6h
+         3+1Y8aFO0Hd/UrTC1tJGVe0toX542zxMEVLMNdX2eCXPcCzHMxbUOJleTAqGQJgORAPN
+         Z60YJFTYrk8Xo+ZZNaXiZ4ar5YajGVyxg1bbgIx2KfHG6vEzEgMdoUcoO/zx8AVMsezj
+         +U9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IsFG5/GvZCP7d6Q7fgcMRKXpI72aUAEHst1zGwkjpaw=;
+        b=mDVfs3FvxE4ZKLXsoQBCDwBh0PbRivo1yW+vr0HAE6EGF+jdeJ5uzUehyy+atIJM+D
+         KUmJPGsyql3Fz4wFqM7RVxNnzlq9U5sAGeG++IP7JwH90E1MQtW8kQLNkSV8wucvkY64
+         YAeLWaovwzsXqWykPqp8/efE0uIXCPJe/6DIxQwBnIk9hcEkJXusK8/HU0V4CxadBvfm
+         fMzkkCLjIFMsRKYzpAAYVqFvJ5kbxiJo1rylNiLYgP7wMmCpzZ1+r97ip77/yETw+mUo
+         3uZUAOledXIL+KRBgzNmlvmBOrVuKf6+CHBiNobQ8T99XKFlQVBh0crBCJzkSp1Vya9H
+         24RA==
+X-Gm-Message-State: AOAM530VpBLwtqLUACO3Ryf7DXQ5RXT/aRaB1yP7/+9yEii6ytgOKSRa
+        glaAWR3Vvn0NMlM0HMGCSvCAu+D7R4t0p6uw
+X-Google-Smtp-Source: ABdhPJxXRaSZjvMa7wV2I843eAN5giCRrPzED7V6mf7qaX885XlsWgHillQURNcqTg9lrfh8ROfE9w==
+X-Received: by 2002:a05:6638:10ea:: with SMTP id g10mr959591jae.79.1644278085342;
+        Mon, 07 Feb 2022 15:54:45 -0800 (PST)
+Received: from localhost.localdomain (c-174-52-171-58.hsd1.ut.comcast.net. [174.52.171.58])
+        by smtp.gmail.com with ESMTPSA id w10sm6948815iow.44.2022.02.07.15.54.44
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Mon, 07 Feb 2022 15:54:45 -0800 (PST)
+From:   Ethan Dye <mrtops03@gmail.com>
+Cc:     Ethan Dye <mrtops03@gmail.com>, Minchan Kim <minchan@kernel.org>,
+        Nitin Gupta <ngupta@vflare.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        Lars Ellenberg <lars.ellenberg@linbit.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+        drbd-dev@lists.linbit.com, linux-doc@vger.kernel.org
+Subject: [PATCH] block/zram: Fix wording in optional feature docs
+Date:   Mon,  7 Feb 2022 16:54:42 -0700
+Message-Id: <20220207235442.95090-1-mrtops03@gmail.com>
+X-Mailer: git-send-email 2.32.0 (Apple Git-132)
 MIME-Version: 1.0
-In-Reply-To: <164422443570.21572.13511859513410998733.b4-ty@cerno.tech>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maxime,
+This fixes some simple grammar errors in the documentation for zram,
+specifically errors in the optional featue section of the zram
+documentation.
 
-On 2/7/22 3:00 AM, Maxime Ripard wrote:
-> On Wed, 2 Feb 2022 20:17:35 -0600, Samuel Holland wrote:
->> The RTC power domain in sun6i and newer SoCs manages the 16 MHz RC
->> oscillator (called "IOSC" or "osc16M") and the optional 32 kHz crystal
->> oscillator (called "LOSC" or "osc32k"). Starting with the H6, this power
->> domain also handles the 24 MHz DCXO (called variously "HOSC", "dcxo24M",
->> or "osc24M") as well. The H6 also adds a calibration circuit for IOSC.
->>
->> Later SoCs introduce further variations on the design:
->>  - H616 adds an additional mux for the 32 kHz fanout source.
->>  - R329 adds an additional mux for the RTC timekeeping clock, a clock
->>    for the SPI bus between power domains inside the RTC, and removes the
->>    IOSC calibration functionality.
->>
->> [...]
-> 
-> Applied to local tree (sunxi/clk-for-5.18).
+Signed-off-by: Ethan Dye <mrtops03@gmail.com>
+---
+ Documentation/admin-guide/blockdev/zram.rst | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
-Part of the build failures were because this patch depends on patch 3. Is that
-okay, or should I update this patch to be independent?
+diff --git a/Documentation/admin-guide/blockdev/zram.rst b/Documentation/admin-guide/blockdev/zram.rst
+index 3e11926a4df9..54fe63745ed8 100644
+--- a/Documentation/admin-guide/blockdev/zram.rst
++++ b/Documentation/admin-guide/blockdev/zram.rst
+@@ -315,8 +315,8 @@ To use the feature, admin should set up backing device via::
+ 
+ 	echo /dev/sda5 > /sys/block/zramX/backing_dev
+ 
+-before disksize setting. It supports only partition at this moment.
+-If admin wants to use incompressible page writeback, they could do via::
++before disksize setting. It supports only partitions at this moment.
++If admin wants to use incompressible page writeback, they could do it via::
+ 
+ 	echo huge > /sys/block/zramX/writeback
+ 
+@@ -341,9 +341,9 @@ Admin can request writeback of those idle pages at right timing via::
+ 
+ 	echo idle > /sys/block/zramX/writeback
+ 
+-With the command, zram writeback idle pages from memory to the storage.
++With the command, zram will writeback idle pages from memory to the storage.
+ 
+-If admin want to write a specific page in zram device to backing device,
++If an admin wants to write a specific page in zram device to the backing device,
+ they could write a page index into the interface.
+ 
+ 	echo "page_index=1251" > /sys/block/zramX/writeback
+@@ -354,7 +354,7 @@ to guarantee storage health for entire product life.
+ 
+ To overcome the concern, zram supports "writeback_limit" feature.
+ The "writeback_limit_enable"'s default value is 0 so that it doesn't limit
+-any writeback. IOW, if admin wants to apply writeback budget, he should
++any writeback. IOW, if admin wants to apply writeback budget, they should
+ enable writeback_limit_enable via::
+ 
+ 	$ echo 1 > /sys/block/zramX/writeback_limit_enable
+@@ -365,7 +365,7 @@ until admin sets the budget via /sys/block/zramX/writeback_limit.
+ (If admin doesn't enable writeback_limit_enable, writeback_limit's value
+ assigned via /sys/block/zramX/writeback_limit is meaningless.)
+ 
+-If admin want to limit writeback as per-day 400M, he could do it
++If admin wants to limit writeback as per-day 400M, they could do it
+ like below::
+ 
+ 	$ MB_SHIFT=20
+@@ -375,16 +375,16 @@ like below::
+ 	$ echo 1 > /sys/block/zram0/writeback_limit_enable
+ 
+ If admins want to allow further write again once the budget is exhausted,
+-he could do it like below::
++they could do it like below::
+ 
+ 	$ echo $((400<<MB_SHIFT>>4K_SHIFT)) > \
+ 		/sys/block/zram0/writeback_limit
+ 
+-If admin wants to see remaining writeback budget since last set::
++If an admin wants to see the remaining writeback budget since last set::
+ 
+ 	$ cat /sys/block/zramX/writeback_limit
+ 
+-If admin want to disable writeback limit, he could do::
++If an admin wants to disable writeback limit, they could do::
+ 
+ 	$ echo 0 > /sys/block/zramX/writeback_limit_enable
+ 
+@@ -393,7 +393,7 @@ system reboot, echo 1 > /sys/block/zramX/reset) so keeping how many of
+ writeback happened until you reset the zram to allocate extra writeback
+ budget in next setting is user's job.
+ 
+-If admin wants to measure writeback count in a certain period, he could
++If admin wants to measure writeback count in a certain period, they could
+ know it via /sys/block/zram0/bd_stat's 3rd column.
+ 
+ memory tracking
+-- 
+2.32.0 (Apple Git-132)
 
-Regards,
-Samuel

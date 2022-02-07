@@ -2,77 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8B4A4AC1BD
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 15:49:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 782D04AC19E
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 15:49:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382721AbiBGOnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 09:43:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47316 "EHLO
+        id S1383199AbiBGOoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 09:44:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344140AbiBGOjY (ORCPT
+        with ESMTP id S239167AbiBGOl1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 09:39:24 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13691C0401C1;
-        Mon,  7 Feb 2022 06:39:24 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id k17so11317692plk.0;
-        Mon, 07 Feb 2022 06:39:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=qOF7XuZ0URB/cEi6r2JFaqatdPkNWbtv8LDsccHb8v8=;
-        b=VIT9DU84F6wnBWTjPisje1T5tMIDg1MClePpER0NkNwLPu3h8vbHbOcJtkHn+nWX2I
-         glyqpg1/dX84E3xetCO1d+sbkvcKwRqteVWA6VO07q809WTkEDpwTiN2QWfhS39+Kxhh
-         RvLI0xe2YnxntxUG4pBeP7YjqOYRiACBUUxFQ3HPDYd3SrhFJz0ZTepbbKZLpkfu/Jks
-         lqkndJ3xfApZYH+BmHR8rfP7iYR/EpX0dvrSgAtOIIMw9P9dOf2lZ2D1zRlTffdjzD17
-         TVzy8Y89g9ZH8K6XFuLieClgaKuA5GMqx6gqVnLuYPSfc5zHiRjN+wmc265bEc1nCIns
-         Xniw==
+        Mon, 7 Feb 2022 09:41:27 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F120AC0401C4
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 06:41:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644244885;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=U9/EMlgIN9QXIzc+zISwktBd/gJFAPg2HMGjyGTDEMA=;
+        b=ZUp4rcLbJ0Cb80o088jdmrrQdKcThep8KZPa8a3AAEEl/MNZK8dqwpBbrfAUufh+jhIEc9
+        2fnw7K2fl1zG+ZAlM2aj16gLV0mMWCi2lvN0VNvjVx8PuEWeONjakteZ3e7N4Yoai/23Y3
+        PwkbFtFEwsWhe9SwE1k/hDFJdHX571A=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-479-0Vt_HepzPaKflEVVGSBJRg-1; Mon, 07 Feb 2022 09:41:23 -0500
+X-MC-Unique: 0Vt_HepzPaKflEVVGSBJRg-1
+Received: by mail-ed1-f72.google.com with SMTP id 30-20020a508e5e000000b0040f6642e814so1964005edx.19
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 06:41:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+         :content-language:to:cc:references:from:organization:in-reply-to
          :content-transfer-encoding;
-        bh=qOF7XuZ0URB/cEi6r2JFaqatdPkNWbtv8LDsccHb8v8=;
-        b=aX/mww2ojSwf8a9flurVBESbHfVAaDRAtW6XMiZ/uz7K0DL7UAlmKY6IMcRAP7Byzj
-         HwGbUsQkE6n9q3dnwhvYVzkyiq6r+CumOQ/rqaS5+w1qUubv+N3IzSuf4qtTvhsBFDeA
-         +KkryivWeAk/b/IJrbTeEBMN9baGZFbfPw7L9p4tbhOAtNKT4EuIc2i+yl49AS1fU9q5
-         anJ17Yx2mjL1MMhcQM7wruPINGgLOM5/cPsTcKo8eIDcFASvZcumukH3BlUYvO8qM/Wf
-         ufCyHy5UC5JSOU4Z41QF8qfaA4JzJ+fFoBqk1dMUGedzW2QYEX8SsD7s1udemOaSEE0P
-         BvNw==
-X-Gm-Message-State: AOAM530+dz+8ukE190xs9sQRAdzYkQ1fXQGAaGdaIyZuLmlHlrXBQmuw
-        wfyIXNXy5VWYF0dx3tSb2R8=
-X-Google-Smtp-Source: ABdhPJyyBVpQ9fCO/0O2Rjq1KPTtehboO+FF8NVRGQskfkI65e+VsAO2IUAKuGYnflIfHsSkl9Rydw==
-X-Received: by 2002:a17:902:e84a:: with SMTP id t10mr2430855plg.25.1644244763599;
-        Mon, 07 Feb 2022 06:39:23 -0800 (PST)
-Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id md9sm3892703pjb.6.2022.02.07.06.39.21
+        bh=U9/EMlgIN9QXIzc+zISwktBd/gJFAPg2HMGjyGTDEMA=;
+        b=62dXt8YBDZKfD5XEMhxAaErwq3R+URBCZtSweT9W6X2CZ6nW1LcYpazo3XzoFIgE/C
+         TaPVmW+McHer2jlV0Rsd0PBCLpB8RSgWxRs2U+IE22k9yAf0LkQp9E0yHe0FXh6zSAvX
+         TS+iunGV+QwoIE4D0FYqYH5ZmtRkxInV9GcHC/snV4PCGPQfBsMbCXPQmWaOC84EgCzA
+         v1lLrgf5+eS/72F7mo4aWh+Iehe4bnQPAmtP8nc5hGXtYawlNMM7LXKLwBHivxcPWXwU
+         W0SGKVUl4xcav544jwjJ8Ubz8hYmaLeA5q0TLJ0dP/4MKF9eWQqnkFlz1XbEdxwal03U
+         6UWQ==
+X-Gm-Message-State: AOAM530G7Y6LjcmAfx18fp+bFqrRuU8UubD+m7UM0qxL7TRt6Gt+TyaJ
+        hjUShc68RGKfXys3aJ7w1571oExIFy6/Wf8fT8oB6AXWbQlTop4GmNpkcylMMJaI6Owo+Zsfg9T
+        pivMdhe3U5U5smwY5jouIRwG/
+X-Received: by 2002:a17:907:2d14:: with SMTP id gs20mr38343ejc.149.1644244882615;
+        Mon, 07 Feb 2022 06:41:22 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz4IMukBv8fxsbw6O/G7HxMpzkkml2E+JB1htfZ/eDniqAe1gLNoBCTjInbUP2QXv6052x03g==
+X-Received: by 2002:a17:907:2d14:: with SMTP id gs20mr38320ejc.149.1644244882287;
+        Mon, 07 Feb 2022 06:41:22 -0800 (PST)
+Received: from ?IPV6:2003:cb:c709:6300:a751:d742:1f76:8639? (p200300cbc7096300a751d7421f768639.dip0.t-ipconnect.de. [2003:cb:c709:6300:a751:d742:1f76:8639])
+        by smtp.gmail.com with ESMTPSA id j1sm390581ejx.123.2022.02.07.06.41.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Feb 2022 06:39:23 -0800 (PST)
-Message-ID: <3cfe6cb0-67c7-bd12-0a3c-a609f5341a32@gmail.com>
-Date:   Mon, 7 Feb 2022 23:39:18 +0900
+        Mon, 07 Feb 2022 06:41:21 -0800 (PST)
+Message-ID: <21cec396-9d6a-03b7-716d-2a84c79eeb73@redhat.com>
+Date:   Mon, 7 Feb 2022 15:41:21 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 0/4] docs: sphinx/kfigure.py: Improve conversion to PDF
+ Thunderbird/91.4.0
+Subject: Re: [PATCH 1/4] mm/memory_hotplug: remove obsolete comment of
+ __add_pages
 Content-Language: en-US
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>
-References: <e01fe9f9-f600-c2fc-c6b3-ef6395655ffe@gmail.com>
- <e545803a-8f09-f0e7-4ca0-16b673ef1796@gmail.com>
- <20220114094535.5bb9ba94@coco.lan>
- <e03de287-4eef-8a68-89f3-8614db66a74b@gmail.com>
- <87bl0c7l79.fsf@meer.lwn.net>
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <87bl0c7l79.fsf@meer.lwn.net>
+To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20220207133643.23427-1-linmiaohe@huawei.com>
+ <20220207133643.23427-2-linmiaohe@huawei.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220207133643.23427-2-linmiaohe@huawei.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,26 +83,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 15 Jan 2022 14:17:30 -0700,
-Jonathan Corbet wrote:
-> Akira Yokosawa <akiyks@gmail.com> writes:
+On 07.02.22 14:36, Miaohe Lin wrote:
+> Since commit f1dd2cd13c4b ("mm, memory_hotplug: do not associate hotadded
+> memory to zones until online"), there is no need to pass in the zone.
 > 
->> We are in the middle of the v5.17 merge window, and I think of this
->> series as a v5.18 material.
->> Which means it won't be merged into doc-next until v5.17-rc5 or -rc6
->> (mid March or so), unless Jon thinks otherwise.
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> ---
+>  mm/memory_hotplug.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
 > 
-> I'd rather merge it rather sooner than that if possible; 5.18 stuff will
-> start going into docs-next shortly.
+> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
+> index a4f69d399929..cbc67c27e0dd 100644
+> --- a/mm/memory_hotplug.c
+> +++ b/mm/memory_hotplug.c
+> @@ -296,10 +296,7 @@ struct page *pfn_to_online_page(unsigned long pfn)
+>  EXPORT_SYMBOL_GPL(pfn_to_online_page);
+>  
+>  /*
+> - * Reasonably generic function for adding memory.  It is
+> - * expected that archs that support memory hotplug will
+> - * call this function after deciding the zone to which to
+> - * add the new pages.
+> + * Reasonably generic function for adding memory.
+>   */
+>  int __ref __add_pages(int nid, unsigned long pfn, unsigned long nr_pages,
+>  		struct mhp_params *params)
 
-Jon,
+I'd suggest just removing the comment completely.
 
-Hearing no objection since mid January, I think it is time for you to
-merge this series into docs-next.
+-- 
+Thanks,
 
-        Thanks, Akira
+David / dhildenb
 
-> 
-> Thanks,
-> 
-> jon

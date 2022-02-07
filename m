@@ -2,120 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED9F84ACD3D
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:07:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 884AF4ACDB6
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:18:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232665AbiBHBFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 20:05:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46756 "EHLO
+        id S245516AbiBHBGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 20:06:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238620AbiBGXvt (ORCPT
+        with ESMTP id S232070AbiBGXxb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 18:51:49 -0500
-Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAEC0C061355
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 15:51:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:MIME-Version:Date:
-        Message-ID:From:References:Cc:To:content-disposition;
-        bh=m4ev1WCRNCl+02YqH74txp8M2CR/EORhvQhxQiDZxaA=; b=eqokiLHaXaeyt/5s6v5Dxq44/e
-        IAqW59SoSHKudPP22PbYzdepcvKhqjbzyfkSuYw4KpL9xtVArn6pQK2Ldyz7E4YcAH9NSYynVTo0x
-        bdiKjmtt+SN4YZG0Ew92tD4rJQNUm7KEjM7PROljaQAtDtxBiTL5EVi6VghTHYbECpve5DE5uUb1N
-        duzW6PtphJmZZ+0mX3PJgZhC5/rVEq/3qykeOe3ABa53oImY5pgTVdlOQOq4oG9J4bsLodSeeYQi1
-        1+6C1yRgCfpdXKc5xhSACk3BweTjswDgZ4yDXBO7FMi9Z1A4zGwJMemyijSE1P8AHIhJmmSKYeRTc
-        ECAC1LFQ==;
-Received: from guinness.priv.deltatee.com ([172.16.1.162])
-        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <logang@deltatee.com>)
-        id 1nHDnM-00EdA1-EY; Mon, 07 Feb 2022 16:51:45 -0700
-To:     Christoph Hellwig <hch@lst.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dan Williams <dan.j.williams@intel.com>
-Cc:     Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        nvdimm@lists.linux.dev, linux-mm@kvack.org
-References: <20220207063249.1833066-1-hch@lst.de>
-From:   Logan Gunthorpe <logang@deltatee.com>
-Message-ID: <29a9f365-064a-f5db-0690-57bae007ce62@deltatee.com>
-Date:   Mon, 7 Feb 2022 16:51:42 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Mon, 7 Feb 2022 18:53:31 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8026C061355
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 15:53:30 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id r19so45741pfh.6
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 15:53:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Dexw4mp88eho1hqWPLMgXA0V6dq/NOSshXT4P+meRXI=;
+        b=I5tbVd2tNRwEgyv1OaBRfTc0g38c7M8Uvsss+AWjzCTWD7GPF/2/a4fc+2QjbgPw+s
+         zVIC/jUvUMoaybysLG+yUXMp0YXxZxpS73gAIiOKOptsX4M/AJS7xVXvSDaREWoFtK7r
+         S//J2YHVt8vV0k7hhWfB2g9rvTPTmG1RMaTGXSadAV0JQrV4HPNtFG3Ms0KvfoeMiyoT
+         BEVjmOEZvFoQyHEvULInwQL2z5RWYRs//wuIeNnwjpxAkaBaDx0cDRTqnK+7IkAAzjRC
+         alRg+EZmzsHtpYroe8e+vGm4xUB0MB3da2u+YbGfPEXYjQGk1QN1tLvtiCgjUOpQ4H6F
+         FGqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Dexw4mp88eho1hqWPLMgXA0V6dq/NOSshXT4P+meRXI=;
+        b=PKh1/qIfZ1ZqQXuEHyiUyvFbrboSytw4P4NeN53vk1TpRyl3u/FDsaOZILee8/XtIY
+         TTkWmGfxB+B76FQRV+SjBfY9Y1oOBMCS4bSNMuv/o6UBEUi5Va/8ygEYW5sbewF5Q/FA
+         CDoXY3uw2lst9hYI73aB2tLkx+QgGwIComAmvHOWAz+3a6CF9zFGzMWuTjQ1EbC+0LOo
+         KxnvLIwzH8Tu2xpzkThpaoT0WqymDzfCS9oc4vkdgUDGmKNz7dsQslc8K6+oj2+UTP/r
+         zQILpdzpbS04q2rubkuaZby0emVffQytsd+y86FLXDCvVUApSWqsd5Ci2xpUMp+k3JIV
+         Yp+w==
+X-Gm-Message-State: AOAM532VaOVeKMmsJHsTfWzbhl0kpMYte+W+X4m/SFm7ZnyhP60Ew8MP
+        +LrVvfXyXh24WFJ+TCrhfnkLCkxTiHns6oJpWiG0hFHM9I8=
+X-Google-Smtp-Source: ABdhPJxWliv+yfnKc0HU0BceLJDPP06+fnjL+v5N68nTmEu4T/ZBxC+x0b5KHflpht3+4et0fqJ5bUl2AlIlOLTNOkk=
+X-Received: by 2002:a65:5943:: with SMTP id g3mr1447475pgu.3.1644278010062;
+ Mon, 07 Feb 2022 15:53:30 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20220207063249.1833066-1-hch@lst.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-CA
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 172.16.1.162
-X-SA-Exim-Rcpt-To: linux-mm@kvack.org, nvdimm@lists.linux.dev, nouveau@lists.freedesktop.org, dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org, rcampbell@nvidia.com, apopple@nvidia.com, jgg@ziepe.ca, lyude@redhat.com, kherbst@redhat.com, bskeggs@redhat.com, Xinhui.Pan@amd.com, christian.koenig@amd.com, alexander.deucher@amd.com, Felix.Kuehling@amd.com, dan.j.williams@intel.com, akpm@linux-foundation.org, hch@lst.de
-X-SA-Exim-Mail-From: logang@deltatee.com
+References: <20220204115718.14934-1-pbonzini@redhat.com> <YgGmgMMR0dBmjW86@google.com>
+ <YgGq31edopd6RMts@google.com>
+In-Reply-To: <YgGq31edopd6RMts@google.com>
+From:   David Matlack <dmatlack@google.com>
+Date:   Mon, 7 Feb 2022 15:53:03 -0800
+Message-ID: <CALzav=d05sMd=ARkV+GMf9SkxKcg9c9n5ttb274M2fZrP27PDA@mail.gmail.com>
+Subject: Re: [PATCH 00/23] KVM: MMU: MMU role refactoring
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
-Subject: Re: start sorting out the ZONE_DEVICE refcount mess
-X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Feb 7, 2022 at 3:27 PM Sean Christopherson <seanjc@google.com> wrote:
+>
+> On Mon, Feb 07, 2022, David Matlack wrote:
+> > On Fri, Feb 04, 2022 at 06:56:55AM -0500, Paolo Bonzini wrote:
+> > > The TDP MMU has a performance regression compared to the legacy
+> > > MMU when CR0 changes often.  This was reported for the grsecurity
+> > > kernel, which uses CR0.WP to implement kernel W^X.  In that case,
+> > > each change to CR0.WP unloads the MMU and causes a lot of unnecessary
+> > > work.  When running nested, this can even cause the L1 to hardly
+> > > make progress, as the L0 hypervisor it is overwhelmed by the amount
+> > > of MMU work that is needed.
+> > >
+> > > The root cause of the issue is that the "MMU role" in KVM is a mess
+> > > that mixes the CPU setup (CR0/CR4/EFER, SMM, guest mode, etc.)
+> > > and the shadow page table format.  Whenever something is different
+> > > between the MMU and the CPU, it is stored as an extra field in struct
+> > > kvm_mmu---and for extra bonus complication, sometimes the same thing
+> > > is stored in both the role and an extra field.
+> > >
+> > > So, this is the "no functional change intended" part of the changes
+> > > required to fix the performance regression.  It separates neatly
+> > > the shadow page table format ("MMU role") from the guest page table
+> > > format ("CPU role"), and removes the duplicate fields.
+> >
+> > What do you think about calling this the guest_role instead of cpu_role?
+> > There is a bit of a precedent for using "guest" instead of "cpu" already
+> > for this type of concept (e.g. guest_walker), and I find it more
+> > intuitive.
+>
+> Haven't looked at the series yet, but I'd prefer not to use guest_role, it's
+> too similar to is_guest_mode() and kvm_mmu_role.guest_mode.  E.g. we'd end up with
+>
+>   static union kvm_mmu_role kvm_calc_guest_role(struct kvm_vcpu *vcpu,
+>                                               const struct kvm_mmu_role_regs *regs)
+>   {
+>         union kvm_mmu_role role = {0};
+>
+>         role.base.access = ACC_ALL;
+>         role.base.smm = is_smm(vcpu);
+>         role.base.guest_mode = is_guest_mode(vcpu);
+>         role.base.direct = !____is_cr0_pg(regs);
+>
+>         ...
+>   }
+>
+> and possibly
+>
+>         if (guest_role.guest_mode)
+>                 ...
+>
+> which would be quite messy.  Maybe vcpu_role if cpu_role isn't intuitive?
 
+I agree it's a little odd. But actually it's somewhat intuitive (the
+guest is in guest-mode, i.e. we're running a nested guest).
 
-On 2022-02-06 11:32 p.m., Christoph Hellwig wrote:
-> Hi all,
-> 
-> this series removes the offset by one refcount for ZONE_DEVICE pages
-> that are freed back to the driver owning them, which is just device
-> private ones for now, but also the planned device coherent pages
-> and the ehanced p2p ones pending.
-> 
-> It does not address the fsdax pages yet, which will be attacked in a
-> follow on series.
-> 
-> Diffstat:
->  arch/arm64/mm/mmu.c                      |    1 
->  arch/powerpc/kvm/book3s_hv_uvmem.c       |    1 
->  drivers/gpu/drm/amd/amdkfd/kfd_migrate.c |    2 
->  drivers/gpu/drm/amd/amdkfd/kfd_priv.h    |    1 
->  drivers/gpu/drm/drm_cache.c              |    2 
->  drivers/gpu/drm/nouveau/nouveau_dmem.c   |    3 -
->  drivers/gpu/drm/nouveau/nouveau_svm.c    |    1 
->  drivers/infiniband/core/rw.c             |    1 
->  drivers/nvdimm/pmem.h                    |    1 
->  drivers/nvme/host/pci.c                  |    1 
->  drivers/nvme/target/io-cmd-bdev.c        |    1 
->  fs/Kconfig                               |    2 
->  fs/fuse/virtio_fs.c                      |    1 
->  include/linux/hmm.h                      |    9 ----
->  include/linux/memremap.h                 |   22 +++++++++-
->  include/linux/mm.h                       |   59 ++++-------------------------
->  lib/test_hmm.c                           |    4 +
->  mm/Kconfig                               |    4 -
->  mm/internal.h                            |    2 
->  mm/memcontrol.c                          |   11 +----
->  mm/memremap.c                            |   63 ++++++++++++++++---------------
->  mm/migrate.c                             |    6 --
->  mm/swap.c                                |   49 ++----------------------
->  23 files changed, 90 insertions(+), 157 deletions(-)
-
-Looks good to me. I was wondering about the location of some of this
-code, so it's nice to see it cleaned up. Except for the one minor issue
-I noted on patch 6, it all looks good to me. I've reviewed all the
-patches and tested the series under my p2pdma series.
-
-Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
-
-Logan
+Ok I'm stretching a little bit :). But if the trade-off is just
+"guest_role.guest_mode" requires a clarifying comment, but the rest of
+the code gets more readable (cpu_role is used a lot more than
+role.guest_mode), it still might be worth it.

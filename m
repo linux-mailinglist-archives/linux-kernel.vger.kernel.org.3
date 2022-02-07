@@ -2,36 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE51A4AC521
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 17:16:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 574244AC523
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 17:16:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230337AbiBGQOm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 11:14:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39568 "EHLO
+        id S232466AbiBGQOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 11:14:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386102AbiBGQBI (ORCPT
+        with ESMTP id S1386896AbiBGQBk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 11:01:08 -0500
-Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B05C0401CC
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 08:01:04 -0800 (PST)
-Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nH6Rp-000Efg-DF; Mon, 07 Feb 2022 16:01:01 +0000
-Date:   Mon, 7 Feb 2022 16:01:01 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Leonardo Araujo <leonardo.aa88@gmail.com>
-Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev
-Subject: Re: [PATCH] Staging : android: Struct file_operations should be const
-Message-ID: <YgFCPbnqs40wS+j1@zeniv-ca.linux.org.uk>
-References: <20220207031711.13644-1-leonardo.aa88@gmail.com>
+        Mon, 7 Feb 2022 11:01:40 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94431C0401D1;
+        Mon,  7 Feb 2022 08:01:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id CCB0CCE112B;
+        Mon,  7 Feb 2022 16:01:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F7FAC004E1;
+        Mon,  7 Feb 2022 16:01:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644249694;
+        bh=PWwSvTHrKik+WHkFYTy4105egats4siq+txQzN9k8F4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qbld5TRvdN3JK2qBA/enz1wOCB2gKXQpDexQEKA0I2oGPR/w/XQnzeJpaLue5P6eN
+         pM6pQQFDCFKUEiFf28DxJ2NETNCKs07CGHmblczmM2dQOhAdgv3qSe4DK0NDr+T40F
+         xvn1YnHqr+eZ6NSYhjrNDagleMKiHaMjz5mJ0EiYTEDsSmcKpROSnenFoUS8WheatQ
+         ZU980LBUk8YVbLekOWx6ENkIqiySkTx8lZIhvrWswvRY3OwBH/esSsREKCcb5xvFLz
+         c5EUeqCb/zuokfJesm06e6DWxWJFlL6e/t5CUWe4j0egzymjBj4ng88RPZEtX3CKu7
+         H+xcbalp7/A9g==
+Date:   Mon, 7 Feb 2022 17:01:30 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] i2c: ACPI: Replace acpi_bus_get_device()
+Message-ID: <YgFCWq3mMQkv8UMY@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org
+References: <4374434.LvFx2qVVIh@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="fA8vdV3lkfQ9XeqW"
 Content-Disposition: inline
-In-Reply-To: <20220207031711.13644-1-leonardo.aa88@gmail.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <4374434.LvFx2qVVIh@kreacher>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -39,61 +65,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 12:17:11AM -0300, Leonardo Araujo wrote:
-> From: "Leonardo Araujo" <leonardo.aa88@gmail.com>
-> 
-> WARNING: struct file_operations should normally be const
-> 
-> Signed-off-by: Leonardo Araujo <leonardo.aa88@gmail.com>
-> ---
->  drivers/staging/android/ashmem.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/staging/android/ashmem.c b/drivers/staging/android/ashmem.c
-> index ddbde3f8430e..4c6b420fbf4d 100644
-> --- a/drivers/staging/android/ashmem.c
-> +++ b/drivers/staging/android/ashmem.c
-> @@ -377,7 +377,7 @@ ashmem_vmfile_get_unmapped_area(struct file *file, unsigned long addr,
->  
->  static int ashmem_mmap(struct file *file, struct vm_area_struct *vma)
->  {
-> -	static struct file_operations vmfile_fops;
-> +	static const struct file_operations vmfile_fops;
->  	struct ashmem_area *asma = file->private_data;
->  	int ret = 0;
 
-Wait a minute.  Why the hell would it possibly want a private instance
-of all-NULLs file_operations?  Odd...
-<checks>
-                if (!vmfile_fops.mmap) {
-                        vmfile_fops = *vmfile->f_op;
-                        vmfile_fops.mmap = ashmem_vmfile_mmap;
-                        vmfile_fops.get_unmapped_area =
-                                        ashmem_vmfile_get_unmapped_area;
-                }
-Er...  So it *is* modified down the road.  What, in your opinion, is signified
-by the const you are adding?
+--fA8vdV3lkfQ9XeqW
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Folks, could we please have the first "WARNING" in checkpatch.pl output replaced
-with
-"I'm a dumb script; this line looks like there might be something fishy in the
-area.  Somebody smarter than me might want to take a look and figure out if
-there's something wrong going on there.  From now on I'll mark all such places
-with 'WARNING' (with the summary of heuristics that pointed to them), to avoid
-repeating the above".
+On Tue, Feb 01, 2022 at 07:00:42PM +0100, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>=20
+> Replace acpi_bus_get_device() that is going to be dropped with
+> acpi_fetch_acpi_dev().
+>=20
+> No intentional functional impact.
+>=20
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Pretty please?  This exact trap keeps snagging newbies - folks misinterpret
-"this place might be worth looking into" for "great (s)tool says: this is
-what's wrong there; must propitiate the great (s)tool!"
+Applied to for-next, thanks! Let me know if you need it in for-current
+instead to get rid of the to-be-deprecated function earlier.
 
-In this case the damage is minimal - the resulting change would be instantly
-caught by compiler, so it's just a matter of mild embarrassment for poster.
-In other cases results had been nowhere near as mild.
 
-Incidentally, the place those heuristics had pointed too _DOES_ look fishy,
-indeed.  What happens, AFAICS, is that the first time we hit that branch
-(asma->file being NULL) we stash a copy of whatever file_operations we get
-on file obtained by shmem_setup_file() (IOW, shmem_file_operations),
-with ->mmap and ->get_unmapped_area replaced with local functions.
-This is a bloody convoluted way to do things, not to mention being rather
-brittle...
+--fA8vdV3lkfQ9XeqW
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIBQlYACgkQFA3kzBSg
+KbYFHRAAjCNtHwASK/9YtSoj9aaDnmw082YXj89IHSSkNj02vkjJhvljsYJrz9EU
+KOVIhQUJRSkmWO/5FsQCNGzqtb8tfdPgeRPV0JtMQDUcEI7Z5CSnmnvBAUXItj/C
+FkSE8DfBykr7z/47LOj5tXUn+yet/mevpojDYgz2meo6++bqEVdZjMVaZYSjt7rU
+GTLJFjMzlaZBDEzfh/Rz8tS5zPsYteQijT2x8yujo89qaZ+jRqnw/YgawFRXN5Mx
+e1Wj5wdXWGrYTiHlWC/B/9InZ4sFtcebOIKzkz8nFNCFdmEXelJ5MM3B+owZV5nN
+/J5nuV94umPntEoFmd1nHYfxD9rLeoyhkX1muSRa9O6PPy+BAt+zr6Laq6rbj7eM
+bZVOdbuevrUYRP5Tz2UIDr1sArFoTeqTdQ38AKTfyM2LTxWJ8DaeBdtiuVak95Jh
+y5RWRzoNp/vSNaypF2qSsHUrozai83o5WqejVmPThs1NblKOTNAVGh9tQqOcK5Je
+WMNG2U2bOIRqQBH0Z1yN/jcAa2EWDs0UY+Mq5A5+Bq6PQgicyCtIShZeyAawPAic
+yOwaRye8QU85RK1O4RPSNN9Yska+A3a4wYQB8HY/SbdDM3igpw5H9+/rnTP2PQkk
+tuMQYoyEb9QoYFBgqHO2Or45jMKtNiPrfpmaf3OihhDCYPy2Wqg=
+=X+Sc
+-----END PGP SIGNATURE-----
+
+--fA8vdV3lkfQ9XeqW--

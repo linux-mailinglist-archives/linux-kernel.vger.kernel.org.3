@@ -2,168 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BCE44ABF3D
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 14:24:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B3414ABF76
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 14:25:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1448498AbiBGNLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 08:11:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58598 "EHLO
+        id S1444077AbiBGNJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 08:09:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1447089AbiBGMxW (ORCPT
+        with ESMTP id S1446315AbiBGMnO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 07:53:22 -0500
-X-Greylist: delayed 181 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 04:53:21 PST
-Received: from condef-08.nifty.com (condef-08.nifty.com [202.248.20.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02B8EC0401C1;
-        Mon,  7 Feb 2022 04:53:20 -0800 (PST)
-Received: from conssluserg-04.nifty.com ([10.126.8.83])by condef-08.nifty.com with ESMTP id 217CYfOO006569;
-        Mon, 7 Feb 2022 21:34:41 +0900
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174]) (authenticated)
-        by conssluserg-04.nifty.com with ESMTP id 217CYN2K029695;
-        Mon, 7 Feb 2022 21:34:23 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 217CYN2K029695
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1644237263;
-        bh=9zKrPVPrkksURJV3q1ADM90/dTQqSdo5AISbXfRbAK8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ncgNidLu5reIUSqWMWHKjwcp1pH8YB2Nl81GvQ0hpGnx78rZFCVFxFRPAqaszZw/2
-         dtUs614cqV/1Xz451imobbGRu/hvXbtxlF3ZfTD3WRWDZpfMQkIlu5PqWgblXK56Ei
-         HH7kYXenqhXRVZNEd6CPHTBzOTY0+UwNTbP8TdJdskvIRA2xhID06vWqZzduuXywao
-         CW61Xtx3JOtQBi8WkQnv+ieoidDZsTOnqLESj4LdpNqzofVS/2qxNYdm3qW8HSLkbQ
-         dLd4b0T2tLs3UY9acXOCyeXvHKMxC5b2KI4/CTBQhVBPZhdOH6jdb0gj7+ZjDGRetb
-         YTgr+HMQZfHtg==
-X-Nifty-SrcIP: [209.85.214.174]
-Received: by mail-pl1-f174.google.com with SMTP id z17so1009414plb.9;
-        Mon, 07 Feb 2022 04:34:23 -0800 (PST)
-X-Gm-Message-State: AOAM531P+CO1a3ScQZp+4a4qpUGL/PwsPN0ubKSR2KMZpO903RW/kuMk
-        Fglse2NSftWLHUwLVHo0dKwn74gj7L9VHIR1dPs=
-X-Google-Smtp-Source: ABdhPJw3cX3TxmQPv1QYgm1VN+3TehX/6SKbg9GVGNoFJP8Soe+of9JeFW0Lh7zcdp1x15eRDqMYFJrt4S2w8Y3RoUM=
-X-Received: by 2002:a17:90b:4a4b:: with SMTP id lb11mr13886889pjb.144.1644237262520;
- Mon, 07 Feb 2022 04:34:22 -0800 (PST)
+        Mon, 7 Feb 2022 07:43:14 -0500
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C992EC0045EF
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 04:38:59 -0800 (PST)
+Received: by mail-qk1-x729.google.com with SMTP id c189so10681633qkg.11
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 04:38:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=DkD54i2Pug3GcN0vGMXIwskw5kZ403zclucyP/4FADw=;
+        b=jejLNq9ZkAUM/1vtLhdi/Te45wokvj6FjwIW8AlLB1k5NEm5TM5g0CwJk0HDNunq/c
+         6W4b+6p5XRj7BipndV9DVl6qeBQUDxuA2t9aVfsgHBtTUreGRF2VJlsJST0i7l+dGEAU
+         jXKut7VfVCZ2E+hEy2gkxGuFJNezlflnLtRFakk/VIJbd/sgO3BccmoGlfvC0JCvzp3J
+         2tMID7ZZ1b4NXRSy1Ykde3PurFm0gp35wEBgEZsJn2KO1xguHtzTQjSW4F1PNUcl8+b4
+         HdNHI0HdCBlheN6vmAvm84gJKD5z/UurHEfshXaDAVDLPeLnCNSSIeFWZs/nklfcXELn
+         Gzfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=DkD54i2Pug3GcN0vGMXIwskw5kZ403zclucyP/4FADw=;
+        b=5jske699IwyUiG0xh5WiZfJLdkrKQZCqMt+OFWhVGzfWiwfv25lfCWBBahexVkRtOw
+         AbOwsXsyTE5ZtjV455viG6DfK7ArLCYTt4xSFXPmHAp7KtkyJKJBHotAxNi4x5N0w4uU
+         4Lwy4Hg2P16Ha45OnGu3XgGa3YCpgMJmp3bcuJZivtOXpN5hVJgbAJT9pVwRxfihbVYW
+         ZZJ3xK/DvcsMJ37zDnBf+z4STOwUrPMxHrMV8A2z0elmXwawMR/k+3utnFU02ZNQlovQ
+         NuQHc7+TqlZFAGMTwYXER9IBfA/wKk1tjxAgmIFtGo1uzmcG13oeL1qouRe0HgoBlXMu
+         fTkg==
+X-Gm-Message-State: AOAM531uxpKH39p3Ivkd62Wuw6bhf7neMN1bA0j4G7uFcZcNf7YET+q0
+        jBUzvvCmmuVhpYoTsZiu2wx+I3m6c1zDJE7G
+X-Google-Smtp-Source: ABdhPJyZ0PJvzdTaMnj9syEuoj2Q+oZ9zjRD3eKKtBRLXKGxSCHQAcviLNhn4SyqNt+ctfVL07Y++g==
+X-Received: by 2002:a05:620a:2443:: with SMTP id h3mr6108230qkn.258.1644237538894;
+        Mon, 07 Feb 2022 04:38:58 -0800 (PST)
+Received: from mail.google.com ([207.246.89.135])
+        by smtp.gmail.com with ESMTPSA id 134sm5114278qkl.50.2022.02.07.04.38.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Feb 2022 04:38:58 -0800 (PST)
+Date:   Mon, 7 Feb 2022 20:38:50 +0800
+From:   ChangbinCONFIG_IRQSOFF_TRACER Du <changbin.du@gmail.com>
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     Changbin Du <changbin.du@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] riscv: fix oops caused by irq on/off tracer
+Message-ID: <20220207123850.l4r5qjswaegwisbx@mail.google.com>
+References: <20220129004226.32868-1-changbin.du@gmail.com>
+ <YgAEb425uqy5/dw1@xhacker>
 MIME-Version: 1.0
-References: <20211218031122.4117631-1-willy@infradead.org> <CAK7LNAQUChvX3NoukBnjBfJJGu+a96pfbM--xHEHOygWPgE9eA@mail.gmail.com>
- <YdSOV7LL0vWCMcWl@casper.infradead.org>
-In-Reply-To: <YdSOV7LL0vWCMcWl@casper.infradead.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Mon, 7 Feb 2022 21:33:46 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQgixJSnDUMfjc+tg90oMdVoh+i5faEn-rqgmHR3Bk6dQ@mail.gmail.com>
-Message-ID: <CAK7LNAQgixJSnDUMfjc+tg90oMdVoh+i5faEn-rqgmHR3Bk6dQ@mail.gmail.com>
-Subject: Re: [PATCH v2] builddeb: Support signing kernels with the module
- signing key
-To:     Matthew Wilcox <willy@infradead.org>,
-        Ben Hutchings <ben@decadent.org.uk>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        efi@lists.einval.com,
-        debian-kernel <debian-kernel@lists.debian.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        David Howells <dhowells@redhat.com>, keyrings@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YgAEb425uqy5/dw1@xhacker>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Added "Ben Hutchings <ben@decadent.org.uk>"
-
-On Wed, Jan 5, 2022 at 3:13 AM Matthew Wilcox <willy@infradead.org> wrote:
+On Mon, Feb 07, 2022 at 01:25:03AM +0800, Jisheng Zhang wrote:
+> On Sat, Jan 29, 2022 at 08:42:26AM +0800, Changbin Du wrote:
+> > The trace_hardirqs_on/off requires at least two parent call frames.
+> > If not, the code generated by CALLER_ADDR1 (aka. ftrace_return_address(1))
+> > could trigger memory access fault.
+> > 
+> > [    0.039615][    T0] Unable to handle kernel NULL pointer dereference at virtual address 00000000000000f8
+> > [    0.041925][    T0] Oops [#1]
+> > [    0.042063][    T0] Modules linked in:
+> > [    0.042864][    T0] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.17.0-rc1-00233-g9a20c48d1ed2 #29
+> > [    0.043568][    T0] Hardware name: riscv-virtio,qemu (DT)
+> > [    0.044343][    T0] epc : trace_hardirqs_on+0x56/0xe2
+> > [    0.044601][    T0]  ra : restore_all+0x12/0x6e
+> > [    0.044721][    T0] epc : ffffffff80126a5c ra : ffffffff80003b94 sp : ffffffff81403db0
+> > [    0.044801][    T0]  gp : ffffffff8163acd8 tp : ffffffff81414880 t0 : 0000000000000020
+> > [    0.044882][    T0]  t1 : 0098968000000000 t2 : 0000000000000000 s0 : ffffffff81403de0
+> > [    0.044967][    T0]  s1 : 0000000000000000 a0 : 0000000000000001 a1 : 0000000000000100
+> > [    0.045046][    T0]  a2 : 0000000000000000 a3 : 0000000000000000 a4 : 0000000000000000
+> > [    0.045124][    T0]  a5 : 0000000000000000 a6 : 0000000000000000 a7 : 0000000054494d45
+> > [    0.045210][    T0]  s2 : ffffffff80003b94 s3 : ffffffff81a8f1b0 s4 : ffffffff80e27b50
+> > [    0.045289][    T0]  s5 : ffffffff81414880 s6 : ffffffff8160fa00 s7 : 00000000800120e8
+> > [    0.045389][    T0]  s8 : 0000000080013100 s9 : 000000000000007f s10: 0000000000000000
+> > [    0.045474][    T0]  s11: 0000000000000000 t3 : 7fffffffffffffff t4 : 0000000000000000
+> > [    0.045548][    T0]  t5 : 0000000000000000 t6 : ffffffff814aa368
+> > [    0.045620][    T0] status: 0000000200000100 badaddr: 00000000000000f8 cause: 000000000000000d
+> > [    0.046402][    T0] [<ffffffff80003b94>] restore_all+0x12/0x6e
+> > 
+> 
+> Hi Changbin,
+> 
+> Could you please provide the reproduce steps? It looks a bit
+> interesting.
 >
-> On Wed, Jan 05, 2022 at 12:39:57AM +0900, Masahiro Yamada wrote:
-> > > +vmlinux=$($MAKE -s -f $srctree/Makefile image_name)
-> > > +key=
-> > > +if is_enabled CONFIG_EFI_STUB && is_enabled CONFIG_MODULE_SIG; then
-> > > +       cert=$(grep ^CONFIG_MODULE_SIG_KEY= include/config/auto.conf | cut -d\" -f2)
-> > > +       if [ ! -f $cert ]; then
-> > > +               cert=$srctree/$cert
-> > > +       fi
-> > > +
-> > > +       key=${cert%pem}priv
-> > > +       if [ ! -f $key ]; then
-> > > +               key=$cert
-> > > +       fi
-> >
-> >
-> > I still do not understand this part.
-> >
-> > It is true that the Debian document you referred to creates separate files
-> > for the key and the certificate:
-> >   # openssl req -new -x509 -newkey rsa:2048 -keyout MOK.priv -outform
-> > DER -out MOK.der -days 36500 -subj "/CN=My Name/" -nodes
-> >
-> > but, is such a use-case possible in Kbuild?
->
-> If someone has followed the Debian instructions for creating a MOK,
-> then they will have two separate files.  We should support both the case
-> where someone has created a Debian MOK and the case where someone has
-> used Kbuild to create this foolish blob with both private and public
-> key in one file.
+Just enable CONFIG_IRQSOFF_TRACER and rebuild kernel with llvm. Then boot the
+new kernel.
 
-But, this patch is doing different things than the Debian document.
+> > To fix above issue, here we add one extra level wrapper so they can be
+> > safely called by low level entry code.
+> > 
+> > Signed-off-by: Changbin Du <changbin.du@gmail.com>
+> > 
+> > ---
+> > v2: fix compile warning.
+> > ---
+> >  arch/riscv/kernel/Makefile    |  2 ++
+> >  arch/riscv/kernel/entry.S     | 10 +++++-----
+> >  arch/riscv/kernel/trace_irq.c | 26 ++++++++++++++++++++++++++
+> >  arch/riscv/kernel/trace_irq.h | 11 +++++++++++
+> >  4 files changed, 44 insertions(+), 5 deletions(-)
+> >  create mode 100644 arch/riscv/kernel/trace_irq.c
+> >  create mode 100644 arch/riscv/kernel/trace_irq.h
+> > 
+> > diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
+> > index 612556faa527..ffc87e76b1dd 100644
+> > --- a/arch/riscv/kernel/Makefile
+> > +++ b/arch/riscv/kernel/Makefile
+> > @@ -51,6 +51,8 @@ obj-$(CONFIG_MODULE_SECTIONS)	+= module-sections.o
+> >  obj-$(CONFIG_FUNCTION_TRACER)	+= mcount.o ftrace.o
+> >  obj-$(CONFIG_DYNAMIC_FTRACE)	+= mcount-dyn.o
+> >  
+> > +obj-$(CONFIG_TRACE_IRQFLAGS)	+= trace_irq.o
+> > +
+> >  obj-$(CONFIG_RISCV_BASE_PMU)	+= perf_event.o
+> >  obj-$(CONFIG_PERF_EVENTS)	+= perf_callchain.o
+> >  obj-$(CONFIG_HAVE_PERF_REGS)	+= perf_regs.o
+> > diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+> > index ed29e9c8f660..d6a46ed0bf05 100644
+> > --- a/arch/riscv/kernel/entry.S
+> > +++ b/arch/riscv/kernel/entry.S
+> > @@ -108,7 +108,7 @@ _save_context:
+> >  .option pop
+> >  
+> >  #ifdef CONFIG_TRACE_IRQFLAGS
+> > -	call trace_hardirqs_off
+> > +	call __trace_hardirqs_off
+> >  #endif
+> >  
+> >  #ifdef CONFIG_CONTEXT_TRACKING
+> > @@ -143,7 +143,7 @@ skip_context_tracking:
+> >  	li t0, EXC_BREAKPOINT
+> >  	beq s4, t0, 1f
+> >  #ifdef CONFIG_TRACE_IRQFLAGS
+> > -	call trace_hardirqs_on
+> > +	call __trace_hardirqs_on
+> >  #endif
+> >  	csrs CSR_STATUS, SR_IE
+> >  
+> > @@ -234,7 +234,7 @@ ret_from_exception:
+> >  	REG_L s0, PT_STATUS(sp)
+> >  	csrc CSR_STATUS, SR_IE
+> >  #ifdef CONFIG_TRACE_IRQFLAGS
+> > -	call trace_hardirqs_off
+> > +	call __trace_hardirqs_off
+> >  #endif
+> >  #ifdef CONFIG_RISCV_M_MODE
+> >  	/* the MPP value is too large to be used as an immediate arg for addi */
+> > @@ -270,10 +270,10 @@ restore_all:
+> >  	REG_L s1, PT_STATUS(sp)
+> >  	andi t0, s1, SR_PIE
+> >  	beqz t0, 1f
+> > -	call trace_hardirqs_on
+> > +	call __trace_hardirqs_on
+> >  	j 2f
+> >  1:
+> > -	call trace_hardirqs_off
+> > +	call __trace_hardirqs_off
+> >  2:
+> >  #endif
+> >  	REG_L a0, PT_STATUS(sp)
+> > diff --git a/arch/riscv/kernel/trace_irq.c b/arch/riscv/kernel/trace_irq.c
+> > new file mode 100644
+> > index 000000000000..fc194c56a35d
+> > --- /dev/null
+> > +++ b/arch/riscv/kernel/trace_irq.c
+> > @@ -0,0 +1,26 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Copyright (C) 2022 Changbin Du <changbin.du@gmail.com>
+> > + */
+> > +
+> > +#include <linux/irqflags.h>
+> > +#include <linux/kprobes.h>
+> > +#include "trace_irq.h"
+> > +
+> > +/**
+> > + * trace_hardirqs_on/off requires at least two parent call frames.
+> > + * Here we add one extra level so they can be safely called by low
+> > + * level entry code.
+> > + */
+> 
+> Hmm, I believe there's elegant solution without this grue, maybe
+> fix in stacktrace implementation or something else?
+> 
+This is not about stacktrace. As describe in commit msg, the problem is
+introduced by ftrace_return_address(1). The complier doesn't have knowledge
+about how many frames available at rumtime and wether each frame is valid.
 
-
-The Debian document you referred to says:
-  "Ubuntu puts its MOK key under /var/lib/shim-signed/mok/ and some
-   software such as Oracle's virtualbox package expect the key there
-   so we follow suit (see 989463 for reference) and put it at the same place"
-
-
-
-In Debian, MOK is generated under /var/lib/shim-signed/mok/,
-and its primary use is for signing the kernel.
-Then, you can reuse it for signing modules as well.
-
-
-This patch adopts the opposite direction:
-  Kbuild generates the module signing key, then
-  this patch reuses it for singing the kernel.
-
-The key is located in the kernel build tree
-(that is, the key is lost when you run "make mrproper").
-
-You need to "mokutil --import path/to/module/sining/key"
-every time Kbuild generates a new key.
-
-
-
-So, another possible approach is:
-
-builddeb signs the kernel with the key
-in /var/lib/shim-signed/mok/.
-
-I think this is more aligned with the debian documenation.
-
-I added Ben Hutchings, who might give us insights.
-
-
-
-
-
-
-
-> > In the old days, yes, the key and the certificate were stored in separate files.
-> > (the key in *.priv and the certificate in *.x509)
-> >
-> >
-> > Please read this commit:
->
-> Yes, I did.
->
-> > The motivation for this change is still questionable to me;
-> > the commit description sounds like they merged *.priv and *.x509
-> > into *.pem just because they could not write a correct Makefile.
-> > (If requested, I can write a correct Makefile that works in parallel build)
->
-> I think that would be preferable.  Putting the private and public keys
-> in the same file cannot be good security practice!
-
-
+> 
+> > +
+> > +void __trace_hardirqs_on(void)
+> > +{
+> > +	trace_hardirqs_on();
+> > +}
+> > +NOKPROBE_SYMBOL(__trace_hardirqs_on);
+> > +
+> > +void __trace_hardirqs_off(void)
+> > +{
+> > +	trace_hardirqs_off();
+> > +}
+> > +NOKPROBE_SYMBOL(__trace_hardirqs_off);
+> > diff --git a/arch/riscv/kernel/trace_irq.h b/arch/riscv/kernel/trace_irq.h
+> > new file mode 100644
+> > index 000000000000..99fe67377e5e
+> > --- /dev/null
+> > +++ b/arch/riscv/kernel/trace_irq.h
+> > @@ -0,0 +1,11 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +/*
+> > + * Copyright (C) 2022 Changbin Du <changbin.du@gmail.com>
+> > + */
+> > +#ifndef __TRACE_IRQ_H
+> > +#define __TRACE_IRQ_H
+> > +
+> > +void __trace_hardirqs_on(void);
+> > +void __trace_hardirqs_off(void);
+> > +
+> > +#endif /* __TRACE_IRQ_H */
+> > -- 
+> > 2.32.0
+> > 
+> > 
+> > _______________________________________________
+> > linux-riscv mailing list
+> > linux-riscv@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-riscv
 
 -- 
-Best Regards
-Masahiro Yamada
+Cheers,
+Changbin Du

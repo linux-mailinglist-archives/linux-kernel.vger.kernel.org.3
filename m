@@ -2,171 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 348704AB92F
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 11:59:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AFE74AB84C
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 11:13:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352364AbiBGK4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 05:56:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37994 "EHLO
+        id S1352833AbiBGKJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 05:09:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345973AbiBGKtk (ORCPT
+        with ESMTP id S1352419AbiBGKAn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 05:49:40 -0500
-X-Greylist: delayed 2922 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 02:49:39 PST
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6914C043181
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 02:49:39 -0800 (PST)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2179CZSj016591;
-        Mon, 7 Feb 2022 11:00:37 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=veZo0P/JfQdRJDIli6sGt4ZGDkxpZF8WrXm4WgcbFDs=;
- b=LyOM7OE32aQxV9zw7duuPrfrJldOPTSzvtdbO7khQHp6VH6nsQS/1nDO1hXbZLmJq3nw
- 7PsdcbDW2DruY7hmskH5TenmUVY9yx7uJ5i1DaUsAgLg+HOCJUkGv7VGwAMsVAtu4F96
- sCJ/nB5vp27U2qF3aQGMcKiyNcnqc+aDARpliHA9q4KtKmWvBpM2371vS0moSutXQlXv
- JD7nJX3nfnuqtwSrLyWpVfNb7yZ7m865ES71jT5FzTN6K3vYc11iMh0Vob87hfDscjJB
- 3OMPkL/dsoItJkdZBEb9HLlQ9rzsqz2u0jZF322OtUadHKol830UF6t/NX5nkfrXyXfN /w== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3e30kg08hy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 07 Feb 2022 11:00:37 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 5343C10002A;
-        Mon,  7 Feb 2022 11:00:35 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 3EFD9212FC5;
-        Mon,  7 Feb 2022 11:00:35 +0100 (CET)
-Received: from [10.129.7.146] (10.75.127.49) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 7 Feb
- 2022 11:00:34 +0100
-Message-ID: <7bd0a0a9-4015-b54c-f745-f813496be61b@foss.st.com>
-Date:   Mon, 7 Feb 2022 11:00:34 +0100
+        Mon, 7 Feb 2022 05:00:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C704C043188;
+        Mon,  7 Feb 2022 02:00:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D8A5DB810EE;
+        Mon,  7 Feb 2022 10:00:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0005C004E1;
+        Mon,  7 Feb 2022 10:00:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1644228040;
+        bh=+uR/PXZaEfd9UqPJTuut/61nSBPBE3DGkzWve6F8gaI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UXRRaHgHdwkUbr9O/4nBs34+9UZYbK309UgnigZAuHEmeXnT1CqU194OYHDahrtom
+         He8FMYCU2bt26N6nhJ/4vPMswhElHKIyeXhc//GOxQS6c26+glWn+U3MsfuA23oVGo
+         8cmp69w6SuUX0axXdPO3/6SA1m0We0QJktDzheBo=
+Date:   Mon, 7 Feb 2022 11:00:37 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     luofei <luofei@unicloud.com>, stable@vger.kernel.org,
+        tony.luck@intel.com, tglx@linutronix.de, mingo@redhat.com,
+        hpa@zytor.com, x86@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] x86/mm, mm/hwpoison: fix unmap kernel 1:1 pages
+Message-ID: <YgDtxR0V7cqOZSe3@kroah.com>
+References: <20220207075242.830685-1-luofei@unicloud.com>
+ <YgDU3+KsiaQ54J5N@kroah.com>
+ <YgDn7WWdcD5xaprX@zn.tnic>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 5/5] drm/stm: ltdc: add support of ycbcr pixel formats
-Content-Language: en-US
-To:     Nathan Chancellor <nathan@kernel.org>
-CC:     Philippe Cornu <philippe.cornu@foss.st.com>,
-        Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20211215214843.20703-1-yannick.fertre@foss.st.com>
- <Yfq3XwozrxYaFhgD@dev-arch.archlinux-ax161>
-From:   yannick Fertre <yannick.fertre@foss.st.com>
-In-Reply-To: <Yfq3XwozrxYaFhgD@dev-arch.archlinux-ax161>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.49]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-07_03,2022-02-07_01,2021-12-02_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YgDn7WWdcD5xaprX@zn.tnic>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nathan,
+On Mon, Feb 07, 2022 at 10:35:41AM +0100, Borislav Petkov wrote:
+> On Mon, Feb 07, 2022 at 09:14:23AM +0100, Greg KH wrote:
+> > On Mon, Feb 07, 2022 at 02:52:42AM -0500, luofei wrote:
+> > > Only unmap the page when the memory error is properly handled
+> > > by calling memory_failure(), not the other way around.
+> > > 
+> > > Fixes: 26f8c38bb466("x86/mm, mm/hwpoison: Don't unconditionally unmap kernel 1:1 pages")
+> > 
+> > This commit is not in Linus's tree.  Please use the correct commit id.
+> 
+> I think he's trying to fix the backport:
+> 
+> see 26f8c38bb466c1a2d232d7609fb4bfb4bc121678 which is the stable tree backport:
+> 
+> @@ -582,7 +586,8 @@ static int srao_decode_notifier(struct notifier_block *nb, unsigned long val,
+>  
+>         if (mce_usable_address(mce) && (mce->severity == MCE_AO_SEVERITY)) {
+>                 pfn = mce->addr >> PAGE_SHIFT;
+> -               memory_failure(pfn, MCE_VECTOR, 0);
+> +               if (memory_failure(pfn, MCE_VECTOR, 0))
+> +                       mce_unmap_kpfn(pfn);
+>         }
+> 
+> 
+> vs the upstream commit:
+> 
+> fd0e786d9d09024f67bd71ec094b110237dc3840
+> 
+> @@ -590,7 +594,8 @@ static int srao_decode_notifier(struct notifier_block *nb, unsigned long val,
+>  
+>         if (mce_usable_address(mce) && (mce->severity == MCE_AO_SEVERITY)) {
+>                 pfn = mce->addr >> PAGE_SHIFT;
+> -               memory_failure(pfn, 0);
+> +               if (!memory_failure(pfn, 0))
+> +                       mce_unmap_kpfn(pfn);
+>         }
+>  
+>         return NOTIFY_OK;
+> 
 
-On 2/2/22 17:54, Nathan Chancellor wrote:
-> Hi Yannick,
-> 
-> On Wed, Dec 15, 2021 at 10:48:43PM +0100, Yannick Fertre wrote:
->> This patch adds the following YCbCr input pixel formats on the latest
->> LTDC hardware version:
->>
->> 1 plane  (co-planar)  : YUYV, YVYU, UYVY, VYUY
->> 2 planes (semi-planar): NV12, NV21
->> 3 planes (full-planar): YU12=I420=DRM YUV420, YV12=DRM YVU420
->>
->> Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
-> 
-> <snip>
-> 
->> +static inline void ltdc_set_ycbcr_config(struct drm_plane *plane, u32 drm_pix_fmt)
->> +{
->> +	struct ltdc_device *ldev = plane_to_ltdc(plane);
->> +	struct drm_plane_state *state = plane->state;
->> +	u32 lofs = plane->index * LAY_OFS;
->> +	u32 val;
->> +
->> +	switch (drm_pix_fmt) {
->> +	case DRM_FORMAT_YUYV:
->> +		val = (YCM_I << 4) | LxPCR_YF | LxPCR_CBF;
->> +		break;
->> +	case DRM_FORMAT_YVYU:
->> +		val = (YCM_I << 4) | LxPCR_YF;
->> +		break;
->> +	case DRM_FORMAT_UYVY:
->> +		val = (YCM_I << 4) | LxPCR_CBF;
->> +		break;
->> +	case DRM_FORMAT_VYUY:
->> +		val = (YCM_I << 4);
->> +		break;
->> +	case DRM_FORMAT_NV12:
->> +		val = (YCM_SP << 4) | LxPCR_CBF;
->> +		break;
->> +	case DRM_FORMAT_NV21:
->> +		val = (YCM_SP << 4);
->> +		break;
->> +	case DRM_FORMAT_YUV420:
->> +	case DRM_FORMAT_YVU420:
->> +		val = (YCM_FP << 4);
->> +		break;
->> +	default:
->> +		/* RGB or not a YCbCr supported format */
->> +		break;
->> +	}
->> +
->> +	/* Enable limited range */
->> +	if (state->color_range == DRM_COLOR_YCBCR_LIMITED_RANGE)
->> +		val |= LxPCR_YREN;
->> +
->> +	/* enable ycbcr conversion */
->> +	val |= LxPCR_YCEN;
->> +
->> +	regmap_write(ldev->regmap, LTDC_L1PCR + lofs, val);
->> +}
-> 
-> This patch as commit 484e72d3146b ("drm/stm: ltdc: add support of ycbcr
-> pixel formats") in -next introduced the following clang warning:
-> 
-> drivers/gpu/drm/stm/ltdc.c:625:2: warning: variable 'val' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
->          default:
->          ^~~~~~~
-> drivers/gpu/drm/stm/ltdc.c:635:2: note: uninitialized use occurs here
->          val |= LxPCR_YCEN;
->          ^~~
-> drivers/gpu/drm/stm/ltdc.c:600:9: note: initialize the variable 'val' to silence this warning
->          u32 val;
->                 ^
->                  = 0
-> 1 warning generated.
-> 
-> Would it be okay to just return in the default case (maybe with a
-> message about an unsupported format?) or should there be another fix?
-> 
-> Cheers,
+Ah, ok, if so, this needs to be documented really really well in the
+changelog text so no one is confused.  Like me :)
 
+thanks,
 
-Thanks for your help.
-It'okay for a message for unsupported format with a return in the 
-default case.
-Do you want create & push the patch?
-
-Best regards
+greg k-h

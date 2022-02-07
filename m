@@ -2,91 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6C0C4AC8CA
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 19:45:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 950FB4AC8D3
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 19:47:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232735AbiBGSnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 13:43:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58570 "EHLO
+        id S232866AbiBGSrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 13:47:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231679AbiBGSm6 (ORCPT
+        with ESMTP id S232506AbiBGSnO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 13:42:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 152A6C0401DA
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 10:42:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 7 Feb 2022 13:43:14 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1835AC0401DC;
+        Mon,  7 Feb 2022 10:43:13 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C7528B8164D
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 18:42:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49042C004E1
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 18:42:55 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="VaQDLxfN"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1644259372;
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 24AE01EC02B9;
+        Mon,  7 Feb 2022 19:43:07 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1644259387;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5f6xoMurihFxc+jyT3VNTd9P91s3UDjpEA7MgFF4tlg=;
-        b=VaQDLxfNzJ79xTmcxtVpnKl+KB68LFOjCrS6wTj5gPlaodw7Y5qd/vzXMBpxBnN2Gh4DqR
-        tE/MOMBGGE0GOi9K0xp8WnIXqplIP7ZniNL7xCkEdaUfjg/wewzCzggfayYRjVZ+uahg70
-        g9Pxk8Eu2sxToKB/kLjWcN1jTAsUo5o=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 1ac30f09 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
-        for <linux-kernel@vger.kernel.org>;
-        Mon, 7 Feb 2022 18:42:52 +0000 (UTC)
-Received: by mail-yb1-f171.google.com with SMTP id c6so42841273ybk.3
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 10:42:52 -0800 (PST)
-X-Gm-Message-State: AOAM533MVITQPgKloJ0tK+zkgSqUi9Nwj9XDCAg3uW9saT7TkCVba1m+
-        RlTnoT1ciblAB3KgAIdgV4n7jnl2HHju7yAreug=
-X-Google-Smtp-Source: ABdhPJwjNWJxLwOB9ojzgqsLPkcQ7PiF7REVUngwHVGRdlgzYXukTlGz5kcw+FR7+Zk3vGohmqsoQIDFis8LYMnWMbU=
-X-Received: by 2002:a81:c40d:: with SMTP id j13mr1209089ywi.499.1644259371472;
- Mon, 07 Feb 2022 10:42:51 -0800 (PST)
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=SZEc3K4WUssJFPuRZM4cYUdq0EX2pDa+Q3YePuI1VGc=;
+        b=qmClInz1dKwfOZbiO2QrY2gZK/xZolImE900/WaPmxRFwwOa2cp3K4OMeOEJsTi80Hu4Qp
+        G43sMx+xX8AUxdLvcgTvewjlRnNRSbTkdwsgOZ6e9vtHFY+GtTdk9DIq09oCjIgK1EE+5Z
+        CRyqtdz0t/QXSU+RToQpc+wZ3krqc2c=
+Date:   Mon, 7 Feb 2022 19:43:01 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>, brijesh.singh@amd.com,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v9 38/43] x86/sev: Use firmware-validated CPUID for
+ SEV-SNP guests
+Message-ID: <YgFoNeASrXizWMIa@zn.tnic>
+References: <20220128171804.569796-1-brijesh.singh@amd.com>
+ <20220128171804.569796-39-brijesh.singh@amd.com>
+ <20220205171901.kt47bahdmh64b45x@amd.com>
+ <Yf/tQPqbP97lrVpg@zn.tnic>
+ <20220207170018.sg37idc6nzlzgj6p@amd.com>
 MIME-Version: 1.0
-References: <e10b79cf-d6d5-ffcc-bce4-edd92b7cb6b9@molgen.mpg.de>
-In-Reply-To: <e10b79cf-d6d5-ffcc-bce4-edd92b7cb6b9@molgen.mpg.de>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Mon, 7 Feb 2022 19:42:40 +0100
-X-Gmail-Original-Message-ID: <CAHmME9pktmNpcBS_DJhJ5Z+6xO9P1wroQ9_gwx8KZMBxk1FBeQ@mail.gmail.com>
-Message-ID: <CAHmME9pktmNpcBS_DJhJ5Z+6xO9P1wroQ9_gwx8KZMBxk1FBeQ@mail.gmail.com>
-Subject: Re: BUG: KCSAN: data-race in add_device_randomness+0x20d/0x290
-To:     pmenzel@molgen.mpg.de
-Cc:     "Theodore Y. Ts'o" <tytso@mit.edu>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Jann Horn <jannh@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220207170018.sg37idc6nzlzgj6p@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
+On Mon, Feb 07, 2022 at 11:00:18AM -0600, Michael Roth wrote:
+> this is more a statement that an out-of-spec hypervisor should not
+> expect that their guests will continue working in future firmware
+> versions, and what's being determined here is whether to break
+> those out-of-spec hypervisor now, or later when/if we actually
+> make use of the fields in the guest code,
 
-Thanks for the report. I assume that this is actually an old bug. Do
-you have a vmlinux or a random.o from this kernel you could send me to
-double check? Without that, my best guess, which I'd say I have
-relatively high confidence about, is that the "1 byte read" is
-actually a `movzx eax, cs:lfsr` referring to the `static u8 lfsr`
-here, which gets inlined into add_device_randomness:
+I think you're missing a very important aspect here called reality.
 
-static int crng_slow_load(const u8 *cp, size_t len)
-{
-    unsigned long flags;
-    static u8 lfsr = 1;
+Let's say that HV is a huge cloud vendor who means a lot of $ and a
+huge use case for SEV tech. And let's say that same HV is doing those
+incompatible things.
 
-This was added in 2008 with dc12baacb95f ("random: use a different
-mixing algorithm for add_device_randomness()"). My understanding is
-that the race here isn't super problematic as we're in kind of a half
-assed "low effort" phase anyway. But I'll give it some thought. I'm
-CCing Jann as well who reported the original issue that motivated that
-change.
+Now imagine you break it with the spec change. But they already have
+a gazillion of deployments on real hw which they can't simply update
+just like that. Hell, cloud vendors are even trying to dictate how CPU
+vendors should do microcode updates on a live system, without rebooting,
+and we're talking about some wimpy fields in some table.
 
-Regards,
-Jason
+Now imagine your business unit calls your engineering and says, you need
+to fix this because a very persuasive chunk of money.
+
+What you most likely will end up with is an ugly ugly workaround after a
+lot of managers screaming at each other and you won't even think about
+breaking that HV.
+
+Now imagine you've designed it the right and unambiguous way from the
+getgo. You wake up and realize, it was all just a bad dream...
+
+> Ok, I'll follow up with the firmware team on this. But just to be clear,
+> what they're suggesting is that the firmware could enforce the MBZ checks
+> on the CPUID page, so out-of-spec hypervisors will fail immediately,
+> rather than in some future version of the spec/cpuid page, and guests
+> can continue ignoring them in the meantime.
+
+Yes, exactly. Fail immediately.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

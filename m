@@ -2,108 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 231BB4ACADA
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 22:04:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDF974ACADB
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 22:07:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232603AbiBGVEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 16:04:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36962 "EHLO
+        id S233600AbiBGVHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 16:07:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231667AbiBGVEU (ORCPT
+        with ESMTP id S231667AbiBGVHH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 16:04:20 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D140C06173B;
-        Mon,  7 Feb 2022 13:04:19 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id b9so29335766lfq.6;
-        Mon, 07 Feb 2022 13:04:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=IS0NV7Wj7WBc0nHIZQdxvQ5ddc8mhbJ83KJ/odH85X8=;
-        b=TAMIOExM4wGKLVkc/S5VkKo7A12LDRzYBpci4A2FA/xQT2lI3GcNBYqVce/WO8j0Wt
-         JBmZ7fas15zRLDoaYmvVgk0ypqD+sNm1Q9RWRUmOpocz7SMC5L3GLCOFrm+Xkx9r3/mO
-         lN2lYQ09HdCM8RUyne+0qQN+1448gyOh4J4JAlZ5Q8iAdEHFiWfHbJoSZqnKiESVMbUf
-         tH6YZ4wGHW21nlQVdB8qME6EBT0XaqJrZw7cnNqaHYPOnVeziJzVrR3grkfHh/yVBsl2
-         TPZCI9mXaUEk8TAfhdOpfHBpDE/KiBQBY9opsG4I/b8wlS9FsYCZEnuOVlFPw5hscshe
-         p3MA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=IS0NV7Wj7WBc0nHIZQdxvQ5ddc8mhbJ83KJ/odH85X8=;
-        b=PShQmgTZ41b4JPxlAXrmhvTmFQXrrO4k3lznlTL80zhf5nu/O4ASR9TwaZjLtezmNI
-         jd01+uT5XY3ku05MrYW4sHd1wS5wao1xPGxImBVwtIfMWSHmke0yn1g44vYXZaVtoyL4
-         o+637X64jnCCdw+f9J17+7XO/zCTVvK/SfuWzITog53vujvZih7pVHwy/UmUPA04/9UM
-         co+WzqFAE9EDY6Fgjr5Hw6uVcnpEVThmMQXlbLi/FVroOv8OE0atqZQmSzpjd53W5Nzl
-         Fv1zqqdzck69sw3ipxX+kpcoHiOOel+PXD0/7k4PD9CL9L9p4fUxL7WtJWTNQbberMxi
-         WbrQ==
-X-Gm-Message-State: AOAM530XvAUqGv639AoKOW0R//nXR8VMDlj7ylW7FqGlh4TCpY86Ab88
-        TYLWrRsJGs96EVU+kGVfxNv8URpVIdjbUTcvpYkJP0iCEvw=
-X-Google-Smtp-Source: ABdhPJzXtEMfZtRgZyOwYRCXj+FJI+yotQe1tVk6j9KP6xZSKGTr+dm5iR19bL4eVqnMgt+kWs2VnMviI+0KiJTl/4o=
-X-Received: by 2002:a05:6512:c1d:: with SMTP id z29mr912257lfu.320.1644267857553;
- Mon, 07 Feb 2022 13:04:17 -0800 (PST)
+        Mon, 7 Feb 2022 16:07:07 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEBC6C06173B
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 13:07:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644268026; x=1675804026;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=8gbY67ygTvd6iWc9uwdHH+xuMdIzgfcuSO4qL0gWlQQ=;
+  b=iaVUPdUy1HROh+x+9YEXAiV0im7NbZITPVToIeYkbksOJhdwVFYR+cKR
+   3/BDpNHaR5/GgtNS5LKC37R3Oas+po/z8EhgeTO0j5PsMdJsEYU6axJ2I
+   c4m8qDvN4I974HH9S4Caxj/c2GWBYYo502TI53jeAt9kC6SvLxxLKqhOB
+   IWlGMrb0K0wX28nupiWtjYQo5/VzWumflrvLyFEdAZVxGggbpHZsoBBPU
+   Q1blUxFW566Aoe8SyxUaFa9CLGlK1WPKxLmEm8ltfVhk6qrgAQcyHVWtd
+   4FY1OzFODJmOU7/S2mxvG6H+MSISbqOarsYE7d/jDpKogr9h1hnTz/lD6
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="229458532"
+X-IronPort-AV: E=Sophos;i="5.88,350,1635231600"; 
+   d="scan'208";a="229458532"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 13:07:06 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,350,1635231600"; 
+   d="scan'208";a="567618908"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orsmga001.jf.intel.com with ESMTP; 07 Feb 2022 13:07:06 -0800
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 7 Feb 2022 13:07:06 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 7 Feb 2022 13:07:05 -0800
+Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
+ fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.2308.020;
+ Mon, 7 Feb 2022 13:07:05 -0800
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+CC:     Jue Wang <juew@google.com>, "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>
+Subject: RE: [RFC] x86/mce: Add workaround for SKX/CLX/CPX spurious machine
+ checks
+Thread-Topic: [RFC] x86/mce: Add workaround for SKX/CLX/CPX spurious machine
+ checks
+Thread-Index: AQHYG9xP0gqp+9MoaEye7S91lqAbGKyI9jkA//+C0wCAAJepgP//g7dQ
+Date:   Mon, 7 Feb 2022 21:07:05 +0000
+Message-ID: <be53997f26704089b941d33d9bf47bc6@intel.com>
+References: <20220207043640.2829295-1-juew@google.com>
+ <YgFqiJOU5tZsHbY6@zn.tnic> <YgFyBRIOIquMI2ng@agluck-desk2.amr.corp.intel.com>
+ <YgGAv/aCVG+RDADI@zn.tnic>
+In-Reply-To: <YgGAv/aCVG+RDADI@zn.tnic>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.6.200.16
+x-originating-ip: [10.1.200.100]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-From:   Steve French <smfrench@gmail.com>
-Date:   Mon, 7 Feb 2022 15:04:06 -0600
-Message-ID: <CAH2r5ms7nZOL5jiGO2+AY8WO_hVXuEK9WsA9jE8utZgyHMoxZA@mail.gmail.com>
-Subject: [GIT PULL] ksmbd server fixes
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Namjae Jeon <linkinjeon@kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please pull the following changes since commit
-e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
-
-  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
-
-are available in the Git repository at:
-
-  git://git.samba.org/ksmbd.git tags/5.17-rc3-ksmbd-server-fixes
-
-for you to fetch changes up to f9929ef6a2a55f03aac61248c6a3a987b8546f2a:
-
-  ksmbd: add support for key exchange (2022-02-04 00:12:22 -0600)
-
-----------------------------------------------------------------
-6 ksmbd server fixes including:
-- NTLMSSP authentication improvement
-- RDMA (smbdirect) fix allowing broader set of NICs to be supported
-- improved buffer validation
-- 3 additional small fixes, including a posix extensions fix for stable
-
-Regression test results:
-http://smb3-test-rhel-75.southcentralus.cloudapp.azure.com/#/builders/8/builds/100
-----------------------------------------------------------------
-Hyunchul Lee (1):
-      ksmbd: smbd: validate buffer descriptor structures
-
-Namjae Jeon (5):
-      ksmbd: fix SMB 3.11 posix extension mount failure
-      ksmbd: fix same UniqueId for dot and dotdot entries
-      ksmbd: don't align last entry offset in smb2 query directory
-      ksmbd: reduce smb direct max read/write size
-      ksmbd: add support for key exchange
-
- fs/Kconfig                |  4 ++--
- fs/ksmbd/auth.c           | 27 +++++++++++++++++++++++++++
- fs/ksmbd/smb2pdu.c        | 45 +++++++++++++++++++++++++++++++++++----------
- fs/ksmbd/smb_common.c     |  5 ++++-
- fs/ksmbd/transport_rdma.c |  2 +-
- fs/ksmbd/vfs.h            |  1 +
- 6 files changed, 70 insertions(+), 14 deletions(-)
-
--- 
-Thanks,
-
-Steve
+PiBJbiB0aGF0IGNhc2UsIHlvdSBjYW4ganVzdCBhcyB3ZWxsIHRlc3QgdGhlIE1TUiBiaXQgZGly
+ZWN0bHkNCj4gTVNSX0lBMzJfTUlTQ19FTkFCTEVfRkFTVF9TVFJJTkdfQklULiBJZiBpdCBzZXQs
+IHlvdSBjbGVhciBpdCwgZG9uZS4NCg0KWWVzLiBUaGF0IHdvdWxkIHdvcmsuIEl0J3MgYW4gZXh0
+cmEgTVNSIHJlYWQgaW5zdGVhZCBvZiBhIG1lbW9yeSByZWFkLiBCdXQgdGhpcw0KaXNuJ3QgYSBw
+ZXJmb3JtYW5jZSBwYXRoLg0KDQo+PiBNYXliZSB0aGlzIHdvdWxkIGJlIG1vcmUgaHVtYW4gZnJp
+ZW5kbHk/DQo+PiANCj4+IAkJcHJfZXJyKCJDUFUlZDogUGVyZm9ybWFuY2Ugbm93IGRlZ3JhZGVk
+IGFmdGVyIGFwcGx5aW5nIG1hY2hpbmUgY2hlY2sgd29ya2Fyb3VuZFxuIiwNCj4+IAkJCXNtcF9w
+cm9jZXNzb3JfaWQoKSk7DQo+DQo+IFdlbGwsIGlzIHRoZXJlIGFuIGVycmF0dW0geW91IGNhbiBy
+ZWZlciB0byBpbiBpdCBpbnN0ZWFkPw0KDQpUaGUgZXJyYXR1bSBoYXMgbWFkZSBpdHMgd2F5IHRo
+cm91Z2ggdG8gdGhlIHB1YmxpYyBzcGVjaWZpY2F0aW9uIHVwZGF0ZSB5ZXQgOi0oDQoNCj4gRXhw
+bGFpbmluZyB0aGUgd2hvbGUgZGVhbCBpbiBhIHNpbmdsZSBlcnJvciBtZXNzYWdlIGlzIGhhcmQg
+YW5kIGFsbW9zdA0KPiBjZXJ0YWlubHkgaW5zdWZmaWNpZW50Lg0KDQpOb3QgaWRlYWwsIGJ1dCB0
+aGUgbWVzc2FnZSBpcyBhIHNlYXJjaCB0b29sIHRvIGdldCB0byB0aGVzZSBlLW1haWwgZGlzY3Vz
+c2lvbnMuDQoNCj4gQWxzbywgd2hhdCdzIHRoZSB1c2Ugb2YgdGhhdCBtZXNzYWdlIGlzc3Vpbmcg
+b25jZSBvbiBldmVyeSBDUFU/IEluc3RlYWQNCj4gb2YgYmVpbmcgYSBfb25jZSgpIG1lc3NhZ2U/
+DQoNCnByX2Vycl9vbmNlKCkgd291bGQgYmUgYmV0dGVyLg0KDQotVG9ueQ0K

@@ -2,52 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C95CE4ABDF7
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:05:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D7C04ABDE3
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:05:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389684AbiBGLut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:50:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44942 "EHLO
+        id S1389449AbiBGLsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:48:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384940AbiBGLaw (ORCPT
+        with ESMTP id S1386550AbiBGLez (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:30:52 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0737C03C19D;
-        Mon,  7 Feb 2022 03:28:48 -0800 (PST)
+        Mon, 7 Feb 2022 06:34:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 271D1C043181;
+        Mon,  7 Feb 2022 03:34:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D79460918;
-        Mon,  7 Feb 2022 11:28:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59D89C004E1;
-        Mon,  7 Feb 2022 11:28:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C7D42B80EBD;
+        Mon,  7 Feb 2022 11:34:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8BE4C004E1;
+        Mon,  7 Feb 2022 11:34:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233327;
-        bh=BrOeKKIu/c6Ewayd+Wwum8dmrbUTc5f982drrQndTvc=;
+        s=korg; t=1644233691;
+        bh=ScHomgUOORKGXC3cq+pTzaGi0+yCAoM+r4g/KqfAQEg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sF+r6av7Z49dT6C1ebOyd4dnpEW69bkWms6xYiT/nivonCF7a2BF8xEGt41aL7fJP
-         zwJxMScSMC0JBdA7NxwFYPtTZZHOwmhhF30vFCqDtGXADCUUW/kljobr2yciv1V7qo
-         eKkNtUYcVBQuLiMDDv0UsYwwVx99jAEzwkaQk9Go=
+        b=h6QgdKTnJHWnHESXfj7+tS8sTK7eOFbfUnqtSeXxHHR6hf4U23rx1SoRoc27Pw3Ku
+         s2DtfT+JWsbsp++0kcWA2zZT6VTWo6LRPcCJqlZGmrzod5hIP/ccjmmao64N62pCCo
+         jOdgZJE72U9TVbCHi11MMvM1zT4kxujWLvLFfMv4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miquel Raynal <miquel.raynal@bootlin.com>,
-        Alexander Aring <aahringo@redhat.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>
-Subject: [PATCH 5.15 056/110] net: ieee802154: hwsim: Ensure proper channel selection at probe time
+        stable@vger.kernel.org, Joerg Roedel <jroedel@suse.de>
+Subject: [PATCH 5.16 058/126] iommu/amd: Fix loop timeout issue in iommu_ga_log_enable()
 Date:   Mon,  7 Feb 2022 12:06:29 +0100
-Message-Id: <20220207103804.179284596@linuxfoundation.org>
+Message-Id: <20220207103806.115758833@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
-References: <20220207103802.280120990@linuxfoundation.org>
+In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
+References: <20220207103804.053675072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,37 +53,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miquel Raynal <miquel.raynal@bootlin.com>
+From: Joerg Roedel <jroedel@suse.de>
 
-commit 1293fccc9e892712d910ec96079d3717307f1d2d upstream.
+commit 9b45a7738eec52bf0f5d8d3d54e822962781c5f2 upstream.
 
-Drivers are expected to set the PHY current_channel and current_page
-according to their default state. The hwsim driver is advertising being
-configured on channel 13 by default but that is not reflected in its own
-internal pib structure. In order to ensure that this driver consider the
-current channel as being 13 internally, we at least need to set the
-pib->channel field to 13.
+The polling loop for the register change in iommu_ga_log_enable() needs
+to have a udelay() in it.  Otherwise the CPU might be faster than the
+IOMMU hardware and wrongly trigger the WARN_ON() further down the code
+stream. Use a 10us for udelay(), has there is some hardware where
+activation of the GA log can take more than a 100ms.
 
-Fixes: f25da51fdc38 ("ieee802154: hwsim: add replacement for fakelb")
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-[stefan@datenfreihafen.org: fixed assigment from page to channel]
-Acked-by: Alexander Aring <aahringo@redhat.com>
-Link: https://lore.kernel.org/r/20220125121426.848337-2-miquel.raynal@bootlin.com
-Signed-off-by: Stefan Schmidt <stefan@datenfreihafen.org>
+A future optimization should move the activation check of the GA log
+to the point where it gets used for the first time. But that is a
+bigger change and not suitable for a fix.
+
+Fixes: 8bda0cfbdc1a ("iommu/amd: Detect and initialize guest vAPIC log")
+Signed-off-by: Joerg Roedel <jroedel@suse.de>
+Link: https://lore.kernel.org/r/20220204115537.3894-1-joro@8bytes.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ieee802154/mac802154_hwsim.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/iommu/amd/init.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/net/ieee802154/mac802154_hwsim.c
-+++ b/drivers/net/ieee802154/mac802154_hwsim.c
-@@ -786,6 +786,7 @@ static int hwsim_add_one(struct genl_inf
- 		goto err_pib;
+--- a/drivers/iommu/amd/init.c
++++ b/drivers/iommu/amd/init.c
+@@ -21,6 +21,7 @@
+ #include <linux/export.h>
+ #include <linux/kmemleak.h>
+ #include <linux/cc_platform.h>
++#include <linux/iopoll.h>
+ #include <asm/pci-direct.h>
+ #include <asm/iommu.h>
+ #include <asm/apic.h>
+@@ -834,6 +835,7 @@ static int iommu_ga_log_enable(struct am
+ 		status = readl(iommu->mmio_base + MMIO_STATUS_OFFSET);
+ 		if (status & (MMIO_STATUS_GALOG_RUN_MASK))
+ 			break;
++		udelay(10);
  	}
  
-+	pib->channel = 13;
- 	rcu_assign_pointer(phy->pib, pib);
- 	phy->idx = idx;
- 	INIT_LIST_HEAD(&phy->edges);
+ 	if (WARN_ON(i >= LOOP_TIMEOUT))
 
 

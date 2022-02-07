@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD3084AC29F
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 16:12:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1CC74AC2A5
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 16:12:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442793AbiBGPJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 10:09:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55858 "EHLO
+        id S1442848AbiBGPKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 10:10:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442452AbiBGOuk (ORCPT
+        with ESMTP id S1442461AbiBGOuw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 09:50:40 -0500
+        Mon, 7 Feb 2022 09:50:52 -0500
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B361C0401C2;
-        Mon,  7 Feb 2022 06:50:40 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB8BEC0401C2;
+        Mon,  7 Feb 2022 06:50:51 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: kholk11)
-        with ESMTPSA id 398861F444B0
+        with ESMTPSA id B335A1F444B0
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644245439;
-        bh=Ju2Q5YwjY/LdNga4EoB41t6xw3DyFhmTZT8pPKyD1xI=;
+        s=mail; t=1644245449;
+        bh=13Pa/hRoL9bc6PMdKa7o3kW0gnpTZ/7yRWMBa7/cWug=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=oaFTUYvRYY60eNHWhaNtRSsVies+YMnhzdtJ+Bbe5HKv/sU+giIdxU7YGk5i6vX9C
-         JFxLcTAtzSPpheVOyDCYr6OoyKAqDEq9EFgOyvsbd20C0LtSwrBFT6fzFKlEJtbmk0
-         0CsH33VM8IVpNuNcLk+hDjxj/o47W0VGlYzyThdkzJsjHiCJLj16R43gfo1luP1rW4
-         Am8CvuA2Yp3Bh0MgOqxTJc9OOgXzgtZyNLZETmTq1ZfOhP2r3saOYg6yhIAmtfFmTy
-         v1thQMWM5I2nSfeq0YyPlz0m0Dhd0jFizEWGwe/iMLrxc4/tH1dh35MguKPph+JVOp
-         Kx+ZQl1rF+4RQ==
-Message-ID: <d91f056c-227f-7a01-9e9c-9b4d53ec04f4@collabora.com>
-Date:   Mon, 7 Feb 2022 15:50:36 +0100
+        b=E5nDpwdJ3WJeBqgA11hTJgycuzr9IolkDMGGw/W0GyDH6gtijdYhCrmKgT50mz2Bc
+         ZZWfgMuby4+E+/iGal0uerm3GAhl96/I61rhtkEAqVPDkJ+MgDbKItyIRozrlwGjy4
+         x+JCnRZiXFTma4kNRMrHqjJF5MxIwbFhxRzLHzdgtfKFGamelDdQYY55JKopBN4Gt6
+         kZpo/Wv17MvsU5RDVIteshi0UJzElRBd+0D8lNz9ZLPtZQjYR2EgwKYVKM4/mvn682
+         dy+SO74CcRhmj++OGIZ/zqUL3OPfTWMfOI/5DoxJzz8yOHzjhnbTH03juHvW0bzPVP
+         NUl8f8rHgCHoA==
+Message-ID: <d305aefa-7cdf-3221-2883-9381785e335d@collabora.com>
+Date:   Mon, 7 Feb 2022 15:50:46 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.1
-Subject: Re: [PATCH V6, 3/5] media: mtk-jpegenc: add jpegenc timeout func
+Subject: Re: [PATCH V1, 5/6] media: mtk-jpegdec: add output pic reorder
  interface
 Content-Language: en-US
 To:     "kyrie.wu" <kyrie.wu@mediatek.com>,
@@ -49,11 +49,11 @@ Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
         linux-mediatek@lists.infradead.org, xia.jiang@mediatek.com,
         maoguang.meng@mediatek.com, srv_heupstream@mediatek.com,
         irui.wang@mediatek.com
-References: <1638501230-13417-1-git-send-email-kyrie.wu@mediatek.com>
- <1638501230-13417-4-git-send-email-kyrie.wu@mediatek.com>
+References: <1638509655-14296-1-git-send-email-kyrie.wu@mediatek.com>
+ <1638509655-14296-6-git-send-email-kyrie.wu@mediatek.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <1638501230-13417-4-git-send-email-kyrie.wu@mediatek.com>
+In-Reply-To: <1638509655-14296-6-git-send-email-kyrie.wu@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -66,100 +66,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 03/12/21 04:13, kyrie.wu ha scritto:
-> Generalizes jpegenc timeout func interfaces to handle HW timeout.
+Il 03/12/21 06:34, kyrie.wu ha scritto:
+> add output reorder func to reorder the output images
+> to ensure the output pic is consistent with the input images.
 > 
 > Signed-off-by: kyrie.wu <kyrie.wu@mediatek.com>
 > ---
-> V6: no change
-> ---
->   drivers/media/platform/mtk-jpeg/mtk_jpeg_core.h   |  8 ++++++++
->   drivers/media/platform/mtk-jpeg/mtk_jpeg_enc_hw.c | 23 +++++++++++++++++++++++
->   2 files changed, 31 insertions(+)
+>   drivers/media/platform/mtk-jpeg/mtk_jpeg_dec_hw.c | 50 +++++++++++++++++++++--
+>   1 file changed, 46 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.h b/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.h
-> index 7d013de..baab305 100644
-> --- a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.h
-> +++ b/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.h
-> @@ -75,6 +75,12 @@ struct mtk_jpeg_variant {
->   	u32 cap_q_default_fourcc;
->   };
->   
-> +struct mtk_jpeg_hw_param {
-> +	struct vb2_v4l2_buffer *src_buffer;
-> +	struct vb2_v4l2_buffer *dst_buffer;
-> +	struct mtk_jpeg_ctx *curr_ctx;
-> +};
-> +
->   enum mtk_jpegenc_hw_id {
->   	MTK_JPEGENC_HW0,
->   	MTK_JPEGENC_HW1,
-> @@ -122,6 +128,8 @@ struct mtk_jpegenc_comp_dev {
->   	struct mtk_jpeg_dev *master_dev;
->   	struct mtk_jpegenc_pm pm;
->   	int jpegenc_irq;
-> +	struct delayed_work job_timeout_work;
-> +	struct mtk_jpeg_hw_param hw_param;
->   };
->   
->   /**
-> diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_enc_hw.c b/drivers/media/platform/mtk-jpeg/mtk_jpeg_enc_hw.c
-> index 4ccda1d..e62b875 100644
-> --- a/drivers/media/platform/mtk-jpeg/mtk_jpeg_enc_hw.c
-> +++ b/drivers/media/platform/mtk-jpeg/mtk_jpeg_enc_hw.c
-> @@ -183,6 +183,24 @@ void mtk_jpeg_set_enc_params(struct mtk_jpeg_ctx *ctx,  void __iomem *base)
->   	writel(ctx->restart_interval, base + JPEG_ENC_RST_MCU_NUM);
+> diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_dec_hw.c b/drivers/media/platform/mtk-jpeg/mtk_jpeg_dec_hw.c
+> index 9138ecb..fad5bf1c 100644
+> --- a/drivers/media/platform/mtk-jpeg/mtk_jpeg_dec_hw.c
+> +++ b/drivers/media/platform/mtk-jpeg/mtk_jpeg_dec_hw.c
+> @@ -443,6 +443,49 @@ void mtk_jpeg_dec_set_config(void __iomem *base,
+>   	mtk_jpeg_dec_set_pause_mcu_idx(base, config->total_mcu);
 >   }
 >   
-> +static void mtk_jpegenc_timeout_work(struct work_struct *work)
+> +void mtk_jpegdec_put_buf(struct mtk_jpegdec_comp_dev *jpeg)
+
+This function is used only in this file, hence it should be static.
+
 > +{
-> +	struct delayed_work *Pwork =
-> +		container_of(work, struct delayed_work, work);
-> +	struct mtk_jpegenc_comp_dev *cjpeg =
-> +		container_of(Pwork, struct mtk_jpegenc_comp_dev,
-> +		job_timeout_work);
-> +	enum vb2_buffer_state buf_state = VB2_BUF_STATE_ERROR;
-> +	struct vb2_v4l2_buffer *src_buf;
+> +	struct mtk_jpeg_src_buf *dst_done_buf, *tmp_dst_done_buf;
+> +	struct vb2_v4l2_buffer *dst_buffer;
+> +	struct list_head *temp_entry;
+> +	struct list_head *pos = NULL;
+> +	struct mtk_jpeg_ctx *ctx;
+> +	unsigned long flags;
 > +
-> +	src_buf = cjpeg->hw_param.src_buffer;
+> +	ctx = jpeg->hw_param.curr_ctx;
+> +	if (!ctx) {
+> +		dev_err(jpeg->dev, "comp_jpeg ctx fail !!!\n");
+
+Since this is unlikely to happen (or should be unlikely anyway!!), this print
+should then be a dev_dbg()
+
+> +		return;
+> +	}
 > +
-> +	mtk_jpeg_enc_reset(cjpeg->reg_base);
-> +	clk_disable_unprepare(cjpeg->pm.venc_clk.clk_info->jpegenc_clk);
-
-You disable and unprepare the clock, but you never turn it back on?
-
-This will lead to unbalanced disable on module removal but, more importantly,
-will lead to unclocked access after a timeout, for which the platform may or
-may not crash, but the jpgenc hardware will be unrecoverable until performing
-a full system reboot.
-
-Please fix this.
-
-> +	pm_runtime_put(cjpeg->pm.dev);
-> +	v4l2_m2m_buf_done(src_buf, buf_state);
+> +	dst_buffer = jpeg->hw_param.dst_buffer;
+> +	if (!dst_buffer) {
+> +		dev_err(jpeg->dev, "comp_jpeg dst_buffer fail !!!\n");
+> +		return;
+> +	}
+> +
+> +	dst_done_buf = container_of(dst_buffer, struct mtk_jpeg_src_buf, b);
+> +
+> +	spin_lock_irqsave(&ctx->done_queue_lock, flags);
+> +	list_add_tail(&dst_done_buf->list, &ctx->dst_done_queue);
+> +	while (!list_empty(&ctx->dst_done_queue) &&
+> +		(pos != &ctx->dst_done_queue)) {
+> +		list_for_each_prev_safe(pos, temp_entry,
+> +			(&ctx->dst_done_queue)) {
+> +			tmp_dst_done_buf = list_entry(pos,
+> +				struct mtk_jpeg_src_buf, list);
+> +			if (tmp_dst_done_buf->frame_num ==
+> +				ctx->last_done_frame_num) {
+> +				list_del(&tmp_dst_done_buf->list);
+> +				v4l2_m2m_buf_done(&tmp_dst_done_buf->b,
+> +					VB2_BUF_STATE_DONE);
+> +				ctx->last_done_frame_num++;
+> +			}
+> +		}
+> +	}
+> +	spin_unlock_irqrestore(&ctx->done_queue_lock, flags);
 > +}
 > +
->   static irqreturn_t mtk_jpegenc_hw_irq_handler(int irq, void *priv)
+>   static void mtk_jpegdec_timeout_work(struct work_struct *work)
 >   {
->   	struct vb2_v4l2_buffer *src_buf, *dst_buf;
-> @@ -194,6 +212,8 @@ static irqreturn_t mtk_jpegenc_hw_irq_handler(int irq, void *priv)
->   	struct mtk_jpegenc_comp_dev *jpeg = priv;
->   	struct mtk_jpeg_dev *master_jpeg = jpeg->master_dev;
+>   	enum vb2_buffer_state buf_state = VB2_BUF_STATE_ERROR;
+> @@ -450,10 +493,9 @@ static void mtk_jpegdec_timeout_work(struct work_struct *work)
+>   		container_of(work, struct mtk_jpegdec_comp_dev,
+>   		job_timeout_work.work);
+>   	struct mtk_jpeg_dev *master_jpeg = cjpeg->master_dev;
+> -	struct vb2_v4l2_buffer *src_buf, *dst_buf;
+> +	struct vb2_v4l2_buffer *src_buf;
 >   
-> +	cancel_delayed_work(&jpeg->job_timeout_work);
-> +
->   	irq_status = readl(jpeg->reg_base + JPEG_ENC_INT_STS) &
->   		JPEG_ENC_INT_STATUS_MASK_ALLIRQ;
->   	if (irq_status)
-> @@ -322,6 +342,9 @@ static int mtk_jpegenc_hw_probe(struct platform_device *pdev)
+>   	src_buf = cjpeg->hw_param.src_buffer;
+> -	dst_buf = cjpeg->hw_param.dst_buffer;
 >   
->   	dev->plat_dev = pdev;
+>   	mtk_jpeg_dec_reset(cjpeg->reg_base);
+>   	clk_disable_unprepare(cjpeg->pm.dec_clk.clk_info->jpegdec_clk);
+> @@ -462,7 +504,7 @@ static void mtk_jpegdec_timeout_work(struct work_struct *work)
+>   	atomic_inc(&cjpeg->hw_rdy);
+>   	wake_up(&master_jpeg->dec_hw_wq);
+>   	v4l2_m2m_buf_done(src_buf, buf_state);
+> -	v4l2_m2m_buf_done(dst_buf, buf_state);
+> +	mtk_jpegdec_put_buf(cjpeg);
+>   }
 >   
-> +	INIT_DELAYED_WORK(&dev->job_timeout_work,
-> +		mtk_jpegenc_timeout_work);
-> +
->   	ret = mtk_jpegenc_init_pm(dev);
->   	if (ret) {
->   		dev_err(&pdev->dev, "Failed to get jpeg enc clock source");
+>   int mtk_jpegdec_init_pm(struct mtk_jpegdec_comp_dev *mtkdev)
+> @@ -559,7 +601,7 @@ static irqreturn_t mtk_jpegdec_hw_irq_handler(int irq, void *priv)
+>   
+>   dec_end:
+>   	v4l2_m2m_buf_done(src_buf, buf_state);
+> -	v4l2_m2m_buf_done(dst_buf, buf_state);
+> +	mtk_jpegdec_put_buf(jpeg);
+>   	v4l2_m2m_job_finish(master_jpeg->m2m_dev, ctx->fh.m2m_ctx);
+>   	clk_disable_unprepare(jpeg->pm.dec_clk.clk_info->jpegdec_clk);
+>   	pm_runtime_put(ctx->jpeg->dev);
 
 

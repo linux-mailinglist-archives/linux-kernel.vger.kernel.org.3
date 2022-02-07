@@ -2,167 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3BA84AC1A2
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 15:49:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E533A4AC1C4
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 15:49:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382790AbiBGOnc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 09:43:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43592 "EHLO
+        id S1382959AbiBGOno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 09:43:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1392368AbiBGO31 (ORCPT
+        with ESMTP id S1385224AbiBGObv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 09:29:27 -0500
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E684AC0401C3
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 06:29:23 -0800 (PST)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4JspS22MSMz9sSr;
-        Mon,  7 Feb 2022 15:29:22 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id dOz3A4mIe6Sr; Mon,  7 Feb 2022 15:29:22 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4JspS21WlXz9sSq;
-        Mon,  7 Feb 2022 15:29:22 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id E342B8B770;
-        Mon,  7 Feb 2022 15:29:21 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id om8gFrsfA6rV; Mon,  7 Feb 2022 15:29:21 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id C48188B76C;
-        Mon,  7 Feb 2022 15:29:21 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 217ETCrr1245796
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Mon, 7 Feb 2022 15:29:12 +0100
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 217ETBfP1245795;
-        Mon, 7 Feb 2022 15:29:11 +0100
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org
-Subject: [PATCH] ilog2: Force inlining of __ilog2_u32() and __ilog2_u64()
-Date:   Mon,  7 Feb 2022 15:29:08 +0100
-Message-Id: <803a2ac3d923ebcfd0dd40f5886b05cae7bb0aba.1644243860.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.33.1
+        Mon, 7 Feb 2022 09:31:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D52D2C0401C2;
+        Mon,  7 Feb 2022 06:31:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9941CB81598;
+        Mon,  7 Feb 2022 14:31:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BED3C340F1;
+        Mon,  7 Feb 2022 14:31:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644244308;
+        bh=wzod6Dyf4Pjn7g62vKZJXz8+aqGlK2RqcGMJlGOO+gc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pR/rc2IOnNVHXsjA16yCQxeIvQNGQ9bKuej1oyOXwsuyp2DR/7MM1/yyFk7LlKTCy
+         CcKaqKT5aWwIsMUmb1sO3WSEzzfphNcMJ/7M1wPgIUNg+OaszixiNA8VoYl4NlguAG
+         Mt7rHrip30pxe3c5m4Zr0JTiEDGKHm0P0i8Z/Csd4xpwEVGUd3K7ryiKAqnc8RJlUZ
+         IvOtV01a9WEZa+AT5MbVZuH7mJj2RMzT75wyiFLK+Rad4r6AsG1kEJRekqehLFxbKN
+         5zMhCmTNNEDjsMNAYYEr7bxG/eV8yYG5W3nQg6bxUaTODhhyl0w0fVNVq+qm0LAXCM
+         7D/ITWViWm+2w==
+Date:   Mon, 7 Feb 2022 15:31:45 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Seth Heasley <seth.heasley@intel.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] i2c: ismt: Remove useless DMA-32 fallback configuration
+Message-ID: <YgEtUT7Dhntmidxy@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Seth Heasley <seth.heasley@intel.com>,
+        Neil Horman <nhorman@tuxdriver.com>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-i2c@vger.kernel.org
+References: <853d9f9d746864435abf93dfc822fccac5b04f37.1641731339.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1644244146; l=3187; s=20211009; h=from:subject:message-id; bh=LbJyGmP0iWIV+hgEVGW0oqWQQm1oTy/XNUfH89Xt7zQ=; b=mNHf9SFAjgfitOeHz35BBXMOILPxupHhNaZkP1W+y+gPMKMHKePKlO4d50S4Lfmb78ZD9UoznNAk UQK1iUI1BJvp1QJ1fm+xY+UP2EbLYWNqfZaA/vyQGESu5PZDni/A
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="yhVCcQgC/qrKuXoJ"
+Content-Disposition: inline
+In-Reply-To: <853d9f9d746864435abf93dfc822fccac5b04f37.1641731339.git.christophe.jaillet@wanadoo.fr>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Building a kernel with CONFIG_CC_OPTIMISE_FOR_SIZE leads to
-__ilog2_u32() being duplicated 50 times and __ilog2_u64() 3 times
-in vmlinux on a tiny powerpc32 config.
 
-__ilog2_u32() being 2 instructions it is not worth being kept out
-of line, so force inlining. Allthough the u64 version is a bit bigger,
-there is still a small benefit in keeping it inlined. On a 64 bits
-config there's a real benefit.
+--yhVCcQgC/qrKuXoJ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-With this change the size of vmlinux text is reduced by 1 kbytes,
-which is approx 50% more than the size of the removed functions.
+On Sun, Jan 09, 2022 at 01:29:45PM +0100, Christophe JAILLET wrote:
+> As stated in [1], dma_set_mask() with a 64-bit mask never fails if
+> dev->dma_mask is non-NULL.
+> So, if it fails, the 32 bits case will also fail for the same reason.
+>=20
+>=20
+> Simplify code and remove some dead code accordingly.
+>=20
+> [1]: https://lkml.org/lkml/2021/6/7/398
+>=20
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-Before the patch there is for instance:
+Seth, Neil, do you agree?
 
-	c00d2a94 <__ilog2_u32>:
-	c00d2a94:	7c 63 00 34 	cntlzw  r3,r3
-	c00d2a98:	20 63 00 1f 	subfic  r3,r3,31
-	c00d2a9c:	4e 80 00 20 	blr
+> ---
+>  drivers/i2c/busses/i2c-ismt.c | 7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
+>=20
+> diff --git a/drivers/i2c/busses/i2c-ismt.c b/drivers/i2c/busses/i2c-ismt.c
+> index f4820fd3dc13..951f3511afaa 100644
+> --- a/drivers/i2c/busses/i2c-ismt.c
+> +++ b/drivers/i2c/busses/i2c-ismt.c
+> @@ -920,11 +920,8 @@ ismt_probe(struct pci_dev *pdev, const struct pci_de=
+vice_id *id)
+> =20
+>  	err =3D dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
+>  	if (err) {
+> -		err =3D dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
+> -		if (err) {
+> -			dev_err(&pdev->dev, "dma_set_mask fail\n");
+> -			return -ENODEV;
+> -		}
+> +		dev_err(&pdev->dev, "dma_set_mask fail\n");
+> +		return -ENODEV;
+>  	}
+> =20
+>  	err =3D ismt_dev_init(priv);
+> --=20
+> 2.32.0
+>=20
 
-	c00d36d8 <__order_base_2>:
-	c00d36d8:	28 03 00 01 	cmplwi  r3,1
-	c00d36dc:	40 81 00 2c 	ble     c00d3708 <__order_base_2+0x30>
-	c00d36e0:	94 21 ff f0 	stwu    r1,-16(r1)
-	c00d36e4:	7c 08 02 a6 	mflr    r0
-	c00d36e8:	38 63 ff ff 	addi    r3,r3,-1
-	c00d36ec:	90 01 00 14 	stw     r0,20(r1)
-	c00d36f0:	4b ff f3 a5 	bl      c00d2a94 <__ilog2_u32>
-	c00d36f4:	80 01 00 14 	lwz     r0,20(r1)
-	c00d36f8:	38 63 00 01 	addi    r3,r3,1
-	c00d36fc:	7c 08 03 a6 	mtlr    r0
-	c00d3700:	38 21 00 10 	addi    r1,r1,16
-	c00d3704:	4e 80 00 20 	blr
-	c00d3708:	38 60 00 00 	li      r3,0
-	c00d370c:	4e 80 00 20 	blr
+--yhVCcQgC/qrKuXoJ
+Content-Type: application/pgp-signature; name="signature.asc"
 
-With the patch it has become:
+-----BEGIN PGP SIGNATURE-----
 
-	c00d356c <__order_base_2>:
-	c00d356c:	28 03 00 01 	cmplwi  r3,1
-	c00d3570:	40 81 00 14 	ble     c00d3584 <__order_base_2+0x18>
-	c00d3574:	38 63 ff ff 	addi    r3,r3,-1
-	c00d3578:	7c 63 00 34 	cntlzw  r3,r3
-	c00d357c:	20 63 00 20 	subfic  r3,r3,32
-	c00d3580:	4e 80 00 20 	blr
-	c00d3584:	38 60 00 00 	li      r3,0
-	c00d3588:	4e 80 00 20 	blr
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIBLVEACgkQFA3kzBSg
+KbZOARAAs6L96EgsUONwDrm0mCyNPdQYFIyNuoaGkRc8YFVgR5B8EjJjYb4pWOp6
+kGF57f6ZKR04Wx0/6V7g865Kbs4oGloMA+xVWNJdMmFmZnBtRrMT3XDcfyBxQ1b1
+YPtMMqXenj2LlBgV5nGf3jqUm7Uillzmkld7mZ/j4pcmW+B0xKbe4XXl20o/Prk8
+OrpTwRyENhVWbiiAgyuVzrBvNe/Age4DnbekUQ+7g6MHgB8/EcnhUVE/WPJL+f84
+mLi60VoLCvp7rjsBGcxE7BweEBKnoTnPPS9Gn/aHNx9uQjuv0DwnbAr6118qD5G9
+szB+Llu7GHOV6NZQ/DB2SbMn6XjGS5QTv9+vuTKrdxOfnTyMEBJ7tThMyKcuu38U
+90YuYWKTfg3IkUxrgcWmJzI+1o7QC/bQq0BYkfKbbsHuTKdiKrfroc7yxGQLKW+B
+ni/Wc+SnmnpqKzoMB72lfX3RjpzvJABqASlY9VJa/p4xujcgWOgJzF5+I7pxDN8d
+mauQny5kOriUGqnwk0qoukPlgH508GKSYQ9xR6vajhO6FDdJxONi5aayz5FmhSPQ
+cronvGZDkgwATYs7whUEtnt7pupENNXzTZcCplQNp+6Ex3Wv5/BTdX3Gn0QqQviN
+Ar3kr2OfpDceky/GhwZi8pg7mH1DgO2Pm7+PPPCfo61PcuYaZLQ=
+=+skG
+-----END PGP SIGNATURE-----
 
-No more need for __order_base_2() to setup a stack frame and
-save/restore caller address. And the following 'add 1' is
-merged in the substract.
-
-Another typical use of it:
-
-	c080ff28 <hugepagesz_setup>:
-	...
-	c080fff8:	7f c3 f3 78 	mr      r3,r30
-	c080fffc:	4b 8f 81 f1 	bl      c01081ec <__ilog2_u32>
-	c0810000:	38 63 ff f2 	addi    r3,r3,-14
-	...
-
-Becomes
-
-	c080ff1c <hugepagesz_setup>:
-	...
-	c080ffec:	7f c3 00 34 	cntlzw  r3,r30
-	c080fff0:	20 63 00 11 	subfic  r3,r3,17
-	...
-
-Here no need to move r30 argument to r3 then substract 14 to result. Just work
-on r30 and merge the 'sub 14' with the 'sub from 31'.
-
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- include/linux/log2.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/include/linux/log2.h b/include/linux/log2.h
-index df0b155c2141..9f30d087a128 100644
---- a/include/linux/log2.h
-+++ b/include/linux/log2.h
-@@ -18,7 +18,7 @@
-  * - the arch is not required to handle n==0 if implementing the fallback
-  */
- #ifndef CONFIG_ARCH_HAS_ILOG2_U32
--static inline __attribute__((const))
-+static __always_inline __attribute__((const))
- int __ilog2_u32(u32 n)
- {
- 	return fls(n) - 1;
-@@ -26,7 +26,7 @@ int __ilog2_u32(u32 n)
- #endif
- 
- #ifndef CONFIG_ARCH_HAS_ILOG2_U64
--static inline __attribute__((const))
-+static __always_inline __attribute__((const))
- int __ilog2_u64(u64 n)
- {
- 	return fls64(n) - 1;
--- 
-2.33.1
-
+--yhVCcQgC/qrKuXoJ--

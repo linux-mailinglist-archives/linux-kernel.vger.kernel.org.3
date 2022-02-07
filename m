@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 172CE4ABE1B
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:05:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 084A94ABC4B
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:46:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390765AbiBGL5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:57:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37790 "EHLO
+        id S1385315AbiBGLba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:31:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384717AbiBGL3m (ORCPT
+        with ESMTP id S1382769AbiBGLUr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:29:42 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E73AC043189;
-        Mon,  7 Feb 2022 03:28:16 -0800 (PST)
+        Mon, 7 Feb 2022 06:20:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E81C03FED2;
+        Mon,  7 Feb 2022 03:20:32 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D5900B811AF;
-        Mon,  7 Feb 2022 11:28:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAC81C004E1;
-        Mon,  7 Feb 2022 11:28:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 17B54B811A6;
+        Mon,  7 Feb 2022 11:20:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F32BC004E1;
+        Mon,  7 Feb 2022 11:20:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233293;
-        bh=QSzRICIWp+0GChseBdZWcjIxGZHnKp6X93Ah6uWn+to=;
+        s=korg; t=1644232820;
+        bh=07DXET1mUt27c2qdzB5vxavcElMoUr/eGhq3NzQRh/A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BF+yxwpHCg6gHgJJG2EB5psc3KwzTfZ/sTe8yQpMUOfxFyx0lTFCBniJrK4Nmrvrz
-         U5vxl5yJI6CjZlV9x1iWSUEGXDrg736avj34uC7mBqYsOlFmPjnIuxipcYCw1XyoqQ
-         +ImCHisApsQ+zyhY+HpZXw6+VYIGeZNd2GCa8WdU=
+        b=ay2woS+Ft2A7HTP2ZNzcnZ6TTRX8udCL7m6OTM7aUllHAg/8MkSWS+vR0RgCKPV74
+         9eoCTT/HTWRESdBJCK0NGcoeVEcxeSyum72kQyh7/Kqm0eXkxhfqGwGMCiKCto6hZF
+         q4MB0ajE0xUBceS8ZoiHLCNe/DAdueg9HWvwgq7A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.15 077/110] ASoC: codecs: lpass-rx-macro: fix sidetone register offsets
-Date:   Mon,  7 Feb 2022 12:06:50 +0100
-Message-Id: <20220207103804.987633377@linuxfoundation.org>
+Subject: [PATCH 5.4 35/44] ASoC: max9759: fix underflow in speaker_gain_control_put()
+Date:   Mon,  7 Feb 2022 12:06:51 +0100
+Message-Id: <20220207103754.299466569@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
-References: <20220207103802.280120990@linuxfoundation.org>
+In-Reply-To: <20220207103753.155627314@linuxfoundation.org>
+References: <20220207103753.155627314@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,54 +54,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-commit fca041a3ab70a099a6d5519ecb689b6279bd04f3 upstream.
+commit 4c907bcd9dcd233da6707059d777ab389dcbd964 upstream.
 
-For some reason we ended up with incorrect register offfset calcuations
-for sidetone. regmap clearly throw errors when accessing these incorrect
-registers as these do not belong to any read/write ranges.
-so fix them to point to correct register offsets.
+Check for negative values of "priv->gain" to prevent an out of bounds
+access.  The concern is that these might come from the user via:
+  -> snd_ctl_elem_write_user()
+    -> snd_ctl_elem_write()
+      -> kctl->put()
 
-Fixes: f3ce6f3c9a99 ("ASoC: codecs: lpass-rx-macro: add iir widgets")
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Link: https://lore.kernel.org/r/20220126113549.8853-3-srinivas.kandagatla@linaro.org
+Fixes: fa8d915172b8 ("ASoC: max9759: Add Amplifier Driver")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Link: https://lore.kernel.org/r/20220119123101.GA9509@kili
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/codecs/lpass-rx-macro.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ sound/soc/codecs/max9759.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/sound/soc/codecs/lpass-rx-macro.c
-+++ b/sound/soc/codecs/lpass-rx-macro.c
-@@ -2688,8 +2688,8 @@ static uint32_t get_iir_band_coeff(struc
- 	int reg, b2_reg;
+--- a/sound/soc/codecs/max9759.c
++++ b/sound/soc/codecs/max9759.c
+@@ -64,7 +64,8 @@ static int speaker_gain_control_put(stru
+ 	struct snd_soc_component *c = snd_soc_kcontrol_component(kcontrol);
+ 	struct max9759 *priv = snd_soc_component_get_drvdata(c);
  
- 	/* Address does not automatically update if reading */
--	reg = CDC_RX_SIDETONE_IIR0_IIR_COEF_B1_CTL + 16 * iir_idx;
--	b2_reg = CDC_RX_SIDETONE_IIR0_IIR_COEF_B2_CTL + 16 * iir_idx;
-+	reg = CDC_RX_SIDETONE_IIR0_IIR_COEF_B1_CTL + 0x80 * iir_idx;
-+	b2_reg = CDC_RX_SIDETONE_IIR0_IIR_COEF_B2_CTL + 0x80 * iir_idx;
+-	if (ucontrol->value.integer.value[0] > 3)
++	if (ucontrol->value.integer.value[0] < 0 ||
++	    ucontrol->value.integer.value[0] > 3)
+ 		return -EINVAL;
  
- 	snd_soc_component_write(component, reg,
- 				((band_idx * BAND_MAX + coeff_idx) *
-@@ -2718,7 +2718,7 @@ static uint32_t get_iir_band_coeff(struc
- static void set_iir_band_coeff(struct snd_soc_component *component,
- 			       int iir_idx, int band_idx, uint32_t value)
- {
--	int reg = CDC_RX_SIDETONE_IIR0_IIR_COEF_B2_CTL + 16 * iir_idx;
-+	int reg = CDC_RX_SIDETONE_IIR0_IIR_COEF_B2_CTL + 0x80 * iir_idx;
- 
- 	snd_soc_component_write(component, reg, (value & 0xFF));
- 	snd_soc_component_write(component, reg, (value >> 8) & 0xFF);
-@@ -2739,7 +2739,7 @@ static int rx_macro_put_iir_band_audio_m
- 	int iir_idx = ctl->iir_idx;
- 	int band_idx = ctl->band_idx;
- 	u32 coeff[BAND_MAX];
--	int reg = CDC_RX_SIDETONE_IIR0_IIR_COEF_B1_CTL + 16 * iir_idx;
-+	int reg = CDC_RX_SIDETONE_IIR0_IIR_COEF_B1_CTL + 0x80 * iir_idx;
- 
- 	memcpy(&coeff[0], ucontrol->value.bytes.data, params->max);
- 
+ 	priv->gain = ucontrol->value.integer.value[0];
 
 

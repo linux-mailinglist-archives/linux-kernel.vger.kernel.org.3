@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21A914ABDF1
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:05:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1695A4ABDDC
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:05:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389630AbiBGLuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:50:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37938 "EHLO
+        id S1389194AbiBGLrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:47:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359604AbiBGLaJ (ORCPT
+        with ESMTP id S1386372AbiBGLea (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:30:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68CB4C03E94C;
-        Mon,  7 Feb 2022 03:28:31 -0800 (PST)
+        Mon, 7 Feb 2022 06:34:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB468C043181;
+        Mon,  7 Feb 2022 03:34:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 270C0B811B3;
-        Mon,  7 Feb 2022 11:28:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E9DDC004E1;
-        Mon,  7 Feb 2022 11:28:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 475DC60A69;
+        Mon,  7 Feb 2022 11:34:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24DEFC004E1;
+        Mon,  7 Feb 2022 11:34:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233309;
-        bh=HlwO99kzVVDq/w0vcBsb1+gvp57k51VTn37EzEf+CmY=;
+        s=korg; t=1644233668;
+        bh=/4zaqO1frzMWWspUOZDtfP70ydPhujaV0aPOS7JO4DI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pogn1h+/KMb8Y7sG1eU4Z3tPqmZDBcQ6cl46Mte8qcQR2IMpgZsCNsgf0iTRactKr
-         /HUX+GP+cPglgKXFE1PtJxuY2C6DUCrDuL9YU6ltCp298yeWLgwAgHSAEMJZImlzRh
-         7eQW3BFS/9KAagZaSrieHSpeI16v0Mb7Pmf8psLA=
+        b=AuXw6MRRUEz7JXZZ4EtCUVXrSCjH2FOiFKETMcMTGALHlIiBpwkBZ4ij84lyY2ibh
+         PKzk7gqgkmfYyVB9XG9cEoVusBZZ5UGGzCgcw89cosXfeJhWlUMn87zcniTmXIg3Gj
+         t8kg6kOt7rUGc2sWKrmEcn+66P0m2hR1Bp7ZFT9c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?=C5=81ukasz=20Bartosik?= <lb@semihalf.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH 5.15 081/110] pinctrl: intel: fix unexpected interrupt
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH 5.16 083/126] ASoC: rt5682: Fix deadlock on resume
 Date:   Mon,  7 Feb 2022 12:06:54 +0100
-Message-Id: <20220207103805.134119606@linuxfoundation.org>
+Message-Id: <20220207103806.973310761@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
-References: <20220207103802.280120990@linuxfoundation.org>
+In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
+References: <20220207103804.053675072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,120 +55,191 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Łukasz Bartosik <lb@semihalf.com>
+From: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
 
-commit e986f0e602f19ecb7880b04dd1db415ed9bca3f6 upstream.
+commit 4045daf0fa87846a27f56329fddad2deeb5ca354 upstream.
 
-ASUS Chromebook C223 with Celeron N3350 crashes sometimes during
-cold booot. Inspection of the kernel log showed that it gets into
-an inifite loop logging the following message:
+On resume from suspend the following chain of events can happen:
+A rt5682_resume() -> mod_delayed_work() for jack_detect_work
+B DAPM sequence starts ( DAPM is locked now)
 
-->handle_irq():  000000009cdb51e8, handle_bad_irq+0x0/0x251
-->irq_data.chip(): 000000005ec212a7, 0xffffa043009d8e7
-->action(): 00000
-   IRQ_NOPROBE set
-unexpected IRQ trap at vector 7c
+A1. rt5682_jack_detect_handler() scheduled
+ - Takes both jdet_mutex and calibrate_mutex
+ - Calls in to rt5682_headset_detect() which tries to take DAPM lock, it
+   starts to wait for it as B path took it already.
+B1. DAPM sequence reaches the "HP Amp", rt5682_hp_event() tries to take
+    the jdet_mutex, but it is locked in A1, so it waits.
 
-The issue happens during cold boot but only if cold boot happens
-at most several dozen seconds after Chromebook is powered off. For
-longer intervals between power off and power on (cold boot) the issue
-does not reproduce. The unexpected interrupt is sourced from INT3452
-GPIO pin which is used for SD card detect. Investigation relevealed
-that when the interval between power off and power on (cold boot)
-is less than several dozen seconds then values of INT3452 GPIO interrupt
-enable and interrupt pending registers survive power off and power
-on sequence and interrupt for SD card detect pin is enabled and pending
-during probe of SD controller which causes the unexpected IRQ message.
-"Intel Pentium and Celeron Processor N- and J- Series" volume 3 doc
-mentions that GPIO interrupt enable and status registers default
-value is 0x0.
-The fix clears INT3452 GPIO interrupt enabled and interrupt pending
-registers in its probe function.
+Deadlock.
 
-Fixes: 7981c0015af2 ("pinctrl: intel: Add Intel Sunrisepoint pin controller and GPIO support")
-Signed-off-by: Łukasz Bartosik <lb@semihalf.com>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To solve the deadlock, drop the jdet_mutex, use the jack_detect_work to do
+the jack removal handling, move the dapm lock up one level to protect the
+most of the rt5682_jack_detect_handler(), but not the jack reporting as it
+might trigger a DAPM sequence.
+The rt5682_headset_detect() can be changed to static as well.
+
+Fixes: 8deb34a90f063 ("ASoC: rt5682: fix the wrong jack type detected")
+Signed-off-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
+Link: https://lore.kernel.org/r/20220126100325.16513-1-peter.ujfalusi@linux.intel.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pinctrl/intel/pinctrl-intel.c |   54 +++++++++++++++++++++-------------
- 1 file changed, 34 insertions(+), 20 deletions(-)
+ sound/soc/codecs/rt5682-i2c.c |   15 ++++-----------
+ sound/soc/codecs/rt5682.c     |   24 ++++++++----------------
+ sound/soc/codecs/rt5682.h     |    2 --
+ 3 files changed, 12 insertions(+), 29 deletions(-)
 
---- a/drivers/pinctrl/intel/pinctrl-intel.c
-+++ b/drivers/pinctrl/intel/pinctrl-intel.c
-@@ -1210,6 +1210,39 @@ static irqreturn_t intel_gpio_irq(int ir
- 	return IRQ_RETVAL(ret);
- }
+--- a/sound/soc/codecs/rt5682-i2c.c
++++ b/sound/soc/codecs/rt5682-i2c.c
+@@ -59,18 +59,12 @@ static void rt5682_jd_check_handler(stru
+ 	struct rt5682_priv *rt5682 = container_of(work, struct rt5682_priv,
+ 		jd_check_work.work);
  
-+static void intel_gpio_irq_init(struct intel_pinctrl *pctrl)
-+{
-+	int i;
-+
-+	for (i = 0; i < pctrl->ncommunities; i++) {
-+		const struct intel_community *community;
-+		void __iomem *base;
-+		unsigned int gpp;
-+
-+		community = &pctrl->communities[i];
-+		base = community->regs;
-+
-+		for (gpp = 0; gpp < community->ngpps; gpp++) {
-+			/* Mask and clear all interrupts */
-+			writel(0, base + community->ie_offset + gpp * 4);
-+			writel(0xffff, base + community->is_offset + gpp * 4);
-+		}
-+	}
-+}
-+
-+static int intel_gpio_irq_init_hw(struct gpio_chip *gc)
-+{
-+	struct intel_pinctrl *pctrl = gpiochip_get_data(gc);
-+
-+	/*
-+	 * Make sure the interrupt lines are in a proper state before
-+	 * further configuration.
-+	 */
-+	intel_gpio_irq_init(pctrl);
-+
-+	return 0;
-+}
-+
- static int intel_gpio_add_community_ranges(struct intel_pinctrl *pctrl,
- 				const struct intel_community *community)
- {
-@@ -1314,6 +1347,7 @@ static int intel_gpio_probe(struct intel
- 	girq->num_parents = 0;
- 	girq->default_type = IRQ_TYPE_NONE;
- 	girq->handler = handle_bad_irq;
-+	girq->init_hw = intel_gpio_irq_init_hw;
- 
- 	ret = devm_gpiochip_add_data(pctrl->dev, &pctrl->chip, pctrl);
- 	if (ret) {
-@@ -1689,26 +1723,6 @@ int intel_pinctrl_suspend_noirq(struct d
- }
- EXPORT_SYMBOL_GPL(intel_pinctrl_suspend_noirq);
- 
--static void intel_gpio_irq_init(struct intel_pinctrl *pctrl)
--{
--	size_t i;
+-	if (snd_soc_component_read(rt5682->component, RT5682_AJD1_CTRL)
+-		& RT5682_JDH_RS_MASK) {
++	if (snd_soc_component_read(rt5682->component, RT5682_AJD1_CTRL) & RT5682_JDH_RS_MASK)
+ 		/* jack out */
+-		rt5682->jack_type = rt5682_headset_detect(rt5682->component, 0);
 -
--	for (i = 0; i < pctrl->ncommunities; i++) {
--		const struct intel_community *community;
--		void __iomem *base;
--		unsigned int gpp;
--
--		community = &pctrl->communities[i];
--		base = community->regs;
--
--		for (gpp = 0; gpp < community->ngpps; gpp++) {
--			/* Mask and clear all interrupts */
--			writel(0, base + community->ie_offset + gpp * 4);
--			writel(0xffff, base + community->is_offset + gpp * 4);
--		}
+-		snd_soc_jack_report(rt5682->hs_jack, rt5682->jack_type,
+-			SND_JACK_HEADSET |
+-			SND_JACK_BTN_0 | SND_JACK_BTN_1 |
+-			SND_JACK_BTN_2 | SND_JACK_BTN_3);
+-	} else {
++		mod_delayed_work(system_power_efficient_wq,
++				 &rt5682->jack_detect_work, 0);
++	else
+ 		schedule_delayed_work(&rt5682->jd_check_work, 500);
 -	}
--}
--
- static bool intel_gpio_update_reg(void __iomem *reg, u32 mask, u32 value)
+ }
+ 
+ static irqreturn_t rt5682_irq(int irq, void *data)
+@@ -198,7 +192,6 @@ static int rt5682_i2c_probe(struct i2c_c
+ 	}
+ 
+ 	mutex_init(&rt5682->calibrate_mutex);
+-	mutex_init(&rt5682->jdet_mutex);
+ 	rt5682_calibrate(rt5682);
+ 
+ 	rt5682_apply_patch_list(rt5682, &i2c->dev);
+--- a/sound/soc/codecs/rt5682.c
++++ b/sound/soc/codecs/rt5682.c
+@@ -922,15 +922,13 @@ static void rt5682_enable_push_button_ir
+  *
+  * Returns detect status.
+  */
+-int rt5682_headset_detect(struct snd_soc_component *component, int jack_insert)
++static int rt5682_headset_detect(struct snd_soc_component *component, int jack_insert)
  {
- 	u32 curr, updated;
+ 	struct rt5682_priv *rt5682 = snd_soc_component_get_drvdata(component);
+ 	struct snd_soc_dapm_context *dapm = &component->dapm;
+ 	unsigned int val, count;
+ 
+ 	if (jack_insert) {
+-		snd_soc_dapm_mutex_lock(dapm);
+-
+ 		snd_soc_component_update_bits(component, RT5682_PWR_ANLG_1,
+ 			RT5682_PWR_VREF2 | RT5682_PWR_MB,
+ 			RT5682_PWR_VREF2 | RT5682_PWR_MB);
+@@ -981,8 +979,6 @@ int rt5682_headset_detect(struct snd_soc
+ 		snd_soc_component_update_bits(component, RT5682_MICBIAS_2,
+ 			RT5682_PWR_CLK25M_MASK | RT5682_PWR_CLK1M_MASK,
+ 			RT5682_PWR_CLK25M_PU | RT5682_PWR_CLK1M_PU);
+-
+-		snd_soc_dapm_mutex_unlock(dapm);
+ 	} else {
+ 		rt5682_enable_push_button_irq(component, false);
+ 		snd_soc_component_update_bits(component, RT5682_CBJ_CTRL_1,
+@@ -1011,7 +1007,6 @@ int rt5682_headset_detect(struct snd_soc
+ 	dev_dbg(component->dev, "jack_type = %d\n", rt5682->jack_type);
+ 	return rt5682->jack_type;
+ }
+-EXPORT_SYMBOL_GPL(rt5682_headset_detect);
+ 
+ static int rt5682_set_jack_detect(struct snd_soc_component *component,
+ 		struct snd_soc_jack *hs_jack, void *data)
+@@ -1094,6 +1089,7 @@ void rt5682_jack_detect_handler(struct w
+ {
+ 	struct rt5682_priv *rt5682 =
+ 		container_of(work, struct rt5682_priv, jack_detect_work.work);
++	struct snd_soc_dapm_context *dapm;
+ 	int val, btn_type;
+ 
+ 	while (!rt5682->component)
+@@ -1102,7 +1098,9 @@ void rt5682_jack_detect_handler(struct w
+ 	while (!rt5682->component->card->instantiated)
+ 		usleep_range(10000, 15000);
+ 
+-	mutex_lock(&rt5682->jdet_mutex);
++	dapm = snd_soc_component_get_dapm(rt5682->component);
++
++	snd_soc_dapm_mutex_lock(dapm);
+ 	mutex_lock(&rt5682->calibrate_mutex);
+ 
+ 	val = snd_soc_component_read(rt5682->component, RT5682_AJD1_CTRL)
+@@ -1162,6 +1160,9 @@ void rt5682_jack_detect_handler(struct w
+ 		rt5682->irq_work_delay_time = 50;
+ 	}
+ 
++	mutex_unlock(&rt5682->calibrate_mutex);
++	snd_soc_dapm_mutex_unlock(dapm);
++
+ 	snd_soc_jack_report(rt5682->hs_jack, rt5682->jack_type,
+ 		SND_JACK_HEADSET |
+ 		SND_JACK_BTN_0 | SND_JACK_BTN_1 |
+@@ -1174,9 +1175,6 @@ void rt5682_jack_detect_handler(struct w
+ 		else
+ 			cancel_delayed_work_sync(&rt5682->jd_check_work);
+ 	}
+-
+-	mutex_unlock(&rt5682->calibrate_mutex);
+-	mutex_unlock(&rt5682->jdet_mutex);
+ }
+ EXPORT_SYMBOL_GPL(rt5682_jack_detect_handler);
+ 
+@@ -1526,7 +1524,6 @@ static int rt5682_hp_event(struct snd_so
+ {
+ 	struct snd_soc_component *component =
+ 		snd_soc_dapm_to_component(w->dapm);
+-	struct rt5682_priv *rt5682 = snd_soc_component_get_drvdata(component);
+ 
+ 	switch (event) {
+ 	case SND_SOC_DAPM_PRE_PMU:
+@@ -1538,17 +1535,12 @@ static int rt5682_hp_event(struct snd_so
+ 			RT5682_DEPOP_1, 0x60, 0x60);
+ 		snd_soc_component_update_bits(component,
+ 			RT5682_DAC_ADC_DIG_VOL1, 0x00c0, 0x0080);
+-
+-		mutex_lock(&rt5682->jdet_mutex);
+-
+ 		snd_soc_component_update_bits(component, RT5682_HP_CTRL_2,
+ 			RT5682_HP_C2_DAC_L_EN | RT5682_HP_C2_DAC_R_EN,
+ 			RT5682_HP_C2_DAC_L_EN | RT5682_HP_C2_DAC_R_EN);
+ 		usleep_range(5000, 10000);
+ 		snd_soc_component_update_bits(component, RT5682_CHARGE_PUMP_1,
+ 			RT5682_CP_SW_SIZE_MASK, RT5682_CP_SW_SIZE_L);
+-
+-		mutex_unlock(&rt5682->jdet_mutex);
+ 		break;
+ 
+ 	case SND_SOC_DAPM_POST_PMD:
+--- a/sound/soc/codecs/rt5682.h
++++ b/sound/soc/codecs/rt5682.h
+@@ -1463,7 +1463,6 @@ struct rt5682_priv {
+ 
+ 	int jack_type;
+ 	int irq_work_delay_time;
+-	struct mutex jdet_mutex;
+ };
+ 
+ extern const char *rt5682_supply_names[RT5682_NUM_SUPPLIES];
+@@ -1473,7 +1472,6 @@ int rt5682_sel_asrc_clk_src(struct snd_s
+ 
+ void rt5682_apply_patch_list(struct rt5682_priv *rt5682, struct device *dev);
+ 
+-int rt5682_headset_detect(struct snd_soc_component *component, int jack_insert);
+ void rt5682_jack_detect_handler(struct work_struct *work);
+ 
+ bool rt5682_volatile_register(struct device *dev, unsigned int reg);
 
 

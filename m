@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 658AD4ABE1C
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:05:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D1784ABC44
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:46:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390772AbiBGL5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:57:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37762 "EHLO
+        id S1385115AbiBGLbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:31:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384715AbiBGL3l (ORCPT
+        with ESMTP id S1382679AbiBGLUj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:29:41 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC0E9C043188;
-        Mon,  7 Feb 2022 03:28:12 -0800 (PST)
+        Mon, 7 Feb 2022 06:20:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1BBC0401CC;
+        Mon,  7 Feb 2022 03:20:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 93E12B81158;
-        Mon,  7 Feb 2022 11:28:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0604C004E1;
-        Mon,  7 Feb 2022 11:28:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D944BB811AF;
+        Mon,  7 Feb 2022 11:20:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22399C004E1;
+        Mon,  7 Feb 2022 11:20:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233290;
-        bh=mghb54hZFOF3Tf8Tw34fghEoY09mRRxhydg5x0NVEVE=;
+        s=korg; t=1644232814;
+        bh=Fglqxzgr+A1WzQ28mgY6xGCSQNbOtNgjhGgd95zp0VQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U7YauR0KscXThr/XaJxanyUFWy8fjk6Gt/x+EkqeFjUYwhfJzCS924XyDaDvKSt98
-         uRIJPAkR1pZMXZAIVdr7y1kiMqMeFKKQgWiw9vgUCG6afTYA+bamNO27Nv65sAq7ru
-         peYhva8Me740YloGLJARO4vYRaMCnGhULi4mSxYc=
+        b=Q+Gaw+knzEdXEtWhfiXl2h8diAfu1E/TsznmZQ0OKfLCpc0/t1XvbswS72hhI7hav
+         So05/wYCkFo1DlwG66fEBqvpy+BCbzobFYDPWmF2RhMiAAeh4SM6sKEu9+DkwK4n+0
+         gW/FAK/AgUou8Bs3CtqB7XddnV2A0Bec8TkYf8N8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Devarsh Thakkar <devarsh.thakkar@xilinx.com>,
+        Robert Hancock <robert.hancock@calian.com>,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.15 076/110] ASoC: codecs: wcd938x: fix incorrect used of portid
+Subject: [PATCH 5.4 33/44] ASoC: xilinx: xlnx_formatter_pcm: Make buffer bytes multiple of period bytes
 Date:   Mon,  7 Feb 2022 12:06:49 +0100
-Message-Id: <20220207103804.956829119@linuxfoundation.org>
+Message-Id: <20220207103754.230959617@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
-References: <20220207103802.280120990@linuxfoundation.org>
+In-Reply-To: <20220207103753.155627314@linuxfoundation.org>
+References: <20220207103753.155627314@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,104 +56,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+From: Robert Hancock <robert.hancock@calian.com>
 
-commit c5c1546a654f613e291a7c5d6f3660fc1eb6d0c7 upstream.
+commit e958b5884725dac86d36c1e7afe5a55f31feb0b2 upstream.
 
-Mixer controls have the channel id in mixer->reg, which is not same
-as port id. port id should be derived from chan_info array.
-So fix this. Without this, its possible that we could corrupt
-struct wcd938x_sdw_priv by accessing port_map array out of range
-with channel id instead of port id.
+This patch is based on one in the Xilinx kernel tree, "ASoc: xlnx: Make
+buffer bytes multiple of period bytes" by Devarsh Thakkar. The same
+issue exists in the mainline version of the driver. The original
+patch description is as follows:
 
-Fixes: e8ba1e05bdc0 ("ASoC: codecs: wcd938x: add basic controls")
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Link: https://lore.kernel.org/r/20220126113549.8853-2-srinivas.kandagatla@linaro.org
+"The Xilinx Audio Formatter IP has a constraint on period
+bytes to be multiple of 64. This leads to driver changing
+the period size to suitable frames such that period bytes
+are multiple of 64.
+
+Now since period bytes and period size are updated but not
+the buffer bytes, this may make the buffer bytes unaligned
+and not multiple of period bytes.
+
+When this happens we hear popping noise as while DMA is being
+done the buffer bytes are not enough to complete DMA access
+for last period of frame within the application buffer boundary.
+
+To avoid this, align buffer bytes too as multiple of 64, and
+set another constraint to always enforce number of periods as
+integer. Now since, there is already a rule in alsa core
+to enforce Buffer size = Number of Periods * Period Size
+this automatically aligns buffer bytes as multiple of period
+bytes."
+
+Fixes: 6f6c3c36f091 ("ASoC: xlnx: add pcm formatter platform driver")
+Cc: Devarsh Thakkar <devarsh.thakkar@xilinx.com>
+Signed-off-by: Robert Hancock <robert.hancock@calian.com>
+Link: https://lore.kernel.org/r/20220107214711.1100162-2-robert.hancock@calian.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/codecs/wcd938x.c |   25 ++++++++++++++-----------
- 1 file changed, 14 insertions(+), 11 deletions(-)
+ sound/soc/xilinx/xlnx_formatter_pcm.c |   27 ++++++++++++++++++++++++---
+ 1 file changed, 24 insertions(+), 3 deletions(-)
 
---- a/sound/soc/codecs/wcd938x.c
-+++ b/sound/soc/codecs/wcd938x.c
-@@ -1432,14 +1432,10 @@ static int wcd938x_sdw_connect_port(stru
- 	return 0;
- }
+--- a/sound/soc/xilinx/xlnx_formatter_pcm.c
++++ b/sound/soc/xilinx/xlnx_formatter_pcm.c
+@@ -37,6 +37,7 @@
+ #define XLNX_AUD_XFER_COUNT	0x28
+ #define XLNX_AUD_CH_STS_START	0x2C
+ #define XLNX_BYTES_PER_CH	0x44
++#define XLNX_AUD_ALIGN_BYTES	64
  
--static int wcd938x_connect_port(struct wcd938x_sdw_priv *wcd, u8 ch_id, u8 enable)
-+static int wcd938x_connect_port(struct wcd938x_sdw_priv *wcd, u8 port_num, u8 ch_id, u8 enable)
- {
--	u8 port_num;
--
--	port_num = wcd->ch_info[ch_id].port_num;
--
- 	return wcd938x_sdw_connect_port(&wcd->ch_info[ch_id],
--					&wcd->port_config[port_num],
-+					&wcd->port_config[port_num - 1],
- 					enable);
- }
+ #define AUD_STS_IOC_IRQ_MASK	BIT(31)
+ #define AUD_STS_CH_STS_MASK	BIT(29)
+@@ -370,12 +371,32 @@ static int xlnx_formatter_pcm_open(struc
+ 	snd_soc_set_runtime_hwparams(substream, &xlnx_pcm_hardware);
+ 	runtime->private_data = stream_data;
  
-@@ -2593,6 +2589,7 @@ static int wcd938x_set_compander(struct
- 	struct wcd938x_priv *wcd938x = snd_soc_component_get_drvdata(component);
- 	struct wcd938x_sdw_priv *wcd;
- 	int value = ucontrol->value.integer.value[0];
-+	int portidx;
- 	struct soc_mixer_control *mc;
- 	bool hphr;
- 
-@@ -2606,10 +2603,12 @@ static int wcd938x_set_compander(struct
- 	else
- 		wcd938x->comp1_enable = value;
- 
-+	portidx = wcd->ch_info[mc->reg].port_num;
+-	/* Resize the period size divisible by 64 */
++	/* Resize the period bytes as divisible by 64 */
+ 	err = snd_pcm_hw_constraint_step(runtime, 0,
+-					 SNDRV_PCM_HW_PARAM_PERIOD_BYTES, 64);
++					 SNDRV_PCM_HW_PARAM_PERIOD_BYTES,
++					 XLNX_AUD_ALIGN_BYTES);
+ 	if (err) {
+ 		dev_err(component->dev,
+-			"unable to set constraint on period bytes\n");
++			"Unable to set constraint on period bytes\n");
++		return err;
++	}
 +
- 	if (value)
--		wcd938x_connect_port(wcd, mc->reg, true);
-+		wcd938x_connect_port(wcd, portidx, mc->reg, true);
- 	else
--		wcd938x_connect_port(wcd, mc->reg, false);
-+		wcd938x_connect_port(wcd, portidx, mc->reg, false);
- 
- 	return 0;
- }
-@@ -2882,9 +2881,11 @@ static int wcd938x_get_swr_port(struct s
- 	struct wcd938x_sdw_priv *wcd;
- 	struct soc_mixer_control *mixer = (struct soc_mixer_control *)kcontrol->private_value;
- 	int dai_id = mixer->shift;
--	int portidx = mixer->reg;
-+	int portidx, ch_idx = mixer->reg;
++	/* Resize the buffer bytes as divisible by 64 */
++	err = snd_pcm_hw_constraint_step(runtime, 0,
++					 SNDRV_PCM_HW_PARAM_BUFFER_BYTES,
++					 XLNX_AUD_ALIGN_BYTES);
++	if (err) {
++		dev_err(component->dev,
++			"Unable to set constraint on buffer bytes\n");
++		return err;
++	}
 +
- 
- 	wcd = wcd938x->sdw_priv[dai_id];
-+	portidx = wcd->ch_info[ch_idx].port_num;
- 
- 	ucontrol->value.integer.value[0] = wcd->port_enable[portidx];
- 
-@@ -2899,12 +2900,14 @@ static int wcd938x_set_swr_port(struct s
- 	struct wcd938x_sdw_priv *wcd;
- 	struct soc_mixer_control *mixer =
- 		(struct soc_mixer_control *)kcontrol->private_value;
--	int portidx = mixer->reg;
-+	int ch_idx = mixer->reg;
-+	int portidx;
- 	int dai_id = mixer->shift;
- 	bool enable;
- 
- 	wcd = wcd938x->sdw_priv[dai_id];
- 
-+	portidx = wcd->ch_info[ch_idx].port_num;
- 	if (ucontrol->value.integer.value[0])
- 		enable = true;
- 	else
-@@ -2912,7 +2915,7 @@ static int wcd938x_set_swr_port(struct s
- 
- 	wcd->port_enable[portidx] = enable;
- 
--	wcd938x_connect_port(wcd, portidx, enable);
-+	wcd938x_connect_port(wcd, portidx, ch_idx, enable);
- 
- 	return 0;
++	/* Set periods as integer multiple */
++	err = snd_pcm_hw_constraint_integer(runtime,
++					    SNDRV_PCM_HW_PARAM_PERIODS);
++	if (err < 0) {
++		dev_err(component->dev,
++			"Unable to set constraint on periods to be integer\n");
+ 		return err;
+ 	}
  
 
 

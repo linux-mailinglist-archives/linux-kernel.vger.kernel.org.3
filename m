@@ -2,113 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 006284ACC0E
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 23:31:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6AA84ACC30
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 23:43:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244551AbiBGWa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 17:30:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52104 "EHLO
+        id S244800AbiBGWng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 17:43:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235284AbiBGWa5 (ORCPT
+        with ESMTP id S238700AbiBGWne (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 17:30:57 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F453C0612A4
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 14:30:57 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id AED8521102;
-        Mon,  7 Feb 2022 22:30:55 +0000 (UTC)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 27E6E13C72;
-        Mon,  7 Feb 2022 22:30:53 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id NJGDNp2dAWK3CgAAMHmgww
-        (envelope-from <dave@stgolabs.net>); Mon, 07 Feb 2022 22:30:53 +0000
-Date:   Mon, 7 Feb 2022 14:23:48 -0800
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Song Liu <song@kernel.org>
-Subject: [PATCH] md/raid5: silence sparse warnings wrt struct raid5_percpu
-Message-ID: <20220207222348.wbokxgsdvmxhbidd@offworld>
-References: <202202072158.7y7wxNRC-lkp@intel.com>
+        Mon, 7 Feb 2022 17:43:34 -0500
+X-Greylist: delayed 303 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 14:43:32 PST
+Received: from mail.namei.org (namei.org [65.99.196.166])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F17ABC061355;
+        Mon,  7 Feb 2022 14:43:32 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.namei.org (Postfix) with ESMTPS id 7235C424;
+        Mon,  7 Feb 2022 22:24:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.namei.org 7235C424
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=namei.org; s=2;
+        t=1644272689; bh=0BY/V/NIgDIevFQdF+wBys4ty26sYhLszDEPcdK7lds=;
+        h=Date:From:To:cc:Subject:From;
+        b=1XdVNc4ggTblHTpzOBwW/SI45jMQCePu37bX4zNovZerTp2MOne46L47WP/LiNVcQ
+         421qWS3h/u+x/sEhDPYdUVx6j1/HOySQeMLRET18Vh6cPbgvFQVHx9SLn8H3N4ca4H
+         X2un323LTy/67B8EZaOPlHzv6fGuyaWcO3Gq0NjY=
+Date:   Tue, 8 Feb 2022 09:24:49 +1100 (AEDT)
+From:   James Morris <jmorris@namei.org>
+To:     linux-security-module@vger.kernel.org
+cc:     linux-kernel@vger.kernel.org, lwn@lwn.net,
+        fedora-selinux-list@redhat.com, linux-crypto@vger.kernel.org,
+        kernel-hardening@lists.openwall.com,
+        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
+        Audit-ML <linux-audit@redhat.com>, gentoo-hardened@gentoo.org,
+        keyrings@linux-nfs.org, tpmdd-devel@lists.sourceforge.net,
+        Linux Security Summit Program Committee 
+        <lss-pc@lists.linuxfoundation.org>
+Subject: [ANNOUNCE][CFP] Linux Security Summit North America 2022
+Message-ID: <3e5acc67-829-fafb-c82-833fc22b35a@namei.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <202202072158.7y7wxNRC-lkp@intel.com>
-User-Agent: NeoMutt/20211029
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_20,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move out the nested declaration of the percpu bits of struct r5conf and
-silence sparse complaining about address spaces:
+==============================================================================
+                   ANNOUNCEMENT AND CALL FOR PARTICIPATION
 
-drivers/md/raid5.c:7070:9: sparse: sparse: cast removes address space '__percpu' of expression
-drivers/md/raid5.c:7070:9: warning: incorrect type in argument 1 (different address spaces)
-drivers/md/raid5.c:7070:9:    expected struct lockdep_map *lock
-drivers/md/raid5.c:7070:9:    got struct lockdep_map [noderef] __percpu *
-drivers/md/raid5.c:7070:9: warning: incorrect type in argument 1 (different address spaces)
-drivers/md/raid5.c:7070:9:    expected struct local_lock_t [usertype] *l
-drivers/md/raid5.c:7070:9:    got struct local_lock_t [noderef] __percpu *
+                   LINUX SECURITY SUMMIT NORTH AMERICA 2022
+                             
+                                 23-24 June
+                           Austin, Texas & Virtual
+==============================================================================
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Davidlohr Bueso <dbueso@suse.de>
----
-  drivers/md/raid5.h | 22 ++++++++++++----------
-  1 file changed, 12 insertions(+), 10 deletions(-)
+DESCRIPTION
+ 
+Linux Security Summit North America (LSS-NA) is a technical forum for
+collaboration between Linux developers, researchers, and end-users.  Its
+primary aim is to foster community efforts in analyzing and solving Linux
+security challenges.
 
-diff --git a/drivers/md/raid5.h b/drivers/md/raid5.h
-index 9e8486a9e445..125b925e2b0c 100644
---- a/drivers/md/raid5.h
-+++ b/drivers/md/raid5.h
-@@ -560,6 +560,17 @@ struct r5pending_data {
-	struct bio_list bios;
-  };
+ The program committee currently seeks proposals for:
+ 
+   * Refereed Presentations:
+     45 minutes in length.
+ 
+   * Panel Discussion Topics:
+     45 minutes in length.
+ 
+   * Short Topics:
+     30 minutes in total, including at least 10 minutes discussion.
+ 
+   * Tutorials
+     90 minutes in length.
+ 
+Tutorial sessions should be focused on advanced Linux security defense
+topics within areas such as the kernel, compiler, and security-related
+libraries.  Priority will be given to tutorials created for this conference,
+and those where the presenter a leading subject matter expert on the topic.
+ 
+Topic areas include, but are not limited to:
+ 
+   * Kernel self-protection
+   * Access control
+   * Cryptography and key management
+   * Integrity policy and enforcement
+   * Hardware Security
+   * IoT and embedded security
+   * Virtualization and containers
+   * System-specific system hardening
+   * Case studies
+   * Security tools
+   * Security UX
+   * Emerging technologies, threats & techniques
 
-+/* per cpu variables */
-+struct raid5_percpu {
-+	struct page	*spare_page; /* Used when checking P/Q in raid6 */
-+	void		*scribble;  /* space for constructing buffer
-+				     * lists and performing address
-+				     * conversions
-+				     */
-+	int             scribble_obj_size;
-+	local_lock_t    lock;
-+};
-+
-  struct r5conf {
-	struct hlist_head	*stripe_hashtbl;
-	/* only protect corresponding hash list and inactive_list */
-@@ -634,16 +645,7 @@ struct r5conf {
-					    * Cleared when a sync completes.
-					    */
-	int			recovery_disabled;
--	/* per cpu variables */
--	struct raid5_percpu {
--		struct page	*spare_page; /* Used when checking P/Q in raid6 */
--		void		*scribble;  /* space for constructing buffer
--					     * lists and performing address
--					     * conversions
--					     */
--		int             scribble_obj_size;
--		local_lock_t    lock;
--	} __percpu *percpu;
-+	struct raid5_percpu __percpu *percpu;
-	int scribble_disks;
-	int scribble_sectors;
-	struct hlist_node node;
---
-2.35.1
+  Proposals should be submitted via:
+    https://events.linuxfoundation.org/linux-security-summit-north-america/
+
+
+Note that for 2022, we are returning to having both North American and
+European events (LSS-EU will be held in September).
+ 
+
+LSS-NA DATES
+ 
+  * CFP close:            March 30
+  * CFP notifications:    April 15
+  * Schedule announced:   April 19
+  * Event:                September 23-24
+
+WHO SHOULD ATTEND
+ 
+We're seeking a diverse range of attendees and welcome participation by
+people involved in Linux security development, operations, and research.
+ 
+LSS is a unique global event that provides the opportunity to present and
+discuss your work or research with key Linux security community members and
+maintainers.  It's also useful for those who wish to keep up with the latest
+in Linux security development and to provide input to the development
+process.
+
+WEB SITE
+
+    https://events.linuxfoundation.org/linux-security-summit-north-america/
+
+TWITTER
+
+  For event updates and announcements, follow:
+
+    https://twitter.com/LinuxSecSummit
+  
+    #linuxsecuritysummit
+
+PROGRAM COMMITTEE
+
+  The program committee for LSS 2021 is:
+
+    * James Morris, Microsoft
+    * Serge Hallyn, Cisco
+    * Paul Moore, Microsoft
+    * Stephen Smalley, NSA
+    * Elena Reshetova, Intel
+    * John Johansen, Canonical
+    * Kees Cook, Google
+    * Casey Schaufler, Intel
+    * Mimi Zohar, IBM
+    * David A. Wheeler, Linux Foundation
+
+  The program committee may be contacted as a group via email:
+    lss-pc () lists.linuxfoundation.org
+
+-- 
+
+

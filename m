@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DDFC4ACB0C
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 22:16:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5CE04ACB10
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 22:17:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235309AbiBGVQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 16:16:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42872 "EHLO
+        id S235688AbiBGVRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 16:17:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231300AbiBGVP4 (ORCPT
+        with ESMTP id S235300AbiBGVRy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 16:15:56 -0500
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CA05C06173B
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 13:15:56 -0800 (PST)
-Received: by mail-oi1-x236.google.com with SMTP id x193so18592077oix.0
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 13:15:56 -0800 (PST)
+        Mon, 7 Feb 2022 16:17:54 -0500
+Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F15DC06173B
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 13:17:53 -0800 (PST)
+Received: by mail-oo1-xc2d.google.com with SMTP id u25-20020a4ad0d9000000b002e8d4370689so15202156oor.12
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 13:17:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OobE6i7gIMfg4XFPq2mt3VscXgZfAtapsVYwcALM9Kc=;
-        b=THD90P/x+7OXkXfQgKxZwvuLFl98w7iNmiBPjN4Ohbd8qVNuZsx8HWUnEr2oeRg0bM
-         +ejAu/jNLP6+QxZwJXSaM6gcmUm8+Ys4VNJ1ag7fE8U6A7odgXO8TJR3SRg1uV+DqQLK
-         fJ2RVbkVPIOW06tXisnEHU16QLILzSryYaZ93aLE1/PfSns7oLMi2pr3QWFEYH4+PD6X
-         eIl4D+ULSOqcPo3uMG6aK7Pwc5sZGXxJgtLeNRl4d3sTNdoAQH6Vi2PJuV1p4BjAn2m9
-         Bpry8EuRVjmMSq99PJdUzvItDNKdfhnDAZ7hV/Tzem/KMiOT793BLNxluAkpAulQBWlY
-         vUwQ==
+         :cc:content-transfer-encoding;
+        bh=v+WQ2xVsw1oloryxWnpzmbXz/wxjOTMCRW462Qc7Xqs=;
+        b=OcbJiNLwcq0sJ+Fp2kOwKKLiaUv/95AU39rRIU3j1+5ZXPbY/Vqzi2PtntwgWpj5Ml
+         fTnmnmSS8KZlEzsgsMmmCweGE2X/N0ej1u78XhcaI6XtkNZ6g/+g/TuVUsxDQUml+Dpe
+         uMs+G9iV6LbilyL7ZkyZhOgdkledFfpR7vVRJsjani5xa/2Q3cLGgDSZ4sfhknDGSm/R
+         Noh9ntR2Crldtj5S7t83+1zhG6aMj2E2jD43qJLgrzj5bncxqBRnhM/V94F3OhMVk609
+         wnZ+69LbP8FisjhLua+Ss1pvnCcF6ohwjkXEvyaURztnFTEYFNVKc0J/E+h8CLJH4qEY
+         je7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OobE6i7gIMfg4XFPq2mt3VscXgZfAtapsVYwcALM9Kc=;
-        b=gBM9G6O4cfXgJ11yekcBEQc4xugo1FC4Dw/p/hsUPAm4XD5eHqJVZMx9VC/WL2lyIy
-         Eq8xFPYpf38j6BdrnM4LSnqt3hf0JAeILAmXX0wdfw5w53xhqxZsataKDKhb1bbsUyha
-         xdmz/OVBPu7Bmc+X4kZYbhmFTIdzu2Zr3JtSPHPCqEgoC5M91pMgZ8b65V2gKHS359mY
-         rIjl9WvDlbC4pFB0muplObvPqV33JunFB9tXP7ylt7MYNlFWJVpOTdzndGYI/tpFvQY0
-         7fRm/VnrLF//Wl8H2RPaTyoZvgcOyvUvg+YLnxyJD9jxOCCK6iEyJDdLKZQJA94G/Dr+
-         SAtg==
-X-Gm-Message-State: AOAM531lsetmM1W5BGMy/SAuy3IeOY2crpdXti+485lqjiR2Hs0Jm7bn
-        taaJXYUiuE7mZrY4SlGpLREGNOpJhQSNWvJYY5E=
-X-Google-Smtp-Source: ABdhPJy0bAxTrvw72wAxN/d14eYdF+KNvKxwijohy8ZvMiJBQd6GMzYwqRPpVLSh5YbT4tpNXPax1NgR3jIPFhxGNvk=
-X-Received: by 2002:a05:6808:159e:: with SMTP id t30mr412394oiw.132.1644268555404;
- Mon, 07 Feb 2022 13:15:55 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=v+WQ2xVsw1oloryxWnpzmbXz/wxjOTMCRW462Qc7Xqs=;
+        b=xyn6ScXefTDTM2kZVyv0N1dtWAZPNDtYlYSdAQp4F9QA2ewIzs+QtncY0eMVrMGflc
+         MHiFPaQk9IjLQlu2Ipddfo8pefUJmYPH/SbbU/9YPsTqDsNkn6ycjfJ022NNl5vWZB/F
+         xH60Z2pMydsxJQEnEb2ggxnD9YkZSs/6+7QcuFy1NVIHhuXPHZBKIC+6m8wq7xi4kd/5
+         NzO6+2qddvFxdyLHdk1UQ/b6erHjFbkw8S1AJoMZZXUioajyvFpadTa7/0ghM8P/GZmU
+         /y+r7I3uRW+erUM2XMuS0kw6B8d7ZsCdNtmfmA7lsyvz1j0HHmK3lWb9bwOSveFHMjrS
+         F5Ng==
+X-Gm-Message-State: AOAM532cm9Ms16PuQN37oCJl5En8sjjTwAdv1qdHuk9tqwjelfY8k1X4
+        uq5ysA2ME71x6g5pjyUtk29HiFRpPuPzu+ysXI0=
+X-Google-Smtp-Source: ABdhPJwxahO9gU4b7vgJU1VxOUJqEJqsTZeca/z/V2pSmCt5TD2eqOzVnHKuDMsSBe3vZzP16U85FdCFWaUpUsoZsn8=
+X-Received: by 2002:a05:6870:790c:: with SMTP id hg12mr285137oab.73.1644268672692;
+ Mon, 07 Feb 2022 13:17:52 -0800 (PST)
 MIME-Version: 1.0
-References: <20220205150008.1968218-1-trix@redhat.com> <DM6PR12MB261982BB4DBCC90F70381121E42C9@DM6PR12MB2619.namprd12.prod.outlook.com>
-In-Reply-To: <DM6PR12MB261982BB4DBCC90F70381121E42C9@DM6PR12MB2619.namprd12.prod.outlook.com>
+References: <YfskWvNqt81rZZpQ@fedora> <DM6PR12MB26199543AD01C2DA18CCFB64E42C9@DM6PR12MB2619.namprd12.prod.outlook.com>
+In-Reply-To: <DM6PR12MB26199543AD01C2DA18CCFB64E42C9@DM6PR12MB2619.namprd12.prod.outlook.com>
 From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Mon, 7 Feb 2022 16:15:44 -0500
-Message-ID: <CADnq5_Mx8kMjLMTxD+db_ssTX8O35MzSfAyeL2NaHDMay7+bzQ@mail.gmail.com>
-Subject: Re: [PATCH] drm/amd/pm: fix error handling
+Date:   Mon, 7 Feb 2022 16:17:41 -0500
+Message-ID: <CADnq5_OgYywwhy1GJsX=z6pttMVbo2kJc5uOT8WMrEWR8O2Mhg@mail.gmail.com>
+Subject: Re: [PATCH] drm/amd/pm: add missing prototypes to amdgpu_dpm_internal
 To:     "Quan, Evan" <Evan.Quan@amd.com>
-Cc:     "trix@redhat.com" <trix@redhat.com>,
+Cc:     =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>,
         "Deucher, Alexander" <Alexander.Deucher@amd.com>,
         "Koenig, Christian" <Christian.Koenig@amd.com>,
         "Pan, Xinhui" <Xinhui.Pan@amd.com>,
@@ -61,14 +61,15 @@ Cc:     "trix@redhat.com" <trix@redhat.com>,
         "nathan@kernel.org" <nathan@kernel.org>,
         "ndesaulniers@google.com" <ndesaulniers@google.com>,
         "Lazar, Lijo" <Lijo.Lazar@amd.com>,
-        "Powell, Darren" <Darren.Powell@amd.com>,
+        "Tuikov, Luben" <Luben.Tuikov@amd.com>,
         "Chen, Guchun" <Guchun.Chen@amd.com>,
-        "Grodzovsky, Andrey" <Andrey.Grodzovsky@amd.com>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        "Zhang, Hawking" <Hawking.Zhang@amd.com>,
+        "jiapeng.chong@linux.alibaba.com" <jiapeng.chong@linux.alibaba.com>,
         "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
         "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -81,71 +82,115 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Applied.  Thanks!
 
-Alex
-
-On Sun, Feb 6, 2022 at 10:04 PM Quan, Evan <Evan.Quan@amd.com> wrote:
+On Sun, Feb 6, 2022 at 10:30 PM Quan, Evan <Evan.Quan@amd.com> wrote:
 >
 > [AMD Official Use Only]
 >
+> Thanks for the fix!
 > Reviewed-by: Evan Quan <evan.quan@amd.com>
 >
 > > -----Original Message-----
-> > From: trix@redhat.com <trix@redhat.com>
-> > Sent: Saturday, February 5, 2022 11:00 PM
+> > From: Ma=C3=ADra Canal <maira.canal@usp.br>
+> > Sent: Thursday, February 3, 2022 8:40 AM
 > > To: Quan, Evan <Evan.Quan@amd.com>; Deucher, Alexander
 > > <Alexander.Deucher@amd.com>; Koenig, Christian
 > > <Christian.Koenig@amd.com>; Pan, Xinhui <Xinhui.Pan@amd.com>;
 > > airlied@linux.ie; daniel@ffwll.ch; nathan@kernel.org;
-> > ndesaulniers@google.com; Lazar, Lijo <Lijo.Lazar@amd.com>; Powell, Darren
-> > <Darren.Powell@amd.com>; Chen, Guchun <Guchun.Chen@amd.com>;
-> > Grodzovsky, Andrey <Andrey.Grodzovsky@amd.com>
-> > Cc: amd-gfx@lists.freedesktop.org; dri-devel@lists.freedesktop.org; linux-
-> > kernel@vger.kernel.org; llvm@lists.linux.dev; Tom Rix <trix@redhat.com>
-> > Subject: [PATCH] drm/amd/pm: fix error handling
+> > ndesaulniers@google.com; Lazar, Lijo <Lijo.Lazar@amd.com>; Tuikov, Lube=
+n
+> > <Luben.Tuikov@amd.com>; Chen, Guchun <Guchun.Chen@amd.com>;
+> > Zhang, Hawking <Hawking.Zhang@amd.com>;
+> > jiapeng.chong@linux.alibaba.com
+> > Cc: amd-gfx@lists.freedesktop.org; dri-devel@lists.freedesktop.org; lin=
+ux-
+> > kernel@vger.kernel.org
+> > Subject: [PATCH] drm/amd/pm: add missing prototypes to
+> > amdgpu_dpm_internal
 > >
-> > From: Tom Rix <trix@redhat.com>
+> > Include the header with the prototype to silence the following clang
+> > warnings:
 > >
-> > clang static analysis reports this error
-> > amdgpu_smu.c:2289:9: warning: Called function pointer
-> >   is null (null dereference)
-> >         return smu->ppt_funcs->emit_clk_levels(
-> >                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > drivers/gpu/drm/amd/amdgpu/../pm/amdgpu_dpm_internal.c:29:6:
+> > warning: no
+> > previous prototype for function 'amdgpu_dpm_get_active_displays'
+> > [-Wmissing-prototypes]
+> > void amdgpu_dpm_get_active_displays(struct amdgpu_device *adev)
+> >      ^
+> > drivers/gpu/drm/amd/amdgpu/../pm/amdgpu_dpm_internal.c:29:1: note:
+> > declare
+> > 'static' if the function is not intended to be used outside of this
+> > translation unit
+> > void amdgpu_dpm_get_active_displays(struct amdgpu_device *adev)
+> > ^
+> > static
+> > drivers/gpu/drm/amd/amdgpu/../pm/amdgpu_dpm_internal.c:76:5:
+> > warning: no
+> > previous prototype for function 'amdgpu_dpm_get_vrefresh'
+> > [-Wmissing-prototypes]
+> > u32 amdgpu_dpm_get_vrefresh(struct amdgpu_device *adev)
+> >     ^
+> > drivers/gpu/drm/amd/amdgpu/../pm/amdgpu_dpm_internal.c:76:1: note:
+> > declare
+> > 'static' if the function is not intended to be used outside of this
+> > translation unit
+> > u32 amdgpu_dpm_get_vrefresh(struct amdgpu_device *adev)
+> > ^
+> > static
+> > 2 warnings generated.
 > >
-> > There is a logic error in the earlier check of
-> > emit_clk_levels.  The error value is set to
-> > the ret variable but ret is never used.  Return
-> > directly and remove the unneeded ret variable.
+> > Besides that, remove the duplicated prototype of the function
+> > amdgpu_dpm_get_vblank_time in order to keep the consistency of the
+> > headers.
 > >
-> > Fixes: 5d64f9bbb628 ("amdgpu/pm: Implement new API function "emit" that
-> > accepts buffer base and write offset")
-> > Signed-off-by: Tom Rix <trix@redhat.com>
+> > fixes: 6ddbd37f ("drm/amd/pm: optimize the amdgpu_pm_compute_clocks()
+> > implementations")
+> >
+> > Signed-off-by: Ma=C3=ADra Canal <maira.canal@usp.br>
 > > ---
-> >  drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c | 3 +--
-> >  1 file changed, 1 insertion(+), 2 deletions(-)
+> >  drivers/gpu/drm/amd/pm/amdgpu_dpm_internal.c | 1 +
+> >  drivers/gpu/drm/amd/pm/inc/amdgpu_dpm.h      | 1 -
+> >  drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c   | 1 +
+> >  3 files changed, 2 insertions(+), 1 deletion(-)
 > >
-> > diff --git a/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
-> > b/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
-> > index af368aa1fd0ae..5f3b3745a9b7a 100644
-> > --- a/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
-> > +++ b/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
-> > @@ -2274,7 +2274,6 @@ static int smu_emit_ppclk_levels(void *handle,
-> > enum pp_clock_type type, char *bu
+> > diff --git a/drivers/gpu/drm/amd/pm/amdgpu_dpm_internal.c
+> > b/drivers/gpu/drm/amd/pm/amdgpu_dpm_internal.c
+> > index ba5f6413412d..42efe838fa85 100644
+> > --- a/drivers/gpu/drm/amd/pm/amdgpu_dpm_internal.c
+> > +++ b/drivers/gpu/drm/amd/pm/amdgpu_dpm_internal.c
+> > @@ -25,6 +25,7 @@
+> >  #include "amdgpu_display.h"
+> >  #include "hwmgr.h"
+> >  #include "amdgpu_smu.h"
+> > +#include "amdgpu_dpm_internal.h"
+> >
+> >  void amdgpu_dpm_get_active_displays(struct amdgpu_device *adev)
 > >  {
-> >       struct smu_context *smu = handle;
-> >       enum smu_clk_type clk_type;
-> > -     int ret = 0;
+> > diff --git a/drivers/gpu/drm/amd/pm/inc/amdgpu_dpm.h
+> > b/drivers/gpu/drm/amd/pm/inc/amdgpu_dpm.h
+> > index 5cc05110cdae..09790413cbc4 100644
+> > --- a/drivers/gpu/drm/amd/pm/inc/amdgpu_dpm.h
+> > +++ b/drivers/gpu/drm/amd/pm/inc/amdgpu_dpm.h
+> > @@ -343,7 +343,6 @@ struct amdgpu_pm {
+> >       struct amdgpu_ctx       *stable_pstate_ctx;
+> >  };
 > >
-> >       clk_type = smu_convert_to_smuclk(type);
-> >       if (clk_type == SMU_CLK_COUNT)
-> > @@ -2284,7 +2283,7 @@ static int smu_emit_ppclk_levels(void *handle,
-> > enum pp_clock_type type, char *bu
-> >               return -EOPNOTSUPP;
+> > -u32 amdgpu_dpm_get_vblank_time(struct amdgpu_device *adev);
+> >  int amdgpu_dpm_read_sensor(struct amdgpu_device *adev, enum
+> > amd_pp_sensors sensor,
+> >                          void *data, uint32_t *size);
 > >
-> >       if (!smu->ppt_funcs->emit_clk_levels)
-> > -             ret = -ENOENT;
-> > +             return -ENOENT;
-> >
-> >       return smu->ppt_funcs->emit_clk_levels(smu, clk_type, buf, offset);
-> >
+> > diff --git a/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c
+> > b/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c
+> > index 7427c50409d4..caae54487f9c 100644
+> > --- a/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c
+> > +++ b/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c
+> > @@ -28,6 +28,7 @@
+> >  #include "amdgpu_pm.h"
+> >  #include "amdgpu_dpm.h"
+> >  #include "amdgpu_atombios.h"
+> > +#include "amdgpu_dpm_internal.h"
+> >  #include "amd_pcie.h"
+> >  #include "sid.h"
+> >  #include "r600_dpm.h"
 > > --
-> > 2.26.3
+> > 2.34.1

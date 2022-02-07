@@ -2,119 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C7EF4AB675
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 09:19:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86DCC4AB673
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 09:18:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241920AbiBGISF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 03:18:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53288 "EHLO
+        id S236644AbiBGISB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 03:18:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244072AbiBGIPv (ORCPT
+        with ESMTP id S243699AbiBGIP3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 03:15:51 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 09589C043184
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 00:15:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644221750;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fZCtKdGV/PdaGul2Xel2hTCDnJYx95E5j/0H+d54vhM=;
-        b=cYdCKnvXBL9hcdC9e+tOr2P3CvH5Wpdbtu8hne1S5HsOKlVVpe3to3DMMeJhhTp0FoY2Am
-        Uo9qW5metTSSb1yVDkvMiO08oFio5lqIDMLslgPLAn3xt/xNNd5fwkIyOFo+A8OmI3NLif
-        oyWQ0nOC3sTeYwquzV/hFfcIJN8WQoA=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-38-UW0UGwDRPQ-RJVmE6brk5w-1; Mon, 07 Feb 2022 03:15:47 -0500
-X-MC-Unique: UW0UGwDRPQ-RJVmE6brk5w-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4FE2F801B0E;
-        Mon,  7 Feb 2022 08:15:45 +0000 (UTC)
-Received: from T590 (ovpn-8-33.pek2.redhat.com [10.72.8.33])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id B56D127CD2;
-        Mon,  7 Feb 2022 08:15:11 +0000 (UTC)
-Date:   Mon, 7 Feb 2022 16:15:06 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Yu Kuai <yukuai3@huawei.com>
-Cc:     tj@kernel.org, axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com
-Subject: Re: [PATCH v7 1/2] blk-throtl: introduce a new flag
- THROTL_TG_CANCELING
-Message-ID: <YgDVCjkjJe1CSVxv@T590>
-References: <20220128084522.3169961-1-yukuai3@huawei.com>
- <20220128084522.3169961-2-yukuai3@huawei.com>
+        Mon, 7 Feb 2022 03:15:29 -0500
+Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F283AC043185;
+        Mon,  7 Feb 2022 00:15:27 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0V3nfmXb_1644221724;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V3nfmXb_1644221724)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 07 Feb 2022 16:15:24 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     damien.lemoal@opensource.wdc.com, jejb@linux.ibm.com
+Cc:     jinpu.wang@cloud.ionos.com, martin.petersen@oracle.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next v2] scsi: pm8001: clean up some inconsistent indenting
+Date:   Mon,  7 Feb 2022 16:15:22 +0800
+Message-Id: <20220207081522.12111-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220128084522.3169961-2-yukuai3@huawei.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 04:45:21PM +0800, Yu Kuai wrote:
-> If the new flag is set, then the throtl_grp will stop throttling bios.
-> Prepare to canceling all throttled bios if the disk is gone.
-> 
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-> ---
->  block/blk-throttle.c | 17 +++++++++++++----
->  1 file changed, 13 insertions(+), 4 deletions(-)
-> 
-> diff --git a/block/blk-throttle.c b/block/blk-throttle.c
-> index 7c462c006b26..abc5e506c72d 100644
-> --- a/block/blk-throttle.c
-> +++ b/block/blk-throttle.c
-> @@ -43,8 +43,12 @@
->  static struct workqueue_struct *kthrotld_workqueue;
->  
->  enum tg_state_flags {
-> -	THROTL_TG_PENDING	= 1 << 0,	/* on parent's pending tree */
-> -	THROTL_TG_WAS_EMPTY	= 1 << 1,	/* bio_lists[] became non-empty */
-> +	/* on parent's pending tree */
-> +	THROTL_TG_PENDING	= 1 << 0,
-> +	/* bio_lists[] became non-empty */
-> +	THROTL_TG_WAS_EMPTY	= 1 << 1,
-> +	/* starts to cancel all bios, will be set if the disk is deleted */
-> +	THROTL_TG_CANCELING	= 1 << 2,
->  };
->  
->  #define rb_entry_tg(node)	rb_entry((node), struct throtl_grp, rb_node)
-> @@ -871,7 +875,8 @@ static bool tg_may_dispatch(struct throtl_grp *tg, struct bio *bio,
->  	       bio != throtl_peek_queued(&tg->service_queue.queued[rw]));
->  
->  	/* If tg->bps = -1, then BW is unlimited */
-> -	if (bps_limit == U64_MAX && iops_limit == UINT_MAX) {
-> +	if ((bps_limit == U64_MAX && iops_limit == UINT_MAX) ||
-> +	    tg->flags & THROTL_TG_CANCELING) {
->  		if (wait)
->  			*wait = 0;
->  		return true;
-> @@ -974,6 +979,9 @@ static void tg_update_disptime(struct throtl_grp *tg)
->  	unsigned long read_wait = -1, write_wait = -1, min_wait = -1, disptime;
->  	struct bio *bio;
->  
-> +	if (tg->flags & THROTL_TG_CANCELING)
-> +		goto update;
-> +
+Eliminate the follow smatch warning:
+drivers/scsi/pm8001/pm8001_ctl.c:760 pm8001_update_flash() warn:
+inconsistent indenting
 
-The above change and the following one in tg_update_disptime() isn't
-needed actually.
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
 
-Also I'd suggest to fold the two into one patch.
+  Changes in v2:
+--According to Damien's suggestion
+  1) Start multi-line comments with a line that has only "/*".
+  2) Align the conditions together to make this code more readable.
+  3) Using a local variable for value which is calculated too many times.
 
+ drivers/scsi/pm8001/pm8001_ctl.c | 61 ++++++++++++++++----------------
+ 1 file changed, 31 insertions(+), 30 deletions(-)
 
-Thanks,
-Ming
+diff --git a/drivers/scsi/pm8001/pm8001_ctl.c b/drivers/scsi/pm8001/pm8001_ctl.c
+index 41a63c9b719b..0d9533ba8d27 100644
+--- a/drivers/scsi/pm8001/pm8001_ctl.c
++++ b/drivers/scsi/pm8001/pm8001_ctl.c
+@@ -727,6 +727,8 @@ static int pm8001_update_flash(struct pm8001_hba_info *pm8001_ha)
+ 	u32		sizeRead = 0;
+ 	u32		ret = 0;
+ 	u32		length = 1024 * 16 + sizeof(*payload) - 1;
++	u32		fc_len = 0;
++	u8		*read_buf;
+ 
+ 	if (pm8001_ha->fw_image->size < 28) {
+ 		pm8001_ha->fw_status = FAIL_FILE_SIZE;
+@@ -755,36 +757,35 @@ static int pm8001_update_flash(struct pm8001_hba_info *pm8001_ha)
+ 			fwControl->retcode = 0;/* OUT */
+ 			fwControl->offset = loopNumber * IOCTL_BUF_SIZE;/*OUT */
+ 
+-		/* for the last chunk of data in case file size is not even with
+-		4k, load only the rest*/
+-		if (((loopcount-loopNumber) == 1) &&
+-			((partitionSize + HEADER_LEN) % IOCTL_BUF_SIZE)) {
+-			fwControl->len =
+-				(partitionSize + HEADER_LEN) % IOCTL_BUF_SIZE;
+-			memcpy((u8 *)fwControl->buffer,
+-				(u8 *)pm8001_ha->fw_image->data + sizeRead,
+-				(partitionSize + HEADER_LEN) % IOCTL_BUF_SIZE);
+-			sizeRead +=
+-				(partitionSize + HEADER_LEN) % IOCTL_BUF_SIZE;
+-		} else {
+-			memcpy((u8 *)fwControl->buffer,
+-				(u8 *)pm8001_ha->fw_image->data + sizeRead,
+-				IOCTL_BUF_SIZE);
+-			sizeRead += IOCTL_BUF_SIZE;
+-		}
+-
+-		pm8001_ha->nvmd_completion = &completion;
+-		ret = PM8001_CHIP_DISP->fw_flash_update_req(pm8001_ha, payload);
+-		if (ret) {
+-			pm8001_ha->fw_status = FAIL_OUT_MEMORY;
+-			goto out;
+-		}
+-		wait_for_completion(&completion);
+-		if (fwControl->retcode > FLASH_UPDATE_IN_PROGRESS) {
+-			pm8001_ha->fw_status = fwControl->retcode;
+-			ret = -EFAULT;
+-			goto out;
+-		}
++			/*
++			 * for the last chunk of data in case file size is
++			 * not even with 4k, load only the rest
++			 */
++
++			fc_len = (partitionSize + HEADER_LEN) % IOCTL_BUF_SIZE;
++			read_buf  = (u8 *)pm8001_ha->fw_image->data + sizeRead;
++
++			if (((loopcount-loopNumber) == 1) && fc_len) {
++				fwControl->len = fc_len;
++				memcpy((u8 *)fwControl->buffer, read_buf, fc_len);
++				sizeRead += fc_len;
++			} else {
++				memcpy((u8 *)fwControl->buffer, read_buf, IOCTL_BUF_SIZE);
++				sizeRead += IOCTL_BUF_SIZE;
++			}
++
++			pm8001_ha->nvmd_completion = &completion;
++			ret = PM8001_CHIP_DISP->fw_flash_update_req(pm8001_ha, payload);
++			if (ret) {
++				pm8001_ha->fw_status = FAIL_OUT_MEMORY;
++				goto out;
++			}
++			wait_for_completion(&completion);
++			if (fwControl->retcode > FLASH_UPDATE_IN_PROGRESS) {
++				pm8001_ha->fw_status = fwControl->retcode;
++				ret = -EFAULT;
++				goto out;
++			}
+ 		}
+ 	}
+ out:
+-- 
+2.20.1.7.g153144c
 

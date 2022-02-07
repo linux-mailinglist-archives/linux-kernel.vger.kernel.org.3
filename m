@@ -2,123 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C647A4AC99F
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 20:34:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DCC24AC99B
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 20:34:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239135AbiBGTba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 14:31:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51162 "EHLO
+        id S240036AbiBGTbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 14:31:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238206AbiBGT0U (ORCPT
+        with ESMTP id S239242AbiBGT0t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 14:26:20 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3CA2C0401E5
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 11:26:19 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id z20so21178901ljo.6
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 11:26:19 -0800 (PST)
+        Mon, 7 Feb 2022 14:26:49 -0500
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66984C0401E0
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 11:26:49 -0800 (PST)
+Received: by mail-qk1-x732.google.com with SMTP id g145so11850153qke.3
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 11:26:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AJag/A5JmvykTiv6EpL4n31ZcZevEf+cXwTOlC0tOkg=;
-        b=q1Hb1u5r9+AsViUlf6UZzxNWWr4GQprtIzge2G5bWfH70p3weWpX0FICkMAfCmkQSW
-         DxgfdzQE6MACnIaDHskjXVgPZotUPDpBaHrW7ATyVti21B//sFUL8rxetrFLrYvP+b9F
-         4o+LGmKu257u9/1LtqMQ+GhZ4MclAaFkmv2BmZ8JEy/LHyw1sb1hB1gUgMg4y5Ld4IM5
-         tJ31LDi71OAbJlJwPOZ8x3SIhG9TLn96RRZPV9+jyJD4SVx4VtmZA5hyKpNTsTwCyT+X
-         MBzdf/hKqWdwyskNBWuTAbzc/LRz7r8p7GK9DgeuRqvoHUUPsMLbtYzYn516lryInL24
-         Sgrw==
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=bGzAS0zKkWkFPCiUJqrRhTBAlrJP3SGf1MGlPyahzN4=;
+        b=b7ELmtzNyf/nrudljsQzl4Q1Js/C7bJel76vjls1xYAgKYUp0D32NW/dwCQI91vZZP
+         cXbYYhEP/g8elhxNJkVvAoFewT4/BqI63tG4dQgRBW68M7alExU2eUsV3nwL+RRGhNfV
+         j9OssUbyMS/ts/M6+OwPFFARzPDqKR87URSREqouyR+yUBPPCOc+h8b8yGuU3ej+D/xM
+         yigD/3UGPd7ytRh96Y0Q0EKXaGboDozlOgbEE8YSvDdrFF+CXBdAOzxWkzfsUC5OZ96L
+         FougQ7rtCxrXPxFtxmHqPYYsSOKmfZn62Sni/waJLdqf1/0D0HpcPN3YMwknPx6e2shw
+         Hl0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AJag/A5JmvykTiv6EpL4n31ZcZevEf+cXwTOlC0tOkg=;
-        b=32hr27OUWBqQe3sN9wu0wtyUdfNJzm2YOQd7+D0MRs6rlpfyxbiIVfgaBh4p6tU6n/
-         Ae+xZ5VU57GOzeHCCOAf0dSIZQIQAEnvDIB6uw3RBlp91ImYPpZ8ZsenFCinqXI8BrjC
-         fyhzRuN6eDnk7SJi4s/Ylfs0Lx7nsEG2/6IjYuwpqYjZPrKccR2LSBt04EU7JT9jbLg/
-         I5/MSdIR8PLdHjzdU3b2j+zvUy2leeUNXYjZuCbolPC+9ozAjlqEclGHojQ5bwVOnoEq
-         GwRCjHOa5ZUtFaWdiYyRGCWPVYWVaD8jQUzWmJUDrnSejDWMHLp68qCFHdQ9hBUe6is9
-         MqMQ==
-X-Gm-Message-State: AOAM533xtYupC+Rs59NMK9rNXwJ4lLkd2AjBuhEn8dpH1u+pX09/UvuB
-        hqKFuPge6GCfLevFv10xx6aA4icHtuQHO8avDdfyl4P62Y8=
-X-Google-Smtp-Source: ABdhPJxiRwBDrZ7qHrwkeYZzKApFxOfBT0kt7xuCw9xbG3ufLrmJ9Sb/VD/Nm0ot8LNlflSABDiDmjBvKBn3HS7qJ1s=
-X-Received: by 2002:a2e:980e:: with SMTP id a14mr617655ljj.220.1644261977984;
- Mon, 07 Feb 2022 11:26:17 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=bGzAS0zKkWkFPCiUJqrRhTBAlrJP3SGf1MGlPyahzN4=;
+        b=W865r7rgIrbEOm/2Ro+1vmfaUrMJq0LOQYNfQCLT09QIGML6EWU2H0+qyctQZnSXjQ
+         dsvuOhggR75qrm60GICqdOR9SXTJ+SF9iQ0XkKZcuBDQ8Tc0chmCD+sPcodq3cTO9M2J
+         +oRZ3bZZ7fuMCT6ZPlR5bCYXSVgXRO1IvP+ZkFbXLmUBcgq3CcY4+/mooYysJZx0omYz
+         Fde1pBCG5dWdEB7uLV+aGjZVhdRYpZ02oAiThYBaDdP/7UkP17nf0y8xm2UM/lIhe95L
+         tkBFuvBGJSl7yhug/znrZVPO6JKPDg7avpwdHo5Q2B3oXZCiCJGjPXJ3kubK0g1/I/qE
+         6uiw==
+X-Gm-Message-State: AOAM533bpXJUskCQNsMFma2NpPExr++Ieo1peBd3Q++BM571yxf8fG7E
+        FxesV3sXlaTKpWO5FYe2g9+9Lg==
+X-Google-Smtp-Source: ABdhPJyr6K2wB/TmouPqeHofF9/cBL8QhnN30S2Z0xEYqLSWtmQW56XluhEWaS6dhmSL4EVhM8SlGg==
+X-Received: by 2002:a05:620a:1204:: with SMTP id u4mr761415qkj.707.1644262008607;
+        Mon, 07 Feb 2022 11:26:48 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
+        by smtp.gmail.com with ESMTPSA id w8sm5913769qti.21.2022.02.07.11.26.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Feb 2022 11:26:47 -0800 (PST)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1nH9ex-000HvP-5E; Mon, 07 Feb 2022 15:26:47 -0400
+Date:   Mon, 7 Feb 2022 15:26:47 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        nvdimm@lists.linux.dev, linux-mm@kvack.org
+Subject: Re: [PATCH 2/8] mm: remove the __KERNEL__ guard from <linux/mm.h>
+Message-ID: <20220207192647.GD49147@ziepe.ca>
+References: <20220207063249.1833066-1-hch@lst.de>
+ <20220207063249.1833066-3-hch@lst.de>
 MIME-Version: 1.0
-References: <20220203152305.1846862-1-trix@redhat.com>
-In-Reply-To: <20220203152305.1846862-1-trix@redhat.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 7 Feb 2022 11:26:06 -0800
-Message-ID: <CAKwvOd=MviBd5iwSnhyt9aSZU+QTsBrBSGPcjsjt2eepfYC3KQ@mail.gmail.com>
-Subject: Re: [PATCH] drm/ast: fix using freed memory
-To:     trix@redhat.com
-Cc:     airlied@redhat.com, tzimmermann@suse.de, airlied@linux.ie,
-        daniel@ffwll.ch, nathan@kernel.org, maxime@cerno.tech,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220207063249.1833066-3-hch@lst.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 3, 2022 at 7:23 AM <trix@redhat.com> wrote:
->
-> From: Tom Rix <trix@redhat.com>
->
-> clang static analysis reports this problem
-> ast_mode.c:1235:3: warning: Use of memory after it is freed
->   drm_connector_update_edid_property(&ast_connector->base, edid);
->   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->
-> The second condition on
->
->   if (!flags && ast_connector->i2c)
->
-> Means that the edid is not always set.  If the previous block
-> fails the freed edid value will be used.  So set edid to NULL
-> after freeing.
->
-> Fixes: 55dc449a7c60 ("drm/ast: Handle failed I2C initialization gracefully")
-> Signed-off-by: Tom Rix <trix@redhat.com>
+On Mon, Feb 07, 2022 at 07:32:43AM +0100, Christoph Hellwig wrote:
+> __KERNEL__ ifdefs don't make sense outside of include/uapi/.
+> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
 > ---
->  drivers/gpu/drm/ast/ast_mode.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/gpu/drm/ast/ast_mode.c b/drivers/gpu/drm/ast/ast_mode.c
-> index ab52efb15670e..9131dc8a1a2fc 100644
-> --- a/drivers/gpu/drm/ast/ast_mode.c
-> +++ b/drivers/gpu/drm/ast/ast_mode.c
-> @@ -1224,10 +1224,12 @@ static int ast_get_modes(struct drm_connector *connector)
->                         return -ENOMEM;
->
->                 flags = ast_dp501_read_edid(connector->dev, (u8 *)edid);
-> -               if (flags)
-> +               if (flags) {
->                         ast->dp501_maxclk = ast_get_dp501_max_clk(connector->dev);
-> -               else
-> +               } else {
->                         kfree(edid);
-> +                       edid = NULL;
-> +               }
+>  include/linux/mm.h | 4 ----
+>  1 file changed, 4 deletions(-)
 
-You probably didn't need to add the {} for the if, but it doesn't really matter.
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 
->         }
->         if (!flags && ast_connector->i2c)
->                 edid = drm_get_edid(connector, &ast_connector->i2c->adapter);
-> --
-> 2.26.3
->
-
-
--- 
-Thanks,
-~Nick Desaulniers
+Jason

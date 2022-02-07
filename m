@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C84B64AB97A
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:23:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE0554ABC55
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:46:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353010AbiBGLMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:12:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48348 "EHLO
+        id S1385829AbiBGLco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:32:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236757AbiBGLJO (ORCPT
+        with ESMTP id S1383100AbiBGLVg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:09:14 -0500
+        Mon, 7 Feb 2022 06:21:36 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B8A7C043189;
-        Mon,  7 Feb 2022 03:09:13 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA904C03FEEE;
+        Mon,  7 Feb 2022 03:21:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0B5C6B80EC3;
-        Mon,  7 Feb 2022 11:09:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3590CC004E1;
-        Mon,  7 Feb 2022 11:09:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 859AEB8111C;
+        Mon,  7 Feb 2022 11:21:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C50B9C004E1;
+        Mon,  7 Feb 2022 11:21:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232150;
-        bh=YzXaxA7SrWaX2UZWXji7oo0gOdanxIrfgqhjLwS/dug=;
+        s=korg; t=1644232877;
+        bh=LD9q2F7C49Xrr8S/nNPWAaFaRh3oBr6qn1pjqP1/jyY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kEUiM/MYyIU3zvAT0GcCcKu2rsmNOZW1dmPRKDWJATUtb97Os9cUNIJIuefz13vc3
-         wNM6D1rOFFqnnrmHyqovZqW8KJKHcRtIPLaJh+aeHHYAskxUwIVOYCwlfYrtVYvD49
-         1ZmUE0fCR0PbANgkjD6FPgxTCcE95KbZp+s5CsRI=
+        b=Z9wcY26QKFRyRDCowbyvYu4vp/CmLZCD3y1o004qTCBLm+R3BNKRuq7qQD+jHl7uN
+         OOjtGFgkGe8ev1uqF66MrX0cVnZ2FfGQ56LMVvv9hdYdLFj8Wg23e6tTMbxq3qP7Ev
+         EtfL0BFXCDhtTKeOleLmJmpqJXYj2sTJsWnIwo4w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Willem de Bruijn <willemb@google.com>,
-        syzbot <syzkaller@googlegroups.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.9 32/48] af_packet: fix data-race in packet_setsockopt / packet_setsockopt
+        stable@vger.kernel.org, Alexander Sergeyev <sergeev917@gmail.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.10 07/74] ALSA: hda: Fix UAF of leds class devs at unbinding
 Date:   Mon,  7 Feb 2022 12:06:05 +0100
-Message-Id: <20220207103753.387803621@linuxfoundation.org>
+Message-Id: <20220207103757.479750939@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103752.341184175@linuxfoundation.org>
-References: <20220207103752.341184175@linuxfoundation.org>
+In-Reply-To: <20220207103757.232676988@linuxfoundation.org>
+References: <20220207103757.232676988@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,80 +54,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-commit e42e70ad6ae2ae511a6143d2e8da929366e58bd9 upstream.
+commit 549f8ffc7b2f7561bea7f90930b6c5104318e87b upstream.
 
-When packet_setsockopt( PACKET_FANOUT_DATA ) reads po->fanout,
-no lock is held, meaning that another thread can change po->fanout.
+The LED class devices that are created by HD-audio codec drivers are
+registered via devm_led_classdev_register() and associated with the
+HD-audio codec device.  Unfortunately, it turned out that the devres
+release doesn't work for this case; namely, since the codec resource
+release happens before the devm call chain, it triggers a NULL
+dereference or a UAF for a stale set_brightness_delay callback.
 
-Given that po->fanout can only be set once during the socket lifetime
-(it is only cleared from fanout_release()), we can use
-READ_ONCE()/WRITE_ONCE() to document the race.
+For fixing the bug, this patch changes the LED class device register
+and unregister in a manual manner without devres, keeping the
+instances in hda_gen_spec.
 
-BUG: KCSAN: data-race in packet_setsockopt / packet_setsockopt
-
-write to 0xffff88813ae8e300 of 8 bytes by task 14653 on cpu 0:
- fanout_add net/packet/af_packet.c:1791 [inline]
- packet_setsockopt+0x22fe/0x24a0 net/packet/af_packet.c:3931
- __sys_setsockopt+0x209/0x2a0 net/socket.c:2180
- __do_sys_setsockopt net/socket.c:2191 [inline]
- __se_sys_setsockopt net/socket.c:2188 [inline]
- __x64_sys_setsockopt+0x62/0x70 net/socket.c:2188
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-read to 0xffff88813ae8e300 of 8 bytes by task 14654 on cpu 1:
- packet_setsockopt+0x691/0x24a0 net/packet/af_packet.c:3935
- __sys_setsockopt+0x209/0x2a0 net/socket.c:2180
- __do_sys_setsockopt net/socket.c:2191 [inline]
- __se_sys_setsockopt net/socket.c:2188 [inline]
- __x64_sys_setsockopt+0x62/0x70 net/socket.c:2188
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-value changed: 0x0000000000000000 -> 0xffff888106f8c000
-
-Reported by Kernel Concurrency Sanitizer on:
-CPU: 1 PID: 14654 Comm: syz-executor.3 Not tainted 5.16.0-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-
-Fixes: 47dceb8ecdc1 ("packet: add classic BPF fanout mode")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Cc: Willem de Bruijn <willemb@google.com>
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Link: https://lore.kernel.org/r/20220201022358.330621-1-eric.dumazet@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Reported-by: Alexander Sergeyev <sergeev917@gmail.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220111195229.a77wrpjclqwrx4bx@localhost.localdomain
+Link: https://lore.kernel.org/r/20220126145011.16728-1-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/packet/af_packet.c |    8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ sound/pci/hda/hda_generic.c |   17 +++++++++++++++--
+ sound/pci/hda/hda_generic.h |    3 +++
+ 2 files changed, 18 insertions(+), 2 deletions(-)
 
---- a/net/packet/af_packet.c
-+++ b/net/packet/af_packet.c
-@@ -1719,7 +1719,10 @@ static int fanout_add(struct sock *sk, u
- 		err = -ENOSPC;
- 		if (atomic_read(&match->sk_ref) < PACKET_FANOUT_MAX) {
- 			__dev_remove_pack(&po->prot_hook);
--			po->fanout = match;
-+
-+			/* Paired with packet_setsockopt(PACKET_FANOUT_DATA) */
-+			WRITE_ONCE(po->fanout, match);
-+
- 			po->rollover = rollover;
- 			rollover = NULL;
- 			atomic_inc(&match->sk_ref);
-@@ -3895,7 +3898,8 @@ packet_setsockopt(struct socket *sock, i
- 	}
- 	case PACKET_FANOUT_DATA:
- 	{
--		if (!po->fanout)
-+		/* Paired with the WRITE_ONCE() in fanout_add() */
-+		if (!READ_ONCE(po->fanout))
- 			return -EINVAL;
+--- a/sound/pci/hda/hda_generic.c
++++ b/sound/pci/hda/hda_generic.c
+@@ -91,6 +91,12 @@ static void snd_hda_gen_spec_free(struct
+ 	free_kctls(spec);
+ 	snd_array_free(&spec->paths);
+ 	snd_array_free(&spec->loopback_list);
++#ifdef CONFIG_SND_HDA_GENERIC_LEDS
++	if (spec->led_cdevs[LED_AUDIO_MUTE])
++		led_classdev_unregister(spec->led_cdevs[LED_AUDIO_MUTE]);
++	if (spec->led_cdevs[LED_AUDIO_MICMUTE])
++		led_classdev_unregister(spec->led_cdevs[LED_AUDIO_MICMUTE]);
++#endif
+ }
  
- 		return fanout_set_data(po, optval, optlen);
+ /*
+@@ -3911,7 +3917,10 @@ static int create_mute_led_cdev(struct h
+ 						enum led_brightness),
+ 				bool micmute)
+ {
++	struct hda_gen_spec *spec = codec->spec;
+ 	struct led_classdev *cdev;
++	int idx = micmute ? LED_AUDIO_MICMUTE : LED_AUDIO_MUTE;
++	int err;
+ 
+ 	cdev = devm_kzalloc(&codec->core.dev, sizeof(*cdev), GFP_KERNEL);
+ 	if (!cdev)
+@@ -3921,10 +3930,14 @@ static int create_mute_led_cdev(struct h
+ 	cdev->max_brightness = 1;
+ 	cdev->default_trigger = micmute ? "audio-micmute" : "audio-mute";
+ 	cdev->brightness_set_blocking = callback;
+-	cdev->brightness = ledtrig_audio_get(micmute ? LED_AUDIO_MICMUTE : LED_AUDIO_MUTE);
++	cdev->brightness = ledtrig_audio_get(idx);
+ 	cdev->flags = LED_CORE_SUSPENDRESUME;
+ 
+-	return devm_led_classdev_register(&codec->core.dev, cdev);
++	err = led_classdev_register(&codec->core.dev, cdev);
++	if (err < 0)
++		return err;
++	spec->led_cdevs[idx] = cdev;
++	return 0;
+ }
+ 
+ static void vmaster_update_mute_led(void *private_data, int enabled)
+--- a/sound/pci/hda/hda_generic.h
++++ b/sound/pci/hda/hda_generic.h
+@@ -305,6 +305,9 @@ struct hda_gen_spec {
+ 				   struct hda_jack_callback *cb);
+ 	void (*mic_autoswitch_hook)(struct hda_codec *codec,
+ 				    struct hda_jack_callback *cb);
++
++	/* leds */
++	struct led_classdev *led_cdevs[NUM_AUDIO_LEDS];
+ };
+ 
+ /* values for add_stereo_mix_input flag */
 
 

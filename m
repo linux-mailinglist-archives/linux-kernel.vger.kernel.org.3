@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3F784ABD61
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:00:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F19654ABB8C
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:38:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387900AbiBGLmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:42:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37762 "EHLO
+        id S1376811AbiBGL3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:29:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384605AbiBGL3Z (ORCPT
+        with ESMTP id S1383399AbiBGLWZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:29:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3BAFC02B5DA;
-        Mon,  7 Feb 2022 03:27:35 -0800 (PST)
+        Mon, 7 Feb 2022 06:22:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC75C043181;
+        Mon,  7 Feb 2022 03:22:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 07BF36091A;
-        Mon,  7 Feb 2022 11:27:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E7BBC004E1;
-        Mon,  7 Feb 2022 11:27:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 44400B811A6;
+        Mon,  7 Feb 2022 11:22:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FB22C340EB;
+        Mon,  7 Feb 2022 11:22:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233251;
-        bh=kXZdNLArO7qlWpDU7iG2egpXkmF2NNZxXC7x7oXDF0Y=;
+        s=korg; t=1644232942;
+        bh=wzMI8B8zO9lWyuTQH9SYkTkbLy69A7ExoZ4si0Qiv6s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ye+Jee+wXq6znG777QtIBOfMGqbpmpOJYqUSRNtwdLD07MyE8hq7qkybrKnZCtYsW
-         qXFFzkvh9+9Q49GxB8oZxHipg6uI4Eq5TVUwxwWVG3md+evntVqTfOoKakbbOQkBIH
-         cmIGkJvAJzT22njaCGkZoahhpReEt1rQwAPGzXe4=
+        b=EDqHEkGMS2RkQI2mg0nWlm1a9eXkrxm8AsE4Oge3gRTncJ2dss4T1S5eiFBLTypds
+         n1r4goSdbEMT73IGApUxQLF7xA/4o2ke3EjiMZzWwerB+hCs0rIRmUC66zxwHm0q7N
+         vKi6A047Z0CQt9NbpP6+8WGvBLHtTrIW3E8z+YZs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Lior Nahmanson <liorna@nvidia.com>,
-        Raed Salem <raeds@nvidia.com>, Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 065/110] net: macsec: Verify that send_sci is on when setting Tx sci explicitly
+        Raed Salem <raeds@nvidia.com>,
+        Antoine Tenart <atenart@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.10 40/74] net: macsec: Fix offload support for NETDEV_UNREGISTER event
 Date:   Mon,  7 Feb 2022 12:06:38 +0100
-Message-Id: <20220207103804.478400147@linuxfoundation.org>
+Message-Id: <20220207103758.539125744@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
-References: <20220207103802.280120990@linuxfoundation.org>
+In-Reply-To: <20220207103757.232676988@linuxfoundation.org>
+References: <20220207103757.232676988@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,45 +58,68 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Lior Nahmanson <liorna@nvidia.com>
 
-commit d0cfa548dbde354de986911d3913897b5448faad upstream.
+commit 9cef24c8b76c1f6effe499d2f131807c90f7ce9a upstream.
 
-When setting Tx sci explicit, the Rx side is expected to use this
-sci and not recalculate it from the packet.However, in case of Tx sci
-is explicit and send_sci is off, the receiver is wrongly recalculate
-the sci from the source MAC address which most likely be different
-than the explicit sci.
+Current macsec netdev notify handler handles NETDEV_UNREGISTER event by
+releasing relevant SW resources only, this causes resources leak in case
+of macsec HW offload, as the underlay driver was not notified to clean
+it's macsec offload resources.
 
-Fix by preventing such configuration when macsec newlink is established
-and return EINVAL error code on such cases.
+Fix by calling the underlay driver to clean it's relevant resources
+by moving offload handling from macsec_dellink() to macsec_common_dellink()
+when handling NETDEV_UNREGISTER event.
 
-Fixes: c09440f7dcb3 ("macsec: introduce IEEE 802.1AE driver")
+Fixes: 3cf3227a21d1 ("net: macsec: hardware offloading infrastructure")
 Signed-off-by: Lior Nahmanson <liorna@nvidia.com>
 Reviewed-by: Raed Salem <raeds@nvidia.com>
 Signed-off-by: Raed Salem <raeds@nvidia.com>
-Link: https://lore.kernel.org/r/1643542672-29403-1-git-send-email-raeds@nvidia.com
+Reviewed-by: Antoine Tenart <atenart@kernel.org>
+Link: https://lore.kernel.org/r/1643542141-28956-1-git-send-email-raeds@nvidia.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/macsec.c |    9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/net/macsec.c |   24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
 --- a/drivers/net/macsec.c
 +++ b/drivers/net/macsec.c
-@@ -4018,6 +4018,15 @@ static int macsec_newlink(struct net *ne
- 	    !macsec_check_offload(macsec->offload, macsec))
- 		return -EOPNOTSUPP;
+@@ -3869,6 +3869,18 @@ static void macsec_common_dellink(struct
+ 	struct macsec_dev *macsec = macsec_priv(dev);
+ 	struct net_device *real_dev = macsec->real_dev;
  
-+	/* send_sci must be set to true when transmit sci explicitly is set */
-+	if ((data && data[IFLA_MACSEC_SCI]) &&
-+	    (data && data[IFLA_MACSEC_INC_SCI])) {
-+		u8 send_sci = !!nla_get_u8(data[IFLA_MACSEC_INC_SCI]);
++	/* If h/w offloading is available, propagate to the device */
++	if (macsec_is_offloaded(macsec)) {
++		const struct macsec_ops *ops;
++		struct macsec_context ctx;
 +
-+		if (!send_sci)
-+			return -EINVAL;
++		ops = macsec_get_ops(netdev_priv(dev), &ctx);
++		if (ops) {
++			ctx.secy = &macsec->secy;
++			macsec_offload(ops->mdo_del_secy, &ctx);
++		}
 +	}
 +
- 	if (data && data[IFLA_MACSEC_ICV_LEN])
- 		icv_len = nla_get_u8(data[IFLA_MACSEC_ICV_LEN]);
- 	mtu = real_dev->mtu - icv_len - macsec_extra_len(true);
+ 	unregister_netdevice_queue(dev, head);
+ 	list_del_rcu(&macsec->secys);
+ 	macsec_del_dev(macsec);
+@@ -3883,18 +3895,6 @@ static void macsec_dellink(struct net_de
+ 	struct net_device *real_dev = macsec->real_dev;
+ 	struct macsec_rxh_data *rxd = macsec_data_rtnl(real_dev);
+ 
+-	/* If h/w offloading is available, propagate to the device */
+-	if (macsec_is_offloaded(macsec)) {
+-		const struct macsec_ops *ops;
+-		struct macsec_context ctx;
+-
+-		ops = macsec_get_ops(netdev_priv(dev), &ctx);
+-		if (ops) {
+-			ctx.secy = &macsec->secy;
+-			macsec_offload(ops->mdo_del_secy, &ctx);
+-		}
+-	}
+-
+ 	macsec_common_dellink(dev, head);
+ 
+ 	if (list_empty(&rxd->secys)) {
 
 

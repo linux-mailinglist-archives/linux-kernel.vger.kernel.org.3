@@ -2,114 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B55724AB8DC
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 11:43:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 528524AB8E4
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 11:43:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346315AbiBGKjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 05:39:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57880 "EHLO
+        id S1350540AbiBGKjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 05:39:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232815AbiBGKay (ORCPT
+        with ESMTP id S236643AbiBGKdO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 05:30:54 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E3C4FC043181
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 02:30:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644229852;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3cyRyCr5+eamib5wZIABy4k0pAM0GRsoTKR73ge8vW8=;
-        b=afUnP9BF1TqjnNoVdkoIiwLZFdS2Evmm8ctpNdgG9FP7GhTeppliY6xcXPcIaIHD7NYGqW
-        aBGFAQztMNWgWQFjPVoWyBCooa5KWfIerYpuB0kjj2HYC29QUWAA/gKfRt93uZ7AE3t+qZ
-        9WHunOaafFevTRqQ+Qp3GhMNI+v+r8M=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-253-UDBsiRaoM2S6ps60GOiWsQ-1; Mon, 07 Feb 2022 05:30:48 -0500
-X-MC-Unique: UDBsiRaoM2S6ps60GOiWsQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 209C21800D50;
-        Mon,  7 Feb 2022 10:30:47 +0000 (UTC)
-Received: from work (unknown [10.40.194.180])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id DE8AE7D704;
-        Mon,  7 Feb 2022 10:30:12 +0000 (UTC)
-Date:   Mon, 7 Feb 2022 11:30:09 +0100
-From:   Lukas Czerner <lczerner@redhat.com>
-To:     syzbot <syzbot+138c9e58e3cb22eae3b4@syzkaller.appspotmail.com>
-Cc:     adilger.kernel@dilger.ca, cmaiolino@redhat.com,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
-        syzkaller-bugs@googlegroups.com, tytso@mit.edu
-Subject: Re: [syzbot] general protection fault in ext4_fill_super
-Message-ID: <20220207103009.id72sr4dtghgzp5f@work>
-References: <0000000000001e0ba105d5c2dede@google.com>
- <000000000000fbf22d05d74d08fb@google.com>
+        Mon, 7 Feb 2022 05:33:14 -0500
+Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83EE1C043181
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 02:33:12 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R641e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V3oaIP1_1644229903;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0V3oaIP1_1644229903)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 07 Feb 2022 18:33:10 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     abbotti@mev.co.uk
+Cc:     hsweeten@visionengravers.com, linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] comedi: remove useless else if
+Date:   Mon,  7 Feb 2022 18:31:41 +0800
+Message-Id: <20220207103141.100004-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <000000000000fbf22d05d74d08fb@google.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 05, 2022 at 02:39:06PM -0800, syzbot wrote:
-> syzbot has bisected this issue to:
-> 
-> commit cebe85d570cf84804e848332d6721bc9e5300e07
-> Author: Lukas Czerner <lczerner@redhat.com>
-> Date:   Wed Oct 27 14:18:56 2021 +0000
-> 
->     ext4: switch to the new mount api
-> 
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14902978700000
-> start commit:   0457e5153e0e Merge tag 'for-linus' of git://git.kernel.org..
-> git tree:       upstream
-> final oops:     https://syzkaller.appspot.com/x/report.txt?x=16902978700000
-> console output: https://syzkaller.appspot.com/x/log.txt?x=12902978700000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=cd57c0f940a9a1ec
-> dashboard link: https://syzkaller.appspot.com/bug?extid=138c9e58e3cb22eae3b4
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17f7004fb00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=178cf108700000
-> 
-> Reported-by: syzbot+138c9e58e3cb22eae3b4@syzkaller.appspotmail.com
-> Fixes: cebe85d570cf ("ext4: switch to the new mount api")
-> 
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-> 
+Eliminate the follow coccicheck warning:
 
-I believe that this has been fixed with upstream commit
+./drivers/comedi/drivers/das1800.c:1300:8-10: WARNING: possible
+condition with no effect (if == else).
 
-commit 7c268d4ce2d3761f666a9950b029c8902bfab710
-Author: Lukas Czerner <lczerner@redhat.com>
-Date:   Wed Jan 19 14:02:09 2022 +0100
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+ drivers/comedi/drivers/das1800.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-    ext4: fix potential NULL pointer dereference in ext4_fill_super()
-
-    By mistake we fail to return an error from ext4_fill_super() in case
-    that ext4_alloc_sbi() fails to allocate a new sbi. Instead we just set
-    the ret variable and allow the function to continue which will later
-    lead to a NULL pointer dereference. Fix it by returning -ENOMEM in the
-    case ext4_alloc_sbi() fails.
-
-    Fixes: cebe85d570cf ("ext4: switch to the new mount api")
-    Reported-by: kernel test robot <lkp@intel.com>
-    Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-    Signed-off-by: Lukas Czerner <lczerner@redhat.com>
-    Link: https://lore.kernel.org/r/20220119130209.40112-1-lczerner@redhat.com
-    Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-    Cc: stable@kernel.org
-
-Thanks!
--Lukas
+diff --git a/drivers/comedi/drivers/das1800.c b/drivers/comedi/drivers/das1800.c
+index f09608c0f4ff..c4b6c68f3551 100644
+--- a/drivers/comedi/drivers/das1800.c
++++ b/drivers/comedi/drivers/das1800.c
+@@ -1297,14 +1297,13 @@ static int das1800_attach(struct comedi_device *dev,
+ 			outb(DAC(i), dev->iobase + DAS1800_SELECT);
+ 			outw(0, dev->iobase + DAS1800_DAC);
+ 		}
+-	} else if (board->id == DAS1800_ID_AO) {
++	} else {
+ 		/*
++		 * the branch includes (board->id == DAS1800_ID_AO).
+ 		 * 'ao' boards have waveform analog outputs that are not
+ 		 * currently supported.
+ 		 */
+ 		s->type		= COMEDI_SUBD_UNUSED;
+-	} else {
+-		s->type		= COMEDI_SUBD_UNUSED;
+ 	}
+ 
+ 	/* Digital Input subdevice */
+-- 
+2.20.1.7.g153144c
 

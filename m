@@ -2,95 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE67E4ACBFF
+	by mail.lfdr.de (Postfix) with ESMTP id 903A04ACBFE
 	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 23:21:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244216AbiBGWVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 17:21:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48184 "EHLO
+        id S244270AbiBGWVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 17:21:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242361AbiBGWVc (ORCPT
+        with ESMTP id S242361AbiBGWVg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 17:21:32 -0500
-Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C52C061A73;
-        Mon,  7 Feb 2022 14:21:30 -0800 (PST)
-Received: by mail-oo1-xc2c.google.com with SMTP id b15-20020a4a878f000000b002dccc412166so15378330ooi.11;
-        Mon, 07 Feb 2022 14:21:30 -0800 (PST)
+        Mon, 7 Feb 2022 17:21:36 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C869C06109E;
+        Mon,  7 Feb 2022 14:21:35 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id k18so9749453lji.12;
+        Mon, 07 Feb 2022 14:21:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=wFhLXWchk49XO6XaaUdOJCoA9VgZCJ1FPny/dt9AN+4=;
-        b=BRlA9SaVQRATsbDJyUjp9LkWTT3PF7P9Y/VvUhtVsPNJJ7pfRy3saqxP9ebm2gTKVY
-         5s0au7hLRVz1CUnpKUnCvoQGe42smZkT6VdRUl6N3493MZe6Gdl3fESfYP5VNxuX01uL
-         GnceLGiS32jpZNE40wwYqIBmydKtjZ49h/qUt1SeGtq7hOGEX7DiUwPQwtyikcuR129g
-         CdeHueMCzK6NvzvNsDQW/WOGuN67/4mYmRv2rJ+Sc2pgmwheZGQ3vF7w0Sdes4NkDXRK
-         hNwyphK7O3qOVtEX/NuDslmzqoZbDCwRTuJyMc42PuKXCP/HrGEjx38rnb+rW0PJjwrl
-         tgsg==
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=dkktLNRU0zmH3cyCEBpe0WEVGWBqGQdfPJQTXBunhSM=;
+        b=hc73tZIWVTZrpAaE4nYlhbUXTRHpuPeIsm/DVzNGGAtNIYKnqKJm38R3lHv/YAZZoe
+         6dumvGazH/DcNklK7C/a2KYRilogiuQE67nQiwDTQXEW+h8RvnvutQUaPNDKrEtlqITV
+         BQUYhHahwRfy9S+z4dGvDPbq4M4mN6v7hCchX7TuqbJVXcpp/4iu4x04EmUVEYxDQ4eT
+         3SlGBwY/LeCES07hoFL1H3GGLx/WNmrpBowUEpuL8n9qkuD3pGLqmxYR/YUf4KpTIkCQ
+         KHFz9BfHnfonI4We0ThJoKxWtfentbyXvGK4XE7po4M0mppcQIBhKbqokvllonrjEnfT
+         ejAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=wFhLXWchk49XO6XaaUdOJCoA9VgZCJ1FPny/dt9AN+4=;
-        b=MFy1OqJmrMhHwUGQWIyhYDlr7TY41vQ7E3QNqyDqnRoJBCeoT6zTSFXXyyKgYxk7Bu
-         YcBHo06rY9Oo4F7z5h+uv3O2ibDPexr1tBHyoZOcOfPQD+tO5S9qfyj4OPGMSb2csiyp
-         zovPVGLJtjd2yzAfGbtJjso0gh/KfGGILmRrWEP2KpeyQMwWSiO4CGzj6c/8nJwe17q8
-         VQ5iMpm0Hh2SXISmz5GBDnhSPVENS7ZaoqT/2ZZbmbPVnCFW8hNRGBvg9kz9yCbKq5Tb
-         5g/1asFO/WOE3O3mZuoX1xfLwIeM0FWIe3m5WMMt7K5TzOJvG7F0RKRJsKe+kQ/vqDB/
-         xWkQ==
-X-Gm-Message-State: AOAM531ChbEzazZFhmdHSFhwYJz6kT9991s25/9s+O3paosMjJQqfhIv
-        Cz1cPBJbhi0pdhiT6LlIMzg=
-X-Google-Smtp-Source: ABdhPJzJ/UCZhA5ENG3pA1JpylLQzGtw79ROjQMWKySOCc1vYPudclDJYetq1gGDvXpEw2GNQmS7Zg==
-X-Received: by 2002:a05:6870:e350:: with SMTP id a16mr345067oae.143.1644272489740;
-        Mon, 07 Feb 2022 14:21:29 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w7sm4513118oou.13.2022.02.07.14.21.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 14:21:29 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 7 Feb 2022 14:21:27 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.10 00/74] 5.10.99-rc1 review
-Message-ID: <20220207222127.GD3388316@roeck-us.net>
-References: <20220207103757.232676988@linuxfoundation.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=dkktLNRU0zmH3cyCEBpe0WEVGWBqGQdfPJQTXBunhSM=;
+        b=Al5FH8KYAOwHAoN91hZh+X8Hqp9HJpqJuDrltfb6gcku43gyEH4Le1/BPKKwxLoIHe
+         NvJdrZTafn9rKW54+R/CVxACpOWtg2EsXlZmVytgyuOi64Invq+Mt/p4yt9ejf0KBBmx
+         ujAOoaHxwcE/+zhkITRHgMo/scisp0IkNp7aXe24G5wdhgWyPb1JvooEttxRl+XTYOv1
+         VMZN+ictq6/kTfuq6HKFZzbGk2cn/aL/8CiHQvgXed1fbhE3s97t/8eUOIT389LFzfS7
+         dAGYZ+f3vH+0ycbJ7x2kLqfAqYaMNN5DV6MC2N7EgZMcF36BGXE8eF3/YpA9MP6rXeei
+         xQ5A==
+X-Gm-Message-State: AOAM531QcxcTBWfK4Ur96AGF0i/+7jAzh9ibentkZ4TsQ6AFLjxPnncB
+        9QzqBaN/lAcv8M6PwAKQ8ds=
+X-Google-Smtp-Source: ABdhPJy0lK8u0HHeZcS4g5cUIhdkvfCDkT1m8RTeI08c9XX9m06IH6BoZaQ/qPjFO9p38tWv4GXRBQ==
+X-Received: by 2002:a05:651c:17a7:: with SMTP id bn39mr960859ljb.26.1644272493832;
+        Mon, 07 Feb 2022 14:21:33 -0800 (PST)
+Received: from [192.168.2.145] (109-252-138-165.dynamic.spd-mgts.ru. [109.252.138.165])
+        by smtp.googlemail.com with ESMTPSA id d5sm117513lji.61.2022.02.07.14.21.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Feb 2022 14:21:33 -0800 (PST)
+Message-ID: <4d1051bc-fbfa-48d8-79db-52406bc19018@gmail.com>
+Date:   Tue, 8 Feb 2022 01:21:32 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220207103757.232676988@linuxfoundation.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4 0/3] Support Sharp LQ101R1SX03 and HannStar HSD101PWW2
+ panels
+Content-Language: en-US
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Sam Ravnborg <sam@ravnborg.org>
+Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Svyatoslav Ryhel <clamor95@gmail.com>,
+        Anton Bambura <jenneron@protonmail.com>
+References: <20220131181208.27101-1-digetx@gmail.com>
+In-Reply-To: <20220131181208.27101-1-digetx@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 12:05:58PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.99 release.
-> There are 74 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+31.01.2022 21:12, Dmitry Osipenko пишет:
+> This series adds support for Sharp LQ101R1SX03 and HannStar HSD101PWW2
+> display panels that are used by Asus Transformer tablets, which we're
+> planning to support since 5.17 kernel.
 > 
-> Responses should be made by Wed, 09 Feb 2022 10:37:42 +0000.
-> Anything received after that time might be too late.
+> Changelog:
+> 
+> v4: - Added r-b from Rob Herring that he gave to the LQ101R1SX01 DT patch
+>       of v2. I missed to add it to the v3 by accident.
+> 
+> v3: - No changes. Re-sending for 5.18. Device-trees of devices that use
+>       these panels were merged to 5.17, so we're missing the display support.
+> 
+> v2: - Added ack from Rob Herring to the HSD101PWW2 binding.
+> 
+>     - Updated LQ101R1SX01 binding, like it was suggested by Rob Herring,
+>       making LQ101R1SX03 directly compatible with the LQ101R1SX01.
+>       Such that ["sharp,lq101r1sx03", "sharp,lq101r1sx01"] could be
+>       used in DT. This removes need to update panel driver with the new
+>       compatible.
+> 
+>     - Improved commit message of the LQ101R1SX03 patch.
+> 
+>     - Added my s-o-b to all patches.
+> 
+> Anton Bambura (1):
+>   dt-bindings: sharp,lq101r1sx01: Add compatible for LQ101R1SX03
+> 
+> Svyatoslav Ryhel (2):
+>   dt-bindings: display: simple: Add HannStar HSD101PWW2
+>   drm/panel: simple: Add support for HannStar HSD101PWW2 panel
+> 
+>  .../bindings/display/panel/panel-simple.yaml  |  2 ++
+>  .../display/panel/sharp,lq101r1sx01.yaml      |  7 ++++-
+>  drivers/gpu/drm/panel/panel-simple.c          | 28 +++++++++++++++++++
+>  3 files changed, 36 insertions(+), 1 deletion(-)
 > 
 
-Build results:
-	total: 161 pass: 161 fail: 0
-Qemu test results:
-	total: 477 pass: 477 fail: 0
-
-Tested-by: Guenter Roeck <linux@roeck-us.net>
-
-Guenter
+Sam, could you please take care of this series? Will be great to see it
+in 5.18 and have the panel to light up Asus TF201 tablet, thanks in advance!

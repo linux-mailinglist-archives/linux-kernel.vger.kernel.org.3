@@ -2,103 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09EA54AB85C
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 11:13:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3887A4AB7B5
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 10:41:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243836AbiBGKHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 05:07:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39270 "EHLO
+        id S1348583AbiBGJ1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 04:27:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353161AbiBGJvi (ORCPT
+        with ESMTP id S1353674AbiBGJQl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 04:51:38 -0500
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEFD8C0401EB;
-        Mon,  7 Feb 2022 01:51:29 -0800 (PST)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21778x1Q010779;
-        Mon, 7 Feb 2022 10:15:19 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=Kkqvjurj574bD6gSsyenZFngomf2r4egE+kYpU9wKEE=;
- b=5RJjR3tqCnt97bpxcyy+Jfq4LrcLWOw7zRdNgCz1Ly3ZIjEmiRymDYVlrTLwMfELyrVA
- 05sHR8zK2e0GD7vh1ifN4HtvOW4rQCcNJO2zdhiD1lGgjTt1Dzflk4gd7rSSZGySh9rw
- pLqYAbECREKnRHD/01y2o+jF4npbtUJjkMJtI2fedNCpAtz0JaGjdY5U4qllZLYZ+bXa
- ryDbvT+5g8xlDnJt0x8jNTx72yxHFJwdYVdNkW31n3ao9ZVjgDxoz0yD0RoRQv81HWlW
- U+6tk2udkrqD7c74cqFaqgCIcw7/d+MnF8NqcWJmbh+zQE5xWw71L10Myu9t4vObzr9g PQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3e2fg5k7pr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 07 Feb 2022 10:15:19 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 1227F10002A;
-        Mon,  7 Feb 2022 10:15:17 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E30B9212FDF;
-        Mon,  7 Feb 2022 10:15:17 +0100 (CET)
-Received: from [10.48.0.252] (10.75.127.46) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 7 Feb
- 2022 10:15:16 +0100
-Message-ID: <6d60031b-2164-bdda-1048-ec047d9bd59e@foss.st.com>
-Date:   Mon, 7 Feb 2022 10:15:15 +0100
+        Mon, 7 Feb 2022 04:16:41 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A983CC0401DE;
+        Mon,  7 Feb 2022 01:16:39 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 934AB1EC0354;
+        Mon,  7 Feb 2022 10:16:33 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1644225393;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=RhZCvESkq4uv/MnXkVCgST7XyZ/TXxrvV+qyZmcFnNo=;
+        b=eAKkrWkC+wccOlnhlbQ0D0g7WmKJasDAmaBpYzOdvOmVRMP0ZaG1AwvCvcMmCdqGiXFPhB
+        mDdy3SsIbwarUgR8GGZzsL3BbYqfAh1nXlT2ZSnFtaxZcLh1lIS3GFFk2oPLpdP7wfNDOf
+        Y74CWeSnp3mCrLoztWbkxIjH5UWMU8I=
+Date:   Mon, 7 Feb 2022 10:16:27 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Brijesh Singh <brijesh.singh@amd.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v9 43/43] virt: sevguest: Add support to get extended
+ report
+Message-ID: <YgDjayeFRpzh1xEu@zn.tnic>
+References: <20220128171804.569796-1-brijesh.singh@amd.com>
+ <20220128171804.569796-44-brijesh.singh@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 0/2] ARM: dts: stm32: remove timer duplicate unit-address
- on stm32f4 series
-Content-Language: en-US
-To:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>, <robh+dt@kernel.org>
-CC:     <olivier.moysan@foss.st.com>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>
-References: <1638959596-6656-1-git-send-email-fabrice.gasnier@foss.st.com>
-From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
-In-Reply-To: <1638959596-6656-1-git-send-email-fabrice.gasnier@foss.st.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-07_03,2022-02-07_01,2021-12-02_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220128171804.569796-44-brijesh.singh@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Fabrice
+On Fri, Jan 28, 2022 at 11:18:04AM -0600, Brijesh Singh wrote:
+> +static int get_ext_report(struct snp_guest_dev *snp_dev, struct snp_guest_request_ioctl *arg)
+> +{
+> +	struct snp_guest_crypto *crypto = snp_dev->crypto;
+> +	struct snp_ext_report_req req = {0};
+> +	struct snp_report_resp *resp;
+> +	int ret, npages = 0, resp_len;
+> +
+> +	if (!arg->req_data || !arg->resp_data)
+> +		return -EINVAL;
+> +
+> +	/* Copy the request payload from userspace */
 
-On 12/8/21 11:33, Fabrice Gasnier wrote:
-> Remove a series of warnings seen when building with W=1, like:
-> Warning (unique_unit_address): /soc/timer@40000c00: duplicate unit-address
-> (also used in node /soc/timers@40000c00)
-> 
-> This approach is based on some discussions[1], to restructure the dtsi
-> and dts files.
-> [1] https://lore.kernel.org/linux-arm-kernel/Yaf4jiZIp8+ndaXs@robh.at.kernel.org/
-> 
-> Fabrice Gasnier (2):
->    ARM: dts: stm32: remove some timer duplicate unit-address on stm32f4
->      series
->    ARM: dts: stm32: remove timer5 duplicate unit-address on stm32f4
->      series
-> 
->   arch/arm/boot/dts/stm32429i-eval.dts  | 12 +++++++++
->   arch/arm/boot/dts/stm32f429-disco.dts | 12 +++++++++
->   arch/arm/boot/dts/stm32f429.dtsi      | 47 -----------------------------------
->   arch/arm/boot/dts/stm32f469-disco.dts | 12 +++++++++
->   4 files changed, 36 insertions(+), 47 deletions(-)
-> 
+Useless comment.
 
-Series applied on stm32-next.
+> +	if (copy_from_user(&req, (void __user *)arg->req_data, sizeof(req)))
+> +		return -EFAULT;
+> +
+> +	if (req.certs_len) {
+> +		if (req.certs_len > SEV_FW_BLOB_MAX_SIZE ||
+> +		    !IS_ALIGNED(req.certs_len, PAGE_SIZE))
+> +			return -EINVAL;
+> +	}
+> +
+> +	if (req.certs_address && req.certs_len) {
+> +		if (!access_ok(req.certs_address, req.certs_len))
+> +			return -EFAULT;
+> +
+> +		/*
+> +		 * Initialize the intermediate buffer with all zero's. This buffer
 
-Thanks
-Alex
+"zeros"
+
+> +		 * is used in the guest request message to get the certs blob from
+> +		 * the host. If host does not supply any certs in it, then copy
+> +		 * zeros to indicate that certificate data was not provided.
+> +		 */
+> +		memset(snp_dev->certs_data, 0, req.certs_len);
+> +
+> +		npages = req.certs_len >> PAGE_SHIFT;
+> +	}
+> +
+> +	/*
+> +	 * The intermediate response buffer is used while decrypting the
+> +	 * response payload. Make sure that it has enough space to cover the
+> +	 * authtag.
+> +	 */
+> +	resp_len = sizeof(resp->data) + crypto->a_len;
+> +	resp = kzalloc(resp_len, GFP_KERNEL_ACCOUNT);
+> +	if (!resp)
+> +		return -ENOMEM;
+> +
+> +	snp_dev->input.data_npages = npages;
+> +	ret = handle_guest_request(snp_dev, SVM_VMGEXIT_EXT_GUEST_REQUEST, arg->msg_version,
+> +				   SNP_MSG_REPORT_REQ, &req.data,
+> +				   sizeof(req.data), resp->data, resp_len, &arg->fw_err);
+> +
+> +	/* If certs length is invalid then copy the returned length */
+> +	if (arg->fw_err == SNP_GUEST_REQ_INVALID_LEN) {
+> +		req.certs_len = snp_dev->input.data_npages << PAGE_SHIFT;
+> +
+> +		if (copy_to_user((void __user *)arg->req_data, &req, sizeof(req)))
+> +			ret = -EFAULT;
+> +	}
+> +
+> +	if (ret)
+> +		goto e_free;
+> +
+> +	/* Copy the certificate data blob to userspace */
+> +	if (req.certs_address && req.certs_len &&
+> +	    copy_to_user((void __user *)req.certs_address, snp_dev->certs_data,
+> +			 req.certs_len)) {
+> +		ret = -EFAULT;
+> +		goto e_free;
+> +	}
+> +
+> +	/* Copy the response payload to userspace */
+
+Both comments are not needed.
+
+> +	if (copy_to_user((void __user *)arg->resp_data, resp, sizeof(*resp)))
+> +		ret = -EFAULT;
+> +
+> +e_free:
+> +	kfree(resp);
+> +	return ret;
+> +}
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

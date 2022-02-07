@@ -2,162 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FA114ACD2A
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:07:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B65444ACD12
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:07:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245463AbiBHBEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 20:04:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37622 "EHLO
+        id S1345061AbiBHBEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 20:04:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236870AbiBGXL5 (ORCPT
+        with ESMTP id S240354AbiBGXM6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 18:11:57 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A01BC061355;
-        Mon,  7 Feb 2022 15:11:55 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jt22r6cKxz4xcZ;
-        Tue,  8 Feb 2022 10:11:48 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1644275511;
-        bh=OaI9CJxcyqPY8QQmjCIUrEv/kcnCpFMZFNJOpwi7Kvs=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Ycji8VqRS1VLL7DZWR+65c+QgXQA7C/E6vP9K8nh8Ekxu/6w/kyvHlrepVxEqdZAV
-         5s48e2gueoVdrY38dV8b4iyZCmIc54r6QV62BFxc+pRWaCsv39gBfZlBf32SH6Tjnm
-         GZYzKIP51NrA+1rFqDZJyzdIuHtIglFddTUHBi9qFQBlMMZF/fGqb/l8EppbRxmWEL
-         l2KkTu3Q6dm2giDid9kEkyiInq/vgo3UhJ/B2NZvAuoYL0epi2zJyHcIPpZ8WBbSq2
-         6IeEEOsC/Qzqm2OGF8a33YNiD4ZzwKJcegNdMrQS32Wsbxf3fM8ZgrtxuVNjPUhcbg
-         xtL3wm641ytTw==
-Date:   Tue, 8 Feb 2022 10:11:48 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Wolfram Sang <wsa@the-dreams.de>
-Cc:     Akhil R <akhilrajeev@nvidia.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: linux-next: manual merge of the pm tree with the i2c tree
-Message-ID: <20220208101148.7e7f7528@canb.auug.org.au>
+        Mon, 7 Feb 2022 18:12:58 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD312C061355;
+        Mon,  7 Feb 2022 15:12:56 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id m6so44643795ybc.9;
+        Mon, 07 Feb 2022 15:12:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wQq+mHaX2NTw8edQ1piWfzulWZiGotWvejNP1a/WHXA=;
+        b=isfraitWhRGlMJU5yWGEFJjAgZ2h8hn2M0bv6WDAuftAolDZK9XA10xhcXKRl6rb94
+         Lu2YTxxxUFK9r4kVpKXZcDqHbNFXAq3M/NQtxWAxWU6Qfs3DCND/pp7uwO7sJosdY4ny
+         /9vBtqBd05H+DhwRfXZGfcCiFZKw95XpV45hry9I+TFnZSlDf6+IgPsn8XlxTLfWDuYP
+         xQ6LomxeYhe7kxPG7n0kLTv4KpJezzWcSd6u3OOBzs77fI1XZcFw61F5Ta2gwFw6PQS4
+         1xG1sL4x+soscQSUxGAPhLyCvhMH//JPqNEnuYqW3eCPFBtjrTbD/yJ/9Qn0kZU5YYtp
+         0JnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wQq+mHaX2NTw8edQ1piWfzulWZiGotWvejNP1a/WHXA=;
+        b=0Yt7C4eCX+dvddQORyOJi1Neojd8RbYgSbtVGciWbrO6eD3QbQ0t/XHwYSYX893GbW
+         JsYuwVrd5jlsG0HJPmBmJnqhQz6ukzbRxoHZ+MFBqo4C5TLmfm4JN02VbHJ7ad/KuLGD
+         TILz1rPjUQHXxUMKwHNdwjdEfroEdeNr0l3E1wKRSI96a+Rh+LiTpvqxE8fJ4A0tcFWK
+         K9iddeRkz4cvCFoHkBtMNcTgYZLvW29/l53276EUnELV91XxDiK5rtdc54N7udwWXQts
+         IE0CrPXQfsclvtaK8xgPor61zBTcQAiiCaYqVvgvB10h/Bh5vdd9FcZgaXEgTcvJO23I
+         9rAQ==
+X-Gm-Message-State: AOAM531Boi6YKFpXk83oLe5cIbDDWoGOW77f5lX41T/aKuevK4rF7zGl
+        kDz7Qdoww8Whbf88ry2pzIlQenEfbjkqKjXcNEBbnGS3i9kEE+vJ
+X-Google-Smtp-Source: ABdhPJzVIXzrcgHdMz3A3fRll57H1Ml4LaWjCW0LwWcIaltsCm6YZYIZwy7v3kDRz8E1y6o8uyz5xHiPiu0JAPcWoqE=
+X-Received: by 2002:a05:6902:4c2:: with SMTP id v2mr2126067ybs.429.1644275575771;
+ Mon, 07 Feb 2022 15:12:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/I1cDFz+PyDv/wQYeAli2Uk6";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220204200342.48665-1-ztong0001@gmail.com> <a45010a4-2b86-aa22-d7bd-3c4839356cf1@pengutronix.de>
+In-Reply-To: <a45010a4-2b86-aa22-d7bd-3c4839356cf1@pengutronix.de>
+From:   Tong Zhang <ztong0001@gmail.com>
+Date:   Mon, 7 Feb 2022 15:12:45 -0800
+Message-ID: <CAA5qM4BtyFZJfwSjCfoAzMf5jZQNbi6jziPjOm+Z1_c98VEVYg@mail.gmail.com>
+Subject: Re: [PATCH] KEYS: trusted: fix crash when TPM/TEE are built as module
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
+Cc:     James Bottomley <jejb@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        Andreas Rammhold <andreas@rammhold.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/I1cDFz+PyDv/wQYeAli2Uk6
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Sun, Feb 6, 2022 at 2:36 AM Ahmad Fatoum <a.fatoum@pengutronix.de> wrote:
+>
+> Hello Tong,
+>
+> On 04.02.22 21:03, Tong Zhang wrote:
+> > when TCG_TPM and TEE are built as module, trusted_key_sources will be an
+> > empty array, loading it won't do what it is supposed to do and unloading
+> > it will cause kernel crash.
+>
+> Jarkko reported picking up an equivalent fix two months ago:
+> https://lkml.kernel.org/keyrings/YadRAWbl2aiapf8l@iki.fi/
+>
+> But it seems to have never made it to Linus.
+>
+> Cheers,
+> Ahmad
+>
+> >
+> > To reproduce:
+> > $ modprobe trusted
+> > $ modprobe -r trusted
+> >
+> > [  173.749423] Unable to handle kernel NULL pointer dereference at virtual address 00000000
+> > [  173.755268] Backtrace:
+> > [  173.755378]  cleanup_trusted [trusted] from sys_delete_module+0x15c/0x22c
+> > [  173.755589]  sys_delete_module from ret_fast_syscall+0x0/0x1c
+> >
+> > To fix this issue, we also need to check CONFIG_TCG_TPM_MODULE and
+> > CONFIG_TEE_MODULE.
+> >
+> > Fixes: 5d0682be3189 ("KEYS: trusted: Add generic trusted keys framework")
+> > Signed-off-by: Tong Zhang <ztong0001@gmail.com>
+> > ---
+> >  security/keys/trusted-keys/trusted_core.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/security/keys/trusted-keys/trusted_core.c b/security/keys/trusted-keys/trusted_core.c
+> > index d5c891d8d353..b3a3b2f2d4a4 100644
+> > --- a/security/keys/trusted-keys/trusted_core.c
+> > +++ b/security/keys/trusted-keys/trusted_core.c
+> > @@ -27,10 +27,10 @@ module_param_named(source, trusted_key_source, charp, 0);
+> >  MODULE_PARM_DESC(source, "Select trusted keys source (tpm or tee)");
+> >
+> >  static const struct trusted_key_source trusted_key_sources[] = {
+> > -#if defined(CONFIG_TCG_TPM)
+> > +#if defined(CONFIG_TCG_TPM) || defined(CONFIG_TCG_TPM_MODULE)
+> >       { "tpm", &trusted_key_tpm_ops },
+> >  #endif
+> > -#if defined(CONFIG_TEE)
+> > +#if defined(CONFIG_TEE) || defined(CONFIG_TEE_MODULE)
+> >       { "tee", &trusted_key_tee_ops },
+> >  #endif
+> >  };
+>
+>
+> --
+> Pengutronix e.K.                           |                             |
+> Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+> 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+> Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
-Hi all,
-
-Today's linux-next merge of the pm tree got a conflict in:
-
-  drivers/base/property.c
-
-between commit:
-
-  ca0acb511c21 ("device property: Add fwnode_irq_get_byname")
-
-from the i2c tree and commit:
-
-  ffa743d3f33b ("device property: Don't split fwnode_get_irq*() APIs in the=
- code")
-
-from the pm tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/base/property.c
-index fc59e0f7f9cc,ad97d23ddbe6..000000000000
---- a/drivers/base/property.c
-+++ b/drivers/base/property.c
-@@@ -919,51 -935,6 +935,35 @@@ int fwnode_irq_get(const struct fwnode_
-  }
-  EXPORT_SYMBOL(fwnode_irq_get);
- =20
-- /**
--  * fwnode_iomap - Maps the memory mapped IO for a given fwnode
--  * @fwnode:	Pointer to the firmware node
--  * @index:	Index of the IO range
--  *
--  * Returns a pointer to the mapped memory.
--  */
-- void __iomem *fwnode_iomap(struct fwnode_handle *fwnode, int index)
-- {
-- 	if (IS_ENABLED(CONFIG_OF_ADDRESS) && is_of_node(fwnode))
-- 		return of_iomap(to_of_node(fwnode), index);
--=20
-- 	return NULL;
-- }
-- EXPORT_SYMBOL(fwnode_iomap);
--=20
- +/**
- + * fwnode_irq_get_byname - Get IRQ from a fwnode using its name
- + * @fwnode:	Pointer to the firmware node
- + * @name:	IRQ name
- + *
- + * Description:
- + * Find a match to the string @name in the 'interrupt-names' string array
- + * in _DSD for ACPI, or of_node for Device Tree. Then get the Linux IRQ
- + * number of the IRQ resource corresponding to the index of the matched
- + * string.
- + *
- + * Return:
- + * Linux IRQ number on success, or negative errno otherwise.
- + */
- +int fwnode_irq_get_byname(const struct fwnode_handle *fwnode, const char =
-*name)
- +{
- +	int index;
- +
- +	if (!name)
- +		return -EINVAL;
- +
- +	index =3D fwnode_property_match_string(fwnode, "interrupt-names",  name);
- +	if (index < 0)
- +		return index;
- +
- +	return fwnode_irq_get(fwnode, index);
- +}
- +EXPORT_SYMBOL(fwnode_irq_get_byname);
- +
-  /**
-   * fwnode_graph_get_next_endpoint - Get next endpoint firmware node
-   * @fwnode: Pointer to the parent firmware node
-
---Sig_/I1cDFz+PyDv/wQYeAli2Uk6
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIBpzQACgkQAVBC80lX
-0GxO6gf/a16UTbqnkBeGJ3k1FAbCOEO7XnLNEn4hW8ILhY0M+ttQZqFF/MPNhCgx
-SvHKWdsOemgH1B03YmHiSgd0s/+FZ4CMU2kBsTWpZdXxk7kKVML2sk17wm1QWZMK
-PbMpncGmfbgUpa2QeCTWxu+mKXOgxQYNQXY7smqrdukFy0h1euzQslapmZhzzFpP
-b+uJLwD6AFyLiA5b73v4AsM80Rl9uTnUgTFZAlxxLwciAQ1ajT8si2HJwchmA5U1
-iY9uyMFTrzPkhJLOIL7Ekl7AGb16GtDSTE6BTZrNlnor0DHXkU4b6rF/uK/Rz2HE
-2uvLG3IZHrjVG608DQWQfo+JElc5MA==
-=ulUL
------END PGP SIGNATURE-----
-
---Sig_/I1cDFz+PyDv/wQYeAli2Uk6--
+Hi Ahmad,
+Thanks for letting me know.
+That fix looks good to me.
+- Tong

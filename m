@@ -2,49 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B41C84AC9CF
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 20:48:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 539AF4AC9D4
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 20:48:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240812AbiBGTpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 14:45:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59284 "EHLO
+        id S240532AbiBGTpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 14:45:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240724AbiBGTnd (ORCPT
+        with ESMTP id S240743AbiBGTnf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 14:43:33 -0500
+        Mon, 7 Feb 2022 14:43:35 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48F48C0401E6
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 11:43:32 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F9D4C0401DA
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 11:43:34 -0800 (PST)
 From:   John Ogness <john.ogness@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1644263010;
+        s=2020; t=1644263011;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Wz4b8g7RhPiNelQL/klnUcQZ1lWWUK2rdxPkiBZW57s=;
-        b=NkQ9Tzkk+waPE4Lx3hILnB/SEXPjt9O0DPteuf5yohGTXni5i6bt3h6TasqLt56Z0LAEUA
-        a/Nq4Fvw53pRhkeAs7CAE5Ps3bkfYxefH4usfEOtyPKYAbrdXfDU8jXF3Si8EnEpmlV06/
-        2l73Xi9e5r/VFxS1ad0ZM2weUGslPPyPI/0mTbNPSPGGR1mqEKHJIzUUt8ZJaqPAWlpsaU
-        GE6lJ264fWXTvDQ4cepXLe03iSVmRpwiwqwJSQ0wUiQ2ZkwrWKaFoqWeDSSjJGck1Mm22a
-        EvKUcI/PD1U5GCKlhMjUZBCxnzvxZc/fWIufOTJ4RA8FUK9N7sACU5xsrc7Hnw==
+        bh=+2Lr9d9qHR05sofK1L6gRmeoW4SDlcmhBs2p6+5unzY=;
+        b=Ye6Rq+yPI0pCCoA1ujHlzs6Hut1pSADQzp1YfshvjDIyKFSP9dINja/z0yiDEzW/x04OzP
+        JM06uk+EqWX8b4j0Dtu3CrJ2ZHvACglmdRx3BZ67bAAhEyXagw10XLJWP3dae3elrDKSyU
+        /cFEGpg11bRTusJgJeCpW3U4+SxGQlfPRPz7bC6QOGGzCNTZF6BqdPriVTnvyMDJ58QkIi
+        cseJ0wilL4O1ClqttjT7VNz+ck1mo9whfQqXTjKyBRCzMBf1/NcKcL4851RDKNLm79//Bk
+        rm2RPkGx7CkQPFMqBcgqUjSgwXNNjhfYcIFbF0ewKDfoQcxAucWVStfI/33UAA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1644263010;
+        s=2020e; t=1644263011;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Wz4b8g7RhPiNelQL/klnUcQZ1lWWUK2rdxPkiBZW57s=;
-        b=VYiRfbKySMkonqCi+iIKU7JtpTkuoiQlT94ayGBwIImidq/e5p6/N8xGM1S8Op0ZZwofyo
-        uC6KFmr+iDdetYAQ==
+        bh=+2Lr9d9qHR05sofK1L6gRmeoW4SDlcmhBs2p6+5unzY=;
+        b=tqjp5W7SLXHhL+7/7InwEQae83NyGcoKqnf64AdDtX9zW1j1+SP32XyV6LQI1bRpmTuefc
+        /9+RuiKBj655JVCQ==
 To:     Petr Mladek <pmladek@suse.com>
 Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH printk v1 12/13] printk: remove @console_locked
-Date:   Mon,  7 Feb 2022 20:49:22 +0106
-Message-Id: <20220207194323.273637-13-john.ogness@linutronix.de>
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        David Sterba <dsterba@suse.com>,
+        =?UTF-8?q?Samuel=20Iglesias=20Gons=C3=A1lvez?= 
+        <siglesias@igalia.com>, Bhaskar Chowdhury <unixbhaskar@gmail.com>,
+        Igor Matheus Andrade Torrente <igormtorrente@gmail.com>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        nick black <dankamongmen@gmail.com>
+Subject: [PATCH printk v1 13/13] console: introduce CON_MIGHT_SLEEP for vt
+Date:   Mon,  7 Feb 2022 20:49:23 +0106
+Message-Id: <20220207194323.273637-14-john.ogness@linutronix.de>
 In-Reply-To: <20220207194323.273637-1-john.ogness@linutronix.de>
 References: <20220207194323.273637-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
@@ -59,103 +68,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The static global variable @console_locked is used to help debug VT
-code to make sure that certain code paths are running with the
-console_lock held. However, this information is also available with
-the static global variable @consoles_paused (for locking via
-console_lock()), and the static global variable @console_lock_count
-(for locking via console_trylock()).
+Deadlocks and the framebuffer console have been a recurring issue
+that is getting worse. Daniel Vetter suggested [0] that
+fbcon->write() should no longer be called from an atomic context.
 
-Remove @console_locked and update is_console_locked() to use the
-alternative variables.
+Introduce a new console flag CON_MIGHT_SLEEP for a console driver to
+specify that it is only called from sleepable contexts. Set the
+fbcon to use this new flag.
+
+[0] https://lore.kernel.org/all/YYuS1uNhxWOEX1Ci@phenom.ffwll.local
 
 Signed-off-by: John Ogness <john.ogness@linutronix.de>
 ---
- kernel/printk/printk.c | 30 ++++++++++++++----------------
- 1 file changed, 14 insertions(+), 16 deletions(-)
+ drivers/tty/vt/vt.c     | 2 +-
+ include/linux/console.h | 1 +
+ kernel/printk/printk.c  | 2 ++
+ 3 files changed, 4 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
+index 7359c3e80d63..ab4712cc9327 100644
+--- a/drivers/tty/vt/vt.c
++++ b/drivers/tty/vt/vt.c
+@@ -3161,7 +3161,7 @@ static struct console vt_console_driver = {
+ 	.write		= vt_console_print,
+ 	.device		= vt_console_device,
+ 	.unblank	= unblank_screen,
+-	.flags		= CON_PRINTBUFFER,
++	.flags		= CON_PRINTBUFFER|CON_MIGHT_SLEEP,
+ 	.index		= -1,
+ };
+ #endif
+diff --git a/include/linux/console.h b/include/linux/console.h
+index c51c7f5507a5..ea52c56b3ff8 100644
+--- a/include/linux/console.h
++++ b/include/linux/console.h
+@@ -138,6 +138,7 @@ static inline int con_debug_leave(void)
+ #define CON_BRL		(32) /* Used for a braille device */
+ #define CON_EXTENDED	(64) /* Use the extended output format a la /dev/kmsg */
+ #define CON_PAUSED	(128) /* Sleep while console is locked */
++#define CON_MIGHT_SLEEP	(256) /* Can only be called from sleepable context */
+ 
+ struct console {
+ 	char	name[16];
 diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-index 135fbe647092..086155578f10 100644
+index 086155578f10..b92ef67a5aa2 100644
 --- a/kernel/printk/printk.c
 +++ b/kernel/printk/printk.c
-@@ -307,15 +307,7 @@ static void __pause_all_consoles(bool do_pause)
- #define pause_all_consoles() __pause_all_consoles(true)
- #define unpause_all_consoles() __pause_all_consoles(false)
+@@ -2836,6 +2836,8 @@ static bool console_flush_all(bool do_cond_resched, u64 *next_seq, bool *handove
  
--/*
-- * This is used for debugging the mess that is the VT code by
-- * keeping track if we have the console semaphore held. It's
-- * definitely not the perfect debug tool (we don't know if _WE_
-- * hold it and are racing, but it helps tracking those weird code
-- * paths in the console code where we end up in places I want
-- * locked without the console semaphore held).
-- */
--static int console_locked, console_suspended;
-+static int console_suspended;
+ 			if (!console_is_usable(con))
+ 				continue;
++			if ((con->flags & CON_MIGHT_SLEEP) && !do_cond_resched)
++				continue;
+ 			any_usable = true;
  
- /*
-  *	Array of consoles built from command line options (console=)
-@@ -2595,7 +2587,6 @@ void console_lock(void)
- 	if (console_suspended)
- 		return;
- 	pause_all_consoles();
--	console_locked = 1;
- 	console_may_schedule = 1;
- }
- EXPORT_SYMBOL(console_lock);
-@@ -2620,7 +2611,6 @@ int console_trylock(void)
- 		up_console_sem();
- 		return 0;
- 	}
--	console_locked = 1;
- 	console_may_schedule = 0;
- 	return 1;
- }
-@@ -2647,14 +2637,25 @@ static int console_trylock_sched(bool may_schedule)
- 		return 0;
- 	}
- 	pause_all_consoles();
--	console_locked = 1;
- 	console_may_schedule = 1;
- 	return 1;
- }
- 
-+/*
-+ * This is used to help to make sure that certain paths within the VT code are
-+ * running with the console lock held. It is definitely not the perfect debug
-+ * tool (it is not known if the VT code is the task holding the console lock),
-+ * but it helps tracking those weird code paths in the console code such as
-+ * when the console is suspended: where the console is not locked but no
-+ * console printing may occur.
-+ *
-+ * Note: This returns true when the console is suspended but is not locked.
-+ *       This is intentional because the VT code must consider that situation
-+ *       the same as if the console was locked.
-+ */
- int is_console_locked(void)
- {
--	return (console_locked || atomic_read(&console_lock_count));
-+	return (consoles_paused || atomic_read(&console_lock_count));
- }
- EXPORT_SYMBOL(is_console_locked);
- 
-@@ -2687,8 +2688,6 @@ static inline bool console_is_usable(struct console *con)
- 
- static void __console_unlock(void)
- {
--	console_locked = 0;
--
- 	/*
- 	 * Depending on whether console_lock() or console_trylock() was used,
- 	 * appropriately allow the kthread printers to continue.
-@@ -2966,7 +2965,6 @@ void console_unblank(void)
- 		console_lock();
- 	}
- 
--	console_locked = 1;
- 	console_may_schedule = 0;
- 	for_each_console(c)
- 		if ((c->flags & CON_ENABLED) && c->unblank)
+ 			if (con->flags & CON_EXTENDED) {
 -- 
 2.30.2
 

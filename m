@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D0614AB995
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:23:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 545F24ABD54
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:59:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380040AbiBGLQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:16:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49896 "EHLO
+        id S1387262AbiBGLk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:40:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355932AbiBGLMt (ORCPT
+        with ESMTP id S239674AbiBGL2R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:12:49 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E39C043181;
-        Mon,  7 Feb 2022 03:12:48 -0800 (PST)
+        Mon, 7 Feb 2022 06:28:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA486C036486;
+        Mon,  7 Feb 2022 03:26:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 25DA16126D;
-        Mon,  7 Feb 2022 11:12:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08E4DC340F1;
-        Mon,  7 Feb 2022 11:12:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D85EDB80EC3;
+        Mon,  7 Feb 2022 11:26:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0848C004E1;
+        Mon,  7 Feb 2022 11:26:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232367;
-        bh=0Lx6J+nW1j3Xe69Ss/RmZp3ltqUDCKWoqBjjFqSPDh4=;
+        s=korg; t=1644233193;
+        bh=4tqbVWyD5n0NTZ+HZNk3x7FdAtAOGFRnc6tGhsbUSB4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JOg89JilsRXqOaQ2TDQLPM2ASEa0zmne5+Q3KGlYzvjP2CGrzLec8WS0Oi+HphA4Y
-         6BOCHIrBkLVZMSX/b7MHUyGMLq2HPlQ7cYZvdcZ5q3r50LZHUAYO9ue7mxY0ldXwGS
-         Q5qZz28aZlMrUVAw2I7s6DxAA/q56DVN0eiOHJts=
+        b=gbNWbs7Vzm90zq3Muf6V2EU2t2BMAemqvuaoKJQOM28qHyKk3JgZyCVzEqnEG9Zu5
+         U2cpGE4A/U9+uH+KzAPkralBh688N9WMnK0Vs+TtJ96awAq1PshqKNrbNK+oZkONw2
+         CUnYEVBJHFmj0WhxjaqtrYEZnpwmu8KybRaDMDDw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 4.14 56/69] spi: mediatek: Avoid NULL pointer crash in interrupt
+        stable@vger.kernel.org, Tom Rix <trix@redhat.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.15 045/110] ALSA: usb-audio: initialize variables that could ignore errors
 Date:   Mon,  7 Feb 2022 12:06:18 +0100
-Message-Id: <20220207103757.465440538@linuxfoundation.org>
+Message-Id: <20220207103803.795364037@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103755.604121441@linuxfoundation.org>
-References: <20220207103755.604121441@linuxfoundation.org>
+In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
+References: <20220207103802.280120990@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,34 +54,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+From: Tom Rix <trix@redhat.com>
 
-commit f83a96e5f033fbbd21764705cb9c04234b96218e upstream.
+commit 3da4b7403db87d39bc2613cfd790de1de99a70ab upstream.
 
-In some case, like after a transfer timeout, master->cur_msg pointer
-is NULL which led to a kernel crash when trying to use master->cur_msg->spi.
-mtk_spi_can_dma(), pointed by master->can_dma, doesn't use this parameter
-avoid the problem by setting NULL as second parameter.
+clang static analysis reports this representative issue
+mixer.c:1548:35: warning: Assigned value is garbage or undefined
+        ucontrol->value.integer.value[0] = val;
+                                         ^ ~~~
 
-Fixes: a568231f46322 ("spi: mediatek: Add spi bus for Mediatek MT8173")
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Link: https://lore.kernel.org/r/20220131141708.888710-1-benjamin.gaignard@collabora.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+The filter_error() macro allows errors to be ignored.
+If errors can be ignored, initialize variables
+so garbage will not be used.
+
+Fixes: 48cc42973509 ("ALSA: usb-audio: Filter error from connector kctl ops, too")
+Signed-off-by: Tom Rix <trix@redhat.com>
+Link: https://lore.kernel.org/r/20220126182142.1184819-1-trix@redhat.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/spi/spi-mt65xx.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/usb/mixer.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/drivers/spi/spi-mt65xx.c
-+++ b/drivers/spi/spi-mt65xx.c
-@@ -498,7 +498,7 @@ static irqreturn_t mtk_spi_interrupt(int
- 	else
- 		mdata->state = MTK_SPI_IDLE;
+--- a/sound/usb/mixer.c
++++ b/sound/usb/mixer.c
+@@ -1496,6 +1496,10 @@ error:
+ 		usb_audio_err(chip,
+ 			"cannot get connectors status: req = %#x, wValue = %#x, wIndex = %#x, type = %d\n",
+ 			UAC_GET_CUR, validx, idx, cval->val_type);
++
++		if (val)
++			*val = 0;
++
+ 		return filter_error(cval, ret);
+ 	}
  
--	if (!master->can_dma(master, master->cur_msg->spi, trans)) {
-+	if (!master->can_dma(master, NULL, trans)) {
- 		if (trans->rx_buf) {
- 			cnt = mdata->xfer_len / 4;
- 			ioread32_rep(mdata->base + SPI_RX_DATA_REG,
 
 

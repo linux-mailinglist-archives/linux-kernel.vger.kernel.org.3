@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED2DD4ABA08
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:26:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A7764ABA0A
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:26:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382586AbiBGLTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:19:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53116 "EHLO
+        id S241156AbiBGLT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:19:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376484AbiBGLPK (ORCPT
+        with ESMTP id S1376872AbiBGLPQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:15:10 -0500
+        Mon, 7 Feb 2022 06:15:16 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B0CC03FEDB;
-        Mon,  7 Feb 2022 03:14:51 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21633C0401F2;
+        Mon,  7 Feb 2022 03:14:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2090D6140B;
-        Mon,  7 Feb 2022 11:14:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08331C004E1;
-        Mon,  7 Feb 2022 11:14:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 174F76113B;
+        Mon,  7 Feb 2022 11:14:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF8F7C340F0;
+        Mon,  7 Feb 2022 11:14:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232488;
-        bh=fWA7+yWKegMS40cpvXEP1/eohdqQT4jfg/9bqF05LxM=;
+        s=korg; t=1644232491;
+        bh=+xFqXhiOYB6EBvF7+DEQtDi3iSvbToZdWSF+mNcRdGo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uTYhamhXzYsReJHw0oq+jxd1TMpCibGFRhDRtsrmv4hkFkSZvPYQWCpbyxpvi1oi5
-         3wJ1h+f1BrvaHAmxVF8nRXFe89Cb6vJc/uxpHyWsPd1oFsiHjbZV7PJigr9lc5uJOs
-         VAGOPT7CtzrNxXG44SxfbQLpXj2fLkwN+3BELkLM=
+        b=fw3rNBdGCwigApkZM8cVFyqWVeG5Y1MkXGrTBwOmzZ8UJJ/WdfbQ0cpdC51iC2E8f
+         5u5V1sXdQvn0uWCI0h72edD4/BBw+KQabE7Gpk2MOoTQcCmtjuc3SxA+b/rJ+FixV3
+         dNF6kORK6pkKyZ1bXZtUIOmXHD43X5pTHu8s/0yg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: [PATCH 4.19 06/86] PM: wakeup: simplify the output logic of pm_show_wakelocks()
-Date:   Mon,  7 Feb 2022 12:05:29 +0100
-Message-Id: <20220207103757.765932137@linuxfoundation.org>
+        stable@vger.kernel.org, Lucas Stach <l.stach@pengutronix.de>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>
+Subject: [PATCH 4.19 07/86] drm/etnaviv: relax submit size limits
+Date:   Mon,  7 Feb 2022 12:05:30 +0100
+Message-Id: <20220207103757.797933402@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220207103757.550973048@linuxfoundation.org>
 References: <20220207103757.550973048@linuxfoundation.org>
@@ -54,51 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+From: Lucas Stach <l.stach@pengutronix.de>
 
-commit c9d967b2ce40d71e968eb839f36c936b8a9cf1ea upstream.
+commit e3d26528e083e612314d4dcd713f3d5a26143ddc upstream.
 
-The buffer handling in pm_show_wakelocks() is tricky, and hopefully
-correct.  Ensure it really is correct by using sysfs_emit_at() which
-handles all of the tricky string handling logic in a PAGE_SIZE buffer
-for us automatically as this is a sysfs file being read from.
+While all userspace tried to limit commandstreams to 64K in size,
+a bug in the Mesa driver lead to command streams of up to 128K
+being submitted. Allow those to avoid breaking existing userspace.
 
-Reviewed-by: Lee Jones <lee.jones@linaro.org>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Fixes: 6dfa2fab8ddd ("drm/etnaviv: limit submit sizes")
+Cc: stable@vger.kernel.org
+Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+Reviewed-by: Christian Gmeiner <christian.gmeiner@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/power/wakelock.c |   12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
+ drivers/gpu/drm/etnaviv/etnaviv_gem_submit.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/kernel/power/wakelock.c
-+++ b/kernel/power/wakelock.c
-@@ -39,23 +39,19 @@ ssize_t pm_show_wakelocks(char *buf, boo
- {
- 	struct rb_node *node;
- 	struct wakelock *wl;
--	char *str = buf;
--	char *end = buf + PAGE_SIZE;
-+	int len = 0;
- 
- 	mutex_lock(&wakelocks_lock);
- 
- 	for (node = rb_first(&wakelocks_tree); node; node = rb_next(node)) {
- 		wl = rb_entry(node, struct wakelock, node);
- 		if (wl->ws.active == show_active)
--			str += scnprintf(str, end - str, "%s ", wl->name);
-+			len += sysfs_emit_at(buf, len, "%s ", wl->name);
+--- a/drivers/gpu/drm/etnaviv/etnaviv_gem_submit.c
++++ b/drivers/gpu/drm/etnaviv/etnaviv_gem_submit.c
+@@ -444,8 +444,8 @@ int etnaviv_ioctl_gem_submit(struct drm_
+ 		return -EINVAL;
  	}
--	if (str > buf)
--		str--;
--
--	str += scnprintf(str, end - str, "\n");
-+	len += sysfs_emit_at(buf, len, "\n");
  
- 	mutex_unlock(&wakelocks_lock);
--	return (str - buf);
-+	return len;
- }
- 
- #if CONFIG_PM_WAKELOCKS_LIMIT > 0
+-	if (args->stream_size > SZ_64K || args->nr_relocs > SZ_64K ||
+-	    args->nr_bos > SZ_64K || args->nr_pmrs > 128) {
++	if (args->stream_size > SZ_128K || args->nr_relocs > SZ_128K ||
++	    args->nr_bos > SZ_128K || args->nr_pmrs > 128) {
+ 		DRM_ERROR("submit arguments out of size limits\n");
+ 		return -EINVAL;
+ 	}
 
 

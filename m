@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 716444ABBB8
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:39:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3D1D4ABDD1
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:05:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384741AbiBGL3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:29:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34638 "EHLO
+        id S1389114AbiBGLqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:46:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383502AbiBGLWq (ORCPT
+        with ESMTP id S1386194AbiBGLdz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:22:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 317FCC043181;
-        Mon,  7 Feb 2022 03:22:46 -0800 (PST)
+        Mon, 7 Feb 2022 06:33:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02AA9C043181;
+        Mon,  7 Feb 2022 03:33:53 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C851961380;
-        Mon,  7 Feb 2022 11:22:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87F0BC004E1;
-        Mon,  7 Feb 2022 11:22:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B36C1B811BD;
+        Mon,  7 Feb 2022 11:33:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D765BC004E1;
+        Mon,  7 Feb 2022 11:33:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232965;
-        bh=fQ6HmfmTWZIJTOD7EvLAW2lH/Y8C1gMM3DzkQZuDHbA=;
+        s=korg; t=1644233631;
+        bh=a/ZBpKbDDQqi+MpGt1DElsti8XZTAvY6yZ+reuerCY8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JjPnq30qzdSm/XPVr1VECdL8S1zvh+/1iJhUtWxY0Qquq5eEk5r9InXGOptuMs2xg
-         UzuI4YlyebEfTeqvMD3uQQCKN6yeKFSpPQHaaq6Iw0T0Ksa5Fj7NIMK0GT4AJUzqzk
-         jLLu+ScPnyIZ4OTsudi4vEIOk6VnixUrTITxfnKk=
+        b=1e9wP5hQXHZbKyQJuQARp7gBbJ9zkcCDm4iFfSTODniHj6bwn4kllJFstheV/8nYQ
+         rk+dnp8wBpOyJ8pvaPqLKKIZda2/K9Qj9vsOXJotdroEa5TcgFOy93V7hH9qehpO5r
+         PK9zUZ7AsZCRrcWRGE9DxmQ6uvMka2mXBNaWcg4U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Devarsh Thakkar <devarsh.thakkar@xilinx.com>,
-        Robert Hancock <robert.hancock@calian.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.10 46/74] ASoC: xilinx: xlnx_formatter_pcm: Make buffer bytes multiple of period bytes
+        stable@vger.kernel.org, Lior Nahmanson <liorna@nvidia.com>,
+        Raed Salem <raeds@nvidia.com>,
+        Antoine Tenart <atenart@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.16 073/126] net: macsec: Fix offload support for NETDEV_UNREGISTER event
 Date:   Mon,  7 Feb 2022 12:06:44 +0100
-Message-Id: <20220207103758.733259813@linuxfoundation.org>
+Message-Id: <20220207103806.631360833@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103757.232676988@linuxfoundation.org>
-References: <20220207103757.232676988@linuxfoundation.org>
+In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
+References: <20220207103804.053675072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,90 +56,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Hancock <robert.hancock@calian.com>
+From: Lior Nahmanson <liorna@nvidia.com>
 
-commit e958b5884725dac86d36c1e7afe5a55f31feb0b2 upstream.
+commit 9cef24c8b76c1f6effe499d2f131807c90f7ce9a upstream.
 
-This patch is based on one in the Xilinx kernel tree, "ASoc: xlnx: Make
-buffer bytes multiple of period bytes" by Devarsh Thakkar. The same
-issue exists in the mainline version of the driver. The original
-patch description is as follows:
+Current macsec netdev notify handler handles NETDEV_UNREGISTER event by
+releasing relevant SW resources only, this causes resources leak in case
+of macsec HW offload, as the underlay driver was not notified to clean
+it's macsec offload resources.
 
-"The Xilinx Audio Formatter IP has a constraint on period
-bytes to be multiple of 64. This leads to driver changing
-the period size to suitable frames such that period bytes
-are multiple of 64.
+Fix by calling the underlay driver to clean it's relevant resources
+by moving offload handling from macsec_dellink() to macsec_common_dellink()
+when handling NETDEV_UNREGISTER event.
 
-Now since period bytes and period size are updated but not
-the buffer bytes, this may make the buffer bytes unaligned
-and not multiple of period bytes.
-
-When this happens we hear popping noise as while DMA is being
-done the buffer bytes are not enough to complete DMA access
-for last period of frame within the application buffer boundary.
-
-To avoid this, align buffer bytes too as multiple of 64, and
-set another constraint to always enforce number of periods as
-integer. Now since, there is already a rule in alsa core
-to enforce Buffer size = Number of Periods * Period Size
-this automatically aligns buffer bytes as multiple of period
-bytes."
-
-Fixes: 6f6c3c36f091 ("ASoC: xlnx: add pcm formatter platform driver")
-Cc: Devarsh Thakkar <devarsh.thakkar@xilinx.com>
-Signed-off-by: Robert Hancock <robert.hancock@calian.com>
-Link: https://lore.kernel.org/r/20220107214711.1100162-2-robert.hancock@calian.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: 3cf3227a21d1 ("net: macsec: hardware offloading infrastructure")
+Signed-off-by: Lior Nahmanson <liorna@nvidia.com>
+Reviewed-by: Raed Salem <raeds@nvidia.com>
+Signed-off-by: Raed Salem <raeds@nvidia.com>
+Reviewed-by: Antoine Tenart <atenart@kernel.org>
+Link: https://lore.kernel.org/r/1643542141-28956-1-git-send-email-raeds@nvidia.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/xilinx/xlnx_formatter_pcm.c |   27 ++++++++++++++++++++++++---
- 1 file changed, 24 insertions(+), 3 deletions(-)
+ drivers/net/macsec.c |   24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
---- a/sound/soc/xilinx/xlnx_formatter_pcm.c
-+++ b/sound/soc/xilinx/xlnx_formatter_pcm.c
-@@ -37,6 +37,7 @@
- #define XLNX_AUD_XFER_COUNT	0x28
- #define XLNX_AUD_CH_STS_START	0x2C
- #define XLNX_BYTES_PER_CH	0x44
-+#define XLNX_AUD_ALIGN_BYTES	64
+--- a/drivers/net/macsec.c
++++ b/drivers/net/macsec.c
+@@ -3870,6 +3870,18 @@ static void macsec_common_dellink(struct
+ 	struct macsec_dev *macsec = macsec_priv(dev);
+ 	struct net_device *real_dev = macsec->real_dev;
  
- #define AUD_STS_IOC_IRQ_MASK	BIT(31)
- #define AUD_STS_CH_STS_MASK	BIT(29)
-@@ -368,12 +369,32 @@ static int xlnx_formatter_pcm_open(struc
- 	snd_soc_set_runtime_hwparams(substream, &xlnx_pcm_hardware);
- 	runtime->private_data = stream_data;
- 
--	/* Resize the period size divisible by 64 */
-+	/* Resize the period bytes as divisible by 64 */
- 	err = snd_pcm_hw_constraint_step(runtime, 0,
--					 SNDRV_PCM_HW_PARAM_PERIOD_BYTES, 64);
-+					 SNDRV_PCM_HW_PARAM_PERIOD_BYTES,
-+					 XLNX_AUD_ALIGN_BYTES);
- 	if (err) {
- 		dev_err(component->dev,
--			"unable to set constraint on period bytes\n");
-+			"Unable to set constraint on period bytes\n");
-+		return err;
++	/* If h/w offloading is available, propagate to the device */
++	if (macsec_is_offloaded(macsec)) {
++		const struct macsec_ops *ops;
++		struct macsec_context ctx;
++
++		ops = macsec_get_ops(netdev_priv(dev), &ctx);
++		if (ops) {
++			ctx.secy = &macsec->secy;
++			macsec_offload(ops->mdo_del_secy, &ctx);
++		}
 +	}
 +
-+	/* Resize the buffer bytes as divisible by 64 */
-+	err = snd_pcm_hw_constraint_step(runtime, 0,
-+					 SNDRV_PCM_HW_PARAM_BUFFER_BYTES,
-+					 XLNX_AUD_ALIGN_BYTES);
-+	if (err) {
-+		dev_err(component->dev,
-+			"Unable to set constraint on buffer bytes\n");
-+		return err;
-+	}
-+
-+	/* Set periods as integer multiple */
-+	err = snd_pcm_hw_constraint_integer(runtime,
-+					    SNDRV_PCM_HW_PARAM_PERIODS);
-+	if (err < 0) {
-+		dev_err(component->dev,
-+			"Unable to set constraint on periods to be integer\n");
- 		return err;
- 	}
+ 	unregister_netdevice_queue(dev, head);
+ 	list_del_rcu(&macsec->secys);
+ 	macsec_del_dev(macsec);
+@@ -3884,18 +3896,6 @@ static void macsec_dellink(struct net_de
+ 	struct net_device *real_dev = macsec->real_dev;
+ 	struct macsec_rxh_data *rxd = macsec_data_rtnl(real_dev);
  
+-	/* If h/w offloading is available, propagate to the device */
+-	if (macsec_is_offloaded(macsec)) {
+-		const struct macsec_ops *ops;
+-		struct macsec_context ctx;
+-
+-		ops = macsec_get_ops(netdev_priv(dev), &ctx);
+-		if (ops) {
+-			ctx.secy = &macsec->secy;
+-			macsec_offload(ops->mdo_del_secy, &ctx);
+-		}
+-	}
+-
+ 	macsec_common_dellink(dev, head);
+ 
+ 	if (list_empty(&rxd->secys)) {
 
 

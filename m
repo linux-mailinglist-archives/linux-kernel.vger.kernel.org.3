@@ -2,163 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2F754AC533
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 17:16:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29CF84AC528
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 17:16:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381750AbiBGQOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 11:14:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50180 "EHLO
+        id S1345701AbiBGQOf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 11:14:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343750AbiBGQJy (ORCPT
+        with ESMTP id S1345732AbiBGQJz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 11:09:54 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1E24C0401DF;
-        Mon,  7 Feb 2022 08:09:44 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id v15-20020a17090a4ecf00b001b82db48754so14044290pjl.2;
-        Mon, 07 Feb 2022 08:09:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Bc9AHRZR1pshNQdSUMPi4giKprTpkGNBEnF9JWPwt2E=;
-        b=JAfoiZ9t8GzKsMy000nAJS6NlGY4h0Fahz0vPp4DgANVACMUHAediTakMcUf2VUbQn
-         L4U46ZbxdSfCdqgTca9qs8DK/e59ANl6k6XGndSJTQGZkQfGzKYFxaH0Aa+NKx8y9kDc
-         ROnb3EJqAhPYk8fTVtkSq4fMazHidRwyIWpzzxmKpXQBeOt+8F6Njax/Ef7P/xBIhMX6
-         UM3+Xe+w5ebHtNlZmh7kDlteUh0+9x/xEAY1QSa0Flgr5eWMFx0X0qilvVSPHp6+G9LK
-         lfr4bUoVst/4kF43XMtL0sWdJo6uU/snm/oCBT4NNwwb4SaPO5bR4n3dVy4a2NBkB56x
-         0tNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Bc9AHRZR1pshNQdSUMPi4giKprTpkGNBEnF9JWPwt2E=;
-        b=H5FQYXf6TfE5Wxhpo/QOgBbqPos4zU1aNrf6dff/4ZTTNo2qgS75gHEFlZA+uxRKO8
-         me2wg249LYVmMrQearoKgUp0DX4TLG1wC2sPzj11WjnMhhZm26ewH/bCngfSDMhdnAcI
-         OedrdPlD/Mk9CqL91ci9XUAt5Rcbv8dtr7xfA/aK9nL4o9EpGb6qoHGJeDKk8vdxrUUe
-         ntlgJEz0q/NY5VFV2A2AlrOJMdTA8Naz0mLg4LAj1zpDu6QA4EGU2PnwsrBqt45qa8SC
-         MzjzVByx9Ad7/jG9ljKflKCsEdjARSJ8IJt/9rjlYio3yd0qEnMQ0Lg91eyjZBJHGmvu
-         E+Vg==
-X-Gm-Message-State: AOAM530Ptb5r7F13yiC4Bkunh/r1w7KwwBFJTMzODD59m/w9qVUQ0Y5G
-        7DcHIuhLMxDWfSiXlUDi5tg=
-X-Google-Smtp-Source: ABdhPJxvraa0Ez4eY9PIHd2rqE7xpEpvngaRaU3dzq0slx+I8MQ6gqMKshVGQWXwXnCvEpiNZqZuDw==
-X-Received: by 2002:a17:902:a413:: with SMTP id p19mr305861plq.35.1644250184070;
-        Mon, 07 Feb 2022 08:09:44 -0800 (PST)
-Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:7:49ed:b358:ae30:a484])
-        by smtp.gmail.com with ESMTPSA id z14sm5958859pfh.173.2022.02.07.08.09.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 08:09:43 -0800 (PST)
-From:   Tianyu Lan <ltykernel@gmail.com>
-To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, brijesh.singh@amd.com,
-        michael.roth@amd.com, jroedel@suse.de, Tianyu.Lan@microsoft.com,
-        thomas.lendacky@amd.com, michael.h.kelley@microsoft.com
-Cc:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC FATCH] x86/Hyper-V: Add SEV negotiate protocol support in Isolation VM.
-Date:   Mon,  7 Feb 2022 11:09:28 -0500
-Message-Id: <20220207160928.111718-1-ltykernel@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 7 Feb 2022 11:09:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C9EEC0401E3;
+        Mon,  7 Feb 2022 08:09:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 54EABB81620;
+        Mon,  7 Feb 2022 16:09:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B487C36AE2;
+        Mon,  7 Feb 2022 16:09:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644250185;
+        bh=zmd2o9oLA0EJ0hPOoSHeAgUAtJ/i5oTwZaJJrykDlgM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=mJSTsCnbTI3gwg/8BhSVQ+RBGPrG+psB6hlPxH2TkERftMdOHpsCZTo5MNoeifO1L
+         oFrULqWEX0iWf+gGMaZH2QDadFBqmSGfutMMDcVyYKu0uwtxsIRlZPSsWP+XN7t+gA
+         r8OaZctUL0ilvXmdCUeQTDILiTKRgaqk5rtCiY+MEkaT+0HodiWd37fMVWTP+uaeya
+         0zU4tVUBj2JvaEpJfySAVL5/b0dWuwoC3v8xANFI6+v+VCvFYfU5v4dcOruIH8co/X
+         Je4AJeG6Vl3Vyo+7Euuk3LCkuySqicc0lRH4jodrf47WNRi/RLTPmyAnNHDKac1GqM
+         dpmi98M+KgR3A==
+Received: by mail-ed1-f42.google.com with SMTP id f17so14004784edd.2;
+        Mon, 07 Feb 2022 08:09:45 -0800 (PST)
+X-Gm-Message-State: AOAM532O3hG1AOvJ2wvbh2SeBUlFdEsZYiP3JcIBVdw+BfdP1NoWV6yQ
+        ZcWy/S4q7xQoelYZctvy2uOm66fB5C2TE5QfGA==
+X-Google-Smtp-Source: ABdhPJxkzi+j5PDhmc4PGrG364yBx0Lt608JLV09wibWGr9XJBFhwpweKp1UvdU3JzJzVyrWRoTz/EIpL6vQYPBMLKo=
+X-Received: by 2002:a50:e68d:: with SMTP id z13mr160190edm.307.1644250183395;
+ Mon, 07 Feb 2022 08:09:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20211129173637.303201-1-robh@kernel.org> <Yf2wTLjmcRj+AbDv@xps13.dannf>
+ <CAL_Jsq+4b4Yy8rJGJv9j9j_TCm6mTAkW5fzcDuuW-jOoiZ2GLg@mail.gmail.com> <CALdTtnuK+D7gNbEDgHbrc29pFFCR3XYAHqrK3=X_hQxUx-Seow@mail.gmail.com>
+In-Reply-To: <CALdTtnuK+D7gNbEDgHbrc29pFFCR3XYAHqrK3=X_hQxUx-Seow@mail.gmail.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Mon, 7 Feb 2022 10:09:31 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJUmjG-SiuR9T7f=5nGcSjTLhuF_382EQDf74kcqdAq_w@mail.gmail.com>
+Message-ID: <CAL_JsqJUmjG-SiuR9T7f=5nGcSjTLhuF_382EQDf74kcqdAq_w@mail.gmail.com>
+Subject: Re: [PATCH] PCI: xgene: Fix IB window setup
+To:     dann frazier <dann.frazier@canonical.com>
+Cc:     Toan Le <toan@os.amperecomputing.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Andrew Murray <amurray@thegoodpenguin.co.uk>,
+        =?UTF-8?Q?St=C3=A9phane_Graber?= <stgraber@ubuntu.com>,
+        stable <stable@vger.kernel.org>, PCI <linux-pci@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tianyu Lan <Tianyu.Lan@microsoft.com>
+On Sat, Feb 5, 2022 at 3:13 PM dann frazier <dann.frazier@canonical.com> wr=
+ote:
+>
+> On Sat, Feb 5, 2022 at 9:05 AM Rob Herring <robh@kernel.org> wrote:
+> >
+> > On Fri, Feb 4, 2022 at 5:01 PM dann frazier <dann.frazier@canonical.com=
+> wrote:
+> > >
+> > > On Mon, Nov 29, 2021 at 11:36:37AM -0600, Rob Herring wrote:
+> > > > Commit 6dce5aa59e0b ("PCI: xgene: Use inbound resources for setup")
+> > > > broke PCI support on XGene. The cause is the IB resources are now s=
+orted
+> > > > in address order instead of being in DT dma-ranges order. The resul=
+t is
+> > > > which inbound registers are used for each region are swapped. I don=
+'t
+> > > > know the details about this h/w, but it appears that IB region 0
+> > > > registers can't handle a size greater than 4GB. In any case, limiti=
+ng
+> > > > the size for region 0 is enough to get back to the original assignm=
+ent
+> > > > of dma-ranges to regions.
+> > >
+> > > hey Rob!
+> > >
+> > > I've been seeing a panic on HP Moonshoot m400 cartridges (X-Gene1) -
+> > > only during network installs - that I also bisected down to commit
+> > > 6dce5aa59e0b ("PCI: xgene: Use inbound resources for setup"). I was
+> > > hoping that this patch that fixed the issue on St=C3=A9phane's X-Gene=
+2
+> > > system would also fix my issue, but no luck. In fact, it seems to jus=
+t
+> > > makes it fail differently. Reverting both patches is required to get =
+a
+> > > v5.17-rc kernel to boot.
+> > >
+> > > I've collected the following logs - let me know if anything else woul=
+d
+> > > be useful.
+> > >
+> > > 1) v5.17-rc2+ (unmodified):
+> > >    http://dannf.org/bugs/m400-no-reverts.log
+> > >    Note that the mlx4 driver fails initialization.
+> > >
+> > > 2) v5.17-rc2+, w/o the commit that fixed St=C3=A9phane's system:
+> > >    http://dannf.org/bugs/m400-xgene2-fix-reverted.log
+> > >    Note the mlx4 MSI-X timeout, and later panic.
+> > >
+> > > 3) v5.17-rc2+, w/ both commits reverted (works)
+> > >    http://dannf.org/bugs/m400-both-reverted.log
+> >
+> > The ranges and dma-ranges addresses don't appear to match up with any
+> > upstream dts files. Can you send me the DT?
+>
+> Sure: http://dannf.org/bugs/fdt
 
-Hyper-V Isolation VM code uses sev_es_ghcb_hv_call() to read/write MSR
-via ghcb page. The SEV-ES guest should call the sev_es_negotiate_protocol()
-to negotiate the GHCB protocol version before establishing the GHCB. Call
-sev_es_negotiate_protocol() in the hyperv_init_ghcb().
+The first fix certainly is a problem. It's going to need something
+besides size to key off of (originally it was dependent on order of
+dma-ranges entries).
 
-Signed-off-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
----
-This patch based on the "Add AMD Secure Nested Paging (SEV-SNP) Guest Support"
-patchset. https://lore.kernel.org/lkml/20220128171804.569796-1-brijesh.singh@amd.com/
+The 2nd issue is the 'dma-ranges' has a second entry that is now ignored:
 
- arch/x86/hyperv/hv_init.c    | 6 ++++++
- arch/x86/include/asm/sev.h   | 2 ++
- arch/x86/kernel/sev-shared.c | 2 +-
- arch/x86/kernel/sev.c        | 4 ++--
- 4 files changed, 11 insertions(+), 3 deletions(-)
+dma-ranges =3D <0x42000000 0x40 0x00 0x40 0x00 0x40 0x00 0x00>, <0x00
+0x79000000 0x00 0x79000000 0x00 0x800000>;
 
-diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
-index 24f4a06ac46a..a22303fccf02 100644
---- a/arch/x86/hyperv/hv_init.c
-+++ b/arch/x86/hyperv/hv_init.c
-@@ -28,6 +28,7 @@
- #include <linux/syscore_ops.h>
- #include <clocksource/hyperv_timer.h>
- #include <linux/highmem.h>
-+#include <asm/sev.h>
- 
- int hyperv_init_cpuhp;
- u64 hv_current_partition_id = ~0ull;
-@@ -69,6 +70,11 @@ static int hyperv_init_ghcb(void)
- 	ghcb_base = (void **)this_cpu_ptr(hv_ghcb_pg);
- 	*ghcb_base = ghcb_va;
- 
-+	sev_es_negotiate_protocol();
-+
-+	/* Write ghcb page back after negotiating protocol. */
-+	wrmsrl(MSR_AMD64_SEV_ES_GHCB, ghcb_gpa);
-+	VMGEXIT();
- 	return 0;
- }
- 
-diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
-index 7a5934af9d47..fc6b0c526492 100644
---- a/arch/x86/include/asm/sev.h
-+++ b/arch/x86/include/asm/sev.h
-@@ -120,6 +120,8 @@ extern enum es_result sev_es_ghcb_hv_call(struct ghcb *ghcb,
- 					  struct es_em_ctxt *ctxt,
- 					  u64 exit_code, u64 exit_info_1,
- 					  u64 exit_info_2);
-+extern bool sev_es_negotiate_protocol(void);
-+
- static inline int rmpadjust(unsigned long vaddr, bool rmp_psize, unsigned long attrs)
- {
- 	int rc;
-diff --git a/arch/x86/kernel/sev-shared.c b/arch/x86/kernel/sev-shared.c
-index ce06cb7c8ed0..8b8af5a8d402 100644
---- a/arch/x86/kernel/sev-shared.c
-+++ b/arch/x86/kernel/sev-shared.c
-@@ -145,7 +145,7 @@ static void snp_register_ghcb_early(unsigned long paddr)
- 		sev_es_terminate(SEV_TERM_SET_LINUX, GHCB_TERM_REGISTER);
- }
- 
--static bool sev_es_negotiate_protocol(void)
-+bool sev_es_negotiate_protocol(void)
- {
- 	u64 val;
- 
-diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-index 3568b3303314..46c53c4885ee 100644
---- a/arch/x86/kernel/sev.c
-+++ b/arch/x86/kernel/sev.c
-@@ -167,12 +167,12 @@ void noinstr __sev_es_ist_exit(void)
- 	this_cpu_write(cpu_tss_rw.x86_tss.ist[IST_INDEX_VC], *(unsigned long *)ist);
- }
- 
--static inline u64 sev_es_rd_ghcb_msr(void)
-+inline u64 sev_es_rd_ghcb_msr(void)
- {
- 	return __rdmsr(MSR_AMD64_SEV_ES_GHCB);
- }
- 
--static __always_inline void sev_es_wr_ghcb_msr(u64 val)
-+__always_inline void sev_es_wr_ghcb_msr(u64 val)
- {
- 	u32 low, high;
- 
--- 
-2.25.1
+Based on the flags (3rd addr cell: 0x0), we have an inbound config
+space which the kernel now ignores because inbound config space
+accesses make no sense. But clearly some setup is needed. Upstream, in
+contrast, sets up a memory range that includes this region, so the
+setup does happen:
 
+<0x42000000 0x00 0x00000000 0x00 0x00000000 0x80 0x00000000>
+
+Minimally, I suspect it will work if you change dma-ranges 2nd entry to:
+
+<0x42000000 0x79000000 0x00 0x79000000 0x00 0x800000>
+
+While we shouldn't break existing DTs, the moonshot DT doesn't use
+what's documented upstream. There are multiple differences compared to
+what's documented. Is upstream supposed to support upstream DTs,
+downstream DTs, and ACPI for XGene which is an abandoned platform with
+only a handful of users?
+
+Rob

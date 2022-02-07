@@ -2,132 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 406F94AB331
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 02:52:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E9374AB301
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 02:02:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348000AbiBGBwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 20:52:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35548 "EHLO
+        id S243262AbiBGBCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 20:02:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229839AbiBGBwc (ORCPT
+        with ESMTP id S230225AbiBGBCK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 20:52:32 -0500
-X-Greylist: delayed 8379 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Feb 2022 17:52:31 PST
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82270C061A73;
-        Sun,  6 Feb 2022 17:52:31 -0800 (PST)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 216MOF4L005276;
-        Sun, 6 Feb 2022 23:32:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : content-type : content-transfer-encoding :
- mime-version; s=pp1; bh=UuP/8S3/SKQ4IbTOycySOWXhpmyFsZS5NE7Z1KSmSjU=;
- b=VxMn9GAzXhdH+Aw/2MJhw848lpmxnM8kVZ6hHDMDmmEYHCwcpvffppX8aya8LPj+LEhC
- AFHvbBPal6K0JEmeiS+Qd6ZVN4BethMaLPiD1KwRp/R7f73nCNi1iqMVOxnU0MHss3dV
- GeQwl87T1JBT2e+cpr3yYDcCNFQ2sRNhbusNm9CYBB7rQWAiKzJtiOXXnWVLVhAFFBVB
- G9/i9CHBn2XfojSzZuDir+67HfPdTs0TH0h02efg9VsTt6dzbU7EqivLfR0Yxvc8QjO4
- 9ve4UYTjYF6eHhO27/EYgy75yqd3/8dIk9gpEMRLGWuu4eveGU6YUDGYeu1dl4tNNksN QQ== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3e22m5eeys-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 06 Feb 2022 23:32:50 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 216NWSoQ001044;
-        Sun, 6 Feb 2022 23:32:48 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 3e1gv8y9ta-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 06 Feb 2022 23:32:48 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 216NWkd148628178
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 6 Feb 2022 23:32:46 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6E6C1A4040;
-        Sun,  6 Feb 2022 23:32:46 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 98C7DA404D;
-        Sun,  6 Feb 2022 23:32:45 +0000 (GMT)
-Received: from sig-9-65-78-117.ibm.com (unknown [9.65.78.117])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Sun,  6 Feb 2022 23:32:45 +0000 (GMT)
-Message-ID: <3a988ebfffe725e3172a6850c3b2b603d16c2330.camel@linux.ibm.com>
-Subject: [GIT PULL] integrity: subsystem fixes for v5.17
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Sun, 06 Feb 2022 18:32:45 -0500
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: z0qb66HVzRdQY2Plmb2OSJgYTHgmgv8N
-X-Proofpoint-ORIG-GUID: z0qb66HVzRdQY2Plmb2OSJgYTHgmgv8N
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Sun, 6 Feb 2022 20:02:10 -0500
+Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96157C06173B;
+        Sun,  6 Feb 2022 17:02:09 -0800 (PST)
+Received: by mail-vk1-xa2e.google.com with SMTP id o11so6059408vkl.11;
+        Sun, 06 Feb 2022 17:02:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=8jrX21L6J3v8bF9fJZsr/4TxVcgur1Mg0vbwPmFjsrk=;
+        b=qIZEEhYuBBgsKwJMK9eMXnprvlx/n4XdCiLPfsB69YckfKa4Dx2+NjhIU6x1jeBU5G
+         NNWHHj98G40YEKNXNsIAZ5o+cFmafaQH9mtajz+E7KT+ds9Pw6PnL5ohf8xqkb2rnvjo
+         MhNYVk+VgYA8oCVzCA1UZ4fMbszrROTJ0F0i1FNgKhHwSFaLsbIh4qZtKN/GCVM8tztd
+         g2bDz65OYoue0U0KRufhQf0Xgg6O0LHFWijS97ehrCqo7L18ZYYwZtq9lHRed7fyZIPN
+         AqNEgwOCAM4533MkxeQTI7tm4TfthZv4p9XW6qxFFeSv2x/PU+E3AT9QcbA0n4KzXFnk
+         KQKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=8jrX21L6J3v8bF9fJZsr/4TxVcgur1Mg0vbwPmFjsrk=;
+        b=jYrsGIMXqrFLHYJ9GHYAkjPoy3v10MFQDck9THArZAerwOJv6o4Nx/LvDdsdlcrPPH
+         vNtcfAW7+4tpIxfbt7RoamIIcQDLcp3JGx3DQZoNy4ImDF1OrP3C6PlbgloC6lo/rf6V
+         qlAguD2/n+xkyqQ0HAZiQx8egBuN4RGeve3LgAjiQNM+bv0/RHRbaH1CA3sHmWP747uG
+         RQ/ZZX4d726QTS7SrrSPo6rI8K7v6b1ofqkmLH46DoPMzolUqaDpb1MRTmO5W5U6dtI+
+         ox+q5TC+Ud7GQvE1rPY+kcAitcRrI/CJnhkPHFIsJC8ZNb56MVJgm1knXCmUtLgyuXyO
+         5wNQ==
+X-Gm-Message-State: AOAM530V6tyb2hIyl87k+1VPUZO4a/yw7XFpXpk26iwWrqTTCKj/43Iy
+        osZQD4kQ2g4QzfmAQPegx9Ls+H4qnPW4CPwPDTM=
+X-Google-Smtp-Source: ABdhPJyXEbojahwDUj939tV0U0vggVrNPhhwW13LEaYPAM1BNNh97XmRAne7kXrK8LL9p0GHLUubSMrPpXMivGEiaY0=
+X-Received: by 2002:a05:6122:d06:: with SMTP id az6mr4294882vkb.22.1644195728353;
+ Sun, 06 Feb 2022 17:02:08 -0800 (PST)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-06_06,2022-02-03_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
- suspectscore=0 phishscore=0 clxscore=1011 impostorscore=0
- priorityscore=1501 malwarescore=0 mlxlogscore=999 lowpriorityscore=0
- mlxscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202060169
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220202214455.15753-1-davispuh@gmail.com> <20220202214455.15753-2-davispuh@gmail.com>
+ <Yfx39HbTJIM0GRXL@relinquished.localdomain>
+In-Reply-To: <Yfx39HbTJIM0GRXL@relinquished.localdomain>
+From:   =?UTF-8?B?RMSBdmlzIE1vc8SBbnM=?= <davispuh@gmail.com>
+Date:   Mon, 7 Feb 2022 03:01:57 +0200
+Message-ID: <CAOE4rSyZ4Av_G4RoeG_UVaYk1NEapYJYvheAX0Bxgk0NL9HYGQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] btrfs: prevent copying too big compressed lzo segment
+To:     Omar Sandoval <osandov@osandov.com>
+Cc:     BTRFS <linux-btrfs@vger.kernel.org>, Chris Mason <clm@fb.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+piektd., 2022. g. 4. febr., plkst. 02:48 =E2=80=94 lietot=C4=81js Omar Sand=
+oval
+(<osandov@osandov.com>) rakst=C4=ABja:
+>
+> On Wed, Feb 02, 2022 at 11:44:55PM +0200, D=C4=81vis Mos=C4=81ns wrote:
+> > Compressed length can be corrupted to be a lot larger than memory
+> > we have allocated for buffer.
+> > This will cause memcpy in copy_compressed_segment to write outside
+> > of allocated memory.
+> >
+> > This mostly results in stuck read syscall but sometimes when using
+> > btrfs send can get #GP
+> >
+> > kernel: general protection fault, probably for non-canonical address 0x=
+841551d5c1000: 0000 [#1] PREEMPT SMP NOPTI
+> > kernel: CPU: 17 PID: 264 Comm: kworker/u256:7 Tainted: P           OE  =
+   5.17.0-rc2-1 #12
+> > kernel: Workqueue: btrfs-endio btrfs_work_helper [btrfs]
+> > kernel: RIP: 0010:lzo_decompress_bio (./include/linux/fortify-string.h:=
+225 fs/btrfs/lzo.c:322 fs/btrfs/lzo.c:394) btrfs
+> > Code starting with the faulting instruction
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >    0:*  48 8b 06                mov    (%rsi),%rax              <-- tra=
+pping instruction
+> >    3:   48 8d 79 08             lea    0x8(%rcx),%rdi
+> >    7:   48 83 e7 f8             and    $0xfffffffffffffff8,%rdi
+> >    b:   48 89 01                mov    %rax,(%rcx)
+> >    e:   44 89 f0                mov    %r14d,%eax
+> >   11:   48 8b 54 06 f8          mov    -0x8(%rsi,%rax,1),%rdx
+> > kernel: RSP: 0018:ffffb110812efd50 EFLAGS: 00010212
+> > kernel: RAX: 0000000000001000 RBX: 000000009ca264c8 RCX: ffff98996e6d8f=
+f8
+> > kernel: RDX: 0000000000000064 RSI: 000841551d5c1000 RDI: ffffffff950043=
+5d
+> > kernel: RBP: ffff989a3be856c0 R08: 0000000000000000 R09: 00000000000000=
+00
+> > kernel: R10: 0000000000000000 R11: 0000000000001000 R12: ffff98996e6d80=
+00
+> > kernel: R13: 0000000000000008 R14: 0000000000001000 R15: 000841551d5c10=
+00
+> > kernel: FS:  0000000000000000(0000) GS:ffff98a09d640000(0000) knlGS:000=
+0000000000000
+> > kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > kernel: CR2: 00001e9f984d9ea8 CR3: 000000014971a000 CR4: 00000000003506=
+e0
+> > kernel: Call Trace:
+> > kernel:  <TASK>
+> > kernel: end_compressed_bio_read (fs/btrfs/compression.c:104 fs/btrfs/co=
+mpression.c:1363 fs/btrfs/compression.c:323) btrfs
+> > kernel: end_workqueue_fn (fs/btrfs/disk-io.c:1923) btrfs
+> > kernel: btrfs_work_helper (fs/btrfs/async-thread.c:326) btrfs
+> > kernel: process_one_work (./arch/x86/include/asm/jump_label.h:27 ./incl=
+ude/linux/jump_label.h:212 ./include/trace/events/workqueue.h:108 kernel/wo=
+rkqueue.c:2312)
+> > kernel: worker_thread (./include/linux/list.h:292 kernel/workqueue.c:24=
+55)
+> > kernel: ? process_one_work (kernel/workqueue.c:2397)
+> > kernel: kthread (kernel/kthread.c:377)
+> > kernel: ? kthread_complete_and_exit (kernel/kthread.c:332)
+> > kernel: ret_from_fork (arch/x86/entry/entry_64.S:301)
+> > kernel:  </TASK>
+> >
+> > Signed-off-by: D=C4=81vis Mos=C4=81ns <davispuh@gmail.com>
+> > ---
+> >  fs/btrfs/lzo.c | 7 +++++++
+> >  1 file changed, 7 insertions(+)
+> >
+> > diff --git a/fs/btrfs/lzo.c b/fs/btrfs/lzo.c
+> > index 31319dfcc9fb..ebaa5083f2ae 100644
+> > --- a/fs/btrfs/lzo.c
+> > +++ b/fs/btrfs/lzo.c
+> > @@ -383,6 +383,13 @@ int lzo_decompress_bio(struct list_head *ws, struc=
+t compressed_bio *cb)
+> >               kunmap(cur_page);
+> >               cur_in +=3D LZO_LEN;
+> >
+> > +             if (seg_len > WORKSPACE_CBUF_LENGTH) {
+> > +                     // seg_len shouldn't be larger than we have alloc=
+ated for workspace->cbuf
+> > +                     btrfs_err(fs_info, "unexpectedly large lzo segmen=
+t len %u", seg_len);
+> > +                     ret =3D -EUCLEAN;
+> > +                     goto out;
+> > +             }
+> > +
+>
+> Oof, the fact that we weren't checking this is pretty bad... Shouldn't
+> we also be checking that seg_len is within the size of the remaining
+> input?
+>
 
-These are fixes for recently found bugs.  One was found/noticed while
-reviewing IMA support for fsverity digests and signatures.  Two of them
-were found/noticed while working on IMA namespacing.  Plus two other bu
-gs.  All of them are for previous kernel releases.
-
-thanks,
-
-Mimi
-
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
-
-  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git tags/integrity-v5.17-fix
-
-for you to fetch changes up to 89677197ae709eb1ab3646952c44f6a171c9e74c:
-
-  ima: Do not print policy rule with inactive LSM labels (2022-02-02 11:59:54 -0500)
-
-----------------------------------------------------------------
-integrity-v5-17-fix
-
-----------------------------------------------------------------
-Eric Biggers (1):
-      ima: fix reference leak in asymmetric_verify()
-
-Roberto Sassu (1):
-      ima: Allow template selection with ima_template[_fmt]= after ima_hash=
-
-Stefan Berger (2):
-      ima: Remove ima_policy file before directory
-      ima: Do not print policy rule with inactive LSM labels
-
-Xiaoke Wang (1):
-      integrity: check the return value of audit_log_start()
-
- security/integrity/digsig_asymmetric.c | 15 +++++++++------
- security/integrity/ima/ima_fs.c        |  2 +-
- security/integrity/ima/ima_policy.c    |  8 ++++++++
- security/integrity/ima/ima_template.c  | 10 +++++++---
- security/integrity/integrity_audit.c   |  2 ++
- 5 files changed, 27 insertions(+), 10 deletions(-)
-
+I don't think that's useful. The only case where it matters is if
+final segment size is wrong and is larger than total size. In that
+case decompressing most likely will still succeed as it won't need all
+data to complete and it's safe to copy more than is used.
+It's more likely that middle segments are corrupted for which this
+check would make no difference.
+But there still is another potential issue, if total size is correct,
+but if a lot segment sizes are corrupted to be smaller than supposed
+and if they still successfully decompress then we will read outside of
+cb->compressed_pages because we check only cur_in < len_in but not
+nr_pages

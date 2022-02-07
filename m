@@ -2,112 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D8704AC952
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 20:19:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEBC04AC965
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 20:24:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236838AbiBGTSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 14:18:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46690 "EHLO
+        id S237941AbiBGTXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 14:23:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238377AbiBGTQH (ORCPT
+        with ESMTP id S238286AbiBGTSt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 14:16:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 939D8C0401DA
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 11:16:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AAE1161029
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 19:16:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03219C004E1;
-        Mon,  7 Feb 2022 19:16:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644261365;
-        bh=FX8ZhpIlZF+4RHH0iTaQPztnxFU3gZjZlumdpdlOJzg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nH2L/yXFXkWChhV3VCclL8E2NfMRs46hGDZfdUS+NeLk26ueq9blVUKofZcMxyJuv
-         4XSqNwJkk+WwgY36/WpUrWh4l08REKDiDGmOkITBFVgrOU1hLnvfQu6XYh5Y7pTpyB
-         F7wIc2ybYsHimr8PEUjZt4aB44qTn40Bx2yZ9IUZxFYfx/kbZv+BR3SDHq9ZQ4c+rg
-         4+Y613Qu9HMtCaNlXYe/hQ+VIyrmoglIWRABM9RlbME4zgJ926w4K3T6Tg6OEyI8CX
-         RlGyGXC6RTViKQ3aj80lNq4WqY8wlPQpNvTw9TU4oENNPiHPRf70MUg5/Em7N818wr
-         PfXLlO3vAFlKg==
-Date:   Mon, 7 Feb 2022 11:16:03 -0800
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Chao Yu <chao@kernel.org>
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] f2fs: skip f2fs_preallocate_blocks() for overwrite
- case
-Message-ID: <YgFv85dH0dWFTZBx@google.com>
-References: <20220204091005.49407-1-chao@kernel.org>
+        Mon, 7 Feb 2022 14:18:49 -0500
+Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EDEBC0401DA;
+        Mon,  7 Feb 2022 11:18:49 -0800 (PST)
+Received: by mail-oo1-f50.google.com with SMTP id w5-20020a4a9785000000b0030956914befso14850496ooi.9;
+        Mon, 07 Feb 2022 11:18:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Oi2kawlC4oTchPx3SrKG6H/+C9rTjQ5ALT7bD0kBsbM=;
+        b=IOTn6/dSrBVkIMLAN09WuDkrWnvOYpwd+c+bOOqH4eh43iGsETPMnjN9ZHeoRMzOZi
+         rzgPkOr1LVAJJqN+d9vZi6WRqkHq3o+JpvgbDWCcixAk/hLJTMsed3uajQXoi61F40yx
+         pZvDE/IPf+wmjMSLJ8zJ120bNL0HJzlugJXImEHuY06QyE71vSHKtdk6CbC4hrxBUCGI
+         wSdxgoQhycGcp1GjWDZY+neV74iELNSJRpEwm+RbnFWrqq6QQv5+9IvW4ZaP194zjNcR
+         IYMoVxx6SFy6MhgFzTpFyUYUCUMt/tWiK4gsNEBOv9qo+8Cma7gcRg29KiF7gpo61JN+
+         pUxQ==
+X-Gm-Message-State: AOAM532/s4MsmU+C3erDAeOtjsiX+l+rqvOWgjg/R+qNFySwDnlStAOU
+        l3MMHGmGXpcXrGOf7dD61hunbbL2gA==
+X-Google-Smtp-Source: ABdhPJzBiNPIh1ptFdSeOpWdwMnIEqTUUUtar0nzIrVQLmfyaZJXVUoObXYgq94h6Np8yJjB7Lly4w==
+X-Received: by 2002:a05:6871:4192:: with SMTP id lc18mr138702oab.207.1644261528365;
+        Mon, 07 Feb 2022 11:18:48 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id m26sm4295846ooa.36.2022.02.07.11.18.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Feb 2022 11:18:47 -0800 (PST)
+Received: (nullmailer pid 738937 invoked by uid 1000);
+        Mon, 07 Feb 2022 19:18:46 -0000
+Date:   Mon, 7 Feb 2022 13:18:46 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-samsung-soc@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH] dt-bindings: i2c: samsung,s3c2410-i2c: convert to
+ dtschema
+Message-ID: <YgFwlgXnHTIUVeOH@robh.at.kernel.org>
+References: <20220131172713.208976-1-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220204091005.49407-1-chao@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220131172713.208976-1-krzysztof.kozlowski@canonical.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/04, Chao Yu wrote:
-> There is potential hangtask happened during swapfile's writeback:
+On Mon, 31 Jan 2022 18:27:13 +0100, Krzysztof Kozlowski wrote:
+> Convert the Samsung S3C24xx/S3C64xx/S5PV210/Exynos SoC I2C Controller
+> bindings to DT schema format.
 > 
-> - loop_kthread_worker_fn		- do_checkpoint
->   - kthread_worker_fn
->    - loop_queue_work
->     - lo_rw_aio
->      - f2fs_file_write_iter
->       - f2fs_preallocate_blocks
->        - f2fs_map_blocks
-> 					 - down_write
->         - down_read
->          - rwsem_down_read_slowpath
->           - schedule
+> The conversion includes also changes/fixes to the bindings, matching the
+> real hardware and existing Linux driver:
+> 1. Do not require interrupts on samsung,exynos5-sata-phy-i2c, because
+>    there is no such.
+> 2. Do not allow gpios on samsung,exynos5-sata-phy-i2c, because they are
+>    hard-wired just like for HDMI phy.
+> 3. Do not require samsung,i2c-sda-delay and use default of 0.
+> 4. Require clock, which was always required but missing in bindings.
 > 
-> One cause is f2fs_preallocate_blocks() will always be called no matter
-> the physical block addresses are allocated or not.
-> 
-> This patch tries to check whether block addresses are all allocated with
-> i_size and i_blocks of inode, it's rough because blocks can be allocated
-> beyond i_size, however, we can afford skipping block preallocation in this
-> condition since it's not necessary to do preallocation all the time.
-> 
-> Signed-off-by: Chao Yu <chao@kernel.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 > ---
-> v2:
-> - check overwrite case with i_size and i_blocks roughly.
->  fs/f2fs/file.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+>  .../devicetree/bindings/i2c/i2c-s3c2410.txt   |  58 -------
+>  .../bindings/i2c/samsung,s3c2410-i2c.yaml     | 164 ++++++++++++++++++
+>  2 files changed, 164 insertions(+), 58 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-s3c2410.txt
+>  create mode 100644 Documentation/devicetree/bindings/i2c/samsung,s3c2410-i2c.yaml
 > 
-> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-> index cfdc41f87f5d..09565d10611d 100644
-> --- a/fs/f2fs/file.c
-> +++ b/fs/f2fs/file.c
-> @@ -4390,6 +4390,16 @@ static int f2fs_preallocate_blocks(struct kiocb *iocb, struct iov_iter *iter,
->  	int flag;
->  	int ret;
->  
-> +	/*
-> +	 * It tries to check whether block addresses are all allocated,
-> +	 * it's rough because blocks can be allocated beyond i_size,
-> +	 * however, we can afford skipping block preallocation since
-> +	 * it's not necessary all the time.
-> +	 */
-> +	if (F2FS_BLK_ALIGN(i_size_read(inode)) ==
-> +			SECTOR_TO_BLOCK(inode->i_blocks))
 
-Do we count i_blocks only for data?
-
-> +		return 0;
-> +
->  	/* If it will be an out-of-place direct write, don't bother. */
->  	if (dio && f2fs_lfs_mode(sbi))
->  		return 0;
-> -- 
-> 2.32.0
+Applied, thanks!

@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F08204AC5B9
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 17:33:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1952D4AC5A9
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 17:33:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389848AbiBGQaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 11:30:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32948 "EHLO
+        id S1382226AbiBGQaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 11:30:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387635AbiBGQ0j (ORCPT
+        with ESMTP id S1389773AbiBGQ04 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 11:26:39 -0500
+        Mon, 7 Feb 2022 11:26:56 -0500
 Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C2B0BC0401CE
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 08:26:37 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DD5CFC0401CF
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 08:26:53 -0800 (PST)
 Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 217GOeL4014415;
-        Mon, 7 Feb 2022 17:24:40 +0100
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 217GOfEK014416;
+        Mon, 7 Feb 2022 17:24:41 +0100
 From:   Willy Tarreau <w@1wt.eu>
 To:     "Paul E . McKenney" <paulmck@kernel.org>
 Cc:     Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
         Willy Tarreau <w@1wt.eu>
-Subject: [PATCH 31/42] tools/nolibc/string: add tiny versions of strncat() and strlcat()
-Date:   Mon,  7 Feb 2022 17:23:43 +0100
-Message-Id: <20220207162354.14293-32-w@1wt.eu>
+Subject: [PATCH 32/42] tools/nolibc: move exported functions to their own section
+Date:   Mon,  7 Feb 2022 17:23:44 +0100
+Message-Id: <20220207162354.14293-33-w@1wt.eu>
 X-Mailer: git-send-email 2.17.5
 In-Reply-To: <20220207162354.14293-1-w@1wt.eu>
 References: <20220207162354.14293-1-w@1wt.eu>
@@ -37,83 +37,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While these functions are often dangerous, forcing the user to work
-around their absence is often much worse. Let's provide small versions
-of each of them. The respective sizes in bytes on a few architectures
-are:
+Some functions like raise() and memcpy() are permanently exported because
+they're needed by libgcc on certain platforms. However most of the time
+they are not needed and needlessly take space.
 
-  strncat(): x86:0x33 mips:0x68 arm:0x3c
-  strlcat(): x86:0x25 mips:0x4c arm:0x2c
-
-The two are quite different, and strncat() is even different from
-strncpy() in that it limits the amount of data it copies and will always
-terminate the output by one zero, while strlcat() will always limit the
-total output to the specified size and will put a zero if possible.
+Let's move them to their own sub-section, called .text.nolibc_<function>.
+This allows ld to get rid of them if unused when passed --gc-sections.
 
 Signed-off-by: Willy Tarreau <w@1wt.eu>
 ---
- tools/include/nolibc/string.h | 41 +++++++++++++++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
+ tools/include/nolibc/stdlib.h | 2 +-
+ tools/include/nolibc/string.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/include/nolibc/string.h b/tools/include/nolibc/string.h
-index 7c274efcdfae..c550c9ba8f4c 100644
---- a/tools/include/nolibc/string.h
-+++ b/tools/include/nolibc/string.h
-@@ -121,6 +121,28 @@ size_t nolibc_strlen(const char *str)
- 		nolibc_strlen((str));           \
- })
- 
-+static __attribute__((unused))
-+size_t strlcat(char *dst, const char *src, size_t size)
-+{
-+	size_t len;
-+	char c;
-+
-+	for (len = 0; dst[len];	len++)
-+		;
-+
-+	for (;;) {
-+		c = *src;
-+		if (len < size)
-+			dst[len] = c;
-+		if (!c)
-+			break;
-+		len++;
-+		src++;
-+	}
-+
-+	return len;
-+}
-+
- static __attribute__((unused))
- size_t strlcpy(char *dst, const char *src, size_t size)
- {
-@@ -138,6 +160,25 @@ size_t strlcpy(char *dst, const char *src, size_t size)
- 	return len;
+diff --git a/tools/include/nolibc/stdlib.h b/tools/include/nolibc/stdlib.h
+index 4cc1fdf6791e..da08ff30c15a 100644
+--- a/tools/include/nolibc/stdlib.h
++++ b/tools/include/nolibc/stdlib.h
+@@ -314,7 +314,7 @@ int msleep(unsigned int msecs)
  }
  
-+static __attribute__((unused))
-+char *strncat(char *dst, const char *src, size_t size)
-+{
-+	char *orig = dst;
-+
-+	while (*dst)
-+		dst++;
-+
-+	while (size && (*dst = *src)) {
-+		src++;
-+		dst++;
-+		size--;
-+	}
-+
-+	*dst = 0;
-+	return orig;
-+}
-+
-+
- static __attribute__((unused))
- char *strncpy(char *dst, const char *src, size_t size)
+ /* This one is not marked static as it's needed by libgcc for divide by zero */
+-__attribute__((weak,unused))
++__attribute__((weak,unused,section(".text.nolibc_raise")))
+ int raise(int signal)
  {
+ 	return sys_kill(sys_getpid(), signal);
+diff --git a/tools/include/nolibc/string.h b/tools/include/nolibc/string.h
+index c550c9ba8f4c..c1661589cb3c 100644
+--- a/tools/include/nolibc/string.h
++++ b/tools/include/nolibc/string.h
+@@ -69,7 +69,7 @@ void *memmove(void *dst, const void *src, size_t len)
+ }
+ 
+ /* must be exported, as it's used by libgcc on ARM */
+-__attribute__((weak,unused))
++__attribute__((weak,unused,section(".text.nolibc_memcpy")))
+ void *memcpy(void *dst, const void *src, size_t len)
+ {
+ 	return _nolibc_memcpy_up(dst, src, len);
 -- 
 2.35.1
 

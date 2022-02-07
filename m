@@ -2,18 +2,18 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ADE24AC9D7
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 20:48:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 053214AC9D3
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 20:48:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240031AbiBGTo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 14:44:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59264 "EHLO
+        id S240585AbiBGTpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 14:45:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240498AbiBGTnb (ORCPT
+        with ESMTP id S240458AbiBGTnb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 7 Feb 2022 14:43:31 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC43C0401E2
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7D5C0401E0
         for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 11:43:30 -0800 (PST)
 From:   John Ogness <john.ogness@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
@@ -22,29 +22,29 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=7hqu9l5kqJCuQTlbnhEqTk9n+e1ZXESo2zvx1X+Jm9U=;
-        b=KCEZ9QqCoglJ6rbCvkG2Lc4Ar8XzRF7VZjI4QZuptkHkDzaYQAEnjgTLYFZNAlbnz2/oVW
-        eBoYR16s+ED6bJSkfoLy08MNL6FOZ62lhkxWBkEtv41VcAfdPwNlv8d8nqIkfSpx4+jKgE
-        UBD+2Gf1n+d+YAZkHejYyErscW7yZqSRCRuIMh7rcFK9NexKuyJBMjZcK5MBuSHewNYKPP
-        c98/jQqwIZ17+pjVG5Dl5npTak+lHZYkoVLFWEO5gqNGkUR7xHAxAIC9nz6AuBqr8MMAWz
-        VaiTyMKi80a92MaLK/VD9E7aisaR6pt+FiSul3oWKOn3EY13u0oqMWLmk+vlNw==
+        bh=Xh+B+R8a+dMM5UjgQTfTZzdQRiBRIrfEWMgEQ7PqZr4=;
+        b=oxU66eRg65n32p2KUIctY1A+KzyV5RB9AU0O+WYXGbTgVw7BAhR7iDmj/AksDLex4cUs4a
+        QaVaO7ffQkhRCekj/ijMWwWb7PG53opfFkiiBLv5IcNOvod1hmGLn2reGRmjqcN/lu2kDd
+        KNiWvVt2izzohNp2QN9I9Fspg8dbtyel9kR62iSmUgfTWUbMxfh+YRUMFsT1aCMTSiKqX3
+        6hMy81izOCGnowK6w2daIF8fkBNRzltpqw+Y49gE07NVFJe+AeSUJlsq5l4reiDHaruSVn
+        iKZUWEnf1tk49RsKzBDhf+WYsWd10oqeJ5nyg+KEF3AuuDKcgp0vvv3+4tyebg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1644263008;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=7hqu9l5kqJCuQTlbnhEqTk9n+e1ZXESo2zvx1X+Jm9U=;
-        b=VVfxGjuen9ls0fccEf4kFtzhuyQPHueMvtv8Bjr1fNjthZWa5VvhCexTVADPGnizGOyLCM
-        vzUHA65jiZhZDABw==
+        bh=Xh+B+R8a+dMM5UjgQTfTZzdQRiBRIrfEWMgEQ7PqZr4=;
+        b=dhHckI5TD0w/WJOQt8dcmU5LVT3Gx6FAcGu6DFRs2yTgc5/WrBWsgDnx8jF+HxjIUQtFwz
+        WaClvWVYAqcf1ICw==
 To:     Petr Mladek <pmladek@suse.com>
 Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH printk v1 07/13] printk: move buffer definitions into console_emit_next_record() caller
-Date:   Mon,  7 Feb 2022 20:49:17 +0106
-Message-Id: <20220207194323.273637-8-john.ogness@linutronix.de>
+Subject: [PATCH printk v1 08/13] printk: add pr_flush()
+Date:   Mon,  7 Feb 2022 20:49:18 +0106
+Message-Id: <20220207194323.273637-9-john.ogness@linutronix.de>
 In-Reply-To: <20220207194323.273637-1-john.ogness@linutronix.de>
 References: <20220207194323.273637-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
@@ -59,181 +59,164 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Extended consoles print extended messages and do not print messages about
-dropped records.
+Provide a might-sleep function to allow waiting for threaded console
+printers to catch up to the latest logged message.
 
-Non-extended consoles print "normal" messages as well as extra messages
-about dropped records.
-
-Currently the buffers for these various message types are defined within
-the functions that might use them and their usage is based upon the
-CON_EXTENDED flag. This will be a problem when moving to kthread printers
-because each printer must be able to provide its own buffers.
-
-Move all the message buffer definitions outside of
-console_emit_next_record(). The caller knows if extended or dropped
-messages should be printed and can specify the appropriate buffers to
-use. The console_emit_next_record() and call_console_driver() functions
-can know what to print based on whether specified buffers are non-NULL.
-
-With this change, buffer definition/allocation/specification is separated
-from the code that does the various types of string printing.
+Use pr_flush() whenever it is desirable to get buffered messages
+printed before continuing: suspend_console(), resume_console(),
+console_stop(), console_start(), console_unblank().
 
 Signed-off-by: John Ogness <john.ogness@linutronix.de>
 ---
- kernel/printk/printk.c | 60 ++++++++++++++++++++++++++++++------------
- 1 file changed, 43 insertions(+), 17 deletions(-)
+ include/linux/printk.h |  7 ++++
+ kernel/printk/printk.c | 73 +++++++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 79 insertions(+), 1 deletion(-)
 
+diff --git a/include/linux/printk.h b/include/linux/printk.h
+index cd8192e611a1..6596f02d1f05 100644
+--- a/include/linux/printk.h
++++ b/include/linux/printk.h
+@@ -170,6 +170,8 @@ extern void __printk_safe_exit(void);
+ #define printk_deferred_enter __printk_safe_enter
+ #define printk_deferred_exit __printk_safe_exit
+ 
++extern bool pr_flush(int timeout_ms, bool reset_on_progress);
++
+ /*
+  * Please don't use printk_ratelimit(), because it shares ratelimiting state
+  * with all other unrelated printk_ratelimit() callsites.  Instead use
+@@ -224,6 +226,11 @@ static inline void printk_deferred_exit(void)
+ {
+ }
+ 
++static inline bool pr_flush(int timeout_ms, bool reset_on_progress)
++{
++	return true;
++}
++
+ static inline int printk_ratelimit(void)
+ {
+ 	return 0;
 diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-index 822b7b6ad6d1..02bde45c1149 100644
+index 02bde45c1149..1e80fd052bd5 100644
 --- a/kernel/printk/printk.c
 +++ b/kernel/printk/printk.c
-@@ -380,6 +380,9 @@ static struct latched_seq clear_seq = {
- /* the maximum size of a formatted record (i.e. with prefix added per line) */
- #define CONSOLE_LOG_MAX		1024
+@@ -2449,6 +2449,7 @@ void suspend_console(void)
+ 	if (!console_suspend_enabled)
+ 		return;
+ 	pr_info("Suspending console(s) (use no_console_suspend to debug)\n");
++	pr_flush(1000, true);
+ 	console_lock();
+ 	console_suspended = 1;
+ 	up_console_sem();
+@@ -2461,6 +2462,7 @@ void resume_console(void)
+ 	down_console_sem();
+ 	console_suspended = 0;
+ 	console_unlock();
++	pr_flush(1000, true);
+ }
  
-+/* the maximum size for a dropped text message */
-+#define DROPPED_TEXT_MAX	64
-+
- /* the maximum size allowed to be reserved for a record */
- #define LOG_LINE_MAX		(CONSOLE_LOG_MAX - PREFIX_MAX)
+ /**
+@@ -2802,8 +2804,10 @@ void console_unblank(void)
+ 	if (oops_in_progress) {
+ 		if (down_trylock_console_sem() != 0)
+ 			return;
+-	} else
++	} else {
++		pr_flush(1000, true);
+ 		console_lock();
++	}
  
-@@ -1877,18 +1880,18 @@ static int console_trylock_spinning(void)
- 
- /*
-  * Call the specified console driver, asking it to write out the specified
-- * text and length. For non-extended consoles, if any records have been
-+ * text and length. If @dropped_text is non-NULL and any records have been
-  * dropped, a dropped message will be written out first.
+ 	console_locked = 1;
+ 	console_may_schedule = 0;
+@@ -2869,6 +2873,7 @@ struct tty_driver *console_device(int *index)
   */
--static void call_console_driver(struct console *con, const char *text, size_t len)
-+static void call_console_driver(struct console *con, const char *text, size_t len,
-+				char *dropped_text)
+ void console_stop(struct console *console)
  {
--	static char dropped_text[64];
- 	size_t dropped_len;
++	pr_flush(1000, true);
+ 	console_lock();
+ 	console->flags &= ~CON_ENABLED;
+ 	console_unlock();
+@@ -2880,6 +2885,7 @@ void console_start(struct console *console)
+ 	console_lock();
+ 	console->flags |= CON_ENABLED;
+ 	console_unlock();
++	pr_flush(1000, true);
+ }
+ EXPORT_SYMBOL(console_start);
  
- 	trace_console_rcuidle(text, len);
+@@ -3249,6 +3255,71 @@ static int __init printk_late_init(void)
+ late_initcall(printk_late_init);
  
--	if (con->dropped && !(con->flags & CON_EXTENDED)) {
--		dropped_len = snprintf(dropped_text, sizeof(dropped_text),
-+	if (con->dropped && dropped_text) {
-+		dropped_len = snprintf(dropped_text, DROPPED_TEXT_MAX,
- 				       "** %lu printk messages dropped **\n",
- 				       con->dropped);
- 		con->dropped = 0;
-@@ -2241,6 +2244,7 @@ EXPORT_SYMBOL(_printk);
- #else /* CONFIG_PRINTK */
- 
- #define CONSOLE_LOG_MAX		0
-+#define DROPPED_TEXT_MAX	0
- #define printk_time		false
- 
- #define prb_read_valid(rb, seq, r)	false
-@@ -2264,7 +2268,10 @@ static ssize_t msg_print_ext_body(char *buf, size_t size,
- 				  struct dev_printk_info *dev_info) { return 0; }
- static void console_lock_spinning_enable(void) { }
- static int console_lock_spinning_disable_and_check(void) { return 0; }
--static void call_console_driver(struct console *con, const char *text, size_t len) {}
-+static void call_console_driver(struct console *con, const char *text, size_t len,
-+				char *dropped_text)
+ #if defined CONFIG_PRINTK
++/**
++ * pr_flush() - Wait for printing threads to catch up.
++ *
++ * @timeout_ms:        The maximum time (in ms) to wait.
++ * @reset_on_progress: Reset the timeout if forward progress is seen.
++ *
++ * A value of 0 for @timeout_ms means no waiting will occur. A value of -1
++ * represents infinite waiting.
++ *
++ * If @reset_on_progress is true, the timeout will be reset whenever any
++ * printer has been seen to make some forward progress.
++ *
++ * Context: Process context. May sleep while acquiring console lock.
++ * Return: true if all enabled printers are caught up.
++ */
++bool pr_flush(int timeout_ms, bool reset_on_progress)
 +{
++	int remaining = timeout_ms;
++	struct console *con;
++	u64 last_diff = 0;
++	u64 printk_seq;
++	u64 diff;
++	u64 seq;
++
++	might_sleep();
++
++	seq = prb_next_seq(prb);
++
++	for (;;) {
++		diff = 0;
++
++		console_lock();
++		for_each_console(con) {
++			if (!console_is_usable(con))
++				continue;
++			printk_seq = con->seq;
++			if (printk_seq < seq)
++				diff += seq - printk_seq;
++		}
++		console_unlock();
++
++		if (diff != last_diff && reset_on_progress)
++			remaining = timeout_ms;
++
++		if (diff == 0 || remaining == 0)
++			break;
++
++		if (remaining < 0) {
++			/* no timeout limit */
++			msleep(100);
++		} else if (remaining < 100) {
++			msleep(remaining);
++			remaining = 0;
++		} else {
++			msleep(100);
++			remaining -= 100;
++		}
++
++		last_diff = diff;
++	}
++
++	return (diff == 0);
 +}
- static bool suppress_message_printing(int level) { return false; }
- static void printk_delay(int level) {}
- 
-@@ -2560,6 +2567,14 @@ static void __console_unlock(void)
-  * Print one record for the given console. The record printed is whatever
-  * record is the next available record for the given console.
-  *
-+ * @text is a buffer of size CONSOLE_LOG_MAX.
-+ *
-+ * If extended messages should be printed, @ext_text is a buffer of size
-+ * CONSOLE_EXT_LOG_MAX. Otherwise @ext_text must be NULL.
-+ *
-+ * If dropped messages should be printed, @dropped_text is a buffer of size
-+ * DROPPED_TEXT_MAX. Otherwise @dropped_text must be NULL.
-+ *
-  * Requires the console_lock.
-  *
-  * Returns false if the given console has no next record to print, otherwise
-@@ -2569,17 +2584,16 @@ static void __console_unlock(void)
-  * console_lock, in which case the caller is no longer holding the
-  * console_lock. Otherwise it is set to false.
++EXPORT_SYMBOL(pr_flush);
++
+ /*
+  * Delayed printk version, for scheduler-internal messages:
   */
--static bool console_emit_next_record(struct console *con, bool *handover)
-+static bool console_emit_next_record(struct console *con, char *text, char *ext_text,
-+				     char *dropped_text, bool *handover)
- {
--	static char ext_text[CONSOLE_EXT_LOG_MAX];
--	static char text[CONSOLE_LOG_MAX];
- 	struct printk_info info;
- 	struct printk_record r;
- 	unsigned long flags;
- 	char *write_text;
- 	size_t len;
- 
--	prb_rec_init_rd(&r, &info, text, sizeof(text));
-+	prb_rec_init_rd(&r, &info, text, CONSOLE_LOG_MAX);
- 
- 	*handover = false;
- 
-@@ -2597,13 +2611,13 @@ static bool console_emit_next_record(struct console *con, bool *handover)
- 		goto skip;
- 	}
- 
--	if (con->flags & CON_EXTENDED) {
--		write_text = &ext_text[0];
--		len = info_print_ext_header(ext_text, sizeof(ext_text), r.info);
--		len += msg_print_ext_body(ext_text + len, sizeof(ext_text) - len,
-+	if (ext_text) {
-+		write_text = ext_text;
-+		len = info_print_ext_header(ext_text, CONSOLE_EXT_LOG_MAX, r.info);
-+		len += msg_print_ext_body(ext_text + len, CONSOLE_EXT_LOG_MAX - len,
- 					  &r.text_buf[0], r.info->text_len, &r.info->dev_info);
- 	} else {
--		write_text = &text[0];
-+		write_text = text;
- 		len = record_print_text(&r, console_msg_format & MSG_FORMAT_SYSLOG, printk_time);
- 	}
- 
-@@ -2621,7 +2635,7 @@ static bool console_emit_next_record(struct console *con, bool *handover)
- 	console_lock_spinning_enable();
- 
- 	stop_critical_timings();	/* don't trace print latency */
--	call_console_driver(con, write_text, len);
-+	call_console_driver(con, write_text, len, dropped_text);
- 	start_critical_timings();
- 
- 	con->seq++;
-@@ -2650,6 +2664,9 @@ static bool console_emit_next_record(struct console *con, bool *handover)
-  */
- static bool console_flush_all(bool do_cond_resched, u64 *next_seq, bool *handover)
- {
-+	static char dropped_text[DROPPED_TEXT_MAX];
-+	static char ext_text[CONSOLE_EXT_LOG_MAX];
-+	static char text[CONSOLE_LOG_MAX];
- 	bool any_usable = false;
- 	struct console *con;
- 	bool any_progress;
-@@ -2667,7 +2684,16 @@ static bool console_flush_all(bool do_cond_resched, u64 *next_seq, bool *handove
- 				continue;
- 			any_usable = true;
- 
--			progress = console_emit_next_record(con, handover);
-+			if (con->flags & CON_EXTENDED) {
-+				/* Extended consoles do not print "dropped messages". */
-+				progress = console_emit_next_record(con, &text[0],
-+								    &ext_text[0], NULL,
-+								    handover);
-+			} else {
-+				progress = console_emit_next_record(con, &text[0],
-+								    NULL, &dropped_text[0],
-+								    handover);
-+			}
- 			if (*handover)
- 				return true;
- 
 -- 
 2.30.2
 

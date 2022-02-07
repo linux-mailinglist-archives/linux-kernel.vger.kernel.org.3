@@ -2,59 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B676E4AC033
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 14:54:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE5C14AC022
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 14:52:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389199AbiBGNvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 08:51:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60428 "EHLO
+        id S1388920AbiBGNus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 08:50:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350009AbiBGN0d (ORCPT
+        with ESMTP id S229453AbiBGNZt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 08:26:33 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A971C043188
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 05:26:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644240392; x=1675776392;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=jwkzm8rlM42MAJem1ebz1/ephF2+kPSW8EADgQDGZmU=;
-  b=gU5lkKguLTy3NqyF3xKn2SQwZaCev/sEIdVrtZNe/ay3JJvXSuGHt7rW
-   Y/3t1ndxh3f0opQk4Sm2ESZnZKxJeohqHXCCrxb4PjoqVBuz5A3OkNeB8
-   z1Dj2vGPof19KIR35dIqaB6HfwEkjcRK7Khqupa/Qu7QqdbEhNuscFFm7
-   0vMGI4MkcBoFagSY8Na0OMWezjuzpI6nrYev39+t1j5sbyFG0QcHV5lHN
-   iUFOKJmDRiyRFTW7PfaTgca6J76n3Wsr83a7mvkXLqbTSbqhyLkv1/V8I
-   A9zW1HyykAn+B71DqE6U1jDnLO5SFZ5gkM7cUsY7xin4AJAYuitTlDzE1
+        Mon, 7 Feb 2022 08:25:49 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61CDEC043181;
+        Mon,  7 Feb 2022 05:25:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1644240349; x=1675776349;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=CpCEMRQxlErafOHj/cZdK42h9JdVmoku8sSemo6Teew=;
+  b=zsGcm9wguTeFqe8In3ObFEUROUCe6CWPESoqaySwtypzJ03hd9RqRKaZ
+   ryaye17qc1o1GhMR/5zDu0PRSVC5oNo7eMrRlCzmOP1TGkLemPJPowLW2
+   AEAN0a09nAE1hU9UZRdxbqxngBNHzDGBWhcmxRa0QD21GY3Ff4GTDVeuK
+   r42QyloTyOOLbZ8umc7HD/58YBlc3unrRYF1zK6Mw8vUQhxb6aB9U3W2v
+   4VGpb/6qtI9a+6fQv+yScEzwyiooEVHkWeIP8TCuObQBrg9xBJMU0M12w
+   bQ1+kp5wQ2Fh0/DP4W7hL8dfHXS5ZFchjvbivkYTgUnHzFqrNQo6F2zmk
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10250"; a="247547105"
+IronPort-SDR: 5+4/apmkhOmwfTHXf59/EUy/lO2w6YA9C5tXWx9NI8EpPY59hzLxuamFyr9rekbuEn6qHUZ8RT
+ gg0rPL6FqwUWcLK8VM+zYk6CUl9kmDkJk3EzDNPk4YIHvaGDt2XjFIEay9Y+YNbx1hiof/PabG
+ ImFcClZGMnIHq+jsm5NIwBuEmO4JyOOqleK2wEMu+NoyazRx24s2lrh/x5IxumMPBeJ/FnvHeD
+ MSJF442C87v6umRQAMAfO1sEFYAb9P2A9ybgcjdRtvRj1u7KScmpfzTWEU0303LcAqJs09KFyE
+ lxABtCJ0cqc14sKgsBdOGuyN
 X-IronPort-AV: E=Sophos;i="5.88,349,1635231600"; 
-   d="scan'208";a="247547105"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 05:26:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,349,1635231600"; 
-   d="scan'208";a="567476063"
-Received: from lkp-server01.sh.intel.com (HELO 9dd77a123018) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 07 Feb 2022 05:26:30 -0800
-Received: from kbuild by 9dd77a123018 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nH42H-0000Z7-Kz; Mon, 07 Feb 2022 13:26:29 +0000
-Date:   Mon, 7 Feb 2022 21:25:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Davidlohr Bueso <dave@stgolabs.net>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Song Liu <song@kernel.org>
-Subject: drivers/md/raid5.c:7055:9: sparse: sparse: cast removes address
- space '__percpu' of expression
-Message-ID: <202202072158.7y7wxNRC-lkp@intel.com>
+   d="scan'208";a="152182354"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Feb 2022 06:25:48 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Mon, 7 Feb 2022 06:25:47 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
+ Transport; Mon, 7 Feb 2022 06:25:47 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WDF0pXxxQq07k+yN7VbBvIS8d48PNtAovLXzWu4yC7RueWv84H47Nk/4/7uUo564znDwDARkT84c2aLGbLBTxNIJVPGCmloNgTRS8+zkDlJGOn9aunHudWISzXUWQsQt9CIXm1Ivi6UW+rOLWdaB+fgAvbdJ7Qj2s8Lw91XQxmsudlCqYiqK6eROrTOUseqLBK31BsGh5gDNgdvoOX54bVuavWOPRRoT29x0+1mPyqhIFl8/d7BEBGeBduZkot5LsDKUjH3lD8AgUJxMDwPJiZXSTscmo+IdWS4B5/RmL+Ri8qW87BLfxmbeJW+muv77ZcKgaKZ1m7dhR7cXY1sxsw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CpCEMRQxlErafOHj/cZdK42h9JdVmoku8sSemo6Teew=;
+ b=JUM3+r371oxReSGclHBMWX3YZ+SKoJnEmRGa6zHpvkygpKrCbyjV18Xfhl6aD6J+s1XxWJZ06lBdT6/WWZK9EbPWiSNDHUuB9fhsI77zTBFSkNslwfOp2ehIueHIgtVhT7PDuoIKFI5mZNh29h2uEj2qYNO+vFn1dMn83O5i3QbZJIUQjlrAqaGrz/fcdHUiUCVeiA9uqm/o7wj9DZoGzWfVLe+wIdXKJXe7ZltCsvGAR5GbvSrA6OjHOVKf2SFiXHqPThTJ5oHSjDsiREkTbgH5at506WlDoIMyzB6W5xsqLWVqPX7UIPmIwPhShRh8vkJSFDkAIjxjQ39NRB2u0A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CpCEMRQxlErafOHj/cZdK42h9JdVmoku8sSemo6Teew=;
+ b=cDQDwJRZes8naIwzjxXOlPjblr4q6Yp9g0x/hYY4jXv897KgrMAWsm1qgl4WESgXl3ChMI9WlfOxcLjr1f7vuvg9eHafs8uMXBb935f0c4VUS204M4RzOPW48TaTAttw6yixtuA63Ukg7Z3LJT8mW8z1EMkJKUEAce1mtAM5CZs=
+Received: from SA2PR11MB4874.namprd11.prod.outlook.com (2603:10b6:806:f9::23)
+ by BYAPR11MB2840.namprd11.prod.outlook.com (2603:10b6:a02:c9::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.11; Mon, 7 Feb
+ 2022 13:25:44 +0000
+Received: from SA2PR11MB4874.namprd11.prod.outlook.com
+ ([fe80::49cd:dd25:384:e918]) by SA2PR11MB4874.namprd11.prod.outlook.com
+ ([fe80::49cd:dd25:384:e918%4]) with mapi id 15.20.4951.018; Mon, 7 Feb 2022
+ 13:25:44 +0000
+From:   <Tudor.Ambarus@microchip.com>
+To:     <Claudiu.Beznea@microchip.com>, <Nicolas.Ferre@microchip.com>,
+        <alexandre.belloni@bootlin.com>, <Ludovic.Desroches@microchip.com>,
+        <robh+dt@kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: Re: [PATCH] ARM: dts: at91: remove status = "okay" from soc specific
+ dtsi
+Thread-Topic: [PATCH] ARM: dts: at91: remove status = "okay" from soc specific
+ dtsi
+Thread-Index: AQHYHCY1EGRKrmuoMkCXeLAzpYy0zA==
+Date:   Mon, 7 Feb 2022 13:25:43 +0000
+Message-ID: <1624ded8-d9ed-8a73-acde-2a6d8f57484b@microchip.com>
+References: <20220207111523.575474-1-claudiu.beznea@microchip.com>
+In-Reply-To: <20220207111523.575474-1-claudiu.beznea@microchip.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 1042539c-eb78-444d-ec29-08d9ea3d5806
+x-ms-traffictypediagnostic: BYAPR11MB2840:EE_
+x-microsoft-antispam-prvs: <BYAPR11MB28400FB414AC227769543E3EF02C9@BYAPR11MB2840.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1850;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Xpc1VOp3ho2kh+4u3VXo0W2gcVopbfosf0qVv14as1V1he+3LJxfzS30kMO+X63bUI1CiwcHpg7yQHMfIFfQXOhhVUmkknaGsnbrvtYbWsGVsbyr3gK/GUOdmwLNp0TcEGxXhnJyYI3IVC0/yx/mVE66F8brrfQ8l3RuNasR9ljuxguHHqEkMR6s1eVvk9bqDFaYMLs5QUvR5RwxmeGKSm570sZ0mjJo/sucZoHbnx4+SX8vPB1D31z5S7eEnNvbb/MLCbrSpANnIhU1lc37C2n/hrkDfVenrEMwqz3vHucISrCyuuuU/k15p58GAY+3p4Rv3NyGyC7fWobdIFu8immmsCB8GitdQQ8PaiIRNSj8liqFaiBslPP4cdDXwlsgonbu6YWzLFRPBowq/62UdBlcDZcjW21X0eN3uI5eVIUd19i85eNcsx5QYIWX7591oM2scP17hEsioD+cx3msCLHvyLZgaURLueTjVRNorX2Ox8pQkAX8YQ3js1+fZ6NgTY9ybZv4ugB4J62sQQK6KrTP6smUAX07jo7y0+HWD78u6j34QoO5j180pSqyO3b0IeWS6iPLhdBblcagT5ibq3kiv6zHBBJ9m+R5shxkJ603IzTxO9+UV0ocwMbdp3ripN8hzNXrxs9LAOWpFD0zsZYyiCR8NK88RKsyKgokELxz8quHlIWloWH+ONSJ52SO+XRu5wzFeiwsR1qUHNC9d4JIYxx3E0POB2R7n6g/xPupxLRDhAAniI/Y9yEGSRnZ6LbVb3EEMn7e5vxboJS45YW+VbPxIZ5+GG9T0EuPHyfJOPEh5GMWTRgCbUsfIKaO+VjDP/LTdQOCAjBI60IPGld9Dfr5aWWNMhRs83SbhYI=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA2PR11MB4874.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(31686004)(36756003)(31696002)(508600001)(6506007)(86362001)(53546011)(6512007)(122000001)(2906002)(5660300002)(38100700002)(4326008)(8676002)(110136005)(54906003)(64756008)(8936002)(66556008)(66946007)(66476007)(66446008)(6486002)(966005)(91956017)(38070700005)(83380400001)(186003)(316002)(71200400001)(76116006)(26005)(2616005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MlZ1TnZObEo2bkxWUGhPYzlqOGpMY3RkRzJ4dzVGb0hENldCTk91MUoyUTlz?=
+ =?utf-8?B?SzluNzZzdUgxU3FTVnZaUENPbUJrY2gra01TS0NtM1o2ckpEdmZ1U0V6U1Jt?=
+ =?utf-8?B?dE82L3Q4NWdlNjBHNWR5NUkwKzFRMURHZXRsY3cwYTVmWkliUjJQcFByamdq?=
+ =?utf-8?B?b2djQTBOR0h0ZXF4Q0dZT1ArTzM0M0YreG5EajhHNHRKdTZRSjlBOC9ybnpC?=
+ =?utf-8?B?UXNZQnhVNFhWWWl6REl5UW9RN1NLcjFpQzVMd21QcGVzN050WHp1R1Uwc1R6?=
+ =?utf-8?B?NkFJQ21MWjJIbjZuUUJ1cjJoUjJ5L2JFZ3UrSXJjZXo0YkVqbzI5RmMxODZW?=
+ =?utf-8?B?ZTRDb1ZVa010VEpialNlaW53NEYyVmsvQ3Q5VHo2THlaNTljWWRQTUpuSGJC?=
+ =?utf-8?B?R0ZiV0IvbmI5eFNoY1NtbldvZ1MzdWJWTkk0dnAzSDdza2tYQ1d5Q2krRkNV?=
+ =?utf-8?B?RDg1OUlIYlB4SFJobi94b011akZPZzlyclNBTnBJRzY2OWwxRE1mWllsRXZr?=
+ =?utf-8?B?TCtwUGZkTTl4Y1kzMzczeWFVR1puUUhraENZam01bWE5b2RTWHZQd0I4OWZw?=
+ =?utf-8?B?NFRreC9PQmRvUWRMZlpoTmFCQ0cyNzkwWnRtNVdFelpBRkt5ekE2RlJhNWZK?=
+ =?utf-8?B?bXUvdE02R2Rxa2E2KzdqN1FFakp5SGdjNTF5NHQ1RHplNEdJZTFKcCsrNVYy?=
+ =?utf-8?B?SlZaUGFZajl1ZGw4eS9kUjYyVDB0UE5YNkh1RnJza2NydjZWMXdiY2NTSGQv?=
+ =?utf-8?B?b0VaQ09xeTljV1c2WlovWXRkbGh4RUh6TE9ISlJJTm5zczZJbjZxalFXNC9q?=
+ =?utf-8?B?TEdwVm5tTzlmekFrUDNPRFYybUp5bFU4SzV0Y0NBakdVeVgzemR1V2N2eFJh?=
+ =?utf-8?B?Z2huVnQ2VFhOemZvbVBQTHM5RmtwTXIyakp2RGFDMGdVeWFZSk1kQUp3QzRK?=
+ =?utf-8?B?M0Q1azdZSkRCNStUYVh5OXN0bE14QUFWRDJqQ0JXTjBJeDdES3JHQllodXdk?=
+ =?utf-8?B?ZURLRWRobjQxNmhaaEdWd2xCMW1KR3EvZzF6MUFWRDZoS1BpZGgvR3J4RFJH?=
+ =?utf-8?B?TGVVTmVjOUVPUjNPQldwTDJTV0JWTSs1c3NWVFFxMnBMTHYwRHhpYmFpWVNn?=
+ =?utf-8?B?Y3hyK2h0YktrK1dwekMvdG9KYm5tbzFtOFBzeWRiMVl2NE5JVlFDd3c1b3cr?=
+ =?utf-8?B?d3lYc0J1RHdJNVJjMC81c1NkM2FVSDV0RnBIaDVSNkJZWFAvYkhWa1NYcWR2?=
+ =?utf-8?B?Y3pKNHFIL2x0U08xVlZHTDg2QUwvVW9kcjhtdDZoMEhFbi85YjZ3ckhWaGxG?=
+ =?utf-8?B?cjBzakhrZnJBa1oveHUzbzNubGNqbXdpeHBWZGJZYUhGK0NDS0xPcWYzSi82?=
+ =?utf-8?B?REtVME1LWUU5SnloMWxBbFh4Ynl6WVV6Vy8ybUI2ZE95ZnVNZkhlM3FtUm1J?=
+ =?utf-8?B?QmtXK0xJQTB4b2hMNk9iWnJvcHZIYnR2TFkwandWbWl2Qk5IU05OL3dZcGwr?=
+ =?utf-8?B?eDdxS1h6L25KbGFQY1p1bFU5MU05RFlGZWFCMy9iUFRRZE1yYWVkT2VJY0xF?=
+ =?utf-8?B?Rkh2MHVYbGFicUZ2cXFPeU80Slo2aWxaSGl1elhydWdubkxheG1UanFMdHZm?=
+ =?utf-8?B?UUFTQkxLL2VZcndDNGVCRGg0dzdIYml3K21VdklFTW1TeGJlOExSTUZOcmNO?=
+ =?utf-8?B?SktnaW4rdG1YM0FkUkVFTVVaMWtubml4TFA0c0lvb2tmRkxOTHRwSmNtekRY?=
+ =?utf-8?B?MzJUbDRmWGk5a09odm5HcG5TRnp3MWNBWUp5aGI2UTFjYWI1UCthaWdrVkhI?=
+ =?utf-8?B?RjExNXpCd3RPLzZmbDM2VjRESU1EM1V6ZEhzRkJBaXBCOHp1YVduN2ZNRHNm?=
+ =?utf-8?B?MCtpWHhLTmpQTm5BeU1CdVVJalllc1dKbDdUVlZGQ0VzR3NTakUxWjZxKy9O?=
+ =?utf-8?B?WENYTlRxWDZuVHJKZTJoSW9LWWtsZzBQc2xjSDQxK0RIYmJSS0VHYmhVM1RM?=
+ =?utf-8?B?UENMVGMyZUw3SWFvS3kvSE13ZGllbWZyVTlxbTQwU2JYUnRaVmdVWkJhdE1V?=
+ =?utf-8?B?K0d2Nkt1VGVDQVNQOFN6dVBRS0YxME9kQnpMbWpwdWRJdzJFa3hDUWE5Q3JI?=
+ =?utf-8?B?cEFrd3JMcGxNSGRZOCtLZGdiOVNYSVhDQUlPY3hiR1UvS216RFcrMUZvWWtG?=
+ =?utf-8?B?T204SitjSnNURGF6NWxGMkNpQVFwd1REVkVXQUJNMWwvcUhvT0pBYVVHM1Vu?=
+ =?utf-8?B?OWVCZmk0dVdUczl1WEFLWGJpblBRPT0=?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <4035CBBB996D0C488842E99433D58983@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA2PR11MB4874.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1042539c-eb78-444d-ec29-08d9ea3d5806
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Feb 2022 13:25:43.9608
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: nUxcL/Oq5UCXyEtzsKacaFvjjnxPxC9DoTSVNqEPSMGMhC6jyTudi0q6jDvKSFef3yi1Na/suSFlSlbEsZ4dTtA+LbwHd4fdXc00j1pEnas=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR11MB2840
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,142 +166,145 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   dfd42facf1e4ada021b939b4e19c935dcdd55566
-commit: 770b1d216d7371c94c88713824da4be4bc39a4e0 md/raid5: play nice with PREEMPT_RT
-date:   5 weeks ago
-config: x86_64-rhel-8.3-kselftests (https://download.01.org/0day-ci/archive/20220207/202202072158.7y7wxNRC-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=770b1d216d7371c94c88713824da4be4bc39a4e0
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 770b1d216d7371c94c88713824da4be4bc39a4e0
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-
-sparse warnings: (new ones prefixed by >>)
-   drivers/md/raid5.c: note: in included file:
-   drivers/md/raid5.h:271:14: sparse: sparse: array of flexible structures
-   drivers/md/raid5.c:641:40: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   drivers/md/raid5.c:641:40: sparse:    struct md_rdev [noderef] __rcu *
-   drivers/md/raid5.c:641:40: sparse:    struct md_rdev *
-   drivers/md/raid5.c:643:32: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   drivers/md/raid5.c:643:32: sparse:    struct md_rdev [noderef] __rcu *
-   drivers/md/raid5.c:643:32: sparse:    struct md_rdev *
-   drivers/md/raid5.c:667:40: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   drivers/md/raid5.c:667:40: sparse:    struct md_rdev [noderef] __rcu *
-   drivers/md/raid5.c:667:40: sparse:    struct md_rdev *
-   drivers/md/raid5.c:669:32: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   drivers/md/raid5.c:669:32: sparse:    struct md_rdev [noderef] __rcu *
-   drivers/md/raid5.c:669:32: sparse:    struct md_rdev *
-   drivers/md/raid5.c:1101:25: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   drivers/md/raid5.c:1101:25: sparse:    struct md_rdev [noderef] __rcu *
-   drivers/md/raid5.c:1101:25: sparse:    struct md_rdev *
-   drivers/md/raid5.c:1103:24: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   drivers/md/raid5.c:1103:24: sparse:    struct md_rdev [noderef] __rcu *
-   drivers/md/raid5.c:1103:24: sparse:    struct md_rdev *
-   drivers/md/raid5.c:3563:32: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   drivers/md/raid5.c:3563:32: sparse:    struct md_rdev [noderef] __rcu *
-   drivers/md/raid5.c:3563:32: sparse:    struct md_rdev *
-   drivers/md/raid5.c:3689:48: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   drivers/md/raid5.c:3689:48: sparse:    struct md_rdev [noderef] __rcu *
-   drivers/md/raid5.c:3689:48: sparse:    struct md_rdev *
-   drivers/md/raid5.c:3696:32: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   drivers/md/raid5.c:3696:32: sparse:    struct md_rdev [noderef] __rcu *
-   drivers/md/raid5.c:3696:32: sparse:    struct md_rdev *
-   drivers/md/raid5.c:3718:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   drivers/md/raid5.c:3718:16: sparse:    struct md_rdev [noderef] __rcu *
-   drivers/md/raid5.c:3718:16: sparse:    struct md_rdev *
-   drivers/md/raid5.c:4646:24: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   drivers/md/raid5.c:4646:24: sparse:    struct md_rdev [noderef] __rcu *
-   drivers/md/raid5.c:4646:24: sparse:    struct md_rdev *
-   drivers/md/raid5.c:4657:32: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   drivers/md/raid5.c:4657:32: sparse:    struct md_rdev [noderef] __rcu *
-   drivers/md/raid5.c:4657:32: sparse:    struct md_rdev *
-   drivers/md/raid5.c:4704:49: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   drivers/md/raid5.c:4704:49: sparse:    struct md_rdev [noderef] __rcu *
-   drivers/md/raid5.c:4704:49: sparse:    struct md_rdev *
-   drivers/md/raid5.c:4717:49: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   drivers/md/raid5.c:4717:49: sparse:    struct md_rdev [noderef] __rcu *
-   drivers/md/raid5.c:4717:49: sparse:    struct md_rdev *
-   drivers/md/raid5.c:4726:49: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   drivers/md/raid5.c:4726:49: sparse:    struct md_rdev [noderef] __rcu *
-   drivers/md/raid5.c:4726:49: sparse:    struct md_rdev *
-   drivers/md/raid5.c:4748:40: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   drivers/md/raid5.c:4748:40: sparse:    struct md_rdev [noderef] __rcu *
-   drivers/md/raid5.c:4748:40: sparse:    struct md_rdev *
-   drivers/md/raid5.c:5419:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   drivers/md/raid5.c:5419:16: sparse:    struct md_rdev [noderef] __rcu *
-   drivers/md/raid5.c:5419:16: sparse:    struct md_rdev *
-   drivers/md/raid5.c:5422:24: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   drivers/md/raid5.c:5422:24: sparse:    struct md_rdev [noderef] __rcu *
-   drivers/md/raid5.c:5422:24: sparse:    struct md_rdev *
->> drivers/md/raid5.c:7055:9: sparse: sparse: cast removes address space '__percpu' of expression
->> drivers/md/raid5.c:7055:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct lockdep_map *lock @@     got struct lockdep_map [noderef] __percpu * @@
-   drivers/md/raid5.c:7055:9: sparse:     expected struct lockdep_map *lock
-   drivers/md/raid5.c:7055:9: sparse:     got struct lockdep_map [noderef] __percpu *
->> drivers/md/raid5.c:7055:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct local_lock_t [usertype] *l @@     got struct local_lock_t [noderef] __percpu * @@
-   drivers/md/raid5.c:7055:9: sparse:     expected struct local_lock_t [usertype] *l
-   drivers/md/raid5.c:7055:9: sparse:     got struct local_lock_t [noderef] __percpu *
-   drivers/md/raid5.c:7808:40: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   drivers/md/raid5.c:7808:40: sparse:    struct md_rdev [noderef] __rcu *
-   drivers/md/raid5.c:7808:40: sparse:    struct md_rdev *
-   drivers/md/raid5.c:8021:25: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   drivers/md/raid5.c:8021:25: sparse:    struct md_rdev [noderef] __rcu *
-   drivers/md/raid5.c:8021:25: sparse:    struct md_rdev *
-   drivers/md/raid5.c:8037:25: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   drivers/md/raid5.c:8037:25: sparse:    struct md_rdev [noderef] __rcu *
-   drivers/md/raid5.c:8037:25: sparse:    struct md_rdev *
-   drivers/md/raid5.c:1476:16: sparse: sparse: dereference of noderef expression
-   drivers/md/raid5.c:1476:39: sparse: sparse: dereference of noderef expression
-   drivers/md/raid5.c:2208:54: sparse: sparse: dereference of noderef expression
-   drivers/md/raid5.c:2419:16: sparse: sparse: dereference of noderef expression
-   drivers/md/raid5.c:2421:9: sparse: sparse: dereference of noderef expression
-   drivers/md/raid5.c:2422:9: sparse: sparse: dereference of noderef expression
-   drivers/md/raid5.c:7031:23: sparse: sparse: dereference of noderef expression
-   drivers/md/raid5.c:7031:23: sparse: sparse: dereference of noderef expression
-   drivers/md/raid5.c:7032:9: sparse: sparse: dereference of noderef expression
-   drivers/md/raid5.c:7033:16: sparse: sparse: dereference of noderef expression
-   drivers/md/raid5.c:7034:9: sparse: sparse: dereference of noderef expression
-   drivers/md/raid5.c:7039:34: sparse: sparse: dereference of noderef expression
-   drivers/md/raid5.c:7040:17: sparse: sparse: dereference of noderef expression
-   drivers/md/raid5.c:7041:22: sparse: sparse: dereference of noderef expression
-   drivers/md/raid5.c:97:9: sparse: sparse: context imbalance in 'raid5_quiesce' - different lock contexts for basic block
-
-vim +/__percpu +7055 drivers/md/raid5.c
-
-  7036	
-  7037	static int alloc_scratch_buffer(struct r5conf *conf, struct raid5_percpu *percpu)
-  7038	{
-  7039		if (conf->level == 6 && !percpu->spare_page) {
-  7040			percpu->spare_page = alloc_page(GFP_KERNEL);
-  7041			if (!percpu->spare_page)
-  7042				return -ENOMEM;
-  7043		}
-  7044	
-  7045		if (scribble_alloc(percpu,
-  7046				   max(conf->raid_disks,
-  7047				       conf->previous_raid_disks),
-  7048				   max(conf->chunk_sectors,
-  7049				       conf->prev_chunk_sectors)
-  7050				   / RAID5_STRIPE_SECTORS(conf))) {
-  7051			free_scratch_buffer(conf, percpu);
-  7052			return -ENOMEM;
-  7053		}
-  7054	
-> 7055		local_lock_init(&percpu->lock);
-  7056		return 0;
-  7057	}
-  7058	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+T24gMi83LzIyIDEzOjE1LCBDbGF1ZGl1IEJlem5lYSB3cm90ZToNCj4gRVhURVJOQUwgRU1BSUw6
+IERvIG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRzIHVubGVzcyB5b3Uga25vdyB0
+aGUgY29udGVudCBpcyBzYWZlDQo+IA0KPiBSZW1vdmUgc3RhdHVzID0gIm9rYXkiIGZyb20gU29D
+IHNwZWNpZmljIGR0c2kgYXMgdGhpcyBpcyB0aGUgZGVmYXVsdA0KPiBzdGF0ZS4NCj4gDQo+IFNp
+Z25lZC1vZmYtYnk6IENsYXVkaXUgQmV6bmVhIDxjbGF1ZGl1LmJlem5lYUBtaWNyb2NoaXAuY29t
+Pg0KDQpEbyB5b3Ugd2FudCBkbyBiZSBjb25zaXN0ZW50IGFjcm9zcyA1ZDMgYXMgd2VsbD8NCg0K
+Z2l0IGdyZXAgb2theSAgYXJjaC9hcm0vYm9vdC9kdHMvc2FtYTVkKi5kdHNpDQphcmNoL2FybS9i
+b290L2R0cy9zYW1hNWQzeGNtLmR0c2k6ICAgICAgICAgICAgICAgICAgICAgIHN0YXR1cyA9ICJv
+a2F5IjsNCmFyY2gvYXJtL2Jvb3QvZHRzL3NhbWE1ZDN4Y20uZHRzaTogICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICBzdGF0dXMgPSAib2theSI7DQphcmNoL2FybS9ib290L2R0cy9zYW1hNWQz
+eGNtX2NtcC5kdHNpOiAgICAgICAgICAgICAgICAgIHN0YXR1cyA9ICJva2F5IjsNCmFyY2gvYXJt
+L2Jvb3QvZHRzL3NhbWE1ZDN4Y21fY21wLmR0c2k6ICAgICAgICAgICAgICAgICAgICAgICAgICBz
+dGF0dXMgPSAib2theSI7DQphcmNoL2FybS9ib290L2R0cy9zYW1hNWQzeGRtLmR0c2k6ICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgc3RhdHVzID0gIm9rYXkiOw0KYXJjaC9hcm0vYm9vdC9k
+dHMvc2FtYTVkM3htYi5kdHNpOiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHN0YXR1cyA9
+ICJva2F5IjsNCmFyY2gvYXJtL2Jvb3QvZHRzL3NhbWE1ZDN4bWIuZHRzaTogICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICBzdGF0dXMgPSAib2theSI7DQphcmNoL2FybS9ib290L2R0cy9zYW1h
+NWQzeG1iLmR0c2k6ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgc3RhdHVzID0gIm9rYXki
+Ow0KYXJjaC9hcm0vYm9vdC9kdHMvc2FtYTVkM3htYi5kdHNpOiAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgIHN0YXR1cyA9ICJva2F5IjsNCmFyY2gvYXJtL2Jvb3QvZHRzL3NhbWE1ZDN4bWIu
+ZHRzaTogICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzdGF0dXMgPSAib2theSI7DQphcmNo
+L2FybS9ib290L2R0cy9zYW1hNWQzeG1iLmR0c2k6ICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgc3RhdHVzID0gIm9rYXkiOw0KYXJjaC9hcm0vYm9vdC9kdHMvc2FtYTVkM3htYi5kdHNpOiAg
+ICAgICAgICAgICAgICAgICAgICBzdGF0dXMgPSAib2theSI7DQphcmNoL2FybS9ib290L2R0cy9z
+YW1hNWQzeG1iLmR0c2k6ICAgICAgICAgICAgICAgICAgICAgIHN0YXR1cyA9ICJva2F5IjsNCmFy
+Y2gvYXJtL2Jvb3QvZHRzL3NhbWE1ZDN4bWIuZHRzaTogICAgICAgICAgICAgICAgICAgICAgc3Rh
+dHVzID0gIm9rYXkiOw0KYXJjaC9hcm0vYm9vdC9kdHMvc2FtYTVkM3htYl9jbXAuZHRzaTogICAg
+ICAgICAgICAgICAgICAgICAgICAgIHN0YXR1cyA9ICJva2F5IjsNCmFyY2gvYXJtL2Jvb3QvZHRz
+L3NhbWE1ZDN4bWJfY21wLmR0c2k6ICAgICAgICAgICAgICAgICAgICAgICAgICBzdGF0dXMgPSAi
+b2theSI7DQphcmNoL2FybS9ib290L2R0cy9zYW1hNWQzeG1iX2NtcC5kdHNpOiAgICAgICAgICAg
+ICAgICAgICAgICAgICAgc3RhdHVzID0gIm9rYXkiOw0KYXJjaC9hcm0vYm9vdC9kdHMvc2FtYTVk
+M3htYl9jbXAuZHRzaTogICAgICAgICAgICAgICAgICAgICAgICAgIHN0YXR1cyA9ICJva2F5IjsN
+CmFyY2gvYXJtL2Jvb3QvZHRzL3NhbWE1ZDN4bWJfY21wLmR0c2k6ICAgICAgICAgICAgICAgICAg
+ICAgICAgICBzdGF0dXMgPSAib2theSI7DQphcmNoL2FybS9ib290L2R0cy9zYW1hNWQzeG1iX2Nt
+cC5kdHNpOiAgICAgICAgICAgICAgICAgICAgICAgICAgc3RhdHVzID0gIm9rYXkiOw0KYXJjaC9h
+cm0vYm9vdC9kdHMvc2FtYTVkM3htYl9jbXAuZHRzaTogICAgICAgICAgICAgICAgICBzdGF0dXMg
+PSAib2theSI7DQphcmNoL2FybS9ib290L2R0cy9zYW1hNWQzeG1iX2NtcC5kdHNpOiAgICAgICAg
+ICBzdGF0dXMgPSAib2theSI7DQoNCkVpdGhlciB3YXksIGZlZWwgZnJlZSB0byBhZGQ6DQpSZXZp
+ZXdlZC1ieTogVHVkb3IgQW1iYXJ1cyA8dHVkb3IuYW1iYXJ1c0BtaWNyb2NoaXAuY29tPg0KDQo+
+IC0tLQ0KPiAgYXJjaC9hcm0vYm9vdC9kdHMvc2FtOXg2MC5kdHNpIHwgNCAtLS0tDQo+ICBhcmNo
+L2FybS9ib290L2R0cy9zYW1hNWQyLmR0c2kgfCAzIC0tLQ0KPiAgYXJjaC9hcm0vYm9vdC9kdHMv
+c2FtYTVkNC5kdHNpIHwgMyAtLS0NCj4gIGFyY2gvYXJtL2Jvb3QvZHRzL3NhbWE3ZzUuZHRzaSB8
+IDMgLS0tDQo+ICA0IGZpbGVzIGNoYW5nZWQsIDEzIGRlbGV0aW9ucygtKQ0KPiANCj4gZGlmZiAt
+LWdpdCBhL2FyY2gvYXJtL2Jvb3QvZHRzL3NhbTl4NjAuZHRzaSBiL2FyY2gvYXJtL2Jvb3QvZHRz
+L3NhbTl4NjAuZHRzaQ0KPiBpbmRleCBlYzQ1Y2VkM2NkZTYuLmUzYWZhMWRhZTIwNyAxMDA2NDQN
+Cj4gLS0tIGEvYXJjaC9hcm0vYm9vdC9kdHMvc2FtOXg2MC5kdHNpDQo+ICsrKyBiL2FyY2gvYXJt
+L2Jvb3QvZHRzL3NhbTl4NjAuZHRzaQ0KPiBAQCAtMjgwLDcgKzI4MCw2IEBAIHNoYTogc2hhQGYw
+MDJjMDAwIHsNCj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBkbWEtbmFtZXMgPSAi
+dHgiOw0KPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNsb2NrcyA9IDwmcG1jIFBN
+Q19UWVBFX1BFUklQSEVSQUwgNDE+Ow0KPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+IGNsb2NrLW5hbWVzID0gInNoYV9jbGsiOw0KPiAtICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgIHN0YXR1cyA9ICJva2F5IjsNCj4gICAgICAgICAgICAgICAgICAgICAgICAgfTsNCj4gDQo+
+ICAgICAgICAgICAgICAgICAgICAgICAgIHRybmc6IHRybmdAZjAwMzAwMDAgew0KPiBAQCAtMjg4
+LDcgKzI4Nyw2IEBAIHRybmc6IHRybmdAZjAwMzAwMDAgew0KPiAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIHJlZyA9IDwweGYwMDMwMDAwIDB4MTAwPjsNCj4gICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICBpbnRlcnJ1cHRzID0gPDM4IElSUV9UWVBFX0xFVkVMX0hJR0ggMD47
+DQo+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgY2xvY2tzID0gPCZwbWMgUE1DX1RZ
+UEVfUEVSSVBIRVJBTCAzOD47DQo+IC0gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgc3Rh
+dHVzID0gIm9rYXkiOw0KPiAgICAgICAgICAgICAgICAgICAgICAgICB9Ow0KPiANCj4gICAgICAg
+ICAgICAgICAgICAgICAgICAgYWVzOiBhZXNAZjAwMzQwMDAgew0KPiBAQCAtMzA0LDcgKzMwMiw2
+IEBAIEFUOTFfWERNQUNfRFRfUEVSSUQoMzIpKT4sDQo+ICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgZG1hLW5hbWVzID0gInR4IiwgInJ4IjsNCj4gICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICBjbG9ja3MgPSA8JnBtYyBQTUNfVFlQRV9QRVJJUEhFUkFMIDM5PjsNCj4gICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICBjbG9jay1uYW1lcyA9ICJhZXNfY2xrIjsNCj4g
+LSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzdGF0dXMgPSAib2theSI7DQo+ICAgICAg
+ICAgICAgICAgICAgICAgICAgIH07DQo+IA0KPiAgICAgICAgICAgICAgICAgICAgICAgICB0ZGVz
+OiB0ZGVzQGYwMDM4MDAwIHsNCj4gQEAgLTMyMCw3ICszMTcsNiBAQCBBVDkxX1hETUFDX0RUX1BF
+UklEKDMxKSk+LA0KPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGRtYS1uYW1lcyA9
+ICJ0eCIsICJyeCI7DQo+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgY2xvY2tzID0g
+PCZwbWMgUE1DX1RZUEVfUEVSSVBIRVJBTCA0MD47DQo+ICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgY2xvY2stbmFtZXMgPSAidGRlc19jbGsiOw0KPiAtICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIHN0YXR1cyA9ICJva2F5IjsNCj4gICAgICAgICAgICAgICAgICAgICAgICAg
+fTsNCj4gDQo+ICAgICAgICAgICAgICAgICAgICAgICAgIGNsYXNzZDogY2xhc3NkQGYwMDNjMDAw
+IHsNCj4gZGlmZiAtLWdpdCBhL2FyY2gvYXJtL2Jvb3QvZHRzL3NhbWE1ZDIuZHRzaSBiL2FyY2gv
+YXJtL2Jvb3QvZHRzL3NhbWE1ZDIuZHRzaQ0KPiBpbmRleCAwOWM3NDFlOGVjYjguLjA1YWIxNmZm
+YThiYiAxMDA2NDQNCj4gLS0tIGEvYXJjaC9hcm0vYm9vdC9kdHMvc2FtYTVkMi5kdHNpDQo+ICsr
+KyBiL2FyY2gvYXJtL2Jvb3QvZHRzL3NhbWE1ZDIuZHRzaQ0KPiBAQCAtMzE2LDcgKzMxNiw2IEBA
+IHNoYUBmMDAyODAwMCB7DQo+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZG1hLW5h
+bWVzID0gInR4IjsNCj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBjbG9ja3MgPSA8
+JnBtYyBQTUNfVFlQRV9QRVJJUEhFUkFMIDEyPjsNCj4gICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICBjbG9jay1uYW1lcyA9ICJzaGFfY2xrIjsNCj4gLSAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICBzdGF0dXMgPSAib2theSI7DQo+ICAgICAgICAgICAgICAgICAgICAgICAgIH07
+DQo+IA0KPiAgICAgICAgICAgICAgICAgICAgICAgICBhZXNAZjAwMmMwMDAgew0KPiBAQCAtMzMy
+LDcgKzMzMSw2IEBAIEFUOTFfWERNQUNfRFRfUEVSSUQoMjYpKT4sDQo+ICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgZG1hLW5hbWVzID0gInR4IiwgInJ4IjsNCj4gICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICBjbG9ja3MgPSA8JnBtYyBQTUNfVFlQRV9QRVJJUEhFUkFMIDk+
+Ow0KPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNsb2NrLW5hbWVzID0gImFlc19j
+bGsiOw0KPiAtICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHN0YXR1cyA9ICJva2F5IjsN
+Cj4gICAgICAgICAgICAgICAgICAgICAgICAgfTsNCj4gDQo+ICAgICAgICAgICAgICAgICAgICAg
+ICAgIHNwaTA6IHNwaUBmODAwMDAwMCB7DQo+IEBAIC0xMDk3LDcgKzEwOTUsNiBAQCBBVDkxX1hE
+TUFDX0RUX1BFUklEKDI4KSk+LA0KPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGRt
+YS1uYW1lcyA9ICJ0eCIsICJyeCI7DQo+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+Y2xvY2tzID0gPCZwbWMgUE1DX1RZUEVfUEVSSVBIRVJBTCAxMT47DQo+ICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgY2xvY2stbmFtZXMgPSAidGRlc19jbGsiOw0KPiAtICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgIHN0YXR1cyA9ICJva2F5IjsNCj4gICAgICAgICAgICAgICAg
+ICAgICAgICAgfTsNCj4gDQo+ICAgICAgICAgICAgICAgICAgICAgICAgIGNsYXNzZDogY2xhc3Nk
+QGZjMDQ4MDAwIHsNCj4gZGlmZiAtLWdpdCBhL2FyY2gvYXJtL2Jvb3QvZHRzL3NhbWE1ZDQuZHRz
+aSBiL2FyY2gvYXJtL2Jvb3QvZHRzL3NhbWE1ZDQuZHRzaQ0KPiBpbmRleCBmNmUzZTZmNTcyNTIu
+LjRkZTE2NDkwNWUwMyAxMDA2NDQNCj4gLS0tIGEvYXJjaC9hcm0vYm9vdC9kdHMvc2FtYTVkNC5k
+dHNpDQo+ICsrKyBiL2FyY2gvYXJtL2Jvb3QvZHRzL3NhbWE1ZDQuZHRzaQ0KPiBAQCAtNjg0LDcg
+KzY4NCw2IEBAIGFlc0BmYzA0NDAwMCB7DQo+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgZG1hLW5hbWVzID0gInR4IiwgInJ4IjsNCj4gICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICBjbG9ja3MgPSA8JnBtYyBQTUNfVFlQRV9QRVJJUEhFUkFMIDEyPjsNCj4gICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICBjbG9jay1uYW1lcyA9ICJhZXNfY2xrIjsNCj4gLSAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICBzdGF0dXMgPSAib2theSI7DQo+ICAgICAgICAgICAg
+ICAgICAgICAgICAgIH07DQo+IA0KPiAgICAgICAgICAgICAgICAgICAgICAgICB0ZGVzQGZjMDRj
+MDAwIHsNCj4gQEAgLTY5OCw3ICs2OTcsNiBAQCB0ZGVzQGZjMDRjMDAwIHsNCj4gICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICBkbWEtbmFtZXMgPSAidHgiLCAicngiOw0KPiAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgIGNsb2NrcyA9IDwmcG1jIFBNQ19UWVBFX1BFUklQSEVS
+QUwgMTQ+Ow0KPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNsb2NrLW5hbWVzID0g
+InRkZXNfY2xrIjsNCj4gLSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzdGF0dXMgPSAi
+b2theSI7DQo+ICAgICAgICAgICAgICAgICAgICAgICAgIH07DQo+IA0KPiAgICAgICAgICAgICAg
+ICAgICAgICAgICBzaGFAZmMwNTAwMDAgew0KPiBAQCAtNzEwLDcgKzcwOCw2IEBAIHNoYUBmYzA1
+MDAwMCB7DQo+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZG1hLW5hbWVzID0gInR4
+IjsNCj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBjbG9ja3MgPSA8JnBtYyBQTUNf
+VFlQRV9QRVJJUEhFUkFMIDE1PjsNCj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBj
+bG9jay1uYW1lcyA9ICJzaGFfY2xrIjsNCj4gLSAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICBzdGF0dXMgPSAib2theSI7DQo+ICAgICAgICAgICAgICAgICAgICAgICAgIH07DQo+IA0KPiAg
+ICAgICAgICAgICAgICAgICAgICAgICBoc21jOiBzbWNAZmMwNWMwMDAgew0KPiBkaWZmIC0tZ2l0
+IGEvYXJjaC9hcm0vYm9vdC9kdHMvc2FtYTdnNS5kdHNpIGIvYXJjaC9hcm0vYm9vdC9kdHMvc2Ft
+YTdnNS5kdHNpDQo+IGluZGV4IGFmZDNlMDY5YjM4Mi4uMGIxZTg1NTQxZjdmIDEwMDY0NA0KPiAt
+LS0gYS9hcmNoL2FybS9ib290L2R0cy9zYW1hN2c1LmR0c2kNCj4gKysrIGIvYXJjaC9hcm0vYm9v
+dC9kdHMvc2FtYTdnNS5kdHNpDQo+IEBAIC04Myw3ICs4Myw2IEBAIHNlY3VyYW06IHNlY3VyYW1A
+ZTAwMDAwMDAgew0KPiAgICAgICAgICAgICAgICAgICAgICAgICAjc2l6ZS1jZWxscyA9IDwxPjsN
+Cj4gICAgICAgICAgICAgICAgICAgICAgICAgcmFuZ2VzID0gPDAgMHhlMDAwMDAwMCAweDQwMDA+
+Ow0KPiAgICAgICAgICAgICAgICAgICAgICAgICBuby1tZW1vcnktd2M7DQo+IC0gICAgICAgICAg
+ICAgICAgICAgICAgIHN0YXR1cyA9ICJva2F5IjsNCj4gICAgICAgICAgICAgICAgIH07DQo+IA0K
+PiAgICAgICAgICAgICAgICAgc2VjdW1vZDogc2VjdW1vZEBlMDAwNDAwMCB7DQo+IEBAIC02NTMs
+MTMgKzY1MiwxMSBAQCBzcGkxMTogc3BpQDQwMCB7DQo+ICAgICAgICAgICAgICAgICB1ZGRyYzog
+dWRkcmNAZTM4MDAwMDAgew0KPiAgICAgICAgICAgICAgICAgICAgICAgICBjb21wYXRpYmxlID0g
+Im1pY3JvY2hpcCxzYW1hN2c1LXVkZHJjIjsNCj4gICAgICAgICAgICAgICAgICAgICAgICAgcmVn
+ID0gPDB4ZTM4MDAwMDAgMHg0MDAwPjsNCj4gLSAgICAgICAgICAgICAgICAgICAgICAgc3RhdHVz
+ID0gIm9rYXkiOw0KPiAgICAgICAgICAgICAgICAgfTsNCj4gDQo+ICAgICAgICAgICAgICAgICBk
+ZHIzcGh5OiBkZHIzcGh5QGUzODA0MDAwIHsNCj4gICAgICAgICAgICAgICAgICAgICAgICAgY29t
+cGF0aWJsZSA9ICJtaWNyb2NoaXAsc2FtYTdnNS1kZHIzcGh5IjsNCj4gICAgICAgICAgICAgICAg
+ICAgICAgICAgcmVnID0gPDB4ZTM4MDQwMDAgMHgxMDAwPjsNCj4gLSAgICAgICAgICAgICAgICAg
+ICAgICAgc3RhdHVzID0gIm9rYXkiOw0KPiAgICAgICAgICAgICAgICAgfTsNCj4gDQo+ICAgICAg
+ICAgICAgICAgICBnaWM6IGludGVycnVwdC1jb250cm9sbGVyQGU4YzExMDAwIHsNCj4gLS0NCj4g
+Mi4zMi4wDQo+IA0KPiANCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX18NCj4gbGludXgtYXJtLWtlcm5lbCBtYWlsaW5nIGxpc3QNCj4gbGludXgtYXJtLWtl
+cm5lbEBsaXN0cy5pbmZyYWRlYWQub3JnDQo+IGh0dHA6Ly9saXN0cy5pbmZyYWRlYWQub3JnL21h
+aWxtYW4vbGlzdGluZm8vbGludXgtYXJtLWtlcm5lbA0KDQo=

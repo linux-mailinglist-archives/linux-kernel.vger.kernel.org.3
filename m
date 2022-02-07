@@ -2,82 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E49074AC735
+	by mail.lfdr.de (Postfix) with ESMTP id 6641C4AC734
 	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 18:24:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240838AbiBGRXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 12:23:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38340 "EHLO
+        id S240027AbiBGRXA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 7 Feb 2022 12:23:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377080AbiBGRNT (ORCPT
+        with ESMTP id S1382714AbiBGROu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 12:13:19 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6592C0401D8
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 09:13:17 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id v74so14093164pfc.1
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 09:13:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=DzeP33bVe/PRU7l8u7/ekAKVRkuaC91XduTpV1y5u6w=;
-        b=fPGGV4+OqfBLxhXgKlBk8GEqB/OZwotFkK2VUylFNXnzzoy5k7PKvKS/VII80jgz2x
-         cRWUvL8sVKacsUb96Hf2u9AzOSzpy4joW1TerxQfRN7cXU5HS+a4DMdiqRCpeAGZgpTS
-         bwcuIoPZbpT6NZqgWYXJHRpUPuvZ4z2HqFn4I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=DzeP33bVe/PRU7l8u7/ekAKVRkuaC91XduTpV1y5u6w=;
-        b=Vf44G4+8sk2OL1kEtYjWG4qcPLJQcan1pLPjaAUjcKreBCxj5Y6fStvnC9eeh31qS/
-         37PNTZMAtvi/blL73sKdv8h5vO4HMOIHlI3lqKsp4RYlaPK64RhsU6htqQPRHfTM9Cex
-         h1L66IEsWcCYDuaFtkwTuZE0pOWsaSr+VcQuV0Dvl/YWxB+vwC6ECkYrd5ni2iuEIRZq
-         BMQ8phrQHzdDxZSYifDoAl+7Q49JLJJuv5XilnXXR/qFNW4x9Z5p4k34MEH5Tjzs5kHr
-         j5p8coRLt9qZNFTD2Ri+5JGJ1jatKuFVGsYplY7xiJH30Ny3N9wjEhBs+TAawWOE5jXo
-         vHug==
-X-Gm-Message-State: AOAM532HGSImYEZyyk12+e/0DbLfspjt/+oEa5XOo5PIfETSD0UYVUTi
-        blY/XYFysQKvQc02r66RBUkdiQ==
-X-Google-Smtp-Source: ABdhPJzcsEZUqhK8vVVbURSYFjIx0GewfFVvnIgrF3hcReRYwiUJF+QzYtK2SQJb856KCk4saoJebg==
-X-Received: by 2002:a63:5a65:: with SMTP id k37mr285365pgm.431.1644253997205;
-        Mon, 07 Feb 2022 09:13:17 -0800 (PST)
-Received: from localhost ([2620:15c:202:201:21ed:2162:c25b:6bf7])
-        by smtp.gmail.com with UTF8SMTPSA id 12sm9010815pgb.71.2022.02.07.09.13.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Feb 2022 09:13:16 -0800 (PST)
-Date:   Mon, 7 Feb 2022 09:13:14 -0800
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Sai Teja Aluvala <quic_saluvala@quicinc.com>
-Cc:     marcel@holtmann.org, johan.hedberg@gmail.com,
-        linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        quic_hemantg@quicinc.com, linux-arm-msm@vger.kernel.org,
-        quic_bgodavar@quicinc.com, quic_rjliao@quicinc.com,
-        quic_hbandi@quicinc.com, abhishekpandit@chromium.org,
-        mcchou@chromium.org
-Subject: Re: [PATCH v1] arm64: dts: qcom: sc7280: Add bluetooth node on
- SC7280 crd board
-Message-ID: <YgFTKid5hOCmSJHh@google.com>
-References: <1644207878-19839-1-git-send-email-quic_saluvala@quicinc.com>
+        Mon, 7 Feb 2022 12:14:50 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 13295C0401D5
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 09:14:48 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-261-OsvrFIUnMKKFrChEQsxdNA-1; Mon, 07 Feb 2022 17:14:46 +0000
+X-MC-Unique: OsvrFIUnMKKFrChEQsxdNA-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Mon, 7 Feb 2022 17:14:43 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Mon, 7 Feb 2022 17:14:43 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Christoph Hellwig' <hch@infradead.org>,
+        Stafford Horne <shorne@gmail.com>
+CC:     LKML <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        "Jonas Bonn" <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>
+Subject: RE: [PATCH] openrisc: remove CONFIG_SET_FS
+Thread-Topic: [PATCH] openrisc: remove CONFIG_SET_FS
+Thread-Index: AQHYG/BjkR+ecsCi7UOyp98rZRODA6yIU2uA
+Date:   Mon, 7 Feb 2022 17:14:43 +0000
+Message-ID: <3744dcbbf2874875b023548aacdd8b41@AcuMS.aculab.com>
+References: <20220206013648.3491865-1-shorne@gmail.com>
+ <YgC/8ng5WX6Nt104@infradead.org>
+In-Reply-To: <YgC/8ng5WX6Nt104@infradead.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1644207878-19839-1-git-send-email-quic_saluvala@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 09:54:38AM +0530, Sai Teja Aluvala wrote:
+From: Christoph Hellwig
+> Sent: 07 February 2022 06:45
+> 
+> On Sun, Feb 06, 2022 at 10:36:47AM +0900, Stafford Horne wrote:
+> > Remove the address space override API set_fs() used for User Mode Linux.
+> 
+> This ain't UML :)
+> 
+> > +	return size <= TASK_SIZE && addr <= (TASK_SIZE - size);
+> 
+> No need for the inner braces.
 
-> Subject: arm64: dts: qcom: sc7280: Add bluetooth node on SC7280 crd board
->
-> Add Bluetooth SoC WCN6750 node for SC7280 crd board
+Since TASK_SIZE is actually an address wouldn't be better to
+swap the condition around (in every architecture).
 
-That doesn't describe accurately what this patch does. The CRD already
-has a Bluetooth node - from including sc7280-idp.dtsi - what this patch
-does is setting the vddio supply for Bluetooth on the CRD.
+	return addr <= TASK_SIZE && size <= TASK_SIZE - addr;
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+

@@ -2,68 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DEB14AC9DC
+	by mail.lfdr.de (Postfix) with ESMTP id 9C65D4AC9DD
 	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 20:49:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239861AbiBGTr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 14:47:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59970 "EHLO
+        id S242860AbiBGTsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 14:48:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238868AbiBGTpf (ORCPT
+        with ESMTP id S240441AbiBGTpm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 14:45:35 -0500
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F1CC0401E1
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 11:45:35 -0800 (PST)
-Received: by mail-qv1-xf2a.google.com with SMTP id c14so4357290qvl.12
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 11:45:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version;
-        bh=DMauDMc5TSXIXiB8XhKeO+orLbY/vKJu7K/SYnFChG8=;
-        b=GWblUf9RSFdaoJNJI+86wq8qtFBAeGNZJNH9OuK30xYa9mAD1Cjn5pIdKc0qtz+yTM
-         UQuuAJIIuoglIHelnNAOSGc7+jwabn0jE0WIXHCeVcpSmxQkLUgwJ+sSjPQyDPoXXtN/
-         WHkl6qYeJQiCAhDTU//ne/Sf/Hp+IIMV48sbvtpXimMD3hXL0Ep8C9FBupqhTLQkDExE
-         Akmi6VJCxTpvwgmbUdtEO3owu5iXwabHd6/j4kRbNa6qWr4ZxOmCdJnnEURlDSb/A8JI
-         AZQqR/No441YEIAFZbs8GW4sR8qJWgz4A2mISjUvcwV9xwP/kHn1DcHN0lcXI6xr/kJu
-         5S0Q==
+        Mon, 7 Feb 2022 14:45:42 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2859C0401DA
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 11:45:41 -0800 (PST)
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 5DD3E4003D
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 19:45:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644263134;
+        bh=ZFe7GrDYXMM8CLQ5SMwXw4UQni/9UZT69dDdKHMLJTo=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=CXNu75oEuLgWLAAwUIzGlsCrsh6PsFr867GTO1mueUbFGXRKvlITzZsVZddpE3JrP
+         PqizrVsInxFq/pkeoTx89IUwlMhbkfYZis3IIF4zKw1ZRd8IaVRg32nDI2mUGdcnON
+         c4kKuuU1kIsVHDgjJE9gt2n2B6X/3EHPnIaefbwB6KmMcjuNtB8jw00c5v7vP7i+Mt
+         x2SN9pMybsVyANw8uoBaUIPEWW3Pzcge2X8wAo7sscFusK3hMe58jIzX2Rr5zw8oFi
+         nQc3J3ux2ScW7S0cPLrZJMRKT4aDXynVF2Sez3CeFrlIZqSuY/IXgqimqLoEqtJhbh
+         bx25iwXfh+Xkg==
+Received: by mail-ed1-f70.google.com with SMTP id k11-20020a50c8cb000000b0040f84c5bc66so1515447edh.4
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 11:45:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version;
-        bh=DMauDMc5TSXIXiB8XhKeO+orLbY/vKJu7K/SYnFChG8=;
-        b=MuHSX9D2ETqVZrgodOOK97go9VN2zt1i/0qF2/I6TkufNdX7UP8a7UQKdzorpuYcvB
-         w+4bEULtfNjiM8NY4U/8hLfcTrP+UtIHdawbJuvxrcnvpt9OYnIVfLjD7A9acpwjIVrU
-         4ZQIUbmJabjjnmiYTPTIqoY4pkriCstk09Pr09m31ltrrdktCSlLG1qqW5zBpi2ZZES9
-         XGKRTec2Hs8mA0M4jVIzfs/HEi85BfO+tAU1hXai4bknUDIB+YkM5MST++E6CxSsqQHU
-         XpEqNvIsmADhd8gTJ56ZwuJgVLoDBhnRhv7c0el3KCb0yKQQZj2IX+HOZ4im25etI2MH
-         Ta/Q==
-X-Gm-Message-State: AOAM533kkcxj60CBO6OUwk275ZwCsifF5OyQwFWSY0brTj/u/SxrdR8j
-        26PLZX5V/JM0ynL3ddyCcDG50g==
-X-Google-Smtp-Source: ABdhPJyHXSRyqeE9rPO314F+wi7vAMCZfgkO3Rzrn16A7k49KyA93HmQy50W1xvPPvzZlpa6MaZe0g==
-X-Received: by 2002:ad4:576e:: with SMTP id r14mr879870qvx.47.1644263134228;
-        Mon, 07 Feb 2022 11:45:34 -0800 (PST)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id bi11sm5580026qkb.18.2022.02.07.11.45.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ZFe7GrDYXMM8CLQ5SMwXw4UQni/9UZT69dDdKHMLJTo=;
+        b=avWMlnKLIz3wHERxQyu2MSL0K3dy1PamJs6erM0efiG5AjcdDHp2vzv7HQ6IMTG5ro
+         WjsQvS59FY3laxdT3q2HtfsZ07kACFmsWH2iYWh5jNEAloCZ/ojI6enZ+7ptlamqTDls
+         gzAmh11151NK0rOavaDf3+LBuirfsM+v1Gsf7LAdn780ZpUrEDdSc2Clr4bdDOWYsKXr
+         obBEjywF5MwKXDqfAWYNi4e7h5m8BvGjcLBhcNiaaEiIbDdtQ2oAjfrs08C83J0ZuD/q
+         QidoJlGzyo6Vup+d20Pl1PjaXgSNDObKyujdrP1UD/qUHSZcavbO2J62ZCuiBt/xmQIJ
+         NZuA==
+X-Gm-Message-State: AOAM5337ZGUXGFIOLazHJFeEHYicFljuMbIiewAG5WysqqpQiFbp4dRe
+        oWRf9Ho97AxgUp7lnMlkdo5Z5maX0b2BmoGxuQvoImfre+GAAZTpUreGFxX4I9rp+taq7EI863l
+        JBouKSW9vuZQmTHY3SWBWEosHtF8h+7QtqNuNXQGlqA==
+X-Received: by 2002:a17:907:98e8:: with SMTP id ke8mr967999ejc.524.1644263132762;
         Mon, 07 Feb 2022 11:45:32 -0800 (PST)
-Date:   Mon, 7 Feb 2022 11:45:21 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.anvils
-To:     Derek Basehore <dbasehore@chromium.org>
-cc:     Rajat Jain <rajatja@google.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: 5.17-rc regression: X1 Carbon touchpad not resumed
-Message-ID: <89456fcd-a113-4c82-4b10-a9bcaefac68f@google.com>
+X-Google-Smtp-Source: ABdhPJzFbHJhhicQcTAJbCV7XtoidiI0ekXusMyI1v7J4cYe1pPDkuk3WrSncw/sfZC1Yn4c59YKVQ==
+X-Received: by 2002:a17:907:98e8:: with SMTP id ke8mr967987ejc.524.1644263132572;
+        Mon, 07 Feb 2022 11:45:32 -0800 (PST)
+Received: from [192.168.0.91] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id t22sm5595617edv.105.2022.02.07.11.45.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Feb 2022 11:45:32 -0800 (PST)
+Message-ID: <22952187-80c2-a456-f389-f70a2a30f467@canonical.com>
+Date:   Mon, 7 Feb 2022 20:45:31 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v6 1/4] spi: dt-bindings: samsung: convert to dtschema
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>, Lee Jones <lee.jones@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Andi Shyti <andi@etezian.org>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Pratyush Yadav <p.yadav@ti.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-spi@vger.kernel.org
+References: <20220124082347.32747-1-krzysztof.kozlowski@canonical.com>
+ <20220124082347.32747-2-krzysztof.kozlowski@canonical.com>
+ <YgFgQsV2bJS6mjQs@sirena.org.uk>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <YgFgQsV2bJS6mjQs@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,29 +92,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-5.17-rc[1-3] on Lenovo ThinkPad X1 Carbon 5th gen: when lid closed
-and opened and system resumed, the touchpad cursor cannot be moved.
+On 07/02/2022 19:09, Mark Brown wrote:
+> On Mon, Jan 24, 2022 at 09:23:44AM +0100, Krzysztof Kozlowski wrote:
+>> Convert the Samsung SoC (S3C24xx, S3C64xx, S5Pv210, Exynos) SPI
+>> controller bindings to DT schema format.
+> 
+> Reviewed-by: Mark Brown <broonie@kernel.org>
 
-Some dmesg from bootup:
-[    2.211061] rmi4_smbus 6-002c: registering SMbus-connected sensor
-[    2.263809] ucsi_acpi USBC000:00: UCSI_GET_PDOS failed (-95)
-[    2.291782] rmi4_f01 rmi4-00.fn01: found RMI device, manufacturer: Synaptics, product: TM3289-002, fw id: 2492434
-[    2.371377] input: Synaptics TM3289-002 as /devices/pci0000:00/0000:00:1f.4/i2c-6/6-002c/rmi4-00/input/input8
-[    2.380820] serio: RMI4 PS/2 pass-through port at rmi4-00.fn03
-...
-[    2.725471] input: PS/2 Generic Mouse as /devices/pci0000:00/0000:00:1f.4/i2c-6/6-002c/rmi4-00/rmi4-00.fn03/serio2/input/input9
+Hi Mark and Lee,
 
-Some dmesg from resume:
-[   79.221064] rmi4_smbus 6-002c: failed to get SMBus version number!
-[   79.265074] rmi4_physical rmi4-00: rmi_driver_reset_handler: Failed to read current IRQ mask.
-[   79.308330] rmi4_f01 rmi4-00.fn01: Failed to restore normal operation: -6.
-[   79.308335] rmi4_f01 rmi4-00.fn01: Resume failed with code -6.
-[   79.308339] rmi4_physical rmi4-00: Failed to suspend functions: -6
-[   79.308342] rmi4_smbus 6-002c: Failed to resume device: -6
-[   79.351967] rmi4_physical rmi4-00: Failed to read irqs, code=-6
+Thanks for the review. The dt-bindings part have Rob's review. I think
+this means Lee can pick up the entire set (SPI+MFD)?
 
-Bisection led to 172d931910e1db800f4e71e8ed92281b6f8c6ee2
-("i2c: enable async suspend/resume on i2c client devices")
-and reverting that fixes it for me.
-
-Hugh
+Best regards,
+Krzysztof

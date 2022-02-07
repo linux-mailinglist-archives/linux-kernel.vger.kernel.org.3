@@ -2,98 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CD404ACA6B
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 21:28:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1DE44ACA6A
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 21:28:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242661AbiBGU1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 15:27:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48976 "EHLO
+        id S242552AbiBGU1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 15:27:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238051AbiBGUWz (ORCPT
+        with ESMTP id S241525AbiBGUXv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 15:22:55 -0500
-Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2F86C0401DA;
-        Mon,  7 Feb 2022 12:22:53 -0800 (PST)
-Received: by mail-oo1-f54.google.com with SMTP id t75-20020a4a3e4e000000b002e9c0821d78so15093686oot.4;
-        Mon, 07 Feb 2022 12:22:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Cf75cF96xkDnXxPJYcJ4U9WkCMvyuWK346gnEuAcTZA=;
-        b=cPevAMbOLzZMf71w6HDfsIyfm41AqR/7aBU9NCJzo+67ImC+OYVUy41tw2n0T9W+/7
-         yyB3sSVv+kZVWTX9dQziBTMKzGhiDj0ObGcr9py06MAQqIi3Peh520USKYTd2jUY8MAj
-         5fSBN+TjTV1+aYjE6mmr9kXGhCtxlG0c2HUALdlilNA+ksdxEQnG8MLZPRPR5V4vMqCK
-         r2KYrpIDMP2D//atC9/k6CAltoWrTAahb/9ENIA/JdlgxlZfQCVh64jgFgfy95oR8tfY
-         Xsb2ac1d1h+JdlkG9iDX5GSo3ioBSSogn6I2/89Eflq+BFZ4A0pzqF3Ooc4PKSoHfHsl
-         KPgQ==
-X-Gm-Message-State: AOAM530gkntl8nOhYNj6L413eK0e547wULbWCky0rF3f5LKNP1oxX3ON
-        14YahPkAfqDoMqrXTZd1Jw==
-X-Google-Smtp-Source: ABdhPJxIPwPMQEK4tBgcvwf7JkxXGyj273AJTnR5MSFoTfd4NZAtv1f3WBtSNTjThuANXOrvMSU98A==
-X-Received: by 2002:a05:6870:a543:: with SMTP id p3mr224500oal.177.1644265373276;
-        Mon, 07 Feb 2022 12:22:53 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id x17sm4275899oop.1.2022.02.07.12.22.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 12:22:52 -0800 (PST)
-Received: (nullmailer pid 844681 invoked by uid 1000);
-        Mon, 07 Feb 2022 20:22:51 -0000
-Date:   Mon, 7 Feb 2022 14:22:51 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Marcel Ziswiler <marcel@ziswiler.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Olof Johansson <olof@lixom.net>, devicetree@vger.kernel.org,
-        Oliver =?iso-8859-1?Q?St=E4bler?= 
-        <oliver.staebler@bytesatwork.ch>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Peng Fan <peng.fan@nxp.com>, Marek Vasut <marex@denx.de>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH v4 01/12] arm64: dts: imx8mm: fix strange hex notation
-Message-ID: <YgF/m+X0SZxDWIt/@robh.at.kernel.org>
-References: <20220204225706.1539818-1-marcel@ziswiler.com>
- <20220204225706.1539818-2-marcel@ziswiler.com>
+        Mon, 7 Feb 2022 15:23:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6B79C0401DA;
+        Mon,  7 Feb 2022 12:23:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 78102B816F8;
+        Mon,  7 Feb 2022 20:23:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68F06C004E1;
+        Mon,  7 Feb 2022 20:23:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644265428;
+        bh=usqaXiifcEu+JIY0FJvPPoSf4O8s+5EkUbpQUKh5KyU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mqQKGW8oImfRrgLRIJs936msARKuW7MF6OO4wl5/4jfGk14W8csXorOwibKtXBS4p
+         ivQ3yCdOEV2Ed1I4uqW97PAyTfKxPQO+3OBYs7KPntk3Dl8cL9cU9XWG+MquvabU2v
+         mI2DYXDw+zbzRCkNVxN6E9Pqw8EHdCDX8MAemYQI24K3yjSJcKYs7YMsDjk6DCBpc7
+         Y0efuOcSVJRXAkAsgk1eZKFBNEDqpU2d5wiie3J+q2w80KP4MpJY905Ouf+WF0oDKV
+         ENblOEROW7KC5dpUDMOOgZVuq7NgKGZDy1T75sGyAsQ7NMML1S3ZFrjR6zWPscGxeh
+         YYuThUp1DnThQ==
+Date:   Mon, 7 Feb 2022 21:23:45 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Derek Basehore <dbasehore@chromium.org>,
+        Rajat Jain <rajatja@google.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
+Subject: Re: 5.17-rc regression: X1 Carbon touchpad not resumed
+Message-ID: <YgF/0QGFN4SppLKg@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        Derek Basehore <dbasehore@chromium.org>,
+        Rajat Jain <rajatja@google.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
+References: <89456fcd-a113-4c82-4b10-a9bcaefac68f@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="SVWOx/Z2IM0sSr6X"
 Content-Disposition: inline
-In-Reply-To: <20220204225706.1539818-2-marcel@ziswiler.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <89456fcd-a113-4c82-4b10-a9bcaefac68f@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 04 Feb 2022 23:56:55 +0100, Marcel Ziswiler wrote:
-> From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
-> 
-> Fix strange hex notation with mixed lower-case and upper-case letters.
-> 
-> Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> 
-> ---
-> 
-> (no changes since v2)
-> 
-> Changes in v2:
-> - Add Laurent's reviewed-by tag.
-> 
->  arch/arm64/boot/dts/freescale/imx8mm-pinfunc.h | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
 
-Acked-by: Rob Herring <robh@kernel.org>
+--SVWOx/Z2IM0sSr6X
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+Hello Hugh,
+
+> Bisection led to 172d931910e1db800f4e71e8ed92281b6f8c6ee2
+> ("i2c: enable async suspend/resume on i2c client devices")
+> and reverting that fixes it for me.
+
+Thank you for the report plus bisection and sorry for the regression!
+
+I will wait a few days if people come up with a fix. If not, I will
+revert the offending commit. Are you willing to test patches in case
+there will be some?
+
+All the best,
+
+   Wolfram
+
+
+--SVWOx/Z2IM0sSr6X
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIBf80ACgkQFA3kzBSg
+KbYP/w//bKPTb4uzystTG/NLAI6vfcl66Q1s10ZKVC8aEK7LS+bSSMLTiUmSf638
+vYP5hs+neOiDdeBFdhYvcm1tMlud6quQKsYugbtNLQxY1J+bBJnqMLLWZ8zn/EHf
+0G4jLNW3u3v2C88A7E6dEywMsx+8CDtdtqcDWXKljIMbV3yNLPF1c8qhHsbh8diO
+xIv6RY8KSnR37uG+3hv7TQEXLM15hc8KT7l7sMtgQb1+oMRnpsalbPmJFTyx4cy8
+zanBvoSgg3PlYx4C8/cGzc2YSaMZKPNs5PIdC2nodlL0gm6JVDIx37KuEzqVs6gA
+9r1BQzdcjPkoW87Pi7HLnTD6h/XcWb8MAK6gnu9hO1UxjCTFMFxMnYQ6wpyni5rk
+bXr/MhALZfMh+T+yUFe3p3zrRZEp7ek9uKiPFXFdjg/gNaxen5BgYsXBMlUjU0rh
+U6UZce3AP9Oct+lDa9OrwoG7l58pTZRb7PCBjpS3B07u5YngzXybf4/vdbak4se4
+DFWMCBKaWgngJPEcu6z7ar2BOhwAFWFNuNUPDWulW3KsEVf6GUh9rDAyHaLAWnwN
+2RqsAkMs1IsFJWXwxM4EiJSEiPB+nKKXW4BPRjCQ6NS0Yn8duiGOphlgQPK8oC36
++53oDlSCYXEWEp2W0zhZJOv8l9hmDabbwJopfSaxq2nmLOyGYJ0=
+=a8CQ
+-----END PGP SIGNATURE-----
+
+--SVWOx/Z2IM0sSr6X--

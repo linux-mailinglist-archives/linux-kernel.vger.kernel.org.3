@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F73D4ABD08
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:55:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A436E4ABBD9
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:44:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388669AbiBGLo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:44:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46002 "EHLO
+        id S1385910AbiBGLdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:33:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385861AbiBGLcw (ORCPT
+        with ESMTP id S1383135AbiBGLVk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:32:52 -0500
+        Mon, 7 Feb 2022 06:21:40 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A257C043188;
-        Mon,  7 Feb 2022 03:32:51 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45AFBC0401C2;
+        Mon,  7 Feb 2022 03:21:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0077160A67;
-        Mon,  7 Feb 2022 11:32:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B77FFC340F0;
-        Mon,  7 Feb 2022 11:32:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 26C7561380;
+        Mon,  7 Feb 2022 11:21:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEB05C004E1;
+        Mon,  7 Feb 2022 11:21:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233570;
-        bh=lV1mkuh7zyPWVcvLXzJOB2GkO6mowb3cwC8cFqZQMqI=;
+        s=korg; t=1644232895;
+        bh=nX/spthLodhzppYhHdGfbmaXFQuRzGLMi4gWVQbVVgg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=H/bZJPj2Y9ph58jwNLPAf9NPLUmeVVT5Nj765uIEgedxjkIJo+8oBVtv+PG/nos1b
-         oy5YKNAO+C+UjiasiApBwLE7qlecButwf++mk6H9BgxSHGaRfIgi+G1udUgSL3CV9U
-         KkGuHJUHFdmhSUoN2RZukUWWMrGnEY0yalF+hNGg=
+        b=y3d/ZdracQ5NCwFTJ7vzC+Zd2Z2KvnWl0bhPba4tcMD0Y7eG8pRn1fpQKanJ16YX7
+         e/60qD6FkRZNcZ3ApsLax/e+S5FJPCVoPF+7QnL01kUy6/RO7RjKKZ3tufiZN5uOP7
+         4ijx9blC/CfvtxoDoCCvumyaqsQnA4//f0iDzIBg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jared Holzman <jared.holzman@excelero.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Subject: [PATCH 5.16 052/126] RDMA/siw: Fix broken RDMA Read Fence/Resume logic.
-Date:   Mon,  7 Feb 2022 12:06:23 +0100
-Message-Id: <20220207103805.913090166@linuxfoundation.org>
+        stable@vger.kernel.org,
+        syzbot+e3f96c43d19782dd14a7@syzkaller.appspotmail.com,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Maor Gottlieb <maorg@nvidia.com>,
+        Leon Romanovsky <leonro@nvidia.com>
+Subject: [PATCH 5.10 26/74] RDMA/ucma: Protect mc during concurrent multicast leaves
+Date:   Mon,  7 Feb 2022 12:06:24 +0100
+Message-Id: <20220207103758.100071214@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
-References: <20220207103804.053675072@linuxfoundation.org>
+In-Reply-To: <20220207103757.232676988@linuxfoundation.org>
+References: <20220207103757.232676988@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,97 +57,154 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bernard Metzler <bmt@zurich.ibm.com>
+From: Leon Romanovsky <leonro@nvidia.com>
 
-commit b43a76f423aa304037603fd6165c4a534d2c09a7 upstream.
+commit 36e8169ec973359f671f9ec7213547059cae972e upstream.
 
-Code unconditionally resumed fenced SQ processing after next RDMA Read
-completion, even if other RDMA Read responses are still outstanding, or
-ORQ is full. Also adds comments for better readability of fence
-processing, and removes orq_get_tail() helper, which is not needed
-anymore.
+Partially revert the commit mentioned in the Fixes line to make sure that
+allocation and erasing multicast struct are locked.
 
-Fixes: 8b6a361b8c48 ("rdma/siw: receive path")
-Fixes: a531975279f3 ("rdma/siw: main include file")
-Link: https://lore.kernel.org/r/20220130170815.1940-1-bmt@zurich.ibm.com
-Reported-by: Jared Holzman <jared.holzman@excelero.com>
-Signed-off-by: Bernard Metzler <bmt@zurich.ibm.com>
+  BUG: KASAN: use-after-free in ucma_cleanup_multicast drivers/infiniband/core/ucma.c:491 [inline]
+  BUG: KASAN: use-after-free in ucma_destroy_private_ctx+0x914/0xb70 drivers/infiniband/core/ucma.c:579
+  Read of size 8 at addr ffff88801bb74b00 by task syz-executor.1/25529
+  CPU: 0 PID: 25529 Comm: syz-executor.1 Not tainted 5.16.0-rc7-syzkaller #0
+  Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+  Call Trace:
+   __dump_stack lib/dump_stack.c:88 [inline]
+   dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+   print_address_description.constprop.0.cold+0x8d/0x320 mm/kasan/report.c:247
+   __kasan_report mm/kasan/report.c:433 [inline]
+   kasan_report.cold+0x83/0xdf mm/kasan/report.c:450
+   ucma_cleanup_multicast drivers/infiniband/core/ucma.c:491 [inline]
+   ucma_destroy_private_ctx+0x914/0xb70 drivers/infiniband/core/ucma.c:579
+   ucma_destroy_id+0x1e6/0x280 drivers/infiniband/core/ucma.c:614
+   ucma_write+0x25c/0x350 drivers/infiniband/core/ucma.c:1732
+   vfs_write+0x28e/0xae0 fs/read_write.c:588
+   ksys_write+0x1ee/0x250 fs/read_write.c:643
+   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+   do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+   entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+Currently the xarray search can touch a concurrently freeing mc as the
+xa_for_each() is not surrounded by any lock. Rather than hold the lock for
+a full scan hold it only for the effected items, which is usually an empty
+list.
+
+Fixes: 95fe51096b7a ("RDMA/ucma: Remove mc_list and rely on xarray")
+Link: https://lore.kernel.org/r/1cda5fabb1081e8d16e39a48d3a4f8160cea88b8.1642491047.git.leonro@nvidia.com
+Reported-by: syzbot+e3f96c43d19782dd14a7@syzkaller.appspotmail.com
+Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
+Reviewed-by: Maor Gottlieb <maorg@nvidia.com>
+Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
 Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/infiniband/sw/siw/siw.h       |    7 +------
- drivers/infiniband/sw/siw/siw_qp_rx.c |   20 +++++++++++---------
- 2 files changed, 12 insertions(+), 15 deletions(-)
+ drivers/infiniband/core/ucma.c |   34 +++++++++++++++++++++++-----------
+ 1 file changed, 23 insertions(+), 11 deletions(-)
 
---- a/drivers/infiniband/sw/siw/siw.h
-+++ b/drivers/infiniband/sw/siw/siw.h
-@@ -644,14 +644,9 @@ static inline struct siw_sqe *orq_get_cu
- 	return &qp->orq[qp->orq_get % qp->attrs.orq_size];
+--- a/drivers/infiniband/core/ucma.c
++++ b/drivers/infiniband/core/ucma.c
+@@ -95,6 +95,7 @@ struct ucma_context {
+ 	u64			uid;
+ 
+ 	struct list_head	list;
++	struct list_head	mc_list;
+ 	struct work_struct	close_work;
+ };
+ 
+@@ -105,6 +106,7 @@ struct ucma_multicast {
+ 
+ 	u64			uid;
+ 	u8			join_state;
++	struct list_head	list;
+ 	struct sockaddr_storage	addr;
+ };
+ 
+@@ -198,6 +200,7 @@ static struct ucma_context *ucma_alloc_c
+ 
+ 	INIT_WORK(&ctx->close_work, ucma_close_id);
+ 	init_completion(&ctx->comp);
++	INIT_LIST_HEAD(&ctx->mc_list);
+ 	/* So list_del() will work if we don't do ucma_finish_ctx() */
+ 	INIT_LIST_HEAD(&ctx->list);
+ 	ctx->file = file;
+@@ -484,19 +487,19 @@ err1:
+ 
+ static void ucma_cleanup_multicast(struct ucma_context *ctx)
+ {
+-	struct ucma_multicast *mc;
+-	unsigned long index;
++	struct ucma_multicast *mc, *tmp;
+ 
+-	xa_for_each(&multicast_table, index, mc) {
+-		if (mc->ctx != ctx)
+-			continue;
++	xa_lock(&multicast_table);
++	list_for_each_entry_safe(mc, tmp, &ctx->mc_list, list) {
++		list_del(&mc->list);
+ 		/*
+ 		 * At this point mc->ctx->ref is 0 so the mc cannot leave the
+ 		 * lock on the reader and this is enough serialization
+ 		 */
+-		xa_erase(&multicast_table, index);
++		__xa_erase(&multicast_table, mc->id);
+ 		kfree(mc);
+ 	}
++	xa_unlock(&multicast_table);
  }
  
--static inline struct siw_sqe *orq_get_tail(struct siw_qp *qp)
--{
--	return &qp->orq[qp->orq_put % qp->attrs.orq_size];
--}
--
- static inline struct siw_sqe *orq_get_free(struct siw_qp *qp)
- {
--	struct siw_sqe *orq_e = orq_get_tail(qp);
-+	struct siw_sqe *orq_e = &qp->orq[qp->orq_put % qp->attrs.orq_size];
+ static void ucma_cleanup_mc_events(struct ucma_multicast *mc)
+@@ -1469,12 +1472,16 @@ static ssize_t ucma_process_join(struct
+ 	mc->uid = cmd->uid;
+ 	memcpy(&mc->addr, addr, cmd->addr_size);
  
- 	if (READ_ONCE(orq_e->flags) == 0)
- 		return orq_e;
---- a/drivers/infiniband/sw/siw/siw_qp_rx.c
-+++ b/drivers/infiniband/sw/siw/siw_qp_rx.c
-@@ -1153,11 +1153,12 @@ static int siw_check_tx_fence(struct siw
- 
- 	spin_lock_irqsave(&qp->orq_lock, flags);
- 
--	rreq = orq_get_current(qp);
--
- 	/* free current orq entry */
-+	rreq = orq_get_current(qp);
- 	WRITE_ONCE(rreq->flags, 0);
- 
-+	qp->orq_get++;
-+
- 	if (qp->tx_ctx.orq_fence) {
- 		if (unlikely(tx_waiting->wr_status != SIW_WR_QUEUED)) {
- 			pr_warn("siw: [QP %u]: fence resume: bad status %d\n",
-@@ -1165,10 +1166,12 @@ static int siw_check_tx_fence(struct siw
- 			rv = -EPROTO;
- 			goto out;
- 		}
--		/* resume SQ processing */
-+		/* resume SQ processing, if possible */
- 		if (tx_waiting->sqe.opcode == SIW_OP_READ ||
- 		    tx_waiting->sqe.opcode == SIW_OP_READ_LOCAL_INV) {
--			rreq = orq_get_tail(qp);
-+
-+			/* SQ processing was stopped because of a full ORQ */
-+			rreq = orq_get_free(qp);
- 			if (unlikely(!rreq)) {
- 				pr_warn("siw: [QP %u]: no ORQE\n", qp_id(qp));
- 				rv = -EPROTO;
-@@ -1181,15 +1184,14 @@ static int siw_check_tx_fence(struct siw
- 			resume_tx = 1;
- 
- 		} else if (siw_orq_empty(qp)) {
-+			/*
-+			 * SQ processing was stopped by fenced work request.
-+			 * Resume since all previous Read's are now completed.
-+			 */
- 			qp->tx_ctx.orq_fence = 0;
- 			resume_tx = 1;
--		} else {
--			pr_warn("siw: [QP %u]: fence resume: orq idx: %d:%d\n",
--				qp_id(qp), qp->orq_get, qp->orq_put);
--			rv = -EPROTO;
- 		}
+-	if (xa_alloc(&multicast_table, &mc->id, NULL, xa_limit_32b,
++	xa_lock(&multicast_table);
++	if (__xa_alloc(&multicast_table, &mc->id, NULL, xa_limit_32b,
+ 		     GFP_KERNEL)) {
+ 		ret = -ENOMEM;
+ 		goto err_free_mc;
  	}
--	qp->orq_get++;
- out:
- 	spin_unlock_irqrestore(&qp->orq_lock, flags);
  
++	list_add_tail(&mc->list, &ctx->mc_list);
++	xa_unlock(&multicast_table);
++
+ 	mutex_lock(&ctx->mutex);
+ 	ret = rdma_join_multicast(ctx->cm_id, (struct sockaddr *)&mc->addr,
+ 				  join_state, mc);
+@@ -1500,8 +1507,11 @@ err_leave_multicast:
+ 	mutex_unlock(&ctx->mutex);
+ 	ucma_cleanup_mc_events(mc);
+ err_xa_erase:
+-	xa_erase(&multicast_table, mc->id);
++	xa_lock(&multicast_table);
++	list_del(&mc->list);
++	__xa_erase(&multicast_table, mc->id);
+ err_free_mc:
++	xa_unlock(&multicast_table);
+ 	kfree(mc);
+ err_put_ctx:
+ 	ucma_put_ctx(ctx);
+@@ -1569,15 +1579,17 @@ static ssize_t ucma_leave_multicast(stru
+ 		mc = ERR_PTR(-EINVAL);
+ 	else if (!refcount_inc_not_zero(&mc->ctx->ref))
+ 		mc = ERR_PTR(-ENXIO);
+-	else
+-		__xa_erase(&multicast_table, mc->id);
+-	xa_unlock(&multicast_table);
+ 
+ 	if (IS_ERR(mc)) {
++		xa_unlock(&multicast_table);
+ 		ret = PTR_ERR(mc);
+ 		goto out;
+ 	}
+ 
++	list_del(&mc->list);
++	__xa_erase(&multicast_table, mc->id);
++	xa_unlock(&multicast_table);
++
+ 	mutex_lock(&mc->ctx->mutex);
+ 	rdma_leave_multicast(mc->ctx->cm_id, (struct sockaddr *) &mc->addr);
+ 	mutex_unlock(&mc->ctx->mutex);
 
 

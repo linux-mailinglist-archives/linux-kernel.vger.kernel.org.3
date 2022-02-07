@@ -2,95 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78FE24ABEF4
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 14:23:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BCE44ABF3D
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 14:24:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348084AbiBGNMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 08:12:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48056 "EHLO
+        id S1448498AbiBGNLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 08:11:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445378AbiBGMmC (ORCPT
+        with ESMTP id S1447089AbiBGMxW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 07:42:02 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40597E0321DD
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 04:33:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644237211; x=1675773211;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=x6kFVrzT05XFotdvtiT0qifyAXqqSEHdTPezDSU7rR8=;
-  b=IA3ugXAmGTNY+s33704DvbybAOE4u7SFDXBSSy6J4RbFtRdGukYN5Zhi
-   dc5JVkLKVPw+qblq6ac8h4qkBe/m7sooZFPKvSgRLJFZVDKJ09DE2kY/c
-   ht5P5HAhs5lWeA7JYT/VmxXbqgXfopqary0wkevQiNcbXWL0mG20pddl4
-   lAhxeQIs6BMeD64skdRuEEF/Rj97JROIVZ3DBhyXZCJHIVyQCmjaoNwXA
-   RIr8vR3Q9ShumJ9khH0+ZJB/wBA2Y8FtgInZvi6iUsYlDslBpRUA461Ti
-   rFLcmwJhZHkLnjhItMH+FowAOvj90T6WCzcTe2cMBcLZFDjRJfX+t6Fe6
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10250"; a="247538984"
-X-IronPort-AV: E=Sophos;i="5.88,349,1635231600"; 
-   d="scan'208";a="247538984"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 04:33:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,349,1635231600"; 
-   d="scan'208";a="484406335"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga006.jf.intel.com with ESMTP; 07 Feb 2022 04:33:28 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 57F393ED; Mon,  7 Feb 2022 14:33:43 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        =?UTF-8?q?Jan=20D=C4=85bro=C5=9B?= <jsd@semihalf.com>
-Subject: [PATCH v2 1/1] bitfield: Add explicit inclusions to the example
-Date:   Mon,  7 Feb 2022 14:33:41 +0200
-Message-Id: <20220207123341.47533-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 7 Feb 2022 07:53:22 -0500
+X-Greylist: delayed 181 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 04:53:21 PST
+Received: from condef-08.nifty.com (condef-08.nifty.com [202.248.20.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02B8EC0401C1;
+        Mon,  7 Feb 2022 04:53:20 -0800 (PST)
+Received: from conssluserg-04.nifty.com ([10.126.8.83])by condef-08.nifty.com with ESMTP id 217CYfOO006569;
+        Mon, 7 Feb 2022 21:34:41 +0900
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id 217CYN2K029695;
+        Mon, 7 Feb 2022 21:34:23 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 217CYN2K029695
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1644237263;
+        bh=9zKrPVPrkksURJV3q1ADM90/dTQqSdo5AISbXfRbAK8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ncgNidLu5reIUSqWMWHKjwcp1pH8YB2Nl81GvQ0hpGnx78rZFCVFxFRPAqaszZw/2
+         dtUs614cqV/1Xz451imobbGRu/hvXbtxlF3ZfTD3WRWDZpfMQkIlu5PqWgblXK56Ei
+         HH7kYXenqhXRVZNEd6CPHTBzOTY0+UwNTbP8TdJdskvIRA2xhID06vWqZzduuXywao
+         CW61Xtx3JOtQBi8WkQnv+ieoidDZsTOnqLESj4LdpNqzofVS/2qxNYdm3qW8HSLkbQ
+         dLd4b0T2tLs3UY9acXOCyeXvHKMxC5b2KI4/CTBQhVBPZhdOH6jdb0gj7+ZjDGRetb
+         YTgr+HMQZfHtg==
+X-Nifty-SrcIP: [209.85.214.174]
+Received: by mail-pl1-f174.google.com with SMTP id z17so1009414plb.9;
+        Mon, 07 Feb 2022 04:34:23 -0800 (PST)
+X-Gm-Message-State: AOAM531P+CO1a3ScQZp+4a4qpUGL/PwsPN0ubKSR2KMZpO903RW/kuMk
+        Fglse2NSftWLHUwLVHo0dKwn74gj7L9VHIR1dPs=
+X-Google-Smtp-Source: ABdhPJw3cX3TxmQPv1QYgm1VN+3TehX/6SKbg9GVGNoFJP8Soe+of9JeFW0Lh7zcdp1x15eRDqMYFJrt4S2w8Y3RoUM=
+X-Received: by 2002:a17:90b:4a4b:: with SMTP id lb11mr13886889pjb.144.1644237262520;
+ Mon, 07 Feb 2022 04:34:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20211218031122.4117631-1-willy@infradead.org> <CAK7LNAQUChvX3NoukBnjBfJJGu+a96pfbM--xHEHOygWPgE9eA@mail.gmail.com>
+ <YdSOV7LL0vWCMcWl@casper.infradead.org>
+In-Reply-To: <YdSOV7LL0vWCMcWl@casper.infradead.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Mon, 7 Feb 2022 21:33:46 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQgixJSnDUMfjc+tg90oMdVoh+i5faEn-rqgmHR3Bk6dQ@mail.gmail.com>
+Message-ID: <CAK7LNAQgixJSnDUMfjc+tg90oMdVoh+i5faEn-rqgmHR3Bk6dQ@mail.gmail.com>
+Subject: Re: [PATCH v2] builddeb: Support signing kernels with the module
+ signing key
+To:     Matthew Wilcox <willy@infradead.org>,
+        Ben Hutchings <ben@decadent.org.uk>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        efi@lists.einval.com,
+        debian-kernel <debian-kernel@lists.debian.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        David Howells <dhowells@redhat.com>, keyrings@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's not obvious that bitfield.h doesn't guarantee the bits.h
-inclusion and the example in the former is confusing. Some
-developers think that it's okay to just include bitfield.h to
-get it working. Change example to explicitly include necessary
-headers in order to avoid confusion.
+Added "Ben Hutchings <ben@decadent.org.uk>"
 
-Fixes: 3e9b3112ec74 ("add basic register-field manipulation macros")
-Depends-on: 8bd9cb51daac ("locking/atomics, asm-generic: Move some macros from <linux/bitops.h> to a new <linux/bits.h> file")
-Reported-by: Jan Dąbroś <jsd@semihalf.com>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v2: used full paths
- include/linux/bitfield.h | 3 +++
- 1 file changed, 3 insertions(+)
+On Wed, Jan 5, 2022 at 3:13 AM Matthew Wilcox <willy@infradead.org> wrote:
+>
+> On Wed, Jan 05, 2022 at 12:39:57AM +0900, Masahiro Yamada wrote:
+> > > +vmlinux=$($MAKE -s -f $srctree/Makefile image_name)
+> > > +key=
+> > > +if is_enabled CONFIG_EFI_STUB && is_enabled CONFIG_MODULE_SIG; then
+> > > +       cert=$(grep ^CONFIG_MODULE_SIG_KEY= include/config/auto.conf | cut -d\" -f2)
+> > > +       if [ ! -f $cert ]; then
+> > > +               cert=$srctree/$cert
+> > > +       fi
+> > > +
+> > > +       key=${cert%pem}priv
+> > > +       if [ ! -f $key ]; then
+> > > +               key=$cert
+> > > +       fi
+> >
+> >
+> > I still do not understand this part.
+> >
+> > It is true that the Debian document you referred to creates separate files
+> > for the key and the certificate:
+> >   # openssl req -new -x509 -newkey rsa:2048 -keyout MOK.priv -outform
+> > DER -out MOK.der -days 36500 -subj "/CN=My Name/" -nodes
+> >
+> > but, is such a use-case possible in Kbuild?
+>
+> If someone has followed the Debian instructions for creating a MOK,
+> then they will have two separate files.  We should support both the case
+> where someone has created a Debian MOK and the case where someone has
+> used Kbuild to create this foolish blob with both private and public
+> key in one file.
 
-diff --git a/include/linux/bitfield.h b/include/linux/bitfield.h
-index 6093fa6db260..c9be1657f03d 100644
---- a/include/linux/bitfield.h
-+++ b/include/linux/bitfield.h
-@@ -19,6 +19,9 @@
-  *
-  * Example:
-  *
-+ *  #include <linux/bitfield.h>
-+ *  #include <linux/bits.h>
-+ *
-  *  #define REG_FIELD_A  GENMASK(6, 0)
-  *  #define REG_FIELD_B  BIT(7)
-  *  #define REG_FIELD_C  GENMASK(15, 8)
+But, this patch is doing different things than the Debian document.
+
+
+The Debian document you referred to says:
+  "Ubuntu puts its MOK key under /var/lib/shim-signed/mok/ and some
+   software such as Oracle's virtualbox package expect the key there
+   so we follow suit (see 989463 for reference) and put it at the same place"
+
+
+
+In Debian, MOK is generated under /var/lib/shim-signed/mok/,
+and its primary use is for signing the kernel.
+Then, you can reuse it for signing modules as well.
+
+
+This patch adopts the opposite direction:
+  Kbuild generates the module signing key, then
+  this patch reuses it for singing the kernel.
+
+The key is located in the kernel build tree
+(that is, the key is lost when you run "make mrproper").
+
+You need to "mokutil --import path/to/module/sining/key"
+every time Kbuild generates a new key.
+
+
+
+So, another possible approach is:
+
+builddeb signs the kernel with the key
+in /var/lib/shim-signed/mok/.
+
+I think this is more aligned with the debian documenation.
+
+I added Ben Hutchings, who might give us insights.
+
+
+
+
+
+
+
+> > In the old days, yes, the key and the certificate were stored in separate files.
+> > (the key in *.priv and the certificate in *.x509)
+> >
+> >
+> > Please read this commit:
+>
+> Yes, I did.
+>
+> > The motivation for this change is still questionable to me;
+> > the commit description sounds like they merged *.priv and *.x509
+> > into *.pem just because they could not write a correct Makefile.
+> > (If requested, I can write a correct Makefile that works in parallel build)
+>
+> I think that would be preferable.  Putting the private and public keys
+> in the same file cannot be good security practice!
+
+
+
 -- 
-2.34.1
-
+Best Regards
+Masahiro Yamada

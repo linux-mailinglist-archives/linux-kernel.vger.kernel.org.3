@@ -2,289 +2,345 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E10454ACD42
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:07:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B50D54ACD19
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:07:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235387AbiBHBEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 20:04:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41412 "EHLO
+        id S245058AbiBHBEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 20:04:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245717AbiBGX2Z (ORCPT
+        with ESMTP id S245737AbiBGX3j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 18:28:25 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17393C0612A4;
-        Mon,  7 Feb 2022 15:28:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644276504; x=1675812504;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=HOtSxOsxsg3P8RM3tbFgDc9I3beqaq6pdDO0U9LNiiQ=;
-  b=lWU/SvhkCVjNdveIr1NuCqmwF/eSttiPX952/qx5g4JhipzxopX0JKO3
-   90v4g9LL3kGkvVZo9jNiPzZkmHVar2OI0W8TwhfbhU50QxLwNB6wlaOnS
-   7+9TO/rqVFBYkJxBDq1IneeA6XJ/eFVTPjn4DEc7CG+tVPQOZRv1746Bx
-   W2GgAndlFCVSVr8eCMwzGsWcNapjpwDigkxM3vS6SNkBulUynW2Mj3NJw
-   HDX4WPz79+sXYxlMB3Oygu/gfSJoOhmNw8gNs1J4hHIjP4zjC2wjVpP7E
-   +k3dDnHy9eF1w69x9m+aycGGgpWuOG9nZnRs4Xqp4eSvACqvH4yQKCIvw
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="247665155"
-X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
-   d="scan'208";a="247665155"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 15:28:23 -0800
-X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
-   d="scan'208";a="525319051"
-Received: from hgrunes-mobl1.amr.corp.intel.com (HELO [10.251.3.57]) ([10.251.3.57])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 15:28:22 -0800
-Message-ID: <9ad0f7f7-e034-eb6d-eee4-1e977123efe7@intel.com>
-Date:   Mon, 7 Feb 2022 15:28:19 -0800
+        Mon, 7 Feb 2022 18:29:39 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E0D65C061355
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 15:29:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644276576;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9Dl50fvdeDVHYYafqXS8rgfNHdVMJ0arMNo9zcfmZaw=;
+        b=D5Vq5GP0XdidXehhk5wUgsR6tU7vKRFerTlZZYumPIZ/pn/5dQJL+UPElYobQkw1whkODp
+        EMPZW+svzqTgLDOfLHVF01BjlxPZFOEZl9c4r7hSbdwqDN9ZXEOldc/smd866G6t39HKEv
+        bERlmXmPMQW7fKNxcEpUFnxObDxKcW0=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-621-A2Aosm06M1ewqGVz4Al-GQ-1; Mon, 07 Feb 2022 18:29:35 -0500
+X-MC-Unique: A2Aosm06M1ewqGVz4Al-GQ-1
+Received: by mail-qv1-f70.google.com with SMTP id w14-20020a0cfc4e000000b0042c1ac91249so910032qvp.4
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 15:29:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=9Dl50fvdeDVHYYafqXS8rgfNHdVMJ0arMNo9zcfmZaw=;
+        b=iSkc8Yr9lVZqUS+jnYaOjeieoDZ/YLHk4neHz/4rvfAefYNZzns5Ot3aWKzv89Ow+p
+         p0vkIPr4idjeqe2FtuFmadlA5zPpgVlt6jPXFoZeJkOH6dlmIiGoEzmWubpMv1Bb5W0n
+         QoBb3dIyArIuhe8Bg7oP7dvG53Xx8XKV+IWu9HS8DL7djqqP+0dJOo60N5h/RbrUmpH6
+         Nw9kN2BwhMrwVcB8BIkXj1qIJ+1ruiq6Z3MF2r5TevKiYyLxgWcYCcRylfwsKvNFvyC9
+         raw4bZ52VelIq7cGHP6DX7l/uVRNUZVSDUdP+8+bxRthCjcYKkciC1pBFAuMXAG/zd4a
+         u1ng==
+X-Gm-Message-State: AOAM531tNgR6gWY16jc4H2hexC/KKWnMTlwtR4D1lm9peq1PzIqtpweR
+        JAmNehEVPowcDbjYUZKd3IgUkdWOVhLXxgw6pcMhNwNj3DPEJWQnoDx0e9sv/qdv1rAw22BsO5h
+        abyiCZIQqDm/+WMkqjAjzZMAW
+X-Received: by 2002:a05:620a:109c:: with SMTP id g28mr1301548qkk.560.1644276574677;
+        Mon, 07 Feb 2022 15:29:34 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxRCWy8A39FHJDiaR3HWfSH2PQB5nFtWfWVP+5EnDyIq9AZyugGWgg4wvMnqxvuxjrnVcI/LA==
+X-Received: by 2002:a05:620a:109c:: with SMTP id g28mr1301534qkk.560.1644276574401;
+        Mon, 07 Feb 2022 15:29:34 -0800 (PST)
+Received: from fedora (modemcable200.11-22-96.mc.videotron.ca. [96.22.11.200])
+        by smtp.gmail.com with ESMTPSA id 195sm6132729qkf.30.2022.02.07.15.29.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Feb 2022 15:29:34 -0800 (PST)
+Date:   Mon, 7 Feb 2022 18:29:32 -0500
+From:   Adrien Thierry <athierry@redhat.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "linux-rpi-kernel@lists.infradead.org" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Jeremy Linton <jeremy.linton@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        "bcm-kernel-feedback-list@broadcom.com" 
+        <bcm-kernel-feedback-list@broadcom.com>
+Subject: Re: [PATCH v2] serial: 8250_bcm2835aux: Add ACPI support
+Message-ID: <YgGrXFCsmt4vPcRm@fedora>
+References: <20220203213408.441407-1-athierry@redhat.com>
+ <CAHp75VcCza4A5Yn+yn1HTpyPxuxbyheFQKZFZ_U6UHxcyHY0fQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com
-Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
- <20220130211838.8382-6-rick.p.edgecombe@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH 05/35] x86/fpu/xstate: Introduce CET MSR and XSAVES
- supervisor states
-In-Reply-To: <20220130211838.8382-6-rick.p.edgecombe@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHp75VcCza4A5Yn+yn1HTpyPxuxbyheFQKZFZ_U6UHxcyHY0fQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/30/22 13:18, Rick Edgecombe wrote:
-> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
+On Sat, Feb 05, 2022 at 01:58:43AM +0200, Andy Shevchenko wrote:
+> On Thursday, February 3, 2022, Adrien Thierry <athierry@redhat.com> wrote:
 > 
-> Control-flow Enforcement Technology (CET) introduces these MSRs:
+> > Add ACPI support to 8250_bcm2835aux driver. This makes it possible to
+> > use the miniuart on the Raspberry Pi with the tianocore/edk2 UEFI
+> > firmware.
+> >
+> > Signed-off-by: Adrien Thierry <athierry@redhat.com>
+> > ---
+> > V1 -> V2: Refactored code to remove unnecessary conditional paths and
+> > intermediate variables
+> >
+> >  drivers/tty/serial/8250/8250_bcm2835aux.c | 87 ++++++++++++++++++-----
+> >  1 file changed, 69 insertions(+), 18 deletions(-)
+> >
+> > diff --git a/drivers/tty/serial/8250/8250_bcm2835aux.c
+> > b/drivers/tty/serial/8250/8250_bcm2835aux.c
+> > index fd95860cd661..b7cec2a3b5f7 100644
+> > --- a/drivers/tty/serial/8250/8250_bcm2835aux.c
+> > +++ b/drivers/tty/serial/8250/8250_bcm2835aux.c
+> > @@ -12,6 +12,7 @@
+> >   * simultaneously to rs485.
+> >   */
+> >
+> > +#include <linux/acpi.h>
 > 
->     MSR_IA32_U_CET (user-mode CET settings),
->     MSR_IA32_PL3_SSP (user-mode shadow stack pointer),
 > 
->     MSR_IA32_PL0_SSP (kernel-mode shadow stack pointer),
->     MSR_IA32_PL1_SSP (Privilege Level 1 shadow stack pointer),
->     MSR_IA32_PL2_SSP (Privilege Level 2 shadow stack pointer),
->     MSR_IA32_S_CET (kernel-mode CET settings),
->     MSR_IA32_INT_SSP_TAB (exception shadow stack table).
+> For what purposes?
+> Can’t you use device_get_match_data()?
+> 
+> 
+> 
+> >  #include <linux/clk.h>
+> >  #include <linux/io.h>
+> >  #include <linux/module.h>
+> 
+> 
+> property.h?
+> 
+> 
+> > @@ -44,6 +45,10 @@ struct bcm2835aux_data {
+> >         u32 cntl;
+> >  };
+> >
+> > +struct bcm2835_aux_serial_acpi_driver_data {
+> > +       resource_size_t offset;
+> > +};
+> > +
+> >  static void bcm2835aux_rs485_start_tx(struct uart_8250_port *up)
+> >  {
+> >         if (!(up->port.rs485.flags & SER_RS485_RX_DURING_TX)) {
+> > @@ -82,8 +87,11 @@ static int bcm2835aux_serial_probe(struct
+> > platform_device *pdev)
+> >  {
+> >         struct uart_8250_port up = { };
+> >         struct bcm2835aux_data *data;
+> > +       struct bcm2835_aux_serial_acpi_driver_data *acpi_data;
+> >         struct resource *res;
+> >         int ret;
+> > +       resource_size_t offset = 0;
+> > +       unsigned int uartclk;
+> 
+> 
+> 
+> Keep reversed Xmas tree order?
+> 
+> 
+> 
+> >
+> >         /* allocate the custom structure */
+> >         data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
+> > @@ -110,8 +118,11 @@ static int bcm2835aux_serial_probe(struct
+> > platform_device *pdev)
+> >
+> >         /* get the clock - this also enables the HW */
+> >         data->clk = devm_clk_get(&pdev->dev, NULL);
+> > -       if (IS_ERR(data->clk))
+> > -               return dev_err_probe(&pdev->dev, PTR_ERR(data->clk),
+> > "could not get clk\n");
+> > +       if (IS_ERR(data->clk)) {
+> > +               ret = device_property_read_u32(&pdev->dev,
+> > "clock-frequency", &uartclk);
+> > +               if (ret)
+> > +                       return dev_err_probe(&pdev->dev, ret, "could not
+> > get clk\n");
+> > +       }
+> >
+> >         /* get the interrupt */
+> >         ret = platform_get_irq(pdev, 0);
+> > @@ -125,20 +136,47 @@ static int bcm2835aux_serial_probe(struct
+> > platform_device *pdev)
+> >                 dev_err(&pdev->dev, "memory resource not found");
+> >                 return -EINVAL;
+> >         }
+> > -       up.port.mapbase = res->start;
+> > -       up.port.mapsize = resource_size(res);
+> > -
+> > -       /* Check for a fixed line number */
+> > -       ret = of_alias_get_id(pdev->dev.of_node, "serial");
+> > -       if (ret >= 0)
+> > -               up.port.line = ret;
+> > -
+> > -       /* enable the clock as a last step */
+> > -       ret = clk_prepare_enable(data->clk);
+> > -       if (ret) {
+> > -               dev_err(&pdev->dev, "unable to enable uart clock - %d\n",
+> > -                       ret);
+> > -               return ret;
+> > +
+> > +       if (has_acpi_companion(&pdev->dev)) {
+> > +               const struct acpi_device_id *match;
+> > +
+> > +               match = acpi_match_device(pdev->dev.driver->acpi_match_table,
+> > &pdev->dev);
+> > +               if (!match)
+> > +                       return -ENODEV;
+> > +
+> > +               acpi_data = (struct bcm2835_aux_serial_acpi_driver_data
+> > *)match->driver_data;
+> 
+> 
+> acpi_data naming is fragile. Use something with local namespace or without
+> it completely (bcm_data, data, ddata, etc).
+> 
+> 
+> > +
+> > +               /* Some UEFI implementations (e.g. tianocore/edk2 for the
+> > Raspberry Pi)
+> > +                * describe the miniuart with a base address that
+> > encompasses the auxiliary
+> > +                * registers shared between the miniuart and spi.
+> > +                *
+> > +                * This is due to historical reasons, see discussion here :
+> > +                * https://edk2.groups.io/g/devel/topic/87501357#84349
+> > +                *
+> > +                * We need to add the offset between the miniuart and
+> > auxiliary
+> > +                * registers to get the real miniuart base address.
+> > +                */
+> > +               offset = acpi_data->offset;
+> 
+> 
+> 
+> 
+> > +       }
+> > +
+> > +       up.port.mapbase = res->start + offset;
+> > +       up.port.mapsize = resource_size(res) - offset;
+> > +
+> > +       if (dev_of_node(&pdev->dev)) {
+> > +               /* Check for a fixed line number */
+> > +               ret = of_alias_get_id(pdev->dev.of_node, "serial");
+> > +               if (ret >= 0)
+> > +                       up.port.line = ret;
+> > +
+> > +               /* enable the clock as a last step */
+> > +               ret = clk_prepare_enable(data->clk);
+> > +               if (ret) {
+> > +                       dev_err(&pdev->dev, "unable to enable uart clock -
+> > %d\n",
+> > +                               ret);
+> > +                       return ret;
+> > +               }
+> > +
+> > +               uartclk = clk_get_rate(data->clk);
+> >         }
+> >
+> >         /* the HW-clock divider for bcm2835aux is 8,
+> > @@ -146,7 +184,7 @@ static int bcm2835aux_serial_probe(struct
+> > platform_device *pdev)
+> >          * so we have to multiply the actual clock by 2
+> >          * to get identical baudrates.
+> >          */
+> > -       up.port.uartclk = clk_get_rate(data->clk) * 2;
+> > +       up.port.uartclk = uartclk * 2;
+> >
+> >         /* register the port */
+> >         ret = serial8250_register_8250_port(&up);
+> > @@ -159,7 +197,9 @@ static int bcm2835aux_serial_probe(struct
+> > platform_device *pdev)
+> >         return 0;
+> >
+> >  dis_clk:
+> > -       clk_disable_unprepare(data->clk);
+> > +       if (dev_of_node(&pdev->dev))
+> > +               clk_disable_unprepare(data->clk);
+> > +
+> 
+> 
+> Why do you change this? CCF is null-aware.
+> 
+> 
+> >         return ret;
+> >  }
+> >
+> > @@ -173,16 +213,27 @@ static int bcm2835aux_serial_remove(struct
+> > platform_device *pdev)
+> >         return 0;
+> >  }
+> >
+> > +static const struct bcm2835_aux_serial_acpi_driver_data
+> > bcm2835_acpi_data = {
+> > +       .offset = 0x40
+> 
+> 
+> 
+>  + comma
+> 
+> 
+> +};
+> > +
+> >  static const struct of_device_id bcm2835aux_serial_match[] = {
+> >         { .compatible = "brcm,bcm2835-aux-uart" },
+> >         { },
+> >  };
+> >  MODULE_DEVICE_TABLE(of, bcm2835aux_serial_match);
+> >
+> > +static const struct acpi_device_id bcm2835aux_serial_acpi_match[] = {
+> > +       { "BCM2836", (kernel_ulong_t)&bcm2835_acpi_data },
+> > +       { },
+> 
+> 
+> No comma for terminator entry.
+> 
+> 
+> > +};
+> > +MODULE_DEVICE_TABLE(acpi, bcm2835aux_serial_acpi_match);
+> > +
+> >  static struct platform_driver bcm2835aux_serial_driver = {
+> >         .driver = {
+> >                 .name = "bcm2835-aux-uart",
+> >                 .of_match_table = bcm2835aux_serial_match,
+> > +               .acpi_match_table = bcm2835aux_serial_acpi_match,
+> >         },
+> >         .probe  = bcm2835aux_serial_probe,
+> >         .remove = bcm2835aux_serial_remove,
+> >
+> > base-commit: 1f2cfdd349b7647f438c1e552dc1b983da86d830
+> > --
+> > 2.34.1
+> >
+> >
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko
 
-To be honest, I'm not sure this is very valuable.  It's *VERY* close to
-the exact information in the structure definitions.  It's also not
-obviously related to XSAVE.  It's more of the "what" this patch does
-than the "why".  Good changelogs talk about "why".
+Thanks for your feedback! I've submitted a v3 addressing your comments.
 
-> The two user-mode MSRs belong to XFEATURE_CET_USER.  The first three of
-> kernel-mode MSRs belong to XFEATURE_CET_KERNEL.  Both XSAVES states are
-> supervisor states.  This means that there is no direct, unprivileged access
-> to these states, making it harder for an attacker to subvert CET.
+Adrien
 
-Forgive me while I go into changelog lecture mode for a moment.
-
-I was constantly looking up at the list of MSRs and trying to reconcile
-them with this paragraph.  Imagine if you had started out this changelog
-by saying:
-
-	Shadow stack register state can be managed with XSAVE.  The
-	registers can logically be separated into two groups:
-
-		* Registers controlling user-mode operation
-		* Registers controlling kernel-mode operation
-
-	The architecture has two new XSAVE state components: one for
-	each group of registers.  This _lets_ an OS manage them
-	separately if it chooses.  Linux chooses to ... <explain the
-	design choice here, or why we don't care yet>.
-
-	Both XSAVE state components are supervisor states, even the
-	state controlling user-mode operation.  This is a departure from
-	earlier features like protection keys where the PKRU state is
-	a normal user (non-supervisor) state.  Having the user state be	
-	supervisor-managed ensures there is no direct, unprivileged
-	access to it, making it harder for an attacker to subvert CET.
-
-Also, IBT gunk is in here too, right?  Let's at least *mention* that in
-the changelog.
-
-...
->  /* All supervisor states including supported and unsupported states. */
->  #define XFEATURE_MASK_SUPERVISOR_ALL (XFEATURE_MASK_SUPERVISOR_SUPPORTED | \
-> diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-> index 3faf0f97edb1..0ee77ce4c753 100644
-> --- a/arch/x86/include/asm/msr-index.h
-> +++ b/arch/x86/include/asm/msr-index.h
-> @@ -362,6 +362,26 @@
->  
->  
->  #define MSR_CORE_PERF_LIMIT_REASONS	0x00000690
-> +
-> +/* Control-flow Enforcement Technology MSRs */
-> +#define MSR_IA32_U_CET			0x000006a0 /* user mode cet setting */
-> +#define MSR_IA32_S_CET			0x000006a2 /* kernel mode cet setting */
-> +#define CET_SHSTK_EN			BIT_ULL(0)
-> +#define CET_WRSS_EN			BIT_ULL(1)
-> +#define CET_ENDBR_EN			BIT_ULL(2)
-> +#define CET_LEG_IW_EN			BIT_ULL(3)
-> +#define CET_NO_TRACK_EN			BIT_ULL(4)
-> +#define CET_SUPPRESS_DISABLE		BIT_ULL(5)
-> +#define CET_RESERVED			(BIT_ULL(6) | BIT_ULL(7) | BIT_ULL(8) | BIT_ULL(9))
-
-Would GENMASK_ULL() look any nicer here?  I guess it's pretty clear
-as-is that bits 6->9 are reserved.
-
-> +#define CET_SUPPRESS			BIT_ULL(10)
-> +#define CET_WAIT_ENDBR			BIT_ULL(11)
-
-Are those bit fields common for both registers?  It might be worth a
-comment to mention that.
-
-> +#define MSR_IA32_PL0_SSP		0x000006a4 /* kernel shadow stack pointer */
-> +#define MSR_IA32_PL1_SSP		0x000006a5 /* ring-1 shadow stack pointer */
-> +#define MSR_IA32_PL2_SSP		0x000006a6 /* ring-2 shadow stack pointer */
-
-Are PL1/2 ever used in this implementation?  If not, let's axe these
-definitions.
-
-> +#define MSR_IA32_PL3_SSP		0x000006a7 /* user shadow stack pointer */
-> +#define MSR_IA32_INT_SSP_TAB		0x000006a8 /* exception shadow stack table */
-> +
->  #define MSR_GFX_PERF_LIMIT_REASONS	0x000006B0
->  #define MSR_RING_PERF_LIMIT_REASONS	0x000006B1
->  
-> diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
-> index 02b3ddaf4f75..44397202762b 100644
-> --- a/arch/x86/kernel/fpu/xstate.c
-> +++ b/arch/x86/kernel/fpu/xstate.c
-> @@ -50,6 +50,8 @@ static const char *xfeature_names[] =
->  	"Processor Trace (unused)"	,
->  	"Protection Keys User registers",
->  	"PASID state",
-> +	"Control-flow User registers"	,
-> +	"Control-flow Kernel registers"	,
->  	"unknown xstate feature"	,
->  	"unknown xstate feature"	,
->  	"unknown xstate feature"	,
-> @@ -73,6 +75,8 @@ static unsigned short xsave_cpuid_features[] __initdata = {
->  	[XFEATURE_PT_UNIMPLEMENTED_SO_FAR]	= X86_FEATURE_INTEL_PT,
->  	[XFEATURE_PKRU]				= X86_FEATURE_PKU,
->  	[XFEATURE_PASID]			= X86_FEATURE_ENQCMD,
-> +	[XFEATURE_CET_USER]			= X86_FEATURE_SHSTK,
-> +	[XFEATURE_CET_KERNEL]			= X86_FEATURE_SHSTK,
->  	[XFEATURE_XTILE_CFG]			= X86_FEATURE_AMX_TILE,
->  	[XFEATURE_XTILE_DATA]			= X86_FEATURE_AMX_TILE,
->  };
-> @@ -250,6 +254,8 @@ static void __init print_xstate_features(void)
->  	print_xstate_feature(XFEATURE_MASK_Hi16_ZMM);
->  	print_xstate_feature(XFEATURE_MASK_PKRU);
->  	print_xstate_feature(XFEATURE_MASK_PASID);
-> +	print_xstate_feature(XFEATURE_MASK_CET_USER);
-> +	print_xstate_feature(XFEATURE_MASK_CET_KERNEL);
->  	print_xstate_feature(XFEATURE_MASK_XTILE_CFG);
->  	print_xstate_feature(XFEATURE_MASK_XTILE_DATA);
->  }
-> @@ -405,6 +411,7 @@ static __init void os_xrstor_booting(struct xregs_state *xstate)
->  	 XFEATURE_MASK_BNDREGS |		\
->  	 XFEATURE_MASK_BNDCSR |			\
->  	 XFEATURE_MASK_PASID |			\
-> +	 XFEATURE_MASK_CET_USER |		\
->  	 XFEATURE_MASK_XTILE)
->  
->  /*
-> @@ -621,6 +628,8 @@ static bool __init check_xstate_against_struct(int nr)
->  	XCHECK_SZ(sz, nr, XFEATURE_PKRU,      struct pkru_state);
->  	XCHECK_SZ(sz, nr, XFEATURE_PASID,     struct ia32_pasid_state);
->  	XCHECK_SZ(sz, nr, XFEATURE_XTILE_CFG, struct xtile_cfg);
-> +	XCHECK_SZ(sz, nr, XFEATURE_CET_USER,   struct cet_user_state);
-> +	XCHECK_SZ(sz, nr, XFEATURE_CET_KERNEL, struct cet_kernel_state);
->  
->  	/* The tile data size varies between implementations. */
->  	if (nr == XFEATURE_XTILE_DATA)
-> @@ -634,7 +643,9 @@ static bool __init check_xstate_against_struct(int nr)
->  	if ((nr < XFEATURE_YMM) ||
->  	    (nr >= XFEATURE_MAX) ||
->  	    (nr == XFEATURE_PT_UNIMPLEMENTED_SO_FAR) ||
-> -	    ((nr >= XFEATURE_RSRVD_COMP_11) && (nr <= XFEATURE_RSRVD_COMP_16))) {
-> +	    (nr == XFEATURE_RSRVD_COMP_13) ||
-> +	    (nr == XFEATURE_RSRVD_COMP_14) ||
-> +	    (nr == XFEATURE_RSRVD_COMP_16)) {
->  		WARN_ONCE(1, "no structure for xstate: %d\n", nr);
->  		XSTATE_WARN_ON(1);
->  		return false;
-
-That if() is getting unweildy.  While I generally despise macros
-implicitly modifying variables, this might be worth it.  We could have a
-local function variable:
-
-	bool feature_checked = false;
-
-and then muck with it in the macro:
-
-#define XCHECK_SZ(sz, nr, nr_macro, __struct) do {
-	if (nr == nr_macro)) {
-		feature_checked = true;
-		if (WARN_ONCE(sz != sizeof(__struct), ... ) {
-			__xstate_dump_leaves();
-		}
-        }
-} while (0)
-
-Then the if() just makes sure the feature was checked instead of
-checking for reserved features explicitly.  We could also do:
-
-	bool c = false;
-
-	...
-
-        c |= XCHECK_SZ(sz, nr, XFEATURE_YMM,       struct ymmh_struct);
-        c |= XCHECK_SZ(sz, nr, XFEATURE_BNDREGS,   struct ...
-        c |= XCHECK_SZ(sz, nr, XFEATURE_BNDCSR,    struct ...
-	...
-
-but that starts to run into 80 columns.  Those are both nice because
-they mean you don't have to maintain a list of reserved features in the
-code.  Another option would be to define a:
-
-bool xfeature_is_reserved(int nr)
-{
-	switch (nr) {
-		case XFEATURE_RSRVD_COMP_13:
-		...
-
-so the if() looks nicer and won't grow; the function will grow instead.
-
-Either way, I think this needs some refactoring.

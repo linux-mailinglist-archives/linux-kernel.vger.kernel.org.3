@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56AFA4AB9F3
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:26:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2225F4ABCFC
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:55:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382357AbiBGLS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:18:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50444 "EHLO
+        id S1388550AbiBGLn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:43:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356779AbiBGLNk (ORCPT
+        with ESMTP id S1384438AbiBGL2E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:13:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A40DC043181;
-        Mon,  7 Feb 2022 03:13:40 -0800 (PST)
+        Mon, 7 Feb 2022 06:28:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 978B2C03C198;
+        Mon,  7 Feb 2022 03:26:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 06A2561380;
-        Mon,  7 Feb 2022 11:13:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC782C340F0;
-        Mon,  7 Feb 2022 11:13:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7417CB811B2;
+        Mon,  7 Feb 2022 11:26:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AED8C004E1;
+        Mon,  7 Feb 2022 11:26:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232419;
-        bh=FiHCycypaGmh6ZE4s8cl9YhCQrEHuZt+aoReo8QuKOE=;
+        s=korg; t=1644233178;
+        bh=4jVbnwfVC3bF207Ch0FiydCtVRc8MucTpP3gbvg3VWc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FsOU274KnPthb7p/JThL3bC3EeakbNcOa7Qysx6RMznk4MIhA891UbwWUS4Mp5cCr
-         KK87AnVV9C3AV/tbdufNQwRx8ClkQZN9T/oHPaeI3BRjBrxrjKCkBLQ79331gQMlV8
-         67P+dWKIvEpcHqG+EXdJzFn4TClZT+ZVUrv92URM=
+        b=tevySV0x6JfPleny8H+fp9yJlyehMcvxsjCQ+OwprlD6nr6poe+yvVztbadJeVa+e
+         6WTNFIJdngHxz3DB75DKaIHJwOnb0gTOG0sOLJDupQFDw7MFNBK2m034PJWQqqEHwr
+         BrFZClW4XSfCcDWgMTCqBsw5boiBVzaki3pM/wD8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dmitry Monakhov <dmonakhov@openvz.org>,
-        Dmitry Ivanov <dmitry.ivanov2@hpe.com>,
-        Alexey Lyashkov <alexey.lyashkov@hpe.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 4.14 51/69] block: bio-integrity: Advance seed correctly for larger interval sizes
-Date:   Mon,  7 Feb 2022 12:06:13 +0100
-Message-Id: <20220207103757.299374694@linuxfoundation.org>
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Subject: [PATCH 5.15 041/110] RDMA/siw: Fix refcounting leak in siw_create_qp()
+Date:   Mon,  7 Feb 2022 12:06:14 +0100
+Message-Id: <20220207103803.670073400@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103755.604121441@linuxfoundation.org>
-References: <20220207103755.604121441@linuxfoundation.org>
+In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
+References: <20220207103802.280120990@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,43 +56,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Martin K. Petersen <martin.petersen@oracle.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-commit b13e0c71856817fca67159b11abac350e41289f5 upstream.
+commit a75badebfdc0b3823054bedf112edb54d6357c75 upstream.
 
-Commit 309a62fa3a9e ("bio-integrity: bio_integrity_advance must update
-integrity seed") added code to update the integrity seed value when
-advancing a bio. However, it failed to take into account that the
-integrity interval might be larger than the 512-byte block layer
-sector size. This broke bio splitting on PI devices with 4KB logical
-blocks.
+The atomic_inc() needs to be paired with an atomic_dec() on the error
+path.
 
-The seed value should be advanced by bio_integrity_intervals() and not
-the number of sectors.
-
-Cc: Dmitry Monakhov <dmonakhov@openvz.org>
-Cc: stable@vger.kernel.org
-Fixes: 309a62fa3a9e ("bio-integrity: bio_integrity_advance must update integrity seed")
-Tested-by: Dmitry Ivanov <dmitry.ivanov2@hpe.com>
-Reported-by: Alexey Lyashkov <alexey.lyashkov@hpe.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Link: https://lore.kernel.org/r/20220204034209.4193-1-martin.petersen@oracle.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Fixes: 514aee660df4 ("RDMA: Globally allocate and release QP memory")
+Link: https://lore.kernel.org/r/20220118091104.GA11671@kili
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
+Reviewed-by: Bernard Metzler <bmt@zurich.ibm.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- block/bio-integrity.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/infiniband/sw/siw/siw_verbs.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/block/bio-integrity.c
-+++ b/block/bio-integrity.c
-@@ -417,7 +417,7 @@ void bio_integrity_advance(struct bio *b
- 	struct blk_integrity *bi = blk_get_integrity(bio->bi_disk);
- 	unsigned bytes = bio_integrity_bytes(bi, bytes_done >> 9);
+--- a/drivers/infiniband/sw/siw/siw_verbs.c
++++ b/drivers/infiniband/sw/siw/siw_verbs.c
+@@ -311,7 +311,8 @@ int siw_create_qp(struct ib_qp *ibqp, st
  
--	bip->bip_iter.bi_sector += bytes_done >> 9;
-+	bip->bip_iter.bi_sector += bio_integrity_intervals(bi, bytes_done >> 9);
- 	bvec_iter_advance(bip->bip_vec, &bip->bip_iter, bytes);
- }
- EXPORT_SYMBOL(bio_integrity_advance);
+ 	if (atomic_inc_return(&sdev->num_qp) > SIW_MAX_QP) {
+ 		siw_dbg(base_dev, "too many QP's\n");
+-		return -ENOMEM;
++		rv = -ENOMEM;
++		goto err_atomic;
+ 	}
+ 	if (attrs->qp_type != IB_QPT_RC) {
+ 		siw_dbg(base_dev, "only RC QP's supported\n");
 
 

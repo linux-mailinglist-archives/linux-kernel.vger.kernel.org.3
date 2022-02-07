@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA43D4AB55C
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 08:00:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0FD84AB554
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 07:57:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239439AbiBGG5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 01:57:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41926 "EHLO
+        id S231502AbiBGG43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 01:56:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357835AbiBGGoU (ORCPT
+        with ESMTP id S1357841AbiBGGoY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 01:44:20 -0500
+        Mon, 7 Feb 2022 01:44:24 -0500
 Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363C6C043187
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 22:44:20 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E8FFC0401C0
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 22:44:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644216260; x=1675752260;
+  t=1644216263; x=1675752263;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=6WtSTQdjRD4wi8NPB/wH0EeILHtZl3dydvFj3GNNpHk=;
-  b=NN1f/sPU7usXw7MPT8L/xf2ghf2katrlmVLV9jMGZA8jsLc/nZv3e6XS
-   wm46sgJ+PQdCK1gTtNRtG9VUVDpML+NG3l0lM08d4Vh5XrplyWrkgwAdf
-   2DlqqH0LTjvuxIfD0HlO677bXEUNkuVOG6vP9AH0J0IeoZ0FFEGL/YVKP
-   WdQ8wDHDHCjIM7BM2usf2NRGa89gZ2sNohWyx6i6LbMaovynBEgJQ1hjR
-   CLU7Hxrv69BWoZtZ9KbCkeXc+Gj2ZFrrUvOVupy/RhKwnets5KtyWqL9M
-   37h9i8zfREJ7a67sOCQ2XIXEXXpmjDIRAeZWqqNq8sSTX/2jboFAd69NB
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10250"; a="273171187"
+  bh=/1FAEc7MxY57hsQjIIjJSXw/pIhYqbkltVpu9dLzdic=;
+  b=HDfnjt06/QciKFur9FsKIlBPtvK6xneIGcA3ZhJ2jAbCInRRxDexiWCN
+   sVOYubzcwrpy9GOUbiBbdK/TjGnuWpu7lqF+fd2XRd3r2vMEkH7yWt1Cn
+   6s6pZYw4dq04AWRttQj+lbBqKmt6QmI52278yIWjgpHLbY1/KcuXM1QD7
+   oP/J3dOmhB3blxt8XdnxfL4lZzAhkZGPdZxy7zRQhn0CoeK8IzMlxXKe9
+   3FSvt39TN67oxQ19mjpfwEY9LX9tdhSxNSM/MIUqzxuSRlgP8/ybBW/+k
+   /9As8IXXKO63R1gRKfOsqAW1HWX2SwT40GA3VqJIse8rlyjeU/FJKUcB9
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10250"; a="273171192"
 X-IronPort-AV: E=Sophos;i="5.88,349,1635231600"; 
-   d="scan'208";a="273171187"
+   d="scan'208";a="273171192"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2022 22:43:18 -0800
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2022 22:43:21 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,349,1635231600"; 
-   d="scan'208";a="525020280"
+   d="scan'208";a="525020303"
 Received: from allen-box.sh.intel.com ([10.239.159.118])
-  by orsmga007.jf.intel.com with ESMTP; 06 Feb 2022 22:43:15 -0800
+  by orsmga007.jf.intel.com with ESMTP; 06 Feb 2022 22:43:18 -0800
 From:   Lu Baolu <baolu.lu@linux.intel.com>
 To:     Joerg Roedel <joro@8bytes.org>, Kevin Tian <kevin.tian@intel.com>,
         Ashok Raj <ashok.raj@intel.com>, Liu Yi L <yi.l.liu@intel.com>,
@@ -47,9 +47,9 @@ Cc:     Robin Murphy <robin.murphy@arm.com>,
         Christoph Hellwig <hch@lst.de>,
         iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
         Lu Baolu <baolu.lu@linux.intel.com>
-Subject: [PATCH v1 06/10] iommu/vt-d: Remove DEFER_DEVICE_DOMAIN_INFO
-Date:   Mon,  7 Feb 2022 14:41:38 +0800
-Message-Id: <20220207064142.1092846-7-baolu.lu@linux.intel.com>
+Subject: [PATCH v1 07/10] iommu/vt-d: Use an xarray for global device_domain_info
+Date:   Mon,  7 Feb 2022 14:41:39 +0800
+Message-Id: <20220207064142.1092846-8-baolu.lu@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220207064142.1092846-1-baolu.lu@linux.intel.com>
 References: <20220207064142.1092846-1-baolu.lu@linux.intel.com>
@@ -65,203 +65,181 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allocate and set the per-device iommu private data during iommu device
-probe. Add a flag to indicate whether default domain attachment is
-deferred. With this refactoring, the dummy DEFER_DEVICE_DOMAIN_INFO
-pointer is removed.
+Replace the existing global device_domain_list with an array so that it
+could be easily searched. The index of the array is composed by the PCI
+segment, bus and devfn. And use RCU lock for protection.
 
 Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 ---
- drivers/iommu/intel/iommu.c | 122 +++++++++++++++---------------------
- 1 file changed, 51 insertions(+), 71 deletions(-)
+ include/linux/intel-iommu.h |  1 -
+ drivers/iommu/intel/iommu.c | 68 ++++++++++++++++---------------------
+ 2 files changed, 30 insertions(+), 39 deletions(-)
 
+diff --git a/include/linux/intel-iommu.h b/include/linux/intel-iommu.h
+index 8c7591b5f3e2..1ccba739a062 100644
+--- a/include/linux/intel-iommu.h
++++ b/include/linux/intel-iommu.h
+@@ -610,7 +610,6 @@ struct intel_iommu {
+ /* PCI domain-device relationship */
+ struct device_domain_info {
+ 	struct list_head link;	/* link to domain siblings */
+-	struct list_head global; /* link to global list */
+ 	struct list_head table;	/* link to pasid table */
+ 	u32 segment;		/* PCI segment number */
+ 	u8 bus;			/* PCI bus number */
 diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index 185aa38df602..165c890b8304 100644
+index 165c890b8304..d7eba86c7f72 100644
 --- a/drivers/iommu/intel/iommu.c
 +++ b/drivers/iommu/intel/iommu.c
-@@ -309,19 +309,9 @@ static int iommu_skip_te_disable;
- int intel_iommu_gfx_mapped;
- EXPORT_SYMBOL_GPL(intel_iommu_gfx_mapped);
+@@ -151,8 +151,6 @@ static struct intel_iommu **g_iommus;
  
--#define DEFER_DEVICE_DOMAIN_INFO ((struct device_domain_info *)(-2))
- struct device_domain_info *get_domain_info(struct device *dev)
- {
--	struct device_domain_info *info;
--
--	if (!dev)
--		return NULL;
--
--	info = dev_iommu_priv_get(dev);
--	if (unlikely(info == DEFER_DEVICE_DOMAIN_INFO))
--		return NULL;
--
--	return info;
-+	return dev_iommu_priv_get(dev);
+ static void __init check_tylersburg_isoch(void);
+ static int rwbf_quirk;
+-static inline struct device_domain_info *
+-dmar_search_domain_by_dev_info(int segment, int bus, int devfn);
+ 
+ /*
+  * set to 1 to panic kernel if can't successfully enable VT-d
+@@ -315,30 +313,30 @@ struct device_domain_info *get_domain_info(struct device *dev)
  }
  
  DEFINE_SPINLOCK(device_domain_lock);
-@@ -708,11 +698,6 @@ struct context_entry *iommu_context_addr(struct intel_iommu *iommu, u8 bus,
- 	return &context[devfn];
+-static LIST_HEAD(device_domain_list);
++static DEFINE_XARRAY_ALLOC(device_domain_array);
++
++#define DEVI_IDX(seg, bus, devfn) ((((u16)(seg)) << 16) | PCI_DEVID(bus, devfn))
+ 
+ /*
+- * Iterate over elements in device_domain_list and call the specified
++ * Iterate over elements in device_domain_array and call the specified
+  * callback @fn against each element.
+  */
+ int for_each_device_domain(int (*fn)(struct device_domain_info *info,
+ 				     void *data), void *data)
+ {
+-	int ret = 0;
+-	unsigned long flags;
+ 	struct device_domain_info *info;
++	unsigned long index;
++	int ret = 0;
+ 
+-	spin_lock_irqsave(&device_domain_lock, flags);
+-	list_for_each_entry(info, &device_domain_list, global) {
++	rcu_read_lock();
++	xa_for_each(&device_domain_array, index, info) {
+ 		ret = fn(info, data);
+-		if (ret) {
+-			spin_unlock_irqrestore(&device_domain_lock, flags);
+-			return ret;
+-		}
++		if (ret)
++			break;
+ 	}
+-	spin_unlock_irqrestore(&device_domain_lock, flags);
++	rcu_read_unlock();
+ 
+-	return 0;
++	return ret;
  }
  
--static bool attach_deferred(struct device *dev)
+ const struct iommu_ops intel_iommu_ops;
+@@ -900,7 +898,8 @@ static void pgtable_walk(struct intel_iommu *iommu, unsigned long pfn, u8 bus, u
+ 	struct dmar_domain *domain;
+ 	int offset, level;
+ 
+-	info = dmar_search_domain_by_dev_info(iommu->segment, bus, devfn);
++	info = xa_load(&device_domain_array,
++		       DEVI_IDX(iommu->segment, bus, devfn));
+ 	if (!info || !info->domain) {
+ 		pr_info("device [%02x:%02x.%d] not probed\n",
+ 			bus, PCI_SLOT(devfn), PCI_FUNC(devfn));
+@@ -1747,14 +1746,14 @@ static int iommu_init_domains(struct intel_iommu *iommu)
+ 
+ static void disable_dmar_iommu(struct intel_iommu *iommu)
+ {
+-	struct device_domain_info *info, *tmp;
+-	unsigned long flags;
++	struct device_domain_info *info;
++	unsigned long index;
+ 
+ 	if (!iommu->domain_ids)
+ 		return;
+ 
+-	spin_lock_irqsave(&device_domain_lock, flags);
+-	list_for_each_entry_safe(info, tmp, &device_domain_list, global) {
++	rcu_read_lock();
++	xa_for_each(&device_domain_array, index, info) {
+ 		if (info->iommu != iommu)
+ 			continue;
+ 
+@@ -1763,7 +1762,7 @@ static void disable_dmar_iommu(struct intel_iommu *iommu)
+ 
+ 		__dmar_remove_one_dev_info(info);
+ 	}
+-	spin_unlock_irqrestore(&device_domain_lock, flags);
++	rcu_read_unlock();
+ 
+ 	if (iommu->gcmd & DMA_GCMD_TE)
+ 		iommu_disable_translation(iommu);
+@@ -2388,7 +2387,8 @@ static inline void unlink_domain_info(struct device_domain_info *info)
+ {
+ 	assert_spin_locked(&device_domain_lock);
+ 	list_del(&info->link);
+-	list_del(&info->global);
++	xa_erase(&device_domain_array,
++		 DEVI_IDX(info->segment, info->bus, info->devfn));
+ 	if (info->dev)
+ 		dev_iommu_priv_set(info->dev, NULL);
+ }
+@@ -2419,19 +2419,6 @@ struct dmar_domain *find_domain(struct device *dev)
+ 	return NULL;
+ }
+ 
+-static inline struct device_domain_info *
+-dmar_search_domain_by_dev_info(int segment, int bus, int devfn)
 -{
--	return dev_iommu_priv_get(dev) == DEFER_DEVICE_DOMAIN_INFO;
+-	struct device_domain_info *info;
+-
+-	list_for_each_entry(info, &device_domain_list, global)
+-		if (info->segment == segment && info->bus == bus &&
+-		    info->devfn == devfn)
+-			return info;
+-
+-	return NULL;
 -}
 -
- /**
-  * is_downstream_to_pci_bridge - test if a device belongs to the PCI
-  *				 sub-hierarchy of a candidate PCI-PCI bridge
-@@ -2426,9 +2411,6 @@ struct dmar_domain *find_domain(struct device *dev)
- 	if (unlikely(!dev || !dev->iommu))
- 		return NULL;
- 
--	if (unlikely(attach_deferred(dev)))
--		return NULL;
--
- 	/* No lock here, assumes no domain exit in normal case */
- 	info = get_domain_info(dev);
- 	if (likely(info))
-@@ -2497,66 +2479,20 @@ static struct dmar_domain *dmar_insert_one_dev_info(struct intel_iommu *iommu,
- 						    struct device *dev,
- 						    struct dmar_domain *domain)
- {
--	struct device_domain_info *info;
-+	struct device_domain_info *info = get_domain_info(dev);
- 	unsigned long flags;
- 	int ret;
- 
--	info = kzalloc(sizeof(*info), GFP_KERNEL);
--	if (!info)
--		return NULL;
--
--	if (!dev_is_real_dma_subdevice(dev)) {
--		info->bus = bus;
--		info->devfn = devfn;
--		info->segment = iommu->segment;
--	} else {
--		struct pci_dev *pdev = to_pci_dev(dev);
--
--		info->bus = pdev->bus->number;
--		info->devfn = pdev->devfn;
--		info->segment = pci_domain_nr(pdev->bus);
--	}
--
--	info->dev = dev;
--	info->domain = domain;
--	info->iommu = iommu;
--
--	if (dev && dev_is_pci(dev)) {
--		struct pci_dev *pdev = to_pci_dev(info->dev);
--
--		if (ecap_dev_iotlb_support(iommu->ecap) &&
--		    pci_ats_supported(pdev) &&
--		    dmar_find_matched_atsr_unit(pdev))
--			info->ats_supported = 1;
--
--		if (sm_supported(iommu)) {
--			if (pasid_supported(iommu)) {
--				int features = pci_pasid_features(pdev);
--				if (features >= 0)
--					info->pasid_supported = features | 1;
--			}
--
--			if (info->ats_supported && ecap_prs(iommu->ecap) &&
--			    pci_pri_supported(pdev))
--				info->pri_supported = 1;
--		}
--	}
--
- 	spin_lock_irqsave(&device_domain_lock, flags);
-+	info->domain = domain;
- 	spin_lock(&iommu->lock);
- 	ret = domain_attach_iommu(domain, iommu);
- 	spin_unlock(&iommu->lock);
--
- 	if (ret) {
- 		spin_unlock_irqrestore(&device_domain_lock, flags);
--		kfree(info);
- 		return NULL;
- 	}
--
- 	list_add(&info->link, &domain->devices);
--	list_add(&info->global, &device_domain_list);
--	if (dev)
--		dev_iommu_priv_set(dev, info);
- 	spin_unlock_irqrestore(&device_domain_lock, flags);
- 
- 	/* PASID table is mandatory for a PCI device in scalable mode. */
-@@ -4405,14 +4341,56 @@ static bool intel_iommu_capable(enum iommu_cap cap)
- 
- static struct iommu_device *intel_iommu_probe_device(struct device *dev)
- {
-+	struct pci_dev *pdev = dev_is_pci(dev) ? to_pci_dev(dev) : NULL;
-+	struct device_domain_info *info;
+ static int domain_setup_first_level(struct intel_iommu *iommu,
+ 				    struct dmar_domain *domain,
+ 				    struct device *dev,
+@@ -4344,8 +4331,8 @@ static struct iommu_device *intel_iommu_probe_device(struct device *dev)
+ 	struct pci_dev *pdev = dev_is_pci(dev) ? to_pci_dev(dev) : NULL;
+ 	struct device_domain_info *info;
  	struct intel_iommu *iommu;
-+	unsigned long flags;
-+	u8 bus, devfn;
+-	unsigned long flags;
+ 	u8 bus, devfn;
++	void *curr;
  
--	iommu = device_to_iommu(dev, NULL, NULL);
-+	iommu = device_to_iommu(dev, &bus, &devfn);
+ 	iommu = device_to_iommu(dev, &bus, &devfn);
  	if (!iommu)
- 		return ERR_PTR(-ENODEV);
+@@ -4387,10 +4374,15 @@ static struct iommu_device *intel_iommu_probe_device(struct device *dev)
+ 		}
+ 	}
  
--	if (translation_pre_enabled(iommu))
--		dev_iommu_priv_set(dev, DEFER_DEVICE_DOMAIN_INFO);
-+	info = kzalloc(sizeof(*info), GFP_KERNEL);
-+	if (!info)
-+		return ERR_PTR(-ENOMEM);
-+
-+	if (dev_is_real_dma_subdevice(dev)) {
-+		info->bus = pdev->bus->number;
-+		info->devfn = pdev->devfn;
-+		info->segment = pci_domain_nr(pdev->bus);
-+	} else {
-+		info->bus = bus;
-+		info->devfn = devfn;
-+		info->segment = iommu->segment;
+-	spin_lock_irqsave(&device_domain_lock, flags);
+-	list_add(&info->global, &device_domain_list);
++	curr = xa_store(&device_domain_array,
++			DEVI_IDX(info->segment, info->bus, info->devfn),
++			info, GFP_KERNEL);
++	if (xa_err(curr) || WARN_ON(curr)) {
++		kfree(info);
++		return ERR_PTR(-ENOSPC);
 +	}
 +
-+	info->dev = dev;
-+	info->iommu = iommu;
-+	if (dev_is_pci(dev)) {
-+		if (ecap_dev_iotlb_support(iommu->ecap) &&
-+		    pci_ats_supported(pdev) &&
-+		    dmar_find_matched_atsr_unit(pdev))
-+			info->ats_supported = 1;
-+
-+		if (sm_supported(iommu)) {
-+			if (pasid_supported(iommu)) {
-+				int features = pci_pasid_features(pdev);
-+
-+				if (features >= 0)
-+					info->pasid_supported = features | 1;
-+			}
-+
-+			if (info->ats_supported && ecap_prs(iommu->ecap) &&
-+			    pci_pri_supported(pdev))
-+				info->pri_supported = 1;
-+		}
-+	}
-+
-+	spin_lock_irqsave(&device_domain_lock, flags);
-+	list_add(&info->global, &device_domain_list);
-+	dev_iommu_priv_set(dev, info);
-+	spin_unlock_irqrestore(&device_domain_lock, flags);
+ 	dev_iommu_priv_set(dev, info);
+-	spin_unlock_irqrestore(&device_domain_lock, flags);
  
  	return &iommu->iommu;
  }
-@@ -4635,7 +4613,9 @@ intel_iommu_dev_disable_feat(struct device *dev, enum iommu_dev_features feat)
- 
- static bool intel_iommu_is_attach_deferred(struct device *dev)
- {
--	return attach_deferred(dev);
-+	struct device_domain_info *info = get_domain_info(dev);
-+
-+	return translation_pre_enabled(info->iommu) && !info->domain;
- }
- 
- /*
 -- 
 2.25.1
 

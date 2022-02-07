@@ -2,57 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2242B4ABCDF
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:50:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45C684ABBD3
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:44:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388142AbiBGLnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:43:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45042 "EHLO
+        id S1385798AbiBGLcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:32:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385664AbiBGLcE (ORCPT
+        with ESMTP id S1383062AbiBGLV3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:32:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E71FBC0401C0;
-        Mon,  7 Feb 2022 03:31:34 -0800 (PST)
+        Mon, 7 Feb 2022 06:21:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E06FC0401CC;
+        Mon,  7 Feb 2022 03:21:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8F508B811A6;
-        Mon,  7 Feb 2022 11:31:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2F50C340EB;
-        Mon,  7 Feb 2022 11:31:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B9E7161464;
+        Mon,  7 Feb 2022 11:21:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8983FC004E1;
+        Mon,  7 Feb 2022 11:21:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233492;
-        bh=LLYIADvuVzP5s+T9xBErFHnFjFO3FixGAqGldwSpfRM=;
+        s=korg; t=1644232865;
+        bh=PXxvrLo0f5n0j+2ESXkHAGvNHfjbEgwhgKzsc6FW1F4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VSVa6Sc7P6GqAxYjNDCbVDm+HR7yAHaadrWC1HWVBUF2jEyvQIz6k3v8/f9aUvkzs
-         0w1ZrRDoIVLBM5OargRLnHVj0ErFWDb5lXwN9+qbmwdvN2HKv4amwrbiTBAEmhqGrr
-         AIB/JHzBtBwUwBB890S7zaoLIJW3JNMfQgOIq0GI=
+        b=xvABHUdpB54JGI6Opmbw+ircF3QuGrJsJ/mqsIuzopX7TNc0tRIKbRKXWRcw3B1rj
+         ax6RfHT+oDdkyQdFVuI0wFh9N9x382oVQvW1UD7JmlTcuib7cDYgQHO50bqA3j18oO
+         BtfEcYCr0LM0PWbY2kRjzrrGJgriiF0svs8hyad4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Zi Yan <ziy@nvidia.com>, David Rientjes <rientjes@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Paul Turner <pjt@google.com>, Wei Xu <weixugc@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.16 030/126] mm/debug_vm_pgtable: remove pte entry from the page table
+        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: [PATCH 5.10 03/74] ASoC: ops: Reject out of bounds values in snd_soc_put_volsw()
 Date:   Mon,  7 Feb 2022 12:06:01 +0100
-Message-Id: <20220207103805.185385774@linuxfoundation.org>
+Message-Id: <20220207103757.342565772@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
-References: <20220207103804.053675072@linuxfoundation.org>
+In-Reply-To: <20220207103757.232676988@linuxfoundation.org>
+References: <20220207103757.232676988@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -67,75 +53,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pasha Tatashin <pasha.tatashin@soleen.com>
+From: Mark Brown <broonie@kernel.org>
 
-commit fb5222aae64fe25e5f3ebefde8214dcf3ba33ca5 upstream.
+commit 817f7c9335ec01e0f5e8caffc4f1dcd5e458a4c0 upstream.
 
-Patch series "page table check fixes and cleanups", v5.
+We don't currently validate that the values being set are within the range
+we advertised to userspace as being valid, do so and reject any values
+that are out of range.
 
-This patch (of 4):
-
-The pte entry that is used in pte_advanced_tests() is never removed from
-the page table at the end of the test.
-
-The issue is detected by page_table_check, to repro compile kernel with
-the following configs:
-
-CONFIG_DEBUG_VM_PGTABLE=y
-CONFIG_PAGE_TABLE_CHECK=y
-CONFIG_PAGE_TABLE_CHECK_ENFORCED=y
-
-During the boot the following BUG is printed:
-
-  debug_vm_pgtable: [debug_vm_pgtable         ]: Validating architecture page table helpers
-  ------------[ cut here ]------------
-  kernel BUG at mm/page_table_check.c:162!
-  invalid opcode: 0000 [#1] PREEMPT SMP PTI
-  CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.16.0-11413-g2c271fe77d52 #3
-  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.15.0-0-g2dd4b9b3f840-prebuilt.qemu.org 04/01/2014
-  ...
-
-The entry should be properly removed from the page table before the page
-is released to the free list.
-
-Link: https://lkml.kernel.org/r/20220131203249.2832273-1-pasha.tatashin@soleen.com
-Link: https://lkml.kernel.org/r/20220131203249.2832273-2-pasha.tatashin@soleen.com
-Fixes: a5c3b9ffb0f4 ("mm/debug_vm_pgtable: add tests validating advanced arch page table helpers")
-Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-Reviewed-by: Zi Yan <ziy@nvidia.com>
-Tested-by: Zi Yan <ziy@nvidia.com>
-Acked-by: David Rientjes <rientjes@google.com>
-Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
-Cc: Paul Turner <pjt@google.com>
-Cc: Wei Xu <weixugc@google.com>
-Cc: Greg Thelen <gthelen@google.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Mike Rapoport <rppt@kernel.org>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: H. Peter Anvin <hpa@zytor.com>
-Cc: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
-Cc: Jiri Slaby <jirislaby@kernel.org>
-Cc: Muchun Song <songmuchun@bytedance.com>
-Cc: Hugh Dickins <hughd@google.com>
-Cc: <stable@vger.kernel.org>	[5.9+]
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20220124153253.3548853-2-broonie@kernel.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/debug_vm_pgtable.c |    2 ++
- 1 file changed, 2 insertions(+)
+ sound/soc/soc-ops.c |   18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
 
---- a/mm/debug_vm_pgtable.c
-+++ b/mm/debug_vm_pgtable.c
-@@ -171,6 +171,8 @@ static void __init pte_advanced_tests(st
- 	ptep_test_and_clear_young(args->vma, args->vaddr, args->ptep);
- 	pte = ptep_get(args->ptep);
- 	WARN_ON(pte_young(pte));
-+
-+	ptep_get_and_clear_full(args->mm, args->vaddr, args->ptep, 1);
- }
+--- a/sound/soc/soc-ops.c
++++ b/sound/soc/soc-ops.c
+@@ -316,13 +316,27 @@ int snd_soc_put_volsw(struct snd_kcontro
+ 	if (sign_bit)
+ 		mask = BIT(sign_bit + 1) - 1;
  
- static void __init pte_savedwrite_tests(struct pgtable_debug_args *args)
+-	val = ((ucontrol->value.integer.value[0] + min) & mask);
++	val = ucontrol->value.integer.value[0];
++	if (mc->platform_max && val > mc->platform_max)
++		return -EINVAL;
++	if (val > max - min)
++		return -EINVAL;
++	if (val < 0)
++		return -EINVAL;
++	val = (val + min) & mask;
+ 	if (invert)
+ 		val = max - val;
+ 	val_mask = mask << shift;
+ 	val = val << shift;
+ 	if (snd_soc_volsw_is_stereo(mc)) {
+-		val2 = ((ucontrol->value.integer.value[1] + min) & mask);
++		val2 = ucontrol->value.integer.value[1];
++		if (mc->platform_max && val2 > mc->platform_max)
++			return -EINVAL;
++		if (val2 > max - min)
++			return -EINVAL;
++		if (val2 < 0)
++			return -EINVAL;
++		val2 = (val2 + min) & mask;
+ 		if (invert)
+ 			val2 = max - val2;
+ 		if (reg == reg2) {
 
 

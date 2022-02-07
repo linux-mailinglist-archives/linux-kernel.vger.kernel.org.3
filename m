@@ -2,439 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F17E4AB86D
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 11:13:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D56684AB86B
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 11:13:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233957AbiBGKJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 05:09:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41488 "EHLO
+        id S1352017AbiBGKJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 05:09:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355916AbiBGJyn (ORCPT
+        with ESMTP id S1354107AbiBGJwH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 04:54:43 -0500
-X-Greylist: delayed 302 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 01:54:42 PST
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D028C0401C0
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 01:54:41 -0800 (PST)
-X-UUID: fbd8fe33545e432ca6901605df860cca-20220207
-X-UUID: fbd8fe33545e432ca6901605df860cca-20220207
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 312939861; Mon, 07 Feb 2022 17:49:35 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 7 Feb 2022 17:49:34 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 7 Feb
- 2022 17:49:34 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 7 Feb 2022 17:49:33 +0800
-Message-ID: <ae9937d21bf505c64f036e85475d4c56f1c4ab2e.camel@mediatek.com>
-Subject: Re: [PATCH v7 6/8] phy: phy-mtk-dp: Add driver for DP phy
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Guillaume Ranquet <granquet@baylibre.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        "Vinod Koul" <vkoul@kernel.org>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        "Philipp Zabel" <p.zabel@pengutronix.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        "Markus Schneider-Pargmann" <msp@baylibre.com>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Date:   Mon, 7 Feb 2022 17:49:33 +0800
-In-Reply-To: <20211217150854.2081-7-granquet@baylibre.com>
-References: <20211217150854.2081-1-granquet@baylibre.com>
-         <20211217150854.2081-7-granquet@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 7 Feb 2022 04:52:07 -0500
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 433FAC0401C4;
+        Mon,  7 Feb 2022 01:52:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1644227525; x=1675763525;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=FPQnUq0e72L30wi5D99t86LFMH3DYM0+N8zdE+KfywE=;
+  b=FS+fTRURvOMbq2OoKsDcTRDEju+Bg78KUBEdj/yVELzLqhpYQMT+xKpL
+   TN2+EDKSITuK0juA289YVnKP5JY+5ocRIi1BVIxBtefuA/e6YTjlPxgJ8
+   wWMvO7ISVhzABfcp1R8+QSg/vSv3sSd704RygaZMwWNIt/6CKV1xtMgLW
+   wlrjZCZOdVU/dIjyhWcuys4SVDZCt5QFAJ+DKrQFvELbCpuc5e7gY10O6
+   jnsKR99xnm5H7/9hipJhfAiaooIcIq6GmhKjcqjakpn+JCaFLWo7Ff5x3
+   utlH/t0RnkBua3gvaswmbzF2otaAt38LfMZRathoiAvo7MnxyZJzsZqfl
+   A==;
+X-IronPort-AV: E=Sophos;i="5.88,349,1635199200"; 
+   d="scan'208";a="21927829"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 07 Feb 2022 10:52:03 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Mon, 07 Feb 2022 10:52:03 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Mon, 07 Feb 2022 10:52:03 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1644227523; x=1675763523;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=FPQnUq0e72L30wi5D99t86LFMH3DYM0+N8zdE+KfywE=;
+  b=L9Ra29dMDhwbndddw/0Zxk/VF6Vy3qykG9iw5HVnPBLOkPVuAwsnOlo7
+   z1CXqNFSX+vp+7ZAWxPH5p7DxHOCg/hnG0ry8tffCXuipPWuthea466hv
+   Z9HiEbcAAHMsrmr8/cvct6CDZvtt/v/vTytSv8PM76w3+2nHqgddcorlg
+   h85WhW5CKoF6SLL631BeIcwiIWeplJ8ySW4H9b7Jf2kW+cgmqbVZuo6hw
+   ERMEXO6fYVGfcTq8PznAvVV6n2fNE8oXRkygcW1Q98LhcFarpqdcpYA/n
+   INIoXZRC5B86ROSgOMAnZUhr1J8q3R9f5zH81xSXxIHjeA8RDgwghtII7
+   w==;
+X-IronPort-AV: E=Sophos;i="5.88,349,1635199200"; 
+   d="scan'208";a="21927828"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 07 Feb 2022 10:52:03 +0100
+Received: from steina-w.localnet (unknown [10.123.49.12])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 2696E280065;
+        Mon,  7 Feb 2022 10:52:03 +0100 (CET)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
+Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: (EXT) Re: [PATCH 4/8] media: imx: Fail conversion if pixel format not supported
+Date:   Mon, 07 Feb 2022 10:52:00 +0100
+Message-ID: <1905895.usQuhbGJ8B@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <20220205085151.61088d8e.dorota.czaplejewicz@puri.sm>
+References: <20220204121514.2762676-1-alexander.stein@ew.tq-group.com> <Yf34CXvZQPQPAxma@pendragon.ideasonboard.com> <20220205085151.61088d8e.dorota.czaplejewicz@puri.sm>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Guillaume:
+Hi Laurent and Dorota,
 
-On Fri, 2021-12-17 at 16:08 +0100, Guillaume Ranquet wrote:
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
+Am Samstag, 5. Februar 2022, 08:51:51 CET schrieb Dorota Czaplejewicz:
+> * PGP Signed by an unknown key
 > 
-> This is a new driver that supports the integrated DisplayPort phy for
-> mediatek SoCs, especially the mt8195. The phy is integrated into the
-> DisplayPort controller and will be created by the mtk-dp driver. This
-> driver expects a struct regmap to be able to work on the same
-> registers
-> as the DisplayPort controller. It sets the device data to be the
-> struct
-> phy so that the DisplayPort controller can easily work with it.
+> Hi Laurent,
 > 
-> The driver does not have any devicetree bindings because the
-> datasheet
-> does not list the controller and the phy as distinct units.
+> On Sat, 5 Feb 2022 06:07:37 +0200
 > 
-> The interaction with the controller can be covered by the configure
-> callback of the phy framework and its displayport parameters.
+> Laurent Pinchart <laurent.pinchart@ideasonboard.com> wrote:
+> > Hi Alexander and Dorota,
+> > 
+> > Thank you for the patch.
+> > 
+> > On Fri, Feb 04, 2022 at 01:15:10PM +0100, Alexander Stein wrote:
+> > > From: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
+> > > 
+> > > imx_media_find_mbus_format has NULL as a valid return value,
+> > > therefore the caller should take it into account.
+> > > 
+> > > Signed-off-by: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
+> > > Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> > > ---
+> > > 
+> > >  drivers/staging/media/imx/imx-media-utils.c | 3 +++
+> > >  1 file changed, 3 insertions(+)
+> > > 
+> > > diff --git a/drivers/staging/media/imx/imx-media-utils.c
+> > > b/drivers/staging/media/imx/imx-media-utils.c index
+> > > 32aaa2e81bea..e0a256a08c3b 100644
+> > > --- a/drivers/staging/media/imx/imx-media-utils.c
+> > > +++ b/drivers/staging/media/imx/imx-media-utils.c
+> > > @@ -544,6 +544,9 @@ static int imx56_media_mbus_fmt_to_pix_fmt(struct
+> > > v4l2_pix_format *pix,> > 
+> > >  		cc = imx_media_find_mbus_format(code, PIXFMT_SEL_YUV);
+> > 
+> > The code passed to the function comes from the previous line:
+> > 	imx_media_enum_mbus_formats(&code, 0, PIXFMT_SEL_YUV);
+> > 
+> > As far as I can tell, this is guaranteed to return a code that will
+> > result in imx_media_find_mbus_format() returning a non-NULL pointer.
 > 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> ---
->  MAINTAINERS                       |   1 +
->  drivers/phy/mediatek/Kconfig      |   8 ++
->  drivers/phy/mediatek/Makefile     |   1 +
->  drivers/phy/mediatek/phy-mtk-dp.c | 219
-> ++++++++++++++++++++++++++++++
->  4 files changed, 229 insertions(+)
->  create mode 100644 drivers/phy/mediatek/phy-mtk-dp.c
+> While I am not well-versed in the implicit code style of the kernel, I
+> decided to leave it in because it makes the code more locally legible. With
+> a check here, even a non-functional one, there's no need to understand the
+> internals of `imx_media_find_mbus_format` that are only implicit. That
+> makes the code less surprising when interested only in the outer function.
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 8b7a98daf8e05..c44829d8a74df 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -6394,6 +6394,7 @@ L:	linux-mediatek@lists.infradead.org
-> (moderated for non-subscribers)
->  S:	Supported
->  F:	Documentation/devicetree/bindings/display/mediatek/
->  F:	drivers/gpu/drm/mediatek/
-> +F:	drivers/phy/mediatek/phy-mtk-dp.c
->  F:	drivers/phy/mediatek/phy-mtk-hdmi*
->  F:	drivers/phy/mediatek/phy-mtk-mipi*
->  
-> diff --git a/drivers/phy/mediatek/Kconfig
-> b/drivers/phy/mediatek/Kconfig
-> index 55f8e6c048ab3..f7ec860590492 100644
-> --- a/drivers/phy/mediatek/Kconfig
-> +++ b/drivers/phy/mediatek/Kconfig
-> @@ -55,3 +55,11 @@ config PHY_MTK_MIPI_DSI
->  	select GENERIC_PHY
->  	help
->  	  Support MIPI DSI for Mediatek SoCs.
-> +
-> +config PHY_MTK_DP
-> +	tristate "MediaTek DP-PHY Driver"
-> +	depends on ARCH_MEDIATEK || COMPILE_TEST
-> +	depends on OF
-> +	select GENERIC_PHY
-> +	help
-> +	  Support DisplayPort PHY for Mediatek SoCs.
-> diff --git a/drivers/phy/mediatek/Makefile
-> b/drivers/phy/mediatek/Makefile
-> index ace660fbed3a1..4ba1e06504346 100644
-> --- a/drivers/phy/mediatek/Makefile
-> +++ b/drivers/phy/mediatek/Makefile
-> @@ -3,6 +3,7 @@
->  # Makefile for the phy drivers.
->  #
->  
-> +obj-$(CONFIG_PHY_MTK_DP)		+= phy-mtk-dp.o
->  obj-$(CONFIG_PHY_MTK_TPHY)		+= phy-mtk-tphy.o
->  obj-$(CONFIG_PHY_MTK_UFS)		+= phy-mtk-ufs.o
->  obj-$(CONFIG_PHY_MTK_XSPHY)		+= phy-mtk-xsphy.o
-> diff --git a/drivers/phy/mediatek/phy-mtk-dp.c
-> b/drivers/phy/mediatek/phy-mtk-dp.c
-> new file mode 100644
-> index 0000000000000..e0de2a367e788
-> --- /dev/null
-> +++ b/drivers/phy/mediatek/phy-mtk-dp.c
-> @@ -0,0 +1,219 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2021 BayLibre
-> + * Author: Markus Schneider-Pargmann <msp@baylibre.com>
-> + */
-> +
-> +#include <linux/delay.h>
-> +#include <linux/io.h>
-> +#include <linux/of.h>
-> +#include <linux/phy/phy.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +
-> +#define PHY_OFFSET 0x1000
-> +
-> +#define MTK_DP_PHY_DIG_PLL_CTL_1		(PHY_OFFSET + 0x014)
-> +# define TPLL_SSC_EN				BIT(3)
-> +
-> +#define MTK_DP_PHY_DIG_BIT_RATE			(PHY_OFFSET +
-> 0x03C)
-> +# define BIT_RATE_RBR				0
-> +# define BIT_RATE_HBR				1
-> +# define BIT_RATE_HBR2				2
-> +# define BIT_RATE_HBR3				3
-> +
-
-I would like to align the indent style to Mediatek mipi dsi phy driver
-and Mediatek hdmi phy driver. That means the bitwise definition value
-has one more indent.
-
-> +#define MTK_DP_PHY_DIG_SW_RST			(PHY_OFFSET +
-> 0x038)
-> +# define DP_GLB_SW_RST_PHYD			BIT(0)
-> +
-> +#define MTK_DP_LANE0_DRIVING_PARAM_3		(PHY_OFFSET + 0x138)
-> +#define MTK_DP_LANE1_DRIVING_PARAM_3		(PHY_OFFSET + 0x238)
-> +#define MTK_DP_LANE2_DRIVING_PARAM_3		(PHY_OFFSET + 0x338)
-> +#define MTK_DP_LANE3_DRIVING_PARAM_3		(PHY_OFFSET + 0x438)
-> +# define XTP_LN_TX_LCTXC0_SW0_PRE0_DEFAULT	0x10
-> +# define XTP_LN_TX_LCTXC0_SW0_PRE1_DEFAULT	(0x14 << 8)
-> +# define XTP_LN_TX_LCTXC0_SW0_PRE2_DEFAULT	(0x18 << 16)
-> +# define XTP_LN_TX_LCTXC0_SW0_PRE3_DEFAULT	(0x20 << 24)
-> +# define DRIVING_PARAM_3_DEFAULT		(XTP_LN_TX_LCTXC0_SW0_P
-> RE0_DEFAULT | \
-> +						 XTP_LN_TX_LCTXC0_SW0_P
-> RE1_DEFAULT | \
-> +						 XTP_LN_TX_LCTXC0_SW0_P
-> RE2_DEFAULT | \
-> +						 XTP_LN_TX_LCTXC0_SW0_P
-> RE3_DEFAULT)
-> +
-> +#define MTK_DP_LANE0_DRIVING_PARAM_4		(PHY_OFFSET + 0x13C)
-> +#define MTK_DP_LANE1_DRIVING_PARAM_4		(PHY_OFFSET + 0x23C)
-> +#define MTK_DP_LANE2_DRIVING_PARAM_4		(PHY_OFFSET + 0x33C)
-> +#define MTK_DP_LANE3_DRIVING_PARAM_4		(PHY_OFFSET + 0x43C)
-
-Useless, so remove.
-
-> +# define XTP_LN_TX_LCTXC0_SW1_PRE0_DEFAULT	0x18
-> +# define XTP_LN_TX_LCTXC0_SW1_PRE1_DEFAULT	(0x1e << 8)
-> +# define XTP_LN_TX_LCTXC0_SW1_PRE2_DEFAULT	(0x24 << 16)
-> +# define XTP_LN_TX_LCTXC0_SW2_PRE0_DEFAULT	(0x20 << 24)
-> +# define DRIVING_PARAM_4_DEFAULT		(XTP_LN_TX_LCTXC0_SW1_P
-> RE0_DEFAULT | \
-> +						 XTP_LN_TX_LCTXC0_SW1_P
-> RE1_DEFAULT | \
-> +						 XTP_LN_TX_LCTXC0_SW1_P
-> RE2_DEFAULT | \
-> +						 XTP_LN_TX_LCTXC0_SW2_P
-> RE0_DEFAULT)
-> +
-> +#define MTK_DP_LANE0_DRIVING_PARAM_5		(PHY_OFFSET + 0x140)
-> +#define MTK_DP_LANE1_DRIVING_PARAM_5		(PHY_OFFSET + 0x240)
-> +#define MTK_DP_LANE2_DRIVING_PARAM_5		(PHY_OFFSET + 0x340)
-> +#define MTK_DP_LANE3_DRIVING_PARAM_5		(PHY_OFFSET + 0x440)
-
-Ditto.
-
-> +# define XTP_LN_TX_LCTXC0_SW2_PRE1_DEFAULT	0x28
-> +# define XTP_LN_TX_LCTXC0_SW3_PRE0_DEFAULT	(0x30 << 8)
-> +# define DRIVING_PARAM_5_DEFAULT		(XTP_LN_TX_LCTXC0_SW2_P
-> RE1_DEFAULT | \
-> +						 XTP_LN_TX_LCTXC0_SW3_P
-> RE0_DEFAULT)
-> +
-> +#define MTK_DP_LANE0_DRIVING_PARAM_6		(PHY_OFFSET + 0x144)
-> +#define MTK_DP_LANE1_DRIVING_PARAM_6		(PHY_OFFSET + 0x244)
-> +#define MTK_DP_LANE2_DRIVING_PARAM_6		(PHY_OFFSET + 0x344)
-> +#define MTK_DP_LANE3_DRIVING_PARAM_6		(PHY_OFFSET + 0x444)
-
-Ditto.
-
-> +# define XTP_LN_TX_LCTXCP1_SW0_PRE0_DEFAULT	0x00
-> +# define XTP_LN_TX_LCTXCP1_SW0_PRE1_DEFAULT	(0x04 << 8)
-> +# define XTP_LN_TX_LCTXCP1_SW0_PRE2_DEFAULT	(0x08 << 16)
-> +# define XTP_LN_TX_LCTXCP1_SW0_PRE3_DEFAULT	(0x10 << 24)
-> +# define DRIVING_PARAM_6_DEFAULT		(XTP_LN_TX_LCTXCP1_SW0_
-> PRE0_DEFAULT | \
-> +						 XTP_LN_TX_LCTXCP1_SW0_
-> PRE1_DEFAULT | \
-> +						 XTP_LN_TX_LCTXCP1_SW0_
-> PRE2_DEFAULT | \
-> +						 XTP_LN_TX_LCTXCP1_SW0_
-> PRE3_DEFAULT)
-> +
-> +#define MTK_DP_LANE0_DRIVING_PARAM_7		(PHY_OFFSET + 0x148)
-> +#define MTK_DP_LANE1_DRIVING_PARAM_7		(PHY_OFFSET + 0x248)
-> +#define MTK_DP_LANE2_DRIVING_PARAM_7		(PHY_OFFSET + 0x348)
-> +#define MTK_DP_LANE3_DRIVING_PARAM_7		(PHY_OFFSET + 0x448)
-
-Ditto.
-
-> +# define XTP_LN_TX_LCTXCP1_SW1_PRE0_DEFAULT	0x00
-> +# define XTP_LN_TX_LCTXCP1_SW1_PRE1_DEFAULT	(0x06 << 8)
-> +# define XTP_LN_TX_LCTXCP1_SW1_PRE2_DEFAULT	(0x0c << 16)
-> +# define XTP_LN_TX_LCTXCP1_SW2_PRE0_DEFAULT	(0x00 << 24)
-> +# define DRIVING_PARAM_7_DEFAULT		(XTP_LN_TX_LCTXCP1_SW1_
-> PRE0_DEFAULT | \
-> +						 XTP_LN_TX_LCTXCP1_SW1_
-> PRE1_DEFAULT | \
-> +						 XTP_LN_TX_LCTXCP1_SW1_
-> PRE2_DEFAULT | \
-> +						 XTP_LN_TX_LCTXCP1_SW2_
-> PRE0_DEFAULT)
-> +
-> +#define MTK_DP_LANE0_DRIVING_PARAM_8		(PHY_OFFSET + 0x14C)
-> +#define MTK_DP_LANE1_DRIVING_PARAM_8		(PHY_OFFSET + 0x24C)
-> +#define MTK_DP_LANE2_DRIVING_PARAM_8		(PHY_OFFSET + 0x34C)
-> +#define MTK_DP_LANE3_DRIVING_PARAM_8		(PHY_OFFSET + 0x44C)
-
-Ditto.
-
-> +# define XTP_LN_TX_LCTXCP1_SW2_PRE1_DEFAULT	0x08
-> +# define XTP_LN_TX_LCTXCP1_SW3_PRE0_DEFAULT	(0x00 << 8)
-> +# define DRIVING_PARAM_8_DEFAULT		(XTP_LN_TX_LCTXCP1_SW2_
-> PRE1_DEFAULT | \
-> +						 XTP_LN_TX_LCTXCP1_SW3_
-> PRE0_DEFAULT)
-> +
-> +struct mtk_dp_phy {
-> +	struct regmap *regs;
-> +};
-> +
-> +static int mtk_dp_phy_init(struct phy *phy)
-> +{
-> +	struct mtk_dp_phy *dp_phy = phy_get_drvdata(phy);
-> +	u32 driving_params[] = {
-> +		DRIVING_PARAM_3_DEFAULT,
-> +		DRIVING_PARAM_4_DEFAULT,
-> +		DRIVING_PARAM_5_DEFAULT,
-> +		DRIVING_PARAM_6_DEFAULT,
-> +		DRIVING_PARAM_7_DEFAULT,
-> +		DRIVING_PARAM_8_DEFAULT
-> +	};
-> +
-> +	regmap_bulk_write(dp_phy->regs, MTK_DP_LANE0_DRIVING_PARAM_3,
-> +			  driving_params, ARRAY_SIZE(driving_params));
-> +	regmap_bulk_write(dp_phy->regs, MTK_DP_LANE1_DRIVING_PARAM_3,
-> +			  driving_params, ARRAY_SIZE(driving_params));
-> +	regmap_bulk_write(dp_phy->regs, MTK_DP_LANE2_DRIVING_PARAM_3,
-> +			  driving_params, ARRAY_SIZE(driving_params));
-> +	regmap_bulk_write(dp_phy->regs, MTK_DP_LANE3_DRIVING_PARAM_3,
-> +			  driving_params, ARRAY_SIZE(driving_params));
-> +
-> +	return 0;
-> +}
-> +
-> +static int mtk_dp_phy_configure(struct phy *phy, union
-> phy_configure_opts *opts)
-> +{
-> +	struct mtk_dp_phy *dp_phy = phy_get_drvdata(phy);
-> +	u32 val;
-> +
-> +	if (opts->dp.set_rate) {
-> +		switch (opts->dp.link_rate) {
-> +		default:
-> +			dev_err(&phy->dev,
-> +				"Implementation error, unknown linkrate
-> %x\n",
-> +				opts->dp.link_rate);
-> +			return -EINVAL;
-> +		case 1620:
-> +			val = BIT_RATE_RBR;
-> +			break;
-> +		case 2700:
-> +			val = BIT_RATE_HBR;
-> +			break;
-> +		case 5400:
-> +			val = BIT_RATE_HBR2;
-> +			break;
-> +		case 8100:
-> +			val = BIT_RATE_HBR3;
-> +			break;
-> +		}
-> +		regmap_write(dp_phy->regs, MTK_DP_PHY_DIG_BIT_RATE,
-> val);
-> +	}
-> +
-> +	regmap_update_bits(dp_phy->regs, MTK_DP_PHY_DIG_PLL_CTL_1,
-> +			   TPLL_SSC_EN, opts->dp.ssc ? TPLL_SSC_EN :
-> 0);
-> +
-> +	return 0;
-> +}
-> +
-> +static int mtk_dp_phy_reset(struct phy *phy)
-> +{
-> +	struct mtk_dp_phy *dp_phy = phy_get_drvdata(phy);
-> +
-> +	regmap_update_bits(dp_phy->regs, MTK_DP_PHY_DIG_SW_RST,
-> +			   DP_GLB_SW_RST_PHYD, 0);
-> +	usleep_range(50, 200);
-> +	regmap_update_bits(dp_phy->regs, MTK_DP_PHY_DIG_SW_RST,
-> +			   DP_GLB_SW_RST_PHYD, 1);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct phy_ops mtk_dp_phy_dev_ops = {
-> +	.init = mtk_dp_phy_init,
-> +	.configure = mtk_dp_phy_configure,
-> +	.reset = mtk_dp_phy_reset,
+> The other advantage of a check is becoming robust against future changes to
+> `imx_media_find_mbus_format` itself.
 > 
+> I don't have a strong preference about keeping or leaving this patch, but if
+> this check was there in the first place, I wouldn't have spent time trying
+> to figure out whether there's a bug here.
 
-In Mediatek mipi dsi phy driver and Mediatek hdmi phy driver, implement
-power_on and power_off. I would like to align the behavior. If init is
-necessary for configure, would exit should be implement?
-
-> +	.owner = THIS_MODULE,
-> +};
-> +
-> +static int mtk_dp_phy_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct mtk_dp_phy *dp_phy;
-> +	struct phy *phy;
-> +
-> +	dp_phy = devm_kzalloc(dev, sizeof(*dp_phy), GFP_KERNEL);
-> +	if (!dp_phy)
-> +		return -ENOMEM;
-> +
-> +	dp_phy->regs = *(struct regmap **)dev->platform_data;
-
-Why not
-
-	mtk_dp->phy_dev = platform_device_register_data(dev, "mediatek-
-dp-phy",
-							PLATFORM_DEVID_
-AUTO,
-							mtk_dp->regs,
-							sizeof(struct
-regmap *));
-
-And
-
-dp_phy->regs = (struct regmap *)dev->platform_data;
+Laurent, thanks for your feedback.
+I'm on Dorota's side here. While you are right that the code from 
+  imx_media_enum_mbus_formats(&code, 0, PIXFMT_SEL_YUV);
+is guaranteed to return something. I don't lnek this implicit assumption over 
+2 function calls. Better be safe than sorry. For that reason code should be 
+initialized as well. Will create a patch for that.
 
 Regards,
-CK
+Alexander
 
-> +	if (!dp_phy->regs) {
-> +		dev_err(dev, "No data passed, requires struct
-> regmap**\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	phy = devm_phy_create(dev, NULL, &mtk_dp_phy_dev_ops);
-> +	if (IS_ERR(phy)) {
-> +		dev_err(dev, "Failed to create DP PHY: %ld\n",
-> PTR_ERR(phy));
-> +		return PTR_ERR(phy);
-> +	}
-> +	phy_set_drvdata(phy, dp_phy);
-> +
-> +	if (!dev->of_node)
-> +		phy_create_lookup(phy, "dp", dev_name(dev));
-> +
-> +	return 0;
-> +}
-> +
-> +struct platform_driver mtk_dp_phy_driver = {
-> +	.probe = mtk_dp_phy_probe,
-> +	.driver = {
-> +		.name = "mediatek-dp-phy",
-> +	},
-> +};
-> +module_platform_driver(mtk_dp_phy_driver);
-> +
-> +MODULE_AUTHOR("Markus Schneider-Pargmann <msp@baylibre.com>");
-> +MODULE_DESCRIPTION("MediaTek DP PHY Driver");
-> +MODULE_LICENSE("GPL v2");
+
 

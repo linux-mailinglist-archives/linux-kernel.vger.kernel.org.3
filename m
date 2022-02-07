@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E8174AB983
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:23:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B92D34ABD01
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:55:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358879AbiBGLOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:14:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49268 "EHLO
+        id S1388596AbiBGLoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:44:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241733AbiBGLLT (ORCPT
+        with ESMTP id S1384248AbiBGL0e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:11:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7985BC0401C1;
-        Mon,  7 Feb 2022 03:11:19 -0800 (PST)
+        Mon, 7 Feb 2022 06:26:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74049C0401C9;
+        Mon,  7 Feb 2022 03:25:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2AB91B80EE8;
-        Mon,  7 Feb 2022 11:11:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F04AC004E1;
-        Mon,  7 Feb 2022 11:11:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 12DFC6135A;
+        Mon,  7 Feb 2022 11:25:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4EFEC004E1;
+        Mon,  7 Feb 2022 11:25:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232276;
-        bh=YsRx6WK12xvS86SkETnSzshMl+yodYOA2OdexcTU104=;
+        s=korg; t=1644233154;
+        bh=Qt3S7UX4NFNycD6cNDXk6cbCpdwYlASoMUr9U9g1V+Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jYLJH1HvHx9SBAG0Obw8aPv0Zyqxhc423jbEFR6Fbb/I8Lt6FhWI5pCW/guHGZnt9
-         DpJrusd1vNthFOu/hzIGbWgwZnNYOJifWqa8yDGWg3hgPmfzJ6R9DP/PsfYnnrrigi
-         5sW0McmizOOeQ8g3S8nWM8ifwCiUroMhwzs1X8fk=
+        b=W4WWYzWDkMpwDgSzx8jhAT8UsuUdjTI8glJOnDhJjXnJvoKkPJqq5g9mX0RItQdCN
+         NHBz4kVpWBqvF6B4NLR+RSOOhDoTWgXE9dYd2wV5PyKnoKRT0ROOU+W830GmCQvyz3
+         pdJGU8CV+jyAQIG4FknXYQOmf5kaoKO3NfA9kGCQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hangbin Liu <liuhangbin@gmail.com>,
-        Xin Long <lucien.xin@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 26/69] ping: fix the sk_bound_dev_if match in ping_lookup
-Date:   Mon,  7 Feb 2022 12:05:48 +0100
-Message-Id: <20220207103756.484887582@linuxfoundation.org>
+        stable@vger.kernel.org, Christian Lachner <gladiac@gmail.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.15 016/110] ALSA: hda/realtek: Fix silent output on Gigabyte X570 Aorus Xtreme after reboot from Windows
+Date:   Mon,  7 Feb 2022 12:05:49 +0100
+Message-Id: <20220207103802.814239221@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103755.604121441@linuxfoundation.org>
-References: <20220207103755.604121441@linuxfoundation.org>
+In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
+References: <20220207103802.280120990@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,47 +54,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xin Long <lucien.xin@gmail.com>
+From: Christian Lachner <gladiac@gmail.com>
 
-commit 2afc3b5a31f9edf3ef0f374f5d70610c79c93a42 upstream.
+commit ea3541961376f733373839cc90493aafa8a7f733 upstream.
 
-When 'ping' changes to use PING socket instead of RAW socket by:
+This commit switches the Gigabyte X570 Aorus Xtreme from using the
+ALC1220_FIXUP_CLEVO_P950 to the ALC1220_FIXUP_GB_X570 quirk. This fixes
+the no-audio after reboot from windows problem.
 
-   # sysctl -w net.ipv4.ping_group_range="0 100"
-
-the selftests 'router_broadcast.sh' will fail, as such command
-
-  # ip vrf exec vrf-h1 ping -I veth0 198.51.100.255 -b
-
-can't receive the response skb by the PING socket. It's caused by mismatch
-of sk_bound_dev_if and dif in ping_rcv() when looking up the PING socket,
-as dif is vrf-h1 if dif's master was set to vrf-h1.
-
-This patch is to fix this regression by also checking the sk_bound_dev_if
-against sdif so that the packets can stil be received even if the socket
-is not bound to the vrf device but to the real iif.
-
-Fixes: c319b4d76b9e ("net: ipv4: add IPPROTO_ICMP socket kind")
-Reported-by: Hangbin Liu <liuhangbin@gmail.com>
-Signed-off-by: Xin Long <lucien.xin@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=205275
+Signed-off-by: Christian Lachner <gladiac@gmail.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220129113243.93068-4-gladiac@gmail.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/ping.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ sound/pci/hda/patch_realtek.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/net/ipv4/ping.c
-+++ b/net/ipv4/ping.c
-@@ -225,7 +225,8 @@ static struct sock *ping_lookup(struct n
- 			continue;
- 		}
- 
--		if (sk->sk_bound_dev_if && sk->sk_bound_dev_if != dif)
-+		if (sk->sk_bound_dev_if && sk->sk_bound_dev_if != dif &&
-+		    sk->sk_bound_dev_if != inet_sdif(skb))
- 			continue;
- 
- 		sock_hold(sk);
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -2586,7 +2586,7 @@ static const struct snd_pci_quirk alc882
+ 	SND_PCI_QUIRK(0x1458, 0xa002, "Gigabyte EP45-DS3/Z87X-UD3H", ALC889_FIXUP_FRONT_HP_NO_PRESENCE),
+ 	SND_PCI_QUIRK(0x1458, 0xa0b8, "Gigabyte AZ370-Gaming", ALC1220_FIXUP_GB_DUAL_CODECS),
+ 	SND_PCI_QUIRK(0x1458, 0xa0cd, "Gigabyte X570 Aorus Master", ALC1220_FIXUP_GB_X570),
+-	SND_PCI_QUIRK(0x1458, 0xa0ce, "Gigabyte X570 Aorus Xtreme", ALC1220_FIXUP_CLEVO_P950),
++	SND_PCI_QUIRK(0x1458, 0xa0ce, "Gigabyte X570 Aorus Xtreme", ALC1220_FIXUP_GB_X570),
+ 	SND_PCI_QUIRK(0x1458, 0xa0d5, "Gigabyte X570S Aorus Master", ALC1220_FIXUP_GB_X570),
+ 	SND_PCI_QUIRK(0x1462, 0x11f7, "MSI-GE63", ALC1220_FIXUP_CLEVO_P950),
+ 	SND_PCI_QUIRK(0x1462, 0x1228, "MSI-GP63", ALC1220_FIXUP_CLEVO_P950),
 
 

@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7935D4AB954
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:23:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91CA04ABC70
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:48:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352257AbiBGLLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:11:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47762 "EHLO
+        id S1386773AbiBGLgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:36:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355277AbiBGLIQ (ORCPT
+        with ESMTP id S1357112AbiBGLZS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:08:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D5E2C043181;
-        Mon,  7 Feb 2022 03:08:16 -0800 (PST)
+        Mon, 7 Feb 2022 06:25:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDDDEC0401F3;
+        Mon,  7 Feb 2022 03:25:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 19CBB61261;
-        Mon,  7 Feb 2022 11:08:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF30BC004E1;
-        Mon,  7 Feb 2022 11:08:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 209EF6077B;
+        Mon,  7 Feb 2022 11:25:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75370C004E1;
+        Mon,  7 Feb 2022 11:25:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232095;
-        bh=i4kxKJp73ZiiAxDUVelR4/cBG+CtNNOMx/SDUQqHhAs=;
+        s=korg; t=1644233112;
+        bh=u4UjAcFF1Zp7pNCg0/6sdayjl3EP4O06VFNJH8ux4dM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hisNyPet+uc9ucP7DHfMAylgnaAljy9RczUD/IDl9HDADHHZThSTE0y57LHFj/pSF
-         5JyXP/AtyD+yP6SAUa/EkVBLT5H2z236suBN7Bsvklj8xqMW/CKDP3b0ktIjGIxZUi
-         OgPJeLSAyTcYgf5dVHo8YWV4WJexYdYFGatc7018=
+        b=IP6+ZSaE0tBsu/Jn8k9XBGbUD22AByA4H/iTQR7H9wzUAI7xds+uXZztc0bAxtBM5
+         V0m96t1uydYB7Lf9wz4WXsJjCfLx0HT7C1TnPolYQlK5wQltFr5DassULGHRmt9e4Z
+         pA50j9P/gyWQorbtF4GxxwwMcbXjZM8gt+AvrSw0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: [PATCH 4.9 07/48] PM: wakeup: simplify the output logic of pm_show_wakelocks()
-Date:   Mon,  7 Feb 2022 12:05:40 +0100
-Message-Id: <20220207103752.579589466@linuxfoundation.org>
+        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: [PATCH 5.15 008/110] ASoC: ops: Reject out of bounds values in snd_soc_put_volsw_sx()
+Date:   Mon,  7 Feb 2022 12:05:41 +0100
+Message-Id: <20220207103802.562124328@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103752.341184175@linuxfoundation.org>
-References: <20220207103752.341184175@linuxfoundation.org>
+In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
+References: <20220207103802.280120990@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,51 +53,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+From: Mark Brown <broonie@kernel.org>
 
-commit c9d967b2ce40d71e968eb839f36c936b8a9cf1ea upstream.
+commit 4f1e50d6a9cf9c1b8c859d449b5031cacfa8404e upstream.
 
-The buffer handling in pm_show_wakelocks() is tricky, and hopefully
-correct.  Ensure it really is correct by using sysfs_emit_at() which
-handles all of the tricky string handling logic in a PAGE_SIZE buffer
-for us automatically as this is a sysfs file being read from.
+We don't currently validate that the values being set are within the range
+we advertised to userspace as being valid, do so and reject any values
+that are out of range.
 
-Reviewed-by: Lee Jones <lee.jones@linaro.org>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20220124153253.3548853-3-broonie@kernel.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/power/wakelock.c |   12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
+ sound/soc/soc-ops.c |    9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
---- a/kernel/power/wakelock.c
-+++ b/kernel/power/wakelock.c
-@@ -38,23 +38,19 @@ ssize_t pm_show_wakelocks(char *buf, boo
- {
- 	struct rb_node *node;
- 	struct wakelock *wl;
--	char *str = buf;
--	char *end = buf + PAGE_SIZE;
-+	int len = 0;
+--- a/sound/soc/soc-ops.c
++++ b/sound/soc/soc-ops.c
+@@ -423,8 +423,15 @@ int snd_soc_put_volsw_sx(struct snd_kcon
+ 	int err = 0;
+ 	unsigned int val, val_mask;
  
- 	mutex_lock(&wakelocks_lock);
++	val = ucontrol->value.integer.value[0];
++	if (mc->platform_max && val > mc->platform_max)
++		return -EINVAL;
++	if (val > max - min)
++		return -EINVAL;
++	if (val < 0)
++		return -EINVAL;
+ 	val_mask = mask << shift;
+-	val = (ucontrol->value.integer.value[0] + min) & mask;
++	val = (val + min) & mask;
+ 	val = val << shift;
  
- 	for (node = rb_first(&wakelocks_tree); node; node = rb_next(node)) {
- 		wl = rb_entry(node, struct wakelock, node);
- 		if (wl->ws.active == show_active)
--			str += scnprintf(str, end - str, "%s ", wl->name);
-+			len += sysfs_emit_at(buf, len, "%s ", wl->name);
- 	}
--	if (str > buf)
--		str--;
--
--	str += scnprintf(str, end - str, "\n");
-+	len += sysfs_emit_at(buf, len, "\n");
- 
- 	mutex_unlock(&wakelocks_lock);
--	return (str - buf);
-+	return len;
- }
- 
- #if CONFIG_PM_WAKELOCKS_LIMIT > 0
+ 	err = snd_soc_component_update_bits(component, reg, val_mask, val);
 
 

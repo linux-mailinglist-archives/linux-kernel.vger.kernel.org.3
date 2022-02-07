@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E9334ABA26
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:27:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 246C44ABC65
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:47:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382794AbiBGLUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:20:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53760 "EHLO
+        id S1377694AbiBGLfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:35:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377775AbiBGLPi (ORCPT
+        with ESMTP id S1384136AbiBGLYw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:15:38 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1839EC03FEDC;
-        Mon,  7 Feb 2022 03:15:16 -0800 (PST)
+        Mon, 7 Feb 2022 06:24:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 108F1C043181;
+        Mon,  7 Feb 2022 03:24:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F1054613F8;
-        Mon,  7 Feb 2022 11:15:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8F01C004E1;
-        Mon,  7 Feb 2022 11:15:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A0EE461388;
+        Mon,  7 Feb 2022 11:24:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F19DC004E1;
+        Mon,  7 Feb 2022 11:24:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232503;
-        bh=JTT6MLmBoO9BQYAvaddXI2YcFB4imTl5OxVLeNg4Aow=;
+        s=korg; t=1644233091;
+        bh=IEgE565Gtb1btIQogTZvSJuRAGwhj+7xF4Okv16Im2o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NbmqlW8wZhfVyiK+S9wwMnfhgRXR6CxzvxXbY7gsvBvl8hQgUoHcbC8ZeMXCRcNsA
-         sDPmLcSeXJ/S0V9cUy3VNDFsDu3ZWDicjD2CfWpUnjcX7AZHJYOWGwR5aqeFEtVTqM
-         BriccZaoXblPvlTQZxteLGksdyjaYJkvQuimRwaE=
+        b=egtWY0ngQD5vYuIcFRlTjU6jsQtn2JhjJ2rkJRBhrWmFuN159ERWefPwRbdWUq5jp
+         T2ofMIcbrz2LGXrYJ72INJTkKwX6+gZ7Hx2iIUawKyrNZvP1/LtIdGU/JWH2nE28Ho
+         RYVbb99Klzq8aRhX5drLvw+t66LyBK15UaZfy4BQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Joe Damato <jdamato@fastly.com>,
-        kernel test robot <lkp@intel.com>,
-        Gurucharan G <gurucharanx.g@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>
-Subject: [PATCH 4.19 23/86] i40e: fix unsigned stat widths
+        stable@vger.kernel.org,
+        =?UTF-8?q?Albert=20Geant=C4=83?= <albertgeanta@gmail.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.15 013/110] ALSA: hda/realtek: Add quirk for ASUS GU603
 Date:   Mon,  7 Feb 2022 12:05:46 +0100
-Message-Id: <20220207103758.305019922@linuxfoundation.org>
+Message-Id: <20220207103802.718911808@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103757.550973048@linuxfoundation.org>
-References: <20220207103757.550973048@linuxfoundation.org>
+In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
+References: <20220207103802.280120990@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,70 +55,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Joe Damato <jdamato@fastly.com>
+From: Albert Geantă <albertgeanta@gmail.com>
 
-commit 3b8428b84539c78fdc8006c17ebd25afd4722d51 upstream.
+commit 94db9cc8f8fa2d5426ce79ec4ca16028f7084224 upstream.
 
-Change i40e_update_vsi_stats and struct i40e_vsi to use u64 fields to match
-the width of the stats counters in struct i40e_rx_queue_stats.
+The ASUS GU603 (Zephyrus M16 - SSID 1043:16b2) requires a quirk similar to
+other ASUS devices for correctly routing the 4 integrated speakers. This
+fixes it by adding a corresponding quirk entry, which connects the bass
+speakers to the proper DAC.
 
-Update debugfs code to use the correct format specifier for u64.
-
-Fixes: 41c445ff0f48 ("i40e: main driver core")
-Signed-off-by: Joe Damato <jdamato@fastly.com>
-Reported-by: kernel test robot <lkp@intel.com>
-Tested-by: Gurucharan G <gurucharanx.g@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: Albert Geantă <albertgeanta@gmail.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220131010523.546386-1-albertgeanta@gmail.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/intel/i40e/i40e.h         |    8 ++++----
- drivers/net/ethernet/intel/i40e/i40e_debugfs.c |    2 +-
- drivers/net/ethernet/intel/i40e/i40e_main.c    |    4 ++--
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ sound/pci/hda/patch_realtek.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/net/ethernet/intel/i40e/i40e.h
-+++ b/drivers/net/ethernet/intel/i40e/i40e.h
-@@ -708,12 +708,12 @@ struct i40e_vsi {
- 	struct rtnl_link_stats64 net_stats_offsets;
- 	struct i40e_eth_stats eth_stats;
- 	struct i40e_eth_stats eth_stats_offsets;
--	u32 tx_restart;
--	u32 tx_busy;
-+	u64 tx_restart;
-+	u64 tx_busy;
- 	u64 tx_linearize;
- 	u64 tx_force_wb;
--	u32 rx_buf_failed;
--	u32 rx_page_failed;
-+	u64 rx_buf_failed;
-+	u64 rx_page_failed;
- 
- 	/* These are containers of ring pointers, allocated at run-time */
- 	struct i40e_ring **rx_rings;
---- a/drivers/net/ethernet/intel/i40e/i40e_debugfs.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_debugfs.c
-@@ -236,7 +236,7 @@ static void i40e_dbg_dump_vsi_seid(struc
- 		 (unsigned long int)vsi->net_stats_offsets.rx_compressed,
- 		 (unsigned long int)vsi->net_stats_offsets.tx_compressed);
- 	dev_info(&pf->pdev->dev,
--		 "    tx_restart = %d, tx_busy = %d, rx_buf_failed = %d, rx_page_failed = %d\n",
-+		 "    tx_restart = %llu, tx_busy = %llu, rx_buf_failed = %llu, rx_page_failed = %llu\n",
- 		 vsi->tx_restart, vsi->tx_busy,
- 		 vsi->rx_buf_failed, vsi->rx_page_failed);
- 	rcu_read_lock();
---- a/drivers/net/ethernet/intel/i40e/i40e_main.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
-@@ -791,9 +791,9 @@ static void i40e_update_vsi_stats(struct
- 	struct rtnl_link_stats64 *ns;   /* netdev stats */
- 	struct i40e_eth_stats *oes;
- 	struct i40e_eth_stats *es;     /* device's eth stats */
--	u32 tx_restart, tx_busy;
-+	u64 tx_restart, tx_busy;
- 	struct i40e_ring *p;
--	u32 rx_page, rx_buf;
-+	u64 rx_page, rx_buf;
- 	u64 bytes, packets;
- 	unsigned int start;
- 	u64 tx_linearize;
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -8854,6 +8854,7 @@ static const struct snd_pci_quirk alc269
+ 	SND_PCI_QUIRK(0x1043, 0x1e51, "ASUS Zephyrus M15", ALC294_FIXUP_ASUS_GU502_PINS),
+ 	SND_PCI_QUIRK(0x1043, 0x1e8e, "ASUS Zephyrus G15", ALC289_FIXUP_ASUS_GA401),
+ 	SND_PCI_QUIRK(0x1043, 0x1f11, "ASUS Zephyrus G14", ALC289_FIXUP_ASUS_GA401),
++	SND_PCI_QUIRK(0x1043, 0x16b2, "ASUS GU603", ALC289_FIXUP_ASUS_GA401),
+ 	SND_PCI_QUIRK(0x1043, 0x3030, "ASUS ZN270IE", ALC256_FIXUP_ASUS_AIO_GPIO2),
+ 	SND_PCI_QUIRK(0x1043, 0x831a, "ASUS P901", ALC269_FIXUP_STEREO_DMIC),
+ 	SND_PCI_QUIRK(0x1043, 0x834a, "ASUS S101", ALC269_FIXUP_STEREO_DMIC),
 
 

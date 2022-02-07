@@ -2,128 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 830754ACAD6
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 22:02:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B2364ACAD8
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 22:03:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232399AbiBGVBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 16:01:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35872 "EHLO
+        id S232525AbiBGVDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 16:03:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231667AbiBGVBl (ORCPT
+        with ESMTP id S231667AbiBGVDH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 16:01:41 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61EBFC06173B;
-        Mon,  7 Feb 2022 13:01:41 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id y9so6529477pjf.1;
-        Mon, 07 Feb 2022 13:01:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FwnKbpTkC/zdPmCdqrahzy52SJ9rfemmtNQ6qp1un1k=;
-        b=mdBf/hKJ/7B7hDsVbKCWNpdxhMkuPUxF+0PCUNUeV4B7/F0tSXEYtNLmofwufiy7PF
-         33C0zLeSB9ip82NjcKe5b1K+LgbtzGt5ubSD3HtaVAgQWZXb9eCelUPgZo0tNeCcouzO
-         RQ748JIssLc69N49BLL6f88Ob9HZCEhToJOrFQdxPUlpAD4rySIQ7JwxmsOoYigL7BP0
-         YF25ZKf41yAUP7rj+PW/q/iI2ZXn4C5q4GgH1HUUF9Yjx7zTBYNdANKIxcInlwmvDcVo
-         ubTnKttmQg1Exb5/EzkpePJSqpT1AANZxtpl5ligRT14obtT866fOsKHNfXrwGpoQF71
-         RA2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FwnKbpTkC/zdPmCdqrahzy52SJ9rfemmtNQ6qp1un1k=;
-        b=wwyYQ68IuZlo5uasQKyKsMpsno3So6nQknmhVFlfEwicGLLmi6RsNOV32frrCMGxZF
-         /rTDzQv+JqDxmAjXF/E6V02QYR8xBY8DcdNUi8Uqjg/F7JIocY6QzVbnAEf6lnt5T/48
-         j45e9VvM1psNnz/k+tT9jkEXJUDP2hPxQvAGXX5kPyghtujls1Bh0kh0ahxpZgMcikt7
-         PXtUBDQQ1YSNDxqrpZNhDP8gbMEnxmBW26DIyqj6OyuXKsPp1GlZQP7y2KDkhVDng0aw
-         oUT8qzl6A6FVTrwLaufaH7GYDjDoT8zK99TmpbVpx8p8UmtfGaVSM12BJpxwtIXBzUD/
-         ywRg==
-X-Gm-Message-State: AOAM532MeyiAbcukS6wI4Fe+HpJt+caXpdqubUdMbcISNly9cQC77Nyh
-        kUA4VkcVSbudyijY+4N/aymtnqhI317316uHaOI=
-X-Google-Smtp-Source: ABdhPJzzqnbfte/UsO4CxN7j1V9c+CNHc+B9dLja6d189I3omGBCC6NXzrh0VaXli8IsejwWZzNN9DCp76ionhJwrFQ=
-X-Received: by 2002:a17:902:ced1:: with SMTP id d17mr1249891plg.78.1644267700768;
- Mon, 07 Feb 2022 13:01:40 -0800 (PST)
+        Mon, 7 Feb 2022 16:03:07 -0500
+X-Greylist: delayed 1200 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 13:03:05 PST
+Received: from 8.mo561.mail-out.ovh.net (8.mo561.mail-out.ovh.net [87.98.172.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1AF2C06173B
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 13:03:05 -0800 (PST)
+Received: from player696.ha.ovh.net (unknown [10.110.171.96])
+        by mo561.mail-out.ovh.net (Postfix) with ESMTP id EF49B22C5C
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 20:25:22 +0000 (UTC)
+Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
+        (Authenticated sender: steve@sk2.org)
+        by player696.ha.ovh.net (Postfix) with ESMTPSA id 154781CFCE83A;
+        Mon,  7 Feb 2022 20:25:16 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-106R006f8eb3e46-876a-4ae5-89e1-dc6a7451b8e5,
+                    3A825F87F2584202EAD4C0DC0B19FF83D581AB08) smtp.auth=steve@sk2.org
+X-OVh-ClientIp: 82.65.25.201
+Date:   Mon, 7 Feb 2022 21:25:08 +0100
+From:   Stephen Kitt <steve@sk2.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Miaohe Lin <linmiaohe@huawei.com>, <linux-kernel@vger.kernel.org>,
+        <linux-mm@kvack.org>, Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH] mm: Remove usercopy_warn()
+Message-ID: <20220207212508.432a6894@heffalump.sk2.org>
+In-Reply-To: <b6e9e005-1269-d591-77b0-7db2edd996f4@huawei.com>
+References: <5f26643fc70b05f8455b60b99c30c17d635fa640.1644231910.git.christophe.leroy@csgroup.eu>
+        <b6e9e005-1269-d591-77b0-7db2edd996f4@huawei.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220202135333.190761-1-jolsa@kernel.org> <20220202135333.190761-3-jolsa@kernel.org>
- <CAEf4Bzbrj01RJq7ArAo-kX-+8rPx9j5OH1OvGHxVJxiq8rn3FA@mail.gmail.com>
-In-Reply-To: <CAEf4Bzbrj01RJq7ArAo-kX-+8rPx9j5OH1OvGHxVJxiq8rn3FA@mail.gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Mon, 7 Feb 2022 13:01:29 -0800
-Message-ID: <CAADnVQ+qRY6ykHUumAhFo4gH8JaurcEkMwC_LOqmrRiqAE7GoA@mail.gmail.com>
-Subject: Re: [PATCH 2/8] bpf: Add bpf_get_func_ip kprobe helper for fprobe link
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Jiri Olsa <jolsa@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Jiri Olsa <olsajiri@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/BTXhOGVfCk=eNZZtoTesO7u";
+ protocol="application/pgp-signature"; micalg=pgp-sha512
+X-Ovh-Tracer-Id: 9237445785914672774
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrheehgddufeegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvffukfgjfhfogggtsehgtderreertddvnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeejkeffvdfhjeekffdukeehvddtvdfhieehhedvheekteekudefjeffueeuvedvvdenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrheileeirdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshhtvghvvgesshhkvddrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 7, 2022 at 10:59 AM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Wed, Feb 2, 2022 at 5:53 AM Jiri Olsa <jolsa@redhat.com> wrote:
-> >
-> > Adding support to call get_func_ip_fprobe helper from kprobe
-> > programs attached by fprobe link.
-> >
-> > Also adding support to inline it, because it's single load
-> > instruction.
-> >
-> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > ---
-> >  kernel/bpf/verifier.c    | 19 ++++++++++++++++++-
-> >  kernel/trace/bpf_trace.c | 16 +++++++++++++++-
-> >  2 files changed, 33 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index 1ae41d0cf96c..a745ded00635 100644
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
-> > @@ -13625,7 +13625,7 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
-> >                         continue;
-> >                 }
-> >
-> > -               /* Implement bpf_get_func_ip inline. */
-> > +               /* Implement tracing bpf_get_func_ip inline. */
-> >                 if (prog_type == BPF_PROG_TYPE_TRACING &&
-> >                     insn->imm == BPF_FUNC_get_func_ip) {
-> >                         /* Load IP address from ctx - 16 */
-> > @@ -13640,6 +13640,23 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
-> >                         continue;
-> >                 }
-> >
-> > +               /* Implement kprobe/fprobe bpf_get_func_ip inline. */
-> > +               if (prog_type == BPF_PROG_TYPE_KPROBE &&
-> > +                   eatype == BPF_TRACE_FPROBE &&
-> > +                   insn->imm == BPF_FUNC_get_func_ip) {
-> > +                       /* Load IP address from ctx (struct pt_regs) ip */
-> > +                       insn_buf[0] = BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1,
-> > +                                                 offsetof(struct pt_regs, ip));
->
-> Isn't this architecture-specific? I'm starting to dislike this
-> inlining whole more and more. It's just a complication in verifier
-> without clear real-world benefits. We are clearly prematurely
-> optimizing here. In practice you'll just call bpf_get_func_ip() once
-> and that's it. Function call overhead will be negligible compare to
-> other *userful* work you'll be doing in your BPF program.
+--Sig_/BTXhOGVfCk=eNZZtoTesO7u
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-We should be doing inlining when we can.
-Every bit of performance matters.
+On Mon, 7 Feb 2022 20:25:19 +0800, Miaohe Lin <linmiaohe@huawei.com> wrote:
+
+> On 2022/2/7 19:05, Christophe Leroy wrote:
+> > Users of usercopy_warn() were removed by
+> > commit 53944f171a89 ("mm: remove HARDENED_USERCOPY_FALLBACK")
+> >=20
+> > Remote it. =20
+>=20
+> s/Remote/Remove/
+>=20
+> Except the above nit, this patch looks good to me. Thanks.
+>=20
+> Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
+
+Likewise,
+
+Reviewed-by: Stephen Kitt <steve@sk2.org>
+
+
+> >=20
+> > Cc: Stephen Kitt <steve@sk2.org>
+> > Cc: Kees Cook <keescook@chromium.org>
+> > Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> > ---
+> >  include/linux/uaccess.h |  2 --
+> >  mm/usercopy.c           | 11 -----------
+> >  2 files changed, 13 deletions(-)
+> >=20
+> > diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
+> > index ac0394087f7d..bca27b4e5eb2 100644
+> > --- a/include/linux/uaccess.h
+> > +++ b/include/linux/uaccess.h
+> > @@ -401,8 +401,6 @@ static inline void user_access_restore(unsigned long
+> > flags) { } #endif
+> > =20
+> >  #ifdef CONFIG_HARDENED_USERCOPY
+> > -void usercopy_warn(const char *name, const char *detail, bool to_user,
+> > -		   unsigned long offset, unsigned long len);
+> >  void __noreturn usercopy_abort(const char *name, const char *detail,
+> >  			       bool to_user, unsigned long offset,
+> >  			       unsigned long len);
+> > diff --git a/mm/usercopy.c b/mm/usercopy.c
+> > index d0d268135d96..e7b0cb49daa1 100644
+> > --- a/mm/usercopy.c
+> > +++ b/mm/usercopy.c
+> > @@ -70,17 +70,6 @@ static noinline int check_stack_object(const void
+> > *obj, unsigned long len)
+> >   * kmem_cache_create_usercopy() function to create the cache (and
+> >   * carefully audit the whitelist range).
+> >   */
+> > -void usercopy_warn(const char *name, const char *detail, bool to_user,
+> > -		   unsigned long offset, unsigned long len)
+> > -{
+> > -	WARN_ONCE(1, "Bad or missing usercopy whitelist? Kernel memory
+> > %s attempt detected %s %s%s%s%s (offset %lu, size %lu)!\n",
+> > -		 to_user ? "exposure" : "overwrite",
+> > -		 to_user ? "from" : "to",
+> > -		 name ? : "unknown?!",
+> > -		 detail ? " '" : "", detail ? : "", detail ? "'" : "",
+> > -		 offset, len);
+> > -}
+> > -
+> >  void __noreturn usercopy_abort(const char *name, const char *detail,
+> >  			       bool to_user, unsigned long offset,
+> >  			       unsigned long len)
+> >  =20
+>=20
+
+--Sig_/BTXhOGVfCk=eNZZtoTesO7u
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEnPVX/hPLkMoq7x0ggNMC9Yhtg5wFAmIBgCQACgkQgNMC9Yht
+g5yLtg//ZTIlI9ZMBzHv0WwyUdxM+A7Zt9ud+2LrYM4Y45YUnO2ZVhuYEYMfyvN5
+7W7I+SbijmY6NlwDFlFV5tqomeJYC1u4eNqJL1owcpGT6wz6XkOPo2O28VYv2/Z5
+Kq5CUP9HLxxhLICwC61rcCDz+uezwe+6OzfGl6SphlDCLng+XHiKky7gPJeL6o31
+zmE1O1jFovodFjjP0hKw0Zla3aQnxBWEUPZxSH4bij/5yBKc9JG2EpiUm3YsDb5q
+aBU6ZOi3LuDhXvxrqak70jG72jpITSyzLcC8Ob0aWDcA6uA5OFckE7mIYm26FpBN
+ke1wDkBB02UYsr6qJ7LFFkdxFRAFY6En2eEHyksDp8R27BGLk7q9ca3yO4noO+4Y
+xq46iAZo8Sl2SFSPXc2PjaOc0wt41dJFnduK6OoYukQRBXQ8OENcOijcO598tGwt
+Rq4p1Ltu82N7U9+WnrANydDgU1D4oC8ldqqVmC1JIfCaGuSti+97S9iiQRH5hwXF
+LUH5IdSi2Acax2w5gMHF0NRInJMx0C7yHAdcgNpCsSMCP8NBTbmKChKR2UMZlsq9
+2lBtYjbdTNCds/HfbtD1NGAWk5PYtOgrOsTR9GhsTxXTaxROylxW/KslF7F4Y6IV
+nX0xXW914tejTbOH9sm28U+PxDhQz6boGjf0bz3fwMhvhtWnEWM=
+=c9dy
+-----END PGP SIGNATURE-----
+
+--Sig_/BTXhOGVfCk=eNZZtoTesO7u--

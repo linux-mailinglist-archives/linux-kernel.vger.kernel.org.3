@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30B654AB99A
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:23:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D1064ABC1B
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:45:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352137AbiBGLLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:11:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48790 "EHLO
+        id S1384864AbiBGLaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:30:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238446AbiBGLKM (ORCPT
+        with ESMTP id S1383602AbiBGLXD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:10:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5B04C043188;
-        Mon,  7 Feb 2022 03:10:11 -0800 (PST)
+        Mon, 7 Feb 2022 06:23:03 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4083DC043181;
+        Mon,  7 Feb 2022 03:23:03 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8271A613FB;
-        Mon,  7 Feb 2022 11:10:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35863C004E1;
-        Mon,  7 Feb 2022 11:10:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F1EEEB81028;
+        Mon,  7 Feb 2022 11:23:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 291E6C004E1;
+        Mon,  7 Feb 2022 11:22:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232211;
-        bh=VmPwG06BoYxolGXfIBhJmLsdJiUdT/22gIzJPpO0ABE=;
+        s=korg; t=1644232980;
+        bh=nEs+HGaOJHuIsOkXksCVRkggW7SHbU3hDrMDAHFVnfU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=i7Z/k7G4zjJRI0Bq2/HHoFTOTWyP+Z1nCkCH6Rh2EnzDnDmAEw6k2rwtf7rLw5FGZ
-         /0D2D7K/8B5CUMtkRFH9vKvW1ZC2QVCiRc22UoestOom+sj90X5Cv/xyw8wfzdHk0G
-         n3WjU+3f5gl5HYKVDuf9n1aaNd7iCeEK+cPuJEs4=
+        b=mTZnTUjrJCIDYQ7JyfE/Du5i7BbbYPVewhyc/oHAnDLI5PQq8+2qN77H9VcKlhDYS
+         +kTiHRXrGP3NOyoXNgj3orZQrngb8wry3tkc9E2AJg04FwhBG+rPnQcb4p9fePIc2f
+         07MTBQIxFLqVyjSElDegKiKQ9Vrrpy+SwyjYDOBQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Riwen Lu <luriwen@kylinos.cn>,
-        Eric Wong <e@80x24.org>,
-        =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: [PATCH 4.9 45/48] rtc: cmos: Evaluate century appropriate
-Date:   Mon,  7 Feb 2022 12:06:18 +0100
-Message-Id: <20220207103753.795773960@linuxfoundation.org>
+        stable@vger.kernel.org, Jordy Zomer <jordy@pwning.systems>,
+        John Stultz <john.stultz@linaro.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>
+Subject: [PATCH 5.10 21/74] dma-buf: heaps: Fix potential spectre v1 gadget
+Date:   Mon,  7 Feb 2022 12:06:19 +0100
+Message-Id: <20220207103757.929587362@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103752.341184175@linuxfoundation.org>
-References: <20220207103752.341184175@linuxfoundation.org>
+In-Reply-To: <20220207103757.232676988@linuxfoundation.org>
+References: <20220207103757.232676988@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,43 +55,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Riwen Lu <luriwen@kylinos.cn>
+From: Jordy Zomer <jordy@pwning.systems>
 
-commit ff164ae39b82ee483b24579c8e22a13a8ce5bd04 upstream.
+commit 92c4cfaee6872038563c5b6f2e8e613f9d84d47d upstream.
 
-There's limiting the year to 2069. When setting the rtc year to 2070,
-reading it returns 1970. Evaluate century starting from 19 to count the
-correct year.
+It appears like nr could be a Spectre v1 gadget as it's supplied by a
+user and used as an array index. Prevent the contents
+of kernel memory from being leaked to userspace via speculative
+execution by using array_index_nospec.
 
-$ sudo date -s 20700106
-Mon 06 Jan 2070 12:00:00 AM CST
-$ sudo hwclock -w
-$ sudo hwclock -r
-1970-01-06 12:00:49.604968+08:00
-
-Fixes: 2a4daadd4d3e5071 ("rtc: cmos: ignore bogus century byte")
-
-Signed-off-by: Riwen Lu <luriwen@kylinos.cn>
-Acked-by: Eric Wong <e@80x24.org>
-Reviewed-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Link: https://lore.kernel.org/r/20220106084609.1223688-1-luriwen@kylinos.cn
-Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl> # preparation for stable
+Signed-off-by: Jordy Zomer <jordy@pwning.systems>
+Fixes: c02a81fba74f ("dma-buf: Add dma-buf heaps framework")
+Cc: <stable@vger.kernel.org> # v5.6+
+Acked-by: John Stultz <john.stultz@linaro.org>
+Signed-off-by: Sumit Semwal <sumit.semwal@linaro.org>
+ [sumits: added fixes and cc: stable tags]
+Link: https://patchwork.freedesktop.org/patch/msgid/20220129150604.3461652-1-jordy@pwning.systems
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/rtc/rtc-mc146818-lib.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/dma-buf/dma-heap.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/rtc/rtc-mc146818-lib.c
-+++ b/drivers/rtc/rtc-mc146818-lib.c
-@@ -82,7 +82,7 @@ unsigned int mc146818_get_time(struct rt
- 	time->tm_year += real_year - 72;
- #endif
+--- a/drivers/dma-buf/dma-heap.c
++++ b/drivers/dma-buf/dma-heap.c
+@@ -14,6 +14,7 @@
+ #include <linux/xarray.h>
+ #include <linux/list.h>
+ #include <linux/slab.h>
++#include <linux/nospec.h>
+ #include <linux/uaccess.h>
+ #include <linux/syscalls.h>
+ #include <linux/dma-heap.h>
+@@ -123,6 +124,7 @@ static long dma_heap_ioctl(struct file *
+ 	if (nr >= ARRAY_SIZE(dma_heap_ioctl_cmds))
+ 		return -EINVAL;
  
--	if (century > 20)
-+	if (century > 19)
- 		time->tm_year += (century - 19) * 100;
++	nr = array_index_nospec(nr, ARRAY_SIZE(dma_heap_ioctl_cmds));
+ 	/* Get the kernel ioctl cmd that matches */
+ 	kcmd = dma_heap_ioctl_cmds[nr];
  
- 	/*
 
 

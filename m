@@ -2,105 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D64824ABBD7
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:44:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 164BB4ABBC4
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:39:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385874AbiBGLcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:32:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33734 "EHLO
+        id S1385750AbiBGLc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:32:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383137AbiBGLVk (ORCPT
+        with ESMTP id S1383090AbiBGLVf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:21:40 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92422C0401E4;
-        Mon,  7 Feb 2022 03:21:26 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id d9-20020a17090a498900b001b8bb1d00e7so2452677pjh.3;
-        Mon, 07 Feb 2022 03:21:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=u1SeK1c7GsxTi1KJRtX41+e8KV9bbkC6jBlAR+v8yco=;
-        b=qek10+XaY11auEJTZ6D2YUOXnJNC2jahYrh8WmWDjUshFRhDhJ9MUUpTlYEZ1NMIxk
-         OJK15B11YbOuuQSFH2zv3+M1qNHESwuLSwwDRnd8qF2BlKd0yf0etXtUzqwqgLzIWmxu
-         X5f/BuOsQtYFxvb+/AjXFs4g0VDQFUwHY2s5OvO570DzRPic/18rXaWBk4Eo/GteEX9M
-         7wQGacG4s4RUi5vg/uaOxIdhZZPotD6Z5dG/iqk3bh4DJqU58gi221g9puGL1MROSccY
-         3FMXdYR5NgOd/ii7X7VguVEijRWdC8skg5uriwOossgj6UvpMQA5KoRGeYMo/RchUYq7
-         jWeg==
+        Mon, 7 Feb 2022 06:21:35 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3811C03FEEB
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 03:21:18 -0800 (PST)
+Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com [209.85.167.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 7F2FD3F328
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 11:21:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644232877;
+        bh=8Y9yNV8EX7NTdignHPRQY252HgYt0mlpY9TRr3lWof4=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=F0F2Xr8uFPF/P72nYBy25C0XD37eYZqgWoyyoZWQ5cgL1bcVhDHIpPvv4z2STveJM
+         kcJg1Beoneg+P6T57TKe6YL25Iz2j0OlYh73LCjEazpO+ovAu0f0NpELYneoXh9lQ1
+         X/9QV4K0YYGjGJAk2qH6/22iZBDm92nQYWo4cZu2QBH5Tydrxbx36GqSgNdRrolAJc
+         waFbeFyuLewMO8LOKr82hg6O4M/Xiab7JoKPpfOqx9uLeuP329eyI4UkwwT0diiyPW
+         vNKjNSaUnnPKJKaM3aglBoNKH0dj/JauwVrZnhwWkn1YoScYcJaZk9oSI8FXvAcipa
+         byV309cZO40SA==
+Received: by mail-lf1-f69.google.com with SMTP id z24-20020a056512371800b0043ea4caa07cso4017729lfr.17
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 03:21:17 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=u1SeK1c7GsxTi1KJRtX41+e8KV9bbkC6jBlAR+v8yco=;
-        b=M47+xtL9mMQDHbnpNjL5mYrERhTYZ2+G3UgITKi9qmuLFaa56kIWV9vdpEtKUUCrK+
-         XIQZt3WkcLvkSMuSXxjgjAhDVLAfR6+JqHdZIwQVqFQoX1T78DRdnRRu05VvilqBSrNw
-         gZiy2QmSRrR3iSw24HcI70SJ3FyX441zZq+Na14vB8/tj67DJpwtQ7CIXYqogEP1smOg
-         cOUE2PXH99HhlFgTCAq9yKFBvMSzDlcS3eqp3XxRm9/XYRiVttIunTBgFtVtA31MT58E
-         a+RH+n/EDVn+z3MljPwhdzflTqZhR/6NiHvXPZUuIoczC29lvs2dxYdER4LQj/KmnHCh
-         VLEg==
-X-Gm-Message-State: AOAM530dhQQX7BzJh8Q4tx8P86v6KuI+yBFhONXA7YITqYJ0VP39sS0E
-        KmJOYhOOYmCJKsjYaIynnOc=
-X-Google-Smtp-Source: ABdhPJyyDGXxcAT+b6VN7v+g7nzcvVC6pBxqH3gvy90hhQbUrZ66KZpL9Y/MgLcgt8d+zNOrJd4/eQ==
-X-Received: by 2002:a17:90b:3802:: with SMTP id mq2mr13748921pjb.236.1644232886066;
-        Mon, 07 Feb 2022 03:21:26 -0800 (PST)
-Received: from localhost.localdomain ([2400:2410:93a3:bc00:d659:4e05:9b13:b711])
-        by smtp.gmail.com with ESMTPSA id w11sm11791400pfu.50.2022.02.07.03.21.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 03:21:25 -0800 (PST)
-From:   Akira Kawata <akirakawata1@gmail.com>
-To:     brendanhiggins@google.com
-Cc:     akirakawata1@gmail.com, Jonathan Corbet <corbet@lwn.net>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1] Documentation: KUnit: Fix usage bug
-Date:   Mon,  7 Feb 2022 20:20:44 +0900
-Message-Id: <20220207112043.397074-1-akirakawata1@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        bh=8Y9yNV8EX7NTdignHPRQY252HgYt0mlpY9TRr3lWof4=;
+        b=FA8iEZeT/YYbIjXdDVcoKJkxFGI9XJZfn9F7QjZkRTjsoJiOGLZlVP8k71r+XF1q3X
+         4Lfn9D5km7Q79UqjSa2HEKRzyuyr40wNkYTGfU9Cx6RiLGDbjUkryb99zFTPHKrlWSVP
+         J8aO2zeFOhQBMKcpsTCyjouVQbtr/KzXnPifV8IgWUySKSKIlbkKxmeR30msQRHAL32b
+         KUEkyX8JWLJhUt6tb359vWiLjVeHrOZY3kyF2Wbek8T+v+3RuDG1jc6qW055GXn7c+pl
+         mZtRJGiOmii8dpvguLy1CRELv/5CsG68Q1xnGa7ywt4ssnc1jaeEdlZWCDEfZp475tEy
+         vgfA==
+X-Gm-Message-State: AOAM531slMMCzNRlSF3UfpkQaPF72j5x+HdzODl2D00k5BfquLH0QGQT
+        X5Wp9OKZIz3e5bDpbGwCGDkLpYIzqXJE01ySLlAUNyejjCh6LcP0Zx+NNW8vRDQksZMjlkGHO2v
+        1AO3poXEnSculHBqBdpvKbcxT9nnmyV0VsUjsAWtQYQ==
+X-Received: by 2002:a5d:6603:: with SMTP id n3mr9256732wru.20.1644232866048;
+        Mon, 07 Feb 2022 03:21:06 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz28bw0iWdum97UqccNObiTCl0E42zll9NAhEqs1JdVzu878pa6CnjxT2SeV0Ew8TU0VtcspA==
+X-Received: by 2002:a5d:6603:: with SMTP id n3mr9256693wru.20.1644232865857;
+        Mon, 07 Feb 2022 03:21:05 -0800 (PST)
+Received: from [192.168.0.87] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id b4sm2321525wrw.100.2022.02.07.03.21.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Feb 2022 03:21:05 -0800 (PST)
+Message-ID: <776e1b61-678d-6686-06fe-a74b7ff68b85@canonical.com>
+Date:   Mon, 7 Feb 2022 12:21:03 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v1 2/6] i2c: npcm: Fix timeout calculation
+Content-Language: en-US
+To:     Tyrone Ting <warp5tw@gmail.com>, avifishman70@gmail.com,
+        tmaimon77@gmail.com, tali.perry1@gmail.com, venture@google.com,
+        yuenn@google.com, benjaminfair@google.com, robh+dt@kernel.org,
+        semen.protsenko@linaro.org, yangyicong@hisilicon.com,
+        wsa@kernel.org, jie.deng@intel.com, sven@svenpeter.dev,
+        bence98@sch.bme.hu, lukas.bulwahn@gmail.com, arnd@arndb.de,
+        olof@lixom.net, andriy.shevchenko@linux.intel.com,
+        tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
+        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
+        kfting@nuvoton.com
+Cc:     openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220207063338.6570-1-warp5tw@gmail.com>
+ <20220207063338.6570-3-warp5tw@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220207063338.6570-3-warp5tw@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix a bug of kunit documentation.
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=205773
+On 07/02/2022 07:33, Tyrone Ting wrote:
+> From: Tali Perry <tali.perry1@gmail.com>
+> 
+> Use adap.timeout for timeout calculation instead of hard-coded
+> value of 35ms.
+> Use syscon to access gcr, instead of "compatible".
 
-: Quoting Steve Pfetsch:
-:
-: kunit documentation is incorrect:
-: https://kunit.dev/third_party/stable_kernel/docs/usage.html
-: struct rectangle *self = container_of(this, struct shape, parent);
-:
-:
-: Shouldn't it be:
-: struct rectangle *self = container_of(this, struct rectangle, parent);
-: ?
+One commit = one fix/feature/logical change, so requirement of syscon
+should be a separate commit.
 
-Signed-off-by: Akira Kawata <akirakawata1@gmail.com>
----
- Documentation/dev-tools/kunit/usage.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
-index 76af931a332c..1c83e7d60a8a 100644
---- a/Documentation/dev-tools/kunit/usage.rst
-+++ b/Documentation/dev-tools/kunit/usage.rst
-@@ -242,7 +242,7 @@ example:
- 
- 	int rectangle_area(struct shape *this)
- 	{
--		struct rectangle *self = container_of(this, struct shape, parent);
-+		struct rectangle *self = container_of(this, struct rectangle, parent);
- 
- 		return self->length * self->width;
- 	};
--- 
-2.25.1
-
+Best regards,
+Krzysztof

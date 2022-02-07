@@ -2,79 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C5484ACBD5
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 23:08:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 747E24ACBEF
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 23:17:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243630AbiBGWIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 17:08:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41666 "EHLO
+        id S244068AbiBGWRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 17:17:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243625AbiBGWIC (ORCPT
+        with ESMTP id S244054AbiBGWRR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 17:08:02 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B41AC0612A4
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 14:08:02 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id d187so15397489pfa.10
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 14:08:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=tWrUH0/2WksDBWa18gtzsMkaDJc90addPmZE3/A1VQs=;
-        b=Z2KHWsSlYbT//VOpYTnsnCI4+qhPgIK3t46x31rkFoO5ONCFeKMB0eBS8wfxLY/rHH
-         DDbbHdNF8IDkq8l2KB7GWf6f87zyM2JbhposV61iCOirtJgTuA2qicPr1czJfliHIbY2
-         S3Ez++GqAIK0YbE8VZFaswNcQ5OATUtK2scAw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tWrUH0/2WksDBWa18gtzsMkaDJc90addPmZE3/A1VQs=;
-        b=aiel7b+/eSD4lwPHvANEQnaVQ2IW2h5OCHUGuIzfHZ2HY5T/t3SM8NpWAM6ycyIrJf
-         gN1/ipx2FZHWHSvrDHA2OX8ZfJWmarT1AE+Y2fy9d8gH5lC64dj15cpr5aubSN47Vh1O
-         jEQE44eDBWHH7pEQJxsN6/Cmbd40qoyw/0QF2gOB09VVV9wcJBngRfeNN1PiJyuZzuyH
-         7W7L8HPVsSCg3VFl4UsKAQqrSob4/k6/PICssuE0DW40KX4qRW+jq9suqoSzCvvVmYk5
-         aJQk4l6FLYnPqz5DLL92t9p5DLfSYMtRI+0HqzFEvZPaOY6S2JZcxqvYrjV9mSEvtxh8
-         NeAg==
-X-Gm-Message-State: AOAM531jwAzFKnRHSM4YhSVKR7N43Thn3C7rfEkm0ZQIauiVrc6EIq7D
-        W7WlaYifS6vzMzceenaRTFm634HJOXQ2oQ==
-X-Google-Smtp-Source: ABdhPJwt1VK44ImLNBUFQZ5ofmSi8ahLthLH5mh0+UjMF0vB3tsRE2HKk/VedZZ1we9FF4YvN78UmA==
-X-Received: by 2002:a63:9245:: with SMTP id s5mr1111836pgn.277.1644271681885;
-        Mon, 07 Feb 2022 14:08:01 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id nl12sm351392pjb.1.2022.02.07.14.08.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 14:08:01 -0800 (PST)
-Date:   Mon, 7 Feb 2022 14:08:01 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 6/6] x86/cpu: Remove "noclflush"
-Message-ID: <202202071408.60A31586@keescook>
-References: <20220127115626.14179-1-bp@alien8.de>
- <20220127115626.14179-7-bp@alien8.de>
+        Mon, 7 Feb 2022 17:17:17 -0500
+X-Greylist: delayed 409 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 14:17:15 PST
+Received: from trent.utfs.org (trent.utfs.org [94.185.90.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCB8BC061355;
+        Mon,  7 Feb 2022 14:17:15 -0800 (PST)
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+ d=nerdbynature.de; i=@nerdbynature.de; q=dns/txt; s=key1;
+ t=1644271824; h=date : from : to : cc : subject : in-reply-to :
+ message-id : references : mime-version : content-type : from;
+ bh=YDvfiw2/shfvHf2dTsRDeWDpQS7n9L1BOkNlOpDAq+0=;
+ b=yGtRoHpE2Dt+N/NRXKoH7CyZ/ulBy09JLZXYQikDPqzfHxOgg4RuvoH/UyjFlPNRa6fna
+ RKe8wfM8DgJCh4HCg==
+Authentication-Results: mail.nerdbynature.de; dmarc=fail (p=none dis=none) header.from=nerdbynature.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nerdbynature.de;
+ i=@nerdbynature.de; q=dns/txt; s=key0; t=1644271824; h=date : from :
+ to : cc : subject : in-reply-to : message-id : references :
+ mime-version : content-type : from;
+ bh=YDvfiw2/shfvHf2dTsRDeWDpQS7n9L1BOkNlOpDAq+0=;
+ b=P0camZa6ejb9S3SR257EbKxZjIMzASPuwQrAb1LNZJqnD6zGgtKUus0X0kLvfyVs4YVZE
+ OVgbcDuvogWJt+1MsvDRNz4MbIJV8PELTQIreX0URSvSVP8X1Ho1ZKB/rW9UC7x0TkJ0JlT
+ vHKcjnAvBX3tJdQAuqthzSdV/GXdPj1ohLBd/fPNy8ZLP3afRFtneyphR1JewsJDkoUmy2t
+ TmwdVhEupR13gn8HU26CDu9GikHMG5Cg4Y+X2yNXPZNWACR0MbA/ut4hKVyanJCOGgEAyKq
+ Ycn+yqK+8McJiY262kdmzwnkph4L6rvF7A5ZFq5r1GhFwCsMytX4Q7o5A+Yg==
+Received: from localhost (localhost [IPv6:::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by trent.utfs.org (Postfix) with ESMTPS id 0137F6026A;
+        Mon,  7 Feb 2022 23:10:24 +0100 (CET)
+Date:   Mon, 7 Feb 2022 23:10:23 +0100 (CET)
+From:   Christian Kujau <lists@nerdbynature.de>
+To:     Anthony Iliopoulos <ailiop@suse.com>
+cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Deepa Dinamani <deepa.kernel@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Salvatore Bonaccorso <carnil@debian.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Eric Biggers <ebiggers@google.com>
+Subject: Re: [PATCH RESEND] mount: warn only once about timestamp range
+ expiration
+In-Reply-To: <YfdPBUYno5f0bTVk@zeniv-ca.linux.org.uk>
+Message-ID: <83203c86-dd51-76f4-dab8-6d3d8bd01ebe@nerdbynature.de>
+References: <20220119202934.26495-1-ailiop@suse.com> <YfdPBUYno5f0bTVk@zeniv-ca.linux.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220127115626.14179-7-bp@alien8.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 12:56:26PM +0100, Borislav Petkov wrote:
-> From: Borislav Petkov <bp@suse.de>
+> On Wed, Jan 19, 2022 at 09:29:34PM +0100, Anthony Iliopoulos wrote:
+> Commit f8b92ba67c5d ("mount: Add mount warning for impending timestamp
+> expiry") introduced a mount warning regarding filesystem timestamp
+> limits, that is printed upon each writable mount or remount.
 > 
-> Not really needed anymore and there's clearcpuid=.
+> This can result in a lot of unnecessary messages in the kernel log in
+> setups where filesystems are being frequently remounted (or mounted
+> multiple times).
 > 
-> Signed-off-by: Borislav Petkov <bp@suse.de>
+> Avoid this by setting a superblock flag which indicates that the warning
+> has been emitted at least once for any particular mount, as suggested in
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Great! I hope this lands in mainline soon. Applied this to 5.17.0-rc3 here 
+and it warns on mounts, but not on remounts. Yay!
 
+  Tested-by: Christian Kujau <lists@nerdbynature.de>
+
+Thanks so much for not forgetting about this!
 -- 
-Kees Cook
+BOFH excuse #402:
+
+Secretary sent chain letter to all 5000 employees.

@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA0F44ABCEA
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:55:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B4984AB98E
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:23:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388185AbiBGLnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:43:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44562 "EHLO
+        id S1359216AbiBGLOt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:14:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385570AbiBGLb7 (ORCPT
+        with ESMTP id S244127AbiBGLLW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:31:59 -0500
+        Mon, 7 Feb 2022 06:11:22 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 273C1C03E96B;
-        Mon,  7 Feb 2022 03:30:56 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18BD8C043188;
+        Mon,  7 Feb 2022 03:11:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AA7DB60AB0;
-        Mon,  7 Feb 2022 11:30:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81337C004E1;
-        Mon,  7 Feb 2022 11:30:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A228861388;
+        Mon,  7 Feb 2022 11:11:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61B1DC004E1;
+        Mon,  7 Feb 2022 11:11:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233455;
-        bh=n9gapmnR3BmvRHyNXNq14LqFhx8NlinKmjcEoRr3GL8=;
+        s=korg; t=1644232280;
+        bh=Uy/xBrLc3Mn2iT8mVCcdW2XFCgcS+4RcXsgRvWliJ7Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EKJkgPv5zgFw4nyGZJDLXHTWyZPy5hNgyOi1azjp/yx1NwXslqOnJI1jwFVYRHOl3
-         z49EtoNQ5OkCWHSBkPN+1yptfMKLHr3ymrBEE+bp4j5zh6UmT+Qk1Vmbs43GoNfGXg
-         QVuBUEjQJlS5QCrQc2PKpVmLO++d8o6RsHbX8Jqs=
+        b=ZhfRwsSjL8kryVJsjIE1+t/2g0hkQeHilbt6sYAEq87PdneZl8EA+9LvD0imvVNWO
+         l36Vsui64SBX4JYbjc0+2kG3RN66pBO/UxNfUZxejahzXhMGy5UFnDsxOtrtd841Ql
+         QNB/Sp00mDdU/sC33vD0zzzmdLR8dAeg9uwK1td0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Qu Wenruo <wqu@suse.com>,
-        David Sterba <dsterba@suse.com>
-Subject: [PATCH 5.16 018/126] btrfs: dont start transaction for scrub if the fs is mounted read-only
+        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        David Ahern <dsahern@kernel.org>, Ray Che <xijiache@gmail.com>,
+        Willy Tarreau <w@1wt.eu>, Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 4.14 27/69] ipv4: avoid using shared IP generator for connected sockets
 Date:   Mon,  7 Feb 2022 12:05:49 +0100
-Message-Id: <20220207103804.695325273@linuxfoundation.org>
+Message-Id: <20220207103756.517075813@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
-References: <20220207103804.053675072@linuxfoundation.org>
+In-Reply-To: <20220207103755.604121441@linuxfoundation.org>
+References: <20220207103755.604121441@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,84 +55,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Qu Wenruo <wqu@suse.com>
+From: Eric Dumazet <edumazet@google.com>
 
-commit 2d192fc4c1abeb0d04d1c8cd54405ff4a0b0255b upstream.
+commit 23f57406b82de51809d5812afd96f210f8b627f3 upstream.
 
-[BUG]
-The following super simple script would crash btrfs at unmount time, if
-CONFIG_BTRFS_ASSERT() is set.
+ip_select_ident_segs() has been very conservative about using
+the connected socket private generator only for packets with IP_DF
+set, claiming it was needed for some VJ compression implementations.
 
- mkfs.btrfs -f $dev
- mount $dev $mnt
- xfs_io -f -c "pwrite 0 4k" $mnt/file
- umount $mnt
- mount -r ro $dev $mnt
- btrfs scrub start -Br $mnt
- umount $mnt
+As mentioned in this referenced document, this can be abused.
+(Ref: Off-Path TCP Exploits of the Mixed IPID Assignment)
 
-This will trigger the following ASSERT() introduced by commit
-0a31daa4b602 ("btrfs: add assertion for empty list of transactions at
-late stage of umount").
+Before switching to pure random IPID generation and possibly hurt
+some workloads, lets use the private inet socket generator.
 
-That patch is definitely not the cause, it just makes enough noise for
-developers.
+Not only this will remove one vulnerability, this will also
+improve performance of TCP flows using pmtudisc==IP_PMTUDISC_DONT
 
-[CAUSE]
-We will start transaction for the following call chain during scrub:
-
-  scrub_enumerate_chunks()
-  |- btrfs_inc_block_group_ro()
-     |- btrfs_join_transaction()
-
-However for RO mount, there is no running transaction at all, thus
-btrfs_join_transaction() will start a new transaction.
-
-Furthermore, since it's read-only mount, btrfs_sync_fs() will not call
-btrfs_commit_super() to commit the new but empty transaction.
-
-And leads to the ASSERT().
-
-The bug has been there for a long time. Only the new ASSERT() makes it
-noisy enough to be noticed.
-
-[FIX]
-For read-only scrub on read-only mount, there is no need to start a
-transaction nor to allocate new chunks in btrfs_inc_block_group_ro().
-
-Just do extra read-only mount check in btrfs_inc_block_group_ro(), and
-if it's read-only, skip all chunk allocation and go inc_block_group_ro()
-directly.
-
-CC: stable@vger.kernel.org # 5.4+
-Signed-off-by: Qu Wenruo <wqu@suse.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
+Fixes: 73f156a6e8c1 ("inetpeer: get rid of ip_id_count")
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Reviewed-by: David Ahern <dsahern@kernel.org>
+Reported-by: Ray Che <xijiache@gmail.com>
+Cc: Willy Tarreau <w@1wt.eu>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/btrfs/block-group.c |   13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ include/net/ip.h |   21 ++++++++++-----------
+ 1 file changed, 10 insertions(+), 11 deletions(-)
 
---- a/fs/btrfs/block-group.c
-+++ b/fs/btrfs/block-group.c
-@@ -2547,6 +2547,19 @@ int btrfs_inc_block_group_ro(struct btrf
- 	int ret;
- 	bool dirty_bg_running;
+--- a/include/net/ip.h
++++ b/include/net/ip.h
+@@ -399,19 +399,18 @@ static inline void ip_select_ident_segs(
+ {
+ 	struct iphdr *iph = ip_hdr(skb);
  
-+	/*
-+	 * This can only happen when we are doing read-only scrub on read-only
-+	 * mount.
-+	 * In that case we should not start a new transaction on read-only fs.
-+	 * Thus here we skip all chunk allocations.
++	/* We had many attacks based on IPID, use the private
++	 * generator as much as we can.
 +	 */
-+	if (sb_rdonly(fs_info->sb)) {
-+		mutex_lock(&fs_info->ro_block_group_mutex);
-+		ret = inc_block_group_ro(cache, 0);
-+		mutex_unlock(&fs_info->ro_block_group_mutex);
-+		return ret;
++	if (sk && inet_sk(sk)->inet_daddr) {
++		iph->id = htons(inet_sk(sk)->inet_id);
++		inet_sk(sk)->inet_id += segs;
++		return;
 +	}
-+
- 	do {
- 		trans = btrfs_join_transaction(fs_info->extent_root);
- 		if (IS_ERR(trans))
+ 	if ((iph->frag_off & htons(IP_DF)) && !skb->ignore_df) {
+-		/* This is only to work around buggy Windows95/2000
+-		 * VJ compression implementations.  If the ID field
+-		 * does not change, they drop every other packet in
+-		 * a TCP stream using header compression.
+-		 */
+-		if (sk && inet_sk(sk)->inet_daddr) {
+-			iph->id = htons(inet_sk(sk)->inet_id);
+-			inet_sk(sk)->inet_id += segs;
+-		} else {
+-			iph->id = 0;
+-		}
++		iph->id = 0;
+ 	} else {
++		/* Unfortunately we need the big hammer to get a suitable IPID */
+ 		__ip_select_ident(net, iph, segs);
+ 	}
+ }
 
 

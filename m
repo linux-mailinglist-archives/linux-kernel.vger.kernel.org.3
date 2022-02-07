@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EF4A4ABDD8
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:05:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCF0C4ABC00
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:45:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381819AbiBGLrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:47:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46478 "EHLO
+        id S1386562AbiBGLe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:34:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386278AbiBGLeR (ORCPT
+        with ESMTP id S1383978AbiBGLYS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:34:17 -0500
+        Mon, 7 Feb 2022 06:24:18 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 225C4C043181;
-        Mon,  7 Feb 2022 03:34:16 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 767CCC043181;
+        Mon,  7 Feb 2022 03:24:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CF01EB80EC3;
-        Mon,  7 Feb 2022 11:34:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EB1CC004E1;
-        Mon,  7 Feb 2022 11:34:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BE2BEB811AF;
+        Mon,  7 Feb 2022 11:24:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D28D2C004E1;
+        Mon,  7 Feb 2022 11:24:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233653;
-        bh=G53Ov27bx25K4bYLcs+JBgsqz22eleL4UIUrJ3J1pmU=;
+        s=korg; t=1644233054;
+        bh=jIwfAxVEMGhpnFVreXI7ObayC/K7pZmZBtoSvlANXFU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A4O+dtUZyn9w4uOmLcCsjj76FbeEeJDMWByXkhgRLMvChhhIsRA+tYhtELnAuSV8c
-         cwnbrhvZj/5v8b/2+QlJ70KQtnjP4MDVwmLx0naO77e4RxjGlnEHjRyNP/y42F5Ux0
-         A37PwZ/kA4hDanyD7t6Rdatr0uXEy4WiJfU4ebgQ=
+        b=YT4vb2Io5YHyRfG0V41G7Zt0ZNOjOdrXRV9xxwVE6+x0y6CsTrO17bwFcqVVwoUXm
+         pyHu53ZYqi2kVCGigCf/UvW+4Xtz6my+stTkZfNoWowXo2qgwXiCT91v9vn2MoJIKb
+         CCW1bavXjkdswmqKB9mkg0eidFH3CznaL/gRps8A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Anitha Chrisanthus <anitha.chrisanthus@intel.com>,
-        Kees Cook <keescook@chromium.org>
-Subject: [PATCH 5.16 079/126] drm/kmb: Fix for build errors with Warray-bounds
+        stable@vger.kernel.org, Guangwu Zhang <guazhang@redhat.com>,
+        Saurav Kashyap <skashyap@marvell.com>,
+        John Meneghini <jmeneghi@redhat.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH 5.10 52/74] scsi: bnx2fc: Make bnx2fc_recv_frame() mp safe
 Date:   Mon,  7 Feb 2022 12:06:50 +0100
-Message-Id: <20220207103806.838794122@linuxfoundation.org>
+Message-Id: <20220207103758.922363514@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
-References: <20220207103804.053675072@linuxfoundation.org>
+In-Reply-To: <20220207103757.232676988@linuxfoundation.org>
+References: <20220207103757.232676988@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,54 +56,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Anitha Chrisanthus <anitha.chrisanthus@intel.com>
+From: John Meneghini <jmeneghi@redhat.com>
 
-commit 43f2517955875be5d96b641fba33d73097fe3cd9 upstream.
+commit 936bd03405fc83ba039d42bc93ffd4b88418f1d3 upstream.
 
-This fixes the following build error
+Running tests with a debug kernel shows that bnx2fc_recv_frame() is
+modifying the per_cpu lport stats counters in a non-mpsafe way.  Just boot
+a debug kernel and run the bnx2fc driver with the hardware enabled.
 
-drivers/gpu/drm/kmb/kmb_plane.c: In function 'kmb_plane_atomic_disable':
-drivers/gpu/drm/kmb/kmb_plane.c:165:34: error: array subscript 3 is above array bounds of 'struct layer_status[2]' [-Werror=array-bounds]
-  165 |                 kmb->plane_status[plane_id].ctrl =
-  LCD_CTRL_GL2_ENABLE;
-  |                 ~~~~~~~~~~~~~~~~~^~~~~~~~~~
-  In file included from drivers/gpu/drm/kmb/kmb_plane.c:17:
-  drivers/gpu/drm/kmb/kmb_drv.h:61:41: note: while referencing 'plane_status'
-  61 |         struct layer_status  plane_status[KMB_MAX_PLANES];
-  |                                         ^~~~~~~~~~~~
-  drivers/gpu/drm/kmb/kmb_plane.c:162:34: error: array subscript 2 is above array bounds of 'struct layer_status[2]' [-Werror=array-bounds]
-  162 |  kmb->plane_status[plane_id].ctrl =  LCD_CTRL_GL1_ENABLE;
-  |                 ~~~~~~~~~~~~~~~~~^~~~~~~~~~
-  In file included from
-  drivers/gpu/drm/kmb/kmb_plane.c:17:
-  drivers/gpu/drm/kmb/kmb_drv.h:61:41: note: while referencing 'plane_status'
-  61 |         struct layer_status  plane_status[KMB_MAX_PLANES];
-  |
-  ^~~~~~~~~~~~
+[ 1391.699147] BUG: using smp_processor_id() in preemptible [00000000] code: bnx2fc_
+[ 1391.699160] caller is bnx2fc_recv_frame+0xbf9/0x1760 [bnx2fc]
+[ 1391.699174] CPU: 2 PID: 4355 Comm: bnx2fc_l2_threa Kdump: loaded Tainted: G    B
+[ 1391.699180] Hardware name: HP ProLiant DL120 G7, BIOS J01 07/01/2013
+[ 1391.699183] Call Trace:
+[ 1391.699188]  dump_stack_lvl+0x57/0x7d
+[ 1391.699198]  check_preemption_disabled+0xc8/0xd0
+[ 1391.699205]  bnx2fc_recv_frame+0xbf9/0x1760 [bnx2fc]
+[ 1391.699215]  ? do_raw_spin_trylock+0xb5/0x180
+[ 1391.699221]  ? bnx2fc_npiv_create_vports.isra.0+0x4e0/0x4e0 [bnx2fc]
+[ 1391.699229]  ? bnx2fc_l2_rcv_thread+0xb7/0x3a0 [bnx2fc]
+[ 1391.699240]  bnx2fc_l2_rcv_thread+0x1af/0x3a0 [bnx2fc]
+[ 1391.699250]  ? bnx2fc_ulp_init+0xc0/0xc0 [bnx2fc]
+[ 1391.699258]  kthread+0x364/0x420
+[ 1391.699263]  ? _raw_spin_unlock_irq+0x24/0x50
+[ 1391.699268]  ? set_kthread_struct+0x100/0x100
+[ 1391.699273]  ret_from_fork+0x22/0x30
 
-Fixes: 7f7b96a8a0a1 ("drm/kmb: Add support for KeemBay Display")
-Signed-off-by: Anitha Chrisanthus <anitha.chrisanthus@intel.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220127194227.2213608-1-anitha.chrisanthus@intel.com
+Restore the old get_cpu/put_cpu code with some modifications to reduce the
+size of the critical section.
+
+Link: https://lore.kernel.org/r/20220124145110.442335-1-jmeneghi@redhat.com
+Fixes: d576a5e80cd0 ("bnx2fc: Improve stats update mechanism")
+Tested-by: Guangwu Zhang <guazhang@redhat.com>
+Acked-by: Saurav Kashyap <skashyap@marvell.com>
+Signed-off-by: John Meneghini <jmeneghi@redhat.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/kmb/kmb_plane.c |    6 ------
- 1 file changed, 6 deletions(-)
+ drivers/scsi/bnx2fc/bnx2fc_fcoe.c |   21 +++++++++++++--------
+ 1 file changed, 13 insertions(+), 8 deletions(-)
 
---- a/drivers/gpu/drm/kmb/kmb_plane.c
-+++ b/drivers/gpu/drm/kmb/kmb_plane.c
-@@ -158,12 +158,6 @@ static void kmb_plane_atomic_disable(str
- 	case LAYER_1:
- 		kmb->plane_status[plane_id].ctrl = LCD_CTRL_VL2_ENABLE;
- 		break;
--	case LAYER_2:
--		kmb->plane_status[plane_id].ctrl = LCD_CTRL_GL1_ENABLE;
--		break;
--	case LAYER_3:
--		kmb->plane_status[plane_id].ctrl = LCD_CTRL_GL2_ENABLE;
--		break;
+--- a/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
++++ b/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
+@@ -506,7 +506,8 @@ static int bnx2fc_l2_rcv_thread(void *ar
+ 
+ static void bnx2fc_recv_frame(struct sk_buff *skb)
+ {
+-	u32 fr_len;
++	u64 crc_err;
++	u32 fr_len, fr_crc;
+ 	struct fc_lport *lport;
+ 	struct fcoe_rcv_info *fr;
+ 	struct fc_stats *stats;
+@@ -540,6 +541,11 @@ static void bnx2fc_recv_frame(struct sk_
+ 	skb_pull(skb, sizeof(struct fcoe_hdr));
+ 	fr_len = skb->len - sizeof(struct fcoe_crc_eof);
+ 
++	stats = per_cpu_ptr(lport->stats, get_cpu());
++	stats->RxFrames++;
++	stats->RxWords += fr_len / FCOE_WORD_TO_BYTE;
++	put_cpu();
++
+ 	fp = (struct fc_frame *)skb;
+ 	fc_frame_init(fp);
+ 	fr_dev(fp) = lport;
+@@ -622,16 +628,15 @@ static void bnx2fc_recv_frame(struct sk_
+ 		return;
  	}
  
- 	kmb->plane_status[plane_id].disable = true;
+-	stats = per_cpu_ptr(lport->stats, smp_processor_id());
+-	stats->RxFrames++;
+-	stats->RxWords += fr_len / FCOE_WORD_TO_BYTE;
++	fr_crc = le32_to_cpu(fr_crc(fp));
+ 
+-	if (le32_to_cpu(fr_crc(fp)) !=
+-			~crc32(~0, skb->data, fr_len)) {
+-		if (stats->InvalidCRCCount < 5)
++	if (unlikely(fr_crc != ~crc32(~0, skb->data, fr_len))) {
++		stats = per_cpu_ptr(lport->stats, get_cpu());
++		crc_err = (stats->InvalidCRCCount++);
++		put_cpu();
++		if (crc_err < 5)
+ 			printk(KERN_WARNING PFX "dropping frame with "
+ 			       "CRC error\n");
+-		stats->InvalidCRCCount++;
+ 		kfree_skb(skb);
+ 		return;
+ 	}
 
 

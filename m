@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B2274AB952
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:23:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 893434ABCD5
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:50:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354047AbiBGLMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:12:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48692 "EHLO
+        id S1387954AbiBGLmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:42:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232220AbiBGLJy (ORCPT
+        with ESMTP id S1359408AbiBGL2n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:09:54 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EED9C043188;
-        Mon,  7 Feb 2022 03:09:54 -0800 (PST)
+        Mon, 7 Feb 2022 06:28:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 361B0C033252;
+        Mon,  7 Feb 2022 03:27:02 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C185261261;
-        Mon,  7 Feb 2022 11:09:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F117C004E1;
-        Mon,  7 Feb 2022 11:09:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 36FCA60A6B;
+        Mon,  7 Feb 2022 11:27:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D724C004E1;
+        Mon,  7 Feb 2022 11:27:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232193;
-        bh=+DizvWClW/CV/X7Q1K0svABf404QPj0PYFO9jr/kB0Y=;
+        s=korg; t=1644233221;
+        bh=9q3/IOuZ6+o3g3xGCTBih0kUoMO02HHzHtG+4luzBNg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gaKsrfQz74RMr0wQFNhQPyAdYT0XiuN0cIllN2w8oboqG9IAa8RA3JVz2TtGkwTu7
-         LFu80xvhFbkyPNYipYw0W7ol+9uUp68qEo13rZ/XbkEzZTY6OjYSUUsDadv3p88xdj
-         2mJrTWoi5JGhIldVBdz8LEtUtZeKDNBBklwtjYG4=
+        b=PT4aQI2mT1TuCcYOhBctJEX6UAw/ObzwEQrZ97Glfa57GSEDm1+DewHjUtBuut6F7
+         A8hrdLHqrBfeI9h/r/1WFxvxieKVcexdVM5XsgwzUuGSMLyw3HsvgU8HEPxeijlItF
+         z42q7fuz1a0iwxZ7v5FsWFRxOOZ//BUIf0CTs1PY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Erhard Furtner <erhard_f@mailbox.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: [PATCH 4.9 14/48] powerpc/32: Fix boot failure with GCC latent entropy plugin
+        stable@vger.kernel.org, Christian Lachner <gladiac@gmail.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.15 014/110] ALSA: hda/realtek: Add missing fixup-model entry for Gigabyte X570 ALC1220 quirks
 Date:   Mon,  7 Feb 2022 12:05:47 +0100
-Message-Id: <20220207103752.809184786@linuxfoundation.org>
+Message-Id: <20220207103802.750149389@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103752.341184175@linuxfoundation.org>
-References: <20220207103752.341184175@linuxfoundation.org>
+In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
+References: <20220207103802.280120990@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,54 +54,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
+From: Christian Lachner <gladiac@gmail.com>
 
-commit bba496656a73fc1d1330b49c7f82843836e9feb1 upstream.
+commit 63394a16086fc2152869d7902621e2525e14bc40 upstream.
 
-Boot fails with GCC latent entropy plugin enabled.
+The initial commit of the new Gigabyte X570 ALC1220 quirks lacked the
+fixup-model entry in alc882_fixup_models[]. It seemed not to cause any ill
+effects but for completeness sake this commit makes up for that.
 
-This is due to early boot functions trying to access 'latent_entropy'
-global data while the kernel is not relocated at its final
-destination yet.
-
-As there is no way to tell GCC to use PTRRELOC() to access it,
-disable latent entropy plugin in early_32.o and feature-fixups.o and
-code-patching.o
-
-Fixes: 38addce8b600 ("gcc-plugins: Add latent_entropy plugin")
-Cc: stable@vger.kernel.org # v4.9+
-Reported-by: Erhard Furtner <erhard_f@mailbox.org>
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215217
-Link: https://lore.kernel.org/r/2bac55483b8daf5b1caa163a45fa5f9cdbe18be4.1640178426.git.christophe.leroy@csgroup.eu
+Signed-off-by: Christian Lachner <gladiac@gmail.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220129113243.93068-2-gladiac@gmail.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/kernel/Makefile |    1 +
- arch/powerpc/lib/Makefile    |    3 +++
- 2 files changed, 4 insertions(+)
+ sound/pci/hda/patch_realtek.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/arch/powerpc/kernel/Makefile
-+++ b/arch/powerpc/kernel/Makefile
-@@ -14,6 +14,7 @@ CFLAGS_prom_init.o      += -fPIC
- CFLAGS_btext.o		+= -fPIC
- endif
- 
-+CFLAGS_setup_32.o += $(DISABLE_LATENT_ENTROPY_PLUGIN)
- CFLAGS_cputable.o += $(DISABLE_LATENT_ENTROPY_PLUGIN)
- CFLAGS_prom_init.o += $(DISABLE_LATENT_ENTROPY_PLUGIN)
- CFLAGS_btext.o += $(DISABLE_LATENT_ENTROPY_PLUGIN)
---- a/arch/powerpc/lib/Makefile
-+++ b/arch/powerpc/lib/Makefile
-@@ -9,6 +9,9 @@ ccflags-$(CONFIG_PPC64)	:= $(NO_MINIMAL_
- CFLAGS_REMOVE_code-patching.o = $(CC_FLAGS_FTRACE)
- CFLAGS_REMOVE_feature-fixups.o = $(CC_FLAGS_FTRACE)
- 
-+CFLAGS_code-patching.o += $(DISABLE_LATENT_ENTROPY_PLUGIN)
-+CFLAGS_feature-fixups.o += $(DISABLE_LATENT_ENTROPY_PLUGIN)
-+
- obj-y += string.o alloc.o crtsavres.o code-patching.o \
- 	 feature-fixups.o
- 
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -2660,6 +2660,7 @@ static const struct hda_model_fixup alc8
+ 	{.id = ALC882_FIXUP_NO_PRIMARY_HP, .name = "no-primary-hp"},
+ 	{.id = ALC887_FIXUP_ASUS_BASS, .name = "asus-bass"},
+ 	{.id = ALC1220_FIXUP_GB_DUAL_CODECS, .name = "dual-codecs"},
++	{.id = ALC1220_FIXUP_GB_X570, .name = "gb-x570"},
+ 	{.id = ALC1220_FIXUP_CLEVO_P950, .name = "clevo-p950"},
+ 	{}
+ };
 
 

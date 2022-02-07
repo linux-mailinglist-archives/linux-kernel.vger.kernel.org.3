@@ -2,41 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F069D4ABDFE
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:05:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00ADF4ABDFF
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:05:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391234AbiBGL6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:58:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47128 "EHLO
+        id S1391246AbiBGL6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:58:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377374AbiBGLfl (ORCPT
+        with ESMTP id S1377733AbiBGLfq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:35:41 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC1AC043181;
-        Mon,  7 Feb 2022 03:35:35 -0800 (PST)
+        Mon, 7 Feb 2022 06:35:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23AA2C0401F6;
+        Mon,  7 Feb 2022 03:35:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1E1C2B8102E;
-        Mon,  7 Feb 2022 11:35:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F280C004E1;
-        Mon,  7 Feb 2022 11:35:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A887B60B20;
+        Mon,  7 Feb 2022 11:35:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69D16C004E1;
+        Mon,  7 Feb 2022 11:35:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233732;
-        bh=rG2zIR8em5dhqg9au0dA4l5hkYO7yd8NVH3Wp/6VZIs=;
+        s=korg; t=1644233736;
+        bh=KaEEvikqmO26oxdyVGpMjrHrH9qyqqylOufY9OgAjLg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=u1apEzEnvBsg4VpLViCOUh4rdVxLvuGvg7ZFJQTUTCczIMFo4ZKwAt/wLnH49F7Pr
-         eoQI2J2GBah31nB0SQ5z8FyNkjfURov/EsiquhX2uDRmdVha7hJp1vdVclMpcZo2Po
-         8OzOoqkAWEMaXHr1+zgPyDQa28CHyHChDMd9OFaE=
+        b=C5Ro1r8Who5MF/UvYIxjxEWBob1BNUcYZ4a53aIZLo7oI5Tn9a0iYexpRpS1VuAE8
+         1B3lq0vGJJZfECEe9qzH9lJWj10ZReZbWYP7qMiaBl/sZoG4NFE66hbHV/IYybuctm
+         W5E51rTUwYw5sq/AQLnsN2lK70kkxA1i8BVU3hxs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH 5.16 104/126] tools/resolve_btfids: Do not print any commands when building silently
-Date:   Mon,  7 Feb 2022 12:07:15 +0100
-Message-Id: <20220207103807.658593946@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Dima Ruinskiy <dima.ruinskiy@intel.com>,
+        Sasha Neftin <sasha.neftin@intel.com>,
+        Nechama Kraus <nechamax.kraus@linux.intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>
+Subject: [PATCH 5.16 105/126] e1000e: Separate ADP board type from TGP
+Date:   Mon,  7 Feb 2022 12:07:16 +0100
+Message-Id: <20220207103807.690836971@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
 References: <20220207103804.053675072@linuxfoundation.org>
@@ -54,44 +58,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nathan Chancellor <nathan@kernel.org>
+From: Sasha Neftin <sasha.neftin@intel.com>
 
-commit 7f3bdbc3f13146eb9d07de81ea71f551587a384b upstream.
+commit 68defd528f94ed1cf11f49a75cc1875dccd781fa upstream.
 
-When building with 'make -s', there is some output from resolve_btfids:
+We have the same LAN controller on different PCH's. Separate ADP board
+type from a TGP which will allow for specific fixes to be applied for
+ADP platforms.
 
-$ make -sj"$(nproc)" oldconfig prepare
-  MKDIR     .../tools/bpf/resolve_btfids/libbpf/
-  MKDIR     .../tools/bpf/resolve_btfids//libsubcmd
-  LINK     resolve_btfids
-
-Silent mode means that no information should be emitted about what is
-currently being done. Use the $(silent) variable from Makefile.include
-to avoid defining the msg macro so that there is no information printed.
-
-Fixes: fbbb68de80a4 ("bpf: Add resolve_btfids tool to resolve BTF IDs in ELF object")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/bpf/20220201212503.731732-1-nathan@kernel.org
+Suggested-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+Suggested-by: Dima Ruinskiy <dima.ruinskiy@intel.com>
+Signed-off-by: Sasha Neftin <sasha.neftin@intel.com>
+Tested-by: Nechama Kraus <nechamax.kraus@linux.intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/bpf/resolve_btfids/Makefile |    6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/intel/e1000e/e1000.h   |    4 ++-
+ drivers/net/ethernet/intel/e1000e/ich8lan.c |   20 ++++++++++++++++
+ drivers/net/ethernet/intel/e1000e/netdev.c  |   33 ++++++++++++++--------------
+ 3 files changed, 40 insertions(+), 17 deletions(-)
 
---- a/tools/bpf/resolve_btfids/Makefile
-+++ b/tools/bpf/resolve_btfids/Makefile
-@@ -9,7 +9,11 @@ ifeq ($(V),1)
-   msg =
- else
-   Q = @
--  msg = @printf '  %-8s %s%s\n' "$(1)" "$(notdir $(2))" "$(if $(3), $(3))";
-+  ifeq ($(silent),1)
-+    msg =
-+  else
-+    msg = @printf '  %-8s %s%s\n' "$(1)" "$(notdir $(2))" "$(if $(3), $(3))";
-+  endif
-   MAKEFLAGS=--no-print-directory
- endif
+--- a/drivers/net/ethernet/intel/e1000e/e1000.h
++++ b/drivers/net/ethernet/intel/e1000e/e1000.h
+@@ -115,7 +115,8 @@ enum e1000_boards {
+ 	board_pch_lpt,
+ 	board_pch_spt,
+ 	board_pch_cnp,
+-	board_pch_tgp
++	board_pch_tgp,
++	board_pch_adp
+ };
  
+ struct e1000_ps_page {
+@@ -502,6 +503,7 @@ extern const struct e1000_info e1000_pch
+ extern const struct e1000_info e1000_pch_spt_info;
+ extern const struct e1000_info e1000_pch_cnp_info;
+ extern const struct e1000_info e1000_pch_tgp_info;
++extern const struct e1000_info e1000_pch_adp_info;
+ extern const struct e1000_info e1000_es2_info;
+ 
+ void e1000e_ptp_init(struct e1000_adapter *adapter);
+--- a/drivers/net/ethernet/intel/e1000e/ich8lan.c
++++ b/drivers/net/ethernet/intel/e1000e/ich8lan.c
+@@ -6021,3 +6021,23 @@ const struct e1000_info e1000_pch_tgp_in
+ 	.phy_ops		= &ich8_phy_ops,
+ 	.nvm_ops		= &spt_nvm_ops,
+ };
++
++const struct e1000_info e1000_pch_adp_info = {
++	.mac			= e1000_pch_adp,
++	.flags			= FLAG_IS_ICH
++				  | FLAG_HAS_WOL
++				  | FLAG_HAS_HW_TIMESTAMP
++				  | FLAG_HAS_CTRLEXT_ON_LOAD
++				  | FLAG_HAS_AMT
++				  | FLAG_HAS_FLASH
++				  | FLAG_HAS_JUMBO_FRAMES
++				  | FLAG_APME_IN_WUC,
++	.flags2			= FLAG2_HAS_PHY_STATS
++				  | FLAG2_HAS_EEE,
++	.pba			= 26,
++	.max_hw_frame_size	= 9022,
++	.get_variants		= e1000_get_variants_ich8lan,
++	.mac_ops		= &ich8_mac_ops,
++	.phy_ops		= &ich8_phy_ops,
++	.nvm_ops		= &spt_nvm_ops,
++};
+--- a/drivers/net/ethernet/intel/e1000e/netdev.c
++++ b/drivers/net/ethernet/intel/e1000e/netdev.c
+@@ -52,6 +52,7 @@ static const struct e1000_info *e1000_in
+ 	[board_pch_spt]		= &e1000_pch_spt_info,
+ 	[board_pch_cnp]		= &e1000_pch_cnp_info,
+ 	[board_pch_tgp]		= &e1000_pch_tgp_info,
++	[board_pch_adp]		= &e1000_pch_adp_info,
+ };
+ 
+ struct e1000_reg_info {
+@@ -7904,22 +7905,22 @@ static const struct pci_device_id e1000_
+ 	{ PCI_VDEVICE(INTEL, E1000_DEV_ID_PCH_TGP_I219_V14), board_pch_tgp },
+ 	{ PCI_VDEVICE(INTEL, E1000_DEV_ID_PCH_TGP_I219_LM15), board_pch_tgp },
+ 	{ PCI_VDEVICE(INTEL, E1000_DEV_ID_PCH_TGP_I219_V15), board_pch_tgp },
+-	{ PCI_VDEVICE(INTEL, E1000_DEV_ID_PCH_RPL_I219_LM23), board_pch_tgp },
+-	{ PCI_VDEVICE(INTEL, E1000_DEV_ID_PCH_RPL_I219_V23), board_pch_tgp },
+-	{ PCI_VDEVICE(INTEL, E1000_DEV_ID_PCH_ADP_I219_LM16), board_pch_tgp },
+-	{ PCI_VDEVICE(INTEL, E1000_DEV_ID_PCH_ADP_I219_V16), board_pch_tgp },
+-	{ PCI_VDEVICE(INTEL, E1000_DEV_ID_PCH_ADP_I219_LM17), board_pch_tgp },
+-	{ PCI_VDEVICE(INTEL, E1000_DEV_ID_PCH_ADP_I219_V17), board_pch_tgp },
+-	{ PCI_VDEVICE(INTEL, E1000_DEV_ID_PCH_RPL_I219_LM22), board_pch_tgp },
+-	{ PCI_VDEVICE(INTEL, E1000_DEV_ID_PCH_RPL_I219_V22), board_pch_tgp },
+-	{ PCI_VDEVICE(INTEL, E1000_DEV_ID_PCH_MTP_I219_LM18), board_pch_tgp },
+-	{ PCI_VDEVICE(INTEL, E1000_DEV_ID_PCH_MTP_I219_V18), board_pch_tgp },
+-	{ PCI_VDEVICE(INTEL, E1000_DEV_ID_PCH_MTP_I219_LM19), board_pch_tgp },
+-	{ PCI_VDEVICE(INTEL, E1000_DEV_ID_PCH_MTP_I219_V19), board_pch_tgp },
+-	{ PCI_VDEVICE(INTEL, E1000_DEV_ID_PCH_LNP_I219_LM20), board_pch_tgp },
+-	{ PCI_VDEVICE(INTEL, E1000_DEV_ID_PCH_LNP_I219_V20), board_pch_tgp },
+-	{ PCI_VDEVICE(INTEL, E1000_DEV_ID_PCH_LNP_I219_LM21), board_pch_tgp },
+-	{ PCI_VDEVICE(INTEL, E1000_DEV_ID_PCH_LNP_I219_V21), board_pch_tgp },
++	{ PCI_VDEVICE(INTEL, E1000_DEV_ID_PCH_RPL_I219_LM23), board_pch_adp },
++	{ PCI_VDEVICE(INTEL, E1000_DEV_ID_PCH_RPL_I219_V23), board_pch_adp },
++	{ PCI_VDEVICE(INTEL, E1000_DEV_ID_PCH_ADP_I219_LM16), board_pch_adp },
++	{ PCI_VDEVICE(INTEL, E1000_DEV_ID_PCH_ADP_I219_V16), board_pch_adp },
++	{ PCI_VDEVICE(INTEL, E1000_DEV_ID_PCH_ADP_I219_LM17), board_pch_adp },
++	{ PCI_VDEVICE(INTEL, E1000_DEV_ID_PCH_ADP_I219_V17), board_pch_adp },
++	{ PCI_VDEVICE(INTEL, E1000_DEV_ID_PCH_RPL_I219_LM22), board_pch_adp },
++	{ PCI_VDEVICE(INTEL, E1000_DEV_ID_PCH_RPL_I219_V22), board_pch_adp },
++	{ PCI_VDEVICE(INTEL, E1000_DEV_ID_PCH_MTP_I219_LM18), board_pch_adp },
++	{ PCI_VDEVICE(INTEL, E1000_DEV_ID_PCH_MTP_I219_V18), board_pch_adp },
++	{ PCI_VDEVICE(INTEL, E1000_DEV_ID_PCH_MTP_I219_LM19), board_pch_adp },
++	{ PCI_VDEVICE(INTEL, E1000_DEV_ID_PCH_MTP_I219_V19), board_pch_adp },
++	{ PCI_VDEVICE(INTEL, E1000_DEV_ID_PCH_LNP_I219_LM20), board_pch_adp },
++	{ PCI_VDEVICE(INTEL, E1000_DEV_ID_PCH_LNP_I219_V20), board_pch_adp },
++	{ PCI_VDEVICE(INTEL, E1000_DEV_ID_PCH_LNP_I219_LM21), board_pch_adp },
++	{ PCI_VDEVICE(INTEL, E1000_DEV_ID_PCH_LNP_I219_V21), board_pch_adp },
+ 
+ 	{ 0, 0, 0, 0, 0, 0, 0 }	/* terminate list */
+ };
 
 

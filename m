@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC4CA4ABC04
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:45:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21A914ABDF1
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:05:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386627AbiBGLfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:35:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36384 "EHLO
+        id S1389630AbiBGLuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:50:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384022AbiBGLY2 (ORCPT
+        with ESMTP id S1359604AbiBGLaJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:24:28 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02079C043188;
-        Mon,  7 Feb 2022 03:24:27 -0800 (PST)
+        Mon, 7 Feb 2022 06:30:09 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68CB4C03E94C;
+        Mon,  7 Feb 2022 03:28:31 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7743461388;
-        Mon,  7 Feb 2022 11:24:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F435C004E1;
-        Mon,  7 Feb 2022 11:24:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 270C0B811B3;
+        Mon,  7 Feb 2022 11:28:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E9DDC004E1;
+        Mon,  7 Feb 2022 11:28:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233066;
-        bh=+nRe8g/tE2F5FU0y+dnQVbMd4p5XFCbxsci5pHSsjd4=;
+        s=korg; t=1644233309;
+        bh=HlwO99kzVVDq/w0vcBsb1+gvp57k51VTn37EzEf+CmY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aEdry7Sq6sC33w2NQ9LLuk8p2PDLAZ05m5O/RbPLgOU8Wa0gZXXIS1RO3Embs8cR2
-         Vi/M9dEpoZGxVDh8DCw/RfH6SJ1QQqFpPatFni+wlfnWW9ZOXT/PcPjWQkgcEmlz6e
-         pdLIPf7JayzAKOsIXCrmhdstzvjkwlM0ilWhc6OM=
+        b=pogn1h+/KMb8Y7sG1eU4Z3tPqmZDBcQ6cl46Mte8qcQR2IMpgZsCNsgf0iTRactKr
+         /HUX+GP+cPglgKXFE1PtJxuY2C6DUCrDuL9YU6ltCp298yeWLgwAgHSAEMJZImlzRh
+         7eQW3BFS/9KAagZaSrieHSpeI16v0Mb7Pmf8psLA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Subject: [PATCH 5.10 56/74] selftests/exec: Remove pipe from TEST_GEN_FILES
+        =?UTF-8?q?=C5=81ukasz=20Bartosik?= <lb@semihalf.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH 5.15 081/110] pinctrl: intel: fix unexpected interrupt
 Date:   Mon,  7 Feb 2022 12:06:54 +0100
-Message-Id: <20220207103759.060911912@linuxfoundation.org>
+Message-Id: <20220207103805.134119606@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103757.232676988@linuxfoundation.org>
-References: <20220207103757.232676988@linuxfoundation.org>
+In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
+References: <20220207103802.280120990@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,41 +55,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+From: Łukasz Bartosik <lb@semihalf.com>
 
-commit 908a26e139e8cf21093acc56d8e90ddad2ad1eff upstream.
+commit e986f0e602f19ecb7880b04dd1db415ed9bca3f6 upstream.
 
-pipe named FIFO special file is being created in execveat.c to perform
-some tests. Makefile doesn't need to do anything with the pipe. When it
-isn't found, Makefile generates the following build error:
+ASUS Chromebook C223 with Celeron N3350 crashes sometimes during
+cold booot. Inspection of the kernel log showed that it gets into
+an inifite loop logging the following message:
 
-make: *** No rule to make target
-'../tools/testing/selftests/exec/pipe', needed by 'all'.  Stop.
+->handle_irq():  000000009cdb51e8, handle_bad_irq+0x0/0x251
+->irq_data.chip(): 000000005ec212a7, 0xffffa043009d8e7
+->action(): 00000
+   IRQ_NOPROBE set
+unexpected IRQ trap at vector 7c
 
-pipe is created and removed during test run-time.
+The issue happens during cold boot but only if cold boot happens
+at most several dozen seconds after Chromebook is powered off. For
+longer intervals between power off and power on (cold boot) the issue
+does not reproduce. The unexpected interrupt is sourced from INT3452
+GPIO pin which is used for SD card detect. Investigation relevealed
+that when the interval between power off and power on (cold boot)
+is less than several dozen seconds then values of INT3452 GPIO interrupt
+enable and interrupt pending registers survive power off and power
+on sequence and interrupt for SD card detect pin is enabled and pending
+during probe of SD controller which causes the unexpected IRQ message.
+"Intel Pentium and Celeron Processor N- and J- Series" volume 3 doc
+mentions that GPIO interrupt enable and status registers default
+value is 0x0.
+The fix clears INT3452 GPIO interrupt enabled and interrupt pending
+registers in its probe function.
 
-Amended change log to add pipe remove info:
-Shuah Khan <skhan@linuxfoundation.org>
-
-Fixes: 61016db15b8e ("selftests/exec: Verify execve of non-regular files fail")
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Fixes: 7981c0015af2 ("pinctrl: intel: Add Intel Sunrisepoint pin controller and GPIO support")
+Signed-off-by: Łukasz Bartosik <lb@semihalf.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/exec/Makefile |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/pinctrl/intel/pinctrl-intel.c |   54 +++++++++++++++++++++-------------
+ 1 file changed, 34 insertions(+), 20 deletions(-)
 
---- a/tools/testing/selftests/exec/Makefile
-+++ b/tools/testing/selftests/exec/Makefile
-@@ -5,7 +5,7 @@ CFLAGS += -D_GNU_SOURCE
+--- a/drivers/pinctrl/intel/pinctrl-intel.c
++++ b/drivers/pinctrl/intel/pinctrl-intel.c
+@@ -1210,6 +1210,39 @@ static irqreturn_t intel_gpio_irq(int ir
+ 	return IRQ_RETVAL(ret);
+ }
  
- TEST_PROGS := binfmt_script non-regular
- TEST_GEN_PROGS := execveat load_address_4096 load_address_2097152 load_address_16777216
--TEST_GEN_FILES := execveat.symlink execveat.denatured script subdir pipe
-+TEST_GEN_FILES := execveat.symlink execveat.denatured script subdir
- # Makefile is a run-time dependency, since it's accessed by the execveat test
- TEST_FILES := Makefile
++static void intel_gpio_irq_init(struct intel_pinctrl *pctrl)
++{
++	int i;
++
++	for (i = 0; i < pctrl->ncommunities; i++) {
++		const struct intel_community *community;
++		void __iomem *base;
++		unsigned int gpp;
++
++		community = &pctrl->communities[i];
++		base = community->regs;
++
++		for (gpp = 0; gpp < community->ngpps; gpp++) {
++			/* Mask and clear all interrupts */
++			writel(0, base + community->ie_offset + gpp * 4);
++			writel(0xffff, base + community->is_offset + gpp * 4);
++		}
++	}
++}
++
++static int intel_gpio_irq_init_hw(struct gpio_chip *gc)
++{
++	struct intel_pinctrl *pctrl = gpiochip_get_data(gc);
++
++	/*
++	 * Make sure the interrupt lines are in a proper state before
++	 * further configuration.
++	 */
++	intel_gpio_irq_init(pctrl);
++
++	return 0;
++}
++
+ static int intel_gpio_add_community_ranges(struct intel_pinctrl *pctrl,
+ 				const struct intel_community *community)
+ {
+@@ -1314,6 +1347,7 @@ static int intel_gpio_probe(struct intel
+ 	girq->num_parents = 0;
+ 	girq->default_type = IRQ_TYPE_NONE;
+ 	girq->handler = handle_bad_irq;
++	girq->init_hw = intel_gpio_irq_init_hw;
  
+ 	ret = devm_gpiochip_add_data(pctrl->dev, &pctrl->chip, pctrl);
+ 	if (ret) {
+@@ -1689,26 +1723,6 @@ int intel_pinctrl_suspend_noirq(struct d
+ }
+ EXPORT_SYMBOL_GPL(intel_pinctrl_suspend_noirq);
+ 
+-static void intel_gpio_irq_init(struct intel_pinctrl *pctrl)
+-{
+-	size_t i;
+-
+-	for (i = 0; i < pctrl->ncommunities; i++) {
+-		const struct intel_community *community;
+-		void __iomem *base;
+-		unsigned int gpp;
+-
+-		community = &pctrl->communities[i];
+-		base = community->regs;
+-
+-		for (gpp = 0; gpp < community->ngpps; gpp++) {
+-			/* Mask and clear all interrupts */
+-			writel(0, base + community->ie_offset + gpp * 4);
+-			writel(0xffff, base + community->is_offset + gpp * 4);
+-		}
+-	}
+-}
+-
+ static bool intel_gpio_update_reg(void __iomem *reg, u32 mask, u32 value)
+ {
+ 	u32 curr, updated;
 
 

@@ -2,106 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8160A4AC427
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 16:46:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87B384AC421
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 16:46:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383772AbiBGPnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 10:43:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49152 "EHLO
+        id S1384697AbiBGPnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 10:43:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384370AbiBGPb4 (ORCPT
+        with ESMTP id S241112AbiBGPj3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 10:31:56 -0500
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7A7C03E961;
-        Mon,  7 Feb 2022 07:31:37 -0800 (PST)
-Received: by mail-pf1-x430.google.com with SMTP id v74so13569132pfc.1;
-        Mon, 07 Feb 2022 07:31:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc:from
-         :subject:content-transfer-encoding;
-        bh=9brYQ3v7OVc6aEBTBtZMjzX9d5bnamj1rQekxmQrM9M=;
-        b=I2Hf3GJxvNN4GRQH9kzLzxkqg8wf5jNqWqCXxsh1evsCBxY1LousIr1ABLvbNRpZC5
-         HlYY5mDuvP2NKqMMC7qNafgtUw+Km/TojstZobIlg68g+0cQkjgZh17Y/nuEywZEYo7H
-         x9+9GyWtPmINGOI7gSyEi+sEXPT6CPp3bA712Md2doEvBjSIszMyc/KbxqZIbBr1zmCV
-         XX5Bdj1guw9UwtLRcdzGIMJiriiT0XVSl0OvDwrT8J2kXe3zR6e0dFETRcBxA9sVxRI4
-         4pPQQKc4jXKe9ztRQlrGh52wXDeBaa7Usc67hbV/UZ2Kw/MIpXW/B0iO7gngV3Ayf3+9
-         RoCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:from:subject:content-transfer-encoding;
-        bh=9brYQ3v7OVc6aEBTBtZMjzX9d5bnamj1rQekxmQrM9M=;
-        b=LahahQibRmZXcl0RimloLQ+Ak5YIEt34xGK2UB55ynszmTsNwGcXLF9UqzaaNNCgfY
-         UdXaNW7TDNQlRqcwlleh1c/kC3Upo8/cI3C7di/cKfLiJtfp6clI+jLZ/g0/vOokl1BE
-         D/zinOKyQZ580gmJJRMFPqcx4Wg2gek5YhSgdwN1stoDTx+Eiy6WOrVll1/1UQTLNvqO
-         7XDGvkXGp4NH5P12pdbw7hM5/VektZ0KJuaO3flldEWb0GxCryL47lK3nygf8C80ia+O
-         HhY5mwCie+13VNOUod4mjwuUGY2t2v3z75m+mmSV8LjcAaplzdtxbq18KedOZdoJ+5hx
-         uO+Q==
-X-Gm-Message-State: AOAM530eJj7NrfbJM0rp1mpDMNLzMXYDf/IzXEDsQ1nMd5cGlMjOe133
-        rqsFloB4Dz+2NZVcwdxRUWQ=
-X-Google-Smtp-Source: ABdhPJwGYDQw/0+EXbLlKn7bGPKQ8vZxLWGxgt4AIK9ImLm+DbN1g0CjOUZmNo8FI5+oxy/Ulb2i8Q==
-X-Received: by 2002:a05:6a00:218b:: with SMTP id h11mr16337091pfi.29.1644247896825;
-        Mon, 07 Feb 2022 07:31:36 -0800 (PST)
-Received: from [10.59.0.6] ([85.203.23.80])
-        by smtp.gmail.com with ESMTPSA id mn7sm2350149pjb.8.2022.02.07.07.31.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Feb 2022 07:31:36 -0800 (PST)
-Message-ID: <fb543659-f69d-242f-b18a-69dd8b8b5ca1@gmail.com>
-Date:   Mon, 7 Feb 2022 23:31:26 +0800
+        Mon, 7 Feb 2022 10:39:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26A57C0401CA
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 07:39:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E29FFB815C8
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 15:39:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29087C004E1;
+        Mon,  7 Feb 2022 15:39:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644248365;
+        bh=1DQ+ee9g1kPRpknTH9hCM9jJ9V2o/CPiuwSx/K5V5x4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dIL+arbBgvnsxXrL9Zdz0tDdM0fM1KQIMILvSSA254Zf8aDJx0Ic/3o4oxVspdfVB
+         +DuZ9T30eNoE42XnVZek54hoj/UqqFHjsm9JiqL2lbZysDpqSWNSSZJNu1B0gNgprn
+         wxrmxR0yhc9zfv28Xi/PbzJRvfYfWIqGVR8CSZUuPrGe1Kmg1BJWyO+Rj4ezk3+zK2
+         Ayjr0IEywBbaluqIQqb7EXJ58AkzJGVbCZY+7eypPawZCywPq6J4zSdHn5W8T9gsrL
+         5ukcdahGpfqZTmkvQGYMYLpwXOJDWa4aJBST9UubwvfrMSUul7C7vru9mvfpNDJmPH
+         lp2Aq4Xes/4eg==
+Date:   Mon, 7 Feb 2022 23:31:41 +0800
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     ChangbinCONFIG_IRQSOFF_TRACER Du <changbin.du@gmail.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] riscv: fix oops caused by irq on/off tracer
+Message-ID: <YgE7XRE/Uc6gTCWd@xhacker>
+References: <20220129004226.32868-1-changbin.du@gmail.com>
+ <YgAEb425uqy5/dw1@xhacker>
+ <20220207123850.l4r5qjswaegwisbx@mail.google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Content-Language: en-US
-To:     chunkeey@googlemail.com, kvalo@kernel.org, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-From:   Jia-Ju Bai <baijiaju1990@gmail.com>
-Subject: [BUG] intersil: p54: possible deadlock in p54_remove_interface() and
- p54_stop()
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220207123850.l4r5qjswaegwisbx@mail.google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon, Feb 07, 2022 at 08:38:50PM +0800, ChangbinCONFIG_IRQSOFF_TRACER Du wrote:
+> On Mon, Feb 07, 2022 at 01:25:03AM +0800, Jisheng Zhang wrote:
+> > On Sat, Jan 29, 2022 at 08:42:26AM +0800, Changbin Du wrote:
+> > > The trace_hardirqs_on/off requires at least two parent call frames.
+> > > If not, the code generated by CALLER_ADDR1 (aka. ftrace_return_address(1))
+> > > could trigger memory access fault.
+> > > 
+> > > [    0.039615][    T0] Unable to handle kernel NULL pointer dereference at virtual address 00000000000000f8
+> > > [    0.041925][    T0] Oops [#1]
+> > > [    0.042063][    T0] Modules linked in:
+> > > [    0.042864][    T0] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.17.0-rc1-00233-g9a20c48d1ed2 #29
+> > > [    0.043568][    T0] Hardware name: riscv-virtio,qemu (DT)
+> > > [    0.044343][    T0] epc : trace_hardirqs_on+0x56/0xe2
+> > > [    0.044601][    T0]  ra : restore_all+0x12/0x6e
+> > > [    0.044721][    T0] epc : ffffffff80126a5c ra : ffffffff80003b94 sp : ffffffff81403db0
+> > > [    0.044801][    T0]  gp : ffffffff8163acd8 tp : ffffffff81414880 t0 : 0000000000000020
+> > > [    0.044882][    T0]  t1 : 0098968000000000 t2 : 0000000000000000 s0 : ffffffff81403de0
+> > > [    0.044967][    T0]  s1 : 0000000000000000 a0 : 0000000000000001 a1 : 0000000000000100
+> > > [    0.045046][    T0]  a2 : 0000000000000000 a3 : 0000000000000000 a4 : 0000000000000000
+> > > [    0.045124][    T0]  a5 : 0000000000000000 a6 : 0000000000000000 a7 : 0000000054494d45
+> > > [    0.045210][    T0]  s2 : ffffffff80003b94 s3 : ffffffff81a8f1b0 s4 : ffffffff80e27b50
+> > > [    0.045289][    T0]  s5 : ffffffff81414880 s6 : ffffffff8160fa00 s7 : 00000000800120e8
+> > > [    0.045389][    T0]  s8 : 0000000080013100 s9 : 000000000000007f s10: 0000000000000000
+> > > [    0.045474][    T0]  s11: 0000000000000000 t3 : 7fffffffffffffff t4 : 0000000000000000
+> > > [    0.045548][    T0]  t5 : 0000000000000000 t6 : ffffffff814aa368
+> > > [    0.045620][    T0] status: 0000000200000100 badaddr: 00000000000000f8 cause: 000000000000000d
+> > > [    0.046402][    T0] [<ffffffff80003b94>] restore_all+0x12/0x6e
+> > > 
+> > 
+> > Hi Changbin,
+> > 
+> > Could you please provide the reproduce steps? It looks a bit
+> > interesting.
+> >
+> Just enable CONFIG_IRQSOFF_TRACER and rebuild kernel with llvm. Then boot the
+> new kernel.
 
-My static analysis tool reports a possible deadlock in the p54 driver in 
-Linux 5.16:
-
-p54_remove_interface()
-   mutex_lock(&priv->conf_mutex); --> Line 262 (Lock A)
-wait_for_completion_interruptible_timeout(&priv->beacon_comp, HZ); --> 
-Line 271 (Wait X)
-
-p54_stop()
-   mutex_lock(&priv->conf_mutex); --> Line 208 (Lock A)
-   p54p_stop() (call via priv->stop)
-     p54_free_skb()
-       p54_tx_qos_accounting_free()
-         complete(&priv->beacon_comp); --> Line 230 (Wake X)
-
-When p54_remove_interface() is executed, "Wait X" is performed by 
-holding "Lock A". If p54_stop() is executed at this time, "Wake X" 
-cannot be performed to wake up "Wait X" in p54_remove_interface(), 
-because "Lock A" has been already hold by p54_remove_interface(), 
-causing a possible deadlock.
-I find that "Wait X" is performed with a timeout, to relieve the 
-possible deadlock; but I think this timeout can cause inefficient execution.
-
-I am not quite sure whether this possible problem is real and how to fix 
-it if it is real.
-Any feedback would be appreciated, thanks :)
-
-
-Best wishes,
-Jia-Ju Bai
+Thanks for the information. I tried IRQSOFF_TRACER with gcc+binutils,
+can't reproduce the issue. I forget to try clang+llvm. From another side
+The fact that gcc+bintuils can't reproduce it means this is a clang+llvm
+speicial case, no?

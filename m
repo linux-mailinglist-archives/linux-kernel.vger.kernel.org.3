@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 055644AC5A3
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 17:33:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AAB14AC5B0
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 17:33:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351190AbiBGQaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 11:30:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60860 "EHLO
+        id S1388441AbiBGQaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 11:30:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389572AbiBGQ0F (ORCPT
+        with ESMTP id S242367AbiBGQ0O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 11:26:05 -0500
+        Mon, 7 Feb 2022 11:26:14 -0500
 Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3C264C0401CE
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 08:26:05 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EE3E5C0401D1
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 08:26:13 -0800 (PST)
 Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 217GOeMr014411;
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 217GOexf014412;
         Mon, 7 Feb 2022 17:24:40 +0100
 From:   Willy Tarreau <w@1wt.eu>
 To:     "Paul E . McKenney" <paulmck@kernel.org>
 Cc:     Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
         Willy Tarreau <w@1wt.eu>
-Subject: [PATCH 28/42] tools/nolibc/string: use unidirectional variants for memcpy()
-Date:   Mon,  7 Feb 2022 17:23:40 +0100
-Message-Id: <20220207162354.14293-29-w@1wt.eu>
+Subject: [PATCH 29/42] tools/nolibc/string: slightly simplify memmove()
+Date:   Mon,  7 Feb 2022 17:23:41 +0100
+Message-Id: <20220207162354.14293-30-w@1wt.eu>
 X-Mailer: git-send-email 2.17.5
 In-Reply-To: <20220207162354.14293-1-w@1wt.eu>
 References: <20220207162354.14293-1-w@1wt.eu>
@@ -37,60 +37,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Till now memcpy() relies on memmove(), but it's always included for libgcc,
-so we have a larger than needed function. Let's implement two unidirectional
-variants to copy from bottom to top and from top to bottom, and use the
-former for memcpy(). The variants are optimized to be compact, and at the
-same time the compiler is sometimes able to detect the loop and to replace
-it with a "rep movsb". The new function is 24 bytes instead of 52 on x86_64.
+The direction test inside the loop was not always completely optimized,
+resulting in a larger than necessary function. This change adds a
+direction variable that is set out of the loop. Now the function is down
+to 48 bytes on x86, 32 on ARM and 68 on mips. It's worth noting that other
+approaches were attempted (including relying on the up and down functions)
+but they were only slightly beneficial on x86 and cost more on others.
 
 Signed-off-by: Willy Tarreau <w@1wt.eu>
 ---
- tools/include/nolibc/string.h | 24 +++++++++++++++++++++++-
- 1 file changed, 23 insertions(+), 1 deletion(-)
+ tools/include/nolibc/string.h | 20 ++++++++++++++------
+ 1 file changed, 14 insertions(+), 6 deletions(-)
 
 diff --git a/tools/include/nolibc/string.h b/tools/include/nolibc/string.h
-index 8a23cda2d450..6d8fad7a92e6 100644
+index 6d8fad7a92e6..b831a02de83f 100644
 --- a/tools/include/nolibc/string.h
 +++ b/tools/include/nolibc/string.h
-@@ -25,6 +25,28 @@ int memcmp(const void *s1, const void *s2, size_t n)
- 	return c1;
- }
- 
-+static __attribute__((unused))
-+void *_nolibc_memcpy_up(void *dst, const void *src, size_t len)
-+{
-+	size_t pos = 0;
-+
-+	while (pos < len) {
-+		((char *)dst)[pos] = ((const char *)src)[pos];
-+		pos++;
-+	}
-+	return dst;
-+}
-+
-+static __attribute__((unused))
-+void *_nolibc_memcpy_down(void *dst, const void *src, size_t len)
-+{
-+	while (len) {
-+		len--;
-+		((char *)dst)[len] = ((const char *)src)[len];
-+	}
-+	return dst;
-+}
-+
+@@ -50,14 +50,22 @@ void *_nolibc_memcpy_down(void *dst, const void *src, size_t len)
  static __attribute__((unused))
  void *memmove(void *dst, const void *src, size_t len)
  {
-@@ -42,7 +64,7 @@ void *memmove(void *dst, const void *src, size_t len)
- __attribute__((weak,unused))
- void *memcpy(void *dst, const void *src, size_t len)
- {
--	return memmove(dst, src, len);
-+	return _nolibc_memcpy_up(dst, src, len);
+-	ssize_t pos = (dst <= src) ? -1 : (long)len;
+-	void *ret = dst;
++	size_t dir, pos;
+ 
+-	while (len--) {
+-		pos += (dst <= src) ? 1 : -1;
+-		((char *)dst)[pos] = ((char *)src)[pos];
++	pos = len;
++	dir = -1;
++
++	if (dst < src) {
++		pos = -1;
++		dir = 1;
++	}
++
++	while (len) {
++		pos += dir;
++		((char *)dst)[pos] = ((const char *)src)[pos];
++		len--;
+ 	}
+-	return ret;
++	return dst;
  }
  
- static __attribute__((unused))
+ /* must be exported, as it's used by libgcc on ARM */
 -- 
 2.35.1
 

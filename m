@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 541D94ABE27
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:05:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E9334ABA26
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:27:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391140AbiBGL6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:58:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44988 "EHLO
+        id S1382794AbiBGLUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:20:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385551AbiBGLb6 (ORCPT
+        with ESMTP id S1377775AbiBGLPi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:31:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF23C02B5D0;
-        Mon,  7 Feb 2022 03:30:45 -0800 (PST)
+        Mon, 7 Feb 2022 06:15:38 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1839EC03FEDC;
+        Mon,  7 Feb 2022 03:15:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CA784B80EC3;
-        Mon,  7 Feb 2022 11:30:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BAF3C004E1;
-        Mon,  7 Feb 2022 11:30:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F1054613F8;
+        Mon,  7 Feb 2022 11:15:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8F01C004E1;
+        Mon,  7 Feb 2022 11:15:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233442;
-        bh=9q3/IOuZ6+o3g3xGCTBih0kUoMO02HHzHtG+4luzBNg=;
+        s=korg; t=1644232503;
+        bh=JTT6MLmBoO9BQYAvaddXI2YcFB4imTl5OxVLeNg4Aow=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JeLcifOo2SJbTLPSskN5jVemGbfYP8Yn6ijrplv6uLRYrLjnXTlJMUru85Q5qXJ30
-         HwvAcv0J6iUvgQD9P2LmcddEE2f3BfSy85pvE1bYPGDiADzn8f8GKq0naOBpYEWyBC
-         PjEAkHn+IYvPepRc3INY1eJWPx7FD65kQkldis6Y=
+        b=NbmqlW8wZhfVyiK+S9wwMnfhgRXR6CxzvxXbY7gsvBvl8hQgUoHcbC8ZeMXCRcNsA
+         sDPmLcSeXJ/S0V9cUy3VNDFsDu3ZWDicjD2CfWpUnjcX7AZHJYOWGwR5aqeFEtVTqM
+         BriccZaoXblPvlTQZxteLGksdyjaYJkvQuimRwaE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Christian Lachner <gladiac@gmail.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.16 014/126] ALSA: hda/realtek: Add missing fixup-model entry for Gigabyte X570 ALC1220 quirks
-Date:   Mon,  7 Feb 2022 12:05:45 +0100
-Message-Id: <20220207103804.559068497@linuxfoundation.org>
+        stable@vger.kernel.org, Joe Damato <jdamato@fastly.com>,
+        kernel test robot <lkp@intel.com>,
+        Gurucharan G <gurucharanx.g@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>
+Subject: [PATCH 4.19 23/86] i40e: fix unsigned stat widths
+Date:   Mon,  7 Feb 2022 12:05:46 +0100
+Message-Id: <20220207103758.305019922@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
-References: <20220207103804.053675072@linuxfoundation.org>
+In-Reply-To: <20220207103757.550973048@linuxfoundation.org>
+References: <20220207103757.550973048@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,32 +56,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christian Lachner <gladiac@gmail.com>
+From: Joe Damato <jdamato@fastly.com>
 
-commit 63394a16086fc2152869d7902621e2525e14bc40 upstream.
+commit 3b8428b84539c78fdc8006c17ebd25afd4722d51 upstream.
 
-The initial commit of the new Gigabyte X570 ALC1220 quirks lacked the
-fixup-model entry in alc882_fixup_models[]. It seemed not to cause any ill
-effects but for completeness sake this commit makes up for that.
+Change i40e_update_vsi_stats and struct i40e_vsi to use u64 fields to match
+the width of the stats counters in struct i40e_rx_queue_stats.
 
-Signed-off-by: Christian Lachner <gladiac@gmail.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220129113243.93068-2-gladiac@gmail.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Update debugfs code to use the correct format specifier for u64.
+
+Fixes: 41c445ff0f48 ("i40e: main driver core")
+Signed-off-by: Joe Damato <jdamato@fastly.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Tested-by: Gurucharan G <gurucharanx.g@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/pci/hda/patch_realtek.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/ethernet/intel/i40e/i40e.h         |    8 ++++----
+ drivers/net/ethernet/intel/i40e/i40e_debugfs.c |    2 +-
+ drivers/net/ethernet/intel/i40e/i40e_main.c    |    4 ++--
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -2660,6 +2660,7 @@ static const struct hda_model_fixup alc8
- 	{.id = ALC882_FIXUP_NO_PRIMARY_HP, .name = "no-primary-hp"},
- 	{.id = ALC887_FIXUP_ASUS_BASS, .name = "asus-bass"},
- 	{.id = ALC1220_FIXUP_GB_DUAL_CODECS, .name = "dual-codecs"},
-+	{.id = ALC1220_FIXUP_GB_X570, .name = "gb-x570"},
- 	{.id = ALC1220_FIXUP_CLEVO_P950, .name = "clevo-p950"},
- 	{}
- };
+--- a/drivers/net/ethernet/intel/i40e/i40e.h
++++ b/drivers/net/ethernet/intel/i40e/i40e.h
+@@ -708,12 +708,12 @@ struct i40e_vsi {
+ 	struct rtnl_link_stats64 net_stats_offsets;
+ 	struct i40e_eth_stats eth_stats;
+ 	struct i40e_eth_stats eth_stats_offsets;
+-	u32 tx_restart;
+-	u32 tx_busy;
++	u64 tx_restart;
++	u64 tx_busy;
+ 	u64 tx_linearize;
+ 	u64 tx_force_wb;
+-	u32 rx_buf_failed;
+-	u32 rx_page_failed;
++	u64 rx_buf_failed;
++	u64 rx_page_failed;
+ 
+ 	/* These are containers of ring pointers, allocated at run-time */
+ 	struct i40e_ring **rx_rings;
+--- a/drivers/net/ethernet/intel/i40e/i40e_debugfs.c
++++ b/drivers/net/ethernet/intel/i40e/i40e_debugfs.c
+@@ -236,7 +236,7 @@ static void i40e_dbg_dump_vsi_seid(struc
+ 		 (unsigned long int)vsi->net_stats_offsets.rx_compressed,
+ 		 (unsigned long int)vsi->net_stats_offsets.tx_compressed);
+ 	dev_info(&pf->pdev->dev,
+-		 "    tx_restart = %d, tx_busy = %d, rx_buf_failed = %d, rx_page_failed = %d\n",
++		 "    tx_restart = %llu, tx_busy = %llu, rx_buf_failed = %llu, rx_page_failed = %llu\n",
+ 		 vsi->tx_restart, vsi->tx_busy,
+ 		 vsi->rx_buf_failed, vsi->rx_page_failed);
+ 	rcu_read_lock();
+--- a/drivers/net/ethernet/intel/i40e/i40e_main.c
++++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
+@@ -791,9 +791,9 @@ static void i40e_update_vsi_stats(struct
+ 	struct rtnl_link_stats64 *ns;   /* netdev stats */
+ 	struct i40e_eth_stats *oes;
+ 	struct i40e_eth_stats *es;     /* device's eth stats */
+-	u32 tx_restart, tx_busy;
++	u64 tx_restart, tx_busy;
+ 	struct i40e_ring *p;
+-	u32 rx_page, rx_buf;
++	u64 rx_page, rx_buf;
+ 	u64 bytes, packets;
+ 	unsigned int start;
+ 	u64 tx_linearize;
 
 

@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A7764ABA0A
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:26:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4E034AB9BA
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:25:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241156AbiBGLT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:19:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53258 "EHLO
+        id S1357813AbiBGLO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:14:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376872AbiBGLPQ (ORCPT
+        with ESMTP id S236277AbiBGLKx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:15:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21633C0401F2;
-        Mon,  7 Feb 2022 03:14:55 -0800 (PST)
+        Mon, 7 Feb 2022 06:10:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1AEBC043188;
+        Mon,  7 Feb 2022 03:10:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 174F76113B;
-        Mon,  7 Feb 2022 11:14:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF8F7C340F0;
-        Mon,  7 Feb 2022 11:14:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A273EB80EE8;
+        Mon,  7 Feb 2022 11:10:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C39CAC004E1;
+        Mon,  7 Feb 2022 11:10:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232491;
-        bh=+xFqXhiOYB6EBvF7+DEQtDi3iSvbToZdWSF+mNcRdGo=;
+        s=korg; t=1644232250;
+        bh=pVidsFRwvfWJFQLvZpwUyJitFV+B3v0Ew0uHp1fIxC4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fw3rNBdGCwigApkZM8cVFyqWVeG5Y1MkXGrTBwOmzZ8UJJ/WdfbQ0cpdC51iC2E8f
-         5u5V1sXdQvn0uWCI0h72edD4/BBw+KQabE7Gpk2MOoTQcCmtjuc3SxA+b/rJ+FixV3
-         dNF6kORK6pkKyZ1bXZtUIOmXHD43X5pTHu8s/0yg=
+        b=TkU6sL82DfQD2FgAwslIIWMlOynk94zBuv40S8qJDetbLnVglFa7+L8KG1EdC5hot
+         Gqqm2vgxqWOg9YbIy/y/K6JdQOisMTrzM4zH0skT2fpW7cf4wos2phH/82xjkGYRjC
+         AC+/cDtnNI4J4PGanCeczw+Tvzk6WfeyEHNoT2Y4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lucas Stach <l.stach@pengutronix.de>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>
-Subject: [PATCH 4.19 07/86] drm/etnaviv: relax submit size limits
+        stable@vger.kernel.org, Erwan Le Ray <erwan.leray@foss.st.com>,
+        Valentin Caron <valentin.caron@foss.st.com>
+Subject: [PATCH 4.14 08/69] serial: stm32: fix software flow control transfer
 Date:   Mon,  7 Feb 2022 12:05:30 +0100
-Message-Id: <20220207103757.797933402@linuxfoundation.org>
+Message-Id: <20220207103755.885708425@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103757.550973048@linuxfoundation.org>
-References: <20220207103757.550973048@linuxfoundation.org>
+In-Reply-To: <20220207103755.604121441@linuxfoundation.org>
+References: <20220207103755.604121441@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,35 +54,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lucas Stach <l.stach@pengutronix.de>
+From: Valentin Caron <valentin.caron@foss.st.com>
 
-commit e3d26528e083e612314d4dcd713f3d5a26143ddc upstream.
+commit 037b91ec7729524107982e36ec4b40f9b174f7a2 upstream.
 
-While all userspace tried to limit commandstreams to 64K in size,
-a bug in the Mesa driver lead to command streams of up to 128K
-being submitted. Allow those to avoid breaking existing userspace.
+x_char is ignored by stm32_usart_start_tx() when xmit buffer is empty.
 
-Fixes: 6dfa2fab8ddd ("drm/etnaviv: limit submit sizes")
-Cc: stable@vger.kernel.org
-Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
-Reviewed-by: Christian Gmeiner <christian.gmeiner@gmail.com>
+Fix start_tx condition to allow x_char to be sent.
+
+Fixes: 48a6092fb41f ("serial: stm32-usart: Add STM32 USART Driver")
+Cc: stable <stable@vger.kernel.org>
+Signed-off-by: Erwan Le Ray <erwan.leray@foss.st.com>
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Link: https://lore.kernel.org/r/20220111164441.6178-3-valentin.caron@foss.st.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/etnaviv/etnaviv_gem_submit.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/tty/serial/stm32-usart.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/gpu/drm/etnaviv/etnaviv_gem_submit.c
-+++ b/drivers/gpu/drm/etnaviv/etnaviv_gem_submit.c
-@@ -444,8 +444,8 @@ int etnaviv_ioctl_gem_submit(struct drm_
- 		return -EINVAL;
- 	}
+--- a/drivers/tty/serial/stm32-usart.c
++++ b/drivers/tty/serial/stm32-usart.c
+@@ -402,7 +402,7 @@ static void stm32_start_tx(struct uart_p
+ {
+ 	struct circ_buf *xmit = &port->state->xmit;
  
--	if (args->stream_size > SZ_64K || args->nr_relocs > SZ_64K ||
--	    args->nr_bos > SZ_64K || args->nr_pmrs > 128) {
-+	if (args->stream_size > SZ_128K || args->nr_relocs > SZ_128K ||
-+	    args->nr_bos > SZ_128K || args->nr_pmrs > 128) {
- 		DRM_ERROR("submit arguments out of size limits\n");
- 		return -EINVAL;
- 	}
+-	if (uart_circ_empty(xmit))
++	if (uart_circ_empty(xmit) && !port->x_char)
+ 		return;
+ 
+ 	stm32_transmit_chars(port);
 
 

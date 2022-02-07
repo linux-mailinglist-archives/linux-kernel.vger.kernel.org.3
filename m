@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2258A4ABBDD
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:44:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4B7B4ABAA2
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:30:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385972AbiBGLdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:33:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34088 "EHLO
+        id S1383968AbiBGLYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:24:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383182AbiBGLVp (ORCPT
+        with ESMTP id S1382270AbiBGLSn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:21:45 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C265C0401C1;
-        Mon,  7 Feb 2022 03:21:44 -0800 (PST)
+        Mon, 7 Feb 2022 06:18:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E454C03FEEE;
+        Mon,  7 Feb 2022 03:18:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 151A2B81158;
-        Mon,  7 Feb 2022 11:21:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3387AC004E1;
-        Mon,  7 Feb 2022 11:21:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E21661416;
+        Mon,  7 Feb 2022 11:18:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6079FC004E1;
+        Mon,  7 Feb 2022 11:18:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232901;
-        bh=lV1mkuh7zyPWVcvLXzJOB2GkO6mowb3cwC8cFqZQMqI=;
+        s=korg; t=1644232707;
+        bh=JE/jV0p/vLig4xTmzfQk4lQFfn7O51vh4mZW9DF20YE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yF+0o6/oN2IeWSxrCTEJsiia/acMt9tuxvzLjzXcnaFLW96vN0bgEZ6Ty4M/XTWJf
-         x90e6417qBs3xMqucorr67FFLQmC3YerI09KGYlctQVO8x/UabY79Nc4NEa0vHnVA8
-         IWKsJ3UzMH/lmtA2NdRA3+DUmzegOcX6TkSXSfBU=
+        b=dhx1pi/UT/vqeKMj+4lGtvvdoKTHXUn9wF8vvmJKM/IGEDeAeqj5qUHN5h9XM+35x
+         Zh6o2i4Ri+Hur6jrmdxZr7U+F1gkVewirqXVK8dDLTzBeNVw3yitlT7XDLv+Q97obW
+         +0OvtEFgcE8RGJujjiCbgXQE9BCPxYTMs5VL3Vgg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jared Holzman <jared.holzman@excelero.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Subject: [PATCH 5.10 28/74] RDMA/siw: Fix broken RDMA Read Fence/Resume logic.
-Date:   Mon,  7 Feb 2022 12:06:26 +0100
-Message-Id: <20220207103758.160620613@linuxfoundation.org>
+        stable@vger.kernel.org, Nick Lopez <github@glowingmonkey.org>,
+        Ilia Mirkin <imirkin@alum.mit.edu>,
+        Karol Herbst <kherbst@redhat.com>
+Subject: [PATCH 5.4 11/44] drm/nouveau: fix off by one in BIOS boundary checking
+Date:   Mon,  7 Feb 2022 12:06:27 +0100
+Message-Id: <20220207103753.522786437@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103757.232676988@linuxfoundation.org>
-References: <20220207103757.232676988@linuxfoundation.org>
+In-Reply-To: <20220207103753.155627314@linuxfoundation.org>
+References: <20220207103753.155627314@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,97 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bernard Metzler <bmt@zurich.ibm.com>
+From: Nick Lopez <github@glowingmonkey.org>
 
-commit b43a76f423aa304037603fd6165c4a534d2c09a7 upstream.
+commit 1b777d4d9e383d2744fc9b3a09af6ec1893c8b1a upstream.
 
-Code unconditionally resumed fenced SQ processing after next RDMA Read
-completion, even if other RDMA Read responses are still outstanding, or
-ORQ is full. Also adds comments for better readability of fence
-processing, and removes orq_get_tail() helper, which is not needed
-anymore.
+Bounds checking when parsing init scripts embedded in the BIOS reject
+access to the last byte. This causes driver initialization to fail on
+Apple eMac's with GeForce 2 MX GPUs, leaving the system with no working
+console.
 
-Fixes: 8b6a361b8c48 ("rdma/siw: receive path")
-Fixes: a531975279f3 ("rdma/siw: main include file")
-Link: https://lore.kernel.org/r/20220130170815.1940-1-bmt@zurich.ibm.com
-Reported-by: Jared Holzman <jared.holzman@excelero.com>
-Signed-off-by: Bernard Metzler <bmt@zurich.ibm.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+This is probably only seen on OpenFirmware machines like PowerPC Macs
+because the BIOS image provided by OF is only the used parts of the ROM,
+not a power-of-two blocks read from PCI directly so PCs always have
+empty bytes at the end that are never accessed.
+
+Signed-off-by: Nick Lopez <github@glowingmonkey.org>
+Fixes: 4d4e9907ff572 ("drm/nouveau/bios: guard against out-of-bounds accesses to image")
+Cc: <stable@vger.kernel.org> # v4.10+
+Reviewed-by: Ilia Mirkin <imirkin@alum.mit.edu>
+Reviewed-by: Karol Herbst <kherbst@redhat.com>
+Signed-off-by: Karol Herbst <kherbst@redhat.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220122081906.2633061-1-github@glowingmonkey.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/infiniband/sw/siw/siw.h       |    7 +------
- drivers/infiniband/sw/siw/siw_qp_rx.c |   20 +++++++++++---------
- 2 files changed, 12 insertions(+), 15 deletions(-)
+ drivers/gpu/drm/nouveau/nvkm/subdev/bios/base.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/infiniband/sw/siw/siw.h
-+++ b/drivers/infiniband/sw/siw/siw.h
-@@ -644,14 +644,9 @@ static inline struct siw_sqe *orq_get_cu
- 	return &qp->orq[qp->orq_get % qp->attrs.orq_size];
- }
- 
--static inline struct siw_sqe *orq_get_tail(struct siw_qp *qp)
--{
--	return &qp->orq[qp->orq_put % qp->attrs.orq_size];
--}
--
- static inline struct siw_sqe *orq_get_free(struct siw_qp *qp)
- {
--	struct siw_sqe *orq_e = orq_get_tail(qp);
-+	struct siw_sqe *orq_e = &qp->orq[qp->orq_put % qp->attrs.orq_size];
- 
- 	if (READ_ONCE(orq_e->flags) == 0)
- 		return orq_e;
---- a/drivers/infiniband/sw/siw/siw_qp_rx.c
-+++ b/drivers/infiniband/sw/siw/siw_qp_rx.c
-@@ -1153,11 +1153,12 @@ static int siw_check_tx_fence(struct siw
- 
- 	spin_lock_irqsave(&qp->orq_lock, flags);
- 
--	rreq = orq_get_current(qp);
--
- 	/* free current orq entry */
-+	rreq = orq_get_current(qp);
- 	WRITE_ONCE(rreq->flags, 0);
- 
-+	qp->orq_get++;
-+
- 	if (qp->tx_ctx.orq_fence) {
- 		if (unlikely(tx_waiting->wr_status != SIW_WR_QUEUED)) {
- 			pr_warn("siw: [QP %u]: fence resume: bad status %d\n",
-@@ -1165,10 +1166,12 @@ static int siw_check_tx_fence(struct siw
- 			rv = -EPROTO;
- 			goto out;
- 		}
--		/* resume SQ processing */
-+		/* resume SQ processing, if possible */
- 		if (tx_waiting->sqe.opcode == SIW_OP_READ ||
- 		    tx_waiting->sqe.opcode == SIW_OP_READ_LOCAL_INV) {
--			rreq = orq_get_tail(qp);
-+
-+			/* SQ processing was stopped because of a full ORQ */
-+			rreq = orq_get_free(qp);
- 			if (unlikely(!rreq)) {
- 				pr_warn("siw: [QP %u]: no ORQE\n", qp_id(qp));
- 				rv = -EPROTO;
-@@ -1181,15 +1184,14 @@ static int siw_check_tx_fence(struct siw
- 			resume_tx = 1;
- 
- 		} else if (siw_orq_empty(qp)) {
-+			/*
-+			 * SQ processing was stopped by fenced work request.
-+			 * Resume since all previous Read's are now completed.
-+			 */
- 			qp->tx_ctx.orq_fence = 0;
- 			resume_tx = 1;
--		} else {
--			pr_warn("siw: [QP %u]: fence resume: orq idx: %d:%d\n",
--				qp_id(qp), qp->orq_get, qp->orq_put);
--			rv = -EPROTO;
- 		}
+--- a/drivers/gpu/drm/nouveau/nvkm/subdev/bios/base.c
++++ b/drivers/gpu/drm/nouveau/nvkm/subdev/bios/base.c
+@@ -38,7 +38,7 @@ nvbios_addr(struct nvkm_bios *bios, u32
+ 		*addr += bios->imaged_addr;
  	}
--	qp->orq_get++;
- out:
- 	spin_unlock_irqrestore(&qp->orq_lock, flags);
  
+-	if (unlikely(*addr + size >= bios->size)) {
++	if (unlikely(*addr + size > bios->size)) {
+ 		nvkm_error(&bios->subdev, "OOB %d %08x %08x\n", size, p, *addr);
+ 		return false;
+ 	}
 
 

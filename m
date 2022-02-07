@@ -2,929 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FA2A4AB4F5
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 07:41:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71A9B4AB4D4
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 07:41:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233478AbiBGGg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 01:36:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41236 "EHLO
+        id S243844AbiBGGgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 01:36:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357543AbiBGF6J (ORCPT
+        with ESMTP id S1359474AbiBGGAX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 00:58:09 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018B2C03E907;
-        Sun,  6 Feb 2022 21:57:55 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id v5-20020a17090a4ec500b001b8b702df57so2009833pjl.2;
-        Sun, 06 Feb 2022 21:57:54 -0800 (PST)
+        Mon, 7 Feb 2022 01:00:23 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E90B6C03E94F
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 21:59:57 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id y3so17961662ejf.2
+        for <linux-kernel@vger.kernel.org>; Sun, 06 Feb 2022 21:59:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=8lo5+S5/qmTfNk7s69lcVxLLkGgsAVOU1eFXlOLlBQY=;
-        b=pdhwglsoX9HjtICuAqmbU+AT3D5M6Qb1t3PThYonYCctgJVX8rbKoOaT9BLZQgTnwl
-         4syL4Q/iRFMWswJAO/+ZS7dIMfYva4VjbnvrD+WLbJi3E8VqnVzP/G952lZVMHYlTM9X
-         wV+JXChNBJPTvsvsQvo5itAyFH9Ec6gKVxVfzUUOYOc3Fm1aBKNiRLdKBDDqcbLCWBhI
-         PVA0R2FlA7dUoEaXmzmlPww7+Ici/yObDWo2yx+/jIDZVUObi6dptccsD5vZunuOOwQm
-         Qsja1rTDixsPLG5jj85fUIM+RauPLJkEAjtj+y+hkPZZcm0K+eDzreqDk7RD7dp+GxH3
-         rr8w==
+        d=ionos.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9rTPpwmidEGnk+0sbSsiZSlt9G/HqE6uqYlGM1FbJrE=;
+        b=ZPsLtFOYJbXBSXxznzdt6saaoAsr34Sl7BH/YzNYyc4mKr+jF1/vWJs4821VBIp3nd
+         wAYRJJhMyvhlRFFisqHrDjp3T/ANdglvZW7vbhim8qaT+0XVsRhXzCNzful3NCALrp54
+         PW1YQoTI1urvAHNes0ksAMk17gRSAHs876hKsGuFZuK04GXSCo0Wyy72Qos1yKpfNsRa
+         c33fVswSl+9Zgo7TNVcf9DIYAV8qMovu2V8xMiLYKYdXvQM6iOtk8FdCGp/A+BQyObme
+         CHMm4XagJ1tLS1aHx+VkjswYOr9+doWYsCysM5Ckp+wImryY23239tWH9wJ+2Ivyiyzj
+         F0Vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=8lo5+S5/qmTfNk7s69lcVxLLkGgsAVOU1eFXlOLlBQY=;
-        b=I8wTMB4iJX1mubzjSmQI1F9Wudw4i2zm0tDv5wwNychRRDwKO+6W3z4jNms8HkAoS+
-         ER3rMu2EY3uFro1FZ6RPFGX82WOeZOgoIQWatnPGDiyhh7dFzkk6uns5En3VrQr611rV
-         FL14Hwxii/l8Yh8O3dBqsto7SGmruMBWuvo5PiACU8YUfWfw5e76VAqg7QjaybT+lLHU
-         UZTB7OWsLCqeUYTOOuIzcRnEezVC7vdxHfEKK2GDjI+wtvOlFN1/grzHND9Ef1+0uY+n
-         R9lbT+3X+F7s4KqvNu/CLu6vxJwip0noA3FIFZG+EzXcvNdH941a2HKB1htODydgkVu7
-         1E5g==
-X-Gm-Message-State: AOAM531ixxthzBBPgMrFW3WhQwHyOLqkJoCnu2LVT8dH8h4v19bdwm+o
-        DhZXeIjoOdONTkI+/f0JzSCo2UQDomhKIg==
-X-Google-Smtp-Source: ABdhPJySsN7AMgc2Iu0tukwcX6rjoivDDze/lxU91vypGTUvwQvq7vnctMubl40HBHuWkm9qpqRO1g==
-X-Received: by 2002:a17:90b:1b0b:: with SMTP id nu11mr16612871pjb.112.1644213474394;
-        Sun, 06 Feb 2022 21:57:54 -0800 (PST)
-Received: from scdiu3.sunplus.com ([113.196.136.192])
-        by smtp.googlemail.com with ESMTPSA id g17sm10529264pfj.148.2022.02.06.21.57.52
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 06 Feb 2022 21:57:54 -0800 (PST)
-From:   Hammer Hsieh <hammerh0314@gmail.com>
-To:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jirislaby@kernel.org,
-        p.zabel@pengutronix.de
-Cc:     wells.lu@sunplus.com, hammer.hsieh@sunplus.com,
-        Hammer Hsieh <hammerh0314@gmail.com>
-Subject: [PATCH v7 2/2] serial:sunplus-uart:Add Sunplus SoC UART Driver
-Date:   Mon,  7 Feb 2022 13:58:01 +0800
-Message-Id: <1644213481-20321-3-git-send-email-hammerh0314@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1644213481-20321-1-git-send-email-hammerh0314@gmail.com>
-References: <1644213481-20321-1-git-send-email-hammerh0314@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9rTPpwmidEGnk+0sbSsiZSlt9G/HqE6uqYlGM1FbJrE=;
+        b=ogUjfDVfaCC7sz+cvTUPn7z9/MytGt7/3NYB2mQQag1+nBadPpYmajBlHOptGMW8RD
+         JoVAHrATNRCZlQhk5NQ0IsXxgeM9gaJkuR7FpqUw/bTXGi5GMKOOLONZvE7ILUesfZH3
+         Tj+CG4VfvsLHdyZwzVdhJGPcmmh4Pg17qWHN9gEgQUXNzYWJE7ylTdJ/sAtCQVvkrYg9
+         C7y/MIVC7hzZxYJb/wfHJrwNGYwL5yJZEGaHz33nywNRsWr+5SD+D1nuPSJpsTjZNKVd
+         XJ9YFv1v/P2XlUToZeF6s1ArIB6vqOdYhEb07vV5rGe5BNPXw3qgd37P2NJcEERFyJnY
+         wZqA==
+X-Gm-Message-State: AOAM533GvLEiMzZH88skNb+dayngn+ramaxbwc/iNJi8bu3P8I1HXztR
+        C6nR4h0olVr+PH/QeBW80wKQL3bR1Aqw0scbQidBcnJhTH/TPw==
+X-Google-Smtp-Source: ABdhPJwHixuY4BY25/LApjenuCxsEqMvyZQIitDtOk4Mx5x6JQpUNYhkL601O0c52Dw4YwAFtYtpdEb4+TG5nbiNeRU=
+X-Received: by 2002:a17:907:6da6:: with SMTP id sb38mr8757776ejc.58.1644213596468;
+ Sun, 06 Feb 2022 21:59:56 -0800 (PST)
+MIME-Version: 1.0
+References: <a1b05cd5bee83778812c70e115e31b2e49cbad2a.1644139163.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <a1b05cd5bee83778812c70e115e31b2e49cbad2a.1644139163.git.christophe.jaillet@wanadoo.fr>
+From:   Jinpu Wang <jinpu.wang@ionos.com>
+Date:   Mon, 7 Feb 2022 06:59:45 +0100
+Message-ID: <CAMGffEkGAtxraD_JmSntzXTkWEze55qjb8LCfarBSxUNZY57aw@mail.gmail.com>
+Subject: Re: [PATCH] block/rnbd: Remove a useless mutex
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     "Md. Haris Iqbal" <haris.iqbal@ionos.com>,
+        Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-block@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Sunplus SoC UART Driver
+On Sun, Feb 6, 2022 at 10:19 AM Christophe JAILLET
+<christophe.jaillet@wanadoo.fr> wrote:
+>
+> According to lib/idr.c,
+>    The IDA handles its own locking.  It is safe to call any of the IDA
+>    functions without synchronisation in your code.
+>
+> so the 'ida_lock' mutex can just be removed.
+> It is here only to protect some ida_simple_get()/ida_simple_remove() calls.
+Hi Christophe,
 
-Signed-off-by: Hammer Hsieh <hammerh0314@gmail.com>
----
-Changes in v7:
- - Addressed all comments from Jiri Slaby and Greg KH.
 
- MAINTAINERS                       |   1 +
- drivers/tty/serial/Kconfig        |  25 ++
- drivers/tty/serial/Makefile       |   1 +
- drivers/tty/serial/sunplus-uart.c | 762 ++++++++++++++++++++++++++++++++++++++
- include/uapi/linux/serial_core.h  |   3 +
- 5 files changed, 792 insertions(+)
- create mode 100644 drivers/tty/serial/sunplus-uart.c
+ ida_simple_get() and ida_simple_remove() are deprecated. Use
+ ida_alloc() and ida_free() instead respectively.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 3c1362e..2dc2fe6 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17949,6 +17949,7 @@ SUNPLUS UART DRIVER
- M:	Hammer Hsieh <hammerh0314@gmail.com>
- S:	Maintained
- F:	Documentation/devicetree/bindings/serial/sunplus,sp7021-uart.yaml
-+F:	drivers/tty/serial/sunplus-uart.c
- 
- SUPERH
- M:	Yoshinori Sato <ysato@users.sourceforge.jp>
-diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
-index 131a6a5..0865da3 100644
---- a/drivers/tty/serial/Kconfig
-+++ b/drivers/tty/serial/Kconfig
-@@ -1561,6 +1561,31 @@ config SERIAL_LITEUART_CONSOLE
- 	  and warnings and which allows logins in single user mode).
- 	  Otherwise, say 'N'.
- 
-+config SERIAL_SUNPLUS
-+	tristate "Sunplus UART support"
-+	depends on OF || COMPILE_TEST
-+	select SERIAL_CORE
-+	help
-+	  Select this option if you would like to use Sunplus serial port on
-+	  Sunplus SoC SP7021.
-+	  If you enable this option, Sunplus serial ports in the system will
-+	  be registered as ttySUPx.
-+	  This driver can also be built as a module. If so, the module will be
-+	  called sunplus-uart.
-+
-+config SERIAL_SUNPLUS_CONSOLE
-+	bool "Console on Sunplus UART"
-+	depends on SERIAL_SUNPLUS
-+	select SERIAL_CORE_CONSOLE
-+	select SERIAL_EARLYCON
-+	help
-+	  Select this option if you would like to use a Sunplus UART as the
-+	  system console.
-+	  Even if you say Y here, the currently visible virtual console
-+	  (/dev/tty0) will still be used as the system console by default, but
-+	  you can alter that using a kernel command line option such as
-+	  "console=ttySUPx".
-+
- endmenu
- 
- config SERIAL_MCTRL_GPIO
-diff --git a/drivers/tty/serial/Makefile b/drivers/tty/serial/Makefile
-index 7da0856..61cc8de 100644
---- a/drivers/tty/serial/Makefile
-+++ b/drivers/tty/serial/Makefile
-@@ -87,6 +87,7 @@ obj-$(CONFIG_SERIAL_RDA)	+= rda-uart.o
- obj-$(CONFIG_SERIAL_MILBEAUT_USIO) += milbeaut_usio.o
- obj-$(CONFIG_SERIAL_SIFIVE)	+= sifive.o
- obj-$(CONFIG_SERIAL_LITEUART) += liteuart.o
-+obj-$(CONFIG_SERIAL_SUNPLUS)	+= sunplus-uart.o
- 
- # GPIOLIB helpers for modem control lines
- obj-$(CONFIG_SERIAL_MCTRL_GPIO)	+= serial_mctrl_gpio.o
-diff --git a/drivers/tty/serial/sunplus-uart.c b/drivers/tty/serial/sunplus-uart.c
-new file mode 100644
-index 0000000..753a18a
---- /dev/null
-+++ b/drivers/tty/serial/sunplus-uart.c
-@@ -0,0 +1,762 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Sunplus SoC UART driver
-+ *
-+ * Author: Hammer Hsieh <hammerh0314@gmail.com>
-+ */
-+#include <linux/clk.h>
-+#include <linux/console.h>
-+#include <linux/init.h>
-+#include <linux/interrupt.h>
-+#include <linux/io.h>
-+#include <linux/iopoll.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/of_platform.h>
-+#include <linux/platform_device.h>
-+#include <linux/reset.h>
-+#include <linux/serial_core.h>
-+#include <linux/serial_reg.h>
-+#include <linux/sysrq.h>
-+#include <linux/tty.h>
-+#include <linux/tty_flip.h>
-+#include <asm/irq.h>
-+
-+/* Register offsets */
-+#define SUP_UART_DATA			0x00
-+#define SUP_UART_LSR			0x04
-+#define SUP_UART_MSR			0x08
-+#define SUP_UART_LCR			0x0C
-+#define SUP_UART_MCR			0x10
-+#define SUP_UART_DIV_L			0x14
-+#define SUP_UART_DIV_H			0x18
-+#define SUP_UART_ISC			0x1C
-+#define SUP_UART_TX_RESIDUE		0x20
-+#define SUP_UART_RX_RESIDUE		0x24
-+
-+/* Line Status Register bits */
-+#define SUP_UART_LSR_BC			BIT(5) /* break condition status */
-+#define SUP_UART_LSR_FE			BIT(4) /* frame error status */
-+#define SUP_UART_LSR_OE			BIT(3) /* overrun error status */
-+#define SUP_UART_LSR_PE			BIT(2) /* parity error status */
-+#define SUP_UART_LSR_RX			BIT(1) /* 1: receive fifo not empty */
-+#define SUP_UART_LSR_TX			BIT(0) /* 1: transmit fifo is not full */
-+#define SUP_UART_LSR_TX_NOT_FULL	1
-+#define SUP_UART_LSR_BRK_ERROR_BITS	GENMASK(5, 2)
-+
-+/* Line Control Register bits */
-+#define SUP_UART_LCR_SBC		BIT(5) /* select break condition */
-+
-+/* Modem Control Register bits */
-+#define SUP_UART_MCR_RI			BIT(3) /* ring indicator */
-+#define SUP_UART_MCR_DCD		BIT(2) /* data carrier detect */
-+
-+/* Interrupt Status/Control Register bits */
-+#define SUP_UART_ISC_RXM		BIT(5) /* RX interrupt enable */
-+#define SUP_UART_ISC_TXM		BIT(4) /* TX interrupt enable */
-+#define SUP_UART_ISC_RX			BIT(1) /* RX interrupt status */
-+#define SUP_UART_ISC_TX			BIT(0) /* TX interrupt status */
-+
-+#define SUP_DUMMY_READ			BIT(16) /* drop bytes received on a !CREAD port */
-+#define SUP_UART_NR			5
-+
-+struct sunplus_uart_port {
-+	struct uart_port port;
-+	struct clk *clk;
-+	struct reset_control *rstc;
-+};
-+
-+static void sp_uart_put_char(struct uart_port *port, unsigned int ch)
-+{
-+	writel(ch, port->membase + SUP_UART_DATA);
-+}
-+
-+static u32 sunplus_tx_buf_not_full(struct uart_port *port)
-+{
-+	unsigned int lsr = readl(port->membase + SUP_UART_LSR);
-+
-+	return (lsr & SUP_UART_LSR_TX) ? SUP_UART_LSR_TX_NOT_FULL : 0;
-+}
-+
-+static unsigned int sunplus_tx_empty(struct uart_port *port)
-+{
-+	unsigned int lsr = readl(port->membase + SUP_UART_LSR);
-+
-+	return (lsr & UART_LSR_TEMT) ? TIOCSER_TEMT : 0;
-+}
-+
-+static void sunplus_set_mctrl(struct uart_port *port, unsigned int mctrl)
-+{
-+	unsigned int mcr = readl(port->membase + SUP_UART_MCR);
-+
-+	if (mctrl & TIOCM_DTR)
-+		mcr |= UART_MCR_DTR;
-+	else
-+		mcr &= ~UART_MCR_DTR;
-+
-+	if (mctrl & TIOCM_RTS)
-+		mcr |= UART_MCR_RTS;
-+	else
-+		mcr &= ~UART_MCR_RTS;
-+
-+	if (mctrl & TIOCM_CAR)
-+		mcr |= SUP_UART_MCR_DCD;
-+	else
-+		mcr &= ~SUP_UART_MCR_DCD;
-+
-+	if (mctrl & TIOCM_RI)
-+		mcr |= SUP_UART_MCR_RI;
-+	else
-+		mcr &= ~SUP_UART_MCR_RI;
-+
-+	if (mctrl & TIOCM_LOOP)
-+		mcr |= UART_MCR_LOOP;
-+	else
-+		mcr &= ~UART_MCR_LOOP;
-+
-+	writel(mcr, port->membase + SUP_UART_MCR);
-+}
-+
-+static unsigned int sunplus_get_mctrl(struct uart_port *port)
-+{
-+	unsigned int ret, mcr;
-+
-+	mcr = readl(port->membase + SUP_UART_MCR);
-+
-+	if (mcr & UART_MCR_DTR)
-+		ret |= TIOCM_DTR;
-+
-+	if (mcr & UART_MCR_RTS)
-+		ret |= TIOCM_RTS;
-+
-+	if (mcr & SUP_UART_MCR_DCD)
-+		ret |= TIOCM_CAR;
-+
-+	if (mcr & SUP_UART_MCR_RI)
-+		ret |= TIOCM_RI;
-+
-+	if (mcr & UART_MCR_LOOP)
-+		ret |= TIOCM_LOOP;
-+
-+	return ret;
-+}
-+
-+static void sunplus_stop_tx(struct uart_port *port)
-+{
-+	unsigned int isc;
-+
-+	isc = readl(port->membase + SUP_UART_ISC);
-+	isc &= ~SUP_UART_ISC_TXM;
-+	writel(isc, port->membase + SUP_UART_ISC);
-+}
-+
-+static void sunplus_start_tx(struct uart_port *port)
-+{
-+	unsigned int isc;
-+
-+	isc = readl(port->membase + SUP_UART_ISC);
-+	isc |= SUP_UART_ISC_TXM;
-+	writel(isc, port->membase + SUP_UART_ISC);
-+}
-+
-+static void sunplus_stop_rx(struct uart_port *port)
-+{
-+	unsigned int isc;
-+
-+	isc = readl(port->membase + SUP_UART_ISC);
-+	isc &= ~SUP_UART_ISC_RXM;
-+	writel(isc, port->membase + SUP_UART_ISC);
-+}
-+
-+static void sunplus_break_ctl(struct uart_port *port, int ctl)
-+{
-+	unsigned long flags;
-+	unsigned int lcr;
-+
-+	spin_lock_irqsave(&port->lock, flags);
-+
-+	lcr = readl(port->membase + SUP_UART_LCR);
-+
-+	if (ctl)
-+		lcr |= SUP_UART_LCR_SBC; /* start break */
-+	else
-+		lcr &= ~SUP_UART_LCR_SBC; /* stop break */
-+
-+	writel(lcr, port->membase + SUP_UART_LCR);
-+
-+	spin_unlock_irqrestore(&port->lock, flags);
-+}
-+
-+static void transmit_chars(struct uart_port *port)
-+{
-+	struct circ_buf *xmit = &port->state->xmit;
-+
-+	if (port->x_char) {
-+		sp_uart_put_char(port, port->x_char);
-+		port->icount.tx++;
-+		port->x_char = 0;
-+		return;
-+	}
-+
-+	if (uart_circ_empty(xmit) || uart_tx_stopped(port)) {
-+		sunplus_stop_tx(port);
-+		return;
-+	}
-+
-+	do {
-+		sp_uart_put_char(port, xmit->buf[xmit->tail]);
-+		xmit->tail = (xmit->tail + 1) % UART_XMIT_SIZE;
-+		port->icount.tx++;
-+
-+		if (uart_circ_empty(xmit))
-+			break;
-+	} while (sunplus_tx_buf_not_full(port));
-+
-+	if (uart_circ_chars_pending(xmit) < WAKEUP_CHARS)
-+		uart_write_wakeup(port);
-+
-+	if (uart_circ_empty(xmit))
-+		sunplus_stop_tx(port);
-+}
-+
-+static void receive_chars(struct uart_port *port)
-+{
-+	unsigned int lsr = readl(port->membase + SUP_UART_LSR);
-+	unsigned int ch, flag;
-+
-+	do {
-+		ch = readl(port->membase + SUP_UART_DATA);
-+		flag = TTY_NORMAL;
-+		port->icount.rx++;
-+
-+		if (unlikely(lsr & SUP_UART_LSR_BRK_ERROR_BITS)) {
-+			if (lsr & SUP_UART_LSR_BC) {
-+				lsr &= ~(SUP_UART_LSR_FE | SUP_UART_LSR_PE);
-+				port->icount.brk++;
-+				flag = TTY_BREAK;
-+				if (uart_handle_break(port))
-+					goto ignore_char;
-+			} else if (lsr & SUP_UART_LSR_PE) {
-+				port->icount.parity++;
-+				flag = TTY_PARITY;
-+			} else if (lsr & SUP_UART_LSR_FE) {
-+				port->icount.frame++;
-+				flag = TTY_FRAME;
-+			}
-+
-+			if (lsr & SUP_UART_LSR_OE)
-+				port->icount.overrun++;
-+		}
-+
-+		if (port->ignore_status_mask & SUP_DUMMY_READ)
-+			goto ignore_char;
-+
-+		if (uart_handle_sysrq_char(port, ch))
-+			goto ignore_char;
-+
-+		uart_insert_char(port, lsr, SUP_UART_LSR_OE, ch, flag);
-+
-+ignore_char:
-+		lsr = readl(port->membase + SUP_UART_LSR);
-+	} while (lsr & SUP_UART_LSR_RX);
-+
-+	tty_flip_buffer_push(&port->state->port);
-+}
-+
-+static irqreturn_t sunplus_uart_irq(int irq, void *args)
-+{
-+	struct uart_port *port = args;
-+	unsigned int isc;
-+
-+	spin_lock(&port->lock);
-+
-+	isc = readl(port->membase + SUP_UART_ISC);
-+
-+	if (isc & SUP_UART_ISC_RX)
-+		receive_chars(port);
-+
-+	if (isc & SUP_UART_ISC_TX)
-+		transmit_chars(port);
-+
-+	spin_unlock(&port->lock);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int sunplus_startup(struct uart_port *port)
-+{
-+	unsigned long flags;
-+	unsigned int isc;
-+	int ret;
-+
-+	ret = request_irq(port->irq, sunplus_uart_irq, 0, "sunplus_uart", port);
-+	if (ret)
-+		return ret;
-+
-+	spin_lock_irqsave(&port->lock, flags);
-+
-+	isc = readl(port->membase + SUP_UART_ISC);
-+	isc |= SUP_UART_ISC_RXM;
-+	writel(isc, port->membase + SUP_UART_ISC);
-+
-+	spin_unlock_irqrestore(&port->lock, flags);
-+
-+	return 0;
-+}
-+
-+static void sunplus_shutdown(struct uart_port *port)
-+{
-+	unsigned long flags;
-+	unsigned int isc;
-+
-+	spin_lock_irqsave(&port->lock, flags);
-+
-+	isc = readl(port->membase + SUP_UART_ISC);
-+	isc &= ~(SUP_UART_ISC_RXM | SUP_UART_ISC_TXM);
-+	writel(isc, port->membase + SUP_UART_ISC);
-+
-+	spin_unlock_irqrestore(&port->lock, flags);
-+
-+	free_irq(port->irq, port);
-+}
-+
-+static void sunplus_set_termios(struct uart_port *port,
-+				struct ktermios *termios,
-+				struct ktermios *oldtermios)
-+{
-+	u32 ext, div, div_l, div_h, baud, lcr;
-+	u32 clk = port->uartclk;
-+	unsigned long flags;
-+
-+	baud = uart_get_baud_rate(port, termios, oldtermios, 0, port->uartclk / 16);
-+
-+	/* baud rate = uartclk / ((16 * divisor + 1) + divisor_ext) */
-+	clk += baud >> 1;
-+	div = clk / baud;
-+	ext = div & 0x0F;
-+	div = (div >> 4) - 1;
-+	div_l = (div & 0xFF) | (ext << 12);
-+	div_h = div >> 8;
-+
-+	switch (termios->c_cflag & CSIZE) {
-+	case CS5:
-+		lcr = UART_LCR_WLEN5;
-+		break;
-+	case CS6:
-+		lcr = UART_LCR_WLEN6;
-+		break;
-+	case CS7:
-+		lcr = UART_LCR_WLEN7;
-+		break;
-+	default:
-+		lcr = UART_LCR_WLEN8;
-+		break;
-+	}
-+
-+	if (termios->c_cflag & CSTOPB)
-+		lcr |= UART_LCR_STOP;
-+
-+	if (termios->c_cflag & PARENB) {
-+		lcr |= UART_LCR_PARITY;
-+
-+		if (!(termios->c_cflag & PARODD))
-+			lcr |= UART_LCR_EPAR;
-+	}
-+
-+	spin_lock_irqsave(&port->lock, flags);
-+
-+	uart_update_timeout(port, termios->c_cflag, baud);
-+
-+	port->read_status_mask = 0;
-+	if (termios->c_iflag & INPCK)
-+		port->read_status_mask |= SUP_UART_LSR_PE | SUP_UART_LSR_FE;
-+
-+	if (termios->c_iflag & (BRKINT | PARMRK))
-+		port->read_status_mask |= SUP_UART_LSR_BC;
-+
-+	/* Characters to ignore */
-+	port->ignore_status_mask = 0;
-+	if (termios->c_iflag & IGNPAR)
-+		port->ignore_status_mask |= SUP_UART_LSR_FE | SUP_UART_LSR_PE;
-+
-+	if (termios->c_iflag & IGNBRK) {
-+		port->ignore_status_mask |= SUP_UART_LSR_BC;
-+
-+		if (termios->c_iflag & IGNPAR)
-+			port->ignore_status_mask |= SUP_UART_LSR_OE;
-+	}
-+
-+	/* Ignore all characters if CREAD is not set */
-+	if ((termios->c_cflag & CREAD) == 0) {
-+		port->ignore_status_mask |= SUP_DUMMY_READ;
-+		/* flush rx data FIFO */
-+		writel(0, port->membase + SUP_UART_RX_RESIDUE);
-+	}
-+
-+	/* Settings for baud rate divisor and lcr */
-+	writel(div_h, port->membase + SUP_UART_DIV_H);
-+	writel(div_l, port->membase + SUP_UART_DIV_L);
-+	writel(lcr, port->membase + SUP_UART_LCR);
-+
-+	spin_unlock_irqrestore(&port->lock, flags);
-+}
-+
-+static void sunplus_set_ldisc(struct uart_port *port, struct ktermios *termios)
-+{
-+	int new = termios->c_line;
-+
-+	if (new == N_PPS)
-+		port->flags |= UPF_HARDPPS_CD;
-+	else
-+		port->flags &= ~UPF_HARDPPS_CD;
-+}
-+
-+static const char *sunplus_type(struct uart_port *port)
-+{
-+	return port->type == PORT_SUNPLUS ? "sunplus_uart" : NULL;
-+}
-+
-+static void sunplus_config_port(struct uart_port *port, int type)
-+{
-+	if (type & UART_CONFIG_TYPE)
-+		port->type = PORT_SUNPLUS;
-+}
-+
-+static int sunplus_verify_port(struct uart_port *port, struct serial_struct *ser)
-+{
-+	if (ser->type != PORT_UNKNOWN && ser->type != PORT_SUNPLUS)
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
-+#ifdef CONFIG_CONSOLE_POLL
-+static void sunplus_poll_put_char(struct uart_port *port, unsigned char data)
-+{
-+	wait_for_xmitr(port);
-+	sp_uart_put_char(port, data);
-+}
-+
-+static int sunplus_poll_get_char(struct uart_port *port)
-+{
-+	unsigned int lsr = readl(port->membase + SUP_UART_LSR);
-+
-+	if (!(lsr & SUP_UART_LSR_RX))
-+		return NO_POLL_CHAR;
-+
-+	return readl(port->membase + SUP_UART_DATA);
-+}
-+#endif
-+
-+static const struct uart_ops sunplus_uart_ops = {
-+	.tx_empty	= sunplus_tx_empty,
-+	.set_mctrl	= sunplus_set_mctrl,
-+	.get_mctrl	= sunplus_get_mctrl,
-+	.stop_tx	= sunplus_stop_tx,
-+	.start_tx	= sunplus_start_tx,
-+	.stop_rx	= sunplus_stop_rx,
-+	.break_ctl	= sunplus_break_ctl,
-+	.startup	= sunplus_startup,
-+	.shutdown	= sunplus_shutdown,
-+	.set_termios	= sunplus_set_termios,
-+	.set_ldisc	= sunplus_set_ldisc,
-+	.type		= sunplus_type,
-+	.config_port	= sunplus_config_port,
-+	.verify_port	= sunplus_verify_port,
-+#ifdef CONFIG_CONSOLE_POLL
-+	.poll_put_char	= sunplus_poll_put_char,
-+	.poll_get_char	= sunplus_poll_get_char,
-+#endif
-+};
-+
-+#ifdef CONFIG_SERIAL_SUNPLUS_CONSOLE
-+struct sunplus_uart_port *sunplus_console_ports[SUP_UART_NR];
-+
-+static void wait_for_xmitr(struct uart_port *port)
-+{
-+	unsigned int val;
-+	int ret;
-+
-+	/* Wait while FIFO is full or timeout */
-+	ret = readl_poll_timeout_atomic(port->membase + SUP_UART_LSR, val,
-+					(val & SUP_UART_LSR_TX), 1, 10000);
-+
-+	if (ret == -ETIMEDOUT) {
-+		dev_err(port->dev, "Timeout waiting while UART TX FULL\n");
-+		return;
-+	}
-+}
-+
-+static void sunplus_uart_console_putchar(struct uart_port *port, int ch)
-+{
-+	wait_for_xmitr(port);
-+	sp_uart_put_char(port, ch);
-+}
-+
-+static void sunplus_console_write(struct console *co,
-+				  const char *s,
-+				  unsigned int count)
-+{
-+	unsigned long flags;
-+	int locked = 1;
-+
-+	local_irq_save(flags);
-+
-+	if (sunplus_console_ports[co->index]->port.sysrq)
-+		locked = 0;
-+	else if (oops_in_progress)
-+		locked = spin_trylock(&sunplus_console_ports[co->index]->port.lock);
-+	else
-+		spin_lock(&sunplus_console_ports[co->index]->port.lock);
-+
-+	uart_console_write(&sunplus_console_ports[co->index]->port, s, count,
-+			   sunplus_uart_console_putchar);
-+
-+	if (locked)
-+		spin_unlock(&sunplus_console_ports[co->index]->port.lock);
-+
-+	local_irq_restore(flags);
-+}
-+
-+static int __init sunplus_console_setup(struct console *co, char *options)
-+{
-+	struct sunplus_uart_port *sup;
-+	int baud = 115200;
-+	int bits = 8;
-+	int parity = 'n';
-+	int flow = 'n';
-+
-+	if (co->index < 0 || co->index >= SUP_UART_NR)
-+		return -EINVAL;
-+
-+	sup = sunplus_console_ports[co->index];
-+	if (!sup)
-+		return -ENODEV;
-+
-+	if (options)
-+		uart_parse_options(options, &baud, &parity, &bits, &flow);
-+
-+	return uart_set_options(&sup->port, co, baud, parity, bits, flow);
-+}
-+
-+static struct uart_driver sunplus_uart_driver;
-+static struct console sunplus_uart_console = {
-+	.name		= "ttySUP",
-+	.write		= sunplus_console_write,
-+	.device		= uart_console_device,
-+	.setup		= sunplus_console_setup,
-+	.flags		= CON_PRINTBUFFER,
-+	.index		= -1,
-+	.data		= &sunplus_uart_driver
-+};
-+
-+static int __init sunplus_console_init(void)
-+{
-+	register_console(&sunplus_uart_console);
-+	return 0;
-+}
-+console_initcall(sunplus_console_init);
-+#endif
-+
-+static struct uart_driver sunplus_uart_driver = {
-+	.owner		= THIS_MODULE,
-+	.driver_name	= "sunplus_uart",
-+	.dev_name	= "ttySUP",
-+	.major		= TTY_MAJOR,
-+	.minor		= 64,
-+	.nr		= SUP_UART_NR,
-+	.cons		= NULL,
-+};
-+
-+static int sunplus_uart_probe(struct platform_device *pdev)
-+{
-+	struct sunplus_uart_port *sup;
-+	struct uart_port *port;
-+	struct resource *res;
-+	int ret, irq;
-+
-+	pdev->id = of_alias_get_id(pdev->dev.of_node, "serial");
-+
-+	if (pdev->id < 0 || pdev->id >= SUP_UART_NR)
-+		return -EINVAL;
-+
-+	sup = devm_kzalloc(&pdev->dev, sizeof(*sup), GFP_KERNEL);
-+	if (!sup)
-+		return -ENOMEM;
-+
-+	sup->clk = devm_clk_get_optional(&pdev->dev, NULL);
-+	if (IS_ERR(sup->clk))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(sup->clk), "clk not found\n");
-+
-+	ret = clk_prepare_enable(sup->clk);
-+	if (ret)
-+		return ret;
-+
-+	ret = devm_add_action_or_reset(&pdev->dev,
-+				       (void(*)(void *))clk_disable_unprepare,
-+				       sup->clk);
-+	if (ret)
-+		return ret;
-+
-+	sup->rstc = devm_reset_control_get_exclusive(&pdev->dev, NULL);
-+	if (IS_ERR(sup->rstc))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(sup->rstc), "rstc not found\n");
-+
-+	port = &sup->port;
-+
-+	port->membase = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
-+	if (IS_ERR(port->membase))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(port->membase), "membase not found\n");
-+
-+	irq = platform_get_irq(pdev, 0);
-+	if (irq < 0)
-+		return irq;
-+
-+	port->mapbase = res->start;
-+	port->uartclk = clk_get_rate(sup->clk);
-+	port->line = pdev->id;
-+	port->irq = irq;
-+	port->dev = &pdev->dev;
-+	port->iotype = UPIO_MEM;
-+	port->ops = &sunplus_uart_ops;
-+	port->flags = UPF_BOOT_AUTOCONF;
-+	port->fifosize = 128;
-+
-+	ret = reset_control_deassert(sup->rstc);
-+	if (ret)
-+		return ret;
-+
-+	ret = devm_add_action_or_reset(&pdev->dev,
-+				       (void(*)(void *))reset_control_assert,
-+				       sup->rstc);
-+	if (ret)
-+		return ret;
-+
-+#ifdef CONFIG_SERIAL_SUNPLUS_CONSOLE
-+	sunplus_console_ports[sup->port.line] = sup;
-+#endif
-+
-+	platform_set_drvdata(pdev, &sup->port);
-+
-+	ret = uart_add_one_port(&sunplus_uart_driver, &sup->port);
-+#ifdef CONFIG_SERIAL_SUNPLUS_CONSOLE
-+	if (ret)
-+		sunplus_console_ports[sup->port.line] = NULL;
-+#endif
-+
-+	return ret;
-+}
-+
-+static int sunplus_uart_remove(struct platform_device *pdev)
-+{
-+	struct sunplus_uart_port *sup = platform_get_drvdata(pdev);
-+
-+	uart_remove_one_port(&sunplus_uart_driver, &sup->port);
-+
-+	return 0;
-+}
-+
-+static int sunplus_uart_suspend(struct device *dev)
-+{
-+	struct sunplus_uart_port *sup = dev_get_drvdata(dev);
-+
-+	if (!uart_console(&sup->port))
-+		uart_suspend_port(&sunplus_uart_driver, &sup->port);
-+
-+	return 0;
-+}
-+
-+static int sunplus_uart_resume(struct device *dev)
-+{
-+	struct sunplus_uart_port *sup = dev_get_drvdata(dev);
-+
-+	if (!uart_console(&sup->port))
-+		uart_resume_port(&sunplus_uart_driver, &sup->port);
-+
-+	return 0;
-+}
-+
-+static const struct dev_pm_ops sunplus_uart_pm_ops = {
-+	SET_SYSTEM_SLEEP_PM_OPS(sunplus_uart_suspend, sunplus_uart_resume)
-+};
-+
-+static const struct of_device_id sp_uart_of_match[] = {
-+	{ .compatible = "sunplus,sp7021-uart" },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, sp_uart_of_match);
-+
-+static struct platform_driver sunplus_uart_platform_driver = {
-+	.probe		= sunplus_uart_probe,
-+	.remove		= sunplus_uart_remove,
-+	.driver = {
-+		.name	= "sunplus_uart",
-+		.of_match_table = sp_uart_of_match,
-+		.pm     = &sunplus_uart_pm_ops,
-+	}
-+};
-+
-+static int __init sunplus_uart_init(void)
-+{
-+	int ret;
-+
-+#ifdef CONFIG_SERIAL_SUNPLUS_CONSOLE
-+	sunplus_uart_driver.cons = &sunplus_uart_console;
-+#endif
-+
-+	ret = uart_register_driver(&sunplus_uart_driver);
-+	if (ret)
-+		return ret;
-+
-+	ret = platform_driver_register(&sunplus_uart_platform_driver);
-+	if (ret)
-+		uart_unregister_driver(&sunplus_uart_driver);
-+
-+	return ret;
-+}
-+module_init(sunplus_uart_init);
-+
-+static void __exit sunplus_uart_exit(void)
-+{
-+	platform_driver_unregister(&sunplus_uart_platform_driver);
-+	uart_unregister_driver(&sunplus_uart_driver);
-+}
-+module_exit(sunplus_uart_exit);
-+
-+#ifdef CONFIG_SERIAL_EARLYCON
-+static void sunplus_uart_putc(struct uart_port *port, int c)
-+{
-+	unsigned int val;
-+	int ret;
-+
-+	ret = readl_poll_timeout_atomic(port->membase + SUP_UART_LSR, val,
-+					(val & UART_LSR_TEMT), 1, 10000);
-+	if (ret)
-+		return;
-+
-+	writel(c, port->membase + SUP_UART_DATA);
-+}
-+
-+static void sunplus_uart_early_write(struct console *con, const char *s, unsigned int n)
-+{
-+	struct earlycon_device *dev = con->data;
-+
-+	uart_console_write(&dev->port, s, n, sunplus_uart_putc);
-+}
-+
-+static int __init
-+sunplus_uart_early_setup(struct earlycon_device *dev, const char *opt)
-+{
-+	if (!(dev->port.membase || dev->port.iobase))
-+		return -ENODEV;
-+
-+	dev->con->write = sunplus_uart_early_write;
-+
-+	return 0;
-+}
-+OF_EARLYCON_DECLARE(sunplus_uart, "sunplus,sp7021-uart", sunplus_uart_early_setup);
-+#endif
-+
-+MODULE_DESCRIPTION("Sunplus UART driver");
-+MODULE_AUTHOR("Hammer Hsieh <hammerh0314@gmail.com>");
-+MODULE_LICENSE("GPL v2");
-diff --git a/include/uapi/linux/serial_core.h b/include/uapi/linux/serial_core.h
-index c4042dc..2dfe443 100644
---- a/include/uapi/linux/serial_core.h
-+++ b/include/uapi/linux/serial_core.h
-@@ -274,4 +274,7 @@
- /* Freescale LINFlexD UART */
- #define PORT_LINFLEXUART	122
- 
-+/* Sunplus UART */
-+#define PORT_SUNPLUS	123
-+
- #endif /* _UAPILINUX_SERIAL_CORE_H */
--- 
-2.7.4
+ While at it, can you convert the api too?
 
+Thanks!
+Jinpu Wang
+
+>
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+>  drivers/block/rnbd/rnbd-clt.c | 5 -----
+>  1 file changed, 5 deletions(-)
+>
+> diff --git a/drivers/block/rnbd/rnbd-clt.c b/drivers/block/rnbd/rnbd-clt.c
+> index 9a880d559ab8..eaff369eff36 100644
+> --- a/drivers/block/rnbd/rnbd-clt.c
+> +++ b/drivers/block/rnbd/rnbd-clt.c
+> @@ -23,7 +23,6 @@ MODULE_LICENSE("GPL");
+>
+>  static int rnbd_client_major;
+>  static DEFINE_IDA(index_ida);
+> -static DEFINE_MUTEX(ida_lock);
+>  static DEFINE_MUTEX(sess_lock);
+>  static LIST_HEAD(sess_list);
+>
+> @@ -55,9 +54,7 @@ static void rnbd_clt_put_dev(struct rnbd_clt_dev *dev)
+>         if (!refcount_dec_and_test(&dev->refcount))
+>                 return;
+>
+> -       mutex_lock(&ida_lock);
+>         ida_simple_remove(&index_ida, dev->clt_device_id);
+> -       mutex_unlock(&ida_lock);
+>         kfree(dev->hw_queues);
+>         kfree(dev->pathname);
+>         rnbd_clt_put_sess(dev->sess);
+> @@ -1460,10 +1457,8 @@ static struct rnbd_clt_dev *init_dev(struct rnbd_clt_session *sess,
+>                 goto out_alloc;
+>         }
+>
+> -       mutex_lock(&ida_lock);
+>         ret = ida_simple_get(&index_ida, 0, 1 << (MINORBITS - RNBD_PART_BITS),
+>                              GFP_KERNEL);
+> -       mutex_unlock(&ida_lock);
+>         if (ret < 0) {
+>                 pr_err("Failed to initialize device '%s' from session %s, allocating idr failed, err: %d\n",
+>                        pathname, sess->sessname, ret);
+> --
+> 2.32.0
+>

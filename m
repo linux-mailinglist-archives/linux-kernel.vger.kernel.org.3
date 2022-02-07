@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2826D4AB991
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:23:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11FB74ABA03
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:26:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356617AbiBGLNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:13:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48972 "EHLO
+        id S1382548AbiBGLTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:19:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348656AbiBGLKi (ORCPT
+        with ESMTP id S1359470AbiBGLOy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:10:38 -0500
+        Mon, 7 Feb 2022 06:14:54 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FC11C043181;
-        Mon,  7 Feb 2022 03:10:37 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B906C0401D0;
+        Mon,  7 Feb 2022 03:14:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 49B7DB81028;
-        Mon,  7 Feb 2022 11:10:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66FA2C004E1;
-        Mon,  7 Feb 2022 11:10:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C1700B80EC3;
+        Mon,  7 Feb 2022 11:14:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2752C004E1;
+        Mon,  7 Feb 2022 11:14:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232235;
+        s=korg; t=1644232479;
         bh=73BdNz4Hg5qLRQTfuS4+6Pt09s5QMlox2v1WqQLxkag=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VD6ci1587j2MyK0gBJCwUh4OuHmbrywKaxwkErtWv4rfw0qzcgeOWI0t/6ydz106b
-         QW46ykAKX0I/HhAVIStLxFuDbTSPfX1h2CF88/JzzNx8meu+ZDH39vEK7CXPyfHeOX
-         1by+F/wVqcFAxAD67PjQSXpQsNMxO+QZXGYf7O9I=
+        b=rk6WYqUlwfWbDvcdDzXXeWxSltA+LwoFCHcvWBddE7E0gwb8uTFb0zRlBIe6BIGTN
+         KewHlPfqfpT5J1OZ0qv9SG2ahOZjSTsTvjKuP/h/T5vIBfOuXUs0UaveiGw8nUzlSU
+         4NvSni4UMIrF+fsZoImLDcgHlpxRX6wBs9xUoV9c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Benjamin Block <bblock@linux.ibm.com>,
         Steffen Maier <maier@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 4.14 03/69] scsi: zfcp: Fix failed recovery on gone remote port with non-NPIV FCP devices
-Date:   Mon,  7 Feb 2022 12:05:25 +0100
-Message-Id: <20220207103755.716473948@linuxfoundation.org>
+Subject: [PATCH 4.19 03/86] scsi: zfcp: Fix failed recovery on gone remote port with non-NPIV FCP devices
+Date:   Mon,  7 Feb 2022 12:05:26 +0100
+Message-Id: <20220207103757.662639283@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103755.604121441@linuxfoundation.org>
-References: <20220207103755.604121441@linuxfoundation.org>
+In-Reply-To: <20220207103757.550973048@linuxfoundation.org>
+References: <20220207103757.550973048@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8

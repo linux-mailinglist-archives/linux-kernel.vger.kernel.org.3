@@ -2,113 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4726E4ACC25
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 23:40:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A421F4ACC28
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 23:42:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244752AbiBGWkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 17:40:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55222 "EHLO
+        id S244774AbiBGWmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 17:42:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244667AbiBGWkD (ORCPT
+        with ESMTP id S242105AbiBGWmU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 17:40:03 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E021C0612A4;
-        Mon,  7 Feb 2022 14:40:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644273602; x=1675809602;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=9YOiN21DFWOvsXWRc0EIImHeT95XLZnWE4OurJAm4GA=;
-  b=SR8WqVVQz99gERWJTyxsNki2ow4mrUHdUweOUx7MR2pw/gLE5alEmvso
-   yi0auCejG205DR6Rpib3/vfCnidH4DtIT4ZQpw6qYqfMa/EC9s+xwwQXx
-   oO+4KA4gSBnGFk8W+QjkPSjqgwQQ++3RaieVJUoKx0WkdvJGC13dfmXSQ
-   dGstVL92X2/ArEsX5ejtHi2blas834vX56X99PNoUULFKEMmV83V07s+o
-   lV/jUIONI95eq6vF3Wj4hNLrSrECRHwWav1Bk0ESKB7tHr0mEFVyU8yWp
-   NatH/C0/YVSwmN8l70Mr/PN3dhmzNy9TumRN5d7VKWjMFtdpmnYh64Nix
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="232388972"
-X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
-   d="scan'208";a="232388972"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 14:40:01 -0800
-X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
-   d="scan'208";a="525306836"
-Received: from hgrunes-mobl1.amr.corp.intel.com (HELO [10.251.3.57]) ([10.251.3.57])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 14:40:00 -0800
-Message-ID: <248ef880-025d-54ce-f3ce-fed0e50a0445@intel.com>
-Date:   Mon, 7 Feb 2022 14:39:57 -0800
+        Mon, 7 Feb 2022 17:42:20 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA029C061355
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 14:42:19 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id my12-20020a17090b4c8c00b001b528ba1cd7so706086pjb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 14:42:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=gVc/rSf8hc23i8BzLsnLzzxnzHxUect8vesEyQ0bjYQ=;
+        b=MLap6RMLL02SXvhnBx0wvmT2F2aV1wjKwPElYKitbKZAPZebylvQ6QlI1JoNlHkXb0
+         tvzYZtWSl5bGRdXPB/pr0Dj+XaVcJwI3TfKVnAX3zO4A53Gat1L3c8Qrq2FlwIPtRP2Q
+         u0ZISa51pSr3EpXKj1wm5r3O4T5XMViJck0tHXU3wtaLxsKz1isy4mOTdXZ7NFGtpTSj
+         Qc5txrvcRvFakKnTQVh0ikuIBtOCLS2P1R6REpZlnejbH05gTUnWPBa1LDXwTKsFIsop
+         t0MkwIgF9AJvf7e3pBoPzo6bxzRSYAsXmL+E3za/GfwW2E+AvsrohXL3YQFrR9TNgJ5d
+         vA1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=gVc/rSf8hc23i8BzLsnLzzxnzHxUect8vesEyQ0bjYQ=;
+        b=TLNdIBlpB3nh78cvrCOlZVrIrSIfqyEpUf6hjMnebmhGeX5J1loAaHuTWomlIOBS4h
+         OraB9VVPSooVaQolX9PRP2DqgPaZu5QqF/n+HJ0Ypfl3GOTafJpcaXZNoexTLMFJDIva
+         +r85M8b6j+lCqVFQrD0b8/S9hHbt2tC/8JEc0thANo4U4feMPOM4ScUCHxfe4fhmmIA8
+         zWYusx7d0D4NoddSCaIUSml4O8i+Lg0dJqbTIaQl3Ji6QM29ghvemDqj5iQRXl2dNTo2
+         LFSADmKThwgc/OYpIw7Axl5MDi4uFoK0oPkhHIeDtED1t2SVkpb7LKRCASYlAuDsJmPL
+         2Z4w==
+X-Gm-Message-State: AOAM5316AT8/3COeyc59SWBfIBaBzmf2rGD7WcnK1N7A3tauyqinZsR0
+        Ibq1Wiwwuc38k+/4h4RI14MVDA==
+X-Google-Smtp-Source: ABdhPJzMYjbaLbphx31DbZWtfp6MdWr2uF1eeiUb9JpYVvgj7VltjPbnWheM7dxx9YcZ+xq5GF2nQg==
+X-Received: by 2002:a17:902:e84c:: with SMTP id t12mr1715065plg.63.1644273739162;
+        Mon, 07 Feb 2022 14:42:19 -0800 (PST)
+Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
+        by smtp.gmail.com with ESMTPSA id c7sm13039915pfp.164.2022.02.07.14.42.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Feb 2022 14:42:18 -0800 (PST)
+Date:   Mon, 7 Feb 2022 22:42:14 +0000
+From:   David Matlack <dmatlack@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        seanjc@google.com, vkuznets@redhat.com
+Subject: Re: [PATCH 20/23] KVM: MMU: pull CPU role computation to kvm_init_mmu
+Message-ID: <YgGgRm/QNbordgqi@google.com>
+References: <20220204115718.14934-1-pbonzini@redhat.com>
+ <20220204115718.14934-21-pbonzini@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com
-Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
- <20220130211838.8382-3-rick.p.edgecombe@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH 02/35] x86/cet/shstk: Add Kconfig option for Shadow Stack
-In-Reply-To: <20220130211838.8382-3-rick.p.edgecombe@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220204115718.14934-21-pbonzini@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/30/22 13:18, Rick Edgecombe wrote:
-> +config X86_SHADOW_STACK
-> +	prompt "Intel Shadow Stack"
-> +	def_bool n
-> +	depends on AS_WRUSS
-> +	depends on ARCH_HAS_SHADOW_STACK
-> +	select ARCH_USES_HIGH_VMA_FLAGS
-> +	help
-> +	  Shadow Stack protection is a hardware feature that detects function
-> +	  return address corruption.  This helps mitigate ROP attacks.
-> +	  Applications must be enabled to use it, and old userspace does not
-> +	  get protection "for free".
-> +	  Support for this feature is present on Tiger Lake family of
-> +	  processors released in 2020 or later.  Enabling this feature
-> +	  increases kernel text size by 3.7 KB.
+On Fri, Feb 04, 2022 at 06:57:15AM -0500, Paolo Bonzini wrote:
+> Do not lead init_kvm_*mmu into the temptation of poking
+> into struct kvm_mmu_role_regs, by passing to it directly
+> the CPU role.
+> 
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
+>  arch/x86/kvm/mmu/mmu.c | 21 +++++++++------------
+>  1 file changed, 9 insertions(+), 12 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 01027da82e23..6f9d876ce429 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -4721,11 +4721,9 @@ kvm_calc_tdp_mmu_root_page_role(struct kvm_vcpu *vcpu,
+>  	return role;
+>  }
+>  
+> -static void init_kvm_tdp_mmu(struct kvm_vcpu *vcpu,
+> -			     const struct kvm_mmu_role_regs *regs)
+> +static void init_kvm_tdp_mmu(struct kvm_vcpu *vcpu, union kvm_mmu_role cpu_role)
+>  {
+>  	struct kvm_mmu *context = &vcpu->arch.root_mmu;
+> -	union kvm_mmu_role cpu_role = kvm_calc_cpu_role(vcpu, regs);
+>  	union kvm_mmu_page_role mmu_role = kvm_calc_tdp_mmu_root_page_role(vcpu, cpu_role);
+>  
+>  	if (cpu_role.as_u64 == context->cpu_role.as_u64 &&
+> @@ -4779,10 +4777,9 @@ static void shadow_mmu_init_context(struct kvm_vcpu *vcpu, struct kvm_mmu *conte
+>  }
+>  
+>  static void kvm_init_shadow_mmu(struct kvm_vcpu *vcpu,
+> -				const struct kvm_mmu_role_regs *regs)
+> +				union kvm_mmu_role cpu_role)
+>  {
+>  	struct kvm_mmu *context = &vcpu->arch.root_mmu;
+> -	union kvm_mmu_role cpu_role = kvm_calc_cpu_role(vcpu, regs);
+>  	union kvm_mmu_page_role mmu_role;
+>  
+>  	mmu_role = cpu_role.base;
+> @@ -4874,20 +4871,19 @@ void kvm_init_shadow_ept_mmu(struct kvm_vcpu *vcpu, bool execonly,
+>  EXPORT_SYMBOL_GPL(kvm_init_shadow_ept_mmu);
+>  
+>  static void init_kvm_softmmu(struct kvm_vcpu *vcpu,
+> -			     const struct kvm_mmu_role_regs *regs)
+> +			     union kvm_mmu_role cpu_role)
+>  {
+>  	struct kvm_mmu *context = &vcpu->arch.root_mmu;
+>  
+> -	kvm_init_shadow_mmu(vcpu, regs);
+> +	kvm_init_shadow_mmu(vcpu, cpu_role);
+>  
+>  	context->get_guest_pgd     = get_cr3;
+>  	context->get_pdptr         = kvm_pdptr_read;
+>  	context->inject_page_fault = kvm_inject_page_fault;
+>  }
+>  
+> -static void init_kvm_nested_mmu(struct kvm_vcpu *vcpu, const struct kvm_mmu_role_regs *regs)
+> +static void init_kvm_nested_mmu(struct kvm_vcpu *vcpu, union kvm_mmu_role new_role)
+>  {
+> -	union kvm_mmu_role new_role = kvm_calc_cpu_role(vcpu, regs);
+>  	struct kvm_mmu *g_context = &vcpu->arch.nested_mmu;
+>  
+>  	if (new_role.as_u64 == g_context->cpu_role.as_u64)
+> @@ -4928,13 +4924,14 @@ static void init_kvm_nested_mmu(struct kvm_vcpu *vcpu, const struct kvm_mmu_role
+>  void kvm_init_mmu(struct kvm_vcpu *vcpu)
+>  {
+>  	struct kvm_mmu_role_regs regs = vcpu_to_role_regs(vcpu);
+> +	union kvm_mmu_role cpu_role = kvm_calc_cpu_role(vcpu, &regs);
 
-I guess the "2020" comment is still OK.  But, given that it's on AMD and
-a could of other Intel models, maybe we should just leave this at:
+WDYT about also inlining vcpu_to_role_regs() in kvm_calc_cpu_role()?
 
-	CPUs supporting shadow stacks were first released in 2020.
-
-If we say anything.  We mostly want folks to just go read the
-documentation if they needs more details.
+>  
+>  	if (mmu_is_nested(vcpu))
+> -		init_kvm_nested_mmu(vcpu, &regs);
+> +		init_kvm_nested_mmu(vcpu, cpu_role);
+>  	else if (tdp_enabled)
+> -		init_kvm_tdp_mmu(vcpu, &regs);
+> +		init_kvm_tdp_mmu(vcpu, cpu_role);
+>  	else
+> -		init_kvm_softmmu(vcpu, &regs);
+> +		init_kvm_softmmu(vcpu, cpu_role);
+>  }
+>  EXPORT_SYMBOL_GPL(kvm_init_mmu);
+>  
+> -- 
+> 2.31.1
+> 
+> 

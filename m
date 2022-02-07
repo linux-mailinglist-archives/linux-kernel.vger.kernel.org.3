@@ -2,103 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E28134ACBAC
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 22:53:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECBCA4ACBB0
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 22:56:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243190AbiBGVx4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 16:53:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35938 "EHLO
+        id S243245AbiBGV4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 16:56:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243125AbiBGVxz (ORCPT
+        with ESMTP id S242051AbiBGV4Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 16:53:55 -0500
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6687FC061355
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 13:53:54 -0800 (PST)
-Received: by mail-vs1-xe34.google.com with SMTP id m24so1253550vsp.7
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 13:53:54 -0800 (PST)
+        Mon, 7 Feb 2022 16:56:16 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5C45C061A73
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 13:56:15 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id y5so14428428pfe.4
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 13:56:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8MZoxFRvZLtE78B5cO8zLm8LUZTFDo8eBlF4th5Z8TU=;
-        b=nv6DeQ7eDp+p7RvS8HJJVgnP86CxRUEh4vAK7+9GxxBd97xBtdHs5xLWK6c+d8rxya
-         +Ik/zpubAjruv8wOc4qkZ6VQDdb4lCPMajxYrw/k9QHrWLGdyeq7D7NNaPUO0HA+vJ4x
-         uGg5XhysX+/yRN2kv/XJcw3vqHL6m5NTciHJhPUkzPJZo2RNocurL8v/DUol+OKg+wP0
-         YnTvbbY+zG+dZRl6m6/86p++Nowt+kMxBKtMLIFsxV3VPVyzQUR+ymz2EdPk8dTtu/m4
-         OiKt4yT2cNuh6hDx4u6B5DpkjjxzeSYt7VQfK2ONdtteRNNhyR9kGw70ueeGJYQ+ZqJO
-         hHdg==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=tHxa2zKVaHBcu/brPJMMDCzteRvMa8lCYhxJZN7g04o=;
+        b=I3T0MgX3KD3D8din9AD4VmFgX5xNMlWkCITEwL0yWT4rotEFC5G/eY54wJX+04On6C
+         CHr+Fk8wpO7RGMsRViMvJA3/won/IUNX8Ak9LBq8aIS1CJfPR5C6w46zR1Z8O+YPMarK
+         I3WWGlNHdYu4PYfMgfgnwpeTxftKTY5LuLmhc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8MZoxFRvZLtE78B5cO8zLm8LUZTFDo8eBlF4th5Z8TU=;
-        b=tA2h4x97I0C8st6Ez7QkTjdafG4fV3O43yRH/UYtbeYNdSBNamo6gBf0TxtAX7YrtK
-         HPRUai8jUy/JTMl/UWdN9Nbe98/qvbF525NUqd8yvVtnxOJi6nSAnL7o27zSpLwVY1LJ
-         MD6MoeedIWVNkORy1MEpUbCrQ89FJGXyB2q2JWs7eAm9soZ2zgeBmLyToT/5NF55j3Yk
-         K2aIUcUbNtgMBH+VV3ZCHfez3HHomBk+/oOwzs2ZLD4Y4DE4K4bxAWRFEQ09S2+XShlC
-         qL2vqRmze2l6O6QtYBccT06wJK69WzvwUyV4ks8VQPjI5BBbz/DWjyMJqdQPiNrrP0IF
-         IS/Q==
-X-Gm-Message-State: AOAM533ddzi1uDQLTzw435EUqHAc5YitbLqRfIcvxHrl1UQBOOfY8TFY
-        QR1r90rIx/0EvT2j+PijhwAi9x1JdK5CE/8qR77bjQ==
-X-Google-Smtp-Source: ABdhPJxxxjucXjjpy0ROP3LvftnHao4Nfpoq0deCl9IbqhO2sUZmJ4Ky6S5/FY8mXNI/nPg0ih0U900I/M9DpvT72g0=
-X-Received: by 2002:a05:6102:3590:: with SMTP id h16mr583187vsu.63.1644270833471;
- Mon, 07 Feb 2022 13:53:53 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=tHxa2zKVaHBcu/brPJMMDCzteRvMa8lCYhxJZN7g04o=;
+        b=nFDNXCY/5ExJzazeY6MwMEujiQwU2UQLHCjObqeVYgCE5LErj8KUJOnWkRijo5vLmX
+         nSJkJprMWuw1wmfF83DvT4cuGCYlevMUC+HqsYYQI6CUU3wFZfgUyX44wh5s30mWSFtD
+         MZykWdjM+xXbRQ7kaTOMgqWk1Orberta8t2XlZKO3bkv8W2RePgSrPTT19Lh4gXcuiRf
+         msxO8BCDXh2H6/vtX/T2GFxg4a75dVFkm9SF3GTEWM21pZh4GCpvXkDZJ2f6hO1YEu8K
+         MSPG9TrCCkDwyEtNvlVHrAaIUWJb7vnryjCraf+RBTaqXRaGz1BXWsJ7csQZQgJR8d6P
+         tiGg==
+X-Gm-Message-State: AOAM532F9rMeBqUM4P75gSJbOjMu0QOqh4sBfOASNjH48vTypw4Z1Lt+
+        AbypvazrFqtCkijZ4U9FM0/N0Q==
+X-Google-Smtp-Source: ABdhPJyCMZS8k4XqgP2140WPRUddkLLGFWtx/egtokuBNm31gkdMHe+p42tk+Kmo6pOth6YVBsHvXw==
+X-Received: by 2002:a63:4f4f:: with SMTP id p15mr1109735pgl.452.1644270975192;
+        Mon, 07 Feb 2022 13:56:15 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id 6sm9348292pgx.36.2022.02.07.13.56.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Feb 2022 13:56:14 -0800 (PST)
+Date:   Mon, 7 Feb 2022 13:56:14 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Martin Fernandez <martin.fernandez@eclypsium.com>
+Cc:     linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-mm@kvack.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        ardb@kernel.org, dvhart@infradead.org, andy@infradead.org,
+        gregkh@linuxfoundation.org, rafael@kernel.org, rppt@kernel.org,
+        akpm@linux-foundation.org, daniel.gutson@eclypsium.com,
+        hughsient@gmail.com, alex.bazhaniuk@eclypsium.com,
+        alison.schofield@intel.com
+Subject: Re: [PATCH v6 4/6] x86/e820: Tag e820_entry with crypto capabilities
+Message-ID: <202202071351.AEEEA92@keescook>
+References: <20220203164328.203629-1-martin.fernandez@eclypsium.com>
+ <20220203164328.203629-5-martin.fernandez@eclypsium.com>
 MIME-Version: 1.0
-References: <e10b79cf-d6d5-ffcc-bce4-edd92b7cb6b9@molgen.mpg.de>
- <CAHmME9pktmNpcBS_DJhJ5Z+6xO9P1wroQ9_gwx8KZMBxk1FBeQ@mail.gmail.com>
- <CAG48ez2P9-CAdgRizcp5T_uuoXRAt0xtodh1doiMW0fKZVX-7g@mail.gmail.com> <CAG48ez3wZOZZX1UHM-Q=KhOnnGR85Unm08q7jT_wVfOq0PW94Q@mail.gmail.com>
-In-Reply-To: <CAG48ez3wZOZZX1UHM-Q=KhOnnGR85Unm08q7jT_wVfOq0PW94Q@mail.gmail.com>
-From:   Jann Horn <jannh@google.com>
-Date:   Mon, 7 Feb 2022 22:53:27 +0100
-Message-ID: <CAG48ez0pWnrUpTN5rAs4zcHX4EBAWvNT1hL+MFLVxGin49Ttkg@mail.gmail.com>
-Subject: Re: BUG: KCSAN: data-race in add_device_randomness+0x20d/0x290
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     pmenzel@molgen.mpg.de, "Theodore Y. Ts'o" <tytso@mit.edu>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220203164328.203629-5-martin.fernandez@eclypsium.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 7, 2022 at 10:50 PM Jann Horn <jannh@google.com> wrote:
->
-> On Mon, Feb 7, 2022 at 10:45 PM Jann Horn <jannh@google.com> wrote:
-> > On Mon, Feb 7, 2022 at 7:42 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> > > Thanks for the report. I assume that this is actually an old bug. Do
-> > > you have a vmlinux or a random.o from this kernel you could send me to
-> > > double check? Without that, my best guess, which I'd say I have
-> > > relatively high confidence about, is that the "1 byte read" is
-> > > actually a `movzx eax, cs:lfsr` referring to the `static u8 lfsr`
-> > > here, which gets inlined into add_device_randomness:
-> > >
-> > > static int crng_slow_load(const u8 *cp, size_t len)
-> > > {
-> > >     unsigned long flags;
-> > >     static u8 lfsr = 1;
-> > >
-> > > This was added in 2008 with dc12baacb95f ("random: use a different
-> > > mixing algorithm for add_device_randomness()"). My understanding is
-> > > that the race here isn't super problematic as we're in kind of a half
-> > > assed "low effort" phase anyway. But I'll give it some thought. I'm
-> > > CCing Jann as well who reported the original issue that motivated that
-> > > change.
-> >
-> > But the "lfsr" variable is never accessed outside the part of this
-> > method that holds a global spinlock. So that can't really be it,
-> > right?
->
-> There is a data race in crng_ready(), it just loads from "crng_init"
-> without READ_ONCE()... maybe that's what KCSAN is noticing?
+On Thu, Feb 03, 2022 at 01:43:26PM -0300, Martin Fernandez wrote:
+> Add a new enum for crypto capabilities.
+> 
+> Add a new member in e820_entry to hold whether an entry is able to do
+> hardware memory encryption or not.
+> 
+> Add a new function e820__range_set_crypto_capable to mark all the
+> entries in a range of addresses as encryptable. This will be called
+> when initializing EFI.
+> 
+> Change e820__update_table to handle merging and overlap problems
+> taking into account crypto_capable.
+> 
+> Signed-off-by: Martin Fernandez <martin.fernandez@eclypsium.com>
+> ---
+>  arch/x86/include/asm/e820/api.h   |   1 +
+>  arch/x86/include/asm/e820/types.h |  12 +++-
+>  arch/x86/kernel/e820.c            | 114 ++++++++++++++++++++++++++++--
+>  3 files changed, 119 insertions(+), 8 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/e820/api.h b/arch/x86/include/asm/e820/api.h
+> index e8f58ddd06d9..4b3b01fafdd1 100644
+> --- a/arch/x86/include/asm/e820/api.h
+> +++ b/arch/x86/include/asm/e820/api.h
+> @@ -17,6 +17,7 @@ extern bool e820__mapped_all(u64 start, u64 end, enum e820_type type);
+>  extern void e820__range_add   (u64 start, u64 size, enum e820_type type);
+>  extern u64  e820__range_update(u64 start, u64 size, enum e820_type old_type, enum e820_type new_type);
+>  extern u64  e820__range_remove(u64 start, u64 size, enum e820_type old_type, bool check_type);
+> +extern u64  e820__range_set_crypto_capable(u64 start, u64 size);
+>  
+>  extern void e820__print_table(char *who);
+>  extern int  e820__update_table(struct e820_table *table);
+> diff --git a/arch/x86/include/asm/e820/types.h b/arch/x86/include/asm/e820/types.h
+> index 314f75d886d0..aef03c665f5e 100644
+> --- a/arch/x86/include/asm/e820/types.h
+> +++ b/arch/x86/include/asm/e820/types.h
+> @@ -46,6 +46,11 @@ enum e820_type {
+>  	E820_TYPE_RESERVED_KERN	= 128,
+>  };
+>  
+> +enum e820_crypto_capabilities {
+> +	E820_NOT_CRYPTO_CAPABLE	= 0,
+> +	E820_CRYPTO_CAPABLE	= 1,
+> +};
 
-(Actually, maybe it should technically even be a smp_load_acquire()?
-Or do we have anything else that ensures that we can't get ordering
-issues here?)
+Is this expected to grow beyond a bool?
+
+> +
+>  /*
+>   * A single E820 map entry, describing a memory range of [addr...addr+size-1],
+>   * of 'type' memory type:
+> @@ -53,9 +58,10 @@ enum e820_type {
+>   * (We pack it because there can be thousands of them on large systems.)
+>   */
+>  struct e820_entry {
+> -	u64			addr;
+> -	u64			size;
+> -	enum e820_type		type;
+> +	u64				addr;
+> +	u64				size;
+> +	enum e820_type			type;
+> +	enum e820_crypto_capabilities	crypto_capable;
+>  } __attribute__((packed));
+
+Is there any concern about growing this structure? The "thousands" note
+in the comment is likely rare. FWIW, this seems fine to me, but I
+thought I'd mention it.
+
+-- 
+Kees Cook

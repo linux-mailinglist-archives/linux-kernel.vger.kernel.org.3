@@ -2,120 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 075E74AB730
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 10:08:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CC6D4AB72E
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 10:08:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243642AbiBGIx4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 03:53:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36496 "EHLO
+        id S243028AbiBGIxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 03:53:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243194AbiBGIoS (ORCPT
+        with ESMTP id S1349277AbiBGIqk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 03:44:18 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A7A8C043185
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 00:44:16 -0800 (PST)
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 8C8BA3FE4B
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 08:44:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1644223450;
-        bh=TJNZ+zUd3S8HoAhxtcYJss8tid7CleqrdrazIaaybsg=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=qSuLgpv8gWA6Pd15Dy2HxaWHHIU2G+tsKgPWNHeAcWbdIsrcmAm2ZeavNwp2ea4KH
-         wJDsb0nMMwgg+YEc6BfwyxUa90PCe0ye26YINwX59uXUatrJqxJl1BmR4kWfG0LlzN
-         57g6AMqFeCWpk4sKCjX7qEPIFIXk1EsIPAY2qBjWLIkcDJOF7tuTWDCDUzZTAuiMsX
-         74VhOTF0CAf2F9tm8u7kdIUpk7bbkkmmkjbY8B+MgNfA+115rhj9KTv+WRikQZLnX3
-         Ert/g4mzfBXM08P+HrDviqAiEV9X12/eY1sCD0nUsZWSCKUMwq8/wBdYMzK5rE9Fsk
-         EBdo6JvSUTxGg==
-Received: by mail-ej1-f72.google.com with SMTP id z26-20020a1709067e5a00b006cbe0628826so337934ejr.10
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 00:44:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TJNZ+zUd3S8HoAhxtcYJss8tid7CleqrdrazIaaybsg=;
-        b=UP6V3nxmUQzfxjaHDoZJQaAe0AaYvxw3jetnLXdrDUGBCMBLqAHK9+A0AsCRVMCyCm
-         dsl+/lghp6bldkOv3Pbveld2O9l9j69h3En2i7nQ+UmddVMB4SkIitRATexN769CpohD
-         RonCV7svg9xnmquwhmkyvexq66VXe/G2W4y4cmzhhBKshYOkFLG5KZCw9dN+wjrB2a1X
-         pTJHL7Sf1Cmw8VfsTOgUJgNR/BVGIFssyjzykVDg32vFCrr0MM2hMLgmCJ2fQvZpB1R5
-         EEvn//GXyZY+Hr/c8eB81X7OKAgL3UjCT2XnS513Cx4Ay5m8xNa5HriYSwyyCNW0XdAM
-         UdQw==
-X-Gm-Message-State: AOAM5311MFb5ZJyuxt3gj/TMjNM5N7ZHfqJUHhcyR0+FYIDsnajGPb7Y
-        OvRHNyUKItSXezaHv9sjKbez7tTPjxUhW0RqbWaeK4tCFSMajyTjgO6X/afMWh18tDRBIkoM9VD
-        twYuZGclEn+DYv1117sw2IH5qX9Hs0AmcHI+0CYXMYA==
-X-Received: by 2002:a17:907:1c9f:: with SMTP id nb31mr9276005ejc.24.1644223450274;
-        Mon, 07 Feb 2022 00:44:10 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxR/JRVVOHBqPXj/NpqeWB6ncqoJamzNzUx/kg+twC2HcWYf4L37Jq+4pk44F+v6qIcq4BTmA==
-X-Received: by 2002:a17:907:1c9f:: with SMTP id nb31mr9275993ejc.24.1644223450061;
-        Mon, 07 Feb 2022 00:44:10 -0800 (PST)
-Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id y11sm1636935edu.2.2022.02.07.00.44.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 00:44:09 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Dinh Nguyen <dinguyen@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        kernel test robot <lkp@intel.com>, stable@vger.kernel.org
-Subject: [PATCH] ARM: socfpga: fix missing RESET_CONTROLLER
-Date:   Mon,  7 Feb 2022 09:44:04 +0100
-Message-Id: <20220207084404.212017-1-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.32.0
+        Mon, 7 Feb 2022 03:46:40 -0500
+X-Greylist: delayed 64 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 00:46:38 PST
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A5EFC043181;
+        Mon,  7 Feb 2022 00:46:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1644223598; x=1675759598;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=ttltnOpaolu1Yl4FfVEtOxItkj60WBcQ3cFt1tKPFdY=;
+  b=eET9b4CeoBwBvXbyY/12mm94tG5cxdNur837wsMD4XmmChBQcODeCNw1
+   OuNsDYfgXzgop24OwrmsvRF4a489044BU4CVU/EhzTfWaN022y9/l3Bgi
+   Q2MukgDIQ7yapa0b7MnBKLUN1ZFggBDIt578+FQVLdnL6K0Z0eVTg5OvU
+   QSWcFqEtvaRm4VqReg+omfIz65qDtoQj7e/EUu4k/dKkKAZ7ayLJsuO/x
+   qprRfWuhx5C6u3WXS55Op9wwLEiuMPITwutX3/qLSRotLpaN81A+j0n46
+   hqwKgqLNd+VeFcPGHfbsJGY+EZaEBfFqkqKvvb+9Ocvp3dQdbUSjOtQs4
+   w==;
+X-IronPort-AV: E=Sophos;i="5.88,349,1635199200"; 
+   d="scan'208";a="21925656"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 07 Feb 2022 09:45:32 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Mon, 07 Feb 2022 09:45:32 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Mon, 07 Feb 2022 09:45:32 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1644223532; x=1675759532;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=ttltnOpaolu1Yl4FfVEtOxItkj60WBcQ3cFt1tKPFdY=;
+  b=BcOAR5lDe/3PVPsYDDNWXHBGAXPVZaPTfn1VEdC1COFf9jwMxaeZM2vZ
+   WqCq5PEHYT9UTd4UC/nuDUPK5JjV/LPrZIeuq+KaBfGULRzbEWOK5s4d2
+   LWB5bHFo6TVcm+lE0undKhTsrV2GhsQMqo12fJP70W17nSLdc2wmgF7J+
+   +IyULwwlV8z4js2vkP6JHtqVo42u9sY/GdswjISHHHM5P6pNfI6AiGHIH
+   7H9S/HqnQS0H22dHedBQppZiXVcpiPOf7DYWJFvlRmWAf8BjNONqoVHqp
+   hM251iXhJwHpZeIu4E6pw6IK7kMkqfptG9waxWMjV4vnL/x7r/o+0lWml
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.88,349,1635199200"; 
+   d="scan'208";a="21925655"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 07 Feb 2022 09:45:32 +0100
+Received: from schifferm-ubuntu (SCHIFFERM-M2.tq-net.de [10.121.201.138])
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id D1266280065;
+        Mon,  7 Feb 2022 09:45:31 +0100 (CET)
+Message-ID: <5944ba0ce568eaf507917799b1dfd89a3d0ca492.camel@ew.tq-group.com>
+Subject: Re: [PATCH v2 1/2] arm64: dts: ti: k3-am65: disable optional
+ peripherals by default
+From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>, soc@kernel.org,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>, jan.kiszka@siemens.com,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Nishanth Menon <nm@ti.com>
+Date:   Mon, 07 Feb 2022 09:45:29 +0100
+In-Reply-To: <YgDCLaBHA3DDQAUd@atomide.com>
+References: <20220203140240.973690-1-matthias.schiffer@ew.tq-group.com>
+         <20220204143108.653qk2ihnlhsr5aa@prior> <YgDCLaBHA3DDQAUd@atomide.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The SocFPGA machine since commit b3ca9888f35f ("reset: socfpga: add an
-early reset driver for SoCFPGA") uses reset controller, so it should
-select RESET_CONTROLLER explicitly.  Selecting ARCH_HAS_RESET_CONTROLLER
-is not enough because it affects only default choice still allowing a
-non-buildable configuration:
+On Mon, 2022-02-07 at 08:54 +0200, Tony Lindgren wrote:
+> Hi,
+> 
+> * Nishanth Menon <nm@ti.com> [220204 14:30]:
+> > Rob, Tony, Arnd, SoC maintainers,
+> > 
+> > On 15:02-20220203, Matthias Schiffer wrote:
+> > > All peripherals that require pinmuxing or other configuration to
+> > > work
+> > > should be disabled by default. Dependent DTS are adjusted
+> > > accordingly.
+> 
+> Disabling SoC internal devices by default is not a good policy. The
+> devices are available even if not pinned out. Disabling device by
+> default
+> causes runtime PM to not work as the kernel will completely ignore
+> the
+> disabled devices. And this means you add a dependency to some certain
+> version of a bootloader for PM to work.
+> 
+> Additionally tagging devices as disabled by default (and then again
+> re-enabling them in the board specific dts files) is just pointless
+> churn and bloat. See for example commit 12afc0cf8121 ("ARM: dts: Drop
+> pointless status changing for am3 musb") :)
+> 
+> If you really want to disable some devices for memory usage or other
+> reasons, do it in the board specific dts files.
 
-  /usr/bin/arm-linux-gnueabi-ld: arch/arm/mach-socfpga/socfpga.o: in function `socfpga_init_irq':
-  arch/arm/mach-socfpga/socfpga.c:56: undefined reference to `socfpga_reset_init'
+Attempting to use unmuxed peripherals often leads to ugly errors - I2C
+without pullups appearing busy, UARTs in endless break condition, ...
+Such errors are often seen as defects in hardware or software by people
+who aren't familiar with the internals.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: <stable@vger.kernel.org>
-Fixes: b3ca9888f35f ("reset: socfpga: add an early reset driver for SoCFPGA")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
----
- arch/arm/mach-socfpga/Kconfig | 2 ++
- 1 file changed, 2 insertions(+)
+I can see the issue with bootloaders leaving peripherals in an unknown
+state, but I'm not happy with keeping such devices enabled in the
+kernel either.
 
-diff --git a/arch/arm/mach-socfpga/Kconfig b/arch/arm/mach-socfpga/Kconfig
-index 43ddec677c0b..594edf9bbea4 100644
---- a/arch/arm/mach-socfpga/Kconfig
-+++ b/arch/arm/mach-socfpga/Kconfig
-@@ -2,6 +2,7 @@
- menuconfig ARCH_INTEL_SOCFPGA
- 	bool "Altera SOCFPGA family"
- 	depends on ARCH_MULTI_V7
-+	select ARCH_HAS_RESET_CONTROLLER
- 	select ARCH_SUPPORTS_BIG_ENDIAN
- 	select ARM_AMBA
- 	select ARM_GIC
-@@ -18,6 +19,7 @@ menuconfig ARCH_INTEL_SOCFPGA
- 	select PL310_ERRATA_727915
- 	select PL310_ERRATA_753970 if PL310
- 	select PL310_ERRATA_769419
-+	select RESET_CONTROLLER
- 
- if ARCH_INTEL_SOCFPGA
- config SOCFPGA_SUSPEND
--- 
-2.32.0
+Generally I think that it's a bootloader's responsiblity to disable
+unneeded devices - the kernel may not even have a driver for some
+peripherals, leading to the same behaviour as a "disabled" status. For
+this reason I believe that it should always be okay to set unneeded
+devices to "disabled", and it should be considered a safe default.
+
+I'm not sure what the consensus on these issues is. I'm more familiar
+with NXP's i.MX and Layerscape SoCs, where it's common to have all
+muxable peripherals set to "disabled" in the base DTSI, and a quick
+grep through a few dts directories gives me the impression that this is
+the case for most other vendors as well.
+
+Regards,
+Matthias
+
+
+> 
+> > https://lore.kernel.org/linux-arm-kernel/20201112183538.6805-1-nm@ti.com/
+> > reversal all over again.
+> > 
+> > Is there a specific pattern we are intending to use here? Because,
+> > if we
+> > are going down this path (which would be a major churn across
+> > multiple
+> > downstream trees as well) - I'd rather have this as a documented
+> > standard and not just a TI approach and will need to be done across
+> > all
+> > K3 devices.
+> > 
+> > Are you aware of such a documented guideline, rather than "word of
+> > mouth"? Maybe I have'nt looked deep enough, but checking..
+> 
+> For SoCs that don't implement runtime PM the policy can be different
+> without causing any harm. But for any SoCs implementing runtime PM,
+> an
+> unknown state from the bootloader is not going to work.
+> 
+> Regards,
+> 
+> Tony
+
 

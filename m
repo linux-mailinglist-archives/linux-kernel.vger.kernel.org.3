@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ACBE4ABD00
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:55:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FCE84ABC54
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:46:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388582AbiBGLoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:44:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37484 "EHLO
+        id S1385661AbiBGLcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:32:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384361AbiBGL2A (ORCPT
+        with ESMTP id S1382980AbiBGLVT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:28:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26AC3C03FEFF;
-        Mon,  7 Feb 2022 03:26:08 -0800 (PST)
+        Mon, 7 Feb 2022 06:21:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AAC6C0401E8;
+        Mon,  7 Feb 2022 03:20:56 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 83E96B811B3;
-        Mon,  7 Feb 2022 11:26:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C95ECC004E1;
-        Mon,  7 Feb 2022 11:26:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 64BFE6126D;
+        Mon,  7 Feb 2022 11:20:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38149C004E1;
+        Mon,  7 Feb 2022 11:20:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233166;
-        bh=tzgF2lLRVeO9JbCxJ6yO7uNVPTSA0/Rh2rbE1TmBoxs=;
+        s=korg; t=1644232852;
+        bh=2K2GpP7nuqFATal9aoLAU6lo/neZKGJn0bBAFRix2cE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uX7ZnLp0r+ITwFkZPBvmyMgfN/ZG0pFX/kYkXIS60NYtUy31kPRIQ4pF4fttZw7kQ
-         AaGFcdQx9bu0lNERJRl22TINzxqkVZDQeglJ3qp5k+RF0ams6NmAEqNCG5PkDsOd5t
-         ngCHmCq+qr+k2jRdg0SJuaW3L+K39qMOIapdN2rU=
+        b=ZdJ/L2r74+2ED74WoYq28ckN7OxsTIoFhV54ehzbdDy/UpSwLrajy+YbUCvxlJfnO
+         CoLCaJ3QvotqdClKBQ7uCT7DFqFBCQHryIpZDfncqQTVUBN/zniuYdgafJ+ASAav/y
+         fqoJ6Vt8Iqsep7/v2DbKlpxyA/hxBcYqp6G4mioE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Steven Price <steven.price@arm.com>,
-        James Morse <james.morse@arm.com>,
-        Marc Zyngier <maz@kernel.org>
-Subject: [PATCH 5.15 037/110] KVM: arm64: Avoid consuming a stale esr value when SError occur
+        stable@vger.kernel.org, Christian Lachner <gladiac@gmail.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.10 12/74] ALSA: hda/realtek: Fix silent output on Gigabyte X570 Aorus Xtreme after reboot from Windows
 Date:   Mon,  7 Feb 2022 12:06:10 +0100
-Message-Id: <20220207103803.530037238@linuxfoundation.org>
+Message-Id: <20220207103757.632250161@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
-References: <20220207103802.280120990@linuxfoundation.org>
+In-Reply-To: <20220207103757.232676988@linuxfoundation.org>
+References: <20220207103757.232676988@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,51 +54,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: James Morse <james.morse@arm.com>
+From: Christian Lachner <gladiac@gmail.com>
 
-commit 1c71dbc8a179d99dd9bb7e7fc1888db613cf85de upstream.
+commit ea3541961376f733373839cc90493aafa8a7f733 upstream.
 
-When any exception other than an IRQ occurs, the CPU updates the ESR_EL2
-register with the exception syndrome. An SError may also become pending,
-and will be synchronised by KVM. KVM notes the exception type, and whether
-an SError was synchronised in exit_code.
+This commit switches the Gigabyte X570 Aorus Xtreme from using the
+ALC1220_FIXUP_CLEVO_P950 to the ALC1220_FIXUP_GB_X570 quirk. This fixes
+the no-audio after reboot from windows problem.
 
-When an exception other than an IRQ occurs, fixup_guest_exit() updates
-vcpu->arch.fault.esr_el2 from the hardware register. When an SError was
-synchronised, the vcpu esr value is used to determine if the exception
-was due to an HVC. If so, ELR_EL2 is moved back one instruction. This
-is so that KVM can process the SError first, and re-execute the HVC if
-the guest survives the SError.
-
-But if an IRQ synchronises an SError, the vcpu's esr value is stale.
-If the previous non-IRQ exception was an HVC, KVM will corrupt ELR_EL2,
-causing an unrelated guest instruction to be executed twice.
-
-Check ARM_EXCEPTION_CODE() before messing with ELR_EL2, IRQs don't
-update this register so don't need to check.
-
-Fixes: defe21f49bc9 ("KVM: arm64: Move PC rollback on SError to HYP")
-Cc: stable@vger.kernel.org
-Reported-by: Steven Price <steven.price@arm.com>
-Signed-off-by: James Morse <james.morse@arm.com>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220127122052.1584324-3-james.morse@arm.com
+BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=205275
+Signed-off-by: Christian Lachner <gladiac@gmail.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220129113243.93068-4-gladiac@gmail.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/kvm/hyp/include/hyp/switch.h |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ sound/pci/hda/patch_realtek.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/arch/arm64/kvm/hyp/include/hyp/switch.h
-+++ b/arch/arm64/kvm/hyp/include/hyp/switch.h
-@@ -425,7 +425,8 @@ static inline bool fixup_guest_exit(stru
- 	if (ARM_EXCEPTION_CODE(*exit_code) != ARM_EXCEPTION_IRQ)
- 		vcpu->arch.fault.esr_el2 = read_sysreg_el2(SYS_ESR);
- 
--	if (ARM_SERROR_PENDING(*exit_code)) {
-+	if (ARM_SERROR_PENDING(*exit_code) &&
-+	    ARM_EXCEPTION_CODE(*exit_code) != ARM_EXCEPTION_IRQ) {
- 		u8 esr_ec = kvm_vcpu_trap_get_class(vcpu);
- 
- 		/*
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -2598,7 +2598,7 @@ static const struct snd_pci_quirk alc882
+ 	SND_PCI_QUIRK(0x1458, 0xa002, "Gigabyte EP45-DS3/Z87X-UD3H", ALC889_FIXUP_FRONT_HP_NO_PRESENCE),
+ 	SND_PCI_QUIRK(0x1458, 0xa0b8, "Gigabyte AZ370-Gaming", ALC1220_FIXUP_GB_DUAL_CODECS),
+ 	SND_PCI_QUIRK(0x1458, 0xa0cd, "Gigabyte X570 Aorus Master", ALC1220_FIXUP_GB_X570),
+-	SND_PCI_QUIRK(0x1458, 0xa0ce, "Gigabyte X570 Aorus Xtreme", ALC1220_FIXUP_CLEVO_P950),
++	SND_PCI_QUIRK(0x1458, 0xa0ce, "Gigabyte X570 Aorus Xtreme", ALC1220_FIXUP_GB_X570),
+ 	SND_PCI_QUIRK(0x1458, 0xa0d5, "Gigabyte X570S Aorus Master", ALC1220_FIXUP_GB_X570),
+ 	SND_PCI_QUIRK(0x1462, 0x11f7, "MSI-GE63", ALC1220_FIXUP_CLEVO_P950),
+ 	SND_PCI_QUIRK(0x1462, 0x1228, "MSI-GP63", ALC1220_FIXUP_CLEVO_P950),
 
 

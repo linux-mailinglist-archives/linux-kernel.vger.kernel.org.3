@@ -2,54 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F341E4AB3EE
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 07:12:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 835004AB3CF
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 07:12:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349477AbiBGFw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 00:52:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50632 "EHLO
+        id S1350610AbiBGFwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 00:52:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352075AbiBGEsf (ORCPT
+        with ESMTP id S241322AbiBGEsV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 23:48:35 -0500
+        Sun, 6 Feb 2022 23:48:21 -0500
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 622E0C043181;
-        Sun,  6 Feb 2022 20:48:35 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBDA1C043181;
+        Sun,  6 Feb 2022 20:48:20 -0800 (PST)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id CCCD8210E8;
-        Mon,  7 Feb 2022 04:48:33 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 79FCD210E8;
+        Mon,  7 Feb 2022 04:48:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1644209313; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1644209299; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ca/QMA9b8aSP2XqDNpzMoh70WOqFOvfMXBDfQmXLg8g=;
-        b=g7MhZp92/rnAsaBQF/LBN2grTXpM1lSbRGyvPNrVbdb93Hur/KShishK0kboEEwtuBgXEN
-        eV5m3zMF/R1LupwK2CXzQ0u20tEnJ9/jxsjPA8hEJhCJA48lpiq2r6PjIQxxf6AYRjBofP
-        Fhn0FQcRrR9S9O3YbkmJ9Fq76of65ME=
+        bh=Cfq4C5n0j+9ECeq3Bau2+AONhc0gqMkxIyut8YkPtic=;
+        b=hgCZHV82MSeCfvaBuyVLoaZFgR2bAwnq2EwfvobATSy1y0Acb2GWpRb/98vu5xbNi/VbtX
+        3O+ymKERrikNj+QdS8RRLvotispWnW0mld72vuhTX30xlfM+Kljy5qrCjzTx4X8DS1pgRm
+        naXBFfVimEaA0fUYKm8uaozUcxwuqno=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1644209313;
+        s=susede2_ed25519; t=1644209299;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ca/QMA9b8aSP2XqDNpzMoh70WOqFOvfMXBDfQmXLg8g=;
-        b=S7cvC95vxV7Ud1UDWIFO6Oa2myUbnd6qE+5EbMwEIspBQunKCydhhC2WbDtoFc/abo0+oz
-        jz1Nwrey9mHimyDg==
+        bh=Cfq4C5n0j+9ECeq3Bau2+AONhc0gqMkxIyut8YkPtic=;
+        b=i6Tee3fCM6I1m/ImAiY+h0T6ZFa3vYICUzE299xZFiVQv5P8W7ze9YcOUifBiJHL5woRsG
+        YBkWVL1UV/SIISAg==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7A6061330E;
-        Mon,  7 Feb 2022 04:48:30 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7FFA11330E;
+        Mon,  7 Feb 2022 04:48:16 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id jU5zDZ6kAGJ/NQAAMHmgww
-        (envelope-from <neilb@suse.de>); Mon, 07 Feb 2022 04:48:30 +0000
-Subject: [PATCH 15/21] SUNRPC: remove scheduling boost for "SWAPPER" tasks.
+        id RLw6D5CkAGJoNQAAMHmgww
+        (envelope-from <neilb@suse.de>); Mon, 07 Feb 2022 04:48:16 +0000
+Subject: [PATCH 13/21] SUNRPC/auth: async tasks mustn't block waiting for
+ memory
 From:   NeilBrown <neilb@suse.de>
 To:     Trond Myklebust <trond.myklebust@hammerspace.com>,
         Anna Schumaker <anna.schumaker@netapp.com>,
@@ -61,7 +62,7 @@ To:     Trond Myklebust <trond.myklebust@hammerspace.com>,
 Cc:     linux-nfs@vger.kernel.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
 Date:   Mon, 07 Feb 2022 15:46:01 +1100
-Message-ID: <164420916121.29374.301108979284279934.stgit@noble.brown>
+Message-ID: <164420916119.29374.16954351742259185040.stgit@noble.brown>
 In-Reply-To: <164420889455.29374.17958998143835612560.stgit@noble.brown>
 References: <164420889455.29374.17958998143835612560.stgit@noble.brown>
 User-Agent: StGit/0.23
@@ -78,70 +79,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, tasks marked as "swapper" tasks get put to the front of
-non-priority rpc_queues, and are sorted earlier than non-swapper tasks on
-the transport's ->xmit_queue.
+When memory is short, new worker threads cannot be created and we depend
+on the minimum one rpciod thread to be able to handle everything.  So it
+must not block waiting for memory.
 
-This is pointless as currently *all* tasks for a mount that has swap
-enabled on *any* file are marked as "swapper" tasks.  So the net result
-is that the non-priority rpc_queues are reverse-ordered (LIFO).
+mempools are particularly a problem as memory can only be released back
+to the mempool by an async rpc task running.  If all available workqueue
+threads are waiting on the mempool, no thread is available to return
+anything.
 
-This scheduling boost is not necessary to avoid deadlocks, and hurts
-fairness, so remove it.  If there were a need to expedite some requests,
-the tk_priority mechanism is a more appropriate tool.
+lookup_cred() can block on a mempool or kmalloc - and this can cause
+deadlocks.  So add a new RPCAUTH_LOOKUP flag for async lookups and don't
+block on memory.  If the -ENOMEM gets back to call_refreshresult(), wait
+a short while and try again.  HZ>>4 is chosen as it is used elsewhere
+for -ENOMEM retries.
 
 Signed-off-by: NeilBrown <neilb@suse.de>
 ---
- net/sunrpc/sched.c |    7 -------
- net/sunrpc/xprt.c  |   11 -----------
- 2 files changed, 18 deletions(-)
+ include/linux/sunrpc/auth.h    |    1 +
+ net/sunrpc/auth.c              |    6 +++++-
+ net/sunrpc/auth_gss/auth_gss.c |    6 +++++-
+ net/sunrpc/auth_unix.c         |   10 ++++++++--
+ net/sunrpc/clnt.c              |    3 +++
+ 5 files changed, 22 insertions(+), 4 deletions(-)
 
-diff --git a/net/sunrpc/sched.c b/net/sunrpc/sched.c
-index d5b6e897f5a5..256302bf6557 100644
---- a/net/sunrpc/sched.c
-+++ b/net/sunrpc/sched.c
-@@ -186,11 +186,6 @@ static void __rpc_add_wait_queue_priority(struct rpc_wait_queue *queue,
+diff --git a/include/linux/sunrpc/auth.h b/include/linux/sunrpc/auth.h
+index 98da816b5fc2..3e6ce288a7fc 100644
+--- a/include/linux/sunrpc/auth.h
++++ b/include/linux/sunrpc/auth.h
+@@ -99,6 +99,7 @@ struct rpc_auth_create_args {
+ 
+ /* Flags for rpcauth_lookupcred() */
+ #define RPCAUTH_LOOKUP_NEW		0x01	/* Accept an uninitialised cred */
++#define RPCAUTH_LOOKUP_ASYNC		0x02	/* Don't block waiting for memory */
  
  /*
-  * Add new request to wait queue.
-- *
-- * Swapper tasks always get inserted at the head of the queue.
-- * This should avoid many nasty memory deadlocks and hopefully
-- * improve overall performance.
-- * Everyone else gets appended to the queue to ensure proper FIFO behavior.
-  */
- static void __rpc_add_wait_queue(struct rpc_wait_queue *queue,
- 		struct rpc_task *task,
-@@ -199,8 +194,6 @@ static void __rpc_add_wait_queue(struct rpc_wait_queue *queue,
- 	INIT_LIST_HEAD(&task->u.tk_wait.timer_list);
- 	if (RPC_IS_PRIORITY(queue))
- 		__rpc_add_wait_queue_priority(queue, task, queue_priority);
--	else if (RPC_IS_SWAPPER(task))
--		list_add(&task->u.tk_wait.list, &queue->tasks[0]);
- 	else
- 		list_add_tail(&task->u.tk_wait.list, &queue->tasks[0]);
- 	task->tk_waitqueue = queue;
-diff --git a/net/sunrpc/xprt.c b/net/sunrpc/xprt.c
-index 47d207e416ab..a0a2583fe941 100644
---- a/net/sunrpc/xprt.c
-+++ b/net/sunrpc/xprt.c
-@@ -1354,17 +1354,6 @@ xprt_request_enqueue_transmit(struct rpc_task *task)
- 				INIT_LIST_HEAD(&req->rq_xmit2);
- 				goto out;
- 			}
--		} else if (RPC_IS_SWAPPER(task)) {
--			list_for_each_entry(pos, &xprt->xmit_queue, rq_xmit) {
--				if (pos->rq_cong || pos->rq_bytes_sent)
--					continue;
--				if (RPC_IS_SWAPPER(pos->rq_task))
--					continue;
--				/* Note: req is added _before_ pos */
--				list_add_tail(&req->rq_xmit, &pos->rq_xmit);
--				INIT_LIST_HEAD(&req->rq_xmit2);
--				goto out;
--			}
- 		} else if (!req->rq_seqno) {
- 			list_for_each_entry(pos, &xprt->xmit_queue, rq_xmit) {
- 				if (pos->rq_task->tk_owner != task->tk_owner)
+  * Client authentication ops
+diff --git a/net/sunrpc/auth.c b/net/sunrpc/auth.c
+index a9f0d17fdb0d..6bfa19f9fa6a 100644
+--- a/net/sunrpc/auth.c
++++ b/net/sunrpc/auth.c
+@@ -615,6 +615,8 @@ rpcauth_bind_root_cred(struct rpc_task *task, int lookupflags)
+ 	};
+ 	struct rpc_cred *ret;
+ 
++	if (RPC_IS_ASYNC(task))
++		lookupflags |= RPCAUTH_LOOKUP_ASYNC;
+ 	ret = auth->au_ops->lookup_cred(auth, &acred, lookupflags);
+ 	put_cred(acred.cred);
+ 	return ret;
+@@ -631,6 +633,8 @@ rpcauth_bind_machine_cred(struct rpc_task *task, int lookupflags)
+ 
+ 	if (!acred.principal)
+ 		return NULL;
++	if (RPC_IS_ASYNC(task))
++		lookupflags |= RPCAUTH_LOOKUP_ASYNC;
+ 	return auth->au_ops->lookup_cred(auth, &acred, lookupflags);
+ }
+ 
+@@ -654,7 +658,7 @@ rpcauth_bindcred(struct rpc_task *task, const struct cred *cred, int flags)
+ 	};
+ 
+ 	if (flags & RPC_TASK_ASYNC)
+-		lookupflags |= RPCAUTH_LOOKUP_NEW;
++		lookupflags |= RPCAUTH_LOOKUP_NEW | RPCAUTH_LOOKUP_ASYNC;
+ 	if (task->tk_op_cred)
+ 		/* Task must use exactly this rpc_cred */
+ 		new = get_rpccred(task->tk_op_cred);
+diff --git a/net/sunrpc/auth_gss/auth_gss.c b/net/sunrpc/auth_gss/auth_gss.c
+index 5f42aa5fc612..df72d6301f78 100644
+--- a/net/sunrpc/auth_gss/auth_gss.c
++++ b/net/sunrpc/auth_gss/auth_gss.c
+@@ -1341,7 +1341,11 @@ gss_hash_cred(struct auth_cred *acred, unsigned int hashbits)
+ static struct rpc_cred *
+ gss_lookup_cred(struct rpc_auth *auth, struct auth_cred *acred, int flags)
+ {
+-	return rpcauth_lookup_credcache(auth, acred, flags, GFP_NOFS);
++	gfp_t gfp = GFP_NOFS;
++
++	if (flags & RPCAUTH_LOOKUP_ASYNC)
++		gfp = GFP_NOWAIT | __GFP_NOWARN;
++	return rpcauth_lookup_credcache(auth, acred, flags, gfp);
+ }
+ 
+ static struct rpc_cred *
+diff --git a/net/sunrpc/auth_unix.c b/net/sunrpc/auth_unix.c
+index e7df1f782b2e..e5819265dd1b 100644
+--- a/net/sunrpc/auth_unix.c
++++ b/net/sunrpc/auth_unix.c
+@@ -43,8 +43,14 @@ unx_destroy(struct rpc_auth *auth)
+ static struct rpc_cred *
+ unx_lookup_cred(struct rpc_auth *auth, struct auth_cred *acred, int flags)
+ {
+-	struct rpc_cred *ret = mempool_alloc(unix_pool, GFP_NOFS);
+-
++	gfp_t gfp = GFP_NOFS;
++	struct rpc_cred *ret;
++
++	if (flags & RPCAUTH_LOOKUP_ASYNC)
++		gfp = GFP_NOWAIT | __GFP_NOWARN;
++	ret = mempool_alloc(unix_pool, gfp);
++	if (!ret)
++		return ERR_PTR(-ENOMEM);
+ 	rpcauth_init_cred(ret, acred, auth, &unix_credops);
+ 	ret->cr_flags = 1UL << RPCAUTH_CRED_UPTODATE;
+ 	return ret;
+diff --git a/net/sunrpc/clnt.c b/net/sunrpc/clnt.c
+index c83fe618767c..d1fb7c0c7685 100644
+--- a/net/sunrpc/clnt.c
++++ b/net/sunrpc/clnt.c
+@@ -1745,6 +1745,9 @@ call_refreshresult(struct rpc_task *task)
+ 		task->tk_cred_retry--;
+ 		trace_rpc_retry_refresh_status(task);
+ 		return;
++	case -ENOMEM:
++		rpc_delay(task, HZ >> 4);
++		return;
+ 	}
+ 	trace_rpc_refresh_status(task);
+ 	rpc_call_rpcerror(task, status);
 
 

@@ -2,116 +2,295 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B74DD4ACCEE
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:06:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B38794ACD20
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:07:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232503AbiBHBEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 20:04:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43910 "EHLO
+        id S1345094AbiBHBE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 20:04:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237255AbiBGXjN (ORCPT
+        with ESMTP id S233102AbiBGXTd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 18:39:13 -0500
-X-Greylist: delayed 1473 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 15:39:12 PST
-Received: from qproxy6-pub.mail.unifiedlayer.com (qproxy6-pub.mail.unifiedlayer.com [69.89.23.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64888C061355
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 15:39:12 -0800 (PST)
-Received: from progateway7-pub.mail.pro1.eigbox.com (unknown [67.222.38.55])
-        by qproxy6.mail.unifiedlayer.com (Postfix) with ESMTP id 2F3098027B56
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 23:14:38 +0000 (UTC)
-Received: from cmgw11.mail.unifiedlayer.com (unknown [10.0.90.126])
-        by progateway7.mail.pro1.eigbox.com (Postfix) with ESMTP id 8E1A410047C07
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 23:14:37 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id HDDRn1o1Wwm8iHDDRn1zYj; Mon, 07 Feb 2022 23:14:37 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=DpSTREz+ c=1 sm=1 tr=0 ts=6201a7dd
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=oGFeUVbbRNcA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=t6qOm/KOiiaWIRHa5sTT1Md15Mq9agO6m6D3H1sdlVI=; b=uf2Itfti2TXiliur05qCnyJUKY
-        rZeyAwkVfF0LHb0EoXbSI6xLqDJiXju5aBJovlfQKC6iQUT17Il+kRj9sDEzONC6wcdz+Y9wTeSiw
-        PFa4/Qm5yg4svSnGWIIWSmiXN;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:53750 helo=[10.0.1.23])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <re@w6rz.net>)
-        id 1nHDDQ-0024ix-Ko; Mon, 07 Feb 2022 16:14:36 -0700
-Message-ID: <60a77fd9-299a-ff38-7ccb-1d1e10f30a8d@w6rz.net>
-Date:   Mon, 7 Feb 2022 15:14:34 -0800
+        Mon, 7 Feb 2022 18:19:33 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A0CC0612A4
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 15:19:32 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id v4so8550751pjh.2
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 15:19:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ThSHxAOPclKygYpsG6VmV+qfMk9x1IPAyMO8Co5HbOc=;
+        b=kmb14pxupGC2sDAnbX9Bh5L1woRvkv3WkvbZIKkM3MMG262WOPVKK1LtB05kz7o8V+
+         B7OjeVwlXI8mBEHkADnt89aw5Xxa/lep6snbGzcw4p/9IQm7xyHWeCJbaltKlok9XRZV
+         AylZGLQomu8E1huNtupY74xKbIDWCw7GFavFGmjLX+vlIZURQTSX/7iqrjFxBVqxBPnj
+         OcrCzCT7h8UJPu2yyadZG8wGYAfEFbHPOjFokH61y4YV2cJY83o9BSUVJp64mRUyU3/j
+         /MuMYDsoi7wxyPUc8GXI/0TuY9/VfzRFkohcTySRa7fb0Sh88s0y/39UF0ENE6sE9zab
+         NMBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ThSHxAOPclKygYpsG6VmV+qfMk9x1IPAyMO8Co5HbOc=;
+        b=eHpdVqhNVxlFZsLfyGC5riQV6XJLREA+WUdFI0yrx969OHrivmcbWZpQMD4Ink05Bx
+         NyFQb2gV9VZWrz3nEKMaLz/Tp7FBt96yWv9liOkxh91Ewwqk2OjfiaFN+BREymWlrMpO
+         I95Sx58h9/Wg1Ezg1HyHtsHNhlur0s/toGgciFE1LBYuw6G0gkMEFgS0qiS+cdy34OQi
+         oTle3r/68l7A9Vga9j/3VKjhWXXwbwiZaF5vGw73V35YYltudC7OXOWkeH0NwsN2oT2c
+         s9jr0c5/oWoyElMjOmJ4hZnzWpjwBXX0t1bjPHgH+Xi7eCy8shggr5nDXcio5WBl+s5E
+         79sg==
+X-Gm-Message-State: AOAM530xtujGfmkl/frs1hbnBrqWj5cB54wXcmQQVuTHf2eR5/s7reeO
+        bf0TTHEF46YqPMQsYKUUD2Sv9A==
+X-Google-Smtp-Source: ABdhPJySKVrDECFoi48FdGe8WJ8TGcWRJOgHFX/qwVFLbqTDSNz6K55tNKXLPHAiphc9QysAK12LdA==
+X-Received: by 2002:a17:902:7e06:: with SMTP id b6mr1915957plm.58.1644275971681;
+        Mon, 07 Feb 2022 15:19:31 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id o125sm9725998pfb.116.2022.02.07.15.19.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Feb 2022 15:19:31 -0800 (PST)
+Date:   Mon, 7 Feb 2022 23:19:27 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Peter Gonda <pgonda@google.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Marc Orr <marcorr@google.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: SEV: Allow SEV intra-host migration of VM with
+ mirrors
+Message-ID: <YgGo/5GyJVfGH00T@google.com>
+References: <20220111154048.2108264-1-pgonda@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 5.15 000/111] 5.15.22-rc2 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220207133903.595766086@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-In-Reply-To: <20220207133903.595766086@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1nHDDQ-0024ix-Ko
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.23]) [73.162.232.9]:53750
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 13
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220111154048.2108264-1-pgonda@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/7/22 06:04, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.22 release.
-> There are 111 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 09 Feb 2022 13:38:43 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.22-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Tue, Jan 11, 2022, Peter Gonda wrote:
+> @@ -1623,22 +1624,41 @@ static void sev_unlock_vcpus_for_migration(struct kvm *kvm)
+>  	}
+>  }
+>  
+> -static void sev_migrate_from(struct kvm_sev_info *dst,
+> -			      struct kvm_sev_info *src)
+> +static void sev_migrate_from(struct kvm *dst_kvm, struct kvm *src_kvm)
+>  {
+> +	struct kvm_sev_info *dst = &to_kvm_svm(dst_kvm)->sev_info;
+> +	struct kvm_sev_info *src = &to_kvm_svm(src_kvm)->sev_info;
+> +	struct kvm_sev_info *mirror, *tmp;
+> +
+>  	dst->active = true;
+>  	dst->asid = src->asid;
+>  	dst->handle = src->handle;
+>  	dst->pages_locked = src->pages_locked;
+>  	dst->enc_context_owner = src->enc_context_owner;
+> +	dst->num_mirrored_vms = src->num_mirrored_vms;
+>  
+>  	src->asid = 0;
+>  	src->active = false;
+>  	src->handle = 0;
+>  	src->pages_locked = 0;
+>  	src->enc_context_owner = NULL;
+> +	src->num_mirrored_vms = 0;
+>  
+>  	list_cut_before(&dst->regions_list, &src->regions_list, &src->regions_list);
+> +	list_cut_before(&dst->mirror_vms, &src->mirror_vms, &src->mirror_vms);
+> +
+> +	/*
+> +	 * If this VM has mirrors we need to update the KVM refcounts from the
+> +	 * source to the destination.
+> +	 */
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+It's worth calling out that a reference is being taken on behalf of the mirror,
+that detail is easy to miss.  And maybe call out that the caller holds a reference
+to @src_kvm?
 
-Tested-by: Ron Economos <re@w6rz.net>
+	/*
+	 * If this VM has mirrors, "transfer" each mirror's refcount of the
+	 * source to the destination (this KVM).  The caller holds a reference
+	 * to the source, so there's no danger of use-after-free.
+	 */
+
+> +	if (dst->num_mirrored_vms > 0) {
+> +		list_for_each_entry_safe(mirror, tmp, &dst->mirror_vms,
+> +					  mirror_entry) {
+> +			kvm_get_kvm(dst_kvm);
+> +			kvm_put_kvm(src_kvm);
+> +			mirror->enc_context_owner = dst_kvm;
+> +		}
+> +	}
+>  }
+>  
+>  static int sev_es_migrate_from(struct kvm *dst, struct kvm *src)
+
+...
+
+> @@ -2050,10 +2062,17 @@ void sev_vm_destroy(struct kvm *kvm)
+>  	if (is_mirroring_enc_context(kvm)) {
+>  		struct kvm *owner_kvm = sev->enc_context_owner;
+>  		struct kvm_sev_info *owner_sev = &to_kvm_svm(owner_kvm)->sev_info;
+> +		struct kvm_sev_info *mirror, *tmp;
+>  
+>  		mutex_lock(&owner_kvm->lock);
+>  		if (!WARN_ON(!owner_sev->num_mirrored_vms))
+>  			owner_sev->num_mirrored_vms--;
+> +
+> +		list_for_each_entry_safe(mirror, tmp, &owner_sev->mirror_vms,
+> +					  mirror_entry)
+> +			if (mirror == sev)
+> +				list_del(&mirror->mirror_entry);
+> +
+
+There's no need to walk the list just to find the entry you already have.  Maaaaybe
+if you were sanity checking, but it's not like we can do anything helpful if the
+sanity check fails, so eating a #GP due to consuming e.g. LIST_POISON1 is just as
+good as anything else.
+
+	if (is_mirroring_enc_context(kvm)) {
+		struct kvm *owner_kvm = sev->enc_context_owner;
+
+		mutex_lock(&owner_kvm->lock);
+		list_del(&->mirror_entry);
+		mutex_unlock(&owner_kvm->lock);
+		kvm_put_kvm(owner_kvm);
+		return;
+	}
+
+>  		mutex_unlock(&owner_kvm->lock);
+>  		kvm_put_kvm(owner_kvm);
+>  		return;
+> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+> index daa8ca84afcc..b9f5e33d5232 100644
+> --- a/arch/x86/kvm/svm/svm.h
+> +++ b/arch/x86/kvm/svm/svm.h
+> @@ -81,6 +81,10 @@ struct kvm_sev_info {
+>  	u64 ap_jump_table;	/* SEV-ES AP Jump Table address */
+>  	struct kvm *enc_context_owner; /* Owner of copied encryption context */
+>  	unsigned long num_mirrored_vms; /* Number of VMs sharing this ASID */
+> +	union {
+> +		struct list_head mirror_vms; /* List of VMs mirroring */
+> +		struct list_head mirror_entry; /* Use as a list entry of mirrors */
+> +	};
+
+
+Whoops.  IIRC, I suggested a union for tracking mirrors vs mirrored.  After seeing
+the code, that was a bad suggestion.  Memory isn't at a premimum for a per-VM
+object, so storing an extra list_head is a non-issue.
+
+If we split the two, then num_mirrored_vms goes away, and more importantly we won't
+have to deal with bugs where we inevitably forget to guard access to the union with
+a check against num_mirrored_vms.
+
+E.g. (completely untested and probably incomplete)
+
+---
+ arch/x86/kvm/svm/sev.c | 32 +++++++++-----------------------
+ arch/x86/kvm/svm/svm.h |  7 ++-----
+ 2 files changed, 11 insertions(+), 28 deletions(-)
+
+diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+index 369cf8c4da61..41f7e733c33e 100644
+--- a/arch/x86/kvm/svm/sev.c
++++ b/arch/x86/kvm/svm/sev.c
+@@ -1635,29 +1635,25 @@ static void sev_migrate_from(struct kvm *dst_kvm, struct kvm *src_kvm)
+ 	dst->handle = src->handle;
+ 	dst->pages_locked = src->pages_locked;
+ 	dst->enc_context_owner = src->enc_context_owner;
+-	dst->num_mirrored_vms = src->num_mirrored_vms;
+
+ 	src->asid = 0;
+ 	src->active = false;
+ 	src->handle = 0;
+ 	src->pages_locked = 0;
+ 	src->enc_context_owner = NULL;
+-	src->num_mirrored_vms = 0;
+
+ 	list_cut_before(&dst->regions_list, &src->regions_list, &src->regions_list);
+ 	list_cut_before(&dst->mirror_vms, &src->mirror_vms, &src->mirror_vms);
+
+ 	/*
+-	 * If this VM has mirrors we need to update the KVM refcounts from the
+-	 * source to the destination.
++	 * If this VM has mirrors, "transfer" each mirror's refcount from the
++	 * source to the destination (this KVM).  The caller holds a reference
++	 * to the source, so there's no danger of use-after-free.
+ 	 */
+-	if (dst->num_mirrored_vms > 0) {
+-		list_for_each_entry_safe(mirror, tmp, &dst->mirror_vms,
+-					  mirror_entry) {
+-			kvm_get_kvm(dst_kvm);
+-			kvm_put_kvm(src_kvm);
+-			mirror->enc_context_owner = dst_kvm;
+-		}
++	list_for_each_entry_safe(mirror, tmp, &dst->mirror_vms, mirror_entry) {
++		kvm_get_kvm(dst_kvm);
++		kvm_put_kvm(src_kvm);
++		mirror->enc_context_owner = dst_kvm;
+ 	}
+ }
+
+@@ -2019,7 +2015,6 @@ int sev_vm_copy_enc_context_from(struct kvm *kvm, unsigned int source_fd)
+ 	 */
+ 	source_sev = &to_kvm_svm(source_kvm)->sev_info;
+ 	kvm_get_kvm(source_kvm);
+-	source_sev->num_mirrored_vms++;
+ 	mirror_sev = &to_kvm_svm(kvm)->sev_info;
+ 	list_add_tail(&mirror_sev->mirror_entry, &source_sev->mirror_vms);
+
+@@ -2053,7 +2048,7 @@ void sev_vm_destroy(struct kvm *kvm)
+ 	struct list_head *head = &sev->regions_list;
+ 	struct list_head *pos, *q;
+
+-	WARN_ON(sev->num_mirrored_vms);
++	WARN_ON(!list_empty(&sev->mirror_vms));
+
+ 	if (!sev_guest(kvm))
+ 		return;
+@@ -2061,18 +2056,9 @@ void sev_vm_destroy(struct kvm *kvm)
+ 	/* If this is a mirror_kvm release the enc_context_owner and skip sev cleanup */
+ 	if (is_mirroring_enc_context(kvm)) {
+ 		struct kvm *owner_kvm = sev->enc_context_owner;
+-		struct kvm_sev_info *owner_sev = &to_kvm_svm(owner_kvm)->sev_info;
+-		struct kvm_sev_info *mirror, *tmp;
+
+ 		mutex_lock(&owner_kvm->lock);
+-		if (!WARN_ON(!owner_sev->num_mirrored_vms))
+-			owner_sev->num_mirrored_vms--;
+-
+-		list_for_each_entry_safe(mirror, tmp, &owner_sev->mirror_vms,
+-					  mirror_entry)
+-			if (mirror == sev)
+-				list_del(&mirror->mirror_entry);
+-
++		list_del(&mirror->mirror_entry);
+ 		mutex_unlock(&owner_kvm->lock);
+ 		kvm_put_kvm(owner_kvm);
+ 		return;
+diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+index 0876329f273d..79bf568c2558 100644
+--- a/arch/x86/kvm/svm/svm.h
++++ b/arch/x86/kvm/svm/svm.h
+@@ -79,11 +79,8 @@ struct kvm_sev_info {
+ 	struct list_head regions_list;  /* List of registered regions */
+ 	u64 ap_jump_table;	/* SEV-ES AP Jump Table address */
+ 	struct kvm *enc_context_owner; /* Owner of copied encryption context */
+-	unsigned long num_mirrored_vms; /* Number of VMs sharing this ASID */
+-	union {
+-		struct list_head mirror_vms; /* List of VMs mirroring */
+-		struct list_head mirror_entry; /* Use as a list entry of mirrors */
+-	};
++	struct list_head mirror_vms; /* List of VMs mirroring */
++	struct list_head mirror_entry; /* Use as a list entry of mirrors */
+ 	struct misc_cg *misc_cg; /* For misc cgroup accounting */
+ 	atomic_t migration_in_progress;
+ };
+
+base-commit: 618a9a6fda17f48d86a1ce9851bd8ceffdc57d75
+--
 

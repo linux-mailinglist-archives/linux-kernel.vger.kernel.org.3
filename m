@@ -2,97 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 954204AC8DD
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 19:52:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EAD94AC8DB
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 19:52:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234369AbiBGSuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 13:50:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59898 "EHLO
+        id S233559AbiBGSuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 13:50:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233874AbiBGSrH (ORCPT
+        with ESMTP id S235259AbiBGSra (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 13:47:07 -0500
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22309C0401DC
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 10:47:06 -0800 (PST)
-Received: from apollo.. (unknown [IPv6:2a02:810b:4340:43bf:4685:ff:fe12:5967])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 909EB22239;
-        Mon,  7 Feb 2022 19:47:03 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1644259624;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=GSEvHFnULQv/IzdQQUd+TGASCzwSK/pi2J8B80qzsvo=;
-        b=GUL29nJQXjfU40722IVcv9BU22uXsKynU+6OvtJTQlQkxIkJ5cEAq1Q1hSwMlBCza37eYX
-        j2VBFc7Z9e9tz/vhRKtr7WL2hxtk9FrUy1ksrrNAxwd/3MoMOOOAFWjxfM0Z6ZwLodm16A
-        uLxBGPqXFOaG0QSK0mnGkcKBf7u4TQg=
-From:   Michael Walle <michael@walle.cc>
-To:     soc@kernel.org, linux-kernel@vger.kernel.org
-Cc:     Lee Jones <lee.jones@linaro.org>, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>,
-        Michael Walle <michael@walle.cc>
-Subject: [PATCH] MAINTAINERS: add myself as a maintainer for the sl28cpld
-Date:   Mon,  7 Feb 2022 19:46:52 +0100
-Message-Id: <20220207184652.1218447-1-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
+        Mon, 7 Feb 2022 13:47:30 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3CFDC0401DA;
+        Mon,  7 Feb 2022 10:47:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=QN6yfdo8RIWM0BFuvlpHBuhEA39RjktPtMeJoHOPZ3k=; b=FhiBYuqQqKT3nv9OEbw64uUrre
+        dkZnveEyOXp6nG2wEHaxtG8QUm2SiisUAuMu3Z6EjbybxnyNV/gJYFQ/q5RjcaIiMsVTc0nSBm5ZW
+        z0gr5pT0cFtRc1bDQxNO7e+aKjIU80WgSlcXdNGIpGmTFZJf0Cny5Z+0NoqGKkmaNA6YZDQuHq5ui
+        XIpkEh2CIRhp0jcpduFORv1lBxpEnJB8dYfRSqg2QPO+ZyV/Yni5ke903nRPZRADlKI2fE/dPUEmP
+        sCHBND9foCAEYyzQGNRnWJFegsszhRKXLPb+wXfVwOXFmx7AQyvIjDzatos2kzr0JbNuNzctfqHXt
+        Re+MJDWQ==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nH92s-001mkC-AN; Mon, 07 Feb 2022 18:47:26 +0000
+Message-ID: <7753c65a-ce16-eb4f-395b-bc5e54c647c6@infradead.org>
+Date:   Mon, 7 Feb 2022 10:47:21 -0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 2/2] dell-smm-hwmon: rewrite CONFIG_I8K description
+Content-Language: en-US
+To:     =?UTF-8?Q?Mateusz_Jo=c5=84czyk?= <mat.jonczyk@o2.pl>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-hwmon@vger.kernel.org
+Cc:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>
+References: <20220207182940.242838-1-mat.jonczyk@o2.pl>
+ <20220207182940.242838-2-mat.jonczyk@o2.pl>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220207182940.242838-2-mat.jonczyk@o2.pl>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The sl28cpld is a management controller found on the Kontron SMARC-sAL28
-board for now. Support for it was added by me quite a while ago, but I
-didn't add a MAINTAINERS entry. Add it now.
+Hi--
 
-Signed-off-by: Michael Walle <michael@walle.cc>
----
-Hi,
+On 2/7/22 10:29, Mateusz Jończyk wrote:
+> It is not the laptops, but the /proc/i8k interface that is legacy. The
+> old description was confusing, fix this.
+> 
+> I'm not a native English speaker, so I'd like that someone proofread
+> this description.
+> 
+> Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
+> Cc: Pali Rohár <pali@kernel.org>
+> Cc: Jean Delvare <jdelvare@suse.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: Hans de Goede <hdegoede@redhat.com>
+> Cc: Mark Gross <markgross@kernel.org>
+> ---
+>  drivers/hwmon/Kconfig | 17 ++++++++---------
+>  1 file changed, 8 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index dd244aa747ad..8f9f41a9ef70 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -506,18 +506,17 @@ config SENSORS_DELL_SMM
+>  	  userspace interface for i8kutils package.
+>  
+>  config I8K
+> -	bool "Dell i8k legacy laptop support"
+> +	bool "Legacy /proc/i8k interface of Dell laptop SMM BIOS hwmon driver"
+>  	depends on SENSORS_DELL_SMM
+>  	help
+> -	  This option enables legacy /proc/i8k userspace interface in hwmon
+> -	  dell-smm-hwmon driver. Character file /proc/i8k reports bios version,
+> -	  temperature and allows controlling fan speeds of Dell laptops via
+> -	  System Management Mode. For old Dell laptops (like Dell Inspiron 8000)
+> -	  it reports also power and hotkey status. For fan speed control is
+> -	  needed userspace package i8kutils.
+> +	  This option enables the legacy /proc/i8k userspace interface of the
+> +	  dell-smm-hwmon driver. The character file /proc/i8k exposes the BIOS
+> +	  version, temperatures and allows control of fan speeds of some Dell
+> +	  laptops. Sometimes, it reports also power and hotkey status.
 
-since this affects so many subsystems, I'm not sure through which tree this
-should go. I'm sending this to the arm soc maintainers because it's an
-aarch64 board where this driver is used as well as Lee as the MFD
-maintainer.
+	  Comma not needed ^^^; "it also reports ..." would be more common.
 
- MAINTAINERS | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+>  
+> -	  Say Y if you intend to run this kernel on old Dell laptops or want to
+> -	  use userspace package i8kutils.
+> +	  This interface is required to run programs from the i8kutils package.
+> +
+> +	  Say Y if you intend to run userspace programs that use this interface.
+>  	  Say N otherwise.
+>  
+>  config SENSORS_DA9052_ADC
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index ddcee331dc09..c14209168ce6 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17762,6 +17762,21 @@ S:	Maintained
- W:	http://www.winischhofer.at/linuxsisusbvga.shtml
- F:	drivers/usb/misc/sisusbvga/
- 
-+SL28 CPLD MFD DRIVER
-+M:	Michael Walle <michael@walle.cc>
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/gpio/kontron,sl28cpld-gpio.yaml
-+F:	Documentation/devicetree/bindings/hwmon/kontron,sl28cpld-hwmon.yaml
-+F:	Documentation/devicetree/bindings/interrupt-controller/kontron,sl28cpld-intc.yaml
-+F:	Documentation/devicetree/bindings/mfd/kontron,sl28cpld.yaml
-+F:	Documentation/devicetree/bindings/pwm/kontron,sl28cpld-pwm.yaml
-+F:	Documentation/devicetree/bindings/watchdog/kontron,sl28cpld-wdt.yaml
-+F:	drivers/gpio/gpio-sl28cpld.c
-+F:	drivers/hwmon/sl28cpld-hwmon.c
-+F:	drivers/irqchip/irq-sl28cpld.c
-+F:	drivers/pwm/pwm-sl28cpld.c
-+F:	drivers/watchdog/sl28cpld_wdt.c
-+
- SLAB ALLOCATOR
- M:	Christoph Lameter <cl@linux.com>
- M:	Pekka Enberg <penberg@kernel.org>
+thanks.
+
 -- 
-2.30.2
-
+~Randy

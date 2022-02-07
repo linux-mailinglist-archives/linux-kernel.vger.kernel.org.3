@@ -2,44 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BDA94ABBF9
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:45:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CBDB4ABE24
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:05:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386434AbiBGLeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:34:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35992 "EHLO
+        id S1391119AbiBGL6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:58:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383871AbiBGLXu (ORCPT
+        with ESMTP id S1385459AbiBGLby (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:23:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1170FC0401C4;
-        Mon,  7 Feb 2022 03:23:47 -0800 (PST)
+        Mon, 7 Feb 2022 06:31:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 459F0C03FEF8;
+        Mon,  7 Feb 2022 03:30:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AAA01B8111C;
-        Mon,  7 Feb 2022 11:23:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40B5CC004E1;
-        Mon,  7 Feb 2022 11:23:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0D20AB80EC3;
+        Mon,  7 Feb 2022 11:30:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 306ADC004E1;
+        Mon,  7 Feb 2022 11:30:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233025;
-        bh=+0N3nRukO1GQN2mvogj92JZma4Oi/VLjvAT+GztctPg=;
+        s=korg; t=1644233420;
+        bh=/FgX0PQoDe/ke1Z7gTQfTglAyxymyTnBOSUKW6/1TSw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wmGWbHw20WH2Khw9EPB//I847mxUuO+VcSWAdQvxZNv6Ix99M1hGiUji3aY6nMxTZ
-         WIEGLbVo6TJcjchGIpnTsh3/hHpc/0VS9akKzsCfnqwAamtXVSWo+gor41TuVnrex+
-         m83D9WMYlbFR10uvu7KmiSQmiq+9ADM0wlmlbDCo=
+        b=JxwqyzhmQRY/qPzR1H/LrXyJQknHAy/weqv6iNIBkY5wL5/sXAsy1+iwjzmUbs0kX
+         o8uMvDAlwXe1JS5ChLcUo6XoXCraJDWENTKSRZNVLHzQlb0XHgtTD0GK/azBk7CcM+
+         nxwalfUAwXN7Glz+YimLSso9Pjs/MSGW9hOPsov0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xin Yin <yinxin.x@bytedance.com>,
-        Theodore Tso <tytso@mit.edu>, stable@kernel.org
-Subject: [PATCH 5.10 67/74] ext4: prevent used blocks from being allocated during fast commit replay
+        stable@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 092/110] kvm/arm64: rework guest entry logic
 Date:   Mon,  7 Feb 2022 12:07:05 +0100
-Message-Id: <20220207103759.426782898@linuxfoundation.org>
+Message-Id: <20220207103805.516218203@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103757.232676988@linuxfoundation.org>
-References: <20220207103757.232676988@linuxfoundation.org>
+In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
+References: <20220207103802.280120990@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,107 +64,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xin Yin <yinxin.x@bytedance.com>
+From: Mark Rutland <mark.rutland@arm.com>
 
-commit 599ea31d13617c5484c40cdf50d88301dc351cfc upstream.
+[ Upstream commit 8cfe148a7136bc60452a5c6b7ac2d9d15c36909b ]
 
-During fast commit replay procedure, we clear inode blocks bitmap in
-ext4_ext_clear_bb(), this may cause ext4_mb_new_blocks_simple() allocate
-blocks still in use.
+In kvm_arch_vcpu_ioctl_run() we enter an RCU extended quiescent state
+(EQS) by calling guest_enter_irqoff(), and unmasked IRQs prior to
+exiting the EQS by calling guest_exit(). As the IRQ entry code will not
+wake RCU in this case, we may run the core IRQ code and IRQ handler
+without RCU watching, leading to various potential problems.
 
-Make ext4_fc_record_regions() also record physical disk regions used by
-inodes during replay procedure. Then ext4_mb_new_blocks_simple() can
-excludes these blocks in use.
+Additionally, we do not inform lockdep or tracing that interrupts will
+be enabled during guest execution, which caan lead to misleading traces
+and warnings that interrupts have been enabled for overly-long periods.
 
-Signed-off-by: Xin Yin <yinxin.x@bytedance.com>
-Link: https://lore.kernel.org/r/20220110035141.1980-2-yinxin.x@bytedance.com
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Cc: stable@kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+This patch fixes these issues by using the new timing and context
+entry/exit helpers to ensure that interrupts are handled during guest
+vtime but with RCU watching, with a sequence:
+
+	guest_timing_enter_irqoff();
+
+	guest_state_enter_irqoff();
+	< run the vcpu >
+	guest_state_exit_irqoff();
+
+	< take any pending IRQs >
+
+	guest_timing_exit_irqoff();
+
+Since instrumentation may make use of RCU, we must also ensure that no
+instrumented code is run during the EQS. I've split out the critical
+section into a new kvm_arm_enter_exit_vcpu() helper which is marked
+noinstr.
+
+Fixes: 1b3d546daf85ed2b ("arm/arm64: KVM: Properly account for guest CPU time")
+Reported-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
+Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+Reviewed-by: Marc Zyngier <maz@kernel.org>
+Reviewed-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
+Cc: Alexandru Elisei <alexandru.elisei@arm.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Frederic Weisbecker <frederic@kernel.org>
+Cc: James Morse <james.morse@arm.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Paul E. McKenney <paulmck@kernel.org>
+Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Message-Id: <20220201132926.3301912-3-mark.rutland@arm.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ext4/ext4.h        |    3 +++
- fs/ext4/extents.c     |    4 ++++
- fs/ext4/fast_commit.c |   20 +++++++++++++++-----
- 3 files changed, 22 insertions(+), 5 deletions(-)
+ arch/arm64/kvm/arm.c | 51 ++++++++++++++++++++++++++++----------------
+ 1 file changed, 33 insertions(+), 18 deletions(-)
 
---- a/fs/ext4/ext4.h
-+++ b/fs/ext4/ext4.h
-@@ -2779,6 +2779,9 @@ void ext4_fc_replay_cleanup(struct super
- int ext4_fc_commit(journal_t *journal, tid_t commit_tid);
- int __init ext4_fc_init_dentry_cache(void);
- void ext4_fc_destroy_dentry_cache(void);
-+int ext4_fc_record_regions(struct super_block *sb, int ino,
-+			   ext4_lblk_t lblk, ext4_fsblk_t pblk,
-+			   int len, int replay);
- 
- /* mballoc.c */
- extern const struct seq_operations ext4_mb_seq_groups_ops;
---- a/fs/ext4/extents.c
-+++ b/fs/ext4/extents.c
-@@ -6088,11 +6088,15 @@ int ext4_ext_clear_bb(struct inode *inod
- 
- 					ext4_mb_mark_bb(inode->i_sb,
- 							path[j].p_block, 1, 0);
-+					ext4_fc_record_regions(inode->i_sb, inode->i_ino,
-+							0, path[j].p_block, 1, 1);
- 				}
- 				ext4_ext_drop_refs(path);
- 				kfree(path);
- 			}
- 			ext4_mb_mark_bb(inode->i_sb, map.m_pblk, map.m_len, 0);
-+			ext4_fc_record_regions(inode->i_sb, inode->i_ino,
-+					map.m_lblk, map.m_pblk, map.m_len, 1);
- 		}
- 		cur = cur + map.m_len;
- 	}
---- a/fs/ext4/fast_commit.c
-+++ b/fs/ext4/fast_commit.c
-@@ -1558,16 +1558,23 @@ out:
+diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+index 9b328bb05596a..f9c7e4e61b296 100644
+--- a/arch/arm64/kvm/arm.c
++++ b/arch/arm64/kvm/arm.c
+@@ -755,6 +755,24 @@ static bool kvm_vcpu_exit_request(struct kvm_vcpu *vcpu, int *ret)
+ 			xfer_to_guest_mode_work_pending();
  }
  
- /*
-- * Record physical disk regions which are in use as per fast commit area. Our
-- * simple replay phase allocator excludes these regions from allocation.
-+ * Record physical disk regions which are in use as per fast commit area,
-+ * and used by inodes during replay phase. Our simple replay phase
-+ * allocator excludes these regions from allocation.
-  */
--static int ext4_fc_record_regions(struct super_block *sb, int ino,
--		ext4_lblk_t lblk, ext4_fsblk_t pblk, int len)
-+int ext4_fc_record_regions(struct super_block *sb, int ino,
-+		ext4_lblk_t lblk, ext4_fsblk_t pblk, int len, int replay)
- {
- 	struct ext4_fc_replay_state *state;
- 	struct ext4_fc_alloc_region *region;
- 
- 	state = &EXT4_SB(sb)->s_fc_replay_state;
-+	/*
-+	 * during replay phase, the fc_regions_valid may not same as
-+	 * fc_regions_used, update it when do new additions.
-+	 */
-+	if (replay && state->fc_regions_used != state->fc_regions_valid)
-+		state->fc_regions_used = state->fc_regions_valid;
- 	if (state->fc_regions_used == state->fc_regions_size) {
- 		state->fc_regions_size +=
- 			EXT4_FC_REPLAY_REALLOC_INCREMENT;
-@@ -1585,6 +1592,9 @@ static int ext4_fc_record_regions(struct
- 	region->pblk = pblk;
- 	region->len = len;
- 
-+	if (replay)
-+		state->fc_regions_valid++;
++/*
++ * Actually run the vCPU, entering an RCU extended quiescent state (EQS) while
++ * the vCPU is running.
++ *
++ * This must be noinstr as instrumentation may make use of RCU, and this is not
++ * safe during the EQS.
++ */
++static int noinstr kvm_arm_vcpu_enter_exit(struct kvm_vcpu *vcpu)
++{
++	int ret;
 +
- 	return 0;
- }
++	guest_state_enter_irqoff();
++	ret = kvm_call_hyp_ret(__kvm_vcpu_run, vcpu);
++	guest_state_exit_irqoff();
++
++	return ret;
++}
++
+ /**
+  * kvm_arch_vcpu_ioctl_run - the main VCPU run function to execute guest code
+  * @vcpu:	The VCPU pointer
+@@ -845,9 +863,9 @@ int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
+ 		 * Enter the guest
+ 		 */
+ 		trace_kvm_entry(*vcpu_pc(vcpu));
+-		guest_enter_irqoff();
++		guest_timing_enter_irqoff();
  
-@@ -1954,7 +1964,7 @@ static int ext4_fc_replay_scan(journal_t
- 			ret = ext4_fc_record_regions(sb,
- 				le32_to_cpu(ext.fc_ino),
- 				le32_to_cpu(ex->ee_block), ext4_ext_pblock(ex),
--				ext4_ext_get_actual_len(ex));
-+				ext4_ext_get_actual_len(ex), 0);
- 			if (ret < 0)
- 				break;
- 			ret = JBD2_FC_REPLAY_CONTINUE;
+-		ret = kvm_call_hyp_ret(__kvm_vcpu_run, vcpu);
++		ret = kvm_arm_vcpu_enter_exit(vcpu);
+ 
+ 		vcpu->mode = OUTSIDE_GUEST_MODE;
+ 		vcpu->stat.exits++;
+@@ -882,26 +900,23 @@ int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
+ 		kvm_arch_vcpu_ctxsync_fp(vcpu);
+ 
+ 		/*
+-		 * We may have taken a host interrupt in HYP mode (ie
+-		 * while executing the guest). This interrupt is still
+-		 * pending, as we haven't serviced it yet!
++		 * We must ensure that any pending interrupts are taken before
++		 * we exit guest timing so that timer ticks are accounted as
++		 * guest time. Transiently unmask interrupts so that any
++		 * pending interrupts are taken.
+ 		 *
+-		 * We're now back in SVC mode, with interrupts
+-		 * disabled.  Enabling the interrupts now will have
+-		 * the effect of taking the interrupt again, in SVC
+-		 * mode this time.
++		 * Per ARM DDI 0487G.b section D1.13.4, an ISB (or other
++		 * context synchronization event) is necessary to ensure that
++		 * pending interrupts are taken.
+ 		 */
+ 		local_irq_enable();
++		isb();
++		local_irq_disable();
++
++		guest_timing_exit_irqoff();
++
++		local_irq_enable();
+ 
+-		/*
+-		 * We do local_irq_enable() before calling guest_exit() so
+-		 * that if a timer interrupt hits while running the guest we
+-		 * account that tick as being spent in the guest.  We enable
+-		 * preemption after calling guest_exit() so that if we get
+-		 * preempted we make sure ticks after that is not counted as
+-		 * guest time.
+-		 */
+-		guest_exit();
+ 		trace_kvm_exit(ret, kvm_vcpu_trap_get_class(vcpu), *vcpu_pc(vcpu));
+ 
+ 		/* Exit types that need handling before we can be preempted */
+-- 
+2.34.1
+
 
 

@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1D5D4ABA2C
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:27:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99C0C4AB9C1
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:25:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382901AbiBGLVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:21:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54052 "EHLO
+        id S1352047AbiBGLLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:11:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378469AbiBGLPw (ORCPT
+        with ESMTP id S237567AbiBGLJP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:15:52 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7029CC0401C4;
-        Mon,  7 Feb 2022 03:15:44 -0800 (PST)
+        Mon, 7 Feb 2022 06:09:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4055C043181;
+        Mon,  7 Feb 2022 03:09:14 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 879ABB81028;
-        Mon,  7 Feb 2022 11:15:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC37CC004E1;
-        Mon,  7 Feb 2022 11:15:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3FE36611AA;
+        Mon,  7 Feb 2022 11:09:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27AD0C004E1;
+        Mon,  7 Feb 2022 11:09:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232542;
-        bh=bZY68VpT7CGufdOKN0ip2iobYHcwOX8yhXkeaZpLdgM=;
+        s=korg; t=1644232153;
+        bh=vkO4ua145R0keyih7o+xMQabayYOpPFOejC9Fq+jX6o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mQfR+uKtNspJChdBaKchg6AGLRT8g7mU0SVrFgIlMHtdHku/73Lux527VrVFhRTyw
-         44yoop9ZKaNGsLKMTmPiiR69q3hOKdXHolUXmBabgXxsVRCQH5iXQ0a32j6IKLdSnE
-         75lQSrzb/YmGkltdJg9o3aq9LVdjX+nNnab2PfLM=
+        b=2AwsT7phikg4LEJ2p3s/ttIKvZK0eLiNJ3e9cKLgWVGWwALnWQ4KcVRxgjcsVeD+F
+         lO+mrO/LxTFKRKoHBb+szamt/Lhy13jRXuh1OfGfxXH7o8GRpiY2kPgOsIwRpr07Jd
+         VLXSVgjbFZTHUxJH7FoM8cVRAAG5GGRiZJnWADBo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 43/86] yam: fix a memory leak in yam_siocdevprivate()
+        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: [PATCH 4.9 33/48] ASoC: ops: Reject out of bounds values in snd_soc_put_volsw()
 Date:   Mon,  7 Feb 2022 12:06:06 +0100
-Message-Id: <20220207103758.949477972@linuxfoundation.org>
+Message-Id: <20220207103753.421098842@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103757.550973048@linuxfoundation.org>
-References: <20220207103757.550973048@linuxfoundation.org>
+In-Reply-To: <20220207103752.341184175@linuxfoundation.org>
+References: <20220207103752.341184175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +53,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hangyu Hua <hbh25y@gmail.com>
+From: Mark Brown <broonie@kernel.org>
 
-[ Upstream commit 29eb31542787e1019208a2e1047bb7c76c069536 ]
+commit 817f7c9335ec01e0f5e8caffc4f1dcd5e458a4c0 upstream.
 
-ym needs to be free when ym->cmd != SIOCYAMSMCS.
+We don't currently validate that the values being set are within the range
+we advertised to userspace as being valid, do so and reject any values
+that are out of range.
 
-Fixes: 0781168e23a2 ("yam: fix a missing-check bug")
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20220124153253.3548853-2-broonie@kernel.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/hamradio/yam.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ sound/soc/soc-ops.c |   18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/hamradio/yam.c b/drivers/net/hamradio/yam.c
-index fdab498725878..3db86f247bf45 100644
---- a/drivers/net/hamradio/yam.c
-+++ b/drivers/net/hamradio/yam.c
-@@ -966,9 +966,7 @@ static int yam_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd)
- 				 sizeof(struct yamdrv_ioctl_mcs));
- 		if (IS_ERR(ym))
- 			return PTR_ERR(ym);
--		if (ym->cmd != SIOCYAMSMCS)
--			return -EINVAL;
--		if (ym->bitrate > YAM_MAXBITRATE) {
-+		if (ym->cmd != SIOCYAMSMCS || ym->bitrate > YAM_MAXBITRATE) {
- 			kfree(ym);
- 			return -EINVAL;
- 		}
--- 
-2.34.1
-
+--- a/sound/soc/soc-ops.c
++++ b/sound/soc/soc-ops.c
+@@ -327,13 +327,27 @@ int snd_soc_put_volsw(struct snd_kcontro
+ 	if (sign_bit)
+ 		mask = BIT(sign_bit + 1) - 1;
+ 
+-	val = ((ucontrol->value.integer.value[0] + min) & mask);
++	val = ucontrol->value.integer.value[0];
++	if (mc->platform_max && val > mc->platform_max)
++		return -EINVAL;
++	if (val > max - min)
++		return -EINVAL;
++	if (val < 0)
++		return -EINVAL;
++	val = (val + min) & mask;
+ 	if (invert)
+ 		val = max - val;
+ 	val_mask = mask << shift;
+ 	val = val << shift;
+ 	if (snd_soc_volsw_is_stereo(mc)) {
+-		val2 = ((ucontrol->value.integer.value[1] + min) & mask);
++		val2 = ucontrol->value.integer.value[1];
++		if (mc->platform_max && val2 > mc->platform_max)
++			return -EINVAL;
++		if (val2 > max - min)
++			return -EINVAL;
++		if (val2 < 0)
++			return -EINVAL;
++		val2 = (val2 + min) & mask;
+ 		if (invert)
+ 			val2 = max - val2;
+ 		if (reg == reg2) {
 
 

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6318D4ABACC
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:30:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08F134ABA41
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:27:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384074AbiBGLYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:24:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58424 "EHLO
+        id S1383298AbiBGLWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:22:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382356AbiBGLS5 (ORCPT
+        with ESMTP id S1381689AbiBGLRY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:18:57 -0500
+        Mon, 7 Feb 2022 06:17:24 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C35F3C0401D0;
-        Mon,  7 Feb 2022 03:18:46 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24493C03FEE5;
+        Mon,  7 Feb 2022 03:17:06 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DE1A6077B;
-        Mon,  7 Feb 2022 11:18:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BE03C004E1;
-        Mon,  7 Feb 2022 11:18:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AAA5A61314;
+        Mon,  7 Feb 2022 11:17:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88C02C004E1;
+        Mon,  7 Feb 2022 11:17:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232725;
-        bh=R6xFvRSAhvFiOxBA1ZVRq5dVEm6iq07Plk0RDFwvnH4=;
+        s=korg; t=1644232625;
+        bh=gQpnfX6fe1GkM5d89JbxBa90jXALueqpBd1PBNtd13I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yVpmD4fFmmzI2ihvUMqdU85mbsFKFiP3C6q+uQlTPwGdMBgwQjuQ4QoPK84j1OfKc
-         2RiqsvOilJCjQ7FGLR6Hd7l2vS38WDOHYMaWLsFt8xulw8PRZLmxBQFTA3VCcVUzhs
-         7PdLT07G6Wa36oKQn8qBCxf0zn0bU1yXl30Y+zTs=
+        b=RnPMi7heTiFoaOXHcTrA7JLB7x6tLIY0vNDJVrmCsdCCvNdonuZx1oHLoapTXbaMG
+         UfPkMzE2Gm7wTe09Oyncmyt9hkWSFdXhJXiV1d1FFha5I3yi5L9aSepwQjvouO2ULv
+         K6U7BjwyrMldjyKje78Z5gy9bT1zUzDoOXpbGz2c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jared Holzman <jared.holzman@excelero.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Subject: [PATCH 5.4 17/44] RDMA/siw: Fix broken RDMA Read Fence/Resume logic.
-Date:   Mon,  7 Feb 2022 12:06:33 +0100
-Message-Id: <20220207103753.714125859@linuxfoundation.org>
+        stable@vger.kernel.org, Miquel Raynal <miquel.raynal@bootlin.com>,
+        Alexander Aring <aahringo@redhat.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>
+Subject: [PATCH 4.19 71/86] net: ieee802154: mcr20a: Fix lifs/sifs periods
+Date:   Mon,  7 Feb 2022 12:06:34 +0100
+Message-Id: <20220207103759.999169538@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103753.155627314@linuxfoundation.org>
-References: <20220207103753.155627314@linuxfoundation.org>
+In-Reply-To: <20220207103757.550973048@linuxfoundation.org>
+References: <20220207103757.550973048@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,97 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bernard Metzler <bmt@zurich.ibm.com>
+From: Miquel Raynal <miquel.raynal@bootlin.com>
 
-commit b43a76f423aa304037603fd6165c4a534d2c09a7 upstream.
+commit d753c4004820a888ec007dd88b271fa9c3172c5c upstream.
 
-Code unconditionally resumed fenced SQ processing after next RDMA Read
-completion, even if other RDMA Read responses are still outstanding, or
-ORQ is full. Also adds comments for better readability of fence
-processing, and removes orq_get_tail() helper, which is not needed
-anymore.
+These periods are expressed in time units (microseconds) while 40 and 12
+are the number of symbol durations these periods will last. We need to
+multiply them both with phy->symbol_duration in order to get these
+values in microseconds.
 
-Fixes: 8b6a361b8c48 ("rdma/siw: receive path")
-Fixes: a531975279f3 ("rdma/siw: main include file")
-Link: https://lore.kernel.org/r/20220130170815.1940-1-bmt@zurich.ibm.com
-Reported-by: Jared Holzman <jared.holzman@excelero.com>
-Signed-off-by: Bernard Metzler <bmt@zurich.ibm.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+Fixes: 8c6ad9cc5157 ("ieee802154: Add NXP MCR20A IEEE 802.15.4 transceiver driver")
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Acked-by: Alexander Aring <aahringo@redhat.com>
+Link: https://lore.kernel.org/r/20220125121426.848337-3-miquel.raynal@bootlin.com
+Signed-off-by: Stefan Schmidt <stefan@datenfreihafen.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/infiniband/sw/siw/siw.h       |    7 +------
- drivers/infiniband/sw/siw/siw_qp_rx.c |   20 +++++++++++---------
- 2 files changed, 12 insertions(+), 15 deletions(-)
+ drivers/net/ieee802154/mcr20a.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/infiniband/sw/siw/siw.h
-+++ b/drivers/infiniband/sw/siw/siw.h
-@@ -658,14 +658,9 @@ static inline struct siw_sqe *orq_get_cu
- 	return &qp->orq[qp->orq_get % qp->attrs.orq_size];
- }
+--- a/drivers/net/ieee802154/mcr20a.c
++++ b/drivers/net/ieee802154/mcr20a.c
+@@ -1005,8 +1005,8 @@ static void mcr20a_hw_setup(struct mcr20
+ 	dev_dbg(printdev(lp), "%s\n", __func__);
  
--static inline struct siw_sqe *orq_get_tail(struct siw_qp *qp)
--{
--	return &qp->orq[qp->orq_put % qp->attrs.orq_size];
--}
--
- static inline struct siw_sqe *orq_get_free(struct siw_qp *qp)
- {
--	struct siw_sqe *orq_e = orq_get_tail(qp);
-+	struct siw_sqe *orq_e = &qp->orq[qp->orq_put % qp->attrs.orq_size];
+ 	phy->symbol_duration = 16;
+-	phy->lifs_period = 40;
+-	phy->sifs_period = 12;
++	phy->lifs_period = 40 * phy->symbol_duration;
++	phy->sifs_period = 12 * phy->symbol_duration;
  
- 	if (READ_ONCE(orq_e->flags) == 0)
- 		return orq_e;
---- a/drivers/infiniband/sw/siw/siw_qp_rx.c
-+++ b/drivers/infiniband/sw/siw/siw_qp_rx.c
-@@ -1153,11 +1153,12 @@ static int siw_check_tx_fence(struct siw
- 
- 	spin_lock_irqsave(&qp->orq_lock, flags);
- 
--	rreq = orq_get_current(qp);
--
- 	/* free current orq entry */
-+	rreq = orq_get_current(qp);
- 	WRITE_ONCE(rreq->flags, 0);
- 
-+	qp->orq_get++;
-+
- 	if (qp->tx_ctx.orq_fence) {
- 		if (unlikely(tx_waiting->wr_status != SIW_WR_QUEUED)) {
- 			pr_warn("siw: [QP %u]: fence resume: bad status %d\n",
-@@ -1165,10 +1166,12 @@ static int siw_check_tx_fence(struct siw
- 			rv = -EPROTO;
- 			goto out;
- 		}
--		/* resume SQ processing */
-+		/* resume SQ processing, if possible */
- 		if (tx_waiting->sqe.opcode == SIW_OP_READ ||
- 		    tx_waiting->sqe.opcode == SIW_OP_READ_LOCAL_INV) {
--			rreq = orq_get_tail(qp);
-+
-+			/* SQ processing was stopped because of a full ORQ */
-+			rreq = orq_get_free(qp);
- 			if (unlikely(!rreq)) {
- 				pr_warn("siw: [QP %u]: no ORQE\n", qp_id(qp));
- 				rv = -EPROTO;
-@@ -1181,15 +1184,14 @@ static int siw_check_tx_fence(struct siw
- 			resume_tx = 1;
- 
- 		} else if (siw_orq_empty(qp)) {
-+			/*
-+			 * SQ processing was stopped by fenced work request.
-+			 * Resume since all previous Read's are now completed.
-+			 */
- 			qp->tx_ctx.orq_fence = 0;
- 			resume_tx = 1;
--		} else {
--			pr_warn("siw: [QP %u]: fence resume: orq idx: %d:%d\n",
--				qp_id(qp), qp->orq_get, qp->orq_put);
--			rv = -EPROTO;
- 		}
- 	}
--	qp->orq_get++;
- out:
- 	spin_unlock_irqrestore(&qp->orq_lock, flags);
- 
+ 	hw->flags = IEEE802154_HW_TX_OMIT_CKSUM |
+ 			IEEE802154_HW_AFILT |
 
 

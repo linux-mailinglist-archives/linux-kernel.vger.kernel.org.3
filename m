@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01F144AB56E
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 08:02:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D30D4AB572
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 08:02:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242311AbiBGG6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 01:58:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41926 "EHLO
+        id S242932AbiBGG7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 01:59:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357550AbiBGGoK (ORCPT
+        with ESMTP id S1357819AbiBGGoS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 01:44:10 -0500
+        Mon, 7 Feb 2022 01:44:18 -0500
 Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 246A9C043184
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 22:44:08 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A163C043189
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 22:44:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644216248; x=1675752248;
+  t=1644216257; x=1675752257;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=gN3LPgLC7pbNU4whlKOywLY30HbjfL0dlgHdNEPYbiE=;
-  b=WdzNyDVxvIcYeLG/AE8OISq3HBw4/XL6wyaskn7ibPNvuNOSWlxdCZJB
-   ZFohdG5uKpSW79bo9xNaB2R2ri1niPfNeV30dA7kO21Cg4wGncaWM0fJu
-   YQWngFac7HuJohF2o28VdhILX69FSOvzxcEZra4gpGOeotOszZ0hV0a88
-   n0/2PX8lG4yWsx8XsKmqF6MWyHs8+h9g8PE949zkNrpeWfk/QGanvSupd
-   SAIFEj3QDbTdk2dTUSzNlLMnSeskpCiDwWVLur3ivfzb7NO0tBpKVGOzy
-   TqdMupVMIO0T95DEMSxoQDRK2/Xh0aEdhkoiLYZKTg9C27gAE/xsscIpq
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10250"; a="273171143"
+  bh=UGmKiwSdYRMedpHT9dtqUe3n0EwJaj3PL5+dZ3oF/ac=;
+  b=LZBZJwpcDc3l5PXJx2MLvgU5XPO6LCtrT1FO+cs6fNRixuJrVp8EEpeB
+   wbGipXBL3nL9tnbRu6BLnDshFGapkJmGBEr7ghQxrKn6sNz6cKTqxPjah
+   bhnsV3Qa4x+jywYoLtyn7TTGzJf2jjtxwbO2wHzl0isllmiYmKrAEprhk
+   o5qBNXbu6jzNgR2BtjF9PdItXdCq0Q9Kw7q/151xcR2xDyPehJ6tSrq6Y
+   +8BLX7Mxdo48P4rqx5c6Q7yLYjrhX3mb///7oDh4lcmSRj54CwwB14zcK
+   vxsQ/Vl/htWvENnZOB/P84E79mNjCqwCX76ESlTTGmGj1KSuJXk4zKSR4
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10250"; a="273171180"
 X-IronPort-AV: E=Sophos;i="5.88,349,1635231600"; 
-   d="scan'208";a="273171143"
+   d="scan'208";a="273171180"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2022 22:43:05 -0800
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2022 22:43:15 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,349,1635231600"; 
-   d="scan'208";a="525020204"
+   d="scan'208";a="525020263"
 Received: from allen-box.sh.intel.com ([10.239.159.118])
-  by orsmga007.jf.intel.com with ESMTP; 06 Feb 2022 22:43:03 -0800
+  by orsmga007.jf.intel.com with ESMTP; 06 Feb 2022 22:43:12 -0800
 From:   Lu Baolu <baolu.lu@linux.intel.com>
 To:     Joerg Roedel <joro@8bytes.org>, Kevin Tian <kevin.tian@intel.com>,
         Ashok Raj <ashok.raj@intel.com>, Liu Yi L <yi.l.liu@intel.com>,
@@ -47,9 +47,9 @@ Cc:     Robin Murphy <robin.murphy@arm.com>,
         Christoph Hellwig <hch@lst.de>,
         iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
         Lu Baolu <baolu.lu@linux.intel.com>
-Subject: [PATCH v1 02/10] iommu/vt-d: Remove intel_iommu::domains
-Date:   Mon,  7 Feb 2022 14:41:34 +0800
-Message-Id: <20220207064142.1092846-3-baolu.lu@linux.intel.com>
+Subject: [PATCH v1 05/10] iommu/vt-d: Remove domain and devinfo mempool
+Date:   Mon,  7 Feb 2022 14:41:37 +0800
+Message-Id: <20220207064142.1092846-6-baolu.lu@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220207064142.1092846-1-baolu.lu@linux.intel.com>
 References: <20220207064142.1092846-1-baolu.lu@linux.intel.com>
@@ -65,159 +65,206 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The "domains" field of the intel_iommu structure keeps the mapping of
-domain_id to dmar_domain. This information is not used anywhere. Remove
-and cleanup it to avoid unnecessary memory consumption.
+The domain and devinfo memory blocks are only allocated during device
+probe and released during remove. There's no hot-path context, hence
+no need for memory pools.
 
 Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 ---
- include/linux/intel-iommu.h |  1 -
- drivers/iommu/intel/iommu.c | 68 ++-----------------------------------
- 2 files changed, 3 insertions(+), 66 deletions(-)
+ drivers/iommu/intel/iommu.c | 104 ++----------------------------------
+ 1 file changed, 5 insertions(+), 99 deletions(-)
 
-diff --git a/include/linux/intel-iommu.h b/include/linux/intel-iommu.h
-index 5cfda90b2cca..8c7591b5f3e2 100644
---- a/include/linux/intel-iommu.h
-+++ b/include/linux/intel-iommu.h
-@@ -578,7 +578,6 @@ struct intel_iommu {
- 
- #ifdef CONFIG_INTEL_IOMMU
- 	unsigned long 	*domain_ids; /* bitmap of domains */
--	struct dmar_domain ***domains; /* ptr to domains */
- 	spinlock_t	lock; /* protect context, domain ids */
- 	struct root_entry *root_entry; /* virtual address */
- 
 diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index 3eb914798c18..438da5da301d 100644
+index e8d58654361c..185aa38df602 100644
 --- a/drivers/iommu/intel/iommu.c
 +++ b/drivers/iommu/intel/iommu.c
-@@ -422,36 +422,6 @@ __setup("intel_iommu=", intel_iommu_setup);
- static struct kmem_cache *iommu_domain_cache;
- static struct kmem_cache *iommu_devinfo_cache;
+@@ -419,9 +419,6 @@ static int __init intel_iommu_setup(char *str)
+ }
+ __setup("intel_iommu=", intel_iommu_setup);
  
--static struct dmar_domain* get_iommu_domain(struct intel_iommu *iommu, u16 did)
--{
--	struct dmar_domain **domains;
--	int idx = did >> 8;
--
--	domains = iommu->domains[idx];
--	if (!domains)
--		return NULL;
--
--	return domains[did & 0xff];
--}
--
--static void set_iommu_domain(struct intel_iommu *iommu, u16 did,
--			     struct dmar_domain *domain)
--{
--	struct dmar_domain **domains;
--	int idx = did >> 8;
--
--	if (!iommu->domains[idx]) {
--		size_t size = 256 * sizeof(struct dmar_domain *);
--		iommu->domains[idx] = kzalloc(size, GFP_ATOMIC);
--	}
--
--	domains = iommu->domains[idx];
--	if (WARN_ON(!domains))
--		return;
--	else
--		domains[did & 0xff] = domain;
--}
+-static struct kmem_cache *iommu_domain_cache;
+-static struct kmem_cache *iommu_devinfo_cache;
 -
  void *alloc_pgtable_page(int node)
  {
  	struct page *page;
-@@ -1718,8 +1688,7 @@ static void intel_flush_iotlb_all(struct iommu_domain *domain)
- 						 DMA_TLB_DSI_FLUSH);
- 
- 		if (!cap_caching_mode(iommu->cap))
--			iommu_flush_dev_iotlb(get_iommu_domain(iommu, did),
--					      0, MAX_AGAW_PFN_WIDTH);
-+			iommu_flush_dev_iotlb(dmar_domain, 0, MAX_AGAW_PFN_WIDTH);
- 	}
+@@ -438,26 +435,6 @@ void free_pgtable_page(void *vaddr)
+ 	free_page((unsigned long)vaddr);
  }
  
-@@ -1782,7 +1751,6 @@ static void iommu_disable_translation(struct intel_iommu *iommu)
- static int iommu_init_domains(struct intel_iommu *iommu)
- {
- 	u32 ndomains;
--	size_t size;
- 
- 	ndomains = cap_ndoms(iommu->cap);
- 	pr_debug("%s: Number of Domains supported <%d>\n",
-@@ -1794,24 +1762,6 @@ static int iommu_init_domains(struct intel_iommu *iommu)
- 	if (!iommu->domain_ids)
- 		return -ENOMEM;
- 
--	size = (ALIGN(ndomains, 256) >> 8) * sizeof(struct dmar_domain **);
--	iommu->domains = kzalloc(size, GFP_KERNEL);
+-static inline void *alloc_domain_mem(void)
+-{
+-	return kmem_cache_alloc(iommu_domain_cache, GFP_ATOMIC);
+-}
 -
--	if (iommu->domains) {
--		size = 256 * sizeof(struct dmar_domain *);
--		iommu->domains[0] = kzalloc(size, GFP_KERNEL);
+-static void free_domain_mem(void *vaddr)
+-{
+-	kmem_cache_free(iommu_domain_cache, vaddr);
+-}
+-
+-static inline void * alloc_devinfo_mem(void)
+-{
+-	return kmem_cache_alloc(iommu_devinfo_cache, GFP_ATOMIC);
+-}
+-
+-static inline void free_devinfo_mem(void *vaddr)
+-{
+-	kmem_cache_free(iommu_devinfo_cache, vaddr);
+-}
+-
+ static inline int domain_type_is_si(struct dmar_domain *domain)
+ {
+ 	return domain->domain.type == IOMMU_DOMAIN_IDENTITY;
+@@ -1852,11 +1829,10 @@ static struct dmar_domain *alloc_domain(unsigned int type)
+ {
+ 	struct dmar_domain *domain;
+ 
+-	domain = alloc_domain_mem();
++	domain = kzalloc(sizeof(*domain), GFP_KERNEL);
+ 	if (!domain)
+ 		return NULL;
+ 
+-	memset(domain, 0, sizeof(*domain));
+ 	domain->nid = NUMA_NO_NODE;
+ 	if (first_level_by_default(type))
+ 		domain->flags |= DOMAIN_FLAG_USE_FIRST_LEVEL;
+@@ -1940,7 +1916,7 @@ static void domain_exit(struct dmar_domain *domain)
+ 		put_pages_list(&freelist);
+ 	}
+ 
+-	free_domain_mem(domain);
++	kfree(domain);
+ }
+ 
+ /*
+@@ -2525,7 +2501,7 @@ static struct dmar_domain *dmar_insert_one_dev_info(struct intel_iommu *iommu,
+ 	unsigned long flags;
+ 	int ret;
+ 
+-	info = alloc_devinfo_mem();
++	info = kzalloc(sizeof(*info), GFP_KERNEL);
+ 	if (!info)
+ 		return NULL;
+ 
+@@ -2541,13 +2517,9 @@ static struct dmar_domain *dmar_insert_one_dev_info(struct intel_iommu *iommu,
+ 		info->segment = pci_domain_nr(pdev->bus);
+ 	}
+ 
+-	info->ats_supported = info->pasid_supported = info->pri_supported = 0;
+-	info->ats_enabled = info->pasid_enabled = info->pri_enabled = 0;
+-	info->ats_qdep = 0;
+ 	info->dev = dev;
+ 	info->domain = domain;
+ 	info->iommu = iommu;
+-	info->pasid_table = NULL;
+ 
+ 	if (dev && dev_is_pci(dev)) {
+ 		struct pci_dev *pdev = to_pci_dev(info->dev);
+@@ -2577,7 +2549,7 @@ static struct dmar_domain *dmar_insert_one_dev_info(struct intel_iommu *iommu,
+ 
+ 	if (ret) {
+ 		spin_unlock_irqrestore(&device_domain_lock, flags);
+-		free_devinfo_mem(info);
++		kfree(info);
+ 		return NULL;
+ 	}
+ 
+@@ -3310,65 +3282,6 @@ static int __init init_dmars(void)
+ 	return ret;
+ }
+ 
+-static inline int iommu_domain_cache_init(void)
+-{
+-	int ret = 0;
+-
+-	iommu_domain_cache = kmem_cache_create("iommu_domain",
+-					 sizeof(struct dmar_domain),
+-					 0,
+-					 SLAB_HWCACHE_ALIGN,
+-
+-					 NULL);
+-	if (!iommu_domain_cache) {
+-		pr_err("Couldn't create iommu_domain cache\n");
+-		ret = -ENOMEM;
 -	}
 -
--	if (!iommu->domains || !iommu->domains[0]) {
--		pr_err("%s: Allocating domain array failed\n",
--		       iommu->name);
--		bitmap_free(iommu->domain_ids);
--		kfree(iommu->domains);
--		iommu->domain_ids = NULL;
--		iommu->domains    = NULL;
+-	return ret;
+-}
+-
+-static inline int iommu_devinfo_cache_init(void)
+-{
+-	int ret = 0;
+-
+-	iommu_devinfo_cache = kmem_cache_create("iommu_devinfo",
+-					 sizeof(struct device_domain_info),
+-					 0,
+-					 SLAB_HWCACHE_ALIGN,
+-					 NULL);
+-	if (!iommu_devinfo_cache) {
+-		pr_err("Couldn't create devinfo cache\n");
+-		ret = -ENOMEM;
+-	}
+-
+-	return ret;
+-}
+-
+-static int __init iommu_init_mempool(void)
+-{
+-	int ret;
+-
+-	ret = iommu_domain_cache_init();
+-	if (ret)
+-		goto domain_error;
+-
+-	ret = iommu_devinfo_cache_init();
+-	if (!ret)
+-		return ret;
+-
+-	kmem_cache_destroy(iommu_domain_cache);
+-domain_error:
+-
+-	return -ENOMEM;
+-}
+-
+-static void __init iommu_exit_mempool(void)
+-{
+-	kmem_cache_destroy(iommu_devinfo_cache);
+-	kmem_cache_destroy(iommu_domain_cache);
+-}
+-
+ static void __init init_no_remapping_devices(void)
+ {
+ 	struct dmar_drhd_unit *drhd;
+@@ -4016,12 +3929,6 @@ int __init intel_iommu_init(void)
+ 	force_on = (!intel_iommu_tboot_noforce && tboot_force_iommu()) ||
+ 		    platform_optin_force_iommu();
+ 
+-	if (iommu_init_mempool()) {
+-		if (force_on)
+-			panic("tboot: Failed to initialize iommu memory\n");
 -		return -ENOMEM;
 -	}
 -
- 	/*
- 	 * If Caching mode is set, then invalid translations are tagged
- 	 * with domain-id 0, hence we need to pre-allocate it. We also
-@@ -1838,7 +1788,7 @@ static void disable_dmar_iommu(struct intel_iommu *iommu)
- 	struct device_domain_info *info, *tmp;
- 	unsigned long flags;
+ 	down_write(&dmar_global_lock);
+ 	if (dmar_table_init()) {
+ 		if (force_on)
+@@ -4142,7 +4049,6 @@ int __init intel_iommu_init(void)
+ out_free_dmar:
+ 	intel_iommu_free_dmars();
+ 	up_write(&dmar_global_lock);
+-	iommu_exit_mempool();
+ 	return ret;
+ }
  
--	if (!iommu->domains || !iommu->domain_ids)
-+	if (!iommu->domain_ids)
- 		return;
+@@ -4199,7 +4105,7 @@ static void __dmar_remove_one_dev_info(struct device_domain_info *info)
+ 	domain_detach_iommu(domain, iommu);
+ 	spin_unlock_irqrestore(&iommu->lock, flags);
  
- 	spin_lock_irqsave(&device_domain_lock, flags);
-@@ -1859,15 +1809,8 @@ static void disable_dmar_iommu(struct intel_iommu *iommu)
+-	free_devinfo_mem(info);
++	kfree(info);
+ }
  
- static void free_dmar_iommu(struct intel_iommu *iommu)
- {
--	if ((iommu->domains) && (iommu->domain_ids)) {
--		int elems = ALIGN(cap_ndoms(iommu->cap), 256) >> 8;
--		int i;
--
--		for (i = 0; i < elems; i++)
--			kfree(iommu->domains[i]);
--		kfree(iommu->domains);
-+	if (iommu->domain_ids) {
- 		bitmap_free(iommu->domain_ids);
--		iommu->domains = NULL;
- 		iommu->domain_ids = NULL;
- 	}
- 
-@@ -1945,11 +1888,8 @@ static int domain_attach_iommu(struct dmar_domain *domain,
- 		}
- 
- 		set_bit(num, iommu->domain_ids);
--		set_iommu_domain(iommu, num, domain);
--
- 		domain->iommu_did[iommu->seq_id] = num;
- 		domain->nid			 = iommu->node;
--
- 		domain_update_iommu_cap(domain);
- 	}
- 
-@@ -1968,8 +1908,6 @@ static void domain_detach_iommu(struct dmar_domain *domain,
- 	if (domain->iommu_refcnt[iommu->seq_id] == 0) {
- 		num = domain->iommu_did[iommu->seq_id];
- 		clear_bit(num, iommu->domain_ids);
--		set_iommu_domain(iommu, num, NULL);
--
- 		domain_update_iommu_cap(domain);
- 		domain->iommu_did[iommu->seq_id] = 0;
- 	}
+ static void dmar_remove_one_dev_info(struct device *dev)
 -- 
 2.25.1
 

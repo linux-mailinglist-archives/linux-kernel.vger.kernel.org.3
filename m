@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD0014ABCFE
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:55:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 225DC4AB97B
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:23:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388566AbiBGLn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:43:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45936 "EHLO
+        id S1376682AbiBGLPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:15:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385802AbiBGLcj (ORCPT
+        with ESMTP id S1347959AbiBGLLm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:32:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 680D5C043181;
-        Mon,  7 Feb 2022 03:32:38 -0800 (PST)
+        Mon, 7 Feb 2022 06:11:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66578C043181;
+        Mon,  7 Feb 2022 03:11:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0432A60A67;
-        Mon,  7 Feb 2022 11:32:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF73BC004E1;
-        Mon,  7 Feb 2022 11:32:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1ED38B80EE8;
+        Mon,  7 Feb 2022 11:11:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22E0EC004E1;
+        Mon,  7 Feb 2022 11:11:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233557;
-        bh=JE/jV0p/vLig4xTmzfQk4lQFfn7O51vh4mZW9DF20YE=;
+        s=korg; t=1644232298;
+        bh=KpkVFOA124n7z4s6OxCkRoPCUJoOZOoncbjtNPXpGG4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cPi1YNayf5ZDyviLTPPiUL4S/N4NrqR/zjg3rjdI633wRdB172qlVMC+a8UgN1qUX
-         ePFT+LkAt3htfgpMnJ3NU6ioB9OtnCZJldboolpYrLO+jvdjk14JWEB/XeJce52haS
-         ZYMibY4Fo3U61u40zhBk+zsCoKymrZj4TWCXx6rg=
+        b=wCOwA5m3B6gHwb/CLZpIjNPwvZv13I3frqmqJWGT5AekCjS2FEHT7PZMuCGxABSSu
+         pdKy3JKGupIGgyRuvjVp9APr3U+33CARDSC8MQopj0PBfMMaFWZF63X6jAJ7ewFuc6
+         hgWSbNiuOqTPrYgRQzqYNKCl5U13+hVndKvlD1vM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nick Lopez <github@glowingmonkey.org>,
-        Ilia Mirkin <imirkin@alum.mit.edu>,
-        Karol Herbst <kherbst@redhat.com>
-Subject: [PATCH 5.16 022/126] drm/nouveau: fix off by one in BIOS boundary checking
-Date:   Mon,  7 Feb 2022 12:05:53 +0100
-Message-Id: <20220207103804.925676047@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Xianting Tian <xianting.tian@linux.alibaba.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 32/69] drm/msm: Fix wrong size calculation
+Date:   Mon,  7 Feb 2022 12:05:54 +0100
+Message-Id: <20220207103756.685426698@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
-References: <20220207103804.053675072@linuxfoundation.org>
+In-Reply-To: <20220207103755.604121441@linuxfoundation.org>
+References: <20220207103755.604121441@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,42 +56,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nick Lopez <github@glowingmonkey.org>
+From: Xianting Tian <xianting.tian@linux.alibaba.com>
 
-commit 1b777d4d9e383d2744fc9b3a09af6ec1893c8b1a upstream.
+commit 0a727b459ee39bd4c5ced19d6024258ac87b6b2e upstream.
 
-Bounds checking when parsing init scripts embedded in the BIOS reject
-access to the last byte. This causes driver initialization to fail on
-Apple eMac's with GeForce 2 MX GPUs, leaving the system with no working
-console.
+For example, memory-region in .dts as below,
+	reg = <0x0 0x50000000 0x0 0x20000000>
 
-This is probably only seen on OpenFirmware machines like PowerPC Macs
-because the BIOS image provided by OF is only the used parts of the ROM,
-not a power-of-two blocks read from PCI directly so PCs always have
-empty bytes at the end that are never accessed.
+We can get below values,
+struct resource r;
+r.start = 0x50000000;
+r.end	= 0x6fffffff;
 
-Signed-off-by: Nick Lopez <github@glowingmonkey.org>
-Fixes: 4d4e9907ff572 ("drm/nouveau/bios: guard against out-of-bounds accesses to image")
-Cc: <stable@vger.kernel.org> # v4.10+
-Reviewed-by: Ilia Mirkin <imirkin@alum.mit.edu>
-Reviewed-by: Karol Herbst <kherbst@redhat.com>
-Signed-off-by: Karol Herbst <kherbst@redhat.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220122081906.2633061-1-github@glowingmonkey.org
+So the size should be:
+size = r.end - r.start + 1 = 0x20000000
+
+Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+Fixes: 072f1f9168ed ("drm/msm: add support for "stolen" mem")
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Link: https://lore.kernel.org/r/20220112123334.749776-1-xianting.tian@linux.alibaba.com
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/nouveau/nvkm/subdev/bios/base.c |    2 +-
+ drivers/gpu/drm/msm/msm_drv.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/gpu/drm/nouveau/nvkm/subdev/bios/base.c
-+++ b/drivers/gpu/drm/nouveau/nvkm/subdev/bios/base.c
-@@ -38,7 +38,7 @@ nvbios_addr(struct nvkm_bios *bios, u32
- 		*addr += bios->imaged_addr;
- 	}
+--- a/drivers/gpu/drm/msm/msm_drv.c
++++ b/drivers/gpu/drm/msm/msm_drv.c
+@@ -321,7 +321,7 @@ static int msm_init_vram(struct drm_devi
+ 		of_node_put(node);
+ 		if (ret)
+ 			return ret;
+-		size = r.end - r.start;
++		size = r.end - r.start + 1;
+ 		DRM_INFO("using VRAM carveout: %lx@%pa\n", size, &r.start);
  
--	if (unlikely(*addr + size >= bios->size)) {
-+	if (unlikely(*addr + size > bios->size)) {
- 		nvkm_error(&bios->subdev, "OOB %d %08x %08x\n", size, p, *addr);
- 		return false;
- 	}
+ 		/* if we have no IOMMU, then we need to use carveout allocator.
 
 

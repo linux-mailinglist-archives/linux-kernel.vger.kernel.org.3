@@ -2,65 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D7214AC109
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 15:21:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 748E04AC0F6
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 15:21:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391312AbiBGOTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 09:19:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44576 "EHLO
+        id S1388960AbiBGOTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 09:19:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389301AbiBGNwK (ORCPT
+        with ESMTP id S1389690AbiBGNx1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 08:52:10 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4701AC0401C8;
-        Mon,  7 Feb 2022 05:52:09 -0800 (PST)
-Date:   Mon, 07 Feb 2022 13:52:05 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1644241926;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NrTTwpwn5bIp2YK7PszkaXMvna76qOYCB+KkaAB6N+c=;
-        b=F/H2AaUCfMsk8jcztYvXMetU8hqaWq45VrA4c8wKxAawFIlMo7NU0fMyGarNgchSbkhWgL
-        /zeoArw5hhEERlo2F/rUf29tWUhDBWYhSNP9zKmmmTSIIKSJ7XHa2jxVThjXRRvIO0zTy0
-        9iimwWNjA0dNVZQsyyd+Ry5Ixuw+Y2ztoNK0xcqQGSuivbUYaput/vOjEtwvWBDHGaPr9q
-        9iDlrGxFBBEYj288SYVcB/p/YYi7f552+WKsbT+NsW1pw5brVHxE/uFwtKKqHHZ5CFfl8W
-        SFJHZTlakZvRNiphmyFUlg9zHkVy7E0u+7TVsgBbXGQ/bJvNHfNDVuSZSbVvKA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1644241926;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NrTTwpwn5bIp2YK7PszkaXMvna76qOYCB+KkaAB6N+c=;
-        b=Flk8l8A+rrGLENRcgfS4Ug4q8GEJPax2QwzIDDvKiwweICYrLpuv0i8XaVzBYMcCNBv4VK
-        BKHaBwfflP8+MsDg==
-From:   "tip-bot2 for Tadeusz Struk" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/urgent] sched/fair: Fix fault in reweight_entity
-Cc:     syzbot+af7a719bc92395ee41b3@syzkaller.appspotmail.com,
-        Tadeusz Struk <tadeusz.struk@linaro.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Mon, 7 Feb 2022 08:53:27 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C63AC0401D3
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 05:53:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=WdC5enyHEX5cT/Hdfk7cPIpuNF5Us7feBKn0FjxV/qc=; b=r05eC816PeaQpyvcJPj2dEiDH2
+        5LMXZxa3ZeUW7LtOAkjdj70S38uFdsMEyJTWoSvwxIHdxhngjbKVOm3n8nMCKAN0kdqiQiGTYKRDZ
+        NdZe8/0ekqnxzUHGbTjRFjTw48tgR7X/5SbJT1n1rAAueRFhJb4/CKoGnyrW5tzpF6fwO0haElQSi
+        Mn07u+JZdJTZFZqje+vDb+BqAXdJSn4AYR31fNhzsAH1YAaDa5xcfENZPG93UruRBwGCwI8Lyfq2u
+        +OQY7wZ0TPlJFEYHyOdne8qSiPnUkHURxAX02ae6g2M9sHY0bDUrd/T+UpsQgOXlsIsCWoEIiRL4s
+        Jp/sKX2g==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nH4Rq-0011kd-Om; Mon, 07 Feb 2022 13:52:54 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 2FD02986235; Mon,  7 Feb 2022 14:52:53 +0100 (CET)
+Date:   Mon, 7 Feb 2022 14:52:53 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Chen Yu <yu.c.chen@intel.com>
+Cc:     linux-kernel@vger.kernel.org, Tim Chen <tim.c.chen@intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
         Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        stable@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220203161846.1160750-1-tadeusz.struk@linaro.org>
-References: <20220203161846.1160750-1-tadeusz.struk@linaro.org>
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Barry Song <21cnbao@gmail.com>,
+        Barry Song <song.bao.hua@hisilicon.com>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
+        Aubrey Li <aubrey.li@intel.com>,
+        Len Brown <len.brown@intel.com>,
+        Zhang Rui <rui.zhang@intel.com>
+Subject: Re: [PATCH][RFC] sched: Stop searching for idle cpu if the LLC
+ domain is overloaded
+Message-ID: <20220207135253.GF23216@worktop.programming.kicks-ass.net>
+References: <20220207034013.599214-1-yu.c.chen@intel.com>
 MIME-Version: 1.0
-Message-ID: <164424192533.16921.7865952180431807276.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220207034013.599214-1-yu.c.chen@intel.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,107 +67,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the sched/urgent branch of tip:
+On Mon, Feb 07, 2022 at 11:40:13AM +0800, Chen Yu wrote:
+> It would be ideal to have a crystal ball to predict the success rate
+> of finding an idle cpu/core in the LLC. If it is doomed to fail,
+> there is no need to search in the LLC domain. There are many potential
+> metrics which could be used to predict the success rate. And the
+> metric should be carefully chosen that, it should help reduce the
+> unnecessary cpu runqueue scan, but meanwhile not give up the opportunity
+> to find an idle cpu.
+> 
+> Choose average cpu utilization as the candidate, since the util_avg is
+> a metric of accumulated historic activity, which seems to be more accurate
+> than instantaneous metrics(such as rq->nr_running) on calculating the probability
+> of find an idle cpu. Only when the average cpu utilization has reaches
+> 85% of the total cpu capacity, this domain is regarded as overloaded.
+> The reason to choose 85% is that, this is the threshold of an overloaded
+> LLC sched group(imbalance_pct = 117, threshold = 100 / 117 * 100%).
 
-Commit-ID:     13765de8148f71fa795e0a6607de37c49ea5915a
-Gitweb:        https://git.kernel.org/tip/13765de8148f71fa795e0a6607de37c49ea=
-5915a
-Author:        Tadeusz Struk <tadeusz.struk@linaro.org>
-AuthorDate:    Thu, 03 Feb 2022 08:18:46 -08:00
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Sun, 06 Feb 2022 22:37:26 +01:00
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 5146163bfabb..1a58befe892d 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
 
-sched/fair: Fix fault in reweight_entity
+> @@ -6280,6 +6281,10 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
+>  	if (!this_sd)
+>  		return -1;
+>  
+> +	sd_share = rcu_dereference(per_cpu(sd_llc_shared, target));
+> +	if (sd_share && READ_ONCE(sd_share->overloaded))
+> +		return -1;
+> +
+>  	cpumask_and(cpus, sched_domain_span(sd), p->cpus_ptr);
+>  
+>  	if (sched_feat(SIS_PROP) && !has_idle_core) {
 
-Syzbot found a GPF in reweight_entity. This has been bisected to
-commit 4ef0c5c6b5ba ("kernel/sched: Fix sched_fork() access an invalid
-sched_task_group")
+> @@ -9268,6 +9275,29 @@ static inline void update_sd_lb_stats(struct lb_env *env, struct sd_lb_stats *sd
+>  		WRITE_ONCE(rd->overutilized, SG_OVERUTILIZED);
+>  		trace_sched_overutilized_tp(rd, SG_OVERUTILIZED);
+>  	}
+> +
+> +	/*
+> +	 * Check if the LLC domain is overloaded. The overload hint
+> +	 * could be used to skip the LLC domain idle cpu search in
+> +	 * select_idle_cpu(). The update of this hint occurs during
+> +	 * periodic load balancing, rather than frequent newidle balance.
+> +	 */
+> +	if (env->idle != CPU_NEWLY_IDLE &&
+> +	    env->sd->span_weight == per_cpu(sd_llc_size, env->dst_cpu)) {
+> +		struct sched_domain_shared *sd_share =
+> +			rcu_dereference(per_cpu(sd_llc_shared, env->dst_cpu));
+> +
+> +		if (!sd_share)
+> +			return;
+> +
+> +		/*
+> +		 * Derived from group_is_overloaded(). The default imbalance_pct
+> +		 * is 117 on LLC domain, which means the threshold of average
+> +		 * utilization is 85%.
+> +		 */
+> +		WRITE_ONCE(sd_share->overloaded, (sds->total_capacity * 100) <
+> +			   (sum_util * env->sd->imbalance_pct));
+> +	}
+>  }
 
-There=C2=A0is a race between sched_post_fork() and setpriority(PRIO_PGRP)
-within a thread group that causes a null-ptr-deref=C2=A0in
-reweight_entity() in CFS. The scenario is that the main process spawns
-number of new threads, which then call setpriority(PRIO_PGRP, 0, -20),
-wait, and exit.  For each of the new threads the copy_process() gets
-invoked, which adds the new task_struct and calls sched_post_fork()
-for it.
+So the only problem I have with this is that this is somewhat of a
+binary toggle. The moment we hit that magical 85% we suddenly change
+behaviour.
 
-In the above scenario there is a possibility that
-setpriority(PRIO_PGRP) and set_one_prio() will be called for a thread
-in the group that is just being created by copy_process(), and for
-which the sched_post_fork() has not been executed yet. This will
-trigger a null pointer dereference in reweight_entity(),=C2=A0as it will
-try to access the run queue pointer, which hasn't been set.
+Would it not be possible to replace the SIS_PROP logic with something
+based on this sum_util metric? Such that when sum_util is very low we
+scan more, while when sum_util hits 85% we naturally stop scanning
+entirely.
 
-Before the mentioned change the cfs_rq pointer for the task  has been
-set in sched_fork(), which is called much earlier in copy_process(),
-before the new task is added to the thread_group.  Now it is done in
-the sched_post_fork(), which is called after that.  To fix the issue
-the remove the update_load param from the update_load param() function
-and call reweight_task() only if the task flag doesn't have the
-TASK_NEW flag set.
-
-Fixes: 4ef0c5c6b5ba ("kernel/sched: Fix sched_fork() access an invalid sched_=
-task_group")
-Reported-by: syzbot+af7a719bc92395ee41b3@syzkaller.appspotmail.com
-Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc: stable@vger.kernel.org
-Link: https://lkml.kernel.org/r/20220203161846.1160750-1-tadeusz.struk@linaro=
-.org
----
- kernel/sched/core.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
-
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 848eaa0..fcf0c18 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -1214,8 +1214,9 @@ int tg_nop(struct task_group *tg, void *data)
- }
- #endif
-=20
--static void set_load_weight(struct task_struct *p, bool update_load)
-+static void set_load_weight(struct task_struct *p)
- {
-+	bool update_load =3D !(READ_ONCE(p->__state) & TASK_NEW);
- 	int prio =3D p->static_prio - MAX_RT_PRIO;
- 	struct load_weight *load =3D &p->se.load;
-=20
-@@ -4406,7 +4407,7 @@ int sched_fork(unsigned long clone_flags, struct task_s=
-truct *p)
- 			p->static_prio =3D NICE_TO_PRIO(0);
-=20
- 		p->prio =3D p->normal_prio =3D p->static_prio;
--		set_load_weight(p, false);
-+		set_load_weight(p);
-=20
- 		/*
- 		 * We don't need the reset flag anymore after the fork. It has
-@@ -6921,7 +6922,7 @@ void set_user_nice(struct task_struct *p, long nice)
- 		put_prev_task(rq, p);
-=20
- 	p->static_prio =3D NICE_TO_PRIO(nice);
--	set_load_weight(p, true);
-+	set_load_weight(p);
- 	old_prio =3D p->prio;
- 	p->prio =3D effective_prio(p);
-=20
-@@ -7212,7 +7213,7 @@ static void __setscheduler_params(struct task_struct *p,
- 	 */
- 	p->rt_priority =3D attr->sched_priority;
- 	p->normal_prio =3D normal_prio(p);
--	set_load_weight(p, true);
-+	set_load_weight(p);
- }
-=20
- /*
-@@ -9445,7 +9446,7 @@ void __init sched_init(void)
- #endif
- 	}
-=20
--	set_load_weight(&init_task, false);
-+	set_load_weight(&init_task);
-=20
- 	/*
- 	 * The boot idle thread does lazy MMU switching as well:
+That way the behaviour is gradual.

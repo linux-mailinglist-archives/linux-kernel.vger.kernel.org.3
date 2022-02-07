@@ -2,60 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A52F4AB513
+	by mail.lfdr.de (Postfix) with ESMTP id 9F2B14AB514
 	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 07:41:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354072AbiBGGiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 01:38:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33090 "EHLO
+        id S1354172AbiBGGiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 01:38:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238648AbiBGGdY (ORCPT
+        with ESMTP id S241627AbiBGGds (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 01:33:24 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 167D1C043184
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 22:33:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=/NCdUINdSDF5KM2Tb0Dq1i00on9a3wMEZ1QazdYyuYI=; b=ooIei4pfJnCYjgGG+26anfZyxt
-        7RPGv8eBlOliwSMzx5DHbMG1ml8zLJe9WG/7xmz++kRingnQ+IvxnuJTHlPCs1Hwm0do7LNzBLi48
-        68VBDLLuGuVYNK7Iw0TK6gyltfjGMgLQ72FXo3g7g+myJm1KPzOnKffgXxRtNjKsiKuk2IQ1ZLCAh
-        d0FhUJIcuwhbbJ05Q9J4VNkVt+7xskowLyUjFLZJ3GHD1iZ+b7MwEfcwP/jO5gGmbPetBVX4fWBLv
-        zknna1w060pYHr37Om6EfjDULgdFda5Q+HPWdA3z5JG8pwz8w19XAjipmSILOVQe8fO6fqp2mXlbq
-        P+0uB/VA==;
-Received: from [2001:4bb8:188:3efc:2cbe:55d7:bb63:46d2] (helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nGxaL-0099Ok-Pz; Mon, 07 Feb 2022 06:33:14 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Dan Williams <dan.j.williams@intel.com>
-Cc:     Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Alistair Popple <apopple@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        nvdimm@lists.linux.dev, linux-mm@kvack.org
-Subject: [PATCH 8/8] fsdax: depend on ZONE_DEVICE || FS_DAX_LIMITED
-Date:   Mon,  7 Feb 2022 07:32:49 +0100
-Message-Id: <20220207063249.1833066-9-hch@lst.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220207063249.1833066-1-hch@lst.de>
-References: <20220207063249.1833066-1-hch@lst.de>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        Mon, 7 Feb 2022 01:33:48 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B081C043181;
+        Sun,  6 Feb 2022 22:33:47 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id t4-20020a17090a510400b001b8c4a6cd5dso1169324pjh.5;
+        Sun, 06 Feb 2022 22:33:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=5w4/ennwCAEEkQywko6dYbRCf/YpCkpMTELAq3SETZ0=;
+        b=Hh53y7v9NqRMkLkoNG8j78dhkJPtGq5sFnpbaHmwv98uBLw3f32oI311L5p3FsJKJ3
+         IgrPn3pu9YeOnJzCeFAgfkY9+N8XVvBodUNzDn+qfjnrk/4nx0g/L9pyLyBsTMjfrZ/D
+         34Eb2vBm+bm+FF7/WxOe/zU/utjATQBnpvQiEf1XRkuAyaDtQXGOSRla9Rx36lSnSFCl
+         Kz/cEyzX+XqzrcnXtwAMRKwYkscyU0U+9pzEy23Rd0t7zzMfFKAAKNA/iop5FskRk39L
+         JOk5Ut+nY244dW4vzbXVIg8BJiCeT1yfuxCNAR7SEZi5s6zwM30kAYnVHR0rD06KNikt
+         Bhtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=5w4/ennwCAEEkQywko6dYbRCf/YpCkpMTELAq3SETZ0=;
+        b=dCt7ZUL5730M22Et2LAnpJRsHW0fccyGP29nPWAIGB7m3oRGQ50+70+BAsz0dkVlge
+         uHIlq3LnN/DFby+03Ns1uMVbSrpGzWHjzdH8hv0FzfzH1LGj7imlJtsbrSFwCzSN/5wK
+         HeVtwUQ6eLcgONkvppzUL6xlPZj6h1XbobFh9XzdZvCd8yWitcUUksZ6PVjMosmUeG5x
+         PGq3gv9zrtOZpjRFUqVPSEgnghMYFOwFSe1scdGDxnXIlELdGpK2QYxbcWAJnTwKVhdC
+         FG98TRErmjNUajm47UVPorw2J6wvS0dDkY0NbJJUkxwsbvZLPC5vvtED950q4ERqzGUS
+         okGg==
+X-Gm-Message-State: AOAM530qgtik2pOVBfIyA9C3e5p6bwA8r8Q5df1ZQW8Su4ZYQs8sNDS8
+        At+ZAFnaHHq3Sx8xSUweEg==
+X-Google-Smtp-Source: ABdhPJwAH1K+CWgey8aVJCIHJ53hQkGzwDi9PAMPA/2HOH43X+MSCDHXYztTHNJXL8NB9GZijsI3XQ==
+X-Received: by 2002:a17:90b:351:: with SMTP id fh17mr5008108pjb.28.1644215627026;
+        Sun, 06 Feb 2022 22:33:47 -0800 (PST)
+Received: from localhost ([2401:e180:8894:9737:7848:1ec7:b697:7d50])
+        by smtp.gmail.com with ESMTPSA id d13sm2803452pfj.205.2022.02.06.22.33.46
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sun, 06 Feb 2022 22:33:46 -0800 (PST)
+From:   Tyrone Ting <warp5tw@gmail.com>
+To:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        robh+dt@kernel.org, krzysztof.kozlowski@canonical.com,
+        semen.protsenko@linaro.org, yangyicong@hisilicon.com,
+        wsa@kernel.org, jie.deng@intel.com, sven@svenpeter.dev,
+        bence98@sch.bme.hu, lukas.bulwahn@gmail.com, arnd@arndb.de,
+        olof@lixom.net, andriy.shevchenko@linux.intel.com,
+        warp5tw@gmail.com, tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
+        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
+        kfting@nuvoton.com
+Cc:     openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1 0/6] i2c: npcm: Bug fixes timeout, spurious interrupts
+Date:   Mon,  7 Feb 2022 14:33:32 +0800
+Message-Id: <20220207063338.6570-1-warp5tw@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,27 +73,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a depends on ZONE_DEVICE support or the s390-specific limited DAX
-support, as one of the two is required at runtime for fsdax code to
-actually work.
+From: Tyrone Ting <kfting@nuvoton.com>
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- fs/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+This patchset includes the following fixes:
 
-diff --git a/fs/Kconfig b/fs/Kconfig
-index 05efea674bffa0..6e8818a5e53c45 100644
---- a/fs/Kconfig
-+++ b/fs/Kconfig
-@@ -48,6 +48,7 @@ config FS_DAX
- 	bool "File system based Direct Access (DAX) support"
- 	depends on MMU
- 	depends on !(ARM || MIPS || SPARC)
-+	depends on ZONE_DEVICE || FS_DAX_LIMITED
- 	select FS_IOMAP
- 	select DAX
- 	help
+- Add dt-bindings description for NPCM845.
+- Bug fix for timeout calculation.
+- Better handling of spurious interrupts.
+- Fix for event type in slave mode.
+- Removal of own slave addresses [2:10].
+- Support for next gen BMC (NPCM845).
+
+The NPCM I2C driver is tested on NPCM750 and NPCM845 evaluation boards.
+
+Tali Perry (4):
+  i2c: npcm: Fix timeout calculation
+  i2c: npcm: Add tx complete counter
+  i2c: npcm: Handle spurious interrupts
+  i2c: npcm: Remove own slave addresses 2:10
+
+Tyrone Ting (2):
+  dt-bindings: i2c: npcm: support NPCM845
+  i2c: npcm: Support NPCM845
+
+ .../bindings/i2c/nuvoton,npcm7xx-i2c.yaml     |  21 +-
+ drivers/i2c/busses/Kconfig                    |   8 +-
+ drivers/i2c/busses/Makefile                   |   2 +-
+ drivers/i2c/busses/i2c-npcm7xx.c              | 191 ++++++++++++------
+ 4 files changed, 149 insertions(+), 73 deletions(-)
+
 -- 
-2.30.2
+2.17.1
 

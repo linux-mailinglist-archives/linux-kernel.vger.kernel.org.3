@@ -2,46 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5676E4AB44C
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 07:13:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E16C44AB43D
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 07:13:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240869AbiBGFvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 00:51:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34942 "EHLO
+        id S232387AbiBGFxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 00:53:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiBGFpH (ORCPT
+        with ESMTP id S232158AbiBGFsS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 00:45:07 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6FC20C043181
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 21:44:55 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A26EBD6E;
-        Sun,  6 Feb 2022 21:44:54 -0800 (PST)
-Received: from [10.163.45.31] (unknown [10.163.45.31])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 88FC33F73B;
-        Sun,  6 Feb 2022 21:44:51 -0800 (PST)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Subject: Re: [PATCH v2 01/15] coresight: Make ETM4x TRCIDR0 register accesses
- consistent with sysreg.h
-To:     James Clark <james.clark@arm.com>, suzuki.poulose@arm.com,
-        mathieu.poirier@linaro.org, coresight@lists.linaro.org
-Cc:     leo.yan@linaro.com, mike.leach@linaro.org,
-        Leo Yan <leo.yan@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220203120604.128396-1-james.clark@arm.com>
- <20220203120604.128396-2-james.clark@arm.com>
-Message-ID: <1b649955-cb45-1283-68cd-c82582cef60c@arm.com>
-Date:   Mon, 7 Feb 2022 11:14:50 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Mon, 7 Feb 2022 00:48:18 -0500
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2067.outbound.protection.outlook.com [40.107.22.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7689C043181
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 21:48:16 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MtniYe6SJlSf7x1YX6oYMsJNFPm+a3XW0AEIY0mKignDC+Y+ejZwotvjk8HW2pY/GN1Zpo65PiLmb132Q4C8HWgpJ9cKVVFkQHm0Xzmbfs8qzLFFr9zlppojMnK9iADOyOOguvGmZajY0xk8f2Ci5b8HPGWGbTaRHCdCb8J5SApPiQWCpDzVvAyMezrkTk0sLVsBUbdJc+Wv+PKsDjjC+zriob009Ir/37hTyGAIr7ygFNwIXjfBdmFwfIlgiKCqbsc8FntCJox+nxNifjZJ1ch0Q5G087Cegl5GB+RvCEhpcSSO2EeNbHa1a/ZxwKGdVw2hnFb90LvG7a/uP7T+nA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hB5atL2VuGp3Qf6sMCeO5bZAGkMi3ZnjjV7jIvHF4Jg=;
+ b=E5PECWJHo03gUP6yjXb6B1nCrgh9M0eRVfK9Q4krrFmNHCKaYMPduilZZQmLNv6A40pk3XIzNAK3ay0ALncpcuusNwc3gSMh7LL1keysGVRfBFIJonafIjWVn03kWUEBI1UUZWvJQyQtn6JmL/+l7zKhDkp9SELJu/yezxSnXiRJsOXa8pC8LItXswGKBAcH406ql1ZMD1z8VZcq43MtQvczIYr66ZzLFfr4glRpmV6g87nIhjDwlcvCquQZFv83cL91bPxenZHF9nvjaBy317lfZdaAJsVzqxS23ZgxF4pYiz9YnVQmggpTrjTldgW+NxWcF8CUVypA9YGNN84yAQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hB5atL2VuGp3Qf6sMCeO5bZAGkMi3ZnjjV7jIvHF4Jg=;
+ b=Mp77vT5DFh6Ton9HA51okX1CMBAt7Qb8j5qKz22QcaX/K3LmLbz0ldP68r+g3yY3D9Pbmz+PvtpM8bAYgqLSmjJc1L29IxZUcAx+GZwePsrxTyV8PKmWFWd+vhSW+6x59twxIASyr9NeBVE520GKATkzu8vPUoyh7teQtyWvU60=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
+ by VI1PR0402MB3677.eurprd04.prod.outlook.com (2603:10a6:803:26::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.17; Mon, 7 Feb
+ 2022 05:48:12 +0000
+Received: from AM7PR04MB7046.eurprd04.prod.outlook.com
+ ([fe80::ddca:beb1:95b0:1ae1]) by AM7PR04MB7046.eurprd04.prod.outlook.com
+ ([fe80::ddca:beb1:95b0:1ae1%4]) with mapi id 15.20.4951.019; Mon, 7 Feb 2022
+ 05:48:12 +0000
+From:   Liu Ying <victor.liu@nxp.com>
+To:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Cc:     linux-imx@nxp.com, Rob Clark <robdclark@chromium.org>,
+        Sean Paul <seanpaul@chromium.org>,
+        Zain Wang <wzz@rock-chips.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Subject: [PATCH RESEND] drm/self_refresh: Don't trigger the entry timer for self refresh work if CRTC state is inactive
+Date:   Mon,  7 Feb 2022 13:46:17 +0800
+Message-Id: <20220207054617.987811-1-victor.liu@nxp.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR02CA0044.apcprd02.prod.outlook.com
+ (2603:1096:4:196::17) To AM7PR04MB7046.eurprd04.prod.outlook.com
+ (2603:10a6:20b:113::22)
 MIME-Version: 1.0
-In-Reply-To: <20220203120604.128396-2-james.clark@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7d4529e6-b338-4393-81a3-08d9e9fd6d39
+X-MS-TrafficTypeDiagnostic: VI1PR0402MB3677:EE_
+X-Microsoft-Antispam-PRVS: <VI1PR0402MB3677BC9EBE7B43C1E5D50D45982C9@VI1PR0402MB3677.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:758;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: vZv2VFCoIQnX+CU08Kg+StfguTGvKll38WHNBsteeU7VVqBwTZBUdqk00TT1oHuGP96K+Rub6MSH9wtOz7K9cf8HndLynehNggvaht62z9bBiLPVnuzyv4npGM37L9O5KvUN/uAksCxjlB3MkAlc8D1aQ0gJu+gdLA/SKv+AfZNFsaq3OgavHxjkclGA8+5VY/haJGmyf/FgGbJLKvJV2g5uOQ3hCaEcxQbkCLhaVJL0XouX86wb26iz8vSWDnA2fRbBm2g2lObaqUfD1UeZZ27UvPp/1USRrAI3X6HU+ZnmNDwJBpQdz0tyiWtzKtFDEYDlByw4PL4D71V+BXzqehiAYevOWUE4+WCUrkBsL2HMnUMXrMIOcq8xe+eoHT1YEocODemOaa6iKAEoHmjv7bXTvP7h6FmM51g6ZVKwOmn7iziboFJedg78xP3MHkrsPnQAIFvr6esJ63c+dIzK2oBms0boMs5kqJglNGQTdNcNVk4ehkIsG8BW4gDIFd8irRahob05tkKl4jAPXSUP/GgVZpWs3pxDO4W96tK7nv8GmZwoj/CGIUSvUW0ImeJqyNBN6huF6rUC24vQLyPKDviVEVmtK/s3l7Ws0GyuhPFKK0JnJz44qFTueGi52ARj4bWl93L3OMhK31rZuTLjrIFKydF7FNKmdVg31Js9sLrTiB1Zuw5Fy5PidCJcu8oQZg0QowlUVjd05pRJCC4SLQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7046.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(26005)(6486002)(2906002)(1076003)(186003)(6512007)(316002)(54906003)(52116002)(508600001)(36756003)(6506007)(2616005)(86362001)(8936002)(66476007)(66556008)(66946007)(83380400001)(8676002)(5660300002)(7416002)(38350700002)(38100700002)(4326008);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?07Mma4LV3rTFyXi3t6dGsYlP0i9yEPAfy4q2dZqwBpTCmOgLT/nw6PzZnu+G?=
+ =?us-ascii?Q?hNFhkVL6wLx/uMbt8uZ0YLKC/EzLQMFqvR9khf9N7kctc6ZZI/ISKOS8F5Px?=
+ =?us-ascii?Q?IOYzr1ygmdRgg9FVISCSKcU5ijUb/Wt8sHI48cl3quL8+y0zys6W1YZpE3RW?=
+ =?us-ascii?Q?mPmD4WQKme2aXfac9F5mZ1WyojPYrHhUT5omtkUrTmwgS2CfWddM7H7LonhH?=
+ =?us-ascii?Q?LKKUf0+l6UismnSZ6jGUQCQnhLNdP3pAVJ90psRtx9VT+e/EijxEDdJ6BoCC?=
+ =?us-ascii?Q?Luy4wvXIP71WcmdBv0jU7yoAHeJlM/+Iz6wW1TF8ut7Y1hQyooJlnRpxVT19?=
+ =?us-ascii?Q?RS4pyHCM/0dqSuFcDotwqi2aUW5b6xjTW68BhFLpxGirWck1gMGDxoZ2PHVm?=
+ =?us-ascii?Q?87QXGwCxHzc8KUiltQlUn6MD+VU1o5kkylaPM3OiXXCxn72FeuY/DDWvV/Xd?=
+ =?us-ascii?Q?em41Bm0WpjTz5/FrzeKF5RiuJTXJXnjpGp9MP9G6UeiFEsZ2g4qSH38w6xja?=
+ =?us-ascii?Q?BSpsYRKmx6RUDhhPkSBiuXe+C/BRTjGei0dqgrLUN3tNuuQZxqHztY9bdWGD?=
+ =?us-ascii?Q?WC1S8mS/y5PyhL1mQrKYvG+kr250054x0O8tmjLCn3+BhQOSZbp+DGJtOv4B?=
+ =?us-ascii?Q?+3y40EGX1WWRGHvIn+MBb+6UzplB9tNCiUDcTuuvGX9H1hmk+O7z4G9Hv5XH?=
+ =?us-ascii?Q?OUXYUyo2O9Wcb/ixxbMA96Vq3CQodKtb296M5lBA5QmOBCntG0UOKXcOrNnZ?=
+ =?us-ascii?Q?+vE6Ymb53Uwyidnzy72IBy3UrRoj2AZTGznZ8ScXbW36DlaSPRq1g8ypxLRm?=
+ =?us-ascii?Q?tJdMIRCvbujfLbknA33lJnhUsXAXwL/8Ux3J+IGfchJJN6lBqglp8Qi9ZnDy?=
+ =?us-ascii?Q?XDpXGxvPW7v9W0o2H6VqoiXbOjliBhe7Y6SQ50KIzjCWzfc9yZP8mwypEb+8?=
+ =?us-ascii?Q?gII/xiZUo/MOh7Om9EHfTtvEqFwLlhAkpKmQtJow1ZYLNCGWudGwWmsJ5x5l?=
+ =?us-ascii?Q?QVmkhyEAb7WqTfN7x4tU47SobrQteETjhS5k90z2iDSMvPFw1o5Rzh0dSmPY?=
+ =?us-ascii?Q?E9mulynRS+KonQ0Y1B+eewXqUQK3lEcGW01UIj2+sYmDbRfJnAqNtBFwAZV9?=
+ =?us-ascii?Q?ctsraN0hI4qEzLKZ99pMET8sUNO32xEZ0EvFiHCC8O4fhtLI0nY9AvgcGMiW?=
+ =?us-ascii?Q?KVhm4OYw6GkDMYZXyhHUTCVOM+4yefWyn7SfhN1SP37NYfrVG0CJ78MbIROV?=
+ =?us-ascii?Q?FuwRvJYqZuDl8Pf0SxsrhhIKi9el+y5hmMQ23v/WinEoqthVIkRkj5FtVhYI?=
+ =?us-ascii?Q?Q3WG8Ivi6UFMYsYXzwTVGbVYGvM+UvpaunVmXmBUXgeW3x7wp2y7uOIiQqPs?=
+ =?us-ascii?Q?TS0/QpU9c+zpJkowe82B0mfFT2EUKukUcRZZ0dljq6W35vfMVTxivDc2or0W?=
+ =?us-ascii?Q?em8X8CChPJqBLfmZ6r5jswlZxgcZHyYcy0yoSt1q7Mo09e6lzt3/UxLiQgZ2?=
+ =?us-ascii?Q?aqzZVcjtChY2bkKe8DMbgeoBEZrx2sM5sEWbzfq/mRijLAC29IgfcuYpbnA0?=
+ =?us-ascii?Q?jUeVez4rJCGU4lWjYRVCH34MRMdBJNgZ6HccYXYHquVQmXdJzqGSJIdV7DsY?=
+ =?us-ascii?Q?4kkj+vlqYTtFcgG5PhlzIjw=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7d4529e6-b338-4393-81a3-08d9e9fd6d39
+X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7046.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Feb 2022 05:48:12.0774
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1MtbMF5brazWkRvV0ips1iDyk/KucxgWuTB6Nm0gPcKM3p6iltu17GFCOCFIKYnRualcxud7tNodaM5PceM3uA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0402MB3677
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,162 +119,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi James,
+If the CRTC state is already inactive, it doesn't make sense to trigger
+the entry timer for self refresh work to make the display enter self
+refresh mode, because the disabled CRTC hints that either the entire
+display pipeline is disabled or the previous atomic commit is triggered
+by the self refresh work(the CRTC is disabled, while the relevant encoder
+and bridges could be disabled or not depending on the drivers).
 
-These are all ETM4X specific changes. Something like this might be cleaner
-and also more compact. Also would suggest to follow the same for subsequent
-patches as well.
+Cc: Rob Clark <robdclark@chromium.org>
+Cc: Sean Paul <seanpaul@chromium.org>
+Cc: Zain Wang <wzz@rock-chips.com>
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+Cc: Maxime Ripard <mripard@kernel.org>
+Cc: Thomas Zimmermann <tzimmermann@suse.de>
+Cc: David Airlie <airlied@linux.ie>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Signed-off-by: Liu Ying <victor.liu@nxp.com>
+---
+ drivers/gpu/drm/drm_self_refresh_helper.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-coresight: etm4x: Cleanup TRCIDR0 register accesses
+diff --git a/drivers/gpu/drm/drm_self_refresh_helper.c b/drivers/gpu/drm/drm_self_refresh_helper.c
+index dd33fec5aabd..e76eb3cd22c7 100644
+--- a/drivers/gpu/drm/drm_self_refresh_helper.c
++++ b/drivers/gpu/drm/drm_self_refresh_helper.c
+@@ -204,8 +204,12 @@ void drm_self_refresh_helper_alter_state(struct drm_atomic_state *state)
+ 		struct drm_self_refresh_data *sr_data;
+ 		unsigned int delay;
+ 
+-		/* Don't trigger the entry timer when we're already in SR */
+-		if (crtc_state->self_refresh_active)
++		/*
++		 * Don't trigger the entry timer when we're already inactive.
++		 * Note that the inactive state hints that either we're already
++		 * in SR or the entire display pipeline is already disabled.
++		 */
++		if (!crtc_state->active)
+ 			continue;
+ 
+ 		sr_data = crtc->self_refresh_data;
+-- 
+2.25.1
 
-Consistency with sysreg.h could be mentioned in the commit message itself.
-
-On 2/3/22 5:35 PM, James Clark wrote:
-> This is a no-op change for style and consistency and has no effect on the
-> binary produced by gcc-11.
-
-This patch adds register definitions, helper macros as well. Please expand
-the commit message to add more details. This is too short, for the change
-it creates. BTW why is it necessary to mention GCC version number here.
-
-> 
-> Signed-off-by: James Clark <james.clark@arm.com>
-> ---
->  .../coresight/coresight-etm4x-core.c          | 36 +++++--------------
->  drivers/hwtracing/coresight/coresight-etm4x.h | 17 +++++++++
->  drivers/hwtracing/coresight/coresight-priv.h  |  5 +++
->  3 files changed, 30 insertions(+), 28 deletions(-)
-> 
-> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-> index e2eebd865241..107e81948f76 100644
-> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
-> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-> @@ -1091,41 +1091,21 @@ static void etm4_init_arch_data(void *info)
->  	etmidr0 = etm4x_relaxed_read32(csa, TRCIDR0);
->  
->  	/* INSTP0, bits[2:1] P0 tracing support field */
-> -	if (BMVAL(etmidr0, 1, 2) == 0b11)
-> -		drvdata->instrp0 = true;
-> -	else
-> -		drvdata->instrp0 = false;
-> -
-> +	drvdata->instrp0 = !!(REG_VAL(etmidr0, TRCIDR0_INSTP0) == 0b11);
->  	/* TRCBB, bit[5] Branch broadcast tracing support bit */
-> -	if (BMVAL(etmidr0, 5, 5))
-> -		drvdata->trcbb = true;
-> -	else
-> -		drvdata->trcbb = false;
-> -
-> +	drvdata->trcbb = !!(etmidr0 & TRCIDR0_TRCBB);
->  	/* TRCCOND, bit[6] Conditional instruction tracing support bit */
-> -	if (BMVAL(etmidr0, 6, 6))
-> -		drvdata->trccond = true;
-> -	else
-> -		drvdata->trccond = false;
-> -
-> +	drvdata->trccond = !!(etmidr0 & TRCIDR0_TRCCOND);
->  	/* TRCCCI, bit[7] Cycle counting instruction bit */
-> -	if (BMVAL(etmidr0, 7, 7))
-> -		drvdata->trccci = true;
-> -	else
-> -		drvdata->trccci = false;
-> -
-> +	drvdata->trccci = !!(etmidr0 & TRCIDR0_TRCCCI);
->  	/* RETSTACK, bit[9] Return stack bit */
-> -	if (BMVAL(etmidr0, 9, 9))
-> -		drvdata->retstack = true;
-> -	else
-> -		drvdata->retstack = false;
-> -
-> +	drvdata->retstack = !!(etmidr0 & TRCIDR0_RETSTACK);
->  	/* NUMEVENT, bits[11:10] Number of events field */
-> -	drvdata->nr_event = BMVAL(etmidr0, 10, 11);
-> +	drvdata->nr_event = REG_VAL(etmidr0, TRCIDR0_NUMEVENT);
->  	/* QSUPP, bits[16:15] Q element support field */
-> -	drvdata->q_support = BMVAL(etmidr0, 15, 16);
-> +	drvdata->q_support = REG_VAL(etmidr0, TRCIDR0_QSUPP);
->  	/* TSSIZE, bits[28:24] Global timestamp size field */
-> -	drvdata->ts_size = BMVAL(etmidr0, 24, 28);
-> +	drvdata->ts_size = REG_VAL(etmidr0, TRCIDR0_TSSIZE);
->  
->  	/* maximum size of resources */
->  	etmidr2 = etm4x_relaxed_read32(csa, TRCIDR2);
-> diff --git a/drivers/hwtracing/coresight/coresight-etm4x.h b/drivers/hwtracing/coresight/coresight-etm4x.h
-> index 3c4d69b096ca..2bd8ad953b8e 100644
-> --- a/drivers/hwtracing/coresight/coresight-etm4x.h
-> +++ b/drivers/hwtracing/coresight/coresight-etm4x.h
-> @@ -130,6 +130,23 @@
->  
->  #define TRCRSR_TA			BIT(12)
->  
-> +/*
-> + * Bit positions of registers that are defined above, in the sysreg.h style
-> + * of _MASK, _SHIFT and BIT().
-> + */
-
-^^^ not really necessary. Instead the format requirement for below mentioned
-CORESIGHT_REG_VAL() macro might be relevant and should be mentioned.
-
-> +#define TRCIDR0_INSTP0_SHIFT			1
-> +#define TRCIDR0_INSTP0_MASK			GENMASK(1, 0)
-> +#define TRCIDR0_TRCBB				BIT(5)
-> +#define TRCIDR0_TRCCOND				BIT(6)
-> +#define TRCIDR0_TRCCCI				BIT(7)
-> +#define TRCIDR0_RETSTACK			BIT(9)
-> +#define TRCIDR0_NUMEVENT_SHIFT			10
-> +#define TRCIDR0_NUMEVENT_MASK			GENMASK(1, 0)
-> +#define TRCIDR0_QSUPP_SHIFT			15
-> +#define TRCIDR0_QSUPP_MASK			GENMASK(1, 0)
-> +#define TRCIDR0_TSSIZE_SHIFT			24
-> +#define TRCIDR0_TSSIZE_MASK			GENMASK(4, 0)
-> +
->  /*
->   * System instructions to access ETM registers.
->   * See ETMv4.4 spec ARM IHI0064F section 4.3.6 System instructions
-> diff --git a/drivers/hwtracing/coresight/coresight-priv.h b/drivers/hwtracing/coresight/coresight-priv.h
-> index ff1dd2092ac5..1452c6038421 100644
-> --- a/drivers/hwtracing/coresight/coresight-priv.h
-> +++ b/drivers/hwtracing/coresight/coresight-priv.h
-> @@ -36,6 +36,11 @@
->  
->  #define TIMEOUT_US		100
->  #define BMVAL(val, lsb, msb)	((val & GENMASK(msb, lsb)) >> lsb)
-> +/*
-> + * Extract a field from a register where field is #defined in the form
-> + * <register_name>_<field_name>_MASK and <register_name>_<field_name>_SHIFT
-> + */
-
-Looking at the usage, <register_name> is already embedded in <filed_name>. So
-it requires <field_name>_SHIFT and <field_name>_MASK instead. Unless register
-name should be passed as separate argument (which actually might be better).
-
-REG_VAL(etmidr0, TRCIDR0_TSSIZE) ----> REG_VAL(etmidr0, TRCIDR0, TSSIZE)
-
-with some restructuring in the comment ..
-
-/*
- * Extract a field from a coresight register
- *
- * Required fields are defined as macros like the following
- *  
- * <register_name>_<field_name>_MASK and <register_name>_<field_name>_SHIFT
- */
-
-> +#define REG_VAL(val, field)	((val & (field##_MASK << field##_SHIFT)) >> field##_SHIFT)
-
-This is too generic to be in a coresight header or it should just be
-named CORESIGHT_REG_VAL() instead, making it more specific for here.
-
-The build should fail in case any required macro definition is absent.
-I guess no more fortification is required in case macros are missing.
-
-However CORESIGHT_REG_VAL() is better placed in <coresight-etm4x.h>
-just before all the dependent SHIFT/MASK register field definition
-starts.
-
->  
->  #define ETM_MODE_EXCL_KERN	BIT(30)
->  #define ETM_MODE_EXCL_USER	BIT(31)
-> 
-
-- Anshuman

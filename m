@@ -2,97 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEC5E4AC01A
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 14:52:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55C544AC038
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 14:54:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388798AbiBGNu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 08:50:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38518 "EHLO
+        id S1389249AbiBGNvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 08:51:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345274AbiBGNkm (ORCPT
+        with ESMTP id S1387223AbiBGNrv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 08:40:42 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56CE0C043189;
-        Mon,  7 Feb 2022 05:40:42 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id e3so10897665wra.0;
-        Mon, 07 Feb 2022 05:40:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jjxTRl/c4nrLxVy+a0+jLX2ZtSQhFhV7DHi5h4ELxr4=;
-        b=E+DyHE87RmaOz/LO2EGtRzJ7qReSsX8GI2mSUXxCy4Jb9z8abBB9IjlvhYdkQvxS+d
-         R8Sx1RmFrP21229QcZMtsm6EnCbvzpvQ/858oNxuiJxJu0W7LSB/cEhYpk9aT3nMcYWp
-         Tqd4zsXOmbtwCbQw+9jJiDJ8mIGtW+1QDwtv29bkCbYPPC9fkqVqtA3MUNZn+OR/rcdu
-         bhpBbP24HBiKTqH9nIBcYp9NoGtYXHgqiGso2mxnR9/MIrGUktDn2Si4E1Kfnf3sBbVp
-         EVOm61pTbrlOGKDYe9W1xJy9g/tr8ACXWYnALNw2MqAF1oVdfM3lx0f/9FiI96wlgbAe
-         UW5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jjxTRl/c4nrLxVy+a0+jLX2ZtSQhFhV7DHi5h4ELxr4=;
-        b=wEQSSkhnC0Ek5Fi79F8i4jfkQccHBPQ52/PM07yt1VkadW8RefytzMi8jbV8NNlxoi
-         HNxf+P33U96Zb0gZLyPnKtn3ynVQ0Ztkx4q6BVgg7lVIkRRklTFVs1okxcjv3TBxxQPp
-         daswirRuJtwg5OCRHiAjDkHq5sZR6R/TqTMEcQoGb3qyBBcH+NDihNGV4zVvSpEHwrLq
-         0voGOYLyKR1RHeFoXS97wVETlhB5k7czO04aLc2N6DREY70DhY3mwQt7kfjv0PRcZQ3k
-         DqaXxueUQjU+atTTBJEdCYUCFglc1fjind0yKq7Br5+4bvHWXNIXpvC2WOf6FmIHG9X5
-         RI5Q==
-X-Gm-Message-State: AOAM531RHYbhf9P/FgYCQRlczdyjtTcLWca/s+/UqgHgPqJgHzo6IHq5
-        G/RsPPEgI9+M1li02TQRgmc=
-X-Google-Smtp-Source: ABdhPJxsup6qGXdvRsBdbwgeWEnB972cXcL5N67PKOnqUSoTorSOUP3oaLQaaGmhbM1OvqMP/UFcBQ==
-X-Received: by 2002:a5d:4528:: with SMTP id j8mr2904210wra.544.1644241240818;
-        Mon, 07 Feb 2022 05:40:40 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id 24sm1478380wmf.48.2022.02.07.05.40.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 05:40:40 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Jan Kara <jack@suse.com>, Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        NeilBrown <neilb@suse.de>, linux-ext4@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] ext2: remove unused pointer bdi
-Date:   Mon,  7 Feb 2022 13:40:39 +0000
-Message-Id: <20220207134039.337197-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 7 Feb 2022 08:47:51 -0500
+Received: from condef-04.nifty.com (condef-04.nifty.com [202.248.20.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B97FC043181;
+        Mon,  7 Feb 2022 05:47:50 -0800 (PST)
+Received: from conssluserg-01.nifty.com ([10.126.8.80])by condef-04.nifty.com with ESMTP id 217DjHnk028207;
+        Mon, 7 Feb 2022 22:45:17 +0900
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50]) (authenticated)
+        by conssluserg-01.nifty.com with ESMTP id 217DipVo022226;
+        Mon, 7 Feb 2022 22:44:52 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 217DipVo022226
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1644241492;
+        bh=QUV0hp+xB/5tu9Im52sNMR58mRLFLhMZGaIvBrJvw+Q=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=nbGi8UszpMuf1YuXNXjb4bnFhY+c9dLrABng6IGMik7U4321n/7HbUJiEz0rSAuDC
+         6cD4A4QDQ5ZU+ZIB75NLw9biK8HJe7RvuCE6Oaeah8sBtulkHBzMZaJ8ZqccnvR94T
+         8QHeSyXccMD9FivQxZQGxxCazVcbFqbzQ7w0olPVGraN8HduDChc5E+KU+1iik4bN4
+         RbJ84oePIAp5VJe3sLn6qaSWVUjD15FoE3+552Fyqti31sjqQKNUXnqw13oGq4IG/9
+         Mln10pW/GTzDiusmCo5z6XHTdkO+l0XGMWniv/oLV5MWBUqeAn5Nbur2rn3TDOHf/2
+         m6XeKpUxo8I+g==
+X-Nifty-SrcIP: [209.85.216.50]
+Received: by mail-pj1-f50.google.com with SMTP id p22-20020a17090adf9600b001b8783b2647so7391102pjv.5;
+        Mon, 07 Feb 2022 05:44:51 -0800 (PST)
+X-Gm-Message-State: AOAM530WE848O1SolBsVKEVFNF6ZZb6/8pvz4oMm0Bq6Xar8WVOofkpr
+        rjl/ndOur2T772pNwIXXNB4EMCtAEppOeT0YQew=
+X-Google-Smtp-Source: ABdhPJwoBSTLjNxzRqh4wM22ZLkK8Kabb+gW2Gmp9KwL9maZhBzOFDPATsJn2nYLB4bdQjZ3p4Q6cWFtQph98OF4fnk=
+X-Received: by 2002:a17:90b:1647:: with SMTP id il7mr18618035pjb.119.1644241491011;
+ Mon, 07 Feb 2022 05:44:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220128220131.10956-1-brenda.streiff@ni.com>
+In-Reply-To: <20220128220131.10956-1-brenda.streiff@ni.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Mon, 7 Feb 2022 22:44:15 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASdD=xHb24sj80CsG90QVDBXFhFV10MvybdwGf2xx27Kw@mail.gmail.com>
+Message-ID: <CAK7LNASdD=xHb24sj80CsG90QVDBXFhFV10MvybdwGf2xx27Kw@mail.gmail.com>
+Subject: Re: [PATCH] kconfig: let 'shell' return enough output for deep path names
+To:     Brenda Streiff <brenda.streiff@ni.com>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The call to bdi_congested has been removed and so the bdi pointer
-is no longer required. Remove it.
+On Sat, Jan 29, 2022 at 7:02 AM Brenda Streiff <brenda.streiff@ni.com> wrot=
+e:
+>
+> The 'shell' built-in only returns the first 256 bytes of the command's
+> output. In some cases, 'shell' is used to return a path; by bumping up
+> the buffer size to 4096 this lets us capture up to PATH_MAX.
+>
+> The specific case where I ran into this was due to commit 1e860048c53e
+> ("gcc-plugins: simplify GCC plugin-dev capability test"). After this
+> change, we now use `$(shell,$(CC) -print-file-name=3Dplugin)` to return
+> a path; if the gcc path is particularly long, then the path ends up
+> truncated at the 256 byte mark, which makes the HAVE_GCC_PLUGINS
+> depends test always fail.
+>
+> Signed-off-by: Brenda Streiff <brenda.streiff@ni.com>
 
-Fixes: 9bbab3a63d49 ("mm/fs: remove bdi_congested() and wb_congested() and related functions")
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- fs/ext2/ialloc.c | 3 ---
- 1 file changed, 3 deletions(-)
+Thanks, applied to linux-kbuild,
+(but I dropped the change to tests)
 
-diff --git a/fs/ext2/ialloc.c b/fs/ext2/ialloc.c
-index d632764da240..998dd2ac8008 100644
---- a/fs/ext2/ialloc.c
-+++ b/fs/ext2/ialloc.c
-@@ -170,9 +170,6 @@ static void ext2_preread_inode(struct inode *inode)
- 	unsigned long offset;
- 	unsigned long block;
- 	struct ext2_group_desc * gdp;
--	struct backing_dev_info *bdi;
--
--	bdi = inode_to_bdi(inode);
- 
- 	block_group = (inode->i_ino - 1) / EXT2_INODES_PER_GROUP(inode->i_sb);
- 	gdp = ext2_get_group_desc(inode->i_sb, block_group, NULL);
--- 
-2.34.1
 
+
+
+
+> ---
+>  scripts/kconfig/preprocess.c                                  | 2 +-
+>  scripts/kconfig/tests/preprocess/builtin_func/Kconfig         | 3 +++
+>  scripts/kconfig/tests/preprocess/builtin_func/expected_stdout | 1 +
+>  3 files changed, 5 insertions(+), 1 deletion(-)
+>
+> diff --git a/scripts/kconfig/preprocess.c b/scripts/kconfig/preprocess.c
+> index 0590f86df6e4..748da578b418 100644
+> --- a/scripts/kconfig/preprocess.c
+> +++ b/scripts/kconfig/preprocess.c
+> @@ -141,7 +141,7 @@ static char *do_lineno(int argc, char *argv[])
+>  static char *do_shell(int argc, char *argv[])
+>  {
+>         FILE *p;
+> -       char buf[256];
+> +       char buf[4096];
+>         char *cmd;
+>         size_t nread;
+>         int i;
+> diff --git a/scripts/kconfig/tests/preprocess/builtin_func/Kconfig b/scri=
+pts/kconfig/tests/preprocess/builtin_func/Kconfig
+> index baa328827911..e9791a97f731 100644
+> --- a/scripts/kconfig/tests/preprocess/builtin_func/Kconfig
+> +++ b/scripts/kconfig/tests/preprocess/builtin_func/Kconfig
+> @@ -25,3 +25,6 @@ $(warning,$(shell,printf 'hello\nworld\n\n4\n\n\n'))
+>  # 'lineno' to the line number.
+>  $(warning,filename=3D$(filename))
+>  $(warning,lineno=3D$(lineno))
+> +
+> +# 'shell' can return more than 256 bytes of output
+> +$(info,$(shell,printf 'hello%01024dworld\n' '0'))
+> diff --git a/scripts/kconfig/tests/preprocess/builtin_func/expected_stdou=
+t b/scripts/kconfig/tests/preprocess/builtin_func/expected_stdout
+> index 82de3a7e97de..8e03e4dfe8f6 100644
+> --- a/scripts/kconfig/tests/preprocess/builtin_func/expected_stdout
+> +++ b/scripts/kconfig/tests/preprocess/builtin_func/expected_stdout
+> @@ -1 +1,2 @@
+>  hello world 0
+> +hello0000000000000000000000000000000000000000000000000000000000000000000=
+000000000000000000000000000000000000000000000000000000000000000000000000000=
+000000000000000000000000000000000000000000000000000000000000000000000000000=
+000000000000000000000000000000000000000000000000000000000000000000000000000=
+000000000000000000000000000000000000000000000000000000000000000000000000000=
+000000000000000000000000000000000000000000000000000000000000000000000000000=
+000000000000000000000000000000000000000000000000000000000000000000000000000=
+000000000000000000000000000000000000000000000000000000000000000000000000000=
+000000000000000000000000000000000000000000000000000000000000000000000000000=
+000000000000000000000000000000000000000000000000000000000000000000000000000=
+000000000000000000000000000000000000000000000000000000000000000000000000000=
+000000000000000000000000000000000000000000000000000000000000000000000000000=
+000000000000000000000000000000000000000000000000000000000000000000000000000=
+000000000000000000000000000000000000000000000000000000000world
+> --
+> 2.20.1
+>
+
+
+--=20
+Best Regards
+Masahiro Yamada

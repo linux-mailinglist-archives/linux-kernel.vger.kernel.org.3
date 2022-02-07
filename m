@@ -2,110 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B1B04AC9EC
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 20:54:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 546EE4AC9FB
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 21:01:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240994AbiBGTwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 14:52:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34336 "EHLO
+        id S240786AbiBGT43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 14:56:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243730AbiBGTs1 (ORCPT
+        with ESMTP id S241619AbiBGT4H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 14:48:27 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3794DC0401E1
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 11:48:26 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id k13so28989562lfg.9
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 11:48:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xshAeQAm5Ise7n5+KqUI2Gq2vO43dYWLzj1n4M3lADI=;
-        b=m2jprebEmhSHSHuYWHpyXk49Q0ycc3cDlMn8JwLTJJKi2qmYSXGGWLoz6bhYhWu4b7
-         WLT19qdEsHrW5Af6zYgwyr9CHYjWxlnl1s0VchRi57EarrSycUQh196P7SyNM6uW01th
-         gnPfKYQmGbsuDcYSC8LlYEKew+wRz/a4CEjh414g8M5tqRCmp5iWBjX+e2YiyFzh2wZt
-         J4oGZRvK4SRlVUUa/H6PGStsTQeKvk9uoL3RvfR7e63ThSnGziaw2k4B1T6zUhLcoPMf
-         nS+SBy3zu4A9uchwt1CmvnTevZEmI2ii8QW82pmdTb2FlG7lO+SGc/8Yr9dDygMfsCIZ
-         7FVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xshAeQAm5Ise7n5+KqUI2Gq2vO43dYWLzj1n4M3lADI=;
-        b=mFGA1n1fdHdfDuX9ssuTHRnSnID+gD3hM6dezXB3fostDnAQTk+KY1locPa+1L4uoB
-         nwmtzh0WkuWOlHVK1OuuUdx349ZeL+siblmL9Sy02oPNQADJwfCWKHpof2mxyEZHa2au
-         gwKwyOITzBRpdmC5pb8LgpTT9KqJ2VYOcnZk2zJlVtOr/mHERlS0zmbv3lCmti6b+SSx
-         OGVyo7YHPkI4EOwKL0oxpr+xYf8RSIjUT0h8C2DHWBogbgd/R9sPsyGZ0N9ZAj4R4aBS
-         f4XFUiFmUeBG7p9nEm12djjKfmxDceoRWcL8BUEOiHpMlXK+gmiEuRK9APwmayZWzJwB
-         YF2Q==
-X-Gm-Message-State: AOAM533K8YAUd9/cwFpcmFRg4LdoDAJ4pXFQ+356NySPCssQjH5yTXz1
-        6zTZBolEOQLd+tia1QhN1fMhxC4uGe6WkwSiOLQL3A==
-X-Google-Smtp-Source: ABdhPJxGbuBFTqFUGLppr8/37eakpFsdrpJ9JwAJ3Gez87KBdM9rrL4ReL3BepKhdcb9fJ8x8e3HiDRO8sSDB9UW9qg=
-X-Received: by 2002:ac2:4e10:: with SMTP id e16mr739680lfr.444.1644263304407;
- Mon, 07 Feb 2022 11:48:24 -0800 (PST)
+        Mon, 7 Feb 2022 14:56:07 -0500
+X-Greylist: delayed 439 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 11:56:00 PST
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B829C0401DA
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 11:56:00 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 0B5BA32021EF;
+        Mon,  7 Feb 2022 14:48:38 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Mon, 07 Feb 2022 14:48:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; bh=qdPXUDXW0aWei852djVIbEVF7fBHoOacUefmwT
+        P0fCc=; b=bi/WHUxYvVRZjQyTlknYCHJeQMVWYxRb/Q7v1d5jNgl8PMPLZnN+oK
+        PZHcJZB0W+rJlmgOXXrZKZSGHgvSWDrSGJg7LwTjpMnvqpsu4HF+qpe5YGpgf+YU
+        vU4vId0T+Tu7hrix4zNsThBb0a1AqOZxHGqDW68tZOP0jM41SMikxS0ROl7KG/0m
+        DcFVYlpo4012Zk3GrYh3QYmMkaTqI0+M15x1IaX+YyJzikP3+rNTCAbEtlI/SDSS
+        RdVte8p3PWRvw4wdMaiPjA2MrPLgTtrRwZRR2wSWmV4hzPz9Ld5NmEGSPfo4lrpm
+        g5TKMyWJT2axAIMQpiJ2nnzZvGoXjmPA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=qdPXUDXW0aWei852d
+        jVIbEVF7fBHoOacUefmwTP0fCc=; b=X8oxJSUyDYqjyPsclY8hXODNNK7GNG/j8
+        8uwEFOkjA/bFxuwIoLsmJmeHOjGijvMYDe4Qtqy62H/yDAL452HA8WNVPj+MnBJM
+        willU6XxPgsm2wvF2z731SkDXnJZtUaMKLxPvkI2yFBChBdUhPjvipnPPLqgEFqy
+        P+EYmx112jHIILKtFWt6uTwdrNaFWL2Lys7Xbc7TA2mnrhtRJxHQgPOUUX399cIq
+        7HV4ibI6ID3nBULOBw3/hsvfIzfE5mWchUiCCiC8KN71kLIBl1VjvRQk+0yIqFnR
+        x88koNgbNpXu5XmxbpOIZ+srGVlVH/+fQSz0nMPIEK0qTkQCcoIeA==
+X-ME-Sender: <xms:lncBYhudkACCwopqxxvI-RF1RDk6crTe4RXjDl6jW-01Umpc7wHJQg>
+    <xme:lncBYqdCk7FlZmRRcln65BKvjYzvzBA-WWQrNiGpLfHbMTPmOxitB9N0Umn9QRgJW
+    UlH07az-CflUs91QY4>
+X-ME-Received: <xmr:lncBYkzD6SRY47uMdnyPlGgHFRR0B-jFNzpfeWAQBo2gUXQNVwKyeRK4E-4t12hrhSUdUHTnCXyhuYJ9CthcAtRmsP-Pr4VEBZFhNTU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrheehgdduvdeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepkedutdelhfeijeeuudetgfdttdeiteeiuddvtddutdeitefgheeiffdvvefg
+    tedvnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdptddurdhorhhgpdhgihhthhhusg
+    hushgvrhgtohhnthgvnhhtrdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghr
+    rghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:lncBYoPb8fOzA9_92AYWo-ncaXGSEkWzqC8LpNcTxHHtvYalityakA>
+    <xmx:lncBYh_tOVw1s1c115aCyYmDs6cQG9DaUr3AS0xxx5ia8tOVUASlJA>
+    <xmx:lncBYoVsLkuLwbaQJ-PFOh-DOkrSk1sYdd32HRiy2eh66EqQ5hgetA>
+    <xmx:lncBYjLfAyHCYQB8xfHFmQQZgFHhtcw_ZFXuFKQT-R9iqdmnvDP2LA>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 7 Feb 2022 14:48:37 -0500 (EST)
+Date:   Mon, 7 Feb 2022 20:48:35 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     kernel test robot <lkp@intel.com>
+Cc:     Samuel Holland <samuel@sholland.org>, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [sunxi:sunxi/clk-for-5.18 2/2]
+ drivers/clk/sunxi-ng/ccu-sun6i-rtc.h:6:10: fatal error:
+ dt-bindings/clock/sun6i-rtc.h: No such file or directory
+Message-ID: <20220207194835.tsxmhaibya3kbban@houat>
+References: <202202072224.hjVEpIij-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220207185126.2085525-1-trix@redhat.com>
-In-Reply-To: <20220207185126.2085525-1-trix@redhat.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 7 Feb 2022 11:48:12 -0800
-Message-ID: <CAKwvOdnyPZ6w5qg-+W0H0ait3KUV5S9+-gmty-ANK46BeKd5VQ@mail.gmail.com>
-Subject: Re: [PATCH] io_uring: fix uninitialized return
-To:     trix@redhat.com
-Cc:     axboe@kernel.dk, asml.silence@gmail.com, nathan@kernel.org,
-        usama.arif@bytedance.com, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="stq24hziqrn6og6t"
+Content-Disposition: inline
+In-Reply-To: <202202072224.hjVEpIij-lkp@intel.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 7, 2022 at 10:51 AM <trix@redhat.com> wrote:
->
-> From: Tom Rix <trix@redhat.com>
->
-> The clang build fails with this error
-> io_uring.c:9396:9: error: variable 'ret' is uninitialized when used here
->         return ret;
->                ^~~~
-> Return 0 directly.
->
-> Fixes: b77e315a9644 ("io_uring: avoid ring quiesce while registering/unregistering eventfd")
-> Signed-off-by: Tom Rix <trix@redhat.com>
 
-Thanks for the patch:
-See also:
-https://lore.kernel.org/llvm/20220207162410.1013466-1-nathan@kernel.org/
+--stq24hziqrn6og6t
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> ---
->  fs/io_uring.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/fs/io_uring.c b/fs/io_uring.c
-> index aadabb31d6da7..74afb96af214c 100644
-> --- a/fs/io_uring.c
-> +++ b/fs/io_uring.c
-> @@ -9393,7 +9393,7 @@ static int io_eventfd_register(struct io_ring_ctx *ctx, void __user *arg,
->         ev_fd->eventfd_async = eventfd_async;
->
->         rcu_assign_pointer(ctx->io_ev_fd, ev_fd);
-> -       return ret;
-> +       return 0;
->  }
->
->  static void io_eventfd_put(struct rcu_head *rcu)
-> --
-> 2.26.3
->
+On Mon, Feb 07, 2022 at 10:47:22PM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git s=
+unxi/clk-for-5.18
+> head:   4f88abd86756e574c733d2ca14676be335cc0058
+> commit: 4f88abd86756e574c733d2ca14676be335cc0058 [2/2] clk: sunxi-ng: Add=
+ support for the sun6i RTC clocks
+> config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/202=
+20207/202202072224.hjVEpIij-lkp@intel.com/config)
+> compiler: powerpc-linux-gcc (GCC) 11.2.0
+> reproduce (this is a W=3D1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
+n/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git=
+/commit/?id=3D4f88abd86756e574c733d2ca14676be335cc0058
+>         git remote add sunxi https://git.kernel.org/pub/scm/linux/kernel/=
+git/sunxi/linux.git
+>         git fetch --no-tags sunxi sunxi/clk-for-5.18
+>         git checkout 4f88abd86756e574c733d2ca14676be335cc0058
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-11.2.0 make.cro=
+ss O=3Dbuild_dir ARCH=3Dpowerpc SHELL=3D/bin/bash
+>=20
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+>=20
+> All errors (new ones prefixed by >>):
+>=20
+>    In file included from drivers/clk/sunxi-ng/ccu-sun6i-rtc.c:18:
+> >> drivers/clk/sunxi-ng/ccu-sun6i-rtc.h:6:10: fatal error: dt-bindings/cl=
+ock/sun6i-rtc.h: No such file or directory
+>        6 | #include <dt-bindings/clock/sun6i-rtc.h>
+>          |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    compilation terminated.
 
+I've dropped these patches for now
 
--- 
-Thanks,
-~Nick Desaulniers
+Maxime
+
+--stq24hziqrn6og6t
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYgF3kwAKCRDj7w1vZxhR
+xdnSAQCaVOCYToJfqw3QTOuUdyxnRGuSxI1ewUGBJiv3+KKkYgEA68loh+EJyzml
+P3VWzq6xeFWP7fLMxPjw37+zqurzLQ8=
+=aDZc
+-----END PGP SIGNATURE-----
+
+--stq24hziqrn6og6t--

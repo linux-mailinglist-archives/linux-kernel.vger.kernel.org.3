@@ -2,130 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A73E74AC8F8
+	by mail.lfdr.de (Postfix) with ESMTP id 4A5E74AC8F7
 	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 20:00:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233874AbiBGS4n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 13:56:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34010 "EHLO
+        id S234596AbiBGS5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 13:57:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235413AbiBGSxE (ORCPT
+        with ESMTP id S236932AbiBGSxy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 13:53:04 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85FC7C0401DA
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 10:53:03 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id EAA081EC02B9;
-        Mon,  7 Feb 2022 19:52:57 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1644259978;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=LICMfza50xLNOKuEZvCy0lQik7Nk+cU+hUWDxRSuwD0=;
-        b=LPT2AUZeTvjMXsvQMIFmTVT6m8+83DAkM9Jb9ymRG02o911J4RcqNZc500jRIugpHS/daj
-        DtVQ5TB/3fLZbEnBft9RUg74C2RsiCEgSEyY2YRLZ61n+k99De89+BoszEMq/+l55ENQTG
-        62jCORLku4DwDhzwb2PS43Fuebag6ek=
-Date:   Mon, 7 Feb 2022 19:52:56 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Jue Wang <juew@google.com>
-Cc:     Tony Luck <tony.luck@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Subject: Re: [RFC] x86/mce: Add workaround for SKX/CLX/CPX spurious machine
- checks
-Message-ID: <YgFqiJOU5tZsHbY6@zn.tnic>
-References: <20220207043640.2829295-1-juew@google.com>
+        Mon, 7 Feb 2022 13:53:54 -0500
+Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.148])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF2EEC0401E1
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 10:53:53 -0800 (PST)
+Received: (wp-smtpd smtp.tlen.pl 9078 invoked from network); 7 Feb 2022 19:53:50 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
+          t=1644260031; bh=C7fW8I2zJOoNbXcMCI53B+cZB01UmuIiKpOEwjmOTfs=;
+          h=Subject:To:Cc:From;
+          b=d0aTf10SHoLYHl5f1uWt9vhYjAH8ZvuwEG6b98/iqXbQPCm3xoYS8tW8zZ4PLKGnl
+           eDOz+4fvms8RQrRz6xS6+ynlISSCIANA8ASHliYZhLvNczqT9pzGNvw3V4FQWgQSxA
+           lQEn10mmymxtNtj+XBWZV/1K82VvpZsTojewJYRg=
+Received: from aaem217.neoplus.adsl.tpnet.pl (HELO [192.168.1.22]) (mat.jonczyk@o2.pl@[83.4.116.217])
+          (envelope-sender <mat.jonczyk@o2.pl>)
+          by smtp.tlen.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
+          for <linux-kernel@vger.kernel.org>; 7 Feb 2022 19:53:50 +0100
+Message-ID: <d5cedee5-5f1e-8a11-1f4d-82e43f0753ed@o2.pl>
+Date:   Mon, 7 Feb 2022 19:53:40 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220207043640.2829295-1-juew@google.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH 1/2] x86/Kconfig: move and modify CONFIG_I8K
+Content-Language: en-GB
+To:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-hwmon@vger.kernel.org
+Cc:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>
+References: <20220207182940.242838-1-mat.jonczyk@o2.pl>
+From:   =?UTF-8?Q?Mateusz_Jo=c5=84czyk?= <mat.jonczyk@o2.pl>
+In-Reply-To: <20220207182940.242838-1-mat.jonczyk@o2.pl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-WP-MailID: e0a24d67e65ad5b12b7fef12da7af879
+X-WP-AV: skaner antywirusowy Poczty o2
+X-WP-SPAM: NO 0000000 [8UM0]                               
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-And while you're working in Tony's request...
-
-On Sun, Feb 06, 2022 at 08:36:40PM -0800, Jue Wang wrote:
-> diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-> index 5818b837fd4d..06001e3b2ff2 100644
-> --- a/arch/x86/kernel/cpu/mce/core.c
-> +++ b/arch/x86/kernel/cpu/mce/core.c
-> @@ -834,6 +834,57 @@ static void quirk_sandybridge_ifu(int bank, struct mce *m, struct pt_regs *regs)
->  	m->cs = regs->cs;
->  }
+W dniu 07.02.2022 o 19:29, Mateusz Jończyk pisze:
+> In Kconfig, inside the "Processor type and features" menu, there is
+> the CONFIG_I8K option: "Dell i8k legacy laptop support". This is
+> very confusing - enabling CONFIG_I8K is not required for the kernel to
+> support old Dell laptops. This option is specific to the dell-smm-hwmon
+> driver, which mostly exports some hardware monitoring information and
+> allows the user to change fan speed.
+>
+> This option is misplaced, so move CONFIG_I8K to drivers/hwmon/Kconfig,
+> where it belongs.
+>
+> Also, modify the dependency order - change
+>         select SENSORS_DELL_SMM
+> to
+>         depends on SENSORS_DELL_SMM
+> as it is just a configuration option of dell-smm-hwmon. This includes
+> changing the option type from tristate to bool. It was tristate because
+> it could select CONFIG_SENSORS_DELL_SMM=m .
+>
+> When running "make oldconfig" on configurations with
+> CONFIG_SENSORS_DELL_SMM enabled , this change will result in an
+> additional question (which could be printed several times during
+> bisecting). I think that tidying up the configuration is worth it,
+> though.
+>
+> Next patch tweaks the description of CONFIG_I8K.
+>
+> Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
+> Cc: Pali Rohár <pali@kernel.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: Jean Delvare <jdelvare@suse.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: Hans de Goede <hdegoede@redhat.com>
+> Cc: Mark Gross <markgross@kernel.org>
+> ---
+>  arch/x86/Kconfig      | 17 -----------------
+>  drivers/hwmon/Kconfig | 15 +++++++++++++++
+>  2 files changed, 15 insertions(+), 17 deletions(-)
+>
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index 9f5bd41bf660..71d4ddd48c02 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -1275,23 +1275,6 @@ config TOSHIBA
+>  	  Say Y if you intend to run this kernel on a Toshiba portable.
+>  	  Say N otherwise.
 >  
-> +static bool is_intel_srar(u64 mci_status)
+> -config I8K
+> -	tristate "Dell i8k legacy laptop support"
+> -	depends on HWMON
+> -	depends on PROC_FS
+> -	select SENSORS_DELL_SMM
+> -	help
+> -	  This option enables legacy /proc/i8k userspace interface in hwmon
+> -	  dell-smm-hwmon driver. Character file /proc/i8k reports bios version,
+> -	  temperature and allows controlling fan speeds of Dell laptops via
+> -	  System Management Mode. For old Dell laptops (like Dell Inspiron 8000)
+> -	  it reports also power and hotkey status. For fan speed control is
+> -	  needed userspace package i8kutils.
+> -
+> -	  Say Y if you intend to run this kernel on old Dell laptops or want to
+> -	  use userspace package i8kutils.
+> -	  Say N otherwise.
+> -
+>  config X86_REBOOTFIXUPS
+>  	bool "Enable X86 board specific fixups for reboot"
+>  	depends on X86_32
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index 8df25f1079ba..dd244aa747ad 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -505,6 +505,21 @@ config SENSORS_DELL_SMM
+>  	  When option I8K is also enabled this driver provides legacy /proc/i8k
+>  	  userspace interface for i8kutils package.
+>  
+> +config I8K
+> +	bool "Dell i8k legacy laptop support"
+> +	depends on SENSORS_DELL_SMM
 
-You don't need this separate function - stick it all in quirk_skylake_repmov()
+Oops, I dropped "depends on PROC_FS". Will fix this in next revision.
 
-> +	return (mci_status &
-> +		(MCI_STATUS_VAL|MCI_STATUS_OVER|MCI_STATUS_UC|MCI_STATUS_EN|
-> +		 MCI_STATUS_ADDRV|MCI_STATUS_MISCV|MCI_STATUS_PCC|
-> +		 MCI_STATUS_AR|MCI_STATUS_S)) ==
-> +		(MCI_STATUS_VAL|MCI_STATUS_UC|MCI_STATUS_EN|MCI_STATUS_ADDRV|
-> +		 MCI_STATUS_MISCV|MCI_STATUS_AR|MCI_STATUS_S);
-> +}
+> +	help
+> +	  This option enables legacy /proc/i8k userspace interface in hwmon
+> +	  dell-smm-hwmon driver. Character file /proc/i8k reports bios version,
+> +	  temperature and allows controlling fan speeds of Dell laptops via
+> +	  System Management Mode. For old Dell laptops (like Dell Inspiron 8000)
+> +	  it reports also power and hotkey status. For fan speed control is
+> +	  needed userspace package i8kutils.
 > +
-> +/*
-> + * Disable fast string copy and return from the MCE handler upon the first SRAR
-> + * MCE on bank 1 due to a CPU erratum on Intel SKX/CLX/CPL CPUs.
-> + * The fast string copy instructions ("rep movs*") could consume an
-> + * uncorrectable memory error in the cache line _right after_ the
-> + * desired region to copy and raise an MCE with RIP pointing to the
-> + * instruction _after_ the "rep movs*".
-> + * This mitigation addresses the issue completely with the caveat of
-> + * performance degradation on the CPU affected. This is still better
-> + * than the OS crashes on MCEs raised on an irrelevant process due to
-> + * 'rep movs*' accesses in a kernel context (e.g., copy_page).
-> + * Since a host drain / fail-over usually starts right after the first
-> + * MCE is signaled, which results in VM migration or termination, the
-> + * performance degradation is a transient effect.
-> + *
-> + * Returns true when fast string copy on cpu should be disabled.
-> + */
-> +static bool quirk_skylake_repmov(void)
-> +{
-> +	/*
-> +	 * State that represents if an SRAR MCE has already signaled on the DCU bank.
-> +	 */
-> +	static DEFINE_PER_CPU(bool, srar_dcu_signaled);
-
-What's that needed for?
-
-If the MSR write below clears the CPUID bit, you clear the corresponding
-X86_FEATURE flag. And this test becomes a X86_FEATURE flag test:
-
-	if (this_cpu_has(X86_FEATURE_FSRM))
-
-I'd guess...
-
-> +	if (unlikely(!__this_cpu_read(srar_dcu_signaled))) {
-> +		u64 mc1_status = mce_rdmsrl(MSR_IA32_MCx_STATUS(1));
+> +	  Say Y if you intend to run this kernel on old Dell laptops or want to
+> +	  use userspace package i8kutils.
+> +	  Say N otherwise.
 > +
-> +		if (is_intel_srar(mc1_status)) {
-> +			__this_cpu_write(srar_dcu_signaled, true);
-> +			msr_clear_bit(MSR_IA32_MISC_ENABLE,
-> +				      MSR_IA32_MISC_ENABLE_FAST_STRING_BIT);
-> +			mce_wrmsrl(MSR_IA32_MCG_STATUS, 0);
-> +			mce_wrmsrl(MSR_IA32_MCx_STATUS(1), 0);
-> +			pr_err("First SRAR MCE on DCU, CPU: %d, disable fast string copy.\n",
+>  config SENSORS_DA9052_ADC
+>  	tristate "Dialog DA9052/DA9053 ADC"
+>  	depends on PMIC_DA9052
 
-That error message can be understood probably only by a handful dozen of
-people on the planet. Is it write-only or is it supposed to be consumed
-by humans and if so, what would be the use case?
+Greetings,
 
-Thx.
+Mateusz
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette

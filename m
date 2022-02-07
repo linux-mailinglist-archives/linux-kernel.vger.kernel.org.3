@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BC0B4ABA00
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:26:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F57C4AB9B4
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:24:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382523AbiBGLTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:19:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52386 "EHLO
+        id S1343805AbiBGLLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:11:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359284AbiBGLOt (ORCPT
+        with ESMTP id S229801AbiBGLIU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:14:49 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A981C03FEDC;
-        Mon,  7 Feb 2022 03:14:36 -0800 (PST)
+        Mon, 7 Feb 2022 06:08:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94159C043181;
+        Mon,  7 Feb 2022 03:08:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ECB216113B;
-        Mon,  7 Feb 2022 11:14:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1B7BC004E1;
-        Mon,  7 Feb 2022 11:14:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 282F861370;
+        Mon,  7 Feb 2022 11:08:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BB0EC004E1;
+        Mon,  7 Feb 2022 11:08:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232464;
-        bh=96vWH8VeJUzwAZTEU3JXtbswkrsSnHsOR4OR7b5bcCg=;
+        s=korg; t=1644232098;
+        bh=5dMnPVgGvcyKRlLrFOFANdLnEP3ROLqN/kgiSsa1FTo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Y1YV65qTEMaNYHdKLTLwnHdFnOCkDP4FengGOR31G9nPqTQE48/8zK3xdwD0Hjyew
-         /7vK/UyzGI/k2gkTBg6TabJ6jNAt6FkxQ6ZezP7JJT1Hq0snrHXgfn1NJwEXDrC1i2
-         cMIjEksiY48AmNu4n67TEgWovB4Q8ITCAQaHS0yo=
+        b=rOpGebAWoL8dNUA1QTBZF0+kZpJGzhAM3qQg0BmwXxe7Wn4/OA3O6GR1aT89q31gL
+         oiGpsCmO3dfVcxQDjiDm7tNw2IOjaqg0eFo3vwMB2nsZc89VFEsHw8/QF11IUASIHc
+         TwUX7jQ7gCQcYeRBzPdgTr2UQQBhVDmdw2xL910Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.19 18/86] net: sfp: ignore disabled SFP node
+        stable@vger.kernel.org, Erwan Le Ray <erwan.leray@foss.st.com>,
+        Valentin Caron <valentin.caron@foss.st.com>
+Subject: [PATCH 4.9 08/48] serial: stm32: fix software flow control transfer
 Date:   Mon,  7 Feb 2022 12:05:41 +0100
-Message-Id: <20220207103758.150313396@linuxfoundation.org>
+Message-Id: <20220207103752.609360226@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103757.550973048@linuxfoundation.org>
-References: <20220207103757.550973048@linuxfoundation.org>
+In-Reply-To: <20220207103752.341184175@linuxfoundation.org>
+References: <20220207103752.341184175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,42 +54,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marek Behún <kabel@kernel.org>
+From: Valentin Caron <valentin.caron@foss.st.com>
 
-commit 2148927e6ed43a1667baf7c2ae3e0e05a44b51a0 upstream.
+commit 037b91ec7729524107982e36ec4b40f9b174f7a2 upstream.
 
-Commit ce0aa27ff3f6 ("sfp: add sfp-bus to bridge between network devices
-and sfp cages") added code which finds SFP bus DT node even if the node
-is disabled with status = "disabled". Because of this, when phylink is
-created, it ends with non-null .sfp_bus member, even though the SFP
-module is not probed (because the node is disabled).
+x_char is ignored by stm32_usart_start_tx() when xmit buffer is empty.
 
-We need to ignore disabled SFP bus node.
+Fix start_tx condition to allow x_char to be sent.
 
-Fixes: ce0aa27ff3f6 ("sfp: add sfp-bus to bridge between network devices and sfp cages")
-Signed-off-by: Marek Behún <kabel@kernel.org>
-Cc: stable@vger.kernel.org # 2203cbf2c8b5 ("net: sfp: move fwnode parsing into sfp-bus layer")
-Signed-off-by: David S. Miller <davem@davemloft.net>
-[ backport to 4.19 ]
-Signed-off-by: Marek Behún <kabel@kernel.org>
+Fixes: 48a6092fb41f ("serial: stm32-usart: Add STM32 USART Driver")
+Cc: stable <stable@vger.kernel.org>
+Signed-off-by: Erwan Le Ray <erwan.leray@foss.st.com>
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Link: https://lore.kernel.org/r/20220111164441.6178-3-valentin.caron@foss.st.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/phy/phylink.c |    5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/tty/serial/stm32-usart.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/phy/phylink.c
-+++ b/drivers/net/phy/phylink.c
-@@ -554,6 +554,11 @@ static int phylink_register_sfp(struct p
- 		return ret;
- 	}
+--- a/drivers/tty/serial/stm32-usart.c
++++ b/drivers/tty/serial/stm32-usart.c
+@@ -389,7 +389,7 @@ static void stm32_start_tx(struct uart_p
+ {
+ 	struct circ_buf *xmit = &port->state->xmit;
  
-+	if (!fwnode_device_is_available(ref.fwnode)) {
-+		fwnode_handle_put(ref.fwnode);
-+		return 0;
-+	}
-+
- 	pl->sfp_bus = sfp_register_upstream(ref.fwnode, pl->netdev, pl,
- 					    &sfp_phylink_ops);
- 	if (!pl->sfp_bus)
+-	if (uart_circ_empty(xmit))
++	if (uart_circ_empty(xmit) && !port->x_char)
+ 		return;
+ 
+ 	stm32_transmit_chars(port);
 
 

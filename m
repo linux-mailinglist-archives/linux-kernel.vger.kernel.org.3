@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BA064ABBD1
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:44:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 258D34AB9C0
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:25:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385767AbiBGLca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:32:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33448 "EHLO
+        id S1378296AbiBGLPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:15:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383088AbiBGLVe (ORCPT
+        with ESMTP id S1353438AbiBGLMN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:21:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C063C0401D6;
-        Mon,  7 Feb 2022 03:21:17 -0800 (PST)
+        Mon, 7 Feb 2022 06:12:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0447BC043181;
+        Mon,  7 Feb 2022 03:12:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 870D5B811B2;
-        Mon,  7 Feb 2022 11:21:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC339C004E1;
-        Mon,  7 Feb 2022 11:21:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8BEF261261;
+        Mon,  7 Feb 2022 11:12:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62D8EC004E1;
+        Mon,  7 Feb 2022 11:12:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232874;
-        bh=xjkRWAuO6sjuAxBcS+6c7kSyPv7Q3Yfk0x1pK5sdx1M=;
+        s=korg; t=1644232332;
+        bh=D4HgBqFSauzWnvviuzxEObdZ74nhubp33ocUfuSYRzw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZGoYXE4TdDwZq6xkP+HyZrRcVwxor1/AAJn99NCbAVGgrYT22AWTHX8UbNeREivGg
-         H2CNcU+qCuF7O5P6pv2eIOsKjOaToiGlgG7LH6ITY+YpbYcrBRJEZRtdmrBZDwRRwK
-         LegH4vHt263UPQGnf6vy0ox5e+rn67CukVqcRlRY=
+        b=I1QE0ZtHyMstXyY7dF/DNjFqyBASjh1DcGJ95akvO6FUC431XI0z4pZIbthAoqVXL
+         Z4Z4GS5lXUr76lR7YO8mWfV4kdknxq+hgc5ksEAY0fNIkWhRhHuQq9IHjtU6XBkrp9
+         Bl/Q2bVmGG0ad7C/B0LQaPm1HVCKKdSuq6GQ1eL4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Jukka Heikintalo <heikintalo.jukka@gmail.com>,
-        =?UTF-8?q?Pawe=C5=82=20Susicki?= <pawel.susicki@gmail.com>,
-        Jonas Hahnfeld <hahnjo@hahnjo.de>, Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.10 06/74] ALSA: usb-audio: Correct quirk for VF0770
+        stable@vger.kernel.org, Sudheesh Mavila <sudheesh.mavila@amd.com>,
+        Raju Rangoju <Raju.Rangoju@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 4.14 42/69] net: amd-xgbe: ensure to reset the tx_timer_active flag
 Date:   Mon,  7 Feb 2022 12:06:04 +0100
-Message-Id: <20220207103757.449235329@linuxfoundation.org>
+Message-Id: <20220207103757.008711261@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103757.232676988@linuxfoundation.org>
-References: <20220207103757.232676988@linuxfoundation.org>
+In-Reply-To: <20220207103755.604121441@linuxfoundation.org>
+References: <20220207103755.604121441@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,41 +56,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jonas Hahnfeld <hahnjo@hahnjo.de>
+From: Raju Rangoju <Raju.Rangoju@amd.com>
 
-commit 4ee02e20893d2f9e951c7888f2284fa608ddaa35 upstream.
+commit 7674b7b559b683478c3832527c59bceb169e701d upstream.
 
-This device provides both audio and video. The original quirk added in
-commit 48827e1d6af5 ("ALSA: usb-audio: Add quirk for VF0770") used
-USB_DEVICE to match the vendor and product ID. Depending on module order,
-if snd-usb-audio was asked first, it would match the entire device and
-uvcvideo wouldn't get to see it. Change the matching to USB_AUDIO_DEVICE
-to restore uvcvideo matching in all cases.
+Ensure to reset the tx_timer_active flag in xgbe_stop(),
+otherwise a port restart may result in tx timeout due to
+uncleared flag.
 
-Fixes: 48827e1d6af5 ("ALSA: usb-audio: Add quirk for VF0770")
-Reported-by: Jukka Heikintalo <heikintalo.jukka@gmail.com>
-Tested-by: Jukka Heikintalo <heikintalo.jukka@gmail.com>
-Reported-by: Paweł Susicki <pawel.susicki@gmail.com>
-Tested-by: Paweł Susicki <pawel.susicki@gmail.com>
-Cc: <stable@vger.kernel.org> # 5.4, 5.10, 5.14, 5.15
-Signed-off-by: Jonas Hahnfeld <hahnjo@hahnjo.de>
-Link: https://lore.kernel.org/r/20220131183516.61191-1-hahnjo@hahnjo.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Fixes: c635eaacbf77 ("amd-xgbe: Remove Tx coalescing")
+Co-developed-by: Sudheesh Mavila <sudheesh.mavila@amd.com>
+Signed-off-by: Sudheesh Mavila <sudheesh.mavila@amd.com>
+Signed-off-by: Raju Rangoju <Raju.Rangoju@amd.com>
+Acked-by: Tom Lendacky <thomas.lendacky@amd.com>
+Link: https://lore.kernel.org/r/20220127060222.453371-1-Raju.Rangoju@amd.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/usb/quirks-table.h |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/amd/xgbe/xgbe-drv.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/sound/usb/quirks-table.h
-+++ b/sound/usb/quirks-table.h
-@@ -84,7 +84,7 @@
-  * combination.
-  */
- {
--	USB_DEVICE(0x041e, 0x4095),
-+	USB_AUDIO_DEVICE(0x041e, 0x4095),
- 	.driver_info = (unsigned long) &(const struct snd_usb_audio_quirk) {
- 		.ifnum = QUIRK_ANY_INTERFACE,
- 		.type = QUIRK_COMPOSITE,
+--- a/drivers/net/ethernet/amd/xgbe/xgbe-drv.c
++++ b/drivers/net/ethernet/amd/xgbe/xgbe-drv.c
+@@ -724,7 +724,9 @@ static void xgbe_stop_timers(struct xgbe
+ 		if (!channel->tx_ring)
+ 			break;
+ 
++		/* Deactivate the Tx timer */
+ 		del_timer_sync(&channel->tx_timer);
++		channel->tx_timer_active = 0;
+ 	}
+ }
+ 
 
 

@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFE084AB96B
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:23:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBA344ABC89
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:49:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352894AbiBGLMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:12:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47746 "EHLO
+        id S1381956AbiBGLhs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:37:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355265AbiBGLIN (ORCPT
+        with ESMTP id S1352941AbiBGLZO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:08:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A4B7C043188;
-        Mon,  7 Feb 2022 03:08:13 -0800 (PST)
+        Mon, 7 Feb 2022 06:25:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8685BC0401C8;
+        Mon,  7 Feb 2022 03:25:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 06C6C61261;
-        Mon,  7 Feb 2022 11:08:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7A50C004E1;
-        Mon,  7 Feb 2022 11:08:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 48098B81028;
+        Mon,  7 Feb 2022 11:25:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DEDFC004E1;
+        Mon,  7 Feb 2022 11:25:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232092;
-        bh=0Cq6hiZ7YsNrUK6HHr6pAyM3KJv2Ya2Cm6SehmCrLPY=;
+        s=korg; t=1644233109;
+        bh=PXxvrLo0f5n0j+2ESXkHAGvNHfjbEgwhgKzsc6FW1F4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cSJUysm18/oyoMMtpvlOv+ZYT07FBhVEMW9kPaOKFCFDFUa7oLA+qDOLoIPr8CJ3+
-         97NchBGB+xBtxugzLFoO2qhGu2ZG+avma3pfAasaRymakp28+CYMb0KnoZYILcC8ko
-         8gYPG9Lvo/ueHqmlT2JroxRKzxeF4ouzCClrIgOw=
+        b=iG5vhJGLs+OLRSd+nwub68O2lJD1RSWeaBOdQpYAPHZgrSHe33xT4KyNGoxd018EU
+         xLaPqtUxotsMQG31FRPPQtyzLsLHmu87/+PM4pBNa/y8HetS8StrokdDA3CArGAXxe
+         P1VlJRVXhyblynBl8TUioYeNDQ1eEFq1nZ6oxmPw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, butt3rflyh4ck <butterflyhuangxx@gmail.com>,
-        Christoph Hellwig <hch@lst.de>, Jan Kara <jack@suse.cz>
-Subject: [PATCH 4.9 06/48] udf: Fix NULL ptr deref when converting from inline format
-Date:   Mon,  7 Feb 2022 12:05:39 +0100
-Message-Id: <20220207103752.548604476@linuxfoundation.org>
+        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: [PATCH 5.15 007/110] ASoC: ops: Reject out of bounds values in snd_soc_put_volsw()
+Date:   Mon,  7 Feb 2022 12:05:40 +0100
+Message-Id: <20220207103802.532613748@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103752.341184175@linuxfoundation.org>
-References: <20220207103752.341184175@linuxfoundation.org>
+In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
+References: <20220207103802.280120990@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,64 +53,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jan Kara <jack@suse.cz>
+From: Mark Brown <broonie@kernel.org>
 
-commit 7fc3b7c2981bbd1047916ade327beccb90994eee upstream.
+commit 817f7c9335ec01e0f5e8caffc4f1dcd5e458a4c0 upstream.
 
-udf_expand_file_adinicb() calls directly ->writepage to write data
-expanded into a page. This however misses to setup inode for writeback
-properly and so we can crash on inode->i_wb dereference when submitting
-page for IO like:
+We don't currently validate that the values being set are within the range
+we advertised to userspace as being valid, do so and reject any values
+that are out of range.
 
-  BUG: kernel NULL pointer dereference, address: 0000000000000158
-  #PF: supervisor read access in kernel mode
-...
-  <TASK>
-  __folio_start_writeback+0x2ac/0x350
-  __block_write_full_page+0x37d/0x490
-  udf_expand_file_adinicb+0x255/0x400 [udf]
-  udf_file_write_iter+0xbe/0x1b0 [udf]
-  new_sync_write+0x125/0x1c0
-  vfs_write+0x28e/0x400
-
-Fix the problem by marking the page dirty and going through the standard
-writeback path to write the page. Strictly speaking we would not even
-have to write the page but we want to catch e.g. ENOSPC errors early.
-
-Reported-by: butt3rflyh4ck <butterflyhuangxx@gmail.com>
-CC: stable@vger.kernel.org
-Fixes: 52ebea749aae ("writeback: make backing_dev_info host cgroup-specific bdi_writebacks")
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Jan Kara <jack@suse.cz>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20220124153253.3548853-2-broonie@kernel.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/udf/inode.c |    8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ sound/soc/soc-ops.c |   18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
 
---- a/fs/udf/inode.c
-+++ b/fs/udf/inode.c
-@@ -259,10 +259,6 @@ int udf_expand_file_adinicb(struct inode
- 	char *kaddr;
- 	struct udf_inode_info *iinfo = UDF_I(inode);
- 	int err;
--	struct writeback_control udf_wbc = {
--		.sync_mode = WB_SYNC_NONE,
--		.nr_to_write = 1,
--	};
+--- a/sound/soc/soc-ops.c
++++ b/sound/soc/soc-ops.c
+@@ -316,13 +316,27 @@ int snd_soc_put_volsw(struct snd_kcontro
+ 	if (sign_bit)
+ 		mask = BIT(sign_bit + 1) - 1;
  
- 	WARN_ON_ONCE(!inode_is_locked(inode));
- 	if (!iinfo->i_lenAlloc) {
-@@ -306,8 +302,10 @@ int udf_expand_file_adinicb(struct inode
- 		iinfo->i_alloc_type = ICBTAG_FLAG_AD_LONG;
- 	/* from now on we have normal address_space methods */
- 	inode->i_data.a_ops = &udf_aops;
-+	set_page_dirty(page);
-+	unlock_page(page);
- 	up_write(&iinfo->i_data_sem);
--	err = inode->i_data.a_ops->writepage(page, &udf_wbc);
-+	err = filemap_fdatawrite(inode->i_mapping);
- 	if (err) {
- 		/* Restore everything back so that we don't lose data... */
- 		lock_page(page);
+-	val = ((ucontrol->value.integer.value[0] + min) & mask);
++	val = ucontrol->value.integer.value[0];
++	if (mc->platform_max && val > mc->platform_max)
++		return -EINVAL;
++	if (val > max - min)
++		return -EINVAL;
++	if (val < 0)
++		return -EINVAL;
++	val = (val + min) & mask;
+ 	if (invert)
+ 		val = max - val;
+ 	val_mask = mask << shift;
+ 	val = val << shift;
+ 	if (snd_soc_volsw_is_stereo(mc)) {
+-		val2 = ((ucontrol->value.integer.value[1] + min) & mask);
++		val2 = ucontrol->value.integer.value[1];
++		if (mc->platform_max && val2 > mc->platform_max)
++			return -EINVAL;
++		if (val2 > max - min)
++			return -EINVAL;
++		if (val2 < 0)
++			return -EINVAL;
++		val2 = (val2 + min) & mask;
+ 		if (invert)
+ 			val2 = max - val2;
+ 		if (reg == reg2) {
 
 

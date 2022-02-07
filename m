@@ -2,42 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3B7F4AB911
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 11:52:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 941DE4AB90B
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 11:52:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241594AbiBGKtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 05:49:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36748 "EHLO
+        id S244835AbiBGKtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 05:49:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352721AbiBGKpv (ORCPT
+        with ESMTP id S240553AbiBGKrT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 05:45:51 -0500
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5FFAC043181;
-        Mon,  7 Feb 2022 02:45:49 -0800 (PST)
-Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 0B2B840013;
-        Mon,  7 Feb 2022 10:45:45 +0000 (UTC)
-Date:   Mon, 7 Feb 2022 11:46:52 +0100
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Eugen Hristev <eugen.hristev@microchip.com>
-Cc:     robh+dt@kernel.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, jacopo+renesas@jmondi.org,
-        hverkuil-cisco@xs4all.nl, nicolas.ferre@microchip.com,
-        sakari.ailus@iki.fi, laurent.pinchart@ideasonboard.com,
-        Hans Verkuil <hverkuil@xs4all.nl>
-Subject: Re: [PATCH v4 01/11] media: atmel: atmel-isc: replace 'stop'
- variable with vb2 calls
-Message-ID: <20220207104652.zovthrwpdi5cnvdm@uno.localdomain>
-References: <20220121131416.603972-1-eugen.hristev@microchip.com>
- <20220121131416.603972-2-eugen.hristev@microchip.com>
+        Mon, 7 Feb 2022 05:47:19 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD2F0C043181;
+        Mon,  7 Feb 2022 02:47:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1644230838; x=1675766838;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=8+dFrGD5ia9/wAG2M41Df0aqZPqFKd4Zz5q7iDj1TDw=;
+  b=ZryZWCMvk3cd6ROBxC8+rRujXZeMRszPnRXtp5CVCHp3eT2ty3zqxqbF
+   s57k/GFcfaJEVWCSE9I+YcxP3xrNj7bW/FT0xiud/t0cvNLysuWfsYrta
+   GsYk7EZii0oUGogAfgi27FiV63ld5LF68UyEtjK/+EAO1krfDYxpahCsa
+   DV/Y374l9Jmc7W+6vrPgb59mgwvqxRg5i4pHskN9c3YbjWEUX607BrCkZ
+   EaFhrMaFak1FhPtlD7TW9L5oWCyiHDtbOfFrJ6aOrjAKIm7xBUgVRwMyr
+   3beap0itxfFGZFc9Xp3cVBm4jTB6E9INGmeHHmOI2GnkJqoEtKiLiFMdD
+   w==;
+IronPort-SDR: 1CtX/c7B6xlWtGR3wpzrSz21W2TVEZqGH4uJhjTln2ksagqdX7ERHcBMABDWWFXUhPvFOPijhM
+ gl8/ggs2GUpAJDO/O0hv9xwojtxxO0d2060iO+vZREcZNwyczR+yPcZfd07zp7eNDJAlsb2pxY
+ tU2pTs04Onvxcyf4tjXD9eZMgSnUDRri5k+QHrSxdNNgILa87JMaD0gPuXP0Qy5g0cfeyIYa5I
+ l41yz0ptav0rwX4r0bXHEv/tjG8qjk2be9mrSc1t1yIsDzswVoGquie/BzRVQzZZTUuxcwpeK5
+ f9NP5ACqdAOEBMe9ux9Ol3Fc
+X-IronPort-AV: E=Sophos;i="5.88,349,1635231600"; 
+   d="scan'208";a="84882724"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Feb 2022 03:47:17 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Mon, 7 Feb 2022 03:47:17 -0700
+Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Mon, 7 Feb 2022 03:47:15 -0700
+From:   Tudor Ambarus <tudor.ambarus@microchip.com>
+To:     <nicolas.ferre@microchip.com>, <claudiu.beznea@microchip.com>,
+        <alexandre.belloni@bootlin.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <robh+dt@kernel.org>, Tudor Ambarus <tudor.ambarus@microchip.com>
+Subject: [PATCH v3] ARM: dts: at91: sama7g5: Add crypto nodes
+Date:   Mon, 7 Feb 2022 12:47:13 +0200
+Message-ID: <20220207104713.87284-1-tudor.ambarus@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220121131416.603972-2-eugen.hristev@microchip.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,108 +67,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eugen,
+Describe and enable the AES, SHA and TDES crypto IPs. Tested with the
+extra run-time self tests of the registered crypto algorithms.
 
-On Fri, Jan 21, 2022 at 03:14:06PM +0200, Eugen Hristev wrote:
-> The stop variable is redundant as the state of the streaming can be obtained
-> by calling vb2_start_streaming_called(&isc->vb2_vidq) or by calling
-> vb2_is_busy(&isc->vb2_vidq).
-> Thus, remove the stop variable completely.
->
-> Suggested-by: Hans Verkuil <hverkuil@xs4all.nl>
-> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+---
+v3: remove explicit status = "okay", as it's already the default case
+when not specified at all.
 
-I trust yours and Hans' judgment here.
-The patch looks sane
-Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+v2:
+- add label to the tdes node
+- update commit description and specify testing method
+- put clocks and clock-names properties before dmas and dma-names
+  because the clocks are mandatory, while DMA is optional for TDES and SHA
 
-Thanks
-> ---
-> Changes in v4:
-> - new patch
->
->  drivers/media/platform/atmel/atmel-isc-base.c | 12 +++++-------
->  drivers/media/platform/atmel/atmel-isc.h      |  2 --
->  2 files changed, 5 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/media/platform/atmel/atmel-isc-base.c b/drivers/media/platform/atmel/atmel-isc-base.c
-> index db15770d5b88..9c62d0ae7887 100644
-> --- a/drivers/media/platform/atmel/atmel-isc-base.c
-> +++ b/drivers/media/platform/atmel/atmel-isc-base.c
-> @@ -362,7 +362,6 @@ static int isc_start_streaming(struct vb2_queue *vq, unsigned int count)
->  	spin_lock_irqsave(&isc->dma_queue_lock, flags);
->
->  	isc->sequence = 0;
-> -	isc->stop = false;
->  	reinit_completion(&isc->comp);
->
->  	isc->cur_frm = list_first_entry(&isc->dma_queue,
-> @@ -403,8 +402,6 @@ static void isc_stop_streaming(struct vb2_queue *vq)
->
->  	v4l2_ctrl_activate(isc->do_wb_ctrl, false);
->
-> -	isc->stop = true;
-> -
->  	/* Wait until the end of the current frame */
->  	if (isc->cur_frm && !wait_for_completion_timeout(&isc->comp, 5 * HZ))
->  		v4l2_err(&isc->v4l2_dev,
-> @@ -1029,7 +1026,7 @@ static int isc_s_fmt_vid_cap(struct file *file, void *priv,
->  {
->  	struct isc_device *isc = video_drvdata(file);
->
-> -	if (vb2_is_streaming(&isc->vb2_vidq))
-> +	if (vb2_is_busy(&isc->vb2_vidq))
->  		return -EBUSY;
->
->  	return isc_set_fmt(isc, f);
-> @@ -1236,7 +1233,8 @@ irqreturn_t isc_interrupt(int irq, void *dev_id)
->  			isc->cur_frm = NULL;
->  		}
->
-> -		if (!list_empty(&isc->dma_queue) && !isc->stop) {
-> +		if (!list_empty(&isc->dma_queue) &&
-> +		    vb2_start_streaming_called(&isc->vb2_vidq)) {
->  			isc->cur_frm = list_first_entry(&isc->dma_queue,
->  						     struct isc_buffer, list);
->  			list_del(&isc->cur_frm->list);
-> @@ -1244,7 +1242,7 @@ irqreturn_t isc_interrupt(int irq, void *dev_id)
->  			isc_start_dma(isc);
->  		}
->
-> -		if (isc->stop)
-> +		if (!vb2_start_streaming_called(&isc->vb2_vidq))
->  			complete(&isc->comp);
->
->  		ret = IRQ_HANDLED;
-> @@ -1398,7 +1396,7 @@ static void isc_awb_work(struct work_struct *w)
->  	int ret;
->
->  	/* streaming is not active anymore */
-> -	if (isc->stop)
-> +	if (!vb2_start_streaming_called(&isc->vb2_vidq))
->  		return;
->
->  	if (ctrls->hist_stat != HIST_ENABLED)
-> diff --git a/drivers/media/platform/atmel/atmel-isc.h b/drivers/media/platform/atmel/atmel-isc.h
-> index 07fa6dbf8460..5fbf52a9080b 100644
-> --- a/drivers/media/platform/atmel/atmel-isc.h
-> +++ b/drivers/media/platform/atmel/atmel-isc.h
-> @@ -201,7 +201,6 @@ struct isc_reg_offsets {
->   * @dma_queue:		the queue for dma buffers
->   * @cur_frm:		current isc frame/buffer
->   * @sequence:		current frame number
-> - * @stop:		true if isc is not streaming, false if streaming
->   * @comp:		completion reference that signals frame completion
->   *
->   * @fmt:		current v42l format
-> @@ -276,7 +275,6 @@ struct isc_device {
->  	struct list_head	dma_queue;
->  	struct isc_buffer	*cur_frm;
->  	unsigned int		sequence;
-> -	bool			stop;
->  	struct completion	comp;
->
->  	struct v4l2_format	fmt;
-> --
-> 2.25.1
->
+ arch/arm/boot/dts/sama7g5.dtsi | 32 ++++++++++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+
+diff --git a/arch/arm/boot/dts/sama7g5.dtsi b/arch/arm/boot/dts/sama7g5.dtsi
+index 7972cb8c2562..8f0c8f42257f 100644
+--- a/arch/arm/boot/dts/sama7g5.dtsi
++++ b/arch/arm/boot/dts/sama7g5.dtsi
+@@ -393,6 +393,27 @@ pit64b1: timer@e1804000 {
+ 			clock-names = "pclk", "gclk";
+ 		};
+ 
++		aes: aes@e1810000 {
++			compatible = "atmel,at91sam9g46-aes";
++			reg = <0xe1810000 0x100>;
++			interrupts = <GIC_SPI 27 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&pmc PMC_TYPE_PERIPHERAL 27>;
++			clock-names = "aes_clk";
++			dmas = <&dma0 AT91_XDMAC_DT_PERID(1)>,
++			       <&dma0 AT91_XDMAC_DT_PERID(2)>;
++			dma-names = "tx", "rx";
++		};
++
++		sha: sha@e1814000 {
++			compatible = "atmel,at91sam9g46-sha";
++			reg = <0xe1814000 0x100>;
++			interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&pmc PMC_TYPE_PERIPHERAL 83>;
++			clock-names = "sha_clk";
++			dmas = <&dma0 AT91_XDMAC_DT_PERID(48)>;
++			dma-names = "tx";
++		};
++
+ 		flx0: flexcom@e1818000 {
+ 			compatible = "atmel,sama5d2-flexcom";
+ 			reg = <0xe1818000 0x200>;
+@@ -475,6 +496,17 @@ trng: rng@e2010000 {
+ 			status = "disabled";
+ 		};
+ 
++		tdes: tdes@e2014000 {
++			compatible = "atmel,at91sam9g46-tdes";
++			reg = <0xe2014000 0x100>;
++			interrupts = <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&pmc PMC_TYPE_PERIPHERAL 96>;
++			clock-names = "tdes_clk";
++			dmas = <&dma0 AT91_XDMAC_DT_PERID(54)>,
++			       <&dma0 AT91_XDMAC_DT_PERID(53)>;
++			dma-names = "tx", "rx";
++		};
++
+ 		flx4: flexcom@e2018000 {
+ 			compatible = "atmel,sama5d2-flexcom";
+ 			reg = <0xe2018000 0x200>;
+-- 
+2.25.1
+

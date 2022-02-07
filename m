@@ -2,123 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 950FB4AC8D3
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 19:47:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F1BE4AC8D1
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 19:47:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232866AbiBGSrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 13:47:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58688 "EHLO
+        id S231897AbiBGSqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 13:46:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232506AbiBGSnO (ORCPT
+        with ESMTP id S231851AbiBGSpT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 13:43:14 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1835AC0401DC;
-        Mon,  7 Feb 2022 10:43:13 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 24AE01EC02B9;
-        Mon,  7 Feb 2022 19:43:07 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1644259387;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=SZEc3K4WUssJFPuRZM4cYUdq0EX2pDa+Q3YePuI1VGc=;
-        b=qmClInz1dKwfOZbiO2QrY2gZK/xZolImE900/WaPmxRFwwOa2cp3K4OMeOEJsTi80Hu4Qp
-        G43sMx+xX8AUxdLvcgTvewjlRnNRSbTkdwsgOZ6e9vtHFY+GtTdk9DIq09oCjIgK1EE+5Z
-        CRyqtdz0t/QXSU+RToQpc+wZ3krqc2c=
-Date:   Mon, 7 Feb 2022 19:43:01 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Michael Roth <michael.roth@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>, brijesh.singh@amd.com,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-Subject: Re: [PATCH v9 38/43] x86/sev: Use firmware-validated CPUID for
- SEV-SNP guests
-Message-ID: <YgFoNeASrXizWMIa@zn.tnic>
-References: <20220128171804.569796-1-brijesh.singh@amd.com>
- <20220128171804.569796-39-brijesh.singh@amd.com>
- <20220205171901.kt47bahdmh64b45x@amd.com>
- <Yf/tQPqbP97lrVpg@zn.tnic>
- <20220207170018.sg37idc6nzlzgj6p@amd.com>
+        Mon, 7 Feb 2022 13:45:19 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75603C0401DA;
+        Mon,  7 Feb 2022 10:45:18 -0800 (PST)
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 217Iihkg030588;
+        Mon, 7 Feb 2022 18:44:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=JWobRtZJdiu1UFWJsYFo6dTuwFzOvnol71RgZ3pYM7g=;
+ b=gpE1Y5Zgrvtptli5BejmreD4vbWsxRhPyMSS8pHDCf6OyjaA/CkrTjHY7vvhOrNRY2xl
+ tkfvzQ9c+Bf7OaAo2iyppSFRkxb92F88ydGLqQ/Kkq7kZUOCZ5oR84x8cRf7mi9ep9gl
+ d0ogishXHp2mwSfHVjybBR4frK4176pkgXIopjpGxNNsS2m+P6+LeV54QOsGnhwFiWT0
+ j4FcHjPTHVM1cjXu/raSjaLHjg9H6YhyqUjqfh+cNVg/YbF6+Ts6RWUNva1ILG41aYGS
+ orgd3sk8vm0EviCeLDXap5Z9i3P2X1rpWVHnOztR7ITMh9VeEbGlsqolej1oOi55sgW0 Cw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3e22whh05p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Feb 2022 18:44:48 +0000
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 217IikRK030861;
+        Mon, 7 Feb 2022 18:44:48 GMT
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3e22whgyuf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Feb 2022 18:44:48 +0000
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 217IXcXe016001;
+        Mon, 7 Feb 2022 18:43:33 GMT
+Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
+        by ppma03wdc.us.ibm.com with ESMTP id 3e1gvabkkj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Feb 2022 18:43:33 +0000
+Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
+        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 217IhWXr34013446
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 7 Feb 2022 18:43:32 GMT
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E96BCB206B;
+        Mon,  7 Feb 2022 18:43:31 +0000 (GMT)
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 87758B2068;
+        Mon,  7 Feb 2022 18:43:31 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
+        Mon,  7 Feb 2022 18:43:31 +0000 (GMT)
+Message-ID: <cb94bd18-2d6c-772f-b16e-a4778480258b@linux.ibm.com>
+Date:   Mon, 7 Feb 2022 13:43:31 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220207170018.sg37idc6nzlzgj6p@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v10 12/27] ima: Define mac_admin_ns_capable() as a wrapper
+ for ns_capable()
+Content-Language: en-US
+From:   Stefan Berger <stefanb@linux.ibm.com>
+To:     "Serge E. Hallyn" <serge@hallyn.com>
+Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        christian.brauner@ubuntu.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        Denis Semakin <denis.semakin@huawei.com>
+References: <20220201203735.164593-1-stefanb@linux.ibm.com>
+ <20220201203735.164593-13-stefanb@linux.ibm.com>
+ <20220205055826.GA15072@mail.hallyn.com>
+ <9c8a09d6-6373-c8c2-c8ff-2b4c3f92ddf1@linux.ibm.com>
+In-Reply-To: <9c8a09d6-6373-c8c2-c8ff-2b4c3f92ddf1@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Tcu-5Coy4UkbaOUi6lumKcgXTITFJmeT
+X-Proofpoint-ORIG-GUID: iFPtb5sqsV7f3jo0ECd3tQdAx54PcLLd
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-07_06,2022-02-07_02,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ impostorscore=0 mlxlogscore=999 clxscore=1015 priorityscore=1501
+ bulkscore=0 spamscore=0 adultscore=0 mlxscore=0 phishscore=0
+ suspectscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2201110000 definitions=main-2202070113
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 11:00:18AM -0600, Michael Roth wrote:
-> this is more a statement that an out-of-spec hypervisor should not
-> expect that their guests will continue working in future firmware
-> versions, and what's being determined here is whether to break
-> those out-of-spec hypervisor now, or later when/if we actually
-> make use of the fields in the guest code,
 
-I think you're missing a very important aspect here called reality.
+On 2/6/22 12:20, Stefan Berger wrote:
+>
+> On 2/5/22 00:58, Serge E. Hallyn wrote:
+>> On Tue, Feb 01, 2022 at 03:37:20PM -0500, Stefan Berger wrote:
+>>> Define mac_admin_ns_capable() as a wrapper for the combined 
+>>> ns_capable()
+>>> checks on CAP_MAC_ADMIN and CAP_SYS_ADMIN in a user namespace. Return
+>>> true on the check if either capability or both are available.
+>>>
+>>> Use mac_admin_ns_capable() in place of capable(SYS_ADMIN). This will 
+>>> allow
+>>> an IMA namespace to read the policy with only CAP_MAC_ADMIN, which has
+>>> less privileges than CAP_SYS_ADMIN.
+>>>
+>>> Signed-off-by: Denis Semakin <denis.semakin@huawei.com>
+>>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+>>> ---
+>>>   include/linux/capability.h      | 6 ++++++
+>>>   security/integrity/ima/ima.h    | 6 ++++++
+>>>   security/integrity/ima/ima_fs.c | 5 ++++-
+>>>   3 files changed, 16 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/include/linux/capability.h b/include/linux/capability.h
+>>> index 65efb74c3585..991579178f32 100644
+>>> --- a/include/linux/capability.h
+>>> +++ b/include/linux/capability.h
+>>> @@ -270,6 +270,12 @@ static inline bool 
+>>> checkpoint_restore_ns_capable(struct user_namespace *ns)
+>>>           ns_capable(ns, CAP_SYS_ADMIN);
+>>>   }
+>>>   +static inline bool mac_admin_ns_capable(struct user_namespace *ns)
+>>> +{
+>>> +    return ns_capable(ns, CAP_MAC_ADMIN) ||
+>>> +        ns_capable(ns, CAP_SYS_ADMIN);
+>> Do you care about audit warnings?  If the task has CAP_SYS_ADMIN but
+>> not CAP_MAC_ADMIN, is it desirable that selinux_capable() will audit the
+>> CAP_MAC_ADMIN failure?
+>
+> Good point.  I will switch both to ns_capable_noaudit() so that the 
+> user cannot provoke unnecessary audit message.
 
-Let's say that HV is a huge cloud vendor who means a lot of $ and a
-huge use case for SEV tech. And let's say that same HV is doing those
-incompatible things.
+Actually,  I will only change the MAC_ADMIN to not do auditing and not 
+change the auditing behavior related to SYS_ADMIN.
 
-Now imagine you break it with the spec change. But they already have
-a gazillion of deployments on real hw which they can't simply update
-just like that. Hell, cloud vendors are even trying to dictate how CPU
-vendors should do microcode updates on a live system, without rebooting,
-and we're talking about some wimpy fields in some table.
+    Stefan
 
-Now imagine your business unit calls your engineering and says, you need
-to fix this because a very persuasive chunk of money.
 
-What you most likely will end up with is an ugly ugly workaround after a
-lot of managers screaming at each other and you won't even think about
-breaking that HV.
-
-Now imagine you've designed it the right and unambiguous way from the
-getgo. You wake up and realize, it was all just a bad dream...
-
-> Ok, I'll follow up with the firmware team on this. But just to be clear,
-> what they're suggesting is that the firmware could enforce the MBZ checks
-> on the CPUID page, so out-of-spec hypervisors will fail immediately,
-> rather than in some future version of the spec/cpuid page, and guests
-> can continue ignoring them in the meantime.
-
-Yes, exactly. Fail immediately.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette

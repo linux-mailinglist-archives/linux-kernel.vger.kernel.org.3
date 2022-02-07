@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9D5D4AB9E7
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:26:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F73D4ABD08
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:55:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380419AbiBGLSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:18:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50010 "EHLO
+        id S1388669AbiBGLo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:44:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241405AbiBGLNI (ORCPT
+        with ESMTP id S1385861AbiBGLcw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:13:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C694C0401C0;
-        Mon,  7 Feb 2022 03:13:05 -0800 (PST)
+        Mon, 7 Feb 2022 06:32:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A257C043188;
+        Mon,  7 Feb 2022 03:32:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F0838B80EC3;
-        Mon,  7 Feb 2022 11:13:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4110BC004E1;
-        Mon,  7 Feb 2022 11:13:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0077160A67;
+        Mon,  7 Feb 2022 11:32:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B77FFC340F0;
+        Mon,  7 Feb 2022 11:32:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232382;
-        bh=ij99Pji2hIjLQvYzmWEb7WMoAGwF9oR2PxtnVYAvycM=;
+        s=korg; t=1644233570;
+        bh=lV1mkuh7zyPWVcvLXzJOB2GkO6mowb3cwC8cFqZQMqI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=itk6Mbu/0Ll/+xavgu++2ahO+R+zJF6/Q98O8rz4AiJvPFtP0kkBOGCcYW6VtZ2iu
-         QJm4+oXUbNH9vT1sp4e6D8Bzixn1NdgfOBTZCjJhDhMsg7AHoc1U2zBe4jXcCfTmoq
-         eN7d1RzYJb9thsd933PD/BkGLpJLPEKspJ8WfXhk=
+        b=H/bZJPj2Y9ph58jwNLPAf9NPLUmeVVT5Nj765uIEgedxjkIJo+8oBVtv+PG/nos1b
+         oy5YKNAO+C+UjiasiApBwLE7qlecButwf++mk6H9BgxSHGaRfIgi+G1udUgSL3CV9U
+         KkGuHJUHFdmhSUoN2RZukUWWMrGnEY0yalF+hNGg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
-        <ville.syrjala@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-Subject: [PATCH 4.14 61/69] drm/i915/overlay: Prevent divide by zero bugs in scaling
+        stable@vger.kernel.org, Jared Holzman <jared.holzman@excelero.com>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Subject: [PATCH 5.16 052/126] RDMA/siw: Fix broken RDMA Read Fence/Resume logic.
 Date:   Mon,  7 Feb 2022 12:06:23 +0100
-Message-Id: <20220207103757.629393379@linuxfoundation.org>
+Message-Id: <20220207103805.913090166@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103755.604121441@linuxfoundation.org>
-References: <20220207103755.604121441@linuxfoundation.org>
+In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
+References: <20220207103804.053675072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,41 +55,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Bernard Metzler <bmt@zurich.ibm.com>
 
-commit 90a3d22ff02b196d5884e111f39271a1d4ee8e3e upstream.
+commit b43a76f423aa304037603fd6165c4a534d2c09a7 upstream.
 
-Smatch detected a divide by zero bug in check_overlay_scaling().
+Code unconditionally resumed fenced SQ processing after next RDMA Read
+completion, even if other RDMA Read responses are still outstanding, or
+ORQ is full. Also adds comments for better readability of fence
+processing, and removes orq_get_tail() helper, which is not needed
+anymore.
 
-    drivers/gpu/drm/i915/display/intel_overlay.c:976 check_overlay_scaling()
-    error: potential divide by zero bug '/ rec->dst_height'.
-    drivers/gpu/drm/i915/display/intel_overlay.c:980 check_overlay_scaling()
-    error: potential divide by zero bug '/ rec->dst_width'.
-
-Prevent this by ensuring that the dst height and width are non-zero.
-
-Fixes: 02e792fbaadb ("drm/i915: implement drmmode overlay support v4")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220124122409.GA31673@kili
-(cherry picked from commit cf5b64f7f10b28bebb9b7c9d25e7aee5cbe43918)
-Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Fixes: 8b6a361b8c48 ("rdma/siw: receive path")
+Fixes: a531975279f3 ("rdma/siw: main include file")
+Link: https://lore.kernel.org/r/20220130170815.1940-1-bmt@zurich.ibm.com
+Reported-by: Jared Holzman <jared.holzman@excelero.com>
+Signed-off-by: Bernard Metzler <bmt@zurich.ibm.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/i915/intel_overlay.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/infiniband/sw/siw/siw.h       |    7 +------
+ drivers/infiniband/sw/siw/siw_qp_rx.c |   20 +++++++++++---------
+ 2 files changed, 12 insertions(+), 15 deletions(-)
 
---- a/drivers/gpu/drm/i915/intel_overlay.c
-+++ b/drivers/gpu/drm/i915/intel_overlay.c
-@@ -965,6 +965,9 @@ static int check_overlay_dst(struct inte
- 	const struct intel_crtc_state *pipe_config =
- 		overlay->crtc->config;
+--- a/drivers/infiniband/sw/siw/siw.h
++++ b/drivers/infiniband/sw/siw/siw.h
+@@ -644,14 +644,9 @@ static inline struct siw_sqe *orq_get_cu
+ 	return &qp->orq[qp->orq_get % qp->attrs.orq_size];
+ }
  
-+	if (rec->dst_height == 0 || rec->dst_width == 0)
-+		return -EINVAL;
+-static inline struct siw_sqe *orq_get_tail(struct siw_qp *qp)
+-{
+-	return &qp->orq[qp->orq_put % qp->attrs.orq_size];
+-}
+-
+ static inline struct siw_sqe *orq_get_free(struct siw_qp *qp)
+ {
+-	struct siw_sqe *orq_e = orq_get_tail(qp);
++	struct siw_sqe *orq_e = &qp->orq[qp->orq_put % qp->attrs.orq_size];
+ 
+ 	if (READ_ONCE(orq_e->flags) == 0)
+ 		return orq_e;
+--- a/drivers/infiniband/sw/siw/siw_qp_rx.c
++++ b/drivers/infiniband/sw/siw/siw_qp_rx.c
+@@ -1153,11 +1153,12 @@ static int siw_check_tx_fence(struct siw
+ 
+ 	spin_lock_irqsave(&qp->orq_lock, flags);
+ 
+-	rreq = orq_get_current(qp);
+-
+ 	/* free current orq entry */
++	rreq = orq_get_current(qp);
+ 	WRITE_ONCE(rreq->flags, 0);
+ 
++	qp->orq_get++;
 +
- 	if (rec->dst_x < pipe_config->pipe_src_w &&
- 	    rec->dst_x + rec->dst_width <= pipe_config->pipe_src_w &&
- 	    rec->dst_y < pipe_config->pipe_src_h &&
+ 	if (qp->tx_ctx.orq_fence) {
+ 		if (unlikely(tx_waiting->wr_status != SIW_WR_QUEUED)) {
+ 			pr_warn("siw: [QP %u]: fence resume: bad status %d\n",
+@@ -1165,10 +1166,12 @@ static int siw_check_tx_fence(struct siw
+ 			rv = -EPROTO;
+ 			goto out;
+ 		}
+-		/* resume SQ processing */
++		/* resume SQ processing, if possible */
+ 		if (tx_waiting->sqe.opcode == SIW_OP_READ ||
+ 		    tx_waiting->sqe.opcode == SIW_OP_READ_LOCAL_INV) {
+-			rreq = orq_get_tail(qp);
++
++			/* SQ processing was stopped because of a full ORQ */
++			rreq = orq_get_free(qp);
+ 			if (unlikely(!rreq)) {
+ 				pr_warn("siw: [QP %u]: no ORQE\n", qp_id(qp));
+ 				rv = -EPROTO;
+@@ -1181,15 +1184,14 @@ static int siw_check_tx_fence(struct siw
+ 			resume_tx = 1;
+ 
+ 		} else if (siw_orq_empty(qp)) {
++			/*
++			 * SQ processing was stopped by fenced work request.
++			 * Resume since all previous Read's are now completed.
++			 */
+ 			qp->tx_ctx.orq_fence = 0;
+ 			resume_tx = 1;
+-		} else {
+-			pr_warn("siw: [QP %u]: fence resume: orq idx: %d:%d\n",
+-				qp_id(qp), qp->orq_get, qp->orq_put);
+-			rv = -EPROTO;
+ 		}
+ 	}
+-	qp->orq_get++;
+ out:
+ 	spin_unlock_irqrestore(&qp->orq_lock, flags);
+ 
 
 

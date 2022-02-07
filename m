@@ -2,156 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DD974AB41F
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 07:12:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B0384AB404
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 07:12:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349892AbiBGFwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 00:52:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46572 "EHLO
+        id S241164AbiBGFvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 00:51:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236725AbiBGEbH (ORCPT
+        with ESMTP id S1351765AbiBGEgp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 23:31:07 -0500
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam08on2046.outbound.protection.outlook.com [40.107.102.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 001B0C043181;
-        Sun,  6 Feb 2022 20:31:03 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CV7dAF3ZZCLkgyxI2XuH2zU0HQU0/6mRpuyIpsAuELEOYAIIEME7N3JBR97CrKGfirV/icHl78ds0lJg0aAAODqOe8E5FR6Fqy0ozEchq5/jz5BPy/q1j60Qb2nrgm9E9gBGx6lJxUvk2wl//iNBt5C+XacRZ4+rKRiHi1yMPfPtfL0W/e60yGZ1unzm5UCoQEjHUsbYuUPz5HOHe/q+iA8/7L/L6Hhry0CZcqq1AmAsYO2DtwsmbBcwNelg0gvniSh1+MxNPlRwMEvyip5MNkNViu4mPLCiPr79gJ1QXVI5YcOuY8/MDwfZAr/ub2lfGfVGsWTd5JvefgtRVyd21w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EOKZIEe3d20wimC5sXmGSYZ7nU4QZjN/LDcbXJOBffI=;
- b=gE9x8c99nVIK3beeqSNThsz9DSPTyMY90gL19AKbYvhyNb02GROGQ9rXEq/OM8LKUNKQx66qJCRGeWKAdjLXKWmD/Lu6p5Css49jnHsStJ35a7NssM2OEZtjjspFeHaZQqlUFd3RhlM06U9fD89Gtf/D1psebLsrxQIB0NX0wdhhuGgj/CZArlTr9FrRziaBa+BSyQY3vr6TL3lTmmqlCVsq5vIYOSNgKmUy1hqs3Z3lt/XxW3SIfY2gplYRv5uLTBSbasQHXts+QLwfvMROvfEL9hnTn4LSRoffyKJPk9ca0tmroLcUKF5Nqu0xVI93Ay3z7FBdoIVtat07od5qkg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
+        Sun, 6 Feb 2022 23:36:45 -0500
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE8C9C043181
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 20:36:44 -0800 (PST)
+Received: by mail-pl1-x649.google.com with SMTP id q4-20020a170902f78400b0014d57696618so902003pln.20
+        for <linux-kernel@vger.kernel.org>; Sun, 06 Feb 2022 20:36:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EOKZIEe3d20wimC5sXmGSYZ7nU4QZjN/LDcbXJOBffI=;
- b=QoNrDXl2Oi4D9e5umD3xd/7sQ28HsbJ5/uoRDLSYfYjKD0QDvZGinLgV5O2onMIrL/uZvTer1jeQjypjsfFdk8vMU8NqGd2V4X7Bm7fCup0p/vvcFp9wh4PK6T0ThlZzQ7NSfVTGocHyVKlGjrumqCx9KrpHnhMP4eKEARwgTuQ=
-Received: from BY5PR02MB6947.namprd02.prod.outlook.com (2603:10b6:a03:23e::12)
- by BYAPR02MB6006.namprd02.prod.outlook.com (2603:10b6:a03:120::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Mon, 7 Feb
- 2022 04:31:00 +0000
-Received: from BY5PR02MB6947.namprd02.prod.outlook.com
- ([fe80::259b:b0b6:7574:328f]) by BY5PR02MB6947.namprd02.prod.outlook.com
- ([fe80::259b:b0b6:7574:328f%9]) with mapi id 15.20.4951.018; Mon, 7 Feb 2022
- 04:31:00 +0000
-From:   Bharat Kumar Gogada <bharatku@xilinx.com>
-To:     Bharat Kumar Gogada <bharatku@xilinx.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        Michal Simek <michals@xilinx.com>
-Subject: RE: [PATCH 0/2] Add support for Xilinx Versal CPM5 Root Port
-Thread-Topic: [PATCH 0/2] Add support for Xilinx Versal CPM5 Root Port
-Thread-Index: AQHYG9j9fzCCB50+a0qHkmZFwkrjpayHfwrg
-Date:   Mon, 7 Feb 2022 04:31:00 +0000
-Message-ID: <BY5PR02MB6947DBD1D5DEFAF24EC3E5ACA52C9@BY5PR02MB6947.namprd02.prod.outlook.com>
-References: <20220207041250.1658-1-bharat.kumar.gogada@xilinx.com>
-In-Reply-To: <20220207041250.1658-1-bharat.kumar.gogada@xilinx.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=xilinx.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 877a1409-4dab-45ae-8e7e-08d9e9f2a4d2
-x-ms-traffictypediagnostic: BYAPR02MB6006:EE_
-x-microsoft-antispam-prvs: <BYAPR02MB60061CAC49932CB18B9CCE7AA52C9@BYAPR02MB6006.namprd02.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1824;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ACiUA2E2kPg0H1do37bD0vytkJYWGPNxz8ekqhnkmM+MsZDPgdnry4Wn2RtIkCvRk8Rx+9jkqxms4j0s3SfcV7cFDJ+BGlWI21N1OJHVPI/d+Wjdw77U/ANBDQVzVhChVhruJAD0csqtCFD7bToTI5OgSIaOjn94BDHaHoD0CrfFmPoKXcke2J12KlfgC9P+G9L6ZQxdUPDKLgWzg7LuhkGO3zJHz8t7iuCMT3WtGSqail0dPsYqMOza7ZzE9LXdYUzHDBgBOAA/qWWeZCx9lzBn7Hb9cTTqp+A5s/WlyhaiBLZ75Ox4KWqt/ngk9wr1sLqmORvr6ohpVzMAh2hb8Lu/wV8/KEOHGN+hncwzzxm+4ANqW3OtQ9I1EYIyvVRM7KQcp2g9JTRlzxjzxs2PqwmDCSQxcdThtzV34GHnlP6HwKueWPHw8CS67L3y3/XZqIt1h7+uzKMhinfBYUkdVTsp6F+ABL7dH7B65nVOehrc/NFTj+Z49Wr7KmEh5cRS/vjH73Ord0eT24zgyuWs33ezvgpD93/mN3VmxBzBduxQcIKPgsHjQTsEALxV5g1HEYUqx2s8kLNiyBOGiGzoZhbD2X8dE9J9s1hdgq+Px2rKgvEMoyAEChJoubBbiYer9YdO6xOkfcLzJG+QuzqLmQu3mxKZZ4Gj/LG+4o6RrYunxy1B0cEkOf/+yswOTqEEMpkyBmBxS3B9T9fWH21cgg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR02MB6947.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(5660300002)(122000001)(9686003)(6506007)(38100700002)(53546011)(86362001)(38070700005)(110136005)(7696005)(54906003)(71200400001)(2906002)(186003)(316002)(76116006)(66946007)(83380400001)(66446008)(64756008)(55016003)(66476007)(52536014)(8936002)(4326008)(66556008)(107886003)(26005)(8676002)(33656002)(508600001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?w8jtRWtHDpsymrcQwmVHizpa/mULhhW2swX7U1k2rRBlp5wjr1v3893qPZEE?=
- =?us-ascii?Q?Pvu18grRakvuMA6kyPdyYmOBxVqP9OEooiyOcSwHMRJjFiwYVuefDb1OvAV8?=
- =?us-ascii?Q?PDwKooVqNNoJzyxXsUJu9FJk4bxT6oe8Ee0ZoXvF8CZAFyWDDOBVFLKQZpw9?=
- =?us-ascii?Q?KavB2/u/MVsudrVzmYtpBqkknnYJ6Gts8LWf8MW0RwApsW6e9BTzbJUMqCrv?=
- =?us-ascii?Q?ie/XhyHHEhcQCj/EFlvuqSZLsX/AZmhNgPMnjYtB1xanA52JTBNSJTU0Z5WT?=
- =?us-ascii?Q?w7nJPaoC0AWyok1DBrIVJXJqgUyAOiF1QYcBwCQ6giBVHXPumjJX6yVHxpkW?=
- =?us-ascii?Q?P9QBE6RUHpLkizxambVHkWrJ2+8ElmxGG3IHSkHC8MKfHkWQP8lENpuuJwTk?=
- =?us-ascii?Q?OBzUS9pycyBuS20QZ+yzDsMUo+zY3nk4+8L1r8dnyjnxSYfMsVBwisdu4sJn?=
- =?us-ascii?Q?rDf3F0abDW105bSOu41M9geAHg0EKkCSVp+BZLvVrK4Uolo09ADZPhotNUbj?=
- =?us-ascii?Q?fXk0kDRJOVNVoiO/qVZvcUm2yvsIVzzGkoz0ZQJukYfa+9zQ8Jeij8LDHFCi?=
- =?us-ascii?Q?O4a7ECnjiS25ezBDyZNn0HBc7fvKeafv0b7b0D34C7e2OSzZTiqo3E7q+gjL?=
- =?us-ascii?Q?YcfgSHhbImhNoYkJnWsP9FzVF5R8HdCjaWk28ppPzqBdrKMiRAXpaG0tzpdK?=
- =?us-ascii?Q?0yXVRFI9kLzjMdWULSKFy5rd8dSbv63O0glbOhENck5KZg8pQJqiPTC37WvQ?=
- =?us-ascii?Q?5zkHbDjyAiofkkymaXoYYsp5HVAE/7gwQx/obZIgjslHlaoeiACB4WfjBeJT?=
- =?us-ascii?Q?qleGr8Kq/N2ffEcdatBY9api6eww/gLWTMG20TXUImiTqzlN2iDFSzsa8wxg?=
- =?us-ascii?Q?h3l/kDMlO/DUzYMhIFfriPhPpzdv+m2cN1jI0rFZPYjtGBiGGeMAl8VRqqIm?=
- =?us-ascii?Q?BH69+gZZvg+jF/M8+SHxasY7P4vnYNKiXjZLYHIVYmq1tgQI7xxtqGJa67c0?=
- =?us-ascii?Q?uKFnoLZDOjkmUwB7upP1Glnxup1PenNvFXD+Gu+J6kbNp7CQyTyhq7+iAmW7?=
- =?us-ascii?Q?+nNV8D7CcJm/neX1/Yp3m6AyOq9RCcA/3ss1nqRwTR2uZbX84Dk4gf/JvzOX?=
- =?us-ascii?Q?quQ53yv0kRmDQkZkCdZss/6OaasFSb3E7rV/dJjj9tMeMfJ2w9IOtC280brk?=
- =?us-ascii?Q?fIpKflF+myVEJ9hEcVPiGoVYLL2ImIG+rN7kNoabsT4jOeNSVuNl6UGK3EW0?=
- =?us-ascii?Q?OCKVMeyYopdrngRVtFN1d+WfOcaPlDC9kIFOvAxRaarGcYsUECvJ1MSaeN5d?=
- =?us-ascii?Q?rVZDdM4aywtODG1fBvf91zCu8QYmEoxP8/k+CuMnDxC+/k4sXLwbwii7m4/B?=
- =?us-ascii?Q?DMScd/Y8DcCDEfozyAXhq/EYtGdJMCbOdimeSMBQf2Ml8oxLk7PWnKD4r7H7?=
- =?us-ascii?Q?xepTkRv2QCXBg2AwU+7VS4vjA+Lv4Te6OnkNV9YeE4Io5v3v4PuEP4XTX4Cq?=
- =?us-ascii?Q?eqQxRA7b1oV7k0C+zLABQ9GlNbtzGnqlqVGBDxD2vRr08kRuJEvUIEKniOx7?=
- =?us-ascii?Q?dTpWy+7JL4trlNPDdonHSZMrhG1rlv2Uw358FLdw55PdhisJnOdI044mHGpO?=
- =?us-ascii?Q?G8cO26BtRbEupfIbjsmGu8Y=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR02MB6947.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 877a1409-4dab-45ae-8e7e-08d9e9f2a4d2
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Feb 2022 04:31:00.5317
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: N9JvLXQ8Ak34R4nfkHlIC5OxArEeAhOGuhIMzLUhM7W+hm0/azYEBXNRulTf9Subw3wqkLa5CiQS/AalDgHXag==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR02MB6006
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=RpgZKv2pVrDwgi45sVAGsLhZHRNIToNQoQwH+0Lvsto=;
+        b=XQU5iYcr6a16R873ijABcrJIJQvoY6+ZidyrmpaLJI8ap0nOPS0uAadVqL44nJqbLC
+         jVKw3xgZFolPPieidVjP9oGlEZvjKCkEy0OdknkbZXXDEAuhnovmBOT9eV1IGehPbjhr
+         Zm0tFnedLEsJWGDqUAk1ejxoUfWkJXD/Y5824olCFtCi53Uo3hmyoMCgTIE5jAq+B1Mr
+         k/12Lp8/ihI9TPTsjb+pekgA2S212xjuZQg3g4Fee3RiUi0lhw692l8ikgzMFUI52KU4
+         jZC3oIulGrPtlhPzBO8p68/6r1VH9FG4YY/pZJdX1rQRlYLl1AVA//AB/DzD2QZ/LgY2
+         EZ+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=RpgZKv2pVrDwgi45sVAGsLhZHRNIToNQoQwH+0Lvsto=;
+        b=7cotABx42dZ3QWOTqqeclEbQlJO1AXRML/eciJvxjtoojE+wsLKsMdQRReqcDoxu2m
+         AOSZcmW4JXjiSse5Nwf/rejCPbhIYaoUuSS+8OQp8jobBfO2CvYN18k145KHy7DLcPo/
+         oxbQmXBsppo0Cl430j0O5wkvFrxS79gmSPYiQONtDyXYlxSv1OMPONA/2witZb2oD7kF
+         tq+CI3RC5G3dHkrqbe3ZDG1A/VcayLe8EhcW/poH8d4SdT9LQUKuxfpaj5lFVsI11Bz1
+         838ohOEG3HHlkLwZsmNCqzLtuRF8nGMzjYzg7xgoBtJ7OHZATFfWyvxrCVU8R8i+cNBS
+         kW0Q==
+X-Gm-Message-State: AOAM532JyPiTjWWNvG8qn9w2LZymGg/+imJg+NVIB5PKmUEe33dCHQ6b
+        AFad3+7o3Pxd7khDr//luVEjdqDh
+X-Google-Smtp-Source: ABdhPJw7haqNCja730dbklrD2inGu4ZzhrXi20XTGrD1LNTCyQm4RisEuw91mmTo3UC8p/QzN9zJOSgw
+X-Received: from juew-desktop.sea.corp.google.com ([2620:15c:100:202:786b:6fb0:c021:39be])
+ (user=juew job=sendgmr) by 2002:a17:90a:5503:: with SMTP id
+ b3mr16550573pji.187.1644208603586; Sun, 06 Feb 2022 20:36:43 -0800 (PST)
+Date:   Sun,  6 Feb 2022 20:36:40 -0800
+Message-Id: <20220207043640.2829295-1-juew@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.0.263.gb82422642f-goog
+Subject: [RFC] x86/mce: Add workaround for SKX/CLX/CPX spurious machine checks
+From:   Jue Wang <juew@google.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Tony Luck <tony.luck@intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Jue Wang <juew@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
+The fast string copy instructions ("rep movs*") could consume an
+uncorrectable memory error in the cache line _right after_ the
+desired region to copy and raise an MCE.
 
-Sorry for resending, my mailbox didn't show one patch, resent this assuming=
- patch was missing.
+Bit 0 of MSR_IA32_MISC_ENABLE can be cleared to disable fast string copy
+and will avoid such spurious machine checks. However, that is less
+preferable due to the permanent performance impact. Considering memory
+poison is rare, it's desirable to keep fast string enabled until an MCE
+is seen.
 
-Regards,
-Bharat
+Intel has confirmed the following:
+1. The CPU erratum of fast string copy only applies to
+SKX/CLX/CPL generations.
+2. Directly return from MCE handler will result in complete execution
+of the fast string copy (rep movs*) with no data loss or corruption.
+3. Directly return from MCE handler will not result in another MCE
+firing on the next poisoned cache line due to rep movs*.
+4. Directly return from MCE handler will resume execution from a
+correct point in code.
+5. Directly return from MCE handler due to any other SRAR MCEs will
+result in the same instruction that triggered the MCE firing a second
+MCE immediately.
+6. It's not safe to directly return without disabling the fast string
+copy, as the next fast string copy of the same buffer on the same CPU
+would result in a PANIC MCE.
 
-> -----Original Message-----
-> From: Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
-> Sent: Monday, February 7, 2022 9:43 AM
-> To: linux-pci@vger.kernel.org; linux-kernel@vger.kernel.org
-> Cc: lorenzo.pieralisi@arm.com; bhelgaas@google.com; Michal Simek
-> <michals@xilinx.com>; Bharat Kumar Gogada <bharatku@xilinx.com>
-> Subject: [PATCH 0/2] Add support for Xilinx Versal CPM5 Root Port
->=20
-> Xilinx Versal Premium series has CPM5 block which supports Root port
-> functioning at Gen5 speed.
-> Xilinx Versal CPM5 has few changes with existing CPM block.
-> - CPM5 has dedicated register space for control and status registers.
-> - CPM5 legacy interrupt handling needs additonal register bit
->   to enable and handle legacy interrupts.
->=20
-> Bharat Kumar Gogada (2):
->   PCI: xilinx-cpm: Update YAML schemas for Versal CPM5 Root Port
->   PCI: xilinx-cpm: Add support for Versal CPM5 Root Port driver
->=20
->  .../bindings/pci/xilinx-versal-cpm.yaml       | 47 ++++++++++++++++---
->  drivers/pci/controller/pcie-xilinx-cpm.c      | 33 ++++++++++++-
->  2 files changed, 72 insertions(+), 8 deletions(-)
->=20
-> --
-> 2.17.1
+The mitigation in this patch should mitigate the erratum completely with
+the only caveat that the fast string copy is disabled on the affected
+hyper thread thus performance degradation.
+
+This is still better than the OS crashes on MCEs raised on an
+irrelevant process due to 'rep movs*' accesses in a kernel context,
+e.g., copy_page.
+
+Since a host drain / fail-over usually starts right after the first
+MCE is signaled, which results in VM migration or termination, the
+performance degradation is a transient effect.
+
+Tested:
+
+Injected errors on 1st cache line of 8 anonymous pages of process
+'proc1' and observed MCE consumption from 'proc2' with no panic
+(directly returned).
+
+Without the fix, the host panicked within a few minutes on a
+random 'proc2' process due to kernel access from copy_page.
+
+Signed-off-by: Jue Wang <juew@google.com>
+---
+ arch/x86/kernel/cpu/mce/core.c     | 61 ++++++++++++++++++++++++++++++
+ arch/x86/kernel/cpu/mce/internal.h |  5 ++-
+ 2 files changed, 65 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index 5818b837fd4d..06001e3b2ff2 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -834,6 +834,57 @@ static void quirk_sandybridge_ifu(int bank, struct mce *m, struct pt_regs *regs)
+ 	m->cs = regs->cs;
+ }
+ 
++static bool is_intel_srar(u64 mci_status)
++{
++	return (mci_status &
++		(MCI_STATUS_VAL|MCI_STATUS_OVER|MCI_STATUS_UC|MCI_STATUS_EN|
++		 MCI_STATUS_ADDRV|MCI_STATUS_MISCV|MCI_STATUS_PCC|
++		 MCI_STATUS_AR|MCI_STATUS_S)) ==
++		(MCI_STATUS_VAL|MCI_STATUS_UC|MCI_STATUS_EN|MCI_STATUS_ADDRV|
++		 MCI_STATUS_MISCV|MCI_STATUS_AR|MCI_STATUS_S);
++}
++
++/*
++ * Disable fast string copy and return from the MCE handler upon the first SRAR
++ * MCE on bank 1 due to a CPU erratum on Intel SKX/CLX/CPL CPUs.
++ * The fast string copy instructions ("rep movs*") could consume an
++ * uncorrectable memory error in the cache line _right after_ the
++ * desired region to copy and raise an MCE with RIP pointing to the
++ * instruction _after_ the "rep movs*".
++ * This mitigation addresses the issue completely with the caveat of
++ * performance degradation on the CPU affected. This is still better
++ * than the OS crashes on MCEs raised on an irrelevant process due to
++ * 'rep movs*' accesses in a kernel context (e.g., copy_page).
++ * Since a host drain / fail-over usually starts right after the first
++ * MCE is signaled, which results in VM migration or termination, the
++ * performance degradation is a transient effect.
++ *
++ * Returns true when fast string copy on cpu should be disabled.
++ */
++static bool quirk_skylake_repmov(void)
++{
++	/*
++	 * State that represents if an SRAR MCE has already signaled on the DCU bank.
++	 */
++	static DEFINE_PER_CPU(bool, srar_dcu_signaled);
++
++	if (unlikely(!__this_cpu_read(srar_dcu_signaled))) {
++		u64 mc1_status = mce_rdmsrl(MSR_IA32_MCx_STATUS(1));
++
++		if (is_intel_srar(mc1_status)) {
++			__this_cpu_write(srar_dcu_signaled, true);
++			msr_clear_bit(MSR_IA32_MISC_ENABLE,
++				      MSR_IA32_MISC_ENABLE_FAST_STRING_BIT);
++			mce_wrmsrl(MSR_IA32_MCG_STATUS, 0);
++			mce_wrmsrl(MSR_IA32_MCx_STATUS(1), 0);
++			pr_err("First SRAR MCE on DCU, CPU: %d, disable fast string copy.\n",
++			       smp_processor_id());
++			return true;
++		}
++	}
++	return false;
++}
++
+ /*
+  * Do a quick check if any of the events requires a panic.
+  * This decides if we keep the events around or clear them.
+@@ -1403,6 +1454,9 @@ noinstr void do_machine_check(struct pt_regs *regs)
+ 	else if (unlikely(!mca_cfg.initialized))
+ 		return unexpected_machine_check(regs);
+ 
++	if (mce_flags.skx_repmov_quirk && quirk_skylake_repmov())
++		return;
++
+ 	/*
+ 	 * Establish sequential order between the CPUs entering the machine
+ 	 * check handler.
+@@ -1858,6 +1912,13 @@ static int __mcheck_cpu_apply_quirks(struct cpuinfo_x86 *c)
+ 
+ 		if (c->x86 == 6 && c->x86_model == 45)
+ 			mce_flags.snb_ifu_quirk = 1;
++
++		/*
++		 * Skylake, Cascacde Lake and Cooper Lake require a quirk on
++		 * rep movs.
++		 */
++		if (c->x86 == 6 && c->x86_model == INTEL_FAM6_SKYLAKE_X)
++			mce_flags.skx_repmov_quirk = 1;
+ 	}
+ 
+ 	if (c->x86_vendor == X86_VENDOR_ZHAOXIN) {
+diff --git a/arch/x86/kernel/cpu/mce/internal.h b/arch/x86/kernel/cpu/mce/internal.h
+index 52c633950b38..cec227c25138 100644
+--- a/arch/x86/kernel/cpu/mce/internal.h
++++ b/arch/x86/kernel/cpu/mce/internal.h
+@@ -170,7 +170,10 @@ struct mce_vendor_flags {
+ 	/* SandyBridge IFU quirk */
+ 	snb_ifu_quirk		: 1,
+ 
+-	__reserved_0		: 57;
++	/* Skylake, Cascade Lake, Cooper Lake rep movs quirk */
++	skx_repmov_quirk		: 1,
++
++	__reserved_0		: 56;
+ };
+ 
+ extern struct mce_vendor_flags mce_flags;
+-- 
+2.35.0.263.gb82422642f-goog
 

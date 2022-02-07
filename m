@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DA9B4AB81B
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 11:01:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 477F94AB838
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 11:01:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345961AbiBGJtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 04:49:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36918 "EHLO
+        id S1344147AbiBGJte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 04:49:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236095AbiBGJpN (ORCPT
+        with ESMTP id S245201AbiBGJqZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 04:45:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D59EBC043181;
-        Mon,  7 Feb 2022 01:45:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8C3F1B810F7;
-        Mon,  7 Feb 2022 09:45:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 919B0C004E1;
-        Mon,  7 Feb 2022 09:45:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644227108;
-        bh=SC/2SlU63pP9Mfmat6jclxxX8jCixi9ZXMl/X43zsPk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=PsFTwW+BM2Mk8RCqQMVi5w+w3sjlZTVS3IHoxPnbk0VYHtd32RH2XI4CnHBhE/qir
-         o6RNj/CjKHlw8ZpG9ZxnPou3yfqsCESJkBWOawAeZ56aZfqA93cxgnFCSMiGg82fPP
-         dChoaEuCbahF7lkXlzsSAr/oE9DuGgs613jBNKZ6TMa6Cfx3U2wDwuIwn7sbxyj+2x
-         N7eXuMcfW5TgucA914NNYG+rSzwXtaGM4lo7KhsAJLXr7ZnVsIGpHitAGtVlRTIajb
-         Sz1r7+FfKh0yYX7moqJPsbgLBaR6iMpxtcQvDJuycYVJM+HFDLqvKdrN9RvNptzhEr
-         s8M+jDY4H0yaw==
-Message-ID: <b5c87b7d-fdb4-2288-5c21-c666fdd40005@kernel.org>
-Date:   Mon, 7 Feb 2022 03:45:06 -0600
+        Mon, 7 Feb 2022 04:46:25 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A7DC043181
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 01:46:23 -0800 (PST)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1644227180;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0RBBdWwxOY62NA2K6sRnag/9lJllybBsMojcDW+50rk=;
+        b=HV1wjgSgsjwbeDPi0YnQN3LEcdv1qz24IToe/yCBydxfm06XXHdqNaGTA/HiCIBu+mIu/B
+        rxDhgaloIATE8eXsEkuu+65jz3h69nApK4JcYC0w5vTpiuo7Toz/zMxKyNkSHpnJEooZl8
+        e02lJKMO9vwPYABDtTbcGUGs0JFJpy7MU8MSDQdpDSlXlXer7Gx7k7r1P4RqHkhbXsPnug
+        EUr7ktJcNjnP4RLZ9ipLe9opuItpDvySWv4UT0wiCIEIgKcbxn9udfMrtAjUIhHdnGcBef
+        YEx3ysAw0fiYztw4wIZyuAR403mcQ8W2DQNWb2g7jlpNgBNu36DH8+r2xV29gw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1644227180;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0RBBdWwxOY62NA2K6sRnag/9lJllybBsMojcDW+50rk=;
+        b=qsVkc5OmeGvljANWBOl7If1Ppr4DGAumqKZajU5D3tN4umJkFIBn1v3EeWPIDU6o3GoX+j
+        QtCi93fAr0a07nDQ==
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-kernel@vger.kernel.org,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: [PATCH v2] printk: defer_console_output: use atomic update
+In-Reply-To: <YfzP50vDiJiaRVCr@google.com>
+References: <20220203112915.1350753-1-john.ogness@linutronix.de>
+ <YfzP50vDiJiaRVCr@google.com>
+Date:   Mon, 07 Feb 2022 10:52:20 +0106
+Message-ID: <87bkzj3t77.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] ARM: socfpga: fix missing RESET_CONTROLLER
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        kernel test robot <lkp@intel.com>, stable@vger.kernel.org
-References: <20220207084404.212017-1-krzysztof.kozlowski@canonical.com>
-From:   Dinh Nguyen <dinguyen@kernel.org>
-In-Reply-To: <20220207084404.212017-1-krzysztof.kozlowski@canonical.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,45 +59,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The per-cpu @printk_pending variable can be updated from
+sleepable contexts, such as:
 
+  get_random_bytes()
+    warn_unseeded_randomness()
+      printk_deferred()
+        defer_console_output()
 
-On 2/7/22 02:44, Krzysztof Kozlowski wrote:
-> The SocFPGA machine since commit b3ca9888f35f ("reset: socfpga: add an
-> early reset driver for SoCFPGA") uses reset controller, so it should
-> select RESET_CONTROLLER explicitly.  Selecting ARCH_HAS_RESET_CONTROLLER
-> is not enough because it affects only default choice still allowing a
-> non-buildable configuration:
-> 
->    /usr/bin/arm-linux-gnueabi-ld: arch/arm/mach-socfpga/socfpga.o: in function `socfpga_init_irq':
->    arch/arm/mach-socfpga/socfpga.c:56: undefined reference to `socfpga_reset_init'
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Cc: <stable@vger.kernel.org>
-> Fixes: b3ca9888f35f ("reset: socfpga: add an early reset driver for SoCFPGA")
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> ---
->   arch/arm/mach-socfpga/Kconfig | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/arch/arm/mach-socfpga/Kconfig b/arch/arm/mach-socfpga/Kconfig
-> index 43ddec677c0b..594edf9bbea4 100644
-> --- a/arch/arm/mach-socfpga/Kconfig
-> +++ b/arch/arm/mach-socfpga/Kconfig
-> @@ -2,6 +2,7 @@
->   menuconfig ARCH_INTEL_SOCFPGA
->   	bool "Altera SOCFPGA family"
->   	depends on ARCH_MULTI_V7
-> +	select ARCH_HAS_RESET_CONTROLLER
->   	select ARCH_SUPPORTS_BIG_ENDIAN
->   	select ARM_AMBA
->   	select ARM_GIC
-> @@ -18,6 +19,7 @@ menuconfig ARCH_INTEL_SOCFPGA
->   	select PL310_ERRATA_727915
->   	select PL310_ERRATA_753970 if PL310
->   	select PL310_ERRATA_769419
-> +	select RESET_CONTROLLER
->   
->   if ARCH_INTEL_SOCFPGA
->   config SOCFPGA_SUSPEND
+and can be updated from interrupt contexts, such as:
 
-Acked-By: Dinh Nguyen <dinguyen@kernel.org>
+  handle_irq_event_percpu()
+    __irq_wake_thread()
+      wake_up_process()
+        try_to_wake_up()
+          select_task_rq()
+            select_fallback_rq()
+              printk_deferred()
+                defer_console_output()
+
+and can be updated from NMI contexts, such as:
+
+  vprintk()
+    if (in_nmi()) defer_console_output()
+
+Therefore this_cpu_or(), the atomic variant of __this_cpu_or(),
+should be used to update the variable.
+
+Reported-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+Signed-off-by: John Ogness <john.ogness@linutronix.de>
+---
+ Change from v1:
+ 
+ Sebastian comments made it clear that the v1 title and message were not
+ correctly specifying the problem or the reason for the fix. I hope this
+ text is clearer.
+
+ kernel/printk/printk.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+index 82abfaf3c2aa..164ccdb9423e 100644
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -3262,7 +3262,7 @@ void defer_console_output(void)
+ 		return;
+ 
+ 	preempt_disable();
+-	__this_cpu_or(printk_pending, PRINTK_PENDING_OUTPUT);
++	this_cpu_or(printk_pending, PRINTK_PENDING_OUTPUT);
+ 	irq_work_queue(this_cpu_ptr(&wake_up_klogd_work));
+ 	preempt_enable();
+ }
+
+base-commit: dfd42facf1e4ada021b939b4e19c935dcdd55566
+-- 
+2.30.2

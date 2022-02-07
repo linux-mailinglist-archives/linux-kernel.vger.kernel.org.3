@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9025D4ABA32
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:27:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F4904ABCF0
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:55:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383059AbiBGLV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:21:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54116 "EHLO
+        id S1388289AbiBGLnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:43:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378622AbiBGLPy (ORCPT
+        with ESMTP id S1385682AbiBGLcG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:15:54 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA57BC0401C8;
-        Mon,  7 Feb 2022 03:15:49 -0800 (PST)
+        Mon, 7 Feb 2022 06:32:06 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE58CC0401D5;
+        Mon,  7 Feb 2022 03:32:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4EBDB61388;
-        Mon,  7 Feb 2022 11:15:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 193DDC004E1;
-        Mon,  7 Feb 2022 11:15:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 74B0BB80EBD;
+        Mon,  7 Feb 2022 11:31:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1D77C004E1;
+        Mon,  7 Feb 2022 11:31:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232548;
-        bh=U+c9K6WdzIVH2IfFgZxIiSIM4vFtt9G9/lsDaGV6npA=;
+        s=korg; t=1644233518;
+        bh=mEtObQG33qfn2d7Uum/gcizK3oGUXgWfZ3PZj7UOunU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fuwp6H5gQPfUFDtBLOQNxzcwmYNfwqgHJRJFKctYt9lEjyAfzEtk1IXJaQ0DTGW3j
-         2OlbwtbbsmsmhKTGUqmSs/Gv6Vox7U1U04rlAC1zoJ/yN25ZTC5IYmzd16EZ1RCRIP
-         Cpf6RBI6UXTIGTYn187Y/IlWrFhGGF1yney1dCeE=
+        b=1BOsNOeU6sJ3MloAvZxzwcSi8Ix6s2vF9F0Q0GbliX91B10MPLjwGDvtLW7EmEB87
+         cGBxP9q+bY7fcJrgbgz85e89FmhvHxLp+GvBfE/jZ0DuHPsgmXlDyM5Vax5A+WVSq9
+         nHZmEqcUEpgu/opnJgnS5boe7vi2/YrYcypWhRpA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Ray Che <xijiache@gmail.com>, David Ahern <dsahern@kernel.org>,
-        Geoff Alexander <alexandg@cs.unm.edu>,
-        Willy Tarreau <w@1wt.eu>, Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 45/86] ipv4: tcp: send zero IPID in SYNACK messages
-Date:   Mon,  7 Feb 2022 12:06:08 +0100
-Message-Id: <20220207103759.028005440@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Subject: [PATCH 5.16 038/126] IB/hfi1: Fix AIP early init panic
+Date:   Mon,  7 Feb 2022 12:06:09 +0100
+Message-Id: <20220207103805.449533570@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103757.550973048@linuxfoundation.org>
-References: <20220207103757.550973048@linuxfoundation.org>
+In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
+References: <20220207103804.053675072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,72 +56,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>
 
-[ Upstream commit 970a5a3ea86da637471d3cd04d513a0755aba4bf ]
+commit 5f8f55b92edd621f056bdf09e572092849fabd83 upstream.
 
-In commit 431280eebed9 ("ipv4: tcp: send zero IPID for RST and
-ACK sent in SYN-RECV and TIME-WAIT state") we took care of some
-ctl packets sent by TCP.
+An early failure in hfi1_ipoib_setup_rn() can lead to the following panic:
 
-It turns out we need to use a similar strategy for SYNACK packets.
+  BUG: unable to handle kernel NULL pointer dereference at 00000000000001b0
+  PGD 0 P4D 0
+  Oops: 0002 [#1] SMP NOPTI
+  Workqueue: events work_for_cpu_fn
+  RIP: 0010:try_to_grab_pending+0x2b/0x140
+  Code: 1f 44 00 00 41 55 41 54 55 48 89 d5 53 48 89 fb 9c 58 0f 1f 44 00 00 48 89 c2 fa 66 0f 1f 44 00 00 48 89 55 00 40 84 f6 75 77 <f0> 48 0f ba 2b 00 72 09 31 c0 5b 5d 41 5c 41 5d c3 48 89 df e8 6c
+  RSP: 0018:ffffb6b3cf7cfa48 EFLAGS: 00010046
+  RAX: 0000000000000246 RBX: 00000000000001b0 RCX: 0000000000000000
+  RDX: 0000000000000246 RSI: 0000000000000000 RDI: 00000000000001b0
+  RBP: ffffb6b3cf7cfa70 R08: 0000000000000f09 R09: 0000000000000001
+  R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000000
+  R13: ffffb6b3cf7cfa90 R14: ffffffff9b2fbfc0 R15: ffff8a4fdf244690
+  FS:  0000000000000000(0000) GS:ffff8a527f400000(0000) knlGS:0000000000000000
+  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+  CR2: 00000000000001b0 CR3: 00000017e2410003 CR4: 00000000007706f0
+  DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+  DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+  PKRU: 55555554
+  Call Trace:
+   __cancel_work_timer+0x42/0x190
+   ? dev_printk_emit+0x4e/0x70
+   iowait_cancel_work+0x15/0x30 [hfi1]
+   hfi1_ipoib_txreq_deinit+0x5a/0x220 [hfi1]
+   ? dev_err+0x6c/0x90
+   hfi1_ipoib_netdev_dtor+0x15/0x30 [hfi1]
+   hfi1_ipoib_setup_rn+0x10e/0x150 [hfi1]
+   rdma_init_netdev+0x5a/0x80 [ib_core]
+   ? hfi1_ipoib_free_rdma_netdev+0x20/0x20 [hfi1]
+   ipoib_intf_init+0x6c/0x350 [ib_ipoib]
+   ipoib_intf_alloc+0x5c/0xc0 [ib_ipoib]
+   ipoib_add_one+0xbe/0x300 [ib_ipoib]
+   add_client_context+0x12c/0x1a0 [ib_core]
+   enable_device_and_get+0xdc/0x1d0 [ib_core]
+   ib_register_device+0x572/0x6b0 [ib_core]
+   rvt_register_device+0x11b/0x220 [rdmavt]
+   hfi1_register_ib_device+0x6b4/0x770 [hfi1]
+   do_init_one.isra.20+0x3e3/0x680 [hfi1]
+   local_pci_probe+0x41/0x90
+   work_for_cpu_fn+0x16/0x20
+   process_one_work+0x1a7/0x360
+   ? create_worker+0x1a0/0x1a0
+   worker_thread+0x1cf/0x390
+   ? create_worker+0x1a0/0x1a0
+   kthread+0x116/0x130
+   ? kthread_flush_work_fn+0x10/0x10
+   ret_from_fork+0x1f/0x40
 
-By default, they carry IP_DF and IPID==0, but there are ways
-to ask them to use the hashed IP ident generator and thus
-be used to build off-path attacks.
-(Ref: Off-Path TCP Exploits of the Mixed IPID Assignment)
+The panic happens in hfi1_ipoib_txreq_deinit() because there is a NULL
+deref when hfi1_ipoib_netdev_dtor() is called in this error case.
 
-One of this way is to force (before listener is started)
-echo 1 >/proc/sys/net/ipv4/ip_no_pmtu_disc
+hfi1_ipoib_txreq_init() and hfi1_ipoib_rxq_init() are self unwinding so
+fix by adjusting the error paths accordingly.
 
-Another way is using forged ICMP ICMP_FRAG_NEEDED
-with a very small MTU (like 68) to force a false return from
-ip_dont_fragment()
+Other changes:
+- hfi1_ipoib_free_rdma_netdev() is deleted including the free_netdev()
+  since the netdev core code deletes calls free_netdev()
+- The switch to the accelerated entrances is moved to the success path.
 
-In this patch, ip_build_and_send_pkt() uses the following
-heuristics.
-
-1) Most SYNACK packets are smaller than IPV4_MIN_MTU and therefore
-can use IP_DF regardless of the listener or route pmtu setting.
-
-2) In case the SYNACK packet is bigger than IPV4_MIN_MTU,
-we use prandom_u32() generator instead of the IPv4 hashed ident one.
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Reported-by: Ray Che <xijiache@gmail.com>
-Reviewed-by: David Ahern <dsahern@kernel.org>
-Cc: Geoff Alexander <alexandg@cs.unm.edu>
-Cc: Willy Tarreau <w@1wt.eu>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org
+Fixes: d99dc602e2a5 ("IB/hfi1: Add functions to transmit datagram ipoib packets")
+Link: https://lore.kernel.org/r/1642287756-182313-4-git-send-email-mike.marciniszyn@cornelisnetworks.com
+Reviewed-by: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
+Signed-off-by: Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv4/ip_output.c |   11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ drivers/infiniband/hw/hfi1/ipoib_main.c |   13 +++----------
+ 1 file changed, 3 insertions(+), 10 deletions(-)
 
---- a/net/ipv4/ip_output.c
-+++ b/net/ipv4/ip_output.c
-@@ -160,12 +160,19 @@ int ip_build_and_send_pkt(struct sk_buff
- 	iph->daddr    = (opt && opt->opt.srr ? opt->opt.faddr : daddr);
- 	iph->saddr    = saddr;
- 	iph->protocol = sk->sk_protocol;
--	if (ip_dont_fragment(sk, &rt->dst)) {
-+	/* Do not bother generating IPID for small packets (eg SYNACK) */
-+	if (skb->len <= IPV4_MIN_MTU || ip_dont_fragment(sk, &rt->dst)) {
- 		iph->frag_off = htons(IP_DF);
- 		iph->id = 0;
- 	} else {
- 		iph->frag_off = 0;
--		__ip_select_ident(net, iph, 1);
-+		/* TCP packets here are SYNACK with fat IPv4/TCP options.
-+		 * Avoid using the hashed IP ident generator.
-+		 */
-+		if (sk->sk_protocol == IPPROTO_TCP)
-+			iph->id = (__force __be16)prandom_u32();
-+		else
-+			__ip_select_ident(net, iph, 1);
+--- a/drivers/infiniband/hw/hfi1/ipoib_main.c
++++ b/drivers/infiniband/hw/hfi1/ipoib_main.c
+@@ -168,12 +168,6 @@ static void hfi1_ipoib_netdev_dtor(struc
+ 	free_percpu(dev->tstats);
+ }
+ 
+-static void hfi1_ipoib_free_rdma_netdev(struct net_device *dev)
+-{
+-	hfi1_ipoib_netdev_dtor(dev);
+-	free_netdev(dev);
+-}
+-
+ static void hfi1_ipoib_set_id(struct net_device *dev, int id)
+ {
+ 	struct hfi1_ipoib_dev_priv *priv = hfi1_ipoib_priv(dev);
+@@ -211,24 +205,23 @@ static int hfi1_ipoib_setup_rn(struct ib
+ 	priv->port_num = port_num;
+ 	priv->netdev_ops = netdev->netdev_ops;
+ 
+-	netdev->netdev_ops = &hfi1_ipoib_netdev_ops;
+-
+ 	ib_query_pkey(device, port_num, priv->pkey_index, &priv->pkey);
+ 
+ 	rc = hfi1_ipoib_txreq_init(priv);
+ 	if (rc) {
+ 		dd_dev_err(dd, "IPoIB netdev TX init - failed(%d)\n", rc);
+-		hfi1_ipoib_free_rdma_netdev(netdev);
+ 		return rc;
  	}
  
- 	if (opt && opt->opt.optlen) {
+ 	rc = hfi1_ipoib_rxq_init(netdev);
+ 	if (rc) {
+ 		dd_dev_err(dd, "IPoIB netdev RX init - failed(%d)\n", rc);
+-		hfi1_ipoib_free_rdma_netdev(netdev);
++		hfi1_ipoib_txreq_deinit(priv);
+ 		return rc;
+ 	}
+ 
++	netdev->netdev_ops = &hfi1_ipoib_netdev_ops;
++
+ 	netdev->priv_destructor = hfi1_ipoib_netdev_dtor;
+ 	netdev->needs_free_netdev = true;
+ 
 
 

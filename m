@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA6644ABCE8
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:55:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A447F4AB99E
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:23:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388156AbiBGLnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:43:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45038 "EHLO
+        id S1353425AbiBGLMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:12:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385579AbiBGLcA (ORCPT
+        with ESMTP id S1355215AbiBGLIC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:32:00 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21BF8C03E97F;
-        Mon,  7 Feb 2022 03:31:02 -0800 (PST)
+        Mon, 7 Feb 2022 06:08:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4034EC043181;
+        Mon,  7 Feb 2022 03:08:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A220160A67;
-        Mon,  7 Feb 2022 11:31:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA051C004E1;
-        Mon,  7 Feb 2022 11:31:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BF07B611AA;
+        Mon,  7 Feb 2022 11:08:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96FD8C004E1;
+        Mon,  7 Feb 2022 11:07:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233461;
-        bh=vhAEzco/UHCmcxF7QDa7KCLTLJqPXpSuTCLSQsFmnXo=;
+        s=korg; t=1644232080;
+        bh=u4195M9uifM8d22mIW+olg3HBt73pJGFVtNfQc0j3uU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bHcYlGNlKz6rSh3D9psngqxbqTnTlB4SYgE6Ign+3lSs1Ikuzhy2cEUMzw1JqCzXF
-         JbiItU6eE0WxqX7Pohj/7UJTuHnoFSPFj9bsPHy5E7fwN4n707SEJq2ydhXRPrdLTR
-         J7Wjy4RM9hB6cPe61vbyafj0xZDBEXq6iwpIQoOo=
+        b=lYpmPMsK1WI6Xh/csC2bQ2zplLCqc4kjS3U85OfA35Q9xyS1Jo1YexWwG6xH/Hp8e
+         l1BM5s5J8bCoYLjeQFOEkI8GgK4ASbkrhvfaUGa1j9dviX2vTM9BD58NPTuEfsO7oW
+         LRynpib1o1XxuCN6wWM+DZd4+4XjElHMBfpYdk40=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Richard Guy Briggs <rgb@redhat.com>,
-        Paul Moore <paul@paul-moore.com>
-Subject: [PATCH 5.16 003/126] audit: improve audit queue handling when "audit=1" on cmdline
-Date:   Mon,  7 Feb 2022 12:05:34 +0100
-Message-Id: <20220207103804.178436990@linuxfoundation.org>
+        stable@vger.kernel.org, Brian Gix <brian.gix@intel.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        syphyr <syphyr@gmail.com>
+Subject: [PATCH 4.9 02/48] Bluetooth: refactor malicious adv data check
+Date:   Mon,  7 Feb 2022 12:05:35 +0100
+Message-Id: <20220207103752.420929028@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
-References: <20220207103804.053675072@linuxfoundation.org>
+In-Reply-To: <20220207103752.341184175@linuxfoundation.org>
+References: <20220207103752.341184175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,207 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paul Moore <paul@paul-moore.com>
+From: Brian Gix <brian.gix@intel.com>
 
-commit f26d04331360d42dbd6b58448bd98e4edbfbe1c5 upstream.
+commit 899663be5e75dc0174dc8bda0b5e6826edf0b29a upstream.
 
-When an admin enables audit at early boot via the "audit=1" kernel
-command line the audit queue behavior is slightly different; the
-audit subsystem goes to greater lengths to avoid dropping records,
-which unfortunately can result in problems when the audit daemon is
-forcibly stopped for an extended period of time.
+Check for out-of-bound read was being performed at the end of while
+num_reports loop, and would fill journal with false positives. Added
+check to beginning of loop processing so that it doesn't get checked
+after ptr has been advanced.
 
-This patch makes a number of changes designed to improve the audit
-queuing behavior so that leaving the audit daemon in a stopped state
-for an extended period does not cause a significant impact to the
-system.
-
-- kauditd_send_queue() is now limited to looping through the
-  passed queue only once per call.  This not only prevents the
-  function from looping indefinitely when records are returned
-  to the current queue, it also allows any recovery handling in
-  kauditd_thread() to take place when kauditd_send_queue()
-  returns.
-
-- Transient netlink send errors seen as -EAGAIN now cause the
-  record to be returned to the retry queue instead of going to
-  the hold queue.  The intention of the hold queue is to store,
-  perhaps for an extended period of time, the events which led
-  up to the audit daemon going offline.  The retry queue remains
-  a temporary queue intended to protect against transient issues
-  between the kernel and the audit daemon.
-
-- The retry queue is now limited by the audit_backlog_limit
-  setting, the same as the other queues.  This allows admins
-  to bound the size of all of the audit queues on the system.
-
-- kauditd_rehold_skb() now returns records to the end of the
-  hold queue to ensure ordering is preserved in the face of
-  recent changes to kauditd_send_queue().
-
-Cc: stable@vger.kernel.org
-Fixes: 5b52330bbfe63 ("audit: fix auditd/kernel connection state tracking")
-Fixes: f4b3ee3c85551 ("audit: improve robustness of the audit queue handling")
-Reported-by: Gaosheng Cui <cuigaosheng1@huawei.com>
-Tested-by: Gaosheng Cui <cuigaosheng1@huawei.com>
-Reviewed-by: Richard Guy Briggs <rgb@redhat.com>
-Signed-off-by: Paul Moore <paul@paul-moore.com>
+Signed-off-by: Brian Gix <brian.gix@intel.com>
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Cc: syphyr <syphyr@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/audit.c |   62 +++++++++++++++++++++++++++++++++++++++------------------
- 1 file changed, 43 insertions(+), 19 deletions(-)
+ net/bluetooth/hci_event.c |   10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
---- a/kernel/audit.c
-+++ b/kernel/audit.c
-@@ -541,20 +541,22 @@ static void kauditd_printk_skb(struct sk
- /**
-  * kauditd_rehold_skb - Handle a audit record send failure in the hold queue
-  * @skb: audit record
-+ * @error: error code (unused)
-  *
-  * Description:
-  * This should only be used by the kauditd_thread when it fails to flush the
-  * hold queue.
-  */
--static void kauditd_rehold_skb(struct sk_buff *skb)
-+static void kauditd_rehold_skb(struct sk_buff *skb, __always_unused int error)
- {
--	/* put the record back in the queue at the same place */
--	skb_queue_head(&audit_hold_queue, skb);
-+	/* put the record back in the queue */
-+	skb_queue_tail(&audit_hold_queue, skb);
- }
+--- a/net/bluetooth/hci_event.c
++++ b/net/bluetooth/hci_event.c
+@@ -4967,6 +4967,11 @@ static void hci_le_adv_report_evt(struct
+ 		struct hci_ev_le_advertising_info *ev = ptr;
+ 		s8 rssi;
  
- /**
-  * kauditd_hold_skb - Queue an audit record, waiting for auditd
-  * @skb: audit record
-+ * @error: error code
-  *
-  * Description:
-  * Queue the audit record, waiting for an instance of auditd.  When this
-@@ -564,19 +566,31 @@ static void kauditd_rehold_skb(struct sk
-  * and queue it, if we have room.  If we want to hold on to the record, but we
-  * don't have room, record a record lost message.
-  */
--static void kauditd_hold_skb(struct sk_buff *skb)
-+static void kauditd_hold_skb(struct sk_buff *skb, int error)
- {
- 	/* at this point it is uncertain if we will ever send this to auditd so
- 	 * try to send the message via printk before we go any further */
- 	kauditd_printk_skb(skb);
- 
- 	/* can we just silently drop the message? */
--	if (!audit_default) {
--		kfree_skb(skb);
--		return;
-+	if (!audit_default)
-+		goto drop;
-+
-+	/* the hold queue is only for when the daemon goes away completely,
-+	 * not -EAGAIN failures; if we are in a -EAGAIN state requeue the
-+	 * record on the retry queue unless it's full, in which case drop it
-+	 */
-+	if (error == -EAGAIN) {
-+		if (!audit_backlog_limit ||
-+		    skb_queue_len(&audit_retry_queue) < audit_backlog_limit) {
-+			skb_queue_tail(&audit_retry_queue, skb);
-+			return;
++		if (ptr > (void *)skb_tail_pointer(skb) - sizeof(*ev)) {
++			bt_dev_err(hdev, "Malicious advertising data.");
++			break;
 +		}
-+		audit_log_lost("kauditd retry queue overflow");
-+		goto drop;
- 	}
- 
--	/* if we have room, queue the message */
-+	/* if we have room in the hold queue, queue the message */
- 	if (!audit_backlog_limit ||
- 	    skb_queue_len(&audit_hold_queue) < audit_backlog_limit) {
- 		skb_queue_tail(&audit_hold_queue, skb);
-@@ -585,24 +599,32 @@ static void kauditd_hold_skb(struct sk_b
- 
- 	/* we have no other options - drop the message */
- 	audit_log_lost("kauditd hold queue overflow");
-+drop:
- 	kfree_skb(skb);
- }
- 
- /**
-  * kauditd_retry_skb - Queue an audit record, attempt to send again to auditd
-  * @skb: audit record
-+ * @error: error code (unused)
-  *
-  * Description:
-  * Not as serious as kauditd_hold_skb() as we still have a connected auditd,
-  * but for some reason we are having problems sending it audit records so
-  * queue the given record and attempt to resend.
-  */
--static void kauditd_retry_skb(struct sk_buff *skb)
-+static void kauditd_retry_skb(struct sk_buff *skb, __always_unused int error)
- {
--	/* NOTE: because records should only live in the retry queue for a
--	 * short period of time, before either being sent or moved to the hold
--	 * queue, we don't currently enforce a limit on this queue */
--	skb_queue_tail(&audit_retry_queue, skb);
-+	if (!audit_backlog_limit ||
-+	    skb_queue_len(&audit_retry_queue) < audit_backlog_limit) {
-+		skb_queue_tail(&audit_retry_queue, skb);
-+		return;
-+	}
 +
-+	/* we have to drop the record, send it via printk as a last effort */
-+	kauditd_printk_skb(skb);
-+	audit_log_lost("kauditd retry queue overflow");
-+	kfree_skb(skb);
- }
- 
- /**
-@@ -640,7 +662,7 @@ static void auditd_reset(const struct au
- 	/* flush the retry queue to the hold queue, but don't touch the main
- 	 * queue since we need to process that normally for multicast */
- 	while ((skb = skb_dequeue(&audit_retry_queue)))
--		kauditd_hold_skb(skb);
-+		kauditd_hold_skb(skb, -ECONNREFUSED);
- }
- 
- /**
-@@ -714,16 +736,18 @@ static int kauditd_send_queue(struct soc
- 			      struct sk_buff_head *queue,
- 			      unsigned int retry_limit,
- 			      void (*skb_hook)(struct sk_buff *skb),
--			      void (*err_hook)(struct sk_buff *skb))
-+			      void (*err_hook)(struct sk_buff *skb, int error))
- {
- 	int rc = 0;
--	struct sk_buff *skb;
-+	struct sk_buff *skb = NULL;
-+	struct sk_buff *skb_tail;
- 	unsigned int failed = 0;
- 
- 	/* NOTE: kauditd_thread takes care of all our locking, we just use
- 	 *       the netlink info passed to us (e.g. sk and portid) */
- 
--	while ((skb = skb_dequeue(queue))) {
-+	skb_tail = skb_peek_tail(queue);
-+	while ((skb != skb_tail) && (skb = skb_dequeue(queue))) {
- 		/* call the skb_hook for each skb we touch */
- 		if (skb_hook)
- 			(*skb_hook)(skb);
-@@ -731,7 +755,7 @@ static int kauditd_send_queue(struct soc
- 		/* can we send to anyone via unicast? */
- 		if (!sk) {
- 			if (err_hook)
--				(*err_hook)(skb);
-+				(*err_hook)(skb, -ECONNREFUSED);
- 			continue;
+ 		if (ev->length <= HCI_MAX_AD_LENGTH &&
+ 		    ev->data + ev->length <= skb_tail_pointer(skb)) {
+ 			rssi = ev->data[ev->length];
+@@ -4978,11 +4983,6 @@ static void hci_le_adv_report_evt(struct
  		}
  
-@@ -745,7 +769,7 @@ retry:
- 			    rc == -ECONNREFUSED || rc == -EPERM) {
- 				sk = NULL;
- 				if (err_hook)
--					(*err_hook)(skb);
-+					(*err_hook)(skb, rc);
- 				if (rc == -EAGAIN)
- 					rc = 0;
- 				/* continue to drain the queue */
+ 		ptr += sizeof(*ev) + ev->length + 1;
+-
+-		if (ptr > (void *) skb_tail_pointer(skb) - sizeof(*ev)) {
+-			bt_dev_err(hdev, "Malicious advertising data. Stopping processing");
+-			break;
+-		}
+ 	}
+ 
+ 	hci_dev_unlock(hdev);
 
 

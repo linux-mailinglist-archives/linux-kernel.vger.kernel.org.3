@@ -2,83 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2CCC4ACA33
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 21:16:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 662554ACA46
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 21:20:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242960AbiBGUMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 15:12:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42840 "EHLO
+        id S241834AbiBGUST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 15:18:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241522AbiBGUJp (ORCPT
+        with ESMTP id S243005AbiBGUMw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 15:09:45 -0500
-Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CE51C0401EC;
-        Mon,  7 Feb 2022 12:09:44 -0800 (PST)
-Received: by mail-oo1-f44.google.com with SMTP id t75-20020a4a3e4e000000b002e9c0821d78so15052629oot.4;
-        Mon, 07 Feb 2022 12:09:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ttZ5bEvqZjIQmVs2OzberAWTk47diq+NL3G4lhS0EoU=;
-        b=cwoniscbbKRS+255VLoPVa4yTWCMwVOIzJCl0Kc2bekIbNkbYv6Eh3erz/D7dziORF
-         PE3wqC4CXh7+XeXGZs6Pz12RGJY+cz9tqOTD/4TE/T/XGILWdQ200IfnMuSN3PTJ6hw8
-         PXhnA/gadJQ3WnXXYNoddwAOsyNHb8AfACJvzICLrvCVvrG/HqGqgzBAPBpUC2CcftBg
-         GMyZot6GGYmEetnw2CCcutpzdN9KkeCrK6t6Q5CBYi4ko+m79TCWJCZbBd/wsDh+q3pP
-         3s2WSil6V7AYkDsycIV6cTmt2sZ+b4KMZb/qoiS+sfP3wNl+BA3PjDwtwWYEhZm5dyCD
-         Ty9g==
-X-Gm-Message-State: AOAM531b97JOiPVzbMCY2ugWw06PlmiROFfkxY0pzLq0ogmAu3w3aTEG
-        0eAP2UEuHyqKWSj+z71oyw==
-X-Google-Smtp-Source: ABdhPJxQvqoRhiuE4eZoltL7bwVfENjxLmaf/fmvJxmAzjJWBu2Pt3FTdl2kIbPQ5qyr6OxY2RuXcA==
-X-Received: by 2002:a05:6870:13cd:: with SMTP id 13mr198485oat.344.1644264583555;
-        Mon, 07 Feb 2022 12:09:43 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id a19sm4404440otf.27.2022.02.07.12.09.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 12:09:42 -0800 (PST)
-Received: (nullmailer pid 823748 invoked by uid 1000);
-        Mon, 07 Feb 2022 20:09:41 -0000
-Date:   Mon, 7 Feb 2022 14:09:41 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Zong Li <zong.li@sifive.com>
-Cc:     robh+dt@kernel.org, dmaengine@vger.kernel.org,
-        geert@linux-m68k.org, green.wan@sifive.com, aou@eecs.berkeley.edu,
-        linux-riscv@lists.infradead.org, palmer@dabbelt.com,
-        vkoul@kernel.org, devicetree@vger.kernel.org,
-        bin.meng@windriver.com, Palmer Dabbelt <palmer@rivosinc.com>,
-        krzysztof.kozlowski@canonical.com, conor.dooley@microchip.com,
-        paul.walmsley@sifive.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 1/3] dt-bindings: Add dma-channels property and modify
- compatible
-Message-ID: <YgF8hR7YO3B3QI+S@robh.at.kernel.org>
-References: <cover.1644215230.git.zong.li@sifive.com>
- <30430019105af445d52b7a48331c106f8e6d6816.1644215230.git.zong.li@sifive.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <30430019105af445d52b7a48331c106f8e6d6816.1644215230.git.zong.li@sifive.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Mon, 7 Feb 2022 15:12:52 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D0FC0401E7
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 12:12:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4BCBCB81677
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 20:12:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB706C004E1;
+        Mon,  7 Feb 2022 20:12:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1644264768;
+        bh=kXoXRf04u+w4CWyQZgTAB7nm472L2Icz48OR33YGQt8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=LwVI5+jid1TeZjul4yCBJPvxgfx8VsNnt38y2pEtRcCcSlZB3sIht3ghVWL+On82x
+         eRf/xbAuVah51N+riVadi+c6A/mKfFmMhopNVTB3MidzMPzdeI3BGk+UvpwjtnFssz
+         IHZsh1c+0oPHQcsqE5wcgyAsR6itraheauIdSK/A=
+Date:   Mon, 7 Feb 2022 12:12:47 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Miaohe Lin <linmiaohe@huawei.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/4] mm/memory_hotplug: remove obsolete comment of
+ __add_pages
+Message-Id: <20220207121247.736ac7240836934247678477@linux-foundation.org>
+In-Reply-To: <21cec396-9d6a-03b7-716d-2a84c79eeb73@redhat.com>
+References: <20220207133643.23427-1-linmiaohe@huawei.com>
+        <20220207133643.23427-2-linmiaohe@huawei.com>
+        <21cec396-9d6a-03b7-716d-2a84c79eeb73@redhat.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 07 Feb 2022 14:30:38 +0800, Zong Li wrote:
-> Add dma-channels property, then we can determine how many channels there
-> by device tree, rather than statically defining it in PDMA driver.
-> In addition, we also modify the compatible for PDMA versioning scheme.
-> 
-> Signed-off-by: Zong Li <zong.li@sifive.com>
-> Suggested-by: Palmer Dabbelt <palmer@rivosinc.com>
-> ---
->  .../bindings/dma/sifive,fu540-c000-pdma.yaml  | 19 +++++++++++++++++--
->  1 file changed, 17 insertions(+), 2 deletions(-)
-> 
+On Mon, 7 Feb 2022 15:41:21 +0100 David Hildenbrand <david@redhat.com> wrote:
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+> On 07.02.22 14:36, Miaohe Lin wrote:
+> > Since commit f1dd2cd13c4b ("mm, memory_hotplug: do not associate hotadded
+> > memory to zones until online"), there is no need to pass in the zone.
+> > 
+> > Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> > ---
+> >  mm/memory_hotplug.c | 5 +----
+> >  1 file changed, 1 insertion(+), 4 deletions(-)
+> > 
+> > diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
+> > index a4f69d399929..cbc67c27e0dd 100644
+> > --- a/mm/memory_hotplug.c
+> > +++ b/mm/memory_hotplug.c
+> > @@ -296,10 +296,7 @@ struct page *pfn_to_online_page(unsigned long pfn)
+> >  EXPORT_SYMBOL_GPL(pfn_to_online_page);
+> >  
+> >  /*
+> > - * Reasonably generic function for adding memory.  It is
+> > - * expected that archs that support memory hotplug will
+> > - * call this function after deciding the zone to which to
+> > - * add the new pages.
+> > + * Reasonably generic function for adding memory.
+> >   */
+> >  int __ref __add_pages(int nid, unsigned long pfn, unsigned long nr_pages,
+> >  		struct mhp_params *params)
+> 
+> I'd suggest just removing the comment completely.
+
+Thanks, I made that change.
+
+A better site for documentation is at add_memory().  Which, as a
+full-on exported-to-modules API function, should really have some
+docs...

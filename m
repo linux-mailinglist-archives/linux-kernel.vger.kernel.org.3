@@ -2,311 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D2F54ACD22
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:07:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FBA64ACD43
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:07:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232478AbiBHBDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 20:03:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35386 "EHLO
+        id S241058AbiBHBDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 20:03:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245421AbiBGXCb (ORCPT
+        with ESMTP id S245428AbiBGXD2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 18:02:31 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9939C061355
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 15:02:30 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id my12-20020a17090b4c8c00b001b528ba1cd7so761738pjb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 15:02:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=pJ/+igUmHgRIjjygLMzdyoK+rvf+jqDZy1oDYk+RIZg=;
-        b=E8gpxS6fJle8GCoe8lQxUylKx4rE9z5yYpFntEJ50OrhsXqUw5Yehi5aTy1m0q26AD
-         TEwxWZ36okQ4FloOQhMedCeMaJF15ck58zyhBFEa4d2isJeVlLSEx1y4rOd4l8zg+e+H
-         Ju0Dvi2L6q1e9s7ha+qlY2jY0nG2P4SS8otyNBDzh4P4czNsbUyezpFJXWMqjwhpdVxk
-         y7612yxtdBylaTRTDcse9PTgPY9M+r7M9zL1eAARfnRz5kjQ5aghTrT5zvLbejUHscGF
-         7/Cvm3rCCa0rJjTyw785o85bazmJ7mXvEkPZ3QltQj4kMOz6l2bS2x+WbGn1ho9S6zrh
-         pk5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=pJ/+igUmHgRIjjygLMzdyoK+rvf+jqDZy1oDYk+RIZg=;
-        b=IdupaOYOQinsbxjJh+Kt3KnLJh0XzuHlq5N4V04ezmRzduTNKE5kRqhCtnwHwhI0lI
-         qoaQYGutx0a71uzzyMY4HR6zAktd/+0t1G7CJpVkiLkZ15rmKzzlDmy78ZMawFG29ksy
-         xP3nKj4O8MT4vu+k43md2GKB+kyr/HVB6I2QtrDclJhP+qHwBqCj6PCI1ko1GD6+Zf6b
-         KL1pFxaPfQlUn0WyrMttcZm1GqmxB6f0RkntTUVn/i1PQxm7XfIog+ly/nGUgUk6fB4k
-         YTG1UeAMTjK0Q+zPB/iwiuCRsVPM/JgNUIm2DA0fa0nhbixJRu4j+rHALOzR367hTcvr
-         xiNg==
-X-Gm-Message-State: AOAM533G1zo0+p+1LFkC+CYfupLW1JkyOgyBW5Mb/pb9Yk5OBAJuSJPf
-        OgJ+63emTEDLw2YCbcCMzOIi7g==
-X-Google-Smtp-Source: ABdhPJzesOXuASeOIlrf6AUPY9/bVDPCRvCIr2LQINyXY8719iOU6+yIEu8TjJMTDHLemah5XzLtvg==
-X-Received: by 2002:a17:90b:3c6:: with SMTP id go6mr1291136pjb.230.1644274950087;
-        Mon, 07 Feb 2022 15:02:30 -0800 (PST)
-Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
-        by smtp.gmail.com with ESMTPSA id h27sm9242504pgb.20.2022.02.07.15.02.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 15:02:29 -0800 (PST)
-Date:   Mon, 7 Feb 2022 23:02:25 +0000
-From:   David Matlack <dmatlack@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        seanjc@google.com, vkuznets@redhat.com
-Subject: Re: [PATCH 23/23] KVM: MMU: replace direct_map with mmu_role.direct
-Message-ID: <YgGlAbyLQGRUOlSG@google.com>
-References: <20220204115718.14934-1-pbonzini@redhat.com>
- <20220204115718.14934-24-pbonzini@redhat.com>
+        Mon, 7 Feb 2022 18:03:28 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A878FC0612A4
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 15:03:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644275007; x=1675811007;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=DwxW5/6A2LJ1fHtlYVK+GKZ2vtOtxuAcvM3oIKFzkB0=;
+  b=cz312uHPI8KhkT9+pB1LlhpdGOKlSgYyAslPkjbgjReuv85UIx13SMcU
+   ycr0VsQav+Kj46XO/h+JXVvenojCF0VTXVRHA8vQB/2X7VlsSfiW5Aaai
+   pM9PFu38/aDm+y6cR8kFtLWtjbIpSYKrC0ScUc1S/jIBwQG4O6uM9YVXj
+   jQN/Ptk8jV/NxwvwR2d1nWZ7iLAhq2WXQhh+EUqGaR4uXpX8bNsLzXE4a
+   od3HH2mz9tyLyGCTdieHTbcI1+N2Rhry2uqaBwYUBfNasgZuOnmBDQHeh
+   egM62cJdVzHr2TfYS5C1QRTdCnELNbfvdGxz3z/Ad1d1WjAag5MHN12GT
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="229474999"
+X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
+   d="scan'208";a="229474999"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 15:03:02 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
+   d="scan'208";a="540323991"
+Received: from otcwcpicx3.sc.intel.com ([172.25.55.73])
+  by orsmga008.jf.intel.com with ESMTP; 07 Feb 2022 15:03:01 -0800
+From:   Fenghua Yu <fenghua.yu@intel.com>
+To:     "Thomas Gleixner" <tglx@linutronix.de>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        "Andy Lutomirski" <luto@kernel.org>,
+        "Tony Luck" <tony.luck@intel.com>,
+        "Lu Baolu" <baolu.lu@linux.intel.com>,
+        "Joerg Roedel" <joro@8bytes.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        "Jacob Pan" <jacob.jun.pan@linux.intel.com>,
+        "Ashok Raj" <ashok.raj@intel.com>,
+        "Ravi V Shankar" <ravi.v.shankar@intel.com>
+Cc:     iommu@lists.linux-foundation.org, "x86" <x86@kernel.org>,
+        "linux-kernel" <linux-kernel@vger.kernel.org>,
+        Fenghua Yu <fenghua.yu@intel.com>
+Subject: [PATCH v4 00/11] Re-enable ENQCMD and PASID MSR
+Date:   Mon,  7 Feb 2022 15:02:43 -0800
+Message-Id: <20220207230254.3342514-1-fenghua.yu@intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220204115718.14934-24-pbonzini@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 04, 2022 at 06:57:18AM -0500, Paolo Bonzini wrote:
-> direct_map is always equal to the role's direct field:
-> 
-> - for shadow paging, direct_map is true if CR0.PG=0 and mmu_role.direct is
-> copied from cpu_role.base.direct
-> 
-> - for TDP, it is always true and mmu_role.direct is also always true
-> 
-> - for shadow EPT, it is always false and mmu_role.direct is also always
-> false
-> 
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Problems in the old code to manage SVM (Shared Virtual Memory) devices
+and the PASID (Process Address Space ID) led to that code being
+disabled.
 
-Reviewed-by: David Matlack <dmatlack@google.com>
+Subsequent discussions resulted in a far simpler approach:
 
-> ---
->  arch/x86/include/asm/kvm_host.h |  1 -
->  arch/x86/kvm/mmu/mmu.c          | 30 ++++++++++++++----------------
->  arch/x86/kvm/x86.c              | 12 ++++++------
->  4 files changed, 21 insertions(+), 23 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index c86a2beee92a..647b3f6d02d0 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -432,7 +432,6 @@ struct kvm_mmu {
->  	gpa_t root_pgd;
->  	union kvm_mmu_role cpu_role;
->  	union kvm_mmu_page_role mmu_role;
-> -	bool direct_map;
->  	struct kvm_mmu_root_info prev_roots[KVM_MMU_NUM_PREV_ROOTS];
->  
->  	/*
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 5a6541d6a424..ce55fad99671 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -2045,7 +2045,7 @@ static struct kvm_mmu_page *kvm_mmu_get_page(struct kvm_vcpu *vcpu,
->  					     int direct,
->  					     unsigned int access)
->  {
-> -	bool direct_mmu = vcpu->arch.mmu->direct_map;
-> +	bool direct_mmu = vcpu->arch.mmu->mmu_role.direct;
->  	union kvm_mmu_page_role role;
->  	struct hlist_head *sp_list;
->  	unsigned quadrant;
-> @@ -2147,7 +2147,7 @@ static void shadow_walk_init_using_root(struct kvm_shadow_walk_iterator *iterato
->  
->  	if (iterator->level >= PT64_ROOT_4LEVEL &&
->  	    vcpu->arch.mmu->cpu_role.base.level < PT64_ROOT_4LEVEL &&
-> -	    !vcpu->arch.mmu->direct_map)
-> +	    !vcpu->arch.mmu->mmu_role.direct)
->  		iterator->level = PT32E_ROOT_LEVEL;
->  
->  	if (iterator->level == PT32E_ROOT_LEVEL) {
-> @@ -2523,7 +2523,7 @@ static int kvm_mmu_unprotect_page_virt(struct kvm_vcpu *vcpu, gva_t gva)
->  	gpa_t gpa;
->  	int r;
->  
-> -	if (vcpu->arch.mmu->direct_map)
-> +	if (vcpu->arch.mmu->mmu_role.direct)
->  		return 0;
->  
->  	gpa = kvm_mmu_gva_to_gpa_read(vcpu, gva, NULL);
-> @@ -3255,7 +3255,8 @@ void kvm_mmu_free_roots(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu,
->  
->  	if (free_active_root) {
->  		if (mmu->mmu_role.level >= PT64_ROOT_4LEVEL &&
-> -		    (mmu->cpu_role.base.level >= PT64_ROOT_4LEVEL || mmu->direct_map)) {
-> +		    (mmu->cpu_role.base.level >= PT64_ROOT_4LEVEL ||
-> +		     mmu->mmu_role.direct)) {
->  			mmu_free_root_page(kvm, &mmu->root_hpa, &invalid_list);
->  		} else if (mmu->pae_root) {
->  			for (i = 0; i < 4; ++i) {
-> @@ -3558,7 +3559,8 @@ static int mmu_alloc_special_roots(struct kvm_vcpu *vcpu)
->  	 * equivalent level in the guest's NPT to shadow.  Allocate the tables
->  	 * on demand, as running a 32-bit L1 VMM on 64-bit KVM is very rare.
->  	 */
-> -	if (mmu->direct_map || mmu->cpu_role.base.level >= PT64_ROOT_4LEVEL ||
-> +	if (mmu->mmu_role.direct ||
-> +	    mmu->cpu_role.base.level >= PT64_ROOT_4LEVEL ||
->  	    mmu->mmu_role.level < PT64_ROOT_4LEVEL)
->  		return 0;
->  
-> @@ -3647,7 +3649,7 @@ void kvm_mmu_sync_roots(struct kvm_vcpu *vcpu)
->  	int i;
->  	struct kvm_mmu_page *sp;
->  
-> -	if (vcpu->arch.mmu->direct_map)
-> +	if (vcpu->arch.mmu->mmu_role.direct)
->  		return;
->  
->  	if (!VALID_PAGE(vcpu->arch.mmu->root_hpa))
-> @@ -3872,7 +3874,7 @@ static bool kvm_arch_setup_async_pf(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
->  
->  	arch.token = (vcpu->arch.apf.id++ << 12) | vcpu->vcpu_id;
->  	arch.gfn = gfn;
-> -	arch.direct_map = vcpu->arch.mmu->direct_map;
-> +	arch.direct_map = vcpu->arch.mmu->mmu_role.direct;
->  	arch.cr3 = vcpu->arch.mmu->get_guest_pgd(vcpu);
->  
->  	return kvm_setup_async_pf(vcpu, cr2_or_gpa,
-> @@ -4090,7 +4092,6 @@ static void nonpaging_init_context(struct kvm_mmu *context)
->  	context->gva_to_gpa = nonpaging_gva_to_gpa;
->  	context->sync_page = nonpaging_sync_page;
->  	context->invlpg = NULL;
-> -	context->direct_map = true;
->  }
->  
->  static inline bool is_root_usable(struct kvm_mmu_root_info *root, gpa_t pgd,
-> @@ -4641,7 +4642,6 @@ static void paging64_init_context(struct kvm_mmu *context)
->  	context->gva_to_gpa = paging64_gva_to_gpa;
->  	context->sync_page = paging64_sync_page;
->  	context->invlpg = paging64_invlpg;
-> -	context->direct_map = false;
->  }
->  
->  static void paging32_init_context(struct kvm_mmu *context)
-> @@ -4650,7 +4650,6 @@ static void paging32_init_context(struct kvm_mmu *context)
->  	context->gva_to_gpa = paging32_gva_to_gpa;
->  	context->sync_page = paging32_sync_page;
->  	context->invlpg = paging32_invlpg;
-> -	context->direct_map = false;
->  }
->  
->  static union kvm_mmu_role
-> @@ -4735,7 +4734,6 @@ static void init_kvm_tdp_mmu(struct kvm_vcpu *vcpu, union kvm_mmu_role cpu_role)
->  	context->page_fault = kvm_tdp_page_fault;
->  	context->sync_page = nonpaging_sync_page;
->  	context->invlpg = NULL;
-> -	context->direct_map = true;
->  	context->get_guest_pgd = get_cr3;
->  	context->get_pdptr = kvm_pdptr_read;
->  	context->inject_page_fault = kvm_inject_page_fault;
-> @@ -4852,7 +4850,7 @@ void kvm_init_shadow_ept_mmu(struct kvm_vcpu *vcpu, bool execonly,
->  		context->gva_to_gpa = ept_gva_to_gpa;
->  		context->sync_page = ept_sync_page;
->  		context->invlpg = ept_invlpg;
-> -		context->direct_map = false;
-> +
->  		update_permission_bitmask(context, true);
->  		context->pkru_mask = 0;
->  		reset_rsvds_bits_mask_ept(vcpu, context, execonly, huge_page_level);
-> @@ -4967,13 +4965,13 @@ int kvm_mmu_load(struct kvm_vcpu *vcpu)
->  {
->  	int r;
->  
-> -	r = mmu_topup_memory_caches(vcpu, !vcpu->arch.mmu->direct_map);
-> +	r = mmu_topup_memory_caches(vcpu, !vcpu->arch.mmu->mmu_role.direct);
->  	if (r)
->  		goto out;
->  	r = mmu_alloc_special_roots(vcpu);
->  	if (r)
->  		goto out;
-> -	if (vcpu->arch.mmu->direct_map)
-> +	if (vcpu->arch.mmu->mmu_role.direct)
->  		r = mmu_alloc_direct_roots(vcpu);
->  	else
->  		r = mmu_alloc_shadow_roots(vcpu);
-> @@ -5176,7 +5174,7 @@ int kvm_mmu_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa, u64 error_code,
->  		       void *insn, int insn_len)
->  {
->  	int r, emulation_type = EMULTYPE_PF;
-> -	bool direct = vcpu->arch.mmu->direct_map;
-> +	bool direct = vcpu->arch.mmu->mmu_role.direct;
->  
->  	if (WARN_ON(!VALID_PAGE(vcpu->arch.mmu->root_hpa)))
->  		return RET_PF_RETRY;
-> @@ -5207,7 +5205,7 @@ int kvm_mmu_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa, u64 error_code,
->  	 * paging in both guests. If true, we simply unprotect the page
->  	 * and resume the guest.
->  	 */
-> -	if (vcpu->arch.mmu->direct_map &&
-> +	if (vcpu->arch.mmu->mmu_role.direct &&
->  	    (error_code & PFERR_NESTED_GUEST_PAGE) == PFERR_NESTED_GUEST_PAGE) {
->  		kvm_mmu_unprotect_page(vcpu->kvm, gpa_to_gfn(cr2_or_gpa));
->  		return 1;
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 657aa646871e..b910fa34e57e 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -7978,7 +7978,7 @@ static bool reexecute_instruction(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
->  	    WARN_ON_ONCE(!(emulation_type & EMULTYPE_PF)))
->  		return false;
->  
-> -	if (!vcpu->arch.mmu->direct_map) {
-> +	if (!vcpu->arch.mmu->mmu_role.direct) {
->  		/*
->  		 * Write permission should be allowed since only
->  		 * write access need to be emulated.
-> @@ -8011,7 +8011,7 @@ static bool reexecute_instruction(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
->  	kvm_release_pfn_clean(pfn);
->  
->  	/* The instructions are well-emulated on direct mmu. */
-> -	if (vcpu->arch.mmu->direct_map) {
-> +	if (vcpu->arch.mmu->mmu_role.direct) {
->  		unsigned int indirect_shadow_pages;
->  
->  		write_lock(&vcpu->kvm->mmu_lock);
-> @@ -8079,7 +8079,7 @@ static bool retry_instruction(struct x86_emulate_ctxt *ctxt,
->  	vcpu->arch.last_retry_eip = ctxt->eip;
->  	vcpu->arch.last_retry_addr = cr2_or_gpa;
->  
-> -	if (!vcpu->arch.mmu->direct_map)
-> +	if (!vcpu->arch.mmu->mmu_role.direct)
->  		gpa = kvm_mmu_gva_to_gpa_write(vcpu, cr2_or_gpa, NULL);
->  
->  	kvm_mmu_unprotect_page(vcpu->kvm, gpa_to_gfn(gpa));
-> @@ -8359,7 +8359,7 @@ int x86_emulate_instruction(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
->  		ctxt->exception.address = cr2_or_gpa;
->  
->  		/* With shadow page tables, cr2 contains a GVA or nGPA. */
-> -		if (vcpu->arch.mmu->direct_map) {
-> +		if (vcpu->arch.mmu->mmu_role.direct) {
->  			ctxt->gpa_available = true;
->  			ctxt->gpa_val = cr2_or_gpa;
->  		}
-> @@ -12196,7 +12196,7 @@ void kvm_arch_async_page_ready(struct kvm_vcpu *vcpu, struct kvm_async_pf *work)
->  {
->  	int r;
->  
-> -	if ((vcpu->arch.mmu->direct_map != work->arch.direct_map) ||
-> +	if ((vcpu->arch.mmu->mmu_role.direct != work->arch.direct_map) ||
->  	      work->wakeup_all)
->  		return;
->  
-> @@ -12204,7 +12204,7 @@ void kvm_arch_async_page_ready(struct kvm_vcpu *vcpu, struct kvm_async_pf *work)
->  	if (unlikely(r))
->  		return;
->  
-> -	if (!vcpu->arch.mmu->direct_map &&
-> +	if (!vcpu->arch.mmu->mmu_role.direct &&
->  	      work->arch.cr3 != vcpu->arch.mmu->get_guest_pgd(vcpu))
->  		return;
->  
-> -- 
-> 2.31.1
-> 
+1) PASID life cycle is from first allocation by a process until that
+   process exits.
+2) All tasks begin with PASID disabled
+3) The #GP fault handler tries to fix faulting ENQCMD instructions very
+   early (thus avoiding complexities of the XSAVE infrastructure)
+
+Change Log:
+v4:
+- Update commit message in patch #4 (Thomas).
+- Update commit message in patch #5 (Thomas).
+- Add "Reviewed-by: Thomas Gleixner <tglx@linutronix.de>" in patch #1-#3
+  and patch #6-#9 (Thomas).
+- Rebased to 5.17-rc3.
+
+v3 can be found at https://lore.kernel.org/lkml/20220128202905.2274672-7-fenghua.yu@intel.com/T/#m039e1a201e9894d99b117fa6005bc05724a5a4bb
+
+v3:
+- Rename mm_pasid_get() to mm_pasid_set() in patch #5 (Thomas).
+- Remove ioasid_get() because it's not used any more when the IOASID
+  is freed on mm exit in patch #5 (Thomas).
+- Remove PASID's refcount exercise in ioasid_put() and rename
+  ioasid_put() to ioasid_free() in patch #5 and #11 (Thomas).
+- Add Acked-by: Josh Poimboeuf <jpoimboe@redhat.com> in patch #10.
+
+v2 can be found at https://lore.kernel.org/lkml/20211217220136.2762116-1-fenghua.yu@intel.com/
+
+v2:
+- Free PASID on mm exit instead of in exit(2) or unbind() (Thomas, AndyL,
+  PeterZ)
+- Directly write IA32_PASID MSR in fixup while local IRQ is still disabled
+  (Thomas)
+- Simplify handling ENQCMD in objtool (PeterZ and Josh)
+- Define mm_pasid_get(), mm_pasid_drop(), and mm_pasid_init() in mm and
+  call the functions from IOMMU (Dave Hansen).
+- A few changes in the #GP fixup function (Dave Hansen, Tony Luck).
+- Initial PASID value is changed to INVALID_PASID (Ashok Raj and
+  Jacob Pan).
+- Add mm_pasid_init(), mm_pasid_get(), and mm_pasid_drop() functions in mm.
+  So the mm's PASID operations are generic for both X86 and ARM
+  (Dave Hansen).
+- Rename CONFIG_IOMMU_SVA_LIB to more useful and accurate
+  CONFIG_IOMMU_SVA
+- Use CONFIG_IOMMU_SVA for PASID processing condition (Jacob)
+- The patch that cleans up old update_pasid() function is in upstream
+  now (commit: 00ecd5401349 "iommu/vt-d: Clean up unused PASID updating
+  functions") and therefore it's removed from this version.
+
+v1 can be found at https://lore.kernel.org/lkml/20210920192349.2602141-1-fenghua.yu@intel.com/T/#md6d542091da1d1159eda0a44a16e57d0c0dfb209
+
+Fenghua Yu (10):
+  iommu/sva: Rename CONFIG_IOMMU_SVA_LIB to CONFIG_IOMMU_SVA
+  mm: Change CONFIG option for mm->pasid field
+  iommu/ioasid: Introduce a helper to check for valid PASIDs
+  kernel/fork: Initialize mm's PASID
+  iommu/sva: Assign a PASID to mm on PASID allocation and free it on mm
+    exit
+  x86/fpu: Clear PASID when copying fpstate
+  x86/traps: Demand-populate PASID MSR via #GP
+  x86/cpufeatures: Re-enable ENQCMD
+  tools/objtool: Check for use of the ENQCMD instruction in the kernel
+  docs: x86: Change documentation for SVA (Shared Virtual Addressing)
+
+Peter Zijlstra (1):
+  sched: Define and initialize a flag to identify valid PASID in the
+    task
+
+ Documentation/x86/sva.rst                     | 53 ++++++++++++++----
+ arch/x86/include/asm/disabled-features.h      |  7 ++-
+ arch/x86/kernel/fpu/core.c                    |  7 +++
+ arch/x86/kernel/traps.c                       | 55 +++++++++++++++++++
+ drivers/iommu/Kconfig                         |  6 +-
+ drivers/iommu/Makefile                        |  2 +-
+ .../iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c   |  5 +-
+ drivers/iommu/intel/Kconfig                   |  2 +-
+ drivers/iommu/intel/iommu.c                   |  4 +-
+ drivers/iommu/intel/svm.c                     |  9 ---
+ drivers/iommu/ioasid.c                        | 39 ++-----------
+ drivers/iommu/iommu-sva-lib.c                 | 39 ++++---------
+ drivers/iommu/iommu-sva-lib.h                 |  7 +--
+ include/linux/ioasid.h                        | 21 +++----
+ include/linux/mm_types.h                      |  2 +-
+ include/linux/sched.h                         |  3 +
+ include/linux/sched/mm.h                      | 26 +++++++++
+ kernel/fork.c                                 | 15 +++--
+ mm/init-mm.c                                  |  4 ++
+ tools/objtool/arch/x86/decode.c               | 11 +++-
+ 20 files changed, 197 insertions(+), 120 deletions(-)
+
+-- 
+2.35.1
+

@@ -2,119 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29EA24AB568
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 08:00:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4667F4AB3F2
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 07:12:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241615AbiBGG6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 01:58:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45376 "EHLO
+        id S1351138AbiBGFw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 00:52:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236113AbiBGGzi (ORCPT
+        with ESMTP id S240857AbiBGEXQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 01:55:38 -0500
-X-Greylist: delayed 483 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Feb 2022 22:55:33 PST
-Received: from mail.tambre.ee (mail.tambre.ee [IPv6:2a01:7e01:e001:cc::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B0DC043185;
-        Sun,  6 Feb 2022 22:55:32 -0800 (PST)
-Received: from [172.16.1.108] (unknown [194.204.61.131])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: raul)
-        by mail.tambre.ee (Postfix) with ESMTPSA id 249867EB02;
-        Mon,  7 Feb 2022 08:47:26 +0200 (EET)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.tambre.ee 249867EB02
-Authentication-Results: mail.tambre.ee; dmarc=fail (p=reject dis=none) header.from=tambre.ee
-Authentication-Results: mail.tambre.ee; spf=fail smtp.mailfrom=tambre.ee
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.tambre.ee 249867EB02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tambre.ee; s=201812;
-        t=1644216446; bh=1ZuSZkK917+DnbsBJTyoKnsNI3AbwbnGFtaNh1AErE8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=wOHR/Bbmhh6Zh+XHczx2X0WjMYtd3PP60SzboIictEX28QeQkfOtl1UKOxSkIxoY2
-         SOOxEUqfTq+y+xPTWTRcQqYagfE58hP8e7eH5zQ+RIKiUlEU6Oc0W5VLhOFe+wYEbb
-         OxS5Ji36pH7WzTmHCYgHIYCKJ1uoWRaAddTbmdD6/yvWNrSTBYcA3AygkhNPuRetc7
-         bpzDvgLycBGe6Pn638YaKrICwH+vTpOhddcGwnq1s3XzcUWEycRxRFr4q/l8cbas+M
-         CHUY+yK1FZuDSYlWfXupJ/M5bcVTTQs9kMae8BlHPGVL0LHDKbhKtI51sSqpC8DIpK
-         O1+s4ytj8wg5w==
-Message-ID: <dcbf28db-d47a-a2e1-dae1-48f17f9a703a@tambre.ee>
-Date:   Mon, 7 Feb 2022 08:47:26 +0200
+        Sun, 6 Feb 2022 23:23:16 -0500
+X-Greylist: delayed 1181 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Feb 2022 20:23:14 PST
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C29C061A73;
+        Sun,  6 Feb 2022 20:23:14 -0800 (PST)
+Received: from dggeme754-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JsXT60sCSz1FCvB;
+        Mon,  7 Feb 2022 11:59:22 +0800 (CST)
+Received: from huawei.com (10.175.104.170) by dggeme754-chm.china.huawei.com
+ (10.3.19.100) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.21; Mon, 7
+ Feb 2022 12:03:31 +0800
+From:   Zhipeng Xie <xiezhipeng1@huawei.com>
+To:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
+        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
+        <jolsa@redhat.com>, <namhyung@kernel.org>
+CC:     <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <xiezhipeng1@huawei.com>
+Subject: [PATCH] Fix perf_mmap fail when CONFIG_PERF_USE_VMALLOC enabled
+Date:   Mon, 7 Feb 2022 12:02:59 -0500
+Message-ID: <20220207170259.2566-1-xiezhipeng1@huawei.com>
+X-Mailer: git-send-email 2.18.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH V1 04/10] dt-bindings: PHY: P2U: Add support for Tegra234
- P2U block
-To:     Vidya Sagar <vidyas@nvidia.com>, bhelgaas@google.com,
-        lorenzo.pieralisi@arm.com, robh+dt@kernel.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com
-Cc:     kishon@ti.com, vkoul@kernel.org, kw@linux.com,
-        krzysztof.kozlowski@canonical.com, p.zabel@pengutronix.de,
-        mperttunen@nvidia.com, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        kthota@nvidia.com, mmaddireddy@nvidia.com, sagar.tv@gmail.com
-References: <20220205162144.30240-1-vidyas@nvidia.com>
- <20220205162144.30240-5-vidyas@nvidia.com>
-From:   Raul Tambre <raul@tambre.ee>
-In-Reply-To: <20220205162144.30240-5-vidyas@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.175.104.170]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggeme754-chm.china.huawei.com (10.3.19.100)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-05 18:21, Vidya Sagar wrote:
-> Subject:
-> [PATCH V1 04/10] dt-bindings: PHY: P2U: Add support for Tegra234 P2U block
-> From:
-> Vidya Sagar <vidyas@nvidia.com>
-> Date:
-> 2022-02-05, 18:21
-> 
-> To:
-> <bhelgaas@google.com>, <lorenzo.pieralisi@arm.com>, 
-> <robh+dt@kernel.org>, <thierry.reding@gmail.com>, <jonathanh@nvidia.com>
-> CC:
-> <kishon@ti.com>, <vkoul@kernel.org>, <kw@linux.com>, 
-> <krzysztof.kozlowski@canonical.com>, <p.zabel@pengutronix.de>, 
-> <mperttunen@nvidia.com>, <linux-pci@vger.kernel.org>, 
-> <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>, 
-> <linux-kernel@vger.kernel.org>, <linux-phy@lists.infradead.org>, 
-> <kthota@nvidia.com>, <mmaddireddy@nvidia.com>, <vidyas@nvidia.com>, 
-> <sagar.tv@gmail.com>
-> 
-> 
-> Add support for Tegra234 P2U (PIPE to UPHY) module block which is a glue
-> module instantiated once for each PCIe lane between Synopsys DesignWare
-> core based PCIe IP and Universal PHY block.
-> 
-> Signed-off-by: Vidya Sagar<vidyas@nvidia.com>
-> ---
->   .../bindings/phy/phy-tegra194-p2u.yaml          | 17 +++++++++++++----
->   1 file changed, 13 insertions(+), 4 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/phy/phy-tegra194-p2u.yaml b/Documentation/devicetree/bindings/phy/phy-tegra194-p2u.yaml
-> index 9a89d05efbda..6ba1f69b1126 100644
-> --- a/Documentation/devicetree/bindings/phy/phy-tegra194-p2u.yaml
-> +++ b/Documentation/devicetree/bindings/phy/phy-tegra194-p2u.yaml
-> @@ -4,7 +4,7 @@
->   $id:"http://devicetree.org/schemas/phy/phy-tegra194-p2u.yaml#"
->   $schema:"http://devicetree.org/meta-schemas/core.yaml#"
->   
-> -title: NVIDIA Tegra194 P2U binding
-> +title: NVIDIA Tegra194 & Tegra234 P2U binding
->   
->   maintainers:
->     - Thierry Reding<treding@nvidia.com>
-> @@ -12,13 +12,17 @@ maintainers:
->   description: >
->     Tegra194 has two PHY bricks namely HSIO (High Speed IO) and NVHS (NVIDIA High
->     Speed) each interfacing with 12 and 8 P2U instances respectively.
-> +  Tegra234 has three PHY bricks namesly HSIO, NVHS and GBE (Gigabit Ethernet)
+when CONFIG_PERF_USE_VMALLOC is enabled, rb->nr_pages is always
+equal to 1 in rb_alloc, causing perf_mmap return -EINVAL when mmap.
+Fix this problem using data_page_nr.
 
-typo: namely
+Signed-off-by: Zhipeng Xie <xiezhipeng1@huawei.com>
+---
+ kernel/events/core.c        | 2 +-
+ kernel/events/internal.h    | 5 +++++
+ kernel/events/ring_buffer.c | 5 -----
+ 3 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index 57c7197838db..370292effd32 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -6352,7 +6352,7 @@ static int perf_mmap(struct file *file, struct vm_area_struct *vma)
+ again:
+ 	mutex_lock(&event->mmap_mutex);
+ 	if (event->rb) {
+-		if (event->rb->nr_pages != nr_pages) {
++		if (data_page_nr(event->rb) != nr_pages) {
+ 			ret = -EINVAL;
+ 			goto unlock;
+ 		}
+diff --git a/kernel/events/internal.h b/kernel/events/internal.h
+index 082832738c8f..5816c0719dbf 100644
+--- a/kernel/events/internal.h
++++ b/kernel/events/internal.h
+@@ -116,6 +116,11 @@ static inline int page_order(struct perf_buffer *rb)
+ }
+ #endif
+ 
++static int data_page_nr(struct perf_buffer *rb)
++{
++	return rb->nr_pages << page_order(rb);
++}
++
+ static inline unsigned long perf_data_size(struct perf_buffer *rb)
+ {
+ 	return rb->nr_pages << (PAGE_SHIFT + page_order(rb));
+diff --git a/kernel/events/ring_buffer.c b/kernel/events/ring_buffer.c
+index 52868716ec35..fb35b926024c 100644
+--- a/kernel/events/ring_buffer.c
++++ b/kernel/events/ring_buffer.c
+@@ -859,11 +859,6 @@ void rb_free(struct perf_buffer *rb)
+ }
+ 
+ #else
+-static int data_page_nr(struct perf_buffer *rb)
+-{
+-	return rb->nr_pages << page_order(rb);
+-}
+-
+ static struct page *
+ __perf_mmap_to_page(struct perf_buffer *rb, unsigned long pgoff)
+ {
+-- 
+2.18.1
+

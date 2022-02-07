@@ -2,72 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 050C14ABF7A
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 14:25:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61E714ABEEE
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 14:23:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1448137AbiBGNKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 08:10:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55774 "EHLO
+        id S1448783AbiBGNM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 08:12:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442952AbiBGMVy (ORCPT
+        with ESMTP id S1443097AbiBGMWG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 07:21:54 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E37C0423D2
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 04:14:00 -0800 (PST)
+        Mon, 7 Feb 2022 07:22:06 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB147C03C1AD
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 04:16:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644236041; x=1675772041;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=TgpvuJ0R1lB2H8FhHzTp6Ej42dRZzsbIJPbNKhwWF1s=;
-  b=KZ9vv96jzpJ8FjOqk9TIVTGDquBcEH6fZof/qWEf1jHbC6YlmVjymzQF
-   wzbWVj/aH3aLt0zqnjHHV7gtY6SQIWsUSUJe9PcijiP9uh3pibyhoUu1z
-   fT8Ykj1+C8+fEu/i5IdPc/b+SlLqs7sevwjbi9mR++CTntsGBBnXA5NQN
-   QTXkkFAk4rpR6Aol3DJc5PoZkzGmRIQX999N9ph8gQpKjSI/6jA+r2AsP
-   MFtKAHgKJbwC8onmY5d0DH8CfDAN1kk4JDBDwsb9hxb/l4Vx0rf66bWgz
-   f8piZKZmgqWEMJuMHhvBX/qASR9Sc+51mb6NKS9PfKRKcq5ahvdDi0Vet
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10250"; a="312000577"
+  t=1644236190; x=1675772190;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1vCj/FFG9pSnPF/Iv806R/ZlY0+1L2qMpTxrhPDp3JE=;
+  b=QI70Pxkd2c1uAnspQUMZl9vc4Ttdppz7zfKumBp1OCApKOomP1ACgQ1i
+   aRI+4O9s0DPtpLkjtMoOQsOyGwnh/CREdnBY7VULlVmefDRyLefPbtE3j
+   j+5SqvxWiAyMATlUFNil2PlKascZm7KuskZDBGGm7qOycrQq4Sl9ZIYvd
+   P0iU+WERKIWqZZqx6TkBil3nnyuOPXzptp6GmULuQ9BE7a3QRNSY2go1N
+   rzvaNODKOega7e7QePYgRzkmf80bmCx0wJQjEI4PMswiLBO3TW/d2gw2r
+   PQ0tFFt2Uzk84TICyKSQmj8tZB0Ur0qYcNP0WOKc5xEfvOuxIvNOHvdz/
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10250"; a="248914436"
 X-IronPort-AV: E=Sophos;i="5.88,349,1635231600"; 
-   d="scan'208";a="312000577"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 04:14:00 -0800
+   d="scan'208";a="248914436"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 04:16:30 -0800
 X-IronPort-AV: E=Sophos;i="5.88,349,1635231600"; 
-   d="scan'208";a="484401961"
-Received: from nbaca1-mobl.ger.corp.intel.com (HELO localhost) ([10.252.18.25])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 04:13:56 -0800
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Christoph Hellwig <hch@lst.de>, Zhi Wang <zhi.wang.linux@gmail.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        "Wang, Zhi A" <zhi.a.wang@intel.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "intel-gvt-dev@lists.freedesktop.org" 
-        <intel-gvt-dev@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        "Xu, Terrence" <terrence.xu@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-Subject: Re: [PATCH 1/3] i915/gvt: Introduce the mmio_table.c to support
- VFIO new mdev API
-In-Reply-To: <20220207120647.GA28851@lst.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20220127120508.11330-1-zhi.a.wang@intel.com>
- <20220207073247.GA24327@lst.de>
- <DM4PR11MB5549FE45F8098368114ADE75CA2C9@DM4PR11MB5549.namprd11.prod.outlook.com>
- <20220207083535.GA25345@lst.de> <877da7rlzr.fsf@intel.com>
- <5c916187-8a8c-323a-adb4-8bce141180cc@gmail.com>
- <20220207120647.GA28851@lst.de>
-Date:   Mon, 07 Feb 2022 14:13:50 +0200
-Message-ID: <87v8xqri0x.fsf@intel.com>
+   d="scan'208";a="700444170"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 04:16:29 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nH2va-001tWE-7Y;
+        Mon, 07 Feb 2022 14:15:30 +0200
+Date:   Mon, 7 Feb 2022 14:15:29 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     andy@kernel.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH] lib/test_string.c: return -ENOMEM on memset16_selftest
+ allocation failure
+Message-ID: <YgENYYPT2gs7sX8H@smile.fi.intel.com>
+References: <20220207103626.103256-1-jiapeng.chong@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220207103626.103256-1-jiapeng.chong@linux.alibaba.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,28 +65,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 07 Feb 2022, Christoph Hellwig <hch@lst.de> wrote:
-> On Mon, Feb 07, 2022 at 06:57:13AM -0500, Zhi Wang wrote:
->> Hi Christoph and Jani:
->>
->> Thanks for the comments. It would be nice that people can achieve a 
->> agreement. I am OK with both of the options and also moving some files into 
->> different folders doesn't needs me to do the full test run again. :)
->
-> The way I understood Jani he agrees that the mmio table, which needs to
-> be part of the core i915 module should not be under the gvt/ subdiretory.
-> I.e. it could be drivers/gpu/drm/i915/intel_gvt_mmio_table.c.  The
-> declarations could then go either into drivers/gpu/drm/i915/intel_gvt.h
-> or drivers/gpu/drm/i915/intel_gvt_mmio_table.h.
+On Mon, Feb 07, 2022 at 06:36:26PM +0800, Jiapeng Chong wrote:
+> Clean up the following smatch warning:
+> 
+> lib/test_string.c:14 memset16_selftest() warn: returning -1 instead of
+> -ENOMEM is sloppy.
 
-Correct.
+It's not that makes much difference, but fine
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Generally I prefer to have the declarations for stuff in intel_foo.c to
-be placed in intel_foo.h, and named intel_foo_*.
-
-
-BR,
-Jani.
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> ---
+>  lib/test_string.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/lib/test_string.c b/lib/test_string.c
+> index 9dfd6f52de92..f23d6cd2d9c7 100644
+> --- a/lib/test_string.c
+> +++ b/lib/test_string.c
+> @@ -11,7 +11,7 @@ static __init int memset16_selftest(void)
+>  
+>  	p = kmalloc(256 * 2 * 2, GFP_KERNEL);
+>  	if (!p)
+> -		return -1;
+> +		return -ENOMEM;
+>  
+>  	for (i = 0; i < 256; i++) {
+>  		for (j = 0; j < 256; j++) {
+> -- 
+> 2.20.1.7.g153144c
+> 
 
 -- 
-Jani Nikula, Intel Open Source Graphics Center
+With Best Regards,
+Andy Shevchenko
+
+

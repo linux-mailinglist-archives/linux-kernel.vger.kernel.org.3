@@ -2,119 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E17C24ACB6C
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 22:41:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46A924ACB65
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 22:39:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240273AbiBGVj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 16:39:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56240 "EHLO
+        id S240069AbiBGVjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 16:39:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240208AbiBGVjw (ORCPT
+        with ESMTP id S231607AbiBGVjR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 16:39:52 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AA7E4C061A73
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 13:39:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644269990;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=AvJ9N+RokT/quaPmMZhpaU8mvk15cL5DRf0vZEA2K/0=;
-        b=HiiucCUTqHgj2undT9qDpunUqVFyFPZbAJJwXVihnIOdCHk+blxDb4/sdCJ+qac4r0KZv5
-        P/IJUweghEsBXu2QWYFIsiB9FY+djpaPQQdykhBDELzcMkV8I8XXmidCD43Rd1TEQYFvaJ
-        pm9uktXUwWmihiY3tKWD2wybhef6u0w=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-441-vgSPi0YHOzOjbRTZsRCqcQ-1; Mon, 07 Feb 2022 16:39:45 -0500
-X-MC-Unique: vgSPi0YHOzOjbRTZsRCqcQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1D0B1101F7A1;
-        Mon,  7 Feb 2022 21:39:43 +0000 (UTC)
-Received: from emerald.redhat.com (unknown [10.22.8.36])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0A52E1037F38;
-        Mon,  7 Feb 2022 21:39:34 +0000 (UTC)
-From:   Lyude Paul <lyude@redhat.com>
-To:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Cc:     Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>,
-        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
-        <ville.syrjala@linux.intel.com>,
-        =?UTF-8?q?Jos=C3=A9=20Roberto=20de=20Souza?= <jose.souza@intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>, stable@vger.kernel.org,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matt Roper <matthew.d.roper@intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] drm/i915/psr: Disable PSR2 selective fetch for all TGL steps
-Date:   Mon,  7 Feb 2022 16:38:20 -0500
-Message-Id: <20220207213923.3605-1-lyude@redhat.com>
+        Mon, 7 Feb 2022 16:39:17 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB43DC061A73
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 13:39:16 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id a25so21621951lji.9
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 13:39:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vj6d/kwNaVMSCvSwpd8SPBJUndIKEEtw3knv973Syso=;
+        b=QLnMWcre93OaJiLYldJtRWqs2HqybqunwmgEVs9I1LEXcGSlxFfOOYSD8R+pgn8LzV
+         V0gKqY0KcpXwQtfSgixPE9BEMFzu5WvYt0mYyrHYovLoKR5602RjdEDihU19rhcyd7C3
+         AcdnkuZanaPMEKCB3W+uoqUiZGd6cky9h2g7u3eFAAPLXDsUPrBd83uAgO/hiQsTMEzp
+         DhIqYvPNyAVtE+uAlCeqrA0CQO2vBKEhYX8lm9tfVQ82Gn2cqT+L7TRIsTMxLZw8iKcy
+         lJ2uFxMn2WKp2IP26br3cl4XwvsUkltNyCI63Xw1ONA10o9bljxMTrIFehgf6XpxExd1
+         KvKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vj6d/kwNaVMSCvSwpd8SPBJUndIKEEtw3knv973Syso=;
+        b=DYIWsqX0F/6vVBzmBifKQBp/5PeKEvmTHNTa+E1aZPzn4TChVimY+RWXppWrQTzvoH
+         6GMrsVXiJPBEaUVFLaVgxL1pRDDjDVZi1IV3WlA7zmJZBGYoNY4slSeoOjG5okchHLmn
+         MVE1SMgieCBq1tydeE6K/0VWb2WlKnLn+KdVGjvJpofChUViPSD/EI15p9UkqxXLNJ2N
+         zMZVSxUGp8dEb4jOAzCwqAwo7pjQulRBvq5OidFa3iFVSmBpAFgF1i1CoYMfzqSSRMf1
+         T1spkuV9WkJwuBZUwN9X/U4nXf6k6RKpRAR085xn01sofsCR8Cxl76eQncm+Plpj/PpH
+         sJhQ==
+X-Gm-Message-State: AOAM533nbJ7SW1tMhOyaYN1w3tjfykSAYr3qWOuOgbpv6b9kfnknUrBq
+        bJkWK8GF51hfYXcZyke/AsRIJohLgXnChCW5u3qSCw==
+X-Google-Smtp-Source: ABdhPJxpaN+DjDrQNevmZdtABjjWGyCfImugc0tOdbHZyCwxssDdoL1MLAkcOTkaKWhmMHuCPTTbz0JbyN05FdyYVSI=
+X-Received: by 2002:a2e:a5cb:: with SMTP id n11mr845559ljp.361.1644269954862;
+ Mon, 07 Feb 2022 13:39:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220204115718.14934-1-pbonzini@redhat.com> <20220204115718.14934-11-pbonzini@redhat.com>
+ <Yf2hRltaM1Ezd6SM@google.com> <04e568ee-8e44-dabe-2cc3-94b9c95287e1@redhat.com>
+In-Reply-To: <04e568ee-8e44-dabe-2cc3-94b9c95287e1@redhat.com>
+From:   David Matlack <dmatlack@google.com>
+Date:   Mon, 7 Feb 2022 13:38:48 -0800
+Message-ID: <CALzav=eTgXJaVhrtT4SUNVvXW=WLQNHquvNNG2s6rh+_cGh+3w@mail.gmail.com>
+Subject: Re: [PATCH 10/23] KVM: MMU: split cpu_role from mmu_role
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As we've unfortunately started to come to expect from PSR on Intel
-platforms, PSR2 selective fetch is not at all ready to be enabled on
-Tigerlake as it results in severe flickering issues - at least on this
-ThinkPad X1 Carbon 9th generation. The easiest way I've found of
-reproducing these issues is to just move the cursor around the left border
-of the screen (suspicious…).
+On Sat, Feb 5, 2022 at 6:49 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
+>
+> On 2/4/22 22:57, David Matlack wrote:
+> >> +    vcpu->arch.root_mmu.cpu_role.base.level = 0;
+> >> +    vcpu->arch.guest_mmu.cpu_role.base.level = 0;
+> >> +    vcpu->arch.nested_mmu.cpu_role.base.level = 0;
+> > Will cpu_role.base.level already be 0 if CR0.PG=0 && !tdp_enabled? i.e.
+> > setting cpu_role.base.level to 0 might not have the desired effect.
+> >
+> > It might not matter in practice since the shadow_mmu_init_context() and
+> > kvm_calc_mmu_role_common() check both the mmu_role and cpu_role, but does
+> > make this reset code confusing.
+> >
+>
+> Good point.  The (still unrealized) purpose of this series is to be able
+> to check mmu_role only, so for now I'll just keep the valid bit in the
+> ext part of the cpu_role.  The mmu_role's level however is never zero,
+> so I can already use the level when I remove the ext part from the mmu_role.
 
-So, fix people's displays again and turn PSR2 selective fetch off for all
-steppings of Tigerlake. This can be re-enabled again if someone from Intel
-finds the time to fix this functionality on OEM machines.
+Agreed.
 
-Signed-off-by: Lyude Paul <lyude@redhat.com>
-Fixes: 7f6002e58025 ("drm/i915/display: Enable PSR2 selective fetch by default")
-Cc: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
-Cc: Ville Syrjälä <ville.syrjala@linux.intel.com>
-Cc: José Roberto de Souza <jose.souza@intel.com>
-Cc: Jani Nikula <jani.nikula@linux.intel.com>
-Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
-Cc: intel-gfx@lists.freedesktop.org
-Cc: <stable@vger.kernel.org> # v5.16+
----
- drivers/gpu/drm/i915/display/intel_psr.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+>
+> I'll remove the valid bit of the ext part only after the cpu_role check
+> is removed, because then it can trivially go.
 
-diff --git a/drivers/gpu/drm/i915/display/intel_psr.c b/drivers/gpu/drm/i915/display/intel_psr.c
-index a1a663f362e7..25c16abcd9cd 100644
---- a/drivers/gpu/drm/i915/display/intel_psr.c
-+++ b/drivers/gpu/drm/i915/display/intel_psr.c
-@@ -737,10 +737,14 @@ static bool intel_psr2_sel_fetch_config_valid(struct intel_dp *intel_dp,
- 		return false;
- 	}
- 
--	/* Wa_14010254185 Wa_14010103792 */
--	if (IS_TGL_DISPLAY_STEP(dev_priv, STEP_A0, STEP_C0)) {
-+	/*
-+	 * There's two things stopping this from being enabled on TGL:
-+	 * For steps A0-C0: workarounds Wa_14010254185 Wa_14010103792 are missing
-+	 * For all steps: PSR2 selective fetch causes screen flickering
-+	 */
-+	if (IS_TIGERLAKE(dev_priv)) {
- 		drm_dbg_kms(&dev_priv->drm,
--			    "PSR2 sel fetch not enabled, missing the implementation of WAs\n");
-+			    "PSR2 sel fetch not enabled, currently broken on TGL\n");
- 		return false;
- 	}
- 
--- 
-2.34.1
+Ok sounds good.
 
+>
+> Paolo
+>

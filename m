@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C24514AB972
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:23:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D712B4ABD04
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:55:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239338AbiBGLNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:13:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48872 "EHLO
+        id S1388624AbiBGLoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:44:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241231AbiBGLKV (ORCPT
+        with ESMTP id S1385837AbiBGLcr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:10:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57BADC043188;
-        Mon,  7 Feb 2022 03:10:21 -0800 (PST)
+        Mon, 7 Feb 2022 06:32:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CBB5C043181;
+        Mon,  7 Feb 2022 03:32:46 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ABB6B613FB;
-        Mon,  7 Feb 2022 11:10:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D7A0C004E1;
-        Mon,  7 Feb 2022 11:10:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 564B2B80EC3;
+        Mon,  7 Feb 2022 11:32:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 717FAC004E1;
+        Mon,  7 Feb 2022 11:32:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232220;
-        bh=khYj2u5+P6ilGQgIZTfojHq9WrTK93UBtTZQe0B6Vtc=;
+        s=korg; t=1644233564;
+        bh=4jVbnwfVC3bF207Ch0FiydCtVRc8MucTpP3gbvg3VWc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W0rPuoPCBRG56Cv+wHyDJcQUcr3rIt1OrdDkWSP6csnIzZmGg6hgWEn/Si1RZTtrF
-         KRdutpaqId89OZFyAVj3oFvm6Iv/rNl1LAmnmKGKIm+hosf6PPkBRJ7ODdfyI+OpSy
-         HP1tOUDVx2XxOt1v9iFpqiKqY0x9E4XkwovI2r80=
+        b=m8lieLTQs9tksiOZnPLQwP0FPEujde2GbR25deL5t/kvpZn3vVOyturPU9oH6OVwN
+         bZ/6ICU36FbM7W7YDP2gOqqrpYwoynYgweFmHYQSOd11Dptf9ptUygtxk6WF/u5GCu
+         AES8CXp/hDvEglzHJHRjw1ith9Kht4J9kKxEhKKc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Whitney <enwlinux@gmail.com>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        Jan Kara <jack@suse.cz>, Theodore Tso <tytso@mit.edu>,
-        stable@kernel.org
-Subject: [PATCH 4.9 48/48] ext4: fix error handling in ext4_restore_inline_data()
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Subject: [PATCH 5.16 050/126] RDMA/siw: Fix refcounting leak in siw_create_qp()
 Date:   Mon,  7 Feb 2022 12:06:21 +0100
-Message-Id: <20220207103753.889781423@linuxfoundation.org>
+Message-Id: <20220207103805.844976517@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103752.341184175@linuxfoundation.org>
-References: <20220207103752.341184175@linuxfoundation.org>
+In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
+References: <20220207103804.053675072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,60 +56,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ritesh Harjani <riteshh@linux.ibm.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-commit 897026aaa73eb2517dfea8d147f20ddb0b813044 upstream.
+commit a75badebfdc0b3823054bedf112edb54d6357c75 upstream.
 
-While running "./check -I 200 generic/475" it sometimes gives below
-kernel BUG(). Ideally we should not call ext4_write_inline_data() if
-ext4_create_inline_data() has failed.
+The atomic_inc() needs to be paired with an atomic_dec() on the error
+path.
 
-<log snip>
-[73131.453234] kernel BUG at fs/ext4/inline.c:223!
-
-<code snip>
- 212 static void ext4_write_inline_data(struct inode *inode, struct ext4_iloc *iloc,
- 213                                    void *buffer, loff_t pos, unsigned int len)
- 214 {
-<...>
- 223         BUG_ON(!EXT4_I(inode)->i_inline_off);
- 224         BUG_ON(pos + len > EXT4_I(inode)->i_inline_size);
-
-This patch handles the error and prints out a emergency msg saying potential
-data loss for the given inode (since we couldn't restore the original
-inline_data due to some previous error).
-
-[ 9571.070313] EXT4-fs (dm-0): error restoring inline_data for inode -- potential data loss! (inode 1703982, error -30)
-
-Reported-by: Eric Whitney <enwlinux@gmail.com>
-Signed-off-by: Ritesh Harjani <riteshh@linux.ibm.com>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Link: https://lore.kernel.org/r/9f4cd7dfd54fa58ff27270881823d94ddf78dd07.1642416995.git.riteshh@linux.ibm.com
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Cc: stable@kernel.org
+Fixes: 514aee660df4 ("RDMA: Globally allocate and release QP memory")
+Link: https://lore.kernel.org/r/20220118091104.GA11671@kili
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
+Reviewed-by: Bernard Metzler <bmt@zurich.ibm.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ext4/inline.c |   10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ drivers/infiniband/sw/siw/siw_verbs.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/fs/ext4/inline.c
-+++ b/fs/ext4/inline.c
-@@ -1123,7 +1123,15 @@ static void ext4_restore_inline_data(han
- 				     struct ext4_iloc *iloc,
- 				     void *buf, int inline_size)
- {
--	ext4_create_inline_data(handle, inode, inline_size);
-+	int ret;
-+
-+	ret = ext4_create_inline_data(handle, inode, inline_size);
-+	if (ret) {
-+		ext4_msg(inode->i_sb, KERN_EMERG,
-+			"error restoring inline_data for inode -- potential data loss! (inode %lu, error %d)",
-+			inode->i_ino, ret);
-+		return;
-+	}
- 	ext4_write_inline_data(inode, iloc, buf, 0, inline_size);
- 	ext4_set_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA);
- }
+--- a/drivers/infiniband/sw/siw/siw_verbs.c
++++ b/drivers/infiniband/sw/siw/siw_verbs.c
+@@ -311,7 +311,8 @@ int siw_create_qp(struct ib_qp *ibqp, st
+ 
+ 	if (atomic_inc_return(&sdev->num_qp) > SIW_MAX_QP) {
+ 		siw_dbg(base_dev, "too many QP's\n");
+-		return -ENOMEM;
++		rv = -ENOMEM;
++		goto err_atomic;
+ 	}
+ 	if (attrs->qp_type != IB_QPT_RC) {
+ 		siw_dbg(base_dev, "only RC QP's supported\n");
 
 

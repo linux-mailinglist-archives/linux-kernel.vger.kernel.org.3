@@ -2,102 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBAAA4AB9D9
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:25:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B37FC4AB968
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:23:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245301AbiBGLFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:05:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41972 "EHLO
+        id S245563AbiBGLFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:05:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352892AbiBGK4s (ORCPT
+        with ESMTP id S233674AbiBGLDc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 05:56:48 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A1E4BC043189;
-        Mon,  7 Feb 2022 02:56:47 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5C69811D4;
-        Mon,  7 Feb 2022 02:56:47 -0800 (PST)
-Received: from [10.57.70.156] (unknown [10.57.70.156])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 634383F73B;
-        Mon,  7 Feb 2022 02:56:45 -0800 (PST)
-Message-ID: <f315aea5-b088-62ad-2234-81e8c0b13f74@arm.com>
-Date:   Mon, 7 Feb 2022 10:56:41 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH 2/2] iommu/arm-smmu-v3: Simplify memory allocation
-Content-Language: en-GB
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Will Deacon <will@kernel.org>, Joerg Roedel <joro@8bytes.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux-foundation.org
-References: <de9e8705169b5dc873f6ce9f9a17598de89aa6a7.1644081032.git.christophe.jaillet@wanadoo.fr>
- <018afc7c92ae4132ac901b088b72ab5979256a9e.1644081032.git.christophe.jaillet@wanadoo.fr>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <018afc7c92ae4132ac901b088b72ab5979256a9e.1644081032.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 7 Feb 2022 06:03:32 -0500
+X-Greylist: delayed 343 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 03:03:31 PST
+Received: from m43-7.mailgun.net (m43-7.mailgun.net [69.72.43.7])
+        by lindbergh.monkeyblade.net (Postfix) with UTF8SMTPS id D82C1C043181
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 03:03:31 -0800 (PST)
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1644231811; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=0xBNTcGBAXWcoRI0B3peXkvckCYdilz2Av3IPGdz/44=;
+ b=BxANQuNqiyPn5kLr1Tcrv6IlsW8q3jV3zrwl+Ay6+5/WV12fYRjnoD76mjwA4/j+G6oP0zVK
+ 40PGuMIH61zaOAUIfDQZMz0/PML+MsAKAga+fCe0cCr2pt/IXrhjOIPxJ4bxsbOZ9eQ1oNNh
+ WKkBqJ6bIGsIx0RrvY6B23fUNqg=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n05.prod.us-east-1.postgun.com with SMTP id
+ 6200fb2ae5522b2a16f4695f (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 07 Feb 2022 10:57:46
+ GMT
+Sender: nitirawa=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id D0836C4361A; Mon,  7 Feb 2022 10:57:45 +0000 (UTC)
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: nitirawa)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id E3C35C43616;
+        Mon,  7 Feb 2022 10:57:44 +0000 (UTC)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Mon, 07 Feb 2022 16:27:44 +0530
+From:   nitirawa@codeaurora.org
+To:     Vidya Sagar <vidyas@nvidia.com>
+Cc:     Keith Busch <kbusch@kernel.org>, rafael.j.wysocki@intel.com,
+        hch@lst.de, bhelgaas@google.com, mmaddireddy@nvidia.com,
+        kthota@nvidia.com, sagar.tv@gmail.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: Query related to shutting down NVMe during system suspend
+In-Reply-To: <0bd9fdc1-99d4-1c59-7343-3708b331b2b5@nvidia.com>
+References: <65b836cd-8d5d-b9c2-eb8f-2ee3ef46112b@nvidia.com>
+ <20220201163054.GA2838889@dhcp-10-100-145-180.wdc.com>
+ <0bd9fdc1-99d4-1c59-7343-3708b331b2b5@nvidia.com>
+Message-ID: <24710253b2e34dfdd81ebe1f46b84652@codeaurora.org>
+X-Sender: nitirawa@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-05 17:11, Christophe JAILLET wrote:
-> Use devm_bitmap_zalloc() instead of hand writing it.
-
-Heh, that reminds me that I have more or less the same patch sat locally 
-somewhere, except IIRC I took it further and removed the unhelpful error 
-message and pruned the local variables as well - I think that would 
-still be my preference here (or I could dig out my patch and post it if 
-you like).
-
-Cheers,
-Robin.
-
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
-> This is NOT compile tested.
-> I don't have the needed cross compiling tools.
-> ---
->   drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 10 ++--------
->   1 file changed, 2 insertions(+), 8 deletions(-)
+On 2022-02-01 22:28, Vidya Sagar wrote:
+> Thanks for the super quick reply and I couldn't agree more.
 > 
-> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-> index 14d06aad0726..ba0e7f1f7dbf 100644
-> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-> @@ -2911,12 +2911,6 @@ static int arm_smmu_init_one_queue(struct arm_smmu_device *smmu,
->   	return 0;
->   }
->   
-> -static void arm_smmu_cmdq_free_bitmap(void *data)
-> -{
-> -	unsigned long *bitmap = data;
-> -	bitmap_free(bitmap);
-> -}
-> -
->   static int arm_smmu_cmdq_init(struct arm_smmu_device *smmu)
->   {
->   	int ret = 0;
-> @@ -2927,13 +2921,13 @@ static int arm_smmu_cmdq_init(struct arm_smmu_device *smmu)
->   	atomic_set(&cmdq->owner_prod, 0);
->   	atomic_set(&cmdq->lock, 0);
->   
-> -	bitmap = (atomic_long_t *)bitmap_zalloc(nents, GFP_KERNEL);
-> +	bitmap = (atomic_long_t *)devm_bitmap_zalloc(smmu->dev, nents,
-> +						     GFP_KERNEL);
->   	if (!bitmap) {
->   		dev_err(smmu->dev, "failed to allocate cmdq bitmap\n");
->   		ret = -ENOMEM;
->   	} else {
->   		cmdq->valid_map = bitmap;
-> -		devm_add_action(smmu->dev, arm_smmu_cmdq_free_bitmap, bitmap);
->   	}
->   
->   	return ret;
+> On 2/1/2022 10:00 PM, Keith Busch wrote:
+>> External email: Use caution opening links or attachments
+>> 
+>> 
+>> On Tue, Feb 01, 2022 at 09:52:28PM +0530, Vidya Sagar wrote:
+>>> Hi Rafael & Christoph,
+>>> My query is regarding the comment and the code that follows after it 
+>>> at
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/nvme/host/pci.c?h=v5.17-rc2#n3243
+>>> What I understood from it is that, there is an underlying assumption
+>>> that the power to the devices is not removed during the suspend call.
+>>> In the case of device-tree based platforms like Tegra194, power is
+>>> indeed removed to the devices during suspend-resume process. Hence, 
+>>> the
+>>> NVMe devices need to be taken through the shutdown path irrespective 
+>>> of
+>>> whether the ASPM states are enabled or not.
+>>> I would like to hear from you the best method to follow to achieve 
+>>> this.
+>> 
+>> Since platform makers can't converge on how to let a driver know what
+>> it's supposed to do, I suggest we default to the simple shutdown 
+>> suspend
+>> all the time. We can add a module parameter to let a user request nvme
+>> power management if they really want it. No matter what we do here,
+>> someone is going to complain, but at least simple shutdown is safe...
+>> 
+
+Hi Vidya,
+
+Are you planning to add module parameter based on above discussion. I 
+see similar behaviour even with  qualcomm platform.
+
+[  119.994092] nvme nvme0: I/O 9 QID 0 timeout, reset controller
+[  120.006612] PM: dpm_run_callback(): pci_pm_resume+0x0/0xe4 returns 
+-16
+[  120.013502] nvme 0001:01:00.0: PM: pci_pm_resume+0x0/0xe4 returned 
+-16 after 60059958 usecs
+[  120.022239] nvme 0001:01:00.0: PM: failed to resume async: error -16
+
+Regards,
+Nitin
+
+

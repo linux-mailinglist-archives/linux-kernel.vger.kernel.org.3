@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E694B4ABBDF
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:44:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64EDC4ABDDD
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:05:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386003AbiBGLdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:33:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34244 "EHLO
+        id S1389245AbiBGLrz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:47:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383222AbiBGLVu (ORCPT
+        with ESMTP id S1386407AbiBGLef (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:21:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53195C0401CA;
-        Mon,  7 Feb 2022 03:21:50 -0800 (PST)
+        Mon, 7 Feb 2022 06:34:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71186C043188;
+        Mon,  7 Feb 2022 03:34:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D3705B81028;
-        Mon,  7 Feb 2022 11:21:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24759C004E1;
-        Mon,  7 Feb 2022 11:21:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2C0DBB80EC3;
+        Mon,  7 Feb 2022 11:34:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66E3CC340F0;
+        Mon,  7 Feb 2022 11:34:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232907;
-        bh=OuwT4LirGBoLvopfmraLft+Fx9tRLUnJPwW1eXn6O8U=;
+        s=korg; t=1644233672;
+        bh=klD1XoqszxDtG3NN+zWwtPmHx71bBeUBfpAm8Kv5nLk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=whkdbnOK5d0J+E4jLiVAct137NFdnMh9D8diUJEvzudZqSFHuVMcCdlmZbu3zgiEh
-         UliJN2gLSWbDjNX6oK+j1uCxWhLse6tjJvo7pMAXAkUNLlUghAEYTmUMINNWDrEvOa
-         yOmOG/WyEr1dXHjqAeQNvjjOyzikSpPDMJO+lN38=
+        b=DC+mZTHfHuUOVWPqwCt5AEmCMqMBqu+tS0o6Sv5dzh/XhMbCzOBQr5zZf7gtTFHrd
+         6tj/FIXL7zhPdbp60shnCk2KpavFi8RczGzhrEg6q1yNd2YAWEwwzwYq+6nytnZN96
+         UzQkunneK1g3ZdUYydABRZzmzJcfRZQ+kDzzhg8E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Lu Baolu <baolu.lu@linux.intel.com>,
         Guoqing Jiang <guoqing.jiang@linux.dev>,
         Joerg Roedel <jroedel@suse.de>
-Subject: [PATCH 5.10 30/74] iommu/vt-d: Fix potential memory leak in intel_setup_irq_remapping()
+Subject: [PATCH 5.16 057/126] iommu/vt-d: Fix potential memory leak in intel_setup_irq_remapping()
 Date:   Mon,  7 Feb 2022 12:06:28 +0100
-Message-Id: <20220207103758.230545765@linuxfoundation.org>
+Message-Id: <20220207103806.082667303@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103757.232676988@linuxfoundation.org>
-References: <20220207103757.232676988@linuxfoundation.org>
+In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
+References: <20220207103804.053675072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -84,7 +84,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/drivers/iommu/intel/irq_remapping.c
 +++ b/drivers/iommu/intel/irq_remapping.c
-@@ -576,9 +576,8 @@ static int intel_setup_irq_remapping(str
+@@ -569,9 +569,8 @@ static int intel_setup_irq_remapping(str
  					    fn, &intel_ir_domain_ops,
  					    iommu);
  	if (!iommu->ir_domain) {
@@ -95,7 +95,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	}
  	iommu->ir_msi_domain =
  		arch_create_remap_msi_irq_domain(iommu->ir_domain,
-@@ -602,7 +601,7 @@ static int intel_setup_irq_remapping(str
+@@ -595,7 +594,7 @@ static int intel_setup_irq_remapping(str
  
  		if (dmar_enable_qi(iommu)) {
  			pr_err("Failed to enable queued invalidation\n");
@@ -104,7 +104,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  		}
  	}
  
-@@ -626,6 +625,14 @@ static int intel_setup_irq_remapping(str
+@@ -619,6 +618,14 @@ static int intel_setup_irq_remapping(str
  
  	return 0;
  

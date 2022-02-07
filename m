@@ -2,120 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C64E4ABE60
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:13:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 338634ABE52
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:09:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386782AbiBGMDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 07:03:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39638 "EHLO
+        id S1391598AbiBGMCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 07:02:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1391445AbiBGMBt (ORCPT
+        with ESMTP id S1388522AbiBGLnx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 07:01:49 -0500
-X-Greylist: delayed 210 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 03:59:31 PST
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E917C03E921;
-        Mon,  7 Feb 2022 03:59:30 -0800 (PST)
-Received: from integral2.. (unknown [36.72.213.52])
-        by gnuweeb.org (Postfix) with ESMTPSA id A50E97E258;
-        Mon,  7 Feb 2022 11:44:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1644234255;
-        bh=UC+l746d+ctD97nNi+ogzS1mPkamtQDrniJtWWP4aXM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=M8RxUq8vBDKlrMWCk6tUjzExD87kUWg+ChDGFxXP4ig7iMkkzz389ytZoZG/In1i4
-         DCDMeFvvZ5/7fp3IEuf/wupbvmAyPfAJnwWXpqChxyndNjM5l1PHI7QqLsyU4PJUfT
-         V+oS8oNUo5UBy9TohgSER7tI1yEoSAaE+vBxnyiV8z5nM9ORVnG6A5ie3Wpl8BSF8Q
-         W8G9PqVd8o+MnyfPP4LOs9iLhpUx35UfMPvADdyW1Q/bDrpkz8Sq6PW+AftCLixJBY
-         w1S5zJ0TH8NPIOMvZfYp44I+b0XSPt4W7i4W4Zalm6M0UHJI7HN2xx23T2w+JEcGv3
-         rAS4mnNqq3ERQ==
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     GNU/Weeb Mailing List <gwml@gnuweeb.org>,
-        io-uring Mailing list <io-uring@vger.kernel.org>,
-        Tea Inside Mailing List <timl@vger.teainside.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alviro Iskandar Setiawan <alviro.iskandar@gmail.com>,
-        kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        "Chen, Rong A" <rong.a.chen@intel.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Subject: [PATCH io_uring-5.17] io_uring: Fix build error potential reading uninitialized value
-Date:   Mon,  7 Feb 2022 18:43:15 +0700
-Message-Id: <20220207114315.555413-1-ammarfaizi2@gnuweeb.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <d33bb5a9-8173-f65b-f653-51fc0681c6d6@intel.com>
-References: <d33bb5a9-8173-f65b-f653-51fc0681c6d6@intel.com>
+        Mon, 7 Feb 2022 06:43:53 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C73C043188
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 03:43:52 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id p5so38883897ybd.13
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 03:43:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=DqWgmzwxtL264zlQQi/aWGo5dgkPVyz0CHwO9F0ARvI=;
+        b=ZAikxu6W0Tse6pSUT3PJpXsbcq5ghw55uIWE0umxyXZEov02vMAXWebaGqeBOBgn56
+         1Ha7T/JXuYFUlO62olgXb4gI02cv2zI720VybXH7rTrhWTBUAWHZ0eqruQ/fT3laLs2m
+         8xgr98g8CCxRpqF6yQM70NsJIvRyh0tiu4PzuAhMG1fQ5TnCE+K2YpSjIv0HSRPbvolC
+         dSL5QjqZ7/EKycgejQkK04Ol4o2V9r0x1MBrSnexX4x/L5LxY2olpuQHEfhCNnPBek5c
+         gnOQ/9kW1rge0Fii1i9jjtMDIhLyhKfNm83PewOARZF4Q4wlL7RCg02SEhj8UL1HBC/S
+         e25g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=DqWgmzwxtL264zlQQi/aWGo5dgkPVyz0CHwO9F0ARvI=;
+        b=hMqJ+7Ln3szNB8sma17G1RSgD6MkVbF/l3K2T8KtvDEZiIH5MUnZVq8305v1t1Kr83
+         eX/N7HqXITkvczN70FQcAWQKBnOLDOBohknoYCxQTBjidgWx3786iWoUJVbthfXtrqoK
+         oBQ8PtnOLfr83uJ7n529c5sZUOYhqLZvzll84mijEaG5JCOBNBGKNyabd+MIlR1k8uRG
+         n1u3ZRGceJwc4J/XTUV3VA4q1SQKtTmiOShHuPzS9xic8ZjPCH6y6TGMO98ZqPOUPH8V
+         6U6Wn0/aLPRKtjHKuKfQGRVbNMh2wntBgR2IOgA0nmdG0/PeQWnAgVyJzZtaHUPoW097
+         /G0A==
+X-Gm-Message-State: AOAM530h0KNtmqctgy+Yagf5uSzewe4zMsM+Mujdcu2fa/ezPvMyG0IT
+        iRP67WYcBKk8/tsMCFGSxTPuDfPAnJcsHX7b6NFDwf0Ol6Y=
+X-Google-Smtp-Source: ABdhPJw/wYJhy6Xitu0IqzKj85on6zJBb6VfDZyyxSheyccof0ONf81+HJUrXnY2Ll7yMc9fC0rcJahUmQTUQMqcTTA=
+X-Received: by 2002:a81:b662:: with SMTP id h34mr10605194ywk.366.1644234230804;
+ Mon, 07 Feb 2022 03:43:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Mon, 7 Feb 2022 17:13:39 +0530
+Message-ID: <CA+G9fYsZuC=36zJoj2UPNhF3hQTf-osgs-m59Zey3TB_E0wZUg@mail.gmail.com>
+Subject: [next] fs/proc/task_mmu.c:1444:14: warning: unused variable 'migration'
+To:     open list <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org
+Cc:     Yang Shi <shy828301@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        David Hildenbrand <david@redhat.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Jann Horn <jannh@google.com>,
+        Matthew Wilcox <willy@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alviro Iskandar Setiawan <alviro.iskandar@gmail.com>
+While building Linux next-20220207 for arm architecture the following
+error was noticed.
 
-In io_recv() if import_single_range() fails, the @flags variable is
-uninitialized, then it will goto out_free.
+make --silent --keep-going --jobs=8  \
+     ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- \
+     'CC=sccache arm-linux-gnueabihf-gcc' \
+     'HOSTCC=sccache gcc' \
+     vexpress_defconfig
 
-After the goto, the compiler doesn't know that (ret < min_ret) is
-always true, so it thinks the "if ((flags & MSG_WAITALL) ..."  path
-could be taken.
+fs/proc/task_mmu.c: In function 'pagemap_pmd_range':
+fs/proc/task_mmu.c:1444:14: warning: unused variable 'migration'
+[-Wunused-variable]
+ 1444 |         bool migration = false;
+      |              ^~~~~~~~~
 
-The complaint comes from gcc-9 (Debian 9.3.0-22) 9.3.0:
-```
-  fs/io_uring.c:5238 io_recvfrom() error: uninitialized symbol 'flags'
-```
-Fix this by bypassing the @ret and @flags check when
-import_single_range() fails.
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Reasons:
- 1. import_single_range() only returns -EFAULT when it fails.
- 2. At that point @flags is uninitialized and shouldn't be read.
+Build log:
+https://builds.tuxbuild.com/24lg0EnsbEf6deWnMXwXiwh8oVi/
 
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Reported-by: "Chen, Rong A" <rong.a.chen@intel.com>
-Link: https://lore.gnuweeb.org/timl/d33bb5a9-8173-f65b-f653-51fc0681c6d6@intel.com/
-Cc: Pavel Begunkov <asml.silence@gmail.com>
-Suggested-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Fixes: 7297ce3d59449de49d3c9e1f64ae25488750a1fc ("io_uring: improve send/recv error handling")
-Signed-off-by: Alviro Iskandar Setiawan <alviro.iskandar@gmail.com>
-Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
----
- fs/io_uring.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+metadata:
+    git_describe: next-20220207
+    git_repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+    git_short_log: b3c0a155ef77 (\"Add linux-next specific files for 20220207\")
+    target_arch: arm
+    toolchain: gcc-10
 
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index 2e04f718319d..3445c4da0153 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -5228,7 +5228,6 @@ static int io_recv(struct io_kiocb *req, unsigned int issue_flags)
- 		min_ret = iov_iter_count(&msg.msg_iter);
- 
- 	ret = sock_recvmsg(sock, &msg, flags);
--out_free:
- 	if (ret < min_ret) {
- 		if (ret == -EAGAIN && force_nonblock)
- 			return -EAGAIN;
-@@ -5236,9 +5235,9 @@ static int io_recv(struct io_kiocb *req, unsigned int issue_flags)
- 			ret = -EINTR;
- 		req_set_fail(req);
- 	} else if ((flags & MSG_WAITALL) && (msg.msg_flags & (MSG_TRUNC | MSG_CTRUNC))) {
-+out_free:
- 		req_set_fail(req);
- 	}
--
- 	__io_req_complete(req, issue_flags, ret, io_put_kbuf(req));
- 	return 0;
- }
 
-base-commit: f6133fbd373811066c8441737e65f384c8f31974
--- 
-2.32.0
-
+--
+Linaro LKFT
+https://lkft.linaro.org

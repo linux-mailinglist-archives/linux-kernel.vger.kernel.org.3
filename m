@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF9064ACB49
+	by mail.lfdr.de (Postfix) with ESMTP id 30B8E4ACB48
 	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 22:29:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239813AbiBGV2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 16:28:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50696 "EHLO
+        id S240053AbiBGV2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 16:28:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239535AbiBGV2l (ORCPT
+        with ESMTP id S239634AbiBGV2l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 7 Feb 2022 16:28:41 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A66C061A73;
-        Mon,  7 Feb 2022 13:28:39 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id bx31so21680282ljb.0;
-        Mon, 07 Feb 2022 13:28:39 -0800 (PST)
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C169C043182;
+        Mon,  7 Feb 2022 13:28:40 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id u6so8455029lfc.3;
+        Mon, 07 Feb 2022 13:28:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Fc7LGrlHAZDYrBuSru9+9ktilHwf1q6a8VpFHoydzeY=;
-        b=RjnpxJmOQ3Yl96FT+6GGJEHHKO/BC6bB/Kg9ocFLeXF9JbDAXlvRXUFs5Lr3lFxZHv
-         U53mcXmiR/KH21mGciDAJR7sDmPKuDMTVOkQpXMdYCQ0pz790y0Mi6EIpi0SFtUaZQKF
-         MYvkblW6YXjMDejP87vf+SMxjSCTey3ckzO5KVWXuAXY+uQEGw4obEjjwFZomHSovxnn
-         LBws+mdr8gVOFFUvXGfExbaycqpvi3GNrFT9FWG9x1/QMUZbLNGRu0OLdTnjvo3hdv7m
-         byJXhd9STxcw8zsUBbZnQ2cUQZ3PJEfwNdwESv2sEYXayhCnq2LTWI5+lX0ik0D1iHvo
-         DKIA==
+        bh=E2zd9qSMx7SACXDQ3TCJWSxyhyik37cN7ytcy2kkvgM=;
+        b=W4rJWInqPQLoRJwxqUdM++mooZfTQzFc7hnkmWoKDU5K3SRLMe6O2IKOe55XtyXdr8
+         8sToojRW+aO3/pUmO8bg8yAAHBEwV2Z9Sl9xRk/wSrqVf/9fEzjxGHD9vD7+49T7OHnT
+         vGT6snfaiTCXNBTbjgU/RF0BzrItwGGe3vF2TIODPvwwrGqHZ/BuDJVJPuSBYpGJ4VR2
+         2lSD+qIbivy1Scox1rQ9gHILSYVUPPHfSpegGhbzVJgNjhiYATOjAaxb2Q8UYrYPTzAX
+         C4yjOUz16iol6qa2dUxm3nbfR4UEd9Z6P23lKzKHGlw7B04qudAqpIt9jGCMF6anEfhw
+         2Z+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Fc7LGrlHAZDYrBuSru9+9ktilHwf1q6a8VpFHoydzeY=;
-        b=UhZLwHMHZuaeE9xhDlm7mU4UbpDnS5L5krwiUhc0G0siuHqlwURMzAdqbraWs0OpBC
-         hz1GYkbZu5HW++yxeW/eVsuynhDs995Gk82Cf6qE4J7I1sXvzuU416h+FrQ/HEJ5IFYq
-         rlGWxHhquCW/pyK6PVYm/hBXnmz8JmcnZ2+CWRgh8e8VE5QVBUqoyvaXNzUsZjd8pps4
-         wxU6E1XjghQeSfUgLVaSUBDslKS42waWu42VjUiN0TeW3YlijJN/6UxMY4BYAJXw6lW2
-         MrWZfB7WYs+0Z7Gp7d4IBx2195crPYyLRoaC/O9rfat9fxpcYcLdmEiG4p6/iMybx3Cn
-         5kTg==
-X-Gm-Message-State: AOAM530TE3KbEfToDqYWozIEMSO7Vnlu+MchbafDDvnakwKtwDAk6wpu
-        8eo1PNYCoxPSKon8svzVWOk=
-X-Google-Smtp-Source: ABdhPJxC24uxUihysBcLEcyWbkzB43B1EDdpkLbBlQuGkqZ3/FpGkwwVdM76BMG6c/Pr89/JgL/PFg==
-X-Received: by 2002:a2e:9953:: with SMTP id r19mr877682ljj.37.1644269317750;
-        Mon, 07 Feb 2022 13:28:37 -0800 (PST)
+        bh=E2zd9qSMx7SACXDQ3TCJWSxyhyik37cN7ytcy2kkvgM=;
+        b=xHMS3plLDWnxiNs18npVW8h+JvywYGmJOuYX3v2XGlBgCBWMiH/tPQ5uWJNGwVWqGi
+         87BRbKoHT3cSemsN5R8jDdxCAL0kKoH2UeAPb2PcuSLNaUB5KdEDSjAzE5DfnevzS1GD
+         w5hirRjCaMOoa9ttvrSlvbT7FOsJ/YyWSLgOSFRXFY8P4Uk8GKaBuFNfYcOX4IXgJXs1
+         N3uQFyDQIYL4IF0+SBMHep+fqJJD6Bd71yAniiCI1tmbE4/R91/ui0csVlstLaFoewn5
+         kt1gVapc5cjTtLCsAx9UeJHRllARtJbW+uPqtPArfXfEO/sy9+/LyyyietaD9gEBAZMK
+         YMHA==
+X-Gm-Message-State: AOAM53182vaXUx3sua9rB6roDm4jvwYpK+ear0d91T/dGscWWUA8kOBm
+        AL2wji21wjRbaggxm2fW31y9yNcN+Qw=
+X-Google-Smtp-Source: ABdhPJxXLXAxKtMWq6WRLQeB8t6rVF8KYPPA6CJK3xKXepxOhU0hwVLrjf9RUml1sK/qjcNZJoRcbg==
+X-Received: by 2002:a05:6512:238c:: with SMTP id c12mr913797lfv.333.1644269318526;
+        Mon, 07 Feb 2022 13:28:38 -0800 (PST)
 Received: from localhost.localdomain (109-252-138-165.dynamic.spd-mgts.ru. [109.252.138.165])
         by smtp.gmail.com with ESMTPSA id i3sm1650867lfj.144.2022.02.07.13.28.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 13:28:37 -0800 (PST)
+        Mon, 07 Feb 2022 13:28:38 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -56,9 +56,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Robert Eckelmann <longnoserob@gmail.com>,
         Agneli <poczt@protonmail.ch>
 Cc:     linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 1/4] ARM: tegra: asus-tf101: Enable S/PDIF and HDMI audio
-Date:   Tue,  8 Feb 2022 00:28:23 +0300
-Message-Id: <20220207212826.10307-2-digetx@gmail.com>
+Subject: [PATCH v1 2/4] ARM: tegra: transformer: Drop reg-shift for Tegra HS UART
+Date:   Tue,  8 Feb 2022 00:28:24 +0300
+Message-Id: <20220207212826.10307-3-digetx@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220207212826.10307-1-digetx@gmail.com>
 References: <20220207212826.10307-1-digetx@gmail.com>
@@ -74,37 +74,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable S/PDIF controller to enable HDMI audio support on ASUS TF101.
-Use nvidia,fixed-parent-rate property that prevents audio rate conflict
-between S/PDIF and I2S.
+From: Svyatoslav Ryhel <clamor95@gmail.com>
 
-Tested-by: Robert Eckelmann <longnoserob@gmail.com>
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+When the Tegra High-Speed UART is used instead of the regular UART, the
+reg-shift property is implied from the compatible string and should not
+be explicitly listed.
+
+Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
 ---
- arch/arm/boot/dts/tegra20-asus-tf101.dts | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ arch/arm/boot/dts/tegra20-asus-tf101.dts               | 2 ++
+ arch/arm/boot/dts/tegra30-asus-transformer-common.dtsi | 2 ++
+ arch/arm/boot/dts/tegra30-pegatron-chagall.dts         | 2 ++
+ 3 files changed, 6 insertions(+)
 
 diff --git a/arch/arm/boot/dts/tegra20-asus-tf101.dts b/arch/arm/boot/dts/tegra20-asus-tf101.dts
-index 020172ee7340..68b0fdb89aa6 100644
+index 68b0fdb89aa6..f95e84fbb20a 100644
 --- a/arch/arm/boot/dts/tegra20-asus-tf101.dts
 +++ b/arch/arm/boot/dts/tegra20-asus-tf101.dts
-@@ -436,8 +436,16 @@ pta {
- 		};
- 	};
- 
-+	spdif@70002400 {
-+		status = "okay";
-+
-+		nvidia,fixed-parent-rate;
-+	};
-+
- 	i2s@70002800 {
- 		status = "okay";
-+
-+		nvidia,fixed-parent-rate;
- 	};
+@@ -450,11 +450,13 @@ i2s@70002800 {
  
  	serial@70006040 {
+ 		compatible = "nvidia,tegra20-hsuart";
++		/delete-property/ reg-shift;
+ 		/* GPS BCM4751 */
+ 	};
+ 
+ 	serial@70006200 {
+ 		compatible = "nvidia,tegra20-hsuart";
++		/delete-property/ reg-shift;
+ 		status = "okay";
+ 
+ 		/* Azurewave AW-NH615 BCM4329B1 */
+diff --git a/arch/arm/boot/dts/tegra30-asus-transformer-common.dtsi b/arch/arm/boot/dts/tegra30-asus-transformer-common.dtsi
+index 85b43a86a26d..c662ab261ed5 100644
+--- a/arch/arm/boot/dts/tegra30-asus-transformer-common.dtsi
++++ b/arch/arm/boot/dts/tegra30-asus-transformer-common.dtsi
+@@ -1080,6 +1080,7 @@ drive_sdio1 {
+ 
+ 	serial@70006040 {
+ 		compatible = "nvidia,tegra30-hsuart";
++		/delete-property/ reg-shift;
+ 		status = "okay";
+ 
+ 		/* Broadcom GPS BCM47511 */
+@@ -1087,6 +1088,7 @@ serial@70006040 {
+ 
+ 	serial@70006200 {
+ 		compatible = "nvidia,tegra30-hsuart";
++		/delete-property/ reg-shift;
+ 		status = "okay";
+ 
+ 		nvidia,adjust-baud-rates = <0 9600 100>,
+diff --git a/arch/arm/boot/dts/tegra30-pegatron-chagall.dts b/arch/arm/boot/dts/tegra30-pegatron-chagall.dts
+index f4b2d4218849..8ce61035290b 100644
+--- a/arch/arm/boot/dts/tegra30-pegatron-chagall.dts
++++ b/arch/arm/boot/dts/tegra30-pegatron-chagall.dts
+@@ -1103,6 +1103,7 @@ drive_lcd2 {
+ 
+ 	uartb: serial@70006040 {
+ 		compatible = "nvidia,tegra30-hsuart";
++		/delete-property/ reg-shift;
+ 		status = "okay";
+ 
+ 		/* Broadcom GPS BCM47511 */
+@@ -1110,6 +1111,7 @@ uartb: serial@70006040 {
+ 
+ 	uartc: serial@70006200 {
+ 		compatible = "nvidia,tegra30-hsuart";
++		/delete-property/ reg-shift;
+ 		status = "okay";
+ 
+ 		nvidia,adjust-baud-rates = <0 9600 100>,
 -- 
 2.34.1
 

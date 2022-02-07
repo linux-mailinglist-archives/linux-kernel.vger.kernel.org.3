@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8DB54ABC5F
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:47:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 541D94ABE27
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:05:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353400AbiBGLff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:35:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36516 "EHLO
+        id S1391140AbiBGL6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:58:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384116AbiBGLYt (ORCPT
+        with ESMTP id S1385551AbiBGLb6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:24:49 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09C07C043188;
-        Mon,  7 Feb 2022 03:24:49 -0800 (PST)
+        Mon, 7 Feb 2022 06:31:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF23C02B5D0;
+        Mon,  7 Feb 2022 03:30:45 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9308F6077B;
-        Mon,  7 Feb 2022 11:24:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 760B5C004E1;
-        Mon,  7 Feb 2022 11:24:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CA784B80EC3;
+        Mon,  7 Feb 2022 11:30:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BAF3C004E1;
+        Mon,  7 Feb 2022 11:30:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233088;
-        bh=ax9fryblx6QV7qJ+qvkUKsP1d+CzKmmJDTBUlRRYv54=;
+        s=korg; t=1644233442;
+        bh=9q3/IOuZ6+o3g3xGCTBih0kUoMO02HHzHtG+4luzBNg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PPx9L1x7LRw6VORMg+hH5UbCS0mpDm3AfUio4zRGgbCLXfqWAkbp1PKH8easVOLJr
-         P0H3xtG7sy/oS3hM4tA9lJDSQTxFtmDG6hL9Ct6vYe+FkWgFjKIFvBCbpazrPCeyE2
-         bY/COp5Tg2APrK3wsHvUtQAe3E5Bx2quB8Qhv42E=
+        b=JeLcifOo2SJbTLPSskN5jVemGbfYP8Yn6ijrplv6uLRYrLjnXTlJMUru85Q5qXJ30
+         HwvAcv0J6iUvgQD9P2LmcddEE2f3BfSy85pvE1bYPGDiADzn8f8GKq0naOBpYEWyBC
+         PjEAkHn+IYvPepRc3INY1eJWPx7FD65kQkldis6Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alexander Sergeyev <sergeev917@gmail.com>,
+        stable@vger.kernel.org, Christian Lachner <gladiac@gmail.com>,
         Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.15 012/110] ALSA: hda: realtek: Fix race at concurrent COEF updates
+Subject: [PATCH 5.16 014/126] ALSA: hda/realtek: Add missing fixup-model entry for Gigabyte X570 ALC1220 quirks
 Date:   Mon,  7 Feb 2022 12:05:45 +0100
-Message-Id: <20220207103802.687712648@linuxfoundation.org>
+Message-Id: <20220207103804.559068497@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
-References: <20220207103802.280120990@linuxfoundation.org>
+In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
+References: <20220207103804.053675072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,148 +54,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Christian Lachner <gladiac@gmail.com>
 
-commit b837a9f5ab3bdfab9233c9f98a6bef717673a3e5 upstream.
+commit 63394a16086fc2152869d7902621e2525e14bc40 upstream.
 
-The COEF access is done with two steps: setting the index then read or
-write the data.  When multiple COEF accesses are performed
-concurrently, the index and data might be paired unexpectedly.
-In most cases, this isn't a big problem as the COEF setup is done at
-the initialization, but some dynamic changes like the mute LED may hit
-such a race.
+The initial commit of the new Gigabyte X570 ALC1220 quirks lacked the
+fixup-model entry in alc882_fixup_models[]. It seemed not to cause any ill
+effects but for completeness sake this commit makes up for that.
 
-For avoiding the racy COEF accesses, this patch introduces a new
-mutex coef_mutex to alc_spec, and wrap the COEF accessing functions
-with it.
-
-Reported-by: Alexander Sergeyev <sergeev917@gmail.com>
+Signed-off-by: Christian Lachner <gladiac@gmail.com>
 Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220111195229.a77wrpjclqwrx4bx@localhost.localdomain
-Link: https://lore.kernel.org/r/20220131075738.24323-1-tiwai@suse.de
+Link: https://lore.kernel.org/r/20220129113243.93068-2-gladiac@gmail.com
 Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/pci/hda/patch_realtek.c |   61 ++++++++++++++++++++++++++++++++++--------
- 1 file changed, 50 insertions(+), 11 deletions(-)
+ sound/pci/hda/patch_realtek.c |    1 +
+ 1 file changed, 1 insertion(+)
 
 --- a/sound/pci/hda/patch_realtek.c
 +++ b/sound/pci/hda/patch_realtek.c
-@@ -97,6 +97,7 @@ struct alc_spec {
- 	unsigned int gpio_mic_led_mask;
- 	struct alc_coef_led mute_led_coef;
- 	struct alc_coef_led mic_led_coef;
-+	struct mutex coef_mutex;
- 
- 	hda_nid_t headset_mic_pin;
- 	hda_nid_t headphone_mic_pin;
-@@ -132,8 +133,8 @@ struct alc_spec {
-  * COEF access helper functions
-  */
- 
--static int alc_read_coefex_idx(struct hda_codec *codec, hda_nid_t nid,
--			       unsigned int coef_idx)
-+static int __alc_read_coefex_idx(struct hda_codec *codec, hda_nid_t nid,
-+				 unsigned int coef_idx)
- {
- 	unsigned int val;
- 
-@@ -142,28 +143,61 @@ static int alc_read_coefex_idx(struct hd
- 	return val;
- }
- 
-+static int alc_read_coefex_idx(struct hda_codec *codec, hda_nid_t nid,
-+			       unsigned int coef_idx)
-+{
-+	struct alc_spec *spec = codec->spec;
-+	unsigned int val;
-+
-+	mutex_lock(&spec->coef_mutex);
-+	val = __alc_read_coefex_idx(codec, nid, coef_idx);
-+	mutex_unlock(&spec->coef_mutex);
-+	return val;
-+}
-+
- #define alc_read_coef_idx(codec, coef_idx) \
- 	alc_read_coefex_idx(codec, 0x20, coef_idx)
- 
--static void alc_write_coefex_idx(struct hda_codec *codec, hda_nid_t nid,
--				 unsigned int coef_idx, unsigned int coef_val)
-+static void __alc_write_coefex_idx(struct hda_codec *codec, hda_nid_t nid,
-+				   unsigned int coef_idx, unsigned int coef_val)
- {
- 	snd_hda_codec_write(codec, nid, 0, AC_VERB_SET_COEF_INDEX, coef_idx);
- 	snd_hda_codec_write(codec, nid, 0, AC_VERB_SET_PROC_COEF, coef_val);
- }
- 
-+static void alc_write_coefex_idx(struct hda_codec *codec, hda_nid_t nid,
-+				 unsigned int coef_idx, unsigned int coef_val)
-+{
-+	struct alc_spec *spec = codec->spec;
-+
-+	mutex_lock(&spec->coef_mutex);
-+	__alc_write_coefex_idx(codec, nid, coef_idx, coef_val);
-+	mutex_unlock(&spec->coef_mutex);
-+}
-+
- #define alc_write_coef_idx(codec, coef_idx, coef_val) \
- 	alc_write_coefex_idx(codec, 0x20, coef_idx, coef_val)
- 
-+static void __alc_update_coefex_idx(struct hda_codec *codec, hda_nid_t nid,
-+				    unsigned int coef_idx, unsigned int mask,
-+				    unsigned int bits_set)
-+{
-+	unsigned int val = __alc_read_coefex_idx(codec, nid, coef_idx);
-+
-+	if (val != -1)
-+		__alc_write_coefex_idx(codec, nid, coef_idx,
-+				       (val & ~mask) | bits_set);
-+}
-+
- static void alc_update_coefex_idx(struct hda_codec *codec, hda_nid_t nid,
- 				  unsigned int coef_idx, unsigned int mask,
- 				  unsigned int bits_set)
- {
--	unsigned int val = alc_read_coefex_idx(codec, nid, coef_idx);
-+	struct alc_spec *spec = codec->spec;
- 
--	if (val != -1)
--		alc_write_coefex_idx(codec, nid, coef_idx,
--				     (val & ~mask) | bits_set);
-+	mutex_lock(&spec->coef_mutex);
-+	__alc_update_coefex_idx(codec, nid, coef_idx, mask, bits_set);
-+	mutex_unlock(&spec->coef_mutex);
- }
- 
- #define alc_update_coef_idx(codec, coef_idx, mask, bits_set)	\
-@@ -196,13 +230,17 @@ struct coef_fw {
- static void alc_process_coef_fw(struct hda_codec *codec,
- 				const struct coef_fw *fw)
- {
-+	struct alc_spec *spec = codec->spec;
-+
-+	mutex_lock(&spec->coef_mutex);
- 	for (; fw->nid; fw++) {
- 		if (fw->mask == (unsigned short)-1)
--			alc_write_coefex_idx(codec, fw->nid, fw->idx, fw->val);
-+			__alc_write_coefex_idx(codec, fw->nid, fw->idx, fw->val);
- 		else
--			alc_update_coefex_idx(codec, fw->nid, fw->idx,
--					      fw->mask, fw->val);
-+			__alc_update_coefex_idx(codec, fw->nid, fw->idx,
-+						fw->mask, fw->val);
- 	}
-+	mutex_unlock(&spec->coef_mutex);
- }
- 
- /*
-@@ -1148,6 +1186,7 @@ static int alc_alloc_spec(struct hda_cod
- 	codec->spdif_status_reset = 1;
- 	codec->forced_resume = 1;
- 	codec->patch_ops = alc_patch_ops;
-+	mutex_init(&spec->coef_mutex);
- 
- 	err = alc_codec_rename_from_preset(codec);
- 	if (err < 0) {
+@@ -2660,6 +2660,7 @@ static const struct hda_model_fixup alc8
+ 	{.id = ALC882_FIXUP_NO_PRIMARY_HP, .name = "no-primary-hp"},
+ 	{.id = ALC887_FIXUP_ASUS_BASS, .name = "asus-bass"},
+ 	{.id = ALC1220_FIXUP_GB_DUAL_CODECS, .name = "dual-codecs"},
++	{.id = ALC1220_FIXUP_GB_X570, .name = "gb-x570"},
+ 	{.id = ALC1220_FIXUP_CLEVO_P950, .name = "clevo-p950"},
+ 	{}
+ };
 
 

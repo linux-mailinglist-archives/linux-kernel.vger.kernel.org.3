@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D75D34ABAA9
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:30:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11B974ABA7D
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:28:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383981AbiBGLYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:24:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58042 "EHLO
+        id S1383840AbiBGLXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:23:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382290AbiBGLSr (ORCPT
+        with ESMTP id S1382159AbiBGLS2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:18:47 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32900C0401C4;
-        Mon,  7 Feb 2022 03:18:31 -0800 (PST)
+        Mon, 7 Feb 2022 06:18:28 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF2F2C0401D4;
+        Mon,  7 Feb 2022 03:18:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B164761388;
-        Mon,  7 Feb 2022 11:18:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA264C004E1;
-        Mon,  7 Feb 2022 11:18:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A2476126D;
+        Mon,  7 Feb 2022 11:18:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F1A1C004E1;
+        Mon,  7 Feb 2022 11:18:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232710;
-        bh=eO66bblHotUaQQr6rj5DB9ysK3KxlrmkQ4Nqnmw5nrY=;
+        s=korg; t=1644232691;
+        bh=8RcvJ0iNpGXd9hhP8foxR5IlHZdwD/RWOBg4L/G1cj0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aNgiPYPUiNeTnLNAlQDrhnE6D+Qvr8C3mCVu5aQ07fErdnP0HcwWlRurXw2NABiDl
-         URV7zv+pA42O1An7Axh0pXCgQv7X47OHmt7hkqqQPn6fxwb5q8gWbJbMWQQzlQojJn
-         hTaoISrTKI413UgVNhFKq5u3WHydNTd4URs9/g3A=
+        b=1bwxGQ2ZMMZ8LEFiiO5/X4IEDRhCFsPmDJlksPH5nZcO4u9EhefMhvd/N013nqdfy
+         YsrGa9AEI3jD6S+6ZGR1A2zCR+jL1UFAp9Dukl6sdeawVfpsXVDApoHPfcEhuzDtMq
+         XjdGM8EBaC441vDYQ1F27CTK13CqrrM4qf4xxdKs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lang Yu <lang.yu@amd.com>,
-        David Hildenbrand <david@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.4 12/44] mm/kmemleak: avoid scanning potential huge holes
+        stable@vger.kernel.org, Lu Baolu <baolu.lu@linux.intel.com>,
+        Guoqing Jiang <guoqing.jiang@linux.dev>,
+        Joerg Roedel <jroedel@suse.de>
+Subject: [PATCH 4.19 65/86] iommu/vt-d: Fix potential memory leak in intel_setup_irq_remapping()
 Date:   Mon,  7 Feb 2022 12:06:28 +0100
-Message-Id: <20220207103753.556364034@linuxfoundation.org>
+Message-Id: <20220207103759.692772181@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103753.155627314@linuxfoundation.org>
-References: <20220207103753.155627314@linuxfoundation.org>
+In-Reply-To: <20220207103757.550973048@linuxfoundation.org>
+References: <20220207103757.550973048@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,121 +55,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lang Yu <lang.yu@amd.com>
+From: Guoqing Jiang <guoqing.jiang@linux.dev>
 
-commit c10a0f877fe007021d70f9cada240f42adc2b5db upstream.
+commit 99e675d473eb8cf2deac1376a0f840222fc1adcf upstream.
 
-When using devm_request_free_mem_region() and devm_memremap_pages() to
-add ZONE_DEVICE memory, if requested free mem region's end pfn were
-huge(e.g., 0x400000000), the node_end_pfn() will be also huge (see
-move_pfn_range_to_zone()).  Thus it creates a huge hole between
-node_start_pfn() and node_end_pfn().
+After commit e3beca48a45b ("irqdomain/treewide: Keep firmware node
+unconditionally allocated"). For tear down scenario, fn is only freed
+after fail to allocate ir_domain, though it also should be freed in case
+dmar_enable_qi returns error.
 
-We found on some AMD APUs, amdkfd requested such a free mem region and
-created a huge hole.  In such a case, following code snippet was just
-doing busy test_bit() looping on the huge hole.
+Besides free fn, irq_domain and ir_msi_domain need to be removed as well
+if intel_setup_irq_remapping fails to enable queued invalidation.
 
-  for (pfn = start_pfn; pfn < end_pfn; pfn++) {
-	struct page *page = pfn_to_online_page(pfn);
-		if (!page)
-			continue;
-	...
-  }
+Improve the rewinding path by add out_free_ir_domain and out_free_fwnode
+lables per Baolu's suggestion.
 
-So we got a soft lockup:
-
-  watchdog: BUG: soft lockup - CPU#6 stuck for 26s! [bash:1221]
-  CPU: 6 PID: 1221 Comm: bash Not tainted 5.15.0-custom #1
-  RIP: 0010:pfn_to_online_page+0x5/0xd0
-  Call Trace:
-    ? kmemleak_scan+0x16a/0x440
-    kmemleak_write+0x306/0x3a0
-    ? common_file_perm+0x72/0x170
-    full_proxy_write+0x5c/0x90
-    vfs_write+0xb9/0x260
-    ksys_write+0x67/0xe0
-    __x64_sys_write+0x1a/0x20
-    do_syscall_64+0x3b/0xc0
-    entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-I did some tests with the patch.
-
-(1) amdgpu module unloaded
-
-before the patch:
-
-  real    0m0.976s
-  user    0m0.000s
-  sys     0m0.968s
-
-after the patch:
-
-  real    0m0.981s
-  user    0m0.000s
-  sys     0m0.973s
-
-(2) amdgpu module loaded
-
-before the patch:
-
-  real    0m35.365s
-  user    0m0.000s
-  sys     0m35.354s
-
-after the patch:
-
-  real    0m1.049s
-  user    0m0.000s
-  sys     0m1.042s
-
-Link: https://lkml.kernel.org/r/20211108140029.721144-1-lang.yu@amd.com
-Signed-off-by: Lang Yu <lang.yu@amd.com>
-Acked-by: David Hildenbrand <david@redhat.com>
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Oscar Salvador <osalvador@suse.de>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Fixes: e3beca48a45b ("irqdomain/treewide: Keep firmware node unconditionally allocated")
+Suggested-by: Lu Baolu <baolu.lu@linux.intel.com>
+Signed-off-by: Guoqing Jiang <guoqing.jiang@linux.dev>
+Link: https://lore.kernel.org/r/20220119063640.16864-1-guoqing.jiang@linux.dev
+Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+Link: https://lore.kernel.org/r/20220128031002.2219155-3-baolu.lu@linux.intel.com
+Signed-off-by: Joerg Roedel <jroedel@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/kmemleak.c |   13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+ drivers/iommu/intel_irq_remapping.c |   13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
---- a/mm/kmemleak.c
-+++ b/mm/kmemleak.c
-@@ -1399,7 +1399,8 @@ static void kmemleak_scan(void)
- {
- 	unsigned long flags;
- 	struct kmemleak_object *object;
--	int i;
-+	struct zone *zone;
-+	int __maybe_unused i;
- 	int new_leaks = 0;
+--- a/drivers/iommu/intel_irq_remapping.c
++++ b/drivers/iommu/intel_irq_remapping.c
+@@ -543,9 +543,8 @@ static int intel_setup_irq_remapping(str
+ 					    fn, &intel_ir_domain_ops,
+ 					    iommu);
+ 	if (!iommu->ir_domain) {
+-		irq_domain_free_fwnode(fn);
+ 		pr_err("IR%d: failed to allocate irqdomain\n", iommu->seq_id);
+-		goto out_free_bitmap;
++		goto out_free_fwnode;
+ 	}
+ 	iommu->ir_msi_domain =
+ 		arch_create_remap_msi_irq_domain(iommu->ir_domain,
+@@ -569,7 +568,7 @@ static int intel_setup_irq_remapping(str
  
- 	jiffies_last_scan = jiffies;
-@@ -1439,9 +1440,9 @@ static void kmemleak_scan(void)
- 	 * Struct page scanning for each node.
- 	 */
- 	get_online_mems();
--	for_each_online_node(i) {
--		unsigned long start_pfn = node_start_pfn(i);
--		unsigned long end_pfn = node_end_pfn(i);
-+	for_each_populated_zone(zone) {
-+		unsigned long start_pfn = zone->zone_start_pfn;
-+		unsigned long end_pfn = zone_end_pfn(zone);
- 		unsigned long pfn;
+ 		if (dmar_enable_qi(iommu)) {
+ 			pr_err("Failed to enable queued invalidation\n");
+-			goto out_free_bitmap;
++			goto out_free_ir_domain;
+ 		}
+ 	}
  
- 		for (pfn = start_pfn; pfn < end_pfn; pfn++) {
-@@ -1450,8 +1451,8 @@ static void kmemleak_scan(void)
- 			if (!page)
- 				continue;
+@@ -593,6 +592,14 @@ static int intel_setup_irq_remapping(str
  
--			/* only scan pages belonging to this node */
--			if (page_to_nid(page) != i)
-+			/* only scan pages belonging to this zone */
-+			if (page_zone(page) != zone)
- 				continue;
- 			/* only scan if page is in use */
- 			if (page_count(page) == 0)
+ 	return 0;
+ 
++out_free_ir_domain:
++	if (iommu->ir_msi_domain)
++		irq_domain_remove(iommu->ir_msi_domain);
++	iommu->ir_msi_domain = NULL;
++	irq_domain_remove(iommu->ir_domain);
++	iommu->ir_domain = NULL;
++out_free_fwnode:
++	irq_domain_free_fwnode(fn);
+ out_free_bitmap:
+ 	kfree(bitmap);
+ out_free_pages:
 
 

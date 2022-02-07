@@ -2,129 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 884AF4ACDB6
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:18:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9798E4ACD76
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:08:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245516AbiBHBGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 20:06:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47126 "EHLO
+        id S1343853AbiBHBG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 20:06:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232070AbiBGXxb (ORCPT
+        with ESMTP id S1343872AbiBHAA7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 18:53:31 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8026C061355
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 15:53:30 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id r19so45741pfh.6
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 15:53:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Dexw4mp88eho1hqWPLMgXA0V6dq/NOSshXT4P+meRXI=;
-        b=I5tbVd2tNRwEgyv1OaBRfTc0g38c7M8Uvsss+AWjzCTWD7GPF/2/a4fc+2QjbgPw+s
-         zVIC/jUvUMoaybysLG+yUXMp0YXxZxpS73gAIiOKOptsX4M/AJS7xVXvSDaREWoFtK7r
-         S//J2YHVt8vV0k7hhWfB2g9rvTPTmG1RMaTGXSadAV0JQrV4HPNtFG3Ms0KvfoeMiyoT
-         BEVjmOEZvFoQyHEvULInwQL2z5RWYRs//wuIeNnwjpxAkaBaDx0cDRTqnK+7IkAAzjRC
-         alRg+EZmzsHtpYroe8e+vGm4xUB0MB3da2u+YbGfPEXYjQGk1QN1tLvtiCgjUOpQ4H6F
-         FGqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Dexw4mp88eho1hqWPLMgXA0V6dq/NOSshXT4P+meRXI=;
-        b=PKh1/qIfZ1ZqQXuEHyiUyvFbrboSytw4P4NeN53vk1TpRyl3u/FDsaOZILee8/XtIY
-         TTkWmGfxB+B76FQRV+SjBfY9Y1oOBMCS4bSNMuv/o6UBEUi5Va/8ygEYW5sbewF5Q/FA
-         CDoXY3uw2lst9hYI73aB2tLkx+QgGwIComAmvHOWAz+3a6CF9zFGzMWuTjQ1EbC+0LOo
-         KxnvLIwzH8Tu2xpzkThpaoT0WqymDzfCS9oc4vkdgUDGmKNz7dsQslc8K6+oj2+UTP/r
-         zQILpdzpbS04q2rubkuaZby0emVffQytsd+y86FLXDCvVUApSWqsd5Ci2xpUMp+k3JIV
-         Yp+w==
-X-Gm-Message-State: AOAM532VaOVeKMmsJHsTfWzbhl0kpMYte+W+X4m/SFm7ZnyhP60Ew8MP
-        +LrVvfXyXh24WFJ+TCrhfnkLCkxTiHns6oJpWiG0hFHM9I8=
-X-Google-Smtp-Source: ABdhPJxWliv+yfnKc0HU0BceLJDPP06+fnjL+v5N68nTmEu4T/ZBxC+x0b5KHflpht3+4et0fqJ5bUl2AlIlOLTNOkk=
-X-Received: by 2002:a65:5943:: with SMTP id g3mr1447475pgu.3.1644278010062;
- Mon, 07 Feb 2022 15:53:30 -0800 (PST)
+        Mon, 7 Feb 2022 19:00:59 -0500
+X-Greylist: delayed 406 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 16:00:55 PST
+Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1FCC0612A4;
+        Mon,  7 Feb 2022 16:00:55 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.west.internal (Postfix) with ESMTP id 5FB362B001F4;
+        Mon,  7 Feb 2022 18:54:06 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Mon, 07 Feb 2022 18:54:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; bh=7T1gb9q/dG3+e+
+        HVYc4URRtl0zI51K/MI/cYy1EcerM=; b=SDYv224gBZ5TT66LpyAI9ivK3tYsVZ
+        GBDiKxzdAELBE+LHIad5qxjwoVvgShjRZqvs1T+iE1ug4DfXaHnPXWqu3w3dW6iS
+        VWYhOUl/EqRiKCBjT+8acRD/NDUoFmg5rDbRyxEem25KtRpeEtsIn3OmVvQ1o06O
+        /uqL4Hxvu1eOldEvKivAb8tYgEdUAQSxU1Mkq6qXmntsEwnrRGo26NV31u68KB62
+        pUUkKRlaMcTRtlWJ21rw2p46tK/w0LVXTHjN6vY6X7GLaePGA86U3dyc2+cE58bi
+        p4llC4FgLAdhQXgDDIqSD7J/XMQiPkeJqz7AKEjiOTDKs39DBr95K10g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; bh=7T1gb9q/dG3+e+HVYc4URRtl0zI51K/MI/cYy1Ece
+        rM=; b=dLl3ZpuPFU64fHFzudMdRGhNEh23o8k+blqkqXrk485ZDHglhYjDWyueC
+        5REvXvS1FtUvdEeK4if4sRQffIpOKH7TEaO+zUNr+oqz4k5vHKGcV3VWNNpmM1mx
+        NX5EkDA1FyaHWQTEKowbGpsbqvyhCJM9q55+c3e1dOLBzDS4VXQQM2f0ZrUZ3vnL
+        m4BPwW+hlb7MdHrWwZc6R/Pq7jca+ihKDFWK59yYtCMUr5CdDixJsYXdhTX9L/es
+        yqH0pAQTvLaBul6yAU/SIpiJLEYxfAGmIw6zcqG7DMHNGiLMp1yDaSbNwN/o/Gmz
+        H2HlSD5bqBi3RplwL/SnkD0wD0KUQ==
+X-ME-Sender: <xms:HLEBYg6jw33gP6tAXBkbbBPNm4gGLbfE98ysR-hGoL_Ozu60Rylstw>
+    <xme:HLEBYh4dqQ3adV6Qd1t2gCrgiDnlBoAzzy10EMDTx_34cils8jIJ2dFvr7LpOjpgw
+    OkkCQNwtrwns3djTA>
+X-ME-Received: <xmr:HLEBYvexMpT1Ym7Mbdz_UUlt-gJcQg9yRVtICaIGsb8uWm1ySPLnl9dFPKc6UB_tgm8zQRI_kif1DqEn5HzNmLdboZvH6x0-qMysB0BXYv2pXglTTIPAfvhT_w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrheeigddugecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefuvfhfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghmuhgv
+    lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtf
+    frrghtthgvrhhnpefgveffteelheffjeeukedvkedviedtheevgeefkeehueeiieeuteeu
+    gfettdeggeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:HLEBYlIcESxYubPnsfJoYBFrpQV7Eca9oPiwAtrBPV0poWN-8a0Tew>
+    <xmx:HLEBYkJ_lpYGg0JrkD8SfUuIEutebjO3VnO7aYSFpLvmu_rCRQzf0w>
+    <xmx:HLEBYmwXKGJNpft6ZS79msn9_tfLg7HwdqRIBM_EBdjbuyZTxtrRXg>
+    <xmx:HbEBYnZPQRdSjNs7ec0qiolHyDVZ8LMFS3OghivBTbNnBGrprWFMS9OcNV8>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 7 Feb 2022 18:54:03 -0500 (EST)
+Subject: Re: (subset) [PATCH v3 5/6] clk: sunxi-ng: Add support for the sun6i
+ RTC clocks
+To:     Maxime Ripard <maxime@cerno.tech>, Chen-Yu Tsai <wens@csie.org>,
+        linux-sunxi@lists.linux.dev, Maxime Ripard <mripard@kernel.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Alessandro Zummo <a.zummo@towertech.it>
+References: <20220203021736.13434-1-samuel@sholland.org>
+ <20220203021736.13434-6-samuel@sholland.org>
+ <164422443570.21572.13511859513410998733.b4-ty@cerno.tech>
+From:   Samuel Holland <samuel@sholland.org>
+Message-ID: <bb05bc64-2a9e-fe21-5a69-0ea31134e978@sholland.org>
+Date:   Mon, 7 Feb 2022 17:54:02 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-References: <20220204115718.14934-1-pbonzini@redhat.com> <YgGmgMMR0dBmjW86@google.com>
- <YgGq31edopd6RMts@google.com>
-In-Reply-To: <YgGq31edopd6RMts@google.com>
-From:   David Matlack <dmatlack@google.com>
-Date:   Mon, 7 Feb 2022 15:53:03 -0800
-Message-ID: <CALzav=d05sMd=ARkV+GMf9SkxKcg9c9n5ttb274M2fZrP27PDA@mail.gmail.com>
-Subject: Re: [PATCH 00/23] KVM: MMU: MMU role refactoring
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <164422443570.21572.13511859513410998733.b4-ty@cerno.tech>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 7, 2022 at 3:27 PM Sean Christopherson <seanjc@google.com> wrote:
->
-> On Mon, Feb 07, 2022, David Matlack wrote:
-> > On Fri, Feb 04, 2022 at 06:56:55AM -0500, Paolo Bonzini wrote:
-> > > The TDP MMU has a performance regression compared to the legacy
-> > > MMU when CR0 changes often.  This was reported for the grsecurity
-> > > kernel, which uses CR0.WP to implement kernel W^X.  In that case,
-> > > each change to CR0.WP unloads the MMU and causes a lot of unnecessary
-> > > work.  When running nested, this can even cause the L1 to hardly
-> > > make progress, as the L0 hypervisor it is overwhelmed by the amount
-> > > of MMU work that is needed.
-> > >
-> > > The root cause of the issue is that the "MMU role" in KVM is a mess
-> > > that mixes the CPU setup (CR0/CR4/EFER, SMM, guest mode, etc.)
-> > > and the shadow page table format.  Whenever something is different
-> > > between the MMU and the CPU, it is stored as an extra field in struct
-> > > kvm_mmu---and for extra bonus complication, sometimes the same thing
-> > > is stored in both the role and an extra field.
-> > >
-> > > So, this is the "no functional change intended" part of the changes
-> > > required to fix the performance regression.  It separates neatly
-> > > the shadow page table format ("MMU role") from the guest page table
-> > > format ("CPU role"), and removes the duplicate fields.
-> >
-> > What do you think about calling this the guest_role instead of cpu_role?
-> > There is a bit of a precedent for using "guest" instead of "cpu" already
-> > for this type of concept (e.g. guest_walker), and I find it more
-> > intuitive.
->
-> Haven't looked at the series yet, but I'd prefer not to use guest_role, it's
-> too similar to is_guest_mode() and kvm_mmu_role.guest_mode.  E.g. we'd end up with
->
->   static union kvm_mmu_role kvm_calc_guest_role(struct kvm_vcpu *vcpu,
->                                               const struct kvm_mmu_role_regs *regs)
->   {
->         union kvm_mmu_role role = {0};
->
->         role.base.access = ACC_ALL;
->         role.base.smm = is_smm(vcpu);
->         role.base.guest_mode = is_guest_mode(vcpu);
->         role.base.direct = !____is_cr0_pg(regs);
->
->         ...
->   }
->
-> and possibly
->
->         if (guest_role.guest_mode)
->                 ...
->
-> which would be quite messy.  Maybe vcpu_role if cpu_role isn't intuitive?
+Hi Maxime,
 
-I agree it's a little odd. But actually it's somewhat intuitive (the
-guest is in guest-mode, i.e. we're running a nested guest).
+On 2/7/22 3:00 AM, Maxime Ripard wrote:
+> On Wed, 2 Feb 2022 20:17:35 -0600, Samuel Holland wrote:
+>> The RTC power domain in sun6i and newer SoCs manages the 16 MHz RC
+>> oscillator (called "IOSC" or "osc16M") and the optional 32 kHz crystal
+>> oscillator (called "LOSC" or "osc32k"). Starting with the H6, this power
+>> domain also handles the 24 MHz DCXO (called variously "HOSC", "dcxo24M",
+>> or "osc24M") as well. The H6 also adds a calibration circuit for IOSC.
+>>
+>> Later SoCs introduce further variations on the design:
+>>  - H616 adds an additional mux for the 32 kHz fanout source.
+>>  - R329 adds an additional mux for the RTC timekeeping clock, a clock
+>>    for the SPI bus between power domains inside the RTC, and removes the
+>>    IOSC calibration functionality.
+>>
+>> [...]
+> 
+> Applied to local tree (sunxi/clk-for-5.18).
 
-Ok I'm stretching a little bit :). But if the trade-off is just
-"guest_role.guest_mode" requires a clarifying comment, but the rest of
-the code gets more readable (cpu_role is used a lot more than
-role.guest_mode), it still might be worth it.
+Part of the build failures were because this patch depends on patch 3. Is that
+okay, or should I update this patch to be independent?
+
+Regards,
+Samuel

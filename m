@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49FE24ABBF4
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:44:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F42104ABC33
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:45:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386353AbiBGLe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:34:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35174 "EHLO
+        id S1384986AbiBGLaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:30:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383684AbiBGLXY (ORCPT
+        with ESMTP id S1356968AbiBGLUM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:23:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02F3FC0401F0;
-        Mon,  7 Feb 2022 03:23:21 -0800 (PST)
+        Mon, 7 Feb 2022 06:20:12 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B584C0401E2;
+        Mon,  7 Feb 2022 03:20:03 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9271E6126D;
-        Mon,  7 Feb 2022 11:23:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F859C004E1;
-        Mon,  7 Feb 2022 11:23:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AF13561388;
+        Mon,  7 Feb 2022 11:20:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D26DC004E1;
+        Mon,  7 Feb 2022 11:20:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233000;
-        bh=tvZEM60YYnpiLaqprdHNK3Tb+A8gmqs5ag5ZSNH2XMU=;
+        s=korg; t=1644232802;
+        bh=ea+hcjM0+kOavuGX3yikwa9yDCSL8uxSQ/4hJSNZOyg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Mo+Fahqc6Qjr1l4+HpPxpX2Mm2v61A4tBu1eTDM2jYcDkl4Y9vCaY3mFBg6f8Urhe
-         uE8jUEriMVE+UKxa19Eesz6OC83jZQLVt+Rw81YS2b7GnFCOpLO6rNZq4MHtC1E5bN
-         Ia9EIfWPjMTaIMxwQhYC2SKnwJka01vWBEENa0AU=
+        b=GzDWOB6OkBYfTlfTwtWSzWbuCtRicCAfn+K8NFqgwBLcZytgYZR0Tz32xQFzv4A93
+         TBm8wux878KbJg4z0U3I1qgLK6Xx0QbAFGiR9XewipI/W7pHaBloFSOM9BRW01rnU7
+         h5r6JPuKc7g5/5cal7kUIBhVhhxj6KkF1BdYjsdA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Riwen Lu <luriwen@kylinos.cn>,
-        Eric Wong <e@80x24.org>,
-        =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: [PATCH 5.10 59/74] rtc: cmos: Evaluate century appropriate
+        stable@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Borislav Petkov <bp@suse.de>, Dinh Nguyen <dinguyen@kernel.org>
+Subject: [PATCH 5.4 41/44] EDAC/altera: Fix deferred probing
 Date:   Mon,  7 Feb 2022 12:06:57 +0100
-Message-Id: <20220207103759.158334607@linuxfoundation.org>
+Message-Id: <20220207103754.491070360@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103757.232676988@linuxfoundation.org>
-References: <20220207103757.232676988@linuxfoundation.org>
+In-Reply-To: <20220207103753.155627314@linuxfoundation.org>
+References: <20220207103753.155627314@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,43 +54,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Riwen Lu <luriwen@kylinos.cn>
+From: Sergey Shtylyov <s.shtylyov@omp.ru>
 
-commit ff164ae39b82ee483b24579c8e22a13a8ce5bd04 upstream.
+commit 279eb8575fdaa92c314a54c0d583c65e26229107 upstream.
 
-There's limiting the year to 2069. When setting the rtc year to 2070,
-reading it returns 1970. Evaluate century starting from 19 to count the
-correct year.
+The driver overrides the error codes returned by platform_get_irq() to
+-ENODEV for some strange reason, so if it returns -EPROBE_DEFER, the
+driver will fail the probe permanently instead of the deferred probing.
+Switch to propagating the proper error codes to platform driver code
+upwards.
 
-$ sudo date -s 20700106
-Mon 06 Jan 2070 12:00:00 AM CST
-$ sudo hwclock -w
-$ sudo hwclock -r
-1970-01-06 12:00:49.604968+08:00
+  [ bp: Massage commit message. ]
 
-Fixes: 2a4daadd4d3e5071 ("rtc: cmos: ignore bogus century byte")
-
-Signed-off-by: Riwen Lu <luriwen@kylinos.cn>
-Acked-by: Eric Wong <e@80x24.org>
-Reviewed-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Link: https://lore.kernel.org/r/20220106084609.1223688-1-luriwen@kylinos.cn
-Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl> # preparation for stable
+Fixes: 71bcada88b0f ("edac: altera: Add Altera SDRAM EDAC support")
+Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Acked-by: Dinh Nguyen <dinguyen@kernel.org>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220124185503.6720-2-s.shtylyov@omp.ru
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/rtc/rtc-mc146818-lib.c |    2 +-
+ drivers/edac/altera_edac.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/rtc/rtc-mc146818-lib.c
-+++ b/drivers/rtc/rtc-mc146818-lib.c
-@@ -83,7 +83,7 @@ unsigned int mc146818_get_time(struct rt
- 	time->tm_year += real_year - 72;
- #endif
+--- a/drivers/edac/altera_edac.c
++++ b/drivers/edac/altera_edac.c
+@@ -349,7 +349,7 @@ static int altr_sdram_probe(struct platf
+ 	if (irq < 0) {
+ 		edac_printk(KERN_ERR, EDAC_MC,
+ 			    "No irq %d in DT\n", irq);
+-		return -ENODEV;
++		return irq;
+ 	}
  
--	if (century > 20)
-+	if (century > 19)
- 		time->tm_year += (century - 19) * 100;
- 
- 	/*
+ 	/* Arria10 has a 2nd IRQ */
 
 

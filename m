@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1170D4ACCF1
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:06:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4C574ACCF0
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:06:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244957AbiBHBDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 20:03:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35610 "EHLO
+        id S1344557AbiBHBDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 20:03:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245429AbiBGXD2 (ORCPT
+        with ESMTP id S245439AbiBGXD3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 18:03:28 -0500
+        Mon, 7 Feb 2022 18:03:29 -0500
 Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B981C061355
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D53E7C06109E
         for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 15:03:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1644275008; x=1675811008;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=ZQuX/1pAiBPvBMAccFCq7xa5FLVExUm2Q9ePeODXOtk=;
-  b=SKs62tmIVcjwb0eMnIX0peBq2WYQNZIG5/PdO/LsRYwJcowtHffnn8+R
-   sL9AN/FyR33ic6NrNn/b9qho9Vq/rX73dbR50cpfiaIDRNm1x01By4mYA
-   ilSl2z+kI0PYM05FIXZ079yOmLQJpCvIwmQBr+/rCGeTpDobtu72o+/R2
-   6fqRcL+U88kLO12SWVybyvoW4WdzD5vnyrU6/cvmhWdXghzdBbs+q3eXS
-   1TAZ/5Ta4h8I9ufU672xR8wHz0a3fYgwH3db9JGRPh9oi1xiDySzkxRtP
-   8L5TfLuodKcqqneGCNt5U4OhvUpRETKocyya/rDd8B7lOHsDzbTgcA2e5
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="229475005"
+  bh=plQnU2Dc8OE22hr3S5V59pRVLYmGY5GOp2NaA2zkwW8=;
+  b=Z4S+LZSxcLCwQ72ADp+UrqTAn4RsTuAKdhTw9/qEaGf4OGTFeNg50J4g
+   5H02OEdZcJqoWTA0jYjtm2vLZtMr9IpPXUuo9DVHYKLuevRbYR9Ekiy7X
+   7fUL1UjwFmF8eARNVMap4hBDYxddIjHoBMFSLwrTfBEpw6RXjXNH2vZXj
+   AP4y2Ns2GN4BYRsncxBxdA9Dqz3OBVyLXn1MVkQR+vLNKznvMH2qQCU0L
+   RKXTbOnTkYYiB+NOd6EhvAupUfbfFytD7XcTeCn8cQWLmFhjx3j7BHIeD
+   fbfeZSE+bIeuXdlTOVO4EWyawg2QLFbqzCfFwf8vd+hjH7aWYJhOV/SmJ
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="229475009"
 X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
-   d="scan'208";a="229475005"
+   d="scan'208";a="229475009"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 15:03:02 -0800
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 15:03:03 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
-   d="scan'208";a="540324016"
+   d="scan'208";a="540324030"
 Received: from otcwcpicx3.sc.intel.com ([172.25.55.73])
   by orsmga008.jf.intel.com with ESMTP; 07 Feb 2022 15:03:02 -0800
 From:   Fenghua Yu <fenghua.yu@intel.com>
@@ -54,9 +54,9 @@ To:     "Thomas Gleixner" <tglx@linutronix.de>,
 Cc:     iommu@lists.linux-foundation.org, "x86" <x86@kernel.org>,
         "linux-kernel" <linux-kernel@vger.kernel.org>,
         Fenghua Yu <fenghua.yu@intel.com>
-Subject: [PATCH v4 02/11] mm: Change CONFIG option for mm->pasid field
-Date:   Mon,  7 Feb 2022 15:02:45 -0800
-Message-Id: <20220207230254.3342514-3-fenghua.yu@intel.com>
+Subject: [PATCH v4 03/11] iommu/ioasid: Introduce a helper to check for valid PASIDs
+Date:   Mon,  7 Feb 2022 15:02:46 -0800
+Message-Id: <20220207230254.3342514-4-fenghua.yu@intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220207230254.3342514-1-fenghua.yu@intel.com>
 References: <20220207230254.3342514-1-fenghua.yu@intel.com>
@@ -72,12 +72,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This currently depends on CONFIG_IOMMU_SUPPORT. But it is only
-needed when CONFIG_IOMMU_SVA option is enabled.
+pasid_valid() is defined to check if a given PASID is valid.
 
-Change the CONFIG guards around definition and initialization
-of mm->pasid field.
-
+Suggested-by: Ashok Raj <ashok.raj@intel.com>
 Suggested-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
 Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
 Reviewed-by: Tony Luck <tony.luck@intel.com>
@@ -87,38 +84,37 @@ v4:
 - Add "Reviewed-by: Thomas Gleixner <tglx@linutronix.de>" (Thomas).
 
 v2:
-- Change condition to more accurate CONFIG_IOMMU_SVA (Jacob and Tony)
+- Define a helper pasid_valid() (Ashok, Jacob, Thomas, Tony)
 
- include/linux/mm_types.h | 2 +-
- kernel/fork.c            | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ include/linux/ioasid.h | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index 5140e5feb486..c5cbfd7915ad 100644
---- a/include/linux/mm_types.h
-+++ b/include/linux/mm_types.h
-@@ -631,7 +631,7 @@ struct mm_struct {
- #endif
- 		struct work_struct async_put_work;
+diff --git a/include/linux/ioasid.h b/include/linux/ioasid.h
+index e9dacd4b9f6b..2237f64dbaae 100644
+--- a/include/linux/ioasid.h
++++ b/include/linux/ioasid.h
+@@ -41,6 +41,10 @@ void *ioasid_find(struct ioasid_set *set, ioasid_t ioasid,
+ int ioasid_register_allocator(struct ioasid_allocator_ops *allocator);
+ void ioasid_unregister_allocator(struct ioasid_allocator_ops *allocator);
+ int ioasid_set_data(ioasid_t ioasid, void *data);
++static inline bool pasid_valid(ioasid_t ioasid)
++{
++	return ioasid != INVALID_IOASID;
++}
  
--#ifdef CONFIG_IOMMU_SUPPORT
-+#ifdef CONFIG_IOMMU_SVA
- 		u32 pasid;
- #endif
- 	} __randomize_layout;
-diff --git a/kernel/fork.c b/kernel/fork.c
-index d75a528f7b21..6ee7551d3bd2 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -1021,7 +1021,7 @@ static void mm_init_owner(struct mm_struct *mm, struct task_struct *p)
- 
- static void mm_init_pasid(struct mm_struct *mm)
- {
--#ifdef CONFIG_IOMMU_SUPPORT
-+#ifdef CONFIG_IOMMU_SVA
- 	mm->pasid = INIT_PASID;
- #endif
+ #else /* !CONFIG_IOASID */
+ static inline ioasid_t ioasid_alloc(struct ioasid_set *set, ioasid_t min,
+@@ -78,5 +82,10 @@ static inline int ioasid_set_data(ioasid_t ioasid, void *data)
+ 	return -ENOTSUPP;
  }
+ 
++static inline bool pasid_valid(ioasid_t ioasid)
++{
++	return false;
++}
++
+ #endif /* CONFIG_IOASID */
+ #endif /* __LINUX_IOASID_H */
 -- 
 2.35.1
 

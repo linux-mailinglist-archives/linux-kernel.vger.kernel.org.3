@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD2B04AB9AA
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:24:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A93874ABCF8
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:55:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380571AbiBGLQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:16:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54532 "EHLO
+        id S1388451AbiBGLnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:43:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379698AbiBGLQP (ORCPT
+        with ESMTP id S1385743AbiBGLcW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:16:15 -0500
+        Mon, 7 Feb 2022 06:32:22 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D926C043189;
-        Mon,  7 Feb 2022 03:16:13 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44084C0401C0;
+        Mon,  7 Feb 2022 03:32:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F51B6113B;
-        Mon,  7 Feb 2022 11:16:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F1B3C004E1;
-        Mon,  7 Feb 2022 11:16:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CAB5F60C8E;
+        Mon,  7 Feb 2022 11:32:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A75FC004E1;
+        Mon,  7 Feb 2022 11:32:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232572;
-        bh=F9nM7RC2KedaKUX+hil3fXIdjk9e2x621P2GLnez9Eo=;
+        s=korg; t=1644233541;
+        bh=lQLt55YV7KRT1YQaDNzbRPxe1nnNFn1F6OImQ/QhjhU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IzmuKsiQzbvB537vUoUqWs6PuSxNoujvRVzqKljLDE1wM2PhmaWDktfiDDj1NOSDG
-         W9LUkgz0EvGwlHE5VZodToB32sEKqhTnX8eSvq9MusdqXAJiJ8srv2utFoNkMlm9zI
-         JYVNmRo+Nf/xFhnctehPn6rbzr/DRHuUCWlrRElw=
+        b=Po0+TQeNXbuz2YREVx/MdCUjaX8E2GUek+Awkz3oK1m4q70j8YBG3wv2ns+SAcxWW
+         WfhWJ1iPYJ2QRQkQGAQdU7E7m8H/psJihWRpOQbqxLo4TafN4Ew+0O+XXRnEw2tjc4
+         8MAeX5QznbsMqtcKKnYtFs9F1Nci9b7JfJxmgzw8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Jiri Pirko <jiri@nvidia.com>, Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.19 52/86] rtnetlink: make sure to refresh master_dev/m_ops in __rtnl_newlink()
+        stable@vger.kernel.org,
+        Mayuresh Chitale <mchitale@ventanamicro.com>,
+        Anup Patel <anup@brainfault.org>
+Subject: [PATCH 5.16 044/126] RISC-V: KVM: make CY, TM, and IR counters accessible in VU mode
 Date:   Mon,  7 Feb 2022 12:06:15 +0100
-Message-Id: <20220207103759.263872926@linuxfoundation.org>
+Message-Id: <20220207103805.643776076@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103757.550973048@linuxfoundation.org>
-References: <20220207103757.550973048@linuxfoundation.org>
+In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
+References: <20220207103804.053675072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,48 +55,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Mayuresh Chitale <mchitale@ventanamicro.com>
 
-commit c6f6f2444bdbe0079e41914a35081530d0409963 upstream.
+commit de1d7b6a51dab546160d252e47baa54adf104d4a upstream.
 
-While looking at one unrelated syzbot bug, I found the replay logic
-in __rtnl_newlink() to potentially trigger use-after-free.
+Those applications that run in VU mode and access the time CSR cause
+a virtual instruction trap as Guest kernel currently does not
+initialize the scounteren CSR.
 
-It is better to clear master_dev and m_ops inside the loop,
-in case we have to replay it.
+To fix this, we should make CY, TM, and IR counters accessibile
+by default in VU mode (similar to OpenSBI).
 
-Fixes: ba7d49b1f0f8 ("rtnetlink: provide api for getting and setting slave info")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Cc: Jiri Pirko <jiri@nvidia.com>
-Link: https://lore.kernel.org/r/20220201012106.216495-1-eric.dumazet@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: a33c72faf2d73 ("RISC-V: KVM: Implement VCPU create, init and
+destroy functions")
+Cc: stable@vger.kernel.org
+Signed-off-by: Mayuresh Chitale <mchitale@ventanamicro.com>
+Signed-off-by: Anup Patel <anup@brainfault.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/core/rtnetlink.c |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ arch/riscv/kvm/vcpu.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/net/core/rtnetlink.c
-+++ b/net/core/rtnetlink.c
-@@ -2942,9 +2942,9 @@ static int rtnl_newlink(struct sk_buff *
+--- a/arch/riscv/kvm/vcpu.c
++++ b/arch/riscv/kvm/vcpu.c
+@@ -74,6 +74,7 @@ int kvm_arch_vcpu_precreate(struct kvm *
+ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
  {
- 	struct net *net = sock_net(skb->sk);
- 	const struct rtnl_link_ops *ops;
--	const struct rtnl_link_ops *m_ops = NULL;
-+	const struct rtnl_link_ops *m_ops;
- 	struct net_device *dev;
--	struct net_device *master_dev = NULL;
-+	struct net_device *master_dev;
- 	struct ifinfomsg *ifm;
- 	char kind[MODULE_NAME_LEN];
- 	char ifname[IFNAMSIZ];
-@@ -2979,6 +2979,8 @@ replay:
- 			dev = NULL;
- 	}
+ 	struct kvm_cpu_context *cntx;
++	struct kvm_vcpu_csr *reset_csr = &vcpu->arch.guest_reset_csr;
  
-+	master_dev = NULL;
-+	m_ops = NULL;
- 	if (dev) {
- 		master_dev = netdev_master_upper_dev_get(dev);
- 		if (master_dev)
+ 	/* Mark this VCPU never ran */
+ 	vcpu->arch.ran_atleast_once = false;
+@@ -89,6 +90,9 @@ int kvm_arch_vcpu_create(struct kvm_vcpu
+ 	cntx->hstatus |= HSTATUS_SPVP;
+ 	cntx->hstatus |= HSTATUS_SPV;
+ 
++	/* By default, make CY, TM, and IR counters accessible in VU mode */
++	reset_csr->scounteren = 0x7;
++
+ 	/* Setup VCPU timer */
+ 	kvm_riscv_vcpu_timer_init(vcpu);
+ 
 
 

@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 825194ABA0C
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:26:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9674B4ABA5A
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:28:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383354AbiBGLWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:22:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55372 "EHLO
+        id S234084AbiBGLZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:25:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381889AbiBGLRk (ORCPT
+        with ESMTP id S1382481AbiBGLTU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:17:40 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8962CC03E954;
-        Mon,  7 Feb 2022 03:17:34 -0800 (PST)
+        Mon, 7 Feb 2022 06:19:20 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16F3C043188;
+        Mon,  7 Feb 2022 03:19:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2E87DB811B2;
-        Mon,  7 Feb 2022 11:17:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 782D5C004E1;
-        Mon,  7 Feb 2022 11:17:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3A02BB81028;
+        Mon,  7 Feb 2022 11:19:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B311C004E1;
+        Mon,  7 Feb 2022 11:19:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232651;
-        bh=07DXET1mUt27c2qdzB5vxavcElMoUr/eGhq3NzQRh/A=;
+        s=korg; t=1644232757;
+        bh=P0lrcZEgh8hsPsHCOTaIbX26/xGUq6E+ZqOZeIfDWz0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iY1OjOFF4YA5B+SONB8+tptLHI7OgN7LAZRW4d/Szyc9267Hhw+Ipgz6vT8gjuITB
-         BeDtUGAqdTgoMNVza0GaY9hJ0OnIgVK6kLqwYlouxbEhv1Yn0DO6xdWQAV/GthilDA
-         FzWWZkyq+zQt6xKBg5a4dKon6PCKAp4Cg4cW8b3w=
+        b=R7FPqb4twrpUtW33OSM6k3wZfG0a0hxETW9m1euvQwcsuhnRqtpWBW/JfZoyNKXVC
+         AgFbOpwEkbLI7GcWiAQMMdRTodLG7xlpOpvg3hMltKK+TuZrE3dFeKN+jAlMPZwDRY
+         fNFFXdfUJPBCpaz5/43ZMoY8SruAYXIDrEjqWawI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 4.19 79/86] ASoC: max9759: fix underflow in speaker_gain_control_put()
+        stable@vger.kernel.org, Miquel Raynal <miquel.raynal@bootlin.com>,
+        Alexander Aring <aahringo@redhat.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>
+Subject: [PATCH 5.4 26/44] net: ieee802154: ca8210: Stop leaking skbs
 Date:   Mon,  7 Feb 2022 12:06:42 +0100
-Message-Id: <20220207103800.258553455@linuxfoundation.org>
+Message-Id: <20220207103754.010886863@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103757.550973048@linuxfoundation.org>
-References: <20220207103757.550973048@linuxfoundation.org>
+In-Reply-To: <20220207103753.155627314@linuxfoundation.org>
+References: <20220207103753.155627314@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,36 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Miquel Raynal <miquel.raynal@bootlin.com>
 
-commit 4c907bcd9dcd233da6707059d777ab389dcbd964 upstream.
+commit 621b24b09eb61c63f262da0c9c5f0e93348897e5 upstream.
 
-Check for negative values of "priv->gain" to prevent an out of bounds
-access.  The concern is that these might come from the user via:
-  -> snd_ctl_elem_write_user()
-    -> snd_ctl_elem_write()
-      -> kctl->put()
+Upon error the ieee802154_xmit_complete() helper is not called. Only
+ieee802154_wake_queue() is called manually. We then leak the skb
+structure.
 
-Fixes: fa8d915172b8 ("ASoC: max9759: Add Amplifier Driver")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Link: https://lore.kernel.org/r/20220119123101.GA9509@kili
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Free the skb structure upon error before returning.
+
+Fixes: ded845a781a5 ("ieee802154: Add CA8210 IEEE 802.15.4 device driver")
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Acked-by: Alexander Aring <aahringo@redhat.com>
+Link: https://lore.kernel.org/r/20220125121426.848337-5-miquel.raynal@bootlin.com
+Signed-off-by: Stefan Schmidt <stefan@datenfreihafen.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/codecs/max9759.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/net/ieee802154/ca8210.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/sound/soc/codecs/max9759.c
-+++ b/sound/soc/codecs/max9759.c
-@@ -64,7 +64,8 @@ static int speaker_gain_control_put(stru
- 	struct snd_soc_component *c = snd_soc_kcontrol_component(kcontrol);
- 	struct max9759 *priv = snd_soc_component_get_drvdata(c);
- 
--	if (ucontrol->value.integer.value[0] > 3)
-+	if (ucontrol->value.integer.value[0] < 0 ||
-+	    ucontrol->value.integer.value[0] > 3)
- 		return -EINVAL;
- 
- 	priv->gain = ucontrol->value.integer.value[0];
+--- a/drivers/net/ieee802154/ca8210.c
++++ b/drivers/net/ieee802154/ca8210.c
+@@ -1770,6 +1770,7 @@ static int ca8210_async_xmit_complete(
+ 			status
+ 		);
+ 		if (status != MAC_TRANSACTION_OVERFLOW) {
++			dev_kfree_skb_any(priv->tx_skb);
+ 			ieee802154_wake_queue(priv->hw);
+ 			return 0;
+ 		}
 
 

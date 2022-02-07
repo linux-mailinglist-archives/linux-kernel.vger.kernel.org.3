@@ -2,47 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C47C4ABCAC
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:49:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB10F4ABBD2
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:44:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387024AbiBGLik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:38:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37870 "EHLO
+        id S1385781AbiBGLce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:32:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352482AbiBGL0W (ORCPT
+        with ESMTP id S1383097AbiBGLVg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:26:22 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA4DC03E910;
-        Mon,  7 Feb 2022 03:25:43 -0800 (PST)
+        Mon, 7 Feb 2022 06:21:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54334C0401C8;
+        Mon,  7 Feb 2022 03:21:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 036C76077B;
-        Mon,  7 Feb 2022 11:25:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E20CBC340EB;
-        Mon,  7 Feb 2022 11:25:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0CC3761388;
+        Mon,  7 Feb 2022 11:21:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE7DBC004E1;
+        Mon,  7 Feb 2022 11:21:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233142;
-        bh=BLyOJI36eHMt72Wa5DjaMq8TiYzOPzbxdmmTZTFuakE=;
+        s=korg; t=1644232871;
+        bh=3Iw4+C7epksGrwi7zi0NVaXS+fJ2+w8mzoPqqhMRU+Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ca9cA0awN41CwBd19+gW5kzRI+mTH/dOgvK/rxC614KQ8itc9epcUTy1Rc6zSDiJE
-         JbU7fMkjIR5KCfvf7Ew35aIQyLIksG825exLF1j0HHSSm9wUyd6pYY9tpmP+qmDMWa
-         UvuGJSQazIhXtdguo9/OWUbapDhSXCAFblwIpPWc=
+        b=HHlDo0g4OPPsWn+tCzPfd+I8oIhplXNzw9E36P1axyxVWqxFV/iKBLaipsx7FIksu
+         TifgM9hRzHY7pe/18yAayHFNS7lFONI2M6Ty3mb9Phdq/vOcQneL6CBk2JRv2JAn7i
+         1ZW6Taig28vyJJ7t0NdA3zkcH/DOiM5v4Zt4FGmk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dmitry Monakhov <dmonakhov@openvz.org>,
-        Dmitry Ivanov <dmitry.ivanov2@hpe.com>,
-        Alexey Lyashkov <alexey.lyashkov@hpe.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.15 030/110] block: bio-integrity: Advance seed correctly for larger interval sizes
+        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: [PATCH 5.10 05/74] ASoC: ops: Reject out of bounds values in snd_soc_put_xr_sx()
 Date:   Mon,  7 Feb 2022 12:06:03 +0100
-Message-Id: <20220207103803.263155646@linuxfoundation.org>
+Message-Id: <20220207103757.412513163@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
-References: <20220207103802.280120990@linuxfoundation.org>
+In-Reply-To: <20220207103757.232676988@linuxfoundation.org>
+References: <20220207103757.232676988@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,43 +53,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Martin K. Petersen <martin.petersen@oracle.com>
+From: Mark Brown <broonie@kernel.org>
 
-commit b13e0c71856817fca67159b11abac350e41289f5 upstream.
+commit 4cf28e9ae6e2e11a044be1bcbcfa1b0d8675fe4d upstream.
 
-Commit 309a62fa3a9e ("bio-integrity: bio_integrity_advance must update
-integrity seed") added code to update the integrity seed value when
-advancing a bio. However, it failed to take into account that the
-integrity interval might be larger than the 512-byte block layer
-sector size. This broke bio splitting on PI devices with 4KB logical
-blocks.
+We don't currently validate that the values being set are within the range
+we advertised to userspace as being valid, do so and reject any values
+that are out of range.
 
-The seed value should be advanced by bio_integrity_intervals() and not
-the number of sectors.
-
-Cc: Dmitry Monakhov <dmonakhov@openvz.org>
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Cc: stable@vger.kernel.org
-Fixes: 309a62fa3a9e ("bio-integrity: bio_integrity_advance must update integrity seed")
-Tested-by: Dmitry Ivanov <dmitry.ivanov2@hpe.com>
-Reported-by: Alexey Lyashkov <alexey.lyashkov@hpe.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Link: https://lore.kernel.org/r/20220204034209.4193-1-martin.petersen@oracle.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Link: https://lore.kernel.org/r/20220124153253.3548853-4-broonie@kernel.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- block/bio-integrity.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/soc/soc-ops.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/block/bio-integrity.c
-+++ b/block/bio-integrity.c
-@@ -373,7 +373,7 @@ void bio_integrity_advance(struct bio *b
- 	struct blk_integrity *bi = blk_get_integrity(bio->bi_bdev->bd_disk);
- 	unsigned bytes = bio_integrity_bytes(bi, bytes_done >> 9);
+--- a/sound/soc/soc-ops.c
++++ b/sound/soc/soc-ops.c
+@@ -880,6 +880,8 @@ int snd_soc_put_xr_sx(struct snd_kcontro
+ 	unsigned int i, regval, regmask;
+ 	int err;
  
--	bip->bip_iter.bi_sector += bytes_done >> 9;
-+	bip->bip_iter.bi_sector += bio_integrity_intervals(bi, bytes_done >> 9);
- 	bvec_iter_advance(bip->bip_vec, &bip->bip_iter, bytes);
- }
- 
++	if (val < mc->min || val > mc->max)
++		return -EINVAL;
+ 	if (invert)
+ 		val = max - val;
+ 	val &= mask;
 
 

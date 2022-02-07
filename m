@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3853D4AB976
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:23:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A44094ABC11
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:45:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244877AbiBGLNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:13:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48890 "EHLO
+        id S1383456AbiBGLaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:30:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242911AbiBGLKY (ORCPT
+        with ESMTP id S1383578AbiBGLW7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:10:24 -0500
+        Mon, 7 Feb 2022 06:22:59 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289F2C043181;
-        Mon,  7 Feb 2022 03:10:24 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E076BC043181;
+        Mon,  7 Feb 2022 03:22:58 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A935961380;
-        Mon,  7 Feb 2022 11:10:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71995C004E1;
-        Mon,  7 Feb 2022 11:10:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 72DA361380;
+        Mon,  7 Feb 2022 11:22:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56EDAC004E1;
+        Mon,  7 Feb 2022 11:22:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232223;
-        bh=/1gOUus/PlI8TcuhnyrJCK0TBi6oG+v2tNclrv/K+8U=;
+        s=korg; t=1644232977;
+        bh=Yi+aO17RMvhJzsy4QMGy26kwoK7BkoXux0P4J5pPcf0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZTrUM9juqsGnZdMmESX2AxTSxoEcYpEJvgAy0sQkFgHa0ebK7d+5l9vzBGxXodETK
-         t29UO5ZxK8C2Cu0Aooji/40bbXguCzYhASQC0T3ARowS2Fwgfg1t5l9k9S6VPOlxhz
-         638E2zWEbJKEW0O8FVtnIKOJmCvBm5yrJY2qNVIc=
+        b=IdqxJkYb+rhT5ky6z5/w4qhoXjavqoo5vvViPViuzaGFGsBqEG5RJMB40ooKVsxUW
+         VMhQuUSf1J3cj/QUwpwh3XSKiixWZ08Pz8QnEa/RXY/YzRvw7hFJl/ZV/NBg6VTcYj
+         fYyW5zsHgRy84HXM/9Ty46R79UYxb9+QzaWmUgFw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dai Ngo <dai.ngo@oracle.com>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Bruce Fields <bfields@fieldses.org>
-Subject: [PATCH 4.9 44/48] nfsd: nfsd4_setclientid_confirm mistakenly expires confirmed client.
-Date:   Mon,  7 Feb 2022 12:06:17 +0100
-Message-Id: <20220207103753.761720551@linuxfoundation.org>
+        stable@vger.kernel.org, Dmitry Monakhov <dmonakhov@openvz.org>,
+        Dmitry Ivanov <dmitry.ivanov2@hpe.com>,
+        Alexey Lyashkov <alexey.lyashkov@hpe.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 5.10 20/74] block: bio-integrity: Advance seed correctly for larger interval sizes
+Date:   Mon,  7 Feb 2022 12:06:18 +0100
+Message-Id: <20220207103757.898337254@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103752.341184175@linuxfoundation.org>
-References: <20220207103752.341184175@linuxfoundation.org>
+In-Reply-To: <20220207103757.232676988@linuxfoundation.org>
+References: <20220207103757.232676988@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,45 +57,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dai Ngo <dai.ngo@oracle.com>
+From: Martin K. Petersen <martin.petersen@oracle.com>
 
-commit ab451ea952fe9d7afefae55ddb28943a148247fe upstream.
+commit b13e0c71856817fca67159b11abac350e41289f5 upstream.
 
->From RFC 7530 Section 16.34.5:
+Commit 309a62fa3a9e ("bio-integrity: bio_integrity_advance must update
+integrity seed") added code to update the integrity seed value when
+advancing a bio. However, it failed to take into account that the
+integrity interval might be larger than the 512-byte block layer
+sector size. This broke bio splitting on PI devices with 4KB logical
+blocks.
 
-o  The server has not recorded an unconfirmed { v, x, c, *, * } and
-   has recorded a confirmed { v, x, c, *, s }.  If the principals of
-   the record and of SETCLIENTID_CONFIRM do not match, the server
-   returns NFS4ERR_CLID_INUSE without removing any relevant leased
-   client state, and without changing recorded callback and
-   callback_ident values for client { x }.
+The seed value should be advanced by bio_integrity_intervals() and not
+the number of sectors.
 
-The current code intends to do what the spec describes above but
-it forgot to set 'old' to NULL resulting to the confirmed client
-to be expired.
-
-Fixes: 2b63482185e6 ("nfsd: fix clid_inuse on mount with security change")
-Signed-off-by: Dai Ngo <dai.ngo@oracle.com>
-Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
-Reviewed-by: Bruce Fields <bfields@fieldses.org>
+Cc: Dmitry Monakhov <dmonakhov@openvz.org>
+Cc: stable@vger.kernel.org
+Fixes: 309a62fa3a9e ("bio-integrity: bio_integrity_advance must update integrity seed")
+Tested-by: Dmitry Ivanov <dmitry.ivanov2@hpe.com>
+Reported-by: Alexey Lyashkov <alexey.lyashkov@hpe.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Link: https://lore.kernel.org/r/20220204034209.4193-1-martin.petersen@oracle.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/nfsd/nfs4state.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ block/bio-integrity.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/fs/nfsd/nfs4state.c
-+++ b/fs/nfsd/nfs4state.c
-@@ -3424,8 +3424,10 @@ nfsd4_setclientid_confirm(struct svc_rqs
- 			status = nfserr_clid_inuse;
- 			if (client_has_state(old)
- 					&& !same_creds(&unconf->cl_cred,
--							&old->cl_cred))
-+							&old->cl_cred)) {
-+				old = NULL;
- 				goto out;
-+			}
- 			status = mark_client_expired_locked(old);
- 			if (status) {
- 				old = NULL;
+--- a/block/bio-integrity.c
++++ b/block/bio-integrity.c
+@@ -384,7 +384,7 @@ void bio_integrity_advance(struct bio *b
+ 	struct blk_integrity *bi = blk_get_integrity(bio->bi_disk);
+ 	unsigned bytes = bio_integrity_bytes(bi, bytes_done >> 9);
+ 
+-	bip->bip_iter.bi_sector += bytes_done >> 9;
++	bip->bip_iter.bi_sector += bio_integrity_intervals(bi, bytes_done >> 9);
+ 	bvec_iter_advance(bip->bip_vec, &bip->bip_iter, bytes);
+ }
+ 
 
 

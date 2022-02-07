@@ -2,259 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 050514AC9FA
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 21:01:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 630094AC9FE
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 21:02:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240534AbiBGT41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 14:56:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37526 "EHLO
+        id S240113AbiBGUBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 15:01:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241004AbiBGTzy (ORCPT
+        with ESMTP id S241480AbiBGT7U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 14:55:54 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87F32C0401DA
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 11:55:53 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id y6so28627904ybc.5
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 11:55:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=cIeGIDwEX25ldmpB0Z226M8rnhkEGp63Yp0NEvcjQyM=;
-        b=FxDPRuncyydboj5DBXA9bBILTdhAgivJ2t+m/B2zLIEe8l5/I5tjzLZtn+CdBoqa2F
-         PHABYz1evnKZkqaiYlDgujbQwMDajqFUb0U2Ib9rpKfTdU/KBXc5f6X3d++6qwSW612L
-         Qy2PHiLfVyNuWpWlk2eR9pbICvHOLSubwinut7li25SC2vP3LQkOJ53uL9jA1C0y8yGx
-         UYIHDU/0R1WX9noC8R+YuiNgnm7SIFk4O5ISzf0a2nptzLEmDPx8N+eSbz2bBlHlPUAF
-         EKLUK8+Y4RmXTcV8qbx9maZTLq5xuzocwA6KfVu3yxeERBG/jhtsvsr8nAVfFSh1Nu+g
-         q9Vg==
+        Mon, 7 Feb 2022 14:59:20 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19810C0401E1
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 11:59:20 -0800 (PST)
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 676D24003A
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 19:59:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644263958;
+        bh=SoJfnnJJW2QFhODDnPm1UyDvJMmMIk7F7kuEpKpNzms=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=pCpCw4rLvH0FzMsatdmMM005iXIy/7UoBBo/eLb3Rw/s0PcgDz0gBWPnR4kp3JAm6
+         3G23Xda6uSoDfsm1BgvL3byxmSqaxYktZTt2nTl4vWGzHlAHQ/0BkJAZXfvWOLZ07h
+         5Eg5wFyS9KECbL1LWZhK7vak05ilBxpy26k4nZeRo5anBo66YQZ6hnFmb5NPy2X9kT
+         ep86jo4GxJYQZtYpS5AcjEbkMGXVVrYH2nENCFvh8+4zYs/fSGTjIpP8LBHy444/Qi
+         xgcMmVz1+07LHvEt55CAouNzq7rGaVac0bcsLharusj3vvxq4MqmgIUMRdCm6BZK3p
+         YcE1hvMQKm1JQ==
+Received: by mail-ej1-f71.google.com with SMTP id l18-20020a1709063d3200b006a93f7d4941so4777188ejf.1
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 11:59:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=cIeGIDwEX25ldmpB0Z226M8rnhkEGp63Yp0NEvcjQyM=;
-        b=PtGjZXtONXiljlKatOY5x5+gIhD1wV+AkSIktqlHwJXyYuA7OxKT2yXezSAWiLQyCQ
-         p1GJZQl65ZQKQ9TZrVvRTLKQzNlxKvu2Pm+shDQg06TgqXB7Gob1JhB8foMzshiTI6Rw
-         cLdu5ff8Be6P+fNhyocwwjFC8hwmgferEU9cMJ9WTieNPTcoV6tTOnty39/5KthKbA40
-         2TiVoR8z5fqNE6yD4LJE+LdsPmPtYBz/wvLAg9DB2gI9c/N/EZnNn6DDiCT/gMA45Mg3
-         7ljNgRviea2rwr0DP11dxCBTHwJn3lEm6pgI0ZGy6tyfU9GP/dmzBWKjqUvOmF065MH2
-         NolQ==
-X-Gm-Message-State: AOAM533ZHjsMfGRR7L/Bump5yHNvJNjoLMKzBQpaULFHxqQ44fCpFht5
-        P4zLpguMVgbER6OSZA9FXftjQ88ZIECagAKWHWOZFQ==
-X-Google-Smtp-Source: ABdhPJypA1OJ3anBiqKzgFuvUx+sUQdROCHaXV8NFzNKd1pSP7YKC/6bNcHVADdFPGCRcSLgYJ1ESdFxCUM8AN4UN00=
-X-Received: by 2002:a81:3986:: with SMTP id g128mr1556995ywa.129.1644263752610;
- Mon, 07 Feb 2022 11:55:52 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=SoJfnnJJW2QFhODDnPm1UyDvJMmMIk7F7kuEpKpNzms=;
+        b=rm7fcO9iWPlxTqCFc/E1e2e3HEA/wtcOpmCBJGuUZsNwZmfsnb1NlxK2QNQQE1seRR
+         1efBuVy7tZhBxDV6MPvETv8hCYtCDK+JmG2X/wh2U6xVfEsxEkHJRifbah0b+NKYXKs6
+         eHLUPmDuDul/LKoovxey99EOoD0/cX0mHxljPf4tF3I/Zrkl+g7qmTfpwBkYrQ6ZXCl2
+         9W5dvpkDl2+WtuKYPayf8KU69wvldGgvqS2SIl3q8GVGpD0jRx7OAFGojHNq7iOLOVCq
+         tSMJbzDfZad8NatdPq66Z3YCuC6xH7yekHDjCbMibEpvzf+l3sK2k238QOQW7BOmBPMY
+         AHAw==
+X-Gm-Message-State: AOAM533htBZM+Y+d2rvefokZAo1Drce7LBS/fmzrT+nHOIzga3CBX8mQ
+        DUCgWFCU4hECzwa/PC7/aKH1q2tIa+xlarqYEm7JS2/qJFh+Yy7KMX80GKJuGUS5Z0fGlv+dugV
+        kn0MdpnxPuI2CXUrqQ2GEmw2FW9qXoXet30hwZauBQQ==
+X-Received: by 2002:a17:907:1627:: with SMTP id hb39mr1026552ejc.407.1644263956198;
+        Mon, 07 Feb 2022 11:59:16 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwUtxIF9E4YM94a/CEVCVH4ktjKMIEGy/luAXiUvmv2LyRtpgZvjz0rDDsCo/M7Wq+ELblwWQ==
+X-Received: by 2002:a17:907:1627:: with SMTP id hb39mr1026547ejc.407.1644263956047;
+        Mon, 07 Feb 2022 11:59:16 -0800 (PST)
+Received: from [192.168.0.91] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id c25sm5601630edu.103.2022.02.07.11.59.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Feb 2022 11:59:15 -0800 (PST)
+Message-ID: <f2370538-6c87-c57f-ad4b-e1a77ebf5e69@canonical.com>
+Date:   Mon, 7 Feb 2022 20:59:14 +0100
 MIME-Version: 1.0
-References: <20220207133856.644483064@linuxfoundation.org>
-In-Reply-To: <20220207133856.644483064@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 8 Feb 2022 01:25:41 +0530
-Message-ID: <CA+G9fYuCnmRoDu4xDhyKzPX1RB5uj7iw-GUo2=y6KP-_Qcnvzw@mail.gmail.com>
-Subject: Re: [PATCH 5.16 000/127] 5.16.8-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/5] dt-bindings: mailbox: imx-mu: add i.MX93 MU
+Content-Language: en-US
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, jassisinghbrar@gmail.com,
+        robh+dt@kernel.org, shawnguo@kernel.org
+Cc:     s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Peng Fan <peng.fan@nxp.com>
+References: <20220207095832.1590225-1-peng.fan@oss.nxp.com>
+ <20220207095832.1590225-2-peng.fan@oss.nxp.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220207095832.1590225-2-peng.fan@oss.nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 7 Feb 2022 at 19:34, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.16.8 release.
-> There are 127 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 09 Feb 2022 13:38:34 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.16.8-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.16.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On 07/02/2022 10:58, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> Add bindings for i.MX93 MU which derived from i.MX8ULP
+> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  Documentation/devicetree/bindings/mailbox/fsl,mu.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/mailbox/fsl,mu.yaml b/Documentation/devicetree/bindings/mailbox/fsl,mu.yaml
+> index f865b806ae6a..713cb847cd8c 100644
+> --- a/Documentation/devicetree/bindings/mailbox/fsl,mu.yaml
+> +++ b/Documentation/devicetree/bindings/mailbox/fsl,mu.yaml
+> @@ -30,6 +30,9 @@ properties:
+>        - const: fsl,imx8-mu-scu
+>        - const: fsl,imx8-mu-seco
+>        - const: fsl,imx8ulp-mu-s4
+> +      - items:
+> +          const: fsl,imx93-mu
+> +          const: fsl,imx8ulp-mu
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+This should be a list (' - const: ...').
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>        - items:
+>            - enum:
+>                - fsl,imx7s-mu
 
-## Build
-* kernel: 5.16.8-rc2
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-5.16.y
-* git commit: 87d888a197db9443026045ba3c253a1a929114d4
-* git describe: v5.16.7-128-g87d888a197db
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.16.y/build/v5.16=
-.7-128-g87d888a197db
 
-## Test Regressions (compared to v5.16.7)
-No test regressions found.
-
-## Metric Regressions (compared to v5.16.7)
-No metric regressions found.
-
-## Test Fixes (compared to v5.16.7)
-No test fixes found.
-
-## Metric Fixes (compared to v5.16.7)
-No metric fixes found.
-
-## Test result summary
-total: 103985, pass: 89106, fail: 847, skip: 13204, xfail: 828
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 259 total, 259 passed, 0 failed
-* arm64: 37 total, 37 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 36 total, 36 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 34 total, 34 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 52 total, 48 passed, 4 failed
-* riscv: 24 total, 20 passed, 4 failed
-* s390: 18 total, 18 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 37 total, 37 passed, 0 failed
-
-## Test suites summary
-* fwts
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-lkdtm
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* prep-tmp-disk
-* rcutorture
-* ssuite
-* v4l2-compliance
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Best regards,
+Krzysztof

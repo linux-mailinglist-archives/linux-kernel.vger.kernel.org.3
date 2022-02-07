@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FAEC4ABDE0
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:05:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9EDB4ABE0E
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:05:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389355AbiBGLsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:48:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46688 "EHLO
+        id S1382096AbiBGL4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:56:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386484AbiBGLen (ORCPT
+        with ESMTP id S1385190AbiBGLbS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:34:43 -0500
+        Mon, 7 Feb 2022 06:31:18 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E40FC043188;
-        Mon,  7 Feb 2022 03:34:42 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E0C8C03FEE0;
+        Mon,  7 Feb 2022 03:29:33 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E23460B20;
-        Mon,  7 Feb 2022 11:34:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA4C8C004E1;
-        Mon,  7 Feb 2022 11:34:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 82D126077B;
+        Mon,  7 Feb 2022 11:29:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66D58C004E1;
+        Mon,  7 Feb 2022 11:29:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233681;
-        bh=biUjx9epFYxUc5njJ7zZT0O1LrXh9iSxhzE0Ljx4fBI=;
+        s=korg; t=1644233373;
+        bh=GS6MBhstiZFiTAX47S9HOYPrRvE1rIgmTK6Ds/8qu4Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=acK0AEvzcsRWnjlSTHrgqnF7pc66renLvcoXEOyw27QUwFkIpOiqoXzCClYJ/E99x
-         V7xuScTHN+4+xl92/yCZL0xzuU85JQInL3lwuBDvPOrHDWn8eO2w4Paxx4DRnSZLdN
-         n2lbe8EAM1hU7el4KH8w5IKEib7S/coj3U+Cq/0o=
+        b=vz2MI98HlH63Wyrq7duaOcQ/cViXIuzS6ixFxzTiLFsYy6OWrUdS59Onaq/QQU5d8
+         EyOHX+pjoSS9Mjk5favPOtchc0b87Jt7GuU5TqBoiA0lMvV9sivU9qW5eTldrKIAvc
+         +zkcd8nzcZ3I0QMzWdS1eA5o5LAetDnPdWfo9IcY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.16 086/126] ASoC: simple-card: fix probe failure on platform component
-Date:   Mon,  7 Feb 2022 12:06:57 +0100
-Message-Id: <20220207103807.070239935@linuxfoundation.org>
+        stable@vger.kernel.org, Haiyue Wang <haiyue.wang@intel.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.15 085/110] gve: fix the wrong AdminQ buffer queue index check
+Date:   Mon,  7 Feb 2022 12:06:58 +0100
+Message-Id: <20220207103805.285730669@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
-References: <20220207103804.053675072@linuxfoundation.org>
+In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
+References: <20220207103802.280120990@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,69 +54,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Hancock <robert.hancock@calian.com>
+From: Haiyue Wang <haiyue.wang@intel.com>
 
-commit a64067f4cecaaa4deed8e33d3266bc0bcc189142 upstream.
+commit 1f84a9450d75e08af70d9e2f2d5e1c0ac0c881d2 upstream.
 
-A previous change to simple-card resulted in asoc_simple_parse_dai
-attempting to retrieve the dai_name for platform components, which are
-unlikely to have a valid DAI name. This caused simple-card to fail to
-probe when using the xlnx_formatter_pcm as the platform component, since
-it does not register any DAI components.
+The 'tail' and 'head' are 'unsigned int' type free-running count, when
+'head' is overflow, the 'int i (= tail) < u32 head' will be false:
 
-Since the dai_name is not used for platform components, just skip trying
-to retrieve it for those.
+Only '- loop 0: idx = 63' result is shown, so it needs to use 'int' type
+to compare, it can handle the overflow correctly.
 
-Fixes: f107294c6422 ("ASoC: simple-card: support snd_soc_dai_link_component style for cpu")
-Signed-off-by: Robert Hancock <robert.hancock@calian.com>
-Link: https://lore.kernel.org/r/20220107214711.1100162-6-robert.hancock@calian.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+typedef uint32_t u32;
+
+int main()
+{
+        u32 tail, head;
+        int stail, shead;
+        int i, loop;
+
+        tail = 0xffffffff;
+        head = 0x00000000;
+
+        for (i = tail, loop = 0; i < head; i++) {
+                unsigned int idx = i & 63;
+
+                printf("+ loop %d: idx = %u\n", loop++, idx);
+        }
+
+        stail = tail;
+        shead = head;
+        for (i = stail, loop = 0; i < shead; i++) {
+                unsigned int idx = i & 63;
+
+                printf("- loop %d: idx = %u\n", loop++, idx);
+        }
+
+        return 0;
+}
+
+Fixes: 5cdad90de62c ("gve: Batch AQ commands for creating and destroying queues.")
+Signed-off-by: Haiyue Wang <haiyue.wang@intel.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/generic/simple-card.c |   26 +++++++++++++++++++++++++-
- 1 file changed, 25 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/google/gve/gve_adminq.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/sound/soc/generic/simple-card.c
-+++ b/sound/soc/generic/simple-card.c
-@@ -28,6 +28,30 @@ static const struct snd_soc_ops simple_o
- 	.hw_params	= asoc_simple_hw_params,
- };
+--- a/drivers/net/ethernet/google/gve/gve_adminq.c
++++ b/drivers/net/ethernet/google/gve/gve_adminq.c
+@@ -281,7 +281,7 @@ static int gve_adminq_parse_err(struct g
+  */
+ static int gve_adminq_kick_and_wait(struct gve_priv *priv)
+ {
+-	u32 tail, head;
++	int tail, head;
+ 	int i;
  
-+static int asoc_simple_parse_platform(struct device_node *node,
-+				      struct snd_soc_dai_link_component *dlc)
-+{
-+	struct of_phandle_args args;
-+	int ret;
-+
-+	if (!node)
-+		return 0;
-+
-+	/*
-+	 * Get node via "sound-dai = <&phandle port>"
-+	 * it will be used as xxx_of_node on soc_bind_dai_link()
-+	 */
-+	ret = of_parse_phandle_with_args(node, DAI, CELL, 0, &args);
-+	if (ret)
-+		return ret;
-+
-+	/* dai_name is not required and may not exist for plat component */
-+
-+	dlc->of_node = args.np;
-+
-+	return 0;
-+}
-+
- static int asoc_simple_parse_dai(struct device_node *node,
- 				 struct snd_soc_dai_link_component *dlc,
- 				 int *is_single_link)
-@@ -289,7 +313,7 @@ static int simple_dai_link_of(struct aso
- 	if (ret < 0)
- 		goto dai_link_of_err;
- 
--	ret = asoc_simple_parse_dai(plat, platforms, NULL);
-+	ret = asoc_simple_parse_platform(plat, platforms);
- 	if (ret < 0)
- 		goto dai_link_of_err;
- 
+ 	tail = ioread32be(&priv->reg_bar0->adminq_event_counter);
 
 

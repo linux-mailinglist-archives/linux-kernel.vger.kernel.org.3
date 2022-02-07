@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12B114AC4D0
+	by mail.lfdr.de (Postfix) with ESMTP id 606C74AC4D1
 	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 17:03:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386646AbiBGQBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 11:01:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38520 "EHLO
+        id S1386704AbiBGQBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 11:01:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244449AbiBGP7X (ORCPT
+        with ESMTP id S244782AbiBGP7Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 10:59:23 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE7AC0401CC
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 07:59:22 -0800 (PST)
+        Mon, 7 Feb 2022 10:59:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C40AFC0401CC
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 07:59:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id DEF69CE112B
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 15:59:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BC39C004E1;
-        Mon,  7 Feb 2022 15:59:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5FCB3614FD
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 15:59:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1F5BC340F2;
+        Mon,  7 Feb 2022 15:59:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644249559;
-        bh=j0kGUyDUJw033HV2Z4CEEwVfMYvpFRqUcwyRnWBDtrc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=mKFQ4Sqh0RBAB3CXtg3vGxy7L1ppdm/Klcx9NE4tGGo88N54X4PHKGwHgMeaM0QYU
-         CjrdEhNMbxB7li2mh/RMHWJ5jXRdtEPjspxh+sS6Sa691I0oJwNlKCHICOs/71tq0P
-         HDcMojaMtTlkJeRZkbOl2ms9YeWDC8FlYg7CDHQQMhqSgcD5t2EfL0M2Rx5tgzvjK1
-         PmQXD3zNaRkRuFs8dPN9+u9uK8Yn7j7uKphob/6wPk05DTl37ZCx3d9oaK6rsn3V6f
-         lKURCyNdQZGztT/x8As0JB1fmETj01t8zx/OYoMFeRvUYHKcI5Q1izMGzmpse6G9R3
-         U3s0sL1C5fYdA==
+        s=k20201202; t=1644249562;
+        bh=12lpq3N2GTXe+NLF6Remlqvk4jUFS3sVYR8vsgOt120=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=YqOCTt2s4BUu7CHqd1Qp0qlIt3qjAkNZMag3s35HK0bZhJnIReNHjwQZbxiSwpGzZ
+         lgb4UxWoTUhh1vnqNblM1U4yLK2LS10qGrAzC2Mj/nbvfan2qz5ACMCKl53iur2jCd
+         nIZWl/AIynwrTzMgZOarnTc1lMuA7Hilj6cv2quuvowFsAWEFA2obMYorB5P2vQbJi
+         N69CJi6BZvAL4Y4BYY4p4n6WsEuBDUHhEgRIEb9rOFYauNJTYmGODeWOQ1LwwhIoBL
+         YoEmvLKTjKVyafM8dnjTw8h7OJpgt6F2aON1yk4YgGJVu9an4LT3EawyKsrqjI76xP
+         V4yck2FQ3zj7A==
 From:   Frederic Weisbecker <frederic@kernel.org>
 To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
@@ -47,10 +47,12 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Phil Auld <pauld@redhat.com>,
         Marcelo Tosatti <mtosatti@redhat.com>,
         Zefan Li <lizefan.x@bytedance.com>
-Subject: [PATCH 0/8] sched/isolation: Split housekeeping cpumask v3
-Date:   Mon,  7 Feb 2022 16:59:02 +0100
-Message-Id: <20220207155910.527133-1-frederic@kernel.org>
+Subject: [PATCH 1/8] pci: Decouple HK_FLAG_WQ and HK_FLAG_DOMAIN cpumask fetch
+Date:   Mon,  7 Feb 2022 16:59:03 +0100
+Message-Id: <20220207155910.527133-2-frederic@kernel.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220207155910.527133-1-frederic@kernel.org>
+References: <20220207155910.527133-1-frederic@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -63,49 +65,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+To prepare for supporting each feature of the housekeeping cpumask
+toward cpuset, prepare each of the HK_FLAG_* entries to move to their
+own cpumask with enforcing to fetch them individually. The new
+constraint is that multiple HK_FLAG_* entries can't be mixed together
+anymore in a single call to housekeeping cpumask().
 
-Just a build fix in "sched/isolation: Use single feature type while
-							referring to housekeeping cpumask"
-because I forgot to convert HK_FLAG_RCU to HK_TYPE_RCU.
+This will later allow, for example, to runtime modify the cpulist passed
+through "isolcpus=", "nohz_full=" and "rcu_nocbs=" kernel boot
+parameters.
 
-git://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
-	isolation/split-v3
-
-HEAD: 1050d7e05a8ce89066befd77dcdc68400230d888
-
-Thanks,
-	Frederic
+Reviewed-by: Juri Lelli <juri.lelli@redhat.com>
+Reviewed-by: Phil Auld <pauld@redhat.com>
+Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Juri Lelli <juri.lelli@redhat.com>
+Cc: Marcelo Tosatti <mtosatti@redhat.com>
+Cc: Nitesh Lal <nilal@redhat.com>
+Cc: Nicolas Saenz <nsaenzju@redhat.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Christoph Lameter <cl@gentwo.de>
+Cc: Tejun Heo <tj@kernel.org>
+Cc: Zefan Li <lizefan.x@bytedance.com>
+Cc: Alex Belits <abelits@marvell.com>
+Cc: Paul Gortmaker <paul.gortmaker@windriver.com>
+Cc: Paul E. McKenney  <paulmck@kernel.org>
 ---
+ drivers/pci/pci-driver.c | 21 ++++++++++++++++-----
+ 1 file changed, 16 insertions(+), 5 deletions(-)
 
-Frederic Weisbecker (8):
-      pci: Decouple HK_FLAG_WQ and HK_FLAG_DOMAIN cpumask fetch
-      workqueue: Decouple HK_FLAG_WQ and HK_FLAG_DOMAIN cpumask fetch
-      net: Decouple HK_FLAG_WQ and HK_FLAG_DOMAIN cpumask fetch
-      sched/isolation: Use single feature type while referring to housekeeping cpumask
-      sched/isolation: Consolidate check for housekeeping minimum service
-      sched/isolation: Consolidate error handling
-      sched/isolation: Fix housekeeping_mask memory leak
-      sched/isolation: Split housekeeping cpumask per isolation features
+diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
+index 588588cfda48..4a5792c82d08 100644
+--- a/drivers/pci/pci-driver.c
++++ b/drivers/pci/pci-driver.c
+@@ -350,7 +350,6 @@ static int pci_call_probe(struct pci_driver *drv, struct pci_dev *dev,
+ 			  const struct pci_device_id *id)
+ {
+ 	int error, node, cpu;
+-	int hk_flags = HK_FLAG_DOMAIN | HK_FLAG_WQ;
+ 	struct drv_dev_and_id ddi = { drv, dev, id };
+ 
+ 	/*
+@@ -368,17 +367,29 @@ static int pci_call_probe(struct pci_driver *drv, struct pci_dev *dev,
+ 	 * device is probed from work_on_cpu() of the Physical device.
+ 	 */
+ 	if (node < 0 || node >= MAX_NUMNODES || !node_online(node) ||
+-	    pci_physfn_is_probed(dev))
++	    pci_physfn_is_probed(dev)) {
+ 		cpu = nr_cpu_ids;
+-	else
++	} else {
++		cpumask_var_t wq_domain_mask;
++
++		if (!zalloc_cpumask_var(&wq_domain_mask, GFP_KERNEL)) {
++			error = -ENOMEM;
++			goto out;
++		}
++		cpumask_and(wq_domain_mask,
++			    housekeeping_cpumask(HK_FLAG_WQ),
++			    housekeeping_cpumask(HK_FLAG_DOMAIN));
++
+ 		cpu = cpumask_any_and(cpumask_of_node(node),
+-				      housekeeping_cpumask(hk_flags));
++				      wq_domain_mask);
++		free_cpumask_var(wq_domain_mask);
++	}
+ 
+ 	if (cpu < nr_cpu_ids)
+ 		error = work_on_cpu(cpu, local_pci_probe, &ddi);
+ 	else
+ 		error = local_pci_probe(&ddi);
+-
++out:
+ 	dev->is_probed = 0;
+ 	cpu_hotplug_enable();
+ 	return error;
+-- 
+2.25.1
 
-
- arch/x86/kernel/cpu/aperfmperf.c |   6 +-
- arch/x86/kvm/x86.c               |   2 +-
- drivers/base/cpu.c               |   2 +-
- drivers/pci/pci-driver.c         |  21 +++--
- include/linux/sched/isolation.h  |  43 ++++++-----
- kernel/cgroup/cpuset.c           |   6 +-
- kernel/cpu.c                     |   4 +-
- kernel/irq/cpuhotplug.c          |   4 +-
- kernel/irq/manage.c              |   4 +-
- kernel/kthread.c                 |   4 +-
- kernel/rcu/tasks.h               |   2 +-
- kernel/rcu/tree_plugin.h         |   6 +-
- kernel/sched/core.c              |  12 +--
- kernel/sched/fair.c              |  10 +--
- kernel/sched/isolation.c         | 162 +++++++++++++++++++++++++--------------
- kernel/sched/topology.c          |   8 +-
- kernel/watchdog.c                |   2 +-
- kernel/workqueue.c               |   4 +-
- net/core/net-sysfs.c             |   6 +-
- 19 files changed, 182 insertions(+), 126 deletions(-)

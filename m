@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C41D4ABA3B
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:27:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C24514AB972
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:23:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383246AbiBGLVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:21:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54892 "EHLO
+        id S239338AbiBGLNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:13:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380499AbiBGLQw (ORCPT
+        with ESMTP id S241231AbiBGLKV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:16:52 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72C22C043188;
-        Mon,  7 Feb 2022 03:16:51 -0800 (PST)
+        Mon, 7 Feb 2022 06:10:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57BADC043188;
+        Mon,  7 Feb 2022 03:10:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0DDCA6113B;
-        Mon,  7 Feb 2022 11:16:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDFB7C004E1;
-        Mon,  7 Feb 2022 11:16:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ABB6B613FB;
+        Mon,  7 Feb 2022 11:10:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D7A0C004E1;
+        Mon,  7 Feb 2022 11:10:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232610;
-        bh=DaGD0G2X0YExTtuIuMmfRFGlyWBa1FEMMdKEvocIJkQ=;
+        s=korg; t=1644232220;
+        bh=khYj2u5+P6ilGQgIZTfojHq9WrTK93UBtTZQe0B6Vtc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IX249gItXwMwjhsAFll0733+LC9XvLw/gy78a2LV1fPFA5row4Ib2DdfKOG4Khjim
-         fVjlN0S8axv+L48YvXbTHPpfNPGEI1FydC87DAeP6zAAfPKy1uFOWjvL5DHp8GwI0Y
-         o165LbTGbf08QyfIILFLS1D4nCTjOZTaQanh130s=
+        b=W0rPuoPCBRG56Cv+wHyDJcQUcr3rIt1OrdDkWSP6csnIzZmGg6hgWEn/Si1RZTtrF
+         KRdutpaqId89OZFyAVj3oFvm6Iv/rNl1LAmnmKGKIm+hosf6PPkBRJ7ODdfyI+OpSy
+         HP1tOUDVx2XxOt1v9iFpqiKqY0x9E4XkwovI2r80=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Christian Lachner <gladiac@gmail.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 4.19 58/86] ALSA: hda/realtek: Add missing fixup-model entry for Gigabyte X570 ALC1220 quirks
+        stable@vger.kernel.org, Eric Whitney <enwlinux@gmail.com>,
+        Ritesh Harjani <riteshh@linux.ibm.com>,
+        Jan Kara <jack@suse.cz>, Theodore Tso <tytso@mit.edu>,
+        stable@kernel.org
+Subject: [PATCH 4.9 48/48] ext4: fix error handling in ext4_restore_inline_data()
 Date:   Mon,  7 Feb 2022 12:06:21 +0100
-Message-Id: <20220207103759.462395774@linuxfoundation.org>
+Message-Id: <20220207103753.889781423@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103757.550973048@linuxfoundation.org>
-References: <20220207103757.550973048@linuxfoundation.org>
+In-Reply-To: <20220207103752.341184175@linuxfoundation.org>
+References: <20220207103752.341184175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,32 +56,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christian Lachner <gladiac@gmail.com>
+From: Ritesh Harjani <riteshh@linux.ibm.com>
 
-commit 63394a16086fc2152869d7902621e2525e14bc40 upstream.
+commit 897026aaa73eb2517dfea8d147f20ddb0b813044 upstream.
 
-The initial commit of the new Gigabyte X570 ALC1220 quirks lacked the
-fixup-model entry in alc882_fixup_models[]. It seemed not to cause any ill
-effects but for completeness sake this commit makes up for that.
+While running "./check -I 200 generic/475" it sometimes gives below
+kernel BUG(). Ideally we should not call ext4_write_inline_data() if
+ext4_create_inline_data() has failed.
 
-Signed-off-by: Christian Lachner <gladiac@gmail.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220129113243.93068-2-gladiac@gmail.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+<log snip>
+[73131.453234] kernel BUG at fs/ext4/inline.c:223!
+
+<code snip>
+ 212 static void ext4_write_inline_data(struct inode *inode, struct ext4_iloc *iloc,
+ 213                                    void *buffer, loff_t pos, unsigned int len)
+ 214 {
+<...>
+ 223         BUG_ON(!EXT4_I(inode)->i_inline_off);
+ 224         BUG_ON(pos + len > EXT4_I(inode)->i_inline_size);
+
+This patch handles the error and prints out a emergency msg saying potential
+data loss for the given inode (since we couldn't restore the original
+inline_data due to some previous error).
+
+[ 9571.070313] EXT4-fs (dm-0): error restoring inline_data for inode -- potential data loss! (inode 1703982, error -30)
+
+Reported-by: Eric Whitney <enwlinux@gmail.com>
+Signed-off-by: Ritesh Harjani <riteshh@linux.ibm.com>
+Reviewed-by: Jan Kara <jack@suse.cz>
+Link: https://lore.kernel.org/r/9f4cd7dfd54fa58ff27270881823d94ddf78dd07.1642416995.git.riteshh@linux.ibm.com
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Cc: stable@kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/pci/hda/patch_realtek.c |    1 +
- 1 file changed, 1 insertion(+)
+ fs/ext4/inline.c |   10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -2607,6 +2607,7 @@ static const struct hda_model_fixup alc8
- 	{.id = ALC882_FIXUP_NO_PRIMARY_HP, .name = "no-primary-hp"},
- 	{.id = ALC887_FIXUP_ASUS_BASS, .name = "asus-bass"},
- 	{.id = ALC1220_FIXUP_GB_DUAL_CODECS, .name = "dual-codecs"},
-+	{.id = ALC1220_FIXUP_GB_X570, .name = "gb-x570"},
- 	{.id = ALC1220_FIXUP_CLEVO_P950, .name = "clevo-p950"},
- 	{}
- };
+--- a/fs/ext4/inline.c
++++ b/fs/ext4/inline.c
+@@ -1123,7 +1123,15 @@ static void ext4_restore_inline_data(han
+ 				     struct ext4_iloc *iloc,
+ 				     void *buf, int inline_size)
+ {
+-	ext4_create_inline_data(handle, inode, inline_size);
++	int ret;
++
++	ret = ext4_create_inline_data(handle, inode, inline_size);
++	if (ret) {
++		ext4_msg(inode->i_sb, KERN_EMERG,
++			"error restoring inline_data for inode -- potential data loss! (inode %lu, error %d)",
++			inode->i_ino, ret);
++		return;
++	}
+ 	ext4_write_inline_data(inode, iloc, buf, 0, inline_size);
+ 	ext4_set_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA);
+ }
 
 

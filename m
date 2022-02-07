@@ -2,77 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39A464AB612
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 08:49:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E7204AB610
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 08:49:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238631AbiBGHbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 02:31:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57856 "EHLO
+        id S234006AbiBGHaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 02:30:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244720AbiBGHTe (ORCPT
+        with ESMTP id S232738AbiBGH3M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 02:19:34 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEC23C03FEE6;
-        Sun,  6 Feb 2022 23:18:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 3C1C1CE0E66;
-        Mon,  7 Feb 2022 07:18:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1E38C004E1;
-        Mon,  7 Feb 2022 07:18:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644218310;
-        bh=JBTRJGgMjccwQfUbbCcxtKgBVyq2KJYTH13BoW+Xa2M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kbHHGFa8hPRReLVpX/FFdLhZtX8JeaON0Jh5Ynxz9d88gs2SAAjsQL7HCivVbY9yf
-         OMnTr5fOIhOJcbusthWjQapNzAqrVIg42lx4cyhhEG+kf3c8aPxFiUAF4jfsypVqBq
-         6F0pY2E0nHzzDNgb0UJ+/d02KZEgmcStMDXpOWIQ=
-Date:   Mon, 7 Feb 2022 08:18:26 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Hammer Hsieh <hammerh0314@gmail.com>
-Cc:     robh+dt@kernel.org, linux-serial@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jirislaby@kernel.org, p.zabel@pengutronix.de, wells.lu@sunplus.com,
-        hammer.hsieh@sunplus.com
-Subject: Re: [PATCH v7 2/2] serial:sunplus-uart:Add Sunplus SoC UART Driver
-Message-ID: <YgDHwgg0s6U3bFxF@kroah.com>
-References: <1644213481-20321-1-git-send-email-hammerh0314@gmail.com>
- <1644213481-20321-3-git-send-email-hammerh0314@gmail.com>
+        Mon, 7 Feb 2022 02:29:12 -0500
+X-Greylist: delayed 540 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Feb 2022 23:29:09 PST
+Received: from rhlx01.hs-esslingen.de (rhlx01.hs-esslingen.DE [IPv6:2001:7c0:700::10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C13C043181;
+        Sun,  6 Feb 2022 23:29:09 -0800 (PST)
+Received: by rhlx01.hs-esslingen.de (Postfix, from userid 1203)
+        id 39F2529B540F; Mon,  7 Feb 2022 08:20:02 +0100 (CET)
+Date:   Mon, 7 Feb 2022 08:20:02 +0100
+From:   Adrian Reber <adrian@lisas.de>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
+        kcc@google.com, eranian@google.com,
+        Andrei Vagin <avagin@gmail.com>,
+        Dmitry Safonov <0x7f454c46@gmail.com>
+Subject: Re: [PATCH 00/35] Shadow stacks for userspace
+Message-ID: <YgDIIpCm3UITk896@lisas.de>
+References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
+ <YgAWVSGQg8FPCeba@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1644213481-20321-3-git-send-email-hammerh0314@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YgAWVSGQg8FPCeba@kernel.org>
+X-Url:  <http://lisas.de/~adrian/>
+X-Operating-System: Linux (5.15.12-200.fc35.x86_64)
+X-Load-Average: 2.46 2.60 2.63
+X-Unexpected: The Spanish Inquisition
+X-GnuPG-Key: gpg --recv-keys D3C4906A
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 01:58:01PM +0800, Hammer Hsieh wrote:
-> Add Sunplus SoC UART Driver
-> 
+On Sun, Feb 06, 2022 at 08:42:03PM +0200, Mike Rapoport wrote:
+> (added more CRIU people)
 
-We need more of a changelog comment here please.  Describe the hardware,
-what the new tty name you are using, and other stuff.  Be descriptive.
+Thanks, Mike.
 
-> --- a/include/uapi/linux/serial_core.h
-> +++ b/include/uapi/linux/serial_core.h
-> @@ -274,4 +274,7 @@
->  /* Freescale LINFlexD UART */
->  #define PORT_LINFLEXUART	122
->  
-> +/* Sunplus UART */
-> +#define PORT_SUNPLUS	123
+> On Sun, Jan 30, 2022 at 01:18:03PM -0800, Rick Edgecombe wrote:
+> > This is a slight reboot of the userspace CET series. I will be taking over the 
+> > series from Yu-cheng. Per some internal recommendations, I’ve reset the version
+> > number and am calling it a new series. Hopefully, it doesn’t cause confusion.
+> > 
+> > The new plan is to upstream only userspace Shadow Stack support at this point. 
+> > IBT can follow later, but for now I’ll focus solely on the most in-demand and
+> > widely available (with the feature on AMD CPUs now) part of CET.
+> > 
+> > I thought as part of this reset, it might be useful to more fully write-up the 
+> > design and summarize the history of the previous CET series. So this slightly
+> > long cover letter does that. The "Updates" section has the changes, if anyone
+> > doesn't want the history.
 
-Why is this needed?  Are you going to require this in some userspace
-code?  If not, please do not add it.
+[...]
 
-thanks,
+> > 	CRIU Support
+> > 	------------
+> > 	In the past there was some speculation on the mailing list about 
+> > 	whether CRIU would need to be taught about CET. It turns out, it does. 
+> > 	The first issue hit is that CRIU calls sigreturn directly from its 
+> > 	“parasite code” that it injects into the dumper process. This violates
+> > 	this shadow stack implementation’s protection that intends to prevent
+> > 	attackers from doing this.
+> > 
+> > 	With so many packages already enabled with shadow stack, there is 
+> > 	probably desire to make it work seamlessly. But in the meantime if 
+> > 	distros want to support shadow stack and CRIU, users could manually 
+> > 	disabled shadow stack via “GLIBC_TUNABLES=glibc.cpu.x86_shstk=off” for 
+> > 	a process they will wants to dump. It’s not ideal.
+> > 
+> > 	I’d like to hear what people think about having shadow stack in the 
+> > 	kernel without this resolved. Nothing would change for any users until 
+> > 	they enable shadow stack in the kernel and update to a glibc configured
+> > 	with CET. Should CRIU userspace be solved before kernel support?
 
-greg k-h
+From the CRIU side I can say that I would definitely like to see this
+resolved. CRIU just went through a similar exercise with rseq() being
+enabled in glibc and CI broke all around for us and other projects
+relying on CRIU. Although rseq() was around for a long time we were not
+aware of it but luckily 5.13 introduced a way to handle it for CRIU with
+ptrace. An environment variable existed but did not really help when
+CRIU is called somewhere in the middle of the container software stack.
+
+From my point of view a solution not involving an environment variable
+would definitely be preferred.
+
+		Adrian

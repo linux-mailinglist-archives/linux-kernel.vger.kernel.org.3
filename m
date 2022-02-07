@@ -2,124 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EE924AB81A
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 11:01:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8227F4AB812
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 11:01:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241052AbiBGJsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 04:48:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37264 "EHLO
+        id S245465AbiBGJtY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 04:49:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245311AbiBGJql (ORCPT
+        with ESMTP id S245350AbiBGJrE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 04:46:41 -0500
-X-Greylist: delayed 1740 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 01:46:40 PST
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0982CC043181;
-        Mon,  7 Feb 2022 01:46:39 -0800 (PST)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2177eoFF028141;
-        Mon, 7 Feb 2022 10:46:31 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=oOSVeuiwVcknZy/uywJxudXEDah2iCuCkHFyhcMZmdY=;
- b=1rQn7010jrDIA5RFqb16ksXRsTaa3Qj53EtAqUiQd2MQKR9ifK/kzSK4oqy+lvdl+eVe
- k9FepXUCrEvLcksBBVmNB0lRC/ey9iALP8IQW9M+gvfdSWGi5BhR59UDnIfygkbsRAL7
- CmUqaIn/XfTIwJpH5LLgM6DRlWDpZQBs5xPzb089c9lMx9InYHpbYz90a0lIEAdvWqqJ
- IcOVCr9HgksQ3AcRS8C2P+LV8AMqVSdVbqctwrqlUZaWeNsTKOu/Un3RovFj9I/JIuaN
- ulizCyvlnIQYQSI/Ig0LkBo++rt+ZCVXgagN4u12l6dTcFHTYx8sjYZAp2dGwSSAsynA mw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3e2fg5kd26-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 07 Feb 2022 10:46:31 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id A345A10002A;
-        Mon,  7 Feb 2022 10:46:30 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 807962138C1;
-        Mon,  7 Feb 2022 10:46:30 +0100 (CET)
-Received: from [10.48.0.252] (10.75.127.45) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 7 Feb
- 2022 10:46:29 +0100
-Message-ID: <c6091ca7-2c82-7169-4a76-e1506212439a@foss.st.com>
-Date:   Mon, 7 Feb 2022 10:46:29 +0100
+        Mon, 7 Feb 2022 04:47:04 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B33AC043187
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 01:47:03 -0800 (PST)
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 3081C3F328
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 09:47:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644227222;
+        bh=RpKisFMVOYgXhr4OBFF0I13PIr7NXdi+wKM2xMCNQ4M=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=Gn7MshsG9J1Ke5+3eCcwYpe5i0jScbu/mOcDCL99CFtmDJW5F7VjB3Z4OhybMxt55
+         LBbvP3QIlqGYuHolUrorzj+1xQHrIfG9A+cV82DAnW5YresuS9FOPa17xEHNfpxyAi
+         Yqw+Ac2081joSDl9Gdx9ktZDmLibh6CPYFnzxBLLK6AoRp/sqQi6H30k6HjJ/P2mGg
+         hp1gjJoV+O6Xxdvb5K8pe5Z9O8gK6gURhmTYNqiDECPhCwONKzELK2SuKRiZBWgTqE
+         Bxax7DtsvHf4Tk5QsYO+ZtRlFEpfhOf0/XzVizRFaPWNg1GGC6y4g3Ihbl9Gi6vH5P
+         Qo+npaKNuKHXA==
+Received: by mail-ed1-f69.google.com with SMTP id cr7-20020a056402222700b0040f59dae606so2339508edb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 01:47:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=RpKisFMVOYgXhr4OBFF0I13PIr7NXdi+wKM2xMCNQ4M=;
+        b=MEkmzMBBKMTTiWg5unpPg+9SIM5e3od0xVJWoiCiP9W0B8KIp5CUCjhHmnvnVZn/OC
+         aEsUr2YMlFNzXcb/1aYBUDt5LxmI1WxIbzBoYJ1BPe1GK0H3eWVtvi9ctkqMcNJc6Ln+
+         2AnJ4MfxeM3gBG4LwMtHNoxDuGDi0zj76X9JCVjHne12oYXOwgqn7A37mTvUkvr20r1R
+         CO2qT7LYRx7MZkWufavjjSyncSdgL4wr9HTdmNjrGAx2Jq+OobEfixWFJ6OWu+mHQ1qM
+         XMko5TVvxOdQJrz49GY9UuDH8US46Ebd7eWkfZ6ch9qqN/55UbFdjbx/+nkKdloSA/Zt
+         iWmw==
+X-Gm-Message-State: AOAM531DEL5NDH8XDSGUy72GrjIQWvAj9M/ZHr7hMSrbXekk5wxKQePK
+        G7CTs+/sh2tNlSL3YmNYwabY+S9GLX31zwBrJAK9oAZ6d5Wmlm0l8r+OjrO1QwS+EF8+9EcKmbv
+        aF2DDGXYcrw0DUm5zVAUwdMQ4K1TXm7RjTXM8RZuC5Q==
+X-Received: by 2002:a17:907:3da1:: with SMTP id he33mr9059614ejc.603.1644227221796;
+        Mon, 07 Feb 2022 01:47:01 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw1BoRtqvleLXKJ94x9jr4A9T/K/xfXE9FqqRN0ilJdw6S1IME3NnflwItPXK1N2kfs64wGqQ==
+X-Received: by 2002:a17:907:3da1:: with SMTP id he33mr9059600ejc.603.1644227221642;
+        Mon, 07 Feb 2022 01:47:01 -0800 (PST)
+Received: from [192.168.0.86] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id o3sm108814edt.67.2022.02.07.01.47.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Feb 2022 01:47:01 -0800 (PST)
+Message-ID: <88fcdbe6-5fef-d9cc-a645-69e35230cdeb@canonical.com>
+Date:   Mon, 7 Feb 2022 10:47:00 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v2 0/2] new emtrion hardware emSBC-Argon
+Subject: Re: [PATCH v2 0/5] mfd/extcon/regulators: max77843: add
+ dtschema/bindings
 Content-Language: en-US
-To:     <reinhold.mueller@emtrion.com>, <robh+dt@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20211209104947.4647-1-reinhold.mueller@emtrion.com>
-From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
-In-Reply-To: <20211209104947.4647-1-reinhold.mueller@emtrion.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Chanwoo Choi <cw00.choi@samsung.com>
+References: <20220111174805.223732-1-krzysztof.kozlowski@canonical.com>
+ <1bebedb9-644f-783d-492c-84a5de91720d@canonical.com>
+ <YgDnUNCNCO+JLyHU@google.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <YgDnUNCNCO+JLyHU@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.45]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-07_03,2022-02-07_01,2021-12-02_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Reinhold
-
-On 12/9/21 11:49, reinhold.mueller@emtrion.com wrote:
-> From: Reinhold Mueller <reinhold.mueller@emtrion.com>
+On 07/02/2022 10:33, Lee Jones wrote:
+> On Sun, 06 Feb 2022, Krzysztof Kozlowski wrote:
 > 
-> This patch series adds support for the emtrion emSBC-Argon
+>> On 11/01/2022 18:48, Krzysztof Kozlowski wrote:
+>>> Hi,
+>>>
+>>> The max77843 shares some parts with max77693 but it lacked bindings.  All
+>>> its compatibles were undocumented.  Add basic bindings for max77843,
+>>> matching existing devicetree.  These are not complete bindings, but
+>>> rather reverse-engineered to match current state.
+>>>
+>>> I do not have access to device with MAX77843, so if anyone else
+>>> volunteers to be the bindings maintainer, please join.
+>>>
+>>> Changes since v1
+>>> ================
+>>> 1. MFD: Use absolute path to schemas.
+>>> 2. Regulator: mention all allowed properties,
+>>>    additionalProperties=false, add min/max values for voltages and
+>>>    current, don't use patternProperties when not needed.
+>>> 3. extcon: Use absolute path to schemas.
+>>>
+>>> Dependencies
+>>> ============
+>>> 1. Patch 1/5 (dts): nothing depends on it, sending here so Rob's automatic
+>>>    checker won't complain about DTS.
+>>>    I will take it via Samsung SoC tree.
+>>>
+>>> 2. The patch 4/5 (mfd bindings) depends on regulator and extcon, so they
+>>>    should come together (2+3+4+5).
+>>>
+>> Dear Lee,
+>>
+>> This patchset was reviewed and there are no outstanding issues. Could
+>> you pick up patches 2-5 (skipping DTS patch) via MFD tree?
 > 
-> Changes
-> 
-> v2:
-> [PATCH 1/2]
-> 	- replaced enum by const
-> [PATCH 2/2]
-> 	- no fixes
-> 
-> v1:
-> [PATCH 0/2]
-> 	- split former patch in dts -and yaml patches
-> [PATCH 1/2]
-> 	- no fixes
-> [PATCH 2/2]
-> 	- small modification in subject name
-> 	- node name for leds moved to led-X
-> 	- update of clocknames removed,
-> 		already defined in stm32mp151.dtsi
-> 	- removing some unneeded entries status = "disabled"
-> 	- moved pin configurations to stm32mp15-pinctrl
-> 
-> Reinhold Mueller (2):
->    dt-binding: arm/stm32: Add emtrion hardware emSBC-Argon
->    ARM: dts: stm32: Add support for the emtrion emSBC-Argon
-> 
->   .../devicetree/bindings/arm/stm32/stm32.yaml  |   6 +
->   arch/arm/boot/dts/Makefile                    |   1 +
->   arch/arm/boot/dts/stm32mp15-pinctrl.dtsi      |  92 +++
->   arch/arm/boot/dts/stm32mp157c-emsbc-argon.dts |  53 ++
->   .../boot/dts/stm32mp157c-emstamp-argon.dtsi   | 552 ++++++++++++++++++
->   5 files changed, 704 insertions(+)
->   create mode 100644 arch/arm/boot/dts/stm32mp157c-emsbc-argon.dts
->   create mode 100644 arch/arm/boot/dts/stm32mp157c-emstamp-argon.dtsi
+> Are the subsystem maintainers not going to review/ack?
 > 
 
-Thanks to add new STM32 board! Series applied on stm32-next.
+Would be nice to have them, but maybe since these are dt-bindings maybe
+they were skipped? Or maybe it was the end-of-year holidays?
 
-Arnd,
-This series introduces new dtbs_check errors mainly because it re-use
-nodes from existing STM32 boards. I think it is acceptable to merge it 
-as it is not "new' errors but replication of existing errors.
+I can resend hoping it will trigger more acks. Do you wish me to resend?
 
-Thanks
-Alex
+Best regards,
+Krzysztof

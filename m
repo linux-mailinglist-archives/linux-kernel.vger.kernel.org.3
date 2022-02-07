@@ -2,137 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE42D4AC7FF
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 18:54:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBC7E4AC80C
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 18:59:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240095AbiBGRyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 12:54:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33954 "EHLO
+        id S1343855AbiBGRyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 12:54:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358181AbiBGRt6 (ORCPT
+        with ESMTP id S1344640AbiBGRwj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 12:49:58 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C3B8C03FEDF;
-        Mon,  7 Feb 2022 09:49:55 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id e28so14265126pfj.5;
-        Mon, 07 Feb 2022 09:49:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=oP4sNWh8iR7KWN0kzeOWR8daIfqvnXiV6Uiu1fQgVnY=;
-        b=Uz/gTtwoKHvTP1Dj5BCTpmTjU9hsSTVEMf2aWbTpnoWQ11WMjMAL159OjrPKuB9MbT
-         3PFzmq8cWmFajJGy69t11cM8qFGao4QUE9S2Ov00q2NX7KBSl/CrsY2mbqQMNmFS95Fl
-         1GekIe0LSI8k+4RQK8XFhcn8RYaYG/Qcr6qqTUqvSEAgXyt9p/BLEQoYGcIzBq/YFjTP
-         6A/f/vVthM57ufBNg8Vx8cUQz+pwX/tS3ETrNGdyMzvVU0s817O5vgxQHokNFy08S2cO
-         Sut6WCyfcvfdfAvOByDF7sInyU4wJisr2k+h6L1mMV6rEpztFGVeScC/aRZqhHr6seCO
-         6P5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=oP4sNWh8iR7KWN0kzeOWR8daIfqvnXiV6Uiu1fQgVnY=;
-        b=P0uvTCU17fPdC+GsLoW0Zv8jf9tiGrZva0E2FWIuy+adpV4p3enIfhOa49mPzesYj7
-         x9we8NdGYILvgHg5yJhKa/SJNhTXGQRhpuJ2g/Cu0mLsmQlhRW9SMieYUv9zk0F3VWkw
-         eJfuQtMFy/yzC3BapZIIgSbZUR+bV9ciH7SCvRLNW79WceACwYqSuQorLpimtaKnXJiy
-         AmOLQL2bziurecl6sawhxinTKEsJVlR6uDo2WvOGQAwDYf321kN7F1RcHuBhHoNlmmni
-         125e3smJTdtTQ4AHj1Um9SlwD7fBoj/mqTEQE+/18XwEwJbqW0dBFnhM3P78j0vf4l8l
-         YirA==
-X-Gm-Message-State: AOAM533y4DuYmAaGRnWXq8RapJaPMQzxi3h3aRkf7QL8o/HFMR22r2RC
-        zYfl2KoqpI5gXOLRsdUKkAi8Pu2NyCHTMxll
-X-Google-Smtp-Source: ABdhPJxcje7J9TJHoslEMy9RgbrnEC80j5+R9Yvm6gQb/WKFjeGgPmnIdPe5EQEYHErrAW3vRpWNdA==
-X-Received: by 2002:aa7:94a9:: with SMTP id a9mr510130pfl.78.1644256195115;
-        Mon, 07 Feb 2022 09:49:55 -0800 (PST)
-Received: from localhost ([2405:201:2003:b021:6001:8ce1:3e29:705e])
-        by smtp.gmail.com with ESMTPSA id s19sm12541046pfu.34.2022.02.07.09.49.51
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 07 Feb 2022 09:49:54 -0800 (PST)
-Date:   Mon, 7 Feb 2022 23:19:48 +0530
-From:   Raag Jadav <raagjadav@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Steen Hegelund <steen.hegelund@microchip.com>,
-        Bjarni Jonasson <bjarni.jonasson@microchip.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: phy: mscc: enable MAC SerDes autonegotiation
-Message-ID: <20220207174948.GA5183@localhost>
-References: <1644043492-31307-1-git-send-email-raagjadav@gmail.com>
- <Yf6QbbqaxZhZPUdC@lunn.ch>
- <20220206171234.GA5778@localhost>
- <YgANBQjsrmK+T/N+@lunn.ch>
+        Mon, 7 Feb 2022 12:52:39 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE8CDC0401D9;
+        Mon,  7 Feb 2022 09:52:38 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4E7441EC01B7;
+        Mon,  7 Feb 2022 18:52:33 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1644256353;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=lj3M3QiQvXsBo94U4HlpV/D8C0ht7/jERvq5KAmCCTE=;
+        b=RBq8vE9Qzf2e+zlbZGA9DQP1MUr9EquOtpBPB/LIb0VrV3MWGw859eIXsOAguuxr3oh7RX
+        U+x/86JIZYerfBFoHjXGrzDqFJkJjKFYyQNGp9K5+LbWwdAqD0zvAhQGdLHiWxNfs5V7of
+        2pBZkpWHSDm+IkFL22w6dVHUxpVgwnk=
+Date:   Mon, 7 Feb 2022 18:52:28 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     Brijesh Singh <brijesh.singh@amd.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com
+Subject: Re: [PATCH v9 31/43] x86/compressed/64: Add support for SEV-SNP
+ CPUID table in #VC handlers
+Message-ID: <YgFcXMEvWs9xGTPF@zn.tnic>
+References: <20220128171804.569796-1-brijesh.singh@amd.com>
+ <20220128171804.569796-32-brijesh.singh@amd.com>
+ <Yf5XScto3mDXnl9u@zn.tnic>
+ <20220205162249.4dkttihw6my7iha3@amd.com>
+ <Yf/PN8rBy3m5seU9@zn.tnic>
+ <20220207153739.p63sa5tcaxtdx2wn@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YgANBQjsrmK+T/N+@lunn.ch>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <20220207153739.p63sa5tcaxtdx2wn@amd.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 06, 2022 at 07:01:41PM +0100, Andrew Lunn wrote:
-> On Sun, Feb 06, 2022 at 10:42:34PM +0530, Raag Jadav wrote:
-> > On Sat, Feb 05, 2022 at 03:57:49PM +0100, Andrew Lunn wrote:
-> > > On Sat, Feb 05, 2022 at 12:14:52PM +0530, Raag Jadav wrote:
-> > > > Enable MAC SerDes autonegotiation to distinguish between
-> > > > 1000BASE-X, SGMII and QSGMII MAC.
-> > > 
-> > > How does autoneg help you here? It just tells you about duplex, pause
-> > > etc. It does not indicate 1000BaseX, SGMII etc. The PHY should be
-> > > using whatever mode it was passed in phydev->interface, which the MAC
-> > > sets when it calls the connection function. If the PHY dynamically
-> > > changes its host side mode as a result of what that line side is
-> > > doing, it should also change phydev->interface. However, as far as i
-> > > can see, the mscc does not do this.
-> > >
-> > 
-> > Once the PHY auto-negotiates parameters such as speed and duplex mode
-> > with its link partner over the copper link as per IEEE 802.3 Clause 27,
-> > the link partner’s capabilities are then transferred by PHY to MAC
-> > over 1000BASE-X or SGMII link using the auto-negotiation functionality
-> > defined in IEEE 802.3z Clause 37.
+On Mon, Feb 07, 2022 at 09:37:39AM -0600, Michael Roth wrote:
+> Absolutely, I know a thorough review is grueling work, and would never
+> want to give the impression that I don't appreciate it. Was just hoping
+> to revisit these in the context of v9 since there were some concerning
+> things in flight WRT the spec handling and I was sort of focused on
+> getting ahead of those in case they involved firmware/spec changes. But
+> I realize that's resulted in a waste of your time and I should have at
+> least provided some indication of where I was with these before your
+> review. Won't happen again.
+
+Thanks, that's appreciated.
+
+And in case you're wondering, the kernel is the most flexible thing from
+all parties involved so even if you have to change the spec/fw, fixing
+the kernel is a lot easier than any of the other things. So make sure
+you do a good job with the spec/fw - the kernel will be fine. :-)
+
+> Ok, will work this in for v10. My plan is to introduce this struct:
 > 
-> None of this allows you to distinguish between 1000BASE-X, SGMII and
-> QSGMII, which is what the commit message says.
+>   struct cpuid_leaf {
+>       u32 fn;
+>       u32 subfn;
+>       u32 eax;
+>       u32 ebx;
+>       u32 ecx;
+>       u32 edx;
+>   }
+
+Ok.
+
+> as part of the patch which introduces sev_cpuid_hv():
 > 
-
-I agree, the current commit message is misleading.
-
-> It does allow you to get duplex, pause, and maybe speed via in band
-> signalling. But you should also be getting the same information out of
-> band, via the phylib callback.
+>   x86/sev: Move MSR-based VMGEXITs for CPUID to helper
 > 
-> There are some MACs which don't seem to work correctly without the in
-> band signalling, so maybe that is your problem? Please could you give
-> more background about your problem, what MAC and PHY combination are
-> you using, what problem you are seeing, etc.
-> 
+> and then utilize that for the function parameters there, here, and any
+> other patches in the SNP code involved with fetching/manipulating cpuid
+> values before returning them to the #VC handler.
 
-MAC implementation[1] in a lot of NXP SoCs comes with in-band aneg enabled
-by default, and it does expect Clause 37 auto-negotiation to complete
-between MAC and PHY before the actual data transfer happens.
+Sounds good.
 
-[1] https://community.nxp.com/pwmxy87654/attachments/pwmxy87654/t-series/3241/1/AN3869(1).pdf
+Thx.
 
-I faced such issue while integrating VSC85xx PHY
-with one of the recent NXP SoC having similar MAC implementation.
-Not sure if this is a problem on MAC side or PHY side,
-But having Clause 37 support should help in most cases I believe.
+-- 
+Regards/Gruss,
+    Boris.
 
-Cheers,
-Raag
-
->     Andrew
-> 
+https://people.kernel.org/tglx/notes-about-netiquette

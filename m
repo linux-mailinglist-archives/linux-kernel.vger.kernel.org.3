@@ -2,65 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 061734AC037
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 14:54:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B48D4AC101
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 15:21:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389236AbiBGNv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 08:51:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41900 "EHLO
+        id S1391200AbiBGOT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 09:19:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388005AbiBGNrz (ORCPT
+        with ESMTP id S1389029AbiBGNvD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 08:47:55 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F38C043188;
-        Mon,  7 Feb 2022 05:47:54 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id u23so1110893wru.6;
-        Mon, 07 Feb 2022 05:47:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bKcb6htcU3nqL3xVplZ7gYiatJOz+PCyFD5n/EZWoj0=;
-        b=j+4PquH5vQ/ytXnWXKd7Mwnr1N0q7MxKtLYjcLtMU+rSeTlZIpmk+erwRPZeqpj8he
-         0YBS9Pqhl0odXOIzEMcb07bJLy9apH/mcjGsC3/PtN0qZOmLoewHCYkGJS0UzP3zYfsd
-         +OdM1CAGbhDgNrJeLyVKCC6mfbKRO4E3S/JywHZJW9LqAFO8gCbht+dSRM6y/gsqa7V9
-         pZBbA/0EKyg9uRNCzAIXX+S0DUXLP2STHeavdPG1HfMOGcrAr0lQoetfrjgVD4ZPB0JU
-         GAJJUvobv1eRN1zxLWOLG7C9ySibU5HwzIwPB3FE+JJ3Z2kRmriXt/UYCt49htGKCwzP
-         vUmA==
+        Mon, 7 Feb 2022 08:51:03 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7CA92C0401C0
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 05:51:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644241861;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=msKQIf5m3RNJ8ndoRLO0bGCg3f8WFhwpKNN7KVs8sjk=;
+        b=H/BBLsEau9tMutIpd1EYmv++jkFa+p+tgr3Z45IWnJfLf25I0xbVtge+GiGUrXmM2LFBOZ
+        kFwNwgubg5up33J6nEuJB+PC0EF3+QnjrsFIgL/J8pKRf1C0IvLDWoXxDEyZv5rx1+R7C5
+        eFcaNzecQCap7jwm5Q+eWGXnuNEvzMU=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-611-y9qTajqZOvKmpr-7Y9xD7A-1; Mon, 07 Feb 2022 08:51:00 -0500
+X-MC-Unique: y9qTajqZOvKmpr-7Y9xD7A-1
+Received: by mail-ej1-f71.google.com with SMTP id o7-20020a170906860700b006cbe6deec1bso649761ejx.22
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 05:51:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=bKcb6htcU3nqL3xVplZ7gYiatJOz+PCyFD5n/EZWoj0=;
-        b=jDUgcRghCtsfDRKH8praX0D7s2xT5KmIGMJedQJFGLaVUrF7yWNGM5PkWDvXqSLDmU
-         FXgk7OQYQb/ymfcz0SA/6uKWaToWXti95YbGIS1JiWsTrnR0+NdnjEbNTAXQ0vlivcdj
-         ITFYHJb+brADOBEmOZV0uhyhJRRW1xbKGiuWzwM0cjyBXFRcSxPecdg17zJPNrrI0ure
-         jvXt2vpVhs1YMhUVQZx0NENTq+APFkQ/v9W0ddi4YnN8384RHARa4L9SZLZiu9NQWUVL
-         RzFNFgdj+aBNWxKVI8gYBWYI3V4fJhKl5g+AIFHVK+l7v0DlVap305RuGwyIIrDbwDLo
-         Hzsg==
-X-Gm-Message-State: AOAM532mDCMp9BMLySkFBCuggSNS3hngf/bT6W4AoF3tkAFEEC8BY5kK
-        qqpDXy2iqWS05vFxpfwl0grS8MFr2VQ=
-X-Google-Smtp-Source: ABdhPJwYYMhMJYTcuBEPRJVRuqoQJcLpP6bMYyYxlUmAcDxFRMlI5/R0GAvjpeLVSrk9rF217IVB+w==
-X-Received: by 2002:adf:e8c3:: with SMTP id k3mr5315177wrn.713.1644241673103;
-        Mon, 07 Feb 2022 05:47:53 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id r2sm17339250wmq.0.2022.02.07.05.47.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 05:47:52 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] intel_th: remove redundant early initialization of pointer hubdrv
-Date:   Mon,  7 Feb 2022 13:47:51 +0000
-Message-Id: <20220207134751.337775-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        bh=msKQIf5m3RNJ8ndoRLO0bGCg3f8WFhwpKNN7KVs8sjk=;
+        b=yLjjsnhYwBwOZ+RFThPdcQl+nMQHsnUVx0EMNS8vyyOGI8K7bhybUQI+TrudmC/GMu
+         8SCkMpnSI93YdT/pf2S9Gn4DOYNXB1ndhVZGYv/QwKdP8cudrB4jUtOXQv1RabmPRCXD
+         J3BYaJQkGFMI6hirSSoMiRMI1CQqPQn1N0R4gAWK/D0tCmAPyXak92pr7LKk+5W6DiKd
+         ONQ2ooPnYMn4D0H/066uz+5U5m3nOMKyRXtwMlxOwdrzqtMitnLNQrqDbJlhPRbiVQZn
+         eg8rUxkzry0Mtwx8c4Y/5fhTACWR4tGeJCZ6KJGb1Ylv5nQvwfr1eay1xt+kyueliZWq
+         5c2g==
+X-Gm-Message-State: AOAM533CiUMRSZWAZPh2wCQBx0HJM0X4HYLk4egH5RzLLqV2Et5rXyED
+        KehN+ef74EZ0FXigRCg9ymIeay371YdNxMImYwActM5SKfrV4i4jBYwLpoPvZHKhv4a0yS2Pc4y
+        wnqoVq1KR5PyXA/ndruHVLC1m
+X-Received: by 2002:a17:907:e9e:: with SMTP id ho30mr9943362ejc.648.1644241859351;
+        Mon, 07 Feb 2022 05:50:59 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyy7q7L46GUgvrZDsUs7fcdkR+jHAnTyhwBqS2NTRUYS3qbGsv1f/ky1Xjl5fOHHMMPa2/MXg==
+X-Received: by 2002:a17:907:e9e:: with SMTP id ho30mr9943343ejc.648.1644241859035;
+        Mon, 07 Feb 2022 05:50:59 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id qh12sm225724ejb.172.2022.02.07.05.50.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Feb 2022 05:50:58 -0800 (PST)
+Message-ID: <180d7f0f-8c58-2a52-02a7-bd014d81d7a3@redhat.com>
+Date:   Mon, 7 Feb 2022 14:50:57 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 06/23] KVM: MMU: load new PGD once nested two-dimensional
+ paging is initialized
+Content-Language: en-US
+To:     David Matlack <dmatlack@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        seanjc@google.com, vkuznets@redhat.com
+References: <20220204115718.14934-1-pbonzini@redhat.com>
+ <20220204115718.14934-7-pbonzini@redhat.com> <Yf178LYEY4pFJcLc@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <Yf178LYEY4pFJcLc@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,29 +83,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pointer hubdrv is being initialized with a value that is never read,
-it is being re-assigned the same value later on closer to where it
-is being first used. The initialization is redundant and can be
-removed.
+On 2/4/22 20:18, David Matlack wrote:
+> On Fri, Feb 04, 2022 at 06:57:01AM -0500, Paolo Bonzini wrote:
+>> __kvm_mmu_new_pgd looks at the MMU's root_level and shadow_root_level
+>> via fast_pgd_switch.
+> Those checks are just for performance correct (to skip iterating through
+> the list of roots)?
+> 
+> Either way, it's probably worth including a Fixes tag below.
+> 
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/hwtracing/intel_th/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+There's no bug because __kvm_mmu_new_pgd is passed a correct new_role. 
+But it's unnecessarily complex as shown by patches 7 and 9.
 
-diff --git a/drivers/hwtracing/intel_th/core.c b/drivers/hwtracing/intel_th/core.c
-index 7e753a75d23b..f8fa0bd414fb 100644
---- a/drivers/hwtracing/intel_th/core.c
-+++ b/drivers/hwtracing/intel_th/core.c
-@@ -1037,7 +1037,7 @@ int intel_th_set_output(struct intel_th_device *thdev,
- 			unsigned int master)
- {
- 	struct intel_th_device *hub = to_intel_th_hub(thdev);
--	struct intel_th_driver *hubdrv = to_intel_th_driver(hub->dev.driver);
-+	struct intel_th_driver *hubdrv;
- 	int ret;
- 
- 	/* In host mode, this is up to the external debugger, do nothing. */
--- 
-2.34.1
+Paolo
 

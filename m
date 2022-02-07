@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73A0A4ABC50
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:46:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49FE24ABBF4
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:44:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385454AbiBGLbx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:31:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33190 "EHLO
+        id S1386353AbiBGLe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:34:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382929AbiBGLVL (ORCPT
+        with ESMTP id S1383684AbiBGLXY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:21:11 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4278BC0401D5;
-        Mon,  7 Feb 2022 03:20:47 -0800 (PST)
+        Mon, 7 Feb 2022 06:23:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02F3FC0401F0;
+        Mon,  7 Feb 2022 03:23:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 31F34B811BE;
-        Mon,  7 Feb 2022 11:20:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41C96C004E1;
-        Mon,  7 Feb 2022 11:20:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9271E6126D;
+        Mon,  7 Feb 2022 11:23:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F859C004E1;
+        Mon,  7 Feb 2022 11:23:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232835;
+        s=korg; t=1644233000;
         bh=tvZEM60YYnpiLaqprdHNK3Tb+A8gmqs5ag5ZSNH2XMU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yJFfy/YvcgkAjuiQMHkmnKhL71RzAxqaxl5hbI6dS2mPEa/z/71xn98fTOEdvRTqr
-         pZmV5Fji0JaruzVBK8/ROnB/BC0DD/gVnABLxsOWvt+gQVmD2VewOmJG12fnrhRzp0
-         Zhof/phJWoZ0Vf0dCghw0VWTE436TRnt0BQuUbRg=
+        b=Mo+Fahqc6Qjr1l4+HpPxpX2Mm2v61A4tBu1eTDM2jYcDkl4Y9vCaY3mFBg6f8Urhe
+         uE8jUEriMVE+UKxa19Eesz6OC83jZQLVt+Rw81YS2b7GnFCOpLO6rNZq4MHtC1E5bN
+         Ia9EIfWPjMTaIMxwQhYC2SKnwJka01vWBEENa0AU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,12 +36,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Eric Wong <e@80x24.org>,
         =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: [PATCH 5.4 40/44] rtc: cmos: Evaluate century appropriate
-Date:   Mon,  7 Feb 2022 12:06:56 +0100
-Message-Id: <20220207103754.458926618@linuxfoundation.org>
+Subject: [PATCH 5.10 59/74] rtc: cmos: Evaluate century appropriate
+Date:   Mon,  7 Feb 2022 12:06:57 +0100
+Message-Id: <20220207103759.158334607@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103753.155627314@linuxfoundation.org>
-References: <20220207103753.155627314@linuxfoundation.org>
+In-Reply-To: <20220207103757.232676988@linuxfoundation.org>
+References: <20220207103757.232676988@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8

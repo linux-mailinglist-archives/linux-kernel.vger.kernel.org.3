@@ -2,109 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99CB54AC59A
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 17:31:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BDC44AC5B8
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 17:33:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389867AbiBGQay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 11:30:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60452 "EHLO
+        id S1389841AbiBGQau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 11:30:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349765AbiBGQZG (ORCPT
+        with ESMTP id S1388324AbiBGQ1d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 11:25:06 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29D43C0401D1;
-        Mon,  7 Feb 2022 08:25:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1644251105; x=1675787105;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=MUwu9Fdq/MRDAHV6UL3afCTA6/6dxR2I/gfuI0/01w0=;
-  b=mNQ29TsglNt9hxiYSj8meMPCEPfzJjutzrXT8HQw5SX3QS3ED463FbXC
-   TLg/UodQduSjI9lhcW26sMroWJcr7GeG72nTiCKRzh/FyZUWs60TTYUrE
-   q16AJo5Ux4+Bn/gAfzhhZh4wrCM32ydmgxDYFKaLp0l3tDgPF9RGW9CI4
-   S+04TcLOEr+GoE/4SsR+VxNk52Su0fW9UUWSyjGna8dhoP+Og3CobZLLG
-   9sgFkZl4iiPRCvLAn1XzaWiaE1Ebf8VHCJSmUA/cmy2daSS5OuNo8FVvn
-   awlDQPlMCvB7UgD0rQeigpeIn1B6fn458TMRkRtLD4miw6i48XdxqBorQ
-   Q==;
-IronPort-SDR: OC17uJvBq1q0iATmtAibBLSPdHfRsh1dMhzNL47iUvksAHeoT2Jd9/Di1DXlDeXIz3sY6e+I0q
- o9twXutBj7DKdr2PBkvVlqNZd7gNc6/P5krNdCFSDzobFqCJit3iSNLnRXRVKuLGGJDlbPqUaT
- dO2VzO6j7NMAvtyL20mMbEtMFI0lNjAVmVBp3obCvHH4007w6MNu90vQ1HfxnG3TfDkf70D4P/
- rNRAYWKxX4ak/E7p6q74kMdRxOPRs5lBfYXt/Q5UAIILW27R0hTAcjn8mxpRUolkgyctVApjZQ
- e5PmQ7IPniSDNfoUMSRNxx4s
-X-IronPort-AV: E=Sophos;i="5.88,350,1635231600"; 
-   d="scan'208";a="152200246"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Feb 2022 09:25:03 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 7 Feb 2022 09:24:53 -0700
-Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Mon, 7 Feb 2022 09:24:48 -0700
-From:   <conor.dooley@microchip.com>
-To:     <linus.walleij@linaro.org>, <brgl@bgdev.pl>, <robh+dt@kernel.org>,
-        <jassisinghbrar@gmail.com>, <thierry.reding@gmail.com>,
-        <u.kleine-koenig@pengutronix.de>, <lee.jones@linaro.org>,
-        <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
-        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
-        <aou@eecs.berkeley.edu>, <geert@linux-m68k.org>,
-        <krzysztof.kozlowski@canonical.com>, <linux-gpio@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>, <linux-pwm@vger.kernel.org>,
-        <linux-rtc@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-CC:     <bin.meng@windriver.com>, <heiko@sntech.de>,
-        <lewis.hanly@microchip.com>, <conor.dooley@microchip.com>,
-        <daire.mcnamara@microchip.com>, <ivan.griffin@microchip.com>,
-        <atishp@rivosinc.com>, Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [PATCH v6 12/12] MAINTAINERS: update riscv/microchip entry
-Date:   Mon, 7 Feb 2022 16:26:38 +0000
-Message-ID: <20220207162637.1658677-13-conor.dooley@microchip.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207162637.1658677-1-conor.dooley@microchip.com>
-References: <20220207162637.1658677-1-conor.dooley@microchip.com>
+        Mon, 7 Feb 2022 11:27:33 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A0AC0401CE
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 08:27:30 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5079C1EC01A9;
+        Mon,  7 Feb 2022 17:27:25 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1644251245;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=V+wFfsqHNfZRL4X27c/FVRJb4slH/Iyz43L5rnSVKww=;
+        b=X9yluiiEo6dUxb589S8A5/IYUIB2oE4PRH2xaGSR2m0NgweXp+TpqR5Su58q4dmnHaYj7a
+        FCZD7OM0zodQtYSYpkwKPdSf+7QOLpRjFeARpFYmEDEAFT9PcxUR9BH0Q/G+g5hA0fHVuA
+        ySgGSvdru5np43vV2veodivKtoSjK30=
+Date:   Mon, 7 Feb 2022 17:27:20 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@intel.com,
+        luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv2 22/29] x86/tdx: Make pages shared in ioremap()
+Message-ID: <YgFIaJ8ijgQQ04Nv@zn.tnic>
+References: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
+ <20220124150215.36893-23-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220124150215.36893-23-kirill.shutemov@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Conor Dooley <conor.dooley@microchip.com>
+On Mon, Jan 24, 2022 at 06:02:08PM +0300, Kirill A. Shutemov wrote:
+> -/*
+> - * Macros to add or remove encryption attribute
+> - */
+> -#define pgprot_encrypted(prot)	__pgprot(__sme_set(pgprot_val(prot)))
+> -#define pgprot_decrypted(prot)	__pgprot(__sme_clr(pgprot_val(prot)))
 
-Update the RISC-V/Microchip entry by adding the microchip dts
-directory and myself as maintainer
+Why can't you simply define
 
-Reviewed-by: Lewis Hanly <lewis.hanly@microchip.com>
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
----
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
+cc_set() and cc_clear()
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index ea3e6c914384..779a550dc95b 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16575,8 +16575,10 @@ K:	riscv
- 
- RISC-V/MICROCHIP POLARFIRE SOC SUPPORT
- M:	Lewis Hanly <lewis.hanly@microchip.com>
-+M:	Conor Dooley <conor.dooley@microchip.com>
- L:	linux-riscv@lists.infradead.org
- S:	Supported
-+F:	arch/riscv/boot/dts/microchip/
- F:	drivers/mailbox/mailbox-mpfs.c
- F:	drivers/soc/microchip/
- F:	include/soc/microchip/mpfs.h
+helpers which either call the __sme variants or __tdx variants, the
+latter you can define the same way, respectively, as the __sme ones.
+
+And then you do:
+
+#define pgprot_encrypted(prot)       __pgprot(cc_set(pgprot_val(prot)))
+#define pgprot_decrypted(prot)       __pgprot(cc_clear(pgprot_val(prot)))
+
+And just so that it works as early as possible, you can define a global
+tdx_shared_mask or so which gets initialized the moment you have
+td_info.gpa_width.
+
+And then you don't need to export anything or other ifdefferies - you
+just make sure you have that mask defined as early as needed.
+
+Thx.
+
 -- 
-2.35.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette

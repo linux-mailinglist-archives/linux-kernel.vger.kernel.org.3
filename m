@@ -2,193 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C02354ACAAC
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 21:48:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEC4E4ACAA2
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 21:47:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234005AbiBGUsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 15:48:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53430 "EHLO
+        id S232849AbiBGUru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 15:47:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241902AbiBGUcw (ORCPT
+        with ESMTP id S239826AbiBGUcl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 15:32:52 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A43C3C0401E6
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 12:32:48 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id u23so3147406wru.6
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 12:32:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=conchuod-ie.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=lInl3v4291y96qRj5SmrtyZWxmX1JQwpyT8w4NZCIwE=;
-        b=pZIbLbD2z5lCj7TnELtOL5EzoxwY+lBVxsw2GZfWwQfoK6YNhj3asWV4g24WsrMUDE
-         Pc+FJHzk1Vwb1BcSpFfE0vnjX6h1xVtFhGSNFLyr3y/cTOKmdEePr+06n3Mz+WC3/mou
-         J0mx4mjkkjxyu+eFle3FufFVo+vGPTRZhg5T5jQJ48QVvrT3A0n7LcYlyg2H/OCEMVaY
-         BHT2Ifq4ujfMhMkTM0aqvNDcquf+yoJ9VFmdwFRw2RZHH8edWFGZNs69BbhMWPjcKkVn
-         c9XLjQf3kynVd22B2/eWeltNLSu9E35+DnSu7D8cQx+vXVd+jI/IW0YoL7wlOaXz//Kt
-         lNYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=lInl3v4291y96qRj5SmrtyZWxmX1JQwpyT8w4NZCIwE=;
-        b=f9Xr88gKvZtpjzKRn3cUx2+M2GkbvscttEDOuODAD5U2eqkvpMYyqpahqHc8+LeyCb
-         9b5srzaqiimD6uDwXf4p6PHAv5xPItUtsOA+NCTrQLNCEi8rRByJd+wb8BPZR3HdgizL
-         30qOn0WU0CLlMYN9K3DHdxMzx9EGr0t5HKzvoM3FO8LB6EqPeXGiw/ILneuXEOS7Cp1P
-         QIL1whlVGDbOisudwCWGn1nnBHKFLv5KCyn+IWcn43egh9KU/Xp4pvzYtw2pHPfnRXtQ
-         HEQZMMyvtLc+NVIYvlcwBunaxeelWyon32hUtVpUTNUbLQTRw+SBQQanDJoGxiK+jWaA
-         XvYQ==
-X-Gm-Message-State: AOAM532qRicMuUktozUC0zSVojldpwgmxr10lt5/TM+A7IUalu+sRX7T
-        bZPin5LQDLXaiqRp0/7q7tv1qQ==
-X-Google-Smtp-Source: ABdhPJxli8C56VbUUZpTG/k9gYuJnfVphrd7Cnfcv2luFPINoxa1eE5dK6Blkudp0C9VSCUYzi1P8w==
-X-Received: by 2002:a5d:518f:: with SMTP id k15mr898486wrv.249.1644265966959;
-        Mon, 07 Feb 2022 12:32:46 -0800 (PST)
-Received: from [192.168.2.116] ([109.78.72.167])
-        by smtp.gmail.com with ESMTPSA id t4sm10594105wro.71.2022.02.07.12.32.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Feb 2022 12:32:46 -0800 (PST)
-Message-ID: <1cce8adf-1f49-b908-ee6e-f7c2ff6b5218@conchuod.ie>
-Date:   Mon, 7 Feb 2022 20:32:44 +0000
+        Mon, 7 Feb 2022 15:32:41 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42420C0401DA;
+        Mon,  7 Feb 2022 12:32:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 075F8B816F3;
+        Mon,  7 Feb 2022 20:32:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC8BCC004E1;
+        Mon,  7 Feb 2022 20:32:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644265957;
+        bh=qA17gMhLSyJTGkg5IG50iMqfuUUw7uCTxGT40buJCL4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=KK+IljrjgG5EfwFp52wkU7rrpkEVMmErHv0ovxwMWKJBsekOrkdiXT/F5dglBKU2i
+         s3Ycx7lGx3IutqVVivrp3g303jjVDYr1rJ6yLN3kTV/4A6HLsYxM1Nk59zIZYvxpAL
+         ByygAUgvH2cG/SXBVs/+pRtMbJ5Ku3nHFEPo6BSb6vS9rQFRQpo6jYRlBwI294KcR1
+         jp2WNrRr/vWfkVaeruLBKTC+eArD+rSJHVlRRCqWaQH1b3t99EitB9f24ESgEOnzyb
+         9l1oBAETt8kgRlmNnqQG7hv+/K+5P7YQAGJKbqvEG96XRjbZfmLaGyiak3nvH2eMEI
+         i/UP9AJapKKqQ==
+Date:   Mon, 7 Feb 2022 20:39:10 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Jia-Ju Bai <baijiaju1990@gmail.com>
+Cc:     lars@metafoo.de, valek@2n.cz, gwendal@chromium.org,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [BUG] iio: light: opt3001: possible deadlock in
+ opt3001_read_raw() and opt3001_irq()
+Message-ID: <20220207203910.76ba3f2e@jic23-huawei>
+In-Reply-To: <f04b6000-f128-f928-0e3e-e3acc206d2d1@gmail.com>
+References: <f04b6000-f128-f928-0e3e-e3acc206d2d1@gmail.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v6 02/12] dt-bindings: soc/microchip: add services as sub
- devs of sys ctrlr
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>, conor.dooley@microchip.com
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, jassisinghbrar@gmail.com,
-        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
-        lee.jones@linaro.org, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, geert@linux-m68k.org,
-        krzysztof.kozlowski@canonical.com, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        bin.meng@windriver.com, heiko@sntech.de, lewis.hanly@microchip.com,
-        daire.mcnamara@microchip.com, ivan.griffin@microchip.com,
-        atishp@rivosinc.com, Palmer Dabbelt <palmer@rivosinc.com>
-References: <20220207162637.1658677-1-conor.dooley@microchip.com>
- <20220207162637.1658677-3-conor.dooley@microchip.com>
- <YgF8G/Eed03xn9iI@robh.at.kernel.org>
-From:   Conor Dooley <mail@conchuod.ie>
-In-Reply-To: <YgF8G/Eed03xn9iI@robh.at.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/02/2022 20:07, Rob Herring wrote:
-> On Mon, Feb 07, 2022 at 04:26:28PM +0000, conor.dooley@microchip.com wrote:
->> From: Conor Dooley <conor.dooley@microchip.com>
->>
->> Document mpfs-rng and mpfs-generic-service as subdevices of the system
->> controller.
->>
->> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
->> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
->> ---
->>   .../microchip,mpfs-sys-controller.yaml        | 35 +++++++++++++++++--
->>   1 file changed, 33 insertions(+), 2 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml b/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
->> index f699772fedf3..b02c8bd72605 100644
->> --- a/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
->> +++ b/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
->> @@ -13,7 +13,6 @@ description: |
->>     The PolarFire SoC system controller is communicated with via a mailbox.
->>     This document describes the bindings for the client portion of that mailbox.
->>   
->> -
->>   properties:
->>     mboxes:
->>       maxItems: 1
->> @@ -21,6 +20,38 @@ properties:
->>     compatible:
->>       const: microchip,mpfs-sys-controller
->>   
->> +  rng:
->> +    type: object
->> +
->> +    description: |
->> +      The hardware random number generator on the Polarfire SoC is
->> +      accessed via the mailbox interface provided by the system controller
->> +
->> +    properties:
->> +      compatible:
->> +        const: microchip,mpfs-rng
->> +
->> +    required:
->> +      - compatible
->> +
->> +  sysserv:
->> +    type: object
->> +
->> +    description: |
->> +      The PolarFire SoC system controller is communicated with via a mailbox.
->> +      This binding represents several of the functions provided by the system
->> +      controller which do not belong in a specific subsystem, such as reading
->> +      the fpga device certificate, all of which follow the same format:
->> +        - a command + optional payload sent to the sys controller
->> +        - a status + a payload returned to Linux
->> +
->> +    properties:
->> +      compatible:
->> +        const: microchip,mpfs-generic-service
->> +
->> +    required:
->> +      - compatible
->> +
->>   required:
->>     - compatible
->>     - mboxes
->> @@ -29,7 +60,7 @@ additionalProperties: false
->>   
->>   examples:
->>     - |
->> -    syscontroller: syscontroller {
->> +    syscontroller {
->>         compatible = "microchip,mpfs-sys-controller";
->>         mboxes = <&mbox 0>;
-> 
-> Removing the child nodes in the example doesn't address my comment. You
-> still have them in the schema. IOW, this patch should be dropped unless
-> you have reasons for child nodes other than I want to partition the OS
-> drivers a certain way and creating DT nodes instantiates them for me.
-> 
-Obviously dropping this patch doesn't prevent me from instantiating the 
-sub devices since it's not going to be done via DT anymore. Would you 
-rather I replaced this patch with one adding a link to the online 
-documentation [0] for them in the main description? I had left them in 
-as I wasn't sure if you wanted the descriptions dropped entirely or not.
+On Mon, 7 Feb 2022 23:41:49 +0800
+Jia-Ju Bai <baijiaju1990@gmail.com> wrote:
 
-And yes, partition of the services is why I had originally gone for 
-different drivers for the different aspects. Some of the services, like 
-the RNG or reprogramming the FPGA from Linux have obvious subsystems to 
-put them under, if it was just the eclectic mix of Microchip FPGA 
-specific items I'd have not bothered with the partitioning.
+> Hello,
+>=20
+> My static analysis tool reports a possible deadlock in the opt3001=20
+> driver in Linux 5.16:
+>=20
+> opt3001_read_raw()
+>  =C2=A0 mutex_lock(&opt->lock); --> Line 399 (Lock A)
+>  =C2=A0 opt3001_get_lux()
+>  =C2=A0=C2=A0=C2=A0 wait_event_timeout(opt->result_ready_queue, ...) --> =
+Line 276 (Wait X)
+>  =C2=A0 mutex_lock(&opt->lock); --> Line 412 (Unlock A)
+>=20
+> opt3001_irq()
+>  =C2=A0 mutex_lock(&opt->lock); --> Line 693 (Lock A)
+>  =C2=A0 mutex_unlock(&opt->lock); --> Line 730 (Unlock A)
+>  =C2=A0 wake_up(&opt->result_ready_queue); --> Line 733 (Wake X)
+>=20
+> When opt3001_read_raw() is executed, "Wait X" is performed by holding=20
+> "Lock A". If opt3001_irq() is executed at this time, "Wake X" cannot be=20
+> performed to wake up "Wait X" in opt3001_read_raw(), because "Lock A"=20
+> has been already hold by opt3001_read_raw(), causing a possible deadlock.
+> I find that "Wait X" is performed with a timeout, to relieve the=20
+> possible deadlock; but I think this timeout can cause inefficient executi=
+on.
+Hi Jia-Ju Bai,
 
-Cheers,
-Conor.
+There is a quirk in here thatyou haven't mentioned.  The "magic"
+opt->ok_to_ignore_lock.
 
-[0] 
-https://onlinedocs.microchip.com/pr/GUID-1409CF11-8EF9-4C24-A94E-70979A688632-en-US-1/index.html
->>       };
->> -- 
->> 2.35.1
->>
->>
-> 
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+So there are two cases:
+1) No irq in use.  In that case the opt3001_irq() will never run and we
+   just sleep + check a status flag. That's the best we can do without
+   an interrupt.
+2) irq in use, the ok_to_ignore_lock =3D true statement occurs and
+   in the opt3001_irq() the locks are never taken hence no deadlock.
+
+It is a very odd bit of code though so I'd be surprised if a static
+analyser hadn't highlighted it as a possible deadlock!
+
+Now, I'm not immediately sure why the driver is done like this as opposed
+to a more complete wait_for_completion() in read_raw(), complete() in the i=
+rq
+handler and do the actual read of the data back in read_raw().
+It's probably related to the other interrupt sources that we need to
+differentiate from in the interrupt handler.
+
+The lock definition is missing an documentation of exactly what it's scope
+is which definitely doesn't help us understand this unusual structure.
+
+Thanks,
+
+Jonathan
+
+
+>=20
+> I am not quite sure whether this possible problem is real and how to fix=
+=20
+> it if it is real.
+> Any feedback would be appreciated, thanks :)
+>=20
+>=20
+> Best wishes,
+> Jia-Ju Bai
+

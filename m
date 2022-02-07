@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FBBB4ABA07
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:26:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 815184ABD6C
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:00:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382579AbiBGLTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:19:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53024 "EHLO
+        id S1388420AbiBGLnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:43:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376406AbiBGLPH (ORCPT
+        with ESMTP id S1385490AbiBGLbz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:15:07 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC570C0401E4;
-        Mon,  7 Feb 2022 03:14:49 -0800 (PST)
+        Mon, 7 Feb 2022 06:31:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55260C03E952;
+        Mon,  7 Feb 2022 03:30:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B4CE5B81028;
-        Mon,  7 Feb 2022 11:14:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05AC3C004E1;
-        Mon,  7 Feb 2022 11:14:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D9F346077B;
+        Mon,  7 Feb 2022 11:30:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFE2DC004E1;
+        Mon,  7 Feb 2022 11:30:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232467;
-        bh=XGWLjLU68ZbceAndK89yy5Ot2TUFaEqJAD5v5ebQOPI=;
+        s=korg; t=1644233433;
+        bh=5OlD3dhXOCojKO3N7H+U3aupk719bOzjvga7rhxB4wA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mupFd7Lt051bjNbWKSIw0y2kCJSPQZsip31N3tyntPjZjdbctcd7+XNs/UyuVVm/U
-         Lb3mkhTPQCG2mOId8enYCNXM2nAWkh3CtUPgRTT/aNWFoLZqkUZ+YYqyAjt17PcCpm
-         VTO0484Wz8SukMlKmND941MmEWq67mcTYqNQTLNg=
+        b=lQlkwCeQH2nm+ActBsIL3oOEctHfOKCEpl504jYoNdbarnRLpTWZxBdPHJnsVzJbg
+         Bn8zQWCzoTXvsJy/DbgKvojJvFvxybGsW86rexdbHrEnh+Khdw/ItsIKF42DCF4Dcs
+         eUimsYSBk51YU72ZgbkX/2hNMUUs/MU9aPS5e58g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Erhard Furtner <erhard_f@mailbox.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: [PATCH 4.19 19/86] powerpc/32: Fix boot failure with GCC latent entropy plugin
+        stable@vger.kernel.org, Alexander Sergeyev <sergeev917@gmail.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.16 011/126] ALSA: hda: Fix UAF of leds class devs at unbinding
 Date:   Mon,  7 Feb 2022 12:05:42 +0100
-Message-Id: <20220207103758.182352841@linuxfoundation.org>
+Message-Id: <20220207103804.452290450@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103757.550973048@linuxfoundation.org>
-References: <20220207103757.550973048@linuxfoundation.org>
+In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
+References: <20220207103804.053675072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,54 +54,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
+From: Takashi Iwai <tiwai@suse.de>
 
-commit bba496656a73fc1d1330b49c7f82843836e9feb1 upstream.
+commit 549f8ffc7b2f7561bea7f90930b6c5104318e87b upstream.
 
-Boot fails with GCC latent entropy plugin enabled.
+The LED class devices that are created by HD-audio codec drivers are
+registered via devm_led_classdev_register() and associated with the
+HD-audio codec device.  Unfortunately, it turned out that the devres
+release doesn't work for this case; namely, since the codec resource
+release happens before the devm call chain, it triggers a NULL
+dereference or a UAF for a stale set_brightness_delay callback.
 
-This is due to early boot functions trying to access 'latent_entropy'
-global data while the kernel is not relocated at its final
-destination yet.
+For fixing the bug, this patch changes the LED class device register
+and unregister in a manual manner without devres, keeping the
+instances in hda_gen_spec.
 
-As there is no way to tell GCC to use PTRRELOC() to access it,
-disable latent entropy plugin in early_32.o and feature-fixups.o and
-code-patching.o
-
-Fixes: 38addce8b600 ("gcc-plugins: Add latent_entropy plugin")
-Cc: stable@vger.kernel.org # v4.9+
-Reported-by: Erhard Furtner <erhard_f@mailbox.org>
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215217
-Link: https://lore.kernel.org/r/2bac55483b8daf5b1caa163a45fa5f9cdbe18be4.1640178426.git.christophe.leroy@csgroup.eu
+Reported-by: Alexander Sergeyev <sergeev917@gmail.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220111195229.a77wrpjclqwrx4bx@localhost.localdomain
+Link: https://lore.kernel.org/r/20220126145011.16728-1-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/kernel/Makefile |    1 +
- arch/powerpc/lib/Makefile    |    3 +++
- 2 files changed, 4 insertions(+)
+ sound/pci/hda/hda_generic.c |   17 +++++++++++++++--
+ sound/pci/hda/hda_generic.h |    3 +++
+ 2 files changed, 18 insertions(+), 2 deletions(-)
 
---- a/arch/powerpc/kernel/Makefile
-+++ b/arch/powerpc/kernel/Makefile
-@@ -15,6 +15,7 @@ CFLAGS_prom_init.o      += -fPIC
- CFLAGS_btext.o		+= -fPIC
- endif
+--- a/sound/pci/hda/hda_generic.c
++++ b/sound/pci/hda/hda_generic.c
+@@ -91,6 +91,12 @@ static void snd_hda_gen_spec_free(struct
+ 	free_kctls(spec);
+ 	snd_array_free(&spec->paths);
+ 	snd_array_free(&spec->loopback_list);
++#ifdef CONFIG_SND_HDA_GENERIC_LEDS
++	if (spec->led_cdevs[LED_AUDIO_MUTE])
++		led_classdev_unregister(spec->led_cdevs[LED_AUDIO_MUTE]);
++	if (spec->led_cdevs[LED_AUDIO_MICMUTE])
++		led_classdev_unregister(spec->led_cdevs[LED_AUDIO_MICMUTE]);
++#endif
+ }
  
-+CFLAGS_setup_32.o += $(DISABLE_LATENT_ENTROPY_PLUGIN)
- CFLAGS_cputable.o += $(DISABLE_LATENT_ENTROPY_PLUGIN)
- CFLAGS_prom_init.o += $(DISABLE_LATENT_ENTROPY_PLUGIN)
- CFLAGS_btext.o += $(DISABLE_LATENT_ENTROPY_PLUGIN)
---- a/arch/powerpc/lib/Makefile
-+++ b/arch/powerpc/lib/Makefile
-@@ -10,6 +10,9 @@ ccflags-$(CONFIG_PPC64)	:= $(NO_MINIMAL_
- CFLAGS_REMOVE_code-patching.o = $(CC_FLAGS_FTRACE)
- CFLAGS_REMOVE_feature-fixups.o = $(CC_FLAGS_FTRACE)
+ /*
+@@ -3922,7 +3928,10 @@ static int create_mute_led_cdev(struct h
+ 						enum led_brightness),
+ 				bool micmute)
+ {
++	struct hda_gen_spec *spec = codec->spec;
+ 	struct led_classdev *cdev;
++	int idx = micmute ? LED_AUDIO_MICMUTE : LED_AUDIO_MUTE;
++	int err;
  
-+CFLAGS_code-patching.o += $(DISABLE_LATENT_ENTROPY_PLUGIN)
-+CFLAGS_feature-fixups.o += $(DISABLE_LATENT_ENTROPY_PLUGIN)
+ 	cdev = devm_kzalloc(&codec->core.dev, sizeof(*cdev), GFP_KERNEL);
+ 	if (!cdev)
+@@ -3932,10 +3941,14 @@ static int create_mute_led_cdev(struct h
+ 	cdev->max_brightness = 1;
+ 	cdev->default_trigger = micmute ? "audio-micmute" : "audio-mute";
+ 	cdev->brightness_set_blocking = callback;
+-	cdev->brightness = ledtrig_audio_get(micmute ? LED_AUDIO_MICMUTE : LED_AUDIO_MUTE);
++	cdev->brightness = ledtrig_audio_get(idx);
+ 	cdev->flags = LED_CORE_SUSPENDRESUME;
+ 
+-	return devm_led_classdev_register(&codec->core.dev, cdev);
++	err = led_classdev_register(&codec->core.dev, cdev);
++	if (err < 0)
++		return err;
++	spec->led_cdevs[idx] = cdev;
++	return 0;
+ }
+ 
+ /**
+--- a/sound/pci/hda/hda_generic.h
++++ b/sound/pci/hda/hda_generic.h
+@@ -294,6 +294,9 @@ struct hda_gen_spec {
+ 				   struct hda_jack_callback *cb);
+ 	void (*mic_autoswitch_hook)(struct hda_codec *codec,
+ 				    struct hda_jack_callback *cb);
 +
- obj-y += string.o alloc.o code-patching.o feature-fixups.o
++	/* leds */
++	struct led_classdev *led_cdevs[NUM_AUDIO_LEDS];
+ };
  
- obj-$(CONFIG_PPC32)	+= div64.o copy_32.o crtsavres.o strlen_32.o
+ /* values for add_stereo_mix_input flag */
 
 

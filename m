@@ -2,171 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F4CA4AB6BF
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 09:44:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20DAE4AB6B9
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 09:44:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244312AbiBGIbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 03:31:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56738 "EHLO
+        id S245297AbiBGIbx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 03:31:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241878AbiBGIWl (ORCPT
+        with ESMTP id S241363AbiBGIXh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 03:22:41 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85789C0401C8
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 00:22:29 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id s10so20662380wra.5
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 00:22:29 -0800 (PST)
+        Mon, 7 Feb 2022 03:23:37 -0500
+Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C796C043181
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 00:23:34 -0800 (PST)
+Received: by mail-yb1-xb44.google.com with SMTP id v186so37734931ybg.1
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 00:23:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=BFte/N73anufCY2L87ftPOVSU+tJUPZA2b1mVMi04m0=;
-        b=Mbh876zYnjjHrxOynXr+Nj75Jw2lyrzd5iAanX1bxuFZzKgj7ChmEnefO66IyihPvV
-         tQBQdKkP2mavDMm+qDG/vlcL66p3mWzsWMqPKjAgFMLgQvORJjY+xi1Rjx/51YROfskG
-         3K0Z94IQe7UM7o7FwXIRAIJDtzH1CJVjv/Qzks4FdNKWj4rXair+q8hR+CNcsWQk37pb
-         0xqDtWf8v5VuHWwvFAll7tTIla6kKlTLTINw0+wvPyHlJCSf/wHPOi/jUvFVyjqo0ivh
-         rDfmIScFCl/Ra6AkdT5cPNzyboHca44CW0uwE+Z2z+o9WElcDo84LY8h8aW+Nm9/aafT
-         L99g==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=vIF0HCtULT8/Hj4oEOKhM3wVM2dbK4vAQWbMA06NHEs=;
+        b=D8wEsUshu+MXbWyBd7OReGZjXbMOkMJppcURGNQbWJVdrq9YtG4pIgx1S+VYMDDYwr
+         kd9/VZvyfo6Vp/NBPU0crRvSDg9NkBrYnss35/x14Tr11a9Z0SyT5XyoHWWwMAfxTFKE
+         Ab2R4KPF77WxJpcM3Y8Hs77JiCzR1t6vfZQTbNK2Vab9vDDkoFp6FFG2+BRZmw8CZYaZ
+         6Ulg7mvwqmTcelVVL6o3OMc/y0lR4i5NbdRd5FOe9M6wnIBFI3ASI09cppYTRiBcJhX1
+         ji5xOD8nKPQe2kpbS701EeD+70lgmHhFsqu/7omXMsY2fuvXpK8ZO5xBx+Kh55V5gtXu
+         n8Vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=BFte/N73anufCY2L87ftPOVSU+tJUPZA2b1mVMi04m0=;
-        b=aYk7f6wtnJ1QveAXFjJP/NZxWWJuAwNMHekGNmgrC4n+B6zDoxIzhrD8NsAzTYudPB
-         Tqzzyv3VTmmuG51ol15dIDQ85MWopDvQ4sYw3oLTu3giIGQ4SqgGGW6m8aiOHLnWLRSn
-         kq5EV1nf5PpDVfASp3FbIj+TspbBnPkk2+lcJ0C5ctgtqSeoUoyX2uj5C776aR2N15b1
-         JVwHFG33y/UnvSfqticOKRrr0N5mXtgT4TW52jstA+vg+QOq4vw+wnkcRLbfdBao+p82
-         //SdegqAOVqwl3fejZtELnPG3HHtiHJQyGN7fu+vriTXM266nliFoghka3wPWiaYdNLa
-         BQzQ==
-X-Gm-Message-State: AOAM531exgRdOIUIoXXX80+zWyvlUhQx5NMoZk27Z/V5pP/TMfKI68bY
-        0t0q6kUiQjpzjl/vvVl7tL3mrA==
-X-Google-Smtp-Source: ABdhPJxz9gW41n0pkig+OBH//ze20WA6UazsXCaba4FC/dE8g7lFgLCHMEy218v1gS11sx4XSGVbjw==
-X-Received: by 2002:a5d:64a7:: with SMTP id m7mr8980991wrp.80.1644222147863;
-        Mon, 07 Feb 2022 00:22:27 -0800 (PST)
-Received: from ?IPV6:2001:861:44c0:66c0:b2bb:1b67:73da:334d? ([2001:861:44c0:66c0:b2bb:1b67:73da:334d])
-        by smtp.gmail.com with ESMTPSA id a1sm9277401wrf.42.2022.02.07.00.22.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Feb 2022 00:22:27 -0800 (PST)
-Message-ID: <4171ca35-3d82-eaa3-5812-9c038f1c0415@baylibre.com>
-Date:   Mon, 7 Feb 2022 09:22:30 +0100
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=vIF0HCtULT8/Hj4oEOKhM3wVM2dbK4vAQWbMA06NHEs=;
+        b=g04WP4dI80AFw8lfi9YjcC3b74J3YIDfaK3KD8mtXX/qG/gNhYalDsd5ulVq8ktkgh
+         n4LYb6xnZ1GPKEnSctf6bN4rkvjd8dJbqYvBHCajx+7E5Iz6cMrN60OLE3llB3MpoPwe
+         zODi9PhD5mSKdhR2RABeJTzaWoA7lz9Knx+fCqLpDypuUtDHyLo0m6UoJT5N4iCVvHMi
+         S7oWtfiYGuU/w1Oz5vpYkJni5WmfIdumIRDM2SXGDbcSD2ygRXrem2FrUe0LNYYkGpbW
+         2M95PeGuMITtqxrCgfgkQ+SCjEVnd3ZInUKOhIunMdDNjjSrzNDckbq7ur3ItuWYXakj
+         y8Kw==
+X-Gm-Message-State: AOAM531lnI8V9qtZQHAik5KmnW6GNhCmJy1xB6YF3fDRQamTOlaQdPq5
+        s1N6Cf8XpayKnIWPeqLgaQa3oL7Dlvn8AlAuGik=
+X-Google-Smtp-Source: ABdhPJwlPED2ys9mXsK+RU2NHbh+bWJ2JkjnIr/BzVj44DEbbYVcmo4FwpFnYRLVvsnz05yk1/sWPgkzZm1o/Ab1VR8=
+X-Received: by 2002:a0d:f0c7:: with SMTP id z190mr9865471ywe.61.1644222213733;
+ Mon, 07 Feb 2022 00:23:33 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3] drm/bridge: dw-hdmi: use safe format when first in
- bridge chain
-Content-Language: en-US
-To:     Sam Ravnborg <sam@ravnborg.org>
-Cc:     robert.foss@linaro.org, jernej.skrabec@gmail.com, jonas@kwiboo.se,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        kieran.bingham@ideasonboard.com,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Laurent.pinchart@ideasonboard.com, biju.das.jz@bp.renesas.com
-References: <20220204143337.89221-1-narmstrong@baylibre.com>
- <YgA+lcSNaQ2x4Wef@ravnborg.org>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <YgA+lcSNaQ2x4Wef@ravnborg.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Reply-To: salkavar2@gmail.com
+Sender: isa.ongo@gmail.com
+Received: by 2002:a05:7000:64cd:0:0:0:0 with HTTP; Mon, 7 Feb 2022 00:23:33
+ -0800 (PST)
+From:   "Mr.Sal kavar" <salkavar2@gmail.com>
+Date:   Mon, 7 Feb 2022 09:23:33 +0100
+X-Google-Sender-Auth: 9YfxrKY40o7j93VKR3QmTDU54pM
+Message-ID: <CA+_CzdMtpAs1y+0H3O+WrFEnRtD41iAvuybaYdcSbMQX5T9Drg@mail.gmail.com>
+Subject: Yours Faithful,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FREEMAIL_REPLYTO_END_DIGIT,LOTS_OF_MONEY,MILLION_HUNDRED,MONEY_FRAUD_8,
+        MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_HK_NAME_FM_MR_MRS,T_MONEY_PERCENT,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:b44 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5029]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [isa.ongo[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [salkavar2[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 MILLION_HUNDRED BODY: Million "One to Nine" Hundred
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  0.0 T_MONEY_PERCENT X% of a lot of money for you
+        *  1.8 MONEY_FRAUD_8 Lots of money and very many fraud phrases
+        *  3.1 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sam,
+I assume you and your family are in good health. I am the foreign
+operations Manager
 
-On 06/02/2022 22:33, Sam Ravnborg wrote:
-> Hi Neail,
-> 
-> On Fri, Feb 04, 2022 at 03:33:37PM +0100, Neil Armstrong wrote:
->> When the dw-hdmi bridge is in first place of the bridge chain, this
->> means there is no way to select an input format of the dw-hdmi HW
->> component.
->>
->> Since introduction of display-connector, negotiation was broken since
->> the dw-hdmi negotiation code only worked when the dw-hdmi bridge was
->> in last position of the bridge chain or behind another bridge also
->> supporting input & output format negotiation.
->>
->> Commit 7cd70656d128 ("drm/bridge: display-connector: implement bus fmts callbacks")
->> was introduced to make negotiation work again by making display-connector
->> act as a pass-through concerning input & output format negotiation.
->>
->> But in the case where the dw-hdmi is single in the bridge chain, for
->> example on Renesas SoCs, with the display-connector bridge the dw-hdmi
->> is no more single, breaking output format.
-> 
-> I have forgotten all the details during my leave from drm, so I
-> may miss something obvious.
-> This fix looks like it papers over some general thingy with the
-> format negotiation.
-> 
-> We do not want to see the below in all display drivers, so
-> I assume the right fix is to stuff it in somewhere in the framework.
+This being a wide world in which it can be difficult to make new
+acquaintances and because it is virtually impossible to know who is
+trustworthy and who can be believed, i have decided to repose
+confidence in you after much fasting and prayer. It is only because of
+this that I have decided to confide in you and to share with you this
+confidential business.
 
-The main issue is there is rule about the encoder in display driver having
-a companion bridge to support format negotiation.
+overdue and unclaimed sum of $15.5m, (Fifteen Million Five Hundred
+Thousand Dollars Only) when the account holder suddenly passed on, he
+left no beneficiary who would be entitled to the receipt of this fund.
+For this reason, I have found it expedient to transfer this fund to a
+trustworthy individual with capacity to act as foreign business
+partner.
 
-To solve this cleanly, the first bridge tied to an encoder should register
-with some caps or flags.
+Thus i humbly request your assistance to claim this fund. Upon the
+transfer of this fund in your account, you will take 45% as your share
+from the total fund, 10% will be shared to Charity Organizations in
+both country and 45% will be for me.
 
-For now very few bridge supports negotiation so the rules yet needs to be defined.
-
-Since we are getting into a better support of DRM_BRIDGE_ATTACH_NO_CONNECTOR, which
-clarifies the bridge chain, we should have more cards in our hand in a near future.
-
-Anyway, in the meantime there is no fix in the framework for this case.
-
-Neil
-
-> 
-> Or do I miss something?
-> 
-> 	Sam
-> 
-> 
->>
->> Reported-by: Biju Das <biju.das.jz@bp.renesas.com>
->> Bisected-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
->> Tested-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
->> Fixes: 7cd70656d128 ("drm/bridge: display-connector: implement bus fmts callbacks").
->> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
->> Reviewed-by: Robert Foss <robert.foss@linaro.org>
->> ---
->> Changes since v2:
->> - Add rob's r-b
->> - Fix invalid Fixes commit hash
->>
->> Changes since v1:
->> - Remove bad fix in dw_hdmi_bridge_atomic_get_input_bus_fmts
->> - Fix typos in commit message
->>
->>   drivers/gpu/drm/bridge/synopsys/dw-hdmi.c | 5 +++--
->>   1 file changed, 3 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
->> index 54d8fdad395f..97cdc61b57f6 100644
->> --- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
->> +++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
->> @@ -2551,8 +2551,9 @@ static u32 *dw_hdmi_bridge_atomic_get_output_bus_fmts(struct drm_bridge *bridge,
->>   	if (!output_fmts)
->>   		return NULL;
->>   
->> -	/* If dw-hdmi is the only bridge, avoid negociating with ourselves */
->> -	if (list_is_singular(&bridge->encoder->bridge_chain)) {
->> +	/* If dw-hdmi is the first or only bridge, avoid negociating with ourselves */
->> +	if (list_is_singular(&bridge->encoder->bridge_chain) ||
->> +	    list_is_first(&bridge->chain_node, &bridge->encoder->bridge_chain)) {
->>   		*num_output_fmts = 1;
->>   		output_fmts[0] = MEDIA_BUS_FMT_FIXED;
->>   
->> -- 
->> 2.25.1
-
+Yours Faithful,
+Mr.Sal Kavar.

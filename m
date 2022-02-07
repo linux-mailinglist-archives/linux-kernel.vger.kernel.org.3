@@ -2,50 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15E734ABE4F
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:09:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 774C64AB96D
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:23:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391556AbiBGMCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 07:02:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48836 "EHLO
+        id S1377905AbiBGLPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:15:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386800AbiBGLhP (ORCPT
+        with ESMTP id S1353048AbiBGLMH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:37:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26C67C043181;
-        Mon,  7 Feb 2022 03:37:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A0C836091A;
-        Mon,  7 Feb 2022 11:37:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3316FC340EB;
-        Mon,  7 Feb 2022 11:37:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233833;
-        bh=YXdkOb+AW7YT32Y3DFc/rWRM/5lbSEXUizTTYCWC+2E=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aLJ3vXDAQr9sSJno+YYmUnThc2nOTRbzsYe1DJK6WSK5/AB5FOGKNBB2NZhrI0RH+
-         Cat6tFG7Xr0FZhbRtxCsF3i6fICMfJzRdIQCohgEK68GQZatHzIXgc9EA2jx+A6W4M
-         BHmrvJgHWVW49WNNVEw0RYwR8SO0Vyo9sEdKo+xs=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Florian Westphal <fw@strlen.de>,
-        Pablo Neira Ayuso <pablo@netfilter.org>
-Subject: [PATCH 5.16 126/126] selftests: netfilter: check stateless nat udp checksum fixup
-Date:   Mon,  7 Feb 2022 12:07:37 +0100
-Message-Id: <20220207103808.392194264@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
-References: <20220207103804.053675072@linuxfoundation.org>
-User-Agent: quilt/0.66
+        Mon, 7 Feb 2022 06:12:07 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A70DC043188
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 03:12:05 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id n8so26096293lfq.4
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 03:12:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XbKWNzwtzweE+tESV0+fzTxjkTTK/lxc2KgkbgEllU8=;
+        b=Bqu1THJMQ0yvHj3Dre8UYh6otX0QojMqhcpvqJsKcG99JBbHgGxFC4U8wrffpFI2MS
+         Sa0EOyFgLtUxjOivr0XSGw2keEcixLf6N1uIEOIQ8R5GoW7Nl07yxQSpMYNjIvVALMyC
+         siU5IVpmFAJMSnAAtII7eb83o7K77CjOHcIwkTBiMtWlGbaBTrZsihxccDWhs/J+7/Iu
+         6SkSTGMxOs1wan/pWtBBAh+6JPi9BO1tlnPQ3wX+d3wodY/V/LJP0GRsNeLyYGzotZQ4
+         Y1w3/+1yNRXQ8YcB1dCFh/y+5aBWQwvTZuVNIi+mj7v/sxwkED8usIoP93ICIRFmGb9D
+         PSaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XbKWNzwtzweE+tESV0+fzTxjkTTK/lxc2KgkbgEllU8=;
+        b=pZuv/WnXivKnESGJjgE4HgfKMBO+4ulIbPg/8N6tYyU4hI5p9ISi0Z7zlbf+vNI/O8
+         yCey6GcZusedHKqnOms1Rd4o6zjvPyZpVPngxivxDBZUMPVGDYxJn5FCuUbaIPXl82jo
+         wqOmyMJ/xWokyOv6MsaZOCNhqJ6lr2swnBxiK0VnsYbozsdm/R+OHOqzltO98R7ID6Ze
+         YIiNjBgZFGsS2HmJqWi+aiQvjrdSPFdFJZPXZaxF2FVBiNHjzICGvIcTdQXAI6597XJN
+         mdHXkHlNjluVHvnQlIItDDXcA3JvbAWWZ72NeoYET3DOfe03bZOU063IJlvumWiuInGq
+         QgTg==
+X-Gm-Message-State: AOAM532DkZvlH/WPT+r224vCRdItgVyn0jrpRUZ8fBB1KxL1JzgQPdcv
+        RHUMSkmbBBCBqfKPIOmgmHqqh1A7ihnLKyoix3YZng==
+X-Google-Smtp-Source: ABdhPJwEVJnnNaxNKAnDxmE98KcsOO4AdVUEM4kKNPEV3/s9YO0k3TL/eLzyo53nzbo+dPK3K3FaKrFhuPiD0ba/vo0=
+X-Received: by 2002:a05:6512:3b9a:: with SMTP id g26mr8074861lfv.71.1644232323581;
+ Mon, 07 Feb 2022 03:12:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <8e61aed5f64e434abc1d7b6f81859c8a@realtek.com> <CAPDyKFrLpim75nUB7ksDie2edkWsnFSq6TbFSFFpw5cY5d4y1w@mail.gmail.com>
+ <fabaed5751f04105a9719c1cb0390c98@realtek.com> <CAPDyKFr3NRUgfKtkb2DBrhziekFAB0jT_X3Fsfvjk_bGZLC9mA@mail.gmail.com>
+ <fa10aa1c644241808c2ad880088240ab@realtek.com> <CAPDyKFrtBKHHRgeF-JO27ANsbSmt8rdnhn-WNr5Je9okEgA29Q@mail.gmail.com>
+ <feb0c4e71e9c48a2a21f18b7d3baf135@realtek.com>
+In-Reply-To: <feb0c4e71e9c48a2a21f18b7d3baf135@realtek.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 7 Feb 2022 12:11:27 +0100
+Message-ID: <CAPDyKFoq_PDk_JgW4D+o4eEPdcffUq2RLbBreRDqeK47m0UnJA@mail.gmail.com>
+Subject: Re: [PATCH v3] mmc: rtsx: improve performance for multi block rw
+To:     Ricky WU <ricky_wu@realtek.com>
+Cc:     "tommyhebb@gmail.com" <tommyhebb@gmail.com>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,208 +69,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florian Westphal <fw@strlen.de>
+[...]
 
-commit aad51ca71ad83273e8826d6cfdcf53c98748d1fa upstream.
+> > > > >
+> > > > > Do you have any suggestion for testing random I/O But we think
+> > > > > random I/O will not change much
+> > > >
+> > > > I would probably look into using fio,
+> > > > https://fio.readthedocs.io/en/latest/
+> > > >
+> > >
+> > > Filled random I/O data
+> > > Before the patch:
+> > > CMD (Randread):
+> > > sudo fio -filename=/dev/mmcblk0 -direct=1 -numjobs=1 -thread
+> > > -group_reporting -ioengine=psync -iodepth=1 -size=1G -name=mytest
+> > > -bs=1M -rw=randread
+> >
+> > Thanks for running the tests! Overall, I would not expect an impact on the
+> > throughput when using a big blocksize like 1M. This is also pretty clear from
+> > the result you have provided.
+> >
+> > However, especially for random writes and reads, we want to try with smaller
+> > blocksizes. Like 8k or 16k, would you mind running another round of tests to
+> > see how that works out?
+> >
+>
+> Filled random I/O data(8k/16k)
 
-Add a test that sends large udp packet (which is fragmented)
-via a stateless nft nat rule, i.e. 'ip saddr set 10.2.3.4'
-and check that the datagram is received by peer.
+Hi Ricky,
 
-On kernels without
-commit 4e1860a38637 ("netfilter: nft_payload: do not update layer 4 checksum when mangling fragments")',
-this will fail with:
+Apologize for the delay! Thanks for running the tests. Let me comment
+on them below.
 
-cmp: EOF on /tmp/tmp.V1q0iXJyQF which is empty
--rw------- 1 root root 4096 Jan 24 22:03 /tmp/tmp.Aaqnq4rBKS
--rw------- 1 root root    0 Jan 24 22:03 /tmp/tmp.V1q0iXJyQF
-ERROR: in and output file mismatch when checking udp with stateless nat
-FAIL: nftables v1.0.0 (Fearless Fosdick #2)
+>
+> Before(randread)
+> 8k:
+> Cmd: sudo fio -filename=/dev/mmcblk0 -direct=1 -numjobs=1 -thread -group_reporting -ioengine=psync -iodepth=1 -size=1G -name=mytest -bs=8k -rw=randread
+> mytest: (g=0): rw=randread, bs=(R) 8192B-8192B, (W) 8192B-8192B, (T) 8192B-8192B, ioengine=psync, iodepth=1
+> result:
+> Run status group 0 (all jobs):
+>    READ: bw=16.5MiB/s (17.3MB/s), 16.5MiB/s-16.5MiB/s (17.3MB/s-17.3MB/s), io=1024MiB (1074MB), run=62019-62019msec
+> Disk stats (read/write):
+>   mmcblk0: ios=130757/0, merge=0/0, ticks=57751/0, in_queue=57751, util=99.89%
+>
+> 16k:
+> Cmd: sudo fio -filename=/dev/mmcblk0 -direct=1 -numjobs=1 -thread -group_reporting -ioengine=psync -iodepth=1 -size=1G -name=mytest -bs=16k -rw=randread
+> mytest: (g=0): rw=randread, bs=(R) 16.0KiB-16.0KiB, (W) 16.0KiB-16.0KiB, (T) 16.0KiB-16.0KiB, ioengine=psync, iodepth=1
+> result:
+> Run status group 0 (all jobs):
+>    READ: bw=23.3MiB/s (24.4MB/s), 23.3MiB/s-23.3MiB/s (24.4MB/s-24.4MB/s), io=1024MiB (1074MB), run=44034-44034msec
+> Disk stats (read/write):
+>   mmcblk0: ios=65333/0, merge=0/0, ticks=39420/0, in_queue=39420, util=99.84%
+>
+> Before(randrwrite)
+> 8k:
+> Cmd: sudo fio -filename=/dev/mmcblk0 -direct=1 -numjobs=1 -thread -group_reporting -ioengine=psync -iodepth=1 -size=100M -name=mytest -bs=8k -rw=randwrite
+> mytest: (g=0): rw=randwrite, bs=(R) 8192B-8192B, (W) 8192B-8192B, (T) 8192B-8192B, ioengine=psync, iodepth=1
+> result:
+> Run status group 0 (all jobs):
+>   WRITE: bw=4060KiB/s (4158kB/s), 4060KiB/s-4060KiB/s (4158kB/s-4158kB/s), io=100MiB (105MB), run=25220-25220msec
+> Disk stats (read/write):
+>   mmcblk0: ios=51/12759, merge=0/0, ticks=80/24154, in_queue=24234, util=99.90%
+>
+> 16k:
+> Cmd: sudo fio -filename=/dev/mmcblk0 -direct=1 -numjobs=1 -thread -group_reporting -ioengine=psync -iodepth=1 -size=100M -name=mytest -bs=16k -rw=randwrite
+> mytest: (g=0): rw=randwrite, bs=(R) 16.0KiB-16.0KiB, (W) 16.0KiB-16.0KiB, (T) 16.0KiB-16.0KiB, ioengine=psync, iodepth=1
+> result:
+> Run status group 0 (all jobs):
+>   WRITE: bw=7201KiB/s (7373kB/s), 7201KiB/s-7201KiB/s (7373kB/s-7373kB/s), io=100MiB (105MB), run=14221-14221msec
+> Disk stats (read/write):
+>   mmcblk0: ios=51/6367, merge=0/0, ticks=82/13647, in_queue=13728, util=99.81%
+>
+>
+> After(randread)
+> 8k:
+> Cmd: sudo fio -filename=/dev/mmcblk0 -direct=1 -numjobs=1 -thread -group_reporting -ioengine=psync -iodepth=1 -size=1G -name=mytest -bs=8k -rw=randread
+> mytest: (g=0): rw=randread, bs=(R) 8192B-8192B, (W) 8192B-8192B, (T) 8192B-8192B, ioengine=psync, iodepth=1
+> result:
+> Run status group 0 (all jobs):
+>    READ: bw=12.4MiB/s (13.0MB/s), 12.4MiB/s-12.4MiB/s (13.0MB/s-13.0MB/s), io=1024MiB (1074MB), run=82397-82397msec
+> Disk stats (read/write):
+>   mmcblk0: ios=130640/0, merge=0/0, ticks=74125/0, in_queue=74125, util=99.94%
+>
+> 16k:
+> Cmd: sudo fio -filename=/dev/mmcblk0 -direct=1 -numjobs=1 -thread -group_reporting -ioengine=psync -iodepth=1 -size=1G -name=mytest -bs=16k -rw=randread
+> mytest: (g=0): rw=randread, bs=(R) 16.0KiB-16.0KiB, (W) 16.0KiB-16.0KiB, (T) 16.0KiB-16.0KiB, ioengine=psync, iodepth=1
+> result:
+> Run status group 0 (all jobs):
+>    READ: bw=20.0MiB/s (21.0MB/s), 20.0MiB/s-20.0MiB/s (21.0MB/s-21.0MB/s), io=1024MiB (1074MB), run=51076-51076msec
+> Disk stats (read/write):
+>   mmcblk0: ios=65282/0, merge=0/0, ticks=46255/0, in_queue=46254, util=99.87%
+>
+> After(randwrite)
+> 8k:
+> Cmd: sudo fio -filename=/dev/mmcblk0 -direct=1 -numjobs=1 -thread -group_reporting -ioengine=psync -iodepth=1 -size=100M -name=mytest -bs=8k -rw=randwrite
+> mytest: (g=0): rw=randwrite, bs=(R) 8192B-8192B, (W) 8192B-8192B, (T) 8192B-8192B, ioengine=psync, iodepth=1
+> result:
+> Run status group 0 (all jobs):
+>   WRITE: bw=4215KiB/s (4317kB/s), 4215KiB/s-4215KiB/s (4317kB/s-4317kB/s), io=100MiB (105MB), run=24292-24292msec
+> Disk stats (read/write):
+>   mmcblk0: ios=52/12717, merge=0/0, ticks=86/23182, in_queue=23267, util=99.92%
+>
+> 16k:
+> Cmd: sudo fio -filename=/dev/mmcblk0 -direct=1 -numjobs=1 -thread -group_reporting -ioengine=psync -iodepth=1 -size=100M -name=mytest -bs=16k -rw=randwrite
+> mytest: (g=0): rw=randwrite, bs=(R) 16.0KiB-16.0KiB, (W) 16.0KiB-16.0KiB, (T) 16.0KiB-16.0KiB, ioengine=psync, iodepth=1
+> result:
+> Run status group 0 (all jobs):
+>   WRITE: bw=6499KiB/s (6655kB/s), 6499KiB/s-6499KiB/s (6655kB/s-6655kB/s), io=100MiB (105MB), run=15756-15756msec
+> Disk stats (read/write):
+>   mmcblk0: ios=51/6347, merge=0/0, ticks=84/15120, in_queue=15204, util=99.80%
 
-On patched kernels, this will show:
-PASS: IP statless for ns2-PFp89amx
+It looks like the rand-read tests above are degrading with the new
+changes, while rand-writes are both improving and degrading.
 
-Signed-off-by: Florian Westphal <fw@strlen.de>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- tools/testing/selftests/netfilter/nft_nat.sh |  152 +++++++++++++++++++++++++++
- 1 file changed, 152 insertions(+)
+To summarize my view from all the tests you have done at this point
+(thanks a lot); it looks like the block I/O merging isn't really
+happening at common blocklayer, at least to that extent that would
+benefit us. Clearly you have shown that by the suggested change in the
+mmc host driver, by detecting whether the "next" request is sequential
+to the previous one, which allows us to skip a CMD12 and minimize some
+command overhead.
 
---- a/tools/testing/selftests/netfilter/nft_nat.sh
-+++ b/tools/testing/selftests/netfilter/nft_nat.sh
-@@ -898,6 +898,144 @@ EOF
- 	ip netns exec "$ns0" nft delete table $family nat
- }
- 
-+test_stateless_nat_ip()
-+{
-+	local lret=0
-+
-+	ip netns exec "$ns0" sysctl net.ipv4.conf.veth0.forwarding=1 > /dev/null
-+	ip netns exec "$ns0" sysctl net.ipv4.conf.veth1.forwarding=1 > /dev/null
-+
-+	ip netns exec "$ns2" ping -q -c 1 10.0.1.99 > /dev/null # ping ns2->ns1
-+	if [ $? -ne 0 ] ; then
-+		echo "ERROR: cannot ping $ns1 from $ns2 before loading stateless rules"
-+		return 1
-+	fi
-+
-+ip netns exec "$ns0" nft -f /dev/stdin <<EOF
-+table ip stateless {
-+	map xlate_in {
-+		typeof meta iifname . ip saddr . ip daddr : ip daddr
-+		elements = {
-+			"veth1" . 10.0.2.99 . 10.0.1.99 : 10.0.2.2,
-+		}
-+	}
-+	map xlate_out {
-+		typeof meta iifname . ip saddr . ip daddr : ip daddr
-+		elements = {
-+			"veth0" . 10.0.1.99 . 10.0.2.2 : 10.0.2.99
-+		}
-+	}
-+
-+	chain prerouting {
-+		type filter hook prerouting priority -400; policy accept;
-+		ip saddr set meta iifname . ip saddr . ip daddr map @xlate_in
-+		ip daddr set meta iifname . ip saddr . ip daddr map @xlate_out
-+	}
-+}
-+EOF
-+	if [ $? -ne 0 ]; then
-+		echo "SKIP: Could not add ip statless rules"
-+		return $ksft_skip
-+	fi
-+
-+	reset_counters
-+
-+	ip netns exec "$ns2" ping -q -c 1 10.0.1.99 > /dev/null # ping ns2->ns1
-+	if [ $? -ne 0 ] ; then
-+		echo "ERROR: cannot ping $ns1 from $ns2 with stateless rules"
-+		lret=1
-+	fi
-+
-+	# ns1 should have seen packets from .2.2, due to stateless rewrite.
-+	expect="packets 1 bytes 84"
-+	cnt=$(ip netns exec "$ns1" nft list counter inet filter ns0insl | grep -q "$expect")
-+	if [ $? -ne 0 ]; then
-+		bad_counter "$ns1" ns0insl "$expect" "test_stateless 1"
-+		lret=1
-+	fi
-+
-+	for dir in "in" "out" ; do
-+		cnt=$(ip netns exec "$ns2" nft list counter inet filter ns1${dir} | grep -q "$expect")
-+		if [ $? -ne 0 ]; then
-+			bad_counter "$ns2" ns1$dir "$expect" "test_stateless 2"
-+			lret=1
-+		fi
-+	done
-+
-+	# ns1 should not have seen packets from ns2, due to masquerade
-+	expect="packets 0 bytes 0"
-+	for dir in "in" "out" ; do
-+		cnt=$(ip netns exec "$ns1" nft list counter inet filter ns2${dir} | grep -q "$expect")
-+		if [ $? -ne 0 ]; then
-+			bad_counter "$ns1" ns0$dir "$expect" "test_stateless 3"
-+			lret=1
-+		fi
-+
-+		cnt=$(ip netns exec "$ns0" nft list counter inet filter ns1${dir} | grep -q "$expect")
-+		if [ $? -ne 0 ]; then
-+			bad_counter "$ns0" ns1$dir "$expect" "test_stateless 4"
-+			lret=1
-+		fi
-+	done
-+
-+	reset_counters
-+
-+	socat -h > /dev/null 2>&1
-+	if [ $? -ne 0 ];then
-+		echo "SKIP: Could not run stateless nat frag test without socat tool"
-+		if [ $lret -eq 0 ]; then
-+			return $ksft_skip
-+		fi
-+
-+		ip netns exec "$ns0" nft delete table ip stateless
-+		return $lret
-+	fi
-+
-+	local tmpfile=$(mktemp)
-+	dd if=/dev/urandom of=$tmpfile bs=4096 count=1 2>/dev/null
-+
-+	local outfile=$(mktemp)
-+	ip netns exec "$ns1" timeout 3 socat -u UDP4-RECV:4233 OPEN:$outfile < /dev/null &
-+	sc_r=$!
-+
-+	sleep 1
-+	# re-do with large ping -> ip fragmentation
-+	ip netns exec "$ns2" timeout 3 socat - UDP4-SENDTO:"10.0.1.99:4233" < "$tmpfile" > /dev/null
-+	if [ $? -ne 0 ] ; then
-+		echo "ERROR: failed to test udp $ns1 to $ns2 with stateless ip nat" 1>&2
-+		lret=1
-+	fi
-+
-+	wait
-+
-+	cmp "$tmpfile" "$outfile"
-+	if [ $? -ne 0 ]; then
-+		ls -l "$tmpfile" "$outfile"
-+		echo "ERROR: in and output file mismatch when checking udp with stateless nat" 1>&2
-+		lret=1
-+	fi
-+
-+	rm -f "$tmpfile" "$outfile"
-+
-+	# ns1 should have seen packets from 2.2, due to stateless rewrite.
-+	expect="packets 3 bytes 4164"
-+	cnt=$(ip netns exec "$ns1" nft list counter inet filter ns0insl | grep -q "$expect")
-+	if [ $? -ne 0 ]; then
-+		bad_counter "$ns1" ns0insl "$expect" "test_stateless 5"
-+		lret=1
-+	fi
-+
-+	ip netns exec "$ns0" nft delete table ip stateless
-+	if [ $? -ne 0 ]; then
-+		echo "ERROR: Could not delete table ip stateless" 1>&2
-+		lret=1
-+	fi
-+
-+	test $lret -eq 0 && echo "PASS: IP statless for $ns2"
-+
-+	return $lret
-+}
-+
- # ip netns exec "$ns0" ping -c 1 -q 10.0.$i.99
- for i in 0 1 2; do
- ip netns exec ns$i-$sfx nft -f /dev/stdin <<EOF
-@@ -964,6 +1102,19 @@ table inet filter {
- EOF
- done
- 
-+# special case for stateless nat check, counter needs to
-+# be done before (input) ip defragmentation
-+ip netns exec ns1-$sfx nft -f /dev/stdin <<EOF
-+table inet filter {
-+	counter ns0insl {}
-+
-+	chain pre {
-+		type filter hook prerouting priority -400; policy accept;
-+		ip saddr 10.0.2.2 counter name "ns0insl"
-+	}
-+}
-+EOF
-+
- sleep 3
- # test basic connectivity
- for i in 1 2; do
-@@ -1018,6 +1169,7 @@ $test_inet_nat && test_redirect inet
- $test_inet_nat && test_redirect6 inet
- 
- test_port_shadowing
-+test_stateless_nat_ip
- 
- if [ $ret -ne 0 ];then
- 	echo -n "FAIL: "
+However, according to the latest tests above, you have also proved
+that the changes in the mmc host driver doesn't come without a cost.
+In particular, small random-reads would degrade in performance from
+these changes.
 
+That said, it looks to me that rather than trying to improve things
+for one specific mmc host driver, it would be better to look at this
+from the generic block layer point of view - and investigate why
+sequential reads/writes aren't getting merged often enough for the
+MMC/SD case. If we can fix the problem there, all mmc host drivers
+would benefit I assume.
 
+BTW, have you tried with different I/O schedulers? If you haven't
+tried BFQ, I suggest you do as it's a good fit for MMC/SD.
+
+[...]
+
+Kind regards
+Uffe

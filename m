@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A974A4ABDEC
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:05:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B0324ABE0C
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:05:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389515AbiBGLtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:49:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46930 "EHLO
+        id S1382014AbiBGL4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:56:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386696AbiBGLfZ (ORCPT
+        with ESMTP id S1385124AbiBGLbN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:35:25 -0500
+        Mon, 7 Feb 2022 06:31:13 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1F07C043188;
-        Mon,  7 Feb 2022 03:35:24 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE53C033258;
+        Mon,  7 Feb 2022 03:29:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 189E360180;
-        Mon,  7 Feb 2022 11:35:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E56BEC004E1;
-        Mon,  7 Feb 2022 11:35:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B2C8B60A69;
+        Mon,  7 Feb 2022 11:29:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78F75C004E1;
+        Mon,  7 Feb 2022 11:29:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233723;
-        bh=FaEL32L8jTCbwx8zIa5szTEouuCoK0lO5+KhZu49YAU=;
+        s=korg; t=1644233363;
+        bh=R4imgKnV8m32j4qt81S3AnOiSUStzzwNsdj4QWnDjis=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1/krfcy1K2hqBrDEZ5O75BE8zWMFiSWf7yB/ip/zYBnJImyk+O80tnwX5tFFMWrJY
-         NeG9BjqQMq2Bc1gG1YhOB8RxQhtfAVxbN7xMf7r2NHYsUBB36atMcpmwws1KbZGVaQ
-         YPjZZwaq+nm+jrerNBhZIAXkC6btzJp/SJ8tOZWQ=
+        b=w8GLwpo2RxJ7/bQyUhPOqOoWcoo2Y/jOwQY7GDCuhTGhvH6ebw29q4N+81HgD9aFs
+         rOXYsiqy+GP5CZd0UkagMXa2mgI3l1ELvwVzJ2nfWBEGBsBE1Fw+WNaFcOD9vsCpbv
+         AyERg/JsYoFIe28q22Wx9LbQP0UB/t1fDASC/BTI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+5ad567a418794b9b5983@syzkaller.appspotmail.com,
-        Hou Tao <houtao1@huawei.com>,
-        Andrii Nakryiko <andrii@kernel.org>
-Subject: [PATCH 5.16 101/126] bpf: Use VM_MAP instead of VM_ALLOC for ringbuf
-Date:   Mon,  7 Feb 2022 12:07:12 +0100
-Message-Id: <20220207103807.566411893@linuxfoundation.org>
+        stable@vger.kernel.org, Xin Yin <yinxin.x@bytedance.com>,
+        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
+        Theodore Tso <tytso@mit.edu>, stable@kernel.org
+Subject: [PATCH 5.15 100/110] ext4: modify the logic of ext4_mb_new_blocks_simple
+Date:   Mon,  7 Feb 2022 12:07:13 +0100
+Message-Id: <20220207103805.775103847@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
-References: <20220207103804.053675072@linuxfoundation.org>
+In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
+References: <20220207103802.280120990@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,42 +55,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hou Tao <hotforest@gmail.com>
+From: Xin Yin <yinxin.x@bytedance.com>
 
-commit b293dcc473d22a62dc6d78de2b15e4f49515db56 upstream.
+commit 31a074a0c62dc0d2bfb9b543142db4fe27f9e5eb upstream.
 
-After commit 2fd3fb0be1d1 ("kasan, vmalloc: unpoison VM_ALLOC pages
-after mapping"), non-VM_ALLOC mappings will be marked as accessible
-in __get_vm_area_node() when KASAN is enabled. But now the flag for
-ringbuf area is VM_ALLOC, so KASAN will complain out-of-bound access
-after vmap() returns. Because the ringbuf area is created by mapping
-allocated pages, so use VM_MAP instead.
+For now in ext4_mb_new_blocks_simple, if we found a block which
+should be excluded then will switch to next group, this may
+probably cause 'group' run out of range.
 
-After the change, info in /proc/vmallocinfo also changes from
-  [start]-[end]   24576 ringbuf_map_alloc+0x171/0x290 vmalloc user
-to
-  [start]-[end]   24576 ringbuf_map_alloc+0x171/0x290 vmap user
+Change to check next block in the same group when get a block should
+be excluded. Also change the search range to EXT4_CLUSTERS_PER_GROUP
+and add error checking.
 
-Fixes: 457f44363a88 ("bpf: Implement BPF ring buffer and verifier support for it")
-Reported-by: syzbot+5ad567a418794b9b5983@syzkaller.appspotmail.com
-Signed-off-by: Hou Tao <houtao1@huawei.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Link: https://lore.kernel.org/bpf/20220202060158.6260-1-houtao1@huawei.com
+Signed-off-by: Xin Yin <yinxin.x@bytedance.com>
+Reviewed-by: Harshad Shirwadkar <harshadshirwadkar@gmail.com>
+Link: https://lore.kernel.org/r/20220110035141.1980-3-yinxin.x@bytedance.com
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Cc: stable@kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/bpf/ringbuf.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/ext4/mballoc.c |   26 +++++++++++++++++---------
+ 1 file changed, 17 insertions(+), 9 deletions(-)
 
---- a/kernel/bpf/ringbuf.c
-+++ b/kernel/bpf/ringbuf.c
-@@ -104,7 +104,7 @@ static struct bpf_ringbuf *bpf_ringbuf_a
+--- a/fs/ext4/mballoc.c
++++ b/fs/ext4/mballoc.c
+@@ -5753,7 +5753,8 @@ static ext4_fsblk_t ext4_mb_new_blocks_s
+ 	struct super_block *sb = ar->inode->i_sb;
+ 	ext4_group_t group;
+ 	ext4_grpblk_t blkoff;
+-	int i = sb->s_blocksize;
++	ext4_grpblk_t max = EXT4_CLUSTERS_PER_GROUP(sb);
++	ext4_grpblk_t i = 0;
+ 	ext4_fsblk_t goal, block;
+ 	struct ext4_super_block *es = EXT4_SB(sb)->s_es;
+ 
+@@ -5775,19 +5776,26 @@ static ext4_fsblk_t ext4_mb_new_blocks_s
+ 		ext4_get_group_no_and_offset(sb,
+ 			max(ext4_group_first_block_no(sb, group), goal),
+ 			NULL, &blkoff);
+-		i = mb_find_next_zero_bit(bitmap_bh->b_data, sb->s_blocksize,
++		while (1) {
++			i = mb_find_next_zero_bit(bitmap_bh->b_data, max,
+ 						blkoff);
++			if (i >= max)
++				break;
++			if (ext4_fc_replay_check_excluded(sb,
++				ext4_group_first_block_no(sb, group) + i)) {
++				blkoff = i + 1;
++			} else
++				break;
++		}
+ 		brelse(bitmap_bh);
+-		if (i >= sb->s_blocksize)
+-			continue;
+-		if (ext4_fc_replay_check_excluded(sb,
+-			ext4_group_first_block_no(sb, group) + i))
+-			continue;
+-		break;
++		if (i < max)
++			break;
  	}
  
- 	rb = vmap(pages, nr_meta_pages + 2 * nr_data_pages,
--		  VM_ALLOC | VM_USERMAP, PAGE_KERNEL);
-+		  VM_MAP | VM_USERMAP, PAGE_KERNEL);
- 	if (rb) {
- 		kmemleak_not_leak(pages);
- 		rb->pages = pages;
+-	if (group >= ext4_get_groups_count(sb) && i >= sb->s_blocksize)
++	if (group >= ext4_get_groups_count(sb) || i >= max) {
++		*errp = -ENOSPC;
+ 		return 0;
++	}
+ 
+ 	block = ext4_group_first_block_no(sb, group) + i;
+ 	ext4_mb_mark_bb(sb, block, 1, 1);
 
 

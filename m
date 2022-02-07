@@ -2,91 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0327C4ABF48
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 14:24:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D4A64ABF00
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 14:23:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1448612AbiBGNML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 08:12:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44102 "EHLO
+        id S229582AbiBGNNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 08:13:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358150AbiBGNGm (ORCPT
+        with ESMTP id S1444387AbiBGNJ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 08:06:42 -0500
-Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com [209.85.222.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB501C043188;
-        Mon,  7 Feb 2022 05:06:40 -0800 (PST)
-Received: by mail-ua1-f54.google.com with SMTP id 60so22715473uae.1;
-        Mon, 07 Feb 2022 05:06:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JZStMkBCEdUkIJefmCWfZykazV+/zPRZRIGtWs+bRb0=;
-        b=zVdog81bqfyQClBj3TjJwffNUnRqGYEEVIpDRMVlDr9RDc+EpYhhnE+FRsgLBvX/IB
-         QL5/DEpfp9Skv3Z1x9duy4515pCf/sR/sMLQwFSjMUsWOYDlSTqTbRXLglnVjfETbqGE
-         MBzNy9ZZfpsCs+gQN3+2YFlVk8oEwOWJzwgKQwnBTuLY2iCLLW2EIDB7dwVyF1qQGcYm
-         S36oDCIoiOtkBuSV/w3RQmVF7TLG58pgD4gjUeKSX8G7tO1b5M+cS15K6zEgvAnejVQS
-         clwBuKfNjoOLVyL1ATiQN77JC84wOjbkBNOXn/IqHpnXVtDMbeXWc99pUwnjzAg0HNPl
-         7cxw==
-X-Gm-Message-State: AOAM532CMcnYIwC1DqksPdcsl5Y85meiYP01b4V8fyJBSHjSYq+MHI99
-        t6pBWM53xFJk0J8d7v2tmxAMUqbZc3hvdQ==
-X-Google-Smtp-Source: ABdhPJzFQTtECeDvgEBcBOSXjqDqXP8RaSF++Sk1oQ1ZdlJX6MzhU4MqKtE0UqYWw/BSLoTtS2zJ7w==
-X-Received: by 2002:a67:3341:: with SMTP id z62mr4394352vsz.70.1644239199785;
-        Mon, 07 Feb 2022 05:06:39 -0800 (PST)
-Received: from mail-ua1-f50.google.com (mail-ua1-f50.google.com. [209.85.222.50])
-        by smtp.gmail.com with ESMTPSA id w3sm2326819vkd.5.2022.02.07.05.06.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Feb 2022 05:06:39 -0800 (PST)
-Received: by mail-ua1-f50.google.com with SMTP id g18so12473821uak.5;
-        Mon, 07 Feb 2022 05:06:39 -0800 (PST)
-X-Received: by 2002:a67:b00e:: with SMTP id z14mr4329049vse.57.1644239199108;
- Mon, 07 Feb 2022 05:06:39 -0800 (PST)
+        Mon, 7 Feb 2022 08:09:59 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD8DC043181
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 05:09:57 -0800 (PST)
+Received: from fraeml702-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Jsmbj5fqSz6GCbt;
+        Mon,  7 Feb 2022 21:05:53 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml702-chm.china.huawei.com (10.206.15.51) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.21; Mon, 7 Feb 2022 14:09:55 +0100
+Received: from [10.47.86.164] (10.47.86.164) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Mon, 7 Feb
+ 2022 13:09:48 +0000
+Message-ID: <1114e27f-e6b3-e9b9-a892-f543f4636c4e@huawei.com>
+Date:   Mon, 7 Feb 2022 13:09:43 +0000
 MIME-Version: 1.0
-References: <20220128173006.1713210-1-geert@linux-m68k.org> <c1034042-f8f4-b5c9-3b0a-8d1aa1efc8e7@gmail.com>
-In-Reply-To: <c1034042-f8f4-b5c9-3b0a-8d1aa1efc8e7@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 7 Feb 2022 14:06:28 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWS2Eh3c-=GPj8GpMwYesGXqSgwo3__cTfM5_5h5=qYyQ@mail.gmail.com>
-Message-ID: <CAMuHMdWS2Eh3c-=GPj8GpMwYesGXqSgwo3__cTfM5_5h5=qYyQ@mail.gmail.com>
-Subject: Re: [PATCH] m68k: mm: Remove check for VM_IO to fix deferred I/O
-To:     Michael Schmitz <schmitzmic@gmail.com>
-Cc:     linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH 00/16] scsi: libsas and users: Factor out LLDD TMF code
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <artur.paszkiewicz@intel.com>, <jinpu.wang@cloud.ionos.com>,
+        <chenxiang66@hisilicon.com>, <Ajish.Koshy@microchip.com>
+CC:     <yanaijie@huawei.com>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <linuxarm@huawei.com>, <liuqi115@huawei.com>,
+        <Viswas.G@microchip.com>
+References: <1643110372-85470-1-git-send-email-john.garry@huawei.com>
+ <1893d9ef-042b-af3b-74ea-dd4d0210c493@opensource.wdc.com>
+ <14df160f-c0f2-cc9f-56d4-8eda67969e0b@huawei.com>
+ <a8fae323-1877-058a-b03e-d175a725213f@opensource.wdc.com>
+ <a2de1656-b1ec-2fb7-caab-657e27dacb48@huawei.com>
+ <49da4d80-5cc3-35c3-ccaa-6def8165eb65@huawei.com>
+ <59a198a8-1d87-bc09-d2d8-2d495ed74c16@opensource.wdc.com>
+ <098f988e-1f12-c412-3111-60393dfe0f0b@huawei.com>
+ <f3362c6f-b4b6-2914-0652-d786e19b6b03@opensource.wdc.com>
+ <62e56609-7026-93a1-a446-a6fd68328653@opensource.wdc.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <62e56609-7026-93a1-a446-a6fd68328653@opensource.wdc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.86.164]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 3:22 AM Michael Schmitz <schmitzmic@gmail.com> wrote:
-> Am 29.01.2022 um 06:30 schrieb Geert Uytterhoeven:
-> > When an application accesses a mapped frame buffer backed by deferred
-> > I/O, it receives a segmentation fault.  Fix this by removing the check
-> > for VM_IO in do_page_fault().
-> >
-> > Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
->
-> Works fine on my Falcon030 when applied to v5.16.
->
-> Tested-by: Michael Schmitz <schmitzmic@gmail.com>
+Hi Damien,
 
-Thanks, queued in the m68k for-v5.18 branch.
+On 04/02/2022 03:02, Damien Le Moal wrote:
+> This is the submission path, not completion. The code is:
+> 
+> (gdb) list *(pm8001_queue_command+0x842)
+> 0x3d42 is in pm8001_queue_command (drivers/scsi/pm8001/pm8001_sas.c:491).
+> 486				atomic_dec(&pm8001_dev->running_req);
+> 487				goto err_out_tag;
+> 488			}
+> 489			/* TODO: select normal or high priority */
+> 490			spin_lock(&t->task_state_lock);
+> 491			t->task_state_flags |= SAS_TASK_AT_INITIATOR;
+> 492			spin_unlock(&t->task_state_lock);
+> 493		} while (0);
+> 494		rc = 0;
+> 495		goto out_done;
+> 
+> So the task is already completed when the submission path tries to set
+> the state flag ? Debugging...
 
-Gr{oetje,eeting}s,
+JFYI, I am putting together a patch to drop SAS_TASK_AT_INITIATOR 
+altogether. I just need to ensure that the logic in the isci code is 
+correct.
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Thanks,
+John

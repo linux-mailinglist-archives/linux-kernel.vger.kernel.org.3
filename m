@@ -2,48 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E64444AB65A
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 09:13:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC68B4AB628
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 09:12:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348654AbiBGHxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 02:53:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42262 "EHLO
+        id S241235AbiBGIHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 03:07:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344919AbiBGHwb (ORCPT
+        with ESMTP id S242269AbiBGIFj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 02:52:31 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 571D3C0401C9
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 23:52:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=l2WBiCb5duYJRA9nKpihqrJOH1Qjg6utSrFiu8qAdtc=; b=h0hQ0gHm64vzVCdD4axk0UtHMb
-        03MTX4oltnZDaL/ERiDC0OFihpUsXBg6RpSvWvkQR/ZkxDFCWwylcu5Vh6U1xWmlWvMyiwCbIZVAc
-        tWskv1FnPVwIqlWAOGJw3LcDwORdJkoVE77uRU7CM3SPLWe3sAdyEEpf+ANZrVLalYj4CJk2cgss9
-        jmf6RDOwefPk5y+zBi1gVGY/JQ+eqR6xPWlxU75lA/tQi9cKkYRbZNlFlAnHgRmn6V2DXO0gFyqpY
-        aeGt4CU8CNRvcf5sCCyeyAkmzyMIWC92oDH98B2Q7WF1ASt1CB0YHpl2wsckZylPYTtTR7K2O1k7b
-        nIOOaSgQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nGyop-009G1Q-Q3; Mon, 07 Feb 2022 07:52:15 +0000
-Date:   Sun, 6 Feb 2022 23:52:15 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 35/75] mm: Turn head_compound_mapcount() into
- folio_entire_mapcount()
-Message-ID: <YgDPr/+BgsyQusod@infradead.org>
-References: <20220204195852.1751729-1-willy@infradead.org>
- <20220204195852.1751729-36-willy@infradead.org>
+        Mon, 7 Feb 2022 03:05:39 -0500
+X-Greylist: delayed 680 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 00:05:38 PST
+Received: from spam.unicloud.com (mx.gosinoic.com [220.194.70.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09AF6C043181;
+        Mon,  7 Feb 2022 00:05:37 -0800 (PST)
+Received: from spam.unicloud.com (localhost [127.0.0.2] (may be forged))
+        by spam.unicloud.com with ESMTP id 2177sKHb055613;
+        Mon, 7 Feb 2022 15:54:20 +0800 (GMT-8)
+        (envelope-from luofei@unicloud.com)
+Received: from eage.unicloud.com ([220.194.70.35])
+        by spam.unicloud.com with ESMTP id 2177qtS2055331;
+        Mon, 7 Feb 2022 15:52:55 +0800 (GMT-8)
+        (envelope-from luofei@unicloud.com)
+Received: from localhost.localdomain (10.10.1.7) by zgys-ex-mb09.Unicloud.com
+ (10.10.0.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2375.17; Mon, 7
+ Feb 2022 15:52:54 +0800
+From:   luofei <luofei@unicloud.com>
+To:     <stable@vger.kernel.org>, <tony.luck@intel.com>, <bp@alien8.de>,
+        <tglx@linutronix.de>, <mingo@redhat.com>, <hpa@zytor.com>,
+        <x86@kernel.org>
+CC:     <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        luofei <luofei@unicloud.com>
+Subject: [PATCH] x86/mm, mm/hwpoison: fix unmap kernel 1:1 pages
+Date:   Mon, 7 Feb 2022 02:52:42 -0500
+Message-ID: <20220207075242.830685-1-luofei@unicloud.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220204195852.1751729-36-willy@infradead.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.10.1.7]
+X-ClientProxiedBy: zgys-ex-mb10.Unicloud.com (10.10.0.6) To
+ zgys-ex-mb09.Unicloud.com (10.10.0.24)
+X-DNSRBL: 
+X-MAIL: spam.unicloud.com 2177sKHb055613
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,6 +55,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Looks good,
+Only unmap the page when the memory error is properly handled
+by calling memory_failure(), not the other way around.
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+Fixes: 26f8c38bb466("x86/mm, mm/hwpoison: Don't unconditionally unmap kernel 1:1 pages")
+
+Signed-off-by: luofei <luofei@unicloud.com>
+Cc: stable@vger.kernel.org #v4.14
+---
+ arch/x86/kernel/cpu/mcheck/mce.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/x86/kernel/cpu/mcheck/mce.c b/arch/x86/kernel/cpu/mcheck/mce.c
+index 95c09db1bba2..d8399a689165 100644
+--- a/arch/x86/kernel/cpu/mcheck/mce.c
++++ b/arch/x86/kernel/cpu/mcheck/mce.c
+@@ -589,7 +589,7 @@ static int srao_decode_notifier(struct notifier_block *nb, unsigned long val,
+ 
+ 	if (mce_usable_address(mce) && (mce->severity == MCE_AO_SEVERITY)) {
+ 		pfn = mce->addr >> PAGE_SHIFT;
+-		if (memory_failure(pfn, MCE_VECTOR, 0))
++		if (!memory_failure(pfn, MCE_VECTOR, 0))
+ 			mce_unmap_kpfn(pfn);
+ 	}
+ 
+-- 
+2.27.0
+

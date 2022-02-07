@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 477F24ABBED
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:44:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C80DE4ABCFB
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:55:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386223AbiBGLeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:34:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34876 "EHLO
+        id S1388405AbiBGLnk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:43:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357821AbiBGLXS (ORCPT
+        with ESMTP id S1385725AbiBGLcS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:23:18 -0500
+        Mon, 7 Feb 2022 06:32:18 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 032F0C0401D1;
-        Mon,  7 Feb 2022 03:23:16 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E7D1C043188;
+        Mon,  7 Feb 2022 03:32:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0D386B811CB;
-        Mon,  7 Feb 2022 11:23:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A01CC340EB;
-        Mon,  7 Feb 2022 11:23:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F2F87B80EBD;
+        Mon,  7 Feb 2022 11:32:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47B2AC004E1;
+        Mon,  7 Feb 2022 11:32:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232993;
-        bh=zn1d9yHL3Mx95okSlALVah5I9XCApZrkhMiBNbcmEbg=;
+        s=korg; t=1644233534;
+        bh=gnZ42VB8luOBpe47zX/EhN1MWbO2bGrsu/FWoeueKY0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=waBeK7xZYuZh1j85yirYwAJCsQPSTMDOpht2mxib6ZIOSh/1Dw658S/d9qef1f0ww
-         0XgVjGUtFQMsZblDTGH2nREHLauUPQ+XWA/2vnZ3st8mn41iOyHxwXmgvFMj3YdY5Z
-         6I+HVyBS4+FqZaIiGSmwk+ZncHpShwBjEfckxzDo=
+        b=K0ufMjgF8OXHfxvMxouB/e/S7DXY0A+ZlU3BLnyuRSwH+z1njXJ85+wtA1ln7yU//
+         FVgZkFqTMLFIk03kK98hS/EVr7GbPpG+Vi5qswjjG2vamzrh02jdoMml7H6wHnQTGv
+         Pc+6bv62sHMn2qU3j4jnJV/kCo5nvtIvvAIPIB3s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Aun-Ali Zaidi <admin@kodeit.net>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Aditya Garg <gargaditya08@live.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: [PATCH 5.10 15/74] drm/amd/display: Force link_rate as LINK_RATE_RBR2 for 2018 15" Apple Retina panels
+        stable@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.16 042/126] mptcp: fix msk traversal in mptcp_nl_cmd_set_flags()
 Date:   Mon,  7 Feb 2022 12:06:13 +0100
-Message-Id: <20220207103757.732456217@linuxfoundation.org>
+Message-Id: <20220207103805.578390861@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103757.232676988@linuxfoundation.org>
-References: <20220207103757.232676988@linuxfoundation.org>
+In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
+References: <20220207103804.053675072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,64 +55,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aun-Ali Zaidi <admin@kodeit.net>
+From: Paolo Abeni <pabeni@redhat.com>
 
-commit 30fbce374745a9c6af93c775a5ac49a97f822fda upstream.
+commit 8e9eacad7ec7a9cbf262649ebf1fa6e6f6cc7d82 upstream.
 
-The eDP link rate reported by the DP_MAX_LINK_RATE dpcd register (0xa) is
-contradictory to the highest rate supported reported by
-EDID (0xc = LINK_RATE_RBR2). The effects of this compounded with commit
-'4a8ca46bae8a ("drm/amd/display: Default max bpc to 16 for eDP")' results
-in no display modes being found and a dark panel.
+The MPTCP endpoint list is under RCU protection, guarded by the
+pernet spinlock. mptcp_nl_cmd_set_flags() traverses the list
+without acquiring the spin-lock nor under the RCU critical section.
 
-For now, simply force the maximum supported link rate for the eDP attached
-2018 15" Apple Retina panels.
+This change addresses the issue performing the lookup and the endpoint
+update under the pernet spinlock.
 
-Additionally, we must also check the firmware revision since the device ID
-reported by the DPCD is identical to that of the more capable 16,1,
-incorrectly quirking it. We also use said firmware check to quirk the
-refreshed 15,1 models with Vega graphics as they use a slightly newer
-firmware version.
+[The upstream commit had to handle a lookup_by_id variable that is only
+ present in 5.17. This version of the patch removes that variable, so
+ the __lookup_addr() function only handles the lookup as it is
+ implemented in 5.15 and 5.16. It also removes one 'const' keyword to
+ prevent a warning due to differing const-ness in the 5.17 version of
+ addresses_equal().]
 
-Tested-by: Aun-Ali Zaidi <admin@kodeit.net>
-Reviewed-by: Harry Wentland <harry.wentland@amd.com>
-Signed-off-by: Aun-Ali Zaidi <admin@kodeit.net>
-Signed-off-by: Aditya Garg <gargaditya08@live.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Cc: stable@vger.kernel.org
+Fixes: 0f9f696a502e ("mptcp: add set_flags command in PM netlink")
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c |   20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ net/mptcp/pm_netlink.c |   34 +++++++++++++++++++++++++---------
+ 1 file changed, 25 insertions(+), 9 deletions(-)
 
---- a/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
-+++ b/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
-@@ -3587,6 +3587,26 @@ static bool retrieve_link_cap(struct dc_
- 		dp_hw_fw_revision.ieee_fw_rev,
- 		sizeof(dp_hw_fw_revision.ieee_fw_rev));
+--- a/net/mptcp/pm_netlink.c
++++ b/net/mptcp/pm_netlink.c
+@@ -459,6 +459,18 @@ static unsigned int fill_remote_addresse
+ 	return i;
+ }
  
-+	/* Quirk for Apple MBP 2018 15" Retina panels: wrong DP_MAX_LINK_RATE */
-+	{
-+		uint8_t str_mbp_2018[] = { 101, 68, 21, 103, 98, 97 };
-+		uint8_t fwrev_mbp_2018[] = { 7, 4 };
-+		uint8_t fwrev_mbp_2018_vega[] = { 8, 4 };
++static struct mptcp_pm_addr_entry *
++__lookup_addr(struct pm_nl_pernet *pernet, struct mptcp_addr_info *info)
++{
++	struct mptcp_pm_addr_entry *entry;
 +
-+		/* We also check for the firmware revision as 16,1 models have an
-+		 * identical device id and are incorrectly quirked otherwise.
-+		 */
-+		if ((link->dpcd_caps.sink_dev_id == 0x0010fa) &&
-+		    !memcmp(link->dpcd_caps.sink_dev_id_str, str_mbp_2018,
-+			     sizeof(str_mbp_2018)) &&
-+		    (!memcmp(link->dpcd_caps.sink_fw_revision, fwrev_mbp_2018,
-+			     sizeof(fwrev_mbp_2018)) ||
-+		    !memcmp(link->dpcd_caps.sink_fw_revision, fwrev_mbp_2018_vega,
-+			     sizeof(fwrev_mbp_2018_vega)))) {
-+			link->reported_link_cap.link_rate = LINK_RATE_RBR2;
-+		}
++	list_for_each_entry(entry, &pernet->local_addr_list, list) {
++		if (addresses_equal(&entry->addr, info, true))
++			return entry;
 +	}
++	return NULL;
++}
 +
- 	memset(&link->dpcd_caps.dsc_caps, '\0',
- 			sizeof(link->dpcd_caps.dsc_caps));
- 	memset(&link->dpcd_caps.fec_cap, '\0', sizeof(link->dpcd_caps.fec_cap));
+ static void mptcp_pm_create_subflow_or_signal_addr(struct mptcp_sock *msk)
+ {
+ 	struct sock *sk = (struct sock *)msk;
+@@ -1725,17 +1737,21 @@ static int mptcp_nl_cmd_set_flags(struct
+ 	if (addr.flags & MPTCP_PM_ADDR_FLAG_BACKUP)
+ 		bkup = 1;
+ 
+-	list_for_each_entry(entry, &pernet->local_addr_list, list) {
+-		if (addresses_equal(&entry->addr, &addr.addr, true)) {
+-			mptcp_nl_addr_backup(net, &entry->addr, bkup);
+-
+-			if (bkup)
+-				entry->flags |= MPTCP_PM_ADDR_FLAG_BACKUP;
+-			else
+-				entry->flags &= ~MPTCP_PM_ADDR_FLAG_BACKUP;
+-		}
++	spin_lock_bh(&pernet->lock);
++	entry = __lookup_addr(pernet, &addr.addr);
++	if (!entry) {
++		spin_unlock_bh(&pernet->lock);
++		return -EINVAL;
+ 	}
+ 
++	if (bkup)
++		entry->flags |= MPTCP_PM_ADDR_FLAG_BACKUP;
++	else
++		entry->flags &= ~MPTCP_PM_ADDR_FLAG_BACKUP;
++	addr = *entry;
++	spin_unlock_bh(&pernet->lock);
++
++	mptcp_nl_addr_backup(net, &addr.addr, bkup);
+ 	return 0;
+ }
+ 
 
 

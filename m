@@ -2,76 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C1674ACB9D
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 22:50:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D381D4ACBA0
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 22:50:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242730AbiBGVuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 16:50:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34002 "EHLO
+        id S242846AbiBGVuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 16:50:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240952AbiBGVuT (ORCPT
+        with ESMTP id S242781AbiBGVuw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 16:50:19 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB36C061355;
-        Mon,  7 Feb 2022 13:50:18 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id u6so29505135lfm.10;
-        Mon, 07 Feb 2022 13:50:18 -0800 (PST)
+        Mon, 7 Feb 2022 16:50:52 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA1EAC06109E
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 13:50:51 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id x23so29708257lfc.0
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 13:50:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=8KR8TAE4T+b81v1A/EZJdCn/FtNSrIEkM3uPzd1DPRY=;
-        b=HdLaK3ZfHe689Tp8tot/VVJY42NmPt5hBj+pj/iuScYhndldleTrCYxzw3s28Uo1sP
-         P7GSPmXULLp95vmMMxpJcBh7lOuyt3yPXdfX/oe2I0JgWkCDmRwS3Bk4jJ0qW+qQXtsh
-         DxI/I3zE/7Kg5PVR8pcCpHAYWbMcSLclIAMcfozaIzD7u41lVO4uDexExIMhl0mhr2/S
-         2IU8DkJG1ozDnP4wK/sw425sxP6rIB/4PtJ35CMWGIzJ+y1Uf/m49we4VRymb1nfPusf
-         mSmaBJps4NyQnIOxMsbGN90O2VuSnrM8UajJEurxSKWJCwDAqNSImQvYU3He7nA1y+/H
-         5Vlw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/ijq+SQEgOasCfrLHlBKCHwbcT+Y/IDNSQSnjTzRzSw=;
+        b=jBN9y7BxHTFMA+5Hqs8ZS/igmyf6qQbVUnCCODRSEUwBrCSjqqILU4uh0PypgUtLG5
+         O3bWTHyLGe7Ieqhbz9i1Xo+qNhh1Qm/jo9yFkRJvD/JCdrGdi9OpOqa23Pt5qs0rs+Qu
+         cn4VhJQK6in+29yAAMojj2zm6a8nagBBoYCFbMRWxe7gGPuo7pUPPm2vJXdW6Pvh78Id
+         D8ii/aNPzRzYxtROLqAlop6M4oW3n4+w99D9I08On+CJ2nM330kJWT+349yK4LVjmQfk
+         HXNxCDZpTW98l2JBY4bzgGrMEZH3KBAmbaDZdTOhxYAcum8xSmbtJbyawind7qxDE+sh
+         dujQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=8KR8TAE4T+b81v1A/EZJdCn/FtNSrIEkM3uPzd1DPRY=;
-        b=46FIDiG5zuzOMfFyBB2WsTjral6+s+b08vyoCA9E8m7YvkPdjS/93OW3krvrpgfjkm
-         AeQOtat3OMOmiIWYRYn9ct/8JM6SQXEb6+sOxsINpO9TzSjwV5RKCYPW3wkLwxq1iG9o
-         o49qw+geuONmK0DaRYVvJlnq/Dud99SAZqGmG0NJqzdbhGDShDoTOoeYYCbv3B14AH9A
-         KpfqwzJcqfet7fq7AKbMRKWHp9ZMelvT3iGf+CA4EjQnHrZUe+qJEl2c8OI+ZDdDBq+R
-         CHxqcnlZiO8x2Ut2bkX0VCEZsZ/iRiM3Bhv1G3c8bD/TnJVYpVkzVKVV0gfy8p6Evh3s
-         77qA==
-X-Gm-Message-State: AOAM5313bWyr3Kuyz4MapvJSWuYJ1mZc6UVh1ij8b3M8zPubPCILz7bW
-        mo9IEgpLfYqt9TvCXjJjTAY=
-X-Google-Smtp-Source: ABdhPJypQF9kCG4qJaDjHN8XTm8D3HyDNVK5iLXsXIzLeFfrNn1XK7M7kqRj8b99JkgfNdLVx4ahqA==
-X-Received: by 2002:a05:6512:151e:: with SMTP id bq30mr1031460lfb.604.1644270616824;
-        Mon, 07 Feb 2022 13:50:16 -0800 (PST)
-Received: from [192.168.2.145] (109-252-138-165.dynamic.spd-mgts.ru. [109.252.138.165])
-        by smtp.googlemail.com with ESMTPSA id i18sm1645506lfv.257.2022.02.07.13.50.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Feb 2022 13:50:16 -0800 (PST)
-Message-ID: <fd8ba6fc-b389-3e8e-2671-51656d3d8e5c@gmail.com>
-Date:   Tue, 8 Feb 2022 00:50:15 +0300
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/ijq+SQEgOasCfrLHlBKCHwbcT+Y/IDNSQSnjTzRzSw=;
+        b=W1idUBHLO58ft7mo3ZjyCY/3EGennJiferW88OryRtJCgAyXGS16SIzCED7TZXwfOp
+         5XUPjEC5QwgAHvwwMC6qc6kOpxTbDoOAD0E+w4JvmvDw6u7At8xZlAIiM91NqgudABEc
+         /jZgmELUxACqNky+a+m51BDDWucV0I0NaLKRquaP8PisiKtJpHHgOZRx682uKWWL9/YI
+         FdyOf6EAm+oK25+sxlWxPaQ8ZeBqdw/k237rZBrU2PB3sExTlIHaNywHMEL5W4f/6fVF
+         GD05TDYXj6C5Cxjw+tFYz6QfeOQJxFn0YV5RJveGCrZs3Out7vaAYBNR16elhEp6Gaal
+         TIuQ==
+X-Gm-Message-State: AOAM532TbOm1SXEdxZWv1pLQCEgHBmJNBKpFj8Kl8UxgYYs/lWfV0PMu
+        MQeiQcuUS3dffmCTzx/H0tWlhWtn0Q6PMZCvKL8JvA==
+X-Google-Smtp-Source: ABdhPJyyZyHGsx4zvOcYNokXStjUvR2p9IAVvxbSkLJKLHP62dNiRzw/RBz/mCHZp8HaItYXhfmeNONlNnlJXKM7rQ4=
+X-Received: by 2002:ac2:58c7:: with SMTP id u7mr999449lfo.518.1644270649934;
+ Mon, 07 Feb 2022 13:50:49 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v19 2/4] dmaengine: tegra: Add tegra gpcdma driver
-Content-Language: en-US
-To:     Akhil R <akhilrajeev@nvidia.com>, devicetree@vger.kernel.org,
-        dmaengine@vger.kernel.org, jonathanh@nvidia.com,
-        kyarlagadda@nvidia.com, ldewangan@nvidia.com,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        p.zabel@pengutronix.de, rgumasta@nvidia.com, robh+dt@kernel.org,
-        thierry.reding@gmail.com, vkoul@kernel.org
-Cc:     Pavan Kunapuli <pkunapuli@nvidia.com>
-References: <1644246094-29423-1-git-send-email-akhilrajeev@nvidia.com>
- <1644246094-29423-3-git-send-email-akhilrajeev@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <1644246094-29423-3-git-send-email-akhilrajeev@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220204115718.14934-1-pbonzini@redhat.com> <20220204115718.14934-2-pbonzini@redhat.com>
+ <Yf1pk1EEBXj0O0/p@google.com> <8081cbe5-6d12-9f99-9f0f-13c1d7617647@redhat.com>
+ <YgFEVr9NM1vXdexg@google.com>
+In-Reply-To: <YgFEVr9NM1vXdexg@google.com>
+From:   David Matlack <dmatlack@google.com>
+Date:   Mon, 7 Feb 2022 13:50:23 -0800
+Message-ID: <CALzav=c9GzV3To=tjU2sdCmkzh7WLK+i+W5pUjtfZsnkcg1dcQ@mail.gmail.com>
+Subject: Re: [PATCH 01/23] KVM: MMU: pass uses_nx directly to reset_shadow_zero_bits_mask
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,33 +70,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-07.02.2022 18:01, Akhil R пишет:
-> Adding GPC DMA controller driver for Tegra. The driver supports dma
-> transfers between memory to memory, IO peripheral to memory and
-> memory to IO peripheral.
-> 
-> Co-developed-by: Pavan Kunapuli <pkunapuli@nvidia.com>
-> Signed-off-by: Pavan Kunapuli <pkunapuli@nvidia.com>
-> Co-developed-by: Rajesh Gumasta <rgumasta@nvidia.com>
-> Signed-off-by: Rajesh Gumasta <rgumasta@nvidia.com>
-> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
-> Reviewed-by: Jon Hunter <jonathanh@nvidia.com>
-> ---
->  drivers/dma/Kconfig            |   11 +
->  drivers/dma/Makefile           |    1 +
->  drivers/dma/tegra186-gpc-dma.c | 1505 ++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 1517 insertions(+)
->  create mode 100644 drivers/dma/tegra186-gpc-dma.c
+On Mon, Feb 7, 2022 at 8:10 AM Sean Christopherson <seanjc@google.com> wrote:
+>
+> On Sat, Feb 05, 2022, Paolo Bonzini wrote:
+> > On 2/4/22 18:59, David Matlack wrote:
+> > > > + reset_shadow_zero_bits_mask(vcpu, context, is_efer_nx(context));
+> > >
+> > > Out of curiousity, how does KVM mitigate iTLB multi-hit when shadowing
+> > > NPT and the guest has not enabled EFER.NX?
+> >
+> > You got me worried for a second but iTLB multihit is Intel-only, isn't it?
+>
+> AFAIK, yes, big Core only.  arch/x86/kernel/cpu/common.c sets NO_ITLB_MULTIHIT
+> for all AMD, Hygon, and Atom CPUs.
 
-Looks okay to me. Thank you for the effort!
-
-Coding style isn't ideal:
-
- - inconsistent alignment of the code
- - unnecessary whitespaces and parens
- - inconsistent variables type signes
- - all abbreviation should be capitalized in comments and commit msg
-
-but this is not critical and could be improved later on.
-
-Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
+Ah that's right, it's Intel-only. Thanks!

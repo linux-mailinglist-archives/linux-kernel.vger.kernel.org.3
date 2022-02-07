@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F2D54AB9A6
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:24:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8844C4ABBD6
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:44:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355699AbiBGLMo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:12:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48490 "EHLO
+        id S1385859AbiBGLcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:32:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241766AbiBGLJ0 (ORCPT
+        with ESMTP id S1383001AbiBGLVX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:09:26 -0500
+        Mon, 7 Feb 2022 06:21:23 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54EFFC043189;
-        Mon,  7 Feb 2022 03:09:25 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E8E4C0401F6;
+        Mon,  7 Feb 2022 03:21:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1833FB80EE8;
-        Mon,  7 Feb 2022 11:09:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36DC4C004E1;
-        Mon,  7 Feb 2022 11:09:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0405EB811A6;
+        Mon,  7 Feb 2022 11:20:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A781C004E1;
+        Mon,  7 Feb 2022 11:20:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232162;
-        bh=JE/jV0p/vLig4xTmzfQk4lQFfn7O51vh4mZW9DF20YE=;
+        s=korg; t=1644232849;
+        bh=vVdceyXEfR+rT7SfufXa4EHqMBTrDKZdT9JBResE4go=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Jim5i8dYX+IxzhKmooh5bFqB4lPY17AR5h5inImjSYmhHQOAq1TO5Y4nC6jqP0kEt
-         hfnkYagFTiYP6AfUbkdYjrgIGlgXBEbXpUMMTGMHmf1GMDycShyDguzHMcDk02O9Z6
-         QqX/zDzDFV3tw0fZH+VWV4PTaaL7Ic9TkFgjAARg=
+        b=x/a9/swCttZNdleNhadRqDOwum9+7RBVDMxHaKJefHTvV361CuGY4muSCn+Gc9xuQ
+         eHPJhXrVno8MH7pS6L00nJP7VecdOTOeKQl/OCPLA95aM0tVWgul6YQp3tUcIar6ym
+         /R1qaEuWg4Wtkoq8M54Q7SHvsGmvoYp58jTJSgAU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nick Lopez <github@glowingmonkey.org>,
-        Ilia Mirkin <imirkin@alum.mit.edu>,
-        Karol Herbst <kherbst@redhat.com>
-Subject: [PATCH 4.9 36/48] drm/nouveau: fix off by one in BIOS boundary checking
+        stable@vger.kernel.org, Christian Lachner <gladiac@gmail.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.10 11/74] ALSA: hda/realtek: Fix silent output on Gigabyte X570S Aorus Master (newer chipset)
 Date:   Mon,  7 Feb 2022 12:06:09 +0100
-Message-Id: <20220207103753.513983395@linuxfoundation.org>
+Message-Id: <20220207103757.601747900@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103752.341184175@linuxfoundation.org>
-References: <20220207103752.341184175@linuxfoundation.org>
+In-Reply-To: <20220207103757.232676988@linuxfoundation.org>
+References: <20220207103757.232676988@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,42 +54,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nick Lopez <github@glowingmonkey.org>
+From: Christian Lachner <gladiac@gmail.com>
 
-commit 1b777d4d9e383d2744fc9b3a09af6ec1893c8b1a upstream.
+commit 41a8601302ecbe704ac970552c33dc942300fc37 upstream.
 
-Bounds checking when parsing init scripts embedded in the BIOS reject
-access to the last byte. This causes driver initialization to fail on
-Apple eMac's with GeForce 2 MX GPUs, leaving the system with no working
-console.
+Newer versions of the X570 Master come with a newer revision of the
+mainboard chipset - the X570S. These boards have the same ALC1220 codec
+but seem to initialize the codec with a different parameter in Coef 0x7
+which causes the output audio to be very low. We therefore write a
+known-good value to Coef 0x7 to fix that. As the value is the exact same
+as on the other X570(non-S) boards the same quirk-function can be shared
+between both generations.
 
-This is probably only seen on OpenFirmware machines like PowerPC Macs
-because the BIOS image provided by OF is only the used parts of the ROM,
-not a power-of-two blocks read from PCI directly so PCs always have
-empty bytes at the end that are never accessed.
+This commit adds the Gigabyte X570S Aorus Master to the list of boards
+using the ALC1220_FIXUP_GB_X570 quirk. This fixes both, the silent output
+and the no-audio after reboot from windows problems.
 
-Signed-off-by: Nick Lopez <github@glowingmonkey.org>
-Fixes: 4d4e9907ff572 ("drm/nouveau/bios: guard against out-of-bounds accesses to image")
-Cc: <stable@vger.kernel.org> # v4.10+
-Reviewed-by: Ilia Mirkin <imirkin@alum.mit.edu>
-Reviewed-by: Karol Herbst <kherbst@redhat.com>
-Signed-off-by: Karol Herbst <kherbst@redhat.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220122081906.2633061-1-github@glowingmonkey.org
+This work has been tested by the folks over at the level1techs forum here:
+https://forum.level1techs.com/t/has-anybody-gotten-audio-working-in-linux-on-aorus-x570-master/154072
+
+Signed-off-by: Christian Lachner <gladiac@gmail.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220129113243.93068-3-gladiac@gmail.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/nouveau/nvkm/subdev/bios/base.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/pci/hda/patch_realtek.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/gpu/drm/nouveau/nvkm/subdev/bios/base.c
-+++ b/drivers/gpu/drm/nouveau/nvkm/subdev/bios/base.c
-@@ -38,7 +38,7 @@ nvbios_addr(struct nvkm_bios *bios, u32
- 		*addr += bios->imaged_addr;
- 	}
- 
--	if (unlikely(*addr + size >= bios->size)) {
-+	if (unlikely(*addr + size > bios->size)) {
- 		nvkm_error(&bios->subdev, "OOB %d %08x %08x\n", size, p, *addr);
- 		return false;
- 	}
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -2171,6 +2171,7 @@ static void alc1220_fixup_gb_x570(struct
+ {
+ 	static const hda_nid_t conn1[] = { 0x0c };
+ 	static const struct coef_fw gb_x570_coefs[] = {
++		WRITE_COEF(0x07, 0x03c0),
+ 		WRITE_COEF(0x1a, 0x01c1),
+ 		WRITE_COEF(0x1b, 0x0202),
+ 		WRITE_COEF(0x43, 0x3005),
+@@ -2598,6 +2599,7 @@ static const struct snd_pci_quirk alc882
+ 	SND_PCI_QUIRK(0x1458, 0xa0b8, "Gigabyte AZ370-Gaming", ALC1220_FIXUP_GB_DUAL_CODECS),
+ 	SND_PCI_QUIRK(0x1458, 0xa0cd, "Gigabyte X570 Aorus Master", ALC1220_FIXUP_GB_X570),
+ 	SND_PCI_QUIRK(0x1458, 0xa0ce, "Gigabyte X570 Aorus Xtreme", ALC1220_FIXUP_CLEVO_P950),
++	SND_PCI_QUIRK(0x1458, 0xa0d5, "Gigabyte X570S Aorus Master", ALC1220_FIXUP_GB_X570),
+ 	SND_PCI_QUIRK(0x1462, 0x11f7, "MSI-GE63", ALC1220_FIXUP_CLEVO_P950),
+ 	SND_PCI_QUIRK(0x1462, 0x1228, "MSI-GP63", ALC1220_FIXUP_CLEVO_P950),
+ 	SND_PCI_QUIRK(0x1462, 0x1229, "MSI-GP73", ALC1220_FIXUP_CLEVO_P950),
 
 

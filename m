@@ -2,248 +2,296 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4139C4AB3DD
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 07:12:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 265944AB41C
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 07:12:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234048AbiBGFth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 00:49:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32926 "EHLO
+        id S238978AbiBGFu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 00:50:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350342AbiBGDaH (ORCPT
+        with ESMTP id S1350413AbiBGDa6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 22:30:07 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2088.outbound.protection.outlook.com [40.107.244.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D65E5C061A73
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 19:30:05 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=og5qCXKHzIixIoG93zAnExYLejGK8IL3CrpfgAe4TbKrMEqktYJbWZtFFaTZWt9TqWPy5iinVGJc9Vsy8iZXgfFBlp3sjN3RQGLIVqdwkdynv0aAMt2WfLS/ZICFw0yXneWs/s5M5mJXrEfB66K0n5ykyw4qFQGLfIyYQPYZ/Re3VmuiksGO+f1eXiOqwQyaOm7wYbwIkrHP2UH5Wt2SKIwGJ3o3qkA+sPKCdxEGTMbpKLkw4Mt8hIo5YgMThLm+guNzIS8YTZF7OujObEfzoBb3NauBfSqY2Pl9Zqyp9T0QAjNjsL+uWdfxn0zE2mRX26ZiwyGUGXC9N1HWCtZL8w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jzWVgmpPJlmPMecU3JhUV57rCwC0Lay5y4PVz93VGpE=;
- b=OQlI2c7/kfgkW6dImkHxz3ZdYVHpph1co1c4mGfhzkVaFbfU22O7e5lO0Ks26McmIGtt9++a97gs7yrDnncTs/Kl9uBql5HAVLYPM7Twu/iud1oZ//tKUn0FeoCDJ6mkiFqYAvgAf3VahmEEl/TykuAZrjlr4pgxXttwkNjjGD57sVDu0GcJD8d6B8e72tHLtFW+hmqElGioeg93LuBu1dFomNemVoiIv5v8drp14DHyHT3G6g+C4Oas4Vu5QhZGBD1tJtKSOla/mTrlaW4SkoaGt573LiWbz6mdpKy0p/2E29w+E94aASSNNMP8Bxqg4S1We3O6Oy5Ai+cxph8ncQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jzWVgmpPJlmPMecU3JhUV57rCwC0Lay5y4PVz93VGpE=;
- b=ZofT7zHhWc1Oxah5HOTXFuwP1okKytDW87eNo0j4nOMrIqlBUcmF1ZYOV4xjvF413S3f43+n6852mUj2K9sOpycybMVshpo6ScR+fd1/TYonazqlwkG6VwvTLP7AYTjI/rTAGnP7f3MJVhLjltLUqRXlG6suyxpOPKWnRo4RO8Q=
-Received: from DM6PR12MB2619.namprd12.prod.outlook.com (2603:10b6:5:45::18) by
- DM5PR12MB1916.namprd12.prod.outlook.com (2603:10b6:3:112::16) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4951.12; Mon, 7 Feb 2022 03:30:01 +0000
-Received: from DM6PR12MB2619.namprd12.prod.outlook.com
- ([fe80::a894:300e:5c16:5639]) by DM6PR12MB2619.namprd12.prod.outlook.com
- ([fe80::a894:300e:5c16:5639%6]) with mapi id 15.20.4951.018; Mon, 7 Feb 2022
- 03:30:01 +0000
-From:   "Quan, Evan" <Evan.Quan@amd.com>
-To:     =?iso-8859-1?Q?Ma=EDra_Canal?= <maira.canal@usp.br>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Koenig, Christian" <Christian.Koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        "airlied@linux.ie" <airlied@linux.ie>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        "nathan@kernel.org" <nathan@kernel.org>,
-        "ndesaulniers@google.com" <ndesaulniers@google.com>,
-        "Lazar, Lijo" <Lijo.Lazar@amd.com>,
-        "Tuikov, Luben" <Luben.Tuikov@amd.com>,
-        "Chen, Guchun" <Guchun.Chen@amd.com>,
-        "Zhang, Hawking" <Hawking.Zhang@amd.com>,
-        "jiapeng.chong@linux.alibaba.com" <jiapeng.chong@linux.alibaba.com>
-CC:     "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] drm/amd/pm: add missing prototypes to amdgpu_dpm_internal
-Thread-Topic: [PATCH] drm/amd/pm: add missing prototypes to
- amdgpu_dpm_internal
-Thread-Index: AQHYGJaXQ42Lm1VvwEmwNUASEbtx+KyHdI7w
-Date:   Mon, 7 Feb 2022 03:30:01 +0000
-Message-ID: <DM6PR12MB26199543AD01C2DA18CCFB64E42C9@DM6PR12MB2619.namprd12.prod.outlook.com>
-References: <YfskWvNqt81rZZpQ@fedora>
-In-Reply-To: <YfskWvNqt81rZZpQ@fedora>
-Accept-Language: en-US, zh-CN
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_Enabled=true;
- MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_SetDate=2022-02-07T03:29:57Z;
- MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_Method=Standard;
- MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_Name=AMD Official Use
- Only-AIP 2.0;
- MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_ActionId=ad92e81e-ea20-44bd-89a5-ec95d51ef386;
- MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_ContentBits=1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 3c95d8c5-d6ed-4db9-fe23-08d9e9ea1fd4
-x-ms-traffictypediagnostic: DM5PR12MB1916:EE_
-x-microsoft-antispam-prvs: <DM5PR12MB1916D8B0AF426A7040C6DAFCE42C9@DM5PR12MB1916.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4941;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: RPLQs25PhX2D5evhmAxJgAMvhZ4QtIrq5Y/8JB96JJDl/6tRAWSeosystKKONrnBIOyv/YmcDrtEyzFfmec6mD66s0Xp3VAqoA0NGT4FsgfImes0T4RVS6fQM8Sl1GELKmmfwgglHEaVvBzMf9pSONWhw2esczFNQqRnePg8h73W9pNbq01SezcwcDISaMqVlrPCxzd90y+slBlfptMcygZU+qvnr+fwZIdvX/vgNeOdT59PwiuCI13H5+1s00AMCIpiTydnF2ZKZGcgyTZG2zu5kS8f2Zz6JqUexI3pcM27T3zHu198LqMPlDalGaKy1ECMfZFSCW/ic29Zgtx5eEaKJCXdJs4s/753xwFqB7yL+jOgKSM6715qoHTHoV0u3Z5hKS0ADDmrqC0j6KwYlFbxSDnjtnd/Ouz+DZDdWyGVshak5DXHjpRuMFwPeJdNgQAXjlXphzd/PBnWQjFjAPLZgHxoGCjAY6/c8xclfUcVpONX/JN3HrNNfTrheD53ydmQKYbUNoRsyNLte4PKbIxbfbUTlX3GN8RIFNMpHowv7ygoHg5C8PP+UdMRwajg728cAFfXYwcIbw5ZDdd6NbJzQDP0ymMo1OIgyKghR/7kixz991Y5d08CPtdbddH6AZCB08eWPCTU/uPum6bpVxsjPj46SWL/NYOiWiROpkW0BrQyxoeFNBfa4XpY10TXb19xCIN+VtPw91Wr5S3Y0IqPXESmW8Af2mzmN4dUmA4=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB2619.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66556008)(8936002)(4326008)(83380400001)(52536014)(66476007)(66574015)(66446008)(64756008)(55016003)(8676002)(508600001)(33656002)(26005)(6506007)(38100700002)(38070700005)(110136005)(86362001)(53546011)(122000001)(9686003)(921005)(5660300002)(76116006)(66946007)(54906003)(7696005)(316002)(186003)(2906002)(71200400001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?ZwjK+uiHDSWCPXeoJ8gX4ymigSKew65Kkj369/OOz6PPL5vEe7m9VtiX+W?=
- =?iso-8859-1?Q?r93Uu+pwD47KpQREZTtoSFAAOOagHgC8B+MOaR7nAPjmwq/9GVljHD+G/8?=
- =?iso-8859-1?Q?GpPnb+EMzAwN54Q3FqoZdMOTwRWWBmz/FcyHCzD7TXPnMG7N7bHtns/ZLe?=
- =?iso-8859-1?Q?0XQNSRk4rOaH7+bA+tJc/CGmqtSvyyzE5IfYmBfblzZWJGcH+hGu205T5p?=
- =?iso-8859-1?Q?Kny6FT/rYERSxzYisfoglsUCOY1rQ0ZvI3mA61OKRhixlr2mcN4j4sba7v?=
- =?iso-8859-1?Q?ZRIKGLpt4Zy726rCbwD/VPx/QQ9iMqyZl5YWsNdqkqeAla2TbjDeJeSDMN?=
- =?iso-8859-1?Q?Y8561OQXVOYtox12wBd9O0g++v5xVbJpU5noIdGt4Xpkdqx04f40nUbi03?=
- =?iso-8859-1?Q?e0MGGQCmJeABzfaLi0ijvuWrgKX5wvLKr/1O2WlUohx1kF/xF+Tth4zOZI?=
- =?iso-8859-1?Q?gKd0K6aA3Eiph4Al02EqW0v1r+KQGXO01c8/StY65xy0KjJTGcvFaHQ1cr?=
- =?iso-8859-1?Q?r8zagcfxtI8J7OWfSSMq/4D2GqHOhJ2SkB22mTKz+OZl1789WrsGhSpgdu?=
- =?iso-8859-1?Q?5DJjwcX9741OnCtfaLL7rD5uRRX4E6Ea+vDpo8IYc1GGi6zFN7EbNLnBVi?=
- =?iso-8859-1?Q?heHwJzn4c3gzNEdJ/9noV5ME5vUvDf9vnQX+gP3QX60FjfLjPPsd2IB+Oa?=
- =?iso-8859-1?Q?9SB27ghaudrz1e5GgxOY6z2WsaT7fXHkAcrYUfClDg5DNaJCqYSCcuImwi?=
- =?iso-8859-1?Q?upZRvD/DcxXq1aPGmGydbwiByj23Q9UF7ffypNLUdFaGW9HmRO+fHUNyXN?=
- =?iso-8859-1?Q?E93JEmCGdE9iAexVLRbG4JcA/mDUOve1hC2MyAhQF27QEv1vnif/OSJmR7?=
- =?iso-8859-1?Q?Fb+B0f7G3XE1x37h1SgriQU7fe5YR8b5IczYY3PaMB+d0/P1Ca8KWOrhdW?=
- =?iso-8859-1?Q?SND9NsCL75/KKNzdreVCasJLqQzLHWOAjgMH0r/JBrVTNiekcpL7cxDqrt?=
- =?iso-8859-1?Q?xJ5lQHQs4EF6irdRh9dM2y+trZ8Q+D85iaMOTf40VWMcOIeBMCadP/Gtp3?=
- =?iso-8859-1?Q?AA/ctLXy8HebPQn21RpKyO/otcbMisbqRXGhoZWSZMrBcN9ilPU+oqQIQX?=
- =?iso-8859-1?Q?Gqxj0lNyanJZS6Gy77ImN5Rlo4vwGKdt3nTrcqTH0X8T6RSoKlSwogq1Zj?=
- =?iso-8859-1?Q?BUryDQF7SsoyFlMk9SmNv/EE8uq9DmjA3tBOsLUvm7TqpQGV91Zb1y+u0z?=
- =?iso-8859-1?Q?ESm5INa87eJJ3Mhi7K+vYRoxp1fMiTONsJG3E6pnxaG21dfzCWKSWtAWAe?=
- =?iso-8859-1?Q?1UI7rqdM9nhsWRlcqQabyFs61E4uUo/2pvDlaSK0qZq/eUT/SftDWQP+l1?=
- =?iso-8859-1?Q?qsZuaHzLGemYM9zFFWBuTHzq8aoof/uLCkczDHdZA3M67bVv3NADrXGhD1?=
- =?iso-8859-1?Q?vjEuvfag9WjQWEhI1f5UtUcft/Zr75jEEwyT2Y15gm8KFO8bezA10F/Ere?=
- =?iso-8859-1?Q?chQWSaXa4j08UTJl7OSaQeDk7lodhYpDJczsNadz0D0VxSPJ1fHtTuU5oC?=
- =?iso-8859-1?Q?OfiaJb3dNeggX5uHcWlEXHyA4BqPHJzOAReibR9/ro9wn/K0nfnzjt6YA6?=
- =?iso-8859-1?Q?X0Dp+ULPpwO5g=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Sun, 6 Feb 2022 22:30:58 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1096C043180
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 19:30:56 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id v47so11159323ybi.4
+        for <linux-kernel@vger.kernel.org>; Sun, 06 Feb 2022 19:30:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=L8aIC6tgOZarL2cC+/D8GXNrTHUDoSyxxEE6XQLswz0=;
+        b=KD9vqPi6m53rdF82uzQEcGM9EwQf0PZBGKf/UauddQ+rgb25RwwAsc7PhOHtg0ixR6
+         /2qonbD1Vf644KGZ7xszAxR4hTUg1MJMuI3RawO/yrCS/PgcC6bCGNMgv0gyZQoTJhPC
+         jyrpD9DcwSWWxnkcUQOl4RcZpGQk7NgHXqizn01FlpJ8QtT1FOpXh9+c+5M/iFgZxS6H
+         9eKxoIh9nZfLDGVWVOvwZqdfdvmjrTZNqBDAl9Vc/E1iI4VtDbLFIJ6Lcp91qpN3pUxU
+         f/FGvx14NNTJXZtswYXPd8WZTkpvT4DoimjKHvXH6SjrjkM885mnCd4WgJDGtybtXyRB
+         qYDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=L8aIC6tgOZarL2cC+/D8GXNrTHUDoSyxxEE6XQLswz0=;
+        b=kbSmGjs9gteVZTTitv1y6Ntd1hTzp7aiYsfQ/fdTsMNvnalglFzAJiScpC1azRvb0Y
+         d0iE8PEP1wjYIyOLxKQqdHbvsZ3yx+RqXKlt7hejWsLqWd83gI8vQFI6OU04hNMGhhKS
+         2yO/h0HEzsTYBIEyV8nr9hfGeYXruibqerHKmniowrhLQB47VqmzNxP0+S3k5PhpQJ8g
+         J4yAGw5HflJarx02kmrq0pjDMQTregrlZEt2nJGS5ZYoVcnrPtdagtbYfSVuj35yysIg
+         ZwLsT2CoEmTaqF1QNykU2ZNSHnUzdp5Ch/7MmZ7+6vei6U81DXJVVzA0nc5JOmNU8vtI
+         rBdw==
+X-Gm-Message-State: AOAM531G3JJZundU1w+2Dv6z/O6Ud+O8pz7ZkRtRLBNdDvhnel0ulEdi
+        o6bbdRTDuR+TQKWB4FbP9Yt/osOJHFOWugyYn27Fgg==
+X-Google-Smtp-Source: ABdhPJzkpFfkiTlqQSQzp+nJjrE7IDV3yucAZ/Zdxqaztc9yfFyVqznKRRHkLExJGw+98rk2Gblyv2jLsY1J813ixBM=
+X-Received: by 2002:a81:e345:: with SMTP id w5mr6827331ywl.32.1644204655621;
+ Sun, 06 Feb 2022 19:30:55 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB2619.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3c95d8c5-d6ed-4db9-fe23-08d9e9ea1fd4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Feb 2022 03:30:01.4369
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: bRnGRLBidpl8e6F8yrO2zVwcLD0xITVqUzE3/TBSN/tycuuzlaoXxFpQ+IaqDeRZ
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1916
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220124202457.3450198-4-eric.dumazet@gmail.com> <20220207030250.GC33412@xsang-OptiPlex-9020>
+In-Reply-To: <20220207030250.GC33412@xsang-OptiPlex-9020>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Sun, 6 Feb 2022 19:30:44 -0800
+Message-ID: <CANn89iLc4=otMLU4x9FKKwe13ozL5WWTY7dFqoYNXDHXhxaRWg@mail.gmail.com>
+Subject: Re: [tcp/dccp] f6408a8641: BUG:KASAN:use-after-free_in_inet_twsk_kill
+To:     kernel test robot <oliver.sang@intel.com>
+Cc:     Eric Dumazet <eric.dumazet@gmail.com>, 0day robot <lkp@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[AMD Official Use Only]
+On Sun, Feb 6, 2022 at 7:03 PM kernel test robot <oliver.sang@intel.com> wrote:
+>
+>
+>
+> Greeting,
+>
+> FYI, we noticed the following commit (built with gcc-9):
+>
+> commit: f6408a86410131190bc04d3c9b12cae45383cdd4 ("[PATCH net-next 3/6] tcp/dccp: get rid of inet_twsk_purge()")
+> url: https://github.com/0day-ci/linux/commits/Eric-Dumazet/netns-speedup-netns-dismantles/20220125-061934
+> base: https://git.kernel.org/cgit/linux/kernel/git/davem/net-next.git 8aaaf2f3af2ae212428f4db1af34214225f5cec3
+> patch link: https://lore.kernel.org/netdev/20220124202457.3450198-4-eric.dumazet@gmail.com
+>
 
-Thanks for the fix!
-Reviewed-by: Evan Quan <evan.quan@amd.com>
+Right, and this has been fixed in
 
-> -----Original Message-----
-> From: Ma=EDra Canal <maira.canal@usp.br>
-> Sent: Thursday, February 3, 2022 8:40 AM
-> To: Quan, Evan <Evan.Quan@amd.com>; Deucher, Alexander
-> <Alexander.Deucher@amd.com>; Koenig, Christian
-> <Christian.Koenig@amd.com>; Pan, Xinhui <Xinhui.Pan@amd.com>;
-> airlied@linux.ie; daniel@ffwll.ch; nathan@kernel.org;
-> ndesaulniers@google.com; Lazar, Lijo <Lijo.Lazar@amd.com>; Tuikov, Luben
-> <Luben.Tuikov@amd.com>; Chen, Guchun <Guchun.Chen@amd.com>;
-> Zhang, Hawking <Hawking.Zhang@amd.com>;
-> jiapeng.chong@linux.alibaba.com
-> Cc: amd-gfx@lists.freedesktop.org; dri-devel@lists.freedesktop.org; linux=
--
-> kernel@vger.kernel.org
-> Subject: [PATCH] drm/amd/pm: add missing prototypes to
-> amdgpu_dpm_internal
->=20
-> Include the header with the prototype to silence the following clang
-> warnings:
->=20
-> drivers/gpu/drm/amd/amdgpu/../pm/amdgpu_dpm_internal.c:29:6:
-> warning: no
-> previous prototype for function 'amdgpu_dpm_get_active_displays'
-> [-Wmissing-prototypes]
-> void amdgpu_dpm_get_active_displays(struct amdgpu_device *adev)
->      ^
-> drivers/gpu/drm/amd/amdgpu/../pm/amdgpu_dpm_internal.c:29:1: note:
-> declare
-> 'static' if the function is not intended to be used outside of this
-> translation unit
-> void amdgpu_dpm_get_active_displays(struct amdgpu_device *adev)
-> ^
-> static
-> drivers/gpu/drm/amd/amdgpu/../pm/amdgpu_dpm_internal.c:76:5:
-> warning: no
-> previous prototype for function 'amdgpu_dpm_get_vrefresh'
-> [-Wmissing-prototypes]
-> u32 amdgpu_dpm_get_vrefresh(struct amdgpu_device *adev)
->     ^
-> drivers/gpu/drm/amd/amdgpu/../pm/amdgpu_dpm_internal.c:76:1: note:
-> declare
-> 'static' if the function is not intended to be used outside of this
-> translation unit
-> u32 amdgpu_dpm_get_vrefresh(struct amdgpu_device *adev)
-> ^
-> static
-> 2 warnings generated.
->=20
-> Besides that, remove the duplicated prototype of the function
-> amdgpu_dpm_get_vblank_time in order to keep the consistency of the
-> headers.
->=20
-> fixes: 6ddbd37f ("drm/amd/pm: optimize the amdgpu_pm_compute_clocks()
-> implementations")
->=20
-> Signed-off-by: Ma=EDra Canal <maira.canal@usp.br>
+commit fbb8295248e1d6f576d444309fcf79356008eac1
+Author: Eric Dumazet <edumazet@google.com>
+Date:   Wed Jan 26 10:07:14 2022 -0800
+
+    tcp: allocate tcp_death_row outside of struct netns_ipv4
+...
+    Fixes: 0dad4087a86a ("tcp/dccp: get rid of inet_twsk_purge()")
+    Signed-off-by: Eric Dumazet <edumazet@google.com>
+    Reported-by: syzbot <syzkaller@googlegroups.com>
+    Reported-by: Paolo Abeni <pabeni@redhat.com>
+    Tested-by: Paolo Abeni <pabeni@redhat.com>
+    Link: https://lore.kernel.org/r/20220126180714.845362-1-eric.dumazet@gmail.com
+    Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+
+
+
+> in testcase: kernel-selftests
+> version: kernel-selftests-x86_64-f050cde9-1_20220127
+> with following parameters:
+>
+>         group: net
+>         ucode: 0xe2
+>
+> test-description: The kernel contains a set of "self tests" under the tools/testing/selftests/ directory. These are intended to be small unit tests to exercise individual code paths in the kernel.
+> test-url: https://www.kernel.org/doc/Documentation/kselftest.txt
+>
+>
+> on test machine: 8 threads Intel(R) Core(TM) i7-6770HQ CPU @ 2.60GHz with 32G memory
+>
+> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
+>
+>
+>
+> If you fix the issue, kindly add following tag
+> Reported-by: kernel test robot <oliver.sang@intel.com>
+>
+>
+> [ 1799.534962][ C0] BUG: KASAN: use-after-free in inet_twsk_kill (net/ipv4/inet_timewait_sock.c:46)
+> [ 1799.542232][    C0] Read of size 8 at addr ffff88889835ea80 by task swapper/0/0
+> [ 1799.549806][    C0]
+> [ 1799.552099][    C0] CPU: 0 PID: 0 Comm: swapper/0 Tainted: G          I       5.16.0-rc8-02293-gf6408a864101 #1
+> [ 1799.562554][    C0] Hardware name:  /NUC6i7KYB, BIOS KYSKLi70.86A.0041.2016.0817.1130 08/17/2016
+> [ 1799.571654][    C0] Call Trace:
+> [ 1799.574923][    C0]  <IRQ>
+> [ 1799.577747][ C0] dump_stack_lvl (lib/dump_stack.c:107)
+> [ 1799.582294][ C0] print_address_description+0x21/0x140
+> [ 1799.588939][ C0] ? inet_twsk_kill (net/ipv4/inet_timewait_sock.c:46)
+> [ 1799.593855][ C0] ? inet_twsk_kill (net/ipv4/inet_timewait_sock.c:46)
+> [ 1799.598850][ C0] kasan_report.cold (mm/kasan/report.c:434 mm/kasan/report.c:450)
+> [ 1799.603906][ C0] ? inet_twsk_kill (net/ipv4/inet_timewait_sock.c:46)
+> [ 1799.608942][ C0] ? inet_twsk_kill (net/ipv4/inet_timewait_sock.c:148)
+> [ 1799.614060][ C0] inet_twsk_kill (net/ipv4/inet_timewait_sock.c:46)
+> [ 1799.619048][ C0] ? inet_twsk_kill (net/ipv4/inet_timewait_sock.c:148)
+> [ 1799.624088][ C0] call_timer_fn (arch/x86/include/asm/jump_label.h:27 include/linux/jump_label.h:212 include/trace/events/timer.h:125 kernel/time/timer.c:1422)
+> [ 1799.628802][ C0] ? lock_release (kernel/locking/lockdep.c:5315 kernel/locking/lockdep.c:5657)
+> [ 1799.633639][ C0] ? del_timer_sync (kernel/time/timer.c:1398)
+> [ 1799.638650][ C0] ? lock_downgrade (kernel/locking/lockdep.c:5645)
+> [ 1799.643768][ C0] ? inet_twsk_kill (net/ipv4/inet_timewait_sock.c:148)
+> [ 1799.648731][ C0] ? lockdep_hardirqs_on_prepare (kernel/locking/lockdep.c:4224 kernel/locking/lockdep.c:4292 kernel/locking/lockdep.c:4244)
+> [ 1799.654797][ C0] ? inet_twsk_kill (net/ipv4/inet_timewait_sock.c:148)
+> [ 1799.659608][ C0] run_timer_softirq (kernel/time/timer.c:1467 kernel/time/timer.c:1734 kernel/time/timer.c:1710 kernel/time/timer.c:1747)
+> [ 1799.664743][ C0] ? call_timer_fn (kernel/time/timer.c:1744)
+> [ 1799.669655][ C0] ? __next_base (kernel/time/hrtimer.c:506)
+> [ 1799.674329][ C0] ? rcu_read_lock_sched_held (include/linux/lockdep.h:283 kernel/rcu/update.c:125)
+> [ 1799.679957][ C0] ? rcu_read_lock_bh_held (kernel/rcu/update.c:120)
+> [ 1799.685223][ C0] __do_softirq (arch/x86/include/asm/jump_label.h:27 include/linux/jump_label.h:212 include/trace/events/irq.h:142 kernel/softirq.c:559)
+> [ 1799.689695][ C0] irq_exit_rcu (kernel/softirq.c:432 kernel/softirq.c:637 kernel/softirq.c:649)
+> [ 1799.694165][ C0] sysvec_apic_timer_interrupt (arch/x86/kernel/apic/apic.c:1097 (discriminator 14))
+> [ 1799.699785][    C0]  </IRQ>
+> [ 1799.702672][    C0]  <TASK>
+> [ 1799.705613][ C0] asm_sysvec_apic_timer_interrupt (arch/x86/include/asm/idtentry.h:638)
+> [ 1799.711800][ C0] RIP: 0010:cpuidle_enter_state (drivers/cpuidle/cpuidle.c:259)
+> [ 1799.717839][ C0] Code: 00 00 31 ff e8 47 58 43 fe 80 3c 24 00 74 12 9c 58 f6 c4 02 0f 85 1f 08 00 00 31 ff e8 6f 9c 5b fe e8 aa 0f 71 fe fb 45 85 f6 <0f> 88 90 03 00 00 49 63 ee 48 83 fd 09 0f 87 62 09 00 00 48 8d 44
+> All code
+> ========
+>    0:   00 00                   add    %al,(%rax)
+>    2:   31 ff                   xor    %edi,%edi
+>    4:   e8 47 58 43 fe          callq  0xfffffffffe435850
+>    9:   80 3c 24 00             cmpb   $0x0,(%rsp)
+>    d:   74 12                   je     0x21
+>    f:   9c                      pushfq
+>   10:   58                      pop    %rax
+>   11:   f6 c4 02                test   $0x2,%ah
+>   14:   0f 85 1f 08 00 00       jne    0x839
+>   1a:   31 ff                   xor    %edi,%edi
+>   1c:   e8 6f 9c 5b fe          callq  0xfffffffffe5b9c90
+>   21:   e8 aa 0f 71 fe          callq  0xfffffffffe710fd0
+>   26:   fb                      sti
+>   27:   45 85 f6                test   %r14d,%r14d
+>   2a:*  0f 88 90 03 00 00       js     0x3c0            <-- trapping instruction
+>   30:   49 63 ee                movslq %r14d,%rbp
+>   33:   48 83 fd 09             cmp    $0x9,%rbp
+>   37:   0f 87 62 09 00 00       ja     0x99f
+>   3d:   48                      rex.W
+>   3e:   8d                      .byte 0x8d
+>   3f:   44                      rex.R
+>
+> Code starting with the faulting instruction
+> ===========================================
+>    0:   0f 88 90 03 00 00       js     0x396
+>    6:   49 63 ee                movslq %r14d,%rbp
+>    9:   48 83 fd 09             cmp    $0x9,%rbp
+>    d:   0f 87 62 09 00 00       ja     0x975
+>   13:   48                      rex.W
+>   14:   8d                      .byte 0x8d
+>   15:   44                      rex.R
+> [ 1799.738502][    C0] RSP: 0018:ffffffff85007dd8 EFLAGS: 00000202
+> [ 1799.744586][    C0] RAX: 00000000012d2f7d RBX: ffffe8ffffa02090 RCX: 1ffffffff0bfa611
+> [ 1799.752936][    C0] RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffffffff83055f16
+> [ 1799.761247][    C0] RBP: 0000000000000004 R08: 0000000000000001 R09: 0000000000000001
+> [ 1799.769680][    C0] R10: ffffffff85fd86e7 R11: fffffbfff0bfb0dc R12: ffffffff85a79e80
+> [ 1799.778069][    C0] R13: 000001a2fc2052e6 R14: 0000000000000004 R15: 0000000000000000
+> [ 1799.782354][ T6832] IPv6: ADDRCONF(NETDEV_CHANGE): veth0: link becomes ready
+> [ 1799.786409][ C0] ? cpuidle_enter_state (arch/x86/include/asm/irqflags.h:45 arch/x86/include/asm/irqflags.h:80 drivers/cpuidle/cpuidle.c:257)
+> [ 1799.799117][ C0] ? cpuidle_enter_state (arch/x86/include/asm/irqflags.h:45 arch/x86/include/asm/irqflags.h:80 drivers/cpuidle/cpuidle.c:257)
+> [ 1799.804473][ C0] ? menu_reflect (drivers/cpuidle/governors/menu.c:267)
+> [ 1799.809304][ C0] cpuidle_enter (drivers/cpuidle/cpuidle.c:353)
+> [ 1799.813795][ C0] do_idle (kernel/sched/idle.c:158 kernel/sched/idle.c:239 kernel/sched/idle.c:306)
+> [ 1799.817917][ C0] ? arch_cpu_idle_exit+0xc0/0xc0
+> [ 1799.823009][ C0] cpu_startup_entry (kernel/sched/idle.c:402 (discriminator 1))
+> [ 1799.827914][ C0] start_kernel (init/main.c:1137)
+> [ 1799.832479][ C0] secondary_startup_64_no_verify (arch/x86/kernel/head_64.S:283)
+> [ 1799.838530][    C0]  </TASK>
+> [ 1799.841584][    C0]
+> [ 1799.843870][    C0] Allocated by task 19319:
+> [ 1799.848379][ C0] kasan_save_stack (mm/kasan/common.c:38)
+> [ 1799.853303][ C0] __kasan_slab_alloc (mm/kasan/common.c:46 mm/kasan/common.c:434 mm/kasan/common.c:467)
+> [ 1799.858176][ C0] kmem_cache_alloc (mm/slab.h:520 mm/slub.c:3234 mm/slub.c:3242 mm/slub.c:3247)
+> [ 1799.863091][ C0] copy_net_ns (include/linux/slab.h:714 net/core/net_namespace.c:404 net/core/net_namespace.c:459)
+> [ 1799.867457][ C0] create_new_namespaces+0x335/0x900
+> [ 1799.873494][ C0] unshare_nsproxy_namespaces (kernel/nsproxy.c:226 (discriminator 4))
+> [ 1799.879267][ C0] ksys_unshare (kernel/fork.c:3075)
+> [ 1799.883868][ C0] __x64_sys_unshare (kernel/fork.c:3144)
+> [ 1799.888661][ C0] do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
+> [ 1799.893312][ C0] entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:113)
+> [ 1799.899477][    C0]
+> [ 1799.901845][    C0] The buggy address belongs to the object at ffff88889835e600
+> [ 1799.901845][    C0]  which belongs to the cache net_namespace of size 6272
+> [ 1799.916823][    C0] The buggy address is located 1152 bytes inside of
+> [ 1799.916823][    C0]  6272-byte region [ffff88889835e600, ffff88889835fe80)
+> [ 1799.930935][    C0] The buggy address belongs to the page:
+> [ 1799.936797][    C0] page:0000000041ff24a7 refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff88889835e600 pfn:0x898358
+> [ 1799.948909][    C0] head:0000000041ff24a7 order:3 compound_mapcount:0 compound_pincount:0
+> [ 1799.957574][    C0] memcg:ffff8881e9591681
+> [ 1799.961926][    C0] flags: 0x17ffffc0010200(slab|head|node=0|zone=2|lastcpupid=0x1fffff)
+> [ 1799.970490][    C0] raw: 0017ffffc0010200 ffffea000a32ac00 dead000000000002 ffff888100bc8c80
+> [ 1799.979427][    C0] raw: ffff88889835e600 0000000080050004 00000001ffffffff ffff8881e9591681
+> [ 1799.988352][    C0] page dumped because: kasan: bad access detected
+> [ 1799.995035][    C0]
+> [ 1799.997380][    C0] Memory state around the buggy address:
+> [ 1800.003163][    C0]  ffff88889835e980: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+> [ 1800.011374][    C0]  ffff88889835ea00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+> [ 1800.019699][    C0] >ffff88889835ea80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+> [ 1800.028007][    C0]                    ^
+> [ 1800.032207][    C0]  ffff88889835eb00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+> [ 1800.040602][    C0]  ffff88889835eb80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+> [ 1800.049061][    C0] ==================================================================
+> [ 1800.057470][    C0] Disabling lock debugging due to kernel taint
+> [ 1800.364663][  T434] # tx=19158 (1195 MB) txc=0 zc=n
+> [ 1800.364686][  T434]
+> [ 1800.763181][  T434] # rx=9578 (1195 MB)
+> [ 1800.763193][  T434]
+> [ 1800.769974][  T434] # ipv6 tcp -z -t 1
+> [ 1800.769984][  T434]
+> [ 1802.219504][  T434] # tx=17552 (1095 MB) txc=17552 zc=n
+> [ 1802.219515][  T434]
+> [ 1802.577158][  T434] # rx=8777 (1095 MB)
+> [ 1802.577170][  T434]
+> [ 1802.583655][  T434] # ok
+> [ 1802.583669][  T434]
+> [ 1802.697567][T19410] IPv6: ADDRCONF(NETDEV_CHANGE): veth0: link becomes ready
+> [ 1802.754498][  T434] # ipv4 udp -t 1
+> [ 1802.754512][  T434]
+> [ 1803.686331][T19410] IPv6: ADDRCONF(NETDEV_CHANGE): veth0: link becomes ready
+> [ 1804.167573][  T434] # tx=40439 (2523 MB) txc=0 zc=n
+> [ 1804.167595][  T434]
+> [ 1804.666768][  T434] # rx=40439 (2523 MB)
+> [ 1804.666780][  T434]
+> [ 1804.673747][  T434] # ipv4 udp -z -t 1
+> [ 1804.673755][  T434]
+> [ 1806.082032][  T434] # tx=18970 (1183 MB) txc=18970 zc=n
+> [ 1806.082049][  T434]
+> [ 1806.580275][  T434] # rx=18956 (1182 MB)
+> [ 1806.580321][  T434]
+> [ 1806.587038][  T434] # ok
+> [ 1806.587045][  T434]
+> [ 1806.717784][  T100] IPv6: ADDRCONF(NETDEV_CHANGE): veth0: link becomes ready
+> [ 1806.781443][  T434] # ipv6 udp -t 1
+>
+>
+> To reproduce:
+>
+>         git clone https://github.com/intel/lkp-tests.git
+>         cd lkp-tests
+>         sudo bin/lkp install job.yaml           # job file is attached in this email
+>         bin/lkp split-job --compatible job.yaml # generate the yaml file for lkp run
+>         sudo bin/lkp run generated-yaml-file
+>
+>         # if come across any failure that blocks the test,
+>         # please remove ~/.lkp and /lkp dir to run from a clean state.
+>
+>
+>
 > ---
->  drivers/gpu/drm/amd/pm/amdgpu_dpm_internal.c | 1 +
->  drivers/gpu/drm/amd/pm/inc/amdgpu_dpm.h      | 1 -
->  drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c   | 1 +
->  3 files changed, 2 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/gpu/drm/amd/pm/amdgpu_dpm_internal.c
-> b/drivers/gpu/drm/amd/pm/amdgpu_dpm_internal.c
-> index ba5f6413412d..42efe838fa85 100644
-> --- a/drivers/gpu/drm/amd/pm/amdgpu_dpm_internal.c
-> +++ b/drivers/gpu/drm/amd/pm/amdgpu_dpm_internal.c
-> @@ -25,6 +25,7 @@
->  #include "amdgpu_display.h"
->  #include "hwmgr.h"
->  #include "amdgpu_smu.h"
-> +#include "amdgpu_dpm_internal.h"
->=20
->  void amdgpu_dpm_get_active_displays(struct amdgpu_device *adev)
->  {
-> diff --git a/drivers/gpu/drm/amd/pm/inc/amdgpu_dpm.h
-> b/drivers/gpu/drm/amd/pm/inc/amdgpu_dpm.h
-> index 5cc05110cdae..09790413cbc4 100644
-> --- a/drivers/gpu/drm/amd/pm/inc/amdgpu_dpm.h
-> +++ b/drivers/gpu/drm/amd/pm/inc/amdgpu_dpm.h
-> @@ -343,7 +343,6 @@ struct amdgpu_pm {
->  	struct amdgpu_ctx       *stable_pstate_ctx;
->  };
->=20
-> -u32 amdgpu_dpm_get_vblank_time(struct amdgpu_device *adev);
->  int amdgpu_dpm_read_sensor(struct amdgpu_device *adev, enum
-> amd_pp_sensors sensor,
->  			   void *data, uint32_t *size);
->=20
-> diff --git a/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c
-> b/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c
-> index 7427c50409d4..caae54487f9c 100644
-> --- a/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c
-> +++ b/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c
-> @@ -28,6 +28,7 @@
->  #include "amdgpu_pm.h"
->  #include "amdgpu_dpm.h"
->  #include "amdgpu_atombios.h"
-> +#include "amdgpu_dpm_internal.h"
->  #include "amd_pcie.h"
->  #include "sid.h"
->  #include "r600_dpm.h"
-> --
-> 2.34.1
+> 0DAY/LKP+ Test Infrastructure                   Open Source Technology Center
+> https://lists.01.org/hyperkitty/list/lkp@lists.01.org       Intel Corporation
+>
+> Thanks,
+> Oliver Sang
+>

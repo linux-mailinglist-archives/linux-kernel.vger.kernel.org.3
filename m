@@ -2,126 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 467E34ACB03
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 22:13:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76BFA4ACB09
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 22:15:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237340AbiBGVNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 16:13:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41604 "EHLO
+        id S234674AbiBGVPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 16:15:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235998AbiBGVNL (ORCPT
+        with ESMTP id S231300AbiBGVPW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 16:13:11 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09DFDC06173B;
-        Mon,  7 Feb 2022 13:13:11 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id l25so12550369eda.12;
-        Mon, 07 Feb 2022 13:13:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=zT3oKzS7n7TI0D8XaL63jjRHo7FI4UGfj4YRLtEmDxg=;
-        b=QR4Jc2mIcnWKHiYdoFEJ5zevhFJyEliAI5KBqZrUbY9rLUnmJuFmL5mMzVoJQveBx6
-         bQKjeiAEyGGkvvKddmCr4S0JElAz3tca5rUbg9We0fHqb6MJhOU3cbspzMY7eP5q3VSv
-         o73vYEdAF5+amj8IL/ESmg3zp2/x6vzygRMHArv14zYwJsjV/z+qZDGo04DAUZEt7TQd
-         5q3hEJf/+LcyDZG2f556d1kDc8HVzfvkdYmTUtYi/PtpFDb+zdv32TgeFqvgB0slNyHb
-         gPv40errXwoy706jxPdyeF8dAh3O2tPaKh7Iwga0jwATcDdGGJR0Fps0AfOmnEIO4Ccf
-         6UJQ==
+        Mon, 7 Feb 2022 16:15:22 -0500
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54CB5C06173B
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 13:15:21 -0800 (PST)
+Received: by mail-io1-f71.google.com with SMTP id q7-20020a6bf207000000b006129589cb60so10059113ioh.4
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 13:15:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=zT3oKzS7n7TI0D8XaL63jjRHo7FI4UGfj4YRLtEmDxg=;
-        b=ikGdHmzinLGnY385TcpwaA+lPnsNXo6KkctiR0js8RBGuMWlegb5RE5BEn2F/hgwy9
-         MHtT5XI9yl3csswLJilozlziXqUtRmildx3vzy5cBMRaQQM17SJk6qCthBaARvzxYJ7y
-         A/Dq4oGxxTffDWHzQqqJq7cu+ZrH3jIpZsGUrimDnYVVJpeVZGESJ+R8qBv8p2FuPMtk
-         C6DAxmP30+cGV7zZJNXxf1uo1YqtL/9CcCJMmxZQXYc2TcYzG51JgPhTEuS3HLo0LaIC
-         GpD0/pX/CsIgiGwYrPw0DymEBClIkDSIHbyhywGmSD+Ck9KFCmaqk/ZM3rs/FmL9pFQn
-         lRRw==
-X-Gm-Message-State: AOAM530iHn7zNw9naD+t+fsplVwqCvucZBFTRtKF38cR5DhIIztJaFY8
-        ItRHgz7/Jx5Xh5tvwVXk+xJqBN66M7c=
-X-Google-Smtp-Source: ABdhPJwCC1iS4UP4hrkX15xYRf3fNO8oBBK+NyVHs/d2yncCD2u4zkXVuzWYG4uaZpq0AanrIwNZmg==
-X-Received: by 2002:a05:6402:254a:: with SMTP id l10mr1340361edb.318.1644268389476;
-        Mon, 07 Feb 2022 13:13:09 -0800 (PST)
-Received: from debian64.daheim (pd9e292b6.dip0.t-ipconnect.de. [217.226.146.182])
-        by smtp.gmail.com with ESMTPSA id z6sm4058135ejd.96.2022.02.07.13.13.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 13:13:08 -0800 (PST)
-Received: from localhost.daheim ([127.0.0.1])
-        by debian64.daheim with esmtp (Exim 4.95)
-        (envelope-from <chunkeey@gmail.com>)
-        id 1nHAN7-001CUZ-Os;
-        Mon, 07 Feb 2022 22:13:08 +0100
-Message-ID: <feb446cd-e935-6fc4-7f3c-d7ab21d18d8e@gmail.com>
-Date:   Mon, 7 Feb 2022 22:13:08 +0100
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=Q04Lfm5jkwz+yscbqKxM+OCLcVdT1wPW/kSPJYuzo3E=;
+        b=1fBCCYZ/4zGMo6+3lKwN1tNAFflDtbJMUF8rEYM9YJkswbAHt7E0DNQ7ssTAVO17UF
+         aFH0jT4mjP9rXe91dx5V61aLmT6vnt9rNXqspuxKqG8qh5Qqnv8cBguSH6Kf6VXAlp0R
+         nDOIwHmxOaW6hftB/gb4qxYDMyrYw2ERX52gFQ1pMfPvKuhFihU263Xsw10yLV+Bh4K2
+         iAMETF81NC2zpvhJu2DDfcrGyE+Hy7M439prUd2j0GRaxnmkYHaQWC6W+IefASrAlcc9
+         Y9lGTh/KYcRlLyckGEFrn5sIKF8mc8wm9DPjxhTjgV4GNXNaxNxjBWenirWuwTx0GLEd
+         nsww==
+X-Gm-Message-State: AOAM532uRo1lzD1uzIzUY8RoLsDMkiX4gS9woi8Wtg6bLIQSeNo/ijYM
+        ky4X6hsyUkJ5D6spXvjTxXNtKTOjS3n8W6X7+r+ndXOrw4bu
+X-Google-Smtp-Source: ABdhPJwcG15q2cwpMieUm4wQkcyVruS93jcXOM1DtU0+s6L3dCWSrW34PO8FXy8+s+zH5D8xY01EufTIQrFlfl/1KHKVDUm0qCkL
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [BUG] intersil: p54: possible deadlock in p54_remove_interface()
- and p54_stop()
-Content-Language: en-US
-To:     Jia-Ju Bai <baijiaju1990@gmail.com>, chunkeey@googlemail.com,
-        kvalo@kernel.org, davem@davemloft.net, kuba@kernel.org
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <fb543659-f69d-242f-b18a-69dd8b8b5ca1@gmail.com>
-From:   Christian Lamparter <chunkeey@gmail.com>
-In-Reply-To: <fb543659-f69d-242f-b18a-69dd8b8b5ca1@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:1e08:: with SMTP id g8mr757607ila.22.1644268520680;
+ Mon, 07 Feb 2022 13:15:20 -0800 (PST)
+Date:   Mon, 07 Feb 2022 13:15:20 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000001733e105d77419fe@google.com>
+Subject: [syzbot] WARNING in schedule_bh (2)
+From:   syzbot <syzbot+e89a1109c376e2c3c389@syzkaller.appspotmail.com>
+To:     axboe@kernel.dk, efremov@linux.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+syzbot has found a reproducer for the following issue on:
 
-On 07/02/2022 16:31, Jia-Ju Bai wrote:
-> Hello,
-> 
-> My static analysis tool reports a possible deadlock in the p54 driver in Linux 5.16:
-> 
-> p54_remove_interface()
->    mutex_lock(&priv->conf_mutex); --> Line 262 (Lock A)
-> wait_for_completion_interruptible_timeout(&priv->beacon_comp, HZ); --> Line 271 (Wait X)
-> 
-> p54_stop()
->    mutex_lock(&priv->conf_mutex); --> Line 208 (Lock A)
->    p54p_stop() (call via priv->stop)
->      p54_free_skb()
->        p54_tx_qos_accounting_free()
->          complete(&priv->beacon_comp); --> Line 230 (Wake X)
-> 
-> When p54_remove_interface() is executed, "Wait X" is performed by holding "Lock A". 
-> If p54_stop() is executed at this time, "Wake X" cannot be performed to wake 
-> up "Wait X" in p54_remove_interface(), because "Lock A" has been already hold by
-> p54_remove_interface(), causing a possible deadlock.
->
-> I find that "Wait X" is performed with a timeout, to relieve the possible deadlock;
-> but I think this timeout can cause inefficient execution.
-> 
-> I am not quite sure whether this possible problem is real and how to fix it if it is real.
-> Any feedback would be appreciated, thanks :)
+HEAD commit:    dfd42facf1e4 Linux 5.17-rc3
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=145b5a28700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=266de9da75c71a45
+dashboard link: https://syzkaller.appspot.com/bug?extid=e89a1109c376e2c3c389
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: i386
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15572b0c700000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1220d968700000
 
-This has been such a long long time ago. But I think I found
-the right documentation entry for you:
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e89a1109c376e2c3c389@syzkaller.appspotmail.com
 
-<https://www.kernel.org/doc/html/v5.16/driver-api/80211/mac80211.html> (scroll down a bit)
-| remove_interface
-| 	Notifies a driver that an interface is going down.
-| 	>>The stop callback is called after this if it is the last interface
-|	and no monitor interfaces are present.<<
-|	(it goes on a bit. But I don't think there's anything important left)
+floppy1: floppy timeout called
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 11 at drivers/block/floppy.c:1000 schedule_bh+0x5f/0x70 drivers/block/floppy.c:1000
+Modules linked in:
+CPU: 0 PID: 11 Comm: kworker/u16:1 Not tainted 5.17.0-rc3-syzkaller #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+Workqueue: floppy floppy_shutdown
+RIP: 0010:schedule_bh+0x5f/0x70 drivers/block/floppy.c:1000
+Code: d7 65 fd fc 48 89 2d 20 c8 03 0c 5b 48 c7 c2 80 d0 6a 8c 48 8b 35 f1 cc 03 0c bf 08 00 00 00 5d e9 46 9a d1 fc e8 b1 65 fd fc <0f> 0b eb d1 66 66 2e 0f 1f 84 00 00 00 00 00 66 90 e8 9b 65 fd fc
+RSP: 0018:ffffc900003cfcf8 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
+RDX: ffff888010feba00 RSI: ffffffff847b12df RDI: 0000000000000003
+RBP: ffffffff847bc790 R08: 0000000000000000 R09: ffffffff8c6ad087
+R10: ffffffff847b12af R11: 0000000000000000 R12: 0000000000000001
+R13: ffffc900003cfdb8 R14: ffff888010db3e00 R15: ffff888010c71800
+FS:  0000000000000000(0000) GS:ffff88802cb00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00000000f7ea1db0 CR3: 000000001f15c000 CR4: 0000000000150ee0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ floppy_shutdown+0x129/0x170 drivers/block/floppy.c:1890
+ process_one_work+0x9ac/0x1650 kernel/workqueue.c:2307
+ worker_thread+0x657/0x1110 kernel/workqueue.c:2454
+ kthread+0x2e9/0x3a0 kernel/kthread.c:377
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+ </TASK>
 
-The documentation tells you not to worry. p54_stop() and p54_remove_interface()
-are being serialized by mac80211.
-
-Cheers,
-Christian

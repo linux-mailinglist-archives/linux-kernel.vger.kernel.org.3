@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35B494ABDC5
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:05:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 825194ABA0C
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:26:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389084AbiBGLqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:46:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46310 "EHLO
+        id S1383354AbiBGLWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:22:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386137AbiBGLdq (ORCPT
+        with ESMTP id S1381889AbiBGLRk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:33:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F52C043181;
-        Mon,  7 Feb 2022 03:33:46 -0800 (PST)
+        Mon, 7 Feb 2022 06:17:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8962CC03E954;
+        Mon,  7 Feb 2022 03:17:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F09D560180;
-        Mon,  7 Feb 2022 11:33:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4CC1C004E1;
-        Mon,  7 Feb 2022 11:33:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2E87DB811B2;
+        Mon,  7 Feb 2022 11:17:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 782D5C004E1;
+        Mon,  7 Feb 2022 11:17:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233625;
-        bh=Cufcp3rMZnSu8TxXUO/67GgkkFgPiEJAJLQFh2QPqxs=;
+        s=korg; t=1644232651;
+        bh=07DXET1mUt27c2qdzB5vxavcElMoUr/eGhq3NzQRh/A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=q0KJG2hfMnwymoXPUcrY0qiviILp7m2LDS0tBZnAjnjB/q5CCdqmj9j1AmxihxKVb
-         8igWSx6bDNEworP8PSUTPqAoJyCW/L068w8KKSN0f6/5iKEfBtVfz8Jx/slkz8mBrP
-         Sf9ilVUI6XfWe6y2Ef7RzCmtDryop2JxQVJV+HHE=
+        b=iY1OjOFF4YA5B+SONB8+tptLHI7OgN7LAZRW4d/Szyc9267Hhw+Ipgz6vT8gjuITB
+         BeDtUGAqdTgoMNVza0GaY9hJ0OnIgVK6kLqwYlouxbEhv1Yn0DO6xdWQAV/GthilDA
+         FzWWZkyq+zQt6xKBg5a4dKon6PCKAp4Cg4cW8b3w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.16 071/126] net: stmmac: dwmac-visconti: No change to ETHER_CLOCK_SEL for unexpected speed request.
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH 4.19 79/86] ASoC: max9759: fix underflow in speaker_gain_control_put()
 Date:   Mon,  7 Feb 2022 12:06:42 +0100
-Message-Id: <20220207103806.567514812@linuxfoundation.org>
+Message-Id: <20220207103800.258553455@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
-References: <20220207103804.053675072@linuxfoundation.org>
+In-Reply-To: <20220207103757.550973048@linuxfoundation.org>
+References: <20220207103757.550973048@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,61 +54,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-commit 928d6fe996f69330ded6b887baf4534c5fac7988 upstream.
+commit 4c907bcd9dcd233da6707059d777ab389dcbd964 upstream.
 
-Variable clk_sel_val is not initialized in the default case of the first switch statement.
-In that case, the function should return immediately without any changes to the hardware.
+Check for negative values of "priv->gain" to prevent an out of bounds
+access.  The concern is that these might come from the user via:
+  -> snd_ctl_elem_write_user()
+    -> snd_ctl_elem_write()
+      -> kctl->put()
 
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Fixes: b38dd98ff8d0 ("net: stmmac: Add Toshiba Visconti SoCs glue driver")
-Signed-off-by: Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
-Reviewed-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: fa8d915172b8 ("ASoC: max9759: Add Amplifier Driver")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Link: https://lore.kernel.org/r/20220119123101.GA9509@kili
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/stmicro/stmmac/dwmac-visconti.c |    9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ sound/soc/codecs/max9759.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-visconti.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-visconti.c
-@@ -49,13 +49,15 @@ struct visconti_eth {
- 	void __iomem *reg;
- 	u32 phy_intf_sel;
- 	struct clk *phy_ref_clk;
-+	struct device *dev;
- 	spinlock_t lock; /* lock to protect register update */
- };
+--- a/sound/soc/codecs/max9759.c
++++ b/sound/soc/codecs/max9759.c
+@@ -64,7 +64,8 @@ static int speaker_gain_control_put(stru
+ 	struct snd_soc_component *c = snd_soc_kcontrol_component(kcontrol);
+ 	struct max9759 *priv = snd_soc_component_get_drvdata(c);
  
- static void visconti_eth_fix_mac_speed(void *priv, unsigned int speed)
- {
- 	struct visconti_eth *dwmac = priv;
--	unsigned int val, clk_sel_val;
-+	struct net_device *netdev = dev_get_drvdata(dwmac->dev);
-+	unsigned int val, clk_sel_val = 0;
- 	unsigned long flags;
+-	if (ucontrol->value.integer.value[0] > 3)
++	if (ucontrol->value.integer.value[0] < 0 ||
++	    ucontrol->value.integer.value[0] > 3)
+ 		return -EINVAL;
  
- 	spin_lock_irqsave(&dwmac->lock, flags);
-@@ -85,7 +87,9 @@ static void visconti_eth_fix_mac_speed(v
- 		break;
- 	default:
- 		/* No bit control */
--		break;
-+		netdev_err(netdev, "Unsupported speed request (%d)", speed);
-+		spin_unlock_irqrestore(&dwmac->lock, flags);
-+		return;
- 	}
- 
- 	writel(val, dwmac->reg + MAC_CTRL_REG);
-@@ -229,6 +233,7 @@ static int visconti_eth_dwmac_probe(stru
- 
- 	spin_lock_init(&dwmac->lock);
- 	dwmac->reg = stmmac_res.addr;
-+	dwmac->dev = &pdev->dev;
- 	plat_dat->bsp_priv = dwmac;
- 	plat_dat->fix_mac_speed = visconti_eth_fix_mac_speed;
- 
+ 	priv->gain = ucontrol->value.integer.value[0];
 
 

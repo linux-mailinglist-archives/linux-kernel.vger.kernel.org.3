@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2D9B4AB9DD
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:25:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C47C4ABCAC
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:49:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378201AbiBGLPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:15:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49674 "EHLO
+        id S1387024AbiBGLik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:38:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353415AbiBGLMM (ORCPT
+        with ESMTP id S1352482AbiBGL0W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:12:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C631C043181;
-        Mon,  7 Feb 2022 03:12:11 -0800 (PST)
+        Mon, 7 Feb 2022 06:26:22 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA4DC03E910;
+        Mon,  7 Feb 2022 03:25:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 07092B80EC3;
-        Mon,  7 Feb 2022 11:12:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49C6EC004E1;
-        Mon,  7 Feb 2022 11:12:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 036C76077B;
+        Mon,  7 Feb 2022 11:25:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E20CBC340EB;
+        Mon,  7 Feb 2022 11:25:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232328;
-        bh=X4zAEnAPt4ZfgCA3lUjOmtemiVM22+id6pT04M2vi+Y=;
+        s=korg; t=1644233142;
+        bh=BLyOJI36eHMt72Wa5DjaMq8TiYzOPzbxdmmTZTFuakE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Y5gWCGaDOst3b7q1cdks+/bwwWc2vj8aS2mP0vl3TuqvARN0BvBfdcWy7mD9stn00
-         XW2drShBdmc+3ULFKPBvCwytcnJVXIvmku51n5GfeZUK/vO5OUB1OwROc/i2pqjTT/
-         zPCy4bPdUvM8BcBaVFbsCLsDKd7EQ8Ako4D1FNVs=
+        b=Ca9cA0awN41CwBd19+gW5kzRI+mTH/dOgvK/rxC614KQ8itc9epcUTy1Rc6zSDiJE
+         JbU7fMkjIR5KCfvf7Ew35aIQyLIksG825exLF1j0HHSSm9wUyd6pYY9tpmP+qmDMWa
+         UvuGJSQazIhXtdguo9/OWUbapDhSXCAFblwIpPWc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Georgi Valkov <gvalkov@abv.bg>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.14 41/69] ipheth: fix EOVERFLOW in ipheth_rcvbulk_callback
+        stable@vger.kernel.org, Dmitry Monakhov <dmonakhov@openvz.org>,
+        Dmitry Ivanov <dmitry.ivanov2@hpe.com>,
+        Alexey Lyashkov <alexey.lyashkov@hpe.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 5.15 030/110] block: bio-integrity: Advance seed correctly for larger interval sizes
 Date:   Mon,  7 Feb 2022 12:06:03 +0100
-Message-Id: <20220207103756.978764692@linuxfoundation.org>
+Message-Id: <20220207103803.263155646@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103755.604121441@linuxfoundation.org>
-References: <20220207103755.604121441@linuxfoundation.org>
+In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
+References: <20220207103802.280120990@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,57 +57,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Georgi Valkov <gvalkov@abv.bg>
+From: Martin K. Petersen <martin.petersen@oracle.com>
 
-commit 63e4b45c82ed1bde979da7052229a4229ce9cabf upstream.
+commit b13e0c71856817fca67159b11abac350e41289f5 upstream.
 
-When rx_buf is allocated we need to account for IPHETH_IP_ALIGN,
-which reduces the usable size by 2 bytes. Otherwise we have 1512
-bytes usable instead of 1514, and if we receive more than 1512
-bytes, ipheth_rcvbulk_callback is called with status -EOVERFLOW,
-after which the driver malfunctiones and all communication stops.
+Commit 309a62fa3a9e ("bio-integrity: bio_integrity_advance must update
+integrity seed") added code to update the integrity seed value when
+advancing a bio. However, it failed to take into account that the
+integrity interval might be larger than the 512-byte block layer
+sector size. This broke bio splitting on PI devices with 4KB logical
+blocks.
 
-Resolves ipheth 2-1:4.2: ipheth_rcvbulk_callback: urb status: -75
+The seed value should be advanced by bio_integrity_intervals() and not
+the number of sectors.
 
-Fixes: f33d9e2b48a3 ("usbnet: ipheth: fix connectivity with iOS 14")
-Signed-off-by: Georgi Valkov <gvalkov@abv.bg>
-Tested-by: Jan Kiszka <jan.kiszka@siemens.com>
-Link: https://lore.kernel.org/all/B60B8A4B-92A0-49B3-805D-809A2433B46C@abv.bg/
-Link: https://lore.kernel.org/all/24851bd2769434a5fc24730dce8e8a984c5a4505.1643699778.git.jan.kiszka@siemens.com/
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Cc: Dmitry Monakhov <dmonakhov@openvz.org>
+Cc: stable@vger.kernel.org
+Fixes: 309a62fa3a9e ("bio-integrity: bio_integrity_advance must update integrity seed")
+Tested-by: Dmitry Ivanov <dmitry.ivanov2@hpe.com>
+Reported-by: Alexey Lyashkov <alexey.lyashkov@hpe.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Link: https://lore.kernel.org/r/20220204034209.4193-1-martin.petersen@oracle.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/usb/ipheth.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ block/bio-integrity.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/usb/ipheth.c
-+++ b/drivers/net/usb/ipheth.c
-@@ -173,7 +173,7 @@ static int ipheth_alloc_urbs(struct iphe
- 	if (tx_buf == NULL)
- 		goto free_rx_urb;
+--- a/block/bio-integrity.c
++++ b/block/bio-integrity.c
+@@ -373,7 +373,7 @@ void bio_integrity_advance(struct bio *b
+ 	struct blk_integrity *bi = blk_get_integrity(bio->bi_bdev->bd_disk);
+ 	unsigned bytes = bio_integrity_bytes(bi, bytes_done >> 9);
  
--	rx_buf = usb_alloc_coherent(iphone->udev, IPHETH_BUF_SIZE,
-+	rx_buf = usb_alloc_coherent(iphone->udev, IPHETH_BUF_SIZE + IPHETH_IP_ALIGN,
- 				    GFP_KERNEL, &rx_urb->transfer_dma);
- 	if (rx_buf == NULL)
- 		goto free_tx_buf;
-@@ -198,7 +198,7 @@ error_nomem:
+-	bip->bip_iter.bi_sector += bytes_done >> 9;
++	bip->bip_iter.bi_sector += bio_integrity_intervals(bi, bytes_done >> 9);
+ 	bvec_iter_advance(bip->bip_vec, &bip->bip_iter, bytes);
+ }
  
- static void ipheth_free_urbs(struct ipheth_device *iphone)
- {
--	usb_free_coherent(iphone->udev, IPHETH_BUF_SIZE, iphone->rx_buf,
-+	usb_free_coherent(iphone->udev, IPHETH_BUF_SIZE + IPHETH_IP_ALIGN, iphone->rx_buf,
- 			  iphone->rx_urb->transfer_dma);
- 	usb_free_coherent(iphone->udev, IPHETH_BUF_SIZE, iphone->tx_buf,
- 			  iphone->tx_urb->transfer_dma);
-@@ -371,7 +371,7 @@ static int ipheth_rx_submit(struct iphet
- 
- 	usb_fill_bulk_urb(dev->rx_urb, udev,
- 			  usb_rcvbulkpipe(udev, dev->bulk_in),
--			  dev->rx_buf, IPHETH_BUF_SIZE,
-+			  dev->rx_buf, IPHETH_BUF_SIZE + IPHETH_IP_ALIGN,
- 			  ipheth_rcvbulk_callback,
- 			  dev);
- 	dev->rx_urb->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
 
 

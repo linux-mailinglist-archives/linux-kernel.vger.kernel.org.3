@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F57C4AB9B4
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:24:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD77E4ABC68
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:47:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343805AbiBGLLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:11:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47780 "EHLO
+        id S1378652AbiBGLf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:35:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229801AbiBGLIU (ORCPT
+        with ESMTP id S1358128AbiBGLZa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:08:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94159C043181;
-        Mon,  7 Feb 2022 03:08:19 -0800 (PST)
+        Mon, 7 Feb 2022 06:25:30 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C2ADC043181;
+        Mon,  7 Feb 2022 03:25:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 282F861370;
-        Mon,  7 Feb 2022 11:08:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BB0EC004E1;
-        Mon,  7 Feb 2022 11:08:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C5C12B81158;
+        Mon,  7 Feb 2022 11:25:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 172C2C004E1;
+        Mon,  7 Feb 2022 11:25:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232098;
-        bh=5dMnPVgGvcyKRlLrFOFANdLnEP3ROLqN/kgiSsa1FTo=;
+        s=korg; t=1644233115;
+        bh=/hAnYNohmzw9oQdX6Kt9aR6iA/2JH1LYTQg7rMfMCQ8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rOpGebAWoL8dNUA1QTBZF0+kZpJGzhAM3qQg0BmwXxe7Wn4/OA3O6GR1aT89q31gL
-         oiGpsCmO3dfVcxQDjiDm7tNw2IOjaqg0eFo3vwMB2nsZc89VFEsHw8/QF11IUASIHc
-         TwUX7jQ7gCQcYeRBzPdgTr2UQQBhVDmdw2xL910Y=
+        b=fpIsUQPVyEfpYmxdSz6acPVCmnSlXRWkg+qDbQ1Jzp1PpO+XXrgfm3A7EUFi3If4M
+         kxebcIP7OfX2+Pg9xfmdtEjMI4VupYgyOoy6Cb8sP6MM4S1hxcvDe7ay6vHIDTAXkX
+         eBLoZmMl2sfr489W6Q3djawNbvttoUxtj14wazJc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Erwan Le Ray <erwan.leray@foss.st.com>,
-        Valentin Caron <valentin.caron@foss.st.com>
-Subject: [PATCH 4.9 08/48] serial: stm32: fix software flow control transfer
-Date:   Mon,  7 Feb 2022 12:05:41 +0100
-Message-Id: <20220207103752.609360226@linuxfoundation.org>
+        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: [PATCH 5.15 009/110] ASoC: ops: Reject out of bounds values in snd_soc_put_xr_sx()
+Date:   Mon,  7 Feb 2022 12:05:42 +0100
+Message-Id: <20220207103802.594628456@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103752.341184175@linuxfoundation.org>
-References: <20220207103752.341184175@linuxfoundation.org>
+In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
+References: <20220207103802.280120990@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,34 +53,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Valentin Caron <valentin.caron@foss.st.com>
+From: Mark Brown <broonie@kernel.org>
 
-commit 037b91ec7729524107982e36ec4b40f9b174f7a2 upstream.
+commit 4cf28e9ae6e2e11a044be1bcbcfa1b0d8675fe4d upstream.
 
-x_char is ignored by stm32_usart_start_tx() when xmit buffer is empty.
+We don't currently validate that the values being set are within the range
+we advertised to userspace as being valid, do so and reject any values
+that are out of range.
 
-Fix start_tx condition to allow x_char to be sent.
-
-Fixes: 48a6092fb41f ("serial: stm32-usart: Add STM32 USART Driver")
-Cc: stable <stable@vger.kernel.org>
-Signed-off-by: Erwan Le Ray <erwan.leray@foss.st.com>
-Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
-Link: https://lore.kernel.org/r/20220111164441.6178-3-valentin.caron@foss.st.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20220124153253.3548853-4-broonie@kernel.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/tty/serial/stm32-usart.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/soc/soc-ops.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/tty/serial/stm32-usart.c
-+++ b/drivers/tty/serial/stm32-usart.c
-@@ -389,7 +389,7 @@ static void stm32_start_tx(struct uart_p
- {
- 	struct circ_buf *xmit = &port->state->xmit;
+--- a/sound/soc/soc-ops.c
++++ b/sound/soc/soc-ops.c
+@@ -879,6 +879,8 @@ int snd_soc_put_xr_sx(struct snd_kcontro
+ 	long val = ucontrol->value.integer.value[0];
+ 	unsigned int i;
  
--	if (uart_circ_empty(xmit))
-+	if (uart_circ_empty(xmit) && !port->x_char)
- 		return;
- 
- 	stm32_transmit_chars(port);
++	if (val < mc->min || val > mc->max)
++		return -EINVAL;
+ 	if (invert)
+ 		val = max - val;
+ 	val &= mask;
 
 

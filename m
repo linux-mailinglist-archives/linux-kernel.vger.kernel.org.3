@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2982B4AC657
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 17:46:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C85D4AC64F
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 17:45:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384334AbiBGQoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 11:44:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40766 "EHLO
+        id S1383444AbiBGQoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 11:44:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390530AbiBGQfA (ORCPT
+        with ESMTP id S1390492AbiBGQeu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 11:35:00 -0500
+        Mon, 7 Feb 2022 11:34:50 -0500
 Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2BBC9C0401D6
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 08:34:56 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A865DC0401D8
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 08:34:48 -0800 (PST)
 Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 217GOaHK014384;
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 217GOaeF014385;
         Mon, 7 Feb 2022 17:24:36 +0100
 From:   Willy Tarreau <w@1wt.eu>
 To:     "Paul E . McKenney" <paulmck@kernel.org>
 Cc:     Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
         Willy Tarreau <w@1wt.eu>
-Subject: [PATCH 01/42] tools/nolibc: use pselect6 on RISCV
-Date:   Mon,  7 Feb 2022 17:23:13 +0100
-Message-Id: <20220207162354.14293-2-w@1wt.eu>
+Subject: [PATCH 02/42] tools/nolibc: guard the main file against multiple inclusion
+Date:   Mon,  7 Feb 2022 17:23:14 +0100
+Message-Id: <20220207162354.14293-3-w@1wt.eu>
 X-Mailer: git-send-email 2.17.5
 In-Reply-To: <20220207162354.14293-1-w@1wt.eu>
 References: <20220207162354.14293-1-w@1wt.eu>
@@ -37,29 +37,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This arch doesn't provide the old-style select() syscall, we have to
-use pselect6().
+Including nolibc.h multiple times results in build errors due to multiple
+definitions. Let's add a guard against multiple inclusions.
 
 Signed-off-by: Willy Tarreau <w@1wt.eu>
 ---
- tools/include/nolibc/nolibc.h | 3 +++
- 1 file changed, 3 insertions(+)
+ tools/include/nolibc/nolibc.h | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/tools/include/nolibc/nolibc.h b/tools/include/nolibc/nolibc.h
-index c1c285fe494a..ad23712f9cb5 100644
+index ad23712f9cb5..4660637d9b17 100644
 --- a/tools/include/nolibc/nolibc.h
 +++ b/tools/include/nolibc/nolibc.h
-@@ -1256,7 +1256,10 @@ struct sys_stat_struct {
-  *   - the arguments are cast to long and assigned into the target
-  *     registers which are then simply passed as registers to the asm code,
-  *     so that we don't have to experience issues with register constraints.
-+ *
-+ * On riscv, select() is not implemented so we have to use pselect6().
+@@ -80,6 +80,8 @@
+  *      https://w3challs.com/syscalls/
+  *
   */
-+#define __ARCH_WANT_SYS_PSELECT6
++#ifndef _NOLIBC_H
++#define _NOLIBC_H
  
- #define my_syscall0(num)                                                      \
- ({                                                                            \
+ #include <asm/unistd.h>
+ #include <asm/ioctls.h>
+@@ -2582,3 +2584,5 @@ dev_t makedev(unsigned int major, unsigned int minor)
+ {
+ 	return ((major & 0xfff) << 8) | (minor & 0xff);
+ }
++
++#endif /* _NOLIBC_H */
 -- 
 2.35.1
 

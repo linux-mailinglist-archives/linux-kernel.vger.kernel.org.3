@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA36E4ABCD7
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:50:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9D5D4AB9E7
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:26:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388010AbiBGLme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:42:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38424 "EHLO
+        id S1380419AbiBGLSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:18:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384620AbiBGL32 (ORCPT
+        with ESMTP id S241405AbiBGLNI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:29:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 053D9C03E90D;
-        Mon,  7 Feb 2022 03:27:42 -0800 (PST)
+        Mon, 7 Feb 2022 06:13:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C694C0401C0;
+        Mon,  7 Feb 2022 03:13:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9CB11B81158;
-        Mon,  7 Feb 2022 11:27:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5593C004E1;
-        Mon,  7 Feb 2022 11:27:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F0838B80EC3;
+        Mon,  7 Feb 2022 11:13:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4110BC004E1;
+        Mon,  7 Feb 2022 11:13:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233261;
-        bh=LAVXAkoXQsExhDaUbdXPoZ77ineNb0J+l7mx3Kv2fAw=;
+        s=korg; t=1644232382;
+        bh=ij99Pji2hIjLQvYzmWEb7WMoAGwF9oR2PxtnVYAvycM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MhUf0Eq8/fx9heHkzPgIEA1/pln1yyRBbqpdstq5cettvV1BKQ1TCdVZPZxl0TwKj
-         F/ebaQX6sSacnOUd53T54r8stPkkUoFfZA+63XEgymai0GTU9/up1M0OnnH0tgeW7u
-         DFNfvAkCtep0GvCxAwLHoSe1AixR2A7LSzXIw9+E=
+        b=itk6Mbu/0Ll/+xavgu++2ahO+R+zJF6/Q98O8rz4AiJvPFtP0kkBOGCcYW6VtZ2iu
+         QJm4+oXUbNH9vT1sp4e6D8Bzixn1NdgfOBTZCjJhDhMsg7AHoc1U2zBe4jXcCfTmoq
+         eN7d1RzYJb9thsd933PD/BkGLpJLPEKspJ8WfXhk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kamal Dasu <kdasu.kdev@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.15 050/110] spi: bcm-qspi: check for valid cs before applying chip select
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Subject: [PATCH 4.14 61/69] drm/i915/overlay: Prevent divide by zero bugs in scaling
 Date:   Mon,  7 Feb 2022 12:06:23 +0100
-Message-Id: <20220207103803.976347918@linuxfoundation.org>
+Message-Id: <20220207103757.629393379@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
-References: <20220207103802.280120990@linuxfoundation.org>
+In-Reply-To: <20220207103755.604121441@linuxfoundation.org>
+References: <20220207103755.604121441@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kamal Dasu <kdasu.kdev@gmail.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-commit 2cbd27267ffe020af1442b95ec57f59a157ba85c upstream.
+commit 90a3d22ff02b196d5884e111f39271a1d4ee8e3e upstream.
 
-Apply only valid chip select value. This change fixes case where chip
-select is set to initial value of '-1' during probe and  PM supend and
-subsequent resume can try to use the value with undefined behaviour.
-Also in case where gpio based chip select, the check in
-bcm_qspi_chip_select() shall prevent undefined behaviour on resume.
+Smatch detected a divide by zero bug in check_overlay_scaling().
 
-Fixes: fa236a7ef240 ("spi: bcm-qspi: Add Broadcom MSPI driver")
-Signed-off-by: Kamal Dasu <kdasu.kdev@gmail.com>
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
-Link: https://lore.kernel.org/r/20220127185359.27322-1-kdasu.kdev@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+    drivers/gpu/drm/i915/display/intel_overlay.c:976 check_overlay_scaling()
+    error: potential divide by zero bug '/ rec->dst_height'.
+    drivers/gpu/drm/i915/display/intel_overlay.c:980 check_overlay_scaling()
+    error: potential divide by zero bug '/ rec->dst_width'.
+
+Prevent this by ensuring that the dst height and width are non-zero.
+
+Fixes: 02e792fbaadb ("drm/i915: implement drmmode overlay support v4")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220124122409.GA31673@kili
+(cherry picked from commit cf5b64f7f10b28bebb9b7c9d25e7aee5cbe43918)
+Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/spi/spi-bcm-qspi.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/i915/intel_overlay.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/drivers/spi/spi-bcm-qspi.c
-+++ b/drivers/spi/spi-bcm-qspi.c
-@@ -552,7 +552,7 @@ static void bcm_qspi_chip_select(struct
- 	u32 rd = 0;
- 	u32 wr = 0;
+--- a/drivers/gpu/drm/i915/intel_overlay.c
++++ b/drivers/gpu/drm/i915/intel_overlay.c
+@@ -965,6 +965,9 @@ static int check_overlay_dst(struct inte
+ 	const struct intel_crtc_state *pipe_config =
+ 		overlay->crtc->config;
  
--	if (qspi->base[CHIP_SELECT]) {
-+	if (cs >= 0 && qspi->base[CHIP_SELECT]) {
- 		rd = bcm_qspi_read(qspi, CHIP_SELECT, 0);
- 		wr = (rd & ~0xff) | (1 << cs);
- 		if (rd == wr)
++	if (rec->dst_height == 0 || rec->dst_width == 0)
++		return -EINVAL;
++
+ 	if (rec->dst_x < pipe_config->pipe_src_w &&
+ 	    rec->dst_x + rec->dst_width <= pipe_config->pipe_src_w &&
+ 	    rec->dst_y < pipe_config->pipe_src_h &&
 
 

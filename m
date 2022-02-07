@@ -2,67 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB7044AB467
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 07:14:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 646294AB434
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 07:13:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232678AbiBGFt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 00:49:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60044 "EHLO
+        id S239849AbiBGFup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 00:50:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350177AbiBGDZW (ORCPT
+        with ESMTP id S1350287AbiBGD0M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 22:25:22 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0509DC061A73;
-        Sun,  6 Feb 2022 19:25:21 -0800 (PST)
+        Sun, 6 Feb 2022 22:26:12 -0500
+X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Feb 2022 19:26:11 PST
+Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40940C061A73
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 19:26:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1644204322; x=1675740322;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=6WoxkUkguy8rx/vdMwuFD/M1zus/du+BiEWUk2id+LM=;
-  b=PYpvX7GSAelpIBSQ1JVOL412h/zkyijpHVO/YV2qcRZhwkGni02Kel4N
-   CVtv0l2tWZFIh6+1pLVeTVSDLGI7/45D7FuRvwG8dIIL60ahwCBjpjxPj
-   oTa0Fy2UlXusgdkrE3R5WuAyEModTerYktgRi7p+UoLa/QJ1YTWxTTXs3
-   2ufNpW6nMpSV+YVAK7BEsZAmow6/VUWfqk6HOHk8N5ex+/weCNHDLPgF1
-   Ehv0RfYnOOkJM6tPZbVVBK64REQFngoPpwjFEmKtH/c3eCojePNMJbBpk
-   WD2AxXLHqVqOjM+PiHiUDLpaxaqbtpkqrw8P5Cm7yRNRYLFt7rPAEtRqQ
-   A==;
-IronPort-SDR: kZCMQKK8MQiDSTQxgzF25qDB32EjuHAbxIFHT/exe1J7tlWvHsomMzaGbkX1rrVlKeJPSZij32
- AeTpkdNPWYAJ1bn1cok7H5ELU5HquaxbqrCKfhTerocT1DBrwnlQ0m5+aIhoe7ZZuBdNgVlSp6
- yQ6n8kNRJOTg7WbPfO56j2esbG0fYy88f9CF/udrsfybp/95/ZMbEzFkYJWOTKMsoYrRPeX5RY
- OoMzRfMOwBa18HHV0u5OL+ajfC4GfZVPvDiFmJ+x0kZdOLUtKHZecI1w9cjO/tErFBkq2rLOCs
- 54ZefkRcDURwnacr3A61SX/m
-X-IronPort-AV: E=Sophos;i="5.88,348,1635231600"; 
-   d="scan'208";a="147803329"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Feb 2022 20:24:19 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Sun, 6 Feb 2022 20:24:18 -0700
-Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Sun, 6 Feb 2022 20:24:16 -0700
-From:   Tudor Ambarus <tudor.ambarus@microchip.com>
-To:     <herbert@gondor.apana.org.au>, <robh+dt@kernel.org>
-CC:     <davem@davemloft.net>, <nicolas.ferre@microchip.com>,
-        <claudiu.beznea@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        "Tudor Ambarus" <tudor.ambarus@microchip.com>
-Subject: [PATCH 3/3] dt-bindings: crypto: Convert Atmel SHA to yaml
-Date:   Mon, 7 Feb 2022 05:24:05 +0200
-Message-ID: <20220207032405.70733-4-tudor.ambarus@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220207032405.70733-1-tudor.ambarus@microchip.com>
-References: <20220207032405.70733-1-tudor.ambarus@microchip.com>
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1644204370; x=1675740370;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=+PGiUz6IVsXwuo4TQYZtEFmfxDiduE4w2R5euJoD4k0=;
+  b=LQdADFjYnw2EG9XZa4Ncu9eRIyozJSlT2MtCfWbKS7uLjE9sQvFjRY/H
+   a2loQo8Obe5pnZP41P3omKV1cGvAkewHypC9Pn+JS09eDHZC52Axy6Kkd
+   V3uGsOVX2SAr/Z2GZJuxZVNgxOKAxKRjLwZ2mfhX8De7l3zIgeulgG1Xm
+   SbDvqHN8s0SawkSYgQoi42D+6pjXNbZEnfaOIebpVnRWybKFeK8Yjgnrb
+   U0cpQkzWJnsCokleAxo468dreIslcqPc7QQg4yK+twUCvqeOvx7vLq4BP
+   rbfe1z9grjuPztoPRt4+AAQMMFUYluLgxQq9V/aOPDE/rW0hZYo+kN3a8
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.88,348,1635177600"; 
+   d="scan'208";a="296386954"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 07 Feb 2022 11:25:08 +0800
+IronPort-SDR: g+cZ83vC91+YKJWssm8bH7LR6uLiFuGWAp2aoHbeScXsnt5G1C9ZFVaJVZ7gKm50RdZOn9vjb4
+ vGdxubSTZlyyUoGVNdpp7Ssp9sa1ZqRxIhnLyhJRKjY17B8oymRZKsjGQb+VlPwfG9VVGz3CQy
+ 7gZaQ7fReM3kbaC/sg9pA9FLwNB+87wruTe3AUlz99JM/kLt/nwy7mmyw5y1KekI8nrmooRs+R
+ PSUhs0kSwuyGfcK6MYMltRXCrzgrk/yebcinr7SBnHsRb0i/m9OmshPif4iiZ4ZffyP9GUDwcM
+ QLTzwvgkGqYBcEaQbPde6Y3+
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2022 18:56:59 -0800
+IronPort-SDR: DS58eNbnI5wBJDjFA1VusNiloulCLGMvtG2l0gTcWif4nkVeOi4t5wlFpz0lZe2sWzozKXcDvC
+ 9YDPtsUVu2Bit1k+A3SZPafjNgcXh/83nFR0f/aalvakfnsverGWb00BChvnZRMneA1xDfcumo
+ au9nPrtP/3zMSUsnRuMVo4cK3DEgjRerAJZ3PHOG5x3mE7yz+eRHeydNOjrW9bzeOymEdqHlZR
+ h3WYH3fOE2yAyX494sUyg7h7BRXtVhrz09LyfW4fklmQdGkcUUoCIb8y7YW/jQDyBIFezTto2n
+ C0s=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2022 19:25:09 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JsWjc2LSKz1SVp2
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 19:25:08 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1644204307; x=1646796308; bh=+PGiUz6IVsXwuo4TQYZtEFmfxDiduE4w2R5
+        euJoD4k0=; b=KrPzH5YM1F6suctFze3AmkR4PflP5imhrAbhjevbNmzolGAMOs+
+        SuqKb1bJhOQGsXk9IDhuoZPV5hhjzp7sdRmMsDHqbBl/jZD2UQEC1U2vXgWSn7uB
+        Ygfsvt09X8yGvCkL0x6gOexLt7HMFW/bdXNjwu4CqGZzyuoe9kc6RX6ZyDgU9IV6
+        V4Z55ZCvlsq7ghlBOc4GyGS8wurGNVBRrPzzSrYpAwepnzU+mijwYbh8JNwneyKA
+        2F9mHLCghIiiOJOjRkmlcY4hvprdRQOAv1u7JCbla8N1+xSJFl0oT9et1EDXMMM4
+        ghbr+dbmuts+8BAqXaQZw29rezcOxFbu+vQ==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id sBpEQYU4mtUt for <linux-kernel@vger.kernel.org>;
+        Sun,  6 Feb 2022 19:25:07 -0800 (PST)
+Received: from [10.225.163.63] (unknown [10.225.163.63])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JsWjZ3jBZz1Rwrw;
+        Sun,  6 Feb 2022 19:25:06 -0800 (PST)
+Message-ID: <281475cc-a159-8e25-f5e7-cde343bc50c4@opensource.wdc.com>
+Date:   Mon, 7 Feb 2022 12:25:04 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH -next] scsi: pm8001: clean up some inconsistent indenting
+Content-Language: en-US
+To:     Yang Li <yang.lee@linux.alibaba.com>, jejb@linux.ibm.com
+Cc:     martin.petersen@oracle.com, jinpu.wang@cloud.ionos.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+References: <20220206125548.110945-1-yang.lee@linux.alibaba.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20220206125548.110945-1-yang.lee@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,116 +100,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert Atmel SHA documentation to yaml format. With the conversion the
-clock and clock-names properties are made mandatory. The driver returns
--EINVAL if "sha_clk" is not found, reflect that in the bindings and make
-the clock and clock-names properties mandatory. Update the example to
-better describe how one should define the dt node.
+On 2/6/22 21:55, Yang Li wrote:
+> Eliminate the follow smatch warning:
+> drivers/scsi/pm8001/pm8001_ctl.c:760 pm8001_update_flash() warn:
+> inconsistent indenting
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> ---
+>  drivers/scsi/pm8001/pm8001_ctl.c | 65 +++++++++++++++++---------------
+>  1 file changed, 35 insertions(+), 30 deletions(-)
+> 
+> diff --git a/drivers/scsi/pm8001/pm8001_ctl.c b/drivers/scsi/pm8001/pm8001_ctl.c
+> index 41a63c9b719b..213ebf39261f 100644
+> --- a/drivers/scsi/pm8001/pm8001_ctl.c
+> +++ b/drivers/scsi/pm8001/pm8001_ctl.c
+> @@ -755,36 +755,41 @@ static int pm8001_update_flash(struct pm8001_hba_info *pm8001_ha)
+>  			fwControl->retcode = 0;/* OUT */
+>  			fwControl->offset = loopNumber * IOCTL_BUF_SIZE;/*OUT */
+>  
+> -		/* for the last chunk of data in case file size is not even with
+> -		4k, load only the rest*/
+> -		if (((loopcount-loopNumber) == 1) &&
+> -			((partitionSize + HEADER_LEN) % IOCTL_BUF_SIZE)) {
+> -			fwControl->len =
+> -				(partitionSize + HEADER_LEN) % IOCTL_BUF_SIZE;
+> -			memcpy((u8 *)fwControl->buffer,
+> -				(u8 *)pm8001_ha->fw_image->data + sizeRead,
+> -				(partitionSize + HEADER_LEN) % IOCTL_BUF_SIZE);
+> -			sizeRead +=
+> -				(partitionSize + HEADER_LEN) % IOCTL_BUF_SIZE;
+> -		} else {
+> -			memcpy((u8 *)fwControl->buffer,
+> -				(u8 *)pm8001_ha->fw_image->data + sizeRead,
+> -				IOCTL_BUF_SIZE);
+> -			sizeRead += IOCTL_BUF_SIZE;
+> -		}
+> -
+> -		pm8001_ha->nvmd_completion = &completion;
+> -		ret = PM8001_CHIP_DISP->fw_flash_update_req(pm8001_ha, payload);
+> -		if (ret) {
+> -			pm8001_ha->fw_status = FAIL_OUT_MEMORY;
+> -			goto out;
+> -		}
+> -		wait_for_completion(&completion);
+> -		if (fwControl->retcode > FLASH_UPDATE_IN_PROGRESS) {
+> -			pm8001_ha->fw_status = fwControl->retcode;
+> -			ret = -EFAULT;
+> -			goto out;
+> -		}
+> +			/* for the last chunk of data in case file
+> +			 * size is not even with 4k, load only the rest
+> +			 */
 
-Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
----
- .../devicetree/bindings/crypto/atmel,sha.yaml | 59 +++++++++++++++++++
- .../bindings/crypto/atmel-crypto.txt          | 25 --------
- 2 files changed, 59 insertions(+), 25 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/crypto/atmel,sha.yaml
- delete mode 100644 Documentation/devicetree/bindings/crypto/atmel-crypto.txt
+Please start multi-line comments with a line that has only "/*". It
+would be good to add a blnak line before that too, for readability.
 
-diff --git a/Documentation/devicetree/bindings/crypto/atmel,sha.yaml b/Documentation/devicetree/bindings/crypto/atmel,sha.yaml
-new file mode 100644
-index 000000000000..ccba6d36ee68
---- /dev/null
-+++ b/Documentation/devicetree/bindings/crypto/atmel,sha.yaml
-@@ -0,0 +1,59 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/crypto/atmel,sha.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Atmel Secure Hash Algorithm (SHA) HW cryptographic accelerator
-+
-+maintainers:
-+  - Tudor Ambarus <tudor.ambarus@microchip.com>
-+
-+properties:
-+  compatible:
-+    const: atmel,at91sam9g46-sha
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    const: sha_clk
-+
-+  dmas:
-+    maxItems: 1
-+    description: TX DMA Channel
-+
-+  dma-names:
-+    const: tx
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - clock-names
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/clock/at91.h>
-+    #include <dt-bindings/dma/at91.h>
-+    sha: sha@e1814000 {
-+      compatible = "atmel,at91sam9g46-sha";
-+      reg = <0xe1814000 0x100>;
-+      interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
-+      clocks = <&pmc PMC_TYPE_PERIPHERAL 83>;
-+      clock-names = "sha_clk";
-+      dmas = <&dma0 AT91_XDMAC_DT_PERID(48)>;
-+      dma-names = "tx";
-+      status = "okay";
-+    };
-diff --git a/Documentation/devicetree/bindings/crypto/atmel-crypto.txt b/Documentation/devicetree/bindings/crypto/atmel-crypto.txt
-deleted file mode 100644
-index 5c6541cfcc4a..000000000000
---- a/Documentation/devicetree/bindings/crypto/atmel-crypto.txt
-+++ /dev/null
-@@ -1,25 +0,0 @@
--* Atmel HW cryptographic accelerators
--
--These are the HW cryptographic accelerators found on some Atmel products.
--
--* Secure Hash Algorithm (SHA)
--
--Required properties:
--- compatible : Should be "atmel,at91sam9g46-sha".
--- reg: Should contain SHA registers location and length.
--- interrupts: Should contain the IRQ line for the SHA.
--
--Optional properties:
--- dmas: One DMA specifiers as described in
--        atmel-dma.txt and dma.txt files.
--- dma-names: Contains one identifier string for each DMA specifier
--             in the dmas property. Only one "tx" string needed.
--
--Example:
--sha@f8034000 {
--	compatible = "atmel,at91sam9g46-sha";
--	reg = <0xf8034000 0x100>;
--	interrupts = <42 4 0>;
--	dmas = <&dma1 2 17>;
--	dma-names = "tx";
--};
+> +			if (((loopcount-loopNumber) == 1) &&
+> +				((partitionSize + HEADER_LEN) % IOCTL_BUF_SIZE)) {
+
+While at it, align the conditions together to make this code more
+readable. As is, it is really unpleasant to read :)
+
+Also, "(partitionSize + HEADER_LEN) % IOCTL_BUF_SIZE" is calculated way
+too many times. Using a local variable for the value would be nice.
+
+> +				fwControl->len =
+> +					(partitionSize + HEADER_LEN) %
+> +					IOCTL_BUF_SIZE;
+> +				memcpy((u8 *)fwControl->buffer,
+> +					(u8 *)pm8001_ha->fw_image->data + sizeRead,
+> +					(partitionSize + HEADER_LEN) %
+> +					IOCTL_BUF_SIZE);
+> +				sizeRead +=
+> +					(partitionSize + HEADER_LEN) %
+> +					IOCTL_BUF_SIZE;
+> +			} else {
+> +				memcpy((u8 *)fwControl->buffer,
+> +					(u8 *)pm8001_ha->fw_image->data + sizeRead,
+> +					IOCTL_BUF_SIZE);
+> +				sizeRead += IOCTL_BUF_SIZE;
+> +			}
+> +
+> +			pm8001_ha->nvmd_completion = &completion;
+> +			ret = PM8001_CHIP_DISP->fw_flash_update_req(pm8001_ha,
+> +				payload);
+> +			if (ret) {
+> +				pm8001_ha->fw_status = FAIL_OUT_MEMORY;
+> +				goto out;
+> +			}
+> +			wait_for_completion(&completion);
+> +			if (fwControl->retcode > FLASH_UPDATE_IN_PROGRESS) {
+> +				pm8001_ha->fw_status = fwControl->retcode;
+> +				ret = -EFAULT;
+> +				goto out;
+> +			}
+>  		}
+>  	}
+>  out:
+
+
 -- 
-2.25.1
-
+Damien Le Moal
+Western Digital Research

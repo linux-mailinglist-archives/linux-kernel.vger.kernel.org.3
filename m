@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B92D34ABD01
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:55:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09CE64AB9BD
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:25:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388596AbiBGLoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:44:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38438 "EHLO
+        id S1381521AbiBGLRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:17:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384248AbiBGL0e (ORCPT
+        with ESMTP id S1380028AbiBGLQb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:26:34 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74049C0401C9;
-        Mon,  7 Feb 2022 03:25:55 -0800 (PST)
+        Mon, 7 Feb 2022 06:16:31 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEC71C043181;
+        Mon,  7 Feb 2022 03:16:30 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 12DFC6135A;
-        Mon,  7 Feb 2022 11:25:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4EFEC004E1;
-        Mon,  7 Feb 2022 11:25:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 78176B80EE8;
+        Mon,  7 Feb 2022 11:16:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBAE4C004E1;
+        Mon,  7 Feb 2022 11:16:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233154;
-        bh=Qt3S7UX4NFNycD6cNDXk6cbCpdwYlASoMUr9U9g1V+Y=;
+        s=korg; t=1644232588;
+        bh=H13gnDyXCBJ5bxJO5Qj4SyZOKQnUZCERSh4Mc1rxgPM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W4WWYzWDkMpwDgSzx8jhAT8UsuUdjTI8glJOnDhJjXnJvoKkPJqq5g9mX0RItQdCN
-         NHBz4kVpWBqvF6B4NLR+RSOOhDoTWgXE9dYd2wV5PyKnoKRT0ROOU+W830GmCQvyz3
-         pdJGU8CV+jyAQIG4FknXYQOmf5kaoKO3NfA9kGCQ=
+        b=P29IcQ+yv6KaQ/TpNnQH86dIHZ+1A9ADFjLbj8kKCauHHeWHPbvasqRYXwrwEEGGK
+         Mhb2p5pPmxTR3jGjjJ/h6lyh8UQla0oot0u/p8YjBJnjQfEBFnFBOTzlrrQvaGC4Bk
+         pW1UKWwNtbRhMnRjXM/Cs7pnGyi0tknMukh2PuM0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Christian Lachner <gladiac@gmail.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.15 016/110] ALSA: hda/realtek: Fix silent output on Gigabyte X570 Aorus Xtreme after reboot from Windows
+        stable@vger.kernel.org, Guangwu Zhang <guazhang@redhat.com>,
+        Maurizio Lombardi <mlombard@redhat.com>,
+        John Meneghini <jmeneghi@redhat.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH 4.19 26/86] scsi: bnx2fc: Flush destroy_work queue before calling bnx2fc_interface_put()
 Date:   Mon,  7 Feb 2022 12:05:49 +0100
-Message-Id: <20220207103802.814239221@linuxfoundation.org>
+Message-Id: <20220207103758.398578650@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
-References: <20220207103802.280120990@linuxfoundation.org>
+In-Reply-To: <20220207103757.550973048@linuxfoundation.org>
+References: <20220207103757.550973048@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,34 +56,146 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christian Lachner <gladiac@gmail.com>
+From: John Meneghini <jmeneghi@redhat.com>
 
-commit ea3541961376f733373839cc90493aafa8a7f733 upstream.
+commit 847f9ea4c5186fdb7b84297e3eeed9e340e83fce upstream.
 
-This commit switches the Gigabyte X570 Aorus Xtreme from using the
-ALC1220_FIXUP_CLEVO_P950 to the ALC1220_FIXUP_GB_X570 quirk. This fixes
-the no-audio after reboot from windows problem.
+The bnx2fc_destroy() functions are removing the interface before calling
+destroy_work. This results multiple WARNings from sysfs_remove_group() as
+the controller rport device attributes are removed too early.
 
-BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=205275
-Signed-off-by: Christian Lachner <gladiac@gmail.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220129113243.93068-4-gladiac@gmail.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Replace the fcoe_port's destroy_work queue. It's not needed.
+
+The problem is easily reproducible with the following steps.
+
+Example:
+
+  $ dmesg -w &
+  $ systemctl enable --now fcoe
+  $ fipvlan -s -c ens2f1
+  $ fcoeadm -d ens2f1.802
+  [  583.464488] host2: libfc: Link down on port (7500a1)
+  [  583.472651] bnx2fc: 7500a1 - rport not created Yet!!
+  [  583.490468] ------------[ cut here ]------------
+  [  583.538725] sysfs group 'power' not found for kobject 'rport-2:0-0'
+  [  583.568814] WARNING: CPU: 3 PID: 192 at fs/sysfs/group.c:279 sysfs_remove_group+0x6f/0x80
+  [  583.607130] Modules linked in: dm_service_time 8021q garp mrp stp llc bnx2fc cnic uio rpcsec_gss_krb5 auth_rpcgss nfsv4 ...
+  [  583.942994] CPU: 3 PID: 192 Comm: kworker/3:2 Kdump: loaded Not tainted 5.14.0-39.el9.x86_64 #1
+  [  583.984105] Hardware name: HP ProLiant DL120 G7, BIOS J01 07/01/2013
+  [  584.016535] Workqueue: fc_wq_2 fc_rport_final_delete [scsi_transport_fc]
+  [  584.050691] RIP: 0010:sysfs_remove_group+0x6f/0x80
+  [  584.074725] Code: ff 5b 48 89 ef 5d 41 5c e9 ee c0 ff ff 48 89 ef e8 f6 b8 ff ff eb d1 49 8b 14 24 48 8b 33 48 c7 c7 ...
+  [  584.162586] RSP: 0018:ffffb567c15afdc0 EFLAGS: 00010282
+  [  584.188225] RAX: 0000000000000000 RBX: ffffffff8eec4220 RCX: 0000000000000000
+  [  584.221053] RDX: ffff8c1586ce84c0 RSI: ffff8c1586cd7cc0 RDI: ffff8c1586cd7cc0
+  [  584.255089] RBP: 0000000000000000 R08: 0000000000000000 R09: ffffb567c15afc00
+  [  584.287954] R10: ffffb567c15afbf8 R11: ffffffff8fbe7f28 R12: ffff8c1486326400
+  [  584.322356] R13: ffff8c1486326480 R14: ffff8c1483a4a000 R15: 0000000000000004
+  [  584.355379] FS:  0000000000000000(0000) GS:ffff8c1586cc0000(0000) knlGS:0000000000000000
+  [  584.394419] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+  [  584.421123] CR2: 00007fe95a6f7840 CR3: 0000000107674002 CR4: 00000000000606e0
+  [  584.454888] Call Trace:
+  [  584.466108]  device_del+0xb2/0x3e0
+  [  584.481701]  device_unregister+0x13/0x60
+  [  584.501306]  bsg_unregister_queue+0x5b/0x80
+  [  584.522029]  bsg_remove_queue+0x1c/0x40
+  [  584.541884]  fc_rport_final_delete+0xf3/0x1d0 [scsi_transport_fc]
+  [  584.573823]  process_one_work+0x1e3/0x3b0
+  [  584.592396]  worker_thread+0x50/0x3b0
+  [  584.609256]  ? rescuer_thread+0x370/0x370
+  [  584.628877]  kthread+0x149/0x170
+  [  584.643673]  ? set_kthread_struct+0x40/0x40
+  [  584.662909]  ret_from_fork+0x22/0x30
+  [  584.680002] ---[ end trace 53575ecefa942ece ]---
+
+Link: https://lore.kernel.org/r/20220115040044.1013475-1-jmeneghi@redhat.com
+Fixes: 0cbf32e1681d ("[SCSI] bnx2fc: Avoid calling bnx2fc_if_destroy with unnecessary locks")
+Tested-by: Guangwu Zhang <guazhang@redhat.com>
+Co-developed-by: Maurizio Lombardi <mlombard@redhat.com>
+Signed-off-by: Maurizio Lombardi <mlombard@redhat.com>
+Signed-off-by: John Meneghini <jmeneghi@redhat.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/pci/hda/patch_realtek.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/bnx2fc/bnx2fc_fcoe.c |   20 +++++---------------
+ 1 file changed, 5 insertions(+), 15 deletions(-)
 
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -2586,7 +2586,7 @@ static const struct snd_pci_quirk alc882
- 	SND_PCI_QUIRK(0x1458, 0xa002, "Gigabyte EP45-DS3/Z87X-UD3H", ALC889_FIXUP_FRONT_HP_NO_PRESENCE),
- 	SND_PCI_QUIRK(0x1458, 0xa0b8, "Gigabyte AZ370-Gaming", ALC1220_FIXUP_GB_DUAL_CODECS),
- 	SND_PCI_QUIRK(0x1458, 0xa0cd, "Gigabyte X570 Aorus Master", ALC1220_FIXUP_GB_X570),
--	SND_PCI_QUIRK(0x1458, 0xa0ce, "Gigabyte X570 Aorus Xtreme", ALC1220_FIXUP_CLEVO_P950),
-+	SND_PCI_QUIRK(0x1458, 0xa0ce, "Gigabyte X570 Aorus Xtreme", ALC1220_FIXUP_GB_X570),
- 	SND_PCI_QUIRK(0x1458, 0xa0d5, "Gigabyte X570S Aorus Master", ALC1220_FIXUP_GB_X570),
- 	SND_PCI_QUIRK(0x1462, 0x11f7, "MSI-GE63", ALC1220_FIXUP_CLEVO_P950),
- 	SND_PCI_QUIRK(0x1462, 0x1228, "MSI-GP63", ALC1220_FIXUP_CLEVO_P950),
+--- a/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
++++ b/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
+@@ -80,7 +80,7 @@ static int bnx2fc_bind_pcidev(struct bnx
+ static void bnx2fc_unbind_pcidev(struct bnx2fc_hba *hba);
+ static struct fc_lport *bnx2fc_if_create(struct bnx2fc_interface *interface,
+ 				  struct device *parent, int npiv);
+-static void bnx2fc_destroy_work(struct work_struct *work);
++static void bnx2fc_port_destroy(struct fcoe_port *port);
+ 
+ static struct bnx2fc_hba *bnx2fc_hba_lookup(struct net_device *phys_dev);
+ static struct bnx2fc_interface *bnx2fc_interface_lookup(struct net_device
+@@ -911,9 +911,6 @@ static void bnx2fc_indicate_netevent(voi
+ 				__bnx2fc_destroy(interface);
+ 		}
+ 		mutex_unlock(&bnx2fc_dev_lock);
+-
+-		/* Ensure ALL destroy work has been completed before return */
+-		flush_workqueue(bnx2fc_wq);
+ 		return;
+ 
+ 	default:
+@@ -1220,8 +1217,8 @@ static int bnx2fc_vport_destroy(struct f
+ 	mutex_unlock(&n_port->lp_mutex);
+ 	bnx2fc_free_vport(interface->hba, port->lport);
+ 	bnx2fc_port_shutdown(port->lport);
++	bnx2fc_port_destroy(port);
+ 	bnx2fc_interface_put(interface);
+-	queue_work(bnx2fc_wq, &port->destroy_work);
+ 	return 0;
+ }
+ 
+@@ -1530,7 +1527,6 @@ static struct fc_lport *bnx2fc_if_create
+ 	port->lport = lport;
+ 	port->priv = interface;
+ 	port->get_netdev = bnx2fc_netdev;
+-	INIT_WORK(&port->destroy_work, bnx2fc_destroy_work);
+ 
+ 	/* Configure fcoe_port */
+ 	rc = bnx2fc_lport_config(lport);
+@@ -1658,8 +1654,8 @@ static void __bnx2fc_destroy(struct bnx2
+ 	bnx2fc_interface_cleanup(interface);
+ 	bnx2fc_stop(interface);
+ 	list_del(&interface->list);
++	bnx2fc_port_destroy(port);
+ 	bnx2fc_interface_put(interface);
+-	queue_work(bnx2fc_wq, &port->destroy_work);
+ }
+ 
+ /**
+@@ -1700,15 +1696,12 @@ netdev_err:
+ 	return rc;
+ }
+ 
+-static void bnx2fc_destroy_work(struct work_struct *work)
++static void bnx2fc_port_destroy(struct fcoe_port *port)
+ {
+-	struct fcoe_port *port;
+ 	struct fc_lport *lport;
+ 
+-	port = container_of(work, struct fcoe_port, destroy_work);
+ 	lport = port->lport;
+-
+-	BNX2FC_HBA_DBG(lport, "Entered bnx2fc_destroy_work\n");
++	BNX2FC_HBA_DBG(lport, "Entered %s, destroying lport %p\n", __func__, lport);
+ 
+ 	bnx2fc_if_destroy(lport);
+ }
+@@ -2562,9 +2555,6 @@ static void bnx2fc_ulp_exit(struct cnic_
+ 			__bnx2fc_destroy(interface);
+ 	mutex_unlock(&bnx2fc_dev_lock);
+ 
+-	/* Ensure ALL destroy work has been completed before return */
+-	flush_workqueue(bnx2fc_wq);
+-
+ 	bnx2fc_ulp_stop(hba);
+ 	/* unregister cnic device */
+ 	if (test_and_clear_bit(BNX2FC_CNIC_REGISTERED, &hba->reg_with_cnic))
 
 

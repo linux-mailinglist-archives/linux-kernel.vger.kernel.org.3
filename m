@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24B704ABC97
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:49:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FCC04AB9FF
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:26:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386906AbiBGLiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:38:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36646 "EHLO
+        id S1382512AbiBGLT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:19:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244593AbiBGLZJ (ORCPT
+        with ESMTP id S1359139AbiBGLOs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:25:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FF5BC0401C6;
-        Mon,  7 Feb 2022 03:25:08 -0800 (PST)
+        Mon, 7 Feb 2022 06:14:48 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6295EC03FECB;
+        Mon,  7 Feb 2022 03:14:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 37984B81028;
-        Mon,  7 Feb 2022 11:25:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E358C340F6;
-        Mon,  7 Feb 2022 11:25:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 164E26140B;
+        Mon,  7 Feb 2022 11:14:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7618C004E1;
+        Mon,  7 Feb 2022 11:14:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233106;
-        bh=5IsXqdmiyDuHjCKLVr33FdSRI3q+QbGeX0U1P/98KaI=;
+        s=korg; t=1644232458;
+        bh=pJ5eda+plEWIbRfwBgyrrzOAuIMWr4zooQdZPAgbqd4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PntqZ7XK5f0k6/DhgvlMJ4Ih4tj3pVR4qg2+4hmXpi7jRNVSzoz3PYH3UCwgcJrus
-         xhRlp9v2z3T2eWz5YW6ivFRD6oR4tvliRPzyy6VHkSU/Xf+B/C21cHIZtWiB91tOyZ
-         +MnB+nicccytgYn5lvWJclYiSGwmiE00LGNrnG5I=
+        b=bzjjrfRMkaBFstz1MLTD7QEJh36kIeDkEk5uiiLsk831uQt08rvycGQRMPoNKpB52
+         1J+oS6lZEsLrfJcC4Kne72/M/QY9jB+KozY+QyupMAXxFvWlfKiukmNODGJenkprGu
+         dMXKC0tMpCtaeDUlDyQEFWtlHqwgnO1kIknVCL0Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dmitry Osipenko <digetx@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.15 006/110] ASoC: hdmi-codec: Fix OOB memory accesses
+        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        syzbot+76629376e06e2c2ad626@syzkaller.appspotmail.com
+Subject: [PATCH 4.19 16/86] USB: core: Fix hang in usb_kill_urb by adding memory barriers
 Date:   Mon,  7 Feb 2022 12:05:39 +0100
-Message-Id: <20220207103802.499218364@linuxfoundation.org>
+Message-Id: <20220207103758.087848858@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
-References: <20220207103802.280120990@linuxfoundation.org>
+In-Reply-To: <20220207103757.550973048@linuxfoundation.org>
+References: <20220207103757.550973048@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,49 +54,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Osipenko <digetx@gmail.com>
+From: Alan Stern <stern@rowland.harvard.edu>
 
-commit 06feec6005c9d9500cd286ec440aabf8b2ddd94d upstream.
+commit 26fbe9772b8c459687930511444ce443011f86bf upstream.
 
-Correct size of iec_status array by changing it to the size of status
-array of the struct snd_aes_iec958. This fixes out-of-bounds slab
-read accesses made by memcpy() of the hdmi-codec driver. This problem
-is reported by KASAN.
+The syzbot fuzzer has identified a bug in which processes hang waiting
+for usb_kill_urb() to return.  It turns out the issue is not unlinking
+the URB; that works just fine.  Rather, the problem arises when the
+wakeup notification that the URB has completed is not received.
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-Link: https://lore.kernel.org/r/20220112195039.1329-1-digetx@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+The reason is memory-access ordering on SMP systems.  In outline form,
+usb_kill_urb() and __usb_hcd_giveback_urb() operating concurrently on
+different CPUs perform the following actions:
+
+CPU 0					CPU 1
+----------------------------		---------------------------------
+usb_kill_urb():				__usb_hcd_giveback_urb():
+  ...					  ...
+  atomic_inc(&urb->reject);		  atomic_dec(&urb->use_count);
+  ...					  ...
+  wait_event(usb_kill_urb_queue,
+	atomic_read(&urb->use_count) == 0);
+					  if (atomic_read(&urb->reject))
+						wake_up(&usb_kill_urb_queue);
+
+Confining your attention to urb->reject and urb->use_count, you can
+see that the overall pattern of accesses on CPU 0 is:
+
+	write urb->reject, then read urb->use_count;
+
+whereas the overall pattern of accesses on CPU 1 is:
+
+	write urb->use_count, then read urb->reject.
+
+This pattern is referred to in memory-model circles as SB (for "Store
+Buffering"), and it is well known that without suitable enforcement of
+the desired order of accesses -- in the form of memory barriers -- it
+is entirely possible for one or both CPUs to execute their reads ahead
+of their writes.  The end result will be that sometimes CPU 0 sees the
+old un-decremented value of urb->use_count while CPU 1 sees the old
+un-incremented value of urb->reject.  Consequently CPU 0 ends up on
+the wait queue and never gets woken up, leading to the observed hang
+in usb_kill_urb().
+
+The same pattern of accesses occurs in usb_poison_urb() and the
+failure pathway of usb_hcd_submit_urb().
+
+The problem is fixed by adding suitable memory barriers.  To provide
+proper memory-access ordering in the SB pattern, a full barrier is
+required on both CPUs.  The atomic_inc() and atomic_dec() accesses
+themselves don't provide any memory ordering, but since they are
+present, we can use the optimized smp_mb__after_atomic() memory
+barrier in the various routines to obtain the desired effect.
+
+This patch adds the necessary memory barriers.
+
+CC: <stable@vger.kernel.org>
+Reported-and-tested-by: syzbot+76629376e06e2c2ad626@syzkaller.appspotmail.com
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+Link: https://lore.kernel.org/r/Ye8K0QYee0Q0Nna2@rowland.harvard.edu
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/uapi/sound/asound.h   |    4 +++-
- sound/soc/codecs/hdmi-codec.c |    2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ drivers/usb/core/hcd.c |   14 ++++++++++++++
+ drivers/usb/core/urb.c |   12 ++++++++++++
+ 2 files changed, 26 insertions(+)
 
---- a/include/uapi/sound/asound.h
-+++ b/include/uapi/sound/asound.h
-@@ -56,8 +56,10 @@
-  *                                                                          *
-  ****************************************************************************/
- 
-+#define AES_IEC958_STATUS_SIZE		24
+--- a/drivers/usb/core/hcd.c
++++ b/drivers/usb/core/hcd.c
+@@ -1670,6 +1670,13 @@ int usb_hcd_submit_urb (struct urb *urb,
+ 		urb->hcpriv = NULL;
+ 		INIT_LIST_HEAD(&urb->urb_list);
+ 		atomic_dec(&urb->use_count);
++		/*
++		 * Order the write of urb->use_count above before the read
++		 * of urb->reject below.  Pairs with the memory barriers in
++		 * usb_kill_urb() and usb_poison_urb().
++		 */
++		smp_mb__after_atomic();
 +
- struct snd_aes_iec958 {
--	unsigned char status[24];	/* AES/IEC958 channel status bits */
-+	unsigned char status[AES_IEC958_STATUS_SIZE]; /* AES/IEC958 channel status bits */
- 	unsigned char subcode[147];	/* AES/IEC958 subcode bits */
- 	unsigned char pad;		/* nothing */
- 	unsigned char dig_subframe[4];	/* AES/IEC958 subframe bits */
---- a/sound/soc/codecs/hdmi-codec.c
-+++ b/sound/soc/codecs/hdmi-codec.c
-@@ -277,7 +277,7 @@ struct hdmi_codec_priv {
- 	bool busy;
- 	struct snd_soc_jack *jack;
- 	unsigned int jack_status;
--	u8 iec_status[5];
-+	u8 iec_status[AES_IEC958_STATUS_SIZE];
- };
+ 		atomic_dec(&urb->dev->urbnum);
+ 		if (atomic_read(&urb->reject))
+ 			wake_up(&usb_kill_urb_queue);
+@@ -1779,6 +1786,13 @@ static void __usb_hcd_giveback_urb(struc
  
- static const struct snd_soc_dapm_widget hdmi_widgets[] = {
+ 	usb_anchor_resume_wakeups(anchor);
+ 	atomic_dec(&urb->use_count);
++	/*
++	 * Order the write of urb->use_count above before the read
++	 * of urb->reject below.  Pairs with the memory barriers in
++	 * usb_kill_urb() and usb_poison_urb().
++	 */
++	smp_mb__after_atomic();
++
+ 	if (unlikely(atomic_read(&urb->reject)))
+ 		wake_up(&usb_kill_urb_queue);
+ 	usb_put_urb(urb);
+--- a/drivers/usb/core/urb.c
++++ b/drivers/usb/core/urb.c
+@@ -692,6 +692,12 @@ void usb_kill_urb(struct urb *urb)
+ 	if (!(urb && urb->dev && urb->ep))
+ 		return;
+ 	atomic_inc(&urb->reject);
++	/*
++	 * Order the write of urb->reject above before the read
++	 * of urb->use_count below.  Pairs with the barriers in
++	 * __usb_hcd_giveback_urb() and usb_hcd_submit_urb().
++	 */
++	smp_mb__after_atomic();
+ 
+ 	usb_hcd_unlink_urb(urb, -ENOENT);
+ 	wait_event(usb_kill_urb_queue, atomic_read(&urb->use_count) == 0);
+@@ -733,6 +739,12 @@ void usb_poison_urb(struct urb *urb)
+ 	if (!urb)
+ 		return;
+ 	atomic_inc(&urb->reject);
++	/*
++	 * Order the write of urb->reject above before the read
++	 * of urb->use_count below.  Pairs with the barriers in
++	 * __usb_hcd_giveback_urb() and usb_hcd_submit_urb().
++	 */
++	smp_mb__after_atomic();
+ 
+ 	if (!urb->dev || !urb->ep)
+ 		return;
 
 

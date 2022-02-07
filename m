@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4B7B4ABAA2
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:30:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE43A4ABA79
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:28:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383968AbiBGLYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:24:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58186 "EHLO
+        id S1383805AbiBGLXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:23:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382270AbiBGLSn (ORCPT
+        with ESMTP id S1382156AbiBGLS1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:18:43 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E454C03FEEE;
-        Mon,  7 Feb 2022 03:18:28 -0800 (PST)
+        Mon, 7 Feb 2022 06:18:27 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BBFAC03F938;
+        Mon,  7 Feb 2022 03:18:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E21661416;
-        Mon,  7 Feb 2022 11:18:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6079FC004E1;
-        Mon,  7 Feb 2022 11:18:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 08133B80EC3;
+        Mon,  7 Feb 2022 11:18:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 357C0C004E1;
+        Mon,  7 Feb 2022 11:18:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232707;
-        bh=JE/jV0p/vLig4xTmzfQk4lQFfn7O51vh4mZW9DF20YE=;
+        s=korg; t=1644232688;
+        bh=+2yQwBmdDLsntIJxVE0Bnkeye6Q+83n4LOF2QFZGPjk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dhx1pi/UT/vqeKMj+4lGtvvdoKTHXUn9wF8vvmJKM/IGEDeAeqj5qUHN5h9XM+35x
-         Zh6o2i4Ri+Hur6jrmdxZr7U+F1gkVewirqXVK8dDLTzBeNVw3yitlT7XDLv+Q97obW
-         +0OvtEFgcE8RGJujjiCbgXQE9BCPxYTMs5VL3Vgg=
+        b=rikAK+FhMG5D2+NDfH9M4GzZVqoAeXJD050Fa9HSTMZl9+1PARV2Xdimx/09PeEP6
+         V3ZBmMNvKkxsqxR+SmesH2dVbPSMjTzHhCeZDW3i9ARSAJLmgfMOShVnh3bWC1YSTq
+         AX++EuHajEnB4ca6aW7kIskVYdAjbIk4Ish8ZHDQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nick Lopez <github@glowingmonkey.org>,
-        Ilia Mirkin <imirkin@alum.mit.edu>,
-        Karol Herbst <kherbst@redhat.com>
-Subject: [PATCH 5.4 11/44] drm/nouveau: fix off by one in BIOS boundary checking
+        stable@vger.kernel.org, Leon Romanovsky <leonro@nvidia.com>,
+        =?UTF-8?q?H=C3=A5kon=20Bugge?= <haakon.bugge@oracle.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Subject: [PATCH 4.19 64/86] RDMA/mlx4: Dont continue event handler after memory allocation failure
 Date:   Mon,  7 Feb 2022 12:06:27 +0100
-Message-Id: <20220207103753.522786437@linuxfoundation.org>
+Message-Id: <20220207103759.661417834@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103753.155627314@linuxfoundation.org>
-References: <20220207103753.155627314@linuxfoundation.org>
+In-Reply-To: <20220207103757.550973048@linuxfoundation.org>
+References: <20220207103757.550973048@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,42 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nick Lopez <github@glowingmonkey.org>
+From: Leon Romanovsky <leonro@nvidia.com>
 
-commit 1b777d4d9e383d2744fc9b3a09af6ec1893c8b1a upstream.
+commit f3136c4ce7acf64bee43135971ca52a880572e32 upstream.
 
-Bounds checking when parsing init scripts embedded in the BIOS reject
-access to the last byte. This causes driver initialization to fail on
-Apple eMac's with GeForce 2 MX GPUs, leaving the system with no working
-console.
+The failure to allocate memory during MLX4_DEV_EVENT_PORT_MGMT_CHANGE
+event handler will cause skip the assignment logic, but
+ib_dispatch_event() will be called anyway.
 
-This is probably only seen on OpenFirmware machines like PowerPC Macs
-because the BIOS image provided by OF is only the used parts of the ROM,
-not a power-of-two blocks read from PCI directly so PCs always have
-empty bytes at the end that are never accessed.
+Fix it by calling to return instead of break after memory allocation
+failure.
 
-Signed-off-by: Nick Lopez <github@glowingmonkey.org>
-Fixes: 4d4e9907ff572 ("drm/nouveau/bios: guard against out-of-bounds accesses to image")
-Cc: <stable@vger.kernel.org> # v4.10+
-Reviewed-by: Ilia Mirkin <imirkin@alum.mit.edu>
-Reviewed-by: Karol Herbst <kherbst@redhat.com>
-Signed-off-by: Karol Herbst <kherbst@redhat.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220122081906.2633061-1-github@glowingmonkey.org
+Fixes: 00f5ce99dc6e ("mlx4: Use port management change event instead of smp_snoop")
+Link: https://lore.kernel.org/r/12a0e83f18cfad4b5f62654f141e240d04915e10.1643622264.git.leonro@nvidia.com
+Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
+Reviewed-by: Håkon Bugge <haakon.bugge@oracle.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/nouveau/nvkm/subdev/bios/base.c |    2 +-
+ drivers/infiniband/hw/mlx4/main.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/gpu/drm/nouveau/nvkm/subdev/bios/base.c
-+++ b/drivers/gpu/drm/nouveau/nvkm/subdev/bios/base.c
-@@ -38,7 +38,7 @@ nvbios_addr(struct nvkm_bios *bios, u32
- 		*addr += bios->imaged_addr;
- 	}
+--- a/drivers/infiniband/hw/mlx4/main.c
++++ b/drivers/infiniband/hw/mlx4/main.c
+@@ -3351,7 +3351,7 @@ static void mlx4_ib_event(struct mlx4_de
+ 	case MLX4_DEV_EVENT_PORT_MGMT_CHANGE:
+ 		ew = kmalloc(sizeof *ew, GFP_ATOMIC);
+ 		if (!ew)
+-			break;
++			return;
  
--	if (unlikely(*addr + size >= bios->size)) {
-+	if (unlikely(*addr + size > bios->size)) {
- 		nvkm_error(&bios->subdev, "OOB %d %08x %08x\n", size, p, *addr);
- 		return false;
- 	}
+ 		INIT_WORK(&ew->work, handle_port_mgmt_change_event);
+ 		memcpy(&ew->ib_eqe, eqe, sizeof *eqe);
 
 

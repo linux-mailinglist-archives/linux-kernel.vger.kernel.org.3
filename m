@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0111E4ABDE8
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:05:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D10164ABB6A
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:38:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355491AbiBGLtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:49:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46856 "EHLO
+        id S230525AbiBGL2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:28:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386636AbiBGLfN (ORCPT
+        with ESMTP id S1382596AbiBGLTy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:35:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28B4AC043181;
-        Mon,  7 Feb 2022 03:35:13 -0800 (PST)
+        Mon, 7 Feb 2022 06:19:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C12DBC043181;
+        Mon,  7 Feb 2022 03:19:53 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CB421B80EBD;
-        Mon,  7 Feb 2022 11:35:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D09B7C004E1;
-        Mon,  7 Feb 2022 11:35:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D56061380;
+        Mon,  7 Feb 2022 11:19:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27271C340EB;
+        Mon,  7 Feb 2022 11:19:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233710;
-        bh=+IY6A+HUlenz/HqGjjxj3obMOLESQN8pG2bZR8pv5QI=;
+        s=korg; t=1644232792;
+        bh=RO6JrjTCFtLKjGtkJis78RkBmbX7z/chUZefduVLvhc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VHuxb3Hxz6I0A4XEIYBuYkZJi7q92A+cBMD/eFCkjFrHSAnj690EO0Ayi90kQDR+G
-         dx9asc8xyX6WXzLfk0/fFpubIJmerjHAqTAIq0eeUzobecQ6nncp4S9Z1t4JBGFhbV
-         1K8ZuQg3h7WSFd/jDVVLCafNELVdl2mjPIqdSjKc=
+        b=aRiiY4bTWx2jQbG9pBR/5qv/9ZKtUJ+ZwARiaUd78qoOolAO819OEwzzln40corla
+         hoCwrWIPw/5TQpmTamGPkaw+pWIShzweHBfXVhYCbbcZps0eoDovE0xVka7KOQ2gax
+         wEmDRf22hqAq9I2yW6wlnfpTUKyVH3syCkh2mcOc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tom Rix <trix@redhat.com>,
+        stable@vger.kernel.org, Christian Lachner <gladiac@gmail.com>,
         Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.16 054/126] ALSA: usb-audio: initialize variables that could ignore errors
+Subject: [PATCH 5.4 09/44] ALSA: hda/realtek: Fix silent output on Gigabyte X570 Aorus Xtreme after reboot from Windows
 Date:   Mon,  7 Feb 2022 12:06:25 +0100
-Message-Id: <20220207103805.976127340@linuxfoundation.org>
+Message-Id: <20220207103753.459222383@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
-References: <20220207103804.053675072@linuxfoundation.org>
+In-Reply-To: <20220207103753.155627314@linuxfoundation.org>
+References: <20220207103753.155627314@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,40 +54,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+From: Christian Lachner <gladiac@gmail.com>
 
-commit 3da4b7403db87d39bc2613cfd790de1de99a70ab upstream.
+commit ea3541961376f733373839cc90493aafa8a7f733 upstream.
 
-clang static analysis reports this representative issue
-mixer.c:1548:35: warning: Assigned value is garbage or undefined
-        ucontrol->value.integer.value[0] = val;
-                                         ^ ~~~
+This commit switches the Gigabyte X570 Aorus Xtreme from using the
+ALC1220_FIXUP_CLEVO_P950 to the ALC1220_FIXUP_GB_X570 quirk. This fixes
+the no-audio after reboot from windows problem.
 
-The filter_error() macro allows errors to be ignored.
-If errors can be ignored, initialize variables
-so garbage will not be used.
-
-Fixes: 48cc42973509 ("ALSA: usb-audio: Filter error from connector kctl ops, too")
-Signed-off-by: Tom Rix <trix@redhat.com>
-Link: https://lore.kernel.org/r/20220126182142.1184819-1-trix@redhat.com
+BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=205275
+Signed-off-by: Christian Lachner <gladiac@gmail.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220129113243.93068-4-gladiac@gmail.com
 Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/usb/mixer.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ sound/pci/hda/patch_realtek.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/sound/usb/mixer.c
-+++ b/sound/usb/mixer.c
-@@ -1526,6 +1526,10 @@ error:
- 		usb_audio_err(chip,
- 			"cannot get connectors status: req = %#x, wValue = %#x, wIndex = %#x, type = %d\n",
- 			UAC_GET_CUR, validx, idx, cval->val_type);
-+
-+		if (val)
-+			*val = 0;
-+
- 		return filter_error(cval, ret);
- 	}
- 
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -2549,7 +2549,7 @@ static const struct snd_pci_quirk alc882
+ 	SND_PCI_QUIRK(0x1458, 0xa002, "Gigabyte EP45-DS3/Z87X-UD3H", ALC889_FIXUP_FRONT_HP_NO_PRESENCE),
+ 	SND_PCI_QUIRK(0x1458, 0xa0b8, "Gigabyte AZ370-Gaming", ALC1220_FIXUP_GB_DUAL_CODECS),
+ 	SND_PCI_QUIRK(0x1458, 0xa0cd, "Gigabyte X570 Aorus Master", ALC1220_FIXUP_GB_X570),
+-	SND_PCI_QUIRK(0x1458, 0xa0ce, "Gigabyte X570 Aorus Xtreme", ALC1220_FIXUP_CLEVO_P950),
++	SND_PCI_QUIRK(0x1458, 0xa0ce, "Gigabyte X570 Aorus Xtreme", ALC1220_FIXUP_GB_X570),
+ 	SND_PCI_QUIRK(0x1458, 0xa0d5, "Gigabyte X570S Aorus Master", ALC1220_FIXUP_GB_X570),
+ 	SND_PCI_QUIRK(0x1462, 0x11f7, "MSI-GE63", ALC1220_FIXUP_CLEVO_P950),
+ 	SND_PCI_QUIRK(0x1462, 0x1228, "MSI-GP63", ALC1220_FIXUP_CLEVO_P950),
 
 

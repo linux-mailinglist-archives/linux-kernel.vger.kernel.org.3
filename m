@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91CA04ABC70
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:48:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82A234ABE30
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:09:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386773AbiBGLgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:36:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37308 "EHLO
+        id S1391175AbiBGL6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:58:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357112AbiBGLZS (ORCPT
+        with ESMTP id S1385484AbiBGLby (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:25:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDDDEC0401F3;
-        Mon,  7 Feb 2022 03:25:13 -0800 (PST)
+        Mon, 7 Feb 2022 06:31:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A17DC03F93F;
+        Mon,  7 Feb 2022 03:30:31 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 209EF6077B;
-        Mon,  7 Feb 2022 11:25:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75370C004E1;
-        Mon,  7 Feb 2022 11:25:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ABA3B60AB0;
+        Mon,  7 Feb 2022 11:30:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84ACBC004E1;
+        Mon,  7 Feb 2022 11:30:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233112;
-        bh=u4UjAcFF1Zp7pNCg0/6sdayjl3EP4O06VFNJH8ux4dM=;
+        s=korg; t=1644233430;
+        bh=xjkRWAuO6sjuAxBcS+6c7kSyPv7Q3Yfk0x1pK5sdx1M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IP6+ZSaE0tBsu/Jn8k9XBGbUD22AByA4H/iTQR7H9wzUAI7xds+uXZztc0bAxtBM5
-         V0m96t1uydYB7Lf9wz4WXsJjCfLx0HT7C1TnPolYQlK5wQltFr5DassULGHRmt9e4Z
-         pA50j9P/gyWQorbtF4GxxwwMcbXjZM8gt+AvrSw0=
+        b=mlWz7zmJ7oA1Xkk9qcUJGklv6hw8BLVngWURiJmsOYG2R9k3LRsErNjJR/v6XAdrp
+         R06GCmQRsdrr4y6zUxA4aLH3rT4bUgY2BgDb1yxsPAf2qKscYqLkoXhtFdk26lPhFx
+         eneCnyqo+BQjiBgEHYmyAQEZZ3wJdRpClOPB3zO4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.15 008/110] ASoC: ops: Reject out of bounds values in snd_soc_put_volsw_sx()
+        stable@vger.kernel.org,
+        Jukka Heikintalo <heikintalo.jukka@gmail.com>,
+        =?UTF-8?q?Pawe=C5=82=20Susicki?= <pawel.susicki@gmail.com>,
+        Jonas Hahnfeld <hahnjo@hahnjo.de>, Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.16 010/126] ALSA: usb-audio: Correct quirk for VF0770
 Date:   Mon,  7 Feb 2022 12:05:41 +0100
-Message-Id: <20220207103802.562124328@linuxfoundation.org>
+Message-Id: <20220207103804.413334168@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
-References: <20220207103802.280120990@linuxfoundation.org>
+In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
+References: <20220207103804.053675072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,41 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+From: Jonas Hahnfeld <hahnjo@hahnjo.de>
 
-commit 4f1e50d6a9cf9c1b8c859d449b5031cacfa8404e upstream.
+commit 4ee02e20893d2f9e951c7888f2284fa608ddaa35 upstream.
 
-We don't currently validate that the values being set are within the range
-we advertised to userspace as being valid, do so and reject any values
-that are out of range.
+This device provides both audio and video. The original quirk added in
+commit 48827e1d6af5 ("ALSA: usb-audio: Add quirk for VF0770") used
+USB_DEVICE to match the vendor and product ID. Depending on module order,
+if snd-usb-audio was asked first, it would match the entire device and
+uvcvideo wouldn't get to see it. Change the matching to USB_AUDIO_DEVICE
+to restore uvcvideo matching in all cases.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20220124153253.3548853-3-broonie@kernel.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: 48827e1d6af5 ("ALSA: usb-audio: Add quirk for VF0770")
+Reported-by: Jukka Heikintalo <heikintalo.jukka@gmail.com>
+Tested-by: Jukka Heikintalo <heikintalo.jukka@gmail.com>
+Reported-by: Paweł Susicki <pawel.susicki@gmail.com>
+Tested-by: Paweł Susicki <pawel.susicki@gmail.com>
+Cc: <stable@vger.kernel.org> # 5.4, 5.10, 5.14, 5.15
+Signed-off-by: Jonas Hahnfeld <hahnjo@hahnjo.de>
+Link: https://lore.kernel.org/r/20220131183516.61191-1-hahnjo@hahnjo.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/soc-ops.c |    9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ sound/usb/quirks-table.h |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/sound/soc/soc-ops.c
-+++ b/sound/soc/soc-ops.c
-@@ -423,8 +423,15 @@ int snd_soc_put_volsw_sx(struct snd_kcon
- 	int err = 0;
- 	unsigned int val, val_mask;
- 
-+	val = ucontrol->value.integer.value[0];
-+	if (mc->platform_max && val > mc->platform_max)
-+		return -EINVAL;
-+	if (val > max - min)
-+		return -EINVAL;
-+	if (val < 0)
-+		return -EINVAL;
- 	val_mask = mask << shift;
--	val = (ucontrol->value.integer.value[0] + min) & mask;
-+	val = (val + min) & mask;
- 	val = val << shift;
- 
- 	err = snd_soc_component_update_bits(component, reg, val_mask, val);
+--- a/sound/usb/quirks-table.h
++++ b/sound/usb/quirks-table.h
+@@ -84,7 +84,7 @@
+  * combination.
+  */
+ {
+-	USB_DEVICE(0x041e, 0x4095),
++	USB_AUDIO_DEVICE(0x041e, 0x4095),
+ 	.driver_info = (unsigned long) &(const struct snd_usb_audio_quirk) {
+ 		.ifnum = QUIRK_ANY_INTERFACE,
+ 		.type = QUIRK_COMPOSITE,
 
 

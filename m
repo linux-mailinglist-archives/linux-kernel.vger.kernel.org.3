@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7342F4AB3FD
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 07:12:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F341E4AB3EE
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 07:12:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238529AbiBGFuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 00:50:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50662 "EHLO
+        id S1349477AbiBGFw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 00:52:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352076AbiBGEsn (ORCPT
+        with ESMTP id S1352075AbiBGEsf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 23:48:43 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A818C043181;
-        Sun,  6 Feb 2022 20:48:42 -0800 (PST)
+        Sun, 6 Feb 2022 23:48:35 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 622E0C043181;
+        Sun,  6 Feb 2022 20:48:35 -0800 (PST)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 2472B1F37E;
-        Mon,  7 Feb 2022 04:48:41 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id CCCD8210E8;
+        Mon,  7 Feb 2022 04:48:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1644209321; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1644209313; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=abp/o94+2rJ4ao5gU5Y3VRhEK9AxXE9gpElUGz0LzVk=;
-        b=CCn6rwGgP1ohSmx2GAqIuYP8+Qj6wqy0px0oekO6styNpRvwCtVHm+LgMww7xKi0dZxr33
-        F9KVX5dJGAHKxI8KHRFoW/9WEqDbubyDmE97JuSIsq374hFBq9bgFNGw7hHp+kM2IV8b6V
-        v8ETLUb5TzNyIoMihm1YrQCqDarH5TE=
+        bh=ca/QMA9b8aSP2XqDNpzMoh70WOqFOvfMXBDfQmXLg8g=;
+        b=g7MhZp92/rnAsaBQF/LBN2grTXpM1lSbRGyvPNrVbdb93Hur/KShishK0kboEEwtuBgXEN
+        eV5m3zMF/R1LupwK2CXzQ0u20tEnJ9/jxsjPA8hEJhCJA48lpiq2r6PjIQxxf6AYRjBofP
+        Fhn0FQcRrR9S9O3YbkmJ9Fq76of65ME=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1644209321;
+        s=susede2_ed25519; t=1644209313;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=abp/o94+2rJ4ao5gU5Y3VRhEK9AxXE9gpElUGz0LzVk=;
-        b=zX3qPGqzKSp/jTG3hChxzUyM+Yu2Mr9oyUJcRa20dUWYAXy1z0gdUFudbbOcKK+2H6ZalB
-        KkALKn9wZTiQL3CA==
+        bh=ca/QMA9b8aSP2XqDNpzMoh70WOqFOvfMXBDfQmXLg8g=;
+        b=S7cvC95vxV7Ud1UDWIFO6Oa2myUbnd6qE+5EbMwEIspBQunKCydhhC2WbDtoFc/abo0+oz
+        jz1Nwrey9mHimyDg==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 47EF01330E;
-        Mon,  7 Feb 2022 04:48:37 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7A6061330E;
+        Mon,  7 Feb 2022 04:48:30 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id HcYZAaWkAGKHNQAAMHmgww
-        (envelope-from <neilb@suse.de>); Mon, 07 Feb 2022 04:48:37 +0000
-Subject: [PATCH 16/21] NFS: discard NFS_RPC_SWAPFLAGS and RPC_TASK_ROOTCREDS
+        id jU5zDZ6kAGJ/NQAAMHmgww
+        (envelope-from <neilb@suse.de>); Mon, 07 Feb 2022 04:48:30 +0000
+Subject: [PATCH 15/21] SUNRPC: remove scheduling boost for "SWAPPER" tasks.
 From:   NeilBrown <neilb@suse.de>
 To:     Trond Myklebust <trond.myklebust@hammerspace.com>,
         Anna Schumaker <anna.schumaker@netapp.com>,
@@ -61,7 +61,7 @@ To:     Trond Myklebust <trond.myklebust@hammerspace.com>,
 Cc:     linux-nfs@vger.kernel.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
 Date:   Mon, 07 Feb 2022 15:46:01 +1100
-Message-ID: <164420916121.29374.12391432623392264427.stgit@noble.brown>
+Message-ID: <164420916121.29374.301108979284279934.stgit@noble.brown>
 In-Reply-To: <164420889455.29374.17958998143835612560.stgit@noble.brown>
 References: <164420889455.29374.17958998143835612560.stgit@noble.brown>
 User-Agent: StGit/0.23
@@ -78,96 +78,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-NFS_RPC_SWAPFLAGS is only used for READ requests.
-It sets RPC_TASK_SWAPPER which gives some memory-allocation priority to
-requests.  This is not needed for swap READ - though it is for writes
-where it is set via a different mechanism.
+Currently, tasks marked as "swapper" tasks get put to the front of
+non-priority rpc_queues, and are sorted earlier than non-swapper tasks on
+the transport's ->xmit_queue.
 
-RPC_TASK_ROOTCREDS causes the 'machine' credential to be used.
-This is not needed as the root credential is saved when the swap file is
-opened, and this is used for all IO.
+This is pointless as currently *all* tasks for a mount that has swap
+enabled on *any* file are marked as "swapper" tasks.  So the net result
+is that the non-priority rpc_queues are reverse-ordered (LIFO).
 
-So NFS_RPC_SWAPFLAGS isn't needed, and as it is the only user of
-RPC_TASK_ROOTCREDS, that isn't needed either.
-
-Remove both.
+This scheduling boost is not necessary to avoid deadlocks, and hurts
+fairness, so remove it.  If there were a need to expedite some requests,
+the tk_priority mechanism is a more appropriate tool.
 
 Signed-off-by: NeilBrown <neilb@suse.de>
 ---
- fs/nfs/read.c                 |    4 ----
- include/linux/nfs_fs.h        |    5 -----
- include/linux/sunrpc/sched.h  |    1 -
- include/trace/events/sunrpc.h |    1 -
- net/sunrpc/auth.c             |    2 +-
- 5 files changed, 1 insertion(+), 12 deletions(-)
+ net/sunrpc/sched.c |    7 -------
+ net/sunrpc/xprt.c  |   11 -----------
+ 2 files changed, 18 deletions(-)
 
-diff --git a/fs/nfs/read.c b/fs/nfs/read.c
-index eb00229c1a50..cd797ce3a67c 100644
---- a/fs/nfs/read.c
-+++ b/fs/nfs/read.c
-@@ -194,10 +194,6 @@ static void nfs_initiate_read(struct nfs_pgio_header *hdr,
- 			      const struct nfs_rpc_ops *rpc_ops,
- 			      struct rpc_task_setup *task_setup_data, int how)
- {
--	struct inode *inode = hdr->inode;
--	int swap_flags = IS_SWAPFILE(inode) ? NFS_RPC_SWAPFLAGS : 0;
--
--	task_setup_data->flags |= swap_flags;
- 	rpc_ops->read_setup(hdr, msg);
- 	trace_nfs_initiate_read(hdr);
- }
-diff --git a/include/linux/nfs_fs.h b/include/linux/nfs_fs.h
-index 02aa49323d1d..ff8b3820409c 100644
---- a/include/linux/nfs_fs.h
-+++ b/include/linux/nfs_fs.h
-@@ -45,11 +45,6 @@
-  */
- #define NFS_MAX_TRANSPORTS 16
+diff --git a/net/sunrpc/sched.c b/net/sunrpc/sched.c
+index d5b6e897f5a5..256302bf6557 100644
+--- a/net/sunrpc/sched.c
++++ b/net/sunrpc/sched.c
+@@ -186,11 +186,6 @@ static void __rpc_add_wait_queue_priority(struct rpc_wait_queue *queue,
  
--/*
-- * These are the default flags for swap requests
-- */
--#define NFS_RPC_SWAPFLAGS		(RPC_TASK_SWAPPER|RPC_TASK_ROOTCREDS)
--
  /*
-  * Size of the NFS directory verifier
+  * Add new request to wait queue.
+- *
+- * Swapper tasks always get inserted at the head of the queue.
+- * This should avoid many nasty memory deadlocks and hopefully
+- * improve overall performance.
+- * Everyone else gets appended to the queue to ensure proper FIFO behavior.
   */
-diff --git a/include/linux/sunrpc/sched.h b/include/linux/sunrpc/sched.h
-index db964bb63912..56710f8056d3 100644
---- a/include/linux/sunrpc/sched.h
-+++ b/include/linux/sunrpc/sched.h
-@@ -124,7 +124,6 @@ struct rpc_task_setup {
- #define RPC_TASK_MOVEABLE	0x0004		/* nfs4.1+ rpc tasks */
- #define RPC_TASK_NULLCREDS	0x0010		/* Use AUTH_NULL credential */
- #define RPC_CALL_MAJORSEEN	0x0020		/* major timeout seen */
--#define RPC_TASK_ROOTCREDS	0x0040		/* force root creds */
- #define RPC_TASK_DYNAMIC	0x0080		/* task was kmalloc'ed */
- #define	RPC_TASK_NO_ROUND_ROBIN	0x0100		/* send requests on "main" xprt */
- #define RPC_TASK_SOFT		0x0200		/* Use soft timeouts */
-diff --git a/include/trace/events/sunrpc.h b/include/trace/events/sunrpc.h
-index 29982d60b68a..ac33892da411 100644
---- a/include/trace/events/sunrpc.h
-+++ b/include/trace/events/sunrpc.h
-@@ -311,7 +311,6 @@ TRACE_EVENT(rpc_request,
- 		{ RPC_TASK_MOVEABLE, "MOVEABLE" },			\
- 		{ RPC_TASK_NULLCREDS, "NULLCREDS" },			\
- 		{ RPC_CALL_MAJORSEEN, "MAJORSEEN" },			\
--		{ RPC_TASK_ROOTCREDS, "ROOTCREDS" },			\
- 		{ RPC_TASK_DYNAMIC, "DYNAMIC" },			\
- 		{ RPC_TASK_NO_ROUND_ROBIN, "NO_ROUND_ROBIN" },		\
- 		{ RPC_TASK_SOFT, "SOFT" },				\
-diff --git a/net/sunrpc/auth.c b/net/sunrpc/auth.c
-index 6bfa19f9fa6a..682fcd24bf43 100644
---- a/net/sunrpc/auth.c
-+++ b/net/sunrpc/auth.c
-@@ -670,7 +670,7 @@ rpcauth_bindcred(struct rpc_task *task, const struct cred *cred, int flags)
- 	/* If machine cred couldn't be bound, try a root cred */
- 	if (new)
- 		;
--	else if (cred == &machine_cred || (flags & RPC_TASK_ROOTCREDS))
-+	else if (cred == &machine_cred)
- 		new = rpcauth_bind_root_cred(task, lookupflags);
- 	else if (flags & RPC_TASK_NULLCREDS)
- 		new = authnull_ops.lookup_cred(NULL, NULL, 0);
+ static void __rpc_add_wait_queue(struct rpc_wait_queue *queue,
+ 		struct rpc_task *task,
+@@ -199,8 +194,6 @@ static void __rpc_add_wait_queue(struct rpc_wait_queue *queue,
+ 	INIT_LIST_HEAD(&task->u.tk_wait.timer_list);
+ 	if (RPC_IS_PRIORITY(queue))
+ 		__rpc_add_wait_queue_priority(queue, task, queue_priority);
+-	else if (RPC_IS_SWAPPER(task))
+-		list_add(&task->u.tk_wait.list, &queue->tasks[0]);
+ 	else
+ 		list_add_tail(&task->u.tk_wait.list, &queue->tasks[0]);
+ 	task->tk_waitqueue = queue;
+diff --git a/net/sunrpc/xprt.c b/net/sunrpc/xprt.c
+index 47d207e416ab..a0a2583fe941 100644
+--- a/net/sunrpc/xprt.c
++++ b/net/sunrpc/xprt.c
+@@ -1354,17 +1354,6 @@ xprt_request_enqueue_transmit(struct rpc_task *task)
+ 				INIT_LIST_HEAD(&req->rq_xmit2);
+ 				goto out;
+ 			}
+-		} else if (RPC_IS_SWAPPER(task)) {
+-			list_for_each_entry(pos, &xprt->xmit_queue, rq_xmit) {
+-				if (pos->rq_cong || pos->rq_bytes_sent)
+-					continue;
+-				if (RPC_IS_SWAPPER(pos->rq_task))
+-					continue;
+-				/* Note: req is added _before_ pos */
+-				list_add_tail(&req->rq_xmit, &pos->rq_xmit);
+-				INIT_LIST_HEAD(&req->rq_xmit2);
+-				goto out;
+-			}
+ 		} else if (!req->rq_seqno) {
+ 			list_for_each_entry(pos, &xprt->xmit_queue, rq_xmit) {
+ 				if (pos->rq_task->tk_owner != task->tk_owner)
 
 

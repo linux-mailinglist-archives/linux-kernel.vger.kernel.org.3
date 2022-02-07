@@ -2,254 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B3414ABF76
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 14:25:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 231164ABF1A
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 14:23:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444077AbiBGNJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 08:09:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49150 "EHLO
+        id S1377089AbiBGNLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 08:11:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446315AbiBGMnO (ORCPT
+        with ESMTP id S1446549AbiBGMn3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 07:43:14 -0500
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C992EC0045EF
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 04:38:59 -0800 (PST)
-Received: by mail-qk1-x729.google.com with SMTP id c189so10681633qkg.11
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 04:38:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=DkD54i2Pug3GcN0vGMXIwskw5kZ403zclucyP/4FADw=;
-        b=jejLNq9ZkAUM/1vtLhdi/Te45wokvj6FjwIW8AlLB1k5NEm5TM5g0CwJk0HDNunq/c
-         6W4b+6p5XRj7BipndV9DVl6qeBQUDxuA2t9aVfsgHBtTUreGRF2VJlsJST0i7l+dGEAU
-         jXKut7VfVCZ2E+hEy2gkxGuFJNezlflnLtRFakk/VIJbd/sgO3BccmoGlfvC0JCvzp3J
-         2tMID7ZZ1b4NXRSy1Ykde3PurFm0gp35wEBgEZsJn2KO1xguHtzTQjSW4F1PNUcl8+b4
-         HdNHI0HdCBlheN6vmAvm84gJKD5z/UurHEfshXaDAVDLPeLnCNSSIeFWZs/nklfcXELn
-         Gzfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=DkD54i2Pug3GcN0vGMXIwskw5kZ403zclucyP/4FADw=;
-        b=5jske699IwyUiG0xh5WiZfJLdkrKQZCqMt+OFWhVGzfWiwfv25lfCWBBahexVkRtOw
-         AbOwsXsyTE5ZtjV455viG6DfK7ArLCYTt4xSFXPmHAp7KtkyJKJBHotAxNi4x5N0w4uU
-         4Lwy4Hg2P16Ha45OnGu3XgGa3YCpgMJmp3bcuJZivtOXpN5hVJgbAJT9pVwRxfihbVYW
-         ZZJ3xK/DvcsMJ37zDnBf+z4STOwUrPMxHrMV8A2z0elmXwawMR/k+3utnFU02ZNQlovQ
-         NuQHc7+TqlZFAGMTwYXER9IBfA/wKk1tjxAgmIFtGo1uzmcG13oeL1qouRe0HgoBlXMu
-         fTkg==
-X-Gm-Message-State: AOAM531uxpKH39p3Ivkd62Wuw6bhf7neMN1bA0j4G7uFcZcNf7YET+q0
-        jBUzvvCmmuVhpYoTsZiu2wx+I3m6c1zDJE7G
-X-Google-Smtp-Source: ABdhPJyZ0PJvzdTaMnj9syEuoj2Q+oZ9zjRD3eKKtBRLXKGxSCHQAcviLNhn4SyqNt+ctfVL07Y++g==
-X-Received: by 2002:a05:620a:2443:: with SMTP id h3mr6108230qkn.258.1644237538894;
-        Mon, 07 Feb 2022 04:38:58 -0800 (PST)
-Received: from mail.google.com ([207.246.89.135])
-        by smtp.gmail.com with ESMTPSA id 134sm5114278qkl.50.2022.02.07.04.38.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 04:38:58 -0800 (PST)
-Date:   Mon, 7 Feb 2022 20:38:50 +0800
-From:   ChangbinCONFIG_IRQSOFF_TRACER Du <changbin.du@gmail.com>
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Changbin Du <changbin.du@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] riscv: fix oops caused by irq on/off tracer
-Message-ID: <20220207123850.l4r5qjswaegwisbx@mail.google.com>
-References: <20220129004226.32868-1-changbin.du@gmail.com>
- <YgAEb425uqy5/dw1@xhacker>
+        Mon, 7 Feb 2022 07:43:29 -0500
+X-Greylist: delayed 91801 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 04:40:12 PST
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D106C033252;
+        Mon,  7 Feb 2022 04:40:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E2048B81240;
+        Mon,  7 Feb 2022 12:40:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8EA63C36AE2;
+        Mon,  7 Feb 2022 12:40:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644237609;
+        bh=Bi+YRTjzamuxy0Bbl8Ld2t5KWt1ALAj8F1h1s7aksL4=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=BMm0uVY5iTIHH3NKUqXCQZcpwC7f59j6QpQu3kWk/2N8uURfuPQiOm2XD+FJ6OmTd
+         uGuITypjb8T4Bi+2ZePUAqQr+cnVtt3rnLAlKkYzoea778aUFJ4h8oRk1MLWRXyZk/
+         1Ri9hImoNPzIijDPLFbbEOVN+CByZcEtK262oCJeAyn1x8TWJDpTqgtsuQxu0RKjG/
+         nBBSUMXY97ps5IFKBkFHHMfv2x6VaJThwfKKr1nbfI+UD+KjT0+EuNnMAPBhzyfdCj
+         /uGrDAeZ9vrU1VDrvQYuZx42r68q5FtVu1AXMW9IMqgOLjY6nG7We6aAijpAeh+kn1
+         J8IIFsyZcfbzA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 78495E5D09D;
+        Mon,  7 Feb 2022 12:40:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YgAEb425uqy5/dw1@xhacker>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH V2 net-next] net: hns3: add support for TX push mode
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164423760948.4874.7091354263258727957.git-patchwork-notify@kernel.org>
+Date:   Mon, 07 Feb 2022 12:40:09 +0000
+References: <20220207014423.3218-1-huangguangbin2@huawei.com>
+In-Reply-To: <20220207014423.3218-1-huangguangbin2@huawei.com>
+To:     Guangbin Huang <huangguangbin2@huawei.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, wangjie125@huawei.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lipeng321@huawei.com, chenhao288@hisilicon.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 01:25:03AM +0800, Jisheng Zhang wrote:
-> On Sat, Jan 29, 2022 at 08:42:26AM +0800, Changbin Du wrote:
-> > The trace_hardirqs_on/off requires at least two parent call frames.
-> > If not, the code generated by CALLER_ADDR1 (aka. ftrace_return_address(1))
-> > could trigger memory access fault.
-> > 
-> > [    0.039615][    T0] Unable to handle kernel NULL pointer dereference at virtual address 00000000000000f8
-> > [    0.041925][    T0] Oops [#1]
-> > [    0.042063][    T0] Modules linked in:
-> > [    0.042864][    T0] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.17.0-rc1-00233-g9a20c48d1ed2 #29
-> > [    0.043568][    T0] Hardware name: riscv-virtio,qemu (DT)
-> > [    0.044343][    T0] epc : trace_hardirqs_on+0x56/0xe2
-> > [    0.044601][    T0]  ra : restore_all+0x12/0x6e
-> > [    0.044721][    T0] epc : ffffffff80126a5c ra : ffffffff80003b94 sp : ffffffff81403db0
-> > [    0.044801][    T0]  gp : ffffffff8163acd8 tp : ffffffff81414880 t0 : 0000000000000020
-> > [    0.044882][    T0]  t1 : 0098968000000000 t2 : 0000000000000000 s0 : ffffffff81403de0
-> > [    0.044967][    T0]  s1 : 0000000000000000 a0 : 0000000000000001 a1 : 0000000000000100
-> > [    0.045046][    T0]  a2 : 0000000000000000 a3 : 0000000000000000 a4 : 0000000000000000
-> > [    0.045124][    T0]  a5 : 0000000000000000 a6 : 0000000000000000 a7 : 0000000054494d45
-> > [    0.045210][    T0]  s2 : ffffffff80003b94 s3 : ffffffff81a8f1b0 s4 : ffffffff80e27b50
-> > [    0.045289][    T0]  s5 : ffffffff81414880 s6 : ffffffff8160fa00 s7 : 00000000800120e8
-> > [    0.045389][    T0]  s8 : 0000000080013100 s9 : 000000000000007f s10: 0000000000000000
-> > [    0.045474][    T0]  s11: 0000000000000000 t3 : 7fffffffffffffff t4 : 0000000000000000
-> > [    0.045548][    T0]  t5 : 0000000000000000 t6 : ffffffff814aa368
-> > [    0.045620][    T0] status: 0000000200000100 badaddr: 00000000000000f8 cause: 000000000000000d
-> > [    0.046402][    T0] [<ffffffff80003b94>] restore_all+0x12/0x6e
-> > 
-> 
-> Hi Changbin,
-> 
-> Could you please provide the reproduce steps? It looks a bit
-> interesting.
->
-Just enable CONFIG_IRQSOFF_TRACER and rebuild kernel with llvm. Then boot the
-new kernel.
+Hello:
 
-> > To fix above issue, here we add one extra level wrapper so they can be
-> > safely called by low level entry code.
-> > 
-> > Signed-off-by: Changbin Du <changbin.du@gmail.com>
-> > 
-> > ---
-> > v2: fix compile warning.
-> > ---
-> >  arch/riscv/kernel/Makefile    |  2 ++
-> >  arch/riscv/kernel/entry.S     | 10 +++++-----
-> >  arch/riscv/kernel/trace_irq.c | 26 ++++++++++++++++++++++++++
-> >  arch/riscv/kernel/trace_irq.h | 11 +++++++++++
-> >  4 files changed, 44 insertions(+), 5 deletions(-)
-> >  create mode 100644 arch/riscv/kernel/trace_irq.c
-> >  create mode 100644 arch/riscv/kernel/trace_irq.h
-> > 
-> > diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-> > index 612556faa527..ffc87e76b1dd 100644
-> > --- a/arch/riscv/kernel/Makefile
-> > +++ b/arch/riscv/kernel/Makefile
-> > @@ -51,6 +51,8 @@ obj-$(CONFIG_MODULE_SECTIONS)	+= module-sections.o
-> >  obj-$(CONFIG_FUNCTION_TRACER)	+= mcount.o ftrace.o
-> >  obj-$(CONFIG_DYNAMIC_FTRACE)	+= mcount-dyn.o
-> >  
-> > +obj-$(CONFIG_TRACE_IRQFLAGS)	+= trace_irq.o
-> > +
-> >  obj-$(CONFIG_RISCV_BASE_PMU)	+= perf_event.o
-> >  obj-$(CONFIG_PERF_EVENTS)	+= perf_callchain.o
-> >  obj-$(CONFIG_HAVE_PERF_REGS)	+= perf_regs.o
-> > diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-> > index ed29e9c8f660..d6a46ed0bf05 100644
-> > --- a/arch/riscv/kernel/entry.S
-> > +++ b/arch/riscv/kernel/entry.S
-> > @@ -108,7 +108,7 @@ _save_context:
-> >  .option pop
-> >  
-> >  #ifdef CONFIG_TRACE_IRQFLAGS
-> > -	call trace_hardirqs_off
-> > +	call __trace_hardirqs_off
-> >  #endif
-> >  
-> >  #ifdef CONFIG_CONTEXT_TRACKING
-> > @@ -143,7 +143,7 @@ skip_context_tracking:
-> >  	li t0, EXC_BREAKPOINT
-> >  	beq s4, t0, 1f
-> >  #ifdef CONFIG_TRACE_IRQFLAGS
-> > -	call trace_hardirqs_on
-> > +	call __trace_hardirqs_on
-> >  #endif
-> >  	csrs CSR_STATUS, SR_IE
-> >  
-> > @@ -234,7 +234,7 @@ ret_from_exception:
-> >  	REG_L s0, PT_STATUS(sp)
-> >  	csrc CSR_STATUS, SR_IE
-> >  #ifdef CONFIG_TRACE_IRQFLAGS
-> > -	call trace_hardirqs_off
-> > +	call __trace_hardirqs_off
-> >  #endif
-> >  #ifdef CONFIG_RISCV_M_MODE
-> >  	/* the MPP value is too large to be used as an immediate arg for addi */
-> > @@ -270,10 +270,10 @@ restore_all:
-> >  	REG_L s1, PT_STATUS(sp)
-> >  	andi t0, s1, SR_PIE
-> >  	beqz t0, 1f
-> > -	call trace_hardirqs_on
-> > +	call __trace_hardirqs_on
-> >  	j 2f
-> >  1:
-> > -	call trace_hardirqs_off
-> > +	call __trace_hardirqs_off
-> >  2:
-> >  #endif
-> >  	REG_L a0, PT_STATUS(sp)
-> > diff --git a/arch/riscv/kernel/trace_irq.c b/arch/riscv/kernel/trace_irq.c
-> > new file mode 100644
-> > index 000000000000..fc194c56a35d
-> > --- /dev/null
-> > +++ b/arch/riscv/kernel/trace_irq.c
-> > @@ -0,0 +1,26 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Copyright (C) 2022 Changbin Du <changbin.du@gmail.com>
-> > + */
-> > +
-> > +#include <linux/irqflags.h>
-> > +#include <linux/kprobes.h>
-> > +#include "trace_irq.h"
-> > +
-> > +/**
-> > + * trace_hardirqs_on/off requires at least two parent call frames.
-> > + * Here we add one extra level so they can be safely called by low
-> > + * level entry code.
-> > + */
-> 
-> Hmm, I believe there's elegant solution without this grue, maybe
-> fix in stacktrace implementation or something else?
-> 
-This is not about stacktrace. As describe in commit msg, the problem is
-introduced by ftrace_return_address(1). The complier doesn't have knowledge
-about how many frames available at rumtime and wether each frame is valid.
+This patch was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
 
+On Mon, 7 Feb 2022 09:44:23 +0800 you wrote:
+> From: Yufeng Mo <moyufeng@huawei.com>
 > 
-> > +
-> > +void __trace_hardirqs_on(void)
-> > +{
-> > +	trace_hardirqs_on();
-> > +}
-> > +NOKPROBE_SYMBOL(__trace_hardirqs_on);
-> > +
-> > +void __trace_hardirqs_off(void)
-> > +{
-> > +	trace_hardirqs_off();
-> > +}
-> > +NOKPROBE_SYMBOL(__trace_hardirqs_off);
-> > diff --git a/arch/riscv/kernel/trace_irq.h b/arch/riscv/kernel/trace_irq.h
-> > new file mode 100644
-> > index 000000000000..99fe67377e5e
-> > --- /dev/null
-> > +++ b/arch/riscv/kernel/trace_irq.h
-> > @@ -0,0 +1,11 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +/*
-> > + * Copyright (C) 2022 Changbin Du <changbin.du@gmail.com>
-> > + */
-> > +#ifndef __TRACE_IRQ_H
-> > +#define __TRACE_IRQ_H
-> > +
-> > +void __trace_hardirqs_on(void);
-> > +void __trace_hardirqs_off(void);
-> > +
-> > +#endif /* __TRACE_IRQ_H */
-> > -- 
-> > 2.32.0
-> > 
-> > 
-> > _______________________________________________
-> > linux-riscv mailing list
-> > linux-riscv@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-riscv
+> For the device that supports the TX push capability, the BD can
+> be directly copied to the device memory. However, due to hardware
+> restrictions, the push mode can be used only when there are no
+> more than two BDs, otherwise, the doorbell mode based on device
+> memory is used.
+> 
+> [...]
 
+Here is the summary with links:
+  - [V2,net-next] net: hns3: add support for TX push mode
+    https://git.kernel.org/netdev/net-next/c/87a9b2fd9288
+
+You are awesome, thank you!
 -- 
-Cheers,
-Changbin Du
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

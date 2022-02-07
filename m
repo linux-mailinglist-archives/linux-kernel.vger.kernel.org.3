@@ -2,113 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2019B4AB922
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 11:56:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C4C54AB92D
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 11:59:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237844AbiBGK4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 05:56:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38706 "EHLO
+        id S1345311AbiBGK4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 05:56:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352481AbiBGKvS (ORCPT
+        with ESMTP id S1346245AbiBGKxx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 05:51:18 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2044.outbound.protection.outlook.com [40.107.237.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF602C043181;
-        Mon,  7 Feb 2022 02:51:17 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TNCct+sOLgyW9MqWlkdLu1Z1nw2G000Nu8Yiii6aFJKDcwn4/X6Wujz/DaQn3RdKgboXOxkNOyfupEgMPDE2cn9wUog05vSZH9c9kH+XNYTioX7Ak78ZydU4skcUm1KD6TKj0GcEg8Txwn6e8A177jC7euexbedgAOtPWPA89IALJZ63hSxSWEwINefMuXbLeZHj06NnICn7xCUx350wlXglgqzMuWPKtGzzc04wUaZz+Y+a13sUByzPNeXZtYvuEDoeT5mzMS2rH8wqpD/sEPxyL0tGWV+csEv2RMx5HCVlKK5c3WdYk4MR9+4Ou85BCweO38ypVu8q7BcprNnFCQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GmOsTMYoPyt+EMa6/G7D2cBX0asmGes7MTGnDcub4SY=;
- b=N5b8JwJcCPloMh6XP/5oG9DRi8VknisEm0QDF/RIwv4nrEo0IIBDcdX7SY/oV/pZkqr/YhgvqmPbd45ak2NwY+8qyMHO0u04bUceR6pWnwfyUps17mJA0mI1YtAJEfv/lFL+Y0i4Hxngr5pxuxZKVzY7B8wldK+ZkdjeoHtBrekIiCbD4zDWJDLPvCngdOxDQQUf1aC+JKkn1d+bTzRXzOnxpsvcPfNfgwnjnetCo63u8vy3h0i2Df3NFZCWHfRxhLaAyUCuKnyJMqu6jAI8I999hk+a3+r09T6Yyef/I60gy/PcFNYcpqlxWpnSPINkHuVt3xoQusMRh+BkC9SltA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.236) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com; dmarc=pass
- (p=reject sp=reject pct=100) action=none header.from=nvidia.com; dkim=none
- (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GmOsTMYoPyt+EMa6/G7D2cBX0asmGes7MTGnDcub4SY=;
- b=kpxnpZ2fPtPQnQ1cqaqBBX8je9MOc9WFGeG9tF0SgAGZ+wyO/+TkxmyotMUXFtfnnNI3/qkG+m+CIYvpPH+aajiefVC98makLT+XaBQZiiqjWGiUXnmEPq3rh+1gfrMe+i+2vuhQtWclyP29VsA0g+/zINS9fERTHRltR+sL9b6QQrDCbJoUtQJoJ/9V2P8uS5RV8Q8i9hg4ugn5iB0gdb88IRrH08BPEdaJdWb+mdTkwoF6a7G5yAZInWXUDPCYmOvBoLZ3FVtog+9SvxjgyqMeRMptS2+0mP6r66wfdjJGKiFJQSu9v+/jt6kHHhF65IMKZizLe7fa9579D7t9kg==
-Received: from MW4PR03CA0286.namprd03.prod.outlook.com (2603:10b6:303:b5::21)
- by BN6PR12MB1427.namprd12.prod.outlook.com (2603:10b6:404:20::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Mon, 7 Feb
- 2022 10:51:15 +0000
-Received: from CO1NAM11FT018.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:b5:cafe::b6) by MW4PR03CA0286.outlook.office365.com
- (2603:10b6:303:b5::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.17 via Frontend
- Transport; Mon, 7 Feb 2022 10:51:14 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.236; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.236) by
- CO1NAM11FT018.mail.protection.outlook.com (10.13.175.16) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4951.12 via Frontend Transport; Mon, 7 Feb 2022 10:51:14 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL109.nvidia.com
- (10.27.9.19) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Mon, 7 Feb
- 2022 10:51:13 +0000
-Received: from [172.27.26.97] (10.126.231.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.9; Mon, 7 Feb 2022
- 02:51:08 -0800
-Message-ID: <af122e70-d073-cd83-541c-b3a0125c7cfb@nvidia.com>
-Date:   Mon, 7 Feb 2022 12:51:05 +0200
+        Mon, 7 Feb 2022 05:53:53 -0500
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1719EC043181;
+        Mon,  7 Feb 2022 02:53:51 -0800 (PST)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2177xPBw022448;
+        Mon, 7 Feb 2022 11:51:25 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=K0w0XBABzulMwdabSun+EYASobtFwjzKISn9qecxuPY=;
+ b=k3lqLLAw5FZoLfGG2L+upiMxtNrtpMVu5eJRO4IXtjDPbTah91Kl0YEEEw42PuQWzddD
+ iunHYyNKNosVbIvPYJc8poGbeVX3jV3KrfHTx3omp+jo+oYifplTOUz3a5PNIHip9ECo
+ di8nWjQPYkmOIrOZa+W+RoKZfTFYQWTdSEPot+z8e3QgHzNs8+UCQY8C2YaO9StgkqIM
+ heGAjJv9tNFhLKbM35juaSCV/rJw9Mp7Mc9NY+1s302Ru7y2ZIVvScBbvKbgSpeVpMAs
+ fWc8WaEwW2WjC4Jq1xHL9+uPqhJf248Lpu6H8z1dr1c7cg+WSnR2PIjtdKypsd6HzATq 0A== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3e2nfyaxev-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Feb 2022 11:51:25 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 66E7D100039;
+        Mon,  7 Feb 2022 11:51:16 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 4CA2E216EDA;
+        Mon,  7 Feb 2022 11:51:16 +0100 (CET)
+Received: from [10.48.0.252] (10.75.127.45) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 7 Feb
+ 2022 11:51:15 +0100
+Message-ID: <c501d583-4293-5781-8ddd-b1d317460b05@foss.st.com>
+Date:   Mon, 7 Feb 2022 11:51:14 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH net-next 2/4] net: bridge: dsa: Add support for offloading
- of locked port flag
+Subject: Re: [PATCH v7 00/10] Add support for DMA2D of STMicroelectronics
+ STM32 Soc series
 Content-Language: en-US
-To:     Hans Schultz <schultz.hans@gmail.com>, <davem@davemloft.net>,
-        <kuba@kernel.org>
-CC:     <netdev@vger.kernel.org>,
-        Hans Schultz <schultz.hans+netdev@gmail.com>,
-        Roopa Prabhu <roopa@nvidia.com>, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "Vladimir Oltean" <olteanv@gmail.com>,
-        <bridge@lists.linux-foundation.org>, <linux-kernel@vger.kernel.org>
-References: <20220207100742.15087-1-schultz.hans+netdev@gmail.com>
- <20220207100742.15087-3-schultz.hans+netdev@gmail.com>
-From:   Nikolay Aleksandrov <nikolay@nvidia.com>
-In-Reply-To: <20220207100742.15087-3-schultz.hans+netdev@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+To:     Dillon Min <dillon.minfei@gmail.com>, <mchehab@kernel.org>,
+        <mchehab+huawei@kernel.org>, <hverkuil-cisco@xs4all.nl>,
+        <ezequiel@collabora.com>, <gnurou@gmail.com>,
+        <pihsun@chromium.org>, <mcoquelin.stm32@gmail.com>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <robh+dt@kernel.org>, <gabriel.fernandez@st.com>,
+        <gabriel.fernandez@foss.st.com>
+CC:     <patrice.chotard@foss.st.com>, <hugues.fruchet@foss.st.com>,
+        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <lkp@intel.com>, <kbuild-all@lists.01.org>, <llvm@lists.linux.dev>
+References: <1635232282-3992-1-git-send-email-dillon.minfei@gmail.com>
+From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
+In-Reply-To: <1635232282-3992-1-git-send-email-dillon.minfei@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.231.35]
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6881ccf2-f704-4578-54fc-08d9ea27c30b
-X-MS-TrafficTypeDiagnostic: BN6PR12MB1427:EE_
-X-Microsoft-Antispam-PRVS: <BN6PR12MB142732CB8F4F383DEBA982E8DF2C9@BN6PR12MB1427.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Wu55FupcrmMQp9K0KcbraQ5PypTAYvFoLmyAjD9a3jk0PSp5MtysayOTqzYk6ozHBrC4MBhJdyLC6LKh579k2ej6vUKu5x8jgVdxOM6CD73ZS3S5JlykLkV3XkPOM6u2M+akYoyHbslCncLQRmcFx6X93YMeo4nhmLASWrhDf+XYxnjJf4gCCYvaJTpqRcP15mjnN0Lm832GZUNmJfEJWN26dsHr6nve7WF9gQZcYHC8Hdmq70GLs7A6dtxHLcJwm1ZfaNvxzsQUpjCeR0HtOfkVvSU/FpQobk4lSV0YYI2e72DJXhQCo2bVseWyMvjQKiY25Ji4p6Bc8i5sSH93PlrV+RtOzAJAy/1BotxsSxa7hXXAUKAe+kJS/nHWRocYT8r/+QUfQMNguq24uZWgqUa6M0rzSLX0KFLqIHDeSvKpxoFg9abH7N5vRhR10Dq9eTznPvWtR3f/j8wBbQxHM2zqqx/6dsVy0gWI+KBzfCeFseUtIpNxn70jcSB7xdYJirBEnCMK2CGYufbTXHEZ4w21yWtpNs8N4iayBJqpN9KnnWFhmvLBVl4FjpDDo7miCqyf0RMAzdJQTRUaDV9j79uHbOCd83ebGVR/I+DUte42rXsr+xt+8S3ZRv07qW9C+KNpL/9zu71EwKGi8VLF3UoF5ylwsumjRhvYpJyVQ82+UjDCSVLUt8hTXSRn9+PXgGDCbSIPp6Ev4sYw7EVrk7wfb7ccw3hMgm7jJwtCfRD4FgpGuoKSpaqYEcwF2M44
-X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(31696002)(16576012)(336012)(316002)(6666004)(53546011)(82310400004)(47076005)(426003)(40460700003)(86362001)(36756003)(2616005)(4744005)(36860700001)(186003)(4326008)(7416002)(31686004)(5660300002)(110136005)(54906003)(83380400001)(8936002)(508600001)(8676002)(81166007)(2906002)(16526019)(26005)(70586007)(70206006)(356005)(36900700001)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Feb 2022 10:51:14.5466
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6881ccf2-f704-4578-54fc-08d9ea27c30b
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT018.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1427
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+X-Originating-IP: [10.75.127.45]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-07_04,2022-02-07_01,2021-12-02_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -116,32 +82,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/02/2022 12:07, Hans Schultz wrote:
-> Various switchcores support setting ports in locked mode, so that
-> clients behind locked ports cannot send traffic through the port
-> unless a fdb entry is added with the clients MAC address.
+Hi Dillon
+
+On 10/26/21 09:11, Dillon Min wrote:
+> This patchset introduces a basic support for DMA2D Interface
+> of STMicroelectronics STM32 SoC series.
 > 
-> Among the switchcores that support this feature is the Marvell
-> mv88e6xxx family.
+> This first basic support implements R2M, M2M, M2M_PFC
+> M2M_BLEND support will be added later on.
 > 
-> Signed-off-by: Hans Schultz <schultz.hans+netdev@gmail.com>
-> ---
->  net/bridge/br_switchdev.c | 2 +-
->  net/dsa/port.c            | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
+> This has been tested on STM32469-DISCO board.
 > 
 
-Hi,
-For some reason I still haven't received patch 01 which adds this new flag,
-so I'll comment on this patch first.
+...
 
-These should be 2 separate patches, there is no bridge: dsa:.
-Please break them into a bridge: and dsa: parts that add the flag, it also
-makes it easier for people who have to backport patches and fixes later.
+ARM DT patches ([3][4]) applied on stm32-next.
 
-In addition please mention in the commit message why the flag is
-added there, i.e. in order to allow to be offloaded.
-
-Thanks,
- Nik
+Thanks
+Alex
 

@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC2DC4ABA29
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:27:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B8134AB9D4
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:25:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382854AbiBGLVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:21:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53952 "EHLO
+        id S244808AbiBGLLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:11:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378265AbiBGLPr (ORCPT
+        with ESMTP id S239868AbiBGLIz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:15:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23900C0401E0;
-        Mon,  7 Feb 2022 03:15:26 -0800 (PST)
+        Mon, 7 Feb 2022 06:08:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B954C043181;
+        Mon,  7 Feb 2022 03:08:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A9772B811A6;
-        Mon,  7 Feb 2022 11:15:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D865BC340EB;
-        Mon,  7 Feb 2022 11:15:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DF00661370;
+        Mon,  7 Feb 2022 11:08:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6649C004E1;
+        Mon,  7 Feb 2022 11:08:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232518;
-        bh=Q97Eg1yGWPuCM9Q3yh8qkEPnDzvSL2qN4yS7WFruiwE=;
+        s=korg; t=1644232133;
+        bh=XEHOf2BWWJu2fV5Q2GdwzqBELmU+u4aevCPMAGrUlxw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=i+t9UBK86FQVpWdAq9ox81mTfRKsKXRG9ukGTiFHpvQjrjsW3e1Y4zyGWMEhn/ZoJ
-         t7+7k4ZnVisilCdHQMqOKR0E0+V7gJLcu5XBhuSRVxVS0q9Yjhq4Nwql5/vWRngOaS
-         MoxqYw1mw0jrOL5lYX8XvwP/xX0SAt4IGr0rmYEs=
+        b=HNuSKRD3Q2nA9kBqkcCwLqhw1vtdO28G9f1pbXpEnqBAnl3pRLJSNs79HHQhv/AsK
+         YkeLrp458XsBsItanEkX11u68ZrbFz/7FlbFVukNmNH2j4rRg+KQUE71fuKw2RkvTA
+         wbGH9TUYdnYoY8QZlOFty9gbFEG5D7soS9smNhdg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: [PATCH 4.19 36/86] drm/msm/dsi: invalid parameter check in msm_dsi_phy_enable
-Date:   Mon,  7 Feb 2022 12:05:59 +0100
-Message-Id: <20220207103758.713106289@linuxfoundation.org>
+        Florian Westphal <fw@strlen.de>,
+        Pablo Neira Ayuso <pablo@netfilter.org>
+Subject: [PATCH 4.9 27/48] netfilter: nat: limit port clash resolution attempts
+Date:   Mon,  7 Feb 2022 12:06:00 +0100
+Message-Id: <20220207103753.228797467@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103757.550973048@linuxfoundation.org>
-References: <20220207103757.550973048@linuxfoundation.org>
+In-Reply-To: <20220207103752.341184175@linuxfoundation.org>
+References: <20220207103752.341184175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,44 +54,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: José Expósito <jose.exposito89@gmail.com>
+From: Florian Westphal <fw@strlen.de>
 
-commit 5e761a2287234bc402ba7ef07129f5103bcd775c upstream.
+commit a504b703bb1da526a01593da0e4be2af9d9f5fa8 upstream.
 
-The function performs a check on the "phy" input parameter, however, it
-is used before the check.
+In case almost or all available ports are taken, clash resolution can
+take a very long time, resulting in soft lockup.
 
-Initialize the "dev" variable after the sanity check to avoid a possible
-NULL pointer dereference.
+This can happen when many to-be-natted hosts connect to same
+destination:port (e.g. a proxy) and all connections pass the same SNAT.
 
-Fixes: 5c8290284402b ("drm/msm/dsi: Split PHY drivers to separate files")
-Addresses-Coverity-ID: 1493860 ("Null pointer dereference")
-Signed-off-by: José Expósito <jose.exposito89@gmail.com>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Link: https://lore.kernel.org/r/20220116181844.7400-1-jose.exposito89@gmail.com
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Pick a random offset in the acceptable range, then try ever smaller
+number of adjacent port numbers, until either the limit is reached or a
+useable port was found.  This results in at most 248 attempts
+(128 + 64 + 32 + 16 + 8, i.e. 4 restarts with new search offset)
+instead of 64000+,
+
+Signed-off-by: Florian Westphal <fw@strlen.de>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/msm/dsi/phy/dsi_phy.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ net/netfilter/nf_nat_proto_common.c |   29 +++++++++++++++++++++++------
+ 1 file changed, 23 insertions(+), 6 deletions(-)
 
---- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
-+++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
-@@ -667,12 +667,14 @@ void __exit msm_dsi_phy_driver_unregiste
- int msm_dsi_phy_enable(struct msm_dsi_phy *phy, int src_pll_id,
- 			struct msm_dsi_phy_clk_request *clk_req)
+--- a/net/netfilter/nf_nat_proto_common.c
++++ b/net/netfilter/nf_nat_proto_common.c
+@@ -40,9 +40,10 @@ void nf_nat_l4proto_unique_tuple(const s
+ 				 enum nf_nat_manip_type maniptype,
+ 				 const struct nf_conn *ct)
  {
--	struct device *dev = &phy->pdev->dev;
-+	struct device *dev;
- 	int ret;
+-	unsigned int range_size, min, max, i;
++	unsigned int range_size, min, max, i, attempts;
+ 	__be16 *portptr;
+-	u_int16_t off;
++	u16 off;
++	static const unsigned int max_attempts = 128;
  
- 	if (!phy || !phy->cfg->ops.enable)
- 		return -EINVAL;
+ 	if (maniptype == NF_NAT_MANIP_SRC)
+ 		portptr = &tuple->src.u.all;
+@@ -86,12 +87,28 @@ void nf_nat_l4proto_unique_tuple(const s
+ 		off = prandom_u32();
+ 	}
  
-+	dev = &phy->pdev->dev;
+-	for (i = 0; ; ++off) {
++	attempts = range_size;
++	if (attempts > max_attempts)
++		attempts = max_attempts;
 +
- 	ret = dsi_phy_enable_resource(phy);
- 	if (ret) {
- 		dev_err(dev, "%s: resource enable failed, %d\n",
++	/* We are in softirq; doing a search of the entire range risks
++	 * soft lockup when all tuples are already used.
++	 *
++	 * If we can't find any free port from first offset, pick a new
++	 * one and try again, with ever smaller search window.
++	 */
++another_round:
++	for (i = 0; i < attempts; i++, off++) {
+ 		*portptr = htons(min + off % range_size);
+-		if (++i != range_size && nf_nat_used_tuple(tuple, ct))
+-			continue;
+-		return;
++		if (!nf_nat_used_tuple(tuple, ct))
++			return;
+ 	}
++
++	if (attempts >= range_size || attempts < 16)
++		return;
++	attempts /= 2;
++	off = prandom_u32();
++	goto another_round;
+ }
+ EXPORT_SYMBOL_GPL(nf_nat_l4proto_unique_tuple);
+ 
 
 

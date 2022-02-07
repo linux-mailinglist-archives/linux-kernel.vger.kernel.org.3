@@ -2,95 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FCED4ACBF6
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 23:21:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE57D4ACBFB
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 23:21:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244128AbiBGWUk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 17:20:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47466 "EHLO
+        id S244171AbiBGWVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 17:21:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235281AbiBGWUi (ORCPT
+        with ESMTP id S235281AbiBGWVF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 17:20:38 -0500
-Received: from mail-oo1-xc29.google.com (mail-oo1-xc29.google.com [IPv6:2607:f8b0:4864:20::c29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FAEEC061355;
-        Mon,  7 Feb 2022 14:20:38 -0800 (PST)
-Received: by mail-oo1-xc29.google.com with SMTP id v17-20020a4ac911000000b002eac41bb3f4so15346092ooq.10;
-        Mon, 07 Feb 2022 14:20:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+dK48uVj0k3aU+1COXYft3k4olQvQM3U7K5F7RnibMI=;
-        b=HmMhiuh3r1n9wGOT6mhwA/epDvAXghCp83nCmiJFCfRNe+4H6O3Z1C3wmNzcLSamZB
-         MFeqUJhlLn5Or7TbbzlhO4QqJJQ7gFLA4dYVUi89xTBxX4eLMG+5Lokof3PBCd51nVQg
-         XeTYce241ETs/Z1ab4/TVxSjiNrlN1nnwHUs1RaZl5/d6khzzTG1U5zEkbvZFqLmb4EW
-         s4ZCn+offMQtQxCbE32+4s1irn+pjDMija+m7pg+7aSjPAjtYfn+yqYB1vlBLnV8tsqP
-         J+Gsa3q1+a9e72289Gdii6E931ifV2v8Oj4fDz4QP1eXVUl9vunehzRD/1Ge8xmmXAEp
-         jlcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=+dK48uVj0k3aU+1COXYft3k4olQvQM3U7K5F7RnibMI=;
-        b=YzzuMshj8p0wSFAKozLSo796AuPs7+DqlID+X+jQchY3eJH90jyIPfPDvrKuHF4lSc
-         NSPZwuvA4CIo+eDl63RsiPxPNXGwFNq6MkxUh2Iw3msW9OuqkE6+KtxQ7FVxuq8Oan8h
-         yjJ0NMK8P+W31zpfF1wtkzKmi/GrsVrPp9kqimKA4bp4/srUeIhVT8akrFHIpYj8f6MK
-         6e1iyNw5tibe0vyMEMyaay1Cwk3UQXniTwYcFUhYfIZREpP0rz/GVKBvLIsd70fKFkbv
-         zjSQDkMd5B//HWsS/8ZQ/n369v+r7tiNbY46wMVijCYVxMAVuiblE+0dMbnrtB7ZjnGk
-         JMWw==
-X-Gm-Message-State: AOAM533tOR+782fu9mZ+7XOzEWvA821sA8i/m6YxkxfriTDTyl713/da
-        +mvNc08WAHIwRUee3E25kKY//BSY39eJHQ==
-X-Google-Smtp-Source: ABdhPJyefZMttAOmPv+bgufYcQ00Dg91WKBg4Lwd17NVpsTdrq3bLXGKu02Cqco+nk2+LzI6wIf1Ow==
-X-Received: by 2002:a05:6871:4091:: with SMTP id kz17mr339055oab.93.1644272437422;
-        Mon, 07 Feb 2022 14:20:37 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y3sm4865195oix.41.2022.02.07.14.20.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 14:20:36 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 7 Feb 2022 14:20:35 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 4.14 00/69] 4.14.265-rc1 review
-Message-ID: <20220207222035.GB3388316@roeck-us.net>
-References: <20220207103755.604121441@linuxfoundation.org>
+        Mon, 7 Feb 2022 17:21:05 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B006C061355
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 14:21:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DED3AB8170A
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 22:21:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82C77C340F2
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 22:21:01 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="UQlYmPI8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1644272459;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=z1WhZRohSjwF5ki35hFdGu7AARlsDBZkg+dcLZ/0i5w=;
+        b=UQlYmPI88xkNa9f3my5R+9vh2+tf91E5VuFOdmp/AVAgySp/D7HXKMkoP2dV6s4WIHlB12
+        HqUtwOqpX8X+wEngg9BV4Vxl+VEKZio0vkJNcYqRUZu8JHMWKYGw1OevwUlOtItqy0Ky0v
+        QeukkrwQK3wcaNnHX9cTJ+b/kwJz+4M=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 4b6d17a6 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
+        for <linux-kernel@vger.kernel.org>;
+        Mon, 7 Feb 2022 22:20:59 +0000 (UTC)
+Received: by mail-yb1-f172.google.com with SMTP id g14so44305724ybs.8
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 14:20:58 -0800 (PST)
+X-Gm-Message-State: AOAM533yyLHKCSCBNrE2GVL50SQ97qjgry2dJRBnQ8MladvW40NuPiJD
+        3b2nRuEHhBol0YYjOH0By+rU1z5UM/B+OpFFl28=
+X-Google-Smtp-Source: ABdhPJxCYVW8NPJ99IONZJRMtzLDEIz5VUL+CfPdsmsLWtOOqE8o3Shoi69FlfCvvnx4OZsYATYNZJO9QRKRq78dZmM=
+X-Received: by 2002:a81:1084:: with SMTP id 126mr2128376ywq.231.1644272458038;
+ Mon, 07 Feb 2022 14:20:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220207103755.604121441@linuxfoundation.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <e10b79cf-d6d5-ffcc-bce4-edd92b7cb6b9@molgen.mpg.de>
+ <CAHmME9pktmNpcBS_DJhJ5Z+6xO9P1wroQ9_gwx8KZMBxk1FBeQ@mail.gmail.com>
+ <CAG48ez2P9-CAdgRizcp5T_uuoXRAt0xtodh1doiMW0fKZVX-7g@mail.gmail.com>
+ <CAG48ez3wZOZZX1UHM-Q=KhOnnGR85Unm08q7jT_wVfOq0PW94Q@mail.gmail.com> <CAHmME9oaj5g==Rhq6HvrxSHHfo-v1whdzwWTWFqmrDw8sBHqoA@mail.gmail.com>
+In-Reply-To: <CAHmME9oaj5g==Rhq6HvrxSHHfo-v1whdzwWTWFqmrDw8sBHqoA@mail.gmail.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Mon, 7 Feb 2022 23:20:47 +0100
+X-Gmail-Original-Message-ID: <CAHmME9phcxQ8gLpBLVwyJszPdnpxOdeTgcDYzno-TLdV15HZcw@mail.gmail.com>
+Message-ID: <CAHmME9phcxQ8gLpBLVwyJszPdnpxOdeTgcDYzno-TLdV15HZcw@mail.gmail.com>
+Subject: Re: BUG: KCSAN: data-race in add_device_randomness+0x20d/0x290
+To:     Jann Horn <jannh@google.com>
+Cc:     pmenzel@molgen.mpg.de, "Theodore Y. Ts'o" <tytso@mit.edu>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 12:05:22PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.14.265 release.
-> There are 69 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 09 Feb 2022 10:37:42 +0000.
-> Anything received after that time might be too late.
-> 
+Narrowing this a bit by looking at the disassembly from as similar as
+a config as I could infer, there are three calls to _tsan_read1():
 
-Build results:
-	total: 168 pass: 168 fail: 0
-Qemu test results:
-	total: 424 pass: 424 fail: 0
+1. ... = lfsr;
+2. ... = dest_buf[i % CHACHA_KEY_SIZE];
+3. ... ^= src_buf[i % len] ...
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
-
-Guenter
+1. lfsr, as you mentioned, appears protected by primary_crng.lock.
+2. dest_buf is &primary_crng.state, which /should/ be protected by
+primary_crng.lock. The only place where it's not is rand_initialize(),
+but this is an early boot function that should complete well in
+advance of where we are.
+3. That would be tsk->se.sum_exec_runtime...

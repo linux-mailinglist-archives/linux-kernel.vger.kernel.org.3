@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AAB14AC5B0
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 17:33:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B83504AC5B3
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 17:33:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388441AbiBGQaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 11:30:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60916 "EHLO
+        id S1389786AbiBGQan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 11:30:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242367AbiBGQ0O (ORCPT
+        with ESMTP id S1380026AbiBGQ0X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 11:26:14 -0500
+        Mon, 7 Feb 2022 11:26:23 -0500
 Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EE3E5C0401D1
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 08:26:13 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 21EE4C0401CF
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 08:26:20 -0800 (PST)
 Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 217GOexf014412;
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 217GOeRj014413;
         Mon, 7 Feb 2022 17:24:40 +0100
 From:   Willy Tarreau <w@1wt.eu>
 To:     "Paul E . McKenney" <paulmck@kernel.org>
 Cc:     Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
         Willy Tarreau <w@1wt.eu>
-Subject: [PATCH 29/42] tools/nolibc/string: slightly simplify memmove()
-Date:   Mon,  7 Feb 2022 17:23:41 +0100
-Message-Id: <20220207162354.14293-30-w@1wt.eu>
+Subject: [PATCH 30/42] tools/nolibc/string: add strncpy() and strlcpy()
+Date:   Mon,  7 Feb 2022 17:23:42 +0100
+Message-Id: <20220207162354.14293-31-w@1wt.eu>
 X-Mailer: git-send-email 2.17.5
 In-Reply-To: <20220207162354.14293-1-w@1wt.eu>
 References: <20220207162354.14293-1-w@1wt.eu>
@@ -37,51 +37,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The direction test inside the loop was not always completely optimized,
-resulting in a larger than necessary function. This change adds a
-direction variable that is set out of the loop. Now the function is down
-to 48 bytes on x86, 32 on ARM and 68 on mips. It's worth noting that other
-approaches were attempted (including relying on the up and down functions)
-but they were only slightly beneficial on x86 and cost more on others.
+These are minimal variants. strncpy() always fills the destination for
+<size> chars, while strlcpy() copies no more than <size> including the
+zero and returns the source's length. The respective sizes on various
+archs are:
+
+  strncpy(): x86:0x1f mips:0x30 arm:0x20
+  strlcpy(): x86:0x17 mips:0x34 arm:0x1a
 
 Signed-off-by: Willy Tarreau <w@1wt.eu>
 ---
- tools/include/nolibc/string.h | 20 ++++++++++++++------
- 1 file changed, 14 insertions(+), 6 deletions(-)
+ tools/include/nolibc/string.h | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
 diff --git a/tools/include/nolibc/string.h b/tools/include/nolibc/string.h
-index 6d8fad7a92e6..b831a02de83f 100644
+index b831a02de83f..7c274efcdfae 100644
 --- a/tools/include/nolibc/string.h
 +++ b/tools/include/nolibc/string.h
-@@ -50,14 +50,22 @@ void *_nolibc_memcpy_down(void *dst, const void *src, size_t len)
- static __attribute__((unused))
- void *memmove(void *dst, const void *src, size_t len)
- {
--	ssize_t pos = (dst <= src) ? -1 : (long)len;
--	void *ret = dst;
-+	size_t dir, pos;
+@@ -121,6 +121,34 @@ size_t nolibc_strlen(const char *str)
+ 		nolibc_strlen((str));           \
+ })
  
--	while (len--) {
--		pos += (dst <= src) ? 1 : -1;
--		((char *)dst)[pos] = ((char *)src)[pos];
-+	pos = len;
-+	dir = -1;
++static __attribute__((unused))
++size_t strlcpy(char *dst, const char *src, size_t size)
++{
++	size_t len;
++	char c;
 +
-+	if (dst < src) {
-+		pos = -1;
-+		dir = 1;
++	for (len = 0;;) {
++		c = src[len];
++		if (len < size)
++			dst[len] = c;
++		if (!c)
++			break;
++		len++;
 +	}
++	return len;
++}
 +
-+	while (len) {
-+		pos += dir;
-+		((char *)dst)[pos] = ((const char *)src)[pos];
-+		len--;
- 	}
--	return ret;
++static __attribute__((unused))
++char *strncpy(char *dst, const char *src, size_t size)
++{
++	size_t len;
++
++	for (len = 0; len < size; len++)
++		if ((dst[len] = *src))
++			src++;
 +	return dst;
- }
- 
- /* must be exported, as it's used by libgcc on ARM */
++}
++
+ static __attribute__((unused))
+ char *strrchr(const char *s, int c)
+ {
 -- 
 2.35.1
 

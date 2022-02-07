@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5D114ABCF5
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:55:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E7274AB9F7
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:26:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388468AbiBGLno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:43:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44562 "EHLO
+        id S1382440AbiBGLTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:19:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385754AbiBGLc1 (ORCPT
+        with ESMTP id S1356790AbiBGLNw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:32:27 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E47ACC0401C2;
-        Mon,  7 Feb 2022 03:32:26 -0800 (PST)
+        Mon, 7 Feb 2022 06:13:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45545C043181;
+        Mon,  7 Feb 2022 03:13:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A5EF4B80EC3;
-        Mon,  7 Feb 2022 11:32:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF268C004E1;
-        Mon,  7 Feb 2022 11:32:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D87086113B;
+        Mon,  7 Feb 2022 11:13:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C100CC004E1;
+        Mon,  7 Feb 2022 11:13:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233544;
-        bh=yXOodRqUYTtTkw1TE/eivAQOedKt74N5rdHbQhj10b0=;
+        s=korg; t=1644232431;
+        bh=ZgHTpfB1Lw6sGk4se2ymlqSay6WE68L2OOWNGliZFQs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1aeLTRz5CW7uScQNfnVmbne2QRbmRhBq0bJm3cpnwMcSiQmrNWAWAGgtJd2vszXG1
-         3eAo1SsMVlOvg0RPAFXedS3b9XFJxVYWgH+czJLMhgJoiYz0wfPhDpufenASrxbXcH
-         Inthf4/Z5KdezFpsLYpZHR+cujcG1b90BZVTbJ1c=
+        b=MCg9vfW/nCXMZbj8CimTM7fgGcwXooQyK5hgepe6WYAWWjMD8EH3bl77/JmRcbcsK
+         0G8kDBi49VprOzqp+KiXLEmq0Mh19A+F0C83b3mgdvpCBGR1+Q/ILLTweq+7lrIYut
+         sdqztYHjn9Jwbbak/6eOlC/VTlyZqU0fVf1sldKc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Steven Price <steven.price@arm.com>,
-        James Morse <james.morse@arm.com>,
-        Marc Zyngier <maz@kernel.org>
-Subject: [PATCH 5.16 045/126] KVM: arm64: Avoid consuming a stale esr value when SError occur
-Date:   Mon,  7 Feb 2022 12:06:16 +0100
-Message-Id: <20220207103805.675591778@linuxfoundation.org>
+        stable@vger.kernel.org, Kamal Dasu <kdasu.kdev@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH 4.14 55/69] spi: bcm-qspi: check for valid cs before applying chip select
+Date:   Mon,  7 Feb 2022 12:06:17 +0100
+Message-Id: <20220207103757.433746148@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
-References: <20220207103804.053675072@linuxfoundation.org>
+In-Reply-To: <20220207103755.604121441@linuxfoundation.org>
+References: <20220207103755.604121441@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,51 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: James Morse <james.morse@arm.com>
+From: Kamal Dasu <kdasu.kdev@gmail.com>
 
-commit 1c71dbc8a179d99dd9bb7e7fc1888db613cf85de upstream.
+commit 2cbd27267ffe020af1442b95ec57f59a157ba85c upstream.
 
-When any exception other than an IRQ occurs, the CPU updates the ESR_EL2
-register with the exception syndrome. An SError may also become pending,
-and will be synchronised by KVM. KVM notes the exception type, and whether
-an SError was synchronised in exit_code.
+Apply only valid chip select value. This change fixes case where chip
+select is set to initial value of '-1' during probe and  PM supend and
+subsequent resume can try to use the value with undefined behaviour.
+Also in case where gpio based chip select, the check in
+bcm_qspi_chip_select() shall prevent undefined behaviour on resume.
 
-When an exception other than an IRQ occurs, fixup_guest_exit() updates
-vcpu->arch.fault.esr_el2 from the hardware register. When an SError was
-synchronised, the vcpu esr value is used to determine if the exception
-was due to an HVC. If so, ELR_EL2 is moved back one instruction. This
-is so that KVM can process the SError first, and re-execute the HVC if
-the guest survives the SError.
-
-But if an IRQ synchronises an SError, the vcpu's esr value is stale.
-If the previous non-IRQ exception was an HVC, KVM will corrupt ELR_EL2,
-causing an unrelated guest instruction to be executed twice.
-
-Check ARM_EXCEPTION_CODE() before messing with ELR_EL2, IRQs don't
-update this register so don't need to check.
-
-Fixes: defe21f49bc9 ("KVM: arm64: Move PC rollback on SError to HYP")
-Cc: stable@vger.kernel.org
-Reported-by: Steven Price <steven.price@arm.com>
-Signed-off-by: James Morse <james.morse@arm.com>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220127122052.1584324-3-james.morse@arm.com
+Fixes: fa236a7ef240 ("spi: bcm-qspi: Add Broadcom MSPI driver")
+Signed-off-by: Kamal Dasu <kdasu.kdev@gmail.com>
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+Link: https://lore.kernel.org/r/20220127185359.27322-1-kdasu.kdev@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/kvm/hyp/include/hyp/switch.h |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/spi/spi-bcm-qspi.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/arch/arm64/kvm/hyp/include/hyp/switch.h
-+++ b/arch/arm64/kvm/hyp/include/hyp/switch.h
-@@ -446,7 +446,8 @@ static inline bool fixup_guest_exit(stru
- 	if (ARM_EXCEPTION_CODE(*exit_code) != ARM_EXCEPTION_IRQ)
- 		vcpu->arch.fault.esr_el2 = read_sysreg_el2(SYS_ESR);
+--- a/drivers/spi/spi-bcm-qspi.c
++++ b/drivers/spi/spi-bcm-qspi.c
+@@ -522,7 +522,7 @@ static void bcm_qspi_chip_select(struct
+ 	u32 rd = 0;
+ 	u32 wr = 0;
  
--	if (ARM_SERROR_PENDING(*exit_code)) {
-+	if (ARM_SERROR_PENDING(*exit_code) &&
-+	    ARM_EXCEPTION_CODE(*exit_code) != ARM_EXCEPTION_IRQ) {
- 		u8 esr_ec = kvm_vcpu_trap_get_class(vcpu);
- 
- 		/*
+-	if (qspi->base[CHIP_SELECT]) {
++	if (cs >= 0 && qspi->base[CHIP_SELECT]) {
+ 		rd = bcm_qspi_read(qspi, CHIP_SELECT, 0);
+ 		wr = (rd & ~0xff) | (1 << cs);
+ 		if (rd == wr)
 
 

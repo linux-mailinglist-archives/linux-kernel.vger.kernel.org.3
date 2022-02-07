@@ -2,91 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D4BC4AC105
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 15:21:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 259404AC0F3
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 15:21:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391275AbiBGOTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 09:19:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60850 "EHLO
+        id S1388700AbiBGOSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 09:18:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382372AbiBGOOl (ORCPT
+        with ESMTP id S235071AbiBGOPB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 09:14:41 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 316DBC0401C0
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 06:14:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644243281; x=1675779281;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0HnYO7OclOrVsG+5Z5WQVd9GI5Heaz31PmHddPJ8d0Y=;
-  b=EChEU4SPuWxJXuHeXcisr8O/xWN9IeJ5D9feWFjgYNbp5F42Av4G3koc
-   uTgAU4hzSWNffj1W2TD8UWPC6JbklrY4zz3IcyH6c98UBMOQYMFSO0auS
-   jAkdRKQbJKh73PVC3GIqRqfBVeoEk17f3O/tAAc2R7WfJxZ64P3rLvjRb
-   fOt76uDD7r/t3qVVQ8ZkRKRpOAVEcb1/p4fMHrEQCiqrzRHqmxzAcrq7z
-   x3gM+zOiJ1gracG+I5E3Kir/4h+eiN+NSFS++flFi2CUmOPxfiOhXMXco
-   /utV9j0Kwl1TZPLUr+uieHkya0b/G4UDQ+athOybqace8+GlMuGRsJR5/
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10250"; a="335126855"
-X-IronPort-AV: E=Sophos;i="5.88,349,1635231600"; 
-   d="scan'208";a="335126855"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 06:14:40 -0800
-X-IronPort-AV: E=Sophos;i="5.88,349,1635231600"; 
-   d="scan'208";a="484434402"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 06:14:39 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nH4lw-001vTI-QA;
-        Mon, 07 Feb 2022 16:13:40 +0200
-Date:   Mon, 7 Feb 2022 16:13:40 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Rodolfo Giometti <giometti@enneenne.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v3 1/1] pps: generators: pps_gen_parport: Switch to use
- module_parport_driver()
-Message-ID: <YgEpFCPX+sjDPlU+@smile.fi.intel.com>
-References: <20220207131652.13316-1-andriy.shevchenko@linux.intel.com>
+        Mon, 7 Feb 2022 09:15:01 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F81AC0401C0;
+        Mon,  7 Feb 2022 06:15:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DE95B60A57;
+        Mon,  7 Feb 2022 14:14:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACF23C004E1;
+        Mon,  7 Feb 2022 14:14:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644243299;
+        bh=kXCavZxVDpPavOetLGC5KN88JPcZOskGkjpwki3m8Q4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tqOZR3W07vwmXzQCM2E0Jpg29RkdWgGlOikhYShhnfwqLUDp3bwc9NNnNvRRNrEdS
+         NG74LGgdD+pQO0gGxzbxZtLTFn2WfDh7izPqjiqifo1BhL63ZWsPi4fea1HrhNneOw
+         XJezewxS0cAkDkZCAlbvMqDOCn11nAIi7erEPS09RUSMmo495JbQbb9dVeoYYW15Bo
+         B/vG92mt3hmQk4bi6PghWSswbxtq/mcqFkFrcbTw1CxiUXju0ZsYJH+LDz+b9JLkxt
+         5a5EqC2ZB6xulm11xwaKRxewuYvS+Vn1uZazPSwvWlsiqgoy0bOeyna9J1j9vZscoo
+         xZmftkPnQXOWw==
+Date:   Mon, 7 Feb 2022 15:14:56 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Ajay Gupta <ajayg@nvidia.com>,
+        "Shah, Nehal-bakulchandra" <nehal-bakulchandra.shah@amd.com>
+Subject: Re: [PATCH v3 1/5] i2c: Introduce common module to instantiate CCGx
+ UCSI
+Message-ID: <YgEpYE2VNc05XhpG@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Ajay Gupta <ajayg@nvidia.com>,
+        "Shah, Nehal-bakulchandra" <nehal-bakulchandra.shah@amd.com>
+References: <20220105141935.24109-1-andriy.shevchenko@linux.intel.com>
+ <Ye7AhqMsOkfvHOAg@smile.fi.intel.com>
+ <YgEa/blO2UMzztCq@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5Q9Y37aHm32GDcLx"
 Content-Disposition: inline
-In-Reply-To: <20220207131652.13316-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <YgEa/blO2UMzztCq@smile.fi.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 03:16:52PM +0200, Andy Shevchenko wrote:
-> Switch to use module_parport_driver() to reduce boilerplate code.
 
-...
-
-> v3: added Ack (Rodolfo), Cc'ed to Greg for picking it up
-
-> +	if (send_delay > SEND_DELAY_MAX) {
-> +		pr_err("delay value should be not greater then %d\n", SEND_DELAY_MAX);
-> +		return -EINVAL;
-
-Argh!
-
-This has been derived from v1 and not v2, sorry.
-v4 will be sent to address this.
+--5Q9Y37aHm32GDcLx
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
 
-> +	}
+> > Ajay, is it possible to get your tag on the series, please?
+>=20
+> Wolfram, can you remind, please, what the process is, if there is
+> a non-responsive (in a meaningful period of time) maintainer?
+
+Well, I can apply patches if there is no response but interest and
+reasonable trust, of course. Your series has interest and trust. But
+still, it may be nice to ping active people from Nvidia and ask about
+Ajay.
 
 
--- 
-With Best Regards,
-Andy Shevchenko
+--5Q9Y37aHm32GDcLx
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIBKVwACgkQFA3kzBSg
+Kba05RAAk9nEfFctEY0932pfK/smckobW69iSd1by93obopbJTmi5wR0SzqHaCBq
+PQwjiH+vW1OBkwE1oTr1L5CJnub3EB1dnfjmQV5maDyVx/wHO/gVwlsNiDtO8/fG
+AAv7b1EP7jXtbcGMhaB9CDf6K9ZCCb4PuQbe5Wdk0ijcPeDiQbpzgf1yxC522SS/
+dcJbeb5Uth2Mad4G29yyqBlykJW/I2iXDVy3sahMin1c/6hhMkXYJBsodrztKmbt
+3vK6JXRCktFemcKH+SduSmo3Oa3ELwqcphCk+5u65YIEX2hJm9W3+ffakIQVpnRo
+lDoRcJBo63KjJOQvDzN3aDexUgzss42s18/EtEyFVQgsW3zxF3e4sgexn1tii5fj
+KTV9ejhDvlLK4FxijYYTs7IpqOdqwnc9rRmtS1lffVHP04gNoT7RaFbxsLxqrky0
+IxfRUDdJPRdK27M709iGszlYww9SUpSbBuNBbwMC+LgXXPRR2YW0JvoPpWg9Oo20
+MC4B+aQvzW/ubcEYUjaYytGfCca1Ulmm7Zr/sau3IY6zw0gyh/UZtDlg2LTUBzVS
+WpaFNaZpZ7WrdrbnZBZ/6Di3xvGtvgheqPQpaHhajrpeSxlrqCgh0rXMBxe/m7t0
+feKmmC6ffTMWpjUrz7ZZFp/aktcBe7bIZ3ftQlb6dBf9CgE9OX4=
+=HfHu
+-----END PGP SIGNATURE-----
+
+--5Q9Y37aHm32GDcLx--

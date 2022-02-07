@@ -2,160 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A8684ACAC0
+	by mail.lfdr.de (Postfix) with ESMTP id D9CFD4ACAC1
 	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 21:52:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234844AbiBGUuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 15:50:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59856 "EHLO
+        id S235499AbiBGUua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 15:50:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234500AbiBGUuI (ORCPT
+        with ESMTP id S234500AbiBGUuV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 15:50:08 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63A5AC06173B;
-        Mon,  7 Feb 2022 12:50:07 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id eg42so17050814edb.7;
-        Mon, 07 Feb 2022 12:50:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qANdVIXCMVhjPuSivu0hrfa8oVru7nw+lgS/w//R+RE=;
-        b=JoNuzVH/O+lLHTezpYLCs+MUz3Rrigv/zPwrdB/Cr6Or812bKwPMSHL+15qJz3t35Q
-         eF+fL+nakoKfoA4mYbcjYn+Q/tMirBm+jfju65smbn+cZOwZOT94/e7hnQpyRTNK0ski
-         JZSXYY4NvZtdlYRDfFJSx1bj3pDz0G4Km0ywk7NGjQcFUx6i4u4MW6CrkHFNR045BeaJ
-         VKUwU7y/mZ+XG6EzC/r4NrAYanpEaRJLL4Iilo/4AaCI4m1GpQ9lDWUvdQ2EiGbdUZO4
-         ZOspzY2T/cB5xQ0w2QsezfKaoT6K8SGtYW4KHtB0fjSIas73Y/7dHoTAuUcwPEFigyAH
-         CX/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qANdVIXCMVhjPuSivu0hrfa8oVru7nw+lgS/w//R+RE=;
-        b=iXcB5WmP+RbEhAfU4Br/hlAw+TqVxwLEMtE4+dUVXlyJGpw57tPliVSGsg2n2qQce/
-         bBIvu0eqeZ+5794yYxs2go7GmNNGqWsQ9zGiQx2cbtDMxuOtfA1NOFPG+apJZg/CShpr
-         HjqqBZxzW7hC2ekJq5x+5vx42fgplCSpgE5bUCkpLW995I4UpinJprNTswGy7psJhgOo
-         3cyDDW/yZ1wKmCziFTd94yxc2tibVWK6QAA9tHEdYWYepsp+Xp+FKfetg1ssQkhBzYYm
-         Jj8XVAE8jue9DuoJ0Sgaytq0xB+JZlelHzcR7j011lHSt0JT85QGMRBE+LvYlksVfCRR
-         L8Gg==
-X-Gm-Message-State: AOAM533cfsZPTWrrwYGS5CrSCFikLSr8LbGjxlbipzddkrx4i1lqu1pF
-        5xhrZK10Oj633sEqN7um/zvsZQkJpTsWRwOqtOk=
-X-Google-Smtp-Source: ABdhPJwUkvLG3szeNM72tsDqCo7WERJYIsWjEU0x/ajOdiio0nC4TYaVtjs7HDFrhdAG0j5IL8ZSUVHc73eBW5CqG0I=
-X-Received: by 2002:a05:6402:268d:: with SMTP id w13mr1263663edd.287.1644267005940;
- Mon, 07 Feb 2022 12:50:05 -0800 (PST)
+        Mon, 7 Feb 2022 15:50:21 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A920C06173B;
+        Mon,  7 Feb 2022 12:50:19 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id 489061F449A7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1644267017;
+        bh=3lS6N5RJps0OJmMkGwekeXsU2Va8vgdu8W44CQNZmXM=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=movQ8j5Qfu3B5UzmjKxjVkNVTWCBwElWoP+woePSYr7NjRY1jTFKP1lAts5SqQl8g
+         eOJdCW973qIxeq3Corq05gMIzs1kOR95/89Z2QDJtpXUYSBnsbALWRU9IL0yLON2Ro
+         fmq3Uj9hlX33ztZwnm6ApgNnj/NShdal1MRL6yijnnNE2H4Nu0WevBJUU0idmUMCau
+         JIGLnSSrMMnP1fUi8vkGfQv1vg9ulXiUhnnCxZHp7HgNTtSkVgfhO34uiiS+exSerU
+         M8iAx2my//x6rg1gLCVc/TPcHks7BVOCvB9efI6GjxuBu985crIr5lbSd5Q2ErkM4R
+         hGHDQpneVnCGw==
+Message-ID: <24d02704-e590-63d0-4d8a-c76578249bea@collabora.com>
+Date:   Tue, 8 Feb 2022 01:50:09 +0500
 MIME-Version: 1.0
-References: <20220204225706.1539818-1-marcel@ziswiler.com> <20220204225706.1539818-13-marcel@ziswiler.com>
-In-Reply-To: <20220204225706.1539818-13-marcel@ziswiler.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Mon, 7 Feb 2022 17:49:55 -0300
-Message-ID: <CAOMZO5D-i5m8ktXkxSmTcTr2NzpnuYFF3KsqTOO+HCxypkRNmQ@mail.gmail.com>
-Subject: Re: [PATCH v4 12/12] arm64: dts: freescale: add initial support for
- verdin imx8m mini
-To:     Marcel Ziswiler <marcel@ziswiler.com>
-Cc:     "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Alex Marginean <alexandru.marginean@nxp.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        "Ariel D'Alessandro" <ariel.dalessandro@collabora.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Jacky Bai <ping.bai@nxp.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Olof Johansson <olof@lixom.net>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Tim Harvey <tharvey@gateworks.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Cc:     usama.anjum@collabora.com, kernel@collabora.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] selftests: futex: set DEFAULT_INSTALL_HDR_PATH
+Content-Language: en-US
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>,
+        Shuah Khan <shuah@kernel.org>
+References: <20220119103332.2887370-1-usama.anjum@collabora.com>
+ <3a4878b9-f175-f16f-a901-efc33b2bf89f@linuxfoundation.org>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <3a4878b9-f175-f16f-a901-efc33b2bf89f@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marcel,
+On 2/7/22 11:40 PM, Shuah Khan wrote:
+> On 1/19/22 3:33 AM, Muhammad Usama Anjum wrote:
+>> If only futex selftest is compiled, uapi header files are copied to the
+>> selftests/futex/functional directory. This copy isn't needed. Set the
+>> DEFAULT_INSTALL_HDR_PATH variable to 1 to use the default header install
+>> path only. This removes extra copy of header file.
+>>
+>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>> ---
+>>   tools/testing/selftests/futex/functional/Makefile | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/tools/testing/selftests/futex/functional/Makefile
+>> b/tools/testing/selftests/futex/functional/Makefile
+>> index 5cc38de9d8ea..9a8c3700d773 100644
+>> --- a/tools/testing/selftests/futex/functional/Makefile
+>> +++ b/tools/testing/selftests/futex/functional/Makefile
+>> @@ -24,6 +24,7 @@ TEST_PROGS := run.sh
+>>     top_srcdir = ../../../../..
+>>   KSFT_KHDR_INSTALL := 1
+>> +DEFAULT_INSTALL_HDR_PATH := 1
+>>   include ../../lib.mk
+>>     $(TEST_GEN_FILES): $(HEADERS)
+>>
+> 
+> This will be a good cleanup. However, please make there is no dependencies
+> in the futex test sub-dirs on being able to find the headers under futex
+> 
+I've tried the following variations. The build is fine.
 
-On Fri, Feb 4, 2022 at 7:58 PM Marcel Ziswiler <marcel@ziswiler.com> wrote:
+cd tools/testing/selftests/futex/functional
+make
 
-> +/* On-module Wi-Fi */
-> +&usdhc3 {
-> +       bus-width = <4>;
-> +       keep-power-in-suspend;
-> +       non-removable;
-> +       pinctrl-names = "default", "state_100mhz", "state_200mhz";
-> +       pinctrl-0 = <&pinctrl_usdhc3>, <&pinctrl_wifi_ctrl>;
-> +       pinctrl-1 = <&pinctrl_usdhc3_100mhz>, <&pinctrl_wifi_ctrl>;
-> +       pinctrl-2 = <&pinctrl_usdhc3_200mhz>, <&pinctrl_wifi_ctrl>;
-> +       vmmc-supply = <&reg_wifi_en>;
-> +       wifi-host;
+cd tools/testing/selftests/futex/
+make
 
-wifi-host is not a valid property.
+make -C tools/testing/selftests/
 
-> +               /* Use the kernel configuration settings instead */
-> +               /delete-node/ linux,cma;
-> +
-> +               rpmsg_reserved: rpmsg@b8000000 {
+> I vaguely remember leaving this in place for reason.
+> 
+This must have been fixed in previous changes made to the build system.
 
-I suppose this comes from the NXP vendor BSP and does not apply upstream.
-
-> +/* Verdin CAN_1 (On-module) */
-> +&ecspi3 {
-> +       #address-cells = <1>;
-> +       #size-cells = <0>;
-> +       cs-gpios = <&gpio5 25 GPIO_ACTIVE_LOW>,
-> +                  <&gpio1 5 GPIO_ACTIVE_LOW>;
-> +       spi-num-chipselects = <2>;
-
-No need to specify "spi-num-chipselects". It is implicit by cs-gpios.
-
-> +
-> +&usbmisc1 {
-> +       vbus-wakeup-supply = <&reg_vdd_3v3>;
-
-Not a valid property.
-
-> +};
-> +
-> +&usbmisc2 {
-> +       vbus-wakeup-supply = <&reg_vdd_3v3>;
-
-Ditto.
-
-> +};
-> +
-> +/* Verdin USB_1 */
-> +&usbotg1 {
-> +       adp-disable;
-> +       dr_mode = "otg";
-> +       hnp-disable;
-> +       over-current-active-low;
-> +       picophy,dc-vol-level-adjust = <7>;
-
-I guess you meant: samsung,picophy-dc-vol-level-adjust
-
-> +       picophy,pre-emp-curr-control = <3>;
-
-I guess you meant: samsung,picophy-pre-emp-curr-control
-
-> +&usbotg2 {
-> +       dr_mode = "host";
-> +       over-current-active-low;
-> +       picophy,dc-vol-level-adjust = <7>;
-> +       picophy,pre-emp-curr-control = <3>;
-
-Same here.
+> thanks,
+> -- Shuah
+> 

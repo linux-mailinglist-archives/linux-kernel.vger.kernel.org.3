@@ -2,112 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 422FB4ACC37
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 23:45:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 648764ACC3D
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 23:46:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244815AbiBGWpc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 17:45:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57352 "EHLO
+        id S244956AbiBGWpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 17:45:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232785AbiBGWpa (ORCPT
+        with ESMTP id S241061AbiBGWps (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 17:45:30 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F79CC061355;
-        Mon,  7 Feb 2022 14:45:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644273930; x=1675809930;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=/kRBeLG+E+e8Fa1In5ioSuQHyPxsmnGL5vggy8pd18g=;
-  b=L6SMl1Wzjc6+j7JJ1y2Lgf+pB80PjC4QCBiQIGcT7m2EFERHHhcShqyV
-   9D4gdeJfpBJSVBZAbYcemgwB0uixZsXj/Amp+x8enWsiixH/pz6QINWLv
-   hCNqVK714QoFAYPa4suZwB22t1JHIqlLYXolXjUUrJhN3qCQ/U+Bk+n4U
-   c7mB8IoZ48yAGiu4XP9VPxw+o3bOmyUKkSOLvpebKRIhvE3j2wZe9Droi
-   S2yF9vARnm5aVXVLEK05G2DFvtTm5bnwu7pD+d/vCM2b1sHzsOOSzZ7lu
-   iaGpoSXYfoBTwFg2ERt9AFrFhbZB3hh7JkoBpeN0QT9Zl9y0/u4dCo7Q2
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="248772082"
-X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
-   d="scan'208";a="248772082"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 14:45:30 -0800
-X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
-   d="scan'208";a="525308323"
-Received: from hgrunes-mobl1.amr.corp.intel.com (HELO [10.251.3.57]) ([10.251.3.57])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 14:45:29 -0800
-Message-ID: <b9d48ed0-699b-585c-a52c-46d789c11dc9@intel.com>
-Date:   Mon, 7 Feb 2022 14:45:26 -0800
+        Mon, 7 Feb 2022 17:45:48 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C7FC061355;
+        Mon,  7 Feb 2022 14:45:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 23A69CE12FB;
+        Mon,  7 Feb 2022 22:45:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF302C340F0;
+        Mon,  7 Feb 2022 22:45:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644273942;
+        bh=qkq40yCflGjOJ7y7JTzQbQGfwF6s4zzKqH433+KJ92U=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=EP7em8vg/cCJr5iKdH/kyYQXa1Da0wtpS6sxh0EW2W5/Zi2G2gDehBQoES1B722EY
+         863M9KTi5IyMdpjVrzSXZRfe+FAaV2BsqwWJh44tv2mpUBkMDfc3WDAwv+uAuo2bZY
+         lDQpt4AmDKX/N8k9ia9Kd6nRFHSe24+/6zW8TGYKc5HPwcdcIr93Xmo69B7ianvdf8
+         P/4emvsuvRHisUm02S69R5PBKLSPGnhjn4c8L330+yQrM7/w0Wk5brMWCnpKUb3Bwp
+         51tk43LFbP2hTF3+cigGAcaZMZXF6Gi+yTQVDOe89Bej8fFpaxnRGtxND0vPbKgg/Z
+         z7n9llszolzqw==
+Date:   Mon, 7 Feb 2022 16:45:40 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     linux-pci@vger.kernel.org
+Cc:     joey.corleone@mail.ru, Jan Kiszka <jan.kiszka@siemens.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [Bug 215533] [BISECTED][REGRESSION] UI becomes unresponsive
+ every couple of seconds
+Message-ID: <20220207224540.GA425996@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com
-Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
- <20220130211838.8382-4-rick.p.edgecombe@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH 03/35] x86/cpufeatures: Add CET CPU feature flags for
- Control-flow Enforcement Technology (CET)
-In-Reply-To: <20220130211838.8382-4-rick.p.edgecombe@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220126121250.GA1694509@bhelgaas>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/30/22 13:18, Rick Edgecombe wrote:
-> --- a/arch/x86/kernel/cpu/cpuid-deps.c
-> +++ b/arch/x86/kernel/cpu/cpuid-deps.c
-> @@ -78,6 +78,7 @@ static const struct cpuid_dep cpuid_deps[] = {
->  	{ X86_FEATURE_XFD,			X86_FEATURE_XSAVES    },
->  	{ X86_FEATURE_XFD,			X86_FEATURE_XGETBV1   },
->  	{ X86_FEATURE_AMX_TILE,			X86_FEATURE_XFD       },
-> +	{ X86_FEATURE_SHSTK,			X86_FEATURE_XSAVES    },
->  	{}
->  };
+[+cc linux-kernel for visibility]
 
-Please add a chunk to the changelog that explains the dependency.  This
-would suffice:
+On Wed, Jan 26, 2022 at 06:12:50AM -0600, Bjorn Helgaas wrote:
+> On Wed, Jan 26, 2022 at 08:18:12AM +0000, bugzilla-daemon@bugzilla.kernel.org wrote:
+> > https://bugzilla.kernel.org/show_bug.cgi?id=215533
+> > 
+> > --- Comment #1 from joey.corleone@mail.ru ---
+> > I accidentally sent the report prematurely. So here come my findings:
+> > 
+> > Since 5.16
+> > (1) my system becomes unresponsive every couple of seconds (micro lags), which
+> > makes it more or less unusable.
+> > (2) wrong(?) CPU frequencies are reported. 
+> > 
+> > - 5.15 works fine.
+> > - Starting from some commit in 5.17, it seems (1) is fixed (unsure), but
+> > definitely not (2).
+> > 
+> > I have bisected the kernel between 5.15 and 5.16, and found that the offending
+> > commit is 0e8ae5a6ff5952253cd7cc0260df838ab4c21009 ("PCI/portdrv: Do not setup
+> > up IRQs if there are no users"). Bisection log attached.
+> > 
+> > Reverting this commit on linux-git[1] fixes both (1) and (2).
+> > 
+> > Important notes:
+> > - This regression was reported on a DELL XPS 9550 laptop by two users [2], so
+> > it might be related strictly to that model. 
+> > - According to user mallocman, the issue can also be fixed by reverting the
+> > BIOS version of the laptop to v1.12.
+> > - The issue ONLY occurs when AC is plugged in (and stays there even when I
+> > unplug it).
+> > - When booting on battery power, there is no issue at all.
+> > 
+> > You can easily observe the regression via: 
+> > 
+> > watch cat /sys/devices/system/cpu/cpu[0-9]*/cpufreq/scaling_cur_fre
+> > 
+> > As soon as I plug in AC, all frequencies go up to values around 3248338 and
+> > stay there even if I unplug AC. This does not happen at all when booted on
+> > battery power. 
+> > 
+> > Also note: 
+> > - the laptop's fans are not really affected by the high frequencies.
+> > - setting the governor to "powersave" has no effect on the frequencies (as
+> > compared to when on battery power).
+> > - lowering the maximum frequency manually works, but does not fix (1).
+> > 
+> > [1] https://aur.archlinux.org/pkgbase/linux-git/ (pulled commits up to
+> > 0280e3c58f92b2fe0e8fbbdf8d386449168de4a8).
+> > [2] https://bbs.archlinux.org/viewtopic.php?id=273330
 
-	To protect shadow stack state from malicious modification, the
-	registers are only accessible in supervisor mode.  This
-	implementation context-switches the registers with XSAVES.  Make
-	X86_FEATURE_SHSTK depend on XSAVES.
+I hope we can find a better solution, but since the responsiveness
+issue is a significant regression, I queued up a revert of
+0e8ae5a6ff59 ("PCI/portdrv: Do not setup up IRQs if there are no
+users") in case we don't find one.
 
-The XSAVES dependency is touched on in the documentation, but it's a bit
-buried in there.
+If/when we get to the bottom of this, I'll replace the revert with the
+solution.  0e8ae5a6ff59 appeared in v5.16, so we'll have to make sure
+we fix that as well.
+
+Bjorn

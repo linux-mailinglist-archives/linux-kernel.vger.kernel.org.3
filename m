@@ -2,152 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E4DA4AB867
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 11:13:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFB184AB84F
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 11:13:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351837AbiBGKJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 05:09:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43184 "EHLO
+        id S1353414AbiBGKJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 05:09:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352092AbiBGJ7t (ORCPT
+        with ESMTP id S1352325AbiBGKA0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 04:59:49 -0500
-Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-eopbgr150053.outbound.protection.outlook.com [40.107.15.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAB1BC043181;
-        Mon,  7 Feb 2022 01:59:47 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VzJxgS9GC38+nV9Aj+7M5qfkJueE8SeZTaImQpVDOouRngTqDqDeH5HYseMjTTKq+JxH/LaghuNkiX2eoBhtWcoqNXL8yo/Qbofw9YUD+f6ZME06LET1F0asi3S1cJHlA/+qik3snvBdjH7qIqCXwLN1NPVSuOKRv8d/HuMYQqqI28Q1pKu9qfejfFAtKp0Ctv8FVaCyWncgoBx/pqs5iLPgOPYNLE3lvWDaQJk0uXSl/jz57yNW8qxQ7Xsh9V7DlLgz+dFQ7+Vrc1DbnK+XFtCpc0bhpdqFa39JDAjkAmiXUtkPbs/3bWGRT3QQEs826gsuDXGaKMZvmk2D8oPAyQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=spv7gkn7Uz4vxztShm5LNUQm/c4UtutJnTJKQUvE1ag=;
- b=LIEX5d1yedgcUAmxgzGbc0rL5k5LSW911sYjdNQUtcrKs4+94yhVpowC4JPlDYs7sr78Kc2/88CQ6kaU+W8ZcwORT/zW1GqGUBy/hpCJzKcI5Gi22ME8VO4Onhxu+me8BQcOBndidO2P9Du4Tyj6R1JzOg2Fo5g+2FUbrZhXpeNqyx5prFNb4BdcERlydhddKxoZAGmHnf69wktlTFoXk0+HoJHUernAOIu0NGaO8/sIEN/QBAUH4l0aAyJnf9/9yOTP5rbUT09oN+EbT3S29+mv4CVrJz2C7uu6yp3meN4PtUKZIMr2n1KvKoNSz6cgyL6b3wamJ12Sqk6Q50uRSA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=spv7gkn7Uz4vxztShm5LNUQm/c4UtutJnTJKQUvE1ag=;
- b=OfSaf8sfqvfoHurXKGgapT/6MgcJjrI+rLTPO9lRtc7aDd3i9m4RCIj+F2aFP3HJ4JvthrUqpoXhU7My902EMb4Zic9KPw3Zgi112JDATaOcO8GedXUnLe2kkOkY9FBdrGv7bFUGlXRD2rokSux/cYkgUxvsnw8UNvzIXE6fzvE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by DB9PR04MB8464.eurprd04.prod.outlook.com (2603:10a6:10:2c1::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.18; Mon, 7 Feb
- 2022 09:59:44 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::d4dc:8c9a:55d0:81d8]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::d4dc:8c9a:55d0:81d8%3]) with mapi id 15.20.4951.018; Mon, 7 Feb 2022
- 09:59:44 +0000
-From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-To:     jassisinghbrar@gmail.com, robh+dt@kernel.org, shawnguo@kernel.org
-Cc:     s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH 5/5] mailbox: imx: update author and Copyright
-Date:   Mon,  7 Feb 2022 17:58:32 +0800
-Message-Id: <20220207095832.1590225-6-peng.fan@oss.nxp.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220207095832.1590225-1-peng.fan@oss.nxp.com>
-References: <20220207095832.1590225-1-peng.fan@oss.nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR03CA0090.apcprd03.prod.outlook.com
- (2603:1096:4:7c::18) To DU0PR04MB9417.eurprd04.prod.outlook.com
- (2603:10a6:10:358::11)
+        Mon, 7 Feb 2022 05:00:26 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB025C043181;
+        Mon,  7 Feb 2022 02:00:24 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 47D961F43D76
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1644228021;
+        bh=C6ahXcGBr3wYvchAhyVsk7tAn1/VzH+lrX2SOz7k5LU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=en+A+ujlU32xmni49UHQs2C5/vrYE7HalLjBIO4xXfMDnYOj1bjpDYOcdDTb+c/Ob
+         2sBZ/f9AwZ7mkzWoCOTVsPVDTUnY8msojKcGtlc48aH0RCKoyW/a6gUvXHiboufPdQ
+         u4kK/FepuqLnObZd9EljObZL5xhbKAsd/F4pN4wwEb+KCLAlFVY4Yj7OWKsfHWxHgs
+         ZJuJMeQlHnLzRpkVLs+dyzr7+gVShpHsF8Cpm4aFbHBTJGcjzNgfMbzUQ9cbzz1g0k
+         wIopPqak1XVIJNxkat+Y81V3Cvp+SjMuz/+D4exsoe8NRa6pgtRy7piosNJ5tWowwN
+         z31K2vKS3GHFg==
+Message-ID: <02d0dba2-ffc8-1bf1-d8a7-f7fa19f2c7ed@collabora.com>
+Date:   Mon, 7 Feb 2022 11:00:18 +0100
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d87ceded-f57c-402a-ef77-08d9ea2090eb
-X-MS-TrafficTypeDiagnostic: DB9PR04MB8464:EE_
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-Microsoft-Antispam-PRVS: <DB9PR04MB8464714D26634680351B7CFCC92C9@DB9PR04MB8464.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1002;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4F4ZYphL85xFEuAIJMcYXtpBs15K4x98ZxT8MyJDflekKw5dxfJBCOSqvvNlJO+GrHl4EYMLePMMb8ZhI9wlsViTka/OvbjGB0pGs9XiJCeYPiDwFV4kEQmjF4s2KOjUb9ZI6CSPzQk/r6X2YY0T6jNz2KFyf0HnXwG9X+p0RoFMD2ep9cZtq/s5xzVaMOKJG6+EaLvZeySybg3y5WIb9q2G8Je48gDK2UwZpyYjBpOY5lA/z1hG0E/O5bgApWQ84GOkfGoAmbmD5Zol4UviXkVAQMwERM4aGwbis6wNxa23V1jbGoCLyeonGkVgmjxU1alkYyD9pDml3vM9ykkkOTgmUgO6WqEaY1jzhSWfSeJOgMEJqr1V+xo3cLoVU+vUN25otv/tkbKuslx7EOh9fOqazFXAVJRNWcB1hivlNQoYgJBrJZlwqCiDcYqi8R2DrFXEwEcPmb1CDKqDfgho3E65hXeopDyoqkD8qRlC2zzwesnXMY6T+c8R8MqI7o5WiEtc/MZ/ZCDgw5l/HbqYFkzbMPhb5Azq77JbRvUu09IogofZDUL/P+MMI1Wp/S4nc3YTGpUtLQ9zoOGx0RrR2s+v2YEd90bc6Re/zbPuiRv0zyZpKTqarhPNinkqdjWeZDEIajYCm2r9iEA5rIHt6QzkCX7EUUvrsSGZuxCazBcqCnz5ZcKyTY42rAbqVsX+Ny2AFcUMY4M38tPxlOeI7Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(4326008)(8936002)(8676002)(2616005)(66556008)(38100700002)(66946007)(86362001)(4744005)(5660300002)(15650500001)(66476007)(2906002)(38350700002)(186003)(1076003)(26005)(316002)(83380400001)(52116002)(6512007)(6666004)(6506007)(508600001)(6486002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?avGglQukIHfzEpc8dv/dXXxy7IHwCnwo0wz/s6dQcm7gUljMUNyjLJE7Ms4l?=
- =?us-ascii?Q?NkZ+nu4SVJ2BzAG62TtZlxdOY2WcaY5nu0ffeRvky2TsjZHzXEJuiXkO4xHB?=
- =?us-ascii?Q?D8FRlXCdBQkCpQkjvJa+QT1yruojkJP3a4zocmadCRUIzv9rGzIWy+pwZz46?=
- =?us-ascii?Q?NbTF6WspfBhR2RBfCPIzhQGzfE55rZGQ0lrlhUDe6cGogGETparSDfnBUMYA?=
- =?us-ascii?Q?hvMo2yzqly+EiQt4Rp/hn1F1M/EHTw1t+1T3ZUqCtNMvDXJZottPh49Y76VN?=
- =?us-ascii?Q?4vGVlBNQsG4XTk1kc1Hj/YMvvk0pBx6U/Z4taWuVKiMcvWtgSD21DRA7ZZ/O?=
- =?us-ascii?Q?0jFeXeZA7ZgElQQNS/O8Hxlos8hzL/xHGoNj13jWpJxOSI7hf24QzYBJkeFs?=
- =?us-ascii?Q?/gx7QFUbRc0orbq7py4SaA8T18K46dxDN0m3gmrOLQW1j/QciV7uKmhq1LSi?=
- =?us-ascii?Q?vpcszJCl7c0XFffzOmxzmRbEybi8cllcY0zWGqbSb6/6s916lWkXCi55ju2K?=
- =?us-ascii?Q?4z0M9eKT/LCYpv5FkH5kepxOC0qKIb9BUnCzihbT+KncJCO4vD7gi3z8xIq6?=
- =?us-ascii?Q?O5paAhAx7o9e6wf6zj3tVix4vE45tuOT0oeLed6VCUxeq0n5O84lCJtCrmWX?=
- =?us-ascii?Q?dseLyjXQfQ5c0az2KYuES17s6qM8B8nfbvC1HjzYLoz3Xvtjg42VmkttHP9w?=
- =?us-ascii?Q?nYClr+EuryYKo9njjjHvPgiOaCfyFlibSqmYXoK6SOQ5NmdkxeWSmkzaWjNU?=
- =?us-ascii?Q?ijtdwn6pz3g/6pDZ0kRMtciPZ35y38c98dRlW1PrdEwdmrLdHmnDh0RU83AL?=
- =?us-ascii?Q?93VP0ZF2AXKrJLc32mCPfpvZBhUlYSPdVtOV73RPa1bMwqL+5JDGNYCfcYIw?=
- =?us-ascii?Q?/kYZ1CNhdQUTz1TH+QmY5sQmfzYiUYN5ei3WWFKYagPllSKSqHOyKrYj0ms/?=
- =?us-ascii?Q?YEDd5Y/9pQmc3pINNC05S+MJXedj8ZlefMnQmbDs6VLQM/H1m5cSQr2d0103?=
- =?us-ascii?Q?KIDvYNn9X3M3tY6zXPntIDJQlJ2kBC4k9hnkt0enJbDVogLs+0dx/JwpLeVB?=
- =?us-ascii?Q?IiUr6WpxW6EqC0UOJqGmFvOc/p4taO4lBLJ3wAPnAUmFdRshQnz1SZ487uVB?=
- =?us-ascii?Q?tPD8Wlx/ckS9KCZQfj2pUX98bh1YZFykOZyzP37p22HzgGXADUFb41wt5zuA?=
- =?us-ascii?Q?cy4CDsmhGOudnhfbxJ8JGjxEWkzTPPc52DssGMFEpgrhEUSCA4YKjuhT+7eS?=
- =?us-ascii?Q?rO+WKFNCh/6rG1ddhAAgb07IWoEYVHyU9lzb9s5EU8LL1WFDYHRsWHy8VbKD?=
- =?us-ascii?Q?pYtcNHjYE+SlZ3ArZF6EVmrCLs+vsrvGFv+Wh9cYdn8O8UxjAGzhoizZ6lie?=
- =?us-ascii?Q?t2wXFr9INWLt5b/HvI5ifB6ycy+t3PRtR25RqmcmHPfZRNghTepWD5JFvJNw?=
- =?us-ascii?Q?jg3OPA6niBSz+3TYdbcOgmlbQ6/Q5kXlmxz7rF5gw83IYamkTTLWRQjK2CFU?=
- =?us-ascii?Q?KCkv+90556ViW0HFBnR9/r/gm0IpjjxmTXtNWzlR1SOcAaoNM4va5ie8UW6r?=
- =?us-ascii?Q?Gb6e/ZR3na85s0HTf6ftP9dTYysCEYNwPh7Sw49MlizNKdTrNFgRdD30T1V+?=
- =?us-ascii?Q?AWFL9DWjiHdyXtRJbUEpY6s=3D?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d87ceded-f57c-402a-ef77-08d9ea2090eb
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Feb 2022 09:59:44.2120
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BgzjO3Qi0cwN3K+Y4Cm9l+AwX6zlTBYlTXh5kswEuYvpw4uGNzEPQC4qDFRUXBMNdaV10SvbfaRMU0jo0GCRLg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB8464
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH] usb: host: xhci-mtk: Simplify supplies handling with
+ regulator_bulk
+Content-Language: en-US
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     mathias.nyman@intel.com, gregkh@linuxfoundation.org,
+        matthias.bgg@gmail.com, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220118133348.111860-1-angelogioacchino.delregno@collabora.com>
+ <91bb8078e2d0824c325eb3819e59cdcb65b68a4e.camel@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <91bb8078e2d0824c325eb3819e59cdcb65b68a4e.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peng Fan <peng.fan@nxp.com>
+Il 20/01/22 07:50, Chunfeng Yun ha scritto:
+> On Tue, 2022-01-18 at 14:33 +0100, AngeloGioacchino Del Regno wrote:
+>> Remove the custom functions xhci_mtk_ldos_{enable,disable}() by
+>> switching to using regulator_bulk to perform the very same thing,
+>> as the regulators are always either both enabled or both disabled.
+>>
+>> Signed-off-by: AngeloGioacchino Del Regno <
+>> angelogioacchino.delregno@collabora.com>
+>> ---
+>>   drivers/usb/host/xhci-mtk.c | 56 ++++++++++++-----------------------
+>> --
+>>   drivers/usb/host/xhci-mtk.h |  4 +--
+>>   2 files changed, 20 insertions(+), 40 deletions(-)
+>>
+>> diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-
+>> mtk.c
+>> index 62c835d446be..3b81931e5b77 100644
+>> --- a/drivers/usb/host/xhci-mtk.c
+>> +++ b/drivers/usb/host/xhci-mtk.c
+>> @@ -395,31 +395,6 @@ static int xhci_mtk_clks_get(struct xhci_hcd_mtk
+>> *mtk)
+>>   	return devm_clk_bulk_get_optional(mtk->dev, BULK_CLKS_NUM,
+>> clks);
+>>   }
+>>   
+>> -static int xhci_mtk_ldos_enable(struct xhci_hcd_mtk *mtk)
+>> -{
+>> -	int ret;
+>> -
+>> -	ret = regulator_enable(mtk->vbus);
+>> -	if (ret) {
+>> -		dev_err(mtk->dev, "failed to enable vbus\n");
+>> -		return ret;
+>> -	}
+>> -
+>> -	ret = regulator_enable(mtk->vusb33);
+>> -	if (ret) {
+>> -		dev_err(mtk->dev, "failed to enable vusb33\n");
+>> -		regulator_disable(mtk->vbus);
+>> -		return ret;
+>> -	}
+>> -	return 0;
+>> -}
+>> -
+>> -static void xhci_mtk_ldos_disable(struct xhci_hcd_mtk *mtk)
+>> -{
+>> -	regulator_disable(mtk->vbus);
+>> -	regulator_disable(mtk->vusb33);
+>> -}
+>> -
+>>   static void xhci_mtk_quirks(struct device *dev, struct xhci_hcd
+>> *xhci)
+>>   {
+>>   	struct usb_hcd *hcd = xhci_to_hcd(xhci);
+>> @@ -475,6 +450,10 @@ static int xhci_mtk_setup(struct usb_hcd *hcd)
+>>   	return ret;
+>>   }
+>>   
+>> +static const char * const xhci_mtk_supply_names[] = {
+>> +	"vusb33", "vbus",
+>> +};
+>> +
+>>   static const struct xhci_driver_overrides xhci_mtk_overrides
+>> __initconst = {
+>>   	.reset = xhci_mtk_setup,
+>>   	.add_endpoint = xhci_mtk_add_ep,
+>> @@ -507,17 +486,18 @@ static int xhci_mtk_probe(struct
+>> platform_device *pdev)
+>>   		return -ENOMEM;
+>>   
+>>   	mtk->dev = dev;
+>> -	mtk->vbus = devm_regulator_get(dev, "vbus");
+>> -	if (IS_ERR(mtk->vbus)) {
+>> -		dev_err(dev, "fail to get vbus\n");
+>> -		return PTR_ERR(mtk->vbus);
+>> -	}
+>> +	mtk->num_supplies = ARRAY_SIZE(xhci_mtk_supply_names);
+>> +	mtk->supplies = devm_kcalloc(dev, mtk->num_supplies,
+>> +				     sizeof(*mtk->supplies),
+>> GFP_KERNEL);
+>> +	if (!mtk->supplies)
+>> +		return -ENOMEM;
+>>   
+>> -	mtk->vusb33 = devm_regulator_get(dev, "vusb33");
+>> -	if (IS_ERR(mtk->vusb33)) {
+>> -		dev_err(dev, "fail to get vusb33\n");
+>> -		return PTR_ERR(mtk->vusb33);
+>> -	}
+>> +	regulator_bulk_set_supply_names(mtk->supplies,
+>> xhci_mtk_supply_names,
+>> +					mtk->num_supplies);
+>> +
+>> +	ret = devm_regulator_bulk_get(dev, mtk->num_supplies, mtk-
+>>> supplies);
+>> +	if (ret)
+>> +		return dev_err_probe(dev, ret, "Failed to get
+>> regulators\n");
+>>   
+>>   	ret = xhci_mtk_clks_get(mtk);
+>>   	if (ret)
+>> @@ -558,7 +538,7 @@ static int xhci_mtk_probe(struct platform_device
+>> *pdev)
+>>   	pm_runtime_enable(dev);
+>>   	pm_runtime_get_sync(dev);
+>>   
+>> -	ret = xhci_mtk_ldos_enable(mtk);
+>> +	ret = regulator_bulk_enable(mtk->num_supplies, mtk->supplies);
+>>   	if (ret)
+>>   		goto disable_pm;
+>>   
+>> @@ -667,7 +647,7 @@ static int xhci_mtk_probe(struct platform_device
+>> *pdev)
+>>   	clk_bulk_disable_unprepare(BULK_CLKS_NUM, mtk->clks);
+>>   
+>>   disable_ldos:
+>> -	xhci_mtk_ldos_disable(mtk);
+>> +	regulator_bulk_disable(mtk->num_supplies, mtk->supplies);
+>>   
+>>   disable_pm:
+>>   	pm_runtime_put_noidle(dev);
+>> @@ -695,7 +675,7 @@ static int xhci_mtk_remove(struct platform_device
+>> *pdev)
+>>   	usb_put_hcd(hcd);
+>>   	xhci_mtk_sch_exit(mtk);
+>>   	clk_bulk_disable_unprepare(BULK_CLKS_NUM, mtk->clks);
+>> -	xhci_mtk_ldos_disable(mtk);
+>> +	regulator_bulk_disable(mtk->num_supplies, mtk->supplies);
+>>   
+>>   	pm_runtime_disable(dev);
+>>   	pm_runtime_put_noidle(dev);
+>> diff --git a/drivers/usb/host/xhci-mtk.h b/drivers/usb/host/xhci-
+>> mtk.h
+>> index 4b1ea89f959a..9b78cd2ba0ac 100644
+>> --- a/drivers/usb/host/xhci-mtk.h
+>> +++ b/drivers/usb/host/xhci-mtk.h
+>> @@ -150,9 +150,9 @@ struct xhci_hcd_mtk {
+>>   	int num_u3_ports;
+>>   	int u2p_dis_msk;
+>>   	int u3p_dis_msk;
+>> -	struct regulator *vusb33;
+>> -	struct regulator *vbus;
+>>   	struct clk_bulk_data clks[BULK_CLKS_NUM];
+>> +	struct regulator_bulk_data *supplies;
+>> +	u8 num_supplies;
+> Could you please help to change it like as clock bulk?
+> 
+> 1. #define BULK_REGULATORS_NUM 2; then define @supplies array,
+> 
+>          struct regulator_bulk_data supplies[BULK_REGULATORS_NUM];
+> 
+> 2. also add a helper to get regulator bulk; e.g.
+> 
+> static int xhci_mtk_regulators_get(struct xhci_hcd_mtk *mtk)
+> {
+>      struct regulator_bulk_data *supplies = mtk->supplies;
+> 
+>      supplies[0].supply = "vusb33";
+>      supplies[1].supply = "vbus";
+> 
+>      return devm_regulator_bulk_get(mtk->dev, BUL
+> K_REGULATORS_NUM, supplies);
+> }
 
-Add NXP Copyright
-Add myself as author
+Hello Chunfeng,
+I chose to go for this way to enhance the implementation flexibility: like that,
+any future SoC that needs different regulators (more vregs, less, different names)
+will simply need a new array of vreg names, like:
 
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
----
- drivers/mailbox/imx-mailbox.c | 2 ++
- 1 file changed, 2 insertions(+)
+static const char * const xhci_mtk_mtxxxx_supply_names[] = {
+	"vusb33", "vbus", "another-supply", "and-another-one",
+};
 
-diff --git a/drivers/mailbox/imx-mailbox.c b/drivers/mailbox/imx-mailbox.c
-index da1c6ca8bee2..094dc84291fc 100644
---- a/drivers/mailbox/imx-mailbox.c
-+++ b/drivers/mailbox/imx-mailbox.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-  * Copyright (c) 2018 Pengutronix, Oleksij Rempel <o.rempel@pengutronix.de>
-+ * Copyright 2022 NXP, Peng Fan <peng.fan@nxp.com>
-  */
- 
- #include <linux/clk.h>
-@@ -1030,5 +1031,6 @@ static struct platform_driver imx_mu_driver = {
- module_platform_driver(imx_mu_driver);
- 
- MODULE_AUTHOR("Oleksij Rempel <o.rempel@pengutronix.de>");
-+MODULE_AUTHOR("Peng Fan <peng.fan@nxp.com>");
- MODULE_DESCRIPTION("Message Unit driver for i.MX");
- MODULE_LICENSE("GPL v2");
--- 
-2.25.1
+Other than enhancing flexibility, this will also make sure that we don't allocate
+more regulator_bulk_data entries than needed, enhancing memory usage.
 
+Your proposal, though, is valid if you are sure that future SoCs will have only
+and always these two power supplies and nothing else...
+
+Regards,
+Angelo
+
+> 
+> Thanks a lot
+> 
+> 
+>>   	unsigned int has_ippc:1;
+>>   	unsigned int lpm_support:1;
+>>   	unsigned int u2_lpm_disable:1;
+> 

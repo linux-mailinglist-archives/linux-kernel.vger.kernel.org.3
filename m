@@ -2,190 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6E474AC52A
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 17:16:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ACBD4AC53A
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 17:16:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385696AbiBGQPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 11:15:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42078 "EHLO
+        id S1382668AbiBGQPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 11:15:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387251AbiBGQDL (ORCPT
+        with ESMTP id S1391863AbiBGQEN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 11:03:11 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C47D9C0401CE;
-        Mon,  7 Feb 2022 08:03:08 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id DC3CF340;
-        Mon,  7 Feb 2022 17:03:06 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1644249787;
-        bh=nfHhY7SAAx/jSa8dp1hMDTzjQj/OuY2kGz3jjvPk5xk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=S+CZh0fGXgBerQVwuj4ZfLJQ6bwJ9df1Vzllh4VKcSm+MtCyn0LFsexbZWLsxjcsb
-         2skIMGdk4g0rNN5bgOMEeHnJUPIe4cLJ3I4iUbUt3S9fuywk0x7fmElGrEqbiPZV8J
-         3HmpuM9QGZsrLtswnZ8AtdRp5YENQqjto4nHkQHs=
-Date:   Mon, 7 Feb 2022 18:03:05 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-staging@lists.linux.dev,
-        Yong Deng <yong.deng@magewell.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helen Koike <helen.koike@collabora.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v2 07/66] dt-bindings: media: sun6i-a31-csi: Add MIPI
- CSI-2 input port
-Message-ID: <YgFCuaf007wd8sJy@pendragon.ideasonboard.com>
-References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
- <20220205185429.2278860-8-paul.kocialkowski@bootlin.com>
+        Mon, 7 Feb 2022 11:04:13 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 054E0C0401DC
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 08:04:09 -0800 (PST)
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id CD8E24003E
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 16:04:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644249847;
+        bh=wWFN/kYmy9qogqxR7Mh7jeBKCVIaVeKo6j328DRFO5U=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=rhTkA/xBwPaz9wH/5KTJdDAmdUSp8XMvNoMNzIL62XYoWeINEtHNTjLNdfqr5jEpP
+         Pls4VsjFLC0iIG44HcwfegBgvioj5DM02xAxMiWMujTU6TYsM40N4FO9retiDd4Ba4
+         PqYwXYAmojvTGo8AatZMPKNqjmPjeQa96RraNJ11ppEXrOLe0m8Hb1Ei/q6fsO5os1
+         NQTBhUb5dX/Fy6D8xliAjPNSGRBOAGfSXRFhIAEkO2Va/K68KIMt7amNpSUoVcJLY6
+         229eBiZRkc4LqEVJT5wW2DGY6y9hj19ossY87yylGeRhst1dnrLbq8oxDLp3ED3cQN
+         D6vuMm/Nie2KQ==
+Received: by mail-ed1-f72.google.com with SMTP id f6-20020a0564021e8600b0040f662b99ffso2138332edf.7
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 08:04:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=wWFN/kYmy9qogqxR7Mh7jeBKCVIaVeKo6j328DRFO5U=;
+        b=rRRoXzsERr/53VvNK0MNj3tr0E0vrVuQzUSoIugiRWBWCHwZG5YzxNJkV6XkLT3nMg
+         AejVzKfvjxt7Yq2ssi7vXAxBD8lx6tcPPc2OaJpZbi8cfRC65IVCDxmV8cOJxwslYgxF
+         ap1utCTAs9to/2SWdE2EU1yO/LUJtG4aE1qIJZ/KpOTDeHRslgYrwjxJU6GJcXjJitQC
+         MNIZL0dWV2Nrusahof4ZM/UwWr3uL/a0bUnldFMRiArlEnrtjoOxv7ybmgI7nsI8Bz5b
+         /Fx3aozA6PJmfR1+RLXxJv+akBI+GHytcCCOg/uVEvJ6QW5sFRy/RiXbiocKzWcYohQK
+         ogrQ==
+X-Gm-Message-State: AOAM533UiA+bNc2YzYorjow5R9r+L7qkq3vSJdkRuAPJVHFlmKc+UQJb
+        s3tZ0EjoZRClpv+0Il0cLZp8Bhsb1I1hcAL4Ic1Yf5AVB57JaOACkWruDOsrEJRro95cX7mB5ZR
+        MzJO0kar051mnUmgG82ZWIuc+iBcFafjglPy8bDWOMA==
+X-Received: by 2002:a17:907:7b85:: with SMTP id ne5mr329326ejc.572.1644249846682;
+        Mon, 07 Feb 2022 08:04:06 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzBm6rX0lrrq+gqVsXaiIiWLV1F3mitDpLqrcgHMbY6Jqelej9PiIrbQrRZpHU2vQlcmagUOw==
+X-Received: by 2002:a17:907:7b85:: with SMTP id ne5mr329281ejc.572.1644249846145;
+        Mon, 07 Feb 2022 08:04:06 -0800 (PST)
+Received: from [192.168.0.90] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id i1sm1602107ejv.183.2022.02.07.08.04.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Feb 2022 08:04:05 -0800 (PST)
+Message-ID: <c7e160b0-16fb-79ca-c291-05571bbe8341@canonical.com>
+Date:   Mon, 7 Feb 2022 17:04:04 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220205185429.2278860-8-paul.kocialkowski@bootlin.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 2/3] dt-bindings: crypto: Convert Atmel TDES to yaml
+Content-Language: en-US
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        herbert@gondor.apana.org.au, robh+dt@kernel.org
+Cc:     davem@davemloft.net, nicolas.ferre@microchip.com,
+        claudiu.beznea@microchip.com, alexandre.belloni@bootlin.com,
+        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220207032405.70733-1-tudor.ambarus@microchip.com>
+ <20220207032405.70733-3-tudor.ambarus@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220207032405.70733-3-tudor.ambarus@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
-
-Thank you for the patch.
-
-On Sat, Feb 05, 2022 at 07:53:30PM +0100, Paul Kocialkowski wrote:
-> The A31 CSI controller supports two distinct input interfaces:
-> parallel and an external MIPI CSI-2 bridge. The parallel interface
-> is often connected to a set of hardware pins while the MIPI CSI-2
-> bridge is an internal FIFO-ish link. As a result, these two inputs
-> are distinguished as two different ports.
+On 07/02/2022 04:24, Tudor Ambarus wrote:
+> Convert Atmel TDES documentation to yaml format. With the conversion the
+> clock and clock-names properties are made mandatory. The driver returns
+> -EINVAL if "tdes_clk" is not found, reflect that in the bindings and make
+> the clock and clock-names properties mandatory. Update the example to
+> better describe how one should define the dt node.
 > 
-> Note that only one of the two may be present on a controller instance.
-> For example, the V3s has one controller dedicated to MIPI-CSI2 and one
-> dedicated to parallel.
-
-Is it that only one of the two is present, or only one of the two is
-connected ? In the latter case I'd make both ports required, but with
-only one of them connected.
-
-> Update the binding with an explicit ports node that holds two distinct
-> port nodes: one for parallel input and one for MIPI CSI-2.
-> 
-> This is backward-compatible with the single-port approach that was
-> previously taken for representing the parallel interface port, which
-> stays enumerated as fwnode port 0.
-> 
-> Note that additional ports may be added in the future, especially to
-> support feeding the CSI controller's output to the ISP.
-> 
-> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Acked-by: Maxime Ripard <mripard@kernel.org>
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
 > ---
->  .../media/allwinner,sun6i-a31-csi.yaml        | 60 +++++++++++++++----
->  1 file changed, 47 insertions(+), 13 deletions(-)
+>  .../bindings/crypto/atmel,tdes.yaml           | 63 +++++++++++++++++++
+>  .../bindings/crypto/atmel-crypto.txt          | 23 -------
+>  2 files changed, 63 insertions(+), 23 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/crypto/atmel,tdes.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-csi.yaml b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-csi.yaml
-> index 8b568072a069..3cc61866ea89 100644
-> --- a/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-csi.yaml
-> +++ b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-csi.yaml
-> @@ -61,6 +61,34 @@ properties:
->  
->      additionalProperties: false
->  
-> +  ports:
-> +    $ref: /schemas/graph.yaml#/properties/ports
+> diff --git a/Documentation/devicetree/bindings/crypto/atmel,tdes.yaml b/Documentation/devicetree/bindings/crypto/atmel,tdes.yaml
+> new file mode 100644
+> index 000000000000..7efa5e4acaa1
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/crypto/atmel,tdes.yaml
+> @@ -0,0 +1,63 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/crypto/atmel,tdes.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +    properties:
-> +      port@0:
-> +        $ref: "#/properties/port"
-> +        unevaluatedProperties: false
+> +title: Atmel Triple Data Encryption Standard (TDES) HW cryptographic accelerator
 > +
-> +      port@1:
-> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> +        description: MIPI CSI-2 bridge input port
+> +maintainers:
+> +  - Tudor Ambarus <tudor.ambarus@microchip.com>
 > +
-> +        properties:
-> +          reg:
-> +            const: 1
+> +properties:
+> +  compatible:
+> +    const: atmel,at91sam9g46-tdes
 > +
-> +          endpoint:
-> +            $ref: video-interfaces.yaml#
-> +            unevaluatedProperties: false
-> +
-> +        additionalProperties: false
-> +
-> +    anyOf:
-> +      - required:
-> +        - port@0
-> +      - required:
-> +        - port@1
-> +
->  required:
->    - compatible
->    - reg
 
-Shouldn't you specify that either port or ports is required, but not
-both ? I'd also add a comment in the port node to tell it's deprecated,
-and that ports should be used instead.
+Same comments as for patch 1 plus one new (also applying to previous
+one). You named the file quite generic "atmel,tdes" or "atmel,aes", but
+what if something newer comes for at91? Maybe name it instead
+"atmel,at91sam9-aes"?
 
-> @@ -89,19 +117,25 @@ examples:
->                        "ram";
->          resets = <&ccu RST_BUS_CSI>;
->  
-> -        port {
-> -            /* Parallel bus endpoint */
-> -            csi1_ep: endpoint {
-> -                remote-endpoint = <&adv7611_ep>;
-> -                bus-width = <16>;
-> -
-> -                /*
-> -                 * If hsync-active/vsync-active are missing,
-> -                 * embedded BT.656 sync is used.
-> -                 */
-> -                 hsync-active = <0>; /* Active low */
-> -                 vsync-active = <0>; /* Active low */
-> -                 pclk-sample = <1>;  /* Rising */
-> +        ports {
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +
-> +            port@0 {
-> +                reg = <0>;
-> +                /* Parallel bus endpoint */
-> +                csi1_ep: endpoint {
-> +                    remote-endpoint = <&adv7611_ep>;
-> +                    bus-width = <16>;
-> +
-> +                    /*
-> +                     * If hsync-active/vsync-active are missing,
-> +                     * embedded BT.656 sync is used.
-> +                     */
-> +                     hsync-active = <0>; /* Active low */
-> +                     vsync-active = <0>; /* Active low */
-> +                     pclk-sample = <1>;  /* Rising */
 
-Wrong indentation.
-
-> +                };
->              };
->          };
->      };
-
--- 
-Regards,
-
-Laurent Pinchart
+Best regards,
+Krzysztof

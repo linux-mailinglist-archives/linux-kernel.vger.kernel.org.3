@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A68334ABD06
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:55:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB2524ABCD4
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:50:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388344AbiBGLne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:43:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45106 "EHLO
+        id S1387939AbiBGLmU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:42:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385685AbiBGLcG (ORCPT
+        with ESMTP id S1376352AbiBGL2s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:32:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B851BC0401D6;
-        Mon,  7 Feb 2022 03:32:02 -0800 (PST)
+        Mon, 7 Feb 2022 06:28:48 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 866A6C02B74A;
+        Mon,  7 Feb 2022 03:27:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 262C560B5B;
-        Mon,  7 Feb 2022 11:32:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAB6EC004E1;
-        Mon,  7 Feb 2022 11:32:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 56620B811A6;
+        Mon,  7 Feb 2022 11:26:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79378C004E1;
+        Mon,  7 Feb 2022 11:26:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233521;
-        bh=4W2tn002ITYK63bmP9hov/JOOeTD9dndTF/zgZV7jQ8=;
+        s=korg; t=1644233206;
+        bh=PPIZ3FNBzNLS7oB1P31CdMJyNI6i1ZhWc0GS/K9Cs1s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NM9m2wmnnxuUSyF583pm1Uesbo0P054JKu+deh+Z4qCwlM9JNPxHrn6L4tMsoWi1B
-         gpPbdephUtgqh+O/L687oJKVk1FBxJzn/eM7FU8twefmNX+cpkw67lW94ISuaUlbnl
-         k1xcqtSPEAeoF5+nsakjnHLatG6D4UaRreuoIWj8=
+        b=gCCwZ8QC9dia0qWVyqGvXW0ns4UHc9+x75m3rhqoYIdizCn7o3/pNBvVAFpxFv6q3
+         dlBooOHbDNtt+jBAdhGQQtRRJcjzxuhhJrSNQby/QYLgT7bQlnR7Zl/gkxwLeYsK+Q
+         8mkYOYm0FJyBasK+uEWJL243psSeAw80nBFQnowI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, ron minnich <rminnich@gmail.com>,
-        ng@0x80.stream, Dominique Martinet <asmadeus@codewreck.org>
-Subject: [PATCH 5.16 021/126] Revert "fs/9p: search open fids first"
+        stable@vger.kernel.org, Filipe Manana <fdmanana@suse.com>,
+        David Sterba <dsterba@suse.com>
+Subject: [PATCH 5.15 019/110] btrfs: fix use-after-free after failure to create a snapshot
 Date:   Mon,  7 Feb 2022 12:05:52 +0100
-Message-Id: <20220207103804.797485286@linuxfoundation.org>
+Message-Id: <20220207103802.908849578@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
-References: <20220207103804.053675072@linuxfoundation.org>
+In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
+References: <20220207103802.280120990@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,67 +54,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dominique Martinet <asmadeus@codewreck.org>
+From: Filipe Manana <fdmanana@suse.com>
 
-commit 22e424feb6658c5d6789e45121830357809c59cb upstream.
+commit 28b21c558a3753171097193b6f6602a94169093a upstream.
 
-This reverts commit 478ba09edc1f2f2ee27180a06150cb2d1a686f9c.
+At ioctl.c:create_snapshot(), we allocate a pending snapshot structure and
+then attach it to the transaction's list of pending snapshots. After that
+we call btrfs_commit_transaction(), and if that returns an error we jump
+to 'fail' label, where we kfree() the pending snapshot structure. This can
+result in a later use-after-free of the pending snapshot:
 
-That commit was meant as a fix for setattrs with by fd (e.g. ftruncate)
-to use an open fid instead of the first fid it found on lookup.
-The proper fix for that is to use the fid associated with the open file
-struct, available in iattr->ia_file for such operations, and was
-actually done just before in 66246641609b ("9p: retrieve fid from file
-when file instance exist.")
-As such, this commit is no longer required.
+1) We allocated the pending snapshot and added it to the transaction's
+   list of pending snapshots;
 
-Furthermore, changing lookup to return open fids first had unwanted side
-effects, as it turns out the protocol forbids the use of open fids for
-further walks (e.g. clone_fid) and we broke mounts for some servers
-enforcing this rule.
+2) We call btrfs_commit_transaction(), and it fails either at the first
+   call to btrfs_run_delayed_refs() or btrfs_start_dirty_block_groups().
+   In both cases, we don't abort the transaction and we release our
+   transaction handle. We jump to the 'fail' label and free the pending
+   snapshot structure. We return with the pending snapshot still in the
+   transaction's list;
 
-Note this only reverts to the old working behaviour, but it's still
-possible for lookup to return open fids if dentry->d_fsdata is not set,
-so more work is needed to make sure we respect this rule in the future,
-for example by adding a flag to the lookup functions to only match
-certain fid open modes depending on caller requirements.
+3) Another task commits the transaction. This time there's no error at
+   all, and then during the transaction commit it accesses a pointer
+   to the pending snapshot structure that the snapshot creation task
+   has already freed, resulting in a user-after-free.
 
-Link: https://lkml.kernel.org/r/20220130130651.712293-1-asmadeus@codewreck.org
-Fixes: 478ba09edc1f ("fs/9p: search open fids first")
-Cc: stable@vger.kernel.org # v5.11+
-Reported-by: ron minnich <rminnich@gmail.com>
-Reported-by: ng@0x80.stream
-Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
+This issue could actually be detected by smatch, which produced the
+following warning:
+
+  fs/btrfs/ioctl.c:843 create_snapshot() warn: '&pending_snapshot->list' not removed from list
+
+So fix this by not having the snapshot creation ioctl directly add the
+pending snapshot to the transaction's list. Instead add the pending
+snapshot to the transaction handle, and then at btrfs_commit_transaction()
+we add the snapshot to the list only when we can guarantee that any error
+returned after that point will result in a transaction abort, in which
+case the ioctl code can safely free the pending snapshot and no one can
+access it anymore.
+
+CC: stable@vger.kernel.org # 5.10+
+Signed-off-by: Filipe Manana <fdmanana@suse.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/9p/fid.c |    9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ fs/btrfs/ioctl.c       |    5 +----
+ fs/btrfs/transaction.c |   24 ++++++++++++++++++++++++
+ fs/btrfs/transaction.h |    2 ++
+ 3 files changed, 27 insertions(+), 4 deletions(-)
 
---- a/fs/9p/fid.c
-+++ b/fs/9p/fid.c
-@@ -96,12 +96,8 @@ static struct p9_fid *v9fs_fid_find(stru
- 		 dentry, dentry, from_kuid(&init_user_ns, uid),
- 		 any);
- 	ret = NULL;
--
--	if (d_inode(dentry))
--		ret = v9fs_fid_find_inode(d_inode(dentry), uid);
--
- 	/* we'll recheck under lock if there's anything to look in */
--	if (!ret && dentry->d_fsdata) {
-+	if (dentry->d_fsdata) {
- 		struct hlist_head *h = (struct hlist_head *)&dentry->d_fsdata;
- 
- 		spin_lock(&dentry->d_lock);
-@@ -113,6 +109,9 @@ static struct p9_fid *v9fs_fid_find(stru
- 			}
- 		}
- 		spin_unlock(&dentry->d_lock);
-+	} else {
-+		if (dentry->d_inode)
-+			ret = v9fs_fid_find_inode(dentry->d_inode, uid);
+--- a/fs/btrfs/ioctl.c
++++ b/fs/btrfs/ioctl.c
+@@ -775,10 +775,7 @@ static int create_snapshot(struct btrfs_
+ 		goto fail;
  	}
  
- 	return ret;
+-	spin_lock(&fs_info->trans_lock);
+-	list_add(&pending_snapshot->list,
+-		 &trans->transaction->pending_snapshots);
+-	spin_unlock(&fs_info->trans_lock);
++	trans->pending_snapshot = pending_snapshot;
+ 
+ 	ret = btrfs_commit_transaction(trans);
+ 	if (ret)
+--- a/fs/btrfs/transaction.c
++++ b/fs/btrfs/transaction.c
+@@ -2033,6 +2033,27 @@ static inline void btrfs_wait_delalloc_f
+ 		btrfs_wait_ordered_roots(fs_info, U64_MAX, 0, (u64)-1);
+ }
+ 
++/*
++ * Add a pending snapshot associated with the given transaction handle to the
++ * respective handle. This must be called after the transaction commit started
++ * and while holding fs_info->trans_lock.
++ * This serves to guarantee a caller of btrfs_commit_transaction() that it can
++ * safely free the pending snapshot pointer in case btrfs_commit_transaction()
++ * returns an error.
++ */
++static void add_pending_snapshot(struct btrfs_trans_handle *trans)
++{
++	struct btrfs_transaction *cur_trans = trans->transaction;
++
++	if (!trans->pending_snapshot)
++		return;
++
++	lockdep_assert_held(&trans->fs_info->trans_lock);
++	ASSERT(cur_trans->state >= TRANS_STATE_COMMIT_START);
++
++	list_add(&trans->pending_snapshot->list, &cur_trans->pending_snapshots);
++}
++
+ int btrfs_commit_transaction(struct btrfs_trans_handle *trans)
+ {
+ 	struct btrfs_fs_info *fs_info = trans->fs_info;
+@@ -2106,6 +2127,8 @@ int btrfs_commit_transaction(struct btrf
+ 	if (cur_trans->state >= TRANS_STATE_COMMIT_START) {
+ 		enum btrfs_trans_state want_state = TRANS_STATE_COMPLETED;
+ 
++		add_pending_snapshot(trans);
++
+ 		spin_unlock(&fs_info->trans_lock);
+ 		refcount_inc(&cur_trans->use_count);
+ 
+@@ -2196,6 +2219,7 @@ int btrfs_commit_transaction(struct btrf
+ 	 * COMMIT_DOING so make sure to wait for num_writers to == 1 again.
+ 	 */
+ 	spin_lock(&fs_info->trans_lock);
++	add_pending_snapshot(trans);
+ 	cur_trans->state = TRANS_STATE_COMMIT_DOING;
+ 	spin_unlock(&fs_info->trans_lock);
+ 	wait_event(cur_trans->writer_wait,
+--- a/fs/btrfs/transaction.h
++++ b/fs/btrfs/transaction.h
+@@ -123,6 +123,8 @@ struct btrfs_trans_handle {
+ 	struct btrfs_transaction *transaction;
+ 	struct btrfs_block_rsv *block_rsv;
+ 	struct btrfs_block_rsv *orig_rsv;
++	/* Set by a task that wants to create a snapshot. */
++	struct btrfs_pending_snapshot *pending_snapshot;
+ 	refcount_t use_count;
+ 	unsigned int type;
+ 	/*
 
 

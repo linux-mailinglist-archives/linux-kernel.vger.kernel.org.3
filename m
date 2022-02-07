@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC6DA4AC845
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 19:11:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFD1F4AC858
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 19:16:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235682AbiBGSI7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 13:08:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43538 "EHLO
+        id S1345001AbiBGSOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 13:14:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344937AbiBGSIN (ORCPT
+        with ESMTP id S1356060AbiBGSIl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 13:08:13 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A34FAC0401D9
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 10:08:12 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id u12so4635341plq.10
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 10:08:12 -0800 (PST)
+        Mon, 7 Feb 2022 13:08:41 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE0B4C0401E1
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 10:08:40 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id h14-20020a17090a130e00b001b88991a305so6339412pja.3
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 10:08:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=intel-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=nxHF7bigQnfZfNGCQpq6EtXcG8/j6GHHAEIHGHy2fyU=;
-        b=W2DDXQJis+1qeQfXY6E/rxnSkSH+QKQccGw4pZqh3cKQQ7Ll28D21ZTANWBpjdTXkB
-         +oBg0dRp7zXiF2K9fvNxjOnqLQ0NU4tSCX/uoDUgYXiPcW3lrnrEZ8WrBiPWSBgY4/tx
-         9wQBgc3U+/16XX6zr1IGWZp+OTMhC+7AmHWl4HQOtmJdf1TDvqV9PwZseP44xIAvTKTJ
-         lY9+rCsDVlGtJn+K+JfRbJQJUoxEyKL8bHmbimQ1ptdoTfcpwUfxMxs8lIMS2tr1n+Up
-         0WNvMspuYRbKnLIowW6FPQwT66Mrqlup7UTEmGoUmJqEmINAArubT4xrd5hjAe0QVo24
-         gEeQ==
+        bh=zYdhIytWWvNZPQpgxc7JanMz43mOjz+UXOqpB/Si8gY=;
+        b=R93xjTEs3HgPo29762m4uqHy6DgEIiw341Wvf7q57zjQt/fMOf/vIggnLWq+UIkvE2
+         ItYfM1ocg4jOoHter+LGmVVn+56WIrTresjlRqOzDpxhR2gE2Z7XKfivMQnYws3oBpcN
+         Wnp4OjEX2kVSHOm5wWUaWUQHoBL2pZOajsCNpVYP+2s7M4Pt370NfYYH6tCLMb0ePa8z
+         HUeyronXi33SaNNHMgqIF/E3v+pRpLWgtLiP7uZ593CHEdxKAHCZRXlItwp/sNFJZgmH
+         Q6m9V+2GxeMGSIE/EyF8AlQqUfCTIeQOL4NCF8eo53fHgen+/6rfpdiFIvCtnwfrEBzm
+         8haA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=nxHF7bigQnfZfNGCQpq6EtXcG8/j6GHHAEIHGHy2fyU=;
-        b=co/3FWB2EGd01nA5PaQyTRt5r/ASHBFNpfwGOHrgEmE4HvQMIlQagMKudlE8H75Xom
-         9IK7FFteqhCm30bzxFwdva22B0fjAGW0wxT8i4/9biYpGcBoSNB4Vy2g7L/aPZP/TdXo
-         aNxUBwafM14H3BkH7bl2Dge4IK3H8IgVdvw1ebN1PzHdTzdHvj5U9rS056xpssAEiZjU
-         qWOyYu2ymM+N4HrptW9wIGQwuGpcBqjZSsnh+RSx7hl1/IL11MdZwyhEsTzyej5yxSUA
-         sUZ0QYcqrzZ0lCG6/uVb4E/vhgeTc2pR/MXceTM0W0WeUU0Z48HfJfrZy3KykZn1cBax
-         PbaA==
-X-Gm-Message-State: AOAM530Q1Zw59PNFjifFWzdlZ0YnONBUS7j4J77imtpvzOCUlyBi5WKl
-        wGQ0zFH7+uKaVKBRQKQucFMPw0uIGzmKlh5mCmKquw==
-X-Google-Smtp-Source: ABdhPJxbjfLp1vymzfVN/rUSu7NFfwM27TjFOxcEJErT+R82ivD+XXC3ZWylDTpvE/Ebzm6hUwz4bOsdTAqXcC6BA2A=
-X-Received: by 2002:a17:902:ccce:: with SMTP id z14mr815477ple.34.1644257292200;
- Mon, 07 Feb 2022 10:08:12 -0800 (PST)
+        bh=zYdhIytWWvNZPQpgxc7JanMz43mOjz+UXOqpB/Si8gY=;
+        b=JKN5IdyL7Lo88aaho89CPJK/69UwNGSEon6B4H63y2jKeiuqd1mD0mzuzC4qPGso+d
+         ZrOu3skOR0gZw6klaSxXsLZRsB4LmKAUpGJoPVZgV1bHcH5c6aEsjOl2DGnQ+1osfXWX
+         sCtCnQF4ZtTUYbOuB/vS3U3+NmilvwFrOIBPgRY/y5iVcimPID5sTnLv992p0AntwxzI
+         Ljdr040gVUpWxMvmEEQQx2dafh2Xrr3W7pIyz8FT+9ouvyC9VZ5h3S3TKYFkPGhZw5QW
+         K5GKXY4vT0X/Dbq9hxUXqfyf5SzEMWDQfEnK4awhyLBZ1/eVmAZyjPrqTS/RIM8trsH6
+         nqCA==
+X-Gm-Message-State: AOAM530OT62pLgkoNU6Dk8OmhiKRu/Xmm4/oDFNpoKyL8yB/rz3uw0Ko
+        OwDOwF4j2ciBSvw/tmArwS0CF8ihIT1dE9ZvrP+bvg==
+X-Google-Smtp-Source: ABdhPJzkFzzjmqODkvgrvwQLNfbzdHBUvOVv75drXwoWtoHzOi4Qr8amdduzRjHB4i+xpu3YrgRs1ma/CEMYchNDNj0=
+X-Received: by 2002:a17:90b:1bcc:: with SMTP id oa12mr121877pjb.93.1644257320409;
+ Mon, 07 Feb 2022 10:08:40 -0800 (PST)
 MIME-Version: 1.0
-References: <20220207063249.1833066-1-hch@lst.de> <20220207063249.1833066-2-hch@lst.de>
-In-Reply-To: <20220207063249.1833066-2-hch@lst.de>
+References: <20220207063249.1833066-1-hch@lst.de> <20220207063249.1833066-3-hch@lst.de>
+In-Reply-To: <20220207063249.1833066-3-hch@lst.de>
 From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Mon, 7 Feb 2022 10:08:01 -0800
-Message-ID: <CAPcyv4iKLXJftFL+jdAXFXt6-fjwSdK9D2un9PywfXDT0W7HzQ@mail.gmail.com>
-Subject: Re: [PATCH 1/8] mm: remove a pointless CONFIG_ZONE_DEVICE check in memremap_pages
+Date:   Mon, 7 Feb 2022 10:08:29 -0800
+Message-ID: <CAPcyv4i3hJR9WBh6PFN9VgA0p3x4Vvgdy6T3b-3_bP_LaPK9fg@mail.gmail.com>
+Subject: Re: [PATCH 2/8] mm: remove the __KERNEL__ guard from <linux/mm.h>
 To:     Christoph Hellwig <hch@lst.de>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Felix Kuehling <Felix.Kuehling@amd.com>,
@@ -81,9 +81,8 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Sun, Feb 6, 2022 at 10:33 PM Christoph Hellwig <hch@lst.de> wrote:
 >
-> memremap.c is only built when CONFIG_ZONE_DEVICE is set, so remove
-> the superflous extra check.
+> __KERNEL__ ifdefs don't make sense outside of include/uapi/.
 
-Looks good to me.
+Yes.
 
 Reviewed-by: Dan Williams <dan.j.williams@intel.com>

@@ -2,372 +2,386 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 852834AB3F8
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 07:12:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 816594AB426
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 07:12:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238889AbiBGFuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 00:50:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40618 "EHLO
+        id S232495AbiBGFtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 00:49:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351166AbiBGEEW (ORCPT
+        with ESMTP id S234847AbiBGEWn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 23:04:22 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D9B5C043180;
-        Sun,  6 Feb 2022 20:04:19 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id y15-20020a17090a474f00b001b88562650aso2649308pjg.0;
-        Sun, 06 Feb 2022 20:04:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=16v0cC1TvpKhlFbTNq1A18dbL8TX/lGmAdN0x49ucuc=;
-        b=YBzJmObXlO3nu/xcZSjYigtBCOdcVkVI7++1MWimj3x4sxZVv4tuLnKHIWbmttgnfu
-         5BiffbdWgh3R7WrmsTQzlpe1XY4MX0eLPVCmOGU1jdySmBJHGEzn4H3A7wj20uIimQrX
-         AjEp2SVT3oApu5TVPQnXUiCy40K1Cm4HeeLZxdcEJhnLlMQci2vo47bA8Zd4GVeZYFMI
-         q3PjmqcHcUdr24a2w/XvtrYz3TI7OC8DQW2wT1XHoAfdWxYbjsYoMNtXlyU4A7cjxjU5
-         8k9f7eZDjvtmxBTZIenH50hq/wWEXzVjQqfTBuh0PP+oaYvA91+pbdT9JbYCj5P08/AD
-         CD7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=16v0cC1TvpKhlFbTNq1A18dbL8TX/lGmAdN0x49ucuc=;
-        b=JOCzDA84iUQrw22Ul5lRNcVSvLmpELIlPy6mMbl3H83dJq9Hx4Ud0sC2VpERwxS5wu
-         29OPQgdBjAvDJhDKbURlR4w8Ig9KK2s8ep8KBjsa5vgT4WvZSQwX2bV8siVM6rt6gd2y
-         tsNCiPPvtnWxZ54z0yM49TkCtZxZ3t/uDA6DKNXdRI118BzGNTrs61+AKesQzQHI+Iqn
-         3iy0hXkq7auBRdxBNl1ztWkIqeDSumuJPaO1RL1EELfKjZYXlUb4Wf5PxDT3r3Fpj2Fu
-         yc5ij8FtIfJVFUzIQmX17qrpZ5plZIFwapbAgsayhujgWzHHWLcMR7W+AefyT1OUfgW8
-         2g1g==
-X-Gm-Message-State: AOAM533dF+6lgbF+VRrNN5eBlNeCc1Vgi+Yfz/hDP3Q8WM4deI55RkrF
-        5+v8kvXK6369C/YLLn2w9aM=
-X-Google-Smtp-Source: ABdhPJyyzhCLWwzxQt2xfOIIPRPYd3U8JsrS7xz8kNwQgrN0D4pB+eAoZxL/CV6twQGXaEo9qUg0Cw==
-X-Received: by 2002:a17:90a:a616:: with SMTP id c22mr12102473pjq.68.1644206659029;
-        Sun, 06 Feb 2022 20:04:19 -0800 (PST)
-Received: from localhost.localdomain ([27.7.146.135])
-        by smtp.gmail.com with ESMTPSA id j18sm10601234pfj.13.2022.02.06.20.04.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Feb 2022 20:04:18 -0800 (PST)
-From:   Jagath Jog J <jagathjog1996@gmail.com>
-To:     jic23@kernel.org, lars@metafoo.de, andy.shevchenko@gmail.com,
-        sst@poczta.fm, robh+dt@kernel.org
-Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] iio: potentiometer: Add support for Maxim DS3502
-Date:   Mon,  7 Feb 2022 09:34:08 +0530
-Message-Id: <20220207040408.4273-3-jagathjog1996@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220207040408.4273-1-jagathjog1996@gmail.com>
-References: <20220207040408.4273-1-jagathjog1996@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 6 Feb 2022 23:22:43 -0500
+X-Greylist: delayed 1051 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Feb 2022 20:22:40 PST
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1980BC061A73;
+        Sun,  6 Feb 2022 20:22:39 -0800 (PST)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JsXZ10GTZz9sT8;
+        Mon,  7 Feb 2022 12:03:37 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 7 Feb 2022 12:05:01 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 7 Feb 2022 12:05:00 +0800
+Subject: Re: [PATCH v20 0/5] support reserving crashkernel above 4G on arm64
+ kdump
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
+        <linux-kernel@vger.kernel.org>, Dave Young <dyoung@redhat.com>,
+        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        <kexec@lists.infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        <devicetree@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        <linux-doc@vger.kernel.org>
+CC:     Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        "Chen Zhou" <dingguo.cz@antgroup.com>,
+        John Donnelly <John.p.donnelly@oracle.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>
+References: <20220124084708.683-1-thunder.leizhen@huawei.com>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <d77f9f52-626d-e290-5fcb-578ac6b0c7ce@huawei.com>
+Date:   Mon, 7 Feb 2022 12:04:48 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
+MIME-Version: 1.0
+In-Reply-To: <20220124084708.683-1-thunder.leizhen@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The DS3502 is a 7-bit, nonvolatile digital potentiometer featuring
-an output voltage range of up to 15.5V.
-DS3502 support is implemented into existing ds1803 driver
+Hi everybody:
+  Can someone take a moment to review these patches? Maybe I should just try
+making generic. This patch series seems to have gone back to square one,
+discarding some of the valuable comments that were made in the middle. But the
+only benefit of make generic is to avoid code duplication, a lot of adaptation
+is needed. I think Borislav Petkov's suggestion is good, too.
 
-Datasheet: https://datasheets.maximintegrated.com/en/ds/DS3502.pdf
+  These patches are taking too long. Maybe no one wants to look through history
+anymore. So I'm putting together some of the most central observations of
+"make generic" as follows:
+   Mike Rapoport:
+     This very reminds what x86 does. Any chance some of the code can be reused
+     rather than duplicated?
+     https://lkml.org/lkml/2019/4/4/1225
 
-Signed-off-by: Jagath Jog J <jagathjog1996@gmail.com>
----
- drivers/iio/potentiometer/Kconfig  |   4 +-
- drivers/iio/potentiometer/ds1803.c | 150 +++++++++++++++++++++++------
- 2 files changed, 120 insertions(+), 34 deletions(-)
+     I think it would be better to have CONFIG_ARCH_WANT_RESERVE_CRASH_KERNEL
+     in arch/Kconfig and select this by X86 and ARM64.
+     https://lkml.org/lkml/2020/11/12/224
 
-diff --git a/drivers/iio/potentiometer/Kconfig b/drivers/iio/potentiometer/Kconfig
-index 832df8da2bc6..1741af33672c 100644
---- a/drivers/iio/potentiometer/Kconfig
-+++ b/drivers/iio/potentiometer/Kconfig
-@@ -27,10 +27,10 @@ config AD5272
- 	  module will be called ad5272.
- 
- config DS1803
--	tristate "Maxim Integrated DS1803 Digital Potentiometer driver"
-+	tristate "Maxim Integrated DS1803 and similar Digital Potentiometer driver"
- 	depends on I2C
- 	help
--	  Say yes here to build support for the Maxim Integrated DS1803
-+	  Say yes here to build support for the Maxim Integrated DS1803 and DS3502
- 	  digital potentiometer chip.
- 
- 	  To compile this driver as a module, choose M here: the
-diff --git a/drivers/iio/potentiometer/ds1803.c b/drivers/iio/potentiometer/ds1803.c
-index 20b45407eaac..5e403e3400f7 100644
---- a/drivers/iio/potentiometer/ds1803.c
-+++ b/drivers/iio/potentiometer/ds1803.c
-@@ -1,12 +1,15 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-- * Maxim Integrated DS1803 digital potentiometer driver
-+ * Maxim Integrated DS1803 and DS3502 digital potentiometer driver
-  * Copyright (c) 2016 Slawomir Stepien
-+ * Copyright (c) 2022 Jagath Jog J
-  *
-  * Datasheet: https://datasheets.maximintegrated.com/en/ds/DS1803.pdf
-+ * Datasheet: https://datasheets.maximintegrated.com/en/ds/DS3502.pdf
-  *
-  * DEVID	#Wipers	#Positions	Resistor Opts (kOhm)	i2c address
-  * ds1803	2	256		10, 50, 100		0101xxx
-+ * DS3502       1       128             10                      01010xx
-  */
- 
- #include <linux/err.h>
-@@ -16,47 +19,88 @@
- #include <linux/module.h>
- #include <linux/mod_devicetable.h>
- 
--#define DS1803_MAX_POS		255
--#define DS1803_WRITE(chan)	(0xa8 | ((chan) + 1))
-+#define DS1803_WIPER_0		(0xA9)
-+#define DS1803_WIPER_1		(0xAA)
-+#define DS3502_WR_IVR		(0x00)
-+#define DS3502_CR               (0x02)
-+#define DS3502_MODE0		(0x00)
-+#define DS3502_MODE1		(0x80)
- 
- enum ds1803_type {
- 	DS1803_010,
- 	DS1803_050,
- 	DS1803_100,
-+	DS3502,
- };
- 
- struct ds1803_cfg {
-+	int wipers;
-+	int avail[3];
- 	int kohms;
- };
- 
- static const struct ds1803_cfg ds1803_cfg[] = {
--	[DS1803_010] = { .kohms =  10, },
--	[DS1803_050] = { .kohms =  50, },
--	[DS1803_100] = { .kohms = 100, },
-+	[DS1803_010] = { .wipers = 2, .avail = { 0, 1, 255 }, .kohms =  10, },
-+	[DS1803_050] = { .wipers = 2, .avail = { 0, 1, 255 }, .kohms =  50, },
-+	[DS1803_100] = { .wipers = 2, .avail = { 0, 1, 255 }, .kohms = 100, },
-+	[DS3502] =     { .wipers = 1, .avail = { 0, 1, 127 }, .kohms =  10, },
-+};
-+
-+struct maxim_potentiometer {
-+	const struct iio_chan_spec *channels;
-+	u8 num_channels;
- };
- 
- struct ds1803_data {
- 	struct i2c_client *client;
-+	enum ds1803_type chip_type;
- 	const struct ds1803_cfg *cfg;
-+	const struct maxim_potentiometer *chip;
- };
- 
--#define DS1803_CHANNEL(ch) {					\
--	.type = IIO_RESISTANCE,					\
--	.indexed = 1,						\
--	.output = 1,						\
--	.channel = (ch),					\
--	.info_mask_separate = BIT(IIO_CHAN_INFO_RAW),		\
--	.info_mask_shared_by_type = BIT(IIO_CHAN_INFO_SCALE),	\
-+#define DS1803_CHANNEL(ch, addr) {					\
-+	.type = IIO_RESISTANCE,						\
-+	.indexed = 1,							\
-+	.output = 1,							\
-+	.channel = (ch),						\
-+	.address = (addr),						\
-+	.info_mask_separate = BIT(IIO_CHAN_INFO_RAW),			\
-+	.info_mask_shared_by_type = BIT(IIO_CHAN_INFO_SCALE),		\
-+	.info_mask_shared_by_type_available = BIT(IIO_CHAN_INFO_RAW),	\
- }
- 
- static const struct iio_chan_spec ds1803_channels[] = {
--	DS1803_CHANNEL(0),
--	DS1803_CHANNEL(1),
-+	DS1803_CHANNEL(0, DS1803_WIPER_0),
-+	DS1803_CHANNEL(1, DS1803_WIPER_1),
-+};
-+
-+static const struct iio_chan_spec ds3502_channels[] = {
-+	{
-+		.type = IIO_RESISTANCE,
-+		.indexed = 1,
-+		.output = 1,
-+		.channel = 0,
-+		.address = (DS3502_WR_IVR),
-+		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) | BIT(IIO_CHAN_INFO_ENABLE),
-+		.info_mask_shared_by_type = BIT(IIO_CHAN_INFO_SCALE),
-+		.info_mask_shared_by_type_available = BIT(IIO_CHAN_INFO_RAW),
-+	},
-+};
-+
-+static const struct maxim_potentiometer maxim_potentiometer_chips[] = {
-+	[DS1803_100] = {
-+				.channels = ds1803_channels,
-+				.num_channels = ARRAY_SIZE(ds1803_channels),
-+		},
-+	[DS3502]     = {
-+				.channels = ds3502_channels,
-+				.num_channels = ARRAY_SIZE(ds3502_channels),
-+		},
- };
- 
- static int ds1803_read_raw(struct iio_dev *indio_dev,
--			    struct iio_chan_spec const *chan,
--			    int *val, int *val2, long mask)
-+			   struct iio_chan_spec const *chan,
-+			   int *val, int *val2, long mask)
- {
- 	struct ds1803_data *data = iio_priv(indio_dev);
- 	int pot = chan->channel;
-@@ -65,17 +109,28 @@ static int ds1803_read_raw(struct iio_dev *indio_dev,
- 
- 	switch (mask) {
- 	case IIO_CHAN_INFO_RAW:
--		ret = i2c_master_recv(data->client, result,
--				indio_dev->num_channels);
-+		switch (data->chip_type) {
-+		case DS1803_010:
-+		case DS1803_050:
-+		case DS1803_100:
-+			ret = i2c_master_recv(data->client, result,
-+					      indio_dev->num_channels);
-+			*val = result[pot];
-+			break;
-+		case DS3502:
-+			ret = i2c_smbus_read_byte_data(data->client, chan->address);
-+			*val = ret;
-+			break;
-+		default:
-+			return -EINVAL;
-+		}
-+
- 		if (ret < 0)
- 			return ret;
--
--		*val = result[pot];
- 		return IIO_VAL_INT;
--
- 	case IIO_CHAN_INFO_SCALE:
- 		*val = 1000 * data->cfg->kohms;
--		*val2 = DS1803_MAX_POS;
-+		*val2 = data->cfg->avail[2];
- 		return IIO_VAL_FRACTIONAL;
- 	}
- 
-@@ -83,38 +138,64 @@ static int ds1803_read_raw(struct iio_dev *indio_dev,
- }
- 
- static int ds1803_write_raw(struct iio_dev *indio_dev,
--			     struct iio_chan_spec const *chan,
--			     int val, int val2, long mask)
-+			    struct iio_chan_spec const *chan,
-+			    int val, int val2, long mask)
- {
- 	struct ds1803_data *data = iio_priv(indio_dev);
--	int pot = chan->channel;
-+	int max_pos = data->cfg->avail[2];
-+	u8 addr = chan->address;
- 
- 	if (val2 != 0)
- 		return -EINVAL;
- 
- 	switch (mask) {
- 	case IIO_CHAN_INFO_RAW:
--		if (val > DS1803_MAX_POS || val < 0)
-+		if (val > max_pos || val < 0)
-+			return -EINVAL;
-+		break;
-+	case IIO_CHAN_INFO_ENABLE:
-+		if (val == 1)
-+			val = DS3502_MODE1;
-+		else if (val != DS3502_MODE0)
- 			return -EINVAL;
-+		addr = DS3502_CR;
- 		break;
- 	default:
- 		return -EINVAL;
- 	}
- 
--	return i2c_smbus_write_byte_data(data->client, DS1803_WRITE(pot), val);
-+	return i2c_smbus_write_byte_data(data->client, addr, val);
-+}
-+
-+static int ds1803_read_avail(struct iio_dev *indio_dev, struct iio_chan_spec const *chan,
-+			     const int **vals, int *type, int *length, long mask)
-+{
-+	struct ds1803_data *data = iio_priv(indio_dev);
-+
-+	switch (mask) {
-+	case IIO_CHAN_INFO_RAW:
-+		*vals = data->cfg->avail;
-+		*length = ARRAY_SIZE(data->cfg->avail);
-+		*type = IIO_VAL_INT;
-+		return IIO_AVAIL_RANGE;
-+	}
-+	return -EINVAL;
- }
- 
- static const struct iio_info ds1803_info = {
- 	.read_raw = ds1803_read_raw,
-+	.read_avail = ds1803_read_avail,
- 	.write_raw = ds1803_write_raw,
- };
- 
- static int ds1803_probe(struct i2c_client *client,
--			 const struct i2c_device_id *id)
-+			const struct i2c_device_id *id)
- {
- 	struct device *dev = &client->dev;
- 	struct ds1803_data *data;
- 	struct iio_dev *indio_dev;
-+	enum ds1803_type chip_type = (id->driver_data <= DS1803_100 ? DS1803_100 : DS3502);
-+	const struct maxim_potentiometer *chip = &maxim_potentiometer_chips[chip_type];
- 
- 	indio_dev = devm_iio_device_alloc(dev, sizeof(*data));
- 	if (!indio_dev)
-@@ -125,10 +206,12 @@ static int ds1803_probe(struct i2c_client *client,
- 	data = iio_priv(indio_dev);
- 	data->client = client;
- 	data->cfg = &ds1803_cfg[id->driver_data];
-+	data->chip = chip;
-+	data->chip_type = chip_type;
- 
- 	indio_dev->info = &ds1803_info;
--	indio_dev->channels = ds1803_channels;
--	indio_dev->num_channels = ARRAY_SIZE(ds1803_channels);
-+	indio_dev->channels = chip->channels;
-+	indio_dev->num_channels = chip->num_channels;
- 	indio_dev->name = client->name;
- 
- 	return devm_iio_device_register(dev, indio_dev);
-@@ -138,6 +221,7 @@ static const struct of_device_id ds1803_dt_ids[] = {
- 	{ .compatible = "maxim,ds1803-010", .data = &ds1803_cfg[DS1803_010] },
- 	{ .compatible = "maxim,ds1803-050", .data = &ds1803_cfg[DS1803_050] },
- 	{ .compatible = "maxim,ds1803-100", .data = &ds1803_cfg[DS1803_100] },
-+	{ .compatible = "maxim,ds3502",     .data = &ds1803_cfg[DS3502] },
- 	{}
- };
- MODULE_DEVICE_TABLE(of, ds1803_dt_ids);
-@@ -146,6 +230,7 @@ static const struct i2c_device_id ds1803_id[] = {
- 	{ "ds1803-010", DS1803_010 },
- 	{ "ds1803-050", DS1803_050 },
- 	{ "ds1803-100", DS1803_100 },
-+	{ "ds3502",	DS3502	   },
- 	{}
- };
- MODULE_DEVICE_TABLE(i2c, ds1803_id);
-@@ -162,5 +247,6 @@ static struct i2c_driver ds1803_driver = {
- module_i2c_driver(ds1803_driver);
- 
- MODULE_AUTHOR("Slawomir Stepien <sst@poczta.fm>");
--MODULE_DESCRIPTION("DS1803 digital potentiometer");
-+MODULE_AUTHOR("Jagath Jog J <jagathjog1996@gmail.com>");
-+MODULE_DESCRIPTION("DS1803 and DS3502 digital potentiometer");
- MODULE_LICENSE("GPL v2");
+   Ingo Molnar:
+     No objections for this to be merged via the ARM tree, as long as x86
+     functionality is kept intact.
+     https://lkml.org/lkml/2019/4/10/109
+
+     I.e. Ack, but only if it doesn't break anything. :-)
+     https://lkml.org/lkml/2019/4/12/66
+
+   Dave Young:
+     Other than the comments from James, can you move the function into
+     kernel/crash_core.c, we already have some functions moved there for
+     sharing.
+     https://lkml.org/lkml/2019/6/12/248
+
+   Catalin Marinas:
+     Except for the threshold to keep zone ZONE_DMA memory,
+     reserve_crashkernel() looks very close to the x86 version. Shall we try
+     to make this generic as well?
+     https://lkml.org/lkml/2020/9/2/917
+
+   Borislav Petkov:
+     Why insert_resource() is relevant only to x86?
+     --> I think this means "Why does arm64 not use insert_resource()?"
+     https://lkml.org/lkml/2021/12/23/480
+
+     This is exactly why I say that making those functions generic and shared
+     might not be such a good idea, after all, because then you'd have to
+     sprinkle around arch-specific stuff.
+     https://lkml.org/lkml/2021/12/23/480
+
+     What I suggested and what would be real clean is if the arches would
+     simply call a *single*
+	parse_crashkernel()
+     function and when that one returns, *all* crashkernel= options would
+     have been parsed properly, low, high, middle crashkernel, whatever...
+     and the caller would know what crash kernel needs to be allocated.
+     https://lkml.org/lkml/2021/12/28/305
+
+   ------
+   James Morse:
+     We can then describe it via a different string in /proc/iomem, something
+     like "Crash kernel (low)".
+     https://lkml.org/lkml/2019/6/5/670
+     --> The suggestion looks out of date. See Borislav Petkov's comments:
+     --> 157752d84f5d ("kexec: use Crash kernel for Crash kernel low")
+     --> https://lkml.org/lkml/2021/12/23/480
+
+
+On 2022/1/24 16:47, Zhen Lei wrote:
+> There are following issues in arm64 kdump:
+> 1. We use crashkernel=X to reserve crashkernel below 4G, which
+> will fail when there is no enough low memory.
+> 2. If reserving crashkernel above 4G, in this case, crash dump
+> kernel will boot failure because there is no low memory available
+> for allocation.
+> 
+> To solve these issues, change the behavior of crashkernel=X.
+> crashkernel=X tries low allocation in DMA zone and fall back to high
+> allocation if it fails.
+> 
+> We can also use "crashkernel=X,high" to select a high region above
+> DMA zone, which also tries to allocate at least 256M low memory in
+> DMA zone automatically and "crashkernel=Y,low" can be used to allocate
+> specified size low memory.
+> 
+> When reserving crashkernel in high memory, some low memory is reserved
+> for crash dump kernel devices. So there may be two regions reserved for
+> crash dump kernel.
+> In order to distinct from the high region and make no effect to the use
+> of existing kexec-tools, rename the low region as "Crash kernel (low)",
+> and pass the low region by reusing DT property
+> "linux,usable-memory-range". We made the low memory region as the last
+> range of "linux,usable-memory-range" to keep compatibility with existing
+> user-space and older kdump kernels.
+> 
+> Besides, we need to modify kexec-tools:
+> arm64: support more than one crash kernel regions(see [1])
+> 
+> Another update is document about DT property 'linux,usable-memory-range':
+> schemas: update 'linux,usable-memory-range' node schema(see [2])
+> 
+> 
+> Changes since [v19]:
+> 1. Temporarily stop making reserve_crashkernel[_low]() generic. There are a
+>    lot of details need to be considered, which can take a long time. Because
+>    "make generic" does not add new functions and does not improve performance,
+>    maybe I should say it's just a cleanup. So by stripping it out and leaving
+>    it for other patches later, we can aggregate the changes to the main functions.
+> 2. Use insert_resource() to replace request_resource(), this not only simplifies
+>    the code, but also reduces the differences between arm64 and x86 implementations.
+> 3. As commit 157752d84f5d ("kexec: use Crash kernel for Crash kernel low") do for
+>    x86, we can also extend kexec-tools for arm64, and it's currently applied. See:
+>    https://www.spinics.net/lists/kexec/msg28284.html
+> 
+> Thank you very much, Borislav Petkov, for so many valuable comments.
+> 
+> 
+> 
+> Changes since [v17]: v17 --> v19
+> 1. Patch 0001-0004
+>    Introduce generic parse_crashkernel_high_low() to bring the parsing of
+>    "crashkernel=X,high" and the parsing of "crashkernel=X,low" together,
+>    then use it instead of the call to parse_crashkernel_{high|low}(). Two
+>    confusing parameters of parse_crashkernel_{high|low}() are deleted.
+> 
+>    I previously sent these four patches separately:
+>    [1] https://lkml.org/lkml/2021/12/25/40
+> 2. Patch 0005-0009
+>    Introduce generic reserve_crashkernel_mem[_low](), the implementation of
+>    these two functions is based on function reserve_crashkernel[_low]() in
+>    arch/x86/kernel/setup.c. There is no functional change for x86.
+>    1) The check position of xen_pv_domain() does not change.
+>    2) Still 1M alignment for crash kernel fixed region, when 'base' is specified.
+> 
+>    To avoid compilation problems on other architectures: patch 0004 moves
+>    the definition of global variable crashk[_low]_res from kexec_core.c to
+>    crash_core.c, and provide default definitions for all macros involved, a
+>    particular platform can redefine these macros to override the default
+>    values.
+> 3. 0010, only one line of comment was changed.
+> 4. 0011
+>    1) crashk_low_res may also a valid reserved memory, should be checked
+>       in crash_is_nosave(), see arch/arm64/kernel/machine_kexec.
+>    2) Drop memblock_mark_nomap() for crashk_low_res, because of:
+>       2687275a5843 arm64: Force NO_BLOCK_MAPPINGS if crashkernel reservation is required
+>    3) Also call kmemleak_ignore_phys() for crashk_low_res, because of:
+>       85f58eb18898 arm64: kdump: Skip kmemleak scan reserved memory for kdump
+> 5. 0012, slightly rebased, because the following patch is applied in advance. 
+>    https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git/commit/?h=dt/linus&id=8347b41748c3019157312fbe7f8a6792ae396eb7
+> 6. 0013, no change.
+> 
+> Others:
+> 1. Discard add ARCH_WANT_RESERVE_CRASH_KERNEL
+> 2. When allocating crash low memory, the start address still starts from 0.
+>    low_base = memblock_phys_alloc_range(low_size, CRASH_ALIGN, 0, CRASH_ADDR_LOW_MAX);
+> 3. Discard change (1ULL << 32) to CRASH_ADDR_LOW_MAX.
+> 4. Ensure the check position of xen_pv_domain() have no change.
+> 5. Except patch 0010 and 0012, all "Tested-by", "Reviewed-by", "Acked-by" are removed.
+> 6. Update description.
+> 
+> 
+> 
+> Changes since [v16]
+> - Because no functional changes in this version, so add
+>   "Tested-by: Dave Kleikamp <dave.kleikamp@oracle.com>" for patch 1-9
+> - Add "Reviewed-by: Rob Herring <robh@kernel.org>" for patch 8
+> - Update patch 9 based on the review comments of Rob Herring
+> - As Catalin Marinas's suggestion, merge the implementation of
+>   ARCH_WANT_RESERVE_CRASH_KERNEL into patch 5. Ensure that the
+>   contents of X86 and ARM64 do not overlap, and reduce unnecessary
+>   temporary differences.
+> 
+> Changes since [v15]
+> -  Aggregate the processing of "linux,usable-memory-range" into one function.
+>    Only patch 9-10 have been updated.
+> 
+> Changes since [v14]
+> - Recovering the requirement that the CrashKernel memory regions on X86
+>   only requires 1 MiB alignment.
+> - Combine patches 5 and 6 in v14 into one. The compilation warning fixed
+>   by patch 6 was introduced by patch 5 in v14.
+> - As with crashk_res, crashk_low_res is also processed by
+>   crash_exclude_mem_range() in patch 7.
+> - Due to commit b261dba2fdb2 ("arm64: kdump: Remove custom linux,usable-memory-range handling")
+>   has removed the architecture-specific code, extend the property "linux,usable-memory-range"
+>   in the platform-agnostic FDT core code. See patch 9.
+> - Discard the x86 description update in the document, because the description
+>   has been updated by commit b1f4c363666c ("Documentation: kdump: update kdump guide").
+> - Change "arm64" to "ARM64" in Doc.
+> 
+> 
+> Changes since [v13]
+> - Rebased on top of 5.11-rc5.
+> - Introduce config CONFIG_ARCH_WANT_RESERVE_CRASH_KERNEL.
+> Since reserve_crashkernel[_low]() implementations are quite similar on
+> other architectures, so have CONFIG_ARCH_WANT_RESERVE_CRASH_KERNEL in
+> arch/Kconfig and select this by X86 and ARM64.
+> - Some minor cleanup.
+> 
+> Changes since [v12]
+> - Rebased on top of 5.10-rc1.
+> - Keep CRASH_ALIGN as 16M suggested by Dave.
+> - Drop patch "kdump: add threshold for the required memory".
+> - Add Tested-by from John.
+> 
+> Changes since [v11]
+> - Rebased on top of 5.9-rc4.
+> - Make the function reserve_crashkernel() of x86 generic.
+> Suggested by Catalin, make the function reserve_crashkernel() of x86 generic
+> and arm64 use the generic version to reimplement crashkernel=X.
+> 
+> Changes since [v10]
+> - Reimplement crashkernel=X suggested by Catalin, Many thanks to Catalin.
+> 
+> Changes since [v9]
+> - Patch 1 add Acked-by from Dave.
+> - Update patch 5 according to Dave's comments.
+> - Update chosen schema.
+> 
+> Changes since [v8]
+> - Reuse DT property "linux,usable-memory-range".
+> Suggested by Rob, reuse DT property "linux,usable-memory-range" to pass the low
+> memory region.
+> - Fix kdump broken with ZONE_DMA reintroduced.
+> - Update chosen schema.
+> 
+> Changes since [v7]
+> - Move x86 CRASH_ALIGN to 2M
+> Suggested by Dave and do some test, move x86 CRASH_ALIGN to 2M.
+> - Update Documentation/devicetree/bindings/chosen.txt.
+> Add corresponding documentation to Documentation/devicetree/bindings/chosen.txt
+> suggested by Arnd.
+> - Add Tested-by from Jhon and pk.
+> 
+> Changes since [v6]
+> - Fix build errors reported by kbuild test robot.
+> 
+> Changes since [v5]
+> - Move reserve_crashkernel_low() into kernel/crash_core.c.
+> - Delete crashkernel=X,high.
+> - Modify crashkernel=X,low.
+> If crashkernel=X,low is specified simultaneously, reserve spcified size low
+> memory for crash kdump kernel devices firstly and then reserve memory above 4G.
+> In addition, rename crashk_low_res as "Crash kernel (low)" for arm64, and then
+> pass to crash dump kernel by DT property "linux,low-memory-range".
+> - Update Documentation/admin-guide/kdump/kdump.rst.
+> 
+> Changes since [v4]
+> - Reimplement memblock_cap_memory_ranges for multiple ranges by Mike.
+> 
+> Changes since [v3]
+> - Add memblock_cap_memory_ranges back for multiple ranges.
+> - Fix some compiling warnings.
+> 
+> Changes since [v2]
+> - Split patch "arm64: kdump: support reserving crashkernel above 4G" as
+> two. Put "move reserve_crashkernel_low() into kexec_core.c" in a separate
+> patch.
+> 
+> Changes since [v1]:
+> - Move common reserve_crashkernel_low() code into kernel/kexec_core.c.
+> - Remove memblock_cap_memory_ranges() i added in v1 and implement that
+> in fdt_enforce_memory_region().
+> There are at most two crash kernel regions, for two crash kernel regions
+> case, we cap the memory range [min(regs[*].start), max(regs[*].end)]
+> and then remove the memory range in the middle.
+> 
+> [1]: https://www.spinics.net/lists/kexec/msg28226.html
+> [2]: https://github.com/robherring/dt-schema/pull/19 
+> [v1]: https://lkml.org/lkml/2019/4/2/1174
+> [v2]: https://lkml.org/lkml/2019/4/9/86
+> [v3]: https://lkml.org/lkml/2019/4/9/306
+> [v4]: https://lkml.org/lkml/2019/4/15/273
+> [v5]: https://lkml.org/lkml/2019/5/6/1360
+> [v6]: https://lkml.org/lkml/2019/8/30/142
+> [v7]: https://lkml.org/lkml/2019/12/23/411
+> [v8]: https://lkml.org/lkml/2020/5/21/213
+> [v9]: https://lkml.org/lkml/2020/6/28/73
+> [v10]: https://lkml.org/lkml/2020/7/2/1443
+> [v11]: https://lkml.org/lkml/2020/8/1/150
+> [v12]: https://lkml.org/lkml/2020/9/7/1037
+> [v13]: https://lkml.org/lkml/2020/10/31/34
+> [v14]: https://lkml.org/lkml/2021/1/30/53
+> [v15]: https://lkml.org/lkml/2021/10/19/1405
+> [v16]: https://lkml.org/lkml/2021/11/23/435
+> [v17]: https://lkml.org/lkml/2021/12/10/38
+> [v18]: https://lkml.org/lkml/2021/12/22/424
+> [v19]: https://lkml.org/lkml/2021/12/28/203
+> 
+> 
+> Chen Zhou (4):
+>   arm64: kdump: introduce some macros for crash kernel reservation
+>   arm64: kdump: reimplement crashkernel=X
+>   of: fdt: Add memory for devices by DT property
+>     "linux,usable-memory-range"
+>   kdump: update Documentation about crashkernel
+> 
+> Zhen Lei (1):
+>   arm64: Use insert_resource() to simplify code
+> 
+>  Documentation/admin-guide/kdump/kdump.rst     | 11 ++-
+>  .../admin-guide/kernel-parameters.txt         | 11 ++-
+>  arch/arm64/kernel/machine_kexec.c             |  9 ++-
+>  arch/arm64/kernel/machine_kexec_file.c        | 12 ++-
+>  arch/arm64/kernel/setup.c                     | 17 +---
+>  arch/arm64/mm/init.c                          | 80 +++++++++++++++++--
+>  drivers/of/fdt.c                              | 33 +++++---
+>  7 files changed, 134 insertions(+), 39 deletions(-)
+> 
+
 -- 
-2.17.1
-
+Regards,
+  Zhen Lei

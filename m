@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A84234ABA14
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:27:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B235D4ABC52
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:46:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383443AbiBGLWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:22:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56384 "EHLO
+        id S1385534AbiBGLb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:31:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381965AbiBGLRr (ORCPT
+        with ESMTP id S1382964AbiBGLVQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:17:47 -0500
+        Mon, 7 Feb 2022 06:21:16 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A91A4C043181;
-        Mon,  7 Feb 2022 03:17:46 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC98CC0401D4;
+        Mon,  7 Feb 2022 03:20:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6A3A3B8111C;
-        Mon,  7 Feb 2022 11:17:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9186C004E1;
-        Mon,  7 Feb 2022 11:17:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DC1E8B811BF;
+        Mon,  7 Feb 2022 11:20:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B140DC004E1;
+        Mon,  7 Feb 2022 11:20:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232664;
-        bh=VmPwG06BoYxolGXfIBhJmLsdJiUdT/22gIzJPpO0ABE=;
+        s=korg; t=1644232839;
+        bh=NJmS3B+Cb2vA5MU8O1kb12BTorYlXGdNj7c14dfOLcw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EjB3rM3i9lx6fYJ6Hoh+sndxniH0OTADDP0N+IxmfCjj42GK5Xm/R+kHIf4z+gjig
-         MY/wohtBhwsFOXZ0ObB4048oK5uVEDeTkS3YpC6CL4U6QCW3BLMTdh1mcFx7Ua71IH
-         V76NOAmjnFfPzReY1kWi3UjecjrGcdtOAjwKREoc=
+        b=So1ljySBLZGW2C6usm45/0XQ0a0WxFUPxqqdWYyRjTB/w/xTrnMzAfpQ9lKTAf+SA
+         dprjBcJXdkS6bcVpyROHTvwzxcU/IEFNnuSlYi/z1MKYT9j6+RRHjJZqXyfiUa/oKi
+         98NS19jCV2yisRlBb2useTtm/xBrQvSVgMoH6MXw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Riwen Lu <luriwen@kylinos.cn>,
-        Eric Wong <e@80x24.org>,
-        =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: [PATCH 4.19 83/86] rtc: cmos: Evaluate century appropriate
-Date:   Mon,  7 Feb 2022 12:06:46 +0100
-Message-Id: <20220207103800.408505495@linuxfoundation.org>
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Subject: [PATCH 5.4 31/44] drm/i915/overlay: Prevent divide by zero bugs in scaling
+Date:   Mon,  7 Feb 2022 12:06:47 +0100
+Message-Id: <20220207103754.168225437@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103757.550973048@linuxfoundation.org>
-References: <20220207103757.550973048@linuxfoundation.org>
+In-Reply-To: <20220207103753.155627314@linuxfoundation.org>
+References: <20220207103753.155627314@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,43 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Riwen Lu <luriwen@kylinos.cn>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-commit ff164ae39b82ee483b24579c8e22a13a8ce5bd04 upstream.
+commit 90a3d22ff02b196d5884e111f39271a1d4ee8e3e upstream.
 
-There's limiting the year to 2069. When setting the rtc year to 2070,
-reading it returns 1970. Evaluate century starting from 19 to count the
-correct year.
+Smatch detected a divide by zero bug in check_overlay_scaling().
 
-$ sudo date -s 20700106
-Mon 06 Jan 2070 12:00:00 AM CST
-$ sudo hwclock -w
-$ sudo hwclock -r
-1970-01-06 12:00:49.604968+08:00
+    drivers/gpu/drm/i915/display/intel_overlay.c:976 check_overlay_scaling()
+    error: potential divide by zero bug '/ rec->dst_height'.
+    drivers/gpu/drm/i915/display/intel_overlay.c:980 check_overlay_scaling()
+    error: potential divide by zero bug '/ rec->dst_width'.
 
-Fixes: 2a4daadd4d3e5071 ("rtc: cmos: ignore bogus century byte")
+Prevent this by ensuring that the dst height and width are non-zero.
 
-Signed-off-by: Riwen Lu <luriwen@kylinos.cn>
-Acked-by: Eric Wong <e@80x24.org>
-Reviewed-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Link: https://lore.kernel.org/r/20220106084609.1223688-1-luriwen@kylinos.cn
-Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl> # preparation for stable
+Fixes: 02e792fbaadb ("drm/i915: implement drmmode overlay support v4")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220124122409.GA31673@kili
+(cherry picked from commit cf5b64f7f10b28bebb9b7c9d25e7aee5cbe43918)
+Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/rtc/rtc-mc146818-lib.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/i915/display/intel_overlay.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/drivers/rtc/rtc-mc146818-lib.c
-+++ b/drivers/rtc/rtc-mc146818-lib.c
-@@ -82,7 +82,7 @@ unsigned int mc146818_get_time(struct rt
- 	time->tm_year += real_year - 72;
- #endif
+--- a/drivers/gpu/drm/i915/display/intel_overlay.c
++++ b/drivers/gpu/drm/i915/display/intel_overlay.c
+@@ -913,6 +913,9 @@ static int check_overlay_dst(struct inte
+ 	const struct intel_crtc_state *pipe_config =
+ 		overlay->crtc->config;
  
--	if (century > 20)
-+	if (century > 19)
- 		time->tm_year += (century - 19) * 100;
- 
- 	/*
++	if (rec->dst_height == 0 || rec->dst_width == 0)
++		return -EINVAL;
++
+ 	if (rec->dst_x < pipe_config->pipe_src_w &&
+ 	    rec->dst_x + rec->dst_width <= pipe_config->pipe_src_w &&
+ 	    rec->dst_y < pipe_config->pipe_src_h &&
 
 

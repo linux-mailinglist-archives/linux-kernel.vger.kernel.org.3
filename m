@@ -2,67 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA6744AB92E
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 11:59:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2019B4AB922
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 11:56:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348844AbiBGK4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 05:56:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38530 "EHLO
+        id S237844AbiBGK4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 05:56:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352176AbiBGKuq (ORCPT
+        with ESMTP id S1352481AbiBGKvS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 05:50:46 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD94C043181
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 02:50:45 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id m14so23891146wrg.12
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 02:50:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=EZDSS2MYdieKNY+ptNKFPV1o4mbS/p6IjuUtTxEmOkI=;
-        b=duNxmxAdk7clYt7ndWPXMcPdSolXHBq4k1vpVSHdqeR3Y4OWFGyd1weIqSmOvwZb6S
-         Spl+lEN4s/4eqR+CV2VBUi31PwqNpLhu1spSm9qyFUZFnw96KF9rCAhnyUvDBEIf11z1
-         PSnr7JICxX6dz2N2SJiFNsqmL9hadf/eri3EZFXn1w2FkBwZdwQP/eyRjWS5wMaFGvdn
-         ZF0lDFr030L6E1u3lhpYKRKDd4tReFjacJB9q+g0p4uS1S2/apocHH72RqIDegc24uK8
-         2jrlj+s/8rx96MGL4wDFQmWS8/lusi4cE2hPx9vSkIyDaelQhP2a0llYAaxuDq8JyPit
-         J5CA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=EZDSS2MYdieKNY+ptNKFPV1o4mbS/p6IjuUtTxEmOkI=;
-        b=m0BHmCjtOm06RqsPr4H5MAMMo0udjYLBS9vSePYsPvD8LnF/EgK07C4+qyGbru0OSb
-         u0namIiMUlwCCu8fl5Pi0imLBjGfG4ZUyo4Zjo6+pRFYR3Cdj8WXY2oF02rDwosIaGaX
-         S2wgzx/7AWalPY9tpCVl/ls4LrBXAExojFr6zoeBwzitqywiUGuPrGJqaXuQTHQ/N6yV
-         oH+BwiZwKZ075PsW9GPOc+/zG6Y+EqyLXhZxs39zZtz7C9Am2kMXVwrPWTp8d96CJrWT
-         E0DnmD53oydnH7thnORslbRy0Fwf/pF6zKEToMJLIdLA8jHmnxKW1epsrJ+ycNlyhoiy
-         f/Cw==
-X-Gm-Message-State: AOAM530NQtB05/35uE76M7WSsnfKzn4V6stL5U1KitXStwVsUodJsNst
-        jPGvwCAuSwzYmZHVEkRB2MZuzg==
-X-Google-Smtp-Source: ABdhPJxLDom1n0BQAQA7DNHaMf3QjJwyZDXY+ENwGqJe57G5ZW9q1SeMh9v9S8yRdiIbSkPeP/Mi6A==
-X-Received: by 2002:a5d:6486:: with SMTP id o6mr8980127wri.454.1644231043764;
-        Mon, 07 Feb 2022 02:50:43 -0800 (PST)
-Received: from usaari01.cust.communityfibre.co.uk ([2a02:6b6d:f804:0:9277:27e1:ecf9:6ab6])
-        by smtp.gmail.com with ESMTPSA id a22sm112080wmq.45.2022.02.07.02.50.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 02:50:43 -0800 (PST)
-From:   Usama Arif <usama.arif@bytedance.com>
-To:     io-uring@vger.kernel.org, axboe@kernel.dk, asml.silence@gmail.com,
-        linux-kernel@vger.kernel.org
-Cc:     fam.zheng@bytedance.com, lkp@lists.01.org, lkp@intel.com,
-        Usama Arif <usama.arif@bytedance.com>,
-        kernel test robot <oliver.sang@intel.com>
-Subject: [PATCH] io_uring: unregister eventfd while holding lock when freeing ring ctx
-Date:   Mon,  7 Feb 2022 10:50:40 +0000
-Message-Id: <20220207105040.2662467-1-usama.arif@bytedance.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 7 Feb 2022 05:51:18 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2044.outbound.protection.outlook.com [40.107.237.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF602C043181;
+        Mon,  7 Feb 2022 02:51:17 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TNCct+sOLgyW9MqWlkdLu1Z1nw2G000Nu8Yiii6aFJKDcwn4/X6Wujz/DaQn3RdKgboXOxkNOyfupEgMPDE2cn9wUog05vSZH9c9kH+XNYTioX7Ak78ZydU4skcUm1KD6TKj0GcEg8Txwn6e8A177jC7euexbedgAOtPWPA89IALJZ63hSxSWEwINefMuXbLeZHj06NnICn7xCUx350wlXglgqzMuWPKtGzzc04wUaZz+Y+a13sUByzPNeXZtYvuEDoeT5mzMS2rH8wqpD/sEPxyL0tGWV+csEv2RMx5HCVlKK5c3WdYk4MR9+4Ou85BCweO38ypVu8q7BcprNnFCQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GmOsTMYoPyt+EMa6/G7D2cBX0asmGes7MTGnDcub4SY=;
+ b=N5b8JwJcCPloMh6XP/5oG9DRi8VknisEm0QDF/RIwv4nrEo0IIBDcdX7SY/oV/pZkqr/YhgvqmPbd45ak2NwY+8qyMHO0u04bUceR6pWnwfyUps17mJA0mI1YtAJEfv/lFL+Y0i4Hxngr5pxuxZKVzY7B8wldK+ZkdjeoHtBrekIiCbD4zDWJDLPvCngdOxDQQUf1aC+JKkn1d+bTzRXzOnxpsvcPfNfgwnjnetCo63u8vy3h0i2Df3NFZCWHfRxhLaAyUCuKnyJMqu6jAI8I999hk+a3+r09T6Yyef/I60gy/PcFNYcpqlxWpnSPINkHuVt3xoQusMRh+BkC9SltA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.236) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com; dmarc=pass
+ (p=reject sp=reject pct=100) action=none header.from=nvidia.com; dkim=none
+ (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GmOsTMYoPyt+EMa6/G7D2cBX0asmGes7MTGnDcub4SY=;
+ b=kpxnpZ2fPtPQnQ1cqaqBBX8je9MOc9WFGeG9tF0SgAGZ+wyO/+TkxmyotMUXFtfnnNI3/qkG+m+CIYvpPH+aajiefVC98makLT+XaBQZiiqjWGiUXnmEPq3rh+1gfrMe+i+2vuhQtWclyP29VsA0g+/zINS9fERTHRltR+sL9b6QQrDCbJoUtQJoJ/9V2P8uS5RV8Q8i9hg4ugn5iB0gdb88IRrH08BPEdaJdWb+mdTkwoF6a7G5yAZInWXUDPCYmOvBoLZ3FVtog+9SvxjgyqMeRMptS2+0mP6r66wfdjJGKiFJQSu9v+/jt6kHHhF65IMKZizLe7fa9579D7t9kg==
+Received: from MW4PR03CA0286.namprd03.prod.outlook.com (2603:10b6:303:b5::21)
+ by BN6PR12MB1427.namprd12.prod.outlook.com (2603:10b6:404:20::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Mon, 7 Feb
+ 2022 10:51:15 +0000
+Received: from CO1NAM11FT018.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:b5:cafe::b6) by MW4PR03CA0286.outlook.office365.com
+ (2603:10b6:303:b5::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.17 via Frontend
+ Transport; Mon, 7 Feb 2022 10:51:14 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.236; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.236) by
+ CO1NAM11FT018.mail.protection.outlook.com (10.13.175.16) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4951.12 via Frontend Transport; Mon, 7 Feb 2022 10:51:14 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL109.nvidia.com
+ (10.27.9.19) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Mon, 7 Feb
+ 2022 10:51:13 +0000
+Received: from [172.27.26.97] (10.126.231.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.9; Mon, 7 Feb 2022
+ 02:51:08 -0800
+Message-ID: <af122e70-d073-cd83-541c-b3a0125c7cfb@nvidia.com>
+Date:   Mon, 7 Feb 2022 12:51:05 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH net-next 2/4] net: bridge: dsa: Add support for offloading
+ of locked port flag
+Content-Language: en-US
+To:     Hans Schultz <schultz.hans@gmail.com>, <davem@davemloft.net>,
+        <kuba@kernel.org>
+CC:     <netdev@vger.kernel.org>,
+        Hans Schultz <schultz.hans+netdev@gmail.com>,
+        Roopa Prabhu <roopa@nvidia.com>, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "Vladimir Oltean" <olteanv@gmail.com>,
+        <bridge@lists.linux-foundation.org>, <linux-kernel@vger.kernel.org>
+References: <20220207100742.15087-1-schultz.hans+netdev@gmail.com>
+ <20220207100742.15087-3-schultz.hans+netdev@gmail.com>
+From:   Nikolay Aleksandrov <nikolay@nvidia.com>
+In-Reply-To: <20220207100742.15087-3-schultz.hans+netdev@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.231.35]
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6881ccf2-f704-4578-54fc-08d9ea27c30b
+X-MS-TrafficTypeDiagnostic: BN6PR12MB1427:EE_
+X-Microsoft-Antispam-PRVS: <BN6PR12MB142732CB8F4F383DEBA982E8DF2C9@BN6PR12MB1427.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Wu55FupcrmMQp9K0KcbraQ5PypTAYvFoLmyAjD9a3jk0PSp5MtysayOTqzYk6ozHBrC4MBhJdyLC6LKh579k2ej6vUKu5x8jgVdxOM6CD73ZS3S5JlykLkV3XkPOM6u2M+akYoyHbslCncLQRmcFx6X93YMeo4nhmLASWrhDf+XYxnjJf4gCCYvaJTpqRcP15mjnN0Lm832GZUNmJfEJWN26dsHr6nve7WF9gQZcYHC8Hdmq70GLs7A6dtxHLcJwm1ZfaNvxzsQUpjCeR0HtOfkVvSU/FpQobk4lSV0YYI2e72DJXhQCo2bVseWyMvjQKiY25Ji4p6Bc8i5sSH93PlrV+RtOzAJAy/1BotxsSxa7hXXAUKAe+kJS/nHWRocYT8r/+QUfQMNguq24uZWgqUa6M0rzSLX0KFLqIHDeSvKpxoFg9abH7N5vRhR10Dq9eTznPvWtR3f/j8wBbQxHM2zqqx/6dsVy0gWI+KBzfCeFseUtIpNxn70jcSB7xdYJirBEnCMK2CGYufbTXHEZ4w21yWtpNs8N4iayBJqpN9KnnWFhmvLBVl4FjpDDo7miCqyf0RMAzdJQTRUaDV9j79uHbOCd83ebGVR/I+DUte42rXsr+xt+8S3ZRv07qW9C+KNpL/9zu71EwKGi8VLF3UoF5ylwsumjRhvYpJyVQ82+UjDCSVLUt8hTXSRn9+PXgGDCbSIPp6Ev4sYw7EVrk7wfb7ccw3hMgm7jJwtCfRD4FgpGuoKSpaqYEcwF2M44
+X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(31696002)(16576012)(336012)(316002)(6666004)(53546011)(82310400004)(47076005)(426003)(40460700003)(86362001)(36756003)(2616005)(4744005)(36860700001)(186003)(4326008)(7416002)(31686004)(5660300002)(110136005)(54906003)(83380400001)(8936002)(508600001)(8676002)(81166007)(2906002)(16526019)(26005)(70586007)(70206006)(356005)(36900700001)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Feb 2022 10:51:14.5466
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6881ccf2-f704-4578-54fc-08d9ea27c30b
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT018.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1427
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,30 +116,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is because ctx->io_ev_fd is rcu_dereference_protected using
-ctx->uring_lock in io_eventfd_unregister. Not locking the function
-resulted in suspicious RCU usage reported by kernel test robot.
+On 07/02/2022 12:07, Hans Schultz wrote:
+> Various switchcores support setting ports in locked mode, so that
+> clients behind locked ports cannot send traffic through the port
+> unless a fdb entry is added with the clients MAC address.
+> 
+> Among the switchcores that support this feature is the Marvell
+> mv88e6xxx family.
+> 
+> Signed-off-by: Hans Schultz <schultz.hans+netdev@gmail.com>
+> ---
+>  net/bridge/br_switchdev.c | 2 +-
+>  net/dsa/port.c            | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
 
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Signed-off-by: Usama Arif <usama.arif@bytedance.com>
----
- fs/io_uring.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi,
+For some reason I still haven't received patch 01 which adds this new flag,
+so I'll comment on this patch first.
 
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index ad8f84376955..dbc9d3f3f6c5 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -9471,8 +9471,8 @@ static __cold void io_ring_ctx_free(struct io_ring_ctx *ctx)
- 		__io_sqe_files_unregister(ctx);
- 	if (ctx->rings)
- 		__io_cqring_overflow_flush(ctx, true);
--	mutex_unlock(&ctx->uring_lock);
- 	io_eventfd_unregister(ctx);
-+	mutex_unlock(&ctx->uring_lock);
- 	io_destroy_buffers(ctx);
- 	if (ctx->sq_creds)
- 		put_cred(ctx->sq_creds);
--- 
-2.25.1
+These should be 2 separate patches, there is no bridge: dsa:.
+Please break them into a bridge: and dsa: parts that add the flag, it also
+makes it easier for people who have to backport patches and fixes later.
+
+In addition please mention in the commit message why the flag is
+added there, i.e. in order to allow to be offloaded.
+
+Thanks,
+ Nik
 

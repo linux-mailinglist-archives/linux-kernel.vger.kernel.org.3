@@ -2,49 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11BA34ABF50
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 14:24:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A5F14ABF26
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 14:23:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442805AbiBGNJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 08:09:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53450 "EHLO
+        id S1448627AbiBGNMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 08:12:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442248AbiBGMUt (ORCPT
+        with ESMTP id S1442251AbiBGMUt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 7 Feb 2022 07:20:49 -0500
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FC77DF8E3E5
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 04:06:52 -0800 (PST)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id B19FC68AA6; Mon,  7 Feb 2022 13:06:47 +0100 (CET)
-Date:   Mon, 7 Feb 2022 13:06:47 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Zhi Wang <zhi.wang.linux@gmail.com>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Christoph Hellwig <hch@lst.de>,
-        "Wang, Zhi A" <zhi.a.wang@intel.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "intel-gvt-dev@lists.freedesktop.org" 
-        <intel-gvt-dev@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        "Xu, Terrence" <terrence.xu@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-Subject: Re: [PATCH 1/3] i915/gvt: Introduce the mmio_table.c to support
- VFIO new mdev API
-Message-ID: <20220207120647.GA28851@lst.de>
-References: <20220127120508.11330-1-zhi.a.wang@intel.com> <20220207073247.GA24327@lst.de> <DM4PR11MB5549FE45F8098368114ADE75CA2C9@DM4PR11MB5549.namprd11.prod.outlook.com> <20220207083535.GA25345@lst.de> <877da7rlzr.fsf@intel.com> <5c916187-8a8c-323a-adb4-8bce141180cc@gmail.com>
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 172BCDF8E3EC;
+        Mon,  7 Feb 2022 04:07:01 -0800 (PST)
+Received: from [192.168.1.111] (91-156-85-209.elisa-laajakaista.fi [91.156.85.209])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4B2FC499;
+        Mon,  7 Feb 2022 13:06:56 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1644235617;
+        bh=uH3r+Qyhm3NdERrDEidXSeR4RXvMj+L+e0iwChpe9eA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=X0ZFIBgrcyPspRGiprabJFQGAPllvw9rkYosOiAtQ8it/1sdpTdjN/XbbNE5n5b00
+         hRSZH5PAYGhr0M7mSGyPct4Davqo6sqFlsu5oaDgse1FQehzu+OxFQtAdeCUXeDi2H
+         +OJzJV7ZrUpVKmjHkxse+x87Lpt2QTBzAZ64aM2U=
+Message-ID: <7e5af144-bd5f-cd0e-2109-49b318449a78@ideasonboard.com>
+Date:   Mon, 7 Feb 2022 14:06:53 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5c916187-8a8c-323a-adb4-8bce141180cc@gmail.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [RFCv3 0/6] TI camera serdes and I2C address translation (Was:
+ [RFCv3 0/6] Hi,)
+Content-Language: en-US
+To:     Luca Ceresoli <luca@lucaceresoli.net>, linux-media@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Peter Rosin <peda@axentia.se>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        matti.vaittinen@fi.rohmeurope.com
+References: <20220206115939.3091265-1-luca@lucaceresoli.net>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <20220206115939.3091265-1-luca@lucaceresoli.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,15 +63,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 06:57:13AM -0500, Zhi Wang wrote:
-> Hi Christoph and Jani:
->
-> Thanks for the comments. It would be nice that people can achieve a 
-> agreement. I am OK with both of the options and also moving some files into 
-> different folders doesn't needs me to do the full test run again. :)
+Hi Luca,
 
-The way I understood Jani he agrees that the mmio table, which needs to
-be part of the core i915 module should not be under the gvt/ subdiretory.
-I.e. it could be drivers/gpu/drm/i915/intel_gvt_mmio_table.c.  The
-declarations could then go either into drivers/gpu/drm/i915/intel_gvt.h
-or drivers/gpu/drm/i915/intel_gvt_mmio_table.h.
+On 06/02/2022 13:59, Luca Ceresoli wrote:
+> this RFCv3, codename "FOSDEM Fries", of RFC patches to support the TI
+> DS90UB9xx serializer/deserializer chipsets with I2C address translation.
+> 
+> I sent RFCv2 back in 2019 (!). After that I have applied most of the
+> improvements proposed during code review, most notably device tree
+> representation and proper use of kernel abstractions for clocks and GPIO. I
+> have also done many improvements all over the drivers code.
+
+Thanks for sending this! I'll have a closer look at the code in the near 
+future.
+
+> However I still don't consider these drivers "ready", hence the RFC status.
+> 
+> One reason is that, while the I2C ATR idea has been considered good by
+> Wolfram, its implementation requires I2C core changes that have been tried
+> but never made it to mainline. I think that discussion needs to be reopened
+> and work has to be done on that side. Thus for the time being this code
+> still has the alias pool: it is an interim solution until I2C core is
+> ready.
+> 
+> Also be aware that the only hardware where I sould test this code runs a
+> v4.19 kernel. I cannot guarantee it will work perfectly on mainline.
+> 
+> And since my hardware has only one camera connected to each deserializer I
+> dropped support. However I wrote the code to be able to easily add support
+> for 2 and 4 camera inputs as well as 2 CSI-2 outputs (DS90UB960).
+ >
+> Finally, I dropped all attempts at supporting hotplug. The goals I had 2+
+> years ago are not reasonably doable even with current kernels. Luckily all
+> the users that I talked with are happy without hotplug. For this reason I
+> simplified the serializer management in the DS90UB954 driver by keeping the
+> serializer always instantiated.
+> 
+> Even with the above limitations I felt I'd send this v3 anyway since
+> several people have contacted me since v2 asking whether this
+> implementation has made progress towards mainline. Some even improved on
+> top of my code it their own forks. As I cannot afford to work on this topic
+> in the near future, here is the latest and greatest version I can produce,
+> with all the improvements I made so far.
+
+I've discussed with Luca in private emails, but I'll add a short status 
+about my work in this thread:
+
+About a year ago I took Luca's then-latest-patches and started working 
+on them. The aim was to get full multiplexed streams support to v4l2 so 
+that we could support CSI-2 bus with multiple virtual channels and 
+embedded data, and after that, add support for fpdlink devices.
+
+Since then I have sent multiple versions of the v4l2 work (no drivers 
+yet, only the framework changes) to upstream lists. Some pieces have 
+already been merged to upstream (e.g. subdev state), but most of it is 
+still under work. Here's a link to v10 of the streams series:
+
+https://lore.kernel.org/all/20211130141536.891878-1-tomi.valkeinen@ideasonboard.com/
+
+It has a link to my (now slightly outdated) git branch which contains 
+the driver work too.
+
+The fpdlink drivers have diverged from Luca's version quite a bit. The 
+most obvious difference is the support for multiplexed streams, of 
+course, but there are lots of other changes too. The drivers support 
+DS90UB960 (no UB954 at the moment), DS90UB953 and DS90UB913. UB960 
+supports all the inputs and outputs. I have also dropped some code which 
+I did not need and which I wasn't sure if it's correctly implemented, to 
+make it easier to work on the multiplexed streams version. Some of that 
+code may need to be added back.
+
+I have not changed the i2c-atr driver, and my fpdlink driver uses it 
+more or less the same way as in Luca's version.
+
+Considering that you're not able to work on this, my suggestion is to 
+review the i2c-atr patches here (or perhaps send those patches in a 
+separate series?), but afaics the fpdlink drivers without multiplexed 
+streams is a dead-end, as they can only support a single camera (and no 
+embedded data), so I don't see much point in properly reviewing them.
+
+However, I will go through the fpdlink drivers in this series and 
+cherry-pick the changes that make sense. I was about to start working on 
+proper fpdlink-clock-rate and clkout support, but I see you've already 
+done that work =).
+
+But, of course, I'm open to other ideas on how to proceed.
+
+  Tomi

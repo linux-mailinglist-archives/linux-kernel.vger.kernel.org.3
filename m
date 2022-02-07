@@ -2,100 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9058B4AC41D
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 16:46:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A04484AC415
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 16:46:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384565AbiBGPnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 10:43:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53380 "EHLO
+        id S1379810AbiBGPnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 10:43:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352774AbiBGPi1 (ORCPT
+        with ESMTP id S1354436AbiBGPi6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 10:38:27 -0500
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EDFDC0401CC
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 07:38:25 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id y84so17310914iof.0
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 07:38:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:in-reply-to:references:subject:message-id:date
-         :mime-version:content-transfer-encoding;
-        bh=uN1CSm5Xp0zfBe9o48GNau7bniWjnN8OKEvpexouZmA=;
-        b=e7TGsDDQnw7DcjI6Brhjc6vCkM0BGnGHOPePjmWKGBU33M8F3SkG5FC9LetY1qxkST
-         uS9Qu7uylVk9F7PIEVKRHenzEBnN8svGYCbBCD/f3btZzar8CHQF71cidCwAJWIniv8E
-         0lac2EA1iUAVm6024Xlwi3l+/5Ud/MWR2AAd1fOG5Chd1JUbumKrjpzV35Ciq+RSeTGD
-         JvoWrKZqUWs+Mblu+src5E3wJraRRSqr3zQuI2QSYoIy03+wUB8QMHcSXMAmfBLGEkcp
-         xGYWaxbmMw9mlsEcO7NHonfZwk369I36O5lJiHETzzkvNCtGBe2eduQCDw9DZpK9Gv7n
-         ikqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=uN1CSm5Xp0zfBe9o48GNau7bniWjnN8OKEvpexouZmA=;
-        b=UKnQkWhuLeoy4MI8yeAL93oJb/4JUu/L4AJ4PPs+ImofprINa7MWMq2r3hWlxuQhPY
-         lCUINu5Xa9lFN+iQV6WSTslDyjIi+dtqDjv4tvGvFsa/JuhADs2/uLIbvXYWaSClJOWS
-         iWkTDs2F9WjAi90yW8gaLgGE/koNuJN4X6ZPaQ7G5dcImW6IfTNHBYYFCYqMeTFVpImy
-         yRBoLV1Lz974MHgi7j3GbLDHzR+8PCNH+Guhx4D8mWTF4SX7ANOQx/WosfSIDsyowDZJ
-         Xzu/onTxp7/vhXBczA9ibtVLE1p8X05OjYmPiGbanuKgsFJrC+o1RFwA4NlVs/jQ5SYo
-         8Tpw==
-X-Gm-Message-State: AOAM531wQSdqybKQ0GaTn4kj1sL35uW/nltJQgQch7fNIo1zhjCRZaCU
-        wflDLj9vhpURMi8ltkDOa/bakA==
-X-Google-Smtp-Source: ABdhPJyLp8yQXnthAsAiXf5Lyt8EZbSsYGzPNbpW4fdUvzh6XOdUKIJi5wEmEzcBbdv+ClLxErVLhw==
-X-Received: by 2002:a05:6602:2c83:: with SMTP id i3mr49969iow.105.1644248305006;
-        Mon, 07 Feb 2022 07:38:25 -0800 (PST)
-Received: from x1.localdomain ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id z23sm6052912iol.11.2022.02.07.07.38.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 07:38:24 -0800 (PST)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Cc:     "Chen, Rong A" <rong.a.chen@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alviro Iskandar Setiawan <alviro.iskandar@gmail.com>,
-        io-uring Mailing list <io-uring@vger.kernel.org>,
-        GNU/Weeb Mailing List <gwml@gnuweeb.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Tea Inside Mailing List <timl@vger.teainside.org>,
-        kernel test robot <lkp@intel.com>
-In-Reply-To: <20220207140533.565411-1-ammarfaizi2@gnuweeb.org>
-References: <d33bb5a9-8173-f65b-f653-51fc0681c6d6@intel.com> <20220207114315.555413-1-ammarfaizi2@gnuweeb.org> <91e8ca64-0670-d998-73d8-f75ec5264cb0@kernel.dk> <20220207140533.565411-1-ammarfaizi2@gnuweeb.org>
-Subject: Re: [PATCH io_uring-5.17 v2] io_uring: Clean up a false-positive warning from GCC 9.3.0
-Message-Id: <164424830208.19639.16912208440698766253.b4-ty@kernel.dk>
-Date:   Mon, 07 Feb 2022 08:38:22 -0700
+        Mon, 7 Feb 2022 10:38:58 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 538CEC0401CF
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 07:38:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E5A6B6149E
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 15:38:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4498C004E1;
+        Mon,  7 Feb 2022 15:38:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644248337;
+        bh=RTvZKxiiVb4DkndrEqiIDyBFoJwkTFHw/l8m5UQFWBI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LbdsYVt2FV8bRWojeV2R3PTQUMumkhGQtqRdk2aVie2hIT9esB1HKCuPakXKuz4zX
+         xkuwhlhp/BXCSREg6Ls9UCh1iAjGeY3e9E5uWyqOw4Cad3NTwal0Yd2+wpGpOjXbgS
+         IsO0/QUB9nQOi9chhM1uXRfBWt6h9Na/R6W8UVXnAcyTjbldJ3wyGgAvS6OH6qK396
+         2GCEkMKIW0nMzMy/gHONkjYdPtnDxbWku7wZEwUL3yJt7G8k5BmadOVb20zdzRZ6an
+         X11yXJjVrBPX7tExR8np6DaCOLv9ihsqTs+jTGBbeEbyTErwV7B2z0CrfRt5edZWuL
+         elMkDjHUluKcA==
+Date:   Mon, 7 Feb 2022 16:38:54 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Nitesh Lal <nilal@redhat.com>,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Christoph Lameter <cl@linux.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Alex Belits <abelits@belits.com>, Peter Xu <peterx@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Oscar Shiang <oscar0225@livemail.tw>
+Subject: Re: [patch v11 13/13] task isolation: only TIF_TASK_ISOL if task
+ isolation is enabled
+Message-ID: <20220207153854.GB526451@lothringen>
+References: <20220204173537.429902988@fedora.localdomain>
+ <20220204173555.047244789@fedora.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220204173555.047244789@fedora.localdomain>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 7 Feb 2022 21:05:33 +0700, Ammar Faizi wrote:
-> From: Alviro Iskandar Setiawan <alviro.iskandar@gmail.com>
+On Fri, Feb 04, 2022 at 02:35:50PM -0300, Marcelo Tosatti wrote:
+> This avoids processing of TIF_TASK_ISOL, when returning to userspace,
+> for tasks which do not have task isolation configured.
 > 
-> In io_recv(), if import_single_range() fails, the @flags variable is
-> uninitialized, then it will goto out_free.
-> 
-> After the goto, the compiler doesn't know that (ret < min_ret) is
-> always true, so it thinks the "if ((flags & MSG_WAITALL) ..."  path
-> could be taken.
-> 
-> [...]
+> Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
 
-Applied, thanks!
-
-[1/1] io_uring: Clean up a false-positive warning from GCC 9.3.0
-      commit: 0d7c1153d9291197c1dc473cfaade77acb874b4b
-
-Best regards,
--- 
-Jens Axboe
-
-
+Ok that answers another of my questions :-)

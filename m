@@ -2,158 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 773964AC99E
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 20:34:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20F334AC9A0
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 20:34:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238101AbiBGTdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 14:33:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53856 "EHLO
+        id S240060AbiBGTds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 14:33:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240812AbiBGTby (ORCPT
+        with ESMTP id S237331AbiBGTcS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 14:31:54 -0500
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F99C0401E6
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 11:31:50 -0800 (PST)
-Received: by mail-yb1-xb2a.google.com with SMTP id m6so43126786ybc.9
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 11:31:50 -0800 (PST)
+        Mon, 7 Feb 2022 14:32:18 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F35B0C0401E0
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 11:32:16 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id f10so28875713lfu.8
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 11:32:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=MK2v0Nt4cCV21YTIg8dlF+1LBbs9TTGPuFsltjIOmZY=;
-        b=rMiweCVJx+urv7AcwZojioWaGyvA45MimmXZ4nW0za2fZ/cduytjm2OQZyHtYp+tPx
-         1HrHmPCebzKnd6tfbU9efn7x6cPgg2Ts12sYH1bDkvdoffD8pp5XtzMRdtBkI3j8bFgF
-         YF8jFpySNTXhHpbW0iLLaZ4Xdtr7HVgrurfwh05TUxgliW41tE3zDiMNBC92jvKeZe2h
-         BS7mTS5MFOFRAbgaP/GIIe5MrNQy5/9MDgN3RIjeirtsr0eY6VsPOsClYYcVlnZCqq2l
-         1iBhLbmjaF6IPhNqDof1RAmK2+93XkctSjr/Btdd8oUPy7U+M6KqcYX7XZFxPvWMb/zn
-         ooHw==
+        bh=9kNXJ/3JYeOdOA7DH0CUuMRYUlFkKsOTuLs1vioWo7w=;
+        b=h+mCGkMYZDJ2VmGTrhAw2KavAcmOsthjQkVi+QdZ+ZkiV9+fSapdS2uzHf/ukcLtPC
+         vRMH36btXdXZw4Ye257+NkEVUOXQ85HWugB/ZhQX8fVUxns1ppL9bbQn13QOA3ElZuOG
+         w/woARgt0jaLHbggZleqoiutYHT5OJpNXqshM0nOaRT6yu8ba+36GM7vOQkVtn+q+KMz
+         PrViwbkfN0W+BU23IVkmRKIfKyqmi1i+hfYNh3aPzbDCWEmi298Kiaj1FG9p3y59070a
+         yT9dTx74o7gwmNbXRdcfA+scReMr+Pi9A/l2N0+4dLetZsnbwfaTYZnVUOnLHuSETGIp
+         DGJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=MK2v0Nt4cCV21YTIg8dlF+1LBbs9TTGPuFsltjIOmZY=;
-        b=Yd0saLbsOH0LIlq8J//E47k5GvTWNZiXXIc31HJ9IaXEBEH1VfPbCfzrv8xETMMA2A
-         4W+KPJWCigKmc4siY3kb35IcrSHz0BZ6zSGOiuOdeI1ANt/AEUayhG5u/OyBEUl/Hrnj
-         yrbGqFsWZlYY4+RT7le7hrAT4HZfdkgrW6Lt9bjIurvBdfzgWGLBZA9pppGSDHp+7X3m
-         yt36vT7DOkujZwpyQ+NG9qW/ZbyrquRkjdrPc8G2PUSA1e6o2K6WlI25bQB6tiGSweKm
-         /3Wi/wSg0zSXOkzmNRD+LVamClN5QpuVQYguSYh3iC1z5hP68PWQEcuutpD21AWD41QJ
-         mQOw==
-X-Gm-Message-State: AOAM5338/sHNBBPRAiCCqZrlgJLsXzSrlrJOuKGxDKiyN/F3QSVGvTwJ
-        zOi0BzSWNGVasOrJEiaV3Wy+DrNY4n5jVOBBeXNmK1EuL41fNvYi
-X-Google-Smtp-Source: ABdhPJx6cAOVkZDsEsjED0wt0V+zqCARCd6Uf0sXMZfve4eA84dGGFKqAgMYW0gF9smp23F+c8iYQKEpGwRFHz8d2dg=
-X-Received: by 2002:a25:d7d0:: with SMTP id o199mr1316951ybg.34.1644262309574;
- Mon, 07 Feb 2022 11:31:49 -0800 (PST)
+        bh=9kNXJ/3JYeOdOA7DH0CUuMRYUlFkKsOTuLs1vioWo7w=;
+        b=IdX2SsziZSsrYgXkp9gCRax25kOPEiKE89kWOtLTY0TCHSiDsFuP5fZXraf5XTcQy1
+         ERpkjrUa7P0Lv8n7uFU4hpzYmAq4NlSeLTk0mZ0vXftjlprvB96Rkay5pAQDheKEmFFd
+         zJ0l9n+bph2sEscl+8uMUuWk5vDg5XWfsislXdEmskUT0+Ow/B1JnR17l3TKqxJKQuZw
+         OBg9aZw2IWhdAnyVIoAwPZUoTM8dB7rMsHztkmKPi3JNXqAwLcWZ6pgqEom0/VYPFHKs
+         wn3cWdaeO1mmH/x/MuXAJQjKzZ7l2UlyuqxWzpsuKqVvkD2qR1vQtPSaQ8clFhewlo3j
+         tJKA==
+X-Gm-Message-State: AOAM533iXhsN8bowJY0d1hhOLJ/YIrekp49Fhl4CwMinWja/k8grMcQq
+        rLYKUjCyCR+WKCy961H2/soGfIK9k8/lhMiVS1ayAA==
+X-Google-Smtp-Source: ABdhPJysHyL+1pJLsLclE94GhiA8i/bGjovo8W+T16GtnH/4rOMgZ92vLex2xjh0nrjH88dfPBFkxZUzaXe4biaSDQQ=
+X-Received: by 2002:ac2:4c4c:: with SMTP id o12mr637262lfk.523.1644262335129;
+ Mon, 07 Feb 2022 11:32:15 -0800 (PST)
 MIME-Version: 1.0
-References: <20220128131006.67712-1-michel@lespinasse.org> <20220128131006.67712-23-michel@lespinasse.org>
- <20220129121319.3593-1-hdanton@sina.com> <CAJuCfpHBfSQBuz8=LHYhX-aOgZ1ng6nNfpv_jeBLz+KVr1OU5w@mail.gmail.com>
- <20220201020958.3720-1-hdanton@sina.com>
-In-Reply-To: <20220201020958.3720-1-hdanton@sina.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Mon, 7 Feb 2022 11:31:38 -0800
-Message-ID: <CAJuCfpG95cA68Y047MKsXYjvGMENXsjSzHkhYktagcT=fjagWw@mail.gmail.com>
-Subject: Re: [PATCH v2 22/35] percpu-rwsem: enable percpu_sem destruction in
- atomic context
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     Michel Lespinasse <michel@lespinasse.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
+References: <20220207162410.1013466-1-nathan@kernel.org>
+In-Reply-To: <20220207162410.1013466-1-nathan@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 7 Feb 2022 11:32:03 -0800
+Message-ID: <CAKwvOdnfQeY8sC0iET4hm-kgeFhurWf_jrh4=czBj17zQ5+x0Q@mail.gmail.com>
+Subject: Re: [PATCH] io_uring: Fix use of uninitialized ret in io_eventfd_register()
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Usama Arif <usama.arif@bytedance.com>,
+        io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 6:10 PM Hillf Danton <hdanton@sina.com> wrote:
+On Mon, Feb 7, 2022 at 8:24 AM Nathan Chancellor <nathan@kernel.org> wrote:
 >
-> On Mon, 31 Jan 2022 10:04:16 -0800 Suren Baghdasaryan wrote:
-> > On Sat, Jan 29, 2022 at 4:13 AM Hillf Danton wrote:
-> > >
-> > > On Fri, 28 Jan 2022 05:09:53 -0800 Michel Lespinasse wrote:
-> > > > +
-> > > > +static LIST_HEAD(destroy_list);
-> > > > +static DEFINE_SPINLOCK(destroy_list_lock);
-> > >
-> > >    static bool destroyer_running;
-> > >
-> > > > +
-> > > > +static void destroy_list_workfn(struct work_struct *work)
-> > > > +{
-> > > > +     struct percpu_rw_semaphore *sem, *sem2;
-> > > > +     LIST_HEAD(to_destroy);
-> > > > +
-> > >
-> > > again:
-> > >
-> > > > +     spin_lock(&destroy_list_lock);
-> > >
-> > >         if (list_empty(&destroy_list)) {
-> > >                 destroyer_running = false;
-> > >                 spin_unlock(&destroy_list_lock);
-> > >                 return;
-> > >         }
-> > >         destroyer_running = true;
-> > >
-> > > > +     list_splice_init(&destroy_list, &to_destroy);
-> > > > +     spin_unlock(&destroy_list_lock);
-> > > > +
-> > > > +     if (list_empty(&to_destroy))
-> > > > +             return;
-> > > > +
-> > > > +     list_for_each_entry_safe(sem, sem2, &to_destroy, destroy_list_entry) {
-> > >
-> > >                 list_del(&sem->destroy_list_entry);
-> > >
-> > > > +             percpu_free_rwsem(sem);
-> > > > +             kfree(sem);
-> > > > +     }
-> > >
-> > >         goto again;
-> > > > +}
-> > > > +
-> > > > +static DECLARE_WORK(destroy_list_work, destroy_list_workfn);
-> > > > +
-> > > > +void percpu_rwsem_async_destroy(struct percpu_rw_semaphore *sem)
-> > > > +{
-> > > > +     spin_lock(&destroy_list_lock);
-> > > > +     list_add_tail(&sem->destroy_list_entry, &destroy_list);
-> > > > +     spin_unlock(&destroy_list_lock);
-> > > > +     schedule_work(&destroy_list_work);
-> > >
-> > > Nits
-> > >         spin_lock(&destroy_list_lock);
-> > > 1/      /* LIFO */
-> > >         list_add(&sem->destroy_list_entry, &destroy_list);
-> > > 2/      /* spawn worker if it is idle */
-> > >         if (!destroyer_running)
-> > > 3/              /* this is not critical work */
-> > >                 queue_work(system_unbound_wq, &destroy_list_work);
-> > >         spin_unlock(&destroy_list_lock);
-> >
-> > Thanks for the review! Just to clarify, are you suggesting
-> > simplifications to the current patch or do you see a function issue?
+> Clang warns:
 >
-> Apart from the nits that can be safely ignored in usual spins, I wonder if
-> the async destroy can be used in the contexts wrt raw_spin_lock.
+>   fs/io_uring.c:9396:9: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+>           return ret;
+>                  ^~~
+>   fs/io_uring.c:9373:13: note: initialize the variable 'ret' to silence this warning
+>           int fd, ret;
+>                      ^
+>                       = 0
+>   1 warning generated.
 >
-> Hillf
+> Just return 0 directly and reduce the scope of ret to the if statement,
+> as that is the only place that it is used, which is how the function was
+> before the fixes commit.
 >
->         raw_spin_lock_irq(&foo->lock);
->         ...
->         percpu_rwsem_async_destroy(*sem);
->         ...
->         raw_spin_unlock_irq(&foo->lock);
+> Fixes: 1a75fac9a0f9 ("io_uring: avoid ring quiesce while registering/unregistering eventfd")
 
-Sorry for the delay. Are you concerned about the use of spin_lock()
-inside percpu_rwsem_async_destroy() which would become a sleeping lock
-in case of PREEMPT_RT? If so, we can use raw_spin_lock() when locking
-destroy_list_lock. Please confirm. Thanks!
+Did SHA's change? In linux-next, I see:
+commit b77e315a9644 ("io_uring: avoid ring quiesce while
+registering/unregistering eventfd")
+otherwise LGTM
+
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1579
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  fs/io_uring.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/fs/io_uring.c b/fs/io_uring.c
+> index 5479f0607430..7ef04bb66da1 100644
+> --- a/fs/io_uring.c
+> +++ b/fs/io_uring.c
+> @@ -9370,7 +9370,7 @@ static int io_eventfd_register(struct io_ring_ctx *ctx, void __user *arg,
+>  {
+>         struct io_ev_fd *ev_fd;
+>         __s32 __user *fds = arg;
+> -       int fd, ret;
+> +       int fd;
+>
+>         ev_fd = rcu_dereference_protected(ctx->io_ev_fd,
+>                                         lockdep_is_held(&ctx->uring_lock));
+> @@ -9386,14 +9386,14 @@ static int io_eventfd_register(struct io_ring_ctx *ctx, void __user *arg,
+>
+>         ev_fd->cq_ev_fd = eventfd_ctx_fdget(fd);
+>         if (IS_ERR(ev_fd->cq_ev_fd)) {
+> -               ret = PTR_ERR(ev_fd->cq_ev_fd);
+> +               int ret = PTR_ERR(ev_fd->cq_ev_fd);
+>                 kfree(ev_fd);
+>                 return ret;
+>         }
+>         ev_fd->eventfd_async = eventfd_async;
+>
+>         rcu_assign_pointer(ctx->io_ev_fd, ev_fd);
+> -       return ret;
+> +       return 0;
+>  }
+>
+>  static void io_eventfd_put(struct rcu_head *rcu)
+>
+> base-commit: 88a0394bc27de2dd8a8715970f289c5627052532
+> --
+> 2.35.1
+>
+>
 
 
->
+-- 
+Thanks,
+~Nick Desaulniers

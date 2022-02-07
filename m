@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 942E54AB9D0
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:25:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 867814AB9A0
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:23:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353316AbiBGLMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:12:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48764 "EHLO
+        id S1354858AbiBGLM0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:12:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237122AbiBGLKI (ORCPT
+        with ESMTP id S1355369AbiBGLIb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:10:08 -0500
+        Mon, 7 Feb 2022 06:08:31 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72065C043181;
-        Mon,  7 Feb 2022 03:10:07 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44203C0401C3;
+        Mon,  7 Feb 2022 03:08:30 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2AFFAB811A6;
-        Mon,  7 Feb 2022 11:10:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DC4EC004E1;
-        Mon,  7 Feb 2022 11:10:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 02F6CB80EE8;
+        Mon,  7 Feb 2022 11:08:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41EF6C004E1;
+        Mon,  7 Feb 2022 11:08:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232204;
-        bh=YQyYSuGuWt3SdnnDFdfIDNJ2uhshhzRjYo2rsuRjqWQ=;
+        s=korg; t=1644232107;
+        bh=t3CKQhOZSqK+9EDYMRdB/12HFLkeO7GVPHP9kDG6JOE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MfHwGCt0kUkyK6kUkxG+XpgfKbQyeXfwW3JJoVtciGf4fsWb/XqUA5Fio6CRmFezB
-         8Vf9AUqvsIcQCh43N0b2O0Tv/9cWco/epjgDHBQbRHWuyhJiU6CuuMlGuSOcdmxx/p
-         OMTg43ldy6iRRO/3AeN1ENQ9tfZLJnGC309PRX/U=
+        b=sBSeM8+3PRq9LXQNuDKWX64flsNSPueAS9HZZFnjduqQez62rZSsmM7+MdMeky66h
+         O4UReQE8RDx9wcUO0nWTsOBPDnorAPF2iWUtd61NEHzREuMYfrCjugkNHh2P+shz61
+         nyBdyfo2SdPky6d6PdOM42jZkt96FI8kvGrqXg1k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        David Ahern <dsahern@kernel.org>, Ray Che <xijiache@gmail.com>,
-        Willy Tarreau <w@1wt.eu>, Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.9 18/48] ipv4: avoid using shared IP generator for connected sockets
-Date:   Mon,  7 Feb 2022 12:05:51 +0100
-Message-Id: <20220207103752.937750248@linuxfoundation.org>
+        stable@vger.kernel.org, Lyu Tao <tao.lyu@epfl.ch>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <Anna.Schumaker@Netapp.com>
+Subject: [PATCH 4.9 19/48] NFSv4: Handle case where the lookup of a directory fails
+Date:   Mon,  7 Feb 2022 12:05:52 +0100
+Message-Id: <20220207103752.968788657@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220207103752.341184175@linuxfoundation.org>
 References: <20220207103752.341184175@linuxfoundation.org>
@@ -55,65 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-commit 23f57406b82de51809d5812afd96f210f8b627f3 upstream.
+commit ac795161c93699d600db16c1a8cc23a65a1eceaf upstream.
 
-ip_select_ident_segs() has been very conservative about using
-the connected socket private generator only for packets with IP_DF
-set, claiming it was needed for some VJ compression implementations.
+If the application sets the O_DIRECTORY flag, and tries to open a
+regular file, nfs_atomic_open() will punt to doing a regular lookup.
+If the server then returns a regular file, we will happily return a
+file descriptor with uninitialised open state.
 
-As mentioned in this referenced document, this can be abused.
-(Ref: Off-Path TCP Exploits of the Mixed IPID Assignment)
+The fix is to return the expected ENOTDIR error in these cases.
 
-Before switching to pure random IPID generation and possibly hurt
-some workloads, lets use the private inet socket generator.
-
-Not only this will remove one vulnerability, this will also
-improve performance of TCP flows using pmtudisc==IP_PMTUDISC_DONT
-
-Fixes: 73f156a6e8c1 ("inetpeer: get rid of ip_id_count")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Reviewed-by: David Ahern <dsahern@kernel.org>
-Reported-by: Ray Che <xijiache@gmail.com>
-Cc: Willy Tarreau <w@1wt.eu>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Reported-by: Lyu Tao <tao.lyu@epfl.ch>
+Fixes: 0dd2b474d0b6 ("nfs: implement i_op->atomic_open()")
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/net/ip.h |   21 ++++++++++-----------
- 1 file changed, 10 insertions(+), 11 deletions(-)
+ fs/nfs/dir.c |   13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
---- a/include/net/ip.h
-+++ b/include/net/ip.h
-@@ -377,19 +377,18 @@ static inline void ip_select_ident_segs(
- {
- 	struct iphdr *iph = ip_hdr(skb);
+--- a/fs/nfs/dir.c
++++ b/fs/nfs/dir.c
+@@ -1602,6 +1602,19 @@ out:
  
-+	/* We had many attacks based on IPID, use the private
-+	 * generator as much as we can.
-+	 */
-+	if (sk && inet_sk(sk)->inet_daddr) {
-+		iph->id = htons(inet_sk(sk)->inet_id);
-+		inet_sk(sk)->inet_id += segs;
-+		return;
+ no_open:
+ 	res = nfs_lookup(dir, dentry, lookup_flags);
++	if (!res) {
++		inode = d_inode(dentry);
++		if ((lookup_flags & LOOKUP_DIRECTORY) && inode &&
++		    !S_ISDIR(inode->i_mode))
++			res = ERR_PTR(-ENOTDIR);
++	} else if (!IS_ERR(res)) {
++		inode = d_inode(res);
++		if ((lookup_flags & LOOKUP_DIRECTORY) && inode &&
++		    !S_ISDIR(inode->i_mode)) {
++			dput(res);
++			res = ERR_PTR(-ENOTDIR);
++		}
 +	}
- 	if ((iph->frag_off & htons(IP_DF)) && !skb->ignore_df) {
--		/* This is only to work around buggy Windows95/2000
--		 * VJ compression implementations.  If the ID field
--		 * does not change, they drop every other packet in
--		 * a TCP stream using header compression.
--		 */
--		if (sk && inet_sk(sk)->inet_daddr) {
--			iph->id = htons(inet_sk(sk)->inet_id);
--			inet_sk(sk)->inet_id += segs;
--		} else {
--			iph->id = 0;
--		}
-+		iph->id = 0;
- 	} else {
-+		/* Unfortunately we need the big hammer to get a suitable IPID */
- 		__ip_select_ident(net, iph, segs);
- 	}
- }
+ 	if (switched) {
+ 		d_lookup_done(dentry);
+ 		if (!res)
 
 

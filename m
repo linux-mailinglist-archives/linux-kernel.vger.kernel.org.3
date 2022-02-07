@@ -2,62 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10E8D4AB6D4
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 09:46:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 964084AB6CE
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 09:45:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244188AbiBGIoW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 03:44:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33686 "EHLO
+        id S240427AbiBGIoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 03:44:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350193AbiBGIfk (ORCPT
+        with ESMTP id S236729AbiBGIgI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 03:35:40 -0500
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07781C043181
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 00:35:39 -0800 (PST)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 3862868AFE; Mon,  7 Feb 2022 09:35:36 +0100 (CET)
-Date:   Mon, 7 Feb 2022 09:35:35 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     "Wang, Zhi A" <zhi.a.wang@intel.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Zhi Wang <zhi.wang.linux@gmail.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "jani.nikula@linux.intel.com" <jani.nikula@linux.intel.com>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "intel-gvt-dev@lists.freedesktop.org" 
-        <intel-gvt-dev@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        "Xu, Terrence" <terrence.xu@intel.com>
-Subject: Re: [PATCH 1/3] i915/gvt: Introduce the mmio_table.c to support
- VFIO new mdev API
-Message-ID: <20220207083535.GA25345@lst.de>
-References: <20220127120508.11330-1-zhi.a.wang@intel.com> <20220207073247.GA24327@lst.de> <DM4PR11MB5549FE45F8098368114ADE75CA2C9@DM4PR11MB5549.namprd11.prod.outlook.com>
+        Mon, 7 Feb 2022 03:36:08 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DFFA2C043185
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 00:36:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644222966;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EnlsbuxwF4ALdiCaBmB6LDE1NtPSwP5sAmBAFk/m7Ms=;
+        b=N+2lxbhU+Kyr6g1zogRinYWZPkDCcTZhQoZwG0biM47o/8rRPuMVYt42LGM36uISLZulFL
+        8/f5fMGOIFMDezRffLDxQk3isxV0ZtjtNxE8X13BR6QdfzDmFl94ya+OiGrr1dAK2YXHDM
+        B1VFWZA5abn4bK5IYvFRC3gLR6usk0s=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-558-GjHXXjkVODuR9_aUygqaJw-1; Mon, 07 Feb 2022 03:36:03 -0500
+X-MC-Unique: GjHXXjkVODuR9_aUygqaJw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C24E0802926;
+        Mon,  7 Feb 2022 08:36:00 +0000 (UTC)
+Received: from localhost (unknown [10.39.193.241])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2C7B362D6E;
+        Mon,  7 Feb 2022 08:35:41 +0000 (UTC)
+From:   Cornelia Huck <cohuck@redhat.com>
+To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
+Cc:     alex.williamson@redhat.com, schnelle@linux.ibm.com,
+        farman@linux.ibm.com, pmorel@linux.ibm.com,
+        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
+        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
+        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 14/30] vfio/pci: re-introduce CONFIG_VFIO_PCI_ZDEV
+In-Reply-To: <20220204211536.321475-15-mjrosato@linux.ibm.com>
+Organization: Red Hat GmbH
+References: <20220204211536.321475-1-mjrosato@linux.ibm.com>
+ <20220204211536.321475-15-mjrosato@linux.ibm.com>
+User-Agent: Notmuch/0.34 (https://notmuchmail.org)
+Date:   Mon, 07 Feb 2022 09:35:39 +0100
+Message-ID: <87czjzvztw.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM4PR11MB5549FE45F8098368114ADE75CA2C9@DM4PR11MB5549.namprd11.prod.outlook.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 08:28:13AM +0000, Wang, Zhi A wrote:
-> 1) About having the mmio_table.h, I would like to keep the stuff in a dedicated header as putting them in intel_gvt.h might needs i915 guys to maintain it.
-> 2) The other one is about if we should move the mmio_table.c into i915 folder. I guess we need the some comments from Jani. In the current version that I am testing, it's still in GVT folder. Guess we can submit a patch to move it to i915 folder later if Jani is ok about that.
+On Fri, Feb 04 2022, Matthew Rosato <mjrosato@linux.ibm.com> wrote:
 
-Yes, let's have Jani chime in on these.  They're basically one and the
-same issue.  This code will have to be built into into the core i915
-driver even with my planned split, which is kindof the point of this
-exercise.  I think it makes sense to use the subdirectories as boundaries
-for where the code ends up and not to declarare maintainership boundaries,
-but it will be up to the i915 and gvt maintainers to decide that.
+> This was previously removed as unnecessary; while that was true, subsequent
+> changes will make KVM an additional required component for vfio-pci-zdev.
+> Let's re-introduce CONFIG_VFIO_PCI_ZDEV as now there is actually a reason
+> to say 'n' for it (when not planning to CONFIG_KVM).
+
+Hm... can the file be split into parts that depend on KVM and parts that
+don't? Does anybody ever use vfio-pci on a non-kvm s390 system?
+
+[Apologies if that has been discussed before, this is my first look at
+this series.]
+
+>
+> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+> ---
+>  drivers/vfio/pci/Kconfig      | 11 +++++++++++
+>  drivers/vfio/pci/Makefile     |  2 +-
+>  include/linux/vfio_pci_core.h |  2 +-
+>  3 files changed, 13 insertions(+), 2 deletions(-)
+>
+

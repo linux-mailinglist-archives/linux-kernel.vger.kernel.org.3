@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E7E74ABCFD
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:55:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B826F4ABA35
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:27:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388390AbiBGLnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:43:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44370 "EHLO
+        id S1383155AbiBGLVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:21:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385695AbiBGLcK (ORCPT
+        with ESMTP id S1379072AbiBGLQB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:32:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84375C0401D8;
-        Mon,  7 Feb 2022 03:32:09 -0800 (PST)
+        Mon, 7 Feb 2022 06:16:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD30C0401C1;
+        Mon,  7 Feb 2022 03:16:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 210BB60B20;
-        Mon,  7 Feb 2022 11:32:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC198C004E1;
-        Mon,  7 Feb 2022 11:32:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 14AABB80EC3;
+        Mon,  7 Feb 2022 11:15:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 385B0C004E1;
+        Mon,  7 Feb 2022 11:15:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233528;
-        bh=rfau10TEWfiRA3xex5IvwTz7/kPBt7AmT1dqmMihsZM=;
+        s=korg; t=1644232557;
+        bh=rUMuAcN2LGESDpLVqYoXT1cCa4WWguHXuJ2RczFMAsk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zcUvSGDV8WNj9Lr4YtbROblNVLFGC8ArxuZon2AAWURDoRDe8194UHlbh+43kZf07
-         62vaysUWPEVroYkHSqT2WiyZ6vHaYY755hArTI0iYrRCxkbjTBKBboqD48eCDyJT4s
-         kkgHsYEOievQ6ikcZ3Nga9LNayBrBXSK60JxwIak=
+        b=RHWlABTM8xctAkIpyB3HJYybX9JaWXlawHf/Z8GnSL60iDspIFnC5dNefCis49DDC
+         +a6gPNQh648Eu1YO+zJLkwIKXztqN0WGcJp9dXR/gRADTDpQHQ7147NXyxL2XrglVt
+         iFsn2xCs2qsMA4wpNhClLsJp1DHQixKYEBOYMZsk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Helge Deller <deller@gmx.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Sven Schnelle <svens@stackframe.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Subject: [PATCH 5.16 040/126] Revert "fbcon: Disable accelerated scrolling"
+        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Jason Xing <kerneljasonxing@gmail.com>,
+        Zhang Changzhong <zhangchangzhong@huawei.com>,
+        liweishi <liweishi@kuaishou.com>,
+        Shujin Li <lishujin@kuaishou.com>,
+        Neal Cardwell <ncardwell@google.com>
+Subject: [PATCH 4.19 48/86] tcp: fix possible socket leaks in internal pacing mode
 Date:   Mon,  7 Feb 2022 12:06:11 +0100
-Message-Id: <20220207103805.511971144@linuxfoundation.org>
+Message-Id: <20220207103759.122641352@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
-References: <20220207103804.053675072@linuxfoundation.org>
+In-Reply-To: <20220207103757.550973048@linuxfoundation.org>
+References: <20220207103757.550973048@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,195 +58,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Helge Deller <deller@gmx.de>
 
-commit 87ab9f6b7417349aa197a6c7098d4fdd4beebb74 upstream.
+From: Eric Dumazet <edumazet@google.com>
 
-This reverts commit 39aead8373b3c20bb5965c024dfb51a94e526151.
+This patch is addressing an issue in stable linux-4.19 only.
 
-Revert the first (of 2) commits which disabled scrolling acceleration in
-fbcon/fbdev.  It introduced a regression for fbdev-supported graphic cards
-because of the performance penalty by doing screen scrolling by software
-instead of using the existing graphic card 2D hardware acceleration.
+In linux-4.20, TCP stack adopted EDT (Earliest Departure
+Time) model and this issue was incidentally fixed.
 
-Console scrolling acceleration was disabled by dropping code which
-checked at runtime the driver hardware capabilities for the
-BINFO_HWACCEL_COPYAREA or FBINFO_HWACCEL_FILLRECT flags and if set, it
-enabled scrollmode SCROLL_MOVE which uses hardware acceleration to move
-screen contents.  After dropping those checks scrollmode was hard-wired
-to SCROLL_REDRAW instead, which forces all graphic cards to redraw every
-character at the new screen position when scrolling.
+Issue at hand was an extra sock_hold() from tcp_internal_pacing()
+in paths not using tcp_xmit_retransmit_queue()
 
-This change effectively disabled all hardware-based scrolling acceleration for
-ALL drivers, because now all kind of 2D hardware acceleration (bitblt,
-fillrect) in the drivers isn't used any longer.
+Jason Xing reported this leak and provided a patch stopping
+the extra sock_hold() to happen.
 
-The original commit message mentions that only 3 DRM drivers (nouveau, omapdrm
-and gma500) used hardware acceleration in the past and thus code for checking
-and using scrolling acceleration is obsolete.
+This patch is more complete and makes sure to avoid
+unnecessary extra delays, by reprogramming the high
+resolution timer.
 
-This statement is NOT TRUE, because beside the DRM drivers there are around 35
-other fbdev drivers which depend on fbdev/fbcon and still provide hardware
-acceleration for fbdev/fbcon.
-
-The original commit message also states that syzbot found lots of bugs in fbcon
-and thus it's "often the solution to just delete code and remove features".
-This is true, and the bugs - which actually affected all users of fbcon,
-including DRM - were fixed, or code was dropped like e.g. the support for
-software scrollback in vgacon (commit 973c096f6a85).
-
-So to further analyze which bugs were found by syzbot, I've looked through all
-patches in drivers/video which were tagged with syzbot or syzkaller back to
-year 2005. The vast majority fixed the reported issues on a higher level, e.g.
-when screen is to be resized, or when font size is to be changed. The few ones
-which touched driver code fixed a real driver bug, e.g. by adding a check.
-
-But NONE of those patches touched code of either the SCROLL_MOVE or the
-SCROLL_REDRAW case.
-
-That means, there was no real reason why SCROLL_MOVE had to be ripped-out and
-just SCROLL_REDRAW had to be used instead. The only reason I can imagine so far
-was that SCROLL_MOVE wasn't used by DRM and as such it was assumed that it
-could go away. That argument completely missed the fact that SCROLL_MOVE is
-still heavily used by fbdev (non-DRM) drivers.
-
-Some people mention that using memcpy() instead of the hardware acceleration is
-pretty much the same speed. But that's not true, at least not for older graphic
-cards and machines where we see speed decreases by factor 10 and more and thus
-this change leads to console responsiveness way worse than before.
-
-That's why the original commit is to be reverted. By reverting we
-reintroduce hardware-based scrolling acceleration and fix the
-performance regression for fbdev drivers.
-
-There isn't any impact on DRM when reverting those patches.
-
-Signed-off-by: Helge Deller <deller@gmx.de>
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Acked-by: Sven Schnelle <svens@stackframe.org>
-Cc: stable@vger.kernel.org # v5.10+
-Signed-off-by: Helge Deller <deller@gmx.de>
-Signed-off-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220202135531.92183-3-deller@gmx.de
+Fixes: 73a6bab5aa2a ("tcp: switch pacing timer to softirq based hrtimer")
+Reference: https://lore.kernel.org/all/CANn89i+7-wE4xr5D9DpH+N-xkL1SB8oVghCKgz+CT5eG1ODQhA@mail.gmail.com/
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Reported-by: Jason Xing <kerneljasonxing@gmail.com>
+Reported-by: Zhang Changzhong <zhangchangzhong@huawei.com>
+Cc: liweishi <liweishi@kuaishou.com>
+Cc: Shujin Li <lishujin@kuaishou.com>
+Cc: Neal Cardwell <ncardwell@google.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Documentation/gpu/todo.rst       |   21 ------------------
- drivers/video/fbdev/core/fbcon.c |   45 ++++++++++++++++++++++++++++++++-------
- 2 files changed, 37 insertions(+), 29 deletions(-)
+ net/ipv4/tcp_output.c |   31 +++++++++++++++++++++++--------
+ 1 file changed, 23 insertions(+), 8 deletions(-)
 
---- a/Documentation/gpu/todo.rst
-+++ b/Documentation/gpu/todo.rst
-@@ -311,27 +311,6 @@ Contact: Daniel Vetter, Noralf Tronnes
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -968,6 +968,8 @@ enum hrtimer_restart tcp_pace_kick(struc
  
- Level: Advanced
- 
--Garbage collect fbdev scrolling acceleration
----------------------------------------------
--
--Scroll acceleration is disabled in fbcon by hard-wiring p->scrollmode =
--SCROLL_REDRAW. There's a ton of code this will allow us to remove:
--
--- lots of code in fbcon.c
--
--- a bunch of the hooks in fbcon_ops, maybe the remaining hooks could be called
--  directly instead of the function table (with a switch on p->rotate)
--
--- fb_copyarea is unused after this, and can be deleted from all drivers
--
--Note that not all acceleration code can be deleted, since clearing and cursor
--support is still accelerated, which might be good candidates for further
--deletion projects.
--
--Contact: Daniel Vetter
--
--Level: Intermediate
--
- idr_init_base()
- ---------------
- 
---- a/drivers/video/fbdev/core/fbcon.c
-+++ b/drivers/video/fbdev/core/fbcon.c
-@@ -1025,7 +1025,7 @@ static void fbcon_init(struct vc_data *v
- 	struct vc_data *svc = *default_mode;
- 	struct fbcon_display *t, *p = &fb_display[vc->vc_num];
- 	int logo = 1, new_rows, new_cols, rows, cols;
--	int ret;
-+	int cap, ret;
- 
- 	if (WARN_ON(info_idx == -1))
- 	    return;
-@@ -1034,6 +1034,7 @@ static void fbcon_init(struct vc_data *v
- 		con2fb_map[vc->vc_num] = info_idx;
- 
- 	info = registered_fb[con2fb_map[vc->vc_num]];
-+	cap = info->flags;
- 
- 	if (logo_shown < 0 && console_loglevel <= CONSOLE_LOGLEVEL_QUIET)
- 		logo_shown = FBCON_LOGO_DONTSHOW;
-@@ -1135,13 +1136,11 @@ static void fbcon_init(struct vc_data *v
- 
- 	ops->graphics = 0;
- 
--	/*
--	 * No more hw acceleration for fbcon.
--	 *
--	 * FIXME: Garbage collect all the now dead code after sufficient time
--	 * has passed.
--	 */
--	p->scrollmode = SCROLL_REDRAW;
-+	if ((cap & FBINFO_HWACCEL_COPYAREA) &&
-+	    !(cap & FBINFO_HWACCEL_DISABLED))
-+		p->scrollmode = SCROLL_MOVE;
-+	else /* default to something safe */
-+		p->scrollmode = SCROLL_REDRAW;
- 
- 	/*
- 	 *  ++guenther: console.c:vc_allocate() relies on initializing
-@@ -1953,15 +1952,45 @@ static void updatescrollmode(struct fbco
+ static void tcp_internal_pacing(struct sock *sk, const struct sk_buff *skb)
  {
- 	struct fbcon_ops *ops = info->fbcon_par;
- 	int fh = vc->vc_font.height;
-+	int cap = info->flags;
-+	u16 t = 0;
-+	int ypan = FBCON_SWAP(ops->rotate, info->fix.ypanstep,
-+				  info->fix.xpanstep);
-+	int ywrap = FBCON_SWAP(ops->rotate, info->fix.ywrapstep, t);
- 	int yres = FBCON_SWAP(ops->rotate, info->var.yres, info->var.xres);
- 	int vyres = FBCON_SWAP(ops->rotate, info->var.yres_virtual,
- 				   info->var.xres_virtual);
-+	int good_pan = (cap & FBINFO_HWACCEL_YPAN) &&
-+		divides(ypan, vc->vc_font.height) && vyres > yres;
-+	int good_wrap = (cap & FBINFO_HWACCEL_YWRAP) &&
-+		divides(ywrap, vc->vc_font.height) &&
-+		divides(vc->vc_font.height, vyres) &&
-+		divides(vc->vc_font.height, yres);
-+	int reading_fast = cap & FBINFO_READS_FAST;
-+	int fast_copyarea = (cap & FBINFO_HWACCEL_COPYAREA) &&
-+		!(cap & FBINFO_HWACCEL_DISABLED);
-+	int fast_imageblit = (cap & FBINFO_HWACCEL_IMAGEBLIT) &&
-+		!(cap & FBINFO_HWACCEL_DISABLED);
++	struct tcp_sock *tp = tcp_sk(sk);
++	ktime_t expire, now;
+ 	u64 len_ns;
+ 	u32 rate;
  
- 	p->vrows = vyres/fh;
- 	if (yres > (fh * (vc->vc_rows + 1)))
- 		p->vrows -= (yres - (fh * vc->vc_rows)) / fh;
- 	if ((yres % fh) && (vyres % fh < yres % fh))
- 		p->vrows--;
-+
-+	if (good_wrap || good_pan) {
-+		if (reading_fast || fast_copyarea)
-+			p->scrollmode = good_wrap ?
-+				SCROLL_WRAP_MOVE : SCROLL_PAN_MOVE;
-+		else
-+			p->scrollmode = good_wrap ? SCROLL_REDRAW :
-+				SCROLL_PAN_REDRAW;
-+	} else {
-+		if (reading_fast || (fast_copyarea && !fast_imageblit))
-+			p->scrollmode = SCROLL_MOVE;
-+		else
-+			p->scrollmode = SCROLL_REDRAW;
+@@ -979,12 +981,28 @@ static void tcp_internal_pacing(struct s
+ 
+ 	len_ns = (u64)skb->len * NSEC_PER_SEC;
+ 	do_div(len_ns, rate);
+-	hrtimer_start(&tcp_sk(sk)->pacing_timer,
+-		      ktime_add_ns(ktime_get(), len_ns),
++	now = ktime_get();
++	/* If hrtimer is already armed, then our caller has not
++	 * used tcp_pacing_check().
++	 */
++	if (unlikely(hrtimer_is_queued(&tp->pacing_timer))) {
++		expire = hrtimer_get_softexpires(&tp->pacing_timer);
++		if (ktime_after(expire, now))
++			now = expire;
++		if (hrtimer_try_to_cancel(&tp->pacing_timer) == 1)
++			__sock_put(sk);
 +	}
++	hrtimer_start(&tp->pacing_timer, ktime_add_ns(now, len_ns),
+ 		      HRTIMER_MODE_ABS_PINNED_SOFT);
+ 	sock_hold(sk);
  }
  
- #define PITCH(w) (((w) + 7) >> 3)
++static bool tcp_pacing_check(const struct sock *sk)
++{
++	return tcp_needs_internal_pacing(sk) &&
++	       hrtimer_is_queued(&tcp_sk(sk)->pacing_timer);
++}
++
+ static void tcp_update_skb_after_send(struct tcp_sock *tp, struct sk_buff *skb)
+ {
+ 	skb->skb_mstamp = tp->tcp_mstamp;
+@@ -2121,6 +2139,9 @@ static int tcp_mtu_probe(struct sock *sk
+ 	if (!tcp_can_coalesce_send_queue_head(sk, probe_size))
+ 		return -1;
+ 
++	if (tcp_pacing_check(sk))
++		return -1;
++
+ 	/* We're allowed to probe.  Build it now. */
+ 	nskb = sk_stream_alloc_skb(sk, probe_size, GFP_ATOMIC, false);
+ 	if (!nskb)
+@@ -2194,12 +2215,6 @@ static int tcp_mtu_probe(struct sock *sk
+ 	return -1;
+ }
+ 
+-static bool tcp_pacing_check(const struct sock *sk)
+-{
+-	return tcp_needs_internal_pacing(sk) &&
+-	       hrtimer_is_queued(&tcp_sk(sk)->pacing_timer);
+-}
+-
+ /* TCP Small Queues :
+  * Control number of packets in qdisc/devices to two packets / or ~1 ms.
+  * (These limits are doubled for retransmits)
 
 

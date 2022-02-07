@@ -2,89 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D29954AC5AE
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 17:33:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AB254AC636
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 17:45:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386997AbiBGQae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 11:30:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58354 "EHLO
+        id S1354052AbiBGQna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 11:43:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345722AbiBGQVN (ORCPT
+        with ESMTP id S1390691AbiBGQfa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 11:21:13 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77887C0401CE
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 08:21:11 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id u23so1987409wru.6
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 08:21:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Np4LH/PHz6uNkDpTZmQ/zoxgwDp96GbmnvDa2V7nWjk=;
-        b=QgufGM+1w3bsYZSJ9xlKRmy3+TsigV3ZsM/lqCkrk+2PFrRq2qAxjaRIcbaZ6XTMpd
-         dHN3csVfUdJlhnr4ISuVdfwWYthqcjlVkwEKaIzb9ohnAgPPPEnUh8ZXbwWBB4FE5VTD
-         v4qiUp1+V61ZK9GFt06cQBjo9kwCIXouNxnx1dWjOOpSi6rvXPFsU0oBn2JtQQ8qDYSE
-         JTzdjg3Q550FQW+DQ/yUhMrzvS9yoNZmt/a2M2/z7siYRPqcfv6jjVIuNkLoSpWuQ8d/
-         sOwBN4knqfQHkxWpOzloC+DeoSvsFYb63wY9gAxv2vVkHqYOCumGB9afLCGKIFbX2MJ5
-         xl2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Np4LH/PHz6uNkDpTZmQ/zoxgwDp96GbmnvDa2V7nWjk=;
-        b=xTCqIa5jsKhPp+GyJUWfhlV/HjGWNTXqz7zGGuXbEW+2TzrAj6GsGTgJNevbCqH/EN
-         m+vgcdmtSCYj3aNTMAx/LKCpdnwMcq0qBrl+ANYZ4ZyFpBXPR/t2S8wI+MkfxNLzG57s
-         NiKdvxdNPpgeueoISpxu955HQ7d/tP15Z1qcr2qAFmHIo7vS3cGKUkepTIwPgsewq9YT
-         A5WStzHd65xJyCHDWQV0DA6xsOpHmOUmxAyjggoT013tGRTaApZsWEs/4Lm/BRdLVcvg
-         6ONCUWHZ8ZZTB3wBPF4v0P5PqoRwIsIsvTIIDuH6GWnng7q8a2gToAktwZsCbdBtHUDz
-         52CA==
-X-Gm-Message-State: AOAM533hl3/r6XaVpgVJijNyLxacHsZg50hBYJa/M39/EZmfVg50MYxR
-        NtfCQtJxkIPhcAm2dFOyI/kY5w==
-X-Google-Smtp-Source: ABdhPJx9cikXNjt/6MFPqIqkMx5U5Ng8Uv5wYgVhdvs4xghr+YQWYDB7vr7F/zL+84q9GXPE6QDA6w==
-X-Received: by 2002:a5d:50c2:: with SMTP id f2mr173218wrt.694.1644250870003;
-        Mon, 07 Feb 2022 08:21:10 -0800 (PST)
-Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id k9sm9789271wrv.81.2022.02.07.08.21.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 08:21:09 -0800 (PST)
-Date:   Mon, 7 Feb 2022 16:21:07 +0000
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Helge Deller <deller@gmx.de>, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-pwm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
-Subject: Re: [PATCH] backlight: pwm_bl: Avoid open coded arithmetic in memory
- allocation
-Message-ID: <20220207162107.eblu6rxyhkuyyqnf@maple.lan>
-References: <bd3d74acfa58d59f6f5f81fc5a9fb409edb8d747.1644046817.git.christophe.jaillet@wanadoo.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bd3d74acfa58d59f6f5f81fc5a9fb409edb8d747.1644046817.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 7 Feb 2022 11:35:30 -0500
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7CBECC0401CF
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 08:35:28 -0800 (PST)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 217GOa41014383;
+        Mon, 7 Feb 2022 17:24:36 +0100
+From:   Willy Tarreau <w@1wt.eu>
+To:     "Paul E . McKenney" <paulmck@kernel.org>
+Cc:     Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        Willy Tarreau <w@1wt.eu>
+Subject: [PATCH 00/42] nolibc: update to resync with out-of-tree project
+Date:   Mon,  7 Feb 2022 17:23:12 +0100
+Message-Id: <20220207162354.14293-1-w@1wt.eu>
+X-Mailer: git-send-email 2.17.5
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 05, 2022 at 08:40:48AM +0100, Christophe JAILLET wrote:
-> kmalloc_array()/kcalloc() should be used to avoid potential overflow when
-> a multiplication is needed to compute the size of the requested memory.
-> 
-> So turn a kzalloc()+explicit size computation into an equivalent kcalloc().
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Hello Paul,
 
-Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
+Here comes an update to the nolibc subsystem to keep it in sync with
+the out-of-tree project and to bring a number of usability improvements.
 
+The approach here consists in better splitting the layers so that
+arch-specific syscall functions are now in their own files (one per
+arch), then syscalls are implemented on top of this in a generic file,
+then the generic libc stuff is exposed. This way it becomes easier to
+add support for new architectures if needed.
 
-Daniel.
+I exported 3 functions as weak symbols: memset(), memmove() and abort().
+For the first two ones, gcc/clang may issue calls to them and will not
+always fall back to the builtin equivalent. For abort(), I've seen it
+referenced by libgcc from some divide functions.
+
+A few stdio-level functions were added (unbuffered), including a quite
+limited but usable printf() which significantly eases debugging of test
+programs by allowing to print return codes or pointers for example.
+
+A few functions and syscalls like abort(), raise(), time() and usleep()
+were added. More str* functions were added as well. open() now takes a
+vararg on the 3rd argument so as to ease porting of existing programs.
+
+Finally, the functions and definitions were moved to the appropriate
+files as documented in their man pages when relevant, so that simple
+programs which only use a few include files among stdio.h, stdlib.h,
+string.h, unistd.h, errno.h, ctype.h, signal.h, time.h or types.h can
+build without modification. Obviously this remains fairly limited in
+scope, but for test programs that's usually fine.
+
+I could verify that a few of my programs and that your rcutorture test
+continue to work (not much surprising since most of the work only
+consists in moving functions between files).
+
+There's obviously no rush, but I preferred to resync the version here
+given that Mark expressed some interest recently, and I'd hate it if
+he had to add new syscalls that already existed out of tree! Comments,
+suggestions and feature requests welcome as usual. If you prefer to
+pull, it's also available here, on top of 5.17-rc3:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git 20220206-nolibc-split-2
+
+Thank you!
+Willy
+
+---
+Willy Tarreau (42):
+  tools/nolibc: use pselect6 on RISCV
+  tools/nolibc: guard the main file against multiple inclusion
+  tools/nolibc/std: move the standard type definitions to std.h
+  tools/nolibc/types: split syscall-specific definitions into their own files
+  tools/nolibc/arch: split arch-specific code into individual files
+  tools/nolibc/sys: split the syscall definitions into their own file
+  tools/nolibc/stdlib: extract the stdlib-specific functions to their own file
+  tools/nolibc/string: split the string functions into string.h
+  tools/nolibc/ctype: split the is* functions to ctype.h
+  tools/nolibc/ctype: add the missing is* functions
+  tools/nolibc/types: move the FD_* functions to macros in types.h
+  tools/nolibc/types: make FD_SETSIZE configurable
+  tools/nolibc/types: move makedev to types.h and make it a macro
+  tools/nolibc/stdlib: move ltoa() to stdlib.h
+  tools/nolibc/stdlib: replace the ltoa() function with more efficient ones
+  tools/nolibc/stdlib: add i64toa() and u64toa()
+  tools/nolibc/stdlib: add utoh() and u64toh()
+  tools/nolibc/stdio: add a minimal set of stdio functions
+  tools/nolibc/stdio: add stdin/stdout/stderr and fget*/fput* functions
+  tools/nolibc/stdio: add fwrite() to stdio
+  tools/nolibc/stdio: add a minimal [vf]printf() implementation
+  tools/nolibc/types: define EXIT_SUCCESS and EXIT_FAILURE
+  tools/nolibc/stdio: add perror() to report the errno value
+  tools/nolibc/sys: make open() take a vararg on the 3rd argument
+  tools/nolibc/stdlib: avoid a 64-bit shift in u64toh_r()
+  tools/nolibc/stdlib: make raise() use the lower level syscalls only
+  tools/nolibc/sys: make getpgrp(), getpid(), gettid() not set errno
+  tools/nolibc/string: use unidirectional variants for memcpy()
+  tools/nolibc/string: slightly simplify memmove()
+  tools/nolibc/string: add strncpy() and strlcpy()
+  tools/nolibc/string: add tiny versions of strncat() and strlcat()
+  tools/nolibc: move exported functions to their own section
+  tools/nolibc/arch: mark the _start symbol as weak
+  tools/nolibc/types: define PATH_MAX and MAXPATHLEN
+  tools/nolibc/string: export memset() and memmove()
+  tools/nolibc/errno: extract errno.h from sys.h
+  tools/nolibc/unistd: extract msleep(), sleep(), tcsetpgrp() to unistd.h
+  tools/nolibc/unistd: add usleep()
+  tools/nolibc/signal: move raise() to signal.h
+  tools/nolibc/time: create time.h with time()
+  tools/nolibc: also mention how to build by just setting the include path
+  tools/nolibc/stdlib: implement abort()
+
+ tools/include/nolibc/arch-aarch64.h |  200 +++
+ tools/include/nolibc/arch-arm.h     |  205 +++
+ tools/include/nolibc/arch-i386.h    |  197 +++
+ tools/include/nolibc/arch-mips.h    |  216 +++
+ tools/include/nolibc/arch-riscv.h   |  205 +++
+ tools/include/nolibc/arch-x86_64.h  |  216 +++
+ tools/include/nolibc/arch.h         |   32 +
+ tools/include/nolibc/ctype.h        |   99 ++
+ tools/include/nolibc/errno.h        |   27 +
+ tools/include/nolibc/nolibc.h       | 2540 +--------------------------
+ tools/include/nolibc/signal.h       |   22 +
+ tools/include/nolibc/std.h          |   49 +
+ tools/include/nolibc/stdio.h        |  296 ++++
+ tools/include/nolibc/stdlib.h       |  311 ++++
+ tools/include/nolibc/string.h       |  212 +++
+ tools/include/nolibc/sys.h          | 1168 ++++++++++++
+ tools/include/nolibc/time.h         |   28 +
+ tools/include/nolibc/types.h        |  184 ++
+ tools/include/nolibc/unistd.h       |   54 +
+ 19 files changed, 3756 insertions(+), 2505 deletions(-)
+ create mode 100644 tools/include/nolibc/arch-aarch64.h
+ create mode 100644 tools/include/nolibc/arch-arm.h
+ create mode 100644 tools/include/nolibc/arch-i386.h
+ create mode 100644 tools/include/nolibc/arch-mips.h
+ create mode 100644 tools/include/nolibc/arch-riscv.h
+ create mode 100644 tools/include/nolibc/arch-x86_64.h
+ create mode 100644 tools/include/nolibc/arch.h
+ create mode 100644 tools/include/nolibc/ctype.h
+ create mode 100644 tools/include/nolibc/errno.h
+ create mode 100644 tools/include/nolibc/signal.h
+ create mode 100644 tools/include/nolibc/std.h
+ create mode 100644 tools/include/nolibc/stdio.h
+ create mode 100644 tools/include/nolibc/stdlib.h
+ create mode 100644 tools/include/nolibc/string.h
+ create mode 100644 tools/include/nolibc/sys.h
+ create mode 100644 tools/include/nolibc/time.h
+ create mode 100644 tools/include/nolibc/types.h
+ create mode 100644 tools/include/nolibc/unistd.h
+
+-- 
+2.35.1
+

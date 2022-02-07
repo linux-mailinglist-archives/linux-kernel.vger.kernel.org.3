@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5281A4ABBEB
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:44:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 510B14AB98C
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:23:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386190AbiBGLdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:33:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36634 "EHLO
+        id S1379213AbiBGLQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:16:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239868AbiBGLZH (ORCPT
+        with ESMTP id S1354980AbiBGLM2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:25:07 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C23C043188;
-        Mon,  7 Feb 2022 03:25:05 -0800 (PST)
+        Mon, 7 Feb 2022 06:12:28 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C54D7C043181;
+        Mon,  7 Feb 2022 03:12:27 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 652F2B81158;
-        Mon,  7 Feb 2022 11:25:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A419AC004E1;
-        Mon,  7 Feb 2022 11:25:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 633496113B;
+        Mon,  7 Feb 2022 11:12:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41AA1C004E1;
+        Mon,  7 Feb 2022 11:12:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233103;
-        bh=OOrci6zsJTgNVekK33PRhoxSHZ4Cd74TJOKyCSGkGLA=;
+        s=korg; t=1644232346;
+        bh=880A3N1m8uxGACnXvYZQDn0CmPaaXP1yPfGtSMIAMvY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E7ObEN/qJKjf8LAbkFspi27W1DWEG7CPG7AcAaJ8pEW1ba2bCGZ8qPYaDuJh8QrEN
-         6HCu5soMilMep6oCzUH8vnUSEIaGQa/3DhY9lKT4iNThx0nnl4p5sf91H8D2jHAudf
-         xiM6ZYssPLlIhYZUvy2mYko43vR1diboEGxdWQJQ=
+        b=AJHONb9SgBz3g0AXeP2RibuqhljC7qQkmyfFSiCtzxYdMHGONXz1j6AWLZeJuBPyI
+         YSP1AC4JBSYqWO8/UIl5K6PfjjIcXpBTT1OfwXBYD5USt0bX6eEaNB0sa1wbFS0sc3
+         aDxnoRWI7sxIp4CFdMYQBiasnfKD5gb9jTfKK2Io=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Lukas Wunner <lukas@wunner.de>, Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.15 005/110] spi: stm32-qspi: Update spi registering
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 4.14 16/69] net: sfp: ignore disabled SFP node
 Date:   Mon,  7 Feb 2022 12:05:38 +0100
-Message-Id: <20220207103802.467844676@linuxfoundation.org>
+Message-Id: <20220207103756.148355340@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
-References: <20220207103802.280120990@linuxfoundation.org>
+In-Reply-To: <20220207103755.604121441@linuxfoundation.org>
+References: <20220207103755.604121441@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,144 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Patrice Chotard <patrice.chotard@foss.st.com>
+From: Marek Behún <kabel@kernel.org>
 
-commit e4d63473d3110afd170e6e0e48494d3789d26136 upstream.
+commit 2148927e6ed43a1667baf7c2ae3e0e05a44b51a0 upstream.
 
-Some device driver need to communicate to qspi device during the remove
-process, qspi controller must be functional when spi_unregister_master()
-is called.
+Commit ce0aa27ff3f6 ("sfp: add sfp-bus to bridge between network devices
+and sfp cages") added code which finds SFP bus DT node even if the node
+is disabled with status = "disabled". Because of this, when phylink is
+created, it ends with non-null .sfp_bus member, even though the SFP
+module is not probed (because the node is disabled).
 
-To ensure this, replace devm_spi_register_master() by spi_register_master()
-and spi_unregister_master() is called directly in .remove callback before
-stopping the qspi controller.
+We need to ignore disabled SFP bus node.
 
-This issue was put in evidence using kernel v5.11 and later
-with a spi-nor which supports the software reset feature introduced
-by commit d73ee7534cc5 ("mtd: spi-nor: core: perform a Soft Reset on
-shutdown")
-
-Fixes: c530cd1d9d5e ("spi: spi-mem: add stm32 qspi controller")
-
-Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
-Cc: <stable@vger.kernel.org> # 5.8.x
-Reviewed-by: Lukas Wunner <lukas@wunner.de>
-Link: https://lore.kernel.org/r/20220117121744.29729-1-patrice.chotard@foss.st.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: ce0aa27ff3f6 ("sfp: add sfp-bus to bridge between network devices and sfp cages")
+Signed-off-by: Marek Behún <kabel@kernel.org>
+Cc: stable@vger.kernel.org # 2203cbf2c8b5 ("net: sfp: move fwnode parsing into sfp-bus layer")
+Signed-off-by: David S. Miller <davem@davemloft.net>
+[ backport to 4.14 ]
+Signed-off-by: Marek Behún <kabel@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/spi/spi-stm32-qspi.c |   47 +++++++++++++++----------------------------
- 1 file changed, 17 insertions(+), 30 deletions(-)
+ drivers/net/phy/phylink.c |    5 +++++
+ 1 file changed, 5 insertions(+)
 
---- a/drivers/spi/spi-stm32-qspi.c
-+++ b/drivers/spi/spi-stm32-qspi.c
-@@ -688,7 +688,7 @@ static int stm32_qspi_probe(struct platf
- 	struct resource *res;
- 	int ret, irq;
+--- a/drivers/net/phy/phylink.c
++++ b/drivers/net/phy/phylink.c
+@@ -514,6 +514,11 @@ static int phylink_register_sfp(struct p
+ 	if (!sfp_np)
+ 		return 0;
  
--	ctrl = spi_alloc_master(dev, sizeof(*qspi));
-+	ctrl = devm_spi_alloc_master(dev, sizeof(*qspi));
- 	if (!ctrl)
- 		return -ENOMEM;
- 
-@@ -697,58 +697,46 @@ static int stm32_qspi_probe(struct platf
- 
- 	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "qspi");
- 	qspi->io_base = devm_ioremap_resource(dev, res);
--	if (IS_ERR(qspi->io_base)) {
--		ret = PTR_ERR(qspi->io_base);
--		goto err_master_put;
--	}
-+	if (IS_ERR(qspi->io_base))
-+		return PTR_ERR(qspi->io_base);
- 
- 	qspi->phys_base = res->start;
- 
- 	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "qspi_mm");
- 	qspi->mm_base = devm_ioremap_resource(dev, res);
--	if (IS_ERR(qspi->mm_base)) {
--		ret = PTR_ERR(qspi->mm_base);
--		goto err_master_put;
--	}
-+	if (IS_ERR(qspi->mm_base))
-+		return PTR_ERR(qspi->mm_base);
- 
- 	qspi->mm_size = resource_size(res);
--	if (qspi->mm_size > STM32_QSPI_MAX_MMAP_SZ) {
--		ret = -EINVAL;
--		goto err_master_put;
--	}
-+	if (qspi->mm_size > STM32_QSPI_MAX_MMAP_SZ)
-+		return -EINVAL;
- 
- 	irq = platform_get_irq(pdev, 0);
--	if (irq < 0) {
--		ret = irq;
--		goto err_master_put;
--	}
-+	if (irq < 0)
-+		return irq;
- 
- 	ret = devm_request_irq(dev, irq, stm32_qspi_irq, 0,
- 			       dev_name(dev), qspi);
- 	if (ret) {
- 		dev_err(dev, "failed to request irq\n");
--		goto err_master_put;
-+		return ret;
- 	}
- 
- 	init_completion(&qspi->data_completion);
- 	init_completion(&qspi->match_completion);
- 
- 	qspi->clk = devm_clk_get(dev, NULL);
--	if (IS_ERR(qspi->clk)) {
--		ret = PTR_ERR(qspi->clk);
--		goto err_master_put;
--	}
-+	if (IS_ERR(qspi->clk))
-+		return PTR_ERR(qspi->clk);
- 
- 	qspi->clk_rate = clk_get_rate(qspi->clk);
--	if (!qspi->clk_rate) {
--		ret = -EINVAL;
--		goto err_master_put;
--	}
-+	if (!qspi->clk_rate)
-+		return -EINVAL;
- 
- 	ret = clk_prepare_enable(qspi->clk);
- 	if (ret) {
- 		dev_err(dev, "can not enable the clock\n");
--		goto err_master_put;
-+		return ret;
- 	}
- 
- 	rstc = devm_reset_control_get_exclusive(dev, NULL);
-@@ -784,7 +772,7 @@ static int stm32_qspi_probe(struct platf
- 	pm_runtime_enable(dev);
- 	pm_runtime_get_noresume(dev);
- 
--	ret = devm_spi_register_master(dev, ctrl);
-+	ret = spi_register_master(ctrl);
- 	if (ret)
- 		goto err_pm_runtime_free;
- 
-@@ -806,8 +794,6 @@ err_dma_free:
- 	stm32_qspi_dma_free(qspi);
- err_clk_disable:
- 	clk_disable_unprepare(qspi->clk);
--err_master_put:
--	spi_master_put(qspi->ctrl);
- 
- 	return ret;
- }
-@@ -817,6 +803,7 @@ static int stm32_qspi_remove(struct plat
- 	struct stm32_qspi *qspi = platform_get_drvdata(pdev);
- 
- 	pm_runtime_get_sync(qspi->dev);
-+	spi_unregister_master(qspi->ctrl);
- 	/* disable qspi */
- 	writel_relaxed(0, qspi->io_base + QSPI_CR);
- 	stm32_qspi_dma_free(qspi);
++	if (!of_device_is_available(sfp_np)) {
++		of_node_put(sfp_np);
++		return 0;
++	}
++
+ 	pl->sfp_bus = sfp_register_upstream(sfp_np, pl->netdev, pl,
+ 					    &sfp_phylink_ops);
+ 	if (!pl->sfp_bus)
 
 

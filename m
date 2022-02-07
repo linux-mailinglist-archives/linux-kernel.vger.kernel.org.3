@@ -2,70 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B74D84AB4DB
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 07:41:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4865E4AB4F2
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 07:41:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244582AbiBGGgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 01:36:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60228 "EHLO
+        id S244254AbiBGGgX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 01:36:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232859AbiBGGaA (ORCPT
+        with ESMTP id S239618AbiBGGbh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 01:30:00 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BBF1C043185;
-        Sun,  6 Feb 2022 22:29:59 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id v5-20020a17090a4ec500b001b8b702df57so2085797pjl.2;
-        Sun, 06 Feb 2022 22:29:59 -0800 (PST)
+        Mon, 7 Feb 2022 01:31:37 -0500
+X-Greylist: delayed 64 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Feb 2022 22:31:35 PST
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07DA8C043181;
+        Sun,  6 Feb 2022 22:31:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :in-reply-to:references;
-        bh=xW8dsqVCTbHpGN1HtDYyawjXyg1vMQtfluuNijuegrM=;
-        b=Ln+wySWTGie2chmEdVdFeSm5V+roiWuVua4yj6Fx0FspGnTNklbAckS+FZ/nA8Tyrn
-         zx+wHFSK+0pqYiV3UZC7xLOiiEXAoSif63Ge1ZX9VwHtPxdZBn4JuVYwB8RjQ03bmXnH
-         xURZlWb3auZdHwpzFRPJN8B7RLhxlHQIHSDQSXDwMDTl9LFo5zcP8OxgMw+9zFTnrSQH
-         PHNxNPQxCMR/AenHMyyPoSi/4Q3/RVoYh3esOrMn5p2eutX62b9l/R4pxF+5L60akcNO
-         ivcjeNQm1V1WNFjYBaG27MlF8zWu+j07U6ByBptc5Q0WY+xkSEcMT/cjfP4HHCxHFkU1
-         ak5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:in-reply-to:references;
-        bh=xW8dsqVCTbHpGN1HtDYyawjXyg1vMQtfluuNijuegrM=;
-        b=srdq73Y3d9fRLEvqmoixGZVQwwiMjQxVXbCIXx38oM6paQG2IAIEgjPSrgHVQgN2tC
-         kfonI/oJxN0MZcYW9Qn3bQerixA3LIh4zQirG69jWevKHOTNCi86dpVlri6OlWXylRGE
-         hRIdxYc3wJseXNsuli7rnIgv/7zEl+Agra4LVBSRSzaGquupDNg0QynY2jQX39c2NN4F
-         i9k2xIaGU7S+WpueqHKvJI99SmdpBTpRbIHYvXGE1qKHgRQFmSUycDHJhhfcvMzSWXxj
-         yrNLanT4idM+COtRqjR6Gq+7zDT2PFch0QJuiJR14izavmvDoK9B71kzFDmXrGPfdOyx
-         REZw==
-X-Gm-Message-State: AOAM533iX21LBnHy3FI6qYrw296IthCBmu7mmsDo4RpN1ujgIKOD1e3q
-        SV/GZBAeAIBk8MEyT0VZAcQ=
-X-Google-Smtp-Source: ABdhPJz27O/RyWC9nr+0C4VhQPIiS8l/mI+3WtxMxmN+k5kAoq8FArYtdgmySTTQn6/nbf6EaKTjcQ==
-X-Received: by 2002:a17:902:9a06:: with SMTP id v6mr14708423plp.109.1644215398342;
-        Sun, 06 Feb 2022 22:29:58 -0800 (PST)
-Received: from scdiu3.sunplus.com ([113.196.136.192])
-        by smtp.googlemail.com with ESMTPSA id j8sm3994386pjc.11.2022.02.06.22.29.56
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 06 Feb 2022 22:29:57 -0800 (PST)
-From:   Tony Huang <tonyhuang.sunplus@gmail.com>
-To:     robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, derek.kiernan@xilinx.com,
-        dragan.cvetic@xilinx.com, arnd@arndb.de,
-        gregkh@linuxfoundation.org, tony.huang@sunplus.com,
-        wells.lu@sunplus.com
-Cc:     Tony Huang <tonyhuang.sunplus@gmail.com>
-Subject: [PATCH v8 2/2] misc: Add iop driver for Sunplus SP7021
-Date:   Mon,  7 Feb 2022 14:30:06 +0800
-Message-Id: <b96f039dc071b1d32bb52fa283fd8afc6d3349cc.1644212476.git.tonyhuang.sunplus@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1644212476.git.tonyhuang.sunplus@gmail.com>
-References: <cover.1644212476.git.tonyhuang.sunplus@gmail.com>
-In-Reply-To: <cover.1644212476.git.tonyhuang.sunplus@gmail.com>
-References: <cover.1644212476.git.tonyhuang.sunplus@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1644215495; x=1675751495;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Wq/xULOuP/jvk92XmnTa8NRyCBGFLagVj5mIPmhXCgg=;
+  b=KcmvVb4bNLLQtmC9DQEwxG3EYkMR5ZUqy1F+h6KHtqlfKng4Jqxoddz3
+   xISbzygx0HjRCqC+QRnw3NfS9fxfknMAoHIozm8giM0yE6DomIWlyHlz9
+   Dl/6eUXJ0CAJydJEeq1PCRyIQGcSQG9afA7tZI1gz8dx9KKFnF0yI5lt0
+   5ndt8clHeVHMygZwsmlD3fDkvf+DEfqabaOoh/FfwetomPia7VyNdY7v6
+   lD8xQxzQEjfH6YKydd2gPlWn030o3abTmd5GBT1pic1gncPogMm9ryqBP
+   X73t75lwNaSl6mXOV80dpWVdCCMhNHKgdDnUN/tgKpy+cPBt/yqUVrDiW
+   g==;
+X-IronPort-AV: E=Sophos;i="5.88,349,1635199200"; 
+   d="scan'208";a="21920108"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 07 Feb 2022 07:30:28 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Mon, 07 Feb 2022 07:30:28 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Mon, 07 Feb 2022 07:30:28 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1644215428; x=1675751428;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Wq/xULOuP/jvk92XmnTa8NRyCBGFLagVj5mIPmhXCgg=;
+  b=BE0+XcqqIwWe058GxcNFZCo42yRP3dWCit9o/vKc3X3X15RT+j+FU+Zr
+   8gK0oqDorM5nZjRBv5XA2kF1KL63x5LpgA/o+3ZWDhNtU7KmE8wPWefqw
+   AlWejtC8LwB8p1WUriQOIuiWxOdz/kIqFZgwVrIO3O12tu5hG4yLR+Ypy
+   k7xlJLG6qqEG2FxGa/4Qbw4eIyYhoPsq1eF8K4deBBnn7QlAnLXXrYdko
+   Ve1MfxW2h9gj4oqLCGxSrcIHhdyn+W5rGGF9y22rKtx5JxS2eOBmKKLeo
+   c1549qmR9KRNIQSrTDSgGSMPYH70F77GfP1IToZ4njAaic/kfUWPvKBnD
+   g==;
+X-IronPort-AV: E=Sophos;i="5.88,349,1635199200"; 
+   d="scan'208";a="21920107"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 07 Feb 2022 07:30:28 +0100
+Received: from steina-w.localnet (unknown [10.123.49.12])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 16B47280065;
+        Mon,  7 Feb 2022 07:30:28 +0100 (CET)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     jeanmichel.hautbois@ideasonboard.com,
+        linux-arm-kernel@lists.infradead.org,
+        dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
+        kernel-list@raspberrypi.com, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        lukasz@jany.st, mchehab@kernel.org, naush@raspberrypi.com,
+        robh@kernel.org, tomi.valkeinen@ideasonboard.com,
+        nsaenz@kernel.org, bcm-kernel-feedback-list@broadcom.com
+Subject: Re: (EXT) Re: (EXT) [RFC PATCH v4 03/12] dt-bindings: media: Add bindings for bcm2835-unicam
+Date:   Mon, 07 Feb 2022 07:30:25 +0100
+Message-ID: <5541132.DvuYhMxLoT@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <Yf3fe2F88SNcl2Jd@pendragon.ideasonboard.com>
+References: <20220203175009.558868-1-jeanmichel.hautbois@ideasonboard.com> <7954256.DvuYhMxLoT@steina-w> <Yf3fe2F88SNcl2Jd@pendragon.ideasonboard.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,587 +88,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-IOP(8051) embedded inside SP7021 which is used as
-Processor for I/O control, monitor RTC interrupt and
-cooperation with CPU & PMC in power management purpose.
-The IOP core is DQ8051, so also named IOP8051,
-it supports dedicated JTAG debug pins which share with SP7021.
-In standby mode operation, the power spec reach 400uA.
+Hi Laurent,
 
-Signed-off-by: Tony Huang <tonyhuang.sunplus@gmail.com>
----
-Changes in v8:
- - Addressed comments from Greg KH.
+Am Samstag, 5. Februar 2022, 03:22:51 CET schrieb Laurent Pinchart:
+> Hi Alexander,
+> 
+> On Fri, Feb 04, 2022 at 09:50:06AM +0100, Alexander Stein wrote:
+> > Am Donnerstag, 3. Februar 2022, 18:50:00 CET schrieb Jean-Michel Hautbois:
+> > > Introduce the dt-bindings documentation for bcm2835 CCP2/CSI2 Unicam
+> > > camera interface. Also add a MAINTAINERS entry for it.
+> > > 
+> > > Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+> > > Signed-off-by: Naushir Patuck <naush@raspberrypi.com>
+> > > Signed-off-by: Jean-Michel Hautbois
+> > > <jeanmichel.hautbois@ideasonboard.com>
+> > > 
+> > > ---
+> > > v4:
+> > > - make MAINTAINERS its own patch
+> > > - describe the reg and clocks correctly
+> > > - use a vendor entry for the number of data lanes
+> > > ---
+> > > 
+> > >  .../bindings/media/brcm,bcm2835-unicam.yaml   | 110 ++++++++++++++++++
+> > >  1 file changed, 110 insertions(+)
+> > >  create mode 100644
+> > > 
+> > > Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
+> > > 
+> > > diff --git
+> > > a/Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
+> > > b/Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml new
+> > > file
+> > > mode 100644
+> > > index 000000000000..0725a0267c60
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
+> > > @@ -0,0 +1,110 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/media/brcm,bcm2835-unicam.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: Broadcom BCM283x Camera Interface (Unicam)
+> > > +
+> > > +maintainers:
+> > > +  - Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>
+> > > +
+> > > +description: |-
+> > > +  The Unicam block on BCM283x SoCs is the receiver for either
+> > > +  CSI-2 or CCP2 data from image sensors or similar devices.
+> > > +
+> > > +  The main platform using this SoC is the Raspberry Pi family of
+> > > boards.
+> > > +  On the Pi the VideoCore firmware can also control this hardware
+> > > block,
+> > > +  and driving it from two different processors will cause issues.
+> > > +  To avoid this, the firmware checks the device tree configuration
+> > > +  during boot. If it finds device tree nodes starting by csi then
+> > > +  it will stop the firmware accessing the block, and it can then
+> > > +  safely be used via the device tree binding.
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    const: brcm,bcm2835-unicam
+> > > +
+> > > +  reg:
+> > > +    items:
+> > > +      - description: Unicam block.
+> > > +      - description: Clock Manager Image (CMI) block.
+> > > +
+> > > +  interrupts:
+> > > +    maxItems: 1
+> > > +
+> > > +  clocks:
+> > > +    items:
+> > > +      - description: Clock to drive the LP state machine of Unicam.
+> > > +      - description: Clock for the vpu (core clock).
+> > > +
+> > > +  clock-names:
+> > > +    items:
+> > > +      - const: lp
+> > > +      - const: vpu
+> > > +
+> > > +  power-domains:
+> > > +    items:
+> > > +      - description: Unicam power domain
+> > > +
+> > > +  brcm,num-data-lanes:
+> > > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > +    enum: [ 2, 4 ]
+> > > +    description: Number of data lanes on the csi bus
+> > 
+> > There is already data-lanes in
+> > Documentation/devicetree/bindings/media/video- interfaces.yaml. AFAICS
+> > these two are identical. Can't the video-
+> > interface.yaml be used for this? I'm no expert TBH.
+> 
+> This is the number of data lanes that the Unicam instance supports.
+> There are two Unicam instances, and they can have 2 or 4 data lanes
+> depending on the SoC. The data-lanes endpoint property indicates the
+> number of lanes used on a particular board.
 
- Documentation/ABI/testing/sysfs-platform-soc@B |  28 ++
- MAINTAINERS                                    |   2 +
- drivers/misc/Kconfig                           |  20 ++
- drivers/misc/Makefile                          |   1 +
- drivers/misc/sunplus_iop.c                     | 463 +++++++++++++++++++++++++
- 5 files changed, 514 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-platform-soc@B
- create mode 100644 drivers/misc/sunplus_iop.c
+Thanks for the explanation. Isn't this something which could be derived from 
+the compatible, e.g. having 2 different ones for 2 and 4 lanes respectively?
+See [1] for a similar situation in the SPI subsystem.
+I don't have a strong opinion, just want to share my feedback.
 
-diff --git a/Documentation/ABI/testing/sysfs-platform-soc@B b/Documentation/ABI/testing/sysfs-platform-soc@B
-new file mode 100644
-index 0000000..d26d6f5
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-platform-soc@B
-@@ -0,0 +1,28 @@
-+What:		/sys/devices/platform/soc@B/9c000400.iop/sp_iop_mailbox
-+Date:		January 2022
-+KernelVersion:	5.16
-+Contact:	Tony Huang <tonyhuang.sunplus@gmail.com>
-+Description:
-+		Show IOP's mailbox0 register data.
-+		Format: %x
-+
-+What:		/sys/devices/platform/soc@B/9c000400.iop/sp_iop_mode
-+Date:		January 2022
-+KernelVersion:	5.16
-+Contact:	Tony Huang <tonyhuang.sunplus@gmail.com>
-+Description:
-+		Read-Write.
-+
-+		Write this file.
-+		Operation mode of IOP is switched to standby mode by writing
-+		"1" to sysfs.
-+		Operation mode of IOP is switched to normal mode by writing
-+		"0" to sysfs.
-+		Writing of other values is invalid.
-+
-+		Read this file.
-+		Show operation mode of IOP. "0" is normal mode. "1" is standby
-+		mode.
-+		Format: %x
-+
-+
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 6f336c9..cbc8dff 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -18245,7 +18245,9 @@ F:	drivers/net/ethernet/dlink/sundance.c
- SUNPLUS IOP DRIVER
- M:	Tony Huang <tonyhuang.sunplus@gmail.com>
- S:	Maintained
-+F:	Documentation/ABI/testing/sysfs-platform-soc@B
- F:	Documentation/devicetree/bindings/misc/sunplu-iop.yaml
-+F:	drivers/misc/sunplus_iop.c
- 
- SUPERH
- M:	Yoshinori Sato <ysato@users.sourceforge.jp>
-diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
-index 0f5a49f..c1d790e 100644
---- a/drivers/misc/Kconfig
-+++ b/drivers/misc/Kconfig
-@@ -470,6 +470,26 @@ config HISI_HIKEY_USB
- 	  switching between the dual-role USB-C port and the USB-A host ports
- 	  using only one USB controller.
- 
-+config SUNPLUS_IOP
-+	tristate "Sunplus IOP support"
-+	default ARCH_SUNPLUS
-+	help
-+	  Sunplus I/O processor (8051) driver.
-+	  Processor for I/O control, monitor RTC interrupt
-+	  and cooperation with CPU&PMC in power management.
-+
-+	  The IOP core is DQ8051, so also named IOP8051.
-+	  Need Install DQ8051, The DQ8051 bin file generated by keil C.
-+	  We will provide users with 8051 normal and standby source code.
-+	  Path: https://sunplus.atlassian.net/wiki/spaces/doc/pages/610172933/
-+	  How+to+use+I+O+processor+8051+of+SP7021#5.-Write-C-or-assembly-source-files-for-IOP
-+	  Users can follow the operation steps to generate normal.bin and standby.bin.
-+	  Path: https://sunplus.atlassian.net/wiki/spaces/doc/pages/466190338/26.+IOP8051
-+	  26.5?How To Create 8051 bin file
-+
-+	  This driver can also be built as a module.  If so, the module
-+	  will be called sunplus_iop.
-+
- source "drivers/misc/c2port/Kconfig"
- source "drivers/misc/eeprom/Kconfig"
- source "drivers/misc/cb710/Kconfig"
-diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
-index a086197..eafeab6 100644
---- a/drivers/misc/Makefile
-+++ b/drivers/misc/Makefile
-@@ -52,6 +52,7 @@ obj-$(CONFIG_DW_XDATA_PCIE)	+= dw-xdata-pcie.o
- obj-$(CONFIG_PCI_ENDPOINT_TEST)	+= pci_endpoint_test.o
- obj-$(CONFIG_OCXL)		+= ocxl/
- obj-$(CONFIG_BCM_VK)		+= bcm-vk/
-+obj-$(CONFIG_SUNPLUS_IOP)	+= sunplus_iop.o
- obj-y				+= cardreader/
- obj-$(CONFIG_PVPANIC)   	+= pvpanic/
- obj-$(CONFIG_HABANA_AI)		+= habanalabs/
-diff --git a/drivers/misc/sunplus_iop.c b/drivers/misc/sunplus_iop.c
-new file mode 100644
-index 0000000..6ef2de7
---- /dev/null
-+++ b/drivers/misc/sunplus_iop.c
-@@ -0,0 +1,463 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * The IOP driver for Sunplus SP7021
-+ *
-+ * Copyright (C) 2021 Sunplus Technology Inc.
-+ *
-+ * All Rights Reserved.
-+ */
-+#include <linux/delay.h>
-+#include <linux/dma-mapping.h>
-+#include <linux/firmware.h>
-+#include <linux/iopoll.h>
-+#include <linux/module.h>
-+#include <linux/miscdevice.h>
-+#include <linux/of_platform.h>
-+#include <linux/of_address.h>
-+#include <linux/of_gpio.h>
-+
-+enum IOP_Status_e {
-+	IOP_SUCCESS,		/* successful */
-+	IOP_ERR_IOP_BUSY,	/* IOP is busy */
-+};
-+
-+/* moon0 register offset */
-+#define IOP_CLKEN0	0x04
-+#define IOP_RESET0	0x54
-+
-+/* IOP register offset */
-+#define IOP_CONTROL	0x00
-+#define IOP_DATA0	0x20
-+#define IOP_DATA1	0x24
-+#define IOP_DATA2	0x28
-+#define IOP_DATA3	0x2c
-+#define IOP_DATA4	0x30
-+#define IOP_DATA5	0x34
-+#define IOP_DATA6	0x38
-+#define IOP_DATA7	0x3c
-+#define IOP_DATA8	0x40
-+#define IOP_DATA9	0x44
-+#define IOP_DATA10	0x48
-+#define IOP_DATA11	0x4c
-+#define IOP_BASE_ADR_L	0x50
-+#define IOP_BASE_ADR_H	0x54
-+
-+/* PMC register offset */
-+#define IOP_PMC_TIMER		0x00
-+#define IOP_PMC_CTRL		0x04
-+#define IOP_XTAL27M_PASSWORD_I	0x08
-+#define IOP_XTAL27M_PASSWORD_II	0x0c
-+#define IOP_XTAL32K_PASSWORD_I	0x10
-+#define IOP_XTAL32K_PASSWORD_II	0x14
-+#define IOP_CLK27M_PASSWORD_I	0x18
-+#define IOP_CLK27M_PASSWORD_II	0x1c
-+#define IOP_PMC_TIMER2		0x20
-+
-+#define NORMAL_CODE_MAX_SIZE 0X1000	/* Max size of normal.bin that can be received */
-+#define STANDBY_CODE_MAX_SIZE 0x4000	/* Max size of standby.bin that can be received */
-+struct sp_iop {
-+	struct miscdevice dev;
-+	struct mutex write_lock;	/* avoid parallel access */
-+	void __iomem *iop_regs;
-+	void __iomem *pmc_regs;
-+	void __iomem *moon0_regs;
-+	int irq;
-+	int gpio_wakeup;
-+	unsigned char iop_normal_code[NORMAL_CODE_MAX_SIZE];
-+	unsigned char iop_standby_code[STANDBY_CODE_MAX_SIZE];
-+	resource_size_t iop_mem_start;
-+	resource_size_t iop_mem_size;
-+	unsigned char bin_code_mode;
-+};
-+
-+static void sp_iop_normal_mode(struct sp_iop *iop)
-+{
-+	void __iomem *iop_kernel_base;
-+	unsigned int reg;
-+
-+	iop_kernel_base = ioremap(iop->iop_mem_start, NORMAL_CODE_MAX_SIZE);
-+	memset(iop_kernel_base, 0, NORMAL_CODE_MAX_SIZE);
-+	memcpy(iop_kernel_base, iop->iop_normal_code, NORMAL_CODE_MAX_SIZE);
-+
-+	writel(0x00100010, iop->moon0_regs + IOP_CLKEN0);
-+
-+	reg = readl(iop->iop_regs + IOP_CONTROL);
-+	reg |= 0x01;
-+	writel(reg, iop->iop_regs + IOP_CONTROL);
-+
-+	reg = readl(iop->iop_regs + IOP_CONTROL);
-+	reg &= ~(0x8000);
-+	writel(reg, iop->iop_regs + IOP_CONTROL);
-+
-+	reg = readl(iop->iop_regs + IOP_CONTROL);
-+	reg |= 0x0200;// disable watchdog event reset IOP
-+	writel(reg, iop->iop_regs + IOP_CONTROL);
-+
-+	reg = (iop->iop_mem_start & 0xFFFF);
-+	writel(reg, iop->iop_regs + IOP_BASE_ADR_L);
-+	reg	= (iop->iop_mem_start >> 16);
-+	writel(reg, iop->iop_regs + IOP_BASE_ADR_H);
-+
-+	reg = readl(iop->iop_regs + IOP_CONTROL);
-+	reg &= ~(0x01);
-+	writel(reg, iop->iop_regs + IOP_CONTROL);
-+	iop->bin_code_mode = 0;
-+}
-+
-+static void sp_iop_standby_mode(struct sp_iop *iop)
-+{
-+	void __iomem *iop_kernel_base;
-+	unsigned long reg;
-+
-+	iop_kernel_base = ioremap(iop->iop_mem_start, STANDBY_CODE_MAX_SIZE);
-+	memset(iop_kernel_base, 0, STANDBY_CODE_MAX_SIZE);
-+	memcpy(iop_kernel_base, iop->iop_standby_code, STANDBY_CODE_MAX_SIZE);
-+
-+	writel(0x00100010, iop->moon0_regs + IOP_CLKEN0);
-+
-+	reg = readl(iop->iop_regs + IOP_CONTROL);
-+	reg |= 0x01;
-+	writel(reg, iop->iop_regs + IOP_CONTROL);
-+
-+	reg = readl(iop->iop_regs + IOP_CONTROL);
-+	reg &= ~(0x8000);
-+	writel(reg, iop->iop_regs + IOP_CONTROL);
-+
-+	reg = readl(iop->iop_regs + IOP_CONTROL);
-+	reg |= 0x0200;// disable watchdog event reset IOP
-+	writel(reg, iop->iop_regs + IOP_CONTROL);
-+
-+	reg = (iop->iop_mem_start & 0xFFFF);
-+	writel(reg, iop->iop_regs + IOP_BASE_ADR_L);
-+	reg = (iop->iop_mem_start >> 16);
-+	writel(reg, iop->iop_regs + IOP_BASE_ADR_H);
-+
-+	reg = readl(iop->iop_regs + IOP_CONTROL);
-+	reg &= ~(0x01);
-+	writel(reg, iop->iop_regs + IOP_CONTROL);
-+	iop->bin_code_mode = 1;
-+}
-+
-+/* 8051 informs linux kerenl. 8051 has been switched to standby.bin code. */
-+#define IOP_READY	0x0004
-+#define RISC_READY	0x0008
-+
-+/* System linux kernel tells 8051 which  gpio pin to wake-up through. */
-+#define WAKEUP_PIN	0xFE02
-+
-+/* System linux kernel tells 8051 to execute S1 or S3 mode. */
-+#define S1	0x5331
-+#define S3	0x5333
-+
-+static int sp_iop_s3mode(struct device *dev, struct sp_iop *iop)
-+{
-+	unsigned int reg;
-+	int ret, value;
-+
-+	/* PMC set */
-+	writel(0x00010001, iop->pmc_regs + IOP_PMC_TIMER);
-+	reg = readl(iop->pmc_regs + IOP_PMC_CTRL);
-+	/* disable system reset PMC, enalbe power down IOP Domain, enable gating clock 27Mhz */
-+	reg |= 0x23;
-+	writel(reg, iop->pmc_regs + IOP_PMC_CTRL);
-+
-+	writel(0x55aa00ff, iop->pmc_regs + IOP_XTAL27M_PASSWORD_I);
-+	writel(0x00ff55aa, iop->pmc_regs + IOP_XTAL27M_PASSWORD_II);
-+	writel(0xaa00ff55, iop->pmc_regs + IOP_XTAL32K_PASSWORD_I);
-+	writel(0xff55aa00, iop->pmc_regs + IOP_XTAL32K_PASSWORD_II);
-+	writel(0xaaff0055, iop->pmc_regs + IOP_CLK27M_PASSWORD_I);
-+	writel(0x5500aaff, iop->pmc_regs + IOP_CLK27M_PASSWORD_II);
-+	writel(0x01000100, iop->pmc_regs + IOP_PMC_TIMER2);
-+
-+	/* IOP Hardware IP reset */
-+	reg = readl(iop->moon0_regs + IOP_RESET0);
-+	reg |= 0x10;
-+	writel(reg, (iop->moon0_regs + IOP_RESET0));
-+	reg &= ~(0x10);
-+	writel(reg, (iop->moon0_regs + IOP_RESET0));
-+
-+	writel(0x00ff0085, (iop->moon0_regs + 32 * 4 * 1 + 4 * 1));
-+
-+	reg = readl(iop->moon0_regs + 32 * 4 * 1 + 4 * 2);
-+	reg |= 0x08000800;
-+	writel(reg, (iop->moon0_regs + 32 * 4 * 1 + 4 * 2));
-+
-+	writel(WAKEUP_PIN, iop->iop_regs + IOP_DATA0);
-+	writel(iop->gpio_wakeup, iop->iop_regs + IOP_DATA1);
-+
-+	ret = readl_poll_timeout(iop->iop_regs + IOP_DATA2, value,
-+				 (value & IOP_READY) == IOP_READY, 1000, 10000);
-+	if (ret) {
-+		dev_err(dev, "timed out\n");
-+		return ret;
-+	}
-+
-+	reg = RISC_READY;
-+	writel(reg, iop->iop_regs + IOP_DATA2);
-+	reg = 0x0000;
-+	writel(reg, iop->iop_regs + IOP_DATA5);
-+	reg = 0x0060;
-+	writel(reg, iop->iop_regs + IOP_DATA6);
-+
-+	ret = readl_poll_timeout(iop->iop_regs + IOP_DATA7, value,
-+				 value == 0xaaaa, 1000, 10000);
-+	if (ret) {
-+		dev_err(dev, "timed out\n");
-+		return ret;
-+	}
-+
-+	/* 8051 bin file call Ultra low function. */
-+	writel(0xdd, iop->iop_regs + IOP_DATA1);
-+	/*
-+	 * When the execution is here, the system linux kernel
-+	 * is about to be powered off
-+	 * The purpose of mdelay(10): Do not let the system linux
-+	 * kernel continue to run other programs.
-+	 */
-+	mdelay(10);
-+	return 0;
-+}
-+
-+static int sp_iop_s1mode(struct device *dev, struct sp_iop *iop)
-+{
-+	int ret, value;
-+
-+	ret = readl_poll_timeout(iop->iop_regs + IOP_DATA2, value,
-+				 (value & IOP_READY) == IOP_READY, 1000, 10000);
-+	if (ret) {
-+		dev_err(dev, "timed out\n");
-+		return ret;
-+	}
-+
-+	writel(RISC_READY, iop->iop_regs + IOP_DATA2);
-+	writel(0x0000, iop->iop_regs + IOP_DATA5);
-+	writel(0x0060, iop->iop_regs + IOP_DATA6);
-+
-+	ret = readl_poll_timeout(iop->iop_regs + IOP_DATA7, value,
-+				 value == 0xaaaa, 1000, 10000);
-+	if (ret) {
-+		dev_err(dev, "timed out\n");
-+		return ret;
-+	}
-+
-+	/* 8051 bin file call S1_mode function. */
-+	writel(0xee, iop->iop_regs + IOP_DATA1);
-+	/*
-+	 * When the execution is here, the system linux kernel
-+	 * is about to be powered off
-+	 * The purpose of mdelay(10): Do not let the system linux
-+	 * kernel continue to run other programs.
-+	 */
-+	mdelay(10);
-+	return 0;
-+}
-+
-+static ssize_t mailbox_show(struct device *dev, struct device_attribute *attr, char *buf)
-+{
-+	struct sp_iop *iop = dev_get_drvdata(dev);
-+	unsigned int mailbox;
-+
-+	mailbox = readl(iop->iop_regs + IOP_DATA0);
-+	return sysfs_emit(buf, "%x\n", mailbox);
-+}
-+
-+static DEVICE_ATTR_RO(mailbox);
-+
-+static ssize_t mode_show(struct device *dev, struct device_attribute *attr, char *buf)
-+{
-+	struct sp_iop *iop = dev_get_drvdata(dev);
-+
-+	return sysfs_emit(buf, "%x\n", iop->bin_code_mode);
-+}
-+
-+static ssize_t mode_store(struct device *dev, struct device_attribute *attr,
-+			  const char *buf, size_t count)
-+{
-+	struct sp_iop *iop = dev_get_drvdata(dev);
-+
-+	if (sysfs_streq(buf, "0"))
-+		sp_iop_normal_mode(iop);
-+	else if (sysfs_streq(buf, "1"))
-+		sp_iop_standby_mode(iop);
-+	else
-+		return -EINVAL;
-+	return count;
-+}
-+
-+static DEVICE_ATTR_RW(mode);
-+
-+static struct attribute *sp_iop_attrs[] = {
-+	&dev_attr_mailbox.attr,
-+	&dev_attr_mode.attr,
-+	NULL,
-+};
-+
-+ATTRIBUTE_GROUPS(sp_iop);
-+
-+static int  sp_iop_get_normal_code(struct device *dev, struct sp_iop *iop)
-+{
-+	const struct firmware *fw;
-+	static const char file[] = "normal.bin";
-+	unsigned int err, i;
-+
-+	err = request_firmware(&fw, file, dev);
-+	if (err) {
-+		dev_err(dev, "get bin file error\n");
-+		return err;
-+	}
-+
-+	for (i = 0; i < NORMAL_CODE_MAX_SIZE; i++) {
-+		char temp;
-+
-+		temp = fw->data[i];
-+		iop->iop_normal_code[i] = temp;
-+	}
-+	release_firmware(fw);
-+	return err;
-+}
-+
-+static int  sp_iop_get_standby_code(struct device *dev, struct sp_iop *iop)
-+{
-+	const struct firmware *fw;
-+	static const char file[] = "standby.bin";
-+	unsigned int err, i;
-+
-+	err = request_firmware(&fw, file, dev);
-+	if (err) {
-+		dev_err(dev, "get bin file error\n");
-+		return err;
-+	}
-+
-+	for (i = 0; i < STANDBY_CODE_MAX_SIZE; i++) {
-+		char temp;
-+
-+		temp = fw->data[i];
-+		iop->iop_standby_code[i] = temp;
-+	}
-+	release_firmware(fw);
-+	return err;
-+}
-+
-+static int sp_iop_get_resources(struct platform_device *pdev, struct sp_iop *p_sp_iop_info)
-+{
-+	struct resource *r;
-+
-+	r = platform_get_resource_byname(pdev, IORESOURCE_MEM, "iop");
-+	p_sp_iop_info->iop_regs = devm_ioremap_resource(&pdev->dev, r);
-+	if (IS_ERR(p_sp_iop_info->iop_regs)) {
-+		dev_err(&pdev->dev, "ioremap fail\n");
-+		return PTR_ERR(p_sp_iop_info->iop_regs);
-+	}
-+
-+	r = platform_get_resource_byname(pdev, IORESOURCE_MEM, "iop_pmc");
-+	p_sp_iop_info->pmc_regs = devm_ioremap_resource(&pdev->dev, r);
-+	if (IS_ERR(p_sp_iop_info->pmc_regs)) {
-+		dev_err(&pdev->dev, "ioremap fail\n");
-+		return PTR_ERR(p_sp_iop_info->pmc_regs);
-+	}
-+
-+	r = platform_get_resource_byname(pdev, IORESOURCE_MEM, "moon0");
-+	p_sp_iop_info->moon0_regs = devm_ioremap_resource(&pdev->dev, r);
-+	if (IS_ERR(p_sp_iop_info->moon0_regs)) {
-+		dev_err(&pdev->dev, "ioremap fail\n");
-+		return PTR_ERR(p_sp_iop_info->moon0_regs);
-+	}
-+	return IOP_SUCCESS;
-+}
-+
-+static int sp_iop_platform_driver_probe(struct platform_device *pdev)
-+{
-+	int ret = -ENXIO;
-+	int rc;
-+	struct sp_iop *iop;
-+	struct device_node *memnp;
-+	struct resource mem_res;
-+
-+	iop = devm_kzalloc(&pdev->dev, sizeof(struct sp_iop), GFP_KERNEL);
-+	if (!iop) {
-+		ret	= -ENOMEM;
-+		goto fail_kmalloc;
-+	}
-+	/* init */
-+	mutex_init(&iop->write_lock);
-+	ret = sp_iop_get_resources(pdev, iop);
-+
-+	// Get reserve address
-+	memnp = of_parse_phandle(pdev->dev.of_node, "memory-region", 0);
-+	if (!memnp) {
-+		dev_err(&pdev->dev, "no memory-region node\n");
-+		return -EINVAL;
-+	}
-+
-+	rc = of_address_to_resource(memnp, 0, &mem_res);
-+	of_node_put(memnp);
-+	if (rc) {
-+		dev_err(&pdev->dev, "failed to translate memory-region to a resource\n");
-+		return -EINVAL;
-+	}
-+
-+	iop->iop_mem_start = mem_res.start;
-+	iop->iop_mem_size = resource_size(&mem_res);
-+
-+	ret = sp_iop_get_normal_code(&pdev->dev, iop);
-+	if (ret != 0) {
-+		dev_err(&pdev->dev, "get normal code err=%d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = sp_iop_get_standby_code(&pdev->dev, iop);
-+	if (ret != 0) {
-+		dev_err(&pdev->dev, "get standby code err=%d\n", ret);
-+		return ret;
-+	}
-+
-+	sp_iop_normal_mode(iop);
-+	platform_set_drvdata(pdev, iop);
-+	iop->gpio_wakeup = of_get_named_gpio(pdev->dev.of_node, "iop-wakeup", 0);
-+	return 0;
-+
-+fail_kmalloc:
-+	return ret;
-+}
-+
-+static void sp_iop_platform_driver_shutdown(struct platform_device *pdev)
-+{
-+	struct sp_iop *iop = platform_get_drvdata(pdev);
-+	unsigned int ret, value;
-+
-+	value = readl(iop->iop_regs + IOP_DATA11);
-+	sp_iop_standby_mode(iop);
-+
-+	ret = readl_poll_timeout(iop->iop_regs + IOP_DATA0, value,
-+				 value == 0x2222, 1000, 100000);
-+	if (ret)
-+		dev_warn(&pdev->dev, "timed out\n");
-+
-+	if (value == S1)
-+		sp_iop_s1mode(&pdev->dev, iop);
-+	else
-+		sp_iop_s3mode(&pdev->dev, iop);
-+}
-+
-+static const struct of_device_id sp_iop_of_match[] = {
-+	{ .compatible = "sunplus,sp7021-iop" },
-+	{ /* sentinel */ },
-+};
-+
-+MODULE_DEVICE_TABLE(of, sp_iop_of_match);
-+
-+static struct platform_driver sp_iop_platform_driver = {
-+	.probe		= sp_iop_platform_driver_probe,
-+	.shutdown	= sp_iop_platform_driver_shutdown,
-+	.driver = {
-+		.name	= "sunplus,sp7021-iop",
-+		.of_match_table = sp_iop_of_match,
-+		.dev_groups = sp_iop_groups,
-+	}
-+};
-+
-+module_platform_driver(sp_iop_platform_driver);
-+
-+MODULE_AUTHOR("Tony Huang <tonyhuang.sunplus@gmail.com>");
-+MODULE_DESCRIPTION("Sunplus IOP Driver");
-+MODULE_LICENSE("GPL v2");
--- 
-2.7.4
+Regards,
+Alexander
+
+[1] https://patchwork.kernel.org/project/spi-devel-general/patch/
+20211207104114.2720764-1-alexander.stein@ew.tq-group.com/#24641405
+
 

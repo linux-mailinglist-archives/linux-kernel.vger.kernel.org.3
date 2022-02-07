@@ -2,99 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18A7F4AC29B
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 16:12:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 076824AC2A2
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 16:12:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442715AbiBGPJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 10:09:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49100 "EHLO
+        id S1442819AbiBGPJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 10:09:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383140AbiBGOoK (ORCPT
+        with ESMTP id S1383558AbiBGOot (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 09:44:10 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DF27C0401C1
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 06:44:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644245049; x=1675781049;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=p/duGNHsUm97N0VAdH1ZLjtrQxZmGiFTO5lsQ0azM+M=;
-  b=fU+ysjMhKNvQxxv1NKM5p24k8G+7FUGgbUiOZgk/j0s5mgBWVs/E0Czs
-   u0/euEdzPUY5JaV556K21n11VV9jkr4oG9rZCeVL6fxnu3+A796S9YlTf
-   JTUMmxGJvPqc7CZuX/vP8Gyz9p2F2xMLV+85ZJLlWuPDdyT6YpT9hIEPf
-   qvLpIe6G4DCPW+h1Se799VGiSb5yH1ShbrXoOzxPqrHkgKKZmTDBUtDUV
-   v2SYLt3KpITW01J+UPrqXk1aLy21iPod1a40LZUFWVqZ5u7Vfrlck26Ss
-   RhPmiaEt1T2naSyKBzT72A7vnqwS7Z695HEHSjo0RSZnRX2+cL3TGRoo2
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10250"; a="248493479"
-X-IronPort-AV: E=Sophos;i="5.88,350,1635231600"; 
-   d="scan'208";a="248493479"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 06:44:09 -0800
-X-IronPort-AV: E=Sophos;i="5.88,350,1635231600"; 
-   d="scan'208";a="700486892"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 06:44:07 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nH5ES-001w7G-L3;
-        Mon, 07 Feb 2022 16:43:08 +0200
-Date:   Mon, 7 Feb 2022 16:43:08 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: Re: [PATCH v3 0/4] gpiolib: A fix and a few cleanups
-Message-ID: <YgEv/MIydfZlL1zQ@smile.fi.intel.com>
-References: <20220201152758.40391-1-andriy.shevchenko@linux.intel.com>
+        Mon, 7 Feb 2022 09:44:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A598C0401C1;
+        Mon,  7 Feb 2022 06:44:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BA078610F4;
+        Mon,  7 Feb 2022 14:44:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C5E6C004E1;
+        Mon,  7 Feb 2022 14:44:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644245088;
+        bh=nAXYK6axBeHMkgxPIHA717JtUwiI1dmoeMXfl99zioA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mQITou0XDAOSWP81fk1y1hectagluyyjmUG8VGPZGPCxJTm0AWNNjllv0hA67naU8
+         2ThVsMrysosu7UCWIWsIkpEBCdBm3kfTtEjZY9jY3YVSA1WqL3BvN8FrrC67rKWKG6
+         ohV61tzluTTstzOKHYz1RgNltgcaVtcxfD6oYwWpMIbaWuBlISp9i6hyzAxHS8mXGe
+         rXZRkSw68DyfXNPtiPrW/xy2onfDbyINxLiIpWz4hfgNKpcGiUZ8fk39WRcSuLWRHS
+         dNwxBskJL2wzYBSQe4AjcyMd2GFj3+zjGCNvoIuWfsTEa6WVmespaNc76tpREPTcQ7
+         /1b+imhMuoi4Q==
+Date:   Mon, 7 Feb 2022 15:44:44 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Elie Morisse <syniurge@gmail.com>,
+        Nehal Shah <nehal-bakulchandra.shah@amd.com>,
+        Shyam Sundar S K <shyam-sundar.s-k@amd.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] i2c: amd-mp2: Remove useless DMA-32 fallback
+ configuration
+Message-ID: <YgEwXK8h+KR3LPgg@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Elie Morisse <syniurge@gmail.com>,
+        Nehal Shah <nehal-bakulchandra.shah@amd.com>,
+        Shyam Sundar S K <shyam-sundar.s-k@amd.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+References: <80f5c9b0f496d769882d807008c21aad192139f9.1641731644.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="9lcnKpQ8wmhWyrg8"
 Content-Disposition: inline
-In-Reply-To: <20220201152758.40391-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <80f5c9b0f496d769882d807008c21aad192139f9.1641731644.git.christophe.jaillet@wanadoo.fr>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 01, 2022 at 05:27:54PM +0200, Andy Shevchenko wrote:
-> Patch 1 is a fix for wrong error code to user space.
-> Patches 2-4 are small cleanups.
 
-> Can be routed via my tree, or directly into GPIO, whatever maintainers
-> prefer.
+--9lcnKpQ8wmhWyrg8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Bart, if the series is okay for you tell me which route to take?
+On Sun, Jan 09, 2022 at 01:34:18PM +0100, Christophe JAILLET wrote:
+> As stated in [1], dma_set_mask() with a 64-bit mask never fails if
+> dev->dma_mask is non-NULL.
+> So, if it fails, the 32 bits case will also fail for the same reason.
+>=20
+>=20
+> Simplify code and remove some dead code accordingly.
+>=20
+> [1]: https://lkml.org/lkml/2021/6/7/398
+>=20
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-> Changelog v3:
-> - joined two patches into a single fix (Bart)
-> - added Rb tag (Linus)
-> - renamed for_each_gpio_desc_with_flag() macro to be descriptive (Johan)
-> - added two new cleanups
-> 
-> Andy Shevchenko (4):
->   gpiolib: Never return internal error codes to user space
->   gpiolib: Introduce for_each_gpio_desc_with_flag() macro
->   gpiolib: Use short form of ternary operator in gpiod_get_index()
->   gpiolib: Simplify error path in gpiod_get_index() when requesting GPIO
-> 
->  drivers/gpio/gpiolib-cdev.c  |  6 +++---
->  drivers/gpio/gpiolib-of.c    | 10 ++++------
->  drivers/gpio/gpiolib-sysfs.c | 14 ++++----------
->  drivers/gpio/gpiolib.c       | 35 ++++++++++++++++-------------------
->  drivers/gpio/gpiolib.h       | 19 +++++++++++++++++++
->  5 files changed, 46 insertions(+), 38 deletions(-)
-
--- 
-With Best Regards,
-Andy Shevchenko
+Applied to for-next, thanks!
 
 
+--9lcnKpQ8wmhWyrg8
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIBMFwACgkQFA3kzBSg
+KbYR4Q//TGJNfc01Vq4YzC91lxvdI0IbGaGZiLakzfjOYcDpAt9bJ7ogy9VAo9bI
+TnFGvBNKeooCJnCMXFZCjgBJjVNBG71dk+22V8GgtrG4pvAksmh0i6p/eRco9R0Q
+13zEEbgvjLzF+ryjmoD+ef0XOQsf6zpjUdwlJQTkvmytTV6kq3d/O8tGrfbL/dxx
+nHQU2mFEGSmqby47J2V2t2wlgrowwDc2X8FGG70B/8Xw6ZqQCeDqnHAdWmKNwuTV
+RPzumkAIRo86tAzbtqvyMsrqNlvIXRkkiGjYtcEm/Jgqj8ANHSK7i1AJkwpt4R+f
+vMWzLjczDI9tdPX5CyTIkR/Vdv0jZBdDkUeIFklkBNpzKroRP9LAxxE7BUyulFEK
+5l++WnUJBzYhA0EuQEpujjCYMx/lzPav1jqZDKnjQs8aInM8b64PumPqEi60lKs8
+/OHnl+uoMLmVVJMZOwQ/c0Jo6naUSqvPUGGiKmrOpW1mWsfBU+cMQNXdreMAxDXE
+MN7yf+4bst1+zKpRQ0aHFGnOmuXfBhTHWM+oXlD433AjiB927m62P1MiWtxnV6/R
+R4pvUF80qYUK0vCI2Qs11CNehsaeuBUYToYFrnAix/22HAyYy4k0FDCoJwyy/sGl
+BrYzt10ucPouHsOA+jIG//eKDoSwMA6JfH3W53X87PuTggGbl7E=
+=qksk
+-----END PGP SIGNATURE-----
+
+--9lcnKpQ8wmhWyrg8--

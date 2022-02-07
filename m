@@ -2,151 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 769954ACB92
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 22:48:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BE154ACB97
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 22:49:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242379AbiBGVs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 16:48:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32984 "EHLO
+        id S242591AbiBGVtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 16:49:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241763AbiBGVs1 (ORCPT
+        with ESMTP id S240952AbiBGVtC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 16:48:27 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4912EC0612A4;
-        Mon,  7 Feb 2022 13:48:26 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id p24so8428284ejo.1;
-        Mon, 07 Feb 2022 13:48:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TA2tCHxBtL+GNLM2iu5etsizYFK9h2SqH5H/ePAisPI=;
-        b=iOZaeLr0JVActyoQUwFar0O4NBbIHuc/3U9jGwpQTpNT3RFDTLUU2OUWoN/BK9lIAD
-         6MyAAOjjknbVj8XjY9Qd/3w6NLIQmW6MH2ZIdToBcIgwixB2fC6FvXDyj/MzzD76sv6c
-         2CZ2iz6i8fhKZITSiyW0ReKr1w+Uoya7xm2SjCXcsGOPSczgev/c2B25gZi0EYCwThp3
-         MfS+8DW6eZfEPMI809tsefpKQOU/bCKbN4khHqVnjRps+QHFaDTgyVTwomRCztirOiti
-         iFaNvX4sIWFJ64L7JfZCK3XN+SRHaYjpuM5eWBxWCPzCVSopMWfqfkJOzATpYqa9WQx7
-         UnIA==
+        Mon, 7 Feb 2022 16:49:02 -0500
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20BF4C061355;
+        Mon,  7 Feb 2022 13:49:01 -0800 (PST)
+Received: by mail-oi1-f175.google.com with SMTP id x193so18676833oix.0;
+        Mon, 07 Feb 2022 13:49:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TA2tCHxBtL+GNLM2iu5etsizYFK9h2SqH5H/ePAisPI=;
-        b=LlUCELalvYU5Le4DcREWvfYaE5QcM38pL2Sr2yIC6fUjseeGWqNnL5D7d7Yv/1uhat
-         lSmSKWbZPR5SO3mg0pjyaQJhfX8Igx/FP8wGBE4b9EF76fB9SrdaVsIF1XefhLiur0A1
-         RgvbUDkczDooYWkzTpzi+6cHn9h3+ZBdxMoA34Nmndh6rL4EggEYIet2LYvQEInobbGO
-         6S5NvFAAFq1Td4A6iy7kEM4btSHP60TQjfc2gznWHMhhoTzgCMfoFiF41ZFs7Re1XEdp
-         EGLn2QUFjNFc3fXgtUTb1DJBLaOSdYFsBwSBByusoqKiZyP6i9ul0jDwPGrlIZIh5YfT
-         loVg==
-X-Gm-Message-State: AOAM533Tp71yO8nY8R/KopYC2Kg9uZFxMmRHoN1LV6JNSomIm7UYoPqB
-        0FhsX6gR6wOduEHRp0/Tx+c=
-X-Google-Smtp-Source: ABdhPJzj6OQmhljMT82gf4rsUtp0LbiixERpC+ZA4NpekGHODdFJJhOCyimW6ogQhAcE0wQC/FS9fg==
-X-Received: by 2002:a17:906:6b0c:: with SMTP id q12mr1249316ejr.640.1644270504735;
-        Mon, 07 Feb 2022 13:48:24 -0800 (PST)
-Received: from localhost.localdomain ([178.94.5.59])
-        by smtp.gmail.com with ESMTPSA id f19sm5714378edu.22.2022.02.07.13.48.23
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xYLxIcXQlNBWOfdCWgpu4sL95wkNNzTgGUCeH7XLJG8=;
+        b=P2J1eO4ezzUZZX+OKBWzpkGGY4hIzTO39r3r2HZeJW+tburkuWspweQmXDZfBVLt8w
+         2z1jSBKri90aqmOwt/89em1xSn+fW6sAB9zfTtbrdizqe7oF3mKGLZ5EYATQOL9BYs6y
+         R4zYNBbLokgA0O+MP+pFWNhs7ICANTst5KgCrWade0a8jAY5N43x44U36AGCOCbpXC9V
+         zZut6Dve3eEUG5ssvCHHduuLSuqCNNhztzDCCMYtuo87RMChAYaGggGx/Jn7CYRCkPyw
+         HqxryBQ0tOPtAdG7lCbTfpxr6WY9YiF5ek/+0kfmooaQyq/ABVYrjulOjnctsyu1BRHZ
+         ZtWA==
+X-Gm-Message-State: AOAM5300vTtzC0ecR+XC18ol/XZI6Az/3eK/wr6gF1bEEzhk9beMAoY2
+        PL6OYpYM2Ta3J/1+b8NLZOjHvA8r4w==
+X-Google-Smtp-Source: ABdhPJy2U3brm8ad9uy92ijdpFL7oqpZSZmF6Fr5+HexIeybeth0vTnt9RjO2+xSrxckvqmzLmiz7Q==
+X-Received: by 2002:a54:4009:: with SMTP id x9mr436340oie.117.1644270540395;
+        Mon, 07 Feb 2022 13:49:00 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id 23sm2371721oac.20.2022.02.07.13.48.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 13:48:24 -0800 (PST)
-From:   Denis Pauk <pauk.denis@gmail.com>
-Cc:     pauk.denis@gmail.com, Per Melin <kernel@melin.net>,
-        Jaap de Haan <jaap.dehaan@freenet.de>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] hwmon: (nct6775) add ASUS ROG STRIX Z390/Z490/X570-* / PRIME X570-P
-Date:   Mon,  7 Feb 2022 23:48:15 +0200
-Message-Id: <20220207214815.10995-1-pauk.denis@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 07 Feb 2022 13:48:59 -0800 (PST)
+Received: (nullmailer pid 983196 invoked by uid 1000);
+        Mon, 07 Feb 2022 21:48:58 -0000
+Date:   Mon, 7 Feb 2022 15:48:58 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Luca Ceresoli <luca@lucaceresoli.net>
+Cc:     linux-media@vger.kernel.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Peter Rosin <peda@axentia.se>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        matti.vaittinen@fi.rohmeurope.com
+Subject: Re: [RFCv3 3/6] media: dt-bindings: add DS90UB953-Q1 video serializer
+Message-ID: <YgGTymmCV4hKPXEi@robh.at.kernel.org>
+References: <20220206115939.3091265-1-luca@lucaceresoli.net>
+ <20220206115939.3091265-4-luca@lucaceresoli.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220206115939.3091265-4-luca@lucaceresoli.net>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Boards such as
-* PRIME X570-P,
-* ROG STRIX B550-F GAMING WIFI II,
-* ROG STRIX B550-XE GAMING (WI-FI),
-* ROG STRIX X570-E GAMING,
-* ROG STRIX Z390-F GAMING,
-* ROG STRIX Z390-H GAMING,
-* ROG STRIX Z390-I GAMING,
-* ROG STRIX Z490-A GAMING,
-* ROG STRIX Z490-E GAMING,
-* ROG STRIX Z490-F GAMING,
-* ROG STRIX Z490-G GAMING,
-* ROG STRIX Z490-G GAMING (WI-FI),
-* ROG STRIX Z490-H GAMING
-have got a nct6775 chip, but by default there's no use of it
-because of resource conflict with WMI method.
+On Sun, Feb 06, 2022 at 12:59:36PM +0100, Luca Ceresoli wrote:
+> Describe the Texas Instruments DS90UB953-Q1, a MIPI CSI-2 video serializer
+> with I2C Address Translator and remote GPIOs.
+> 
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> 
+> ---
+> 
+> Changes RFCv2 -> RFCv3:
+> 
+>  - rewrite in yaml
+> 
+> Changes RFCv1 -> RFCv2: none, this patch is new in RFCv2
+> ---
+>  .../bindings/media/i2c/ti,ds90ub953-q1.yaml   | 96 +++++++++++++++++++
+>  MAINTAINERS                                   |  7 ++
+>  include/dt-bindings/media/ds90ub953.h         | 16 ++++
+>  3 files changed, 119 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub953-q1.yaml
+>  create mode 100644 include/dt-bindings/media/ds90ub953.h
+> 
+> diff --git a/Documentation/devicetree/bindings/media/i2c/ti,ds90ub953-q1.yaml b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub953-q1.yaml
+> new file mode 100644
+> index 000000000000..2a836a3e65e9
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub953-q1.yaml
+> @@ -0,0 +1,96 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +# Copyright (C) 2019 Renesas Electronics Corp.
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/i2c/ti,ds90ub953-q1.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Texas Instruments DS90UB953-Q1 video serializer
+> +
+> +maintainers:
+> +  - Luca Ceresoli <luca@lucaceresoli.net>
+> +
+> +description: |
+> +  The TI DS90UB953-Q1 is a MIPI CSI-2 video serializer that forwards a MIPI
+> +  CSI-2 input video stream over an FPD Link 3 connection to a remote
+> +  deserializer. It also allows access to I2C and GPIO from the deserializer.
+> +
+> +  The DT definitions can be found in include/dt-bindings/media/ds90ub953.h
+> +
+> +  When used as a the remote counterpart of a deserializer (e.g. the
+> +  DS90UB954-Q1), the serializer is described in the
+> +  "deserializer/remote-chips/remote-chip@[01]" node.
+> +
+> +properties:
+> +  compatible:
+> +    const: ti,ds90ub953-q1
+> +
+> +  reg:
+> +    description: |
+> +      Index of the remote (serializer) RX port that this serializer is
+> +      connected to.
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    description: FPD-Link line rate (provided by the deserializer)
+> +    maxItems: 1
+> +
+> +  gpio-controller: true
+> +
+> +  '#gpio-cells':
+> +    const: 2
+> +
+> +  '#clock-cells':
+> +    const: 0
+> +
+> +  ti,gpio-functions:
+> +    description: |
+> +      A list of 4 values defining how the 4 GPIO pins are connected in
+> +      hardware; possible values are:
+> +      - DS90_GPIO_FUNC_UNUSED (0): the GPIO is not unused
+> +      - DS90_GPIO_FUNC_INPUT (1): the GPIO is an input to the ds90ub953,
+> +        the remote chip (deserializer) can read its value
+> +      - DS90_GPIO_FUNC_OUTPUT_REMOTE (2): the GPIO is an output from the
+> +        ds90ub953, the remote chip (deserializer) can set its value
+> +      For unspecified values the GPIO is assumed to be unused.
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +    maxItems: 4
+> +
+> +patternProperties:
+> +  '^ti,ds90ub953-q1-(clk|d[0-3])-inv-pol-quirk$':
+> +    description: |
+> +      The MIPI CSI-2 input clock lane or any of the data lanes has inverted
+> +      polarity in hardware
 
-This commit adds such boards to the WMI monitoring list.
+What's the type?
 
-BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=204807
-Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
-Tested-by: Per Melin <kernel@melin.net>
-Tested-by: Jaap de Haan <jaap.dehaan@freenet.de>
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - gpio-controller
+> +  - '#gpio-cells'
+> +  - '#clock-cells'
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/media/ds90ub953.h>
+> +    remote-chips {
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +
+> +      remote-chip@0 {
+> +        reg = <0>;
+> +        compatible = "ti,ds90ub953-q1";
+> +        clocks = <&deser>;
+> +        ti,gpio-functions =
+> +          <DS90_GPIO_FUNC_UNUSED
+> +          DS90_GPIO_FUNC_OUTPUT_REMOTE
+> +          DS90_GPIO_FUNC_UNUSED
+> +          DS90_GPIO_FUNC_UNUSED>;
+> +
+> +        gpio-controller;
+> +        #gpio-cells = <2>;
+> +        #clock-cells = <0>;
+> +      };
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 7383aec87e4a..4429ce035496 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -19090,6 +19090,13 @@ F:	include/linux/dma/k3-udma-glue.h
+>  F:	include/linux/dma/ti-cppi5.h
+>  F:	include/linux/dma/k3-psil.h
+>  
+> +TEXAS INSTRUMENTS DS90UB953 VIDEO SERIALIZER DRIVER
+> +M:	Luca Ceresoli <luca@lucaceresoli.net>
+> +L:	linux-media@vger.kernel.org
+> +S:	Maintained
+> +F:	Documentation/devicetree/bindings/media/i2c/ti,ds90ub953-q1.yaml
+> +F:	include/dt-bindings/media/ds90ub953.h
+> +
+>  TEXAS INSTRUMENTS' SYSTEM CONTROL INTERFACE (TISCI) PROTOCOL DRIVER
+>  M:	Nishanth Menon <nm@ti.com>
+>  M:	Tero Kristo <kristo@kernel.org>
+> diff --git a/include/dt-bindings/media/ds90ub953.h b/include/dt-bindings/media/ds90ub953.h
+> new file mode 100644
+> index 000000000000..5359432968e9
+> --- /dev/null
+> +++ b/include/dt-bindings/media/ds90ub953.h
+> @@ -0,0 +1,16 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
 
----
-Changes in v2:
-- Added ROG STRIX B550-F GAMING WIFI II, ROG STRIX B550-XE GAMING (WI-FI).
+Dual license please.
 
-Comments for v1:
-- I have rechecked all the boards by extracting[1] all DSDT files from UEFI
-  CAP files that can be downloaded from asus.com site. And all boards have
-  fully same WMI methods implementation. I have saved dumps to [2].
-  [1]: https://github.com/theopolis/uefi-firmware-parser
-  [2]: https://github.com/asus-wmi-boards-sensors/asus-board-dsdt
-- PRIME X570-P and ROG STRIX Z390-F GAMING are checked with real boards.
----
- drivers/hwmon/nct6775.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
-
-diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
-index fbf6266c7ba7..2b91f7e05126 100644
---- a/drivers/hwmon/nct6775.c
-+++ b/drivers/hwmon/nct6775.c
-@@ -5109,6 +5109,7 @@ static const char * const asus_wmi_boards[] = {
- 	"PRIME B550-PLUS",
- 	"PRIME B550M-A",
- 	"PRIME B550M-A (WI-FI)",
-+	"PRIME X570-P",
- 	"PRIME X570-PRO",
- 	"ROG CROSSHAIR VIII DARK HERO",
- 	"ROG CROSSHAIR VIII FORMULA",
-@@ -5118,10 +5119,22 @@ static const char * const asus_wmi_boards[] = {
- 	"ROG STRIX B550-E GAMING",
- 	"ROG STRIX B550-F GAMING",
- 	"ROG STRIX B550-F GAMING (WI-FI)",
-+	"ROG STRIX B550-F GAMING WIFI II",
- 	"ROG STRIX B550-I GAMING",
-+	"ROG STRIX B550-XE GAMING (WI-FI)",
-+	"ROG STRIX X570-E GAMING",
- 	"ROG STRIX X570-F GAMING",
- 	"ROG STRIX X570-I GAMING",
- 	"ROG STRIX Z390-E GAMING",
-+	"ROG STRIX Z390-F GAMING",
-+	"ROG STRIX Z390-H GAMING",
-+	"ROG STRIX Z390-I GAMING",
-+	"ROG STRIX Z490-A GAMING",
-+	"ROG STRIX Z490-E GAMING",
-+	"ROG STRIX Z490-F GAMING",
-+	"ROG STRIX Z490-G GAMING",
-+	"ROG STRIX Z490-G GAMING (WI-FI)",
-+	"ROG STRIX Z490-H GAMING",
- 	"ROG STRIX Z490-I GAMING",
- 	"TUF GAMING B550M-PLUS",
- 	"TUF GAMING B550M-PLUS (WI-FI)",
-
-base-commit: 74fa97c35a74d62a34e120343520e74c50329372
--- 
-2.34.1
-
+> +/**
+> + * Definitions for the Texas Instruments DS90UB953-Q1 video serializer
+> + *
+> + * Copyright (c) 2019 Luca Ceresoli <luca@lucaceresoli.net>
+> + */
+> +
+> +#ifndef _DS90UB953_H
+> +#define _DS90UB953_H
+> +
+> +#define DS90_GPIO_FUNC_UNUSED             0
+> +#define DS90_GPIO_FUNC_INPUT              1
+> +#define DS90_GPIO_FUNC_OUTPUT_REMOTE      2
+> +#define DS90_GPIO_N_FUNCS                 3
+> +
+> +#endif /* _DS90UB953_H */
+> -- 
+> 2.25.1
+> 
+> 

@@ -2,44 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C34874ABE01
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:05:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D20824ABE31
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:09:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391271AbiBGL6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:58:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47524 "EHLO
+        id S237602AbiBGL64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:58:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378322AbiBGLfu (ORCPT
+        with ESMTP id S1378601AbiBGLf4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:35:50 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66ED9C0401C3;
-        Mon,  7 Feb 2022 03:35:43 -0800 (PST)
+        Mon, 7 Feb 2022 06:35:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE4CC0401C2;
+        Mon,  7 Feb 2022 03:35:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 042A060B5B;
-        Mon,  7 Feb 2022 11:35:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCDE2C004E1;
-        Mon,  7 Feb 2022 11:35:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DA6E6B8112C;
+        Mon,  7 Feb 2022 11:35:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9BD2C004E1;
+        Mon,  7 Feb 2022 11:35:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233742;
-        bh=Z7H7oZrmQOOS5dhXt+kfnsPedSGfqT1i5+pCQHO2n5E=;
+        s=korg; t=1644233745;
+        bh=L7Ua2JQNOCa06ZsUU44srCbAmLOJXVGTcK1MykbM4Rw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QT4Km53LWiJ+Bg3Evq/VAcdYGefZvDoDtkhEs2JagNk8vVcFDbt3XKHGhFs6Phy69
-         Z6hgqrurdgpQdeQxmk9m+Ax5s9lrf5Z3gC8aUx3ttehbB7xqStJV95lyT4UqlFnf/t
-         NXyxf40NuQDRHwe5xzKfgEJfBbasYrZRUgCNNKhk=
+        b=qX054NArC84lEl8xczT06RMS/Ueu2VsOaLpocVYuVmGADv40cFoTtH3oacPD3JPd2
+         O+2q1oprRVPF15q4rrTD5WGaMhgNBI3k/ixAQfqJyyObszTMGci4E3hfsYEX/3kgFX
+         PtZnoryfH+LdH9rQzdJzDI3aWr/SgPu5JNIjZSPU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Adam Borowski <kilobyte@angband.pl>,
-        =?UTF-8?q?Martin=20Li=C5=A1ka?= <mliska@suse.cz>,
-        Sergei Trofimovich <slyich@gmail.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 107/126] objtool: Fix truncated string warning
-Date:   Mon,  7 Feb 2022 12:07:18 +0100
-Message-Id: <20220207103807.759609312@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 108/126] kvm/arm64: rework guest entry logic
+Date:   Mon,  7 Feb 2022 12:07:19 +0100
+Message-Id: <20220207103807.791632381@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
 References: <20220207103804.053675072@linuxfoundation.org>
@@ -57,58 +64,140 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sergei Trofimovich <slyich@gmail.com>
+From: Mark Rutland <mark.rutland@arm.com>
 
-[ Upstream commit 82880283d7fcd0a1d20964a56d6d1a5cc0df0713 ]
+[ Upstream commit 8cfe148a7136bc60452a5c6b7ac2d9d15c36909b ]
 
-On GCC 12, the build fails due to a possible truncated string:
+In kvm_arch_vcpu_ioctl_run() we enter an RCU extended quiescent state
+(EQS) by calling guest_enter_irqoff(), and unmasked IRQs prior to
+exiting the EQS by calling guest_exit(). As the IRQ entry code will not
+wake RCU in this case, we may run the core IRQ code and IRQ handler
+without RCU watching, leading to various potential problems.
 
-    check.c: In function 'validate_call':
-    check.c:2865:58: error: '%d' directive output may be truncated writing between 1 and 10 bytes into a region of size 9 [-Werror=format-truncation=]
-     2865 |                 snprintf(pvname, sizeof(pvname), "pv_ops[%d]", idx);
-          |                                                          ^~
+Additionally, we do not inform lockdep or tracing that interrupts will
+be enabled during guest execution, which caan lead to misleading traces
+and warnings that interrupts have been enabled for overly-long periods.
 
-In theory it's a valid bug:
+This patch fixes these issues by using the new timing and context
+entry/exit helpers to ensure that interrupts are handled during guest
+vtime but with RCU watching, with a sequence:
 
-    static char pvname[16];
-    int idx;
-    ...
-    idx = (rel->addend / sizeof(void *));
-    snprintf(pvname, sizeof(pvname), "pv_ops[%d]", idx);
+	guest_timing_enter_irqoff();
 
-There are only 7 chars for %d while it could take up to 9, so the
-printed "pv_ops[%d]" string could get truncated.
+	guest_state_enter_irqoff();
+	< run the vcpu >
+	guest_state_exit_irqoff();
 
-In reality the bug should never happen, because pv_ops only has ~80
-entries, so 7 chars for the integer is more than enough.  Still, it's
-worth fixing.  Bump the buffer size by 2 bytes to silence the warning.
+	< take any pending IRQs >
 
-[ jpoimboe: changed size to 19; massaged changelog ]
+	guest_timing_exit_irqoff();
 
-Fixes: db2b0c5d7b6f ("objtool: Support pv_opsindirect calls for noinstr")
-Reported-by: Adam Borowski <kilobyte@angband.pl>
-Reported-by: Martin Liška <mliska@suse.cz>
-Signed-off-by: Sergei Trofimovich <slyich@gmail.com>
-Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Link: https://lore.kernel.org/r/20220120233748.2062559-1-slyich@gmail.com
+Since instrumentation may make use of RCU, we must also ensure that no
+instrumented code is run during the EQS. I've split out the critical
+section into a new kvm_arm_enter_exit_vcpu() helper which is marked
+noinstr.
+
+Fixes: 1b3d546daf85ed2b ("arm/arm64: KVM: Properly account for guest CPU time")
+Reported-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
+Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+Reviewed-by: Marc Zyngier <maz@kernel.org>
+Reviewed-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
+Cc: Alexandru Elisei <alexandru.elisei@arm.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Frederic Weisbecker <frederic@kernel.org>
+Cc: James Morse <james.morse@arm.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Paul E. McKenney <paulmck@kernel.org>
+Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Message-Id: <20220201132926.3301912-3-mark.rutland@arm.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/objtool/check.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/kvm/arm.c | 51 ++++++++++++++++++++++++++++----------------
+ 1 file changed, 33 insertions(+), 18 deletions(-)
 
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 21735829b860c..750ef1c446c8a 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -2823,7 +2823,7 @@ static inline bool func_uaccess_safe(struct symbol *func)
+diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+index e4727dc771bf3..b2222d8eb0b55 100644
+--- a/arch/arm64/kvm/arm.c
++++ b/arch/arm64/kvm/arm.c
+@@ -764,6 +764,24 @@ static bool kvm_vcpu_exit_request(struct kvm_vcpu *vcpu, int *ret)
+ 			xfer_to_guest_mode_work_pending();
+ }
  
- static inline const char *call_dest_name(struct instruction *insn)
- {
--	static char pvname[16];
-+	static char pvname[19];
- 	struct reloc *rel;
- 	int idx;
++/*
++ * Actually run the vCPU, entering an RCU extended quiescent state (EQS) while
++ * the vCPU is running.
++ *
++ * This must be noinstr as instrumentation may make use of RCU, and this is not
++ * safe during the EQS.
++ */
++static int noinstr kvm_arm_vcpu_enter_exit(struct kvm_vcpu *vcpu)
++{
++	int ret;
++
++	guest_state_enter_irqoff();
++	ret = kvm_call_hyp_ret(__kvm_vcpu_run, vcpu);
++	guest_state_exit_irqoff();
++
++	return ret;
++}
++
+ /**
+  * kvm_arch_vcpu_ioctl_run - the main VCPU run function to execute guest code
+  * @vcpu:	The VCPU pointer
+@@ -854,9 +872,9 @@ int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
+ 		 * Enter the guest
+ 		 */
+ 		trace_kvm_entry(*vcpu_pc(vcpu));
+-		guest_enter_irqoff();
++		guest_timing_enter_irqoff();
  
+-		ret = kvm_call_hyp_ret(__kvm_vcpu_run, vcpu);
++		ret = kvm_arm_vcpu_enter_exit(vcpu);
+ 
+ 		vcpu->mode = OUTSIDE_GUEST_MODE;
+ 		vcpu->stat.exits++;
+@@ -891,26 +909,23 @@ int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
+ 		kvm_arch_vcpu_ctxsync_fp(vcpu);
+ 
+ 		/*
+-		 * We may have taken a host interrupt in HYP mode (ie
+-		 * while executing the guest). This interrupt is still
+-		 * pending, as we haven't serviced it yet!
++		 * We must ensure that any pending interrupts are taken before
++		 * we exit guest timing so that timer ticks are accounted as
++		 * guest time. Transiently unmask interrupts so that any
++		 * pending interrupts are taken.
+ 		 *
+-		 * We're now back in SVC mode, with interrupts
+-		 * disabled.  Enabling the interrupts now will have
+-		 * the effect of taking the interrupt again, in SVC
+-		 * mode this time.
++		 * Per ARM DDI 0487G.b section D1.13.4, an ISB (or other
++		 * context synchronization event) is necessary to ensure that
++		 * pending interrupts are taken.
+ 		 */
+ 		local_irq_enable();
++		isb();
++		local_irq_disable();
++
++		guest_timing_exit_irqoff();
++
++		local_irq_enable();
+ 
+-		/*
+-		 * We do local_irq_enable() before calling guest_exit() so
+-		 * that if a timer interrupt hits while running the guest we
+-		 * account that tick as being spent in the guest.  We enable
+-		 * preemption after calling guest_exit() so that if we get
+-		 * preempted we make sure ticks after that is not counted as
+-		 * guest time.
+-		 */
+-		guest_exit();
+ 		trace_kvm_exit(ret, kvm_vcpu_trap_get_class(vcpu), *vcpu_pc(vcpu));
+ 
+ 		/* Exit types that need handling before we can be preempted */
 -- 
 2.34.1
 

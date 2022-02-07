@@ -2,86 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C60FE4ACD25
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:07:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56E554ACD4C
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:07:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345244AbiBHBEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 20:04:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42270 "EHLO
+        id S233632AbiBHBE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 20:04:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237896AbiBGXcG (ORCPT
+        with ESMTP id S1343611AbiBGXmn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 18:32:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32501C061355;
-        Mon,  7 Feb 2022 15:32:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A9B0960E9E;
-        Mon,  7 Feb 2022 23:32:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39CC0C004E1;
-        Mon,  7 Feb 2022 23:32:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644276725;
-        bh=Sip9F5Bfsba1zq25dZliHosPf+iJHY5BZ3ZAUNyiX9Q=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Z10xrt4P2z6n/9x0o45n9hD44NEp74dqY2HFtNOkYHbDOZOBHzW3NM+X/d37mv1JW
-         fRjbOnc3wDHiiE4Zr4YSykieNOuTFOEp3HVY6jZPNpVtd6kTIU7Sqpp9zzHNsnRj6E
-         CXcbXcl1vAgcR0lmVoak0wAWhi2tv/dGkk46nimauCfCoAMuNJ51ZhdhrO4E0xVTwA
-         dotKn5nQTpYAq10NCOZQIUHWMq2TMA+1jxDstrR0d0Q8tkjNqQWzjzAXy4caKkqill
-         nZPNRBlLYoOKE4uUp8Btdwf2+zHjpK1cT8MkwCJzNFYPASeiAfvobxJEm1cXs8XZV5
-         oYTFfvpydxkRg==
-Date:   Mon, 7 Feb 2022 17:39:23 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Ben Skeggs <bskeggs@redhat.com>, Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH][next] nouveau/svm: Use struct_size() helper in
- nouveau_pfns_map()
-Message-ID: <20220207233923.GA524723@embeddedor>
+        Mon, 7 Feb 2022 18:42:43 -0500
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08EF6C061355
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 15:42:41 -0800 (PST)
+Received: by mail-oi1-x230.google.com with SMTP id s185so18818260oie.3
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 15:42:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=X94FZ2c+7TUXwZqG/jE1cAOFdmfyxcJBnlGMdedsJC0=;
+        b=EEKRZvEo5wj8N0q0UazmMypoDWIzYj1SS/fXmHO1sqtNkhMVbrCRUiMCrKYkMeCx/A
+         P+XQa5R/00XOevC4mc/SJ8/E3zA9DemKHgMSzKxZHVE6hxcFvSWAFoW9ulhXxGeySoV0
+         /65iUadXmZYasgRtATsjOhYWm7vsiO0Bzen5UU7clkaivpJwXqAZF0Fpz/StHIIsMLxV
+         /qjBwGKsYY1VwF/rTtOhaZdwXGTjJV21S7sJAz3lEADVRCfouU6J1O1/BiF+O7MpBgVB
+         WTtBz1CE9VWApuIMr8AHs4drbcqBr0k5xEXn+QfhPKTPNdkpgj7v1GPtF+F6/5KNYsu7
+         z7nQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=X94FZ2c+7TUXwZqG/jE1cAOFdmfyxcJBnlGMdedsJC0=;
+        b=LaT78VMnD5eyCFmunISTZPOo8H81qW77Y+caIj6dHeD0ejxVVkB5nXqu1346JISlpz
+         0O/v5Gl3yscmO/172lLsKmh+BX9UIvXiHxF0UAFbAvHhK8tByIsSQhL8oJ5vtnzHg2kl
+         9UF8PIuiNwlTQzmjwhCG2cXQbDFPvI3YDYWiwJKtvj9HWZx98MikaBnfLxDUxsT6kmct
+         gEA4rx8VlOVCUdNVvtTwOUt5+fRmnexDl7syH0J+kb+I86YWag+JhyR6tHWweiLp4n6Q
+         Lccb/X9ulOqJpXsqRg9+Z/mrmA8yGWOXbmtpx1PCL1O/bMksAxlk95UcG7IpXxCMDqM1
+         jmPg==
+X-Gm-Message-State: AOAM53341/evPVpgkwcCJvYLij5JzpBSiu60rCbrnxWHCtr5oZjWODZG
+        Uu1y9rl/BZYVa5NjI4A7DSU=
+X-Google-Smtp-Source: ABdhPJwex7LwSxsPOqDgiTeSbxDjuSKwRYmdSxhr9EFfsRIDBn7ix6ZU0W0bEvpF5TJxPYOnGM5Pdg==
+X-Received: by 2002:a05:6808:2188:: with SMTP id be8mr620443oib.63.1644277360326;
+        Mon, 07 Feb 2022 15:42:40 -0800 (PST)
+Received: from localhost.localdomain ([2804:14d:4cd8:12bf:4134:806a:5a4a:2a88])
+        by smtp.gmail.com with ESMTPSA id w20sm4590903ooe.3.2022.02.07.15.42.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Feb 2022 15:42:39 -0800 (PST)
+From:   Leonardo Araujo <leonardo.aa88@gmail.com>
+To:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        Leonardo Araujo <leonardo.aa88@gmail.com>
+Subject: [PATCH] Staging: r8188eu: core: 'associcated' may be misspelled - perhaps 'associated'?
+Date:   Mon,  7 Feb 2022 20:42:10 -0300
+Message-Id: <20220207234210.26097-1-leonardo.aa88@gmail.com>
+X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make use of the struct_size() helper instead of an open-coded version,
-in order to avoid any potential type mistakes or integer overflows that,
-in the worse scenario, could lead to heap overflows.
+This patch fixes the following checkpatch.pl warning:
 
-Link: https://github.com/KSPP/linux/issues/160
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+CHECK: 'associcated' may be misspelled - perhaps 'associated'?
+
+Signed-off-by: Leonardo Araujo <leonardo.aa88@gmail.com>
 ---
- drivers/gpu/drm/nouveau/nouveau_svm.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/staging/r8188eu/core/rtw_ap.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/nouveau/nouveau_svm.c b/drivers/gpu/drm/nouveau/nouveau_svm.c
-index 266809e511e2..46a5a1016e37 100644
---- a/drivers/gpu/drm/nouveau/nouveau_svm.c
-+++ b/drivers/gpu/drm/nouveau/nouveau_svm.c
-@@ -925,8 +925,8 @@ nouveau_pfns_map(struct nouveau_svmm *svmm, struct mm_struct *mm,
+diff --git a/drivers/staging/r8188eu/core/rtw_ap.c b/drivers/staging/r8188eu/core/rtw_ap.c
+index 1675e2e8439c..e02dd8e11c95 100644
+--- a/drivers/staging/r8188eu/core/rtw_ap.c
++++ b/drivers/staging/r8188eu/core/rtw_ap.c
+@@ -819,7 +819,7 @@ static int rtw_ht_operation_update(struct adapter *padapter)
  
- 	mutex_lock(&svmm->mutex);
+ void associated_clients_update(struct adapter *padapter, u8 updated)
+ {
+-	/* update associcated stations cap. */
++	/* update associated stations cap. */
+ 	if (updated) {
+ 		struct list_head *phead, *plist;
+ 		struct sta_info *psta = NULL;
+@@ -972,7 +972,7 @@ void bss_cap_update_on_sta_join(struct adapter *padapter, struct sta_info *psta)
+ 		update_beacon(padapter, _HT_ADD_INFO_IE_, NULL, true);
+ 	}
  
--	ret = nvif_object_ioctl(&svmm->vmm->vmm.object, args, sizeof(*args) +
--				npages * sizeof(args->p.phys[0]), NULL);
-+	ret = nvif_object_ioctl(&svmm->vmm->vmm.object, args,
-+				struct_size(args, p.phys, npages), NULL);
+-	/* update associcated stations cap. */
++	/* update associated stations cap. */
+ 	associated_clients_update(padapter,  beacon_updated);
  
- 	mutex_unlock(&svmm->mutex);
- }
+ 	DBG_88E("%s, updated =%d\n", __func__, beacon_updated);
+@@ -1036,7 +1036,7 @@ u8 bss_cap_update_on_sta_leave(struct adapter *padapter, struct sta_info *psta)
+ 		update_beacon(padapter, _HT_ADD_INFO_IE_, NULL, true);
+ 	}
+ 
+-	/* update associcated stations cap. */
++	/* update associated stations cap. */
+ 
+ 	DBG_88E("%s, updated =%d\n", __func__, beacon_updated);
+ 
 -- 
-2.27.0
+2.29.0
 

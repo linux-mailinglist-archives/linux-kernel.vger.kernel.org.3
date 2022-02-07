@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37AA54AB9AB
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:24:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C84B64AB97A
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:23:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378431AbiBGLPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:15:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49706 "EHLO
+        id S1353010AbiBGLMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:12:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354078AbiBGLMS (ORCPT
+        with ESMTP id S236757AbiBGLJO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:12:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92B70C043181;
-        Mon,  7 Feb 2022 03:12:17 -0800 (PST)
+        Mon, 7 Feb 2022 06:09:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B8A7C043189;
+        Mon,  7 Feb 2022 03:09:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 513F6B80EE8;
-        Mon,  7 Feb 2022 11:12:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DF2DC340EB;
-        Mon,  7 Feb 2022 11:12:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0B5C6B80EC3;
+        Mon,  7 Feb 2022 11:09:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3590CC004E1;
+        Mon,  7 Feb 2022 11:09:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232335;
-        bh=t1mDbYUz5ncUHrgoorpW5ZuOdFGpnnHi3xKn5xv1gsw=;
+        s=korg; t=1644232150;
+        bh=YzXaxA7SrWaX2UZWXji7oo0gOdanxIrfgqhjLwS/dug=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ndk2yByGpknPOtX9p3VTcsNfkizELBPmkhGzeuqFFDGWB9qfXjMP8phwI1JLY29yj
-         utO1enj46KOyvSIQhUkLT3UKz4CINQ+gLvgHTfGCAzcn1SJAfxttHb9+qneAGukuC4
-         8zjBFdcZQW1N0JvcCT5W3Gw5/ziZw8iErfbGYhh4=
+        b=kEUiM/MYyIU3zvAT0GcCcKu2rsmNOZW1dmPRKDWJATUtb97Os9cUNIJIuefz13vc3
+         wNM6D1rOFFqnnrmHyqovZqW8KJKHcRtIPLaJh+aeHHYAskxUwIVOYCwlfYrtVYvD49
+         1ZmUE0fCR0PbANgkjD6FPgxTCcE95KbZp+s5CsRI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tom Lendacky <thomas.lendacky@amd.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Willem de Bruijn <willemb@google.com>,
+        syzbot <syzkaller@googlegroups.com>,
         Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.14 43/69] net: amd-xgbe: Fix skb data length underflow
+Subject: [PATCH 4.9 32/48] af_packet: fix data-race in packet_setsockopt / packet_setsockopt
 Date:   Mon,  7 Feb 2022 12:06:05 +0100
-Message-Id: <20220207103757.041725409@linuxfoundation.org>
+Message-Id: <20220207103753.387803621@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103755.604121441@linuxfoundation.org>
-References: <20220207103755.604121441@linuxfoundation.org>
+In-Reply-To: <20220207103752.341184175@linuxfoundation.org>
+References: <20220207103752.341184175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,55 +56,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
+From: Eric Dumazet <edumazet@google.com>
 
-commit 5aac9108a180fc06e28d4e7fb00247ce603b72ee upstream.
+commit e42e70ad6ae2ae511a6143d2e8da929366e58bd9 upstream.
 
-There will be BUG_ON() triggered in include/linux/skbuff.h leading to
-intermittent kernel panic, when the skb length underflow is detected.
+When packet_setsockopt( PACKET_FANOUT_DATA ) reads po->fanout,
+no lock is held, meaning that another thread can change po->fanout.
 
-Fix this by dropping the packet if such length underflows are seen
-because of inconsistencies in the hardware descriptors.
+Given that po->fanout can only be set once during the socket lifetime
+(it is only cleared from fanout_release()), we can use
+READ_ONCE()/WRITE_ONCE() to document the race.
 
-Fixes: 622c36f143fc ("amd-xgbe: Fix jumbo MTU processing on newer hardware")
-Suggested-by: Tom Lendacky <thomas.lendacky@amd.com>
-Signed-off-by: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
-Acked-by: Tom Lendacky <thomas.lendacky@amd.com>
-Link: https://lore.kernel.org/r/20220127092003.2812745-1-Shyam-sundar.S-k@amd.com
+BUG: KCSAN: data-race in packet_setsockopt / packet_setsockopt
+
+write to 0xffff88813ae8e300 of 8 bytes by task 14653 on cpu 0:
+ fanout_add net/packet/af_packet.c:1791 [inline]
+ packet_setsockopt+0x22fe/0x24a0 net/packet/af_packet.c:3931
+ __sys_setsockopt+0x209/0x2a0 net/socket.c:2180
+ __do_sys_setsockopt net/socket.c:2191 [inline]
+ __se_sys_setsockopt net/socket.c:2188 [inline]
+ __x64_sys_setsockopt+0x62/0x70 net/socket.c:2188
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+read to 0xffff88813ae8e300 of 8 bytes by task 14654 on cpu 1:
+ packet_setsockopt+0x691/0x24a0 net/packet/af_packet.c:3935
+ __sys_setsockopt+0x209/0x2a0 net/socket.c:2180
+ __do_sys_setsockopt net/socket.c:2191 [inline]
+ __se_sys_setsockopt net/socket.c:2188 [inline]
+ __x64_sys_setsockopt+0x62/0x70 net/socket.c:2188
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+value changed: 0x0000000000000000 -> 0xffff888106f8c000
+
+Reported by Kernel Concurrency Sanitizer on:
+CPU: 1 PID: 14654 Comm: syz-executor.3 Not tainted 5.16.0-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+
+Fixes: 47dceb8ecdc1 ("packet: add classic BPF fanout mode")
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Cc: Willem de Bruijn <willemb@google.com>
+Reported-by: syzbot <syzkaller@googlegroups.com>
+Link: https://lore.kernel.org/r/20220201022358.330621-1-eric.dumazet@gmail.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/amd/xgbe/xgbe-drv.c |   12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ net/packet/af_packet.c |    8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
---- a/drivers/net/ethernet/amd/xgbe/xgbe-drv.c
-+++ b/drivers/net/ethernet/amd/xgbe/xgbe-drv.c
-@@ -2722,6 +2722,14 @@ read_again:
- 			buf2_len = xgbe_rx_buf2_len(rdata, packet, len);
- 			len += buf2_len;
- 
-+			if (buf2_len > rdata->rx.buf.dma_len) {
-+				/* Hardware inconsistency within the descriptors
-+				 * that has resulted in a length underflow.
-+				 */
-+				error = 1;
-+				goto skip_data;
-+			}
+--- a/net/packet/af_packet.c
++++ b/net/packet/af_packet.c
+@@ -1719,7 +1719,10 @@ static int fanout_add(struct sock *sk, u
+ 		err = -ENOSPC;
+ 		if (atomic_read(&match->sk_ref) < PACKET_FANOUT_MAX) {
+ 			__dev_remove_pack(&po->prot_hook);
+-			po->fanout = match;
 +
- 			if (!skb) {
- 				skb = xgbe_create_skb(pdata, napi, rdata,
- 						      buf1_len);
-@@ -2751,8 +2759,10 @@ skip_data:
- 		if (!last || context_next)
- 			goto read_again;
++			/* Paired with packet_setsockopt(PACKET_FANOUT_DATA) */
++			WRITE_ONCE(po->fanout, match);
++
+ 			po->rollover = rollover;
+ 			rollover = NULL;
+ 			atomic_inc(&match->sk_ref);
+@@ -3895,7 +3898,8 @@ packet_setsockopt(struct socket *sock, i
+ 	}
+ 	case PACKET_FANOUT_DATA:
+ 	{
+-		if (!po->fanout)
++		/* Paired with the WRITE_ONCE() in fanout_add() */
++		if (!READ_ONCE(po->fanout))
+ 			return -EINVAL;
  
--		if (!skb)
-+		if (!skb || error) {
-+			dev_kfree_skb(skb);
- 			goto next_packet;
-+		}
- 
- 		/* Be sure we don't exceed the configured MTU */
- 		max_len = netdev->mtu + ETH_HLEN;
+ 		return fanout_set_data(po, optval, optlen);
 
 

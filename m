@@ -2,309 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B59B4AC03A
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 14:54:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4A1E4AC01D
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 14:52:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389269AbiBGNvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 08:51:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33514 "EHLO
+        id S1388840AbiBGNua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 08:50:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381343AbiBGN3x (ORCPT
+        with ESMTP id S1386900AbiBGNQo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 08:29:53 -0500
-X-Greylist: delayed 601 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 05:29:51 PST
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15EC4C043181;
-        Mon,  7 Feb 2022 05:29:51 -0800 (PST)
-Received: from [192.168.0.7] (ip5f5aee58.dynamic.kabel-deutschland.de [95.90.238.88])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 70ABB61E64846;
-        Mon,  7 Feb 2022 14:14:21 +0100 (CET)
-Message-ID: <d41d8b41-c347-47e7-e52b-39d7211c8952@molgen.mpg.de>
-Date:   Mon, 7 Feb 2022 14:14:20 +0100
+        Mon, 7 Feb 2022 08:16:44 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4698DC043188
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 05:16:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644239803; x=1675775803;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=NVBwUuQV6ckVxuAoKC8BjePGv50m0lO/JPE38dD/qM8=;
+  b=CmXvauUjZZbIIfNPVh+k0BShnTLGfzJRBMroGEeS9B/eHH8WlI5ze6V1
+   XWSHUThGTkaBVOqVd6SDF+BgB/CC++v8ILzLh5yzNVJuhPdw5pGAu1jUx
+   sbDWVyHAzSDrx11L7+mixrOcvih0NEPtVHFpdZFsxAz56poTYHznaCOg8
+   Szz/SWZRkXB7Rk57suxbpiB0Afni8J0+lU+WmTKd6Ium/OPtWATstyzXD
+   kbe45vRMYRhgN8jvkJ52kbey+CaLXvYtdz4/DPRqRUAJf8fLUuI+lpXYo
+   u2FZCWFXHMpqHNLavJCtoZTvZnHZUN8TEGQfHz4WXYHRO9nOKG5I8WOht
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10250"; a="335115028"
+X-IronPort-AV: E=Sophos;i="5.88,349,1635231600"; 
+   d="scan'208";a="335115028"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 05:16:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,349,1635231600"; 
+   d="scan'208";a="770630442"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga006.fm.intel.com with ESMTP; 07 Feb 2022 05:16:41 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 8AB70509; Mon,  7 Feb 2022 15:16:56 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Rodolfo Giometti <giometti@enneenne.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH v3 1/1] pps: generators: pps_gen_parport: Switch to use module_parport_driver()
+Date:   Mon,  7 Feb 2022 15:16:52 +0200
+Message-Id: <20220207131652.13316-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: Unable to transfer big files to Nokia N9
-Content-Language: en-US
-To:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        linux-bluetooth@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>, regressions@lists.linux.dev,
-        Takashi Iwai <tiwai@suse.com>
-References: <eb6d86eb-d156-d7ac-0965-181719023d51@molgen.mpg.de>
- <CABBYNZLENxvXMCh6XbBSnu0jasV1F0QestEK5v2mnNUpJdw3Vw@mail.gmail.com>
- <cf71bdea-ec22-e4c9-016c-69e94a130607@molgen.mpg.de>
- <a93c0fa7-7b84-6aea-265b-c913e0c84678@molgen.mpg.de>
- <d7206e12-1b99-c3be-84f4-df22af427ef5@molgen.mpg.de>
- <371027df-7f32-edab-208d-d4cdd2202ba6@leemhuis.info>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <371027df-7f32-edab-208d-d4cdd2202ba6@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Thorsten, dear Luiz,
+Switch to use module_parport_driver() to reduce boilerplate code.
 
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Acked-by: Rodolfo Giometti <giometti@enneenne.com>
+---
+v3: added Ack (Rodolfo), Cc'ed to Greg for picking it up
+ drivers/pps/generators/pps_gen_parport.c | 42 ++++--------------------
+ 1 file changed, 7 insertions(+), 35 deletions(-)
 
-Am 28.01.22 um 11:36 schrieb Thorsten Leemhuis:
-> Hi, this is your Linux kernel regression tracker speaking.
+diff --git a/drivers/pps/generators/pps_gen_parport.c b/drivers/pps/generators/pps_gen_parport.c
+index 6a1af7664f3b..fba6c490977c 100644
+--- a/drivers/pps/generators/pps_gen_parport.c
++++ b/drivers/pps/generators/pps_gen_parport.c
+@@ -20,8 +20,6 @@
+ #include <linux/hrtimer.h>
+ #include <linux/parport.h>
+ 
+-#define DRVDESC "parallel port PPS signal generator"
+-
+ #define SIGNAL		0
+ #define NO_SIGNAL	PARPORT_CONTROL_STROBE
+ 
+@@ -180,6 +178,11 @@ static void parport_attach(struct parport *port)
+ {
+ 	struct pardev_cb pps_cb;
+ 
++	if (send_delay > SEND_DELAY_MAX) {
++		pr_err("delay value should be not greater then %d\n", SEND_DELAY_MAX);
++		return -EINVAL;
++	}
++
+ 	if (attached) {
+ 		/* we already have a port */
+ 		return;
+@@ -231,39 +234,8 @@ static struct parport_driver pps_gen_parport_driver = {
+ 	.detach = parport_detach,
+ 	.devmodel = true,
+ };
+-
+-/* module staff */
+-
+-static int __init pps_gen_parport_init(void)
+-{
+-	int ret;
+-
+-	pr_info(DRVDESC "\n");
+-
+-	if (send_delay > SEND_DELAY_MAX) {
+-		pr_err("delay value should be not greater"
+-				" then %d\n", SEND_DELAY_MAX);
+-		return -EINVAL;
+-	}
+-
+-	ret = parport_register_driver(&pps_gen_parport_driver);
+-	if (ret) {
+-		pr_err("unable to register with parport\n");
+-		return ret;
+-	}
+-
+-	return  0;
+-}
+-
+-static void __exit pps_gen_parport_exit(void)
+-{
+-	parport_unregister_driver(&pps_gen_parport_driver);
+-	pr_info("hrtimer avg error is %ldns\n", hrtimer_error);
+-}
+-
+-module_init(pps_gen_parport_init);
+-module_exit(pps_gen_parport_exit);
++module_parport_driver(pps_gen_parport_driver);
+ 
+ MODULE_AUTHOR("Alexander Gordeev <lasaine@lvk.cs.msu.su>");
+-MODULE_DESCRIPTION(DRVDESC);
++MODULE_DESCRIPTION("parallel port PPS signal generator");
+ MODULE_LICENSE("GPL");
+-- 
+2.34.1
 
-Thorsten, thank you for following up on this.
-
-> On 16.01.22 14:27, Paul Menzel wrote:
->> #regzbot introduced: 81be03e026dc0c16dc1c64e088b2a53b73caa895
-> 
-> thx for getting regzbot involved, much appreciated!
-> 
->> Dear Luiz,
->>
->> It turns out there was a regression in Linux 5.16-rc1.
-> 
-> @bt-maintaners, what's the status here? Paul reported that over ten days
-> ago and there wasn't a single reply. Or did the discussion move
-> somewhere else?
-> 
-> @Paul: just wondering, did you give 5.17-rc1 a try? Might be worth a
-> shot, if only to confirm the issue is still present.
-
-I just tried with 5.17-rc3, and the issue is still present.
-
-
-Kind regards,
-
-Paul
-
-
->> Am 20.12.21 um 22:31 schrieb Paul Menzel:
->>
->>> Am 01.12.21 um 23:07 schrieb Paul Menzel:
->>>
->>>> Am 01.12.21 um 19:29 schrieb Luiz Augusto von Dentz:
->>>>
->>>>> On Wed, Dec 1, 2021 at 9:39 AM Paul Menzel <pmenzel@molgen.mpg.de>
->>>>> wrote:
->>>>
->>>>>> For the first time, I wanted to transfer a 2 MB PDF file from a Dell
->>>>>> Latitude E7250 with Debian sid/unstable with Linux 5.16-rc1 to a Nokia
->>>>>> N9 (MeeGo/Harmattan). Using the package *bluez-obexd* 5.61-1 and GNOME
->>>>>> 41, the device was found, and paired fine. Then I selected to transfer
->>>>>> the 2 MB file, and after starting for a second, it timed out after the
->>>>>> progress bar moves forward ones and failed.
->>>>>>
->>>>>> The systemd journal contains:
->>>>>>
->>>>>>        obexd[21139]: Transfer(0x56243fe4f790) Error: Timed out
->>>>>> waiting for response
->>>>>>
->>>>>> Testing with a a 5 byte test text file, worked fine. Also testing
->>>>>> with a
->>>>>> Galaly M32, both files were transferred without problems (though
->>>>>> slowly
->>>>>> with 32 KB/s.)
->>>>>>
->>>>>> Trying to connect to the device with bluetoothctl failed for me,
->>>>>> and the
->>>>>> journal contained, it failed.
->>>>>>
->>>>>>        $ bluetoothctl
->>>>>>        Agent registered
->>>>>>        [bluetooth]# connect 40:98:4E:5B:CE:XX
->>>>>>        Attempting to connect to 40:98:4E:5B:CE:XX
->>>>>>        Failed to connect: org.bluez.Error.Failed
->>>>>>
->>>>>>        bluetoothd[21104]: src/service.c:btd_service_connect()
->>>>>> a2dp-source profile connect failed for 40:98:4E:5B:CE:B3: Protocol
->>>>>> not available
->>>>>>
->>>>>> As the Nokia N9 was once pretty popular in the Linux community, I am
->>>>>> pretty sure, it used to work fine in the past, and there is some
->>>>>> regression. It’d be great, if you could give me some hints how to
->>>>>> further debug the issue.
->>>>>
->>>>> We will need some logs, obexd and btmon, if possible.
->>>>
->>>> I only managed to get the btmon trace [1]. I did `sudo modprobe -r
->>>> btusb` and `sudo btmon -w /dev/shm/trace.log`.
->>>>
->>>> Linux messages:
->>>>
->>>>       [29880.100381] calling  btusb_driver_init+0x0/0x1000 [btusb] @
->>>> 28716
->>>>       [29880.239603] usbcore: registered new interface driver btusb
->>>>       [29880.239608] initcall btusb_driver_init+0x0/0x1000 [btusb]
->>>> returned 0 after 135952 usecs
->>>>       [29880.240706] Bluetooth: hci0: unexpected event for opcode 0x0500
->>>>       [29880.241598] Bluetooth: hci0: Legacy ROM 2.5 revision 1.0
->>>> build 3 week 17 2014
->>>>       [29880.241605] Bluetooth: hci0: Intel device is already patched.
->>>> patch num: 32
->>>>
->>>>   From the system journal:
->>>>
->>>>       Dez 01 22:52:19 ersatz obexd[21139]: Transfer(0x56243fe53dd0)
->>>> Error: Timed out waiting for response
->>>
->>> Were you able to see anything in the attached logs? If the obexd logs
->>> are missing, can you please tell how I should capture them?
->>>
->>> I also tested with Ubuntu 20.04 (*linux-image-5.11.0-27-generic*) and
->>> 21.10 (*linux-image-5.13.0-19-generic*) live systems booted from a USB
->>> storage device, and transferring `/usr/bin/systemctl`
->>> (`/lib/systemd/systemd`) with size of 1.8 MB worked fine.
->>>
->>> Could there be a regression in that area? Unfortunately, it’s not easy
->>> for me to do a bisection on the device at hand.
->>>
->>> (Would it be possible to do with QEMU and USB controller and Bluetooth
->>> device passthrough? How can I transfer the file on the command line so
->>> I wouldn’t need to install a desktop environment?)
->>
->> Turns out, that is indeed possible [2], but turned out to be cumbersome,
->> as I hit the regression [3], which seems to have been fixed by commit
->> 95655456e7ce (Bluetooth: btintel: Fix broken LED quirk for legacy ROM
->> devices) merged in the current Linux 5.17 cycle this week.
->>
->> As a work around, I applied a hunk from Takashi’s patch.
->>
->> -       { USB_DEVICE(0x8087, 0x0a2a), .driver_info =
->> BTUSB_INTEL_COMBINED },
->> +       { USB_DEVICE(0x8087, 0x0a2a), .driver_info = BTUSB_INTEL_COMBINED |
->> + BTUSB_INTEL_BROKEN_INITIAL_NCMD },
->>
->> My problem with the Nokia N9 is still present in Linus’ master branch.
->>
->> Then I built a minimal Linux kernel for QEMU, and ran:
->>
->>      qemu-system-x86_64 -cpu host -m 2G -enable-kvm \
->>        -usb -device usb-host,vendorid=0x8087,productid=0x0a2a \
->>        -drive file=/dev/shm/debian-64.img,format=raw,if=virtio \
->>        -net nic -net user,hostfwd=tcp::22223-:22 \
->>        -kernel /dev/shm/bzImage -append "root=/dev/vda1 rw quiet"
->>
->> In the Debian sid/unstable VM, I used
->>
->>      ssh root@localhost -p 22223
->>
->> I once had to pair the VM with the Nokia N9 in bluetoothctl, and then
->> started `/usr/libexec/bluetooth/obexd`, and ran `obexctl`, and connected
->> first with `connect`, and then ran `send /lib/systemd/systemd` to
->> transfer the file. In the problematic cases it stopped/hung after the
->> first progress message.
->>
->>      # obexctl
->>      [NEW] Client /org/bluez/obex
->>      [obex]# connect 40:98:4E:5B:CE:XX
->>      Attempting to connect to 40:98:4E:5B:CE:XX
->>      [NEW] Session /org/bluez/obex/client/session0 [default]
->>      [NEW] ObjectPush /org/bluez/obex/client/session0
->>      Connection successful
->>      [40:98:4E:5B:CE:XX]# send /lib/systemd/systemd
->>      Attempting to send /lib/systemd/systemd to
->> /org/bluez/obex/client/session0
->>      [NEW] Transfer /org/bluez/obex/client/session0/transfer0
->>      Transfer /org/bluez/obex/client/session0/transfer0
->>          Status: queued
->>          Name: systemd
->>          Size: 1841712
->>          Filename: /lib/systemd/systemd
->>          Session: /org/bluez/obex/client/session0
->>      [CHG] Transfer /org/bluez/obex/client/session0/transfer0 Status: active
->>      [CHG] Transfer /org/bluez/obex/client/session0/transfer0
->> Transferred: 32737 (@32KB/s 00:55)
->>      [CHG] Transfer /org/bluez/obex/client/session0/transfer0 Status: error
->>      [DEL] Transfer /org/bluez/obex/client/session0/transfer0
->>
->> Some manual bisection of Linux releases, verified, that the regression
->> was introduced in Linux 5.16-rc1. (Lucky me, I started using Bluetooth
->> with the Nokia with Linux 5.16-rc1.) Then I verified it was introduced
->> by the Bluetooth pull request for Linux 5.16. Then I picked commit
->> 81be03e026dc0c16dc1c64e088b2a53b73caa895 due to the commit message, and
->> bisected from there, and it turns out, that this commit is actually
->> introducing the regression.
->>
->>      $ git bisect good
->>      81be03e026dc0c16dc1c64e088b2a53b73caa895 is the first bad commit
->>      commit 81be03e026dc0c16dc1c64e088b2a53b73caa895
->>      Author: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
->>      Date:   Fri Sep 3 15:27:32 2021 -0700
->>
->>          Bluetooth: RFCOMM: Replace use of memcpy_from_msg with
->> bt_skb_sendmmsg
->>
->>          This makes use of bt_skb_sendmmsg instead using memcpy_from_msg
->> which
->>          is not considered safe to be used when lock_sock is held.
->>
->>          Also make rfcomm_dlc_send handle skb with fragments and queue
->> them all
->>          atomically.
->>
->>          Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
->>          Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
->>
->>       net/bluetooth/rfcomm/core.c | 50
->> ++++++++++++++++++++++++++++++++++++++-------
->>       net/bluetooth/rfcomm/sock.c | 46
->> +++++++++--------------------------------
->>       2 files changed, 53 insertions(+), 43 deletions(-)
->>
->> Unfortunately, the patch does not cleanly revert, so users have to wait
->> until an expert can take a look, and come up with a fix.
->>
->>
->> Kind regards,
->>
->> Paul
->>
->>
->> PS: For the records:
->>
->>      $ git bisect log
->>      # bad: [81be03e026dc0c16dc1c64e088b2a53b73caa895] Bluetooth: RFCOMM:
->> Replace use of memcpy_from_msg with bt_skb_sendmmsg
->>      # good: [49d8a5606428ca0962d09050a5af81461ff90fbb] Bluetooth: fix
->> init and cleanup of sco_conn.timeout_work
->>      git bisect start '81be03e026dc0' 'HEAD^'
->>      # good: [904c139a2517191e48f9cb1bb2d611ae59434009] Bluetooth: Add
->> support for msbc coding format
->>      git bisect good 904c139a2517191e48f9cb1bb2d611ae59434009
->>      # good: [8bba13b1d08d42e2e8308924fa5c1551a7b2b011] Bluetooth:
->> btintel: Fix incorrect out of memory check
->>      git bisect good 8bba13b1d08d42e2e8308924fa5c1551a7b2b011
->>      # good: [38f64f650dc0e44c146ff88d15a7339efa325918] Bluetooth: Add
->> bt_skb_sendmsg helper
->>      git bisect good 38f64f650dc0e44c146ff88d15a7339efa325918
->>      # good: [0771cbb3b97d3c1d68eecd7f00055f599954c34e] Bluetooth: SCO:
->> Replace use of memcpy_from_msg with bt_skb_sendmsg
->>      git bisect good 0771cbb3b97d3c1d68eecd7f00055f599954c34e
->>      # first bad commit: [81be03e026dc0c16dc1c64e088b2a53b73caa895]
->> Bluetooth: RFCOMM: Replace use of memcpy_from_msg with bt_skb_sendmmsg
->>
->>
->> Kind regards,
->>
->> Paul
->>
->>
->>>> [1]: https://owww.molgen.mpg.de/~pmenzel/trace.log.7z
->> [2]:
->> https://lore.kernel.org/linux-bluetooth/5891f0d5-8d51-9da5-7663-718f301490b1@molgen.mpg.de/T/#u
->>
->> [3]:
->> https://lore.kernel.org/linux-bluetooth/20211202162256.31837-1-tiwai@suse.de/
->>
->>
->>

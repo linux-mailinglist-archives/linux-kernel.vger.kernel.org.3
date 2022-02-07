@@ -2,189 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73F604AB95F
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:23:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B153F4AB9D3
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:25:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343649AbiBGLL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:11:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45848 "EHLO
+        id S1347612AbiBGLLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:11:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245754AbiBGLGI (ORCPT
+        with ESMTP id S243672AbiBGLFH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:06:08 -0500
-X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 03:06:08 PST
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14BA7C043188;
-        Mon,  7 Feb 2022 03:06:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644231968; x=1675767968;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=vKJ4QcP9fRqWs4tGoyWgQwEyJftVIBFH0F7ZDLnXbgE=;
-  b=YTqVopbV7Yprp1smcwWntyi7L9pCGNTVe8xdzmtBnIPqi1HaE+44ofjg
-   QACugBIve4qwicGfQ5yX9wua8i7lr+nMiZ4InBrhCy611YExaEgGXROtW
-   /T3MV1jBrqs3ZKeP/P85/VHom8MoSIW7Lzns9waXiojFaPDKlh4y4GqKC
-   vre4XlXkYPGFIFLM2McTrLEwc4oLNAqXo0MtTF9YfeL1koVUcO88oayBg
-   QqiMQCePj3jFCUBDL7WCbGcZlKE0F0GoI7GhmC1tomcJJMjefAGjEqPNf
-   zfe/0OeTGiZOKwcWqrk6hlGcndhRrsQZi9fUpXuViAvPjEccfQrQTRvrQ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10250"; a="232257838"
-X-IronPort-AV: E=Sophos;i="5.88,349,1635231600"; 
-   d="scan'208";a="232257838"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 03:05:05 -0800
-X-IronPort-AV: E=Sophos;i="5.88,349,1635231600"; 
-   d="scan'208";a="628486542"
-Received: from nbaca1-mobl.ger.corp.intel.com (HELO localhost) ([10.252.18.25])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 03:05:00 -0800
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Kees Cook <keescook@chromium.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel@lists.freedesktop.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Lyude Paul <lyude@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] drm/dp: Remove common Post Cursor2 register handling
-In-Reply-To: <202202041740.F368F91F5@keescook>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20220105173507.2420910-1-keescook@chromium.org>
- <202202041740.F368F91F5@keescook>
-Date:   Mon, 07 Feb 2022 13:04:55 +0200
-Message-ID: <87y22nq6nc.fsf@intel.com>
+        Mon, 7 Feb 2022 06:05:07 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 627A2C043188;
+        Mon,  7 Feb 2022 03:05:06 -0800 (PST)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2178LT1j001365;
+        Mon, 7 Feb 2022 11:05:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : to : cc : references : from : subject : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=RD64Ji/IfEP734Rh2SZfk6LYte1PyTzLo0Dg4ga3DHA=;
+ b=gqGRvgQEuQQjsMp7o4jDCmAUcws/3KeLI7LgrSlu961khy/4oKEKInmj1RVPjVA34Yic
+ n/Oo02fX5szgxRWqsbox0Hdh6w2JKPgsl6lJVoxFkJzeN/MpUnoGoYfsqMvBMSEAHEex
+ 2CA0x1PdGGIzuWtruCgR1HFL8aUqiLASOGQmJGHUABgupsd95q0JPsuJV1TmDoMfUiRt
+ L+aXEkWDKN33mw6FVbwE9KPydXRvFcSZ/EBSG3p5MCY03V55Ovxj8M9hq30CJ9kGj2ZT
+ DaskVpxV4kJho8yLFxoJ6uP3Eih0GM2+Mi0YFOc96SHQquyZIYMa8z8ThwVSfrh8CiYw Sw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e22u78y8d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Feb 2022 11:05:05 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 217AZjJx012205;
+        Mon, 7 Feb 2022 11:05:05 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e22u78y7e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Feb 2022 11:05:05 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 217B2VFI028113;
+        Mon, 7 Feb 2022 11:05:02 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03ams.nl.ibm.com with ESMTP id 3e1gv93ahk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Feb 2022 11:05:02 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 217B4vVk47710616
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 7 Feb 2022 11:04:57 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 220D44208B;
+        Mon,  7 Feb 2022 11:04:57 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B7EF842049;
+        Mon,  7 Feb 2022 11:04:56 +0000 (GMT)
+Received: from [9.145.9.42] (unknown [9.145.9.42])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon,  7 Feb 2022 11:04:56 +0000 (GMT)
+Message-ID: <28955238-1fac-ad9a-f2bb-2c6c0c2ed894@linux.ibm.com>
+Date:   Mon, 7 Feb 2022 12:04:56 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Content-Language: en-US
+To:     Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org
+Cc:     borntraeger@de.ibm.com, thuth@redhat.com, pasic@linux.ibm.com,
+        david@redhat.com, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, scgl@linux.ibm.com
+References: <20220204155349.63238-1-imbrenda@linux.ibm.com>
+ <20220204155349.63238-11-imbrenda@linux.ibm.com>
+From:   Janosch Frank <frankja@linux.ibm.com>
+Subject: Re: [PATCH v7 10/17] KVM: s390: pv: add mmu_notifier
+In-Reply-To: <20220204155349.63238-11-imbrenda@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: bSvq6_uLlqeSZg-Xb77eu3LWPqNWRtHG
+X-Proofpoint-GUID: K7kBAmbTB-296jSLZIZKMXN3UUOs5wJL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-07_03,2022-02-07_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
+ bulkscore=0 lowpriorityscore=0 mlxscore=0 mlxlogscore=999
+ priorityscore=1501 spamscore=0 phishscore=0 suspectscore=0 malwarescore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202070072
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 04 Feb 2022, Kees Cook <keescook@chromium.org> wrote:
-> Ping,
->
-> This is a OOB read fix. Can someone please pick this up?
+On 2/4/22 16:53, Claudio Imbrenda wrote:
+> Add an mmu_notifier for protected VMs. The callback function is
+> triggered when the mm is torn down, and will attempt to convert all
+> protected vCPUs to non-protected. This allows the mm teardown to use
+> the destroy page UVC instead of export.
+> 
+> Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+> ---
+>   arch/s390/include/asm/kvm_host.h |  2 ++
+>   arch/s390/kvm/pv.c               | 20 ++++++++++++++++++++
+>   2 files changed, 22 insertions(+)
+> 
+> diff --git a/arch/s390/include/asm/kvm_host.h b/arch/s390/include/asm/kvm_host.h
+> index a22c9266ea05..1bccb8561ba9 100644
+> --- a/arch/s390/include/asm/kvm_host.h
+> +++ b/arch/s390/include/asm/kvm_host.h
+> @@ -19,6 +19,7 @@
+>   #include <linux/kvm.h>
+>   #include <linux/seqlock.h>
+>   #include <linux/module.h>
+> +#include <linux/mmu_notifier.h>
+>   #include <asm/debug.h>
+>   #include <asm/cpu.h>
+>   #include <asm/fpu/api.h>
+> @@ -921,6 +922,7 @@ struct kvm_s390_pv {
+>   	u64 guest_len;
+>   	unsigned long stor_base;
+>   	void *stor_var;
+> +	struct mmu_notifier mmu_notifier;
+>   };
+>   
+>   struct kvm_arch{
+> diff --git a/arch/s390/kvm/pv.c b/arch/s390/kvm/pv.c
+> index f1e812a45acb..d3b8fd9b5b3e 100644
+> --- a/arch/s390/kvm/pv.c
+> +++ b/arch/s390/kvm/pv.c
+> @@ -193,6 +193,21 @@ int kvm_s390_pv_deinit_vm(struct kvm *kvm, u16 *rc, u16 *rrc)
+>   	return -EIO;
+>   }
+>   
+> +static void kvm_s390_pv_mmu_notifier_release(struct mmu_notifier *subscription,
+> +					     struct mm_struct *mm)
+> +{
+> +	struct kvm *kvm = container_of(subscription, struct kvm, arch.pv.mmu_notifier);
 
-Daniel? Thierry?
+Are we sure that the kvm pointer is still valid at this point?
 
-As I said, I reviewed this but I'm not comfortable applying patches that
-change the functionality of drivers I don't maintain.
+> +	u16 dummy;
+> +
+> +	mutex_lock(&kvm->lock);
 
-BR,
-Jani.
+Against what are we locking here?
 
+> +	kvm_s390_cpus_from_pv(kvm, &dummy, &dummy);
 
->
-> -Kees
->
-> On Wed, Jan 05, 2022 at 09:35:07AM -0800, Kees Cook wrote:
->> The link_status array was not large enough to read the Adjust Request
->> Post Cursor2 register, so remove the common helper function to avoid
->> an OOB read, found with a -Warray-bounds build:
->> 
->> drivers/gpu/drm/drm_dp_helper.c: In function 'drm_dp_get_adjust_request_post_cursor':
->> drivers/gpu/drm/drm_dp_helper.c:59:27: error: array subscript 10 is outside array bounds of 'const u8[6]' {aka 'const unsigned char[6]'} [-Werror=array-bounds]
->>    59 |         return link_status[r - DP_LANE0_1_STATUS];
->>       |                ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
->> drivers/gpu/drm/drm_dp_helper.c:147:51: note: while referencing 'link_status'
->>   147 | u8 drm_dp_get_adjust_request_post_cursor(const u8 link_status[DP_LINK_STATUS_SIZE],
->>       |                                          ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> 
->> Replace the only user of the helper with an open-coded fetch and decode,
->> similar to drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c.
->> 
->> Fixes: 79465e0ffeb9 ("drm/dp: Add helper to get post-cursor adjustments")
->> Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
->> Cc: Maxime Ripard <mripard@kernel.org>
->> Cc: Thomas Zimmermann <tzimmermann@suse.de>
->> Cc: David Airlie <airlied@linux.ie>
->> Cc: Daniel Vetter <daniel@ffwll.ch>
->> Cc: dri-devel@lists.freedesktop.org
->> Signed-off-by: Kees Cook <keescook@chromium.org>
->> ---
->> This is the alternative to:
->> https://lore.kernel.org/lkml/20211203084354.3105253-1-keescook@chromium.org/
->> ---
->>  drivers/gpu/drm/drm_dp_helper.c | 10 ----------
->>  drivers/gpu/drm/tegra/dp.c      | 11 ++++++++++-
->>  include/drm/drm_dp_helper.h     |  2 --
->>  3 files changed, 10 insertions(+), 13 deletions(-)
->> 
->> diff --git a/drivers/gpu/drm/drm_dp_helper.c b/drivers/gpu/drm/drm_dp_helper.c
->> index 23f9073bc473..c9528aa62c9c 100644
->> --- a/drivers/gpu/drm/drm_dp_helper.c
->> +++ b/drivers/gpu/drm/drm_dp_helper.c
->> @@ -144,16 +144,6 @@ u8 drm_dp_get_adjust_tx_ffe_preset(const u8 link_status[DP_LINK_STATUS_SIZE],
->>  }
->>  EXPORT_SYMBOL(drm_dp_get_adjust_tx_ffe_preset);
->>  
->> -u8 drm_dp_get_adjust_request_post_cursor(const u8 link_status[DP_LINK_STATUS_SIZE],
->> -					 unsigned int lane)
->> -{
->> -	unsigned int offset = DP_ADJUST_REQUEST_POST_CURSOR2;
->> -	u8 value = dp_link_status(link_status, offset);
->> -
->> -	return (value >> (lane << 1)) & 0x3;
->> -}
->> -EXPORT_SYMBOL(drm_dp_get_adjust_request_post_cursor);
->> -
->>  static int __8b10b_clock_recovery_delay_us(const struct drm_dp_aux *aux, u8 rd_interval)
->>  {
->>  	if (rd_interval > 4)
->> diff --git a/drivers/gpu/drm/tegra/dp.c b/drivers/gpu/drm/tegra/dp.c
->> index 70dfb7d1dec5..f5535eb04c6b 100644
->> --- a/drivers/gpu/drm/tegra/dp.c
->> +++ b/drivers/gpu/drm/tegra/dp.c
->> @@ -549,6 +549,15 @@ static void drm_dp_link_get_adjustments(struct drm_dp_link *link,
->>  {
->>  	struct drm_dp_link_train_set *adjust = &link->train.adjust;
->>  	unsigned int i;
->> +	u8 post_cursor;
->> +	int err;
->> +
->> +	err = drm_dp_dpcd_read(link->aux, DP_ADJUST_REQUEST_POST_CURSOR2,
->> +			       &post_cursor, sizeof(post_cursor));
->> +	if (err < 0) {
->> +		DRM_ERROR("failed to read post_cursor2: %d\n", err);
->> +		post_cursor = 0;
->> +	}
->>  
->>  	for (i = 0; i < link->lanes; i++) {
->>  		adjust->voltage_swing[i] =
->> @@ -560,7 +569,7 @@ static void drm_dp_link_get_adjustments(struct drm_dp_link *link,
->>  				DP_TRAIN_PRE_EMPHASIS_SHIFT;
->>  
->>  		adjust->post_cursor[i] =
->> -			drm_dp_get_adjust_request_post_cursor(status, i);
->> +			(post_cursor >> (i << 1)) & 0x3;
->>  	}
->>  }
->>  
->> diff --git a/include/drm/drm_dp_helper.h b/include/drm/drm_dp_helper.h
->> index 472dac376284..fdf3cf6ccc02 100644
->> --- a/include/drm/drm_dp_helper.h
->> +++ b/include/drm/drm_dp_helper.h
->> @@ -1528,8 +1528,6 @@ u8 drm_dp_get_adjust_request_pre_emphasis(const u8 link_status[DP_LINK_STATUS_SI
->>  					  int lane);
->>  u8 drm_dp_get_adjust_tx_ffe_preset(const u8 link_status[DP_LINK_STATUS_SIZE],
->>  				   int lane);
->> -u8 drm_dp_get_adjust_request_post_cursor(const u8 link_status[DP_LINK_STATUS_SIZE],
->> -					 unsigned int lane);
->>  
->>  #define DP_BRANCH_OUI_HEADER_SIZE	0xc
->>  #define DP_RECEIVER_CAP_SIZE		0xf
->> -- 
->> 2.30.2
->> 
+I'd guess that we can't really have a second kvm_s390_cpus_from_pv() 
+call in flight, right? If the mm is being torn down there would be no 
+code left that can execute the IOCTL.
 
--- 
-Jani Nikula, Intel Open Source Graphics Center
+> +	mutex_unlock(&kvm->lock);
+> +}
+> +
+> +static const struct mmu_notifier_ops kvm_s390_pv_mmu_notifier_ops = {
+> +	.release = kvm_s390_pv_mmu_notifier_release,
+> +};
+> +
+>   int kvm_s390_pv_init_vm(struct kvm *kvm, u16 *rc, u16 *rrc)
+>   {
+>   	struct uv_cb_cgc uvcb = {
+> @@ -234,6 +249,11 @@ int kvm_s390_pv_init_vm(struct kvm *kvm, u16 *rc, u16 *rrc)
+>   		return -EIO;
+>   	}
+>   	kvm->arch.gmap->guest_handle = uvcb.guest_handle;
+> +	/* Add the notifier only once. No races because we hold kvm->lock */
+> +	if (kvm->arch.pv.mmu_notifier.ops != &kvm_s390_pv_mmu_notifier_ops) {
+> +		kvm->arch.pv.mmu_notifier.ops = &kvm_s390_pv_mmu_notifier_ops;
+> +		mmu_notifier_register(&kvm->arch.pv.mmu_notifier, kvm->mm);
+> +	}
+>   	return 0;
+>   }
+>   
+> 
+

@@ -2,59 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 351804ACB99
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 22:49:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A808E4ACB9E
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 22:50:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242640AbiBGVty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 16:49:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33726 "EHLO
+        id S242751AbiBGVut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 16:50:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240952AbiBGVtw (ORCPT
+        with ESMTP id S242743AbiBGVuj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 16:49:52 -0500
-Received: from mail-ua1-x929.google.com (mail-ua1-x929.google.com [IPv6:2607:f8b0:4864:20::929])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A4DDC061355
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 13:49:51 -0800 (PST)
-Received: by mail-ua1-x929.google.com with SMTP id b37so23945489uad.12
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 13:49:51 -0800 (PST)
+        Mon, 7 Feb 2022 16:50:39 -0500
+Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 569B6C061355
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 13:50:39 -0800 (PST)
+Received: by mail-vs1-xe34.google.com with SMTP id g10so1251488vss.1
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 13:50:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=yOK7ZFbX6M/yFlHUYZwVYyYTn3CE2+Syg/ppv2ftUNA=;
-        b=FiK4f6J1Q9WgJIZvkcQQ78p/JcVE8F9PLU2GLMwde+dY56wtNnxdN82eUW6gaOEfg2
-         K8nerIR/pQN5xeAMbYa0Gn0B9/FpABaHG4Xg0NnWFvXOmNVMM/x/V7aeCuqpDsZxFo0F
-         hijltBdU/BfDxjmnEa7nDa1+ht2j/7dD3s3bzrgpsOxZHH990ILXAvEpDG0/e45Vn47a
-         IWZztrq0Ptc3oTGoSOLC5o3gJ9KzF0ImHPAgOh3ELn+o6I1zCboDjeHoffdaVLM6HPYe
-         ErI1GGP83fLApcl+ECeZC/wD5o3JCkfxBYPs+khBzWIxvbhixuEFV5Lq1GUwt2VhPqvX
-         6M5A==
+        bh=LrJtG/4VF3TjaBbbVCMP3L8XINzF0HJUnLz1QbyH774=;
+        b=OIA3HNAQMQ2qVTofuripOySnB8XsK+KrH1Fa3nCSa0GqX6xDef7u1BLlL+FtDbAOpX
+         TOBvrVoolEO8RU0TDuiBwgtNLaAX3h+uRyEJD0guTIQi7rsnaHX2dGgxhyacaT2cACUT
+         w+CE+BDnIKB+i3OFkxXizBi1lDvw6ooJqJI6GNAp6PCI7KgmT9MnOODe/ZWG+zp0AcU+
+         u9vL9zuuVh2XLlo/dSSDdnDLB2H4wlMkeGn/Ui2yupguX5P32j2n1cr6RyP+wWeXhN7T
+         qjhzdD08Y22oWbMz5/7geaSRNBDXP0zgCMA0rPJqoziREry1FzjjJF61aK09qgc7vYhC
+         Jv3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=yOK7ZFbX6M/yFlHUYZwVYyYTn3CE2+Syg/ppv2ftUNA=;
-        b=Pbun9xobLNB5ovEvBihK/6jYxp+dVU1H6GGLAjMX01qdSDJUT6bmMCNoSvIsXZzX4g
-         un380mfQzAA9tQ8IDrgm1kwBoZvQwn7h/zcitg6NxPm64jkjVf42vlU/mLiYlvXgquB1
-         9ZgNe6RRUPE+3nAjY2Vn1CIqQz0CVgf8Bf1rqXVfWMhrJoeB7EydhVPjNezNA2S5kSLE
-         s5ae7ZbJHRnJ4FaS1rWdKMrRdKZmh/UYqVqqkYYGGBVj8Fz8FNg23tl9twnmaNGX02tt
-         jZZcDy3MpOrm+u/wFtL/vrAJICdf7szAOAwHXmxw3x69ZqGuVzltgeL3uvLbbYrfFZt8
-         cVmw==
-X-Gm-Message-State: AOAM530A/Eej1IUILZbNpHHM8XyEMVxQu8maq0Io6LeBEOUV3xlL8frd
-        Foa0gaMaOwyTzmgP/GC6xKDUfVctYWab/EQgeLy5LA==
-X-Google-Smtp-Source: ABdhPJyJnuf9KurdM0an3YYeK6GZ2Cpq0BPn4OfJwD6/qDHKeD+yGqsyWb2OtEiwcRmxZ5Dw8BejN0470v7H/iPnQkk=
-X-Received: by 2002:ab0:43a6:: with SMTP id l35mr29540ual.12.1644270590671;
- Mon, 07 Feb 2022 13:49:50 -0800 (PST)
+        bh=LrJtG/4VF3TjaBbbVCMP3L8XINzF0HJUnLz1QbyH774=;
+        b=Jchg7tLUwFTdtHroR2ehkOhZ8zouZFn5Jg4gn2kbPztsTogncl4tMgHnJHs2213g0f
+         I5waFCEpdU/Zs3DikjaJ7cC8S6Z5K4Xnp4UovwnfdyOKaXkCsqQhyoSJyZ4B64TZEEvY
+         5uGTLf45uorcw1WcHU1IBpQaOPQT6OGhlfs5REMt41we+nO6cBmaZ5jYEwRDiL0Ojl1q
+         oU5zP4rYDgOEfklieoZGXsge2Bq7Sr0PWAaiD05HYqWHEszcCvBLraK5dNazPuNfZ2ND
+         yBI16+5cXR+KEuweNALorPpzUVj3yHzf8efW/FrYkoUv1pKQ7O3J2TB6Vpp1AYSBxxXF
+         EwZA==
+X-Gm-Message-State: AOAM530d8nCXw7k3fxHfyoHQDGQ/+DARMssHax7GfOI3SlQaDYv4EnkR
+        gDGb485VcDJvwSlls94ZHCvyt5z5esD+gfpo3g8uag==
+X-Google-Smtp-Source: ABdhPJw2An15tX4wk6vj87vqmn3C3Le56zen1+ee6Epwhv/PcbapVScQqxoFhNHrTGgijorQ6jNfOxXFsHZMSp+P1dE=
+X-Received: by 2002:a67:e08d:: with SMTP id f13mr608800vsl.78.1644270638386;
+ Mon, 07 Feb 2022 13:50:38 -0800 (PST)
 MIME-Version: 1.0
-References: <e10b79cf-d6d5-ffcc-bce4-edd92b7cb6b9@molgen.mpg.de> <CAHmME9pktmNpcBS_DJhJ5Z+6xO9P1wroQ9_gwx8KZMBxk1FBeQ@mail.gmail.com>
-In-Reply-To: <CAHmME9pktmNpcBS_DJhJ5Z+6xO9P1wroQ9_gwx8KZMBxk1FBeQ@mail.gmail.com>
+References: <e10b79cf-d6d5-ffcc-bce4-edd92b7cb6b9@molgen.mpg.de>
+ <CAHmME9pktmNpcBS_DJhJ5Z+6xO9P1wroQ9_gwx8KZMBxk1FBeQ@mail.gmail.com> <CAG48ez2P9-CAdgRizcp5T_uuoXRAt0xtodh1doiMW0fKZVX-7g@mail.gmail.com>
+In-Reply-To: <CAG48ez2P9-CAdgRizcp5T_uuoXRAt0xtodh1doiMW0fKZVX-7g@mail.gmail.com>
 From:   Jann Horn <jannh@google.com>
-Date:   Mon, 7 Feb 2022 22:49:24 +0100
-Message-ID: <CAG48ez17i5ObZ62BtDFF5UguO-n_0qvcvrsqVp4auvq2R4NPTA@mail.gmail.com>
+Date:   Mon, 7 Feb 2022 22:50:12 +0100
+Message-ID: <CAG48ez3wZOZZX1UHM-Q=KhOnnGR85Unm08q7jT_wVfOq0PW94Q@mail.gmail.com>
 Subject: Re: BUG: KCSAN: data-race in add_device_randomness+0x20d/0x290
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        kasan-dev <kasan-dev@googlegroups.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
 Cc:     pmenzel@molgen.mpg.de, "Theodore Y. Ts'o" <tytso@mit.edu>,
         LKML <linux-kernel@vger.kernel.org>,
         Dominik Brodowski <linux@dominikbrodowski.net>
@@ -70,13 +68,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+KCSAN people
+On Mon, Feb 7, 2022 at 10:45 PM Jann Horn <jannh@google.com> wrote:
+> On Mon, Feb 7, 2022 at 7:42 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> > Thanks for the report. I assume that this is actually an old bug. Do
+> > you have a vmlinux or a random.o from this kernel you could send me to
+> > double check? Without that, my best guess, which I'd say I have
+> > relatively high confidence about, is that the "1 byte read" is
+> > actually a `movzx eax, cs:lfsr` referring to the `static u8 lfsr`
+> > here, which gets inlined into add_device_randomness:
+> >
+> > static int crng_slow_load(const u8 *cp, size_t len)
+> > {
+> >     unsigned long flags;
+> >     static u8 lfsr = 1;
+> >
+> > This was added in 2008 with dc12baacb95f ("random: use a different
+> > mixing algorithm for add_device_randomness()"). My understanding is
+> > that the race here isn't super problematic as we're in kind of a half
+> > assed "low effort" phase anyway. But I'll give it some thought. I'm
+> > CCing Jann as well who reported the original issue that motivated that
+> > change.
+>
+> But the "lfsr" variable is never accessed outside the part of this
+> method that holds a global spinlock. So that can't really be it,
+> right?
 
-On Mon, Feb 7, 2022 at 7:42 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> Thanks for the report. I assume that this is actually an old bug. Do
-> you have a vmlinux or a random.o from this kernel you could send me to
-> double check? Without that, my best guess, which I'd say I have
-> relatively high confidence about,
-
-Maybe KCSAN should go through the same instruction-bytes-dumping thing
-as normal BUG() does? That might be helpful for cases like this...
+There is a data race in crng_ready(), it just loads from "crng_init"
+without READ_ONCE()... maybe that's what KCSAN is noticing?

@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A0794ABDF8
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:05:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BCF84ABAF9
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:35:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389714AbiBGLux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:50:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44564 "EHLO
+        id S1384229AbiBGL0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:26:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384994AbiBGLa4 (ORCPT
+        with ESMTP id S1382546AbiBGLTl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:30:56 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A4E5C03BFE6;
-        Mon,  7 Feb 2022 03:28:55 -0800 (PST)
+        Mon, 7 Feb 2022 06:19:41 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8BBEC043181;
+        Mon,  7 Feb 2022 03:19:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 13F956077B;
-        Mon,  7 Feb 2022 11:28:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7565C004E1;
-        Mon,  7 Feb 2022 11:28:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D6D86077B;
+        Mon,  7 Feb 2022 11:19:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 372FAC340F0;
+        Mon,  7 Feb 2022 11:19:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233334;
-        bh=klD1XoqszxDtG3NN+zWwtPmHx71bBeUBfpAm8Kv5nLk=;
+        s=korg; t=1644232779;
+        bh=wsyRc9ZMvzorUJmWyI3fLh+nyyibMv5xQACoeXZCBwc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lybLKwtyl9XtKEEOkA2ZCNKwlmgrz/ocUtJZl0rKFeh9lVownQZEa2YEi9YUh6kmM
-         8blzDMj1vA9jJ3l6b31S0dVahGROn3yew2gRsJa1APON39wdrvM3KvRGMYbtOiDAYR
-         t5S3o1G9Vcp/o0VJw1lEgOanY93FnQKHJRAqJFGQ=
+        b=XCRSVOhZuJHvM1A/Z/Ixnj6wJXlM/ksa1skypCs0DG8ZbE9oib8aPLDfWAlMrt4hi
+         PXc+tE6nGWoTSl7qrXcHsT8lG2Bs2SW4KPGwEtijw5q6EtAEtkeErQT/BGI1HOdMer
+         0TXfHWKhPPEcH3I2xOgF0pNdEUeAYT8nXmPXaWPs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lu Baolu <baolu.lu@linux.intel.com>,
-        Guoqing Jiang <guoqing.jiang@linux.dev>,
-        Joerg Roedel <jroedel@suse.de>
-Subject: [PATCH 5.15 048/110] iommu/vt-d: Fix potential memory leak in intel_setup_irq_remapping()
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.4 05/44] ALSA: usb-audio: Simplify quirk entries with a macro
 Date:   Mon,  7 Feb 2022 12:06:21 +0100
-Message-Id: <20220207103803.908885340@linuxfoundation.org>
+Message-Id: <20220207103753.334915098@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
-References: <20220207103802.280120990@linuxfoundation.org>
+In-Reply-To: <20220207103753.155627314@linuxfoundation.org>
+References: <20220207103753.155627314@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,69 +53,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guoqing Jiang <guoqing.jiang@linux.dev>
+From: Takashi Iwai <tiwai@suse.de>
 
-commit 99e675d473eb8cf2deac1376a0f840222fc1adcf upstream.
+commit fa10635fca359f047df6a18b3befd2f1e7304e1a upstream.
 
-After commit e3beca48a45b ("irqdomain/treewide: Keep firmware node
-unconditionally allocated"). For tear down scenario, fn is only freed
-after fail to allocate ir_domain, though it also should be freed in case
-dmar_enable_qi returns error.
+Introduce a new macro USB_AUDIO_DEVICE() for the entries matching with
+the pid/vid pair and the class/subclass, and remove the open-code.
 
-Besides free fn, irq_domain and ir_msi_domain need to be removed as well
-if intel_setup_irq_remapping fails to enable queued invalidation.
-
-Improve the rewinding path by add out_free_ir_domain and out_free_fwnode
-lables per Baolu's suggestion.
-
-Fixes: e3beca48a45b ("irqdomain/treewide: Keep firmware node unconditionally allocated")
-Suggested-by: Lu Baolu <baolu.lu@linux.intel.com>
-Signed-off-by: Guoqing Jiang <guoqing.jiang@linux.dev>
-Link: https://lore.kernel.org/r/20220119063640.16864-1-guoqing.jiang@linux.dev
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-Link: https://lore.kernel.org/r/20220128031002.2219155-3-baolu.lu@linux.intel.com
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
+Link: https://lore.kernel.org/r/20200817082140.20232-3-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+[ just add the macro for 5.4.y, no entry changes made - gregkh ]
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iommu/intel/irq_remapping.c |   13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+ sound/usb/quirks-table.h |   10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
---- a/drivers/iommu/intel/irq_remapping.c
-+++ b/drivers/iommu/intel/irq_remapping.c
-@@ -569,9 +569,8 @@ static int intel_setup_irq_remapping(str
- 					    fn, &intel_ir_domain_ops,
- 					    iommu);
- 	if (!iommu->ir_domain) {
--		irq_domain_free_fwnode(fn);
- 		pr_err("IR%d: failed to allocate irqdomain\n", iommu->seq_id);
--		goto out_free_bitmap;
-+		goto out_free_fwnode;
- 	}
- 	iommu->ir_msi_domain =
- 		arch_create_remap_msi_irq_domain(iommu->ir_domain,
-@@ -595,7 +594,7 @@ static int intel_setup_irq_remapping(str
+--- a/sound/usb/quirks-table.h
++++ b/sound/usb/quirks-table.h
+@@ -25,6 +25,16 @@
+ 	.idProduct = prod, \
+ 	.bInterfaceClass = USB_CLASS_VENDOR_SPEC
  
- 		if (dmar_enable_qi(iommu)) {
- 			pr_err("Failed to enable queued invalidation\n");
--			goto out_free_bitmap;
-+			goto out_free_ir_domain;
- 		}
- 	}
- 
-@@ -619,6 +618,14 @@ static int intel_setup_irq_remapping(str
- 
- 	return 0;
- 
-+out_free_ir_domain:
-+	if (iommu->ir_msi_domain)
-+		irq_domain_remove(iommu->ir_msi_domain);
-+	iommu->ir_msi_domain = NULL;
-+	irq_domain_remove(iommu->ir_domain);
-+	iommu->ir_domain = NULL;
-+out_free_fwnode:
-+	irq_domain_free_fwnode(fn);
- out_free_bitmap:
- 	bitmap_free(bitmap);
- out_free_pages:
++/* A standard entry matching with vid/pid and the audio class/subclass */
++#define USB_AUDIO_DEVICE(vend, prod) \
++	.match_flags = USB_DEVICE_ID_MATCH_DEVICE | \
++		       USB_DEVICE_ID_MATCH_INT_CLASS | \
++		       USB_DEVICE_ID_MATCH_INT_SUBCLASS, \
++	.idVendor = vend, \
++	.idProduct = prod, \
++	.bInterfaceClass = USB_CLASS_AUDIO, \
++	.bInterfaceSubClass = USB_SUBCLASS_AUDIOCONTROL
++
+ /* HP Thunderbolt Dock Audio Headset */
+ {
+ 	USB_DEVICE(0x03f0, 0x0269),
 
 

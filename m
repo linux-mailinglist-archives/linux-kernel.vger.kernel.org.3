@@ -2,178 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C3364AB913
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 11:52:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 172964AB90F
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 11:52:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245314AbiBGKtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 05:49:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60430 "EHLO
+        id S238065AbiBGKtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 05:49:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245311AbiBGKim (ORCPT
+        with ESMTP id S1351864AbiBGKj0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 05:38:42 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52CA3C043181
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 02:38:42 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id E92B1210FB;
-        Mon,  7 Feb 2022 10:38:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1644230320; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fRg/KrCpHSrUBFXxA9iQ6SfefZdasVbcPfiKOyC6LFI=;
-        b=OD1PYXh8UCh7QewQ4/YGePNXBt+v2QnFCkXYRwH7/iVCTVslzxZIkYVvkNIRSJKDXGLJvR
-        E/D/zlC8kUWFX46d2GfUnrdlJbzyJiyhQ26RVKg4WeTZiflxeqGlBNMvky0M4/G3o1FCpm
-        uXP8RMJnay3eUl0Iv9KwdfKEhoFkVkQ=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 91D9913B92;
-        Mon,  7 Feb 2022 10:38:40 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id WvUeIrD2AGKWQwAAMHmgww
-        (envelope-from <jgross@suse.com>); Mon, 07 Feb 2022 10:38:40 +0000
-Message-ID: <6b06a133-d39b-46bf-d574-c1afeb92b2b0@suse.com>
-Date:   Mon, 7 Feb 2022 11:38:39 +0100
+        Mon, 7 Feb 2022 05:39:26 -0500
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE9AAC043181;
+        Mon,  7 Feb 2022 02:39:25 -0800 (PST)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2177wqw4017916;
+        Mon, 7 Feb 2022 11:39:17 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=5fT7c4Mvgn2+ok+STLBdSgiGaFIlSdUaQbBwjLUOJH0=;
+ b=i67U6qLJURxlIpLy7BYqlneYLOC7BdWvvYXtnza2KQDmRrcTbYml/pKJc443HWlff3RN
+ znakVb4TkS8kPn3g+v49D34loNf2M+X9zzV6th7oqe2eRL4YZQpDgi8616hvuBPGFUK0
+ JXY+LqnKaH9bGnw6VuWI9cJnvPynwDiq7K0qaqt92fLzNtiYN25P1fQylixxZuBeSqtq
+ T6Yi4MBXokPTOIYgzaVkFKwbcq2zIpVbC6RB/vWgRoQWBnd5oRW69vexYBYaSckmESAS
+ ziGP1HcQsDJd7Dv6uIXTP2ewNa7zQDCtOkEtHLBUdGxwgjFiQgRkj6CbgG2RYXFu+uL4 Mw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3e2nfyaveu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Feb 2022 11:39:17 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 86CCF100034;
+        Mon,  7 Feb 2022 11:39:16 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 7D6EB215157;
+        Mon,  7 Feb 2022 11:39:16 +0100 (CET)
+Received: from [10.48.0.252] (10.75.127.47) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 7 Feb
+ 2022 11:39:15 +0100
+Message-ID: <b35ab20d-479f-a5ae-0e43-2b3c03f087e1@foss.st.com>
+Date:   Mon, 7 Feb 2022 11:39:14 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH] xen/x2apic: Fix inconsistent indenting
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 00/10] ARM: dts: stm32: update sdmmc nodes
 Content-Language: en-US
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        boris.ostrovsky@oracle.com
-Cc:     sstabellini@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, xen-devel@lists.xenproject.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-References: <20220207103506.102008-1-jiapeng.chong@linux.alibaba.com>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <20220207103506.102008-1-jiapeng.chong@linux.alibaba.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------zR35Epbl73u6X4Sy41IhP7Md"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Yann Gautier <yann.gautier@foss.st.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-mmc@vger.kernel.org>
+References: <20220112163226.25384-1-yann.gautier@foss.st.com>
+From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
+In-Reply-To: <20220112163226.25384-1-yann.gautier@foss.st.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-07_03,2022-02-07_01,2021-12-02_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------zR35Epbl73u6X4Sy41IhP7Md
-Content-Type: multipart/mixed; boundary="------------oBn0DW5buLl1Hm6LsSbXJ0eh";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
- boris.ostrovsky@oracle.com
-Cc: sstabellini@kernel.org, tglx@linutronix.de, mingo@redhat.com,
- bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
- xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
- Abaci Robot <abaci@linux.alibaba.com>
-Message-ID: <6b06a133-d39b-46bf-d574-c1afeb92b2b0@suse.com>
-Subject: Re: [PATCH] xen/x2apic: Fix inconsistent indenting
-References: <20220207103506.102008-1-jiapeng.chong@linux.alibaba.com>
-In-Reply-To: <20220207103506.102008-1-jiapeng.chong@linux.alibaba.com>
+Hi Yann
 
---------------oBn0DW5buLl1Hm6LsSbXJ0eh
-Content-Type: multipart/mixed; boundary="------------toO60Ntrx6rFcpP7aGO4CUDO"
+On 1/12/22 17:32, Yann Gautier wrote:
+> This patches series brings updates for SDMMC nodes on STM32MP13
+> (max frequency, pins slew-rates, sleep pins, and controller version).
+> The sdmmc2 node is also added as STM32MP13 embeds 2 SDMMC controllers.
+> 
+> The compatible for sdmmc nodes is also updated for both STM32MP13
+> and STM32MP15, to align with bootloaders DT, and after arm,pl18x.yaml
+> has been updated [1].
+> 
+> [1] commit 552bc46484b3 ("dt-bindings: mmc: mmci: Add st,stm32-sdmmc2
+>      compatible")
+> 
+> Gerald Baeza (1):
+>    ARM: dts: stm32: update sdmmc slew-rate in stm32mp13 pinctrl
+> 
+> Yann Gautier (9):
+>    ARM: dts: stm32: add st,stm32-sdmmc2 compatible on stm32mp151
+>    ARM: dts: stm32: add st,stm32-sdmmc2 compatible on stm32mp131
+>    ARM: dts: stm32: increase SDMMC max-frequency for STM32MP13
+>    ARM: dts: stm32: update SDMMC clock slew-rate on STM32MP135F-DK board
+>    ARM: dts: stm32: add sdmmc sleep pins for STM32MP13
+>    ARM: dts: stm32: add sdmmc sleep config for STM32MP135F-DK
+>    ARM: dts: stm32: update SDMMC version for STM32MP13
+>    ARM: dts: stm32: add SDMMC2 in STM32MP13 DT
+>    ARM: dts: stm32: add sdmmc2 pins for STM32MP13
+> 
+>   arch/arm/boot/dts/stm32mp13-pinctrl.dtsi | 81 ++++++++++++++++++++----
+>   arch/arm/boot/dts/stm32mp131.dtsi        | 20 +++++-
+>   arch/arm/boot/dts/stm32mp135f-dk.dts     |  7 +-
+>   arch/arm/boot/dts/stm32mp151.dtsi        |  6 +-
+>   4 files changed, 94 insertions(+), 20 deletions(-)
+> 
 
---------------toO60Ntrx6rFcpP7aGO4CUDO
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Series applied on stm32-next.
 
-T24gMDcuMDIuMjIgMTE6MzUsIEppYXBlbmcgQ2hvbmcgd3JvdGU6DQo+IEVsaW1pbmF0ZSB0
-aGUgZm9sbG93IHNtYXRjaCB3YXJuaW5nOg0KPiANCj4gYXJjaC94ODYveGVuL2VubGlnaHRl
-bl9odm0uYzoxODkgeGVuX2NwdV9kZWFkX2h2bSgpIHdhcm46IGluY29uc2lzdGVudA0KPiBp
-bmRlbnRpbmcuDQo+IA0KPiBSZXBvcnRlZC1ieTogQWJhY2kgUm9ib3QgPGFiYWNpQGxpbnV4
-LmFsaWJhYmEuY29tPg0KPiBTaWduZWQtb2ZmLWJ5OiBKaWFwZW5nIENob25nIDxqaWFwZW5n
-LmNob25nQGxpbnV4LmFsaWJhYmEuY29tPg0KDQpSZXZpZXdlZC1ieTogSnVlcmdlbiBHcm9z
-cyA8amdyb3NzQHN1c2UuY29tPg0KDQoNCkp1ZXJnZW4NCg==
---------------toO60Ntrx6rFcpP7aGO4CUDO
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
-
------BEGIN PGP PUBLIC KEY BLOCK-----
-
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
-
---------------toO60Ntrx6rFcpP7aGO4CUDO--
-
---------------oBn0DW5buLl1Hm6LsSbXJ0eh--
-
---------------zR35Epbl73u6X4Sy41IhP7Md
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmIA9rAFAwAAAAAACgkQsN6d1ii/Ey97
-bAf/RSXbgw75TsvUhawE1zOJM8BYbjzzOKBLRiNG8JaLsJ7mmVXhstO0jpTN5G6YkAZ2lakHuCZL
-rrLDuUacd5qPKU5XHVnEZV0+R1yCB/kPVehodV9ASXaMofoywzMeOkDUMmay+ldh556KJ2VtJ7RJ
-IsxgVdpHuh8rFzn39SAAH1LAPms7Ji44T1fBSpNuBo6uwS6JqXE17dzRP5jYxreMj9TuuIp1rCJA
-3n7C85oYER3+d3yD6ToMksIdeJonlxGWxz4ebmu0ur1GRqDh7pV0iZ/cJ0NjoO6BfLSPjOjb2+SK
-3dftV0LeUJb/p2FXytZIs8dCwk6kvNSMl85JruFr7Q==
-=PtrF
------END PGP SIGNATURE-----
-
---------------zR35Epbl73u6X4Sy41IhP7Md--
+Thanks
+alex

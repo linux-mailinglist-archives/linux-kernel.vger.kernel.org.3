@@ -2,161 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A421F4ACC28
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 23:42:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84CF64ACC48
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 23:48:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244774AbiBGWmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 17:42:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56086 "EHLO
+        id S245127AbiBGWsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 17:48:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242105AbiBGWmU (ORCPT
+        with ESMTP id S231463AbiBGWsl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 17:42:20 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA029C061355
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 14:42:19 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id my12-20020a17090b4c8c00b001b528ba1cd7so706086pjb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 14:42:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=gVc/rSf8hc23i8BzLsnLzzxnzHxUect8vesEyQ0bjYQ=;
-        b=MLap6RMLL02SXvhnBx0wvmT2F2aV1wjKwPElYKitbKZAPZebylvQ6QlI1JoNlHkXb0
-         tvzYZtWSl5bGRdXPB/pr0Dj+XaVcJwI3TfKVnAX3zO4A53Gat1L3c8Qrq2FlwIPtRP2Q
-         u0ZISa51pSr3EpXKj1wm5r3O4T5XMViJck0tHXU3wtaLxsKz1isy4mOTdXZ7NFGtpTSj
-         Qc5txrvcRvFakKnTQVh0ikuIBtOCLS2P1R6REpZlnejbH05gTUnWPBa1LDXwTKsFIsop
-         t0MkwIgF9AJvf7e3pBoPzo6bxzRSYAsXmL+E3za/GfwW2E+AvsrohXL3YQFrR9TNgJ5d
-         vA1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=gVc/rSf8hc23i8BzLsnLzzxnzHxUect8vesEyQ0bjYQ=;
-        b=TLNdIBlpB3nh78cvrCOlZVrIrSIfqyEpUf6hjMnebmhGeX5J1loAaHuTWomlIOBS4h
-         OraB9VVPSooVaQolX9PRP2DqgPaZu5QqF/n+HJ0Ypfl3GOTafJpcaXZNoexTLMFJDIva
-         +r85M8b6j+lCqVFQrD0b8/S9hHbt2tC/8JEc0thANo4U4feMPOM4ScUCHxfe4fhmmIA8
-         zWYusx7d0D4NoddSCaIUSml4O8i+Lg0dJqbTIaQl3Ji6QM29ghvemDqj5iQRXl2dNTo2
-         LFSADmKThwgc/OYpIw7Axl5MDi4uFoK0oPkhHIeDtED1t2SVkpb7LKRCASYlAuDsJmPL
-         2Z4w==
-X-Gm-Message-State: AOAM5316AT8/3COeyc59SWBfIBaBzmf2rGD7WcnK1N7A3tauyqinZsR0
-        Ibq1Wiwwuc38k+/4h4RI14MVDA==
-X-Google-Smtp-Source: ABdhPJzMYjbaLbphx31DbZWtfp6MdWr2uF1eeiUb9JpYVvgj7VltjPbnWheM7dxx9YcZ+xq5GF2nQg==
-X-Received: by 2002:a17:902:e84c:: with SMTP id t12mr1715065plg.63.1644273739162;
-        Mon, 07 Feb 2022 14:42:19 -0800 (PST)
-Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
-        by smtp.gmail.com with ESMTPSA id c7sm13039915pfp.164.2022.02.07.14.42.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 14:42:18 -0800 (PST)
-Date:   Mon, 7 Feb 2022 22:42:14 +0000
-From:   David Matlack <dmatlack@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        seanjc@google.com, vkuznets@redhat.com
-Subject: Re: [PATCH 20/23] KVM: MMU: pull CPU role computation to kvm_init_mmu
-Message-ID: <YgGgRm/QNbordgqi@google.com>
-References: <20220204115718.14934-1-pbonzini@redhat.com>
- <20220204115718.14934-21-pbonzini@redhat.com>
+        Mon, 7 Feb 2022 17:48:41 -0500
+X-Greylist: delayed 303 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 14:48:38 PST
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1D20C061355;
+        Mon,  7 Feb 2022 14:48:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1644274117;
+        bh=QhZBPtbAWH4+pKc3YMKNO4ZUECQS51u5SUOueTN1NGg=;
+        h=X-UI-Sender-Class:Date:From:Subject:To:Cc;
+        b=Lwl34HF/VMltqaVw0xBpCYB9VcHeyhGakRFm/hWcojk0l88vpnV0YwjJV7vPYywt+
+         WeuqSC3XH/5ZyEqE2MyOQgVB0pzyxWelpwVAX9LMoLAHiIBqnUjb+tkwNrcor1MUkT
+         JE0yd6wQwmw4PZGevbpv4ZyzSg0b7slAhUFunyf0=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.100.20] ([46.142.35.82]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MfHEP-1nxAS63xFb-00goFO; Mon, 07
+ Feb 2022 23:43:34 +0100
+Message-ID: <3251deaa-2b0f-1e04-fdb3-361b84ef4a7a@gmx.de>
+Date:   Mon, 7 Feb 2022 23:43:33 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220204115718.14934-21-pbonzini@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+From:   Ronald Warsow <rwarsow@gmx.de>
+Subject: Re: [PATCH 5.16 000/127] 5.16.8-rc2 review
+To:     linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org
+Content-Language: de-DE
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:RZNd/xCD/zmSBdEh/hZVBZ/+M029zV543YVboXn/dcEJt8wJPXu
+ fLJhzSU/rzrhToxixgkrDAjbT4y0SVNcIKR5YWEDnkZbNuI++xpqx+g4ggFur4FZixdoW2i
+ ITu0T1A4qgSVpKl2xeGHAh4DJCArHZ6kylv86cbmk9lwOv0tHt0Ukm3i4UYk6fRDklKdmT/
+ RrMRaK8icvVqGbOB6StaQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:3ODOsgAMdFU=:WvP8R29XAfZ72OczrvrIFC
+ OAC0aJ3+mV4pewM0QHZfKh0Ef2WMtY8Zw9jYgAOdWp6asUfcXMADovAmArfs/Dnha0yduAQJU
+ 5GuosIlInFnRRFcFkv2yRpxyuqopSP0JmJTzN4gKlnM6CAQoEwVJyJn4e1Ugdox11TEPSjtd6
+ n318fLJ2P2/NQ8wg+8FK2ktJYaoqS5w9UVKbkqphGfJ+fIwusUjBI2yJb+KrhZdeVO42n8GIs
+ hzTed7VAFtKqu63A6WurRQdf3oFVaQ+pXNHb3eLKENxIFr4PwwCSTBVzMmy9uPrd7hAvSOAMK
+ +wtmpVDb2QvRLyN1eJrK6Da33a1j7aj26r8kHs0sqmJMvFyPy3pp1+3bOUJxWY+QcI8KfrPh1
+ Ye7OpaIGiADgk4HYvPV9LzdQl+a31LnwxOxpNjVKTW8e7qIhY/IceTWhoo10vccLhcqdKnPUh
+ 6CxqTocJealxd6siT9lXfQrO7aCkjiVMfQYspaEBrQvfb7otOQF8wb+AAGvy8b2dmGXAbt/qH
+ P+uRlfyQ5xokAZcVlkhPt0EYiBXIWWeH0iIe45AeCSsfMcXAfHP7Hv3wC4fQXqp1reLb0+huu
+ Aq5xA6WlSLXqh6p7JOxxEe7ifchHJefg7EqqeuFt0NPsta/2IPCrQudMDbhJMHZbokTmBzUDj
+ oAyPkToBjS4J+ChqrbvLqTR9XdGAoItBnN8YBw2Kv71esSFlhUgkLw+A/K6GgTZpKC5P1gFCA
+ IoUiSbXuaDvMoXr7YFqaadE+GoE0vwNMqIQ/A5VfFB+NwijSn6kwawpDWh/a0nexWN2lfNv98
+ gIG70nEepFp4aTWhmYeO+jkUQraLCnsHYEsKfRwYqxcZKk02cj+9yNehLzHWpNYJAPSYVuyBO
+ TWecUg602N4fVcBa7eAZlu5+deb9ez7jz5MsMvMIxzlEBDpV2izOCxZyoPEWKnbF9AOFhk0k0
+ n6llywkgEEqMQpfghlZ2CrKo6fjFAx3GMlHt7G7mFK2zL2poe+KkXpA2lzEeE8z0+3MHtDrcN
+ EVI2g9F8kv7XZYtQdhAifx+ygToKg9uAOKYnE+LTyvUhnekkw1GDL44xG7VW+E9xxzCfprJ/3
+ nvky2jMj/jh2vk=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 04, 2022 at 06:57:15AM -0500, Paolo Bonzini wrote:
-> Do not lead init_kvm_*mmu into the temptation of poking
-> into struct kvm_mmu_role_regs, by passing to it directly
-> the CPU role.
-> 
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
->  arch/x86/kvm/mmu/mmu.c | 21 +++++++++------------
->  1 file changed, 9 insertions(+), 12 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 01027da82e23..6f9d876ce429 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -4721,11 +4721,9 @@ kvm_calc_tdp_mmu_root_page_role(struct kvm_vcpu *vcpu,
->  	return role;
->  }
->  
-> -static void init_kvm_tdp_mmu(struct kvm_vcpu *vcpu,
-> -			     const struct kvm_mmu_role_regs *regs)
-> +static void init_kvm_tdp_mmu(struct kvm_vcpu *vcpu, union kvm_mmu_role cpu_role)
->  {
->  	struct kvm_mmu *context = &vcpu->arch.root_mmu;
-> -	union kvm_mmu_role cpu_role = kvm_calc_cpu_role(vcpu, regs);
->  	union kvm_mmu_page_role mmu_role = kvm_calc_tdp_mmu_root_page_role(vcpu, cpu_role);
->  
->  	if (cpu_role.as_u64 == context->cpu_role.as_u64 &&
-> @@ -4779,10 +4777,9 @@ static void shadow_mmu_init_context(struct kvm_vcpu *vcpu, struct kvm_mmu *conte
->  }
->  
->  static void kvm_init_shadow_mmu(struct kvm_vcpu *vcpu,
-> -				const struct kvm_mmu_role_regs *regs)
-> +				union kvm_mmu_role cpu_role)
->  {
->  	struct kvm_mmu *context = &vcpu->arch.root_mmu;
-> -	union kvm_mmu_role cpu_role = kvm_calc_cpu_role(vcpu, regs);
->  	union kvm_mmu_page_role mmu_role;
->  
->  	mmu_role = cpu_role.base;
-> @@ -4874,20 +4871,19 @@ void kvm_init_shadow_ept_mmu(struct kvm_vcpu *vcpu, bool execonly,
->  EXPORT_SYMBOL_GPL(kvm_init_shadow_ept_mmu);
->  
->  static void init_kvm_softmmu(struct kvm_vcpu *vcpu,
-> -			     const struct kvm_mmu_role_regs *regs)
-> +			     union kvm_mmu_role cpu_role)
->  {
->  	struct kvm_mmu *context = &vcpu->arch.root_mmu;
->  
-> -	kvm_init_shadow_mmu(vcpu, regs);
-> +	kvm_init_shadow_mmu(vcpu, cpu_role);
->  
->  	context->get_guest_pgd     = get_cr3;
->  	context->get_pdptr         = kvm_pdptr_read;
->  	context->inject_page_fault = kvm_inject_page_fault;
->  }
->  
-> -static void init_kvm_nested_mmu(struct kvm_vcpu *vcpu, const struct kvm_mmu_role_regs *regs)
-> +static void init_kvm_nested_mmu(struct kvm_vcpu *vcpu, union kvm_mmu_role new_role)
->  {
-> -	union kvm_mmu_role new_role = kvm_calc_cpu_role(vcpu, regs);
->  	struct kvm_mmu *g_context = &vcpu->arch.nested_mmu;
->  
->  	if (new_role.as_u64 == g_context->cpu_role.as_u64)
-> @@ -4928,13 +4924,14 @@ static void init_kvm_nested_mmu(struct kvm_vcpu *vcpu, const struct kvm_mmu_role
->  void kvm_init_mmu(struct kvm_vcpu *vcpu)
->  {
->  	struct kvm_mmu_role_regs regs = vcpu_to_role_regs(vcpu);
-> +	union kvm_mmu_role cpu_role = kvm_calc_cpu_role(vcpu, &regs);
+hallo Greg
 
-WDYT about also inlining vcpu_to_role_regs() in kvm_calc_cpu_role()?
+5.16.8-rc2
 
->  
->  	if (mmu_is_nested(vcpu))
-> -		init_kvm_nested_mmu(vcpu, &regs);
-> +		init_kvm_nested_mmu(vcpu, cpu_role);
->  	else if (tdp_enabled)
-> -		init_kvm_tdp_mmu(vcpu, &regs);
-> +		init_kvm_tdp_mmu(vcpu, cpu_role);
->  	else
-> -		init_kvm_softmmu(vcpu, &regs);
-> +		init_kvm_softmmu(vcpu, cpu_role);
->  }
->  EXPORT_SYMBOL_GPL(kvm_init_mmu);
->  
-> -- 
-> 2.31.1
-> 
-> 
+compiles, boots and runs on my x86_64
+(Intel i5-11400, Fedora 35)
+
+Thanks
+
+Tested-by: Ronald Warsow <rwarsow@gmx.de>
+------------------------------------------------------------------------
+
+regards
+Ronald
+
+

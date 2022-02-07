@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5D314AB9F5
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:26:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 341734ABD52
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:59:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382391AbiBGLTD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:19:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50482 "EHLO
+        id S1387236AbiBGLkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:40:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356786AbiBGLNs (ORCPT
+        with ESMTP id S1384538AbiBGL2M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:13:48 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F68C043181;
-        Mon,  7 Feb 2022 03:13:47 -0800 (PST)
+        Mon, 7 Feb 2022 06:28:12 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D59D6C03BFD9;
+        Mon,  7 Feb 2022 03:26:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A293CB80EC3;
-        Mon,  7 Feb 2022 11:13:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB078C004E1;
-        Mon,  7 Feb 2022 11:13:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C54B060909;
+        Mon,  7 Feb 2022 11:26:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC48AC004E1;
+        Mon,  7 Feb 2022 11:26:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232425;
-        bh=8RcvJ0iNpGXd9hhP8foxR5IlHZdwD/RWOBg4L/G1cj0=;
+        s=korg; t=1644233181;
+        bh=gn4OAdhu+hH8rfibNVVxX0yqlvsmy0BuWCaHNaM1xOs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=unSfOZvWdfI7vcrAE+xWFPxD/RGcRJjHDRjNezuQ0js+ERbRI7rtkJFhdmOp9ZsC+
-         m6iUoJjyLhN7RgtdDnIK2zBc5CbnZEWZ2+JsV4p+NTX7rLgZGvCuRiUX/FH3Tb99Ty
-         1GGwSTSVycUXtFr1OqWrOQv2cGR0a/Gk81rLz3hg=
+        b=kJL0RC8XbVpPaTs9zJfOwpsU6XRRwtgIBswbI8M4xn67FouCJv0K+BzB4JGLqP5zN
+         dAFew134IAAYno2DJ/s0q92JAXIPUbZh4+GghQgCOf1KYVhSfkvhCBDrTo8vc3YHY3
+         P+SO41210E/myAOsXs1INv1CtiWHBsUAzYwP7/zI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lu Baolu <baolu.lu@linux.intel.com>,
-        Guoqing Jiang <guoqing.jiang@linux.dev>,
-        Joerg Roedel <jroedel@suse.de>
-Subject: [PATCH 4.14 53/69] iommu/vt-d: Fix potential memory leak in intel_setup_irq_remapping()
+        stable@vger.kernel.org,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Subject: [PATCH 5.15 042/110] IB/rdmavt: Validate remote_addr during loopback atomic tests
 Date:   Mon,  7 Feb 2022 12:06:15 +0100
-Message-Id: <20220207103757.363053239@linuxfoundation.org>
+Message-Id: <20220207103803.703835249@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103755.604121441@linuxfoundation.org>
-References: <20220207103755.604121441@linuxfoundation.org>
+In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
+References: <20220207103802.280120990@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,69 +56,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guoqing Jiang <guoqing.jiang@linux.dev>
+From: Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>
 
-commit 99e675d473eb8cf2deac1376a0f840222fc1adcf upstream.
+commit 4028bccb003cf67e46632dee7f97ddc5d7b6e685 upstream.
 
-After commit e3beca48a45b ("irqdomain/treewide: Keep firmware node
-unconditionally allocated"). For tear down scenario, fn is only freed
-after fail to allocate ir_domain, though it also should be freed in case
-dmar_enable_qi returns error.
+The rdma-core test suite sends an unaligned remote address and expects a
+failure.
 
-Besides free fn, irq_domain and ir_msi_domain need to be removed as well
-if intel_setup_irq_remapping fails to enable queued invalidation.
+ERROR: test_atomic_non_aligned_addr (tests.test_atomic.AtomicTest)
 
-Improve the rewinding path by add out_free_ir_domain and out_free_fwnode
-lables per Baolu's suggestion.
+The qib/hfi1 rc handling validates properly, but the test has the client
+and server on the same system.
 
-Fixes: e3beca48a45b ("irqdomain/treewide: Keep firmware node unconditionally allocated")
-Suggested-by: Lu Baolu <baolu.lu@linux.intel.com>
-Signed-off-by: Guoqing Jiang <guoqing.jiang@linux.dev>
-Link: https://lore.kernel.org/r/20220119063640.16864-1-guoqing.jiang@linux.dev
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-Link: https://lore.kernel.org/r/20220128031002.2219155-3-baolu.lu@linux.intel.com
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
+The loopback of these operations is a distinct code path.
+
+Fix by syntaxing the proposed remote address in the loopback code path.
+
+Fixes: 15703461533a ("IB/{hfi1, qib, rdmavt}: Move ruc_loopback to rdmavt")
+Link: https://lore.kernel.org/r/1642584489-141005-1-git-send-email-mike.marciniszyn@cornelisnetworks.com
+Reviewed-by: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
+Signed-off-by: Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iommu/intel_irq_remapping.c |   13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+ drivers/infiniband/sw/rdmavt/qp.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/iommu/intel_irq_remapping.c
-+++ b/drivers/iommu/intel_irq_remapping.c
-@@ -543,9 +543,8 @@ static int intel_setup_irq_remapping(str
- 					    fn, &intel_ir_domain_ops,
- 					    iommu);
- 	if (!iommu->ir_domain) {
--		irq_domain_free_fwnode(fn);
- 		pr_err("IR%d: failed to allocate irqdomain\n", iommu->seq_id);
--		goto out_free_bitmap;
-+		goto out_free_fwnode;
- 	}
- 	iommu->ir_msi_domain =
- 		arch_create_remap_msi_irq_domain(iommu->ir_domain,
-@@ -569,7 +568,7 @@ static int intel_setup_irq_remapping(str
- 
- 		if (dmar_enable_qi(iommu)) {
- 			pr_err("Failed to enable queued invalidation\n");
--			goto out_free_bitmap;
-+			goto out_free_ir_domain;
- 		}
- 	}
- 
-@@ -593,6 +592,14 @@ static int intel_setup_irq_remapping(str
- 
- 	return 0;
- 
-+out_free_ir_domain:
-+	if (iommu->ir_msi_domain)
-+		irq_domain_remove(iommu->ir_msi_domain);
-+	iommu->ir_msi_domain = NULL;
-+	irq_domain_remove(iommu->ir_domain);
-+	iommu->ir_domain = NULL;
-+out_free_fwnode:
-+	irq_domain_free_fwnode(fn);
- out_free_bitmap:
- 	kfree(bitmap);
- out_free_pages:
+--- a/drivers/infiniband/sw/rdmavt/qp.c
++++ b/drivers/infiniband/sw/rdmavt/qp.c
+@@ -3073,6 +3073,8 @@ do_write:
+ 	case IB_WR_ATOMIC_FETCH_AND_ADD:
+ 		if (unlikely(!(qp->qp_access_flags & IB_ACCESS_REMOTE_ATOMIC)))
+ 			goto inv_err;
++		if (unlikely(wqe->atomic_wr.remote_addr & (sizeof(u64) - 1)))
++			goto inv_err;
+ 		if (unlikely(!rvt_rkey_ok(qp, &qp->r_sge.sge, sizeof(u64),
+ 					  wqe->atomic_wr.remote_addr,
+ 					  wqe->atomic_wr.rkey,
 
 

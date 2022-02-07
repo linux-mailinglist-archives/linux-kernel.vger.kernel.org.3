@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58F524AB9CA
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:25:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E860A4ABA30
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:27:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379028AbiBGLP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:15:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49740 "EHLO
+        id S1382989AbiBGLVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:21:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354800AbiBGLMY (ORCPT
+        with ESMTP id S1378740AbiBGLPz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:12:24 -0500
+        Mon, 7 Feb 2022 06:15:55 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B12F4C043181;
-        Mon,  7 Feb 2022 03:12:23 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D202BC0401CC;
+        Mon,  7 Feb 2022 03:15:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 70BBAB81158;
-        Mon,  7 Feb 2022 11:12:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A80BC004E1;
-        Mon,  7 Feb 2022 11:12:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8C1B1B811BC;
+        Mon,  7 Feb 2022 11:15:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C41BBC004E1;
+        Mon,  7 Feb 2022 11:15:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232341;
-        bh=0U6ln+mci2a4SV4DbDK3nR+s6trUK/xFJvJqzsqX7oU=;
+        s=korg; t=1644232545;
+        bh=ejKlmfkdpK4QC6TWW8BDeFyg6WR3o5WxoJii4FF16nM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=p9I6WxE8EHD8Ip371UbYNFtaAsaacdl/hukAGss8j7RsLsGAcS9Ptq6FJ29mIgdZ7
-         jN4YE/ABW2B/g4onvS2YO7wqCy0fssBY78oL6Dzf8VsPv5bSxAfHWL1AZx+Y/YjKrr
-         PjA3XoYIdILe+Xcrmp5RJP32gWzMkWroiTN+Lsrg=
+        b=a4LS3sCSMQqTNnj2xmfpAR4hb521ewztBvjBWi27TthU3PXDFdLmOCSYvIhvYG+qa
+         83mXwLmg8RqczKeX3fX6ryyM8LZAw9KKzjLw+AtVZi+O/PoD/EtXDQlox2wn5QHdiV
+         ZbSe87SdAnbe5WPDhQImCoX61B/S8sVwUdlkIMVI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Willem de Bruijn <willemb@google.com>,
         syzbot <syzkaller@googlegroups.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.14 45/69] af_packet: fix data-race in packet_setsockopt / packet_setsockopt
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 44/86] ipv4: raw: lock the socket in raw_bind()
 Date:   Mon,  7 Feb 2022 12:06:07 +0100
-Message-Id: <20220207103757.109325470@linuxfoundation.org>
+Message-Id: <20220207103758.989908777@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103755.604121441@linuxfoundation.org>
-References: <20220207103755.604121441@linuxfoundation.org>
+In-Reply-To: <20220207103757.550973048@linuxfoundation.org>
+References: <20220207103757.550973048@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,78 +58,76 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Eric Dumazet <edumazet@google.com>
 
-commit e42e70ad6ae2ae511a6143d2e8da929366e58bd9 upstream.
+[ Upstream commit 153a0d187e767c68733b8e9f46218eb1f41ab902 ]
 
-When packet_setsockopt( PACKET_FANOUT_DATA ) reads po->fanout,
-no lock is held, meaning that another thread can change po->fanout.
+For some reason, raw_bind() forgot to lock the socket.
 
-Given that po->fanout can only be set once during the socket lifetime
-(it is only cleared from fanout_release()), we can use
-READ_ONCE()/WRITE_ONCE() to document the race.
+BUG: KCSAN: data-race in __ip4_datagram_connect / raw_bind
 
-BUG: KCSAN: data-race in packet_setsockopt / packet_setsockopt
-
-write to 0xffff88813ae8e300 of 8 bytes by task 14653 on cpu 0:
- fanout_add net/packet/af_packet.c:1791 [inline]
- packet_setsockopt+0x22fe/0x24a0 net/packet/af_packet.c:3931
- __sys_setsockopt+0x209/0x2a0 net/socket.c:2180
- __do_sys_setsockopt net/socket.c:2191 [inline]
- __se_sys_setsockopt net/socket.c:2188 [inline]
- __x64_sys_setsockopt+0x62/0x70 net/socket.c:2188
+write to 0xffff8881170d4308 of 4 bytes by task 5466 on cpu 0:
+ raw_bind+0x1b0/0x250 net/ipv4/raw.c:739
+ inet_bind+0x56/0xa0 net/ipv4/af_inet.c:443
+ __sys_bind+0x14b/0x1b0 net/socket.c:1697
+ __do_sys_bind net/socket.c:1708 [inline]
+ __se_sys_bind net/socket.c:1706 [inline]
+ __x64_sys_bind+0x3d/0x50 net/socket.c:1706
  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
  do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
  entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-read to 0xffff88813ae8e300 of 8 bytes by task 14654 on cpu 1:
- packet_setsockopt+0x691/0x24a0 net/packet/af_packet.c:3935
- __sys_setsockopt+0x209/0x2a0 net/socket.c:2180
- __do_sys_setsockopt net/socket.c:2191 [inline]
- __se_sys_setsockopt net/socket.c:2188 [inline]
- __x64_sys_setsockopt+0x62/0x70 net/socket.c:2188
+read to 0xffff8881170d4308 of 4 bytes by task 5468 on cpu 1:
+ __ip4_datagram_connect+0xb7/0x7b0 net/ipv4/datagram.c:39
+ ip4_datagram_connect+0x2a/0x40 net/ipv4/datagram.c:89
+ inet_dgram_connect+0x107/0x190 net/ipv4/af_inet.c:576
+ __sys_connect_file net/socket.c:1900 [inline]
+ __sys_connect+0x197/0x1b0 net/socket.c:1917
+ __do_sys_connect net/socket.c:1927 [inline]
+ __se_sys_connect net/socket.c:1924 [inline]
+ __x64_sys_connect+0x3d/0x50 net/socket.c:1924
  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
  do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
  entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-value changed: 0x0000000000000000 -> 0xffff888106f8c000
+value changed: 0x00000000 -> 0x0003007f
 
 Reported by Kernel Concurrency Sanitizer on:
-CPU: 1 PID: 14654 Comm: syz-executor.3 Not tainted 5.16.0-syzkaller #0
+CPU: 1 PID: 5468 Comm: syz-executor.5 Not tainted 5.17.0-rc1-syzkaller #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
 
-Fixes: 47dceb8ecdc1 ("packet: add classic BPF fanout mode")
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
 Signed-off-by: Eric Dumazet <edumazet@google.com>
-Cc: Willem de Bruijn <willemb@google.com>
 Reported-by: syzbot <syzkaller@googlegroups.com>
-Link: https://lore.kernel.org/r/20220201022358.330621-1-eric.dumazet@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/packet/af_packet.c |    8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ net/ipv4/raw.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
---- a/net/packet/af_packet.c
-+++ b/net/packet/af_packet.c
-@@ -1770,7 +1770,10 @@ static int fanout_add(struct sock *sk, u
- 		err = -ENOSPC;
- 		if (refcount_read(&match->sk_ref) < PACKET_FANOUT_MAX) {
- 			__dev_remove_pack(&po->prot_hook);
--			po->fanout = match;
-+
-+			/* Paired with packet_setsockopt(PACKET_FANOUT_DATA) */
-+			WRITE_ONCE(po->fanout, match);
-+
- 			po->rollover = rollover;
- 			rollover = NULL;
- 			refcount_set(&match->sk_ref, refcount_read(&match->sk_ref) + 1);
-@@ -3915,7 +3918,8 @@ packet_setsockopt(struct socket *sock, i
- 	}
- 	case PACKET_FANOUT_DATA:
- 	{
--		if (!po->fanout)
-+		/* Paired with the WRITE_ONCE() in fanout_add() */
-+		if (!READ_ONCE(po->fanout))
- 			return -EINVAL;
+diff --git a/net/ipv4/raw.c b/net/ipv4/raw.c
+index 21800979ed621..8cae691c3c9f4 100644
+--- a/net/ipv4/raw.c
++++ b/net/ipv4/raw.c
+@@ -725,6 +725,7 @@ static int raw_bind(struct sock *sk, struct sockaddr *uaddr, int addr_len)
+ 	int ret = -EINVAL;
+ 	int chk_addr_ret;
  
- 		return fanout_set_data(po, optval, optlen);
++	lock_sock(sk);
+ 	if (sk->sk_state != TCP_CLOSE || addr_len < sizeof(struct sockaddr_in))
+ 		goto out;
+ 
+@@ -744,7 +745,9 @@ static int raw_bind(struct sock *sk, struct sockaddr *uaddr, int addr_len)
+ 		inet->inet_saddr = 0;  /* Use device */
+ 	sk_dst_reset(sk);
+ 	ret = 0;
+-out:	return ret;
++out:
++	release_sock(sk);
++	return ret;
+ }
+ 
+ /*
+-- 
+2.34.1
+
 
 

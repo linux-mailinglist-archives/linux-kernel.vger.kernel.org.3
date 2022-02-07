@@ -2,49 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57C7B4ABA74
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:28:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2258A4ABBDD
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:44:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383761AbiBGLXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:23:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57382 "EHLO
+        id S1385972AbiBGLdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:33:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382091AbiBGLSQ (ORCPT
+        with ESMTP id S1383182AbiBGLVp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:18:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2056DC03FEDE;
-        Mon,  7 Feb 2022 03:18:08 -0800 (PST)
+        Mon, 7 Feb 2022 06:21:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C265C0401C1;
+        Mon,  7 Feb 2022 03:21:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CEC4FB8111C;
-        Mon,  7 Feb 2022 11:18:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15900C004E1;
-        Mon,  7 Feb 2022 11:18:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 151A2B81158;
+        Mon,  7 Feb 2022 11:21:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3387AC004E1;
+        Mon,  7 Feb 2022 11:21:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232685;
-        bh=2WvEFVURxo4yYW09fMtPpYrTd9dtqHtvlmttqsLZCVg=;
+        s=korg; t=1644232901;
+        bh=lV1mkuh7zyPWVcvLXzJOB2GkO6mowb3cwC8cFqZQMqI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0dT+KV4MoMZl5/5BUhitBSsE1sgmNxvKV61oMUWsbNEYTZGhDPHA2b0wW+tA58Wgt
-         diCRINIEs227YYQDrOhCDRdpPM6c+h4hiOb3UIqFa1p0fHUJaoZm5TkXjtFwlKjySC
-         Z0jt2cCuY8w4ynKO8BohqHrz4e/CGyKN+b0ovZv8=
+        b=yF+0o6/oN2IeWSxrCTEJsiia/acMt9tuxvzLjzXcnaFLW96vN0bgEZ6Ty4M/XTWJf
+         x90e6417qBs3xMqucorr67FFLQmC3YerI09KGYlctQVO8x/UabY79Nc4NEa0vHnVA8
+         IWKsJ3UzMH/lmtA2NdRA3+DUmzegOcX6TkSXSfBU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Mark Brown <broonie@kernel.org>,
-        James Liao <jamesjj.liao@mediatek.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 4.19 63/86] Revert "ASoC: mediatek: Check for error clk pointer"
+        stable@vger.kernel.org, Jared Holzman <jared.holzman@excelero.com>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Subject: [PATCH 5.10 28/74] RDMA/siw: Fix broken RDMA Read Fence/Resume logic.
 Date:   Mon,  7 Feb 2022 12:06:26 +0100
-Message-Id: <20220207103759.630087537@linuxfoundation.org>
+Message-Id: <20220207103758.160620613@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103757.550973048@linuxfoundation.org>
-References: <20220207103757.550973048@linuxfoundation.org>
+In-Reply-To: <20220207103757.232676988@linuxfoundation.org>
+References: <20220207103757.232676988@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,95 +55,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guenter Roeck <linux@roeck-us.net>
+From: Bernard Metzler <bmt@zurich.ibm.com>
 
-This reverts commit e4f5f2767cd2c14fcb7b2c16dac5fe21888de9c2 which is
-commit 9de2b9286a6dd16966959b3cb34fc2ddfd39213e upstream
+commit b43a76f423aa304037603fd6165c4a534d2c09a7 upstream.
 
-With this patch in the tree, Chromebooks running the affected hardware
-no longer boot. Bisect points to this patch, and reverting it fixes
-the problem.
+Code unconditionally resumed fenced SQ processing after next RDMA Read
+completion, even if other RDMA Read responses are still outstanding, or
+ORQ is full. Also adds comments for better readability of fence
+processing, and removes orq_get_tail() helper, which is not needed
+anymore.
 
-An analysis of the code with this patch applied shows:
-
-        ret = init_clks(pdev, clk);
-        if (ret)
-                return ERR_PTR(ret);
-...
-                for (j = 0; j < MAX_CLKS && data->clk_id[j]; j++) {
-                        struct clk *c = clk[data->clk_id[j]];
-
-                        if (IS_ERR(c)) {
-                                dev_err(&pdev->dev, "%s: clk unavailable\n",
-                                        data->name);
-                                return ERR_CAST(c);
-                        }
-
-                        scpd->clk[j] = c;
-                }
-
-Not all clocks in the clk_names array have to be present. Only the clocks
-in the data->clk_id array are actually needed. The code already checks if
-the required clocks are available and bails out if not. The assumption that
-all clocks have to be present is wrong, and commit 9de2b9286a6d needs to be
-reverted.
-
-Fixes: 9de2b9286a6d ("ASoC: mediatek: Check for error clk pointer")
-Cc: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: James Liao <jamesjj.liao@mediatek.com>
-Cc: Kevin Hilman <khilman@baylibre.com>
-Cc: Matthias Brugger <matthias.bgg@gmail.com
-Cc: Frank Wunderlich <frank-w@public-files.de>
-Cc: Daniel Golle <daniel@makrotopia.org>
-Link: https://lore.kernel.org/lkml/20220205014755.699603-1-linux@roeck-us.net/
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Fixes: 8b6a361b8c48 ("rdma/siw: receive path")
+Fixes: a531975279f3 ("rdma/siw: main include file")
+Link: https://lore.kernel.org/r/20220130170815.1940-1-bmt@zurich.ibm.com
+Reported-by: Jared Holzman <jared.holzman@excelero.com>
+Signed-off-by: Bernard Metzler <bmt@zurich.ibm.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/soc/mediatek/mtk-scpsys.c |   15 ++++-----------
- 1 file changed, 4 insertions(+), 11 deletions(-)
+ drivers/infiniband/sw/siw/siw.h       |    7 +------
+ drivers/infiniband/sw/siw/siw_qp_rx.c |   20 +++++++++++---------
+ 2 files changed, 12 insertions(+), 15 deletions(-)
 
---- a/drivers/soc/mediatek/mtk-scpsys.c
-+++ b/drivers/soc/mediatek/mtk-scpsys.c
-@@ -341,17 +341,12 @@ out:
- 	return ret;
+--- a/drivers/infiniband/sw/siw/siw.h
++++ b/drivers/infiniband/sw/siw/siw.h
+@@ -644,14 +644,9 @@ static inline struct siw_sqe *orq_get_cu
+ 	return &qp->orq[qp->orq_get % qp->attrs.orq_size];
  }
  
--static int init_clks(struct platform_device *pdev, struct clk **clk)
-+static void init_clks(struct platform_device *pdev, struct clk **clk)
- {
- 	int i;
- 
--	for (i = CLK_NONE + 1; i < CLK_MAX; i++) {
-+	for (i = CLK_NONE + 1; i < CLK_MAX; i++)
- 		clk[i] = devm_clk_get(&pdev->dev, clk_names[i]);
--		if (IS_ERR(clk[i]))
--			return PTR_ERR(clk[i]);
--	}
+-static inline struct siw_sqe *orq_get_tail(struct siw_qp *qp)
+-{
+-	return &qp->orq[qp->orq_put % qp->attrs.orq_size];
+-}
 -
--	return 0;
- }
- 
- static struct scp *init_scp(struct platform_device *pdev,
-@@ -361,7 +356,7 @@ static struct scp *init_scp(struct platf
+ static inline struct siw_sqe *orq_get_free(struct siw_qp *qp)
  {
- 	struct genpd_onecell_data *pd_data;
- 	struct resource *res;
--	int i, j, ret;
-+	int i, j;
- 	struct scp *scp;
- 	struct clk *clk[CLK_MAX];
+-	struct siw_sqe *orq_e = orq_get_tail(qp);
++	struct siw_sqe *orq_e = &qp->orq[qp->orq_put % qp->attrs.orq_size];
  
-@@ -416,9 +411,7 @@ static struct scp *init_scp(struct platf
+ 	if (READ_ONCE(orq_e->flags) == 0)
+ 		return orq_e;
+--- a/drivers/infiniband/sw/siw/siw_qp_rx.c
++++ b/drivers/infiniband/sw/siw/siw_qp_rx.c
+@@ -1153,11 +1153,12 @@ static int siw_check_tx_fence(struct siw
  
- 	pd_data->num_domains = num;
+ 	spin_lock_irqsave(&qp->orq_lock, flags);
  
--	ret = init_clks(pdev, clk);
--	if (ret)
--		return ERR_PTR(ret);
-+	init_clks(pdev, clk);
+-	rreq = orq_get_current(qp);
+-
+ 	/* free current orq entry */
++	rreq = orq_get_current(qp);
+ 	WRITE_ONCE(rreq->flags, 0);
  
- 	for (i = 0; i < num; i++) {
- 		struct scp_domain *scpd = &scp->domains[i];
++	qp->orq_get++;
++
+ 	if (qp->tx_ctx.orq_fence) {
+ 		if (unlikely(tx_waiting->wr_status != SIW_WR_QUEUED)) {
+ 			pr_warn("siw: [QP %u]: fence resume: bad status %d\n",
+@@ -1165,10 +1166,12 @@ static int siw_check_tx_fence(struct siw
+ 			rv = -EPROTO;
+ 			goto out;
+ 		}
+-		/* resume SQ processing */
++		/* resume SQ processing, if possible */
+ 		if (tx_waiting->sqe.opcode == SIW_OP_READ ||
+ 		    tx_waiting->sqe.opcode == SIW_OP_READ_LOCAL_INV) {
+-			rreq = orq_get_tail(qp);
++
++			/* SQ processing was stopped because of a full ORQ */
++			rreq = orq_get_free(qp);
+ 			if (unlikely(!rreq)) {
+ 				pr_warn("siw: [QP %u]: no ORQE\n", qp_id(qp));
+ 				rv = -EPROTO;
+@@ -1181,15 +1184,14 @@ static int siw_check_tx_fence(struct siw
+ 			resume_tx = 1;
+ 
+ 		} else if (siw_orq_empty(qp)) {
++			/*
++			 * SQ processing was stopped by fenced work request.
++			 * Resume since all previous Read's are now completed.
++			 */
+ 			qp->tx_ctx.orq_fence = 0;
+ 			resume_tx = 1;
+-		} else {
+-			pr_warn("siw: [QP %u]: fence resume: orq idx: %d:%d\n",
+-				qp_id(qp), qp->orq_get, qp->orq_put);
+-			rv = -EPROTO;
+ 		}
+ 	}
+-	qp->orq_get++;
+ out:
+ 	spin_unlock_irqrestore(&qp->orq_lock, flags);
+ 
 
 

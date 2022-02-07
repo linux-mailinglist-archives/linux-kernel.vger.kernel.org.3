@@ -2,89 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 747E24ACBEF
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 23:17:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 773584ACBDB
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 23:10:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244068AbiBGWRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 17:17:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45834 "EHLO
+        id S243682AbiBGWKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 17:10:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244054AbiBGWRR (ORCPT
+        with ESMTP id S241144AbiBGWKo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 17:17:17 -0500
-X-Greylist: delayed 409 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 14:17:15 PST
-Received: from trent.utfs.org (trent.utfs.org [94.185.90.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCB8BC061355;
-        Mon,  7 Feb 2022 14:17:15 -0800 (PST)
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
- d=nerdbynature.de; i=@nerdbynature.de; q=dns/txt; s=key1;
- t=1644271824; h=date : from : to : cc : subject : in-reply-to :
- message-id : references : mime-version : content-type : from;
- bh=YDvfiw2/shfvHf2dTsRDeWDpQS7n9L1BOkNlOpDAq+0=;
- b=yGtRoHpE2Dt+N/NRXKoH7CyZ/ulBy09JLZXYQikDPqzfHxOgg4RuvoH/UyjFlPNRa6fna
- RKe8wfM8DgJCh4HCg==
-Authentication-Results: mail.nerdbynature.de; dmarc=fail (p=none dis=none) header.from=nerdbynature.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nerdbynature.de;
- i=@nerdbynature.de; q=dns/txt; s=key0; t=1644271824; h=date : from :
- to : cc : subject : in-reply-to : message-id : references :
- mime-version : content-type : from;
- bh=YDvfiw2/shfvHf2dTsRDeWDpQS7n9L1BOkNlOpDAq+0=;
- b=P0camZa6ejb9S3SR257EbKxZjIMzASPuwQrAb1LNZJqnD6zGgtKUus0X0kLvfyVs4YVZE
- OVgbcDuvogWJt+1MsvDRNz4MbIJV8PELTQIreX0URSvSVP8X1Ho1ZKB/rW9UC7x0TkJ0JlT
- vHKcjnAvBX3tJdQAuqthzSdV/GXdPj1ohLBd/fPNy8ZLP3afRFtneyphR1JewsJDkoUmy2t
- TmwdVhEupR13gn8HU26CDu9GikHMG5Cg4Y+X2yNXPZNWACR0MbA/ut4hKVyanJCOGgEAyKq
- Ycn+yqK+8McJiY262kdmzwnkph4L6rvF7A5ZFq5r1GhFwCsMytX4Q7o5A+Yg==
-Received: from localhost (localhost [IPv6:::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by trent.utfs.org (Postfix) with ESMTPS id 0137F6026A;
-        Mon,  7 Feb 2022 23:10:24 +0100 (CET)
-Date:   Mon, 7 Feb 2022 23:10:23 +0100 (CET)
-From:   Christian Kujau <lists@nerdbynature.de>
-To:     Anthony Iliopoulos <ailiop@suse.com>
-cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Deepa Dinamani <deepa.kernel@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Salvatore Bonaccorso <carnil@debian.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Eric Biggers <ebiggers@google.com>
-Subject: Re: [PATCH RESEND] mount: warn only once about timestamp range
- expiration
-In-Reply-To: <YfdPBUYno5f0bTVk@zeniv-ca.linux.org.uk>
-Message-ID: <83203c86-dd51-76f4-dab8-6d3d8bd01ebe@nerdbynature.de>
-References: <20220119202934.26495-1-ailiop@suse.com> <YfdPBUYno5f0bTVk@zeniv-ca.linux.org.uk>
+        Mon, 7 Feb 2022 17:10:44 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 520BAC0612A4
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 14:10:44 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id y7so6952944plp.2
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 14:10:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=G6eyJKmfFUAf01J78dlSIW81WrqdXWXhBcO7ghlDcmA=;
+        b=sKkGLjPzG0ZdullIrSblfCWKuBIrej5PizLx1i2qsH980wbmqxt87m/yEzS8GwLs1r
+         GpBtXo/uBEMAQWFyNhPUTJHGjK1BXW6BhmIpgOlyY7lg0VqBmCNP+FmDvYSobG6QKC7h
+         EyAbVBAfrarGbvoAxWACbeFf2ire1Wjo+L4d9dHlNFdRBDF9ymnK473SClAzMFMMYSaK
+         RaOSlWQZoQBVw6y2uZcLQsrAHEtfoj1BJr+/fn7H4gmWBGST+mtyzPX10xJexfKJ70/8
+         lsJNUUxI3VCqNoqmFvtAt6VCmXD70qbFQTRDmPly42D/kpiC+nLBc+WzwW1ss4RbgCTa
+         iIWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=G6eyJKmfFUAf01J78dlSIW81WrqdXWXhBcO7ghlDcmA=;
+        b=wBRGxz8Y97SkiHT9e2SShh6ese9LRUzMMq32JK0z51jC9WZp27uHt2iMkbH5JZagKZ
+         XL8rJvrhUGHvxndDPMia+hM/v+pl2sqa04gjcSTClLPpkB1OR6SAYN8nvZfA7+s10g0u
+         vIp7Sfs8STCUcE+j1YHAGGK+z8DHG09luDkFjsnbXt1UDUgTVnN9LOJH7gN+SLmeMMYa
+         /FothCcjTTUoqE69eMpgfbTsqToqOtupogKNiTjZLf8eT0vyg9lpeg7x89tOT5CdJXMq
+         uiAXqgembTL3jJUSpPkj1ZZKrpLtDk2I8Rqf44nTTxCWZCFM7WFAmibYWbIlDDfsFmGA
+         2/lg==
+X-Gm-Message-State: AOAM531bPdHnvUhYErvQDGigBsGUxQ9uUhDRWdQ1iLWV0WmW5tLDJj/f
+        UUCTLPgOxVXXCHswmaxuGoIkqVnQ+E5hEA==
+X-Google-Smtp-Source: ABdhPJxB51iuOhrkdmc8x9jKC4OFpA+BCdGplAtgiK5P5F4x8sDSnX4s5Ux5HHNw1ECYAALxgHakVw==
+X-Received: by 2002:a17:90b:2251:: with SMTP id hk17mr1096502pjb.210.1644271843558;
+        Mon, 07 Feb 2022 14:10:43 -0800 (PST)
+Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
+        by smtp.gmail.com with ESMTPSA id p21sm207825pfo.97.2022.02.07.14.10.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Feb 2022 14:10:42 -0800 (PST)
+Date:   Mon, 7 Feb 2022 22:10:39 +0000
+From:   David Matlack <dmatlack@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        seanjc@google.com, vkuznets@redhat.com
+Subject: Re: [PATCH 11/23] KVM: MMU: do not recompute root level from
+ kvm_mmu_role_regs
+Message-ID: <YgGY31hso29mbQ2E@google.com>
+References: <20220204115718.14934-1-pbonzini@redhat.com>
+ <20220204115718.14934-12-pbonzini@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220204115718.14934-12-pbonzini@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Wed, Jan 19, 2022 at 09:29:34PM +0100, Anthony Iliopoulos wrote:
-> Commit f8b92ba67c5d ("mount: Add mount warning for impending timestamp
-> expiry") introduced a mount warning regarding filesystem timestamp
-> limits, that is printed upon each writable mount or remount.
+On Fri, Feb 04, 2022 at 06:57:06AM -0500, Paolo Bonzini wrote:
+> The root_level can be found in the cpu_role (in fact the field
+> is superfluous and could be removed, but one thing at a time).
+> Since there is only one usage left of role_regs_to_root_level,
+> inline it into kvm_calc_cpu_role.
 > 
-> This can result in a lot of unnecessary messages in the kernel log in
-> setups where filesystems are being frequently remounted (or mounted
-> multiple times).
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
+>  arch/x86/kvm/mmu/mmu.c | 23 ++++++++---------------
+>  1 file changed, 8 insertions(+), 15 deletions(-)
 > 
-> Avoid this by setting a superblock flag which indicates that the warning
-> has been emitted at least once for any particular mount, as suggested in
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index f98444e1d834..74789295f922 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -253,19 +253,6 @@ static struct kvm_mmu_role_regs vcpu_to_role_regs(struct kvm_vcpu *vcpu)
+>  	return regs;
+>  }
+>  
+> -static int role_regs_to_root_level(const struct kvm_mmu_role_regs *regs)
+> -{
+> -	if (!____is_cr0_pg(regs))
+> -		return 0;
+> -	else if (____is_efer_lma(regs))
+> -		return ____is_cr4_la57(regs) ? PT64_ROOT_5LEVEL :
+> -					       PT64_ROOT_4LEVEL;
+> -	else if (____is_cr4_pae(regs))
+> -		return PT32E_ROOT_LEVEL;
+> -	else
+> -		return PT32_ROOT_LEVEL;
+> -}
+> -
+>  static inline bool kvm_available_flush_tlb_with_range(void)
+>  {
+>  	return kvm_x86_ops.tlb_remote_flush_with_range;
+> @@ -4673,7 +4660,13 @@ kvm_calc_cpu_role(struct kvm_vcpu *vcpu, const struct kvm_mmu_role_regs *regs)
+>  		role.base.smep_andnot_wp = ____is_cr4_smep(regs) && !____is_cr0_wp(regs);
+>  		role.base.smap_andnot_wp = ____is_cr4_smap(regs) && !____is_cr0_wp(regs);
+>  		role.base.has_4_byte_gpte = !____is_cr4_pae(regs);
+> -		role.base.level = role_regs_to_root_level(regs);
+> +
+> +		if (____is_efer_lma(regs))
+> +			role.base.level = ____is_cr4_la57(regs) ? PT64_ROOT_5LEVEL : PT64_ROOT_4LEVEL;
+> +		else if (____is_cr4_pae(regs))
+> +			role.base.level = PT32E_ROOT_LEVEL;
+> +		else
+> +			role.base.level = PT32_ROOT_LEVEL;
 
-Great! I hope this lands in mainline soon. Applied this to 5.17.0-rc3 here 
-and it warns on mounts, but not on remounts. Yay!
+Did you mean to drop the !CR0.PG case?
 
-  Tested-by: Christian Kujau <lists@nerdbynature.de>
-
-Thanks so much for not forgetting about this!
--- 
-BOFH excuse #402:
-
-Secretary sent chain letter to all 5000 employees.
+>  
+>  		role.ext.cr0_pg = 1;
+>  		role.ext.cr4_pae = ____is_cr4_pae(regs);
+> @@ -4766,7 +4759,7 @@ static void init_kvm_tdp_mmu(struct kvm_vcpu *vcpu,
+>  	context->get_guest_pgd = get_cr3;
+>  	context->get_pdptr = kvm_pdptr_read;
+>  	context->inject_page_fault = kvm_inject_page_fault;
+> -	context->root_level = role_regs_to_root_level(regs);
+> +	context->root_level = cpu_role.base.level;
+>  
+>  	if (!is_cr0_pg(context))
+>  		context->gva_to_gpa = nonpaging_gva_to_gpa;
+> -- 
+> 2.31.1
+> 
+> 

@@ -2,161 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85D954AC2A1
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 16:12:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56A434AC28F
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 16:11:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442812AbiBGPJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 10:09:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56762 "EHLO
+        id S1443169AbiBGPKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 10:10:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238673AbiBGOwp (ORCPT
+        with ESMTP id S1391650AbiBGOyC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 09:52:45 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FB9FC0401C1;
-        Mon,  7 Feb 2022 06:52:44 -0800 (PST)
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 217EjPuT004111;
-        Mon, 7 Feb 2022 14:52:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=nSJRveDTKIUQUv2s4+BCEj7qNNSbeUEMunEcVn9C5jE=;
- b=evYVyMHZRKNzdJEEdz/SiJ/qBt79O9BNFRO+HEONURQG7uQ8EjaDAdqRjUKSnrop/zsE
- 3O40L4KHfOwWt3Gub7FnfhA4Inh0XRixKgIi+hQVanDix/Px4ci6DyNWYbddiSfWVmfP
- WiuvRlpCLKyug+YMRjlFZWNNaADvv9RaqdbGHi2+CK0pEymyodDWcsBEERFPMfvW4iAK
- aDExKmp+7fj45xFZhdyaBBjz9RZm9LDnyaTaK7jsCvOqLvnwFtiIiwyTb481XNQk1rxd
- JgqexNpoId8HGuRTG/SF5CgitTiZRezIdsVm1IdDO1FvojucoT0E2TRzWqnaU5egBSdd 4Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3e1hux9mbh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 07 Feb 2022 14:52:43 +0000
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 217EjaOJ005493;
-        Mon, 7 Feb 2022 14:52:43 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3e1hux9maw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 07 Feb 2022 14:52:42 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 217Elx1J016384;
-        Mon, 7 Feb 2022 14:52:41 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma06ams.nl.ibm.com with ESMTP id 3e1ggjnw4h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 07 Feb 2022 14:52:41 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 217EqbJn45875668
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 7 Feb 2022 14:52:38 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D0B224204C;
-        Mon,  7 Feb 2022 14:52:37 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 70D534204B;
-        Mon,  7 Feb 2022 14:52:37 +0000 (GMT)
-Received: from [9.145.9.42] (unknown [9.145.9.42])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon,  7 Feb 2022 14:52:37 +0000 (GMT)
-Message-ID: <99296cad-5f74-d9ab-544c-b2d1a557b226@linux.ibm.com>
-Date:   Mon, 7 Feb 2022 15:52:37 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v7 15/17] KVM: s390: pv: api documentation for
- asynchronous destroy
+        Mon, 7 Feb 2022 09:54:02 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2069.outbound.protection.outlook.com [40.107.223.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15B9C0401C1;
+        Mon,  7 Feb 2022 06:54:01 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=a6rkVI+9rRe+3/KsjWl0/e6LbNOBgdQqX40hcrfAA3ZSE/OJs45cetV9OF3cwLFdz9uxQFz2AJPMQd6YLgz9cSTNg9nBiNXF5AoU0KKCuRrOhu636HSvTWJgfqdMnkyYvx0IUaTngOzb6eP+BtW2vhcQSjlCQi28gS6xP6s69fAnEJMMYYFSszR1aFOE4WkFO60EWY8U62344UD+z3dAIy0Al55WAbU+lbWRItu1XoPGsF1RrrOKcG2IcMWIZyEqdtNJn/abMVO7jc50r4tzGa1RrWJZKoJ3OHKmxrVramBtv0ObMuqv67au4iCnn9jihqRAkHpxRqCPeRwZ/S0sbQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2/EsQ2Z706JUUyg+l9K94heo5JrbW6AY6MQTaL3hGZQ=;
+ b=nXpwW8DF6VH1Yxc1qjPOhUezHvROfqH5XJAwxru+4guSMRaaFd3YSQXkLbS6A378IX53Tq3pSgSmwrJ2GsjMhWzsE321sQp/QLlRTGtkBk48ndLbvh345JIgI4Cfhx3SOwy3dsw0BzQrz9tUUxohtlkOA+xWR8IdK7b0gKq1Dss6ruPAkccisqzifILoqvMb5cOCHQWBMRvJLiZJ85qzkf/gSyAeAhSEk0MXOg1soee1w397oIbSXHZWsen9Y9CPhEtaqg/P1Cxi5QLci1RCIKeddYQol4anviCg9tInP+d2+TkhnpnynJr66xdgmXoy+Q9RnFo+FNolMrkoOqNuyw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2/EsQ2Z706JUUyg+l9K94heo5JrbW6AY6MQTaL3hGZQ=;
+ b=aHMS4sJTYa98k91P4rQHXz45noGdwfA5YKw5fidiE14JSNOPwqhI+PqrXpHivJlVvFhyr0MGOXDGNmBsag9TUcecjobHOMKK7MQbkjvIzFgtmZFoWl+T0X/gJwHyzBrWGes98qmMIE6QAtaGL4xivNTWLhR+Sy8OpnuFHy+mZCVGHZDQ6tM44yqmzjUfjV36L5DXXR8/aQv65ByuLMRbjFUT2FVcLxfppSS7lwTUulAYyvJzFy7RVlIp+x+fvaXDglloNkj47EMiam0P8Shq4D+xMWj1wHVCVQzDd0ti8m0B1cVdYdGtd7AuqPAMfFz9nFeexa4IciR0q3XCxI4ybw==
+Received: from DM6PR12MB3563.namprd12.prod.outlook.com (2603:10b6:5:11a::19)
+ by MN2PR12MB4637.namprd12.prod.outlook.com (2603:10b6:208:3e::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.16; Mon, 7 Feb
+ 2022 14:54:00 +0000
+Received: from DM6PR12MB3563.namprd12.prod.outlook.com
+ ([fe80::5125:d2ad:cbef:fcd4]) by DM6PR12MB3563.namprd12.prod.outlook.com
+ ([fe80::5125:d2ad:cbef:fcd4%7]) with mapi id 15.20.4909.019; Mon, 7 Feb 2022
+ 14:54:00 +0000
+From:   Krishna Yarlagadda <kyarlagadda@nvidia.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>
+Subject: RE: [PATCH 6/6] spi: tegra210-quad: combined sequence mode
+Thread-Topic: [PATCH 6/6] spi: tegra210-quad: combined sequence mode
+Thread-Index: AQHYGbI5hON+MFM3SE2C51fYICcN6ayDbjeAgATDdiA=
+Date:   Mon, 7 Feb 2022 14:54:00 +0000
+Message-ID: <DM6PR12MB35630A9020EC4B309D877086C32C9@DM6PR12MB3563.namprd12.prod.outlook.com>
+References: <1643970576-31503-1-git-send-email-kyarlagadda@nvidia.com>
+ <1643970576-31503-7-git-send-email-kyarlagadda@nvidia.com>
+ <Yf0zkdS2nqHOZjMG@sirena.org.uk>
+In-Reply-To: <Yf0zkdS2nqHOZjMG@sirena.org.uk>
+Accept-Language: en-IN, en-US
 Content-Language: en-US
-To:     Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org
-Cc:     borntraeger@de.ibm.com, thuth@redhat.com, pasic@linux.ibm.com,
-        david@redhat.com, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, scgl@linux.ibm.com
-References: <20220204155349.63238-1-imbrenda@linux.ibm.com>
- <20220204155349.63238-16-imbrenda@linux.ibm.com>
-From:   Janosch Frank <frankja@linux.ibm.com>
-In-Reply-To: <20220204155349.63238-16-imbrenda@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: cjmHCR0RFcQrOz_yfzusQWe8kMgjPWdz
-X-Proofpoint-GUID: ZrwNAgYQPUCXLFQTasoH-UqwAL_mFLz4
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-07_05,2022-02-07_02,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- phishscore=0 impostorscore=0 bulkscore=0 adultscore=0 priorityscore=1501
- suspectscore=0 mlxscore=0 mlxlogscore=999 spamscore=0 malwarescore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202070093
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: b652b184-cc3c-4139-0ba5-08d9ea49acf2
+x-ms-traffictypediagnostic: MN2PR12MB4637:EE_
+x-microsoft-antispam-prvs: <MN2PR12MB46377E2B3898948C2A6DF79DC32C9@MN2PR12MB4637.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: jRf5PLPQOwRl17zMv90TEXo13DEA8QouWjY62ruw47QcxBf3eyorsORWmFsYn1v/njdJvs1ouBNG3fWb4bW4q/oURPBPkWL1sJHI3xwK/oJR/AbexKOIErjtq69AYLc1Q8RaFJIfP7J/rdKdv78BIrqkwI4iVn63bkIubQ9umm+kZ32bcBGI1UcQ8wCPtSOoBUNa/xe1JbdphQSVgA4665ARxEwHS9jq4QWIi2nYhWfbcKpFpySAbFhaYJNmew1b48BOcya86Zl3/bntXek2qlA1NfcVSoe+uXPayMbLUfXC/vst/jYWt/OiEm3hZrlIb/ZyuonFlMFLR7764CAz39eZiSjTnAplGjCiQ2jOVsXtj8XKvtuH56x+a8xbaKyEgdPjTuD/KnfiRIyg4gVl+bSSyzQAItsbqPIe84fO7JiaxhqhRO7SpaAMj6Jr0mSqyztM2ljZOIhvrWj6hAkz1fyvKdPMPMc1Sb/boWEmJl7McTmQjo4ebL670U1zCbL8l8JjbS9YK9iRwQU9SzbeIpgyCVchzksYiSzZm36u9ZN7Eh5cbyDKfaCSu/TP4SJiapHmA+2XHJ/tm8Nl9+5QhBat0R6qZhgB22G0MxWQadhHhUfOFSkUKjFWTwcV0pgmssO04fjb9HLfnFTjTN2Nxra0V4/YvEebo7NKrp1Q0na84kCYef3Us7dpei3HRsWGYs/KeMTU0ji046EsKHbE6A==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3563.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(55016003)(38070700005)(6916009)(5660300002)(54906003)(52536014)(9686003)(316002)(186003)(26005)(83380400001)(53546011)(66476007)(66946007)(66556008)(64756008)(66446008)(76116006)(8936002)(8676002)(7696005)(6506007)(508600001)(122000001)(86362001)(33656002)(38100700002)(4326008)(55236004)(2906002)(71200400001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?AdenHaSRwvGysu9/gID0iARI0ru8uFUB2Lnfc8cSztj6u6ijZ49orjEui/k4?=
+ =?us-ascii?Q?V5VQSXcub08s8DLdpEEmp+sOHNik0QsWzUHE4Ai2d1iTy0TKESO/dNVDUnXy?=
+ =?us-ascii?Q?2Ia0kQTvWMRq+ZvmztYJm6JtI+4aTPr5a7s88tiR2WDJ0pbUyIGhiZfxf0ND?=
+ =?us-ascii?Q?DIAl+OvB7mralXceDdhSohiXyQUjlX5vitzlrgRYSaHh2gZ4Ln/vJhAuLuMd?=
+ =?us-ascii?Q?k9ayOKqN3vUFbgWznUmyRR9fdyscMMOT55Rbs3HNnid0wWvKXfTA/Y5rG2sI?=
+ =?us-ascii?Q?skT1bBZCTcxa+8CWOt6nYNCEbVC95lgUTfIBBiNMuHRyq0VVeehOqNKs+qrR?=
+ =?us-ascii?Q?wkKk3T+9VVSKmjBHmW56GAKP32wq6tZcoHHS5aPUFxyJPW3WfuqRH8l2w7fj?=
+ =?us-ascii?Q?sEOOFYvGUjc4ZKinsGd5n2wRXWpxWriV8Es2XL5I5sAABKS9fsjJuRVm5q01?=
+ =?us-ascii?Q?TYfUfzNjBTCYzZ1DcoKfFnuk8yEaLiCUkHDyVUVvrxxH5RLkbAPRUXLooIiv?=
+ =?us-ascii?Q?6URNAN4y2VkLcP1RKosbSV5F4aiOlWLqIr/gRblmznXP0QS428jKLYJHAkVt?=
+ =?us-ascii?Q?aDltOTdXWbM6EUfNYYgWE+ilaULjTzqpRizXOBzAch4Kkd9pwga21u9urXy2?=
+ =?us-ascii?Q?oUoseD8DSzsnxth850x81ljX89vXTH0jYCvTNB7VtTiLR9ZonWYmfQY8AIMU?=
+ =?us-ascii?Q?r13biGYiTVAsbWXgJDed8XVr+zh+Yil0qhHRoL/FGE5hckhdg1ZHkQH4Wa4J?=
+ =?us-ascii?Q?bm6TAA1Bfj65MQb7PLK1fhmOSZ1DU9/MFbSoX0LZvbj1eLfJ6lbva4ZqUyEV?=
+ =?us-ascii?Q?cj2p8Ll6lnpJne93OsT1fGZ/I9t0FO4fjXsF6xEDF18w0z2F5TimqoOrD7l3?=
+ =?us-ascii?Q?Tg0+gn2brMcXrL3KzL/YIcnVbK4UamdHSUaAJWMc9fgiEkbuClSJuIcmcuBI?=
+ =?us-ascii?Q?Q7NqJaVF9866+cjPQaQsSof0dXkKpAKHe546mmb+rrhdC77jRrdT9K+xyYix?=
+ =?us-ascii?Q?nmrv+vgSAtXC1z+k+XfxHb6sfR4WobU7v+pmdDEtYcNmGX03obt5ZAu9frUf?=
+ =?us-ascii?Q?HgyhEfn3dkXhzznoHU3kJKCqdiOUlYdkPKqI7SsQH850LQD1Q1Tuo9+eO4Dl?=
+ =?us-ascii?Q?MO8boCMqY/jEXQ/syn2mz7skMbiVqxf26brHCFnGT5YaAArkAWh+ZA/u9n/M?=
+ =?us-ascii?Q?TQ1OvPbup7VVULU06r5oe+MGYT7eC7OYiHMxX+rLcJqHZPkwLmfDrklTWybv?=
+ =?us-ascii?Q?M1eCWVsR3Iyt6nboqLBu0HCyzo1gDBFZSZovnnI8z+ce3AVK0dmPoOIWB9aA?=
+ =?us-ascii?Q?3Vn8GI56BJEKeS9SmxTbKiMzvlmbgMciW7lf2icb+XfFC3B5UgeuHV7nuNja?=
+ =?us-ascii?Q?A1UnoNpz9SpwzgvVbDepvFlExYOByXKaHNQIDK38F4LUxawFaP3v++c/2Im7?=
+ =?us-ascii?Q?8dcM57c9bQyEWeO82VUC5j2iGkNvgQ1DRdg1WtZgG2DTqGk6dg3xAnry4kYd?=
+ =?us-ascii?Q?MgqAK0YMJ0FSN3wEu33cSDZFNDW2ENcMkoqjjQBOKwwfnbHTEIiZgl4Y0NKL?=
+ =?us-ascii?Q?ptEWHzzzf7ILYk1pJJ5SBB/4hvYe/BQWIAGTCS9mkXn+7YKD7eCLg6CddPki?=
+ =?us-ascii?Q?kVYCcEROxDgvnBxlxufT/mE=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3563.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b652b184-cc3c-4139-0ba5-08d9ea49acf2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Feb 2022 14:54:00.3910
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: zy+nxxLp+UvpsfBTOLqR0LGmNCXGezG4jvDRLEoJObFltey6ZtnCkHaEHF+ryS82TkBlR4ezjvXezx2CIw8EIQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4637
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/4/22 16:53, Claudio Imbrenda wrote:
-> Add documentation for the new commands added to the KVM_S390_PV_COMMAND
-> ioctl.
-> 
-> Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
-> ---
->   Documentation/virt/kvm/api.rst | 21 ++++++++++++++++++---
->   1 file changed, 18 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> index a4267104db50..3b9068aceead 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
-> @@ -5010,11 +5010,13 @@ KVM_PV_ENABLE
->     =====      =============================
->   
->   KVM_PV_DISABLE
-> -
->     Deregister the VM from the Ultravisor and reclaim the memory that
->     had been donated to the Ultravisor, making it usable by the kernel
-> -  again.  All registered VCPUs are converted back to non-protected
-> -  ones.
-> +  again. All registered VCPUs are converted back to non-protected
-> +  ones. If a previous VM had been prepared for asynchonous teardown
-> +  with KVM_PV_ASYNC_DISABLE_PREPARE and not actually torn down with
-> +  KVM_PV_ASYNC_DISABLE, it will be torn down in this call together with
-> +  the current VM.
->   
->   KVM_PV_VM_SET_SEC_PARMS
->     Pass the image header from VM memory to the Ultravisor in
-> @@ -5027,6 +5029,19 @@ KVM_PV_VM_VERIFY
->     Verify the integrity of the unpacked image. Only if this succeeds,
->     KVM is allowed to start protected VCPUs.
->   
-> +KVM_PV_ASYNC_DISABLE_PREPARE
-> +  Prepare the current protected VM for asynchronous teardown. The current
-
-I think the first sentence needs a few more examples of what we do so 
-the second sentence makes more sense.
-
-...by setting aside the pointers to the donated storage, replacing the 
-top most page table, destroying the first 2GB of memory and zeroing the 
-KVM PV structs.
-
-
-Or something which sounds a bit nicer.
-
-> +  VM will then continue immediately as non-protected. If a protected VM had
-> +  already been set aside without starting the teardown process, this call
-> +  will fail. In this case the userspace process should issue a normal
-> +  KVM_PV_DISABLE.
-> +
-> +KVM_PV_ASYNC_DISABLE
-> +  Tear down the protected VM previously set aside for asynchronous teardown.
-> +  This PV command should ideally be issued by userspace from a separate
-> +  thread. If a fatal signal is received (or the process terminates
-> +  naturally), the command will terminate immediately without completing.
-> +
->   4.126 KVM_X86_SET_MSR_FILTER
->   ----------------------------
->   
-> 
-
+> -----Original Message-----
+> From: Mark Brown <broonie@kernel.org>
+> Sent: 04 February 2022 19:39
+> To: Krishna Yarlagadda <kyarlagadda@nvidia.com>
+> Cc: thierry.reding@gmail.com; Jonathan Hunter <jonathanh@nvidia.com>;
+> linux-spi@vger.kernel.org; linux-tegra@vger.kernel.org; Sowjanya Komatine=
+ni
+> <skomatineni@nvidia.com>; Laxman Dewangan <ldewangan@nvidia.com>;
+> robh+dt@kernel.org; devicetree@vger.kernel.org; linux-
+> kernel@vger.kernel.org; p.zabel@pengutronix.de
+> Subject: Re: [PATCH 6/6] spi: tegra210-quad: combined sequence mode
+>=20
+> On Fri, Feb 04, 2022 at 03:59:36PM +0530, Krishna Yarlagadda wrote:
+>=20
+> > +	/* Process individual transfer list */
+> > +	list_for_each_entry(xfer, &msg->transfers, transfer_list) {
+> > +		if (transfer_phase =3D=3D CMD_TRANSFER) {
+>=20
+> > +		} else if (transfer_phase =3D=3D ADDR_TRANSFER) {
+>=20
+> > +		} else {
+>=20
+> Looks like you're writing a switch statement here...
+Yes. This can be switch statement.
+>=20
+> > +			/* X1 SDR mode */
+> > +			cmd_config =3D tegra_qspi_cmd_config(false, 0,
+> > +							   xfer->len);
+> > +			cmd_value =3D *((const u8 *)(xfer->tx_buf));
+> > +
+> > +			len =3D xfer->len;
+>=20
+> > +			/* X1 SDR mode */
+> > +			addr_config =3D tegra_qspi_addr_config(false, 0,
+> > +							     xfer->len);
+> > +			address_value =3D *((const u32 *)(xfer->tx_buf));
+>=20
+> > +			/* Program Command, Address value in register */
+> > +			tegra_qspi_writel(tqspi, cmd_value,
+> QSPI_CMB_SEQ_CMD);
+> > +			tegra_qspi_writel(tqspi, address_value,
+> > +					  QSPI_CMB_SEQ_ADDR);
+> > +			/* Program Command and Address config in register
+> */
+> > +			tegra_qspi_writel(tqspi, cmd_config,
+> > +					  QSPI_CMB_SEQ_CMD_CFG);
+> > +			tegra_qspi_writel(tqspi, addr_config,
+> > +					  QSPI_CMB_SEQ_ADDR_CFG);
+>=20
+> It looks like the command and address have to be specific lengths?  If th=
+at's the
+> case then
+Cmd  and address are configurable to a limit. Will add min and max check.
+>=20
+> > +	if (cdata->is_cmb_xfer && transfer_count =3D=3D 3)
+> > +		ret =3D tegra_qspi_combined_seq_xfer(tqspi, msg);
+> > +	else
+> > +		ret =3D tegra_qspi_non_combined_seq_xfer(tqspi, msg);
+>=20
+> This check needs to be more specific.  But like I said in reply to the bi=
+nding
+> patch I don't see why we can't just pattern match on the data without req=
+uiring
+> a property here, we'd need to check that the message is suitable no matte=
+r
+> what.
+There is no real-world use case we encountered so far preventing us stick t=
+o pattern.
+But this was to avoid any corner case where there could be 3 different tran=
+sfers sent in single msg.

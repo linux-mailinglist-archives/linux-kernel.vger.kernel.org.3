@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ECA24ABE00
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:05:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 323004ABE12
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:05:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391258AbiBGL6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:58:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47240 "EHLO
+        id S1390662AbiBGL5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:57:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377754AbiBGLfr (ORCPT
+        with ESMTP id S1385224AbiBGLbY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:35:47 -0500
+        Mon, 7 Feb 2022 06:31:24 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 638DEC03FEC8;
-        Mon,  7 Feb 2022 03:35:40 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73786C02C461;
+        Mon,  7 Feb 2022 03:29:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D62E260180;
-        Mon,  7 Feb 2022 11:35:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96E11C004E1;
-        Mon,  7 Feb 2022 11:35:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 119A260A69;
+        Mon,  7 Feb 2022 11:29:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2CFBC004E1;
+        Mon,  7 Feb 2022 11:29:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233739;
-        bh=DFsm60ujwlq6xrmRluf3V0gZYV+0uKA4KIhEf3z/2VY=;
+        s=korg; t=1644233382;
+        bh=qVNKeck0zmBC2NlbwYsQU2xFOx29BT7tvNk9RAbYvl8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ODjv018DgL4WC527PwuUfriM21P3W+DY7QmWol6Nv8tcIKGfRw7XMhztC4ewTrqry
-         64dPLMpyuND8FDRAnMIddDMGjnqjpkYRsXEuCniR8PkNu/QPhRJK+E6YtgqhThLbGx
-         jxTHPHEAp0N//JuKPATpbGTgMWan9LToxGwZtez4=
+        b=lyIW1SVLv4iMkO1aBzTC7qAJ2XPhBJzLtEGc0ei0+2eJPAsrlOSsFwUBrhNsmgExi
+         dOqsLV2z5XYofUAZncWAT0wZhAha8ERoF2IoiGtMJly534aJ9P/wFAizYqLayXn/Oo
+         YKrYG9JBOlIDpVon49sM5NQOEWOIWz0y2yio6lxM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Riwen Lu <luriwen@kylinos.cn>,
-        Eric Wong <e@80x24.org>,
-        =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: [PATCH 5.16 106/126] rtc: cmos: Evaluate century appropriate
-Date:   Mon,  7 Feb 2022 12:07:17 +0100
-Message-Id: <20220207103807.720623227@linuxfoundation.org>
+        stable@vger.kernel.org, Waiman Long <longman@redhat.com>,
+        Phil Auld <pauld@redhat.com>, Tejun Heo <tj@kernel.org>
+Subject: [PATCH 5.15 105/110] cgroup/cpuset: Fix "suspicious RCU usage" lockdep warning
+Date:   Mon,  7 Feb 2022 12:07:18 +0100
+Message-Id: <20220207103805.944986607@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
-References: <20220207103804.053675072@linuxfoundation.org>
+In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
+References: <20220207103802.280120990@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,43 +54,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Riwen Lu <luriwen@kylinos.cn>
+From: Waiman Long <longman@redhat.com>
 
-commit ff164ae39b82ee483b24579c8e22a13a8ce5bd04 upstream.
+commit 2bdfd2825c9662463371e6691b1a794e97fa36b4 upstream.
 
-There's limiting the year to 2069. When setting the rtc year to 2070,
-reading it returns 1970. Evaluate century starting from 19 to count the
-correct year.
+It was found that a "suspicious RCU usage" lockdep warning was issued
+with the rcu_read_lock() call in update_sibling_cpumasks().  It is
+because the update_cpumasks_hier() function may sleep. So we have
+to release the RCU lock, call update_cpumasks_hier() and reacquire
+it afterward.
 
-$ sudo date -s 20700106
-Mon 06 Jan 2070 12:00:00 AM CST
-$ sudo hwclock -w
-$ sudo hwclock -r
-1970-01-06 12:00:49.604968+08:00
+Also add a percpu_rwsem_assert_held() in update_sibling_cpumasks()
+instead of stating that in the comment.
 
-Fixes: 2a4daadd4d3e5071 ("rtc: cmos: ignore bogus century byte")
-
-Signed-off-by: Riwen Lu <luriwen@kylinos.cn>
-Acked-by: Eric Wong <e@80x24.org>
-Reviewed-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Link: https://lore.kernel.org/r/20220106084609.1223688-1-luriwen@kylinos.cn
-Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl> # preparation for stable
+Fixes: 4716909cc5c5 ("cpuset: Track cpusets that use parent's effective_cpus")
+Signed-off-by: Waiman Long <longman@redhat.com>
+Tested-by: Phil Auld <pauld@redhat.com>
+Reviewed-by: Phil Auld <pauld@redhat.com>
+Signed-off-by: Tejun Heo <tj@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/rtc/rtc-mc146818-lib.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/cgroup/cpuset.c |   10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
---- a/drivers/rtc/rtc-mc146818-lib.c
-+++ b/drivers/rtc/rtc-mc146818-lib.c
-@@ -104,7 +104,7 @@ again:
- 	time->tm_year += real_year - 72;
- #endif
+--- a/kernel/cgroup/cpuset.c
++++ b/kernel/cgroup/cpuset.c
+@@ -1512,10 +1512,15 @@ static void update_sibling_cpumasks(stru
+ 	struct cpuset *sibling;
+ 	struct cgroup_subsys_state *pos_css;
  
--	if (century > 20)
-+	if (century > 19)
- 		time->tm_year += (century - 19) * 100;
- 
++	percpu_rwsem_assert_held(&cpuset_rwsem);
++
  	/*
+ 	 * Check all its siblings and call update_cpumasks_hier()
+ 	 * if their use_parent_ecpus flag is set in order for them
+ 	 * to use the right effective_cpus value.
++	 *
++	 * The update_cpumasks_hier() function may sleep. So we have to
++	 * release the RCU read lock before calling it.
+ 	 */
+ 	rcu_read_lock();
+ 	cpuset_for_each_child(sibling, pos_css, parent) {
+@@ -1523,8 +1528,13 @@ static void update_sibling_cpumasks(stru
+ 			continue;
+ 		if (!sibling->use_parent_ecpus)
+ 			continue;
++		if (!css_tryget_online(&sibling->css))
++			continue;
+ 
++		rcu_read_unlock();
+ 		update_cpumasks_hier(sibling, tmp);
++		rcu_read_lock();
++		css_put(&sibling->css);
+ 	}
+ 	rcu_read_unlock();
+ }
 
 

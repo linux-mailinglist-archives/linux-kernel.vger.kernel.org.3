@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4250F4AC59C
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 17:31:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E26324AC635
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 17:44:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389907AbiBGQbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 11:31:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60808 "EHLO
+        id S237062AbiBGQnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 11:43:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387440AbiBGQZ5 (ORCPT
+        with ESMTP id S1390544AbiBGQfB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 11:25:57 -0500
+        Mon, 7 Feb 2022 11:35:01 -0500
 Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 784DCC0401CE
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 08:25:56 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2CFD2C0401D1
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 08:35:00 -0800 (PST)
 Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 217GOd4U014407;
-        Mon, 7 Feb 2022 17:24:39 +0100
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 217GOemG014408;
+        Mon, 7 Feb 2022 17:24:40 +0100
 From:   Willy Tarreau <w@1wt.eu>
 To:     "Paul E . McKenney" <paulmck@kernel.org>
 Cc:     Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
         Willy Tarreau <w@1wt.eu>
-Subject: [PATCH 24/42] tools/nolibc/sys: make open() take a vararg on the 3rd argument
-Date:   Mon,  7 Feb 2022 17:23:36 +0100
-Message-Id: <20220207162354.14293-25-w@1wt.eu>
+Subject: [PATCH 25/42] tools/nolibc/stdlib: avoid a 64-bit shift in u64toh_r()
+Date:   Mon,  7 Feb 2022 17:23:37 +0100
+Message-Id: <20220207162354.14293-26-w@1wt.eu>
 X-Mailer: git-send-email 2.17.5
 In-Reply-To: <20220207162354.14293-1-w@1wt.eu>
 References: <20220207162354.14293-1-w@1wt.eu>
@@ -37,62 +37,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let's pass a vararg to open() so that it remains compatible with existing
-code. The arg is only dereferenced when flags contain O_CREAT. The function
-is generally not inlined anymore, causing an extra call (total 16 extra
-bytes) but it's still optimized for constant propagation, limiting the
-excess to no more than 16 bytes in practice when open() is called without
-O_CREAT, and ~40 with O_CREAT, which remains reasonable.
+The build of printf() on mips requires libgcc for functions __ashldi3 and
+__lshrdi3 due to 64-bit shifts when scanning the input number. These are
+not really needed in fact since we scan the number 4 bits at a time. Let's
+arrange the loop to perform two 32-bit shifts instead on 32-bit platforms.
 
 Signed-off-by: Willy Tarreau <w@1wt.eu>
 ---
- tools/include/nolibc/sys.h | 18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
+ tools/include/nolibc/stdlib.h | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
 
-diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-index 98689f668ed3..539af457a91b 100644
---- a/tools/include/nolibc/sys.h
-+++ b/tools/include/nolibc/sys.h
-@@ -7,6 +7,7 @@
- #ifndef _NOLIBC_SYS_H
- #define _NOLIBC_SYS_H
+diff --git a/tools/include/nolibc/stdlib.h b/tools/include/nolibc/stdlib.h
+index 82a4cf606d3c..db47362a750f 100644
+--- a/tools/include/nolibc/stdlib.h
++++ b/tools/include/nolibc/stdlib.h
+@@ -200,14 +200,18 @@ int u64toh_r(uint64_t in, char *buffer)
+ 	int dig;
  
-+#include <stdarg.h>
- #include "std.h"
+ 	do {
+-		dig = in >> pos;
+-		in -= (uint64_t)dig << pos;
++		if (sizeof(long) >= 8) {
++			dig = (in >> pos) & 0xF;
++		} else {
++			/* 32-bit platforms: avoid a 64-bit shift */
++			uint32_t d = (pos >= 32) ? (in >> 32) : in;
++			dig = (d >> (pos & 31)) & 0xF;
++		}
++		if (dig > 9)
++			dig += 'a' - '0' - 10;
+ 		pos -= 4;
+-		if (dig || digits || pos < 0) {
+-			if (dig > 9)
+-				dig += 'a' - '0' - 10;
++		if (dig || digits || pos < 0)
+ 			buffer[digits++] = '0' + dig;
+-		}
+ 	} while (pos >= 0);
  
- /* system includes */
-@@ -719,7 +720,7 @@ int mount(const char *src, const char *tgt,
- 
- 
- /*
-- * int open(const char *path, int flags, mode_t mode);
-+ * int open(const char *path, int flags[, mode_t mode]);
-  */
- 
- static __attribute__((unused))
-@@ -735,9 +736,20 @@ int sys_open(const char *path, int flags, mode_t mode)
- }
- 
- static __attribute__((unused))
--int open(const char *path, int flags, mode_t mode)
-+int open(const char *path, int flags, ...)
- {
--	int ret = sys_open(path, flags, mode);
-+	mode_t mode = 0;
-+	int ret;
-+
-+	if (flags & O_CREAT) {
-+		va_list args;
-+
-+		va_start(args, flags);
-+		mode = va_arg(args, mode_t);
-+		va_end(args);
-+	}
-+
-+	ret = sys_open(path, flags, mode);
- 
- 	if (ret < 0) {
- 		SET_ERRNO(-ret);
+ 	buffer[digits] = 0;
 -- 
 2.35.1
 

@@ -2,57 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA99D4AC430
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 16:46:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73BA84AC436
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 16:46:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384633AbiBGPnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 10:43:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51640 "EHLO
+        id S1376387AbiBGPnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 10:43:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379639AbiBGPea (ORCPT
+        with ESMTP id S1380053AbiBGPeh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 10:34:30 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0E8DC0401CE;
-        Mon,  7 Feb 2022 07:34:29 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: nfraprado)
-        with ESMTPSA id 0227C1F43B76
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644248068;
-        bh=ol3XokBITXIfyab5chsBQWUULIoTBvY1DDSR5rejgvw=;
+        Mon, 7 Feb 2022 10:34:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF0FC0401C1
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 07:34:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 89C24614C4
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 15:34:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B0A5C004E1;
+        Mon,  7 Feb 2022 15:34:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1644248076;
+        bh=5j63DxhNOeAOqeDOxMU3/s9mzDKx++25hxAQDhkhezo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=obxfamCW4cnL3wy0ug3PFGL3p+Tuo+giscjZZG7Gp8W3+dak1a5dMCLmxytjSi3Zu
-         +7qQH7krl7nFsswMvu2OmAanWP5sU1e3Qqi2/o+i+IrTiDsoE4OG5n6BMqW+1Oo5ER
-         dM8v4gJfJDhlam8krFoExNK0TRnvFIzcCGDMaA1+y6+BYDOHlXxFrkiCf9ptWVe3Gw
-         4o32biV2EuqM64q522rtN/Dq039d2I/CvSUOw4UwwMr9unwDv2QrtI5X92Wc9xUWPY
-         i1kUSi5T9U+91w0sW2LK+/dNk2NkACnPJaGoT0Y8035wIr+rUwx2uCtNFboIJB3wMj
-         4c5WiceFbJ4KQ==
-Date:   Mon, 7 Feb 2022 10:34:23 -0500
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     Chun-Jie Chen <chun-jie.chen@mediatek.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        srv_heupstream@mediatek.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Weiyi Lu <weiyi.lu@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: Re: [v5] arm64: dts: mediatek: Add mt8192 power domains controller
-Message-ID: <20220207153423.smz3636wk3hjk3b5@notapiano>
-References: <20210825010426.30303-1-chun-jie.chen@mediatek.com>
+        b=nqgq0ci8OBWzryHs9lJosHu9cV/k1mZgFPwNx7yiy7r1eFhp9J9RgpWCoTJW5E2CS
+         C/UgP0tCmoWDuHyLnsBh6Q2U3BO1RVRHh925lO5dqzIzjXbSQY7LbVmfnBIRQ9h3it
+         KvbQEfT0S2gwoPicVA9B651GDLRiSPDnYJ2uj/Ys=
+Date:   Mon, 7 Feb 2022 16:34:32 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Ankit Kumar Pandey <itsankitkp@gmail.com>
+Cc:     jirislaby@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Fixes styleguide related issues in tty drivers
+Message-ID: <YgE8CA+1jCEGPoWj@kroah.com>
+References: <YgE3wNira6AmpHab@ankit-vm>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210825010426.30303-1-chun-jie.chen@mediatek.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+In-Reply-To: <YgE3wNira6AmpHab@ankit-vm>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,256 +50,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chun-Jie,
-
-thanks for the patch. Please see my comments below.
-
-On Wed, Aug 25, 2021 at 09:04:26AM +0800, Chun-Jie Chen wrote:
-> Add power domains controller node for SoC mt8192
-> 
-> Signed-off-by: Weiyi Lu <weiyi.lu@mediatek.com>
-> Signed-off-by: Chun-Jie Chen <chun-jie.chen@mediatek.com>
+On Mon, Feb 07, 2022 at 08:46:16PM +0530, Ankit Kumar Pandey wrote:
+> Various styleguide warnings are raised in drivers/tty. This patch aims
+> to fix those and bring styleguide warning to zero.
+> Signed-off-by: Ankit Kumar Pandey <itsankitkp@gmail.com>
 > ---
-> This patch is base on v5.14-rc1,
-> series "Mediatek MT8192 clock support"[1] and [2].
-> No changes compare v4
+>  drivers/tty/ehv_bytechan.c | 5 +++--
+>  drivers/tty/goldfish.c     | 2 ++
+>  2 files changed, 5 insertions(+), 2 deletions(-)
 > 
-> [1] https://patchwork.kernel.org/project/linux-mediatek/list/?series=521127
-> [2] https://patchwork.kernel.org/project/linux-mediatek/patch/20210727023205.20319-2-chun-jie.chen@mediatek.com/
-
-Those two patches are already merged in mainline, so this patch applies
-cleanly on mainline without any other dependencies. Might be worth sending a new
-version removing this text to make that clearer to the maintainers.
-
-Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-
-Thanks,
-Nícolas
-
-> ---
->  arch/arm64/boot/dts/mediatek/mt8192.dtsi | 201 +++++++++++++++++++++++
->  1 file changed, 201 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> index c7c7d4e017ae..a0084a7a5bcd 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> @@ -9,6 +9,7 @@
->  #include <dt-bindings/interrupt-controller/arm-gic.h>
->  #include <dt-bindings/interrupt-controller/irq.h>
->  #include <dt-bindings/pinctrl/mt8192-pinfunc.h>
-> +#include <dt-bindings/power/mt8192-power.h>
+> diff --git a/drivers/tty/ehv_bytechan.c b/drivers/tty/ehv_bytechan.c
+> index 19d32cb6a..c41c4c07b 100644
+> --- a/drivers/tty/ehv_bytechan.c
+> +++ b/drivers/tty/ehv_bytechan.c
+> @@ -324,8 +324,9 @@ static int __init ehv_bc_console_init(void)
+>  #endif
 >  
->  / {
->  	compatible = "mediatek,mt8192";
-> @@ -301,6 +302,206 @@
->  			#interrupt-cells = <2>;
->  		};
+>  	/* add_preferred_console() must be called before register_console(),
+> -	   otherwise it won't work.  However, we don't want to enumerate all the
+> -	   byte channels here, either, since we only care about one. */
+> +	 * otherwise it won't work.  However, we don't want to enumerate all the
+> +	 * byte channels here, either, since we only care about one.
+> +	 */
 >  
-> +		scpsys: syscon@10006000 {
-> +			compatible = "syscon", "simple-mfd";
-> +			reg = <0 0x10006000 0 0x1000>;
-> +			#power-domain-cells = <1>;
+>  	add_preferred_console(ehv_bc_console.name, ehv_bc_console.index, NULL);
+>  	register_console(&ehv_bc_console);
+> diff --git a/drivers/tty/goldfish.c b/drivers/tty/goldfish.c
+> index 5ed19a985..61ccbf670 100644
+> --- a/drivers/tty/goldfish.c
+> +++ b/drivers/tty/goldfish.c
+> @@ -173,6 +173,7 @@ static void goldfish_tty_shutdown(struct tty_port *port)
+>  static int goldfish_tty_open(struct tty_struct *tty, struct file *filp)
+>  {
+>  	struct goldfish_tty *qtty = &goldfish_ttys[tty->index];
 > +
-> +			/* System Power Manager */
-> +			spm: power-controller {
-> +				compatible = "mediatek,mt8192-power-controller";
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +				#power-domain-cells = <1>;
+>  	return tty_port_open(&qtty->port, tty, filp);
+>  }
+>  
+> @@ -202,6 +203,7 @@ static unsigned int goldfish_tty_chars_in_buffer(struct tty_struct *tty)
+>  {
+>  	struct goldfish_tty *qtty = &goldfish_ttys[tty->index];
+>  	void __iomem *base = qtty->base;
 > +
-> +				/* power domain of the SoC */
-> +				power-domain@MT8192_POWER_DOMAIN_AUDIO {
-> +					reg = <MT8192_POWER_DOMAIN_AUDIO>;
-> +					clocks = <&topckgen CLK_TOP_AUD_INTBUS_SEL>,
-> +						 <&infracfg CLK_INFRA_AUDIO_26M_B>,
-> +						 <&infracfg CLK_INFRA_AUDIO>;
-> +					clock-names = "audio", "audio1", "audio2";
-> +					mediatek,infracfg = <&infracfg>;
-> +					#power-domain-cells = <0>;
-> +				};
-> +
-> +				power-domain@MT8192_POWER_DOMAIN_CONN {
-> +					reg = <MT8192_POWER_DOMAIN_CONN>;
-> +					clocks = <&infracfg CLK_INFRA_PMIC_CONN>;
-> +					clock-names = "conn";
-> +					mediatek,infracfg = <&infracfg>;
-> +					#power-domain-cells = <0>;
-> +				};
-> +
-> +				power-domain@MT8192_POWER_DOMAIN_MFG0 {
-> +					reg = <MT8192_POWER_DOMAIN_MFG0>;
-> +					clocks = <&topckgen CLK_TOP_MFG_PLL_SEL>;
-> +					clock-names = "mfg";
-> +					#address-cells = <1>;
-> +					#size-cells = <0>;
-> +					#power-domain-cells = <1>;
-> +
-> +					power-domain@MT8192_POWER_DOMAIN_MFG1 {
-> +						reg = <MT8192_POWER_DOMAIN_MFG1>;
-> +						mediatek,infracfg = <&infracfg>;
-> +						#address-cells = <1>;
-> +						#size-cells = <0>;
-> +						#power-domain-cells = <1>;
-> +
-> +						power-domain@MT8192_POWER_DOMAIN_MFG2 {
-> +							reg = <MT8192_POWER_DOMAIN_MFG2>;
-> +							#power-domain-cells = <0>;
-> +						};
-> +
-> +						power-domain@MT8192_POWER_DOMAIN_MFG3 {
-> +							reg = <MT8192_POWER_DOMAIN_MFG3>;
-> +							#power-domain-cells = <0>;
-> +						};
-> +
-> +						power-domain@MT8192_POWER_DOMAIN_MFG4 {
-> +							reg = <MT8192_POWER_DOMAIN_MFG4>;
-> +							#power-domain-cells = <0>;
-> +						};
-> +
-> +						power-domain@MT8192_POWER_DOMAIN_MFG5 {
-> +							reg = <MT8192_POWER_DOMAIN_MFG5>;
-> +							#power-domain-cells = <0>;
-> +						};
-> +
-> +						power-domain@MT8192_POWER_DOMAIN_MFG6 {
-> +							reg = <MT8192_POWER_DOMAIN_MFG6>;
-> +							#power-domain-cells = <0>;
-> +						};
-> +					};
-> +				};
-> +
-> +				power-domain@MT8192_POWER_DOMAIN_DISP {
-> +					reg = <MT8192_POWER_DOMAIN_DISP>;
-> +					clocks = <&topckgen CLK_TOP_DISP_SEL>,
-> +						 <&mmsys CLK_MM_SMI_INFRA>,
-> +						 <&mmsys CLK_MM_SMI_COMMON>,
-> +						 <&mmsys CLK_MM_SMI_GALS>,
-> +						 <&mmsys CLK_MM_SMI_IOMMU>;
-> +					clock-names = "disp", "disp-0", "disp-1", "disp-2",
-> +						      "disp-3";
-> +					mediatek,infracfg = <&infracfg>;
-> +					#address-cells = <1>;
-> +					#size-cells = <0>;
-> +					#power-domain-cells = <1>;
-> +
-> +					power-domain@MT8192_POWER_DOMAIN_IPE {
-> +						reg = <MT8192_POWER_DOMAIN_IPE>;
-> +						clocks = <&topckgen CLK_TOP_IPE_SEL>,
-> +							 <&ipesys CLK_IPE_LARB19>,
-> +							 <&ipesys CLK_IPE_LARB20>,
-> +							 <&ipesys CLK_IPE_SMI_SUBCOM>,
-> +							 <&ipesys CLK_IPE_GALS>;
-> +						clock-names = "ipe", "ipe-0", "ipe-1", "ipe-2",
-> +							      "ipe-3";
-> +						mediatek,infracfg = <&infracfg>;
-> +						#power-domain-cells = <0>;
-> +					};
-> +
-> +					power-domain@MT8192_POWER_DOMAIN_ISP {
-> +						reg = <MT8192_POWER_DOMAIN_ISP>;
-> +						clocks = <&topckgen CLK_TOP_IMG1_SEL>,
-> +							 <&imgsys CLK_IMG_LARB9>,
-> +							 <&imgsys CLK_IMG_GALS>;
-> +						clock-names = "isp", "isp-0", "isp-1";
-> +						mediatek,infracfg = <&infracfg>;
-> +						#power-domain-cells = <0>;
-> +					};
-> +
-> +					power-domain@MT8192_POWER_DOMAIN_ISP2 {
-> +						reg = <MT8192_POWER_DOMAIN_ISP2>;
-> +						clocks = <&topckgen CLK_TOP_IMG2_SEL>,
-> +							 <&imgsys2 CLK_IMG2_LARB11>,
-> +							 <&imgsys2 CLK_IMG2_GALS>;
-> +						clock-names = "isp2", "isp2-0", "isp2-1";
-> +						mediatek,infracfg = <&infracfg>;
-> +						#power-domain-cells = <0>;
-> +					};
-> +
-> +					power-domain@MT8192_POWER_DOMAIN_MDP {
-> +						reg = <MT8192_POWER_DOMAIN_MDP>;
-> +						clocks = <&topckgen CLK_TOP_MDP_SEL>,
-> +							 <&mdpsys CLK_MDP_SMI0>;
-> +						clock-names = "mdp", "mdp-0";
-> +						mediatek,infracfg = <&infracfg>;
-> +						#power-domain-cells = <0>;
-> +					};
-> +
-> +					power-domain@MT8192_POWER_DOMAIN_VENC {
-> +						reg = <MT8192_POWER_DOMAIN_VENC>;
-> +						clocks = <&topckgen CLK_TOP_VENC_SEL>,
-> +							 <&vencsys CLK_VENC_SET1_VENC>;
-> +						clock-names = "venc", "venc-0";
-> +						mediatek,infracfg = <&infracfg>;
-> +						#power-domain-cells = <0>;
-> +					};
-> +
-> +					power-domain@MT8192_POWER_DOMAIN_VDEC {
-> +						reg = <MT8192_POWER_DOMAIN_VDEC>;
-> +						clocks = <&topckgen CLK_TOP_VDEC_SEL>,
-> +							 <&vdecsys_soc CLK_VDEC_SOC_VDEC>,
-> +							 <&vdecsys_soc CLK_VDEC_SOC_LAT>,
-> +							 <&vdecsys_soc CLK_VDEC_SOC_LARB1>;
-> +						clock-names = "vdec", "vdec-0", "vdec-1", "vdec-2";
-> +						mediatek,infracfg = <&infracfg>;
-> +						#address-cells = <1>;
-> +						#size-cells = <0>;
-> +						#power-domain-cells = <1>;
-> +
-> +						power-domain@MT8192_POWER_DOMAIN_VDEC2 {
-> +							reg = <MT8192_POWER_DOMAIN_VDEC2>;
-> +							clocks = <&vdecsys CLK_VDEC_VDEC>,
-> +								 <&vdecsys CLK_VDEC_LAT>,
-> +								 <&vdecsys CLK_VDEC_LARB1>;
-> +							clock-names = "vdec2-0", "vdec2-1",
-> +								      "vdec2-2";
-> +							#power-domain-cells = <0>;
-> +						};
-> +					};
-> +
-> +					power-domain@MT8192_POWER_DOMAIN_CAM {
-> +						reg = <MT8192_POWER_DOMAIN_CAM>;
-> +						clocks = <&topckgen CLK_TOP_CAM_SEL>,
-> +							 <&camsys CLK_CAM_LARB13>,
-> +							 <&camsys CLK_CAM_LARB14>,
-> +							 <&camsys CLK_CAM_CCU_GALS>,
-> +							 <&camsys CLK_CAM_CAM2MM_GALS>;
-> +						clock-names = "cam", "cam-0", "cam-1", "cam-2",
-> +							      "cam-3";
-> +						mediatek,infracfg = <&infracfg>;
-> +						#address-cells = <1>;
-> +						#size-cells = <0>;
-> +						#power-domain-cells = <1>;
-> +
-> +						power-domain@MT8192_POWER_DOMAIN_CAM_RAWA {
-> +							reg = <MT8192_POWER_DOMAIN_CAM_RAWA>;
-> +							clocks = <&camsys_rawa CLK_CAM_RAWA_LARBX>;
-> +							clock-names = "cam_rawa-0";
-> +							#power-domain-cells = <0>;
-> +						};
-> +
-> +						power-domain@MT8192_POWER_DOMAIN_CAM_RAWB {
-> +							reg = <MT8192_POWER_DOMAIN_CAM_RAWB>;
-> +							clocks = <&camsys_rawb CLK_CAM_RAWB_LARBX>;
-> +							clock-names = "cam_rawb-0";
-> +							#power-domain-cells = <0>;
-> +						};
-> +
-> +						power-domain@MT8192_POWER_DOMAIN_CAM_RAWC {
-> +							reg = <MT8192_POWER_DOMAIN_CAM_RAWC>;
-> +							clocks = <&camsys_rawc CLK_CAM_RAWC_LARBX>;
-> +							clock-names = "cam_rawc-0";
-> +							#power-domain-cells = <0>;
-> +						};
-> +					};
-> +				};
-> +			};
-> +		};
-> +
->  		apmixedsys: syscon@1000c000 {
->  			compatible = "mediatek,mt8192-apmixedsys", "syscon";
->  			reg = <0 0x1000c000 0 0x1000>;
+>  	return __raw_readl(base + GOLDFISH_TTY_REG_BYTES_READY);
+>  }
+>  
 > -- 
-> 2.18.0
+> 2.32.0
 > 
-> 
+
+Hi,
+
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- Your patch does not have a Signed-off-by: line in the correct
+  location..  Please read the kernel file,
+  Documentation/SubmittingPatches and resend it after adding that line.
+  Note, the line needs to be in the body of the email, before the patch,
+  not at the bottom of the patch or in the email signature.
+
+- Your patch did many different things all at once, making it difficult
+  to review.  All Linux kernel patches need to only do one thing at a
+  time.  If you need to do multiple things (such as clean up all coding
+  style issues in a file/driver), do it in a sequence of patches, each
+  one doing only one thing.  This will make it easier to review the
+  patches to ensure that they are correct, and to help alleviate any
+  merge issues that larger patches can cause.
+
+- You did not specify a description of why the patch is needed, or
+  possibly, any description at all, in the email body.  Please read the
+  section entitled "The canonical patch format" in the kernel file,
+  Documentation/SubmittingPatches for what is needed in order to
+  properly describe the change.
+
+- You did not write a descriptive Subject: for the patch, allowing Greg,
+  and everyone else, to know what this patch is all about.  Please read
+  the section entitled "The canonical patch format" in the kernel file,
+  Documentation/SubmittingPatches for what a proper Subject: line should
+  look like.
+
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/SubmittingPatches for what needs to be done
+  here to properly describe this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot

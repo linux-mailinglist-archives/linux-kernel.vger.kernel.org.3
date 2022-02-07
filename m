@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C42604AB9FC
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:26:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A2984ABCDD
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:50:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382488AbiBGLTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:19:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51888 "EHLO
+        id S1388112AbiBGLm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:42:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358086AbiBGLOc (ORCPT
+        with ESMTP id S1385612AbiBGLcB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:14:32 -0500
+        Mon, 7 Feb 2022 06:32:01 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D124C03F91E;
-        Mon,  7 Feb 2022 03:14:13 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79C4DC03CA49;
+        Mon,  7 Feb 2022 03:31:09 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9B210B81158;
-        Mon,  7 Feb 2022 11:14:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA124C004E1;
-        Mon,  7 Feb 2022 11:14:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3E159B80EBD;
+        Mon,  7 Feb 2022 11:31:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A95CC004E1;
+        Mon,  7 Feb 2022 11:31:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232449;
-        bh=p9gzYhntkEFFU0kZCVkx2X3WS7L38CrCbtyOn9AY4Z0=;
+        s=korg; t=1644233467;
+        bh=OOrci6zsJTgNVekK33PRhoxSHZ4Cd74TJOKyCSGkGLA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dc3UTnCZ1AFRGMcalLjU/nRVy2TC++WKa8PifD+bHbHMyh579kA94mMjm1dzS0SvM
-         Rv0mTt8zwL9nCLxQNpdSy/ycOdbpabGedqfBm/U5eAn50m6H8yUcSLYk4kt/eZZ3gW
-         OvLeIzmzMg0AoiHKPpAlsTOivIFf+H2YkwfLDPGQ=
+        b=xqs8VEO2XbAtpdbdgmxIuQJ+mid9ZZWNHVkkh2CZumU7zbcuAkaRm7nD2hTP4tlJW
+         EDZ4niGYFjFVJ/iiSxldY1qcAX2c6913eIYFfUiRf0CYw2ufL+RgH29LHJcjeJjkgX
+         x1QHuztrcbY4EUSFm6HQmRg5lqITBdxFne/TKmVk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, DocMAX <mail@vacharakis.de>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH 4.19 13/86] usb-storage: Add unusual-devs entry for VL817 USB-SATA bridge
+        stable@vger.kernel.org,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Lukas Wunner <lukas@wunner.de>, Mark Brown <broonie@kernel.org>
+Subject: [PATCH 5.16 005/126] spi: stm32-qspi: Update spi registering
 Date:   Mon,  7 Feb 2022 12:05:36 +0100
-Message-Id: <20220207103757.994684774@linuxfoundation.org>
+Message-Id: <20220207103804.249514249@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103757.550973048@linuxfoundation.org>
-References: <20220207103757.550973048@linuxfoundation.org>
+In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
+References: <20220207103804.053675072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,56 +55,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alan Stern <stern@rowland.harvard.edu>
+From: Patrice Chotard <patrice.chotard@foss.st.com>
 
-commit 5b67b315037250a61861119683e7fcb509deea25 upstream.
+commit e4d63473d3110afd170e6e0e48494d3789d26136 upstream.
 
-Two people have reported (and mentioned numerous other reports on the
-web) that VIA's VL817 USB-SATA bridge does not work with the uas
-driver.  Typical log messages are:
+Some device driver need to communicate to qspi device during the remove
+process, qspi controller must be functional when spi_unregister_master()
+is called.
 
-[ 3606.232149] sd 14:0:0:0: [sdg] tag#2 uas_zap_pending 0 uas-tag 1 inflight: CMD
-[ 3606.232154] sd 14:0:0:0: [sdg] tag#2 CDB: Write(16) 8a 00 00 00 00 00 18 0c c9 80 00 00 00 80 00 00
-[ 3606.306257] usb 4-4.4: reset SuperSpeed Plus Gen 2x1 USB device number 11 using xhci_hcd
-[ 3606.328584] scsi host14: uas_eh_device_reset_handler success
+To ensure this, replace devm_spi_register_master() by spi_register_master()
+and spi_unregister_master() is called directly in .remove callback before
+stopping the qspi controller.
 
-Surprisingly, the devices do seem to work okay for some other people.
-The cause of the differing behaviors is not known.
+This issue was put in evidence using kernel v5.11 and later
+with a spi-nor which supports the software reset feature introduced
+by commit d73ee7534cc5 ("mtd: spi-nor: core: perform a Soft Reset on
+shutdown")
 
-In the hope of getting the devices to work for the most users, even at
-the possible cost of degraded performance for some, this patch adds an
-unusual_devs entry for the VL817 to block it from binding to the uas
-driver by default.  Users will be able to override this entry by means
-of a module parameter, if they want.
+Fixes: c530cd1d9d5e ("spi: spi-mem: add stm32 qspi controller")
 
-CC: <stable@vger.kernel.org>
-Reported-by: DocMAX <mail@vacharakis.de>
-Reported-and-tested-by: Thomas Weißschuh <linux@weissschuh.net>
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-Link: https://lore.kernel.org/r/Ye8IsK2sjlEv1rqU@rowland.harvard.edu
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Cc: <stable@vger.kernel.org> # 5.8.x
+Reviewed-by: Lukas Wunner <lukas@wunner.de>
+Link: https://lore.kernel.org/r/20220117121744.29729-1-patrice.chotard@foss.st.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/storage/unusual_devs.h |   10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/spi/spi-stm32-qspi.c |   47 +++++++++++++++----------------------------
+ 1 file changed, 17 insertions(+), 30 deletions(-)
 
---- a/drivers/usb/storage/unusual_devs.h
-+++ b/drivers/usb/storage/unusual_devs.h
-@@ -2301,6 +2301,16 @@ UNUSUAL_DEV(  0x2027, 0xa001, 0x0000, 0x
- 		USB_SC_DEVICE, USB_PR_DEVICE, usb_stor_euscsi_init,
- 		US_FL_SCM_MULT_TARG ),
+--- a/drivers/spi/spi-stm32-qspi.c
++++ b/drivers/spi/spi-stm32-qspi.c
+@@ -688,7 +688,7 @@ static int stm32_qspi_probe(struct platf
+ 	struct resource *res;
+ 	int ret, irq;
  
-+/*
-+ * Reported by DocMAX <mail@vacharakis.de>
-+ * and Thomas Weißschuh <linux@weissschuh.net>
-+ */
-+UNUSUAL_DEV( 0x2109, 0x0715, 0x9999, 0x9999,
-+		"VIA Labs, Inc.",
-+		"VL817 SATA Bridge",
-+		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-+		US_FL_IGNORE_UAS),
-+
- UNUSUAL_DEV( 0x2116, 0x0320, 0x0001, 0x0001,
- 		"ST",
- 		"2A",
+-	ctrl = spi_alloc_master(dev, sizeof(*qspi));
++	ctrl = devm_spi_alloc_master(dev, sizeof(*qspi));
+ 	if (!ctrl)
+ 		return -ENOMEM;
+ 
+@@ -697,58 +697,46 @@ static int stm32_qspi_probe(struct platf
+ 
+ 	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "qspi");
+ 	qspi->io_base = devm_ioremap_resource(dev, res);
+-	if (IS_ERR(qspi->io_base)) {
+-		ret = PTR_ERR(qspi->io_base);
+-		goto err_master_put;
+-	}
++	if (IS_ERR(qspi->io_base))
++		return PTR_ERR(qspi->io_base);
+ 
+ 	qspi->phys_base = res->start;
+ 
+ 	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "qspi_mm");
+ 	qspi->mm_base = devm_ioremap_resource(dev, res);
+-	if (IS_ERR(qspi->mm_base)) {
+-		ret = PTR_ERR(qspi->mm_base);
+-		goto err_master_put;
+-	}
++	if (IS_ERR(qspi->mm_base))
++		return PTR_ERR(qspi->mm_base);
+ 
+ 	qspi->mm_size = resource_size(res);
+-	if (qspi->mm_size > STM32_QSPI_MAX_MMAP_SZ) {
+-		ret = -EINVAL;
+-		goto err_master_put;
+-	}
++	if (qspi->mm_size > STM32_QSPI_MAX_MMAP_SZ)
++		return -EINVAL;
+ 
+ 	irq = platform_get_irq(pdev, 0);
+-	if (irq < 0) {
+-		ret = irq;
+-		goto err_master_put;
+-	}
++	if (irq < 0)
++		return irq;
+ 
+ 	ret = devm_request_irq(dev, irq, stm32_qspi_irq, 0,
+ 			       dev_name(dev), qspi);
+ 	if (ret) {
+ 		dev_err(dev, "failed to request irq\n");
+-		goto err_master_put;
++		return ret;
+ 	}
+ 
+ 	init_completion(&qspi->data_completion);
+ 	init_completion(&qspi->match_completion);
+ 
+ 	qspi->clk = devm_clk_get(dev, NULL);
+-	if (IS_ERR(qspi->clk)) {
+-		ret = PTR_ERR(qspi->clk);
+-		goto err_master_put;
+-	}
++	if (IS_ERR(qspi->clk))
++		return PTR_ERR(qspi->clk);
+ 
+ 	qspi->clk_rate = clk_get_rate(qspi->clk);
+-	if (!qspi->clk_rate) {
+-		ret = -EINVAL;
+-		goto err_master_put;
+-	}
++	if (!qspi->clk_rate)
++		return -EINVAL;
+ 
+ 	ret = clk_prepare_enable(qspi->clk);
+ 	if (ret) {
+ 		dev_err(dev, "can not enable the clock\n");
+-		goto err_master_put;
++		return ret;
+ 	}
+ 
+ 	rstc = devm_reset_control_get_exclusive(dev, NULL);
+@@ -784,7 +772,7 @@ static int stm32_qspi_probe(struct platf
+ 	pm_runtime_enable(dev);
+ 	pm_runtime_get_noresume(dev);
+ 
+-	ret = devm_spi_register_master(dev, ctrl);
++	ret = spi_register_master(ctrl);
+ 	if (ret)
+ 		goto err_pm_runtime_free;
+ 
+@@ -806,8 +794,6 @@ err_dma_free:
+ 	stm32_qspi_dma_free(qspi);
+ err_clk_disable:
+ 	clk_disable_unprepare(qspi->clk);
+-err_master_put:
+-	spi_master_put(qspi->ctrl);
+ 
+ 	return ret;
+ }
+@@ -817,6 +803,7 @@ static int stm32_qspi_remove(struct plat
+ 	struct stm32_qspi *qspi = platform_get_drvdata(pdev);
+ 
+ 	pm_runtime_get_sync(qspi->dev);
++	spi_unregister_master(qspi->ctrl);
+ 	/* disable qspi */
+ 	writel_relaxed(0, qspi->io_base + QSPI_CR);
+ 	stm32_qspi_dma_free(qspi);
 
 

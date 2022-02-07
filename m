@@ -2,69 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 197444ACD5C
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:08:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65C584ACD08
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:07:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345176AbiBHBEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 20:04:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41210 "EHLO
+        id S1345194AbiBHBEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 20:04:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241127AbiBGX1c (ORCPT
+        with ESMTP id S236779AbiBGX2E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 18:27:32 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AFD5C061355
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 15:27:32 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id e6so15696616pfc.7
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 15:27:32 -0800 (PST)
+        Mon, 7 Feb 2022 18:28:04 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5724C061355;
+        Mon,  7 Feb 2022 15:28:03 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id om7so1288966pjb.5;
+        Mon, 07 Feb 2022 15:28:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KVQbHmXJXEUUK9WaxnXa944qWSKejG3/VlU2/JcjjTQ=;
-        b=oigxKzpVr6LQrOlqPqsrESAfYtNuXliH+BIwZnOzZdGHwV6JN4vZYwBvhFAyWakLet
-         r6cH6XyH7MipymQrkM8nQOGqn5dPjcKj5FOsJIcZBCruwbtmmh7UCyMwe0iY8zVL92Rt
-         ObpIND3a1D/zgCy4wnxvKwi31vmeVJO5ZqSj0lxWR/mS+eBBD9kL1fIx5JpSP8OgMpX0
-         cpf09haXReN764dHKN+DzKluMsgogKinieHuIZAShW6wCvivRn4pkmTMiuYe05mQLeKv
-         eGWDb2sJAxBw3olVoqAiX0WFiFcf0X+mRVe9qr8XdXisQeOwH4aPY9aYq9Mz6mfoTAQ7
-         bh3w==
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=wMCF6rrG4H4mtR75i+Ow3RIxozoNm0ZBZY8u8XRb4YI=;
+        b=FUfAOdIhJc/NIZaF7i6SnkgHZUqRweh3C67UTQ0+Y9pki22+ZtNB7min1qoUAIdleb
+         QQ3WMe9ppSf9nVF8/rWzFkYC/DemMLlUGzlwLM2qsS+VTl3J3SlP2DKlMPUtVUhyCe1v
+         OxStvo3MwAmq/IE2pyosgPvKco1i51JvFFwxADCmenMzPJg1NRS8zGaeTnH0HK3RhMN9
+         AeA/IvO9EZJpyovTWWQAfDb7hUGe7U/fZKEdXM7qBEFqcItHRbJgnLraex/tRnxtjagH
+         Yg1NXXT15ZT/71E71nB8dUCp9+9FQXFG1oegbw91QuRc2ZtiJBEAhmnFW4cd9eVlt4Fs
+         qbrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KVQbHmXJXEUUK9WaxnXa944qWSKejG3/VlU2/JcjjTQ=;
-        b=YCiwd0rwZNZMmNClQ49vRzBR7tqeF1YO6r64B0IhGSsrFgxFoh18zZfSCCCzEGrAlG
-         awJinZAIlCa9Zb1jvNDuk5DzFFwcJ4RVGE1Ys8qp2hZX776SyrKdJPsPHIwvHXsXKicy
-         /wUXzs4RZF/EGVueI59LVdEvnLn8XEBoS2gaacStpF7da1c5OOiFDobUKw0LykYKWhp5
-         cYzocXLMMDJrKHD/WostIGjOSBDVkB7wWePj0SOMp/4RrK8ktsFqpkB0+xQ+vwLO75c8
-         FQpczIhmrivTPfJBQ4sd51Fx3sIk6pS991AlHSzwyUSTIawq9/eIrN9ip/qgr6N+dWd7
-         ujrA==
-X-Gm-Message-State: AOAM532GLlVaGdXDFdPc88Fhf2/stQ/ZgXkLNz4FQIoLg/XNg4YyXcCa
-        r2b/hARrO+piKU3Bbl3yj59LFw==
-X-Google-Smtp-Source: ABdhPJxldfR2n4p4M6GdeB1cOtw9U8ns9csEpIPbsw4cgGUQ5XO6H4W53T8JzXmu6uvhJD0dj8eBPA==
-X-Received: by 2002:a63:ee01:: with SMTP id e1mr1365492pgi.508.1644276451628;
-        Mon, 07 Feb 2022 15:27:31 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id k9sm12415190pfi.134.2022.02.07.15.27.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 15:27:31 -0800 (PST)
-Date:   Mon, 7 Feb 2022 23:27:27 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     David Matlack <dmatlack@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, vkuznets@redhat.com
-Subject: Re: [PATCH 00/23] KVM: MMU: MMU role refactoring
-Message-ID: <YgGq31edopd6RMts@google.com>
-References: <20220204115718.14934-1-pbonzini@redhat.com>
- <YgGmgMMR0dBmjW86@google.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=wMCF6rrG4H4mtR75i+Ow3RIxozoNm0ZBZY8u8XRb4YI=;
+        b=d7QVgs3DAVhFLRAuDFNkmRRJNsa3WOLx7dNXduXeQg3eOb9q3/QWwPhAT+DkF7gvc0
+         k8VMV8R6YpOE33r2djhVCsqAhg8PvmxL2Wj6eIGuMD0GBewiZgX3O0x5Hg4VqELSRLLN
+         ntZDkfAy09XqJ4oazzcYzLqVTQKN1TdQIosZokcO7RqywKgwJl1V3qQaSaJZ8jtDdAwB
+         XvF4HoUITJPNf3GBsJKkECJaO3dDxAEDAA04I9Q5qBruI3ohwSD+tuC0iQ+PCBlJPxWZ
+         AqSKG60rySTn/DCkx8ICjogJXf5pXrMzdEXrNEISA7fB4N/omIoornSXtboyw/2IMBls
+         bB/A==
+X-Gm-Message-State: AOAM530V1E+dMeHtH5EB5wwqByEjNLJBg0frT3PTpSfZbEC8jQoUacTo
+        30POuQja+WAZT9fjFVXjAVM=
+X-Google-Smtp-Source: ABdhPJwQ05+7spxyqqMOdTZMnDmFos3xpomIyWBNabfORn7hpQFI0tMroajmfSyqOs8P7RR7NhQ+4A==
+X-Received: by 2002:a17:903:1105:: with SMTP id n5mr1706476plh.99.1644276483121;
+        Mon, 07 Feb 2022 15:28:03 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id mz4sm395744pjb.53.2022.02.07.15.27.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Feb 2022 15:28:02 -0800 (PST)
+Subject: Re: [PATCH 5.4 00/44] 5.4.178-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220207103753.155627314@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <2d0979d7-ecc1-3ff0-6bb7-c4295f3aeb7c@gmail.com>
+Date:   Mon, 7 Feb 2022 15:27:32 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YgGmgMMR0dBmjW86@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+In-Reply-To: <20220207103753.155627314@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,52 +78,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022, David Matlack wrote:
-> On Fri, Feb 04, 2022 at 06:56:55AM -0500, Paolo Bonzini wrote:
-> > The TDP MMU has a performance regression compared to the legacy
-> > MMU when CR0 changes often.  This was reported for the grsecurity
-> > kernel, which uses CR0.WP to implement kernel W^X.  In that case,
-> > each change to CR0.WP unloads the MMU and causes a lot of unnecessary
-> > work.  When running nested, this can even cause the L1 to hardly
-> > make progress, as the L0 hypervisor it is overwhelmed by the amount
-> > of MMU work that is needed.
-> > 
-> > The root cause of the issue is that the "MMU role" in KVM is a mess
-> > that mixes the CPU setup (CR0/CR4/EFER, SMM, guest mode, etc.)
-> > and the shadow page table format.  Whenever something is different
-> > between the MMU and the CPU, it is stored as an extra field in struct
-> > kvm_mmu---and for extra bonus complication, sometimes the same thing
-> > is stored in both the role and an extra field.
-> > 
-> > So, this is the "no functional change intended" part of the changes
-> > required to fix the performance regression.  It separates neatly
-> > the shadow page table format ("MMU role") from the guest page table
-> > format ("CPU role"), and removes the duplicate fields.
+On 2/7/22 3:06 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.178 release.
+> There are 44 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> What do you think about calling this the guest_role instead of cpu_role?
-> There is a bit of a precedent for using "guest" instead of "cpu" already
-> for this type of concept (e.g. guest_walker), and I find it more
-> intuitive.
+> Responses should be made by Wed, 09 Feb 2022 10:37:42 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.178-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Haven't looked at the series yet, but I'd prefer not to use guest_role, it's
-too similar to is_guest_mode() and kvm_mmu_role.guest_mode.  E.g. we'd end up with
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
 
-  static union kvm_mmu_role kvm_calc_guest_role(struct kvm_vcpu *vcpu,
-  					      const struct kvm_mmu_role_regs *regs)
-  {
-	union kvm_mmu_role role = {0};
-
-	role.base.access = ACC_ALL;
-	role.base.smm = is_smm(vcpu);
-	role.base.guest_mode = is_guest_mode(vcpu);
-	role.base.direct = !____is_cr0_pg(regs);
-
-	...
-  }
-
-and possibly
-
-	if (guest_role.guest_mode)
-		...
-
-which would be quite messy.  Maybe vcpu_role if cpu_role isn't intuitive?
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

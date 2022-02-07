@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 787054ABE23
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:05:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA77B4ABE47
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:09:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391112AbiBGL6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:58:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44920 "EHLO
+        id S1391396AbiBGMBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 07:01:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385425AbiBGLbu (ORCPT
+        with ESMTP id S1386786AbiBGLgs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:31:50 -0500
+        Mon, 7 Feb 2022 06:36:48 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C53EC03FEEE;
-        Mon,  7 Feb 2022 03:30:20 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 612B4C043188;
+        Mon,  7 Feb 2022 03:36:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 00C14B811B2;
-        Mon,  7 Feb 2022 11:30:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44884C004E1;
-        Mon,  7 Feb 2022 11:30:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 25A07B80EBD;
+        Mon,  7 Feb 2022 11:36:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D4D2C004E1;
+        Mon,  7 Feb 2022 11:36:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233417;
-        bh=DFsm60ujwlq6xrmRluf3V0gZYV+0uKA4KIhEf3z/2VY=;
+        s=korg; t=1644233805;
+        bh=8QV6oXiFaB4PUA8JqIhf7y6Mx274xZaFC/RUXpTItBc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fmIeJk6CfoGr0ULvTUvQGKis4dB5JsC8aQeVFX8HRa6hOa5lfQRjKpZdEuEcgjjt1
-         zwZsZV66GMHZz+mjjNF88RVYMptQfPfpuC0aas/gUUQ54sdC0I713DlO5A2jexCTUS
-         aAQ6m8cSTN/OOUlnVTZgcJkOACwVzNoyAXgkZouM=
+        b=fsxEVEihRELWBcOnRSCsR3mal7aBaDAOcKFbeyPMLjmSDOaDQ/gq5nPgwMtevj9CC
+         f8x1JoOjXTk1uxNW3fwSblZ5UapIHYQrZNfOB1wW8lnYb/sL2FioD9RzIHYDHJJuiY
+         ez6zOllcYjmyISOrPcqI87GWYbEP/66ZapRbr2nM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Riwen Lu <luriwen@kylinos.cn>,
-        Eric Wong <e@80x24.org>,
-        =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: [PATCH 5.15 091/110] rtc: cmos: Evaluate century appropriate
+        stable@vger.kernel.org, SASANO Takayoshi <uaa@mx5.nisiq.net>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH 5.16 093/126] pinctrl: sunxi: Fix H616 I2S3 pin data
 Date:   Mon,  7 Feb 2022 12:07:04 +0100
-Message-Id: <20220207103805.483671403@linuxfoundation.org>
+Message-Id: <20220207103807.297452660@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
-References: <20220207103802.280120990@linuxfoundation.org>
+In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
+References: <20220207103804.053675072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,43 +57,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Riwen Lu <luriwen@kylinos.cn>
+From: Andre Przywara <andre.przywara@arm.com>
 
-commit ff164ae39b82ee483b24579c8e22a13a8ce5bd04 upstream.
+commit 1fd6bb5b47a65eacb063b37e6fa6df2b8fa92959 upstream.
 
-There's limiting the year to 2069. When setting the rtc year to 2070,
-reading it returns 1970. Evaluate century starting from 19 to count the
-correct year.
+Two bugs have sneaked in the H616 pinctrl data:
+- PH9 uses the mux value of 0x3 twice (one should be 0x5 instead)
+- PH8 and PH9 use the "i2s3" function name twice in each pin
 
-$ sudo date -s 20700106
-Mon 06 Jan 2070 12:00:00 AM CST
-$ sudo hwclock -w
-$ sudo hwclock -r
-1970-01-06 12:00:49.604968+08:00
+For the double pin name we use the same trick we pulled for i2s0: append
+the pin function to the group name to designate the special function.
 
-Fixes: 2a4daadd4d3e5071 ("rtc: cmos: ignore bogus century byte")
-
-Signed-off-by: Riwen Lu <luriwen@kylinos.cn>
-Acked-by: Eric Wong <e@80x24.org>
-Reviewed-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Link: https://lore.kernel.org/r/20220106084609.1223688-1-luriwen@kylinos.cn
-Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl> # preparation for stable
+Fixes: 25adc29407fb ("pinctrl: sunxi: Add support for the Allwinner H616 pin controller")
+Reported-by: SASANO Takayoshi <uaa@mx5.nisiq.net>
+Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Reviewed-by: Samuel Holland <samuel@sholland.org>
+Link: https://lore.kernel.org/r/20220105172952.23347-1-andre.przywara@arm.com
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/rtc/rtc-mc146818-lib.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/pinctrl/sunxi/pinctrl-sun50i-h616.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
---- a/drivers/rtc/rtc-mc146818-lib.c
-+++ b/drivers/rtc/rtc-mc146818-lib.c
-@@ -104,7 +104,7 @@ again:
- 	time->tm_year += real_year - 72;
- #endif
- 
--	if (century > 20)
-+	if (century > 19)
- 		time->tm_year += (century - 19) * 100;
- 
- 	/*
+--- a/drivers/pinctrl/sunxi/pinctrl-sun50i-h616.c
++++ b/drivers/pinctrl/sunxi/pinctrl-sun50i-h616.c
+@@ -363,16 +363,16 @@ static const struct sunxi_desc_pin h616_
+ 		  SUNXI_FUNCTION(0x0, "gpio_in"),
+ 		  SUNXI_FUNCTION(0x1, "gpio_out"),
+ 		  SUNXI_FUNCTION(0x2, "uart2"),		/* CTS */
+-		  SUNXI_FUNCTION(0x3, "i2s3"),	/* DO0 */
++		  SUNXI_FUNCTION(0x3, "i2s3_dout0"),	/* DO0 */
+ 		  SUNXI_FUNCTION(0x4, "spi1"),		/* MISO */
+-		  SUNXI_FUNCTION(0x5, "i2s3"),	/* DI1 */
++		  SUNXI_FUNCTION(0x5, "i2s3_din1"),	/* DI1 */
+ 		  SUNXI_FUNCTION_IRQ_BANK(0x6, 6, 8)),	/* PH_EINT8 */
+ 	SUNXI_PIN(SUNXI_PINCTRL_PIN(H, 9),
+ 		  SUNXI_FUNCTION(0x0, "gpio_in"),
+ 		  SUNXI_FUNCTION(0x1, "gpio_out"),
+-		  SUNXI_FUNCTION(0x3, "i2s3"),	/* DI0 */
++		  SUNXI_FUNCTION(0x3, "i2s3_din0"),	/* DI0 */
+ 		  SUNXI_FUNCTION(0x4, "spi1"),		/* CS1 */
+-		  SUNXI_FUNCTION(0x3, "i2s3"),	/* DO1 */
++		  SUNXI_FUNCTION(0x5, "i2s3_dout1"),	/* DO1 */
+ 		  SUNXI_FUNCTION_IRQ_BANK(0x6, 6, 9)),	/* PH_EINT9 */
+ 	SUNXI_PIN(SUNXI_PINCTRL_PIN(H, 10),
+ 		  SUNXI_FUNCTION(0x0, "gpio_in"),
 
 

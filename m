@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 933C94AB962
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:23:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3C2C4ABC6F
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:48:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353619AbiBGLMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:12:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48168 "EHLO
+        id S1386756AbiBGLge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:36:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238814AbiBGLIu (ORCPT
+        with ESMTP id S1380400AbiBGLZx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:08:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56493C043181;
-        Mon,  7 Feb 2022 03:08:49 -0800 (PST)
+        Mon, 7 Feb 2022 06:25:53 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E87C03E946;
+        Mon,  7 Feb 2022 03:25:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 11043B81158;
-        Mon,  7 Feb 2022 11:08:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35CDCC004E1;
-        Mon,  7 Feb 2022 11:08:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B7D7E6135A;
+        Mon,  7 Feb 2022 11:25:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A396BC340EB;
+        Mon,  7 Feb 2022 11:25:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232126;
-        bh=kFoh9Zc4+HnA41aDNdolCCovmrIzEChsHplzS5kQCkI=;
+        s=korg; t=1644233127;
+        bh=Wvu9U0FC7Jn2345zfBPmgze6YuQzHKCpO7jO646nQC4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NkmFjDsK+3++aelMdO2SL9Z0bjm507UPUVb3SlgkSzOeSWh0tDDD7cjMw0q59worJ
-         9nCEJbN+x8EMwzkabdkRrU1CWwW5OsIHDzpjzhgZREdjWPzKnn6Il/QSSHwtxs7J8P
-         zgYGFn9WLut0u2GHuudhxh5SuzKfRsYE39nELPN8=
+        b=opbpBoAxS4VhIspCSbcwW6VjZSF5plrgY3DzWwYWb75j4c+LrOeEec3KPpQeWru7n
+         LEzncAWA0ShYpslJ7JVJLkm9dd3rXEdtAr7WGP0pT5tVwkN3MhD5+A65DbqFgmjg4h
+         6WTtUb2xc3epMycRNcyDR2R9PBYaS0Q22NpdFjDI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Ray Che <xijiache@gmail.com>, David Ahern <dsahern@kernel.org>,
-        Geoff Alexander <alexandg@cs.unm.edu>,
-        Willy Tarreau <w@1wt.eu>, Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 25/48] ipv4: tcp: send zero IPID in SYNACK messages
+        stable@vger.kernel.org, Aun-Ali Zaidi <admin@kodeit.net>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Aditya Garg <gargaditya08@live.com>,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: [PATCH 5.15 025/110] drm/amd/display: Force link_rate as LINK_RATE_RBR2 for 2018 15" Apple Retina panels
 Date:   Mon,  7 Feb 2022 12:05:58 +0100
-Message-Id: <20220207103753.162252683@linuxfoundation.org>
+Message-Id: <20220207103803.101677250@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103752.341184175@linuxfoundation.org>
-References: <20220207103752.341184175@linuxfoundation.org>
+In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
+References: <20220207103802.280120990@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,72 +56,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Aun-Ali Zaidi <admin@kodeit.net>
 
-[ Upstream commit 970a5a3ea86da637471d3cd04d513a0755aba4bf ]
+commit 30fbce374745a9c6af93c775a5ac49a97f822fda upstream.
 
-In commit 431280eebed9 ("ipv4: tcp: send zero IPID for RST and
-ACK sent in SYN-RECV and TIME-WAIT state") we took care of some
-ctl packets sent by TCP.
+The eDP link rate reported by the DP_MAX_LINK_RATE dpcd register (0xa) is
+contradictory to the highest rate supported reported by
+EDID (0xc = LINK_RATE_RBR2). The effects of this compounded with commit
+'4a8ca46bae8a ("drm/amd/display: Default max bpc to 16 for eDP")' results
+in no display modes being found and a dark panel.
 
-It turns out we need to use a similar strategy for SYNACK packets.
+For now, simply force the maximum supported link rate for the eDP attached
+2018 15" Apple Retina panels.
 
-By default, they carry IP_DF and IPID==0, but there are ways
-to ask them to use the hashed IP ident generator and thus
-be used to build off-path attacks.
-(Ref: Off-Path TCP Exploits of the Mixed IPID Assignment)
+Additionally, we must also check the firmware revision since the device ID
+reported by the DPCD is identical to that of the more capable 16,1,
+incorrectly quirking it. We also use said firmware check to quirk the
+refreshed 15,1 models with Vega graphics as they use a slightly newer
+firmware version.
 
-One of this way is to force (before listener is started)
-echo 1 >/proc/sys/net/ipv4/ip_no_pmtu_disc
-
-Another way is using forged ICMP ICMP_FRAG_NEEDED
-with a very small MTU (like 68) to force a false return from
-ip_dont_fragment()
-
-In this patch, ip_build_and_send_pkt() uses the following
-heuristics.
-
-1) Most SYNACK packets are smaller than IPV4_MIN_MTU and therefore
-can use IP_DF regardless of the listener or route pmtu setting.
-
-2) In case the SYNACK packet is bigger than IPV4_MIN_MTU,
-we use prandom_u32() generator instead of the IPv4 hashed ident one.
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Reported-by: Ray Che <xijiache@gmail.com>
-Reviewed-by: David Ahern <dsahern@kernel.org>
-Cc: Geoff Alexander <alexandg@cs.unm.edu>
-Cc: Willy Tarreau <w@1wt.eu>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Tested-by: Aun-Ali Zaidi <admin@kodeit.net>
+Reviewed-by: Harry Wentland <harry.wentland@amd.com>
+Signed-off-by: Aun-Ali Zaidi <admin@kodeit.net>
+Signed-off-by: Aditya Garg <gargaditya08@live.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv4/ip_output.c |   11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c |   20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
---- a/net/ipv4/ip_output.c
-+++ b/net/ipv4/ip_output.c
-@@ -159,12 +159,19 @@ int ip_build_and_send_pkt(struct sk_buff
- 	iph->daddr    = (opt && opt->opt.srr ? opt->opt.faddr : daddr);
- 	iph->saddr    = saddr;
- 	iph->protocol = sk->sk_protocol;
--	if (ip_dont_fragment(sk, &rt->dst)) {
-+	/* Do not bother generating IPID for small packets (eg SYNACK) */
-+	if (skb->len <= IPV4_MIN_MTU || ip_dont_fragment(sk, &rt->dst)) {
- 		iph->frag_off = htons(IP_DF);
- 		iph->id = 0;
- 	} else {
- 		iph->frag_off = 0;
--		__ip_select_ident(net, iph, 1);
-+		/* TCP packets here are SYNACK with fat IPv4/TCP options.
-+		 * Avoid using the hashed IP ident generator.
-+		 */
-+		if (sk->sk_protocol == IPPROTO_TCP)
-+			iph->id = (__force __be16)prandom_u32();
-+		else
-+			__ip_select_ident(net, iph, 1);
- 	}
+--- a/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
++++ b/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
+@@ -3913,6 +3913,26 @@ static bool retrieve_link_cap(struct dc_
+ 		dp_hw_fw_revision.ieee_fw_rev,
+ 		sizeof(dp_hw_fw_revision.ieee_fw_rev));
  
- 	if (opt && opt->opt.optlen) {
++	/* Quirk for Apple MBP 2018 15" Retina panels: wrong DP_MAX_LINK_RATE */
++	{
++		uint8_t str_mbp_2018[] = { 101, 68, 21, 103, 98, 97 };
++		uint8_t fwrev_mbp_2018[] = { 7, 4 };
++		uint8_t fwrev_mbp_2018_vega[] = { 8, 4 };
++
++		/* We also check for the firmware revision as 16,1 models have an
++		 * identical device id and are incorrectly quirked otherwise.
++		 */
++		if ((link->dpcd_caps.sink_dev_id == 0x0010fa) &&
++		    !memcmp(link->dpcd_caps.sink_dev_id_str, str_mbp_2018,
++			     sizeof(str_mbp_2018)) &&
++		    (!memcmp(link->dpcd_caps.sink_fw_revision, fwrev_mbp_2018,
++			     sizeof(fwrev_mbp_2018)) ||
++		    !memcmp(link->dpcd_caps.sink_fw_revision, fwrev_mbp_2018_vega,
++			     sizeof(fwrev_mbp_2018_vega)))) {
++			link->reported_link_cap.link_rate = LINK_RATE_RBR2;
++		}
++	}
++
+ 	memset(&link->dpcd_caps.dsc_caps, '\0',
+ 			sizeof(link->dpcd_caps.dsc_caps));
+ 	memset(&link->dpcd_caps.fec_cap, '\0', sizeof(link->dpcd_caps.fec_cap));
 
 

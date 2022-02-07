@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED7ED4ABA27
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:27:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC9C24ABBC3
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:39:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382821AbiBGLUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:20:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53886 "EHLO
+        id S1385735AbiBGLcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:32:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378063AbiBGLPn (ORCPT
+        with ESMTP id S1383021AbiBGLVZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:15:43 -0500
+        Mon, 7 Feb 2022 06:21:25 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CE2FC0401CE;
-        Mon,  7 Feb 2022 03:15:23 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D9B0C03FECD;
+        Mon,  7 Feb 2022 03:21:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BEB94B811AF;
-        Mon,  7 Feb 2022 11:15:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7FEFC004E1;
-        Mon,  7 Feb 2022 11:15:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 69E04B811AF;
+        Mon,  7 Feb 2022 11:21:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F295C004E1;
+        Mon,  7 Feb 2022 11:21:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232521;
-        bh=F1s5gUhACbxYTgy3q4vT3rcy4q4s2APu8H8KOKKraCE=;
+        s=korg; t=1644232862;
+        bh=vhAEzco/UHCmcxF7QDa7KCLTLJqPXpSuTCLSQsFmnXo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZGqUVtfHTnNGBdpkKlCwHD16JczQ8bUiaGZ4dSCGWZZ1b2IRCp0K/GEqd8W57nAq2
-         qW4miE4gpPQrZSCAwnqvzOmfC5qsA/PQDl/eNyubxlBHEWhFZ68I6daIfyt6OIr+os
-         L2MY9ZyMsdmTOLGgF+AzOUaevAlew+SyOpeuVUY0=
+        b=ibUbqN6flqoJa0wJYlkzkYUqCCucIv5B2+ZL0+kKJCkM+oV6X+MZyC/XWhqddX4G7
+         U8X0aHV4V0i+oKsRNcUZaOQgbl4GZ4VuN6PVWSvDGicsRZKufTmLYLr/kjbUp3I3Ft
+         iNDjdb1LVsL454ZlML/eN5c9Ck/Zc7sT/hRuJz3I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        syzbot <syzkaller@googlegroups.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.19 37/86] ipv6: annotate accesses to fn->fn_sernum
+        stable@vger.kernel.org, Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Richard Guy Briggs <rgb@redhat.com>,
+        Paul Moore <paul@paul-moore.com>
+Subject: [PATCH 5.10 02/74] audit: improve audit queue handling when "audit=1" on cmdline
 Date:   Mon,  7 Feb 2022 12:06:00 +0100
-Message-Id: <20220207103758.744907067@linuxfoundation.org>
+Message-Id: <20220207103757.311948583@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103757.550973048@linuxfoundation.org>
-References: <20220207103757.550973048@linuxfoundation.org>
+In-Reply-To: <20220207103757.232676988@linuxfoundation.org>
+References: <20220207103757.232676988@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,188 +55,207 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Paul Moore <paul@paul-moore.com>
 
-commit aafc2e3285c2d7a79b7ee15221c19fbeca7b1509 upstream.
+commit f26d04331360d42dbd6b58448bd98e4edbfbe1c5 upstream.
 
-struct fib6_node's fn_sernum field can be
-read while other threads change it.
+When an admin enables audit at early boot via the "audit=1" kernel
+command line the audit queue behavior is slightly different; the
+audit subsystem goes to greater lengths to avoid dropping records,
+which unfortunately can result in problems when the audit daemon is
+forcibly stopped for an extended period of time.
 
-Add READ_ONCE()/WRITE_ONCE() annotations.
+This patch makes a number of changes designed to improve the audit
+queuing behavior so that leaving the audit daemon in a stopped state
+for an extended period does not cause a significant impact to the
+system.
 
-Do not change existing smp barriers in fib6_get_cookie_safe()
-and __fib6_update_sernum_upto_root()
+- kauditd_send_queue() is now limited to looping through the
+  passed queue only once per call.  This not only prevents the
+  function from looping indefinitely when records are returned
+  to the current queue, it also allows any recovery handling in
+  kauditd_thread() to take place when kauditd_send_queue()
+  returns.
 
-syzbot reported:
+- Transient netlink send errors seen as -EAGAIN now cause the
+  record to be returned to the retry queue instead of going to
+  the hold queue.  The intention of the hold queue is to store,
+  perhaps for an extended period of time, the events which led
+  up to the audit daemon going offline.  The retry queue remains
+  a temporary queue intended to protect against transient issues
+  between the kernel and the audit daemon.
 
-BUG: KCSAN: data-race in fib6_clean_node / inet6_csk_route_socket
+- The retry queue is now limited by the audit_backlog_limit
+  setting, the same as the other queues.  This allows admins
+  to bound the size of all of the audit queues on the system.
 
-write to 0xffff88813df62e2c of 4 bytes by task 1920 on cpu 1:
- fib6_clean_node+0xc2/0x260 net/ipv6/ip6_fib.c:2178
- fib6_walk_continue+0x38e/0x430 net/ipv6/ip6_fib.c:2112
- fib6_walk net/ipv6/ip6_fib.c:2160 [inline]
- fib6_clean_tree net/ipv6/ip6_fib.c:2240 [inline]
- __fib6_clean_all+0x1a9/0x2e0 net/ipv6/ip6_fib.c:2256
- fib6_flush_trees+0x6c/0x80 net/ipv6/ip6_fib.c:2281
- rt_genid_bump_ipv6 include/net/net_namespace.h:488 [inline]
- addrconf_dad_completed+0x57f/0x870 net/ipv6/addrconf.c:4230
- addrconf_dad_work+0x908/0x1170
- process_one_work+0x3f6/0x960 kernel/workqueue.c:2307
- worker_thread+0x616/0xa70 kernel/workqueue.c:2454
- kthread+0x1bf/0x1e0 kernel/kthread.c:359
- ret_from_fork+0x1f/0x30
+- kauditd_rehold_skb() now returns records to the end of the
+  hold queue to ensure ordering is preserved in the face of
+  recent changes to kauditd_send_queue().
 
-read to 0xffff88813df62e2c of 4 bytes by task 15701 on cpu 0:
- fib6_get_cookie_safe include/net/ip6_fib.h:285 [inline]
- rt6_get_cookie include/net/ip6_fib.h:306 [inline]
- ip6_dst_store include/net/ip6_route.h:234 [inline]
- inet6_csk_route_socket+0x352/0x3c0 net/ipv6/inet6_connection_sock.c:109
- inet6_csk_xmit+0x91/0x1e0 net/ipv6/inet6_connection_sock.c:121
- __tcp_transmit_skb+0x1323/0x1840 net/ipv4/tcp_output.c:1402
- tcp_transmit_skb net/ipv4/tcp_output.c:1420 [inline]
- tcp_write_xmit+0x1450/0x4460 net/ipv4/tcp_output.c:2680
- __tcp_push_pending_frames+0x68/0x1c0 net/ipv4/tcp_output.c:2864
- tcp_push+0x2d9/0x2f0 net/ipv4/tcp.c:725
- mptcp_push_release net/mptcp/protocol.c:1491 [inline]
- __mptcp_push_pending+0x46c/0x490 net/mptcp/protocol.c:1578
- mptcp_sendmsg+0x9ec/0xa50 net/mptcp/protocol.c:1764
- inet6_sendmsg+0x5f/0x80 net/ipv6/af_inet6.c:643
- sock_sendmsg_nosec net/socket.c:705 [inline]
- sock_sendmsg net/socket.c:725 [inline]
- kernel_sendmsg+0x97/0xd0 net/socket.c:745
- sock_no_sendpage+0x84/0xb0 net/core/sock.c:3086
- inet_sendpage+0x9d/0xc0 net/ipv4/af_inet.c:834
- kernel_sendpage+0x187/0x200 net/socket.c:3492
- sock_sendpage+0x5a/0x70 net/socket.c:1007
- pipe_to_sendpage+0x128/0x160 fs/splice.c:364
- splice_from_pipe_feed fs/splice.c:418 [inline]
- __splice_from_pipe+0x207/0x500 fs/splice.c:562
- splice_from_pipe fs/splice.c:597 [inline]
- generic_splice_sendpage+0x94/0xd0 fs/splice.c:746
- do_splice_from fs/splice.c:767 [inline]
- direct_splice_actor+0x80/0xa0 fs/splice.c:936
- splice_direct_to_actor+0x345/0x650 fs/splice.c:891
- do_splice_direct+0x106/0x190 fs/splice.c:979
- do_sendfile+0x675/0xc40 fs/read_write.c:1245
- __do_sys_sendfile64 fs/read_write.c:1310 [inline]
- __se_sys_sendfile64 fs/read_write.c:1296 [inline]
- __x64_sys_sendfile64+0x102/0x140 fs/read_write.c:1296
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-value changed: 0x0000026f -> 0x00000271
-
-Reported by Kernel Concurrency Sanitizer on:
-CPU: 0 PID: 15701 Comm: syz-executor.2 Not tainted 5.16.0-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-
-The Fixes tag I chose is probably arbitrary, I do not think
-we need to backport this patch to older kernels.
-
-Fixes: c5cff8561d2d ("ipv6: add rcu grace period before freeing fib6_node")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Link: https://lore.kernel.org/r/20220120174112.1126644-1-eric.dumazet@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Cc: stable@vger.kernel.org
+Fixes: 5b52330bbfe63 ("audit: fix auditd/kernel connection state tracking")
+Fixes: f4b3ee3c85551 ("audit: improve robustness of the audit queue handling")
+Reported-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+Tested-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+Reviewed-by: Richard Guy Briggs <rgb@redhat.com>
+Signed-off-by: Paul Moore <paul@paul-moore.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/net/ip6_fib.h |    2 +-
- net/ipv6/ip6_fib.c    |   23 +++++++++++++----------
- net/ipv6/route.c      |    2 +-
- 3 files changed, 15 insertions(+), 12 deletions(-)
+ kernel/audit.c |   62 +++++++++++++++++++++++++++++++++++++++------------------
+ 1 file changed, 43 insertions(+), 19 deletions(-)
 
---- a/include/net/ip6_fib.h
-+++ b/include/net/ip6_fib.h
-@@ -243,7 +243,7 @@ static inline bool fib6_get_cookie_safe(
- 	fn = rcu_dereference(f6i->fib6_node);
- 
- 	if (fn) {
--		*cookie = fn->fn_sernum;
-+		*cookie = READ_ONCE(fn->fn_sernum);
- 		/* pairs with smp_wmb() in fib6_update_sernum_upto_root() */
- 		smp_rmb();
- 		status = true;
---- a/net/ipv6/ip6_fib.c
-+++ b/net/ipv6/ip6_fib.c
-@@ -112,7 +112,7 @@ void fib6_update_sernum(struct net *net,
- 	fn = rcu_dereference_protected(f6i->fib6_node,
- 			lockdep_is_held(&f6i->fib6_table->tb6_lock));
- 	if (fn)
--		fn->fn_sernum = fib6_new_sernum(net);
-+		WRITE_ONCE(fn->fn_sernum, fib6_new_sernum(net));
- }
- 
- /*
-@@ -544,12 +544,13 @@ static int fib6_dump_table(struct fib6_t
- 		spin_unlock_bh(&table->tb6_lock);
- 		if (res > 0) {
- 			cb->args[4] = 1;
--			cb->args[5] = w->root->fn_sernum;
-+			cb->args[5] = READ_ONCE(w->root->fn_sernum);
- 		}
- 	} else {
--		if (cb->args[5] != w->root->fn_sernum) {
-+		int sernum = READ_ONCE(w->root->fn_sernum);
-+		if (cb->args[5] != sernum) {
- 			/* Begin at the root if the tree changed */
--			cb->args[5] = w->root->fn_sernum;
-+			cb->args[5] = sernum;
- 			w->state = FWS_INIT;
- 			w->node = w->root;
- 			w->skip = w->count;
-@@ -1203,7 +1204,7 @@ static void __fib6_update_sernum_upto_ro
- 	/* paired with smp_rmb() in rt6_get_cookie_safe() */
- 	smp_wmb();
- 	while (fn) {
--		fn->fn_sernum = sernum;
-+		WRITE_ONCE(fn->fn_sernum, sernum);
- 		fn = rcu_dereference_protected(fn->parent,
- 				lockdep_is_held(&rt->fib6_table->tb6_lock));
- 	}
-@@ -1983,8 +1984,8 @@ static int fib6_clean_node(struct fib6_w
- 	};
- 
- 	if (c->sernum != FIB6_NO_SERNUM_CHANGE &&
--	    w->node->fn_sernum != c->sernum)
--		w->node->fn_sernum = c->sernum;
-+	    READ_ONCE(w->node->fn_sernum) != c->sernum)
-+		WRITE_ONCE(w->node->fn_sernum, c->sernum);
- 
- 	if (!c->func) {
- 		WARN_ON_ONCE(c->sernum == FIB6_NO_SERNUM_CHANGE);
-@@ -2332,7 +2333,7 @@ static void ipv6_route_seq_setup_walk(st
- 	iter->w.state = FWS_INIT;
- 	iter->w.node = iter->w.root;
- 	iter->w.args = iter;
--	iter->sernum = iter->w.root->fn_sernum;
-+	iter->sernum = READ_ONCE(iter->w.root->fn_sernum);
- 	INIT_LIST_HEAD(&iter->w.lh);
- 	fib6_walker_link(net, &iter->w);
- }
-@@ -2360,8 +2361,10 @@ static struct fib6_table *ipv6_route_seq
- 
- static void ipv6_route_check_sernum(struct ipv6_route_iter *iter)
+--- a/kernel/audit.c
++++ b/kernel/audit.c
+@@ -541,20 +541,22 @@ static void kauditd_printk_skb(struct sk
+ /**
+  * kauditd_rehold_skb - Handle a audit record send failure in the hold queue
+  * @skb: audit record
++ * @error: error code (unused)
+  *
+  * Description:
+  * This should only be used by the kauditd_thread when it fails to flush the
+  * hold queue.
+  */
+-static void kauditd_rehold_skb(struct sk_buff *skb)
++static void kauditd_rehold_skb(struct sk_buff *skb, __always_unused int error)
  {
--	if (iter->sernum != iter->w.root->fn_sernum) {
--		iter->sernum = iter->w.root->fn_sernum;
-+	int sernum = READ_ONCE(iter->w.root->fn_sernum);
+-	/* put the record back in the queue at the same place */
+-	skb_queue_head(&audit_hold_queue, skb);
++	/* put the record back in the queue */
++	skb_queue_tail(&audit_hold_queue, skb);
+ }
+ 
+ /**
+  * kauditd_hold_skb - Queue an audit record, waiting for auditd
+  * @skb: audit record
++ * @error: error code
+  *
+  * Description:
+  * Queue the audit record, waiting for an instance of auditd.  When this
+@@ -564,19 +566,31 @@ static void kauditd_rehold_skb(struct sk
+  * and queue it, if we have room.  If we want to hold on to the record, but we
+  * don't have room, record a record lost message.
+  */
+-static void kauditd_hold_skb(struct sk_buff *skb)
++static void kauditd_hold_skb(struct sk_buff *skb, int error)
+ {
+ 	/* at this point it is uncertain if we will ever send this to auditd so
+ 	 * try to send the message via printk before we go any further */
+ 	kauditd_printk_skb(skb);
+ 
+ 	/* can we just silently drop the message? */
+-	if (!audit_default) {
+-		kfree_skb(skb);
+-		return;
++	if (!audit_default)
++		goto drop;
 +
-+	if (iter->sernum != sernum) {
-+		iter->sernum = sernum;
- 		iter->w.state = FWS_INIT;
- 		iter->w.node = iter->w.root;
- 		WARN_ON(iter->w.skip);
---- a/net/ipv6/route.c
-+++ b/net/ipv6/route.c
-@@ -2320,7 +2320,7 @@ static void ip6_link_failure(struct sk_b
- 			if (from) {
- 				fn = rcu_dereference(from->fib6_node);
- 				if (fn && (rt->rt6i_flags & RTF_DEFAULT))
--					fn->fn_sernum = -1;
-+					WRITE_ONCE(fn->fn_sernum, -1);
- 			}
++	/* the hold queue is only for when the daemon goes away completely,
++	 * not -EAGAIN failures; if we are in a -EAGAIN state requeue the
++	 * record on the retry queue unless it's full, in which case drop it
++	 */
++	if (error == -EAGAIN) {
++		if (!audit_backlog_limit ||
++		    skb_queue_len(&audit_retry_queue) < audit_backlog_limit) {
++			skb_queue_tail(&audit_retry_queue, skb);
++			return;
++		}
++		audit_log_lost("kauditd retry queue overflow");
++		goto drop;
+ 	}
+ 
+-	/* if we have room, queue the message */
++	/* if we have room in the hold queue, queue the message */
+ 	if (!audit_backlog_limit ||
+ 	    skb_queue_len(&audit_hold_queue) < audit_backlog_limit) {
+ 		skb_queue_tail(&audit_hold_queue, skb);
+@@ -585,24 +599,32 @@ static void kauditd_hold_skb(struct sk_b
+ 
+ 	/* we have no other options - drop the message */
+ 	audit_log_lost("kauditd hold queue overflow");
++drop:
+ 	kfree_skb(skb);
+ }
+ 
+ /**
+  * kauditd_retry_skb - Queue an audit record, attempt to send again to auditd
+  * @skb: audit record
++ * @error: error code (unused)
+  *
+  * Description:
+  * Not as serious as kauditd_hold_skb() as we still have a connected auditd,
+  * but for some reason we are having problems sending it audit records so
+  * queue the given record and attempt to resend.
+  */
+-static void kauditd_retry_skb(struct sk_buff *skb)
++static void kauditd_retry_skb(struct sk_buff *skb, __always_unused int error)
+ {
+-	/* NOTE: because records should only live in the retry queue for a
+-	 * short period of time, before either being sent or moved to the hold
+-	 * queue, we don't currently enforce a limit on this queue */
+-	skb_queue_tail(&audit_retry_queue, skb);
++	if (!audit_backlog_limit ||
++	    skb_queue_len(&audit_retry_queue) < audit_backlog_limit) {
++		skb_queue_tail(&audit_retry_queue, skb);
++		return;
++	}
++
++	/* we have to drop the record, send it via printk as a last effort */
++	kauditd_printk_skb(skb);
++	audit_log_lost("kauditd retry queue overflow");
++	kfree_skb(skb);
+ }
+ 
+ /**
+@@ -640,7 +662,7 @@ static void auditd_reset(const struct au
+ 	/* flush the retry queue to the hold queue, but don't touch the main
+ 	 * queue since we need to process that normally for multicast */
+ 	while ((skb = skb_dequeue(&audit_retry_queue)))
+-		kauditd_hold_skb(skb);
++		kauditd_hold_skb(skb, -ECONNREFUSED);
+ }
+ 
+ /**
+@@ -714,16 +736,18 @@ static int kauditd_send_queue(struct soc
+ 			      struct sk_buff_head *queue,
+ 			      unsigned int retry_limit,
+ 			      void (*skb_hook)(struct sk_buff *skb),
+-			      void (*err_hook)(struct sk_buff *skb))
++			      void (*err_hook)(struct sk_buff *skb, int error))
+ {
+ 	int rc = 0;
+-	struct sk_buff *skb;
++	struct sk_buff *skb = NULL;
++	struct sk_buff *skb_tail;
+ 	unsigned int failed = 0;
+ 
+ 	/* NOTE: kauditd_thread takes care of all our locking, we just use
+ 	 *       the netlink info passed to us (e.g. sk and portid) */
+ 
+-	while ((skb = skb_dequeue(queue))) {
++	skb_tail = skb_peek_tail(queue);
++	while ((skb != skb_tail) && (skb = skb_dequeue(queue))) {
+ 		/* call the skb_hook for each skb we touch */
+ 		if (skb_hook)
+ 			(*skb_hook)(skb);
+@@ -731,7 +755,7 @@ static int kauditd_send_queue(struct soc
+ 		/* can we send to anyone via unicast? */
+ 		if (!sk) {
+ 			if (err_hook)
+-				(*err_hook)(skb);
++				(*err_hook)(skb, -ECONNREFUSED);
+ 			continue;
  		}
- 		rcu_read_unlock();
+ 
+@@ -745,7 +769,7 @@ retry:
+ 			    rc == -ECONNREFUSED || rc == -EPERM) {
+ 				sk = NULL;
+ 				if (err_hook)
+-					(*err_hook)(skb);
++					(*err_hook)(skb, rc);
+ 				if (rc == -EAGAIN)
+ 					rc = 0;
+ 				/* continue to drain the queue */
 
 

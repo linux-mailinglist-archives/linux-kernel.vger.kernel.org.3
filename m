@@ -2,116 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3509A4AC807
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 18:59:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 108604AC840
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 19:11:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245743AbiBGRyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 12:54:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32902 "EHLO
+        id S1346012AbiBGSI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 13:08:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239410AbiBGRtR (ORCPT
+        with ESMTP id S1344764AbiBGSAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 12:49:17 -0500
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC8CC0401D9
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 09:49:16 -0800 (PST)
-Received: by mail-qv1-xf35.google.com with SMTP id k4so11959757qvt.6
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 09:49:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=kJucW2FhnAmOVXK6ttAIBgemWe7fm9oO1NBHaN+SpLo=;
-        b=7t3DM3VcFauVZOBlngQ9606Z9gD+sKLDq4AgAEevZr3ZavsH+WJjWgzundrmQ8j/fH
-         hCffawc1iSxT+eaqadAZ1tqlVNTDb+A8KjFDmVKplNkHqDhpdrPs8wFr6OC0CiykGHfz
-         AAKSENzVQE2vrUQ/ZlKTDOUsfDlVmSnj8w3uUXoD6Bbh5yOayLCi6VyiOjsv2oE4naa5
-         MzMyXm98/uP0z8aA1/Qe3tZBOtjj8qSrjwkLFmZTgROZ7VSP+wkCsFASes3w87WNcxdo
-         jYbbZnyI+uLZXYUYlcOT73zPchwbG85kEXuSM8Hr9RZ6VbhoEm2EuodTvRrGz/h2HdJ4
-         n6tQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kJucW2FhnAmOVXK6ttAIBgemWe7fm9oO1NBHaN+SpLo=;
-        b=MHfvvAEjJEOq9PBEATNoqa7h69OAxHVIRPB3cup41g0kAQpGV+Q/5vRiVpsKPe7LK5
-         xuWj8IC0HRNx4P6UYwjoloLTZNPzGRc1DkjoZyEzBSIuC0+XZw4hczU2uPvxkrUyk7CD
-         Wwy0PCp4Y8AcTeEnHn8ki+oNMLtNq6PvZx5iA41ByZjma/f1oMpcThuyz0NM/TWB9XOb
-         E+7TVjxTVrK4PAx/qywTGlRUn6pGaT7MUACRai/9WUfvEaSX4x/G3oQG24YqgeOfQuCS
-         /gU2/eyWaTJN2At3l/A93pgljDntgLz+Kf/NMQvhv5Ri4BzdqfqL2jWPjzgihhqvsJzT
-         shuQ==
-X-Gm-Message-State: AOAM5327ob7YWEzuEgwGjJVl99DXjI4JxnmjBtxuFIAPI0xD4Bc5SA9A
-        PyCIyFHDYfm2Z/XmZAKZ2GVTGA==
-X-Google-Smtp-Source: ABdhPJyfrQtt982KQJ8YVomy4l18OH5G1tRs6T70oQ9tcGHf4td1lFkXstlwrfw1W6P49W2p7bCKGw==
-X-Received: by 2002:a05:6214:29e2:: with SMTP id jv2mr600877qvb.4.1644256156176;
-        Mon, 07 Feb 2022 09:49:16 -0800 (PST)
-Received: from localhost (cpe-98-15-154-102.hvc.res.rr.com. [98.15.154.102])
-        by smtp.gmail.com with ESMTPSA id s28sm5387928qkm.53.2022.02.07.09.49.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 09:49:15 -0800 (PST)
-Date:   Mon, 7 Feb 2022 12:49:15 -0500
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Huang Ying <ying.huang@intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Mel Gorman <mgorman@suse.de>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Feng Tang <feng.tang@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Rik van Riel <riel@surriel.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Yang Shi <shy828301@gmail.com>, Zi Yan <ziy@nvidia.com>,
-        Wei Xu <weixugc@google.com>, osalvador <osalvador@suse.de>,
-        Shakeel Butt <shakeelb@google.com>,
-        zhongjiang-ali <zhongjiang-ali@linux.alibaba.com>
-Subject: Re: [PATCH -V11 3/3] memory tiering: skip to scan fast memory
-Message-ID: <YgFbmxRR4QC7CJKb@cmpxchg.org>
-References: <20220128082751.593478-1-ying.huang@intel.com>
- <20220128082751.593478-4-ying.huang@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220128082751.593478-4-ying.huang@intel.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 7 Feb 2022 13:00:19 -0500
+X-Greylist: delayed 339 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 10:00:16 PST
+Received: from fwd1.porkbun.com (fwd1.porkbun.com [52.10.174.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43ED9C0401D9;
+        Mon,  7 Feb 2022 10:00:16 -0800 (PST)
+Received: by fwd1.porkbun.com (Postfix, from userid 497)
+        id E276741D09; Mon,  7 Feb 2022 17:49:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ansari.sh;
+        s=default; t=1644256477;
+        bh=WgWSC1IOBKQNEaPKc/yuujz/f2ZwdXMi8BgaxzlEwSc=;
+        h=From:To:Cc:Subject:Date;
+        b=bZkiW7qxwSd1k0xDaVddX2Tk+1rI1P9NjCWXzvxS8z2g/f3lS5lCO3TOJ+9QtIKBN
+         kcwqYqWWTurFN2sOUNKYbldSCYZrRbTh5mxGeEVPOMLIHMqTrG5IfGibqvkkddsBKm
+         YVNto8jd+Qaqk4f6y/3A2p0rqd6qo8GU5VmXBMSc=
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
+Received: from rayyan-pc.broadband (unknown [90.242.138.108])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: rayyan@ansari.sh)
+        by fwd1.porkbun.com (Postfix) with ESMTPSA id 91D7B43726;
+        Mon,  7 Feb 2022 17:49:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ansari.sh;
+        s=default; t=1644256189;
+        bh=WgWSC1IOBKQNEaPKc/yuujz/f2ZwdXMi8BgaxzlEwSc=;
+        h=From:To:Cc:Subject:Date;
+        b=J14q/+x9mBBTBYPjjvrMpK/SRO55KDxwG+mHiLf7IBPB1URuD9fc3rQdFKSXGcbSx
+         7XIkIX18mC4m2VLDQ3AsgjOLxBVgBZ+Vn3v8xvuNtNfnUAfgLj7Q63+/Twn7KYd8os
+         MHmO4hCdmqvkA3+Kt1+/twuN6B4aeiqkhsxuEZ5I=
+From:   Rayyan Ansari <rayyan@ansari.sh>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Rayyan Ansari <rayyan@ansari.sh>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ARM: dts: qcom: pm8226: Add VADC node
+Date:   Mon,  7 Feb 2022 17:49:33 +0000
+Message-Id: <20220207174933.20909-1-rayyan@ansari.sh>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 04:27:51PM +0800, Huang Ying wrote:
-> If the NUMA balancing isn't used to optimize the page placement among
-> sockets but only among memory types, the hot pages in the fast memory
-> node couldn't be migrated (promoted) to anywhere.  So it's unnecessary
-> to scan the pages in the fast memory node via changing their PTE/PMD
-> mapping to be PROT_NONE.  So that the page faults could be avoided
-> too.
-> 
-> In the test, if only the memory tiering NUMA balancing mode is enabled, the
-> number of the NUMA balancing hint faults for the DRAM node is reduced to
-> almost 0 with the patch.  While the benchmark score doesn't change
-> visibly.
-> 
-> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
-> Suggested-by: Dave Hansen <dave.hansen@linux.intel.com>
-> Tested-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Michal Hocko <mhocko@suse.com>
-> Cc: Rik van Riel <riel@surriel.com>
-> Cc: Mel Gorman <mgorman@techsingularity.net>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Yang Shi <shy828301@gmail.com>
-> Cc: Zi Yan <ziy@nvidia.com>
-> Cc: Wei Xu <weixugc@google.com>
-> Cc: osalvador <osalvador@suse.de>
-> Cc: Shakeel Butt <shakeelb@google.com>
-> Cc: zhongjiang-ali <zhongjiang-ali@linux.alibaba.com>
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-mm@kvack.org
+Add a node for the voltage ADC (VADC) found in PM8226.
 
-Looks good to me.
+Signed-off-by: Rayyan Ansari <rayyan@ansari.sh>
+---
+ arch/arm/boot/dts/qcom-pm8226.dtsi | 33 ++++++++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+diff --git a/arch/arm/boot/dts/qcom-pm8226.dtsi b/arch/arm/boot/dts/qcom-pm8226.dtsi
+index b3d0f7b5874d..a651b4c941b8 100644
+--- a/arch/arm/boot/dts/qcom-pm8226.dtsi
++++ b/arch/arm/boot/dts/qcom-pm8226.dtsi
+@@ -40,6 +40,39 @@ smbb: charger@1000 {
+ 			chg_otg: otg-vbus { };
+ 		};
+ 
++		pm8226_vadc: adc@3100 {
++			compatible = "qcom,spmi-vadc";
++			reg = <0x3100>;
++			interrupts = <0x0 0x31 0x0 IRQ_TYPE_EDGE_RISING>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			#io-channel-cells = <1>;
++
++			adc-chan@7 {
++				reg = <VADC_VSYS>;
++				qcom,pre-scaling = <1 3>;
++				label = "vph_pwr";
++			};
++			adc-chan@8 {
++				reg = <VADC_DIE_TEMP>;
++				label = "die_temp";
++			};
++			adc-chan@9 {
++				reg = <VADC_REF_625MV>;
++				label = "ref_625mv";
++			};
++			adc-chan@a {
++				reg = <VADC_REF_1250MV>;
++				label = "ref_1250mv";
++			};
++			adc-chan@e {
++				reg = <VADC_GND_REF>;
++			};
++			adc-chan@f {
++				reg = <VADC_VDD_VADC>;
++			};
++		};
++
+ 		pm8226_mpps: mpps@a000 {
+ 			compatible = "qcom,pm8226-mpp", "qcom,spmi-mpp";
+ 			reg = <0xa000>;
+-- 
+2.34.1
+

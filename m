@@ -2,173 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0B8D4AB446
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 07:13:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37ED44AB3E0
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 07:12:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230402AbiBGFtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 00:49:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49816 "EHLO
+        id S239117AbiBGFue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 00:50:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240499AbiBGEpU (ORCPT
+        with ESMTP id S241071AbiBGEqs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 23:45:20 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5878C043181
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 20:45:19 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id n32so10918889pfv.11
-        for <linux-kernel@vger.kernel.org>; Sun, 06 Feb 2022 20:45:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=xm+csgTnUDpErNmAVkrgFErEXLw5b0TmRhIzFrD3fEI=;
-        b=ZcLnfup6DNDpRzMQqOuZ1AEsYS5RZiB2wSMVTgckVjNJgJhRK4jnkKi1QI3N3NQb6c
-         CSBYImE44yFaJxI1jivJ0lUaXqp7X2aSvD3wHodKOss/dFNn7058OW33BFadFL+8mh7s
-         Gz5Je7m/xJzA5hZvZPBd0hgCIqYuEO2yLuPskTfe8aIuc1AtNj930FMbrmXzf7xz2WJH
-         raEXQiiIxSDZNwdw5ELaS8IVXRbpn3zH8ytBAdweX3in0ly7HU3mj9HP5NQcUHeQxCLd
-         d0thewP68xUX9NyI33ll+lTZHlP9dFqG4MGbj76OKUXIbK/uQjNIGpB6jW80UAj7OTws
-         W/ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=xm+csgTnUDpErNmAVkrgFErEXLw5b0TmRhIzFrD3fEI=;
-        b=LnU1vI1w4s+A94aDGGpSo6QK+yUs7dC1sNHsHTPwAnF9HXnKUaNVw1sSyZnoftGZ90
-         bgtapTJJ6PzQ5r6ucmn8NUNLqdPt/n0mAII71lRnfubnc5F558rHGxsIUjQRlLKB4+f0
-         3rZJQuPWdkD42DjpeSt0gvfrEcanzjIWC1eTr6xoD/Y5Ei1yGJZ7o8lMJmDpmOLaZHsB
-         zUbFpcwnAzPXAoqgnXhKg7xa40DcKdZ71COXzjEdItIiwde5FeKGqQIGMlajDIvKhr+2
-         wE2LgWDs3ePIA6FGKnkrE6ZxPsGjtzJKkNGsLHrHH5rkURPCDoVNLsMveRqEMhDO/BgF
-         SMnw==
-X-Gm-Message-State: AOAM533XD4qdVhWSyjActjYcz5gPC9elw6SYrHXSIWlX8FeSRYXt8Dvb
-        P2CqfLdWaouCTJsB96rfZDs=
-X-Google-Smtp-Source: ABdhPJyPCMpuNpkKXy+ZFMXYRJ32ati/EOJ/H73r5FSn36l0djCcNVzhQCZ2uY0xAxg8et9t6FAZAA==
-X-Received: by 2002:a05:6a00:1513:: with SMTP id q19mr14016623pfu.12.1644209119026;
-        Sun, 06 Feb 2022 20:45:19 -0800 (PST)
-Received: from mail.google.com (219-89-118-172.adsl.xtra.co.nz. [219.89.118.172])
-        by smtp.gmail.com with ESMTPSA id ip4sm9145214pjb.8.2022.02.06.20.45.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Feb 2022 20:45:18 -0800 (PST)
-Date:   Mon, 7 Feb 2022 17:45:12 +1300
-From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
-To:     gregkh@linuxfoundation.org, paulo.miguel.almeida.rodenas@gmail.com,
-        realwakka@gmail.com
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: pi433: remove need to recompile code to debug fifo
- content
-Message-ID: <YgCj2P59AbFFmnbA@mail.google.com>
+        Sun, 6 Feb 2022 23:46:48 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAAE7C043181;
+        Sun,  6 Feb 2022 20:46:46 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 4B1AF1F37E;
+        Mon,  7 Feb 2022 04:46:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1644209205; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=U9N4d6jiSLUN/jgU8wn+Vx5a7YFyPHoCVjyVTiQLtWo=;
+        b=D7ClHLlXCPAnUMq8dOvwwwrzmaScoUlfNpLlP8S3SYnqtpIWp1GvKY3L1IQPtBoYiEW6PM
+        5jAqcWOlkakD4qjbhUmLX8EmVIZNMZy/zOHGAxZ6J6qNuD/7jguzu128xBC84FZvC0zsQH
+        +mKe4lXZ0OsN3471M8Q8Vw/8Kn08LD0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1644209205;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=U9N4d6jiSLUN/jgU8wn+Vx5a7YFyPHoCVjyVTiQLtWo=;
+        b=hHkMCaHK8KlVEpuDXQEX/KtsCHk/EHsmxCbe8b1mwiiu69NFUbbVVBGfHAulbMf7Mtoe17
+        /WLUrlTVBvFxEqDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2F0291330E;
+        Mon,  7 Feb 2022 04:46:41 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id L37WNTGkAGL/NAAAMHmgww
+        (envelope-from <neilb@suse.de>); Mon, 07 Feb 2022 04:46:41 +0000
+Subject: [PATCH 00/21 V4] Repair SWAP-over_NFS
+From:   NeilBrown <neilb@suse.de>
+To:     Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mark Hemment <markhemm@googlemail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        David Howells <dhowells@redhat.com>
+Cc:     linux-nfs@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Date:   Mon, 07 Feb 2022 15:46:00 +1100
+Message-ID: <164420889455.29374.17958998143835612560.stgit@noble.brown>
+User-Agent: StGit/0.23
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Debugging content present in the FIFO register is tricky as when we read
-the FIFO register that changes the content of fifo struct which reduces
-number of possible ways of debugging it. Rf69 uC has the possibility of
-triggering certain IRQs depending on how many items are in the FIFO
-queue, so being able to know what's in there is an important way to
-troubleshoot certain problems.
+This 4th version of the series address review comment, particularly
+tidying up "NFS: swap IO handling is slightly different for O_DIRECT IO"
+and collect reviewed-by etc.
 
-This patch removes the requirement of having to compile pi433 driver
-with DEBUG_FIFO_ACCESS set and let that be driven by printk verbositity
-level and/or dynamic debug config instead.
+I've also move 3 NFS patches which depend on the MM patches to the end
+in case they helps maintainers land the patches in a consistent order.
+Those three patches might go through the NFS free after the next merge
+window.
 
-Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
----
-Meta-comments:
+Original intro follows.
+Thanks,
+NeilBrown
 
-#1
-In my mind, I didn't like the idea of having to change the code and then 
-echo "module pi433 +p" > <debugfs>/dynamic_debug/control to only then
-be able to read stuff being sent/retrieved from fifo. It felt somewhat
-redundant at a certain level. On the other hand, I understand that
-removing the conditional compilation will force a for-loop to iterate
-for no real reason most of the time (max 66 iterations)... so I made a 
-trade-off and in case anyone disagrees with that, just let me know and I
-will be happy to change to a different approach.
+swap-over-NFS currently has a variety of problems.
 
-#2
-In the past, it's been pointed out to me during code review that I tend
-to add code comments which could be omitted. In this case, the for-loop
-seemed a bit odd without explaining why it's in there. Let me know if
-you think I should keep/remove it.
+swap writes call generic_write_checks(), which always fails on a swap
+file, so it completely fails.
+Even without this, various deadlocks are possible - largely due to
+improvements in NFS memory allocation (using NOFS instead of ATOMIC)
+which weren't tested against swap-out.
 
-Patch dependency:
+NFS is the only filesystem that has supported fs-based swap IO, and it
+hasn't worked for several releases, so now is a convenient time to clean
+up the swap-via-filesystem interfaces - we cannot break anything !
 
-This patch depends on the following patches being applied first:
-- https://lore.kernel.org/lkml/Yf9ivRB5qpmA5rY2@mail.google.com/
-- https://lore.kernel.org/lkml/YgA4XHU4uf6YkOk5@mail.google.com/
+So the first few patches here clean up and improve various parts of the
+swap-via-filesystem code.  ->activate_swap() is given a cleaner
+interface, a new ->swap_rw is introduced instead of burdening
+->direct_IO, etc.
+
+Current swap-to-filesystem code only ever submits single-page reads and
+writes.  These patches change that to allow multi-page IO when adjacent
+requests are submitted.  Writes are also changed to be async rather than
+sync.  This substantially speeds up write throughput for swap-over-NFS.
 
 ---
- drivers/staging/pi433/rf69.c | 15 ++-------------
- 1 file changed, 2 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/staging/pi433/rf69.c b/drivers/staging/pi433/rf69.c
-index a8def70808d6..901f8db3e3ce 100644
---- a/drivers/staging/pi433/rf69.c
-+++ b/drivers/staging/pi433/rf69.c
-@@ -6,11 +6,6 @@
-  *	Marcus Wolf <linux@wolf-entwicklungen.de>
-  */
- 
--/* enable prosa debug info */
--#undef DEBUG
--/* enable print of values on fifo access */
--#undef DEBUG_FIFO_ACCESS
--
- #include <linux/types.h>
- #include <linux/spi/spi.h>
- 
-@@ -829,9 +824,7 @@ int rf69_set_dagc(struct spi_device *spi, enum dagc dagc)
- 
- int rf69_read_fifo(struct spi_device *spi, u8 *buffer, unsigned int size)
- {
--#ifdef DEBUG_FIFO_ACCESS
- 	int i;
--#endif
- 	struct spi_transfer transfer;
- 	u8 local_buffer[FIFO_SIZE + 1];
- 	int retval;
-@@ -851,10 +844,9 @@ int rf69_read_fifo(struct spi_device *spi, u8 *buffer, unsigned int size)
- 
- 	retval = spi_sync_transfer(spi, &transfer, 1);
- 
--#ifdef DEBUG_FIFO_ACCESS
-+	/* print content read from fifo for debugging purposes */
- 	for (i = 0; i < size; i++)
- 		dev_dbg(&spi->dev, "%d - 0x%x\n", i, local_buffer[i + 1]);
--#endif
- 
- 	memcpy(buffer, &local_buffer[1], size);
- 
-@@ -863,9 +855,7 @@ int rf69_read_fifo(struct spi_device *spi, u8 *buffer, unsigned int size)
- 
- int rf69_write_fifo(struct spi_device *spi, u8 *buffer, unsigned int size)
- {
--#ifdef DEBUG_FIFO_ACCESS
- 	int i;
--#endif
- 	u8 local_buffer[FIFO_SIZE + 1];
- 
- 	if (size > FIFO_SIZE) {
-@@ -877,10 +867,9 @@ int rf69_write_fifo(struct spi_device *spi, u8 *buffer, unsigned int size)
- 	local_buffer[0] = REG_FIFO | WRITE_BIT;
- 	memcpy(&local_buffer[1], buffer, size);
- 
--#ifdef DEBUG_FIFO_ACCESS
-+	/* print content written from fifo for debugging purposes */
- 	for (i = 0; i < size; i++)
- 		dev_dbg(&spi->dev, "0x%x\n", buffer[i]);
--#endif
- 
- 	return spi_write(spi, local_buffer, size + 1);
- }
--- 
-2.34.1
+NeilBrown (21):
+ MM - in merge winow
+      MM: create new mm/swap.h header file.
+      MM: drop swap_set_page_dirty
+      MM: move responsibility for setting SWP_FS_OPS to ->swap_activate
+      MM: reclaim mustn't enter FS for SWP_FS_OPS swap-space
+      MM: introduce ->swap_rw and use it for reads from SWP_FS_OPS swap-space
+      MM: perform async writes to SWP_FS_OPS swap-space using ->swap_rw
+      DOC: update documentation for swap_activate and swap_rw
+      MM: submit multipage reads for SWP_FS_OPS swap-space
+      MM: submit multipage write for SWP_FS_OPS swap-space
+      VFS: Add FMODE_CAN_ODIRECT file flag
+
+ NFS - in merge window
+      NFS: remove IS_SWAPFILE hack
+      SUNRPC/call_alloc: async tasks mustn't block waiting for memory
+      SUNRPC/auth: async tasks mustn't block waiting for memory
+      SUNRPC/xprt: async tasks mustn't block waiting for memory
+      SUNRPC: remove scheduling boost for "SWAPPER" tasks.
+      NFS: discard NFS_RPC_SWAPFLAGS and RPC_TASK_ROOTCREDS
+      SUNRPC: improve 'swap' handling: scheduling and PF_MEMALLOC
+      NFSv4: keep state manager thread active if swap is enabled
+
+ NFS - after merge window
+      NFS: rename nfs_direct_IO and use as ->swap_rw
+      NFS: swap IO handling is slightly different for O_DIRECT IO
+      NFS: swap-out must always use STABLE writes.
+
+
+ Documentation/filesystems/locking.rst |  18 +-
+ Documentation/filesystems/vfs.rst     |  17 +-
+ drivers/block/loop.c                  |   4 +-
+ fs/cifs/file.c                        |   7 +-
+ fs/fcntl.c                            |   9 +-
+ fs/nfs/direct.c                       |  67 +++++---
+ fs/nfs/file.c                         |  39 +++--
+ fs/nfs/nfs4_fs.h                      |   1 +
+ fs/nfs/nfs4proc.c                     |  20 +++
+ fs/nfs/nfs4state.c                    |  39 ++++-
+ fs/nfs/read.c                         |   4 -
+ fs/nfs/write.c                        |   2 +
+ fs/open.c                             |   9 +-
+ fs/overlayfs/file.c                   |  13 +-
+ include/linux/fs.h                    |   4 +
+ include/linux/nfs_fs.h                |  15 +-
+ include/linux/nfs_xdr.h               |   2 +
+ include/linux/sunrpc/auth.h           |   1 +
+ include/linux/sunrpc/sched.h          |   1 -
+ include/linux/swap.h                  |   7 +-
+ include/linux/writeback.h             |   7 +
+ include/trace/events/sunrpc.h         |   1 -
+ mm/madvise.c                          |   8 +-
+ mm/memory.c                           |   2 +-
+ mm/page_io.c                          | 237 +++++++++++++++++++-------
+ mm/swap.h                             |  30 +++-
+ mm/swap_state.c                       |  22 ++-
+ mm/swapfile.c                         |  13 +-
+ mm/vmscan.c                           |  38 +++--
+ net/sunrpc/auth.c                     |   8 +-
+ net/sunrpc/auth_gss/auth_gss.c        |   6 +-
+ net/sunrpc/auth_unix.c                |  10 +-
+ net/sunrpc/clnt.c                     |   7 +-
+ net/sunrpc/sched.c                    |  29 ++--
+ net/sunrpc/xprt.c                     |  19 +--
+ net/sunrpc/xprtrdma/transport.c       |  10 +-
+ net/sunrpc/xprtsock.c                 |   8 +
+ 37 files changed, 519 insertions(+), 215 deletions(-)
+
+--
+Signature
 

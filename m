@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDA134ABAC1
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:30:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88A8D4ABA40
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:27:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384051AbiBGLYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:24:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58440 "EHLO
+        id S1383290AbiBGLWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:22:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382363AbiBGLS5 (ORCPT
+        with ESMTP id S1381708AbiBGLR3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:18:57 -0500
+        Mon, 7 Feb 2022 06:17:29 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C25C0401C4;
-        Mon,  7 Feb 2022 03:18:52 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F4DC03FEE9;
+        Mon,  7 Feb 2022 03:17:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F6D16126D;
-        Mon,  7 Feb 2022 11:18:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E8C2C340F1;
-        Mon,  7 Feb 2022 11:18:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 851C26113B;
+        Mon,  7 Feb 2022 11:17:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BC8DC004E1;
+        Mon,  7 Feb 2022 11:17:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232732;
-        bh=KAE0O2nTeXCwapS+z8eBi68IhQji7PiqV3BVSpTFaIw=;
+        s=korg; t=1644232628;
+        bh=KihTurCynR+zU2kUyr36ZMXFVU4sPftbTicBV9rTdJA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HcMvmnpc7bEFQlaLUshRO589ghxGg5qqGDX/TZld5is5lyjncW2L74Qv0QVyOl/Ze
-         06GgW6yyJ/kfQbLUP/cTlWe2FRaiU0yjqr4TqsmnVRxwhxQfkVZXgkIZ72IW1SJqQx
-         TulDvGPvSzlI6742iUZCQoNxzXGs0V+lyVZ9Tk/A=
+        b=ufCJSmXgGRZHMcwraisok2U5NNFCJB8oUDvlvvwThfbwh6oGkzD8L/xtwGUNG/tLk
+         qFfbSsJb2kZkMKTdpAV1X7r2JmppetAFCo19o9lGscUOh3IzIdPgawRQ/NagKs9FHT
+         zuKgASINGTuKs0x0x/vgufDC+NBa55AyeqO3kJIU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lu Baolu <baolu.lu@linux.intel.com>,
-        Guoqing Jiang <guoqing.jiang@linux.dev>,
-        Joerg Roedel <jroedel@suse.de>
-Subject: [PATCH 5.4 19/44] iommu/vt-d: Fix potential memory leak in intel_setup_irq_remapping()
+        stable@vger.kernel.org, Miquel Raynal <miquel.raynal@bootlin.com>,
+        Alexander Aring <aahringo@redhat.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>
+Subject: [PATCH 4.19 72/86] net: ieee802154: ca8210: Stop leaking skbs
 Date:   Mon,  7 Feb 2022 12:06:35 +0100
-Message-Id: <20220207103753.778412161@linuxfoundation.org>
+Message-Id: <20220207103800.038514573@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103753.155627314@linuxfoundation.org>
-References: <20220207103753.155627314@linuxfoundation.org>
+In-Reply-To: <20220207103757.550973048@linuxfoundation.org>
+References: <20220207103757.550973048@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,69 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guoqing Jiang <guoqing.jiang@linux.dev>
+From: Miquel Raynal <miquel.raynal@bootlin.com>
 
-commit 99e675d473eb8cf2deac1376a0f840222fc1adcf upstream.
+commit 621b24b09eb61c63f262da0c9c5f0e93348897e5 upstream.
 
-After commit e3beca48a45b ("irqdomain/treewide: Keep firmware node
-unconditionally allocated"). For tear down scenario, fn is only freed
-after fail to allocate ir_domain, though it also should be freed in case
-dmar_enable_qi returns error.
+Upon error the ieee802154_xmit_complete() helper is not called. Only
+ieee802154_wake_queue() is called manually. We then leak the skb
+structure.
 
-Besides free fn, irq_domain and ir_msi_domain need to be removed as well
-if intel_setup_irq_remapping fails to enable queued invalidation.
+Free the skb structure upon error before returning.
 
-Improve the rewinding path by add out_free_ir_domain and out_free_fwnode
-lables per Baolu's suggestion.
-
-Fixes: e3beca48a45b ("irqdomain/treewide: Keep firmware node unconditionally allocated")
-Suggested-by: Lu Baolu <baolu.lu@linux.intel.com>
-Signed-off-by: Guoqing Jiang <guoqing.jiang@linux.dev>
-Link: https://lore.kernel.org/r/20220119063640.16864-1-guoqing.jiang@linux.dev
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-Link: https://lore.kernel.org/r/20220128031002.2219155-3-baolu.lu@linux.intel.com
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
+Fixes: ded845a781a5 ("ieee802154: Add CA8210 IEEE 802.15.4 device driver")
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Acked-by: Alexander Aring <aahringo@redhat.com>
+Link: https://lore.kernel.org/r/20220125121426.848337-5-miquel.raynal@bootlin.com
+Signed-off-by: Stefan Schmidt <stefan@datenfreihafen.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iommu/intel_irq_remapping.c |   13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+ drivers/net/ieee802154/ca8210.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/iommu/intel_irq_remapping.c
-+++ b/drivers/iommu/intel_irq_remapping.c
-@@ -570,9 +570,8 @@ static int intel_setup_irq_remapping(str
- 					    fn, &intel_ir_domain_ops,
- 					    iommu);
- 	if (!iommu->ir_domain) {
--		irq_domain_free_fwnode(fn);
- 		pr_err("IR%d: failed to allocate irqdomain\n", iommu->seq_id);
--		goto out_free_bitmap;
-+		goto out_free_fwnode;
- 	}
- 	iommu->ir_msi_domain =
- 		arch_create_remap_msi_irq_domain(iommu->ir_domain,
-@@ -596,7 +595,7 @@ static int intel_setup_irq_remapping(str
- 
- 		if (dmar_enable_qi(iommu)) {
- 			pr_err("Failed to enable queued invalidation\n");
--			goto out_free_bitmap;
-+			goto out_free_ir_domain;
+--- a/drivers/net/ieee802154/ca8210.c
++++ b/drivers/net/ieee802154/ca8210.c
+@@ -1769,6 +1769,7 @@ static int ca8210_async_xmit_complete(
+ 			status
+ 		);
+ 		if (status != MAC_TRANSACTION_OVERFLOW) {
++			dev_kfree_skb_any(priv->tx_skb);
+ 			ieee802154_wake_queue(priv->hw);
+ 			return 0;
  		}
- 	}
- 
-@@ -620,6 +619,14 @@ static int intel_setup_irq_remapping(str
- 
- 	return 0;
- 
-+out_free_ir_domain:
-+	if (iommu->ir_msi_domain)
-+		irq_domain_remove(iommu->ir_msi_domain);
-+	iommu->ir_msi_domain = NULL;
-+	irq_domain_remove(iommu->ir_domain);
-+	iommu->ir_domain = NULL;
-+out_free_fwnode:
-+	irq_domain_free_fwnode(fn);
- out_free_bitmap:
- 	bitmap_free(bitmap);
- out_free_pages:
 
 

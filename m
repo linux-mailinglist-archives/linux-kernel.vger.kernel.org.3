@@ -2,71 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10EB94AC10D
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 15:22:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34E424AC10E
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 15:22:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391328AbiBGOTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 09:19:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55922 "EHLO
+        id S1391335AbiBGOTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 09:19:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379787AbiBGOE2 (ORCPT
+        with ESMTP id S1390866AbiBGOBb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 09:04:28 -0500
-X-Greylist: delayed 122 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 06:04:27 PST
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EB3CC043181
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 06:04:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1644242666; x=1675778666;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Z/+CVlL3mqTgFj3zyrToq+orOMgW+WqL+lq+BPmfdZM=;
-  b=1knsMkmlVC4EgAoeEbUm3LVQeZLXSs8m/dd3phVhNQoLH5sqjfc4742F
-   UTzsaz6b4EphMZN7+FbLCzDZyP6YwCdGls3reOCUQUBRBhpg/dYwlQ4Iy
-   oMycs6Ay+4YhEHH584iShYqZI6zuvpiHwwoUjwAlopceok8Q0GnLfuGdR
-   V6weieJM6JL7FloXc6S8Y9I/jGeQ62a/C6DQW2B0i40cPOLPvmp6jlYQZ
-   XCwCZYTq1gOqpbQbn4UYNcaj2Ran0HXUbAI+RFuOs/X8Qd9iuZoRXvMq7
-   9QNZSQ6rQx3P0gib7SYs2f1G9Wtve2N5uLikFsR3qQ2txGdPpwtRywqpf
-   g==;
-IronPort-SDR: IfTfJkMZmAS9CVVCaV7NUimSRktUjKglwpKNbdFyaR4I8dhj7/nDXp3iOD2pvWWq9NLNoT+MKb
- HVZ696IgFjAZE8wJThhl0LicKy7HYPZo4DNQcqMK7kQCAiLj1BrgeSuxwXRzQdWivf6QRRr6SR
- DPeP8ahSkbkShmMJ8/h7mLJVBf6N1TPkJXkNwZ1cArylmwFzlTb/zoxBQ4RWufqEphPb1rQIX5
- GZzMyYblvcZc3PprSZTke0pWtaK7JRdzRbP3j3msHHbGtKXrzDjrI1NYXh1099QKjbyuduF+En
- tOUaooe+15cScTinZHjkI9oF
-X-IronPort-AV: E=Sophos;i="5.88,349,1635231600"; 
-   d="scan'208";a="161339149"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Feb 2022 07:01:22 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 7 Feb 2022 07:01:22 -0700
-Received: from CHE-LT-I21427LX.microchip.com (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Mon, 7 Feb 2022 07:01:17 -0700
-Message-ID: <9ac4268e0f3978203d7c3cee5b68cc3f57d2000c.camel@microchip.com>
-Subject: Re: [PATCH v7 net-next 00/10] net: dsa: microchip: DSA driver
- support for LAN937x switch
-From:   Prasanna Vengateshan <prasanna.vengateshan@microchip.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-CC:     <andrew@lunn.ch>, <netdev@vger.kernel.org>, <olteanv@gmail.com>,
-        <robh+dt@kernel.org>, <UNGLinuxDriver@microchip.com>,
-        <Woojung.Huh@microchip.com>, <hkallweit1@gmail.com>,
-        <linux@armlinux.org.uk>, <davem@davemloft.net>,
-        <linux-kernel@vger.kernel.org>, <vivien.didelot@gmail.com>,
-        <f.fainelli@gmail.com>, <devicetree@vger.kernel.org>
-Date:   Mon, 7 Feb 2022 19:31:15 +0530
-In-Reply-To: <20220204192906.15a0e6e0@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-References: <20220204174500.72814-1-prasanna.vengateshan@microchip.com>
-         <20220204192906.15a0e6e0@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.0-1 
+        Mon, 7 Feb 2022 09:01:31 -0500
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 582E1C043189
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 06:01:30 -0800 (PST)
+Received: by mail-qk1-x72b.google.com with SMTP id o12so10925489qke.5
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 06:01:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=+VH5Yzc0FArtBDlyVciKdTaJzlAuXtplA0CDhVkYZVw=;
+        b=TUJuhAgjjswNVQ7JzTkg9iKkOgM430mBd5iaZFyVB8juiwGMelroxSVc/tEeoVjS03
+         SBBJAs6XyaJLOH0zNh1fMB11MocmBy0vZW3lQVqwc7nmLVkUib5NLDfgXeW1egoLcrUl
+         0zJ1M9G8GricJAi2JHxOQgJzIsENPf4oXdSlLGMn1ou/GSiwitfE+Re74s2OC3cGYiXS
+         WAB6PyKR8iNz2aNJcgzl/Jv2b00SlxQrNVuEW+ZJ8pyVvgvQpU41dl5hiuO86kWk7vjX
+         6XluH9RnX42crAJsdacFsF/M+gN0YxPG9aqIQm6tHe1mZG9Uo38/MZ0gAIlPcqFBC8jG
+         7hCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+VH5Yzc0FArtBDlyVciKdTaJzlAuXtplA0CDhVkYZVw=;
+        b=YxEy1MhtJ+05ktWU+1De4w0cN6/O1cxEsIBhcJIyVBMHsoKUm62FU3/9HM1EdAp4et
+         HKpRNSpdX+PuTLMwPJAQJZpG5uMAHy+109PJJHhkuGMJ1XEQ9ZYqHi0goSlCTa0oElx/
+         HvC/NCOKkg2pBdX/BKQ4Ynd3w89c3qCx0VXsHoKpCVK5QKqSTS6Mt1DkXaI/Txu/+r00
+         awdII6Rp5OweTCVNYLpKWYYRaS68oQQzpFKsF7SnKpgyl/fHc9nxwVrcZsC67hZGKCU6
+         auhf9xS7nmu0/QcjmVdh1GYBe2pn5ggNIbSh3ssLROM8l1D3wON2d2t9UvK2U1hOBe0f
+         jebQ==
+X-Gm-Message-State: AOAM5304hqEG3lMMogxyzNm5UDVUZ1+YHAWrOqnRUemjGrtA1/InbgHb
+        q6L+PQOfeaepaQg2NcFLeWuUAA==
+X-Google-Smtp-Source: ABdhPJxewUAI8RDxJecgMQqK84dnZDRSuWWALhikOi914YekMnNecZIoiX1AIBCzbrtZ6bBwZBwWpw==
+X-Received: by 2002:a37:2c02:: with SMTP id s2mr6217893qkh.76.1644242489492;
+        Mon, 07 Feb 2022 06:01:29 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
+        by smtp.gmail.com with ESMTPSA id f4sm5480989qko.72.2022.02.07.06.01.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Feb 2022 06:01:28 -0800 (PST)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1nH4a7-000CyH-Do; Mon, 07 Feb 2022 10:01:27 -0400
+Date:   Mon, 7 Feb 2022 10:01:27 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        nvdimm@lists.linux.dev, linux-mm@kvack.org
+Subject: Re: [PATCH 3/8] mm: remove pointless includes from <linux/hmm.h>
+Message-ID: <20220207140127.GA49147@ziepe.ca>
+References: <20220207063249.1833066-1-hch@lst.de>
+ <20220207063249.1833066-4-hch@lst.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220207063249.1833066-4-hch@lst.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,24 +87,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-02-04 at 19:29 -0800, Jakub Kicinski wrote:
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know the
-> content is safe
+On Mon, Feb 07, 2022 at 07:32:44AM +0100, Christoph Hellwig wrote:
+> hmm.h pulls in the world for no good reason at all.  Remove the
+> includes and push a few ones into the users instead.
 > 
-> On Fri, 4 Feb 2022 23:14:50 +0530 Prasanna Vengateshan wrote:
-> > LAN937x is a Multi-Port 100BASE-T1 Ethernet Physical Layer switch
-> > compliant with the IEEE 802.3bw-2015 specification. The device
-> > provides 100 Mbit/s transmit and receive capability over a single
-> > Unshielded Twisted Pair (UTP) cable. LAN937x is successive revision
-> > of KSZ series switch. This series of patches provide the DSA driver
-> > support for Microchip LAN937X switch and it configures through
-> > SPI interface.
-> 
-> Please CC the driver's maintainer, woojung.huh@microchip.com on the next
-> version.
-Woojung.Huh@microchip.com is already part of the CC list. May be
-'netdev/cc_maintainers' does the case sensitive checking. I will correct it in
-the next rev. Thanks.
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
+>  drivers/gpu/drm/amd/amdkfd/kfd_migrate.c | 1 +
+>  drivers/gpu/drm/nouveau/nouveau_dmem.c   | 1 +
+>  include/linux/hmm.h                      | 9 ++-------
+>  lib/test_hmm.c                           | 2 ++
+>  4 files changed, 6 insertions(+), 7 deletions(-)
 
-Prasanna
+Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 
+Jason

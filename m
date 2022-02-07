@@ -2,103 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDF974ACADB
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 22:07:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8C0D4ACAE5
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 22:09:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233600AbiBGVHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 16:07:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37792 "EHLO
+        id S236569AbiBGVH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 16:07:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231667AbiBGVHH (ORCPT
+        with ESMTP id S233961AbiBGVHT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 16:07:07 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEBC6C06173B
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 13:07:06 -0800 (PST)
+        Mon, 7 Feb 2022 16:07:19 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2ED7C061355;
+        Mon,  7 Feb 2022 13:07:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644268026; x=1675804026;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=8gbY67ygTvd6iWc9uwdHH+xuMdIzgfcuSO4qL0gWlQQ=;
-  b=iaVUPdUy1HROh+x+9YEXAiV0im7NbZITPVToIeYkbksOJhdwVFYR+cKR
-   3/BDpNHaR5/GgtNS5LKC37R3Oas+po/z8EhgeTO0j5PsMdJsEYU6axJ2I
-   c4m8qDvN4I974HH9S4Caxj/c2GWBYYo502TI53jeAt9kC6SvLxxLKqhOB
-   IWlGMrb0K0wX28nupiWtjYQo5/VzWumflrvLyFEdAZVxGggbpHZsoBBPU
-   Q1blUxFW566Aoe8SyxUaFa9CLGlK1WPKxLmEm8ltfVhk6qrgAQcyHVWtd
-   4FY1OzFODJmOU7/S2mxvG6H+MSISbqOarsYE7d/jDpKogr9h1hnTz/lD6
+  t=1644268038; x=1675804038;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=IsKQb5WzONKIwPxjcBemKckXmF3G3s2lwGN3DJvVYfA=;
+  b=eZYtM0901GafQTb78UtEJEURSm0JbQUuPSeAEWk9KuzoEX0adWnflPIr
+   FS+VAYLHmincrtRlJMu0D3Hpu52bNmjFwnnU8ONsGDTSTqBxdRj14p1nW
+   /fo2z90Jh8zAFQrIOAFvYOmnH6d3I1UzsdroRyApglm6qOpnNmNYQssFr
+   89r8Gb6/jFJor2ePeG1PbOhdaPhW3BKeZkILYlDdd085DprQP/dFYmNjs
+   mSuCeyORmwOoOzQoqump2u+/nRczZa6Ag3daLtk8X8/5mR8aspB6kYDTF
+   RaRfR7PofcFlO5RFvo7ikUROt2rT0RUhLkcp3bcjIQ2n7v+WZHDSvq5JN
    w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="229458532"
+X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="247644788"
 X-IronPort-AV: E=Sophos;i="5.88,350,1635231600"; 
-   d="scan'208";a="229458532"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 13:07:06 -0800
+   d="scan'208";a="247644788"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 13:07:18 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,350,1635231600"; 
-   d="scan'208";a="567618908"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by orsmga001.jf.intel.com with ESMTP; 07 Feb 2022 13:07:06 -0800
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 7 Feb 2022 13:07:06 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 7 Feb 2022 13:07:05 -0800
-Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
- fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.2308.020;
- Mon, 7 Feb 2022 13:07:05 -0800
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-CC:     Jue Wang <juew@google.com>, "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>
-Subject: RE: [RFC] x86/mce: Add workaround for SKX/CLX/CPX spurious machine
- checks
-Thread-Topic: [RFC] x86/mce: Add workaround for SKX/CLX/CPX spurious machine
- checks
-Thread-Index: AQHYG9xP0gqp+9MoaEye7S91lqAbGKyI9jkA//+C0wCAAJepgP//g7dQ
-Date:   Mon, 7 Feb 2022 21:07:05 +0000
-Message-ID: <be53997f26704089b941d33d9bf47bc6@intel.com>
-References: <20220207043640.2829295-1-juew@google.com>
- <YgFqiJOU5tZsHbY6@zn.tnic> <YgFyBRIOIquMI2ng@agluck-desk2.amr.corp.intel.com>
- <YgGAv/aCVG+RDADI@zn.tnic>
-In-Reply-To: <YgGAv/aCVG+RDADI@zn.tnic>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.200.16
-x-originating-ip: [10.1.200.100]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+   d="scan'208";a="499335212"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga002.jf.intel.com with ESMTP; 07 Feb 2022 13:07:16 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 44D1B31D; Mon,  7 Feb 2022 23:07:31 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Richard Cochran <richardcochran@gmail.com>
+Subject: [PATCH v2 net-next 1/6] ptp_pch: use mac_pton()
+Date:   Mon,  7 Feb 2022 23:07:25 +0200
+Message-Id: <20220207210730.75252-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBJbiB0aGF0IGNhc2UsIHlvdSBjYW4ganVzdCBhcyB3ZWxsIHRlc3QgdGhlIE1TUiBiaXQgZGly
-ZWN0bHkNCj4gTVNSX0lBMzJfTUlTQ19FTkFCTEVfRkFTVF9TVFJJTkdfQklULiBJZiBpdCBzZXQs
-IHlvdSBjbGVhciBpdCwgZG9uZS4NCg0KWWVzLiBUaGF0IHdvdWxkIHdvcmsuIEl0J3MgYW4gZXh0
-cmEgTVNSIHJlYWQgaW5zdGVhZCBvZiBhIG1lbW9yeSByZWFkLiBCdXQgdGhpcw0KaXNuJ3QgYSBw
-ZXJmb3JtYW5jZSBwYXRoLg0KDQo+PiBNYXliZSB0aGlzIHdvdWxkIGJlIG1vcmUgaHVtYW4gZnJp
-ZW5kbHk/DQo+PiANCj4+IAkJcHJfZXJyKCJDUFUlZDogUGVyZm9ybWFuY2Ugbm93IGRlZ3JhZGVk
-IGFmdGVyIGFwcGx5aW5nIG1hY2hpbmUgY2hlY2sgd29ya2Fyb3VuZFxuIiwNCj4+IAkJCXNtcF9w
-cm9jZXNzb3JfaWQoKSk7DQo+DQo+IFdlbGwsIGlzIHRoZXJlIGFuIGVycmF0dW0geW91IGNhbiBy
-ZWZlciB0byBpbiBpdCBpbnN0ZWFkPw0KDQpUaGUgZXJyYXR1bSBoYXMgbWFkZSBpdHMgd2F5IHRo
-cm91Z2ggdG8gdGhlIHB1YmxpYyBzcGVjaWZpY2F0aW9uIHVwZGF0ZSB5ZXQgOi0oDQoNCj4gRXhw
-bGFpbmluZyB0aGUgd2hvbGUgZGVhbCBpbiBhIHNpbmdsZSBlcnJvciBtZXNzYWdlIGlzIGhhcmQg
-YW5kIGFsbW9zdA0KPiBjZXJ0YWlubHkgaW5zdWZmaWNpZW50Lg0KDQpOb3QgaWRlYWwsIGJ1dCB0
-aGUgbWVzc2FnZSBpcyBhIHNlYXJjaCB0b29sIHRvIGdldCB0byB0aGVzZSBlLW1haWwgZGlzY3Vz
-c2lvbnMuDQoNCj4gQWxzbywgd2hhdCdzIHRoZSB1c2Ugb2YgdGhhdCBtZXNzYWdlIGlzc3Vpbmcg
-b25jZSBvbiBldmVyeSBDUFU/IEluc3RlYWQNCj4gb2YgYmVpbmcgYSBfb25jZSgpIG1lc3NhZ2U/
-DQoNCnByX2Vycl9vbmNlKCkgd291bGQgYmUgYmV0dGVyLg0KDQotVG9ueQ0K
+Use mac_pton() instead of custom approach.
+
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+v2: no changes
+ drivers/ptp/ptp_pch.c | 41 ++++++++++-------------------------------
+ 1 file changed, 10 insertions(+), 31 deletions(-)
+
+diff --git a/drivers/ptp/ptp_pch.c b/drivers/ptp/ptp_pch.c
+index 8070f3fd98f0..cbf7ce3db93a 100644
+--- a/drivers/ptp/ptp_pch.c
++++ b/drivers/ptp/ptp_pch.c
+@@ -100,7 +100,6 @@ struct pch_ts_regs {
+ #define PCH_ECS_ETH		(1 << 0)
+ 
+ #define PCH_ECS_CAN		(1 << 1)
+-#define PCH_STATION_BYTES	6
+ 
+ #define PCH_IEEE1588_ETH	(1 << 0)
+ #define PCH_IEEE1588_CAN	(1 << 1)
+@@ -292,8 +291,9 @@ static void pch_reset(struct pch_dev *chip)
+  */
+ int pch_set_station_address(u8 *addr, struct pci_dev *pdev)
+ {
+-	s32 i;
+ 	struct pch_dev *chip = pci_get_drvdata(pdev);
++	bool valid;
++	u64 mac;
+ 
+ 	/* Verify the parameter */
+ 	if ((chip->regs == NULL) || addr == (u8 *)NULL) {
+@@ -301,37 +301,16 @@ int pch_set_station_address(u8 *addr, struct pci_dev *pdev)
+ 			"invalid params returning PCH_INVALIDPARAM\n");
+ 		return PCH_INVALIDPARAM;
+ 	}
+-	/* For all station address bytes */
+-	for (i = 0; i < PCH_STATION_BYTES; i++) {
+-		u32 val;
+-		s32 tmp;
+ 
+-		tmp = hex_to_bin(addr[i * 3]);
+-		if (tmp < 0) {
+-			dev_err(&pdev->dev,
+-				"invalid params returning PCH_INVALIDPARAM\n");
+-			return PCH_INVALIDPARAM;
+-		}
+-		val = tmp * 16;
+-		tmp = hex_to_bin(addr[(i * 3) + 1]);
+-		if (tmp < 0) {
+-			dev_err(&pdev->dev,
+-				"invalid params returning PCH_INVALIDPARAM\n");
+-			return PCH_INVALIDPARAM;
+-		}
+-		val += tmp;
+-		/* Expects ':' separated addresses */
+-		if ((i < 5) && (addr[(i * 3) + 2] != ':')) {
+-			dev_err(&pdev->dev,
+-				"invalid params returning PCH_INVALIDPARAM\n");
+-			return PCH_INVALIDPARAM;
+-		}
+-
+-		/* Ideally we should set the address only after validating
+-							 entire string */
+-		dev_dbg(&pdev->dev, "invoking pch_station_set\n");
+-		iowrite32(val, &chip->regs->ts_st[i]);
++	valid = mac_pton(addr, (u8 *)&mac);
++	if (!valid) {
++		dev_err(&pdev->dev, "invalid params returning PCH_INVALIDPARAM\n");
++		return PCH_INVALIDPARAM;
+ 	}
++
++	dev_dbg(&pdev->dev, "invoking pch_station_set\n");
++	iowrite32(lower_32_bits(mac), &chip->regs->ts_st[0]);
++	iowrite32(upper_32_bits(mac), &chip->regs->ts_st[4]);
+ 	return 0;
+ }
+ EXPORT_SYMBOL(pch_set_station_address);
+-- 
+2.34.1
+

@@ -2,52 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B8E34ACA48
+	by mail.lfdr.de (Postfix) with ESMTP id CFCF04ACA49
 	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 21:20:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242046AbiBGUSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 15:18:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44984 "EHLO
+        id S242104AbiBGUSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 15:18:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241807AbiBGUNs (ORCPT
+        with ESMTP id S241877AbiBGUN6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 15:13:48 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF969C0401DA;
-        Mon,  7 Feb 2022 12:13:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AF9B1B81673;
-        Mon,  7 Feb 2022 20:13:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E746C340EE;
-        Mon,  7 Feb 2022 20:13:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644264825;
-        bh=plTnq9pejgjpmDCGWtGP8pfnD0zRw1CkgzOlZIUXW+Y=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=cCGH/YrbuY0GdCIi582p6XmXwWgBSOhqBYn2V9Oy3z29nvC/AEkgYR8oJ+IBaQo89
-         NH6MrrUR6Gd4iGcQaK2NtW6N4k10sovKyCWY27PiZ9jM7VPSXKZsUpWdJhUR3nRYFq
-         y738P/ANGIvN8Gdwk7JHHDFo+FEECNI4rgGobNbl8ApAZukXQEPwN1n3NE2t4+ab3O
-         bnqVVg3KflfjdcJZSb8dVNuzA0OkG8YHeq9G29zHWUGqyeZrSstPwYcGjStdoZ7Lsz
-         EwhbN5U1fziwzU9kHbfuENQiQAOjYzkCIOEueSJfD1Qdf/p1HRn/iovjSwu6YhjeNk
-         R7M0VZW4kyV6g==
-Date:   Mon, 7 Feb 2022 14:13:43 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Abhishek Sahu <abhsahu@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: Re: [PATCH] PCI: Fix the ACPI power state during runtime resume
-Message-ID: <20220207201343.GA413636@bhelgaas>
+        Mon, 7 Feb 2022 15:13:58 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24877C0401E2
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 12:13:57 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id 192so17323388ybd.10
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 12:13:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=nRc9Tqqq9fYDfHJKshSMoN+bDAjX+9kSEzcflRyBExg=;
+        b=gjrPNzzAMYoHyJvcEgNl1zceUp8sU8VR+2Gcw4fpIxLoeFsxodPJVAewDArz97bRx/
+         EEofiOzSThAi8K/KaXII8yHkyOb25AowdV8SDwCG+xpt5bxMz3t3QJPiP0YWr5T+uFAZ
+         ydG82vAaW9F7pGlI+dtC/YjBnarmYiUlXdKtU/OJ56oIqgzPe6rMUSe4tA6Y6uYpHWhu
+         yeufA+1X5VkzGc13i9hCOIDiOMl+mpqG3Z6U84RzuOa8fpW4yGAmjKZOzCiObepZWE5/
+         KQuOUrqeERcCPia8aupZccDJXdgsdhd8PKHjHQFdpnU8q6fWSrbzliIohhH0w57dV7bO
+         GKxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=nRc9Tqqq9fYDfHJKshSMoN+bDAjX+9kSEzcflRyBExg=;
+        b=B8z3tDSaiWCPSsmWC8tnGosscWjUn4NwYfnqi2QxftUWvFinMJum+TM2kdOkYX7/ow
+         6oBJuTp+SgKpJlBaqo3H7e3fOnCQg9hdxN2AS6MGNAn8dCRMny1cmRm0tpOl2KrZCabI
+         vyyr5Rz3u8eP5tJxTBOvITepCJeESHg7fSIatfykFYyImXr+KNp0VD8h5LI+00utdxYe
+         Ik2bVuADbhpBcMbFp6TqqN0Onz3IRvqD1b+zQtidc/8Z9V1pTrfeTyuO/4oO1HLZ+yeE
+         vwqgHldDsoG1jMg49eal1sZJU/AtNwT2CYbIZ3O2t1lxjrVZyy+99arBNhndVMbLW0AR
+         KzfA==
+X-Gm-Message-State: AOAM533RBTTckjxCYF7a+8sQdFYcK/1k0IadKNMrXpIqGTF7o2iFS5kB
+        JIsQ5O2cSMBpPGpkfTsbb7czBICgrg+P45FuVxUuKg==
+X-Google-Smtp-Source: ABdhPJyucK91UYiujQhpoNFj6jy7F3p2dUZ40tG1lxniwN3tAyuZDcSt1IAjz2DEOLDd8I8HqkU70fanVMaPd4Qddww=
+X-Received: by 2002:a81:ed10:: with SMTP id k16mr1741134ywm.166.1644264836076;
+ Mon, 07 Feb 2022 12:13:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2249802.ElGaqSPkdT@kreacher>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220207133903.595766086@linuxfoundation.org>
+In-Reply-To: <20220207133903.595766086@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 8 Feb 2022 01:43:44 +0530
+Message-ID: <CA+G9fYswXgZsdVSg+q_76A6dvj2=8KpWKBqFCAUxC64y5JcQfQ@mail.gmail.com>
+Subject: Re: [PATCH 5.15 000/111] 5.15.22-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,37 +70,177 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 07:58:13PM +0100, Rafael J. Wysocki wrote:
-> On Saturday, February 5, 2022 12:32:19 AM CET Bjorn Helgaas wrote:
-> > Wonder if we should add something like this to MAINTAINERS so you get
-> > cc'd on power-related things:
-> > 
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index ea3e6c914384..3d9a211cad5d 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -15422,6 +15422,7 @@ F:	include/linux/pm.h
-> >  F:	include/linux/pm_*
-> >  F:	include/linux/powercap.h
-> >  F:	kernel/configs/nopm.config
-> > +K:	pci_[a-z_]*power[a-z_]*\(
-> 
-> It seems so, but generally PM patches should be CCed to linux-pm anyway.
+On Mon, 7 Feb 2022 at 19:34, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.22 release.
+> There are 111 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 09 Feb 2022 13:38:43 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.15.22-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Definitely.  It's just that running get_maintainer.pl on this patch
-currently shows:
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-  Bjorn Helgaas <bhelgaas@google.com> (supporter:PCI SUBSYSTEM)
-  linux-pci@vger.kernel.org (open list:PCI SUBSYSTEM)
-  linux-kernel@vger.kernel.org (open list)
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-so it's not as helpful as it could be.  The MAINTAINERS patch above
-would change it to this:
+## Build
+* kernel: 5.15.22-rc2
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-5.15.y
+* git commit: 0472630a562104918269888a8b355d06c5060e98
+* git describe: v5.15.21-112-g0472630a5621
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
+.21-112-g0472630a5621
 
-  Bjorn Helgaas <bhelgaas@google.com> (supporter:PCI SUBSYSTEM)
-  "Rafael J. Wysocki" <rafael@kernel.org> (supporter:POWER MANAGEMENT CORE)
-  linux-pci@vger.kernel.org (open list:PCI SUBSYSTEM)
-  linux-kernel@vger.kernel.org (open list)
-  linux-pm@vger.kernel.org (open list:POWER MANAGEMENT CORE)
+## Test Regressions (compared to v5.15.21)
+No test regressions found.
 
-Bjorn
+## Metric Regressions (compared to v5.15.21)
+No metric regressions found.
+
+## Test Fixes (compared to v5.15.21)
+No test fixes found.
+
+## Metric Fixes (compared to v5.15.21)
+No metric fixes found.
+
+## Test result summary
+total: 77350, pass: 66730, fail: 383, skip: 9670, xfail: 567
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 259 total, 259 passed, 0 failed
+* arm64: 37 total, 37 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 36 total, 36 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 34 total, 34 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 52 total, 48 passed, 4 failed
+* riscv: 24 total, 20 passed, 4 failed
+* s390: 18 total, 18 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 37 total, 37 passed, 0 failed
+
+## Test suites summary
+* fwts
+* kselftest-android
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
+
+--
+Linaro LKFT
+https://lkft.linaro.org

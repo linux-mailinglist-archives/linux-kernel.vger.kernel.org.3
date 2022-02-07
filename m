@@ -2,43 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D3484AB9FB
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:26:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C87AA4ABCDE
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:50:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382480AbiBGLTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:19:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51220 "EHLO
+        id S1388126AbiBGLnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:43:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357465AbiBGLOW (ORCPT
+        with ESMTP id S1385604AbiBGLcB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:14:22 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 148DAC0401E5;
-        Mon,  7 Feb 2022 03:14:07 -0800 (PST)
+        Mon, 7 Feb 2022 06:32:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88DD1C03E937;
+        Mon,  7 Feb 2022 03:31:06 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CB0F6126D;
-        Mon,  7 Feb 2022 11:14:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 081A4C004E1;
-        Mon,  7 Feb 2022 11:14:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4355BB80EC3;
+        Mon,  7 Feb 2022 11:31:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57CB5C004E1;
+        Mon,  7 Feb 2022 11:31:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232446;
-        bh=Ywsm0VbShm1rZ6+dOfkOQ4q6cUz0Hy3DFeZcvMhtHuQ=;
+        s=korg; t=1644233464;
+        bh=UBUGUaJZe93yLz+nk7Ton8WJCc+VGhP2Z/SUcF67TSE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VQDPJCkrcg5lixg/zSTddLr+rtFbC9CGBmWaCWP5zx/TYhUw51cSQePITONdmsQFn
-         U6acFd5GUIfVZ8Zc9c1xwV4xQH5iAXIs7hJVpdAk0hWzGRVNOr63AzBEwxDXsWFyy4
-         Tm0rtA9RDch1z15VYsZcIYiq94MV4laGPVu6L1rw=
+        b=YFvrwteB+mdXqWaI/TEqe9p+HZVz/ssmC7faZDfiqz2w6yaAdXubolA2H6fgUqu3Z
+         5cNB74YztiImKAE4WdRGGT2B8eR2S/A4kPDWHx1CgghewNpGFcmFzJ82+JNRKDuyjr
+         NQWH7NaHwj+obOgIRTqczbIAD6MoBue0dhM8lDIg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Cameron Williams <cang1@live.co.uk>
-Subject: [PATCH 4.19 12/86] tty: Add support for Brainboxes UC cards.
+        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Shakeel Butt <shakeelb@google.com>,
+        Manfred Spraul <manfred@colorfullife.com>,
+        Arnd Bergmann <arnd@arndb.de>, Yang Guang <cgel.zte@gmail.com>,
+        Davidlohr Bueso <dbueso@suse.de>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Bhaskar Chowdhury <unixbhaskar@gmail.com>,
+        Vasily Averin <vvs@virtuozzo.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.16 004/126] ipc/sem: do not sleep with a spin lock held
 Date:   Mon,  7 Feb 2022 12:05:35 +0100
-Message-Id: <20220207103757.964554207@linuxfoundation.org>
+Message-Id: <20220207103804.211134497@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103757.550973048@linuxfoundation.org>
-References: <20220207103757.550973048@linuxfoundation.org>
+In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
+References: <20220207103804.053675072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,139 +63,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Cameron Williams <cang1@live.co.uk>
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-commit 152d1afa834c84530828ee031cf07a00e0fc0b8c upstream.
+commit 520ba724061cef59763e2b6f5b26e8387c2e5822 upstream.
 
-This commit adds support for the some of the Brainboxes PCI range of
-cards, including the UC-101, UC-235/246, UC-257, UC-268, UC-275/279,
-UC-302, UC-310, UC-313, UC-320/324, UC-346, UC-357, UC-368
-and UC-420/431.
+We can't call kvfree() with a spin lock held, so defer it.
 
-Signed-off-by: Cameron Williams <cang1@live.co.uk>
-Cc: stable <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/AM5PR0202MB2564688493F7DD9B9C610827C45E9@AM5PR0202MB2564.eurprd02.prod.outlook.com
+Link: https://lkml.kernel.org/r/20211223031207.556189-1-chi.minghao@zte.com.cn
+Fixes: fc37a3b8b438 ("[PATCH] ipc sem: use kvmalloc for sem_undo allocation")
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+Reviewed-by: Shakeel Butt <shakeelb@google.com>
+Reviewed-by: Manfred Spraul <manfred@colorfullife.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Yang Guang <cgel.zte@gmail.com>
+Cc: Davidlohr Bueso <dbueso@suse.de>
+Cc: Randy Dunlap <rdunlap@infradead.org>
+Cc: Bhaskar Chowdhury <unixbhaskar@gmail.com>
+Cc: Vasily Averin <vvs@virtuozzo.com>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/tty/serial/8250/8250_pci.c |  100 ++++++++++++++++++++++++++++++++++++-
- 1 file changed, 98 insertions(+), 2 deletions(-)
+ ipc/sem.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/tty/serial/8250/8250_pci.c
-+++ b/drivers/tty/serial/8250/8250_pci.c
-@@ -4797,8 +4797,30 @@ static const struct pci_device_id serial
- 	{	PCI_VENDOR_ID_INTASHIELD, PCI_DEVICE_ID_INTASHIELD_IS400,
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,    /* 135a.0dc0 */
- 		pbn_b2_4_115200 },
-+	/* Brainboxes Devices */
- 	/*
--	 * BrainBoxes UC-260
-+	* Brainboxes UC-101
-+	*/
-+	{       PCI_VENDOR_ID_INTASHIELD, 0x0BA1,
-+		PCI_ANY_ID, PCI_ANY_ID,
-+		0, 0,
-+		pbn_b2_2_115200 },
-+	/*
-+	 * Brainboxes UC-235/246
-+	 */
-+	{	PCI_VENDOR_ID_INTASHIELD, 0x0AA1,
-+		PCI_ANY_ID, PCI_ANY_ID,
-+		0, 0,
-+		pbn_b2_1_115200 },
-+	/*
-+	 * Brainboxes UC-257
-+	 */
-+	{	PCI_VENDOR_ID_INTASHIELD, 0x0861,
-+		PCI_ANY_ID, PCI_ANY_ID,
-+		0, 0,
-+		pbn_b2_2_115200 },
-+	/*
-+	 * Brainboxes UC-260/271/701/756
+--- a/ipc/sem.c
++++ b/ipc/sem.c
+@@ -1964,6 +1964,7 @@ static struct sem_undo *find_alloc_undo(
  	 */
- 	{	PCI_VENDOR_ID_INTASHIELD, 0x0D21,
- 		PCI_ANY_ID, PCI_ANY_ID,
-@@ -4806,7 +4828,81 @@ static const struct pci_device_id serial
- 		pbn_b2_4_115200 },
- 	{	PCI_VENDOR_ID_INTASHIELD, 0x0E34,
- 		PCI_ANY_ID, PCI_ANY_ID,
--		 PCI_CLASS_COMMUNICATION_MULTISERIAL << 8, 0xffff00,
-+		PCI_CLASS_COMMUNICATION_MULTISERIAL << 8, 0xffff00,
-+		pbn_b2_4_115200 },
-+	/*
-+	 * Brainboxes UC-268
-+	 */
-+	{       PCI_VENDOR_ID_INTASHIELD, 0x0841,
-+		PCI_ANY_ID, PCI_ANY_ID,
-+		0, 0,
-+		pbn_b2_4_115200 },
-+	/*
-+	 * Brainboxes UC-275/279
-+	 */
-+	{	PCI_VENDOR_ID_INTASHIELD, 0x0881,
-+		PCI_ANY_ID, PCI_ANY_ID,
-+		0, 0,
-+		pbn_b2_8_115200 },
-+	/*
-+	 * Brainboxes UC-302
-+	 */
-+	{	PCI_VENDOR_ID_INTASHIELD, 0x08E1,
-+		PCI_ANY_ID, PCI_ANY_ID,
-+		0, 0,
-+		pbn_b2_2_115200 },
-+	/*
-+	 * Brainboxes UC-310
-+	 */
-+	{       PCI_VENDOR_ID_INTASHIELD, 0x08C1,
-+		PCI_ANY_ID, PCI_ANY_ID,
-+		0, 0,
-+		pbn_b2_2_115200 },
-+	/*
-+	 * Brainboxes UC-313
-+	 */
-+	{       PCI_VENDOR_ID_INTASHIELD, 0x08A3,
-+		PCI_ANY_ID, PCI_ANY_ID,
-+		0, 0,
-+		pbn_b2_2_115200 },
-+	/*
-+	 * Brainboxes UC-320/324
-+	 */
-+	{	PCI_VENDOR_ID_INTASHIELD, 0x0A61,
-+		PCI_ANY_ID, PCI_ANY_ID,
-+		0, 0,
-+		pbn_b2_1_115200 },
-+	/*
-+	 * Brainboxes UC-346
-+	 */
-+	{	PCI_VENDOR_ID_INTASHIELD, 0x0B02,
-+		PCI_ANY_ID, PCI_ANY_ID,
-+		0, 0,
-+		pbn_b2_4_115200 },
-+	/*
-+	 * Brainboxes UC-357
-+	 */
-+	{	PCI_VENDOR_ID_INTASHIELD, 0x0A81,
-+		PCI_ANY_ID, PCI_ANY_ID,
-+		0, 0,
-+		pbn_b2_2_115200 },
-+	{	PCI_VENDOR_ID_INTASHIELD, 0x0A83,
-+		PCI_ANY_ID, PCI_ANY_ID,
-+		0, 0,
-+		pbn_b2_2_115200 },
-+	/*
-+	 * Brainboxes UC-368
-+	 */
-+	{	PCI_VENDOR_ID_INTASHIELD, 0x0C41,
-+		PCI_ANY_ID, PCI_ANY_ID,
-+		0, 0,
-+		pbn_b2_4_115200 },
-+	/*
-+	 * Brainboxes UC-420/431
-+	 */
-+	{       PCI_VENDOR_ID_INTASHIELD, 0x0921,
-+		PCI_ANY_ID, PCI_ANY_ID,
-+		0, 0,
- 		pbn_b2_4_115200 },
- 	/*
- 	 * Perle PCI-RAS cards
+ 	un = lookup_undo(ulp, semid);
+ 	if (un) {
++		spin_unlock(&ulp->lock);
+ 		kvfree(new);
+ 		goto success;
+ 	}
+@@ -1976,9 +1977,8 @@ static struct sem_undo *find_alloc_undo(
+ 	ipc_assert_locked_object(&sma->sem_perm);
+ 	list_add(&new->list_id, &sma->list_id);
+ 	un = new;
+-
+-success:
+ 	spin_unlock(&ulp->lock);
++success:
+ 	sem_unlock(sma, -1);
+ out:
+ 	return un;
 
 

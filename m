@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9674B4ABA5A
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:28:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0035F4ABBB2
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:39:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234084AbiBGLZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:25:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58850 "EHLO
+        id S1384719AbiBGL3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:29:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382481AbiBGLTU (ORCPT
+        with ESMTP id S1383494AbiBGLWn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:19:20 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16F3C043188;
-        Mon,  7 Feb 2022 03:19:19 -0800 (PST)
+        Mon, 7 Feb 2022 06:22:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D4E0C043181;
+        Mon,  7 Feb 2022 03:22:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3A02BB81028;
-        Mon,  7 Feb 2022 11:19:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B311C004E1;
-        Mon,  7 Feb 2022 11:19:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 08B6D61380;
+        Mon,  7 Feb 2022 11:22:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4CFAC340EB;
+        Mon,  7 Feb 2022 11:22:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232757;
-        bh=P0lrcZEgh8hsPsHCOTaIbX26/xGUq6E+ZqOZeIfDWz0=;
+        s=korg; t=1644232961;
+        bh=oockd+H0nbljZXJvxJaW8xs5secCp/bASldZOrm0rlE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R7FPqb4twrpUtW33OSM6k3wZfG0a0hxETW9m1euvQwcsuhnRqtpWBW/JfZoyNKXVC
-         AgFbOpwEkbLI7GcWiAQMMdRTodLG7xlpOpvg3hMltKK+TuZrE3dFeKN+jAlMPZwDRY
-         fNFFXdfUJPBCpaz5/43ZMoY8SruAYXIDrEjqWawI=
+        b=wdRaxjjMr1aLJfXeOkJVWDZIAH+IUgqP9XahiGZe94wAKGmvoD5NfuOCSkH/gFU7c
+         FBnz/cl72HK+w2gp5gjqDDa2Rtz5/UTfnR7Phf5vdyIMcEYc9aL4/TFXKxXcp7BzUa
+         RTcKstVQwDHWECVI/1z7xAo9bnvHVepzocEhihds=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miquel Raynal <miquel.raynal@bootlin.com>,
-        Alexander Aring <aahringo@redhat.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>
-Subject: [PATCH 5.4 26/44] net: ieee802154: ca8210: Stop leaking skbs
-Date:   Mon,  7 Feb 2022 12:06:42 +0100
-Message-Id: <20220207103754.010886863@linuxfoundation.org>
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH 5.10 45/74] ASoC: fsl: Add missing error handling in pcm030_fabric_probe
+Date:   Mon,  7 Feb 2022 12:06:43 +0100
+Message-Id: <20220207103758.694638738@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103753.155627314@linuxfoundation.org>
-References: <20220207103753.155627314@linuxfoundation.org>
+In-Reply-To: <20220207103757.232676988@linuxfoundation.org>
+References: <20220207103757.232676988@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +54,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miquel Raynal <miquel.raynal@bootlin.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit 621b24b09eb61c63f262da0c9c5f0e93348897e5 upstream.
+commit fb25621da5702c104ce0a48de5b174ced09e5b4e upstream.
 
-Upon error the ieee802154_xmit_complete() helper is not called. Only
-ieee802154_wake_queue() is called manually. We then leak the skb
-structure.
+Add the missing platform_device_put() and platform_device_del()
+before return from pcm030_fabric_probe in the error handling case.
 
-Free the skb structure upon error before returning.
-
-Fixes: ded845a781a5 ("ieee802154: Add CA8210 IEEE 802.15.4 device driver")
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Acked-by: Alexander Aring <aahringo@redhat.com>
-Link: https://lore.kernel.org/r/20220125121426.848337-5-miquel.raynal@bootlin.com
-Signed-off-by: Stefan Schmidt <stefan@datenfreihafen.org>
+Fixes: c912fa913446 ("ASoC: fsl: register the wm9712-codec")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220127131336.30214-1-linmq006@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ieee802154/ca8210.c |    1 +
- 1 file changed, 1 insertion(+)
+ sound/soc/fsl/pcm030-audio-fabric.c |   11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
---- a/drivers/net/ieee802154/ca8210.c
-+++ b/drivers/net/ieee802154/ca8210.c
-@@ -1770,6 +1770,7 @@ static int ca8210_async_xmit_complete(
- 			status
- 		);
- 		if (status != MAC_TRANSACTION_OVERFLOW) {
-+			dev_kfree_skb_any(priv->tx_skb);
- 			ieee802154_wake_queue(priv->hw);
- 			return 0;
- 		}
+--- a/sound/soc/fsl/pcm030-audio-fabric.c
++++ b/sound/soc/fsl/pcm030-audio-fabric.c
+@@ -93,16 +93,21 @@ static int pcm030_fabric_probe(struct pl
+ 		dev_err(&op->dev, "platform_device_alloc() failed\n");
+ 
+ 	ret = platform_device_add(pdata->codec_device);
+-	if (ret)
++	if (ret) {
+ 		dev_err(&op->dev, "platform_device_add() failed: %d\n", ret);
++		platform_device_put(pdata->codec_device);
++	}
+ 
+ 	ret = snd_soc_register_card(card);
+-	if (ret)
++	if (ret) {
+ 		dev_err(&op->dev, "snd_soc_register_card() failed: %d\n", ret);
++		platform_device_del(pdata->codec_device);
++		platform_device_put(pdata->codec_device);
++	}
+ 
+ 	platform_set_drvdata(op, pdata);
+-
+ 	return ret;
++
+ }
+ 
+ static int pcm030_fabric_remove(struct platform_device *op)
 
 

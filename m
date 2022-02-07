@@ -2,81 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3069A4ACBBA
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 22:59:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB0144ACBC2
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 23:03:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243402AbiBGV7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 16:59:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38178 "EHLO
+        id S243424AbiBGWD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 17:03:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbiBGV7P (ORCPT
+        with ESMTP id S239911AbiBGWD5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 16:59:15 -0500
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F6FC061355;
-        Mon,  7 Feb 2022 13:59:14 -0800 (PST)
-Received: by mail-oi1-f177.google.com with SMTP id s24so10916851oic.6;
-        Mon, 07 Feb 2022 13:59:14 -0800 (PST)
+        Mon, 7 Feb 2022 17:03:57 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32351C0612A4
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 14:03:57 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id u130so15407278pfc.2
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 14:03:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=UPy7lygPxr90ipECLkuZI1hGfjCl5QQ8FuHy0YowhSc=;
+        b=RCgXhswVoMfKJgmEInLACfKtrGVLqOCKWZNQ41sxN5QDiS7VwL/G07y2oU0WB8ztNR
+         Y0S/kH1ShxVpYYabvAnlMUsDkJFODoyyY5dzhb1Fd7mnBLqXM9Rec01w4aj7PGNdeL5n
+         RWuK3IpF25Z9D8lhRsyEZAKgCsMiGAZNHpKo086hki4ByVDihSrUinUl2fJl0XC9tujL
+         PNBkTL6RuaWSjX1S5vLoYvoof4pfeRaDyEpdC+mVVVIu7XPHvEn4en4/Y4pIL4hV6rr1
+         Cdy78LZyRztbpdzjvMGH8T8h9AbVd0QzBozwz2j0qazz4F8EmAc5xBhZNFYgkPpM1Tn/
+         gMUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=1TgpekSKAIGefPlVKG3MJZI856wXlnKnhXOCP6G/TtM=;
-        b=XKW7d1zTnTOmnVeglFAhgrNhVoNy5FQ8EymfsBor3CCo3lAMOZlJgNDKH7WA031ben
-         BV51zBC8rWKLf7939v4oINfPMxHmG42q6aGv2BNkGt1lioUU27Ilu2kSPskzxeDgq3Tr
-         nZVsy27T+QA1tuCkMpbxf7NEB5ZHISEOCiN73U9NAZvYh10b9VLmzdp8UHjcJN/IWuYG
-         IUarIj7eIBPc3/OmtjOq775azOwumX+sbMF0jXPLaHVRy79ycYPZ7RtH1n4/g9ync0tk
-         R5rArLnkSRC/k0YQbXOOe4/kASopqrY04j7Y9QuHbdZyrw2NIRJJK+W6RgIkKT6YYwFG
-         6QlQ==
-X-Gm-Message-State: AOAM5313LOcL7kMeEIWJwa6vhkY/xfJ8VQSqlsBT2uEig6of48Wqt8/f
-        8fG0T1CvQtAGtUMX3UV0bE6+O22kXw==
-X-Google-Smtp-Source: ABdhPJwI0ZpUsaKMxFb0aBSe8Sw2b4RWxRlQE2ac8fEAdS7NPC5z5RDDiyWlaa1rrV7BOte7aggdtw==
-X-Received: by 2002:a05:6808:14c6:: with SMTP id f6mr453650oiw.0.1644271154024;
-        Mon, 07 Feb 2022 13:59:14 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id 127sm4703473oih.8.2022.02.07.13.59.12
+        bh=UPy7lygPxr90ipECLkuZI1hGfjCl5QQ8FuHy0YowhSc=;
+        b=mNjk4qIyKYAw9Z+6UbNOuEiiZ7AtOd/HHqUc5Wh8UJxgS+2rk6+91pd71ZU4YaNs0z
+         MU1K/a90Om4xBMDpRUzbFE6FxNU6u4VWrRLXWaHSczFi5wyTEJuz+X7AW4jqRaO9ZcB9
+         nWTtW6wWJeZZNAPpcVrKYBkc/9JL23p0X3KdM86quYBo7uhCeCRRNnHEjBSoLuOc6pW/
+         YXE5AIcTr2VZkaICnMS2axMAUYSIflbgNDdRkl41QoThx5C4L5Zx461FEb5TAy0AwnJy
+         bY43SshQ+oGdTVWKqE0jgafVYiws25d4rA7zTt0lUxB4C5x7kSyqLvNA+24KL7CY5e6X
+         cedQ==
+X-Gm-Message-State: AOAM532kDYZIAcktDa1GXwq4hQcOXrMeO5HCASGpD1ZOrwcBXvHhjD9C
+        1Q29Ny7gF/AGVe/WtSWGK5Vchg==
+X-Google-Smtp-Source: ABdhPJzbBC9XPXZx1a7sY7aumuFcnEQRXSeGjArZY3492Wqxxm+qGn6UVim4VyXN7pLekEvoM53jAg==
+X-Received: by 2002:a63:2c83:: with SMTP id s125mr1103589pgs.265.1644271436434;
+        Mon, 07 Feb 2022 14:03:56 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id q2sm13779245pfj.94.2022.02.07.14.03.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 13:59:12 -0800 (PST)
-Received: (nullmailer pid 998749 invoked by uid 1000);
-        Mon, 07 Feb 2022 21:59:11 -0000
-Date:   Mon, 7 Feb 2022 15:59:11 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     cy_huang <u0084500@gmail.com>
-Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org,
-        th_chuang@richtek.com, cy_huang@richtek.com,
-        gregkh@linuxfoundation.org, will_lin@richtek.com,
-        linux-kernel@vger.kernel.org, heikki.krogerus@linux.intel.com,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] dt-bindings: usb: rt1719: Add binding for Richtek
- RT1719
-Message-ID: <YgGWL+GZo2QRUMSv@robh.at.kernel.org>
-References: <1644246970-18305-1-git-send-email-u0084500@gmail.com>
- <1644246970-18305-2-git-send-email-u0084500@gmail.com>
+        Mon, 07 Feb 2022 14:03:55 -0800 (PST)
+Date:   Mon, 7 Feb 2022 22:03:52 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Joerg Roedel <joro@8bytes.org>
+Cc:     x86@kernel.org, Joerg Roedel <jroedel@suse.de>,
+        Eric Biederman <ebiederm@xmission.com>,
+        kexec@lists.infradead.org, hpa@zytor.com,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Jiri Slaby <jslaby@suse.cz>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Juergen Gross <jgross@suse.com>,
+        Kees Cook <keescook@chromium.org>,
+        David Rientjes <rientjes@google.com>,
+        Cfir Cohen <cfir@google.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mike Stunes <mstunes@vmware.com>,
+        Martin Radev <martin.b.radev@gmail.com>,
+        Arvind Sankar <nivedita@alum.mit.edu>,
+        linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH v3 04/10] x86/sev: Cache AP Jump Table Address
+Message-ID: <YgGXSKAsi4aLxFMg@google.com>
+References: <20220127101044.13803-1-joro@8bytes.org>
+ <20220127101044.13803-5-joro@8bytes.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1644246970-18305-2-git-send-email-u0084500@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220127101044.13803-5-joro@8bytes.org>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 07 Feb 2022 23:16:09 +0800, cy_huang wrote:
-> From: ChiYuan Huang <cy_huang@richtek.com>
+On Thu, Jan 27, 2022, Joerg Roedel wrote:
+> From: Joerg Roedel <jroedel@suse.de>
 > 
-> Add binding for Richtek RT1719.
-> 
-> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> ---
->  .../devicetree/bindings/usb/richtek,rt1719.yaml    | 85 ++++++++++++++++++++++
->  1 file changed, 85 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/richtek,rt1719.yaml
-> 
+> Store the physical address of the AP jump table in kernel memory so
+> that it does not need to be fetched from the Hypervisor again.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+This doesn't explain why the kernel would retrieve the jump table more than once,
+e.g. at this point in the series, this can only ever be called once.
+
+> Signed-off-by: Joerg Roedel <jroedel@suse.de>
+> ---
+>  arch/x86/kernel/sev.c | 28 +++++++++++++++-------------
+>  1 file changed, 15 insertions(+), 13 deletions(-)
+> 
+> diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
+> index 8a4317fa699a..969ef9855bb5 100644
+> --- a/arch/x86/kernel/sev.c
+> +++ b/arch/x86/kernel/sev.c
+> @@ -43,6 +43,9 @@ static struct ghcb boot_ghcb_page __bss_decrypted __aligned(PAGE_SIZE);
+>   */
+>  static struct ghcb __initdata *boot_ghcb;
+>  
+> +/* Cached AP jump table Address */
+> +static phys_addr_t jump_table_pa;
+> +
+>  /* #VC handler runtime per-CPU data */
+>  struct sev_es_runtime_data {
+>  	struct ghcb ghcb_page;
+> @@ -523,12 +526,14 @@ void noinstr __sev_es_nmi_complete(void)
+>  	__sev_put_ghcb(&state);
+>  }
+>  
+> -static u64 get_jump_table_addr(void)
+> +static phys_addr_t get_jump_table_addr(void)
+
+Not new, but I believe this can be tagged __init.
+
+>  {
+>  	struct ghcb_state state;
+>  	unsigned long flags;
+>  	struct ghcb *ghcb;
+> -	u64 ret = 0;
+> +
+> +	if (jump_table_pa)
+> +		return jump_table_pa;
+>  
+>  	local_irq_save(flags);
+>  
+> @@ -544,39 +549,36 @@ static u64 get_jump_table_addr(void)
+>  
+>  	if (ghcb_sw_exit_info_1_is_valid(ghcb) &&
+>  	    ghcb_sw_exit_info_2_is_valid(ghcb))
+> -		ret = ghcb->save.sw_exit_info_2;
+> +		jump_table_pa = (phys_addr_t)ghcb->save.sw_exit_info_2;
+>  
+>  	__sev_put_ghcb(&state);
+>  
+>  	local_irq_restore(flags);
+>  
+> -	return ret;
+> +	return jump_table_pa;
+>  }
+>  
+>  int sev_es_setup_ap_jump_table(struct real_mode_header *rmh)
+
+__init here too.
+
+>  {
+>  	u16 startup_cs, startup_ip;
+> -	phys_addr_t jump_table_pa;
+> -	u64 jump_table_addr;
+>  	u16 __iomem *jump_table;
+> +	phys_addr_t pa;
+>  
+> -	jump_table_addr = get_jump_table_addr();
+> +	pa = get_jump_table_addr();
+>  
+>  	/* On UP guests there is no jump table so this is not a failure */
+
+Does anything actually check that the jump table is valid for SMP guests?
+
+> -	if (!jump_table_addr)
+> +	if (!pa)
+
+Using '0' for "not valid" is funky because '0' isn't technically an illegal GPA,
+and because it means the address (or lack thereof) isn't cached on a single-vCPU
+guest.

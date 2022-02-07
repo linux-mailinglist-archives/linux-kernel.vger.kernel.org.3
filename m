@@ -2,173 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E9374AB301
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 02:02:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4C964AB302
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 02:04:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243262AbiBGBCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 20:02:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49234 "EHLO
+        id S243367AbiBGBEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 20:04:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230225AbiBGBCK (ORCPT
+        with ESMTP id S230225AbiBGBEA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 20:02:10 -0500
-Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96157C06173B;
-        Sun,  6 Feb 2022 17:02:09 -0800 (PST)
-Received: by mail-vk1-xa2e.google.com with SMTP id o11so6059408vkl.11;
-        Sun, 06 Feb 2022 17:02:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=8jrX21L6J3v8bF9fJZsr/4TxVcgur1Mg0vbwPmFjsrk=;
-        b=qIZEEhYuBBgsKwJMK9eMXnprvlx/n4XdCiLPfsB69YckfKa4Dx2+NjhIU6x1jeBU5G
-         NNWHHj98G40YEKNXNsIAZ5o+cFmafaQH9mtajz+E7KT+ds9Pw6PnL5ohf8xqkb2rnvjo
-         MhNYVk+VgYA8oCVzCA1UZ4fMbszrROTJ0F0i1FNgKhHwSFaLsbIh4qZtKN/GCVM8tztd
-         g2bDz65OYoue0U0KRufhQf0Xgg6O0LHFWijS97ehrCqo7L18ZYYwZtq9lHRed7fyZIPN
-         AqNEgwOCAM4533MkxeQTI7tm4TfthZv4p9XW6qxFFeSv2x/PU+E3AT9QcbA0n4KzXFnk
-         KQKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=8jrX21L6J3v8bF9fJZsr/4TxVcgur1Mg0vbwPmFjsrk=;
-        b=jYrsGIMXqrFLHYJ9GHYAkjPoy3v10MFQDck9THArZAerwOJv6o4Nx/LvDdsdlcrPPH
-         vNtcfAW7+4tpIxfbt7RoamIIcQDLcp3JGx3DQZoNy4ImDF1OrP3C6PlbgloC6lo/rf6V
-         qlAguD2/n+xkyqQ0HAZiQx8egBuN4RGeve3LgAjiQNM+bv0/RHRbaH1CA3sHmWP747uG
-         RQ/ZZX4d726QTS7SrrSPo6rI8K7v6b1ofqkmLH46DoPMzolUqaDpb1MRTmO5W5U6dtI+
-         ox+q5TC+Ud7GQvE1rPY+kcAitcRrI/CJnhkPHFIsJC8ZNb56MVJgm1knXCmUtLgyuXyO
-         5wNQ==
-X-Gm-Message-State: AOAM530V6tyb2hIyl87k+1VPUZO4a/yw7XFpXpk26iwWrqTTCKj/43Iy
-        osZQD4kQ2g4QzfmAQPegx9Ls+H4qnPW4CPwPDTM=
-X-Google-Smtp-Source: ABdhPJyXEbojahwDUj939tV0U0vggVrNPhhwW13LEaYPAM1BNNh97XmRAne7kXrK8LL9p0GHLUubSMrPpXMivGEiaY0=
-X-Received: by 2002:a05:6122:d06:: with SMTP id az6mr4294882vkb.22.1644195728353;
- Sun, 06 Feb 2022 17:02:08 -0800 (PST)
+        Sun, 6 Feb 2022 20:04:00 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4320FC06173B
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 17:03:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644195839; x=1675731839;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=59Ys8lop+dANH2jufpC/AldVNuUV3D8aZlkVkEYGNMQ=;
+  b=CL2/a/Qs5Ys/Pb4O/HZYm5asB/0Wm6nbaM3U4ToViE68NYDbGOj4MN84
+   xNUQeui7jqShRFNTYpLA3G7OVSMXor4BbrBZiGDSJhTdpRdeoA34DveSQ
+   GadSbCPNEQ88v10AmKJdhFc2BzygBpcYfB17xzpWjk6Tx1ZKIAvMVgYB3
+   np4H6+FcMa55Xu+QnKznDNaTEplC5A5S+Sidb7AkmbITUfntKz+Y4MEJD
+   yjXJSVYI7rZW2XmM0uWoz3MPuw/JYlJrqr2spQ7CjeNmpNc/hYJSSonwU
+   q5DXbMfOi4TPjFLXlH8y5vPJxhQxSXit2/BILStevEAECKO0K4hVrhFjG
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10250"; a="248383130"
+X-IronPort-AV: E=Sophos;i="5.88,348,1635231600"; 
+   d="scan'208";a="248383130"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2022 17:03:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,348,1635231600"; 
+   d="scan'208";a="524949036"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 06 Feb 2022 17:03:56 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nGsRg-000awv-8D; Mon, 07 Feb 2022 01:03:56 +0000
+Date:   Mon, 7 Feb 2022 09:03:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Chris Wilson <chris@chris-wilson.co.uk>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Subject: drivers/gpu/drm/i915/gt/selftest_execlists.c:167:4: error: format
+ string is not a string literal (potentially insecure)
+Message-ID: <202202070826.I6zgScfr-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220202214455.15753-1-davispuh@gmail.com> <20220202214455.15753-2-davispuh@gmail.com>
- <Yfx39HbTJIM0GRXL@relinquished.localdomain>
-In-Reply-To: <Yfx39HbTJIM0GRXL@relinquished.localdomain>
-From:   =?UTF-8?B?RMSBdmlzIE1vc8SBbnM=?= <davispuh@gmail.com>
-Date:   Mon, 7 Feb 2022 03:01:57 +0200
-Message-ID: <CAOE4rSyZ4Av_G4RoeG_UVaYk1NEapYJYvheAX0Bxgk0NL9HYGQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] btrfs: prevent copying too big compressed lzo segment
-To:     Omar Sandoval <osandov@osandov.com>
-Cc:     BTRFS <linux-btrfs@vger.kernel.org>, Chris Mason <clm@fb.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-piektd., 2022. g. 4. febr., plkst. 02:48 =E2=80=94 lietot=C4=81js Omar Sand=
-oval
-(<osandov@osandov.com>) rakst=C4=ABja:
->
-> On Wed, Feb 02, 2022 at 11:44:55PM +0200, D=C4=81vis Mos=C4=81ns wrote:
-> > Compressed length can be corrupted to be a lot larger than memory
-> > we have allocated for buffer.
-> > This will cause memcpy in copy_compressed_segment to write outside
-> > of allocated memory.
-> >
-> > This mostly results in stuck read syscall but sometimes when using
-> > btrfs send can get #GP
-> >
-> > kernel: general protection fault, probably for non-canonical address 0x=
-841551d5c1000: 0000 [#1] PREEMPT SMP NOPTI
-> > kernel: CPU: 17 PID: 264 Comm: kworker/u256:7 Tainted: P           OE  =
-   5.17.0-rc2-1 #12
-> > kernel: Workqueue: btrfs-endio btrfs_work_helper [btrfs]
-> > kernel: RIP: 0010:lzo_decompress_bio (./include/linux/fortify-string.h:=
-225 fs/btrfs/lzo.c:322 fs/btrfs/lzo.c:394) btrfs
-> > Code starting with the faulting instruction
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >    0:*  48 8b 06                mov    (%rsi),%rax              <-- tra=
-pping instruction
-> >    3:   48 8d 79 08             lea    0x8(%rcx),%rdi
-> >    7:   48 83 e7 f8             and    $0xfffffffffffffff8,%rdi
-> >    b:   48 89 01                mov    %rax,(%rcx)
-> >    e:   44 89 f0                mov    %r14d,%eax
-> >   11:   48 8b 54 06 f8          mov    -0x8(%rsi,%rax,1),%rdx
-> > kernel: RSP: 0018:ffffb110812efd50 EFLAGS: 00010212
-> > kernel: RAX: 0000000000001000 RBX: 000000009ca264c8 RCX: ffff98996e6d8f=
-f8
-> > kernel: RDX: 0000000000000064 RSI: 000841551d5c1000 RDI: ffffffff950043=
-5d
-> > kernel: RBP: ffff989a3be856c0 R08: 0000000000000000 R09: 00000000000000=
-00
-> > kernel: R10: 0000000000000000 R11: 0000000000001000 R12: ffff98996e6d80=
-00
-> > kernel: R13: 0000000000000008 R14: 0000000000001000 R15: 000841551d5c10=
-00
-> > kernel: FS:  0000000000000000(0000) GS:ffff98a09d640000(0000) knlGS:000=
-0000000000000
-> > kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > kernel: CR2: 00001e9f984d9ea8 CR3: 000000014971a000 CR4: 00000000003506=
-e0
-> > kernel: Call Trace:
-> > kernel:  <TASK>
-> > kernel: end_compressed_bio_read (fs/btrfs/compression.c:104 fs/btrfs/co=
-mpression.c:1363 fs/btrfs/compression.c:323) btrfs
-> > kernel: end_workqueue_fn (fs/btrfs/disk-io.c:1923) btrfs
-> > kernel: btrfs_work_helper (fs/btrfs/async-thread.c:326) btrfs
-> > kernel: process_one_work (./arch/x86/include/asm/jump_label.h:27 ./incl=
-ude/linux/jump_label.h:212 ./include/trace/events/workqueue.h:108 kernel/wo=
-rkqueue.c:2312)
-> > kernel: worker_thread (./include/linux/list.h:292 kernel/workqueue.c:24=
-55)
-> > kernel: ? process_one_work (kernel/workqueue.c:2397)
-> > kernel: kthread (kernel/kthread.c:377)
-> > kernel: ? kthread_complete_and_exit (kernel/kthread.c:332)
-> > kernel: ret_from_fork (arch/x86/entry/entry_64.S:301)
-> > kernel:  </TASK>
-> >
-> > Signed-off-by: D=C4=81vis Mos=C4=81ns <davispuh@gmail.com>
-> > ---
-> >  fs/btrfs/lzo.c | 7 +++++++
-> >  1 file changed, 7 insertions(+)
-> >
-> > diff --git a/fs/btrfs/lzo.c b/fs/btrfs/lzo.c
-> > index 31319dfcc9fb..ebaa5083f2ae 100644
-> > --- a/fs/btrfs/lzo.c
-> > +++ b/fs/btrfs/lzo.c
-> > @@ -383,6 +383,13 @@ int lzo_decompress_bio(struct list_head *ws, struc=
-t compressed_bio *cb)
-> >               kunmap(cur_page);
-> >               cur_in +=3D LZO_LEN;
-> >
-> > +             if (seg_len > WORKSPACE_CBUF_LENGTH) {
-> > +                     // seg_len shouldn't be larger than we have alloc=
-ated for workspace->cbuf
-> > +                     btrfs_err(fs_info, "unexpectedly large lzo segmen=
-t len %u", seg_len);
-> > +                     ret =3D -EUCLEAN;
-> > +                     goto out;
-> > +             }
-> > +
->
-> Oof, the fact that we weren't checking this is pretty bad... Shouldn't
-> we also be checking that seg_len is within the size of the remaining
-> input?
->
+Hi Chris,
 
-I don't think that's useful. The only case where it matters is if
-final segment size is wrong and is larger than total size. In that
-case decompressing most likely will still succeed as it won't need all
-data to complete and it's safe to copy more than is used.
-It's more likely that middle segments are corrupted for which this
-check would make no difference.
-But there still is another potential issue, if total size is correct,
-but if a lot segment sizes are corrupted to be smaller than supposed
-and if they still successfully decompress then we will read outside of
-cb->compressed_pages because we check only cur_in < len_in but not
-nr_pages
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   dfd42facf1e4ada021b939b4e19c935dcdd55566
+commit: 70a2b431c36483c0c06e589e11c59e438cd0ac06 drm/i915/gt: Rename lrc.c to execlists_submission.c
+date:   1 year, 2 months ago
+config: i386-randconfig-a001-20220207 (https://download.01.org/0day-ci/archive/20220207/202202070826.I6zgScfr-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6daaf5a44925592c764c59219b0024ee06317028)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=70a2b431c36483c0c06e589e11c59e438cd0ac06
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 70a2b431c36483c0c06e589e11c59e438cd0ac06
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/gpu/drm/i915/gt/intel_execlists_submission.c:6116:
+>> drivers/gpu/drm/i915/gt/selftest_execlists.c:167:4: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
+                           GEM_TRACE("spinner failed to start\n");
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/i915_gem.h:69:24: note: expanded from macro 'GEM_TRACE'
+   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
+                          ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:724:3: note: expanded from macro 'trace_printk'
+                   do_trace_printk(fmt, ##__VA_ARGS__);    \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:738:30: note: expanded from macro 'do_trace_printk'
+                   __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
+                                              ^~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/gt/selftest_execlists.c:167:4: note: treat the string as an argument to avoid this
+   drivers/gpu/drm/i915/i915_gem.h:69:24: note: expanded from macro 'GEM_TRACE'
+   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
+                          ^
+   include/linux/kernel.h:724:3: note: expanded from macro 'trace_printk'
+                   do_trace_printk(fmt, ##__VA_ARGS__);    \
+                   ^
+   include/linux/kernel.h:738:30: note: expanded from macro 'do_trace_printk'
+                   __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
+                                              ^
+   In file included from drivers/gpu/drm/i915/gt/intel_execlists_submission.c:6116:
+   drivers/gpu/drm/i915/gt/selftest_execlists.c:1790:4: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
+                           GEM_TRACE("lo spinner failed to start\n");
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/i915_gem.h:69:24: note: expanded from macro 'GEM_TRACE'
+   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
+                          ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:724:3: note: expanded from macro 'trace_printk'
+                   do_trace_printk(fmt, ##__VA_ARGS__);    \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:738:30: note: expanded from macro 'do_trace_printk'
+                   __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
+                                              ^~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/gt/selftest_execlists.c:1790:4: note: treat the string as an argument to avoid this
+   drivers/gpu/drm/i915/i915_gem.h:69:24: note: expanded from macro 'GEM_TRACE'
+   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
+                          ^
+   include/linux/kernel.h:724:3: note: expanded from macro 'trace_printk'
+                   do_trace_printk(fmt, ##__VA_ARGS__);    \
+                   ^
+   include/linux/kernel.h:738:30: note: expanded from macro 'do_trace_printk'
+                   __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
+                                              ^
+   In file included from drivers/gpu/drm/i915/gt/intel_execlists_submission.c:6116:
+   drivers/gpu/drm/i915/gt/selftest_execlists.c:1807:4: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
+                           GEM_TRACE("hi spinner failed to start\n");
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/i915_gem.h:69:24: note: expanded from macro 'GEM_TRACE'
+   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
+                          ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:724:3: note: expanded from macro 'trace_printk'
+                   do_trace_printk(fmt, ##__VA_ARGS__);    \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:738:30: note: expanded from macro 'do_trace_printk'
+                   __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
+                                              ^~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/gt/selftest_execlists.c:1807:4: note: treat the string as an argument to avoid this
+   drivers/gpu/drm/i915/i915_gem.h:69:24: note: expanded from macro 'GEM_TRACE'
+   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
+                          ^
+   include/linux/kernel.h:724:3: note: expanded from macro 'trace_printk'
+                   do_trace_printk(fmt, ##__VA_ARGS__);    \
+                   ^
+   include/linux/kernel.h:738:30: note: expanded from macro 'do_trace_printk'
+                   __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
+                                              ^
+   3 errors generated.
+
+
+vim +167 drivers/gpu/drm/i915/gt/selftest_execlists.c
+
+280e285dc78f736 drivers/gpu/drm/i915/gt/selftest_lrc.c     Chris Wilson   2020-02-27  134  
+2c66555ec19235e drivers/gpu/drm/i915/selftests/intel_lrc.c Chris Wilson   2018-04-04  135  static int live_sanitycheck(void *arg)
+2c66555ec19235e drivers/gpu/drm/i915/selftests/intel_lrc.c Chris Wilson   2018-04-04  136  {
+1357fa8136ea030 drivers/gpu/drm/i915/gt/selftest_lrc.c     Chris Wilson   2019-10-16  137  	struct intel_gt *gt = arg;
+e6ba76480299a0d drivers/gpu/drm/i915/gt/selftest_lrc.c     Chris Wilson   2019-12-21  138  	struct intel_engine_cs *engine;
+e6ba76480299a0d drivers/gpu/drm/i915/gt/selftest_lrc.c     Chris Wilson   2019-12-21  139  	enum intel_engine_id id;
+8d2f6e2f2721097 drivers/gpu/drm/i915/selftests/intel_lrc.c Tvrtko Ursulin 2018-11-30  140  	struct igt_spinner spin;
+e6ba76480299a0d drivers/gpu/drm/i915/gt/selftest_lrc.c     Chris Wilson   2019-12-21  141  	int err = 0;
+2c66555ec19235e drivers/gpu/drm/i915/selftests/intel_lrc.c Chris Wilson   2018-04-04  142  
+1357fa8136ea030 drivers/gpu/drm/i915/gt/selftest_lrc.c     Chris Wilson   2019-10-16  143  	if (!HAS_LOGICAL_RING_CONTEXTS(gt->i915))
+2c66555ec19235e drivers/gpu/drm/i915/selftests/intel_lrc.c Chris Wilson   2018-04-04  144  		return 0;
+2c66555ec19235e drivers/gpu/drm/i915/selftests/intel_lrc.c Chris Wilson   2018-04-04  145  
+1357fa8136ea030 drivers/gpu/drm/i915/gt/selftest_lrc.c     Chris Wilson   2019-10-16  146  	if (igt_spinner_init(&spin, gt))
+2af402982ab3822 drivers/gpu/drm/i915/gt/selftest_lrc.c     Chris Wilson   2019-10-04  147  		return -ENOMEM;
+2c66555ec19235e drivers/gpu/drm/i915/selftests/intel_lrc.c Chris Wilson   2018-04-04  148  
+e6ba76480299a0d drivers/gpu/drm/i915/gt/selftest_lrc.c     Chris Wilson   2019-12-21  149  	for_each_engine(engine, gt, id) {
+e6ba76480299a0d drivers/gpu/drm/i915/gt/selftest_lrc.c     Chris Wilson   2019-12-21  150  		struct intel_context *ce;
+2c66555ec19235e drivers/gpu/drm/i915/selftests/intel_lrc.c Chris Wilson   2018-04-04  151  		struct i915_request *rq;
+2c66555ec19235e drivers/gpu/drm/i915/selftests/intel_lrc.c Chris Wilson   2018-04-04  152  
+e6ba76480299a0d drivers/gpu/drm/i915/gt/selftest_lrc.c     Chris Wilson   2019-12-21  153  		ce = intel_context_create(engine);
+e6ba76480299a0d drivers/gpu/drm/i915/gt/selftest_lrc.c     Chris Wilson   2019-12-21  154  		if (IS_ERR(ce)) {
+e6ba76480299a0d drivers/gpu/drm/i915/gt/selftest_lrc.c     Chris Wilson   2019-12-21  155  			err = PTR_ERR(ce);
+e6ba76480299a0d drivers/gpu/drm/i915/gt/selftest_lrc.c     Chris Wilson   2019-12-21  156  			break;
+e6ba76480299a0d drivers/gpu/drm/i915/gt/selftest_lrc.c     Chris Wilson   2019-12-21  157  		}
+e6ba76480299a0d drivers/gpu/drm/i915/gt/selftest_lrc.c     Chris Wilson   2019-12-21  158  
+f277bc0c98a4077 drivers/gpu/drm/i915/gt/selftest_lrc.c     Chris Wilson   2019-07-31  159  		rq = igt_spinner_create_request(&spin, ce, MI_NOOP);
+2c66555ec19235e drivers/gpu/drm/i915/selftests/intel_lrc.c Chris Wilson   2018-04-04  160  		if (IS_ERR(rq)) {
+2c66555ec19235e drivers/gpu/drm/i915/selftests/intel_lrc.c Chris Wilson   2018-04-04  161  			err = PTR_ERR(rq);
+e6ba76480299a0d drivers/gpu/drm/i915/gt/selftest_lrc.c     Chris Wilson   2019-12-21  162  			goto out_ctx;
+2c66555ec19235e drivers/gpu/drm/i915/selftests/intel_lrc.c Chris Wilson   2018-04-04  163  		}
+2c66555ec19235e drivers/gpu/drm/i915/selftests/intel_lrc.c Chris Wilson   2018-04-04  164  
+2c66555ec19235e drivers/gpu/drm/i915/selftests/intel_lrc.c Chris Wilson   2018-04-04  165  		i915_request_add(rq);
+8d2f6e2f2721097 drivers/gpu/drm/i915/selftests/intel_lrc.c Tvrtko Ursulin 2018-11-30  166  		if (!igt_wait_for_spinner(&spin, rq)) {
+2c66555ec19235e drivers/gpu/drm/i915/selftests/intel_lrc.c Chris Wilson   2018-04-04 @167  			GEM_TRACE("spinner failed to start\n");
+2c66555ec19235e drivers/gpu/drm/i915/selftests/intel_lrc.c Chris Wilson   2018-04-04  168  			GEM_TRACE_DUMP();
+1357fa8136ea030 drivers/gpu/drm/i915/gt/selftest_lrc.c     Chris Wilson   2019-10-16  169  			intel_gt_set_wedged(gt);
+2c66555ec19235e drivers/gpu/drm/i915/selftests/intel_lrc.c Chris Wilson   2018-04-04  170  			err = -EIO;
+e6ba76480299a0d drivers/gpu/drm/i915/gt/selftest_lrc.c     Chris Wilson   2019-12-21  171  			goto out_ctx;
+2c66555ec19235e drivers/gpu/drm/i915/selftests/intel_lrc.c Chris Wilson   2018-04-04  172  		}
+2c66555ec19235e drivers/gpu/drm/i915/selftests/intel_lrc.c Chris Wilson   2018-04-04  173  
+8d2f6e2f2721097 drivers/gpu/drm/i915/selftests/intel_lrc.c Tvrtko Ursulin 2018-11-30  174  		igt_spinner_end(&spin);
+1357fa8136ea030 drivers/gpu/drm/i915/gt/selftest_lrc.c     Chris Wilson   2019-10-16  175  		if (igt_flush_test(gt->i915)) {
+2c66555ec19235e drivers/gpu/drm/i915/selftests/intel_lrc.c Chris Wilson   2018-04-04  176  			err = -EIO;
+e6ba76480299a0d drivers/gpu/drm/i915/gt/selftest_lrc.c     Chris Wilson   2019-12-21  177  			goto out_ctx;
+2c66555ec19235e drivers/gpu/drm/i915/selftests/intel_lrc.c Chris Wilson   2018-04-04  178  		}
+e6ba76480299a0d drivers/gpu/drm/i915/gt/selftest_lrc.c     Chris Wilson   2019-12-21  179  
+e6ba76480299a0d drivers/gpu/drm/i915/gt/selftest_lrc.c     Chris Wilson   2019-12-21  180  out_ctx:
+e6ba76480299a0d drivers/gpu/drm/i915/gt/selftest_lrc.c     Chris Wilson   2019-12-21  181  		intel_context_put(ce);
+e6ba76480299a0d drivers/gpu/drm/i915/gt/selftest_lrc.c     Chris Wilson   2019-12-21  182  		if (err)
+e6ba76480299a0d drivers/gpu/drm/i915/gt/selftest_lrc.c     Chris Wilson   2019-12-21  183  			break;
+2c66555ec19235e drivers/gpu/drm/i915/selftests/intel_lrc.c Chris Wilson   2018-04-04  184  	}
+2c66555ec19235e drivers/gpu/drm/i915/selftests/intel_lrc.c Chris Wilson   2018-04-04  185  
+8d2f6e2f2721097 drivers/gpu/drm/i915/selftests/intel_lrc.c Tvrtko Ursulin 2018-11-30  186  	igt_spinner_fini(&spin);
+2c66555ec19235e drivers/gpu/drm/i915/selftests/intel_lrc.c Chris Wilson   2018-04-04  187  	return err;
+2c66555ec19235e drivers/gpu/drm/i915/selftests/intel_lrc.c Chris Wilson   2018-04-04  188  }
+2c66555ec19235e drivers/gpu/drm/i915/selftests/intel_lrc.c Chris Wilson   2018-04-04  189  
+
+:::::: The code at line 167 was first introduced by commit
+:::::: 2c66555ec19235efd689741c44bbeb893aa8e7de drm/i915/selftests: Add basic sanitychecks for execlists
+
+:::::: TO: Chris Wilson <chris@chris-wilson.co.uk>
+:::::: CC: Chris Wilson <chris@chris-wilson.co.uk>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 249434ABE48
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:09:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC90C4ABBF8
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:45:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391424AbiBGMBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 07:01:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48676 "EHLO
+        id S1386419AbiBGLeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:34:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386787AbiBGLgv (ORCPT
+        with ESMTP id S1383881AbiBGLXy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:36:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B46D8C043181;
-        Mon,  7 Feb 2022 03:36:50 -0800 (PST)
+        Mon, 7 Feb 2022 06:23:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 147EEC0401C5;
+        Mon,  7 Feb 2022 03:23:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 491B460A69;
-        Mon,  7 Feb 2022 11:36:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 645F1C004E1;
-        Mon,  7 Feb 2022 11:36:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C6311B8111C;
+        Mon,  7 Feb 2022 11:23:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D062C004E1;
+        Mon,  7 Feb 2022 11:23:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233809;
-        bh=ugirauE7wsGqXb36nXK6gxIvb+7wGHj2bprs0GCSXLQ=;
+        s=korg; t=1644233028;
+        bh=/tGzveDzfTBR4qxgZ0fj0VvGpTMLFFUP9H5ABeVidT0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=njsGotnMmV+snq/HyLqoPNzSLQnyztyPDzqvb6/c0IA+A1lPqF+vOHfUgYMQy+vNV
-         xRAQvNdSThVWNYZObGtrg1imdM7LFKoXsrPxHNhK8iCFksJuTUgegVEC5RkN5ySnLP
-         pMc+mIKOoW8kwh444wUcY0SpGdeM4N7kgygS4YhU=
+        b=hzBb6oTzslXsmzBvC8y06E+A8SLrVur7SzMqx7Wee/KLHmX/iKXi0ghHy5Eo9KPgh
+         +Aca4TwAqf/j8yHIPD3D+KPkX13SJYoXYv8YNHl5iADJMjL2wVGVX5Maf7DNrzf0Xm
+         A44O1hgzZXfMYLBOfa0MqXZ7QD2njRDjNCP3RraU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kane Chen <kane.chen@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Grace Kao <grace.kao@intel.com>
-Subject: [PATCH 5.16 094/126] pinctrl: intel: Fix a glitch when updating IRQ flags on a preconfigured line
-Date:   Mon,  7 Feb 2022 12:07:05 +0100
-Message-Id: <20220207103807.329696976@linuxfoundation.org>
+        stable@vger.kernel.org, Xin Yin <yinxin.x@bytedance.com>,
+        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
+        Theodore Tso <tytso@mit.edu>, stable@kernel.org
+Subject: [PATCH 5.10 68/74] ext4: modify the logic of ext4_mb_new_blocks_simple
+Date:   Mon,  7 Feb 2022 12:07:06 +0100
+Message-Id: <20220207103759.457691273@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
-References: <20220207103804.053675072@linuxfoundation.org>
+In-Reply-To: <20220207103757.232676988@linuxfoundation.org>
+References: <20220207103757.232676988@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,69 +55,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+From: Xin Yin <yinxin.x@bytedance.com>
 
-commit e12963c453263d5321a2c610e98cbc731233b685 upstream.
+commit 31a074a0c62dc0d2bfb9b543142db4fe27f9e5eb upstream.
 
-The commit af7e3eeb84e2 ("pinctrl: intel: Disable input and output buffer
-when switching to GPIO") hadn't taken into account an update of the IRQ
-flags scenario.
+For now in ext4_mb_new_blocks_simple, if we found a block which
+should be excluded then will switch to next group, this may
+probably cause 'group' run out of range.
 
-When updating the IRQ flags on the preconfigured line the ->irq_set_type()
-is called again. In such case the sequential Rx buffer configuration
-changes may trigger a falling or rising edge interrupt that may lead,
-on some platforms, to an undesired event.
+Change to check next block in the same group when get a block should
+be excluded. Also change the search range to EXT4_CLUSTERS_PER_GROUP
+and add error checking.
 
-This may happen because each of intel_gpio_set_gpio_mode() and
-__intel_gpio_set_direction() updates the pad configuration with a different
-value of the GPIORXDIS bit. Notable, that the intel_gpio_set_gpio_mode() is
-called only for the pads that are configured as an input. Due to this fact,
-integrate the logic of __intel_gpio_set_direction() call into the
-intel_gpio_set_gpio_mode() so that the Rx buffer won't be disabled and
-immediately re-enabled.
-
-Fixes: af7e3eeb84e2 ("pinctrl: intel: Disable input and output buffer when switching to GPIO")
-Reported-by: Kane Chen <kane.chen@intel.com>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-Tested-by: Grace Kao <grace.kao@intel.com>
+Signed-off-by: Xin Yin <yinxin.x@bytedance.com>
+Reviewed-by: Harshad Shirwadkar <harshadshirwadkar@gmail.com>
+Link: https://lore.kernel.org/r/20220110035141.1980-3-yinxin.x@bytedance.com
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Cc: stable@kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pinctrl/intel/pinctrl-intel.c |   10 ++--------
- 1 file changed, 2 insertions(+), 8 deletions(-)
+ fs/ext4/mballoc.c |   26 +++++++++++++++++---------
+ 1 file changed, 17 insertions(+), 9 deletions(-)
 
---- a/drivers/pinctrl/intel/pinctrl-intel.c
-+++ b/drivers/pinctrl/intel/pinctrl-intel.c
-@@ -451,8 +451,8 @@ static void intel_gpio_set_gpio_mode(voi
- 	value &= ~PADCFG0_PMODE_MASK;
- 	value |= PADCFG0_PMODE_GPIO;
+--- a/fs/ext4/mballoc.c
++++ b/fs/ext4/mballoc.c
+@@ -5173,7 +5173,8 @@ static ext4_fsblk_t ext4_mb_new_blocks_s
+ 	struct super_block *sb = ar->inode->i_sb;
+ 	ext4_group_t group;
+ 	ext4_grpblk_t blkoff;
+-	int i = sb->s_blocksize;
++	ext4_grpblk_t max = EXT4_CLUSTERS_PER_GROUP(sb);
++	ext4_grpblk_t i = 0;
+ 	ext4_fsblk_t goal, block;
+ 	struct ext4_super_block *es = EXT4_SB(sb)->s_es;
  
--	/* Disable input and output buffers */
--	value |= PADCFG0_GPIORXDIS;
-+	/* Disable TX buffer and enable RX (this will be input) */
-+	value &= ~PADCFG0_GPIORXDIS;
- 	value |= PADCFG0_GPIOTXDIS;
+@@ -5195,19 +5196,26 @@ static ext4_fsblk_t ext4_mb_new_blocks_s
+ 		ext4_get_group_no_and_offset(sb,
+ 			max(ext4_group_first_block_no(sb, group), goal),
+ 			NULL, &blkoff);
+-		i = mb_find_next_zero_bit(bitmap_bh->b_data, sb->s_blocksize,
++		while (1) {
++			i = mb_find_next_zero_bit(bitmap_bh->b_data, max,
+ 						blkoff);
++			if (i >= max)
++				break;
++			if (ext4_fc_replay_check_excluded(sb,
++				ext4_group_first_block_no(sb, group) + i)) {
++				blkoff = i + 1;
++			} else
++				break;
++		}
+ 		brelse(bitmap_bh);
+-		if (i >= sb->s_blocksize)
+-			continue;
+-		if (ext4_fc_replay_check_excluded(sb,
+-			ext4_group_first_block_no(sb, group) + i))
+-			continue;
+-		break;
++		if (i < max)
++			break;
+ 	}
  
- 	/* Disable SCI/SMI/NMI generation */
-@@ -497,9 +497,6 @@ static int intel_gpio_request_enable(str
+-	if (group >= ext4_get_groups_count(sb) && i >= sb->s_blocksize)
++	if (group >= ext4_get_groups_count(sb) || i >= max) {
++		*errp = -ENOSPC;
+ 		return 0;
++	}
  
- 	intel_gpio_set_gpio_mode(padcfg0);
- 
--	/* Disable TX buffer and enable RX (this will be input) */
--	__intel_gpio_set_direction(padcfg0, true);
--
- 	raw_spin_unlock_irqrestore(&pctrl->lock, flags);
- 
- 	return 0;
-@@ -1115,9 +1112,6 @@ static int intel_gpio_irq_type(struct ir
- 
- 	intel_gpio_set_gpio_mode(reg);
- 
--	/* Disable TX buffer and enable RX (this will be input) */
--	__intel_gpio_set_direction(reg, true);
--
- 	value = readl(reg);
- 
- 	value &= ~(PADCFG0_RXEVCFG_MASK | PADCFG0_RXINV);
+ 	block = ext4_group_first_block_no(sb, group) + i;
+ 	ext4_mb_mark_bb(sb, block, 1, 1);
 
 

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B0FF4ABE09
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:05:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9BEF4ABDEA
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:05:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380450AbiBGL4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:56:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45004 "EHLO
+        id S1386249AbiBGLtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:49:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385075AbiBGLbE (ORCPT
+        with ESMTP id S1386685AbiBGLfU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:31:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C94C03544C;
-        Mon,  7 Feb 2022 03:29:11 -0800 (PST)
+        Mon, 7 Feb 2022 06:35:20 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3900C043181;
+        Mon,  7 Feb 2022 03:35:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A1E260AB0;
-        Mon,  7 Feb 2022 11:29:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2330C004E1;
-        Mon,  7 Feb 2022 11:29:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0831AB80EBD;
+        Mon,  7 Feb 2022 11:35:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4637EC004E1;
+        Mon,  7 Feb 2022 11:35:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233350;
-        bh=dlSCWan0FfA5znaLczSL60Lqi/QBNHiAtI0rESPoMpM=;
+        s=korg; t=1644233716;
+        bh=TdKdDS8mr/Iv2O+Ke94fu/1lpmuGq84s4HlElW3efN8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kEUz8gV7yqHCtFKUzno+n+JILWViIKEHt95jTv2kOlKHVm+TDnk8HuObPGi7k1APK
-         O43Hp0Fa3Tp5s81cy+/BV3U2oVfCnEQ02TcohMk5g0Qjk1NjrQ+Y56ZTyyv1ctpTn7
-         QsKt80dKRQk81qJ4UPll8qd5o9p5yLwMBuFOfKvY=
+        b=QBpMiAfmmj6gTrQC8RXLZpwpaeWCEgS8CtOidTXx+kYzyCTpLF2EF0h3Ue8kZyW+d
+         DsIoAU4LOg3pq67pfEq9S0s3vLKGhN/QNTrGNMnsjHPSyAaqjL09HoIUFlzunXcklS
+         QDiq2+Ho95DCxkNfdOWn6QHXclgmd5q0o9T0BU90=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kyle Huey <me@kylehuey.com>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, stable@kernel.org
-Subject: [PATCH 5.15 096/110] x86/perf: Default set FREEZE_ON_SMI for all
-Date:   Mon,  7 Feb 2022 12:07:09 +0100
-Message-Id: <20220207103805.641038111@linuxfoundation.org>
+        stable@vger.kernel.org, Dai Ngo <dai.ngo@oracle.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Bruce Fields <bfields@fieldses.org>
+Subject: [PATCH 5.16 099/126] nfsd: nfsd4_setclientid_confirm mistakenly expires confirmed client.
+Date:   Mon,  7 Feb 2022 12:07:10 +0100
+Message-Id: <20220207103807.498649276@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
-References: <20220207103802.280120990@linuxfoundation.org>
+In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
+References: <20220207103804.053675072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,58 +55,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
+From: Dai Ngo <dai.ngo@oracle.com>
 
-commit a01994f5e5c79d3a35e5e8cf4252c7f2147323c3 upstream.
+commit ab451ea952fe9d7afefae55ddb28943a148247fe upstream.
 
-Kyle reported that rr[0] has started to malfunction on Comet Lake and
-later CPUs due to EFI starting to make use of CPL3 [1] and the PMU
-event filtering not distinguishing between regular CPL3 and SMM CPL3.
+>From RFC 7530 Section 16.34.5:
 
-Since this is a privilege violation, default disable SMM visibility
-where possible.
+o  The server has not recorded an unconfirmed { v, x, c, *, * } and
+   has recorded a confirmed { v, x, c, *, s }.  If the principals of
+   the record and of SETCLIENTID_CONFIRM do not match, the server
+   returns NFS4ERR_CLID_INUSE without removing any relevant leased
+   client state, and without changing recorded callback and
+   callback_ident values for client { x }.
 
-Administrators wanting to observe SMM cycles can easily change this
-using the sysfs attribute while regular users don't have access to
-this file.
+The current code intends to do what the spec describes above but
+it forgot to set 'old' to NULL resulting to the confirmed client
+to be expired.
 
-[0] https://rr-project.org/
-
-[1] See the Intel white paper "Trustworthy SMM on the Intel vPro Platform"
-at https://bugzilla.kernel.org/attachment.cgi?id=300300, particularly the
-end of page 5.
-
-Reported-by: Kyle Huey <me@kylehuey.com>
-Suggested-by: Andrew Cooper <Andrew.Cooper3@citrix.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Cc: stable@kernel.org
-Link: https://lkml.kernel.org/r/YfKChjX61OW4CkYm@hirez.programming.kicks-ass.net
+Fixes: 2b63482185e6 ("nfsd: fix clid_inuse on mount with security change")
+Signed-off-by: Dai Ngo <dai.ngo@oracle.com>
+Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
+Reviewed-by: Bruce Fields <bfields@fieldses.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/events/intel/core.c |   13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ fs/nfsd/nfs4state.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/arch/x86/events/intel/core.c
-+++ b/arch/x86/events/intel/core.c
-@@ -4654,6 +4654,19 @@ static __initconst const struct x86_pmu
- 	.lbr_read		= intel_pmu_lbr_read_64,
- 	.lbr_save		= intel_pmu_lbr_save,
- 	.lbr_restore		= intel_pmu_lbr_restore,
-+
-+	/*
-+	 * SMM has access to all 4 rings and while traditionally SMM code only
-+	 * ran in CPL0, 2021-era firmware is starting to make use of CPL3 in SMM.
-+	 *
-+	 * Since the EVENTSEL.{USR,OS} CPL filtering makes no distinction
-+	 * between SMM or not, this results in what should be pure userspace
-+	 * counters including SMM data.
-+	 *
-+	 * This is a clear privilege issue, therefore globally disable
-+	 * counting SMM by default.
-+	 */
-+	.attr_freeze_on_smi	= 1,
- };
- 
- static __init void intel_clovertown_quirk(void)
+--- a/fs/nfsd/nfs4state.c
++++ b/fs/nfsd/nfs4state.c
+@@ -4112,8 +4112,10 @@ nfsd4_setclientid_confirm(struct svc_rqs
+ 			status = nfserr_clid_inuse;
+ 			if (client_has_state(old)
+ 					&& !same_creds(&unconf->cl_cred,
+-							&old->cl_cred))
++							&old->cl_cred)) {
++				old = NULL;
+ 				goto out;
++			}
+ 			status = mark_client_expired_locked(old);
+ 			if (status) {
+ 				old = NULL;
 
 

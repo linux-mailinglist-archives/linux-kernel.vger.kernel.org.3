@@ -2,66 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D67684ACAB6
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 21:48:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44A314ACAB5
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 21:48:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234635AbiBGUsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 15:48:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55718 "EHLO
+        id S234302AbiBGUsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 15:48:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242685AbiBGUm7 (ORCPT
+        with ESMTP id S242599AbiBGUhu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 15:42:59 -0500
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D884C0401DA;
-        Mon,  7 Feb 2022 12:42:58 -0800 (PST)
-Received: by mail-oi1-f171.google.com with SMTP id u3so2486827oiv.12;
-        Mon, 07 Feb 2022 12:42:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rlE1V9OTk6BkuyItKfJDtXE3hovJxZT5HEVCUsaARlc=;
-        b=FbXej2qIduulG9djnqrz0rVXQndYbVTxSPxMKKg3HSh4RYdCeHy05ocM7wg4WQo7w+
-         Bf4JnfY9MfM1pXnm65SU4HXk/FN6LTpPflCAGQxBvzESdZRFIjiafUbILMm3tEUqCTAj
-         xtcOFxu9h9zxvNwXqkS1s47p18IXPkbWP+0Dy7VjM3bmP5tzjVbvS1b3IiptLEToEzsW
-         HMQn7qG7TAai+aXG7W4ZF9m/IdqNdIrqCKf6Lh6k5rRDmjPSQ0t8SS4KJMZ9T/WXvjsC
-         RrPIQKkkoxlrCX6sNKb5Y/CjVDsmztpFrK2zaPmaJLRClevoosADJgkxuPRwV3PA/c7g
-         V5Hw==
-X-Gm-Message-State: AOAM530h6smyg8IxjK3ovONBuKcrUSNUacYzLX/fAOjqDd0wQINsmfTG
-        4xvNHETJaN/tly/wJuKuaw==
-X-Google-Smtp-Source: ABdhPJzdEby2HALFZLU6QZB+I9qAgJ2rlgPsbx8QFyIGftJZxHXR/0k5XwciVAIo5f+eoTkU8xhLMA==
-X-Received: by 2002:a05:6808:99b:: with SMTP id a27mr354523oic.299.1644266577999;
-        Mon, 07 Feb 2022 12:42:57 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id g4sm4317453otl.1.2022.02.07.12.42.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 12:42:56 -0800 (PST)
-Received: (nullmailer pid 883752 invoked by uid 1000);
-        Mon, 07 Feb 2022 20:42:55 -0000
-Date:   Mon, 7 Feb 2022 14:42:55 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Alim Akhtar <alim.akhtar@samsung.com>
-Cc:     linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com,
-        andi@etezian.org, linux-spi@vger.kernel.org, linux-fsd@tesla.com,
-        robh+dt@kernel.org, linus.walleij@linaro.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        krzysztof.kozlowski@canonical.com, broonie@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Adithya K V <adithya.kv@samsung.com>
-Subject: Re: [PATCH v3 1/3] spi: dt-bindings: samsung: Add fsd spi compatible
-Message-ID: <YgGET9UVDCxDA621@robh.at.kernel.org>
-References: <20220125031604.76009-1-alim.akhtar@samsung.com>
- <CGME20220125032821epcas5p128c99ca3654fce0ec046943c90211849@epcas5p1.samsung.com>
- <20220125031604.76009-2-alim.akhtar@samsung.com>
+        Mon, 7 Feb 2022 15:37:50 -0500
+X-Greylist: delayed 201 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 12:37:50 PST
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DC46C0401DA;
+        Mon,  7 Feb 2022 12:37:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 69338CE10EF;
+        Mon,  7 Feb 2022 20:37:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6687EC004E1;
+        Mon,  7 Feb 2022 20:37:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644266266;
+        bh=IgAuBdjgFLxpzyuTFtxQnKiQ28etrzscehcAocUU+Tg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=VqlmucnKui7TMn1XduYKgDyTgILjXVAJy1KHKfLJ3+Isf3ztsu8BxIsj8spr9joY5
+         0S6wIuiB3dVtnWWkcLRgDugXPq894VXMvElJNoUEGidLjkcMYPk+wjOmxqoLmsSTpP
+         cvKdmGieZhs5hgOUF+jEd0PMbx6PnV05KXmZXVHgvD+pP9eDcM/pRdQWlRtj9NyLGi
+         gS0L8IoD0n1sapSUvOQQ0PUpSmg/joajcuyYNuSruCbaV0PEaWANBu65hYOtBqBEgx
+         BYsISPk9Z9VK/+AqpI8Rzj58SKIycjO136cX526qV/TX6sKbYxXDNKaxNmvZB2fn5N
+         /x7kAF2g8GK+A==
+Date:   Mon, 7 Feb 2022 20:44:21 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Joe Perches <joe@perches.com>, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>,
+        Lars-Peter Clausen <lars@metafoo.de>
+Subject: Re: [PATCH v2 1/3] iio: temperature: ltc2983: Don't hard code
+ defined constants in messages
+Message-ID: <20220207204421.7f905aa5@jic23-huawei>
+In-Reply-To: <YgFVFceYQtWq4Hww@smile.fi.intel.com>
+References: <20220207104830.83882-1-andriy.shevchenko@linux.intel.com>
+        <fdb3056dcaf9dd113049adebbc3fcd74de2b3028.camel@perches.com>
+        <YgFVFceYQtWq4Hww@smile.fi.intel.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220125031604.76009-2-alim.akhtar@samsung.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,18 +61,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Jan 2022 08:46:02 +0530, Alim Akhtar wrote:
-> Adds spi controller dt-binding compatible information for
-> Tesla Full Self-Driving (FSD) SoC.
-> 
-> Cc: linux-fsd@tesla.com
-> Signed-off-by: Adithya K V <adithya.kv@samsung.com>
-> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Reviewed-by: Andi Shyti <andi@etezian.org>
-> ---
->  Documentation/devicetree/bindings/spi/samsung,spi.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
+On Mon, 7 Feb 2022 19:21:25 +0200
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
 
-Acked-by: Rob Herring <robh@kernel.org>
+> On Mon, Feb 07, 2022 at 08:37:55AM -0800, Joe Perches wrote:
+> > On Mon, 2022-02-07 at 12:48 +0200, Andy Shevchenko wrote:  
+> > > In a couple of messages the constants, which have their definitions,
+> > > are hard coded into the message text. Unhardcode them.  
+> > 
+> > Found by inspection or tool?  
+> 
+> Does it matter? No, a side effect of the following patch.
+> 
+> ...
+> 
+> > > +		dev_err(dev, "Steinhart sensors size(%zu) must be %d", new_custom->size,
+> > > +			LTC2983_CUSTOM_STEINHART_SIZE);  
+> > 
+> > probably better using "%u" and not "%d"
+> > 
+> > and better with a \n termination too.  
+> 
+> I think it would be a separate change if we wish so. Let Jonathan to tell what
+> to do here.
+> 
+Either way is fine by me.  I tend to be a little flexible of trivial fixes
+in patches that are as simple as this one.
+
+Thanks,
+
+Jonathan
+
+

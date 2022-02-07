@@ -2,109 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC3834AC036
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 14:54:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A4264AC030
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 14:54:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389227AbiBGNvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 08:51:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41088 "EHLO
+        id S1389171AbiBGNvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 08:51:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355445AbiBGNqG (ORCPT
+        with ESMTP id S1388113AbiBGNqd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 08:46:06 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00C9FC043188
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 05:46:00 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id g8so3172654pfq.9
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 05:46:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=+fYYVy93BDFqw0cCdynsbSRegfY0xYWHIfwAqDxymeY=;
-        b=hp3MMQ8ZMedpHg9Nevp1XeEuuEA7IKnvKqo3RmIMgSgkNZVcw4jBrSu78B7Dx97yzi
-         ChG12kiPN5PHLwvGlce9A0y5Co7qoc5PD33ihFDc/g1bGg4tbNHvi4ffk8p1O6Ksm5My
-         8BtSs5gvT2LhokIb2C3tAO+hrK5GTuyzQrRXirbOgMOoWQh3fse1cb5JMHqHIXxI8Fre
-         uYUXkpw437r8QzNVs6c23wTMj6+Kfq6yj2oLsk7GzdQPcsInWy68JVklCfUL8CbW6oGC
-         7JMcutC1k+rlN6rp3tNzXDqgVacnpF5Doatrua7fNfYRD/YTFpNYv00gpZYUSBG4Ylf1
-         eI3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=+fYYVy93BDFqw0cCdynsbSRegfY0xYWHIfwAqDxymeY=;
-        b=j//HtBR/J+Y/m7B79eg2sFYgrvfod3ANXXN3vym3GaQEaI7otjrOK9SvLTQHroDxnp
-         t84Ne4apCHkS9WkhRsHokCG31gVjLFN0CHZteEP/cTfceNFlgU4nNPsJz+jH65jcUHfr
-         zPEFEVgF+yfxzTpQGHxDosaHdHzyN29omD+mDQ0RrwDcBVLFPII3zyON7YKGjyRQQi/I
-         8ZXRd0Kqya6aV0hCG8ePDa+bMWZnv47t6pAL39QVKfg/7mBd5H5/fa4zZS1X4GsRyba9
-         +xvheg6zFd7Bdyn1joVb9c53urFx6ifUfXw6lSO71qhBIti4BZnlZBaxQPnWpSlqfTkV
-         Prkg==
-X-Gm-Message-State: AOAM530Kr5UEqWAk2V2zFdwOKVf+tTZnE8OqzfIc1UFojkWfFjL3mU0e
-        so+Q3JP2EDMUrktSRewfGGMAPQ==
-X-Google-Smtp-Source: ABdhPJy13wPQSgj1YQJzHPhdlM4opHdCLY6oe1/iBRCUm78RUTw3mK/LTWyJn4eAdyiaxbyeS+SOEw==
-X-Received: by 2002:a63:e647:: with SMTP id p7mr9358380pgj.23.1644241560350;
-        Mon, 07 Feb 2022 05:46:00 -0800 (PST)
-Received: from [192.168.1.116] ([66.219.217.159])
-        by smtp.gmail.com with ESMTPSA id c11sm12279229pfv.76.2022.02.07.05.45.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Feb 2022 05:45:59 -0800 (PST)
-Subject: Re: [PATCH io_uring-5.17] io_uring: Fix build error potential reading
- uninitialized value
-To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Cc:     GNU/Weeb Mailing List <gwml@gnuweeb.org>,
-        io-uring Mailing list <io-uring@vger.kernel.org>,
-        Tea Inside Mailing List <timl@vger.teainside.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alviro Iskandar Setiawan <alviro.iskandar@gmail.com>,
-        kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        "Chen, Rong A" <rong.a.chen@intel.com>,
-        Pavel Begunkov <asml.silence@gmail.com>
-References: <d33bb5a9-8173-f65b-f653-51fc0681c6d6@intel.com>
- <20220207114315.555413-1-ammarfaizi2@gnuweeb.org>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <91e8ca64-0670-d998-73d8-f75ec5264cb0@kernel.dk>
-Date:   Mon, 7 Feb 2022 06:45:57 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Mon, 7 Feb 2022 08:46:33 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F7CDC043189
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 05:46:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644241592; x=1675777592;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3wK53JgZhBniyCgBVdS0LybEWKQeh0TXcziRebU5F5g=;
+  b=boXQ3R9bPp1LomxTBJ00EenmeXGwhGBsvK1AXoFbz9ZZRq8l5Z5A2/UO
+   DRy7+0nLyRFlNFCq6f4dZQDaJBxOWaoQ7AnOwXuvF1IGW2kbG3SAH1eKU
+   0AzwHIxljpfaz7m3q7Blo8o1GcUvmokv0g/lI4xlRxagfmE5ytV8vSPFr
+   UgbgWhjcD49eI5bgs6PAMj4wmXgz1Rs0cNA/TUzygM26J1qOjr20McWQU
+   h9Y2ekEU5MYk+X7i4ad28/is5CO6r51tMn8WsKw/GlggGlCaOt+Z5lnYw
+   Ja4ntZlojykwc7fvb10+14lRjJcPwQZKNxxxrc/9z8FuZbcbCRUjYjSXx
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10250"; a="232280777"
+X-IronPort-AV: E=Sophos;i="5.88,349,1635231600"; 
+   d="scan'208";a="232280777"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 05:46:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,349,1635231600"; 
+   d="scan'208";a="700468612"
+Received: from lkp-server01.sh.intel.com (HELO 9dd77a123018) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 07 Feb 2022 05:46:30 -0800
+Received: from kbuild by 9dd77a123018 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nH4Ld-0000Zl-Rh; Mon, 07 Feb 2022 13:46:29 +0000
+Date:   Mon, 7 Feb 2022 21:46:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     kbuild-all@lists.01.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm: Outline copy_overflow()
+Message-ID: <202202072148.OAzMGrDo-lkp@intel.com>
+References: <b9a31b025e729394e7081257870f0a0e73355a04.1644229010.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-In-Reply-To: <20220207114315.555413-1-ammarfaizi2@gnuweeb.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b9a31b025e729394e7081257870f0a0e73355a04.1644229010.git.christophe.leroy@csgroup.eu>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/7/22 4:43 AM, Ammar Faizi wrote:
-> From: Alviro Iskandar Setiawan <alviro.iskandar@gmail.com>
-> 
-> In io_recv() if import_single_range() fails, the @flags variable is
-> uninitialized, then it will goto out_free.
-> 
-> After the goto, the compiler doesn't know that (ret < min_ret) is
-> always true, so it thinks the "if ((flags & MSG_WAITALL) ..."  path
-> could be taken.
-> 
-> The complaint comes from gcc-9 (Debian 9.3.0-22) 9.3.0:
-> ```
->   fs/io_uring.c:5238 io_recvfrom() error: uninitialized symbol 'flags'
-> ```
-> Fix this by bypassing the @ret and @flags check when
-> import_single_range() fails.
+Hi Christophe,
 
-The compiler should be able to deduce this, and I guess newer compilers
-do which is why we haven't seen this warning before. I'm fine with doing
-this as a cleanup, but I think the commit title should be modified a
-bit. It sounds like there might be an issue reading uninitialized data,
-which isn't actually true.
+I love your patch! Yet something to improve:
 
--- 
-Jens Axboe
+[auto build test ERROR on hnaz-mm/master]
 
+url:    https://github.com/0day-ci/linux/commits/Christophe-Leroy/mm-Outline-copy_overflow/20220207-190441
+base:   https://github.com/hnaz/linux-mm master
+config: i386-randconfig-a013-20220207 (https://download.01.org/0day-ci/archive/20220207/202202072148.OAzMGrDo-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/0day-ci/linux/commit/2ae7547d08e23e529db61b3de0cb93879630a102
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Christophe-Leroy/mm-Outline-copy_overflow/20220207-190441
+        git checkout 2ae7547d08e23e529db61b3de0cb93879630a102
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "copy_overflow" [drivers/usb/gadget/function/usb_f_fs.ko] undefined!
+>> ERROR: modpost: "copy_overflow" [drivers/scsi/sg.ko] undefined!
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2C724AC641
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 17:45:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0BD14AC643
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 17:45:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381559AbiBGQnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 11:43:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41090 "EHLO
+        id S1382293AbiBGQnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 11:43:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390557AbiBGQfK (ORCPT
+        with ESMTP id S1390634AbiBGQfV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 11:35:10 -0500
+        Mon, 7 Feb 2022 11:35:21 -0500
 Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8907EC0401CC
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 08:35:08 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 11A00C0401D9
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 08:35:18 -0800 (PST)
 Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 217GOdq6014403;
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 217GOdng014404;
         Mon, 7 Feb 2022 17:24:39 +0100
 From:   Willy Tarreau <w@1wt.eu>
 To:     "Paul E . McKenney" <paulmck@kernel.org>
 Cc:     Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
         Willy Tarreau <w@1wt.eu>
-Subject: [PATCH 20/42] tools/nolibc/stdio: add fwrite() to stdio
-Date:   Mon,  7 Feb 2022 17:23:32 +0100
-Message-Id: <20220207162354.14293-21-w@1wt.eu>
+Subject: [PATCH 21/42] tools/nolibc/stdio: add a minimal [vf]printf() implementation
+Date:   Mon,  7 Feb 2022 17:23:33 +0100
+Message-Id: <20220207162354.14293-22-w@1wt.eu>
 X-Mailer: git-send-email 2.17.5
 In-Reply-To: <20220207162354.14293-1-w@1wt.eu>
 References: <20220207162354.14293-1-w@1wt.eu>
@@ -37,76 +37,166 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We'll use it to write substrings. It relies on a simpler _fwrite() that
-only takes one size. fputs() was also modified to rely on it.
+This adds a minimal vfprintf() implementation as well as the commonly
+used fprintf() and printf() that rely on it.
+
+For now the function supports:
+  - formats: %s, %c, %u, %d, %x
+  - modifiers: %l and %ll
+  - unknown chars are considered as modifiers and are ignored
+
+It is designed to remain minimalist, despite this printf() is 549 bytes
+on x86_64. It would be wise not to add too many formats.
 
 Signed-off-by: Willy Tarreau <w@1wt.eu>
 ---
- tools/include/nolibc/stdio.h | 35 ++++++++++++++++++++++++++++-------
- 1 file changed, 28 insertions(+), 7 deletions(-)
+ tools/include/nolibc/stdio.h | 128 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 128 insertions(+)
 
 diff --git a/tools/include/nolibc/stdio.h b/tools/include/nolibc/stdio.h
-index 149c5ca59aad..996bf89a30d2 100644
+index 996bf89a30d2..a73cf24cb68d 100644
 --- a/tools/include/nolibc/stdio.h
 +++ b/tools/include/nolibc/stdio.h
-@@ -84,12 +84,14 @@ int putchar(int c)
- }
+@@ -7,6 +7,8 @@
+ #ifndef _NOLIBC_STDIO_H
+ #define _NOLIBC_STDIO_H
  
- 
--/* puts(), fputs(). Note that puts() emits '\n' but not fputs(). */
-+/* fwrite(), puts(), fputs(). Note that puts() emits '\n' but not fputs(). */
- 
-+/* internal fwrite()-like function which only takes a size and returns 0 on
-+ * success or EOF on error. It automatically retries on short writes.
-+ */
- static __attribute__((unused))
--int fputs(const char *s, FILE *stream)
-+int _fwrite(const void *buf, size_t size, FILE *stream)
- {
--	size_t len = strlen(s);
- 	ssize_t ret;
- 	int fd;
- 
-@@ -98,16 +100,35 @@ int fputs(const char *s, FILE *stream)
- 
- 	fd = 3 + (long)stream;
- 
--	while (len > 0) {
--		ret = write(fd, s, len);
-+	while (size) {
-+		ret = write(fd, buf, size);
- 		if (ret <= 0)
- 			return EOF;
--		s += ret;
--		len -= ret;
-+		size -= ret;
-+		buf += ret;
- 	}
- 	return 0;
- }
- 
-+static __attribute__((unused))
-+size_t fwrite(const void *s, size_t size, size_t nmemb, FILE *stream)
-+{
-+	size_t written;
++#include <stdarg.h>
 +
-+	for (written = 0; written < nmemb; written++) {
-+		if (_fwrite(s, size, stream) != 0)
-+			break;
-+		s += size;
+ #include "std.h"
+ #include "arch.h"
+ #include "types.h"
+@@ -158,4 +160,130 @@ char *fgets(char *s, int size, FILE *stream)
+ 	return ofs ? s : NULL;
+ }
+ 
++
++/* minimal vfprintf(). It supports the following formats:
++ *  - %[l*]{d,u,c,x}
++ *  - %s
++ *  - unknown modifiers are ignored.
++ */
++static __attribute__((unused))
++int vfprintf(FILE *stream, const char *fmt, va_list args)
++{
++	char escape, lpref, c;
++	unsigned long long v;
++	unsigned int written;
++	size_t len, ofs;
++	char tmpbuf[21];
++	const char *outstr;
++
++	written = ofs = escape = lpref = 0;
++	while (1) {
++		c = fmt[ofs++];
++
++		if (escape) {
++			/* we're in an escape sequence, ofs == 1 */
++			escape = 0;
++			if (c == 'c' || c == 'd' || c == 'u' || c == 'x') {
++				if (lpref) {
++					if (lpref > 1)
++						v = va_arg(args, unsigned long long);
++					else
++						v = va_arg(args, unsigned long);
++				} else
++					v = va_arg(args, unsigned int);
++
++				if (c == 'd') {
++					/* sign-extend the value */
++					if (lpref == 0)
++						v = (long long)(int)v;
++					else if (lpref == 1)
++						v = (long long)(long)v;
++				}
++
++				switch (c) {
++				case 'd':
++					i64toa_r(v, tmpbuf);
++					break;
++				case 'u':
++					u64toa_r(v, tmpbuf);
++					break;
++				case 'x':
++					u64toh_r(v, tmpbuf);
++					break;
++				default: /* 'c' */
++					tmpbuf[0] = v;
++					tmpbuf[1] = 0;
++					break;
++				}
++				outstr = tmpbuf;
++			}
++			else if (c == 's') {
++				outstr = va_arg(args, char *);
++			}
++			else if (c == '%') {
++				/* queue it verbatim */
++				continue;
++			}
++			else {
++				/* modifiers or final 0 */
++				if (c == 'l') {
++					/* long format prefix, maintain the escape */
++					lpref++;
++				}
++				escape = 1;
++				goto do_escape;
++			}
++			len = strlen(outstr);
++			goto flush_str;
++		}
++
++		/* not an escape sequence */
++		if (c == 0 || c == '%') {
++			/* flush pending data on escape or end */
++			escape = 1;
++			lpref = 0;
++			outstr = fmt;
++			len = ofs - 1;
++		flush_str:
++			if (_fwrite(outstr, len, stream) != 0)
++				break;
++
++			written += len;
++		do_escape:
++			if (c == 0)
++				break;
++			fmt += ofs;
++			ofs = 0;
++			continue;
++		}
++
++		/* literal char, just queue it */
 +	}
 +	return written;
 +}
 +
 +static __attribute__((unused))
-+int fputs(const char *s, FILE *stream)
++int fprintf(FILE *stream, const char *fmt, ...)
 +{
-+	return _fwrite(s, strlen(s), stream);
++	va_list args;
++	int ret;
++
++	va_start(args, fmt);
++	ret = vfprintf(stream, fmt, args);
++	va_end(args);
++	return ret;
 +}
 +
- static __attribute__((unused))
- int puts(const char *s)
- {
++static __attribute__((unused))
++int printf(const char *fmt, ...)
++{
++	va_list args;
++	int ret;
++
++	va_start(args, fmt);
++	ret = vfprintf(stdout, fmt, args);
++	va_end(args);
++	return ret;
++}
++
+ #endif /* _NOLIBC_STDIO_H */
 -- 
 2.35.1
 

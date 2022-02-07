@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7C144ABE11
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:05:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 812DA4ABE35
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:09:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390643AbiBGL5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:57:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44846 "EHLO
+        id S1350020AbiBGL71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:59:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385234AbiBGLb0 (ORCPT
+        with ESMTP id S1382918AbiBGLf7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:31:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8297C02B750;
-        Mon,  7 Feb 2022 03:29:46 -0800 (PST)
+        Mon, 7 Feb 2022 06:35:59 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 166C6C03FEC0;
+        Mon,  7 Feb 2022 03:35:56 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 768E960A67;
-        Mon,  7 Feb 2022 11:29:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3809CC004E1;
-        Mon,  7 Feb 2022 11:29:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C24A3B8102E;
+        Mon,  7 Feb 2022 11:35:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7EBEC004E1;
+        Mon,  7 Feb 2022 11:35:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233385;
-        bh=OtP5r+gyCFy9t1qM39CdxkthGbobIllUleGvZdo9M9s=;
+        s=korg; t=1644233753;
+        bh=fkBbCu26Q7qpm8psYy59pDkbehGMf3egVEF0vTplVJk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hZ5F2WKF/P2sC563mjfEDcQa/whNZgOR+dvNvmGELRP1vEKFJHrTzU4BYLRRuIqQU
-         YSL3aPDCQX5Dvycw+fzkIlMYfeXbOTRF/CqCExyv9xgW242CScEuHIP/8eQ0/56XI9
-         UHWD7nbbJ4K33Lm2ztNzuhMe1LUJZfKImAtds0o8=
+        b=HE0mrW9W8MeA9Wpe8m4c9iwVZwlql/IFrUq69jQGFai0AnO4/A04Bxs9UPgsZzHev
+         vYh0AvM2gL8ST8DKZkVBqI/QSvEauKEH7UAPk/Uo6TQuzlkAZ1Vz8o3YYeYgrF+3PN
+         fDsZS99gnSQ9yM5+9AyS3xNMEf9kJiZJU6SFfkYg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dmitry Osipenko <digetx@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.de>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: [PATCH 5.15 106/110] tools include UAPI: Sync sound/asound.h copy with the kernel sources
-Date:   Mon,  7 Feb 2022 12:07:19 +0100
-Message-Id: <20220207103805.980470477@linuxfoundation.org>
+        stable@vger.kernel.org, Dmitry Vyukov <dvyukov@google.com>,
+        Marco Elver <elver@google.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 109/126] perf: Copy perf_event_attr::sig_data on modification
+Date:   Mon,  7 Feb 2022 12:07:20 +0100
+Message-Id: <20220207103807.824862640@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
-References: <20220207103802.280120990@linuxfoundation.org>
+In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
+References: <20220207103804.053675072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,45 +56,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnaldo Carvalho de Melo <acme@redhat.com>
+From: Marco Elver <elver@google.com>
 
-commit 4f2492731ada9d702ffdfaa6ec1ff64820a1664c upstream.
+[ Upstream commit 3c25fc97f5590060464cabfa25710970ecddbc96 ]
 
-Picking the changes from:
+The intent has always been that perf_event_attr::sig_data should also be
+modifiable along with PERF_EVENT_IOC_MODIFY_ATTRIBUTES, because it is
+observable by user space if SIGTRAP on events is requested.
 
-  06feec6005c9d950 ("ASoC: hdmi-codec: Fix OOB memory accesses")
+Currently only PERF_TYPE_BREAKPOINT is modifiable, and explicitly copies
+relevant breakpoint-related attributes in hw_breakpoint_copy_attr().
+This misses copying perf_event_attr::sig_data.
 
-Which entails no changes in the tooling side as it doesn't introduce new
-SNDRV_PCM_IOCTL_ ioctls.
+Since sig_data is not specific to PERF_TYPE_BREAKPOINT, introduce a
+helper to copy generic event-type-independent attributes on
+modification.
 
-To silence this perf tools build warning:
-
-  Warning: Kernel ABI header at 'tools/include/uapi/sound/asound.h' differs from latest version at 'include/uapi/sound/asound.h'
-  diff -u tools/include/uapi/sound/asound.h include/uapi/sound/asound.h
-
-Cc: Dmitry Osipenko <digetx@gmail.com>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: Takashi Iwai <tiwai@suse.de>
-Link: https://lore.kernel.org/lkml/Yf+6OT+2eMrYDEeX@kernel.org
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 97ba62b27867 ("perf: Add support for SIGTRAP on perf events")
+Reported-by: Dmitry Vyukov <dvyukov@google.com>
+Signed-off-by: Marco Elver <elver@google.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Dmitry Vyukov <dvyukov@google.com>
+Link: https://lore.kernel.org/r/20220131103407.1971678-1-elver@google.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/include/uapi/sound/asound.h |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ kernel/events/core.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
---- a/tools/include/uapi/sound/asound.h
-+++ b/tools/include/uapi/sound/asound.h
-@@ -56,8 +56,10 @@
-  *                                                                          *
-  ****************************************************************************/
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index 6ed890480c4aa..04e6e2dae60e4 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -3234,6 +3234,15 @@ static int perf_event_modify_breakpoint(struct perf_event *bp,
+ 	return err;
+ }
  
-+#define AES_IEC958_STATUS_SIZE		24
++/*
++ * Copy event-type-independent attributes that may be modified.
++ */
++static void perf_event_modify_copy_attr(struct perf_event_attr *to,
++					const struct perf_event_attr *from)
++{
++	to->sig_data = from->sig_data;
++}
 +
- struct snd_aes_iec958 {
--	unsigned char status[24];	/* AES/IEC958 channel status bits */
-+	unsigned char status[AES_IEC958_STATUS_SIZE]; /* AES/IEC958 channel status bits */
- 	unsigned char subcode[147];	/* AES/IEC958 subcode bits */
- 	unsigned char pad;		/* nothing */
- 	unsigned char dig_subframe[4];	/* AES/IEC958 subframe bits */
+ static int perf_event_modify_attr(struct perf_event *event,
+ 				  struct perf_event_attr *attr)
+ {
+@@ -3256,10 +3265,17 @@ static int perf_event_modify_attr(struct perf_event *event,
+ 	WARN_ON_ONCE(event->ctx->parent_ctx);
+ 
+ 	mutex_lock(&event->child_mutex);
++	/*
++	 * Event-type-independent attributes must be copied before event-type
++	 * modification, which will validate that final attributes match the
++	 * source attributes after all relevant attributes have been copied.
++	 */
++	perf_event_modify_copy_attr(&event->attr, attr);
+ 	err = func(event, attr);
+ 	if (err)
+ 		goto out;
+ 	list_for_each_entry(child, &event->child_list, child_list) {
++		perf_event_modify_copy_attr(&child->attr, attr);
+ 		err = func(child, attr);
+ 		if (err)
+ 			goto out;
+-- 
+2.34.1
+
 
 

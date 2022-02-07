@@ -2,21 +2,21 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8E9C4AC017
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 14:52:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E5C54AC035
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 14:54:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388763AbiBGNuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 08:50:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37224 "EHLO
+        id S1389217AbiBGNvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 08:51:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387672AbiBGNiC (ORCPT
+        with ESMTP id S1387669AbiBGNiC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 7 Feb 2022 08:38:02 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88650C0401D5
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C562C0401D4
         for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 05:37:24 -0800 (PST)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JsnCD1VTwz1FD17;
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JsnCD2jbDzZfPd;
         Mon,  7 Feb 2022 21:33:12 +0800 (CST)
 Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
  (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
@@ -26,9 +26,9 @@ From:   Miaohe Lin <linmiaohe@huawei.com>
 To:     <akpm@linux-foundation.org>
 CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         <linmiaohe@huawei.com>
-Subject: [PATCH 1/4] mm/memory_hotplug: remove obsolete comment of __add_pages
-Date:   Mon, 7 Feb 2022 21:36:40 +0800
-Message-ID: <20220207133643.23427-2-linmiaohe@huawei.com>
+Subject: [PATCH 2/4] mm/memory_hotplug: avoid calling zone_intersects() for ZONE_NORMAL
+Date:   Mon, 7 Feb 2022 21:36:41 +0800
+Message-ID: <20220207133643.23427-3-linmiaohe@huawei.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20220207133643.23427-1-linmiaohe@huawei.com>
 References: <20220207133643.23427-1-linmiaohe@huawei.com>
@@ -48,30 +48,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit f1dd2cd13c4b ("mm, memory_hotplug: do not associate hotadded
-memory to zones until online"), there is no need to pass in the zone.
+If zid reaches ZONE_NORMAL, the caller will always get the NORMAL zone no
+matter what zone_intersects() returns. So we can save some possible cpu
+cycles by avoid calling zone_intersects() for ZONE_NORMAL.
 
 Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 ---
- mm/memory_hotplug.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ mm/memory_hotplug.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
-index a4f69d399929..cbc67c27e0dd 100644
+index cbc67c27e0dd..140809e60e9a 100644
 --- a/mm/memory_hotplug.c
 +++ b/mm/memory_hotplug.c
-@@ -296,10 +296,7 @@ struct page *pfn_to_online_page(unsigned long pfn)
- EXPORT_SYMBOL_GPL(pfn_to_online_page);
+@@ -826,7 +826,7 @@ static struct zone *default_kernel_zone_for_pfn(int nid, unsigned long start_pfn
+ 	struct pglist_data *pgdat = NODE_DATA(nid);
+ 	int zid;
  
- /*
-- * Reasonably generic function for adding memory.  It is
-- * expected that archs that support memory hotplug will
-- * call this function after deciding the zone to which to
-- * add the new pages.
-+ * Reasonably generic function for adding memory.
-  */
- int __ref __add_pages(int nid, unsigned long pfn, unsigned long nr_pages,
- 		struct mhp_params *params)
+-	for (zid = 0; zid <= ZONE_NORMAL; zid++) {
++	for (zid = 0; zid < ZONE_NORMAL; zid++) {
+ 		struct zone *zone = &pgdat->node_zones[zid];
+ 
+ 		if (zone_intersects(zone, start_pfn, nr_pages))
 -- 
 2.23.0
 

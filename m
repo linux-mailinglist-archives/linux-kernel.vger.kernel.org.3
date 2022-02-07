@@ -2,55 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBD7B4AB3F6
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 07:12:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32D474AB425
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 07:12:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238260AbiBGFuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 00:50:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50540 "EHLO
+        id S1350841AbiBGFwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 00:52:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352072AbiBGEsP (ORCPT
+        with ESMTP id S241182AbiBGEsI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 23:48:15 -0500
+        Sun, 6 Feb 2022 23:48:08 -0500
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22607C043181;
-        Sun,  6 Feb 2022 20:48:14 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF356C043181;
+        Sun,  6 Feb 2022 20:48:07 -0800 (PST)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id D2BA6210E8;
-        Mon,  7 Feb 2022 04:48:12 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 980B4210E8;
+        Mon,  7 Feb 2022 04:48:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1644209292; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1644209286; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ViWGm/depDGf235ykZcrvlwHPhzYZ1IOzNywgeuJlCs=;
-        b=dEj/ZECgQzPmVNNwNtLhRwIK+t+7MZfIgofMU57KXuIxPsebs5TmJ+yBisbfSkJ1Lthv13
-        WGxGwr5R4TqIlYYAhIz1CsdYyp+aE9q3/2eQvTm0XbIF4xjDADjB0h2337rxl00eMcgeg/
-        EywU58RZdtc7KMmvbgUOuYuHFQJUK2Q=
+        bh=2w8E8+D8DnDn4oux4W6cKi7wJrd0JGZITu8BgcqO5/k=;
+        b=iIaeyp+u+6up1G0hpe0ns8cxnMeE6N4td3CtAWY+xZIGV+UKST1UGVia/hjHjG3qOIcUAl
+        giG/fcb7PceuAdwQKLhekiYjp3BTPoUdQH5hMxRU7sqNfqk/ybnfaJ4iMjn7mj5MFX1fWO
+        7Jh6V+gwtrKOjdzEU1rDx5podtWYG/E=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1644209292;
+        s=susede2_ed25519; t=1644209286;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ViWGm/depDGf235ykZcrvlwHPhzYZ1IOzNywgeuJlCs=;
-        b=LB4uxgey7EDf4HC0h1f45bTAwNW+UouWDbatH0XJLCUd1qURVb63ibV21W/iR7wynleyiL
-        nIOTeQVWLnjvIqCQ==
+        bh=2w8E8+D8DnDn4oux4W6cKi7wJrd0JGZITu8BgcqO5/k=;
+        b=sb1QOGj4V3V8k41j+kPjQWi6J0FNHQBPDe3wYFw+hB7Sa78/4oiATv1segw7lCSXrSSAJV
+        f8j/FpEi2KgcDMDw==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F0D7B1330E;
-        Mon,  7 Feb 2022 04:48:09 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 85BCC1330E;
+        Mon,  7 Feb 2022 04:48:03 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id O2hbK4mkAGJiNQAAMHmgww
-        (envelope-from <neilb@suse.de>); Mon, 07 Feb 2022 04:48:09 +0000
-Subject: [PATCH 12/21] SUNRPC/call_alloc: async tasks mustn't block waiting
- for memory
+        id QQM1EIOkAGJcNQAAMHmgww
+        (envelope-from <neilb@suse.de>); Mon, 07 Feb 2022 04:48:03 +0000
+Subject: [PATCH 11/21] NFS: remove IS_SWAPFILE hack
 From:   NeilBrown <neilb@suse.de>
 To:     Trond Myklebust <trond.myklebust@hammerspace.com>,
         Anna Schumaker <anna.schumaker@netapp.com>,
@@ -62,7 +61,7 @@ To:     Trond Myklebust <trond.myklebust@hammerspace.com>,
 Cc:     linux-nfs@vger.kernel.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
 Date:   Mon, 07 Feb 2022 15:46:01 +1100
-Message-ID: <164420916119.29374.4983888648335050333.stgit@noble.brown>
+Message-ID: <164420916118.29374.2111079497808369007.stgit@noble.brown>
 In-Reply-To: <164420889455.29374.17958998143835612560.stgit@noble.brown>
 References: <164420889455.29374.17958998143835612560.stgit@noble.brown>
 User-Agent: StGit/0.23
@@ -79,56 +78,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When memory is short, new worker threads cannot be created and we depend
-on the minimum one rpciod thread to be able to handle everything.
-So it must not block waiting for memory.
+This code is pointless as IS_SWAPFILE is always defined.
+So remove it.
 
-mempools are particularly a problem as memory can only be released back
-to the mempool by an async rpc task running.  If all available
-workqueue threads are waiting on the mempool, no thread is available to
-return anything.
-
-rpc_malloc() can block, and this might cause deadlocks.
-So check RPC_IS_ASYNC(), rather than RPC_IS_SWAPPER() to determine if
-blocking is acceptable.
-
+Suggested-by: Mark Hemment <markhemm@googlemail.com>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
 Signed-off-by: NeilBrown <neilb@suse.de>
 ---
- net/sunrpc/sched.c              |    4 +++-
- net/sunrpc/xprtrdma/transport.c |    4 +++-
- 2 files changed, 6 insertions(+), 2 deletions(-)
+ fs/nfs/file.c |    5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/net/sunrpc/sched.c b/net/sunrpc/sched.c
-index e2c835482791..d5b6e897f5a5 100644
---- a/net/sunrpc/sched.c
-+++ b/net/sunrpc/sched.c
-@@ -1023,8 +1023,10 @@ int rpc_malloc(struct rpc_task *task)
- 	struct rpc_buffer *buf;
- 	gfp_t gfp = GFP_NOFS;
+diff --git a/fs/nfs/file.c b/fs/nfs/file.c
+index 9e2def045111..4d4750738aeb 100644
+--- a/fs/nfs/file.c
++++ b/fs/nfs/file.c
+@@ -44,11 +44,6 @@
  
-+	if (RPC_IS_ASYNC(task))
-+		gfp = GFP_NOWAIT | __GFP_NOWARN;
- 	if (RPC_IS_SWAPPER(task))
--		gfp = __GFP_MEMALLOC | GFP_NOWAIT | __GFP_NOWARN;
-+		gfp |= __GFP_MEMALLOC;
+ static const struct vm_operations_struct nfs_file_vm_ops;
  
- 	size += sizeof(struct rpc_buffer);
- 	if (size <= RPC_BUFFER_MAXSIZE)
-diff --git a/net/sunrpc/xprtrdma/transport.c b/net/sunrpc/xprtrdma/transport.c
-index 42e375dbdadb..5714bf880e95 100644
---- a/net/sunrpc/xprtrdma/transport.c
-+++ b/net/sunrpc/xprtrdma/transport.c
-@@ -570,8 +570,10 @@ xprt_rdma_allocate(struct rpc_task *task)
- 	gfp_t flags;
- 
- 	flags = RPCRDMA_DEF_GFP;
-+	if (RPC_IS_ASYNC(task))
-+		flags = GFP_NOWAIT | __GFP_NOWARN;
- 	if (RPC_IS_SWAPPER(task))
--		flags = __GFP_MEMALLOC | GFP_NOWAIT | __GFP_NOWARN;
-+		flags |= __GFP_MEMALLOC;
- 
- 	if (!rpcrdma_check_regbuf(r_xprt, req->rl_sendbuf, rqst->rq_callsize,
- 				  flags))
+-/* Hack for future NFS swap support */
+-#ifndef IS_SWAPFILE
+-# define IS_SWAPFILE(inode)	(0)
+-#endif
+-
+ int nfs_check_flags(int flags)
+ {
+ 	if ((flags & (O_APPEND | O_DIRECT)) == (O_APPEND | O_DIRECT))
 
 

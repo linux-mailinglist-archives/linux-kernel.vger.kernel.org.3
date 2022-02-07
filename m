@@ -2,132 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CC304AC015
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 14:52:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C48EB4AC025
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 14:52:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388381AbiBGNuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 08:50:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37504 "EHLO
+        id S1389014AbiBGNvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 08:51:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344368AbiBGNiW (ORCPT
+        with ESMTP id S241501AbiBGNkj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 08:38:22 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 315BCC043181;
-        Mon,  7 Feb 2022 05:38:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C121961258;
-        Mon,  7 Feb 2022 13:38:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA267C340F5;
-        Mon,  7 Feb 2022 13:38:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644241100;
-        bh=pckcxANR31hSoBJ7CS3Tfcm617BRnX3Og809MDixEeU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qbJV0bSaAAPUvgIW7JVwfgqJXLwUETek0dyrM2yFdYP9klX4oAReMN6n8ZvBg4Wov
-         YDH5FBJTk/3oWTAcWs19D0oxv5Wd4tg2/2tDu8agigNGBGDEAu2rDpT2cFU9oufiDU
-         +pveXsElDpciuCurAvk/jBQ5jamyA9nmKK3AXaOs=
-Date:   Mon, 7 Feb 2022 14:38:17 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com, Arnd Bergmann <arnd@arndb.de>,
-        James Morse <james.morse@arm.com>,
-        Marc Zyngier <maz@kernel.org>
-Subject: Re: [PATCH 5.16 000/126] 5.16.8-rc1 review
-Message-ID: <YgEgybmgfR/DzNUZ@kroah.com>
-References: <20220207103804.053675072@linuxfoundation.org>
- <CA+G9fYsd_kjuXOJx9umAhkaA7rRx40gVhY9ZBEe6xsMOZ2oTQg@mail.gmail.com>
- <d4a766d90803e794985e8d693972c24e5fe1926f.camel@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d4a766d90803e794985e8d693972c24e5fe1926f.camel@redhat.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 7 Feb 2022 08:40:39 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3249FC043181;
+        Mon,  7 Feb 2022 05:40:37 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id d187so12991973pfa.10;
+        Mon, 07 Feb 2022 05:40:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=TGF9rxKbfLgE4yzeN1f8tbFRCeGks8IIW/eVpPUyeiU=;
+        b=ZyaZgt0719MVOEzqMhPX9YuwhOcvk4Tfgtci93hXXrWqzr0VZbI2hjq43PQTBQMuz8
+         nIGCqRdMsDziUzsgblBes1baEbn8xA5hGHAkNjFYWF3vQLkNzx3HsIWUhhHM4RPA+8le
+         tC51WGTcxkNfvVsF3DZfZ08jLbQ80xAuq+jnkAmSShFDCaPwuN+jkwkH9LYcJU7X4Zy6
+         3QgQpGfke4WWvrb564nfUnAhbGpAgKoptflj7l1MBWG3lqMg++4W5Ide+nPfY/qnc2Dk
+         L4t9PeoHicJ/YoBZK/SGm6Zl6qErkrGM88O1SL8CwidyADrMEJKKBtAxhpBzCJphZffh
+         JPvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=TGF9rxKbfLgE4yzeN1f8tbFRCeGks8IIW/eVpPUyeiU=;
+        b=ACrt0QpLhxJDcUrD5xliMowASCZMHDnJq+2V8Lz0PfMoyKXpN2A/U8ZoB3AfBrTbKq
+         n2HE+vNgYMO8r7ioI852k8/YuulOzk4+fPmgZd+hj5LzOYHaCLPcvmXsDN18BpyM8vHq
+         uIL+qnIDpjy4A9HZsYBecnI2jdAYr6KenJa91+hyaUlhnp2NMtNJ3dYPXgFfq2I/spDD
+         6sJT2AfA/KSYubi7kDiyz7jUlyji/k1sXlEO6dqwxvpMzTgrKtj/diTOqkDAyW+Qh3ho
+         SuUxSf+1PIzrdIbVb3Oc9PvL2Ip127ORKeb/xNa+CTWtJCVEG4aJY2GnMWowb3IMejth
+         afgg==
+X-Gm-Message-State: AOAM532/o7WPmf/Y3H2Stc6Ei0tMLuWWWQU+w2Zw0twv2O6ZzxO/50k1
+        HgbDDAJhLNOupGF28YQztAU=
+X-Google-Smtp-Source: ABdhPJzf4r4cyGazko/1XgNj0OygcynEqxH7DclCZ/kkCf8azez4RKIt62fonUr015Jjv6NO2Ylb/A==
+X-Received: by 2002:a05:6a00:2350:: with SMTP id j16mr15992959pfj.78.1644241236437;
+        Mon, 07 Feb 2022 05:40:36 -0800 (PST)
+Received: from localhost.localdomain ([103.37.201.178])
+        by smtp.gmail.com with ESMTPSA id u17sm8424156pgi.14.2022.02.07.05.40.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Feb 2022 05:40:36 -0800 (PST)
+From:   Ayan Choudhary <ayanchoudhary1025@gmail.com>
+To:     marvin24@gmx.de, gregkh@linuxfoundation.org
+Cc:     Ayan Choudhary <ayanchoudhary1025@gmail.com>,
+        ac100@lists.launchpad.net, linux-tegra@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH] Staging: nvec: Fix ending in '(' error
+Date:   Mon,  7 Feb 2022 05:39:21 -0800
+Message-Id: <20220207133921.4287-1-ayanchoudhary1025@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 01:22:45PM +0100, Nicolas Saenz Julienne wrote:
-> On Mon, 2022-02-07 at 17:49 +0530, Naresh Kamboju wrote:
-> > > This is the start of the stable review cycle for the 5.16.8 release.
-> > > There are 126 patches in this series, all will be posted as a response
-> > > to this one.  If anyone has any issues with these being applied, please
-> > > let me know.
-> > > 
-> > > Responses should be made by Wed, 09 Feb 2022 10:37:42 +0000.
-> > > Anything received after that time might be too late.
-> > > 
-> > > The whole patch series can be found in one patch at:
-> > >         
-> > > https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.8-rc1.gz
-> > > or in the git tree and branch at:
-> > >          git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-> > > linux-5.16.y
-> > > and the diffstat can be found below.
-> > > 
-> > > thanks,
-> > > 
-> > > greg k-h
-> > 
-> > 
-> > Linux stable-rc 5.16 arm64 builds failed due to below errors.
-> > 
-> >   kvm/arm64: rework guest entry logic
-> >   [ Upstream commit 8cfe148a7136bc60452a5c6b7ac2d9d15c36909b ]
-> > 
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > 
-> > arch/arm64/kvm/arm.c: In function 'kvm_arm_vcpu_enter_exit':
-> > arch/arm64/kvm/arm.c:778:9: error: implicit declaration of function
-> > 'guest_state_enter_irqoff'; did you mean 'guest_enter_irqoff'?
-> > [-Werror=implicit-function-declaration]
-> >   778 |         guest_state_enter_irqoff();
-> >       |         ^~~~~~~~~~~~~~~~~~~~~~~~
-> >       |         guest_enter_irqoff
-> > arch/arm64/kvm/arm.c:780:9: error: implicit declaration of function
-> > 'guest_state_exit_irqoff'; did you mean 'guest_exit_irqoff'?
-> > [-Werror=implicit-function-declaration]
-> >   780 |         guest_state_exit_irqoff();
-> >       |         ^~~~~~~~~~~~~~~~~~~~~~~
-> >       |         guest_exit_irqoff
-> > arch/arm64/kvm/arm.c: In function 'kvm_arch_vcpu_ioctl_run':
-> > arch/arm64/kvm/arm.c:875:17: error: implicit declaration of function
-> > 'guest_timing_enter_irqoff'; did you mean 'guest_enter_irqoff'?
-> > [-Werror=implicit-function-declaration]
-> >   875 |                 guest_timing_enter_irqoff();
-> >       |                 ^~~~~~~~~~~~~~~~~~~~~~~~~
-> >       |                 guest_enter_irqoff
-> > arch/arm64/kvm/arm.c:925:17: error: implicit declaration of function
-> > 'guest_timing_exit_irqoff'; did you mean 'guest_exit_irqoff'?
-> > [-Werror=implicit-function-declaration]
-> >   925 |                 guest_timing_exit_irqoff();
-> >       |                 ^~~~~~~~~~~~~~~~~~~~~~~~
-> >       |                 guest_exit_irqoff
-> > cc1: some warnings being treated as errors
-> > 
-> > 
-> > build link:
-> > -----------
-> 
-> I think this patch is missing:
-> https://lore.kernel.org/lkml/87czk65vhq.wl-maz@kernel.org/T/#m49f8ab674c269f14f57dae33f90af30617bc735f
+This patch fixes the checkpatch.pl warning:
 
+CHECK: Lines should not end with a '('
+386: FILE: drivers/staging/nvec/nvec.c:386:
++		err = wait_for_completion_interruptible_timeout(
 
-Thanks, I'll go queue this up now and push out some -rc2 releases.
+Signed-off-by: Ayan Choudhary <ayanchoudhary1025@gmail.com>
+---
+ drivers/staging/nvec/nvec.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-greg k-h
+diff --git a/drivers/staging/nvec/nvec.c b/drivers/staging/nvec/nvec.c
+index 990d15c31a13..b3f114cb00dc 100644
+--- a/drivers/staging/nvec/nvec.c
++++ b/drivers/staging/nvec/nvec.c
+@@ -383,8 +383,8 @@ static void nvec_request_master(struct work_struct *work)
+ 		msg = list_first_entry(&nvec->tx_data, struct nvec_msg, node);
+ 		spin_unlock_irqrestore(&nvec->tx_lock, flags);
+ 		nvec_gpio_set_value(nvec, 0);
+-		err = wait_for_completion_interruptible_timeout(
+-				&nvec->ec_transfer, msecs_to_jiffies(5000));
++		err = wait_for_completion_interruptible_timeout(&nvec->ec_transfer,
++								msecs_to_jiffies(5000));
+ 
+ 		if (err == 0) {
+ 			dev_warn(nvec->dev, "timeout waiting for ec transfer\n");
+-- 
+2.17.1
+

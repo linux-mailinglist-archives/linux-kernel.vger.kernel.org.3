@@ -2,173 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A86A44AC51E
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 17:15:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2F754AC533
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 17:16:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379109AbiBGQOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 11:14:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50004 "EHLO
+        id S1381750AbiBGQOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 11:14:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239482AbiBGQJ2 (ORCPT
+        with ESMTP id S1343750AbiBGQJy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 11:09:28 -0500
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08BB8C0401CE
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 08:09:28 -0800 (PST)
-Received: by mail-oi1-x236.google.com with SMTP id ay7so3548398oib.8
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 08:09:28 -0800 (PST)
+        Mon, 7 Feb 2022 11:09:54 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1E24C0401DF;
+        Mon,  7 Feb 2022 08:09:44 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id v15-20020a17090a4ecf00b001b82db48754so14044290pjl.2;
+        Mon, 07 Feb 2022 08:09:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
+        h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=mAu8pWBtSchKstM5A3tZ7ZHtLl/tvNz8Fm6ONHkwe4s=;
-        b=RepKa8SkJ2TUQ+K6b0KJbqwAyCDaePxYPDwzGUi5nkwciUGr7ZHZwqZSinG1w3s0kL
-         sLiR9veBA3jd0qenLNT+DSxpEaG+a3C9xFLEiyEiVZFN6iw9sX9cQcB+Ci8/2ZvfLe/K
-         ZpsYBGA9k1vB/B0xqULtFLKF05ylVJt9j6+PdearCLo4dpboS53DnpP4NAfjOHyaeAdg
-         CsAuUYoWSbqSLQSewLJlxguOw26cO50JBNKZa4+jzPKxPtC8/W5/hDhTWwufqFEq4LjR
-         IS76TyW8Dkw+glmy8zymXFRYwbAlkmo6nlpgDGYH9tCbJm3Mpi7EYoQ9kCXDWBTaiXgf
-         I6BA==
+        bh=Bc9AHRZR1pshNQdSUMPi4giKprTpkGNBEnF9JWPwt2E=;
+        b=JAfoiZ9t8GzKsMy000nAJS6NlGY4h0Fahz0vPp4DgANVACMUHAediTakMcUf2VUbQn
+         L4U46ZbxdSfCdqgTca9qs8DK/e59ANl6k6XGndSJTQGZkQfGzKYFxaH0Aa+NKx8y9kDc
+         ROnb3EJqAhPYk8fTVtkSq4fMazHidRwyIWpzzxmKpXQBeOt+8F6Njax/Ef7P/xBIhMX6
+         UM3+Xe+w5ebHtNlZmh7kDlteUh0+9x/xEAY1QSa0Flgr5eWMFx0X0qilvVSPHp6+G9LK
+         lfr4bUoVst/4kF43XMtL0sWdJo6uU/snm/oCBT4NNwwb4SaPO5bR4n3dVy4a2NBkB56x
+         0tNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=mAu8pWBtSchKstM5A3tZ7ZHtLl/tvNz8Fm6ONHkwe4s=;
-        b=Qmu0ZS8s73t6AC599HlyTWREEhDecYDG6qHeZ2CWQUsHIWZtDIkk9FeZKc+0F9ZzlA
-         AQVMMXTBCJminYP5z6lW3OOot7t7Oy6JKTv8dLo1nsbzktnqdJR+u/bn8kukBSwNE+HX
-         v+KM0wKnsoLQ66GFibZYwTt5SHUGk4CFikd9LEH5yOp7E3xXe22JKR1RhvEmSIQPfhRc
-         03MolIxKywB7heTY4GOi67qx5kgyJV14iPh5e8v+EtYq+pvXVLvIvV+CIYeRS2XBZaYx
-         hZbkcumWhVH4HvQ/feglQlTTanM5qkssFgArvyFg0peEWzBOtNgtrjSuQ52dtZxA51cm
-         xx7A==
-X-Gm-Message-State: AOAM531YMdROiXn+i0f/60ViOrzSqHLhWSxbMyDzdCiA6x8t6pi2GPjW
-        ekaRO6XPzBkJccX5fQ/7ysc=
-X-Google-Smtp-Source: ABdhPJw70VbtPo9y5hLiH62QDpTkOmxvHJ7SHRLlMlw8o8xatBkWtLmjbLHOaoeqGjSilgv5GKiwlw==
-X-Received: by 2002:a05:6808:1647:: with SMTP id az7mr7522062oib.335.1644250167222;
-        Mon, 07 Feb 2022 08:09:27 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 31sm4089019otr.13.2022.02.07.08.09.25
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Bc9AHRZR1pshNQdSUMPi4giKprTpkGNBEnF9JWPwt2E=;
+        b=H5FQYXf6TfE5Wxhpo/QOgBbqPos4zU1aNrf6dff/4ZTTNo2qgS75gHEFlZA+uxRKO8
+         me2wg249LYVmMrQearoKgUp0DX4TLG1wC2sPzj11WjnMhhZm26ewH/bCngfSDMhdnAcI
+         OedrdPlD/Mk9CqL91ci9XUAt5Rcbv8dtr7xfA/aK9nL4o9EpGb6qoHGJeDKk8vdxrUUe
+         ntlgJEz0q/NY5VFV2A2AlrOJMdTA8Naz0mLg4LAj1zpDu6QA4EGU2PnwsrBqt45qa8SC
+         MzjzVByx9Ad7/jG9ljKflKCsEdjARSJ8IJt/9rjlYio3yd0qEnMQ0Lg91eyjZBJHGmvu
+         E+Vg==
+X-Gm-Message-State: AOAM530Ptb5r7F13yiC4Bkunh/r1w7KwwBFJTMzODD59m/w9qVUQ0Y5G
+        7DcHIuhLMxDWfSiXlUDi5tg=
+X-Google-Smtp-Source: ABdhPJxvraa0Ez4eY9PIHd2rqE7xpEpvngaRaU3dzq0slx+I8MQ6gqMKshVGQWXwXnCvEpiNZqZuDw==
+X-Received: by 2002:a17:902:a413:: with SMTP id p19mr305861plq.35.1644250184070;
+        Mon, 07 Feb 2022 08:09:44 -0800 (PST)
+Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:7:49ed:b358:ae30:a484])
+        by smtp.gmail.com with ESMTPSA id z14sm5958859pfh.173.2022.02.07.08.09.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 08:09:26 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Mark Brown <broonie@kernel.org>,
-        James Liao <jamesjj.liao@mediatek.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Daniel Golle <daniel@makrotopia.org>
-Subject: [PATCH v2] ASoC: Revert "ASoC: mediatek: Check for error clk pointer"
-Date:   Mon,  7 Feb 2022 08:09:23 -0800
-Message-Id: <20220207160923.3911501-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.35.1
+        Mon, 07 Feb 2022 08:09:43 -0800 (PST)
+From:   Tianyu Lan <ltykernel@gmail.com>
+To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, brijesh.singh@amd.com,
+        michael.roth@amd.com, jroedel@suse.de, Tianyu.Lan@microsoft.com,
+        thomas.lendacky@amd.com, michael.h.kelley@microsoft.com
+Cc:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RFC FATCH] x86/Hyper-V: Add SEV negotiate protocol support in Isolation VM.
+Date:   Mon,  7 Feb 2022 11:09:28 -0500
+Message-Id: <20220207160928.111718-1-ltykernel@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit 9de2b9286a6d ("ASoC: mediatek: Check for error clk
-pointer").
+From: Tianyu Lan <Tianyu.Lan@microsoft.com>
 
-With this patch in the tree, Chromebooks running the affected hardware
-no longer boot. Bisect points to this patch, and reverting it fixes
-the problem.
+Hyper-V Isolation VM code uses sev_es_ghcb_hv_call() to read/write MSR
+via ghcb page. The SEV-ES guest should call the sev_es_negotiate_protocol()
+to negotiate the GHCB protocol version before establishing the GHCB. Call
+sev_es_negotiate_protocol() in the hyperv_init_ghcb().
 
-An analysis of the code with this patch applied shows:
-
-        ret = init_clks(pdev, clk);
-        if (ret)
-                return ERR_PTR(ret);
-...
-                for (j = 0; j < MAX_CLKS && data->clk_id[j]; j++) {
-                        struct clk *c = clk[data->clk_id[j]];
-
-                        if (IS_ERR(c)) {
-                                dev_err(&pdev->dev, "%s: clk unavailable\n",
-                                        data->name);
-                                return ERR_CAST(c);
-                        }
-
-                        scpd->clk[j] = c;
-                }
-
-Not all clocks in the clk_names array have to be present. Only the clocks
-in the data->clk_id array are actually needed. The code already checks if
-the required clocks are available and bails out if not. The assumption that
-all clocks have to be present is wrong, and commit 9de2b9286a6d ("ASoC:
-mediatek: Check for error clk pointer") needs to be reverted.
-
-Cc: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: James Liao <jamesjj.liao@mediatek.com>
-Cc: Kevin Hilman <khilman@baylibre.com>
-Cc: Matthias Brugger <matthias.bgg@gmail.com>
-Reported-by: Frank Wunderlich <frank-w@public-files.de>
-Reported-by: Daniel Golle <daniel@makrotopia.org>
-Fixes: 9de2b9286a6d ("ASoC: mediatek: Check for error clk pointer")
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
 ---
-v2: Updated subject and description, trying to match expected subsystem
-    style.
-    Replaced two Cc: tags with Reported-by: to give proper credit.
+This patch based on the "Add AMD Secure Nested Paging (SEV-SNP) Guest Support"
+patchset. https://lore.kernel.org/lkml/20220128171804.569796-1-brijesh.singh@amd.com/
 
- drivers/soc/mediatek/mtk-scpsys.c | 15 ++++-----------
- 1 file changed, 4 insertions(+), 11 deletions(-)
+ arch/x86/hyperv/hv_init.c    | 6 ++++++
+ arch/x86/include/asm/sev.h   | 2 ++
+ arch/x86/kernel/sev-shared.c | 2 +-
+ arch/x86/kernel/sev.c        | 4 ++--
+ 4 files changed, 11 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/soc/mediatek/mtk-scpsys.c b/drivers/soc/mediatek/mtk-scpsys.c
-index 670cc82d17dc..ca75b14931ec 100644
---- a/drivers/soc/mediatek/mtk-scpsys.c
-+++ b/drivers/soc/mediatek/mtk-scpsys.c
-@@ -411,17 +411,12 @@ static int scpsys_power_off(struct generic_pm_domain *genpd)
- 	return ret;
+diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+index 24f4a06ac46a..a22303fccf02 100644
+--- a/arch/x86/hyperv/hv_init.c
++++ b/arch/x86/hyperv/hv_init.c
+@@ -28,6 +28,7 @@
+ #include <linux/syscore_ops.h>
+ #include <clocksource/hyperv_timer.h>
+ #include <linux/highmem.h>
++#include <asm/sev.h>
+ 
+ int hyperv_init_cpuhp;
+ u64 hv_current_partition_id = ~0ull;
+@@ -69,6 +70,11 @@ static int hyperv_init_ghcb(void)
+ 	ghcb_base = (void **)this_cpu_ptr(hv_ghcb_pg);
+ 	*ghcb_base = ghcb_va;
+ 
++	sev_es_negotiate_protocol();
++
++	/* Write ghcb page back after negotiating protocol. */
++	wrmsrl(MSR_AMD64_SEV_ES_GHCB, ghcb_gpa);
++	VMGEXIT();
+ 	return 0;
  }
  
--static int init_clks(struct platform_device *pdev, struct clk **clk)
-+static void init_clks(struct platform_device *pdev, struct clk **clk)
+diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
+index 7a5934af9d47..fc6b0c526492 100644
+--- a/arch/x86/include/asm/sev.h
++++ b/arch/x86/include/asm/sev.h
+@@ -120,6 +120,8 @@ extern enum es_result sev_es_ghcb_hv_call(struct ghcb *ghcb,
+ 					  struct es_em_ctxt *ctxt,
+ 					  u64 exit_code, u64 exit_info_1,
+ 					  u64 exit_info_2);
++extern bool sev_es_negotiate_protocol(void);
++
+ static inline int rmpadjust(unsigned long vaddr, bool rmp_psize, unsigned long attrs)
  {
- 	int i;
- 
--	for (i = CLK_NONE + 1; i < CLK_MAX; i++) {
-+	for (i = CLK_NONE + 1; i < CLK_MAX; i++)
- 		clk[i] = devm_clk_get(&pdev->dev, clk_names[i]);
--		if (IS_ERR(clk[i]))
--			return PTR_ERR(clk[i]);
--	}
--
--	return 0;
+ 	int rc;
+diff --git a/arch/x86/kernel/sev-shared.c b/arch/x86/kernel/sev-shared.c
+index ce06cb7c8ed0..8b8af5a8d402 100644
+--- a/arch/x86/kernel/sev-shared.c
++++ b/arch/x86/kernel/sev-shared.c
+@@ -145,7 +145,7 @@ static void snp_register_ghcb_early(unsigned long paddr)
+ 		sev_es_terminate(SEV_TERM_SET_LINUX, GHCB_TERM_REGISTER);
  }
  
- static struct scp *init_scp(struct platform_device *pdev,
-@@ -431,7 +426,7 @@ static struct scp *init_scp(struct platform_device *pdev,
+-static bool sev_es_negotiate_protocol(void)
++bool sev_es_negotiate_protocol(void)
  {
- 	struct genpd_onecell_data *pd_data;
- 	struct resource *res;
--	int i, j, ret;
-+	int i, j;
- 	struct scp *scp;
- 	struct clk *clk[CLK_MAX];
+ 	u64 val;
  
-@@ -486,9 +481,7 @@ static struct scp *init_scp(struct platform_device *pdev,
+diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
+index 3568b3303314..46c53c4885ee 100644
+--- a/arch/x86/kernel/sev.c
++++ b/arch/x86/kernel/sev.c
+@@ -167,12 +167,12 @@ void noinstr __sev_es_ist_exit(void)
+ 	this_cpu_write(cpu_tss_rw.x86_tss.ist[IST_INDEX_VC], *(unsigned long *)ist);
+ }
  
- 	pd_data->num_domains = num;
+-static inline u64 sev_es_rd_ghcb_msr(void)
++inline u64 sev_es_rd_ghcb_msr(void)
+ {
+ 	return __rdmsr(MSR_AMD64_SEV_ES_GHCB);
+ }
  
--	ret = init_clks(pdev, clk);
--	if (ret)
--		return ERR_PTR(ret);
-+	init_clks(pdev, clk);
+-static __always_inline void sev_es_wr_ghcb_msr(u64 val)
++__always_inline void sev_es_wr_ghcb_msr(u64 val)
+ {
+ 	u32 low, high;
  
- 	for (i = 0; i < num; i++) {
- 		struct scp_domain *scpd = &scp->domains[i];
 -- 
-2.35.1
+2.25.1
 

@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB3AF4ABE19
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:05:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 629044ABE10
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:05:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390743AbiBGL5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:57:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44580 "EHLO
+        id S1386708AbiBGL5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:57:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385201AbiBGLbT (ORCPT
+        with ESMTP id S1385212AbiBGLbU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:31:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76763C0302EA;
-        Mon,  7 Feb 2022 03:29:38 -0800 (PST)
+        Mon, 7 Feb 2022 06:31:20 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC3EFC0302F1;
+        Mon,  7 Feb 2022 03:29:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6DDEBB80EC3;
-        Mon,  7 Feb 2022 11:29:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92901C004E1;
-        Mon,  7 Feb 2022 11:29:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A864FB80EC3;
+        Mon,  7 Feb 2022 11:29:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCE33C004E1;
+        Mon,  7 Feb 2022 11:29:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233376;
-        bh=fvqCg9Xu5uhA5L3q+FEDsw1sBGuqJaYbDtNqhJQvLfI=;
+        s=korg; t=1644233379;
+        bh=q0nvyZV4sYkd7gzOHWgjUx1R62mGh98lgexTYH8IfgA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JCxn0wU7G01L/P5qbqjZ3CHOwVt9T+C0+Nd6uN1NL5Wg1+JaksQFrT4q2cxf9HO6d
-         hVTV6GPhNuSsHJ9Hs1NVQrBkuJiRYQJRk+fAfx/5PFetsX5PaQcqQj1jIWXSs0ypEK
-         FQ+If6JKNbgJ81xGdG3WKmZ9guMU+FSEE42jV/Hc=
+        b=gxiZBjjCS+7ieVCtRWkxkCzovZEjPAHdmtqMzPRL/pjfzt2b8sztytYfl+ZYjH2G/
+         IbZHpMXESASuwslCBoGJTkKlU+VDbcDXIU1T3unEni0NEs9g3dzk69pxZ0mWirlJHk
+         icyj3aAt1Z0vyYJfwf0GoUolnBD1j9uTgyXec/g0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        stable@kernel.org, Xin Yin <yinxin.x@bytedance.com>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        Theodore Tso <tytso@mit.edu>
-Subject: [PATCH 5.15 103/110] ext4: fix incorrect type issue during replay_del_range
-Date:   Mon,  7 Feb 2022 12:07:16 +0100
-Message-Id: <20220207103805.877048294@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.15 104/110] net: dsa: mt7530: make NET_DSA_MT7530 select MEDIATEK_GE_PHY
+Date:   Mon,  7 Feb 2022 12:07:17 +0100
+Message-Id: <20220207103805.908177058@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
 References: <20220207103802.280120990@linuxfoundation.org>
@@ -56,37 +57,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xin Yin <yinxin.x@bytedance.com>
+From: Arınç ÜNAL <arinc.unal@arinc9.com>
 
-commit 8fca8a2b0a822f7936130af7299d2fd7f0a66714 upstream.
+commit 4223f86512877b04c932e7203648b37eec931731 upstream.
 
-should not use fast commit log data directly, add le32_to_cpu().
+Make MediaTek MT753x DSA driver enable MediaTek Gigabit PHYs driver to
+properly control MT7530 and MT7531 switch PHYs.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Fixes: 0b5b5a62b945 ("ext4: use ext4_ext_remove_space() for fast commit replay delete range")
-Cc: stable@kernel.org
-Signed-off-by: Xin Yin <yinxin.x@bytedance.com>
-Reviewed-by: Ritesh Harjani <riteshh@linux.ibm.com>
-Link: https://lore.kernel.org/r/20220126063146.2302-1-yinxin.x@bytedance.com
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+A noticeable change is that the behaviour of switchport interfaces going
+up-down-up-down is no longer there.
+
+Fixes: b8f126a8d543 ("net-next: dsa: add dsa support for Mediatek MT7530 switch")
+Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Link: https://lore.kernel.org/r/20220129062703.595-1-arinc.unal@arinc9.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ext4/fast_commit.c |    5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/net/dsa/Kconfig |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/fs/ext4/fast_commit.c
-+++ b/fs/ext4/fast_commit.c
-@@ -1816,8 +1816,9 @@ ext4_fc_replay_del_range(struct super_bl
- 	}
- 
- 	down_write(&EXT4_I(inode)->i_data_sem);
--	ret = ext4_ext_remove_space(inode, lrange.fc_lblk,
--				lrange.fc_lblk + lrange.fc_len - 1);
-+	ret = ext4_ext_remove_space(inode, le32_to_cpu(lrange.fc_lblk),
-+				le32_to_cpu(lrange.fc_lblk) +
-+				le32_to_cpu(lrange.fc_len) - 1);
- 	up_write(&EXT4_I(inode)->i_data_sem);
- 	if (ret)
- 		goto out;
+--- a/drivers/net/dsa/Kconfig
++++ b/drivers/net/dsa/Kconfig
+@@ -36,6 +36,7 @@ config NET_DSA_LANTIQ_GSWIP
+ config NET_DSA_MT7530
+ 	tristate "MediaTek MT753x and MT7621 Ethernet switch support"
+ 	select NET_DSA_TAG_MTK
++	select MEDIATEK_GE_PHY
+ 	help
+ 	  This enables support for the MediaTek MT7530, MT7531, and MT7621
+ 	  Ethernet switch chips.
 
 

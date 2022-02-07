@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BD384AC63C
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 17:45:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2C724AC641
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 17:45:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358197AbiBGQnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 11:43:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41500 "EHLO
+        id S1381559AbiBGQnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 11:43:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390650AbiBGQfW (ORCPT
+        with ESMTP id S1390557AbiBGQfK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 11:35:22 -0500
+        Mon, 7 Feb 2022 11:35:10 -0500
 Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B08BAC0401D2
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 08:35:21 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8907EC0401CC
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 08:35:08 -0800 (PST)
 Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 217GOdun014402;
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 217GOdq6014403;
         Mon, 7 Feb 2022 17:24:39 +0100
 From:   Willy Tarreau <w@1wt.eu>
 To:     "Paul E . McKenney" <paulmck@kernel.org>
 Cc:     Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
         Willy Tarreau <w@1wt.eu>
-Subject: [PATCH 19/42] tools/nolibc/stdio: add stdin/stdout/stderr and fget*/fput* functions
-Date:   Mon,  7 Feb 2022 17:23:31 +0100
-Message-Id: <20220207162354.14293-20-w@1wt.eu>
+Subject: [PATCH 20/42] tools/nolibc/stdio: add fwrite() to stdio
+Date:   Mon,  7 Feb 2022 17:23:32 +0100
+Message-Id: <20220207162354.14293-21-w@1wt.eu>
 X-Mailer: git-send-email 2.17.5
 In-Reply-To: <20220207162354.14293-1-w@1wt.eu>
 References: <20220207162354.14293-1-w@1wt.eu>
@@ -37,163 +37,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The standard puts() function always emits the trailing LF which makes it
-unconvenient for small string concatenation. fputs() ought to be used
-instead but it requires a FILE*.
-
-This adds 3 dummy FILE* values (stdin, stdout, stderr) which are in fact
-pointers to struct FILE of one byte. We reserve 3 pointer values for them,
--3, -2 and -1, so that they are ordered, easing the tests and mapping to
-integer.
-
-From this, fgetc(), fputc(), fgets() and fputs() were implemented, and
-the previous putchar() and getchar() now remap to these. The standard
-getc() and putc() macros were also implemented as pointing to these
-ones.
-
-There is absolutely no buffering, fgetc() and fgets() read one byte at
-a time, fputc() writes one byte at a time, and only fputs() which knows
-the string's length writes all of it at once.
+We'll use it to write substrings. It relies on a simpler _fwrite() that
+only takes one size. fputs() was also modified to rely on it.
 
 Signed-off-by: Willy Tarreau <w@1wt.eu>
 ---
- tools/include/nolibc/stdio.h | 95 +++++++++++++++++++++++++++++++++---
- 1 file changed, 89 insertions(+), 6 deletions(-)
+ tools/include/nolibc/stdio.h | 35 ++++++++++++++++++++++++++++-------
+ 1 file changed, 28 insertions(+), 7 deletions(-)
 
 diff --git a/tools/include/nolibc/stdio.h b/tools/include/nolibc/stdio.h
-index 4c6af3016e2e..149c5ca59aad 100644
+index 149c5ca59aad..996bf89a30d2 100644
 --- a/tools/include/nolibc/stdio.h
 +++ b/tools/include/nolibc/stdio.h
-@@ -18,40 +18,123 @@
- #define EOF (-1)
- #endif
+@@ -84,12 +84,14 @@ int putchar(int c)
+ }
  
-+/* just define FILE as a non-empty type */
-+typedef struct FILE {
-+	char dummy[1];
-+} FILE;
-+
-+/* We define the 3 common stdio files as constant invalid pointers that
-+ * are easily recognized.
+ 
+-/* puts(), fputs(). Note that puts() emits '\n' but not fputs(). */
++/* fwrite(), puts(), fputs(). Note that puts() emits '\n' but not fputs(). */
+ 
++/* internal fwrite()-like function which only takes a size and returns 0 on
++ * success or EOF on error. It automatically retries on short writes.
 + */
-+static __attribute__((unused)) FILE* const stdin  = (FILE*)-3;
-+static __attribute__((unused)) FILE* const stdout = (FILE*)-2;
-+static __attribute__((unused)) FILE* const stderr = (FILE*)-1;
-+
-+/* getc(), fgetc(), getchar() */
-+
-+#define getc(stream) fgetc(stream)
-+
  static __attribute__((unused))
--int getchar(void)
-+int fgetc(FILE* stream)
+-int fputs(const char *s, FILE *stream)
++int _fwrite(const void *buf, size_t size, FILE *stream)
  {
- 	unsigned char ch;
-+	int fd;
+-	size_t len = strlen(s);
+ 	ssize_t ret;
+ 	int fd;
  
--	if (read(0, &ch, 1) <= 0)
-+	if (stream < stdin || stream > stderr)
-+		return EOF;
-+
-+	fd = 3 + (long)stream;
-+
-+	if (read(fd, &ch, 1) <= 0)
- 		return EOF;
- 	return ch;
+@@ -98,16 +100,35 @@ int fputs(const char *s, FILE *stream)
+ 
+ 	fd = 3 + (long)stream;
+ 
+-	while (len > 0) {
+-		ret = write(fd, s, len);
++	while (size) {
++		ret = write(fd, buf, size);
+ 		if (ret <= 0)
+ 			return EOF;
+-		s += ret;
+-		len -= ret;
++		size -= ret;
++		buf += ret;
+ 	}
+ 	return 0;
  }
  
- static __attribute__((unused))
--int putchar(int c)
-+int getchar(void)
-+{
-+	return fgetc(stdin);
-+}
-+
-+
-+/* putc(), fputc(), putchar() */
-+
-+#define putc(c, stream) fputc(c, stream)
-+
 +static __attribute__((unused))
-+int fputc(int c, FILE* stream)
- {
- 	unsigned char ch = c;
-+	int fd;
- 
--	if (write(1, &ch, 1) <= 0)
-+	if (stream < stdin || stream > stderr)
-+		return EOF;
-+
-+	fd = 3 + (long)stream;
-+
-+	if (write(fd, &ch, 1) <= 0)
- 		return EOF;
- 	return ch;
- }
- 
- static __attribute__((unused))
--int puts(const char *s)
-+int putchar(int c)
++size_t fwrite(const void *s, size_t size, size_t nmemb, FILE *stream)
 +{
-+	return fputc(c, stdout);
++	size_t written;
++
++	for (written = 0; written < nmemb; written++) {
++		if (_fwrite(s, size, stream) != 0)
++			break;
++		s += size;
++	}
++	return written;
 +}
-+
-+
-+/* puts(), fputs(). Note that puts() emits '\n' but not fputs(). */
 +
 +static __attribute__((unused))
 +int fputs(const char *s, FILE *stream)
++{
++	return _fwrite(s, strlen(s), stream);
++}
++
+ static __attribute__((unused))
+ int puts(const char *s)
  {
- 	size_t len = strlen(s);
- 	ssize_t ret;
-+	int fd;
-+
-+	if (stream < stdin || stream > stderr)
-+		return EOF;
-+
-+	fd = 3 + (long)stream;
- 
- 	while (len > 0) {
--		ret = write(1, s, len);
-+		ret = write(fd, s, len);
- 		if (ret <= 0)
- 			return EOF;
- 		s += ret;
- 		len -= ret;
- 	}
-+	return 0;
-+}
-+
-+static __attribute__((unused))
-+int puts(const char *s)
-+{
-+	if (fputs(s, stdout) == EOF)
-+		return EOF;
- 	return putchar('\n');
- }
- 
-+
-+/* fgets() */
-+static __attribute__((unused))
-+char *fgets(char *s, int size, FILE *stream)
-+{
-+	int ofs;
-+	int c;
-+
-+	for (ofs = 0; ofs + 1 < size;) {
-+		c = fgetc(stream);
-+		if (c == EOF)
-+			break;
-+		s[ofs++] = c;
-+		if (c == '\n')
-+			break;
-+	}
-+	if (ofs < size)
-+		s[ofs] = 0;
-+	return ofs ? s : NULL;
-+}
-+
- #endif /* _NOLIBC_STDIO_H */
 -- 
 2.35.1
 

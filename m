@@ -2,52 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D1064ABC1B
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:45:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E5514ABAF5
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:35:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384864AbiBGLaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:30:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34738 "EHLO
+        id S1358830AbiBGLZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:25:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383602AbiBGLXD (ORCPT
+        with ESMTP id S1382515AbiBGLTb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:23:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4083DC043181;
-        Mon,  7 Feb 2022 03:23:03 -0800 (PST)
+        Mon, 7 Feb 2022 06:19:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A786C043181;
+        Mon,  7 Feb 2022 03:19:30 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F1EEEB81028;
-        Mon,  7 Feb 2022 11:23:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 291E6C004E1;
-        Mon,  7 Feb 2022 11:22:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EB9E961426;
+        Mon,  7 Feb 2022 11:19:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE455C004E1;
+        Mon,  7 Feb 2022 11:19:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232980;
-        bh=nEs+HGaOJHuIsOkXksCVRkggW7SHbU3hDrMDAHFVnfU=;
+        s=korg; t=1644232769;
+        bh=V5zhYNZoU8n/q3yA/4X3J6GPtvrP5VLschKaveJCJQg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mTZnTUjrJCIDYQ7JyfE/Du5i7BbbYPVewhyc/oHAnDLI5PQq8+2qN77H9VcKlhDYS
-         +kTiHRXrGP3NOyoXNgj3orZQrngb8wry3tkc9E2AJg04FwhBG+rPnQcb4p9fePIc2f
-         07MTBQIxFLqVyjSElDegKiKQ9Vrrpy+SwyjYDOBQ=
+        b=leyNAmdUWmuJRpCY8eo2IMnYPHWaEdIen25iLP3LNsdXKNSkwMwhAG0kyizDF8upg
+         B2tBrbMQZO6uFyyDVjeYGEc+l6Rf00l9JJGnYcpUZ8nPQK/Fq8iN++WIQlRvpoc20r
+         6KdOuQxkoTMyPJHN6C4+Ny/6L4ZrSublb8goNoT8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jordy Zomer <jordy@pwning.systems>,
-        John Stultz <john.stultz@linaro.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>
-Subject: [PATCH 5.10 21/74] dma-buf: heaps: Fix potential spectre v1 gadget
+        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: [PATCH 5.4 03/44] ASoC: ops: Reject out of bounds values in snd_soc_put_volsw_sx()
 Date:   Mon,  7 Feb 2022 12:06:19 +0100
-Message-Id: <20220207103757.929587362@linuxfoundation.org>
+Message-Id: <20220207103753.267178413@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103757.232676988@linuxfoundation.org>
-References: <20220207103757.232676988@linuxfoundation.org>
+In-Reply-To: <20220207103753.155627314@linuxfoundation.org>
+References: <20220207103753.155627314@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,44 +53,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jordy Zomer <jordy@pwning.systems>
+From: Mark Brown <broonie@kernel.org>
 
-commit 92c4cfaee6872038563c5b6f2e8e613f9d84d47d upstream.
+commit 4f1e50d6a9cf9c1b8c859d449b5031cacfa8404e upstream.
 
-It appears like nr could be a Spectre v1 gadget as it's supplied by a
-user and used as an array index. Prevent the contents
-of kernel memory from being leaked to userspace via speculative
-execution by using array_index_nospec.
+We don't currently validate that the values being set are within the range
+we advertised to userspace as being valid, do so and reject any values
+that are out of range.
 
-Signed-off-by: Jordy Zomer <jordy@pwning.systems>
-Fixes: c02a81fba74f ("dma-buf: Add dma-buf heaps framework")
-Cc: <stable@vger.kernel.org> # v5.6+
-Acked-by: John Stultz <john.stultz@linaro.org>
-Signed-off-by: Sumit Semwal <sumit.semwal@linaro.org>
- [sumits: added fixes and cc: stable tags]
-Link: https://patchwork.freedesktop.org/patch/msgid/20220129150604.3461652-1-jordy@pwning.systems
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20220124153253.3548853-3-broonie@kernel.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/dma-buf/dma-heap.c |    2 ++
- 1 file changed, 2 insertions(+)
+ sound/soc/soc-ops.c |    9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
---- a/drivers/dma-buf/dma-heap.c
-+++ b/drivers/dma-buf/dma-heap.c
-@@ -14,6 +14,7 @@
- #include <linux/xarray.h>
- #include <linux/list.h>
- #include <linux/slab.h>
-+#include <linux/nospec.h>
- #include <linux/uaccess.h>
- #include <linux/syscalls.h>
- #include <linux/dma-heap.h>
-@@ -123,6 +124,7 @@ static long dma_heap_ioctl(struct file *
- 	if (nr >= ARRAY_SIZE(dma_heap_ioctl_cmds))
- 		return -EINVAL;
+--- a/sound/soc/soc-ops.c
++++ b/sound/soc/soc-ops.c
+@@ -436,8 +436,15 @@ int snd_soc_put_volsw_sx(struct snd_kcon
+ 	int err = 0;
+ 	unsigned int val, val_mask, val2 = 0;
  
-+	nr = array_index_nospec(nr, ARRAY_SIZE(dma_heap_ioctl_cmds));
- 	/* Get the kernel ioctl cmd that matches */
- 	kcmd = dma_heap_ioctl_cmds[nr];
++	val = ucontrol->value.integer.value[0];
++	if (mc->platform_max && val > mc->platform_max)
++		return -EINVAL;
++	if (val > max - min)
++		return -EINVAL;
++	if (val < 0)
++		return -EINVAL;
+ 	val_mask = mask << shift;
+-	val = (ucontrol->value.integer.value[0] + min) & mask;
++	val = (val + min) & mask;
+ 	val = val << shift;
  
+ 	err = snd_soc_component_update_bits(component, reg, val_mask, val);
 
 

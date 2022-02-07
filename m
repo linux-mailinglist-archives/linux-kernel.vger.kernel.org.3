@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 056F04ABE26
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:05:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF7FD4AB9E0
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:25:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391133AbiBGL63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:58:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44586 "EHLO
+        id S1356124AbiBGLQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:16:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385568AbiBGLb7 (ORCPT
+        with ESMTP id S1379641AbiBGLQO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:31:59 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83552C03E969;
-        Mon,  7 Feb 2022 03:30:54 -0800 (PST)
+        Mon, 7 Feb 2022 06:16:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE74C043181;
+        Mon,  7 Feb 2022 03:16:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4DA3CB80EBD;
-        Mon,  7 Feb 2022 11:30:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 879BBC004E1;
-        Mon,  7 Feb 2022 11:30:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 59B81B81028;
+        Mon,  7 Feb 2022 11:16:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56146C004E1;
+        Mon,  7 Feb 2022 11:16:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233452;
-        bh=ommyWLdHB1X5ao2pxgZFgQltSg+lALGtV7sFv7djEpk=;
+        s=korg; t=1644232570;
+        bh=Zrz0GY0pyQQxF+ytv8eyvaDyQNDvX7nn8gVGtMPJUik=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=i6vbk9/b8rxq0BGIoBa7l3rrlS9RSFVdIVtnEYvAKfI5INttm5FwmXK1ZcDxSVX6O
-         P4aVJcrUHWOfzInlDvYwGX7Qnn2mqrow2N7PBE4O5LZ/QT6uC12s1kYRWTlhRUCI6e
-         PJ0TJx+f3UoG4xDRmdNsDqvehV9WpdzR/aHupF2E=
+        b=1fb0IQxyQqMyCjM6nGsj9AmKYQO2SaymkwuTwVK+o7KLMAXKJnQgVnBySNkoBMm+g
+         MiPO3rZMAhxweEDPvcCZlu6GJvacz/V9IYRPDd97ZEFe/R3KfjYMhIkaDLY+hb7Gle
+         +P9bh4GuRVXmzwiW6mqZJ9YytyJcD5D1FWgukuS0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Anton Lundin <glance@acc.umu.se>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Subject: [PATCH 5.16 017/126] ata: libata-core: Introduce ATA_HORKAGE_NO_LOG_DIR horkage
+        stable@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>
+Subject: [PATCH 4.19 25/86] rpmsg: char: Fix race between the release of rpmsg_eptdev and cdev
 Date:   Mon,  7 Feb 2022 12:05:48 +0100
-Message-Id: <20220207103804.653311531@linuxfoundation.org>
+Message-Id: <20220207103758.366607814@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
-References: <20220207103804.053675072@linuxfoundation.org>
+In-Reply-To: <20220207103757.550973048@linuxfoundation.org>
+References: <20220207103757.550973048@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,65 +57,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Anton Lundin <glance@acc.umu.se>
+From: Matthias Kaehlcke <mka@chromium.org>
 
-commit ac9f0c810684a1b161c18eb4b91ce84cbc13c91d upstream.
+commit 7a534ae89e34e9b51acb5a63dd0f88308178b46a upstream.
 
-06f6c4c6c3e8 ("ata: libata: add missing ata_identify_page_supported() calls")
-introduced additional calls to ata_identify_page_supported(), thus also
-adding indirectly accesses to the device log directory log page through
-ata_log_supported(). Reading this log page causes SATADOM-ML 3ME devices
-to lock up.
+struct rpmsg_eptdev contains a struct cdev. The current code frees
+the rpmsg_eptdev struct in rpmsg_eptdev_destroy(), but the cdev is
+a managed object, therefore its release is not predictable and the
+rpmsg_eptdev could be freed before the cdev is entirely released.
 
-Introduce the horkage flag ATA_HORKAGE_NO_LOG_DIR to prevent accesses to
-the log directory in ata_log_supported() and add a blacklist entry
-with this flag for "SATADOM-ML 3ME" devices.
+The cdev_device_add/del() API was created to address this issue
+(see commit '233ed09d7fda ("chardev: add helper function to register
+char devs with a struct device")'), use it instead of cdev add/del().
 
-Fixes: 636f6e2af4fb ("libata: add horkage for missing Identify Device log")
-Cc: stable@vger.kernel.org # v5.10+
-Signed-off-by: Anton Lundin <glance@acc.umu.se>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Fixes: c0cdc19f84a4 ("rpmsg: Driver for user space endpoint interface")
+Suggested-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20220110104706.v6.2.Idde68b05b88d4a2e6e54766c653f3a6d9e419ce6@changeid
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/ata/libata-core.c |   10 ++++++++++
- include/linux/libata.h    |    1 +
- 2 files changed, 11 insertions(+)
+ drivers/rpmsg/rpmsg_char.c |   11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
 
---- a/drivers/ata/libata-core.c
-+++ b/drivers/ata/libata-core.c
-@@ -2043,6 +2043,9 @@ static bool ata_log_supported(struct ata
- {
- 	struct ata_port *ap = dev->link->ap;
+--- a/drivers/rpmsg/rpmsg_char.c
++++ b/drivers/rpmsg/rpmsg_char.c
+@@ -92,7 +92,7 @@ static int rpmsg_eptdev_destroy(struct d
+ 	/* wake up any blocked readers */
+ 	wake_up_interruptible(&eptdev->readq);
  
-+	if (dev->horkage & ATA_HORKAGE_NO_LOG_DIR)
-+		return false;
-+
- 	if (ata_read_log_page(dev, ATA_LOG_DIRECTORY, 0, ap->sector_buf, 1))
- 		return false;
- 	return get_unaligned_le16(&ap->sector_buf[log * 2]) ? true : false;
-@@ -4123,6 +4126,13 @@ static const struct ata_blacklist_entry
- 	{ "WDC WD3000JD-*",		NULL,	ATA_HORKAGE_WD_BROKEN_LPM },
- 	{ "WDC WD3200JD-*",		NULL,	ATA_HORKAGE_WD_BROKEN_LPM },
+-	device_del(&eptdev->dev);
++	cdev_device_del(&eptdev->cdev, &eptdev->dev);
+ 	put_device(&eptdev->dev);
  
-+	/*
-+	 * This sata dom device goes on a walkabout when the ATA_LOG_DIRECTORY
-+	 * log page is accessed. Ensure we never ask for this log page with
-+	 * these devices.
-+	 */
-+	{ "SATADOM-ML 3ME",		NULL,	ATA_HORKAGE_NO_LOG_DIR },
-+
- 	/* End Marker */
- 	{ }
- };
---- a/include/linux/libata.h
-+++ b/include/linux/libata.h
-@@ -428,6 +428,7 @@ enum {
- 	ATA_HORKAGE_MAX_TRIM_128M = (1 << 26),	/* Limit max trim size to 128M */
- 	ATA_HORKAGE_NO_NCQ_ON_ATI = (1 << 27),	/* Disable NCQ on ATI chipset */
- 	ATA_HORKAGE_NO_ID_DEV_LOG = (1 << 28),	/* Identify device log missing */
-+	ATA_HORKAGE_NO_LOG_DIR	= (1 << 29),	/* Do not read log directory */
+ 	return 0;
+@@ -329,7 +329,6 @@ static void rpmsg_eptdev_release_device(
  
- 	 /* DMA mask for user DMA control: User visible values; DO NOT
- 	    renumber */
+ 	ida_simple_remove(&rpmsg_ept_ida, dev->id);
+ 	ida_simple_remove(&rpmsg_minor_ida, MINOR(eptdev->dev.devt));
+-	cdev_del(&eptdev->cdev);
+ 	kfree(eptdev);
+ }
+ 
+@@ -374,19 +373,13 @@ static int rpmsg_eptdev_create(struct rp
+ 	dev->id = ret;
+ 	dev_set_name(dev, "rpmsg%d", ret);
+ 
+-	ret = cdev_add(&eptdev->cdev, dev->devt, 1);
++	ret = cdev_device_add(&eptdev->cdev, &eptdev->dev);
+ 	if (ret)
+ 		goto free_ept_ida;
+ 
+ 	/* We can now rely on the release function for cleanup */
+ 	dev->release = rpmsg_eptdev_release_device;
+ 
+-	ret = device_add(dev);
+-	if (ret) {
+-		dev_err(dev, "device_add failed: %d\n", ret);
+-		put_device(dev);
+-	}
+-
+ 	return ret;
+ 
+ free_ept_ida:
 
 

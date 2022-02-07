@@ -2,186 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BB9A4AB6DB
+	by mail.lfdr.de (Postfix) with ESMTP id EABFB4AB6DC
 	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 09:47:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346155AbiBGIpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 03:45:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36260 "EHLO
+        id S1346935AbiBGIpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 03:45:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242918AbiBGInX (ORCPT
+        with ESMTP id S243042AbiBGIoM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 03:43:23 -0500
-X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 00:43:21 PST
-Received: from esa.hc3962-90.iphmx.com (esa.hc3962-90.iphmx.com [216.71.140.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C73ECC043181;
-        Mon,  7 Feb 2022 00:43:21 -0800 (PST)
+        Mon, 7 Feb 2022 03:44:12 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D286FC043181
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 00:44:10 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id c15so18422394ljf.11
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 00:44:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qccesdkim1;
-  t=1644223401; x=1644828201;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=vrGJo5GJMvZVTeRHI+THqvSZPHHn1vX0KIRLXNDrqZc=;
-  b=Sk3vkN6+bxlN5waw5XbocE8L3raOAskqff6c6cSLSxKQ1/NYilju/YTZ
-   evrudEo/C5YgnrAiMuxuQyJd08Sf/qE92eds0KECv1TLZ3VFKmGuIKwrN
-   CEgFA1XZJ0FTdOMS+0pvU6Mvbc+EGparpFu4Yqb7lLCDX/opaKsQ3aFpq
-   o=;
-Received: from mail-bn7nam10lp2101.outbound.protection.outlook.com (HELO NAM10-BN7-obe.outbound.protection.outlook.com) ([104.47.70.101])
-  by ob1.hc3962-90.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 08:42:17 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=n0YbmWfOBz8TeX4kcJPkM1eTIpl9x1JUR0r+aZ5Xut3AnnQCd8LyKBeYCUIM+1025sasUI5kN5z9K0do7mh1B9q+2B1q8rQJ6TWwmWCV3VEDGdkjnMHUzbzkq1BDnyqsUDjhPsxyLU8udrGKPR3aHh7it3Zmg/KOvwW9WuGenTSI5DEjNnyKK03jIITRpPPONJO8+HbjNaZsq4KDWi86PFfQJP1QiQKFJCOiva9TCbY6r727co6JRrXQzJPFk1ZjBYYTZ1nH1fokZ2CxrUHZ406ZQ951DA2MZ8I/xkpJQS06Fnnt6caKA4X9gVbQzwENu4rtMQ3zPOSlIwfDVbbw1A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vrGJo5GJMvZVTeRHI+THqvSZPHHn1vX0KIRLXNDrqZc=;
- b=U6H0if0hJn0G8alnoQ9dUP0mrg4Dz4ttIUSMIEn4YJz69GhQ/FGa6zHn7Uvm8gOZiGwRhtAXHbp2EQRQp0H45eFcvTctUOF3xxuBHpBE0LjIZa+9Yh0ERSl+wVGM5RiMwwG8wXdq1nov8dJULtLdw3reTBIU/iba2rNbXMHpMUd4Ilb9WNx6IPbrn/GJELiangxu5FzCOlP0gTq1Ql/iaBUnCnrt09ppJCOMv1NI60X/Qr0dj4m0v1ib1yXn6b2Zc+UYl98VzGrwP9wJnJ07SGWUT6jsBIGc0Y/iLRLknRUAiBrnZyqg3yniZz8p+uuPX2yCEyY2p/IyLEdNbID7iA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Received: from SN4PR0201MB8725.namprd02.prod.outlook.com
- (2603:10b6:806:1e8::6) by DM6PR02MB4361.namprd02.prod.outlook.com
- (2603:10b6:5:22::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Mon, 7 Feb
- 2022 08:42:03 +0000
-Received: from SN4PR0201MB8725.namprd02.prod.outlook.com
- ([fe80::45ac:4918:6d01:3009]) by SN4PR0201MB8725.namprd02.prod.outlook.com
- ([fe80::45ac:4918:6d01:3009%5]) with mapi id 15.20.4951.019; Mon, 7 Feb 2022
- 08:42:03 +0000
-From:   "Sai Teja Aluvala (Temp) (QUIC)" <quic_saluvala@quicinc.com>
-To:     "Sai Teja Aluvala (Temp) (QUIC)" <quic_saluvala@quicinc.com>,
-        "marcel@holtmann.org" <marcel@holtmann.org>,
-        "johan.hedberg@gmail.com" <johan.hedberg@gmail.com>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>
-CC:     "mka@chromium.org" <mka@chromium.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        "Hemant Gupta (QUIC)" <quic_hemantg@quicinc.com>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        quic_bgodavar <quic_bgodavar@quicinc.com>,
-        quic_rjliao <quic_rjliao@quicinc.com>,
-        quic_hbandi <quic_hbandi@quicinc.com>,
-        "abhishekpandit@chromium.org" <abhishekpandit@chromium.org>,
-        "mcchou@chromium.org" <mcchou@chromium.org>,
-        "Sai Teja Aluvala (Temp) (QUIC)" <quic_saluvala@quicinc.com>
-Subject: RE: [PATCH v1] arm64: dts: qcom: sc7280: Add bluetooth node on SC7280
- crd board
-Thread-Topic: [PATCH v1] arm64: dts: qcom: sc7280: Add bluetooth node on
- SC7280 crd board
-Thread-Index: AQHYG9q6N7JJmMX7QUi4o6d+ajSBrKyHxW6Q
-Date:   Mon, 7 Feb 2022 08:42:03 +0000
-Message-ID: <SN4PR0201MB87255A93065DE270B624EA07E32C9@SN4PR0201MB8725.namprd02.prod.outlook.com>
-References: <1644207878-19839-1-git-send-email-quic_saluvala@quicinc.com>
-In-Reply-To: <1644207878-19839-1-git-send-email-quic_saluvala@quicinc.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=quicinc.com;
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 7a991b84-2f06-4ad6-86b4-08d9ea15b720
-x-ms-traffictypediagnostic: DM6PR02MB4361:EE_
-x-ld-processed: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d,ExtAddr
-x-microsoft-antispam-prvs: <DM6PR02MB436155798359D430169F50369F2C9@DM6PR02MB4361.namprd02.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:475;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: OHXQtoRP++Lj/YaXRCTAa+QMTZGFtb3brGRnSUBz9QfjXNvRUwBunFcndBt6R+KOL/QTFvh73lfXXoddJ1YjaR3Ia1dX9c5oqMjXRmqktfgJsq8wi3/+661CFySL4u4fCZQx2uqHRG16iES6+SZD3/aO/wtnlWGWbUSIBcz+0eNX55yJv8N9ob4mfIlBfzTDwR+Oei4WNjmWZ2pY4+dfVfP5NuOqar4JLa4FBws4vSZ49LwHNUizewLhwqrDR1iGF4vVQxAMQDpedGSvis4e6TVIVR2rwgFrFudXw2oOlmTExt+N3Jt4KLgCNL7kL+fmv7zPtbS5gog3t7HPMnn8x75N/deMiI4/4ng3KZ3Okvh/vtdRGHAwESeRFXzCR5CXk9sUxfMwD1Txkl01e6YWh67jjAITuEF5I4S5eYAYUINrGrcjkyPu4TUnsGbVIjr0l01dgSNfsRHszlM5J81ULrLftFWkdyeCgGGN5gzS0/zGlN3O88/5uHb8HHgf7zQTQFOAm6q/D5crgK59p60GZjC0lnrZhRGeb6LqlgVutaE1gk6dEvvVMjmjWKnfP33iVhvQLf+gNmi8pNN5NNhuhVqnmHGzpmRLn2AkIrr1uR/nf6DWuExyTqNNr9HpOxF3+8K2i7JenxMPQiz0vLwT3nJIGR9+rZhA+fVPlGenwXEzSE+52WWdvbyfPYF8ALGBZvOmsthDr3g47N9jZBzTfw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN4PR0201MB8725.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38100700002)(186003)(26005)(107886003)(508600001)(9686003)(55016003)(83380400001)(122000001)(5660300002)(2906002)(33656002)(52536014)(53546011)(110136005)(7696005)(6506007)(54906003)(316002)(71200400001)(38070700005)(86362001)(66446008)(66556008)(66476007)(76116006)(66946007)(8936002)(8676002)(4326008)(64756008);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?qPJ2Ti3F0UpSKySpDNSF1u0IKH87B0kwAZjjbmY7WYUOtbIMMhYRAvmw/iVJ?=
- =?us-ascii?Q?3FxSChJTJqKbiOkFXaN3dS6Iwff8ODs/j/87pltp1wNu85wLzdBrfqEo4db7?=
- =?us-ascii?Q?0rEHcmxw3megI3aK5gwPpzcQkgu2Nss727nbxMmmU5NytFkh/OGeDpctIOHE?=
- =?us-ascii?Q?oeYqpJZaZPHOPftIe83Z+KVUqYSYW/9C4NKAKD/E3civ0606vfHe9n6vkF2I?=
- =?us-ascii?Q?az0KBWak40ClLgu6j7STgv0Un+NVkcwv6oJSraFFs25jwVIm8hsXVKDjeh7J?=
- =?us-ascii?Q?h4Rca63vNGcSG+UHGcvHP3Ddh7AdIm82e+Ng1JhdaPgEi0dJqL/kWieTiIKc?=
- =?us-ascii?Q?uoOYqfhAsTfgnWXmRYyVscI3QUQShX2Eb1M1gHlYIB1d/gOJeZfpIdhFD2oy?=
- =?us-ascii?Q?CsIgvW8UHfTP/dQ+/rk79QGdFH2QH5q1/zkyHjfBOFxPlQ5SPOec4+z8FIiV?=
- =?us-ascii?Q?COLN+xiwtDJdMOzoxzmFjUpsktfI6rakvzjsKn2HnkXxbMhK/Kt8/5P7HU5I?=
- =?us-ascii?Q?nQX1UmqVPT5pGKH/yBpQJ3MAWcR97MSxHxQtWsFNYDfH1fN7SJin83SQ9/DU?=
- =?us-ascii?Q?37Lu7PnUmbiwEpo0cKdmQYaW9LuluqJdD8fW/0rKlYgh9/BT8aVo2nrkdYA7?=
- =?us-ascii?Q?ps86EkL3bXMn4PStvwQ86KCSq4T3P9gJimp1y4im3XXm9OxqYotqFkpCE6uR?=
- =?us-ascii?Q?hCYGv8NAxnvGSwTW84tk6LRc7Yxulfi7xJUmDSy7LKlEw30E+YKF3CKTbU1L?=
- =?us-ascii?Q?r53B12KTZG1PFdGpv2ufXmQC+xnXF1KXoAG4tog6bv6KWGQkyoVR4rYNK5VO?=
- =?us-ascii?Q?I5Dm58H90/G71YkG8ovWe2+W5jp5u1uAJSN1M9UyF8Xf4whLdJ0NJ7m6FhX3?=
- =?us-ascii?Q?Tg9DcsyB2r9z5dAjjFgbA8jq5fCnBrf+zQmh2MGM1RW2MYqwvQCDxCwa5+gn?=
- =?us-ascii?Q?MSuWpxLCMnWnnI75qtYLQFZpJ2Jxqu+7bPmr3ghlGwXYJcuwUECqC4+sL5po?=
- =?us-ascii?Q?GHl3YqcrJj7MUFLnE24ZB8Dyb2spCAmmFIY9QggQentcqbRv58Ebo/1ZLLd7?=
- =?us-ascii?Q?D3yet3J2U3s0Aqz2M5QFSGjkmU/xrmxsDfctfJa7j0vsvi8MYFaCcQnE4QuQ?=
- =?us-ascii?Q?HKCBWyIOP1ZUeNqWvE2XDFpV/POwvuYZMr7kSTFVh5e9xAY8C5alYuOHe5B/?=
- =?us-ascii?Q?CBlNtAeckFJlvVhshgyHPMFIDyfJiaTcOkzLOm9YM6pY7lM78X6Ux37WceEx?=
- =?us-ascii?Q?yAxvNZ7sfS3ej7eueeC9lfeolP3jJlzA2COsiP1cmMhPEjtD1fnFmrZNLET+?=
- =?us-ascii?Q?Si9MAKpAa1XMvv1aAIPv/uQqusN0KXWnMWB03JJnol0nLGOgLAWjATCOppjL?=
- =?us-ascii?Q?trqVzmg5nr8/IqgBWdrCiqNvUM6M1fpV9N3xniM10spKpd6an0RFoNPc9OSP?=
- =?us-ascii?Q?E/nS7I7UcTE6AMjFqlbG5BCF16MjWtSb4XMfZBu6gFMuijAaP8Rrb1AgKuWf?=
- =?us-ascii?Q?cncLBNjxrzSvHR/tkLsVNvnoI9O2Cfz0gjgKbSj80ahJz+iO/3GuTjDxxKSu?=
- =?us-ascii?Q?kWSsELjQIcgdlQ60lFumPcAcHM7upsivQU+zmSHsYaIhOIcDeqEhjOTI1MIY?=
- =?us-ascii?Q?OdJs7XfzdmhcOqrnUnQd5mezR18WYenJDLn4njbWMfPIXVtRCIBbI+HQAG2e?=
- =?us-ascii?Q?VA/huA=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=iV9+wsyfUcoW/CmR74trefYkab9ZaA0MJl8TccvkpxA=;
+        b=fqB0sUl89xvVMJzuFktZmc/xLp21fIZ6V56NLPiVLb9Uww8w6ImIdxClcUslefyuPn
+         S2F/Mhkk6nsF4h1ky4NCN1mB9VXbj5ih7KokULjll67LTGb4+uQY73fSSrhrrABW0Oci
+         OG0CEwYVzYxvHlrxJTJ4GbHZBJV7l1ZnmrSLH5CtimQO1FWKuS7G6HBHbju6sxzDTwNC
+         fS1UYXgY7nAp2pWwCWN8KlmekeD/3jw9NKwfAkxAf2YEqCVALpH17K7fxR4xEgTr7MKj
+         OYdmTAGZw2qoLsqIvWWKC7V40+JrpIviGe5vYb7/MBWZ2ZhjkSAiXNiYuzKSd6i/V4Ia
+         DFKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=iV9+wsyfUcoW/CmR74trefYkab9ZaA0MJl8TccvkpxA=;
+        b=nzk0oKwHSyIUztS5/i6zKkXp1Iy1/H9bj7hKMhZt699jMyBd/zJthbU0oEW4g959hH
+         huTF8Tn2nsGlZH2umCYFQeU3Lrih6aCpyRbaw4WaTlKraMONghImDTTeso9UXHLpfbhQ
+         2PCfIFkxpKB5gqeU5PVDpal4hH2dHyMG1Qdtx/tnkwOmXkaty2GPk/ntHyRESf8nmbi8
+         pRtJPlN9XcWrP6CrWmlReq29+5pWboEEV0KuOs7D9AR/481BgFR/CL+RQaD14y7SiIup
+         IIi5VHynaol7LW9YSpmCUIm5Ev7KVDQVmBXQC2CzBEqx1K261K97ai0DmKpLf4v6zrD3
+         QwUg==
+X-Gm-Message-State: AOAM531egXdw3qdAPoMuhrPZNELR60P4M9WwzZgt+9LOi6pcfnQVPhL5
+        tH/BzxhniS1g6zwZ7AbGkj6FspIdjMgbxDJhs2V0iw==
+X-Google-Smtp-Source: ABdhPJxijT6MHex4bqgY6LoldBW85wOtJU7/upx1oWMkfqzHyF0lKD8+g8zAWNzBSJRF+FvSmiCwkEC1iYh0SoLCoMQ=
+X-Received: by 2002:a05:651c:1787:: with SMTP id bn7mr8423349ljb.16.1644223449112;
+ Mon, 07 Feb 2022 00:44:09 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: quicinc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SN4PR0201MB8725.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7a991b84-2f06-4ad6-86b4-08d9ea15b720
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Feb 2022 08:42:03.5961
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: StHAQZffqtxSTjVxggdz42ZFQLVSEtG4vXJFqi77k7YjzHH9LsZTr7Pz+DT9Vmi/MxV8u4cpyH8zlX5TZS5RemHW4nYv6SacTx3PH2sQ5Ik=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB4361
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220131113743.52265-1-ulf.hansson@linaro.org>
+ <b33ceac4-506a-65c8-7c80-b1b0a67ce65e@gmail.com> <CAPDyKFqsvF=Pm-vMXSUwPMPnjCr7nSYuy5AH+8rwLYm_NUPKww@mail.gmail.com>
+ <400e45da-837a-c8ad-84b3-285e35f8462c@gmail.com>
+In-Reply-To: <400e45da-837a-c8ad-84b3-285e35f8462c@gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 7 Feb 2022 09:43:32 +0100
+Message-ID: <CAPDyKFpLX0Jpz-tzYx3-g0YBZZNh6Bw731gQEFQub1SviLGoYg@mail.gmail.com>
+Subject: Re: [PATCH] PM: domains: Prevent power off for parent unless child is
+ in deepest state
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        Kevin Hilman <khilman@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+ bjorn
+On Fri, 4 Feb 2022 at 20:10, Dmitry Osipenko <digetx@gmail.com> wrote:
+>
+> 04.02.2022 12:43, Ulf Hansson =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> > On Mon, 31 Jan 2022 at 19:29, Dmitry Osipenko <digetx@gmail.com> wrote:
+> >>
+> >> 31.01.2022 14:37, Ulf Hansson =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> >>> A PM domain managed by genpd may support multiple idlestates. During
+> >>> genpd_power_off() a genpd governor may be asked to select one of the
+> >>> idlestates based upon the dev PM QoS constraints, for example.
+> >>>
+> >>> However, there is a problem with the behaviour around this in genpd. =
+More
+> >>> precisely, a parent-domain is allowed to be powered off, no matter of=
+ what
+> >>> idlestate that has been selected for the child-domain.
+> >>>
+> >>> So far, we have not received any reports about errors, possibly becau=
+se
+> >>> there might not be platform with this hierarchical configuration, yet=
+.
+> >>> Nevertheless, it seems reasonable to change the behaviour into preven=
+ting
+> >>> the parent-domain from being powered off, unless the deepest idlestat=
+e has
+> >>> been selected for the child-domain, so let's do that.
+> >>>
+> >>> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> >>> ---
+> >>>  drivers/base/power/domain.c | 18 ++++++++++++++++++
+> >>>  1 file changed, 18 insertions(+)
+> >>>
+> >>> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.=
+c
+> >>> index 5db704f02e71..7f97c5cabdc2 100644
+> >>> --- a/drivers/base/power/domain.c
+> >>> +++ b/drivers/base/power/domain.c
+> >>> @@ -636,6 +636,17 @@ static int genpd_power_off(struct generic_pm_dom=
+ain *genpd, bool one_dev_on,
+> >>>                       atomic_read(&genpd->sd_count) > 0)
+> >>>               return -EBUSY;
+> >>>
+> >>> +     /*
+> >>> +      * The children must be in their deepest states to allow the pa=
+rent to
+> >>> +      * be powered off. Note that, there's no need for additional lo=
+cking, as
+> >>> +      * powering on a child, requires the parent's lock to be acquir=
+ed first.
+> >>> +      */
+> >>> +     list_for_each_entry(link, &genpd->parent_links, parent_node) {
+> >>> +             struct generic_pm_domain *child =3D link->child;
+> >>> +             if (child->state_idx < child->state_count - 1)
+> >>> +                     return -EBUSY;
+> >>> +     }
+> >>> +
+> >>>       list_for_each_entry(pdd, &genpd->dev_list, list_node) {
+> >>>               enum pm_qos_flags_status stat;
+> >>>
+> >>> @@ -1073,6 +1084,13 @@ static void genpd_sync_power_off(struct generi=
+c_pm_domain *genpd, bool use_lock,
+> >>>           || atomic_read(&genpd->sd_count) > 0)
+> >>>               return;
+> >>>
+> >>> +     /* Check that the children are in their deepest state. */
+> >>> +     list_for_each_entry(link, &genpd->parent_links, parent_node) {
+> >>> +             struct generic_pm_domain *child =3D link->child;
+> >>> +             if (child->state_idx < child->state_count - 1)
+> >>> +                     return;
+> >>> +     }
+> >>> +
+> >>>       /* Choose the deepest state when suspending */
+> >>>       genpd->state_idx =3D genpd->state_count - 1;
+> >>>       if (_genpd_power_off(genpd, false))
+> >>
+> >> Hello Ulf,
+> >
+> > Hi Dmitry,
+> >
+> >>
+> >> Is this needed by a concrete SoC? It needs to be clarified in the comm=
+it
+> >> message, otherwise looks like this patch wasn't tested and it's unclea=
+r
+> >> whether this change is really needed.
+> >
+> > It's needed on a STMicro SoC that I have been working on. However,
+> > it's difficult for me to test on that platform, as some SoC specific
+> > pieces are missing upstream (the power domain deployment in
+> > particular). Anyway, let me add some information about this in the
+> > commit log for the next version.
+> >
+> > When it comes to testing, I am using a couple of local test dummy
+> > drivers. One that manages devices that gets attached to a genpd,
+> > mostly to execute runtime PM and dev PM QoS calls - and another that
+> > manages the PM domains with genpd. I have been thinking of a way to
+> > share these "tools" to let other people use them for testing too, but
+> > I haven't just got to it yet.
+> >
+> > Besides the above, do you see any issues from Nvidia platforms point
+> > of view with $subject patch?
+>
+> I've two main concerns:
+>
+> 1. This is a patch for something (STMicro SoC) that isn't fully
+> supported by upstream kernel and it's not clear whether it will be ever
+> supported at all.
 
------Original Message-----
-From: Sai Teja Aluvala <quic_saluvala@quicinc.com>=20
-Sent: Monday, February 7, 2022 9:55 AM
-To: marcel@holtmann.org; johan.hedberg@gmail.com
-Cc: mka@chromium.org; linux-kernel@vger.kernel.org; linux-bluetooth@vger.ke=
-rnel.org; Hemant Gupta (QUIC) <quic_hemantg@quicinc.com>; linux-arm-msm@vge=
-r.kernel.org; quic_bgodavar <quic_bgodavar@quicinc.com>; quic_rjliao <quic_=
-rjliao@quicinc.com>; quic_hbandi <quic_hbandi@quicinc.com>; abhishekpandit@=
-chromium.org; mcchou@chromium.org; Sai Teja Aluvala (Temp) (QUIC) <quic_sal=
-uvala@quicinc.com>
-Subject: [PATCH v1] arm64: dts: qcom: sc7280: Add bluetooth node on SC7280 =
-crd board
+The upstream work is ongoing, it's the stm32mp1 platform, which is
+already supported upstream.
 
-Add Bluetooth SoC WCN6750 node for SC7280 crd board
+>
+> 2. It's not clear why behaviour of a very specific SoC should be applied
+> to all SoCs, especially given that the specific SoC itself isn't going
+> to use to this feature right now. I guess it could be okay to put this
+> behaviour into the core code until any other SoC will require a
+> different behaviour, but the commit message doesn't clarify this.
 
-Signed-off-by: Sai Teja Aluvala <quic_saluvala@quicinc.com>
+The point with the commit message is to question the current default
+behaviour. If we have a QoS constraint that causes the genpd governor
+to select a shallow state for a child, it seems wrong to allow the
+parent to be turned off, in my opinion.
 
----
- arch/arm64/boot/dts/qcom/sc7280-crd.dts | 4 ++++
- 1 file changed, 4 insertions(+)
+If a platform with a PM domain hierarchy would need a different
+behaviour from genpd, then we need to look into that, of course.
+However, the current *uncontrolled* behaviour is most likely not going
+to be suitable for any platform anyway.
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-crd.dts b/arch/arm64/boot/dts/=
-qcom/sc7280-crd.dts
-index cd2755c..53ea3b4 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-crd.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7280-crd.dts
-@@ -23,6 +23,10 @@
- 	};
- };
-=20
-+&bluetooth {
-+	vddio-supply =3D <&vreg_l18b_1p8>;
-+};
-+
- ap_tp_i2c: &i2c0 {
- 	status =3D "okay";
- 	clock-frequency =3D <400000>;
---=20
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc.
+>
+> To my knowledge all NVIDIA Tegra SoCs are indifferent to this patch
+> because they don't have such kind of dependency between power domains.
 
+Great, thanks for confirming!
+
+>
+> In general, such changes usually are deferred from being upstreamed
+> until there is a real user, otherwise there is a risk of cluttering the
+> code with unused features. Do you have a time estimation in regards to
+> when STMicro may start to benefit from this change?
+
+The STMicro folkz are working on it right now, but I can't give you
+any estimates for their work.
+
+Moreover, I think the important point in this regard, is that the
+$subject patch doesn't really hurt anything else, so then what's the
+point of holding this back?
+
+Kind regards
+Uffe

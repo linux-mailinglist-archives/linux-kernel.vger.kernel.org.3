@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD8464ABD09
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:55:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0111E4ABDE8
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:05:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388684AbiBGLoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:44:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46024 "EHLO
+        id S1355491AbiBGLtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:49:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385880AbiBGLc4 (ORCPT
+        with ESMTP id S1386636AbiBGLfN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:32:56 -0500
+        Mon, 7 Feb 2022 06:35:13 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18079C043181;
-        Mon,  7 Feb 2022 03:32:55 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28B4AC043181;
+        Mon,  7 Feb 2022 03:35:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ACFC1B80EBD;
-        Mon,  7 Feb 2022 11:32:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00017C004E1;
-        Mon,  7 Feb 2022 11:32:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CB421B80EBD;
+        Mon,  7 Feb 2022 11:35:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D09B7C004E1;
+        Mon,  7 Feb 2022 11:35:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233573;
-        bh=0amyQrwO/l9Xpx9ZFXvom4ZEQ7XuUf/uQHAxWPyi1UE=;
+        s=korg; t=1644233710;
+        bh=+IY6A+HUlenz/HqGjjxj3obMOLESQN8pG2bZR8pv5QI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YfHfWlBKwAS5Gsa+mhhNu/97a0g/M81UrBz5H5KUfVtRKzyEm61b5cFdOcAfyOlhA
-         pEcIwXyF+PZQ2uyIi23OkTST9Eu6k3kojMj+E+5fo+GMSprHIW5XMPf2aIQ6dLHvvV
-         faMCYGpvl6GgQ6socJb6OZDm8CKoNPESv2but3fQ=
+        b=VHuxb3Hxz6I0A4XEIYBuYkZJi7q92A+cBMD/eFCkjFrHSAnj690EO0Ayi90kQDR+G
+         dx9asc8xyX6WXzLfk0/fFpubIJmerjHAqTAIq0eeUzobecQ6nncp4S9Z1t4JBGFhbV
+         1K8ZuQg3h7WSFd/jDVVLCafNELVdl2mjPIqdSjKc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Leon Romanovsky <leonro@nvidia.com>,
-        =?UTF-8?q?H=C3=A5kon=20Bugge?= <haakon.bugge@oracle.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Subject: [PATCH 5.16 053/126] RDMA/mlx4: Dont continue event handler after memory allocation failure
-Date:   Mon,  7 Feb 2022 12:06:24 +0100
-Message-Id: <20220207103805.945560237@linuxfoundation.org>
+        stable@vger.kernel.org, Tom Rix <trix@redhat.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.16 054/126] ALSA: usb-audio: initialize variables that could ignore errors
+Date:   Mon,  7 Feb 2022 12:06:25 +0100
+Message-Id: <20220207103805.976127340@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
 References: <20220207103804.053675072@linuxfoundation.org>
@@ -55,37 +54,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Leon Romanovsky <leonro@nvidia.com>
+From: Tom Rix <trix@redhat.com>
 
-commit f3136c4ce7acf64bee43135971ca52a880572e32 upstream.
+commit 3da4b7403db87d39bc2613cfd790de1de99a70ab upstream.
 
-The failure to allocate memory during MLX4_DEV_EVENT_PORT_MGMT_CHANGE
-event handler will cause skip the assignment logic, but
-ib_dispatch_event() will be called anyway.
+clang static analysis reports this representative issue
+mixer.c:1548:35: warning: Assigned value is garbage or undefined
+        ucontrol->value.integer.value[0] = val;
+                                         ^ ~~~
 
-Fix it by calling to return instead of break after memory allocation
-failure.
+The filter_error() macro allows errors to be ignored.
+If errors can be ignored, initialize variables
+so garbage will not be used.
 
-Fixes: 00f5ce99dc6e ("mlx4: Use port management change event instead of smp_snoop")
-Link: https://lore.kernel.org/r/12a0e83f18cfad4b5f62654f141e240d04915e10.1643622264.git.leonro@nvidia.com
-Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
-Reviewed-by: Håkon Bugge <haakon.bugge@oracle.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+Fixes: 48cc42973509 ("ALSA: usb-audio: Filter error from connector kctl ops, too")
+Signed-off-by: Tom Rix <trix@redhat.com>
+Link: https://lore.kernel.org/r/20220126182142.1184819-1-trix@redhat.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/infiniband/hw/mlx4/main.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/usb/mixer.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/drivers/infiniband/hw/mlx4/main.c
-+++ b/drivers/infiniband/hw/mlx4/main.c
-@@ -3247,7 +3247,7 @@ static void mlx4_ib_event(struct mlx4_de
- 	case MLX4_DEV_EVENT_PORT_MGMT_CHANGE:
- 		ew = kmalloc(sizeof *ew, GFP_ATOMIC);
- 		if (!ew)
--			break;
-+			return;
+--- a/sound/usb/mixer.c
++++ b/sound/usb/mixer.c
+@@ -1526,6 +1526,10 @@ error:
+ 		usb_audio_err(chip,
+ 			"cannot get connectors status: req = %#x, wValue = %#x, wIndex = %#x, type = %d\n",
+ 			UAC_GET_CUR, validx, idx, cval->val_type);
++
++		if (val)
++			*val = 0;
++
+ 		return filter_error(cval, ret);
+ 	}
  
- 		INIT_WORK(&ew->work, handle_port_mgmt_change_event);
- 		memcpy(&ew->ib_eqe, eqe, sizeof *eqe);
 
 

@@ -2,65 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A808E4ACB9E
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 22:50:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C1674ACB9D
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 22:50:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242751AbiBGVut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 16:50:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34246 "EHLO
+        id S242730AbiBGVuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 16:50:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242743AbiBGVuj (ORCPT
+        with ESMTP id S240952AbiBGVuT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 16:50:39 -0500
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 569B6C061355
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 13:50:39 -0800 (PST)
-Received: by mail-vs1-xe34.google.com with SMTP id g10so1251488vss.1
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 13:50:39 -0800 (PST)
+        Mon, 7 Feb 2022 16:50:19 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB36C061355;
+        Mon,  7 Feb 2022 13:50:18 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id u6so29505135lfm.10;
+        Mon, 07 Feb 2022 13:50:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LrJtG/4VF3TjaBbbVCMP3L8XINzF0HJUnLz1QbyH774=;
-        b=OIA3HNAQMQ2qVTofuripOySnB8XsK+KrH1Fa3nCSa0GqX6xDef7u1BLlL+FtDbAOpX
-         TOBvrVoolEO8RU0TDuiBwgtNLaAX3h+uRyEJD0guTIQi7rsnaHX2dGgxhyacaT2cACUT
-         w+CE+BDnIKB+i3OFkxXizBi1lDvw6ooJqJI6GNAp6PCI7KgmT9MnOODe/ZWG+zp0AcU+
-         u9vL9zuuVh2XLlo/dSSDdnDLB2H4wlMkeGn/Ui2yupguX5P32j2n1cr6RyP+wWeXhN7T
-         qjhzdD08Y22oWbMz5/7geaSRNBDXP0zgCMA0rPJqoziREry1FzjjJF61aK09qgc7vYhC
-         Jv3A==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=8KR8TAE4T+b81v1A/EZJdCn/FtNSrIEkM3uPzd1DPRY=;
+        b=HdLaK3ZfHe689Tp8tot/VVJY42NmPt5hBj+pj/iuScYhndldleTrCYxzw3s28Uo1sP
+         P7GSPmXULLp95vmMMxpJcBh7lOuyt3yPXdfX/oe2I0JgWkCDmRwS3Bk4jJ0qW+qQXtsh
+         DxI/I3zE/7Kg5PVR8pcCpHAYWbMcSLclIAMcfozaIzD7u41lVO4uDexExIMhl0mhr2/S
+         2IU8DkJG1ozDnP4wK/sw425sxP6rIB/4PtJ35CMWGIzJ+y1Uf/m49we4VRymb1nfPusf
+         mSmaBJps4NyQnIOxMsbGN90O2VuSnrM8UajJEurxSKWJCwDAqNSImQvYU3He7nA1y+/H
+         5Vlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LrJtG/4VF3TjaBbbVCMP3L8XINzF0HJUnLz1QbyH774=;
-        b=Jchg7tLUwFTdtHroR2ehkOhZ8zouZFn5Jg4gn2kbPztsTogncl4tMgHnJHs2213g0f
-         I5waFCEpdU/Zs3DikjaJ7cC8S6Z5K4Xnp4UovwnfdyOKaXkCsqQhyoSJyZ4B64TZEEvY
-         5uGTLf45uorcw1WcHU1IBpQaOPQT6OGhlfs5REMt41we+nO6cBmaZ5jYEwRDiL0Ojl1q
-         oU5zP4rYDgOEfklieoZGXsge2Bq7Sr0PWAaiD05HYqWHEszcCvBLraK5dNazPuNfZ2ND
-         yBI16+5cXR+KEuweNALorPpzUVj3yHzf8efW/FrYkoUv1pKQ7O3J2TB6Vpp1AYSBxxXF
-         EwZA==
-X-Gm-Message-State: AOAM530d8nCXw7k3fxHfyoHQDGQ/+DARMssHax7GfOI3SlQaDYv4EnkR
-        gDGb485VcDJvwSlls94ZHCvyt5z5esD+gfpo3g8uag==
-X-Google-Smtp-Source: ABdhPJw2An15tX4wk6vj87vqmn3C3Le56zen1+ee6Epwhv/PcbapVScQqxoFhNHrTGgijorQ6jNfOxXFsHZMSp+P1dE=
-X-Received: by 2002:a67:e08d:: with SMTP id f13mr608800vsl.78.1644270638386;
- Mon, 07 Feb 2022 13:50:38 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=8KR8TAE4T+b81v1A/EZJdCn/FtNSrIEkM3uPzd1DPRY=;
+        b=46FIDiG5zuzOMfFyBB2WsTjral6+s+b08vyoCA9E8m7YvkPdjS/93OW3krvrpgfjkm
+         AeQOtat3OMOmiIWYRYn9ct/8JM6SQXEb6+sOxsINpO9TzSjwV5RKCYPW3wkLwxq1iG9o
+         o49qw+geuONmK0DaRYVvJlnq/Dud99SAZqGmG0NJqzdbhGDShDoTOoeYYCbv3B14AH9A
+         KpfqwzJcqfet7fq7AKbMRKWHp9ZMelvT3iGf+CA4EjQnHrZUe+qJEl2c8OI+ZDdDBq+R
+         CHxqcnlZiO8x2Ut2bkX0VCEZsZ/iRiM3Bhv1G3c8bD/TnJVYpVkzVKVV0gfy8p6Evh3s
+         77qA==
+X-Gm-Message-State: AOAM5313bWyr3Kuyz4MapvJSWuYJ1mZc6UVh1ij8b3M8zPubPCILz7bW
+        mo9IEgpLfYqt9TvCXjJjTAY=
+X-Google-Smtp-Source: ABdhPJypQF9kCG4qJaDjHN8XTm8D3HyDNVK5iLXsXIzLeFfrNn1XK7M7kqRj8b99JkgfNdLVx4ahqA==
+X-Received: by 2002:a05:6512:151e:: with SMTP id bq30mr1031460lfb.604.1644270616824;
+        Mon, 07 Feb 2022 13:50:16 -0800 (PST)
+Received: from [192.168.2.145] (109-252-138-165.dynamic.spd-mgts.ru. [109.252.138.165])
+        by smtp.googlemail.com with ESMTPSA id i18sm1645506lfv.257.2022.02.07.13.50.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Feb 2022 13:50:16 -0800 (PST)
+Message-ID: <fd8ba6fc-b389-3e8e-2671-51656d3d8e5c@gmail.com>
+Date:   Tue, 8 Feb 2022 00:50:15 +0300
 MIME-Version: 1.0
-References: <e10b79cf-d6d5-ffcc-bce4-edd92b7cb6b9@molgen.mpg.de>
- <CAHmME9pktmNpcBS_DJhJ5Z+6xO9P1wroQ9_gwx8KZMBxk1FBeQ@mail.gmail.com> <CAG48ez2P9-CAdgRizcp5T_uuoXRAt0xtodh1doiMW0fKZVX-7g@mail.gmail.com>
-In-Reply-To: <CAG48ez2P9-CAdgRizcp5T_uuoXRAt0xtodh1doiMW0fKZVX-7g@mail.gmail.com>
-From:   Jann Horn <jannh@google.com>
-Date:   Mon, 7 Feb 2022 22:50:12 +0100
-Message-ID: <CAG48ez3wZOZZX1UHM-Q=KhOnnGR85Unm08q7jT_wVfOq0PW94Q@mail.gmail.com>
-Subject: Re: BUG: KCSAN: data-race in add_device_randomness+0x20d/0x290
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     pmenzel@molgen.mpg.de, "Theodore Y. Ts'o" <tytso@mit.edu>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v19 2/4] dmaengine: tegra: Add tegra gpcdma driver
+Content-Language: en-US
+To:     Akhil R <akhilrajeev@nvidia.com>, devicetree@vger.kernel.org,
+        dmaengine@vger.kernel.org, jonathanh@nvidia.com,
+        kyarlagadda@nvidia.com, ldewangan@nvidia.com,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        p.zabel@pengutronix.de, rgumasta@nvidia.com, robh+dt@kernel.org,
+        thierry.reding@gmail.com, vkoul@kernel.org
+Cc:     Pavan Kunapuli <pkunapuli@nvidia.com>
+References: <1644246094-29423-1-git-send-email-akhilrajeev@nvidia.com>
+ <1644246094-29423-3-git-send-email-akhilrajeev@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+In-Reply-To: <1644246094-29423-3-git-send-email-akhilrajeev@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,30 +79,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 7, 2022 at 10:45 PM Jann Horn <jannh@google.com> wrote:
-> On Mon, Feb 7, 2022 at 7:42 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> > Thanks for the report. I assume that this is actually an old bug. Do
-> > you have a vmlinux or a random.o from this kernel you could send me to
-> > double check? Without that, my best guess, which I'd say I have
-> > relatively high confidence about, is that the "1 byte read" is
-> > actually a `movzx eax, cs:lfsr` referring to the `static u8 lfsr`
-> > here, which gets inlined into add_device_randomness:
-> >
-> > static int crng_slow_load(const u8 *cp, size_t len)
-> > {
-> >     unsigned long flags;
-> >     static u8 lfsr = 1;
-> >
-> > This was added in 2008 with dc12baacb95f ("random: use a different
-> > mixing algorithm for add_device_randomness()"). My understanding is
-> > that the race here isn't super problematic as we're in kind of a half
-> > assed "low effort" phase anyway. But I'll give it some thought. I'm
-> > CCing Jann as well who reported the original issue that motivated that
-> > change.
->
-> But the "lfsr" variable is never accessed outside the part of this
-> method that holds a global spinlock. So that can't really be it,
-> right?
+07.02.2022 18:01, Akhil R пишет:
+> Adding GPC DMA controller driver for Tegra. The driver supports dma
+> transfers between memory to memory, IO peripheral to memory and
+> memory to IO peripheral.
+> 
+> Co-developed-by: Pavan Kunapuli <pkunapuli@nvidia.com>
+> Signed-off-by: Pavan Kunapuli <pkunapuli@nvidia.com>
+> Co-developed-by: Rajesh Gumasta <rgumasta@nvidia.com>
+> Signed-off-by: Rajesh Gumasta <rgumasta@nvidia.com>
+> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+> Reviewed-by: Jon Hunter <jonathanh@nvidia.com>
+> ---
+>  drivers/dma/Kconfig            |   11 +
+>  drivers/dma/Makefile           |    1 +
+>  drivers/dma/tegra186-gpc-dma.c | 1505 ++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 1517 insertions(+)
+>  create mode 100644 drivers/dma/tegra186-gpc-dma.c
 
-There is a data race in crng_ready(), it just loads from "crng_init"
-without READ_ONCE()... maybe that's what KCSAN is noticing?
+Looks okay to me. Thank you for the effort!
+
+Coding style isn't ideal:
+
+ - inconsistent alignment of the code
+ - unnecessary whitespaces and parens
+ - inconsistent variables type signes
+ - all abbreviation should be capitalized in comments and commit msg
+
+but this is not critical and could be improved later on.
+
+Reviewed-by: Dmitry Osipenko <digetx@gmail.com>

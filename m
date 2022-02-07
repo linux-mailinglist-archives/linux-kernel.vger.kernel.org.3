@@ -2,51 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6D964AC95F
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 20:24:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5FDF4AC962
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 20:24:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238884AbiBGTSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 14:18:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45984 "EHLO
+        id S238789AbiBGTSx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 14:18:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239313AbiBGTOz (ORCPT
+        with ESMTP id S239331AbiBGTQJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 14:14:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00921C0401DC
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 11:14:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AB551B80EF6
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 19:14:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 440D8C004E1;
-        Mon,  7 Feb 2022 19:14:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644261292;
-        bh=HJoLZayjw9d/gTYyeZLWOIyycJnicgl+gCOYbWkZsXU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mtOs0UFvLFkypBmJJ4xlwyKBYH+C3cuBhr2TXU4kpDV9+q1LF8W1t++Gwl4Ejy9//
-         xbD6K6t+PhFRAo0E9bK7c63F1EadKKIfN678kYPxoxlCKz/M++a5b1hdQU6q56lPQf
-         A/G+HyzTi+1QQoBU0/VhUOx3ja68Klh4Yx9BHryHm6RE99SZvhzVQ9aS0ED7pwNVYA
-         LAaA67j2ip7+Oop90XwqyRjxNe6N3/HPmvLTj94CBSZ/tXh8BjuGhhrIB1oeliy/TT
-         6D3quwBsbKKrzomk2Lf/xp41Lbm0i4EB4eth6qu7VpDbCL+xHcS7N/N3jdZFEhjALr
-         7BZMFQ5tFiuSA==
-Date:   Mon, 7 Feb 2022 11:14:50 -0800
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Chao Yu <chao@kernel.org>
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        Mon, 7 Feb 2022 14:16:09 -0500
+Received: from a2nlsmtp01-02.prod.iad2.secureserver.net (a2nlsmtp01-02.prod.iad2.secureserver.net [198.71.225.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E06E8C0401DC
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 11:16:08 -0800 (PST)
+Received: from a2plcpnl0394.prod.iad2.secureserver.net ([198.71.228.70])
+        by : HOSTING RELAY : with ESMTP
+        id H9TfnGXABfq3hH9TfnYUVf; Mon, 07 Feb 2022 12:15:07 -0700
+X-CMAE-Analysis: v=2.4 cv=CMPv4TnD c=1 sm=1 tr=0 ts=62016fbb
+ a=1StuNoa505miz0bl6oWT8A==:117 a=W/LxAOAmMZmt5zG/D6lBSA==:17
+ a=9+rZDBEiDlHhcck0kWbJtElFXBc=:19 a=gQX1269ULFhLm4Thdby34LUHVW0=:19
+ a=kj9zAlcOel0A:10 a=oGFeUVbbRNcA:10 a=VwQbUJbxAAAA:8 a=07d9gI8wAAAA:8
+ a=Lwaw6U-gAAAA:8 a=NEAV23lmAAAA:8 a=B8Uq0VdtDiOBwz_KTowA:9 a=CjuIK1q_8ugA:10
+ a=AtAeFeFvLGd9njqGQagc:22 a=AjGcO6oz07-iQ99wixmX:22 a=e2CUPOnPG4QKp8I52DXD:22
+X-SECURESERVER-ACCT: contact@ifohancroft.com
+Received: from [94.26.87.140] (port=43376 helo=battlestation)
+        by a2plcpnl0394.prod.iad2.secureserver.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <contact@ifohancroft.com>)
+        id 1nH9Te-00AAXm-LU; Mon, 07 Feb 2022 12:15:06 -0700
+Date:   Mon, 7 Feb 2022 21:15:04 +0200
+From:   IFo Hancroft <contact@ifohancroft.com>
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Garrett LeSage <garrett@lesage.us>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] f2fs: avoid unneeded preflush during checkpoint()
-Message-ID: <YgFvqnoa61BspqmW@google.com>
-References: <20220207113516.9489-1-chao@kernel.org>
+Subject: Re: [PATCH] docs: add SVG version of Linux logo
+Message-ID: <YgFvuIa0n3e6+cbq@battlestation>
+References: <20220207014418.GA28724@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20220207113516.9489-1-chao@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220207014418.GA28724@kernel.org>
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - a2plcpnl0394.prod.iad2.secureserver.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - ifohancroft.com
+X-Get-Message-Sender-Via: a2plcpnl0394.prod.iad2.secureserver.net: authenticated_id: contact@ifohancroft.com
+X-Authenticated-Sender: a2plcpnl0394.prod.iad2.secureserver.net: contact@ifohancroft.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-CMAE-Envelope: MS4xfI8nEmH2NpQYps42yIG1GV7rz3CG+06VONEwJo3+SnpviQAaBW3AnW6V1ik32PsDRjm+ufo7a3P9g6UNBUJX8jwxYkDTWbyxFfKuyT27y3ochPV3pT1r
+ YRjnqmEUM4V1u84Xh14DeHZ2naE078VPmOs6o4zQbbm9WxnLDIMo1LA720ZNWIrhSAbVvehNJi9lT0+Ly/kOcAbps00UAPYrgBfUKsrV2Yf1UGnTHcq0Vfvt
+ jrQcvJnATvvgY5BzTubnVxoUtqHjI0M34pCdkMxLse0=
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URI_DOTEDU autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,39 +65,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/07, Chao Yu wrote:
-> During checkpoint, we have committed preflush command via f2fs_flush_device_cache()
+Hi,
 
- 787 int f2fs_flush_device_cache(struct f2fs_sb_info *sbi)
- 788 {
- 789         int ret = 0, i;
- 790 
- 791         if (!f2fs_is_multi_device(sbi))
- 792                 return 0;
+You have my permission to use the vector version of Tux with the license given in the patch.
 
-Seems a wrong assumption.
+Best Regards,
+IFo Hancroft
 
-> to persist all metadata pages except last #2 CP pack page, so we don't need to
-> commit another preflush command in commit_checkpoint(), remove it to avoid unneeded
-> write cache overhead.
-> 
-> Signed-off-by: Chao Yu <chao@kernel.org>
-> ---
->  fs/f2fs/data.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
-> index 8c417864c66a..15ac18bbbc8e 100644
-> --- a/fs/f2fs/data.c
-> +++ b/fs/f2fs/data.c
-> @@ -598,7 +598,7 @@ static void __f2fs_submit_merged_write(struct f2fs_sb_info *sbi,
->  		io->fio.op = REQ_OP_WRITE;
->  		io->fio.op_flags = REQ_META | REQ_PRIO | REQ_SYNC;
->  		if (!test_opt(sbi, NOBARRIER))
-> -			io->fio.op_flags |= REQ_PREFLUSH | REQ_FUA;
-> +			io->fio.op_flags |= REQ_FUA;
->  	}
->  	__submit_merged_bio(io);
->  	up_write(&io->io_rwsem);
-> -- 
-> 2.32.0
+On Mon, Feb 07, 2022 at 02:44:18AM +0100, Miguel Ojeda wrote:
+>In the Rust for Linux patch series, Jonathan Corbet requested that
+>we avoid binary assets (logo and favicons for the generated
+>documentation), possibly by recreating the logo in SVG format.
+>
+>However, it turns out there is no SVG version of the Linux logo
+>in the kernel tree yet, only a GIF one from the pre-v2.0.0 days.
+>Thus this commit fixes that, which then we can use in the Rust
+>documentation in one way or another.
+>
+>This is a vector re-illustration by Garrett LeSage of the original
+>logo by Larry Ewing (plus cleanups by IFo Hancroft). Garrett gave
+>me (privately) his permission to use it for this purpose. The
+>acknowledgement requirement has been made mandatory here to match
+>the wording of the existing one.
+>
+>Link: https://lore.kernel.org/lkml/87fspk1xoc.fsf@meer.lwn.net/
+>Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+>---
+>Garrett, it would be great if you could confirm here that you
+>are OK with the note in `COPYING-logo`. In particular, in your
+>repository, you license the logo as public domain, though here
+>I followed the existing licence which requires giving credit.
+>Please see below.
+>
+> Documentation/COPYING-logo |    8 +
+> Documentation/logo.svg     | 2040 ++++++++++++++++++++++++++++++++++++
+> 2 files changed, 2048 insertions(+)
+> create mode 100644 Documentation/logo.svg
+>
+>diff --git a/Documentation/COPYING-logo b/Documentation/COPYING-logo
+>index b21c7cf7d9f6..fd7c9451fc72 100644
+>--- a/Documentation/COPYING-logo
+>+++ b/Documentation/COPYING-logo
+>@@ -11,3 +11,11 @@ Larry's web-page:
+>
+> 	https://www.isc.tamu.edu/~lewing/linux/
+>
+>+The SVG version was re-illustrated in vector by Garrett LeSage and
+>+refined and cleaned up by IFo Hancroft. It is also freely usable
+>+as long as you acknowledge Larry, Garrett and IFo Hancroft as above.
+>+
+>+There are also black-and-white and inverted vector versions at
+>+Garrett's repository:
+>+
+>+	https://github.com/garrett/Tux

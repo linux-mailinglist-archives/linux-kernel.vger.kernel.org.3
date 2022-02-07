@@ -2,57 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE3C14AB2D6
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 00:59:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C04CE4AB2DB
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 01:02:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242901AbiBFX7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 18:59:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33296 "EHLO
+        id S242912AbiBGACZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 19:02:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242736AbiBFX7L (ORCPT
+        with ESMTP id S230300AbiBGACW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 18:59:11 -0500
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9246CC06173B;
-        Sun,  6 Feb 2022 15:59:10 -0800 (PST)
-Received: by mail-pj1-f50.google.com with SMTP id v4so5223434pjh.2;
-        Sun, 06 Feb 2022 15:59:10 -0800 (PST)
+        Sun, 6 Feb 2022 19:02:22 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEBD6C06173B
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 16:02:21 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id q198-20020a1ca7cf000000b0037bb52545c6so2690539wme.1
+        for <linux-kernel@vger.kernel.org>; Sun, 06 Feb 2022 16:02:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=q6y8D3kpo4uKuVZoaqtD5J5vageNIGOTp/wVMHU+XYk=;
+        b=gElwdwxlVHLX8tMzCIjES1hP49FBEizTKUY6xDy+76oDB8AT9SPVXAsMxkGs6B7ABd
+         DF8n/7RHE12GUwBzB0Ev18YzRn+3lgOUfMHcD5Vp2tuxuhv9byBCMguuSD1vjWlui5xH
+         MT355TRhzTbR6aApCyTzHajT8LQPYrWQBvreuk5syqdG8rPZuxfsFF7bAlvhgI5i3lqm
+         bFYxKYL9XJVNyZZEnlgTJidwTbsrfcxDdKXpFEhFN4u6YkcFMRBepGIBGRNlY644/S+U
+         /QlyAEhXoSUzHeTG6wS/TVfZ+I9ZAPH0xUS9a2WtQIjU4i6T1K/NqtDN1GeMf4hwDzas
+         VYvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PrfCsSbfGWIrOruxPw/p5CTYm+a4iMaGLX1NpoJ3bk8=;
-        b=mdgu/6CMoHUfdvyLU1MGf6HV6wFGgGBKMZIxixJ9YJD0QjehHFVNTEycclmwsAh+RL
-         JCUF5qhM5GuEYVDSA8XlltCGocQvayiPVGgAIbIg/qcP6X8+R5kV1HqGq/lw3S0skCq7
-         gOOvWAIDyJQ8/9oqS1NKSrXosbmcj9xgp0gqTT5qWIBv4yZknUtpeu3ppf0eQbYZO11g
-         EJFW0JXzVdoBHoJRWefrgHUQMRx7Jso3MPZRih//F4kc2G5K1R6T6ejmvMQbH7Oa6hoS
-         ebn0Z0ivOfCALtPy2+ZvK0xmD/d1Mz03+A2kDg8Qz5Eba2qMH/3vxxmAty5mhpyDFFgF
-         hiVA==
-X-Gm-Message-State: AOAM5338QKpeBxvJFm++Lvj6xUbjObc6+GJHOLPTPgknkQBFEXul125Z
-        vfA0fe1M07Vt7VvKCMpEHTt9vz07Ni3A2eM2R0MG+fcwdco=
-X-Google-Smtp-Source: ABdhPJy13y1mAC2XnhB8T6L+FzK0qauBeKmGBp9m5c0YTv70SqCFB5GBauOOr2I6FP2291j85qX0+S9+gCMWhVjjGy0=
-X-Received: by 2002:a17:902:a617:: with SMTP id u23mr2108993plq.48.1644191949843;
- Sun, 06 Feb 2022 15:59:09 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=q6y8D3kpo4uKuVZoaqtD5J5vageNIGOTp/wVMHU+XYk=;
+        b=tqyQHLQEss/JPVz0fqAH5D3ZVLh+NEwuhcbjwIo6BLWIkW+Epg7lSBrqKopvfy9+qM
+         3pzkDCMfsRM/b+tCPzG3EZS9Eij587Ay3WkSaMS4v1+JqNQeCtLRyKmRh3Ja18ndVQxv
+         RGB4cbjTfoobLeVlwpRPIjxhCyW8AFgAQdUOWOCJ8FsN/zvD9NG0QRpuazbG3JnzWQUT
+         V6kRqLY3ksROIPxS7ewTmPQSZ8HEMdsUvwyOvlJhXK5QXwwTPqXhEX9+BHt3Yw72wx3s
+         yWFEXOYNNqZN0McQmTkCd0VqIdNIlJOHZQc9ePveiWzKCZm7rU7NjWEWNeEmgH4suBv1
+         YPCg==
+X-Gm-Message-State: AOAM5302L477UulpYhCV6rLfwnJIkRG+PKdrlV50I1ho7pxGfFIn4gvz
+        UFrocfSiW/VymejbZ/VPmKw=
+X-Google-Smtp-Source: ABdhPJzttKD35oquTDKy+pzbXdCkOtSBB8h8Sdt62xvWcG4vlV66CWY4GuL+PkwLAKBi7rmaxGnD0w==
+X-Received: by 2002:a05:600c:1da5:: with SMTP id p37mr8672026wms.93.1644192140127;
+        Sun, 06 Feb 2022 16:02:20 -0800 (PST)
+Received: from leap.localnet (host-95-245-2-16.retail.telecomitalia.it. [95.245.2.16])
+        by smtp.gmail.com with ESMTPSA id b16sm2780974wmj.32.2022.02.06.16.02.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Feb 2022 16:02:19 -0800 (PST)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     linux-staging@lists.linux.dev, gregkh@linuxfoundation.org,
+        phil@philpotter.co.uk, larry.finger@lwfinger.net
+Cc:     julia.lawall@inria.fr, linux-kernel@vger.kernel.org,
+        Michael Straube <michael.straube@stud.uni-goettingen.de>,
+        martin@kaiser.cx
+Subject: [RFC] staging: r8188eu: Sleeping in atomic context (SAC) bugs
+Date:   Mon, 07 Feb 2022 01:02:17 +0100
+Message-ID: <2111927.Icojqenx9y@leap>
 MIME-Version: 1.0
-References: <202202060827.9dExlwbc-lkp@intel.com> <20220206003735.GA94316@d6598ff186c2>
-In-Reply-To: <20220206003735.GA94316@d6598ff186c2>
-From:   Emil Renner Berthing <kernel@esmil.dk>
-Date:   Mon, 7 Feb 2022 00:58:58 +0100
-Message-ID: <CANBLGcyJDdej0y6XU-bSgW_W9YYtZF3nQWnD5vO8KXYweFHyVw@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: starfive: fix semicolon.cocci warnings
-To:     kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Huan Feng <huan.feng@starfivetech.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,22 +70,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 6 Feb 2022 at 01:38, kernel test robot <lkp@intel.com> wrote:
->
-> From: kernel test robot <lkp@intel.com>
->
-> drivers/pinctrl/pinctrl-starfive.c:1029:2-3: Unneeded semicolon
->
->
->  Remove unneeded semicolon.
->
-> Generated by: scripts/coccinelle/misc/semicolon.cocci
->
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: kernel test robot <lkp@intel.com>
+Hello everyone,
 
-Thanks. There is already a previous patch for this although it was
-sent before this code was in Linus' tree:
-https://lore.kernel.org/all/20211222073522.123656-1-yang.lee@linux.alibaba.com/
+I've noticed a couple of SAC bugs in r8188eu. Recently two of them have been 
+addressed by me and one by Michael Straube (sorry if I recall it wrongly).
 
-/Emil
+Prof. Julia Lawall wrote with Others in a paper that "[] Code executing in 
+atomic context monopolizes a CPU core, and the progress of other threads that 
+need to concurrently access the same resources is delayed. Thus the code 
+execution in atomic context should complete as quickly as possible. Sleeping 
+in atomic context is forbidden, as it can block a CPU core for a long period 
+and may lead to a system hang. [] SAC bugs do not always cause problems in real 
+execution, and they are often hard to reproduce at runtime. Recent studies [] 
+have shown that SAC bugs have caused serious system hangs at runtime. Thus, 
+it is necessary to detect and fix SAC bugs in kernel modules.".
+
+Probably the phrase "SAC bugs do not always cause problems in real execution" 
+is the key to understand why very few people seems to care and fix them.
+
+While working on my last patch for this driver, I noticed that a Mutex is 
+acquired while holding a Spinlock and while bottom halves are disabled.
+
+In staging/r8188eu/core/rtw_ioctl_set.c, the function rtw_set_802_11_disassociate()
+calls spin_lock_bh(). While holding that Spinlock, it calls _rtw_pwr_wakeup()
+that, in turn, does a call to msleep().
+
+My first question is whether or not msleep() can be called in atomic context. If
+I understand its semantics and implementation it seems that it should be forbidden.
+What about changing it to mdelay()? Again, it seems that mdelay() spins without 
+sleeping so it should be safe. Isn't it?
+
+Furthermore, I noticed that _rtw_pwr_wakeup() calls ips_leave(). The latter 
+acquires the "pwrpriv->lock" Mutex. Aren't we forbidden to call Mutexes while 
+holding Spinlocks? That lock is used to protect struct "pwrctrl_priv". I didn't
+yet provide a patch because I'm pretty sure that I'm missing the good and 
+correct reasons that led the author(s) to use a Mutex in that context...
+
+My second question is: should we substitute that Mutex with a Spinlock and use 
+it everywhere else the struct "pwrctrl_priv" must be protected in the driver?
+
+Looking forward to reading what you all think about these two questions of mine.
+
+Regards,
+
+Fabio M. De Francesco
+
+
+

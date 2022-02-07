@@ -2,100 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46A924ACB65
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 22:39:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 311844ACB70
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 22:41:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240069AbiBGVjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 16:39:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55838 "EHLO
+        id S241044AbiBGVko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 16:40:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231607AbiBGVjR (ORCPT
+        with ESMTP id S240208AbiBGVkl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 16:39:17 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB43DC061A73
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 13:39:16 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id a25so21621951lji.9
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 13:39:16 -0800 (PST)
+        Mon, 7 Feb 2022 16:40:41 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C3C4C061355
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 13:40:40 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id i186so15354490pfe.0
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 13:40:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vj6d/kwNaVMSCvSwpd8SPBJUndIKEEtw3knv973Syso=;
-        b=QLnMWcre93OaJiLYldJtRWqs2HqybqunwmgEVs9I1LEXcGSlxFfOOYSD8R+pgn8LzV
-         V0gKqY0KcpXwQtfSgixPE9BEMFzu5WvYt0mYyrHYovLoKR5602RjdEDihU19rhcyd7C3
-         AcdnkuZanaPMEKCB3W+uoqUiZGd6cky9h2g7u3eFAAPLXDsUPrBd83uAgO/hiQsTMEzp
-         DhIqYvPNyAVtE+uAlCeqrA0CQO2vBKEhYX8lm9tfVQ82Gn2cqT+L7TRIsTMxLZw8iKcy
-         lJ2uFxMn2WKp2IP26br3cl4XwvsUkltNyCI63Xw1ONA10o9bljxMTrIFehgf6XpxExd1
-         KvKA==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TUCNvjYGBjDLOWx0oqjTNqXH/Yx+Zia2/rtd6r5omRs=;
+        b=O7m2P73zV+5NeLlFCzV7cYTbgTSOFUB6jKeJh5bYZY4eykQxfb6J0TLyiaKsWAsdlk
+         51kBcDc1bKUHh4BVAuzZ6upxW7bHVwRpqqnKJvzIa9+dNjz1bYnWjYTlq34sKe9ArSVk
+         tQKETIKuouocyHBnM+j7QR3RZ1IK/EC+LX6YI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vj6d/kwNaVMSCvSwpd8SPBJUndIKEEtw3knv973Syso=;
-        b=DYIWsqX0F/6vVBzmBifKQBp/5PeKEvmTHNTa+E1aZPzn4TChVimY+RWXppWrQTzvoH
-         6GMrsVXiJPBEaUVFLaVgxL1pRDDjDVZi1IV3WlA7zmJZBGYoNY4slSeoOjG5okchHLmn
-         MVE1SMgieCBq1tydeE6K/0VWb2WlKnLn+KdVGjvJpofChUViPSD/EI15p9UkqxXLNJ2N
-         zMZVSxUGp8dEb4jOAzCwqAwo7pjQulRBvq5OidFa3iFVSmBpAFgF1i1CoYMfzqSSRMf1
-         T1spkuV9WkJwuBZUwN9X/U4nXf6k6RKpRAR085xn01sofsCR8Cxl76eQncm+Plpj/PpH
-         sJhQ==
-X-Gm-Message-State: AOAM533nbJ7SW1tMhOyaYN1w3tjfykSAYr3qWOuOgbpv6b9kfnknUrBq
-        bJkWK8GF51hfYXcZyke/AsRIJohLgXnChCW5u3qSCw==
-X-Google-Smtp-Source: ABdhPJxpaN+DjDrQNevmZdtABjjWGyCfImugc0tOdbHZyCwxssDdoL1MLAkcOTkaKWhmMHuCPTTbz0JbyN05FdyYVSI=
-X-Received: by 2002:a2e:a5cb:: with SMTP id n11mr845559ljp.361.1644269954862;
- Mon, 07 Feb 2022 13:39:14 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TUCNvjYGBjDLOWx0oqjTNqXH/Yx+Zia2/rtd6r5omRs=;
+        b=niuLByBafaeAx28wiejleO3sOUz2WgkbrMtGt61d5UfOkn2YqygbdY0J9x7Y5YZB6r
+         GpKT7FzpxCn4JbF1N6sXFLKlnsPCjw7VTl4yAaloK5oxhX4oromfJuN+7aX2Or2BS7Qx
+         OexdcGXQZqtD5qKO1BRYkhwhfnxnX6rcZo4SlBtF9ev1px8aKg1/5GCwBQADKeLyHIO0
+         R8DMUO+miHKkiCZ/hE+5ESW1V4Swt6ftKtknO88dhDIVwvcdEtv+XH6SimvV9jT4X/oq
+         o7gHz140Y+Gs2tm6ifGmoTE8aYBukbLKifu/qquVX5VQlb3s+2ya1nug5PzNV20yY32n
+         BSGA==
+X-Gm-Message-State: AOAM531ebWDGaQY0DzUdcGP7eIYU6pvrqNrzUOEOPIA92L8NgZIqBU4O
+        QFO4inj1bNwJgeIlD+opyh5dPm3AMflEZQ==
+X-Google-Smtp-Source: ABdhPJy2uusfp5RUHaUg38A19JuXK7AQln9SqEclfLmCzpUTINXPSo4Jt2gaG4sSxhwgVB7W2mNt/w==
+X-Received: by 2002:a05:6a00:1514:: with SMTP id q20mr1467788pfu.74.1644270039871;
+        Mon, 07 Feb 2022 13:40:39 -0800 (PST)
+Received: from pmalani.c.googlers.com.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id s9sm9268010pgm.76.2022.02.07.13.40.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Feb 2022 13:40:39 -0800 (PST)
+From:   Prashant Malani <pmalani@chromium.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Prashant Malani <pmalani@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        chrome-platform@lists.linux.dev (open list:CHROMEOS EC USB TYPE-C
+        DRIVER), Guenter Roeck <groeck@chromium.org>
+Subject: [PATCH 0/4] platform/chrome: cros_ec_typec: Reorganize mux configuration
+Date:   Mon,  7 Feb 2022 21:40:22 +0000
+Message-Id: <20220207214026.1526151-1-pmalani@chromium.org>
+X-Mailer: git-send-email 2.35.0.263.gb82422642f-goog
 MIME-Version: 1.0
-References: <20220204115718.14934-1-pbonzini@redhat.com> <20220204115718.14934-11-pbonzini@redhat.com>
- <Yf2hRltaM1Ezd6SM@google.com> <04e568ee-8e44-dabe-2cc3-94b9c95287e1@redhat.com>
-In-Reply-To: <04e568ee-8e44-dabe-2cc3-94b9c95287e1@redhat.com>
-From:   David Matlack <dmatlack@google.com>
-Date:   Mon, 7 Feb 2022 13:38:48 -0800
-Message-ID: <CALzav=eTgXJaVhrtT4SUNVvXW=WLQNHquvNNG2s6rh+_cGh+3w@mail.gmail.com>
-Subject: Re: [PATCH 10/23] KVM: MMU: split cpu_role from mmu_role
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 5, 2022 at 6:49 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
->
-> On 2/4/22 22:57, David Matlack wrote:
-> >> +    vcpu->arch.root_mmu.cpu_role.base.level = 0;
-> >> +    vcpu->arch.guest_mmu.cpu_role.base.level = 0;
-> >> +    vcpu->arch.nested_mmu.cpu_role.base.level = 0;
-> > Will cpu_role.base.level already be 0 if CR0.PG=0 && !tdp_enabled? i.e.
-> > setting cpu_role.base.level to 0 might not have the desired effect.
-> >
-> > It might not matter in practice since the shadow_mmu_init_context() and
-> > kvm_calc_mmu_role_common() check both the mmu_role and cpu_role, but does
-> > make this reset code confusing.
-> >
->
-> Good point.  The (still unrealized) purpose of this series is to be able
-> to check mmu_role only, so for now I'll just keep the valid bit in the
-> ext part of the cpu_role.  The mmu_role's level however is never zero,
-> so I can already use the level when I remove the ext part from the mmu_role.
+This is a short series that reorganizes when mux configuration occurs
+during Type C port updates. The first 2 patches are minor refactors
+which move some of the mux update logic to within
+cros_typec_configure_mux(). The third patch moves
+cros_typec_configure_mux() itself to be earlier in
+cros_typec_port_update().
 
-Agreed.
+The final patch updates the stashed mux flag when a partner removal has
+occured.
 
->
-> I'll remove the valid bit of the ext part only after the cpu_role check
-> is removed, because then it can trivially go.
+Prashant Malani (4):
+  platform/chrome: cros_ec_typec: Move mux flag checks
+  platform/chrome: cros_ec_typec: Get mux state inside configure_mux
+  platform/chrome: cros_ec_typec: Configure muxes at start of port
+    update
+  platform/chrome: cros_ec_typec: Update mux flags during partner
+    removal
 
-Ok sounds good.
+ drivers/platform/chrome/cros_ec_typec.c | 76 +++++++++++--------------
+ 1 file changed, 34 insertions(+), 42 deletions(-)
 
->
-> Paolo
->
+-- 
+2.35.0.263.gb82422642f-goog
+

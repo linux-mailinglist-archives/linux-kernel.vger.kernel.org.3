@@ -2,54 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1EB14AB8E5
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 11:43:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B55724AB8DC
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 11:43:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347305AbiBGKjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 05:39:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57062 "EHLO
+        id S1346315AbiBGKjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 05:39:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245021AbiBGK1b (ORCPT
+        with ESMTP id S232815AbiBGKay (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 05:27:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC5B6C043181;
-        Mon,  7 Feb 2022 02:27:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 7 Feb 2022 05:30:54 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E3C4FC043181
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 02:30:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644229852;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3cyRyCr5+eamib5wZIABy4k0pAM0GRsoTKR73ge8vW8=;
+        b=afUnP9BF1TqjnNoVdkoIiwLZFdS2Evmm8ctpNdgG9FP7GhTeppliY6xcXPcIaIHD7NYGqW
+        aBGFAQztMNWgWQFjPVoWyBCooa5KWfIerYpuB0kjj2HYC29QUWAA/gKfRt93uZ7AE3t+qZ
+        9WHunOaafFevTRqQ+Qp3GhMNI+v+r8M=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-253-UDBsiRaoM2S6ps60GOiWsQ-1; Mon, 07 Feb 2022 05:30:48 -0500
+X-MC-Unique: UDBsiRaoM2S6ps60GOiWsQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6221D612F0;
-        Mon,  7 Feb 2022 10:27:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9849C004E1;
-        Mon,  7 Feb 2022 10:27:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644229649;
-        bh=Ea/XgchYNUyDyZnHDIWZphGznZHyvYvoO3mp+EI+3DM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gxp6gjMooNt+0+/sJ9licDOZQh2gXK56cR44iURJCiAjpMcitNE0Aih4wIENC7p9I
-         BbflIonrJj5D1ZzJ2gx2qEc/kPc71t9MOMV3BUtqaSyDQsP5XfEALcUifa0EUXJzyK
-         PfhC6PqMQEAMbdf/uwsA+Deqy8S4ZPQRJXFUfgu4=
-Date:   Mon, 7 Feb 2022 11:27:26 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Pavel Skripkin <paskripkin@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, linux@rempel-privat.de,
-        andrew@lunn.ch, oneukum@suse.com, robert.foss@collabora.com,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+6ca9f7867b77c2d316ac@syzkaller.appspotmail.com,
-        Oleksij Rempel <o.rempel@pengutronix.de>
-Subject: Re: [PATCH net-next] net: asix: add proper error handling of usb
- read errors
-Message-ID: <YgD0Dln2R0dPJX/L@kroah.com>
-References: <f676e339-5808-2163-2afd-ea254cfb2684@rempel-privat.de>
- <20220206180516.28439-1-paskripkin@gmail.com>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 209C21800D50;
+        Mon,  7 Feb 2022 10:30:47 +0000 (UTC)
+Received: from work (unknown [10.40.194.180])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id DE8AE7D704;
+        Mon,  7 Feb 2022 10:30:12 +0000 (UTC)
+Date:   Mon, 7 Feb 2022 11:30:09 +0100
+From:   Lukas Czerner <lczerner@redhat.com>
+To:     syzbot <syzbot+138c9e58e3cb22eae3b4@syzkaller.appspotmail.com>
+Cc:     adilger.kernel@dilger.ca, cmaiolino@redhat.com,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
+        syzkaller-bugs@googlegroups.com, tytso@mit.edu
+Subject: Re: [syzbot] general protection fault in ext4_fill_super
+Message-ID: <20220207103009.id72sr4dtghgzp5f@work>
+References: <0000000000001e0ba105d5c2dede@google.com>
+ <000000000000fbf22d05d74d08fb@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220206180516.28439-1-paskripkin@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <000000000000fbf22d05d74d08fb@google.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,78 +63,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 06, 2022 at 09:05:16PM +0300, Pavel Skripkin wrote:
-> Syzbot once again hit uninit value in asix driver. The problem still the
-> same -- asix_read_cmd() reads less bytes, than was requested by caller.
+On Sat, Feb 05, 2022 at 02:39:06PM -0800, syzbot wrote:
+> syzbot has bisected this issue to:
 > 
-> Since all read requests are performed via asix_read_cmd() let's catch
-> usb related error there and add __must_check notation to be sure all
-> callers actually check return value.
+> commit cebe85d570cf84804e848332d6721bc9e5300e07
+> Author: Lukas Czerner <lczerner@redhat.com>
+> Date:   Wed Oct 27 14:18:56 2021 +0000
 > 
-> So, this patch adds sanity check inside asix_read_cmd(), that simply
-> checks if bytes read are not less, than was requested and adds missing
-> error handling of asix_read_cmd() all across the driver code.
+>     ext4: switch to the new mount api
 > 
-> Fixes: d9fe64e51114 ("net: asix: Add in_pm parameter")
-> Reported-and-tested-by: syzbot+6ca9f7867b77c2d316ac@syzkaller.appspotmail.com
-> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
-> Tested-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> ---
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14902978700000
+> start commit:   0457e5153e0e Merge tag 'for-linus' of git://git.kernel.org..
+> git tree:       upstream
+> final oops:     https://syzkaller.appspot.com/x/report.txt?x=16902978700000
+> console output: https://syzkaller.appspot.com/x/log.txt?x=12902978700000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=cd57c0f940a9a1ec
+> dashboard link: https://syzkaller.appspot.com/bug?extid=138c9e58e3cb22eae3b4
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17f7004fb00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=178cf108700000
 > 
-> Changes since RFT:
-> 	- Added Tested-by: tag
+> Reported-by: syzbot+138c9e58e3cb22eae3b4@syzkaller.appspotmail.com
+> Fixes: cebe85d570cf ("ext4: switch to the new mount api")
 > 
-> ---
->  drivers/net/usb/asix.h         |  4 ++--
->  drivers/net/usb/asix_common.c  | 19 +++++++++++++------
->  drivers/net/usb/asix_devices.c | 21 ++++++++++++++++++---
->  3 files changed, 33 insertions(+), 11 deletions(-)
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 > 
-> diff --git a/drivers/net/usb/asix.h b/drivers/net/usb/asix.h
-> index 2a1e31def..4334aafab 100644
-> --- a/drivers/net/usb/asix.h
-> +++ b/drivers/net/usb/asix.h
-> @@ -192,8 +192,8 @@ extern const struct driver_info ax88172a_info;
->  /* ASIX specific flags */
->  #define FLAG_EEPROM_MAC		(1UL << 0)  /* init device MAC from eeprom */
->  
-> -int asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
-> -		  u16 size, void *data, int in_pm);
-> +int __must_check asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
-> +			       u16 size, void *data, int in_pm);
->  
->  int asix_write_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
->  		   u16 size, void *data, int in_pm);
-> diff --git a/drivers/net/usb/asix_common.c b/drivers/net/usb/asix_common.c
-> index 71682970b..524805285 100644
-> --- a/drivers/net/usb/asix_common.c
-> +++ b/drivers/net/usb/asix_common.c
-> @@ -11,8 +11,8 @@
->  
->  #define AX_HOST_EN_RETRIES	30
->  
-> -int asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
-> -		  u16 size, void *data, int in_pm)
-> +int __must_check asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
-> +			       u16 size, void *data, int in_pm)
->  {
->  	int ret;
->  	int (*fn)(struct usbnet *, u8, u8, u16, u16, void *, u16);
-> @@ -27,9 +27,12 @@ int asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
->  	ret = fn(dev, cmd, USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
->  		 value, index, data, size);
->  
-> -	if (unlikely(ret < 0))
-> +	if (unlikely(ret < size)) {
-> +		ret = ret < 0 ? ret : -ENODATA;
-> +
 
-Didn't I suggest using the proper USB core functions for this instead of
-rolling your own functions?  We now have usb_control_msg_read() and
-usb_control_msg_send() that prevents this type of thing from happening.
+I believe that this has been fixed with upstream commit
 
-Ah, it's a bit more tangled up than that it seems, the number of layers
-of abstractions here is odd and deep.  This change looks fine for now to
-keep syzbot happy:
+commit 7c268d4ce2d3761f666a9950b029c8902bfab710
+Author: Lukas Czerner <lczerner@redhat.com>
+Date:   Wed Jan 19 14:02:09 2022 +0100
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    ext4: fix potential NULL pointer dereference in ext4_fill_super()
+
+    By mistake we fail to return an error from ext4_fill_super() in case
+    that ext4_alloc_sbi() fails to allocate a new sbi. Instead we just set
+    the ret variable and allow the function to continue which will later
+    lead to a NULL pointer dereference. Fix it by returning -ENOMEM in the
+    case ext4_alloc_sbi() fails.
+
+    Fixes: cebe85d570cf ("ext4: switch to the new mount api")
+    Reported-by: kernel test robot <lkp@intel.com>
+    Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+    Signed-off-by: Lukas Czerner <lczerner@redhat.com>
+    Link: https://lore.kernel.org/r/20220119130209.40112-1-lczerner@redhat.com
+    Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+    Cc: stable@kernel.org
+
+Thanks!
+-Lukas
+

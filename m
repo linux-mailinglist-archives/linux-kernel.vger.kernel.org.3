@@ -2,202 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D372F4AB3EB
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 07:12:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 933F24AB43C
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 07:13:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232979AbiBGFt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 00:49:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55478 "EHLO
+        id S234958AbiBGFut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 00:50:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234958AbiBGDE7 (ORCPT
+        with ESMTP id S1350094AbiBGDSM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 22:04:59 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2079.outbound.protection.outlook.com [40.107.93.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81066C061A73
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 19:04:58 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RYu96WpzmH6mc5Sqdf/deBj9vTifvUoqUzycBpI34yow0RShghp11OHuBSO0U13+oLEvLhw/9+BcagFPO1T788emc1lOWrd+wGGY12DldZHnXEEQJILLJSRwWEUaB4X/h8aE+ZakNH7mJekogZHNSe+BGTrlPv3onHOgUOV91C9zEy5BRbgOKhwTwAsZSIL3+LwjtsJW3H06BEWgaWlnxQ8iaaaIwA9eN5JK5nbC+6IucT9yCgoeyR9DvtdOsCTpSvEH0sTXIsEKlNIUlTAINKA+ZWT8bTiqVh94QX6YphkAfLA12omHT4yyLfBzJ9mtUaWflqSwYPmM3kqiGNkIqQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=c0mKa3GFn/K7z3Vp/MPPgKL76eW1ze0iSxZTVlkL+ck=;
- b=XkCWipNofTevI7q6GacIjoZJDa6W35yhe47//ANOre0u78p1GHsu4nwKOxiVfUr02VHF8cip6qgDcIDB7EOcWpTjfToHd2Z2ApsFEicimdpO33eaM9/TX+Pv+Ajbp1/zlHcBX5f/PcmPq3Whu0zDVuE4Dzb2EpWM9dvN4D2qAkfXEiYynVt+b737+ckx6i7gERZZizCGjWvGXDJQawUSbI40lCm1WvrfKYaoRPIwxs0Ty62nRLOV8sj+JSDs2sm9NXEwAR4YN01/EHZJnufyTXU5gxhGk3eqmRyE5RtqM1iP8594LLJMIKFuD19QHAFWSnfrgyt8m2nL8gXZngNxpQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=c0mKa3GFn/K7z3Vp/MPPgKL76eW1ze0iSxZTVlkL+ck=;
- b=VKgSC1iMkWDvacw27isg10Vfulvhvftaa5XEQEtg3fGvKUj9DHSer3fgxDyVbHtSUW+ZltQ3TGT5xb2+EY0sEyRi6V3GnwXXtRZLqdiMKVLpdjz1WraDAYH/4Lg5r27VS5YcG2e3DAD27GRWldcuYtDobg9LWDYzmHnyATaf9rE=
-Received: from DM6PR12MB2619.namprd12.prod.outlook.com (2603:10b6:5:45::18) by
- BN7PR12MB2642.namprd12.prod.outlook.com (2603:10b6:408:26::18) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4951.11; Mon, 7 Feb 2022 03:04:54 +0000
-Received: from DM6PR12MB2619.namprd12.prod.outlook.com
- ([fe80::a894:300e:5c16:5639]) by DM6PR12MB2619.namprd12.prod.outlook.com
- ([fe80::a894:300e:5c16:5639%6]) with mapi id 15.20.4951.018; Mon, 7 Feb 2022
- 03:04:54 +0000
-From:   "Quan, Evan" <Evan.Quan@amd.com>
-To:     "trix@redhat.com" <trix@redhat.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Koenig, Christian" <Christian.Koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        "airlied@linux.ie" <airlied@linux.ie>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        "nathan@kernel.org" <nathan@kernel.org>,
-        "ndesaulniers@google.com" <ndesaulniers@google.com>,
-        "Lazar, Lijo" <Lijo.Lazar@amd.com>,
-        "Powell, Darren" <Darren.Powell@amd.com>,
-        "Chen, Guchun" <Guchun.Chen@amd.com>,
-        "Grodzovsky, Andrey" <Andrey.Grodzovsky@amd.com>
-CC:     "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
-Subject: RE: [PATCH] drm/amd/pm: fix error handling
-Thread-Topic: [PATCH] drm/amd/pm: fix error handling
-Thread-Index: AQHYGqEaK1SoVE67J0WJiMLZE9ClrayHaYlA
-Date:   Mon, 7 Feb 2022 03:04:54 +0000
-Message-ID: <DM6PR12MB261982BB4DBCC90F70381121E42C9@DM6PR12MB2619.namprd12.prod.outlook.com>
-References: <20220205150008.1968218-1-trix@redhat.com>
-In-Reply-To: <20220205150008.1968218-1-trix@redhat.com>
-Accept-Language: en-US, zh-CN
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_Enabled=true;
- MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_SetDate=2022-02-07T03:04:47Z;
- MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_Method=Standard;
- MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_Name=AMD Official Use
- Only-AIP 2.0;
- MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_ActionId=2b99d696-63a7-4ca0-bf44-e753c9397dd4;
- MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_ContentBits=1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: c188e0a8-7488-42b9-629c-08d9e9e69d9a
-x-ms-traffictypediagnostic: BN7PR12MB2642:EE_
-x-microsoft-antispam-prvs: <BN7PR12MB264214EB5827DE579AAD2259E42C9@BN7PR12MB2642.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7219;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: O5Na4Drt+e6IU5twF3tO7fse8sRaBLN5Ag/yXrgkBJSxV/jOHNZOQQOM6FZsArRmiVL9Et0UcJDQIeENhPafnPfjHE17PakC1IPV0ur36qOSKqD2NYKYmdiBOKT2JO22AOuI/V+QPRERRei7ExKAJGQyoyvjCZQbHSvdHE7hQ6U3AiadXEKa6CkI3mn+Ppcug4Nyd2sOU/h2Q1crlBXTqqgUAPtIigodWLTauHhKNYkeJeHvo1+BO1QuTKOW6hf7UkX7/CQl8CUIIJ2Mc5ZHHNU1aBG1XiIsgM/baFw2DAn+GuotqoB5at3rQ0jgzkj+zumA5kqozvmyRiJiqo/mH9UNEsB3ibnQHvZMK84U1bzsofEXPe/eP/f9wOwO899tHmZUi8iQTNjZY6HTgq52GdrEfRrUb0/bM1ezgLsHu1Mz8XMmXQscL48z+EM67VRMx3a9aArY3dmjgLCejekgWN724W3H5gS5YQ04k7M81aBIx9hd9zpejdSQy3LIFmQWaDRdJgrS/eI4OMLcnsWPYVb8laYZmJJHja/mNKFmUw6ptzE4qhu52niJsuzcVJ/5Q+70dq17Mnt3IcKm16by7tMN9yKZh4DYFIEVySGQ32PA8elGJHZmRvGceRS5ZvlPgHPrcKYinTGlA2mLTDcE0mB5G99ZID2zuGSBSYjROMgGnQjiYvJuCKD5fDJaDLUOkwnzGA0i0F3uhwdL7Ybcl4LXzeCbNbPj2/KcekfXVWI=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB2619.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(71200400001)(7696005)(110136005)(122000001)(6636002)(9686003)(53546011)(508600001)(54906003)(6506007)(316002)(52536014)(2906002)(38070700005)(86362001)(76116006)(26005)(66946007)(33656002)(66476007)(186003)(38100700002)(921005)(4326008)(8936002)(8676002)(83380400001)(66556008)(66446008)(5660300002)(64756008)(55016003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Awb+bMdpuRa1CEWGzhvwM42zAGS9j9GlvPOLWxso2h3CZtYuCf0ePjjTk5HI?=
- =?us-ascii?Q?Gl2Dav8PQRTqFXxlj0x+d1vM+M+A3MVj8UvtgmNxAyJb1W84QVi3xNPNqt5d?=
- =?us-ascii?Q?7m2jig/xkqN7tn3u+dSlpxnrVN0dJyksN5XYWHgsthhHp/WHaSXQAKasG0IX?=
- =?us-ascii?Q?UMtQBZBoFYNnlDNRr24alC/LOMyCyRCJXfpy4zPeOPpUHDjrhXKa7AaETkIL?=
- =?us-ascii?Q?uh7t4u87SC9BPiHG/GdaFYdHva4ezWUSwg3CkbBVU4ytaZvx6eyP/tKEn8r5?=
- =?us-ascii?Q?wSSul8TlLHqo8mnng9qDdgN2IeZ9iinA7ONAdn2aUcxu8dE7pD1h1+9rZbuC?=
- =?us-ascii?Q?48ioNreXPQsmOSPsRW9kKfevDaF7yvnywVA+2kcay5pkK14fJNEoIf2IFNlk?=
- =?us-ascii?Q?jx/c3pghvgCMOaVTnI2YpNLRsb2dNMy16GnyYwNz3vZll91tW998I0N+AXjO?=
- =?us-ascii?Q?J/weyCJiaKMmSvc1857JgIOvddgW1Z1GedJXohsz7bT1zUImO2vwLQLCtCZe?=
- =?us-ascii?Q?Gr0QJW3WPIQjP5SCrRPjqykROC6BPg2kXWHyjNldO4yaNBcSVIrW3386eUok?=
- =?us-ascii?Q?8QvDpMY2IcGT1+yea7aFjpES6CCFSYtOUnGgd+vM0Tdp8y9cPoWAi4cdwOJB?=
- =?us-ascii?Q?jzdgX/w6JWE2p2+PLzsx1Mfn6gOh4YJ/5DHmSeco5rUShysUav3J9I+USV8b?=
- =?us-ascii?Q?HPMTuA2rFZHxm+GQaUDjRWLnWdbVzNN2S9jR8kvlOdp3OJVE6hGA9er7AjRy?=
- =?us-ascii?Q?063trkbfgp44d4T4s2wS4vRIil7n0fcNzkbD5cFsPMDCn/dm12qXWtzqU66y?=
- =?us-ascii?Q?f1ehWQwWbV9cG76dwXAmtBWBJRoytP/n5terd/uXILzhQ/tLj4DwsS7ahASC?=
- =?us-ascii?Q?fda6o2wqF/+JyzmC3c4z0BFCRILpR2TfOpclHJ9OVUqMVKJnxcS1zVohhO84?=
- =?us-ascii?Q?tl4lzlTxbAUFXzzlTY8f/5BbDXv43V8AMZ2+j3MN6wDotTH20wOOi6DssNOb?=
- =?us-ascii?Q?lDg7K1i9pt3omCN/auZAi2cWAy9SKwo13Sl/ixbUfUxb/PnxZZfj8ngqZ24w?=
- =?us-ascii?Q?CYe0MUkldDok2+cIaOqpnVK3lj66sauXfbWpCtfcXijtAE7Wvjc5/rW9f9hS?=
- =?us-ascii?Q?fMmE1ulnSCEZlg49WZBpXIJKmxDN+79o74bVTRs1d0aYEYXYFqrHPHiXAJU2?=
- =?us-ascii?Q?n1cbCccnqHbCyNHLvNhoo4Fru7LcKA8Xt2mRHbfYqTjrQXo4KUcCJ9/E+cOI?=
- =?us-ascii?Q?pTHtwxBodD9iApB4EWWnrJ1cAlJoRyfMhm8PNvvPEsdMc1ptevq6HA2uW+Z3?=
- =?us-ascii?Q?EnfujW/KlCc/uTjoNMLdkC8miQ9Q9ES0wrCNPIV4/bubAZKudvK95xqFv1k7?=
- =?us-ascii?Q?aihvTBJdbsCLfsiTHLp+NXNgIP+LhJNWsrSqhgjpK+leiKlkpEKpyT/v7NwM?=
- =?us-ascii?Q?lmVF2aMPlxBFr5Mc8pr+uwvabgaDzGj7cEUzZdzQnUVo75ZpkcQPrvkF50MW?=
- =?us-ascii?Q?wF3WEiqIfTaJGW7oeUlcugb2LnF/wwpm/Hc4dnQzfvriqKO5P1LAkQedVxBZ?=
- =?us-ascii?Q?fGv55AYDElNDSjVo/vw=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Sun, 6 Feb 2022 22:18:12 -0500
+X-Greylist: delayed 301 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Feb 2022 19:18:04 PST
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9D21C061A73
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 19:18:04 -0800 (PST)
+X-UUID: 5a4ab4f1b2964d9e9448fd94ad2d7066-20220207
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:CC:To:Subject; bh=YZZvR0t4dJmK+tzaa2+xl8XMxoD2nvg+7x/q6w/YaC0=;
+        b=fGSeHeV+NLZFKcpxYupzDcTsSu8bO0DC6EfTY2NiFElqw4ihy8cke9nJhFwnrmheaivOuo+8NCh+f9rabijaPUtFwtMd4i8YrnfDJ3jApEC4Fr1pgek4b+Ur4bYyaqVm4h1nYs/qT5MrvCl4cnlhCCSgRkL+eLytm696F83BBgU=;
+X-UUID: 5a4ab4f1b2964d9e9448fd94ad2d7066-20220207
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <macpaul.lin@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1598545706; Mon, 07 Feb 2022 11:12:59 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Mon, 7 Feb 2022 11:12:58 +0800
+Received: from [172.21.84.99] (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 7 Feb 2022 11:12:58 +0800
+Subject: Re: [PATCH] memory: mtk-smi: Enable sleep ctrl safety function for
+ MT8195
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, <yong.wu@mediatek.com>
+CC:     <krzysztof.kozlowski@canonical.com>, <matthias.bgg@gmail.com>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20220204125543.1189151-1-angelogioacchino.delregno@collabora.com>
+From:   Macpaul Lin <macpaul.lin@mediatek.com>
+Message-ID: <6c360daa-151b-5bb3-5c93-17f90cb693a6@mediatek.com>
+Date:   Mon, 7 Feb 2022 11:12:58 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB2619.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c188e0a8-7488-42b9-629c-08d9e9e69d9a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Feb 2022 03:04:54.3339
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: TxdlzYlzeKtnYEubo5WYukrBNMTJw30oNF8I6L4O7L7hNsKz39bwrJ88QsEMY6Zp
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR12MB2642
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220204125543.1189151-1-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,NICE_REPLY_A,RDNS_NONE,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[AMD Official Use Only]
+T24gMi80LzIyIDg6NTUgUE0sIEFuZ2Vsb0dpb2FjY2hpbm8gRGVsIFJlZ25vIHdyb3RlOg0KPiBF
+bmFibGUgdGhlIHNsZWVwIGN0cmwgZnVuY3Rpb24gdG8gd2FpdCB1bnRpbCBhbGwgdGhlIHF1ZXVl
+ZCBjb21tYW5kcw0KPiBhcmUgZXhlY3V0ZWQgYmVmb3JlIHN1c3BlbmRpbmcgdGhlIExBUkJzLCBs
+aWtlIGRvbmUgZm9yIE1UODE4Ni4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IEFuZ2Vsb0dpb2FjY2hp
+bm8gRGVsIFJlZ25vIDxhbmdlbG9naW9hY2NoaW5vLmRlbHJlZ25vQGNvbGxhYm9yYS5jb20+DQo+
+IC0tLQ0KPiAgIGRyaXZlcnMvbWVtb3J5L210ay1zbWkuYyB8IDMgKystDQo+ICAgMSBmaWxlIGNo
+YW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQ0KPiANCj4gZGlmZiAtLWdpdCBh
+L2RyaXZlcnMvbWVtb3J5L210ay1zbWkuYyBiL2RyaXZlcnMvbWVtb3J5L210ay1zbWkuYw0KPiBp
+bmRleCBjMjJhY2QzZGRkMTAuLjg2YTNkMzRmNDE4ZSAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9t
+ZW1vcnkvbXRrLXNtaS5jDQo+ICsrKyBiL2RyaXZlcnMvbWVtb3J5L210ay1zbWkuYw0KPiBAQCAt
+MzUxLDcgKzM1MSw4IEBAIHN0YXRpYyBjb25zdCBzdHJ1Y3QgbXRrX3NtaV9sYXJiX2dlbiBtdGtf
+c21pX2xhcmJfbXQ4MTkyID0gew0KPiAgIA0KPiAgIHN0YXRpYyBjb25zdCBzdHJ1Y3QgbXRrX3Nt
+aV9sYXJiX2dlbiBtdGtfc21pX2xhcmJfbXQ4MTk1ID0gew0KPiAgIAkuY29uZmlnX3BvcnQgICAg
+ICAgICAgICAgICAgPSBtdGtfc21pX2xhcmJfY29uZmlnX3BvcnRfZ2VuMl9nZW5lcmFsLA0KPiAt
+CS5mbGFnc19nZW5lcmFsCSAgICAgICAgICAgID0gTVRLX1NNSV9GTEFHX1RIUlRfVVBEQVRFIHwg
+TVRLX1NNSV9GTEFHX1NXX0ZMQUcsDQo+ICsJLmZsYWdzX2dlbmVyYWwJICAgICAgICAgICAgPSBN
+VEtfU01JX0ZMQUdfVEhSVF9VUERBVEUgfCBNVEtfU01JX0ZMQUdfU1dfRkxBRyB8DQo+ICsJCQkJ
+ICAgICAgTVRLX1NNSV9GTEFHX1NMRUVQX0NUTCwNCj4gICAJLm9zdGQJCSAgICAgICAgICAgID0g
+bXRrX3NtaV9sYXJiX210ODE5NV9vc3RkLA0KPiAgIH07DQo+ICAgDQo+IA0KDQpSZXZpZXdlZC1i
+eTogTWFjcGF1bCBMaW4gPG1hY3BhdWwubGluQG1lZGlhdGVrLmNvbT4NCg0KUmVnYXJkcywNCk1h
+Y3BhdWwgTGlu
 
-Reviewed-by: Evan Quan <evan.quan@amd.com>
-
-> -----Original Message-----
-> From: trix@redhat.com <trix@redhat.com>
-> Sent: Saturday, February 5, 2022 11:00 PM
-> To: Quan, Evan <Evan.Quan@amd.com>; Deucher, Alexander
-> <Alexander.Deucher@amd.com>; Koenig, Christian
-> <Christian.Koenig@amd.com>; Pan, Xinhui <Xinhui.Pan@amd.com>;
-> airlied@linux.ie; daniel@ffwll.ch; nathan@kernel.org;
-> ndesaulniers@google.com; Lazar, Lijo <Lijo.Lazar@amd.com>; Powell, Darren
-> <Darren.Powell@amd.com>; Chen, Guchun <Guchun.Chen@amd.com>;
-> Grodzovsky, Andrey <Andrey.Grodzovsky@amd.com>
-> Cc: amd-gfx@lists.freedesktop.org; dri-devel@lists.freedesktop.org; linux=
--
-> kernel@vger.kernel.org; llvm@lists.linux.dev; Tom Rix <trix@redhat.com>
-> Subject: [PATCH] drm/amd/pm: fix error handling
->=20
-> From: Tom Rix <trix@redhat.com>
->=20
-> clang static analysis reports this error
-> amdgpu_smu.c:2289:9: warning: Called function pointer
->   is null (null dereference)
->         return smu->ppt_funcs->emit_clk_levels(
->                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->=20
-> There is a logic error in the earlier check of
-> emit_clk_levels.  The error value is set to
-> the ret variable but ret is never used.  Return
-> directly and remove the unneeded ret variable.
->=20
-> Fixes: 5d64f9bbb628 ("amdgpu/pm: Implement new API function "emit" that
-> accepts buffer base and write offset")
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->=20
-> diff --git a/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
-> b/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
-> index af368aa1fd0ae..5f3b3745a9b7a 100644
-> --- a/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
-> +++ b/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
-> @@ -2274,7 +2274,6 @@ static int smu_emit_ppclk_levels(void *handle,
-> enum pp_clock_type type, char *bu
->  {
->  	struct smu_context *smu =3D handle;
->  	enum smu_clk_type clk_type;
-> -	int ret =3D 0;
->=20
->  	clk_type =3D smu_convert_to_smuclk(type);
->  	if (clk_type =3D=3D SMU_CLK_COUNT)
-> @@ -2284,7 +2283,7 @@ static int smu_emit_ppclk_levels(void *handle,
-> enum pp_clock_type type, char *bu
->  		return -EOPNOTSUPP;
->=20
->  	if (!smu->ppt_funcs->emit_clk_levels)
-> -		ret =3D -ENOENT;
-> +		return -ENOENT;
->=20
->  	return smu->ppt_funcs->emit_clk_levels(smu, clk_type, buf, offset);
->=20
-> --
-> 2.26.3

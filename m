@@ -2,59 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C12704AB411
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 07:12:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D1F54AB465
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 07:14:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348482AbiBGFwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 00:52:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53630 "EHLO
+        id S244725AbiBGFvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 00:51:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiBGFBm (ORCPT
+        with ESMTP id S233796AbiBGE6V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 00:01:42 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC551C043185
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 21:01:37 -0800 (PST)
-X-UUID: d18a93e47dd04dd0a8426c6bd770449d-20220207
-X-UUID: d18a93e47dd04dd0a8426c6bd770449d-20220207
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1486972065; Mon, 07 Feb 2022 12:56:31 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 7 Feb 2022 12:56:31 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 7 Feb
- 2022 12:56:30 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 7 Feb 2022 12:56:30 +0800
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     <chunkuang.hu@kernel.org>, <matthias.bgg@gmail.com>,
-        <narmstrong@baylibre.com>, <robert.foss@linaro.org>,
-        <andrzej.hajda@intel.com>, <daniel@ffwll.ch>, <airlied@linux.ie>,
-        <maarten.lankhorst@linux.intel.com>, <mripard@kernel.org>,
-        <tzimmermann@suse.de>, <p.zabel@pengutronix.de>
-CC:     <xji@analogixsemi.com>, <jitao.shi@mediatek.com>,
-        <xinlei.lee@mediatek.com>,
-        <angelogioacchino.delregno@collabora.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>
-Subject: [v11,3/3] drm/bridge: anx7625: config hs packets end aligned to avoid screen shift
-Date:   Mon, 7 Feb 2022 12:56:25 +0800
-Message-ID: <20220207045625.17713-4-rex-bc.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220207045625.17713-1-rex-bc.chen@mediatek.com>
-References: <20220207045625.17713-1-rex-bc.chen@mediatek.com>
+        Sun, 6 Feb 2022 23:58:21 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D423C043181
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 20:58:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CB0FCB81053
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 04:58:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7703AC004E1;
+        Mon,  7 Feb 2022 04:58:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644209898;
+        bh=hmzT2AM8lylqdoXOy+nKuqNdHRMelSGHWNMXUYiaoGc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Y8AKHJ9Ng4PD8Gsvp2Siq7XkcHRj1aCI1pdJkjWbi+A30MM0i/XJAuR+VTilS48aC
+         ZeBhZPDfS23qr6+AoHQ6exvRUjYJKhKoHyyeb3AhEpP5kExCjCsUqEF9+FClnlOv8o
+         5BCytzYDGzOEgKGEQqTLhFD+dHpmXGQBCHNeQE1r9kCakUeOv8HjeiCmV6f5Mipcsg
+         3NJTCG+HHclV+jEsywudpA3eY4+yGXPKdbBM6c29Mr5TCvSoU2L+CPijWsa8iE9Ucr
+         l8iOXDjT0RblIL7OhFdBkQi7a11PKY/7/lhzhb6SI1Yz8uOzQpAJNt7VyUvPKbYSvc
+         9/VxtKWkPv7fQ==
+Date:   Mon, 7 Feb 2022 10:28:13 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Aswath Govindraju <a-govindraju@ti.com>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Swapnil Jakhade <sjakhade@cadence.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] phy: cadence: Sierra: Add support for skipping
+ configuration
+Message-ID: <YgCm5VUGpQZxVUar@matsya>
+References: <20220128072642.29188-1-a-govindraju@ti.com>
+ <YfqT444YoGBIturt@matsya>
+ <1d5c41a8-24aa-3cfb-fff0-c2695102aa91@ti.com>
+ <YfseaJADVocxqnOu@matsya>
+ <3444e347-2603-6f5b-94de-09642c41fc27@ti.com>
+ <YfzERMrPh+TrXr9x@matsya>
+ <004e4d00-936f-1e4f-8378-b779ae168c60@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <004e4d00-936f-1e4f-8378-b779ae168c60@ti.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,32 +64,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This device requires the packets on lanes aligned at the end to fix
-screen shift or scroll.
+On 04-02-22, 11:48, Aswath Govindraju wrote:
 
-Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
-Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-Acked-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: Xin Ji <xji@analogixsemi.com>
-Reviewed-by: Andrzej Hajda <andrzej.hajda@intel.com>
----
- drivers/gpu/drm/bridge/analogix/anx7625.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+> Thank you for the clarification. I will make note of mentioning this
+> from next time. So, just to confirm, if the fixes are merged then v2 of
+> this patch series will apply cleanly.
 
-diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
-index 2346dbcc505f..fe32ab0878ae 100644
---- a/drivers/gpu/drm/bridge/analogix/anx7625.c
-+++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
-@@ -1673,7 +1673,8 @@ static int anx7625_attach_dsi(struct anx7625_data *ctx)
- 	dsi->format = MIPI_DSI_FMT_RGB888;
- 	dsi->mode_flags = MIPI_DSI_MODE_VIDEO	|
- 		MIPI_DSI_MODE_VIDEO_SYNC_PULSE	|
--		MIPI_DSI_MODE_VIDEO_HSE;
-+		MIPI_DSI_MODE_VIDEO_HSE	|
-+		MIPI_DSI_HS_PKT_END_ALIGNED;
- 
- 	ret = devm_mipi_dsi_attach(dev, dsi);
- 	if (ret) {
+I have merged fixes and applied v2 now
+
 -- 
-2.31.0
-
+~Vinod

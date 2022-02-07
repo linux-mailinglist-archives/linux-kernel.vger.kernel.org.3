@@ -2,295 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B38794ACD20
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:07:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 084714ACD18
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:07:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345094AbiBHBE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 20:04:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39340 "EHLO
+        id S1345125AbiBHBEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 20:04:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233102AbiBGXTd (ORCPT
+        with ESMTP id S240468AbiBGXWA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 18:19:33 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A0CC0612A4
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 15:19:32 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id v4so8550751pjh.2
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 15:19:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ThSHxAOPclKygYpsG6VmV+qfMk9x1IPAyMO8Co5HbOc=;
-        b=kmb14pxupGC2sDAnbX9Bh5L1woRvkv3WkvbZIKkM3MMG262WOPVKK1LtB05kz7o8V+
-         B7OjeVwlXI8mBEHkADnt89aw5Xxa/lep6snbGzcw4p/9IQm7xyHWeCJbaltKlok9XRZV
-         AylZGLQomu8E1huNtupY74xKbIDWCw7GFavFGmjLX+vlIZURQTSX/7iqrjFxBVqxBPnj
-         OcrCzCT7h8UJPu2yyadZG8wGYAfEFbHPOjFokH61y4YV2cJY83o9BSUVJp64mRUyU3/j
-         /MuMYDsoi7wxyPUc8GXI/0TuY9/VfzRFkohcTySRa7fb0Sh88s0y/39UF0ENE6sE9zab
-         NMBw==
+        Mon, 7 Feb 2022 18:22:00 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 49F79C061355
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 15:21:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644276118;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Iw9wt34aXKvuMxoYZcgwMJfoVHqXFAcM6CtavfIfEfU=;
+        b=FtKsJjEEkdrpKxHaHXlWkTpg7Ie/MDEM4hFZqMW9DqTIntJhK2HyOz8M8M3wxwyynurYwR
+        Nff+R7rrlFGeUOwT0YU8yIpxGYY6K5LqRv0JG8ThWHsY0TcVs+B4j2ozIfuNStvWIICaoN
+        01ctCY5HeRnMVstWOrC8LnXwHPQ5bow=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-653-9CfCEObdOymLaN9fMMgv0w-1; Mon, 07 Feb 2022 18:21:57 -0500
+X-MC-Unique: 9CfCEObdOymLaN9fMMgv0w-1
+Received: by mail-qk1-f200.google.com with SMTP id x16-20020a05620a449000b00508582d0db2so5257029qkp.0
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 15:21:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ThSHxAOPclKygYpsG6VmV+qfMk9x1IPAyMO8Co5HbOc=;
-        b=eHpdVqhNVxlFZsLfyGC5riQV6XJLREA+WUdFI0yrx969OHrivmcbWZpQMD4Ink05Bx
-         NyFQb2gV9VZWrz3nEKMaLz/Tp7FBt96yWv9liOkxh91Ewwqk2OjfiaFN+BREymWlrMpO
-         I95Sx58h9/Wg1Ezg1HyHtsHNhlur0s/toGgciFE1LBYuw6G0gkMEFgS0qiS+cdy34OQi
-         oTle3r/68l7A9Vga9j/3VKjhWXXwbwiZaF5vGw73V35YYltudC7OXOWkeH0NwsN2oT2c
-         s9jr0c5/oWoyElMjOmJ4hZnzWpjwBXX0t1bjPHgH+Xi7eCy8shggr5nDXcio5WBl+s5E
-         79sg==
-X-Gm-Message-State: AOAM530xtujGfmkl/frs1hbnBrqWj5cB54wXcmQQVuTHf2eR5/s7reeO
-        bf0TTHEF46YqPMQsYKUUD2Sv9A==
-X-Google-Smtp-Source: ABdhPJySKVrDECFoi48FdGe8WJ8TGcWRJOgHFX/qwVFLbqTDSNz6K55tNKXLPHAiphc9QysAK12LdA==
-X-Received: by 2002:a17:902:7e06:: with SMTP id b6mr1915957plm.58.1644275971681;
-        Mon, 07 Feb 2022 15:19:31 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id o125sm9725998pfb.116.2022.02.07.15.19.30
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Iw9wt34aXKvuMxoYZcgwMJfoVHqXFAcM6CtavfIfEfU=;
+        b=teOJuvq9QQqRpkWuN7wDxr6mhC/ANpVl2bF0vsrkFkx0irqy2aJY1i0BKfdEzgnDhf
+         g31QOUb2MJ6nYWpyFqpyz9i66guw40xeA+CVPAOdOZnOiAaacsXQqtnz0mqnUlD5OoKy
+         G/T+HbOYSl1xPX67kmizYPEVOBVzStq8f4ssnOy2HPPzOA8f5nKa74C8MFp59T32+AeY
+         /uKz/0hufI56aVDQTP05+91Dx4aCLX/DvT8UuF/GXBxYQ46ME4/uF05Zxy0IyGNrr2Uv
+         RcqI9KR2LtHlRFJ8w5gR4fow2DXwb/cwqPpzfFfyFmd+ey8/NhE4YuAlGqPrnQWSYH4F
+         3zkg==
+X-Gm-Message-State: AOAM532g+OiAsb6NZZOrzSOtrPVww0HLzY1sXm/ZFTFx1DdpylQTaUL9
+        avCAk0NEDv7XHj5k8aN4t0yk1Fz0THj4k+MIawyFHvH4cN+R/M7MgM/fkxptPDlr36AVlmoz9sh
+        UlElJ5LGj3eqgeckThtorgXkd
+X-Received: by 2002:ad4:5ce7:: with SMTP id iv7mr1363045qvb.121.1644276116278;
+        Mon, 07 Feb 2022 15:21:56 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw1NtXQcsm5FW3EBilz/ZfT3Cvi3lIDzaSf3isXw3sfYe4piCqut0wV1cRBs/K/pJ1jR71oUg==
+X-Received: by 2002:ad4:5ce7:: with SMTP id iv7mr1363030qvb.121.1644276116076;
+        Mon, 07 Feb 2022 15:21:56 -0800 (PST)
+Received: from fedora.hitronhub.home (modemcable200.11-22-96.mc.videotron.ca. [96.22.11.200])
+        by smtp.gmail.com with ESMTPSA id y2sm5906567qke.33.2022.02.07.15.21.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 15:19:31 -0800 (PST)
-Date:   Mon, 7 Feb 2022 23:19:27 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Peter Gonda <pgonda@google.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Orr <marcorr@google.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: SEV: Allow SEV intra-host migration of VM with
- mirrors
-Message-ID: <YgGo/5GyJVfGH00T@google.com>
-References: <20220111154048.2108264-1-pgonda@google.com>
+        Mon, 07 Feb 2022 15:21:55 -0800 (PST)
+From:   Adrien Thierry <athierry@redhat.com>
+To:     linux-serial@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Adrien Thierry <athierry@redhat.com>,
+        Jeremy Linton <jeremy.linton@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com
+Subject: [PATCH v3] serial: 8250_bcm2835aux: Add ACPI support
+Date:   Mon,  7 Feb 2022 18:21:29 -0500
+Message-Id: <20220207232129.402882-1-athierry@redhat.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220111154048.2108264-1-pgonda@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022, Peter Gonda wrote:
-> @@ -1623,22 +1624,41 @@ static void sev_unlock_vcpus_for_migration(struct kvm *kvm)
->  	}
->  }
->  
-> -static void sev_migrate_from(struct kvm_sev_info *dst,
-> -			      struct kvm_sev_info *src)
-> +static void sev_migrate_from(struct kvm *dst_kvm, struct kvm *src_kvm)
->  {
-> +	struct kvm_sev_info *dst = &to_kvm_svm(dst_kvm)->sev_info;
-> +	struct kvm_sev_info *src = &to_kvm_svm(src_kvm)->sev_info;
-> +	struct kvm_sev_info *mirror, *tmp;
-> +
->  	dst->active = true;
->  	dst->asid = src->asid;
->  	dst->handle = src->handle;
->  	dst->pages_locked = src->pages_locked;
->  	dst->enc_context_owner = src->enc_context_owner;
-> +	dst->num_mirrored_vms = src->num_mirrored_vms;
->  
->  	src->asid = 0;
->  	src->active = false;
->  	src->handle = 0;
->  	src->pages_locked = 0;
->  	src->enc_context_owner = NULL;
-> +	src->num_mirrored_vms = 0;
->  
->  	list_cut_before(&dst->regions_list, &src->regions_list, &src->regions_list);
-> +	list_cut_before(&dst->mirror_vms, &src->mirror_vms, &src->mirror_vms);
-> +
-> +	/*
-> +	 * If this VM has mirrors we need to update the KVM refcounts from the
-> +	 * source to the destination.
-> +	 */
+Add ACPI support to 8250_bcm2835aux driver. This makes it possible to
+use the miniuart on the Raspberry Pi with the tianocore/edk2 UEFI
+firmware.
 
-It's worth calling out that a reference is being taken on behalf of the mirror,
-that detail is easy to miss.  And maybe call out that the caller holds a reference
-to @src_kvm?
-
-	/*
-	 * If this VM has mirrors, "transfer" each mirror's refcount of the
-	 * source to the destination (this KVM).  The caller holds a reference
-	 * to the source, so there's no danger of use-after-free.
-	 */
-
-> +	if (dst->num_mirrored_vms > 0) {
-> +		list_for_each_entry_safe(mirror, tmp, &dst->mirror_vms,
-> +					  mirror_entry) {
-> +			kvm_get_kvm(dst_kvm);
-> +			kvm_put_kvm(src_kvm);
-> +			mirror->enc_context_owner = dst_kvm;
-> +		}
-> +	}
->  }
->  
->  static int sev_es_migrate_from(struct kvm *dst, struct kvm *src)
-
-...
-
-> @@ -2050,10 +2062,17 @@ void sev_vm_destroy(struct kvm *kvm)
->  	if (is_mirroring_enc_context(kvm)) {
->  		struct kvm *owner_kvm = sev->enc_context_owner;
->  		struct kvm_sev_info *owner_sev = &to_kvm_svm(owner_kvm)->sev_info;
-> +		struct kvm_sev_info *mirror, *tmp;
->  
->  		mutex_lock(&owner_kvm->lock);
->  		if (!WARN_ON(!owner_sev->num_mirrored_vms))
->  			owner_sev->num_mirrored_vms--;
-> +
-> +		list_for_each_entry_safe(mirror, tmp, &owner_sev->mirror_vms,
-> +					  mirror_entry)
-> +			if (mirror == sev)
-> +				list_del(&mirror->mirror_entry);
-> +
-
-There's no need to walk the list just to find the entry you already have.  Maaaaybe
-if you were sanity checking, but it's not like we can do anything helpful if the
-sanity check fails, so eating a #GP due to consuming e.g. LIST_POISON1 is just as
-good as anything else.
-
-	if (is_mirroring_enc_context(kvm)) {
-		struct kvm *owner_kvm = sev->enc_context_owner;
-
-		mutex_lock(&owner_kvm->lock);
-		list_del(&->mirror_entry);
-		mutex_unlock(&owner_kvm->lock);
-		kvm_put_kvm(owner_kvm);
-		return;
-	}
-
->  		mutex_unlock(&owner_kvm->lock);
->  		kvm_put_kvm(owner_kvm);
->  		return;
-> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-> index daa8ca84afcc..b9f5e33d5232 100644
-> --- a/arch/x86/kvm/svm/svm.h
-> +++ b/arch/x86/kvm/svm/svm.h
-> @@ -81,6 +81,10 @@ struct kvm_sev_info {
->  	u64 ap_jump_table;	/* SEV-ES AP Jump Table address */
->  	struct kvm *enc_context_owner; /* Owner of copied encryption context */
->  	unsigned long num_mirrored_vms; /* Number of VMs sharing this ASID */
-> +	union {
-> +		struct list_head mirror_vms; /* List of VMs mirroring */
-> +		struct list_head mirror_entry; /* Use as a list entry of mirrors */
-> +	};
-
-
-Whoops.  IIRC, I suggested a union for tracking mirrors vs mirrored.  After seeing
-the code, that was a bad suggestion.  Memory isn't at a premimum for a per-VM
-object, so storing an extra list_head is a non-issue.
-
-If we split the two, then num_mirrored_vms goes away, and more importantly we won't
-have to deal with bugs where we inevitably forget to guard access to the union with
-a check against num_mirrored_vms.
-
-E.g. (completely untested and probably incomplete)
-
+Signed-off-by: Adrien Thierry <athierry@redhat.com>
 ---
- arch/x86/kvm/svm/sev.c | 32 +++++++++-----------------------
- arch/x86/kvm/svm/svm.h |  7 ++-----
- 2 files changed, 11 insertions(+), 28 deletions(-)
+V1 -> V2: Refactored code to remove unnecessary conditional paths and
+intermediate variables
+V2 -> V3: Cleaned up coding style and addressed review comments
 
-diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-index 369cf8c4da61..41f7e733c33e 100644
---- a/arch/x86/kvm/svm/sev.c
-+++ b/arch/x86/kvm/svm/sev.c
-@@ -1635,29 +1635,25 @@ static void sev_migrate_from(struct kvm *dst_kvm, struct kvm *src_kvm)
- 	dst->handle = src->handle;
- 	dst->pages_locked = src->pages_locked;
- 	dst->enc_context_owner = src->enc_context_owner;
--	dst->num_mirrored_vms = src->num_mirrored_vms;
+ drivers/tty/serial/8250/8250_bcm2835aux.c | 52 ++++++++++++++++++++---
+ 1 file changed, 46 insertions(+), 6 deletions(-)
 
- 	src->asid = 0;
- 	src->active = false;
- 	src->handle = 0;
- 	src->pages_locked = 0;
- 	src->enc_context_owner = NULL;
--	src->num_mirrored_vms = 0;
-
- 	list_cut_before(&dst->regions_list, &src->regions_list, &src->regions_list);
- 	list_cut_before(&dst->mirror_vms, &src->mirror_vms, &src->mirror_vms);
-
- 	/*
--	 * If this VM has mirrors we need to update the KVM refcounts from the
--	 * source to the destination.
-+	 * If this VM has mirrors, "transfer" each mirror's refcount from the
-+	 * source to the destination (this KVM).  The caller holds a reference
-+	 * to the source, so there's no danger of use-after-free.
- 	 */
--	if (dst->num_mirrored_vms > 0) {
--		list_for_each_entry_safe(mirror, tmp, &dst->mirror_vms,
--					  mirror_entry) {
--			kvm_get_kvm(dst_kvm);
--			kvm_put_kvm(src_kvm);
--			mirror->enc_context_owner = dst_kvm;
--		}
-+	list_for_each_entry_safe(mirror, tmp, &dst->mirror_vms, mirror_entry) {
-+		kvm_get_kvm(dst_kvm);
-+		kvm_put_kvm(src_kvm);
-+		mirror->enc_context_owner = dst_kvm;
- 	}
- }
-
-@@ -2019,7 +2015,6 @@ int sev_vm_copy_enc_context_from(struct kvm *kvm, unsigned int source_fd)
- 	 */
- 	source_sev = &to_kvm_svm(source_kvm)->sev_info;
- 	kvm_get_kvm(source_kvm);
--	source_sev->num_mirrored_vms++;
- 	mirror_sev = &to_kvm_svm(kvm)->sev_info;
- 	list_add_tail(&mirror_sev->mirror_entry, &source_sev->mirror_vms);
-
-@@ -2053,7 +2048,7 @@ void sev_vm_destroy(struct kvm *kvm)
- 	struct list_head *head = &sev->regions_list;
- 	struct list_head *pos, *q;
-
--	WARN_ON(sev->num_mirrored_vms);
-+	WARN_ON(!list_empty(&sev->mirror_vms));
-
- 	if (!sev_guest(kvm))
- 		return;
-@@ -2061,18 +2056,9 @@ void sev_vm_destroy(struct kvm *kvm)
- 	/* If this is a mirror_kvm release the enc_context_owner and skip sev cleanup */
- 	if (is_mirroring_enc_context(kvm)) {
- 		struct kvm *owner_kvm = sev->enc_context_owner;
--		struct kvm_sev_info *owner_sev = &to_kvm_svm(owner_kvm)->sev_info;
--		struct kvm_sev_info *mirror, *tmp;
-
- 		mutex_lock(&owner_kvm->lock);
--		if (!WARN_ON(!owner_sev->num_mirrored_vms))
--			owner_sev->num_mirrored_vms--;
--
--		list_for_each_entry_safe(mirror, tmp, &owner_sev->mirror_vms,
--					  mirror_entry)
--			if (mirror == sev)
--				list_del(&mirror->mirror_entry);
--
-+		list_del(&mirror->mirror_entry);
- 		mutex_unlock(&owner_kvm->lock);
- 		kvm_put_kvm(owner_kvm);
- 		return;
-diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-index 0876329f273d..79bf568c2558 100644
---- a/arch/x86/kvm/svm/svm.h
-+++ b/arch/x86/kvm/svm/svm.h
-@@ -79,11 +79,8 @@ struct kvm_sev_info {
- 	struct list_head regions_list;  /* List of registered regions */
- 	u64 ap_jump_table;	/* SEV-ES AP Jump Table address */
- 	struct kvm *enc_context_owner; /* Owner of copied encryption context */
--	unsigned long num_mirrored_vms; /* Number of VMs sharing this ASID */
--	union {
--		struct list_head mirror_vms; /* List of VMs mirroring */
--		struct list_head mirror_entry; /* Use as a list entry of mirrors */
--	};
-+	struct list_head mirror_vms; /* List of VMs mirroring */
-+	struct list_head mirror_entry; /* Use as a list entry of mirrors */
- 	struct misc_cg *misc_cg; /* For misc cgroup accounting */
- 	atomic_t migration_in_progress;
+diff --git a/drivers/tty/serial/8250/8250_bcm2835aux.c b/drivers/tty/serial/8250/8250_bcm2835aux.c
+index fd95860cd661..2a1226a78a0c 100644
+--- a/drivers/tty/serial/8250/8250_bcm2835aux.c
++++ b/drivers/tty/serial/8250/8250_bcm2835aux.c
+@@ -17,6 +17,7 @@
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/platform_device.h>
++#include <linux/property.h>
+ 
+ #include "8250.h"
+ 
+@@ -44,6 +45,10 @@ struct bcm2835aux_data {
+ 	u32 cntl;
  };
+ 
++struct bcm2835_aux_serial_driver_data {
++	resource_size_t offset;
++};
++
+ static void bcm2835aux_rs485_start_tx(struct uart_8250_port *up)
+ {
+ 	if (!(up->port.rs485.flags & SER_RS485_RX_DURING_TX)) {
+@@ -80,9 +85,12 @@ static void bcm2835aux_rs485_stop_tx(struct uart_8250_port *up)
+ 
+ static int bcm2835aux_serial_probe(struct platform_device *pdev)
+ {
++	const struct bcm2835_aux_serial_driver_data *bcm_data;
+ 	struct uart_8250_port up = { };
+ 	struct bcm2835aux_data *data;
++	resource_size_t offset = 0;
+ 	struct resource *res;
++	unsigned int uartclk;
+ 	int ret;
+ 
+ 	/* allocate the custom structure */
+@@ -109,9 +117,7 @@ static int bcm2835aux_serial_probe(struct platform_device *pdev)
+ 	platform_set_drvdata(pdev, data);
+ 
+ 	/* get the clock - this also enables the HW */
+-	data->clk = devm_clk_get(&pdev->dev, NULL);
+-	if (IS_ERR(data->clk))
+-		return dev_err_probe(&pdev->dev, PTR_ERR(data->clk), "could not get clk\n");
++	data->clk = devm_clk_get_optional(&pdev->dev, NULL);
+ 
+ 	/* get the interrupt */
+ 	ret = platform_get_irq(pdev, 0);
+@@ -125,8 +131,24 @@ static int bcm2835aux_serial_probe(struct platform_device *pdev)
+ 		dev_err(&pdev->dev, "memory resource not found");
+ 		return -EINVAL;
+ 	}
+-	up.port.mapbase = res->start;
+-	up.port.mapsize = resource_size(res);
++
++	bcm_data = device_get_match_data(&pdev->dev);
++
++	/* Some UEFI implementations (e.g. tianocore/edk2 for the Raspberry Pi)
++	 * describe the miniuart with a base address that encompasses the auxiliary
++	 * registers shared between the miniuart and spi.
++	 *
++	 * This is due to historical reasons, see discussion here :
++	 * https://edk2.groups.io/g/devel/topic/87501357#84349
++	 *
++	 * We need to add the offset between the miniuart and auxiliary
++	 * registers to get the real miniuart base address.
++	 */
++	if (bcm_data)
++		offset = bcm_data->offset;
++
++	up.port.mapbase = res->start + offset;
++	up.port.mapsize = resource_size(res) - offset;
+ 
+ 	/* Check for a fixed line number */
+ 	ret = of_alias_get_id(pdev->dev.of_node, "serial");
+@@ -141,12 +163,19 @@ static int bcm2835aux_serial_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
+ 
++	uartclk = clk_get_rate(data->clk);
++	if (!uartclk) {
++		ret = device_property_read_u32(&pdev->dev, "clock-frequency", &uartclk);
++		if (ret)
++			return dev_err_probe(&pdev->dev, ret, "could not get clk rate\n");
++	}
++
+ 	/* the HW-clock divider for bcm2835aux is 8,
+ 	 * but 8250 expects a divider of 16,
+ 	 * so we have to multiply the actual clock by 2
+ 	 * to get identical baudrates.
+ 	 */
+-	up.port.uartclk = clk_get_rate(data->clk) * 2;
++	up.port.uartclk = uartclk * 2;
+ 
+ 	/* register the port */
+ 	ret = serial8250_register_8250_port(&up);
+@@ -173,16 +202,27 @@ static int bcm2835aux_serial_remove(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
++static const struct bcm2835_aux_serial_driver_data bcm2835_acpi_data = {
++	.offset = 0x40,
++};
++
+ static const struct of_device_id bcm2835aux_serial_match[] = {
+ 	{ .compatible = "brcm,bcm2835-aux-uart" },
+ 	{ },
+ };
+ MODULE_DEVICE_TABLE(of, bcm2835aux_serial_match);
+ 
++static const struct acpi_device_id bcm2835aux_serial_acpi_match[] = {
++	{ "BCM2836", (kernel_ulong_t)&bcm2835_acpi_data },
++	{ }
++};
++MODULE_DEVICE_TABLE(acpi, bcm2835aux_serial_acpi_match);
++
+ static struct platform_driver bcm2835aux_serial_driver = {
+ 	.driver = {
+ 		.name = "bcm2835-aux-uart",
+ 		.of_match_table = bcm2835aux_serial_match,
++		.acpi_match_table = bcm2835aux_serial_acpi_match,
+ 	},
+ 	.probe  = bcm2835aux_serial_probe,
+ 	.remove = bcm2835aux_serial_remove,
 
-base-commit: 618a9a6fda17f48d86a1ce9851bd8ceffdc57d75
---
+base-commit: 2ade8eef993c37a2a43e51a9b1f6c25509a2acce
+-- 
+2.34.1
 

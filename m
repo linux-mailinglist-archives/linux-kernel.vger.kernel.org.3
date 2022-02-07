@@ -2,141 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20F334AC9A0
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 20:34:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF1E04AC9BD
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 20:42:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240060AbiBGTds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 14:33:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54084 "EHLO
+        id S239822AbiBGTgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 14:36:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237331AbiBGTcS (ORCPT
+        with ESMTP id S240653AbiBGTeL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 14:32:18 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F35B0C0401E0
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 11:32:16 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id f10so28875713lfu.8
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 11:32:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9kNXJ/3JYeOdOA7DH0CUuMRYUlFkKsOTuLs1vioWo7w=;
-        b=h+mCGkMYZDJ2VmGTrhAw2KavAcmOsthjQkVi+QdZ+ZkiV9+fSapdS2uzHf/ukcLtPC
-         vRMH36btXdXZw4Ye257+NkEVUOXQ85HWugB/ZhQX8fVUxns1ppL9bbQn13QOA3ElZuOG
-         w/woARgt0jaLHbggZleqoiutYHT5OJpNXqshM0nOaRT6yu8ba+36GM7vOQkVtn+q+KMz
-         PrViwbkfN0W+BU23IVkmRKIfKyqmi1i+hfYNh3aPzbDCWEmi298Kiaj1FG9p3y59070a
-         yT9dTx74o7gwmNbXRdcfA+scReMr+Pi9A/l2N0+4dLetZsnbwfaTYZnVUOnLHuSETGIp
-         DGJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9kNXJ/3JYeOdOA7DH0CUuMRYUlFkKsOTuLs1vioWo7w=;
-        b=IdX2SsziZSsrYgXkp9gCRax25kOPEiKE89kWOtLTY0TCHSiDsFuP5fZXraf5XTcQy1
-         ERpkjrUa7P0Lv8n7uFU4hpzYmAq4NlSeLTk0mZ0vXftjlprvB96Rkay5pAQDheKEmFFd
-         zJ0l9n+bph2sEscl+8uMUuWk5vDg5XWfsislXdEmskUT0+Ow/B1JnR17l3TKqxJKQuZw
-         OBg9aZw2IWhdAnyVIoAwPZUoTM8dB7rMsHztkmKPi3JNXqAwLcWZ6pgqEom0/VYPFHKs
-         wn3cWdaeO1mmH/x/MuXAJQjKzZ7l2UlyuqxWzpsuKqVvkD2qR1vQtPSaQ8clFhewlo3j
-         tJKA==
-X-Gm-Message-State: AOAM533iXhsN8bowJY0d1hhOLJ/YIrekp49Fhl4CwMinWja/k8grMcQq
-        rLYKUjCyCR+WKCy961H2/soGfIK9k8/lhMiVS1ayAA==
-X-Google-Smtp-Source: ABdhPJysHyL+1pJLsLclE94GhiA8i/bGjovo8W+T16GtnH/4rOMgZ92vLex2xjh0nrjH88dfPBFkxZUzaXe4biaSDQQ=
-X-Received: by 2002:ac2:4c4c:: with SMTP id o12mr637262lfk.523.1644262335129;
- Mon, 07 Feb 2022 11:32:15 -0800 (PST)
+        Mon, 7 Feb 2022 14:34:11 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AED62C0401E9
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 11:34:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644262449;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Mt0dY24O8oy81HO9eljR8ZyBXQGPacTP1E1VhcVXUbE=;
+        b=gqjno34FsP3Ad3i/263EtKO4WP01HVIVSCCZNE7wIADEx8oH5SHC7E3TLWjF+rfm7W/VSu
+        NQ0yc3Q+gYs7hrVv5t2+UFizkGGYfnUFfbNcJB9HrxB5JclsRtL+P4yhPNn3dJLxNS65dp
+        qZ3Iq7qF6oJboG5lA0MD98XM2JUlWQ0=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-623-aVSMeVKxOSmcoeJFlsExTA-1; Mon, 07 Feb 2022 14:34:08 -0500
+X-MC-Unique: aVSMeVKxOSmcoeJFlsExTA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4E2761898291;
+        Mon,  7 Feb 2022 19:34:05 +0000 (UTC)
+Received: from [10.22.32.15] (unknown [10.22.32.15])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id BDA3A452E6;
+        Mon,  7 Feb 2022 19:33:57 +0000 (UTC)
+Message-ID: <53f89ef2-3894-ad23-7484-38ce192bce20@redhat.com>
+Date:   Mon, 7 Feb 2022 14:33:57 -0500
 MIME-Version: 1.0
-References: <20220207162410.1013466-1-nathan@kernel.org>
-In-Reply-To: <20220207162410.1013466-1-nathan@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 7 Feb 2022 11:32:03 -0800
-Message-ID: <CAKwvOdnfQeY8sC0iET4hm-kgeFhurWf_jrh4=czBj17zQ5+x0Q@mail.gmail.com>
-Subject: Re: [PATCH] io_uring: Fix use of uninitialized ret in io_eventfd_register()
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Usama Arif <usama.arif@bytedance.com>,
-        io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v4 3/4] mm/page_owner: Print memcg information
+Content-Language: en-US
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, Ira Weiny <ira.weiny@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Roman Gushchin <guro@fb.com>, Rafael Aquini <aquini@redhat.com>
+References: <20220131192308.608837-5-longman@redhat.com>
+ <20220202203036.744010-4-longman@redhat.com>
+ <YfvOp5VXrxy9IW1w@dhcp22.suse.cz>
+ <3f042edb-3769-afea-17a7-899578cd5c69@redhat.com>
+ <YgFUxFI5bMbc42j4@dhcp22.suse.cz>
+ <20220207110947.f07b58898d91c02090f9aacf@linux-foundation.org>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20220207110947.f07b58898d91c02090f9aacf@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 7, 2022 at 8:24 AM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> Clang warns:
->
->   fs/io_uring.c:9396:9: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
->           return ret;
->                  ^~~
->   fs/io_uring.c:9373:13: note: initialize the variable 'ret' to silence this warning
->           int fd, ret;
->                      ^
->                       = 0
->   1 warning generated.
->
-> Just return 0 directly and reduce the scope of ret to the if statement,
-> as that is the only place that it is used, which is how the function was
-> before the fixes commit.
->
-> Fixes: 1a75fac9a0f9 ("io_uring: avoid ring quiesce while registering/unregistering eventfd")
 
-Did SHA's change? In linux-next, I see:
-commit b77e315a9644 ("io_uring: avoid ring quiesce while
-registering/unregistering eventfd")
-otherwise LGTM
+On 2/7/22 14:09, Andrew Morton wrote:
+> On Mon, 7 Feb 2022 18:20:04 +0100 Michal Hocko <mhocko@suse.com> wrote:
+>
+>> On Thu 03-02-22 14:03:58, Waiman Long wrote:
+>>> On 2/3/22 07:46, Michal Hocko wrote:
+>>>> On Wed 02-02-22 15:30:35, Waiman Long wrote:
+>>>> [...]
+>> ...
+>>>>> +	online = (memcg->css.flags & CSS_ONLINE);
+>>>>> +	cgroup_name(memcg->css.cgroup, name, sizeof(name));
+>>>> Is there any specific reason to use another buffer allocated on the
+>>>> stack? Also 80B seems too short to cover NAME_MAX.
+>>>>
+>>>> Nothing else jumped at me.
+>>> I suppose we can print directly into kbuf with cgroup_name(), but using a
+>>> separate buffer is easier to read and understand. 79 characters should be
+>>> enough for most cgroup names. Some auto-generated names with some kind of
+>>> embedded uuids may be longer than that, but the random sequence of hex
+>>> digits that may be missing do not convey much information for identification
+>>> purpose. We can always increase the buffer length later if it turns out to
+>>> be an issue.
+>> Cutting a name short sounds like a source of confusion and there doesn't
+>> seem to be any good reason for that.
+> Yes.  If we give them 79 characters, someone will go and want 94.  If
+> we can prevent this once and for ever, let's please do so.
 
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1579
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  fs/io_uring.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/fs/io_uring.c b/fs/io_uring.c
-> index 5479f0607430..7ef04bb66da1 100644
-> --- a/fs/io_uring.c
-> +++ b/fs/io_uring.c
-> @@ -9370,7 +9370,7 @@ static int io_eventfd_register(struct io_ring_ctx *ctx, void __user *arg,
->  {
->         struct io_ev_fd *ev_fd;
->         __s32 __user *fds = arg;
-> -       int fd, ret;
-> +       int fd;
->
->         ev_fd = rcu_dereference_protected(ctx->io_ev_fd,
->                                         lockdep_is_held(&ctx->uring_lock));
-> @@ -9386,14 +9386,14 @@ static int io_eventfd_register(struct io_ring_ctx *ctx, void __user *arg,
->
->         ev_fd->cq_ev_fd = eventfd_ctx_fdget(fd);
->         if (IS_ERR(ev_fd->cq_ev_fd)) {
-> -               ret = PTR_ERR(ev_fd->cq_ev_fd);
-> +               int ret = PTR_ERR(ev_fd->cq_ev_fd);
->                 kfree(ev_fd);
->                 return ret;
->         }
->         ev_fd->eventfd_async = eventfd_async;
->
->         rcu_assign_pointer(ctx->io_ev_fd, ev_fd);
-> -       return ret;
-> +       return 0;
->  }
->
->  static void io_eventfd_put(struct rcu_head *rcu)
->
-> base-commit: 88a0394bc27de2dd8a8715970f289c5627052532
-> --
-> 2.35.1
->
+Sure. Will send a version with that change.
+
+Cheers,
+Longman
+
 >
 
-
--- 
-Thanks,
-~Nick Desaulniers

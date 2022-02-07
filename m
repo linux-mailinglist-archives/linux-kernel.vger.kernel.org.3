@@ -2,55 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68BAC4AB6D2
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 09:46:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D9CA4AB6D8
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 09:46:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243268AbiBGIoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 03:44:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34878 "EHLO
+        id S245037AbiBGIoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 03:44:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243871AbiBGIjP (ORCPT
+        with ESMTP id S241038AbiBGIkQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 03:39:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07ADDC043181;
-        Mon,  7 Feb 2022 00:39:15 -0800 (PST)
+        Mon, 7 Feb 2022 03:40:16 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FAB4C043181;
+        Mon,  7 Feb 2022 00:40:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9767E61139;
-        Mon,  7 Feb 2022 08:39:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1805C004E1;
-        Mon,  7 Feb 2022 08:39:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644223154;
-        bh=oFz9BaL9e3pbQqoR3n99qyo4Z+yc7ZCLihiceMXEhio=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A6DD361137;
+        Mon,  7 Feb 2022 08:40:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3CDEC004E1;
+        Mon,  7 Feb 2022 08:40:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644223214;
+        bh=OXu4ePF9KnYMXzbzhryuJjA+Qn2NlR5TcqjF8HO8C1k=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TRJSbI5hpLHhuYWzgyELmIHnfhZBdVIt2QJLm49vE5pRrMapIr1UjrzVDKOQG/JJ7
-         tBVe2TML5DFaRDzxEAm8YLAT+gMz4/3kWEF8X/KWcKvd+bKNsuLg3T3/DIAiJQm11f
-         fA8HTUWyOQ2lYR0oA9Xai/C9THo6UFJGa+qDVVoo=
-Date:   Mon, 7 Feb 2022 09:39:11 +0100
-From:   gregkh <gregkh@linuxfoundation.org>
-To:     Tony Huang =?utf-8?B?6buD5oe35Y6a?= <tony.huang@sunplus.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Tony Huang <tonyhuang.sunplus@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Derek Kiernan <derek.kiernan@xilinx.com>,
-        Dragan Cvetic <dragan.cvetic@xilinx.com>,
-        Wells Lu =?utf-8?B?5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
-Subject: Re: [PATCH v8 2/2] misc: Add iop driver for Sunplus SP7021
-Message-ID: <YgDar1O/CeTM8w6J@kroah.com>
-References: <cover.1644212476.git.tonyhuang.sunplus@gmail.com>
- <b96f039dc071b1d32bb52fa283fd8afc6d3349cc.1644212476.git.tonyhuang.sunplus@gmail.com>
- <CAK8P3a0zNeaeOzC_tPb1KDbyktLpjUJCdEu=C6t_QX4pB9TKnQ@mail.gmail.com>
- <b440dc1dbb044a8c81d083d52774ad6b@sphcmbx02.sunplus.com.tw>
+        b=XOKg1tHXXyriKEFLh5p1wdnUqD8okrg/yiG277ztoueOy+HUbu3BTM7esXttteLqc
+         /xEpc3ZVmxG3JaAk0YypUx3Pae73MsXwEcPVrMTXmf8KaXTmg8DvrgufdWwbPI0/6d
+         kmdEPaM+CvRH3dwveMFzmYwKmqiGsmhHK/rq+fqqKM2X0iZ7PMOVxP5h8A2q0DGp5W
+         vtMqrcgzYMs9vzmmdInh/Ql7ogC56Upl9kbg8UN7v2pNcozbJnLmi+L4aVHlSxb6sI
+         maSOv4KaBsdo32ETV936V5isjB1Kr7SIMN+XH6gKwLyPAf4dCs/tYI3xiTpeH+xME1
+         qrTu2tpCBCZkw==
+Date:   Mon, 7 Feb 2022 14:10:07 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Yonglin Tan <yonglin.tan@outlook.com>
+Cc:     hemantk@codeaurora.org, mhi@lists.linux.dev,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] bus: mhi: Add mru_default for Quectel EM1xx series
+ modules.
+Message-ID: <20220207084007.GE1905@thinkpad>
+References: <MEYP282MB2374C10BC162393B39D78294FD229@MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b440dc1dbb044a8c81d083d52774ad6b@sphcmbx02.sunplus.com.tw>
+In-Reply-To: <MEYP282MB2374C10BC162393B39D78294FD229@MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -61,109 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 08:29:40AM +0000, Tony Huang 黃懷厚 wrote:
-> Dear Arnd:
+On Fri, Jan 28, 2022 at 01:24:04PM +0800, Yonglin Tan wrote:
+> For default mechanism, the driver uses default MRU 3500 if mru_default
+> is not initialized. The Qualcomm configured the MRU size to 32768 in the
+> WWAN device FW. So, we align the driver setting with Qualcomm FW setting.
 > 
-> > -----Original Message-----
-> > From: Arnd Bergmann <arnd@arndb.de>
-> > Sent: Monday, February 7, 2022 3:48 PM
-> > To: Tony Huang <tonyhuang.sunplus@gmail.com>
-> > Cc: Rob Herring <robh+dt@kernel.org>; DTML <devicetree@vger.kernel.org>;
-> > Linux Kernel Mailing List <linux-kernel@vger.kernel.org>; Derek Kiernan
-> > <derek.kiernan@xilinx.com>; Dragan Cvetic <dragan.cvetic@xilinx.com>; Arnd
-> > Bergmann <arnd@arndb.de>; gregkh <gregkh@linuxfoundation.org>; Tony
-> > Huang 黃懷厚 <tony.huang@sunplus.com>; Wells Lu 呂芳騰
-> > <wells.lu@sunplus.com>
-> > Subject: Re: [PATCH v8 2/2] misc: Add iop driver for Sunplus SP7021
-> > 
-> > On Mon, Feb 7, 2022 at 7:30 AM Tony Huang
-> > <tonyhuang.sunplus@gmail.com> wrote:
-> > >
-> > > IOP(8051) embedded inside SP7021 which is used as Processor for I/O
-> > > control, monitor RTC interrupt and cooperation with CPU & PMC in power
-> > > management purpose.
-> > > The IOP core is DQ8051, so also named IOP8051, it supports dedicated
-> > > JTAG debug pins which share with SP7021.
-> > > In standby mode operation, the power spec reach 400uA.
-> > >
-> > > Signed-off-by: Tony Huang <tonyhuang.sunplus@gmail.com>
-> > > ---
-> > > Changes in v8:
-> > >  - Addressed comments from Greg KH.
-> > >
-> > >  Documentation/ABI/testing/sysfs-platform-soc@B |  28 ++
-> > >  MAINTAINERS                                    |   2 +
-> > >  drivers/misc/Kconfig                           |  20 ++
-> > >  drivers/misc/Makefile                          |   1 +
-> > >  drivers/misc/sunplus_iop.c                     | 463
-> > +++++++++++++++++++++++++
-> > >  5 files changed, 514 insertions(+)
-> > >  create mode 100644 Documentation/ABI/testing/sysfs-platform-soc@B
-> > >  create mode 100644 drivers/misc/sunplus_iop.c
-> > >
-> > > diff --git a/Documentation/ABI/testing/sysfs-platform-soc@B
-> > > b/Documentation/ABI/testing/sysfs-platform-soc@B
-> > > new file mode 100644
-> > > index 0000000..d26d6f5
-> > > --- /dev/null
-> > > +++ b/Documentation/ABI/testing/sysfs-platform-soc@B
-> > > @@ -0,0 +1,28 @@
-> > > +What:
-> > /sys/devices/platform/soc@B/9c000400.iop/sp_iop_mailbox
-> > > +Date:          January 2022
-> > > +KernelVersion: 5.16
-> > > +Contact:       Tony Huang <tonyhuang.sunplus@gmail.com>
-> > > +Description:
-> > > +               Show IOP's mailbox0 register data.
-> > > +               Format: %x
-> > > +
-> > > +What:
-> > /sys/devices/platform/soc@B/9c000400.iop/sp_iop_mode
-> > > +Date:          January 2022
-> > > +KernelVersion: 5.16
-> > > +Contact:       Tony Huang <tonyhuang.sunplus@gmail.com>
-> > > +Description:
-> > > +               Read-Write.
-> > > +
-> > > +               Write this file.
-> > > +               Operation mode of IOP is switched to standby mode by
-> > writing
-> > > +               "1" to sysfs.
-> > > +               Operation mode of IOP is switched to normal mode by
-> > writing
-> > > +               "0" to sysfs.
-> > > +               Writing of other values is invalid.
-> > > +
-> > > +               Read this file.
-> > > +               Show operation mode of IOP. "0" is normal mode. "1" is
-> > standby
-> > > +               mode.
-> > > +               Format: %x
-> > 
-> > As discussed before, I would suggest leaving out all custom attributes for now,
-> > and first hooking up the driver to all the in-kernel subsystems.
-> > 
-> > The mailbox0 register data definitely feels like an implementation detail, not
-> > something that should be exposed to user space as an interface.
-> > 
-> > For standby mode, this would normally be handled by the power management
-> > subsystem in the kernel. not a custom interface. From your earlier description,
-> > I assume this interface puts the main CPU into standby mode, not the IOP,
-> > right?
-> > 
-> > CPU standby is handled by the cpuidle subsystem, so you need a driver in
-> > drivers/cpuidle/ to replace your sysfs attribute.
-> > If you plan to hook up the driver to multiple subsystems, keeping a generic
-> > driver file is ok, so  you'll end up with two driver modules, with one of them
-> > calling into the other, using
-> > EXPORT_SYMBOL() to link between them.
-> > 
+> Signed-off-by: Yonglin Tan <yonglin.tan@outlook.com>
+
+Please add the Fixes tag for commit ac4bf60bbaa0 and CC stable list.
+
+Also the subject should be:
+"bus: mhi: pci_generic: Add mru_default for Quectel EM1xx series"
+
+With that,
+Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+
+Thanks,
+Mani
+
+> ---
+>  drivers/bus/mhi/pci_generic.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> The purpose of adding sysfs is only for users to debug.
-> So this is not needed?
-
-If this is only for debugging, please put it in debugfs and not sysfs.
-
-thanks,
-
-greg k-h
+> diff --git a/drivers/bus/mhi/pci_generic.c b/drivers/bus/mhi/pci_generic.c
+> index b798958..9527b7d 100644
+> --- a/drivers/bus/mhi/pci_generic.c
+> +++ b/drivers/bus/mhi/pci_generic.c
+> @@ -327,6 +327,7 @@ static const struct mhi_pci_dev_info mhi_quectel_em1xx_info = {
+>  	.config = &modem_quectel_em1xx_config,
+>  	.bar_num = MHI_PCI_DEFAULT_BAR_NUM,
+>  	.dma_data_width = 32,
+> +	.mru_default = 32768,
+>  	.sideband_wake = true,
+>  };
+>  
+> -- 
+> 2.7.4
+> 

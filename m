@@ -2,174 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EF234AC841
+	by mail.lfdr.de (Postfix) with ESMTP id AD5904AC842
 	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 19:11:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346484AbiBGSI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 13:08:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39540 "EHLO
+        id S1352707AbiBGSIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 13:08:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344328AbiBGSAw (ORCPT
+        with ESMTP id S1355445AbiBGSBy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 13:00:52 -0500
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC44C0401DA
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 10:00:51 -0800 (PST)
-Received: by mail-il1-x12f.google.com with SMTP id h11so3610843ilq.9
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 10:00:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=vAANZBXJ7sjdB6HJV8mdniD7XEYfQ+ohI4e6g+PRzDA=;
-        b=b7VXqSPJlQilf3OxElTU4ZKiyU9lyp6MPPkBwL3AuC4i1t/FNz/Jjp2J9pCnwsQOFh
-         wn7MaGFgiAcqPlfAb36NLajsoEJnZh84xdKMn9a02dgLgIbq7gCaCCARpHEsjDz/hDRZ
-         1NtPXaqXy+5I3ONdQazd/+U2JAUCjLtZfNiE8=
+        Mon, 7 Feb 2022 13:01:54 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 49B59C0401DC
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 10:01:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644256912;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7ZC9voboJMLyP9X+M4c3BNIBV745SBUEBDiANYpctyI=;
+        b=FemED7jx0deNUbjqxYPdnoYpM+lROLfNU6iy2ihZyucIHU0t4GoZcY0edO/y4SB+6vwzqb
+        R01pBf1QbL3HNT/ebwvHaAdEScquGd3XpRz2z8K0UNuCtMgwY854f9M2mISbL9xLxq2/TE
+        nd23zKn+OBws8n0i1EHTaAI4zXdb2pc=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-161-hkS7vlbYOFKxPg5LKbFrlQ-1; Mon, 07 Feb 2022 13:01:51 -0500
+X-MC-Unique: hkS7vlbYOFKxPg5LKbFrlQ-1
+Received: by mail-wm1-f72.google.com with SMTP id bg32-20020a05600c3ca000b00349f2aca1beso5927206wmb.9
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 10:01:51 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=vAANZBXJ7sjdB6HJV8mdniD7XEYfQ+ohI4e6g+PRzDA=;
-        b=guOv4r9PkR7e0VATjS3Y37nPDM3fx5KJ3qmWCX/MX0AdtAHIYa/0rWoRglPA5+tsGJ
-         gP2pIb6oxaBma6NHh3NG+ZFwS/vd4hZGj4C5+/sHQ9rilMxaXATH9V9dh8EBLwlI0lPE
-         qJ3ieQ2clu4cvalcl1vjvza3xrS4tJ0IXJrUulEGRyIBMT3nEuKqx+mII7WT16UOiz+4
-         v3H3+7t/N0wAPdGg48oLtjMUHf1bmKKmDCJysL7fHCW481cIn2+6V7rGRFB8HgBPtebw
-         NIn3sW1cFoCN1Mx+vXH+v3AexfyPvFzUVvrSeUv40ebmYgEfxEk791Zn4SKLgTH/mnB9
-         zSug==
-X-Gm-Message-State: AOAM531TA+CNNfw2ZV1vdxA4TETcNhNdohvc7LURucD+cnW0t4RzGC5q
-        C2QaTBzuwl3l6atKaPFaZulJ0g==
-X-Google-Smtp-Source: ABdhPJzzZ8fAEThnEB/DDtjGPIUo2pX8YgD7f8HKp+5pMhwDSyFZtkChRxqswvlKelWm0bvvUUeRmQ==
-X-Received: by 2002:a92:c5b1:: with SMTP id r17mr350950ilt.320.1644256850455;
-        Mon, 07 Feb 2022 10:00:50 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id c13sm2055151ilq.50.2022.02.07.10.00.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Feb 2022 10:00:50 -0800 (PST)
-Subject: Re: [PATCH 0/3] selftests: Remove duplicate CPUID wrappers
-To:     Reinette Chatre <reinette.chatre@intel.com>, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ram Pai <linuxram@us.ibm.com>,
-        Sandipan Das <sandipan@linux.ibm.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "Desnes A. Nunes do Rosario" <desnesn@linux.vnet.ibm.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Suchanek <msuchanek@suse.de>, linux-mm@kvack.org,
-        "Chang S . Bae" <chang.seok.bae@intel.com>,
-        Borislav Petkov <bp@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        Andy Lutomirski <luto@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <cover.1644000145.git.reinette.chatre@intel.com>
- <81df8c0e-fde6-f3b8-f988-b539f193635b@linuxfoundation.org>
- <c61a227e-e35e-55a8-3571-6e015e222d5f@intel.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <3787aee3-064a-dce7-1ab1-0dcabd56a100@linuxfoundation.org>
-Date:   Mon, 7 Feb 2022 11:00:49 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=7ZC9voboJMLyP9X+M4c3BNIBV745SBUEBDiANYpctyI=;
+        b=2Wknb7S62ox0QYz7RLIKV+hb3VMqGpWomaDsZSnI4+9Puwvvi0YeGe2zRabd6EUXgn
+         nR84NwAH36S39+TxO3uNCGkqdYdOBgUiXbR1y8U4m9Bu/ROyuwpgUL4tpSyQmYPn8cmy
+         B5P8kJD5VJ+Uzm3GhDV+yHw2LZD6MEky8NRy8+WpPY2AWJ/EpvqKMvdXS6fbQULVDvHq
+         49ZGLrTkU9tC8gqfXlwyRbNCHw6tK3Djv2Ul+xRm/gAVBjpUzdfax0wcN83vF6U9fzL1
+         kugXkp6fV9h7h2ZiziPQwT1hu4k3AtJ/7+nDthPtdsOIIRcXhhT8we5XrOsXoaYVjsdm
+         Qlcw==
+X-Gm-Message-State: AOAM531F8gIVUPIhuFX7K5EDcge93lE2ZztXz0jVyJGwqypkxg0/LJjf
+        OnC1AakRuyXEWuRCFfApcrqjzbd4cEPAJJnzoqeLcMClYxRFU5jTcv4eOUZSjWV/hyx1pMNlqzT
+        /BIAyyq/2lTFu+5TlfZ97VGE=
+X-Received: by 2002:a05:600c:35c5:: with SMTP id r5mr52356wmq.195.1644256910081;
+        Mon, 07 Feb 2022 10:01:50 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwHGKUD5R67kKE3OayMIvijga96fYqhI4O3QezVsa05W/PCwK6GX5Iiq/+FauG4WL4qC8Qivg==
+X-Received: by 2002:a05:600c:35c5:: with SMTP id r5mr52327wmq.195.1644256909789;
+        Mon, 07 Feb 2022 10:01:49 -0800 (PST)
+Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
+        by smtp.gmail.com with ESMTPSA id g20sm68731wmq.9.2022.02.07.10.01.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Feb 2022 10:01:49 -0800 (PST)
+Date:   Mon, 7 Feb 2022 18:01:48 +0000
+From:   Aaron Tomlin <atomlin@redhat.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Aaron Tomlin <atomlin@atomlin.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Michal Suchanek <msuchanek@suse.de>,
+        "cl@linux.com" <cl@linux.com>,
+        "pmladek@suse.com" <pmladek@suse.com>,
+        "mbenes@suse.cz" <mbenes@suse.cz>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "jeyu@kernel.org" <jeyu@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
+        "ghalat@redhat.com" <ghalat@redhat.com>,
+        "allen.lkml@gmail.com" <allen.lkml@gmail.com>,
+        "void@manifault.com" <void@manifault.com>,
+        "joe@perches.com" <joe@perches.com>
+Subject: Re: [RFC PATCH v4 00/13] module: core code clean up
+Message-ID: <20220207180148.bbstggd4yr5ozfrf@ava.usersys.com>
+X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
+X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
+References: <20220130213214.1042497-1-atomlin@redhat.com>
+ <Yfsf2SGELhQ71Ovo@bombadil.infradead.org>
+ <1ae3a950-8c1e-a212-e557-8f112a16457d@csgroup.eu>
+ <20220207164659.ap42at2nphxu4q6o@ava.usersys.com>
+ <b0a54f00-b9ac-df55-e8d2-d3eb95039a95@csgroup.eu>
 MIME-Version: 1.0
-In-Reply-To: <c61a227e-e35e-55a8-3571-6e015e222d5f@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <b0a54f00-b9ac-df55-e8d2-d3eb95039a95@csgroup.eu>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/4/22 5:11 PM, Reinette Chatre wrote:
-> Hi Shuah,
-> 
-> On 2/4/2022 3:39 PM, Shuah Khan wrote:
->> On 2/4/22 12:17 PM, Reinette Chatre wrote:
->>> A few tests that require running CPUID do so with a private
->>> implementation of a wrapper for CPUID. This duplication of
->>> the CPUID wrapper should be avoided but having one is also
->>> unnecessary because of the existence of a macro that can
->>> be used instead.
->>>
->>> This series replaces private CPUID wrappers with calls
->>> to the __cpuid_count() macro from cpuid.h as made available
->>> by gcc and clang/llvm.
->>>
->>> Cc: Dave Hansen <dave.hansen@linux.intel.com>
->>> Cc: Ram Pai <linuxram@us.ibm.com>
->>> Cc: Sandipan Das <sandipan@linux.ibm.com>
->>> Cc: Florian Weimer <fweimer@redhat.com>
->>> Cc: "Desnes A. Nunes do Rosario" <desnesn@linux.vnet.ibm.com>
->>> Cc: Ingo Molnar <mingo@kernel.org>
->>> Cc: Thiago Jung Bauermann <bauerman@linux.ibm.com>
->>> Cc: Michael Ellerman <mpe@ellerman.id.au>
->>> Cc: Michal Suchanek <msuchanek@suse.de>
->>> Cc: linux-mm@kvack.org
->>> Cc: Chang S. Bae <chang.seok.bae@intel.com>
->>> Cc: Borislav Petkov <bp@suse.de>
->>> Cc: Thomas Gleixner <tglx@linutronix.de>
->>> Cc: Ingo Molnar <mingo@redhat.com>
->>> Cc: "H. Peter Anvin" <hpa@zytor.com>
->>> Cc: x86@kernel.org
->>> Cc: Andy Lutomirski <luto@kernel.org>
->>>
->>> Reinette Chatre (3):
->>>     selftests/vm/pkeys: Use existing __cpuid_count() macro
->>>     selftests/x86/amx: Use existing __cpuid_count() macro
->>>     selftests/x86/corrupt_xstate_header: Use existing __cpuid_count()
->>>       macro
->>>
->>>    tools/testing/selftests/vm/pkey-x86.h         | 22 +++---------------
->>>    tools/testing/selftests/x86/amx.c             | 23 +++++--------------
->>>    .../selftests/x86/corrupt_xstate_header.c     | 17 ++------------
->>>    3 files changed, 11 insertions(+), 51 deletions(-)
->>>
->>
->> I am all for this cleanup. However, I am not finding __cpuid_count()
->> marco on my system with gcc:
->>
->> gcc --version
->> gcc (Ubuntu 11.2.0-7ubuntu2) 11.2.0
->>
->> My concern is regression on older gcc versions.
-> 
-> Please see this message from our earlier thread where you were able
-> to find it on your system:
-> https://lore.kernel.org/linux-kselftest/63293c72-55ca-9446-35eb-74aff4c8ba5d@linuxfoundation.org/
-> 
+On Mon 2022-02-07 17:17 +0000, Christophe Leroy wrote:
+> Yes and that's the purpose of the patch I proposed at 
+> https://patchwork.kernel.org/project/linux-modules/patch/203348805c9ac9851d8939d15cb9802ef047b5e2.1643919758.git.christophe.leroy@csgroup.eu/
 
-Right. After I sent off the response, I was thinking we discussed
-this before. Thanks for the refresh.
+I see.
 
-> As mentioned in that thread, on my system it arrived via user space's
-> libgcc-dev package. This does not seem to be the first time including
-> files from this source - I did a quick check and from what I can tell
-> existing kselftest includes like stdarg.h, stdbool.h, stdatomic.h,
-> unwind.h, x86intrin.h ... arrive via libgcc-dev.
-> 
+> Allthough I need to find out what's the problem reported by the robot.
 
-This will work fine on newer versions of gcc/clang. However this could
-fail when mainline kselftest is used on stable releases on test rings
-and so on, especially if they have older versions of gcc/clang.
+I'll have a look too.
 
-We will have to find a solution for this. Instead of deleting the local
-define, let's keep it under ifndef __cpuid_count
+> As suggested by Luis, this fix should go once all ongoing work is done. 
+> But it would be nice if you could just remove patch 5 from you series, 
+> otherwise we would have to revert it later.
 
-/usr/lib/gcc/x86_64-linux-gnu/11/include/cpuid.h
+Perhaps it might be easier if I keep the patch within the series; once
+merged into module-next, by Luis, you can rebase and then add the "Fixes:"
+tag to resolve the issue, no?
 
-#define __cpuid_count(level, count, a, b, c, d)                         \
-   __asm__ __volatile__ ("cpuid\n\t"                                     \
-                         : "=a" (a), "=b" (b), "=c" (c), "=d" (d)        \
-                         : "0" (level), "2" (count))
 
-thanks,
--- Shuah
+Kind regards,
+
+-- 
+Aaron Tomlin
+

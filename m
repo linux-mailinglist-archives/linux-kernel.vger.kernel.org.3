@@ -2,51 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EF3D4ABDF2
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:05:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9E884ABC05
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:45:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389639AbiBGLu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:50:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37770 "EHLO
+        id S1386642AbiBGLfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:35:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380273AbiBGLaJ (ORCPT
+        with ESMTP id S1384031AbiBGLYb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:30:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027B4C03E957;
-        Mon,  7 Feb 2022 03:28:32 -0800 (PST)
+        Mon, 7 Feb 2022 06:24:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D79ABC043189;
+        Mon,  7 Feb 2022 03:24:30 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A8026077B;
-        Mon,  7 Feb 2022 11:28:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 733BFC004E1;
-        Mon,  7 Feb 2022 11:28:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 74B4B6077B;
+        Mon,  7 Feb 2022 11:24:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FC23C004E1;
+        Mon,  7 Feb 2022 11:24:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233312;
-        bh=gL+AJW7aUmc5Iap6xJjIKV40t3Yz1xThdKwzbu6TnWs=;
+        s=korg; t=1644233069;
+        bh=72vwZ6kvzEMAGleLWY/VTPiDOeZhPnE8/1zmPpNqG64=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1UKjbuA/p1pvwGSX/KqxDV5muIvTmKvkobZST/EIcHRsbNC429gBU0DyzChmZ+ta7
-         vdHKivlhguH48t5cL7/ln7TASFa+qpGbV7zfEXe1v95fZ/cRaqusQz3Aq+5LUW7WWu
-         wbxJXeSnkz0d+BIfFDqLd2zJbAaJYOzG1woLVltc=
+        b=Xt2JQdoGnFpQscZ72AkhVW5CGKRM4kz4NkPogvCnxExUetizq4pB2VITPe9gwrBee
+         zrHjsiWrDquxcy08ffIcW+UG5k10QAaVx/rWVLTOHfp7tm8Hhpuy6B2+8eb7qXjvN5
+         fytYdovV1CJ5NPlUURz9eTtwUhPbCvgwsgTNYVnc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 5.15 082/110] pinctrl: bcm2835: Fix a few error paths
+        stable@vger.kernel.org,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: [PATCH 5.10 57/74] selftests: futex: Use variable MAKE instead of make
 Date:   Mon,  7 Feb 2022 12:06:55 +0100
-Message-Id: <20220207103805.173542541@linuxfoundation.org>
+Message-Id: <20220207103759.093487968@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
-References: <20220207103802.280120990@linuxfoundation.org>
+In-Reply-To: <20220207103757.232676988@linuxfoundation.org>
+References: <20220207103757.232676988@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,78 +56,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florian Fainelli <f.fainelli@gmail.com>
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
 
-commit 5297c693d8c8e08fa742e3112cf70723f7a04da2 upstream.
+commit b9199181a9ef8252e47e207be8c23e1f50662620 upstream.
 
-After commit 266423e60ea1 ("pinctrl: bcm2835: Change init order for gpio
-hogs") a few error paths would not unwind properly the registration of
-gpio ranges. Correct that by assigning a single error label and goto it
-whenever we encounter a fatal error.
+Recursive make commands should always use the variable MAKE, not the
+explicit command name ‘make’. This has benefits and removes the
+following warning when multiple jobs are used for the build:
 
-Fixes: 266423e60ea1 ("pinctrl: bcm2835: Change init order for gpio hogs")
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-Link: https://lore.kernel.org/r/20220127215033.267227-1-f.fainelli@gmail.com
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+make[2]: warning: jobserver unavailable: using -j1.  Add '+' to parent make rule.
+
+Fixes: a8ba798bc8ec ("selftests: enable O and KBUILD_OUTPUT")
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Reviewed-by: André Almeida <andrealmeid@collabora.com>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pinctrl/bcm/pinctrl-bcm2835.c |   23 +++++++++++++++--------
- 1 file changed, 15 insertions(+), 8 deletions(-)
+ tools/testing/selftests/futex/Makefile |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/pinctrl/bcm/pinctrl-bcm2835.c
-+++ b/drivers/pinctrl/bcm/pinctrl-bcm2835.c
-@@ -1263,16 +1263,18 @@ static int bcm2835_pinctrl_probe(struct
- 				     sizeof(*girq->parents),
- 				     GFP_KERNEL);
- 	if (!girq->parents) {
--		pinctrl_remove_gpio_range(pc->pctl_dev, &pc->gpio_range);
--		return -ENOMEM;
-+		err = -ENOMEM;
-+		goto out_remove;
- 	}
- 
- 	if (is_7211) {
- 		pc->wake_irq = devm_kcalloc(dev, BCM2835_NUM_IRQS,
- 					    sizeof(*pc->wake_irq),
- 					    GFP_KERNEL);
--		if (!pc->wake_irq)
--			return -ENOMEM;
-+		if (!pc->wake_irq) {
-+			err = -ENOMEM;
-+			goto out_remove;
-+		}
- 	}
- 
- 	/*
-@@ -1300,8 +1302,10 @@ static int bcm2835_pinctrl_probe(struct
- 
- 		len = strlen(dev_name(pc->dev)) + 16;
- 		name = devm_kzalloc(pc->dev, len, GFP_KERNEL);
--		if (!name)
--			return -ENOMEM;
-+		if (!name) {
-+			err = -ENOMEM;
-+			goto out_remove;
-+		}
- 
- 		snprintf(name, len, "%s:bank%d", dev_name(pc->dev), i);
- 
-@@ -1320,11 +1324,14 @@ static int bcm2835_pinctrl_probe(struct
- 	err = gpiochip_add_data(&pc->gpio_chip, pc);
- 	if (err) {
- 		dev_err(dev, "could not add GPIO chip\n");
--		pinctrl_remove_gpio_range(pc->pctl_dev, &pc->gpio_range);
--		return err;
-+		goto out_remove;
- 	}
- 
- 	return 0;
-+
-+out_remove:
-+	pinctrl_remove_gpio_range(pc->pctl_dev, &pc->gpio_range);
-+	return err;
- }
- 
- static struct platform_driver bcm2835_pinctrl_driver = {
+--- a/tools/testing/selftests/futex/Makefile
++++ b/tools/testing/selftests/futex/Makefile
+@@ -11,7 +11,7 @@ all:
+ 	@for DIR in $(SUBDIRS); do		\
+ 		BUILD_TARGET=$(OUTPUT)/$$DIR;	\
+ 		mkdir $$BUILD_TARGET  -p;	\
+-		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;\
++		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$DIR $@;\
+ 		if [ -e $$DIR/$(TEST_PROGS) ]; then \
+ 			rsync -a $$DIR/$(TEST_PROGS) $$BUILD_TARGET/; \
+ 		fi \
+@@ -32,6 +32,6 @@ override define CLEAN
+ 	@for DIR in $(SUBDIRS); do		\
+ 		BUILD_TARGET=$(OUTPUT)/$$DIR;	\
+ 		mkdir $$BUILD_TARGET  -p;	\
+-		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;\
++		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$DIR $@;\
+ 	done
+ endef
 
 

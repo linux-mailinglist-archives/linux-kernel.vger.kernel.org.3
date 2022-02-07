@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FCB14ABBFB
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:45:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A3144ABDEB
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:05:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386482AbiBGLen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:34:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36170 "EHLO
+        id S1386407AbiBGLtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:49:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383929AbiBGLYI (ORCPT
+        with ESMTP id S1386692AbiBGLfY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:24:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 764E0C043189;
-        Mon,  7 Feb 2022 03:24:07 -0800 (PST)
+        Mon, 7 Feb 2022 06:35:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14237C043181;
+        Mon,  7 Feb 2022 03:35:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 36262B81028;
-        Mon,  7 Feb 2022 11:24:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8092AC004E1;
-        Mon,  7 Feb 2022 11:24:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 98659B8112C;
+        Mon,  7 Feb 2022 11:35:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDEBEC004E1;
+        Mon,  7 Feb 2022 11:35:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233045;
-        bh=aMaqliSo0pUwthaPjUJtqmJ27qP7rBg0/Ef30il+49I=;
+        s=korg; t=1644233720;
+        bh=ltgwrwtKt8xHd3CXYRwUOLL0p3DAs3UWKiWzsRUVJi0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xvQYssItOZyTjEkJN7zT87Dvj2PiARN3l1XKJFbK2cx+Kls1ic4LPnYN9q50xFycd
-         MUWrfRo0yMdITSyLz1z5QazgbGGi8b6hfwT68Y13VpJprGrL50fZ5RE1XBDwf0IaET
-         v904nLYEVkDUKNHtNKN+yVDE6A35qHrF3bNoGGcw=
+        b=xkUbl18pbkIbI+wYslySfQ06iNueEAuDHHucBzeWTdgqP/iW0QWTtUuf429dsNyHc
+         FSbQCFj9wdKZCwIUvZ3bf3h/yuzHlp2aBG13KfwQRYCMGVj+6K4RxCBIpN/nVnS13r
+         BlNGQpOYvKMopKCy0udvqV59ftgoEbb7f8Pn7LnM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.10 72/74] net: dsa: mt7530: make NET_DSA_MT7530 select MEDIATEK_GE_PHY
-Date:   Mon,  7 Feb 2022 12:07:10 +0100
-Message-Id: <20220207103759.591363633@linuxfoundation.org>
+        stable@vger.kernel.org, Haiyue Wang <haiyue.wang@intel.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.16 100/126] gve: fix the wrong AdminQ buffer queue index check
+Date:   Mon,  7 Feb 2022 12:07:11 +0100
+Message-Id: <20220207103807.532064652@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103757.232676988@linuxfoundation.org>
-References: <20220207103757.232676988@linuxfoundation.org>
+In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
+References: <20220207103804.053675072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,36 +54,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arınç ÜNAL <arinc.unal@arinc9.com>
+From: Haiyue Wang <haiyue.wang@intel.com>
 
-commit 4223f86512877b04c932e7203648b37eec931731 upstream.
+commit 1f84a9450d75e08af70d9e2f2d5e1c0ac0c881d2 upstream.
 
-Make MediaTek MT753x DSA driver enable MediaTek Gigabit PHYs driver to
-properly control MT7530 and MT7531 switch PHYs.
+The 'tail' and 'head' are 'unsigned int' type free-running count, when
+'head' is overflow, the 'int i (= tail) < u32 head' will be false:
 
-A noticeable change is that the behaviour of switchport interfaces going
-up-down-up-down is no longer there.
+Only '- loop 0: idx = 63' result is shown, so it needs to use 'int' type
+to compare, it can handle the overflow correctly.
 
-Fixes: b8f126a8d543 ("net-next: dsa: add dsa support for Mediatek MT7530 switch")
-Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-Link: https://lore.kernel.org/r/20220129062703.595-1-arinc.unal@arinc9.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+typedef uint32_t u32;
+
+int main()
+{
+        u32 tail, head;
+        int stail, shead;
+        int i, loop;
+
+        tail = 0xffffffff;
+        head = 0x00000000;
+
+        for (i = tail, loop = 0; i < head; i++) {
+                unsigned int idx = i & 63;
+
+                printf("+ loop %d: idx = %u\n", loop++, idx);
+        }
+
+        stail = tail;
+        shead = head;
+        for (i = stail, loop = 0; i < shead; i++) {
+                unsigned int idx = i & 63;
+
+                printf("- loop %d: idx = %u\n", loop++, idx);
+        }
+
+        return 0;
+}
+
+Fixes: 5cdad90de62c ("gve: Batch AQ commands for creating and destroying queues.")
+Signed-off-by: Haiyue Wang <haiyue.wang@intel.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/dsa/Kconfig |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/ethernet/google/gve/gve_adminq.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/dsa/Kconfig
-+++ b/drivers/net/dsa/Kconfig
-@@ -36,6 +36,7 @@ config NET_DSA_MT7530
- 	tristate "MediaTek MT753x and MT7621 Ethernet switch support"
- 	depends on NET_DSA
- 	select NET_DSA_TAG_MTK
-+	select MEDIATEK_GE_PHY
- 	help
- 	  This enables support for the MediaTek MT7530, MT7531, and MT7621
- 	  Ethernet switch chips.
+--- a/drivers/net/ethernet/google/gve/gve_adminq.c
++++ b/drivers/net/ethernet/google/gve/gve_adminq.c
+@@ -301,7 +301,7 @@ static int gve_adminq_parse_err(struct g
+  */
+ static int gve_adminq_kick_and_wait(struct gve_priv *priv)
+ {
+-	u32 tail, head;
++	int tail, head;
+ 	int i;
+ 
+ 	tail = ioread32be(&priv->reg_bar0->adminq_event_counter);
 
 

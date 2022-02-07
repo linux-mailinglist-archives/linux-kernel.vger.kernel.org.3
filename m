@@ -2,147 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB7604AC463
+	by mail.lfdr.de (Postfix) with ESMTP id 5DA064AC462
 	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 16:53:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384896AbiBGPv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 10:51:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33234 "EHLO
+        id S1384883AbiBGPvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 10:51:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378595AbiBGPt5 (ORCPT
+        with ESMTP id S1386004AbiBGPpc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 10:49:57 -0500
-X-Greylist: delayed 301 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 07:49:56 PST
-Received: from so254-9.mailgun.net (so254-9.mailgun.net [198.61.254.9])
-        by lindbergh.monkeyblade.net (Postfix) with UTF8SMTPS id CFF74C0401D2
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 07:49:56 -0800 (PST)
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1644248996; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=2yxEWoGWybWm+EWzW1VAE3C5MPy0zhkD2Pst4w6ox5s=;
- b=N+wOMipwJzrfFVCe21xKtVtaHiguBVGmgtNQebZAbkFzyorWpyF6ZWZMIINXB4/pjnLjB+im
- pJ7r1z3g/lNx818NYJPfaX+mVZG+FaOUctzbXUOEIDLyRifMnV0b9JpU4WsA16jvabrqVkXg
- bU3fvtlUfwVzq5tMzwR/paVpZ+Q=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n01.prod.us-west-2.postgun.com with SMTP id
- 62013e7519d16b66a9ea982e (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 07 Feb 2022 15:44:53
- GMT
-Sender: nitirawa=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 9918DC43150; Mon,  7 Feb 2022 15:44:53 +0000 (UTC)
+        Mon, 7 Feb 2022 10:45:32 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A1D3C0401CA
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 07:45:28 -0800 (PST)
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id B2F2A3F1B4
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 15:45:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644248727;
+        bh=6Y+2dKF+oax8zT1A/qm081V7yzQIygshkjwkuuK0Jjs=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=F5sdoN99jDXmL8UXS/ktdHtnrtFD4aUhV1WFbbu0gTrFu8CIJA7YQkYA+KSlyW7zD
+         Eqj103CXyVKCGDjCFEchjVeQR/LNNk9F/Jgj+gNfV5eNq4ZQJJKv6H9EgMieX6p6Ic
+         ICKoVWGym6a0+qTZP1dypHALE1eb/0mGQIBN4C/JjsklDDyV4sc4GZfnwoStwZFH7x
+         ERBd5zTwqd6mgKcRem2PHgvaXl0plVSx+HNBy05yn6MVqeNdgxto1dYGCvnGxZoEnC
+         OYO7k/3IcZLquftntssPG5ahaTrmtld5d4JO1sH3MbF/qt5mPbWhNOaIYxGZk1qVMA
+         6MCDN9YvhCcNw==
+Received: by mail-ed1-f69.google.com with SMTP id f6-20020a0564021e8600b0040f662b99ffso2106226edf.7
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 07:45:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=6Y+2dKF+oax8zT1A/qm081V7yzQIygshkjwkuuK0Jjs=;
+        b=sDVdTjWqbrEmHF8qPmOSSLwKT9nlhBRlPrFpr2ESWmzzOPMEprFps78QK/rJGQXAXW
+         Srzb5QcoQcnii7mXIgeS3fyHcGiOVkhjaxPNO43YNbmXMUAKhpIxxxCq7fgwV3uMPhh+
+         LSSwEJ05Utt5ZzSuWg6GKTTP0CJXRCMk1gp5ICjn9ACDCOh+JtOHUDxVI9na6YWZ74Lt
+         MdpG9dR6NmXv00ZNDKs32anqH0dKxhmzMkS/wP1MIQrZGOWBgV/KaiURR8iQnkrfpVjK
+         VGKO7IxYoUx22vQ7Q4OwN9qSwwhSNng/QvCcXOpbWckExR/UOC5evh4LjwXQ1bXuD8fX
+         532A==
+X-Gm-Message-State: AOAM532MyEstFxfdXZGRK3zsAOIDjcpL42eDrR+J8HtDoMl5UGVbHk2a
+        UO0JPTAZuw5JzQGAvePSn+w46GjTsPBs3C6AyFLUgbbiCEIZjcXfMctyG84fh43Dz6M2F5M3f5o
+        YCgNQjcrSPmYh4PzLXVTIWEyGLY9x3j7gv0zl9hWW5A==
+X-Received: by 2002:a17:907:7241:: with SMTP id ds1mr253304ejc.491.1644248727437;
+        Mon, 07 Feb 2022 07:45:27 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyWwLB3X8srR0F9tgq40qKr7ABY3oB3F7i+C8YvII4SCUp1VGjoXcEv3mNNgvu3qM4y28Q/Ww==
+X-Received: by 2002:a17:907:7241:: with SMTP id ds1mr253275ejc.491.1644248727021;
+        Mon, 07 Feb 2022 07:45:27 -0800 (PST)
+Received: from [192.168.0.90] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id h7sm1280103ejb.40.2022.02.07.07.45.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Feb 2022 07:45:26 -0800 (PST)
+Message-ID: <a49f77c8-3d92-8c84-28fe-0e6735f09610@canonical.com>
+Date:   Mon, 7 Feb 2022 16:45:25 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH next] dt-bindings:spi: Fix test error for sp7021.
+Content-Language: en-US
+To:     Li-hao Kuo <lhjeff911@gmail.com>, broonie@kernel.org,
+        robh+dt@kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     wells.lu@sunplus.com, lh.kuo@sunplus.com
+References: <b8a94fbfcab68b1279b09b6297099310c209927b.1644198244.git.lhjeff911@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <b8a94fbfcab68b1279b09b6297099310c209927b.1644198244.git.lhjeff911@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: nitirawa)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id E43E8C43639;
-        Mon,  7 Feb 2022 15:44:49 +0000 (UTC)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Mon, 07 Feb 2022 21:14:49 +0530
-From:   nitirawa@codeaurora.org
-To:     Vidya Sagar <vidyas@nvidia.com>, Keith Busch <kbusch@kernel.org>
-Cc:     Keith Busch <kbusch@kernel.org>, rafael.j.wysocki@intel.com,
-        hch@lst.de, bhelgaas@google.com, mmaddireddy@nvidia.com,
-        kthota@nvidia.com, sagar.tv@gmail.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: Query related to shutting down NVMe during system suspend
-In-Reply-To: <cc0b6768-5722-2277-6e51-75baf3311dc5@nvidia.com>
-References: <65b836cd-8d5d-b9c2-eb8f-2ee3ef46112b@nvidia.com>
- <20220201163054.GA2838889@dhcp-10-100-145-180.wdc.com>
- <0bd9fdc1-99d4-1c59-7343-3708b331b2b5@nvidia.com>
- <24710253b2e34dfdd81ebe1f46b84652@codeaurora.org>
- <cc0b6768-5722-2277-6e51-75baf3311dc5@nvidia.com>
-Message-ID: <c2255367927729ee00c42ae4148c1301@codeaurora.org>
-X-Sender: nitirawa@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-07 17:41, Vidya Sagar wrote:
-> On 2/7/2022 4:27 PM, nitirawa@codeaurora.org wrote:
->> External email: Use caution opening links or attachments
->> 
->> 
->> On 2022-02-01 22:28, Vidya Sagar wrote:
->>> Thanks for the super quick reply and I couldn't agree more.
->>> 
->>> On 2/1/2022 10:00 PM, Keith Busch wrote:
->>>> External email: Use caution opening links or attachments
->>>> 
->>>> 
->>>> On Tue, Feb 01, 2022 at 09:52:28PM +0530, Vidya Sagar wrote:
->>>>> Hi Rafael & Christoph,
->>>>> My query is regarding the comment and the code that follows after 
->>>>> it
->>>>> at
->>>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/nvme/host/pci.c?h=v5.17-rc2#n3243 
->>>>> What I understood from it is that, there is an underlying 
->>>>> assumption
->>>>> that the power to the devices is not removed during the suspend 
->>>>> call.
->>>>> In the case of device-tree based platforms like Tegra194, power is
->>>>> indeed removed to the devices during suspend-resume process. Hence,
->>>>> the
->>>>> NVMe devices need to be taken through the shutdown path 
->>>>> irrespective
->>>>> of
->>>>> whether the ASPM states are enabled or not.
->>>>> I would like to hear from you the best method to follow to achieve
->>>>> this.
->>>> 
->>>> Since platform makers can't converge on how to let a driver know 
->>>> what
->>>> it's supposed to do, I suggest we default to the simple shutdown
->>>> suspend
->>>> all the time. We can add a module parameter to let a user request 
->>>> nvme
->>>> power management if they really want it. No matter what we do here,
->>>> someone is going to complain, but at least simple shutdown is 
->>>> safe...
->>>> 
->> 
->> Hi Vidya,
->> 
->> Are you planning to add module parameter based on above discussion. I
->> see similar behaviour even with  qualcomm platform.
->> 
->> [  119.994092] nvme nvme0: I/O 9 QID 0 timeout, reset controller
->> [  120.006612] PM: dpm_run_callback(): pci_pm_resume+0x0/0xe4 returns
->> -16
->> [  120.013502] nvme 0001:01:00.0: PM: pci_pm_resume+0x0/0xe4 returned
->> -16 after 60059958 usecs
->> [  120.022239] nvme 0001:01:00.0: PM: failed to resume async: error 
->> -16
-> Not really.
-> Keith Busch has already pushed a patch to fix it in a different way
-> and issue is resolved (on Tegra platforms) with that patch.
-> https://lore.kernel.org/all/20220201165006.3074615-1-kbusch@kernel.org/
-> is that patch.
+On 07/02/2022 02:46, Li-hao Kuo wrote:
+> Remove the include path and modify parameters for fix error for bt binding test
+
+1. No trailing dots in commit title. Space after each ":".
+2. s/bt/dt/
+3. Wrap the commit msg:
+https://elixir.bootlin.com/linux/v5.13/source/Documentation/process/submitting-patches.rst#L124
+
+4. What is exactly the error you are fixing?
+
 > 
-> Thanks & Regards,
-> Vidya Sagar
->> 
->> Regards,
->> Nitin
->> 
->> 
+> Fixes: a708078eeb99  ("spi: Add Sunplus SP7021 schema")
 
-Thanks Vidya for pointing out the patch . This patch worked for us as 
-well.
-@keith - Please can we get this merged .
+5. Only one space after SHA.
 
-Regards,
-Nitin
+6. Wasn't it reported to you? Looks like it was, so you need to add
+"Reported-by" tag:
+https://lore.kernel.org/all/CAL_JsqKwg_bzJmehTG8tR2cpr+HwwvpF_cpoESidZouc_SpKcQ@mail.gmail.com/
+
+> Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml b/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
+> index 38589fd..298eac2 100644
+> --- a/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
+> +++ b/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
+> @@ -59,8 +59,6 @@ unevaluatedProperties: false
+>  
+>  examples:
+>    - |
+> -    #include <dt-bindings/clock/sp-sp7021.h>
+> -    #include <dt-bindings/reset/sp-sp7021.h>
+>      #include <dt-bindings/interrupt-controller/irq.h>
+>      spi@9C002D80 {
+>          compatible = "sunplus,sp7021-spi";
+> @@ -73,8 +71,8 @@ examples:
+>          interrupts = <144 IRQ_TYPE_LEVEL_HIGH>,
+>                       <146 IRQ_TYPE_LEVEL_HIGH>,
+>                       <145 IRQ_TYPE_LEVEL_HIGH>;
+> -        clocks = <&clkc SPI_COMBO_0>;
+> -        resets = <&rstc RST_SPI_COMBO_0>;
+> +        clocks = <&clkc 0x32>;
+> +        resets = <&rstc 0x22>;
+>          pinctrl-names = "default";
+>          pinctrl-0 = <&pins_spi0>;
+>      };
+
+
+Best regards,
+Krzysztof

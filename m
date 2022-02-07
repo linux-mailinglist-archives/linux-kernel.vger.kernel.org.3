@@ -2,157 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7DAD4ACD2D
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:07:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AF274ACCEF
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:06:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344722AbiBHBDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 20:03:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35674 "EHLO
+        id S1344891AbiBHBEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 20:04:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245472AbiBGXDb (ORCPT
+        with ESMTP id S245533AbiBGXJk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 18:03:31 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0254C06109E
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 15:03:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644275010; x=1675811010;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ncFZ3GgiFenQLT9iFwTMGx9ZJmzYJBlebX18EhhOoaA=;
-  b=k5/Xj5dckNbdlxHhvR554H8HV0oJMNJo4BCJSVyWKuKyv6v7uZQr21vw
-   QIiNtk9O+gkSj59NS/guahtkY6U2FNaKWmsezBQxw93scfV9G1/dsK9Wh
-   AJXnMp6arGuMy4K4B/C/wTTwv3QSseaTb9h7BvtdYxiw9JMYEKg0/fTQO
-   cx4ZxI0yyXN00PYZv1xoSubrRlB/CcabQ81zQfLLeAnFHvhIx5Xh1BdSc
-   SEPKHaHHGp75v/KPl1VPkAq4OlnfCIHYKYLXZ5dqof952DF5dd2QELr/E
-   fKFs9oxj5GSjYbNlcMB3upR8Tj17j16PnsxaIjrfkoUj9P4gyHbyZ+K3p
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="229475024"
-X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
-   d="scan'208";a="229475024"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 15:03:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
-   d="scan'208";a="540324104"
-Received: from otcwcpicx3.sc.intel.com ([172.25.55.73])
-  by orsmga008.jf.intel.com with ESMTP; 07 Feb 2022 15:03:07 -0800
-From:   Fenghua Yu <fenghua.yu@intel.com>
-To:     "Thomas Gleixner" <tglx@linutronix.de>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        "Andy Lutomirski" <luto@kernel.org>,
-        "Tony Luck" <tony.luck@intel.com>,
-        "Lu Baolu" <baolu.lu@linux.intel.com>,
-        "Joerg Roedel" <joro@8bytes.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        "Jacob Pan" <jacob.jun.pan@linux.intel.com>,
-        "Ashok Raj" <ashok.raj@intel.com>,
-        "Ravi V Shankar" <ravi.v.shankar@intel.com>
-Cc:     iommu@lists.linux-foundation.org, "x86" <x86@kernel.org>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>,
-        Fenghua Yu <fenghua.yu@intel.com>
-Subject: [PATCH v4 11/11] docs: x86: Change documentation for SVA (Shared Virtual Addressing)
-Date:   Mon,  7 Feb 2022 15:02:54 -0800
-Message-Id: <20220207230254.3342514-12-fenghua.yu@intel.com>
+        Mon, 7 Feb 2022 18:09:40 -0500
+X-Greylist: delayed 80 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 15:09:39 PST
+Received: from smtprelay05.ispgateway.de (smtprelay05.ispgateway.de [80.67.18.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6EFC061355;
+        Mon,  7 Feb 2022 15:09:39 -0800 (PST)
+Received: from [92.206.166.137] (helo=note-book.lan)
+        by smtprelay05.ispgateway.de with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <git@apitzsch.eu>)
+        id 1nHD6s-0001JC-Pd; Tue, 08 Feb 2022 00:07:50 +0100
+From:   =?UTF-8?q?Andr=C3=A9=20Apitzsch?= <git@apitzsch.eu>
+To:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-leds@vger.kernel.org, Pavel Machek <pavel@ucw.cz>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        =?UTF-8?q?Andr=C3=A9=20Apitzsch?= <git@apitzsch.eu>
+Subject: [PATCH v2 0/3] Add support for ocp8110 flash
+Date:   Tue,  8 Feb 2022 00:06:35 +0100
+Message-Id: <20220207230638.56730-1-git@apitzsch.eu>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207230254.3342514-1-fenghua.yu@intel.com>
-References: <20220207230254.3342514-1-fenghua.yu@intel.com>
+In-Reply-To: <20211117091405.7412-1-git@apitzsch.eu>
+References: <20211117091405.7412-1-git@apitzsch.eu>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Df-Sender: YW5kcmVAYXBpdHpzY2guZXU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since allocating, freeing and fixing up PASID are changed, the
-documentation is updated to reflect the changes.
+The led is used as front flash of BQ Aquaris M5.
 
-Originally-by: Ashok Raj <ashok.raj@intel.com>
-Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
-Reviewed-by: Tony Luck <tony.luck@intel.com>
----
-v3:
-- Remove PASID refcount description (Thomas).
+https://github.com/bq/aquaris-M5/blob/901d0b2ca05c0b0af49786fb548eb0fc289867ff/arch/arm/boot/dts/qcom/piccolo-msm8939-camera-sensor-qrd.dtsi#L16
 
-v2:
-- Update life cycle info (Tony and Thomas).
-- Update initial PASID value to INVALID_IOASID on fork().
+v2: Reorder patches
 
- Documentation/x86/sva.rst | 53 ++++++++++++++++++++++++++++++---------
- 1 file changed, 41 insertions(+), 12 deletions(-)
+André Apitzsch (3):
+  dt-bindings: vendor-prefixes: Add ocs prefix
+  dt-bindings: leds: sgm3140: Document ocp8110 compatible
+  leds: sgm3140: Add ocs,ocp8110 compatible
 
-diff --git a/Documentation/x86/sva.rst b/Documentation/x86/sva.rst
-index 076efd51ef1f..1a22020735a3 100644
---- a/Documentation/x86/sva.rst
-+++ b/Documentation/x86/sva.rst
-@@ -104,18 +104,47 @@ The MSR must be configured on each logical CPU before any application
- thread can interact with a device. Threads that belong to the same
- process share the same page tables, thus the same MSR value.
- 
--PASID is cleared when a process is created. The PASID allocation and MSR
--programming may occur long after a process and its threads have been created.
--One thread must call iommu_sva_bind_device() to allocate the PASID for the
--process. If a thread uses ENQCMD without the MSR first being populated, a #GP
--will be raised. The kernel will update the PASID MSR with the PASID for all
--threads in the process. A single process PASID can be used simultaneously
--with multiple devices since they all share the same address space.
--
--One thread can call iommu_sva_unbind_device() to free the allocated PASID.
--The kernel will clear the PASID MSR for all threads belonging to the process.
--
--New threads inherit the MSR value from the parent.
-+PASID Life Cycle Management
-+==========================
-+
-+PASID is initialized as INVALID_IOASID (-1) when a process is created.
-+
-+Only processes that access SVA-capable devices need to have a PASID
-+allocated. This allocation happens when a process opens/binds an SVA-capable
-+device but finds no PASID for this process. Subsequent binds of the same, or
-+other devices will share the same PASID.
-+
-+Although the PASID is allocated to the process by opening a device,
-+it is not active in any of the threads of that process. It's loaded to the
-+IA32_PASID MSR lazily when a thread tries to submit a work descriptor
-+to a device using the ENQCMD.
-+
-+That first access will trigger a #GP fault because the IA32_PASID MSR
-+has not been initialized with the PASID value assigned to the process
-+when the device was opened. The Linux #GP handler notes that a PASID has
-+been allocated for the process, and so initializes the IA32_PASID MSR
-+and returns so that the ENQCMD instruction is re-executed.
-+
-+On fork(2) or exec(2) the PASID is removed from the process as it no
-+longer has the same address space that it had when the device was opened.
-+
-+On clone(2) the new task shares the same address space, so will be
-+able to use the PASID allocated to the process. The IA32_PASID is not
-+preemptively initialized as the PASID value might not be allocated yet or
-+the kernel does not know whether this thread is going to access the device
-+and the cleared IA32_PASID MSR reduces context switch overhead by xstate
-+init optimization. Since #GP faults have to be handled on any threads that
-+were created before the PASID was assigned to the mm of the process, newly
-+created threads might as well be treated in a consistent way.
-+
-+Due to complexity of freeing the PASID and clearing all IA32_PASID MSRs in
-+all threads in unbind, free the PASID lazily only on mm exit.
-+
-+If a process does a close(2) of the device file descriptor and munmap(2)
-+of the device MMIO portal, then the driver will unbind the device. The
-+PASID is still marked VALID in the PASID_MSR for any threads in the
-+process that accessed the device. But this is harmless as without the
-+MMIO portal they cannot submit new work to the device.
- 
- Relationships
- =============
+ Documentation/devicetree/bindings/leds/leds-sgm3140.yaml | 4 +++-
+ Documentation/devicetree/bindings/vendor-prefixes.yaml   | 2 ++
+ drivers/leds/flash/leds-sgm3140.c                        | 1 +
+ 3 files changed, 6 insertions(+), 1 deletion(-)
+
+
+base-commit: 2ade8eef993c37a2a43e51a9b1f6c25509a2acce
 -- 
 2.35.1
 

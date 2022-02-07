@@ -2,78 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D34A4ACD03
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:07:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 197444ACD5C
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:08:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345154AbiBHBEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 20:04:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40334 "EHLO
+        id S1345176AbiBHBEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 20:04:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238617AbiBGXX5 (ORCPT
+        with ESMTP id S241127AbiBGX1c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 18:23:57 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB4E3C061355;
-        Mon,  7 Feb 2022 15:23:56 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id d9-20020a17090a498900b001b8bb1d00e7so806273pjh.3;
-        Mon, 07 Feb 2022 15:23:56 -0800 (PST)
+        Mon, 7 Feb 2022 18:27:32 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AFD5C061355
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 15:27:32 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id e6so15696616pfc.7
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 15:27:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Q4NGVfnZcTyTN7uyU45OoCJgZ8qSuaDFnbB0+R0yaoU=;
-        b=J9okMS8ibcD1d6kJ2AV43EegsSK00dpFoJfenatFVPg3mCkxf6l0+R3KeKcPlGYez+
-         vQgnpulyimR7MCNqt+YXLjIlKV4LHj03g6aGZoMAqs4bcns2qnl0gaUP59bcSVXBHzL/
-         tkWNYc/PKe/hrSnSZRyBEYR6Wee615vJTjgOERc241bmGaQY/4EwN6uvacVIbTKN0klS
-         5BhbvzJklY71KS1pj+/lXpLopOIyPTqGIH+/MK5NP9ySZANtgrTtCeOQa0+lcWicw2bl
-         loIsuUo2QSUSZEaofaom3wAidnQ0/QA2nR+U50syrh/GwTkTFBTgyzcIFCHW/RGcL2PE
-         asmA==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=KVQbHmXJXEUUK9WaxnXa944qWSKejG3/VlU2/JcjjTQ=;
+        b=oigxKzpVr6LQrOlqPqsrESAfYtNuXliH+BIwZnOzZdGHwV6JN4vZYwBvhFAyWakLet
+         r6cH6XyH7MipymQrkM8nQOGqn5dPjcKj5FOsJIcZBCruwbtmmh7UCyMwe0iY8zVL92Rt
+         ObpIND3a1D/zgCy4wnxvKwi31vmeVJO5ZqSj0lxWR/mS+eBBD9kL1fIx5JpSP8OgMpX0
+         cpf09haXReN764dHKN+DzKluMsgogKinieHuIZAShW6wCvivRn4pkmTMiuYe05mQLeKv
+         eGWDb2sJAxBw3olVoqAiX0WFiFcf0X+mRVe9qr8XdXisQeOwH4aPY9aYq9Mz6mfoTAQ7
+         bh3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Q4NGVfnZcTyTN7uyU45OoCJgZ8qSuaDFnbB0+R0yaoU=;
-        b=qZ26S2aPK/BFav5nuPedhnca6DgASy6QdZEYR81n2BJcE1lyukuN6Bq6HqvBTUVdU+
-         87nqHZsi0gPzq0G9QYFKwyIHw7RPS7HHBm/Cjx//etupKbahJn5CaeiKFzSod5Kjzh1b
-         18RRHJqTD1GHF8Km8l66MB3iDyMDnmPKPbMadrrdCF2dX7+gH3bxn9d74aEkhCfWRYyy
-         ySjcuywNt/RFnoU3ZK1HSrXogfeCSqYzJAVhl0JWYbdlIU7aQRGajrhPvUkLEMRoSXnX
-         IvkrIdKuiNm6nyJQkKbnYmUq+drThEAuQhlCPN/dGf4LFaFiCjaespVO2DI25WlkTEAQ
-         FvGQ==
-X-Gm-Message-State: AOAM530nEOUT1JlKBTvmBSdLyS0LujuZqlXJKfPoFhrjvwsPbH5iEBaB
-        /ZvuJ01AsubpkZ3CIkfuS4A=
-X-Google-Smtp-Source: ABdhPJzPi+18QP61QkBD3QrQXZf2jGk9fBmgd2jZB23uHQUcVAWcdNe2AYk0ZeYIUsujebh3SGrVlQ==
-X-Received: by 2002:a17:902:e545:: with SMTP id n5mr1855955plf.129.1644276236236;
-        Mon, 07 Feb 2022 15:23:56 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id md9sm429343pjb.6.2022.02.07.15.23.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Feb 2022 15:23:55 -0800 (PST)
-Subject: Re: [PATCH v3] serial: 8250_bcm2835aux: Add ACPI support
-To:     Adrien Thierry <athierry@redhat.com>, linux-serial@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Jeremy Linton <jeremy.linton@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com
-References: <20220207232129.402882-1-athierry@redhat.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <8b19f824-cd4f-10fc-c13b-0b177324294c@gmail.com>
-Date:   Mon, 7 Feb 2022 15:23:51 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=KVQbHmXJXEUUK9WaxnXa944qWSKejG3/VlU2/JcjjTQ=;
+        b=YCiwd0rwZNZMmNClQ49vRzBR7tqeF1YO6r64B0IhGSsrFgxFoh18zZfSCCCzEGrAlG
+         awJinZAIlCa9Zb1jvNDuk5DzFFwcJ4RVGE1Ys8qp2hZX776SyrKdJPsPHIwvHXsXKicy
+         /wUXzs4RZF/EGVueI59LVdEvnLn8XEBoS2gaacStpF7da1c5OOiFDobUKw0LykYKWhp5
+         cYzocXLMMDJrKHD/WostIGjOSBDVkB7wWePj0SOMp/4RrK8ktsFqpkB0+xQ+vwLO75c8
+         FQpczIhmrivTPfJBQ4sd51Fx3sIk6pS991AlHSzwyUSTIawq9/eIrN9ip/qgr6N+dWd7
+         ujrA==
+X-Gm-Message-State: AOAM532GLlVaGdXDFdPc88Fhf2/stQ/ZgXkLNz4FQIoLg/XNg4YyXcCa
+        r2b/hARrO+piKU3Bbl3yj59LFw==
+X-Google-Smtp-Source: ABdhPJxldfR2n4p4M6GdeB1cOtw9U8ns9csEpIPbsw4cgGUQ5XO6H4W53T8JzXmu6uvhJD0dj8eBPA==
+X-Received: by 2002:a63:ee01:: with SMTP id e1mr1365492pgi.508.1644276451628;
+        Mon, 07 Feb 2022 15:27:31 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id k9sm12415190pfi.134.2022.02.07.15.27.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Feb 2022 15:27:31 -0800 (PST)
+Date:   Mon, 7 Feb 2022 23:27:27 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     David Matlack <dmatlack@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, vkuznets@redhat.com
+Subject: Re: [PATCH 00/23] KVM: MMU: MMU role refactoring
+Message-ID: <YgGq31edopd6RMts@google.com>
+References: <20220204115718.14934-1-pbonzini@redhat.com>
+ <YgGmgMMR0dBmjW86@google.com>
 MIME-Version: 1.0
-In-Reply-To: <20220207232129.402882-1-athierry@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YgGmgMMR0dBmjW86@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,15 +72,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/7/22 3:21 PM, Adrien Thierry wrote:
-> Add ACPI support to 8250_bcm2835aux driver. This makes it possible to
-> use the miniuart on the Raspberry Pi with the tianocore/edk2 UEFI
-> firmware.
+On Mon, Feb 07, 2022, David Matlack wrote:
+> On Fri, Feb 04, 2022 at 06:56:55AM -0500, Paolo Bonzini wrote:
+> > The TDP MMU has a performance regression compared to the legacy
+> > MMU when CR0 changes often.  This was reported for the grsecurity
+> > kernel, which uses CR0.WP to implement kernel W^X.  In that case,
+> > each change to CR0.WP unloads the MMU and causes a lot of unnecessary
+> > work.  When running nested, this can even cause the L1 to hardly
+> > make progress, as the L0 hypervisor it is overwhelmed by the amount
+> > of MMU work that is needed.
+> > 
+> > The root cause of the issue is that the "MMU role" in KVM is a mess
+> > that mixes the CPU setup (CR0/CR4/EFER, SMM, guest mode, etc.)
+> > and the shadow page table format.  Whenever something is different
+> > between the MMU and the CPU, it is stored as an extra field in struct
+> > kvm_mmu---and for extra bonus complication, sometimes the same thing
+> > is stored in both the role and an extra field.
+> > 
+> > So, this is the "no functional change intended" part of the changes
+> > required to fix the performance regression.  It separates neatly
+> > the shadow page table format ("MMU role") from the guest page table
+> > format ("CPU role"), and removes the duplicate fields.
 > 
-> Signed-off-by: Adrien Thierry <athierry@redhat.com>
+> What do you think about calling this the guest_role instead of cpu_role?
+> There is a bit of a precedent for using "guest" instead of "cpu" already
+> for this type of concept (e.g. guest_walker), and I find it more
+> intuitive.
 
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Haven't looked at the series yet, but I'd prefer not to use guest_role, it's
+too similar to is_guest_mode() and kvm_mmu_role.guest_mode.  E.g. we'd end up with
 
-Looks a lot better, thanks!
--- 
-Florian
+  static union kvm_mmu_role kvm_calc_guest_role(struct kvm_vcpu *vcpu,
+  					      const struct kvm_mmu_role_regs *regs)
+  {
+	union kvm_mmu_role role = {0};
+
+	role.base.access = ACC_ALL;
+	role.base.smm = is_smm(vcpu);
+	role.base.guest_mode = is_guest_mode(vcpu);
+	role.base.direct = !____is_cr0_pg(regs);
+
+	...
+  }
+
+and possibly
+
+	if (guest_role.guest_mode)
+		...
+
+which would be quite messy.  Maybe vcpu_role if cpu_role isn't intuitive?

@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECDF74ABBBC
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:39:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 756E54AB9CD
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:25:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237537AbiBGLaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:30:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34702 "EHLO
+        id S1380953AbiBGLQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:16:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383564AbiBGLW6 (ORCPT
+        with ESMTP id S1379780AbiBGLQV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:22:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B8CBC043181;
-        Mon,  7 Feb 2022 03:22:57 -0800 (PST)
+        Mon, 7 Feb 2022 06:16:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17047C043181;
+        Mon,  7 Feb 2022 03:16:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 34F6DB80EC3;
-        Mon,  7 Feb 2022 11:22:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 612E2C004E1;
-        Mon,  7 Feb 2022 11:22:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 97B426126D;
+        Mon,  7 Feb 2022 11:16:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 776FAC004E1;
+        Mon,  7 Feb 2022 11:16:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232975;
-        bh=cpJn+EIkjNPDv9SUqXa9/2HaFKcFbCOvxSlkiqMAxbU=;
+        s=korg; t=1644232579;
+        bh=PkDSCHfSoW1Otd51STQdopensaiCHNHWwutyrZDS9Gg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1ejXNo88Zgswkt7UQmB7mEWOX63s2JJbrPlnWuGjb8mSfkQ90RjXiYZaoOGefWsDP
-         DE+zGZJn9LAf9oMHw3qqwAZ41zlldQnPJedi1TsRI7sB5+zO9WDs0Kb3c3M5fbJnT6
-         2VlkAHoA274IzNIapruAcHBXRQjHvZurSPdmw7hk=
+        b=e2Fg7AbEEqTd9QFmm9eGTkbxg7x8J4PdRTd26iGVEeLV7QwI/umqnvH1k4OL8+0Hy
+         2fZXaIF1feL3+BckuKlTBclNWDgYPUml5cbM7Djky2gEDnu8ACwWfzl5iOUiMR/etq
+         WFLPEIQAO6E6KnnXMnoSA8cOP12clVJb1t9Uzd94=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lang Yu <lang.yu@amd.com>,
-        David Hildenbrand <david@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.10 19/74] mm/kmemleak: avoid scanning potential huge holes
+        stable@vger.kernel.org, Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Richard Guy Briggs <rgb@redhat.com>,
+        Paul Moore <paul@paul-moore.com>
+Subject: [PATCH 4.19 54/86] audit: improve audit queue handling when "audit=1" on cmdline
 Date:   Mon,  7 Feb 2022 12:06:17 +0100
-Message-Id: <20220207103757.867500990@linuxfoundation.org>
+Message-Id: <20220207103759.334877202@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103757.232676988@linuxfoundation.org>
-References: <20220207103757.232676988@linuxfoundation.org>
+In-Reply-To: <20220207103757.550973048@linuxfoundation.org>
+References: <20220207103757.550973048@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,121 +55,207 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lang Yu <lang.yu@amd.com>
+From: Paul Moore <paul@paul-moore.com>
 
-commit c10a0f877fe007021d70f9cada240f42adc2b5db upstream.
+commit f26d04331360d42dbd6b58448bd98e4edbfbe1c5 upstream.
 
-When using devm_request_free_mem_region() and devm_memremap_pages() to
-add ZONE_DEVICE memory, if requested free mem region's end pfn were
-huge(e.g., 0x400000000), the node_end_pfn() will be also huge (see
-move_pfn_range_to_zone()).  Thus it creates a huge hole between
-node_start_pfn() and node_end_pfn().
+When an admin enables audit at early boot via the "audit=1" kernel
+command line the audit queue behavior is slightly different; the
+audit subsystem goes to greater lengths to avoid dropping records,
+which unfortunately can result in problems when the audit daemon is
+forcibly stopped for an extended period of time.
 
-We found on some AMD APUs, amdkfd requested such a free mem region and
-created a huge hole.  In such a case, following code snippet was just
-doing busy test_bit() looping on the huge hole.
+This patch makes a number of changes designed to improve the audit
+queuing behavior so that leaving the audit daemon in a stopped state
+for an extended period does not cause a significant impact to the
+system.
 
-  for (pfn = start_pfn; pfn < end_pfn; pfn++) {
-	struct page *page = pfn_to_online_page(pfn);
-		if (!page)
-			continue;
-	...
-  }
+- kauditd_send_queue() is now limited to looping through the
+  passed queue only once per call.  This not only prevents the
+  function from looping indefinitely when records are returned
+  to the current queue, it also allows any recovery handling in
+  kauditd_thread() to take place when kauditd_send_queue()
+  returns.
 
-So we got a soft lockup:
+- Transient netlink send errors seen as -EAGAIN now cause the
+  record to be returned to the retry queue instead of going to
+  the hold queue.  The intention of the hold queue is to store,
+  perhaps for an extended period of time, the events which led
+  up to the audit daemon going offline.  The retry queue remains
+  a temporary queue intended to protect against transient issues
+  between the kernel and the audit daemon.
 
-  watchdog: BUG: soft lockup - CPU#6 stuck for 26s! [bash:1221]
-  CPU: 6 PID: 1221 Comm: bash Not tainted 5.15.0-custom #1
-  RIP: 0010:pfn_to_online_page+0x5/0xd0
-  Call Trace:
-    ? kmemleak_scan+0x16a/0x440
-    kmemleak_write+0x306/0x3a0
-    ? common_file_perm+0x72/0x170
-    full_proxy_write+0x5c/0x90
-    vfs_write+0xb9/0x260
-    ksys_write+0x67/0xe0
-    __x64_sys_write+0x1a/0x20
-    do_syscall_64+0x3b/0xc0
-    entry_SYSCALL_64_after_hwframe+0x44/0xae
+- The retry queue is now limited by the audit_backlog_limit
+  setting, the same as the other queues.  This allows admins
+  to bound the size of all of the audit queues on the system.
 
-I did some tests with the patch.
+- kauditd_rehold_skb() now returns records to the end of the
+  hold queue to ensure ordering is preserved in the face of
+  recent changes to kauditd_send_queue().
 
-(1) amdgpu module unloaded
-
-before the patch:
-
-  real    0m0.976s
-  user    0m0.000s
-  sys     0m0.968s
-
-after the patch:
-
-  real    0m0.981s
-  user    0m0.000s
-  sys     0m0.973s
-
-(2) amdgpu module loaded
-
-before the patch:
-
-  real    0m35.365s
-  user    0m0.000s
-  sys     0m35.354s
-
-after the patch:
-
-  real    0m1.049s
-  user    0m0.000s
-  sys     0m1.042s
-
-Link: https://lkml.kernel.org/r/20211108140029.721144-1-lang.yu@amd.com
-Signed-off-by: Lang Yu <lang.yu@amd.com>
-Acked-by: David Hildenbrand <david@redhat.com>
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Oscar Salvador <osalvador@suse.de>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: stable@vger.kernel.org
+Fixes: 5b52330bbfe63 ("audit: fix auditd/kernel connection state tracking")
+Fixes: f4b3ee3c85551 ("audit: improve robustness of the audit queue handling")
+Reported-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+Tested-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+Reviewed-by: Richard Guy Briggs <rgb@redhat.com>
+Signed-off-by: Paul Moore <paul@paul-moore.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/kmemleak.c |   13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+ kernel/audit.c |   62 +++++++++++++++++++++++++++++++++++++++------------------
+ 1 file changed, 43 insertions(+), 19 deletions(-)
 
---- a/mm/kmemleak.c
-+++ b/mm/kmemleak.c
-@@ -1401,7 +1401,8 @@ static void kmemleak_scan(void)
+--- a/kernel/audit.c
++++ b/kernel/audit.c
+@@ -549,20 +549,22 @@ static void kauditd_printk_skb(struct sk
+ /**
+  * kauditd_rehold_skb - Handle a audit record send failure in the hold queue
+  * @skb: audit record
++ * @error: error code (unused)
+  *
+  * Description:
+  * This should only be used by the kauditd_thread when it fails to flush the
+  * hold queue.
+  */
+-static void kauditd_rehold_skb(struct sk_buff *skb)
++static void kauditd_rehold_skb(struct sk_buff *skb, __always_unused int error)
  {
- 	unsigned long flags;
- 	struct kmemleak_object *object;
--	int i;
-+	struct zone *zone;
-+	int __maybe_unused i;
- 	int new_leaks = 0;
+-	/* put the record back in the queue at the same place */
+-	skb_queue_head(&audit_hold_queue, skb);
++	/* put the record back in the queue */
++	skb_queue_tail(&audit_hold_queue, skb);
+ }
  
- 	jiffies_last_scan = jiffies;
-@@ -1441,9 +1442,9 @@ static void kmemleak_scan(void)
- 	 * Struct page scanning for each node.
- 	 */
- 	get_online_mems();
--	for_each_online_node(i) {
--		unsigned long start_pfn = node_start_pfn(i);
--		unsigned long end_pfn = node_end_pfn(i);
-+	for_each_populated_zone(zone) {
-+		unsigned long start_pfn = zone->zone_start_pfn;
-+		unsigned long end_pfn = zone_end_pfn(zone);
- 		unsigned long pfn;
+ /**
+  * kauditd_hold_skb - Queue an audit record, waiting for auditd
+  * @skb: audit record
++ * @error: error code
+  *
+  * Description:
+  * Queue the audit record, waiting for an instance of auditd.  When this
+@@ -572,19 +574,31 @@ static void kauditd_rehold_skb(struct sk
+  * and queue it, if we have room.  If we want to hold on to the record, but we
+  * don't have room, record a record lost message.
+  */
+-static void kauditd_hold_skb(struct sk_buff *skb)
++static void kauditd_hold_skb(struct sk_buff *skb, int error)
+ {
+ 	/* at this point it is uncertain if we will ever send this to auditd so
+ 	 * try to send the message via printk before we go any further */
+ 	kauditd_printk_skb(skb);
  
- 		for (pfn = start_pfn; pfn < end_pfn; pfn++) {
-@@ -1452,8 +1453,8 @@ static void kmemleak_scan(void)
- 			if (!page)
- 				continue;
+ 	/* can we just silently drop the message? */
+-	if (!audit_default) {
+-		kfree_skb(skb);
+-		return;
++	if (!audit_default)
++		goto drop;
++
++	/* the hold queue is only for when the daemon goes away completely,
++	 * not -EAGAIN failures; if we are in a -EAGAIN state requeue the
++	 * record on the retry queue unless it's full, in which case drop it
++	 */
++	if (error == -EAGAIN) {
++		if (!audit_backlog_limit ||
++		    skb_queue_len(&audit_retry_queue) < audit_backlog_limit) {
++			skb_queue_tail(&audit_retry_queue, skb);
++			return;
++		}
++		audit_log_lost("kauditd retry queue overflow");
++		goto drop;
+ 	}
  
--			/* only scan pages belonging to this node */
--			if (page_to_nid(page) != i)
-+			/* only scan pages belonging to this zone */
-+			if (page_zone(page) != zone)
- 				continue;
- 			/* only scan if page is in use */
- 			if (page_count(page) == 0)
+-	/* if we have room, queue the message */
++	/* if we have room in the hold queue, queue the message */
+ 	if (!audit_backlog_limit ||
+ 	    skb_queue_len(&audit_hold_queue) < audit_backlog_limit) {
+ 		skb_queue_tail(&audit_hold_queue, skb);
+@@ -593,24 +607,32 @@ static void kauditd_hold_skb(struct sk_b
+ 
+ 	/* we have no other options - drop the message */
+ 	audit_log_lost("kauditd hold queue overflow");
++drop:
+ 	kfree_skb(skb);
+ }
+ 
+ /**
+  * kauditd_retry_skb - Queue an audit record, attempt to send again to auditd
+  * @skb: audit record
++ * @error: error code (unused)
+  *
+  * Description:
+  * Not as serious as kauditd_hold_skb() as we still have a connected auditd,
+  * but for some reason we are having problems sending it audit records so
+  * queue the given record and attempt to resend.
+  */
+-static void kauditd_retry_skb(struct sk_buff *skb)
++static void kauditd_retry_skb(struct sk_buff *skb, __always_unused int error)
+ {
+-	/* NOTE: because records should only live in the retry queue for a
+-	 * short period of time, before either being sent or moved to the hold
+-	 * queue, we don't currently enforce a limit on this queue */
+-	skb_queue_tail(&audit_retry_queue, skb);
++	if (!audit_backlog_limit ||
++	    skb_queue_len(&audit_retry_queue) < audit_backlog_limit) {
++		skb_queue_tail(&audit_retry_queue, skb);
++		return;
++	}
++
++	/* we have to drop the record, send it via printk as a last effort */
++	kauditd_printk_skb(skb);
++	audit_log_lost("kauditd retry queue overflow");
++	kfree_skb(skb);
+ }
+ 
+ /**
+@@ -648,7 +670,7 @@ static void auditd_reset(const struct au
+ 	/* flush the retry queue to the hold queue, but don't touch the main
+ 	 * queue since we need to process that normally for multicast */
+ 	while ((skb = skb_dequeue(&audit_retry_queue)))
+-		kauditd_hold_skb(skb);
++		kauditd_hold_skb(skb, -ECONNREFUSED);
+ }
+ 
+ /**
+@@ -722,16 +744,18 @@ static int kauditd_send_queue(struct soc
+ 			      struct sk_buff_head *queue,
+ 			      unsigned int retry_limit,
+ 			      void (*skb_hook)(struct sk_buff *skb),
+-			      void (*err_hook)(struct sk_buff *skb))
++			      void (*err_hook)(struct sk_buff *skb, int error))
+ {
+ 	int rc = 0;
+-	struct sk_buff *skb;
++	struct sk_buff *skb = NULL;
++	struct sk_buff *skb_tail;
+ 	unsigned int failed = 0;
+ 
+ 	/* NOTE: kauditd_thread takes care of all our locking, we just use
+ 	 *       the netlink info passed to us (e.g. sk and portid) */
+ 
+-	while ((skb = skb_dequeue(queue))) {
++	skb_tail = skb_peek_tail(queue);
++	while ((skb != skb_tail) && (skb = skb_dequeue(queue))) {
+ 		/* call the skb_hook for each skb we touch */
+ 		if (skb_hook)
+ 			(*skb_hook)(skb);
+@@ -739,7 +763,7 @@ static int kauditd_send_queue(struct soc
+ 		/* can we send to anyone via unicast? */
+ 		if (!sk) {
+ 			if (err_hook)
+-				(*err_hook)(skb);
++				(*err_hook)(skb, -ECONNREFUSED);
+ 			continue;
+ 		}
+ 
+@@ -753,7 +777,7 @@ retry:
+ 			    rc == -ECONNREFUSED || rc == -EPERM) {
+ 				sk = NULL;
+ 				if (err_hook)
+-					(*err_hook)(skb);
++					(*err_hook)(skb, rc);
+ 				if (rc == -EAGAIN)
+ 					rc = 0;
+ 				/* continue to drain the queue */
 
 

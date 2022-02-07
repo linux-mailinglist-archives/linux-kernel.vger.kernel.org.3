@@ -2,100 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 545B24ABF12
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 14:23:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B13114ABF74
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 14:25:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356420AbiBGNLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 08:11:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58580 "EHLO
+        id S1448655AbiBGNMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 08:12:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1447088AbiBGMxS (ORCPT
+        with ESMTP id S1442697AbiBGMzP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 07:53:18 -0500
-Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B155C0401C2
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 04:53:13 -0800 (PST)
-Received: by mail-oo1-xc2a.google.com with SMTP id w5-20020a4a9785000000b0030956914befso13479360ooi.9
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 04:53:13 -0800 (PST)
+        Mon, 7 Feb 2022 07:55:15 -0500
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DCAFC043189
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 04:55:12 -0800 (PST)
+Received: by mail-lf1-x144.google.com with SMTP id i34so26720511lfv.2
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 04:55:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=VVTWVtpd640Y9AU4fvdSxIMwrpG9a27oVopMV2NmfGs=;
-        b=jchDbadWa1Oh3wXqsSmRg0ENq9LfGbPygo8oVErBD3YeETlXQkHTOHtrPnqZ/XCUj0
-         U/io97dGT1oLb6/WF4Ir4wHuyosIKXfn8OqQeG+cdfNAJ2T06HC9QjBPa7XUSvQlYPld
-         Kv/E/W4tDu/hkyYkgjJdwkhIY/QRnZ9f15fiuV1gegd8ELwcEqjUUo6rc+lyOqOHkN3s
-         UlvlRuIsA7z+71XyfISXb0gjCnNT2XmpJG/EIF8vgLcCizAGvH4eopMREWm+Av7i5fzw
-         xfZFXjAAENR74RTGkxojjjfm3D/5XoM0NxE7FGjzzAOHH8AYeoHtxlwAbiFRssoO1UV4
-         L4Dw==
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=+zB79ok8+scrzrgYKxLKHdTPGXHaNMs4/kAV8iB60HM=;
+        b=Ls8SEqK0c5NiJAhO44BAIz23+e/3nbYZ02VnkH7mNS2HNVw3oDZU9Vp9JYIYpRsRkW
+         /vuNfSrvHcE2BVXBFGRHd8gVLDSdv63HcEy/sA3dF84afTwLIwuMhNKBeI8YNtoj4tvE
+         ZloSfKI8tniDWFRjv8iflLRO4RSv9EAviP2rDF9pfgSba1+qnqf1MjvDpRqFSXhU+6Dx
+         L+2DX3KrdSKDKd+qnd5h0qAOBsmZxzSvmnT1udBTbpvQzF0TxagyomL15iDHxXiAhrfv
+         cIeFEXAioZGCKcM7syHdhKvd4kjljlTc0eg5gjOxlksTGQ578JlNkq4RTzSLGLFSoydd
+         6kKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=VVTWVtpd640Y9AU4fvdSxIMwrpG9a27oVopMV2NmfGs=;
-        b=cMTFpNYfn5pwu7pSJqvdY3cqyL4jEVN8fi5oePieWzy75ihtl5PdOk7wS4l7FIj2SI
-         CKKyVo6grnwJeCua4z1NX0XbuG6R1rQeq5mYcYtRDeeMwkyzboK7DPb2nZ+MvLnsRxu4
-         COeJfpFBRTecVnNBg388phXqyBdVh+ODZUJz07cGMjP0g06AKQRrqiLMjtLHlPz3tud0
-         NBgTgkghclLWVtnmrSDscs/Ill9lAJ3hiBYjz4B3dY96mqxVURFpmel+AlYjOJEtTVkw
-         nfMsbTdZ147doOWymtJj7YCQmnP6pnkazlUGl+2aYk+CqZe7/OIIFhijJJsI4N82LAEV
-         3H6A==
-X-Gm-Message-State: AOAM530GygbD8e4ZDY6XyN2rjONZdocLJQo/e2dLaOXzfYU+CPD+1XGd
-        DWqMZfs1ukDNPy7KPsKMwyjtUbECl8xMK6mdnpE=
-X-Google-Smtp-Source: ABdhPJzRuGiONl4pmLlHL42Yz+Qo1VBks31WwS/wqqdTvrfQn0WHFtCZLb2Svnyw3ccL5Ca+hLOwbKRPyKyGD0OmePQ=
-X-Received: by 2002:a05:6870:660b:: with SMTP id gf11mr653760oab.187.1644238392184;
- Mon, 07 Feb 2022 04:53:12 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=+zB79ok8+scrzrgYKxLKHdTPGXHaNMs4/kAV8iB60HM=;
+        b=C97PIM+SwkIOFSMZJeZoiDuo/5qRzkPLW8qoUcjqgAVOLsoeYou+lnj9/xi9fU/yc6
+         OuRRBroGrDVVHxWqKo+Mfva0WmVfiYOVj2pJWWWRZmcIsIyJFVuVgUoOWNdjeriZpbAl
+         2Gty4E3gUC1ShO2SCMXwvhySOqNnbe4Lkn92S1MQZ33jc1waO7z6oGLhK5bU87M4032w
+         IDRwa0YQDHqPp5Oea0e3ef+Ltduo52S3jIqkYc8NlFSZIUuEuGoV3bGnqv5oQ1ds5BVu
+         OyGCoFc5z9JQ8wXiWy9V9Ol5LKB6VWp3b5ljE9dWir/i8IxBuEn+HXkHgnYV513JB1Uj
+         /vlw==
+X-Gm-Message-State: AOAM531OH2N+YEKeVIl+PW+MW94bAZrW+iX7Y7zcfUd64ySMRkq6dy8L
+        uT9tFCf8s+UVGLlSOkkHn1Kx0xWzPzQ+LUsnOdQ=
+X-Google-Smtp-Source: ABdhPJxrTjk5sK7v7NECMxKrdB5/t8FBSNikYM7xLKPhDrSiKRaPOfNjkYHXu7gYZV5kYCH63+7VMvKaoD5sq7u5eJM=
+X-Received: by 2002:a05:6512:3991:: with SMTP id j17mr8247958lfu.391.1644238510181;
+ Mon, 07 Feb 2022 04:55:10 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:ac9:7f02:0:0:0:0:0 with HTTP; Mon, 7 Feb 2022 04:53:11 -0800 (PST)
-Reply-To: contact@embrudis-super-u.com
-From:   EMBRUDIS SAS <cjvdistribution2@gmail.com>
-Date:   Mon, 7 Feb 2022 13:53:11 +0100
-Message-ID: <CADBVrndxzNAQ8RWx0eEqiyvD3ib0uTpP7+UTt-BtXfGqLyHqsQ@mail.gmail.com>
-Subject: COLLABORATION.
+Reply-To: avas58158@gmail.com
+Sender: kingevido56@gmail.com
+Received: by 2002:a05:6512:3b98:0:0:0:0 with HTTP; Mon, 7 Feb 2022 04:55:09
+ -0800 (PST)
+From:   Ava Smith <avas58158@gmail.com>
+Date:   Mon, 7 Feb 2022 04:55:09 -0800
+X-Google-Sender-Auth: s9QlXpTVIA4oWyRCX37InPHKtSQ
+Message-ID: <CAH+=8uQwmXxUytW-PjoAUw3RfspZW-jX9j2E=rVohPRmmg1ejg@mail.gmail.com>
+Subject: From Ava
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=20
-Hello,
+Hello Dear,
 
-As a national company, Embrudis SAS is present throughout France with
-several supermarkets, convenience stores and a number of subsidiaries.
-We sell a wide range of food and non-food products as well as various items=
-.
-We are constantly revising our product line based on customer needs.
-We are also investing heavily in new buildings, technology and
-facilities and machinery for our business as part of our strategy for
-long-term expansion and growth.
-We have visited your website and are interested in some of your products.
-We would like to establish a business relationship with your company
-and ask for the following information:
+My name is Ava Smith from United States. I am a French and American
+national (dual) living in the U.S and sometimes in the U.K for the
+Purpose of Work. I hope you consider my friend request and consider me
+Worthy to be your friend. I will share some of my pics and more
+details about myself when i get your response.
 
--A complete list of the products you sell and manufacture -Any
-information on delivery times and availability of your products that
-we may find useful.
-We send you our financial statements and data for your insurance
-company to do a credit check. TVA / VAT UE : FR08380636373 Siret :
-38063637300033
+Thanks
 
-We want to know after studying your insurance company to know if we
-can benefit from a payment within 7 days from the date of invoice.
-
-Cordially
-MARTINS Paul
-
-Mobile : +33 (0) 644677027
-E-mail:contact@embrudis-super-u.com
-EMBRUDIS SAS
-ANCIENNE ROUTE DE BARATIER
-ENTRAIGUES
-05200 EMBRUN
-Num=C3=A9ro TVA UE : FR08380636373
+Ava Smith

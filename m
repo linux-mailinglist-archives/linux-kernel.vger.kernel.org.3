@@ -2,56 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FF6B4AB820
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 11:01:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCAB34AB834
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 11:01:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347123AbiBGJtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 04:49:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33240 "EHLO
+        id S1343690AbiBGJtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 04:49:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351851AbiBGJgX (ORCPT
+        with ESMTP id S1351900AbiBGJgc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 04:36:23 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 411CDC043181
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 01:36:22 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nH0RX-0001Oq-5l; Mon, 07 Feb 2022 10:36:19 +0100
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nH0RW-0005jj-2h; Mon, 07 Feb 2022 10:36:18 +0100
-Date:   Mon, 7 Feb 2022 10:36:18 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] misc: alcor_pci: Fix an error handling path
-Message-ID: <20220207093618.GA18325@pengutronix.de>
-References: <918a9875b7f67b7f8f123c4446452603422e8c5e.1644136776.git.christophe.jaillet@wanadoo.fr>
+        Mon, 7 Feb 2022 04:36:32 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B3B0C043187
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 01:36:31 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id w11so23605179wra.4
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 01:36:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=qrvBS/TzjL+d5+7WnH62vtdXI5w+DWvXkC7GzKhpJJk=;
+        b=tc5s7ekSpBAR+xbhyLx3fnhzUwxa8WfVcQK1lWdQybmI2OXSMntUTM0FS54/pS0l1k
+         fjthaUllv6xcgQlo07cKhtBRZeSp3Wtw+XeY1dAzNxDDW69BIHgh9qXLHSTe2StCLnvI
+         ZbbNeHBKk9uPK3v95zObnCm3VeOnwVXPh0DlPsOqKvRr7xFZWGGjWcyWKMYqXUJH4QAp
+         JIg/XLlwZJ3WxSLrQeeO4EwEecIKmGugBjK/BuSD73aUeQfkM/ee4Knoes+yf0raBbSF
+         Cw5VYI9VBzNONL+qlx47DwfeYhbjBfd/OeKtuLtH1k55dtnerjpBkNaKWODtJopzmn3R
+         6EYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=qrvBS/TzjL+d5+7WnH62vtdXI5w+DWvXkC7GzKhpJJk=;
+        b=Fx52o2dtwMX8H7d+LwcbgTmNWlg0k+RjzjhuAuo7rGUxOcPJUCo5ByL5gUJyFy2YuO
+         qkyNzY0xU4xWdAdHT0x26yDoPvBlPnexf7gUi/Z0aXR25+mH4IZ3KM4831xZnHa8K7dc
+         tP0MpcLCusUze60pAvvvKm34xE5tPCX0XNXN4y2c/McsZWoMLV0o8yPtnubakbksdQ9P
+         Jgj78croyhHSAywH/ncEpIYzzUN8oRsjrvdLocBKmgJdf9ho5GP6Pq7+GqnUuygunB9g
+         aZ4RetDyfuHNIEFMI6O9h2M00z8HtHaVGjru4V8eWtcfJcjS6KBFttxnl0ZeJFEIaaTz
+         f3vg==
+X-Gm-Message-State: AOAM533Dd3+IZJw2rS6xnn5Sl120XcNkqrWxOd3BEdtIbyPluUpodRVN
+        Uz33wPNyWzrU8KW/mhcBoKJqTg==
+X-Google-Smtp-Source: ABdhPJw++V5on4HlT6+jIXzacZJXDK3OK3YGQ425d24Wltt5gE0fwoH6RTaQC/qkOuDwmb7mArXSlA==
+X-Received: by 2002:adf:ea82:: with SMTP id s2mr9251824wrm.44.1644226589677;
+        Mon, 07 Feb 2022 01:36:29 -0800 (PST)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id i19sm20468171wmq.45.2022.02.07.01.36.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Feb 2022 01:36:29 -0800 (PST)
+Date:   Mon, 7 Feb 2022 09:36:27 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Javier Martinez Canillas <javier@dowhile0.org>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Subject: Re: [PATCH v2 0/3] regulator/mfd: dt-bindings: maxim,max77802:
+ convert to dtschema
+Message-ID: <YgDoG8Xlhq5L3Bii@google.com>
+References: <20220111175430.224421-1-krzysztof.kozlowski@canonical.com>
+ <f0a9e656-cf18-f212-b701-a1c9d10c4a59@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <918a9875b7f67b7f8f123c4446452603422e8c5e.1644136776.git.christophe.jaillet@wanadoo.fr>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 10:33:44 up 58 days, 18:19, 81 users,  load average: 0.17, 0.22,
- 0.38
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f0a9e656-cf18-f212-b701-a1c9d10c4a59@canonical.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,75 +79,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 06, 2022 at 09:39:54AM +0100, Christophe JAILLET wrote:
-> A successful ida_simple_get() should be balanced by a corresponding
-> ida_simple_remove().
-> 
-> Add the missing call in the error handling path of the probe.
-> 
-> While at it, switch to ida_alloc()/ida_free() instead to
-> ida_simple_get()/ida_simple_remove().
-> The latter is deprecated and more verbose.
-> 
-> Fixes: 4f556bc04e3c ("misc: cardreader: add new Alcor Micro Cardreader PCI driver")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+On Sun, 06 Feb 2022, Krzysztof Kozlowski wrote:
 
-Reviewed-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> On 11/01/2022 18:54, Krzysztof Kozlowski wrote:
+> > Hi,
+> > 
+> > Changes since v1
+> > ================
+> > 1. MFD: Use absolute path to schemas.
+> > 2. Regulator: skip properties.
+> > 
+> > Dependencies
+> > ============
+> > 1. DTS patch: nothing depends on it, sending here so Rob's automatic
+> >    checker won't complain about DTS.
+> >    I will take it via Samsung SoC tree.
+> > 
+> > 2. Final MFD patch depends on regulator, so the two last patches could
+> >    go via Rob's, Mark's or Lee's trees.
+> > 
+> 
+> Dear Lee,
+> 
+> This patchset was reviewed and there are no outstanding issues. Could
+> you pick up entire set via MFD tree?
 
-Thank you!
-
-> ---
->  drivers/misc/cardreader/alcor_pci.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/misc/cardreader/alcor_pci.c b/drivers/misc/cardreader/alcor_pci.c
-> index de6d44a158bb..3f514d77a843 100644
-> --- a/drivers/misc/cardreader/alcor_pci.c
-> +++ b/drivers/misc/cardreader/alcor_pci.c
-> @@ -266,7 +266,7 @@ static int alcor_pci_probe(struct pci_dev *pdev,
->  	if (!priv)
->  		return -ENOMEM;
->  
-> -	ret = ida_simple_get(&alcor_pci_idr, 0, 0, GFP_KERNEL);
-> +	ret = ida_alloc(&alcor_pci_idr, GFP_KERNEL);
->  	if (ret < 0)
->  		return ret;
->  	priv->id = ret;
-> @@ -280,7 +280,8 @@ static int alcor_pci_probe(struct pci_dev *pdev,
->  	ret = pci_request_regions(pdev, DRV_NAME_ALCOR_PCI);
->  	if (ret) {
->  		dev_err(&pdev->dev, "Cannot request region\n");
-> -		return -ENOMEM;
-> +		ret = -ENOMEM;
-> +		goto error_free_ida;
->  	}
->  
->  	if (!(pci_resource_flags(pdev, bar) & IORESOURCE_MEM)) {
-> @@ -324,6 +325,8 @@ static int alcor_pci_probe(struct pci_dev *pdev,
->  
->  error_release_regions:
->  	pci_release_regions(pdev);
-> +error_free_ida:
-> +	ida_free(&alcor_pci_idr, priv->id);
->  	return ret;
->  }
->  
-> @@ -337,7 +340,7 @@ static void alcor_pci_remove(struct pci_dev *pdev)
->  
->  	mfd_remove_devices(&pdev->dev);
->  
-> -	ida_simple_remove(&alcor_pci_idr, priv->id);
-> +	ida_free(&alcor_pci_idr, priv->id);
->  
->  	pci_release_regions(pdev);
->  	pci_set_drvdata(pdev, NULL);
-> -- 
-> 2.32.0
-> 
-> 
+Nothing from LED or Regulator?
 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

@@ -2,84 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18F4F4AB40D
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 07:12:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF1F84AB430
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 07:12:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242308AbiBGFvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 00:51:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45748 "EHLO
+        id S1350539AbiBGFwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 00:52:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230505AbiBGE1Y (ORCPT
+        with ESMTP id S239559AbiBGE2S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 23:27:24 -0500
-X-Greylist: delayed 123 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Feb 2022 20:27:23 PST
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF6BC043183;
-        Sun,  6 Feb 2022 20:27:23 -0800 (PST)
+        Sun, 6 Feb 2022 23:28:18 -0500
+X-Greylist: delayed 122 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Feb 2022 20:28:17 PST
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 489A9C043181;
+        Sun,  6 Feb 2022 20:28:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1644208043; x=1675744043;
-  h=from:to:cc:subject:date:message-id;
-  bh=pXQ7LkOBiXdg1mQC9sP2hejVjWSd8jyBBgp1P3TOblY=;
-  b=uzPgaGlKudtQ+4oC5hDoOswWVo+jEaGlY+17B00qFZFaER2bvpMPB/jg
-   9ByLR5A3MSPS1aYSZRzEHYRPwMhbXDp3XyCNCmFe/0Z5o7BFwf0y2Jb00
-   Gkc44MRV3nabnHImb7smRtIJja3NLiC3KRG2JVIju2N7/QYN3LwEQl7cX
-   0=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 06 Feb 2022 20:25:20 -0800
+  t=1644208097; x=1675744097;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=fderG4Gz8z+WaznEGhLQ9NMtlL+AgXDhS7nYzmK/IC8=;
+  b=GI1IwDBcDB/T/wFTAbD3moQWyNUK4MgJ4LeQ2coHlliDaQW1vOZ+Idwd
+   cNkHNy6RaKe+Sft1eyw2stKts4Q3YIFKK14jP9Td/xFYEA++dgKPyRRIg
+   GeZvk8jKxAKYM/WnUOd4enFkKZ519/hCRvQKL/9JlnQhQiFnHwVY69ZP0
+   w=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 06 Feb 2022 20:26:14 -0800
 X-QCInternal: smtphost
-Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 06 Feb 2022 20:25:18 -0800
-X-QCInternal: smtphost
-Received: from hyd-lablnx377.qualcomm.com ([10.204.178.226])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 07 Feb 2022 09:55:01 +0530
-Received: by hyd-lablnx377.qualcomm.com (Postfix, from userid 4035820)
-        id 87A482152F; Mon,  7 Feb 2022 09:55:00 +0530 (IST)
-From:   Sai Teja Aluvala <quic_saluvala@quicinc.com>
-To:     marcel@holtmann.org, johan.hedberg@gmail.com
-Cc:     mka@chromium.org, linux-kernel@vger.kernel.org,
-        linux-bluetooth@vger.kernel.org, quic_hemantg@quicinc.com,
-        linux-arm-msm@vger.kernel.org, quic_bgodavar@quicinc.com,
-        quic_rjliao@quicinc.com, quic_hbandi@quicinc.com,
-        abhishekpandit@chromium.org, mcchou@chromium.org,
-        Sai Teja Aluvala <quic_saluvala@quicinc.com>
-Subject: [PATCH v1] arm64: dts: qcom: sc7280: Add bluetooth node on SC7280 crd board
-Date:   Mon,  7 Feb 2022 09:54:38 +0530
-Message-Id: <1644207878-19839-1-git-send-email-quic_saluvala@quicinc.com>
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2022 20:26:13 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Sun, 6 Feb 2022 20:26:13 -0800
+Received: from ugoswami-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Sun, 6 Feb 2022 20:26:09 -0800
+From:   Udipto Goswami <quic_ugoswami@quicinc.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Pratham Pratap <quic_ppratap@quicinc.com>,
+        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        Jack Pham <quic_jackp@quicinc.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Udipto Goswami <quic_ugoswami@quicinc.com>
+Subject: [PATCH] usb: dwc3: gadget: Prevent core from processing stale TRBs
+Date:   Mon, 7 Feb 2022 09:55:58 +0530
+Message-ID: <1644207958-18287-1-git-send-email-quic_ugoswami@quicinc.com>
 X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Bluetooth SoC WCN6750 node for SC7280 crd board
+With CPU re-ordering on write instructions, there might
+be a chance that the HWO is set before the TRB is updated
+with the new mapped buffer address.
+And in the case where core is processing a list of TRBs
+it is possible that it fetched the TRBs when the HWO is set
+but before the buffer address is updated.
+Prevent this by adding a memory barrier before the HWO
+is updated to ensure that the core always process the
+updated TRBs.
 
-Signed-off-by: Sai Teja Aluvala <quic_saluvala@quicinc.com>
-
+Fixes: f6bafc6a1c9 ("usb: dwc3: convert TRBs into bitshifts")
+Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
 ---
- arch/arm64/boot/dts/qcom/sc7280-crd.dts | 4 ++++
- 1 file changed, 4 insertions(+)
+v1: For an ep the trbs can be reused, and if cpu re-ordering also
+takes place, there is a change that the HWO will get set even before
+the trb bpl/bph are updated which will lead controller to access a
+stale buffer address from the previous transactions.
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-crd.dts b/arch/arm64/boot/dts/qcom/sc7280-crd.dts
-index cd2755c..53ea3b4 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-crd.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7280-crd.dts
-@@ -23,6 +23,10 @@
- 	};
- };
+ drivers/usb/dwc3/gadget.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 520031b..183b909 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -1291,6 +1291,19 @@ static void __dwc3_prepare_one_trb(struct dwc3_ep *dep, struct dwc3_trb *trb,
+ 	if (usb_endpoint_xfer_bulk(dep->endpoint.desc) && dep->stream_capable)
+ 		trb->ctrl |= DWC3_TRB_CTRL_SID_SOFN(stream_id);
  
-+&bluetooth {
-+	vddio-supply = <&vreg_l18b_1p8>;
-+};
-+
- ap_tp_i2c: &i2c0 {
- 	status = "okay";
- 	clock-frequency = <400000>;
++	/*
++	 * As per data book 4.2.3.2TRB Control Bit Rules section
++	 *
++	 * The controller autonomously checks the HWO field of a TRB to determine if the
++	 * entire TRB is valid. Therefore, software must ensure that the rest of the TRB
++	 * is valid before setting the HWO field to '1'. In most systems, this means that
++	 * software must update the fourth DWORD of a TRB last.
++	 *
++	 * However there is a possibility of CPU re-ordering here which can cause
++	 * controller to observe the HWO bit set prematurely.
++	 * Add a write memory barrier to prevent CPU re-ordering.
++	 */
++	wmb();
+ 	trb->ctrl |= DWC3_TRB_CTRL_HWO;
+ 
+ 	dwc3_ep_inc_enq(dep);
 -- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc.
+2.7.4
 

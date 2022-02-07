@@ -2,161 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AF394ACBDE
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 23:12:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0CAA4ACBDF
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 23:12:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243754AbiBGWMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 17:12:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43408 "EHLO
+        id S243790AbiBGWMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 17:12:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243692AbiBGWL6 (ORCPT
+        with ESMTP id S243692AbiBGWMM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 17:11:58 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB26DC0612A4
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 14:11:57 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id w1so2659083plb.6
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 14:11:57 -0800 (PST)
+        Mon, 7 Feb 2022 17:12:12 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF9BC0612A4
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 14:12:12 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id u6so29595902lfm.10
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 14:12:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=iTzDr07nDR0Kl7lFwHuFFDUEMCGqC9FB/uZHfJ8d1Mw=;
-        b=IYp6uTWjHF7Eyy4PczCpkHeC9xff7BNFIgUZQKzLF6A5XC4d2aZTzFxbsdu7wbLLV+
-         8qnuGLKuJS6YV1HIEddyw1WBUHZINajA2y7bT6iItl4bHpP1y3IDp2m5DRlkgZSpXvBx
-         C3c+GD1fb7NhmNCLjgdjXmtW+E6jQ4/6qjaflz3A1pwwoWjAHIZebaoWxL5f/KCtHbRf
-         NAh8BCEcH96Xlbh6SqxxTpPe/NYIUSybli6KNHCMu3R7vj1otLza7HJFHJ7M71x203u1
-         2eVL46KcknHxwS6gm9Bb18RAjr7p/addt5Ap6SGO+3ThcgyH/nig+9ouMapWeIYw1Kp0
-         An7A==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cFN1ZYBqoyYBut+IHT4rtno8V8itQS4yOxwKeKCtmn4=;
+        b=DO1SsmMoZUPb8EpqEdwHK7B5xPPAQPJVqR4moEEUUS19EXPRjKIcJvUyNowKDRrUuX
+         mcrC07VGFDcXhkaKsml15IF3S1BWurAGrnREufMQVhdour7Qxru/+BISVmcki+3DotLo
+         zHbHVVdCjjbD/sCjBscxYVh3yLL2Il9MbEIXe06erS1zFXCLDw+xJQ7SOUJE1vIeK1yd
+         z6OrvvBm/gvqyd9GQWPvXvTGwFxdfshMjbbbNRibU9purQbIbC95bEYQto8V3bR7d1ov
+         g84sFOxVvuw+33dvJlhOmHfKKzsN+h7vVAUF1dmS5Wwot9B6cAyfUvgxglqPUxia5yiD
+         nfCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=iTzDr07nDR0Kl7lFwHuFFDUEMCGqC9FB/uZHfJ8d1Mw=;
-        b=RtvLGdmYC3p1xjFRnkwLsdkzpmrYSuew78C7DMLP/2QHcbInPUHm3kSUI4WJ7ZWUOV
-         Ga+g8am9V+57qI+isbj9nR54KmjJhZff7vvluqnAkDtJLQSkUWp4IZHTQM4bR0F56qZB
-         04IQSibrFROO/Oapk5BpxsCtTz5GH+xDmMxcTSz1IZkOMGE79C8jZc2cNRZ2MD0AIEID
-         wdW+OFb0zeZ/7kT22fbMsDjtBnKgwYMHw7fpnbk9hjV2Kkei03VuJihFmvlpZ6mxx5BU
-         wTxt6OGAlvcuaUOJ6lLNLzkYjdGnZdITxxPBW3Rr5KksAfHhLYhkQm6A+ilg56b5viNr
-         7HNg==
-X-Gm-Message-State: AOAM533fnPOk3oGZtZmJf5Smn0zizfGVBv+FceDQ2OqTLpvteLa3Sjno
-        PzwpHqQSvtt4pEG0D0paLl7yqQ==
-X-Google-Smtp-Source: ABdhPJw45LFLi3Lo8mYXK0eLgPYlH0oh1NJlpAM43K6XMNbSYLI8CEbycgiys9Ieotpc3LkharP35w==
-X-Received: by 2002:a17:90b:1b52:: with SMTP id nv18mr1114781pjb.136.1644271917102;
-        Mon, 07 Feb 2022 14:11:57 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id iy13sm321808pjb.51.2022.02.07.14.11.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 14:11:56 -0800 (PST)
-Date:   Mon, 7 Feb 2022 22:11:53 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Joerg Roedel <joro@8bytes.org>
-Cc:     x86@kernel.org, Joerg Roedel <jroedel@suse.de>,
-        Eric Biederman <ebiederm@xmission.com>,
-        kexec@lists.infradead.org, hpa@zytor.com,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Jiri Slaby <jslaby@suse.cz>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Juergen Gross <jgross@suse.com>,
-        Kees Cook <keescook@chromium.org>,
-        David Rientjes <rientjes@google.com>,
-        Cfir Cohen <cfir@google.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mike Stunes <mstunes@vmware.com>,
-        Martin Radev <martin.b.radev@gmail.com>,
-        Arvind Sankar <nivedita@alum.mit.edu>,
-        linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH v3 05/10] x86/sev: Setup code to park APs in the AP Jump
- Table
-Message-ID: <YgGZKdbr3RrzU+xk@google.com>
-References: <20220127101044.13803-1-joro@8bytes.org>
- <20220127101044.13803-6-joro@8bytes.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cFN1ZYBqoyYBut+IHT4rtno8V8itQS4yOxwKeKCtmn4=;
+        b=Ss0gajvXZ2BYscRQNFohmkl3tJ5xmHF7UDsevn37RwD6m7DxOesNRHL62MF2SNUnqb
+         sy6PnZ6BRsuex3iQZfE54Sre5F8Y5FXtv/u8jFIE5Pg86q0nas7f28WRAWiGRyFqJ8CS
+         E+eK0vHPBvcpJplivqngK+oijq6vcZm40f09DDxgz175FQ7ZXTuM1ctnD9ResZlbdtG0
+         zIkfBdTJFsB5dJCQQCBcKHZo6JS+Qrpcq7r5TVya/HbMRXyaDWjDncHX9y7j6EffLpfn
+         OUIWZYF8Jxqn9iv/8yqLmcAdtan+cROYsfcZvDquVoiTBAv/GnUfT40LLPE6E2eUgN8E
+         JoRA==
+X-Gm-Message-State: AOAM53214qVXALFT5CPE9+QFzt4hpX+yqaIn43r0PlvOkW8MCzb85xNy
+        TY0COvKI9OB8aA8kO85OZBi7FsJj0z+YeUsvlnDHNg==
+X-Google-Smtp-Source: ABdhPJxw3i4RCdalhojC+MhyaF6SAJt6gNdZ18G4Mssyxvj2N+4Vbk9x6zcG3vBGyPmTfV+iG9cTrKeLTbKYP4kuO2g=
+X-Received: by 2002:ac2:4c17:: with SMTP id t23mr1027082lfq.240.1644271930244;
+ Mon, 07 Feb 2022 14:12:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220127101044.13803-6-joro@8bytes.org>
+References: <20211229021258.176670-1-morbo@google.com> <20220204005742.1222997-1-morbo@google.com>
+In-Reply-To: <20220204005742.1222997-1-morbo@google.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 7 Feb 2022 14:11:58 -0800
+Message-ID: <CAKwvOdk=VdDo1fhWJVa4eO0UjuQwtV9kC-cJd0J9-6guU2vafA@mail.gmail.com>
+Subject: Re: [PATCH v3] x86: use builtins to read eflags
+To:     Bill Wendling <morbo@google.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022, Joerg Roedel wrote:
-> +static int __init sev_setup_ap_jump_table(void)
+On Thu, Feb 3, 2022 at 4:57 PM Bill Wendling <morbo@google.com> wrote:
+>
+> GCC and Clang both have builtins to read and write the EFLAGS register.
+> This allows the compiler to determine the best way to generate this
+> code, which can improve code generation.
+>
+> This issue arose due to Clang's issue with the "=rm" constraint.  Clang
+> chooses to be conservative in these situations, and so uses memory
+> instead of registers. This is a known issue, which is currently being
+> addressed.
+>
+> However, using builtins is benefiical in general, because it removes the
 
-This name is really confusing.  AFAICT, it's specific to SEV-ES, but used only
-"sev" for the namespace because sev_es_setup_ap_jump_table() already exists.
-I assume this variant is purely for parking/offlining vCPUs?  Adding that in the
-name would be helpful.
+s/benefiical/beneficial/
 
-The two flows are also very, very similar, but apparently do slightly different
-things.  Even more odd is that this version applies different sanity checks on
-the address than the existing code.  It should be fairly simple to extract a
-common helper.  That would likely help with naming problem too.
+> burden of determining what's the way to read the flags register from the
+> programmer and places it on to the compiler, which has the information
+> needed to make that decision. Indeed, this piece of code has had several
+> changes over the years, some of which were pinging back and forth to
+> determine the correct constraints to use.
+>
+> With this change, Clang generates better code:
+>
+> Original code:
+>         movq    $0, -48(%rbp)
+>         #APP
+>         # __raw_save_flags
+>         pushfq
+>         popq    -48(%rbp)
+>         #NO_APP
+>         movq    -48(%rbp), %rbx
+>
+> New code:
+>         pushfq
+>         popq    %rbx
+>         #APP
 
-> +{
-> +	size_t blob_size = rm_ap_jump_table_blob_end - rm_ap_jump_table_blob;
-> +	u16 startup_cs, startup_ip;
-> +	u16 __iomem *jump_table;
-> +	phys_addr_t pa;
-> +
-> +	if (!cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT))
-> +		return 0;
-> +
-> +	if (ghcb_info.vm_proto < 2) {
-> +		pr_warn("AP jump table parking requires at least GHCB protocol version 2\n");
-> +		return 0;
-> +	}
-> +
-> +	pa = get_jump_table_addr();
-> +
-> +	/* On UP guests there is no jump table so this is not a failure */
-> +	if (!pa)
-> +		return 0;
-> +
-> +	/* Check overflow and size for untrusted jump table address */
-> +	if (pa + PAGE_SIZE < pa || pa + PAGE_SIZE > SZ_4G) {
-> +		pr_info("AP jump table is above 4GB or address overflow - not enabling AP jump table parking\n");
-> +		return 0;
-> +	}
-> +
-> +	jump_table = ioremap_encrypted(pa, PAGE_SIZE);
-> +	if (WARN_ON(!jump_table))
-> +		return -EINVAL;
-> +
-> +	/*
-> +	 * Save reset vector to restore it later because the blob will
-> +	 * overwrite it.
-> +	 */
-> +	startup_ip = jump_table[0];
-> +	startup_cs = jump_table[1];
-> +
-> +	/* Install AP jump table Blob with real mode AP parking code */
-> +	memcpy_toio(jump_table, rm_ap_jump_table_blob, blob_size);
-> +
-> +	/* Setup AP jump table GDT */
-> +	sev_es_setup_ap_jump_table_data(jump_table, (u32)pa);
-> +
-> +	writew(startup_ip, &jump_table[0]);
-> +	writew(startup_cs, &jump_table[1]);
-> +
-> +	iounmap(jump_table);
-> +
-> +	pr_info("AP jump table Blob successfully set up\n");
-> +
-> +	/* Mark AP jump table blob as available */
-> +	sev_ap_jumptable_blob_installed = true;
-> +
-> +	return 0;
-> +}
-> +core_initcall(sev_setup_ap_jump_table);
+But it also forces frame pointers due to another bug in LLVM.
+https://godbolt.org/z/6badWaGjo
+For x86_64, we default to CONFIG_UNWINDER_ORC=y, not
+CONFIG_UNWINDER_FRAME_POINTER=y.  So this change would make us use
+registers instead of stack slots (improvement), but then force frame
+pointers when we probably didn't need or want them (deterioration) for
+all released versions of clang.
+
+I think we should fix https://reviews.llvm.org/D92695 first before I'd
+be comfortable signing off on this kernel change.  Again, I think we
+should test out Phoebe's recommendation
+https://reviews.llvm.org/D92695#inline-1086936
+or do you already have a fix that I haven't yet been cc'ed on, perhaps?
+
+>
+> Note that the stack slot in the original code is no longer needed in the
+> new code, saving a small amount of stack space.
+>
+> There is no change to GCC's ouput:
+>
+> Original code:
+>
+>         # __raw_save_flags
+>         pushf ; pop %r13        # flags
+>
+> New code:
+>
+>         pushfq
+>         popq    %r13    # _23
+>
+> Signed-off-by: Bill Wendling <morbo@google.com>
+> ---
+> v3: - Add blurb indicating that GCC's output hasn't changed.
+> v2: - Kept the original function to retain the out-of-line symbol.
+>     - Improved the commit message.
+>     - Note that I couldn't use Nick's suggestion of
+>
+>         return IS_ENABLED(CONFIG_X86_64) ? ...
+>
+>       because Clang complains about using __builtin_ia32_readeflags_u32 in
+>       64-bit mode.
+> ---
+>  arch/x86/include/asm/irqflags.h | 19 +++++--------------
+>  1 file changed, 5 insertions(+), 14 deletions(-)
+>
+> diff --git a/arch/x86/include/asm/irqflags.h b/arch/x86/include/asm/irqflags.h
+> index 87761396e8cc0..f31a035f3c6a9 100644
+> --- a/arch/x86/include/asm/irqflags.h
+> +++ b/arch/x86/include/asm/irqflags.h
+> @@ -19,20 +19,11 @@
+>  extern inline unsigned long native_save_fl(void);
+>  extern __always_inline unsigned long native_save_fl(void)
+>  {
+> -       unsigned long flags;
+> -
+> -       /*
+> -        * "=rm" is safe here, because "pop" adjusts the stack before
+> -        * it evaluates its effective address -- this is part of the
+> -        * documented behavior of the "pop" instruction.
+> -        */
+> -       asm volatile("# __raw_save_flags\n\t"
+> -                    "pushf ; pop %0"
+> -                    : "=rm" (flags)
+> -                    : /* no input */
+> -                    : "memory");
+> -
+> -       return flags;
+> +#ifdef CONFIG_X86_64
+> +       return __builtin_ia32_readeflags_u64();
+> +#else
+> +       return __builtin_ia32_readeflags_u32();
+> +#endif
+>  }
+>
+>  static __always_inline void native_irq_disable(void)
+> --
+> 2.35.0.263.gb82422642f-goog
+>
+
+
+-- 
+Thanks,
+~Nick Desaulniers

@@ -2,95 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C8484AC895
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 19:32:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2B084AC894
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 19:32:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239775AbiBGSbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 13:31:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51278 "EHLO
+        id S239487AbiBGSbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 13:31:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243904AbiBGSZc (ORCPT
+        with ESMTP id S230321AbiBGS2K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 13:25:32 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D70CDC0401D9
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 10:25:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644258331; x=1675794331;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=+g3d/khpgpbVGXsUIHT4OSkqD8lvmSb0Jeo3mZpjGic=;
-  b=fzR4grscm8MQiKDT1TZur1bxVgIaXRsuGLCvDBlq/B11EpsHvj0rBSXj
-   Sf4CKNsNisN+hVe9VFx6zL5nX+UsIRmlHwWsFOy2jvFpDP/PqF6R17w3P
-   g2RUjfpaf0Y2UfsZ3XpabR2/JwseZZZaXu2kEnjZeOeJh/xW+J7P7he+K
-   8qIYjJ4ziPfrEj+Mt+ijlusagPl8acimf5JyQo2ECNoLAyRfzu2Gd+2bK
-   7u6xrPaRtZ/P49dBU1tjwCDjMdblxCfBtTn4SauiYSKd7a6j5LlbgOG2v
-   eXa9z0WbkFlsZn9j1FvO0ucmduT2I5xzjJa5xH4E5nN356z9bouyjQBPL
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10250"; a="229428066"
-X-IronPort-AV: E=Sophos;i="5.88,350,1635231600"; 
-   d="scan'208";a="229428066"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 10:24:29 -0800
-X-IronPort-AV: E=Sophos;i="5.88,350,1635231600"; 
-   d="scan'208";a="499290647"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.198.157])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 10:24:29 -0800
-Date:   Mon, 7 Feb 2022 10:27:25 -0800
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     Lu Baolu <baolu.lu@linux.intel.com>
-Cc:     Joerg Roedel <joro@8bytes.org>, Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Liu Yi L <yi.l.liu@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@lst.de>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH v1 09/10] iommu/vt-d: Refactor
- dmar_insert_one_dev_info()
-Message-ID: <20220207102725.3ce9320d@jacob-builder>
-In-Reply-To: <20220207064142.1092846-10-baolu.lu@linux.intel.com>
-References: <20220207064142.1092846-1-baolu.lu@linux.intel.com>
-        <20220207064142.1092846-10-baolu.lu@linux.intel.com>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Mon, 7 Feb 2022 13:28:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92639C0401DA;
+        Mon,  7 Feb 2022 10:28:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3476060DC6;
+        Mon,  7 Feb 2022 18:28:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F940C004E1;
+        Mon,  7 Feb 2022 18:28:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644258488;
+        bh=ETqd+yZ/HS9AXaGMHGmXNmo1b7Ei8h0Mz5rxIDEAYCs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=R0lPrTz1FVVpdU3QufS9iVKKMCmrC8ANQnsceUKDopylKuSrAc9ZWIg8FaEdCA+9m
+         VJxfjTgBkmVzq+EQK9UR4ZWGhAWrmt2LELoJzDvV/+v8YG72iirrcJ3/ZAZQMkJygq
+         AP0y+Pnj8ziGzIfx9FOdXP6gQZc/+MejhJTXPV7zpf4aIMZk5BRsaECWXVcuBBIUCc
+         Om2hSoJ3n5oM8NCeOQ16Eoq3Ucy3BtjC8B3yQD/a2bzpBiwQnc71U/2OKmy1LQyGJl
+         X/16Qrhf0kRAW+gGOKKNmb+/oW+VRYvzu8ik92egN9UhQfF0PBI4x5bYezTP/Fj+O3
+         auwZo+RrVIF6w==
+Date:   Mon, 7 Feb 2022 12:28:06 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lorenzo.pieralisi@arm.com, bhelgaas@google.com, michals@xilinx.com
+Subject: Re: [PATCH 1/2] PCI: xilinx-cpm: Update YAML schemas for Versal CPM5
+ Root Port
+Message-ID: <20220207182806.GA408432@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220207041250.1658-2-bharat.kumar.gogada@xilinx.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi BaoLu,
+It looks like the subject line convention here would be something
+like:
 
-On Mon,  7 Feb 2022 14:41:41 +0800, Lu Baolu <baolu.lu@linux.intel.com>
-wrote:
+  dt-bindings: PCI: xilinx-cpm: Add Versal CPM5 Root Port
 
->  static void intel_iommu_release_device(struct device *dev)
->  {
-> -	struct intel_iommu *iommu;
-> -
-> -	iommu = device_to_iommu(dev, NULL, NULL);
-> -	if (!iommu)
-> -		return;
-> -
-> -	dmar_remove_one_dev_info(dev);
-> +	struct device_domain_info *info = get_domain_info(dev);
-> +	unsigned long index = DEVI_IDX(info->segment, info->bus,
-> info->devfn); 
-> +	xa_erase(&device_domain_array, index);
-> +	dev_iommu_priv_set(info->dev, NULL);
->  	set_dma_ops(dev, NULL);
-> +	kfree(info);
-Now that info and sinfo are under RCU, should we use kfree_rcu?
+(From "git log --oneline Documentation/devicetree/bindings/pci/")
 
-Thanks,
+On Mon, Feb 07, 2022 at 09:42:48AM +0530, Bharat Kumar Gogada wrote:
+> Xilinx Versal Premium series has CPM5 block which supports Root port
+> functioning at Gen5 speed.
+> Add support for YAML schemas documentation for Versal CPM5 Root Port driver.
 
-Jacob
+s/Root port/Root Port/ to be consistent.
+Add blank line between paragraphs.
+
+Bjorn

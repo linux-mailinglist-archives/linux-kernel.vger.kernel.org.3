@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 171314ABA45
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:27:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47C154ABA54
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:28:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383331AbiBGLWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:22:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56216 "EHLO
+        id S236509AbiBGLZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:25:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381883AbiBGLRj (ORCPT
+        with ESMTP id S1382457AbiBGLTP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:17:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32A16C0401DB;
-        Mon,  7 Feb 2022 03:17:31 -0800 (PST)
+        Mon, 7 Feb 2022 06:19:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A408CC0401C3;
+        Mon,  7 Feb 2022 03:19:14 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2AA5EB8111C;
-        Mon,  7 Feb 2022 11:17:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69043C004E1;
-        Mon,  7 Feb 2022 11:17:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 183F761426;
+        Mon,  7 Feb 2022 11:19:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E985DC004E1;
+        Mon,  7 Feb 2022 11:19:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232649;
-        bh=p/9Eah5nhtugNJaw6mXassHwYlybfO93r0QZ0+5hfdo=;
+        s=korg; t=1644232753;
+        bh=b13qAo4YSP2y+ta2ne27FSUAmi4yqSLi1KWG0FFTyEU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UZtO75zNXVgXioZWr7xPgZa1bmAaDRfIYxSJhwAsoq7sn/bIYdRDNE0foG9JbaYHS
-         DZP8uKIIir1GbPV1s56QAzoMxafJS+5SUG2BJleCI1RiUEqseG0/g8z0ZoMFehh7hb
-         q2htUb/RAXgJBTWA0gIzR85slbNseJW+c7rmYAug=
+        b=socPR+A26rP6ZlBB96Vt4Tsj6Qq7N0PrvsZ9Yp5NrdAjZEh5cwkxuHvWQLHffAHSt
+         Bxy6XM0RfS+7NioDY5gJWpIDv/m8v+3Ty7tKKULTFRESoXgn57itSLWLvC7w+4+tHo
+         h4dR0bmZJ3yAggf6MTiXPswWjtKt3MJNjTJA6+lc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 4.19 78/86] ASoC: cpcap: Check for NULL pointer after calling of_get_child_by_name
+        stable@vger.kernel.org, Miquel Raynal <miquel.raynal@bootlin.com>,
+        Alexander Aring <aahringo@redhat.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>
+Subject: [PATCH 5.4 25/44] net: ieee802154: mcr20a: Fix lifs/sifs periods
 Date:   Mon,  7 Feb 2022 12:06:41 +0100
-Message-Id: <20220207103800.227001691@linuxfoundation.org>
+Message-Id: <20220207103753.981171151@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103757.550973048@linuxfoundation.org>
-References: <20220207103757.550973048@linuxfoundation.org>
+In-Reply-To: <20220207103753.155627314@linuxfoundation.org>
+References: <20220207103753.155627314@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,36 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Miquel Raynal <miquel.raynal@bootlin.com>
 
-commit f7a6021aaf02088870559f82fc13c58cda7fea1a upstream.
+commit d753c4004820a888ec007dd88b271fa9c3172c5c upstream.
 
-If the device does not exist, of_get_child_by_name() will return NULL
-pointer.
-And devm_snd_soc_register_component() does not check it.
-Also, I have noticed that cpcap_codec_driver has not been used yet.
-Therefore, it should be better to check it in order to avoid the future
-dereference of the NULL pointer.
+These periods are expressed in time units (microseconds) while 40 and 12
+are the number of symbol durations these periods will last. We need to
+multiply them both with phy->symbol_duration in order to get these
+values in microseconds.
 
-Fixes: f6cdf2d3445d ("ASoC: cpcap: new codec")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Link: https://lore.kernel.org/r/20220111025048.524134-1-jiasheng@iscas.ac.cn
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: 8c6ad9cc5157 ("ieee802154: Add NXP MCR20A IEEE 802.15.4 transceiver driver")
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Acked-by: Alexander Aring <aahringo@redhat.com>
+Link: https://lore.kernel.org/r/20220125121426.848337-3-miquel.raynal@bootlin.com
+Signed-off-by: Stefan Schmidt <stefan@datenfreihafen.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/codecs/cpcap.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/net/ieee802154/mcr20a.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/sound/soc/codecs/cpcap.c
-+++ b/sound/soc/codecs/cpcap.c
-@@ -1541,6 +1541,8 @@ static int cpcap_codec_probe(struct plat
- {
- 	struct device_node *codec_node =
- 		of_get_child_by_name(pdev->dev.parent->of_node, "audio-codec");
-+	if (!codec_node)
-+		return -ENODEV;
+--- a/drivers/net/ieee802154/mcr20a.c
++++ b/drivers/net/ieee802154/mcr20a.c
+@@ -976,8 +976,8 @@ static void mcr20a_hw_setup(struct mcr20
+ 	dev_dbg(printdev(lp), "%s\n", __func__);
  
- 	pdev->dev.of_node = codec_node;
+ 	phy->symbol_duration = 16;
+-	phy->lifs_period = 40;
+-	phy->sifs_period = 12;
++	phy->lifs_period = 40 * phy->symbol_duration;
++	phy->sifs_period = 12 * phy->symbol_duration;
  
+ 	hw->flags = IEEE802154_HW_TX_OMIT_CKSUM |
+ 			IEEE802154_HW_AFILT |
 
 

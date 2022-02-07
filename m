@@ -2,97 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D0214ABEE1
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 14:23:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB3134ABF22
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 14:23:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1448297AbiBGNKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 08:10:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49834 "EHLO
+        id S1377659AbiBGNLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 08:11:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446823AbiBGMoV (ORCPT
+        with ESMTP id S1343547AbiBGMog (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 07:44:21 -0500
+        Mon, 7 Feb 2022 07:44:36 -0500
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEF55C0401DA;
-        Mon,  7 Feb 2022 04:44:19 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E217C043181;
+        Mon,  7 Feb 2022 04:44:34 -0800 (PST)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 85E26210FA;
-        Mon,  7 Feb 2022 12:44:18 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C8A6C210FA;
+        Mon,  7 Feb 2022 12:44:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1644237858; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1644237872; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=REWCo4WyXqeggxlaQoc81Z4br+c6dPKsB4gSuuK5a8s=;
-        b=MNQOcYiQ53o6zEK8Lc1m4mw9C6G14uAiy47KM0MqG0ye9B82f7xDvHneHXV3JfqHdRqNxt
-        HVIaFh+Iw13hiJ+6YgTNex5CM610q2JgC4WvW66CzSqbQ+ypFqV9XAoxMMU9Ws9Y8wM2TW
-        /12zf2YrSTPnlc5H+4w0mU1YBeO1idI=
+        bh=Fm3Hca/uzXhbYie979FgZfnFphMe3Z7RRg4zd6rl6XA=;
+        b=fZVCs+CMytbezBVuxQehYFx4LZrjEXf2Vcpr7JlQW/9jUJbBYX5Y7zlL+D3XW9WcU9naGp
+        OA66/Xo0GbPlqvY9+buTsXIa1/DJay1EK+DHrPkCkOASTC0iIGC5y4oLqRCQ+sLO2Lh39A
+        XUyP8msmynKa0nRxQav8fPjk7ejhwcE=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1644237858;
+        s=susede2_ed25519; t=1644237872;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=REWCo4WyXqeggxlaQoc81Z4br+c6dPKsB4gSuuK5a8s=;
-        b=K2P7SDskUm/1d2WOVLh3wZ975jizBirt8lNG5kSdDCFQxfOD2K53K2lSDQN9BMFYZFHrd8
-        h7UU/o6AheZG3NAw==
+        bh=Fm3Hca/uzXhbYie979FgZfnFphMe3Z7RRg4zd6rl6XA=;
+        b=UvY0vJmR3xSPxee9tQ9XceFUY5Dv1cs4AwxnMCImFrerWtJLkHzLbJ/ZQU3S2y8lePP7R3
+        HzH2+lRzuwMx87Bw==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F0AA213BF5;
-        Mon,  7 Feb 2022 12:44:17 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7E21013BF5;
+        Mon,  7 Feb 2022 12:44:32 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id 6Hy8OCEUAWKqCgAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Mon, 07 Feb 2022 12:44:17 +0000
-Date:   Mon, 7 Feb 2022 13:44:16 +0100
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Terry Bowman <terry.bowman@amd.com>
-Cc:     <linux@roeck-us.net>, <linux-watchdog@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>, <wsa@kernel.org>,
-        <andy.shevchenko@gmail.com>, <rafael.j.wysocki@intel.com>,
-        <linux-kernel@vger.kernel.org>, <wim@linux-watchdog.org>,
-        <rrichter@amd.com>, <thomas.lendacky@amd.com>,
-        <sudheesh.mavila@amd.com>, <Nehal-bakulchandra.Shah@amd.com>,
-        <Basavaraj.Natikar@amd.com>, <Shyam-sundar.S-k@amd.com>,
-        <Mario.Limonciello@amd.com>
-Subject: Re: [PATCH v4 0/4] Watchdog: sp5100_tco: Replace cd6h/cd7h port I/O
- accesses with MMIO accesses
-Message-ID: <20220207134416.72c22504@endymion.delvare>
-In-Reply-To: <20220130191225.303115-1-terry.bowman@amd.com>
-References: <20220130191225.303115-1-terry.bowman@amd.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        id +0SOHTAUAWLZCgAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 07 Feb 2022 12:44:32 +0000
+Message-ID: <11d3b6d4-3e31-05cc-c021-22e1497f02d1@suse.de>
+Date:   Mon, 7 Feb 2022 13:44:31 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 1/4] drm/format-helper: Add drm_fb_{xrgb8888,
+ gray8}_to_mono_reversed()
+Content-Language: en-US
+To:     Ilia Mirkin <imirkin@alum.mit.edu>
+Cc:     linux-fbdev <linux-fbdev@vger.kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sam Ravnborg <sam@ravnborg.org>
+References: <20220204134347.1187749-1-javierm@redhat.com>
+ <20220204134347.1187749-2-javierm@redhat.com>
+ <47100413-db63-1efa-45e9-028dfc430b7e@suse.de>
+ <CAKb7UvgxhLFT4aqYSE+=dpqfuTkvr62tsGmQP5H46mAytaQBRg@mail.gmail.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <CAKb7UvgxhLFT4aqYSE+=dpqfuTkvr62tsGmQP5H46mAytaQBRg@mail.gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------tfQqrAesgLp1qKiU02HjQVFV"
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Terry,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------tfQqrAesgLp1qKiU02HjQVFV
+Content-Type: multipart/mixed; boundary="------------DQMouTCacmkGVTRyTTuQE7rM";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Ilia Mirkin <imirkin@alum.mit.edu>
+Cc: linux-fbdev <linux-fbdev@vger.kernel.org>, David Airlie
+ <airlied@linux.ie>, Daniel Vetter <daniel.vetter@ffwll.ch>,
+ Javier Martinez Canillas <javierm@redhat.com>,
+ dri-devel <dri-devel@lists.freedesktop.org>,
+ LKML <linux-kernel@vger.kernel.org>, =?UTF-8?Q?Noralf_Tr=c3=b8nnes?=
+ <noralf@tronnes.org>, Geert Uytterhoeven <geert@linux-m68k.org>,
+ Maxime Ripard <maxime@cerno.tech>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Sam Ravnborg <sam@ravnborg.org>
+Message-ID: <11d3b6d4-3e31-05cc-c021-22e1497f02d1@suse.de>
+Subject: Re: [PATCH v2 1/4] drm/format-helper: Add drm_fb_{xrgb8888,
+ gray8}_to_mono_reversed()
+References: <20220204134347.1187749-1-javierm@redhat.com>
+ <20220204134347.1187749-2-javierm@redhat.com>
+ <47100413-db63-1efa-45e9-028dfc430b7e@suse.de>
+ <CAKb7UvgxhLFT4aqYSE+=dpqfuTkvr62tsGmQP5H46mAytaQBRg@mail.gmail.com>
+In-Reply-To: <CAKb7UvgxhLFT4aqYSE+=dpqfuTkvr62tsGmQP5H46mAytaQBRg@mail.gmail.com>
 
-On Sun, 30 Jan 2022 13:12:21 -0600, Terry Bowman wrote:
-> Please confirm to leave your reviewed-by and tested-by.
+--------------DQMouTCacmkGVTRyTTuQE7rM
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Confirmed. I reviewed the 4 patches of this version of the series and
-I'm fine with them. I also tested the result successfully on my laptop.
+SGkNCg0KQW0gMDQuMDIuMjIgdW0gMjI6MDIgc2NocmllYiBJbGlhIE1pcmtpbjoNCj4gT24g
+RnJpLCBGZWIgNCwgMjAyMiBhdCAxMDo1MyBBTSBUaG9tYXMgWmltbWVybWFubiA8dHppbW1l
+cm1hbm5Ac3VzZS5kZT4gd3JvdGU6DQo+Pg0KPj4gSGkNCj4+DQo+PiBBbSAwNC4wMi4yMiB1
+bSAxNDo0MyBzY2hyaWViIEphdmllciBNYXJ0aW5leiBDYW5pbGxhczoNCj4+PiBBZGQgc3Vw
+cG9ydCB0byBjb252ZXJ0IFhSMjQgYW5kIDgtYml0IGdyYXlzY2FsZSB0byByZXZlcnNlZCBt
+b25vY2hyb21lIGZvcg0KPj4+IGRyaXZlcnMgdGhhdCBjb250cm9sIG1vbm9jaHJvbWF0aWMg
+cGFuZWxzLCB0aGF0IG9ubHkgaGF2ZSAxIGJpdCBwZXIgcGl4ZWwuDQo+Pj4NCj4+PiBUaGUg
+ZHJtX2ZiX2dyYXk4X3RvX21vbm9fcmV2ZXJzZWQoKSBoZWxwZXIgd2FzIGJhc2VkIG9uIHRo
+ZSBmdW5jdGlvbiB0aGF0DQo+Pj4gZG9lcyB0aGUgc2FtZSBpbiB0aGUgZHJpdmVycy9ncHUv
+ZHJtL3RpbnkvcmVwYXBlci5jIGRyaXZlci4NCj4+Pg0KPj4+IFNpZ25lZC1vZmYtYnk6IEph
+dmllciBNYXJ0aW5leiBDYW5pbGxhcyA8amF2aWVybUByZWRoYXQuY29tPg0KPj4+IC0tLQ0K
+Pj4+DQo+Pj4gKG5vIGNoYW5nZXMgc2luY2UgdjEpDQo+Pj4NCj4+PiAgICBkcml2ZXJzL2dw
+dS9kcm0vZHJtX2Zvcm1hdF9oZWxwZXIuYyB8IDgwICsrKysrKysrKysrKysrKysrKysrKysr
+KysrKysrDQo+Pj4gICAgaW5jbHVkZS9kcm0vZHJtX2Zvcm1hdF9oZWxwZXIuaCAgICAgfCAg
+NyArKysNCj4+PiAgICAyIGZpbGVzIGNoYW5nZWQsIDg3IGluc2VydGlvbnMoKykNCj4+Pg0K
+Pj4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vZHJtX2Zvcm1hdF9oZWxwZXIuYyBi
+L2RyaXZlcnMvZ3B1L2RybS9kcm1fZm9ybWF0X2hlbHBlci5jDQo+Pj4gaW5kZXggMGYyOGRk
+MmJkZDcyLi5jZGNlNGI3YzI1ZDkgMTAwNjQ0DQo+Pj4gLS0tIGEvZHJpdmVycy9ncHUvZHJt
+L2RybV9mb3JtYXRfaGVscGVyLmMNCj4+PiArKysgYi9kcml2ZXJzL2dwdS9kcm0vZHJtX2Zv
+cm1hdF9oZWxwZXIuYw0KPj4+IEBAIC01ODQsMyArNTg0LDgzIEBAIGludCBkcm1fZmJfYmxp
+dF90b2lvKHZvaWQgX19pb21lbSAqZHN0LCB1bnNpZ25lZCBpbnQgZHN0X3BpdGNoLCB1aW50
+MzJfdCBkc3RfZm9yDQo+Pj4gICAgICAgIHJldHVybiAtRUlOVkFMOw0KPj4+ICAgIH0NCj4+
+PiAgICBFWFBPUlRfU1lNQk9MKGRybV9mYl9ibGl0X3RvaW8pOw0KPj4+ICsNCj4+PiArc3Rh
+dGljIHZvaWQgZHJtX2ZiX2dyYXk4X3RvX21vbm9fcmV2ZXJzZWRfbGluZSh1OCAqZHN0LCBj
+b25zdCB1OCAqc3JjLCBzaXplX3QgcGl4ZWxzKQ0KPj4+ICt7DQo+Pj4gKyAgICAgdW5zaWdu
+ZWQgaW50IHhiLCBpOw0KPj4+ICsNCj4+PiArICAgICBmb3IgKHhiID0gMDsgeGIgPCBwaXhl
+bHMgLyA4OyB4YisrKSB7DQo+Pg0KPj4gSW4gcHJhY3RpY2UsIGFsbCBtb2RlIHdpZHRocyBh
+cmUgbXVsdGlwbGVzIG9mIDggYmVjYXVzZSBWR0EgbWFuZGF0ZWQgaXQuDQo+PiBTbyBpdCdz
+IG9rLWlzaCB0byBhc3N1bWUgdGhpcyBoZXJlLiBZb3Ugc2hvdWxkIHByb2JhYmx5IGF0IGxl
+YXN0IHByaW50IGENCj4+IHdhcm5pbmcgc29tZXdoZXJlIGlmIChwaXhlbHMgJSA4ICE9IDAp
+DQo+IA0KPiBOb3Qgc3VyZSBpZiBpdCdzIHJlbGV2YW50LCBidXQgMTM2Nng3Njggd2FzIGEg
+ZmFpcmx5IHBvcHVsYXIgbGFwdG9wDQo+IHJlc29sdXRpb24uIFRoZXJlJ3MgZXZlbiBhIGRl
+ZGljYXRlZCBkcm1fbW9kZV9maXh1cF8xMzY2eDc2OCBpbg0KPiBkcm1fZWRpZC5jLiAoV291
+bGQgaXQgaGF2ZSBraWxsZWQgdGhlbSB0byBhZGQgMiBtb3JlIGhvcml6b250YWwNCj4gcGl4
+ZWxzPyBBcHBhcmVudGx5LikNCg0KRCdvaCENCg0KRG8geW91IGtub3cgaG93IHRoZSB0ZXh0
+IGNvbnNvbGUgbG9va3MgaW4gdGhpcyBtb2RlPyBGb250cyBzdGlsbCBleHBlY3QgDQphIG11
+bHRpcGxlIG9mIDguDQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNCj4gDQo+IENoZWVycywN
+Cj4gDQo+ICAgIC1pbGlhDQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERy
+aXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0K
+TWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBB
+RyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
 
-Reviewed-by: Jean Delvare <jdelvare@suse.de>
-Tested-by: Jean Delvare <jdelvare@suse.de>
+--------------DQMouTCacmkGVTRyTTuQE7rM--
 
-Thanks for your work.
+--------------tfQqrAesgLp1qKiU02HjQVFV
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
--- 
-Jean Delvare
-SUSE L3 Support
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmIBFC8FAwAAAAAACgkQlh/E3EQov+B+
+0BAAw+HwjL96CAPp6PCfz73k3/HGoFK8bVBoBvx6P8FLvNiqC46JHBXy00kTJ6kA2UZGFkwilhdH
+tTuUXWgKrRlU3xpSV6CZkkaxsoSBozAOIiVCTNXs8OLLErtHJ5WEvEiYsqqaG46agM0ij67KC8t7
+E1uNtdi3CacDAUr/255+vq8Sk7B3z+5GTgIKJ9wH3AaZn0un41HzncQ3ouEFY0p5S4hCDINt6O+u
+OmTtqO5NXZePZP33vhsLOq0F3uu3QLfk4NjB28Xq2xBzW9gEhKsnIHz4wr8ReYOveQK5u8+NehXR
+BulND7Bura3Lia+wTk6Xk8h0NGhP8YxCD/kEznskX4dsVNgdga9Auxwtm9uk5F73bCTlciSAOihW
+YwsV1rX0VSk5iRUOll9ROwmxJpZYbwjQf3jv0DP3Mql3IC9KUipzTIML7Evhe67+gZ04y77uJo5i
+Bv8PsFAp6Qn+T+eUK2wCryJTcg5NZec8AGBwe46KAp8pjm0oAEc98WPinnZn7DZQiCXGZYEU5/ZE
+cMDsRNmbLnvCh70FkRg8cr61PX4/IzKVF54oOldLhd/490a28ISosBWNH9+L/pRxuDerc9Tkr0JM
+w2N8VTlri5V16mQeTI3A/OgnY7gCuS5FKakCirKHqxzTxHHjgs2/DH4cfeHBmgLhX4UONDWrtltZ
+BcY=
+=w1Rr
+-----END PGP SIGNATURE-----
+
+--------------tfQqrAesgLp1qKiU02HjQVFV--

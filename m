@@ -2,243 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DE254AB353
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 03:22:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4BF04AB355
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 03:24:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348655AbiBGCWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 21:22:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45182 "EHLO
+        id S1348760AbiBGCX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 21:23:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236621AbiBGCWV (ORCPT
+        with ESMTP id S231880AbiBGCXy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 21:22:21 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D20AC043180
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 18:22:20 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id bt13so11860663ybb.2
-        for <linux-kernel@vger.kernel.org>; Sun, 06 Feb 2022 18:22:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gShRWvUd9Ow7a7WNN2vAkv7bSulf8ktrvRALywosIDY=;
-        b=e7yB3Prxf+J7bVf+/a2nIir83849wgtDQk2BJ7M1DF4TBP37cuBDpdB31Y7riwDj/j
-         LhSu6kbCMfxBI6GA4T7OmZlS2cCZ7OEWVPbngWC421tEew37Y+O84gqJk1fEAEwC8LVk
-         l+vuvCn5qvSKR+y/g3CqozYlrOdHJVigyosv17O1HeONiueto6O3XrzGtKOF8yn5/CtG
-         v/2kinBnRVx48YtWh0OSULoMl4c4LlnvMaMyTmjsav4CRcbZyjJJ7Yw7uDerJVBCFO7z
-         Xv9IOX4DYj7FHkjNpHztmy1SgbLriaW4CayuHOcUy+yHQ7i7X6l+diswez1nc4wmKfkY
-         5Jrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gShRWvUd9Ow7a7WNN2vAkv7bSulf8ktrvRALywosIDY=;
-        b=WOzr3eaxV9uv9oY1uaRNxTxGkK9er5KGH1WgYwhfZeJBeANdCmE2pW3EmYt5XBlf4J
-         1uehRKXORTqtwjvkblzaqAmMDEnHABycSxqOeEMu6YzDVQkvTqQtkJE2xh5U86W+eMh6
-         EhxCr7/hn2U5hURGDOxcWhc1g2Si81qx2JpdAGDiHRg2W4xTt4EJpFypFJc+j4sNhfJ5
-         PNG4W5rHApK8/SMHba8tkd7opLQJAcEKYq3NzLSV67Z23cSog7SeIr8DsExtsUCUG2Uj
-         vjqox0txNLjhPu6BtJrgjN2ODzCVWbbXgCWjLDiBuFnLOYAQLQKBqVQn0ofRZxckS3Hw
-         6P6Q==
-X-Gm-Message-State: AOAM532NWgM4Ai6vKkiKEcxgNdPNUJfHwqbUKvJFUfpxVTOx7Vo5f/qp
-        tOjiePsUXhxbhCnWQO+Hdm1tRppm9nzFDNvD5FHfiXw0xNW3GOxm
-X-Google-Smtp-Source: ABdhPJwW13OwDk7ti3/sqrP1zQY4V8fOTJjXL4CMpcwkAg83dxV/qEvR+dldzcOt98WP5dRM+1ArTSYF/GgHYsYxsuM=
-X-Received: by 2002:a81:e345:: with SMTP id w5mr6660964ywl.32.1644200538925;
- Sun, 06 Feb 2022 18:22:18 -0800 (PST)
+        Sun, 6 Feb 2022 21:23:54 -0500
+Received: from APC01-HK2-obe.outbound.protection.outlook.com (mail-eopbgr1300131.outbound.protection.outlook.com [40.107.130.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1063BC061A73
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 18:23:53 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=L6tpDkR6r6NkcbLT/Q8chkWbWFj46vIwEOysCPSnki6SGysc9hHoeIwIxA/lhqXXsJxfWJWTt9k8UjfdZU1/+Q5zuiNYv+J/3ySfDCoTKRGjDp3n6O8XHugnbDsZ6gjOAykHybq0F/SE2FC87aMyk93r7YlvN/+Q0HVRS6ckDgbAdQg+MMye4oR7noI+Iimd/K7VQc7jeiKxPNcjUzaQn68NNb9+8q+YY7sL2OQkNZMW6Qpa7P1lD4Tg41rr6VNaNJbMKeEErzRI/UAcV367xYI5nj/Ieyk5BaO1VYSrKnaDP104ewRqaQ+bzztrP663vdEs81LbhCSxBKSbtajZwg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JXF+Yh8jdou4KymQosnDd75noYcoWv/HnhvplGeP7E8=;
+ b=HPTgXmBtHir0iRr/tVAdkxnsm1OVvXdV+PLYXYSj51kGkD30CkWFWSAkfn1xSH1WUDsXsZPWFRgyjw7X7zVBM5IfaxloH1Pus0uxIMbLndzWl0mrQH7ouyt90u4YPkdlBjkRIFtulB4ZGcE6k1WpqqI4aXHRkvRGbEabkazE2fMZaNLaOJCALNqo6fRwe4E2yIaBPFxOe/f8PqQxm6Nc9HEoS5r3dIdySMN/N+TFFUzKocJCbFNeNaWeqDtzfd55VuZuV+myN8xbmhu5qFlSGpKCLf5qcN5UdOKwSwHib4TNo9nsIO24rV/+A5CEHY3O2WtjqvWodDI4q35B4DsCiQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JXF+Yh8jdou4KymQosnDd75noYcoWv/HnhvplGeP7E8=;
+ b=aibhBPIFhlWiolgo0nnu5bkszj122dYDbHOjLoP5vw5KNIvis0EnVzBEv1/+AmGHCNXolLWGOzOHSFLCrtAfAP0gMgNiS46ngZDvh3pDDXtrviR2jpUZuletZSzU7vi9r1kTbNP+SnW2ARL+IhkZFswkc4QDaaamGHk/huVIoUE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SG2PR06MB3367.apcprd06.prod.outlook.com (2603:1096:4:78::19) by
+ PSAPR06MB4022.apcprd06.prod.outlook.com (2603:1096:301:3d::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4951.12; Mon, 7 Feb 2022 02:23:47 +0000
+Received: from SG2PR06MB3367.apcprd06.prod.outlook.com
+ ([fe80::9d01:7970:71ff:cac3]) by SG2PR06MB3367.apcprd06.prod.outlook.com
+ ([fe80::9d01:7970:71ff:cac3%2]) with mapi id 15.20.4951.018; Mon, 7 Feb 2022
+ 02:23:46 +0000
+From:   Wan Jiabing <wanjiabing@vivo.com>
+To:     Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     jiabing.wan@qq.com, Wan Jiabing <wanjiabing@vivo.com>
+Subject: [PATCH] ARM: footbridge: Remove duplicated include in mach-footbridge
+Date:   Mon,  7 Feb 2022 10:23:10 +0800
+Message-Id: <20220207022310.2242489-1-wanjiabing@vivo.com>
+X-Mailer: git-send-email 2.35.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: HK2PR03CA0045.apcprd03.prod.outlook.com
+ (2603:1096:202:17::15) To SG2PR06MB3367.apcprd06.prod.outlook.com
+ (2603:1096:4:78::19)
 MIME-Version: 1.0
-References: <20220207014955.GA33412@xsang-OptiPlex-9020> <CANn89i+iE899BXqkMde8moNbqt8fWmt7O3mGqKt8M5wt=v58Hw@mail.gmail.com>
-In-Reply-To: <CANn89i+iE899BXqkMde8moNbqt8fWmt7O3mGqKt8M5wt=v58Hw@mail.gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Sun, 6 Feb 2022 18:22:07 -0800
-Message-ID: <CANn89iKuxQzG-Y=09YN7tVCC36gEFhJ9KhDz5hQT_qzVCHk8FQ@mail.gmail.com>
-Subject: Re: [ip6mr] f2f2325ec7: BUG:KASAN:use-after-free_in_ip6mr_sk_done
-To:     kernel test robot <oliver.sang@intel.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
-        lkp@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: f43fe8f4-37fc-4aac-939a-08d9e9e0de17
+X-MS-TrafficTypeDiagnostic: PSAPR06MB4022:EE_
+X-Microsoft-Antispam-PRVS: <PSAPR06MB4022B4A1983525C302D5FCB0AB2C9@PSAPR06MB4022.apcprd06.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2958;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 3cjDdWrU3cMC+Cczpu5ZDLyX+NmZbn3PpjQ71O8AJmkhBAz8LNF0IBAL+DZIlgIxp+TnnoqYkbo1/xHUJ3ghGqyGtm9iNdg77xfPV2drU1ZcRjr4WYfWlSqqI7/eY2XA1cj11M+iZoAEq/I4mXIelxOQ4BRoIDGWhBWY8PTWfpPjhpza9Jk5UkslENw4o7b563JP47EAggCzfvmL1P3n0CxIqIwmQ/Wt9L9VI2v0oaVg/q8bi7oCOKf4SvLUbHMQ1K01Aagu/+WetIMwJhtxg2kBAr6VJU32qNFF31l4yg+nKjbxft0Ddihnt8ecJXaTRy3TZDBIbG1w36aRJL8yf+C1A+nY4dVXQ1v2WeGitqnjH+mHZSsg8LMYXXEZPameAFZQn5de7KqxNlfvRxojJQAgdD9GTOS67QlCwDCK9o0pk3O1JrTqJZnQYED52eZ78MXHaACognc4aPaLbut8/JXQsz6MFcY/3XPTX394UmY/YUBlAS4oHktDWzqrX5V8X2CI6FY2J19SdEW+l/SNpUIsnteLGtct9Z9okVsTEgoRjKAFE0f7cKybN4K2Ri/oVnMXP6bSNEeWrcpKK4cjpDnK5xb3MO1WhDSDPipH5WVUICnCcIA7SDxv3TQj6ID/WNgi4V+4SiKcMe/UjJqYh1pBvBS/CRCv4ezyCmqkUk2HvSaWa2EbgKaiv/lhoBpfiF6PGhaY080lBxnoP0hs8w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3367.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8936002)(8676002)(5660300002)(186003)(4326008)(1076003)(6486002)(66476007)(66556008)(4744005)(66946007)(2906002)(6512007)(52116002)(6666004)(6506007)(2616005)(86362001)(36756003)(38100700002)(508600001)(316002)(107886003)(38350700002)(26005)(83380400001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?bonBm8p97ULSSBcuhNxAKa3Fz3g61ipb1Qd9IGQDJQgffbt8EHuDGfDWXuJs?=
+ =?us-ascii?Q?j7n5KeStXdNaUORETvQW30yVom75cDz63rXtjCjVBosOLG+H2hW9Cm8WEhNP?=
+ =?us-ascii?Q?BJkbpsgXa9J6buYD/4uGQCZrYEtekFld146V9Tu44IIX37IAUfK4sPyByTRd?=
+ =?us-ascii?Q?AObczgQn8+53rbZjrPCDNe6o3w24/SblxXNTgr0uYutM6W6DOcmw368kjgmO?=
+ =?us-ascii?Q?vub2xsOPkv+SDNKNsMFrvV2xuR24bPKSHr6OhmUBSN2m+TT0+Vvzs6rRGCOF?=
+ =?us-ascii?Q?tHVit2d3V78FB1J2eYs/P07EeEcpaelSk3aVfzkg0ejhZDEx06q7aXoQ5txv?=
+ =?us-ascii?Q?cp8QGAusZ87khIjLQdkhEZ8W6O4QNf/qDNT3MWM01D4Bzj82jsheh0+kwNjv?=
+ =?us-ascii?Q?Nr2jvisPnIr/eNi0ihplMDmtjIrcsF0sYxr/BVgp+eFYNhYVi8Rd7CYYNYKd?=
+ =?us-ascii?Q?JHdf2OxS0NWyiJ9kOCzPPFeYnI0YyWOLrxxNItGaxNKWn5eRPu23qhKqzBUf?=
+ =?us-ascii?Q?rNnSmfK8ikfBFGxAOqw1ylKJfpQ5i5Z5pTUVCMtUMJFARaXptWutSPNh4l8/?=
+ =?us-ascii?Q?6z8aj3k7EXzUeIiWF3woJrn13OIsgMzGcdbn407Ubn/3Tz8Ir9rRBISCi0PE?=
+ =?us-ascii?Q?FVYebukynkHDb7MDbDKWYwsfocgu61JzHTU3boAwRw6ylxMNqxHbKqfzZoRl?=
+ =?us-ascii?Q?nd2iSOBWND1wSYckuDfUdRNommGH3MWhdgHEmo9lGk4gPa0Li8BvYXfK7dMH?=
+ =?us-ascii?Q?D/7ySTCC0a/5TnZUHIFHmuUP7Zk8LFoy4+fG4VxrzYUI8qLOYJ7GtQiQGjh/?=
+ =?us-ascii?Q?vh0rBrStNjB4MkmmeRq15OhuHX7DltBQmgOGjkEfB8KNt6CrfKzratfkunM1?=
+ =?us-ascii?Q?1QxBAJCLje1dBN+9Q8AnGxU6cGZu7zZyrheSUuw/cxKtXsy793XiRAXQnNW0?=
+ =?us-ascii?Q?FGnC8fXOXBj3/gTgz1rnitezS0XOC/hQbBZMHh7fS1V61O/2wcMOwj8TFBkG?=
+ =?us-ascii?Q?dwo8MkoFPN2IcTLNZYeRiCyTeFEv5T+lHRV/1dediIeTZA4v+Sm7lI1D7EFI?=
+ =?us-ascii?Q?HYINrlU6/EG+dPmw0FQKLkszM+U/v9gUK3LRhsZjYCqVMrO53T8iLbjQ4X3f?=
+ =?us-ascii?Q?bRoLChv2QhkyC/MEBM+al096m6EmVt/QNRigu2AqozSCEcBJZd+FlYW/n04p?=
+ =?us-ascii?Q?C+uE0n8aXzsMH5YRiRAYpxu+1wOKUllN1ekbZeWP9XV7gEK3mMICf22afDq1?=
+ =?us-ascii?Q?5hTNC+/V/H/mR1d+w8i96sTqG9TDHkOchUsnDWbivlYSjoyl4KvKHDhFRt6Q?=
+ =?us-ascii?Q?j8nAWsHlNhv6Vy8Ul40xO0eH7CNE+h2GeR9EguSEpX56nqzIKfV8sR37kW2J?=
+ =?us-ascii?Q?dFZF9lmbEWpp183SlOe8R0loGVVVAYw1oSE8Jz1gCvs3aT+qCMYaF3EA6lor?=
+ =?us-ascii?Q?0W3nGWSZIPDwjXwFGdl+QO9Orkj0S8OL+KP/cEWPTMda3UPi1oNLwXDvwJ1b?=
+ =?us-ascii?Q?vNi0AEW1YOM89uxkEY5EGbjRKvLXgVxIAgjBuYVQA1Xr+FYU1Y7sOh9lGxCP?=
+ =?us-ascii?Q?mS/WMYF7l9e8cT379eeWllXDgu8CW2nObmXcudHYH5NY/WgBvF6bs9JO6svh?=
+ =?us-ascii?Q?39b7ujqNonAaUJ3Q2Sl61FU=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f43fe8f4-37fc-4aac-939a-08d9e9e0de17
+X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3367.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Feb 2022 02:23:46.5012
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: oWiAUqMtkEwVCmAAZkr8aKC1v7Bgo8rEKu25nN/Ehfxm4XoW0S6Hbraea/+UP35gV8BelFk3qLGwEMPl9LoA6w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PSAPR06MB4022
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 6, 2022 at 6:20 PM Eric Dumazet <edumazet@google.com> wrote:
->
-> On Sun, Feb 6, 2022 at 5:50 PM kernel test robot <oliver.sang@intel.com> wrote:
-> >
-> >
-> >
-> > Greeting,
-> >
-> > FYI, we noticed the following commit (built with gcc-9):
-> >
-> > commit: f2f2325ec79970807012dfc9e716cdbb02d9b574 ("ip6mr: ip6mr_sk_done() can exit early in common cases")
-> > url: https://github.com/0day-ci/linux/commits/Biju-Das/dt-bindings-net-renesas-etheravb-Document-RZ-V2L-SoC/20220207-042554
-> >
->
-> Yes, syzbot found it yesterday, and the fix is sent for review. thanks.
->
-> https://patchwork.kernel.org/project/netdevbpf/patch/20220206143348.350693-1-eric.dumazet@gmail.com/
+Fix following checkincludes.pl warning:
+./arch/arm/mach-footbridge/common.c: asm/hardware/dec21285.h is included
+more than once.
 
-Correct link is :
+The include is in line 22. Remove the duplicated here.
 
-https://patchwork.kernel.org/project/netdevbpf/list/?series=611632
+Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+---
+ arch/arm/mach-footbridge/common.c | 1 -
+ 1 file changed, 1 deletion(-)
 
+diff --git a/arch/arm/mach-footbridge/common.c b/arch/arm/mach-footbridge/common.c
+index 322495df271d..627a12332022 100644
+--- a/arch/arm/mach-footbridge/common.c
++++ b/arch/arm/mach-footbridge/common.c
+@@ -29,7 +29,6 @@
+ 
+ #include <mach/hardware.h>
+ #include <mach/irqs.h>
+-#include <asm/hardware/dec21285.h>
+ 
+ static int dc21285_get_irq(void)
+ {
+-- 
+2.35.1
 
->
->
-> > in testcase: trinity
-> > version: trinity-x86_64-608712d8-1_20220128
-> > with following parameters:
-> >
-> >         runtime: 300s
-> >
-> > test-description: Trinity is a linux system call fuzz tester.
-> > test-url: http://codemonkey.org.uk/projects/trinity/
-> >
-> >
-> > on test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
-> >
-> > caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
-> >
-> >
-> >
-> > If you fix the issue, kindly add following tag
-> > Reported-by: kernel test robot <oliver.sang@intel.com>
-> >
-> >
-> > [ 43.727566][ T7] BUG: KASAN: use-after-free in ip6mr_sk_done (arch/x86/include/asm/atomic.h:29 include/linux/atomic/atomic-instrumented.h:28 net/ipv6/ip6mr.c:1578)
-> > [   43.728665][    T7] Read of size 4 at addr ffff88810eb94888 by task kworker/u4:0/7
-> > [   43.729851][    T7]
-> > [   43.730219][    T7] CPU: 0 PID: 7 Comm: kworker/u4:0 Not tainted 5.17.0-rc2-00638-gf2f2325ec799 #1
-> > [   43.731561][    T7] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.12.0-1 04/01/2014
-> > [   43.732945][    T7] Workqueue: netns cleanup_net
-> > [   43.733744][    T7] Call Trace:
-> > [   43.734297][    T7]  <TASK>
-> > [ 43.734792][ T7] dump_stack_lvl (lib/dump_stack.c:107)
-> > [ 43.735543][ T7] print_address_description+0x21/0x180
-> > [ 43.736636][ T7] ? ip6mr_sk_done (arch/x86/include/asm/atomic.h:29 include/linux/atomic/atomic-instrumented.h:28 net/ipv6/ip6mr.c:1578)
-> > [ 43.737405][ T7] kasan_report.cold (mm/kasan/report.c:443 mm/kasan/report.c:459)
-> > [ 43.738113][ T7] ? ip6mr_sk_done (arch/x86/include/asm/atomic.h:29 include/linux/atomic/atomic-instrumented.h:28 net/ipv6/ip6mr.c:1578)
-> > [ 43.738764][ T7] kasan_check_range (mm/kasan/generic.c:190)
-> > [ 43.739475][ T7] ip6mr_sk_done (arch/x86/include/asm/atomic.h:29 include/linux/atomic/atomic-instrumented.h:28 net/ipv6/ip6mr.c:1578)
-> > [ 43.740207][ T7] rawv6_close (net/ipv6/raw.c:1202)
-> > [ 43.743739][ T7] inet_release (net/ipv4/af_inet.c:429)
-> > [ 43.747360][ T7] __sock_release (net/socket.c:651)
-> > [ 43.749878][ T7] igmp6_net_exit (net/ipv6/mcast.c:3174)
-> > [ 43.752005][ T7] ops_exit_list+0x98/0x180
-> > [ 43.754973][ T7] cleanup_net (net/core/net_namespace.c:599 (discriminator 3))
-> > [ 43.757738][ T7] ? peernet2id_alloc (net/core/net_namespace.c:553)
-> > [ 43.760247][ T7] ? __schedule (kernel/sched/core.c:6174)
-> > [ 43.762857][ T7] process_one_work (arch/x86/include/asm/jump_label.h:27 include/linux/jump_label.h:212 include/trace/events/workqueue.h:108 kernel/workqueue.c:2312)
-> > [ 43.765808][ T7] worker_thread (include/linux/list.h:292 kernel/workqueue.c:2455)
-> > [ 43.768529][ T7] ? process_one_work (kernel/workqueue.c:2397)
-> > [ 43.771855][ T7] kthread (kernel/kthread.c:377)
-> > [ 43.775300][ T7] ? kthread_complete_and_exit (kernel/kthread.c:332)
-> > [ 43.778982][ T7] ret_from_fork (arch/x86/entry/entry_64.S:301)
-> > [   43.782691][    T7]  </TASK>
-> > [   43.786069][    T7]
-> > [   43.789270][    T7] Allocated by task 1:
-> > [ 43.792813][ T7] kasan_save_stack (mm/kasan/common.c:39)
-> > [ 43.796486][ T7] __kasan_kmalloc (mm/kasan/common.c:45 mm/kasan/common.c:436 mm/kasan/common.c:515 mm/kasan/common.c:524)
-> > [ 43.799875][ T7] fib_create_info (include/linux/slab.h:586 include/linux/slab.h:715 net/ipv4/fib_semantics.c:1442)
-> > [ 43.803543][ T7] fib_table_insert (net/ipv4/fib_trie.c:1224)
-> > [ 43.807195][ T7] fib_magic+0x297/0x440
-> > [ 43.810869][ T7] fib_add_ifaddr (net/ipv4/fib_frontend.c:1129)
-> > [ 43.814464][ T7] fib_netdev_event (net/ipv4/fib_frontend.c:1465 (discriminator 3))
-> > [ 43.818098][ T7] raw_notifier_call_chain (kernel/notifier.c:89 kernel/notifier.c:392)
-> > [ 43.821558][ T7] __dev_notify_flags (net/core/dev.c:1931 net/core/dev.c:1945 net/core/dev.c:8177)
-> > [ 43.824595][ T7] dev_change_flags (net/core/dev.c:8217)
-> > [ 43.827778][ T7] ip_auto_config (net/ipv4/ipconfig.c:224 net/ipv4/ipconfig.c:1502)
-> > [ 43.831118][ T7] do_one_initcall (init/main.c:1300)
-> > [ 43.834106][ T7] kernel_init_freeable (init/main.c:1372 init/main.c:1389 init/main.c:1408 init/main.c:1613)
-> > [ 43.837190][ T7] kernel_init (init/main.c:1504)
-> > [ 43.839802][ T7] ret_from_fork (arch/x86/entry/entry_64.S:301)
-> > [   43.842527][    T7]
-> > [   43.844785][    T7] Freed by task 7:
-> > [   43.845862][  T660] VFS: Warning: trinity-c3 using old stat() call. Recompile your binary.
-> > [ 43.847180][ T7] kasan_save_stack (mm/kasan/common.c:39)
-> > [ 43.847193][ T7] kasan_set_track (mm/kasan/common.c:45)
-> > [ 43.847198][ T7] kasan_set_free_info (mm/kasan/generic.c:372)
-> > [ 43.858233][ T7] __kasan_slab_free (mm/kasan/common.c:368 mm/kasan/common.c:328 mm/kasan/common.c:374)
-> > [ 43.861032][ T7] kfree (mm/slub.c:1754 mm/slub.c:3509 mm/slub.c:4562)
-> > [ 43.863634][ T7] ops_exit_list+0x98/0x180
-> > [ 43.866428][ T7] cleanup_net (net/core/net_namespace.c:599 (discriminator 3))
-> > [ 43.868846][ T7] process_one_work (arch/x86/include/asm/jump_label.h:27 include/linux/jump_label.h:212 include/trace/events/workqueue.h:108 kernel/workqueue.c:2312)
-> > [ 43.871491][ T7] worker_thread (include/linux/list.h:292 kernel/workqueue.c:2455)
-> > [ 43.874217][ T7] kthread (kernel/kthread.c:377)
-> > [ 43.876775][ T7] ret_from_fork (arch/x86/entry/entry_64.S:301)
-> > [   43.879429][    T7]
-> > [   43.881813][    T7] Last potentially related work creation:
-> > [ 43.884669][ T7] kasan_save_stack (mm/kasan/common.c:39)
-> > [ 43.887467][ T7] __kasan_record_aux_stack (mm/kasan/generic.c:348)
-> > [ 43.890366][ T7] call_rcu (kernel/rcu/tree.c:3027 kernel/rcu/tree.c:3106)
-> > [ 43.893057][ T7] fib_create_info (net/ipv4/fib_semantics.c:1574)
-> > [ 43.895888][ T7] fib_table_insert (net/ipv4/fib_trie.c:1224)
-> > [ 43.898686][ T7] fib_magic+0x297/0x440
-> > [ 43.901503][ T7] fib_add_ifaddr (net/ipv4/fib_frontend.c:1129)
-> > [ 43.904283][ T7] fib_netdev_event (net/ipv4/fib_frontend.c:1465 (discriminator 3))
-> > [ 43.906925][ T7] raw_notifier_call_chain (kernel/notifier.c:89 kernel/notifier.c:392)
-> > [ 43.909660][ T7] __dev_notify_flags (net/core/dev.c:1931 net/core/dev.c:1945 net/core/dev.c:8177)
-> > [ 43.912346][ T7] dev_change_flags (net/core/dev.c:8217)
-> > [ 43.915108][ T7] ip_auto_config (net/ipv4/ipconfig.c:224 net/ipv4/ipconfig.c:1502)
-> > [ 43.917827][ T7] do_one_initcall (init/main.c:1300)
-> > [ 43.920549][ T7] kernel_init_freeable (init/main.c:1372 init/main.c:1389 init/main.c:1408 init/main.c:1613)
-> > [ 43.923383][ T7] kernel_init (init/main.c:1504)
-> > [ 43.926096][ T7] ret_from_fork (arch/x86/entry/entry_64.S:301)
-> > [   43.928757][    T7]
-> > [   43.931153][    T7] The buggy address belongs to the object at ffff88810eb94800
-> > [   43.931153][    T7]  which belongs to the cache kmalloc-256 of size 256
-> > [   43.937453][    T7] The buggy address is located 136 bytes inside of
-> > [   43.937453][    T7]  256-byte region [ffff88810eb94800, ffff88810eb94900)
-> > [   43.943729][    T7] The buggy address belongs to the page:
-> > [   43.946822][    T7] page:00000000392d4f15 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x10eb94
-> > [   43.950810][    T7] head:00000000392d4f15 order:1 compound_mapcount:0
-> > [   43.954208][    T7] flags: 0x17ffffc0010200(slab|head|node=0|zone=2|lastcpupid=0x1fffff)
-> > [   43.957836][    T7] raw: 0017ffffc0010200 dead000000000100 dead000000000122 ffff888100041b40
-> > [   43.961613][    T7] raw: 0000000000000000 0000000000100010 00000001ffffffff 0000000000000000
-> > [   43.965353][    T7] page dumped because: kasan: bad access detected
-> > [   43.968765][    T7] page_owner tracks the page as allocated
-> > [   43.971860][    T7] page last allocated via order 1, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 1, ts 24086391223, free_ts 24079533892
-> > [ 43.979986][ T7] prep_new_page (include/linux/page_owner.h:31 mm/page_alloc.c:2427 mm/page_alloc.c:2434)
-> > [ 43.983297][ T7] get_page_from_freelist (mm/page_alloc.c:4171)
-> > [ 43.986879][ T7] __alloc_pages (mm/page_alloc.c:5390)
-> > [ 43.990280][ T7] alloc_page_interleave (arch/x86/include/asm/jump_label.h:27 mm/mempolicy.c:2118)
-> > [ 43.993759][ T7] allocate_slab (mm/slub.c:1799 mm/slub.c:1944)
-> > [ 43.997239][ T7] ___slab_alloc (mm/slub.c:3018)
-> > [ 44.000639][ T7] __slab_alloc+0x1c/0x40
-> > [ 44.004090][ T7] __kmalloc (mm/slub.c:3196 mm/slub.c:3238 mm/slub.c:4420)
-> >
-> >
-> > To reproduce:
-> >
-> >         # build kernel
-> >         cd linux
-> >         cp config-5.17.0-rc2-00638-gf2f2325ec799 .config
-> >         make HOSTCC=gcc-9 CC=gcc-9 ARCH=x86_64 olddefconfig prepare modules_prepare bzImage modules
-> >         make HOSTCC=gcc-9 CC=gcc-9 ARCH=x86_64 INSTALL_MOD_PATH=<mod-install-dir> modules_install
-> >         cd <mod-install-dir>
-> >         find lib/ | cpio -o -H newc --quiet | gzip > modules.cgz
-> >
-> >
-> >         git clone https://github.com/intel/lkp-tests.git
-> >         cd lkp-tests
-> >         bin/lkp qemu -k <bzImage> -m modules.cgz job-script # job-script is attached in this email
-> >
-> >         # if come across any failure that blocks the test,
-> >         # please remove ~/.lkp and /lkp dir to run from a clean state.
-> >
-> >
-> >
-> > ---
-> > 0DAY/LKP+ Test Infrastructure                   Open Source Technology Center
-> > https://lists.01.org/hyperkitty/list/lkp@lists.01.org       Intel Corporation
-> >
-> > Thanks,
-> > Oliver Sang
-> >

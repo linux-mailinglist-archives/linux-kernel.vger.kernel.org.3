@@ -2,115 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 172964AB90F
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 11:52:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ACB14AB904
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 11:51:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238065AbiBGKtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 05:49:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60752 "EHLO
+        id S237210AbiBGKs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 05:48:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351864AbiBGKj0 (ORCPT
+        with ESMTP id S1355437AbiBGKmG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 05:39:26 -0500
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE9AAC043181;
-        Mon,  7 Feb 2022 02:39:25 -0800 (PST)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2177wqw4017916;
-        Mon, 7 Feb 2022 11:39:17 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=5fT7c4Mvgn2+ok+STLBdSgiGaFIlSdUaQbBwjLUOJH0=;
- b=i67U6qLJURxlIpLy7BYqlneYLOC7BdWvvYXtnza2KQDmRrcTbYml/pKJc443HWlff3RN
- znakVb4TkS8kPn3g+v49D34loNf2M+X9zzV6th7oqe2eRL4YZQpDgi8616hvuBPGFUK0
- JXY+LqnKaH9bGnw6VuWI9cJnvPynwDiq7K0qaqt92fLzNtiYN25P1fQylixxZuBeSqtq
- T6Yi4MBXokPTOIYgzaVkFKwbcq2zIpVbC6RB/vWgRoQWBnd5oRW69vexYBYaSckmESAS
- ziGP1HcQsDJd7Dv6uIXTP2ewNa7zQDCtOkEtHLBUdGxwgjFiQgRkj6CbgG2RYXFu+uL4 Mw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3e2nfyaveu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 07 Feb 2022 11:39:17 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 86CCF100034;
-        Mon,  7 Feb 2022 11:39:16 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 7D6EB215157;
-        Mon,  7 Feb 2022 11:39:16 +0100 (CET)
-Received: from [10.48.0.252] (10.75.127.47) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 7 Feb
- 2022 11:39:15 +0100
-Message-ID: <b35ab20d-479f-a5ae-0e43-2b3c03f087e1@foss.st.com>
-Date:   Mon, 7 Feb 2022 11:39:14 +0100
+        Mon, 7 Feb 2022 05:42:06 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E087AC0401CC
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 02:41:42 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id h6so5186035wrb.9
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 02:41:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=T6Y4XwyMFlMeGLzQGb5LndPQ3ElLUnlBrYaGjIYGShI=;
+        b=Ob5A1YIBRvULbvGmzFBCbIcU+XZeq0qU4VD1yGb6jrOI1GIR0OoVYDmZn72ar9cIbu
+         NcurQVPHxzzlFAcNcArrPQ+lUEswI0+Oy2u+WOwKC53DivxIPFfUKXnCLVx6Hg8OGM/z
+         JLao0lZFOY1L1Ym/Ns6uHfIoe3i/x+xpDrYqDI5edmYQXBFzgHNSTB4HW8wGJIrG+b8q
+         3VHcP5bT7cjR/UAOxs2bpqJrsjr4oYYR//2wqdsva4lHNYxMMPTz5cEdya5UWFJFxxSU
+         zadQp+mOo4RRnaQHLKM0jQAPoapwYr+nkZrButpeQNj8qnmt3x56dyfwioAcY/X8k0ZP
+         iSBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=T6Y4XwyMFlMeGLzQGb5LndPQ3ElLUnlBrYaGjIYGShI=;
+        b=Pxiok68DbqAiFGZ0/JRXJV+fwrXCts6+xZYp4GDnK8c4kT2sKwtYZrIy7wDaFmXy05
+         USYBSsR+lAIRd+iC9aVpkhpDlLrtbXKB7rMPhhTZR5ALY8GBs1tp+nbMOaJsiMDTZV0t
+         XOoXSsBD/TL/1mBmb9aR+o4vycPx63otQQkU4AqM2bvHYo3mZSrgR5na3IX4NrdOasJb
+         eYYS6ftAgPRg/IuG7JbTOt9R5vk+k7zy4nIZwjD0+mIVHuPyLDZ3QfL7aqC4GdnyxUY9
+         xLw5bIkzYuJlbhJCXBbapHmzLOpHdrrmiNlaabPYMBt/bizvD+eIGwbJQcBqADyVBzpE
+         PpmA==
+X-Gm-Message-State: AOAM530+Y6EUi6AZPkySyXpajKqW2yIAL9W6NXwarWUHqBc1zvx4fjuS
+        GKAksuu0jO80BlkLtdLs7efOSg==
+X-Google-Smtp-Source: ABdhPJwYXiJDItEqRFFJ0jxOt0InTlKSm5WeIpAG+Cbkr0EGULbWjnWSGTHjnC6+X5lO/QPTRJ52iw==
+X-Received: by 2002:adf:dd8e:: with SMTP id x14mr1125270wrl.576.1644230501325;
+        Mon, 07 Feb 2022 02:41:41 -0800 (PST)
+Received: from ?IPV6:2a01:e34:ed2f:f020:aad:d73a:87d6:4855? ([2a01:e34:ed2f:f020:aad:d73a:87d6:4855])
+        by smtp.googlemail.com with ESMTPSA id ay29sm8852796wmb.38.2022.02.07.02.41.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Feb 2022 02:41:40 -0800 (PST)
+Message-ID: <0d2217e0-44f7-8587-3e1f-a73d301ab166@linaro.org>
+Date:   Mon, 7 Feb 2022 11:41:39 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH 00/10] ARM: dts: stm32: update sdmmc nodes
+Subject: Re: [PATCH 0/2] Ignore Energy Model with abstract scale in IPA and
+ DTPM
 Content-Language: en-US
-To:     Yann Gautier <yann.gautier@foss.st.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-mmc@vger.kernel.org>
-References: <20220112163226.25384-1-yann.gautier@foss.st.com>
-From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
-In-Reply-To: <20220112163226.25384-1-yann.gautier@foss.st.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.47]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-07_03,2022-02-07_01,2021-12-02_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+To:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Cc:     amit.kachhap@gmail.com, viresh.kumar@linaro.org, rafael@kernel.org,
+        amitk@kernel.org, rui.zhang@intel.com, dietmar.eggemann@arm.com,
+        Pierre.Gondois@arm.com
+References: <20220207073036.14901-1-lukasz.luba@arm.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20220207073036.14901-1-lukasz.luba@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yann
+On 07/02/2022 08:30, Lukasz Luba wrote:
+> Hi all,
+> 
+> The Energy Model supports abstract scale power values. This might cause
+> issues for some mechanisms like thermal governor IPA or DTPM, which
+> expect that all devices provide sane power values. This patch set prevents
+> from registering such devices for IPA and DTPM.
 
-On 1/12/22 17:32, Yann Gautier wrote:
-> This patches series brings updates for SDMMC nodes on STM32MP13
-> (max frequency, pins slew-rates, sleep pins, and controller version).
-> The sdmmc2 node is also added as STM32MP13 embeds 2 SDMMC controllers.
-> 
-> The compatible for sdmmc nodes is also updated for both STM32MP13
-> and STM32MP15, to align with bootloaders DT, and after arm,pl18x.yaml
-> has been updated [1].
-> 
-> [1] commit 552bc46484b3 ("dt-bindings: mmc: mmci: Add st,stm32-sdmmc2
->      compatible")
-> 
-> Gerald Baeza (1):
->    ARM: dts: stm32: update sdmmc slew-rate in stm32mp13 pinctrl
-> 
-> Yann Gautier (9):
->    ARM: dts: stm32: add st,stm32-sdmmc2 compatible on stm32mp151
->    ARM: dts: stm32: add st,stm32-sdmmc2 compatible on stm32mp131
->    ARM: dts: stm32: increase SDMMC max-frequency for STM32MP13
->    ARM: dts: stm32: update SDMMC clock slew-rate on STM32MP135F-DK board
->    ARM: dts: stm32: add sdmmc sleep pins for STM32MP13
->    ARM: dts: stm32: add sdmmc sleep config for STM32MP135F-DK
->    ARM: dts: stm32: update SDMMC version for STM32MP13
->    ARM: dts: stm32: add SDMMC2 in STM32MP13 DT
->    ARM: dts: stm32: add sdmmc2 pins for STM32MP13
-> 
->   arch/arm/boot/dts/stm32mp13-pinctrl.dtsi | 81 ++++++++++++++++++++----
->   arch/arm/boot/dts/stm32mp131.dtsi        | 20 +++++-
->   arch/arm/boot/dts/stm32mp135f-dk.dts     |  7 +-
->   arch/arm/boot/dts/stm32mp151.dtsi        |  6 +-
->   4 files changed, 94 insertions(+), 20 deletions(-)
-> 
 
-Series applied on stm32-next.
+Does it mean for example big and little have both 0-100 ?
 
-Thanks
-alex
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

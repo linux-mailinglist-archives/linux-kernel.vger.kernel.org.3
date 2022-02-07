@@ -2,102 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AFE74AB84C
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 11:13:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00AE04AB85F
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 11:13:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352833AbiBGKJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 05:09:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43528 "EHLO
+        id S1353186AbiBGKJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 05:09:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352419AbiBGKAn (ORCPT
+        with ESMTP id S245372AbiBGKBr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 05:00:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C704C043188;
-        Mon,  7 Feb 2022 02:00:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 7 Feb 2022 05:01:47 -0500
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B43AC043181;
+        Mon,  7 Feb 2022 02:01:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1644228106; x=1675764106;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=OLBk8VmXYB8jx7aVY5Bxh1lSXhO4OOTwnhTpzDJBWAE=;
+  b=RcDjGY1HjM+vqyW9NxHirDB4DPkjTqf9JZ1TxJzOeO1Oq7wm+e0ddYy2
+   FtMh3ipCTRnsca1VLe1LXs+irOVbqKqASlabK0XsU41hgJrjWPHB7UncA
+   HtsTa9oswj/E9t6Rg8q7w4nglKFRp6wHKBKot/5/yIFSXLYuz3AQC1bBb
+   EQhHKcPt1ouh8SnZzYWTE4ODz1mXWoGR3akHYHY5uVpxvLBsKWvTYk9Z4
+   bIfdA/UUNGj2sEnjRty4Z/Swhjm2uEv1O6i8mdO3uzde4NCCoD/bdWPSx
+   0NNMlNnWL5Py/b7zh10fqTn/THfEmI8h9QyBqtAnwxvK3JgPf23XIMoNK
+   A==;
+X-IronPort-AV: E=Sophos;i="5.88,349,1635199200"; 
+   d="scan'208";a="21928203"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 07 Feb 2022 11:01:44 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Mon, 07 Feb 2022 11:01:44 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Mon, 07 Feb 2022 11:01:44 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1644228104; x=1675764104;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=OLBk8VmXYB8jx7aVY5Bxh1lSXhO4OOTwnhTpzDJBWAE=;
+  b=hTq700xWMAQBrKds3eG6S/ofOq0kY7Hqgbbp7K74N89UweNr1HkEiEei
+   MMKBPzuDWVtEH+my1B3XVis0zemDUPfd6H+89WWDI0xsY5arHrdHFTnG4
+   Gw9lSsvRJvPt4WSRRkcbQjEhoWefIbaLIYwskJTB17rapdRCvKnEpMqXe
+   f2JW/SdllrNPxBqeBum+DpzEQrsZolbscI1J5kL9+gVw0kmXp70Va5fLp
+   XZX0mcl8XTEGSclphQogOnwtqVFp7F8YCTsDbYU43zbGxy68gmDuCcAP6
+   7qUlOuDuqWs5+eqHMYx33267YejIonEwIGLbsydlpJIfBpktDpGdS8bwc
+   A==;
+X-IronPort-AV: E=Sophos;i="5.88,349,1635199200"; 
+   d="scan'208";a="21928202"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 07 Feb 2022 11:01:44 +0100
+Received: from steina-w.localnet (unknown [10.123.49.12])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D8A5DB810EE;
-        Mon,  7 Feb 2022 10:00:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0005C004E1;
-        Mon,  7 Feb 2022 10:00:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644228040;
-        bh=+uR/PXZaEfd9UqPJTuut/61nSBPBE3DGkzWve6F8gaI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UXRRaHgHdwkUbr9O/4nBs34+9UZYbK309UgnigZAuHEmeXnT1CqU194OYHDahrtom
-         He8FMYCU2bt26N6nhJ/4vPMswhElHKIyeXhc//GOxQS6c26+glWn+U3MsfuA23oVGo
-         8cmp69w6SuUX0axXdPO3/6SA1m0We0QJktDzheBo=
-Date:   Mon, 7 Feb 2022 11:00:37 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     luofei <luofei@unicloud.com>, stable@vger.kernel.org,
-        tony.luck@intel.com, tglx@linutronix.de, mingo@redhat.com,
-        hpa@zytor.com, x86@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] x86/mm, mm/hwpoison: fix unmap kernel 1:1 pages
-Message-ID: <YgDtxR0V7cqOZSe3@kroah.com>
-References: <20220207075242.830685-1-luofei@unicloud.com>
- <YgDU3+KsiaQ54J5N@kroah.com>
- <YgDn7WWdcD5xaprX@zn.tnic>
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 2F966280065;
+        Mon,  7 Feb 2022 11:01:44 +0100 (CET)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: (EXT) Re: [PATCH 6/8] media: imx: imx7_media-csi: Add support for additional Bayer patterns
+Date:   Mon, 07 Feb 2022 11:01:43 +0100
+Message-ID: <3473889.R56niFO833@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <Yf3xni8i4AAOZ7HF@pendragon.ideasonboard.com>
+References: <20220204121514.2762676-1-alexander.stein@ew.tq-group.com> <20220204121514.2762676-7-alexander.stein@ew.tq-group.com> <Yf3xni8i4AAOZ7HF@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YgDn7WWdcD5xaprX@zn.tnic>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 10:35:41AM +0100, Borislav Petkov wrote:
-> On Mon, Feb 07, 2022 at 09:14:23AM +0100, Greg KH wrote:
-> > On Mon, Feb 07, 2022 at 02:52:42AM -0500, luofei wrote:
-> > > Only unmap the page when the memory error is properly handled
-> > > by calling memory_failure(), not the other way around.
-> > > 
-> > > Fixes: 26f8c38bb466("x86/mm, mm/hwpoison: Don't unconditionally unmap kernel 1:1 pages")
+Hi Laurent,
+
+Am Samstag, 5. Februar 2022, 04:40:14 CET schrieb Laurent Pinchart:
+> Hi Alexander,
+> 
+> Thank you for the patch.
+> 
+> On Fri, Feb 04, 2022 at 01:15:12PM +0100, Alexander Stein wrote:
+> > imx7_csi_configure() allows configuring these Bayer patterns when
+> > starting a stream. So allow these in link_validate() as well.
 > > 
-> > This commit is not in Linus's tree.  Please use the correct commit id.
+> > Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
 > 
-> I think he's trying to fix the backport:
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 > 
-> see 26f8c38bb466c1a2d232d7609fb4bfb4bc121678 which is the stable tree backport:
-> 
-> @@ -582,7 +586,8 @@ static int srao_decode_notifier(struct notifier_block *nb, unsigned long val,
->  
->         if (mce_usable_address(mce) && (mce->severity == MCE_AO_SEVERITY)) {
->                 pfn = mce->addr >> PAGE_SHIFT;
-> -               memory_failure(pfn, MCE_VECTOR, 0);
-> +               if (memory_failure(pfn, MCE_VECTOR, 0))
-> +                       mce_unmap_kpfn(pfn);
->         }
-> 
-> 
-> vs the upstream commit:
-> 
-> fd0e786d9d09024f67bd71ec094b110237dc3840
-> 
-> @@ -590,7 +594,8 @@ static int srao_decode_notifier(struct notifier_block *nb, unsigned long val,
->  
->         if (mce_usable_address(mce) && (mce->severity == MCE_AO_SEVERITY)) {
->                 pfn = mce->addr >> PAGE_SHIFT;
-> -               memory_failure(pfn, 0);
-> +               if (!memory_failure(pfn, 0))
-> +                       mce_unmap_kpfn(pfn);
->         }
->  
->         return NOTIFY_OK;
-> 
+> > ---
+> > I'm wondering if V4L2_PIX_FMT_SBGGR16 (and their variants) is correct in
+> > this function. imx7_csi_configure() does not list
+> > MEDIA_BUS_FMT_Sxxxx16_1X16. Also I can't find a proper a proper setting
+> > in CSI_CR18 of CSI Bridge in IMX8M Mini RM for RAW16. The feature list
+> > names a  "16-bit data port for Bayer data input", but is it actually
+> > supported? I do not know anything about the MIPI CSI data formats though.
+> > Maybe someone else can clarify this.
+> The CSI bridge has a 16-bit input. The MIPI_DATA_FORMAT field in CR18
+> maps to the CSI-2 DT value, and it's not clear if it's only used to
+> filter on the CSI-2 DT, or if it does more than that. If we're lucky,
+> it's the former and we can just use 0x2e.
 
-Ah, ok, if so, this needs to be documented really really well in the
-changelog text so no one is confused.  Like me :)
+Well, 0x2e is not listed as a valid value for MIPI_DATA_FORMAT in both i.MX7D 
+RM Rev1 and i.MX8M Mini RM Rev 3. So I'm not so sure about that. Maybe this 
+holds true for other devices as well. I can not test RAW16 anyway, so I just 
+wanted to raise a possible issue here.
 
-thanks,
+Regards,
+Alexander
 
-greg k-h
+> 
+> >  drivers/staging/media/imx/imx7-media-csi.c | 12 ++++++++++++
+> >  1 file changed, 12 insertions(+)
+> > 
+> > diff --git a/drivers/staging/media/imx/imx7-media-csi.c
+> > b/drivers/staging/media/imx/imx7-media-csi.c index
+> > 158d2a736c6d..7e737221f187 100644
+> > --- a/drivers/staging/media/imx/imx7-media-csi.c
+> > +++ b/drivers/staging/media/imx/imx7-media-csi.c
+> > @@ -1004,6 +1004,18 @@ static int imx7_csi_pad_link_validate(struct
+> > v4l2_subdev *sd,> 
+> >  	case V4L2_PIX_FMT_SGBRG8:
+> >  	case V4L2_PIX_FMT_SGRBG8:
+> > 
+> >  	case V4L2_PIX_FMT_SRGGB8:
+> > +	case V4L2_PIX_FMT_SBGGR10:
+> > +	case V4L2_PIX_FMT_SGBRG10:
+> > +	case V4L2_PIX_FMT_SGRBG10:
+> > +	case V4L2_PIX_FMT_SRGGB10:
+> > +	case V4L2_PIX_FMT_SBGGR12:
+> > +	case V4L2_PIX_FMT_SGBRG12:
+> > +	case V4L2_PIX_FMT_SGRBG12:
+> > +	case V4L2_PIX_FMT_SRGGB12:
+> > +	case V4L2_PIX_FMT_SBGGR14:
+> > +	case V4L2_PIX_FMT_SGBRG14:
+> > +	case V4L2_PIX_FMT_SGRBG14:
+> > 
+> > +	case V4L2_PIX_FMT_SRGGB14:
+> >  	case V4L2_PIX_FMT_SBGGR16:
+> >  	case V4L2_PIX_FMT_SGBRG16:
+> >  	case V4L2_PIX_FMT_SGRBG16:
+
+
+
+

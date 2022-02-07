@@ -2,146 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECBCA4ACBB0
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 22:56:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EACC4ACBB5
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 22:58:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243245AbiBGV4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 16:56:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36660 "EHLO
+        id S243328AbiBGV55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 16:57:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242051AbiBGV4Q (ORCPT
+        with ESMTP id S239942AbiBGV5z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 16:56:16 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5C45C061A73
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 13:56:15 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id y5so14428428pfe.4
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 13:56:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=tHxa2zKVaHBcu/brPJMMDCzteRvMa8lCYhxJZN7g04o=;
-        b=I3T0MgX3KD3D8din9AD4VmFgX5xNMlWkCITEwL0yWT4rotEFC5G/eY54wJX+04On6C
-         CHr+Fk8wpO7RGMsRViMvJA3/won/IUNX8Ak9LBq8aIS1CJfPR5C6w46zR1Z8O+YPMarK
-         I3WWGlNHdYu4PYfMgfgnwpeTxftKTY5LuLmhc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tHxa2zKVaHBcu/brPJMMDCzteRvMa8lCYhxJZN7g04o=;
-        b=nFDNXCY/5ExJzazeY6MwMEujiQwU2UQLHCjObqeVYgCE5LErj8KUJOnWkRijo5vLmX
-         nSJkJprMWuw1wmfF83DvT4cuGCYlevMUC+HqsYYQI6CUU3wFZfgUyX44wh5s30mWSFtD
-         MZykWdjM+xXbRQ7kaTOMgqWk1Orberta8t2XlZKO3bkv8W2RePgSrPTT19Lh4gXcuiRf
-         msxO8BCDXh2H6/vtX/T2GFxg4a75dVFkm9SF3GTEWM21pZh4GCpvXkDZJ2f6hO1YEu8K
-         MSPG9TrCCkDwyEtNvlVHrAaIUWJb7vnryjCraf+RBTaqXRaGz1BXWsJ7csQZQgJR8d6P
-         tiGg==
-X-Gm-Message-State: AOAM532F9rMeBqUM4P75gSJbOjMu0QOqh4sBfOASNjH48vTypw4Z1Lt+
-        AbypvazrFqtCkijZ4U9FM0/N0Q==
-X-Google-Smtp-Source: ABdhPJyCMZS8k4XqgP2140WPRUddkLLGFWtx/egtokuBNm31gkdMHe+p42tk+Kmo6pOth6YVBsHvXw==
-X-Received: by 2002:a63:4f4f:: with SMTP id p15mr1109735pgl.452.1644270975192;
-        Mon, 07 Feb 2022 13:56:15 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 6sm9348292pgx.36.2022.02.07.13.56.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 13:56:14 -0800 (PST)
-Date:   Mon, 7 Feb 2022 13:56:14 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Martin Fernandez <martin.fernandez@eclypsium.com>
-Cc:     linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-mm@kvack.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        ardb@kernel.org, dvhart@infradead.org, andy@infradead.org,
-        gregkh@linuxfoundation.org, rafael@kernel.org, rppt@kernel.org,
-        akpm@linux-foundation.org, daniel.gutson@eclypsium.com,
-        hughsient@gmail.com, alex.bazhaniuk@eclypsium.com,
-        alison.schofield@intel.com
-Subject: Re: [PATCH v6 4/6] x86/e820: Tag e820_entry with crypto capabilities
-Message-ID: <202202071351.AEEEA92@keescook>
-References: <20220203164328.203629-1-martin.fernandez@eclypsium.com>
- <20220203164328.203629-5-martin.fernandez@eclypsium.com>
+        Mon, 7 Feb 2022 16:57:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3C22C06109E
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 13:57:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 77B1C615D9
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 21:57:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0F4AC340F1
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 21:57:52 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="PiMVGtX8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1644271070;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9r/q0NAcQxwYCCZk1yFqi/sFfxTN8cr0KnX5Fg2puEk=;
+        b=PiMVGtX8evEWNLiggNdjaaRdwFKBPYUdYeNV44qcisiwO4zAaLdKy8Xh8EMMzQHkWg+X/P
+        UlNkqd/s4w+8AmbtcRvXxWQRveetpJ3BCJypG+10qer7o5Me6LR2jHcQLjqz/FQl86TCAb
+        YZ8e39reke8yEoNQo9c01KVmEJYQQZg=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 3f16a0ab (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
+        for <linux-kernel@vger.kernel.org>;
+        Mon, 7 Feb 2022 21:57:50 +0000 (UTC)
+Received: by mail-yb1-f176.google.com with SMTP id bt13so20261056ybb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 13:57:49 -0800 (PST)
+X-Gm-Message-State: AOAM532A+3DuHY1rWpS2l947v4Vmo9Laj6wgnD3m9Bt2Dae7dfMbuxMc
+        uRLaX7dGRTPQl92XkJx1iC10Hf0mkETSFXOHl60=
+X-Google-Smtp-Source: ABdhPJxnaeiBVQKmBumoZUIDMxlAwGiEOjzDfNzW8CS+7gcJX1xtKl6LXnLTeAg7OpXcXgTh1tDxnI6qm1MFelowxPQ=
+X-Received: by 2002:a81:1b54:: with SMTP id b81mr2089864ywb.404.1644271068571;
+ Mon, 07 Feb 2022 13:57:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220203164328.203629-5-martin.fernandez@eclypsium.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <e10b79cf-d6d5-ffcc-bce4-edd92b7cb6b9@molgen.mpg.de>
+ <CAHmME9pktmNpcBS_DJhJ5Z+6xO9P1wroQ9_gwx8KZMBxk1FBeQ@mail.gmail.com>
+ <CAG48ez2P9-CAdgRizcp5T_uuoXRAt0xtodh1doiMW0fKZVX-7g@mail.gmail.com> <CAG48ez3wZOZZX1UHM-Q=KhOnnGR85Unm08q7jT_wVfOq0PW94Q@mail.gmail.com>
+In-Reply-To: <CAG48ez3wZOZZX1UHM-Q=KhOnnGR85Unm08q7jT_wVfOq0PW94Q@mail.gmail.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Mon, 7 Feb 2022 22:57:37 +0100
+X-Gmail-Original-Message-ID: <CAHmME9oaj5g==Rhq6HvrxSHHfo-v1whdzwWTWFqmrDw8sBHqoA@mail.gmail.com>
+Message-ID: <CAHmME9oaj5g==Rhq6HvrxSHHfo-v1whdzwWTWFqmrDw8sBHqoA@mail.gmail.com>
+Subject: Re: BUG: KCSAN: data-race in add_device_randomness+0x20d/0x290
+To:     Jann Horn <jannh@google.com>
+Cc:     pmenzel@molgen.mpg.de, "Theodore Y. Ts'o" <tytso@mit.edu>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 03, 2022 at 01:43:26PM -0300, Martin Fernandez wrote:
-> Add a new enum for crypto capabilities.
-> 
-> Add a new member in e820_entry to hold whether an entry is able to do
-> hardware memory encryption or not.
-> 
-> Add a new function e820__range_set_crypto_capable to mark all the
-> entries in a range of addresses as encryptable. This will be called
-> when initializing EFI.
-> 
-> Change e820__update_table to handle merging and overlap problems
-> taking into account crypto_capable.
-> 
-> Signed-off-by: Martin Fernandez <martin.fernandez@eclypsium.com>
-> ---
->  arch/x86/include/asm/e820/api.h   |   1 +
->  arch/x86/include/asm/e820/types.h |  12 +++-
->  arch/x86/kernel/e820.c            | 114 ++++++++++++++++++++++++++++--
->  3 files changed, 119 insertions(+), 8 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/e820/api.h b/arch/x86/include/asm/e820/api.h
-> index e8f58ddd06d9..4b3b01fafdd1 100644
-> --- a/arch/x86/include/asm/e820/api.h
-> +++ b/arch/x86/include/asm/e820/api.h
-> @@ -17,6 +17,7 @@ extern bool e820__mapped_all(u64 start, u64 end, enum e820_type type);
->  extern void e820__range_add   (u64 start, u64 size, enum e820_type type);
->  extern u64  e820__range_update(u64 start, u64 size, enum e820_type old_type, enum e820_type new_type);
->  extern u64  e820__range_remove(u64 start, u64 size, enum e820_type old_type, bool check_type);
-> +extern u64  e820__range_set_crypto_capable(u64 start, u64 size);
->  
->  extern void e820__print_table(char *who);
->  extern int  e820__update_table(struct e820_table *table);
-> diff --git a/arch/x86/include/asm/e820/types.h b/arch/x86/include/asm/e820/types.h
-> index 314f75d886d0..aef03c665f5e 100644
-> --- a/arch/x86/include/asm/e820/types.h
-> +++ b/arch/x86/include/asm/e820/types.h
-> @@ -46,6 +46,11 @@ enum e820_type {
->  	E820_TYPE_RESERVED_KERN	= 128,
->  };
->  
-> +enum e820_crypto_capabilities {
-> +	E820_NOT_CRYPTO_CAPABLE	= 0,
-> +	E820_CRYPTO_CAPABLE	= 1,
-> +};
+On Mon, Feb 7, 2022 at 10:50 PM Jann Horn <jannh@google.com> wrote:
+> > But the "lfsr" variable is never accessed outside the part of this
+> > method that holds a global spinlock. So that can't really be it,
+> > right?
 
-Is this expected to grow beyond a bool?
+Oh, hm, yea. Seems likely.
 
-> +
->  /*
->   * A single E820 map entry, describing a memory range of [addr...addr+size-1],
->   * of 'type' memory type:
-> @@ -53,9 +58,10 @@ enum e820_type {
->   * (We pack it because there can be thousands of them on large systems.)
->   */
->  struct e820_entry {
-> -	u64			addr;
-> -	u64			size;
-> -	enum e820_type		type;
-> +	u64				addr;
-> +	u64				size;
-> +	enum e820_type			type;
-> +	enum e820_crypto_capabilities	crypto_capable;
->  } __attribute__((packed));
+>
+> There is a data race in crng_ready(), it just loads from "crng_init"
+> without READ_ONCE()... maybe that's what KCSAN is noticing?
 
-Is there any concern about growing this structure? The "thousands" note
-in the comment is likely rare. FWIW, this seems fine to me, but I
-thought I'd mention it.
+There are lots of data races in crng_ready(), which Dominik has been
+fixing up gradually (which is why I CC'd him). However, crng_init is 4
+bytes, and that crng_init is read first with a cmpl that will read the
+whole thing. Maybe KCSAN's reporting is wrong? But it also says 0x00
+-> 0x43, which isn't one of the assigned values of crng_init. Also,
+0x20d seems quite far into the body of add_device_randomness, whereas
+crng_ready() is checked sort of early on.
 
--- 
-Kees Cook
+Hopefully Paul will send us his vmlinux.
+
+Another possibility is that this is happening on the u8 read of the
+buffer *input*, of what release_task->__exit_signal is passing it:
+
+       add_device_randomness((const void*) &tsk->se.sum_exec_runtime,
+                             sizeof(unsigned long long));
+
+I haven't yet looked at the locking around tsk->se.sum_exec_runtime.

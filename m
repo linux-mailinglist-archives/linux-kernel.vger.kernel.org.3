@@ -2,150 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8FAF4AC5B1
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 17:33:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 223E84AC5A6
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 17:33:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389472AbiBGQal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 11:30:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33076 "EHLO
+        id S1379839AbiBGQaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 11:30:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389775AbiBGQ1G (ORCPT
+        with ESMTP id S1389646AbiBGQUe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 11:27:06 -0500
-X-Greylist: delayed 311 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 08:27:04 PST
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F28C0401CC;
-        Mon,  7 Feb 2022 08:27:04 -0800 (PST)
-Received: from evilbit.green-communications.fr ([92.154.77.116]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.119]) with ESMTPSA (Nemesis)
- id 1MKbwg-1nbwVi0iyK-00L0Yj; Mon, 07 Feb 2022 17:21:38 +0100
-From:   Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] imx_thermal: Fix temperature retrieval after overheat
-Date:   Mon,  7 Feb 2022 17:18:30 +0100
-Message-Id: <20220207161829.4807-1-nicolas.cavallari@green-communications.fr>
-X-Mailer: git-send-email 2.34.1
+        Mon, 7 Feb 2022 11:20:34 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8818C0401D2
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 08:20:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644250833; x=1675786833;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=jGpVpvPyWERCA352dy7V5AUAApivyGrZIj/XPAMo5FU=;
+  b=a4j6JFa8N+2qZZ2w/CbjwCKoNvWwz+weigKp+Tw8LJDOHvdYsC/NxW27
+   PeRwXuOmv7gYkGpFAO4quciRUWmkCgsLpZajsm0dxf8/zTvdi5osms0TY
+   njSDG7y5K8fSooVtr18S4vIXsMJeP3YiRpFNRmEX2GZY1pjuldWJco4Yn
+   VTjEo/73KUwjhotkGfcLlob8MAJaGKof6xgTg3yfhbQkdOGxf5vqfYdUc
+   FGGtYUX+WE4wU6EZOUYC0PfnlXDIauhmz4RU+PklxtKwF9Yg08Lq+PZUF
+   N4GjDKQlcPna7L1gMT+JrgBeMpo+n0Ysz/vBb9C/cA9bdVNUF1MghW8y1
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10250"; a="228718255"
+X-IronPort-AV: E=Sophos;i="5.88,350,1635231600"; 
+   d="scan'208";a="228718255"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 08:19:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,350,1635231600"; 
+   d="scan'208";a="484470056"
+Received: from lkp-server01.sh.intel.com (HELO 9dd77a123018) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 07 Feb 2022 08:19:43 -0800
+Received: from kbuild by 9dd77a123018 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nH6ju-0000jI-QE; Mon, 07 Feb 2022 16:19:42 +0000
+Date:   Tue, 8 Feb 2022 00:19:12 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [asahilinux:smc/work 9/18] include/linux/bits.h:35:29: warning: left
+ shift count >= width of type
+Message-ID: <202202080017.hd9ScSdU-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:nB1bTMwZBFWEuhylUis7rLw5EQ2337iNQATK8GFDRXIZ7yaAo/p
- zViD23GEZDiLLLdymY7ZtS9rODuTGylsdyaKoZB79ML/Z2+8UizghvoK42a8KJ8Tn06M/4j
- AFo4amFvwIIsyIsFNo+iZeTzpA5njJ5N0jNl6i2nFhqy92t9GRJNMK/KzQ+RUkbjxb5tjnD
- OFMPHJEHWe8qhJRaOwAfQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:DrdQU+NYlxo=:ZI9BjRW9eZMtiZ1FpJjbHp
- YZxmh/MqKo+wLu95PSRy/e7+58EAOV5H2v7N6n1YIJwMVO+Re1f0E2o4EEbpQoOdPirIJIrXh
- rkUN4LQGj0pRbCiGo4O9cbGbr6t4GK1IjCfkgVJkpFtjGPojf7yolu202n+GJn3KRRZ15grHW
- EvlOGKNGOmPXaH8U/iuy2Xh2decU44u4/VX+WxEiWyq7UgvNOTxKqmg2K2kPvgIijFScTJU+c
- IkFolc9rXr4kePFy936LnSMonyF0XShig3loZAvWjVVZ389EE2u2TPcnmT9uhLKbSzoyoHrSY
- EBHBBaU1t6Ksa27R2/TmTjyKicWbqBh+WWq0qMt1cy39cCCKwmsFVly1aZprxuvipPenNVXsL
- 0gNykysooh377d4oVg5fHdjj77Ry+QkBQYAp1ldcCbGpY6Acl5bse1nLwr1NIvZ/nFCcGLIqH
- mjj6q9HUyAZg2vDtB6dlwemQGkDCIq4J565fNoqF8xN2qO8oNktogCb4yC+kbQBUftsZFjIhr
- qChuXN96Wfasnvcwr14wXQDLcdRjnBGBCnrVaz/7dxvrZQeQTZJ5RNhKIoz1W9x7XguUR8kJV
- 9d6iTM9OvV752nu4PZdsDNBDfIIZ1l0JjNM3bPTEJjIrIHHznqLcDi8R3gzgYCk6JrZG9UnZv
- yIrJkS5f3YZLR4I5LhQTSdCY72OuJGyClxZxJnG7armMo1zoIqvtauQS2v9oqXQpGf88S8Bvd
- Yt9a9kpJumHqeo9s52H1Zi61KQSbtvOJsHvotA==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the CPU temperature is above the passive trip point, reading the
-temperature would fail forever with EAGAIN.  Fortunately, the thermal
-core would continue to assume that the system is overheating, so would
-put all passive cooling devices to the max.  Unfortunately, it does
-this forever, even if the temperature returns to normal.
+tree:   https://github.com/AsahiLinux/linux smc/work
+head:   3dcf1f28dd3d0b36f11098cc61187986d00ee253
+commit: 4dcb7038ce2579c3fe867685d0fdc3998958edc3 [9/18] platform/apple: Add new Apple Mac SMC driver
+config: csky-allyesconfig (https://download.01.org/0day-ci/archive/20220208/202202080017.hd9ScSdU-lkp@intel.com/config)
+compiler: csky-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/AsahiLinux/linux/commit/4dcb7038ce2579c3fe867685d0fdc3998958edc3
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux smc/work
+        git checkout 4dcb7038ce2579c3fe867685d0fdc3998958edc3
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=csky SHELL=/bin/bash drivers/clk/ drivers/dma/ drivers/platform/apple/ sound/soc/apple/
 
-This can be easily tested by setting a very low trip point and crossing
-it with while(1) loops.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-The cause is commit d92ed2c9d3ff ("thermal: imx: Use driver's local data
-to decide whether to run a measurement"), which replaced a check for
-thermal_zone_device_is_enabled() by a check for irq_enabled, which
-tests if the passive trip interrupt is enabled.
+All warnings (new ones prefixed by >>):
 
-Normally, when the thermal zone is enabled, the temperature sensors
-are always enabled and the interrupt is used to detect overheating.
-When the interrupt fires, it must be disabled.
-In that case, the commit causes the measurements to be done
-manually (enable sensor, do measurement, disable sensor).
-If the thermal core successfully cools down the system below the trip
-point (which it typically does quickly), the irq is enabled again but
-the sensor is not enabled.
+   drivers/platform/apple/smc_rtkit.c: In function 'apple_smc_cmd':
+   drivers/platform/apple/smc_rtkit.c:69:16: error: implicit declaration of function 'FIELD_PREP' [-Werror=implicit-function-declaration]
+      69 |         msg = (FIELD_PREP(SMC_MSG, cmd) |
+         |                ^~~~~~~~~~
+   In file included from include/linux/ratelimit_types.h:5,
+                    from include/linux/ratelimit.h:5,
+                    from include/linux/dev_printk.h:16,
+                    from include/linux/device.h:15,
+                    from drivers/platform/apple/smc_rtkit.c:8:
+>> include/linux/bits.h:35:29: warning: left shift count >= width of type [-Wshift-count-overflow]
+      35 |         (((~UL(0)) - (UL(1) << (l)) + 1) & \
+         |                             ^~
+   include/linux/bits.h:38:38: note: in expansion of macro '__GENMASK'
+      38 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^~~~~~~~~
+   drivers/platform/apple/smc_rtkit.c:29:41: note: in expansion of macro 'GENMASK'
+      29 | #define SMC_DATA                        GENMASK(63, 32)
+         |                                         ^~~~~~~
+   drivers/platform/apple/smc_rtkit.c:73:27: note: in expansion of macro 'SMC_DATA'
+      73 |                FIELD_PREP(SMC_DATA, arg));
+         |                           ^~~~~~~~
+>> include/linux/bits.h:36:18: warning: right shift count is negative [-Wshift-count-negative]
+      36 |          (~UL(0) >> (BITS_PER_LONG - 1 - (h))))
+         |                  ^~
+   include/linux/bits.h:38:38: note: in expansion of macro '__GENMASK'
+      38 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^~~~~~~~~
+   drivers/platform/apple/smc_rtkit.c:29:41: note: in expansion of macro 'GENMASK'
+      29 | #define SMC_DATA                        GENMASK(63, 32)
+         |                                         ^~~~~~~
+   drivers/platform/apple/smc_rtkit.c:73:27: note: in expansion of macro 'SMC_DATA'
+      73 |                FIELD_PREP(SMC_DATA, arg));
+         |                           ^~~~~~~~
+   drivers/platform/apple/smc_rtkit.c:85:13: error: implicit declaration of function 'FIELD_GET' [-Werror=implicit-function-declaration]
+      85 |         if (FIELD_GET(SMC_ID, smc->cmd_ret) != smc->msg_id) {
+         |             ^~~~~~~~~
+   In file included from include/linux/ratelimit_types.h:5,
+                    from include/linux/ratelimit.h:5,
+                    from include/linux/dev_printk.h:16,
+                    from include/linux/device.h:15,
+                    from drivers/platform/apple/smc_rtkit.c:8:
+>> include/linux/bits.h:35:29: warning: left shift count >= width of type [-Wshift-count-overflow]
+      35 |         (((~UL(0)) - (UL(1) << (l)) + 1) & \
+         |                             ^~
+   include/linux/bits.h:38:38: note: in expansion of macro '__GENMASK'
+      38 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^~~~~~~~~
+   drivers/platform/apple/smc_rtkit.c:29:41: note: in expansion of macro 'GENMASK'
+      29 | #define SMC_DATA                        GENMASK(63, 32)
+         |                                         ^~~~~~~
+   drivers/platform/apple/smc_rtkit.c:96:39: note: in expansion of macro 'SMC_DATA'
+      96 |                 *ret_data = FIELD_GET(SMC_DATA, smc->cmd_ret);
+         |                                       ^~~~~~~~
+>> include/linux/bits.h:36:18: warning: right shift count is negative [-Wshift-count-negative]
+      36 |          (~UL(0) >> (BITS_PER_LONG - 1 - (h))))
+         |                  ^~
+   include/linux/bits.h:38:38: note: in expansion of macro '__GENMASK'
+      38 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^~~~~~~~~
+   drivers/platform/apple/smc_rtkit.c:29:41: note: in expansion of macro 'GENMASK'
+      29 | #define SMC_DATA                        GENMASK(63, 32)
+         |                                         ^~~~~~~
+   drivers/platform/apple/smc_rtkit.c:96:39: note: in expansion of macro 'SMC_DATA'
+      96 |                 *ret_data = FIELD_GET(SMC_DATA, smc->cmd_ret);
+         |                                       ^~~~~~~~
+   cc1: some warnings being treated as errors
 
-To fix this without using thermal_zone_device_is_enabled(), use a
-separate variable to record if the thermal zone is enabled.
 
-Fixes: d92ed2c9d3ff ("thermal: imx: Use driver's local data to decide
-whether to run a measurement")
+vim +35 include/linux/bits.h
 
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+295bcca84916cb5 Rikard Falkeborn 2020-04-06  33  
+295bcca84916cb5 Rikard Falkeborn 2020-04-06  34  #define __GENMASK(h, l) \
+95b980d62d52c4c Masahiro Yamada  2019-07-16 @35  	(((~UL(0)) - (UL(1) << (l)) + 1) & \
+95b980d62d52c4c Masahiro Yamada  2019-07-16 @36  	 (~UL(0) >> (BITS_PER_LONG - 1 - (h))))
+295bcca84916cb5 Rikard Falkeborn 2020-04-06  37  #define GENMASK(h, l) \
+295bcca84916cb5 Rikard Falkeborn 2020-04-06  38  	(GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+8bd9cb51daac893 Will Deacon      2018-06-19  39  
+
+:::::: The code at line 35 was first introduced by commit
+:::::: 95b980d62d52c4c1768ee719e8db3efe27ef52b2 linux/bits.h: make BIT(), GENMASK(), and friends available in assembly
+
+:::::: TO: Masahiro Yamada <yamada.masahiro@socionext.com>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+
 ---
- drivers/thermal/imx_thermal.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
-index 2c7473d86a59..5a6ad5bae238 100644
---- a/drivers/thermal/imx_thermal.c
-+++ b/drivers/thermal/imx_thermal.c
-@@ -205,6 +205,7 @@ struct imx_thermal_data {
- 	int alarm_temp;
- 	int last_temp;
- 	bool irq_enabled;
-+	bool tz_enabled;
- 	int irq;
- 	struct clk *thermal_clk;
- 	const struct thermal_soc_data *socdata;
-@@ -252,11 +253,10 @@ static int imx_get_temp(struct thermal_zone_device *tz, int *temp)
- 	const struct thermal_soc_data *soc_data = data->socdata;
- 	struct regmap *map = data->tempmon;
- 	unsigned int n_meas;
--	bool wait, run_measurement;
-+	bool wait;
- 	u32 val;
- 
--	run_measurement = !data->irq_enabled;
--	if (!run_measurement) {
-+	if (data->tz_enabled) {
- 		/* Check if a measurement is currently in progress */
- 		regmap_read(map, soc_data->temp_data, &val);
- 		wait = !(val & soc_data->temp_valid_mask);
-@@ -283,7 +283,7 @@ static int imx_get_temp(struct thermal_zone_device *tz, int *temp)
- 
- 	regmap_read(map, soc_data->temp_data, &val);
- 
--	if (run_measurement) {
-+	if (!data->tz_enabled) {
- 		regmap_write(map, soc_data->sensor_ctrl + REG_CLR,
- 			     soc_data->measure_temp_mask);
- 		regmap_write(map, soc_data->sensor_ctrl + REG_SET,
-@@ -339,6 +339,7 @@ static int imx_change_mode(struct thermal_zone_device *tz,
- 	const struct thermal_soc_data *soc_data = data->socdata;
- 
- 	if (mode == THERMAL_DEVICE_ENABLED) {
-+		data->tz_enabled = true;
- 		regmap_write(map, soc_data->sensor_ctrl + REG_CLR,
- 			     soc_data->power_down_mask);
- 		regmap_write(map, soc_data->sensor_ctrl + REG_SET,
-@@ -349,6 +350,7 @@ static int imx_change_mode(struct thermal_zone_device *tz,
- 			enable_irq(data->irq);
- 		}
- 	} else {
-+		data->tz_enabled = false;
- 		regmap_write(map, soc_data->sensor_ctrl + REG_CLR,
- 			     soc_data->measure_temp_mask);
- 		regmap_write(map, soc_data->sensor_ctrl + REG_SET,
--- 
-2.34.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

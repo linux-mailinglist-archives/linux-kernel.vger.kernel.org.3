@@ -2,48 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D93924AC0FD
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 15:21:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F307E4AC106
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 15:21:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390416AbiBGOTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 09:19:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56388 "EHLO
+        id S1391289AbiBGOTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 09:19:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390936AbiBGOF2 (ORCPT
+        with ESMTP id S1347860AbiBGOGJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 09:05:28 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4914EC043189;
-        Mon,  7 Feb 2022 06:05:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=bZkPt3tJIWdpwN+WGfn+8VumHQlVZ74e44nHdwfLHi0=; b=zJxPWUxjtl0SxNUn8gsA7U4fGZ
-        xOycPFeDc3quhnDYqGWc3uwL8tL8zZuPkypOUHRB+CK9gRf+j8YthUEy9jcegnBL6/NAuuTPUqQt7
-        Fx+qbSB+dFbz43ikBSYn/MtGDvYqE6quuWGdULOvni2qxMoYZwgwRwLdiVtlCloH6nPg=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nH4du-004e27-Mv; Mon, 07 Feb 2022 15:05:22 +0100
-Date:   Mon, 7 Feb 2022 15:05:22 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Hans Schultz <schultz.hans@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Hans Schultz <schultz.hans+netdev@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 3/4] net: dsa: mv88e6xxx: Add support for bridge
- port locked feature
-Message-ID: <YgEnIksFSHaRZtK7@lunn.ch>
-References: <20220207100742.15087-1-schultz.hans+netdev@gmail.com>
- <20220207100742.15087-4-schultz.hans+netdev@gmail.com>
+        Mon, 7 Feb 2022 09:06:09 -0500
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E2AC043188;
+        Mon,  7 Feb 2022 06:06:07 -0800 (PST)
+Received: from integral2.. (unknown [36.72.214.231])
+        by gnuweeb.org (Postfix) with ESMTPSA id 2708E7E24F;
+        Mon,  7 Feb 2022 14:06:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1644242766;
+        bh=G0B/qx9vzzQxYGDcP1samCsqc9aLd8Wtz9Gxg69dd2I=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=F6YNv0l9aRMeGzi7VwFsEMtzG3zQaKwAxd1XnR2M3BlpSiMHYKFvabS7/OpjqfbXi
+         eMVuZ5yNmJcV54+mSeqvGkRHHqSrI0i1CwI5GJlXMco28NE9L5Hjr5LhCqVUXR2AV+
+         YxVMPyTunprBdUMqqdd8cuEWNrgC/Xjn48JaucpXdDFMF1Q1UhFyluTujQEY/z1ZUA
+         oLk9/QWwoTatM/PuQ/80T585UTJWC+zoR2UOPIs01NmXGivafTILP12QQe7C8SdAOV
+         yastEbo9QPOn2C9M8r4oVMAlV8Rh2tZLKZtNkv2MAiVfSdnynzTtMzM7k9oJ1bnJte
+         lKz9eZJAsrGgA==
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     GNU/Weeb Mailing List <gwml@gnuweeb.org>,
+        io-uring Mailing list <io-uring@vger.kernel.org>,
+        Tea Inside Mailing List <timl@vger.teainside.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alviro Iskandar Setiawan <alviro.iskandar@gmail.com>,
+        kernel test robot <lkp@intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        "Chen, Rong A" <rong.a.chen@intel.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Subject: [PATCH io_uring-5.17 v2] io_uring: Clean up a false-positive warning from GCC 9.3.0
+Date:   Mon,  7 Feb 2022 21:05:33 +0700
+Message-Id: <20220207140533.565411-1-ammarfaizi2@gnuweeb.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <91e8ca64-0670-d998-73d8-f75ec5264cb0@kernel.dk>
+References: <d33bb5a9-8173-f65b-f653-51fc0681c6d6@intel.com> <20220207114315.555413-1-ammarfaizi2@gnuweeb.org> <91e8ca64-0670-d998-73d8-f75ec5264cb0@kernel.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220207100742.15087-4-schultz.hans+netdev@gmail.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -53,18 +57,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 11:07:41AM +0100, Hans Schultz wrote:
-> Supporting bridge port locked mode using the 802.1X mode in Marvell
-> mv88e6xxx switchcores is described in the '88E6096/88E6097/88E6097F
-> Datasheet', sections 4.4.6, 4.4.7 and 5.1.2.1 (Drop on Lock).
+From: Alviro Iskandar Setiawan <alviro.iskandar@gmail.com>
 
-This implementation seems to be incorrect for 6390X, and maybe
-others. I just picked a modern devices at random, and it is different,
-so didn't check any other devices.  The 6390X uses bits 14 and 15, not
-just bit 14.
+In io_recv(), if import_single_range() fails, the @flags variable is
+uninitialized, then it will goto out_free.
 
-So either you need to narrow down support to just those devices this
-actually works for, or you need to add implementations for all
-generations, via an op in mv88e6xxx_ops.
+After the goto, the compiler doesn't know that (ret < min_ret) is
+always true, so it thinks the "if ((flags & MSG_WAITALL) ..."  path
+could be taken.
 
-    Andrew
+The complaint comes from gcc-9 (Debian 9.3.0-22) 9.3.0:
+```
+  fs/io_uring.c:5238 io_recvfrom() error: uninitialized symbol 'flags'
+```
+Fix this by bypassing the @ret and @flags check when
+import_single_range() fails.
+
+Reasons:
+ 1. import_single_range() only returns -EFAULT when it fails.
+ 2. At that point, @flags is uninitialized and shouldn't be read.
+
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Reported-by: "Chen, Rong A" <rong.a.chen@intel.com>
+Link: https://lore.gnuweeb.org/timl/d33bb5a9-8173-f65b-f653-51fc0681c6d6@intel.com/
+Cc: Pavel Begunkov <asml.silence@gmail.com>
+Suggested-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Fixes: 7297ce3d59449de49d3c9e1f64ae25488750a1fc ("io_uring: improve send/recv error handling")
+Signed-off-by: Alviro Iskandar Setiawan <alviro.iskandar@gmail.com>
+Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+---
+
+ v2:
+   - Update the subject line
+
+ fs/io_uring.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index 2e04f718319d..3445c4da0153 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -5228,7 +5228,6 @@ static int io_recv(struct io_kiocb *req, unsigned int issue_flags)
+ 		min_ret = iov_iter_count(&msg.msg_iter);
+ 
+ 	ret = sock_recvmsg(sock, &msg, flags);
+-out_free:
+ 	if (ret < min_ret) {
+ 		if (ret == -EAGAIN && force_nonblock)
+ 			return -EAGAIN;
+@@ -5236,9 +5235,9 @@ static int io_recv(struct io_kiocb *req, unsigned int issue_flags)
+ 			ret = -EINTR;
+ 		req_set_fail(req);
+ 	} else if ((flags & MSG_WAITALL) && (msg.msg_flags & (MSG_TRUNC | MSG_CTRUNC))) {
++out_free:
+ 		req_set_fail(req);
+ 	}
+-
+ 	__io_req_complete(req, issue_flags, ret, io_put_kbuf(req));
+ 	return 0;
+ }
+
+base-commit: f6133fbd373811066c8441737e65f384c8f31974
+-- 
+2.32.0
+

@@ -2,91 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDF9C4ACB90
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 22:46:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 672F24ACB88
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 22:45:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242004AbiBGVpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 16:45:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59658 "EHLO
+        id S241956AbiBGVpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 16:45:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235505AbiBGVph (ORCPT
+        with ESMTP id S235505AbiBGVpW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 16:45:37 -0500
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B072C061355
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 13:45:37 -0800 (PST)
-Received: by mail-vs1-xe35.google.com with SMTP id f6so1237343vsa.5
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 13:45:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lwNho10NSvUvgMsTPwNeOvofrX+IJ611XZs8ySHA1Wo=;
-        b=LBxgTV4F2iQiPXVDRq7ADCCqouUP5XvK/lIQIaGw5372xy8vdbEcd+Gq6sFDu0BG6O
-         UFcbCoKIC7XrpnRPmARzCDBxwChhmZeI5rXTetBg+pQ05Y1V0p8FTWyoqKjDKkBEZEH0
-         5G/FZKRu95PXGzfQ4cG0meMf6H28mqTJD6Kx3lMFdADSzmmeN2ltFfBh3lDZWYTN+60e
-         SrmL4lSgOKwF+LTQpdBwS43THXBpf0MzSuwQst7EK+h/SZGXe0QiTURnhwRrqUvUlQdj
-         9Z/yJ0awQtytvQmDPUiGMa0hLRbNiSO1Lgtw+GTEG22XjfKxcuBel1fEEcFgO4M/0uA3
-         M9rw==
+        Mon, 7 Feb 2022 16:45:22 -0500
+Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 776D0C061355;
+        Mon,  7 Feb 2022 13:45:20 -0800 (PST)
+Received: by mail-ot1-f42.google.com with SMTP id b17-20020a9d4791000000b005a17fc2dfc1so11895701otf.1;
+        Mon, 07 Feb 2022 13:45:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lwNho10NSvUvgMsTPwNeOvofrX+IJ611XZs8ySHA1Wo=;
-        b=HjQpr9CtdGicJVQLypcr+oRfdNvQvOCjN5ipEPxQmuflg5r5q+oc03HiWtzxdLizx9
-         w3RI/UvvV/ZYWZVfGnOHuOayclRCwFuxeCK+om6f2WELoeYd1/JPNCdgokBEJesWBirq
-         3UFJUt+YiLwx/2zTha0maKI9TwnoIWTQ6JmrES+8AOOjuvDUapsVE0ZsdXyr4mnbJ60T
-         uouFk5fntguXJFwEpyo8Hd7oHndsGNLdut67jyInHPHNkoPyxPfxBR4q+ZYpAQNd/8Q4
-         IQTmJGFqE7UiGITffREyTgEcHM75NJ2pmBYhJdvw9zOvbtNd/HVR6w6Ho/sY+FVxve6s
-         oZ+Q==
-X-Gm-Message-State: AOAM5330+oo1oqhXZaoGgil4prW3HrfOz80iGDAvfm5aKEArPiMydUGx
-        onID8rqfMqzn/Li9EbZYGicd0eMJCpU1Xkn5NCftDpfLoJY=
-X-Google-Smtp-Source: ABdhPJzYW/EIs2vsiLv6XBj1/e2fLqmZlg4vGTJLvmNDMj7EsaPmA8ipg6pHpSj9xMvVzVnjGu+fnTaNDOvDennPOS0=
-X-Received: by 2002:a67:e08d:: with SMTP id f13mr603569vsl.78.1644270336041;
- Mon, 07 Feb 2022 13:45:36 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=RTR0nFrp3s4BqIEjNWo3YoJyTs4shL49W7ioqon6aOI=;
+        b=ppQlB8a61ujPHJoRjtEC0kDnXAs36iTrS92dFAwmFhkBWu1gqzTgn3K9e0zByUESpu
+         zpweDvyKK/xkKOjRP3pLUPWMGI3bKLQYZ4Wz7bara2ziD3QYlExx5natURxAJ3IPJDRn
+         FhWm70I4O0of1kagvsIfd5bsVG8sGM1quYch95YKDY27+CE3+SAxDI8fVR5/z6f7Y1Al
+         LBuRJl8X9GDHavmozvMHHAv+PITCuKxGgD/warwUfckszih5SbI15jXPRPbdKaxg/RPM
+         AI+enlNbpY/7fZ6E/+Su+GhysU7jq5dT7KEj2gchzAZb8X69yudp2N84q0Y14cAFkCK6
+         QaOw==
+X-Gm-Message-State: AOAM53169+pEO2y44ufZ9G0n01Sl/y94cnZVBIwgOuahsyH3QPXFg/0D
+        JbCUvz2Ty43bZig9LunRCQ==
+X-Google-Smtp-Source: ABdhPJxLdm3APhJ37DTFNGxqX95hogQIoqUwXlXstkPJI3BHIac1nI2rUdV08uKnk1cUk3SKliVRVg==
+X-Received: by 2002:a9d:6f8d:: with SMTP id h13mr712005otq.309.1644270319682;
+        Mon, 07 Feb 2022 13:45:19 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id h9sm4542956otk.42.2022.02.07.13.45.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Feb 2022 13:45:19 -0800 (PST)
+Received: (nullmailer pid 977724 invoked by uid 1000);
+        Mon, 07 Feb 2022 21:45:17 -0000
+Date:   Mon, 7 Feb 2022 15:45:17 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v3 1/3] dt-bindings: interrupt-controller: stm32-exti:
+ document st,stm32mp13-exti
+Message-ID: <YgGS7YkSl+hGKx/1@robh.at.kernel.org>
+References: <20220202140005.860-1-alexandre.torgue@foss.st.com>
+ <20220202140005.860-2-alexandre.torgue@foss.st.com>
 MIME-Version: 1.0
-References: <e10b79cf-d6d5-ffcc-bce4-edd92b7cb6b9@molgen.mpg.de> <CAHmME9pktmNpcBS_DJhJ5Z+6xO9P1wroQ9_gwx8KZMBxk1FBeQ@mail.gmail.com>
-In-Reply-To: <CAHmME9pktmNpcBS_DJhJ5Z+6xO9P1wroQ9_gwx8KZMBxk1FBeQ@mail.gmail.com>
-From:   Jann Horn <jannh@google.com>
-Date:   Mon, 7 Feb 2022 22:45:09 +0100
-Message-ID: <CAG48ez2P9-CAdgRizcp5T_uuoXRAt0xtodh1doiMW0fKZVX-7g@mail.gmail.com>
-Subject: Re: BUG: KCSAN: data-race in add_device_randomness+0x20d/0x290
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     pmenzel@molgen.mpg.de, "Theodore Y. Ts'o" <tytso@mit.edu>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220202140005.860-2-alexandre.torgue@foss.st.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 7, 2022 at 7:42 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> Thanks for the report. I assume that this is actually an old bug. Do
-> you have a vmlinux or a random.o from this kernel you could send me to
-> double check? Without that, my best guess, which I'd say I have
-> relatively high confidence about, is that the "1 byte read" is
-> actually a `movzx eax, cs:lfsr` referring to the `static u8 lfsr`
-> here, which gets inlined into add_device_randomness:
->
-> static int crng_slow_load(const u8 *cp, size_t len)
-> {
->     unsigned long flags;
->     static u8 lfsr = 1;
->
-> This was added in 2008 with dc12baacb95f ("random: use a different
-> mixing algorithm for add_device_randomness()"). My understanding is
-> that the race here isn't super problematic as we're in kind of a half
-> assed "low effort" phase anyway. But I'll give it some thought. I'm
-> CCing Jann as well who reported the original issue that motivated that
-> change.
+On Wed, 02 Feb 2022 15:00:03 +0100, Alexandre Torgue wrote:
+> Support of STM32MP13 SoC implies to create a new compatible in order to
+> manage EXTI/GIC mapping changes.
+> 
+> Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+> 
 
-But the "lfsr" variable is never accessed outside the part of this
-method that holds a global spinlock. So that can't really be it,
-right?
+Acked-by: Rob Herring <robh@kernel.org>

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C15BF4AB9AF
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:24:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 776E14ABCB2
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:49:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355467AbiBGLMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:12:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48304 "EHLO
+        id S1387049AbiBGLiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:38:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343558AbiBGLJI (ORCPT
+        with ESMTP id S1379840AbiBGL02 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:09:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB85C043181;
-        Mon,  7 Feb 2022 03:09:07 -0800 (PST)
+        Mon, 7 Feb 2022 06:26:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 319B7C03E92E;
+        Mon,  7 Feb 2022 03:25:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 497FDB80EC3;
-        Mon,  7 Feb 2022 11:09:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DFE9C004E1;
-        Mon,  7 Feb 2022 11:09:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DC728B81028;
+        Mon,  7 Feb 2022 11:25:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAB5FC004E1;
+        Mon,  7 Feb 2022 11:25:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232145;
-        bh=sSN5IaaNkR+bNNzEnIm5DAhmzKX7oOdxJ9V2k3QJHgU=;
+        s=korg; t=1644233145;
+        bh=n9ts40NzW/gNgiYJSJZjAg4qmKmz5RkYXFbhssIVcNM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Jz99Pwx4TsGkCc7VeyC4wjhIeGm1UR5tm8zU53pJtpZ9ZuYsgll8zNdTk5A90GR3A
-         KX56ZH2HcR6FnJq0NdcXpPHHOUNtbLQA2BX2mSTgoKTb1FFRDLHZFSXL+2805IzhmF
-         Mr7hZOPnlClakt9WjHDy7q568Jod6xeyeUcYgI2c=
+        b=pqTQmGxULGxO1UGwHtpJNu2+vXV8BJ6MkhibLA9X3q0YlaW6xkPFg49zRvo/uA+9A
+         ABfrHby/8f6V6OUJE1tfOCQ6tV81buGEIRX7puAR5Jt9gW9xW853zNJ2b/KwjN1E0a
+         QgBA0AXB2Nnpi+qjNBnA1E2zk08RLkWnyZGQ2TRU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tom Lendacky <thomas.lendacky@amd.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.9 30/48] net: amd-xgbe: Fix skb data length underflow
-Date:   Mon,  7 Feb 2022 12:06:03 +0100
-Message-Id: <20220207103753.325503466@linuxfoundation.org>
+        stable@vger.kernel.org, Jordy Zomer <jordy@pwning.systems>,
+        John Stultz <john.stultz@linaro.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>
+Subject: [PATCH 5.15 031/110] dma-buf: heaps: Fix potential spectre v1 gadget
+Date:   Mon,  7 Feb 2022 12:06:04 +0100
+Message-Id: <20220207103803.302971173@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103752.341184175@linuxfoundation.org>
-References: <20220207103752.341184175@linuxfoundation.org>
+In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
+References: <20220207103802.280120990@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,55 +55,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
+From: Jordy Zomer <jordy@pwning.systems>
 
-commit 5aac9108a180fc06e28d4e7fb00247ce603b72ee upstream.
+commit 92c4cfaee6872038563c5b6f2e8e613f9d84d47d upstream.
 
-There will be BUG_ON() triggered in include/linux/skbuff.h leading to
-intermittent kernel panic, when the skb length underflow is detected.
+It appears like nr could be a Spectre v1 gadget as it's supplied by a
+user and used as an array index. Prevent the contents
+of kernel memory from being leaked to userspace via speculative
+execution by using array_index_nospec.
 
-Fix this by dropping the packet if such length underflows are seen
-because of inconsistencies in the hardware descriptors.
-
-Fixes: 622c36f143fc ("amd-xgbe: Fix jumbo MTU processing on newer hardware")
-Suggested-by: Tom Lendacky <thomas.lendacky@amd.com>
-Signed-off-by: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
-Acked-by: Tom Lendacky <thomas.lendacky@amd.com>
-Link: https://lore.kernel.org/r/20220127092003.2812745-1-Shyam-sundar.S-k@amd.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Jordy Zomer <jordy@pwning.systems>
+Fixes: c02a81fba74f ("dma-buf: Add dma-buf heaps framework")
+Cc: <stable@vger.kernel.org> # v5.6+
+Acked-by: John Stultz <john.stultz@linaro.org>
+Signed-off-by: Sumit Semwal <sumit.semwal@linaro.org>
+ [sumits: added fixes and cc: stable tags]
+Link: https://patchwork.freedesktop.org/patch/msgid/20220129150604.3461652-1-jordy@pwning.systems
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/amd/xgbe/xgbe-drv.c |   12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ drivers/dma-buf/dma-heap.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/net/ethernet/amd/xgbe/xgbe-drv.c
-+++ b/drivers/net/ethernet/amd/xgbe/xgbe-drv.c
-@@ -1968,6 +1968,14 @@ read_again:
- 			buf2_len = xgbe_rx_buf2_len(rdata, packet, len);
- 			len += buf2_len;
+--- a/drivers/dma-buf/dma-heap.c
++++ b/drivers/dma-buf/dma-heap.c
+@@ -14,6 +14,7 @@
+ #include <linux/xarray.h>
+ #include <linux/list.h>
+ #include <linux/slab.h>
++#include <linux/nospec.h>
+ #include <linux/uaccess.h>
+ #include <linux/syscalls.h>
+ #include <linux/dma-heap.h>
+@@ -135,6 +136,7 @@ static long dma_heap_ioctl(struct file *
+ 	if (nr >= ARRAY_SIZE(dma_heap_ioctl_cmds))
+ 		return -EINVAL;
  
-+			if (buf2_len > rdata->rx.buf.dma_len) {
-+				/* Hardware inconsistency within the descriptors
-+				 * that has resulted in a length underflow.
-+				 */
-+				error = 1;
-+				goto skip_data;
-+			}
-+
- 			if (!skb) {
- 				skb = xgbe_create_skb(pdata, napi, rdata,
- 						      buf1_len);
-@@ -1997,8 +2005,10 @@ skip_data:
- 		if (!last || context_next)
- 			goto read_again;
++	nr = array_index_nospec(nr, ARRAY_SIZE(dma_heap_ioctl_cmds));
+ 	/* Get the kernel ioctl cmd that matches */
+ 	kcmd = dma_heap_ioctl_cmds[nr];
  
--		if (!skb)
-+		if (!skb || error) {
-+			dev_kfree_skb(skb);
- 			goto next_packet;
-+		}
- 
- 		/* Be sure we don't exceed the configured MTU */
- 		max_len = netdev->mtu + ETH_HLEN;
 
 

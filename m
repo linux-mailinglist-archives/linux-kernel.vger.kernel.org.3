@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB10F4ABBD2
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:44:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C15BF4AB9AF
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:24:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385781AbiBGLce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:32:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33588 "EHLO
+        id S1355467AbiBGLMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:12:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383097AbiBGLVg (ORCPT
+        with ESMTP id S1343558AbiBGLJI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:21:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54334C0401C8;
-        Mon,  7 Feb 2022 03:21:18 -0800 (PST)
+        Mon, 7 Feb 2022 06:09:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB85C043181;
+        Mon,  7 Feb 2022 03:09:07 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0CC3761388;
-        Mon,  7 Feb 2022 11:21:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE7DBC004E1;
-        Mon,  7 Feb 2022 11:21:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 497FDB80EC3;
+        Mon,  7 Feb 2022 11:09:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DFE9C004E1;
+        Mon,  7 Feb 2022 11:09:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232871;
-        bh=3Iw4+C7epksGrwi7zi0NVaXS+fJ2+w8mzoPqqhMRU+Y=;
+        s=korg; t=1644232145;
+        bh=sSN5IaaNkR+bNNzEnIm5DAhmzKX7oOdxJ9V2k3QJHgU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HHlDo0g4OPPsWn+tCzPfd+I8oIhplXNzw9E36P1axyxVWqxFV/iKBLaipsx7FIksu
-         TifgM9hRzHY7pe/18yAayHFNS7lFONI2M6Ty3mb9Phdq/vOcQneL6CBk2JRv2JAn7i
-         1ZW6Taig28vyJJ7t0NdA3zkcH/DOiM5v4Zt4FGmk=
+        b=Jz99Pwx4TsGkCc7VeyC4wjhIeGm1UR5tm8zU53pJtpZ9ZuYsgll8zNdTk5A90GR3A
+         KX56ZH2HcR6FnJq0NdcXpPHHOUNtbLQA2BX2mSTgoKTb1FFRDLHZFSXL+2805IzhmF
+         Mr7hZOPnlClakt9WjHDy7q568Jod6xeyeUcYgI2c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.10 05/74] ASoC: ops: Reject out of bounds values in snd_soc_put_xr_sx()
+        stable@vger.kernel.org, Tom Lendacky <thomas.lendacky@amd.com>,
+        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 4.9 30/48] net: amd-xgbe: Fix skb data length underflow
 Date:   Mon,  7 Feb 2022 12:06:03 +0100
-Message-Id: <20220207103757.412513163@linuxfoundation.org>
+Message-Id: <20220207103753.325503466@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103757.232676988@linuxfoundation.org>
-References: <20220207103757.232676988@linuxfoundation.org>
+In-Reply-To: <20220207103752.341184175@linuxfoundation.org>
+References: <20220207103752.341184175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,33 +55,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+From: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
 
-commit 4cf28e9ae6e2e11a044be1bcbcfa1b0d8675fe4d upstream.
+commit 5aac9108a180fc06e28d4e7fb00247ce603b72ee upstream.
 
-We don't currently validate that the values being set are within the range
-we advertised to userspace as being valid, do so and reject any values
-that are out of range.
+There will be BUG_ON() triggered in include/linux/skbuff.h leading to
+intermittent kernel panic, when the skb length underflow is detected.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20220124153253.3548853-4-broonie@kernel.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fix this by dropping the packet if such length underflows are seen
+because of inconsistencies in the hardware descriptors.
+
+Fixes: 622c36f143fc ("amd-xgbe: Fix jumbo MTU processing on newer hardware")
+Suggested-by: Tom Lendacky <thomas.lendacky@amd.com>
+Signed-off-by: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
+Acked-by: Tom Lendacky <thomas.lendacky@amd.com>
+Link: https://lore.kernel.org/r/20220127092003.2812745-1-Shyam-sundar.S-k@amd.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/soc-ops.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/net/ethernet/amd/xgbe/xgbe-drv.c |   12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
---- a/sound/soc/soc-ops.c
-+++ b/sound/soc/soc-ops.c
-@@ -880,6 +880,8 @@ int snd_soc_put_xr_sx(struct snd_kcontro
- 	unsigned int i, regval, regmask;
- 	int err;
+--- a/drivers/net/ethernet/amd/xgbe/xgbe-drv.c
++++ b/drivers/net/ethernet/amd/xgbe/xgbe-drv.c
+@@ -1968,6 +1968,14 @@ read_again:
+ 			buf2_len = xgbe_rx_buf2_len(rdata, packet, len);
+ 			len += buf2_len;
  
-+	if (val < mc->min || val > mc->max)
-+		return -EINVAL;
- 	if (invert)
- 		val = max - val;
- 	val &= mask;
++			if (buf2_len > rdata->rx.buf.dma_len) {
++				/* Hardware inconsistency within the descriptors
++				 * that has resulted in a length underflow.
++				 */
++				error = 1;
++				goto skip_data;
++			}
++
+ 			if (!skb) {
+ 				skb = xgbe_create_skb(pdata, napi, rdata,
+ 						      buf1_len);
+@@ -1997,8 +2005,10 @@ skip_data:
+ 		if (!last || context_next)
+ 			goto read_again;
+ 
+-		if (!skb)
++		if (!skb || error) {
++			dev_kfree_skb(skb);
+ 			goto next_packet;
++		}
+ 
+ 		/* Be sure we don't exceed the configured MTU */
+ 		max_len = netdev->mtu + ETH_HLEN;
 
 

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1F864ABB74
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:38:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 711C24ABD96
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:00:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359183AbiBGL2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:28:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34456 "EHLO
+        id S1388788AbiBGLpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:45:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383340AbiBGLWP (ORCPT
+        with ESMTP id S1386060AbiBGLdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:22:15 -0500
+        Mon, 7 Feb 2022 06:33:25 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22355C043181;
-        Mon,  7 Feb 2022 03:22:15 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E859C043181;
+        Mon,  7 Feb 2022 03:33:25 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D103CB811A6;
-        Mon,  7 Feb 2022 11:22:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A827C004E1;
-        Mon,  7 Feb 2022 11:22:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E0E9CB80EBD;
+        Mon,  7 Feb 2022 11:33:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A97FC004E1;
+        Mon,  7 Feb 2022 11:33:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232932;
-        bh=b13qAo4YSP2y+ta2ne27FSUAmi4yqSLi1KWG0FFTyEU=;
+        s=korg; t=1644233602;
+        bh=7QUCjhG7b2OWuM/D+SKi0gaN56aTrCQMmg2TU98RO+E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zHKnwaV2EE0F1us6i9j8jzZ29zZpfkSGIXpzNFcdicOPrpDvuIXnvsnT3Xp2QVBqj
-         8R7VH5fj4wzZVVjfh4x+Ofd49wCtVdNbWflBcb9zIG1VqrTSy83sMGUgGa0xmsWuXh
-         ZrHdxrojY0Kv+819xfaC9C+WgYMc4gM5pBPehRZg=
+        b=Elpu5vbNyhAESYf4JMD5PXDd5HdWz6/cp0zb2CTbFrU4BmQSA3CWLpPZFidyA/ANR
+         ayHBxg9o/I92c/wjZKz4lByrVy3sdRpLa1s62xu8FntSoEFGU60gyARkvdfqCPBSfy
+         dna+RLXPy3NNJOLd0dVBiFT5QSgyc8z+hJS8kmsg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miquel Raynal <miquel.raynal@bootlin.com>,
-        Alexander Aring <aahringo@redhat.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>
-Subject: [PATCH 5.10 37/74] net: ieee802154: mcr20a: Fix lifs/sifs periods
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Mark Zhang <markzhang@nvidia.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Subject: [PATCH 5.16 064/126] IB/cm: Release previously acquired reference counter in the cm_id_priv
 Date:   Mon,  7 Feb 2022 12:06:35 +0100
-Message-Id: <20220207103758.446954843@linuxfoundation.org>
+Message-Id: <20220207103806.314771662@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103757.232676988@linuxfoundation.org>
-References: <20220207103757.232676988@linuxfoundation.org>
+In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
+References: <20220207103804.053675072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +56,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miquel Raynal <miquel.raynal@bootlin.com>
+From: Mark Zhang <markzhang@nvidia.com>
 
-commit d753c4004820a888ec007dd88b271fa9c3172c5c upstream.
+commit b856101a1774b5f1c8c99e8dfdef802856520732 upstream.
 
-These periods are expressed in time units (microseconds) while 40 and 12
-are the number of symbol durations these periods will last. We need to
-multiply them both with phy->symbol_duration in order to get these
-values in microseconds.
+In failure flow, the reference counter acquired was not released,
+and the following error was reported:
 
-Fixes: 8c6ad9cc5157 ("ieee802154: Add NXP MCR20A IEEE 802.15.4 transceiver driver")
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Acked-by: Alexander Aring <aahringo@redhat.com>
-Link: https://lore.kernel.org/r/20220125121426.848337-3-miquel.raynal@bootlin.com
-Signed-off-by: Stefan Schmidt <stefan@datenfreihafen.org>
+  drivers/infiniband/core/cm.c:3373 cm_lap_handler() warn: inconsistent
+			refcounting 'cm_id_priv->refcount.refs.counter':
+
+Fixes: 7345201c3963 ("IB/cm: Improve the calling of cm_init_av_for_lap and cm_init_av_by_path")
+Link: https://lore.kernel.org/r/7615f23bbb5c5b66d03f6fa13e1c99d51dae6916.1642581448.git.leonro@nvidia.com
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Mark Zhang <markzhang@nvidia.com>
+Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ieee802154/mcr20a.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/infiniband/core/cm.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/ieee802154/mcr20a.c
-+++ b/drivers/net/ieee802154/mcr20a.c
-@@ -976,8 +976,8 @@ static void mcr20a_hw_setup(struct mcr20
- 	dev_dbg(printdev(lp), "%s\n", __func__);
+--- a/drivers/infiniband/core/cm.c
++++ b/drivers/infiniband/core/cm.c
+@@ -3322,7 +3322,7 @@ static int cm_lap_handler(struct cm_work
+ 	ret = cm_init_av_by_path(param->alternate_path, NULL, &alt_av);
+ 	if (ret) {
+ 		rdma_destroy_ah_attr(&ah_attr);
+-		return -EINVAL;
++		goto deref;
+ 	}
  
- 	phy->symbol_duration = 16;
--	phy->lifs_period = 40;
--	phy->sifs_period = 12;
-+	phy->lifs_period = 40 * phy->symbol_duration;
-+	phy->sifs_period = 12 * phy->symbol_duration;
- 
- 	hw->flags = IEEE802154_HW_TX_OMIT_CKSUM |
- 			IEEE802154_HW_AFILT |
+ 	spin_lock_irq(&cm_id_priv->lock);
 
 

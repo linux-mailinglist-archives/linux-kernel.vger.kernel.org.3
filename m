@@ -2,64 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B8C04AB30C
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 02:19:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 311C94AB31E
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 02:27:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243541AbiBGBTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Feb 2022 20:19:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53578 "EHLO
+        id S1347490AbiBGB1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Feb 2022 20:27:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230225AbiBGBS6 (ORCPT
+        with ESMTP id S1344367AbiBGB1c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Feb 2022 20:18:58 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77953C06173B
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Feb 2022 17:18:57 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id c6so35640495ybk.3
-        for <linux-kernel@vger.kernel.org>; Sun, 06 Feb 2022 17:18:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wF7wLYknrAguQRg8tSTIkfoRb2Q1jL2Myx81XhHaTX0=;
-        b=boKjz6VniFotg9L1M4r51qKoS+gj2GSrZLEftSekUQtk9xP8ZLl1pFCkxQZldC/GE0
-         D7ODLMupOoMZT5VDL664MHe1Pz/iQI7YI00lTwySRG+msmoV0+qBFundg3Gj7hadxC1T
-         VwLYyCa9mOqzy7ZjjLJ+c1MjFCKVT+wa04wdbNwkRwvTMZvDw9+Kt2oYf7o+FC5EIxVL
-         Zp3oYPE3y8dc+kOyDVmQXpyw6/31cYOkNn+Y6mFprWIwwUvLeL3ec/Sx+st0CcPMZp0R
-         lLMxuzNRMsGWe5ZQlA1gujF267zV9ix6QPNEHLmacr3zxcZURPTbBMmYlVRLRzcW1U56
-         e6Uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wF7wLYknrAguQRg8tSTIkfoRb2Q1jL2Myx81XhHaTX0=;
-        b=oKiWwFhuFnaRiO1kjFb4IaFnPp74wCiHDqxVo31aYCa/x9yW53jaoZemMZ/Ytsy1xU
-         i7ppC6XDSMB5MIf78I7EjTAdfSkv99Pq2/GuZJ44d4J0F79Kkc6EZzKeH8PNco+BlNs5
-         HBgmjZ9CduZDA8m8JRqR0p0Gufe+2uVzTiW8Nr64iBfSQUSJ7Fgm8GCKOWN0URa7PVBJ
-         LvgBcH32sZIhddpwrar/pLBzTcpMZVK7GPwv2B8p6EyqPXYr/h2SQBbxErTVZV+05cc0
-         vz84z/q6GixVC301gFq9+BGJrZMNozitsVS1bskduyEtgigPcMKRUkG8iGg/ktqoLL2H
-         uxoA==
-X-Gm-Message-State: AOAM5335isCkL/kW372/jm9bdsR0C6OqOc04ZNzeGQIZBEVeYjUidON1
-        gHXVGBPX5iPDki6e4ttuV+uno8oTeNSLQMn1q8M=
-X-Google-Smtp-Source: ABdhPJwxpTAT1hMwpB3AuslkxEXuPVtmbiBZWNr8UkvUpClzvuPZ4wfXfvx4LQhFpZ4/e1BOnV86QZfHSXxcD7D3Zu8=
-X-Received: by 2002:a25:4489:: with SMTP id r131mr8279192yba.538.1644196736547;
- Sun, 06 Feb 2022 17:18:56 -0800 (PST)
+        Sun, 6 Feb 2022 20:27:32 -0500
+X-Greylist: delayed 496 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Feb 2022 17:27:31 PST
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF81AC06173B;
+        Sun,  6 Feb 2022 17:27:31 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JsSwK1MWyz4xcZ;
+        Mon,  7 Feb 2022 12:19:13 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1644196753;
+        bh=DVo9TFj10WHnIMP3upbM4NlbZB2TC5ggS49NOyVsTQo=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=fVv9D5FuEvLaNhfgmXgjlmjX4g5lOMemZmfYENVGDoppdX2Jo87qwVgAkhSIW0EP0
+         89Lc++67+OIoMEwNxjvC50RgrjFDElHcPnLgKXuA5z1ZQiM++i/WE+BI+matwTnW2P
+         91Ie3ar6Hr7cTtJ21ddl+Mbkp3WJslga+XRknX57rBaj+Wt1/rbTxjyAQqrUiUMLyq
+         69wA8R2wfhA4KR8xTZG8HD3WRA+dYQp8A8q5D5TWDPWcWDmNGi2ZrHqlZZAor3hGwP
+         gBZUprAx+25T1ngXxDkvVI01Gokid1upCSXRiWM4/lXk81+HjumKOlIxOkqLRh8iAA
+         xnZSLLukqnG4w==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Jessica Yu <jeyu@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "kgdb-bugreport@lists.sourceforge.net" 
+        <kgdb-bugreport@lists.sourceforge.net>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Paul Mackerras <paulus@samba.org>
+Subject: Re: [PATCH v2 5/5] powerpc: Select
+ ARCH_WANTS_MODULES_DATA_IN_VMALLOC on book3s/32 and 8xx
+In-Reply-To: <9cab4adb-bd4b-48d5-d63c-33a0f25c97e4@csgroup.eu>
+References: <cover.1643282353.git.christophe.leroy@csgroup.eu>
+ <a20285472ad0a0a13a1d93c4707180be5b4fa092.1643282353.git.christophe.leroy@csgroup.eu>
+ <YfsVhcpVTW0+YCl5@bombadil.infradead.org>
+ <87h79gmrux.fsf@mpe.ellerman.id.au>
+ <9cab4adb-bd4b-48d5-d63c-33a0f25c97e4@csgroup.eu>
+Date:   Mon, 07 Feb 2022 12:19:06 +1100
+Message-ID: <877da7mq2d.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-References: <20220205185909.878643-1-nunes.erico@gmail.com>
-In-Reply-To: <20220205185909.878643-1-nunes.erico@gmail.com>
-From:   Qiang Yu <yuq825@gmail.com>
-Date:   Mon, 7 Feb 2022 09:18:45 +0800
-Message-ID: <CAKGbVbsBy5=b8bACbiQ57qMe2Jw_MN-4p=o7Qd+9BCS8U1ZQJw@mail.gmail.com>
-Subject: Re: [PATCH] lima: avoid error task dump attempt when not enabled
-To:     Erico Nunes <nunes.erico@gmail.com>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, lima@lists.freedesktop.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,42 +66,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Looks good for me, patch is:
-Reviewed-by: Qiang Yu <yuq825@gmail.com>
+Christophe Leroy <christophe.leroy@csgroup.eu> writes:
+> Le 03/02/2022 =C3=A0 06:39, Michael Ellerman a =C3=A9crit=C2=A0:
+>> Luis Chamberlain <mcgrof@kernel.org> writes:
+>>> On Thu, Jan 27, 2022 at 11:28:12AM +0000, Christophe Leroy wrote:
+>>>> book3s/32 and 8xx have a separate area for allocating modules,
+>>>> defined by MODULES_VADDR / MODULES_END.
+>>>>
+>>>> On book3s/32, it is not possible to protect against execution
+>>>> on a page basis. A full 256M segment is either Exec or NoExec.
+>>>> The module area is in an Exec segment while vmalloc area is
+>>>> in a NoExec segment.
+>>>>
+>>>> In order to protect module data against execution, select
+>>>> ARCH_WANTS_MODULES_DATA_IN_VMALLOC.
+>>>>
+>>>> For the 8xx (and possibly other 32 bits platform in the future),
+>>>> there is no such constraint on Exec/NoExec protection, however
+>>>> there is a critical distance between kernel functions and callers
+>>>> that needs to remain below 32Mbytes in order to avoid costly
+>>>> trampolines. By allocating data outside of module area, we
+>>>> increase the chance for module text to remain within acceptable
+>>>> distance from kernel core text.
+>>>>
+>>>> So select ARCH_WANTS_MODULES_DATA_IN_VMALLOC for 8xx as well.
+>>>>
+>>>> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+>>>> Cc: Michael Ellerman <mpe@ellerman.id.au>
+>>>> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+>>>> Cc: Paul Mackerras <paulus@samba.org>
+>>>
+>>> Cc list first and then the SOB.
+>>=20
+>> Just delete the Cc: list, it's meaningless.
+>>=20
+>
+> Was an easy way to copy you automatically with 'git send-email', but=20
+> getting it through linuxppc-dev list is enough I guess ?
 
-On Sun, Feb 6, 2022 at 2:59 AM Erico Nunes <nunes.erico@gmail.com> wrote:
->
-> Currently when users try to run an application with lima and that hits
-> an issue such as a timeout, a message saying "fail to save task state"
-> and "error task list is full" is shown in dmesg.
->
-> The error task dump is a debug feature disabled by default, so the
-> error task list is usually not going to be available at all.
-> The message can be misleading and creates confusion in bug reports.
->
-> We can avoid that code path and that particular message when the user
-> has not explicitly set the max_error_tasks parameter to enable the
-> feature.
->
-> Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
-> ---
->  drivers/gpu/drm/lima/lima_sched.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/lima/lima_sched.c b/drivers/gpu/drm/lima/lima_sched.c
-> index 5612d73f238f..12437e42cc76 100644
-> --- a/drivers/gpu/drm/lima/lima_sched.c
-> +++ b/drivers/gpu/drm/lima/lima_sched.c
-> @@ -409,7 +409,8 @@ static enum drm_gpu_sched_stat lima_sched_timedout_job(struct drm_sched_job *job
->
->         drm_sched_increase_karma(&task->base);
->
-> -       lima_sched_build_error_task_list(task);
-> +       if (lima_max_error_tasks)
-> +               lima_sched_build_error_task_list(task);
->
->         pipe->task_error(pipe);
->
-> --
-> 2.34.1
->
+It's useful for making the tooling Cc the right people, it's fine to use
+them for that.
+
+But there's no value in committing them to the git history, I actively
+strip them when applying. The fact that someone is Cc'ed on a patch
+tells you nothing, given the volume of mail maintainers receive.
+
+The link tag back to the original submission gives you the Cc list
+anyway.
+
+cheers

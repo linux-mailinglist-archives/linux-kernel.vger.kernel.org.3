@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CB654AB9A2
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:23:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5103D4ABC09
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:45:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354787AbiBGLMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:12:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47964 "EHLO
+        id S1386707AbiBGLf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:35:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352679AbiBGLI3 (ORCPT
+        with ESMTP id S1384097AbiBGLYn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:08:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38D58C0401C6;
-        Mon,  7 Feb 2022 03:08:27 -0800 (PST)
+        Mon, 7 Feb 2022 06:24:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16E02C043181;
+        Mon,  7 Feb 2022 03:24:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DFE36B80EC3;
-        Mon,  7 Feb 2022 11:08:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 097E8C004E1;
-        Mon,  7 Feb 2022 11:08:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A003C6077B;
+        Mon,  7 Feb 2022 11:24:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AD9FC004E1;
+        Mon,  7 Feb 2022 11:24:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644232104;
-        bh=dhE/Vcsu4lZ41OOm0QZA5rpSIL+8j4vjii8J319picU=;
+        s=korg; t=1644233082;
+        bh=xjkRWAuO6sjuAxBcS+6c7kSyPv7Q3Yfk0x1pK5sdx1M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=v1x5voxRe0doC+FpERYJigDHqDTBx/+Algy2A7JSj5af9l7+Fevd5sHoXh/fb3fsu
-         oylBwvURjJ4nLX2wu7qd8BNgLqxdsbasR92hy7YiTJIWiuE9sSQWYxASuIZeSu4/3M
-         jCAQOjEbeQoWLIIeObuc0+2v0WFbIwESRgYCJaKU=
+        b=UseLBa1xJglCDP95TlKt0l6aTQak+nZCOBXHcL3HIQIHZdRp991I6rYDtP4FnIRx9
+         n033RVIZPbBuc6wXSTfUG4zl2PN5sXkRGUzv9Eyylhk4Hu5igiEMrVjwOiJInKvcmI
+         NDLEVpCMFB5sxBW7I5QGDYLXxGBj7cXmn4wLRnJU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Cameron Williams <cang1@live.co.uk>
-Subject: [PATCH 4.9 10/48] tty: Add support for Brainboxes UC cards.
+        stable@vger.kernel.org,
+        Jukka Heikintalo <heikintalo.jukka@gmail.com>,
+        =?UTF-8?q?Pawe=C5=82=20Susicki?= <pawel.susicki@gmail.com>,
+        Jonas Hahnfeld <hahnjo@hahnjo.de>, Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.15 010/110] ALSA: usb-audio: Correct quirk for VF0770
 Date:   Mon,  7 Feb 2022 12:05:43 +0100
-Message-Id: <20220207103752.675802743@linuxfoundation.org>
+Message-Id: <20220207103802.624680247@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103752.341184175@linuxfoundation.org>
-References: <20220207103752.341184175@linuxfoundation.org>
+In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
+References: <20220207103802.280120990@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,139 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Cameron Williams <cang1@live.co.uk>
+From: Jonas Hahnfeld <hahnjo@hahnjo.de>
 
-commit 152d1afa834c84530828ee031cf07a00e0fc0b8c upstream.
+commit 4ee02e20893d2f9e951c7888f2284fa608ddaa35 upstream.
 
-This commit adds support for the some of the Brainboxes PCI range of
-cards, including the UC-101, UC-235/246, UC-257, UC-268, UC-275/279,
-UC-302, UC-310, UC-313, UC-320/324, UC-346, UC-357, UC-368
-and UC-420/431.
+This device provides both audio and video. The original quirk added in
+commit 48827e1d6af5 ("ALSA: usb-audio: Add quirk for VF0770") used
+USB_DEVICE to match the vendor and product ID. Depending on module order,
+if snd-usb-audio was asked first, it would match the entire device and
+uvcvideo wouldn't get to see it. Change the matching to USB_AUDIO_DEVICE
+to restore uvcvideo matching in all cases.
 
-Signed-off-by: Cameron Williams <cang1@live.co.uk>
-Cc: stable <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/AM5PR0202MB2564688493F7DD9B9C610827C45E9@AM5PR0202MB2564.eurprd02.prod.outlook.com
+Fixes: 48827e1d6af5 ("ALSA: usb-audio: Add quirk for VF0770")
+Reported-by: Jukka Heikintalo <heikintalo.jukka@gmail.com>
+Tested-by: Jukka Heikintalo <heikintalo.jukka@gmail.com>
+Reported-by: Paweł Susicki <pawel.susicki@gmail.com>
+Tested-by: Paweł Susicki <pawel.susicki@gmail.com>
+Cc: <stable@vger.kernel.org> # 5.4, 5.10, 5.14, 5.15
+Signed-off-by: Jonas Hahnfeld <hahnjo@hahnjo.de>
+Link: https://lore.kernel.org/r/20220131183516.61191-1-hahnjo@hahnjo.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/tty/serial/8250/8250_pci.c |  100 ++++++++++++++++++++++++++++++++++++-
- 1 file changed, 98 insertions(+), 2 deletions(-)
+ sound/usb/quirks-table.h |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/tty/serial/8250/8250_pci.c
-+++ b/drivers/tty/serial/8250/8250_pci.c
-@@ -5238,8 +5238,30 @@ static struct pci_device_id serial_pci_t
- 	{	PCI_VENDOR_ID_INTASHIELD, PCI_DEVICE_ID_INTASHIELD_IS400,
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,    /* 135a.0dc0 */
- 		pbn_b2_4_115200 },
-+	/* Brainboxes Devices */
- 	/*
--	 * BrainBoxes UC-260
-+	* Brainboxes UC-101
-+	*/
-+	{       PCI_VENDOR_ID_INTASHIELD, 0x0BA1,
-+		PCI_ANY_ID, PCI_ANY_ID,
-+		0, 0,
-+		pbn_b2_2_115200 },
-+	/*
-+	 * Brainboxes UC-235/246
-+	 */
-+	{	PCI_VENDOR_ID_INTASHIELD, 0x0AA1,
-+		PCI_ANY_ID, PCI_ANY_ID,
-+		0, 0,
-+		pbn_b2_1_115200 },
-+	/*
-+	 * Brainboxes UC-257
-+	 */
-+	{	PCI_VENDOR_ID_INTASHIELD, 0x0861,
-+		PCI_ANY_ID, PCI_ANY_ID,
-+		0, 0,
-+		pbn_b2_2_115200 },
-+	/*
-+	 * Brainboxes UC-260/271/701/756
- 	 */
- 	{	PCI_VENDOR_ID_INTASHIELD, 0x0D21,
- 		PCI_ANY_ID, PCI_ANY_ID,
-@@ -5247,7 +5269,81 @@ static struct pci_device_id serial_pci_t
- 		pbn_b2_4_115200 },
- 	{	PCI_VENDOR_ID_INTASHIELD, 0x0E34,
- 		PCI_ANY_ID, PCI_ANY_ID,
--		 PCI_CLASS_COMMUNICATION_MULTISERIAL << 8, 0xffff00,
-+		PCI_CLASS_COMMUNICATION_MULTISERIAL << 8, 0xffff00,
-+		pbn_b2_4_115200 },
-+	/*
-+	 * Brainboxes UC-268
-+	 */
-+	{       PCI_VENDOR_ID_INTASHIELD, 0x0841,
-+		PCI_ANY_ID, PCI_ANY_ID,
-+		0, 0,
-+		pbn_b2_4_115200 },
-+	/*
-+	 * Brainboxes UC-275/279
-+	 */
-+	{	PCI_VENDOR_ID_INTASHIELD, 0x0881,
-+		PCI_ANY_ID, PCI_ANY_ID,
-+		0, 0,
-+		pbn_b2_8_115200 },
-+	/*
-+	 * Brainboxes UC-302
-+	 */
-+	{	PCI_VENDOR_ID_INTASHIELD, 0x08E1,
-+		PCI_ANY_ID, PCI_ANY_ID,
-+		0, 0,
-+		pbn_b2_2_115200 },
-+	/*
-+	 * Brainboxes UC-310
-+	 */
-+	{       PCI_VENDOR_ID_INTASHIELD, 0x08C1,
-+		PCI_ANY_ID, PCI_ANY_ID,
-+		0, 0,
-+		pbn_b2_2_115200 },
-+	/*
-+	 * Brainboxes UC-313
-+	 */
-+	{       PCI_VENDOR_ID_INTASHIELD, 0x08A3,
-+		PCI_ANY_ID, PCI_ANY_ID,
-+		0, 0,
-+		pbn_b2_2_115200 },
-+	/*
-+	 * Brainboxes UC-320/324
-+	 */
-+	{	PCI_VENDOR_ID_INTASHIELD, 0x0A61,
-+		PCI_ANY_ID, PCI_ANY_ID,
-+		0, 0,
-+		pbn_b2_1_115200 },
-+	/*
-+	 * Brainboxes UC-346
-+	 */
-+	{	PCI_VENDOR_ID_INTASHIELD, 0x0B02,
-+		PCI_ANY_ID, PCI_ANY_ID,
-+		0, 0,
-+		pbn_b2_4_115200 },
-+	/*
-+	 * Brainboxes UC-357
-+	 */
-+	{	PCI_VENDOR_ID_INTASHIELD, 0x0A81,
-+		PCI_ANY_ID, PCI_ANY_ID,
-+		0, 0,
-+		pbn_b2_2_115200 },
-+	{	PCI_VENDOR_ID_INTASHIELD, 0x0A83,
-+		PCI_ANY_ID, PCI_ANY_ID,
-+		0, 0,
-+		pbn_b2_2_115200 },
-+	/*
-+	 * Brainboxes UC-368
-+	 */
-+	{	PCI_VENDOR_ID_INTASHIELD, 0x0C41,
-+		PCI_ANY_ID, PCI_ANY_ID,
-+		0, 0,
-+		pbn_b2_4_115200 },
-+	/*
-+	 * Brainboxes UC-420/431
-+	 */
-+	{       PCI_VENDOR_ID_INTASHIELD, 0x0921,
-+		PCI_ANY_ID, PCI_ANY_ID,
-+		0, 0,
- 		pbn_b2_4_115200 },
- 	/*
- 	 * Perle PCI-RAS cards
+--- a/sound/usb/quirks-table.h
++++ b/sound/usb/quirks-table.h
+@@ -84,7 +84,7 @@
+  * combination.
+  */
+ {
+-	USB_DEVICE(0x041e, 0x4095),
++	USB_AUDIO_DEVICE(0x041e, 0x4095),
+ 	.driver_info = (unsigned long) &(const struct snd_usb_audio_quirk) {
+ 		.ifnum = QUIRK_ANY_INTERFACE,
+ 		.type = QUIRK_COMPOSITE,
 
 

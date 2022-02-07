@@ -2,64 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1DE44ACA6A
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 21:28:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BE5B4ACA6C
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 21:28:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242552AbiBGU1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 15:27:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49388 "EHLO
+        id S242770AbiBGU1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 15:27:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241525AbiBGUXv (ORCPT
+        with ESMTP id S233366AbiBGUY1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 15:23:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6B79C0401DA;
-        Mon,  7 Feb 2022 12:23:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 78102B816F8;
-        Mon,  7 Feb 2022 20:23:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68F06C004E1;
-        Mon,  7 Feb 2022 20:23:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644265428;
-        bh=usqaXiifcEu+JIY0FJvPPoSf4O8s+5EkUbpQUKh5KyU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mqQKGW8oImfRrgLRIJs936msARKuW7MF6OO4wl5/4jfGk14W8csXorOwibKtXBS4p
-         ivQ3yCdOEV2Ed1I4uqW97PAyTfKxPQO+3OBYs7KPntk3Dl8cL9cU9XWG+MquvabU2v
-         mI2DYXDw+zbzRCkNVxN6E9Pqw8EHdCDX8MAemYQI24K3yjSJcKYs7YMsDjk6DCBpc7
-         Y0efuOcSVJRXAkAsgk1eZKFBNEDqpU2d5wiie3J+q2w80KP4MpJY905Ouf+WF0oDKV
-         ENblOEROW7KC5dpUDMOOgZVuq7NgKGZDy1T75sGyAsQ7NMML1S3ZFrjR6zWPscGxeh
-         YYuThUp1DnThQ==
-Date:   Mon, 7 Feb 2022 21:23:45 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Derek Basehore <dbasehore@chromium.org>,
-        Rajat Jain <rajatja@google.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: 5.17-rc regression: X1 Carbon touchpad not resumed
-Message-ID: <YgF/0QGFN4SppLKg@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Hugh Dickins <hughd@google.com>,
-        Derek Basehore <dbasehore@chromium.org>,
-        Rajat Jain <rajatja@google.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-References: <89456fcd-a113-4c82-4b10-a9bcaefac68f@google.com>
+        Mon, 7 Feb 2022 15:24:27 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0C72FC0401E1
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 12:24:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644265465;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9T/OvHQML0n7t8483X0s9RB1P7k3PGxeDBNyGeKNXxg=;
+        b=gq1JiwiMhVRICsyRsLLPMuVjgxY3NuFaWNOyW3mIw1C3bCv7egaV8L8z1YeyRdPdG9TAQb
+        h15HpVxTIPRuJ9nWzPi3GKlhQHu5alQQw5exNpK8mf24IsMq3fIDWukQsAm7//3E1VVt2E
+        Bd65DYJYsIcjG+2BY6kE0Y+h+tei39k=
+Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
+ [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-503-QjTbS4zmPG-IIYEL_gW-WA-1; Mon, 07 Feb 2022 15:24:24 -0500
+X-MC-Unique: QjTbS4zmPG-IIYEL_gW-WA-1
+Received: by mail-lj1-f200.google.com with SMTP id c31-20020a2ebf1f000000b0022d87a28911so4919396ljr.1
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 12:24:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9T/OvHQML0n7t8483X0s9RB1P7k3PGxeDBNyGeKNXxg=;
+        b=trMpr9zZItA2QVjTHq4+9y0TVSEEOTF+WfG0ACCrC6ce8RE3xfh/eG35ILmA9bF/u4
+         IwgnPbpzZHON4eZ4Z+c12FjL3UPJt5fYRlWWrRqbDU9aYWAI/BCu0IRD0Zp4nGBJ8FKX
+         +tNu6m6AX1gFkWLusJTj161aw0toMn6a+OJXUXt5FHeNV2y+3K8X6aqWjghPeg4BtSgu
+         y6pBb4PnnA8VHcm/2zqVLrwETcfZaPymuTjRWHoI4EKfCLyEQx68NJhz92AXDLUPwZg8
+         wMbbUGiZuRRonO/c0Tlzk/oMFFieN2fmzoeqlFfP9MZIhxHxZ6Ykl4DaBDbOs6WrQcM7
+         YYSw==
+X-Gm-Message-State: AOAM530aZZVzeG8WKbnyVxUGj0obF87FmCuLBIReUGlpN8N/mQV5nRM/
+        9WSjY61+tCXTcyzqQdl7Jox+DMjK8E1ubTgt3Mxtf1ccCRhZFhxex959V2+KCpArn3wKv/zdzTw
+        NWeERvEebVaJLZk45N6Hkqabau4xnUQUxgKFOkRUr
+X-Received: by 2002:a05:651c:1213:: with SMTP id i19mr745449lja.116.1644265463147;
+        Mon, 07 Feb 2022 12:24:23 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwuUh1S24KOapaXqUTbR/PE5isBkVVKCEATv0reBXJDNNQwUC3D72GSr/G+3NpnX4u042B4PjJAmEV12JsYe7E=
+X-Received: by 2002:a05:651c:1213:: with SMTP id i19mr745427lja.116.1644265462882;
+ Mon, 07 Feb 2022 12:24:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="SVWOx/Z2IM0sSr6X"
-Content-Disposition: inline
-In-Reply-To: <89456fcd-a113-4c82-4b10-a9bcaefac68f@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220205081658.562208-1-leobras@redhat.com> <20220205081658.562208-2-leobras@redhat.com>
+ <f2b0cac2-2f8a-60e8-616c-73825b3f62a6@redhat.com>
+In-Reply-To: <f2b0cac2-2f8a-60e8-616c-73825b3f62a6@redhat.com>
+From:   Leonardo Bras Soares Passos <leobras@redhat.com>
+Date:   Mon, 7 Feb 2022 17:24:11 -0300
+Message-ID: <CAJ6HWG7DV-AeWyXxGwMMV61BejcCdpTc=U+4U6eY4gx4hfhP-g@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] x86/kvm/fpu: Mask guest fpstate->xfeatures with guest_supported_xcr0
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,46 +80,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Paolo,
 
---SVWOx/Z2IM0sSr6X
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Mon, Feb 7, 2022 at 10:30 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
+>
+> On 2/5/22 09:16, Leonardo Bras wrote:
+> > During host/guest switch (like in kvm_arch_vcpu_ioctl_run()), the kernel
+> > swaps the fpu between host/guest contexts, by using fpu_swap_kvm_fpstate().
+> >
+> > When xsave feature is available, the fpu swap is done by:
+> > - xsave(s) instruction, with guest's fpstate->xfeatures as mask, is used
+> >    to store the current state of the fpu registers to a buffer.
+> > - xrstor(s) instruction, with (fpu_kernel_cfg.max_features &
+> >    XFEATURE_MASK_FPSTATE) as mask, is used to put the buffer into fpu regs.
+> >
+> > For xsave(s) the mask is used to limit what parts of the fpu regs will
+> > be copied to the buffer. Likewise on xrstor(s), the mask is used to
+> > limit what parts of the fpu regs will be changed.
+> >
+> > The mask for xsave(s), the guest's fpstate->xfeatures, is defined on
+> > kvm_arch_vcpu_create(), which (in summary) sets it to all features
+> > supported by the cpu which are enabled on kernel config.
+> >
+> > This means that xsave(s) will save to guest buffer all the fpu regs
+> > contents the cpu has enabled when the guest is paused, even if they
+> > are not used.
+> >
+> > This would not be an issue, if xrstor(s) would also do that.
+> >
+> > xrstor(s)'s mask for host/guest swap is basically every valid feature
+> > contained in kernel config, except XFEATURE_MASK_PKRU.
+> > According to kernel src, it is instead switched in switch_to() and
+> > flush_thread().
+>
+> Hi Leonardo, is this an issue when patch 2 is applied?
 
-Hello Hugh,
+Yes.
+This issue happens on host/guest context switch, instead of KVM_{GET,SET}_XSAVE,
+so this bug will be triggered whenever the guest doesn't support PKRU
+but the host
+does, without any interference of above IOCTLs.
+In fact, IIUC,  even if we are able to fix the feature bit with
+KVM_SET_XSAVE, it would
+come back after another host/guest context switch if we don't fix
+vcpu->arch.guest_fpu.fpstate->xfeatures.
 
-> Bisection led to 172d931910e1db800f4e71e8ed92281b6f8c6ee2
-> ("i2c: enable async suspend/resume on i2c client devices")
-> and reverting that fixes it for me.
+> With this patch,
+> we have to reason about the effect of calling KVM_SET_CPUID2 twice calls
+> back to back.  I think an "&=" would be wrong in that case.
 
-Thank you for the report plus bisection and sorry for the regression!
+So, you suggest something like this ?
 
-I will wait a few days if people come up with a fix. If not, I will
-revert the offending commit. Are you willing to test patches in case
-there will be some?
-
-All the best,
-
-   Wolfram
+vcpu->arch.guest_fpu.fpstate->xfeatures =
+        fpu_user_cfg.default_features & vcpu->arch.guest_supported_xcr0;
 
 
---SVWOx/Z2IM0sSr6X
-Content-Type: application/pgp-signature; name="signature.asc"
+>
+> On the other hand, with patch 2 the change is only in the KVM_SET_XSAVE
+> output, which is much more self-contained.
 
------BEGIN PGP SIGNATURE-----
+Agree, but they solve different sources of the same issue.
+Patch 2 will only address a bug that can happen if userspace mistakenly
+tries to set a feature the guest does not support.
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIBf80ACgkQFA3kzBSg
-KbYP/w//bKPTb4uzystTG/NLAI6vfcl66Q1s10ZKVC8aEK7LS+bSSMLTiUmSf638
-vYP5hs+neOiDdeBFdhYvcm1tMlud6quQKsYugbtNLQxY1J+bBJnqMLLWZ8zn/EHf
-0G4jLNW3u3v2C88A7E6dEywMsx+8CDtdtqcDWXKljIMbV3yNLPF1c8qhHsbh8diO
-xIv6RY8KSnR37uG+3hv7TQEXLM15hc8KT7l7sMtgQb1+oMRnpsalbPmJFTyx4cy8
-zanBvoSgg3PlYx4C8/cGzc2YSaMZKPNs5PIdC2nodlL0gm6JVDIx37KuEzqVs6gA
-9r1BQzdcjPkoW87Pi7HLnTD6h/XcWb8MAK6gnu9hO1UxjCTFMFxMnYQ6wpyni5rk
-bXr/MhALZfMh+T+yUFe3p3zrRZEp7ek9uKiPFXFdjg/gNaxen5BgYsXBMlUjU0rh
-U6UZce3AP9Oct+lDa9OrwoG7l58pTZRb7PCBjpS3B07u5YngzXybf4/vdbak4se4
-DFWMCBKaWgngJPEcu6z7ar2BOhwAFWFNuNUPDWulW3KsEVf6GUh9rDAyHaLAWnwN
-2RqsAkMs1IsFJWXwxM4EiJSEiPB+nKKXW4BPRjCQ6NS0Yn8duiGOphlgQPK8oC36
-+53oDlSCYXEWEp2W0zhZJOv8l9hmDabbwJopfSaxq2nmLOyGYJ0=
-=a8CQ
------END PGP SIGNATURE-----
+>
+> Thanks,
 
---SVWOx/Z2IM0sSr6X--
+Thank you!
+
+Best regards,
+Leo
+[...]
+

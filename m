@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58E994ABDEF
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:05:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98FD04ABC02
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:45:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389552AbiBGLuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:50:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38418 "EHLO
+        id S1386595AbiBGLfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:35:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352776AbiBGLaE (ORCPT
+        with ESMTP id S1384001AbiBGLYY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:30:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CDA7C03FEE6;
-        Mon,  7 Feb 2022 03:28:25 -0800 (PST)
+        Mon, 7 Feb 2022 06:24:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79961C043188;
+        Mon,  7 Feb 2022 03:24:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 28947B80EBD;
-        Mon,  7 Feb 2022 11:28:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BA84C004E1;
-        Mon,  7 Feb 2022 11:28:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0CB30B81158;
+        Mon,  7 Feb 2022 11:24:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F74DC004E1;
+        Mon,  7 Feb 2022 11:24:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233302;
-        bh=8QV6oXiFaB4PUA8JqIhf7y6Mx274xZaFC/RUXpTItBc=;
+        s=korg; t=1644233060;
+        bh=2kK5sbq3cpZ3QtSC6O0CqOyEdKdVWKxpE+KMJ3HVuHI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Fo+LSCeT74grMC0GPXfs24sY/lLKCF4+EdDKEnhrTaVCMV17FzInldyrTujroZmUa
-         WvDHbjWcTpDXc5JqR+RC1O7/WDXrQtShucoa+B2JtIoCbtpzrD9FpZzyd5dlkCMXRS
-         8o2Iq7OVMbOop7632/NXWW1K9eO+Dq3EkjVdUjUo=
+        b=QWZ8u266EFvHsaQwtxPwp1Zq6G2GUfjlgDKVsH1sc9Tex6H4soAZwPt+2Uzx3I9qr
+         GIcmD/goROb2vUTqf7+rsk+r+6OiG/xVqQTUZ/she87TnlTTsWU1yv/LeoEkq1HFXM
+         Ol/KoWf1SI/35GajjcM/OQkiN/xEGgkAkrdGbL3M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, SASANO Takayoshi <uaa@mx5.nisiq.net>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 5.15 079/110] pinctrl: sunxi: Fix H616 I2S3 pin data
+        stable@vger.kernel.org, Haiyue Wang <haiyue.wang@intel.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.10 54/74] gve: fix the wrong AdminQ buffer queue index check
 Date:   Mon,  7 Feb 2022 12:06:52 +0100
-Message-Id: <20220207103805.059120061@linuxfoundation.org>
+Message-Id: <20220207103758.983776899@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103802.280120990@linuxfoundation.org>
-References: <20220207103802.280120990@linuxfoundation.org>
+In-Reply-To: <20220207103757.232676988@linuxfoundation.org>
+References: <20220207103757.232676988@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,51 +54,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andre Przywara <andre.przywara@arm.com>
+From: Haiyue Wang <haiyue.wang@intel.com>
 
-commit 1fd6bb5b47a65eacb063b37e6fa6df2b8fa92959 upstream.
+commit 1f84a9450d75e08af70d9e2f2d5e1c0ac0c881d2 upstream.
 
-Two bugs have sneaked in the H616 pinctrl data:
-- PH9 uses the mux value of 0x3 twice (one should be 0x5 instead)
-- PH8 and PH9 use the "i2s3" function name twice in each pin
+The 'tail' and 'head' are 'unsigned int' type free-running count, when
+'head' is overflow, the 'int i (= tail) < u32 head' will be false:
 
-For the double pin name we use the same trick we pulled for i2s0: append
-the pin function to the group name to designate the special function.
+Only '- loop 0: idx = 63' result is shown, so it needs to use 'int' type
+to compare, it can handle the overflow correctly.
 
-Fixes: 25adc29407fb ("pinctrl: sunxi: Add support for the Allwinner H616 pin controller")
-Reported-by: SASANO Takayoshi <uaa@mx5.nisiq.net>
-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Reviewed-by: Samuel Holland <samuel@sholland.org>
-Link: https://lore.kernel.org/r/20220105172952.23347-1-andre.przywara@arm.com
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+typedef uint32_t u32;
+
+int main()
+{
+        u32 tail, head;
+        int stail, shead;
+        int i, loop;
+
+        tail = 0xffffffff;
+        head = 0x00000000;
+
+        for (i = tail, loop = 0; i < head; i++) {
+                unsigned int idx = i & 63;
+
+                printf("+ loop %d: idx = %u\n", loop++, idx);
+        }
+
+        stail = tail;
+        shead = head;
+        for (i = stail, loop = 0; i < shead; i++) {
+                unsigned int idx = i & 63;
+
+                printf("- loop %d: idx = %u\n", loop++, idx);
+        }
+
+        return 0;
+}
+
+Fixes: 5cdad90de62c ("gve: Batch AQ commands for creating and destroying queues.")
+Signed-off-by: Haiyue Wang <haiyue.wang@intel.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pinctrl/sunxi/pinctrl-sun50i-h616.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/net/ethernet/google/gve/gve_adminq.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/pinctrl/sunxi/pinctrl-sun50i-h616.c
-+++ b/drivers/pinctrl/sunxi/pinctrl-sun50i-h616.c
-@@ -363,16 +363,16 @@ static const struct sunxi_desc_pin h616_
- 		  SUNXI_FUNCTION(0x0, "gpio_in"),
- 		  SUNXI_FUNCTION(0x1, "gpio_out"),
- 		  SUNXI_FUNCTION(0x2, "uart2"),		/* CTS */
--		  SUNXI_FUNCTION(0x3, "i2s3"),	/* DO0 */
-+		  SUNXI_FUNCTION(0x3, "i2s3_dout0"),	/* DO0 */
- 		  SUNXI_FUNCTION(0x4, "spi1"),		/* MISO */
--		  SUNXI_FUNCTION(0x5, "i2s3"),	/* DI1 */
-+		  SUNXI_FUNCTION(0x5, "i2s3_din1"),	/* DI1 */
- 		  SUNXI_FUNCTION_IRQ_BANK(0x6, 6, 8)),	/* PH_EINT8 */
- 	SUNXI_PIN(SUNXI_PINCTRL_PIN(H, 9),
- 		  SUNXI_FUNCTION(0x0, "gpio_in"),
- 		  SUNXI_FUNCTION(0x1, "gpio_out"),
--		  SUNXI_FUNCTION(0x3, "i2s3"),	/* DI0 */
-+		  SUNXI_FUNCTION(0x3, "i2s3_din0"),	/* DI0 */
- 		  SUNXI_FUNCTION(0x4, "spi1"),		/* CS1 */
--		  SUNXI_FUNCTION(0x3, "i2s3"),	/* DO1 */
-+		  SUNXI_FUNCTION(0x5, "i2s3_dout1"),	/* DO1 */
- 		  SUNXI_FUNCTION_IRQ_BANK(0x6, 6, 9)),	/* PH_EINT9 */
- 	SUNXI_PIN(SUNXI_PINCTRL_PIN(H, 10),
- 		  SUNXI_FUNCTION(0x0, "gpio_in"),
+--- a/drivers/net/ethernet/google/gve/gve_adminq.c
++++ b/drivers/net/ethernet/google/gve/gve_adminq.c
+@@ -141,7 +141,7 @@ static int gve_adminq_parse_err(struct g
+  */
+ static int gve_adminq_kick_and_wait(struct gve_priv *priv)
+ {
+-	u32 tail, head;
++	int tail, head;
+ 	int i;
+ 
+ 	tail = ioread32be(&priv->reg_bar0->adminq_event_counter);
 
 

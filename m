@@ -2,106 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B73AB4ACA16
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 21:11:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF9DB4ACA19
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 21:11:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241454AbiBGUJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 15:09:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41898 "EHLO
+        id S241075AbiBGUJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 15:09:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239990AbiBGUHL (ORCPT
+        with ESMTP id S240553AbiBGUH6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 15:07:11 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E96BCC0401E5
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 12:07:10 -0800 (PST)
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 92A323F203
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 20:07:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1644264428;
-        bh=4dYOe+nDDh4aVyn34qFZwR7+XYTuNxTI3b3m5/CxGfA=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=HSfdaizQSYqblyB+QdiLdn8HXBbyehrKHGrbdBVJxVwNvkoseRfB+uT7TTxE6hWv1
-         KHxmkx+GIpLN4Xh29Qdh2IIZO2cLF2GNdpPgIclW/uX+0V7i0sWfdjhXrKhfKy/toU
-         vMXO5qCxdi4qufoz65aAeXiU5YPHOHdkfKi5kPNCo7uH8KXThPyUP7e4rpSdVlpYb+
-         E4BkZeqvxd2sbcQK4KmR4de41YIFJAWuuoDPrTnI9I8bym49PjL5cvriKGH1Pldxq1
-         Vw5ZMw8XonSYWdoPMiNmDfuBBmOGrCin/JDTPO2+AO2gIfXULtqaJlLZv6Wj0IFyTs
-         jJhlwEZ/UoYFQ==
-Received: by mail-ej1-f70.google.com with SMTP id 13-20020a170906328d00b006982d0888a4so4727842ejw.9
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 12:07:08 -0800 (PST)
+        Mon, 7 Feb 2022 15:07:58 -0500
+Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5205BC0401DA;
+        Mon,  7 Feb 2022 12:07:58 -0800 (PST)
+Received: by mail-oo1-f45.google.com with SMTP id o192-20020a4a2cc9000000b00300af40d795so15026052ooo.13;
+        Mon, 07 Feb 2022 12:07:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=4dYOe+nDDh4aVyn34qFZwR7+XYTuNxTI3b3m5/CxGfA=;
-        b=LiDbRGUcl4Jx6wABC5nQh7Zyjo7PBX8CyPIJcWl+0W7swbOlriHmk1woGQjumkh25i
-         AJhNW2pBBhlv2mc30PfdSRGc0YqekyEmERN7jkJNMcXz+4MiCz2NRwGErYgw8yrZwOGf
-         jiw7/fsT12pgz+TwDW/dxcCtHSeWCvJrmTGpJsFuRnBCvX3u6qzsQALiZskWKXyNjszA
-         X1KHZV0w4cxK6qkD2L2BY9HJbGJT2/24TnkUPfC0IyIxrMU5OiU6Ew8kvCMhvA608klb
-         ebE6/rKN1Dn6eafEJ2k2gq0ET+Y4onEYusEpDCJnjbBg8KFk5zbyZdcQ5kZrET2mQ9SJ
-         PEIw==
-X-Gm-Message-State: AOAM530pBiTR36e0LPFAWkjiq3/ObVxxHuZcdbz2qBWdmRHBnUkgezr5
-        q72u+Bp13IoQ5JOHA0MB2vuYlKIWOC6MSGO4jM9pz2+cb0mdZ19tcAYwPljDa6TuaRkpU//aQ/o
-        b/J04/ZjN9M6ndm+3DvxcDfFqpSzfVNLYbtwGLzj9TQ==
-X-Received: by 2002:a05:6402:4385:: with SMTP id o5mr1182573edc.48.1644264428207;
-        Mon, 07 Feb 2022 12:07:08 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx7gqrf2i0cbGWZf55YEN4mmZLmIUrR0Ghfw9MTtHdiGRjZWYb5iwRVnSs+fii5J+1BSjqQDA==
-X-Received: by 2002:a05:6402:4385:: with SMTP id o5mr1182563edc.48.1644264428045;
-        Mon, 07 Feb 2022 12:07:08 -0800 (PST)
-Received: from [192.168.0.91] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id s9sm5783229edj.48.2022.02.07.12.07.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Feb 2022 12:07:07 -0800 (PST)
-Message-ID: <9bb00b0c-6d5d-3dc3-776b-6ecce0268407@canonical.com>
-Date:   Mon, 7 Feb 2022 21:07:06 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=HsXp1ktRNXXH1ZuQq9T7gkz8YQLCBAGSvs9f6otXSEc=;
+        b=kTD45pxxBRaJAEMawetNv/mQtrIxcK7j9j96hqdJhE0EnE3hbxqzAAWvJkgsX6Hqmt
+         mtmQtr+s/xZaYEoUNxF2jNgxZSVpz0b9llomZuCjyuXdaErEY0WGor6HESxgOruB89Ih
+         qg3DRl8mRLQWfwz7VRRIQppC+WBoPV36HByI7tDF68hOOVyzFmSMArnkSQCvBtfrkoBh
+         j1nTw4rgQ4+G4CA1K5SCWUYt0/DQ6lN9T+RutjVQbJshkBfZdhQIuDuDRUKlI71wSEZK
+         PtRmznH5Dgz0grw6afPCD5C/gBQbnwUWKN04r7Y4joDBBkShbai4oi39rkBObJrGXxkm
+         FoOQ==
+X-Gm-Message-State: AOAM532L3nl4BQkAt8fLUsskaeHHqrZpisclhHZo5v6wfBKVwZx8B52m
+        dXx/1ullVMeZMr5AO4Td8A==
+X-Google-Smtp-Source: ABdhPJwZ69i+KxDCJdLyXXbkdUnY+k1QIC0WKQTQTKD8UaxeMwXblmqX/F1sU7XCejibDstsOhUa7A==
+X-Received: by 2002:a4a:d051:: with SMTP id x17mr562987oor.60.1644264477617;
+        Mon, 07 Feb 2022 12:07:57 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id ep17sm4757304oab.21.2022.02.07.12.07.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Feb 2022 12:07:56 -0800 (PST)
+Received: (nullmailer pid 820845 invoked by uid 1000);
+        Mon, 07 Feb 2022 20:07:55 -0000
+Date:   Mon, 7 Feb 2022 14:07:55 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     conor.dooley@microchip.com
+Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, jassisinghbrar@gmail.com,
+        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
+        lee.jones@linaro.org, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, geert@linux-m68k.org,
+        krzysztof.kozlowski@canonical.com, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        bin.meng@windriver.com, heiko@sntech.de, lewis.hanly@microchip.com,
+        daire.mcnamara@microchip.com, ivan.griffin@microchip.com,
+        atishp@rivosinc.com, Palmer Dabbelt <palmer@rivosinc.com>
+Subject: Re: [PATCH v6 02/12] dt-bindings: soc/microchip: add services as sub
+ devs of sys ctrlr
+Message-ID: <YgF8G/Eed03xn9iI@robh.at.kernel.org>
+References: <20220207162637.1658677-1-conor.dooley@microchip.com>
+ <20220207162637.1658677-3-conor.dooley@microchip.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 5/5] mailbox: imx: update author and Copyright
-Content-Language: en-US
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, jassisinghbrar@gmail.com,
-        robh+dt@kernel.org, shawnguo@kernel.org
-Cc:     s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Peng Fan <peng.fan@nxp.com>
-References: <20220207095832.1590225-1-peng.fan@oss.nxp.com>
- <20220207095832.1590225-6-peng.fan@oss.nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220207095832.1590225-6-peng.fan@oss.nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220207162637.1658677-3-conor.dooley@microchip.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/02/2022 10:58, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
+On Mon, Feb 07, 2022 at 04:26:28PM +0000, conor.dooley@microchip.com wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
 > 
-> Add NXP Copyright
-> Add myself as author
+> Document mpfs-rng and mpfs-generic-service as subdevices of the system
+> controller.
 > 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
 > ---
->  drivers/mailbox/imx-mailbox.c | 2 ++
->  1 file changed, 2 insertions(+)
+>  .../microchip,mpfs-sys-controller.yaml        | 35 +++++++++++++++++--
+>  1 file changed, 33 insertions(+), 2 deletions(-)
 > 
+> diff --git a/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml b/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
+> index f699772fedf3..b02c8bd72605 100644
+> --- a/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
+> +++ b/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
+> @@ -13,7 +13,6 @@ description: |
+>    The PolarFire SoC system controller is communicated with via a mailbox.
+>    This document describes the bindings for the client portion of that mailbox.
+>  
+> -
+>  properties:
+>    mboxes:
+>      maxItems: 1
+> @@ -21,6 +20,38 @@ properties:
+>    compatible:
+>      const: microchip,mpfs-sys-controller
+>  
+> +  rng:
+> +    type: object
+> +
+> +    description: |
+> +      The hardware random number generator on the Polarfire SoC is
+> +      accessed via the mailbox interface provided by the system controller
+> +
+> +    properties:
+> +      compatible:
+> +        const: microchip,mpfs-rng
+> +
+> +    required:
+> +      - compatible
+> +
+> +  sysserv:
+> +    type: object
+> +
+> +    description: |
+> +      The PolarFire SoC system controller is communicated with via a mailbox.
+> +      This binding represents several of the functions provided by the system
+> +      controller which do not belong in a specific subsystem, such as reading
+> +      the fpga device certificate, all of which follow the same format:
+> +        - a command + optional payload sent to the sys controller
+> +        - a status + a payload returned to Linux
+> +
+> +    properties:
+> +      compatible:
+> +        const: microchip,mpfs-generic-service
+> +
+> +    required:
+> +      - compatible
+> +
+>  required:
+>    - compatible
+>    - mboxes
+> @@ -29,7 +60,7 @@ additionalProperties: false
+>  
+>  examples:
+>    - |
+> -    syscontroller: syscontroller {
+> +    syscontroller {
+>        compatible = "microchip,mpfs-sys-controller";
+>        mboxes = <&mbox 0>;
 
-Just squash it with previous update. Usually the copyright is updated
-because of introduced work, so keeping it a separate commit does not
-make much sense.
+Removing the child nodes in the example doesn't address my comment. You 
+still have them in the schema. IOW, this patch should be dropped unless 
+you have reasons for child nodes other than I want to partition the OS 
+drivers a certain way and creating DT nodes instantiates them for me.
 
-Best regards,
-Krzysztof
+>      };
+> -- 
+> 2.35.1
+> 
+> 

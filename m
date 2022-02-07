@@ -2,44 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C03224ABD8B
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:00:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57C7B4ABA74
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:28:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385559AbiBGLo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:44:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46164 "EHLO
+        id S1383761AbiBGLXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:23:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386025AbiBGLdU (ORCPT
+        with ESMTP id S1382091AbiBGLSQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:33:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75BD5C043181;
-        Mon,  7 Feb 2022 03:33:20 -0800 (PST)
+        Mon, 7 Feb 2022 06:18:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2056DC03FEDE;
+        Mon,  7 Feb 2022 03:18:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E6AD60C8E;
-        Mon,  7 Feb 2022 11:33:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAD58C004E1;
-        Mon,  7 Feb 2022 11:33:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CEC4FB8111C;
+        Mon,  7 Feb 2022 11:18:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15900C004E1;
+        Mon,  7 Feb 2022 11:18:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233599;
-        bh=8eH1MdEVdu2hKNRuGIzmCqaimYky5xcS1WJ3g2iEc98=;
+        s=korg; t=1644232685;
+        bh=2WvEFVURxo4yYW09fMtPpYrTd9dtqHtvlmttqsLZCVg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nYBjP/lpsYMSpxS2KGxgpjebAfpxTLD9ORgOuV013wD4J8V1fPzwukRYrJbXRsIbf
-         J2t7UxSXcvhcDQj6YHRhSGJyhBibqJWtAARj3QtAUwFpGtfiBGhm+pZ34wqhJLwCHz
-         nhLb3pWzNtxwGHYa7ajQ3ZOkIp2ey8Z1BpiTjxMk=
+        b=0dT+KV4MoMZl5/5BUhitBSsE1sgmNxvKV61oMUWsbNEYTZGhDPHA2b0wW+tA58Wgt
+         diCRINIEs227YYQDrOhCDRdpPM6c+h4hiOb3UIqFa1p0fHUJaoZm5TkXjtFwlKjySC
+         Z0jt2cCuY8w4ynKO8BohqHrz4e/CGyKN+b0ovZv8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.16 055/126] ALSA: hda: Fix signedness of sscanf() arguments
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Mark Brown <broonie@kernel.org>,
+        James Liao <jamesjj.liao@mediatek.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 4.19 63/86] Revert "ASoC: mediatek: Check for error clk pointer"
 Date:   Mon,  7 Feb 2022 12:06:26 +0100
-Message-Id: <20220207103806.014919306@linuxfoundation.org>
+Message-Id: <20220207103759.630087537@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
-References: <20220207103804.053675072@linuxfoundation.org>
+In-Reply-To: <20220207103757.550973048@linuxfoundation.org>
+References: <20220207103757.550973048@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,33 +59,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Guenter Roeck <linux@roeck-us.net>
 
-commit 0444f82766f0b5b9c8302ad802dafa5dd0e722d0 upstream.
+This reverts commit e4f5f2767cd2c14fcb7b2c16dac5fe21888de9c2 which is
+commit 9de2b9286a6dd16966959b3cb34fc2ddfd39213e upstream
 
-The %x format of sscanf() takes an unsigned int pointer, while we pass
-a signed int pointer.  Practically it's OK, but this may result in a
-compile warning.  Let's fix it.
+With this patch in the tree, Chromebooks running the affected hardware
+no longer boot. Bisect points to this patch, and reverting it fixes
+the problem.
 
-Fixes: a235d5b8e550 ("ALSA: hda: Allow model option to specify PCI SSID alias")
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/r/20220127135717.31751-1-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+An analysis of the code with this patch applied shows:
+
+        ret = init_clks(pdev, clk);
+        if (ret)
+                return ERR_PTR(ret);
+...
+                for (j = 0; j < MAX_CLKS && data->clk_id[j]; j++) {
+                        struct clk *c = clk[data->clk_id[j]];
+
+                        if (IS_ERR(c)) {
+                                dev_err(&pdev->dev, "%s: clk unavailable\n",
+                                        data->name);
+                                return ERR_CAST(c);
+                        }
+
+                        scpd->clk[j] = c;
+                }
+
+Not all clocks in the clk_names array have to be present. Only the clocks
+in the data->clk_id array are actually needed. The code already checks if
+the required clocks are available and bails out if not. The assumption that
+all clocks have to be present is wrong, and commit 9de2b9286a6d needs to be
+reverted.
+
+Fixes: 9de2b9286a6d ("ASoC: mediatek: Check for error clk pointer")
+Cc: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: James Liao <jamesjj.liao@mediatek.com>
+Cc: Kevin Hilman <khilman@baylibre.com>
+Cc: Matthias Brugger <matthias.bgg@gmail.com
+Cc: Frank Wunderlich <frank-w@public-files.de>
+Cc: Daniel Golle <daniel@makrotopia.org>
+Link: https://lore.kernel.org/lkml/20220205014755.699603-1-linux@roeck-us.net/
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/pci/hda/hda_auto_parser.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/soc/mediatek/mtk-scpsys.c |   15 ++++-----------
+ 1 file changed, 4 insertions(+), 11 deletions(-)
 
---- a/sound/pci/hda/hda_auto_parser.c
-+++ b/sound/pci/hda/hda_auto_parser.c
-@@ -985,7 +985,7 @@ void snd_hda_pick_fixup(struct hda_codec
- 	int id = HDA_FIXUP_ID_NOT_SET;
- 	const char *name = NULL;
- 	const char *type = NULL;
--	int vendor, device;
-+	unsigned int vendor, device;
+--- a/drivers/soc/mediatek/mtk-scpsys.c
++++ b/drivers/soc/mediatek/mtk-scpsys.c
+@@ -341,17 +341,12 @@ out:
+ 	return ret;
+ }
  
- 	if (codec->fixup_id != HDA_FIXUP_ID_NOT_SET)
- 		return;
+-static int init_clks(struct platform_device *pdev, struct clk **clk)
++static void init_clks(struct platform_device *pdev, struct clk **clk)
+ {
+ 	int i;
+ 
+-	for (i = CLK_NONE + 1; i < CLK_MAX; i++) {
++	for (i = CLK_NONE + 1; i < CLK_MAX; i++)
+ 		clk[i] = devm_clk_get(&pdev->dev, clk_names[i]);
+-		if (IS_ERR(clk[i]))
+-			return PTR_ERR(clk[i]);
+-	}
+-
+-	return 0;
+ }
+ 
+ static struct scp *init_scp(struct platform_device *pdev,
+@@ -361,7 +356,7 @@ static struct scp *init_scp(struct platf
+ {
+ 	struct genpd_onecell_data *pd_data;
+ 	struct resource *res;
+-	int i, j, ret;
++	int i, j;
+ 	struct scp *scp;
+ 	struct clk *clk[CLK_MAX];
+ 
+@@ -416,9 +411,7 @@ static struct scp *init_scp(struct platf
+ 
+ 	pd_data->num_domains = num;
+ 
+-	ret = init_clks(pdev, clk);
+-	if (ret)
+-		return ERR_PTR(ret);
++	init_clks(pdev, clk);
+ 
+ 	for (i = 0; i < num; i++) {
+ 		struct scp_domain *scpd = &scp->domains[i];
 
 

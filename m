@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD12C4ABE2E
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 13:09:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C459F4ABA05
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 12:26:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391161AbiBGL6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 06:58:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44986 "EHLO
+        id S1382563AbiBGLTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 06:19:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385637AbiBGLcE (ORCPT
+        with ESMTP id S1359847AbiBGLPB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:32:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16140C03C190;
-        Mon,  7 Feb 2022 03:31:21 -0800 (PST)
+        Mon, 7 Feb 2022 06:15:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21746C0401E6;
+        Mon,  7 Feb 2022 03:14:46 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A56E560A67;
-        Mon,  7 Feb 2022 11:31:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69A07C340EB;
-        Mon,  7 Feb 2022 11:31:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A48F7B811A6;
+        Mon,  7 Feb 2022 11:14:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAB60C004E1;
+        Mon,  7 Feb 2022 11:14:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644233480;
-        bh=/hAnYNohmzw9oQdX6Kt9aR6iA/2JH1LYTQg7rMfMCQ8=;
+        s=korg; t=1644232461;
+        bh=C7V72L6qUMellueiSr7gQPjlWH16WYktJB8JU2MQGNM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xg/DDpwgtmJJ3dWWn6TkfAhohJ5iubJY2PVbMBhiEfPs1HEkw+LF6aJ0eLLZSfMZ6
-         JOaxuN80+1wHdbWuD5OVsXyQotBTlBUvBUWimXofezIsWcsf1Hna8vsMOgCCPanbWX
-         /lYymyUtsfO6dTv+jRAaH2efuh/1687vu8qYV648=
+        b=HyGu7z5OjW5azltD0t3MvM3ga0DCMMh1uWYMwSR7x+In0mwAHfQUMYZlFxAoVpIa0
+         NGj+ayP4iu9PJOrqc9rfJPfTbg3hPB84oAnNs9WlaJ6lky917ZU1jGDALiGjgT4FaY
+         QMVLb1lAn1KfLr++q5oeA1WDa3shW+UAVFJmWbkQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.16 009/126] ASoC: ops: Reject out of bounds values in snd_soc_put_xr_sx()
+        stable@vger.kernel.org,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Badhri Jagan Sridharan <badhri@google.com>
+Subject: [PATCH 4.19 17/86] usb: typec: tcpm: Do not disconnect while receiving VBUS off
 Date:   Mon,  7 Feb 2022 12:05:40 +0100
-Message-Id: <20220207103804.379642678@linuxfoundation.org>
+Message-Id: <20220207103758.119388532@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220207103804.053675072@linuxfoundation.org>
-References: <20220207103804.053675072@linuxfoundation.org>
+In-Reply-To: <20220207103757.550973048@linuxfoundation.org>
+References: <20220207103757.550973048@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,33 +55,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+From: Badhri Jagan Sridharan <badhri@google.com>
 
-commit 4cf28e9ae6e2e11a044be1bcbcfa1b0d8675fe4d upstream.
+commit 90b8aa9f5b09edae6928c0561f933fec9f7a9987 upstream.
 
-We don't currently validate that the values being set are within the range
-we advertised to userspace as being valid, do so and reject any values
-that are out of range.
+With some chargers, vbus might momentarily raise above VSAFE5V and fall
+back to 0V before tcpm gets to read port->tcpc->get_vbus. This will
+will report a VBUS off event causing TCPM to transition to
+SNK_UNATTACHED where it should be waiting in either SNK_ATTACH_WAIT
+or SNK_DEBOUNCED state. This patch makes TCPM avoid vbus off events
+while in SNK_ATTACH_WAIT or SNK_DEBOUNCED state.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Stub from the spec:
+    "4.5.2.2.4.2 Exiting from AttachWait.SNK State
+    A Sink shall transition to Unattached.SNK when the state of both
+    the CC1 and CC2 pins is SNK.Open for at least tPDDebounce.
+    A DRP shall transition to Unattached.SRC when the state of both
+    the CC1 and CC2 pins is SNK.Open for at least tPDDebounce."
+
+[23.194131] CC1: 0 -> 0, CC2: 0 -> 5 [state SNK_UNATTACHED, polarity 0, connected]
+[23.201777] state change SNK_UNATTACHED -> SNK_ATTACH_WAIT [rev3 NONE_AMS]
+[23.209949] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 170 ms [rev3 NONE_AMS]
+[23.300579] VBUS off
+[23.300668] state change SNK_ATTACH_WAIT -> SNK_UNATTACHED [rev3 NONE_AMS]
+[23.301014] VBUS VSAFE0V
+[23.301111] Start toggling
+
+Fixes: f0690a25a140b8 ("staging: typec: USB Type-C Port Manager (tcpm)")
 Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20220124153253.3548853-4-broonie@kernel.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+Link: https://lore.kernel.org/r/20220122015520.332507-1-badhri@google.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/soc-ops.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/usb/typec/tcpm.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/sound/soc/soc-ops.c
-+++ b/sound/soc/soc-ops.c
-@@ -879,6 +879,8 @@ int snd_soc_put_xr_sx(struct snd_kcontro
- 	long val = ucontrol->value.integer.value[0];
- 	unsigned int i;
+--- a/drivers/usb/typec/tcpm.c
++++ b/drivers/usb/typec/tcpm.c
+@@ -3865,7 +3865,8 @@ static void _tcpm_pd_vbus_off(struct tcp
+ 	case SNK_TRYWAIT_DEBOUNCE:
+ 		break;
+ 	case SNK_ATTACH_WAIT:
+-		tcpm_set_state(port, SNK_UNATTACHED, 0);
++	case SNK_DEBOUNCED:
++		/* Do nothing, as TCPM is still waiting for vbus to reaach VSAFE5V to connect */
+ 		break;
  
-+	if (val < mc->min || val > mc->max)
-+		return -EINVAL;
- 	if (invert)
- 		val = max - val;
- 	val &= mask;
+ 	case SNK_NEGOTIATE_CAPABILITIES:
 
 

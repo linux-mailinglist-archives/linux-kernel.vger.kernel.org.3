@@ -2,132 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 172FE4AC8E5
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 19:54:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC70C4AC8E4
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 19:54:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235959AbiBGSx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 13:53:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33084 "EHLO
+        id S235789AbiBGSxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 13:53:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235602AbiBGSum (ORCPT
+        with ESMTP id S235952AbiBGSvp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 13:50:42 -0500
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2079.outbound.protection.outlook.com [40.107.236.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E4FC0401DA;
-        Mon,  7 Feb 2022 10:50:41 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UN4gHAKsP/+fs7POMjSJ/jmE+5MomPtlFhIdzmxBAsaqxt0hZIxROiYga/En/np57oCWJPIs5pJVpXAQuQtGF3hNlcm0wkt5qLMAEhDac1eEreeZeDZoaHYR+SAxS4a+fHM8NgMx+oMHS1oTVds74KBy7mp2m4N8Y1k8n36QPD3hW2OYDlEn+mZqq2PmOKBPLsgKCLfIgmDt0ELOIgFHSXdH0K9ji8ibIlBNnv25wswiVh7PBGcEuCTBqd6sEywb7thjiQkhNvCaQIdFFpdCC26ur6WEKgVurSOrmtHYsEUDrCl7CPisCwteTYeTC09u/nFHycqEAtOYsZHo2I9icA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jDjP0vgTHjrDSmU6PqYxXwb1yFblzA5G/98vZeaZzcc=;
- b=V5+Ok7U8DsWo7f0OzyPH+rpzIBPvfTqZvFMVLME2MW0q+qV5kvFjfxT1GTxLXPogNtHj4SbeO8mXBbECWdA08HnrHCAa3Zz2LDhQ35+ouchdvOurLZwMA5q5e+C7APv+0ddDhPDG8679E0cTeO2lWvF6XjISBdaD5hDjsfYO5cfUSIdlChxOYiZ/t6uJY8vyoY99RAZNf1cvssK9HE1+BzVV2IUbwoGRoPHI/gEm3u9BsFa2smyZ7ZY/JqguQYmJTk0NKyuV/s5Gny++53C2V71vFqIWbszN8Ae4wTCsXtrMRMz6zfSioTuvhIQGe9GFfRWcGA4xMwoubpUjbOQSEA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jDjP0vgTHjrDSmU6PqYxXwb1yFblzA5G/98vZeaZzcc=;
- b=N/cGk1s4uibSMH1HECjR+K2y+JjMBfQwFz83WgWbrboNLO/8BDKxI4rOzESsypITwNWZ1Gupd0GT2hGS0A7Db1d4XNUt9CnkR/ZDu7H98MiJ6oKA8zw9FmESKfEd2UADMscgrOi8/Idr00X/vqv8sTcMolHEhjYzj9BHZONRxcQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BL1PR12MB5221.namprd12.prod.outlook.com (2603:10b6:208:30b::9)
- by CY4PR12MB1429.namprd12.prod.outlook.com (2603:10b6:903:42::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.18; Mon, 7 Feb
- 2022 18:50:39 +0000
-Received: from BL1PR12MB5221.namprd12.prod.outlook.com
- ([fe80::b9af:8be3:36e5:1a13]) by BL1PR12MB5221.namprd12.prod.outlook.com
- ([fe80::b9af:8be3:36e5:1a13%7]) with mapi id 15.20.4951.019; Mon, 7 Feb 2022
- 18:50:38 +0000
-Message-ID: <ea03061e-14aa-8159-4935-869f694a4715@amd.com>
-Date:   Mon, 7 Feb 2022 12:50:35 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 0/9] Parallel CPU bringup for x86_64
-Content-Language: en-US
-To:     David Woodhouse <dwmw2@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
-        hushiyuan@huawei.com, luolongjun@huawei.com, hejingxian@huawei.com,
-        Sean Christopherson <seanjc@google.com>,
-        Paul Menzel <pmenzel@molgen.mpg.de>
-References: <20220201205328.123066-1-dwmw2@infradead.org>
-From:   Tom Lendacky <thomas.lendacky@amd.com>
-In-Reply-To: <20220201205328.123066-1-dwmw2@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: CH2PR12CA0007.namprd12.prod.outlook.com
- (2603:10b6:610:57::17) To BL1PR12MB5221.namprd12.prod.outlook.com
- (2603:10b6:208:30b::9)
+        Mon, 7 Feb 2022 13:51:45 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27EB6C0401E0;
+        Mon,  7 Feb 2022 10:51:43 -0800 (PST)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 217IQ4oL001233;
+        Mon, 7 Feb 2022 18:51:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=6wo3fy8YHuqfHQqrTi4jIFOaNA44Ygv455HTfVt4MkA=;
+ b=ZU8Qf2lQT4XRQY7Sa2xDY/EY+8aNtQ2qr+N/+KSN+8sG7uhk2Zcn5x9d4VEIRojSV0zN
+ 35hhA3wfHXzkNl9gb5zcTAkADqAXQB2b3g85NAVHbj/UzLfjzT033uvLdO/wL3hn3VUq
+ cdjSTzCbhmhuYOwO5oBU9GG/apZ2GmOwUWp/JhfkRbEZeoTO2czcHbNitfAe0svDwQ9L
+ v6LBMWpoN3yAXAqIXq6sWj2srx4K3lVYAvXn/mwBlv402xBSvUAM37mThqQr55rmTabN
+ hupI+XQjHerJ71HJoL+PSlcnmVpAGGpxDIlkK+8Ph5Ss+sej/1nV+JyA91h9e8mRYSJK wQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e22st4em4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Feb 2022 18:51:02 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 217IdeJT030526;
+        Mon, 7 Feb 2022 18:51:01 GMT
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e22st4ekm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Feb 2022 18:51:01 +0000
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 217Ilb8b011839;
+        Mon, 7 Feb 2022 18:51:00 GMT
+Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
+        by ppma03wdc.us.ibm.com with ESMTP id 3e1gvabq8s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Feb 2022 18:51:00 +0000
+Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
+        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 217Iovg831785398
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 7 Feb 2022 18:50:57 GMT
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BC80A6E04E;
+        Mon,  7 Feb 2022 18:50:57 +0000 (GMT)
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 30BE46E052;
+        Mon,  7 Feb 2022 18:50:51 +0000 (GMT)
+Received: from [9.65.240.79] (unknown [9.65.240.79])
+        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Mon,  7 Feb 2022 18:50:50 +0000 (GMT)
+Message-ID: <3387b2e7-0921-cd80-279b-24d13f706443@linux.ibm.com>
+Date:   Mon, 7 Feb 2022 20:50:48 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: bce39e9f-71cb-4991-5f80-08d9ea6abb70
-X-MS-TrafficTypeDiagnostic: CY4PR12MB1429:EE_
-X-Microsoft-Antispam-PRVS: <CY4PR12MB14299E07088DB27320343A22EC2C9@CY4PR12MB1429.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:4714;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XemMfJimSxGyZM25/F4w7bbpJkQsuwWmI8Ywa0c30V1lPDd6GFdMVeB2rq9WBzOouHdqKNJj7E5oYIHRSAQXzBKX8/KrQ7EFBiZ7Cq3bbUsadMgw951ccyMvRzP2cphLq3WjfyPyMBD8c3VyQCmkfIJBzohmlaBzxGvhKyUKoDpA5Y771vjbQ85VHoWfcRKW3pBiTSaYr9S0wF1zR6vfclXBIpIoDSH8DZqjYe7n+C6EDSP8KMcoacBS3BTheEflymyGrR9wb0iHFuT/Ia/7/Dov0srVKxMH/xqfYbB+5SIZZ4IxQcGbol4RaRHJGZtFjZB11n1eszsvZUENoLxHmgiTc5GwprUtMzKeD2TUmHuW4zEaxHqzlP+hbYiqH/a8/+EqqMGGeC9fzvYJYNoZ7bb/vwqqJqJx02ACEu2mCBx4WTWsvkLjLSQXM5zHx4DVfIXm3oNfTqE6cLmdIlClNxeVNiWGonnG7t+J0fdYX07BocMczlCwck1O26+tspnGBtwtHu3ywMddzR+U2+zdn9fIDOd/CGKfWr207EpNs2kJwtCng29O5Cn/vM3tciB29I4btIrPhtMKQyEArkND2YgN/jNBdwlyt+rg3l2i8tSrq5XEpyW6xj0Q1/iVMAUdfp4zrA5x2gvq8l9HfeM1IjJK1O4iOnCvmWxnbvpXLTgn/TmqhnVFejlcpYwLa0ysLfhzoEfLjsQE/o8UNDWUuVLFPM0kq/7+KS+ImB7I2dsKBrSTmPqqKGfDGx0Z7gCZ
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5221.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6506007)(6666004)(6512007)(2616005)(53546011)(508600001)(66946007)(83380400001)(8936002)(8676002)(66556008)(54906003)(66476007)(38100700002)(110136005)(4326008)(31696002)(86362001)(26005)(186003)(316002)(31686004)(5660300002)(2906002)(7416002)(36756003)(6486002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?V0FtQytSMFFjMnRXZ2xDd1RvUEJiMlAyMjhkWjNyV0gvTjQ4a0hQN3ljL1c2?=
- =?utf-8?B?TWhUOE9aQTJab3RCdWRRNkZpazRGVXl0NE85L0dNQW9VQ0hTUGRVVFlkUUM4?=
- =?utf-8?B?NlpiNGxJd2gxaUJRRU1Vc3E4eWZwN2V5L3NqOGJSZlVWUERsZi9meCt0N1V5?=
- =?utf-8?B?dERETmU1UmJxZzJINFdIWFIyQjR1ZzZtaWU4dHhjL2FDcEVtVFpBZnp2dERS?=
- =?utf-8?B?RDVhclFHV3pYemdsSTNaMmpZZUJ0M0hta2haOWFNc1ZMYlRKMjBrU1FDd21M?=
- =?utf-8?B?UmNMQnVOYnpUZkhweVhCZm92THBLZ2FES3U2ZER6YWpUdDVTSXVXcUJCUGdt?=
- =?utf-8?B?MFNNMnRxdFJyY1hXdCs2aDFlbVphSzk4Mk1lKzVnc1pHaGxmL2Q4NDhOSVYv?=
- =?utf-8?B?KzNxaW9yUXNqcGlsQklPQXdGTWhIR1dkaGk0M1o0MkYvZEp6bEFxT1lwUm50?=
- =?utf-8?B?bHhkUk5sVEQzdHZqckU0R1BlUVhzdGJ5VDZhdDR2SnhWcEhFQXpIRmxxNUZS?=
- =?utf-8?B?aVl5OGwrSzlMbm9CL1B0RGJIQXdNQjdvTmFSa0c1cDF4OGkyb296WkZWRUhQ?=
- =?utf-8?B?eDdnN3oyQmFJeFBUR1JQZ3dDUlNZanpsUTdHWVl2eE83YTVnOXpDMEtqT290?=
- =?utf-8?B?TVprcDJhUHlaOWUySDF4OXliMVZqRUo5RVdLSkRFVU9pRXliUXM2NXFocnAw?=
- =?utf-8?B?S3hDRGROSndXcG5rWVBFQkdZNitSczM5TldKSVV0eWZNWlMxbXJsOG9IQkhy?=
- =?utf-8?B?a2FvaVFWZW1VS0FvWHFtMks2dk0rRHIyelgyVk9JYzFUanNzeW5FSGczTFht?=
- =?utf-8?B?SHJXTzdOdWlUVkUzbmlnMmpuL1ZGOFVDbGh3TkxZaC9qYUYxWm81UWcxWnRU?=
- =?utf-8?B?WlhCdnJvS2ExSk5TQitOdGk3YVFCem5WZnZrZFNqY2duSGNaN3N1VXFhT1pE?=
- =?utf-8?B?RkpSNS9UVzQzcjJ1MlRscmF2bFlxRFBpNnhvWUpVblZaZTBWWXVoUzY5R3lL?=
- =?utf-8?B?SEErb1NZdytmRmUxWVJrczRVYjRoZnRUVmVNNDFPaDQ0MVBDemhSdmpobmhM?=
- =?utf-8?B?ZXRZNG5lV0tLcEVaWlIvTG1YUHhLOU1UQXRFNy9zeWNGR29sRmZ3MytGb2FY?=
- =?utf-8?B?TzVEcFc2bXJieXFCYUg4UytCaDhEMjlzd2tHZHI5TW9BN3FMUFZPUXJOWnht?=
- =?utf-8?B?bHB5dnZXemt5MUNRK2FNM0FVNzRVNjIwbVFUcENFak9UZ3NDeXdOdms1Mmlu?=
- =?utf-8?B?SHM2aVlCU0hZR0VWMTJuZHBRYU5QZzFDV2kxZUw5YmNXZmtuZ1FsbjJaNmZU?=
- =?utf-8?B?VU00VFFvVDd2SUtvYWJvbGRjc1JPQXFNU25GTGsxb2JHTHF5Tmg2Zi9sbzFx?=
- =?utf-8?B?aW0wZUpCRkNZTldRcER4OGJmSHNrNjYvb1NGSWlpMVMyTUxTRWJHbjJ4SXBn?=
- =?utf-8?B?TldYMW9FT3BxVFZRQzlCNVVrWVByaWMzSFk2a0F1eDFobjhsK2hNWHcyRTht?=
- =?utf-8?B?QVBrbmc5djlxVUFia0FZeDk0ZTN1ME1weVRUVC80UncyRmt3d3RNT0dKeFZQ?=
- =?utf-8?B?QWJDcHp1NVpRYjV6cXlsQ3NHNENycW1DLzFMRFpIMWgwRmxrcmpiZGdsR0hX?=
- =?utf-8?B?UmhwVDRDejkvY0drdktQSUhKVWQ4Q05ROXpsTnFOWjNCejUzZ2xzVlY3MGkz?=
- =?utf-8?B?K1lnRUZnM1hHWmR4WlJJZnAxYzVtbllweHljUmU1QW53VldSVXJCNmZ1bjBu?=
- =?utf-8?B?dVhySHh4VjhqQyt5S2lCa1l2YlR3VGMyS0dFcG9JMjhkeGt6Qk9SQ1dhUXFR?=
- =?utf-8?B?cjY1bDhqNW02V0VZcTJ1R1FQRGQ3OXBqMkg5VHJWQzAvaVFiTDRXRXZQc3A3?=
- =?utf-8?B?ZklPdnIwQkFXcXNpblBPd0ZTbWRwdDhKTmFjdEpEZGg5WnZIVnQxMTNtY2Zv?=
- =?utf-8?B?TjJHSk40OEpFeCs2bXI2L2RyVzNPT3FSWlRGQWZkTkFYNmwreTRuRWl1YWlB?=
- =?utf-8?B?dFU1NUdvYUN3OEphTHdEWmlTaHFESWVoOUhQendOaGZ3T3p0LzFvUEJiaUwy?=
- =?utf-8?B?ZUFDN1o5QVF5WGVuODNETEpmdEVjcUszdnR6NWppV2tsWExmRFZ5bkMvN0k2?=
- =?utf-8?B?MzQrRnE1N1lRVmR0K0RtL2NzMXBFdnJuUnBFV0lYS1RkUEJmNWZSblhzcjdu?=
- =?utf-8?Q?9l0s0FKnF9LrP/l3sZhSNAc=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bce39e9f-71cb-4991-5f80-08d9ea6abb70
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5221.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Feb 2022 18:50:38.6146
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ypIAvwLPSWKruux4a8HSoD9T3AIamnpzKtp/TwEVZ+BOV9kYdfjbvbTd6YyRM0+7V9s4jS4DLA4LpSN4th+Q3w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1429
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v7 0/5] Allow guest access to EFI confidential computing
+ secret area
+Content-Language: en-US
+To:     Matthew Garrett <mjg59@srcf.ucam.org>,
+        Gerd Hoffmann <kraxel@redhat.com>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        James Bottomley <jejb@linux.ibm.com>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        Borislav Petkov <bp@suse.de>,
+        Ashish Kalra <ashish.kalra@amd.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Andrew Scull <ascull@google.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
+        Lenny Szubowicz <lszubowi@redhat.com>,
+        Peter Gonda <pgonda@google.com>,
+        Tobin Feldman-Fitzthum <tobin@linux.ibm.com>,
+        Jim Cadden <jcadden@ibm.com>,
+        Daniele Buono <dbuono@linux.vnet.ibm.com>,
+        linux-coco@lists.linux.dev, linux-security-module@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nayna Jain <nayna@linux.ibm.com>, dougmill@linux.vnet.ibm.com,
+        gcwilson@linux.ibm.com, gjoyce@ibm.com,
+        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
+        <linuxppc-dev@lists.ozlabs.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Daniel Axtens <dja@axtens.net>,
+        Dov Murik <dovmurik@linux.ibm.com>
+References: <Yfk6vEuZFtgtA+G+@kroah.com>
+ <37779659ca96ac9c1f11bcc0ac0665895c795b54.camel@linux.ibm.com>
+ <20220202040157.GA8019@srcf.ucam.org> <YfogOurPZb7+Yelo@kroah.com>
+ <20220202065443.GA9249@srcf.ucam.org> <YfotMyQiQ66xfCOQ@kroah.com>
+ <20220202071023.GA9489@srcf.ucam.org>
+ <CAMj1kXFTyc9KnMsnvs+mt80DbJL8VGKKcQ0J=4NrGYGSAG8sRw@mail.gmail.com>
+ <20220202080401.GA9861@srcf.ucam.org>
+ <20220202083653.p3cb4w3qdud4e33t@sirius.home.kraxel.org>
+ <20220202084534.GA10247@srcf.ucam.org>
+From:   Dov Murik <dovmurik@linux.ibm.com>
+In-Reply-To: <20220202084534.GA10247@srcf.ucam.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: kNbeaTLnGVyfzqIU5wFmWGQaLaWnhJPq
+X-Proofpoint-ORIG-GUID: -177XkzI6xzpuOjb3dcnAHyLrUUkx8qg
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-07_06,2022-02-07_02,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ priorityscore=1501 spamscore=0 suspectscore=0 malwarescore=0 mlxscore=0
+ mlxlogscore=999 impostorscore=0 bulkscore=0 adultscore=0 clxscore=1011
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202070113
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -135,64 +130,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/1/22 14:53, David Woodhouse wrote:
-> Doing the INIT/SIPI/SIPI in parallel for all APs and *then* waiting for
-> them shaves about 80% off the AP bringup time on a 96-thread 2-socket
-> Skylake box (EC2 c5.metal) — from about 500ms to 100ms.
-> 
-> There are more wins to be had with further parallelisation, but this is
-> the simple part.
-> 
-> v2: Cut it back to just INIT/SIPI/SIPI in parallel for now, nothing more
-> v3: Clean up x2apic patch, add MTRR optimisation, lock topology update
->      in preparation for more parallelisation.
-> v4: Fixes to the real mode parallelisation patch spotted by SeanC, to
->      avoid scribbling on initial_gs in common_cpu_up(), and to allow all
->      24 bits of the physical X2APIC ID to be used. That patch still needs
->      a Signed-off-by from its original author, who once claimed not to
->      remember writing it at all. But now we've fixed it, hopefully he'll
->      admit it now :)
 
-I'm no longer seeing crashes launching high vCPU-count guests with this 
-series.
 
-Thanks,
-Tom
+On 02/02/2022 10:45, Matthew Garrett wrote:
+> On Wed, Feb 02, 2022 at 09:36:53AM +0100, Gerd Hoffmann wrote:
+> 
+>> Having a "secrets/" directory looks good to me.  Then the individual
+>> implementations can either add files to the directory, i.e. efi_secrets
+>> would create "secrets/<guid>" files.  Or each implementation creates a
+>> subdirectory with the secrets, i.e. "secrets/coco/" and
+>> "secrets/coco/<guid>".
+> 
+> I prefer a subdirectory, on the basis that we could conceivably end up 
+> with more than one implementation on a single device at some point, and 
+> also because it makes it trivial for userland to determine what the 
+> source is which may make a semantic difference under certain 
+> circumstances.
+>  
 
+OK, sounds good.  In the next round of the series the module will create
+the files in <securityfs>/secrets/coco/ .
+
+
+>> Longer-term (i.e once we have more than one implementation) we probably
+>> need a separate module which owns and manages the "secrets/" directory,
+>> and possibly provides some common helper functions too.
 > 
-> David Woodhouse (8):
->        x86/apic/x2apic: Fix parallel handling of cluster_mask
->        cpu/hotplug: Move idle_thread_get() to <linux/smpboot.h>
->        cpu/hotplug: Add dynamic parallel bringup states before CPUHP_BRINGUP_CPU
->        x86/smpboot: Reference count on smpboot_setup_warm_reset_vector()
->        x86/smpboot: Split up native_cpu_up into separate phases and document them
->        x86/smpboot: Send INIT/SIPI/SIPI to secondary CPUs in parallel
->        x86/mtrr: Avoid repeated save of MTRRs on boot-time CPU bringup
->        x86/smpboot: Serialize topology updates for secondary bringup
-> 
-> Thomas Gleixner (1):
->        x86/smpboot: Support parallel startup of secondary CPUs
-> 
-> [dwoodhou@i7 linux-2.6]$ git diff --stat  v5.17-rc2..share/parallel-5.17-part1
->   arch/x86/include/asm/realmode.h       |   3 +
->   arch/x86/include/asm/smp.h            |  13 +-
->   arch/x86/include/asm/topology.h       |   2 -
->   arch/x86/kernel/acpi/sleep.c          |   1 +
->   arch/x86/kernel/apic/apic.c           |   2 +-
->   arch/x86/kernel/apic/x2apic_cluster.c | 108 ++++++-----
->   arch/x86/kernel/cpu/common.c          |   6 +-
->   arch/x86/kernel/cpu/mtrr/mtrr.c       |   9 +
->   arch/x86/kernel/head_64.S             |  73 ++++++++
->   arch/x86/kernel/smpboot.c             | 325 ++++++++++++++++++++++++----------
->   arch/x86/realmode/init.c              |   3 +
->   arch/x86/realmode/rm/trampoline_64.S  |  14 ++
->   arch/x86/xen/smp_pv.c                 |   4 +-
->   include/linux/cpuhotplug.h            |   2 +
->   include/linux/smpboot.h               |   7 +
->   kernel/cpu.c                          |  27 ++-
->   kernel/smpboot.c                      |   2 +-
->   kernel/smpboot.h                      |   2 -
->   18 files changed, 442 insertions(+), 161 deletions(-)
-> 
-> 
-> 
+> Agree.
+
+Yes; one candidate for such helper function is a filesystem that
+implements the "wipe file content from memory on unlink".
+
+
+-Dov

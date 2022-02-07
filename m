@@ -2,101 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D8454AC534
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 17:16:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 785874AC529
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Feb 2022 17:16:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381816AbiBGQPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 11:15:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48894 "EHLO
+        id S1345639AbiBGQOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 11:14:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443857AbiBGQIC (ORCPT
+        with ESMTP id S239346AbiBGQJW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 11:08:02 -0500
-Received: from mail-vs1-f50.google.com (mail-vs1-f50.google.com [209.85.217.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21508C0401E6;
-        Mon,  7 Feb 2022 08:07:56 -0800 (PST)
-Received: by mail-vs1-f50.google.com with SMTP id r20so138116vsn.0;
-        Mon, 07 Feb 2022 08:07:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IH36XLf83w5u+4nl2DlHKSEzZJZ+m1Rf3raz8J+6Itg=;
-        b=1QzYjFazcmACfnMDQLrEufUJe9Y7DpWVdd6XmtQ9LJm9+m4a2EuFnno3gHAJ0Ld+bd
-         SK10tf12+ZClghoCVLL+sHNipj+f01NhMCgtzlIxvObDNeX6X2dNYZi+EZEoJjryMNIE
-         dKowQpS5N5JJrmHYMjaictmEq8yVWhjrz1aQfrvpmLKp/M4Kcdt+SBSsYTH22esV8Ce3
-         GJWj63tpLmnM9Ues2QhQ4o1TqpCx3615eXM6VyD71CgQB+U/Q47BGf38awEU4p0w6n5y
-         lxIq6vmGkj8Bo6FeOM4puRkLYqLA92DdkZMAQM2wDefHCjuoP530o3/bqXbrt6+S2s7r
-         FsKA==
-X-Gm-Message-State: AOAM532dy0vuW/jfUBWE/jGdCBJUzhBqgHfCv9Xv52OB3KAG4dxU2n1X
-        OTRZaSJCzkxJ5fupvKLKgkraRdcpvqwyDg==
-X-Google-Smtp-Source: ABdhPJyG+bsBR+XO8uk9FDGc3Q2JhjXtVGeLtOnf4iQNxV539yNPl1mNAbkFgkhdTD3tDub9YW3SOA==
-X-Received: by 2002:a67:ec15:: with SMTP id d21mr95557vso.79.1644250075179;
-        Mon, 07 Feb 2022 08:07:55 -0800 (PST)
-Received: from mail-vs1-f50.google.com (mail-vs1-f50.google.com. [209.85.217.50])
-        by smtp.gmail.com with ESMTPSA id g20sm1015104vkq.46.2022.02.07.08.07.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Feb 2022 08:07:55 -0800 (PST)
-Received: by mail-vs1-f50.google.com with SMTP id a7so138550vsc.6;
-        Mon, 07 Feb 2022 08:07:54 -0800 (PST)
-X-Received: by 2002:a67:b00e:: with SMTP id z14mr142941vse.57.1644250074734;
- Mon, 07 Feb 2022 08:07:54 -0800 (PST)
-MIME-Version: 1.0
-References: <20220204161806.3126321-1-jjhiblot@traphandler.com> <20220204161806.3126321-3-jjhiblot@traphandler.com>
-In-Reply-To: <20220204161806.3126321-3-jjhiblot@traphandler.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 7 Feb 2022 17:07:43 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUFs_G0ZENwRttxBbnUMZZyJ5Nks12FvNJnaJjbrXYcNg@mail.gmail.com>
-Message-ID: <CAMuHMdUFs_G0ZENwRttxBbnUMZZyJ5Nks12FvNJnaJjbrXYcNg@mail.gmail.com>
-Subject: Re: [PATCH 2/6] dt-bindings: clock: r9a06g032: Add the definition of
- the watchdog clock
-To:     Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mon, 7 Feb 2022 11:09:22 -0500
+X-Greylist: delayed 1076 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 08:09:21 PST
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58757C0401D2;
+        Mon,  7 Feb 2022 08:09:21 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 95CCC340;
+        Mon,  7 Feb 2022 17:09:19 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1644250159;
+        bh=4a6oyH40Csn50dUhVk1KKkhWqQ+bT0AQuD8nF5SL40Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BjnDuSwJb7zSiLkq8jUPy87i86c/x8YPcQgITE7qtB6aMKmQkRGRJBy/mXUrT5wiS
+         UFKmU9sVo1jhp1siSPFBNdhP5/+HTcmDw/ZJG72onGz6ggZMRoSmaOzYuUutBa/+5+
+         TQPkXjgQ4skbl4oTC1mFEoZ3pUrC0BOs7fpCsuW8=
+Date:   Mon, 7 Feb 2022 18:09:17 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-staging@lists.linux.dev,
+        Yong Deng <yong.deng@magewell.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Maxime Ripard <mripard@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helen Koike <helen.koike@collabora.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v2 08/66] dt-bindings: media: Add Allwinner A31 MIPI
+ CSI-2 bindings documentation
+Message-ID: <YgFELcVluEqr9LAH@pendragon.ideasonboard.com>
+References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
+ <20220205185429.2278860-9-paul.kocialkowski@bootlin.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220205185429.2278860-9-paul.kocialkowski@bootlin.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jean-Jacques,
+Hi Paul,
 
-On Fri, Feb 4, 2022 at 5:18 PM Jean-Jacques Hiblot
-<jjhiblot@traphandler.com> wrote:
-> This clock is actually the REF_SYNC_D8 clock.
->
-> Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+Thank you for the patch.
 
-Thanks for your patch!
+On Sat, Feb 05, 2022 at 07:53:31PM +0100, Paul Kocialkowski wrote:
+> This introduces YAML bindings documentation for the Allwinner A31 MIPI
+> CSI-2 controller.
+> 
+> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> Reviewed-by: Maxime Ripard <mripard@kernel.org>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../media/allwinner,sun6i-a31-mipi-csi2.yaml  | 142 ++++++++++++++++++
+>  1 file changed, 142 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/allwinner,sun6i-a31-mipi-csi2.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-mipi-csi2.yaml b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-mipi-csi2.yaml
+> new file mode 100644
+> index 000000000000..09207904b6db
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-mipi-csi2.yaml
+> @@ -0,0 +1,142 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/allwinner,sun6i-a31-mipi-csi2.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Allwinner A31 MIPI CSI-2 Device Tree Bindings
+> +
+> +maintainers:
+> +  - Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - const: allwinner,sun6i-a31-mipi-csi2
+> +      - items:
+> +          - const: allwinner,sun8i-v3s-mipi-csi2
+> +          - const: allwinner,sun6i-a31-mipi-csi2
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: Bus Clock
+> +      - description: Module Clock
+> +
+> +  clock-names:
+> +    items:
+> +      - const: bus
+> +      - const: mod
+> +
+> +  phys:
+> +    maxItems: 1
+> +    description: MIPI D-PHY
+> +
+> +  phy-names:
+> +    items:
+> +      - const: dphy
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
+> +
+> +    properties:
+> +      port@0:
+> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> +        description: Input port, connect to a MIPI CSI-2 sensor
+> +
+> +        properties:
+> +          reg:
+> +            const: 0
+> +
+> +          endpoint:
+> +            $ref: video-interfaces.yaml#
+> +            unevaluatedProperties: false
+> +
+> +            properties:
+> +              data-lanes:
+> +                minItems: 1
+> +                maxItems: 4
+> +
+> +            required:
+> +              - data-lanes
+> +
+> +        additionalProperties: false
+> +
+> +      port@1:
+> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> +        description: Output port, connect to a CSI controller
+> +
+> +        properties:
+> +          reg:
+> +            const: 1
+> +
+> +          endpoint:
+> +            $ref: video-interfaces.yaml#
+> +            unevaluatedProperties: false
+> +
+> +        additionalProperties: false
 
-> --- a/include/dt-bindings/clock/r9a06g032-sysctrl.h
-> +++ b/include/dt-bindings/clock/r9a06g032-sysctrl.h
-> @@ -74,6 +74,7 @@
->  #define R9A06G032_CLK_DDRPHY_PCLK      81      /* AKA CLK_REF_SYNC_D4 */
->  #define R9A06G032_CLK_FW               81      /* AKA CLK_REF_SYNC_D4 */
->  #define R9A06G032_CLK_CRYPTO           81      /* AKA CLK_REF_SYNC_D4 */
-> +#define R9A06G032_CLK_WATCHDOG         82      /* AKA CLK_REF_SYNC_D8 */
->  #define R9A06G032_CLK_A7MP             84      /* AKA DIV_CA7 */
->  #define R9A06G032_HCLK_CAN0            85
->  #define R9A06G032_HCLK_CAN1            86
+The two ports should be required.
 
-I couldn't find this in the documentation, so I have to trust you on this.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - clock-names
+> +  - phys
+> +  - phy-names
 
-Gr{oetje,eeting}s,
+And ports should be required here.
 
-                        Geert
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> +  - resets
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/clock/sun8i-v3s-ccu.h>
+> +    #include <dt-bindings/reset/sun8i-v3s-ccu.h>
+> +
+> +    mipi_csi2: csi@1cb1000 {
+> +        compatible = "allwinner,sun8i-v3s-mipi-csi2",
+> +                     "allwinner,sun6i-a31-mipi-csi2";
+> +        reg = <0x01cb1000 0x1000>;
+> +        interrupts = <GIC_SPI 90 IRQ_TYPE_LEVEL_HIGH>;
+> +        clocks = <&ccu CLK_BUS_CSI>,
+> +                 <&ccu CLK_CSI1_SCLK>;
+> +        clock-names = "bus", "mod";
+> +        resets = <&ccu RST_BUS_CSI>;
+> +
+> +        phys = <&dphy>;
+> +        phy-names = "dphy";
+> +
+> +        ports {
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +
+> +            mipi_csi2_in: port@0 {
+> +                reg = <0>;
+> +
+> +                mipi_csi2_in_ov5648: endpoint {
+> +                    data-lanes = <1 2 3 4>;
+> +
+> +                    remote-endpoint = <&ov5648_out_mipi_csi2>;
+> +                };
+> +            };
+> +
+> +            mipi_csi2_out: port@1 {
+> +                reg = <1>;
+> +
+> +                mipi_csi2_out_csi0: endpoint {
+> +                    remote-endpoint = <&csi0_in_mipi_csi2>;
+> +                };
+> +            };
+> +        };
+> +    };
+> +
+> +...
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+Regards,
+
+Laurent Pinchart

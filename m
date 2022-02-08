@@ -2,174 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 400874ACDA2
+	by mail.lfdr.de (Postfix) with ESMTP id A7A404ACDA3
 	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:08:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343716AbiBHBI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 20:08:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55276 "EHLO
+        id S232284AbiBHBIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 20:08:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239946AbiBHA2I (ORCPT
+        with ESMTP id S230499AbiBHAfQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 19:28:08 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D37A3C061355
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 16:28:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 60C9E60C81
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 00:28:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C46A3C004E1;
-        Tue,  8 Feb 2022 00:28:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644280086;
-        bh=NUX/W0BW1/5gPfD/6xGafoiQopd/QpzHJNHSOktk44w=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=o7VOPFdocxEFjeVipVRlj5W3Mu7abDq+fOfucIX9RxNG9cRKVxAKAM0VsPVzz+X+4
-         c8ju1lW6w/MB3bKP2+uW+LHGpIr0t6eFvzMikc7D4L8ver5qMwboxy9Koon30xS6xl
-         ENXe2rGvOJd15CBRRwJVKVQs6TnJW6plizH7eHWfWLirfJW43plfnrVjgCLuE/oeOi
-         33TdCdBaG9Drd7j/6S9vYtWi2cKHfRJA+Dc15W7uKvLpChmg7OQDTaOuB3KVx5zOU8
-         C5k7Yig3F2+3yvBJd/dv2o9l56Vx8vhgmZlTNB2wYherc7WV3No67ZrzjRuqG2hcTN
-         /CZARcLczoPUA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 9B1A35C0348; Mon,  7 Feb 2022 16:28:06 -0800 (PST)
-Date:   Mon, 7 Feb 2022 16:28:06 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [ammarfaizi2-block:paulmck/linux-rcu/dev 18/18]
- mm/slab_common.c:336:23: sparse: sparse: restricted slab_flags_t degrades to
- integer
-Message-ID: <20220208002806.GJ4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <202202070951.I9Vhb0aQ-lkp@intel.com>
+        Mon, 7 Feb 2022 19:35:16 -0500
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2D48C061355
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 16:35:12 -0800 (PST)
+Received: by mail-qk1-x731.google.com with SMTP id 13so12458556qkd.13
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 16:35:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=L5Y6tZ7R3KyR03w5zcFELc4O16jaupwakXADGje8Tdc=;
+        b=X2Yr6MGhvVb6PTuHIw5jF9tlHEgzZoalL5ybQEqPTb/qd7/U7yZhENC+0oxeSj8IRB
+         SwlxlJ/mEMpqHyBbYePbI5X0/NH7W2rE4Yd7txmWMcs+UW8cqCkl4qO0YS46t+CuSi3B
+         OsQ0d0lnsRoZ7lDicoRZMdYwG7Q0J1RJVzJdHbGJy8WXRSruie6FPM/aROTdlN0QjwHa
+         hOLT5hWWMFzMBiSY9KHZUKMqhfcM5Z5pIMPg/S9yMZh1rSlJCGPsyK0RfnvKO3NdobrM
+         LcN7iIDBK2ZVe6eGw3hYJgY7QVEt1kLc7Fc4roh3JVgTQHWOiO8+8Qv4iWE5Dz94L7YJ
+         J4tQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=L5Y6tZ7R3KyR03w5zcFELc4O16jaupwakXADGje8Tdc=;
+        b=EJZidULqr0GOLuhJX0kPFi5dfChHKNEcjAPmXwzNigKnNuhXSNRSUvubl2XugOVh8E
+         ohcfP+LBo8OJcxMXCWxVbWY8TTY/SIBqVQpHHqcV04Yd0xB2n7QGOrEadUigSY3dPvVU
+         qTZutMRzZP7BHIon5m4CNBQxMVi8gCtWiHlNoctkBDuN4e8kF+d6aH7lqm9IrveMtyjc
+         tmM6XtfjHo0tu0HF0yAPDAXS4bnxOzv+Ssqtr1Jt9q4PFA64otbSFbaE6xPVumDaJTNZ
+         9KOe+zNEUahYMDe3gvpGNvJsBF4sNgW4KzIH+LmJw5C/afDjj5KmVXgKHrhK5GwNZr6A
+         nyUA==
+X-Gm-Message-State: AOAM533D7sji328WTblIV/GosEBIeKE8VQi4ZAEEbX1J+Fdz3nhyRvrk
+        pifdqEYOL9vHF5OhHDflKyg=
+X-Google-Smtp-Source: ABdhPJwZMRlToBG5m/cjFWjEY1VUrIRmNm8ofG/GqyL7YGNGCqOdI8Lu8XRi4Phm3gAFv2HLEONNdw==
+X-Received: by 2002:a05:620a:170e:: with SMTP id az14mr1401831qkb.780.1644280510441;
+        Mon, 07 Feb 2022 16:35:10 -0800 (PST)
+Received: from mail.google.com ([207.246.89.135])
+        by smtp.gmail.com with ESMTPSA id b184sm6354942qkf.87.2022.02.07.16.35.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Feb 2022 16:35:09 -0800 (PST)
+Date:   Tue, 8 Feb 2022 08:35:02 +0800
+From:   Changbin Du <changbin.du@gmail.com>
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     ChangbinCONFIG_IRQSOFF_TRACER Du <changbin.du@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] riscv: fix oops caused by irq on/off tracer
+Message-ID: <20220208003502.62gi5xhyg6bk2t2h@mail.google.com>
+References: <20220129004226.32868-1-changbin.du@gmail.com>
+ <YgAEb425uqy5/dw1@xhacker>
+ <20220207123850.l4r5qjswaegwisbx@mail.google.com>
+ <YgE7XRE/Uc6gTCWd@xhacker>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202202070951.I9Vhb0aQ-lkp@intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YgE7XRE/Uc6gTCWd@xhacker>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 09:23:47AM +0800, kernel test robot wrote:
-> tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/dev
-> head:   e6e0d15aa1c5117dda15eb266e8b862627af7608
-> commit: e6e0d15aa1c5117dda15eb266e8b862627af7608 [18/18] mm: Check for SLAB_TYPESAFE_BY_RCU and __GFP_ZERO slab creation
-> config: m68k-randconfig-s032-20220206 (https://download.01.org/0day-ci/archive/20220207/202202070951.I9Vhb0aQ-lkp@intel.com/config)
-> compiler: m68k-linux-gcc (GCC) 11.2.0
-> reproduce:
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # apt-get install sparse
->         # sparse version: v0.6.4-dirty
->         # https://github.com/ammarfaizi2/linux-block/commit/e6e0d15aa1c5117dda15eb266e8b862627af7608
->         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
->         git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/dev
->         git checkout e6e0d15aa1c5117dda15eb266e8b862627af7608
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=m68k SHELL=/bin/bash
+On Mon, Feb 07, 2022 at 11:31:41PM +0800, Jisheng Zhang wrote:
+> On Mon, Feb 07, 2022 at 08:38:50PM +0800, ChangbinCONFIG_IRQSOFF_TRACER Du wrote:
+> > On Mon, Feb 07, 2022 at 01:25:03AM +0800, Jisheng Zhang wrote:
+> > > On Sat, Jan 29, 2022 at 08:42:26AM +0800, Changbin Du wrote:
+> > > > The trace_hardirqs_on/off requires at least two parent call frames.
+> > > > If not, the code generated by CALLER_ADDR1 (aka. ftrace_return_address(1))
+> > > > could trigger memory access fault.
+> > > > 
+> > > > [    0.039615][    T0] Unable to handle kernel NULL pointer dereference at virtual address 00000000000000f8
+> > > > [    0.041925][    T0] Oops [#1]
+> > > > [    0.042063][    T0] Modules linked in:
+> > > > [    0.042864][    T0] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.17.0-rc1-00233-g9a20c48d1ed2 #29
+> > > > [    0.043568][    T0] Hardware name: riscv-virtio,qemu (DT)
+> > > > [    0.044343][    T0] epc : trace_hardirqs_on+0x56/0xe2
+> > > > [    0.044601][    T0]  ra : restore_all+0x12/0x6e
+> > > > [    0.044721][    T0] epc : ffffffff80126a5c ra : ffffffff80003b94 sp : ffffffff81403db0
+> > > > [    0.044801][    T0]  gp : ffffffff8163acd8 tp : ffffffff81414880 t0 : 0000000000000020
+> > > > [    0.044882][    T0]  t1 : 0098968000000000 t2 : 0000000000000000 s0 : ffffffff81403de0
+> > > > [    0.044967][    T0]  s1 : 0000000000000000 a0 : 0000000000000001 a1 : 0000000000000100
+> > > > [    0.045046][    T0]  a2 : 0000000000000000 a3 : 0000000000000000 a4 : 0000000000000000
+> > > > [    0.045124][    T0]  a5 : 0000000000000000 a6 : 0000000000000000 a7 : 0000000054494d45
+> > > > [    0.045210][    T0]  s2 : ffffffff80003b94 s3 : ffffffff81a8f1b0 s4 : ffffffff80e27b50
+> > > > [    0.045289][    T0]  s5 : ffffffff81414880 s6 : ffffffff8160fa00 s7 : 00000000800120e8
+> > > > [    0.045389][    T0]  s8 : 0000000080013100 s9 : 000000000000007f s10: 0000000000000000
+> > > > [    0.045474][    T0]  s11: 0000000000000000 t3 : 7fffffffffffffff t4 : 0000000000000000
+> > > > [    0.045548][    T0]  t5 : 0000000000000000 t6 : ffffffff814aa368
+> > > > [    0.045620][    T0] status: 0000000200000100 badaddr: 00000000000000f8 cause: 000000000000000d
+> > > > [    0.046402][    T0] [<ffffffff80003b94>] restore_all+0x12/0x6e
+> > > > 
+> > > 
+> > > Hi Changbin,
+> > > 
+> > > Could you please provide the reproduce steps? It looks a bit
+> > > interesting.
+> > >
+> > Just enable CONFIG_IRQSOFF_TRACER and rebuild kernel with llvm. Then boot the
+> > new kernel.
 > 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> 
-> sparse warnings: (new ones prefixed by >>)
-> >> mm/slab_common.c:336:23: sparse: sparse: restricted slab_flags_t degrades to integer
-> >> mm/slab_common.c:336:46: sparse: sparse: restricted gfp_t degrades to integer
+> Thanks for the information. I tried IRQSOFF_TRACER with gcc+binutils,
+> can't reproduce the issue. I forget to try clang+llvm. From another side
+> The fact that gcc+bintuils can't reproduce it means this is a clang+llvm
+> speicial case, no?
+The behaviour of GCC is a bit different, please refer to another disccusion:
+https://lore.kernel.org/lkml/C2470F2D-9E45-49D7-A03B-E6A7BB4B9738@jrtc27.com/T/
 
-Good catch!  I really did get the various flags confused.  :-/
+But I suppose it still has similar issue. Make sure FRAME_POINTER is enabled
+also.
 
-Will fix with attribution.
-
-							Thanx, Paul
-
->    mm/slab_common.c:336:14: sparse: sparse: restricted slab_flags_t degrades to integer
->    mm/slab_common.c:336:63: sparse: sparse: restricted slab_flags_t degrades to integer
->    mm/slab_common.c:336:86: sparse: sparse: restricted gfp_t degrades to integer
-> 
-> vim +336 mm/slab_common.c
-> 
->    321	
->    322		mutex_lock(&slab_mutex);
->    323	
->    324		err = kmem_cache_sanity_check(name, size);
->    325		if (err) {
->    326			goto out_unlock;
->    327		}
->    328	
->    329		/* Refuse requests with allocator specific flags */
->    330		if (flags & ~SLAB_FLAGS_PERMITTED) {
->    331			err = -EINVAL;
->    332			goto out_unlock;
->    333		}
->    334	
->    335		/* References to typesafe memory survives free/alloc. */
->  > 336		if ((flags & (SLAB_TYPESAFE_BY_RCU | __GFP_ZERO)) == (SLAB_TYPESAFE_BY_RCU | __GFP_ZERO)) {
->    337			err = -EINVAL;
->    338			goto out_unlock;
->    339		}
->    340	
->    341		/*
->    342		 * Some allocators will constraint the set of valid flags to a subset
->    343		 * of all flags. We expect them to define CACHE_CREATE_MASK in this
->    344		 * case, and we'll just provide them with a sanitized version of the
->    345		 * passed flags.
->    346		 */
->    347		flags &= CACHE_CREATE_MASK;
->    348	
->    349		/* Fail closed on bad usersize of useroffset values. */
->    350		if (WARN_ON(!usersize && useroffset) ||
->    351		    WARN_ON(size < usersize || size - usersize < useroffset))
->    352			usersize = useroffset = 0;
->    353	
->    354		if (!usersize)
->    355			s = __kmem_cache_alias(name, size, align, flags, ctor);
->    356		if (s)
->    357			goto out_unlock;
->    358	
->    359		cache_name = kstrdup_const(name, GFP_KERNEL);
->    360		if (!cache_name) {
->    361			err = -ENOMEM;
->    362			goto out_unlock;
->    363		}
->    364	
->    365		s = create_cache(cache_name, size,
->    366				 calculate_alignment(flags, align, size),
->    367				 flags, useroffset, usersize, ctor, NULL);
->    368		if (IS_ERR(s)) {
->    369			err = PTR_ERR(s);
->    370			kfree_const(cache_name);
->    371		}
->    372	
->    373	out_unlock:
->    374		mutex_unlock(&slab_mutex);
->    375	
->    376		if (err) {
->    377			if (flags & SLAB_PANIC)
->    378				panic("%s: Failed to create slab '%s'. Error %d\n",
->    379					__func__, name, err);
->    380			else {
->    381				pr_warn("%s(%s) failed with error %d\n",
->    382					__func__, name, err);
->    383				dump_stack();
->    384			}
->    385			return NULL;
->    386		}
->    387		return s;
->    388	}
->    389	EXPORT_SYMBOL(kmem_cache_create_usercopy);
->    390	
-> 
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Cheers,
+Changbin Du

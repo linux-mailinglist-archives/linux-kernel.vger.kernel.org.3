@@ -2,240 +2,484 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5BDF4AD9A5
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 14:22:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19E0A4AD9A9
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 14:22:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377104AbiBHNWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 08:22:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57606 "EHLO
+        id S1350836AbiBHNW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 08:22:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357732AbiBHMgl (ORCPT
+        with ESMTP id S1357742AbiBHMhF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 07:36:41 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE6FCC03FEC0;
-        Tue,  8 Feb 2022 04:36:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=MIME-Version:Content-Type:References:
-        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Nb01ZpYYzQEXF2HrWAI67dHAOgMaAfguDcsFcUWL8Rk=; b=Mb9CiMFzQhE8UaB3MqUEMANsLB
-        w7CYR3Ufar4ak1FdkoIivZ3Fc/zu9nXm9mIerO9vfMg8mr/qvPCYD4y8/+rVo6OsH2RiK1NhKgpY6
-        0BwZ8Aq1bhmjDLhFnZ8q1hpjSDMYYWyvMhJbI/NpXCZ6wRCXAl/lUTERqlJXQr4fyU13JzN16zBSz
-        x1cO7m01mj1u3y9ZqspRS1vFSckqNtxqr/zk2J4gyVJkMJXFfUb4NcV2zM3eqEeJYn62gcSO1CEgx
-        NN8U6tnZ1P3X6B3C4qoMfRea4blyDAwmTjpL1IQUUQj5OgHvsr+QBht3R08oMTAHV12w+qAgv3xVc
-        fy8YrRcA==;
-Received: from [2001:8b0:10b:1::3ae] (helo=u3832b3a9db3152.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nHPja-00Dm5D-1P; Tue, 08 Feb 2022 12:36:38 +0000
-Message-ID: <ce716485bb0b3097cefb77c1ec53e1834bef2e06.camel@infradead.org>
-Subject: Re: [PATCH RFC 15/39] KVM: x86/xen: handle PV spinlocks slowpath
-From:   David Woodhouse <dwmw2@infradead.org>
-To:     Joao Martins <joao.m.martins@oracle.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, metikaya@amazon.co.uk
-Cc:     Ankur Arora <ankur.a.arora@oracle.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Radim =?UTF-8?Q?Kr=C4=8Dm=C3=A1=C5=99?= <rkrcmar@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org
-Date:   Tue, 08 Feb 2022 12:36:33 +0000
-In-Reply-To: <20190220201609.28290-16-joao.m.martins@oracle.com>
-References: <20190220201609.28290-1-joao.m.martins@oracle.com>
-         <20190220201609.28290-16-joao.m.martins@oracle.com>
-Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-        boundary="=-OCGc/NiGfWit24U4It7O"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Tue, 8 Feb 2022 07:37:05 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A8767C03FEC0
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 04:37:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644323822;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y5vSlEmtbw6e2MoGrB6mFIzKqXBqzf02wD7hCYaC1L8=;
+        b=M1eFZgxSEC5oLG9YG3gTXjuJGkOOLAzLvza5FmqPORxLrUBPBuov/KMUBd81bYJ+Zuz3Yj
+        kkI+t/FF3zITu61PI/u+jZhASDak3+5nZaAIO3d0vdW5T3qaKiy1VM2FQZfXmUe1R+YSXO
+        IH/C8k9SP2Z9iu8Is753Vqmf+xdlz9U=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-104-Rqd_XqQNPsqoFAPDdGKYqQ-1; Tue, 08 Feb 2022 07:37:01 -0500
+X-MC-Unique: Rqd_XqQNPsqoFAPDdGKYqQ-1
+Received: by mail-wm1-f71.google.com with SMTP id t2-20020a7bc3c2000000b003528fe59cb9so481027wmj.5
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 04:37:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=Y5vSlEmtbw6e2MoGrB6mFIzKqXBqzf02wD7hCYaC1L8=;
+        b=nkaVC2ZDq7D9uFZ7xGbRs6mEmpFjLfmW8qpXAW0uezg9AcOVNP30Dae5Xie2DWZUD3
+         Dzh5XV/lDajgN31zfacRo0CLR0kaPMBgchxF8359mcYiRvAUM9PGaU/DWivlahe9d4aT
+         lPmHa12td/WshBjv+NjB0EAoPnQ1RJAZfbL0Lq9yERHMmIuN8ihp+m9+WeGaEyz/LODp
+         Pg2J61jg7xEHMAeoadGA0BWvJeMohfAEeeFVMcvkB7DWlHqsGVBMOPQ+PtmHgiIDdeuk
+         EzwoAcm8G0CNK25khlkgUpXpM7N9KsxssJ8bSvPCTGmRRiUkemtfcg9BJkcaPnCOVmgU
+         0Vnw==
+X-Gm-Message-State: AOAM530Qsm1XQlDxr2DnTuIv6JJlIy/q5I7Zla8H3OXLe+JHNZPevFq1
+        ovp/0VOmvhgnYRZ5HgM3cIO8ru/MO2cZ3syMaRcon6ZJym4156axAgq8cDRWao6V98+Or4Hsgr2
+        FOZIW1Zwp5x4s7u6gwHT+2LFx
+X-Received: by 2002:a5d:488f:: with SMTP id g15mr3360032wrq.564.1644323820327;
+        Tue, 08 Feb 2022 04:37:00 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzD625fBX0DzJv8DmzHy80761ZH48vaT6n/DPsnp1+c01bo2R/r/Y9yXVZ44ay76AQL+2sWeg==
+X-Received: by 2002:a5d:488f:: with SMTP id g15mr3360013wrq.564.1644323820094;
+        Tue, 08 Feb 2022 04:37:00 -0800 (PST)
+Received: from ?IPv6:2a0c:5a80:1204:1500:37e7:8150:d9df:36f? ([2a0c:5a80:1204:1500:37e7:8150:d9df:36f])
+        by smtp.gmail.com with ESMTPSA id o27sm2229495wms.4.2022.02.08.04.36.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 04:36:59 -0800 (PST)
+Message-ID: <8ba732136cffc61276e0580010e8f5d56892d816.camel@redhat.com>
+Subject: Re: [PATCH 3/6] drivers/auxdisplay: sensehat: Raspberry Pi Sense
+ HAT display driver
+From:   Nicolas Saenz Julienne <nsaenzju@redhat.com>
+To:     Charles Mirabile <cmirabil@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Serge Schneider <serge@raspberrypi.org>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Mattias Brugger <mbrugger@suse.com>,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, fedora-rpi@googlegroups.com,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Mwesigwa Guma <mguma@redhat.com>,
+        Joel Savitz <jsavitz@redhat.com>,
+        Daniel Bauman <dbauman@redhat.com>
+Date:   Tue, 08 Feb 2022 13:36:58 +0100
+In-Reply-To: <20220203002521.162878-4-cmirabil@redhat.com>
+References: <20220203002521.162878-1-cmirabil@redhat.com>
+         <20220203002521.162878-4-cmirabil@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
 MIME-Version: 1.0
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---=-OCGc/NiGfWit24U4It7O
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, 2019-02-20 at 20:15 +0000, Joao Martins wrote:
-> From: Boris Ostrovsky <boris.ostrovsky@oracle.com>
->=20
-> Add support for SCHEDOP_poll hypercall.
->=20
-> This implementation is optimized for polling for a single channel, which
-> is what Linux does. Polling for multiple channels is not especially
-> efficient (and has not been tested).
->=20
-> PV spinlocks slow path uses this hypercall, and explicitly crash if it's
-> not supported.
->=20
-> Signed-off-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
+On Wed, 2022-02-02 at 19:25 -0500, Charles Mirabile wrote:
+> This patch adds the driver for the 8x8 RGB LED matrix display
+> on the Sense HAT. It appears as a character device named sense-hat
+> in /dev/. That special file is 192 bytes large and contains one byte
+> for each color channel of each pixel. The overall layout is:
+> 
+>     col 1       col 8
+>       |           |
+>       v           v
+> 0x00: R   . . .   R \
+> 0x08: G   . . .   G |> row 1
+> 0x10: B   . . .   B /
+>       .   .       .
+> ...   .     .     .
+>       .       .   .
+> 0xA8: R   . . .   R \
+> 0xB0: G   . . .   G |> row 8
+> 0xB8: G   . . .   G /
+> 
+> Each channel may have any value between 0 and 31 (larger values are
+> wrapped) and are translated by a gamma table before being send to the
+> device to provide a linear experience of brightness (the gamma table
+> can be modified or reset using an ioctl call on the file). The constants
+> for the ioctl are in the sensehat.h header also added in this patch.
+> 
+> Co-developed-by: Mwesigwa Guma <mguma@redhat.com>
+> Signed-off-by: Mwesigwa Guma <mguma@redhat.com>
+> Co-developed-by: Joel Savitz <jsavitz@redhat.com>
+> Signed-off-by: Joel Savitz <jsavitz@redhat.com>
+> Co-developed-by: Daniel Bauman <dbauman@redhat.com>
+> Signed-off-by: Daniel Bauman <dbauman@redhat.com>
+> Signed-off-by: Charles Mirabile <cmirabil@redhat.com>
 > ---
-
-...
-
-> +static void kvm_xen_check_poller(struct kvm_vcpu *vcpu, int port)
+>  drivers/auxdisplay/Kconfig            |   8 +
+>  drivers/auxdisplay/Makefile           |   1 +
+>  drivers/auxdisplay/sensehat-display.c | 264 ++++++++++++++++++++++++++
+>  include/uapi/linux/sensehat.h         |  28 +++
+>  4 files changed, 301 insertions(+)
+>  create mode 100644 drivers/auxdisplay/sensehat-display.c
+>  create mode 100644 include/uapi/linux/sensehat.h
+> 
+> diff --git a/drivers/auxdisplay/Kconfig b/drivers/auxdisplay/Kconfig
+> index 64012cda4d12..9bad1aade7a0 100644
+> --- a/drivers/auxdisplay/Kconfig
+> +++ b/drivers/auxdisplay/Kconfig
+> @@ -203,6 +203,14 @@ config ARM_CHARLCD
+>  	  line and the Linux version on the second line, but that's
+>  	  still useful.
+>  
+> +config SENSEHAT_DISPLAY
+> +	tristate "Raspberry Pi Sense HAT display driver"
+> +	depends on I2C
+> +	select MFD_SIMPLE_MFD_I2C
+> +	help
+> +	 This is a driver for the Raspberry Pi Sensehat 8x8 RBG-LED matrix
+> +	 you can access it as a misc device at /dev/sense-hat
+> +
+>  menuconfig PARPORT_PANEL
+>  	tristate "Parallel port LCD/Keypad Panel support"
+>  	depends on PARPORT
+> diff --git a/drivers/auxdisplay/Makefile b/drivers/auxdisplay/Makefile
+> index 6968ed4d3f0a..30b2b7934046 100644
+> --- a/drivers/auxdisplay/Makefile
+> +++ b/drivers/auxdisplay/Makefile
+> @@ -14,3 +14,4 @@ obj-$(CONFIG_HT16K33)		+= ht16k33.o
+>  obj-$(CONFIG_PARPORT_PANEL)	+= panel.o
+>  obj-$(CONFIG_LCD2S)		+= lcd2s.o
+>  obj-$(CONFIG_LINEDISP)		+= line-display.o
+> +obj-$(CONFIG_SENSEHAT_DISPLAY)	+= sensehat-display.o
+> diff --git a/drivers/auxdisplay/sensehat-display.c b/drivers/auxdisplay/sensehat-display.c
+> new file mode 100644
+> index 000000000000..08b397a544f0
+> --- /dev/null
+> +++ b/drivers/auxdisplay/sensehat-display.c
+> @@ -0,0 +1,264 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Raspberry Pi Sense HAT 8x8 LED matrix display driver
+> + * http://raspberrypi.org
+> + *
+> + * Copyright (C) 2015 Raspberry Pi
+> + * Copyright (C) 2021 Charles Mirabile, Mwesigwa Guma, Joel Savitz
+> + *
+> + * Original Author: Serge Schneider
+> + * Revised for upstream Linux by: Charles Mirabile, Mwesigwa Guma, Joel Savitz
+> + */
+> +
+> +#include <linux/module.h>
+> +#include <linux/kernel.h>
+> +#include <linux/errno.h>
+> +#include <linux/string.h>
+> +#include <linux/mm.h>
+> +#include <linux/slab.h>
+> +#include <linux/uaccess.h>
+> +#include <linux/delay.h>
+> +#include <linux/init.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/miscdevice.h>
+> +#include <linux/regmap.h>
+> +#include <linux/property.h>
+> +#include <linux/sensehat.h>
+> +
+> +#define GAMMA_SIZE 32
+> +#define VMEM_SIZE 192
+> +
+> +struct sensehat_display {
+> +	struct platform_device *pdev;
+> +	struct miscdevice mdev;
+> +	struct mutex rw_mtx;
+> +	u8 gamma[GAMMA_SIZE];
+> +	u8 vmem[VMEM_SIZE];
+> +	u32 display_register;
+> +};
+> +
+> +static bool lowlight;
+> +module_param(lowlight, bool, 0);
+> +MODULE_PARM_DESC(lowlight, "Reduce LED matrix brightness to one third");
+> +
+> +static const u8 gamma_presets[][GAMMA_SIZE] = {
+> +	[SENSEHAT_GAMMA_DEFAULT] = {
+> +		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
+> +		0x02, 0x02, 0x03, 0x03, 0x04, 0x05, 0x06, 0x07,
+> +		0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0E, 0x0F, 0x11,
+> +		0x12, 0x14, 0x15, 0x17, 0x19, 0x1B, 0x1D, 0x1F,
+> +	},
+> +	[SENSEHAT_GAMMA_LOWLIGHT] = {
+> +		0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
+> +		0x01, 0x01, 0x01, 0x01, 0x01, 0x02, 0x02, 0x02,
+> +		0x03, 0x03, 0x03, 0x04, 0x04, 0x05, 0x05, 0x06,
+> +		0x06, 0x07, 0x07, 0x08, 0x08, 0x09, 0x0A, 0x0A,
+> +	},
+> +};
+> +
+> +static void sensehat_update_display(struct sensehat_display *display)
 > +{
-> +       struct kvm_vcpu_xen *vcpu_xen =3D vcpu_to_xen_vcpu(vcpu);
+> +	int i, ret;
+> +	struct regmap *regmap = dev_get_regmap(display->pdev->dev.parent, NULL);
+
+Same comment as with joystick.
+
+> +	u8 temp[VMEM_SIZE];
 > +
-> +       if ((vcpu_xen->poll_evtchn =3D=3D port ||
-> +            vcpu_xen->poll_evtchn =3D=3D -1) &&
-> +           test_and_clear_bit(vcpu->vcpu_id, vcpu->kvm->arch.xen.poll_ma=
-sk))
-> +               wake_up(&vcpu_xen->sched_waitq);
+> +	for (i = 0; i < VMEM_SIZE; ++i)
+> +		temp[i] = display->gamma[display->vmem[i] & 0x1f];
+> +
+> +	ret = regmap_bulk_write(regmap, display->display_register, temp,
+> +				VMEM_SIZE);
+> +	if (ret < 0)
+> +		dev_err(&display->pdev->dev,
+> +			"Update to 8x8 LED matrix display failed");
 > +}
-
-...
-
-> +	if (sched_poll.nr_ports =3D=3D 1)
-> +		vcpu_xen->poll_evtchn =3D port;
-> +	else
-> +		vcpu_xen->poll_evtchn =3D -1;
 > +
-> +	if (!wait_pending_event(vcpu, sched_poll.nr_ports, ports))
-> +		wait_event_interruptible_timeout(
-> +			 vcpu_xen->sched_waitq,
-> +			 wait_pending_event(vcpu, sched_poll.nr_ports, ports),
-> +			 sched_poll.timeout ?: KTIME_MAX);
+> +static loff_t sensehat_display_llseek(struct file *filp, loff_t offset,
+> +				      int whence)
+> +{
+> +	loff_t base, pos;
+> +
+> +	switch (whence) {
+> +	case SEEK_SET:
+> +		base = 0;
+> +		break;
+> +	case SEEK_CUR:
+> +		base = filp->f_pos;
+> +		break;
+> +	case SEEK_END:
+> +		base = VMEM_SIZE;
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +	pos = base + offset;
+> +	if (pos < 0 || pos >= VMEM_SIZE)
+> +		return -EINVAL;
+> +	filp->f_pos = pos;
+> +	return base;
+> +}
+> +
+> +static ssize_t sensehat_display_read(struct file *filp, char __user *buf,
+> +				     size_t count, loff_t *f_pos)
+> +{
+> +	struct sensehat_display *sensehat_display =
+> +		container_of(filp->private_data, struct sensehat_display, mdev);
+> +	ssize_t retval = -EFAULT;
+> +
+> +	if (*f_pos >= VMEM_SIZE)
+> +		return 0;
+> +	if (*f_pos + count > VMEM_SIZE)
+> +		count = VMEM_SIZE - *f_pos;
+> +	if (mutex_lock_interruptible(&sensehat_display->rw_mtx))
+> +		return -ERESTARTSYS;
+> +	if (copy_to_user(buf, sensehat_display->vmem + *f_pos, count))
+> +		goto out;
+> +	*f_pos += count;
+> +	retval = count;
+> +out:
+> +	mutex_unlock(&sensehat_display->rw_mtx);
+> +	return retval;
+> +}
+> +
+> +static ssize_t sensehat_display_write(struct file *filp, const char __user *buf,
+> +				      size_t count, loff_t *f_pos)
+> +{
+> +	struct sensehat_display *sensehat_display =
+> +		container_of(filp->private_data, struct sensehat_display, mdev);
+> +	int ret = count;
+> +
+> +	if (*f_pos >= VMEM_SIZE)
+> +		return -EFBIG;
+> +	if (*f_pos + count > VMEM_SIZE)
+> +		count = VMEM_SIZE - *f_pos;
+> +	if (mutex_lock_interruptible(&sensehat_display->rw_mtx))
+> +		return -ERESTARTSYS;
+> +	if (copy_from_user(sensehat_display->vmem + *f_pos, buf, count)) {
+> +		ret = -EFAULT;
+> +		goto out;
+> +	}
+> +	sensehat_update_display(sensehat_display);
+> +	*f_pos += count;
+> +out:
+> +	mutex_unlock(&sensehat_display->rw_mtx);
+> +	return ret;
+> +}
+> +
+> +static long sensehat_display_ioctl(struct file *filp, unsigned int cmd,
+> +				   unsigned long arg)
+> +{
+> +	struct sensehat_display *sensehat_display =
+> +		container_of(filp->private_data, struct sensehat_display, mdev);
+> +	void __user *user_ptr = (void __user *)arg;
+> +	int i, ret = 0;
+> +
+> +	if (mutex_lock_interruptible(&sensehat_display->rw_mtx))
+> +		return -ERESTARTSYS;
 
-Hm, this doesn't wake on other interrupts, does it? I think it should.
-Shouldn't it basically be like HLT, with an additional wakeup when the
-listed ports are triggered even when they're masked?
+nit: add space, here and after the switch statement.
 
-At https://git.infradead.org/users/dwmw2/linux.git/commitdiff/ddfbdf1af
-I've tried to make it use kvm_vcpu_halt(), and kvm_xen_check_poller()
-sets KVM_REQ_UNBLOCK when an event is delivered to a monitored port.
+> +	switch (cmd) {
+> +	case SENSEDISP_IOGET_GAMMA:
+> +		if (copy_to_user(user_ptr, sensehat_display->gamma, GAMMA_SIZE))
+> +			ret = -EFAULT;
+> +		goto no_update;
+> +	case SENSEDISP_IOSET_GAMMA:
+> +		if (copy_from_user(sensehat_display->gamma, user_ptr,
+> +				   GAMMA_SIZE))
+> +			ret = -EFAULT;
+> +		break;
+> +	case SENSEDISP_IORESET_GAMMA:
+> +		if (arg >= SENSEHAT_GAMMA_PRESET_COUNT) {
+> +			ret = -EINVAL;
+> +			goto no_update;
+> +		}
+> +		memcpy(sensehat_display->gamma, gamma_presets[arg], GAMMA_SIZE);
+> +		goto no_check;
+> +	default:
+> +		ret = -EINVAL;
+> +		break;
+> +	}
+> +	for (i = 0; i < GAMMA_SIZE; ++i)
+> +		sensehat_display->gamma[i] &= 0x1f;
+> +no_check:
+> +	sensehat_update_display(sensehat_display);
+> +no_update:
+> +	mutex_unlock(&sensehat_display->rw_mtx);
+> +	return ret;
+> +}
+> +
+> +static const struct file_operations sensehat_display_fops = {
+> +	.owner = THIS_MODULE,
+> +	.llseek = sensehat_display_llseek,
+> +	.read = sensehat_display_read,
+> +	.write = sensehat_display_write,
+> +	.unlocked_ioctl = sensehat_display_ioctl,
+> +};
+> +
+> +static int sensehat_display_probe(struct platform_device *pdev)
+> +{
+> +	int ret;
+> +
+> +	struct sensehat_display *sensehat_display =
+> +		devm_kzalloc(&pdev->dev, sizeof(*sensehat_display), GFP_KERNEL);
+> +
+> +	sensehat_display->pdev = pdev;
+> +
+> +	memcpy(sensehat_display->gamma, gamma_presets[lowlight], GAMMA_SIZE);
+> +
+> +	memset(sensehat_display->vmem, 0, VMEM_SIZE);
 
-I haven't quite got it to work yet, but does it seem like a sane
-approach?
+You don't nee this, kzalloc already zeroes the memory.
 
-+       if (!wait_pending_event(vcpu, sched_poll.nr_ports, ports)) {
-+               vcpu->arch.mp_state =3D KVM_MP_STATE_HALTED;
-+               kvm_vcpu_halt(vcpu);
+> +
+> +	mutex_init(&sensehat_display->rw_mtx);
+> +
+> +	ret = device_property_read_u32(&pdev->dev, "reg",
+> +				       &sensehat_display->display_register);
 
+Same comment as with joystick.
 
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "Could not read register property.\n");
+> +		return ret;
+> +	}
+> +
+> +	sensehat_display->mdev = (struct miscdevice){
+> +		.minor = MISC_DYNAMIC_MINOR,
+> +		.name = "sense-hat",
+> +		.mode = 0666,
+> +		.fops = &sensehat_display_fops,
+> +	};
+> +
+> +	ret = misc_register(&sensehat_display->mdev);
+> +	if (ret < 0) {
+> +		dev_err(&pdev->dev,
+> +			"Could not register 8x8 LED matrix display.\n");
+> +		return ret;
+> +	}
+> +
+> +	ret = devm_add_action(&pdev->dev, (void *)misc_deregister,
+> +			      &sensehat_display->mdev);
+> +	if (ret < 0) {
+> +		dev_err(&pdev->dev, "Could not add misc device to devm\n");
+> +		return ret;
+> +	}
 
+Instead of doing this I'd add a .remove callback to the platform driver.
 
+> +
+> +	dev_info(&pdev->dev,
+> +		 "8x8 LED matrix display registered with minor number %i",
+> +		 sensehat_display->mdev.minor);
+> +
+> +	sensehat_update_display(sensehat_display);
 
+This could potentially race with an app accessing the misc device?
 
---=-OCGc/NiGfWit24U4It7O
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id sensehat_display_device_id[] = {
+> +	{ .compatible = "raspberrypi,sensehat-display" },
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(of, sensehat_display_device_id);
+> +
+> +static struct platform_driver sensehat_display_driver = {
+> +	.probe = sensehat_display_probe,
+> +	.driver = {
+> +		.name = "sensehat-display",
+> +		.of_match_table = sensehat_display_device_id,
+> +	},
+> +};
+> +
+> +module_platform_driver(sensehat_display_driver);
+> +
+> +MODULE_DESCRIPTION("Raspberry Pi Sense HAT 8x8 LED matrix display driver");
+> +MODULE_AUTHOR("Serge Schneider <serge@raspberrypi.org>");
+> +MODULE_LICENSE("GPL");
+> diff --git a/include/uapi/linux/sensehat.h b/include/uapi/linux/sensehat.h
+> new file mode 100644
+> index 000000000000..cae07568a5eb
+> --- /dev/null
+> +++ b/include/uapi/linux/sensehat.h
+> @@ -0,0 +1,28 @@
+> +/* SPDX-License-Identifier: GPL-2.0-or-later WITH Linux-syscall-note */
+> +/*
+> + * Raspberry Pi Sense HAT core driver
+> + * http://raspberrypi.org
+> + *
+> + * Copyright (C) 2015 Raspberry Pi
+> + * Copyright (C) 2021 Charles Mirabile, Mwesigwa Guma, Joel Savitz
+> + *
+> + * Original Author: Serge Schneider
+> + * Revised for upstream Linux by: Charles Mirabile, Mwesigwa Guma, Joel Savitz
+> + */
+> +
+> +#ifndef _UAPILINUX_SENSEHAT_H_
+> +#define _UAPILINUX_SENSEHAT_H_
+> +
+> +#define SENSEDISP_IOC_MAGIC 0xF1
+> +
+> +#define SENSEDISP_IOGET_GAMMA _IO(SENSEDISP_IOC_MAGIC, 0)
+> +#define SENSEDISP_IOSET_GAMMA _IO(SENSEDISP_IOC_MAGIC, 1)
+> +#define SENSEDISP_IORESET_GAMMA _IO(SENSEDISP_IOC_MAGIC, 2)
+> +
+> +enum gamma_preset {
+> +	SENSEHAT_GAMMA_DEFAULT = 0,
+> +	SENSEHAT_GAMMA_LOWLIGHT,
+> +	SENSEHAT_GAMMA_PRESET_COUNT,
+> +};
+> +
+> +#endif
 
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkQw
-ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
-EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
-FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
-aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
-EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
-VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
-aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
-AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
-ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
-QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
-rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
-ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
-U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
-DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
-BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
-dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
-BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
-QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
-CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
-xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
-IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
-kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
-eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
-KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
-1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
-OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
-x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
-5ZgtwCLXgAIe5W8mybM2JzCCBhQwggT8oAMCAQICEQDGvhmWZ0DEAx0oURL6O6l+MA0GCSqGSIb3
-DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
-VQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28g
-UlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTIyMDEwNzAw
-MDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9y
-ZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3GpC2bomUqk+91wLYBzDMcCj5C9m6
-oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZHh7htyAkWYVoFsFPrwHounto8xTsy
-SSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT9YgcBqKCo65pTFmOnR/VVbjJk4K2
-xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNjP+qDrh0db7PAjO1D4d5ftfrsf+kd
-RR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy2U+eITZ5LLE5s45mX2oPFknWqxBo
-bQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3BgBEmfsYWlBXO8rVXfvPgLs32VdV
-NZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/7auNVRmPB3v5SWEsH8xi4Bez2V9U
-KxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmdlFYhAflWKQ03Ufiu8t3iBE3VJbc2
-5oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9aelIl6vtbhMA+l0nfrsORMa4kobqQ5
-C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMBAAGjggHMMIIByDAfBgNVHSMEGDAW
-gBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeDMcimo0oz8o1R1Nver3ZVpSkwDgYD
-VR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
-MEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
-by5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGln
-b1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEB
-BH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50
-QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29j
-c3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5mcmFkZWFkLm9yZzANBgkqhkiG9w0B
-AQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQvQ/fzPXmtR9t54rpmI2TfyvcKgOXp
-qa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvIlSPrzIB4Z2wyIGQpaPLlYflrrVFK
-v9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9ChWFfgSXvrWDZspnU3Gjw/rMHrGnql
-Htlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0whpBtXdyDjzBtQTaZJ7zTT/vlehc/
-tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9IzCCBhQwggT8oAMCAQICEQDGvhmW
-Z0DEAx0oURL6O6l+MA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
-YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
-ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
-IEVtYWlsIENBMB4XDTIyMDEwNzAwMDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJ
-ARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3
-GpC2bomUqk+91wLYBzDMcCj5C9m6oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZH
-h7htyAkWYVoFsFPrwHounto8xTsySSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT
-9YgcBqKCo65pTFmOnR/VVbjJk4K2xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNj
-P+qDrh0db7PAjO1D4d5ftfrsf+kdRR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy
-2U+eITZ5LLE5s45mX2oPFknWqxBobQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3
-BgBEmfsYWlBXO8rVXfvPgLs32VdVNZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/
-7auNVRmPB3v5SWEsH8xi4Bez2V9UKxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmd
-lFYhAflWKQ03Ufiu8t3iBE3VJbc25oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9ae
-lIl6vtbhMA+l0nfrsORMa4kobqQ5C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMB
-AAGjggHMMIIByDAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeD
-Mcimo0oz8o1R1Nver3ZVpSkwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYw
-FAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYB
-BQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9j
-cmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1h
-aWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdv
-LmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAj
-BggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
-cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQv
-Q/fzPXmtR9t54rpmI2TfyvcKgOXpqa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvI
-lSPrzIB4Z2wyIGQpaPLlYflrrVFKv9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9Ch
-WFfgSXvrWDZspnU3Gjw/rMHrGnqlHtlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0w
-hpBtXdyDjzBtQTaZJ7zTT/vlehc/tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9
-IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
-dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
-NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
-xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
-DQEHATAcBgkqhkiG9w0BCQUxDxcNMjIwMjA4MTIzNjMzWjAvBgkqhkiG9w0BCQQxIgQgQ65XTe9h
-yDevLaUXV1vfka5kBiNe/X63LUwAXJf9Kwcwgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
-BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
-A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
-dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
-DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
-MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
-Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
-lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgCje1UNQwlelbfjsxuucZMBONBgtgSWiKmO
-fX9ef8a/VrET12nF1CVTVmAEHRcz8fjpHd9VDEx5jmAtTum5S2mio1mSr9rekzSCoRpzg8YwRwsr
-3WeU1eicjurmQHIxx/rPNCdEtgcLZrnMLrCE2cMsv1rPyTKIYF6j/AbCkn6BkIXCxpFPUn1Oddcq
-zT7Ajvd2l+4o/khhthfxueA6bA/J4wyW4CWsztCkW9uJpKaD7xqDrF8oUI0M6eCzDG2PLHySiat+
-Iak2O7jUv4r+sqLP925MasPwx/TRXys3Eve7u8zX4HyH8ur55+EDYOLV9qzIuCXWCJr43R6K4GpS
-CZ8eUkTEPtheAhQ+0a/H4rkqXf0oGQ9nM6/2zCSM4rtBTbNcbb/7B5lC3v47wC/e+oPsTrpnZ6DB
-iYqFr7A3L+032TobWmCDXDB/8rGMov+vz3B2O2PfzXiiQY4nSeA0z2afDXpTLRPt4wJbB5YccKiI
-VL4OkGos2rlmIftGIYo375g7MnT7oPm9w+/+Pc8BwpqQqdc/46IvPVnaC49MUAswumREE27CeyTh
-Bh1FXdIXj8WAKo1LDn5kIpBwwXtb/o6FC08vCibz3Lt0t5pL3I/KmlKVWivGoreOpoWe/Gk+Qdgq
-iUxaUkbqtcWUDYgj/mqETdvScuwhV1n6tYXpyLsS5gAAAAAAAA==
-
-
---=-OCGc/NiGfWit24U4It7O--
+-- 
+Nicolás Sáenz
 

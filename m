@@ -2,186 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E35534AD7F2
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:53:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD8754AD7FB
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:55:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245559AbiBHLwz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 06:52:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43378 "EHLO
+        id S1347504AbiBHLxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 06:53:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239521AbiBHLwy (ORCPT
+        with ESMTP id S239521AbiBHLxt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 06:52:54 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F48CC03FEC0;
-        Tue,  8 Feb 2022 03:52:53 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id qe15so6515535pjb.3;
-        Tue, 08 Feb 2022 03:52:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=DRIuUc2VDgRmjcevfIz/V5hKd5UgUekQHsS7kXsTMhA=;
-        b=QKI0U/4xxaT2com3DuGoQVRH9mne7idQfR9378gfAFlSah1PStbuQ9B85ooqlRIxnp
-         T28Zw7GJE/sM1hfJ2T5XmY5uDLDGaiSkGD/d+QYqXsnecgaI47QHjT/Q2/CODjHf9FvA
-         Pm8wrhQ0vfpAjs1T93rmyqWEj/sZgDCXgd/8ITYb92/ZmncGwL+2MHTC/B8CZzHzO4lm
-         7bxkue+PlQ6BI46uFF/hOovMlUUr6JMArMwdKitcUA/Y4HfSJQGg/ZB031Y1qMUuOO3y
-         65ZWx+ucRsIYYTCX0xD6EhaVHHlxgQOSu3VqEZTWISl+mvVCm+HZ7R8E9oVcqH7gIViR
-         7tog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=DRIuUc2VDgRmjcevfIz/V5hKd5UgUekQHsS7kXsTMhA=;
-        b=VXM8Xkb6cxECM0L3tqfWEBpw35SPRWqoOo6ip1Gzqbyv3RJXRHJqEsRP5TgrhgARUM
-         qa4xdZgZ+S9HmQS+roKrXe8/OW1sR425yLkuGPtEc7Te6XAKaD10vqqGX6XMybvRcC3m
-         zkg+H5qBFk+p8EAc6JxxKTAd88V41ql7Q05LrQ2yHVe8LRCtYzkit3NcOnh0tHOKcPWw
-         1C5f4MMxmmKXdgYnMToHXoLKu/mxYnABpfAED6SwCKw2STxdFH+LvDWU0z63e3TetP0k
-         NzgKRA11NxzrUrFAn/R0cKged1MCZ7/NRtwNicE3uKTbrQgXvB/oSBPC3OTVwLTFV6Em
-         cDgQ==
-X-Gm-Message-State: AOAM532yN4rnH+5CzJvEVvJzXBmZMCP9X3LH6VXVpCjnj8OHIaqs76+5
-        9g6ZeW75U8vpwbsAo4lEsbz2stU++z77HQ==
-X-Google-Smtp-Source: ABdhPJzYHJeYL4cKG1G4ja0goc702EwvDIt/NyPpJMLgZUDpZ9o4TUGSoI/uApB9b8L9616LwKmT6w==
-X-Received: by 2002:a17:902:7049:: with SMTP id h9mr4334023plt.121.1644321172817;
-        Tue, 08 Feb 2022 03:52:52 -0800 (PST)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id ml19sm2789049pjb.52.2022.02.08.03.52.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Feb 2022 03:52:52 -0800 (PST)
-Message-ID: <319bd90e-5315-35c2-0d0c-32ced685a147@gmail.com>
-Date:   Tue, 8 Feb 2022 19:52:40 +0800
+        Tue, 8 Feb 2022 06:53:49 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9A1F2C03FEC0;
+        Tue,  8 Feb 2022 03:53:48 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 43C17ED1;
+        Tue,  8 Feb 2022 03:53:48 -0800 (PST)
+Received: from lpieralisi (e121166-lin.cambridge.arm.com [10.1.196.255])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 405EF3F70D;
+        Tue,  8 Feb 2022 03:53:47 -0800 (PST)
+Date:   Tue, 8 Feb 2022 11:53:44 +0000
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     Kishon Vijay Abraham I <kishon@ti.com>, bhelgaas@google.com
+Cc:     Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 4/5] PCI: keystone: Add quirk to mark AM654 RC BAR
+ flag as IORESOURCE_UNSET
+Message-ID: <20220208115344.GB6233@lpieralisi>
+References: <20211126083119.16570-1-kishon@ti.com>
+ <20211126083119.16570-5-kishon@ti.com>
+ <20220104155741.GA28358@lpieralisi>
+ <f3a2c3f0-caf2-743c-a2f7-a99ea3ddb04f@ti.com>
+ <a07040ce-e043-22ac-2ee5-47a3bfdedd3b@ti.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.0
-Subject: Re: [PATCH kvm/queue v2 2/3] perf: x86/core: Add interface to query
- perfmon_event_map[] directly
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Jim Mattson <jmattson@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Like Xu <likexu@tencent.com>
-References: <20220117085307.93030-1-likexu@tencent.com>
- <20220117085307.93030-3-likexu@tencent.com>
- <20220202144308.GB20638@worktop.programming.kicks-ass.net>
-From:   Like Xu <like.xu.linux@gmail.com>
-Organization: Tencent
-In-Reply-To: <20220202144308.GB20638@worktop.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a07040ce-e043-22ac-2ee5-47a3bfdedd3b@ti.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/2/2022 10:43 pm, Peter Zijlstra wrote:
-> On Mon, Jan 17, 2022 at 04:53:06PM +0800, Like Xu wrote:
->> From: Like Xu <likexu@tencent.com>
->>
->> Currently, we have [intel|knc|p4|p6]_perfmon_event_map on the Intel
->> platforms and amd_[f17h]_perfmon_event_map on the AMD platforms.
->>
->> Early clumsy KVM code or other potential perf_event users may have
->> hard-coded these perfmon_maps (e.g., arch/x86/kvm/svm/pmu.c), so
->> it would not make sense to program a common hardware event based
->> on the generic "enum perf_hw_id" once the two tables do not match.
->>
->> Let's provide an interface for callers outside the perf subsystem to get
->> the counter config based on the perfmon_event_map currently in use,
->> and it also helps to save bytes.
->>
->> Cc: Peter Zijlstra <peterz@infradead.org>
->> Signed-off-by: Like Xu <likexu@tencent.com>
->> ---
->>   arch/x86/events/core.c            | 9 +++++++++
->>   arch/x86/include/asm/perf_event.h | 2 ++
->>   2 files changed, 11 insertions(+)
->>
->> diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
->> index 38b2c779146f..751048f4cc97 100644
->> --- a/arch/x86/events/core.c
->> +++ b/arch/x86/events/core.c
->> @@ -693,6 +693,15 @@ void x86_pmu_disable_all(void)
->>   	}
->>   }
->>   
->> +u64 perf_get_hw_event_config(int perf_hw_id)
->> +{
->> +	if (perf_hw_id < x86_pmu.max_events)
->> +		return x86_pmu.event_map(perf_hw_id);
->> +
->> +	return 0;
->> +}
+On Fri, Feb 04, 2022 at 08:38:46PM +0530, Kishon Vijay Abraham I wrote:
+> Hi Lorenzo,
 > 
-> Where does perf_hw_id come from? Does this need to be
-> array_index_nospec() ?
-
-A valid incoming parameter will be a member of the generic "enum perf_hw_id" table.
-
-If array_index_nospec() helps, how about:
-
-+u64 perf_get_hw_event_config(int hw_event)
-+{
-+	int max = x86_pmu.max_events;
-+
-+	if (hw_event < max)
-+		return x86_pmu.event_map(array_index_nospec(hw_event, max));
-+
-+	return 0;
-+}
-
+> On 11/01/22 11:53 am, Kishon Vijay Abraham I wrote:
+> > Hi Lorenzo,
+> > 
+> > On 04/01/22 9:27 pm, Lorenzo Pieralisi wrote:
+> >> On Fri, Nov 26, 2021 at 02:01:18PM +0530, Kishon Vijay Abraham I wrote:
+> >>> AM654 RootComplex has a hard coded 64 bit BAR of size 1MB and also has
+> >>> both MSI and MSI-X capability in it's config space. If PCIEPORTBUS is
+> >>> enabled, it tries to configure MSI-X and msix_mask_all() adds about 10
+> >>> Second boot up delay when it tries to write to undefined location.
+> >>>
+> >>> Add quirk to mark AM654 RC BAR flag as IORESOURCE_UNSET so that
+> >>> msix_map_region() returns NULL for Root Complex and avoid un-desirable
+> >>> writes to MSI-X table.
+> >>
+> >> I don't think this is the right fix (it is not even a fix, just a
+> >> plaster to workaround an issue).
+> >>
+> >> What do you mean by "writing to an undefined location" ?
+> >>
+> >> What does "a hard coded BAR" mean ?
+> >>
+> >> What happens if we _rightly_ write into it (ie to size it) ?
+> > 
+> > There are two parts w.r.t setting the BAR; one is during the configuration and
+> > the other is during the enumeration.
+> > i) During the configuration, the size of the BAR is configured and the inbound
+> > ATU is configured to map the BAR to a physical memory.
+> > ii) During the enumeration, the size of the BAR is obtained and an address is
+> > allocated and programmed in the BAR.
+> > 
+> > In the case of RC, for (i) above, the BAR size is configured as '0'
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/pci/controller/dwc/pcie-designware-host.c#n556
+> > and the inbound ATU is not programmed at all.
+> > 
+> > However, in the case of AM654, the HW configures BAR0 for a fixed size of 1MB
+> > (irrespective of what SW programmed in [i]). While this was done more for a
+> > endpoint usecase, since the same IP is configured for both RC mode and EP mode,
+> > the fixed BAR size is seen with RC mode as well. AM654 also has MSI-X capability
+> > for RC mode (the IP should have been ideally configured to have MSI-X capability
+> > for EP mode). This results in PCIEPORTBUS doing some undesired access in
+> > msix_mask_all().
+> > 
+> > Here I configure IORESOURCE_UNSET so that memory is not allocated for RC BAR.
 > 
->> +EXPORT_SYMBOL_GPL(perf_get_hw_event_config);
-> 
-> Urgh... hate on kvm being a module again. We really need something like
-> EXPORT_SYMBOL_KVM() or something.
+> Do you need further clarifications on this?
 
-As opposed to maintaining the obsolete {intel|amd}_event_mapping[] in the out 
-context of perf,
-a more appropriate method is to set up the table in the KVM through the new perf 
-interface.
+There are two things here:
 
-Well, I probably need Paolo's clarity to trigger more changes, whether it's 
-introducing EXPORT_SYMBOL_KVM or a built-in KVM as a necessary prerequisite for 
-vPMU.
+1) As Rob mentioned, you can write it as a quirk applying only to the
+   bridge _only_
+2) What you want is that the BAR should not be visible to the OS since
+   it is not an actual resource. What I am questioning is whether your
+   way of doing that complies with how this is done in the kernel for
+   other devices/bridges. I need Bjorn's input on this since he knows
+   better (especially wrt IORESOURCE_UNSET usage). I don't want to add
+   any other IORESOURCE_UNSET usage that deviates from what's expected
+   from it
 
-> 
-> 
->>   struct perf_guest_switch_msr *perf_guest_get_msrs(int *nr)
->>   {
->>   	return static_call(x86_pmu_guest_get_msrs)(nr);
->> diff --git a/arch/x86/include/asm/perf_event.h b/arch/x86/include/asm/perf_event.h
->> index 8fc1b5003713..d1e325517b74 100644
->> --- a/arch/x86/include/asm/perf_event.h
->> +++ b/arch/x86/include/asm/perf_event.h
->> @@ -492,9 +492,11 @@ static inline void perf_check_microcode(void) { }
->>   
->>   #if defined(CONFIG_PERF_EVENTS) && defined(CONFIG_CPU_SUP_INTEL)
->>   extern struct perf_guest_switch_msr *perf_guest_get_msrs(int *nr);
->> +extern u64 perf_get_hw_event_config(int perf_hw_id);
->>   extern int x86_perf_get_lbr(struct x86_pmu_lbr *lbr);
->>   #else
->>   struct perf_guest_switch_msr *perf_guest_get_msrs(int *nr);
->> +u64 perf_get_hw_event_config(int perf_hw_id);
-> 
-> I think Paolo already spotted this one.
+Lorenzo
 
-Indeed, I will apply it.
-
-> 
->>   static inline int x86_perf_get_lbr(struct x86_pmu_lbr *lbr)
->>   {
->>   	return -1;
->> -- 
->> 2.33.1
->>
+> > 
+> >>
+> >> Lorenzo
+> >>
+> >>> Signed-off-by: Kishon Vijay Abraham I <kishon@ti.com>
+> >>> ---
+> >>>  drivers/pci/controller/dwc/pci-keystone.c | 8 +++++++-
+> >>>  1 file changed, 7 insertions(+), 1 deletion(-)
+> >>>
+> >>> diff --git a/drivers/pci/controller/dwc/pci-keystone.c b/drivers/pci/controller/dwc/pci-keystone.c
+> >>> index 52d20fe17ee9..73e6626a0d8f 100644
+> >>> --- a/drivers/pci/controller/dwc/pci-keystone.c
+> >>> +++ b/drivers/pci/controller/dwc/pci-keystone.c
+> >>> @@ -557,8 +557,14 @@ static void ks_pcie_quirk(struct pci_dev *dev)
+> >>>  		{ 0, },
+> >>>  	};
+> >>>  
+> >>> -	if (pci_is_root_bus(bus))
+> >>> +	if (pci_is_root_bus(bus)) {
+> >>>  		bridge = dev;
+> >>> +		if (pci_match_id(am6_pci_devids, bridge)) {
+> >>> +			struct resource *r = &dev->resource[0];
+> >>> +
+> >>> +			r->flags |= IORESOURCE_UNSET;
+> >>> +		}
+> >>> +	}
+> >>>  
+> >>>  	/* look for the host bridge */
+> >>>  	while (!pci_is_root_bus(bus)) {
+> >>> -- 
+> >>> 2.17.1
+> >>>

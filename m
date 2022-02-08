@@ -2,95 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBC0F4AE260
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 20:41:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DEF94AE262
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 20:41:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353788AbiBHTlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 14:41:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42264 "EHLO
+        id S1386191AbiBHTle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 14:41:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiBHTlP (ORCPT
+        with ESMTP id S1353806AbiBHTlb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 14:41:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4705DC0613CB
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 11:41:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 8 Feb 2022 14:41:31 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FF72C0612B8
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 11:41:30 -0800 (PST)
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D3762615EA
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 19:41:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4FB7C004E1;
-        Tue,  8 Feb 2022 19:41:12 +0000 (UTC)
-Date:   Tue, 8 Feb 2022 14:41:11 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     JaeSang Yoo <js.yoo.5b@gmail.com>
-Cc:     mingo@redhat.com, linux-kernel@vger.kernel.org,
-        JaeSang Yoo <jsyoo5b@gmail.com>
-Subject: Re: [PATCH v2] trace: param: fix tp_printk option related with
- tp_printk_stop_on_boot
-Message-ID: <20220208144111.6d5b5d2d@gandalf.local.home>
-In-Reply-To: <20220208163031.885332-1-jsyoo5b@gmail.com>
-References: <20220208163031.885332-1-jsyoo5b@gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id B86D23F1F0
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 19:41:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644349282;
+        bh=IBoZSDY+vh3MSwNsW1pxD5jmNE6UjfMq9hfqIrcXwOQ=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version;
+        b=K8L1CWA6+gQrk0r2BPB6naeEEC/px6HGeoPbk7cT9kbJS0aSaj2URSSPphSner+Fb
+         3wvHQxxCehPuZrpt9wnDXYama7HvoKVkwQOQtgTDr7defUeSnkOQSwK+DmptjJMomS
+         4PomZ6ZSyK4K4B/I4JVo/m8jXu4We4jUpPhuEEXVGHQVmwg7O4b34caE57woLgOKhj
+         +aEEw2JPgEIHdAJBAWxycfPcmgUIYnmiK3AW+nHm6mwp8tPSkGors4ei/JTcmGiqVc
+         kgMjGXPnpLZLN4k2mjkTQZOQK/xlP/BhvnbyYCWaT/qvgpMlnc0/mxuPBhLtz/nYXb
+         7EBCmzv+fBLqQ==
+Received: by mail-ej1-f71.google.com with SMTP id z26-20020a1709067e5a00b006cbe0628826so112726ejr.10
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 11:41:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IBoZSDY+vh3MSwNsW1pxD5jmNE6UjfMq9hfqIrcXwOQ=;
+        b=bxREl6d4jcuUxEtQNPEXi6g8mQjhh8qmQXe2WKFSOV2KwxvSDn5AvTJkEeG2o9JoSd
+         dDIgBo7NTsSGtrPlyAmwmAzjcUc+PoG04CQiKOXzJdrU60C5LMolMXE+slIVnDS8ctYj
+         8RWjQvdLafqfPqaRAHOZYQcBoSakS1fCc/Oc8tkfo+CCIgVdEuFxbChe2z49VaG0EpvQ
+         taDQpqyke+MNMvgSvjuuaziicy6Ku4pSsB8NvmYACTDh30TenN+goLjl0zbVU2C+6iXS
+         Ik/L9TGsMM9V5lVi3YNztH8gkBkkVgEzZVOlcYV+D/E3B8eev7ODG+g9xKUCuIITHHm3
+         zTkQ==
+X-Gm-Message-State: AOAM533/yeFAVS4dMbFqw746DnBDnoKSjrMx63BYwK8PGvKciJxaaKJY
+        BF0yxBzpWSe/pKjkzyET1cuN9kixZYjN0iHAk3mmUnELAH82TOckys0RMBz3VZg0B5FilooeJwn
+        FQYjiM9xMSvrdgGnUU8kqBnZbcY7QAti5VCm/GDvKdQ==
+X-Received: by 2002:a17:907:16a6:: with SMTP id hc38mr5142712ejc.291.1644349282205;
+        Tue, 08 Feb 2022 11:41:22 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzn9tSy823egnQ7yz9s8CuvfmblkNP8GroHvwF86v5BwqvI6RsmXBhjnUpUe0Qp6ywDYxQrXQ==
+X-Received: by 2002:a17:907:16a6:: with SMTP id hc38mr5142696ejc.291.1644349282019;
+        Tue, 08 Feb 2022 11:41:22 -0800 (PST)
+Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id k22sm3887085ejr.211.2022.02.08.11.41.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 11:41:21 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: soc: samsung: usi: refer to dtschema for children
+Date:   Tue,  8 Feb 2022 20:41:19 +0100
+Message-Id: <20220208194119.46022-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed,  9 Feb 2022 01:30:33 +0900
-JaeSang Yoo <js.yoo.5b@gmail.com> wrote:
+Explicitly reference the dtschema for USI children implementing specific
+serial protocol (I2C, SPI, UART).  The SPI schema is not yet accepted,
+so it will be provided later.
 
-> Kernel param "tp_printk_stop_on_boot" starts with "tp_printk" which is
-> the exact as the other kernel param "tp_printk".
-> In compile & build process, It may not guaranteed that
-> "tp_printk_stop_on_boot" always checked before "tp_printk".
-> (By swapping its __setup() macro order, it may not work as expected.)
-> Some kernel params which starts with other kernel params consider this
-> problem. See commit 745a600cf1a6 ("um: console: Ignore console= option")
-> or init/do_mounts.c:45 (setup function of "ro" kernel param)
-> 
-> Kernel param "tp_printk" can be handled with its value(0 or off) or
-> it can be handled without its value. (maybe it won't effect anything)
-> Fix setup function to ignore when the "tp_printk" becomes prefix of
-> other kernel param.
-> 
-> Signed-off-by: JaeSang Yoo <jsyoo5b@gmail.com>
-> ---
->  kernel/trace/trace.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-> index c860f582b078..5c8a28d74cf8 100644
-> --- a/kernel/trace/trace.c
-> +++ b/kernel/trace/trace.c
-> @@ -252,6 +252,8 @@ __setup("trace_clock=", set_trace_boot_clock);
->  
->  static int __init set_tracepoint_printk(char *str)
->  {
-> +	if (*str == '_')
-> +		return 0
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+---
+ .../bindings/soc/samsung/exynos-usi.yaml      | 19 +++++++++++--------
+ 1 file changed, 11 insertions(+), 8 deletions(-)
 
-Did you test this?
-
-Need a space here (besides the obvious bug).
-
-Also, it needs a comment above:
-
-	/* Ignore the tp_printk_stop_on_boot */
-	if (*str == '_')
-		return 0;
-
--- Steve
-
->  	if ((strcmp(str, "=0") != 0 && strcmp(str, "=off") != 0))
->  		tracepoint_printk = 1;
->  	return 1;
+diff --git a/Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml b/Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml
+index 58f2e9d8bb0e..f3aae7e0e2e6 100644
+--- a/Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml
++++ b/Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml
+@@ -18,11 +18,7 @@ description: |
+   selects which particular function will be used.
+ 
+   Refer to next bindings documentation for information on protocol subnodes that
+-  can exist under USI node:
+-
+-  [1] Documentation/devicetree/bindings/serial/samsung_uart.yaml
+-  [2] Documentation/devicetree/bindings/i2c/i2c-exynos5.txt
+-  [3] Documentation/devicetree/bindings/spi/spi-samsung.txt
++  can exist under USI node.
+ 
+ properties:
+   $nodename:
+@@ -75,10 +71,17 @@ properties:
+       This property is optional.
+ 
+ patternProperties:
+-  # All other properties should be child nodes
+-  "^(serial|spi|i2c)@[0-9a-f]+$":
++  "^i2c@[0-9a-f]+$":
++    $ref: /schemas/i2c/i2c-exynos5.yaml
++    description: Child node describing underlying I2C
++
++  "^serial@[0-9a-f]+$":
++    $ref: /schemas/serial/samsung_uart.yaml
++    description: Child node describing underlying UART/serial
++
++  "^spi@[0-9a-f]+$":
+     type: object
+-    description: Child node describing underlying USI serial protocol
++    description: Child node describing underlying SPI
+ 
+ required:
+   - compatible
+-- 
+2.32.0
 

@@ -2,146 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AEFF4ADA67
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 14:51:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F8574ADA6F
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 14:54:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376773AbiBHNvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 08:51:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45038 "EHLO
+        id S1354705AbiBHNyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 08:54:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233604AbiBHNvm (ORCPT
+        with ESMTP id S1350660AbiBHNyE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 08:51:42 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E4DFC03FECE
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 05:51:41 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id DEE1A1F387;
-        Tue,  8 Feb 2022 13:51:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1644328299; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KdBmHlpiWVoOGJrAAEL9T6nI45p+Xd30noXSDXWqouo=;
-        b=XfWeGKbvKx6pedZHAsn1NdiA7AYox4E41PKEamA/hgEiAcW3xIwQlj5qrchfieR/gW4T01
-        X2M138V1wLSeEPCyzgWBhpDuR7RzOUTOmuKKW+/uRhgunNC2IoB2OSqcSEHe4FQTtIYBMo
-        OQs3lKNKVuJ6YPdpmyLaB4ysNKau11o=
-Received: from suse.cz (unknown [10.100.216.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 59DA2A3B84;
-        Tue,  8 Feb 2022 13:51:39 +0000 (UTC)
-Date:   Tue, 8 Feb 2022 14:51:39 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Kees Cook <keescook@chromium.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH] vsprintf: Fix %pK with kptr_restrict == 0
-Message-ID: <YgJ1a0Mi0wEbr88C@alley>
-References: <d7cd39abc28f5e0e08faa8958f35cd929165084e.1643281806.git.christophe.leroy@csgroup.eu>
+        Tue, 8 Feb 2022 08:54:04 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08795C03FECE
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 05:54:03 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id s10so28296893wra.5
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 05:54:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4O7t+VO/eUKPV3zCNKFSbvq0Ljp3XWU8Qf/HjmcbkEc=;
+        b=gnx0wctQF0ZOrloVcj5vzxR/MoXGQ5grkToQFc0SpnV2toiN0RcEU0b0Joz5mj4Uz1
+         aoQNEtoZVQWUxi5PJcDDd+IJmgG3zUT40M1A6XASvbF1bwhM1Tyd+B7c5s4K+rgh3g1m
+         H0laAeLoROpuVYCKj2hPvYin3DylTSujPrm5M=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=4O7t+VO/eUKPV3zCNKFSbvq0Ljp3XWU8Qf/HjmcbkEc=;
+        b=gquPWl0/eZ9pl/b98ixtkQ9omWc4JGW3tFrlTWyjR5bGjD1qpgjumxT1JFmOfhV965
+         kydWqZB65r92dwWt4ri/Xwpd/Cta8+PjWL0h2vqd+J6VMyxO9OR+7CLACf4z/sP6oHRQ
+         ODnwoTYIqDIR5EAfytb2jeyI0Nk2NaCiq9Sp8GqSXGEmWmvT2jfTvpXtGjLGtJlTPRIP
+         H6SQx/pdre9zFy01h3aDyJts1CFnaYt9BtPKPfzZzn0ORhXjqh2X5cZs9muG0kENdpzM
+         WJXkQnEOWBo4HcZy1iDsFL/Sl9c0rT8UZiMbiLtgpbpTZN2n03ZDmS9VzeA3Nh6J/utS
+         s4qw==
+X-Gm-Message-State: AOAM533UygNk38XzlvhS0gHin/ULv2WqypduI36pwqUqHNDEDfYnCoTR
+        qrnW9WVqrx6lTaRKg7dlnrizcA==
+X-Google-Smtp-Source: ABdhPJwtMvoSlZ1zJLr+xk0DKI6HZ/HhJrH76WUKQbFlTNz3OgcD8QA8YxnqOWoVUYW/4bYjDOFLTg==
+X-Received: by 2002:adf:de12:: with SMTP id b18mr3660421wrm.293.1644328441602;
+        Tue, 08 Feb 2022 05:54:01 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id bg23sm2829083wmb.5.2022.02.08.05.54.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 05:54:00 -0800 (PST)
+Date:   Tue, 8 Feb 2022 14:53:59 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Sam Ravnborg <sam@ravnborg.org>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        linux-fbdev@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Du Cheng <ducheng2@gmail.com>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Claudio Suarez <cssk@net-c.es>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Vetter <daniel.vetter@intel.com>
+Subject: Re: [PATCH 13/21] fbcon: move more common code into fb_open()
+Message-ID: <YgJ19zts7nxCjGk5@phenom.ffwll.local>
+Mail-Followup-To: Sam Ravnborg <sam@ravnborg.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        linux-fbdev@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Du Cheng <ducheng2@gmail.com>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>, Claudio Suarez <cssk@net-c.es>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Vetter <daniel.vetter@intel.com>
+References: <20220131210552.482606-1-daniel.vetter@ffwll.ch>
+ <20220131210552.482606-14-daniel.vetter@ffwll.ch>
+ <Yf2AAx9rlIsh/h8I@ravnborg.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d7cd39abc28f5e0e08faa8958f35cd929165084e.1643281806.git.christophe.leroy@csgroup.eu>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <Yf2AAx9rlIsh/h8I@ravnborg.org>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adding Kees and Linus in Cc because it modifies %pK behavior.
-
-On Thu 2022-01-27 11:11:02, Christophe Leroy wrote:
-> Although kptr_restrict is set to 0 and the kernel is booted with
-> no_hash_pointers parameter, the content of /proc/vmallocinfo is
-> lacking the real addresses.
+On Fri, Feb 04, 2022 at 08:35:31PM +0100, Sam Ravnborg wrote:
+> On Mon, Jan 31, 2022 at 10:05:44PM +0100, Daniel Vetter wrote:
+> > No idea why con2fb_acquire_newinfo() initializes much less than
+> > fbcon_startup(), but so be it. From a quick look most of the
+> > un-initialized stuff should be fairly harmless, but who knows.
+> > 
+> > Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
+> > Cc: Daniel Vetter <daniel@ffwll.ch>
+> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Cc: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+> > Cc: Thomas Zimmermann <tzimmermann@suse.de>
+> > Cc: Claudio Suarez <cssk@net-c.es>
+> > Cc: Du Cheng <ducheng2@gmail.com>
+> > ---
+> >  drivers/video/fbdev/core/fbcon.c | 74 +++++++++++++-------------------
+> >  1 file changed, 31 insertions(+), 43 deletions(-)
+> > 
+> > diff --git a/drivers/video/fbdev/core/fbcon.c b/drivers/video/fbdev/core/fbcon.c
+> > index b83a5a77d8a8..5a3391ff038d 100644
+> > --- a/drivers/video/fbdev/core/fbcon.c
+> > +++ b/drivers/video/fbdev/core/fbcon.c
+> > @@ -680,8 +680,18 @@ static int fbcon_invalid_charcount(struct fb_info *info, unsigned charcount)
+> >  
+> >  #endif /* CONFIG_MISC_TILEBLITTING */
+> >  
+> > +static void fbcon_release(struct fb_info *info)
+> > +{
+> > +	if (info->fbops->fb_release)
+> > +		info->fbops->fb_release(info, 0);
+> > +
+> > +	module_put(info->fbops->owner);
+> > +}
+> > +
+> >  static int fbcon_open(struct fb_info *info)
+> >  {
+> > +	struct fbcon_ops *ops;
+> > +
+> >  	if (!try_module_get(info->fbops->owner))
+> >  		return -ENODEV;
+> >  
+> > @@ -691,19 +701,22 @@ static int fbcon_open(struct fb_info *info)
+> >  		return -ENODEV;
+> >  	}
+> >  
+> > -	return 0;
+> > -}
+> > +	ops = kzalloc(sizeof(struct fbcon_ops), GFP_KERNEL);
+> > +	if (!ops) {
+> > +		fbcon_release(info);
+> > +		return -ENOMEM;
+> > +	}
+> >  
+> > -static void fbcon_release(struct fb_info *info)
+> > -{
+> > -	if (info->fbops->fb_release)
+> > -		info->fbops->fb_release(info, 0);
+> > +	INIT_DELAYED_WORK(&ops->cursor_work, fb_flashcursor);
+> > +	ops->info = info;
+> > +	info->fbcon_par = ops;
+> > +	ops->cur_blink_jiffies = HZ / 5;
+> >  
+> > -	module_put(info->fbops->owner);
+> > +	return 0;
+> >  }
+> >  
+> >  static int con2fb_acquire_newinfo(struct vc_data *vc, struct fb_info *info,
+> > -				  int unit, int oldidx)
+> > +				  int unit)
+> >  {
+> >  	struct fbcon_ops *ops = NULL;
+> >  	int err;
+> > @@ -712,27 +725,10 @@ static int con2fb_acquire_newinfo(struct vc_data *vc, struct fb_info *info,
+> >  	if (err)
+> >  		return err;
+> >  
+> > -	if (!err) {
+> > -		ops = kzalloc(sizeof(struct fbcon_ops), GFP_KERNEL);
+> > -		if (!ops)
+> > -			err = -ENOMEM;
+> > -
+> > -		INIT_DELAYED_WORK(&ops->cursor_work, fb_flashcursor);
+> > -	}
+> > -
+> > -	if (!err) {
+> > -		ops->cur_blink_jiffies = HZ / 5;
+> > -		ops->info = info;
+> > -		info->fbcon_par = ops;
+> > -
+> > -		if (vc)
+> > -			set_blitting_type(vc, info);
+> > -	}
+> > +	ops = info->fbcon_par;
+> >  
+> > -	if (err) {
+> > -		con2fb_map[unit] = oldidx;
+> > -		fbcon_release(info);
+> > -	}
+> > +	if (vc)
+> > +		set_blitting_type(vc, info);
+> >  
+> >  	return err;
+> >  }
+> > @@ -840,9 +836,11 @@ static int set_con2fb_map(int unit, int newidx, int user)
+> >  
+> >  	found = search_fb_in_map(newidx);
+> >  
+> > -	con2fb_map[unit] = newidx;
+> > -	if (!err && !found)
+> > -		err = con2fb_acquire_newinfo(vc, info, unit, oldidx);
+> > +	if (!err && !found) {
+> > +		err = con2fb_acquire_newinfo(vc, info, unit);
+> > +		if (!err)
+> > +			con2fb_map[unit] = newidx;
+> > +	}
+> This looks like an unintentional change of functionality as con2fb_map[unit] is
+> only assigned when we do a con2fb_acquire_newinfo().
 > 
->   / # cat /proc/vmallocinfo
->   0x(ptrval)-0x(ptrval)    8192 load_module+0xc0c/0x2c0c pages=1 vmalloc
->   0x(ptrval)-0x(ptrval)   12288 start_kernel+0x4e0/0x690 pages=2 vmalloc
->   0x(ptrval)-0x(ptrval)   12288 start_kernel+0x4e0/0x690 pages=2 vmalloc
->   0x(ptrval)-0x(ptrval)    8192 _mpic_map_mmio.constprop.0+0x20/0x44 phys=0x80041000 ioremap
->   0x(ptrval)-0x(ptrval)   12288 _mpic_map_mmio.constprop.0+0x20/0x44 phys=0x80041000 ioremap
->     ...
+> Staring at the code I could not say it is wrong, but not nice to hide
+> the change in this patch.
+
+Nope, it's not an unintentional bugfix. The old con2fb_acquire_newinfo did
+reset con2fb_map to oldidx upon failure, which I've found to be a most
+bizarre calling convention. So this sorts this out.
+
+The reason I smashed this into the same patch is that I had to remove the
+fbcon_release call, and so the error handling in there looked even more
+funny. But I indeed failed to explain this all in the commit message.
+
+Ack with that explainer, or do you want me to split this out properly?
+-Daniel
+
 > 
-> According to the documentation for /proc/sys/kernel/, %pK is
-> equivalent to %p when kptr_restrict is set to 0.
-
-Good catch!
-
-BTW: The behavior is strange also when kptr_restrict == 1. It allways
-prints non-hashed pointers for user space adresses. It means that
-it is less restrictive than kptr_restrict == 0 by default when
-no_hash_pointers == 0. It is probably not a big deal but...
-
-
-> ---
->  lib/vsprintf.c | 10 ++++++----
->  1 file changed, 6 insertions(+), 4 deletions(-)
+> 	Sam
 > 
-> diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-> index 3b8129dd374c..9c60d6e1a0d6 100644
-> --- a/lib/vsprintf.c
-> +++ b/lib/vsprintf.c
-> @@ -857,6 +861,8 @@ char *restricted_pointer(char *buf, char *end, const void *ptr,
->  	switch (kptr_restrict) {
->  	case 0:
->  		/* Handle as %p, hash and do _not_ leak addresses. */
-> +		if (unlikely(no_hash_pointers))
-> +			break;
->  		return ptr_to_id(buf, end, ptr, spec);
+> 
+> >  
+> >  	/*
+> >  	 * If old fb is not mapped to any of the consoles,
+> > @@ -939,20 +937,10 @@ static const char *fbcon_startup(void)
+> >  	if (fbcon_open(info))
+> >  		return NULL;
+> >  
+> > -	ops = kzalloc(sizeof(struct fbcon_ops), GFP_KERNEL);
+> > -	if (!ops) {
+> > -		fbcon_release(info);
+> > -		return NULL;
+> > -	}
+> > -
+> > -	INIT_DELAYED_WORK(&ops->cursor_work, fb_flashcursor);
+> > -
+> > +	ops = info->fbcon_par;
+> >  	ops->currcon = -1;
+> >  	ops->graphics = 1;
+> >  	ops->cur_rotate = -1;
+> > -	ops->cur_blink_jiffies = HZ / 5;
+> > -	ops->info = info;
+> > -	info->fbcon_par = ops;
+> >  
+> >  	p->con_rotate = initial_rotation;
+> >  	if (p->con_rotate == -1)
+> > @@ -1022,7 +1010,7 @@ static void fbcon_init(struct vc_data *vc, int init)
+> >  		return;
+> >  
+> >  	if (!info->fbcon_par)
+> > -		con2fb_acquire_newinfo(vc, info, vc->vc_num, -1);
+> > +		con2fb_acquire_newinfo(vc, info, vc->vc_num);
+> >  
+> >  	/* If we are not the first console on this
+> >  	   fb, copy the font from that console */
+> > -- 
+> > 2.33.0
 
-This is a twisted duplication of the following code from pointer():
-
-static noinline_for_stack
-char *pointer(const char *fmt, char *buf, char *end, void *ptr,
-	      struct printf_spec spec)
-{
-[...]
-	/*
-	 * default is to _not_ leak addresses, so hash before printing,
-	 * unless no_hash_pointers is specified on the command line.
-	 */
-	if (unlikely(no_hash_pointers))
-		return pointer_string(buf, end, ptr, spec);
-	else
-		return ptr_to_id(buf, end, ptr, spec);
-}
-
-Instead, I would create:
-
-/*
- * default is to _not_ leak addresses, so hash before printing,
- * unless no_hash_pointers is specified on the command line.
- */
-static noinline_for_stack
-char *default_pointer(const char *fmt, char *buf, char *end, void *ptr,
-		      struct printf_spec spec) 
-{
-	if (unlikely(no_hash_pointers))
-		return pointer_string(buf, end, ptr, spec);
-
-	return ptr_to_id(buf, end, ptr, spec);
-}
-
-and use it in both hash_pointer() and pointer().
-
-And I would use is also for kptr_restrict == 1. But it probably
-should be done in a separate patch and should be acked by Kees.
-
-
->  	case 1: {
->  		const struct cred *cred;
-
-Best Regards,
-Petr
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

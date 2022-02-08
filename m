@@ -2,89 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 388124AD2D6
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 09:09:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4989C4AD2D3
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 09:09:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348908AbiBHIJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 03:09:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48948 "EHLO
+        id S1348864AbiBHIJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 03:09:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbiBHIJk (ORCPT
+        with ESMTP id S241872AbiBHIJQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 03:09:40 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 784A7C0401EF
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 00:09:40 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id v186so47709986ybg.1
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 00:09:40 -0800 (PST)
+        Tue, 8 Feb 2022 03:09:16 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4947EC0401F5
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 00:09:15 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id bg19-20020a05600c3c9300b0034565e837b6so445876wmb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 00:09:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DC5h5QPa2MMSD8jMuUZaOZTMv0rKCEv7tr+WwakctiM=;
-        b=UKt/5gqtEQEDR+I4jR//5bWv57hPVaW9KmAr8xHRshFW+V9PDSWkFrBE8Hyb8wlSkA
-         QQKQ+stzgyEgp5J4DyVY4bvPNBtHP4wSzJ6uJck+8cplu8GPkuIVWQ+Y8zm1xv27s0Zu
-         cR2ljgqob8w9EmBGVw0EdJVkId5N+xNPUHeADg5epuSLdcXTrW9Tqo5OcA22EaRu8U3K
-         l3cuLzKBbOc9GbQXk+h497gXyT6KtsqpW966ysKE5jotsGOXr7l3B+dKnggATk5GoyUy
-         KJOt1xwxzqYiEqEVIBRmXg0oLWnTj4m1q1+iR+FtOucXjtQu9GfhLJMBe3O/kYgazNfR
-         tnQg==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Ikw43MPriiIAbjOZjzCbDdxoeo6GLo0YMTk+PKI0AMQ=;
+        b=p/48KqgkBezydVHKW62KCOR7fRF5aZ8bJ7Vj5qZA5bfYwBfnfi9TKAhktIK8ngNClb
+         HmXxYBa+RRqFIgbmP7+d33LkGWz9h4oC/59oQNIl7VlFGfjxUx1LSE3MHaFJxL84QKt3
+         a8LJa58g9sCZZ8W6rYPptgncbvigRRvgAVtSi9cgoJjIPBuGbon+mI1cdPWcTkbYwmzB
+         ojnUD8kWvypHp1DQ/0WWidUrV7BU5FDPVrv+LnJxJ+xH75SetzXU5jleezoEmlfpjle8
+         Hyiqqhy7CaXehaLx7JMJcJdqGQhh2whEE2Wwa89I7tdsf4d/esyPXS2sNbaszS3h/AS9
+         iscA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DC5h5QPa2MMSD8jMuUZaOZTMv0rKCEv7tr+WwakctiM=;
-        b=OafxFoHz1oOiGrgQDdCEoRA3DqcwOJzSK/dFs/YnOhzM+gyEfjHmv1jeIlDJZfW4Q2
-         nt6qXaQCduRieqyHriWXIw+qG/OqrudoYxbi33yY4qKf7odG2lNlO7V+zxNdOL8fKY2K
-         h3KYeZk9mnHDW0DyGiDF+9Id4iqqfw6QqInny2vqCq4mHVxFAO0lyJckIs1vcYePUEZz
-         MYMb2aioWu/RzfU9lhE4hIpQi2H9ZI8IUWDS/DuF11gil5B6Nzn+pUoVq1/bcL+kGqlQ
-         4wUnoZdydDdmUN1DFzMMmvNJI1TEV8gGlRrml2M7KyEcgSx6lh4wIaVhyI3ZYeYoePEU
-         k56Q==
-X-Gm-Message-State: AOAM530ASzqYYA7W1DmwHpZhpvZfV3z47BFPr5rXfAl1urDsAK16cHTe
-        WKv9mDMrujXJlQ8tpqhqiuyUjLKGKsq9v6r1MBx2KA==
-X-Google-Smtp-Source: ABdhPJyFSmuR7M4HIJ31YSJoOUpobAKTBK69kzVotLKdLdB2NRipgBTZ2XLKWECEqSNiqnwAnFetqc4Ion8CCMp0OGY=
-X-Received: by 2002:a81:ad46:: with SMTP id l6mr3668263ywk.31.1644307779769;
- Tue, 08 Feb 2022 00:09:39 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Ikw43MPriiIAbjOZjzCbDdxoeo6GLo0YMTk+PKI0AMQ=;
+        b=Ypk2tHZgNihk30BdyojWPYo7Ih5tyBjT7fl/4Bx71O/+j41GrmItpC3L5OChg70pS0
+         cincnFb0z0SWG0i0ri7qH3vWtoEdujbBtbc3E3SdWh0spnMjXCJg6/0/fpozF2my3k7K
+         YVgx+QcLzTjjMpHMEEup6MBHTLCDXQTEcrGOTw/vXRHoPl4L5us3YweQohKmdEog5j2S
+         0hiCH1D8EfI3WlLAmHHrvjrzLrkSj9yVZjDOdei+xXkGWG35Dj5aNL8/CoHBlJwtGeEH
+         bXeaYIvUd+qhyAc/v1AoV0CIJZgDKzEQRi7F/hdQclM74iNE9iLB2Qb3Vo+5EduUlWFZ
+         tSdQ==
+X-Gm-Message-State: AOAM533OdixCYXa8QMseoBZv/IgX0y7IJBW9iK9PC4QhKl96MeBrn0px
+        4ItxYs44SJcUBMzJaIO7g7M=
+X-Google-Smtp-Source: ABdhPJzByC8Qgzyw0Yz/LNKRPF6ZW1JT1tyJHCxE+8t8cF66Tkwl/xvUXqulqoZqdB4rwwrF0+a8oQ==
+X-Received: by 2002:a05:600c:4f02:: with SMTP id l2mr21703wmq.115.1644307753769;
+        Tue, 08 Feb 2022 00:09:13 -0800 (PST)
+Received: from leap.localnet (host-95-245-2-16.retail.telecomitalia.it. [95.245.2.16])
+        by smtp.gmail.com with ESMTPSA id r2sm1840146wmq.0.2022.02.08.00.09.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 00:09:13 -0800 (PST)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        gregkh@linuxfoundation.org,
+        Leonardo Araujo <leonardo.aa88@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        Leonardo Araujo <leonardo.aa88@gmail.com>
+Subject: Re: [PATCH] Staging: r8188eu: core: 'associcated' may be misspelled - perhaps 'associated'?
+Date:   Tue, 08 Feb 2022 09:09:10 +0100
+Message-ID: <2122312.NgBsaNRSFp@leap>
+In-Reply-To: <20220207234210.26097-1-leonardo.aa88@gmail.com>
+References: <20220207234210.26097-1-leonardo.aa88@gmail.com>
 MIME-Version: 1.0
-References: <20220207063249.1833066-1-hch@lst.de> <20220207063249.1833066-5-hch@lst.de>
-In-Reply-To: <20220207063249.1833066-5-hch@lst.de>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Tue, 8 Feb 2022 16:09:03 +0800
-Message-ID: <CAMZfGtUqbU9VpCOA-9bdU6d1CoQ7n8D+26v4j79uLcH1uc5Q2w@mail.gmail.com>
-Subject: Re: [PATCH 4/8] mm: move free_devmap_managed_page to memremap.c
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Alistair Popple <apopple@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        nouveau@lists.freedesktop.org, nvdimm@lists.linux.dev,
-        Linux Memory Management List <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="ISO-8859-1"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 7, 2022 at 2:42 PM Christoph Hellwig <hch@lst.de> wrote:
->
-> free_devmap_managed_page has nothing to do with the code in swap.c,
-> move it to live with the rest of the code for devmap handling.
->
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
+On marted=EC 8 febbraio 2022 00:42:10 CET Leonardo Araujo wrote:
+> This patch fixes the following checkpatch.pl warning:
+>=20
+> CHECK: 'associcated' may be misspelled - perhaps 'associated'?
+>=20
+> Signed-off-by: Leonardo Araujo <leonardo.aa88@gmail.com>
+> ---
+>  drivers/staging/r8188eu/core/rtw_ap.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>=20
+"Staging: r8188eu: core: 'associated' may be misspelled - perhaps 'associat=
+ed'?"=20
+it's not the way patch subjects are created for inclusion in Linux.
 
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+Please follow what is clearly described in the "Philosophy of Linux kernel=
+=20
+patches" document at https://kernelnewbies.org/PatchPhilosophy...
 
-Thanks.
+"In patch descriptions and in the subject, it is common and preferable to u=
+se=20
+present-tense, imperative language. Write as if you are telling git what to=
+ do=20
+with your patch.".
+
+It's not my job to accept or reject patches for this subsystem and I don't =
+want=20
+to tell you what to write but, if I were you, I'd send a v2 with a subject =
+like=20
+"Fix misspelled word in comments" (or something else similar to this subjec=
+t).
+
+=46urthermore, please take note that the name of this subsystem is "staging=
+" (it=20
+is not "Staging").
+
+Decide by yourself whether or not the other two patches that you submitted =
+this=20
+morning have to be sent anew as v2 with due changes in the subjects.
+
+Regards,
+
+=46abio M. De Francesco =20
+
+
+
+
+

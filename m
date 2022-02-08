@@ -2,154 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FC1E4ADDD0
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 17:00:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D09484ADDD8
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 17:01:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382580AbiBHP7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 10:59:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38904 "EHLO
+        id S235290AbiBHQBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 11:01:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382495AbiBHP71 (ORCPT
+        with ESMTP id S1381165AbiBHQBQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 10:59:27 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A38C0613CA
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 07:59:24 -0800 (PST)
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id EB1C13F32B
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 15:59:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1644335962;
-        bh=GCejdhR+a/xBJu0EdDNmDz0h5nAc0bdug5YEZYD9D0o=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=d6dKpMYQ7SqpS6VioALkwrSX/7lH0jVSalazDnvVWhF4ZpEoixxyrA/mbodWQNFxw
-         bC16r3FexJ8wqrnnr7hd/yqQv1FS1G5ml4nZOeexf7hMGRwuhW2HWF567xxuJBmiPJ
-         dqbWBkpONGPWH24tHGJ8QMD6O9jtdUJcXzcBQ6rZAAEdelmY5sr+Bg0HYH3WRIMkKn
-         1otuQiX0zGw/LpPHHQblBqr50OAzBoTYmhlrjrA8Uf8kZs/1CcRruSVU1B7N4q5eFi
-         pbXWebr1t5dj9SoW08IVipWBoiUKeFEU8Kg4I2kY5ckW/zAoshtvBAcugabtWceZrZ
-         WX3wjj22etH/A==
-Received: by mail-ej1-f71.google.com with SMTP id ka12-20020a170907990c00b006c41c582397so4433899ejc.11
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 07:59:22 -0800 (PST)
+        Tue, 8 Feb 2022 11:01:16 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CF208C061579
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 08:01:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644336075;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=I1wYQcALmzzp3eC1Kv9MyB7va4H/QkIUUQ+lvknf2po=;
+        b=D6+v8o9Edw7YJtFKgWNsZ3A0EsrlWP7OTw3ayhqv+MWG5LG9jHVCoq3jHKOBmqViyeuLiq
+        TKrNCCChouc7uJO4bL9mD++mI3WwYH03V0BH7LzRf2kL1EK3DA5VeuSbhBnCQ/oxAxUsXg
+        ZUt8PRknK0CkElmD4eMQXlzcP/0137Q=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-27-O1p2V5o3OU2ptM5wxX8MqQ-1; Tue, 08 Feb 2022 11:01:14 -0500
+X-MC-Unique: O1p2V5o3OU2ptM5wxX8MqQ-1
+Received: by mail-qt1-f200.google.com with SMTP id s1-20020ac85ec1000000b002cf7c93d56dso13819065qtx.21
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 08:01:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=GCejdhR+a/xBJu0EdDNmDz0h5nAc0bdug5YEZYD9D0o=;
-        b=6avZ2Ob/gLA3NUsgCmqfwaZRKUxAduUWQXoxMAssFvB7nto5muRQeNur9H8HnDG2AB
-         NXSxEMlNTYSBkXefSAktpn8swpnyA61bTEJ4X6fsRt6waAzfdzz4HsZz4qPsazJjQfqY
-         0QAD/qvYTD95HPiit1mC3zIek4Snwzr2KJXR3/f8TV5vxR4lFE1UOWAzmn4wkirPxbd1
-         1Bis6pbHttiEA9XtCHKcKvE4Iicyl8tpsuYfXGTSHPt7d/BCc90drrJHUVdKJfni3Gb0
-         XWg+hVIzfJUspS/dAlkPiUTHMBYbbOuP9SexS7VLfr8m2lTfr6iHIk+REB7xCKbC+Fr5
-         WlLw==
-X-Gm-Message-State: AOAM533pmNnFuNBVS6Na7ZZkqDtc5N7rXBxC43YXbxx+YsfyCf/BFex3
-        sa3dL1w/PFWo1aSpSoiYjep9hqudFh84yQE50u/6TOpr3uF2jGN4kzKfZOU/27FY4upng22zE3r
-        O7ejTbQfbQHewcGbkY4Rb3OI3wEe2nztEuk8TPViqOQ==
-X-Received: by 2002:a17:907:60d0:: with SMTP id hv16mr4209716ejc.668.1644335962378;
-        Tue, 08 Feb 2022 07:59:22 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzzMWiC01ysSyAaBuDoWTE5s3bHip+jTOUASLhVK6NUfNE19TNoA/lCw7TRiHSeEzA5hH0AUg==
-X-Received: by 2002:a17:907:60d0:: with SMTP id hv16mr4209691ejc.668.1644335962134;
-        Tue, 08 Feb 2022 07:59:22 -0800 (PST)
-Received: from [192.168.0.94] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id q4sm4956884ejb.109.2022.02.08.07.59.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Feb 2022 07:59:21 -0800 (PST)
-Message-ID: <fea9a9b3-5e15-e177-a0ee-ac08fa2b91ab@canonical.com>
-Date:   Tue, 8 Feb 2022 16:59:20 +0100
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=I1wYQcALmzzp3eC1Kv9MyB7va4H/QkIUUQ+lvknf2po=;
+        b=5YoyepipBJ88JkvEeBew66RT2VpoqmApQuQkD9gA3sAsyjtAWvtEUfiH/jOmk/eVo+
+         KsyWUK8P4OXvLf78+cZvDRMOVQKfvNI+tRAxV4zoG+KNu3+x+jLw1wiy0lVnEJQ0cNxt
+         tZEq9oh8CnnO4XsULrq0HvrQvnl/PYibWOwKLmQHiTEtSjBYcN6ujy1AHK0x0BRnrY+o
+         zXQPQo8lgI3WRLnhIZdTaAChcoBeuRgOI5wmvNvQ5068oinU955y6O7k3u5Mc10aUNSY
+         E7mIcODNmTZw21CVH6b/Ww2NmuKMsEqlrUzxKWhPS5EiVeH85uuGQqqzVdhDqeoYmqUl
+         2Eew==
+X-Gm-Message-State: AOAM530liXi6Q/9UfWvTlxyoM2cggxSPTY/oQN42RUA8KSSTEk8ef1DW
+        LbFE5KRz/Yo6z3Ty3cTvpX3OTFaPTpXGg8jeOHGLErBPs7TSG1yUNX/UgADGcJhfRnmLf/ei3V2
+        LWvK6urByz/M28PrL5vbR21uw
+X-Received: by 2002:a05:6214:2402:: with SMTP id fv2mr3581322qvb.9.1644336073337;
+        Tue, 08 Feb 2022 08:01:13 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx9xYpQIzQXvKpdRdFAJVedmOkOWIXhZG1xIX9Mpv3pOBzgATnhlRQx/QiOqbkA6Pc8H2YY6w==
+X-Received: by 2002:a05:6214:2402:: with SMTP id fv2mr3581250qvb.9.1644336072750;
+        Tue, 08 Feb 2022 08:01:12 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-96-254.dyn.eolo.it. [146.241.96.254])
+        by smtp.gmail.com with ESMTPSA id b10sm7585437qtb.34.2022.02.08.08.01.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 08:01:12 -0800 (PST)
+Message-ID: <a62abfeb0c06bf8be7f4fa271e2bcdef9d86c550.camel@redhat.com>
+Subject: Re: [PATCH] net: fix wrong network header length
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Maciej =?UTF-8?Q?=C5=BBenczykowski?= <maze@google.com>,
+        Steffen Klassert <steffen.klassert@secunet.com>
+Cc:     Lina Wang <lina.wang@mediatek.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Linux NetDev <netdev@vger.kernel.org>,
+        Kernel hackers <linux-kernel@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Willem Bruijn <willemb@google.com>,
+        Eric Dumazet <edumazet@google.com>
+Date:   Tue, 08 Feb 2022 17:01:07 +0100
+In-Reply-To: <CANP3RGe8ko=18F2cr0_hVMKw99nhTyOCf4Rd_=SMiwBtQ7AmrQ@mail.gmail.com>
+References: <20220208025511.1019-1-lina.wang@mediatek.com>
+         <0300acca47b10384e6181516f32caddda043f3e4.camel@redhat.com>
+         <CANP3RGe8ko=18F2cr0_hVMKw99nhTyOCf4Rd_=SMiwBtQ7AmrQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 3/3] dt-bindings: crypto: Convert Atmel SHA to yaml
-Content-Language: en-US
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        herbert@gondor.apana.org.au
-Cc:     nicolas.ferre@microchip.com, claudiu.beznea@microchip.com,
-        alexandre.belloni@bootlin.com, linux-crypto@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kavyasree.kotagiri@microchip.com, devicetree@vger.kernel.org
-References: <20220208104918.226156-1-tudor.ambarus@microchip.com>
- <20220208104918.226156-4-tudor.ambarus@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220208104918.226156-4-tudor.ambarus@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/02/2022 11:49, Tudor Ambarus wrote:
-> Convert Atmel SHA documentation to yaml format. With the conversion the
-> clock and clock-names properties are made mandatory. The driver returns
-> -EINVAL if "sha_clk" is not found, reflect that in the bindings and make
-> the clock and clock-names properties mandatory. Update the example to
-> better describe how one should define the dt node.
++ Steffen
+On Tue, 2022-02-08 at 04:57 -0800, Maciej Żenczykowski wrote:
+> On Tue, Feb 8, 2022 at 12:25 AM Paolo Abeni <pabeni@redhat.com> wrote:
+> > 
+> > Hello,
+> > 
+> > On Tue, 2022-02-08 at 10:55 +0800, Lina Wang wrote:
+> > > When clatd starts with ebpf offloaing, and NETIF_F_GRO_FRAGLIST is enable,
+> > > several skbs are gathered in skb_shinfo(skb)->frag_list. The first skb's
+> > > ipv6 header will be changed to ipv4 after bpf_skb_proto_6_to_4,
+> > > network_header\transport_header\mac_header have been updated as ipv4 acts,
+> > > but other skbs in frag_list didnot update anything, just ipv6 packets.
+> > > 
+> > > udp_queue_rcv_skb will call skb_segment_list to traverse other skbs in
+> > > frag_list and make sure right udp payload is delivered to user space.
+> > > Unfortunately, other skbs in frag_list who are still ipv6 packets are
+> > > updated like the first skb and will have wrong transport header length.
+> > > 
+> > > e.g.before bpf_skb_proto_6_to_4,the first skb and other skbs in frag_list
+> > > has the same network_header(24)& transport_header(64), after
+> > > bpf_skb_proto_6_to_4, ipv6 protocol has been changed to ipv4, the first
+> > > skb's network_header is 44,transport_header is 64, other skbs in frag_list
+> > > didnot change.After skb_segment_list, the other skbs in frag_list has
+> > > different network_header(24) and transport_header(44), so there will be 20
+> > > bytes difference,that is difference between ipv6 header and ipv4 header.
+> > 
+> > > Actually, there are two solutions to fix it, one is traversing all skbs
+> > > and changing every skb header in bpf_skb_proto_6_to_4, the other is
+> > > modifying frag_list skb's header in skb_segment_list.
+> > 
+> > I don't think the above should be addressed into the GSO layer. The
+> > ebpf program is changing the GRO packet in arbitrary way violating the
+> > GSO packet constraint - arguably, it's corrupting the packet.
+> > 
+> > I think it would be better change the bpf_skb_proto_6_to_4() to
+> > properly handle FRAGLIST GSO packets.
+> > 
+> > If traversing the segments become too costly, you can try replacing
+> > GRO_FRAGLIST with GRO_UDP_FWD.
 > 
-> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-> ---
->  .../crypto/atmel,at91sam9g46-sha.yaml         | 59 +++++++++++++++++++
->  .../bindings/crypto/atmel-crypto.txt          | 25 --------
->  2 files changed, 59 insertions(+), 25 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-sha.yaml
->  delete mode 100644 Documentation/devicetree/bindings/crypto/atmel-crypto.txt
+> Yeah, I don't know...
 > 
-> diff --git a/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-sha.yaml b/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-sha.yaml
-> new file mode 100644
-> index 000000000000..e454f4468dc5
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-sha.yaml
-> @@ -0,0 +1,59 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/crypto/atmel,at91sam9g46-sha.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Atmel Secure Hash Algorithm (SHA) HW cryptographic accelerator
-> +
-> +maintainers:
-> +  - Tudor Ambarus <tudor.ambarus@microchip.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: atmel,at91sam9g46-sha
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  clock-names:
-> +    const: sha_clk
-> +
-> +  dmas:
-> +    maxItems: 1
-> +    description: TX DMA Channel
-> +
+> I've considered that we could perhaps fix the 6to4 helper, and 4to6 helper...
+> but then I think every *other* helper / code path that plays games
+> with the packet header needs fixing as well,
+> ie. everything dealing with encap/decap, vlan, etc..
+> 
+> At that point it seems to me like it's worth fixing here rather than
+> in all those other places.
+> 
+> In general it seems gro fraglist as implemented is just a bad idea...
+> Packets (and things we treat like packets) really should only have 1 header.
+> GRO fraglist - as implemented - violates this pretty fundamental assumption.
+> As such it seems to be on the gro fraglist implementation to deal with it.
+> That to me seems to mean it should be fixed here, and not elsewhere.
 
-One-item-description should work as well, so if you are going to resend:
+@Steffen: IIRC GRO_FRAGLIST was originally added to support some
+forwarding scenarios. Now we have GRO_UDP_FWD which should be quite
+comparable. I'm wondering if the latter feature addresses your use
+case, too.
 
-+  dmas:
-+    items:
-+      - description: TX DMA Channel
+If so, could we consider deprecating (and in a longer run, drop) the
+GRO_FRAGLIST feature? 
 
-but the code looks equivalent, so:
+Thanks!
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Paolo
 
-
-Best regards,
-Krzysztof

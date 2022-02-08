@@ -2,226 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A9874AE442
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:29:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D4924AE4AF
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:37:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386193AbiBHW3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 17:29:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51984 "EHLO
+        id S1387316AbiBHWbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 17:31:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386386AbiBHUU5 (ORCPT
+        with ESMTP id S1386395AbiBHUVd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 15:20:57 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B1CC0613CB;
-        Tue,  8 Feb 2022 12:20:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644351653; x=1675887653;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=vWwjJPHqpo4WC1y4/aAzAVE2rzMSHZvFTwkc+cNDZAQ=;
-  b=dxMXo+VYhARkSWvdO8qz8UzlmGfwWkcr4Qx1zCUrWkWJcZYjYfQuYHni
-   +vjdJ3TmTNbTQFsY1H13A7BH3ivd2sFJ+uSlqEOxYSWDpSPe45JtdkEOs
-   nQfx8PCt4nqtIK8PqBV8RKsXLQvar/U/IK//p5xBGIQEVExg5hjvPjssU
-   L0mVY8X7QRKozndCB54b5QLN8SJIBSVdKa+FOsglu5GEw5TI+gGUBfRxf
-   M4M0ZDNXB8lNPyjyIZnhpVkZvSv6efEOW4rNTAPZoMug54KhYks6E9x5U
-   HpEumPpq+pxx7jO8XclfTVs6NtTuc9fSHQ7ScJZ8ZbrFLq2PfuGVE949B
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="232610857"
-X-IronPort-AV: E=Sophos;i="5.88,353,1635231600"; 
-   d="scan'208";a="232610857"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 12:20:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,353,1635231600"; 
-   d="scan'208";a="771105441"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmsmga006.fm.intel.com with ESMTP; 08 Feb 2022 12:20:51 -0800
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 8 Feb 2022 12:20:50 -0800
-Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
- ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 8 Feb 2022 12:20:50 -0800
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20 via Frontend Transport; Tue, 8 Feb 2022 12:20:50 -0800
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (104.47.51.43) by
- edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.20; Tue, 8 Feb 2022 12:20:49 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UuBGGk7B/XrP6HzA+zcaK7NVVtZ9dKwvDPI61gmQuQ6/onxdAIFkEBjeo9P5+uwcWbMXdyE9iHbY6qNHBTsTkTruPZuw6QDjzten1kAOzFu2IxsnFPB7/bzZRm8+FbPJbg+s9Ow1R5QpyuKCHLc2rqXUXhhGC4+1mWnXwUbhLlAU7ErZG47t8stfZY+e1Le94JAWN5zZvVqtR08T9FjMkUfZKUMbpZdO5Rpfx+i5/23YUFQpGp6YDjgUfavSK0vmvK57/k1GdDWC+r9wj4FXA30H8pH7Rf/rC6cIhgSLAZYQvM4t/NryWO5NpoCLp36cdY5Hh89GScDeXVEw8lp7Lw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vWwjJPHqpo4WC1y4/aAzAVE2rzMSHZvFTwkc+cNDZAQ=;
- b=ew6XFmO/HoTNaSoEws9Rm8S1cKAqO6Zr99Gkg6IIe/D/zOMoDUIsHK4c9RbaglQay8I57GEFKnm1XmXHSYTK1qAjLIdbD/9Uosib/wlGwi5dhEOwCsaz915sw19nS/GOQZsDbV87Ngo1zvlzjVEXXz8GakmiZweijEXDK3xKsbOARKfoymOMTb/H1MkUXYUJDEV/eQkGN2vk86lFK0SFg+FuRBdTNfG5tmmln9jjxnRXu+HxzkMC2xOHtp4uA/mLpha6cjAazAX5+UJUOCLbbKw2HvDylNanRDhg47hBkTmsyik53asqSBIAnv3pXf21Bp3WDJ8/SqtkJXpDH2EItQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com (2603:10b6:300:24::14)
- by BL0PR11MB3058.namprd11.prod.outlook.com (2603:10b6:208:7b::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Tue, 8 Feb
- 2022 20:20:47 +0000
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::250a:7e8f:1f3d:de15]) by MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::250a:7e8f:1f3d:de15%4]) with mapi id 15.20.4951.019; Tue, 8 Feb 2022
- 20:20:46 +0000
-From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To:     "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kcc@google.com" <kcc@google.com>, "bp@alien8.de" <bp@alien8.de>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "arnd@arndb.de" <arnd@arndb.de>,
-        "Moreira, Joao" <joao.moreira@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "Dave.Martin@arm.com" <Dave.Martin@arm.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>
-CC:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH 02/35] x86/cet/shstk: Add Kconfig option for Shadow Stack
-Thread-Topic: [PATCH 02/35] x86/cet/shstk: Add Kconfig option for Shadow Stack
-Thread-Index: AQHYFh9oqWuEZjX+PEO8VnQiZDqsKKyIuwSAgACn9gCAAMN6AA==
-Date:   Tue, 8 Feb 2022 20:20:46 +0000
-Message-ID: <89283631b471b3f77c5ccca682e45f35484975c2.camel@intel.com>
-References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
-         <20220130211838.8382-3-rick.p.edgecombe@intel.com>
-         <248ef880-025d-54ce-f3ce-fed0e50a0445@intel.com> <87sfstvjh9.ffs@tglx>
-In-Reply-To: <87sfstvjh9.ffs@tglx>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 2827d407-b814-4827-4196-08d9eb407dbd
-x-ms-traffictypediagnostic: BL0PR11MB3058:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-microsoft-antispam-prvs: <BL0PR11MB305800E4C601929DFBCF5E9BC92D9@BL0PR11MB3058.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: cfugNZG2PoBkjHSCd4CwjOeeBTzoWSSa11AChK9nBL2fY2HV1vDXjr3A/LawaHX2Z8l/H/F1VjmwkDLPRflnzEkwbB2KLyuk6m4FeLpMbsdHREyhSa8uLcgZfiewMflEbuCPLDnTu66j9kwH6P/NoFJ5RJ/XSy+0QsyMIlVTHZlZKe3lnmqdtNwJAP5FMQ5qvCZtAqJZTnehV9RgBCJOIrC5N/SjU52AbW8luc2s5R/s3AFH/7mjN56B03THfdUETE9TykdOrud9crIsaFhvCm+28beboh4kvC040O7rdjUZUKKA3CErH2TWtoyoGcurL8wmExOevcz/J0NV94Cnp0ews5z1Z4l+GMjqarlqN3a0tZGO87stjfweW8bwReoMeWlASIBgWrd3hNh1kSjX+zjW63WTw6Zy+HE/BcQZrVXiMa9cKUyR9hYqKvqUAFJ0rsf0VnfiX51fkJRMqkrCKtta/gEXw2t0QcbrWNDafG3+Ji0dQcEDpiMqKuwwLHNUTYxJO0ihfMfNbH2nghUXPLpKJWVnkpb9h/YD/C8K+7unckSAUbrBXrxlWe6UZ1GaMfjUXe7gYGr156TmdfMuNfMRCyiamDgrGOUl5jLMK5RhVIAQq081NYVEtppgChmGE3VE8fN8sFfwbWXtshpFzDv5hJn6hLV6FhRRsJFSd32ZzaBy0l8bAHZIbAd/Hr0kizlg68V/rw7CtmaZ72SJx9noFawdOcAPMtbhsH7KnIdhPSvl/xKnIM3T/u79jRVG
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(82960400001)(66446008)(66946007)(921005)(71200400001)(26005)(76116006)(83380400001)(6486002)(186003)(5660300002)(66476007)(66556008)(38070700005)(64756008)(38100700002)(8676002)(8936002)(2906002)(6506007)(36756003)(508600001)(7416002)(86362001)(316002)(122000001)(4326008)(110136005)(2616005)(6512007)(53546011)(7406005)(99106002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Q1ZBNlpkT1RZaVFDSStQZ2JNT01TaGl6dnBpdXNVb0YzdHhtY1dYRElDTm1R?=
- =?utf-8?B?bXJ2MHpXdmV0anhkWnhQbUo1eFBVUUlBQXZQU0JSS0FBQzRyeHF0L0ZRQi9S?=
- =?utf-8?B?YkNINWRlVzkxdlpMZitrZFQwTW9WRVBkcW1RSnh0cWlHZ3FmOG8vcnFUVHZw?=
- =?utf-8?B?WHQ5cFV2UDlkQ2dsamFQR1o0VlE2QVRoYjdNemhYS1dmczJKRmF2MkNjTGw1?=
- =?utf-8?B?WnBmRVJ2RjZjbGJGenRvVlloMUdEY3hLMWpWVWJSSDNCRU1EVzlCZlN2VlRt?=
- =?utf-8?B?YnRtdkdVNHMxR2VmQW9NS21abFRoaGcxS3VNK3VXWGZwbjVSWEZJRE9XVWFY?=
- =?utf-8?B?THlkd3JXUytzQk9pK2FxNGJCWHNaTUZaRzJXUGRSN1M5OXVET1BRRFp3NGUz?=
- =?utf-8?B?S05lYlBrZG1objFZQVpXVmJBaVU4U3FKNVJlNERZRlZXV3lWVEZwSW9WNyt5?=
- =?utf-8?B?SUlqeU1WVkRzVGhiRVlxZGR6TmtpcEcxazM2YXk3NFRsaDJsSCt4WnkrekJi?=
- =?utf-8?B?bGhQVmF2NEppSkUzM2xQVmd1UFVtNDE1M294NEd5ZXA5WElzWGk4TU1TWHEx?=
- =?utf-8?B?K2ZLeXJrbDI1L2g0UXhBODlZTzhJUGhRYzEvendSL0tGVnkrOThaUzVkY0dv?=
- =?utf-8?B?NEU2aVhjSEEwOGw3NnNZZ2p3Uk9tR2h4L25HYjlsRnlzS1dMWWQyVEZDUnZs?=
- =?utf-8?B?bC9PaUdMOUhHcnhaUy8zakd4bEZsWEgyU2xlQ3NlTTNhdEhJbVdObW84am5i?=
- =?utf-8?B?dDdiU1pwSlZvNi96TmJiek5ZMGhadW1ZL3A4NFR1YWxJa0F4TmNuN2RhN2V4?=
- =?utf-8?B?dGorSUszTHl1dVJranJEOHRXNTVpdkhUajU2YmhnUFpySU5oMXVWQytaRkdX?=
- =?utf-8?B?NVN1YXpmNGZTQXFETFRKRDh4djlHTEJxWjM4V1lycVQ3Y056aUxhSkpuZWk3?=
- =?utf-8?B?NzJ6aCt1eTFYSlJOM20wdUFjbFZ3UnNDMFlMOStIcnBiMUFCQS9BdXRvV0d5?=
- =?utf-8?B?S3I1Nm1jbEVqellra1NhZXZyeVVIWVZ3U2o4RXA4aytQQXhVdmd4aFdVTUIz?=
- =?utf-8?B?bXFuMVJqbHFvTzc2d1FKZkN5dk92dXo3aVVDYk02aHRmRlMvbk96RXhpU01D?=
- =?utf-8?B?MkpSdW5kVlZQdDNtLzZrUm9SUkp5eHBEOW9MNFQzT1ZlbHo3azNhYk5NeUhY?=
- =?utf-8?B?V2Z6ME4rRE8ycGZmdGtQT2JIU1pGNW82dHNWMHpaSlk1N0NkSjNlY2xONm5s?=
- =?utf-8?B?bkdkL2hTRVZFNmVDbUNiQUZ1cEJyRjlZRjRnN3JBZEJSL0sxUldES1ZvTlRq?=
- =?utf-8?B?dC9KZmlwUVVSQUhJVU9CNXJwcUs1L2w5OEYxSXE2WEZhOU92Nk85dlk0d1dB?=
- =?utf-8?B?NGZ0Q0FRallhTU16VlMzSHpObExLNlhrZzZEaExZRmtmSVZhS0hXR0ZDSmVu?=
- =?utf-8?B?R3ZwWjl5UllJMndncFNNWHpndVc0d1Q4bjBsYWVZWENPMFhWN3FaQ3ZOS1pS?=
- =?utf-8?B?Y1dYWDJDMHFqTDJUQ1BsZUI0Zmk3NEdVelkydnVNRjhqK04wRXJvdDNnK0NJ?=
- =?utf-8?B?M1BRaEg2clJlUlBIZzYyTSsxV0FTRTdqdVBCVHppNnlKTkNna1ZOL2l3UW8r?=
- =?utf-8?B?RlBkclJuK1NGN2xsSFBobld3ZHJhVUxKVk5yQ1FJWjJKMUN4bGF1RDBGSzhH?=
- =?utf-8?B?ODYzYUdYUzdYVkx6UjNlN045bVdtUkFNdjdud3NXcEh3cjNKTi85ZW1DdmN5?=
- =?utf-8?B?VnlHdWNJMmlXbitBQWJKOEpqVzQ2WjQzYUVEUEIycXRENng2OTFHN21UNmU2?=
- =?utf-8?B?dGF1dVkzaVp4K2E2V1Vpc3RORVUzeE5ValRsOXNLcTFiSWFmN1VTTHdxYzNV?=
- =?utf-8?B?Yy9jTDd1SWZCV3dHYWF6YzROK2QvU25Dazd1eTFSNHEvWHVnOGdBbkVxL3dM?=
- =?utf-8?B?VU1PdTRoWjBmV2pzUGlpM3pCYjBralZzSmxhUSt6L0hSSjY3cnRzdFg4cG5T?=
- =?utf-8?B?TU9NamI0cDVwT0IvOVAyWEVvdHRKelBFOFZDL2FSc2t4a1MrZUxZMUlRY2pJ?=
- =?utf-8?B?M3VZTmp0ZngxbWtQSW4zaWwrMndpYUFUQjVjZmo5UTQ1Q1NaV2pBKzBxUTB4?=
- =?utf-8?B?Ylo0SU43ckhkRnFFQktrMXErRlR4dGdWOUI5MGxFdGdQd010aWlwMDhDeml1?=
- =?utf-8?B?Q1Q3OVdaek5YRGFuSk90bktHSEQ3dEcwT2hhSzZYWjR5emxRbit2ZmZRYTBU?=
- =?utf-8?Q?ZF1fCoUHL3pwDf/VQc/IldqebQJhw9Yx/ehPN6Lx9Y=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <6BC4108BE759E24A8879219E7B4BD0CF@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Tue, 8 Feb 2022 15:21:33 -0500
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6385C0612C1
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 12:21:31 -0800 (PST)
+Received: by mail-il1-f198.google.com with SMTP id s2-20020a056e021a0200b002b94aede929so12272199ild.12
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 12:21:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=TaQwE2DFiZTHkuTB9gFHxb0jFiUgExXwgy+A0Sjpojg=;
+        b=BrtioBTTL1OvqT803Rp/jQylt2cL5vKUFo+0wOyjjCjCXqROJnmZ7fJTN0zcgsxhQR
+         oW07LNaranbF+Khyei2WUtHNLcE2/Jf9dxnyZ3bNHl/f/SeFtBs6BeuBXkVuTzWwRGHn
+         +YI2f1tnP06EvGUF01lyjAEmu1UN2BEgQagcKSgtR1hjyZloAQNr2gnn7sPSnrH1gHcp
+         GbKwP7wxLGdqysoJSX5RW297I0NTI2yEHzONUwpdYFAlyjqKfBnEZmWO+/+dHqmEpJA5
+         6q+CsKHzmmbjmlnKH9Q95kFWYQBoVhDSxy43VVBYQvhihYejrsSaVuZ80iNz+q5JsnEL
+         QSsA==
+X-Gm-Message-State: AOAM533dH+NUkJIUbLm1VMfEHy8m6YSwvfJ9IW1oG+qAQNoMCTpxBdrk
+        yIapu/5Crqt69axvTavxlDuiqXq7pZz/CfgyLxoLgKvWz2XK
+X-Google-Smtp-Source: ABdhPJwAVRTcWd8gAG6rv+1tIP3j1Wp4NlKNx+pkGdIW2URUSM4oWubQcegGkCjTmblLU4xyteAIKdcNHVJ/vB1Anc0NCup1HmkG
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1392.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2827d407-b814-4827-4196-08d9eb407dbd
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Feb 2022 20:20:46.0718
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: LbdapZQir3L3tTtPKW0XVK0jvWUSD7Q+tv4E0emNJLnu8G4dxTpUi0YRI4JujK5s5DY7ifxNWJboG85wdzHqt47Qkb17nLJxgVEuFKaaYYw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR11MB3058
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a02:6f48:: with SMTP id b8mr3107880jae.9.1644351690964;
+ Tue, 08 Feb 2022 12:21:30 -0800 (PST)
+Date:   Tue, 08 Feb 2022 12:21:30 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006d045e05d78776f6@google.com>
+Subject: [syzbot] BUG: MAX_LOCK_DEPTH too low! (3)
+From:   syzbot <syzbot+4de3c0e8a263e1e499bc@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, davem@davemloft.net, guwen@linux.alibaba.com,
+        john.fastabend@gmail.com, kafai@fb.com, kgraul@linux.ibm.com,
+        kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVHVlLCAyMDIyLTAyLTA4IGF0IDA5OjQxICswMTAwLCBUaG9tYXMgR2xlaXhuZXIgd3JvdGU6
-DQo+IE9uIE1vbiwgRmViIDA3IDIwMjIgYXQgMTQ6MzksIERhdmUgSGFuc2VuIHdyb3RlOg0KPiAN
-Cj4gPiBPbiAxLzMwLzIyIDEzOjE4LCBSaWNrIEVkZ2Vjb21iZSB3cm90ZToNCj4gPiA+ICtjb25m
-aWcgWDg2X1NIQURPV19TVEFDSw0KPiA+ID4gKyAgICBwcm9tcHQgIkludGVsIFNoYWRvdyBTdGFj
-ayINCj4gPiA+ICsgICAgZGVmX2Jvb2wgbg0KPiA+ID4gKyAgICBkZXBlbmRzIG9uIEFTX1dSVVNT
-DQo+ID4gPiArICAgIGRlcGVuZHMgb24gQVJDSF9IQVNfU0hBRE9XX1NUQUNLDQo+ID4gPiArICAg
-IHNlbGVjdCBBUkNIX1VTRVNfSElHSF9WTUFfRkxBR1MNCj4gPiA+ICsgICAgaGVscA0KPiA+ID4g
-KyAgICAgIFNoYWRvdyBTdGFjayBwcm90ZWN0aW9uIGlzIGEgaGFyZHdhcmUgZmVhdHVyZSB0aGF0
-IGRldGVjdHMNCj4gPiA+IGZ1bmN0aW9uDQo+ID4gPiArICAgICAgcmV0dXJuIGFkZHJlc3MgY29y
-cnVwdGlvbi4gIFRoaXMgaGVscHMgbWl0aWdhdGUgUk9QDQo+ID4gPiBhdHRhY2tzLg0KPiA+ID4g
-KyAgICAgIEFwcGxpY2F0aW9ucyBtdXN0IGJlIGVuYWJsZWQgdG8gdXNlIGl0LCBhbmQgb2xkIHVz
-ZXJzcGFjZQ0KPiA+ID4gZG9lcyBub3QNCj4gPiA+ICsgICAgICBnZXQgcHJvdGVjdGlvbiAiZm9y
-IGZyZWUiLg0KPiA+ID4gKyAgICAgIFN1cHBvcnQgZm9yIHRoaXMgZmVhdHVyZSBpcyBwcmVzZW50
-IG9uIFRpZ2VyIExha2UgZmFtaWx5DQo+ID4gPiBvZg0KPiA+ID4gKyAgICAgIHByb2Nlc3NvcnMg
-cmVsZWFzZWQgaW4gMjAyMCBvciBsYXRlci4gIEVuYWJsaW5nIHRoaXMNCj4gPiA+IGZlYXR1cmUN
-Cj4gPiA+ICsgICAgICBpbmNyZWFzZXMga2VybmVsIHRleHQgc2l6ZSBieSAzLjcgS0IuDQo+ID4g
-DQo+ID4gSSBndWVzcyB0aGUgIjIwMjAiIGNvbW1lbnQgaXMgc3RpbGwgT0suICBCdXQsIGdpdmVu
-IHRoYXQgaXQncyBvbg0KPiA+IEFNRCBhbmQNCj4gPiBhIGNvdWxkIG9mIG90aGVyIEludGVsIG1v
-ZGVscywgbWF5YmUgd2Ugc2hvdWxkIGp1c3QgbGVhdmUgdGhpcyBhdDoNCj4gPiANCj4gPiAgICAg
-ICAgQ1BVcyBzdXBwb3J0aW5nIHNoYWRvdyBzdGFja3Mgd2VyZSBmaXJzdCByZWxlYXNlZCBpbiAy
-MDIwLg0KPiANCj4gWWVzLg0KPiANCj4gPiBJZiB3ZSBzYXkgYW55dGhpbmcuICBXZSBtb3N0bHkg
-d2FudCBmb2xrcyB0byBqdXN0IGdvIHJlYWQgdGhlDQo+ID4gZG9jdW1lbnRhdGlvbiBpZiB0aGV5
-IG5lZWRzIG1vcmUgZGV0YWlscy4NCj4gDQo+IEFsc28gdGhlIGtlcm5lbCB0ZXh0IHNpemUgaW5j
-cmVhc2UgYmx1cmIgaXMgcHJldHR5IHVzZWxlc3MgYXMgdGhhdCdzDQo+IGENCj4gbnVtYmVyIHdo
-aWNoIGlzIHdyb25nIGZyb20gZGF5IG9uZS4NCg0KTWFrZXMgc2Vuc2UuIFRoYW5rcy4NCg==
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    ed14fc7a79ab net: sparx5: Fix get_stat64 crash in tcpdump
+git tree:       net
+console output: https://syzkaller.appspot.com/x/log.txt?x=175bd324700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b4a89edfcc8f7c74
+dashboard link: https://syzkaller.appspot.com/bug?extid=4de3c0e8a263e1e499bc
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15f97334700000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16b54958700000
+
+The issue was bisected to:
+
+commit 341adeec9adad0874f29a0a1af35638207352a39
+Author: Wen Gu <guwen@linux.alibaba.com>
+Date:   Wed Jan 26 15:33:04 2022 +0000
+
+    net/smc: Forward wakeup to smc socket waitqueue after fallback
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=11c2637c700000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=13c2637c700000
+console output: https://syzkaller.appspot.com/x/log.txt?x=15c2637c700000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+4de3c0e8a263e1e499bc@syzkaller.appspotmail.com
+Fixes: 341adeec9ada ("net/smc: Forward wakeup to smc socket waitqueue after fallback")
+
+BUG: MAX_LOCK_DEPTH too low!
+turning off the locking correctness validator.
+depth: 48  max: 48!
+48 locks held by syz-executor417/3783:
+ #0: ffff888070db8810 (&sb->s_type->i_mutex_key#11){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:777 [inline]
+ #0: ffff888070db8810 (&sb->s_type->i_mutex_key#11){+.+.}-{3:3}, at: __sock_release+0x86/0x280 net/socket.c:649
+ #1: ffff88801d4f7578 (&smc->clcsock_release_lock){+.+.}-{3:3}, at: smc_clcsock_release+0x71/0xe0 net/smc/smc_close.c:30
+ #2: ffff8880739bc930 (k-sk_lock-AF_INET){+.+.}-{0:0}, at: lock_sock include/net/sock.h:1668 [inline]
+ #2: ffff8880739bc930 (k-sk_lock-AF_INET){+.+.}-{0:0}, at: tcp_close+0x1e/0xc0 net/ipv4/tcp.c:2921
+ #3: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #4: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #5: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #6: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #7: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #8: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #9: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #10: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #11: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #12: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #13: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #14: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #15: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #16: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #17: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #18: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #19: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #20: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #21: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #22: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #23: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #24: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #25: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #26: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #27: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #28: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #29: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #30: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #31: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #32: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #33: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #34: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #35: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #36: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #37: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #38: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #39: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #40: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #41: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #42: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #43: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #44: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #45: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #46: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
+ #47: ffff888070db8c58 (&ei->socket.wq.wait){..-.}-{2:2}, at: add_wait_queue+0x42/0x260 kernel/sched/wait.c:23
+INFO: lockdep is turned off.
+CPU: 0 PID: 3783 Comm: syz-executor417 Not tainted 5.17.0-rc2-syzkaller-00168-ged14fc7a79ab #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ __lock_acquire+0x18fd/0x5470 kernel/locking/lockdep.c:5045
+ lock_acquire kernel/locking/lockdep.c:5639 [inline]
+ lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5604
+ __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+ _raw_spin_lock_irqsave+0x39/0x50 kernel/locking/spinlock.c:162
+ add_wait_queue+0x42/0x260 kernel/sched/wait.c:23
+ smc_fback_forward_wakeup+0x15b/0x540 net/smc/af_smc.c:617
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
+ smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
+ sk_error_report+0x35/0x310 net/core/sock.c:340
+ tcp_disconnect+0x14e3/0x1e80 net/ipv4/tcp.c:3096
+ __tcp_close+0xe65/0x12b0 net/ipv4/tcp.c:2792
+ tcp_close+0x29/0xc0 net/ipv4/tcp.c:2922
+ inet_release+0x12e/0x280 net/ipv4/af_inet.c:428
+ __sock_release net/socket.c:650 [inline]
+ sock_release+0x87/0x1b0 net/socket.c:678
+ smc_clcsock_release+0xb3/0xe0 net/smc/smc_close.c:34
+ __smc_release+0x35e/0x5b0 net/smc/af_smc.c:172
+ smc_release+0x17f/0x530 net/smc/af_smc.c:209
+ __sock_release+0xcd/0x280 net/socket.c:650
+ sock_close+0x18/0x20 net/socket.c:1318
+ __fput+0x286/0x9f0 fs/file_table.c:311
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+ exit_task_work include/linux/task_work.h:32 [inline]
+ do_exit+0xb29/0x2a30 kernel/exit.c:806
+ do_group_exit+0xd2/0x2f0 kernel/exit.c:935
+ get_signal+0x4b0/0x28c0 kernel/signal.c:2862
+ arch_do_signal_or_restart+0x2a9/0x1c40 arch/x86/kernel/signal.c:868
+ handle_signal_work kernel/entry/common.c:148 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:172 [inline]
+ exit_to_user_mode_prepare+0x17d/0x290 kernel/entry/common.c:207
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
+ syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:300
+ do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f41e18579a9
+Code: Unable to access opcode bytes at RIP 0x7f41e185797f.
+RSP: 002b:00007f41e17e8318 EFLAGS: 00000246 ORIG_RAX: 00000000000000ca
+RAX: 0000000000000001 RBX: 00007f41e18df3f8 RCX: 00007f41e18579a9
+RDX: 00000000000f4240 RSI: 0000000000000081 RDI: 00007f41e18df3fc
+RBP: 00007f41e18df3f0 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f41e18ad074
+R13: 00007ffefdec9ecf R14: 00007f41e17e8400 R15: 0000000000022000
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

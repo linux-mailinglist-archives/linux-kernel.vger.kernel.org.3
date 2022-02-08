@@ -2,109 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEF644ADD71
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 16:49:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F2A34ADD75
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 16:49:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382007AbiBHPth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 10:49:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59046 "EHLO
+        id S1382041AbiBHPtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 10:49:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239907AbiBHPtg (ORCPT
+        with ESMTP id S239907AbiBHPtm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 10:49:36 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 779A9C061578;
-        Tue,  8 Feb 2022 07:49:35 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id z20so25077365ljo.6;
-        Tue, 08 Feb 2022 07:49:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=jKPmnUC6L/CUlDp8szM1YCCjQLDW+YvcV/DqXbymrLg=;
-        b=f2WRHXLNfJOh7sW/V4/7apwC9vEcqbQDCu5ThTHxAjbf0FymsK82Q4rw6gMCGa01gN
-         4xx/vbgf9yXx/k8BdfUkiUmlj5xJNFXdxj5q88rAbeuogtTBS346YPJA3qm+bMj+10+Z
-         f6SKGWmzAP5T1w/mDDMDJF1DmH/TQWBkMUZPesR9oqq7pjT0N8jmBvNpKe1UYmdPL1o7
-         XActh5t9D1lYngjG3RUaGgnbEtOaerM7QqSxam3phY2cZA0ndAI+5kV7lK376CJrYFCi
-         vQH9B2H88FpNZ4/GcRQBFqk5uzlxoBl1lXY1CzwkB62EdAMCqO0Xy/gSYDWFgWTcBj6+
-         uIcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=jKPmnUC6L/CUlDp8szM1YCCjQLDW+YvcV/DqXbymrLg=;
-        b=6FY9TNnMU+bUADO5mDVXJ9vAlmdCPhlO0Ho+UewK4hL8vuArb6vYyF1uSSmwOBD0cA
-         2ltCVF0HxK0HbC8COHEjp6xFaSKWMFU9C0cMObpVjXt6E0MQMfxHa3AxC42sYfGRhFAd
-         ig0TpfT2uUSSVgdNGOAcpqke6mRw2jORSXMi+s7bcywUKC0odfu0j4N8qK5A6jTy50lG
-         JZbWQ3JkrQZPKwK/THVBgiSsC1SYEBAiAufo9gfeeMnm+SJcjLAlZl91p6q35q3OAaO9
-         etbcdgQn3aLrA6KYNR+p7Zf8Xzvi76COu+q62+206pUkzW6QrBTmSYYBrB/Vev3XVZ5V
-         baBg==
-X-Gm-Message-State: AOAM532XioYVTJvmsJp2agnrZtVClhAhTauqy4UIfVD4TayIqxC1mBp9
-        vy5vMXcsYYFM3takcyRDWFY=
-X-Google-Smtp-Source: ABdhPJw9LiyrQQ/0AXcRsE2Qr2EzS8Azw2M1dHgg7XpBuggCxJhcctze5CShZpEVzzzPswRmRv3TDg==
-X-Received: by 2002:a2e:8495:: with SMTP id b21mr3126317ljh.89.1644335373825;
-        Tue, 08 Feb 2022 07:49:33 -0800 (PST)
-Received: from [192.168.1.11] ([94.103.224.201])
-        by smtp.gmail.com with ESMTPSA id v7sm2018844ljv.68.2022.02.08.07.49.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Feb 2022 07:49:33 -0800 (PST)
-Message-ID: <61f00e3c-06ea-20a6-4b76-2bddf986f074@gmail.com>
-Date:   Tue, 8 Feb 2022 18:49:28 +0300
+        Tue, 8 Feb 2022 10:49:42 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D84CAC061579;
+        Tue,  8 Feb 2022 07:49:41 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 8DD151F387;
+        Tue,  8 Feb 2022 15:49:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1644335380; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8/yyDEn0znQ6vifOgauLRJ+f9o0LDX3jTehpE1N4f20=;
+        b=Ro4MgiR/TGmj4CCeQCMWf17cLE+9KyA5BN8HX4zVOiUaZJXRsJbYjkp51BA7knZzVvhxA2
+        BDGx1eVq9xhduEnahtXAGEihTxzF9GOAE4YuwnL5+FDo8Nb9yj6DrL4gYXAxU5E9xBd0k2
+        1YQRTKZLYZ6Q+2HiTTVSIOV2BonaCO4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1644335380;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8/yyDEn0znQ6vifOgauLRJ+f9o0LDX3jTehpE1N4f20=;
+        b=Xm3DHaRJYBsMgGfeUBVrT0tXJtWekeqP6gXV0NAfVZebgnMqTO6/hqox1JpscH4nMuAN1M
+        rJSgsuQkjHb5baDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0B20D13CDC;
+        Tue,  8 Feb 2022 15:49:40 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id FKEUARSRAmKuMgAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Tue, 08 Feb 2022 15:49:40 +0000
+Date:   Tue, 8 Feb 2022 16:49:38 +0100
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Terry Bowman <terry.bowman@amd.com>
+Cc:     <linux@roeck-us.net>, <linux-watchdog@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, <wsa@kernel.org>,
+        <andy.shevchenko@gmail.com>, <rafael.j.wysocki@intel.com>,
+        <linux-kernel@vger.kernel.org>, <wim@linux-watchdog.org>,
+        <rrichter@amd.com>, <thomas.lendacky@amd.com>,
+        <sudheesh.mavila@amd.com>, <Nehal-bakulchandra.Shah@amd.com>,
+        <Basavaraj.Natikar@amd.com>, <Shyam-sundar.S-k@amd.com>,
+        <Mario.Limonciello@amd.com>
+Subject: Re: [PATCH v4 6/9] i2c: piix4: Add EFCH MMIO support to region
+ request and release
+Message-ID: <20220208164938.512abe51@endymion.delvare>
+In-Reply-To: <20220130184130.176646-7-terry.bowman@amd.com>
+References: <20220130184130.176646-1-terry.bowman@amd.com>
+        <20220130184130.176646-7-terry.bowman@amd.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 2/2] ath9k: htc: clean up *STAT_* macros
-Content-Language: en-US
-To:     =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@toke.dk>,
-        Jeff Johnson <quic_jjohnson@quicinc.com>,
-        ath9k-devel@qca.qualcomm.com, kvalo@kernel.org,
-        davem@davemloft.net, kuba@kernel.org, linville@tuxdriver.com
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <80962aae265995d1cdb724f5362c556d494c7566.1644265120.git.paskripkin@gmail.com>
- <28c83b99b8fea0115ad7fbda7cc93a86468ec50d.1644265120.git.paskripkin@gmail.com>
- <258ac12b-9ca3-9b24-30df-148f9df51582@quicinc.com> <87ee4d9xxe.fsf@toke.dk>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <87ee4d9xxe.fsf@toke.dk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Toke,
+Hi Terry,
 
-On 2/8/22 18:32, Toke Høiland-Jørgensen wrote:
->> It seems that these macros (both the original and the new) aren't 
->> following the guidance from the Coding Style which tells us under 
->> "Things to avoid when using macros" that we should avoid "macros that 
->> depend on having a local variable with a magic name". Wouldn't these 
->> macros be "better" is they included the hif_dev/priv as arguments rather 
->> than being "magic"?
+On Sun, 30 Jan 2022 12:41:27 -0600, Terry Bowman wrote:
+> EFCH cd6h/cd7h port I/O may no longer be available on later AMD
+> processors and it is recommended to use MMIO instead. Update the
+> request and release functions to support MMIO.
 > 
-> Hmm, yeah, that's a good point; looks like the non-HTC ath9k stats
-> macros have already been converted to take the container as a parameter,
-> so taking this opportunity to fix these macros is not a bad idea. While
-> we're at it, let's switch to the do{} while(0) syntax the other macros
-> are using instead of that weird usage of ?:. And there's not really any
-> reason for the duplication between ADD/INC either. So I'm thinking
-> something like:
+> MMIO request/release and mmapping require details during cleanup.
+> Add a MMIO configuration structure containing resource and vaddress
+> details for mapping the region, accessing the region, and releasing
+> the region.
 > 
-> #define __STAT_SAVE(_priv, _member, _n) do { if (_priv) (_priv)->_member += (_n); } while(0)
-> 
-> #define TX_STAT_ADD(_priv, _c, _a) __STAT_SAVE(_priv, debug.tx_stats._c, _a)
-> #define TX_STAT_INC(_priv, _c) TX_STAT_ADD(_priv, _c, 1)
-> 
+> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
+> ---
+>  drivers/i2c/busses/i2c-piix4.c | 61 ++++++++++++++++++++++++++++++----
+>  1 file changed, 55 insertions(+), 6 deletions(-)
+> (...)
+> @@ -880,6 +928,7 @@ static int piix4_add_adapter(struct pci_dev *dev, unsigned short smba,
+>  		return -ENOMEM;
+>  	}
+>  
+> +	adapdata->mmio_cfg.use_mmio = 0;
 
-Good point, thank you. Will redo these macros in v4
+Useless initialization, as the adapdata structure has just been zalloc'd.
+
+>  	adapdata->smba = smba;
+>  	adapdata->sb800_main = sb800_main;
+>  	adapdata->port = port << piix4_port_shift_sb800;
 
 
-With regards,
-Pavel Skripkin
+-- 
+Jean Delvare
+SUSE L3 Support

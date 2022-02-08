@@ -2,102 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D945C4AE162
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 19:48:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2C284AE165
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 19:49:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385481AbiBHSsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 13:48:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43232 "EHLO
+        id S1385439AbiBHSr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 13:47:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385472AbiBHSs3 (ORCPT
+        with ESMTP id S1385423AbiBHSrv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 13:48:29 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F95DC0612C2
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 10:48:28 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id y17so121347plg.7
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 10:48:28 -0800 (PST)
+        Tue, 8 Feb 2022 13:47:51 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2839BC0612C0
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 10:47:49 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id cn6so279017edb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 10:47:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=3nJw75yUn0Ak2LbjP8FDSUKGk9cBjMNSHZr8K3rv/n8=;
-        b=Kcc50LqTHuQIYf273mHplhXaUKkVZo5PUBRoSWfRcf58iiGQ2BqdIdG45EwyPs1uXs
-         CAAbXNkEd2gr6pK4HN7DiQh4qUIHHNlorxb+wH1BXIOdeK6oQxUKyLl5QTwejhLKNtmR
-         CteLOdhUCS5CWbC0mzNmxIdXJAHtmnBxfT90k=
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6mUKs8mr76hd0MFknp8EWX6G4mUT2iT6oVgdRjhWDVQ=;
+        b=AW0ZMG08jE40Og2RDKzb836NI3DmQ5Nu2DfyA7c1/xy506HgYpHJVANCQ/2zAYYrYb
+         5xvgX0ZI55zcLmwGg+ahNT13LuSAFFh8qo/mDDMm4qR8AggnjS+lDT2shOluS0uXzumN
+         hezE1macEKIORPLttPi6sYf8/psKfsFsO+QFk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=3nJw75yUn0Ak2LbjP8FDSUKGk9cBjMNSHZr8K3rv/n8=;
-        b=vo8E//jxoAnG+SOHjuTzR/ka2ICwpmXEmvCTE5P9GXxlSV4e8ldlbDhF9qa5M3Nzg1
-         F5WrVxeId0TbupCKC38E0xv6WKZnUw9XImPiOJx7w+Xh136kq4JpA8AXDDWE/BKVglPg
-         2Kuo1KgUZq8u374Q7jEStxbr5ybTjtpni+etGqn/fdAh4nn7qx+GDEv2CKuREiGSBK23
-         WgyalZI2ZeD/FsJtZvZFZ8FZwCdlsZ7cQ7hyxrIAltJwJ4eUWPM7+LcLjM4jwy+4n5Du
-         89sXVIYA2VHLXvpiDDqYk2VYvR4GE+BRfZUrJdFAlEj7XL2ydc7gbVZWUjMYciXZxKNV
-         b2QA==
-X-Gm-Message-State: AOAM532ngBi9hOgsUbedftC8B28vNt8JoxNihjJxRl3oqZOggVHam5jR
-        WML7zhcUINRnVhPSZ0vB23h/0LgDMfqG4Q==
-X-Google-Smtp-Source: ABdhPJzUwlOAtGq+Y2cBB0fnuRDAYTc8P/abuAm1YmIdSlVd7T3zol+qZiMELS+dYrh3y9do6LWUBA==
-X-Received: by 2002:a17:90b:4c91:: with SMTP id my17mr2870441pjb.121.1644346107948;
-        Tue, 08 Feb 2022 10:48:27 -0800 (PST)
-Received: from pmalani.c.googlers.com.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id gk15sm3594453pjb.3.2022.02.08.10.48.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 10:48:27 -0800 (PST)
-From:   Prashant Malani <pmalani@chromium.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Prashant Malani <pmalani@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        chrome-platform@lists.linux.dev (open list:CHROMEOS EC USB TYPE-C
-        DRIVER)
-Subject: [PATCH v2 4/4] platform/chrome: cros_ec_typec: Update mux flags during partner removal
-Date:   Tue,  8 Feb 2022 18:47:24 +0000
-Message-Id: <20220208184721.1697194-5-pmalani@chromium.org>
-X-Mailer: git-send-email 2.35.0.263.gb82422642f-goog
-In-Reply-To: <20220208184721.1697194-1-pmalani@chromium.org>
-References: <20220208184721.1697194-1-pmalani@chromium.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6mUKs8mr76hd0MFknp8EWX6G4mUT2iT6oVgdRjhWDVQ=;
+        b=TDc+i5XG7itg9edQXj0NfPRA44BL+WxJNOhdbOWceZnhGC0NidM3yconlJ+Y1rO18E
+         vMTWaX556G0Py7QnemLpA42YLAOg8AfwIkyLz5nB36XYIdqt4zojgLzKDUPvFjMpXiE4
+         LNCUKNXbgiLN+dpvvYt9R5L9k9M6fBezIgM3yt1Mfd0B/ktoCIFRobLJBe1sY1fao5gc
+         OuDy/cyhsQLR8zxFd/k3hgl/PqowECSj0xq97gha5qJBLm4ifiSnXLwOa1lnVsEdnZVJ
+         ptgtjHbU/ETsZ+DzyRBg/RNg0rxYVvHAwOStL2V+BCh+e7olcGxP0DAafQ57RKghhPbq
+         Zoxg==
+X-Gm-Message-State: AOAM533KavJQhlg22YHpNggGs7/Yl9IA3NEgCGBldf4iJFLGqvdgsO83
+        9O2yw3Z3pIa/17kdFjfgdI9/gQMF8+9JGgAa
+X-Google-Smtp-Source: ABdhPJz9lsO8lrif2mHMAqCKB22bmc9FthRdcECpz30/tZVspoGvxIEH8RK+ZR6zkWVVOkyNBG40uA==
+X-Received: by 2002:a05:6402:26ce:: with SMTP id x14mr5875613edd.211.1644346067574;
+        Tue, 08 Feb 2022 10:47:47 -0800 (PST)
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com. [209.85.221.49])
+        by smtp.gmail.com with ESMTPSA id z2sm3391827ejr.68.2022.02.08.10.47.46
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Feb 2022 10:47:46 -0800 (PST)
+Received: by mail-wr1-f49.google.com with SMTP id q7so4269220wrc.13
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 10:47:46 -0800 (PST)
+X-Received: by 2002:adf:f90c:: with SMTP id b12mr4520200wrr.97.1644346066360;
+ Tue, 08 Feb 2022 10:47:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220208150625.374191-1-Jason@zx2c4.com>
+In-Reply-To: <20220208150625.374191-1-Jason@zx2c4.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 8 Feb 2022 10:47:29 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wi3fRiQXynJrLvaD5DDqF0MzgX1xSGFSJS_2frwXT1E5Q@mail.gmail.com>
+Message-ID: <CAHk-=wi3fRiQXynJrLvaD5DDqF0MzgX1xSGFSJS_2frwXT1E5Q@mail.gmail.com>
+Subject: Re: [GIT PULL] random number generator fixes for 5.17-rc4
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In cros_typec_remove_partner(), we call
-cros_typec_usb_disconnect_state() which sets the switches/muxes to be in
-a disconnected state. This also happens in cros_typec_configure_mux().
-However, unlike there, here the mux_flags variable hasn't been updated
-to reflect that a disconnection has occurred. Update the flag here
-accordingly.
+On Tue, Feb 8, 2022 at 7:07 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>
+> Given that these fixes are for a security issue (albeit a probably relatively
+> low grade one), sending this mid-cycle feels like the "responsible" thing to
+> do, and 5.17 will resultantly have a more secure RNG. However, I also would
+> understand that, diffstat not withstanding, you think this is a bit much and
+> want to reject this pull until 5.18. Either way works for me, though I
+> naturally lean heavily toward the former, hence making this pull request in
+> the first place.
 
-Signed-off-by: Prashant Malani <pmalani@chromium.org>
----
+I think the changes look fine, but this definitely conceptually is a
+"new feature" to me, rather than some security fix.
 
-Changes in v2:
-- No changes.
+Using a hash instead of an LFSR sounds like the modern and sane thing
+to do, and simplifies the code a lot. But I also don't think the old
+LFSR model is broken in practice.
 
- drivers/platform/chrome/cros_ec_typec.c | 1 +
- 1 file changed, 1 insertion(+)
+I don't think the pool leaking has been a real or realistic attack,
+and when the issue is lack of any actual real entropy (which _has_
+been an issue), I don't think it really changes anything in practice.
 
-diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
-index 3019e29f200d..4bd2752c0823 100644
---- a/drivers/platform/chrome/cros_ec_typec.c
-+++ b/drivers/platform/chrome/cros_ec_typec.c
-@@ -228,6 +228,7 @@ static void cros_typec_remove_partner(struct cros_typec_data *typec,
- 	cros_typec_unregister_altmodes(typec, port_num, true);
- 
- 	cros_typec_usb_disconnect_state(port);
-+	port->mux_flags = USB_PD_MUX_NONE;
- 
- 	typec_unregister_partner(port->partner);
- 	port->partner = NULL;
--- 
-2.35.0.263.gb82422642f-goog
+So I think this is improving the code, but I don't think the old
+approach was so broken that there's much argument for a mid-rc update
+like this (and if it was, we'd have to mark this cc:stable all the way
+back).
 
+In contrast, as a 5.18 merge window pull request, this makes complete sense.
+
+           Linus

@@ -2,70 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D11C4AE1AB
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 19:59:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 052424AE1B1
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 20:00:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385656AbiBHS6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 13:58:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50202 "EHLO
+        id S1353593AbiBHTAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 14:00:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385660AbiBHS6e (ORCPT
+        with ESMTP id S233759AbiBHTAA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 13:58:34 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D23C03FEEC
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 10:58:18 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id y5so72541pfe.4
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 10:58:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=NuDVKcupWPWZQzgU6U8buer2ersgmbuGRKW8s6KtZbI=;
-        b=ZR0NoryWPniq+EVBewnvk2KsPHdygfYYI9dNoCF/9m61vF5whsv+I2/jV8p/Qbgx+P
-         7jRNFL5zyq+Jb5WyrcDtB1sb9qHvDUO64EksOXJLFpU3KB0w0ZTDLgz3BFQWyQA/Vz7x
-         NRIrn0Ofuzm1CYeL2Z/7vtT09huxe9rD9Yfwo+mDu2VPTjWKVoTwXJE/ELSlqvQZs31G
-         Nf2b667cbUfgtRJdBtGkxW6NS7ypZ6EB5TtSXgc8uJvuM02lnF2DR7huVV/1L2i4ZBLZ
-         VB1OWlbBxmCtkhzkqNisMa64BoAV6F68Zd/KaIX+W3B0G+m3oTDTybQIMqnmkpC+nM2j
-         sPkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=NuDVKcupWPWZQzgU6U8buer2ersgmbuGRKW8s6KtZbI=;
-        b=zpN6cQefVPZ+n0wqYAbNisVn9/dvZSqpfMVaFw9LfUW6HBo5e3NCJUc/eewHNiMKFz
-         cFgAGwGAnRDRhBslOQoRXZnABg5SowAgmvcKyUyjmUhf2yhjE4ECQKQBsOq3Q+lCsCQM
-         vR/tzSCOWJFFAyFR21Xvo5azBaWFbS7xfsMLBblj4UxCUfrtOYBgiQq6VoWxj4tbeWpO
-         jjQk/yhVY6jNOBxNDHLxntrE5U/i/Z70kk9yy/ShbN0K7QY6GbgBsPOxft09oZ8KM+mI
-         tjqlCLjHYgcqrEREiyCoK21f0iF4iTvWLUVZTW/xNN4UwGz7M9e7Qh24YWHm5bjWDKkf
-         K4Ag==
-X-Gm-Message-State: AOAM5337OvZcWrnocZjou5pvvAetF4oD4AARjV64xHXRdpT/QCjD36oo
-        v2aQOXCPUp/VSCW+a9mbuFkWRg==
-X-Google-Smtp-Source: ABdhPJw8VHoJtAoqxATZi1GTIrqeRrywDXg1regOzdAutz7/rUf4XHuenfExCHOS2dvxIIgT6JrTsg==
-X-Received: by 2002:aa7:9528:: with SMTP id c8mr5554106pfp.85.1644346697738;
-        Tue, 08 Feb 2022 10:58:17 -0800 (PST)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id ip5sm3690253pjb.13.2022.02.08.10.58.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 10:58:16 -0800 (PST)
-Date:   Tue, 8 Feb 2022 11:58:14 -0700
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     James Clark <james.clark@arm.com>
-Cc:     suzuki.poulose@arm.com, coresight@lists.linaro.org,
-        leo.yan@linaro.com, mike.leach@linaro.org,
-        Leo Yan <leo.yan@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 15/15] coresight: Make ETM4x TRCRSCTLRn register
- accesses consistent with sysreg.h
-Message-ID: <20220208185814.GA3508773@p14s>
-References: <20220203120604.128396-1-james.clark@arm.com>
- <20220203120604.128396-16-james.clark@arm.com>
+        Tue, 8 Feb 2022 14:00:00 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C42DC0613CB
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 10:59:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 36EBA614D9
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 18:59:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6BD2C004E1;
+        Tue,  8 Feb 2022 18:59:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644346798;
+        bh=5W5fPk5O+OhCfuvFpEPNFTFJHSo3n34jghpGXLn8aa8=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=jAAFXZ3uwrzI+tSd+DT22vrWw6TWL6e9qJ2AJDbBmJx6PHfFpL1DNaAPhe7KwSTNS
+         oeng1Ngy5J8ihJpwlwbrYoM+InbF3Z+pi1kxLsm6O/eEjyYEvBWU2az1Jg32Cv1tua
+         q+lV9OFEuF9HUYM6c5xPQoy/mbUlBCuFQTIk8rU06o1OXK+TXumAs4stZtFde2gFFn
+         HSo7tGTlH/yT7WLTmp7K5ZjCCBLezK6vKZgahIIzPtHovYjUTNCwR5dBsszBsvmTNm
+         1EnKiM7fp0mGLTPkFDM0MvJhp+CDz++Cxx7L55snhDct1FHuNUtLrts8vPMbAvvcXB
+         EIjnLXOVwt9qQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     kai.vehmanen@linux.intel.com,
+        Daniel Baluta <daniel.baluta@oss.nxp.com>,
+        ranjani.sridharan@linux.intel.com,
+        pierre-louis.bossart@linux.intel.com, lgirdwood@gmail.com
+Cc:     alsa-devel@alsa-project.org, daniel.baluta@nxp.com,
+        linux-kernel@vger.kernel.org, paul.olaru@nxp.com,
+        cezary.rojewski@intel.com
+In-Reply-To: <20220120143741.492634-1-daniel.baluta@oss.nxp.com>
+References: <20220120143741.492634-1-daniel.baluta@oss.nxp.com>
+Subject: Re: [PATCH v3] ASoC: SOF: compr: Add compress ops implementation
+Message-Id: <164434679640.1135369.1129624363357940675.b4-ty@kernel.org>
+Date:   Tue, 08 Feb 2022 18:59:56 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220203120604.128396-16-james.clark@arm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,61 +58,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 03, 2022 at 12:06:03PM +0000, James Clark wrote:
-> This is a no-op change for style and consistency and has no effect on the
-> binary produced by gcc-11.
+On Thu, 20 Jan 2022 16:37:41 +0200, Daniel Baluta wrote:
+> From: Daniel Baluta <daniel.baluta@nxp.com>
 > 
-> Signed-off-by: James Clark <james.clark@arm.com>
-> ---
->  drivers/hwtracing/coresight/coresight-etm4x-sysfs.c | 7 +++++--
->  drivers/hwtracing/coresight/coresight-etm4x.h       | 9 +++++++++
->  2 files changed, 14 insertions(+), 2 deletions(-)
+> Implement snd_compress_ops. There are a lot of similarities with
+> PCM implementation.
 > 
-> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c b/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
-> index a0cdd2cd978a..c876a63fa84d 100644
-> --- a/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
-> +++ b/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
-> @@ -1728,8 +1728,11 @@ static ssize_t res_ctrl_store(struct device *dev,
->  	/* For odd idx pair inversal bit is RES0 */
->  	if (idx % 2 != 0)
->  		/* PAIRINV, bit[21] */
-> -		val &= ~BIT(21);
-> -	config->res_ctrl[idx] = val & GENMASK(21, 0);
-> +		val &= ~TRCRSCTLRn_PAIRINV;
-> +	config->res_ctrl[idx] = val & (TRCRSCTLRn_PAIRINV |
-> +				       TRCRSCTLRn_INV |
-> +				       (TRCRSCTLRn_GROUP_MASK << TRCRSCTLRn_GROUP_SHIFT) |
-> +				       (TRCRSCTLRn_SELECT_MASK << TRCRSCTLRn_SELECT_SHIFT));
->  	spin_unlock(&drvdata->spinlock);
->  	return size;
->  }
-> diff --git a/drivers/hwtracing/coresight/coresight-etm4x.h b/drivers/hwtracing/coresight/coresight-etm4x.h
-> index 4d943faade33..dd2156a5e70b 100644
-> --- a/drivers/hwtracing/coresight/coresight-etm4x.h
-> +++ b/drivers/hwtracing/coresight/coresight-etm4x.h
-> @@ -258,6 +258,15 @@
->  #define TRCBBCTLR_RANGE_SHIFT			0
->  #define TRCBBCTLR_RANGE_MASK			GENMASK(7, 0)
->  
-> +#define TRCRSCTLRn_PAIRINV			BIT(21)
-> +#define TRCRSCTLRn_INV				BIT(20)
-> +#define TRCRSCTLRn_GROUP_SHIFT			16
-> +#define TRCRSCTLRn_GROUP_MASK			GENMASK(3, 0)
-> +#define TRCRSCTLRn_SELECT_SHIFT			0
-> +#define TRCRSCTLRn_SELECT_MASK			GENMASK(15, 0)
-> +
-> +
-> +
-
-Two extra newlines.
-
-With the above and for patches 02 to 15:
-
-Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
-
->  /*
->   * System instructions to access ETM registers.
->   * See ETMv4.4 spec ARM IHI0064F section 4.3.6 System instructions
-> -- 
-> 2.28.0
+> For now we use sof_ipc_pcm_params to transfer compress parameters to SOF
+> firmware.
 > 
+> [...]
+
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+
+Thanks!
+
+[1/1] ASoC: SOF: compr: Add compress ops implementation
+      commit: 6324cf901e14c6662be508f30485e0f09c54694d
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

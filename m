@@ -2,206 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FF8B4AD700
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:31:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDE5F4AD711
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:32:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356461AbiBHLbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 06:31:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33684 "EHLO
+        id S1359520AbiBHLbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 06:31:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356700AbiBHKzE (ORCPT
+        with ESMTP id S232060AbiBHKzm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 05:55:04 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAEA5C03FEC5
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 02:55:02 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id h14-20020a17090a130e00b001b88991a305so1711477pja.3
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 02:55:02 -0800 (PST)
+        Tue, 8 Feb 2022 05:55:42 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0813EC03FEC0;
+        Tue,  8 Feb 2022 02:55:42 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id i30so18189068pfk.8;
+        Tue, 08 Feb 2022 02:55:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=JpFe2MD1E+2DPoXg543PglALXj4OP+/vcuv1a1idPqs=;
-        b=deOHRpDN7/U/V2+1GsKT9q4cej3QCC1mv9oreCRy2yqCzqwof20GqvzEGli/OdHxZp
-         XbF3QBT3Th2t6JVa2oGczJxri5/zN1rZQOLve5TxfB5GgIpK5tzEM08Ad2tDnXi2n3L1
-         QkJwk/5mWQ/oqiRINLAHiGlQgQye9NmBNdHJ8=
+        d=gmail.com; s=20210112;
+        h=from:subject:to:cc:message-id:date:user-agent:mime-version
+         :content-transfer-encoding:content-language;
+        bh=sWE38xa95W+xhxHgrq7WzsZ2vv/Ie+VkpJNorAGjDbg=;
+        b=pl2KrerUPO7MVE2mHCZefx2Cu4UZm40ckE4roweTe44c4Ba20GwJgU1rTKso9u6o2M
+         Kj3sbpYEtJt4vQQewuqFXCPntHNfgIjnnjOGwmasAEudNDqcpfQ+kkfBlpHs2u5eVDM9
+         2o7krHmcBdbWj5VIOdLbo+N8O+Oo4bslLwDmrHVgLP76c1DSwPNr60Q4iLlxUqaMVl8x
+         sYhks3hdQEVr0uo7ZQW+08cLx9omr0tfW1W3mxhZZlix82+kKoKxjYaiylZKwt5u6BZm
+         nv70sxkFlTdmMcEC8Ds+KF9wMOruXjUJ/onhU0oV7Bx6J7F7/3x1pPT41IFJwRO2m8WC
+         bKwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=JpFe2MD1E+2DPoXg543PglALXj4OP+/vcuv1a1idPqs=;
-        b=HVKExAxQJBwESMYO9BCKVlyxwgPrNilIMxig2EtMz8AuZZwIXNEW8axSx2xm7Jp2Py
-         vHGW0ppHdybmuwK0wKaAQZ+184AIFkPPOhbTvi+CywjcxL7lkk5kNNuj40+Z0QMTo2a2
-         JYrD3EmQ0uEFg7qVdWWCCKKNz/Z4/3h3C+YMUg7F2pqUUwFsUH+8vBDIZnHhGNTi2xPS
-         +BnMkzIDx4TFaGLbBgdstWOgGMCbm+Xnx7WcMfin1w0ZQ5ES9HY1pB6ofbGM/d00rMf7
-         d+8uCF0hrCevK8JQxh5PDR1zF2BewSSw8QY1rznGjZ7uTdgzzkIhVvtn7A5EWgwm2tpA
-         AG/g==
-X-Gm-Message-State: AOAM531PJVucd4w5NyBSqTu/++chYm7R671Kfi/LKluVO9saG47/dFi7
-        2EytcYUOEPWAMb2+cSmtSve0bA==
-X-Google-Smtp-Source: ABdhPJzxCELfUQ71vOBWo/X6NxZxybbY8TJpqWcbbxZ9oEXImbmiUN5OoLbviGkL9g1oIynidlrpnw==
-X-Received: by 2002:a17:902:dcca:: with SMTP id t10mr3844961pll.133.1644317702158;
-        Tue, 08 Feb 2022 02:55:02 -0800 (PST)
-Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:41b6:813e:c823:609c])
-        by smtp.gmail.com with ESMTPSA id e17sm14907277pfv.101.2022.02.08.02.55.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 02:55:01 -0800 (PST)
-From:   Chen-Yu Tsai <wenst@chromium.org>
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     Chen-Yu Tsai <wenst@chromium.org>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH RFC] media: hantro: Implement support for encoder commands
-Date:   Tue,  8 Feb 2022 18:54:56 +0800
-Message-Id: <20220208105456.321294-1-wenst@chromium.org>
-X-Mailer: git-send-email 2.35.0.263.gb82422642f-goog
+        h=x-gm-message-state:from:subject:to:cc:message-id:date:user-agent
+         :mime-version:content-transfer-encoding:content-language;
+        bh=sWE38xa95W+xhxHgrq7WzsZ2vv/Ie+VkpJNorAGjDbg=;
+        b=3xtatWAKpkg85YtREj0I9cHFYNIP3TqahqugDrVLthe5i1QrLQTGqZivQ4Nnq+uLHZ
+         fiP3P14qidGGUuNHV25ianpeh0zXC9QHe5bxFXCrjHahl5Eol8BcyP0yOxbSQPXG6tUB
+         /qzImL4d/njhex/QkTih6HZNsHMDJvZSX7mjldLDKI/viY5li9d73yvt6aP2Wqe+NP6t
+         DDKhXBlLn0NQ8+nqj7vqpsgQOVE/hXAKe9VJf947R4426l/qnesQYdKYqkbJvioIqw+9
+         Gaq7W3raaX75XrJqBYlaySZ0hZsK4OGVaXhEW1VaJp+p8M24Nx4ZXxWx592NAqMvodxR
+         A+rA==
+X-Gm-Message-State: AOAM532zwAVUlMz3Ca3ZdcxbINOdDYUoZBxWgPIw0N+hZsm+rZ32Kblr
+        hfxZ64+WbcnbT6xPJpjJPnzx0+aSHjA=
+X-Google-Smtp-Source: ABdhPJzDfm/XaP31aWpiNpsnafHmrMc0SBrpe7htyOBDrSByBdrMOLx1+2RuXa1fzkZlUAECj3XIAw==
+X-Received: by 2002:a05:6a00:c94:: with SMTP id a20mr3833402pfv.41.1644317741126;
+        Tue, 08 Feb 2022 02:55:41 -0800 (PST)
+Received: from [192.168.1.100] ([166.111.139.99])
+        by smtp.gmail.com with ESMTPSA id lk8sm2489742pjb.40.2022.02.08.02.55.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Feb 2022 02:55:40 -0800 (PST)
+From:   Jia-Ju Bai <baijiaju1990@gmail.com>
+Subject: [BUG] block: drbd: possible deadlocks involving waiting and locking
+ operations
+To:     philipp.reisner@linbit.com, lars.ellenberg@linbit.com,
+        axboe@kernel.dk
+Cc:     drbd-dev@lists.linbit.com, linux-block@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Message-ID: <3b992e3b-bf1a-426a-5e76-a822f5bf6e6a@gmail.com>
+Date:   Tue, 8 Feb 2022 18:55:20 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Language: en-US
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The V4L2 stateful encoder uAPI specification requires that drivers
-support the ENCODER_CMD ioctl to allow draining of buffers. This
-however was not implemented, and causes issues for some userspace
-applications.
+Hello,
 
-Implement support for the ENCODER_CMD ioctl using v4l2-mem2mem helpers.
-This is entirely based on existing code found in the vicodec test
-driver.
+My static analysis tool reports three possible deadlocks in the drbd 
+driver in Linux 5.16:
 
-Fixes: 775fec69008d ("media: add Rockchip VPU JPEG encoder driver")
-Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
----
+#BUG 1
+drbd_adm_attach()
+   mutex_lock(&adm_ctx.resource->adm_mutex); --> Line 1810 (Lock A)
+   wait_event(device->misc_wait, ...); --> Line 1824 (Wait X)
 
-This is based on linux-next-20220207, and was tested on RK3399 with
-Gstreamer running the JPEG encoder. It was also tested on ChromeOS
-5.10 on Kevin with the video encoder used in ChromeOS ARC, which
-requires this.
+drbd_adm_disk_opts()
+   mutex_lock(&adm_ctx.resource->adm_mutex); --> Line 1582 (Lock A)
+   get_ldev()
+     get_ldev_if_state()
+       _get_ldev_if_state()
+         put_ldev()
+           wake_up(&device->misc_wait); --> Line 2108 (Wake X)
 
-Everything works OK, but since I'm not very familiar with the mem2mem
-framework, I might be missing something, causing resource leaks.
-Hence this patch is labeled RFC.
+#BUG 2
+drbd_adm_invalidate()
+   mutex_lock(&adm_ctx.resource->adm_mutex); --> Line 3024 (Lock A)
+   wait_event(device->misc_wait, ...); --> Line 3030 (Wait X)
 
----
- drivers/staging/media/hantro/hantro_drv.c  | 10 +++++
- drivers/staging/media/hantro/hantro_v4l2.c | 44 ++++++++++++++++++++++
- 2 files changed, 54 insertions(+)
+drbd_adm_disk_opts()
+   mutex_lock(&adm_ctx.resource->adm_mutex); --> Line 1582 (Lock A)
+   get_ldev()
+     get_ldev_if_state()
+       _get_ldev_if_state()
+         put_ldev()
+           wake_up(&device->misc_wait); --> Line 2108 (Wake X)
 
-diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
-index bc9bcb4eaf46..ccd47eee5c43 100644
---- a/drivers/staging/media/hantro/hantro_drv.c
-+++ b/drivers/staging/media/hantro/hantro_drv.c
-@@ -56,6 +56,10 @@ dma_addr_t hantro_get_ref(struct hantro_ctx *ctx, u64 ts)
- 	return hantro_get_dec_buf_addr(ctx, buf);
- }
- 
-+static const struct v4l2_event hantro_eos_event = {
-+	.type = V4L2_EVENT_EOS
-+};
-+
- static void hantro_job_finish_no_pm(struct hantro_dev *vpu,
- 				    struct hantro_ctx *ctx,
- 				    enum vb2_buffer_state result)
-@@ -73,6 +77,12 @@ static void hantro_job_finish_no_pm(struct hantro_dev *vpu,
- 	src->sequence = ctx->sequence_out++;
- 	dst->sequence = ctx->sequence_cap++;
- 
-+	if (v4l2_m2m_is_last_draining_src_buf(ctx->fh.m2m_ctx, src)) {
-+		dst->flags |= V4L2_BUF_FLAG_LAST;
-+		v4l2_event_queue_fh(&ctx->fh, &hantro_eos_event);
-+		v4l2_m2m_mark_stopped(ctx->fh.m2m_ctx);
-+	}
-+
- 	v4l2_m2m_buf_done_and_job_finish(ctx->dev->m2m_dev, ctx->fh.m2m_ctx,
- 					 result);
- }
-diff --git a/drivers/staging/media/hantro/hantro_v4l2.c b/drivers/staging/media/hantro/hantro_v4l2.c
-index 67148ba346f5..8c6746637236 100644
---- a/drivers/staging/media/hantro/hantro_v4l2.c
-+++ b/drivers/staging/media/hantro/hantro_v4l2.c
-@@ -628,6 +628,39 @@ static int vidioc_s_selection(struct file *file, void *priv,
- 	return 0;
- }
- 
-+static const struct v4l2_event hantro_eos_event = {
-+	.type = V4L2_EVENT_EOS
-+};
-+
-+static int vidioc_encoder_cmd(struct file *file, void *priv,
-+			      struct v4l2_encoder_cmd *ec)
-+{
-+	struct hantro_ctx *ctx = fh_to_ctx(priv);
-+	int ret;
-+
-+	ret = v4l2_m2m_ioctl_try_encoder_cmd(file, priv, ec);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (!vb2_is_streaming(v4l2_m2m_get_src_vq(ctx->fh.m2m_ctx)) ||
-+	    !vb2_is_streaming(v4l2_m2m_get_dst_vq(ctx->fh.m2m_ctx)))
-+		return 0;
-+
-+	ret = v4l2_m2m_ioctl_encoder_cmd(file, priv, ec);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (ec->cmd == V4L2_ENC_CMD_STOP &&
-+	    v4l2_m2m_has_stopped(ctx->fh.m2m_ctx))
-+		v4l2_event_queue_fh(&ctx->fh, &hantro_eos_event);
-+
-+	if (ec->cmd == V4L2_ENC_CMD_START &&
-+	    v4l2_m2m_has_stopped(ctx->fh.m2m_ctx))
-+		vb2_clear_last_buffer_dequeued(&ctx->fh.m2m_ctx->cap_q_ctx.q);
-+
-+	return 0;
-+}
-+
- const struct v4l2_ioctl_ops hantro_ioctl_ops = {
- 	.vidioc_querycap = vidioc_querycap,
- 	.vidioc_enum_framesizes = vidioc_enum_framesizes,
-@@ -657,6 +690,9 @@ const struct v4l2_ioctl_ops hantro_ioctl_ops = {
- 
- 	.vidioc_g_selection = vidioc_g_selection,
- 	.vidioc_s_selection = vidioc_s_selection,
-+
-+	.vidioc_try_encoder_cmd = v4l2_m2m_ioctl_try_encoder_cmd,
-+	.vidioc_encoder_cmd = vidioc_encoder_cmd,
- };
- 
- static int
-@@ -759,6 +795,8 @@ static int hantro_start_streaming(struct vb2_queue *q, unsigned int count)
- 	struct hantro_ctx *ctx = vb2_get_drv_priv(q);
- 	int ret = 0;
- 
-+	v4l2_m2m_update_start_streaming_state(ctx->fh.m2m_ctx, q);
-+
- 	if (V4L2_TYPE_IS_OUTPUT(q->type))
- 		ctx->sequence_out = 0;
- 	else
-@@ -831,6 +869,12 @@ static void hantro_stop_streaming(struct vb2_queue *q)
- 		hantro_return_bufs(q, v4l2_m2m_src_buf_remove);
- 	else
- 		hantro_return_bufs(q, v4l2_m2m_dst_buf_remove);
-+
-+	v4l2_m2m_update_stop_streaming_state(ctx->fh.m2m_ctx, q);
-+
-+	if (V4L2_TYPE_IS_OUTPUT(q->type) &&
-+	    v4l2_m2m_has_stopped(ctx->fh.m2m_ctx))
-+		v4l2_event_queue_fh(&ctx->fh, &hantro_eos_event);
- }
- 
- static void hantro_buf_request_complete(struct vb2_buffer *vb)
--- 
-2.35.0.263.gb82422642f-goog
+#BUG 3
+drbd_adm_invalidate_peer()
+   mutex_lock(&adm_ctx.resource->adm_mutex); --> Line 3101 (Lock A)
+   wait_event(device->misc_wait, ...); --> Line 3107 (Wait X)
+
+drbd_adm_disk_opts()
+   mutex_lock(&adm_ctx.resource->adm_mutex); --> Line 1582 (Lock A)
+   get_ldev()
+     get_ldev_if_state()
+       _get_ldev_if_state()
+         put_ldev()
+           wake_up(&device->misc_wait); --> Line 2108 (Wake X)
+
+When drbd_adm_attach()/drbd_adm_invalidate()/drbd_adm_invalidate_peer() 
+is executed, "Wait X" is performed by holding "Lock A". If 
+drbd_adm_disk_opts() is executed at this time, because "Lock A" has been 
+already held, "Wake X" cannot be performed to wake up "Wait X", causing 
+possible deadlocks.
+
+I am not quite sure whether these possible problems are real.
+Any feedback would be appreciated, thanks :)
+
+Best wishes,
+Jia-Ju Bai
 

@@ -2,115 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6A514AE4C8
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:37:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B5474AE4E1
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:45:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386236AbiBHWhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 17:37:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36836 "EHLO
+        id S1354656AbiBHWpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 17:45:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388500AbiBHWdC (ORCPT
+        with ESMTP id S1387741AbiBHWoo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 17:33:02 -0500
-Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06373C01CB14
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 14:25:12 -0800 (PST)
-Received: from in02.mta.xmission.com ([166.70.13.52]:50410)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nHYv9-00DAOc-CY; Tue, 08 Feb 2022 15:25:11 -0700
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:41898 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nHYv7-00CSCi-GT; Tue, 08 Feb 2022 15:25:10 -0700
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Waiman Long <longman@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Alexey Gladkov <legion@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jann Horn <jannh@google.com>, linux-kernel@vger.kernel.org
-References: <20220208163912.1084752-1-longman@redhat.com>
-        <YgKziblMKsmHkP4f@zeniv-ca.linux.org.uk>
-        <bd83aca3-059f-92dd-e094-b27f51f9481a@redhat.com>
-        <YgK/fdYWi0wWysci@zeniv-ca.linux.org.uk>
-        <874k59f2ad.fsf@email.froward.int.ebiederm.org>
-        <YgLr2GEXgz/TxdUA@zeniv-ca.linux.org.uk>
-Date:   Tue, 08 Feb 2022 16:25:02 -0600
-In-Reply-To: <YgLr2GEXgz/TxdUA@zeniv-ca.linux.org.uk> (Al Viro's message of
-        "Tue, 8 Feb 2022 22:16:56 +0000")
-Message-ID: <87czjxdmip.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Tue, 8 Feb 2022 17:44:44 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABC5BC08C5F5
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 14:30:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644359421; x=1675895421;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=IVSlc+hTFVxw4ygzmnnDYqbkOr2sqg2hetKidNXSDBM=;
+  b=abV+CCXq6Awghk+x+Y1mqetBcwBkmob9GaJvPXdVyzK+webRUaJz2if8
+   uvQTxeS8IQTmVGusX1modjUUeGTya8JJV4HEY65mWA9a/G0TS+OEPnLNU
+   t4u0fLSLSdi2S1aVNXF5fb+io4kWmCS1VxjoaC7t5m5J7BJy3lUT7tjW1
+   3BidEaEHIEghg92/CIVfeQe/OfPiea2MjKTM73CgG/yYqIL16Cj/FVYMe
+   COO3NllOjrj9L+T1GAo0q/y6J+hXuww9FJ4SSlZyltFUv3BjJtvjBoJ9A
+   edLozcIQEbowgdvDd/Hrm+En8pEmjB4kjUYLvMyHPFLud/sdYXZCHzmf/
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="273600197"
+X-IronPort-AV: E=Sophos;i="5.88,353,1635231600"; 
+   d="scan'208";a="273600197"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 14:30:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,353,1635231600"; 
+   d="scan'208";a="701013215"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 08 Feb 2022 14:30:12 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nHZ00-0000py-41; Tue, 08 Feb 2022 22:30:12 +0000
+Date:   Wed, 9 Feb 2022 06:29:42 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Nathan Huckleberry <nhuck@google.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Ard Biesheuvel <ardb@kernel.org>
+Subject: [ardb:hctr2 3/8] crypto/hctr2.c:115:38: sparse: sparse: incorrect
+ type in assignment (different base types)
+Message-ID: <202202090607.wkQ2yto6-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1nHYv7-00CSCi-GT;;;mid=<87czjxdmip.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX182oeJyc/2QUC0MDFcVTea6z+qieDuOmFk=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ;Al Viro <viro@zeniv.linux.org.uk>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 361 ms - load_scoreonly_sql: 0.04 (0.0%),
-        signal_user_changed: 12 (3.4%), b_tie_ro: 10 (2.9%), parse: 1.07
-        (0.3%), extract_message_metadata: 14 (3.8%), get_uri_detail_list: 1.36
-        (0.4%), tests_pri_-1000: 14 (3.9%), tests_pri_-950: 1.71 (0.5%),
-        tests_pri_-900: 1.40 (0.4%), tests_pri_-90: 100 (27.7%), check_bayes:
-        98 (27.3%), b_tokenize: 6 (1.8%), b_tok_get_all: 7 (1.9%),
-        b_comp_prob: 2.6 (0.7%), b_tok_touch_all: 79 (21.8%), b_finish: 0.87
-        (0.2%), tests_pri_0: 204 (56.4%), check_dkim_signature: 0.50 (0.1%),
-        check_dkim_adsp: 2.6 (0.7%), poll_dns_idle: 0.56 (0.2%), tests_pri_10:
-        2.1 (0.6%), tests_pri_500: 8 (2.2%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH] copy_process(): Move fd_install() out of
- sighand->siglock critical section
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Al Viro <viro@zeniv.linux.org.uk> writes:
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git hctr2
+head:   5bb01649223080b7cde5740f441eb5e758ec357f
+commit: 09533ad0ea8fa56420aa6e866b11c0685e862bd1 [3/8] crypto: hctr2 - Add HCTR2 support
+config: sparc64-randconfig-s032-20220208 (https://download.01.org/0day-ci/archive/20220209/202202090607.wkQ2yto6-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?id=09533ad0ea8fa56420aa6e866b11c0685e862bd1
+        git remote add ardb git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git
+        git fetch --no-tags ardb hctr2
+        git checkout 09533ad0ea8fa56420aa6e866b11c0685e862bd1
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=sparc64 SHELL=/bin/bash
 
-> On Tue, Feb 08, 2022 at 03:59:06PM -0600, Eric W. Biederman wrote:
->
->> The fd is being installed in the fdtable of the parent process,
->> and the siglock and tasklist_lock are held to protect the child.
->> 
->> 
->> Further fd_install is exposing the fd to userspace where it can be used
->> by the process_madvise and the process_mrelease system calls, from
->> anything that shares the fdtable of the parent thread.  Which means it
->> needs to be guaranteed that kernel_clone will call wake_up_process
->> before it is safe to call fd_install.
->
-> You mean "no calling fd_install() until after we are past the last possible
-> failure exit, by which point we know that wake_up_process() will eventually
-> be called", hopefully?  If so (as I assumed all along), anything downstream
-> of
->         if (fatal_signal_pending(current)) {
-> 		retval = -EINTR;
-> 		goto bad_fork_cancel_cgroup;
-> 	}
->
-> should be fine...
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Except for the problems of calling fd_install under siglock, and
-tasklist_lock, which protect nothing and cause lockdep splats.
 
-There may also be assumptions on the task actually being fully setup,
-if not today then in a future use pidfd.  So I am not particularly
-comfortable with fd_install coming before we drop tasklist_lock.
+sparse warnings: (new ones prefixed by >>)
+>> crypto/hctr2.c:115:38: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long @@     got restricted __le64 [usertype] @@
+   crypto/hctr2.c:115:38: sparse:     expected unsigned long long
+   crypto/hctr2.c:115:38: sparse:     got restricted __le64 [usertype]
+   crypto/hctr2.c:117:38: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long @@     got restricted __le64 [usertype] @@
+   crypto/hctr2.c:117:38: sparse:     expected unsigned long long
+   crypto/hctr2.c:117:38: sparse:     got restricted __le64 [usertype]
 
-I was pointing out that to resolve the locking issue we fundamentally
-can not move the fd_install earlier, to resolve the locking issues.
+vim +115 crypto/hctr2.c
 
-Eric
+   103	
+   104	static int hctr2_hash_tweak(struct skcipher_request *req, u8 *iv)
+   105	{
+   106		u64 tweak_length_part[2];
+   107		struct crypto_skcipher *tfm = crypto_skcipher_reqtfm(req);
+   108		const struct hctr2_tfm_ctx *tctx = crypto_skcipher_ctx(tfm);
+   109		struct hctr2_request_ctx *rctx = skcipher_request_ctx(req);
+   110		struct shash_desc *hash_desc = &rctx->u.hash_desc;
+   111		int err;
+   112	
+   113		memset(tweak_length_part, 0, sizeof(tweak_length_part));
+   114		if (req->cryptlen % POLYVAL_BLOCK_SIZE == 0)
+ > 115			tweak_length_part[0] = cpu_to_le64(TWEAK_SIZE * 8 * 2 + 2);
+   116		else
+   117			tweak_length_part[0] = cpu_to_le64(TWEAK_SIZE * 8 * 2 + 3);
+   118	
+   119		hash_desc->tfm = tctx->hash;
+   120		err = crypto_shash_init(hash_desc);
+   121		if (err)
+   122			return err;
+   123	
+   124		err = crypto_shash_update(hash_desc, (u8 *)tweak_length_part, sizeof(tweak_length_part));
+   125		if (err)
+   126			return err;
+   127		err = crypto_shash_update(hash_desc, iv, TWEAK_SIZE);
+   128		return err;
+   129	}
+   130	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

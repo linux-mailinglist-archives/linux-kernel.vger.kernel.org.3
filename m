@@ -2,223 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F5BB4ADFDA
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 18:45:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 503AE4ADFDF
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 18:48:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352870AbiBHRpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 12:45:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36146 "EHLO
+        id S1383604AbiBHRsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 12:48:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234672AbiBHRpD (ORCPT
+        with ESMTP id S234672AbiBHRsX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 12:45:03 -0500
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E23EC061578
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 09:45:02 -0800 (PST)
-Received: by mail-lj1-x233.google.com with SMTP id p21so16492435ljn.13
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 09:45:02 -0800 (PST)
+        Tue, 8 Feb 2022 12:48:23 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54B9FC061576;
+        Tue,  8 Feb 2022 09:48:22 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id m126-20020a1ca384000000b0037bb8e379feso1715191wme.5;
+        Tue, 08 Feb 2022 09:48:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+2ZOKjsTypCf57frmi1Jqd7Dt7KnItcHNvGL+OMmMpI=;
-        b=HmnZrkgiLYXAkRHXqwu5HRn8hAE5ABYzHtzdcNr2aI/43FVw5XZoXDLOe8HJxQZieN
-         2MjvRMPQXZl299rU9Knx9Ij48msciGp1dRfUUzi+wlCZcEF8Tng16N7jD0bpcS9zg+4G
-         oYIPkkGg9d1egvRkDBlB4lsSpDQOo2KUFWB4PQ9s8Xi8WBvOLeqxN3+2uVrAGUbgEALR
-         7PIyPvTfNFAbl5cIkYkHkOAOHeKL8hQxBVRKAyJmQAEvfbCtqpRj/z5QZH2h7DvqVQEj
-         HVsEMOsp3KiO7pleWWHNVJ/W0WAW+0qU8v/acQx/twwkqUFn376l6fAmAw9pSM4Vvd/x
-         FPUw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bMfYT83zSUK7mpqLA4dZ2kmw3QdtLZi19QJaATNiud4=;
+        b=b0UlYiJb+n9a3ESGEh2FQ41DHdlGNRN0IrEs1bZOqwA8HUraLDGQLQHM8Jow8C8gDT
+         u8mgcDg7mmSy0EgofReFnROAT4HmWOjypA+0yG8tPoo5cZUe15Ue3hY+HylkzlIaFWRQ
+         DM228zSOja0hyQ2P4tHRaiGJ+ZTjPOQnq4aON9Dv9XfurOgn2D4JMhMz+E7QqIvEqzPn
+         Bae4EmBm2nWetNLmRuTxpf7L06luDOBVG2tcs+0e1YhbZi8WFIfGyItTLnAIoLTAN6jY
+         7MtbuhdPRQ3/EHGeKHm0xCBvKKD1VnB8Laiv/YnDCxrSDcGAkjLExzy5xUHQW0jVhbHB
+         DKJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+2ZOKjsTypCf57frmi1Jqd7Dt7KnItcHNvGL+OMmMpI=;
-        b=XquP7eNVIe0Xnir0fq46Dqb08hja3hQc8R4/jyN/S6XgteF8tKwt1NyXZqC48EK7k8
-         SEMqr2Va2OMOueaOA50ye02RM6Ou32uiCtgNclt6gi1GSfqRpa9IoEKFmaNS4KcBzONd
-         cDOvweSiGv7GU1qAkx84se8OIrrhpZzt3e2zTa9/LxaF3T5VfGn2nDBpdmQnRuBrGe3R
-         Q+V5dUF35rgwTQZIJTtX2GiRwaSHGdsKLBWbpYhkf+shHsc7puywi9a7KgH2d6TuJMg4
-         aUdIb/sPCdusJd0xzlqFBNmfg4DWc+NFIvWr9rb/1Ci+RYq9Wy5KbYgO3yOIPsbeEmks
-         fOvg==
-X-Gm-Message-State: AOAM530Z7XcvrtwV0gTqNyQO+Yj+SHCi/omgNfac0AG+6rhZhFQ4u4Hy
-        m1gIN4DrCQhHeX37fKYO7ABsNzz2KbbDJCD9Ae1IxA==
-X-Google-Smtp-Source: ABdhPJzNrdZ68YdmVvWF4hTmS7YeVVol3VHv3vV2v9o+W/Ks7y29yAhoN2Wv6L+jm4G3Wbc7HBw11ESczjaG7Lg2RPg=
-X-Received: by 2002:a05:651c:1253:: with SMTP id h19mr3483007ljh.338.1644342300206;
- Tue, 08 Feb 2022 09:45:00 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bMfYT83zSUK7mpqLA4dZ2kmw3QdtLZi19QJaATNiud4=;
+        b=1rjuK5oSfUrHC+CrY6j8yc+JIhNoXE66Jz74mPIG42vG3Xh49P4ZfDATmJBS38AGZj
+         +rhVFPVAQofeAbMW0dSRW4Jv8ajfzjDLII7W5KZax9GFIH+yJeAnl3q1RxYzwn0MALdh
+         TL+ddvmEjZBe9PSb9mWjOD91/gKNK1kg7ZFGcAsoDkp0BqJYi8kTcp4M7b4Xsi4kyj7r
+         H0GOhJBr1hbVYlbsRr7KQwhyCzSDZA6NkX+BdU/Q6plcJFjtWu6bzP7qzD3rV5b6wR3H
+         FrotBChb3iShG3OjkceBUsbIzk02jBeSAV7n9EgpsSd7BPpdiSYbDFHAMifyVkVElnBT
+         yHYQ==
+X-Gm-Message-State: AOAM5329+gr6L4FZTXc29hsVLG5N/g843T3M88VSiuVvYwB2xeZ1ipjQ
+        LY92UUYiL2hMPaMuGMICfIg=
+X-Google-Smtp-Source: ABdhPJyefCwGQxbs2MR2QmOb9dPMLVj8yskEcFolWeHZ/WLvicpIihMCF18HtuZnXCUuctgaV2o1Kw==
+X-Received: by 2002:a05:600c:3ca5:: with SMTP id bg37mr1997746wmb.193.1644342500814;
+        Tue, 08 Feb 2022 09:48:20 -0800 (PST)
+Received: from localhost.localdomain ([94.73.33.246])
+        by smtp.gmail.com with ESMTPSA id i2sm3467744wmq.23.2022.02.08.09.48.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 09:48:20 -0800 (PST)
+From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+To:     dmitry.torokhov@gmail.com
+Cc:     rydberg@bitmath.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
+        Peter Hutterer <peter.hutterer@who-t.net>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Jiri Kosina <jkosina@suse.cz>
+Subject: [PATCH RESEND v3] Input: clear BTN_RIGHT/MIDDLE on buttonpads
+Date:   Tue,  8 Feb 2022 18:48:06 +0100
+Message-Id: <20220208174806.17183-1-jose.exposito89@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220204123740.GA4077@xsang-OptiPlex-9020> <CAKwvOdm0+bB=UY91V=ai2TPg3XCbNUZQfBzxrSUA0AtW=zM=LA@mail.gmail.com>
- <202202071858.0B5538E7CB@keescook>
-In-Reply-To: <202202071858.0B5538E7CB@keescook>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 8 Feb 2022 09:44:48 -0800
-Message-ID: <CAKwvOdm1k51OxYqSq1v9UVp8ZptBkJj7FgOA_QhDjEC6vaU+RQ@mail.gmail.com>
-Subject: Re: [x86] 1099ce55b0: BUG:kernel_NULL_pointer_dereference,address
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Arvind Sankar <nivedita@alum.mit.edu>,
-        Fangrui Song <maskray@google.com>,
-        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
-        lkp@intel.com, kernel test robot <oliver.sang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 7, 2022 at 7:09 PM Kees Cook <keescook@chromium.org> wrote:
->
-> On Mon, Feb 07, 2022 at 04:23:06PM -0800, Nick Desaulniers wrote:
-> > On Fri, Feb 4, 2022 at 4:37 AM kernel test robot <oliver.sang@intel.com> wrote:
-> > > FYI, we noticed the following commit (built with clang-15):
-> > >
-> > > commit: 1099ce55b0530ff429312dc37362ad43aee8c5c0 ("x86: don't build CONFIG_X86_32 as -ffreestanding")
-> > > https://git.kernel.org/cgit/linux/kernel/git/kees/linux.git for-next/memcpy
-> > >
-> > > in testcase: boot
-> > [...]
-> > I've been having a hard time pinpointing via bisection when this
-> > stopped working.  I suspect it's actually the change on llvm's side
-> > that would replace memcmp with bcmp.  With this diff, we can boot
-> > ARCH=i386 defconfig
-> >
-> > ```
-> > diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-> > index 7ef211865239..5e4570495206 100644
-> > --- a/arch/x86/Makefile
-> > +++ b/arch/x86/Makefile
-> > @@ -88,6 +88,8 @@ ifeq ($(CONFIG_X86_32),y)
-> >          include $(srctree)/arch/x86/Makefile_32.cpu
-> >          KBUILD_CFLAGS += $(cflags-y)
-> >
-> > +        KBUILD_CFLAGS += -fno-builtin-bcmp
-> > +
-> >         ifeq ($(CONFIG_STACKPROTECTOR),y)
-> >                 ifeq ($(CONFIG_SMP),y)
-> >                         KBUILD_CFLAGS +=
-> > -mstack-protector-guard-reg=fs
-> > -mstack-protector-guard-symbol=__stack_chk_guard
-> > ```
-> >
-> > It looks like the call argument setup in the _callers_ of memcmp is messed up.
-> >
-> > Before:
-> > pushl %ecx
-> > pushl %ebx
-> > pushl -24(%ebp)
-> > calll bcmp
-> >
-> > After:
-> > movl  %ebx, %eax
-> > movl  %esi, %edx
-> > movl  %ecx, %ebx
-> > calll memcmp
-> >
-> > it looks like they're not obeying `-mregparm=3`.
-> >
-> > https://godbolt.org/z/z3fjveP4h
-> >
-> > Diffing the IR between `-mregparm=3` vs not, it looks like there's an
-> > LLVM IR function argument attribute inreg.
-> > https://llvm.org/docs/LangRef.html#parameter-attributes
-> > >> This indicates that this parameter or return value should be treated in a
-> > >> special target-dependent fashion while emitting code for a function call
-> > >> or return (usually, by putting it in a register as opposed to memory,
-> > >> though some targets use it to distinguish between two different kinds of
-> > >> registers). Use of this attribute is target-specific.
-> >
-> > As is tradition, instcombine is not checking+carrying over the
-> > function argument attributes when replacing calls to memcmp w/ bcmp.
-> >
-> > Before:
-> >   %4 = call i32 @memcmp(i8* inreg noundef %3, i8* inreg noundef %0,
-> > i32 inreg noundef %1) #4, !dbg !22
-> >
-> > After:
-> >   %bcmp = call i32 @bcmp(i8* %3, i8* %0, i32 %1), !dbg !22
-> >
-> > Filed:
-> > https://github.com/llvm/llvm-project/issues/53645
-> >
-> > So I think the best course of action is to disable memcmp to bcmp
-> > BEFORE the removal of -ffreestanding, and only for clang until we have
-> > a fix in hand.
->
-> What do you mean about BEFORE the removal of -ffreestanding? As in, add
-> two patches, one to add -fno-builtin-bcmp and the next to remove
-> -ffreestanding? i.e.:
->
->
-> diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-> index e84cdd409b64..c92f69e916b4 100644
-> --- a/arch/x86/Makefile
-> +++ b/arch/x86/Makefile
-> @@ -90,6 +90,9 @@ ifeq ($(CONFIG_X86_32),y)
->
->          # temporary until string.h is fixed
->          KBUILD_CFLAGS += -ffreestanding
-> +        ifdef CONFIG_CC_IS_CLANG
-> +                KBUILD_CFLAGS += -fno-builtin-bcmp
-> +        endif
->
->         ifeq ($(CONFIG_STACKPROTECTOR),y)
->                 ifeq ($(CONFIG_SMP),y)
->
->
-> then:
->
->
->
-> diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-> index c92f69e916b4..f56936aeed9e 100644
-> --- a/arch/x86/Makefile
-> +++ b/arch/x86/Makefile
-> @@ -88,8 +88,6 @@ ifeq ($(CONFIG_X86_32),y)
->          include $(srctree)/arch/x86/Makefile_32.cpu
->          KBUILD_CFLAGS += $(cflags-y)
->
-> -        # temporary until string.h is fixed
-> -        KBUILD_CFLAGS += -ffreestanding
->          ifdef CONFIG_CC_IS_CLANG
->                  KBUILD_CFLAGS += -fno-builtin-bcmp
->          endif
->
-> ?
+Buttonpads are expected to map the INPUT_PROP_BUTTONPAD property bit
+and the BTN_LEFT key bit.
 
-Yeah, that's what I had in mind yesterday afternoon. Thinking more
-about this in the evening though, I think this is a pretty
-catastrophic compiler bug in LLVM.
+As explained in the specification, where a device has a button type
+value of 0 (click-pad) or 1 (pressure-pad) there should not be
+discrete buttons:
+https://docs.microsoft.com/en-us/windows-hardware/design/component-guidelines/touchpad-windows-precision-touchpad-collection#device-capabilities-feature-report
 
-The compiler does change the calling convention (somewhat) as part of
-optimizations when the caller and callee are visible within the same
-TU. Here, the callee is not visible, and yet the caller is modifying
-the calling convention with no corresponding change to the callee.
+However, some drivers map the BTN_RIGHT and/or BTN_MIDDLE key bits even
+though the device is a buttonpad and therefore does not have those
+buttons.
 
-Essentially, -ffreestanding is holding -mregparam=3 together for
-ARCH=i386 LLVM=1 builds.  That my above diff that only avoided the
-issue for memcmp -> bcmp was able to boot to command line is kind of a
-miracle.  I'm sure there's all kind of things that don't work right,
-and we can't ship that since it will come back to bite us for 32b x86
-(such as Android Cuttlefish).
+This behavior has forced userspace applications like libinput to
+implement different workarounds and quirks to detect buttonpads and
+offer to the user the right set of features and configuration options.
+For more information:
+https://gitlab.freedesktop.org/libinput/libinput/-/merge_requests/726
 
-Do we need to remove -ffreestanding for ARCH=i386 for FORTIFY_SOURCE
-to work _for GCC_?
+In order to avoid this issue clear the BTN_RIGHT and BTN_MIDDLE key
+bits when the input device is register if the INPUT_PROP_BUTTONPAD
+property bit is set.
 
-If yes, then perhaps we can only add -ffreestanding for clang for now?
-If no, then perhaps we should leave -ffreestanding for now?
+Notice that this change will not affect udev because it does not check
+for buttons. See systemd/src/udev/udev-builtin-input_id.c.
 
-Either way, I would shelve FORTIFY_SOURCE for ARCH=i386 LLVM=1 until
-this compiler bug is fixed (and drop my patch, or I can send a v2).
-https://github.com/llvm/llvm-project/issues/53645
+List of known affected hardware:
 
-That said, I would consider this lower priority than
-https://github.com/llvm/llvm-project/issues/53118, which looks like a
-very obvious clang-14 regression (the 14 release is almost done, so
-it's time to fix regression NOW) that produces an true positive
-objtool warning.
+ - Chuwi AeroBook Plus
+ - Chuwi Gemibook
+ - Framework Laptop
+ - GPD Win Max
+ - Huawei MateBook 2020
+ - Prestigio Smartbook 141 C2
+ - Purism Librem 14v1
+ - StarLite Mk II   - AMI firmware
+ - StarLite Mk II   - Coreboot firmware
+ - StarLite Mk III  - AMI firmware
+ - StarLite Mk III  - Coreboot firmware
+ - StarLabTop Mk IV - AMI firmware
+ - StarLabTop Mk IV - Coreboot firmware
+ - StarBook Mk V
+
+Acked-by: Peter Hutterer <peter.hutterer@who-t.net>
+Acked-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Acked-by: Jiri Kosina <jkosina@suse.cz>
+Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+
+---
+
+v3:
+
+ - Clear BTN_RIGHT/MIDDLE on input_register_device
+   (Thanks to Dmitry Torokhov for pointing me in this direction)
+
+ - Add acked-by tags (thanks to Peter, Benjamin and Jiří)
+---
+ drivers/input/input.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/input/input.c b/drivers/input/input.c
+index ccaeb2426385..c3139bc2aa0d 100644
+--- a/drivers/input/input.c
++++ b/drivers/input/input.c
+@@ -2285,6 +2285,12 @@ int input_register_device(struct input_dev *dev)
+ 	/* KEY_RESERVED is not supposed to be transmitted to userspace. */
+ 	__clear_bit(KEY_RESERVED, dev->keybit);
+ 
++	/* Buttonpads should not map BTN_RIGHT and/or BTN_MIDDLE. */
++	if (test_bit(INPUT_PROP_BUTTONPAD, dev->propbit)) {
++		__clear_bit(BTN_RIGHT, dev->keybit);
++		__clear_bit(BTN_MIDDLE, dev->keybit);
++	}
++
+ 	/* Make sure that bitmasks not mentioned in dev->evbit are clean. */
+ 	input_cleanse_bitmasks(dev);
+ 
 -- 
-Thanks,
-~Nick Desaulniers
+2.25.1
+

@@ -2,124 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 007604ADBBE
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 15:56:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8AF54ADBB9
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 15:56:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378750AbiBHO4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 09:56:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49516 "EHLO
+        id S244797AbiBHOz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 09:55:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234194AbiBHO4g (ORCPT
+        with ESMTP id S1378716AbiBHOzQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 09:56:36 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2081.outbound.protection.outlook.com [40.107.92.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A76C061576;
-        Tue,  8 Feb 2022 06:56:34 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OXGQ7KH4gBlpNFWAlrAZU7JY1prlLJfojNAEWs9/Jajf9astyvWs9d1MtObyCuuHvu/dwwJNWtzi/bhbAK315fdPCVzWFQi4eZioQSK6NT19W031UL50V3nAvYgR0pSF4UWwrIjHE+ZpPjIIAZO1mJwT/gm7Pxh/78XVNGlbcSdNzbvgtTAPDfoCSyntXnS16dAC9Ro0SRTfL0D8323rsrH2O1Ucy+mBAfNntZN+CA89UAUxGRkYQoqUZjToqMsgbM0xbMFxPfnLIrO74IJXvkHAgeStHiJ9FAESXMEZezwlvHSR5b2lRh5EpRqTjWU3ECk7bhSEX8GLE5Ih3mQbmQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kXRe9jIcp7dAgK3TSGQPQmq7ps2tmtQEkFwWgWt2vR4=;
- b=ZDkYQ9XRlRYVWJvDPeVHF2BabeO35wjp3/+BM+H5+Cf8dtL6QIVuLtTdneukOY5IfRy/m0LKH799m9+KgwnKsLszc4a2vmdwHYULLBNotlarC5IubfT4MgaByBwDhHBkcmDSOiWmz4/esUivZB092qeaPlhsdb9EMO5PdaFY7YAa7EkxCSGNmrl5JMkMy5QLP98ygTZqVQU3MNmq7HX31wC1H8c/BQ8TvNO7+RdOIgNO+0pTuQXBOII0goD+OiCP7cb113FCuySkHd2O7L5MtJI34nfW8GZbz9qRVb8yNIol1/QZTApaa2sqiIQrVUzy/jI7oxiAnzO7DmAV5UhETg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=google.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kXRe9jIcp7dAgK3TSGQPQmq7ps2tmtQEkFwWgWt2vR4=;
- b=EgIOyq2hXt2rQPomh5gHfa83z/wwHcpge/mP+YG4Wx+4lD9YdDhMwtohAobOZqinHXYr9odTq6njIFJPuWaUwulKPmcuT2b/HNRIslSpEVsVfF+pUP/10ynO/DFiM+ks9GNkE7Xv9i3+f5GwUCmbklDQR7TSTaV6DAd7chq0id8=
-Received: from BN7PR02CA0032.namprd02.prod.outlook.com (2603:10b6:408:20::45)
- by DM5PR12MB2440.namprd12.prod.outlook.com (2603:10b6:4:b6::39) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Tue, 8 Feb
- 2022 14:56:31 +0000
-Received: from BN8NAM11FT017.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:20:cafe::c4) by BN7PR02CA0032.outlook.office365.com
- (2603:10b6:408:20::45) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12 via Frontend
- Transport; Tue, 8 Feb 2022 14:56:31 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT017.mail.protection.outlook.com (10.13.177.93) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4951.12 via Frontend Transport; Tue, 8 Feb 2022 14:56:31 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Tue, 8 Feb
- 2022 08:56:30 -0600
-Date:   Tue, 8 Feb 2022 08:54:39 -0600
-From:   Michael Roth <michael.roth@amd.com>
-To:     Sean Christopherson <seanjc@google.com>
-CC:     Brijesh Singh <brijesh.singh@amd.com>, <x86@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
-        <linux-efi@vger.kernel.org>, <platform-driver-x86@vger.kernel.org>,
-        <linux-coco@lists.linux.dev>, <linux-mm@kvack.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Srinivas Pandruvada" <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        "Tobin Feldman-Fitzthum" <tobin@ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "Vlastimil Babka" <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        "Andi Kleen" <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        <brijesh.ksingh@gmail.com>, <tony.luck@intel.com>,
-        <marcorr@google.com>, <sathyanarayanan.kuppuswamy@linux.intel.com>
-Subject: Re: [PATCH v9 30/43] KVM: SEV: Add documentation for SEV-SNP CPUID
- Enforcement
-Message-ID: <20220208145439.ozw4cjhqfvozewl4@amd.com>
-References: <20220128171804.569796-1-brijesh.singh@amd.com>
- <20220128171804.569796-31-brijesh.singh@amd.com>
- <YgGvu1BsYP9cihwh@google.com>
+        Tue, 8 Feb 2022 09:55:16 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69B51C03FEEE
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 06:55:12 -0800 (PST)
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id BE7163F33A
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 14:55:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644332110;
+        bh=s1IMl3bQpWn4BmhYXFrJkGqIg7SbAYtbaNCslVtkn9A=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=HMAz8B7Dwmmca22gRczJKVzfb1knOeIvmBsbxZreOTVJVcaaT3db50py4DW/FlxuD
+         PFFg1TLTIazeQ31Vyj0G1PiCPf597wcdHPLiwr3Ri1ulaZAJ0KpkGRLbhDg9URsP64
+         aOUODZm98XB+vg39V84E3jvyumQvdLY7DgKouH4upi/GKkWA2OOpvqqej3AHGEfxwj
+         9uoLnLGjumotGTq4sTXu8i81kieYfwAjJjT9z7hlhJpPusfRLIMzrJZ6VkK2OvzKq5
+         +GvEPINRZMjxl8QUeurHsMR9ToW4vTThNwh1dxGKZJ+TaIA4cFGyZNo3hEupnBO7oI
+         11fttRKcpHGrQ==
+Received: by mail-ej1-f71.google.com with SMTP id aj9-20020a1709069a4900b006cd205be806so956744ejc.18
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 06:55:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=s1IMl3bQpWn4BmhYXFrJkGqIg7SbAYtbaNCslVtkn9A=;
+        b=SmfSU5yQzJbl/hBhgtkJGK7K+9aoxMSn95QxIUC2sK5fM+N38Fn5HTbK9z40EsK0pd
+         5accPw52yWwOARj6CjdprkOgKO6+i1MwMgnwodL0zltxCtWW0fU547p6houv7u2RZLRe
+         6rL7DLtl8iWryg0uME4qunCnBZnUzEserJBr0qix+4/sOG61bGHFjicu47SBLwi+c5fN
+         dPnJteuLkRdyhJDGWNDKTAFwzAr2rXEIBP+9Ti+29o4rzoi0hboYGJefVWtdlreCaUQm
+         6R3W85aikzJ2ARJm3IWaJUaTxXbNsXfB43tCsue06bzGmfNVcX6EKdZM6h5zvbM/hU3p
+         Nn5A==
+X-Gm-Message-State: AOAM530GrBEBeBAGMRE27RbzvMB9tD5o8NiKwkWSH4R87BqMnFRAqFwd
+        FDSKVSe3SAIp5nBL4jeA46KUXbnhxewHujeHF58IPcUAcZxvHJOnxSPtsDlihgIDgKCH+NSELJo
+        3C8j5/1Pmo2tETMmvT0A4nMpVyISh60Q2ni9i3fXBhg==
+X-Received: by 2002:a17:907:1c01:: with SMTP id nc1mr4166734ejc.659.1644332110288;
+        Tue, 08 Feb 2022 06:55:10 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzBDSawfyjI97i8H3epieO8DgpiikxUatxwAPQp6uSpUnl0g6llplmwOmXOOamh8buC1ms3Yg==
+X-Received: by 2002:a17:907:1c01:: with SMTP id nc1mr4166711ejc.659.1644332110105;
+        Tue, 08 Feb 2022 06:55:10 -0800 (PST)
+Received: from [192.168.0.93] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id o11sm7026147edh.75.2022.02.08.06.55.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Feb 2022 06:55:09 -0800 (PST)
+Message-ID: <bca78043-d552-a7e4-149b-087c6226d8bf@canonical.com>
+Date:   Tue, 8 Feb 2022 15:55:08 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <YgGvu1BsYP9cihwh@google.com>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 205c953d-9c7d-4b8b-cba8-08d9eb133175
-X-MS-TrafficTypeDiagnostic: DM5PR12MB2440:EE_
-X-Microsoft-Antispam-PRVS: <DM5PR12MB24401F74968EAB8C7F9C6A31952D9@DM5PR12MB2440.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Zm5m1i8vGRKkfviARu86uzc2jhCDq2LZebGaw0+dx58hOfI6rKHnusDIdnDyLMivdMrJ14FCb7uK9U6ZONlxRUQ2Ww8OkkPHu31nZjJVlsMm1XBAzMwMuYuCrDy+RY6jyYX37zVUTFeu4BFWwKitPg/ILqmd4j26CdhjwFrC6bjaWhim4AuALZSeHf8tOTqPZ9/73eYvSYrmdvbkVJfRfavJyC3310BB+g6+rbjqTimzVEaHNNEJPAPy2YaGnXpdJ4hy5j+z0KS13BYQ5ULzYWY9PvTklCuhoZL/16FEgtPLIiCEPN3EuKH7VBP/wEcnFg8ZxH3851ZWCvqzm9PgT8s8puQyyGMi/lbD87h7zNYH4SmImQqNY1/Jxq0zV4b3j0yyUGatSYJ3cypbAI5I1U3YjUcjLBM41qxqLms86UYeMbEdSeDAlFuFpYIq1IVmcKKiFDcVtZJoqgBq9cZMbCwJVuyxVA3IH+/lVz9tluyptAmjlfydJJQ5vR1Ohwx5q+oZDc9/50Jw7MIq+PMgGNp4Ti1irEHeCW/nzD86Z+10Whjzcww1xC72QEIkudfNyoyaVjokvl/Sk5oXAYcHX33ea2o5vOgzV72/8FASCeN/Mvd3VRbWN0u+nEZu2SrB6SicxFaJJxZUUMH9jtGaEr6bouIO5ttZJrPdX0dwZeD8QX8ts2cXJlVqMbu+61BKb3UKsPldrfU4ZEkm4LgceA==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(426003)(186003)(1076003)(508600001)(26005)(16526019)(336012)(36756003)(86362001)(6916009)(36860700001)(47076005)(40460700003)(54906003)(83380400001)(2616005)(7406005)(70586007)(70206006)(8936002)(81166007)(7416002)(5660300002)(4326008)(356005)(8676002)(2906002)(44832011)(316002)(82310400004)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Feb 2022 14:56:31.5564
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 205c953d-9c7d-4b8b-cba8-08d9eb133175
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT017.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB2440
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 1/3] dt-bindings: crypto: Convert Atmel AES to yaml
+Content-Language: en-US
+To:     Tudor.Ambarus@microchip.com, herbert@gondor.apana.org.au
+Cc:     Nicolas.Ferre@microchip.com, Claudiu.Beznea@microchip.com,
+        alexandre.belloni@bootlin.com, linux-crypto@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Kavyasree.Kotagiri@microchip.com, devicetree@vger.kernel.org
+References: <20220208104918.226156-1-tudor.ambarus@microchip.com>
+ <20220208104918.226156-2-tudor.ambarus@microchip.com>
+ <f5563605-7b61-c23e-68ec-6e315efb268d@canonical.com>
+ <d72a96a9-f99c-5204-00d0-00f78ea96772@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <d72a96a9-f99c-5204-00d0-00f78ea96772@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -127,84 +88,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 11:48:11PM +0000, Sean Christopherson wrote:
-> On Fri, Jan 28, 2022, Brijesh Singh wrote:
-> > From: Michael Roth <michael.roth@amd.com>
-> > 
-> > Update the documentation with SEV-SNP CPUID enforcement.
-> > 
-> > Signed-off-by: Michael Roth <michael.roth@amd.com>
-> > Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
-> > ---
-> >  .../virt/kvm/amd-memory-encryption.rst        | 28 +++++++++++++++++++
-> >  1 file changed, 28 insertions(+)
-> > 
-> > diff --git a/Documentation/virt/kvm/amd-memory-encryption.rst b/Documentation/virt/kvm/amd-memory-encryption.rst
-> > index 1c6847fff304..0c72f44cc11a 100644
-> > --- a/Documentation/virt/kvm/amd-memory-encryption.rst
-> > +++ b/Documentation/virt/kvm/amd-memory-encryption.rst
+On 08/02/2022 15:40, Tudor.Ambarus@microchip.com wrote:
+> On 2/8/22 13:58, Krzysztof Kozlowski wrote:
+>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+>>
+>> On 08/02/2022 11:49, Tudor Ambarus wrote:
+>>> Convert Atmel AES documentation to yaml format. With the conversion the
+>>> clock and clock-names properties are made mandatory. The driver returns
+>>> -EINVAL if "aes_clk" is not found, reflect that in the bindings and make
+>>> the clock and clock-names properties mandatory. Update the example to
+>>> better describe how one should define the dt node.
+>>>
+>>> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+>>> ---
+>>>  .../crypto/atmel,at91sam9g46-aes.yaml         | 65 +++++++++++++++++++
+>>>  .../bindings/crypto/atmel-crypto.txt          | 20 ------
+>>>  2 files changed, 65 insertions(+), 20 deletions(-)
+>>>  create mode 100644 Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-aes.yaml
+>>>
+>>
+>> I understand that you keep the license GPL-2.0 (not recommended mix)
+>> because of example coming from previous bindings or from DTS (both GPL-2.0)?
+>>
 > 
-> This doc is specifically for KVM's host-side implemenation, whereas the below is
-> (a) mostly targeted at the guest and (b) has nothing to do with KVM.
+> The previous bindings did not have a license specified. We have DTS files with
+> these nodes that are either (GPL-2.0+ OR MIT) or GPL-2.0-or-later. The drivers
+> are GPL-2.0. I thought to follow the drivers. I see the example in [1] uses
+> (GPL-2.0-only OR BSD-2-Clause). I see the crypto bindings that are converted
+> to yaml are either (GPL-2.0-only OR BSD-2-Clause) or GPL-2.0-only. Is there
+> another guideline that I miss?
 > 
-> Documentation/x86/amd-memory-encryption.rst isn't a great fit either.
-> 
-> Since TDX will need a fair bit of documentation, and SEV-ES could retroactively
-> use docs as well, what about adding a sub-directory:
-> 
-> 	Documentation/virt/confidential_compute
 
-There's actually a Documentation/virt/coco/sevguest.rst that was added
-in this series as part of:
-
-  "virt: Add SEV-SNP guest driver"
-
-Maybe that's good choice?
-
-I've been wondering about potentially adding the:
-
-  "Guest/Hypervisor Implementation Notes for SEV-SNP CPUID Enforcement"
-
-document that was sent to SNP mailing list under Documentation/
-somewhere. If we were to do that, it would be a good place to move the
-documentation from this patch into as well. Any thoughts on that?
-
-> 
-> to match the "cc_platform_has" stuffr, and then we can add sev.rst and tdx.rst
-> there?  Or sev-es.rst, sev-snp.rst, etc... if we want to split things up more.
-> 
-> It might be worth extracting the SEV details from x86/amd-memory-encryption.rst
-> into virt/ as well.  A big chunk of that file appears to be SEV specific, and it
-> appears to have gotten a little out-of-whack.  E.g. this section no longer makes
-> sense as the last paragraph below appears to be talking about SME (bit 23 in MSR
-> 0xc0010010), but walking back "this bit" would reference SEV.  I suspect a
-> mostly-standalone sev.rst would be easier to follow than an intertwined SME+SEV.
-> 
->   If support for SME is present, MSR 0xc00100010 (MSR_AMD64_SYSCFG) can be used to
->   determine if SME is enabled and/or to enable memory encryption::
-> 
->           0xc0010010:
->                   Bit[23]   0 = memory encryption features are disabled
->                             1 = memory encryption features are enabled
-> 
->   If SEV is supported, MSR 0xc0010131 (MSR_AMD64_SEV) can be used to determine if
->   SEV is active::
-> 
->           0xc0010131:
->                   Bit[0]    0 = memory encryption is not active
->                             1 = memory encryption is active
-> 
->   Linux relies on BIOS to set this bit if BIOS has determined that the reduction
->   in the physical address space as a result of enabling memory encryption (see
->   CPUID information above) will not conflict with the address space resource
->   requirements for the system.  If this bit is not set upon Linux startup then
->   Linux itself will not set it and memory encryption will not be possible.
-
-I'll check with Brijesh on these.
-
-Thanks!
-
--Mike
+Yes, there is. Run checkpatch (your question kinds of point to the fact
+that you did not run it...):
+WARNING: DT binding documents should be licensed (GPL-2.0-only OR
+BSD-2-Clause)
 
 
+If your new bindings use copied/derivative description or DTS code which
+is licensed as only GPL-2.0, the bindings itself as derivative work
+might need to stay as GPL-2.0 as well. Unless copyright holders agree to
+re-license this as GPL2-OR-BSD. As representing company, your patch
+might be enough to re-license, but maybe other people contributed. I
+don't know.
 
+I just wanted to be sure that you use GPL-2.0 in purpose, because
+GPL2-OR-BSD cannot be used.
+
+Best regards,
+Krzysztof

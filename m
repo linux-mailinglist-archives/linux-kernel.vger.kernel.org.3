@@ -2,93 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F78A4ADA9A
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 14:58:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77C534ADA9D
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 14:59:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377138AbiBHN6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 08:58:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48982 "EHLO
+        id S1377225AbiBHN7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 08:59:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377092AbiBHN6o (ORCPT
+        with ESMTP id S1358099AbiBHN7d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 08:58:44 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E6DAC03FED2
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 05:58:39 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id i30so18980006pfk.8
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 05:58:39 -0800 (PST)
+        Tue, 8 Feb 2022 08:59:33 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35415C03FECE;
+        Tue,  8 Feb 2022 05:59:32 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id c192so12241242wma.4;
+        Tue, 08 Feb 2022 05:59:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:in-reply-to:references:subject:message-id:date
-         :mime-version:content-transfer-encoding;
-        bh=AIz4u6+J7TOpSAJ7umSJYy5QMznxsAdsbABH881qXOc=;
-        b=QBvyg3iXYdPDog3Mjgdepp4ko2yHqMNCTbKR64iBX+RhYpRvyqc9bYuCOWzw/EZON6
-         fb0YVocvKj0GOxIgoDaLhJIaeIILGeA4+sI/bA1V8NnQlV8QaVtH3DW1WrqJBffNWdY7
-         sCD/aDoPpKxAgWDRoRQ4bnm1vQq+PsIXopIJNGuYb6jwVa8/gkzj39DQ5Y5uiy6x+EUP
-         T8Pxoy7zPp43NUyECscPQ6QNWxDkoTH6CMPeNlHI1Z/zsPmehJiSSgCAxEAbWc0JgqZC
-         E+QfZdAbsjlgqbEVdhhosJdoqYMnqw0y0qeOL/OicYv4pTxOO3O33DjWnwzI4g+wYUg3
-         JGPQ==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=r0hF5ZRTXwpGB8Z1rBOeeLEYfkPvVonZLdA9UEgNhqw=;
+        b=Bbw7NflQ70eSn3rN/iwnYlv4e9SlAWz2F2aTCUkdUQ9R4xLmM8bAqPzKWLtPeSeNro
+         ed2YrKex4bkyihHBsXcUZUrjh0iwbHue6ae0L2FuiIkmcABet21PLQZpV7WuZxDQcy/o
+         JtFeGJMMkvP6FH9hj3SbvHuYQxGuScvy9Tex0YIO+yPhinoOrscHeXgrZbzEei8I36r2
+         DNSrQjSPf8SN0Ua8jjrfxc7QNXzCWaT3vXcFtzpVVqzEvgySFNKW/EtMaRx3oBGCNcTM
+         0CVV/RQ3iREmDcxs0KRP1Xw2dyNrQ81IYpdiLz4iNeBehQYHmmEvubkbunvgOV5Vf4TZ
+         Lrrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=AIz4u6+J7TOpSAJ7umSJYy5QMznxsAdsbABH881qXOc=;
-        b=jaZ3ZF6F6U7Cs7UhxmB5FyTVq+DM9Knb0b04QIEsvU8xVidnAJfb/cDtsyDcmpBAXg
-         qeDa7s6tv0xbC168X7AS+Ez5UcZjUrz+xnhdxohnHOpYfOAg4gSOHykiarrb/KWh4wzT
-         JjCmrx2o42sJGy0tsYrZKvh7nlL2tAFGppmcHvnsKuuKrtNl+L5VN4nlZlgB3hIGNzct
-         92PmWtj+2Pz4oQOR/RskD0PpwCpUl6dWlS5JnFN0EJJVum/o948ptD62qAUbyxNtQDDQ
-         tGHslaZjlangogL909lYqQKOpjIyflCA2SzMj9pHz9mactwqshkrHlIZAuwMdnB5Q6es
-         WNzw==
-X-Gm-Message-State: AOAM5330U5HTQ5s53MzaNHFRuEdXotCDYeR56COZjHb31b+v1AVlsX0J
-        JuDaNq0qwWWTXuUv9FMGsNVU6g==
-X-Google-Smtp-Source: ABdhPJx66+slGS5Qs7Nt+9v0YLJNIrazUPmXvysxRltmh84zmjoesoqrKy5dz7gq35J9FjJAQOQbaA==
-X-Received: by 2002:a63:91c3:: with SMTP id l186mr3699400pge.558.1644328718641;
-        Tue, 08 Feb 2022 05:58:38 -0800 (PST)
-Received: from [192.168.1.116] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id r10sm2423434pgk.74.2022.02.08.05.58.37
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=r0hF5ZRTXwpGB8Z1rBOeeLEYfkPvVonZLdA9UEgNhqw=;
+        b=eJND3yRoZMVvlgn+aQ9HgDMaLVTbl9Zdbfe6H0vtcI33x67i4tCmAp/IiAS/5w/MVX
+         65CVflxIU9agp+yDN7ZvoX9WRJsNoEnQTPl+9s9gQ6KIU3Zfh1CNy2Jn1kQm/IStM06U
+         HdTwniB6ib1Ymy00KJyiyIC9OIN+NaXMgFeiNNvOBGKnUxNzYfOQ5lp+dcD1jMdEyTYx
+         WUKxMV9YhBQr0NGLQablTstR7XmVKxOEx7aqJLmTUQP9B+IUpb4wQvLIonjDf7rHO0vo
+         jdOpNHBxneZ4bYrEn9fjdzt8rLtUUbGoLELFl46ysH3JOC593guEn03TPW0TVm2/94hS
+         k7yg==
+X-Gm-Message-State: AOAM53396DuIz2LD6QqeTyKd9nv98c/XmFz6KL1fQFLQGHt00DPenQ47
+        9FX8kxyf28swkD1vjf4GqXg=
+X-Google-Smtp-Source: ABdhPJwJwtce+XPvjrqhfnhiTU3vMRDenSOoJG/GpYYWqoF1cJa4dzHMh0DbY5X5r2yRl6ozoGncgw==
+X-Received: by 2002:a05:600c:3b9b:: with SMTP id n27mr1143539wms.14.1644328770736;
+        Tue, 08 Feb 2022 05:59:30 -0800 (PST)
+Received: from debian (host-78-145-97-89.as13285.net. [78.145.97.89])
+        by smtp.gmail.com with ESMTPSA id x5sm3205272wrv.63.2022.02.08.05.59.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 05:58:38 -0800 (PST)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        "Md. Haris Iqbal" <haris.iqbal@ionos.com>,
-        Jack Wang <jinpu.wang@ionos.com>
-Cc:     linux-block@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <7f9eccd8b1fce1bac45ac9b01a78cf72f54c0a61.1644266862.git.christophe.jaillet@wanadoo.fr>
-References: <7f9eccd8b1fce1bac45ac9b01a78cf72f54c0a61.1644266862.git.christophe.jaillet@wanadoo.fr>
-Subject: Re: [PATCH v2] block/rnbd: Remove a useless mutex
-Message-Id: <164432871743.114004.5542011379839024648.b4-ty@kernel.dk>
-Date:   Tue, 08 Feb 2022 06:58:37 -0700
+        Tue, 08 Feb 2022 05:59:30 -0800 (PST)
+Date:   Tue, 8 Feb 2022 13:59:28 +0000
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, slade@sladewatkins.com
+Subject: Re: [PATCH 5.4 00/44] 5.4.178-rc1 review
+Message-ID: <YgJ3QCc/ZPPd9HHx@debian>
+References: <20220207103753.155627314@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220207103753.155627314@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 7 Feb 2022 21:48:19 +0100, Christophe JAILLET wrote:
-> According to lib/idr.c,
->    The IDA handles its own locking.  It is safe to call any of the IDA
->    functions without synchronisation in your code.
+Hi Greg,
+
+On Mon, Feb 07, 2022 at 12:06:16PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.178 release.
+> There are 44 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> so the 'ida_lock' mutex can just be removed.
-> It is here only to protect some ida_simple_get()/ida_simple_remove() calls.
-> 
-> [...]
+> Responses should be made by Wed, 09 Feb 2022 10:37:42 +0000.
+> Anything received after that time might be too late.
 
-Applied, thanks!
+Build test:
+mips (gcc version 11.2.1 20220121): 65 configs -> no new failure
+arm (gcc version 11.2.1 20220121): 107 configs -> no new failure
+arm64 (gcc version 11.2.1 20220121): 2 configs -> no failure
+x86_64 (gcc version 11.2.1 20220121): 4 configs -> no failure
 
-[1/1] block/rnbd: Remove a useless mutex
-      commit: a41cdf83a63122e5c5fb8c8550b812b25a332577
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
 
-Best regards,
--- 
-Jens Axboe
+[1]. https://openqa.qa.codethink.co.uk/tests/723
 
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+--
+Regards
+Sudip
 

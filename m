@@ -2,543 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74FE34AE497
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:37:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BED14AE42F
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:27:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387023AbiBHWfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 17:35:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49622 "EHLO
+        id S1387613AbiBHWZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 17:25:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386339AbiBHUKm (ORCPT
+        with ESMTP id S1386376AbiBHUR4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 15:10:42 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 682E1C0613CB;
-        Tue,  8 Feb 2022 12:10:40 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id y3so1047224ejf.2;
-        Tue, 08 Feb 2022 12:10:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=LqpS1C58rEre6k1Ish5WUbwOdRiZi0f8EFHi+i5WIvo=;
-        b=S6Eh7lva1WoZBEDwp+ntAxc6UTzGvE268VB2ZOvJrE3kx7bfpIdHK2pFiNWZq8DDb1
-         C5GOG1D17V4xl4okMH6Jh+QNoYUs99YVS4y0/rLJh+jM9sDWjxkmV0zJFkQMZeTRmlHG
-         kCaCv1UGhByN9XKDjE9H/OTbwelG6rz4igNyLeBlDfgtBh+MHgapRuALdkl6K+ZCvn0Q
-         mrSZk57aoLP1gddt2x4654GT9Gk5Cb2lb5jMqNJNuqzdfee0miBBMmukdIIb+GhItwgJ
-         WtUqRETIkXiw+3CehiKM0L6xbyQOZSpdo3InuusC0ZgEfDiyidann1XdezKcrYFj9TKV
-         Dkew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=LqpS1C58rEre6k1Ish5WUbwOdRiZi0f8EFHi+i5WIvo=;
-        b=xwFs/N52UlyBjfVISpg1PRQzEyKhk16h6soWlTxHLEG1JY7Ipm/pWzY1HwFVj0TLmB
-         KPyLg/CzhBrR5BS8CMovwytrZfBA7S/6XpL/T+/wsVovQZ2Rmjx5qaTPK8icYP9q53jU
-         B/igMyXR5msSQinYEfCZZHFuWhlHy2nDk0IR6HG7SzkZ7WrE1UV3WwrlGrTYGtbgRLg5
-         vXeCS0UXrnrNyA3hkA5oZETSsVhSQ4ZG7Dl1TX5WQhsFM8zvRPgl+vkYLd8i9LAa6JN9
-         hv8N0eEfX6svTImLKpYby9xgiei1oY9s8N0XFZdmA0dOUZ9Ur98RxI0bzBf5mDER5dxs
-         BWeQ==
-X-Gm-Message-State: AOAM530TowMt0AnSnLv6rKnmd4h3bRzrokx4AJlsEPjrfmkY9hSScMWg
-        8KFKw9cgdnTtIZ33iwzcMwYbjOdztIkget7y/WMYyEOlI46VSw==
-X-Google-Smtp-Source: ABdhPJwTfhhiIuNgwW0z2YamYq660O9jrbcrgJBsQqaEJJ7UuuabvkknKnwttu0PEpBZ2QtMVSdpwn6Q8t32jw2L/HI=
-X-Received: by 2002:a17:907:6d17:: with SMTP id sa23mr4821509ejc.551.1644351038635;
- Tue, 08 Feb 2022 12:10:38 -0800 (PST)
+        Tue, 8 Feb 2022 15:17:56 -0500
+X-Greylist: delayed 427 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Feb 2022 12:17:54 PST
+Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.87.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9726BC0613CB
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 12:17:54 -0800 (PST)
+Received: from mailhost.synopsys.com (sv2-mailhost2.synopsys.com [10.205.2.134])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 53423C0A66;
+        Tue,  8 Feb 2022 20:10:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1644351047; bh=+x3Uol0yIHfiI40VefQmQc9RPfNzaWwwHPF8zDxcnbc=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=F2hE4i2mAxe61nzquY8a1dluKuu6U3KwBV2PcVNmelraY8tLD/7rF+QTN0BGAz/dB
+         QVbwwO9oSX8BumYpr5h3LqGG8QTI2uJEw1LusBSlPf6Fw9hyCa3vd40u0+ikuMR1/1
+         So1F0sZuO102Uq9tZglOf+BuA879dgkzib/ZQxRPXiQkjb/k7pt6kBLM0C6dqpUMn2
+         xHdoE/K8Bs9qrFT/mmm+OXE9E447U+QtraQ8zw93w0VeAaKEyNZBS+7QK3Di7wiVRd
+         4Gg2wat99PUPZZZ/kKnb5F8TU3q1mJINV6U8dR0yLhSjntcM1cu9PB82jQmiNx1CXD
+         aaGTH16nkZCWw==
+Received: from o365relay-in.synopsys.com (us03-o365relay3.synopsys.com [10.4.161.139])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client CN "o365relay-in.synopsys.com", Issuer "Entrust Certification Authority - L1K" (verified OK))
+        by mailhost.synopsys.com (Postfix) with ESMTPS id E7367A0099;
+        Tue,  8 Feb 2022 20:10:40 +0000 (UTC)
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2174.outbound.protection.outlook.com [104.47.58.174])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
+        by o365relay-in.synopsys.com (Postfix) with ESMTPS id 5D28580362;
+        Tue,  8 Feb 2022 20:10:37 +0000 (UTC)
+Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
+Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=thinhn@synopsys.com
+Authentication-Results: o365relay-in.synopsys.com;
+        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="RR9VZ467";
+        dkim-atps=neutral
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IHLw5dw3ODKGVJlQjnXbq3/+IAiq0LmlnAETxOPxAwHaIWuBg864pKR2JDYY3dCbC0prJz1rnynylXtNp2oY82ubtTkaOWG8WRO7JgLP545P+f/M0LJS/qI3VSAphUl4YWKsD5Ug1IepUr7seIl96NoHjVcuhNaln7vURBtDCDh/yd9BCFyvHECQR5UROKKD+uT6M2bhY6OOTCF9MSbynxvqENoJ9MqBbuqLCu7BXC8BAy4c+BJOgBOyQ6i8ZTGEtSpbt5706qSEnLIKatQ4UP/8qNTvDBep82BWRrNGX19Ftv4Y8Vn2cCag7bySocg/BAnOBC+ns2NLzzdKkKWe7w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+x3Uol0yIHfiI40VefQmQc9RPfNzaWwwHPF8zDxcnbc=;
+ b=GIOyPJN0bTdKi348hMdLGfxosLJAFAVaDFN6jjLKDEQeHl2sthSqehxYWTXtyd0lHZ94dHQqece+pKcsrFQJsAaYpU/bVIbImMqhKvbGpaO9ckeUeCW/lZCS/1+OsCe3SUcKse3X6aDFoppfZ0uAwvvPpobR5o+1bUhu7safCBaSl9OgkdPTwLudOXtsfwrQgEC0vuFEyJTv9ouzbYK1uNvOQpADbv4ShV3c7XdGQAhSkdyXEJfU8pON8wU6EOMiCwVI9DpnJFTe/KOZY9krLuW7vYXWasP9hlycQ8Is26EnIGkV5amnEhRXEjevgaRsYI1TBKhXJkwk+uXVFqKAVA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+x3Uol0yIHfiI40VefQmQc9RPfNzaWwwHPF8zDxcnbc=;
+ b=RR9VZ467NlCLonNxOobxMdZhzMIc63/PYvIfoDuUK3u4s3Irxk1Bm9ozd6vuXuxBV89N32MV4vhuovrya6NOz8Z74jPj749SNUOGA+YIQ8NFWeHL88v5d8enCh4LtAplW8H4IBjdzt81yPlbjwU1r6jpYvqwwj6kiGqwR+xP/Tg=
+Received: from BYAPR12MB4791.namprd12.prod.outlook.com (2603:10b6:a03:10a::12)
+ by BY5PR12MB4241.namprd12.prod.outlook.com (2603:10b6:a03:20c::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.11; Tue, 8 Feb
+ 2022 20:10:34 +0000
+Received: from BYAPR12MB4791.namprd12.prod.outlook.com
+ ([fe80::c5f4:5df4:b5bf:b13e]) by BYAPR12MB4791.namprd12.prod.outlook.com
+ ([fe80::c5f4:5df4:b5bf:b13e%3]) with mapi id 15.20.4951.019; Tue, 8 Feb 2022
+ 20:10:34 +0000
+X-SNPS-Relay: synopsys.com
+From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Arnd Bergmann <arnd@kernel.org>
+CC:     Fabio Estevam <festevam@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        John Youn <John.Youn@synopsys.com>,
+        Bing Yuan <Bing.Yuan@synopsys.com>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: Kconfig CONFIG_FB dependency regression
+Thread-Topic: Kconfig CONFIG_FB dependency regression
+Thread-Index: AQHYF7+jJ2OaNYIQN0qLBwE4mmvJGKx/URMAgAAPEICAAAQRAIAAfiQAgAEPAICAAHuWgIABUBIAgAALfACAB1ffgA==
+Date:   Tue, 8 Feb 2022 20:10:34 +0000
+Message-ID: <992f01cc-eb0c-b503-f9b4-4a037c6cf67a@synopsys.com>
+References: <6fc4a81f-1a13-bff9-7b2e-d5bec382cb42@synopsys.com>
+ <9bab4777-3034-b789-fdf6-ca8d7e6a8c35@infradead.org>
+ <CAOMZO5Aa4WxuadfoFGwwyYyD4UGPm-E258xTWU3-ozp_hwG-7g@mail.gmail.com>
+ <d8981e2a-4f61-72bb-e5cc-bf4ded29c08a@synopsys.com>
+ <CAK8P3a3ELrSC=KX6cr8UnP6kkJN0AXeAE4EG4oUY=Zz7gG_dgg@mail.gmail.com>
+ <b44de208-6d5f-3fcd-0e36-f05745297747@synopsys.com>
+ <CAK8P3a27RtHxYwtj=rjxcDzkMdKhC-w9ho=SApHpczma_vU8JQ@mail.gmail.com>
+ <6743d6b1-13fe-9c83-f706-82338dd03897@synopsys.com>
+ <7ed6137e-cf19-3614-9404-e89389411a8f@infradead.org>
+In-Reply-To: <7ed6137e-cf19-3614-9404-e89389411a8f@infradead.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=synopsys.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 03ecfac3-7891-423f-ae60-08d9eb3f10e5
+x-ms-traffictypediagnostic: BY5PR12MB4241:EE_
+x-microsoft-antispam-prvs: <BY5PR12MB4241017756CDE6427B34C361AA2D9@BY5PR12MB4241.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: jqKtbdpMQ88EAgc2V/KlPRFfR6yYa5zgfq+u2iKHhlufbi8IDCsDHUu81LQ9ZkbIfCEM77Ylfbrx+UpzVNKHXt/c1VzNjeX53yVaJnd7jPkPLUEGZNllBFiE5IrGbuC1FxoYXncrzIZpl7TIGNmbJqV6A16wS9sm66cHv5YQex58NuueWYJCjbqsCgax9NDbt/5h+NLh2GEbpZ9BHoQAzWjh/lalTyQQbkfcCtfVwSdyLNS+SYzLqAmPvivdnpCYBookjaj4vpeKdJQAgoxzlh55qFouMMJnkbSNf+Mnm/WuKZbcZc3T7Yhp85N0dE+l/O71BxFGNn9m9gg0oWGE220WVGwTVrPUC5QOPK+I1/BatxF83OjT89z/4vMiBS+lY4M1LFKZKGjMvrsEgFsjY96ovpNYbSC4Bzvsl7HhJhBjUqGKcUWAIGDVtuLlamhLnsta5M4AC6YFHolrJ/DK+d0RKQMRUOec43XxutuArhyHX5c3u0XcLwVtw6Q81ot6duS5fu0dI+iuc0Xy9ulPEqY26Sd608iM/C9S3stTpfGlKFSJ0Ws+iECGyXCB9dd7RzUEU5PClrs08hpPi0Q42yu9oQbdJppBZUhbTygv3qPFnBJGlYp8Wr6Run1e62wM2WSHVlN4nMN87t32CEUDvAOrCzt5yZ9+OkRx3Tior0jf17Ro/7wtWburnjZq2WP/pc5Gl7qLmzx1hiEMhXClOt+xkpauZ/5DbXyRujD2H+LyNVzuQ29cM1iwEsNx4VcIBFIZqsXtopRMxZVNCzD/bg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4791.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(508600001)(316002)(53546011)(36756003)(31686004)(6506007)(6512007)(110136005)(66476007)(66446008)(5660300002)(76116006)(8936002)(66946007)(66556008)(4326008)(2906002)(38070700005)(8676002)(86362001)(38100700002)(122000001)(6486002)(186003)(26005)(2616005)(31696002)(83380400001)(64756008)(54906003)(71200400001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dGJ4Mm9KUE9HcUJPK1l5RERZRnl4M21HUXVUL08yeXFVakFGSFBjNnB2bGdL?=
+ =?utf-8?B?NFdhV0xXek9ad1B1Mk5yd2tyTUthTlhRdGhRZFZ0VnRBRTF3QitVTjRDYjlD?=
+ =?utf-8?B?Sk9oK2EvR25CWlZHQWZRY25QWFVxZExrK3k4QnlPaEZBMStwOTNTc0VoeUxC?=
+ =?utf-8?B?SzVVUFhvdUFWbWs1bFM4U0EvbmI1eDk2by93QVFVSVNoVkJHNkJsKzh6U2x5?=
+ =?utf-8?B?UGRWM2NocHBaTjNjVjZOaXIvclpsMi9wQ0ZZbHdEQmZaYXBnU1QyL0ZWbFF4?=
+ =?utf-8?B?TGFXWDdWWUczL1UwUFFvTS93VzBLSlhuNnZLS2U2b2xIb29NcHpBbElpZUZp?=
+ =?utf-8?B?em1aRjFuTk43VTYvM3I1SFZqS3NLb01YOVpXVDI4ZkpHN1dDTE51dklUNSsy?=
+ =?utf-8?B?bWo0YWdYck4rV1lNMDg3NDl6SWJucHdjY0VLdGhGYXd2WGhKUzIrQmhFMUpu?=
+ =?utf-8?B?bUxPRkZjUmFIRHU0UklIR00vRzNjRjVLbXlKdVBWV2tXd2VrcGsvcHNMS09y?=
+ =?utf-8?B?ajMxbVZBNG9DcHhoNUV1YllDOXdUb1ZVb0haVnF4bURSc0FsbWY0c0RJeVBw?=
+ =?utf-8?B?ZDdrWGJZdjVKQ0Q1aWRwSFEyTnNPZ1d1MmRhc3J6K1BXeFRxTXlERUttZXdm?=
+ =?utf-8?B?TDhUbkNQbitLMnl3RnpGYW55SUsxUlVyYmphNlVwSXljTlVWUEhsbk1VOVFj?=
+ =?utf-8?B?T1NGR2gzTDk1TDd1SSsvenFXcUFocS9QL01Lc0lTRnIzNFc0M1VGUkVhcG1N?=
+ =?utf-8?B?OEhWeXY4Y2RzQkdYbU5MdUsyaG9TdFgvdDVJODA1UUVQVDVobytPRVZlT1dD?=
+ =?utf-8?B?aGU0VW9GeVM4bU45MTJnUTBQVzB6RUVQVkU5L0drRFZrcXBzbTA4S1E2SHpr?=
+ =?utf-8?B?MFBKVG5MUGF1US82MUkwRTBSR3RXTzB4ODFmaDRicVl1V05sOE5QdG1EQjZZ?=
+ =?utf-8?B?aE9JUkFOQjQrRHNySlVnTHUwdHVJamhwQ2tndmxoQ2g3VmVWZjUwMVVxK3Jt?=
+ =?utf-8?B?N2hRbmdUcGx5SHpEZE1YRWtVNGlTa1hUSUZDZWpZNGU4bUdsaEgwdFo4endK?=
+ =?utf-8?B?N25GYTlJR0c5ak83V0htT0NkU1hwd0ZOeGd0TG83M1gyQWZJRTVhWi93UUNT?=
+ =?utf-8?B?bkE0bnVLajBEY1BiWFNLc3lyOW8yRmIwZzJ0eVVKZUFNNEhhR1lRMW1vNzhF?=
+ =?utf-8?B?K2Q5cVZLOEw4VHlmbzViM2R1ZDEvdmYzaWtYamJKaSt0K3I2TGxudnlEeUp3?=
+ =?utf-8?B?OFpTRUdOTDlDWTBDajVEN1FXMkI5TFVFVk5SMUFSQWd3UVArUmFPUFUwRUVE?=
+ =?utf-8?B?Vm96QXVNZXFGMGpNTUJGMzZEZUF1WS9ZbXFHSU1IUit0aU9EWUUyYUEwMHl6?=
+ =?utf-8?B?UUZUZTI1TkxxMFNsbWZpUzdoSTRHSU9pb2xKUC9qM3AwTUJxUGh1VEY0MDNq?=
+ =?utf-8?B?NVpXelZHRFIrNDE3RnVCNkZPcXN1Y2h1aytKQ3FsdGpmTjMvNUgzVXJSRE00?=
+ =?utf-8?B?QmI3THVQSTZNbW9jaWZUWDFodW9PaENwZEozd3dCKzlPTnFhNVE5WjdxSHZh?=
+ =?utf-8?B?cjFGS0xGcjNXWjdWZnJWa3owMldmQ2Nua2lGL0Q5MHdJMUV5T1JnYXM1VWVS?=
+ =?utf-8?B?VnQ3dUlCT3FrR3N3ZWp3UTJyakdJOWIxZlQweFI3QlZyQWk1L0ROb3lEOWh5?=
+ =?utf-8?B?dTV5R2tFRldRSzVrZXVwM2ptSkFSby95OE9WRWhudTMvNlo3enZOQXVYdVd0?=
+ =?utf-8?B?cTh6TE9RSGdobW1jWlFra2ZVdGNiVkhFWUttSnQ1bk8xelBFR0J6anI4emY1?=
+ =?utf-8?B?b3hwNDRFeERmaWllTmxnaDJsanBoY3RkOWhmSE9vZmJXSisrTWJvZGxMSHF4?=
+ =?utf-8?B?MTZXRHhVTGV1SUl6dkkzUERERUhKTXY5SUhONEhVUmx0K1NHR1dtTEhCM0RJ?=
+ =?utf-8?B?M2huRGtlWE9KTjlaZ1lXLzJ0MllpSmsyNCs2QlJtUFA4aTh5UXRhTDVqc2ZG?=
+ =?utf-8?B?VWF5ZnlBbTJrVmM3ZmMvQ1luMTIycnBTc0NjeUxRR2FHdzJLK0UwcXF3TENO?=
+ =?utf-8?B?ZDBnK0daTmVWUnhFVStkZ0pRcEthd2dwYWJpWDhST1NpTGpXdTI3ZmZxanRo?=
+ =?utf-8?B?eXpSNGpMZjJDTVNmQWo0bldVRmtTdVlKY3JGOHZNdkFJcExFOWhqY1pEQkNv?=
+ =?utf-8?B?NEE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <1C78DCE788E9C847BCDE3906394636D0@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <159db05f-539c-fe29-608b-91b036588033@molgen.mpg.de>
- <CAABZP2xampOLo8k93OLgaOfv9LreJ+f0g0_1mXwqtrv_LKewQg@mail.gmail.com>
- <3534d781-7d01-b42a-8974-0b1c367946f0@molgen.mpg.de> <CAABZP2zFDY-hrZqE=-c0uW8vFMH+Q9XezYd2DcBX4Wm+sxzK1g@mail.gmail.com>
- <04a597dc-64aa-57e6-f7fb-17bd2ec58159@molgen.mpg.de> <CAABZP2yb7-xa4F_2c6tuzkv7x902wU-hqgD_pqRooGC6C7S20A@mail.gmail.com>
- <20220130174421.GS4285@paulmck-ThinkPad-P17-Gen-1> <CAABZP2w8ysVFmxRo7CMSHunnU0GqtS=+bU6tLqcsXDUyf60-Dw@mail.gmail.com>
- <20220201175023.GW4285@paulmck-ThinkPad-P17-Gen-1> <CAABZP2zsyf238t6FGaszY+vwuBocFWQj=7k2pGd2OA3E7G525g@mail.gmail.com>
-In-Reply-To: <CAABZP2zsyf238t6FGaszY+vwuBocFWQj=7k2pGd2OA3E7G525g@mail.gmail.com>
-From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
-Date:   Wed, 9 Feb 2022 04:10:26 +0800
-Message-ID: <CAABZP2xS8zPZxve=Yx=UKMGYxjKmgjL-GA4YOngH7BSn5Tf7Gw@mail.gmail.com>
-Subject: Re: BUG: Kernel NULL pointer dereference on write at 0x00000000 (rtmsg_ifinfo_build_skb)
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Paul Menzel <pmenzel@molgen.mpg.de>,
-        Josh Triplett <josh@joshtriplett.org>,
-        rcu <rcu@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NORMAL_HTTP_TO_IP,
-        NUMERIC_HTTP_ADDR,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: synopsys.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4791.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 03ecfac3-7891-423f-ae60-08d9eb3f10e5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Feb 2022 20:10:34.4997
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: zI0COjSS9DCOecZ0SE08yD4Lr5p0MmFF9PwknipctUJ/mKtWoM2R1fgFxJoOaW2KVL0YOFPMoscLw/HgUGHDiA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4241
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul
-
-Below are my preliminary test results tested on PPC VM supplied by
-Open source lab of Oregon State University, thank you for your
-support!
-
-[Preliminary test results on ppc64le virtual guest]
-
-1. Conclusion
-Some other kernel configuration besides RCU may lead to "BUG: Kernel
-NULL pointer dereference" at boot
-
-
-2. Test Environment
-2.1 host hardware
-8 core ppc64le virtual guest with 16G ram and 160G disk
-cpu        : POWER9 (architected), altivec supported
-clock        : 2200.000000MHz
-revision    : 2.2 (pvr 004e 1202)
-
-2.2 host software
-Operating System: Ubuntu 20.04.3 LTS, Compiler: gcc version 9.3.0
-
-
-3. Test Procedure
-3.1 kernel source
-next-20220203
-
-3.2 build and boot the kernel with CONFIG_DRM_BOCHS=3Dm and
-CONFIG_RCU_TORTURE_TEST=3Dy
-test result: "BUG: Kernel NULL pointer dereference" at boot
-config file: http://154.223.142.244/Feb2022/config-5.17.0-rc2-next.bochs.to=
-rture
-boot msg: http://154.223.142.244/Feb2022/dmesg.torture.bochs
-
-3.3 build and boot the kernel with CONFIG_DRM_BOCHS=3Dm
-test result: "BUG: Kernel NULL pointer dereference" at boot
-config file: http://154.223.142.244/Feb2022/config-5.17.0-rc2-next.bochs
-boot msg: http://154.223.142.244/Feb2022/dmesg.bochs
-
-3.4 build and boot the kernel with CONFIG_RCU_TORTURE_TEST=3Dy (without
-CONFIG_DRM_BOCHS)
-test result: boot without error
-config file: http://154.223.142.244/Feb2022/config-5.17.0-rc2-next.torture
-boot msg: http://154.223.142.244/Feb2022/dmesg.torture
-
-3.5 build and boot the kernel with CONFIG_RCU_TORTURE_TEST=3Dm (without
-CONFIG_DRM_BOCHS)
-test result: boot without error
-config file: http://154.223.142.244/Feb2022/config-5.17.0-rc2-next
-boot msg: http://154.223.142.244/Feb2022/dmesg
-
-4. Acknowledgement
-Thank Open source lab of Oregon State University and Paul Menzel and
-all other community members who support my tiny research.
-
-Thanks
-Zhouyi
-
-On Wed, Feb 2, 2022 at 10:39 AM Zhouyi Zhou <zhouzhouyi@gmail.com> wrote:
->
-> Thank Paul for your encouragement!
->
-> On Wed, Feb 2, 2022 at 1:50 AM Paul E. McKenney <paulmck@kernel.org> wrot=
-e:
-> >
-> > On Mon, Jan 31, 2022 at 09:08:40AM +0800, Zhouyi Zhou wrote:
-> > > Thank Paul for joining us!
-> > >
-> > > On Mon, Jan 31, 2022 at 1:44 AM Paul E. McKenney <paulmck@kernel.org>=
- wrote:
-> > > >
-> > > > On Sun, Jan 30, 2022 at 09:24:44PM +0800, Zhouyi Zhou wrote:
-> > > > > Dear Paul
-> > > > >
-> > > > > On Sun, Jan 30, 2022 at 4:19 PM Paul Menzel <pmenzel@molgen.mpg.d=
-e> wrote:
-> > > > > >
-> > > > > > Dear Zhouyi,
-> > > > > >
-> > > > > >
-> > > > > > Am 30.01.22 um 01:21 schrieb Zhouyi Zhou:
-> > > > > >
-> > > > > > > Thank you for your instructions, I learned a lot from this pr=
-ocess.
-> > > > > >
-> > > > > > Same on my end.
-> > > > > >
-> > > > > > > On Sun, Jan 30, 2022 at 12:52 AM Paul Menzel <pmenzel@molgen.=
-mpg.de> wrote:
-> > > > > >
-> > > > > > >> Am 29.01.22 um 03:23 schrieb Zhouyi Zhou:
-> > > > > > >>
-> > > > > > >>> I don't have an IBM machine, but I tried to analyze the pro=
-blem using
-> > > > > > >>> my x86_64 kvm virtual machine, I can't reproduce the bug us=
-ing my
-> > > > > > >>> x86_64 kvm virtual machine.
-> > > > > > >>
-> > > > > > >> No idea, if it=E2=80=99s architecture specific.
-> > > > > > >>
-> > > > > > >>> I saw the panic is caused by registration of sit device (A =
-sit device
-> > > > > > >>> is a type of virtual network device that takes our IPv6 tra=
-ffic,
-> > > > > > >>> encapsulates/decapsulates it in IPv4 packets, and sends/rec=
-eives it
-> > > > > > >>> over the IPv4 Internet to another host)
-> > > > > > >>>
-> > > > > > >>> sit device is registered in function sit_init_net:
-> > > > > > >>> 1895    static int __net_init sit_init_net(struct net *net)
-> > > > > > >>> 1896    {
-> > > > > > >>> 1897        struct sit_net *sitn =3D net_generic(net, sit_n=
-et_id);
-> > > > > > >>> 1898        struct ip_tunnel *t;
-> > > > > > >>> 1899        int err;
-> > > > > > >>> 1900
-> > > > > > >>> 1901        sitn->tunnels[0] =3D sitn->tunnels_wc;
-> > > > > > >>> 1902        sitn->tunnels[1] =3D sitn->tunnels_l;
-> > > > > > >>> 1903        sitn->tunnels[2] =3D sitn->tunnels_r;
-> > > > > > >>> 1904        sitn->tunnels[3] =3D sitn->tunnels_r_l;
-> > > > > > >>> 1905
-> > > > > > >>> 1906        if (!net_has_fallback_tunnels(net))
-> > > > > > >>> 1907            return 0;
-> > > > > > >>> 1908
-> > > > > > >>> 1909        sitn->fb_tunnel_dev =3D alloc_netdev(sizeof(str=
-uct ip_tunnel), "sit0",
-> > > > > > >>> 1910                           NET_NAME_UNKNOWN,
-> > > > > > >>> 1911                           ipip6_tunnel_setup);
-> > > > > > >>> 1912        if (!sitn->fb_tunnel_dev) {
-> > > > > > >>> 1913            err =3D -ENOMEM;
-> > > > > > >>> 1914            goto err_alloc_dev;
-> > > > > > >>> 1915        }
-> > > > > > >>> 1916        dev_net_set(sitn->fb_tunnel_dev, net);
-> > > > > > >>> 1917        sitn->fb_tunnel_dev->rtnl_link_ops =3D &sit_lin=
-k_ops;
-> > > > > > >>> 1918        /* FB netdevice is special: we have one, and on=
-ly one per netns.
-> > > > > > >>> 1919         * Allowing to move it to another netns is clea=
-rly unsafe.
-> > > > > > >>> 1920         */
-> > > > > > >>> 1921        sitn->fb_tunnel_dev->features |=3D NETIF_F_NETN=
-S_LOCAL;
-> > > > > > >>> 1922
-> > > > > > >>> 1923        err =3D register_netdev(sitn->fb_tunnel_dev);
-> > > > > > >>> register_netdev on line 1923 will call if_nlmsg_size indire=
-ctly.
-> > > > > > >>>
-> > > > > > >>> On the other hand, the function that calls the paniced strl=
-en is if_nlmsg_size:
-> > > > > > >>> (gdb) disassemble if_nlmsg_size
-> > > > > > >>> Dump of assembler code for function if_nlmsg_size:
-> > > > > > >>>      0xffffffff81a0dc20 <+0>:    nopl   0x0(%rax,%rax,1)
-> > > > > > >>>      0xffffffff81a0dc25 <+5>:    push   %rbp
-> > > > > > >>>      0xffffffff81a0dc26 <+6>:    push   %r15
-> > > > > > >>>      0xffffffff81a0dd04 <+228>:    je     0xffffffff81a0de2=
-0 <if_nlmsg_size+512>
-> > > > > > >>>      0xffffffff81a0dd0a <+234>:    mov    0x10(%rbp),%rdi
-> > > > > > >>>      ...
-> > > > > > >>>    =3D> 0xffffffff81a0dd0e <+238>:    callq  0xffffffff8175=
-32d0 <strlen>
-> > > > > > >>>      0xffffffff81a0dd13 <+243>:    add    $0x10,%eax
-> > > > > > >>>      0xffffffff81a0dd16 <+246>:    movslq %eax,%r12
-> > > > > > >>
-> > > > > > >> Excuse my ignorance, would that look the same for ppc64le?
-> > > > > > >> Unfortunately, I didn=E2=80=99t save the problematic `vmlinu=
-z` file, but on a
-> > > > > > >> current build (without rcutorture) I have the line below, wh=
-ere strlen
-> > > > > > >> shows up.
-> > > > > > >>
-> > > > > > >>       (gdb) disassemble if_nlmsg_size
-> > > > > > >>       [=E2=80=A6]
-> > > > > > >>       0xc000000000f7f82c <+332>: bl      0xc000000000a10e30 =
-<strlen>
-> > > > > > >>       [=E2=80=A6]
-> > > > > > >>
-> > > > > > >>> and the C code for 0xffffffff81a0dd0e is following (line 52=
-4):
-> > > > > > >>> 515    static size_t rtnl_link_get_size(const struct net_de=
-vice *dev)
-> > > > > > >>> 516    {
-> > > > > > >>> 517        const struct rtnl_link_ops *ops =3D dev->rtnl_li=
-nk_ops;
-> > > > > > >>> 518        size_t size;
-> > > > > > >>> 519
-> > > > > > >>> 520        if (!ops)
-> > > > > > >>> 521            return 0;
-> > > > > > >>> 522
-> > > > > > >>> 523        size =3D nla_total_size(sizeof(struct nlattr)) +=
- /* IFLA_LINKINFO */
-> > > > > > >>> 524               nla_total_size(strlen(ops->kind) + 1);  /=
-* IFLA_INFO_KIND */
-> > > > > > >>
-> > > > > > >> How do I connect the disassemby output with the correspondin=
-g line?
-> > > > > > > I use "make  ARCH=3Dpowerpc CC=3Dpowerpc64le-linux-gnu-gcc-9
-> > > > > > > CROSS_COMPILE=3Dpowerpc64le-linux-gnu- -j 16" to cross compil=
-e kernel
-> > > > > > > for powerpc64le in my Ubuntu 20.04 x86_64.
-> > > > > > >
-> > > > > > > gdb-multiarch ./vmlinux
-> > > > > > > (gdb)disassemble if_nlmsg_size
-> > > > > > > [...]
-> > > > > > > 0xc00000000191bf40 <+112>:    bl      0xc000000001c28ad0 <str=
-len>
-> > > > > > > [...]
-> > > > > > > (gdb) break *0xc00000000191bf40
-> > > > > > > Breakpoint 1 at 0xc00000000191bf40: file ./include/net/netlin=
-k.h, line 1112.
-> > > > > > >
-> > > > > > > But in include/net/netlink.h:1112, I can't find the call to s=
-trlen
-> > > > > > > 1110static inline int nla_total_size(int payload)
-> > > > > > > 1111{
-> > > > > > > 1112        return NLA_ALIGN(nla_attr_size(payload));
-> > > > > > > 1113}
-> > > > > > > This may be due to the compiler wrongly encode the debug info=
-rmation, I guess.
-> > > > > >
-> > > > > > `rtnl_link_get_size()` contains:
-> > > > > >
-> > > > > >              size =3D nla_total_size(sizeof(struct nlattr)) + /=
-*
-> > > > > > IFLA_LINKINFO */
-> > > > > >                     nla_total_size(strlen(ops->kind) + 1);  /*
-> > > > > > IFLA_INFO_KIND */
-> > > > > >
-> > > > > > Is that inlined(?) and the code at fault?
-> > > > > Yes, that is inlined! because
-> > > > > (gdb) disassemble if_nlmsg_size
-> > > > > Dump of assembler code for function if_nlmsg_size:
-> > > > > [...]
-> > > > > 0xc00000000191bf38 <+104>:    beq     0xc00000000191c1f0 <if_nlms=
-g_size+800>
-> > > > > 0xc00000000191bf3c <+108>:    ld      r3,16(r31)
-> > > > > 0xc00000000191bf40 <+112>:    bl      0xc000000001c28ad0 <strlen>
-> > > > > [...]
-> > > > > (gdb)
-> > > > > (gdb) break *0xc00000000191bf40
-> > > > > Breakpoint 1 at 0xc00000000191bf40: file ./include/net/netlink.h,=
- line 1112.
-> > > > > (gdb) break *0xc00000000191bf38
-> > > > > Breakpoint 2 at 0xc00000000191bf38: file net/core/rtnetlink.c, li=
-ne 520.
-> > > >
-> > > > I suggest building your kernel with CONFIG_DEBUG_INFO=3Dy if you ar=
-e not
-> > > > already doing so.  That gives gdb a lot more information about thin=
-gs
-> > > > like inlining.
-> > > I check my .config file, CONFIG_DEBUG_INFO=3Dy is here:
-> > > linux-next$ grep CONFIG_DEBUG_INFO .config
-> > > CONFIG_DEBUG_INFO=3Dy
-> > > Then I invoke "make clean" and rebuild the kernel, the behavior of gd=
-b
-> > > and vmlinux remain unchanged, sorry for that
-> >
-> > Glad you were already on top of this one!
-> I am very pleased to contribute my tiny effort to the process of
-> making Linux better ;-)
-> >
-> > > I am trying to reproduce the bug on my bare metal x86_64 machines in
-> > > the coming days, and am also trying to work with Mr Menzel after he
-> > > comes back to the office.
-> >
-> > This URL used to allow community members such as yourself to request
-> > access to Power systems: https://osuosl.org/services/powerdev/
-> I have filled the request form on
-> https://osuosl.org/services/powerdev/ and now wait for them to deploy
-> the environment for me.
->
-> Thanks again
-> Zhouyi
-> >
-> > In case that helps.
-> >
-> >                                                         Thanx, Paul
-> >
-> > > Thanks
-> > > Zhouyi
-> > > >
-> > > >                                                         Thanx, Paul
-> > > >
-> > > > > > >>> But ops is assigned the value of sit_link_ops in function s=
-it_init_net
-> > > > > > >>> line 1917, so I guess something must happened between the c=
-alls.
-> > > > > > >>>
-> > > > > > >>> Do we have KASAN in IBM machine? would KASAN help us find o=
-ut what
-> > > > > > >>> happened in between?
-> > > > > > >>
-> > > > > > >> Unfortunately, KASAN is not support on Power, I have, as far=
- as I can
-> > > > > > >> see. From `arch/powerpc/Kconfig`:
-> > > > > > >>
-> > > > > > >>           select HAVE_ARCH_KASAN                  if PPC32 &=
-& PPC_PAGE_SHIFT <=3D 14
-> > > > > > >>           select HAVE_ARCH_KASAN_VMALLOC          if PPC32 &=
-& PPC_PAGE_SHIFT <=3D 14
-> > > > > > >>
-> > > > > > > en, agree, I invoke "make  menuconfig  ARCH=3Dpowerpc
-> > > > > > > CC=3Dpowerpc64le-linux-gnu-gcc-9 CROSS_COMPILE=3Dpowerpc64le-=
-linux-gnu- -j
-> > > > > > > 16", I can't find KASAN under Memory Debugging, I guess we sh=
-ould find
-> > > > > > > the bug by bisecting instead.
-> > > > > >
-> > > > > > I do not know, if it is a regression, as it was the first time =
-I tried
-> > > > > > to run a Linux kernel built with rcutorture on real hardware.
-> > > > > I tried to add some debug statements to the kernel to locate the =
-bug
-> > > > > more accurately,  you can try it when you're not busy in the futu=
-re,
-> > > > > or just ignore it if the following patch looks not very effective=
- ;-)
-> > > > > diff --git a/net/core/dev.c b/net/core/dev.c
-> > > > > index 1baab07820f6..969ac7c540cc 100644
-> > > > > --- a/net/core/dev.c
-> > > > > +++ b/net/core/dev.c
-> > > > > @@ -9707,6 +9707,9 @@ int register_netdevice(struct net_device *d=
-ev)
-> > > > >       *    Prevent userspace races by waiting until the network
-> > > > >       *    device is fully setup before sending notifications.
-> > > > >       */
-> > > > > +    if (dev->rtnl_link_ops)
-> > > > > +        printk(KERN_INFO "%lx IFLA_INFO_KIND %s %s\n", dev->rtnl=
-_link_ops,
-> > > > > +               dev->rtnl_link_ops->kind, __FUNCTION__);
-> > > > >      if (!dev->rtnl_link_ops ||
-> > > > >          dev->rtnl_link_state =3D=3D RTNL_LINK_INITIALIZED)
-> > > > >          rtmsg_ifinfo(RTM_NEWLINK, dev, ~0U, GFP_KERNEL);
-> > > > > @@ -9788,6 +9791,9 @@ int register_netdev(struct net_device *dev)
-> > > > >
-> > > > >      if (rtnl_lock_killable())
-> > > > >          return -EINTR;
-> > > > > +    if (dev->rtnl_link_ops)
-> > > > > +        printk(KERN_INFO "%lx IFLA_INFO_KIND %s %s\n", dev->rtnl=
-_link_ops,
-> > > > > +               dev->rtnl_link_ops->kind, __FUNCTION__);
-> > > > >      err =3D register_netdevice(dev);
-> > > > >      rtnl_unlock();
-> > > > >      return err;
-> > > > > diff --git a/net/core/rtnetlink.c b/net/core/rtnetlink.c
-> > > > > index e476403231f0..e08986ae6238 100644
-> > > > > --- a/net/core/rtnetlink.c
-> > > > > +++ b/net/core/rtnetlink.c
-> > > > > @@ -520,6 +520,8 @@ static size_t rtnl_link_get_size(const struct
-> > > > > net_device *dev)
-> > > > >      if (!ops)
-> > > > >          return 0;
-> > > > >
-> > > > > +    printk(KERN_INFO "%lx IFLA_INFO_KIND %s %s\n", ops,
-> > > > > +           ops->kind, __FUNCTION__);
-> > > > >      size =3D nla_total_size(sizeof(struct nlattr)) + /* IFLA_LIN=
-KINFO */
-> > > > >             nla_total_size(strlen(ops->kind) + 1);  /* IFLA_INFO_=
-KIND */
-> > > > >
-> > > > > @@ -1006,6 +1008,9 @@ static size_t rtnl_proto_down_size(const st=
-ruct
-> > > > > net_device *dev)
-> > > > >  static noinline size_t if_nlmsg_size(const struct net_device *de=
-v,
-> > > > >                       u32 ext_filter_mask)
-> > > > >  {
-> > > > > +    if (dev->rtnl_link_ops)
-> > > > > +        printk(KERN_INFO "%lx IFLA_INFO_KIND  %s %s\n", dev->rtn=
-l_link_ops,
-> > > > > +               dev->rtnl_link_ops->kind, __FUNCTION__);
-> > > > >      return NLMSG_ALIGN(sizeof(struct ifinfomsg))
-> > > > >             + nla_total_size(IFNAMSIZ) /* IFLA_IFNAME */
-> > > > >             + nla_total_size(IFALIASZ) /* IFLA_IFALIAS */
-> > > > > @@ -3825,7 +3830,9 @@ struct sk_buff *rtmsg_ifinfo_build_skb(int =
-type,
-> > > > > struct net_device *dev,
-> > > > >      struct net *net =3D dev_net(dev);
-> > > > >      struct sk_buff *skb;
-> > > > >      int err =3D -ENOBUFS;
-> > > > > -
-> > > > > +    if (dev->rtnl_link_ops)
-> > > > > +        printk(KERN_INFO "%lx IFLA_INFO_KIND %s %s\n", dev->rtnl=
-_link_ops,
-> > > > > +               dev->rtnl_link_ops->kind, __FUNCTION__);
-> > > > >      skb =3D nlmsg_new(if_nlmsg_size(dev, 0), flags);
-> > > > >      if (skb =3D=3D NULL)
-> > > > >          goto errout;
-> > > > > @@ -3861,7 +3868,9 @@ static void rtmsg_ifinfo_event(int type, st=
-ruct
-> > > > > net_device *dev,
-> > > > >
-> > > > >      if (dev->reg_state !=3D NETREG_REGISTERED)
-> > > > >          return;
-> > > > > -
-> > > > > +    if (dev->rtnl_link_ops)
-> > > > > +        printk(KERN_INFO "%lx IFLA_INFO_KIND  %s %s\n", dev->rtn=
-l_link_ops,
-> > > > > +               dev->rtnl_link_ops->kind, __FUNCTION__);
-> > > > >      skb =3D rtmsg_ifinfo_build_skb(type, dev, change, event, fla=
-gs, new_nsid,
-> > > > >                       new_ifindex);
-> > > > >      if (skb)
-> > > > > @@ -3871,6 +3880,9 @@ static void rtmsg_ifinfo_event(int type, st=
-ruct
-> > > > > net_device *dev,
-> > > > >  void rtmsg_ifinfo(int type, struct net_device *dev, unsigned int=
- change,
-> > > > >            gfp_t flags)
-> > > > >  {
-> > > > > +    if (dev->rtnl_link_ops)
-> > > > > +        printk(KERN_INFO "%lx IFLA_INFO_KIND  %s %s\n", dev->rtn=
-l_link_ops,
-> > > > > +               dev->rtnl_link_ops->kind, __FUNCTION__);
-> > > > >      rtmsg_ifinfo_event(type, dev, change, rtnl_get_event(0), fla=
-gs,
-> > > > >                 NULL, 0);
-> > > > >  }
-> > > > > diff --git a/net/ipv6/sit.c b/net/ipv6/sit.c
-> > > > > index c0b138c20992..fa5b2725811c 100644
-> > > > > --- a/net/ipv6/sit.c
-> > > > > +++ b/net/ipv6/sit.c
-> > > > > @@ -1919,6 +1919,8 @@ static int __net_init sit_init_net(struct n=
-et *net)
-> > > > >       * Allowing to move it to another netns is clearly unsafe.
-> > > > >       */
-> > > > >      sitn->fb_tunnel_dev->features |=3D NETIF_F_NETNS_LOCAL;
-> > > > > -
-> > > > > +    printk(KERN_INFO "%lx IFLA_INFO_KIND %s %s\n",
-> > > > > +           sitn->fb_tunnel_dev->rtnl_link_ops,
-> > > > > +           sitn->fb_tunnel_dev->rtnl_link_ops->kind, __FUNCTION_=
-_);
-> > > > >      err =3D register_netdev(sitn->fb_tunnel_dev);
-> > > > >      if (err)
-> > > > >          goto err_reg_dev;
-> > > > > >
-> > > > > > >>> Hope I can be of more helpful.
-> > > > > > >>
-> > > > > > >> Some distributions support multi-arch, so they easily allow
-> > > > > > >> crosscompiling for different architectures.
-> > > > > > > I use "make  ARCH=3Dpowerpc CC=3Dpowerpc64le-linux-gnu-gcc-9
-> > > > > > > CROSS_COMPILE=3Dpowerpc64le-linux-gnu- -j 16" to cross compil=
-e kernel
-> > > > > > > for powerpc64le in my Ubuntu 20.04 x86_64. But I can't boot t=
-he
-> > > > > > > compiled kernel using "qemu-system-ppc64le -M pseries -nograp=
-hic -smp
-> > > > > > > 4 -net none -m 4G -kernel arch/powerpc/boot/zImage". I will c=
-ontinue
-> > > > > > > to explore it.
-> > > > > >
-> > > > > > Oh, that does not sound good. But I have not tried that in a lo=
-ng time
-> > > > > > either. It=E2=80=99s a separate issue, but maybe some of the PP=
-C
-> > > > > > maintainers/folks could help.
-> > > > > I will do further research on this later.
-> > > > >
-> > > > > Thanks for your time
-> > > > > Kind regards
-> > > > > Zhouyi
-> > > > > >
-> > > > > >
-> > > > > > Kind regards,
-> > > > > >
-> > > > > > Paul
+UmFuZHkgRHVubGFwIHdyb3RlOg0KPiANCj4gDQo+IE9uIDIvMy8yMiAxOToyMSwgVGhpbmggTmd1
+eWVuIHdyb3RlOg0KPj4gQXJuZCBCZXJnbWFubiB3cm90ZToNCj4+PiBPbiBUaHUsIEZlYiAzLCAy
+MDIyIGF0IDEyOjU1IEFNIFRoaW5oIE5ndXllbiA8VGhpbmguTmd1eWVuQHN5bm9wc3lzLmNvbT4g
+d3JvdGU6DQo+Pj4+IEFybmQgQmVyZ21hbm4gd3JvdGU6DQo+Pj4+PiBPbiBXZWQsIEZlYiAyLCAy
+MDIyIGF0IDE6MTQgQU0gVGhpbmggTmd1eWVuIDxUaGluaC5OZ3V5ZW5Ac3lub3BzeXMuY29tPiB3
+cm90ZToNCj4+Pj4+PiBGYWJpbyBFc3RldmFtIHdyb3RlOg0KPj4+Pj4NCj4+Pj4+IENPTkZJR19G
+QiBzaG91bGQgbm90IG5vcm1hbGx5IGJlIG5lZWRlZCBmb3IgYm9vdGluZywgc28gdW5sZXNzDQo+
+Pj4+PiB5b3UgaGF2ZSBhIGdyYXBoaWNhbCBhcHBsaWNhdGlvbiBpbiB5b3VyIGluaXRyYW1mcyB0
+aGF0IHJlcXVpcmVzIHRoZSAvZGV2L2ZiMA0KPj4+Pj4gZGV2aWNlIHRvIHdvcmssIGl0IGlzIG5v
+dCBzdXBwb3NlZCB0byBtYWtlIGEgZGlmZmVyZW5jZS4NCj4+Pj4+DQo+Pj4+DQo+Pj4+IEknbSBu
+b3Qgc3VyZSwgYnV0IGl0IHNlZW1zIGxpa2UgdGhlIHNldHVwIHdlIGhhdmUgaXNuJ3QgdGhlIG9u
+bHkgb25lDQo+Pj4+IHRoYXQgbmVlZGVkIGl0LiBGYWJpbyBhbHNvIG5vdGVkIHRoYXQgdGhlIGlt
+eF92Nl92N19kZWZjb25maWcgYWxzbyBuZWVkcw0KPj4+PiB0byBoYXZlIENPTkZJR19GQiBzZXQu
+DQo+Pj4NCj4+PiBObywgdGhhdCBvbmUgaXMgZGlmZmVyZW50OiB0aGUgY2hhbmdlIGZvciBpbXhf
+djZfdjdfZGVmY29uZmlnIHdhcw0KPj4+IGRvbmUgYmVjYXVzZSB0aGV5IGFjdHVhbGx5IHVzZSBh
+IGZyYW1lYnVmZmVyIGNvbnNvbGUgb24gc29tZSBkZXZpY2VzLA0KPj4+IHNvIHRoZSBwYXRjaCBq
+dXN0IGFkZHMgdGhlIHN5bWJvbCB0byBlbmFibGUgdGhlIGRyaXZlcnMgdGhleSBhcmUgdXNpbmcu
+DQo+Pj4NCj4+PiBUaGlzIGlzIGV4cGVjdGVkIHdpdGggbXkgb3JpZ2luYWwgcGF0Y2ggdGhhdCBk
+b2Vzbid0IGltcGxpY2l0bHkgZW5hYmxlDQo+Pj4gdGhlIGZyYW1lYnVmZmVyIGxheWVyIGFueSBt
+b3JlLiBXaGF0IGlzIG5vdCBleHBlY3RlZCBpcyBmb3IgdGhlIGtlcm5lbA0KPj4+IHRvIGhhbmcg
+ZHVyaW5nIGJvb3QgYXMgeW91IHJlcG9ydGVkIGZvciB5b3VyIHVuaWRlbnRpZmllZCBwbGF0Zm9y
+bS4NCj4+Pg0KPj4+Pj4gQXJlIHRoZXJlIGFueSBvdGhlciBkaWZmZXJlbmNlcyBpbiB5b3VyIC5j
+b25maWcgYmVmb3JlIGFuZCBhZnRlciB0aGUgcGF0Y2g/DQo+Pj4+PiBJdCdzIHBvc3NpYmxlIHRo
+YXQgeW91IHVzZSBzb21lIG90aGVyIGRyaXZlciB0aGF0IGluIHR1cm4gZGVwZW5kcyBvbg0KPj4+
+Pj4gQ09ORklHX0ZCLiBEb2VzIHlvdXIgbWFjaGluZSBoYXZlIGFueSBncmFwaGljYWwgb3V0cHV0
+IGRldmljZT8NCj4+Pj4+IElmIHllcywgd2hpY2ggZHJpdmVyIGRvIHlvdSB1c2U/DQo+Pj4+DQo+
+Pj4+IEkgZG9uJ3QgaGF2ZSB0aGUgYW5zd2VyIHRvIHRob3NlIHF1ZXN0aW9ucyB5ZXQuIE5lZWQg
+bW9yZSBpbnZlc3RpZ2F0aW9uLg0KPj4+PiBJJ20gbmV3IHRvIHRoaXMgcGFydGljdWxhciB0ZXN0
+IHNldHVwLg0KPj4+DQo+Pj4gRG8geW91IG1lYW4geW91IGRvbid0IGtub3cgaWYgdGhlcmUgaXMg
+YSBzY3JlZW4gYXR0YWNoZWQgdG8gdGhlIHN5c3RlbT8NCj4+Pg0KPj4NCj4+IEl0IGRvZXMgaGF2
+ZSBhIGdyYXBoaWNhbCBvdXRwdXQgZGV2aWNlLCBidXQgSSBkaWRuJ3QgY2hlY2sgd2hhdCBpdCBp
+cyBvcg0KPj4gd2hhdCBkcml2ZXIgaXMgZHJpdmluZyBpdC4gSSBqdXN0IG5vdGljZSB0aGF0IGFm
+dGVyIHRoZSByZXBvcnRlZCBjb21taXQsDQo+PiBzb21ldGhpbmcgc3RvcHBlZCB3b3JraW5nLg0K
+Pj4NCj4+Pj4+DQo+Pj4+PiBZb3UgbWF5IGFsc28gd2FudCB0byBtYWtlIHN1cmUgdGhhdCB5b3Ug
+aGF2ZSA5ZDYzNjZlNzQzZjMgKCJkcm06DQo+Pj4+PiBmYl9oZWxwZXI6IGltcHJvdmUgQ09ORklH
+X0ZCIGRlcGVuZGVuY3kiKSBpbiB5b3VyIGtlcm5lbCwgd2hpY2gNCj4+Pj4+IGZpeGVzIGEgbWlu
+b3IgcHJvYmxlbSB3aXRoIG15IG9yaWdpbmFsIHBhdGNoLg0KPj4+Pj4NCj4+Pj4NCj4+Pj4gVGhl
+IGlzc3VlIGFsc28gb2NjdXJzIGluIG1haW5saW5lLCB3aGljaCBoYXMgeW91ciBtaW5vciBmaXgg
+Y29tbWl0DQo+Pj4+IGFib3ZlLiBUaGUgcmV2ZXJ0IGlzbid0IGNsZWFuIGZvciB0aGUgbGF0ZXN0
+IGtlcm5lbCB2ZXJzaW9uLiBJIGFsc28gaGF2ZQ0KPj4+PiB0byByZXZlcnQgc29tZSBvZiB0aGUg
+Y2hhbmdlcyBhbG9uZyB3aXRoIENPTkZJR19GQi4gVGhlIHJldmVydCBsb29rcw0KPj4+PiBtb3Jl
+IGxpa2UgdGhpcyBmb3IgdGhlIGxhdGVzdCBrZXJuZWw6DQo+Pj4+DQo+Pj4+IGRpZmYgLS1naXQg
+YS9kcml2ZXJzL2dwdS9kcm0vS2NvbmZpZyBiL2RyaXZlcnMvZ3B1L2RybS9LY29uZmlnDQo+Pj4+
+IGluZGV4IGIxZjIyZTQ1N2ZkMC4uN2NiYzczM2E4NTY5IDEwMDY0NA0KPj4+PiAtLS0gYS9kcml2
+ZXJzL2dwdS9kcm0vS2NvbmZpZw0KPj4+PiArKysgYi9kcml2ZXJzL2dwdS9kcm0vS2NvbmZpZw0K
+Pj4+PiBAQCAtMTE4LDggKzExOCw5IEBAIGNvbmZpZyBEUk1fREVCVUdfTU9ERVNFVF9MT0NLDQo+
+Pj4+DQo+Pj4+ICBjb25maWcgRFJNX0ZCREVWX0VNVUxBVElPTg0KPj4+PiAgICAgICAgIGJvb2wg
+IkVuYWJsZSBsZWdhY3kgZmJkZXYgc3VwcG9ydCBmb3IgeW91ciBtb2Rlc2V0dGluZyBkcml2ZXIi
+DQo+Pj4+IC0gICAgICAgZGVwZW5kcyBvbiBEUk1fS01TX0hFTFBFUg0KPj4+PiAtICAgICAgIGRl
+cGVuZHMgb24gRkI9eSB8fCBGQj1EUk1fS01TX0hFTFBFUg0KPj4+PiArICAgICAgIGRlcGVuZHMg
+b24gRFJNDQo+Pj4+ICsgICAgICAgc2VsZWN0IERSTV9LTVNfSEVMUEVSDQo+Pj4+ICsgICAgICAg
+c2VsZWN0IEZCDQo+Pj4+ICAgICAgICAgc2VsZWN0IEZCX0NGQl9GSUxMUkVDVA0KPj4+PiAgICAg
+ICAgIHNlbGVjdCBGQl9DRkJfQ09QWUFSRUENCj4+Pj4gICAgICAgICBzZWxlY3QgRkJfQ0ZCX0lN
+QUdFQkxJVA0KPj4+Pg0KPj4+Pg0KPj4+Pg0KPj4+PiBJIGF0dGFjaGVkIHRoZSBjb25maWdzIGZv
+ciBrZXJuZWwgdjUuMTctcmMxLiBUaGUgImJhZCIgY29uZmlnIGlzIHdpdGhvdXQNCj4+Pj4gYW55
+IHJldmVydCwgdGhlICJnb29kIiBjb25maWcgaXMgd2l0aCB0aGUgY2hhbmdlIGFib3ZlLg0KPj4+
+DQo+Pj4gTG9va2luZyBhdCB0aGUgY29uZmlnLCBJIHNlZSB0aGF0IHRoaXMgaXMgZm9yIGFuIHg4
+NiBtYWNoaW5lLA0KPj4+IGFuZCB5b3UgaGF2ZSB0aGUgRkJfRUZJIGRyaXZlciBhbmQgRUZJX0VB
+UkxZQ09OIGVuYWJsZWQuDQo+Pj4NCj4+PiBXaGF0IEkgc3VzcGVjIGlzIGdvaW5nIG9uIGlzIHRo
+YXQgeW91IGFyZSBsb29raW5nIGF0IGEgc2NyZWVuIHJhdGhlcg0KPj4+IHRoYW4gYSBzZXJpYWwg
+Y29uc29sZSwgYW5kIHRoZSBrZXJuZWwgZG9lc24ndCBhY3R1YWxseSBoYW5nIGJ1dCB5b3UNCj4+
+PiBqdXN0IGRvbid0IHNlZSBhbnkgbW9yZSBtZXNzYWdlcyBhZnRlciB0aGUgRFJNIGRyaXZlciB0
+YWtlcw0KPj4+IG92ZXIgZnJvbSBFRklfRUFSTFlDT04gYmVjYXVzZSB0aGVyZSBpcyBubyBjb25z
+b2xlIGRyaXZlci4NCj4+Pg0KPj4+IEluIHRoaXMgY2FzZSwgd2hhdCB5b3Ugc2VlIGlzIHRoZSBp
+bnRlbmRlZCBiZWhhdmlvciwgbm90IGEgYnVnLg0KPj4+IElmIHlvdSB3YW50IGEgZ3JhcGhpY2Fs
+IGNvbnNvbGUgaW4geW91ciBzeXN0ZW0sIHlvdSBuZWVkIHRvDQo+Pj4gZW5hYmxlIHRoZSBzdXBw
+b3J0IGZvciB0aGlzIGluIHlvdXIgY29uZmlnLg0KPj4+DQo+Pg0KPj4gSXQgc291bmRzIGxpa2Ug
+dGhhdCdzIHRoZSBjYXNlLiBVbmZvcnR1bmF0ZWx5IEknbSBub3QgZmFtaWxpYXIgd2l0aCB0aGlz
+DQo+PiBzdWJzeXN0ZW0gdG8gc2F5IHRoYXQncyB3aGF0IGhhcHBlbmluZy4gSWYgdGhlcmUncyBu
+b3RoaW5nIGFjdHVhbGx5DQo+PiBicm9rZW4gZnJvbSByZXZpZXcsIHdlIGNhbiBpZ25vcmUgdGhp
+cyBlbWFpbCB0aHJlYWQuDQo+IA0KPiBIaSwNCj4gSSBkb24ndCBrbm93IG9mIGFueXRoaW5nIHRo
+YXQgaXMgYnJva2VuLi4uDQo+IA0KPiBJIGFtIGN1cmlvdXMgaG93IENPTkZJR19GQl9FRkkgY2Ft
+ZSB0byBiZSBzZXQgd2hlbiBnb2luZyBmcm9tIGJhZC5jb25maWcgdG8NCj4gZ29vZC5jb25maWcu
+ICBDYW4geW91IGV4cGxhaW4gdGhhdD8NCj4gDQoNCkkganVzdCB1c2UgdGhlIGNoYW5nZSBhYm92
+ZSBhbmQgIm1ha2UiIHdpdGggb2xkZGVmY29uZmlnIG9wdGlvbi4gSXMgaXQNCm5vdCBleHBlY3Rl
+ZD8NCg0KVGhhbmtzLA0KVGhpbmgNCg0K

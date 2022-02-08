@@ -2,98 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 337134AD47A
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 10:15:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7C664AD482
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 10:16:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353354AbiBHJOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 04:14:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57512 "EHLO
+        id S1353423AbiBHJQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 04:16:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240554AbiBHJOx (ORCPT
+        with ESMTP id S1353379AbiBHJQD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 04:14:53 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9E768C0401F0
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 01:14:52 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-20-tTBzvubUOWqiQLjk6umxoA-1; Tue, 08 Feb 2022 09:14:49 +0000
-X-MC-Unique: tTBzvubUOWqiQLjk6umxoA-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Tue, 8 Feb 2022 09:14:49 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Tue, 8 Feb 2022 09:14:49 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Nick Desaulniers' <ndesaulniers@google.com>,
-        Bill Wendling <morbo@google.com>
-CC:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Nathan Chancellor" <nathan@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v3] x86: use builtins to read eflags
-Thread-Topic: [PATCH v3] x86: use builtins to read eflags
-Thread-Index: AQHYHG/CSK+t8Kagc0eLuNqaUHH4EKyJWp+w
-Date:   Tue, 8 Feb 2022 09:14:49 +0000
-Message-ID: <0d93ea4d847b42ca9c5603cb97cbda8a@AcuMS.aculab.com>
-References: <20211229021258.176670-1-morbo@google.com>
- <20220204005742.1222997-1-morbo@google.com>
- <CAKwvOdk=VdDo1fhWJVa4eO0UjuQwtV9kC-cJd0J9-6guU2vafA@mail.gmail.com>
-In-Reply-To: <CAKwvOdk=VdDo1fhWJVa4eO0UjuQwtV9kC-cJd0J9-6guU2vafA@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Tue, 8 Feb 2022 04:16:03 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B7AB2C0401F0
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 01:16:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644311761;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vWTeTtK7QuygKDGNGhC3/zMgZotQ2ldpExYYNODBF4o=;
+        b=QOigSa2uIUIC/0ykjaVnbD/d364QDOazpWy1cSTwmKjQeQCEdWkVqSiWRixE9A9fvA8EuG
+        eR9qhOZ3UuCN7v200VFdV7w8fx4HQlrvSNzGCt6JNLYBNCUyZJNemEwSjIgFaWVtIy34A3
+        sj82scfrxazI+hu7OmHTx2qYFvmUm/Q=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-518-3nhrpAfIPayu3v3wGSzHDA-1; Tue, 08 Feb 2022 04:16:00 -0500
+X-MC-Unique: 3nhrpAfIPayu3v3wGSzHDA-1
+Received: by mail-ej1-f71.google.com with SMTP id v2-20020a170906292200b006a94a27f903so5479827ejd.8
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 01:15:59 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vWTeTtK7QuygKDGNGhC3/zMgZotQ2ldpExYYNODBF4o=;
+        b=EEjxgSYvZX2OyVNCD4ncOdH01u3ZX6Dy82WmGrDN+xMJp2uDb/xG+yT7DNiiwV1SwW
+         OGTIbVmz0zzaoKR3aJbl7h0cMINLyyluoFa5+mWTzIBQwgQjC7ag6hCaUCmSaEJlwfqh
+         jGT5lgAHMiRI4oT5ls9fve54yCwNAMUiAmsQAyHKndA7nofvYWS+ScWTkYrUynONMoft
+         muqCZNw0Nzt9lhWzv+ZM+TJb0CxZY/7+BTKkpZeuGF9uHn5kv6UyM8990U8SNu9XLHOH
+         6L5a5lUqCQuuuZz/TrirBV/vfR6T6mAxN8DC474s5U7DeCNk6o37u+/bs6oMjYEb9AXJ
+         C9Pg==
+X-Gm-Message-State: AOAM5319kLN6YUT1w709Fpvj1IW5XxkYnrZ5HbbBUycm/JLtgrBN2ioD
+        R9gmsTJGpwjhr9KhT5WkUK/5ElbMb2nrpEMM+u+i5WFF7NrclXV1i0WXmk6LtPRbbwPxqk7nuaX
+        FeSrsaAVplG2zBrdQn4ZRF1rY
+X-Received: by 2002:aa7:cb87:: with SMTP id r7mr3496505edt.284.1644311758859;
+        Tue, 08 Feb 2022 01:15:58 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx7Lki8J0+DYZKgA0Sje1wqEXoOop45PfSQdqu2TcaABmDndUbGA3rwRkTpJzzLLbClyqFLTw==
+X-Received: by 2002:aa7:cb87:: with SMTP id r7mr3496479edt.284.1644311758630;
+        Tue, 08 Feb 2022 01:15:58 -0800 (PST)
+Received: from krava (nat-pool-brq-u.redhat.com. [213.175.37.12])
+        by smtp.gmail.com with ESMTPSA id r6sm4025782ejd.100.2022.02.08.01.15.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 01:15:58 -0800 (PST)
+Date:   Tue, 8 Feb 2022 10:15:56 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Jiri Olsa <olsajiri@gmail.com>
+Subject: Re: [PATCH 8/8] selftest/bpf: Add fprobe test for bpf_cookie values
+Message-ID: <YgI0zJDJ3jrb3q49@krava>
+References: <20220202135333.190761-1-jolsa@kernel.org>
+ <20220202135333.190761-9-jolsa@kernel.org>
+ <CAEf4Bzbi3t_zZL2=8NyBeJ9q95ODH7pXF+EybtgBQp7LTyfr6Q@mail.gmail.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4Bzbi3t_zZL2=8NyBeJ9q95ODH7pXF+EybtgBQp7LTyfr6Q@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogTmljayBEZXNhdWxuaWVycw0KPiBTZW50OiAwNyBGZWJydWFyeSAyMDIyIDIyOjEyDQo+
-IA0KPiBPbiBUaHUsIEZlYiAzLCAyMDIyIGF0IDQ6NTcgUE0gQmlsbCBXZW5kbGluZyA8bW9yYm9A
-Z29vZ2xlLmNvbT4gd3JvdGU6DQo+ID4NCj4gPiBHQ0MgYW5kIENsYW5nIGJvdGggaGF2ZSBidWls
-dGlucyB0byByZWFkIGFuZCB3cml0ZSB0aGUgRUZMQUdTIHJlZ2lzdGVyLg0KPiA+IFRoaXMgYWxs
-b3dzIHRoZSBjb21waWxlciB0byBkZXRlcm1pbmUgdGhlIGJlc3Qgd2F5IHRvIGdlbmVyYXRlIHRo
-aXMNCj4gPiBjb2RlLCB3aGljaCBjYW4gaW1wcm92ZSBjb2RlIGdlbmVyYXRpb24uDQo+ID4NCj4g
-PiBUaGlzIGlzc3VlIGFyb3NlIGR1ZSB0byBDbGFuZydzIGlzc3VlIHdpdGggdGhlICI9cm0iIGNv
-bnN0cmFpbnQuICBDbGFuZw0KPiA+IGNob29zZXMgdG8gYmUgY29uc2VydmF0aXZlIGluIHRoZXNl
-IHNpdHVhdGlvbnMsIGFuZCBzbyB1c2VzIG1lbW9yeQ0KPiA+IGluc3RlYWQgb2YgcmVnaXN0ZXJz
-LiBUaGlzIGlzIGEga25vd24gaXNzdWUsIHdoaWNoIGlzIGN1cnJlbnRseSBiZWluZw0KPiA+IGFk
-ZHJlc3NlZC4NCg0KSG93IG11Y2ggcGVyZm9ybWFuY2Ugd291bGQgYmUgbG9zdCBieSBqdXN0IHVz
-aW5nICI9ciI/DQoNCllvdSBnZXQgdHdvIGluc3RydWN0aW9ucyBpZiB0aGUgYWN0dWFsIHRhcmdl
-dCBpcyBtZW1vcnkuDQpUaGlzIG1pZ2h0IGJlIGEgbWFyZ2luYWwgY29kZSBzaXplIGluY3JlYXNl
-IC0gYnV0IG5vdCBtdWNoLA0KSXQgbWlnaHQgYWxzbyBzbG93IHRoaW5ncyBkb3duIGlmIHRoZSBl
-eGVjdXRpb24gaXMgbGltaXRlZA0KYnkgdGhlIGluc3RydWN0aW9uIGRlY29kZXIuDQoNCkJ1dCBv
-biBJbnRlbCBjcHUgJ3BvcCBtZW1vcnknIGlzIDIgdW9wcywgZXhhY3RseSB0aGUgc2FtZQ0KYXMg
-J3BvcCByZWdpc3RlcicgJ3N0b3JlIHJlZ2lzdGVyJyAoYW5kIEkgdGhpbmsgYW1kIGlzIHNpbWls
-YXIpLg0KU28gdGhlIGFjdHVhbCBleGVjdXRpb24gdGltZSBpcyBleGFjdGx5IHRoZSBzYW1lIGZv
-ciBib3RoLg0KDQpBbHNvIGl0IGxvb2tzIGxpa2UgY2xhbmcncyBidWlsdGluIGlzIGVmZmVjdGl2
-ZWx5ICI9ciIuDQpDb21waWxpbmc6DQpsb25nIGZsOw0Kdm9pZCBuYXRpdmVfc2F2ZV9mbCh2b2lk
-KSB7DQogICAgICAgZmwgPSBfX2J1aWx0aW5faWEzMl9yZWFkZWZsYWdzX3U2NCgpOw0KfQ0KTm90
-IG9ubHkgZ2VuZXJhdGVzIGEgc3RhY2sgZnJhbWUsIGl0IGFsc28gZ2VuZXJhdGVzOg0KcHVzaGY7
-IHBvcCAlcmF4OyBtb3YgbWVtLCAlcmF4Lg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRy
-ZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1L
-MSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+On Mon, Feb 07, 2022 at 10:59:32AM -0800, Andrii Nakryiko wrote:
+> On Wed, Feb 2, 2022 at 5:54 AM Jiri Olsa <jolsa@redhat.com> wrote:
+> >
+> > Adding bpf_cookie test for kprobe attached by fprobe link.
+> >
+> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > ---
+> >  .../selftests/bpf/prog_tests/bpf_cookie.c     | 73 +++++++++++++++++++
+> >  .../selftests/bpf/progs/fprobe_bpf_cookie.c   | 62 ++++++++++++++++
+> >  2 files changed, 135 insertions(+)
+> >  create mode 100644 tools/testing/selftests/bpf/progs/fprobe_bpf_cookie.c
+> >
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
+> > index cd10df6cd0fc..bf70d859c598 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
+> > @@ -7,6 +7,7 @@
+> >  #include <unistd.h>
+> >  #include <test_progs.h>
+> >  #include "test_bpf_cookie.skel.h"
+> > +#include "fprobe_bpf_cookie.skel.h"
+> >
+> >  /* uprobe attach point */
+> >  static void trigger_func(void)
+> > @@ -63,6 +64,76 @@ static void kprobe_subtest(struct test_bpf_cookie *skel)
+> >         bpf_link__destroy(retlink2);
+> >  }
+> >
+> > +static void fprobe_subtest(void)
+> > +{
+> > +       DECLARE_LIBBPF_OPTS(bpf_link_create_opts, opts);
+> > +       int err, prog_fd, link1_fd = -1, link2_fd = -1;
+> > +       struct fprobe_bpf_cookie *skel = NULL;
+> > +       __u32 duration = 0, retval;
+> > +       __u64 addrs[8], cookies[8];
+> > +
+> > +       skel = fprobe_bpf_cookie__open_and_load();
+> > +       if (!ASSERT_OK_PTR(skel, "fentry_raw_skel_load"))
+> > +               goto cleanup;
+> > +
+> > +       kallsyms_find("bpf_fentry_test1", &addrs[0]);
+> > +       kallsyms_find("bpf_fentry_test2", &addrs[1]);
+> > +       kallsyms_find("bpf_fentry_test3", &addrs[2]);
+> > +       kallsyms_find("bpf_fentry_test4", &addrs[3]);
+> > +       kallsyms_find("bpf_fentry_test5", &addrs[4]);
+> > +       kallsyms_find("bpf_fentry_test6", &addrs[5]);
+> > +       kallsyms_find("bpf_fentry_test7", &addrs[6]);
+> > +       kallsyms_find("bpf_fentry_test8", &addrs[7]);
+> > +
+> > +       cookies[0] = 1;
+> > +       cookies[1] = 2;
+> > +       cookies[2] = 3;
+> > +       cookies[3] = 4;
+> > +       cookies[4] = 5;
+> > +       cookies[5] = 6;
+> > +       cookies[6] = 7;
+> > +       cookies[7] = 8;
+> > +
+> > +       opts.fprobe.addrs = (__u64) &addrs;
+> 
+> we should have ptr_to_u64() for test_progs, but if not, let's either
+> add it or it should be (__u64)(uintptr_t)&addrs. Otherwise we'll be
+> getting compilation warnings on some architectures.
+
+there's one in btf.c, bpf.c and libbpf.c ;-) so I guess it could go to bpf.h
+
+> 
+> > +       opts.fprobe.cnt = 8;
+> > +       opts.fprobe.bpf_cookies = (__u64) &cookies;
+> > +       prog_fd = bpf_program__fd(skel->progs.test2);
+> > +
+> > +       link1_fd = bpf_link_create(prog_fd, 0, BPF_TRACE_FPROBE, &opts);
+> > +       if (!ASSERT_GE(link1_fd, 0, "link1_fd"))
+> > +               return;
+> > +
+> > +       cookies[0] = 8;
+> > +       cookies[1] = 7;
+> > +       cookies[2] = 6;
+> > +       cookies[3] = 5;
+> > +       cookies[4] = 4;
+> > +       cookies[5] = 3;
+> > +       cookies[6] = 2;
+> > +       cookies[7] = 1;
+> > +
+> > +       opts.flags = BPF_F_FPROBE_RETURN;
+> > +       prog_fd = bpf_program__fd(skel->progs.test3);
+> > +
+> > +       link2_fd = bpf_link_create(prog_fd, 0, BPF_TRACE_FPROBE, &opts);
+> > +       if (!ASSERT_GE(link2_fd, 0, "link2_fd"))
+> > +               goto cleanup;
+> > +
+> > +       prog_fd = bpf_program__fd(skel->progs.test1);
+> > +       err = bpf_prog_test_run(prog_fd, 1, NULL, 0,
+> > +                               NULL, NULL, &retval, &duration);
+> > +       ASSERT_OK(err, "test_run");
+> > +       ASSERT_EQ(retval, 0, "test_run");
+> > +
+> > +       ASSERT_EQ(skel->bss->test2_result, 8, "test2_result");
+> > +       ASSERT_EQ(skel->bss->test3_result, 8, "test3_result");
+> > +
+> > +cleanup:
+> > +       close(link1_fd);
+> > +       close(link2_fd);
+> > +       fprobe_bpf_cookie__destroy(skel);
+> > +}
+> > +
+> >  static void uprobe_subtest(struct test_bpf_cookie *skel)
+> >  {
+> >         DECLARE_LIBBPF_OPTS(bpf_uprobe_opts, opts);
+> > @@ -249,6 +320,8 @@ void test_bpf_cookie(void)
+> >
+> >         if (test__start_subtest("kprobe"))
+> >                 kprobe_subtest(skel);
+> > +       if (test__start_subtest("rawkprobe"))
+> 
+> kprobe.multi?
+
+yes
+
+thanks,
+jirka
 

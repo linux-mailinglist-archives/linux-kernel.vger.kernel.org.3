@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2244A4AD478
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 10:13:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C12264AD477
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 10:13:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353374AbiBHJNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 04:13:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56706 "EHLO
+        id S1353336AbiBHJN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 04:13:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353221AbiBHJNX (ORCPT
+        with ESMTP id S1353220AbiBHJNX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 8 Feb 2022 04:13:23 -0500
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04917C03FEC0
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 316F0C03FEC1
         for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 01:13:23 -0800 (PST)
-Received: by mail-io1-f72.google.com with SMTP id q5-20020a0566022f0500b00638278a161fso5402578iow.11
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 01:13:22 -0800 (PST)
+Received: by mail-il1-f200.google.com with SMTP id i7-20020a056e020ec700b002be118c9b21so4404652ilk.20
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 01:13:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=d853FYKiMfJBLFjIJPTK0l7nRNte7hxVebJY6lt/Hww=;
-        b=zQuMLi0QbxQoWWSRrkBml6IFAVtwUBCvr94KDWiHgRnCtRlSRMD8wvPxULoVWP84/B
-         vrJUiNdeLsz6FgGEbYKN91PFbZATu0Ja6Qc3COjDro5IWdSjX584W6s4wUiiidPiuZl/
-         1R+QdUeiDnqTbkwaM11JDm82/Nqh8SI+dOtpM++U6LsMwJsnHeH9fL2215mHcriRtMBG
-         FI4uDuyOpjNIt0U6D1QrMlSOQlPf++DxC+01Pgotg7ZJxJtqtTUXePzBBy7BCjvj/XxP
-         80QUm/FLeDu6rMhruUZdTdr6RWzNjeaUqlLnLr1WUpwemDMW+DaPU2s+4dplFBXjHwNw
-         QFYg==
-X-Gm-Message-State: AOAM533DMAh4vO0v/KZxwF8aMdIWsTuUg/nqXv5zqqg0M7RSgYy1uVLY
-        firn3rxUb4tNNIcm8YgSWAXGPV8pILCrPcZWcuoAyLcTFfLC
-X-Google-Smtp-Source: ABdhPJyl5someFze/leMXY+UMeZB6KyqLyKyMR1xHO5v+gqxDic6OW0E2pPO816147akPaw6tPNqw/l+tSUjpJorZcF2e+VR7EY+
+        bh=fmKzwHE9y2F6412F2hvJKw1swsIkm5oQWcI9LLxHYNM=;
+        b=r7ABGE6jAEZTQAwgq9GUZZs+xzhjQr7JSvcg+W7gpsniLock61lASHpI5qNO0/Q7m8
+         wd5GBisvFvOZN1+oUR3rEFXG5LbYah7UBtwCbdCLadafqWXf9P1Z7dVuKAS/FWjhvRKd
+         Fmk5hzHiSN7ANOxqXpMGqaauowmj19/oXPNdFlJTEbSTO1QF838diw0E31ilMc2stjLX
+         QUzl//habK+fbQWd37yzHIorE4MGYgSqCKGtcFXMyyICdaG8yD7o4k6Wu70LTUcKLIaX
+         eXw1vUlEPoHAOGmconR6vhqQKlluAMO0vdJQLFBavlu6DBXmXlWbwz9qlvYKM8rpSoml
+         hurQ==
+X-Gm-Message-State: AOAM533CehR1vNDROk73LquU/h9U1EwWoZkMq0HqAvppHTo8JLlycvOS
+        TLc9d2nvWgkhh0tIs1sNlPJFNnumdgWPXfcXIjdoP92azajW
+X-Google-Smtp-Source: ABdhPJwJFN2ywyl3Ztm6XamwcrU4BWSBBwyGIGQ0RFICRB4abjdE45+rX21ZCaG4FTlpyAbnRjEg2ygdzgf8G3U9mETEPNi4BdlB
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:2182:: with SMTP id j2mr1752703ila.304.1644311602369;
+X-Received: by 2002:a05:6602:1347:: with SMTP id i7mr1627681iov.141.1644311602582;
  Tue, 08 Feb 2022 01:13:22 -0800 (PST)
 Date:   Tue, 08 Feb 2022 01:13:22 -0800
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f5988505d77e20e4@google.com>
-Subject: [syzbot] KCSAN: data-race in wg_packet_handshake_receive_worker /
- wg_packet_rx_poll (3)
-From:   syzbot <syzbot+ed414b05fe54c96947f8@syzkaller.appspotmail.com>
+Message-ID: <000000000000f8dc8805d77e202f@google.com>
+Subject: [syzbot] KCSAN: data-race in dev_get_tstats64 / wg_packet_rx_poll (3)
+From:   syzbot <syzbot+5d8276c437d9827c1fbf@syzkaller.appspotmail.com>
 To:     Jason@zx2c4.com, davem@davemloft.net, kuba@kernel.org,
         linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         syzkaller-bugs@googlegroups.com, wireguard@lists.zx2c4.com
@@ -58,25 +57,25 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    455e73a07f6e Merge tag 'clk-for-linus' of git://git.kernel..
+HEAD commit:    79e06c4c4950 Merge tag 'for-linus' of git://git.kernel.org..
 git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=131009feb00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e1f9a6122410716
-dashboard link: https://syzkaller.appspot.com/bug?extid=ed414b05fe54c96947f8
+console output: https://syzkaller.appspot.com/x/log.txt?x=1642e837b00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d443ab22c440893a
+dashboard link: https://syzkaller.appspot.com/bug?extid=5d8276c437d9827c1fbf
 compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
 
 Unfortunately, I don't have any reproducer for this issue yet.
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+ed414b05fe54c96947f8@syzkaller.appspotmail.com
+Reported-by: syzbot+5d8276c437d9827c1fbf@syzkaller.appspotmail.com
 
 ==================================================================
-BUG: KCSAN: data-race in wg_packet_handshake_receive_worker / wg_packet_rx_poll
+BUG: KCSAN: data-race in dev_get_tstats64 / wg_packet_rx_poll
 
-read to 0xffff88813238a9e0 of 8 bytes by interrupt on cpu 1:
- update_rx_stats drivers/net/wireguard/receive.c:28 [inline]
+write to 0xffffe8ffffc39fe0 of 8 bytes by interrupt on cpu 0:
+ update_rx_stats drivers/net/wireguard/receive.c:26 [inline]
  wg_packet_consume_data_done drivers/net/wireguard/receive.c:365 [inline]
- wg_packet_rx_poll+0xf6b/0x11f0 drivers/net/wireguard/receive.c:481
+ wg_packet_rx_poll+0xf37/0x11f0 drivers/net/wireguard/receive.c:481
  __napi_poll+0x65/0x3f0 net/core/dev.c:6365
  napi_poll net/core/dev.c:6432 [inline]
  net_rx_action+0x29e/0x650 net/core/dev.c:6519
@@ -93,21 +92,41 @@ read to 0xffff88813238a9e0 of 8 bytes by interrupt on cpu 1:
  kthread+0x2c7/0x2e0 kernel/kthread.c:327
  ret_from_fork+0x1f/0x30
 
-write to 0xffff88813238a9e0 of 8 bytes by task 5035 on cpu 0:
- update_rx_stats drivers/net/wireguard/receive.c:28 [inline]
- wg_receive_handshake_packet drivers/net/wireguard/receive.c:205 [inline]
- wg_packet_handshake_receive_worker+0x54a/0x6e0 drivers/net/wireguard/receive.c:220
- process_one_work+0x3f6/0x960 kernel/workqueue.c:2307
- worker_thread+0x616/0xa70 kernel/workqueue.c:2454
- kthread+0x2c7/0x2e0 kernel/kthread.c:327
- ret_from_fork+0x1f/0x30
+read to 0xffffe8ffffc39fe0 of 8 bytes by task 7601 on cpu 1:
+ dev_fetch_sw_netstats net/core/dev.c:10050 [inline]
+ dev_get_tstats64+0x117/0x1e0 net/core/dev.c:10075
+ dev_get_stats+0x65/0x180 net/core/dev.c:10017
+ rtnl_fill_stats+0x45/0x320 net/core/rtnetlink.c:1203
+ rtnl_fill_ifinfo+0xf16/0x25b0 net/core/rtnetlink.c:1776
+ rtmsg_ifinfo_build_skb+0xa8/0x130 net/core/rtnetlink.c:3833
+ rtmsg_ifinfo_event net/core/rtnetlink.c:3865 [inline]
+ rtmsg_ifinfo+0x58/0xc0 net/core/rtnetlink.c:3874
+ __dev_notify_flags+0x63/0x3b0 net/core/dev.c:8173
+ dev_change_flags+0xa2/0xc0 net/core/dev.c:8215
+ do_setlink+0x820/0x2500 net/core/rtnetlink.c:2729
+ __rtnl_newlink net/core/rtnetlink.c:3412 [inline]
+ rtnl_newlink+0xfad/0x13b0 net/core/rtnetlink.c:3527
+ rtnetlink_rcv_msg+0x745/0x7e0 net/core/rtnetlink.c:5592
+ netlink_rcv_skb+0x14e/0x250 net/netlink/af_netlink.c:2494
+ rtnetlink_rcv+0x18/0x20 net/core/rtnetlink.c:5610
+ netlink_unicast_kernel net/netlink/af_netlink.c:1317 [inline]
+ netlink_unicast+0x602/0x6d0 net/netlink/af_netlink.c:1343
+ netlink_sendmsg+0x728/0x850 net/netlink/af_netlink.c:1919
+ sock_sendmsg_nosec net/socket.c:705 [inline]
+ sock_sendmsg net/socket.c:725 [inline]
+ __sys_sendto+0x21e/0x2c0 net/socket.c:2040
+ __do_sys_sendto net/socket.c:2052 [inline]
+ __se_sys_sendto net/socket.c:2048 [inline]
+ __x64_sys_sendto+0x74/0x90 net/socket.c:2048
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-value changed: 0x0000000000000aa8 -> 0x0000000000000ac8
+value changed: 0x0000000000000001 -> 0x0000000000000002
 
 Reported by Kernel Concurrency Sanitizer on:
-CPU: 0 PID: 5035 Comm: kworker/0:60 Not tainted 5.16.0-syzkaller #0
+CPU: 1 PID: 7601 Comm: syz-executor.0 Not tainted 5.16.0-syzkaller #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: wg-kex-wg2 wg_packet_handshake_receive_worker
 ==================================================================
 
 

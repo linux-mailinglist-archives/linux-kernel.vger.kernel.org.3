@@ -2,145 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 539764AE5B2
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 00:58:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC9CC4AE5B5
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 01:00:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238941AbiBHX6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 18:58:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55128 "EHLO
+        id S239038AbiBHX73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 18:59:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238871AbiBHX63 (ORCPT
+        with ESMTP id S239016AbiBHX72 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 18:58:29 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48884C061577
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 15:58:28 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id on2so612321pjb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 15:58:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Al312nSB11RWQ/fPz/oLtgMbGtxfQXub9WO/1WYfmpk=;
-        b=QVhTkuP6g5ht0lSUDdZXX4ML54Png+mqetf03uPCTSZEbVJJRRik/1zcMYrH17WVc3
-         bpnDG1ZupaKCXeN7lPCDGJ5EAv8dmXPG65CXGhHlRVFz0gJq0z1+3Q/Xv+P/D3bFVjZC
-         pq+jYhiAV+G8dH8pK+8L0b1G59nytVkjzXk1U=
+        Tue, 8 Feb 2022 18:59:28 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D7A68C061577
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 15:59:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644364767;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1B+HhoEdav6Cob3bPb/BF6nu8D/2OQMn0TX9fIjaHGQ=;
+        b=ic2wNtBUam2bz3I4ll/IUk94uFAfcHQdZaWPQd7Hg+vh4iRcpSU//sYaSmkxWOpXWX8Dqf
+        jJ7dLcG3zHG9eU3zRy9SURbxI+vMn7Ud03/0m+klpZoeBEFWgFVh6Px2etZcYHvuf8dK01
+        lp69zuxLHkDb/xBdiBYGlXxCzxoJS08=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-106-CuqG3tJ7M4qhx5ukxKXnTQ-1; Tue, 08 Feb 2022 18:59:25 -0500
+X-MC-Unique: CuqG3tJ7M4qhx5ukxKXnTQ-1
+Received: by mail-wr1-f71.google.com with SMTP id g17-20020adfa591000000b001da86c91c22so308821wrc.5
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 15:59:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Al312nSB11RWQ/fPz/oLtgMbGtxfQXub9WO/1WYfmpk=;
-        b=ebRbpZTwZ7RABWFlafXnYmD6JFL33PiangSNPXesYvE9IkDyWk8kO4tHc5izuY6Kjh
-         qSn4tjgNeY6WCZVUzfSGGIOq8WEoL1BzjWP7h9okECXmBnCMiXwGwkZJaL/C+65DQTPQ
-         XbnPstCk2ru6SMU1IFDXEiPvOYpj7Hmrb05unEWuNXeCylePe8ezLjbml569ij0RR0yC
-         Yh04/QpkrndsAGH5C3B75OnXaeVyKGfGj68fAFOSdqf+UQRJepy3Gbg7121VAw+oVRBm
-         UqLXX92+mH4nbnXwwQCOitVvwPfvONrPo8O/eCb2Zn4hGRIS3lg2oUbcDyAtiaIpGVHd
-         rH8A==
-X-Gm-Message-State: AOAM532cvFw+NcUKm2hwYTWtB3w3BevlSfuGuJJmzWuM1peDsJiwiF2w
-        mxnGBQ9lW210FTSn8JxKhjX2QA==
-X-Google-Smtp-Source: ABdhPJw+/mRo5ofjXEkCHagXxoE3e/S1IZPBO5qaKIqgxKt9qk6CwAf4EaSB4bnfRh2kzoYBWuaIAw==
-X-Received: by 2002:a17:902:e88e:: with SMTP id w14mr6839434plg.95.1644364707754;
-        Tue, 08 Feb 2022 15:58:27 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id r7sm6748208pgv.15.2022.02.08.15.58.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 15:58:27 -0800 (PST)
-Date:   Tue, 8 Feb 2022 15:58:26 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        George Burgess IV <gbiv@google.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v7 7/8] fortify: Make sure strlen() may still be used as
- a constant expression
-Message-ID: <202202081555.ED0C0658@keescook>
-References: <20220208225350.1331628-1-keescook@chromium.org>
- <20220208225350.1331628-8-keescook@chromium.org>
- <CAKwvOd=wre3uzFVBFaOs4Oud+SobxiW_BwKXMsa5p0tEy6BsiA@mail.gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=1B+HhoEdav6Cob3bPb/BF6nu8D/2OQMn0TX9fIjaHGQ=;
+        b=dU1KnwZTTu4rG4DEP4c1gd2HopDu/VsGAysKJf8YIkPI8qaj70EEodxCnehG6NoozY
+         4jWQiA8h8X1S9iohvE0oZR0VdJmVsJkwg+h7OVAoaQvXmZ0PeykNqd18m5A/IFnr36jl
+         klIdQOO+zKGtbr+behyW7Ih3HeCOabMmiiC5bACOag+QeXsHqboh+ANj52U+Ybe7TwmL
+         pZuYQ2zEzoyl1AhMAiRSC7O8EmapmWPTul3nx+hICXG1PthRFdBNw4INjwoYO1WeKdC/
+         Tv5pp3dtppxXe6Oqxzv/fO1a7hcvyEPL/seAvOFFq6gK6j5/EFLhqaHLv59D0ULodBwT
+         nLWw==
+X-Gm-Message-State: AOAM533CKtUW8FUGskg0ZrE32KjhcKTZeCrQjw97hIIMnksKlVtPeRCm
+        SUut5mmtCjCC7AfTA5bfhQaU4xY0F9w2u9dSWDTc9mZfxGfAte89+AtPuUcxt4JeUuW53u+veOf
+        BgXHOAhysw+gM2kQf8G8D73Jg
+X-Received: by 2002:a1c:4c19:: with SMTP id z25mr302718wmf.105.1644364764702;
+        Tue, 08 Feb 2022 15:59:24 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwyxrdx5PAN39E9zDPgBt3t7VCZ+YkAG7VKuS1GxY71C3wn6MOzwm1KHjgao+aMLB+p3UZbTg==
+X-Received: by 2002:a1c:4c19:: with SMTP id z25mr302707wmf.105.1644364764502;
+        Tue, 08 Feb 2022 15:59:24 -0800 (PST)
+Received: from [192.168.1.102] ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id l24sm3859205wms.24.2022.02.08.15.59.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Feb 2022 15:59:24 -0800 (PST)
+Message-ID: <c58f7b96-8d8c-030e-9fd2-358e259127e4@redhat.com>
+Date:   Wed, 9 Feb 2022 00:59:23 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKwvOd=wre3uzFVBFaOs4Oud+SobxiW_BwKXMsa5p0tEy6BsiA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 06/19] fbcon: Use delayed work for cursor
+Content-Language: en-US
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        DRI Development <dri-devel@lists.freedesktop.org>
+Cc:     linux-fbdev@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Du Cheng <ducheng2@gmail.com>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Claudio Suarez <cssk@net-c.es>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Vetter <daniel.vetter@intel.com>
+References: <20220208210824.2238981-1-daniel.vetter@ffwll.ch>
+ <20220208210824.2238981-7-daniel.vetter@ffwll.ch>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <20220208210824.2238981-7-daniel.vetter@ffwll.ch>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 08, 2022 at 03:17:13PM -0800, Nick Desaulniers wrote:
-> On Tue, Feb 8, 2022 at 2:53 PM Kees Cook <keescook@chromium.org> wrote:
-> >
-> > In preparation for enabling Clang FORTIFY_SOURCE support, redefine
-> > strlen() as a macro that tests for being a constant expression
-> > so that strlen() can still be used in static initializers, which is
-> > lost when adding __pass_object_size and __overloadable.
-> >
-> > An example of this usage can be seen here:
-> >         https://lore.kernel.org/all/202201252321.dRmWZ8wW-lkp@intel.com/
-> >
-> > Notably, this constant expression feature of strlen() is not available
-> > for architectures that build with -ffreestanding. This means the kernel
-> > currently does not universally expect strlen() to be used this way, but
-> > since there _are_ some build configurations that depend on it, retain
-> > the characteristic for Clang FORTIFY_SOURCE builds too.
-> >
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > ---
-> >  include/linux/fortify-string.h | 13 +++++++++++--
-> >  1 file changed, 11 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/include/linux/fortify-string.h b/include/linux/fortify-string.h
-> > index db1ad1c1c79a..f77cf22e2d60 100644
-> > --- a/include/linux/fortify-string.h
-> > +++ b/include/linux/fortify-string.h
-> > @@ -2,6 +2,8 @@
-> >  #ifndef _LINUX_FORTIFY_STRING_H_
-> >  #define _LINUX_FORTIFY_STRING_H_
-> >
-> > +#include <linux/const.h>
-> > +
-> >  #define __FORTIFY_INLINE extern __always_inline __gnu_inline
-> >  #define __RENAME(x) __asm__(#x)
-> >
-> > @@ -95,9 +97,16 @@ __FORTIFY_INLINE __kernel_size_t strnlen(const char * const p, __kernel_size_t m
-> >         return ret;
-> >  }
-> >
-> > -/* defined after fortified strnlen to reuse it. */
-> > +/*
-> > + * Defined after fortified strnlen to reuse it. However, it must still be
-> > + * possible for strlen() to be used on compile-time strings for use in
-> > + * static initializers (i.e. as a constant expression).
-> > + */
-> > +#define strlen(p)                                                      \
-> > +       __builtin_choose_expr(__is_constexpr(__builtin_strlen(p)),      \
-> 
-> Is `__is_constexpr(p) == __is_constexpr(__builtin_strlen(p))`? i.e.
-> can we drop the first `__builtin_strlen`? It seems redundant.
-> 
-> So instead, we'd have:
-> 
-> #define strlen(p) __builtin_choose_expr(__is_constexpr(p),
-> __builtin_strlen(p), __fortify_strlen(p))
-> 
-> Or is there some funny business where p isn't constexpr but strlen(p)
-> somehow is? I doubt that.  (Or is it that p is constexpr, but
-> strlen(p) is not?)
-> 
-> (Guess I'm wrong: https://godbolt.org/z/19ffz7vjx)
+Hello Daniel,
 
-Yeah, as you've discovered ... funny business. :P
+On 2/8/22 22:08, Daniel Vetter wrote:
+> Allows us to delete a bunch of hand-rolled stuff. Also to simplify the
+> code we initialize the cursor_work completely when we allocate the
+> fbcon_ops structure, instead of trying to cope with console
+> re-initialization.
+> 
 
-> Ok then.
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Maybe also make it more explicit in the commit message that the delayed
+work is replacing a timer that was used before for the cursor ?
 
-Thanks!
+> The motiviation here is that fbcon code stops using the fb_info.queue,
 
+motivation
+
+[snip]
+
+>     /*
+>      *    This is the interface between the low-level console driver and the
+> @@ -68,7 +68,7 @@ struct fbcon_ops {
+>  	int  (*update_start)(struct fb_info *info);
+>  	int  (*rotate_font)(struct fb_info *info, struct vc_data *vc);
+>  	struct fb_var_screeninfo var;  /* copy of the current fb_var_screeninfo */
+> -	struct timer_list cursor_timer; /* Cursor timer */
+> +	struct delayed_work cursor_work; /* Cursor timer */
+
+A delayed_work uses a timer underneath but I wonder if the comment also
+needs to be updated since technically isn't a timer anymore but deferred
+work that gets re-scheduled each time on fb_flashcursor().
+
+The patch looks good to me and makes the logic much simpler than before.
+
+Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+
+Best regards,
 -- 
-Kees Cook
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
+

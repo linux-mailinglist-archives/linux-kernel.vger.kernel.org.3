@@ -2,120 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4989C4AD2D3
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 09:09:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4B9F4AD2D7
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 09:10:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348864AbiBHIJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 03:09:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48654 "EHLO
+        id S1348927AbiBHIKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 03:10:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241872AbiBHIJQ (ORCPT
+        with ESMTP id S1348915AbiBHIKA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 03:09:16 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4947EC0401F5
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 00:09:15 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id bg19-20020a05600c3c9300b0034565e837b6so445876wmb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 00:09:15 -0800 (PST)
+        Tue, 8 Feb 2022 03:10:00 -0500
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4505EC0401EF
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 00:09:59 -0800 (PST)
+Received: by mail-yb1-xb31.google.com with SMTP id j2so47788389ybu.0
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 00:09:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Ikw43MPriiIAbjOZjzCbDdxoeo6GLo0YMTk+PKI0AMQ=;
-        b=p/48KqgkBezydVHKW62KCOR7fRF5aZ8bJ7Vj5qZA5bfYwBfnfi9TKAhktIK8ngNClb
-         HmXxYBa+RRqFIgbmP7+d33LkGWz9h4oC/59oQNIl7VlFGfjxUx1LSE3MHaFJxL84QKt3
-         a8LJa58g9sCZZ8W6rYPptgncbvigRRvgAVtSi9cgoJjIPBuGbon+mI1cdPWcTkbYwmzB
-         ojnUD8kWvypHp1DQ/0WWidUrV7BU5FDPVrv+LnJxJ+xH75SetzXU5jleezoEmlfpjle8
-         Hyiqqhy7CaXehaLx7JMJcJdqGQhh2whEE2Wwa89I7tdsf4d/esyPXS2sNbaszS3h/AS9
-         iscA==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=bLl0JJQpx3VT/7k/lVGpwYjdhHk/5YKncSo5G08KJEk=;
+        b=DU5xsxyvI1jqnE8bKjY0OLS0NsSNgWai/ptCdWLK3TI4sOMi+6xU1VUhMmMJaNK5uj
+         63tiX0PevGWIV8EzXLyAb1lGPFmCytd0TytasLdztgiEL957YpsWSKlLj/A0D6abc3/J
+         Pyeth1VEA/sIZ+IdpIBhBAuQZ/PCngYYX+Jv+hrtlBM2ViP5vpUdaMp+tKKVZsxafvYI
+         zRk6ruVDZ0J/6ZEychbXnmfNqC96lo/EsDVIQnS25VcezPgu1YvUXdJV9gpC5XO4Mydk
+         hMtNQrWq6m9CLpTxpGNxyUr2GGyE/B61QhAaiN6ipJpYGYzWMY3IJK7VxZn9frPuIlUW
+         dWsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Ikw43MPriiIAbjOZjzCbDdxoeo6GLo0YMTk+PKI0AMQ=;
-        b=Ypk2tHZgNihk30BdyojWPYo7Ih5tyBjT7fl/4Bx71O/+j41GrmItpC3L5OChg70pS0
-         cincnFb0z0SWG0i0ri7qH3vWtoEdujbBtbc3E3SdWh0spnMjXCJg6/0/fpozF2my3k7K
-         YVgx+QcLzTjjMpHMEEup6MBHTLCDXQTEcrGOTw/vXRHoPl4L5us3YweQohKmdEog5j2S
-         0hiCH1D8EfI3WlLAmHHrvjrzLrkSj9yVZjDOdei+xXkGWG35Dj5aNL8/CoHBlJwtGeEH
-         bXeaYIvUd+qhyAc/v1AoV0CIJZgDKzEQRi7F/hdQclM74iNE9iLB2Qb3Vo+5EduUlWFZ
-         tSdQ==
-X-Gm-Message-State: AOAM533OdixCYXa8QMseoBZv/IgX0y7IJBW9iK9PC4QhKl96MeBrn0px
-        4ItxYs44SJcUBMzJaIO7g7M=
-X-Google-Smtp-Source: ABdhPJzByC8Qgzyw0Yz/LNKRPF6ZW1JT1tyJHCxE+8t8cF66Tkwl/xvUXqulqoZqdB4rwwrF0+a8oQ==
-X-Received: by 2002:a05:600c:4f02:: with SMTP id l2mr21703wmq.115.1644307753769;
-        Tue, 08 Feb 2022 00:09:13 -0800 (PST)
-Received: from leap.localnet (host-95-245-2-16.retail.telecomitalia.it. [95.245.2.16])
-        by smtp.gmail.com with ESMTPSA id r2sm1840146wmq.0.2022.02.08.00.09.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 00:09:13 -0800 (PST)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        gregkh@linuxfoundation.org,
-        Leonardo Araujo <leonardo.aa88@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        Leonardo Araujo <leonardo.aa88@gmail.com>
-Subject: Re: [PATCH] Staging: r8188eu: core: 'associcated' may be misspelled - perhaps 'associated'?
-Date:   Tue, 08 Feb 2022 09:09:10 +0100
-Message-ID: <2122312.NgBsaNRSFp@leap>
-In-Reply-To: <20220207234210.26097-1-leonardo.aa88@gmail.com>
-References: <20220207234210.26097-1-leonardo.aa88@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=bLl0JJQpx3VT/7k/lVGpwYjdhHk/5YKncSo5G08KJEk=;
+        b=uv/cYQV20kWL6etW2/GKI0DlJBKOAXuMPpunD9HxbR4Ukh5e0tGUqOPvlPrjYOK7lN
+         +djQmZRuK6Ihc2ZPHACleu3f6SjNYMl2l9EfDdujTV0pxLGbcwd/CdJX1R4WjNAcnuYi
+         iqLwv+8HaSxDcZZMLS78HFkoS5qcfldalZZknson0mp6RgJJZKRLSdYA4iO93vGSD7qu
+         nLrqQ3B7y9aPtJMKiPn8wYsKhnbC03CaFqlCOQVYAAA94Mp/D5btHu4EjzK6sLNcUGK9
+         uWjGj2UTMmgs5bY0H38HxvVmplkGUtbFlVUCAeX3bBE5bkts7qNJATfF8wiU5AcYurC8
+         +46Q==
+X-Gm-Message-State: AOAM530hRJj4Z5YquixqpdYJCP92E8XGAit1kqLs0Ulv+NrxCO/ecH76
+        gCUAxmKxw+1z9MaXyrtyPwvp0BsxFH6zP5+B2p8/Tg==
+X-Google-Smtp-Source: ABdhPJwuuJv9wlhTlzweDM2oR2lT9WpraZTfba2ypaRff/IL5875UBTx7iLSnzCY7+nzuLvQb2whvn2VnVg9qfBeGgw=
+X-Received: by 2002:a25:49c5:: with SMTP id w188mr3501478yba.200.1644307798270;
+ Tue, 08 Feb 2022 00:09:58 -0800 (PST)
 MIME-Version: 1.0
+References: <20220207103753.155627314@linuxfoundation.org>
+In-Reply-To: <20220207103753.155627314@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 8 Feb 2022 13:39:47 +0530
+Message-ID: <CA+G9fYs5bPiAA0M0=sQvxCxVcaz1Y+bDb0zy1+5dCMOFJjshdw@mail.gmail.com>
+Subject: Re: [PATCH 5.4 00/44] 5.4.178-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="ISO-8859-1"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On marted=EC 8 febbraio 2022 00:42:10 CET Leonardo Araujo wrote:
-> This patch fixes the following checkpatch.pl warning:
->=20
-> CHECK: 'associcated' may be misspelled - perhaps 'associated'?
->=20
-> Signed-off-by: Leonardo Araujo <leonardo.aa88@gmail.com>
-> ---
->  drivers/staging/r8188eu/core/rtw_ap.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->=20
-"Staging: r8188eu: core: 'associated' may be misspelled - perhaps 'associat=
-ed'?"=20
-it's not the way patch subjects are created for inclusion in Linux.
+On Mon, 7 Feb 2022 at 16:49, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.4.178 release.
+> There are 44 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 09 Feb 2022 10:37:42 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.4.178-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.4.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Please follow what is clearly described in the "Philosophy of Linux kernel=
-=20
-patches" document at https://kernelnewbies.org/PatchPhilosophy...
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-"In patch descriptions and in the subject, it is common and preferable to u=
-se=20
-present-tense, imperative language. Write as if you are telling git what to=
- do=20
-with your patch.".
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-It's not my job to accept or reject patches for this subsystem and I don't =
-want=20
-to tell you what to write but, if I were you, I'd send a v2 with a subject =
-like=20
-"Fix misspelled word in comments" (or something else similar to this subjec=
-t).
+## Build
+* kernel: 5.4.178-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-5.4.y
+* git commit: 3836147e31ee95815758c97dc5c319423774464d
+* git describe: v5.4.177-45-g3836147e31ee
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.1=
+77-45-g3836147e31ee
 
-=46urthermore, please take note that the name of this subsystem is "staging=
-" (it=20
-is not "Staging").
+## Test Regressions (compared to v5.4.177)
+No test regressions found.
 
-Decide by yourself whether or not the other two patches that you submitted =
-this=20
-morning have to be sent anew as v2 with due changes in the subjects.
+## Metric Regressions (compared to v5.4.177)
+No metric regressions found.
 
-Regards,
+## Test Fixes (compared to v5.4.177)
+No test fixes found.
 
-=46abio M. De Francesco =20
+## Metric Fixes (compared to v5.4.177)
+No metric fixes found.
 
+## Test result summary
+total: 92667, pass: 77078, fail: 737, skip: 13409, xfail: 1443
 
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 257 total, 257 passed, 0 failed
+* arm64: 36 total, 31 passed, 5 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 20 total, 20 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 34 total, 34 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 52 total, 48 passed, 4 failed
+* riscv: 24 total, 24 passed, 0 failed
+* s390: 12 total, 12 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 36 total, 36 passed, 0 failed
 
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kselftest[
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
 
-
+--
+Linaro LKFT
+https://lkft.linaro.org

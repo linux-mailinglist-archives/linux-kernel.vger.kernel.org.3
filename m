@@ -2,56 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCA3C4AE167
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 19:49:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75D7C4AE169
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 19:49:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385478AbiBHSsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 13:48:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43576 "EHLO
+        id S1385469AbiBHSsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 13:48:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358560AbiBHSst (ORCPT
+        with ESMTP id S1385455AbiBHSsP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 13:48:49 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03D4DC0612C1;
-        Tue,  8 Feb 2022 10:48:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644346129; x=1675882129;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=GKYfrOdPKIidCVFdft/pVkcauP1SFgER+aJOOG3WDEA=;
-  b=nvxCrdDs4OeAnUM9i++1tL6hCNiNV1a8ZMXu2s/MV/yWXB2zsl5q/G61
-   cR3AyMXgHkhgE1wdVY7YftNxyMDaCiFAGTERLvGXYD/zrmMDkr5rUoHOR
-   bzZsILWoaMRTBOqBVQCN1uQhEFjJ6PLpOWyb2cbxm+Msg6CGClNMsTkkB
-   D0RqUTQkseeqYgAt9JvJYLEG4idlo1UwKatmXwyzChHR2wG3RHSwNJ9aA
-   IioWmKRt1h5QFFSJ/oDu/nrDG72iwpLLEbjmsgSOIWuVvZG6XRsC4NDSF
-   5uNLZ/UwS1MlXxO3ocA7Iyz/zy9RnqlSAkYHXnMTni+mxnfNLc5X4nt5v
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="236430341"
-X-IronPort-AV: E=Sophos;i="5.88,353,1635231600"; 
-   d="scan'208";a="236430341"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 10:48:14 -0800
-X-IronPort-AV: E=Sophos;i="5.88,353,1635231600"; 
-   d="scan'208";a="484914385"
-Received: from rchatre-ws.ostc.intel.com ([10.54.69.144])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 10:48:14 -0800
-From:   Reinette Chatre <reinette.chatre@intel.com>
-To:     dave.hansen@linux.intel.com, jarkko@kernel.org, tglx@linutronix.de,
-        bp@alien8.de, luto@kernel.org, mingo@redhat.com,
-        linux-sgx@vger.kernel.org, x86@kernel.org
-Cc:     vijay.dhanraj@intel.com, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: [PATCH V3] x86/sgx: Silence softlockup detection when releasing large enclaves
-Date:   Tue,  8 Feb 2022 10:48:07 -0800
-Message-Id: <ced01cac1e75f900251b0a4ae1150aa8ebd295ec.1644345232.git.reinette.chatre@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 8 Feb 2022 13:48:15 -0500
+Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F117C0612B8
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 10:48:14 -0800 (PST)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1644346090;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=gcjgT1JGS5YXvEC8btLC0N+cld9EBSbr9pVNw5PdFDA=;
+        b=YwjFDHDpUVOWsxMQhjaqg62TIJEVJAMmMjMpcWMzPmWPvhtEXTN4RpsoFoe8geQvMHhHUA
+        vFTns2xWRjh/j2TG5fSJymx5r0Pyd5DICtZ2YqaS0YbWKMD7kyCmMVwfCtDslI/6KVwGJ6
+        nsJGiy/HAP6IZS+hEIWcWF9qLQ82RHA=
+From:   andrey.konovalov@linux.dev
+To:     Marco Elver <elver@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+Subject: [PATCH v2] kasan: test: prevent cache merging in kmem_cache_double_destroy
+Date:   Tue,  8 Feb 2022 19:48:08 +0100
+Message-Id: <b597bd434c49591d8af00ee3993a42c609dc9a59.1644346040.git.andreyknvl@google.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,67 +51,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Vijay reported that the "unclobbered_vdso_oversubscribed" selftest
-triggers the softlockup detector.
+From: Andrey Konovalov <andreyknvl@google.com>
 
-Actual SGX systems have 128GB of enclave memory or more.  The
-"unclobbered_vdso_oversubscribed" selftest creates one enclave which
-consumes all of the enclave memory on the system. Tearing down such a
-large enclave takes around a minute, most of it in the loop where
-the EREMOVE instruction is applied to each individual 4k enclave page.
+With HW_TAGS KASAN and kasan.stacktrace=off, the cache created in the
+kmem_cache_double_destroy() test might get merged with an existing one.
+Thus, the first kmem_cache_destroy() call won't actually destroy it
+but will only decrease the refcount. This causes the test to fail.
 
-Spending one minute in a loop triggers the softlockup detector.
+Provide an empty constructor for the created cache to prevent the cache
+from getting merged.
 
-Add a cond_resched() to give other tasks a chance to run and placate
-the softlockup detector.
-
-Cc: stable@vger.kernel.org
-Fixes: 1728ab54b4be ("x86/sgx: Add a page reclaimer")
-Reported-by: Vijay Dhanraj <vijay.dhanraj@intel.com>
-Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-Tested-by: Jarkko Sakkinen <jarkko@kernel.org>  (kselftest as sanity check)
-Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
+Fixes: f98f966cd750 ("kasan: test: add test case for double-kmem_cache_destroy()")
+Reviewed-by: Marco Elver <elver@google.com>
+Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 ---
-Softlockup message:
+ lib/test_kasan.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-watchdog: BUG: soft lockup - CPU#7 stuck for 22s! [test_sgx:11502]
-Kernel panic - not syncing: softlockup: hung tasks
-<snip>
-sgx_encl_release+0x86/0x1c0
-sgx_release+0x11c/0x130
-__fput+0xb0/0x280
-____fput+0xe/0x10
-task_work_run+0x6c/0xc0
-exit_to_user_mode_prepare+0x1eb/0x1f0
-syscall_exit_to_user_mode+0x1d/0x50
-do_syscall_64+0x46/0xb0
-entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-Changes since V2:
-- V2: https://lore.kernel.org/lkml/b5e9f218064aa76e3026f778e1ad0a1d823e3db8.1643133224.git.reinette.chatre@intel.com/
-- Add Jarkko's "Reviewed-by" and "Tested-by" tags.
-
-Changes since V1:
-- V1: https://lore.kernel.org/lkml/1aa037705e5aa209d8b7a075873c6b4190327436.1642530802.git.reinette.chatre@intel.com/
-- Add comment provided by Jarkko.
-
- arch/x86/kernel/cpu/sgx/encl.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/encl.c
-index 001808e3901c..48afe96ae0f0 100644
---- a/arch/x86/kernel/cpu/sgx/encl.c
-+++ b/arch/x86/kernel/cpu/sgx/encl.c
-@@ -410,6 +410,8 @@ void sgx_encl_release(struct kref *ref)
- 		}
+diff --git a/lib/test_kasan.c b/lib/test_kasan.c
+index 26a5c9007653..3b413f8c8a71 100644
+--- a/lib/test_kasan.c
++++ b/lib/test_kasan.c
+@@ -869,11 +869,14 @@ static void kmem_cache_invalid_free(struct kunit *test)
+ 	kmem_cache_destroy(cache);
+ }
  
- 		kfree(entry);
-+		/* Invoke scheduler to prevent soft lockups. */
-+		cond_resched();
- 	}
++static void empty_cache_ctor(void *object) { }
++
+ static void kmem_cache_double_destroy(struct kunit *test)
+ {
+ 	struct kmem_cache *cache;
  
- 	xa_destroy(&encl->page_array);
+-	cache = kmem_cache_create("test_cache", 200, 0, 0, NULL);
++	/* Provide a constructor to prevent cache merging. */
++	cache = kmem_cache_create("test_cache", 200, 0, 0, empty_cache_ctor);
+ 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, cache);
+ 	kmem_cache_destroy(cache);
+ 	KUNIT_EXPECT_KASAN_FAIL(test, kmem_cache_destroy(cache));
 -- 
 2.25.1
 

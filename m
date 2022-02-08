@@ -2,177 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9E4A4AD297
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 08:58:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B66AB4AD29D
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 08:59:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348652AbiBHH5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 02:57:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42146 "EHLO
+        id S1348663AbiBHH7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 02:59:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231454AbiBHH5e (ORCPT
+        with ESMTP id S1345198AbiBHH7Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 02:57:34 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DB51C0401EF;
-        Mon,  7 Feb 2022 23:57:32 -0800 (PST)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2185gFe8022851;
-        Tue, 8 Feb 2022 07:57:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=gtXrtw7v/3SXOtkad2MXOemabtU5jV15ZauhrTAWKX4=;
- b=ggv8EE4aJX/LIncKHPapugyLjX6O4nOxTSJMNOygzNpRzfSuy8PX1CGtNUK6ows24YHC
- ooOVjR4tbFgbJIFITa/vz6+vFP0GuqNiUDvRfwaPRKr4QzXidRHOQ1WWFp9lLudZd1p5
- crBBRYc+zDi3G6MqsTr/HCl90eN4EzXRIfESwYj6AfU+72Z46oNngFzMBXq9rO65W2kY
- zkcUmP76pHj7ifuzMjv1c8bIj5ExDLY0ql+rfYwqDo/EWDLUiKOX+aeh6yUedbQeOEDv
- e5Cl9PIbOej9lFoRxbUG3S6BJ6WOQMHpQnJfbE7sFJSq4m35QBPNd0hrT6MCUkULQ94n bw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3e22kqjms7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Feb 2022 07:57:03 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 2186xLGF012181;
-        Tue, 8 Feb 2022 07:57:02 GMT
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3e22kqjmrr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Feb 2022 07:57:02 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2187rsvV025229;
-        Tue, 8 Feb 2022 07:57:01 GMT
-Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
-        by ppma02wdc.us.ibm.com with ESMTP id 3e2f8n0w3v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Feb 2022 07:57:01 +0000
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2187v09V15532352
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 8 Feb 2022 07:57:00 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 12B0EBE04F;
-        Tue,  8 Feb 2022 07:57:00 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CD478BE059;
-        Tue,  8 Feb 2022 07:56:52 +0000 (GMT)
-Received: from [9.65.240.79] (unknown [9.65.240.79])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue,  8 Feb 2022 07:56:52 +0000 (GMT)
-Message-ID: <cd3ef9dd-cfc5-ac8c-d524-d8d4416f5cad@linux.ibm.com>
-Date:   Tue, 8 Feb 2022 09:56:52 +0200
+        Tue, 8 Feb 2022 02:59:16 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B2D4C0401F4
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 23:59:15 -0800 (PST)
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id C893B3FFDA
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 07:59:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644307147;
+        bh=KUmu+SyX79IqC4JJ7btjA8fb9z3hZtQRTMNCGj6+80w=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=ZaT9o8DR6x0Jh9WF0J4dBiIwXaB1MJ8fB5rID68l/ASmd5fboJQR14EGhmB9jFykd
+         KNmLtHkZoPoI0qXApti2/hjMQY5C91wl/FU+xIZnUVQ8UdfGs7eVTwe2Ljx8CgPh3Q
+         Qs1saJBR7zBpYuH70NB5cXrPXSVsS6XmPYehYWz2IlSKV1srZxvXCA3Cr6k9os+5By
+         E/KP5bb64TtBohSBCb8DRaaBrnOVzxgXpe2tBT40vEKlaRHp4duxDjENN1hhoYtWcu
+         koChDhbipP1H4ZkwsLQKDYa0b9JfM7usIqoVKFaqJgX0AERuaBkQtEV5OzT9kd2WcL
+         Lez3NP6yxLxzA==
+Received: by mail-ej1-f70.google.com with SMTP id l18-20020a1709063d3200b006a93f7d4941so5376056ejf.1
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 23:59:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=KUmu+SyX79IqC4JJ7btjA8fb9z3hZtQRTMNCGj6+80w=;
+        b=kZ3n1INRUSK7dlz8rd5rDRHf4V1KZsm6Q4iN5z8eCn10+Otcre4YlyUkXxj+DWNuJ4
+         ERjCbflFiPPCSTP/sUWDhQEqO6WuNdJPzfGxySdbAlxQT4hxcwFL6g+eNZwGFlojNF1x
+         O/0Xf7X7EwmGoSHtTycLJBDLWr6ySyoidc2If+0dVCOV3tM/53NOadxbYxOKIH/9XW8U
+         7cv1/Kk0kvBMDzq9m0q3yEVRQuCHY1OYZuo54LIr7D2d+hLz1HIGrL42AR8DJggGhv2K
+         yQ35eX7QU+lVkBG/bjv3gkIPuyYxvmGNUKt8YyCoqBBIeH294qLo/5118+iGlbkJs52G
+         6wmA==
+X-Gm-Message-State: AOAM532/Z64B8vwrgMVLhxddoj5n6y/xHIPpVzD1OCtg1kjioga3Zef/
+        Z02RVy0lD9c9REjd1PXqgEIwLirN5qh91N8vKEypgrNIrVE2lSjmPLTv3gdHQx46ud5MV7NcRGC
+        LZelH2Z4OJDnu0nuub9LIxAVWoNbw/ZeittFEhmaP4A==
+X-Received: by 2002:a17:907:3d9e:: with SMTP id he30mr2695744ejc.625.1644307147047;
+        Mon, 07 Feb 2022 23:59:07 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwnMuJKGmrn//ENmSKnBlAudNuu0CWc31cjpAvZg8bgdPfnemJMwR4TMW3LN8I8kjOeWiw/ww==
+X-Received: by 2002:a17:907:3d9e:: with SMTP id he30mr2695737ejc.625.1644307146862;
+        Mon, 07 Feb 2022 23:59:06 -0800 (PST)
+Received: from [192.168.0.92] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id i24sm42682edt.86.2022.02.07.23.59.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Feb 2022 23:59:06 -0800 (PST)
+Message-ID: <30ac5fe7-9d96-a756-24b0-384361b48a2d@canonical.com>
+Date:   Tue, 8 Feb 2022 08:59:05 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v9 42/43] virt: sevguest: Add support to derive key
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v1 6/6] i2c: npcm: Support NPCM845
 Content-Language: en-US
-To:     Brijesh Singh <brijesh.singh@amd.com>,
-        Borislav Petkov <bp@alien8.de>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Dov Murik <dovmurik@linux.ibm.com>
-References: <20220128171804.569796-1-brijesh.singh@amd.com>
- <20220128171804.569796-43-brijesh.singh@amd.com> <YgDduR0mrptX5arB@zn.tnic>
- <1cb4fdf5-7c1e-6c8f-1db6-8c976d6437c2@amd.com>
- <ae1644a3-bd2c-6966-4ae3-e26abd77b77b@linux.ibm.com>
- <20ba1ac2-83d1-6766-7821-c9c8184fb59b@amd.com>
-From:   Dov Murik <dovmurik@linux.ibm.com>
-In-Reply-To: <20ba1ac2-83d1-6766-7821-c9c8184fb59b@amd.com>
+To:     Tali Perry <tali.perry1@gmail.com>
+Cc:     =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
+        Tyrone Ting <warp5tw@gmail.com>, avifishman70@gmail.com,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Rob Herring <robh+dt@kernel.org>, semen.protsenko@linaro.org,
+        yangyicong@hisilicon.com, Wolfram Sang <wsa@kernel.org>,
+        jie.deng@intel.com, sven@svenpeter.dev, bence98@sch.bme.hu,
+        lukas.bulwahn@gmail.com, arnd@arndb.de, olof@lixom.net,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Tali Perry <tali.perry@nuvoton.com>,
+        Avi Fishman <Avi.Fishman@nuvoton.com>,
+        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
+        kfting@nuvoton.com, devicetree <devicetree@vger.kernel.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220207063338.6570-1-warp5tw@gmail.com>
+ <20220207063338.6570-7-warp5tw@gmail.com> <YgEJ1M40AG9EuRPI@latitude>
+ <086655b0-b9d2-30ed-1496-47cdc6346003@canonical.com>
+ <CAHb3i=vpFwez+ZzDhHkSxjkios3tyoM2urRpCxOn3vfwzvewog@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <CAHb3i=vpFwez+ZzDhHkSxjkios3tyoM2urRpCxOn3vfwzvewog@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: qvassD_Uu8uQX6f_dwT-iYnruSlWvah-
-X-Proofpoint-ORIG-GUID: c-8-weD6JHfrfspuix_37e4dnbGaP-Xl
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-08_02,2022-02-07_02,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- priorityscore=1501 bulkscore=0 spamscore=0 impostorscore=0 suspectscore=0
- mlxlogscore=999 lowpriorityscore=0 adultscore=0 malwarescore=0 mlxscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202080039
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 07/02/2022 22:08, Brijesh Singh wrote:
-> 
-> 
-> On 2/7/22 1:09 PM, Dov Murik wrote:
+On 08/02/2022 08:14, Tali Perry wrote:
+>> -----Original Message-----
+>> From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>> Sent: Monday, February 7, 2022 5:27 PM
+>> To: Jonathan Neuschäfer <j.neuschaefer@gmx.net>; Tyrone Ting <warp5tw@gmail.com>
+>> Cc: avifishman70@gmail.com; tmaimon77@gmail.com; tali.perry1@gmail.com; venture@google.com; yuenn@google.com; benjaminfair@google.com; robh+dt@kernel.org; semen.protsenko@linaro.org; yangyicong@hisilicon.com; wsa@kernel.org; jie.deng@intel.com; sven@svenpeter.dev; bence98@sch.bme.hu; lukas.bulwahn@gmail.com; arnd@arndb.de; olof@lixom.net; andriy.shevchenko@linux.intel.com; IS20 Tali Perry <tali.perry@nuvoton.com>; IS20 Avi Fishman <Avi.Fishman@nuvoton.com>; IS20 Tomer Maimon <tomer.maimon@nuvoton.com>; CS20 KWLiu <KWLIU@nuvoton.com>; CS20 JJLiu0 <JJLIU0@nuvoton.com>; CS20 KFTing <KFTING@nuvoton.com>; devicetree@vger.kernel.org; openbmc@lists.ozlabs.org; linux-i2c@vger.kernel.org; linux-kernel@vger.kernel.org
+>> Subject: Re: [PATCH v1 6/6] i2c: npcm: Support NPCM845
 >>
->>
->> On 07/02/2022 18:23, Brijesh Singh wrote:
+>> On 07/02/2022 13:00, Jonathan Neuschäfer wrote:
+>>> Hello,
 >>>
+>>> On Mon, Feb 07, 2022 at 02:33:38PM +0800, Tyrone Ting wrote:
+>>>> From: Tyrone Ting <kfting@nuvoton.com>
+>>>>
+>>>> NPCM8XX uses a similar i2c module as NPCM7XX.
+>>>> The only difference is that the internal HW FIFO is larger.
+>>>>
+>>>> Related Makefile and Kconfig files are modified to support as well.
+>>>>
+>>>> Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller
+>>>> driver")
 >>>
->>> On 2/7/22 2:52 AM, Borislav Petkov wrote:
->>>> Those are allocated on stack, why are you clearing them?
+>>> It's not really a bug fix, but rather an additional feature.
+>>> Therefore, I suggest removing the Fixes tag from this patch.
 >>>
->>> Yep, no need to explicitly clear it. I'll take it out in next rev.
+>>>> Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
+>>>> Signed-off-by: Tali Perry <tali.perry1@gmail.com>
+>>>> ---
+>>> [...]
+>>>>  /* init register and default value required to enable module */
+>>>>  #define NPCM_I2CSEGCTL 0xE4
+>>>> +#ifdef CONFIG_ARCH_NPCM7XX
+>>>>  #define NPCM_I2CSEGCTL_INIT_VAL 0x0333F000
+>>>> +#else
+>>>> +#define NPCM_I2CSEGCTL_INIT_VAL 0x9333F000
+>>>> +#endif
 >>>
+>>> This is going to cause problems when someone tries to compile a kernel
+>>> that runs on both NPCM7xx and NPCM8xx (because the driver will then
+>>> only work on NPCM7xx).
 >>
->> Wait, this is key material generated by PSP and passed to userspace.
->> Why leave copies of it floating around kernel memory?  I thought that's
->> the whole reason for these memzero_explicit() calls (maybe add a
->> comment?).
+>> Yes, good catch.
+>>
+>> The NPCM7XX is multiplatform, I guess NPCM8xx will be as well, so this looks like an invalid code. How such code is supposed to work on multiplatform kernel?
 >>
 > 
+> NPCM7xx and NPCM8xx are very different devices.
+> They share same driver sources for some of the modules but it's not ABI.
+> Users cannot compile a single kernel with two separate DTS.
+> In case of the i2c controller, the npcm7xx has a 16 byte HW FIFO,
+> and the NPCM8xx has 32 bytes HW FIFO.
+> This also means that registers fields are slightly different.
+> For init data we can move it to the DTS, but register field sizes
+> can't be handled with this approach.
 > 
-> Ah, now I remember I added the memzero_explicit() to address your review
-> feedback :) In that patch version, we were using the kmalloc() to store
-> the response data; since then, we switched to stack. We will leak the
-> key outside when the stack is converted private-> shared; I don't know
-> if any of these are going to happen. I can add a comment and keep the
-> memzero_explicit() call.
-> 
 
-Just to be clear, I didn't mean necessarily "leak the key to the
-untrusted host" (even if a page is converted back from private to
-shared, it is encrypted, so host can't read its contents).  But even
-*inside* the guest, when dealing with sensitive data like keys, we
-should minimize the amount of copies that float around (I assume this is
-the reason for most of the uses of memzero_explicit() in the kernel).
-
--Dov
+What do you mean they cannot compile a kernel with different DTS? Of
+course they can - when we talk about multiplatform sub-architectures!
+Maybe there is something specific in NPCMxxx which stops it but then it
+should not be marked multiplatform.
 
 
-
-> Boris, let me know if you are okay with it?
-> 
-> 
->> As an example, in arch/x86/crypto/aesni-intel_glue.c there are two calls
->> to memzero_explicit(), both on stack variables; the only reason for
->> these calls (as I understand it) is to avoid some future possible leak
->> of this sensitive data (keys, cipher context, etc.).  I'm sure there are
->> other examples in the kernel code.
->>
+Best regards,
+Krzysztof

@@ -2,138 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C12264AD477
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 10:13:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BDA14AD4C5
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 10:25:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353336AbiBHJN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 04:13:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56708 "EHLO
+        id S1354484AbiBHJY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 04:24:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353220AbiBHJNX (ORCPT
+        with ESMTP id S240196AbiBHJYu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 04:13:23 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 316F0C03FEC1
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 01:13:23 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id i7-20020a056e020ec700b002be118c9b21so4404652ilk.20
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 01:13:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=fmKzwHE9y2F6412F2hvJKw1swsIkm5oQWcI9LLxHYNM=;
-        b=r7ABGE6jAEZTQAwgq9GUZZs+xzhjQr7JSvcg+W7gpsniLock61lASHpI5qNO0/Q7m8
-         wd5GBisvFvOZN1+oUR3rEFXG5LbYah7UBtwCbdCLadafqWXf9P1Z7dVuKAS/FWjhvRKd
-         Fmk5hzHiSN7ANOxqXpMGqaauowmj19/oXPNdFlJTEbSTO1QF838diw0E31ilMc2stjLX
-         QUzl//habK+fbQWd37yzHIorE4MGYgSqCKGtcFXMyyICdaG8yD7o4k6Wu70LTUcKLIaX
-         eXw1vUlEPoHAOGmconR6vhqQKlluAMO0vdJQLFBavlu6DBXmXlWbwz9qlvYKM8rpSoml
-         hurQ==
-X-Gm-Message-State: AOAM533CehR1vNDROk73LquU/h9U1EwWoZkMq0HqAvppHTo8JLlycvOS
-        TLc9d2nvWgkhh0tIs1sNlPJFNnumdgWPXfcXIjdoP92azajW
-X-Google-Smtp-Source: ABdhPJwJFN2ywyl3Ztm6XamwcrU4BWSBBwyGIGQ0RFICRB4abjdE45+rX21ZCaG4FTlpyAbnRjEg2ygdzgf8G3U9mETEPNi4BdlB
-MIME-Version: 1.0
-X-Received: by 2002:a05:6602:1347:: with SMTP id i7mr1627681iov.141.1644311602582;
- Tue, 08 Feb 2022 01:13:22 -0800 (PST)
-Date:   Tue, 08 Feb 2022 01:13:22 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f8dc8805d77e202f@google.com>
-Subject: [syzbot] KCSAN: data-race in dev_get_tstats64 / wg_packet_rx_poll (3)
-From:   syzbot <syzbot+5d8276c437d9827c1fbf@syzkaller.appspotmail.com>
-To:     Jason@zx2c4.com, davem@davemloft.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, wireguard@lists.zx2c4.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        Tue, 8 Feb 2022 04:24:50 -0500
+Received: from mail-m17635.qiye.163.com (mail-m17635.qiye.163.com [59.111.176.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E19EC03FEC0;
+        Tue,  8 Feb 2022 01:24:47 -0800 (PST)
+Received: from localhost.localdomain (unknown [58.22.7.114])
+        by mail-m17635.qiye.163.com (Hmail) with ESMTPA id 97C7B400379;
+        Tue,  8 Feb 2022 17:13:34 +0800 (CST)
+From:   Yifeng Zhao <yifeng.zhao@rock-chips.com>
+To:     heiko@sntech.de
+Cc:     robh+dt@kernel.org, jbx6244@gmail.com, devicetree@vger.kernel.org,
+        vkoul@kernel.org, michael.riesch@wolfvision.net,
+        linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, kishon@ti.com,
+        p.zabel@pengutronix.de, cl@rock-chips.com,
+        kever.yang@rock-chips.com, lee.jones@linaro.org,
+        wulf@rock-chips.com, david.wu@rock-chips.com,
+        Yifeng Zhao <yifeng.zhao@rock-chips.com>
+Subject: [PATCH v8 1/4] dt-bindings: soc: grf: add naneng combo phy register compatible
+Date:   Tue,  8 Feb 2022 17:13:23 +0800
+Message-Id: <20220208091326.12495-2-yifeng.zhao@rock-chips.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220208091326.12495-1-yifeng.zhao@rock-chips.com>
+References: <20220208091326.12495-1-yifeng.zhao@rock-chips.com>
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZCBgUCR5ZQVlLVUtZV1
+        kWDxoPAgseWUFZKDYvK1lXWShZQUhPN1dZLVlBSVdZDwkaFQgSH1lBWRkdHxpWS09PGEpPTEwfGR
+        8eVRMBExYaEhckFA4PWVdZFhoPEhUdFFlBWVVLWQY+
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PhQ6OCo6Ij5PGiEqFDgNL0ko
+        PDYKCjZVSlVKTU9PSEpKTUpOQ0NMVTMWGhIXVQISHR4VHFUBExoUOwkUGBBWGBMSCwhVGBQWRVlX
+        WRILWUFZTkNVSUlVTFVKSk9ZV1kIAVlBSUxDTzcG
+X-HM-Tid: 0a7ed89c1667d991kuws97c7b400379
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+From: Johan Jonker <jbx6244@gmail.com>
 
-syzbot found the following issue on:
+Add Naneng combo phy register compatible.
 
-HEAD commit:    79e06c4c4950 Merge tag 'for-linus' of git://git.kernel.org..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1642e837b00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d443ab22c440893a
-dashboard link: https://syzkaller.appspot.com/bug?extid=5d8276c437d9827c1fbf
-compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+5d8276c437d9827c1fbf@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KCSAN: data-race in dev_get_tstats64 / wg_packet_rx_poll
-
-write to 0xffffe8ffffc39fe0 of 8 bytes by interrupt on cpu 0:
- update_rx_stats drivers/net/wireguard/receive.c:26 [inline]
- wg_packet_consume_data_done drivers/net/wireguard/receive.c:365 [inline]
- wg_packet_rx_poll+0xf37/0x11f0 drivers/net/wireguard/receive.c:481
- __napi_poll+0x65/0x3f0 net/core/dev.c:6365
- napi_poll net/core/dev.c:6432 [inline]
- net_rx_action+0x29e/0x650 net/core/dev.c:6519
- __do_softirq+0x158/0x2de kernel/softirq.c:558
- do_softirq+0xb1/0xf0 kernel/softirq.c:459
- __local_bh_enable_ip+0x68/0x70 kernel/softirq.c:383
- __raw_spin_unlock_bh include/linux/spinlock_api_smp.h:167 [inline]
- _raw_spin_unlock_bh+0x33/0x40 kernel/locking/spinlock.c:210
- spin_unlock_bh include/linux/spinlock.h:394 [inline]
- ptr_ring_consume_bh include/linux/ptr_ring.h:367 [inline]
- wg_packet_decrypt_worker+0x73c/0x780 drivers/net/wireguard/receive.c:506
- process_one_work+0x3f6/0x960 kernel/workqueue.c:2307
- worker_thread+0x616/0xa70 kernel/workqueue.c:2454
- kthread+0x2c7/0x2e0 kernel/kthread.c:327
- ret_from_fork+0x1f/0x30
-
-read to 0xffffe8ffffc39fe0 of 8 bytes by task 7601 on cpu 1:
- dev_fetch_sw_netstats net/core/dev.c:10050 [inline]
- dev_get_tstats64+0x117/0x1e0 net/core/dev.c:10075
- dev_get_stats+0x65/0x180 net/core/dev.c:10017
- rtnl_fill_stats+0x45/0x320 net/core/rtnetlink.c:1203
- rtnl_fill_ifinfo+0xf16/0x25b0 net/core/rtnetlink.c:1776
- rtmsg_ifinfo_build_skb+0xa8/0x130 net/core/rtnetlink.c:3833
- rtmsg_ifinfo_event net/core/rtnetlink.c:3865 [inline]
- rtmsg_ifinfo+0x58/0xc0 net/core/rtnetlink.c:3874
- __dev_notify_flags+0x63/0x3b0 net/core/dev.c:8173
- dev_change_flags+0xa2/0xc0 net/core/dev.c:8215
- do_setlink+0x820/0x2500 net/core/rtnetlink.c:2729
- __rtnl_newlink net/core/rtnetlink.c:3412 [inline]
- rtnl_newlink+0xfad/0x13b0 net/core/rtnetlink.c:3527
- rtnetlink_rcv_msg+0x745/0x7e0 net/core/rtnetlink.c:5592
- netlink_rcv_skb+0x14e/0x250 net/netlink/af_netlink.c:2494
- rtnetlink_rcv+0x18/0x20 net/core/rtnetlink.c:5610
- netlink_unicast_kernel net/netlink/af_netlink.c:1317 [inline]
- netlink_unicast+0x602/0x6d0 net/netlink/af_netlink.c:1343
- netlink_sendmsg+0x728/0x850 net/netlink/af_netlink.c:1919
- sock_sendmsg_nosec net/socket.c:705 [inline]
- sock_sendmsg net/socket.c:725 [inline]
- __sys_sendto+0x21e/0x2c0 net/socket.c:2040
- __do_sys_sendto net/socket.c:2052 [inline]
- __se_sys_sendto net/socket.c:2048 [inline]
- __x64_sys_sendto+0x74/0x90 net/socket.c:2048
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-value changed: 0x0000000000000001 -> 0x0000000000000002
-
-Reported by Kernel Concurrency Sanitizer on:
-CPU: 1 PID: 7601 Comm: syz-executor.0 Not tainted 5.16.0-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-==================================================================
-
-
+Acked-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+Signed-off-by: Yifeng Zhao <yifeng.zhao@rock-chips.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Changes in v8: None
+Changes in v7: None
+Changes in v5: None
+Changes in v4: None
+Changes in v3: None
+Changes in v2: None
+
+ Documentation/devicetree/bindings/soc/rockchip/grf.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/soc/rockchip/grf.yaml b/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
+index b2ba7bed89b2..5079e9d24af6 100644
+--- a/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
++++ b/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
+@@ -15,6 +15,8 @@ properties:
+       - items:
+           - enum:
+               - rockchip,rk3288-sgrf
++              - rockchip,rk3568-pipe-grf
++              - rockchip,rk3568-pipe-phy-grf
+               - rockchip,rk3568-usb2phy-grf
+               - rockchip,rv1108-usbgrf
+           - const: syscon
+-- 
+2.17.1
+

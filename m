@@ -2,84 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19E0A4AD9A9
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 14:22:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 399234AD9BE
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 14:27:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350836AbiBHNW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 08:22:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57748 "EHLO
+        id S240515AbiBHN05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 08:26:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357742AbiBHMhF (ORCPT
+        with ESMTP id S1359186AbiBHNZp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 07:37:05 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A8767C03FEC0
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 04:37:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644323822;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Y5vSlEmtbw6e2MoGrB6mFIzKqXBqzf02wD7hCYaC1L8=;
-        b=M1eFZgxSEC5oLG9YG3gTXjuJGkOOLAzLvza5FmqPORxLrUBPBuov/KMUBd81bYJ+Zuz3Yj
-        kkI+t/FF3zITu61PI/u+jZhASDak3+5nZaAIO3d0vdW5T3qaKiy1VM2FQZfXmUe1R+YSXO
-        IH/C8k9SP2Z9iu8Is753Vqmf+xdlz9U=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-104-Rqd_XqQNPsqoFAPDdGKYqQ-1; Tue, 08 Feb 2022 07:37:01 -0500
-X-MC-Unique: Rqd_XqQNPsqoFAPDdGKYqQ-1
-Received: by mail-wm1-f71.google.com with SMTP id t2-20020a7bc3c2000000b003528fe59cb9so481027wmj.5
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 04:37:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=Y5vSlEmtbw6e2MoGrB6mFIzKqXBqzf02wD7hCYaC1L8=;
-        b=nkaVC2ZDq7D9uFZ7xGbRs6mEmpFjLfmW8qpXAW0uezg9AcOVNP30Dae5Xie2DWZUD3
-         Dzh5XV/lDajgN31zfacRo0CLR0kaPMBgchxF8359mcYiRvAUM9PGaU/DWivlahe9d4aT
-         lPmHa12td/WshBjv+NjB0EAoPnQ1RJAZfbL0Lq9yERHMmIuN8ihp+m9+WeGaEyz/LODp
-         Pg2J61jg7xEHMAeoadGA0BWvJeMohfAEeeFVMcvkB7DWlHqsGVBMOPQ+PtmHgiIDdeuk
-         EzwoAcm8G0CNK25khlkgUpXpM7N9KsxssJ8bSvPCTGmRRiUkemtfcg9BJkcaPnCOVmgU
-         0Vnw==
-X-Gm-Message-State: AOAM530Qsm1XQlDxr2DnTuIv6JJlIy/q5I7Zla8H3OXLe+JHNZPevFq1
-        ovp/0VOmvhgnYRZ5HgM3cIO8ru/MO2cZ3syMaRcon6ZJym4156axAgq8cDRWao6V98+Or4Hsgr2
-        FOZIW1Zwp5x4s7u6gwHT+2LFx
-X-Received: by 2002:a5d:488f:: with SMTP id g15mr3360032wrq.564.1644323820327;
-        Tue, 08 Feb 2022 04:37:00 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzD625fBX0DzJv8DmzHy80761ZH48vaT6n/DPsnp1+c01bo2R/r/Y9yXVZ44ay76AQL+2sWeg==
-X-Received: by 2002:a5d:488f:: with SMTP id g15mr3360013wrq.564.1644323820094;
-        Tue, 08 Feb 2022 04:37:00 -0800 (PST)
-Received: from ?IPv6:2a0c:5a80:1204:1500:37e7:8150:d9df:36f? ([2a0c:5a80:1204:1500:37e7:8150:d9df:36f])
-        by smtp.gmail.com with ESMTPSA id o27sm2229495wms.4.2022.02.08.04.36.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 04:36:59 -0800 (PST)
-Message-ID: <8ba732136cffc61276e0580010e8f5d56892d816.camel@redhat.com>
-Subject: Re: [PATCH 3/6] drivers/auxdisplay: sensehat: Raspberry Pi Sense
- HAT display driver
-From:   Nicolas Saenz Julienne <nsaenzju@redhat.com>
-To:     Charles Mirabile <cmirabil@redhat.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Serge Schneider <serge@raspberrypi.org>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Mattias Brugger <mbrugger@suse.com>,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, fedora-rpi@googlegroups.com,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Mwesigwa Guma <mguma@redhat.com>,
-        Joel Savitz <jsavitz@redhat.com>,
-        Daniel Bauman <dbauman@redhat.com>
-Date:   Tue, 08 Feb 2022 13:36:58 +0100
-In-Reply-To: <20220203002521.162878-4-cmirabil@redhat.com>
-References: <20220203002521.162878-1-cmirabil@redhat.com>
-         <20220203002521.162878-4-cmirabil@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
+        Tue, 8 Feb 2022 08:25:45 -0500
+X-Greylist: delayed 2520 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Feb 2022 05:19:28 PST
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2A32C004386
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 05:19:28 -0800 (PST)
+Received: from fsav413.sakura.ne.jp (fsav413.sakura.ne.jp [133.242.250.112])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 218CbD4m058607;
+        Tue, 8 Feb 2022 21:37:13 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav413.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav413.sakura.ne.jp);
+ Tue, 08 Feb 2022 21:37:12 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav413.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 218CbCsG058604
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Tue, 8 Feb 2022 21:37:12 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <5a65fe57-70ce-68c1-6578-5545b1af9392@I-love.SAKURA.ne.jp>
+Date:   Tue, 8 Feb 2022 21:37:11 +0900
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: regression: LTP isofs testcase failure - bisection fingers "loop:
+ make autoclear operation asynchronous"
+Content-Language: en-US
+To:     Mike Galbraith <efault@gmx.de>, Jens Axboe <axboe@kernel.dk>,
+        Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>
+Cc:     lkml <linux-kernel@vger.kernel.org>
+References: <4eb771d2b48ee94ba2e3aa8706bce8117d398e80.camel@gmx.de>
+ <c53285e4-cbd4-5fd0-cbc9-93e2e3d3d88d@I-love.SAKURA.ne.jp>
+ <83f59bac8286f3348d4c7ccdd93d1ce1ad2f06c9.camel@gmx.de>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <83f59bac8286f3348d4c7ccdd93d1ce1ad2f06c9.camel@gmx.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -88,398 +57,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-02-02 at 19:25 -0500, Charles Mirabile wrote:
-> This patch adds the driver for the 8x8 RGB LED matrix display
-> on the Sense HAT. It appears as a character device named sense-hat
-> in /dev/. That special file is 192 bytes large and contains one byte
-> for each color channel of each pixel. The overall layout is:
+On 2022/02/08 12:16, Mike Galbraith wrote:
+> On Tue, 2022-01-18 at 06:57 +0900, Tetsuo Handa wrote:
+>> On 2022/01/18 0:34, Mike Galbraith wrote:
+>>> Greetings,
+>>>
+>>> LTP's isofs testcase began failing this cycle, and bisected as below,
+>>> which a revert then confirmed.  Full testcase output attached.
+>>>
+>>
+>> Thanks for reporting.
+>> Discussion is continued at https://lkml.kernel.org/r/cdaf1346-2885-f0da-8878-12264bd48348@I-love.SAKURA.ne.jp .
 > 
->     col 1       col 8
->       |           |
->       v           v
-> 0x00: R   . . .   R \
-> 0x08: G   . . .   G |> row 1
-> 0x10: B   . . .   B /
->       .   .       .
-> ...   .     .     .
->       .       .   .
-> 0xA8: R   . . .   R \
-> 0xB0: G   . . .   G |> row 8
-> 0xB8: G   . . .   G /
+> <legalese-disclaimer-font> ping
 > 
-> Each channel may have any value between 0 and 31 (larger values are
-> wrapped) and are translated by a gamma table before being send to the
-> device to provide a linear experience of brightness (the gamma table
-> can be modified or reset using an ioctl call on the file). The constants
-> for the ioctl are in the sensehat.h header also added in this patch.
-> 
-> Co-developed-by: Mwesigwa Guma <mguma@redhat.com>
-> Signed-off-by: Mwesigwa Guma <mguma@redhat.com>
-> Co-developed-by: Joel Savitz <jsavitz@redhat.com>
-> Signed-off-by: Joel Savitz <jsavitz@redhat.com>
-> Co-developed-by: Daniel Bauman <dbauman@redhat.com>
-> Signed-off-by: Daniel Bauman <dbauman@redhat.com>
-> Signed-off-by: Charles Mirabile <cmirabil@redhat.com>
-> ---
->  drivers/auxdisplay/Kconfig            |   8 +
->  drivers/auxdisplay/Makefile           |   1 +
->  drivers/auxdisplay/sensehat-display.c | 264 ++++++++++++++++++++++++++
->  include/uapi/linux/sensehat.h         |  28 +++
->  4 files changed, 301 insertions(+)
->  create mode 100644 drivers/auxdisplay/sensehat-display.c
->  create mode 100644 include/uapi/linux/sensehat.h
-> 
-> diff --git a/drivers/auxdisplay/Kconfig b/drivers/auxdisplay/Kconfig
-> index 64012cda4d12..9bad1aade7a0 100644
-> --- a/drivers/auxdisplay/Kconfig
-> +++ b/drivers/auxdisplay/Kconfig
-> @@ -203,6 +203,14 @@ config ARM_CHARLCD
->  	  line and the Linux version on the second line, but that's
->  	  still useful.
->  
-> +config SENSEHAT_DISPLAY
-> +	tristate "Raspberry Pi Sense HAT display driver"
-> +	depends on I2C
-> +	select MFD_SIMPLE_MFD_I2C
-> +	help
-> +	 This is a driver for the Raspberry Pi Sensehat 8x8 RBG-LED matrix
-> +	 you can access it as a misc device at /dev/sense-hat
-> +
->  menuconfig PARPORT_PANEL
->  	tristate "Parallel port LCD/Keypad Panel support"
->  	depends on PARPORT
-> diff --git a/drivers/auxdisplay/Makefile b/drivers/auxdisplay/Makefile
-> index 6968ed4d3f0a..30b2b7934046 100644
-> --- a/drivers/auxdisplay/Makefile
-> +++ b/drivers/auxdisplay/Makefile
-> @@ -14,3 +14,4 @@ obj-$(CONFIG_HT16K33)		+= ht16k33.o
->  obj-$(CONFIG_PARPORT_PANEL)	+= panel.o
->  obj-$(CONFIG_LCD2S)		+= lcd2s.o
->  obj-$(CONFIG_LINEDISP)		+= line-display.o
-> +obj-$(CONFIG_SENSEHAT_DISPLAY)	+= sensehat-display.o
-> diff --git a/drivers/auxdisplay/sensehat-display.c b/drivers/auxdisplay/sensehat-display.c
-> new file mode 100644
-> index 000000000000..08b397a544f0
-> --- /dev/null
-> +++ b/drivers/auxdisplay/sensehat-display.c
-> @@ -0,0 +1,264 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Raspberry Pi Sense HAT 8x8 LED matrix display driver
-> + * http://raspberrypi.org
-> + *
-> + * Copyright (C) 2015 Raspberry Pi
-> + * Copyright (C) 2021 Charles Mirabile, Mwesigwa Guma, Joel Savitz
-> + *
-> + * Original Author: Serge Schneider
-> + * Revised for upstream Linux by: Charles Mirabile, Mwesigwa Guma, Joel Savitz
-> + */
-> +
-> +#include <linux/module.h>
-> +#include <linux/kernel.h>
-> +#include <linux/errno.h>
-> +#include <linux/string.h>
-> +#include <linux/mm.h>
-> +#include <linux/slab.h>
-> +#include <linux/uaccess.h>
-> +#include <linux/delay.h>
-> +#include <linux/init.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/miscdevice.h>
-> +#include <linux/regmap.h>
-> +#include <linux/property.h>
-> +#include <linux/sensehat.h>
-> +
-> +#define GAMMA_SIZE 32
-> +#define VMEM_SIZE 192
-> +
-> +struct sensehat_display {
-> +	struct platform_device *pdev;
-> +	struct miscdevice mdev;
-> +	struct mutex rw_mtx;
-> +	u8 gamma[GAMMA_SIZE];
-> +	u8 vmem[VMEM_SIZE];
-> +	u32 display_register;
-> +};
-> +
-> +static bool lowlight;
-> +module_param(lowlight, bool, 0);
-> +MODULE_PARM_DESC(lowlight, "Reduce LED matrix brightness to one third");
-> +
-> +static const u8 gamma_presets[][GAMMA_SIZE] = {
-> +	[SENSEHAT_GAMMA_DEFAULT] = {
-> +		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
-> +		0x02, 0x02, 0x03, 0x03, 0x04, 0x05, 0x06, 0x07,
-> +		0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0E, 0x0F, 0x11,
-> +		0x12, 0x14, 0x15, 0x17, 0x19, 0x1B, 0x1D, 0x1F,
-> +	},
-> +	[SENSEHAT_GAMMA_LOWLIGHT] = {
-> +		0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
-> +		0x01, 0x01, 0x01, 0x01, 0x01, 0x02, 0x02, 0x02,
-> +		0x03, 0x03, 0x03, 0x04, 0x04, 0x05, 0x05, 0x06,
-> +		0x06, 0x07, 0x07, 0x08, 0x08, 0x09, 0x0A, 0x0A,
-> +	},
-> +};
-> +
-> +static void sensehat_update_display(struct sensehat_display *display)
-> +{
-> +	int i, ret;
-> +	struct regmap *regmap = dev_get_regmap(display->pdev->dev.parent, NULL);
 
-Same comment as with joystick.
-
-> +	u8 temp[VMEM_SIZE];
-> +
-> +	for (i = 0; i < VMEM_SIZE; ++i)
-> +		temp[i] = display->gamma[display->vmem[i] & 0x1f];
-> +
-> +	ret = regmap_bulk_write(regmap, display->display_register, temp,
-> +				VMEM_SIZE);
-> +	if (ret < 0)
-> +		dev_err(&display->pdev->dev,
-> +			"Update to 8x8 LED matrix display failed");
-> +}
-> +
-> +static loff_t sensehat_display_llseek(struct file *filp, loff_t offset,
-> +				      int whence)
-> +{
-> +	loff_t base, pos;
-> +
-> +	switch (whence) {
-> +	case SEEK_SET:
-> +		base = 0;
-> +		break;
-> +	case SEEK_CUR:
-> +		base = filp->f_pos;
-> +		break;
-> +	case SEEK_END:
-> +		base = VMEM_SIZE;
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +	pos = base + offset;
-> +	if (pos < 0 || pos >= VMEM_SIZE)
-> +		return -EINVAL;
-> +	filp->f_pos = pos;
-> +	return base;
-> +}
-> +
-> +static ssize_t sensehat_display_read(struct file *filp, char __user *buf,
-> +				     size_t count, loff_t *f_pos)
-> +{
-> +	struct sensehat_display *sensehat_display =
-> +		container_of(filp->private_data, struct sensehat_display, mdev);
-> +	ssize_t retval = -EFAULT;
-> +
-> +	if (*f_pos >= VMEM_SIZE)
-> +		return 0;
-> +	if (*f_pos + count > VMEM_SIZE)
-> +		count = VMEM_SIZE - *f_pos;
-> +	if (mutex_lock_interruptible(&sensehat_display->rw_mtx))
-> +		return -ERESTARTSYS;
-> +	if (copy_to_user(buf, sensehat_display->vmem + *f_pos, count))
-> +		goto out;
-> +	*f_pos += count;
-> +	retval = count;
-> +out:
-> +	mutex_unlock(&sensehat_display->rw_mtx);
-> +	return retval;
-> +}
-> +
-> +static ssize_t sensehat_display_write(struct file *filp, const char __user *buf,
-> +				      size_t count, loff_t *f_pos)
-> +{
-> +	struct sensehat_display *sensehat_display =
-> +		container_of(filp->private_data, struct sensehat_display, mdev);
-> +	int ret = count;
-> +
-> +	if (*f_pos >= VMEM_SIZE)
-> +		return -EFBIG;
-> +	if (*f_pos + count > VMEM_SIZE)
-> +		count = VMEM_SIZE - *f_pos;
-> +	if (mutex_lock_interruptible(&sensehat_display->rw_mtx))
-> +		return -ERESTARTSYS;
-> +	if (copy_from_user(sensehat_display->vmem + *f_pos, buf, count)) {
-> +		ret = -EFAULT;
-> +		goto out;
-> +	}
-> +	sensehat_update_display(sensehat_display);
-> +	*f_pos += count;
-> +out:
-> +	mutex_unlock(&sensehat_display->rw_mtx);
-> +	return ret;
-> +}
-> +
-> +static long sensehat_display_ioctl(struct file *filp, unsigned int cmd,
-> +				   unsigned long arg)
-> +{
-> +	struct sensehat_display *sensehat_display =
-> +		container_of(filp->private_data, struct sensehat_display, mdev);
-> +	void __user *user_ptr = (void __user *)arg;
-> +	int i, ret = 0;
-> +
-> +	if (mutex_lock_interruptible(&sensehat_display->rw_mtx))
-> +		return -ERESTARTSYS;
-
-nit: add space, here and after the switch statement.
-
-> +	switch (cmd) {
-> +	case SENSEDISP_IOGET_GAMMA:
-> +		if (copy_to_user(user_ptr, sensehat_display->gamma, GAMMA_SIZE))
-> +			ret = -EFAULT;
-> +		goto no_update;
-> +	case SENSEDISP_IOSET_GAMMA:
-> +		if (copy_from_user(sensehat_display->gamma, user_ptr,
-> +				   GAMMA_SIZE))
-> +			ret = -EFAULT;
-> +		break;
-> +	case SENSEDISP_IORESET_GAMMA:
-> +		if (arg >= SENSEHAT_GAMMA_PRESET_COUNT) {
-> +			ret = -EINVAL;
-> +			goto no_update;
-> +		}
-> +		memcpy(sensehat_display->gamma, gamma_presets[arg], GAMMA_SIZE);
-> +		goto no_check;
-> +	default:
-> +		ret = -EINVAL;
-> +		break;
-> +	}
-> +	for (i = 0; i < GAMMA_SIZE; ++i)
-> +		sensehat_display->gamma[i] &= 0x1f;
-> +no_check:
-> +	sensehat_update_display(sensehat_display);
-> +no_update:
-> +	mutex_unlock(&sensehat_display->rw_mtx);
-> +	return ret;
-> +}
-> +
-> +static const struct file_operations sensehat_display_fops = {
-> +	.owner = THIS_MODULE,
-> +	.llseek = sensehat_display_llseek,
-> +	.read = sensehat_display_read,
-> +	.write = sensehat_display_write,
-> +	.unlocked_ioctl = sensehat_display_ioctl,
-> +};
-> +
-> +static int sensehat_display_probe(struct platform_device *pdev)
-> +{
-> +	int ret;
-> +
-> +	struct sensehat_display *sensehat_display =
-> +		devm_kzalloc(&pdev->dev, sizeof(*sensehat_display), GFP_KERNEL);
-> +
-> +	sensehat_display->pdev = pdev;
-> +
-> +	memcpy(sensehat_display->gamma, gamma_presets[lowlight], GAMMA_SIZE);
-> +
-> +	memset(sensehat_display->vmem, 0, VMEM_SIZE);
-
-You don't nee this, kzalloc already zeroes the memory.
-
-> +
-> +	mutex_init(&sensehat_display->rw_mtx);
-> +
-> +	ret = device_property_read_u32(&pdev->dev, "reg",
-> +				       &sensehat_display->display_register);
-
-Same comment as with joystick.
-
-> +	if (ret) {
-> +		dev_err(&pdev->dev, "Could not read register property.\n");
-> +		return ret;
-> +	}
-> +
-> +	sensehat_display->mdev = (struct miscdevice){
-> +		.minor = MISC_DYNAMIC_MINOR,
-> +		.name = "sense-hat",
-> +		.mode = 0666,
-> +		.fops = &sensehat_display_fops,
-> +	};
-> +
-> +	ret = misc_register(&sensehat_display->mdev);
-> +	if (ret < 0) {
-> +		dev_err(&pdev->dev,
-> +			"Could not register 8x8 LED matrix display.\n");
-> +		return ret;
-> +	}
-> +
-> +	ret = devm_add_action(&pdev->dev, (void *)misc_deregister,
-> +			      &sensehat_display->mdev);
-> +	if (ret < 0) {
-> +		dev_err(&pdev->dev, "Could not add misc device to devm\n");
-> +		return ret;
-> +	}
-
-Instead of doing this I'd add a .remove callback to the platform driver.
-
-> +
-> +	dev_info(&pdev->dev,
-> +		 "8x8 LED matrix display registered with minor number %i",
-> +		 sensehat_display->mdev.minor);
-> +
-> +	sensehat_update_display(sensehat_display);
-
-This could potentially race with an app accessing the misc device?
-
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id sensehat_display_device_id[] = {
-> +	{ .compatible = "raspberrypi,sensehat-display" },
-> +	{},
-> +};
-> +MODULE_DEVICE_TABLE(of, sensehat_display_device_id);
-> +
-> +static struct platform_driver sensehat_display_driver = {
-> +	.probe = sensehat_display_probe,
-> +	.driver = {
-> +		.name = "sensehat-display",
-> +		.of_match_table = sensehat_display_device_id,
-> +	},
-> +};
-> +
-> +module_platform_driver(sensehat_display_driver);
-> +
-> +MODULE_DESCRIPTION("Raspberry Pi Sense HAT 8x8 LED matrix display driver");
-> +MODULE_AUTHOR("Serge Schneider <serge@raspberrypi.org>");
-> +MODULE_LICENSE("GPL");
-> diff --git a/include/uapi/linux/sensehat.h b/include/uapi/linux/sensehat.h
-> new file mode 100644
-> index 000000000000..cae07568a5eb
-> --- /dev/null
-> +++ b/include/uapi/linux/sensehat.h
-> @@ -0,0 +1,28 @@
-> +/* SPDX-License-Identifier: GPL-2.0-or-later WITH Linux-syscall-note */
-> +/*
-> + * Raspberry Pi Sense HAT core driver
-> + * http://raspberrypi.org
-> + *
-> + * Copyright (C) 2015 Raspberry Pi
-> + * Copyright (C) 2021 Charles Mirabile, Mwesigwa Guma, Joel Savitz
-> + *
-> + * Original Author: Serge Schneider
-> + * Revised for upstream Linux by: Charles Mirabile, Mwesigwa Guma, Joel Savitz
-> + */
-> +
-> +#ifndef _UAPILINUX_SENSEHAT_H_
-> +#define _UAPILINUX_SENSEHAT_H_
-> +
-> +#define SENSEDISP_IOC_MAGIC 0xF1
-> +
-> +#define SENSEDISP_IOGET_GAMMA _IO(SENSEDISP_IOC_MAGIC, 0)
-> +#define SENSEDISP_IOSET_GAMMA _IO(SENSEDISP_IOC_MAGIC, 1)
-> +#define SENSEDISP_IORESET_GAMMA _IO(SENSEDISP_IOC_MAGIC, 2)
-> +
-> +enum gamma_preset {
-> +	SENSEHAT_GAMMA_DEFAULT = 0,
-> +	SENSEHAT_GAMMA_LOWLIGHT,
-> +	SENSEHAT_GAMMA_PRESET_COUNT,
-> +};
-> +
-> +#endif
-
--- 
-Nicolás Sáenz
-
+Still waiting for response. It seems that we are unable to come to a conclusion.

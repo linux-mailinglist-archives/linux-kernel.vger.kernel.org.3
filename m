@@ -2,63 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 944174AD64E
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:24:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25FCF4AD656
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:24:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345609AbiBHLXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 06:23:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47674 "EHLO
+        id S235865AbiBHLXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 06:23:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235548AbiBHJyY (ORCPT
+        with ESMTP id S1355795AbiBHJzN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 04:54:24 -0500
-X-Greylist: delayed 72149 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Feb 2022 01:54:23 PST
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46EF1C03FEC0;
-        Tue,  8 Feb 2022 01:54:23 -0800 (PST)
-Date:   Tue, 08 Feb 2022 09:54:19 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1644314060;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Q/IayFDBAyr/LKIzMEy3/M8i4irY95BKw7ZqHhR11ow=;
-        b=xuboOmy97j14wcvq9eS80iq6pJBoZULoTopvOYqJSY03DPsDSsCvYfNlPGhZpkYQZGKoxB
-        ibE/tsgwSNHMZeJ31l/9Cb0ST1CDDCvFY0hcb2zHjEdtOAYOiMWH8C1T4TUbT8EJ667H6t
-        vPA+M9iv0/cJqrwCVDVfqnE5ZDJlKAOhou9Y1h0RPGGA4xpCxwVoI00/6+TCiSINnjIE0o
-        7c1AmKo9CN3pql86cytKIodyrAwJi8Ji7IVNNJgfK14GdPwebZ6BUZyOv2xz35Nrv48ejf
-        phu7x8vq/GCX/tzzIy9wp3cYC/kcnUp+IlFLO3tarc7gHtYG4RQ8IApzZUq95Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1644314060;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Q/IayFDBAyr/LKIzMEy3/M8i4irY95BKw7ZqHhR11ow=;
-        b=eWJF+bhAIK01aYIt+lNyZQElZZRX7nvgenZxiVT65ukw/CCl8rOCSEWdli5Viqb+eGth0a
-        kvKeeNQGlpq//GDQ==
-From:   "tip-bot2 for Jim Mattson" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cpu] x86/cpufeatures: Put the AMX macros in the word 18 block
-Cc:     Jim Mattson <jmattson@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@suse.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220203194308.2469117-1-jmattson@google.com>
-References: <20220203194308.2469117-1-jmattson@google.com>
+        Tue, 8 Feb 2022 04:55:13 -0500
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 142FFC03FEC0;
+        Tue,  8 Feb 2022 01:55:13 -0800 (PST)
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2189e1Gs001072;
+        Tue, 8 Feb 2022 01:55:03 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=pfpt0220;
+ bh=3abWHgG6nENtNyY5CXP31TV02jF59Tr3xSqA/fFYRfU=;
+ b=OV9t6Unxq3b4h6e9scy+KFsT8tqELVt9yYW3MLvT68jJALYsHGot1/ddNj4f9kb31mKw
+ h9vpun8jTiMvD5dHFizxnT50QDo5DdfFFg7mCSN/9Ix59KbupwxOho/hCYDSpmimjCq1
+ rrajMPVWUvMytuIcN42voGhm58fDXr4K40IHlHOCskZU0d2V47dxyJDn/H6Eo+LxFz2u
+ 6aI9JrDsnDV8A3G4pUt9XeD+cyAcUhx0oymAR9dw+X+SRXvmpr2Tw5Fb7V8GjE2H1z3m
+ yYPKTmaNqZ5bAASJvB2ZZaiMRAkDd6WckuEwKfia0BtNYExnvyFcZXlZhT0/74ASNzgK 6A== 
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3e3nuy02qc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Tue, 08 Feb 2022 01:55:02 -0800
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 8 Feb
+ 2022 01:55:00 -0800
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 8 Feb 2022 01:55:00 -0800
+Received: from hyd1soter3.marvell.com (unknown [10.29.37.12])
+        by maili.marvell.com (Postfix) with ESMTP id 0E7403F708F;
+        Tue,  8 Feb 2022 01:54:57 -0800 (PST)
+From:   Hariprasad Kelam <hkelam@marvell.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <kuba@kernel.org>, <davem@davemloft.net>, <sgoutham@marvell.com>,
+        <lcherian@marvell.com>, <gakula@marvell.com>, <jerinj@marvell.com>,
+        <sbhatta@marvell.com>, <hkelam@marvell.com>
+Subject: [net-next PATCH 0/4] Priority flow control support for RVU netdev
+Date:   Tue, 8 Feb 2022 15:24:52 +0530
+Message-ID: <20220208095456.6122-1-hkelam@marvell.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Message-ID: <164431405962.16921.15997082266702791882.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Type: text/plain
+X-Proofpoint-GUID: nxZF4mK6WB5-LdweunyRz-MM67UNdlS-
+X-Proofpoint-ORIG-GUID: nxZF4mK6WB5-LdweunyRz-MM67UNdlS-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-08_02,2022-02-07_02,2021-12-02_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,53 +65,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/cpu branch of tip:
+In network congestion, instead of pausing all traffic on link
+PFC allows user to selectively pause traffic according to its
+class. This series of patches add support of PFC for RVU netdev
+drivers.
 
-Commit-ID:     fa31a4d669bd471e9510db1abf9b91e1a6be6ff7
-Gitweb:        https://git.kernel.org/tip/fa31a4d669bd471e9510db1abf9b91e1a6be6ff7
-Author:        Jim Mattson <jmattson@google.com>
-AuthorDate:    Thu, 03 Feb 2022 11:43:07 -08:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Tue, 08 Feb 2022 10:23:35 +01:00
+Patch1 adds support to disable pause frames by default as
+with PFC user can enable either PFC or 802.3 pause frames.
+Patch2&3 adds resource management support for flow control
+and configures necessary registers for PFC.
+Patch4 adds dcb ops registration for netdev drivers.
 
-x86/cpufeatures: Put the AMX macros in the word 18 block
 
-These macros are for bits in CPUID.(EAX=7,ECX=0):EDX, not for bits in
-CPUID(EAX=7,ECX=1):EAX. Put them with their brethren.
 
-  [ bp: Sort word 18 bits properly, as caught by Like Xu
-    <like.xu.linux@gmail.com> ]
+Hariprasad Kelam (3):
+  octeontx2-af: Don't enable Pause frames by default
+  octeontx2-af: Flow control resource management
+  octeontx2-pf: PFC config support with DCBx
 
-Signed-off-by: Jim Mattson <jmattson@google.com>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lkml.kernel.org/r/20220203194308.2469117-1-jmattson@google.com
----
- arch/x86/include/asm/cpufeatures.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Sunil Kumar Kori (1):
+  octeontx2-af: Priority flow control configuration support
 
-diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-index 6db4e29..5cd2209 100644
---- a/arch/x86/include/asm/cpufeatures.h
-+++ b/arch/x86/include/asm/cpufeatures.h
-@@ -299,9 +299,6 @@
- /* Intel-defined CPU features, CPUID level 0x00000007:1 (EAX), word 12 */
- #define X86_FEATURE_AVX_VNNI		(12*32+ 4) /* AVX VNNI instructions */
- #define X86_FEATURE_AVX512_BF16		(12*32+ 5) /* AVX512 BFLOAT16 instructions */
--#define X86_FEATURE_AMX_BF16		(18*32+22) /* AMX bf16 Support */
--#define X86_FEATURE_AMX_TILE		(18*32+24) /* AMX tile Support */
--#define X86_FEATURE_AMX_INT8		(18*32+25) /* AMX int8 Support */
- 
- /* AMD-defined CPU features, CPUID level 0x80000008 (EBX), word 13 */
- #define X86_FEATURE_CLZERO		(13*32+ 0) /* CLZERO instruction */
-@@ -390,7 +387,10 @@
- #define X86_FEATURE_TSXLDTRK		(18*32+16) /* TSX Suspend Load Address Tracking */
- #define X86_FEATURE_PCONFIG		(18*32+18) /* Intel PCONFIG */
- #define X86_FEATURE_ARCH_LBR		(18*32+19) /* Intel ARCH LBR */
-+#define X86_FEATURE_AMX_BF16		(18*32+22) /* AMX bf16 Support */
- #define X86_FEATURE_AVX512_FP16		(18*32+23) /* AVX512 FP16 */
-+#define X86_FEATURE_AMX_TILE		(18*32+24) /* AMX tile Support */
-+#define X86_FEATURE_AMX_INT8		(18*32+25) /* AMX int8 Support */
- #define X86_FEATURE_SPEC_CTRL		(18*32+26) /* "" Speculation Control (IBRS + IBPB) */
- #define X86_FEATURE_INTEL_STIBP		(18*32+27) /* "" Single Thread Indirect Branch Predictors */
- #define X86_FEATURE_FLUSH_L1D		(18*32+28) /* Flush L1D cache */
+ .../net/ethernet/marvell/octeontx2/af/cgx.c   | 247 +++++++++++++-----
+ .../net/ethernet/marvell/octeontx2/af/cgx.h   |  13 +
+ .../marvell/octeontx2/af/lmac_common.h        |  10 +
+ .../net/ethernet/marvell/octeontx2/af/mbox.h  |  19 ++
+ .../net/ethernet/marvell/octeontx2/af/rpm.c   | 223 ++++++++++++----
+ .../net/ethernet/marvell/octeontx2/af/rpm.h   |  30 +++
+ .../net/ethernet/marvell/octeontx2/af/rvu.h   |   3 +
+ .../ethernet/marvell/octeontx2/af/rvu_cgx.c   | 117 ++++++++-
+ .../ethernet/marvell/octeontx2/af/rvu_nix.c   |  16 +-
+ .../ethernet/marvell/octeontx2/nic/Makefile   |   3 +
+ .../marvell/octeontx2/nic/otx2_common.c       |  17 +-
+ .../marvell/octeontx2/nic/otx2_common.h       |  12 +
+ .../marvell/octeontx2/nic/otx2_dcbnl.c        | 170 ++++++++++++
+ .../marvell/octeontx2/nic/otx2_flows.c        |  50 +++-
+ .../ethernet/marvell/octeontx2/nic/otx2_pf.c  |  26 +-
+ .../ethernet/marvell/octeontx2/nic/otx2_vf.c  |  24 +-
+ 16 files changed, 835 insertions(+), 145 deletions(-)
+ create mode 100644 drivers/net/ethernet/marvell/octeontx2/nic/otx2_dcbnl.c
+
+--
+2.17.1

@@ -2,106 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95C4A4ADB6A
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 15:41:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F9EF4ADB77
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 15:45:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351240AbiBHOla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 09:41:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41482 "EHLO
+        id S1351650AbiBHOpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 09:45:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230374AbiBHOl2 (ORCPT
+        with ESMTP id S1351484AbiBHOp2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 09:41:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E67C03FED0;
-        Tue,  8 Feb 2022 06:41:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 8 Feb 2022 09:45:28 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA8BCC03FED4;
+        Tue,  8 Feb 2022 06:45:27 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ACFB5B81AF8;
-        Tue,  8 Feb 2022 14:41:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6F45C004E1;
-        Tue,  8 Feb 2022 14:41:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644331285;
-        bh=S2Mhl+SP+krSYHv8YbK+y9MJgy+YlW+2kfYbIoDxG68=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HKCzlP4n8IGs7fL0TOcDJCjbRQNsbErtXPYz5+Fa3jOdvZ8xePIsFRZHfOX/CrCi+
-         oR09E+WrZeEaoXNz7F3K17cNPzCzGuTGR6bwztv8tBDYnSNObLfn7t1cP46SmVWlu5
-         ymTKB2BUW7dlrwBoZUlIE5O5WXb4HEte4tOzsq/mDep3SHpG8tb+qvIM8uRy5j9ZMk
-         EUneCfvv4owzLlepm9/oLbGtm0wGiXl8+oxX0457N5qXJeMwO1oJCfu7Pq0SGXL2gF
-         4Gm9WRrPMASGK7rVtffRpvm3gcusYO8oexcyEOdvk4PT7OJHISgSiSuUh1eUK/84+X
-         yGIMw8ldInbRw==
-Date:   Tue, 8 Feb 2022 14:41:20 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Prasad Kumpatla <quic_pkumpatl@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        'Linux Samsung SOC' <linux-samsung-soc@vger.kernel.org>
-Subject: Re: [PATCH v2] regmap-irq: Use regmap_irq_update_bits instead of
- regmap_write
-Message-ID: <YgKBEIapL8MAQAoI@sirena.org.uk>
-References: <20220119142953.1804-1-quic_pkumpatl@quicinc.com>
- <CGME20220208122955eucas1p2d4e32f51224242e9ebd0bce58b9c04ca@eucas1p2.samsung.com>
- <39f1b598-58ca-1e3d-3065-8dd692ee7c9f@samsung.com>
- <20220208133957.GC112838@ediswmail.ad.cirrus.com>
- <20220208135036.GD112838@ediswmail.ad.cirrus.com>
- <YgJ2hG2vwUclA/zF@sirena.org.uk>
- <20220208143316.GE112838@ediswmail.ad.cirrus.com>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 6EEFD1F387;
+        Tue,  8 Feb 2022 14:45:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1644331526; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=F8fCX7jpBJSdTGWVH6OOOBQBhn3uvoR/Uftrbxcu2D0=;
+        b=gZUkN49ITaU744saGHPoaBrHxebr7OVW0K3A02xnMR0qLfJHWISh2ExbOqTgBd+pm7+txn
+        TpHyxG9CeReB6H1Rq68OUBo+JGURds0H56Cnc9mfJ7JP5NtHwSNSsY5ZmZy7l+fMgxNzVy
+        BrG5Pw30Bbd1nXt7jBrKLZZcCGdnkYk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1644331526;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=F8fCX7jpBJSdTGWVH6OOOBQBhn3uvoR/Uftrbxcu2D0=;
+        b=zF1lHTovq6sClWtl35NOT8VHMi1709bKDEzHdRe3pUQMftZY1A99N/+9uU95qZQpK6CO1F
+        1xK69EzqDluIeSAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D9CE413C79;
+        Tue,  8 Feb 2022 14:45:25 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 0a1rMwWCAmI3DgAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Tue, 08 Feb 2022 14:45:25 +0000
+Date:   Tue, 8 Feb 2022 15:45:24 +0100
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Terry Bowman <terry.bowman@amd.com>
+Cc:     <linux@roeck-us.net>, <linux-watchdog@vger.kernel.org>,
+        <jdelvare@suse.com>, <linux-i2c@vger.kernel.org>, <wsa@kernel.org>,
+        <andy.shevchenko@gmail.com>, <rafael.j.wysocki@intel.com>,
+        <linux-kernel@vger.kernel.org>, <wim@linux-watchdog.org>,
+        <rrichter@amd.com>, <thomas.lendacky@amd.com>,
+        <sudheesh.mavila@amd.com>, <Nehal-bakulchandra.Shah@amd.com>,
+        <Basavaraj.Natikar@amd.com>, <Shyam-sundar.S-k@amd.com>,
+        <Mario.Limonciello@amd.com>
+Subject: Re: [PATCH v4 3/9] i2c: piix4: Move port I/O region request/release
+ code into functions
+Message-ID: <20220208154524.283609ad@endymion.delvare>
+In-Reply-To: <20220130184130.176646-4-terry.bowman@amd.com>
+References: <20220130184130.176646-1-terry.bowman@amd.com>
+        <20220130184130.176646-4-terry.bowman@amd.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jv8MBE5QGK8kAXmU"
-Content-Disposition: inline
-In-Reply-To: <20220208143316.GE112838@ediswmail.ad.cirrus.com>
-X-Cookie: This is your fortune.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Terry,
 
---jv8MBE5QGK8kAXmU
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Sun, 30 Jan 2022 12:41:24 -0600, Terry Bowman wrote:
+> Move duplicated region request and release code into a function. Move is
+> in preparation for following MMIO changes.
+> 
+> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
+> ---
+>  drivers/i2c/busses/i2c-piix4.c | 39 +++++++++++++++++++++++-----------
+>  1 file changed, 27 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-piix4.c b/drivers/i2c/busses/i2c-piix4.c
+> index 3ff68967034e..5a98970ac60a 100644
+> --- a/drivers/i2c/busses/i2c-piix4.c
+> +++ b/drivers/i2c/busses/i2c-piix4.c
+> @@ -165,6 +165,24 @@ struct i2c_piix4_adapdata {
+>  	u8 port;		/* Port number, shifted */
+>  };
+>  
+> +static int piix4_sb800_region_request(struct device *dev)
+> +{
+> +	if (!request_muxed_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE,
+> +				  "sb800_piix4_smb")) {
+> +		dev_err(dev,
+> +			"SMBus base address index region 0x%x already in use.\n",
+> +			SB800_PIIX4_SMB_IDX);
+> +		return -EBUSY;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static void piix4_sb800_region_release(struct device *dev)
+> +{
+> +	release_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE);
+> +}
+> +
+>  static int piix4_setup(struct pci_dev *PIIX4_dev,
+>  		       const struct pci_device_id *id)
+>  {
+> @@ -270,6 +288,7 @@ static int piix4_setup_sb800(struct pci_dev *PIIX4_dev,
+>  	unsigned short piix4_smba;
+>  	u8 smba_en_lo, smba_en_hi, smb_en, smb_en_status, port_sel;
+>  	u8 i2ccfg, i2ccfg_offset = 0x10;
+> +	int retval;
+>  
+>  	/* SB800 and later SMBus does not support forcing address */
+>  	if (force || force_addr) {
+> @@ -291,20 +310,16 @@ static int piix4_setup_sb800(struct pci_dev *PIIX4_dev,
+>  	else
+>  		smb_en = (aux) ? 0x28 : 0x2c;
+>  
+> -	if (!request_muxed_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE,
+> -				  "sb800_piix4_smb")) {
+> -		dev_err(&PIIX4_dev->dev,
+> -			"SMB base address index region 0x%x already in use.\n",
+> -			SB800_PIIX4_SMB_IDX);
+> -		return -EBUSY;
+> -	}
+> +	retval = piix4_sb800_region_request(&PIIX4_dev->dev);
+> +	if (retval)
+> +		return retval;
+>  
+>  	outb_p(smb_en, SB800_PIIX4_SMB_IDX);
+>  	smba_en_lo = inb_p(SB800_PIIX4_SMB_IDX + 1);
+>  	outb_p(smb_en + 1, SB800_PIIX4_SMB_IDX);
+>  	smba_en_hi = inb_p(SB800_PIIX4_SMB_IDX + 1);
+>  
+> -	release_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE);
+> +	piix4_sb800_region_release(&PIIX4_dev->dev);
+>  
+>  	if (!smb_en) {
+>  		smb_en_status = smba_en_lo & 0x10;
+> @@ -685,9 +700,9 @@ static s32 piix4_access_sb800(struct i2c_adapter *adap, u16 addr,
+>  	u8 port;
+>  	int retval;
+>  
+> -	if (!request_muxed_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE,
+> -				  "sb800_piix4_smb"))
+> -		return -EBUSY;
+> +	retval = piix4_sb800_region_request(&adap->dev);
+> +	if (retval)
+> +		return retval;
+>  
+>  	/* Request the SMBUS semaphore, avoid conflicts with the IMC */
+>  	smbslvcnt  = inb_p(SMBSLVCNT);
+> @@ -762,7 +777,7 @@ static s32 piix4_access_sb800(struct i2c_adapter *adap, u16 addr,
+>  		piix4_imc_wakeup();
+>  
+>  release:
+> -	release_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE);
+> +	piix4_sb800_region_release(&adap->dev);
+>  	return retval;
+>  }
+>  
 
-On Tue, Feb 08, 2022 at 02:33:16PM +0000, Charles Keepax wrote:
-> On Tue, Feb 08, 2022 at 01:56:20PM +0000, Mark Brown wrote:
+There's a third occurrence of request_muxed_region(SB800_PIIX4_SMB_IDX,
+...) / release_region(SB800_PIIX4_SMB_IDX, ...) in function
+piix4_setup_sb800. Any reason why you don't make use of the new helper
+functions there as well?
 
-> > My understanding was that they'd mixed interrupt handling in as a
-> > bitfield in another register.
+OK, I see that this part of the code is specific to the original (ATI)
+SB800, so it can't use MMIO, therefore you don't *have* to call the
+helper functions. But for consistency, wouldn't it still make sense to
+use them?
 
-> Eek.. what a courageous choice. I guess that might work as
-> long as there is only a single IRQ status bit in the register,
-> if there are multiple bits this really needs more complex
-> handling, like you basically need the old behaviour for the
-> IRQ part of the register, and the new behaviour for the not
-> IRQ part of the register. So perhaps a new mask to denote which
-> bit of the register is being used for IRQ stuff?
-
-Yeah, I think that's what I misread the code as doing.
-
---jv8MBE5QGK8kAXmU
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmICgQ8ACgkQJNaLcl1U
-h9CuOQf/f55QEPYWcJesb5ASdVandS6mWWUT3NZ4QOrbearecpyY1z2pPh3zx7Yu
-qUVYuvfLMfJvSPsjtGHi2THg5eX+ctxJdpsflYf1SDGEQnX1dREsJl+1giBVqogn
-ybLMXZmEvzKOYoR9q0MZMw8baesjtlpirunaXvvK7ctnTB/5hfR/Slmm9dqwt2Ph
-PoElLbFPTzlvKFYccAyr6dsCxgbL1cV7rw0dSMdreAD7b7Is1V9X0zmq6bPPS0g5
-qXG3XIjUDDMqB1gNvAEqz8vUx4sqrh1SHkpyIDjfb5cC4dn1ANqiKeVbkzhTSCky
-cciN+AtOT6e9JkzbRLN3gVG8rq08aw==
-=Y0qE
------END PGP SIGNATURE-----
-
---jv8MBE5QGK8kAXmU--
+-- 
+Jean Delvare
+SUSE L3 Support

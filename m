@@ -2,72 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 689364AD9AA
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 14:22:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17E184AD991
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 14:22:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377376AbiBHNW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 08:22:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56124 "EHLO
+        id S1355500AbiBHNVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 08:21:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240887AbiBHMa5 (ORCPT
+        with ESMTP id S1357085AbiBHMbN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 07:30:57 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26DF2C03FEC0
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 04:30:56 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id j14so28396056ejy.6
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 04:30:56 -0800 (PST)
+        Tue, 8 Feb 2022 07:31:13 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BFD3C03FECA
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 04:31:12 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id j2so49559653ybu.0
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 04:31:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=pyOlF6UmaaIPMj49n9I5e2YrqASqQxHSgQMcnkz9Ds4=;
-        b=IBUDla5NdRwnTD1y7ixnE9OWuHg3ICqgKArWpjAignm88vnnqODVf8RIL+vDRRZdK8
-         kyb0bO1C2pvtzynJNC7afc+k9jgk5mbQgtQ/jfgVfPPR0GCmZNHFhwKET7oodghB1RU7
-         jiKwOHaoxH1VvD6ERbTGE6q0K3ctkR/gh4iwU=
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yfYLtbVg7Jphgpqo5l2mfLMwKt3fmTcNOyyPV835z9U=;
+        b=X73BVSASthoFh71ZUYqhPOBlmWD6VlnN6mtxlLeUi48uyVMU0ZaQsH/cmXLKhp1Jui
+         4usjsDrOE/K++FH8OeqG4WNNAOcG9B+4N4GSjY7QwCYxcbUEhBC2Y/nh2OUlwsgnjeox
+         eUtinaYsaItLRMZrGl5DhrtfLCm02TgJMPJqc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=pyOlF6UmaaIPMj49n9I5e2YrqASqQxHSgQMcnkz9Ds4=;
-        b=7X/38X+Oy0GcYupliGYqr0as4VRwhrbzyZtVYOvacboQJndKq4sLlDVEjIXJ7u5kIN
-         jAlwytUYsY9NQh6Wk4YuMm3BDaQ1DQRfzV5bEsWilafP2PvKKnDCnasarD3vndK58FOp
-         kJNQ9HVaHFrIA05irfuUrji5mn/7L1BQfJSuf6TsJL6VyHW5zxcFA37SYaOg1kWjpsO0
-         azO2QN3kX0N55/SUTP4JokKmrIf+92KFk+ESxV2mx3wG09fDAjJDBnHcz28LOp3RPi6U
-         1JJe7qIo8EL4NUWVGb6C9jW8lGtXifYnZAfmNCh2o28nFDSoXdv9v6KtKbLklW18/Kkj
-         osjQ==
-X-Gm-Message-State: AOAM533Ccsy3ZOAmUh3/PnULdzQMMl1hLExNDEMFh+fnj9sFrDPxCAj0
-        P43dxbfBmMJkGqDWqjdLgmJywA==
-X-Google-Smtp-Source: ABdhPJwXYw4q1btwyGQoyQq1y6twywUuMFtmW+XmsRH9NZB9ermSewsnO3Ku4Glqh91lKOk5bYCRbQ==
-X-Received: by 2002:a17:907:a41f:: with SMTP id sg31mr3426142ejc.645.1644323454658;
-        Tue, 08 Feb 2022 04:30:54 -0800 (PST)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id m17sm5598646edr.62.2022.02.08.04.30.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 04:30:54 -0800 (PST)
-Date:   Tue, 8 Feb 2022 13:30:52 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     syzbot <syzbot+60df062e1c41940cae0f@syzkaller.appspotmail.com>
-Cc:     dri-devel@lists.freedesktop.org, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, rafael@kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] WARNING in component_del
-Message-ID: <YgJifE4GcWXS9p2H@phenom.ffwll.local>
-Mail-Followup-To: syzbot <syzbot+60df062e1c41940cae0f@syzkaller.appspotmail.com>,
-        dri-devel@lists.freedesktop.org, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, rafael@kernel.org,
-        syzkaller-bugs@googlegroups.com
-References: <00000000000016f4ae05d5cec832@google.com>
- <0000000000001e4c2e05d77cfcbb@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yfYLtbVg7Jphgpqo5l2mfLMwKt3fmTcNOyyPV835z9U=;
+        b=YDAE2jFtQaLP1dq6eh212i/hz+mQMNrHN9sMFm2ykWWeqKdVexwBGOIWV2PBmTVhHb
+         vJCCzxdNoI7iy4BWBzOyEI2emlImoAysUb4j+ZFq3kJNY+ml9TrDCKOw4dE07LhKldAK
+         Cx47yisrhzmg2qelMbpsscH1U7a32xahsKBbSXjhO4ThrhBjzSyIRG92QaBMljDLX/Vb
+         rYK/BUm8uWVKG9OoNyBenbaTy83kBWiqkDnKh8yOKgSOWP4phy3DpVnJ/DA2LwTWYHTd
+         U7r3WOZRaVmXoVXbxqtte2Iyiq5mKZ+Qe7bJrKNojaY7sp4S4WaC2jIjW2zmFtFlJ5L2
+         pvPw==
+X-Gm-Message-State: AOAM5316RL3k+4t+wdsxFSv/8wAyAi7mrBf1EqoGh4YXOU1fEuF1Fdl+
+        cXx9Z25sGnH0cGHkQpyOmjybvnGn9LV3kiakPgExVA==
+X-Google-Smtp-Source: ABdhPJyCCYOYwDckY357tk7CH1jqmHDW4BUZPjfdeuj7J3jv7vIaHKcjBTuE6IB72wx2P7IBnypp3hlrdAC/yjDoo7g=
+X-Received: by 2002:a81:1b4e:: with SMTP id b75mr4316368ywb.295.1644323471148;
+ Tue, 08 Feb 2022 04:31:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0000000000001e4c2e05d77cfcbb@google.com>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220208105456.321294-1-wenst@chromium.org>
+In-Reply-To: <20220208105456.321294-1-wenst@chromium.org>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Tue, 8 Feb 2022 20:30:59 +0800
+Message-ID: <CAGXv+5HT84sEv9TFV1H=mMEO4oqz4OdwXQGMhwrOf5dtMrjOBQ@mail.gmail.com>
+Subject: Re: [PATCH RFC] media: hantro: Implement support for encoder commands
+To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,78 +67,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 11:51:29PM -0800, syzbot wrote:
-> syzbot has found a reproducer for the following issue on:
-> 
-> HEAD commit:    555f3d7be91a Merge tag '5.17-rc3-ksmbd-server-fixes' of gi..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=130a0c2c700000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=266de9da75c71a45
-> dashboard link: https://syzkaller.appspot.com/bug?extid=60df062e1c41940cae0f
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15880d84700000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14de0c77b00000
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+60df062e1c41940cae0f@syzkaller.appspotmail.com
+On Tue, Feb 8, 2022 at 6:55 PM Chen-Yu Tsai <wenst@chromium.org> wrote:
+>
+> The V4L2 stateful encoder uAPI specification requires that drivers
+> support the ENCODER_CMD ioctl to allow draining of buffers. This
+> however was not implemented, and causes issues for some userspace
+> applications.
+>
+> Implement support for the ENCODER_CMD ioctl using v4l2-mem2mem helpers.
+> This is entirely based on existing code found in the vicodec test
+> driver.
+>
+> Fixes: 775fec69008d ("media: add Rockchip VPU JPEG encoder driver")
+> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+> ---
+>
+> This is based on linux-next-20220207, and was tested on RK3399 with
+> Gstreamer running the JPEG encoder. It was also tested on ChromeOS
+> 5.10 on Kevin with the video encoder used in ChromeOS ARC, which
+> requires this.
+>
+> Everything works OK, but since I'm not very familiar with the mem2mem
+> framework, I might be missing something, causing resource leaks.
+> Hence this patch is labeled RFC.
 
-From a quick grep usb seems to have indeed gained some component code, and
-I'm not aware of any drm usb drivers using component. So I think this is
-an usb issue, not a drm one.
+And it seems I failed to handle the case where the last capture buffer
+is empty.
 
-Greg, thoughts?
--Daniel
+Will rework and send a new version tomorrow.
 
-> 
-> ------------[ cut here ]------------
-> WARNING: CPU: 0 PID: 3598 at drivers/base/component.c:767 component_del+0x40c/0x540 drivers/base/component.c:765
-> Modules linked in:
-> CPU: 0 PID: 3598 Comm: syz-executor255 Not tainted 5.17.0-rc3-syzkaller-00020-g555f3d7be91a #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> RIP: 0010:component_del+0x40c/0x540 drivers/base/component.c:767
-> Code: 00 48 39 6b 20 75 82 e8 72 b1 07 fd 48 c7 43 20 00 00 00 00 e9 70 ff ff ff e8 60 b1 07 fd 48 c7 c7 20 aa 67 8c e8 84 d4 db 04 <0f> 0b 31 ed e8 4b b1 07 fd 48 89 ef 5b 5d 41 5c 41 5d 41 5e 41 5f
-> RSP: 0018:ffffc90001aafa68 EFLAGS: 00010286
-> RAX: 0000000000000000 RBX: dffffc0000000000 RCX: ffff8880745c8000
-> RDX: 0000000000000000 RSI: 0000000000000008 RDI: ffffc90001aaf9b0
-> RBP: ffffffff8c67a9e0 R08: 0000000000000001 R09: ffffc90001aaf9b7
-> R10: fffff52000355f36 R11: 0000000000000001 R12: ffff88801dce5008
-> R13: ffffffff8a4c0dc0 R14: ffff88801dce5008 R15: ffff88801dce5000
-> FS:  0000555556461300(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007fb3739a5130 CR3: 000000001996f000 CR4: 0000000000350ef0
-> Call Trace:
->  <TASK>
->  usb_hub_remove_port_device+0x272/0x370 drivers/usb/core/port.c:653
->  hub_disconnect+0x171/0x510 drivers/usb/core/hub.c:1737
->  usb_unbind_interface+0x1d8/0x8e0 drivers/usb/core/driver.c:458
->  __device_release_driver+0x5d7/0x700 drivers/base/dd.c:1206
->  device_release_driver_internal drivers/base/dd.c:1237 [inline]
->  device_release_driver+0x26/0x40 drivers/base/dd.c:1260
->  usb_driver_release_interface+0x102/0x180 drivers/usb/core/driver.c:627
->  proc_ioctl.part.0+0x4d6/0x560 drivers/usb/core/devio.c:2332
->  proc_ioctl drivers/usb/core/devio.c:170 [inline]
->  proc_ioctl_default drivers/usb/core/devio.c:2375 [inline]
->  usbdev_do_ioctl drivers/usb/core/devio.c:2731 [inline]
->  usbdev_ioctl+0x2b29/0x36c0 drivers/usb/core/devio.c:2791
->  vfs_ioctl fs/ioctl.c:51 [inline]
->  __do_sys_ioctl fs/ioctl.c:874 [inline]
->  __se_sys_ioctl fs/ioctl.c:860 [inline]
->  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:860
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> RIP: 0033:0x7fb3739346f9
-> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007fff3db9d808 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-> RAX: ffffffffffffffda RBX: 00007fb373978194 RCX: 00007fb3739346f9
-> RDX: 0000000020000380 RSI: 00000000c0105512 RDI: 0000000000000003
-> RBP: 0000000000000000 R08: 00007fff3db9d280 R09: 0000000000000001
-> R10: 000000000000ffff R11: 0000000000000246 R12: 00007fff3db9d81c
-> R13: 431bde82d7b634db R14: 0000000000000000 R15: 0000000000000000
->  </TASK>
-> 
 
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+ChenYu
+
+> ---
+>  drivers/staging/media/hantro/hantro_drv.c  | 10 +++++
+>  drivers/staging/media/hantro/hantro_v4l2.c | 44 ++++++++++++++++++++++
+>  2 files changed, 54 insertions(+)
+>
+> diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
+> index bc9bcb4eaf46..ccd47eee5c43 100644
+> --- a/drivers/staging/media/hantro/hantro_drv.c
+> +++ b/drivers/staging/media/hantro/hantro_drv.c
+> @@ -56,6 +56,10 @@ dma_addr_t hantro_get_ref(struct hantro_ctx *ctx, u64 ts)
+>         return hantro_get_dec_buf_addr(ctx, buf);
+>  }
+>
+> +static const struct v4l2_event hantro_eos_event = {
+> +       .type = V4L2_EVENT_EOS
+> +};
+> +
+>  static void hantro_job_finish_no_pm(struct hantro_dev *vpu,
+>                                     struct hantro_ctx *ctx,
+>                                     enum vb2_buffer_state result)
+> @@ -73,6 +77,12 @@ static void hantro_job_finish_no_pm(struct hantro_dev *vpu,
+>         src->sequence = ctx->sequence_out++;
+>         dst->sequence = ctx->sequence_cap++;
+>
+> +       if (v4l2_m2m_is_last_draining_src_buf(ctx->fh.m2m_ctx, src)) {
+> +               dst->flags |= V4L2_BUF_FLAG_LAST;
+> +               v4l2_event_queue_fh(&ctx->fh, &hantro_eos_event);
+> +               v4l2_m2m_mark_stopped(ctx->fh.m2m_ctx);
+> +       }
+> +
+>         v4l2_m2m_buf_done_and_job_finish(ctx->dev->m2m_dev, ctx->fh.m2m_ctx,
+>                                          result);
+>  }
+> diff --git a/drivers/staging/media/hantro/hantro_v4l2.c b/drivers/staging/media/hantro/hantro_v4l2.c
+> index 67148ba346f5..8c6746637236 100644
+> --- a/drivers/staging/media/hantro/hantro_v4l2.c
+> +++ b/drivers/staging/media/hantro/hantro_v4l2.c
+> @@ -628,6 +628,39 @@ static int vidioc_s_selection(struct file *file, void *priv,
+>         return 0;
+>  }
+>
+> +static const struct v4l2_event hantro_eos_event = {
+> +       .type = V4L2_EVENT_EOS
+> +};
+> +
+> +static int vidioc_encoder_cmd(struct file *file, void *priv,
+> +                             struct v4l2_encoder_cmd *ec)
+> +{
+> +       struct hantro_ctx *ctx = fh_to_ctx(priv);
+> +       int ret;
+> +
+> +       ret = v4l2_m2m_ioctl_try_encoder_cmd(file, priv, ec);
+> +       if (ret < 0)
+> +               return ret;
+> +
+> +       if (!vb2_is_streaming(v4l2_m2m_get_src_vq(ctx->fh.m2m_ctx)) ||
+> +           !vb2_is_streaming(v4l2_m2m_get_dst_vq(ctx->fh.m2m_ctx)))
+> +               return 0;
+> +
+> +       ret = v4l2_m2m_ioctl_encoder_cmd(file, priv, ec);
+> +       if (ret < 0)
+> +               return ret;
+> +
+> +       if (ec->cmd == V4L2_ENC_CMD_STOP &&
+> +           v4l2_m2m_has_stopped(ctx->fh.m2m_ctx))
+> +               v4l2_event_queue_fh(&ctx->fh, &hantro_eos_event);
+> +
+> +       if (ec->cmd == V4L2_ENC_CMD_START &&
+> +           v4l2_m2m_has_stopped(ctx->fh.m2m_ctx))
+> +               vb2_clear_last_buffer_dequeued(&ctx->fh.m2m_ctx->cap_q_ctx.q);
+> +
+> +       return 0;
+> +}
+> +
+>  const struct v4l2_ioctl_ops hantro_ioctl_ops = {
+>         .vidioc_querycap = vidioc_querycap,
+>         .vidioc_enum_framesizes = vidioc_enum_framesizes,
+> @@ -657,6 +690,9 @@ const struct v4l2_ioctl_ops hantro_ioctl_ops = {
+>
+>         .vidioc_g_selection = vidioc_g_selection,
+>         .vidioc_s_selection = vidioc_s_selection,
+> +
+> +       .vidioc_try_encoder_cmd = v4l2_m2m_ioctl_try_encoder_cmd,
+> +       .vidioc_encoder_cmd = vidioc_encoder_cmd,
+>  };
+>
+>  static int
+> @@ -759,6 +795,8 @@ static int hantro_start_streaming(struct vb2_queue *q, unsigned int count)
+>         struct hantro_ctx *ctx = vb2_get_drv_priv(q);
+>         int ret = 0;
+>
+> +       v4l2_m2m_update_start_streaming_state(ctx->fh.m2m_ctx, q);
+> +
+>         if (V4L2_TYPE_IS_OUTPUT(q->type))
+>                 ctx->sequence_out = 0;
+>         else
+> @@ -831,6 +869,12 @@ static void hantro_stop_streaming(struct vb2_queue *q)
+>                 hantro_return_bufs(q, v4l2_m2m_src_buf_remove);
+>         else
+>                 hantro_return_bufs(q, v4l2_m2m_dst_buf_remove);
+> +
+> +       v4l2_m2m_update_stop_streaming_state(ctx->fh.m2m_ctx, q);
+> +
+> +       if (V4L2_TYPE_IS_OUTPUT(q->type) &&
+> +           v4l2_m2m_has_stopped(ctx->fh.m2m_ctx))
+> +               v4l2_event_queue_fh(&ctx->fh, &hantro_eos_event);
+>  }
+>
+>  static void hantro_buf_request_complete(struct vb2_buffer *vb)
+> --
+> 2.35.0.263.gb82422642f-goog
+>

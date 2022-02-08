@@ -2,82 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31EC04AD452
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 10:06:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA8284AD455
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 10:07:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348509AbiBHJGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 04:06:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52886 "EHLO
+        id S1352888AbiBHJH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 04:07:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234853AbiBHJGP (ORCPT
+        with ESMTP id S1349138AbiBHJHY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 04:06:15 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0177C03FEC1
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 01:06:14 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id w20so4056658plq.12
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 01:06:14 -0800 (PST)
+        Tue, 8 Feb 2022 04:07:24 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27D1AC0401F0;
+        Tue,  8 Feb 2022 01:07:23 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id v129so8100002wme.2;
+        Tue, 08 Feb 2022 01:07:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=OS1U64O372XeRGN7+KBDv0OHFk8nFr6YHJks9Kr/ihg=;
-        b=HtdXbOCUg+HSsiuOkaq3T6bEHZAuekerbf1UYs4fh1Y2XA4UXkwzzOvzh0nzj2icwd
-         oHvXRxf6XI+TSN8nwA5mhmEG5oh1VOs/u1cr759BYxSiPftdRI5NMVhTSiIHI9z8Dzzr
-         VtIM0J1cdB8vrPTF38pY0Jjwf96L9URnyQQC6ffPEuUsGuorawD8WmAPapQ//H4ZITfM
-         OIsSbW7qjfrXmpKyAwiDNGYdEcChX6umpDYwEe9SHYk1pG1z9oQmu/uFyzWmhz8isztH
-         Dq19YJeKer0d/yuy5G5V5j4jrBTj8+3ssoD7VGjrKL5UV3oBgaFuFqU3FB0NKg6Cnrh7
-         Hlzw==
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=vpEZx2aDaRD4hwz/cgEGHsBbudveBVKpDQc3oNrzJIc=;
+        b=A1mUx61Urxs2tc3tDNhFy5T2KYzXThskLrNm4DZWlKBPDM1U1/UpjS3L5MCLg7Nwp0
+         lruhQU7oJCghLyzpYkjK7jdMiWwSWztmQCbknVuOk1DFg94SmfPNWpwfsExjOy/+8Vt2
+         MaMwlHLqPHn1YWbEMte4iUQ8Yfewa66RLkgp82QG3HJN5HRJDSV3Effiw9CKp9UWNc1z
+         ux7bPK+bV8P8z1E/scBFoGuZT3y/GCGzIP9ULqrTl/JNZ69tR/PyHRlu4yQ3e+Rm7qSp
+         Wyb552MCBAUv/yNsVjtNq7jOSEXvcY+mKjUYPm3iP7AYBZbFP8puo7690NMGVYyUi97N
+         p8aA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=OS1U64O372XeRGN7+KBDv0OHFk8nFr6YHJks9Kr/ihg=;
-        b=1IRmFPpMflfZtrdfZt+VPZ/JbXrN46X8nkTtlCv5xEf4fYeKuLq28bCkFYJf7jAjqr
-         UdfUab00OePwRfHXLwNajq+kKHPdxvx4vzzLZEPPGlIxSkcLuyFMYndTunWUBsKqYkBE
-         IxJRTIxvlHx/2TBbMNqZkXUMTJYd0TvBE8YADCnaTX7t9Eify0SxFikFR6XapiE0ATgf
-         lh4QyHDJbFPVWG0vQ3nEw0q3JChzYaroDQxdl90mNQ6Wf+VY2IlRNVlqAiRVtzF9nrAI
-         OVVrTpyY8pjxxraHuFES5TJEOr3ym4upd6bJhT2ZsiHd//F8o/HexDpe2YZ/voYDq3sY
-         rwUw==
-X-Gm-Message-State: AOAM531Ooez+7Uq75/FmTfcWKiB/qL7rzMKUaoH7OuHEWDz5OnSwmgKD
-        gW22nbtOrdUOBnnD8KvINjM=
-X-Google-Smtp-Source: ABdhPJx8nGnpWJy6cpl6+GbES17K6q4o6YsJkuWz36cnPcIrpMH2rMm1ZdDHYR94Xt253EJa+PjCCA==
-X-Received: by 2002:a17:903:304b:: with SMTP id u11mr3430560pla.140.1644311174063;
-        Tue, 08 Feb 2022 01:06:14 -0800 (PST)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id z7sm15084815pfe.49.2022.02.08.01.06.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Feb 2022 01:06:13 -0800 (PST)
-Message-ID: <f3a9ccd2-bd6c-691a-f6c2-43fb549b3d4b@gmail.com>
-Date:   Tue, 8 Feb 2022 17:06:04 +0800
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=vpEZx2aDaRD4hwz/cgEGHsBbudveBVKpDQc3oNrzJIc=;
+        b=Py6gUAQsB4NQwm5Vs2POQHtHWDtf6FebIob+SdHBSziZFCdmFWH+s8hsPbzqiegOH4
+         YJNNo3fsNPYyYegwCNQEoYc949FGNIF/zBHsJxyOCuqdrVu6pVekXjmWGn11t1B/l4+F
+         wO7eOkmghkdpTSZVvdyfVpoqLo8aQmSBIAtfIFhBobP2YCh6WrEPW0TS/Wi27c5WT+Nm
+         uGQTzh/+p6+B+9qKCJH+DTNH34/uZy3RSHVjyB9oziLbFsI6ga2PIVp1LkAnBDP7A77t
+         efbkR4KvIe9l/2Mly83CV2vHRNI5M959ckdvFlzxa1uOABew4m/pAyZntwjQfO0qeyFn
+         9RRQ==
+X-Gm-Message-State: AOAM530yARSNHgyxuHmvn6l8OfL1dvp9JNZhTApYTS7kBkeKkJjfel1C
+        xeqJqofAQkUSS92LlvDAwT8=
+X-Google-Smtp-Source: ABdhPJwGj5CMnZHIBULLOZXgzOyt/GzqPmlJb8H7Fsp+QBjdmImqlhcfcnu04//CymPcII4Qucj2gA==
+X-Received: by 2002:a05:600c:4f06:: with SMTP id l6mr228404wmq.126.1644311241631;
+        Tue, 08 Feb 2022 01:07:21 -0800 (PST)
+Received: from wse-c0127 (2-104-116-184-cable.dk.customer.tdc.net. [2.104.116.184])
+        by smtp.gmail.com with ESMTPSA id u7sm585007wrm.15.2022.02.08.01.07.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 01:07:21 -0800 (PST)
+From:   Hans Schultz <schultz.hans@gmail.com>
+X-Google-Original-From: Hans Schultz <schultz.hans+netdev@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>, Ido Schimmel <idosch@idosch.org>
+Cc:     Hans Schultz <schultz.hans@gmail.com>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <nikolay@nvidia.com>,
+        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org
+Subject: Re: [PATCH net-next 1/4] net: bridge: Add support for bridge port
+ in locked mode
+In-Reply-To: <YgEkXARS160I9Ooe@lunn.ch>
+References: <20220207100742.15087-1-schultz.hans+netdev@gmail.com>
+ <20220207100742.15087-2-schultz.hans+netdev@gmail.com>
+ <YgD5MglBy/UbN0uX@shredder> <YgEkXARS160I9Ooe@lunn.ch>
+Date:   Tue, 08 Feb 2022 10:06:43 +0100
+Message-ID: <867da5viak.fsf@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.0
-Subject: Re: [PATCH] x86/cpufeatures: Move the definition of X86_FEATURE_AMX_*
- to the word 18
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>, Jim Mattson <jmattson@google.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        Jing Liu <jing2.liu@intel.com>, linux-kernel@vger.kernel.org,
-        "Bae, Chang Seok" <chang.seok.bae@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-References: <20220117062344.58862-1-likexu@tencent.com>
- <8b274c5f-6b68-aed9-117d-f89249e57e18@intel.com>
- <47362220-30d5-c513-a2aa-61187ee91c41@redhat.com>
- <bc272301-af11-621a-3bda-ee398754fd0a@gmail.com> <YfVM+xdDS76E3d6r@zn.tnic>
- <1105cf7d-0d61-3ae2-f372-3b1f80c08c60@gmail.com> <YgIvCIEeWK0wnq8M@zn.tnic>
-From:   Like Xu <like.xu.linux@gmail.com>
-Organization: Tencent
-In-Reply-To: <YgIvCIEeWK0wnq8M@zn.tnic>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,43 +77,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/2/2022 4:51 pm, Borislav Petkov wrote:
-> On Tue, Feb 08, 2022 at 04:08:17PM +0800, Like Xu wrote:
->> Emm, are you willing to make "test-apply.sh" public (or have done) and let
->> others benefit ?
-> 
-> It is nothing special - just a simple script which does first
-> 
-> patch -p1 --dry-run -l -i [patch file]
-> 
-> to see whether it would even apply.
-> 
->> Sorry for the late reply, and here's a new version from git-send-email:
-> 
-> Yeah, someone already took care of this:
-> 
-> https://git.kernel.org/tip/ae75fa54228162ecd65341f9780886f21f557cc4
-> 
+On m=C3=A5n, feb 07, 2022 at 14:53, Andrew Lunn <andrew@lunn.ch> wrote:
+>> > +	if (p->flags & BR_PORT_LOCKED) {
+>> > +		fdb_entry =3D br_fdb_find_rcu(br, eth_hdr(skb)->h_source, vid);
+>> > +		if (!(fdb_entry && fdb_entry->dst =3D=3D p))
+>> > +			goto drop;
+>>=20
+>> I'm not familiar with 802.1X so I have some questions:
+>
+> Me neither.
+>
+>>=20
+>> 1. Do we need to differentiate between no FDB entry and an FDB entry
+>> pointing to a different port than we expect?
+>
+> And extending that question, a static vs a dynamic entry?
+>
+>     Andrew
 
-Uh, it's Jim and we have worked together on many KVM issues.
-
-BTW, I'm not sure why we prefer:
-
-#define X86_FEATURE_AVX512_FP16		(18*32+23) /* AVX512 FP16 */
-#define X86_FEATURE_SPEC_CTRL		(18*32+26) /* "" Speculation Control (IBRS + IBPB) */
-+#define X86_FEATURE_AMX_BF16		(18*32+22) /* AMX bf16 Support */
-+#define X86_FEATURE_AMX_TILE		(18*32+24) /* AMX tile Support */
-+#define X86_FEATURE_AMX_INT8		(18*32+25) /* AMX int8 Support */
-
-rather than:
-
-+#define X86_FEATURE_AMX_BF16        (18*32+22) /* AMX bf16 Support */
-  #define X86_FEATURE_AVX512_FP16		(18*32+23) /* AVX512 FP16 */
-+#define X86_FEATURE_AMX_TILE        (18*32+24) /* AMX tile Support */
-+#define X86_FEATURE_AMX_INT8        (18*32+25) /* AMX int8 Support */
-
-It would make more sense to put them in order, what do you think? Need v3 to 
-sort it ?
-
-Thanks,
-Like Xu
+The question is - if there is an fdb entry or not - for the specific client
+mac address behind the locked port in the bridge associated with the
+respective locked port and vlan taken into consideration.
+Normally you would have learning disabled, or from a fresh start if a port
+is locked, it will not learn on incoming from that port, so you need to
+add the fdb entry from user-space. In the common case you will want to
+use static entries and remember the master flag for the entry to go to
+the bridge module.

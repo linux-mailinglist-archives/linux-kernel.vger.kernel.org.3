@@ -2,383 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7432D4AD99A
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 14:22:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADB4A4AD96E
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 14:18:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358145AbiBHNVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 08:21:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59828 "EHLO
+        id S234885AbiBHNS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 08:18:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231765AbiBHMnm (ORCPT
+        with ESMTP id S231326AbiBHMo5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 07:43:42 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7CACC03FEC0;
-        Tue,  8 Feb 2022 04:43:40 -0800 (PST)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 218CeA2g011116;
-        Tue, 8 Feb 2022 12:43:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=WPbkXtb7NpI/JkJfFRz93CgGmvTRASLXwVrkPpLhX7w=;
- b=pGMBspZs6UoJvXB88NzBILS1bjxkb2sdPmoa+15WpL7faNJeXuDW7Syh79OqXZOONsBM
- WHntyiy5ZbSP+uoHiPHcgdX1QJiF2FnBqV6UcLNE4B3A9U6lQM4BvpOOWu0l4eu4Fcw7
- fn/TTMKhg8Dg8tOOF9AvX/1zkGo7tGh6zLh38gPOYUPlJm6GcLLes+3pnEuizJKeFlEI
- nt4cxP3ifVzuCFYVs+NAwIm6Don+LJsID5E5x53T4Me7zaCGSpvF+ar+T0ByuSOk3ub4
- /3B02kuRgxpO2AONvWU/wAEt7q9KYQFwI7sc4A81Zn4gZZV+Bfmus86/lR8LejFL4Ex3 fA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3e22nm0c1b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Feb 2022 12:43:38 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 218Cf5tx013701;
-        Tue, 8 Feb 2022 12:43:38 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3e22nm0c0y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Feb 2022 12:43:38 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 218Ch031022126;
-        Tue, 8 Feb 2022 12:43:36 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma04ams.nl.ibm.com with ESMTP id 3e1gv95ngp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Feb 2022 12:43:36 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 218ChUgf47579506
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 8 Feb 2022 12:43:30 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B101642041;
-        Tue,  8 Feb 2022 12:43:30 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0848C42042;
-        Tue,  8 Feb 2022 12:43:30 +0000 (GMT)
-Received: from [9.145.150.231] (unknown [9.145.150.231])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue,  8 Feb 2022 12:43:29 +0000 (GMT)
-Message-ID: <84e53a00-3026-da3b-8044-51d741ddbb58@linux.ibm.com>
-Date:   Tue, 8 Feb 2022 13:43:29 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 04/11] KVM: s390: selftests: Test TEST PROTECTION
- emulation
+        Tue, 8 Feb 2022 07:44:57 -0500
+X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Feb 2022 04:44:55 PST
+Received: from esa.hc3962-90.iphmx.com (esa.hc3962-90.iphmx.com [216.71.142.165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBCD9C03FEC0;
+        Tue,  8 Feb 2022 04:44:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qccesdkim1;
+  t=1644324295; x=1644929095;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=jhG61g6kz9te8m9hVw4Q9HWrew2xJ6mtgjV3NxNeTq4=;
+  b=hdUe+DwZURljhXyYJo9I3h7YdEzmW/kpgLIUxSucuN/vgnGZXIdgntVU
+   tlqqCZ5VGKQQiW6zaBcyqdvnEJTkbpAaw/YcJmaKiz8TtD0lossYTW/WD
+   TAyBFxL2m8o9W7O/JRzjEFZuiOaUF0RapeufGj+Y+qU5Eh9/syTSCwXXK
+   g=;
+Received: from mail-dm6nam11lp2174.outbound.protection.outlook.com (HELO NAM11-DM6-obe.outbound.protection.outlook.com) ([104.47.57.174])
+  by ob1.hc3962-90.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 12:43:52 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lK2Fs58GMCF+zkGgaQ/kxtFC+nrJriDvCvH65vuS2aJVgH7EWDeVeF39cr8777Q0rrAEO3on+HDsPMdww2qx5RT6h4h4eQbdA6GZ6n85hrnzp6hMlx7ENA19WrY4WKc6xRpGohUKBNdfLRqQMkTp2Jlx11iNsC/wnQc2ZO9xq2oUE7J76Nzc5l1viasBK7AUiCKxV5dwX9kVsATF6v64l+FwLwafTczvjE/BUW2qOsqa+kBaqUKBZ3BPeNJnosKN5ZJNn6LSdtxdHN9+htuMRpomXG0c5G7P5tRUI1/l8wZI8VDlePg4Ah3htjQS5qGFni/Vc6UtYly/lUTht6uwnQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jhG61g6kz9te8m9hVw4Q9HWrew2xJ6mtgjV3NxNeTq4=;
+ b=nV4D8/HiJeW/XNov5gMG7fMssqH/tIw6F7VrD22oFKVTz3Jgjp+1YFYy0qoPtQF4zsncTVIa5VIK7tvuT+AFCkCf2qz/jLazJMCGwyle0Qt7WdYhkyQ8PyecIT8n40QBtXiFoEATc3PKM5XaV6yojSCieOPoc4N9O0x7+pMm0rU71Mh3RNFnyUgZtqsM5C+oZZJ8OPgH7rVK9xcyQ/PiASkS2l5S/peABnr9s7vtD9nL3OrEVe9PYtt3NjcZ+YI8uihUFqETZVnji8jj9W6JI6Brg4KXHU5RjGt2nc/h+C9CBw91pPn3VHPQ1Poz6prHbeb+EL8jyDjMJlmpGUcp+w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+Received: from DM6PR02MB5148.namprd02.prod.outlook.com (2603:10b6:5:48::21) by
+ SN6PR02MB4688.namprd02.prod.outlook.com (2603:10b6:805:99::15) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4951.17; Tue, 8 Feb 2022 12:43:50 +0000
+Received: from DM6PR02MB5148.namprd02.prod.outlook.com
+ ([fe80::fd14:f3bb:506c:4fa9]) by DM6PR02MB5148.namprd02.prod.outlook.com
+ ([fe80::fd14:f3bb:506c:4fa9%4]) with mapi id 15.20.4951.019; Tue, 8 Feb 2022
+ 12:43:50 +0000
+From:   "Dikshita Agarwal (QUIC)" <quic_dikshita@quicinc.com>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        "Dikshita Agarwal (QUIC)" <quic_dikshita@quicinc.com>
+CC:     "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "vgarodia@codeaurora.org" <vgarodia@codeaurora.org>
+Subject: RE: [PATCH] Add check for READ ONLY flag
+Thread-Topic: [PATCH] Add check for READ ONLY flag
+Thread-Index: AQHYGZM6GzYGUfERzkeFd/d4R+cnj6yJnrAAgAAA71A=
+Date:   Tue, 8 Feb 2022 12:43:50 +0000
+Message-ID: <DM6PR02MB5148FA037A4AA01893698CDDF32D9@DM6PR02MB5148.namprd02.prod.outlook.com>
+References: <1643957268-6365-1-git-send-email-quic_dikshita@quicinc.com>
+ <37c856c6-caa3-b908-9cda-25a50a50ef03@xs4all.nl>
+In-Reply-To: <37c856c6-caa3-b908-9cda-25a50a50ef03@xs4all.nl>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>
-Cc:     Alexander Gordeev <agordeev@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>
-References: <20220207165930.1608621-1-scgl@linux.ibm.com>
- <20220207165930.1608621-5-scgl@linux.ibm.com>
-From:   Janosch Frank <frankja@linux.ibm.com>
-In-Reply-To: <20220207165930.1608621-5-scgl@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: ATY7tXbqd3-MdjdLuNy26Jo6k4DVF5cz
-X-Proofpoint-ORIG-GUID: NfgUH_3QsZXyQm1A5e_XN46Gvt5Yu3by
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-08_03,2022-02-07_02,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
- malwarescore=0 priorityscore=1501 lowpriorityscore=0 bulkscore=0
- mlxlogscore=999 clxscore=1015 phishscore=0 impostorscore=0 adultscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202080073
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=quicinc.com;
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 2b713d37-3202-45fd-e395-08d9eb00a821
+x-ms-traffictypediagnostic: SN6PR02MB4688:EE_
+x-ld-processed: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d,ExtAddr
+x-microsoft-antispam-prvs: <SN6PR02MB4688E133FF43DA2D12A8977C8F2D9@SN6PR02MB4688.namprd02.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6790;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: hWXL5wyCiUe59k9jlg0QF5X7qCqGtKNnHASrII/u2QMGTJngT0Dvq6EV1/ooGVJVqWv2zR455gd3V6dG1gKwFtj/SEGX0n6dbOl6fSTl8ifliLuAvoofbum024+dci94BRMjmtRVSoYoEWOIXOzEsHPhlP0x1k4JuZ5006eXILe2kEzYCv/yR/7I4Lnaebtc6tON0vh0NMthuUc3A0FGSuWGvnn4hRc4wfqa17FMOIqZpWTwjEDlVBTztMuATFCrhcGrptZ9AeySpWra3nEIDHb6MPRfGvWZ0JlLsW/rLgEbR4giJFBzZWtrgG+K6cdH1Wapfj18W4olWIniw+WbMQJOc568X8uNTduSm/9MPglRLv7qidVNDs0ATarUwObxva3Irszoua42pxC2lsMj785Vckw75vsxlj7sR0CpZjb/4RWV1jVO8+f1JKRflzMMZjYo4gPVIi8gN4ZsGeUWGUSWxXuK6+rO+kkMEbP0+TwMEJ3z2LIIxuo1RPq3urfC67MMCAzRXi0fc3Jnk0ZQ78tYSF3HIS9Y/kPPiQpTTocQ9V2Bb5nhVgnO+Lq8iU+AB9okJtVL5N2/ekU4PjJ9iF6zEuJKEz0gWpWYd9vz6cH2KfgvSopN1mFbgbKk6kPN+DAIebYtiR98Ed73fHp+NO2FY5oinmalEIv2hFxVkcq4dRgVsg55fsW2Vd7mwyzNX0+GkWghD2cu0+X0+xXQIQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR02MB5148.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(86362001)(55016003)(186003)(83380400001)(110136005)(316002)(54906003)(508600001)(122000001)(38100700002)(6506007)(7696005)(66946007)(8676002)(8936002)(4326008)(66446008)(66476007)(66556008)(64756008)(33656002)(2906002)(26005)(5660300002)(71200400001)(38070700005)(9686003)(76116006)(53546011)(52536014);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?cHB1Tlk5WWc4WWdNNnJ3dWJHZXAvTUdDdklVQ0xndms1Z1gzV1RsVW9ybWtq?=
+ =?utf-8?B?M2YzaUlCU1hlZnF2YWJ2N1ZraUdWakdReFQwZDNEVU9SZkNPNmtvblJDL3hD?=
+ =?utf-8?B?a1FXbG9vbnNCcWwzRktFSWVxSElSYXRiNjFmQjVLUUw3TGZ2YnZtODBmWERG?=
+ =?utf-8?B?Rk5oT1ZOZElZYXR1OW9IVkE5MzFkMi9WMFBlRlZMZFViemJ4NUxMYUpqY3NV?=
+ =?utf-8?B?MnZzbDNCMVM2QlBEd0JGMGV6TGExS1ZjNHVldzZHQ0hteWdDM3MzU2lzQmJK?=
+ =?utf-8?B?cTNlY1M3SmI3dHBPTXg5cUdXYjd0cGFtbFNRSmJMeG1sZVpNQ1lzbmI4eW9z?=
+ =?utf-8?B?WkpaaE1rSWJlRFJ4dWhjSEJwL2F5SmJDMGIrVzE1SStlR0x4RnJ1eFY3b1RO?=
+ =?utf-8?B?N3grWkJ5UC92UEMyOXdKZEJVRElIb1RmTk1HdlR1eUk4M0hvY1lLNEhUejE1?=
+ =?utf-8?B?UFI5cmMxMEJlWXk2aWVWR2ZzY1orOEN1aHNGK25BWVVpVmVtVWVpRmk3RWQv?=
+ =?utf-8?B?SkFFcitQVXZ3aW92MzVUM0JlQTRqbG5kVXF5OXNsZzYrY2J5dUhWTTBYeWJr?=
+ =?utf-8?B?WHNBSUJyZWdmWnlwSnZ2aDhkbnpTY1JrajVialBTSHc3b28wWVN1ME1iL3RK?=
+ =?utf-8?B?ekl5eldUb09HY2hKMEh4NjR4SU9nZ2M2a016Z2lWZlhZTDc2YkNrZXVhMzh3?=
+ =?utf-8?B?MFdBcHQ0cUVLVXJUbnQwY2JjS3FZS2R0UmttSWpaOVRnWXhVbHhHOUx4VGZo?=
+ =?utf-8?B?VUZKK2dhaTJQc0VxVHJKem5EU2RMQ09Yb1FxODArZnRZSFVGNTVyN3BoR1FC?=
+ =?utf-8?B?a2xQbTlyMC83Q1JHb0Zyc0pGa081cktqRzcwUTZUTGtBSXlpelk3L21FZEpY?=
+ =?utf-8?B?RG1CMVRBM0F5ZnMxTnNMMGhkV0psbUY0cTVlQVBuNGNXQWVLUVJRVHh5YUFt?=
+ =?utf-8?B?MjFLb1ZyU0Ezd09wSzdWWG1LUHpsN20zVnlrVWF1YTlOL2h3THRyeTZ2cVlk?=
+ =?utf-8?B?NnRURDdEU3QvSGJwVVdjNW9EN2ZXY21zMGhpa1hiVUNhclVyTlkwOU5FQnFm?=
+ =?utf-8?B?a0UvOXhFQkNOVlM5ZXZqNHZTZ3ZjWGJQV1Y0eURVTTZ5Nk5IN0szWjR4dUdB?=
+ =?utf-8?B?T2grbks3SHVaRDJ0MSt6dDhlSzVwYUtJYVlPQ1o3d3EvK3ZBVVdUSkp6QXNo?=
+ =?utf-8?B?K3VpZGFjc1hPc0RDcXRycFhzMndBcGQ1ZXhnR2o4TXZieTkzeldlSGNIK2R2?=
+ =?utf-8?B?YVZOT1FTNjRiK2FCQS9hUm5PSmJDUTZ0U0lKTEdVemxzSk40Q2tBdzlENzNS?=
+ =?utf-8?B?OTc1RmUvSCtsQnhoZ1BLK1RKMExyR3FicTViK3g4OXZIdEp0dTdYVGpiU2o1?=
+ =?utf-8?B?eG5pM3NIdXhaYldRVDVYaEVPZVIrM3R4T2lmQ1cxbWJ5dUQyMzVxUVRQWnIr?=
+ =?utf-8?B?MUlFdTVEWmMwWXcwYTNQRWZxMTdMTzVMdVY3SmVGbmlhUWE3VlJVVUR1U1Zi?=
+ =?utf-8?B?Nk1sbXFScjNyMkkwc3FHZCtXSDFNKzBKZ3ZJTEdlc0t3RGhDV0w0RXVvSnd4?=
+ =?utf-8?B?OUQ2aS9yb25GMDk0K2VOUEN5cGxRUThpTzhCdU91SS8wU1NKaHVXMEMrc0hK?=
+ =?utf-8?B?RHk4bU5YcExLQ1RjbXZ2YUtxZlBTN0p2Syt4aWwxaW0xa2d4NGZSUDNVdGsw?=
+ =?utf-8?B?dDdUZGtSeVlXc2hpd014MHR0Tythd3hMaDZkUDFTOHdBT1JFT0dTVGtVWTlP?=
+ =?utf-8?B?dHJYbDdpYTVIYm83Vms4eml5eUJTaUZ3YjFCUWdUbEpYLy9WQXdPRkNEQlZB?=
+ =?utf-8?B?Uzg4dEl5c3FTU1hoTnFyTHZML0xMbTQ3c2tjOXdtaTEybjV6a2ttSFFaeExp?=
+ =?utf-8?B?MGJleGxDOXBRNkR1NFBFSGlMZWhrOVFxemgwRVc5ajVreVlvWW5TcFNnaGNn?=
+ =?utf-8?B?Y2w1bkVWQVk4dWpvbklENmlEOFkwUUNQUGYvV3VteVBVanRLQ0lTQ0VCa0Jw?=
+ =?utf-8?B?MFJ1eldCRUd0VGxaRnh5Vmk5aHVxZERBZFdLdm9kbmxKYnlmS1NDOGJWWU5j?=
+ =?utf-8?B?cVZSWStOZXdOd0RRTU1lSS9adFdLSTMvMjAyek9xM0J1NzFsR3Y3WUYzZjJs?=
+ =?utf-8?B?dnZxN3kxYXRaTUJCTGx2ZC9Zc1Ryalk4RDJYb1B2d1B3eEFjaWlqOTYvNkVF?=
+ =?utf-8?B?VnBGVWhDaGtKenBrY0t1Q3JHb1pSejcwN3NDVEJIVDhUVFZaT0p2UjNmNjdS?=
+ =?utf-8?B?RzhPeC9EcXJlSENGYVBKZ25janpnPT0=?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: quicinc.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR02MB5148.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2b713d37-3202-45fd-e395-08d9eb00a821
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Feb 2022 12:43:50.2175
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: H56dfUZmK/HPWeeUltoqrskYFzg/pXMYyNjkTkQzcYWtslb5OIigT8eKwbSJOcZmijHhZq+muDaaSw2b5V9KwV1zPgj4i24B+Q3dptgRAcY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR02MB4688
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/7/22 17:59, Janis Schoetterl-Glausch wrote:
-> Test the emulation of TEST PROTECTION in the presence of storage keys.
-> Emulation only occurs under certain conditions, one of which is the host
-> page being protected.
-> Trigger this by protecting the test pages via mprotect.
-> 
-> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-
-That was way more understandable with the additions of the comments, 
-thanks for taking the time to add them.
-
-Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
-
-> ---
->   tools/testing/selftests/kvm/.gitignore    |   1 +
->   tools/testing/selftests/kvm/Makefile      |   1 +
->   tools/testing/selftests/kvm/s390x/tprot.c | 227 ++++++++++++++++++++++
->   3 files changed, 229 insertions(+)
->   create mode 100644 tools/testing/selftests/kvm/s390x/tprot.c
-> 
-> diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-> index dce7de7755e6..7903580a48ac 100644
-> --- a/tools/testing/selftests/kvm/.gitignore
-> +++ b/tools/testing/selftests/kvm/.gitignore
-> @@ -8,6 +8,7 @@
->   /s390x/memop
->   /s390x/resets
->   /s390x/sync_regs_test
-> +/s390x/tprot
->   /x86_64/amx_test
->   /x86_64/cpuid_test
->   /x86_64/cr4_cpuid_sync_test
-> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-> index 0e4926bc9a58..086f490e808d 100644
-> --- a/tools/testing/selftests/kvm/Makefile
-> +++ b/tools/testing/selftests/kvm/Makefile
-> @@ -121,6 +121,7 @@ TEST_GEN_PROGS_aarch64 += kvm_binary_stats_test
->   TEST_GEN_PROGS_s390x = s390x/memop
->   TEST_GEN_PROGS_s390x += s390x/resets
->   TEST_GEN_PROGS_s390x += s390x/sync_regs_test
-> +TEST_GEN_PROGS_s390x += s390x/tprot
->   TEST_GEN_PROGS_s390x += demand_paging_test
->   TEST_GEN_PROGS_s390x += dirty_log_test
->   TEST_GEN_PROGS_s390x += kvm_create_max_vcpus
-> diff --git a/tools/testing/selftests/kvm/s390x/tprot.c b/tools/testing/selftests/kvm/s390x/tprot.c
-> new file mode 100644
-> index 000000000000..c097b9db495e
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/s390x/tprot.c
-> @@ -0,0 +1,227 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Test TEST PROTECTION emulation.
-> + *
-> + * Copyright IBM Corp. 2021
-> + */
-> +
-> +#include <sys/mman.h>
-> +#include "test_util.h"
-> +#include "kvm_util.h"
-> +
-> +#define PAGE_SHIFT 12
-> +#define PAGE_SIZE (1 << PAGE_SHIFT)
-> +#define CR0_FETCH_PROTECTION_OVERRIDE	(1UL << (63 - 38))
-> +#define CR0_STORAGE_PROTECTION_OVERRIDE	(1UL << (63 - 39))
-> +
-> +#define VCPU_ID 1
-> +
-> +static __aligned(PAGE_SIZE) uint8_t pages[2][PAGE_SIZE];
-> +static uint8_t *const page_store_prot = pages[0];
-> +static uint8_t *const page_fetch_prot = pages[1];
-> +
-> +/* Nonzero return value indicates that address not mapped */
-> +static int set_storage_key(void *addr, uint8_t key)
-> +{
-> +	int not_mapped = 0;
-> +
-> +	asm volatile (
-> +		       "lra	%[addr], 0(0,%[addr])\n"
-> +		"	jz	0f\n"
-> +		"	llill	%[not_mapped],1\n"
-> +		"	j	1f\n"
-> +		"0:	sske	%[key], %[addr]\n"
-> +		"1:"
-> +		: [addr] "+&a" (addr), [not_mapped] "+r" (not_mapped)
-> +		: [key] "r" (key)
-> +		: "cc"
-> +	);
-> +	return -not_mapped;
-> +}
-> +
-> +enum permission {
-> +	READ_WRITE = 0,
-> +	READ = 1,
-> +	RW_PROTECTED = 2,
-> +	TRANSL_UNAVAIL = 3,
-> +};
-> +
-> +static enum permission test_protection(void *addr, uint8_t key)
-> +{
-> +	uint64_t mask;
-> +
-> +	asm volatile (
-> +		       "tprot	%[addr], 0(%[key])\n"
-> +		"	ipm	%[mask]\n"
-> +		: [mask] "=r" (mask)
-> +		: [addr] "Q" (*(char *)addr),
-> +		  [key] "a" (key)
-> +		: "cc"
-> +	);
-> +
-> +	return (enum permission)(mask >> 28);
-> +}
-> +
-> +enum stage {
-> +	STAGE_END,
-> +	STAGE_INIT_SIMPLE,
-> +	TEST_SIMPLE,
-> +	STAGE_INIT_FETCH_PROT_OVERRIDE,
-> +	TEST_FETCH_PROT_OVERRIDE,
-> +	TEST_STORAGE_PROT_OVERRIDE,
-> +};
-> +
-> +struct test {
-> +	enum stage stage;
-> +	void *addr;
-> +	uint8_t key;
-> +	enum permission expected;
-> +} tests[] = {
-> +	/*
-> +	 * We perform each test in the array by executing TEST PROTECTION on
-> +	 * the specified addr with the specified key and checking if the returned
-> +	 * permissions match the expected value.
-> +	 * Both guest and host cooperate to set up the required test conditions.
-> +	 * A central condition is that the page targeted by addr has to be DAT
-> +	 * protected in the host mappings, in order for KVM to emulate the
-> +	 * TEST PROTECTION instruction.
-> +	 * Since the page tables are shared, the host uses mprotect to achieve
-> +	 * this.
-> +	 *
-> +	 * Test resulting in RW_PROTECTED/TRANSL_UNAVAIL will be interpreted
-> +	 * by SIE, not KVM, but there is no harm in testing them also.
-> +	 * See Enhanced Suppression-on-Protection Facilities in the
-> +	 * Interpretive-Execution Mode
-> +	 */
-> +	/*
-> +	 * guest: set storage key of page_store_prot to 1
-> +	 *        storage key of page_fetch_prot to 9 and enable
-> +	 *        protection for it
-> +	 * STAGE_INIT_SIMPLE
-> +	 * host: write protect both via mprotect
-> +	 */
-> +	/* access key 0 matches any storage key -> RW */
-> +	{ TEST_SIMPLE, page_store_prot, 0x00, READ_WRITE },
-> +	/* access key matches storage key -> RW */
-> +	{ TEST_SIMPLE, page_store_prot, 0x10, READ_WRITE },
-> +	/* mismatched keys, but no fetch protection -> RO */
-> +	{ TEST_SIMPLE, page_store_prot, 0x20, READ },
-> +	/* access key 0 matches any storage key -> RW */
-> +	{ TEST_SIMPLE, page_fetch_prot, 0x00, READ_WRITE },
-> +	/* access key matches storage key -> RW */
-> +	{ TEST_SIMPLE, page_fetch_prot, 0x90, READ_WRITE },
-> +	/* mismatched keys, fetch protection -> inaccessible */
-> +	{ TEST_SIMPLE, page_fetch_prot, 0x10, RW_PROTECTED },
-> +	/* page 0 not mapped yet -> translation not available */
-> +	{ TEST_SIMPLE, (void *)0x00, 0x10, TRANSL_UNAVAIL },
-> +	/*
-> +	 * host: try to map page 0
-> +	 * guest: set storage key of page 0 to 9 and enable fetch protection
-> +	 * STAGE_INIT_FETCH_PROT_OVERRIDE
-> +	 * host: write protect page 0
-> +	 *       enable fetch protection override
-> +	 */
-> +	/* mismatched keys, fetch protection, but override applies -> RO */
-> +	{ TEST_FETCH_PROT_OVERRIDE, (void *)0x00, 0x10, READ },
-> +	/* mismatched keys, fetch protection, override applies to 0-2048 only -> inaccessible */
-> +	{ TEST_FETCH_PROT_OVERRIDE, (void *)2049, 0x10, RW_PROTECTED },
-> +	/*
-> +	 * host: enable storage protection override
-> +	 */
-> +	/* mismatched keys, but override applies (storage key 9) -> RW */
-> +	{ TEST_STORAGE_PROT_OVERRIDE, page_fetch_prot, 0x10, READ_WRITE },
-> +	/* mismatched keys, no fetch protection, override doesn't apply -> RO */
-> +	{ TEST_STORAGE_PROT_OVERRIDE, page_store_prot, 0x20, READ },
-> +	/* mismatched keys, but override applies (storage key 9) -> RW */
-> +	{ TEST_STORAGE_PROT_OVERRIDE, (void *)2049, 0x10, READ_WRITE },
-> +	/* end marker */
-> +	{ STAGE_END, 0, 0, 0 },
-> +};
-> +
-> +static enum stage perform_next_stage(int *i, bool mapped_0)
-> +{
-> +	enum stage stage = tests[*i].stage;
-> +	enum permission result;
-> +	bool skip;
-> +
-> +	for (; tests[*i].stage == stage; (*i)++) {
-> +		/*
-> +		 * Some fetch protection override tests require that page 0
-> +		 * be mapped, however, when the hosts tries to map that page via
-> +		 * vm_vaddr_alloc, it may happen that some other page gets mapped
-> +		 * instead.
-> +		 * In order to skip these tests we detect this inside the guest
-> +		 */
-> +		skip = tests[*i].addr < (void *)4096 &&
-> +		       tests[*i].expected != TRANSL_UNAVAIL &&
-> +		       !mapped_0;
-> +		if (!skip) {
-> +			result = test_protection(tests[*i].addr, tests[*i].key);
-> +			GUEST_ASSERT_2(result == tests[*i].expected, *i, result);
-> +		}
-> +	}
-> +	return stage;
-> +}
-> +
-> +static void guest_code(void)
-> +{
-> +	bool mapped_0;
-> +	int i = 0;
-> +
-> +	GUEST_ASSERT_EQ(set_storage_key(page_store_prot, 0x10), 0);
-> +	GUEST_ASSERT_EQ(set_storage_key(page_fetch_prot, 0x98), 0);
-> +	GUEST_SYNC(STAGE_INIT_SIMPLE);
-> +	GUEST_SYNC(perform_next_stage(&i, false));
-> +
-> +	/* Fetch-protection override */
-> +	mapped_0 = !set_storage_key((void *)0, 0x98);
-> +	GUEST_SYNC(STAGE_INIT_FETCH_PROT_OVERRIDE);
-> +	GUEST_SYNC(perform_next_stage(&i, mapped_0));
-> +
-> +	/* Storage-protection override */
-> +	GUEST_SYNC(perform_next_stage(&i, mapped_0));
-> +}
-> +
-> +#define HOST_SYNC(vmp, stage)							\
-> +({										\
-> +	struct kvm_vm *__vm = (vmp);						\
-> +	struct ucall uc;							\
-> +	int __stage = (stage);							\
-> +										\
-> +	vcpu_run(__vm, VCPU_ID);						\
-> +	get_ucall(__vm, VCPU_ID, &uc);						\
-> +	if (uc.cmd == UCALL_ABORT) {						\
-> +		TEST_FAIL("line %lu: %s, hints: %lu, %lu", uc.args[1],		\
-> +			  (const char *)uc.args[0], uc.args[2], uc.args[3]);	\
-> +	}									\
-> +	ASSERT_EQ(uc.cmd, UCALL_SYNC);						\
-> +	ASSERT_EQ(uc.args[1], __stage);						\
-> +})
-> +
-> +int main(int argc, char *argv[])
-> +{
-> +	struct kvm_vm *vm;
-> +	struct kvm_run *run;
-> +	vm_vaddr_t guest_0_page;
-> +
-> +	vm = vm_create_default(VCPU_ID, 0, guest_code);
-> +	run = vcpu_state(vm, VCPU_ID);
-> +
-> +	HOST_SYNC(vm, STAGE_INIT_SIMPLE);
-> +	mprotect(addr_gva2hva(vm, (vm_vaddr_t)pages), PAGE_SIZE * 2, PROT_READ);
-> +	HOST_SYNC(vm, TEST_SIMPLE);
-> +
-> +	guest_0_page = vm_vaddr_alloc(vm, PAGE_SIZE, 0);
-> +	if (guest_0_page != 0)
-> +		print_skip("Did not allocate page at 0 for fetch protection override tests");
-> +	HOST_SYNC(vm, STAGE_INIT_FETCH_PROT_OVERRIDE);
-> +	if (guest_0_page == 0)
-> +		mprotect(addr_gva2hva(vm, (vm_vaddr_t)0), PAGE_SIZE, PROT_READ);
-> +	run->s.regs.crs[0] |= CR0_FETCH_PROTECTION_OVERRIDE;
-> +	run->kvm_dirty_regs = KVM_SYNC_CRS;
-> +	HOST_SYNC(vm, TEST_FETCH_PROT_OVERRIDE);
-> +
-> +	run->s.regs.crs[0] |= CR0_STORAGE_PROTECTION_OVERRIDE;
-> +	run->kvm_dirty_regs = KVM_SYNC_CRS;
-> +	HOST_SYNC(vm, TEST_STORAGE_PROT_OVERRIDE);
-> +}
-
+VGhhbmtzIEhhbnMgZm9yIHJldmlldy4NCkkgc2VudCBhIHYyIGFkZHJlc3NpbmcgaXQuDQoNClRo
+YW5rcywNCkRpa3NoaXRhIEFnYXJ3YWwNCg0KLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCkZy
+b206IEhhbnMgVmVya3VpbCA8aHZlcmt1aWwtY2lzY29AeHM0YWxsLm5sPiANClNlbnQ6IFR1ZXNk
+YXksIEZlYnJ1YXJ5IDA4LCAyMDIyIDY6MTAgUE0NClRvOiBEaWtzaGl0YSBBZ2Fyd2FsIChRVUlD
+KSA8cXVpY19kaWtzaGl0YUBxdWljaW5jLmNvbT4NCkNjOiBsaW51eC1tZWRpYUB2Z2VyLmtlcm5l
+bC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7IHZnYXJvZGlhQGNvZGVhdXJvcmEu
+b3JnDQpTdWJqZWN0OiBSZTogW1BBVENIXSBBZGQgY2hlY2sgZm9yIFJFQUQgT05MWSBmbGFnDQoN
+CldBUk5JTkc6IFRoaXMgZW1haWwgb3JpZ2luYXRlZCBmcm9tIG91dHNpZGUgb2YgUXVhbGNvbW0u
+IFBsZWFzZSBiZSB3YXJ5IG9mIGFueSBsaW5rcyBvciBhdHRhY2htZW50cywgYW5kIGRvIG5vdCBl
+bmFibGUgbWFjcm9zLg0KDQpPbiAyLzQvMjIgMDc6NDcsIERpa3NoaXRhIEFnYXJ3YWwgd3JvdGU6
+DQo+IEFkZCBhIGNoZWNrIGZvciBWNEwyX0NUUkxfRkxBR19SRUFEX09OTFkgdG8gYXZvaWQgcmVx
+dWVzdCB0ZXN0aW5nIGZvciANCj4gc3VjaCBjb250cm9scy4NCg0KTWlzc2luZyBTaWduZWQtb2Zm
+LWJ5IQ0KDQpSZWdhcmRzLA0KDQogICAgICAgIEhhbnMNCg0KPiAtLS0NCj4gIHV0aWxzL3Y0bDIt
+Y29tcGxpYW5jZS92NGwyLXRlc3QtYnVmZmVycy5jcHAgfCAzICsrLQ0KPiAgMSBmaWxlIGNoYW5n
+ZWQsIDIgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQ0KPg0KPiBkaWZmIC0tZ2l0IGEvdXRp
+bHMvdjRsMi1jb21wbGlhbmNlL3Y0bDItdGVzdC1idWZmZXJzLmNwcCANCj4gYi91dGlscy92NGwy
+LWNvbXBsaWFuY2UvdjRsMi10ZXN0LWJ1ZmZlcnMuY3BwDQo+IGluZGV4IGZhOGMzN2MuLmI4ZGU3
+YWYgMTAwNjQ0DQo+IC0tLSBhL3V0aWxzL3Y0bDItY29tcGxpYW5jZS92NGwyLXRlc3QtYnVmZmVy
+cy5jcHANCj4gKysrIGIvdXRpbHMvdjRsMi1jb21wbGlhbmNlL3Y0bDItdGVzdC1idWZmZXJzLmNw
+cA0KPiBAQCAtMjAzMiw3ICsyMDMyLDggQEAgaW50IHRlc3RSZXF1ZXN0cyhzdHJ1Y3Qgbm9kZSAq
+bm9kZSwgYm9vbCB0ZXN0X3N0cmVhbWluZykNCj4gICAgICAgICAgICAgICBpZiAocWN0cmwudHlw
+ZSAhPSBWNEwyX0NUUkxfVFlQRV9JTlRFR0VSICYmDQo+ICAgICAgICAgICAgICAgICAgIHFjdHJs
+LnR5cGUgIT0gVjRMMl9DVFJMX1RZUEVfQk9PTEVBTikNCj4gICAgICAgICAgICAgICAgICAgICAg
+IGNvbnRpbnVlOw0KPiAtICAgICAgICAgICAgIGlmIChxY3RybC5mbGFncyAmIFY0TDJfQ1RSTF9G
+TEFHX1dSSVRFX09OTFkpDQo+ICsgICAgICAgICAgICAgaWYgKHFjdHJsLmZsYWdzICYgVjRMMl9D
+VFJMX0ZMQUdfV1JJVEVfT05MWSB8fA0KPiArICAgICAgICAgICAgICAgICBxY3RybC5mbGFncyAm
+IFY0TDJfQ1RSTF9GTEFHX1JFQURfT05MWSkNCj4gICAgICAgICAgICAgICAgICAgICAgIGNvbnRp
+bnVlOw0KPiAgICAgICAgICAgICAgIGlmIChpc192aXZpZCAmJiBWNEwyX0NUUkxfSUQyV0hJQ0go
+cWN0cmwuaWQpID09IFY0TDJfQ1RSTF9DTEFTU19WSVZJRCkNCj4gICAgICAgICAgICAgICAgICAg
+ICAgIGNvbnRpbnVlOw0K

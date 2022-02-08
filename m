@@ -2,89 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02DC14ACDA4
+	by mail.lfdr.de (Postfix) with ESMTP id 51B4F4ACDA5
 	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:08:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239806AbiBHBIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 20:08:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57110 "EHLO
+        id S239612AbiBHBIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 20:08:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233453AbiBHAg2 (ORCPT
+        with ESMTP id S1344071AbiBHAjF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 19:36:28 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363AFC061355
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 16:36:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C37EF60ED0
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 00:36:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C2B0C340F0
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 00:36:25 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="A2f5wHJE"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1644280582;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yJt8rbu3AYDoBNc/EdQTMBvSLH8yRYqHWGRsR+89oog=;
-        b=A2f5wHJEAXgAt0T7iWdYtzPxyGiOv442ggfCLgAEVGPsQ3zjcSaGco8vyhZAEYxtfd8BWp
-        JA+8PonRf4Klw2Nk7Svp1QYVcVtJZHTMpgkMLAWma4MgW5J69ix7yfJfBrnX5uKtU+QEh4
-        3gri3t2hV089X/3lhl//WSKk7CdM2Sc=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 55871bb8 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
-        for <linux-kernel@vger.kernel.org>;
-        Tue, 8 Feb 2022 00:36:21 +0000 (UTC)
-Received: by mail-yb1-f173.google.com with SMTP id 124so44503565ybw.6
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 16:36:21 -0800 (PST)
-X-Gm-Message-State: AOAM5330qQHfBFS0z7XhAVv3JDHjTrB0HWClunfsNxERbK89NCOLm/vo
-        m67lwrd6pJ69jflMGt7O83STrL+UvAWChyvKDr4=
-X-Google-Smtp-Source: ABdhPJweAimco5zPp1mHY1t7UXPEjwVynXI4FfQ9H1oBNFhgY/j7o+kBMl8UwoNjH07uMlMn0qtpkYL06j/0gaZt2Pw=
-X-Received: by 2002:a05:6902:14d:: with SMTP id p13mr2403206ybh.638.1644280580410;
- Mon, 07 Feb 2022 16:36:20 -0800 (PST)
+        Mon, 7 Feb 2022 19:39:05 -0500
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD6FC0612A4
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 16:39:03 -0800 (PST)
+Received: by mail-io1-xd36.google.com with SMTP id s18so19132884ioa.12
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 16:39:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Rmp3DZvzS68gv+rXD5CE3qBfGpBWdIc/bhA+tLCOLDg=;
+        b=fBoqNIp/YvvhfJD30/p2ZYWnSdqGqBGC99xKMZMAu+6e/kZWOB75g8Sn4kpEicBVkt
+         Q0dvlAhHgaHK9umzmHDV+y+t1r3Hjv8Jo0ssmhOBbhiTJSaBx/K2POlTdjf+H7CGmaK4
+         s61Nzp5bo3IuUD9qfIZusrS0XvyvyK2VK8ICM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Rmp3DZvzS68gv+rXD5CE3qBfGpBWdIc/bhA+tLCOLDg=;
+        b=uyU70G7Gu2Fv1W0R9TA+NIIQmIpYQ7tvXjRxuoyGrl2SmHBd9F02lOGpCfzyO5Q+0g
+         rPFDE4JnzJieAbglt+tdOp60Mz2Fc6oSSQYy/J0yHJEy1TS6X0HSmNh+NItNrdNUoqpg
+         Tva8uWkGjM7oTX6twjmSYaWWrLo5Z705sP193CSuGkcv7eLbMG54GwVozMU/ioOms5xE
+         6lOeKtw8joeR53AL1ykH2amRaFutowzEHmp9PkbOjC1WarawmrmL5u6qpJ+EnK8+fNkA
+         To7mFUdmJygD66lVl/SyzdvluogaTLKsrECUBrLSgOzIXhFxNHaA8xfrspZq2XQeBW8z
+         wD1g==
+X-Gm-Message-State: AOAM530JKjyMqO6I88/P3P0QGEMvXJrYrXs5BqkZ7RIX4982UK7r6cz/
+        hUoqNAO4234JeBDaDqDA2YlGDqnokUzQhw==
+X-Google-Smtp-Source: ABdhPJx64mZN0F6b1XBlcj4hJ8xlzjAAoFz12xNvyjo7ub9HLt8hxvheqgxc320XHNZ8Fdd/LZLO3A==
+X-Received: by 2002:a05:6638:2506:: with SMTP id v6mr1066256jat.94.1644280742746;
+        Mon, 07 Feb 2022 16:39:02 -0800 (PST)
+Received: from mail-il1-f173.google.com (mail-il1-f173.google.com. [209.85.166.173])
+        by smtp.gmail.com with ESMTPSA id q16sm6992614ion.27.2022.02.07.16.39.00
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Feb 2022 16:39:01 -0800 (PST)
+Received: by mail-il1-f173.google.com with SMTP id h11so4469490ilq.9
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 16:39:00 -0800 (PST)
+X-Received: by 2002:a92:ca4d:: with SMTP id q13mr902121ilo.165.1644280740496;
+ Mon, 07 Feb 2022 16:39:00 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:7110:6254:b0:129:4164:158b with HTTP; Mon, 7 Feb 2022
- 16:36:19 -0800 (PST)
-In-Reply-To: <CANpmjNPVJP_Y6TjsHAR9dm=RpjY5V-=O5u7iP61dBjH2ePGrRw@mail.gmail.com>
-References: <e10b79cf-d6d5-ffcc-bce4-edd92b7cb6b9@molgen.mpg.de>
- <CAHmME9pktmNpcBS_DJhJ5Z+6xO9P1wroQ9_gwx8KZMBxk1FBeQ@mail.gmail.com>
- <CAG48ez17i5ObZ62BtDFF5UguO-n_0qvcvrsqVp4auvq2R4NPTA@mail.gmail.com> <CANpmjNPVJP_Y6TjsHAR9dm=RpjY5V-=O5u7iP61dBjH2ePGrRw@mail.gmail.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Tue, 8 Feb 2022 01:36:19 +0100
-X-Gmail-Original-Message-ID: <CAHmME9oPGnAQ23ZGGJg+ZZRDjG8M+hkqvTko1Zkrc5+zQYUvVg@mail.gmail.com>
-Message-ID: <CAHmME9oPGnAQ23ZGGJg+ZZRDjG8M+hkqvTko1Zkrc5+zQYUvVg@mail.gmail.com>
-Subject: Re: BUG: KCSAN: data-race in add_device_randomness+0x20d/0x290
-To:     Marco Elver <elver@google.com>
-Cc:     Jann Horn <jannh@google.com>, Dmitry Vyukov <dvyukov@google.com>,
-        kasan-dev <kasan-dev@googlegroups.com>, pmenzel@molgen.mpg.de,
-        "Theodore Y. Ts'o" <tytso@mit.edu>,
+References: <20220119204345.3769662-1-mka@chromium.org> <20220119124327.v20.2.Ie1de382686d61909e17fa8def2b83899256e8f5d@changeid>
+ <YekPTh/G1IkvpSiI@infradead.org> <YekTFMnXK87MNMh3@kroah.com>
+ <Yel+0DrtWm5I9JrL@google.com> <YemBkNhvfPukCB6C@kroah.com>
+In-Reply-To: <YemBkNhvfPukCB6C@kroah.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 7 Feb 2022 16:38:49 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=WUSo+knj7E9KYDnw5fTv__fdpg72f_N2p1ra7Gtyt8Dg@mail.gmail.com>
+Message-ID: <CAD=FV=WUSo+knj7E9KYDnw5fTv__fdpg72f_N2p1ra7Gtyt8Dg@mail.gmail.com>
+Subject: Re: [PATCH v20 2/5] driver core: Export device_is_bound()
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Matthias Kaehlcke <mka@chromium.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Peter Chen <peter.chen@kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>
+        Roger Quadros <rogerq@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        Bastien Nocera <hadess@hadess.net>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marco,
+Hi,
 
-On 2/8/22, Marco Elver <elver@google.com> wrote:
-> Jason - if you're interested in KCSAN data race reports in some
-> subsystems you maintain (I see a few in Wireguard), let me know, and
-> I'll release them from syzbot's moderation queue. The way we're trying
-> to do it with KCSAN is that we pre-moderate and ask maintainers if
-> they're happy to be forwarded all reports that syzbot finds (currently
-> some Networking and RCU, though the latter finds almost all data races
-> via KCSAN-enabled rcutorture).
+On Thu, Jan 20, 2022 at 7:36 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Thu, Jan 20, 2022 at 07:25:04AM -0800, Matthias Kaehlcke wrote:
+> > On Thu, Jan 20, 2022 at 08:45:24AM +0100, Greg Kroah-Hartman wrote:
+> > > On Wed, Jan 19, 2022 at 11:29:18PM -0800, Christoph Hellwig wrote:
+> > > > On Wed, Jan 19, 2022 at 12:43:42PM -0800, Matthias Kaehlcke wrote:
+> > > > > Export device_is_bound() to enable its use by drivers that are
+> > > > > built as modules.
+> > > > >
+> > > > > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> > > > > Reviewed-by: Douglas Anderson <dianders@chromium.org>
+> > > > > Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+> > > >
+> > > > Didn't Greg clearly NAK this the last few times it came up?
+> > >
+> > > Yes, which is why this series is _WAY_ on the bottom of my list for
+> > > reviews...
+> >
+> > I wasn't aware of that prior discussion, it would have helped to know
+> > that this is a major concern for you ...
+>
+> Sorry, that was on a different thread for a different feature, I thought
+> it was this one.  Too many reviews at times.
+>
+> >
+> > If using device_is_bound() is a no-go then _find_onboard_hub() of
+> > the onboard_hub driver could make it's decision based on the
+> > presence (or absence) of drvdata, which is what the function ultimately
+> > returns.
+>
+> That suffers from the same problem.  I'll take a look at this later
+> after -rc1 is out and see what can be done here...
 
-Oh that'd be great. Please feel free to forward whatever for WireGuard
-or random.c to jason@zx2c4.com and I'll gladly try to fix what needs
-fixing.
+Did you have any suggestions or pointers to places to further research
+what you're looking for? I think at this point both Stephen Boyd and I
+have given the patch series a fairly thorough review. If the only
+problem left is the export of device_is_bound() then we should find a
+better solution to the problem so the series can move forward.
 
-Jason
+Thanks!
+
+-Doug

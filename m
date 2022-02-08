@@ -2,170 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0295C4ADCA9
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 16:29:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4D0C4ADCAE
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 16:32:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380412AbiBHP3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 10:29:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44110 "EHLO
+        id S1380442AbiBHPcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 10:32:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235109AbiBHP3s (ORCPT
+        with ESMTP id S235109AbiBHPcA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 10:29:48 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99EC9C061576;
-        Tue,  8 Feb 2022 07:29:47 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Tue, 8 Feb 2022 10:32:00 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5584C061576
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 07:31:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 55FFC1F383;
-        Tue,  8 Feb 2022 15:29:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1644334186; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RefxbU951jlfBz7uIMcFk+7I0WDLMgFTTEu0GfJJxIc=;
-        b=EJjHrjSGzZxeKgTcgWAfXnys77d5lTsvC4y9X6h5H+hj10/m5CR2HmfqbGvQlVOpJ4eidA
-        5BYmNCjNMNz3LsOl0UU9BMYVwz8PdMKrxEwUvCpyQM86GbfWkZ+vIQm82WZe6yArPgVMUc
-        qA/1wjSie8CB5RJzbQSH9/M/J5WVEc8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1644334186;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RefxbU951jlfBz7uIMcFk+7I0WDLMgFTTEu0GfJJxIc=;
-        b=UPVg8xY0uNxI/UbSRDsH4x52GSrGeUgd/FVnlZawSTwSmtwLJJv5NRWmrXE/JuwERkDVd8
-        SLqjwEwtO8rblMDg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CDC2013C99;
-        Tue,  8 Feb 2022 15:29:45 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Rp2wMGmMAmIxJwAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Tue, 08 Feb 2022 15:29:45 +0000
-Date:   Tue, 8 Feb 2022 16:29:44 +0100
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Terry Bowman <terry.bowman@amd.com>
-Cc:     <linux@roeck-us.net>, <linux-watchdog@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>, <wsa@kernel.org>,
-        <andy.shevchenko@gmail.com>, <rafael.j.wysocki@intel.com>,
-        <linux-kernel@vger.kernel.org>, <wim@linux-watchdog.org>,
-        <rrichter@amd.com>, <thomas.lendacky@amd.com>,
-        <sudheesh.mavila@amd.com>, <Nehal-bakulchandra.Shah@amd.com>,
-        <Basavaraj.Natikar@amd.com>, <Shyam-sundar.S-k@amd.com>,
-        <Mario.Limonciello@amd.com>
-Subject: Re: [PATCH v4 5/9] i2c: piix4: Move SMBus port selection into
- function
-Message-ID: <20220208162944.3207577c@endymion.delvare>
-In-Reply-To: <20220130184130.176646-6-terry.bowman@amd.com>
-References: <20220130184130.176646-1-terry.bowman@amd.com>
-        <20220130184130.176646-6-terry.bowman@amd.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C1E2615C7
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 15:31:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F8F2C340E9;
+        Tue,  8 Feb 2022 15:31:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644334318;
+        bh=L0p/sE9csIRwSUuble/l//7GDvjyfHoLqprBqHetPSc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ouw1+av2qOU9Y88Pio/kOxI/2jxsqngUdvYjkPsq0DGvW0wvZjBPSv7J43exny63Z
+         2Jq+TXc8J1EkXvbcfVnIPVggcz7rWd5ZmWfpfroAQfch+SXB/HnBePi5diiAYy+9ek
+         7Gi0QplCwPQIJA0pDJ/3psDaRXngU3NfjL7Y5I72ZBGiQd/i2NBFluOMvphmC4GJM8
+         svFHDDl/lx9IXUlgnp1hYa2IhId0BlUdVN2URhNtxlM1rSqPpQp62ngDxc/9RxRK29
+         HZ/ZgxNO42Hc8oXVE30B8DzAdv+ZtLzZJO+sbsWdWz8y4yHID7z3kS0HG0P4+oh8UA
+         mThwvlwoh0fEA==
+Date:   Tue, 8 Feb 2022 15:31:52 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Rob Clark <robdclark@chromium.org>,
+        linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux-foundation.org, Xin Tan <tanxin.ctf@gmail.com>,
+        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        "Isaac J. Manjarres" <isaacm@codeaurora.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Subject: Re: [PATCH 1/2] iommu/arm-smmu: Use platform_irq_count() to get the
+ interrupt count
+Message-ID: <20220208153152.GC1802@willie-the-truck>
+References: <20211223130046.9365-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20211223130046.9365-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <f9efc8e8-9dc6-8a80-15bb-bc2d9aaf60cb@arm.com>
+ <20220208151932.GB1802@willie-the-truck>
+ <f54af077-41a3-e8c3-4349-ecc7f83520a4@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f54af077-41a3-e8c3-4349-ecc7f83520a4@arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 30 Jan 2022 12:41:26 -0600, Terry Bowman wrote:
-> Move port selection code into a separate function. Refactor is in
-> preparation for following MMIO changes.
+On Tue, Feb 08, 2022 at 03:28:50PM +0000, Robin Murphy wrote:
+> On 2022-02-08 15:19, Will Deacon wrote:
+> > On Thu, Dec 23, 2021 at 02:14:35PM +0000, Robin Murphy wrote:
+> > > On 2021-12-23 13:00, Lad Prabhakar wrote:
+> > > > platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> > > > allocation of IRQ resources in DT core code, this causes an issue
+> > > > when using hierarchical interrupt domains using "interrupts" property
+> > > > in the node as this bypasses the hierarchical setup and messes up the
+> > > > irq chaining.
+> > > > 
+> > > > In preparation for removal of static setup of IRQ resource from DT core
+> > > > code use platform_get_irq_count().
+> > > 
+> > > Nit: platform_irq_count()
+> > > 
+> > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > > ---
+> > > >    drivers/iommu/arm/arm-smmu/arm-smmu.c | 12 ++++++------
+> > > >    1 file changed, 6 insertions(+), 6 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu.c b/drivers/iommu/arm/arm-smmu/arm-smmu.c
+> > > > index 4bc75c4ce402..4844cd075644 100644
+> > > > --- a/drivers/iommu/arm/arm-smmu/arm-smmu.c
+> > > > +++ b/drivers/iommu/arm/arm-smmu/arm-smmu.c
+> > > > @@ -2105,12 +2105,12 @@ static int arm_smmu_device_probe(struct platform_device *pdev)
+> > > >    	if (IS_ERR(smmu))
+> > > >    		return PTR_ERR(smmu);
+> > > > -	num_irqs = 0;
+> > > > -	while ((res = platform_get_resource(pdev, IORESOURCE_IRQ, num_irqs))) {
+> > > > -		num_irqs++;
+> > > > -		if (num_irqs > smmu->num_global_irqs)
+> > > > -			smmu->num_context_irqs++;
+> > > > -	}
+> > > > +	num_irqs = platform_irq_count(pdev);
+> > > > +	if (num_irqs < 0)
+> > > > +		return num_irqs;
+> > > > +
+> > > > +	if (num_irqs > smmu->num_global_irqs)
+> > > > +		smmu->num_context_irqs += (num_irqs - smmu->num_global_irqs);
+> > > 
+> > > This seems a bit overcomplicated. I reckon:
+> > > 
+> > > 	smmu->num_context_irqs = num_irqs - smmu->num_global_irqs;
+> > > 	if (num_irqs <= smmu->num_global_irqs) {
+> > > 		dev_err(...
+> > > 
+> > > should do it.
+> > > 
+> > > However, FYI I have some patches refactoring most of the IRQ stuff here that
+> > > I plan to post next cycle (didn't quite have time to get them done for 5.17
+> > > as I'd hoped...), so unless this needs to go in right now as an urgent fix,
+> > > I'm happy to take care of removing platform_get_resource() as part of that
+> > > if it's easier.
+> > 
+> > Did you get anywhere with this? December 23rd is long forgotten by now ;)
 > 
-> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
-> ---
->  drivers/i2c/busses/i2c-piix4.c | 26 ++++++++++++++++----------
->  1 file changed, 16 insertions(+), 10 deletions(-)
+> Yup: https://gitlab.arm.com/linux-arm/linux-rm/-/commit/b2a40caaf1622eb35c555074a0d72f4f0513cff9
 > 
-> diff --git a/drivers/i2c/busses/i2c-piix4.c b/drivers/i2c/busses/i2c-piix4.c
-> index eab06e9e5fdf..32a30af5778a 100644
-> --- a/drivers/i2c/busses/i2c-piix4.c
-> +++ b/drivers/i2c/busses/i2c-piix4.c
-> @@ -699,6 +699,19 @@ static void piix4_imc_wakeup(void)
->  	release_region(KERNCZ_IMC_IDX, 2);
->  }
->  
-> +static int piix4_sb800_port_sel(u8 port)
-> +{
-> +	u8 smba_en_lo, val;
-> +
-> +	outb_p(piix4_port_sel_sb800, SB800_PIIX4_SMB_IDX);
-> +	smba_en_lo = inb_p(SB800_PIIX4_SMB_IDX + 1);
-> +
-> +	val = (smba_en_lo & ~piix4_port_mask_sb800) | port;
-> +	if (smba_en_lo != val)
-> +		outb_p(val, SB800_PIIX4_SMB_IDX + 1);
-> +
-> +	return (smba_en_lo & piix4_port_mask_sb800);
-> +}
->  /*
->   * Handles access to multiple SMBus ports on the SB800.
->   * The port is selected by bits 2:1 of the smb_en register (0x2c).
-> @@ -715,8 +728,7 @@ static s32 piix4_access_sb800(struct i2c_adapter *adap, u16 addr,
->  	unsigned short piix4_smba = adapdata->smba;
->  	int retries = MAX_TIMEOUT;
->  	int smbslvcnt;
-> -	u8 smba_en_lo;
-> -	u8 port;
-> +	u8 prev_port;
->  	int retval;
->  
->  	retval = piix4_sb800_region_request(&adap->dev);
-> @@ -776,18 +788,12 @@ static s32 piix4_access_sb800(struct i2c_adapter *adap, u16 addr,
->  		}
->  	}
->  
-> -	outb_p(piix4_port_sel_sb800, SB800_PIIX4_SMB_IDX);
-> -	smba_en_lo = inb_p(SB800_PIIX4_SMB_IDX + 1);
-> -
-> -	port = adapdata->port;
-> -	if ((smba_en_lo & piix4_port_mask_sb800) != port)
-> -		outb_p((smba_en_lo & ~piix4_port_mask_sb800) | port,
-> -		       SB800_PIIX4_SMB_IDX + 1);
-> +	prev_port = piix4_sb800_port_sel(adapdata->port);
->  
->  	retval = piix4_access(adap, addr, flags, read_write,
->  			      command, size, data);
->  
-> -	outb_p(smba_en_lo, SB800_PIIX4_SMB_IDX + 1);
-> +	piix4_sb800_port_sel(prev_port);
->  
->  	/* Release the semaphore */
->  	outb_p(smbslvcnt | 0x20, SMBSLVCNT);
+> I'm still cleaning up the PMU driver that justifies the whole thing, but I
+> can send that patch now if you reckon it's not complete nonsense out of
+> context. Otherwise, I'll aim to get the whole lot out next week.
 
-Hmm, this gets pretty inefficient. You set SB800_PIIX4_SMB_IDX to
-piix4_port_sel_sb800 twice and compare the new port with the previous
-port twice, even though the result will inevitably be the same. The
-original code would just unconditionally restore the original port
-value, which was also not always needed, but was cheaper in the end.
+Next week is fine, no rush. I was just trying to work out what to do with
+Lad's patches in this thread and it sounds like I should ignore them and
+wait for your series instead.
 
-I can't really think of a better way though, so, so be it :-(
-
-I wonder why we insist on restoring the port though. When you read
-multiple values from the same bus (and I2C device drivers do that a
-lot, obviously) you end up switching ports a lot for no good reason. I
-looked at the git history and it has been that way since support for
-the multiplexed buses was added back in 2015. There's a mutex
-protecting that section of code anyway, so I don't think restoring the
-port buys us anything we did not already have. The only benefit I can
-see is to leave the port setting in its original state on suspend and
-shutdown (and we know by experience that it can be important to the
-BIOS) but then we should just do it in the suspend and remove
-functions, instead of after every transfer.
-
--- 
-Jean Delvare
-SUSE L3 Support
+Will

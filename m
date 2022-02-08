@@ -2,95 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3F4B4AD79B
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:38:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDC854AD79E
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:38:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359216AbiBHLgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 06:36:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41082 "EHLO
+        id S1359420AbiBHLgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 06:36:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354263AbiBHLXg (ORCPT
+        with ESMTP id S1358831AbiBHL1l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 06:23:36 -0500
-Received: from vulcan.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6971AC03FED5
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 03:23:30 -0800 (PST)
-Received: from spock.localnet (unknown [83.148.33.151])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Tue, 8 Feb 2022 06:27:41 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17471C03FEEA
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 03:27:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by vulcan.natalenko.name (Postfix) with ESMTPSA id 8B816DB9038;
-        Tue,  8 Feb 2022 12:23:23 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
-        s=dkim-20170712; t=1644319403;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=my5/8th5a1G7ebhyaPdVtVtFmJbJrOhNxNQVFvXgC40=;
-        b=Fnhwtslj8SYrkR8v0r6PKFfWgEtB3HXbPMoKJXMvRmOemwUCnV61p8NyytmFYHIxsngfbx
-        X6J0GZxqNznkUW8ewaCtXL4RgXBRrqb+incxzeMpQl4thLb8d+AOBKEcNWcQJ7mKr9JL9X
-        QPzs5JWZ/G/ywB8xYdBUfoeEoMukvMM=
-From:   Oleksandr Natalenko <oleksandr@natalenko.name>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Mel Gorman <mgorman@suse.de>, Yu Zhao <yuzhao@google.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Barry Song <21cnbao@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        page-reclaim@google.com, x86@kernel.org
-Subject: Re: [PATCH v7 00/12] Multigenerational LRU Framework
-Date:   Tue, 08 Feb 2022 12:23:22 +0100
-Message-ID: <2228442.ElGaqSPkdT@natalenko.name>
-In-Reply-To: <YgJQeBUDaPbuDHi+@dhcp22.suse.cz>
-References: <20220208081902.3550911-1-yuzhao@google.com> <4714886.31r3eYUQgx@natalenko.name> <YgJQeBUDaPbuDHi+@dhcp22.suse.cz>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A293D615C2
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 11:27:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DF72C004E1;
+        Tue,  8 Feb 2022 11:27:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1644319648;
+        bh=CGQqY63qbTyT2OHCC+vjreP6q7CXq083TbLUBIE3Ys4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kjpJt2OsYIINrFQNdlgDkPgBgtcrP3piCf+lio35QnYefp7hORiCgi4zQcWWj/gv2
+         ENk345IS7+ZFd3tOaLrMM1rsBluQQ7xWW1vnEoQVK5IdnkX+LmJvd7/8vFz6NHyAVL
+         DHWYZaci5OnbDbzidTk3ITZfAk09yhrvL2XYfmoA=
+Date:   Tue, 8 Feb 2022 12:27:25 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Imran Khan <imran.f.khan@oracle.com>
+Cc:     tj@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 1/2] kernfs: use hashed mutex and spinlock in place of
+ global ones.
+Message-ID: <YgJTndUA7iK/UIao@kroah.com>
+References: <20220206010925.1033990-1-imran.f.khan@oracle.com>
+ <20220206010925.1033990-2-imran.f.khan@oracle.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220206010925.1033990-2-imran.f.khan@oracle.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello.
+On Sun, Feb 06, 2022 at 12:09:24PM +1100, Imran Khan wrote:
+> diff --git a/fs/kernfs/kernfs-internal.h b/fs/kernfs/kernfs-internal.h
+> index f9cc912c31e1b..cc49a6cd94154 100644
+> --- a/fs/kernfs/kernfs-internal.h
+> +++ b/fs/kernfs/kernfs-internal.h
+> @@ -31,6 +31,7 @@ struct kernfs_iattrs {
+>  	atomic_t		user_xattr_size;
+>  };
+>  
+> +
+>  /* +1 to avoid triggering overflow warning when negating it */
+>  #define KN_DEACTIVATED_BIAS		(INT_MIN + 1)
+>  
 
-On =FAter=FD 8. =FAnora 2022 12:14:00 CET Michal Hocko wrote:
-> On Tue 08-02-22 11:11:02, Oleksandr Natalenko wrote:
-> [...]
-> > Is the patch submission broken for everyone, or for me only? I see raw
-> > emails cluttered with some garbage like =3D2D, and hence I cannot apply
-> > those neither from my email client nor from lore.
->=20
-> The patchset seems to be OK both in my inbox and b4[1] has downloaded
-> the full thread without any issues and I could apply all the patches
-> just fine
->=20
-> [1] https://git.kernel.org/pub/scm/utils/b4/b4.git
+Nit, the above change isn't needed :)
 
-Thanks, b4 worked for me as well.
+> @@ -147,4 +148,54 @@ void kernfs_drain_open_files(struct kernfs_node *kn);
+>   */
+>  extern const struct inode_operations kernfs_symlink_iops;
+>  
+> +static inline spinlock_t *kernfs_open_node_lock_ptr(struct kernfs_node *kn)
+> +{
+> +	struct kernfs_root *root;
+> +	int idx = hash_ptr(kn, NR_KERNFS_LOCK_BITS);
+> +
+> +	root = kernfs_root(kn);
+> +
+> +	return &root->open_node_locks[idx].lock;
+> +}
+> +
+> +static inline spinlock_t *kernfs_open_node_lock(struct kernfs_node *kn)
+> +{
+> +	struct kernfs_root *root;
+> +	spinlock_t *lock;
+> +	int idx = hash_ptr(kn, NR_KERNFS_LOCK_BITS);
+> +
+> +	root = kernfs_root(kn);
+> +
+> +	lock = &root->open_node_locks[idx].lock;
+> +
+> +	spin_lock_irq(lock);
+> +
+> +	return lock;
+> +}
 
-=2D-=20
-Oleksandr Natalenko (post-factum)
+Can't you use kernfs_open_node_lock_ptr() in kernfs_open_node_lock() to
+make this use less duplicated code?
 
 
+> +
+> +static inline struct mutex *kernfs_open_file_mutex_ptr(struct kernfs_node *kn)
+> +{
+> +	struct kernfs_root *root;
+> +	int idx = hash_ptr(kn, NR_KERNFS_LOCK_BITS);
+> +
+> +	root = kernfs_root(kn);
+> +
+> +	return &root->open_file_mutex[idx].lock;
+> +}
+> +
+> +static inline struct mutex *kernfs_open_file_mutex_lock(struct kernfs_node *kn)
+> +{
+> +	struct kernfs_root *root;
+> +	struct mutex *lock;
+> +	int idx = hash_ptr(kn, NR_KERNFS_LOCK_BITS);
+> +
+> +	root = kernfs_root(kn);
+> +
+> +	lock = &root->open_file_mutex[idx].lock;
+> +
+> +	mutex_lock(lock);
+> +
+> +	return lock;
+> +}
+
+Same thing here.
+
+
+
+> +
+>  #endif	/* __KERNFS_INTERNAL_H */
+> diff --git a/include/linux/kernfs.h b/include/linux/kernfs.h
+> index 861c4f0f8a29f..5bf9f02ce9dce 100644
+> --- a/include/linux/kernfs.h
+> +++ b/include/linux/kernfs.h
+> @@ -18,6 +18,8 @@
+>  #include <linux/uidgid.h>
+>  #include <linux/wait.h>
+>  #include <linux/rwsem.h>
+> +#include <linux/spinlock.h>
+> +#include <linux/cache.h>
+>  
+>  struct file;
+>  struct dentry;
+> @@ -34,6 +36,40 @@ struct kernfs_fs_context;
+>  struct kernfs_open_node;
+>  struct kernfs_iattrs;
+>  
+> +/*
+> + * NR_KERNFS_LOCK_BITS determines size (NR_KERNFS_LOCKS) of hash
+> + * table of locks.
+> + * Having a small hash table would impact scalability, since
+> + * more and more kernfs_node objects will end up using same lock
+> + * and having a very large hash table would waste memory.
+> + *
+> + * At the moment size of hash table of locks is being set based on
+> + * the number of CPUs as follows:
+> + *
+> + * NR_CPU      NR_KERNFS_LOCK_BITS      NR_KERNFS_LOCKS
+> + *   1                  1                       2
+> + *  2-3                 2                       4
+> + *  4-7                 4                       16
+> + *  8-15                6                       64
+> + *  16-31               8                       256
+> + *  32 and more         10                      1024
+> + */
+> +#ifdef CONFIG_SMP
+> +#define NR_KERNFS_LOCK_BITS (2 * (ilog2(NR_CPUS < 32 ? NR_CPUS : 32)))
+> +#else
+> +#define NR_KERNFS_LOCK_BITS     1
+> +#endif
+> +
+> +#define NR_KERNFS_LOCKS     (1 << NR_KERNFS_LOCK_BITS)
+> +
+> +struct kernfs_open_node_lock {
+> +	spinlock_t lock;
+> +} ____cacheline_aligned_in_smp;
+> +
+> +struct kernfs_open_file_mutex {
+> +	struct mutex lock;
+> +} ____cacheline_aligned_in_smp;
+> +
+>  enum kernfs_node_type {
+>  	KERNFS_DIR		= 0x0001,
+>  	KERNFS_FILE		= 0x0002,
+> @@ -90,6 +126,7 @@ enum kernfs_root_flag {
+>  	KERNFS_ROOT_SUPPORT_USER_XATTR		= 0x0008,
+>  };
+>  
+> +
+>  /* type-specific structures for kernfs_node union members */
+>  struct kernfs_elem_dir {
+>  	unsigned long		subdirs;
+> @@ -201,6 +238,8 @@ struct kernfs_root {
+>  
+>  	wait_queue_head_t	deactivate_waitq;
+>  	struct rw_semaphore	kernfs_rwsem;
+> +	struct kernfs_open_node_lock open_node_locks[NR_KERNFS_LOCKS];
+> +	struct kernfs_open_file_mutex open_file_mutex[NR_KERNFS_LOCKS];
+>  };
+
+I think struct kernfs_root can be declared locally inside fs/kernfs/ to
+keep other subsystems/files from having to see this structure, right?
+That would make this a bit less of a "rebuild the world" type of change
+and could be done in a patch before this one.
+
+Overall, this looks sane to me, nice work.
+
+Tejun, any comments?
+
+thanks,
+
+greg k-h

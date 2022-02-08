@@ -2,165 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E9724ADC92
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 16:26:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 831844ADC96
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 16:27:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380216AbiBHP0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 10:26:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40956 "EHLO
+        id S1380154AbiBHP0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 10:26:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380168AbiBHP0C (ORCPT
+        with ESMTP id S231667AbiBHP0v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 10:26:02 -0500
-Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 948EDC0612B9;
-        Tue,  8 Feb 2022 07:25:59 -0800 (PST)
-Received: by mail-oo1-xc2c.google.com with SMTP id f11-20020a4abb0b000000b002e9abf6bcbcso17936516oop.0;
-        Tue, 08 Feb 2022 07:25:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=v+HG5AG509udiPdf4BbsPVUGkODFt7xt8GFthycqDiw=;
-        b=n9OrIeg0JbTsKqYhfSoL7aOmHBxhHJOBZT3Nf+McGU4HY/ifvP7QLdcLGmQJwmjcMq
-         etKBJK8lBatTtV6Ahy+4SC5KVAlljP26qriG5qcO4ZqGC9mZz78KBsD8nbjnCMNssWAi
-         llLr4bsundwoZvMa2IWwUG28hF3jUWLPqfnn37VMcvq5Oosi+8ElyKHI7Y3Q892qAnDX
-         eCRUYX7DH3RM9XBHWJCfw8xy7NIkIp12yLytR0jW6vy2Xi13KJrVKmPIVStlN9g1yfDy
-         +zhRxEtvuIEsVSJ9po64vWsTts/bmUV8NDdF93SrlSGS9AfiV65Kaca5pUz9XPGsBTlS
-         f9Mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=v+HG5AG509udiPdf4BbsPVUGkODFt7xt8GFthycqDiw=;
-        b=hyzYokMoGIMJfLe67pJh7qcQbWt6FLJr/Lz0utovcD2amVrDaSqIUaVRLccEBiMxej
-         AxZe/bYMI6RHFnG9lrwVJOhdbzVlTMs7+O2KmKDrWkWNv0ZHu0HKZ/gn5rPs1rDgH3EF
-         J7CgkGdsqQScb3/AAW3vxA2spVDj7+P6BPUuSTeIa2picoCQUdf3H46uK/mRQ70vosUz
-         2b8avIxfLCnGZHkoU6v8yZir43oeGEQ8OmWDJtb/PkidCeZ0IvwqkCtsVkQ9QnGnjYHJ
-         YiWRgdhvCun/m2zk2ALpxAQu19QEpBj9x7ArGQrmgdzu5X+Ug24hkZ1k2BuT6bOptTO9
-         j5Wg==
-X-Gm-Message-State: AOAM533E2GC3zFRRIcUWAVVDdSyLU4T+BauFd5dn+LmyI8bEyZDuCkGj
-        Ko17EVyYiCzpvDc3YQXU3yISOTR80IzzMg==
-X-Google-Smtp-Source: ABdhPJxp0s0F3y7NWA4W6wkqFG5FSCdF/0he8UTd6McrYoTifTToLYQCwsCH3TksFjauFdFLaC46YQ==
-X-Received: by 2002:a05:6870:3655:: with SMTP id v21mr523749oak.302.1644333958441;
-        Tue, 08 Feb 2022 07:25:58 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 1sm4725791oab.16.2022.02.08.07.25.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Feb 2022 07:25:57 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <106b27d7-6845-ed3c-411e-9ef5aee7f224@roeck-us.net>
-Date:   Tue, 8 Feb 2022 07:25:56 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 1/2] usb: typec: tcpm: add interface for passing
- supported_pd_rev from tcpc_dev
-Content-Language: en-US
-To:     Potin Lai <potin.lai@quantatw.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Patrick Williams <patrick@stwcx.xyz>
-References: <20220208082026.4855-1-potin.lai@quantatw.com>
- <20220208112226.9108-1-potin.lai@quantatw.com>
- <20220208112226.9108-2-potin.lai@quantatw.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220208112226.9108-2-potin.lai@quantatw.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Tue, 8 Feb 2022 10:26:51 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D900C061576;
+        Tue,  8 Feb 2022 07:26:51 -0800 (PST)
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 218FFDsa022286;
+        Tue, 8 Feb 2022 15:26:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=DeLDo9Re16ajpsw4sNAcqICogJBryuA+YZ39ylPMRn0=;
+ b=VvjICS5ticvsYnz9yVG/BOMIHCYAl1tmOUv8uakWXcjPFUpfEnlARkzFYKS5lXr//KEL
+ Za3XMflitZJQfhGAIs/g0VmAYd8+rgU8OxsV+QRJWtlATthYmxK5lxWYbfaZFYLaNmTm
+ 0kqm3+tDLmBqP0uaXagDwzIz9NMOOI7CzNIPbtBd+8Uv4k+Jx/fl0UBBRW3lcRauvwk/
+ NnXUFXzW3aPDNmKp2Iq22WGC7NJ1WYhwUaN8+lVeOQ2dvx79vyDX2e9Ja6hhjDo1SYvL
+ LcjUsDKM+R9b2HdFOd28vpla7X5GWzygW+a0IQ4YotTbS9stgi4q25H6NrB3yWlMpEYb Yw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3e3fm4y2xc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Feb 2022 15:26:26 +0000
+Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 218FFDjU022318;
+        Tue, 8 Feb 2022 15:26:25 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3e3fm4y2wd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Feb 2022 15:26:25 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 218FIwtP012832;
+        Tue, 8 Feb 2022 15:26:23 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma04ams.nl.ibm.com with ESMTP id 3e1gv976n2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Feb 2022 15:26:23 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 218FQLC446399848
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 8 Feb 2022 15:26:21 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 525D74204B;
+        Tue,  8 Feb 2022 15:26:21 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CE35442042;
+        Tue,  8 Feb 2022 15:26:18 +0000 (GMT)
+Received: from sig-9-65-88-92.ibm.com (unknown [9.65.88.92])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue,  8 Feb 2022 15:26:18 +0000 (GMT)
+Message-ID: <00a106d904e6e495293af78cad78a353987da438.camel@linux.ibm.com>
+Subject: Re: MAINTAINERS update suggestion (subject change)
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Eric Snowberg <eric.snowberg@oracle.com>, dhowells@redhat.com,
+        dwmw2@infradead.org, ardb@kernel.org, jmorris@namei.org,
+        serge@hallyn.com, nayna@linux.ibm.com, keescook@chromium.org,
+        torvalds@linux-foundation.org, weiyongjun1@huawei.com,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-efi@vger.kernel.org, linux-security-module@vger.kernel.org,
+        James.Bottomley@hansenpartnership.com, pjones@redhat.com,
+        konrad.wilk@oracle.com
+Date:   Tue, 08 Feb 2022 10:26:18 -0500
+In-Reply-To: <YgI32LAFgGSW6ugh@iki.fi>
+References: <20220126025834.255493-1-eric.snowberg@oracle.com>
+         <YfFP6OHqBVNWKL2C@iki.fi> <YfFTf6vIpNMIrwH0@iki.fi>
+         <78d2c13ad60b5f845cb841d257d1b41290f575c6.camel@linux.ibm.com>
+         <YgI32LAFgGSW6ugh@iki.fi>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: avYcCmWJ9SVCG6WQIpXEyRzC05jER9Eo
+X-Proofpoint-GUID: qGU9TewXdQhykhXGaqWmyXgGhhpfn5GL
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-08_05,2022-02-07_02,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
+ spamscore=0 bulkscore=0 impostorscore=0 priorityscore=1501 phishscore=0
+ mlxlogscore=999 clxscore=1011 adultscore=0 lowpriorityscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202080090
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/8/22 03:22, Potin Lai wrote:
-> Current TCPM allways assume using PD_MAX_REV for negotiation,
-> but for some USB controller only support PD 2.0, adding an interface
-> for passing supported_pd_rev from tcpc_dev.
+(Updated subject line)
+
+On Tue, 2022-02-08 at 10:28 +0100, Jarkko Sakkinen wrote:
+> On Wed, Jan 26, 2022 at 05:06:09PM -0500, Mimi Zohar wrote:
+
+> > > Mimi brought up that we need a MAINTAINERS update for this and also
+> > > .platform.
+> > > 
+> > > We have these:
+> > > 
+> > > - KEYS/KEYRINGS
+> > > - CERTIFICATE HANDLING
+> > > 
+> > > I would put them under KEYRINGS for now and would not consider further
+> > > subdivision for the moment.
+> > 
+> > IMA has dependencies on the platform_certs/ and now on the new .machine
+> > keyring.  Just adding "F: security/integrity/platform_certs/" to the
+> > KEYS/KEYRINGS record, ignores that dependency.  The discussion wouldn't
+> > even be on the linux-integrity mailing list.
+> > 
+> > Existing requirement:
+> > - The keys on the .platform keyring are limited to verifying the kexec
+> > image.
+> > 
+> > New requirements based on Eric Snowbergs' patch set:
+> > - When IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY is enabled,
+> > the MOK keys will not be loaded directly onto the .machine keyring or
+> > indirectly onto the .secondary_trusted_keys keyring.
+> > 
+> > - Only when a new IMA Kconfig explicitly allows the keys on the
+> > .machine keyrings, will the CA keys stored in MOK be loaded onto the
+> > .machine keyring.
+> > 
+> > Unfortunately I don't think there is any choice, but to define a new
+> > MAINTAINERS entry.  Perhaps something along the lines of:
+> > 
+> > KEYS/KEYRINGS_INTEGRITY
+> > M:     Jarkko Sakkinen <jarkko@kernel.org>
+> > M:     Mimi Zohar <zohar@linux.ibm.com>
+> > L:      keyrings@vger.kernel.org
+> > L:      linux-integrity@vger.kernel.org
+> > F:      security/integrity/platform_certs
 > 
-
-The PD revision supported by the usb controller is a constant.
-I don't see why this would need a callback function. Other
-capabilitied are passed to tcpm using the fwnode pointer.
-I don't see why this capability would have to be handled
-differently.
-
-Guenter
-
-> Signed-off-by: Potin Lai <potin.lai@quantatw.com>
-> ---
->   drivers/usb/typec/tcpm/tcpm.c | 14 ++++++++++++--
->   include/linux/usb/tcpm.h      |  4 ++++
->   2 files changed, 16 insertions(+), 2 deletions(-)
+> WFM. BTW, the patches are now in my tree:
 > 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 59d4fa2443f2..22e7d226826e 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -571,6 +571,16 @@ static bool tcpm_port_is_disconnected(struct tcpm_port *port)
->   				    port->cc2 == TYPEC_CC_OPEN)));
->   }
->   
-> +static u32 tcpm_pd_supported_rev(struct tcpm_port *port)
-> +{
-> +	u32 rev = PD_MAX_REV;
-> +
-> +	if (port->tcpc->supported_pd_rev)
-> +		rev = port->tcpc->supported_pd_rev(port->tcpc);
-> +
-> +	return min(rev, PD_MAX_REV);
-> +}
-> +
->   /*
->    * Logging
->    */
-> @@ -3932,7 +3942,7 @@ static void run_state_machine(struct tcpm_port *port)
->   		typec_set_pwr_opmode(port->typec_port, opmode);
->   		port->pwr_opmode = TYPEC_PWR_MODE_USB;
->   		port->caps_count = 0;
-> -		port->negotiated_rev = PD_MAX_REV;
-> +		port->negotiated_rev = tcpm_pd_supported_rev(port);
->   		port->message_id = 0;
->   		port->rx_msgid = -1;
->   		port->explicit_contract = false;
-> @@ -4167,7 +4177,7 @@ static void run_state_machine(struct tcpm_port *port)
->   					      port->cc2 : port->cc1);
->   		typec_set_pwr_opmode(port->typec_port, opmode);
->   		port->pwr_opmode = TYPEC_PWR_MODE_USB;
-> -		port->negotiated_rev = PD_MAX_REV;
-> +		port->negotiated_rev = tcpm_pd_supported_rev(port);
->   		port->message_id = 0;
->   		port->rx_msgid = -1;
->   		port->explicit_contract = false;
-> diff --git a/include/linux/usb/tcpm.h b/include/linux/usb/tcpm.h
-> index bffc8d3e14ad..36282b2a9d9c 100644
-> --- a/include/linux/usb/tcpm.h
-> +++ b/include/linux/usb/tcpm.h
-> @@ -114,6 +114,9 @@ enum tcpm_transmit_type {
->    *              Optional; The USB Communications Capable bit indicates if port
->    *              partner is capable of communication over the USB data lines
->    *              (e.g. D+/- or SS Tx/Rx). Called to notify the status of the bit.
-> + * @supported_pd_rev:
-> + *              Optional; TCPM call this function to get supported PD revesion
-> + *              from lower level driver.
->    */
->   struct tcpc_dev {
->   	struct fwnode_handle *fwnode;
-> @@ -148,6 +151,7 @@ struct tcpc_dev {
->   						 bool pps_active, u32 requested_vbus_voltage);
->   	bool (*is_vbus_vsafe0v)(struct tcpc_dev *dev);
->   	void (*set_partner_usb_comm_capable)(struct tcpc_dev *dev, bool enable);
-> +	u32 (*supported_pd_rev)(struct tcpc_dev *dev);
->   };
->   
->   struct tcpm_port;
+> git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
+> 
+> I can add any tags requested. I'll mirror this at some point to linux-next.
+
+Thanks,  Jarkko.
+
+-- 
+Mimi
 

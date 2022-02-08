@@ -2,63 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2B044AD178
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 07:25:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C4404AD17D
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 07:26:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347244AbiBHGY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 01:24:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33828 "EHLO
+        id S1347286AbiBHG0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 01:26:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240841AbiBHGY4 (ORCPT
+        with ESMTP id S230217AbiBHG0c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 01:24:56 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8598C0401F0
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 22:24:55 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id s13so49091794ejy.3
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 22:24:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ionos.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=F05KrrJ5nwRnJTzF4EHFCUub/SMru0BF05WRRy/F6Pk=;
-        b=bHQDT+JW+B0bT2CR3YOv/YW+mOdd+RZtX5FkePRJjdUsBXnKBDk6mgNM+23oTbmdrd
-         nrdPoqa/CLBSQWuGpmofiyJt9ss8A8yWrHjEgoIa8Xv7OiBtEtQEf6c392Oa0gdT4guo
-         kkKwUGcKP/XhVXaF1w77SLwYUxK+lFZt1iQP4SBwIeaqvc0jgpogqAhVH7Ee2xD+5r9f
-         CQXsGQRxOgipfmH5UbxTLv/XDTNk1MfKMv8QM7IwhzIxQ1M5sCVmu2u/1/6gTCNlQdt/
-         xvBIoUQifcbWMgHTJOtJsL3oxZCAwbsP8/qJUbtgRzDShxFg3rWUEpkxGbuivR50PT+2
-         NaHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=F05KrrJ5nwRnJTzF4EHFCUub/SMru0BF05WRRy/F6Pk=;
-        b=u6POqcMJyk+xmChYHH0EJ7ddDTZ/T8ZHZGufxfux75DzfCphjiwwSNIs+pgilQ1Whc
-         EIlOXkGiT+O/oV4EUq8Z9LGanhIhEQMvyjLKfwOufxpBaTIY7OPa8fjm5Q6nB/J7utLg
-         i/pIUTBP8tXywhxSj5QwigG1C6JBElOf9Tdv18e69uHj8YdWAs3ACUhIvnsoCYULJkav
-         p5P0k8/z0iexfM7S59im9WQz1QH62in9b6ujF963dDVkUEgVl4QDlyAtPLDnL6x1jHuU
-         fr7Api6quFSwWIQ2cOTFZXNkOsG0x8Mu83yIFa4ApEeuR0zJvxDGdinFzXy6h6HYVCv1
-         j2ug==
-X-Gm-Message-State: AOAM533ENar5TSn9lJfmo9GqagjO2SINbYUd7WghGcSYrMXGQ9w2MNSU
-        OOV7sagAKP3yhpOtwqsouzUiSbDH/TDxuq593b59tQ==
-X-Google-Smtp-Source: ABdhPJw0mV3W8x4mwmjY7Wbc8YNoyW9j3jncLmuwo0IXP3n3B7HZBKW9o3xDHJtoZCmgbTznPN2ywGhGB920b7ymYx8=
-X-Received: by 2002:a17:907:1b1c:: with SMTP id mp28mr2441762ejc.624.1644301494293;
- Mon, 07 Feb 2022 22:24:54 -0800 (PST)
+        Tue, 8 Feb 2022 01:26:32 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7200C0401DC;
+        Mon,  7 Feb 2022 22:26:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 811F8B81854;
+        Tue,  8 Feb 2022 06:26:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CC76C340F2;
+        Tue,  8 Feb 2022 06:26:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644301588;
+        bh=HIuCEKBnx2neFGe2TzYeuJVUlLTSD+WZPGwlgjCCuXU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=T9v/Dz0S1HpzoAwIBZvdu5DREqs+MdQzq9y55DHTQDwk2sn3pmvKSlv+GpfgCVTvV
+         WfRWeusIuQzCfT2yyD8t04yJ/s3vViOSbz0a9Z/f5ayoUux9/YwxA7AfmFvKsbIriM
+         CUvjWc1SmMF2pjmXGoFdMzwGfgyxP41s59LNfmalvMXvTGHrB8IjXJaPwKpz3rODn2
+         WzkmTp8eIJmPjzo4yqOJPBsA8fAyVcKPNXUBBre2JNUrieVwuelVz/VrsbrB7pXbas
+         HK9f03shLil5H84Uzil62wV17maN1jN99Fs7UheuvIyLIHRiwucQDztUqSCdWPvfBR
+         25twB4iSaCk5g==
+Received: by mail-vk1-f176.google.com with SMTP id k128so1531181vkk.10;
+        Mon, 07 Feb 2022 22:26:28 -0800 (PST)
+X-Gm-Message-State: AOAM530Knta6VyWwbmofObf6JII5qEZPlOVu21XOt7xbouuMqTelGPBz
+        6CbQk3g1Knv4jN0dbte8Ll/ztzcfqOPsJAeXaRc=
+X-Google-Smtp-Source: ABdhPJzacuJptpzsvQJRUnvzBbBzr1u57gJ0wQqQFKPI58LeRRTunUkd1GGEazbj4/xQPLofWtoVqwCs4xjOKh2E+nk=
+X-Received: by 2002:a05:6122:1c5:: with SMTP id h5mr1217423vko.2.1644301587245;
+ Mon, 07 Feb 2022 22:26:27 -0800 (PST)
 MIME-Version: 1.0
-References: <7f9eccd8b1fce1bac45ac9b01a78cf72f54c0a61.1644266862.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <7f9eccd8b1fce1bac45ac9b01a78cf72f54c0a61.1644266862.git.christophe.jaillet@wanadoo.fr>
-From:   Jinpu Wang <jinpu.wang@ionos.com>
-Date:   Tue, 8 Feb 2022 07:24:43 +0100
-Message-ID: <CAMGffE=xiO1tgAeZ9QJr0GyrE2EnYkj3hASJSMsGFHwRCTZ5Cg@mail.gmail.com>
-Subject: Re: [PATCH v2] block/rnbd: Remove a useless mutex
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     "Md. Haris Iqbal" <haris.iqbal@ionos.com>,
-        Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-block@vger.kernel.org
+References: <20220126114452.692512-1-apatel@ventanamicro.com> <20220126114452.692512-9-apatel@ventanamicro.com>
+In-Reply-To: <20220126114452.692512-9-apatel@ventanamicro.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Tue, 8 Feb 2022 14:26:16 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRLcqQ8ZjKwWNmARtaraVW7dD5Hp5=iv+4kHYENvB2gWg@mail.gmail.com>
+Message-ID: <CAJF2gTRLcqQ8ZjKwWNmARtaraVW7dD5Hp5=iv+4kHYENvB2gWg@mail.gmail.com>
+Subject: Re: [PATCH v10 8/8] RISC-V: Enable RISC-V SBI CPU Idle driver for
+ QEMU virt machine
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Sandeep Tripathy <milun.tripathy@gmail.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Liush <liush@allwinnertech.com>,
+        Anup Patel <anup@brainfault.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-pm@vger.kernel.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        kvm-riscv@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,63 +78,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 7, 2022 at 9:48 PM Christophe JAILLET
-<christophe.jaillet@wanadoo.fr> wrote:
+On Wed, Jan 26, 2022 at 7:51 PM Anup Patel <apatel@ventanamicro.com> wrote:
 >
-> According to lib/idr.c,
->    The IDA handles its own locking.  It is safe to call any of the IDA
->    functions without synchronisation in your code.
+> From: Anup Patel <anup.patel@wdc.com>
 >
-> so the 'ida_lock' mutex can just be removed.
-> It is here only to protect some ida_simple_get()/ida_simple_remove() calls.
+> We enable RISC-V SBI CPU Idle driver for QEMU virt machine to test
+> SBI HSM Supend on QEMU.
 >
-> While at it, switch to ida_alloc_XXX()/ida_free() instead to
-> ida_simple_get()/ida_simple_remove().
-> The latter is deprecated and more verbose.
->
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Acked-by: Jack Wang <jinpu.wang@ionos.com>
-Thanks!
+> Signed-off-by: Anup Patel <anup.patel@wdc.com>
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
 > ---
->  drivers/block/rnbd/rnbd-clt.c | 11 +++--------
->  1 file changed, 3 insertions(+), 8 deletions(-)
+>  arch/riscv/Kconfig.socs           | 3 +++
+>  arch/riscv/configs/defconfig      | 1 +
+>  arch/riscv/configs/rv32_defconfig | 1 +
+>  3 files changed, 5 insertions(+)
 >
-> diff --git a/drivers/block/rnbd/rnbd-clt.c b/drivers/block/rnbd/rnbd-clt.c
-> index 9a880d559ab8..1f63f308eb39 100644
-> --- a/drivers/block/rnbd/rnbd-clt.c
-> +++ b/drivers/block/rnbd/rnbd-clt.c
-> @@ -23,7 +23,6 @@ MODULE_LICENSE("GPL");
+> diff --git a/arch/riscv/Kconfig.socs b/arch/riscv/Kconfig.socs
+> index 6ec44a22278a..f4097a815201 100644
+> --- a/arch/riscv/Kconfig.socs
+> +++ b/arch/riscv/Kconfig.socs
+> @@ -36,6 +36,9 @@ config SOC_VIRT
+>         select GOLDFISH
+>         select RTC_DRV_GOLDFISH if RTC_CLASS
+>         select SIFIVE_PLIC
+> +       select PM_GENERIC_DOMAINS if PM
+> +       select PM_GENERIC_DOMAINS_OF if PM && OF
+> +       select RISCV_SBI_CPUIDLE if CPU_IDLE
+>         help
+>           This enables support for QEMU Virt Machine.
 >
->  static int rnbd_client_major;
->  static DEFINE_IDA(index_ida);
-> -static DEFINE_MUTEX(ida_lock);
->  static DEFINE_MUTEX(sess_lock);
->  static LIST_HEAD(sess_list);
->
-> @@ -55,9 +54,7 @@ static void rnbd_clt_put_dev(struct rnbd_clt_dev *dev)
->         if (!refcount_dec_and_test(&dev->refcount))
->                 return;
->
-> -       mutex_lock(&ida_lock);
-> -       ida_simple_remove(&index_ida, dev->clt_device_id);
-> -       mutex_unlock(&ida_lock);
-> +       ida_free(&index_ida, dev->clt_device_id);
->         kfree(dev->hw_queues);
->         kfree(dev->pathname);
->         rnbd_clt_put_sess(dev->sess);
-> @@ -1460,10 +1457,8 @@ static struct rnbd_clt_dev *init_dev(struct rnbd_clt_session *sess,
->                 goto out_alloc;
->         }
->
-> -       mutex_lock(&ida_lock);
-> -       ret = ida_simple_get(&index_ida, 0, 1 << (MINORBITS - RNBD_PART_BITS),
-> -                            GFP_KERNEL);
-> -       mutex_unlock(&ida_lock);
-> +       ret = ida_alloc_max(&index_ida, 1 << (MINORBITS - RNBD_PART_BITS),
-> +                           GFP_KERNEL);
->         if (ret < 0) {
->                 pr_err("Failed to initialize device '%s' from session %s, allocating idr failed, err: %d\n",
->                        pathname, sess->sessname, ret);
+> diff --git a/arch/riscv/configs/defconfig b/arch/riscv/configs/defconfig
+> index a5e0482a4969..b8c882b70b02 100644
+> --- a/arch/riscv/configs/defconfig
+> +++ b/arch/riscv/configs/defconfig
+> @@ -20,6 +20,7 @@ CONFIG_SOC_SIFIVE=y
+>  CONFIG_SOC_VIRT=y
+>  CONFIG_SMP=y
+>  CONFIG_HOTPLUG_CPU=y
+> +CONFIG_PM=y
+>  CONFIG_CPU_IDLE=y
+>  CONFIG_VIRTUALIZATION=y
+>  CONFIG_KVM=m
+> diff --git a/arch/riscv/configs/rv32_defconfig b/arch/riscv/configs/rv32_defconfig
+rv32_defconfig would be removed. I think you could delete this part.
+https://lore.kernel.org/linux-riscv/20220201150545.1512822-9-guoren@kernel.org/T/#u
+
+I would Cc you in the patch, and you could track the progress.
+
+> index d1b87db54d68..6f9a7c89bff9 100644
+> --- a/arch/riscv/configs/rv32_defconfig
+> +++ b/arch/riscv/configs/rv32_defconfig
+> @@ -20,6 +20,7 @@ CONFIG_SOC_VIRT=y
+>  CONFIG_ARCH_RV32I=y
+>  CONFIG_SMP=y
+>  CONFIG_HOTPLUG_CPU=y
+> +CONFIG_PM=y
+>  CONFIG_CPU_IDLE=y
+>  CONFIG_VIRTUALIZATION=y
+>  CONFIG_KVM=m
 > --
-> 2.32.0
+> 2.25.1
 >
+>
+> --
+> kvm-riscv mailing list
+> kvm-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/kvm-riscv
+
+
+
+-- 
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/

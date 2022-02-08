@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD6744ADF2A
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 18:19:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7098D4ADF44
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 18:19:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352708AbiBHRTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 12:19:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49900 "EHLO
+        id S1383501AbiBHRTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 12:19:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234241AbiBHRTN (ORCPT
+        with ESMTP id S1352669AbiBHRTP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 12:19:13 -0500
+        Tue, 8 Feb 2022 12:19:15 -0500
 Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B565C061579
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 09:19:12 -0800 (PST)
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 966BAC061576
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 09:19:14 -0800 (PST)
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 21E7F3FFDA
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 17:19:11 +0000 (UTC)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 4B5D53FFFC
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 17:19:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1644340751;
-        bh=FcBirewgG5GspHM+XiPFPnNhDyGu6MCNBPG4nrU1bUg=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=pifFX9AmJ3B4OewK8O2GazzFCutjvzKZaYYfrjXu/sMEWGB4EI+L6UpjDfII+7s/S
-         EIkWCGJPiY8C/hGzC05RJ8NrlYiBrPGQpDOXXf8fOzFj4KE02otIyggL9rhHwMJH4N
-         uTnADkTWzPqH7SfiUsLcWo7hvQ/ULV55QmGEXCaSDQE//sXFcfp9jMQO0Fs0ZiZa4m
-         lBKyuHX0JX9LqV8V9dgUDqklO/Q0/4l7aczUPh9jDqzgll2l2FkZY3qXgF8RNLxnAb
-         DCB8kDiZNYVVB0cCi67jj+zs0/RwE/tbiwIdkZTgYlj6iBcOrlFV7jQe/uYSCz/0RF
-         iTj++jJsYm6IQ==
-Received: by mail-ed1-f71.google.com with SMTP id ee7-20020a056402290700b0040f680071c9so4002632edb.9
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 09:19:11 -0800 (PST)
+        s=20210705; t=1644340752;
+        bh=ljNZXcV6Ym7/PH8vFjEM0hkawYJJLcPyRUsIX2ztPxc=;
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+         MIME-Version;
+        b=MnenrchCcxbLqRXNFVnXEZWrQFjXNDWsAnL6fDhWQwsDq5xhJ1xfBVYZrF+M+ILbe
+         D/zcwNuiJwNb2GigcGJ+tSIzvk/Kf0sNhjchrTu6oLe9DHlaqzP8FNi8z5D1CGTyZP
+         KJZj8XSM25br/gafWV8rEIx+I6+Det9UJpfpOC31IF/MQGW2h7AAu82dgv0OukQQWQ
+         mCcjUUdFziRn2jdxa0yN4rVXa7rXKgcJWBFYyPKvq11PZJVtsCNsPydiOF1ju1qOVm
+         kmSVMfkA6e3Wnk19AMsQs43A/iXypgFjZeI1YNkJWErMJ3tdCwbPV/E29l0fnTtJFe
+         5L7HMGWXdaDGA==
+Received: by mail-ej1-f70.google.com with SMTP id q19-20020a1709064c9300b006b39291ff3eso6057938eju.5
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 09:19:12 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=FcBirewgG5GspHM+XiPFPnNhDyGu6MCNBPG4nrU1bUg=;
-        b=NRT/em8R+Ln5/nRlenK6dZ/PMJCIsEgIthui4qPTeqwLJ2DgwbpInXX9Vm541hA6m2
-         WH8QVAbeCQxFC0XT29Q9IIAbaR++C6PitaE49vUbb3RZ/aYpIP+w7XwfhmuNbOIL3H9J
-         mgSTlV0aMz2Z7l7BshAA9QGuNpx4jS/T1TyHsClfu/P0crXJUocNI9cbjSIivn9GjY3R
-         m5UxS1j1QJRud31Mma0lGKu8HpYQU4xEdowIzAtP/43waCU1FQfwoAjYZmswm+CphD2c
-         UMr7+wsbGWcj+xcWxau1XXQfzeF6m3UV+G6I9L39mSr5QRmSDqm6W0K4Nrpvw26U3dDK
-         twfQ==
-X-Gm-Message-State: AOAM530hwo7qrFMldzNcG7+W3sQDtHQgCho3Wgx2CBxGYgPyI9AIC4Zv
-        AkhUmq6yWa/HwK4ixhjaEr79Bqi6EXBA5Lstxq85mVcTZQl1A23cX15xmyU/a8mUVzMhd0ISJe2
-        +py+01VhrXb+ZbZ0+80o5II3G9EFEyXVIUUkqvYRXUw==
-X-Received: by 2002:a17:907:2d94:: with SMTP id gt20mr4673995ejc.501.1644340750446;
-        Tue, 08 Feb 2022 09:19:10 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxr5UsCRspXa4NCGOuZM5Ba8debNWt45uxZ8oMQLV+xoDrSe58nTit31OQ9lQldNaQthBGDVw==
-X-Received: by 2002:a17:907:2d94:: with SMTP id gt20mr4673973ejc.501.1644340750270;
-        Tue, 08 Feb 2022 09:19:10 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=ljNZXcV6Ym7/PH8vFjEM0hkawYJJLcPyRUsIX2ztPxc=;
+        b=SuLh161/8uV3U+2Ljtf8Nm3tyr2X2oBld/5UOr1ZVDmB5oX5ZPUoEK9R1Q4FuQYvbR
+         a0ckIq20L131tdtz60pAb4qXG9NYzjgfS1Ss14kyoPgddhkmBbRRMmlW2102y0xRvCCo
+         tqil0uMH1eDjlsP49co1NpONlVpnPUFvwEqdZcZg+g9kMAjdxuXTO9317lpsXUR3fTS1
+         U4hEXtk60Z55u/zvpez18FbgBa8GpxDZTmyem976oanrJz2vSI7cNlstcuV1UhgJxi7h
+         hMThqCxPXomyyQtk6BoiOA2rEydYUoat1XyKAHWrpDSaMONA0tyCzWRn+EgPor+Au5mA
+         AqjQ==
+X-Gm-Message-State: AOAM533x2l1WlYgYn/dpHzDzCDI4jVYecHgguSB317lAY43akufhBvLF
+        eEWY8KL4auG0s2CIsdMQtJEe0T5ZHJ4ySldwAoBoARUHL1SljhPKjxOxa+RhVyW7iQPn4SagINw
+        l7WySzIhvPUA8zhdb13IXhatMvV/XE7nvQ+t1TGmjdw==
+X-Received: by 2002:a50:fb94:: with SMTP id e20mr5723248edq.292.1644340751868;
+        Tue, 08 Feb 2022 09:19:11 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzFtmSCjrFuZnV5QFldxP4RqEiUiHOeP0ej5h/rJ0gsHHDMvXDxxIkOQXiY9qgzDn7rJ1eDKQ==
+X-Received: by 2002:a50:fb94:: with SMTP id e20mr5723234edq.292.1644340751717;
+        Tue, 08 Feb 2022 09:19:11 -0800 (PST)
 Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id r10sm5125550ejy.148.2022.02.08.09.19.09
+        by smtp.gmail.com with ESMTPSA id r10sm5125550ejy.148.2022.02.08.09.19.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 09:19:09 -0800 (PST)
+        Tue, 08 Feb 2022 09:19:11 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 To:     Inki Dae <inki.dae@samsung.com>,
         Joonyoung Shim <jy0922.shim@samsung.com>,
@@ -72,11 +73,14 @@ To:     Inki Dae <inki.dae@samsung.com>,
         linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-phy@lists.infradead.org
 Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Sylwester Nawrocki <snawrocki@kernel.org>
-Subject: [PATCH 00/10] drm: dt-bindings: exynos: convert to dtschema
-Date:   Tue,  8 Feb 2022 18:18:13 +0100
-Message-Id: <20220208171823.226211-1-krzysztof.kozlowski@canonical.com>
+        Sylwester Nawrocki <snawrocki@kernel.org>,
+        stable@vger.kernel.org
+Subject: [PATCH 01/10] ARM: dts: exynos: add missing HDMI supplies on SMDK5250
+Date:   Tue,  8 Feb 2022 18:18:14 +0100
+Message-Id: <20220208171823.226211-2-krzysztof.kozlowski@canonical.com>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220208171823.226211-1-krzysztof.kozlowski@canonical.com>
+References: <20220208171823.226211-1-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -89,73 +93,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Add required VDD supplies to HDMI block on SMDK5250.  Without them, the
+HDMI driver won't probe.  Because of lack of schematics, use same
+supplies as on Arndale 5250 board (voltage matches).
 
-Convert most of the Exynos DRM/Display bindings to DT schema and put
-them under "samsung" directory instead of "exynos". The FIMD is used also
-on S3C and S5P, so exynos is too specific.  Also most of other Samsung
-SoC bindings and drivers are organized in directories by company name,
-not by SoC name.
+Cc: <stable@vger.kernel.org> # v3.15+
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+---
+ arch/arm/boot/dts/exynos5250-smdk5250.dts | 3 +++
+ 1 file changed, 3 insertions(+)
 
-I used Exynos DRM maintainers and myself as bindings maintainers, but
-feel free to propose different approach.
-
-Dependencies
-============
-None. I will take the DTS patches via Samsung SoC tree.
-
-Best regards,
-Krzysztof
-
-Krzysztof Kozlowski (10):
-  ARM: dts: exynos: add missing HDMI supplies on SMDK5250
-  ARM: dts: exynos: add missing HDMI supplies on SMDK5420
-  dt-bindings: phy: samsung,exynos-hdmi-phy: convert to dtschema
-  dt-bindings: display: samsung,exynos5433-decon: convert to dtschema
-  dt-bindings: display: samsung,exynos7-decon: convert to dtschema
-  dt-bindings: display: samsung,exynos-hdmi-ddc: convert to dtschema
-  dt-bindings: display: samsung,exynos-mixer: convert to dtschema
-  dt-bindings: display: samsung,exynos-hdmi: convert to dtschema
-  dt-bindings: display: samsung,exynos5433-mic: convert to dtschema
-  dt-bindings: display: samsung,exynos-fimd: convert to dtschema
-
- .../bindings/display/exynos/exynos-mic.txt    |  51 ----
- .../display/exynos/exynos5433-decon.txt       |  60 -----
- .../bindings/display/exynos/exynos7-decon.txt |  65 -----
- .../bindings/display/exynos/exynos_hdmi.txt   |  64 -----
- .../display/exynos/exynos_hdmiddc.txt         |  15 --
- .../display/exynos/exynos_hdmiphy.txt         |  15 --
- .../bindings/display/exynos/exynos_mixer.txt  |  26 --
- .../bindings/display/exynos/samsung-fimd.txt  | 107 ---------
- .../samsung/samsung,exynos-hdmi-ddc.yaml      |  42 ++++
- .../display/samsung/samsung,exynos-hdmi.yaml  | 227 ++++++++++++++++++
- .../display/samsung/samsung,exynos-mixer.yaml | 143 +++++++++++
- .../samsung/samsung,exynos5433-decon.yaml     | 148 ++++++++++++
- .../samsung/samsung,exynos5433-mic.yaml       |  95 ++++++++
- .../samsung/samsung,exynos7-decon.yaml        | 120 +++++++++
- .../display/samsung/samsung,fimd.yaml         | 198 +++++++++++++++
- .../bindings/phy/samsung,exynos-hdmi-phy.yaml |  44 ++++
- MAINTAINERS                                   |   1 +
- arch/arm/boot/dts/exynos5250-smdk5250.dts     |   3 +
- arch/arm/boot/dts/exynos5420-smdk5420.dts     |   3 +
- 19 files changed, 1024 insertions(+), 403 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/display/exynos/exynos-mic.txt
- delete mode 100644 Documentation/devicetree/bindings/display/exynos/exynos5433-decon.txt
- delete mode 100644 Documentation/devicetree/bindings/display/exynos/exynos7-decon.txt
- delete mode 100644 Documentation/devicetree/bindings/display/exynos/exynos_hdmi.txt
- delete mode 100644 Documentation/devicetree/bindings/display/exynos/exynos_hdmiddc.txt
- delete mode 100644 Documentation/devicetree/bindings/display/exynos/exynos_hdmiphy.txt
- delete mode 100644 Documentation/devicetree/bindings/display/exynos/exynos_mixer.txt
- delete mode 100644 Documentation/devicetree/bindings/display/exynos/samsung-fimd.txt
- create mode 100644 Documentation/devicetree/bindings/display/samsung/samsung,exynos-hdmi-ddc.yaml
- create mode 100644 Documentation/devicetree/bindings/display/samsung/samsung,exynos-hdmi.yaml
- create mode 100644 Documentation/devicetree/bindings/display/samsung/samsung,exynos-mixer.yaml
- create mode 100644 Documentation/devicetree/bindings/display/samsung/samsung,exynos5433-decon.yaml
- create mode 100644 Documentation/devicetree/bindings/display/samsung/samsung,exynos5433-mic.yaml
- create mode 100644 Documentation/devicetree/bindings/display/samsung/samsung,exynos7-decon.yaml
- create mode 100644 Documentation/devicetree/bindings/display/samsung/samsung,fimd.yaml
- create mode 100644 Documentation/devicetree/bindings/phy/samsung,exynos-hdmi-phy.yaml
-
+diff --git a/arch/arm/boot/dts/exynos5250-smdk5250.dts b/arch/arm/boot/dts/exynos5250-smdk5250.dts
+index 65d2474f83eb..21fbbf3d8684 100644
+--- a/arch/arm/boot/dts/exynos5250-smdk5250.dts
++++ b/arch/arm/boot/dts/exynos5250-smdk5250.dts
+@@ -118,6 +118,9 @@ &hdmi {
+ 	status = "okay";
+ 	ddc = <&i2c_2>;
+ 	hpd-gpios = <&gpx3 7 GPIO_ACTIVE_HIGH>;
++	vdd-supply = <&ldo8_reg>;
++	vdd_osc-supply = <&ldo10_reg>;
++	vdd_pll-supply = <&ldo8_reg>;
+ };
+ 
+ &i2c_0 {
 -- 
 2.32.0
 

@@ -2,250 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35A3C4AE49F
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:37:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F09124AE448
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:30:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387956AbiBHWcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 17:32:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59852 "EHLO
+        id S1387812AbiBHW2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 17:28:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386543AbiBHUyU (ORCPT
+        with ESMTP id S1386582AbiBHUzS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 15:54:20 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43431C0612C3;
-        Tue,  8 Feb 2022 12:54:16 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id s7so956653edd.3;
-        Tue, 08 Feb 2022 12:54:16 -0800 (PST)
+        Tue, 8 Feb 2022 15:55:18 -0500
+Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EE5EC0612B8
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 12:55:16 -0800 (PST)
+Received: by mail-vk1-xa2a.google.com with SMTP id b2so52170vkl.1
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 12:55:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=PDhjQ85RPBAN8gdoe5LBgB+KXAQiKOAIVei1JjMNISU=;
-        b=KlypnIg2Q4TNPY7ywPtIVAaC6gRlZf6/GaS4h98jSWnLdWAidpxxul8Dh8RxnzInIB
-         FxFlGMNuADDHiTj1ewb1BRF9aaR5XLlHuz2/sVe6MErGo3JBZhwGf3/3pyC74jJUe/AU
-         ISjM5AFHdUg4pyXoFg9Qv4DHHrrXRF9/FGaSIcgOSflfHRjXYLzo55WHkUo3Yl7smqnF
-         vOJWuKEk7HTt+0s3/+vvS+NBxUN1vEh5xKLL2O4TeJCTdxLrZkt7q+2iaZjfvz6d2j6c
-         JVALpU/Xt00xdIc0NKJ0q7Z1+8bsP84m40fU9rIJfDFRB8BKYDyzClp0/Sh/iFL/IF4v
-         gkSw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Dav5GHwHoInVNFFUmD/+H7rFBilhhPolISX4pLfyPgs=;
+        b=I35aftOGkLR/ISv6OSLuGuNra4KAzA0XXAvR3HIzqJsZ4sbzSCT6m6eUErRZTsBdRZ
+         5zHFtqoTfYTj0VaC44XixtJmomtIqu6M2jaGsuJVIFo9NFo73pcMfzY6Ib6daRmOQQ6G
+         s61LlDd0JuL2BDMhfXFEtfUTzv8Gb82qMMbR0G9yretQLwALK2QmdEaFwNvtCZ+xTHcw
+         YsKyu3HM3enCJRsm6D5qPoryva8Zw7Tulo94jtMwvcQWakEadP5Kr9mEupdTsILy1yjH
+         aZAW1pjsKR/HlEntXIBoRge+jo1q74UJiwiUyNQKf6AdaelrV1Cb0N0B5Vj6vewPaFM1
+         JBSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=PDhjQ85RPBAN8gdoe5LBgB+KXAQiKOAIVei1JjMNISU=;
-        b=h0j3UXdmolw3xPe1fJRItIbVqrmZ/BiOeZPPxRpXtZN9E3liDjbee+4KsDHlJhRzDd
-         GNJWvS6JV9FMHKOL5BU1OLpZSqtCWl6X7UeiCdKBELlC9jhJ++1NE2vk8t/+AGidc//k
-         AQsk6bGl9RmWiSjvMvDVZLLtVFjBGw2uqtVDG/2JLz2DX71GNjVFO29pgu8bLX9A8Onh
-         BW8YKHkhrRPD/hVmAZDOjcLJI9dYK+si+KYXaQEbpiNvYfGaTVV/lpDT8Wr2Schpcc82
-         Ms3w4R/LOClJHpN92LnuEmPcCXPLle9RdK/Ss2e7mqo7WvoGomlUDYM4B+eUKNwe87Ce
-         QY3A==
-X-Gm-Message-State: AOAM530vQF7dJrG4m9Ck5v2vVBP6XFZPjTW94OW1/bQ1F8vxcbSD8qmF
-        /zcjvXiJXvYXdy5Ovq1ZXOeiRe3PLQ/FMA==
-X-Google-Smtp-Source: ABdhPJzKxy1DftrC9Hdvyz71ZUjBbAQJvqevq1dibwVr5XOxE/w6Jr5uhIT+BNs11hMybA1XTWmzhw==
-X-Received: by 2002:aa7:dbc3:: with SMTP id v3mr6404848edt.32.1644353654531;
-        Tue, 08 Feb 2022 12:54:14 -0800 (PST)
-Received: from netbook-debian ([94.179.49.215])
-        by smtp.gmail.com with ESMTPSA id gj8sm2329107ejc.186.2022.02.08.12.54.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 12:54:14 -0800 (PST)
-Date:   Tue, 8 Feb 2022 22:54:09 +0200
-From:   Denis Pauk <pauk.denis@gmail.com>
-To:     Oleksandr Natalenko <oleksandr@natalenko.name>
-Cc:     Eugene Shalygin <eugene.shalygin@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (asus-ec-sensors) add CPU core voltage
-Message-ID: <20220208225409.5285adf9@netbook-debian>
-In-Reply-To: <11918951.O9o76ZdvQC@natalenko.name>
-References: <20220208094244.1106312-1-eugene.shalygin@gmail.com>
-        <11918951.O9o76ZdvQC@natalenko.name>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Dav5GHwHoInVNFFUmD/+H7rFBilhhPolISX4pLfyPgs=;
+        b=tlWZstrnbgGB+H37pN6QWDzlw6P+RHjjy+926YNDTKXoAvoDalTaazQCPzjF9LmH0x
+         3ZE8kIdd4iG9TpOs13AsM+vUmHNCUX5vAQWqj+e9XOPxXeSM3iT/ewKN+b5AQiE1Swop
+         qxjRQU/Rmpak/oezglZxKvxjFgzZCf2pN0bGizV0KD+ySLNPl5+QAuZybIXjB0e09oQK
+         DZEMCWVgSEXny+yOzxSTi+ouba0nbQUYMdX9R+DFpuCvqFGs4vKJp2r2cQjK9Y/mgAl9
+         nnfv8hc0hTd5j0T2cXRsK9WyUUiIFz8MGZ9eIXphe+6xvDJO8O91NPjoxsUnmxczWFXB
+         jAgw==
+X-Gm-Message-State: AOAM533nzMVdhbvMfyxTI1vgR7fMEf+OxKsUw9sgwmyWOblfSWxB2DUv
+        q5vGvX8stIl8yf2MJGUxyuA+8IRZoSEQfA==
+X-Google-Smtp-Source: ABdhPJyAds8ya3zvTpqvh0cGhMNUvwNedLZSTwG7MQ38DVVsr9CsQCJgB3X00FLv+ZZPfeQ3S7D/dg==
+X-Received: by 2002:a05:6122:202a:: with SMTP id l42mr2456574vkd.40.1644353715549;
+        Tue, 08 Feb 2022 12:55:15 -0800 (PST)
+Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com. [209.85.222.48])
+        by smtp.gmail.com with ESMTPSA id s15sm3164838uao.17.2022.02.08.12.55.15
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Feb 2022 12:55:15 -0800 (PST)
+Received: by mail-ua1-f48.google.com with SMTP id 60so263577uae.1
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 12:55:15 -0800 (PST)
+X-Received: by 2002:ab0:6718:: with SMTP id q24mr1146421uam.141.1644353714675;
+ Tue, 08 Feb 2022 12:55:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+References: <20220208181510.787069-1-andrew@daynix.com> <20220208181510.787069-4-andrew@daynix.com>
+In-Reply-To: <20220208181510.787069-4-andrew@daynix.com>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Tue, 8 Feb 2022 15:54:38 -0500
+X-Gmail-Original-Message-ID: <CA+FuTSdrHwNWh1Mz7KT8w+Z69LcNipeTcasny6ioqOUYBisNXg@mail.gmail.com>
+Message-ID: <CA+FuTSdrHwNWh1Mz7KT8w+Z69LcNipeTcasny6ioqOUYBisNXg@mail.gmail.com>
+Subject: Re: [PATCH v3 3/4] drivers/net/virtio_net: Added RSS hash report.
+To:     Andrew Melnychenko <andrew@daynix.com>
+Cc:     netdev@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        jasowang@redhat.com, mst@redhat.com, yan@daynix.com,
+        yuri.benditovich@daynix.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 08 Feb 2022 17:15:46 +0100
-Oleksandr Natalenko <oleksandr@natalenko.name> wrote:
+On Tue, Feb 8, 2022 at 1:19 PM Andrew Melnychenko <andrew@daynix.com> wrote:
+>
+> Added features for RSS hash report.
+> If hash is provided - it sets to skb.
+> Added checks if rss and/or hash are enabled together.
+>
+> Signed-off-by: Andrew Melnychenko <andrew@daynix.com>
+> ---
+>  drivers/net/virtio_net.c | 51 ++++++++++++++++++++++++++++++++++------
+>  1 file changed, 44 insertions(+), 7 deletions(-)
+>
+> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> index 495aed524e33..543da2fbdd2d 100644
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> @@ -227,6 +227,7 @@ struct virtnet_info {
+>
+>         /* Host supports rss and/or hash report */
+>         bool has_rss;
+> +       bool has_rss_hash_report;
+>         u8 rss_key_size;
+>         u16 rss_indir_table_size;
+>         u32 rss_hash_types_supported;
+> @@ -421,7 +422,7 @@ static struct sk_buff *page_to_skb(struct virtnet_info *vi,
+>
+>         hdr_len = vi->hdr_len;
+>         if (vi->mergeable_rx_bufs)
+> -               hdr_padded_len = sizeof(*hdr);
+> +               hdr_padded_len = hdr_len;
 
-> Hello.
->=20
-> On =C3=BAter=C3=BD 8. =C3=BAnora 2022 10:42:43 CET Eugene Shalygin wrote:
-> > A user discovered [1] the CPU Core voltage sensor, which spans 2
-> > registers and provides output in mV. Althroug the discovery was made
-> > with a X470 chipset, the sensor is present in X570 (tested with
-> > C8H). For now simply add it to each board with the CPU current
-> > sensor present.
-> >=20
-> > [1] https://github.com/zeule/asus-ec-sensors/issues/12
-> >=20
-> > Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
-> > ---
-> >  Documentation/hwmon/asus_ec_sensors.rst |  1 +
-> >  drivers/hwmon/asus-ec-sensors.c         | 29
-> > ++++++++++++++++--------- 2 files changed, 20 insertions(+), 10
-> > deletions(-)
-> >=20
-> > diff --git a/Documentation/hwmon/asus_ec_sensors.rst
-> > b/Documentation/hwmon/asus_ec_sensors.rst index
-> > 22de1b037cfb..e7e8f1640f45 100644 ---
-> > a/Documentation/hwmon/asus_ec_sensors.rst +++
-> > b/Documentation/hwmon/asus_ec_sensors.rst @@ -39,6 +39,7 @@ The
-> > driver is aware of and reads the following sensors: 9. Readings
-> > from the "Water flow meter" header (RPM) 10. Readings from the
-> > "Water In" and "Water Out" temperature headers 11. CPU current
-> > +12. CPU core voltage
-> > =20
-> >  Sensor values are read from EC registers, and to avoid race with
-> > the board firmware the driver acquires ACPI mutex, the one used by
-> > the WMI when its diff --git a/drivers/hwmon/asus-ec-sensors.c
-> > b/drivers/hwmon/asus-ec-sensors.c index dd7b207d062f..bfac08a5dc57
-> > 100644 --- a/drivers/hwmon/asus-ec-sensors.c
-> > +++ b/drivers/hwmon/asus-ec-sensors.c
-> > @@ -18,6 +18,7 @@
-> >   * - VRM Heat Sink fan RPM
-> >   * - Water Flow fan RPM
-> >   * - CPU current
-> > + * - CPU core voltage
-> >   */
-> > =20
-> >  #include <linux/acpi.h>
-> > @@ -100,6 +101,8 @@ enum ec_sensors {
-> >  	ec_sensor_temp_t_sensor,
-> >  	/* VRM temperature [=E2=84=83] */
-> >  	ec_sensor_temp_vrm,
-> > +	/* CPU Core voltage [mV] */
-> > +	ec_sensor_in_cpu_core,
-> >  	/* CPU_Opt fan [RPM] */
-> >  	ec_sensor_fan_cpu_opt,
-> >  	/* VRM heat sink fan [RPM] */
-> > @@ -121,6 +124,7 @@ enum ec_sensors {
-> >  #define SENSOR_TEMP_MB BIT(ec_sensor_temp_mb)
-> >  #define SENSOR_TEMP_T_SENSOR BIT(ec_sensor_temp_t_sensor)
-> >  #define SENSOR_TEMP_VRM BIT(ec_sensor_temp_vrm)
-> > +#define SENSOR_IN_CPU_CORE BIT(ec_sensor_in_cpu_core)
-> >  #define SENSOR_FAN_CPU_OPT BIT(ec_sensor_fan_cpu_opt)
-> >  #define SENSOR_FAN_VRM_HS BIT(ec_sensor_fan_vrm_hs)
-> >  #define SENSOR_FAN_CHIPSET BIT(ec_sensor_fan_chipset)
-> > @@ -139,6 +143,8 @@ static const struct ec_sensor_info
-> > known_ec_sensors[] =3D { [ec_sensor_temp_t_sensor] =3D
-> >  		EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x00, 0x3d),
-> >  	[ec_sensor_temp_vrm] =3D EC_SENSOR("VRM", hwmon_temp, 1,
-> > 0x00, 0x3e),
-> > +	[ec_sensor_in_cpu_core] =3D
-> > +		EC_SENSOR("CPU Core", hwmon_in, 2, 0x00, 0xa2),
-> >  	[ec_sensor_fan_cpu_opt] =3D
-> >  		EC_SENSOR("CPU_Opt", hwmon_fan, 2, 0x00, 0xb0),
-> >  	[ec_sensor_fan_vrm_hs] =3D EC_SENSOR("VRM HS", hwmon_fan, 2,
-> > 0x00, 0xb2), @@ -172,32 +178,34 @@ static const struct
-> > dmi_system_id asus_ec_dmi_table[] __initconst =3D {
-> > SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CHIPSET),
-> > DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE, "Pro WS X570-ACE",
-> > SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_VRM |
-> > -		SENSOR_FAN_CHIPSET | SENSOR_CURR_CPU),
-> > +		SENSOR_FAN_CHIPSET | SENSOR_CURR_CPU |
-> > SENSOR_IN_CPU_CORE), =20
->=20
-> Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
->=20
-> on Pro WS X570-ACE:
->=20
-> ```
-> asusec-isa-0000
-> Adapter: ISA adapter
-> CPU Core:      1.47 V
-> =E2=80=A6
-> ```
->=20
-> Thanks.
->=20
-> >  	DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE,
-> >  			      "ROG CROSSHAIR VIII DARK HERO",
-> >  		SENSOR_SET_TEMP_CHIPSET_CPU_MB |
-> > SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM | SENSOR_SET_TEMP_WATER |
-> > -		SENSOR_FAN_CPU_OPT | SENSOR_FAN_WATER_FLOW |
-> > SENSOR_CURR_CPU),
-> > +		SENSOR_FAN_CPU_OPT | SENSOR_FAN_WATER_FLOW |
-> > +		SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE),
-> >  	DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE,
-> >  			      "ROG CROSSHAIR VIII FORMULA",
-> >  		SENSOR_SET_TEMP_CHIPSET_CPU_MB |
-> > SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM | SENSOR_FAN_CPU_OPT |
-> > SENSOR_FAN_CHIPSET |
-> > -		SENSOR_CURR_CPU),
-> > +		SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE),
-> >  	DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE, "ROG
-> > CROSSHAIR VIII HERO", SENSOR_SET_TEMP_CHIPSET_CPU_MB |
-> > SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM | SENSOR_SET_TEMP_WATER |
-> >  		SENSOR_FAN_CPU_OPT | SENSOR_FAN_CHIPSET |
-> > -		SENSOR_FAN_WATER_FLOW | SENSOR_CURR_CPU),
-> > +		SENSOR_FAN_WATER_FLOW | SENSOR_CURR_CPU |
-> > SENSOR_IN_CPU_CORE), DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE,
-> >  			      "ROG CROSSHAIR VIII HERO (WI-FI)",
-> >  		SENSOR_SET_TEMP_CHIPSET_CPU_MB |
-> > SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM | SENSOR_SET_TEMP_WATER |
-> >  		SENSOR_FAN_CPU_OPT | SENSOR_FAN_CHIPSET |
-> > -		SENSOR_FAN_WATER_FLOW | SENSOR_CURR_CPU),
-> > +		SENSOR_FAN_WATER_FLOW | SENSOR_CURR_CPU |
-> > SENSOR_IN_CPU_CORE), DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE,
-> >  			      "ROG CROSSHAIR VIII IMPACT",
-> >  		SENSOR_SET_TEMP_CHIPSET_CPU_MB |
-> > SENSOR_TEMP_T_SENSOR |
-> > -		SENSOR_TEMP_VRM | SENSOR_FAN_CHIPSET |
-> > SENSOR_CURR_CPU),
-> > +		SENSOR_TEMP_VRM | SENSOR_FAN_CHIPSET |
-> > +		SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE),
-> >  	DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE, "ROG STRIX
-> > B550-E GAMING", SENSOR_SET_TEMP_CHIPSET_CPU_MB |
-> >  		SENSOR_TEMP_T_SENSOR |
-> > @@ -205,17 +213,19 @@ static const struct dmi_system_id
-> > asus_ec_dmi_table[] __initconst =3D {
-> > DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE, "ROG STRIX B550-I
-> > GAMING", SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_T_SENSOR |
-> > -		SENSOR_TEMP_VRM | SENSOR_FAN_VRM_HS |
-> > SENSOR_CURR_CPU),
-> > +		SENSOR_TEMP_VRM | SENSOR_FAN_VRM_HS |
-> > +		SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE),
-> >  	DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE, "ROG STRIX
-> > X570-E GAMING", SENSOR_SET_TEMP_CHIPSET_CPU_MB |
-> >  		SENSOR_TEMP_T_SENSOR |
-> > -		SENSOR_TEMP_VRM | SENSOR_FAN_CHIPSET |
-> > SENSOR_CURR_CPU),
-> > +		SENSOR_TEMP_VRM | SENSOR_FAN_CHIPSET |
-> > +		SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE),
-> >  	DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE, "ROG STRIX
-> > X570-F GAMING", SENSOR_SET_TEMP_CHIPSET_CPU_MB |
-> >  		SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CHIPSET),
-> >  	DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE, "ROG STRIX
-> > X570-I GAMING", SENSOR_TEMP_T_SENSOR | SENSOR_FAN_VRM_HS |
-> > -		SENSOR_FAN_CHIPSET | SENSOR_CURR_CPU),
-> > +		SENSOR_FAN_CHIPSET | SENSOR_CURR_CPU |
-> > SENSOR_IN_CPU_CORE), {}
-> >  };
-> > =20
-> > @@ -467,7 +477,6 @@ static long scale_sensor_value(s32 value, int
-> > data_type) switch (data_type) {
-> >  	case hwmon_curr:
-> >  	case hwmon_temp:
-> > -	case hwmon_in:
-> >  		return value * MILLI;
-> >  	default:
-> >  		return value;
-> >  =20
->=20
->=20
+Belongs in patch 1?
 
-Tested-by: Denis Pauk <pauk.denis@gmail.com>
+>         else
+>                 hdr_padded_len = sizeof(struct padded_vnet_hdr);
+>
+> @@ -1156,6 +1157,8 @@ static void receive_buf(struct virtnet_info *vi, struct receive_queue *rq,
+>         struct net_device *dev = vi->dev;
+>         struct sk_buff *skb;
+>         struct virtio_net_hdr_mrg_rxbuf *hdr;
+> +       struct virtio_net_hdr_v1_hash *hdr_hash;
+> +       enum pkt_hash_types rss_hash_type;
+>
+>         if (unlikely(len < vi->hdr_len + ETH_HLEN)) {
+>                 pr_debug("%s: short packet %i\n", dev->name, len);
+> @@ -1182,6 +1185,29 @@ static void receive_buf(struct virtnet_info *vi, struct receive_queue *rq,
+>                 return;
+>
+>         hdr = skb_vnet_hdr(skb);
+> +       if (dev->features & NETIF_F_RXHASH && vi->has_rss_hash_report) {
 
-Best regards,
-             Denis.
+Can the first be true if the second is not?
+
+> +               hdr_hash = (struct virtio_net_hdr_v1_hash *)(hdr);
+> +
+> +               switch (hdr_hash->hash_report) {
+> +               case VIRTIO_NET_HASH_REPORT_TCPv4:
+> +               case VIRTIO_NET_HASH_REPORT_UDPv4:
+> +               case VIRTIO_NET_HASH_REPORT_TCPv6:
+> +               case VIRTIO_NET_HASH_REPORT_UDPv6:
+> +               case VIRTIO_NET_HASH_REPORT_TCPv6_EX:
+> +               case VIRTIO_NET_HASH_REPORT_UDPv6_EX:
+> +                       rss_hash_type = PKT_HASH_TYPE_L4;
+> +                       break;
+> +               case VIRTIO_NET_HASH_REPORT_IPv4:
+> +               case VIRTIO_NET_HASH_REPORT_IPv6:
+> +               case VIRTIO_NET_HASH_REPORT_IPv6_EX:
+> +                       rss_hash_type = PKT_HASH_TYPE_L3;
+> +                       break;
+> +               case VIRTIO_NET_HASH_REPORT_NONE:
+> +               default:
+> +                       rss_hash_type = PKT_HASH_TYPE_NONE;
+> +               }
+> +               skb_set_hash(skb, hdr_hash->hash_value, rss_hash_type);
+> +       }
+
+so many lines, perhaps deserves a helper function
+
+>
+>         if (hdr->hdr.flags & VIRTIO_NET_HDR_F_DATA_VALID)
+>                 skb->ip_summed = CHECKSUM_UNNECESSARY;
+> @@ -2232,7 +2258,8 @@ static bool virtnet_commit_rss_command(struct virtnet_info *vi)
+>         sg_set_buf(&sgs[3], vi->ctrl->rss.key, sg_buf_size);
+>
+>         if (!virtnet_send_command(vi, VIRTIO_NET_CTRL_MQ,
+> -                                 VIRTIO_NET_CTRL_MQ_RSS_CONFIG, sgs)) {
+> +                                 vi->has_rss ? VIRTIO_NET_CTRL_MQ_RSS_CONFIG
+> +                                 : VIRTIO_NET_CTRL_MQ_HASH_CONFIG, sgs)) {
+>                 dev_warn(&dev->dev, "VIRTIONET issue with committing RSS sgs\n");
+>                 return false;
+>         }
+> @@ -3230,6 +3257,8 @@ static bool virtnet_validate_features(struct virtio_device *vdev)
+>              VIRTNET_FAIL_ON(vdev, VIRTIO_NET_F_CTRL_MAC_ADDR,
+>                              "VIRTIO_NET_F_CTRL_VQ") ||
+>              VIRTNET_FAIL_ON(vdev, VIRTIO_NET_F_RSS,
+> +                            "VIRTIO_NET_F_CTRL_VQ") ||
+> +            VIRTNET_FAIL_ON(vdev, VIRTIO_NET_F_HASH_REPORT,
+>                              "VIRTIO_NET_F_CTRL_VQ"))) {
+>                 return false;
+>         }
+> @@ -3365,8 +3394,13 @@ static int virtnet_probe(struct virtio_device *vdev)
+>         if (virtio_has_feature(vdev, VIRTIO_NET_F_MRG_RXBUF))
+>                 vi->mergeable_rx_bufs = true;
+>
+> -       if (virtio_has_feature(vdev, VIRTIO_NET_F_RSS)) {
+> +       if (virtio_has_feature(vdev, VIRTIO_NET_F_HASH_REPORT))
+> +               vi->has_rss_hash_report = true;
+> +
+> +       if (virtio_has_feature(vdev, VIRTIO_NET_F_RSS))
+>                 vi->has_rss = true;
+> +
+> +       if (vi->has_rss || vi->has_rss_hash_report) {
+>                 vi->rss_indir_table_size =
+>                         virtio_cread16(vdev, offsetof(struct virtio_net_config,
+
+should indir table size be zero if only hash report is enabled?
+
+>                                 rss_max_indirection_table_length));
+> @@ -3382,8 +3416,11 @@ static int virtnet_probe(struct virtio_device *vdev)
+>
+>                 dev->hw_features |= NETIF_F_RXHASH;
+>         }
+> -       if (virtio_has_feature(vdev, VIRTIO_NET_F_MRG_RXBUF) ||
+> -           virtio_has_feature(vdev, VIRTIO_F_VERSION_1))
+> +
+> +       if (vi->has_rss_hash_report)
+> +               vi->hdr_len = sizeof(struct virtio_net_hdr_v1_hash);
+> +       else if (virtio_has_feature(vdev, VIRTIO_NET_F_MRG_RXBUF) ||
+> +                virtio_has_feature(vdev, VIRTIO_F_VERSION_1))
+>                 vi->hdr_len = sizeof(struct virtio_net_hdr_mrg_rxbuf);
+>         else
+>                 vi->hdr_len = sizeof(struct virtio_net_hdr);
+> @@ -3450,7 +3487,7 @@ static int virtnet_probe(struct virtio_device *vdev)
+>                 }
+>         }
+>
+> -       if (vi->has_rss)
+> +       if (vi->has_rss || vi->has_rss_hash_report)
+>                 virtnet_init_default_rss(vi);
+>
+>         err = register_netdev(dev);
+> @@ -3585,7 +3622,7 @@ static struct virtio_device_id id_table[] = {
+>         VIRTIO_NET_F_CTRL_MAC_ADDR, \
+>         VIRTIO_NET_F_MTU, VIRTIO_NET_F_CTRL_GUEST_OFFLOADS, \
+>         VIRTIO_NET_F_SPEED_DUPLEX, VIRTIO_NET_F_STANDBY, \
+> -       VIRTIO_NET_F_RSS
+> +       VIRTIO_NET_F_RSS, VIRTIO_NET_F_HASH_REPORT
+>
+>  static unsigned int features[] = {
+>         VIRTNET_FEATURES,
+> --
+> 2.34.1
+>

@@ -2,188 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 094844AD426
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 09:57:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38FC14AD424
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 09:57:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352414AbiBHI4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 03:56:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48314 "EHLO
+        id S1352529AbiBHI5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 03:57:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232806AbiBHI4u (ORCPT
+        with ESMTP id S1352440AbiBHI44 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 03:56:50 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D985C03FEC0
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 00:56:49 -0800 (PST)
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id EBFF83F4B6
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 08:56:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1644310607;
-        bh=jrCjP6cigoq2hUV57n4k5BTndMW5LQallJ585bA4v4U=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=b/sAkhKFjLJazsU5AjfDQ0dfetpumh0ZCRtRzNLaG9HlL/l9B5qlX02p1J15ENeM7
-         B7ipymFrHwOWbahXFByDwJZMcj3z9HLaslUyaTQ043b+m451WEl5KALWk+xcjeaA/B
-         YF1kdQ/HGnxlKK88xq+hl3iXYXGUscqo77EQgusRNYpMihufgzIkI1tuPNGe+wClDI
-         pfaw9d+73hWYXQ9Royk4TJlNA4Q9oCfU30nW9IIgNE+4VE6/HHNX7+rdbbiyO1JGA+
-         QWzqOk1nOtfHAQWefqSOBFH9fK5z7olpawtzbYTXCHAymP7wcV3/LHmwb/GvPZwsTS
-         Pesz19Yy/gN+w==
-Received: by mail-ej1-f72.google.com with SMTP id la22-20020a170907781600b006a7884de505so5431113ejc.7
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 00:56:47 -0800 (PST)
+        Tue, 8 Feb 2022 03:56:56 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B273C03FEC5
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 00:56:55 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id m14so29326403wrg.12
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 00:56:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=uFHu5hccvMsF7o2tu2U34+ZB4v04LjByM/vohLM1Hos=;
+        b=aua/lLM29hlA2EW20MciGDxo6kSzKs1ShqohU6FEZbdY5WLoRRoDL7ebR2JO0cF+oh
+         wkIrJ0UBqiDGFL8PwmGoHRqSnLEQmZ5Z6XMuxU8aNtoJbOJM6NJ7pa60AgZ7AhTHEjFi
+         r3odVwT6OaxSNlvXWmYX3DRmsw2YQyeUXzWkJUQmrO1Q2Bi/1aqMN0uB++77G7lcPV7E
+         crmmvn2hp++MUAs6ygCjD7y2qMVyW2wJbXEm1/B/GZ6ka+iQL7KGHf8atLTlC66RtY2A
+         4ZtWcaknXVU8ZJkh04X7IHREQBGv4O67W9DIBqj+4qn7LzAmHBaNwFOeldWf81ngD/Rq
+         KCvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=jrCjP6cigoq2hUV57n4k5BTndMW5LQallJ585bA4v4U=;
-        b=j7eab2RE9XXTifRHqBZMMfcvz83cBIBlGUzdmHDGSDb+8Su/5eh4f5V4mehOtAga+0
-         9YqRou+Ou8BfxcxvjGH0h2SKcOwZcTPgFNBWI3CFk+2DyDD8mjMhO3G8Hk+DfuvQY0Mx
-         AlXei/sg0L7QB3NVdymDXI7es5ixPe7rRJraI6sFlEcaC+Q33vvT88NmjJyoSKsFwlZo
-         4fVZmjaGHioHa+DbBPHpc/DQqS1qzc9jeWTyA+puUl0I+1SPrAU6evcxRBmafhgxaeBP
-         LlFb80dDkzaxoL57NLhKxCM9zN6+gK7eXW6sTQbTGkV1whmRbkdRji1twaXckUW6dwPq
-         deuw==
-X-Gm-Message-State: AOAM5323AtcrtU45gugPefvBRqgC/7YFqbNqcaWftE61Lsy8qI1Oan1L
-        g0kllIckO0Ah1Vk9WCiwvgS25QOgwWOHC31IzeuGuYMVgMC2hhJX4SbQyM9OGifLhTtg6XzLY2j
-        1oiG+fQJ7Jy4O6N+HN0uZw6GUDJD2XRhzKuhdZUe4mg==
-X-Received: by 2002:a17:907:948c:: with SMTP id dm12mr2940481ejc.770.1644310607492;
-        Tue, 08 Feb 2022 00:56:47 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwWL7auPyMvH/eI9rxLnQiNw2PVY1Wgkiymv6mfS8QZo6OPnHvXX90ldKMwT7Z004YsVjstlQ==
-X-Received: by 2002:a17:907:948c:: with SMTP id dm12mr2940447ejc.770.1644310607251;
-        Tue, 08 Feb 2022 00:56:47 -0800 (PST)
-Received: from [192.168.0.92] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id a21sm4220537eds.5.2022.02.08.00.56.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Feb 2022 00:56:46 -0800 (PST)
-Message-ID: <1a172e64-f662-2a36-71ef-4214cfe5bffc@canonical.com>
-Date:   Tue, 8 Feb 2022 09:56:45 +0100
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=uFHu5hccvMsF7o2tu2U34+ZB4v04LjByM/vohLM1Hos=;
+        b=fHG62aN/PAijmRYD3tTlgpXe1cNFa3vxuoiQecwdSbDARKdGPbtbZEyVn5B0R1G3nP
+         W4UbTJ1CKyiBa2Gj0un7ePmGA+hU06buP59dJPn0pUvbkg4DRYtMrdEEECU6qcv0gU8h
+         9sDw8G91PL9OcZqO1qkGK0emoni2ip6woblAIlQG3BqOCS82HwcSBemou0P5rM0fOkV+
+         zHqrGf8yAWp7uJjEqa7MRK7EZSr21e+TUgYgO0j2Ni/iOh6j27f2u+lgy3SnXta01rLD
+         9JnsE0mMh8Yp4etZAcq4zeGYIcIyQG2B7quWhzXNsMisrUTLdiPT75UhYT0J1Y19/FF4
+         VYAQ==
+X-Gm-Message-State: AOAM532V3YJpAt/TyXXiLRuepjftyKaW7GAGD0yUq10gGE/Aj5oRmQie
+        TpP/aTqB1SjkBVQVILdDGAo=
+X-Google-Smtp-Source: ABdhPJzcjRB5ryj93ByKb+iLvzPIzvNewL5R2090HkYH0pfHPHuv1PHY+jyAwrOJSDmMgjTGKWdOWA==
+X-Received: by 2002:a05:6000:11cd:: with SMTP id i13mr2522322wrx.318.1644310614006;
+        Tue, 08 Feb 2022 00:56:54 -0800 (PST)
+Received: from leap.localnet (host-95-245-2-16.retail.telecomitalia.it. [95.245.2.16])
+        by smtp.gmail.com with ESMTPSA id p8sm13652398wrr.16.2022.02.08.00.56.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 00:56:53 -0800 (PST)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        Leonardo Araujo <leonardo.aa88@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
+Subject: Re: [PATCH] Staging: r8188eu: core: 'associcated' may be misspelled - perhaps 'associated'?
+Date:   Tue, 08 Feb 2022 09:56:51 +0100
+Message-ID: <2023396.KlZ2vcFHjT@leap>
+In-Reply-To: <YgIpMuShlOamHV68@kroah.com>
+References: <20220207234210.26097-1-leonardo.aa88@gmail.com> <2122312.NgBsaNRSFp@leap> <YgIpMuShlOamHV68@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v1 6/6] i2c: npcm: Support NPCM845
-Content-Language: en-US
-To:     Tali Perry <tali.perry1@gmail.com>
-Cc:     =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
-        Tyrone Ting <warp5tw@gmail.com>, avifishman70@gmail.com,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Rob Herring <robh+dt@kernel.org>, semen.protsenko@linaro.org,
-        yangyicong@hisilicon.com, Wolfram Sang <wsa@kernel.org>,
-        jie.deng@intel.com, sven@svenpeter.dev, bence98@sch.bme.hu,
-        lukas.bulwahn@gmail.com, arnd@arndb.de, olof@lixom.net,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Tali Perry <tali.perry@nuvoton.com>,
-        Avi Fishman <Avi.Fishman@nuvoton.com>,
-        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
-        kfting@nuvoton.com, devicetree <devicetree@vger.kernel.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220207063338.6570-1-warp5tw@gmail.com>
- <20220207063338.6570-7-warp5tw@gmail.com> <YgEJ1M40AG9EuRPI@latitude>
- <086655b0-b9d2-30ed-1496-47cdc6346003@canonical.com>
- <CAHb3i=vpFwez+ZzDhHkSxjkios3tyoM2urRpCxOn3vfwzvewog@mail.gmail.com>
- <30ac5fe7-9d96-a756-24b0-384361b48a2d@canonical.com>
- <CAHb3i=ukzVr4DDgcPQ2+DO+LXWWtgjCe03WbG-CqvsOP_qqvUw@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <CAHb3i=ukzVr4DDgcPQ2+DO+LXWWtgjCe03WbG-CqvsOP_qqvUw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/02/2022 09:51, Tali Perry wrote:
->> On 08/02/2022 08:14, Tali Perry wrote:
->>>> Subject: Re: [PATCH v1 6/6] i2c: npcm: Support NPCM845
->>>>
->>>> On 07/02/2022 13:00, Jonathan Neuschäfer wrote:
->>>>> Hello,
->>>>>
->>>>> On Mon, Feb 07, 2022 at 02:33:38PM +0800, Tyrone Ting wrote:
->>>>>> From: Tyrone Ting <kfting@nuvoton.com>
->>>>>>
->>>>>> NPCM8XX uses a similar i2c module as NPCM7XX.
->>>>>> The only difference is that the internal HW FIFO is larger.
->>>>>>
->>>>>> Related Makefile and Kconfig files are modified to support as well.
->>>>>>
->>>>>> Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller
->>>>>> driver")
->>>>>
->>>>> It's not really a bug fix, but rather an additional feature.
->>>>> Therefore, I suggest removing the Fixes tag from this patch.
->>>>>
->>>>>> Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
->>>>>> Signed-off-by: Tali Perry <tali.perry1@gmail.com>
->>>>>> ---
->>>>> [...]
->>>>>>  /* init register and default value required to enable module */
->>>>>>  #define NPCM_I2CSEGCTL 0xE4
->>>>>> +#ifdef CONFIG_ARCH_NPCM7XX
->>>>>>  #define NPCM_I2CSEGCTL_INIT_VAL 0x0333F000
->>>>>> +#else
->>>>>> +#define NPCM_I2CSEGCTL_INIT_VAL 0x9333F000
->>>>>> +#endif
->>>>>
->>>>> This is going to cause problems when someone tries to compile a kernel
->>>>> that runs on both NPCM7xx and NPCM8xx (because the driver will then
->>>>> only work on NPCM7xx).
->>>>
->>>> Yes, good catch.
->>>>
->>>> The NPCM7XX is multiplatform, I guess NPCM8xx will be as well, so this looks like an invalid code. How such code is supposed to work on multiplatform kernel?
->>>>
->>>
->>> NPCM7xx and NPCM8xx are very different devices.
->>> They share same driver sources for some of the modules but it's not ABI.
->>> Users cannot compile a single kernel with two separate DTS.
->>> In case of the i2c controller, the npcm7xx has a 16 byte HW FIFO,
->>> and the NPCM8xx has 32 bytes HW FIFO.
->>> This also means that registers fields are slightly different.
->>> For init data we can move it to the DTS, but register field sizes
->>> can't be handled with this approach.
->>>
->>
->> What do you mean they cannot compile a kernel with different DTS? Of
->> course they can - when we talk about multiplatform sub-architectures!
->> Maybe there is something specific in NPCMxxx which stops it but then it
->> should not be marked multiplatform.
->>
-> 
-> 
-> NCPM7xx is ARM32 bit (dual core Cortex A9)
-> NPCM8xx is ARM64 bit (quad core Cortex A35)
-> 
-> They have completely different architecture so not ABI compliant.
-> I2C module is similar, but the devices are quite different and have
-> separate architectures.
+On marted=EC 8 febbraio 2022 09:26:26 CET Greg KH wrote:
+> On Tue, Feb 08, 2022 at 09:09:10AM +0100, Fabio M. De Francesco wrote:
+> > On marted=EC 8 febbraio 2022 00:42:10 CET Leonardo Araujo wrote:
+> > > This patch fixes the following checkpatch.pl warning:
+> > >=20
+> > > CHECK: 'associcated' may be misspelled - perhaps 'associated'?
+> > >=20
+> > > Signed-off-by: Leonardo Araujo <leonardo.aa88@gmail.com>
+> > > ---
+> > >  drivers/staging/r8188eu/core/rtw_ap.c | 6 +++---
+> > >  1 file changed, 3 insertions(+), 3 deletions(-)
+> > >=20
+> > "Staging: r8188eu: core: 'associated' may be misspelled - perhaps 'asso=
+ciated'?"=20
+> > it's not the way patch subjects are created for inclusion in Linux.
+>=20
+> I do not see anything wrong with this.  What do you think is not
+> acceptable?
 
-OK, in such case usually you indeed can't have both. :)
+My opinion is that the formal construction of a patch is important not less=
+ than
+the code in it. However it's not that big deal, in this case. But for what =
+my=20
+opinion is worth, having a subject that says what the patch must do and usi=
+ng an
+imperative language is quite important.
 
-> Sorry for the confusion.
-> This is the first patch we try to upstream for NPCM8xx.
-> In the coming weeks we will upstream the architecture of NPCM8xx as well.
+I specified that it is not my job to accept or reject and said "if I were y=
+ou []".
+If you think that new contributor may be creative with the subjects of patc=
+hes, this
+is up to you to decide (obviously).
 
-Still, ARCH_XXX should not be hard-coded in the drivers to change the
-driver's behavior, even if driver won't be used simultaneously. It
-breaks all design principles and prevents any further re-use if a new
-use case appears.
+My intent was just to provide help to improve how to write subjects. I hope=
+ that=20
+Leonardo is going to become a productive member of this Community, so I tho=
+ught=20
+that a little help for improving how to write subjects wouldn't hurt. =20
 
-You can use "ifdef ARCH_XXX" to skip building of some parts of the
-driver, but it's not the case here.
+>=20
+> > Please follow what is clearly described in the "Philosophy of Linux ker=
+nel=20
+> > patches" document at https://kernelnewbies.org/PatchPhilosophy...
+>=20
+> The in-kernel documentation describes this well also.
+>=20
+> > "In patch descriptions and in the subject, it is common and preferable =
+to use=20
+> > present-tense, imperative language. Write as if you are telling git wha=
+t to do=20
+> > with your patch.".
+> >=20
+> > It's not my job to accept or reject patches for this subsystem and I do=
+n't want=20
+> > to tell you what to write but, if I were you, I'd send a v2 with a subj=
+ect like=20
+> > "Fix misspelled word in comments" (or something else similar to this su=
+bject).
+> >=20
+> > Furthermore, please take note that the name of this subsystem is "stagi=
+ng" (it=20
+> > is not "Staging").
+>=20
+> Either is fine, I will not reject a change for an upper-case letter like
+> this.
+>=20
+> > Decide by yourself whether or not the other two patches that you submit=
+ted this=20
+> > morning have to be sent anew as v2 with due changes in the subjects.
+>=20
+> I do not see a problem with this change at all, nothing needs to be
+> resubmitted.
+
+You are the maintainer, so it's up to you. Nothing needs to be resubmitted =
+but=20
+I hope that next time his subjects will better conform to the guidelines.
+
+Thanks,
+
+=46abio
+
+>=20
+> greg k-h
+>=20
 
 
-Best regards,
-Krzysztof
+
+

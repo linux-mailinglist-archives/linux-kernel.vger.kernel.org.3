@@ -2,139 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 011684ADDBD
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 16:55:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17CFA4ADDBF
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 16:56:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381154AbiBHPz3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 10:55:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36852 "EHLO
+        id S1382496AbiBHP4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 10:56:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232356AbiBHPz1 (ORCPT
+        with ESMTP id S1382657AbiBHPzv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 10:55:27 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DDB4C061576
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 07:55:27 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id D9B4E1F387;
-        Tue,  8 Feb 2022 15:55:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1644335725; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WijHXTObJseuOiFvlli9+l6jvFN1GY3799lbVAl5WkE=;
-        b=Q/oTXjVzIERW9PT1/jqOi+5kUSo+JlJzQAki6xLupLsmyEFPvg+sF0ejxlPPXB4DmZBVDB
-        AEgyHruOJN/0q12D3uaXghhnWeUV2B87jCmWhVLFetFM+G1xhIg4/7UJQI9VlXbJUqu2ZV
-        VYiAjqrWFIelN1tUNEwmpM6blOPQ7z8=
-Received: from suse.cz (unknown [10.100.216.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 9E7D3A3B83;
-        Tue,  8 Feb 2022 15:55:25 +0000 (UTC)
-Date:   Tue, 8 Feb 2022 16:55:25 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Andre Kalb <andre.kalb@sma.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] printk: Set console_set_on_cmdline=1 when using
- console="" or console=null
-Message-ID: <YgKSbe9d3haHKMid@alley>
-References: <YfMkJKUuGBwyT611@pc6682>
+        Tue, 8 Feb 2022 10:55:51 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD524C06157A
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 07:55:50 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nHSq9-00015b-Hq; Tue, 08 Feb 2022 16:55:37 +0100
+Received: from pengutronix.de (unknown [195.138.59.174])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id DB1242E763;
+        Tue,  8 Feb 2022 15:55:34 +0000 (UTC)
+Date:   Tue, 8 Feb 2022 16:55:31 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
+Cc:     appana.durga.rao@xilinx.com, wg@grandegger.com,
+        davem@davemloft.net, kuba@kernel.org, robh+dt@kernel.org,
+        git@xilinx.com, naga.sureshkumar.relli@xilinx.com,
+        michal.simek@xilinx.com, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: can: xilinx_can: Convert Xilinx CAN binding
+ to YAML
+Message-ID: <20220208155531.uxyyiwuewlk5rtvb@pengutronix.de>
+References: <20220208155209.25926-1-amit.kumar-mahapatra@xilinx.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="kdrzfvarlmluvr5z"
 Content-Disposition: inline
-In-Reply-To: <YfMkJKUuGBwyT611@pc6682>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220208155209.25926-1-amit.kumar-mahapatra@xilinx.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 2022-01-28 00:00:52, Andre Kalb wrote:
-> In case of using console="" or console=null set console_set_on_cmdline=1
-> to disable chosen{ "stdout-path" } node from devicetree.
-> 
-> To jump out from drivers/of/base.c, line 2087 of_console_check function
-> with false.
 
-It makes sense. I would just fix it slightly different way, see below.
+--kdrzfvarlmluvr5z
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
-> Signed-off-by: Andre Kalb <andre.kalb@sma.de>
+On 08.02.2022 21:22:09, Amit Kumar Mahapatra wrote:
+> Convert Xilinx CAN binding documentation to YAML.
+>
+> Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
 > ---
->  kernel/printk/printk.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-> index 82abfaf3c2aa..df5ab35b8af2 100644
-> --- a/kernel/printk/printk.c
-> +++ b/kernel/printk/printk.c
-> @@ -2385,6 +2385,7 @@ static int __init console_setup(char *str)
->  	 */
->  	if (str[0] == 0 || strcmp(str, "null") == 0) {
->  		__add_preferred_console("ttynull", 0, NULL, NULL,
-> true); 
-> +		console_set_on_cmdline = 1;
+> BRANCH: yaml
+> ---
+>  .../bindings/net/can/xilinx_can.txt           |  61 --------
+>  .../bindings/net/can/xilinx_can.yaml          | 146 ++++++++++++++++++
+>  2 files changed, 146 insertions(+), 61 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/net/can/xilinx_can.txt
+>  create mode 100644 Documentation/devicetree/bindings/net/can/xilinx_can.yaml
+>
+> diff --git a/Documentation/devicetree/bindings/net/can/xilinx_can.txt b/Documentation/devicetree/bindings/net/can/xilinx_can.txt
+> deleted file mode 100644
+> index 100cc40b8510..000000000000
+> --- a/Documentation/devicetree/bindings/net/can/xilinx_can.txt
+> +++ /dev/null
+> @@ -1,61 +0,0 @@
+> -Xilinx Axi CAN/Zynq CANPS controller Device Tree Bindings
+> ----------------------------------------------------------
+> -
+> -Required properties:
+> -- compatible		: Should be:
+> -			  - "xlnx,zynq-can-1.0" for Zynq CAN controllers
+> -			  - "xlnx,axi-can-1.00.a" for Axi CAN controllers
+> -			  - "xlnx,canfd-1.0" for CAN FD controllers
+> -			  - "xlnx,canfd-2.0" for CAN FD 2.0 controllers
+> -- reg			: Physical base address and size of the controller
+> -			  registers map.
+> -- interrupts		: Property with a value describing the interrupt
+> -			  number.
+> -- clock-names		: List of input clock names
+> -			  - "can_clk", "pclk" (For CANPS),
+> -			  - "can_clk", "s_axi_aclk" (For AXI CAN and CAN FD).
+> -			  (See clock bindings for details).
+> -- clocks		: Clock phandles (see clock bindings for details).
+> -- tx-fifo-depth		: Can Tx fifo depth (Zynq, Axi CAN).
+> -- rx-fifo-depth		: Can Rx fifo depth (Zynq, Axi CAN, CAN FD in
+> -                          sequential Rx mode).
+> -- tx-mailbox-count	: Can Tx mailbox buffer count (CAN FD).
+> -- rx-mailbox-count	: Can Rx mailbox buffer count (CAN FD in mailbox Rx
+> -			  mode).
+> -
+> -
+> -Example:
+> -
+> -For Zynq CANPS Dts file:
+> -	zynq_can_0: can@e0008000 {
+> -			compatible = "xlnx,zynq-can-1.0";
+> -			clocks = <&clkc 19>, <&clkc 36>;
+> -			clock-names = "can_clk", "pclk";
+> -			reg = <0xe0008000 0x1000>;
+> -			interrupts = <0 28 4>;
+> -			interrupt-parent = <&intc>;
+> -			tx-fifo-depth = <0x40>;
+> -			rx-fifo-depth = <0x40>;
+> -		};
+> -For Axi CAN Dts file:
+> -	axi_can_0: axi-can@40000000 {
+> -			compatible = "xlnx,axi-can-1.00.a";
+> -			clocks = <&clkc 0>, <&clkc 1>;
+> -			clock-names = "can_clk","s_axi_aclk" ;
+> -			reg = <0x40000000 0x10000>;
+> -			interrupt-parent = <&intc>;
+> -			interrupts = <0 59 1>;
+> -			tx-fifo-depth = <0x40>;
+> -			rx-fifo-depth = <0x40>;
+> -		};
+> -For CAN FD Dts file:
+> -	canfd_0: canfd@40000000 {
+> -			compatible = "xlnx,canfd-1.0";
+> -			clocks = <&clkc 0>, <&clkc 1>;
+> -			clock-names = "can_clk", "s_axi_aclk";
+> -			reg = <0x40000000 0x2000>;
+> -			interrupt-parent = <&intc>;
+> -			interrupts = <0 59 1>;
+> -			tx-mailbox-count = <0x20>;
+> -			rx-fifo-depth = <0x20>;
+> -		};
+> diff --git a/Documentation/devicetree/bindings/net/can/xilinx_can.yaml b/Documentation/devicetree/bindings/net/can/xilinx_can.yaml
+> new file mode 100644
+> index 000000000000..cdf2e4a20662
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/can/xilinx_can.yaml
+> @@ -0,0 +1,146 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/can/xilinx_can.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title:
+> +  Xilinx Axi CAN/Zynq CANPS controller Binding
+> +
+> +maintainers:
+> +  - Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>
+> +
 
-We basically always need to set it when __add_preferred_console() is
-called with user_specified == true.
+Please add:
 
-Therefore, we should move the assigment into
-__add_preferred_console(). We should do something like:
+allOf:
+  - $ref: can-controller.yaml#
 
-diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-index 82abfaf3c2aa..3654695ca5d2 100644
---- a/kernel/printk/printk.c
-+++ b/kernel/printk/printk.c
-@@ -2324,6 +2324,15 @@ asmlinkage __visible void early_printk(const char *fmt, ...)
- }
- #endif
- 
-+static void set_user_specified(struct console_cmdline *c, bool user_specified)
-+{
-+	if (!user_specified)
-+		return;
-+
-+	c->user_specified = true;
-+	console_set_on_cmdline = 1;
-+}
-+
- static int __add_preferred_console(char *name, int idx, char *options,
- 				   char *brl_options, bool user_specified)
- {
-@@ -2340,8 +2349,7 @@ static int __add_preferred_console(char *name, int idx, char *options,
- 		if (strcmp(c->name, name) == 0 && c->index == idx) {
- 			if (!brl_options)
- 				preferred_console = i;
--			if (user_specified)
--				c->user_specified = true;
-+			set_user_specified(c, user_specified);
- 			return 0;
- 		}
- 	}
-@@ -2351,7 +2359,7 @@ static int __add_preferred_console(char *name, int idx, char *options,
- 		preferred_console = i;
- 	strlcpy(c->name, name, sizeof(c->name));
- 	c->options = options;
--	c->user_specified = user_specified;
-+	set_user_specified(c, user_specified);
- 	braille_set_options(c, brl_options);
- 
- 	c->index = idx;
-@@ -2417,7 +2425,6 @@ static int __init console_setup(char *str)
- 	*s = 0;
- 
- 	__add_preferred_console(buf, idx, options, brl_options, true);
--	console_set_on_cmdline = 1;
- 	return 1;
- }
- __setup("console=", console_setup);
+Marc
 
+--
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-Best Regards,
-Petr
+--kdrzfvarlmluvr5z
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmICkm4ACgkQrX5LkNig
+013G+Qf/XXs+9iWONiI7XzlZBD94Mv/cyow0j2FmhqX8tA/jC0wrNuC2+rh2Aksj
+ElrCHqfLmzw0SKRD8ncbZ0boOpEqPcGoAivziBTEcFpS0EVrmxrFtE2PrOOwVG/7
+ATRsA97OQANlG37GyrlvjnmVX10YfnS6pQNBby/YF4P5Jo4r97X3fxedqva9o3ch
+S6xeU8cbukXz5J3cV/qd7a7qYOGv2BTld6fkhWEUL8O5JUFUbqKnjUeOYsmjQ1Ph
+1OKU+4QZeiw00B0M6Tpc3ydNeIwcrwHElcZ7yDbcRoG9Bvb+z0ohnS3K9eEAjoSJ
+zNubODBeQjzXu3/1zx1Xay5fgfcbwA==
+=3Hgw
+-----END PGP SIGNATURE-----
+
+--kdrzfvarlmluvr5z--

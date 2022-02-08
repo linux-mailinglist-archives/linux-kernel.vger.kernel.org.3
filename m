@@ -2,46 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3A894ADBF1
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 16:05:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 917304ADBFA
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 16:07:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379456AbiBHPE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 10:04:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55454 "EHLO
+        id S1379089AbiBHPHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 10:07:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379219AbiBHPEy (ORCPT
+        with ESMTP id S235908AbiBHPHA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 10:04:54 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E48F7C061579
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 07:04:52 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AF96E2B;
-        Tue,  8 Feb 2022 07:04:52 -0800 (PST)
-Received: from [10.57.88.245] (unknown [10.57.88.245])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 45DC93F73B;
-        Tue,  8 Feb 2022 07:04:51 -0800 (PST)
-Message-ID: <7ba34443-d76a-253d-d112-4100d5a57e21@arm.com>
-Date:   Tue, 8 Feb 2022 15:04:49 +0000
+        Tue, 8 Feb 2022 10:07:00 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A57CEC061576
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 07:06:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id EE779CE1A7D
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 15:06:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A754C340F7;
+        Tue,  8 Feb 2022 15:06:55 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="KrCbqWJ2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1644332814;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=dWd1BpP+gWy6YldHbtkFbasD6YjFmn1T1mSDW8zn5Wg=;
+        b=KrCbqWJ2TIaDff3RPR1pQWOAUnlMm+6KaJ3ReXt3N4832t9hg/TwPafDLydddalxNBumju
+        XotfWayNDW+SZkw6E2Wyn9sxg7ot2GX6nb1OGk/PRJqmrGdo+Z4/vBDZ3VCg1O1iXrLtSk
+        ZagDtInLzkHwzSqhqm7NeWqUh50Bkb8=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 0f56589a (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 8 Feb 2022 15:06:53 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [GIT PULL] random number generator fixes for 5.17-rc4
+Date:   Tue,  8 Feb 2022 16:06:25 +0100
+Message-Id: <20220208150625.374191-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.1
-Subject: Re: [PATCH v2 01/15] coresight: Make ETM4x TRCIDR0 register accesses
- consistent with sysreg.h
-To:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        James Clark <james.clark@arm.com>, mathieu.poirier@linaro.org,
-        coresight@lists.linaro.org
-Cc:     leo.yan@linaro.com, mike.leach@linaro.org,
-        Leo Yan <leo.yan@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220203120604.128396-1-james.clark@arm.com>
- <20220203120604.128396-2-james.clark@arm.com>
- <1b649955-cb45-1283-68cd-c82582cef60c@arm.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <1b649955-cb45-1283-68cd-c82582cef60c@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -50,166 +53,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/02/2022 05:44, Anshuman Khandual wrote:
-> Hi James,
-> 
-> These are all ETM4X specific changes. Something like this might be cleaner
-> and also more compact. Also would suggest to follow the same for subsequent
-> patches as well.
-> 
-> coresight: etm4x: Cleanup TRCIDR0 register accesses
-> 
-> Consistency with sysreg.h could be mentioned in the commit message itself.
-> 
-> On 2/3/22 5:35 PM, James Clark wrote:
->> This is a no-op change for style and consistency and has no effect on the
->> binary produced by gcc-11.
-> 
-> This patch adds register definitions, helper macros as well. Please expand
-> the commit message to add more details. This is too short, for the change
-> it creates. BTW why is it necessary to mention GCC version number here.
-> 
->>
->> Signed-off-by: James Clark <james.clark@arm.com>
->> ---
->>   .../coresight/coresight-etm4x-core.c          | 36 +++++--------------
->>   drivers/hwtracing/coresight/coresight-etm4x.h | 17 +++++++++
->>   drivers/hwtracing/coresight/coresight-priv.h  |  5 +++
->>   3 files changed, 30 insertions(+), 28 deletions(-)
->>
->> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
->> index e2eebd865241..107e81948f76 100644
->> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
->> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
->> @@ -1091,41 +1091,21 @@ static void etm4_init_arch_data(void *info)
->>   	etmidr0 = etm4x_relaxed_read32(csa, TRCIDR0);
->>   
->>   	/* INSTP0, bits[2:1] P0 tracing support field */
->> -	if (BMVAL(etmidr0, 1, 2) == 0b11)
->> -		drvdata->instrp0 = true;
->> -	else
->> -		drvdata->instrp0 = false;
->> -
->> +	drvdata->instrp0 = !!(REG_VAL(etmidr0, TRCIDR0_INSTP0) == 0b11);
->>   	/* TRCBB, bit[5] Branch broadcast tracing support bit */
->> -	if (BMVAL(etmidr0, 5, 5))
->> -		drvdata->trcbb = true;
->> -	else
->> -		drvdata->trcbb = false;
->> -
->> +	drvdata->trcbb = !!(etmidr0 & TRCIDR0_TRCBB);
->>   	/* TRCCOND, bit[6] Conditional instruction tracing support bit */
->> -	if (BMVAL(etmidr0, 6, 6))
->> -		drvdata->trccond = true;
->> -	else
->> -		drvdata->trccond = false;
->> -
->> +	drvdata->trccond = !!(etmidr0 & TRCIDR0_TRCCOND);
->>   	/* TRCCCI, bit[7] Cycle counting instruction bit */
->> -	if (BMVAL(etmidr0, 7, 7))
->> -		drvdata->trccci = true;
->> -	else
->> -		drvdata->trccci = false;
->> -
->> +	drvdata->trccci = !!(etmidr0 & TRCIDR0_TRCCCI);
->>   	/* RETSTACK, bit[9] Return stack bit */
->> -	if (BMVAL(etmidr0, 9, 9))
->> -		drvdata->retstack = true;
->> -	else
->> -		drvdata->retstack = false;
->> -
->> +	drvdata->retstack = !!(etmidr0 & TRCIDR0_RETSTACK);
->>   	/* NUMEVENT, bits[11:10] Number of events field */
->> -	drvdata->nr_event = BMVAL(etmidr0, 10, 11);
->> +	drvdata->nr_event = REG_VAL(etmidr0, TRCIDR0_NUMEVENT);
->>   	/* QSUPP, bits[16:15] Q element support field */
->> -	drvdata->q_support = BMVAL(etmidr0, 15, 16);
->> +	drvdata->q_support = REG_VAL(etmidr0, TRCIDR0_QSUPP);
->>   	/* TSSIZE, bits[28:24] Global timestamp size field */
->> -	drvdata->ts_size = BMVAL(etmidr0, 24, 28);
->> +	drvdata->ts_size = REG_VAL(etmidr0, TRCIDR0_TSSIZE);
->>   
->>   	/* maximum size of resources */
->>   	etmidr2 = etm4x_relaxed_read32(csa, TRCIDR2);
->> diff --git a/drivers/hwtracing/coresight/coresight-etm4x.h b/drivers/hwtracing/coresight/coresight-etm4x.h
->> index 3c4d69b096ca..2bd8ad953b8e 100644
->> --- a/drivers/hwtracing/coresight/coresight-etm4x.h
->> +++ b/drivers/hwtracing/coresight/coresight-etm4x.h
->> @@ -130,6 +130,23 @@
->>   
->>   #define TRCRSR_TA			BIT(12)
->>   
->> +/*
->> + * Bit positions of registers that are defined above, in the sysreg.h style
->> + * of _MASK, _SHIFT and BIT().
->> + */
-> 
-> ^^^ not really necessary. Instead the format requirement for below mentioned
-> CORESIGHT_REG_VAL() macro might be relevant and should be mentioned.
-> 
->> +#define TRCIDR0_INSTP0_SHIFT			1
->> +#define TRCIDR0_INSTP0_MASK			GENMASK(1, 0)
->> +#define TRCIDR0_TRCBB				BIT(5)
->> +#define TRCIDR0_TRCCOND				BIT(6)
->> +#define TRCIDR0_TRCCCI				BIT(7)
->> +#define TRCIDR0_RETSTACK			BIT(9)
->> +#define TRCIDR0_NUMEVENT_SHIFT			10
->> +#define TRCIDR0_NUMEVENT_MASK			GENMASK(1, 0)
->> +#define TRCIDR0_QSUPP_SHIFT			15
->> +#define TRCIDR0_QSUPP_MASK			GENMASK(1, 0)
->> +#define TRCIDR0_TSSIZE_SHIFT			24
->> +#define TRCIDR0_TSSIZE_MASK			GENMASK(4, 0)
->> +
->>   /*
->>    * System instructions to access ETM registers.
->>    * See ETMv4.4 spec ARM IHI0064F section 4.3.6 System instructions
->> diff --git a/drivers/hwtracing/coresight/coresight-priv.h b/drivers/hwtracing/coresight/coresight-priv.h
->> index ff1dd2092ac5..1452c6038421 100644
->> --- a/drivers/hwtracing/coresight/coresight-priv.h
->> +++ b/drivers/hwtracing/coresight/coresight-priv.h
->> @@ -36,6 +36,11 @@
->>   
->>   #define TIMEOUT_US		100
->>   #define BMVAL(val, lsb, msb)	((val & GENMASK(msb, lsb)) >> lsb)
->> +/*
->> + * Extract a field from a register where field is #defined in the form
->> + * <register_name>_<field_name>_MASK and <register_name>_<field_name>_SHIFT
->> + */
-> 
-> Looking at the usage, <register_name> is already embedded in <filed_name>. So
-> it requires <field_name>_SHIFT and <field_name>_MASK instead. Unless register
-> name should be passed as separate argument (which actually might be better).
-> 
-> REG_VAL(etmidr0, TRCIDR0_TSSIZE) ----> REG_VAL(etmidr0, TRCIDR0, TSSIZE)
+Hi Linus,
 
-I don't see much difference here. So I am fine either way.
+Please pull the following fixes for 5.17-rc4. This week's pull contains fixes
+for the crypto ~vuln I mentioned last week. There are extensive details about
+it and some simple PoC code in the commit message of the first patch if you're
+curious.
 
-> 
-> with some restructuring in the comment ..
-> 
-> /*
->   * Extract a field from a coresight register
->   *
->   * Required fields are defined as macros like the following
->   *
->   * <register_name>_<field_name>_MASK and <register_name>_<field_name>_SHIFT
->   */
-> 
->> +#define REG_VAL(val, field)	((val & (field##_MASK << field##_SHIFT)) >> field##_SHIFT)
-> 
-> This is too generic to be in a coresight header or it should just be
-> named CORESIGHT_REG_VAL() instead, making it more specific for here.
-> 
-> The build should fail in case any required macro definition is absent.
-> I guess no more fortification is required in case macros are missing.
-> 
-> However CORESIGHT_REG_VAL() is better placed in <coresight-etm4x.h>
-> just before all the dependent SHIFT/MASK register field definition
-> starts.
+Code-wise, the change is both insubstantial and substantial. It is
+insubstantial in that we're talking about removing over 400 lines of old code,
+many of which are outdated comments, and replacing them with less than 90
+lines, so it's not "big" on the additive side.  On the other hand, it is a
+substantial change, as it's doing away with the heart of our entropy collector
+that we've had in one form or another forever. It would seem fitting with the
+times that we're able to replace gobs of old stuff from the 90s with a boring
+cryptographic hash function.
 
-Not necessarily. CORESIGHT_REG_VAL() is a generic function and doesn't
-have anything specific to do with etm4x. We could reuse that for
-cleaning up other drivers in CoreSight.
+Given that these fixes are for a security issue (albeit a probably relatively
+low grade one), sending this mid-cycle feels like the "responsible" thing to
+do, and 5.17 will resultantly have a more secure RNG. However, I also would
+understand that, diffstat not withstanding, you think this is a bit much and
+want to reject this pull until 5.18. Either way works for me, though I
+naturally lean heavily toward the former, hence making this pull request in
+the first place.
 
-Cheers
-Suzuki
+Thanks,
+Jason
+
+
+The following changes since commit dfd42facf1e4ada021b939b4e19c935dcdd55566:
+
+  Linux 5.17-rc3 (2022-02-06 12:20:50 -0800)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git tags/random-5.17-rc4-for-linus
+
+for you to fetch changes up to 966038a49e2b31ff9aa86862295be3915c51dbdd:
+
+  random: make credit_entropy_bits() always safe (2022-02-08 11:53:05 +0100)
+
+----------------------------------------------------------------
+Jason A. Donenfeld (5):
+      random: use computational hash for entropy extraction
+      random: simplify entropy debiting
+      random: use linear min-entropy accumulation crediting
+      random: always wake up entropy writers after extraction
+      random: make credit_entropy_bits() always safe
+
+ drivers/char/random.c         | 499 +++++++-----------------------------------
+ include/trace/events/random.h |  30 +--
+ 2 files changed, 86 insertions(+), 443 deletions(-)

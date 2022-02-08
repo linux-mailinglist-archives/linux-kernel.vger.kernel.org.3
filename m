@@ -2,103 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30D974AD7C3
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:47:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E062F4AD7C7
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:49:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240375AbiBHLrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 06:47:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39400 "EHLO
+        id S1356796AbiBHLsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 06:48:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356096AbiBHLqj (ORCPT
+        with ESMTP id S236934AbiBHLr4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 06:46:39 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 307BAC07D6C5;
-        Tue,  8 Feb 2022 03:34:22 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id i30so18352230pfk.8;
-        Tue, 08 Feb 2022 03:34:22 -0800 (PST)
+        Tue, 8 Feb 2022 06:47:56 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E81C00268D
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 03:36:00 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id eg42so21044570edb.7
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 03:36:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=yDBZiG+Y+FfC9XvTDeOHp+ccsZWR8lWNBSroy9RZxiY=;
-        b=HVurCuvwm8kePUh9ZgizNHMBzyvivYu2+BFM5Nd01fk+j63x52RolG3z8HEMehUsD0
-         eL11XdFDze4DHJYR4gO6taWPsl4EBdsSVMErrwsMO6ZvG740iTGhNLjZLMQa0IDikrAa
-         O6fIgrL5G2cCwiNaBQziEiaXNKjXTksvJm6AOoEHwjkFttEWEN9p/7ZNHsVeVjL8vamy
-         qoP8wAn4SOxTpML1Y1qQ6Ms+xF0gFIkvHL+JsqX7qIPCT+yJ17lQn+losi2MTVCnCL6U
-         sCMGBFmtGfDFGD6Ld+/YRjXjJjfo/sDHA0PwVe1pRakMHIwDZnS/h6LLzv5csR4h2sLe
-         glhg==
+        d=raspberrypi.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KPlR6gJDHsACPyVMcZtoDq6lm4JjvzGgUldKcw5CvFE=;
+        b=SekmjhaP94H/FC7zsedKUk/Cq7nQQIzfVQs5LybFKPQUdwVI4pdmzAVRAFBMxz69u0
+         tQiuFmuSdZmojfO+wMkOh5iMArzfwnxI15v4uu7shP1tnL64/p0QSOj/z00TACxZCoAk
+         CEN0EQFQkgwxZuLtBcPe+gJ/niMzChiXIb6WXUTYEymnBoaTwCJGCBNVzqxECZPtbOIG
+         BMP+pMnpDr55sMeZr2pqkF1wpBgdxCxagJptZhVjgaA7K7Nn5naU8GzmZGsro7djODkb
+         FW6Nica3Rfa6WPUYGMsa+j6f9IJsZJLjynA1bIWQee6CXPyETUguRtzFM2z0soPv79BG
+         L5AQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=yDBZiG+Y+FfC9XvTDeOHp+ccsZWR8lWNBSroy9RZxiY=;
-        b=FjXWcp9BDMBovTafVosakMkZoihWkaCs1uf5E71EeKzuhx0jMPiAc4KoZsH1+Evcs3
-         hvC+0NWOz+7vyIW0siiw7ZlBaC/9QwgVcAV/BeyfuW4I7Gjpl6qF9R834W0ghYuhfSqs
-         sCMBundWya2jqi9u5gDh0oOC7ebGm8vod/mHn6YREV39dMOQSsQV6FHuHhByXOwDSQlb
-         qffxk8rGEv+4pIW0xEDws5WL3MM2OYG7wEk13G/qTqPnfnc3OSt92zKxhX4ATkywetlv
-         kVGbfq4hglfwGSdzS4twdEkuGHec4XOu/P+wEFs2wtInF6ZbtTlFcF5Z8uOVv1RPYRaH
-         HDoQ==
-X-Gm-Message-State: AOAM530Crk/BdLXhtczhr2KdG+aDSvCnlOAGvW6u0nd95lvDO+umemwh
-        ckQy3TiGFqUtrA5KxUs/FIU=
-X-Google-Smtp-Source: ABdhPJz0q3uOBeaikFB/3hEe8oh6F/U8I1ZgZGlYosc6tr6GdkDKOxe/2tlTm/MhqIpWVo9xoWTFnA==
-X-Received: by 2002:a63:87c6:: with SMTP id i189mr3057798pge.411.1644320055555;
-        Tue, 08 Feb 2022 03:34:15 -0800 (PST)
-Received: from ?IPV6:2601:206:8000:2834::19b? ([2601:206:8000:2834::19b])
-        by smtp.gmail.com with ESMTPSA id ms8sm2477145pjb.33.2022.02.08.03.34.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Feb 2022 03:34:14 -0800 (PST)
-Message-ID: <47510a58-111b-d4b9-0ff2-e93319e15be3@gmail.com>
-Date:   Tue, 8 Feb 2022 03:34:12 -0800
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KPlR6gJDHsACPyVMcZtoDq6lm4JjvzGgUldKcw5CvFE=;
+        b=ptaR76iK5c1uyFNham42HsIAtDTr3RAJPZjr14TmuP6rYhZBgLOh02usIJjUzCs+8j
+         h0pw2xTnR5B2NMSvCOXVfl/7nfgBXZVI9uL9rT8SaM9ZzI7/6RT/xV16f4FBa/3W6bMd
+         gqOEAIRYwJi3iupvFioZkRLigYavggaHb7xMUAu/MDskhjPFk/+3DeK1LzJfU7Sessdq
+         f9qomz48Nb93t+pzwnUTo4QEQ+S7IYM5WFx4b/zzVrGpOpT8PdGVrjF+SrrFUzzQcXcU
+         DCtwV0TNmoFXhQpiktMnBVGPi/Op/gzXWPy2f+2RNzAzS8XnfuyyDCFiOJWftWdi+rsO
+         x4kg==
+X-Gm-Message-State: AOAM5316jytZnGjqQQRZDGuVJb/u2HecmLGiwY+Ii4Rm+mnB2bjGu75+
+        UvF48RmRM+ELJG8Zw8xxsPgiKGsikCW3hkhXpv+S1w==
+X-Google-Smtp-Source: ABdhPJzYSB24uVf1cbhEcYjKt3W+LXFr1sz/yMsFDj7wmuiLzgtrwFIAmARBE3XfnAfTr+nMGzumxyfE0tCCxcFEHUc=
+X-Received: by 2002:aa7:c917:: with SMTP id b23mr4035128edt.118.1644320155975;
+ Tue, 08 Feb 2022 03:35:55 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 5.16 000/127] 5.16.8-rc2 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220207133856.644483064@linuxfoundation.org>
-From:   Scott Bruce <smbruce@gmail.com>
-In-Reply-To: <20220207133856.644483064@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220203175009.558868-1-jeanmichel.hautbois@ideasonboard.com>
+ <7954256.DvuYhMxLoT@steina-w> <Yf3fe2F88SNcl2Jd@pendragon.ideasonboard.com>
+ <5541132.DvuYhMxLoT@steina-w> <YgHJIsZSrDFp9xvF@pendragon.ideasonboard.com>
+In-Reply-To: <YgHJIsZSrDFp9xvF@pendragon.ideasonboard.com>
+From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
+Date:   Tue, 8 Feb 2022 11:35:39 +0000
+Message-ID: <CAPY8ntDBu2M89Eif93SaOLykPzTCzCVwE1MypNMxJ+kmAY_5JA@mail.gmail.com>
+Subject: Re: (EXT) Re: (EXT) [RFC PATCH v4 03/12] dt-bindings: media: Add
+ bindings for bcm2835-unicam
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        kernel-list@raspberrypi.com, LKML <linux-kernel@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-rpi-kernel@lists.infradead.org, lukasz@jany.st,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Naushir Patuck <naush@raspberrypi.com>, robh@kernel.org,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        bcm-kernel-feedback-list@broadcom.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/7/22 06:04, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.16.8 release.
-> There are 127 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 09 Feb 2022 13:38:34 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.8-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+Hi Alexander and Laurent
 
-Build, dmesg, desktop use and s0ix suspend all look good on x86_64/Cezanne (ASUS GA503QR.)
+On Tue, 8 Feb 2022 at 01:36, Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
+>
+> Hi Alexander,
+>
+> On Mon, Feb 07, 2022 at 07:30:25AM +0100, Alexander Stein wrote:
+> > Am Samstag, 5. Februar 2022, 03:22:51 CET schrieb Laurent Pinchart:
+> > > On Fri, Feb 04, 2022 at 09:50:06AM +0100, Alexander Stein wrote:
+> > > > Am Donnerstag, 3. Februar 2022, 18:50:00 CET schrieb Jean-Michel Hautbois:
+> > > > > Introduce the dt-bindings documentation for bcm2835 CCP2/CSI2 Unicam
+> > > > > camera interface. Also add a MAINTAINERS entry for it.
+> > > > >
+> > > > > Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+> > > > > Signed-off-by: Naushir Patuck <naush@raspberrypi.com>
+> > > > > Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
+> > > > >
+> > > > > ---
+> > > > > v4:
+> > > > > - make MAINTAINERS its own patch
+> > > > > - describe the reg and clocks correctly
+> > > > > - use a vendor entry for the number of data lanes
+> > > > > ---
+> > > > >
+> > > > >  .../bindings/media/brcm,bcm2835-unicam.yaml   | 110 ++++++++++++++++++
+> > > > >  1 file changed, 110 insertions(+)
+> > > > >  create mode 100644
+> > > > >
+> > > > > Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
+> > > > >
+> > > > > diff --git
+> > > > > a/Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
+> > > > > b/Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
+> > > > > new file mode 100644
+> > > > > index 000000000000..0725a0267c60
+> > > > > --- /dev/null
+> > > > > +++ b/Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
+> > > > > @@ -0,0 +1,110 @@
+> > > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > > > +%YAML 1.2
+> > > > > +---
+> > > > > +$id: http://devicetree.org/schemas/media/brcm,bcm2835-unicam.yaml#
+> > > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > > > +
+> > > > > +title: Broadcom BCM283x Camera Interface (Unicam)
+> > > > > +
+> > > > > +maintainers:
+> > > > > +  - Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>
+> > > > > +
+> > > > > +description: |-
+> > > > > +  The Unicam block on BCM283x SoCs is the receiver for either
+> > > > > +  CSI-2 or CCP2 data from image sensors or similar devices.
+> > > > > +
+> > > > > +  The main platform using this SoC is the Raspberry Pi family of boards.
+> > > > > +  On the Pi the VideoCore firmware can also control this hardware block,
+> > > > > +  and driving it from two different processors will cause issues.
+> > > > > +  To avoid this, the firmware checks the device tree configuration
+> > > > > +  during boot. If it finds device tree nodes starting by csi then
+> > > > > +  it will stop the firmware accessing the block, and it can then
+> > > > > +  safely be used via the device tree binding.
+> > > > > +
+> > > > > +properties:
+> > > > > +  compatible:
+> > > > > +    const: brcm,bcm2835-unicam
+> > > > > +
+> > > > > +  reg:
+> > > > > +    items:
+> > > > > +      - description: Unicam block.
+> > > > > +      - description: Clock Manager Image (CMI) block.
+> > > > > +
+> > > > > +  interrupts:
+> > > > > +    maxItems: 1
+> > > > > +
+> > > > > +  clocks:
+> > > > > +    items:
+> > > > > +      - description: Clock to drive the LP state machine of Unicam.
+> > > > > +      - description: Clock for the vpu (core clock).
+> > > > > +
+> > > > > +  clock-names:
+> > > > > +    items:
+> > > > > +      - const: lp
+> > > > > +      - const: vpu
+> > > > > +
+> > > > > +  power-domains:
+> > > > > +    items:
+> > > > > +      - description: Unicam power domain
+> > > > > +
+> > > > > +  brcm,num-data-lanes:
+> > > > > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > > > +    enum: [ 2, 4 ]
+> > > > > +    description: Number of data lanes on the csi bus
+> > > >
+> > > > There is already data-lanes in
+> > > > Documentation/devicetree/bindings/media/video- interfaces.yaml. AFAICS
+> > > > these two are identical. Can't the video-
+> > > > interface.yaml be used for this? I'm no expert TBH.
+> > >
+> > > This is the number of data lanes that the Unicam instance supports.
+> > > There are two Unicam instances, and they can have 2 or 4 data lanes
+> > > depending on the SoC. The data-lanes endpoint property indicates the
+> > > number of lanes used on a particular board.
+> >
+> > Thanks for the explanation. Isn't this something which could be derived from
+> > the compatible, e.g. having 2 different ones for 2 and 4 lanes respectively?
+> > See [1] for a similar situation in the SPI subsystem.
+> > I don't have a strong opinion, just want to share my feedback.
+>
+> Yes, it could also be done through compatible strings, but in this case
+> I think a vendor-specific property is better. The number of lanes routed
+> from the Unicam IP core to the external of the SoC depends on the exact
+> SoC model, so we would need to create different compatible strings for
+> essentially the same IP core.
 
-Tested-by: Scott Bruce <smbruce@gmail.com>
+Yes csi0 (only supporting 2 data lanes) and csi1 (supporting 4 lanes)
+could have different compatibles. However lanes default to being
+disabled, so there's no need to treat csi1 any differently to csi0 if
+only using up to 2 lanes.
 
+The issue is your second case as eg on Compute Module 4, all 4 data
+lanes of csi1 on the BCM2711 are routed to the camera connector. On
+the Pi4 which also uses BCM2711, only 2 data lanes of csi1 are routed
+to the camera connector. It's the same SoC, so the same compatible
+string would normally apply.
+It's a board design decision over how many lanes to route, not a
+difference in the silicon or IP core. With 3rd parties able to design
+their own carrier boards for Compute Modules, there's no guarantee
+that a Compute Module will always have 4 lanes routed either.
+
+Take imx290 as a sensor driver which supports running on either 2 or 4
+lanes based on DT. A user can take a dtoverlay to configure it for 4
+lanes on a Pi4 and it can not work. If the driver can validate the
+number of lanes requested then it can produce some form of error,
+otherwise you get the support query.
+
+If V4L2's CSI support did something similar to DRM's DSI support where
+the API passed across the number of lanes to run with, then data-lanes
+could be used for this validation (and lane reordering). However at
+present we have to have the data-lanes property on all CSI2 devices in
+a chain have to match.
+
+This has been discussed previously [1], and I relented and dropped it
+to only use data-lanes.
+From a support side, having that validation avoids so many issues that
+it will be in our vendor tree whether it is accepted to mainline or
+not.
+
+  Dave
+
+[1] https://patchwork.linuxtv.org/project/linux-media/patch/888a28269a8a7c22feb2a126db699b1259d1b457.1497452006.git.dave.stevenson@raspberrypi.org/
+
+> > [1] https://patchwork.kernel.org/project/spi-devel-general/patch/20211207104114.2720764-1-alexander.stein@ew.tq-group.com/#24641405
+>
+> --
+> Regards,
+>
+> Laurent Pinchart

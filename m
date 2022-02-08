@@ -2,232 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5E434ADBD0
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 15:58:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD3E94ADBD7
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 15:59:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379071AbiBHO6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 09:58:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51222 "EHLO
+        id S1379132AbiBHO7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 09:59:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348499AbiBHO6r (ORCPT
+        with ESMTP id S1379093AbiBHO7m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 09:58:47 -0500
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594B4C061577;
-        Tue,  8 Feb 2022 06:58:46 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 8C6265C0130;
-        Tue,  8 Feb 2022 09:58:45 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Tue, 08 Feb 2022 09:58:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=FZq4ssWYMzF04ugzd
-        U6+K23uZ05YdN5l+VMujCkRgRE=; b=Bqp07LPgsRAyzl+TYa3JiHKhBiEsDjSRb
-        mQYRMEGrYieX1NiRgGpCL5g0nYgx8R12ffhpdOAB+CheUOJGlqO9OSF7Od5opNRJ
-        5t0sd1FMDR/ql/52am+9dBlCKWfZKjwk7/tZ8fL2b8UNTrKwRUEIx5CIA5nBeuUP
-        kTFSH79WGJmrr8N1+v7OD+NzrW8no2UNUPQ7Ypg7WnYpKg5l0USZ646+OBzNrMdY
-        efquFiDlPofLiXQ/dCi2CTW1tkr5NmjXjlaq+y7ktIB1yUUDA7MVSIQ/BTNagUP9
-        J2mSyoctrgWEhSivUlvkKHE6SVyA9HdjNpfY6NyqW9WUDzSoj86wg==
-X-ME-Sender: <xms:JIUCYik-3y23dLZm0pm-KTnSeUphdjfIg3ZUIlbSzjS2ZduT0Eo-Sg>
-    <xme:JIUCYp1pqD32pHbcwcRkNkJl3ivjGyFmQsSUfj-6ncHm2B_Kbl1_iu_zUjgc1EHZw
-    lCvV57UYdkm9vk>
-X-ME-Received: <xmr:JIUCYgpetAlwpDA2JSi91BCyQkQb7Dxe_xnhZ7548_FLGuHmadbrs4ZZoggFqNzXVLrsN-jrL-GLo_pG-ZsXoFXiaNFbfg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrheejgdeijecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecunecujfgurhepfffhvffukfhfgggtuggjsehttdortd
-    dttddvnecuhfhrohhmpefkughoucfutghhihhmmhgvlhcuoehiughoshgthhesihguohhs
-    tghhrdhorhhgqeenucggtffrrghtthgvrhhnpefgjeevhfdvgeeiudekteduveegueejfe
-    fffeefteekkeeuueehjeduledtjeeuudenucevlhhushhtvghrufhiiigvpedtnecurfgr
-    rhgrmhepmhgrihhlfhhrohhmpehiughoshgthhesihguohhstghhrdhorhhg
-X-ME-Proxy: <xmx:JIUCYmlyZNDi2_wwfKMpjUNBsjV5OyJ_xHIUNX28kfP2YiSr-tB5HA>
-    <xmx:JIUCYg3RnrwEewoye8jaJTKVi7ak8RH_2u_ZOaebfzsHdPqKbD85Fw>
-    <xmx:JIUCYttMU35hvy5pnwYjPVei1khtRXVN0pys3BPbkqmzxo8ELFOYWA>
-    <xmx:JYUCYhmVI6ZU5xQMrqa9Ef8ZJ7Yzvh2UpTW0CByt6-2S-cqYM4QaqA>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 8 Feb 2022 09:58:44 -0500 (EST)
-Date:   Tue, 8 Feb 2022 16:58:39 +0200
-From:   Ido Schimmel <idosch@idosch.org>
-To:     menglong8.dong@gmail.com
-Cc:     rostedt@goodmis.org, mingo@redhat.com, nhorman@tuxdriver.com,
-        davem@davemloft.net, kuba@kernel.org, imagedong@tencent.com,
-        dsahern@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH v7 net-next 2/2] net: drop_monitor: support drop reason
-Message-ID: <YgKFHyQphAwMgsEY@shredder>
-References: <20220208072836.3540192-1-imagedong@tencent.com>
- <20220208072836.3540192-3-imagedong@tencent.com>
+        Tue, 8 Feb 2022 09:59:42 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B6CC061579
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 06:59:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644332382; x=1675868382;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=3zdqxWQwoN/nUQJbyJaitI/dH1KXQ3pdiHsoHtgxz6M=;
+  b=Xn5E1XfWVZy6oolfq+qkflaInHC4pWTMNMMZE2HONGmQSCL3YVKO7wM+
+   XEiCeFyHf7Aj3iN+ecwCpruaz+ZUaWZzAxYviZdmw204crrGFbnbd23Ex
+   4FA5u4USGMZ9oifZaXzo99nZRpCQVnp4u4l7fQnmnhN++i19YmyZSMvEt
+   fdZpSA7HwNZaYafITcbuAlFBLa3g6vRt6gP2vfLfXdH15yqbone0VBzfN
+   eN6s0kOKT4GazGWBC8Ij+eBO7+J4/E6dW/I2+uvOWOPz2D90QjuoDNv4A
+   guel1M5JZd/hwBZOwi0Jnn57rnCHaGL1NS7ZWBcr2sD2INgs4rFNIkoCA
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="248725663"
+X-IronPort-AV: E=Sophos;i="5.88,353,1635231600"; 
+   d="scan'208";a="248725663"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 06:59:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,353,1635231600"; 
+   d="scan'208";a="499584724"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 08 Feb 2022 06:59:40 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nHRxz-0000L3-KD; Tue, 08 Feb 2022 14:59:39 +0000
+Date:   Tue, 8 Feb 2022 22:58:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
+Subject: [peterz-queue:sched/core 32/32]
+ arch/arm64/include/asm/preempt.h:85:25: error: a parameter list without
+ types is only allowed in a function definition
+Message-ID: <202202082223.QmYxE9Ko-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220208072836.3540192-3-imagedong@tencent.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 08, 2022 at 03:28:36PM +0800, menglong8.dong@gmail.com wrote:
-> From: Menglong Dong <imagedong@tencent.com>
-> 
-> In the commit c504e5c2f964 ("net: skb: introduce kfree_skb_reason()")
-> drop reason is introduced to the tracepoint of kfree_skb. Therefore,
-> drop_monitor is able to report the drop reason to users by netlink.
-> 
-> The drop reasons are reported as string to users, which is exactly
-> the same as what we do when reporting it to ftrace.
-> 
-> Signed-off-by: Menglong Dong <imagedong@tencent.com>
-> ---
-> v7:
-> - take the size of NET_DM_ATTR_REASON into accounting in
->   net_dm_packet_report_size()
-> - let compiler define the size of drop_reasons
-> 
-> v6:
-> - check the range of drop reason in net_dm_packet_report_fill()
-> 
-> v5:
-> - check if drop reason larger than SKB_DROP_REASON_MAX
-> 
-> v4:
-> - report drop reasons as string
-> 
-> v3:
-> - referring to cb->reason and cb->pc directly in
->   net_dm_packet_report_fill()
-> 
-> v2:
-> - get a pointer to struct net_dm_skb_cb instead of local var for
->   each field
-> ---
->  include/uapi/linux/net_dropmon.h |  1 +
->  net/core/drop_monitor.c          | 34 ++++++++++++++++++++++++++++----
->  2 files changed, 31 insertions(+), 4 deletions(-)
-> 
-> diff --git a/include/uapi/linux/net_dropmon.h b/include/uapi/linux/net_dropmon.h
-> index 66048cc5d7b3..1bbea8f0681e 100644
-> --- a/include/uapi/linux/net_dropmon.h
-> +++ b/include/uapi/linux/net_dropmon.h
-> @@ -93,6 +93,7 @@ enum net_dm_attr {
->  	NET_DM_ATTR_SW_DROPS,			/* flag */
->  	NET_DM_ATTR_HW_DROPS,			/* flag */
->  	NET_DM_ATTR_FLOW_ACTION_COOKIE,		/* binary */
-> +	NET_DM_ATTR_REASON,			/* string */
->  
->  	__NET_DM_ATTR_MAX,
->  	NET_DM_ATTR_MAX = __NET_DM_ATTR_MAX - 1
-> diff --git a/net/core/drop_monitor.c b/net/core/drop_monitor.c
-> index 7b288a121a41..28c55d605566 100644
-> --- a/net/core/drop_monitor.c
-> +++ b/net/core/drop_monitor.c
-> @@ -48,6 +48,19 @@
->  static int trace_state = TRACE_OFF;
->  static bool monitor_hw;
->  
-> +#undef EM
-> +#undef EMe
-> +
-> +#define EM(a, b)	[a] = #b,
-> +#define EMe(a, b)	[a] = #b
-> +
-> +/* drop_reasons is used to translate 'enum skb_drop_reason' to string,
-> + * which is reported to user space.
-> + */
-> +static const char * const drop_reasons[] = {
-> +	TRACE_SKB_DROP_REASON
-> +};
-> +
->  /* net_dm_mutex
->   *
->   * An overall lock guarding every operation coming from userspace.
-> @@ -126,6 +139,7 @@ struct net_dm_skb_cb {
->  		struct devlink_trap_metadata *hw_metadata;
->  		void *pc;
->  	};
-> +	enum skb_drop_reason reason;
->  };
->  
->  #define NET_DM_SKB_CB(__skb) ((struct net_dm_skb_cb *)&((__skb)->cb[0]))
-> @@ -498,6 +512,7 @@ static void net_dm_packet_trace_kfree_skb_hit(void *ignore,
->  {
->  	ktime_t tstamp = ktime_get_real();
->  	struct per_cpu_dm_data *data;
-> +	struct net_dm_skb_cb *cb;
->  	struct sk_buff *nskb;
->  	unsigned long flags;
->  
-> @@ -508,7 +523,9 @@ static void net_dm_packet_trace_kfree_skb_hit(void *ignore,
->  	if (!nskb)
->  		return;
->  
-> -	NET_DM_SKB_CB(nskb)->pc = location;
-> +	cb = NET_DM_SKB_CB(nskb);
-> +	cb->reason = reason;
-> +	cb->pc = location;
->  	/* Override the timestamp because we care about the time when the
->  	 * packet was dropped.
->  	 */
-> @@ -574,6 +591,8 @@ static size_t net_dm_packet_report_size(size_t payload_len)
->  	       nla_total_size(sizeof(u32)) +
->  	       /* NET_DM_ATTR_PROTO */
->  	       nla_total_size(sizeof(u16)) +
-> +	       /* NET_DM_ATTR_REASON */
-> +	       nla_total_size(SKB_DR_MAX_LEN + 1) +
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/core
+head:   ac7695a93a578befdcf4900a90860bf19e057e1b
+commit: ac7695a93a578befdcf4900a90860bf19e057e1b [32/32] arm64: support PREEMPT_DYNAMIC
+config: arm64-randconfig-r025-20220208 (https://download.01.org/0day-ci/archive/20220208/202202082223.QmYxE9Ko-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e8bff9ae54a55b4dbfeb6ba55f723abbd81bf494)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=ac7695a93a578befdcf4900a90860bf19e057e1b
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue sched/core
+        git checkout ac7695a93a578befdcf4900a90860bf19e057e1b
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 prepare
 
-Nothing ensures that the reason is not longer than this length and
-nothing ensures that this assumption remains valid as more reasons are
-added.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-I think "SKB_DR_MAX_LEN" can be removed completely. Pass "reason" to
-this function and do "strlen(drop_reasons[reason]) + 1". Any reason it
-can't work?
+All error/warnings (new ones prefixed by >>):
 
->  	       /* NET_DM_ATTR_PAYLOAD */
->  	       nla_total_size(payload_len);
->  }
-> @@ -606,8 +625,9 @@ static int net_dm_packet_report_in_port_put(struct sk_buff *msg, int ifindex,
->  static int net_dm_packet_report_fill(struct sk_buff *msg, struct sk_buff *skb,
->  				     size_t payload_len)
->  {
-> -	u64 pc = (u64)(uintptr_t) NET_DM_SKB_CB(skb)->pc;
-> +	struct net_dm_skb_cb *cb = NET_DM_SKB_CB(skb);
->  	char buf[NET_DM_MAX_SYMBOL_LEN];
-> +	unsigned int reason;
->  	struct nlattr *attr;
->  	void *hdr;
->  	int rc;
-> @@ -620,10 +640,16 @@ static int net_dm_packet_report_fill(struct sk_buff *msg, struct sk_buff *skb,
->  	if (nla_put_u16(msg, NET_DM_ATTR_ORIGIN, NET_DM_ORIGIN_SW))
->  		goto nla_put_failure;
->  
-> -	if (nla_put_u64_64bit(msg, NET_DM_ATTR_PC, pc, NET_DM_ATTR_PAD))
-> +	if (nla_put_u64_64bit(msg, NET_DM_ATTR_PC, (u64)(uintptr_t)cb->pc,
-> +			      NET_DM_ATTR_PAD))
-> +		goto nla_put_failure;
-> +
-> +	reason = (unsigned int)cb->reason;
-> +	if (reason < SKB_DROP_REASON_MAX &&
+   In file included from arch/arm64/kernel/asm-offsets.c:10:
+   In file included from include/linux/arm_sdei.h:8:
+   In file included from include/acpi/ghes.h:5:
+   In file included from include/acpi/apei.h:9:
+   In file included from include/linux/acpi.h:13:
+   In file included from include/linux/irqdomain.h:35:
+   In file included from include/linux/of.h:17:
+   In file included from include/linux/kobject.h:20:
+   In file included from include/linux/sysfs.h:16:
+   In file included from include/linux/kernfs.h:11:
+   In file included from include/linux/mutex.h:17:
+   In file included from include/linux/lockdep.h:14:
+   In file included from include/linux/smp.h:110:
+   In file included from include/linux/preempt.h:78:
+>> arch/arm64/include/asm/preempt.h:85:1: warning: declaration specifier missing, defaulting to 'int'
+   DECLARE_STATIC_KEY_TRUE(sk_dynamic_irqentry_exit_cond_resched);
+   ^
+   int
+>> arch/arm64/include/asm/preempt.h:85:25: error: a parameter list without types is only allowed in a function definition
+   DECLARE_STATIC_KEY_TRUE(sk_dynamic_irqentry_exit_cond_resched);
+                           ^
+   1 warning and 1 error generated.
+   make[2]: *** [scripts/Makefile.build:121: arch/arm64/kernel/asm-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1191: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
-In which cases can this happen? Might be better to perform this
-validation in net_dm_packet_trace_kfree_skb_hit() and set "cb->reason"
-to "SKB_DROP_REASON_NOT_SPECIFIED" in this case. That way we don't need
-to perform the validation in later code paths
 
-> +	    nla_put_string(msg, NET_DM_ATTR_REASON, drop_reasons[reason]))
->  		goto nla_put_failure;
->  
-> -	snprintf(buf, sizeof(buf), "%pS", NET_DM_SKB_CB(skb)->pc);
-> +	snprintf(buf, sizeof(buf), "%pS", cb->pc);
->  	if (nla_put_string(msg, NET_DM_ATTR_SYMBOL, buf))
->  		goto nla_put_failure;
->  
-> -- 
-> 2.34.1
-> 
+vim +85 arch/arm64/include/asm/preempt.h
+
+    84	
+  > 85	DECLARE_STATIC_KEY_TRUE(sk_dynamic_irqentry_exit_cond_resched);
+    86	void dynamic_preempt_schedule(void);
+    87	#define __preempt_schedule()		dynamic_preempt_schedule()
+    88	void dynamic_preempt_schedule_notrace(void);
+    89	#define __preempt_schedule_notrace()	dynamic_preempt_schedule_notrace()
+    90	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

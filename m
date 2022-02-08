@@ -2,149 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F33DB4AD0FA
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 06:33:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E027D4AD10F
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 06:34:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347376AbiBHFdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 00:33:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59466 "EHLO
+        id S231971AbiBHFdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 00:33:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231237AbiBHFDb (ORCPT
+        with ESMTP id S231616AbiBHFKn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 00:03:31 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B232C0401DC;
-        Mon,  7 Feb 2022 21:03:30 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id 10so4981877plj.1;
-        Mon, 07 Feb 2022 21:03:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=D7TPg7igy8jX8i2IC5l48LueyTmlMqu2/RJJ5raSOkc=;
-        b=nYoWxiV0dpeHGymcX1/LiH0Q2uLhPdSw9W1eorADlHjdoaGELcCZ4EEHCJECi2sCOu
-         63cLRobdP2k2KEH9g2zkBuUU+yXU+DUGvk4esMKLOQvFP1VJ3PnY6IhvmUXLUo2sU/mH
-         Fj05qx2iGcLgYkhzS/b1yK5tn6UJX/KIXWxwQp/zkK4S+3qh1RgkKBpJpBuYCU99dP5a
-         Q9R1EY3jcKqLcnep3Dw0jwTf5anuxpP+G7TlFFPnkjJDBG+A/QN3NYSE7WykIxJ/LlAJ
-         wEa1XekRbvsU0SkYiJpx+XmCV3L4FZBROV8sdxk98rLfvOjWSdN2pqpGxVy5cVdiBMZl
-         K+Ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=D7TPg7igy8jX8i2IC5l48LueyTmlMqu2/RJJ5raSOkc=;
-        b=bSMeRPFiB4O4FMjryCjDdq09DLAHhGVMYao6q/yaRWF2iE7/3RYxhIOYaS6a9z48AY
-         BN0yvQg2CEZtdQaL/r6liRWvJ7aL3M+ZdU6ZkHKePscliBjDcYp/OVNlKToteOTHGHvJ
-         KW3Tm24sBMtSDXQ/354zpmgwO2HgH3Dz7/E32m6IDWMPNgVtUpAK3YtUZw3PQf0JNsHh
-         3MHyStGi+aw2R39e4/t4epK0z/l5FlmC4PCvtkTWRbLTKOBtjNgGCT49QAkUa9wC1ASE
-         OebA3NdMK9cb0mM28Brxtw/g4wnHxE6KLdtH35vGTzykB6I6+6fbMO9ThDMqS6S852n4
-         1sgg==
-X-Gm-Message-State: AOAM533NdJaaa2abVInsDSxDUb42AS8UoqOooiyIXRAKjQcC8vAcJu1R
-        Gt4D3fJ3WXSVkMx9jSA+bcU=
-X-Google-Smtp-Source: ABdhPJx8O5PSUs5MOOvZEKvj+v+OcwylIZAba/0DAfzEACWL/FTp9ttHKw0a0Uductr+7QzFLHFKIQ==
-X-Received: by 2002:a17:902:7ec8:: with SMTP id p8mr2850589plb.165.1644296609885;
-        Mon, 07 Feb 2022 21:03:29 -0800 (PST)
-Received: from [10.0.2.64] ([209.37.97.194])
-        by smtp.googlemail.com with ESMTPSA id a38sm1862369pfx.121.2022.02.07.21.03.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Feb 2022 21:03:29 -0800 (PST)
-Message-ID: <f1d1f29b-45e8-1ba3-bdbd-4c892b6a4e0f@gmail.com>
-Date:   Mon, 7 Feb 2022 21:03:27 -0800
+        Tue, 8 Feb 2022 00:10:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4189DC0401DC
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 21:10:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FD0A61584
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 05:10:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15B4DC004E1;
+        Tue,  8 Feb 2022 05:10:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644297041;
+        bh=hQU4kALbv8KReTh+8inR9J8N9ipY/aO4u1IHOAkwfxU=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=AaHpKKIOHX7xGKlrNU/X66cmgsQQpMgqyIeBeVpubFjbKqUfPGCX4eDl445Hwgzlz
+         4xF0K0WYTjNzvHP5Yjb/zIQP9aaW8LL+wBIC9uNwlPAJmJjroHwVzb9AGq3OdG90Pl
+         cmXpUh5ldSBYapjDtyYzhsz4t0JTGP5cAGrVlkhMB/9GfnNUsV9KpGj1i/C2DagM7l
+         Tvj/FkqWuQ7Sclpo2s9g0Zv2Ah+zo4RMPfwX5js7oUTKxoeD0P1ctZFnHt5I2+ZgKg
+         7WBbHxIcrk8wSLHn+UJB6MJdP4f+KUqqwismbaFSuMdqsE0gyr+dIjlqBO3peK4oFV
+         3mblRv79ySLVQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id A78805C0348; Mon,  7 Feb 2022 21:10:40 -0800 (PST)
+Date:   Mon, 7 Feb 2022 21:10:40 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 00/42] nolibc: update to resync with out-of-tree project
+Message-ID: <20220208051040.GM4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220207162354.14293-1-w@1wt.eu>
+ <20220208000028.GG4285@paulmck-ThinkPad-P17-Gen-1>
+ <20220208044150.GA18521@1wt.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.1
-Subject: Re: [PATCH 2/2] net: tun: track dropped skb via kfree_skb_reason()
-Content-Language: en-US
-To:     Dongli Zhang <dongli.zhang@oracle.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        rostedt@goodmis.org, mingo@redhat.com, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, imagedong@tencent.com,
-        joao.m.martins@oracle.com, joe.jin@oracle.com, edumazet@google.com
-References: <20220208035510.1200-1-dongli.zhang@oracle.com>
- <20220208035510.1200-3-dongli.zhang@oracle.com>
-From:   David Ahern <dsahern@gmail.com>
-In-Reply-To: <20220208035510.1200-3-dongli.zhang@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220208044150.GA18521@1wt.eu>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/7/22 7:55 PM, Dongli Zhang wrote:
-> The TUN can be used as vhost-net backend. E.g, the tun_net_xmit() is the
-> interface to forward the skb from TUN to vhost-net/virtio-net.
+On Tue, Feb 08, 2022 at 05:41:50AM +0100, Willy Tarreau wrote:
+> On Mon, Feb 07, 2022 at 04:00:28PM -0800, Paul E. McKenney wrote:
+> > I queued these from email to get some time on them.  If an update is
+> > needed (for example, based on discussion with David Laight), please feel
+> > free to send me an update and I can drop the current set in favor of a
+> > new version.
 > 
-> However, there are many "goto drop" in the TUN driver. Therefore, the
-> kfree_skb_reason() is involved at each "goto drop" to help userspace
-> ftrace/ebpf to track the reason for the loss of packets.
+> OK thanks!
 > 
-> Cc: Joao Martins <joao.m.martins@oracle.com>
-> Cc: Joe Jin <joe.jin@oracle.com>
-> Signed-off-by: Dongli Zhang <dongli.zhang@oracle.com>
-> ---
->  drivers/net/tun.c          | 33 +++++++++++++++++++++++++--------
->  include/linux/skbuff.h     |  6 ++++++
->  include/trace/events/skb.h |  6 ++++++
->  3 files changed, 37 insertions(+), 8 deletions(-)
+> > Good stuff, by the way, thank you!!!
 > 
-> diff --git a/drivers/net/tun.c b/drivers/net/tun.c
-> index fed85447701a..d67f2419dbb4 100644
-> --- a/drivers/net/tun.c
-> +++ b/drivers/net/tun.c
-> @@ -1062,13 +1062,16 @@ static netdev_tx_t tun_net_xmit(struct sk_buff *skb, struct net_device *dev)
->  	struct netdev_queue *queue;
->  	struct tun_file *tfile;
->  	int len = skb->len;
-> +	int drop_reason = SKB_DROP_REASON_NOT_SPECIFIED;
+> thanks ;-)
+> 
+> > Hmmm...  I should make rcutorture able to smoke-test this.  My thought
+> > would be to add some code to rcutorture's init.c that tried out the
+> > system calls.
+> 
+> I don't think we should abuse rcutorture to test nolibc, however you
+> could decide that rcutorture could benefit from some improvements
+> (take arguments, parse env or /proc/cmdline, report some info such
+> as syscall errors etc).
+> 
+> > But I bet that you already have some test code.  ;-)
+> 
+> Actually my testing remains limited in terms of reproducibility. For
+> most syscalls I used to just modify a simple test file (hello.c) to
+> update the syscall and generally run it under strace; in addition,
+> my preinit code builds with it and all my kernels rely on it, which
+> gives me extra confidence I didn't break common stuff.
+> 
+> I've thought about starting to create a real test suite for all these
+> calls, either just one syscall or function per file (for easier testing),
+> or one test file per test unit (e.g. one for stdlib, one for sys, etc),
+> or maybe something in between.
 
+I am mainly looking for a regression test I can run, with or without
+rcutorture.  ;-)
 
->  
->  	rcu_read_lock();
->  	tfile = rcu_dereference(tun->tfiles[txq]);
->  
->  	/* Drop packet if interface is not attached */
-> -	if (!tfile)
-> +	if (!tfile) {
-> +		drop_reason = SKB_DROP_REASON_DEV_NOT_ATTACHED;
+> > One approach would be to place the test code in tools/nolibc, and
+> > have rcutorture's init.c either #include that or link to it.
+> 
+> There could be an interesting idea to develop here. While I don't find
+> it logical to abuse rcutorture for this, we could instead consider a
+> more general init-based test suite that could cover various aspects
+> including syscalls and rcutorture. We could let the user choose at
+> build time what to implement (so that we don't waste testing time on
+> the libc aspect when rcutorture is needed for example), and/or force
+> tests on the cmdline (convenient under qemu for example). It could
+> also be used to verify if some syscalls were dropped due to some
+> config options being turned off.
+> 
+> I was thinking about having just a numbered suite that iterates over
+> numerous tests and provides a test number, a function/syscall name,
+> a variant and a result. Something that could easily be copy-pasted
+> to ease reporting of breakage.
+> 
+> This could be especially helpful to port to other architectures. For
+> example we're still missing PPC and I don't have much experience there
+> (the only one I have access to runs and old version of AIX). And a
+> test suite could easily tell if something is broken such as a
+> non-implemented syscall.
 
-That is going to be a confusing reason code (tap device existed to get
-here) and does not really explain this error.
+All excellent points!
 
+> I was hesitant about where to place such a test suite, because I didn't
+> want to pollute the include files with tests. In the out-of-tree code
+> there's already a "hello.c" file and I started to think about moving the
+> rest to include/. But your proposal of tools/nolibc makes sense in that
+> it would keep the suite separate from the include files. Actually I'd
+> rather put that under tools/testing/selftests/nolibc. With this done,
+> I think it would remove some maintenance burden and I could probably
+> just kill the out-of-tree project and consider that the up-to-date one
+> is in the kernel.
 
->  		goto drop;
-> +	}
->  
->  	if (!rcu_dereference(tun->steering_prog))
->  		tun_automq_xmit(tun, skb);
-> @@ -1078,19 +1081,27 @@ static netdev_tx_t tun_net_xmit(struct sk_buff *skb, struct net_device *dev)
->  	/* Drop if the filter does not like it.
->  	 * This is a noop if the filter is disabled.
->  	 * Filter can be enabled only for the TAP devices. */
-> -	if (!check_filter(&tun->txflt, skb))
-> +	if (!check_filter(&tun->txflt, skb)) {
-> +		drop_reason = SKB_DROP_REASON_TAP_RUN_FILTER;
+Agreed, tools/testing/selftests/nolibc makes a lot of sense.  As does
+having things in-tree, especially given that it seems to have several
+contributors now, which presumably means at least that many users.
 
-just SKB_DROP_REASON_TAP_FILTER
+> > Thoughts?  Especially thoughts about better testing approaches?
+> 
+> Hehe, each time I think I'm done for a while on this project, you
+> manage to fuel me with many interesting ideas for improvements ;-)
 
->  		goto drop;
-> +	}
->  
->  	if (tfile->socket.sk->sk_filter &&
-> -	    sk_filter(tfile->socket.sk, skb))
-> +	    sk_filter(tfile->socket.sk, skb)) {
-> +		drop_reason = SKB_DROP_REASON_SKB_TRIM;
+"It is a service I provide."  ;-)
 
-SKB_DROP_REASON_SOCKET_FILTER
-
-The remainder of your changes feels like another variant of your
-previous "function / line" reason code. You are creating new reason
-codes for every goto failure with a code based name. The reason needs to
-be the essence of the failure in a user friendly label.
+							Thanx, Paul

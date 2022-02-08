@@ -2,106 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F37624AD669
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:25:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B6784AD663
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:25:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357323AbiBHLZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 06:25:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50512 "EHLO
+        id S1358173AbiBHLZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 06:25:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349659AbiBHKGO (ORCPT
+        with ESMTP id S1356063AbiBHKHK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 05:06:14 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09968C03FEC0
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 02:06:12 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Tue, 8 Feb 2022 05:07:10 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FC26C03FEC0;
+        Tue,  8 Feb 2022 02:07:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 777D1210F0;
-        Tue,  8 Feb 2022 10:06:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1644314771; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tYrORe3vbzcD89PzHSw+5HK7RMII1r7ziVJYHhpEbvY=;
-        b=1G97zkUeMoUg2asgGtkKTpcfWDbflaeBjia6xc6toNB3usuLthmDrzmslwlNFDcp3oeajy
-        a/CZ4wv+1Axgc0UL23uKPu9gl3y8o9C6oRPqacVZ1cw7Ek2vQutdsydcbSoANblhvK/Lsc
-        3UgYFGtuHddoAXHJcsaHpB2nJfDRCvU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1644314771;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tYrORe3vbzcD89PzHSw+5HK7RMII1r7ziVJYHhpEbvY=;
-        b=BLDJBR5kBFT2606T2KG/4nXiSiOkRNicBmCdSRXn6G+O0k8joXqf3lxJaYSAI3TgAwYQ6n
-        n0viQfq9FopNdADw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1580D13BF9;
-        Tue,  8 Feb 2022 10:06:11 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id C7R6ApNAAmJUbwAAMHmgww
-        (envelope-from <osalvador@suse.de>); Tue, 08 Feb 2022 10:06:11 +0000
-Date:   Tue, 8 Feb 2022 11:06:08 +0100
-From:   Oscar Salvador <osalvador@suse.de>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/4] mm/memory_hotplug: avoid calling zone_intersects()
- for ZONE_NORMAL
-Message-ID: <YgJAkJfEffpsmEuj@localhost.localdomain>
-References: <20220207133643.23427-1-linmiaohe@huawei.com>
- <20220207133643.23427-3-linmiaohe@huawei.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 51E25B81802;
+        Tue,  8 Feb 2022 10:07:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55214C340EF;
+        Tue,  8 Feb 2022 10:07:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1644314827;
+        bh=OikrdX8FMNiMLuMVEJTQbFg4yac0GkRiulyJsMntNGY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jiP1EPaq3l/aJLJwYUcK5NMYqW2KzAtVaLuE9HOb9vDiTt92PUE12lcvGYU6E6zqt
+         XcPHv5v36KfoKOmKMk4R3I/1iVdMxdBG53W5NftkumO7AlhhmCtBDucZk4S+gPHloK
+         ss7Xe7jZpLAI2h8sTcfxDRByeIUNzXrPHSohN2ps=
+Date:   Tue, 8 Feb 2022 11:07:04 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Erwan LE RAY <erwan.leray@foss.st.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Gerald Baeza <gerald.baeza@st.com>,
+        Valentin Caron <valentin.caron@foss.st.com>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "linux-stm32@st-md-mailman.stormreply.com" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/2] serial: mctrl_gpio: add a new API to enable /
+ disable wake_irq
+Message-ID: <YgJAyAZFJBFXQGvf@kroah.com>
+References: <20220203171644.12231-1-erwan.leray@foss.st.com>
+ <20220203171644.12231-2-erwan.leray@foss.st.com>
+ <CAHp75VfxGj=3mKvjcRpQjyXBCM0szsidHVuJGdAL8yP5SmdBzw@mail.gmail.com>
+ <cb09a49a-37f8-9e3f-168c-4c5dd62e2c07@foss.st.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220207133643.23427-3-linmiaohe@huawei.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <cb09a49a-37f8-9e3f-168c-4c5dd62e2c07@foss.st.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 09:36:41PM +0800, Miaohe Lin wrote:
-> If zid reaches ZONE_NORMAL, the caller will always get the NORMAL zone no
-> matter what zone_intersects() returns. So we can save some possible cpu
-> cycles by avoid calling zone_intersects() for ZONE_NORMAL.
+On Fri, Feb 04, 2022 at 04:41:58PM +0100, Erwan LE RAY wrote:
+> Hi Andy,
 > 
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> On 2/4/22 10:07 AM, Andy Shevchenko wrote:
+> > 
+> > 
+> > On Thursday, February 3, 2022, Erwan Le Ray <erwan.leray@foss.st.com
+> > <mailto:erwan.leray@foss.st.com>> wrote:
+> > 
+> >     Add a new API to enable / disable wake_irq in order to enable gpio
+> >     irqs as
+> >     wakeup irqs for the uart port.
+> > 
+> >     Signed-off-by: Erwan Le Ray <erwan.leray@foss.st.com
+> >     <mailto:erwan.leray@foss.st.com>>
+> > 
+> >     diff --git a/drivers/tty/serial/serial_mctrl_gpio.c
+> >     b/drivers/tty/serial/serial_mctrl_gpio.c
+> >     index c41d8911ce95..1663b3afc3a0 100644
+> >     --- a/drivers/tty/serial/serial_mctrl_gpio.c
+> >     +++ b/drivers/tty/serial/serial_mctrl_gpio.c
+> >     @@ -299,4 +299,42 @@ void mctrl_gpio_disable_ms(struct mctrl_gpios
+> >     *gpios)
+> >       }
+> >       EXPORT_SYMBOL_GPL(mctrl_gpio_disable_ms);
+> > 
+> >     +void mctrl_gpio_enable_irq_wake(struct mctrl_gpios *gpios)
+> >     +{
+> >     +       enum mctrl_gpio_idx i;
+> >     +
+> >     +       if (!gpios)
+> >     +               return;
+> >     +
+> >     +       if (!gpios->mctrl_on)
+> >     +               return;
+> >     +
+> >     +       for (i = 0; i < UART_GPIO_MAX; ++i) {
+> >     +               if (!gpios->irq[i])
+> >     +                       continue;
+> > 
+> > 
+> > 
+> > Why not simply
+> > 
+> >    if (gpios[])
+> >      enable_irq_...
+> > 
+> > ?
+> > 
+> > And same for disabling.
+> > 
+> >     +
+> >     +               enable_irq_wake(gpios->irq[i]);
+> >     +       }
+> >     +}
+> >     +EXPORT_SYMBOL_GPL(mctrl_gpio_enable_irq_wake);
+> >     +
+> >     +void mctrl_gpio_disable_irq_wake(struct mctrl_gpios *gpios)
+> >     +{
+> >     +       enum mctrl_gpio_idx i;
+> >     +
+> >     +       if (!gpios)
+> >     +               return;
+> >     +
+> >     +       if (!gpios->mctrl_on)
+> >     +               return;
+> >     +
+> >     +       for (i = 0; i < UART_GPIO_MAX; ++i) {
+> >     +               if (!gpios->irq[i])
+> >     +                       continue;
+> >     +
+> >     +               disable_irq_wake(gpios->irq[i]);
+> >     +       }
+> >     +}
+> >     +EXPORT_SYMBOL_GPL(mctrl_gpio_disable_irq_wake);
+> >     +
+> >       MODULE_LICENSE("GPL");
+> >     diff --git a/drivers/tty/serial/serial_mctrl_gpio.h
+> >     b/drivers/tty/serial/serial_mctrl_gpio.h
+> >     index b134a0ffc894..fc76910fb105 100644
+> >     --- a/drivers/tty/serial/serial_mctrl_gpio.h
+> >     +++ b/drivers/tty/serial/serial_mctrl_gpio.h
+> >     @@ -91,6 +91,16 @@ void mctrl_gpio_enable_ms(struct mctrl_gpios *gpios);
+> >        */
+> >       void mctrl_gpio_disable_ms(struct mctrl_gpios *gpios);
+> > 
+> >     +/*
+> >     + * Enable gpio wakeup interrupts to enable wake up source.
+> >     + */
+> >     +void mctrl_gpio_enable_irq_wake(struct mctrl_gpios *gpios);
+> >     +
+> >     +/*
+> >     + * Disable gpio wakeup interrupts to enable wake up source.
+> >     + */
+> >     +void mctrl_gpio_disable_irq_wake(struct mctrl_gpios *gpios);
+> >     +
+> >       #else /* GPIOLIB */
+> > 
+> >       static inline
+> >     @@ -142,6 +152,14 @@ static inline void mctrl_gpio_disable_ms(struct
+> >     mctrl_gpios *gpios)
+> >       {
+> >       }
+> > 
+> >     +static inline void mctrl_gpio_enable_irq_wake(struct mctrl_gpios
+> >     *gpios)
+> >     +{
+> >     +}
+> >     +
+> >     +static inline void mctrl_gpio_disable_irq_wake(struct mctrl_gpios
+> >     *gpios)
+> >     +{
+> >     +}
+> >     +
+> >       #endif /* GPIOLIB */
+> > 
+> >       #endif
+> >     --     2.17.1
+> > 
+> > 
+> > 
+> > -- 
+> > With Best Regards,
+> > Andy Shevchenko
+> > 
+> > 
+> 
+> Thanks for your review.
+> I fully agree with your comment, but I wrote this code like it is to keep
+> the same structure than all the other ops of serial_mcrtrl_gpio driver. I
+> preferred keeping an homogeneous code in the driver rather than breaking the
+> driver homogeneity with the addition of an optimized code.
+> 
+> Greg, can you please indicate which solution you recommend ?
 
-Reviewed-by: Oscar Salvador <osalvador@suse.de>
+Sadly, this is the format in this file, so I'll take this as-is.
 
-> ---
->  mm/memory_hotplug.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
-> index cbc67c27e0dd..140809e60e9a 100644
-> --- a/mm/memory_hotplug.c
-> +++ b/mm/memory_hotplug.c
-> @@ -826,7 +826,7 @@ static struct zone *default_kernel_zone_for_pfn(int nid, unsigned long start_pfn
->  	struct pglist_data *pgdat = NODE_DATA(nid);
->  	int zid;
->  
-> -	for (zid = 0; zid <= ZONE_NORMAL; zid++) {
-> +	for (zid = 0; zid < ZONE_NORMAL; zid++) {
->  		struct zone *zone = &pgdat->node_zones[zid];
->  
->  		if (zone_intersects(zone, start_pfn, nr_pages))
-> -- 
-> 2.23.0
-> 
-> 
+thanks,
 
--- 
-Oscar Salvador
-SUSE Labs
+greg k-h

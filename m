@@ -2,70 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B403D4AD2B2
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 09:04:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BE5A4AD2B5
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 09:05:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348739AbiBHIEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 03:04:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45566 "EHLO
+        id S1348761AbiBHIFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 03:05:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348734AbiBHIEQ (ORCPT
+        with ESMTP id S236001AbiBHIFw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 03:04:16 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4445C0401F5
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 00:04:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644307454; x=1675843454;
-  h=mime-version:content-transfer-encoding:in-reply-to:
-   references:to:cc:subject:from:message-id:date;
-  bh=AUUalteisJVotgwm2A5rb5kQMU4MKwe9fDedhXPmsdY=;
-  b=Lo76UWkFk/9FWrrDs9rnscSbbfHCwb5k0JPPPD2AjJ9QxmDsVz9SCnwm
-   IBIsjJmh0upCDP491Awpm+wNjAXyR1JeatXc6AgbsRvEmxPIomMiJWRfr
-   u6V1dU58CKOL68NWWD5wvj8gmFxam+mpdyIGclgo5GjKuE8IxbIoCTMS4
-   fDUda3xI8JafcDqwsO2RYWjzq6FE09Z7IerN+btLCovtov8rKTWJEv6gO
-   F1xYGFoKClVn8TRgTVw2GaxRfLIVTrWjRlzMjqCjwNL2NHZ7Q2rcf1tNM
-   dPf3WuQmsFXSZGiSFxGl5A45Fty/ZBgrM0IC+ZOT98Ec6biUy9LXyLj5u
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="249105310"
-X-IronPort-AV: E=Sophos;i="5.88,352,1635231600"; 
-   d="scan'208";a="249105310"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 00:04:14 -0800
-X-IronPort-AV: E=Sophos;i="5.88,352,1635231600"; 
-   d="scan'208";a="540492714"
-Received: from zimmerer-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.39.149])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 00:04:10 -0800
-Content-Type: text/plain; charset="utf-8"
+        Tue, 8 Feb 2022 03:05:52 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6509C0401EF;
+        Tue,  8 Feb 2022 00:05:51 -0800 (PST)
+Received: from fraeml701-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JtFnG68VGz6F92x;
+        Tue,  8 Feb 2022 16:00:50 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml701-chm.china.huawei.com (10.206.15.50) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.21; Tue, 8 Feb 2022 09:05:49 +0100
+Received: from [10.47.24.125] (10.47.24.125) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Tue, 8 Feb
+ 2022 08:05:35 +0000
+Message-ID: <4f6f6e0f-4398-3018-cc35-6aa7ea1305fe@huawei.com>
+Date:   Tue, 8 Feb 2022 08:05:29 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <877da7rlzr.fsf@intel.com>
-References: <20220127120508.11330-1-zhi.a.wang@intel.com> <20220207073247.GA24327@lst.de> <DM4PR11MB5549FE45F8098368114ADE75CA2C9@DM4PR11MB5549.namprd11.prod.outlook.com> <20220207083535.GA25345@lst.de> <877da7rlzr.fsf@intel.com>
-To:     "Wang, Zhi A" <zhi.a.wang@intel.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Jani Nikula <jani.nikula@linux.intel.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Zhi Wang <zhi.wang.linux@gmail.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "intel-gvt-dev@lists.freedesktop.org" 
-        <intel-gvt-dev@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v3 8/8] iommu/arm-smmu-v3: Make default domain type of
+ HiSilicon PTT device to identity
+To:     Yicong Yang <yangyicong@hisilicon.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "helgaas@kernel.org" <helgaas@kernel.org>,
+        "alexander.shishkin@linux.intel.com" 
+        <alexander.shishkin@linux.intel.com>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "mathieu.poirier@linaro.org" <mathieu.poirier@linaro.org>,
+        "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
+        "mike.leach@linaro.org" <mike.leach@linaro.org>,
+        "leo.yan@linaro.org" <leo.yan@linaro.org>,
+        "Jonathan Cameron" <jonathan.cameron@huawei.com>,
+        "daniel.thompson@linaro.org" <daniel.thompson@linaro.org>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "Shameerali Kolothum Thodi" <shameerali.kolothum.thodi@huawei.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "acme@kernel.org" <acme@kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        "Xu, Terrence" <terrence.xu@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-Subject: Re: [PATCH 1/3] i915/gvt: Introduce the mmio_table.c to support VFIO new mdev API
-From:   Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-Message-ID: <164430744744.6827.16056768203919410118@jlahtine-mobl.ger.corp.intel.com>
-User-Agent: alot/0.8.1
-Date:   Tue, 08 Feb 2022 10:04:07 +0200
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "coresight@lists.linaro.org" <coresight@lists.linaro.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>
+CC:     "Zengtao (B)" <prime.zeng@hisilicon.com>,
+        "liuqi (BA)" <liuqi115@huawei.com>,
+        Zhangshaokun <zhangshaokun@hisilicon.com>,
+        Linuxarm <linuxarm@huawei.com>,
+        yangyicong <yangyicong@huawei.com>,
+        "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>
+References: <20220124131118.17887-1-yangyicong@hisilicon.com>
+ <20220124131118.17887-9-yangyicong@hisilicon.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <20220124131118.17887-9-yangyicong@hisilicon.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.24.125]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,37 +86,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Jani Nikula (2022-02-07 12:48:08)
-> On Mon, 07 Feb 2022, Christoph Hellwig <hch@lst.de> wrote:
-> > On Mon, Feb 07, 2022 at 08:28:13AM +0000, Wang, Zhi A wrote:
-> >> 1) About having the mmio_table.h, I would like to keep the stuff in a
-> >> dedicated header as putting them in intel_gvt.h might needs i915 guys
-> >> to maintain it.
-> >> 2) The other one is about if we should move the mmio_table.c into
-> >> i915 folder. I guess we need the some comments from Jani. In the
-> >> current version that I am testing, it's still in GVT folder. Guess we
-> >> can submit a patch to move it to i915 folder later if Jani is ok
-> >> about that.
-> >
-> > Yes, let's have Jani chime in on these.  They're basically one and the
-> > same issue.  This code will have to be built into into the core i915
-> > driver even with my planned split, which is kindof the point of this
-> > exercise.  I think it makes sense to use the subdirectories as boundari=
-es
-> > for where the code ends up and not to declarare maintainership boundari=
-es,
-> > but it will be up to the i915 and gvt maintainers to decide that.
->=20
-> Agreed. If there's going to be a gvt.ko, I think all of gvt/ should be
-> part of that module, nothing more, nothing less.
->=20
-> The gvt related files in i915/ should probably be named intel_gvt* or
-> something, ditto for function naming, and we'll probably want patches
-> touching them be Cc'd to intel-gfx list.
->=20
-> Joonas, Rodrigo, Tvrtko, thoughts?
+On 24/01/2022 13:11, Yicong Yang wrote:
+> The DMA of HiSilicon PTT device can only work with identical
+> mapping. So add a quirk for the device to force the domain
+> passthrough.
 
-Agreed on above. I don't think we expect much changes on the golden MMIO
-state capture set.
+This patch should be earlier in the series, before the PTT driver, and 
+the comment on hisi_ptt_check_iommu_mapping() should mention what is 
+going on here.
 
-Regards, Joonas
+> 
+> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+> ---
+>   drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 16 ++++++++++++++++
+>   1 file changed, 16 insertions(+)
+> 
+> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> index 6dc6d8b6b368..6f67a2b1dd27 100644
+> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> @@ -2838,6 +2838,21 @@ static int arm_smmu_dev_disable_feature(struct device *dev,
+>   	}
+>   }
+>   
+> +#define IS_HISI_PTT_DEVICE(pdev)	((pdev)->vendor == PCI_VENDOR_ID_HUAWEI && \
+> +					 (pdev)->device == 0xa12e)
+
+I assume that not all revisions will require this check, right?
+
+> +
+> +static int arm_smmu_def_domain_type(struct device *dev)
+> +{
+> +	if (dev_is_pci(dev)) {
+> +		struct pci_dev *pdev = to_pci_dev(dev);
+> +
+> +		if (IS_HISI_PTT_DEVICE(pdev))
+> +			return IOMMU_DOMAIN_IDENTITY;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>   static struct iommu_ops arm_smmu_ops = {
+>   	.capable		= arm_smmu_capable,
+>   	.domain_alloc		= arm_smmu_domain_alloc,
+> @@ -2863,6 +2878,7 @@ static struct iommu_ops arm_smmu_ops = {
+>   	.sva_unbind		= arm_smmu_sva_unbind,
+>   	.sva_get_pasid		= arm_smmu_sva_get_pasid,
+>   	.page_response		= arm_smmu_page_response,
+> +	.def_domain_type	= arm_smmu_def_domain_type,
+>   	.pgsize_bitmap		= -1UL, /* Restricted during device attach */
+>   	.owner			= THIS_MODULE,
+>   };
+

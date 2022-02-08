@@ -2,119 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0D924AD3CC
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 09:43:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30C024AD3D0
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 09:44:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351346AbiBHInn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 03:43:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39920 "EHLO
+        id S1352045AbiBHIoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 03:44:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351856AbiBHInW (ORCPT
+        with ESMTP id S1351427AbiBHInj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 03:43:22 -0500
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF0C1C03FED4
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 00:43:08 -0800 (PST)
-Received: by mail-io1-xd30.google.com with SMTP id p63so20166753iod.11
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 00:43:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Co3BUFT9beNFmBZeCDmBd4UzULJVNB7vW9mGtuUcPnM=;
-        b=ohrEubPZBSY43eIQ5NQCK0B4O7CFbJ/HpKhbez278dzMobVWnfF2oOF3sOrc74B4QQ
-         U41143EltG56aXzdjjzZm/GU4cXZGtH83mvjb2qCX+F563MQ3fpmYtycdSu5kzshBVG8
-         DqWBAyQynUJHXWlGwhPQOK9if98mUmdwJ8Ir1N0avBzJ6forpYNFs3XqdV58s5cnDsMU
-         W4bwCOSsmJHJTrTl6UvTk9gc5iIIE+0JWF2n38A2tLyC+ff1QK0lTH4UBYtz+UVESmVG
-         gAIT3JizZEMLq6e110ENj51HMCyTWq0cX5c1QvY5BLrH4EK1/TJW9WkstrnYoO1NG7hG
-         geNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Co3BUFT9beNFmBZeCDmBd4UzULJVNB7vW9mGtuUcPnM=;
-        b=WAFfTvfVoz5fRDdYyEpUyWRQZyFEu3rb1M4xLoO5nK8DkFbt6000D3tGWNV1PXxWb+
-         aYFR4jprb9FjldkxKj4SQ/enBN8kjRFIJAH3nFUw3NXf1bFrvUT8OYPqh1T0lvDBCyNw
-         +O/9yZI64GGICqgoo24fPTrdo0NX9qt65+/3KghfZldXLvn8QuH+YIDMvXKnf+J/vtAN
-         iniYAbn2pJRO5WSfSllHpO4DRMNman1PwtFeNHpicN4Iuzodx+aB4xLQzTZYsdsNXiS2
-         J56zXkEe4oHK/kn9maPzoA5kD5l+0eeVqlYzqCfSKir9hI5Ej5FiVBONOnCVKhnkWaKM
-         1Lyg==
-X-Gm-Message-State: AOAM530/oIJ8RalVxl7L3Ca7LOuF3LoUG3XbQZ+x5cxeO24uFKFJT7lC
-        iRnpEEjnbeqj6aBo0G11lOkjrw==
-X-Google-Smtp-Source: ABdhPJzBcDi7EsMql8HPyIUlcRBl/OsFwSyoeS5mkLvsu+udWvl2GtuObFdyWK2J++yBEFuvf+uvKg==
-X-Received: by 2002:a05:6638:1501:: with SMTP id b1mr1620304jat.251.1644309787998;
-        Tue, 08 Feb 2022 00:43:07 -0800 (PST)
-Received: from google.com ([2620:15c:183:200:5f31:19c3:21f5:7300])
-        by smtp.gmail.com with ESMTPSA id x7sm3011504ilp.88.2022.02.08.00.43.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 00:43:07 -0800 (PST)
-Date:   Tue, 8 Feb 2022 01:43:03 -0700
-From:   Yu Zhao <yuzhao@google.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>
-Cc:     Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Barry Song <21cnbao@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        page-reclaim@google.com, x86@kernel.org,
-        Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        Holger =?iso-8859-1?Q?Hoffst=E4tte?= 
-        <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>
-Subject: Re: [PATCH v7 10/12] mm: multigenerational LRU: thrashing prevention
-Message-ID: <YgItF/LcaTC6mpLN@google.com>
-References: <20220208081902.3550911-1-yuzhao@google.com>
- <20220208081902.3550911-11-yuzhao@google.com>
+        Tue, 8 Feb 2022 03:43:39 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F02C03E931
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 00:43:27 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nHM5r-0002Xc-Q8; Tue, 08 Feb 2022 09:43:23 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nHM5q-00FGOF-Re; Tue, 08 Feb 2022 09:43:22 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nHM5o-00Bgwf-VR; Tue, 08 Feb 2022 09:43:20 +0100
+Date:   Tue, 8 Feb 2022 09:43:18 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Helge Deller <deller@gmx.de>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-pwm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
+Subject: Re: [PATCH] backlight: pwm_bl: Avoid open coded arithmetic in memory
+ allocation
+Message-ID: <20220208084318.pkfs6xtpe4cz77sd@pengutronix.de>
+References: <bd3d74acfa58d59f6f5f81fc5a9fb409edb8d747.1644046817.git.christophe.jaillet@wanadoo.fr>
+ <20220207080128.xmvommcddjfgz7ey@pengutronix.de>
+ <YgDm1FWtlneMLCTS@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="pdixcmr5l2jhzb4h"
 Content-Disposition: inline
-In-Reply-To: <20220208081902.3550911-11-yuzhao@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YgDm1FWtlneMLCTS@google.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 08, 2022 at 01:19:00AM -0700, Yu Zhao wrote:
-> Add /sys/kernel/mm/lru_gen/min_ttl_ms for thrashing prevention, as
-> requested by many desktop users [1].
-> 
-> When set to value N, it prevents the working set of N milliseconds
-> from getting evicted. The OOM killer is triggered if this working set
-> can't be kept in memory. Based on the average human detectable lag
-> (~100ms), N=1000 usually eliminates intolerable lags due to thrashing.
-> Larger values like N=3000 make lags less noticeable at the risk of
-> premature OOM kills.
 
-Refactored min_ttl into a separate patch as requested here:
-https://lore.kernel.org/linux-mm/YdxSUuDc3OC4pe+f@dhcp22.suse.cz/
+--pdixcmr5l2jhzb4h
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-<snipped>
+On Mon, Feb 07, 2022 at 09:31:00AM +0000, Lee Jones wrote:
+> On Mon, 07 Feb 2022, Uwe Kleine-K=F6nig wrote:
+>=20
+> > On Sat, Feb 05, 2022 at 08:40:48AM +0100, Christophe JAILLET wrote:
+> > > kmalloc_array()/kcalloc() should be used to avoid potential overflow =
+when
+> > > a multiplication is needed to compute the size of the requested memor=
+y.
+> > >=20
+> > > So turn a kzalloc()+explicit size computation into an equivalent kcal=
+loc().
+> > >=20
+> > > Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> >=20
+> > LGTM
+> >=20
+> > Acked-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> >=20
+> > Thanks
+> > Uwe
+>=20
+> I am totally confused!
+
+An rightfully so. Copy-paste-fail, this was supposed to be
+
+Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+
+Sorry!
+
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--pdixcmr5l2jhzb4h
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmICLSMACgkQwfwUeK3K
+7AkbYgf/RNIxNrujniat17dztKQmOsg7ALfQgtXaD7tJg70b7hHEABMPGSfUeTD4
+NmvXDBOnN1LiF8tOP/wJQlsM+vQzWJfIT4IQkiravbjwlUW4dgP7791/tH96r0uk
+S5Cz5KuSYksD6aj/RnsSC5lGtXQzjX2u7zC/H0oIMdOQ7VotZMSsKYVkkayAukP4
+HY6htMhSXDfTLemlM0oVWGOwMzO+LvG1szPEKsUdaOTiT0qMMozlRBd+gt/4Panz
+OnodFwSXAmgEH9IH+s/wH8xsVe5TYibaqhPnsj9JBaMRjGVNnCf7ziwL+BSC3P1m
+6guPRpOxNHkPy8j+kGt+RekqdmL/QQ==
+=Iulx
+-----END PGP SIGNATURE-----
+
+--pdixcmr5l2jhzb4h--

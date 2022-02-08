@@ -2,180 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 684E34ADA64
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 14:50:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E5C74ADA66
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 14:50:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376557AbiBHNud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 08:50:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44244 "EHLO
+        id S235672AbiBHNut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 08:50:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235672AbiBHNua (ORCPT
+        with ESMTP id S1376702AbiBHNuq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 08:50:30 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2054.outbound.protection.outlook.com [40.107.92.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 812AEC03FECE;
-        Tue,  8 Feb 2022 05:50:29 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Z3s7Pf3n/2O2XXkpnQaKGo4Src5i3PDbNdhqdkvp7bUJrLQ2JPUlIfaMJsJJgNAWYlUSFp/z3IsP5gs18c4H+iceUfHySYXc5MY2GeIgP6hV+qH61Ry8+f7/foKEjGhsgb+8fTqhgFHNcU7w8cramRTdF3WKf/YyK3CFni8Tw7gvtPW4U89CYgYQMNO5wkhTAiPa8uKG6R9E5+QkuuwWPERv7qrxy3VdMPR3WrRm7zuKKNhuTVZLhqw3fY7ENMBGdfnqxv/xb3d3iHrOF/hLjtsJCoglLSAr6Zt87NhUfZ0cs/aWlws4QZy9EqlsriC0iRydd206yekMr4R2EGJh9Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=l4WL+IMG05UQ1GmyxCEXUju2/ZsLw53Y/UIjKGUyM40=;
- b=GRhQQkfFxh6Jw7UUOHRCycv92+lBbC+yk4uz20ZHAdXDsMwtVjy2ysVzffTiYoFPohX1vNQnYoHCQdFLXDtJu6M9anuk26fiTtiA0zl+wzs/oCA9o4vY3vVHeIznNPACPq5g+YdwpQ5ia2nI+q3q8EfMeenOXPJMIBSi3+CzxaGW/wE8JBAg6mLhPnLqO3LulXCIXYwrxZ5wMjT/FrdULOp79DIyD3ZCzylOgGj20cZlJ+bBH0wad8Bjy3OsE9XFm6fDTkVHRl+NY/Y+wMNBeMkzYlO1eHkWpAyeV1/TcpCfHea3z3VhYc6eW2gmF8XvfuPN+1lGiGuGmX9KBsbYVA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=l4WL+IMG05UQ1GmyxCEXUju2/ZsLw53Y/UIjKGUyM40=;
- b=2vakhQwQXWK426KouNK5Z38Q9dQ7Wpd08hhopciCWLnPJRd7nxjcHPKa6V3bC6LVhlmTA2d6nrQYMGVrxHm81DUHOqESHWP+GYcGspnSlKD74pL0TYl5pMjI65aANG8pIu/xz+x98QZDOIEAJQ0XvFWmJ9NZySecg1RhLGDC9wY=
-Received: from BN8PR15CA0012.namprd15.prod.outlook.com (2603:10b6:408:c0::25)
- by BL1PR12MB5126.namprd12.prod.outlook.com (2603:10b6:208:312::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.11; Tue, 8 Feb
- 2022 13:50:27 +0000
-Received: from BN8NAM11FT033.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:c0:cafe::9f) by BN8PR15CA0012.outlook.office365.com
- (2603:10b6:408:c0::25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.19 via Frontend
- Transport; Tue, 8 Feb 2022 13:50:27 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT033.mail.protection.outlook.com (10.13.177.149) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4951.12 via Frontend Transport; Tue, 8 Feb 2022 13:50:27 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 8 Feb 2022 08:50:46 -0500
+X-Greylist: delayed 639 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Feb 2022 05:50:45 PST
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50CD4C03FED7;
+        Tue,  8 Feb 2022 05:50:45 -0800 (PST)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2187tlkh007467;
+        Tue, 8 Feb 2022 07:50:38 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=/8VOHFZR1O1aA/Ads8wUp8bVwUNLX0h1y0p5epau7LY=;
+ b=QmP/PjgcS5R1CDQ66O0C5BfXffWOurFqRcDBFVFpil1BOqpwpQQ44VgF8XC/CvhjR0if
+ aQPEKFlhylWrcFpXfqXvidJVgQEdHqmKlrf25wwGl8qewUw4aZliV0HI4wXqkDBCstY7
+ 2fTVxAsR4Iy/lJHoleEdunq+gquEwyl86CZx5KZB/djOm1IaDJqktGFTV+yjMyNI0q5h
+ hBNn4iU1pDUVXal2piycqjsHDGCEFZRfIAv29aumx03EwnZ5pAmC5lDuq8camp67mNNq
+ 8RxP0itBhsmFgsvDh1aVe8gnknZXSyzGfeCPwR6/5iRtpIKLK5640j79zifEVak8+2D2 PQ== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3e34y5scf5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 08 Feb 2022 07:50:38 -0600
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Tue, 8 Feb
- 2022 07:50:25 -0600
-Date:   Tue, 8 Feb 2022 07:50:09 -0600
-From:   Michael Roth <michael.roth@amd.com>
-To:     Borislav Petkov <bp@alien8.de>
-CC:     Brijesh Singh <brijesh.singh@amd.com>, <x86@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
-        <linux-efi@vger.kernel.org>, <platform-driver-x86@vger.kernel.org>,
-        <linux-coco@lists.linux.dev>, <linux-mm@kvack.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        "Vitaly Kuznetsov" <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        "Andy Lutomirski" <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        <brijesh.ksingh@gmail.com>, <tony.luck@intel.com>,
-        <marcorr@google.com>, <sathyanarayanan.kuppuswamy@linux.intel.com>
-Subject: Re: [PATCH v9 33/43] x86/compressed: Add SEV-SNP feature
- detection/setup
-Message-ID: <20220208135009.7rfrau33kxivx5h3@amd.com>
-References: <20220128171804.569796-1-brijesh.singh@amd.com>
- <20220128171804.569796-34-brijesh.singh@amd.com>
- <Yf/6NhnS50UDv4xV@zn.tnic>
+ 2022 13:50:36 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
+ Transport; Tue, 8 Feb 2022 13:50:36 +0000
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id ACA0511D7;
+        Tue,  8 Feb 2022 13:50:36 +0000 (UTC)
+Date:   Tue, 8 Feb 2022 13:50:36 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+CC:     Prasad Kumpatla <quic_pkumpatl@quicinc.com>,
+        Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        'Linux Samsung SOC' <linux-samsung-soc@vger.kernel.org>
+Subject: Re: [PATCH v2] regmap-irq: Use regmap_irq_update_bits instead of
+ regmap_write
+Message-ID: <20220208135036.GD112838@ediswmail.ad.cirrus.com>
+References: <20220119142953.1804-1-quic_pkumpatl@quicinc.com>
+ <CGME20220208122955eucas1p2d4e32f51224242e9ebd0bce58b9c04ca@eucas1p2.samsung.com>
+ <39f1b598-58ca-1e3d-3065-8dd692ee7c9f@samsung.com>
+ <20220208133957.GC112838@ediswmail.ad.cirrus.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <Yf/6NhnS50UDv4xV@zn.tnic>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6ae88d64-b041-4308-4ecd-08d9eb09f66d
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5126:EE_
-X-Microsoft-Antispam-PRVS: <BL1PR12MB5126D28B6A979FD37531C8B6952D9@BL1PR12MB5126.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: roLKyeWT1xUXPqG9BQX4r5eIhp8XHDm5omwOyb+/odj4K0KZUIHfbXvgCjLEebEv5/Yhs4/enjBEwClxgFmiHHUkAiU0376pgnfqFstxtM7T3/Z8ET7X4tXGF1SSehv4tGT3saWS4qwZ+xtCDi9GWCnqjHmqb/NtC0b1WCYFkWLUJdL9AOfRO+Xcv8wI2ocu3rlF0BtDixh8kB+N49qSxgGKUadAy9oGJhUCuism5dKM1FFj5AilHjcOCVK9iuLLo+prfuJFnuGlpbV/j0Aioeha0bSHKnY2cBaM65Fi23Ev5VBuuN3+eMmoHpBnNGCB+9f68sFFIPraZBH6Q9qGFtfd7dJtIJFfuAwZgsW0lsXbYgTLbcjuLN4+h6gIdHON6L+b9ooeie5OGdWa5yoh8VINCEba9jYUJLOGrU6rJP7m/jAjMtrjFqJextVAW2siHYOz3YxxXGimpizqsfwEbEYI3baN0fbK6UDN2O3ybBgFI2PQyAqg+gUYzpnXxAuu6VA2quFaYo+uHD/Ckw0SR8AHhipLmaOjECiOKnvmn0J9eM2bzG8EcJw7vNrx7zFTRrgn2YEvF1qL1jRm8+5ookx+9lpaZMPwGkyso7jRP0gTCKoxEPHhkvSNrx0onOaha3mtwclquj+c2aA3C2gM3dnf98wEwwd+fAzAE8it/Gp1gV65PA3BmRq37shZhcDR/BbYp497M4X7HKCLqxqgZQ==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(82310400004)(508600001)(6916009)(54906003)(316002)(81166007)(356005)(83380400001)(47076005)(16526019)(36860700001)(86362001)(6666004)(70586007)(2616005)(1076003)(426003)(336012)(186003)(26005)(8676002)(4326008)(40460700003)(7416002)(7406005)(8936002)(44832011)(5660300002)(36756003)(2906002)(70206006)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Feb 2022 13:50:27.0446
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6ae88d64-b041-4308-4ecd-08d9eb09f66d
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT033.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5126
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220208133957.GC112838@ediswmail.ad.cirrus.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-GUID: IviAGyL3NSJelSl5gE0d9NZwqB_mNN7Z
+X-Proofpoint-ORIG-GUID: IviAGyL3NSJelSl5gE0d9NZwqB_mNN7Z
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 06, 2022 at 05:41:26PM +0100, Borislav Petkov wrote:
-> On Fri, Jan 28, 2022 at 11:17:54AM -0600, Brijesh Singh wrote:
-> > +static struct cc_setup_data *get_cc_setup_data(struct boot_params *bp)
-> > +{
-> > +	struct setup_data *hdr = (struct setup_data *)bp->hdr.setup_data;
-> > +
-> > +	while (hdr) {
-> > +		if (hdr->type == SETUP_CC_BLOB)
-> > +			return (struct cc_setup_data *)hdr;
-> > +		hdr = (struct setup_data *)hdr->next;
-> > +	}
-> > +
-> > +	return NULL;
-> > +}
+On Tue, Feb 08, 2022 at 01:39:57PM +0000, Charles Keepax wrote:
+> On Tue, Feb 08, 2022 at 01:29:55PM +0100, Marek Szyprowski wrote:
+> > Hi Prasad,
+> > 
+> > On 19.01.2022 15:29, Prasad Kumpatla wrote:
+> > > With the existing logic by using regmap_write() all the bits in
+> > > the register are being updated which is not expected. To update only the
+> > > interrupt raised bit and not tocuhing other bits, replace regmap_write()
+> > > with regmap_irq_update_bits().
+> > >
+> > > This patch is to fix the issue observed in MBHC button press/release events.
+> > >
+> > > Fixes: 3a6f0fb7b8eb ("regmap: irq: Add support to clear ack registers")
+> > > Signed-off-by: Prasad Kumpatla <quic_pkumpatl@quicinc.com>
+> > 
+> > There is something wrong with this patch. Since it landed in linux-next 
+> > (20220204) I get an interrupt storm on two of my test devices:
+> > 
+> > 1. ARM 32bit Exynos4412-based Trats2 ("wm8994-codec wm8994-codec: FIFO 
+> > error" message)
+> > 
+> > 2. ARM 64bit Exynos5433-based TM2e ("arizona spi1.0: Mixer dropped 
+> > sample" message)
+> > 
+> > Definitely the interrupts are not acknowledged properly. Once I find 
+> > some spare time, I will check it further which regmap configuration 
+> > triggers the issue, but it is definitely related to this patch. 
+> > Reverting it on top of current linux-next fixes the issue.
+> > 
 > 
-> Merge that function into its only caller.
+> Yeah I was just looking at this patch it looks a bit weird. Like
+> most IRQ acks are write 1 to clear, so doing an update_bits seems
+> unlikely to work, as it will ack every pending interrupt. As the
+> whole idea of doing a regmap_write was to only write 1 to the bits
+> that need ACKed.
 > 
-> ...
-> 
-> > +static struct cc_blob_sev_info *snp_find_cc_blob(struct boot_params *bp)
-> 
-> static function, no need for the "snp_" prefix. Please audit all your
-> patches for that and remove that prefix from all static functions.
+> I suspect what is needed here is the inverted case wants an
+> update bits but the normal case needs to stay as a regmap_write.
 > 
 
-I'm a little unsure how to handle some of these others cases:
+Apologies for the multiple emails, yeah looking at this I think
+need some more information on how the hardware that patch was
+addressing works. I don't quite understand what was wrong with
+the old code even in the inverted case, the old code wrote a 1 to
+every bit except the interrupt being cleared which gets a 0. This
+feels like how I would have thought a write 0 to clear IRQ would
+work, you don't want to clear any other bits so you write 1 to
+them.
 
-We have this which is defined in sev-shared.c and used "externally"
-by kernel/sev.c or boot/compressed/sev.c:
+The update_bits is really problematic as even in the write 0 to
+clear case, if a new interrupt asserts between the regmap_read
+and regmap_write that make up the update_bits, you will clear that
+new interrupt without ever noticing it.
 
-  snp_setup_cpuid_table()
-
-I'm assuming that would be considered 'non-static' since it would need
-to be exported if sev-shared.c was compiled separately instead of
-directly #include'd.
-
-And then there's also these which are static helpers that are only used
-within sev-shared.c:
-
-  snp_cpuid_info_get_ptr()
-  snp_cpuid_calc_xsave_size()
-  snp_cpuid_get_validated_func()
-  snp_cpuid_check_range()
-  snp_cpuid_hv()
-  snp_cpuid_postprocess()
-  snp_cpuid()
-
-but in those cases it seems useful to keep them grouped under the
-snp_cpuid_* prefix since they become ambiguous otherwise, and
-just using cpuid_* as a prefix (or suffix/etc) makes it unclear
-that they are only used for SNP and not for general CPUID handling.
-Should we leave those as-is?
+Thanks,
+Charles

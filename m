@@ -2,357 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16DF14AD6B8
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:29:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7082C4AD6C0
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:29:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348030AbiBHL3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 06:29:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59520 "EHLO
+        id S1357204AbiBHL3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 06:29:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356421AbiBHKpN (ORCPT
+        with ESMTP id S1356426AbiBHKqT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 05:45:13 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C5BDC03FEC3
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 02:45:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644317112; x=1675853112;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=gqZNDevZLqM/RC37vfn+L0AvGvvPx+wqt3xJH2xPIQE=;
-  b=cdiV7DfOa9ABEDadC1Qs05d2Klc/FiJ8R/6BBmarjqghK2kddCl7HLyy
-   EYW53NpTNgmubBnpWxmGfeyfJSDvxV287ib4L237zR4jQXwSCCDtE3Qkw
-   9mKS0b9beUTU3V+lKs17gYaDDXypw9yE9fDXz6u1qZXnVH65uvD8HEJcj
-   9UfktVx+RrYj8HBJ2qlZLoXGnwiHFnHut+xsA5AUyGJM9trPEqMKgTyiT
-   uQUhINXucdWQnB67DSLFYL1vtxxZmJOnox081ldsyPuXZVBfwkavIkZFi
-   UsBArK3+qOgMZmhNM0S8a2QZBWkQY98U8z7QW1jIobno8cXNZ2Gafw/2o
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="228890727"
-X-IronPort-AV: E=Sophos;i="5.88,352,1635231600"; 
-   d="scan'208";a="228890727"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 02:45:10 -0800
-X-IronPort-AV: E=Sophos;i="5.88,352,1635231600"; 
-   d="scan'208";a="700804111"
-Received: from lucas-s2600cw.jf.intel.com ([10.165.21.202])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 02:45:09 -0800
-From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Cc:     John Harrison <John.C.Harrison@Intel.com>,
-        Matthew Brost <matthew.brost@intel.com>,
-        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
-        Matt Roper <matthew.d.roper@intel.com>,
-        =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 02/18] iosys-map: Add a few more helpers
-Date:   Tue,  8 Feb 2022 02:45:08 -0800
-Message-Id: <20220208104524.2516209-3-lucas.demarchi@intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220208104524.2516209-1-lucas.demarchi@intel.com>
-References: <20220208104524.2516209-1-lucas.demarchi@intel.com>
+        Tue, 8 Feb 2022 05:46:19 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4B6C03FEC3
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 02:46:17 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id q198-20020a1ca7cf000000b0037bb52545c6so1045877wme.1
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 02:46:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gtZWNw9Rcg3r2OPM4Cd7rgO9cXEHRHPNGugcBi7HcnM=;
+        b=ndu7HwBw/9YXXqck+eFMaNO6yXBWThFPF4n5xldsJT3JxAK9VRfdquWeWZvFIXEgsk
+         toQfLl0WcNpp/CGQlSYGoRdC58KfbINdku4kUOoLXZrxlN2LmrUu33a+8JdufGmi5J4p
+         O45OAyZyCqkZ3dWNSPkNAijh/tCUIJPqzahvDcjUR28BJrTchxdyoFEe+a1+FiB0Z0UY
+         SunjqCIauDIAiVA3luTVT3j0sX3EDv6matvmbTOYsVYCZTAEtNZFE8ykV8RjIXaJOSlO
+         FFBPXn4hklp5cczVqaD/H8v2Ko0OZHMKMUjHUcVE0nOAz2Sbj1iH7XynsKH7zLK2yk39
+         RNzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gtZWNw9Rcg3r2OPM4Cd7rgO9cXEHRHPNGugcBi7HcnM=;
+        b=Cu8cPSqA4e8o56CORCy3Tnq/VRVXwP3mcYa+uRAGuHpkKFc79Smnvh0bn7C9suOFxi
+         8vj/gnybh9dyQDB4KR2H8R+uOgTUVoMb86dHbShYdSUt1NFzHn2ks/pitcPJ8l6jJ1Jp
+         hCGbOsFj2IfHz8JI5cKqydTnUhbaIMiLSgpVCQM6vxEuWBEbCnQauFNRegwKuP3MjK7I
+         hoGG8QsYsDxWanbyCG/X43GT54yjeNVYr6dI3m4ERdBMI5aH3Dj0jkL11Q0HsbGeLoki
+         lW1A46LSsX6MYkNuc9eQIDtCyPK4Qf2E/Z+n9ClvNijPS4Si9jgcbeBDqfyh5d3pBOHc
+         15BQ==
+X-Gm-Message-State: AOAM532KnFzvNfY3RX0fJhCkkwViHcos9qhJfcxBklzT1wGR/7UPLx8n
+        tSyqt/GRQD6Woy7R3PBrtqdmMg==
+X-Google-Smtp-Source: ABdhPJwXA8yZq+kf2tFPyJgQwaQkBQW67aJaZfh0O7r2VS91Dy10bye/29WKRvdWKc9PWM09CWpGGg==
+X-Received: by 2002:a05:600c:3544:: with SMTP id i4mr588789wmq.23.1644317175577;
+        Tue, 08 Feb 2022 02:46:15 -0800 (PST)
+Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.googlemail.com with ESMTPSA id e13sm14172933wrq.35.2022.02.08.02.46.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 02:46:15 -0800 (PST)
+From:   Corentin Labbe <clabbe@baylibre.com>
+To:     krzysztof.kozlowski@canonical.com, pavel@ucw.cz, robh+dt@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-leds@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v3] leds: remove ide-disk trigger
+Date:   Tue,  8 Feb 2022 10:46:01 +0000
+Message-Id: <20220208104601.3751852-1-clabbe@baylibre.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-First the simplest ones:
+No user of ide-disk remains, so remove this deprecated trigger.
+Only a few platforms used this and were fixed in 2016.
 
-	- iosys_map_memset(): when abstracting system and I/O memory,
-	  just like the memcpy() use case, memset() also has dedicated
-	  functions to be called for using IO memory.
-	- iosys_map_memcpy_from(): we may need to copy data from I/O
-	  memory, not only to.
-
-In certain situations it's useful to be able to read or write to an
-offset that is calculated by having the memory layout given by a struct
-declaration. Usually we are going to read/write a u8, u16, u32 or u64.
-
-As a pre-requisite for the implementation, add iosys_map_memcpy_from()
-to be the equivalent of iosys_map_memcpy_to(), but in the other
-direction. Then add 2 pairs of macros:
-
-	- iosys_map_rd() / iosys_map_wr()
-	- iosys_map_rd_field() / iosys_map_wr_field()
-
-The first pair takes the C-type and offset to read/write. The second
-pair uses a struct describing the layout of the mapping in order to
-calculate the offset and size being read/written.
-
-We could use readb, readw, readl, readq and the write* counterparts,
-however due to alignment issues this may not work on all architectures.
-If alignment needs to be checked to call the right function, it's not
-possible to decide at compile-time which function to call: so just leave
-the decision to the memcpy function that will do exactly that.
-
-Finally, in order to use the above macros with a map derived from
-another, add another initializer: IOSYS_MAP_INIT_OFFSET().
-
-v2:
-  - Rework IOSYS_MAP_INIT_OFFSET() so it doesn't rely on aliasing rules
-    within the union
-  - Add offset to both iosys_map_rd_field() and iosys_map_wr_field() to
-    allow the struct itself to be at an offset from the mapping
-  - Add documentation to iosys_map_rd_field() with example and expected
-    memory layout
-
-Cc: Sumit Semwal <sumit.semwal@linaro.org>
-Cc: Christian König <christian.koenig@amd.com>
-Cc: Thomas Zimmermann <tzimmermann@suse.de>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: dri-devel@lists.freedesktop.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Lucas De Marchi <lucas.demarchi@intel.com>
+Acked-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
 ---
- include/linux/iosys-map.h | 202 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 202 insertions(+)
+Change since v1:
+- remove also DEFINE_LED_TRIGGER(ledtrig_ide)
+Changes since v2:
+- Added the fact that few platforms used this and it was fixed old ago.
+- Added Rob's ack
 
-diff --git a/include/linux/iosys-map.h b/include/linux/iosys-map.h
-index edd730b1e899..c6b223534b21 100644
---- a/include/linux/iosys-map.h
-+++ b/include/linux/iosys-map.h
-@@ -6,6 +6,7 @@
- #ifndef __IOSYS_MAP_H__
- #define __IOSYS_MAP_H__
+ Documentation/devicetree/bindings/leds/common.yaml | 3 ---
+ drivers/leds/trigger/ledtrig-disk.c                | 4 ----
+ 2 files changed, 7 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/leds/common.yaml b/Documentation/devicetree/bindings/leds/common.yaml
+index 37f8a6fd6518..c89f430df4a0 100644
+--- a/Documentation/devicetree/bindings/leds/common.yaml
++++ b/Documentation/devicetree/bindings/leds/common.yaml
+@@ -91,9 +91,6 @@ properties:
+       - disk-activity
+       - disk-read
+       - disk-write
+-        # LED indicates IDE disk activity (deprecated), in new implementations
+-        # use "disk-activity"
+-      - ide-disk
+         # LED flashes at a fixed, configurable rate
+       - timer
+         # LED alters the brightness for the specified duration with one software
+diff --git a/drivers/leds/trigger/ledtrig-disk.c b/drivers/leds/trigger/ledtrig-disk.c
+index 0741910785bb..0b7dfbd04273 100644
+--- a/drivers/leds/trigger/ledtrig-disk.c
++++ b/drivers/leds/trigger/ledtrig-disk.c
+@@ -16,7 +16,6 @@
+ DEFINE_LED_TRIGGER(ledtrig_disk);
+ DEFINE_LED_TRIGGER(ledtrig_disk_read);
+ DEFINE_LED_TRIGGER(ledtrig_disk_write);
+-DEFINE_LED_TRIGGER(ledtrig_ide);
  
-+#include <linux/kernel.h>
- #include <linux/io.h>
- #include <linux/string.h>
+ void ledtrig_disk_activity(bool write)
+ {
+@@ -24,8 +23,6 @@ void ledtrig_disk_activity(bool write)
  
-@@ -120,6 +121,45 @@ struct iosys_map {
- 		.is_iomem = false,	\
- 	}
+ 	led_trigger_blink_oneshot(ledtrig_disk,
+ 				  &blink_delay, &blink_delay, 0);
+-	led_trigger_blink_oneshot(ledtrig_ide,
+-				  &blink_delay, &blink_delay, 0);
+ 	if (write)
+ 		led_trigger_blink_oneshot(ledtrig_disk_write,
+ 					  &blink_delay, &blink_delay, 0);
+@@ -40,7 +37,6 @@ static int __init ledtrig_disk_init(void)
+ 	led_trigger_register_simple("disk-activity", &ledtrig_disk);
+ 	led_trigger_register_simple("disk-read", &ledtrig_disk_read);
+ 	led_trigger_register_simple("disk-write", &ledtrig_disk_write);
+-	led_trigger_register_simple("ide-disk", &ledtrig_ide);
  
-+/**
-+ * IOSYS_MAP_INIT_OFFSET - Initializes struct iosys_map from another iosys_map
-+ * @map_:	The dma-buf mapping structure to copy from
-+ * @offset_:	Offset to add to the other mapping
-+ *
-+ * Initializes a new iosys_map struct based on another passed as argument. It
-+ * does a shallow copy of the struct so it's possible to update the back storage
-+ * without changing where the original map points to. It is the equivalent of
-+ * doing:
-+ *
-+ * .. code-block:: c
-+ *
-+ *	iosys_map map = other_map;
-+ *	iosys_map_incr(&map, &offset);
-+ *
-+ * Example usage:
-+ *
-+ * .. code-block:: c
-+ *
-+ *	void foo(struct device *dev, struct iosys_map *base_map)
-+ *	{
-+ *		...
-+ *		struct iosys_map map = IOSYS_MAP_INIT_OFFSET(base_map, FIELD_OFFSET);
-+ *		...
-+ *	}
-+ *
-+ * The advantage of using the initializer over just increasing the offset with
-+ * iosys_map_incr() like above is that the new map will always point to the
-+ * right place of the buffer during its scope. It reduces the risk of updating
-+ * the wrong part of the buffer and having no compiler warning about that. If
-+ * the assignment to IOSYS_MAP_INIT_OFFSET() is forgotten, the compiler can warn
-+ * about the use of uninitialized variable.
-+ */
-+#define IOSYS_MAP_INIT_OFFSET(map_, offset_) ({				\
-+	struct iosys_map copy = *map_;					\
-+	iosys_map_incr(&copy, offset_);					\
-+	copy;								\
-+})
-+
- /**
-  * iosys_map_set_vaddr - Sets a iosys mapping structure to an address in system memory
-  * @map:	The iosys_map structure
-@@ -239,6 +279,26 @@ static inline void iosys_map_memcpy_to(struct iosys_map *dst, size_t dst_offset,
- 		memcpy(dst->vaddr + dst_offset, src, len);
+ 	return 0;
  }
- 
-+/**
-+ * iosys_map_memcpy_from - Memcpy from iosys_map into system memory
-+ * @dst:	Destination in system memory
-+ * @src:	The iosys_map structure
-+ * @src_offset:	The offset from which to copy
-+ * @len:	The number of byte in src
-+ *
-+ * Copies data from a iosys_map with an offset. The dest buffer is in
-+ * system memory. Depending on the mapping location, the helper picks the
-+ * correct method of accessing the memory.
-+ */
-+static inline void iosys_map_memcpy_from(void *dst, const struct iosys_map *src,
-+					 size_t src_offset, size_t len)
-+{
-+	if (src->is_iomem)
-+		memcpy_fromio(dst, src->vaddr_iomem + src_offset, len);
-+	else
-+		memcpy(dst, src->vaddr + src_offset, len);
-+}
-+
- /**
-  * iosys_map_incr - Increments the address stored in a iosys mapping
-  * @map:	The iosys_map structure
-@@ -255,4 +315,146 @@ static inline void iosys_map_incr(struct iosys_map *map, size_t incr)
- 		map->vaddr += incr;
- }
- 
-+/**
-+ * iosys_map_memset - Memset iosys_map
-+ * @dst:	The iosys_map structure
-+ * @offset:	Offset from dst where to start setting value
-+ * @value:	The value to set
-+ * @len:	The number of bytes to set in dst
-+ *
-+ * Set value in iosys_map. Depending on the buffer's location, the helper
-+ * picks the correct method of accessing the memory.
-+ */
-+static inline void iosys_map_memset(struct iosys_map *dst, size_t offset,
-+				    int value, size_t len)
-+{
-+	if (dst->is_iomem)
-+		memset_io(dst->vaddr_iomem + offset, value, len);
-+	else
-+		memset(dst->vaddr + offset, value, len);
-+}
-+
-+/**
-+ * iosys_map_rd - Read a C-type value from the iosys_map
-+ *
-+ * @map__:	The iosys_map structure
-+ * @offset__:	The offset from which to read
-+ * @type__:	Type of the value being read
-+ *
-+ * Read a C type value from iosys_map, handling possible un-aligned accesses to
-+ * the mapping.
-+ *
-+ * Returns:
-+ * The value read from the mapping.
-+ */
-+#define iosys_map_rd(map__, offset__, type__) ({			\
-+	type__ val;							\
-+	iosys_map_memcpy_from(&val, map__, offset__, sizeof(val));	\
-+	val;								\
-+})
-+
-+/**
-+ * iosys_map_wr - Write a C-type value to the iosys_map
-+ *
-+ * @map__:	The iosys_map structure
-+ * @offset__:	The offset from the mapping to write to
-+ * @type__:	Type of the value being written
-+ * @val__:	Value to write
-+ *
-+ * Write a C-type value to the iosys_map, handling possible un-aligned accesses
-+ * to the mapping.
-+ */
-+#define iosys_map_wr(map__, offset__, type__, val__) ({			\
-+	type__ val = (val__);						\
-+	iosys_map_memcpy_to(map__, offset__, &val, sizeof(val));	\
-+})
-+
-+/**
-+ * iosys_map_rd_field - Read a member from a struct in the iosys_map
-+ *
-+ * @map__:		The iosys_map structure
-+ * @struct_offset__:	Offset from the beggining of the map, where the struct
-+ *			is located
-+ * @struct_type__:	The struct describing the layout of the mapping
-+ * @field__:		Member of the struct to read
-+ *
-+ * Read a value from iosys_map considering its layout is described by a C struct
-+ * starting at @struct_offset__. The field offset and size is calculated and its
-+ * value read handling possible un-aligned memory accesses. For example: suppose
-+ * there is a @struct foo defined as below and the value ``foo.field2.inner2``
-+ * needs to be read from the iosys_map:
-+ *
-+ * .. code-block:: c
-+ *
-+ *	struct foo {
-+ *		int field1;
-+ *		struct {
-+ *			int inner1;
-+ *			int inner2;
-+ *		} field2;
-+ *		int field3;
-+ *	} __packed;
-+ *
-+ * This is the expected memory layout of a buffer using iosys_map_rd_field():
-+ *
-+ * +------------------------------+--------------------------+
-+ * | Address                      | Content                  |
-+ * +==============================+==========================+
-+ * | buffer + 0000                | start of mmapped buffer  |
-+ * |                              | pointed by iosys_map     |
-+ * +------------------------------+--------------------------+
-+ * | ...                          | ...                      |
-+ * +------------------------------+--------------------------+
-+ * | buffer + ``struct_offset__`` | start of ``struct foo``  |
-+ * +------------------------------+--------------------------+
-+ * | ...                          | ...                      |
-+ * +------------------------------+--------------------------+
-+ * | buffer + wwww                | ``foo.field2.inner2``    |
-+ * +------------------------------+--------------------------+
-+ * | ...                          | ...                      |
-+ * +------------------------------+--------------------------+
-+ * | buffer + yyyy                | end of ``struct foo``    |
-+ * +------------------------------+--------------------------+
-+ * | ...                          | ...                      |
-+ * +------------------------------+--------------------------+
-+ * | buffer + zzzz                | end of mmaped buffer     |
-+ * +------------------------------+--------------------------+
-+ *
-+ * Values automatically calculated by this macro or not needed are denoted by
-+ * wwww, yyyy and zzzz. This is the code to read that value:
-+ *
-+ * .. code-block:: c
-+ *
-+ *	x = iosys_map_rd_field(&map, offset, struct foo, field2.inner2);
-+ *
-+ * Returns:
-+ * The value read from the mapping.
-+ */
-+#define iosys_map_rd_field(map__, struct_offset__, struct_type__, field__) ({	\
-+	struct_type__ *s;							\
-+	iosys_map_rd(map__, struct_offset__ + offsetof(struct_type__, field__),	\
-+		     typeof(s->field__));					\
-+})
-+
-+/**
-+ * iosys_map_wr_field - Write to a member of a struct in the iosys_map
-+ *
-+ * @map__:		The iosys_map structure
-+ * @struct_offset__:	Offset from the beggining of the map, where the struct
-+ *			is located
-+ * @struct_type__:	The struct describing the layout of the mapping
-+ * @field__:		Member of the struct to read
-+ * @val__:		Value to write
-+ *
-+ * Write a value to the iosys_map considering its layout is described by a C struct
-+ * starting at @struct_offset__. The field offset and size is calculated and the
-+ * @val__ is written handling possible un-aligned memory accesses. Refer to
-+ * iosys_map_rd_field() for expected usage and memory layout.
-+ */
-+#define iosys_map_wr_field(map__, struct_offset__, struct_type__, field__, val__) ({	\
-+	struct_type__ *s;								\
-+	iosys_map_wr(map__, struct_offset__ + offsetof(struct_type__, field__),		\
-+		     typeof(s->field__), val__);					\
-+})
-+
- #endif /* __IOSYS_MAP_H__ */
 -- 
-2.35.1
+2.34.1
 

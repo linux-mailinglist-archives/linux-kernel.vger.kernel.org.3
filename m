@@ -2,137 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 976FD4ADAF7
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 15:15:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 290D84ADAFC
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 15:17:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377876AbiBHOPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 09:15:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58288 "EHLO
+        id S1351005AbiBHORQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 09:17:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236378AbiBHOPf (ORCPT
+        with ESMTP id S1351022AbiBHORL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 09:15:35 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E34C03FECE
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 06:15:35 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id i186so19134664pfe.0
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 06:15:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=LXSv8hqgFIfSvy/vUmuBy6laJV3E0bBQocpR/QGdDDw=;
-        b=q3nUTbmKIFWlU/OTXUEa/H0xEs+ZfN4sePTEYisCm0njLnygF6ppTYefATn5TN67lX
-         8dXGUyHODY36+JV/0UuGAPi5C9Ea5VKVknAWLWdVkvKAXwZ8kXnxnLLY0xa0Hxev+oYR
-         TTxM+OGm12dgNPatAcad/6ktnL+Hq5HVm/G/Bbu5dS6wqlh5dHCc7uVvHT3gPvcGz6ye
-         XFDsFLSygCJ1NLklUGHDaSkBALVhdbNxfM/ZJSJc/ftasrT2v5afz4pW2JsLLLcPNFSV
-         FazjNI8bO6HAJ84xRZsDUEMIH5eAt04ejbgyd4CNx7Yw4x/88e2vK2r7jahLOCPBdE7g
-         Wcew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=LXSv8hqgFIfSvy/vUmuBy6laJV3E0bBQocpR/QGdDDw=;
-        b=jpwD4oYQQ/YEhiEBTti695Lr/0y0v2qgqfSPD7p9tnOsoMSSzlP5spneDhIqnfC5JZ
-         uvVtyC5Q1kQQkixsmTzGaf1CAWzFInjUsqzbnjui0q0ZsQhB9TPCvifebeTwtWUkQD/d
-         NooFjf8TQxzRurnWwS6sOdNWa2csrGDVZtB/f/M01efdyLmCj8YbK5qFcF4lkHODNcxm
-         EH2lm6XD8Ofph8uCWdDW9cpps2TYT4Jk6GEDWsFf2vNJ6eE/Pf6e47UNh4UkvV7phEzU
-         DnKG9h46cVzSiITg8YoeuyhYh2ZLZGSDrIEkHItwj0tpB4W0EzJQv48OYR/IAYmV/XgA
-         Ux+Q==
-X-Gm-Message-State: AOAM533zhZomYsIX4cadCX5bRytvjz2crP5Pn5nsK363I49+qRe9WQIU
-        kbZqwXKlIy3b49Amb0v6PQZ6PO5v0m22Sq1Ayk1NSA==
-X-Google-Smtp-Source: ABdhPJxi1fRQv5HfPGz6ZVLmAdi+/PJyFOytcefJpm786JHMNaapMLTxE7gICjI7kTmTb9uj1eI+LPha+In/oZrHTy8=
-X-Received: by 2002:aa7:8484:: with SMTP id u4mr4550457pfn.70.1644329735103;
- Tue, 08 Feb 2022 06:15:35 -0800 (PST)
+        Tue, 8 Feb 2022 09:17:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCE85C03FECE
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 06:17:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 593F361227
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 14:17:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CD37C004E1;
+        Tue,  8 Feb 2022 14:17:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1644329829;
+        bh=GK8zL7bCJXUu6YBd8ARaHTZaT8YLbCB64RKltU4JUTY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sJMlrQOu2pPNdZDw0l5vjkifH8fFo7/LATREK55pEiqV57421UXftgQ75PSt+uM09
+         d5hR8nCqsrYtte6hbTosbbwTuSkerdGk5jDcFbBZwL00uZoQLGYm5WTPnbS5Uvk0WL
+         gK3eFrlDIhPGl/6XXNiLwc3L6J002BpJqTkJr6gI=
+Date:   Tue, 8 Feb 2022 15:17:06 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Ankit Kumar Pandey <itsankitkp@gmail.com>
+Cc:     Larry.Finger@lwfinger.net, florian.c.schilhabel@googlemail.com,
+        martin@kaiser.cx, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Fixed stylegude error in drivers/staging/rtl8712 by
+ removing un-needed commented out lines
+Message-ID: <YgJ7YhsyPVpdBt2J@kroah.com>
+References: <YgJ5t1/Cn93qtBAE@ankit-vm>
 MIME-Version: 1.0
-References: <20220120001621.705352-2-jsd@semihalf.com> <20220202144302.1438303-1-jsd@semihalf.com>
- <20220202144302.1438303-2-jsd@semihalf.com> <YfqtkBIZZxp2Au2l@smile.fi.intel.com>
- <CAOtMz3O_j5-0ZLJngQpzQSGduhZVnQ8awBvGkMdUQWAX8nN5Hw@mail.gmail.com> <YgEFWN8K7Yh452GY@smile.fi.intel.com>
-In-Reply-To: <YgEFWN8K7Yh452GY@smile.fi.intel.com>
-From:   =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>
-Date:   Tue, 8 Feb 2022 15:15:24 +0100
-Message-ID: <CAOtMz3P18emF_1tPvXzckVS8V4DWYB6Evqu+V6PsXN6L2YH2aA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] i2c: designware: Add AMD PSP I2C bus support
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Raul E Rangel <rrangel@chromium.org>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>, upstream@semihalf.com,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "Deucher, Alexander" <alexander.deucher@amd.com>,
-        "Easow, Nimesh" <Nimesh.Easow@amd.com>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YgJ5t1/Cn93qtBAE@ankit-vm>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pon., 7 lut 2022 o 12:42 Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> napisa=C5=82(a):
->
-> On Mon, Feb 07, 2022 at 09:27:12AM +0100, Jan D=C4=85bro=C5=9B wrote:
-> > =C5=9Br., 2 lut 2022 o 17:16 Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> napisa=C5=82(a):
-> > > On Wed, Feb 02, 2022 at 03:43:02PM +0100, Jan Dabros wrote:
->
-> ...
->
-> > > > +struct psp_i2c_req {
-> > > > +     struct psp_req_buffer_hdr hdr;
-> > > > +     enum psp_i2c_req_type type;
-> > > > +} __aligned(32);
-> > >
-> > > I forgot if this alignment is requirement due to DMA or so?
-> > > We may use ____cacheline_aligned in such case.
-> >
-> > I used some old code as a reference - this structure is mapped by PSP,
-> > thus alignment applied here. I'm checking this with AMD whether it is
-> > really needed or at least can be somehow limited - still waiting for
-> > their response.
-> > I propose to left this as is right now and eventually remove or make
-> > more liberal in the future.
->
-> Would be nice to clarify sooner than later.
-> In either case it needs a good comment.
+On Tue, Feb 08, 2022 at 07:39:59PM +0530, Ankit Kumar Pandey wrote:
+> Volatile keyword was left commented out as it was probably used during
+> development but was not needed in final build.
 
-I confirmed that we can remove this alignment completely. Removed in v4.
+Are you sure?  Doesn't it convey some meaning here that needs to be
+verified before you remove it?
 
-Best Regards,
-Jan
+> And this was causing styleguide error, so I have removed this and there
+> for this patch reduces minor styleguide warnings to 0
 
->
-> ...
->
-> > > > +     return readl_poll_timeout(&mbox->cmd_fields, tmp, (tmp =3D=3D=
- expected),
-> > > > +                               0, 1000 * PSP_CMD_TIMEOUT_MS);
-> > >
-> > > 0?!
-> >
-> > Yes, we are checking for readiness of PSP mailbox in a tight loop. We
-> > would like to proceed further quickly as soon as this bit is set.
-> > Actually checking this twice per every ACQUIRE&RELEASE - once before
-> > sending command (to check whether PSP is ready to accept requests) and
-> > second time after sending it. Do you think we should increase
-> > @sleep_us value?
->
-> It depends on what you have in mind about hardware. I'm fine with either =
-way,
-> but 0 has to be explained (in the comment).
->
-> --
-> With Best Regards,
-> Andy Shevchenko
->
->
+You can not mix coding style fixes like my bot told you :(
+
+Also the subject line for this change is very odd, look at others for
+this same file to see examples of what to do:
+
+$ git log --oneline drivers/staging/rtl8712/rtl871x_pwrctrl.h | head -n 5
+9be550ee4391 staging: rtl8712: get rid of flush_scheduled_work
+c75afdaf2e53 staging: rtl8712: remove extra blank lines
+7c93fdf090df staging: rtl8712: r8712_register_cmd_alive(): Change return values
+e24c1f8658c9 staging: rtl8712: add SPDX identifiers
+b355da4c7cfb Staging: rtl8712: rtl871x_pwrctrl.h - style fix
+
+thanks,
+
+greg k-h

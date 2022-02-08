@@ -2,176 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4FD74ADEFD
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 18:11:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB2464ADEFF
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 18:11:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383752AbiBHRLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 12:11:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45260 "EHLO
+        id S1383780AbiBHRLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 12:11:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244646AbiBHRLJ (ORCPT
+        with ESMTP id S1352487AbiBHRLT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 12:11:09 -0500
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73A3C061576
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 09:11:05 -0800 (PST)
-Received: by mail-io1-xd2a.google.com with SMTP id n17so22002825iod.4
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 09:11:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=DUOmgbDHv9TGhzCwwc6ir5fTuwgLxZHx2yr6wrlhX/c=;
-        b=eex8i7kur3v78Vl/7duuld6Gedj+S9MbQzPL4dqaRAmkcvf6y19qbfCr7f0mpjVnYe
-         7NbM8tZue9DfEpwG7KleDx6axk4urVIRu6QhVzMymZ9l3AoEsJDxpe1mTPCJRrBPLTRv
-         GR5X4ED9HqF2qffqJd17N70du82rofyEAm0dk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=DUOmgbDHv9TGhzCwwc6ir5fTuwgLxZHx2yr6wrlhX/c=;
-        b=ZNfOLuN1H6hTp1s/h5OEEk1gni7KBlknIofXZ+vBEM38l5PZERK+MOd9ucXc71F5VX
-         5pFs6RWUijweJ5cGB+L2jVgO1wAt77uc5+Tlu2NBKKrCGbDdw7q3DoxAZnTn6Ah+owFe
-         mXl/l3WHGTz0KeeMJrxQzzdQ6qRkLrVVLSaxv1eHDUyV8Y148ABchAEe3YOd+ogB/9cw
-         4NQA780SjzCtMoRycGGdebKhBsAp+9PID9/nYXkIxJ1wrIXjDaozl6vMdsxQKLPus+RE
-         psVhba+6xZrLGIh0UyWU7rNOnj3pyY2AqSNcXhf4kdpFB97nFj25FYnFwVAXQ31hWeYH
-         UZvQ==
-X-Gm-Message-State: AOAM533c9TuP1Uvv7p8jppnCPG4z3HNyxQi31815b/itbLJyyccvxXND
-        Q+mqa+ztsvXtRXZ0Rl6P1eWU6A==
-X-Google-Smtp-Source: ABdhPJxI+60kUWV0wK02Do1Ljum8fRfUSV96QCsR/1AD9uHXCNG3g22230pw4nhS3axAL2kQCSoY8Q==
-X-Received: by 2002:a05:6602:2ac1:: with SMTP id m1mr2448582iov.123.1644340265093;
-        Tue, 08 Feb 2022 09:11:05 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id g7sm7620275ild.23.2022.02.08.09.11.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Feb 2022 09:11:04 -0800 (PST)
-Subject: Re: [PATCH v3 1/1] Documentation: dev-tools: clarify KTAP
- specification wording
-To:     frowand.list@gmail.com, Jonathan Corbet <corbet@lwn.net>,
-        David Gow <davidgow@google.com>,
-        Kees Cook <keescook@chromium.org>, Rae Moar <rmoar@google.com>,
-        Tim.Bird@sony.com, Brendan Higgins <brendanhiggins@google.com>
-Cc:     rmr167@gmail.com, guillaume.tucker@collabora.com,
-        dlatypov@google.com, kernelci@groups.io,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220208164623.3151777-1-frowand.list@gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <86c4c8ce-468d-8922-3ada-7960f1924ba8@linuxfoundation.org>
-Date:   Tue, 8 Feb 2022 10:11:03 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Tue, 8 Feb 2022 12:11:19 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A39C061578;
+        Tue,  8 Feb 2022 09:11:17 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 71B8C1F387;
+        Tue,  8 Feb 2022 17:11:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1644340276; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QPUuODZvfHfbK4I1HD8yNzMlq3DUr01lnj3/cFWOZHw=;
+        b=Krwlre5TT8cG8uuQV/wBgo6cO8s9TpmtsxTUXQpR2EtFNfxij9q9L0JOyVnZtgXj41Dza+
+        HFy9AGBfHmVIE3svdunsjgzQp8HEEqouzj8HCfHhpj9J9mIWzGwkwE4oWoKXR0+JTmXOY6
+        TJ+pFJykNI3dqb9yzPdZmHHWp3DAYP0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1644340276;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QPUuODZvfHfbK4I1HD8yNzMlq3DUr01lnj3/cFWOZHw=;
+        b=AW7zgCjMqw1DHvST6TyjtFvQuKtXsRlQFUQXQ1bP8UTTnMosj6litlO8SxK7aUvF6p7suM
+        iJOcMI8TTsGUetDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E074213A1A;
+        Tue,  8 Feb 2022 17:11:15 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id cXGkNDOkAmIXXAAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Tue, 08 Feb 2022 17:11:15 +0000
+Date:   Tue, 8 Feb 2022 18:11:14 +0100
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Terry Bowman <terry.bowman@amd.com>
+Cc:     <linux@roeck-us.net>, <linux-watchdog@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, <wsa@kernel.org>,
+        <andy.shevchenko@gmail.com>, <rafael.j.wysocki@intel.com>,
+        <linux-kernel@vger.kernel.org>, <wim@linux-watchdog.org>,
+        <rrichter@amd.com>, <thomas.lendacky@amd.com>,
+        <sudheesh.mavila@amd.com>, <Nehal-bakulchandra.Shah@amd.com>,
+        <Basavaraj.Natikar@amd.com>, <Shyam-sundar.S-k@amd.com>,
+        <Mario.Limonciello@amd.com>
+Subject: Re: [PATCH v4 0/9] i2c: piix4: Replace cd6h/cd7h port I/O accesses
+ with MMIO accesses
+Message-ID: <20220208181114.180a99ba@endymion.delvare>
+In-Reply-To: <20220130184130.176646-1-terry.bowman@amd.com>
+References: <20220130184130.176646-1-terry.bowman@amd.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <20220208164623.3151777-1-frowand.list@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/8/22 9:46 AM, frowand.list@gmail.com wrote:
-> From: Frank Rowand <frank.rowand@sony.com>
-> 
-> Add the spec version to the title line.
-> 
-> Explain likely source of "Unknown lines".
-> 
-> "Unknown lines" in nested tests are optionally indented.
-> 
-> Add "Unknown lines" items to differences between TAP & KTAP list
-> 
-> Reviewed-by: Tim Bird <Tim.Bird@sony.com>
-> Reviewed-by: David Gow <davidgow@google.com>
-> Signed-off-by: Frank Rowand <frank.rowand@sony.com>
-> ---
-> 
-> Changes since version 2
->    - Add missing quote after word: incorrect
->    - Add Reviewed-by tags
-> 
-> Changes since version 1
->    - Explain likely source of "Unknown lines"
->    - "Unknown line" in nested tests are optionally indented
->    - Add "Unknown lines" items to differences between TAP & KTAP list
-> 
->   Documentation/dev-tools/ktap.rst | 24 ++++++++++++++++++------
->   1 file changed, 18 insertions(+), 6 deletions(-)
-> 
-> diff --git a/Documentation/dev-tools/ktap.rst b/Documentation/dev-tools/ktap.rst
-> index 878530cb9c27..dfb3f10a8b2d 100644
-> --- a/Documentation/dev-tools/ktap.rst
-> +++ b/Documentation/dev-tools/ktap.rst
-> @@ -1,8 +1,8 @@
->   .. SPDX-License-Identifier: GPL-2.0
->   
-> -========================================
-> -The Kernel Test Anything Protocol (KTAP)
-> -========================================
-> +===================================================
-> +The Kernel Test Anything Protocol (KTAP), version 1
-> +===================================================
->   
->   TAP, or the Test Anything Protocol is a format for specifying test results used
->   by a number of projects. It's website and specification are found at this `link
-> @@ -174,6 +174,13 @@ There may be lines within KTAP output that do not follow the format of one of
->   the four formats for lines described above. This is allowed, however, they will
->   not influence the status of the tests.
->   
-> +This is an important difference from TAP.  Kernel tests may print messages
-> +to the system console or a log file.  Both of these destinations may contain
-> +messages either from unrelated kernel or userspace activity, or kernel
-> +messages from non-test code that is invoked by the test.  The kernel code
-> +invoked by the test likely is not aware that a test is in progress and
-> +thus can not print the message as a diagnostic message.
-> +
->   Nested tests
->   ------------
->   
-> @@ -186,10 +193,13 @@ starting with another KTAP version line and test plan, and end with the overall
->   result. If one of the subtests fail, for example, the parent test should also
->   fail.
->   
-> -Additionally, all result lines in a subtest should be indented. One level of
-> +Additionally, all lines in a subtest should be indented. One level of
->   indentation is two spaces: "  ". The indentation should begin at the version
->   line and should end before the parent test's result line.
->   
-> +"Unknown lines" are not considered to be lines in a subtest and thus are
-> +allowed to be either indented or not indented.
-> +
->   An example of a test with two nested subtests:
->   
->   .. code-block::
-> @@ -225,9 +235,11 @@ Major differences between TAP and KTAP
->   --------------------------------------
->   
->   Note the major differences between the TAP and KTAP specification:
-> -- yaml and json are not recommended in diagnostic messages
-> -- TODO directive not recognized
-> +- yaml and json are not recommended in KTAP diagnostic messages
-> +- TODO directive not recognized in KTAP
->   - KTAP allows for an arbitrary number of tests to be nested> +- TAP includes "Unknown lines" in the category of "Anything else"
-> +- TAP says "Unknown lines" are "incorrect"; KTAP allows "Unknown lines"
->   
+Hi Terry,
 
-If we can put the data in a table - makes it lot easier to read
-
->   The TAP14 specification does permit nested tests, but instead of using another
->   nested version line, uses a line of the form
+On Sun, 30 Jan 2022 12:41:21 -0600, Terry Bowman wrote:
+> This series changes the piix4_smbus driver's cd6h/cd7h port I/O accesses
+> to use MMIO instead. This is necessary because cd6h/cd7h port I/O may be
+> disabled on later AMD processors.
 > 
+> This series includes patches with MMIO accesses to register
+> FCH::PM::DECODEEN. The same register is also accessed by the sp5100_tco
+> driver.[1] Synchronization to the MMIO register is required in both
+> drivers.
+> 
+> The first patch creates a macro to request MMIO region using the 'muxed'
+> retry logic. This is used in patch 6 to synchronize accesses to EFCH MMIO.
+> 
+> The second patch replaces a hardcoded region size with a #define. This is
+> to improve maintainability and was requested from v2 review.
+> 
+> The third patch moves duplicated region request/release code into
+> functions. This locates related code into functions and reduces code line
+> count. This will also make adding MMIO support in patch 6 easier.
+> 
+> The fourth patch moves SMBus controller address detection into a function. 
+> This is in preparation for adding MMIO region support.
+> 
+> The fifth patch moves EFCH port selection into a function. This is in
+> preparation for adding MMIO region support.
+> 
+> The sixth patch adds MMIO support for region requesting/releasing and
+> mapping. This is necessary for using MMIO to detect SMBus controller
+> address, enable SMBbus controller region, and control the port select.
+> 
+> The seventh patch updates the SMBus controller address detection to support
+> using MMIO. This is necessary because the driver accesses register
+> FCH::PM::DECODEEN during initialization and only available using MMIO on
+> later AMD processors.
+> 
+> The eighth patch updates the SMBus port selection to support MMIO. This is
+> required because port selection control resides in the
+> FCH::PM::DECODEEN[smbus0sel] and is only accessible using MMIO on later AMD
+> processors.
+> 
+> The ninth patch enables the EFCH MMIO functionality added earlier in this
+> series. The SMBus controller's PCI revision ID is used to check if EFCH
+> MMIO is supported by HW and should be enabled in the driver.
 
-Looks good otherwise. Thanks for clearly outlining the differences.
+Thank you for splitting the changes into small chunks for easier
+review. Maybe it was even a bit too much in the end, as most patches
+don't serve a purpose on their own. But well, that's still much better
+than a monolithic patch.
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+> Based on v5.16.
+> 
+> Testing:
+>   Tested on family 19h using:
+>     i2cdetect -y 0
+>     i2cdetect -y 2
+> 
+>   - Results using v5.16 and this pachset applied. Below
+>     shows the devices detected on the busses:
+>     
+>     # i2cdetect -y 0 
+>          0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+>     00:                         -- -- -- -- -- -- -- -- 
+>     10: 10 11 -- -- -- -- -- -- 18 -- -- -- -- -- -- -- 
+>     20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+>     30: 30 -- -- -- -- 35 36 -- -- -- -- -- -- -- -- -- 
+>     40: -- -- -- -- -- -- -- -- -- -- 4a -- -- -- -- -- 
+>     50: 50 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+>     60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+>     70: -- -- -- 73 -- -- -- --                         
+>     # i2cdetect -y 2
+>          0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+>     00:                         -- -- -- -- -- -- -- -- 
+>     10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+>     20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+>     30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+>     40: -- -- -- -- -- -- -- -- -- -- -- -- 4c -- -- -- 
+>     50: -- 51 -- -- 54 -- -- -- -- -- -- -- -- -- -- -- 
+>     60: 60 -- -- 63 -- -- 66 -- -- -- -- 6b -- -- 6e -- 
+>     70: 70 71 72 73 74 75 -- 77
 
-thanks,
--- Shuah
+Unfortunately I'm not really able to test this series. While I do have
+an AMD-based laptop which uses the i2c-piix4 driver, the SMBus has
+never been usable on it. The driver creates 3 i2c buses (port 0 at
+0b00, port 2 at 0b00 and port 1 at 0b20). The first 2 do not seem to
+have any device on them (i2cdetect returns empty). The last one must
+have some devices on it, I see address 0x1c answers the ping,
+unfortunately as soon as probing reaches address 0x2c, all later pings
+return success, regardless of the address. It seems that some I2C
+device (probably the one at 0x2c, but I don't know what it is) is
+holding SDA low forever, therefore preventing any use of the whole
+SMBus port until the next reboot.
+
+> (...)
+> Changes in v4:
+> (...)
+>  - Removed iowrite32(ioread32(...), ...). Unnecessary because MMIO is
+>    already enabled. (Terry Bowman)
+
+I'm curious, how can you be sure of that actually?
+
+> (...)
+> Terry Bowman (9):
+>   kernel/resource: Introduce request_mem_region_muxed()
+>   i2c: piix4: Replace hardcoded memory map size with a #define
+>   i2c: piix4: Move port I/O region request/release code into functions
+>   i2c: piix4: Move SMBus controller base address detect into function
+>   i2c: piix4: Move SMBus port selection into function
+>   i2c: piix4: Add EFCH MMIO support to region request and release
+>   i2c: piix4: Add EFCH MMIO support to SMBus base address detect
+>   i2c: piix4: Add EFCH MMIO support for SMBus port select
+>   i2c: piix4: Enable EFCH MMIO for Family 17h+
+> 
+>  drivers/i2c/busses/i2c-piix4.c | 207 ++++++++++++++++++++++++++-------
+>  include/linux/ioport.h         |   2 +
+>  2 files changed, 164 insertions(+), 45 deletions(-)
+
+I'm done with my review, looks good overall, I made a few comments here
+and there but no major issue. I'll leave it up to you (and Wolfram) to
+either send a new series with (some of) my suggestions addressed or
+just go with v4. In both cases you can add:
+
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
+
+to all patches.
+
+Thank you very much for your work, and sorry for my late review.
+
+-- 
+Jean Delvare
+SUSE L3 Support

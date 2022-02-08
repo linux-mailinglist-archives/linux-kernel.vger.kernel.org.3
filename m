@@ -2,170 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE4A94AE453
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:30:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2C904AE4C9
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:37:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386724AbiBHW1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 17:27:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32888 "EHLO
+        id S1388315AbiBHWcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 17:32:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386608AbiBHU7G (ORCPT
+        with ESMTP id S1386622AbiBHU7i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 15:59:06 -0500
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552DAC0612B9
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 12:59:05 -0800 (PST)
-Received: by mail-vs1-xe2a.google.com with SMTP id m24so376834vsp.7
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 12:59:05 -0800 (PST)
+        Tue, 8 Feb 2022 15:59:38 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7988C0612B8
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 12:59:37 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id h6so515535wrb.9
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 12:59:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NxB7BzC6ZAoAU/UTQQPI/XYwGHJmUDw1BkVBGKXBE4c=;
-        b=Y3dHeM9K1rCwczLjQBwnOlwAC1lSGX6KBBSSvc9OyYXm6MqTlm+Arx3JxBqbvT2562
-         W0x2T60xfaRmhG7hTPmRYxjsLOT4FN+LbwHOE0BH68Xi/mXCfSwaGROEhPdmrgqDlHqJ
-         JPRWBGOJQ1PS76ChpBJzY0tx4VNWTjdTb5fVBwWSghrT8vsr7qedw4jQ2c13cNgs/aAc
-         e+yl1ENT+jlXNFeDSWDJK7+ZX7++Mr0D+/gQpLUqOG41iNLxTrInsNBCQIyOYpRI8+tI
-         gAz2GORpxqQe3vUVD0C0We+OO0BwCa4LDGZN8KtEOfBlMnFIXOa75bonu1iLcDzr68hi
-         cOrg==
+        d=ffwll.ch; s=google;
+        h=date:from:to:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=LR/HqP2Q1P8BmgSmBhLwoCgWv4OeRLxaaKVnBHVz380=;
+        b=OClWzaHwfnKbU2ivv9C7fQtoAaSQhJdGklXpEzcFffm1SkumsQsTkr8ZOu//Qj3wMX
+         gEbDIlvZmGBGIRp32EXuJUt4pdkA+9hSevTsMS5kH+0eK7Qp5AnE8d5EBZDnA9LbvTcn
+         umgHa0cvz5UESKxYpoHkM5AGiSPrp+EXDnSms=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NxB7BzC6ZAoAU/UTQQPI/XYwGHJmUDw1BkVBGKXBE4c=;
-        b=cP9WBqne1z6ClEjvP94L9NiDXVXdLepdvydSC55SlNuPv5/FiPckYN7Ba5nWIzIgDK
-         1WcuaHu1RPqY+xFRD2nMePYiFJ9isxAwQjkUpmvCIV23Tbln54vdO5M5HwGWc1Zh2Tbt
-         cKuJ1H+1weXwKB4/XrnxMlerfaco66m/Nyycp7ZnXt3g41BxMaGVj1MBdKFpGCHsIdpZ
-         BeB6sE2+5UoH/fKrodoRxakDZYjSeH4MmVZpZe58Wgrc25tOfhQtF7hyUx40pq1CYbgy
-         bTDGPkFLcTLvR5Ys3x6+ChhnqzS1YsVDtTv3lUd0lDtQkfl3jkxryBzZvIoUW9My2BLT
-         xzIA==
-X-Gm-Message-State: AOAM530gm00rQCr/RrTkrLroRXIXP/T77N4WpWM6tOyhskaWqPEcXoD4
-        RqXXERjDLIvsAipl81oucjbePA7RFRQFmA==
-X-Google-Smtp-Source: ABdhPJyyfanTQDxZMI+Jy+IyYwdJMxOWexbUN7I0gtgGgqc5bnpDIsiu2xMy3H+xfKxHQx3t7X20aQ==
-X-Received: by 2002:a67:e1c3:: with SMTP id p3mr2029151vsl.31.1644353944505;
-        Tue, 08 Feb 2022 12:59:04 -0800 (PST)
-Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com. [209.85.222.48])
-        by smtp.gmail.com with ESMTPSA id k20sm2770518vsg.14.2022.02.08.12.59.03
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Feb 2022 12:59:04 -0800 (PST)
-Received: by mail-ua1-f48.google.com with SMTP id e17so247240uad.9
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 12:59:03 -0800 (PST)
-X-Received: by 2002:ab0:384c:: with SMTP id h12mr2198570uaw.122.1644353943533;
- Tue, 08 Feb 2022 12:59:03 -0800 (PST)
+        h=x-gm-message-state:date:from:to:subject:message-id:mail-followup-to
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=LR/HqP2Q1P8BmgSmBhLwoCgWv4OeRLxaaKVnBHVz380=;
+        b=LV8lqsbqIMA9l+2avLwjMTU4Y3irTmvFOLFeT4qscEnFCJfhnIHJcd7Xna7/GwI32s
+         wdbV6Lh7+hiihNQiJ4j6uy8mqAqR8RKuFRvtyjrzbo/8qbPsKwdVFNBPZoLP4QFtXFPr
+         O9R1gUPhRFrpsjn3tW3tqupqwhLiKv5L68jvNSoPNeV5Wg65OrdWbltsLWi+VkTkzc26
+         /Toe0g2IOsMpudEhMFxUoepuCRqWFtwwufdjY/lEgUvxQzXgBQilCpAcRz4USSWb9Mvj
+         2QRHl5+S5emtsBdXNvQfKROPG50vBJvzmI/VF6ml8N8CIpDE42t48vvk/XMkMdsTRhti
+         49/Q==
+X-Gm-Message-State: AOAM531hF/FSXQD/ZQkPg8fPpsBlPE/OPoHg+dwrUHUJ8/4rzmcHVlBG
+        C8lUFjp0/oIwxlc5XSIA+0BaLQ==
+X-Google-Smtp-Source: ABdhPJyoKyE7ZSiQIZzA82zoDzmj1UBV8TCrGt8kooKo8r1vgxpn3G6jb5XrdBUZcozMC7B14dmZJA==
+X-Received: by 2002:a5d:64c8:: with SMTP id f8mr5121045wri.337.1644353976273;
+        Tue, 08 Feb 2022 12:59:36 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id e3sm7852138wrr.94.2022.02.08.12.59.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 12:59:35 -0800 (PST)
+Date:   Tue, 8 Feb 2022 21:59:33 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jens Frederich <jfrederich@gmail.com>,
+        Jon Nettleton <jon.nettleton@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Helge Deller <deller@gmx.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
+        Zheyu Ma <zheyuma97@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 21/21] fbdev: Make registered_fb[] private to fbmem.c
+Message-ID: <YgLZtbhMGlr/upqA@phenom.ffwll.local>
+Mail-Followup-To: Geert Uytterhoeven <geert@linux-m68k.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jens Frederich <jfrederich@gmail.com>,
+        Jon Nettleton <jon.nettleton@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Helge Deller <deller@gmx.de>, Matthew Wilcox <willy@infradead.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Xiyu Yang <xiyuyang19@fudan.edu.cn>, Zheyu Ma <zheyuma97@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>
+References: <20220131210552.482606-1-daniel.vetter@ffwll.ch>
+ <20220131210552.482606-22-daniel.vetter@ffwll.ch>
+ <CAMuHMdUm76tT6u+i=A50ffh=k8hX5kgoMqH=t_wfHqH95nVOPA@mail.gmail.com>
+ <YgJ4g2BEaeUELmvF@phenom.ffwll.local>
 MIME-Version: 1.0
-References: <20220208181510.787069-1-andrew@daynix.com> <20220208181510.787069-5-andrew@daynix.com>
-In-Reply-To: <20220208181510.787069-5-andrew@daynix.com>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Tue, 8 Feb 2022 15:58:27 -0500
-X-Gmail-Original-Message-ID: <CA+FuTScRp5hhkvETuVRsUxMRCZVU0wVrmd5_=a5UoKNLDv4LnA@mail.gmail.com>
-Message-ID: <CA+FuTScRp5hhkvETuVRsUxMRCZVU0wVrmd5_=a5UoKNLDv4LnA@mail.gmail.com>
-Subject: Re: [PATCH v3 4/4] drivers/net/virtio_net: Added RSS hash report control.
-To:     Andrew Melnychenko <andrew@daynix.com>
-Cc:     netdev@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        jasowang@redhat.com, mst@redhat.com, yan@daynix.com,
-        yuri.benditovich@daynix.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YgJ4g2BEaeUELmvF@phenom.ffwll.local>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 8, 2022 at 1:19 PM Andrew Melnychenko <andrew@daynix.com> wrote:
->
-> Now it's possible to control supported hashflows.
-> Added hashflow set/get callbacks.
-> Also, disabling RXH_IP_SRC/DST for TCP would disable then for UDP.
+On Tue, Feb 08, 2022 at 03:04:51PM +0100, Daniel Vetter wrote:
+> On Fri, Feb 04, 2022 at 09:30:56AM +0100, Geert Uytterhoeven wrote:
+> > Hi Daniel,
+> > 
+> > Thanks for your patch!
+> > 
+> > On Tue, Feb 1, 2022 at 9:50 PM Daniel Vetter <daniel.vetter@ffwll.ch> wrote:
+> > > Well except when the olpc dcon fbdev driver is enabled, that thing
+> > > digs around in there in rather unfixable ways.
+> > 
+> > Can't the actual frame buffer driver (which one?) used on olpc export
+> > a pointer to its fb_info?
+> 
+> Yeah that might be the right thing to do, I'll add that as a stagin TODO
+> in the next iteration.
 
-I don't follow this comment. Can you elaborate?
+Well I tried to do that and noticed I've done that already in 2019:
 
-> TCP and UDP supports only:
-> ethtool -U eth0 rx-flow-hash tcp4 sd
->     RXH_IP_SRC + RXH_IP_DST
-> ethtool -U eth0 rx-flow-hash tcp4 sdfn
->     RXH_IP_SRC + RXH_IP_DST + RXH_L4_B_0_1 + RXH_L4_B_2_3
->
-> Signed-off-by: Andrew Melnychenko <andrew@daynix.com>
-> ---
->  drivers/net/virtio_net.c | 141 ++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 140 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> index 543da2fbdd2d..88759d5e693c 100644
-> --- a/drivers/net/virtio_net.c
-> +++ b/drivers/net/virtio_net.c
-> @@ -231,6 +231,7 @@ struct virtnet_info {
->         u8 rss_key_size;
->         u16 rss_indir_table_size;
->         u32 rss_hash_types_supported;
-> +       u32 rss_hash_types_saved;
+commit af1440368837f19ac7d5dec05d929d91308f5a90
+Author: Daniel Vetter <daniel.vetter@ffwll.ch>
+Date:   Tue May 28 11:03:03 2019 +0200
 
-hash_types_active?
+    staging/olpc_dcon: Add drm conversion to TODO
 
-> +static bool virtnet_set_hashflow(struct virtnet_info *vi, struct ethtool_rxnfc *info)
-> +{
-> +       u32 new_hashtypes = vi->rss_hash_types_saved;
-> +       bool is_disable = info->data & RXH_DISCARD;
-> +       bool is_l4 = info->data == (RXH_IP_SRC | RXH_IP_DST | RXH_L4_B_0_1 | RXH_L4_B_2_3);
-> +
-> +       /* supports only 'sd', 'sdfn' and 'r' */
-> +       if (!((info->data == (RXH_IP_SRC | RXH_IP_DST)) | is_l4 | is_disable))
+TODO already explains how this should be done correctly in drm. Well maybe
+we should add that stitching the drivers together should be done with
+component.c or something like that.
+-Daniel
 
-maybe add an is_l3
+> 
+> > 
+> > > --- a/drivers/video/fbdev/core/fbmem.c
+> > > +++ b/drivers/video/fbdev/core/fbmem.c
+> > > @@ -48,10 +48,14 @@
+> > >  static DEFINE_MUTEX(registration_lock);
+> > >
+> > >  struct fb_info *registered_fb[FB_MAX] __read_mostly;
+> > > -EXPORT_SYMBOL(registered_fb);
+> > > -
+> > >  int num_registered_fb __read_mostly;
+> > > +#if IS_ENABLED(CONFIG_OLPC_DCON)
+> > 
+> > CONFIG_FB_OLPC_DCON (everywhere), cfr. the build failure reported
+> > by the robot.
+> 
+> Yeah realized that too and fixed it locally.
+> 
+> Cheers, Daniel
+> 
+> > 
+> > Gr{oetje,eeting}s,
+> > 
+> >                         Geert
+> > 
+> > --
+> > Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> > 
+> > In personal conversations with technical people, I call myself a hacker. But
+> > when I'm talking to journalists I just say "programmer" or something like that.
+> >                                 -- Linus Torvalds
+> 
+> -- 
+> Daniel Vetter
+> Software Engineer, Intel Corporation
+> http://blog.ffwll.ch
 
-> +               return false;
-> +
-> +       switch (info->flow_type) {
-> +       case TCP_V4_FLOW:
-> +               new_hashtypes &= ~(VIRTIO_NET_RSS_HASH_TYPE_IPv4 | VIRTIO_NET_RSS_HASH_TYPE_TCPv4);
-> +               if (!is_disable)
-> +                       new_hashtypes |= VIRTIO_NET_RSS_HASH_TYPE_IPv4
-> +                               | (is_l4 ? VIRTIO_NET_RSS_HASH_TYPE_TCPv4 : 0);
-> +               break;
-> +       case UDP_V4_FLOW:
-> +               new_hashtypes &= ~(VIRTIO_NET_RSS_HASH_TYPE_IPv4 | VIRTIO_NET_RSS_HASH_TYPE_UDPv4);
-> +               if (!is_disable)
-> +                       new_hashtypes |= VIRTIO_NET_RSS_HASH_TYPE_IPv4
-> +                               | (is_l4 ? VIRTIO_NET_RSS_HASH_TYPE_UDPv4 : 0);
-> +               break;
-> +       case IPV4_FLOW:
-> +               new_hashtypes &= ~VIRTIO_NET_RSS_HASH_TYPE_IPv4;
-> +               if (!is_disable)
-> +                       new_hashtypes = VIRTIO_NET_RSS_HASH_TYPE_IPv4;
-> +               break;
-> +       case TCP_V6_FLOW:
-> +               new_hashtypes &= ~(VIRTIO_NET_RSS_HASH_TYPE_IPv6 | VIRTIO_NET_RSS_HASH_TYPE_TCPv6);
-> +               if (!is_disable)
-> +                       new_hashtypes |= VIRTIO_NET_RSS_HASH_TYPE_IPv6
-> +                               | (is_l4 ? VIRTIO_NET_RSS_HASH_TYPE_TCPv6 : 0);
-> +               break;
-> +       case UDP_V6_FLOW:
-> +               new_hashtypes &= ~(VIRTIO_NET_RSS_HASH_TYPE_IPv6 | VIRTIO_NET_RSS_HASH_TYPE_UDPv6);
-> +               if (!is_disable)
-> +                       new_hashtypes |= VIRTIO_NET_RSS_HASH_TYPE_IPv6
-> +                               | (is_l4 ? VIRTIO_NET_RSS_HASH_TYPE_UDPv6 : 0);
-> +               break;
-> +       case IPV6_FLOW:
-> +               new_hashtypes &= ~VIRTIO_NET_RSS_HASH_TYPE_IPv6;
-> +               if (!is_disable)
-> +                       new_hashtypes = VIRTIO_NET_RSS_HASH_TYPE_IPv6;
-> +               break;
-> +       default:
-> +               /* unsupported flow */
-> +               return false;
-> +       }
-> +
-> +       /* if unsupported hashtype was set */
-> +       if (new_hashtypes != (new_hashtypes & vi->rss_hash_types_supported))
-> +               return false;
-> +
-> +       if (new_hashtypes != vi->rss_hash_types_saved) {
-> +               vi->rss_hash_types_saved = new_hashtypes;
-
-should only be updated if the commit function returned success?
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

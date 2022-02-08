@@ -2,128 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A18204ADCB3
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 16:32:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 997FB4ADCBC
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 16:34:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380477AbiBHPcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 10:32:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45212 "EHLO
+        id S1380187AbiBHPed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 10:34:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235109AbiBHPcQ (ORCPT
+        with ESMTP id S1357075AbiBHPeb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 10:32:16 -0500
-Received: from mail.toke.dk (mail.toke.dk [IPv6:2a0c:4d80:42:2002::664])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B917C061576;
-        Tue,  8 Feb 2022 07:32:15 -0800 (PST)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=toke.dk; s=20161023;
-        t=1644334333; bh=wgBzt5vK3cFN8FMnyCpL9e4AgZNfJRkAyZy5pNQF5Y8=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=SDtmhTSuRrLIi0rBu2TtRfajchoprAs5Y921ThZLf60QXQWj6C62Z5d3CntC9fB8Y
-         ez/6QuDAttYFRjncVb18h5leoNYSIKF36l4hIHnk0J88KgCvWwFD6tjAuTSGcS67fq
-         KgxpwbYrlF0bYZJyz4sRLqrY0/AWc5OOOR41hFO7tBxRgfaBOG50spbTS16HvvZISB
-         OfOpaj5w6vLOhL2ndpQwatDM2xZvXdeHDQAL4mzNzU7krdAzhVE8HgMv+kAuZNBseT
-         btlWIBr5CH4FAUjEDGuNNOxcV4COjwF9Y3PB43j2h8/q5b8xTUiyCSq23x7nMrHLK1
-         O5SZLzArGhTxw==
-To:     Jeff Johnson <quic_jjohnson@quicinc.com>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        ath9k-devel@qca.qualcomm.com, kvalo@kernel.org,
-        davem@davemloft.net, kuba@kernel.org, linville@tuxdriver.com
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] ath9k: htc: clean up *STAT_* macros
-In-Reply-To: <258ac12b-9ca3-9b24-30df-148f9df51582@quicinc.com>
-References: <80962aae265995d1cdb724f5362c556d494c7566.1644265120.git.paskripkin@gmail.com>
- <28c83b99b8fea0115ad7fbda7cc93a86468ec50d.1644265120.git.paskripkin@gmail.com>
- <258ac12b-9ca3-9b24-30df-148f9df51582@quicinc.com>
-Date:   Tue, 08 Feb 2022 16:32:13 +0100
-X-Clacks-Overhead: GNU Terry Pratchett
-Message-ID: <87ee4d9xxe.fsf@toke.dk>
+        Tue, 8 Feb 2022 10:34:31 -0500
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D913C061579;
+        Tue,  8 Feb 2022 07:34:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1644334471; x=1675870471;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=EXYG8k+MxXH2YD2Vp5IRmopJjJXrnw1g9nldIjqOPpA=;
+  b=izMJNPeR287lR5KeX8g2X3q21QIafR75w/pWyWF1LALjze/7jIJ1aNYq
+   jNfCQBYqp06zOBqgMDNFjbPtfUqqGymUV/O7l71UXayv+xRdHiCTDI+qR
+   OdKVqmZVI4PYl7Qku5u+/slzLSgp+bHJp0cSzj2E92jIgRINbUl7lAKPj
+   4=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 08 Feb 2022 07:34:31 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 07:34:30 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Tue, 8 Feb 2022 07:34:30 -0800
+Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Tue, 8 Feb 2022 07:34:26 -0800
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <robh+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <rohitkr@codeaurora.org>, <srinivas.kandagatla@linaro.org>,
+        <dianders@chromium.org>, <swboyd@chromium.org>,
+        <judyhsiao@chromium.org>
+CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Subject: [PATCH v2 0/3] Add lpass pin control support for audio on sc7280 based targets
+Date:   Tue, 8 Feb 2022 21:04:11 +0530
+Message-ID: <1644334454-16719-1-git-send-email-quic_srivasam@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jeff Johnson <quic_jjohnson@quicinc.com> writes:
+This patch set is to add lpass pin control support for Audio over I2S,
+wcd codec and digital mics.
 
-> On 2/7/2022 12:24 PM, Pavel Skripkin wrote:
->> I've changed *STAT_* macros a bit in previous patch and I seems like
->> they become really unreadable. Align these macros definitions to make
->> code cleaner.
->> 
->> Also fixed following checkpatch warning
->> 
->> ERROR: Macros with complex values should be enclosed in parentheses
->> 
->> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
->> ---
->> 
->> Changes since v2:
->> 	- My send-email script forgot, that mailing lists exist.
->> 	  Added back all related lists
->> 	- Fixed checkpatch warning
->> 
->> Changes since v1:
->> 	- Added this patch
->> 
->> ---
->>   drivers/net/wireless/ath/ath9k/htc.h | 16 ++++++++--------
->>   1 file changed, 8 insertions(+), 8 deletions(-)
->> 
->> diff --git a/drivers/net/wireless/ath/ath9k/htc.h b/drivers/net/wireless/ath/ath9k/htc.h
->> index 141642e5e00d..b4755e21a501 100644
->> --- a/drivers/net/wireless/ath/ath9k/htc.h
->> +++ b/drivers/net/wireless/ath/ath9k/htc.h
->> @@ -327,14 +327,14 @@ static inline struct ath9k_htc_tx_ctl *HTC_SKB_CB(struct sk_buff *skb)
->>   }
->>   
->>   #ifdef CONFIG_ATH9K_HTC_DEBUGFS
->> -#define __STAT_SAVE(expr) (hif_dev->htc_handle->drv_priv ? (expr) : 0)
->> -#define TX_STAT_INC(c) __STAT_SAVE(hif_dev->htc_handle->drv_priv->debug.tx_stats.c++)
->> -#define TX_STAT_ADD(c, a) __STAT_SAVE(hif_dev->htc_handle->drv_priv->debug.tx_stats.c += a)
->> -#define RX_STAT_INC(c) __STAT_SAVE(hif_dev->htc_handle->drv_priv->debug.skbrx_stats.c++)
->> -#define RX_STAT_ADD(c, a) __STAT_SAVE(hif_dev->htc_handle->drv_priv->debug.skbrx_stats.c += a)
->> -#define CAB_STAT_INC   priv->debug.tx_stats.cab_queued++
->> -
->> -#define TX_QSTAT_INC(q) (priv->debug.tx_stats.queue_stats[q]++)
->> +#define __STAT_SAVE(expr)	(hif_dev->htc_handle->drv_priv ? (expr) : 0)
->> +#define TX_STAT_INC(c)		__STAT_SAVE(hif_dev->htc_handle->drv_priv->debug.tx_stats.c++)
->> +#define TX_STAT_ADD(c, a)	__STAT_SAVE(hif_dev->htc_handle->drv_priv->debug.tx_stats.c += a)
->> +#define RX_STAT_INC(c)		__STAT_SAVE(hif_dev->htc_handle->drv_priv->debug.skbrx_stats.c++)
->> +#define RX_STAT_ADD(c, a)	__STAT_SAVE(hif_dev->htc_handle->drv_priv->debug.skbrx_stats.c += a)
->> +#define CAB_STAT_INC		(priv->debug.tx_stats.cab_queued++)
->> +
->> +#define TX_QSTAT_INC(q)		(priv->debug.tx_stats.queue_stats[q]++)
->>   
->>   void ath9k_htc_err_stat_rx(struct ath9k_htc_priv *priv,
->>   			   struct ath_rx_status *rs);
->
-> It seems that these macros (both the original and the new) aren't 
-> following the guidance from the Coding Style which tells us under 
-> "Things to avoid when using macros" that we should avoid "macros that 
-> depend on having a local variable with a magic name". Wouldn't these 
-> macros be "better" is they included the hif_dev/priv as arguments rather 
-> than being "magic"?
+This patch set depends on:
+	-- https://patchwork.kernel.org/project/alsa-devel/patch/1638891339-21806-3-git-send-email-quic_srivasam@quicinc.com/
 
-Hmm, yeah, that's a good point; looks like the non-HTC ath9k stats
-macros have already been converted to take the container as a parameter,
-so taking this opportunity to fix these macros is not a bad idea. While
-we're at it, let's switch to the do{} while(0) syntax the other macros
-are using instead of that weird usage of ?:. And there's not really any
-reason for the duplication between ADD/INC either. So I'm thinking
-something like:
+Changes Since V1:
+    -- Merge pinmux and pinconf properties in amp_en and wcd pin reset node.
+    -- Split common i2s pin control nodes to functionality specific nodes.
+    -- Move board specific properties to board specific dtsi file.
+    -- Update dmic pin control node name.
 
-#define __STAT_SAVE(_priv, _member, _n) do { if (_priv) (_priv)->_member += (_n); } while(0)
+Srinivasa Rao Mandadapu (3):
+  arm64: dts: qcom: sc7280: Add pinmux for I2S speaker and Headset
+  arm64: dts: qcom: sc7280: add lpass lpi pin controller node
+  arm64: dts: qcom: sc7280: Add wcd9380 pinmux
 
-#define TX_STAT_ADD(_priv, _c, _a) __STAT_SAVE(_priv, debug.tx_stats._c, _a)
-#define TX_STAT_INC(_priv, _c) TX_STAT_ADD(_priv, _c, 1)
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 205 +++++++++++++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sc7280.dtsi     |  40 ++++++
+ 2 files changed, 245 insertions(+)
 
-[... etc ...]
+-- 
+2.7.4
 
--Toke

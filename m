@@ -2,62 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D36554ADE8D
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 17:46:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 947E24ADE90
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 17:46:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383522AbiBHQqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 11:46:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33742 "EHLO
+        id S1383530AbiBHQqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 11:46:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352314AbiBHQp7 (ORCPT
+        with ESMTP id S238447AbiBHQqU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 11:45:59 -0500
-Received: from relay05.th.seeweb.it (relay05.th.seeweb.it [IPv6:2001:4b7a:2000:18::166])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F733C061579
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 08:45:58 -0800 (PST)
-Received: from [192.168.1.101] (abxk84.neoplus.adsl.tpnet.pl [83.9.4.84])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id F01183F727;
-        Tue,  8 Feb 2022 17:45:49 +0100 (CET)
-Message-ID: <6b839237-74f0-7270-2f33-f5c17e6b59de@somainline.org>
-Date:   Tue, 8 Feb 2022 17:45:48 +0100
+        Tue, 8 Feb 2022 11:46:20 -0500
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98AA4C061576
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 08:46:19 -0800 (PST)
+Received: by mail-il1-f197.google.com with SMTP id d3-20020a92d783000000b002bdfbe72c13so6545494iln.6
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 08:46:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=04stNfTA8owtchC8dwIElu8+6DIjBdqEAIbIB7WQr1g=;
+        b=uI4GaK0ch1UkB/oPYdr83Ka3rhYZWAmjyzLEPavN01GMyJdy3sd0cN+5JDJdQxVtQa
+         BV0bW6QT4UEevTMXMheNIVhaoOjo1pVd4C0Gu+hSg2mbYzcCEIG5gKr1DMjud+5Sz1x9
+         V7aBIaLkMuUzqBaJ36grAqhzfVpvDG/sDdnPulHOEaQEF3DnTSD8NRA/s6iPzfFY7eeO
+         byyhQgqd3QW5klW82Qj70g5jU6bEKYAG8F63V8GfqtSgyyciKAqvqUJ2uUdIKOliP8go
+         UaKNvukb4avLzaEJGAz36L9zqhQl2GJ0IGsiHajEPPTgG5sDy9vibt8hpY8UBsDvQMvg
+         jIoQ==
+X-Gm-Message-State: AOAM532FqGeTkpXDhyXCu7r8flDYkT6R/d40PjRrP6Na5WVPY8Sg/sEY
+        BTZxDWoika2JRWau8oaJ5RJkgI1S3iK04wQCmULEUAMyYdoK
+X-Google-Smtp-Source: ABdhPJzoxPhAVs+NLpIAxk0klhk3tC4wwLDe8d+FGHLQF00JVyXcHz2lNoy1U1FAZBwoO/UX88EBn2NH13f/G24b2D3LjSFvwpd+
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH] mtd: nand: raw: qcom_nandc: Don't clear_bam_transaction
- on READID
-Content-Language: en-US
-To:     Sricharan Ramabadhran <sricharan@codeaurora.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Manivannan Sadhasivam <mani@kernel.org>, pragalla@codeaurora.org,
-        ~postmarketos/upstreaming@lists.sr.ht, martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mdalam@codeaurora.org,
-        bbhatt@codeaurora.org, hemantk@codeaurora.org
-References: <20220113184427.2259509-1-konrad.dybcio@somainline.org>
- <20220114082718.32a2fc83@xps13> <20220126111613.3ab0021e@xps13>
- <20220126103316.GA212068@thinkpad> <20220126114200.4cc3c21b@xps13>
- <fc80a6e7-bd44-3b3e-fca2-1316a76d65f5@codeaurora.org>
- <a6fcc533-e7cd-7b55-4db0-cec80c07b46a@codeaurora.org>
- <0a8d6550-aa19-0af1-abae-66bf34c91ea8@somainline.org>
- <be779ed9-bd80-8f01-fe7f-d3c07d3d85aa@codeaurora.org>
- <12cad24a-fa2f-9a82-cf43-241a0a6fe4f6@somainline.org>
- <20220201145204.54646475@xps13>
- <d79bf21d-5a90-0074-cef6-896f66e80d28@somainline.org>
- <c63d5410-7f08-80fe-28ac-f4867038ff30@codeaurora.org>
- <cc1302f4-9150-0145-421c-bf2b7a7bf258@codeaurora.org>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <cc1302f4-9150-0145-421c-bf2b7a7bf258@codeaurora.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6e02:1a05:: with SMTP id s5mr2640669ild.231.1644338778980;
+ Tue, 08 Feb 2022 08:46:18 -0800 (PST)
+Date:   Tue, 08 Feb 2022 08:46:18 -0800
+In-Reply-To: <000000000000c3eace05d24f0189@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000cfc8ab05d78474c4@google.com>
+Subject: Re: [syzbot] BUG: corrupted list in rdma_listen (2)
+From:   syzbot <syzbot+c94a3675a626f6333d74@syzkaller.appspotmail.com>
+To:     avihaih@nvidia.com, dledford@redhat.com, dvyukov@google.com,
+        fgheet255t@gmail.com, haakon.bugge@oracle.com, jgg@ziepe.ca,
+        leon@kernel.org, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,188 +56,180 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+syzbot has found a reproducer for the following issue on:
 
+HEAD commit:    555f3d7be91a Merge tag '5.17-rc3-ksmbd-server-fixes' of gi..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=16c4c44fb00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=266de9da75c71a45
+dashboard link: https://syzkaller.appspot.com/bug?extid=c94a3675a626f6333d74
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=137e0c77b00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=140b1eaa700000
 
-On 4.02.2022 18:17, Sricharan Ramabadhran wrote:
-> 
-> On 2/2/2022 12:54 PM, Sricharan Ramabadhran wrote:
->> Hi Konrad/Miquel,
->>
->> On 2/1/2022 9:21 PM, Konrad Dybcio wrote:
->>>
->>> On 01/02/2022 14:52, Miquel Raynal wrote:
->>>> Hi Konrad,
->>>>
->>>> konrad.dybcio@somainline.org wrote on Mon, 31 Jan 2022 20:54:12 +0100:
->>>>
->>>>> On 31/01/2022 15:13, Sricharan Ramabadhran wrote:
->>>>>> Hi Konrad,
->>>>>>
->>>>>> On 1/31/2022 3:39 PM, Konrad Dybcio wrote:
->>>>>>> On 28/01/2022 18:50, Sricharan Ramabadhran wrote:
->>>>>>>> Hi Konrad,
->>>>>>>>
->>>>>>>> On 1/28/2022 9:55 AM, Sricharan Ramabadhran wrote:
->>>>>>>>> Hi Miquel,
->>>>>>>>>
->>>>>>>>> On 1/26/2022 4:12 PM, Miquel Raynal wrote:
->>>>>>>>>> Hi Mani,
->>>>>>>>>>
->>>>>>>>>> mani@kernel.org wrote on Wed, 26 Jan 2022 16:03:16 +0530:
->>>>>>>>>>> On Wed, Jan 26, 2022 at 11:16:13AM +0100, Miquel Raynal wrote:
->>>>>>>>>>>> Hello,
->>>>>>>>>>>>
->>>>>>>>>>>> miquel.raynal@bootlin.com wrote on Fri, 14 Jan 2022 08:27:18 +0100:
->>>>>>>>>>>>> Hi Konrad,
->>>>>>>>>>>>>
->>>>>>>>>>>>> konrad.dybcio@somainline.org wrote on Thu, 13 Jan 2022 19:44:26 >>>>>>>> +0100:
->>>>>>>>>>>>>> While I have absolutely 0 idea why and how, running >>>>>>>>> clear_bam_transaction
->>>>>>>>>>>>>> when READID is issued makes the DMA totally clog up and refuse >>>>>>>>> to function
->>>>>>>>>>>>>> at all on mdm9607. In fact, it is so bad that all the data >>>>>>>>> gets garbled
->>>>>>>>>>>>>> and after a short while in the nand probe flow, the CPU >>>>>>>>> decides that
->>>>>>>>>>>>>> sepuku is the only option.
->>>>>>>>>>>>>>
->>>>>>>>>>>>>> Removing _READID from the if condition makes it work like a >>>>>>>>> charm, I can
->>>>>>>>>>>>>> read data and mount partitions without a problem.
->>>>>>>>>>>>>>
->>>>>>>>>>>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
->>>>>>>>>>>>>> ---
->>>>>>>>>>>>>> This is totally just an observation which took me an inhumane >>>>>>>>> amount of
->>>>>>>>>>>>>> debug prints to find.. perhaps there's a better reason behind >>>>>>>>> this, but
->>>>>>>>>>>>>> I can't seem to find any answers.. Therefore, this is a BIG RFC!
->>>>>>>>>>>>> I'm adding two people from codeaurora who worked a lot on this >>>>>>>> driver.
->>>>>>>>>>>>> Hopefully they will have an idea :)
->>>>>>>>>>>> Sadre, I've spent a significant amount of time reviewing your >>>>>>> patches,
->>>>>>>>>>>> now it's your turn to not take a month to answer to your peers
->>>>>>>>>>>> proposals.
->>>>>>>>>>>>
->>>>>>>>>>>> Please help reviewing this patch.
->>>>>>>>>>> Sorry. I was hoping that Qcom folks would chime in as I don't >>>>>> have any idea
->>>>>>>>>>> about the mdm9607 platform. It could be that the mail server >>>>>> migration from
->>>>>>>>>>> codeaurora to quicinc put a barrier here.
->>>>>>>>>>>
->>>>>>>>>>> Let me ping them internally.
->>>>>>>>>> Oh, ok, I didn't know. Thanks!
->>>>>>>>>     Sorry Miquel, somehow we did not get this email in our inbox.
->>>>>>>>>     Thanks to Mani for pinging us, we will test this up today and >>>> get back.
->>>>>>>>        While we could not reproduce this issue on our ipq boards (do >>> not have a mdm9607 right now) and
->>>>>>>>         issue does not look any obvious.
->>>>>>>>        can you please give the debug logs that you did for the above >>> stage by stage ?
->>>>>>> I won't have access to the board for about two weeks, sorry.
->>>>>>>
->>>>>>> When I get to it, I'll surely try to send you the logs, though there
->>>>>>>
->>>>>>> wasn't much more than just something jumping to who-knows-where
->>>>>>>
->>>>>>> after clear_bam_transaction was called, resulting in values >> associated with
->>>>>>>
->>>>>>> the NAND being all zeroed out in pr_err/_debug/etc.
->>>>>>>
->>>>>>      Ok sure. So was the READID command itself failing (or) the > subsequent one ?
->>>>>>     We can check which parameter reset by the clear_bam_transaction is > causing the
->>>>>>     failure.  Meanwhile, looping in Pradeep who has access to the > board, so in a better
->>>>>>     position to debug.
->>>>> I'm sorry I have so few details on hand, and no kernel tree (no access to that machine either, for now).
->>>>>
->>>>>
->>>>> I will try to describe to the best of my abilities what I recall.
->>>>>
->>>>>
->>>>> My methodology of making sure things don't go haywire was to print the oob size
->>>>>
->>>>> of our NAND basically every two lines of code (yes, i was very desperate at one point),
->>>>>
->>>>> as that was zeroed out when *the bug* happened,
->>>> This does look like a pointer error at some point and some kernel data
->>>> has been corrupted very badly by the driver.
->>>>
->>>>> leading to a kernel bug/panic/stall
->>>>>
->>>>> (can't recall what exactly it was, but it said something along the lines of "no support for
->>>>>
->>>>> oob size 0" and then it didn't fail graceully, leading to some bad jumps and ultimately
->>>>>
->>>>> a dead platform..)
->>>>>
->>>>>
->>>>> after hours of digging, I found out that everything goes fine until clear_bam_transaction is called,
->>>> Do you remember if this function was called for the first time when
->>>> this happened?
->>>
->>> I think so, if I recall correctly there are no more callers in this path, as readid is the first nand command executed in flash probe flow.
->>>
->>>
->>>
->>>>
->>>>> after that gets executed every nand op starts reading all zeroes (for example in JEDEC ID check)
->>>>>
->>>>> so I added the changes from this patch, and things magically started working... My suspicion is
->>>>>
->>>>> that the underlying FIFO isn't fully drained (is it a FIFO on 9607? bah, i work on too many socs at once)
->>>> I don't see it in the list of supported devices, what's the exact
->>>> compatible used?
->>>
->>> qcom,ipq4019-nand
->>>
->>>
->>>
->>>>
->>>>> and this function only makes Linux think it is, without actually draining it, and the leftover
->>>>>
->>>>> commands get executed with some parts of them getting overwritten, resulting in the
->>>>>
->>>>> famous garbage in - garbage out situation, but that's only a guesstimate..
->>>> I would bet for a non allocated bam-ish pointer that is reset to zero
->>>> in the clear_bam_transaction() helper.
->>>>
->>>> Can you get your hands on the board again?
->>>
->>> Sure, but as I mentioned previously, only in about 2 weeks, I can't really do any dev before then.. :(
->>>
->>>
->>>
->>>> It would be nice to check if the allocation always occurs before use,
->>>> and if yes on how much bytes.
->>>>
->>>> If the pointer is not dangling, then perhaps something else smashes
->>>> that pointer.
->>>
->>>
->>> Konrad
->>>
->>>>
->>>>> Do note this somehow worked fine on 5.11 and then broke on 5.12/13. I went as far as replacing most
->>>>>
->>>>> of the kernel with the updated/downgraded parts via git checkout (i tried many combinations),
->>>>>
->>>>> to no avail.. I even tried different compilers and optimization levels, thinking it could have been
->>>>>
->>>>> a codegen issue, but no luck either.
->>>>>
->>>>>
->>>>> I.. do understand this email is a total mess to read, as much as it was to write, but
->>>>>
->>>>> without access to my code and the machine itself I can't give you solid details, and
->>>>>
->>>>> the fact this situation is far from ordinary doesn't help either..
->>>>>
->>>>>
->>>>> The latest (ancient, not quite pretty, but probably working if my memory is correct) version of my patches
->>>>>
->>>>> for the mdm9607 is available at [1], I will push the new revision after I get access to the workstation.
->>>>>
->>   + few more who have access to the board.
->>
->>    Going by the description, for kernel corruption, we can try out a KASAN build.
->>    Since you have mentioned it worked till 5.11, you bisected the driver till 5.11 head and it worked ?
->>
->    Tried running a KASAN enabled image on IPQ board, but no luck. Nothing came out.
->    Only if someone with the board can help here, we can proceed
-> 
-> 
-> Regards,
->   Sricharan
-> 
-I have the board with me again. Please tell me where do we start :)
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+c94a3675a626f6333d74@syzkaller.appspotmail.com
 
-Konrad
+==================================================================
+BUG: KASAN: use-after-free in __list_add_valid+0x93/0xa0 lib/list_debug.c:26
+Read of size 8 at addr ffff88807d24c1e0 by task syz-executor341/3597
+
+CPU: 1 PID: 3597 Comm: syz-executor341 Not tainted 5.17.0-rc3-syzkaller-00020-g555f3d7be91a #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0x8d/0x336 mm/kasan/report.c:255
+ __kasan_report mm/kasan/report.c:442 [inline]
+ kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
+ __list_add_valid+0x93/0xa0 lib/list_debug.c:26
+ __list_add include/linux/list.h:69 [inline]
+ list_add_tail include/linux/list.h:102 [inline]
+ cma_listen_on_all drivers/infiniband/core/cma.c:2593 [inline]
+ rdma_listen+0x86e/0xde0 drivers/infiniband/core/cma.c:3862
+ ucma_listen+0x16a/0x210 drivers/infiniband/core/ucma.c:1105
+ ucma_write+0x25c/0x350 drivers/infiniband/core/ucma.c:1744
+ vfs_write+0x28e/0xae0 fs/read_write.c:588
+ ksys_write+0x1ee/0x250 fs/read_write.c:643
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f0aca906fb9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fffc9f11448 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f0aca906fb9
+RDX: 0000000000000010 RSI: 0000000020000040 RDI: 0000000000000003
+RBP: 0000000000000000 R08: 00007fffc9f115e8 R09: 00007fffc9f115e8
+R10: 00007fffc9f115e8 R11: 0000000000000246 R12: 00007fffc9f1145c
+R13: 431bde82d7b634db R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+
+Allocated by task 3596:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track mm/kasan/common.c:45 [inline]
+ set_alloc_info mm/kasan/common.c:436 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:515 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:474 [inline]
+ __kasan_kmalloc+0xa9/0xd0 mm/kasan/common.c:524
+ kmalloc include/linux/slab.h:581 [inline]
+ kzalloc include/linux/slab.h:715 [inline]
+ __rdma_create_id+0x5b/0x5c0 drivers/infiniband/core/cma.c:845
+ rdma_create_user_id+0x79/0xd0 drivers/infiniband/core/cma.c:900
+ ucma_create_id+0x162/0x360 drivers/infiniband/core/ucma.c:464
+ ucma_write+0x25c/0x350 drivers/infiniband/core/ucma.c:1744
+ vfs_write+0x28e/0xae0 fs/read_write.c:588
+ ksys_write+0x1ee/0x250 fs/read_write.c:643
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+Freed by task 3596:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track+0x21/0x30 mm/kasan/common.c:45
+ kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
+ ____kasan_slab_free mm/kasan/common.c:366 [inline]
+ ____kasan_slab_free+0x130/0x160 mm/kasan/common.c:328
+ kasan_slab_free include/linux/kasan.h:236 [inline]
+ slab_free_hook mm/slub.c:1728 [inline]
+ slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1754
+ slab_free mm/slub.c:3509 [inline]
+ kfree+0xcb/0x280 mm/slub.c:4562
+ ucma_close_id drivers/infiniband/core/ucma.c:187 [inline]
+ ucma_destroy_private_ctx+0x9ca/0xd20 drivers/infiniband/core/ucma.c:579
+ ucma_close+0x10a/0x180 drivers/infiniband/core/ucma.c:1809
+ __fput+0x286/0x9f0 fs/file_table.c:311
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+ exit_task_work include/linux/task_work.h:32 [inline]
+ do_exit+0xb29/0x2a30 kernel/exit.c:806
+ do_group_exit+0xd2/0x2f0 kernel/exit.c:935
+ __do_sys_exit_group kernel/exit.c:946 [inline]
+ __se_sys_exit_group kernel/exit.c:944 [inline]
+ __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:944
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+Last potentially related work creation:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ __kasan_record_aux_stack+0xbe/0xd0 mm/kasan/generic.c:348
+ __call_rcu kernel/rcu/tree.c:3026 [inline]
+ call_rcu+0xb1/0x740 kernel/rcu/tree.c:3106
+ netlink_release+0xf08/0x1db0 net/netlink/af_netlink.c:813
+ __sock_release+0xcd/0x280 net/socket.c:650
+ sock_close+0x18/0x20 net/socket.c:1318
+ __fput+0x286/0x9f0 fs/file_table.c:311
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+ tracehook_notify_resume include/linux/tracehook.h:188 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:175 [inline]
+ exit_to_user_mode_prepare+0x27e/0x290 kernel/entry/common.c:207
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
+ syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:300
+ do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+The buggy address belongs to the object at ffff88807d24c000
+ which belongs to the cache kmalloc-2k of size 2048
+The buggy address is located 480 bytes inside of
+ 2048-byte region [ffff88807d24c000, ffff88807d24c800)
+The buggy address belongs to the page:
+page:ffffea0001f49200 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x7d248
+head:ffffea0001f49200 order:3 compound_mapcount:0 compound_pincount:0
+flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000010200 ffffea00052c7e00 dead000000000002 ffff888010c42000
+raw: 0000000000000000 0000000080080008 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 3, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 2947, ts 17013492589, free_ts 15683127625
+ prep_new_page mm/page_alloc.c:2434 [inline]
+ get_page_from_freelist+0xa72/0x2f50 mm/page_alloc.c:4165
+ __alloc_pages+0x1b2/0x500 mm/page_alloc.c:5389
+ alloc_pages+0x1aa/0x310 mm/mempolicy.c:2271
+ alloc_slab_page mm/slub.c:1799 [inline]
+ allocate_slab mm/slub.c:1944 [inline]
+ new_slab+0x28a/0x3b0 mm/slub.c:2004
+ ___slab_alloc+0x87c/0xe90 mm/slub.c:3018
+ __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3105
+ slab_alloc_node mm/slub.c:3196 [inline]
+ slab_alloc mm/slub.c:3238 [inline]
+ __kmalloc+0x2fb/0x340 mm/slub.c:4420
+ kmalloc include/linux/slab.h:586 [inline]
+ sk_prot_alloc+0x110/0x290 net/core/sock.c:1923
+ sk_alloc+0x32/0xa80 net/core/sock.c:1976
+ __netlink_create+0x63/0x2f0 net/netlink/af_netlink.c:645
+ netlink_create+0x3ad/0x5e0 net/netlink/af_netlink.c:708
+ __sock_create+0x353/0x790 net/socket.c:1468
+ sock_create net/socket.c:1519 [inline]
+ __sys_socket+0xef/0x200 net/socket.c:1561
+ __do_sys_socket net/socket.c:1570 [inline]
+ __se_sys_socket net/socket.c:1568 [inline]
+ __x64_sys_socket+0x6f/0xb0 net/socket.c:1568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1352 [inline]
+ free_pcp_prepare+0x374/0x870 mm/page_alloc.c:1404
+ free_unref_page_prepare mm/page_alloc.c:3325 [inline]
+ free_unref_page+0x19/0x690 mm/page_alloc.c:3404
+ free_contig_range+0xa8/0xf0 mm/page_alloc.c:9335
+ destroy_args+0xa8/0x646 mm/debug_vm_pgtable.c:1018
+ debug_vm_pgtable+0x298e/0x2a20 mm/debug_vm_pgtable.c:1332
+ do_one_initcall+0x103/0x650 init/main.c:1300
+ do_initcall_level init/main.c:1373 [inline]
+ do_initcalls init/main.c:1389 [inline]
+ do_basic_setup init/main.c:1408 [inline]
+ kernel_init_freeable+0x6b1/0x73a init/main.c:1613
+ kernel_init+0x1a/0x1d0 init/main.c:1502
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+
+Memory state around the buggy address:
+ ffff88807d24c080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff88807d24c100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>ffff88807d24c180: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                                                       ^
+ ffff88807d24c200: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff88807d24c280: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
+

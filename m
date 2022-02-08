@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0628D4ADE3E
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 17:23:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC2CE4ADE3B
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 17:23:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383103AbiBHQWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 11:22:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51106 "EHLO
+        id S1383160AbiBHQWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 11:22:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383073AbiBHQWI (ORCPT
+        with ESMTP id S1383127AbiBHQWO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 11:22:08 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39BC1C061578;
-        Tue,  8 Feb 2022 08:22:08 -0800 (PST)
+        Tue, 8 Feb 2022 11:22:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D333AC0613CB;
+        Tue,  8 Feb 2022 08:22:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CB40F616D9;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9FDC9B81BDC;
+        Tue,  8 Feb 2022 16:22:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B413EC340F2;
         Tue,  8 Feb 2022 16:22:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3387DC340EC;
-        Tue,  8 Feb 2022 16:22:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644337327;
-        bh=sXbCfyUpCRgkdJeoXxIsdIqWpDpDr+h2fd3sTTQiBW4=;
+        s=k20201202; t=1644337329;
+        bh=ZV70IUeh32GHdGG2/5iy3KDBRhJ1xne/qFAM7rrDojI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GsZfWIC+pXBcJXMk1q3KUH8Cx12/BrNymYL16J79pzY/l8t0dHpJQL/WmXUSxeao5
-         EgHCmZCmt/Yveslj2EZQb/widC6i9hc1RI50Jf2+Tj09CAJFsIZbUrwTWAOc2q9uKV
-         bhug3/MFFJOS0bdREkpJTvY3aTtaP26U8NntYc4B+rK4e+qJJU/QC2RstCQx8BDqtM
-         Vjj/LJ9qRWx949tzpqh0ZiDqEVPOsmkA4d3yw/xrk0MiVWah/ds56Zxgy9G2in5bri
-         Os7SsQITtQ05pUQI+hIMvgDythuZ07dazEdGseH7fnYaOv7SEP5WvxwmzmeiAM8kbD
-         sg6ZQPX4niNRw==
+        b=FYr3B2T+9JtifRZk/42CU15cKfnnSxW54IN3NNiDJK8TsVzgueswux58D2U4hOgPg
+         /OdbYRDKs4iV3+WrCn6fUxpvfy6zwYdjwTkKyMbnR/Sz45cLlrTO8CkS43oKzQkDsA
+         f7IZcGHxQ6pmSdBa9sVTviWt+Cit/jDO3JLEbtV6cwR+5m/w3qklPGbAixZJ7+dgUn
+         xjFJ7t5Dy7BDnHt6wLtIzbjomDaewTNInNAAB8WeqlSGI4a39pF3vwm6WLFHYnCnah
+         FNrBxQpvBqrD+HAr7BKR8MbaSBnkcqT8ZUIic2X52ac2RGClkXJO0FqednIfEeVHtw
+         vTZ5t0PPnf8DQ==
 From:   Will Deacon <will@kernel.org>
-To:     Miaoqian Lin <linmq006@gmail.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Mark Rutland <mark.rutland@arm.com>
 Cc:     catalin.marinas@arm.com, kernel-team@android.com,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        iommu@lists.linux-foundation.org, linux-arm-msm@vger.kernel.org,
-        Rob Clark <robdclark@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
         linux-arm-kernel@lists.infradead.org,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>
-Subject: Re: [PATCH] iommu/arm-smmu: Add missing pm_runtime_disable() in qcom_iommu_device_probe
-Date:   Tue,  8 Feb 2022 16:21:53 +0000
-Message-Id: <164433576813.932880.12030091721881106363.b4-ty@kernel.org>
+        Linux ACPI <linux-acpi@vger.kernel.org>
+Subject: Re: [PATCH] perf: Replace acpi_bus_get_device()
+Date:   Tue,  8 Feb 2022 16:21:54 +0000
+Message-Id: <164433329407.3773412.15776450422000493467.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220105101619.29108-1-linmq006@gmail.com>
-References: <20220105101619.29108-1-linmq006@gmail.com>
+In-Reply-To: <10025610.nUPlyArG6x@kreacher>
+References: <10025610.nUPlyArG6x@kreacher>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -60,17 +60,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 5 Jan 2022 10:16:19 +0000, Miaoqian Lin wrote:
-> If the probe fails, we should use pm_runtime_disable() to balance
-> pm_runtime_enable().
-> Add missing pm_runtime_disable() for error handling.
+On Tue, 01 Feb 2022 20:10:01 +0100, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
+> Replace acpi_bus_get_device() that is going to be dropped with
+> acpi_fetch_acpi_dev().
 > 
+> No intentional functional impact.
+> 
+> [...]
 
-Applied to will (for-joerg/arm-smmu/updates), thanks!
+Applied to will (for-next/perf), thanks!
 
-[1/1] iommu/arm-smmu: Add missing pm_runtime_disable() in qcom_iommu_device_probe
-      https://git.kernel.org/will/c/93665e0275a2
+[1/1] perf: Replace acpi_bus_get_device()
+      https://git.kernel.org/will/c/602c873eb52e
 
 Cheers,
 -- 

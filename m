@@ -2,90 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21E3C4AE562
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 00:22:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8BF54AE565
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 00:24:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236274AbiBHXWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 18:22:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40658 "EHLO
+        id S236454AbiBHXYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 18:24:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236110AbiBHXWf (ORCPT
+        with ESMTP id S234907AbiBHXYV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 18:22:35 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D516C061577
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 15:22:34 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id e28so1119121pfj.5
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 15:22:34 -0800 (PST)
+        Tue, 8 Feb 2022 18:24:21 -0500
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B83C061576;
+        Tue,  8 Feb 2022 15:24:19 -0800 (PST)
+Received: by mail-il1-x135.google.com with SMTP id b5so291358ile.11;
+        Tue, 08 Feb 2022 15:24:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=65Yx3cIdfLzt0T+id6uVoCd7FXnXUVvDxA3gTNR3Dng=;
-        b=D9YNuUVdJTulkSju/MM9sviTG6bckQkX/SIXUVO1UtmvIaPP8VkZNbvOeNoaFqcPI9
-         UH23LE55wzOe4mCH81x1UYN4ER5e88H7pJ2UKltNDPfu6A/YPCCQugqamLLz/P5ETbC1
-         apovZ0lNaHQ9V9HmAmlc/upFgiorgor0lyS6hTfOn/BJluWaNeBQo0rHngXxeWEbIDCU
-         iKyCgb19m7k4h3e/ZIphkjrM7oxWS1JXyGNPnyWCvR06TmhKvtP7eygFOSmBg7ogChR2
-         fvANAU4h1Er/ddhFqeYIlxNxdVzfjYmC6uJFaSmbw0ML4SUrLQ0pYrQ6qADLc1Wyo6hx
-         MMjA==
+        bh=icW1CmJt7V7nnYt5AEHzW1LfQUR9u0/06jxrbW0ydIE=;
+        b=jWTvazfUXIGZM4J993OHGxm2ZT3pV/4rQPbUpZfltxws6BXlwBQBM2zYTSjY4Rm/Jt
+         pmCf2lp0vaijmggY0iiIvc0is4diW9zh72iCOlZHinv7lbxSSZU962g9QzsHC55DN7t/
+         6Ov6Op+kTCxBjT94pLbDXuyQ71l7it10AJouojfJCWSDGCeBLdHSGFLdrmAYVN1LXAgf
+         NTgdRwvZendUKApqUXOKwNFdEN1AseLeyEHkBHAbrAUGgiWSbSKwOK2W40bPf08L5kq5
+         sAbq7euYFesaYWWTcr5jmpyMk+xTcwyRDHWb+IkpT4CUbkuVSiy0BMjFawXX3HAdTAOu
+         wwyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=65Yx3cIdfLzt0T+id6uVoCd7FXnXUVvDxA3gTNR3Dng=;
-        b=xyUCpSjN4o+n7LuRBg1IAW9UencYi9pr3ZQ2Jl/BkH8w9MbgECXIU/NBqxxp4dbjql
-         9IEj8QhSoViHlpHFaUSKb00VlszuPvqOZj71xtHxVJJxv1FvHgAGs6hN35TTBJOeKgUd
-         OlZkieAwVOEoikfiOmrvqFOtndUlHlugUjHB3UTo3joLsHrvlCPsoTmqvG54tAW3kRNp
-         UhTc24wHOkzJca3bDpRwQ05yUMMrC2sVOGP4C54Eujs3WRbV5U8cxDlC0fAQOwYLTzPI
-         vsBuLAzk7Ih57nnIb2/4qqLkGi/PleWHYHG8+g1QuYpHdeI8fV7nOZ56KN233yZAWr+t
-         HQSw==
-X-Gm-Message-State: AOAM530+qwCgqwIp9BrsS0YtJAwp4gdyZcFLnpC3fD/sQVGPLMX9s4G4
-        8ZqAvDPs1BkNDi/hTUe/1fnOHMIi8PWwdazNINfu3zSFAWc=
-X-Google-Smtp-Source: ABdhPJwFl69iK7ADPSSNO1REnB1wEk4TOLoSjHxhRyrj8iZ2laimMn3fDvfhzf8CkUPDdJGSGJZTS9pAfLYJWo9OU/Q=
-X-Received: by 2002:a65:484b:: with SMTP id i11mr5240409pgs.40.1644362553514;
- Tue, 08 Feb 2022 15:22:33 -0800 (PST)
+        bh=icW1CmJt7V7nnYt5AEHzW1LfQUR9u0/06jxrbW0ydIE=;
+        b=JprkbFj/ZYZocFmqI0GwfA+8R5RPw8oNl46UospMctLu3ki+q09Luk/11zh9TJYh7q
+         XWpqYf6QXTza07EaIfTcnENxNmK2ty3zZUnpnjL3WAc4/cAS0CofgpGDwSg/88as/Puq
+         Ppsntdq/vL0KB3bK0NM+wtqIaEF4topYU5ptTuLf/CsgDGwJvk6RY9mic8rJBo5fSSNf
+         UFi0+0VkJAcgbvCj2d/3ZDl/0ni1MIyuEVn21yKFG5mgVY2ngDbbzRuCUzQDFQWGhnUP
+         vzqU1JBK3EkdyEu0iq75o6SGiNqh+RAlOc3cOR4jiU3XJTXnqoY2qg4chIjEXDz/6238
+         eJnA==
+X-Gm-Message-State: AOAM531x1dok55d1nnrOf1O2EpWl7L2y/ZelcBVZZlc9XsJbjfoArQlZ
+        hNX+Y0hZCKEy2gMPELMzUTUvQJKdetd9uGWtqrA=
+X-Google-Smtp-Source: ABdhPJwNnNt82Ke50ji96jl+FazzkYyliOjKQ0J1l3/mxC7Bq/ioquSrgo/Vj0t9xSSu5YUxI/clxSsg1CoqZiW/JLw=
+X-Received: by 2002:a05:6e02:1bcd:: with SMTP id x13mr3347247ilv.98.1644362658855;
+ Tue, 08 Feb 2022 15:24:18 -0800 (PST)
 MIME-Version: 1.0
-References: <20220127175505.851391-1-ira.weiny@intel.com> <20220127175505.851391-37-ira.weiny@intel.com>
- <2193142f0cf3785a4225e0393eace397cbbe86e6.camel@intel.com>
- <CAPcyv4i_Jc865zEzNxbQB_XHqCwSS6zm_evquLv2BBu9ipa39Q@mail.gmail.com>
- <20220205054039.GE785175@iweiny-DESK2.sc.intel.com> <CAPcyv4hcKsy1Z78OyhPK+gPCqqEsbr9fuNRzOBNah03guDzktA@mail.gmail.com>
- <20220208224803.GI785175@iweiny-DESK2.sc.intel.com>
-In-Reply-To: <20220208224803.GI785175@iweiny-DESK2.sc.intel.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Tue, 8 Feb 2022 15:22:22 -0800
-Message-ID: <CAPcyv4iPT8r9ButHRJ2DsPQQMBN1rHCe1zSiV-rrag9vdqoW7w@mail.gmail.com>
-Subject: Re: [PATCH V8 36/44] memremap_pages: Reserve a PKS PKey for eventual
- use by PMEM
-To:     Ira Weiny <ira.weiny@intel.com>
-Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220202135333.190761-1-jolsa@kernel.org> <20220202135333.190761-9-jolsa@kernel.org>
+ <CAEf4Bzbi3t_zZL2=8NyBeJ9q95ODH7pXF+EybtgBQp7LTyfr6Q@mail.gmail.com> <YgI0zJDJ3jrb3q49@krava>
+In-Reply-To: <YgI0zJDJ3jrb3q49@krava>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 8 Feb 2022 15:24:07 -0800
+Message-ID: <CAEf4BzaJc6uE52JL8Ac=nam0KOS_+haWh3pBVOSMsDM2jv_AXQ@mail.gmail.com>
+Subject: Re: [PATCH 8/8] selftest/bpf: Add fprobe test for bpf_cookie values
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Jiri Olsa <olsajiri@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 8, 2022 at 2:48 PM Ira Weiny <ira.weiny@intel.com> wrote:
-[..]
->  *      // 5) Add initial value to PKS_INIT_VALUE
->  *      #define PKS_INIT_VALUE ((PKS_ALL_AD & (GENMASK(31, PKS_KEY_MAX * PKR_BITS_PER_PKEY))) | \
->  *                              PKS_KEY_DEFAULT_INIT | \
->  *                              PKS_KEY_MY_FEATURE_INIT | \
-
-Does this compile? I.e. can you have a '|' operator with nothing on
-the right hand side?
-
->  *                              )
->  */
+On Tue, Feb 8, 2022 at 1:16 AM Jiri Olsa <jolsa@redhat.com> wrote:
 >
+> On Mon, Feb 07, 2022 at 10:59:32AM -0800, Andrii Nakryiko wrote:
+> > On Wed, Feb 2, 2022 at 5:54 AM Jiri Olsa <jolsa@redhat.com> wrote:
+> > >
+> > > Adding bpf_cookie test for kprobe attached by fprobe link.
+> > >
+> > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > > ---
+> > >  .../selftests/bpf/prog_tests/bpf_cookie.c     | 73 +++++++++++++++++++
+> > >  .../selftests/bpf/progs/fprobe_bpf_cookie.c   | 62 ++++++++++++++++
+> > >  2 files changed, 135 insertions(+)
+> > >  create mode 100644 tools/testing/selftests/bpf/progs/fprobe_bpf_cookie.c
+> > >
+> > > diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
+> > > index cd10df6cd0fc..bf70d859c598 100644
+> > > --- a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
+> > > +++ b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
+> > > @@ -7,6 +7,7 @@
+> > >  #include <unistd.h>
+> > >  #include <test_progs.h>
+> > >  #include "test_bpf_cookie.skel.h"
+> > > +#include "fprobe_bpf_cookie.skel.h"
+> > >
+> > >  /* uprobe attach point */
+> > >  static void trigger_func(void)
+> > > @@ -63,6 +64,76 @@ static void kprobe_subtest(struct test_bpf_cookie *skel)
+> > >         bpf_link__destroy(retlink2);
+> > >  }
+> > >
+> > > +static void fprobe_subtest(void)
+> > > +{
+> > > +       DECLARE_LIBBPF_OPTS(bpf_link_create_opts, opts);
+> > > +       int err, prog_fd, link1_fd = -1, link2_fd = -1;
+> > > +       struct fprobe_bpf_cookie *skel = NULL;
+> > > +       __u32 duration = 0, retval;
+> > > +       __u64 addrs[8], cookies[8];
+> > > +
+> > > +       skel = fprobe_bpf_cookie__open_and_load();
+> > > +       if (!ASSERT_OK_PTR(skel, "fentry_raw_skel_load"))
+> > > +               goto cleanup;
+> > > +
+> > > +       kallsyms_find("bpf_fentry_test1", &addrs[0]);
+> > > +       kallsyms_find("bpf_fentry_test2", &addrs[1]);
+> > > +       kallsyms_find("bpf_fentry_test3", &addrs[2]);
+> > > +       kallsyms_find("bpf_fentry_test4", &addrs[3]);
+> > > +       kallsyms_find("bpf_fentry_test5", &addrs[4]);
+> > > +       kallsyms_find("bpf_fentry_test6", &addrs[5]);
+> > > +       kallsyms_find("bpf_fentry_test7", &addrs[6]);
+> > > +       kallsyms_find("bpf_fentry_test8", &addrs[7]);
+> > > +
+> > > +       cookies[0] = 1;
+> > > +       cookies[1] = 2;
+> > > +       cookies[2] = 3;
+> > > +       cookies[3] = 4;
+> > > +       cookies[4] = 5;
+> > > +       cookies[5] = 6;
+> > > +       cookies[6] = 7;
+> > > +       cookies[7] = 8;
+> > > +
+> > > +       opts.fprobe.addrs = (__u64) &addrs;
+> >
+> > we should have ptr_to_u64() for test_progs, but if not, let's either
+> > add it or it should be (__u64)(uintptr_t)&addrs. Otherwise we'll be
+> > getting compilation warnings on some architectures.
 >
-> Let me know if this is clear enough?
+> there's one in btf.c, bpf.c and libbpf.c ;-) so I guess it could go to bpf.h
 
-Looks good to me.
+No, it shouldn't, bpf.h is a public API header. Let's keep internal
+helpers internal. Just copy/paste.
+
+>
+> >
+> > > +       opts.fprobe.cnt = 8;
+> > > +       opts.fprobe.bpf_cookies = (__u64) &cookies;
+> > > +       prog_fd = bpf_program__fd(skel->progs.test2);
+> > > +
+> > > +       link1_fd = bpf_link_create(prog_fd, 0, BPF_TRACE_FPROBE, &opts);
+> > > +       if (!ASSERT_GE(link1_fd, 0, "link1_fd"))
+> > > +               return;
+> > > +
+> > > +       cookies[0] = 8;
+> > > +       cookies[1] = 7;
+> > > +       cookies[2] = 6;
+> > > +       cookies[3] = 5;
+> > > +       cookies[4] = 4;
+> > > +       cookies[5] = 3;
+> > > +       cookies[6] = 2;
+> > > +       cookies[7] = 1;
+> > > +
+> > > +       opts.flags = BPF_F_FPROBE_RETURN;
+> > > +       prog_fd = bpf_program__fd(skel->progs.test3);
+> > > +
+> > > +       link2_fd = bpf_link_create(prog_fd, 0, BPF_TRACE_FPROBE, &opts);
+> > > +       if (!ASSERT_GE(link2_fd, 0, "link2_fd"))
+> > > +               goto cleanup;
+> > > +
+> > > +       prog_fd = bpf_program__fd(skel->progs.test1);
+> > > +       err = bpf_prog_test_run(prog_fd, 1, NULL, 0,
+> > > +                               NULL, NULL, &retval, &duration);
+> > > +       ASSERT_OK(err, "test_run");
+> > > +       ASSERT_EQ(retval, 0, "test_run");
+> > > +
+> > > +       ASSERT_EQ(skel->bss->test2_result, 8, "test2_result");
+> > > +       ASSERT_EQ(skel->bss->test3_result, 8, "test3_result");
+> > > +
+> > > +cleanup:
+> > > +       close(link1_fd);
+> > > +       close(link2_fd);
+> > > +       fprobe_bpf_cookie__destroy(skel);
+> > > +}
+> > > +
+> > >  static void uprobe_subtest(struct test_bpf_cookie *skel)
+> > >  {
+> > >         DECLARE_LIBBPF_OPTS(bpf_uprobe_opts, opts);
+> > > @@ -249,6 +320,8 @@ void test_bpf_cookie(void)
+> > >
+> > >         if (test__start_subtest("kprobe"))
+> > >                 kprobe_subtest(skel);
+> > > +       if (test__start_subtest("rawkprobe"))
+> >
+> > kprobe.multi?
+>
+> yes
+>
+> thanks,
+> jirka
+>

@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89E704AE23D
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 20:29:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFFB14AE23B
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 20:29:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386035AbiBHT3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 14:29:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36980 "EHLO
+        id S1386062AbiBHT3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 14:29:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239801AbiBHT25 (ORCPT
+        with ESMTP id S1386040AbiBHT3A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 14:28:57 -0500
+        Tue, 8 Feb 2022 14:29:00 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 977B5C0613CB
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 11:28:57 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C142DC0612C0
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 11:28:59 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6B3D6B81D1C
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 19:28:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88776C004E1
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 19:28:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8A79BB81D41
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 19:28:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 804CAC340ED;
+        Tue,  8 Feb 2022 19:28:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644348535;
-        bh=VMSknEIfxSbX3tRwp+KwIrJcLUesBpLa6Ad5UvGTqN8=;
-        h=From:To:Subject:Date:From;
-        b=ThKIFjRVDc/n0/1wRqhEaQrWHvbNQwBosRGQ5TcTmJZrwjR4UdMbwmIW67JTBwH6l
-         L8jgD355l9dWJhMkyjus1xReEBA/Tu4IvEkiMReHto/B96dx8+GlV5Q/5udVfICmo9
-         BX+NEVWl4t2J9e8GzM9fwN8KX3IsxQgEB2xK2ocxlDRKozXFD6n/uTwIhnCx9zxqQK
-         grbDMX2aqKaPutzZg6dv+MBu4trDEP9ME3atXoLbFKojSca6aTFuD3V43t43vVUsqX
-         dX0J9gPAQbVrtbhPjBoTTq8juy0QUBih10unCkHuWNdJs46CrspyRrPzGRrz9I4O0D
-         PaW3DP9FZqLMg==
+        s=k20201202; t=1644348537;
+        bh=+I0LZST9yYyXmAF3ot9pXLbyITDJi3AToihw/g6lgDI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=AXz7VwgQ6hsVZWecCV8UeNubsSBQ3MyrR5rsrw628oJNZ/ZmQ1nG0Kuns+mHJPROk
+         jKEzNwn+YjX0/1yBDVGWKRVZ5PS/JhqznHYPqpla223sU4ehUli/W1zFR9O09oAIJD
+         ntjrfJKol008JQV7qbUgF6CBxKkTrnDUKPjRvnUqQ46AWfyoFpLEcN7PqUS2qvyVeF
+         zhaZLa84X1z9i23eIlg4awMRMwk1ZPGY40yrYQRVeFm81sHwHL3thQfDAQcmW5PYJ6
+         +nVpy5QcYMzUPelcj4hkh6Mla3yA8/sm3qJK/77BSXkkTJ9RymJZGb+iF8OMRbpIvp
+         04yGAcNQGriAQ==
 From:   Oded Gabbay <ogabbay@kernel.org>
 To:     linux-kernel@vger.kernel.org
-Subject: [PATCH 1/4] habanalabs: change function to static
-Date:   Tue,  8 Feb 2022 21:28:47 +0200
-Message-Id: <20220208192850.3526511-1-ogabbay@kernel.org>
+Cc:     Tomer Tayar <ttayar@habana.ai>
+Subject: [PATCH 2/4] habanalabs: enable stop-on-error debugfs setting per ASIC
+Date:   Tue,  8 Feb 2022 21:28:48 +0200
+Message-Id: <20220208192850.3526511-2-ogabbay@kernel.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220208192850.3526511-1-ogabbay@kernel.org>
+References: <20220208192850.3526511-1-ogabbay@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -50,27 +53,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-handle_registration_node() is called directly from the irq handler
-in irq.c, so it can be static.
+From: Tomer Tayar <ttayar@habana.ai>
 
+On Goya and Gaudi, the stop-on-error configuration can be set via
+debugfs. However, in future devices, this configuration will always be
+enabled.
+Modify the debugfs node to be allowed only for ASICs that support this
+dynamic configuration.
+
+Signed-off-by: Tomer Tayar <ttayar@habana.ai>
+Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
 Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 ---
- drivers/misc/habanalabs/common/irq.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/ABI/testing/debugfs-driver-habanalabs | 1 +
+ drivers/misc/habanalabs/common/debugfs.c            | 6 ++++++
+ drivers/misc/habanalabs/common/habanalabs.h         | 2 ++
+ drivers/misc/habanalabs/gaudi/gaudi.c               | 2 ++
+ drivers/misc/habanalabs/goya/goya.c                 | 2 ++
+ 5 files changed, 13 insertions(+)
 
-diff --git a/drivers/misc/habanalabs/common/irq.c b/drivers/misc/habanalabs/common/irq.c
-index c28f3a1c7a03..e2bc128f2291 100644
---- a/drivers/misc/habanalabs/common/irq.c
-+++ b/drivers/misc/habanalabs/common/irq.c
-@@ -175,7 +175,7 @@ static void hl_ts_free_objects(struct work_struct *work)
-  * so here we'll be filling a list with nodes of "put" jobs and then will send this
-  * list to a dedicated workqueue to do the actual put.
+diff --git a/Documentation/ABI/testing/debugfs-driver-habanalabs b/Documentation/ABI/testing/debugfs-driver-habanalabs
+index 783001a574b3..bcf6915987e4 100644
+--- a/Documentation/ABI/testing/debugfs-driver-habanalabs
++++ b/Documentation/ABI/testing/debugfs-driver-habanalabs
+@@ -222,6 +222,7 @@ KernelVersion:  5.6
+ Contact:        ogabbay@kernel.org
+ Description:    Sets the stop-on_error option for the device engines. Value of
+                 "0" is for disable, otherwise enable.
++                Relevant only for GOYA and GAUDI.
+ 
+ What:           /sys/kernel/debug/habanalabs/hl<n>/timeout_locked
+ Date:           Sep 2021
+diff --git a/drivers/misc/habanalabs/common/debugfs.c b/drivers/misc/habanalabs/common/debugfs.c
+index e3ee5f45d20c..9f0aaf0ef43b 100644
+--- a/drivers/misc/habanalabs/common/debugfs.c
++++ b/drivers/misc/habanalabs/common/debugfs.c
+@@ -1071,6 +1071,9 @@ static ssize_t hl_stop_on_err_read(struct file *f, char __user *buf,
+ 	char tmp_buf[200];
+ 	ssize_t rc;
+ 
++	if (!hdev->asic_prop.configurable_stop_on_err)
++		return -EOPNOTSUPP;
++
+ 	if (*ppos)
+ 		return 0;
+ 
+@@ -1089,6 +1092,9 @@ static ssize_t hl_stop_on_err_write(struct file *f, const char __user *buf,
+ 	u32 value;
+ 	ssize_t rc;
+ 
++	if (!hdev->asic_prop.configurable_stop_on_err)
++		return -EOPNOTSUPP;
++
+ 	if (hdev->reset_info.in_reset) {
+ 		dev_warn_ratelimited(hdev->dev,
+ 				"Can't change stop on error during reset\n");
+diff --git a/drivers/misc/habanalabs/common/habanalabs.h b/drivers/misc/habanalabs/common/habanalabs.h
+index b06e2b0812b6..93116fe71ef6 100644
+--- a/drivers/misc/habanalabs/common/habanalabs.h
++++ b/drivers/misc/habanalabs/common/habanalabs.h
+@@ -561,6 +561,7 @@ struct hl_hints_range {
+  *                              use-case of doing soft-reset in training (due
+  *                              to the fact that training runs on multiple
+  *                              devices)
++ * @configurable_stop_on_err: is stop-on-error option configurable via debugfs.
   */
--int handle_registration_node(struct hl_device *hdev, struct hl_user_pending_interrupt *pend,
-+static int handle_registration_node(struct hl_device *hdev, struct hl_user_pending_interrupt *pend,
- 						struct list_head **free_list)
- {
- 	struct timestamp_reg_free_node *free_node;
+ struct asic_fixed_properties {
+ 	struct hw_queue_properties	*hw_queues_props;
+@@ -644,6 +645,7 @@ struct asic_fixed_properties {
+ 	u8				use_get_power_for_reset_history;
+ 	u8				supports_soft_reset;
+ 	u8				allow_inference_soft_reset;
++	u8				configurable_stop_on_err;
+ };
+ 
+ /**
+diff --git a/drivers/misc/habanalabs/gaudi/gaudi.c b/drivers/misc/habanalabs/gaudi/gaudi.c
+index f2242aa3baa2..61aa6dce6dde 100644
+--- a/drivers/misc/habanalabs/gaudi/gaudi.c
++++ b/drivers/misc/habanalabs/gaudi/gaudi.c
+@@ -669,6 +669,8 @@ static int gaudi_set_fixed_properties(struct hl_device *hdev)
+ 
+ 	prop->use_get_power_for_reset_history = true;
+ 
++	prop->configurable_stop_on_err = true;
++
+ 	return 0;
+ }
+ 
+diff --git a/drivers/misc/habanalabs/goya/goya.c b/drivers/misc/habanalabs/goya/goya.c
+index 3785fb33260d..c8143b6616af 100644
+--- a/drivers/misc/habanalabs/goya/goya.c
++++ b/drivers/misc/habanalabs/goya/goya.c
+@@ -483,6 +483,8 @@ int goya_set_fixed_properties(struct hl_device *hdev)
+ 
+ 	prop->use_get_power_for_reset_history = true;
+ 
++	prop->configurable_stop_on_err = true;
++
+ 	return 0;
+ }
+ 
 -- 
 2.25.1
 

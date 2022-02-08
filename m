@@ -2,98 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0CF04AD632
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:23:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65CF54AD642
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:23:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357516AbiBHLXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 06:23:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45618 "EHLO
+        id S236502AbiBHLXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 06:23:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355551AbiBHJpj (ORCPT
+        with ESMTP id S1355586AbiBHJqv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 04:45:39 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A068C03FEC0;
-        Tue,  8 Feb 2022 01:45:38 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Tue, 8 Feb 2022 04:46:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7B06C03FEC0
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 01:46:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 329DE1F383;
-        Tue,  8 Feb 2022 09:45:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1644313537; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=phKy/GYR8AFrOcYtM7KfuK7BlbUn4X8F4JX+JrNNqQk=;
-        b=c5r86d+mvOPETQEeH4ZvGpRU0TNuc5nbdOM6G6xscdL7XZWTbOhkkDLYcJPAzOA4kblFyK
-        nMgb9yGYMbx5czOY/kfQqG5FSTZHwIFH7NpUQMSWJ22ZuwG6yPh3PYkyKFlvf8w1KRX1d7
-        3DOBHCdLpBarcjAwbQGf7Djk4O9yBpQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1644313537;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=phKy/GYR8AFrOcYtM7KfuK7BlbUn4X8F4JX+JrNNqQk=;
-        b=vSX94O3lmfcAJOzIgHi2dJwsx6/Lg+/9BtUjJ4mae/aaOa1XM+O7riDHeIR0Rr2U0pecOk
-        cFMJWcT4eseWfaAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A5B8413BA0;
-        Tue,  8 Feb 2022 09:45:36 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id K7nHJsA7AmKmZAAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Tue, 08 Feb 2022 09:45:36 +0000
-Date:   Tue, 8 Feb 2022 10:45:35 +0100
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     Terry Bowman <terry.bowman@amd.com>, linux@roeck-us.net,
-        linux-watchdog@vger.kernel.org, linux-i2c@vger.kernel.org,
-        andy.shevchenko@gmail.com, rafael.j.wysocki@intel.com,
-        linux-kernel@vger.kernel.org, wim@linux-watchdog.org,
-        rrichter@amd.com, thomas.lendacky@amd.com, sudheesh.mavila@amd.com,
-        Nehal-bakulchandra.Shah@amd.com, Basavaraj.Natikar@amd.com,
-        Shyam-sundar.S-k@amd.com, Mario.Limonciello@amd.com
-Subject: Re: [PATCH v4 0/4] Watchdog: sp5100_tco: Replace cd6h/cd7h port I/O
- accesses with MMIO accesses
-Message-ID: <20220208104535.468198f0@endymion.delvare>
-In-Reply-To: <YgEYjOwoxtbkBdfq@shikoro>
-References: <20220130191225.303115-1-terry.bowman@amd.com>
-        <20220207134416.72c22504@endymion.delvare>
-        <YgEYjOwoxtbkBdfq@shikoro>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 62F44B81990
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 09:46:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86753C004E1;
+        Tue,  8 Feb 2022 09:46:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1644313608;
+        bh=8UbAjj/H6avAWOylioig6EnD0MGcFmQgIPkZQYteBMI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NL4mPYiCgOPwGpLfECYMdrXx3UnBrMG1x8wFtDUHy63Yp9jTV2gbwD65NwdCBr+LQ
+         yDQuC8cCfuCJtkdD1Dehs3YIBY8/jAa4RrVpIyyA/S3OQf3zj1e8gjf86MmYGwHXtu
+         gn/ibnf871eQ+VlCXDQLN1HXJ1z5Fhb5yxcdFvDU=
+Date:   Tue, 8 Feb 2022 10:46:45 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Tong Zhang <ztong0001@gmail.com>
+Cc:     Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev, insop.song@gainspeed.com,
+        devel@driverdev.osuosl.org, dan.carpenter@oracle.com
+Subject: Re: [PATCH] staging: drop fpgaboot driver
+Message-ID: <YgI8BQlUa671AvkY@kroah.com>
+References: <Yf025dphJw2rUVR5@kroah.com>
+ <20220204190847.3809405-1-ztong0001@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220204190847.3809405-1-ztong0001@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 7 Feb 2022 14:03:08 +0100, Wolfram Sang wrote:
-> > Confirmed. I reviewed the 4 patches of this version of the series and
-> > I'm fine with them. I also tested the result successfully on my laptop.
-> > 
-> > Reviewed-by: Jean Delvare <jdelvare@suse.de>
-> > Tested-by: Jean Delvare <jdelvare@suse.de>  
+On Fri, Feb 04, 2022 at 11:08:35AM -0800, Tong Zhang wrote:
+> The gs_fpgaboot driver is totally broken since 2014 and no one even
+> noticed the driver is not probing. Given the quality of the driver
+> and its current state it makes sense to drop it.
 > 
-> Does that mean you are happy with the i2c-piix4 changes as well?
+> Signed-off-by: Tong Zhang <ztong0001@gmail.com>
 
-I'm still reviewing these, sorry. I only picked the first patch of the
-series so that the sp5100_tco patches would build so I could test them.
-I hope to be done by the end of the day.
+Thanks, now dropped!
 
--- 
-Jean Delvare
-SUSE L3 Support

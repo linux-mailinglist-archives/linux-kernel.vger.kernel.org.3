@@ -2,67 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5DD74ADAA2
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 15:01:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3858F4ADAA4
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 15:01:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377407AbiBHOBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 09:01:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50400 "EHLO
+        id S1377227AbiBHOBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 09:01:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377294AbiBHOBG (ORCPT
+        with ESMTP id S1347474AbiBHOBm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 09:01:06 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCEACC03FED2;
-        Tue,  8 Feb 2022 06:01:04 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id w11so30955138wra.4;
-        Tue, 08 Feb 2022 06:01:04 -0800 (PST)
+        Tue, 8 Feb 2022 09:01:42 -0500
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33574C03FECE
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 06:01:42 -0800 (PST)
+Received: by mail-io1-xd30.google.com with SMTP id i62so21203846ioa.1
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 06:01:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=4FtU9kX5hrkDZtN795Al3MMAz8CfFhP/v7tRtMsIPlo=;
-        b=eBuK6MSuOTfOj3zN1jc4QcazeyEbXboPZ9f9o5uRh4twyQWgDxZdwJywjyQmcIcfQp
-         YidLOtSsNzpCkjrPUZFKnKwVukz9WVNt7D45DIOcH9xX/AbR1El0rTeR4Vpnb+JL0vXM
-         aQpS0FBRQaRUNzmTWdhwqL3Nh9Luaq7iVE8vyl0LqFarsnjBig/fJZA4WWkvkWejH2SU
-         VJO3KWFzvMGKPz+owfuLTcvetKMSV7jGn2Kb9Kn6Ekij/R8ObX5m60gNZCB1SZPPJRHi
-         Ey7PUSKx8D4IQRBPLcCVMyDeCW8ZQgFXptVdE4jUcfudpq9cDX6EBdorWe+u8eSKSwka
-         Ka0g==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=m7aA6YF+GsgEfI0h+DNZiuAXZYvOtMmeC1bEBfF0tbw=;
+        b=lpjihUxs/LmLJZ33gqGMbA3VCou+/PSb4KwyGXkB++Ms9L2DqtxrVa79cpzJ3hfe9u
+         HQIz7pJ9UGNjucW7Dn8c4VEbj0hx4+UXmpD+CfJuNU/Ll0O+chhIei9Ylgp4tc1J2wFb
+         k9uj0bWbqbzFPm9XvH4dBJBn9VRaizq2HWszlVPSofVKtjHdepecuQLjbWaJOYAPCNh0
+         5+5DwS7xT331ITm2HeD+FBsov/PFPGrLiKO7Uwgc7gNI5cE/tl/OsFdkePlLq83kryY5
+         e822pYaOeosVR6TIghB2omK7FpKptFy7ne1ozbP8TbehBqQo349bSiIo5fOtlCXzVx2R
+         AgFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4FtU9kX5hrkDZtN795Al3MMAz8CfFhP/v7tRtMsIPlo=;
-        b=SDVm4b/vOEkufr0oT+4klDlvkZdGrLWxXybscGODbWFIxPBt9QV1uUaISRy1I/7uuO
-         8tOxZkbnwvL1Me8V7bWVdsOx+qqjjnBD93Qwhf+M57Uo66TapkE7kJK0SohFHCPrkzBP
-         WNFw5Fao0+8cSdHl6BlCGalKUtea5ZqCF2IRS3EI5whjrNRRNS8YPdEyM+QqX+FqjcFV
-         RKrn2QLfA6zr4q6s8YT6ip/GdgEUwl/fZS3BWjCvgIl2t1j43GwHEBs1DlZyeSW5aSuk
-         perPefwcghyw0bF3v+DXfYSriP6Hs1iG9CPsfZ4vvFHykBRjyEVKGZx/ELHOhGSk/kfq
-         l62A==
-X-Gm-Message-State: AOAM531g75YBDtZ5Tm386R3TVrPwye2vt6J9/mPSb/bIECOp2hc5CAsM
-        OZ5SSYc8b2HWw4jr5cRQA54=
-X-Google-Smtp-Source: ABdhPJx/b8/Ihm2+3HfolHbcVtsskPDPftVKvbTACiryI5EOK83HEhrXjaYcIiS73SKmkpA4V5/4BA==
-X-Received: by 2002:a5d:6950:: with SMTP id r16mr3729979wrw.462.1644328862686;
-        Tue, 08 Feb 2022 06:01:02 -0800 (PST)
-Received: from debian (host-78-145-97-89.as13285.net. [78.145.97.89])
-        by smtp.gmail.com with ESMTPSA id j19sm2540960wmq.17.2022.02.08.06.01.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 06:01:02 -0800 (PST)
-Date:   Tue, 8 Feb 2022 14:01:00 +0000
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 5.10 00/74] 5.10.99-rc1 review
-Message-ID: <YgJ3nF5RGa7VKcwT@debian>
-References: <20220207103757.232676988@linuxfoundation.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=m7aA6YF+GsgEfI0h+DNZiuAXZYvOtMmeC1bEBfF0tbw=;
+        b=rWh/MX19YK62sxrlbbb87bF9qt++L+uT1UBJYsXfNJQPbX7nyirRy8uothVfCuLJZs
+         RhGj0jQqeDhbzDhtEH+f+EIFIelmlV6NIr9TvO4uyQmET79NPTUYxr1BWUzT5grY6SEq
+         DFAo255fbk0Lv1xfv/f/s0UjS6uXFelToFcUUS0HLbm1wrbqT8b3VpVr+9DMRREiVFG1
+         /ZnsN0q8zIrCkkclUiy/tX8zXZdVBngipwBSJz/nTrd398YD9l55lAnUOMBpvZt+wUf3
+         YYPsbYHPCppqlXWnj7v3HtgZukYKO+76NXyX90fFzB2cpIMvYtkVqps82VLG1zidsqZv
+         MUuw==
+X-Gm-Message-State: AOAM530X2kI91yoEDwa/KnM+bX3jlw5TtvtOId8bkBXciEodsZVD0fn4
+        4C8OJ24oJUsuJvgRA2KG11SonXLkp/h49cW87IM=
+X-Google-Smtp-Source: ABdhPJwdoszuI/1eBvag/YJnxGMC5sTLZPFeC9SnKVBc4cRuk1U9R/iVujm95FCtxeRDuVzK/zkgUts6+odDPOwr8j8=
+X-Received: by 2002:a05:6638:380f:: with SMTP id i15mr2181383jav.308.1644328901638;
+ Tue, 08 Feb 2022 06:01:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220207103757.232676988@linuxfoundation.org>
+References: <202202081303.QEI35DwC-lkp@intel.com>
+In-Reply-To: <202202081303.QEI35DwC-lkp@intel.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Tue, 8 Feb 2022 15:01:30 +0100
+Message-ID: <CANiq72=K0sH=PGdZY56U2KqhvBu2ww4rq1h_WcDrqFNnxaJWyg@mail.gmail.com>
+Subject: Re: [ojeda-linux:ci 4/9] rust/helpers.c:39:17: warning: no previous
+ declaration for 'rust_helper_BUG'
+To:     kernel test robot <lkp@intel.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>, kbuild-all@lists.01.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -73,35 +66,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Tue, Feb 8, 2022 at 6:20 AM kernel test robot <lkp@intel.com> wrote:
+>
+> >> rust/helpers.c:39:17: warning: no previous declaration for 'rust_helper_BUG' [-Wmissing-declarations]
+>       39 | __noreturn void rust_helper_BUG(void)
+>          |                 ^~~~~~~~~~~~~~~
 
-On Mon, Feb 07, 2022 at 12:05:58PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.99 release.
-> There are 74 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 09 Feb 2022 10:37:42 +0000.
-> Anything received after that time might be too late.
+Fixed on `rust` -- I will put it in `rust-next` soon.
 
-Build test:
-mips (gcc version 11.2.1 20220121): 63 configs -> no new failure
-arm (gcc version 11.2.1 20220121): 105 configs -> no new failure
-arm64 (gcc version 11.2.1 20220121): 3 configs -> no failure
-x86_64 (gcc version 11.2.1 20220121): 4 configs -> no failure
+Thanks a lot!
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
-
-[1]. https://openqa.qa.codethink.co.uk/tests/724
-[2]. https://openqa.qa.codethink.co.uk/tests/726
-
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
---
-Regards
-Sudip
-
+Cheers,
+Miguel

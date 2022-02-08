@@ -2,46 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6E1D4AE1B2
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 20:00:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 568F24AE1BD
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 20:00:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385550AbiBHTAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 14:00:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51426 "EHLO
+        id S1385665AbiBHTAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 14:00:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353620AbiBHTAM (ORCPT
+        with ESMTP id S1385631AbiBHTAW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 14:00:12 -0500
+        Tue, 8 Feb 2022 14:00:22 -0500
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A1FBC0612C3;
-        Tue,  8 Feb 2022 11:00:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 580E9C0612AA;
+        Tue,  8 Feb 2022 11:00:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id B6CE4CE1C17;
-        Tue,  8 Feb 2022 19:00:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC8A4C004E1;
-        Tue,  8 Feb 2022 19:00:06 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C107FCE1C1B;
+        Tue,  8 Feb 2022 19:00:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B42AFC004E1;
+        Tue,  8 Feb 2022 19:00:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644346808;
-        bh=DcrrQTlZTFvVz/EDWSALpPw5JloWhfX2vgl1EPRJutc=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=hR+Cu0n37NGv4o3gQsLXlcwOn1h8pz1PZ3Bh7qogE85jr2ruCgQinKPMzObK2YUL5
-         Bqzj9RXmPZHIHVObJONomS/jUn5llZhU/K5IHHu8q8Ke7escn8k78N+boLinx2D6S5
-         lsrcMHyqmhk7mX+0h5aB4iR/iKRHNEEZWBplq+MTAbskTn4npsSxn6TrMaru6oT7ff
-         jwUvHqHGVsBkmggLibpSV7HJq8JOZmkfPBzz6Tg/H2bte7XHGR4lalul5LTS+ndROR
-         td+3vSIpzt+6Vu12Vi57iSLYw87q8AxR9tAUBuKft+bVHJJ3LJT/5+L/AuzPSxmqV1
-         vOn61dDPeI+hw==
+        s=k20201202; t=1644346817;
+        bh=zJd+H+BIPkR2OI3cFt0/lJSBS7oK/94+7PCJWcu8U/M=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=hoE1wnoZdIOBNhyQQdvZMVEKbdamCmwiLoxUBpPTTHa8SG7pRO9viyElKLyJwxSL/
+         oxeUkZdI1qrMhFXXCDjVTfAWWtkOUb7JwDIhmMuB+rFKuc45V0RDxKr0lJQ1Jg9QbM
+         73r/Pj6+oIMEFckMfW+dKnAffRRXz4dBOjdTwiXdF/UlnBCv41e7VTZh1nKkVdispC
+         ajwNQpsW66RwZwcNPn8O6/qVNkq4m4SA8gkodbfEXuD+cpefDW98jmDtMRlD5a99QT
+         +NHUEAfRGsYnQQkBr2O+pYINiHf5up34Gw5jYh3wraf8E7U2tIj5uZKXaobuX04KpM
+         t/dEGQEequoVQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     lgirdwood@gmail.com,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc:     linux-kernel@vger.kernel.org, kernel@axis.com,
-        devicetree@vger.kernel.org, robh+dt@kernel.org
-In-Reply-To: <20220204155241.576342-1-vincent.whitchurch@axis.com>
-References: <20220204155241.576342-1-vincent.whitchurch@axis.com>
-Subject: Re: [PATCH 0/2] regulator: Add support for TPS6286x
-Message-Id: <164434680631.1135477.3942083403967758360.b4-ty@kernel.org>
-Date:   Tue, 08 Feb 2022 19:00:06 +0000
+To:     linux-kernel@vger.kernel.org,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Grant Likely <grant.likely@secretlab.ca>,
+        linux-spi@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        linux-tegra@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Stephen Warren <swarren@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>
+In-Reply-To: <20220128165238.25615-1-linmq006@gmail.com>
+References: <20220128165238.25615-1-linmq006@gmail.com>
+Subject: Re: [PATCH] spi: tegra114: Add missing IRQ check in tegra_spi_probe
+Message-Id: <164434681322.1135514.2854633035091330179.b4-ty@kernel.org>
+Date:   Tue, 08 Feb 2022 19:00:13 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -55,26 +59,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 4 Feb 2022 16:52:39 +0100, Vincent Whitchurch wrote:
-> TI's TPS62864/TPS6286/TPS62868/TPS62869 are high-frequency synchronous
-> step-down converters controlled via I2C.  There are differences in the
-> electrical characteristics and packaging between the variants, but the
-> register interfaces are identical.
+On Fri, 28 Jan 2022 16:52:38 +0000, Miaoqian Lin wrote:
+> This func misses checking for platform_get_irq()'s call and may passes the
+> negative error codes to request_threaded_irq(), which takes unsigned IRQ #,
+> causing it to fail with -EINVAL, overriding an original error code.
+> Stop calling request_threaded_irq() with invalid IRQ #s.
 > 
-> This series adds basic support for these chips.
 > 
-> [...]
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
 Thanks!
 
-[1/2] regulator: Add bindings for TPS62864x
-      commit: 2f04aa69ab5c5c40d2e3e51fd73ce2ecb651e9ba
-[2/2] regulator: Add support for TPS6286x
-      commit: e2a01b4e8806087743e5ee42f9dcedfc741d4112
+[1/1] spi: tegra114: Add missing IRQ check in tegra_spi_probe
+      commit: 4f92724d4b92c024e721063f520d66e11ca4b54b
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

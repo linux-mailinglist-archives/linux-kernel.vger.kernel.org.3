@@ -2,261 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 131424AD0C2
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 06:32:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B780A4AD0C0
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 06:32:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236590AbiBHFcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 00:32:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54370 "EHLO
+        id S1347089AbiBHFcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 00:32:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346977AbiBHElN (ORCPT
+        with ESMTP id S1347013AbiBHEq7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 23:41:13 -0500
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E7EC0401ED
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 20:41:11 -0800 (PST)
-Received: by mail-oi1-x236.google.com with SMTP id ay7so5407400oib.8
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 20:41:11 -0800 (PST)
+        Mon, 7 Feb 2022 23:46:59 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2125.outbound.protection.outlook.com [40.107.244.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86963C0401DC;
+        Mon,  7 Feb 2022 20:46:58 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=k3TztukKWmqbWuD3nCBvuH80EyZGHs6xQ3TAF/KG1paGUxcbR+7GcFCuPZMDGhl6nSilGjqdvxruS6IBq5CQq8Frck+zHJtCRu5nElpg8Ibt4OioONw+oc0iVO5t7KrvgBkcsXuIPAhvFgwFN8+CrPQKyViMOTn2kuSanzESGt86RJ+YNjAsmUpoEh7KqgguWwvFaEoM6n1rFAfzutxm4D4T0XsqAqJ5YsfJ2GH1ycYTPHuA5Ez/Fybkua04uSsS1faDbsCpJNwPT36ITLzOR0ZICl7xl+ZLi16FbyNimTtvegdFGN0NLPU7I1z8Qf3/IWiR9rXCfJykIkYWA+rnog==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=u3Ozhtl3Vm4r+UsISOpZYHXfOOcE7BoKeT217UZplhA=;
+ b=InsgP0sDgQOpUg558aSRFr34fkTXFbfhi88r4zBVSM6SJMhZDn9IfemsaAQa92eU9p8xFZKGBYzU1EW4VgbWEIzGCxXQdlLLdKdYHMRSMtegIhEBqcZoxKZ8/oic0a1RwDCJ9O89Og2o9dEo2h2WRVZjK065k7+Ti6ALhVjdyRTbsHanwFGhZ7jvpViHA8l+Od+ctyp2/sLmPHrLLaXSuO4ydzLs+0Fy+Dqf7gzwKPYdqBz89ft9vWTiAo/9FakHstFRga7k3MmAXuwjVuw2zI/qD3B25mjdF1/I4p4NWazNSKwV5Q075/9yYBUr7vbgytfxyKCmg3ERXm3KTQMh6Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=lApkzQz97x0mjsEJc+j9OKw9zJ/S3b/963aKxsBJZWE=;
-        b=UUESrc5ssqMRmCaxq+U9GGNWZRYyVLIwHPaaKqw9Pq5DCbJZJzrBWe2w228S//BAbo
-         2GB+0MUYTqCnsYFQi1hf6ZtQMlH/QJc0GEMZmDY/jZ4H6WoYwAlRgMGtwaH/uiNSkgYg
-         nTGk7Y4kToyMqYzcrPg5ag+Rs4oGaNIxLG27uDyUSHNijdf45grJX327yP6uyHRqb6hM
-         yx0A5X7B8IqkjD10OlX+MM5KjmlxN/6dKndtfp5j1V6dbKlGUrNrIHN/hx07XuY1pJWz
-         hIuTYXgDpaF5umFDhP0mmmWQq+aNcvBdCzjcWxT2+EgveGt3BiYjCIQ7Gzm4t0bHvB8P
-         tlrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=lApkzQz97x0mjsEJc+j9OKw9zJ/S3b/963aKxsBJZWE=;
-        b=4BoxSzcfO6Jql/sNEY/Flyspwbs9fy2OHGe9bN6Jc8OtHwAEFIQnTndJEMNLrWM+W3
-         qPAgKn/qTV0dIwXkoyIf3f9VhEHZ67v5m6wE3/WDsJCDS7MB46QPFTDfTCNp35Q3nx67
-         WUJ3QSqif6U6ftWECWJdn/xZJ+r4NP6T9IhMPwu5rpkveXO7pQISP4pkwyQiFOEPZiSR
-         HYy5Y/Lv7NnHtVcmQ1tO7E4RIHfI126/ZuI+15PU7LnGAAgiWM/pHrZYF0Hjm+BxUkwA
-         Rc8mTHUS2wnRIaGnRu30N8sNmCXAz+JxCMTN4JuiZjmBpBB3EtubMm7yqdjl30wOI6oS
-         o7wQ==
-X-Gm-Message-State: AOAM532LZ8cVtazVofuyhOY/44Vnx6i/Hky7pPy65NvA2f8XdOZhlSLE
-        ue08hhEDgKJwA8dU+K/Prkr4pF0o1XKhsg==
-X-Google-Smtp-Source: ABdhPJw2UJVkuEOYTtWmqnSoR08eKh7Ztez+zBpPkO6aA6imDoQs7i5kE5FwAfA2l7hYB7w1HV35rA==
-X-Received: by 2002:aca:ad97:: with SMTP id w145mr1029114oie.238.1644295270406;
-        Mon, 07 Feb 2022 20:41:10 -0800 (PST)
-Received: from ripper.. ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id l14sm4709367ooq.12.2022.02.07.20.41.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 20:41:09 -0800 (PST)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, linux-usb@vger.kernel.org
-Subject: [PATCH 2/2] drm/msm/dp: Implement oob_hotplug_event()
-Date:   Mon,  7 Feb 2022 20:43:28 -0800
-Message-Id: <20220208044328.588860-2-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20220208044328.588860-1-bjorn.andersson@linaro.org>
-References: <20220208044328.588860-1-bjorn.andersson@linaro.org>
-MIME-Version: 1.0
+ d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=u3Ozhtl3Vm4r+UsISOpZYHXfOOcE7BoKeT217UZplhA=;
+ b=OtOPJDt4LPVO+jlwFF02OJRfVK0QUyC6POEsLb/htRqwWMDwrUyWQdwEmqVR7oSLJD9/C4HEhRiB241FPkUU4oy5C0mFzxDFw5cj+zrlmVTe4Cp2a4RL+SQyHu8/Bsfoeq/N09bLorsbWc0YdRF/7NcpqXvAxOR1J334Kc9JkB8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=in-advantage.com;
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37) by DM6PR10MB4394.namprd10.prod.outlook.com
+ (2603:10b6:5:221::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Tue, 8 Feb
+ 2022 04:46:54 +0000
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::2d52:2a96:7e6c:460f]) by MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::2d52:2a96:7e6c:460f%4]) with mapi id 15.20.4951.018; Tue, 8 Feb 2022
+ 04:46:54 +0000
+From:   Colin Foster <colin.foster@in-advantage.com>
+To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        UNGLinuxDriver@microchip.com,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Subject: [PATCH v5 net-next 0/3] use bulk reads for ocelot statistics
+Date:   Mon,  7 Feb 2022 20:46:41 -0800
+Message-Id: <20220208044644.359951-1-colin.foster@in-advantage.com>
+X-Mailer: git-send-email 2.25.1
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: MWHPR17CA0090.namprd17.prod.outlook.com
+ (2603:10b6:300:c2::28) To MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 90887445-3aa7-4d9e-c971-08d9eabe07b4
+X-MS-TrafficTypeDiagnostic: DM6PR10MB4394:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR10MB4394B9EDCEDB25812C11CAEBA42D9@DM6PR10MB4394.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:489;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: wLR5ZJlHGo9FVZugRzTBWinzKj1qa18yYKMYtBYqmb+cYQFYX3PYv3mqfRjV5t6WaBWCddGpSxaZwpMztWhcj5uFzfJh0+6WT1DJ6I3k36GeN3VorusC1YPZO6l+wRoLRH8I/qd2H7+G1z9vbSq8FAZUVpO16/9EROQx3UaFEzvSKFH+lQ8syj9HNljb+pDp9JtvXuN00h6RkQ0ldfwsxU4E6h/Cv2pMNpYihnMyy3LSao2tNBnmB2fhK7Iwy9Zh+9RY5UhO+CWARG6eVngvfiXqlg8Whp/10T92b2YkebX7LlINBYosA8VP9U6s7iavx6nCko/CT1qPT7ldB5gmNchVG2I1zzUFHiUU8k9A+nZzF3Boa5B6thSJaLTmPuzr+FxcLopvasmFLsJEahVDlX7BULRQ40nQ0sca8cqp+l3aNQE4Yuqedg66VTrIdyIfIA4Z78W296JCptSQLUa4FOEkI/Wzm45ZGBmZozyOhZaS9qoUAH0vFOyyqnuJsN0snHNeHe6KdUkyn0yf9DeYJKaOLPuJbPJlYslFOnCztBESjJFRQ7lswps57K0Y7go/GhfT1Qo3bitGOyg51+eyJ2goVOCT2kCO5D1dYTjjHS2Fr6Bko2JTT/WBpMKuTohsZn0F/78aGMNrqrTeUXRxde/EQlVJGJ/8F1Z5cEJjJid79/8+yDdan5wmcqHK0YMOi2GQnDfVDbRdC49G2ySK/g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(346002)(396003)(376002)(39830400003)(42606007)(136003)(366004)(52116002)(1076003)(186003)(6486002)(6506007)(508600001)(86362001)(26005)(36756003)(2616005)(6666004)(6512007)(54906003)(83380400001)(5660300002)(66946007)(8936002)(2906002)(4326008)(66556008)(8676002)(66476007)(38350700002)(44832011)(38100700002)(316002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?QxnwwKl5bfgpExOpxdI4CnrQ+2VmrS1Ksttn/ISn7FEHHVQpuFiL8NJRTViV?=
+ =?us-ascii?Q?1ayoSMJQ9KDkbk76vRa+zFNzMQQDsurUVX2AI23jB9/IAP9v4BirmlxrQngA?=
+ =?us-ascii?Q?7w2Zlo2K3Ao+2KP1qz+aUBV814NKs0uxEVeMWKC3DTxlHrMWWoJ28NBaaTiO?=
+ =?us-ascii?Q?gO07CUFAU6At2RUZsXuAzCCiCjTDnQPQ0DmgaWyfEJif9WxK6c+4BN+3eCkF?=
+ =?us-ascii?Q?Vjv58qoLLnfGH91F/28z1k42w9mqq3zHRI8m7TSuJOiuIkzZXvQ+zDZGmFLK?=
+ =?us-ascii?Q?NYSytRdcYsFonesw6Fxp72I4Yr3nDBrRpnZ2vhlY2iNP+fSsqNAMifYpb9yI?=
+ =?us-ascii?Q?hEovlRa8pg1w/7R/tFhgOwwT2YkWqT9pkxYV7QMfBWc/ZQagogjK/QL7o3j7?=
+ =?us-ascii?Q?E0h+nCYED4tMKOVmGcH5YSY3Rpaw3lI8xz6sw5BDheJwWakf+Zq1Ars6EE98?=
+ =?us-ascii?Q?toPtLDTkL/54aNdCW4+JD5Ppu8KHbe4Ti1AognUedRYHAIX1jX5o1un6yXG1?=
+ =?us-ascii?Q?rryBl356z2v64AegG+t33yK0ASGmzGY/3XLZ6V/2DzMhZe2JCj9s7y4/i6AB?=
+ =?us-ascii?Q?ry/TUhBloidmGIpHL0q9+AmDgn+zgdggnXZg6dSf6S2s8nb8R+MqwdT7p3q9?=
+ =?us-ascii?Q?vlurvh1AL4RnqSunB7imfwLGH2knFKpoKOhvqput8uHmr2/T5R5LnxWzmMwV?=
+ =?us-ascii?Q?+fJ/km/M2MqcOwgSTXfoS9yPnbvia1UGls+QBDCrgy3/hpmWFQ6nCg0p/Nai?=
+ =?us-ascii?Q?4aIjjlz+9Xgi7vbA2m6GL7hwKozJRGooqPMOcwvznxHe+U+uhjHRZVZFyrUm?=
+ =?us-ascii?Q?ASuJOxfXZC5FKIH/cYf0kme5HS4pG5gYWHSVmBrtzWUZNOjTHA7xZyxcCK/V?=
+ =?us-ascii?Q?g6vw/2B8Qvbi/nUcP/QTMJXP7mny6Fw/ztHGqkP9xRlvD+eAqWa5fZsKPPMY?=
+ =?us-ascii?Q?CSb8j67gs52bdlHAGYZeu/N+EyjFkjxoBKG1CsfUR64xZt6UwJPKhOD157WG?=
+ =?us-ascii?Q?RfipNfLY9emylf3FzKLytAKc0QmnqNG7djSjHwHg2RggrSQP9pwW5wz+oZEb?=
+ =?us-ascii?Q?3qIx6RzNc5vIv5sudF6yms9lAbIfTVZIDoYN5aQckpsZKZ4QSlUA7C2Okymv?=
+ =?us-ascii?Q?etsaV+KAaHxgendwCaSwYK07EKXAM/dZzjy3NYPvOUJ3jLDydqtN2XlTJz9z?=
+ =?us-ascii?Q?IeF7+Nud/DHujN0oLKu4m+Gvn72ghdXT2uWgxqwTVqwnTczsuwpwdm+T9HbM?=
+ =?us-ascii?Q?Qu+lN9HWGj3fizekMnHkafEIPGxgshg2A3FA0BfCcY4e55ZkIFAP6KzrWWpQ?=
+ =?us-ascii?Q?enQa9zMrIVeY84d0fH9W21SS0bPH1IZFY8TVYnwdG5y3ZbbRZ8Jm3aIOe+G+?=
+ =?us-ascii?Q?RBVb8xVLCU8ZSlRdYom1bHQ3r6zHrw9pUNWFswuqLwtZzZWyT1cG5K2LcEh1?=
+ =?us-ascii?Q?s6AK1iQnjLW7LPuLxjk0d6zzBUg6Q0qi/7R66s133ePKFAB+OCxd1tKwFk6s?=
+ =?us-ascii?Q?61ZCq5C2D/N+TnGv+T16KlMUcSZUtWC3Y9BeMkoanUXXdn9j8jNv0JJ+UtX+?=
+ =?us-ascii?Q?ioQvIAitgYfcvIbdrQtGuzMkqetbPIVBtX5C5uhQTN46K6Fd/OaIx1L0Ie5l?=
+ =?us-ascii?Q?sD4R4ykWPw6tsm9avktQMOWx2BcJqpiD/Zz7KsTkmcUzQVnc5+YlsY3Sf15T?=
+ =?us-ascii?Q?Kzm136NCNy4TZT5L3nsfJDh127I=3D?=
+X-OriginatorOrg: in-advantage.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 90887445-3aa7-4d9e-c971-08d9eabe07b4
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Feb 2022 04:46:54.5641
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: wG2UcfLjTxZZm64N+Yx3eOla42+7hZFwdCplaCbJX2pTWpTs+gUQTb2dHsNUsBfoIKvNjTmwBMwcf/C+4wKIfZsHKrWFi1e8AcAt7pJBb5I=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB4394
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Qualcomm DisplayPort driver contains traces of the necessary
-plumbing to hook up USB HPD, in the form of the dp_hpd module and the
-dp_usbpd_cb struct. Use this as basis for implementing the
-oob_hotplug_event() callback, by amending the dp_hpd module with the
-missing logic.
+Ocelot loops over memory regions to gather stats on different ports.
+These regions are mostly continuous, and are ordered. This patch set
+uses that information to break the stats reads into regions that can get
+read in bulk.
 
-Overall the solution is similar to what's done downstream, but upstream
-all the code to disect the HPD notification lives on the calling side of
-drm_connector_oob_hotplug_event().
+The motiviation is for general cleanup, but also for SPI. Performing two
+back-to-back reads on a SPI bus require toggling the CS line, holding,
+re-toggling the CS line, sending 3 address bytes, sending N padding
+bytes, then actually performing the read. Bulk reads could reduce almost
+all of that overhead, but require that the reads are performed via
+regmap_bulk_read.
 
-drm_connector_oob_hotplug_event() performs the lookup of the
-drm_connector based on fwnode, hence the need to assign the fwnode in
-dp_drm_connector_init().
+v1 > v2: reword commit messages
+v2 > v3: correctly mark this for net-next when sending
+v3 > v4: calloc array instead of zalloc per review
+v4 > v5:
+    Apply CR suggestions for whitespace
+    Fix calloc / zalloc mixup
+    Properly destroy workqueues
+    Add third commit to split long macros
 
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
----
- drivers/gpu/drm/msm/dp/dp_display.c |  8 ++++++++
- drivers/gpu/drm/msm/dp/dp_display.h |  2 ++
- drivers/gpu/drm/msm/dp/dp_drm.c     | 10 ++++++++++
- drivers/gpu/drm/msm/dp/dp_hpd.c     | 19 +++++++++++++++++++
- drivers/gpu/drm/msm/dp/dp_hpd.h     |  4 ++++
- 5 files changed, 43 insertions(+)
 
-diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-index 7cc4d21f2091..124a2f794382 100644
---- a/drivers/gpu/drm/msm/dp/dp_display.c
-+++ b/drivers/gpu/drm/msm/dp/dp_display.c
-@@ -414,6 +414,13 @@ static int dp_display_usbpd_configure_cb(struct device *dev)
- 	return dp_display_process_hpd_high(dp);
- }
- 
-+void dp_display_oob_hotplug_event(struct msm_dp *dp_display, bool hpd_state)
-+{
-+	struct dp_display_private *dp = container_of(dp_display, struct dp_display_private, dp_display);
-+
-+	dp->usbpd->oob_event(dp->usbpd, hpd_state);
-+}
-+
- static int dp_display_usbpd_disconnect_cb(struct device *dev)
- {
- 	struct dp_display_private *dp = dev_get_dp_display_private(dev);
-@@ -1251,6 +1258,7 @@ static int dp_display_probe(struct platform_device *pdev)
- 	dp->pdev = pdev;
- 	dp->name = "drm_dp";
- 	dp->dp_display.connector_type = desc->connector_type;
-+	dp->dp_display.dev = &pdev->dev;
- 
- 	rc = dp_init_sub_modules(dp);
- 	if (rc) {
-diff --git a/drivers/gpu/drm/msm/dp/dp_display.h b/drivers/gpu/drm/msm/dp/dp_display.h
-index e3adcd578a90..1f856b3bca79 100644
---- a/drivers/gpu/drm/msm/dp/dp_display.h
-+++ b/drivers/gpu/drm/msm/dp/dp_display.h
-@@ -11,6 +11,7 @@
- #include "disp/msm_disp_snapshot.h"
- 
- struct msm_dp {
-+	struct device *dev;
- 	struct drm_device *drm_dev;
- 	struct device *codec_dev;
- 	struct drm_bridge *bridge;
-@@ -40,5 +41,6 @@ bool dp_display_check_video_test(struct msm_dp *dp_display);
- int dp_display_get_test_bpp(struct msm_dp *dp_display);
- void dp_display_signal_audio_start(struct msm_dp *dp_display);
- void dp_display_signal_audio_complete(struct msm_dp *dp_display);
-+void dp_display_oob_hotplug_event(struct msm_dp *dp_display, bool hpd_state);
- 
- #endif /* _DP_DISPLAY_H_ */
-diff --git a/drivers/gpu/drm/msm/dp/dp_drm.c b/drivers/gpu/drm/msm/dp/dp_drm.c
-index d4d360d19eba..665568197c49 100644
---- a/drivers/gpu/drm/msm/dp/dp_drm.c
-+++ b/drivers/gpu/drm/msm/dp/dp_drm.c
-@@ -123,6 +123,13 @@ static enum drm_mode_status dp_connector_mode_valid(
- 	return dp_display_validate_mode(dp_disp, mode->clock);
- }
- 
-+static void dp_oob_hotplug_event(struct drm_connector *connector, bool hpd_state)
-+{
-+	struct msm_dp *dp_disp = to_dp_connector(connector)->dp_display;
-+
-+	dp_display_oob_hotplug_event(dp_disp, hpd_state);
-+}
-+
- static const struct drm_connector_funcs dp_connector_funcs = {
- 	.detect = dp_connector_detect,
- 	.fill_modes = drm_helper_probe_single_connector_modes,
-@@ -130,6 +137,7 @@ static const struct drm_connector_funcs dp_connector_funcs = {
- 	.reset = drm_atomic_helper_connector_reset,
- 	.atomic_duplicate_state = drm_atomic_helper_connector_duplicate_state,
- 	.atomic_destroy_state = drm_atomic_helper_connector_destroy_state,
-+	.oob_hotplug_event = dp_oob_hotplug_event,
- };
- 
- static const struct drm_connector_helper_funcs dp_connector_helper_funcs = {
-@@ -160,6 +168,8 @@ struct drm_connector *dp_drm_connector_init(struct msm_dp *dp_display)
- 	if (ret)
- 		return ERR_PTR(ret);
- 
-+	connector->fwnode = fwnode_handle_get(dev_fwnode(dp_display->dev));
-+
- 	drm_connector_helper_add(connector, &dp_connector_helper_funcs);
- 
- 	/*
-diff --git a/drivers/gpu/drm/msm/dp/dp_hpd.c b/drivers/gpu/drm/msm/dp/dp_hpd.c
-index db98a1d431eb..3e62852a18b4 100644
---- a/drivers/gpu/drm/msm/dp/dp_hpd.c
-+++ b/drivers/gpu/drm/msm/dp/dp_hpd.c
-@@ -7,6 +7,7 @@
- 
- #include <linux/slab.h>
- #include <linux/device.h>
-+#include <drm/drm_print.h>
- 
- #include "dp_hpd.h"
- 
-@@ -45,6 +46,23 @@ int dp_hpd_connect(struct dp_usbpd *dp_usbpd, bool hpd)
- 	return rc;
- }
- 
-+static void dp_hpd_oob_event(struct dp_usbpd *dp_usbpd, bool hpd_state)
-+{
-+	struct dp_hpd_private *hpd_priv = container_of(dp_usbpd, struct dp_hpd_private, dp_usbpd);
-+
-+	DRM_DEBUG_DP("hpd_state: %d connected: %d\n", hpd_state, dp_usbpd->connected);
-+
-+	if (!dp_usbpd->connected && hpd_state) {
-+		dp_usbpd->connected = true;
-+		hpd_priv->dp_cb->configure(hpd_priv->dev);
-+	} else if (!hpd_state) {
-+		dp_usbpd->connected = false;
-+		hpd_priv->dp_cb->disconnect(hpd_priv->dev);
-+	} else {
-+		hpd_priv->dp_cb->attention(hpd_priv->dev);
-+	}
-+}
-+
- struct dp_usbpd *dp_hpd_get(struct device *dev, struct dp_usbpd_cb *cb)
- {
- 	struct dp_hpd_private *dp_hpd;
-@@ -62,6 +80,7 @@ struct dp_usbpd *dp_hpd_get(struct device *dev, struct dp_usbpd_cb *cb)
- 	dp_hpd->dp_cb = cb;
- 
- 	dp_hpd->dp_usbpd.connect = dp_hpd_connect;
-+	dp_hpd->dp_usbpd.oob_event = dp_hpd_oob_event;
- 
- 	return &dp_hpd->dp_usbpd;
- }
-diff --git a/drivers/gpu/drm/msm/dp/dp_hpd.h b/drivers/gpu/drm/msm/dp/dp_hpd.h
-index 8feec5aa5027..310ecc2a8538 100644
---- a/drivers/gpu/drm/msm/dp/dp_hpd.h
-+++ b/drivers/gpu/drm/msm/dp/dp_hpd.h
-@@ -29,7 +29,9 @@ enum plug_orientation {
-  * @hpd_irq: Change in the status since last message
-  * @alt_mode_cfg_done: bool to specify alt mode status
-  * @debug_en: bool to specify debug mode
-+ * @connected: cable currently connected
-  * @connect: simulate disconnect or connect for debug mode
-+ * @oob_event: deliver oob event to the usbpd code
-  */
- struct dp_usbpd {
- 	enum plug_orientation orientation;
-@@ -41,8 +43,10 @@ struct dp_usbpd {
- 	bool hpd_irq;
- 	bool alt_mode_cfg_done;
- 	bool debug_en;
-+	bool connected;
- 
- 	int (*connect)(struct dp_usbpd *dp_usbpd, bool hpd);
-+	void (*oob_event)(struct dp_usbpd *dp_usbpd, bool hpd_state);
- };
- 
- /**
+Colin Foster (3):
+  net: ocelot: align macros for consistency
+  net: mscc: ocelot: add ability to perform bulk reads
+  net: mscc: ocelot: use bulk reads for stats
+
+ drivers/net/ethernet/mscc/ocelot.c    | 78 ++++++++++++++++++++++-----
+ drivers/net/ethernet/mscc/ocelot_io.c | 13 +++++
+ include/soc/mscc/ocelot.h             | 57 ++++++++++++++------
+ 3 files changed, 120 insertions(+), 28 deletions(-)
+
 -- 
-2.33.1
+2.25.1
 

@@ -2,169 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ADED4AD211
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 08:18:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA2CA4AD210
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 08:18:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348003AbiBHHRm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 02:17:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53048 "EHLO
+        id S1348015AbiBHHSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 02:18:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235298AbiBHHRi (ORCPT
+        with ESMTP id S235298AbiBHHSW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 02:17:38 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2057.outbound.protection.outlook.com [40.107.237.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CADCC0401EF
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 23:17:37 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fwOa21yprmSSBSa56OAbt5n3gmkMBmbkar+8LYdFd7UxKK1Wy0Dxmtt5swRWmWNPSQJl+DUKqMNB8l6jv47XIwVh2/VJ8wTrjrh+crpq4fw41tQ+Z9H8sq7QSH2LxxtGflhTX1IVG0/0gG2UVSPiFgxSl9MZ1kXVpMEDfjeckzXaX6+pTa3iWrenYlpD1W8qHeV4nZMZkGZEerAnjkRS7XCYHyBr+dNf7d/0D5rOargyNRcJ6Z5P4KDY/KSD/ovhZT2HHohC5bwbR/FutmDGiiq2JHl0+x3lWGJ+WybnXiXpdmNjbtjbYAFYItjcm3rJYqxRpTqpE259+wrHKxbSvg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tNFOqf0seb7OGsE5TF+uG8DsOxHjqZpVB5pKzIjAU4I=;
- b=Idsa1wiJdOh/vifydWwBzb5Qxd8p/Vx40NFtZzS7E5yxix9dYImVgbZEFlmcCoFb3odPq34ZU+NJMTzu5OFMDT81WmOMAv/kqcSabLF6Twdd6SCzPJQG0JFXYwPWv+ZUL4Aq/F7/anfawKesfoVcELWK90+eLCUVy+fuyPETRIFF9+ly7XsEg7unuYl+3LLQyiggiLlpPEtrfFiiQ33rYyMHf/+Mo6agg0Zq8eWACo8tTSileNQON8pGfGbOS3s5VtFIQh5puCjkeaHFf6XdqnAKgxT+/8ZRiWCLKkI940efw2mjhKGKZqPGHf9a4GVeco/KbFUXcM11l/+EFgdW7A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tNFOqf0seb7OGsE5TF+uG8DsOxHjqZpVB5pKzIjAU4I=;
- b=mcBv3Oio9lzKGvxxhJByh7wtRNMagoG1zLcXDDGULh6k6ogI2ntBYs1IVNMxD60AQD6lasgJQC6T29K3hRfyWh9XGNsEGMjUD4wndYHp54trqsd8ExtVWooQ+3gg1npNggHa08rHF52dcYcXuXWrVufhK/UyOkaO+JfAPW7bMk6ff2bPWTfrtLt6aKI6hZhTUyAGSaB9qKlkyTVVZUBD8LMl6l+GO2fLthC8SE/UDN3L8DHYvIEB1PzRfhX7ulrI8ZAMdv8m1CWYLjYOKi+0UaHznvWYpuH9DSGSQY6Ryb3UY4lNmcuuL8yealNYrPJv5elE96km8B9ia4WF7MRW1Q==
-Received: from MW2PR12MB4667.namprd12.prod.outlook.com (2603:10b6:302:12::28)
- by DM6PR12MB3337.namprd12.prod.outlook.com (2603:10b6:5:118::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.17; Tue, 8 Feb
- 2022 07:17:35 +0000
-Received: from MW2PR12MB4667.namprd12.prod.outlook.com
- ([fe80::846c:d3cd:5a30:c35]) by MW2PR12MB4667.namprd12.prod.outlook.com
- ([fe80::846c:d3cd:5a30:c35%5]) with mapi id 15.20.4951.019; Tue, 8 Feb 2022
- 07:17:35 +0000
-From:   Chaitanya Kulkarni <chaitanyak@nvidia.com>
-To:     Christoph Hellwig <hch@lst.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dan Williams <dan.j.williams@intel.com>
-CC:     Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?utf-8?B?Q2hyaXN0aWFuIEvDtm5pZw==?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Alistair Popple <apopple@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "nouveau@lists.freedesktop.org" <nouveau@lists.freedesktop.org>,
-        "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>
-Subject: Re: [PATCH 1/8] mm: remove a pointless CONFIG_ZONE_DEVICE check in
- memremap_pages
-Thread-Topic: [PATCH 1/8] mm: remove a pointless CONFIG_ZONE_DEVICE check in
- memremap_pages
-Thread-Index: AQHYHLvxBBtwWc6HbkSSxqjiw8sbQQ==
-Date:   Tue, 8 Feb 2022 07:17:34 +0000
-Message-ID: <8c6a8d6c-bc23-226e-44aa-c89ab7c070bb@nvidia.com>
-References: <20220207063249.1833066-1-hch@lst.de>
- <20220207063249.1833066-2-hch@lst.de>
-In-Reply-To: <20220207063249.1833066-2-hch@lst.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 53adfc12-c599-4e34-9990-08d9ead31465
-x-ms-traffictypediagnostic: DM6PR12MB3337:EE_
-x-microsoft-antispam-prvs: <DM6PR12MB3337CD41FBE197BD7B707052A32D9@DM6PR12MB3337.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:962;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: rEVTxhqr5iH9c3z2F/K+2Cl8/b7dBNjD35SIUbSS9BK/8B/yQLdBkpeEV8hfxJbCCECkEOYipfK2I5+sQWM5h4f7L/51mdbx+aCrmeSW7lfe0XRqV1z5qjc67UZK8t2TNcxES7MOorWErQTo/er89v6V/EkahcRRRsKEPDC1uOzzfV/BmBCVZhOHD2gCR9VzxH1TdRav8HZ4xpvrw8+ekWVRhHKJks+7mpORXbE8/luFm34zbRKa6FP+0Bv8xdMN58DwrZ+4clUz9+h9YXlyBLRIOLSe23aWrZi086FrqesM5OptThOX2jsHf4qRhSdKQsYswBYaJyoGcleqmkdWsmytUhS0Mjl1NpI4V1D9mKLm+Yf2oftJK19OXt2uuSg876Z+6I0A6vHn/zYuhWzET27JOzDPo2u6JOKkzusrURhTLnaXuL5gymuI+KjuBmimpBdXTdtQIohkv6hPcfc82m9hcWylwek0+XXTO+F0Fr+gMQqVAqXCiEWu7iDTppP+CzcOUYNMqz2TalONsEUyklZ9CVZSuq5swJyArXyQ2tUQg4EEEJKajb5batJyF48/tqHrl0199k6jw9HiLm7O9FlHUUXUesh5Zv/ilTOmnV/HEPGCu03qJI4JlXnhMveuGbz+qJU/50Ftp0XDxqYJanx1cN6RF8kuccw+4u//tCHV7RQRMOi2NDJoHkdM7LM5DQgNbhjF2WOrWXErPZBK6yMOiHSAIZjXZ1N2Z+VMTR2UMySQkLwMsA1AxxNHyATrNdgqBaZxLcblj3xYCD7J0A==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR12MB4667.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(31696002)(110136005)(4744005)(54906003)(64756008)(8936002)(8676002)(66556008)(66946007)(76116006)(66446008)(66476007)(31686004)(316002)(91956017)(38100700002)(186003)(2616005)(122000001)(5660300002)(6506007)(86362001)(71200400001)(38070700005)(7416002)(53546011)(6512007)(83380400001)(36756003)(2906002)(508600001)(4326008)(6486002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TXJJOU5lUXVKdVAvWlhKc0tTTnk5MHF0UHlQeFRibG41REphUFVHTlRLSmRk?=
- =?utf-8?B?Um9nM1NKNGhOaGpWYW5jOHRneVhwSnhoUGtVSlFDT3NmRG50dXVUTTN0Rjgy?=
- =?utf-8?B?Y0FkMmtmdzJ6MnhEeWZONmZqVjNKRGUvQkhubzhxcXliZGJLaGFKTnpjaHdv?=
- =?utf-8?B?bGQ5b0dYNWR3SWdHY2o2NWtHRGlablgwNDVhSFFrRzFDK0ZXL3U4bTdQTTN3?=
- =?utf-8?B?V0tBTU9wc1R1TU9MaU12bzFlOW5sV3UyQ1hIeUV2OHpPYUQxVjc4M1NlY3Uz?=
- =?utf-8?B?ckFER3BOMzVpbjJrYW0vYWo5UHVKRmg0aHhRcUtQWFRad21UK3B2WlFWT0No?=
- =?utf-8?B?N1lJcWVoYXo1NHlhWUNtYnVIK2luanRZRWhma3d5NUl1SlVmOEt6M1R6eVY3?=
- =?utf-8?B?TnBoVW0rL3kxNFoyRi9TU0dlK2YwYk4wdGZralc4eWx5UjZpZjBOcml5aTZk?=
- =?utf-8?B?Si9LdTdWczZnaGV4U3pubmlXRmU5NnAxK2RFVHRJSjF6SENlb09sbWdLVmYx?=
- =?utf-8?B?c3BrYTR3R25yQmdhdHNpZWtTOVVhRnJ5UTJQYTJMbS9hbmh6Q1Buc1Q0R25M?=
- =?utf-8?B?eWdxUGt1bmVZR3V5V3duZG4zUzkvc0Y5NDduT0FMaU5URjZ0UWZhNGNXWGh3?=
- =?utf-8?B?V0lpUUl4dkdYdXRxeWFVVVJJbXhZbnNGTmtmbGxKbERmendabFFrekpXT2Zh?=
- =?utf-8?B?QkJzdkd4V1hIRjczMHIzMWlQN1pyZHo3dk1KREhhaFNSOHdYb2hlcHBVMWpx?=
- =?utf-8?B?d1UrK0ZOeHRoZ0c4RGxVQ3B3dStIeTg2QnlJWFNscWg2SUZWL05BSGdTZ1I2?=
- =?utf-8?B?aVVHRHRtKzBpMjNsMmVpaDFBVzdNNEk1WXZSMmw1ZTVvK2pjVlhWRlJYN0NT?=
- =?utf-8?B?ZWhHQ0xNSUEzcEFHZVpsZ1M2R1RSL3lSVEw3Q2xqdGhpNktrd1NVcmdKa3Bt?=
- =?utf-8?B?ZWRzN0hISkoyNVN6dE1uVkptbytWYlI0UXJEYThkRXdqT1p6cER1eVZ5UUlZ?=
- =?utf-8?B?MVZMUk13bDIvWGlCS2t2RkpYZHJzS2FOc0FGT3Q3SjBWZkp2ZzcyS0tKdmVX?=
- =?utf-8?B?dVdHNVlwRVhuL3prenBSb29GamY3cm4xVzVSVUpwd1NydzQ5UGQ2ZS9kRDVM?=
- =?utf-8?B?ZkZkZnBUMU90VWRwc3RMZjVGcDA0YXlSaktiaXA2cGlnVitYelVOV1krUC8y?=
- =?utf-8?B?OW9jTTd3UytoQ3N1NndHc095cWRxVmpmT1R3bjVqQnAzZjl1Y1ZjMERSbGow?=
- =?utf-8?B?VWhEeERtZStqRDIwbkwwNDUzUTFTNU51N3BDUjVldEhrK3FOM2ZENE5vclRE?=
- =?utf-8?B?K2ZHRG0vNVhSa2hwazNrMXlMYU5ja0ZHUDRMRkdpU2RMSm4wMCtScCtYdFNs?=
- =?utf-8?B?c2xyVTVZN1IrV2JmTWhHUW8xVjBZQ1p1akhRYnE5RXNleXlLYjJUUHZueVNE?=
- =?utf-8?B?M1JkdXQvcS9TWXlpeWNKQkxNekp1K3hNSHN3bFYxRXZtSTdmOStBVXdCWExi?=
- =?utf-8?B?dVQrNUJ0Y3BQeVRCRXRHNkZnakF2M290V09OMG1lTnB3R0VRRXNJc05lR3ly?=
- =?utf-8?B?WDhQakM1MldseVZMdDQvMTFqVEhWTEpqMVFFTHUzM2VIcXkwNkxLdmFxOE43?=
- =?utf-8?B?clo0d1JwWmJVbTBidGFoNDUvenU3Z2VnSmJqeDJUR1liTDJ0ak5CdDVpWWQr?=
- =?utf-8?B?R2U5Q2hHdlIrOHQ2cW81eC9WOTRVbjI3MXNvbEpNNEZLQjcyWnpFMFI2ajRM?=
- =?utf-8?B?MWVwU0xkVDhIcEFwS3UybmF4NU0xSTRCU2pzMFVyMHFGRGJ2K3dqN3lhbnNh?=
- =?utf-8?B?OWMyVGpxdE14U3N1aFFmaG04VnpqZjJkSHBUVzBsd2QvLzFucUhQRnE2aitr?=
- =?utf-8?B?RGZ4UTM5TkVQaXI2MHRnUEVsUUZzTmNCd1hydVpXYWJFc0o4elFRaG52RS9u?=
- =?utf-8?B?RURZU3I3Mmc4TGhwS2owbmpJWUJQQzY2TmdvNmlIdWtXWldFODdjS1RWUW96?=
- =?utf-8?B?OFpPWWozWnRFaVAzT0JpZXMwYVF2cnljZkptTWlUV1V0Z2dUY0htKytsZkN0?=
- =?utf-8?B?RG1MWDRqckxtRGFVNEEzN29uM1ZnZ1ZRc01pcnNYNDdaaFdIM0xIam5sa3RK?=
- =?utf-8?B?K21FSFVZbHJ1S2c3cGtRT2pQZWUyQzBBbSt5azF2VU93MDhWT21QVzJxMUVB?=
- =?utf-8?Q?KwQaCsnPNM0gdxr/WV2ikVrzDs7YFhO3k0nny1Gi1cHO?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <C5248F9754CAFE45A3F64858FBC7AC77@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Tue, 8 Feb 2022 02:18:22 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4F6B4C0401F2;
+        Mon,  7 Feb 2022 23:18:19 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D5BFD2B;
+        Mon,  7 Feb 2022 23:18:18 -0800 (PST)
+Received: from [192.168.122.164] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 63F4E3F73B;
+        Mon,  7 Feb 2022 23:18:18 -0800 (PST)
+Message-ID: <827f3c8b-b89a-018f-a5af-3984c7bc8492@arm.com>
+Date:   Tue, 8 Feb 2022 01:18:09 -0600
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MW2PR12MB4667.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 53adfc12-c599-4e34-9990-08d9ead31465
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Feb 2022 07:17:34.9431
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 41PzyM7ypJzt6TtEFXBubpX2+02XfJ2CszR425QYHlgVv5Cs7NuusWK4MnwkIFSxF4du1Q2gz7MA7/JJwajd3A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3337
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v3] serial: 8250_bcm2835aux: Add ACPI support
+Content-Language: en-US
+To:     Adrien Thierry <athierry@redhat.com>, linux-serial@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com
+References: <20220207232129.402882-1-athierry@redhat.com>
+From:   Jeremy Linton <jeremy.linton@arm.com>
+In-Reply-To: <20220207232129.402882-1-athierry@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMi82LzIyIDEwOjMyIFBNLCBDaHJpc3RvcGggSGVsbHdpZyB3cm90ZToNCj4gbWVtcmVtYXAu
-YyBpcyBvbmx5IGJ1aWx0IHdoZW4gQ09ORklHX1pPTkVfREVWSUNFIGlzIHNldCwgc28gcmVtb3Zl
-DQo+IHRoZSBzdXBlcmZsb3VzIGV4dHJhIGNoZWNrLg0KPiANCj4gU2lnbmVkLW9mZi1ieTogQ2hy
-aXN0b3BoIEhlbGx3aWcgPGhjaEBsc3QuZGU+DQo+IC0tLQ0KPiAgIG1tL21lbXJlbWFwLmMgfCAz
-ICstLQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMiBkZWxldGlvbnMoLSkN
-Cj4gDQo+IGRpZmYgLS1naXQgYS9tbS9tZW1yZW1hcC5jIGIvbW0vbWVtcmVtYXAuYw0KPiBpbmRl
-eCA2YWE1ZjBjMmQxMWZkYS4uNWYwNGEwNzA5ZTQzNmUgMTAwNjQ0DQo+IC0tLSBhL21tL21lbXJl
-bWFwLmMNCj4gKysrIGIvbW0vbWVtcmVtYXAuYw0KPiBAQCAtMzI4LDggKzMyOCw3IEBAIHZvaWQg
-Km1lbXJlbWFwX3BhZ2VzKHN0cnVjdCBkZXZfcGFnZW1hcCAqcGdtYXAsIGludCBuaWQpDQo+ICAg
-CQl9DQo+ICAgCQlicmVhazsNCj4gICAJY2FzZSBNRU1PUllfREVWSUNFX0ZTX0RBWDoNCj4gLQkJ
-aWYgKCFJU19FTkFCTEVEKENPTkZJR19aT05FX0RFVklDRSkgfHwNCj4gLQkJICAgIElTX0VOQUJM
-RUQoQ09ORklHX0ZTX0RBWF9MSU1JVEVEKSkgew0KPiArCQlpZiAoSVNfRU5BQkxFRChDT05GSUdf
-RlNfREFYX0xJTUlURUQpKSB7DQo+ICAgCQkJV0FSTigxLCAiRmlsZSBzeXN0ZW0gREFYIG5vdCBz
-dXBwb3J0ZWRcbiIpOw0KPiAgIAkJCXJldHVybiBFUlJfUFRSKC1FSU5WQUwpOw0KPiAgIAkJfQ0K
-PiANCg0KSW5kZWVkIGl0IGRvZXMgaGF2ZSBpdCBpbiB0aGUgbWFrZWZpbGU6LQ0KDQpyb290QGRl
-diBtbSAoZm9yLW5leHQpICMgZ3JlcCBtZW1yZW1hcC5vIE1ha2VmaWxlDQpvYmotJChDT05GSUdf
-Wk9ORV9ERVZJQ0UpICs9IG1lbXJlbWFwLm8NCg0KDQpMb29rcyBnb29kLg0KDQpSZXZpZXdlZC1i
-eTogQ2hhaXRhbnlhIEt1bGthcm5pIDxrY2hAbnZpZGlhLmNvbT4NCg==
+Hi,
+
+On 2/7/22 17:21, Adrien Thierry wrote:
+> Add ACPI support to 8250_bcm2835aux driver. This makes it possible to
+> use the miniuart on the Raspberry Pi with the tianocore/edk2 UEFI
+> firmware.
+
+I merged this to 5.17rc3, switched the console to this device and it now 
+works in linux! Thanks for doing this!
+
+Tested-by: Jeremy Linton <jeremy.linton@arm.com>
+
+> 
+> Signed-off-by: Adrien Thierry <athierry@redhat.com>
+> ---
+> V1 -> V2: Refactored code to remove unnecessary conditional paths and
+> intermediate variables
+> V2 -> V3: Cleaned up coding style and addressed review comments
+> 
+>   drivers/tty/serial/8250/8250_bcm2835aux.c | 52 ++++++++++++++++++++---
+>   1 file changed, 46 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/8250/8250_bcm2835aux.c b/drivers/tty/serial/8250/8250_bcm2835aux.c
+> index fd95860cd661..2a1226a78a0c 100644
+> --- a/drivers/tty/serial/8250/8250_bcm2835aux.c
+> +++ b/drivers/tty/serial/8250/8250_bcm2835aux.c
+> @@ -17,6 +17,7 @@
+>   #include <linux/module.h>
+>   #include <linux/of.h>
+>   #include <linux/platform_device.h>
+> +#include <linux/property.h>
+>   
+>   #include "8250.h"
+>   
+> @@ -44,6 +45,10 @@ struct bcm2835aux_data {
+>   	u32 cntl;
+>   };
+>   
+> +struct bcm2835_aux_serial_driver_data {
+> +	resource_size_t offset;
+> +};
+> +
+>   static void bcm2835aux_rs485_start_tx(struct uart_8250_port *up)
+>   {
+>   	if (!(up->port.rs485.flags & SER_RS485_RX_DURING_TX)) {
+> @@ -80,9 +85,12 @@ static void bcm2835aux_rs485_stop_tx(struct uart_8250_port *up)
+>   
+>   static int bcm2835aux_serial_probe(struct platform_device *pdev)
+>   {
+> +	const struct bcm2835_aux_serial_driver_data *bcm_data;
+>   	struct uart_8250_port up = { };
+>   	struct bcm2835aux_data *data;
+> +	resource_size_t offset = 0;
+>   	struct resource *res;
+> +	unsigned int uartclk;
+>   	int ret;
+>   
+>   	/* allocate the custom structure */
+> @@ -109,9 +117,7 @@ static int bcm2835aux_serial_probe(struct platform_device *pdev)
+>   	platform_set_drvdata(pdev, data);
+>   
+>   	/* get the clock - this also enables the HW */
+> -	data->clk = devm_clk_get(&pdev->dev, NULL);
+> -	if (IS_ERR(data->clk))
+> -		return dev_err_probe(&pdev->dev, PTR_ERR(data->clk), "could not get clk\n");
+> +	data->clk = devm_clk_get_optional(&pdev->dev, NULL);
+>   
+>   	/* get the interrupt */
+>   	ret = platform_get_irq(pdev, 0);
+> @@ -125,8 +131,24 @@ static int bcm2835aux_serial_probe(struct platform_device *pdev)
+>   		dev_err(&pdev->dev, "memory resource not found");
+>   		return -EINVAL;
+>   	}
+> -	up.port.mapbase = res->start;
+> -	up.port.mapsize = resource_size(res);
+> +
+> +	bcm_data = device_get_match_data(&pdev->dev);
+> +
+> +	/* Some UEFI implementations (e.g. tianocore/edk2 for the Raspberry Pi)
+> +	 * describe the miniuart with a base address that encompasses the auxiliary
+> +	 * registers shared between the miniuart and spi.
+> +	 *
+> +	 * This is due to historical reasons, see discussion here :
+> +	 * https://edk2.groups.io/g/devel/topic/87501357#84349
+> +	 *
+> +	 * We need to add the offset between the miniuart and auxiliary
+> +	 * registers to get the real miniuart base address.
+> +	 */
+> +	if (bcm_data)
+> +		offset = bcm_data->offset;
+> +
+> +	up.port.mapbase = res->start + offset;
+> +	up.port.mapsize = resource_size(res) - offset;
+>   
+>   	/* Check for a fixed line number */
+>   	ret = of_alias_get_id(pdev->dev.of_node, "serial");
+> @@ -141,12 +163,19 @@ static int bcm2835aux_serial_probe(struct platform_device *pdev)
+>   		return ret;
+>   	}
+>   
+> +	uartclk = clk_get_rate(data->clk);
+> +	if (!uartclk) {
+> +		ret = device_property_read_u32(&pdev->dev, "clock-frequency", &uartclk);
+> +		if (ret)
+> +			return dev_err_probe(&pdev->dev, ret, "could not get clk rate\n");
+> +	}
+> +
+>   	/* the HW-clock divider for bcm2835aux is 8,
+>   	 * but 8250 expects a divider of 16,
+>   	 * so we have to multiply the actual clock by 2
+>   	 * to get identical baudrates.
+>   	 */
+> -	up.port.uartclk = clk_get_rate(data->clk) * 2;
+> +	up.port.uartclk = uartclk * 2;
+>   
+>   	/* register the port */
+>   	ret = serial8250_register_8250_port(&up);
+> @@ -173,16 +202,27 @@ static int bcm2835aux_serial_remove(struct platform_device *pdev)
+>   	return 0;
+>   }
+>   
+> +static const struct bcm2835_aux_serial_driver_data bcm2835_acpi_data = {
+> +	.offset = 0x40,
+> +};
+> +
+>   static const struct of_device_id bcm2835aux_serial_match[] = {
+>   	{ .compatible = "brcm,bcm2835-aux-uart" },
+>   	{ },
+>   };
+>   MODULE_DEVICE_TABLE(of, bcm2835aux_serial_match);
+>   
+> +static const struct acpi_device_id bcm2835aux_serial_acpi_match[] = {
+> +	{ "BCM2836", (kernel_ulong_t)&bcm2835_acpi_data },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(acpi, bcm2835aux_serial_acpi_match);
+> +
+>   static struct platform_driver bcm2835aux_serial_driver = {
+>   	.driver = {
+>   		.name = "bcm2835-aux-uart",
+>   		.of_match_table = bcm2835aux_serial_match,
+> +		.acpi_match_table = bcm2835aux_serial_acpi_match,
+>   	},
+>   	.probe  = bcm2835aux_serial_probe,
+>   	.remove = bcm2835aux_serial_remove,
+> 
+> base-commit: 2ade8eef993c37a2a43e51a9b1f6c25509a2acce
+> 
+

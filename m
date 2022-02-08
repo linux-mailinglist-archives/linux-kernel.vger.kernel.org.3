@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2F1E4AE1A6
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 19:57:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A65FC4AE1A9
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 19:57:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385630AbiBHS5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 13:57:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48464 "EHLO
+        id S1385637AbiBHS5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 13:57:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385530AbiBHS5I (ORCPT
+        with ESMTP id S1385553AbiBHS5J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 13:57:08 -0500
+        Tue, 8 Feb 2022 13:57:09 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93F77C0612B8;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA557C0612BA;
         Tue,  8 Feb 2022 10:57:06 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 22D166142A;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 40233613F8;
         Tue,  8 Feb 2022 18:57:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA8E2C340F3;
-        Tue,  8 Feb 2022 18:57:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 136B7C340F8;
+        Tue,  8 Feb 2022 18:57:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1644346626;
-        bh=KWdwaYmfieQ577sfQve0otGenOOT5DJLuSqbiyJn4NQ=;
+        bh=byMO3nYSC2TvSH32oHHrAxbZ7HoV85bYK3g6rU+Vckk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mkDKPHjPz30MLWZwdY3KX/fQ9Z5Am0IUOIcztL4UVtd5AYF7yNCA2EIsed3o8Tu6G
-         /xG7Fvw0b0dHEM3OCDXU9IAYlQZ9Gsixzp5cVn+9bmc8lCv0uz9ED38i8VDLAzvAoU
-         T0whhTPTfAYqFg9cgCRyvaybyyJKsoWYcZwpEPiQUy0L2XKK3PgOHsMqg1ExcxAQcI
-         9NlV8k89tUsmPE7knIgFBfn3bCXkf+4jpdj6WpYTknSDaMJOYVCaMMHVdW9RyG6BfP
-         RFNfkJaXr3PikfjwKhpU+wh13zoFsNFdnDcDsg2sCvEjG8iHLxD5W7VNbEXA8DIIBv
-         Zd/+K5UnIdt/A==
+        b=PCD2UCJfQrsemk/xjjy64hyoqVb/mB4I/rPiPffQ5dGy8RnL/bCaW1dAwEL7jyduu
+         azNmGpDY8iPWwe7baD/HFf3C9udWOGFv6OC5FxyBb/PU36gL3kHdO9CYj4hXfnWXuD
+         yqhRwae27Bg0++C6bMNRCfNmgktFF9hnBsx4XWBVQo4TSBHVeGfQuqUuIbEUH2wK1h
+         LqagRQnhC0KbgeFIkOIJ33eqY194m0uikUzG6crMIGFktwTy8pNX6U+ddqIep3nkHr
+         AMcpHbhq+nHvTAu3WAW8e+v1doAja6ZoS8R+l9UNRmauSdt0sUxWz0glxkjh4dsNqo
+         cKETcqwxV1yxg==
 Received: from sofa.misterjones.org ([185.219.108.64] helo=why.lan)
         by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <maz@kernel.org>)
-        id 1nHVfk-006MEi-38; Tue, 08 Feb 2022 18:57:04 +0000
+        id 1nHVfk-006MEi-BH; Tue, 08 Feb 2022 18:57:04 +0000
 From:   Marc Zyngier <maz@kernel.org>
 To:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
@@ -47,9 +47,9 @@ Cc:     Mark Rutland <mark.rutland@arm.com>, Will Deacon <will@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Dougall <dougallj@gmail.com>, kernel-team@android.com
-Subject: [PATCH v5 08/10] irqchip/apple-aic: Move PMU-specific registers to their own include file
-Date:   Tue,  8 Feb 2022 18:56:02 +0000
-Message-Id: <20220208185604.1097957-9-maz@kernel.org>
+Subject: [PATCH v5 09/10] drivers/perf: arm_pmu: Handle 47 bit counters
+Date:   Tue,  8 Feb 2022 18:56:03 +0000
+Message-Id: <20220208185604.1097957-10-maz@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220208185604.1097957-1-maz@kernel.org>
 References: <20220208185604.1097957-1-maz@kernel.org>
@@ -69,71 +69,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As we are about to have a PMU driver, move the PMU bits from the AIC
-driver into a common include file.
+The current ARM PMU framework can only deal with 32 or 64bit counters.
+Teach it about a 47bit flavour.
+
+Yes, this is odd.
 
 Reviewed-by: Hector Martin <marcan@marcan.st>
 Signed-off-by: Marc Zyngier <maz@kernel.org>
 ---
- arch/arm64/include/asm/apple_m1_pmu.h | 19 +++++++++++++++++++
- drivers/irqchip/irq-apple-aic.c       | 11 +----------
- 2 files changed, 20 insertions(+), 10 deletions(-)
- create mode 100644 arch/arm64/include/asm/apple_m1_pmu.h
+ drivers/perf/arm_pmu.c       | 2 ++
+ include/linux/perf/arm_pmu.h | 2 ++
+ 2 files changed, 4 insertions(+)
 
-diff --git a/arch/arm64/include/asm/apple_m1_pmu.h b/arch/arm64/include/asm/apple_m1_pmu.h
-new file mode 100644
-index 000000000000..b848af7faadc
---- /dev/null
-+++ b/arch/arm64/include/asm/apple_m1_pmu.h
-@@ -0,0 +1,19 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#ifndef __ASM_APPLE_M1_PMU_h
-+#define __ASM_APPLE_M1_PMU_h
-+
-+#include <linux/bits.h>
-+#include <asm/sysreg.h>
-+
-+/* Core PMC control register */
-+#define SYS_IMP_APL_PMCR0_EL1	sys_reg(3, 1, 15, 0, 0)
-+#define PMCR0_IMODE		GENMASK(10, 8)
-+#define PMCR0_IMODE_OFF		0
-+#define PMCR0_IMODE_PMI		1
-+#define PMCR0_IMODE_AIC		2
-+#define PMCR0_IMODE_HALT	3
-+#define PMCR0_IMODE_FIQ		4
-+#define PMCR0_IACT		BIT(11)
-+
-+#endif /* __ASM_APPLE_M1_PMU_h */
-diff --git a/drivers/irqchip/irq-apple-aic.c b/drivers/irqchip/irq-apple-aic.c
-index 873544e58676..b40199c6625e 100644
---- a/drivers/irqchip/irq-apple-aic.c
-+++ b/drivers/irqchip/irq-apple-aic.c
-@@ -55,6 +55,7 @@
- #include <linux/limits.h>
- #include <linux/of_address.h>
- #include <linux/slab.h>
-+#include <asm/apple_m1_pmu.h>
- #include <asm/exception.h>
- #include <asm/sysreg.h>
- #include <asm/virt.h>
-@@ -109,16 +110,6 @@
-  * Note: sysreg-based IPIs are not supported yet.
+diff --git a/drivers/perf/arm_pmu.c b/drivers/perf/arm_pmu.c
+index 295cc7952d0e..0a9ed1a061ac 100644
+--- a/drivers/perf/arm_pmu.c
++++ b/drivers/perf/arm_pmu.c
+@@ -109,6 +109,8 @@ static inline u64 arm_pmu_event_max_period(struct perf_event *event)
+ {
+ 	if (event->hw.flags & ARMPMU_EVT_64BIT)
+ 		return GENMASK_ULL(63, 0);
++	else if (event->hw.flags & ARMPMU_EVT_47BIT)
++		return GENMASK_ULL(46, 0);
+ 	else
+ 		return GENMASK_ULL(31, 0);
+ }
+diff --git a/include/linux/perf/arm_pmu.h b/include/linux/perf/arm_pmu.h
+index 2512e2f9cd4e..0407a38b470a 100644
+--- a/include/linux/perf/arm_pmu.h
++++ b/include/linux/perf/arm_pmu.h
+@@ -26,6 +26,8 @@
   */
+ /* Event uses a 64bit counter */
+ #define ARMPMU_EVT_64BIT		1
++/* Event uses a 47bit counter */
++#define ARMPMU_EVT_47BIT		2
  
--/* Core PMC control register */
--#define SYS_IMP_APL_PMCR0_EL1		sys_reg(3, 1, 15, 0, 0)
--#define PMCR0_IMODE			GENMASK(10, 8)
--#define PMCR0_IMODE_OFF			0
--#define PMCR0_IMODE_PMI			1
--#define PMCR0_IMODE_AIC			2
--#define PMCR0_IMODE_HALT		3
--#define PMCR0_IMODE_FIQ			4
--#define PMCR0_IACT			BIT(11)
--
- /* IPI request registers */
- #define SYS_IMP_APL_IPI_RR_LOCAL_EL1	sys_reg(3, 5, 15, 0, 0)
- #define SYS_IMP_APL_IPI_RR_GLOBAL_EL1	sys_reg(3, 5, 15, 0, 1)
+ #define HW_OP_UNSUPPORTED		0xFFFF
+ #define C(_x)				PERF_COUNT_HW_CACHE_##_x
 -- 
 2.30.2
 

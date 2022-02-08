@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80FC64ACDDF
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:18:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 822D34ACDBC
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:18:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237189AbiBHBJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 20:09:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59320 "EHLO
+        id S229972AbiBHBJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 20:09:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344148AbiBHAqM (ORCPT
+        with ESMTP id S1344153AbiBHAqM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 7 Feb 2022 19:46:12 -0500
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2AC4C043188;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B857C061A73;
         Mon,  7 Feb 2022 16:46:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644281171; x=1675817171;
+  t=1644281172; x=1675817172;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=n2tussXbA+nZyavb3jVmHg8ajqL6ns6El7v3FjGaYE0=;
-  b=NHd3R7iRcnnTWhcU9jv0jcVprRurgO1oE2TL9DPbhF0Hv9uz7iGU4TYy
-   aelg3NT4kM/zbNXbxWQiGjLsFLMnyj2IuJgTTqY5qHJj3sFtFz8XQIL8B
-   DH9dp9/lpKsqmcA0VDKJpF8SDq/RfQ8xy9QfnFka/hP+4wBmS/ZlngHYS
-   xCsa3Am6K1ViMKoYrDiBY/ox3wNucKvj08TsAb8E3nNJvQGI2CNDzvVAv
-   VCgpspePg2V3TrtPNQjyVI/Q7Bp/wo/nVtsNT8tjsDmKSBUUeqZEQa88I
-   uX9XyKGyjNzWq94kWmf7Ryq4RZi7AE9npkACj8aOfpN9rQjmz9P+B/PT+
+  bh=8EpFNPqK4DbJWTi/iUeiaR91d3oTWcQUQu8VuBjJR+0=;
+  b=CIqUnrNBOoznRL/jpluw/dAx4BhtbnEfnmQMGS9Ih9/HYOi0gz5jo32C
+   IglfX5miebaH0QCTy9ZJcMEF+HJ5V2XlYFjpDXQJrzbkWxXBXRQKguPGt
+   Ca4pme40vY11QUrye6WiZPPbYyCp1x2l6pLPhjS78WgehmUVBirYnDzMA
+   uqUKeHcMk4HgaJWE79oq2qTmwa8Ybn2n5S4+YnieTt4ocQCs/rovFfYBC
+   pl/fEI7b2Eu0ISHY0HjtsvT+UcXxCIxEIQ+N4H3xYXPor0gKNf210obbk
+   o4g6OsIYH/6Mgp04hO7juelnxdO2S/UCAg+OF0Kqg8xF5Rpszj8guUd9Q
    g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="232407940"
+X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="232407942"
 X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
-   d="scan'208";a="232407940"
+   d="scan'208";a="232407942"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
   by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 16:46:08 -0800
 X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
-   d="scan'208";a="499389477"
+   d="scan'208";a="499389480"
 Received: from rchatre-ws.ostc.intel.com ([10.54.69.144])
   by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 16:46:08 -0800
 From:   Reinette Chatre <reinette.chatre@intel.com>
@@ -45,9 +45,9 @@ Cc:     seanjc@google.com, kai.huang@intel.com, cathy.zhang@intel.com,
         cedric.xing@intel.com, haitao.huang@intel.com,
         mark.shanahan@intel.com, hpa@zytor.com,
         linux-kernel@vger.kernel.org
-Subject: [PATCH V2 04/32] x86/sgx: Add wrapper for SGX2 EAUG function
-Date:   Mon,  7 Feb 2022 16:45:26 -0800
-Message-Id: <e4ff83aa58317a71de5ed02545d739671bb2f418.1644274683.git.reinette.chatre@intel.com>
+Subject: [PATCH V2 05/32] Documentation/x86: Document SGX permission details
+Date:   Mon,  7 Feb 2022 16:45:27 -0800
+Message-Id: <39ad1503cfa6004abfd3de1e3b01650e09cd9e4c.1644274683.git.reinette.chatre@intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1644274683.git.reinette.chatre@intel.com>
 References: <cover.1644274683.git.reinette.chatre@intel.com>
@@ -63,46 +63,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a wrapper for the EAUG ENCLS leaf function used to
-add a page to an initialized enclave.
+Provide summary of the various permissions involved in
+managing access to enclave pages. This summary documents
+the foundation for additions related to runtime managing of
+enclave page permissions that is made possible with SGX2.
 
-EAUG:
-1) Stores all properties of the new enclave page in the SGX
-   hardware's Enclave Page Cache Map (EPCM).
-2) Sets the PENDING bit in the EPCM entry of the enclave page.
-   This bit is cleared by the enclave by invoking ENCLU leaf
-   function EACCEPT or EACCEPTCOPY.
-
-Access from within the enclave to the new enclave page is not
-possible until the PENDING bit is cleared.
-
+Suggested-by: Andy Lutomirski <luto@kernel.org>
 Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
 ---
 Changes since V1:
-- Split original patch ("x86/sgx: Add wrappers for SGX2 functions")
-  in three to introduce the SGX2 functions separately (Jarkko).
-- Rewrite commit message to include how the EPCM within the hardware
-  is changed by the SGX2 function as well as any calling
-  conditions (Jarkko).
+- New patch.
 
- arch/x86/kernel/cpu/sgx/encls.h | 6 ++++++
- 1 file changed, 6 insertions(+)
+ Documentation/x86/sgx.rst | 28 +++++++++++++++++++++++-----
+ 1 file changed, 23 insertions(+), 5 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/sgx/encls.h b/arch/x86/kernel/cpu/sgx/encls.h
-index 7a1ecf704ec1..99004b02e2ed 100644
---- a/arch/x86/kernel/cpu/sgx/encls.h
-+++ b/arch/x86/kernel/cpu/sgx/encls.h
-@@ -227,4 +227,10 @@ static inline int __emodt(struct sgx_secinfo *secinfo, void *addr)
- 	return __encls_ret_2(EMODT, secinfo, addr);
- }
+diff --git a/Documentation/x86/sgx.rst b/Documentation/x86/sgx.rst
+index 265568a9292c..89ff924b1480 100644
+--- a/Documentation/x86/sgx.rst
++++ b/Documentation/x86/sgx.rst
+@@ -71,16 +71,34 @@ The processor tracks EPC pages in a hardware metadata structure called the
+ which describes the owning enclave, access rights and page type among the other
+ things.
  
-+/* Zero a page of EPC memory and add it to an initialized enclave. */
-+static inline int __eaug(struct sgx_pageinfo *pginfo, void *addr)
-+{
-+	return __encls_2(EAUG, pginfo, addr);
-+}
+-EPCM permissions are separate from the normal page tables.  This prevents the
+-kernel from, for instance, allowing writes to data which an enclave wishes to
+-remain read-only.  EPCM permissions may only impose additional restrictions on
+-top of normal x86 page permissions.
+-
+ For all intents and purposes, the SGX architecture allows the processor to
+ invalidate all EPCM entries at will.  This requires that software be prepared to
+ handle an EPCM fault at any time.  In practice, this can happen on events like
+ power transitions when the ephemeral key that encrypts enclave memory is lost.
+ 
++Details about enclave page permissions
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 +
- #endif /* _X86_ENCLS_H */
++EPCM permissions are separate from the normal page tables.  This prevents the
++kernel from, for instance, allowing writes to data which an enclave wishes
++to remain read-only.
++
++Three permission masks are relevant to SGX:
++
++* EPCM permissions.
++* Page Table Entry (PTE) permissions.
++* Virtual Memory Area (VMA) permissions.
++
++An enclave is only able to access an enclave page if all three permission
++masks enable it to do so.
++
++The relationships between the different permission masks are:
++
++* An SGX VMA can only be created if its permissions are the same or weaker
++  than the EPCM permissions.
++* PTEs are installed to match the EPCM permissions, but not be more
++  relaxed than the VMA permissions.
++
+ Application interface
+ =====================
+ 
 -- 
 2.25.1
 

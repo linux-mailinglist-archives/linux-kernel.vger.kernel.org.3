@@ -2,95 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F5E64ACF55
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 03:59:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD7754ACF2C
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 03:50:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346308AbiBHC7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 21:59:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42876 "EHLO
+        id S1346132AbiBHCuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 21:50:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345777AbiBHC7v (ORCPT
+        with ESMTP id S238055AbiBHCuE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 21:59:51 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 138FDC06109E;
-        Mon,  7 Feb 2022 18:59:50 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id v74so16451201pfc.1;
-        Mon, 07 Feb 2022 18:59:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=JhTpMGvbxGUrJKu9ijtc6q5cHQtWVbAXxqUiZ2vf6R0=;
-        b=VflgJZsG7gz8vKTl+ZwEyVJ/NKBnNb1T6B1IapXX3KAcQdvdl2+jbIwj3m6k5HhZFc
-         8PyUPJYerdEyFKEz6IxOHhfsZUUf4+kwHmFHVkgFMF9pWPX/C/kstJqHe0BCbWNSn4Ls
-         MXJXd9ytdvN78I0bV854gdZdpYj+K4kGZ11LsbzMDeN9j6faoaCJToXMQWUHxmFO7qbV
-         /Rf/IV8iiIV+DsJTfeJN2eJLmmT/KpLa25O9FPwbom3PP5d+LLOcKlBrTO4ilEukO58a
-         l3m1QIK+9qdK9/M0nyK+MuyHngKj1+wcVy3Koo9fzM2bks72DceoPDpAdme2iiVv/NUf
-         1CJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=JhTpMGvbxGUrJKu9ijtc6q5cHQtWVbAXxqUiZ2vf6R0=;
-        b=AOzxSo8xIAFF1YBkysCbL5NHayNKGZdzh6qm1fbazTuXNhG7tLkZiqCLCozXMhEfJm
-         1Aa3+BxsjKsrusuBuWHsfh+51oon7qDSIF+/ZngB06B9CW4Cxe4GD0jncIOL+X8oMsFJ
-         WqfLDv2xJP77itwFUaFJVDzWkXM5UD0wjNVQix/uqBispFKo1mbz1RMTKBPBHkL16y+K
-         MLu1c2Kb+Y6F9tynQ6iSli1tLLiTa4OpZtB063g2Sk7E6Yyclz1O78Y3XLQn6UZbjkC3
-         YvsgGZZNw8rsYGYgj8zX3udNr5Q7SqH2YsooP4RyLE1O0yS2uTsBHNGM8LQb2bxOZR2X
-         EG7Q==
-X-Gm-Message-State: AOAM532e+cqEFhYtPE16J1QIaaqBSwu+aWhy/LsAhwXs9oKlmjtG3b36
-        5UW2lEEfkpeK6SXbvS7ucdE=
-X-Google-Smtp-Source: ABdhPJwJKe8zRAXA2oArhtP8Khj2Mlg8Z67j9TqGBH4wQ5OjG+YqFAO7vZAplb49s3J/KWVRY8Td+w==
-X-Received: by 2002:a05:6a00:cd2:: with SMTP id b18mr2322825pfv.63.1644289189459;
-        Mon, 07 Feb 2022 18:59:49 -0800 (PST)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id f18sm13464712pfc.203.2022.02.07.18.59.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Feb 2022 18:59:48 -0800 (PST)
-Message-ID: <3577892f-02ae-fbfd-8a6f-c58018e2efdc@gmail.com>
-Date:   Mon, 7 Feb 2022 18:59:47 -0800
+        Mon, 7 Feb 2022 21:50:04 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 854C1C061355;
+        Mon,  7 Feb 2022 18:50:03 -0800 (PST)
+Received: from dggeme754-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Jt6np2m3QzZfGd;
+        Tue,  8 Feb 2022 10:45:50 +0800 (CST)
+Received: from huawei.com (10.175.104.170) by dggeme754-chm.china.huawei.com
+ (10.3.19.100) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.21; Tue, 8
+ Feb 2022 10:50:00 +0800
+From:   Zhipeng Xie <xiezhipeng1@huawei.com>
+To:     <peterz@infradead.org>
+CC:     <acme@kernel.org>, <alexander.shishkin@linux.intel.com>,
+        <jolsa@redhat.com>, <linux-kernel@vger.kernel.org>,
+        <linux-perf-users@vger.kernel.org>, <mark.rutland@arm.com>,
+        <mingo@redhat.com>, <namhyung@kernel.org>,
+        <xiezhipeng1@huawei.com>, <xiexiuqi@huawei.com>,
+        <fanwentao@huawei.com>
+Subject: Re: [PATCH] Fix perf_mmap fail when CONFIG_PERF_USE_VMALLOC enabled
+Date:   Tue, 8 Feb 2022 10:49:31 -0500
+Message-ID: <20220208154931.4371-1-xiezhipeng1@huawei.com>
+X-Mailer: git-send-email 2.18.1
+In-Reply-To: <20220207141136.GG23216@worktop.programming.kicks-ass.net>
+References: <20220207141136.GG23216@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v8 net-next 10/10] net: dsa: microchip: add support for
- vlan operations
-Content-Language: en-US
-To:     Prasanna Vengateshan <prasanna.vengateshan@microchip.com>,
-        andrew@lunn.ch, netdev@vger.kernel.org, olteanv@gmail.com,
-        robh+dt@kernel.org
-Cc:     UNGLinuxDriver@microchip.com, woojung.huh@microchip.com,
-        hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        vivien.didelot@gmail.com, devicetree@vger.kernel.org
-References: <20220207172204.589190-1-prasanna.vengateshan@microchip.com>
- <20220207172204.589190-11-prasanna.vengateshan@microchip.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220207172204.589190-11-prasanna.vengateshan@microchip.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.175.104.170]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggeme754-chm.china.huawei.com (10.3.19.100)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, February 7, 2022 10:12 PM, Peter Zijlstra wrote:
+> Your $Subject needs a subsystem prefix.
 
+Thanks for your comments, I will adjust the patch Subject and resend the
+patch according to your suggestions.
 
-On 2/7/2022 9:22 AM, Prasanna Vengateshan wrote:
-> Support for VLAN add, del, prepare and filtering operations.
+> On Mon, Feb 07, 2022 at 12:02:59PM -0500, Zhipeng Xie wrote:
+> > when CONFIG_PERF_USE_VMALLOC is enabled, rb->nr_pages is always
+> > equal to 1 in rb_alloc, causing perf_mmap return -EINVAL when mmap.
+> > Fix this problem using data_page_nr.
 > 
-> The VLAN aware is a global setting. Mixed vlan filterings
-> are not supported. vlan_filtering_is_global is made as true
-> in lan937x_setup function.
-> 
-> Signed-off-by: Prasanna Vengateshan <prasanna.vengateshan@microchip.com>
+> How can this be? This would mean that any arch that selects that hasn't
+> worked for forever ?! That seems unlikely.
 
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+Arch with CONFIG_PERF_USE_VMALLOC enabled by default: 
+	arc/arm/csky/mips/sh/sparc/xtensa
+Arch with CONFIG_PERF_USE_VMALLOC disabled by default:
+	x86_64/aarch64/...
+I have this problem when using sysdig -B(using ebpf)[1] on an aarch64 kernel
+with CONFIG_PERF_USE_VMALLOC enabled. sysdig -B works fine after rebuilding
+the kernel with the CONFIG_PERF_USE_VMALLOC disabled. I tracked it down to the
+if condition event->rb->nr_pages != nr_pages in perf_mmap is true where
+event->rb->nr_pages = 1 and nr_pages = 2048 resulting perf_mmap to return
+-EINVAL.
+
+[1] https://github.com/draios/sysdig
+
+> > Signed-off-by: Zhipeng Xie <xiezhipeng1@huawei.com>
+> 
+> If this is correct; this is also missing a Fixes: tag.
+
+Sorry, I don't know when this problem was introduced, so
+I have no idea which commit my patch fixes.from the git log,
+this problem seems to have existed for a long time, even before
+the ebpf feature was introduced.

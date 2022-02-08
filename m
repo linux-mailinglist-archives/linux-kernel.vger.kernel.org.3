@@ -2,59 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 183034ACDDD
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:18:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B62034ACDCB
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:18:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345798AbiBHBL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 20:11:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34410 "EHLO
+        id S1345830AbiBHBMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 20:12:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235231AbiBHBAm (ORCPT
+        with ESMTP id S1344290AbiBHBAm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 7 Feb 2022 20:00:42 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF582C061355;
-        Mon,  7 Feb 2022 17:00:40 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id og43so23227193ejc.0;
-        Mon, 07 Feb 2022 17:00:40 -0800 (PST)
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0152BC0612A4;
+        Mon,  7 Feb 2022 17:00:41 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id cn6so11266121edb.5;
+        Mon, 07 Feb 2022 17:00:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vOsFYs8M1ICwGJG7PLwZ9dqci40OC3z1WYDbknJ2Ydw=;
-        b=L685HJqIZwer95uTAt0qz3Gviz5M9rYSeXPrEPQiBf8DIudPbCUojjRXI6Lil0kGnh
-         vXHo4247ZDV9YMag0Xk4Gy9Ze4nwbq5+6BfyX1NChdqYaeuQ3NNlTtIAftbThrICQJhk
-         HCdxvzMjFxv7ICgC5RRXmqZtTb+bQ/rpgR4NJJu2FyqxSQoUT6RnS7mhFJaabdAaTAFB
-         tAePAVDwJgnrA8LdAd5oqmQitezdyxksenRfoCjoSGdb9a4pdKHT554uiHmkW2KhvEmG
-         Ki7CrIRV+zUjlo1IDkqAOzkkuLCz6zJJUGPJoheChWMdUoPNJbVUPO22iQAwKvDOUcKg
-         0+RA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=HTGRbwlc2wTEYrwUQpON9SLosHIdDZCHpfCw94mlpzY=;
+        b=WgMfcs+p3R5Y+RdipgsuX3NYA4JuPvS3OWO/Zqwk7yhvpsq06d0Bgf9S+8SizIysAN
+         n3L42HeIJGL8wR01vQv49bl1yZ3Od5CWNVId6j+CKn57L70mCswqgU/0MWqk3IgH9zgU
+         dJFMTfT0uWmnomAl5nlUTGMAaP/nvza/Cc33/XMqQe3sbADlbOHeRgk6Pp9iAg2SmwXJ
+         vcOdCGwXcwVK+Nslb1IPRsJtKDcQUdOh90wQQGET1JU/7xZoYG286nc0NZEcuXJY4zx5
+         j480bSR/QJufeZepIyfVGJAtnx02zcId4ZQSTqunPmELxqIu5f9DB/W9YBHrPPgNlcNI
+         u0vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vOsFYs8M1ICwGJG7PLwZ9dqci40OC3z1WYDbknJ2Ydw=;
-        b=ajoKIjncx/+79CAXF7qvJGordnpKbZrR69FqzAVsEjssHyLy8aOQXQa7x5OKTpaW3b
-         AUH0gClSY5qZZ53oQzTt/+vWnjG6a3JxAOnkZzQpRGTQaTGUiAvfpSOikQ2J7mheDIb6
-         1ovxlb7Axd2Jys+99Ypd/2e6G9YTEz9p+RnmWrT8AS24kfzqE1uBcE121ady5TFYqEPG
-         VT4x326shvKvfNV9CLi4tZ3hZ2GWw7TOQ2rEL9CEyg/BlNHX+gbclkqxOK/1k9ViMslJ
-         ojWnjX8v+1ATTAPp8M3aUqV/9Cr0g8zTOt6pU1DmbKuLlMvWFQzKTTMZpIzzpVUdZUd6
-         qTxw==
-X-Gm-Message-State: AOAM533h9p24gCmXgymQxXGtIPHaImksHyUYnFgBTyrH2qsvnnTRXtOs
-        G0Jn2arPKHbCE3622cq5fu8=
-X-Google-Smtp-Source: ABdhPJxrxooHH091K6iGi4dvPy4w5KUFYEWQFCftHnHSy7c7G5XkfuBJD/RYTmmBz6dFelAFXkYEHQ==
-X-Received: by 2002:a17:906:3e49:: with SMTP id t9mr1707493eji.683.1644282039253;
-        Mon, 07 Feb 2022 17:00:39 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=HTGRbwlc2wTEYrwUQpON9SLosHIdDZCHpfCw94mlpzY=;
+        b=y+3HCnMoaOOy26wl3krJ6i06VBMIgEHXTahU8Mm3oJ3YIy46I/y7fl4PdjzwWJCHtA
+         X5/iomIdjji3ezayLD1nUK51XWuHDQTuAXfeI6P/yZqqfU6Xs1W6pxpc91ZGiqCmZNkb
+         eY1eTc56nVcKA86jXog8OBCZt/o2wuPYq2mYewApnyZPffB12Q7e9yyOap+03yZAs6p9
+         xiCd9lkhL9hfpfoa71v1xhL4pWhzDJdHYg4ZABckB+7q7MMkIXgrcG6ya88mhrsFWVpm
+         6MXLoEwN29vOKk5kp4t1LCJdLKwh/55zaGp+RMjMBPVkfj53NwZiqs+e1fPofLDlfRNy
+         Vhvw==
+X-Gm-Message-State: AOAM531ZT2U4AxXW0ufV51krDZ+Q5sqgmrwXcpCsWdU/h7DpjMweTaxp
+        jkE5FuEIzdb/DvbZsVpRpv7ler6UDcm5gWWJAUY=
+X-Google-Smtp-Source: ABdhPJy9W8AXR7U1Azwfja2RBr5nCZOBH6CzUaJwggVEZNIR5PiJ6S+5H1CdMXLGXidM290sUntvYg==
+X-Received: by 2002:aa7:c917:: with SMTP id b23mr2083443edt.118.1644282040519;
+        Mon, 07 Feb 2022 17:00:40 -0800 (PST)
 Received: from localhost (92.40.202.227.threembb.co.uk. [92.40.202.227])
-        by smtp.gmail.com with ESMTPSA id p19sm4197644ejc.42.2022.02.07.17.00.37
+        by smtp.gmail.com with ESMTPSA id p19sm4197644ejc.42.2022.02.07.17.00.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 17:00:38 -0800 (PST)
+        Mon, 07 Feb 2022 17:00:40 -0800 (PST)
 From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 To:     paul@crapouillou.net, mturquette@baylibre.com, sboyd@kernel.org
 Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 0/3] Clock fixes for Ingenic SoCs
-Date:   Tue,  8 Feb 2022 01:00:45 +0000
-Message-Id: <20220208010048.211691-1-aidanmacdonald.0x0@gmail.com>
+Subject: [PATCH 1/3] clk: ingenic: Allow specifying common clock flags
+Date:   Tue,  8 Feb 2022 01:00:46 +0000
+Message-Id: <20220208010048.211691-2-aidanmacdonald.0x0@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220208010048.211691-1-aidanmacdonald.0x0@gmail.com>
+References: <20220208010048.211691-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -67,37 +69,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I ran across a problem trying to get Linux running on an Ingenic X1000 SoC:
-since the memory clock isn't referenced by any driver, it appears unused and
-gets disabled automatically. After that, the system hangs on any RAM access.
+Provide a flags field for clocks under the ingenic-cgu driver,
+which can be used to set generic common clock framework flags
+on the created clocks. For example, the CLK_IS_CRITICAL flag
+is needed for some clocks (such as CPU or memory) to stop them
+being automatically disabled.
 
-There is a hack in board-ingenic.c to forcibly enable the CPU clock, but this
-is insufficient for the X1000 since the memory clock has its own gate and mux
-that isn't tied to the CPU.
+Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+---
+ drivers/clk/ingenic/cgu.c | 2 +-
+ drivers/clk/ingenic/cgu.h | 3 +++
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
-This patch series fixes the bug by adding CLK_IS_CRITICAL flags to important
-clocks, which seems to be the approach used in many other SoC clock drivers.
-
-It's my first time submitting patches to the kernel so let me know if I
-messed anything up.
-
-Aidan MacDonald (3):
-  clk: ingenic: Allow specifying common clock flags
-  clk: ingenic: Mark critical clocks in Ingenic SoCs
-  mips: ingenic: Do not manually reference the CPU clock
-
- arch/mips/generic/board-ingenic.c | 26 --------------------------
- drivers/clk/ingenic/cgu.c         |  2 +-
- drivers/clk/ingenic/cgu.h         |  3 +++
- drivers/clk/ingenic/jz4725b-cgu.c |  2 ++
- drivers/clk/ingenic/jz4740-cgu.c  |  2 ++
- drivers/clk/ingenic/jz4760-cgu.c  |  2 ++
- drivers/clk/ingenic/jz4770-cgu.c  |  1 +
- drivers/clk/ingenic/jz4780-cgu.c  |  3 +++
- drivers/clk/ingenic/x1000-cgu.c   |  3 +++
- drivers/clk/ingenic/x1830-cgu.c   |  3 +++
- 10 files changed, 20 insertions(+), 27 deletions(-)
-
+diff --git a/drivers/clk/ingenic/cgu.c b/drivers/clk/ingenic/cgu.c
+index af31633a8862..861c50d6cb24 100644
+--- a/drivers/clk/ingenic/cgu.c
++++ b/drivers/clk/ingenic/cgu.c
+@@ -660,7 +660,7 @@ static int ingenic_register_clock(struct ingenic_cgu *cgu, unsigned idx)
+ 	ingenic_clk->idx = idx;
+ 
+ 	clk_init.name = clk_info->name;
+-	clk_init.flags = 0;
++	clk_init.flags = clk_info->flags;
+ 	clk_init.parent_names = parent_names;
+ 
+ 	caps = clk_info->type;
+diff --git a/drivers/clk/ingenic/cgu.h b/drivers/clk/ingenic/cgu.h
+index bfc2b9c38a41..147b7df0d657 100644
+--- a/drivers/clk/ingenic/cgu.h
++++ b/drivers/clk/ingenic/cgu.h
+@@ -136,6 +136,7 @@ struct ingenic_cgu_custom_info {
+  * struct ingenic_cgu_clk_info - information about a clock
+  * @name: name of the clock
+  * @type: a bitmask formed from CGU_CLK_* values
++ * @flags: common clock flags to set on this clock
+  * @parents: an array of the indices of potential parents of this clock
+  *           within the clock_info array of the CGU, or -1 in entries
+  *           which correspond to no valid parent
+@@ -161,6 +162,8 @@ struct ingenic_cgu_clk_info {
+ 		CGU_CLK_CUSTOM		= BIT(7),
+ 	} type;
+ 
++	unsigned long flags;
++
+ 	int parents[4];
+ 
+ 	union {
 -- 
 2.34.1
 

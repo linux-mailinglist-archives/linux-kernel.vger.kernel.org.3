@@ -2,166 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBAC84ADBB0
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 15:56:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 505F84ADBCB
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 15:58:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378708AbiBHOzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 09:55:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48154 "EHLO
+        id S1379005AbiBHO5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 09:57:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378789AbiBHOzS (ORCPT
+        with ESMTP id S1378991AbiBHO51 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 09:55:18 -0500
-Received: from IND01-BMX-obe.outbound.protection.outlook.com (mail-bmxind01olkn2040.outbound.protection.outlook.com [40.92.103.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C49FC061579;
-        Tue,  8 Feb 2022 06:55:17 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=c/RaUpfE+i6cLfq1zRwScRhO5byBr+oRsoyUL/n5aiKx9G/kjRwWSIsSF0HxrdYfaQXOvvLjWcqJo8KuCFQh1Lt7y2ih0REgk+9iyNqMcYWA3J8ej2EBqBN/tjNzl0X6Ja9S5B/+ZVUViBd+cczAQe2VcrucQ8jfMVZZdHF82zqc3gLEwJznuwxXOxkCrOZu0XCkZRwgjKqk+kkL9nb4x+g+0bzwnQi5FGyEUjWTUF2W/96QeAGJotCoK+8DYbcmWCc762x41BfwP4kpRwRRND63E+NfdNH4mnXYKpp9N10xwSsIGB4Rz1oQpCAer9QWt9+ShZeocKyEeKou5Twtrg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bUtTusyOT4md75lry1P1HozY6Mx/2UJg5nQjOAuY/3Y=;
- b=B0YIz8RZ9ljc2UVjyeexCtHECPF08Yxh7jfSTmI7fLPXKicOKGuJT/77yJLRUDKlsoPyesXfVn04tEKV0/HUW1WrZcvZT1NFxo90UfuJqTzWw2qnTtV2Fo6PkSyIc15LopMPaTtr/TlQgOym0ATcFJAxZp+VH8evvi7X4HNgSfr/IM04mm3+NBbS/jTiVrjK6IEOgUb11F2q2JTi7ddV3rGJKQ03MqkPgKE7mjx6iE2huoqlbJrOqvvoZlZnMOCTzNdjeDW0FgZA7R4p6u4tknaMtaCRuvP/fpvIjofAEzHsM3q9vMntU8lGK25XqX6sgrwfyzOHNdXYwb9j4mXtJA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bUtTusyOT4md75lry1P1HozY6Mx/2UJg5nQjOAuY/3Y=;
- b=unejyP3mhe05eN4d3HTv6HR3GzR+WHbwGckOGiYzJRzml6jjVvX7pOog/ThRs7rk8hoh0O0bK9d6Tn3zWT30SDlNc+j2pVJzkUXanU6Im4mqN1tmA5hZe4mgv179rr2KjTh9OTcsGXix8Hj0kFcYKs1FmiJgHWXWopN137EX+do5SH0BTcN1qbI4L82edHGT3U3IN/mOiaxUkbt7RNYb5bPUDKxTcA2wxZA5If8x9T2NTlHU6slnje1lWw8ZlIYmYTnwYiVsi7nurQT5MFXwapzCK+DX0dKTrmXfOb7XiaCyMyDrXsmzNqffWy0mN5XY78J1Hh9isGPlHbzsXFBIOA==
-Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:1b::13)
- by BMXPR01MB4759.INDPRD01.PROD.OUTLOOK.COM (2603:1096:b01:3::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Tue, 8 Feb
- 2022 14:55:12 +0000
-Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::d19b:7cd1:3760:b055]) by PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::d19b:7cd1:3760:b055%9]) with mapi id 15.20.4951.019; Tue, 8 Feb 2022
- 14:55:12 +0000
-From:   Aditya Garg <gargaditya08@live.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-CC:     Jeremy Kerr <jk@ozlabs.org>, Matthew Garrett <mjg59@srcf.ucam.org>,
-        Orlando Chamberlain <redecorating@protonmail.com>,
-        Aun-Ali Zaidi <admin@kodeit.net>,
-        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [BUG SEVERE] Failure to enable EFI Runtime services on T2 Macs
-Thread-Topic: [BUG SEVERE] Failure to enable EFI Runtime services on T2 Macs
-Thread-Index: AQHYHPN9yWRx6QwxHkme7awzoxWFeKyJr1oAgAAOewA=
-Date:   Tue, 8 Feb 2022 14:55:12 +0000
-Message-ID: <2A5B5047-23DE-4660-9ABD-446EE264CC54@live.com>
-References: <E5DB4C43-F2AB-412A-9891-C13255374AD9@live.com>
- <CAMj1kXEUudnnX8FaAhtUmcKB+jt237BUTsMrNC8ZoOepf4P3pQ@mail.gmail.com>
-In-Reply-To: <CAMj1kXEUudnnX8FaAhtUmcKB+jt237BUTsMrNC8ZoOepf4P3pQ@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tmn:  [2Mj+BrPDiwCh14Icn7nf1NO6WYuyCFAe/LSDpc49abQHuVX2DeKhnIeAJioc0lRP]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 08714fdb-5138-45ec-4fdc-08d9eb130250
-x-ms-traffictypediagnostic: BMXPR01MB4759:EE_
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: w1qfulWiPOoeYNxOIXS3awvfT+1HlWNqb5DVZuTdVuVfHGbUQoBlEF8d23QcuLPmuoTjxZZC2d+0fPu/QFHm4SzQTqdYhbe0aatrmS2URRASVMQyJ8RYK6UOB9rc4K/veScS9hR26fMf1iZYzFmkd9D3ZCd8fXH8PewDwzvyLT4c2h9Tc5yaVkBL6fx+HXhpEOJ6aJCbRn6M7UWTqJZQpssbBNQQpMpJubmnZABuTqB5USsX+MsCQ4KBoqcnPJYSO7vGH/mF1cQODCHEt1UWsUBc5BQJ9U2z1ZE3krIyjh2Bw1ooGF5mp5T5B3IbjmLaCAA4Oa8I16VOQzMd0ngKpGEtTUisxbouJPhL9LDiisuNRShlqXvzHtBLtpwZpkmurGdRN7EaPhkRwA1rMoKynpGGpcR2//LXgyOp8gpcINQ+iVk+6lsr0Jc0otgaZ6LuS1UOocB0MmOA0Hj+lacS8tqUaBww3up/gY6RtMiOUKGaafLNyK3O9goI/JHspDSv+NujBC5TXKGxDslhDnGb8WxdVuQh7optcpzIE/k2bacyxt+WTyJwQ7TM9hdEz/L1SEuqhv8E0FdYtW9DTKWX3r+VC2JwybHNP9c56Q4o3/r3kyW9e7eqdMATQqkfhfKIm9u+FoSderMa2UGi4jzrz7TE95dd52+s+YqX5jovsLU=
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Xz+tAYMh6cVFspX/EZyRwi96O5a9RTNFlWfc5uXnSmy+g59IM2Gk+mikYKW0?=
- =?us-ascii?Q?LnYDoSWu+STTU2+qayTRdwTgRMfkyviR8rsq8bdyUflpiMyS1zfAZNyBw53Z?=
- =?us-ascii?Q?TThvdzwHXHewvOXovE71iaEXYnaWAG4gdW8ApZ1TT1nbwg9Blbb4XyhYgglF?=
- =?us-ascii?Q?Z868G7h6duY+SVXaBur4mTkpZX6A6C/Mh8RILnNpD61ZO+unG8/XrDwQ5lfx?=
- =?us-ascii?Q?c0C+VgwAZ5+kqZpMnLIg1QfwQUDYCa+ICjW7Vq2gc5Iz8dileR4zTY79kgcQ?=
- =?us-ascii?Q?yY0zc5RXA1lYTVYew16I+XUg7hQ6ttkuA/+KQ5gndlnS1D6YTi9hWju0VmdC?=
- =?us-ascii?Q?8u5kHCigSY77brCJhJPF8wE9+64xDqrcllGXClHAs8J/80/0EBUR8esPRNbb?=
- =?us-ascii?Q?sKS7JdqoagUNgQPecTs276Ff4zlx5Q7D6mU0o06xlM66AEGZCe6CIjz3GKDK?=
- =?us-ascii?Q?3Dsh/PrwH9RHhvG7ANgCa6rP8h1mDjjibCMGVVeTpjdRn8ucoccPj9AvYZCM?=
- =?us-ascii?Q?bERxCVDUvRj3A8j8h35//t2DFrJTDwzFu5AYCPvRYZpNDsY2D4PorfHnWhlO?=
- =?us-ascii?Q?BKiw09y1qU0Wuxj8/BAdV3HkJ9amjiRcdN+cYZYQcgKmGYmKlViALQBO1OGg?=
- =?us-ascii?Q?M5bB7pUCL6L57EaYU1bgB14z1VEEifyPvDxkk5jzM18qu+1t3kxKkLjQdlAc?=
- =?us-ascii?Q?EET5u/5seVKRo82z02r2MZzPCRgBc/nbisBgcPD0CvoTzRYporaDqoLjifqy?=
- =?us-ascii?Q?o/wLqpUoRT/3EoEmSEmjmScgT/QkPnorH197XUMUSm4ilp9BlQDkxC5u4imS?=
- =?us-ascii?Q?22bosdfSj1L0pOpGNYtW0I/oRL+1OHrBhgHqrTnPDpzVTyRqahKHYvAgWJp5?=
- =?us-ascii?Q?CRxD+02CBRV7+6VHE5nMKNgQqGBz9/hlDX5MsE2IR0KIrAhn3xV3cGEJzuyW?=
- =?us-ascii?Q?xEe48bLEVsBwscCW/aGcIqjOIidlZH9HrjimWEmQ7VMJO2JUI/8WTVN21h9g?=
- =?us-ascii?Q?2b4CUrAcJnwgwPzX9Nq/Ul+M2g=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <D236C2EBE10B1346A17B09B513A1DBEA@INDPRD01.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: quoted-printable
+        Tue, 8 Feb 2022 09:57:27 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EE08C06157A;
+        Tue,  8 Feb 2022 06:57:26 -0800 (PST)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 218EfT69029974;
+        Tue, 8 Feb 2022 14:57:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=YIELr6G77NKbsfwh+N0gl4RoNyBwUD/wqOTeC2MHvk8=;
+ b=Pj11Ydg7PLoNTBbkwm7aEp/YqyrrD8SLXrFgtmJLN5KiSjUNmaA9OL+a2g9EC/siBfzO
+ MCK1OqIgUwqBxhq0lgkP12EF6iN37BdZaMm3n2iRhjnTxlTkG+C6imMiIASAQ7iq7H2V
+ 4mzQWP5ZJdAgXdTRVVXK3OWT4VI1QL3cskGX+jmDjjRz0hBQg7M4SKAUydxeNlEtvRkw
+ AcGx5mGyUl2Z1xwzVZs2YMRC6TN2JZnyPqLV+Y8M8MOkHYtlTvYnom/38+GhtzCf8fRQ
+ 4nji+4wTtQCnoVuzX1CiMeG0iTO/TIkAE3TRxbOs2SFNBfUhM1tEy3g3qEPa48+7uEDx PA== 
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e231a2h54-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Feb 2022 14:57:23 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 218EqWTt028404;
+        Tue, 8 Feb 2022 14:57:22 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma01fra.de.ibm.com with ESMTP id 3e1gv9dme0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Feb 2022 14:57:22 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 218ElE9u34472284
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 8 Feb 2022 14:47:14 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 59582A405B;
+        Tue,  8 Feb 2022 14:57:19 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 76450A405C;
+        Tue,  8 Feb 2022 14:57:18 +0000 (GMT)
+Received: from sig-9-65-88-92.ibm.com (unknown [9.65.88.92])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue,  8 Feb 2022 14:57:18 +0000 (GMT)
+Message-ID: <329b719e7fe302a9fa13325687061634a8d99977.camel@linux.ibm.com>
+Subject: Re: [PATCH v4 0/8] ima: support fs-verity digests and signatures
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-integrity@vger.kernel.org,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 08 Feb 2022 09:57:17 -0500
+In-Reply-To: <YgIEsLsoe/sHsjBr@sol.localdomain>
+References: <20220208014140.483447-1-zohar@linux.ibm.com>
+         <YgIEsLsoe/sHsjBr@sol.localdomain>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: dNHKBCjZs7DhyG0jU034nOodRBFZCB1R
+X-Proofpoint-GUID: dNHKBCjZs7DhyG0jU034nOodRBFZCB1R
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 08714fdb-5138-45ec-4fdc-08d9eb130250
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Feb 2022 14:55:12.5047
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BMXPR01MB4759
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-08_04,2022-02-07_02,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ lowpriorityscore=0 malwarescore=0 impostorscore=0 adultscore=0
+ mlxlogscore=999 suspectscore=0 spamscore=0 bulkscore=0 mlxscore=0
+ phishscore=0 priorityscore=1501 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2201110000 definitions=main-2202080090
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 2022-02-07 at 21:50 -0800, Eric Biggers wrote:
+> On Mon, Feb 07, 2022 at 08:41:32PM -0500, Mimi Zohar wrote:
+> > Support for including fs-verity file digests and signatures in the IMA
+> > measurement list as well as verifying the fs-verity file digest based
+> > signatures, both based on IMA policy rules, was discussed prior to
+> > fs-verity being upstreamed[1,2].
+> > 
+> > Support for including fs-verity file digests in the 'd-ng' template field
+> > is based on a new policy rule option named 'digest_type=verity'.  A new
+> > template field named 'd-type' as well as a new template named 'ima-ngv2'
+> > are defined to differentiate between the regular IMA file hashes from the
+> > fs-verity file digests (tree-hash based file hashes) stored in the 'd-ng'
+> > template field.
+> > 
+> > Support for verifying fs-verity based file signatures stored in the
+> > 'security.ima' xattr is similarly based on the policy rule option
+> > 'digest_type=verity'.
+> > 
+> > To differentiate IMA from fs-verity file signatures a new xattr_type
+> > named IMA_VERITY_DIGSIG is defined.  Signature version 3, which is a hash
+> > of the ima_file_id struct, disambiguates the signatures stored as
+> > 'security.ima' xattr.  fs-verity only supports the new signature format
+> > (version 3).  To prevent abuse of the different signature formats, policy
+> > rules must be limited to a specific signature version.
+> > 
+> > [1] https://events19.linuxfoundation.org/wp-content/uploads/2017/11/fs-verify_Mike-Halcrow_Eric-Biggers.pdf
+> > [2] Documentation/filesystems/fsverity.rst
+> 
+> What does this patchset apply to?  I'm no longer able to apply it.  I tried
+> both v5.17-rc3, and the next-integrity branch of
+> https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git.
 
+Just refreshed 'next-integrity' now.
 
-> On 08-Feb-2022, at 7:33 PM, Ard Biesheuvel <ardb@kernel.org> wrote:
->=20
-> On Tue, 8 Feb 2022 at 14:55, Aditya Garg <gargaditya08@live.com> wrote:
->>=20
->> On using some specific kernel configuration, on Macs with the T2 Securit=
-y chip, EFI Runtime services fail to start. Some logs which may be useful a=
-re as follows :-
->>=20
->> Feb 08 17:11:11 MacBook kernel: [Firmware Bug]: Page fault caused by fir=
-mware at PA: 0xffffa79840068000
->> Feb 08 17:11:11 MacBook kernel: WARNING: CPU: 11 PID: 150 at arch/x86/pl=
-atform/efi/quirks.c:735 efi_crash_gracefully_on_page_fault+0x50/0xd0
->=20
-> This means the firmware is broken. There is very little we can do
-> about this beyond disabling EFI runtime services entirely on such
-> systems.
->=20
-> ...
->=20
->> The kernel configuration where this bug is seen is on https://github.com=
-/t2linux/T2-Ubuntu-Kernel/blob/Mainline/templates/default-config
->>=20
->> I had an old kernel configuration, where I did not face this issue and w=
-as easily able to write to the NVRAM. That kernel configuration is on https=
-://github.com/t2linux/T2-Ubuntu-Kernel/blob/b5c20b8c7689251dd943e22dbe02cef=
-9020db8d1/templates/default-config
->>=20
->> I believe these lines in the kernel config, which are present in the for=
-mer but absent in the latter are causing the issue :-
->>=20
-> ...
->=20
->> Especially CONFIG_LOAD_UEFI_KEYS=3Dy is which I guess may be the culprit=
-.
->>=20
->=20
-> Yes, that seems likely.
->=20
->> I request you to reply to my issue as soon as possible
->>=20
->=20
-> Please stop demanding attention like this, even though it is thinly
-> veiled as courteous.
->=20
-> If you want to run bleeding edge kernels on non-standard EFI hardware,
-> you have to be able to sort yourself out to some extent. I am the
-> EFI-on-Linux maintainer, but that doesn't mean I work for you and have
-> to be on call to fix your problems.
+-- 
+thanks,
 
-Looks like I offended you. Heartiest apologies for that. I guess being from=
- a non English background my works had a negative effect on you. My intenti=
-on was just to get help, not complain.
-
-Regards
-Aditya
+Mimi
 

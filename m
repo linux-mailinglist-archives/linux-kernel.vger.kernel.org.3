@@ -2,264 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 098E44AD7F9
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:55:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5894E4AD7FF
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:56:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349372AbiBHLyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 06:54:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44310 "EHLO
+        id S1356122AbiBHLzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 06:55:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239521AbiBHLyR (ORCPT
+        with ESMTP id S1356697AbiBHLzn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 06:54:17 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E8BC03FEC9
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 03:54:16 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E3D281EC02B9;
-        Tue,  8 Feb 2022 12:54:10 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1644321251;
+        Tue, 8 Feb 2022 06:55:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DB6E2C03FECA
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 03:55:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644321342;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=uptMnPYFOV21XdwltxMzn4qXCKEGhUF3xlm4y4miDxM=;
-        b=T6+QvWNqSkurVXjh394cF3DZoIQPSwiqBpCqqjNBdWZtKBmqeH68l8ixpwkM4oHML/yMn0
-        WaVZT4zZyZfItTCp/5tz3lkmb6jSooEJIRIm7eMxLrZffQRDdxOWfSH/gwo/Xp4GZGTfeH
-        wfUjUtCXQm4x2nHbcbztc5ZFiaoPedM=
-Date:   Tue, 8 Feb 2022 12:54:05 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/6] x86/cpu: Allow feature bit names from
- /proc/cpuinfo in clearcpuid=
-Message-ID: <YgJZ3YkJdNstZ/ZH@zn.tnic>
-References: <20220127115626.14179-1-bp@alien8.de>
- <20220127115626.14179-2-bp@alien8.de>
- <202202071402.DEFD6C9@keescook>
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CrvvLV6pJtPHCmu67NLbQwinnrYKaoWgfpouCR5Xtw0=;
+        b=VsFN/hX3Xl6nQTIYCI7fR0zpulOBtUMbCNbCEMMLyauRazxDRyI0+YUHPPYAcxa8pv8xVK
+        6xm4OShHg4dcn2+1j9rC0cMVnCfMwXB3XCOgXpkuh5BE2iNIqmbXlBlN3HqborX2aZg491
+        N6imfDtbkQ7RhqOaj5yRoCod2GfQnz0=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-459-FDBsLofiMVuJy2ja0QKZ6g-1; Tue, 08 Feb 2022 06:55:37 -0500
+X-MC-Unique: FDBsLofiMVuJy2ja0QKZ6g-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 47D0C1091DA5;
+        Tue,  8 Feb 2022 11:55:31 +0000 (UTC)
+Received: from starship (unknown [10.40.192.15])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 529196E1EA;
+        Tue,  8 Feb 2022 11:55:08 +0000 (UTC)
+Message-ID: <0c20990f2543413f4a087b7918cff14db48bc774.camel@redhat.com>
+Subject: Re: [PATCH RESEND 07/30] KVM: x86: nSVM: deal with L1 hypervisor
+ that intercepts interrupts but lets L2 control them
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
+Cc:     Tony Luck <tony.luck@intel.com>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-kernel@vger.kernel.org,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        intel-gvt-dev@lists.freedesktop.org,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Sean Christopherson <seanjc@google.com>,
+        David Airlie <airlied@linux.ie>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Jim Mattson <jmattson@google.com>, x86@kernel.org,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Borislav Petkov <bp@alien8.de>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>
+Date:   Tue, 08 Feb 2022 13:55:07 +0200
+In-Reply-To: <dd9305d6-1e3a-24f9-1d48-c5dac440112d@redhat.com>
+References: <20220207155447.840194-1-mlevitsk@redhat.com>
+         <20220207155447.840194-8-mlevitsk@redhat.com>
+         <dd9305d6-1e3a-24f9-1d48-c5dac440112d@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <202202071402.DEFD6C9@keescook>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 02:04:04PM -0800, Kees Cook wrote:
-> I like the taint flag addition!
+On Tue, 2022-02-08 at 12:33 +0100, Paolo Bonzini wrote:
+> On 2/7/22 16:54, Maxim Levitsky wrote:
+> > Fix a corner case in which the L1 hypervisor intercepts
+> > interrupts (INTERCEPT_INTR) and either doesn't set
+> > virtual interrupt masking (V_INTR_MASKING) or enters a
+> > nested guest with EFLAGS.IF disabled prior to the entry.
+> > 
+> > In this case, despite the fact that L1 intercepts the interrupts,
+> > KVM still needs to set up an interrupt window to wait before
+> > injecting the INTR vmexit.
+> > 
+> > Currently the KVM instead enters an endless loop of 'req_immediate_exit'.
+> > 
+> > Exactly the same issue also happens for SMIs and NMI.
+> > Fix this as well.
+> > 
+> > Note that on VMX, this case is impossible as there is only
+> > 'vmexit on external interrupts' execution control which either set,
+> > in which case both host and guest's EFLAGS.IF
+> > are ignored, or not set, in which case no VMexits are delivered.
+> > 
+> > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> > ---
+> >   arch/x86/kvm/svm/svm.c | 17 +++++++++++++----
+> >   1 file changed, 13 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> > index 9a4e299ed5673..22e614008cf59 100644
+> > --- a/arch/x86/kvm/svm/svm.c
+> > +++ b/arch/x86/kvm/svm/svm.c
+> > @@ -3372,11 +3372,13 @@ static int svm_nmi_allowed(struct kvm_vcpu *vcpu, bool for_injection)
+> >   	if (svm->nested.nested_run_pending)
+> >   		return -EBUSY;
+> >   
+> > +	if (svm_nmi_blocked(vcpu))
+> > +		return 0;
+> > +
+> >   	/* An NMI must not be injected into L2 if it's supposed to VM-Exit.  */
+> >   	if (for_injection && is_guest_mode(vcpu) && nested_exit_on_nmi(svm))
+> >   		return -EBUSY;
+> > -
+> > -	return !svm_nmi_blocked(vcpu);
+> > +	return 1;
+> >   }
+> >   
+> >   static bool svm_get_nmi_mask(struct kvm_vcpu *vcpu)
+> > @@ -3428,9 +3430,13 @@ bool svm_interrupt_blocked(struct kvm_vcpu *vcpu)
+> >   static int svm_interrupt_allowed(struct kvm_vcpu *vcpu, bool for_injection)
+> >   {
+> >   	struct vcpu_svm *svm = to_svm(vcpu);
+> > +
+> >   	if (svm->nested.nested_run_pending)
+> >   		return -EBUSY;
+> >   
+> > +	if (svm_interrupt_blocked(vcpu))
+> > +		return 0;
+> > +
+> >   	/*
+> >   	 * An IRQ must not be injected into L2 if it's supposed to VM-Exit,
+> >   	 * e.g. if the IRQ arrived asynchronously after checking nested events.
+> > @@ -3438,7 +3444,7 @@ static int svm_interrupt_allowed(struct kvm_vcpu *vcpu, bool for_injection)
+> >   	if (for_injection && is_guest_mode(vcpu) && nested_exit_on_intr(svm))
+> >   		return -EBUSY;
+> >   
+> > -	return !svm_interrupt_blocked(vcpu);
+> > +	return 1;
+> >   }
+> >   
+> >   static void svm_enable_irq_window(struct kvm_vcpu *vcpu)
+> > @@ -4169,11 +4175,14 @@ static int svm_smi_allowed(struct kvm_vcpu *vcpu, bool for_injection)
+> >   	if (svm->nested.nested_run_pending)
+> >   		return -EBUSY;
+> >   
+> > +	if (svm_smi_blocked(vcpu))
+> > +		return 0;
+> > +
+> >   	/* An SMI must not be injected into L2 if it's supposed to VM-Exit.  */
+> >   	if (for_injection && is_guest_mode(vcpu) && nested_exit_on_smi(svm))
+> >   		return -EBUSY;
+> >   
+> > -	return !svm_smi_blocked(vcpu);
+> > +	return 1;
+> >   }
+> >   
+> >   static int svm_enter_smm(struct kvm_vcpu *vcpu, char *smstate)
+> 
+> Can you prepare a testcase for at least the interrupt case?
 
-IKR. See below.
 
-> Even though it reports what it does actually clear, do you think it
-> might be more "friendly" to yell about unknown stuff too? i.e.:
+Yep, I already wrote a kvm unit tests for all the cases, and I will send them very soon.
 
-Well, this thing is not supposed to be used by normal users anyway.
-There was even talk of completely removing it but CPU folks wanna do
-some experiments with it, that's why we kept it.
+Best regards,
+	Maxim Levitsky
+> 
+> Thanks,
+> 
+> Paolo
+> 
 
-And for exactly the same reason it taints the kernel - so that we know
-that it is an "out-of-spec" situation.
 
-I even caused an explosion while testing it due to creating an
-impossible configuration of features.
-
-So, folks who use it better know what they're doing.
-
-> [    0.000000] Clearing CPUID bits: unknown bit 'succory'
-> [    0.000000] Clearing CPUID bits: de 13:24 smca bmi1 3dnow
-
-How's the below (I don't want to disrupt the pr_cont flow too much):
-
-On the cmdline I have:
-
-... clearcpuid=de,440,smca,succory,bmi1,3dnow,bla,foo ...
-
-which says:
-
-[    0.000000] Clearing CPUID bits: de 13:24 smca (unknown: succory) bmi1 3dnow (unknown: bla) (unknown: foo)
-
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-
-Thx.
-
----
-From: Borislav Petkov <bp@suse.de>
-Date: Thu, 27 Jan 2022 12:56:21 +0100
-Subject: [PATCH] x86/cpu: Allow feature bit names from /proc/cpuinfo in clearcpuid=
-
-Having to give the X86_FEATURE array indices in order to disable a
-feature bit for testing is not really user-friendly. So accept the
-feature bit names too.
-
-Some feature bits don't have names so there the array indices are still
-accepted, of course.
-
-Clearing CPUID flags is not something which should be done in production
-so taint the kernel too.
-
-An exemplary cmdline would then be something like:
-
-  clearcpuid=de,440,smca,succory,bmi1,3dnow
-
-("succory" is wrong on purpose). And it says:
-
-  [   ... ] Clearing CPUID bits: de 13:24 smca (unknown: succory) bmi1 3dnow
-
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Link: https://lore.kernel.org/r/20220127115626.14179-2-bp@alien8.de
----
- .../admin-guide/kernel-parameters.txt         | 11 +++-
- arch/x86/include/asm/cpufeature.h             |  7 ++-
- arch/x86/kernel/cpu/common.c                  | 62 +++++++++++++++----
- 3 files changed, 63 insertions(+), 17 deletions(-)
-
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index f5a27f067db9..b67d0cf27997 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -631,12 +631,17 @@
- 			Defaults to zero when built as a module and to
- 			10 seconds when built into the kernel.
- 
--	clearcpuid=BITNUM[,BITNUM...] [X86]
-+	clearcpuid=X[,X...] [X86]
- 			Disable CPUID feature X for the kernel. See
- 			arch/x86/include/asm/cpufeatures.h for the valid bit
--			numbers. Note the Linux specific bits are not necessarily
--			stable over kernel options, but the vendor specific
-+			numbers X. Note the Linux-specific bits are not necessarily
-+			stable over kernel options, but the vendor-specific
- 			ones should be.
-+			X can also be a string as appearing in the flags: line
-+			in /proc/cpuinfo which does not have the above
-+			instability issue. However, not all features have names
-+			in /proc/cpuinfo.
-+			Note that using this option will taint your kernel.
- 			Also note that user programs calling CPUID directly
- 			or using the feature without checking anything
- 			will still see it. This just prevents it from
-diff --git a/arch/x86/include/asm/cpufeature.h b/arch/x86/include/asm/cpufeature.h
-index 1261842d006c..66d3e3b1d24d 100644
---- a/arch/x86/include/asm/cpufeature.h
-+++ b/arch/x86/include/asm/cpufeature.h
-@@ -34,14 +34,17 @@ enum cpuid_leafs
- 	CPUID_8000_001F_EAX,
- };
- 
-+#define X86_CAP_FMT_NUM "%d:%d"
-+#define x86_cap_flag_num(flag) ((flag) >> 5), ((flag) & 31)
-+
- #ifdef CONFIG_X86_FEATURE_NAMES
- extern const char * const x86_cap_flags[NCAPINTS*32];
- extern const char * const x86_power_flags[32];
- #define X86_CAP_FMT "%s"
- #define x86_cap_flag(flag) x86_cap_flags[flag]
- #else
--#define X86_CAP_FMT "%d:%d"
--#define x86_cap_flag(flag) ((flag) >> 5), ((flag) & 31)
-+#define X86_CAP_FMT X86_CAP_FMT_NUM
-+#define x86_cap_flag x86_cap_flag_num
- #endif
- 
- /*
-diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index 64deb7727d00..cd24372253ee 100644
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -1314,8 +1314,8 @@ static void detect_nopl(void)
- static void __init cpu_parse_early_param(void)
- {
- 	char arg[128];
--	char *argptr = arg;
--	int arglen, res, bit;
-+	char *argptr = arg, *opt;
-+	int arglen, taint = 0;
- 
- #ifdef CONFIG_X86_32
- 	if (cmdline_find_option_bool(boot_command_line, "no387"))
-@@ -1343,21 +1343,59 @@ static void __init cpu_parse_early_param(void)
- 		return;
- 
- 	pr_info("Clearing CPUID bits:");
--	do {
--		res = get_option(&argptr, &bit);
--		if (res == 0 || res == 3)
--			break;
- 
--		/* If the argument was too long, the last bit may be cut off */
--		if (res == 1 && arglen >= sizeof(arg))
--			break;
-+	while (argptr) {
-+		bool found __maybe_unused = false;
-+		unsigned int bit;
-+
-+		opt = strsep(&argptr, ",");
-+
-+		/*
-+		 * Handle naked numbers first for feature flags which don't
-+		 * have names.
-+		 */
-+		if (!kstrtouint(opt, 10, &bit)) {
-+			if (bit < NCAPINTS * 32) {
-+
-+				/* empty-string, i.e., ""-defined feature flags */
-+				if (!x86_cap_flags[bit])
-+					pr_cont(" " X86_CAP_FMT_NUM, x86_cap_flag_num(bit));
-+				else
-+					pr_cont(" " X86_CAP_FMT, x86_cap_flag(bit));
-+
-+				setup_clear_cpu_cap(bit);
-+				taint++;
-+			}
-+			/*
-+			 * The assumption is that there are no feature names with only
-+			 * numbers in the name thus go to the next argument.
-+			 */
-+			continue;
-+		}
-+
-+#ifdef CONFIG_X86_FEATURE_NAMES
-+		for (bit = 0; bit < 32 * NCAPINTS; bit++) {
-+			if (!x86_cap_flag(bit))
-+				continue;
- 
--		if (bit >= 0 && bit < NCAPINTS * 32) {
--			pr_cont(" " X86_CAP_FMT, x86_cap_flag(bit));
-+			if (strcmp(x86_cap_flag(bit), opt))
-+				continue;
-+
-+			pr_cont(" %s", opt);
- 			setup_clear_cpu_cap(bit);
-+			taint++;
-+			found = true;
-+			break;
- 		}
--	} while (res == 2);
-+
-+		if (!found)
-+			pr_cont(" (unknown: %s)", opt);
-+#endif
-+	}
- 	pr_cont("\n");
-+
-+	if (taint)
-+		add_taint(TAINT_CPU_OUT_OF_SPEC, LOCKDEP_STILL_OK);
- }
- 
- /*
--- 
-2.29.2
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette

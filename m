@@ -2,141 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11AEB4AD96C
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 14:18:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBA634AD99C
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 14:22:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243250AbiBHNSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 08:18:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53406 "EHLO
+        id S1358534AbiBHNVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 08:21:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351538AbiBHMUS (ORCPT
+        with ESMTP id S1354305AbiBHMVf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 07:20:18 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE35C03FEC0;
-        Tue,  8 Feb 2022 04:20:16 -0800 (PST)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JtMWN5SFgzbkJT;
-        Tue,  8 Feb 2022 20:19:12 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 8 Feb 2022 20:20:12 +0800
-CC:     "Zengtao (B)" <prime.zeng@hisilicon.com>,
-        "liuqi (BA)" <liuqi115@huawei.com>,
-        Zhangshaokun <zhangshaokun@hisilicon.com>,
-        Linuxarm <linuxarm@huawei.com>,
-        "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>
-Subject: Re: [PATCH v3 8/8] iommu/arm-smmu-v3: Make default domain type of
- HiSilicon PTT device to identity
-To:     John Garry <john.garry@huawei.com>,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "helgaas@kernel.org" <helgaas@kernel.org>,
-        "alexander.shishkin@linux.intel.com" 
-        <alexander.shishkin@linux.intel.com>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "mathieu.poirier@linaro.org" <mathieu.poirier@linaro.org>,
-        "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
-        "mike.leach@linaro.org" <mike.leach@linaro.org>,
-        "leo.yan@linaro.org" <leo.yan@linaro.org>,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        "daniel.thompson@linaro.org" <daniel.thompson@linaro.org>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        Shameerali Kolothum Thodi 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "acme@kernel.org" <acme@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "coresight@lists.linaro.org" <coresight@lists.linaro.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>
-References: <20220124131118.17887-1-yangyicong@hisilicon.com>
- <20220124131118.17887-9-yangyicong@hisilicon.com>
- <4f6f6e0f-4398-3018-cc35-6aa7ea1305fe@huawei.com>
- <ae45a637-2c67-4126-3007-6829320d5659@huawei.com>
- <144329a3-8125-1975-7f23-a247343a679e@huawei.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <d92c9d64-6a89-b7d5-02e3-519ca32f27e9@huawei.com>
-Date:   Tue, 8 Feb 2022 20:20:12 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Tue, 8 Feb 2022 07:21:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 27C10C03FECA
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 04:21:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644322893;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+Mdb5Ebivxr6jzHOzSN/tIiK6XfSCOdpNYf9wIWORf4=;
+        b=WuW6p77VAqLuteBfFWAbrbaAHkECQ9ZGu1LuSNak8lrZbeWxXynP/gazhd2ZBkCRNDvVzY
+        /Ct+593wp4eD9S7l874zPtWm7xfWCv1KsNmAIXunyiy+oXh7D+8vrsNO5kfZjtFow1rAhr
+        LhsV8nT0YqB0egt8k1UikwHTtNdMDws=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-397-qT6QavVNNGij7L-10S9VwQ-1; Tue, 08 Feb 2022 07:21:32 -0500
+X-MC-Unique: qT6QavVNNGij7L-10S9VwQ-1
+Received: by mail-wr1-f71.google.com with SMTP id h24-20020adfaa98000000b001e33eb81e71so274026wrc.9
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 04:21:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+Mdb5Ebivxr6jzHOzSN/tIiK6XfSCOdpNYf9wIWORf4=;
+        b=wz5Diq/7kCltxWZw3UTAVCK7WlHQGm/lTavcECielXS7PMQzi1wriJxPpUFOgYT2SN
+         Qnvuj4LPj2PP7eZcFuhGNkllU3aj/TgPJDusugh9L2SkQmTAHr9DDXqAQu335WQwepoo
+         n30lVPfr54ZtiwH52dSSWuGUTd3tz5JoVB/OJYa3R+ivtdCcNFBeqFyaLYnSeVq4eiJh
+         Nj9n+4Q3JpZrGM+XrIY9fzS6qXQ5bXhtfheC6DyAQjg9YCm8oSdgApbQ5gbOU/vZy63X
+         qb1/1Hq1ThH8YZd4zfgxjrSrom71RmB3Y9BfxcQR3p2g2ZdqBLDKyVVoQnqPt/k+rMBD
+         /OFw==
+X-Gm-Message-State: AOAM532sOo+GIIaFM18yeNOwAO5il2KfenqMyWd+js3tgr2wR3bt2pUY
+        yWa91FnT3+jXpnGjRiZ0LetXw5k6cmSDOwwU1GJ+hNKbdkuPdzeljPUb4fF2UYI+3gFNvbEY1UI
+        /ivw5wVS+WZRbt8VXreGMdlNS92kWSVmUBWtaaqA0
+X-Received: by 2002:adf:e281:: with SMTP id v1mr3333547wri.308.1644322890907;
+        Tue, 08 Feb 2022 04:21:30 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyLlALWJQvkTxajX4mY5wFPC0i9Cbyibc6vh+dA8xRid1wKDVpfMqtwnuSqGnDZsRaAsQEg1IKxzDseghgHQVU=
+X-Received: by 2002:adf:e281:: with SMTP id v1mr3333537wri.308.1644322890725;
+ Tue, 08 Feb 2022 04:21:30 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <144329a3-8125-1975-7f23-a247343a679e@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220204180504.328999-1-lyude@redhat.com>
+In-Reply-To: <20220204180504.328999-1-lyude@redhat.com>
+From:   Karol Herbst <kherbst@redhat.com>
+Date:   Tue, 8 Feb 2022 13:21:12 +0100
+Message-ID: <CACO55ttjtNW9Gx6pJegGD+r37j53Do+jc5xoyTFf8aXaBt5y-g@mail.gmail.com>
+Subject: Re: [PATCH] drm/nouveau/backlight: Fix LVDS backlight detection on
+ some laptops
+To:     Lyude Paul <lyude@redhat.com>
+Cc:     nouveau <nouveau@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        stable@vger.kernel.org, Ben Skeggs <bskeggs@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/2/8 19:56, John Garry wrote:
-> On 08/02/2022 11:21, Yicong Yang wrote:
->>> This patch should be earlier in the series, before the PTT driver, and the comment on hisi_ptt_check_iommu_mapping() should mention what is going on here.
->>>
->> ok I'll reorder the serives and modify the comments of hisi_ptt_check_iommu_mapping() like:
->>
->> /*
->>   * The DMA of PTT trace can only use direct mapping, due to some
->>   * hardware restriction. Check whether there is an iommu or the
->>   * policy of the iommu domain is passthrough, otherwise the trace
->>   * cannot work.
-> 
-> IOMMU, capitalize acronyms
-> 
+On Fri, Feb 4, 2022 at 7:05 PM Lyude Paul <lyude@redhat.com> wrote:
+>
+> It seems that some laptops will report having both an eDP and LVDS
+> connector, even though only the LVDS connector is actually hooked up. This
+> can lead to issues with backlight registration if the eDP connector ends up
+> getting registered before the LVDS connector, as the backlight device will
+> then be registered to the eDP connector instead of the LVDS connector.
+>
+> So, fix this by only registering the backlight on connectors that are
+> reported as being connected.
+>
 
-ok.
+I think the patch might risk breaking muxed systems where we have two
+GPUs, but.. the systems I know of have different ways of controlling
+the backlight anyway. So unless there is something I missed this is
 
->>   *
->>   * The PTT device is supposed to behind the arm smmu v3, which
->>   * should have passthrough the device by a quirk. Otherwise user
->>   * should manually set the iommu domain type to identity through
->>   * sysfs.
-> 
-> Sorry, but I don't really understand your meaning here.
-> 
-> I did not think that if we have a default domain then we can change via sysfs to anything else.
-> 
+Reviewed-by: Karol Herbst <kherbst@redhat.com>
 
-ok I think the last sentence maybe misleading and better drop it.
+> Signed-off-by: Lyude Paul <lyude@redhat.com>
+> Fixes: 6eca310e8924 ("drm/nouveau/kms/nv50-: Add basic DPCD backlight support for nouveau")
+> Bugzilla: https://gitlab.freedesktop.org/drm/nouveau/-/issues/137
+> Cc: <stable@vger.kernel.org> # v5.15+
+> ---
+>  drivers/gpu/drm/nouveau/nouveau_backlight.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/nouveau/nouveau_backlight.c b/drivers/gpu/drm/nouveau/nouveau_backlight.c
+> index ae2f2abc8f5a..6af12dc99d7f 100644
+> --- a/drivers/gpu/drm/nouveau/nouveau_backlight.c
+> +++ b/drivers/gpu/drm/nouveau/nouveau_backlight.c
+> @@ -294,7 +294,8 @@ nv50_backlight_init(struct nouveau_backlight *bl,
+>         struct nouveau_drm *drm = nouveau_drm(nv_encoder->base.base.dev);
+>         struct nvif_object *device = &drm->client.device.object;
+>
+> -       if (!nvif_rd32(device, NV50_PDISP_SOR_PWM_CTL(ffs(nv_encoder->dcb->or) - 1)))
+> +       if (!nvif_rd32(device, NV50_PDISP_SOR_PWM_CTL(ffs(nv_encoder->dcb->or) - 1)) ||
+> +           nv_conn->base.status != connector_status_connected)
+>                 return -ENODEV;
+>
+>         if (nv_conn->type == DCB_CONNECTOR_eDP) {
+> --
+> 2.34.1
+>
 
->>   */
->>
->>>> Signed-off-by: Yicong Yang<yangyicong@hisilicon.com>
->>>> ---
->>>>    drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 16 ++++++++++++++++
->>>>    1 file changed, 16 insertions(+)
->>>>
->>>> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
->>>> index 6dc6d8b6b368..6f67a2b1dd27 100644
->>>> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
->>>> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
->>>> @@ -2838,6 +2838,21 @@ static int arm_smmu_dev_disable_feature(struct device *dev,
->>>>        }
->>>>    }
->>>>    +#define IS_HISI_PTT_DEVICE(pdev)    ((pdev)->vendor == PCI_VENDOR_ID_HUAWEI && \
->>>> +                     (pdev)->device == 0xa12e)
->>> I assume that not all revisions will require this check, right?
-> 
-> So if you are very confident that the next revision will be fixed then I would add a check for this current broken revision.
-> 
->>>
->> For current revisions it's necessary.
->>
-> 
-> .

@@ -2,100 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A0CF4AE01A
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 18:57:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25A3B4ADFF2
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 18:55:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384608AbiBHR4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 12:56:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40950 "EHLO
+        id S1352847AbiBHRyx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 12:54:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384589AbiBHRzy (ORCPT
+        with ESMTP id S1352766AbiBHRyv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 12:55:54 -0500
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E46EC03FEDC;
-        Tue,  8 Feb 2022 09:55:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1644342948; x=1675878948;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=0DBJMX6CN9Q62n1+xR/XbkjpUIrkdnw82/25SwLtiv4=;
-  b=hiD/yWCgIvGiKRDHG4bKLmLr5BXj0W+/OylJiCqroNaCH6sxYPuEQ8Mj
-   qf/iaKOoWojFy+qBYUKm3MNvLoRbsN0GQS8/CNPdrjFzBX4eQTm4NElWJ
-   kaK4solylmprWpI2lhNPRBX/1kUNzHjhZMc67/WM9b60CkGB+AkA58evs
-   w=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 08 Feb 2022 09:55:48 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 09:55:47 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Tue, 8 Feb 2022 09:55:47 -0800
-Received: from blr-ubuntu-525.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Tue, 8 Feb 2022 09:55:42 -0800
-From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-To:     <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <pure.logic@nexus-software.ie>,
-        <bjorn.andersson@linaro.org>, <greg@kroah.com>, <robh@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <quic_tsoni@quicinc.com>,
-        <quic_psodagud@quicinc.com>, <quic_satyap@quicinc.com>,
-        <quic_pheragu@quicinc.com>, <quic_rjendra@quicinc.com>,
-        <quic_sibis@quicinc.com>, <quic_saipraka@quicinc.com>,
-        <quic_schowdhu@quicinc.com>
-Subject: [PATCH V6 6/6] MAINTAINERS: Add maintainer entry for EUD
-Date:   Tue, 8 Feb 2022 23:24:29 +0530
-Message-ID: <50cc73b4432c3d118361e6c9d47a9b0f7682e8ae.1644339918.git.quic_schowdhu@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1644339918.git.quic_schowdhu@quicinc.com>
-References: <cover.1644339918.git.quic_schowdhu@quicinc.com>
+        Tue, 8 Feb 2022 12:54:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3D4C061579;
+        Tue,  8 Feb 2022 09:54:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 836EFB81CA5;
+        Tue,  8 Feb 2022 17:54:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45178C004E1;
+        Tue,  8 Feb 2022 17:54:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1644342887;
+        bh=PXqWBuNMwcBti6POF7jxCab7d/1oiSuHAH+hwQqqJ04=;
+        h=From:To:Cc:Subject:Date:From;
+        b=TRDIpboaQ2fvUBiZaQoAlzYeZVEei5Y1dY0Kud/msIqcicBLwTNWJrv0j/fzF1IIG
+         JL7Byr2Z2TO+GNX20Psyx/B02/6OwxCxEx11TzZ6f9xIqvTOyW3YoUGULlo+GYqtb+
+         qddXeVJWaRwJqV5HfomjDFDskGgiS/AY5Qsb30HA=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Linux 4.9.300
+Date:   Tue,  8 Feb 2022 18:54:42 +0100
+Message-Id: <16443428839687@kroah.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the entry for maintainer for EUD driver
-and other associated files.
+I'm announcing the release of the 4.9.300 kernel.
 
-Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
----
- MAINTAINERS | 8 ++++++++
- 1 file changed, 8 insertions(+)
+All users of the 4.9 kernel series must upgrade.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index b84e2d5..f86ec0e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -7227,6 +7227,14 @@ F:	include/uapi/linux/mdio.h
- F:	include/uapi/linux/mii.h
- F:	net/core/of_net.c
+The updated 4.9.y git tree can be found at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.9.y
+and can be browsed at the normal kernel.org git web browser:
+	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
 
-+QCOM EMBEDDED USB DEBUGGER(EUD)
-+M:	Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-+L:	linux-arm-msm@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/ABI/testing/sysfs-driver-eud
-+F:	Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
-+F:	drivers/usb/misc/qcom_eud.c
-+
- EXEC & BINFMT API
- R:	Eric Biederman <ebiederm@xmission.com>
- R:	Kees Cook <keescook@chromium.org>
---
-2.7.4
+thanks,
+
+greg k-h
+
+------------
+
+ Makefile                                        |    2 
+ arch/powerpc/kernel/Makefile                    |    1 
+ arch/powerpc/lib/Makefile                       |    3 
+ arch/s390/hypfs/hypfs_vm.c                      |    6 -
+ drivers/edac/altera_edac.c                      |    2 
+ drivers/edac/xgene_edac.c                       |    2 
+ drivers/gpu/drm/msm/msm_drv.c                   |    2 
+ drivers/gpu/drm/nouveau/nvkm/subdev/bios/base.c |    2 
+ drivers/hwmon/lm90.c                            |    2 
+ drivers/iommu/amd_iommu_init.c                  |    2 
+ drivers/net/ethernet/amd/xgbe/xgbe-drv.c        |   14 +++
+ drivers/net/macsec.c                            |    9 ++
+ drivers/net/usb/ipheth.c                        |    6 -
+ drivers/rtc/rtc-mc146818-lib.c                  |    2 
+ drivers/s390/scsi/zfcp_fc.c                     |   13 ++-
+ drivers/scsi/bnx2fc/bnx2fc_fcoe.c               |   41 ++++-----
+ drivers/spi/spi-bcm-qspi.c                      |    2 
+ drivers/spi/spi-mt65xx.c                        |    2 
+ drivers/tty/n_gsm.c                             |    4 
+ drivers/tty/serial/8250/8250_pci.c              |  100 +++++++++++++++++++++++-
+ drivers/tty/serial/stm32-usart.c                |    2 
+ drivers/usb/core/hcd.c                          |   14 +++
+ drivers/usb/core/urb.c                          |   12 ++
+ drivers/usb/gadget/function/f_sourcesink.c      |    1 
+ drivers/usb/storage/unusual_devs.h              |   10 ++
+ fs/ext4/inline.c                                |   10 ++
+ fs/nfs/dir.c                                    |   18 ++++
+ fs/nfsd/nfs4state.c                             |    4 
+ fs/udf/inode.c                                  |    9 --
+ include/linux/netdevice.h                       |    1 
+ include/net/ip.h                                |   21 ++---
+ include/net/netfilter/nf_nat_l4proto.h          |    2 
+ kernel/power/wakelock.c                         |   12 --
+ net/bluetooth/hci_event.c                       |   10 +-
+ net/can/bcm.c                                   |   20 ++--
+ net/core/net-procfs.c                           |   38 ++++++++-
+ net/core/rtnetlink.c                            |    6 -
+ net/ieee802154/nl802154.c                       |    8 -
+ net/ipv4/ip_output.c                            |   11 ++
+ net/ipv4/raw.c                                  |    5 -
+ net/ipv6/ip6_tunnel.c                           |    8 -
+ net/netfilter/nf_nat_proto_common.c             |   36 ++++++--
+ net/netfilter/nf_nat_proto_dccp.c               |    5 -
+ net/netfilter/nf_nat_proto_sctp.c               |    5 -
+ net/netfilter/nf_nat_proto_tcp.c                |    5 -
+ net/netfilter/nf_nat_proto_udp.c                |    5 -
+ net/netfilter/nf_nat_proto_udplite.c            |    5 -
+ net/packet/af_packet.c                          |   10 +-
+ sound/soc/fsl/pcm030-audio-fabric.c             |   11 +-
+ sound/soc/soc-ops.c                             |   29 ++++++
+ 50 files changed, 409 insertions(+), 141 deletions(-)
+
+Alan Stern (2):
+      usb-storage: Add unusual-devs entry for VL817 USB-SATA bridge
+      USB: core: Fix hang in usb_kill_urb by adding memory barriers
+
+Benjamin Gaignard (1):
+      spi: mediatek: Avoid NULL pointer crash in interrupt
+
+Brian Gix (1):
+      Bluetooth: refactor malicious adv data check
+
+Cameron Williams (1):
+      tty: Add support for Brainboxes UC cards.
+
+Christophe Leroy (1):
+      powerpc/32: Fix boot failure with GCC latent entropy plugin
+
+Congyu Liu (1):
+      net: fix information leakage in /proc/net/ptype
+
+Dai Ngo (1):
+      nfsd: nfsd4_setclientid_confirm mistakenly expires confirmed client.
+
+Eric Dumazet (5):
+      ipv4: avoid using shared IP generator for connected sockets
+      ipv4: raw: lock the socket in raw_bind()
+      ipv4: tcp: send zero IPID in SYNACK messages
+      rtnetlink: make sure to refresh master_dev/m_ops in __rtnl_newlink()
+      af_packet: fix data-race in packet_setsockopt / packet_setsockopt
+
+Florian Westphal (2):
+      netfilter: nat: remove l4 protocol port rovers
+      netfilter: nat: limit port clash resolution attempts
+
+Georgi Valkov (1):
+      ipheth: fix EOVERFLOW in ipheth_rcvbulk_callback
+
+Greg Kroah-Hartman (2):
+      PM: wakeup: simplify the output logic of pm_show_wakelocks()
+      Linux 4.9.300
+
+Guenter Roeck (1):
+      hwmon: (lm90) Reduce maximum conversion rate for G781
+
+Ido Schimmel (1):
+      ipv6_tunnel: Rate limit warning messages
+
+Jan Kara (2):
+      udf: Restore i_lenAlloc when inode expansion fails
+      udf: Fix NULL ptr deref when converting from inline format
+
+Jianguo Wu (1):
+      net-procfs: show net devices bound packet types
+
+Joerg Roedel (1):
+      iommu/amd: Fix loop timeout issue in iommu_ga_log_enable()
+
+John Meneghini (2):
+      scsi: bnx2fc: Flush destroy_work queue before calling bnx2fc_interface_put()
+      scsi: bnx2fc: Make bnx2fc_recv_frame() mp safe
+
+Kamal Dasu (1):
+      spi: bcm-qspi: check for valid cs before applying chip select
+
+Lior Nahmanson (1):
+      net: macsec: Verify that send_sci is on when setting Tx sci explicitly
+
+Mark Brown (3):
+      ASoC: ops: Reject out of bounds values in snd_soc_put_volsw()
+      ASoC: ops: Reject out of bounds values in snd_soc_put_volsw_sx()
+      ASoC: ops: Reject out of bounds values in snd_soc_put_xr_sx()
+
+Miaoqian Lin (1):
+      ASoC: fsl: Add missing error handling in pcm030_fabric_probe
+
+Miquel Raynal (1):
+      net: ieee802154: Return meaningful error codes from the netlink helpers
+
+Nick Lopez (1):
+      drm/nouveau: fix off by one in BIOS boundary checking
+
+Pavankumar Kondeti (1):
+      usb: gadget: f_sourcesink: Fix isoc transfer for USB_SPEED_SUPER_PLUS
+
+Raju Rangoju (1):
+      net: amd-xgbe: ensure to reset the tx_timer_active flag
+
+Ritesh Harjani (1):
+      ext4: fix error handling in ext4_restore_inline_data()
+
+Riwen Lu (1):
+      rtc: cmos: Evaluate century appropriate
+
+Sergey Shtylyov (2):
+      EDAC/altera: Fix deferred probing
+      EDAC/xgene: Fix deferred probing
+
+Shyam Sundar S K (1):
+      net: amd-xgbe: Fix skb data length underflow
+
+Steffen Maier (1):
+      scsi: zfcp: Fix failed recovery on gone remote port with non-NPIV FCP devices
+
+Trond Myklebust (2):
+      NFSv4: Handle case where the lookup of a directory fails
+      NFSv4: nfs_atomic_open() can race when looking up a non-regular file
+
+Valentin Caron (1):
+      serial: stm32: fix software flow control transfer
+
+Vasily Gorbik (1):
+      s390/hypfs: include z/VM guests with access control group set
+
+Xianting Tian (1):
+      drm/msm: Fix wrong size calculation
+
+Ziyang Xuan (1):
+      can: bcm: fix UAF of bcm op
+
+daniel.starke@siemens.com (1):
+      tty: n_gsm: fix SW flow control encoding/handling
 

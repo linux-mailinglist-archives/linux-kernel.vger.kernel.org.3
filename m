@@ -2,147 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02C2B4AD1A8
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 07:37:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D92A44AD1B1
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 07:42:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347645AbiBHGhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 01:37:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39490 "EHLO
+        id S1347679AbiBHGmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 01:42:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347615AbiBHGhc (ORCPT
+        with ESMTP id S233449AbiBHGmF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 01:37:32 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A04DCC0401F1;
-        Mon,  7 Feb 2022 22:37:31 -0800 (PST)
-Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1nHK80-00008M-MC; Tue, 08 Feb 2022 07:37:28 +0100
-Message-ID: <80db7043-b854-ed20-16aa-e25552e0748e@leemhuis.info>
-Date:   Tue, 8 Feb 2022 07:37:26 +0100
+        Tue, 8 Feb 2022 01:42:05 -0500
+X-Greylist: delayed 122 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 22:42:04 PST
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FABCC0401EF;
+        Mon,  7 Feb 2022 22:42:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1644302524; x=1675838524;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=iqtNpA9tQzu6yJkZwnRGduJChMwjXon6hNRj5nmETJQ=;
+  b=cbUA0RV9dvcQbdXgm9nAvFpJNGjMr1XdZSic1nHMw2zHqJxqnvqmRfIs
+   9aTge8+kUGeJHiB/2D6yvg7okA5hR0HhykI+5U4JgwJSn+lM3m+9VEkv+
+   eOtqRXKWL5PQ+tyD5ZMqO36QmZYAOLlhYyhHfa4mV9aGlDHH+vq8tbKIu
+   Q=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 07 Feb 2022 22:40:01 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 22:40:00 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Mon, 7 Feb 2022 22:40:00 -0800
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Mon, 7 Feb 2022 22:39:56 -0800
+Date:   Tue, 8 Feb 2022 12:09:52 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Udipto Goswami <quic_ugoswami@quicinc.com>
+CC:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Pratham Pratap <quic_ppratap@quicinc.com>,
+        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        Jack Pham <quic_jackp@quicinc.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+Subject: Re: [PATCH] usb: dwc3: gadget: Prevent core from processing stale
+ TRBs
+Message-ID: <20220208063952.GB22194@hu-pkondeti-hyd.qualcomm.com>
+References: <1644207958-18287-1-git-send-email-quic_ugoswami@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: 5.17-rc regression: X1 Carbon touchpad not resumed
-Content-Language: en-BS
-To:     Hugh Dickins <hughd@google.com>,
-        Derek Basehore <dbasehore@chromium.org>
-Cc:     Rajat Jain <rajatja@google.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-References: <89456fcd-a113-4c82-4b10-a9bcaefac68f@google.com>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <89456fcd-a113-4c82-4b10-a9bcaefac68f@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1644302251;6714fcf3;
-X-HE-SMSGID: 1nHK80-00008M-MC
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <1644207958-18287-1-git-send-email-quic_ugoswami@quicinc.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[TLDR: I'm adding the regression report below to regzbot, the Linux
-kernel regression tracking bot; all text you find below is compiled from
-a few templates paragraphs you might have encountered already already
-from similar mails.]
-
-Hi, this is your Linux kernel regression tracker speaking.
-
-On 07.02.22 20:45, Hugh Dickins wrote:
-> 5.17-rc[1-3] on Lenovo ThinkPad X1 Carbon 5th gen: when lid closed
-> and opened and system resumed, the touchpad cursor cannot be moved.
+On Mon, Feb 07, 2022 at 09:55:58AM +0530, Udipto Goswami wrote:
+> With CPU re-ordering on write instructions, there might
+> be a chance that the HWO is set before the TRB is updated
+> with the new mapped buffer address.
+> And in the case where core is processing a list of TRBs
+> it is possible that it fetched the TRBs when the HWO is set
+> but before the buffer address is updated.
+> Prevent this by adding a memory barrier before the HWO
+> is updated to ensure that the core always process the
+> updated TRBs.
 > 
-> Some dmesg from bootup:
-> [    2.211061] rmi4_smbus 6-002c: registering SMbus-connected sensor
-> [    2.263809] ucsi_acpi USBC000:00: UCSI_GET_PDOS failed (-95)
-> [    2.291782] rmi4_f01 rmi4-00.fn01: found RMI device, manufacturer: Synaptics, product: TM3289-002, fw id: 2492434
-> [    2.371377] input: Synaptics TM3289-002 as /devices/pci0000:00/0000:00:1f.4/i2c-6/6-002c/rmi4-00/input/input8
-> [    2.380820] serio: RMI4 PS/2 pass-through port at rmi4-00.fn03
-> ...
-> [    2.725471] input: PS/2 Generic Mouse as /devices/pci0000:00/0000:00:1f.4/i2c-6/6-002c/rmi4-00/rmi4-00.fn03/serio2/input/input9
+> Fixes: f6bafc6a1c9 ("usb: dwc3: convert TRBs into bitshifts")
+> Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
+> ---
+> v1: For an ep the trbs can be reused, and if cpu re-ordering also
+> takes place, there is a change that the HWO will get set even before
+> the trb bpl/bph are updated which will lead controller to access a
+> stale buffer address from the previous transactions.
 > 
-> Some dmesg from resume:
-> [   79.221064] rmi4_smbus 6-002c: failed to get SMBus version number!
-> [   79.265074] rmi4_physical rmi4-00: rmi_driver_reset_handler: Failed to read current IRQ mask.
-> [   79.308330] rmi4_f01 rmi4-00.fn01: Failed to restore normal operation: -6.
-> [   79.308335] rmi4_f01 rmi4-00.fn01: Resume failed with code -6.
-> [   79.308339] rmi4_physical rmi4-00: Failed to suspend functions: -6
-> [   79.308342] rmi4_smbus 6-002c: Failed to resume device: -6
-> [   79.351967] rmi4_physical rmi4-00: Failed to read irqs, code=-6
+>  drivers/usb/dwc3/gadget.c | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
 > 
-> Bisection led to 172d931910e1db800f4e71e8ed92281b6f8c6ee2
-> ("i2c: enable async suspend/resume on i2c client devices")
-> and reverting that fixes it for me.
+> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> index 520031b..183b909 100644
+> --- a/drivers/usb/dwc3/gadget.c
+> +++ b/drivers/usb/dwc3/gadget.c
+> @@ -1291,6 +1291,19 @@ static void __dwc3_prepare_one_trb(struct dwc3_ep *dep, struct dwc3_trb *trb,
+>  	if (usb_endpoint_xfer_bulk(dep->endpoint.desc) && dep->stream_capable)
+>  		trb->ctrl |= DWC3_TRB_CTRL_SID_SOFN(stream_id);
+>  
+> +	/*
+> +	 * As per data book 4.2.3.2TRB Control Bit Rules section
+> +	 *
+> +	 * The controller autonomously checks the HWO field of a TRB to determine if the
+> +	 * entire TRB is valid. Therefore, software must ensure that the rest of the TRB
+> +	 * is valid before setting the HWO field to '1'. In most systems, this means that
+> +	 * software must update the fourth DWORD of a TRB last.
+> +	 *
+> +	 * However there is a possibility of CPU re-ordering here which can cause
+> +	 * controller to observe the HWO bit set prematurely.
+> +	 * Add a write memory barrier to prevent CPU re-ordering.
+> +	 */
+> +	wmb();
+>  	trb->ctrl |= DWC3_TRB_CTRL_HWO;
+>  
 
-Thanks for the report.
+Looks good to me. FWIW,
 
-To be sure this issue doesn't fall through the cracks unnoticed, I'm
-adding it to regzbot, my Linux kernel regression tracking bot:
+Reviewed-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
 
-#regzbot ^introduced 172d931910e1db800f4e71e8ed92281b6f8c6ee2
-#regzbot title i2c/input/hid: X1 Carbon touchpad not resumed
-#regzbot ignore-activity
+It is very similar to what we have in xHC during TRB preparation.
 
-Reminder for developers: when fixing the issue, please add a 'Link:'
-tags pointing to the report (the mail quoted above) using
-lore.kernel.org/r/, as explained in
-'Documentation/process/submitting-patches.rst' and
-'Documentation/process/5.Posting.rst'. This allows the bot to connect
-the report with any patches posted or committed to fix the issue; this
-again allows the bot to show the current status of regressions and
-automatically resolve the issue when the fix hits the right tree.
+commit 576667bad341516edc4e18eb85acb0a2b4c9c9d9
+Author: Mathias Nyman <mathias.nyman@linux.intel.com>
+Date:   Fri Jan 15 18:19:06 2021 +0200
 
-I'm sending this to everyone that got the initial report, to make them
-aware of the tracking. I also hope that messages like this motivate
-people to directly get at least the regression mailing list and ideally
-even regzbot involved when dealing with regressions, as messages like
-this wouldn't be needed then.
+xhci: make sure TRB is fully written before giving it to the controller
 
-Don't worry, I'll send further messages wrt to this regression just to
-the lists (with a tag in the subject so people can filter them away), if
-they are relevant just for regzbot. With a bit of luck no such messages
-will be needed anyway.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-
-P.S.: As the Linux kernel's regression tracker I'm getting a lot of
-reports on my table. I can only look briefly into most of them and lack
-knowledge about most of the areas they concern. I thus unfortunately
-will sometimes get things wrong or miss something important. I hope
-that's not the case here; if you think it is, don't hesitate to tell me
-in a public reply, it's in everyone's interest to set the public record
-straight.
-
--- 
-Additional information about regzbot:
-
-If you want to know more about regzbot, check out its web-interface, the
-getting start guide, and the references documentation:
-
-https://linux-regtracking.leemhuis.info/regzbot/
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
-
-The last two documents will explain how you can interact with regzbot
-yourself if your want to.
-
-Hint for reporters: when reporting a regression it's in your interest to
-CC the regression list and tell regzbot about the issue, as that ensures
-the regression makes it onto the radar of the Linux kernel's regression
-tracker -- that's in your interest, as it ensures your report won't fall
-through the cracks unnoticed.
-
-Hint for developers: you normally don't need to care about regzbot once
-it's involved. Fix the issue as you normally would, just remember to
-include 'Link:' tag in the patch descriptions pointing to all reports
-about the issue. This has been expected from developers even before
-regzbot showed up for reasons explained in
-'Documentation/process/submitting-patches.rst' and
-'Documentation/process/5.Posting.rst'.
+Thanks,
+Pavan

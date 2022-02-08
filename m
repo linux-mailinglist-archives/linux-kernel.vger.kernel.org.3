@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 593DC4ADC1F
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 16:13:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D8574ADC26
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 16:13:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379536AbiBHPM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 10:12:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60430 "EHLO
+        id S1379707AbiBHPNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 10:13:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351656AbiBHPM4 (ORCPT
+        with ESMTP id S1379570AbiBHPNA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 10:12:56 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D9ADC061577
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 07:12:55 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id k13so33885224lfg.9
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 07:12:55 -0800 (PST)
+        Tue, 8 Feb 2022 10:13:00 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4301C061579
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 07:12:59 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id u6so12873671lfc.3
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 07:12:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=l2+GjzePMFpH5F944i8QOqtHOHuiYTriOX9rD5i+Mws=;
-        b=CCldQERGrCvjQn5prWyMGA1XEKEW6SlWWAaXNhd7pkglCcsjtbVcmreyYaIM3JRU9j
-         kzk2Vw2WL5thyTjoc3WD0CQqbGvg3PKeTzSv0YKVWdDaPFH+Cv/zdLacQ+656059qxEr
-         02eooFkw1Fu+hgpYEBviCX6usGPrpmARJXS5MtCDlIzDstS/xHJx3T6Za6DFTU5xR58q
-         Syqh3/QfMiLIdezUQQR2WQ5B2k8psty8U+PwTzVKYHreCXIGf8GTHEANiqHMaeOdUtuz
-         weE7yf3pFibbTCQL55PMQLGuX6xHedTNwMa0iyzP5/HstY7f53Ar5jfluhPmsrEDpQ3l
-         tU+A==
+        bh=NY+ZwWuclulJI/EwOyt3HfpGBKh0j1b2t2Y9v5DNXi8=;
+        b=auyWIb560YDBZgxQ+7OPHdI3+Lqo83TPiIjcFYkbblxBRMFFEIe2E8bsh3fAURQSLu
+         aRXfghU1TI8d+lNsHTcKsoTwbu58W295bQeMVaVtHL/bH2DFE6Y03kUsO13rs8sBm7ZE
+         HVKMGWQ0+NDCLpyu2kuDnku/HWQuS26qepMfArKY675ojGrdyrjMtPqLi1+BNDRBqmR0
+         airc6G2Mm3Hcw6Mhk1W/XcwR8Kk1rAcws4h/d/oNfcmNdH5isJXYkpktedY+epgoMkFK
+         Oeab11MGDoz+xwdm5CAjQzbFsa6Bv398hWNbUR1Cb3pqEzPXGgDlannnzEtFwuqsjVr5
+         P9nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=l2+GjzePMFpH5F944i8QOqtHOHuiYTriOX9rD5i+Mws=;
-        b=WlHw4rQR42r5setP4oEHTrBzpbSyJCR1jShM8lJtv+DNwI6KfEzfEoPrhev8j6u4uR
-         h8QUpGJqgPhU6/0fswq+g79qXAAFVDC2JIy0kYiLAYPvDuZ2O8RN4uaBKZBR46jEI7tA
-         w9PYbUD3Uu4kaCTbRuT2oDM9CmTZyuo3GO9fYMGNCwFL5gKW0cn25fsYSK4w7eT2FmLb
-         6ouIiDFYl5y7Dl5eYpy7bVS54RbQ4MlssS9Pdeg2lopcv3jtA18ClekMaaNVyLlb6FCI
-         TxKv3s8qP4R9ZbRevW6FV3ufLofcOs0fSLLhYcZqyo08IT5BpkhrPJ5P3BY98ly4Fjpn
-         HAHg==
-X-Gm-Message-State: AOAM531oAXH5qK80k2EMgTetgO0pGK1GU93TCgx9gSukc8kgMyHbWWSp
-        Lx6FwzQ8tRZQ8QycvgGNaw0IaHy14wvlSepu1arikA==
-X-Google-Smtp-Source: ABdhPJwhm+nC6e2kePHoIEaRqqooZpIwL78JW6X7AsmRxvU286v5l6BSxZS1fegs8BoD3N9IXlW/J6k8YKCiTPMT5kU=
-X-Received: by 2002:ac2:5dcb:: with SMTP id x11mr3273145lfq.254.1644333173813;
- Tue, 08 Feb 2022 07:12:53 -0800 (PST)
+        bh=NY+ZwWuclulJI/EwOyt3HfpGBKh0j1b2t2Y9v5DNXi8=;
+        b=GlAZ3XIfFQigQexn1qJTK3Pg0rhvMMfet3+CG0rwDW91Dku5bTN3Atk2jz6ILBIzot
+         K4cGcMQqwQM2eoXyolNjFY9unzgO6Jx2tbwf1Ou+0SNW3xbs8j/wILpKP666Cftnrwtc
+         mk2JeCVb+ZbL9939g6YNFFpQnNo3WZg8J9fXZqk1CpjhJdY6iJWCEdOkUcsesB8Q8gmr
+         QEwWIKdfNRKiSEhPpHMIn4Y2c8cAbUEgNQ0W843CT8jolzM7ZXbS5Kar4KhJ6jiOZAun
+         W61i8KtoGncE1ls42YMDunlBSr0V104OkdthlYPviNqCVb6jDRvws6Kfwx1pO01zuVsn
+         NwjQ==
+X-Gm-Message-State: AOAM533Kovk3Mir8G7w2ePQSEekIWcJNW1GxIL9swquDfycvqib6AByz
+        5QXw11+lmf8MGw1G8vpn2TrZnlRFQjfrtukhbgvznmJL074=
+X-Google-Smtp-Source: ABdhPJwpIIFNjHK3W8/1s65m+yFXwfDxcycoN/0meGoeCtTH4S7LjjaHRz97NGZxNQWJ4wtJjt3eVrTKsfZPa2uoHkE=
+X-Received: by 2002:a05:6512:3ca2:: with SMTP id h34mr1684743lfv.167.1644333178187;
+ Tue, 08 Feb 2022 07:12:58 -0800 (PST)
 MIME-Version: 1.0
-References: <20220202180648.1252154-1-huobean@gmail.com>
-In-Reply-To: <20220202180648.1252154-1-huobean@gmail.com>
+References: <20220202182450.54925-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20220202182450.54925-1-andriy.shevchenko@linux.intel.com>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 8 Feb 2022 16:12:17 +0100
-Message-ID: <CAPDyKFqDk3Jik5tXoKNbQijZTd08nTcHgv_Z-D2DbV_TUM+76w@mail.gmail.com>
-Subject: Re: [PATCH 0/5] Use of_device_get_match_data() helper
-To:     Bean Huo <huobean@gmail.com>
-Cc:     Eugen.Hristev@microchip.com, adrian.hunter@intel.com,
-        nicolas.ferre@microchip.com, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, beanhuo@micron.com
+Date:   Tue, 8 Feb 2022 16:12:21 +0100
+Message-ID: <CAPDyKFro1sqxzOYWVbsHud_s6P-zYxOH0WOiosN0kZHsP1OywA@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] mmc: dw_mmc: Use device_property_string_array_count()
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jaehoon Chung <jh80.chung@samsung.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -66,29 +65,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2 Feb 2022 at 19:07, Bean Huo <huobean@gmail.com> wrote:
+On Wed, 2 Feb 2022 at 19:24, Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 >
-> From: Bean Huo <beanhuo@micron.com>
+> Use device_property_string_array_count() to get number of strings
+> in a string array property.
 >
-> *** BLURB HERE ***
->
-> Bean Huo (5):
->   mmc: wmt-sdmmc: Use of_device_get_match_data() helper
->   mmc: sdhci-tegra: Use of_device_get_match_data() helper
->   mmc: sdhci-omap: Use of_device_get_match_data() helper
->   mmc: sdhci-of-at91: Use of_device_get_match_data() helper
->   mmc: davinci: Use of_device_get_match_data() helper
->
->  drivers/mmc/host/davinci_mmc.c   | 6 ++----
->  drivers/mmc/host/sdhci-of-at91.c | 6 ++----
->  drivers/mmc/host/sdhci-omap.c    | 7 +------
->  drivers/mmc/host/sdhci-tegra.c   | 6 ++----
->  drivers/mmc/host/wmt-sdmmc.c     | 7 ++-----
->  5 files changed, 9 insertions(+), 23 deletions(-)
->
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Series applied for next, except patch3 that seems to need some minor
-adjustments, thanks!
+Applied for next, thanks!
 
 Kind regards
 Uffe
+
+
+> ---
+>  drivers/mmc/host/dw_mmc.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/drivers/mmc/host/dw_mmc.c b/drivers/mmc/host/dw_mmc.c
+> index 99b201921954..3420a7ad6098 100644
+> --- a/drivers/mmc/host/dw_mmc.c
+> +++ b/drivers/mmc/host/dw_mmc.c
+> @@ -3057,8 +3057,7 @@ static void dw_mci_init_dma(struct dw_mci *host)
+>                 dev_info(host->dev, "Using internal DMA controller.\n");
+>         } else {
+>                 /* TRANS_MODE_EDMAC: check dma bindings again */
+> -               if ((device_property_read_string_array(dev, "dma-names",
+> -                                                      NULL, 0) < 0) ||
+> +               if ((device_property_string_array_count(dev, "dma-names") < 0) ||
+>                     !device_property_present(dev, "dmas")) {
+>                         goto no_dma;
+>                 }
+> --
+> 2.34.1
+>

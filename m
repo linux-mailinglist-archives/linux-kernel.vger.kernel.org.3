@@ -2,62 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E9F64AE04A
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 19:04:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 308644AE04C
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 19:04:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353263AbiBHSEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 13:04:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46342 "EHLO
+        id S1384419AbiBHSEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 13:04:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234348AbiBHSEg (ORCPT
+        with ESMTP id S1353460AbiBHSEj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 13:04:36 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1EC2C061576
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 10:04:34 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id q7so4074935wrc.13
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 10:04:34 -0800 (PST)
+        Tue, 8 Feb 2022 13:04:39 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8240EC061576
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 10:04:38 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id j5-20020a05600c1c0500b0034d2e956aadso2297998wms.4
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 10:04:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=esaHoJx4QHm8kkodcqDserNTJ99eLynAuTTriRkvM1E=;
-        b=RwcAexFIpLprQCua5xnJFoSaNdoYU+MVkpsruPLL30E6yZFv1NNKJ+PjC6TbHMM7Yb
-         SC6SHogzn8WSQNai4UZeqLjqkLOkd5Uxv6TFoc9utacrbG+6ZXlkFQ8f3TE3IZcxRFaT
-         NOX0ZGFW9pOB2KtjQeHvhrUVSR8ks3pWAmDsXhKr4T5/Afz+SeHjzakL6I7+Xiq3gvmT
-         ZmclHZVIrDyHVZLcXFFYufx3KXJDo8WrEKlSHX+UA82a56qLINrQkP2Gkp/Mn9vaQnBF
-         2YQyLdMkY3N2aedfQmoOCK0s8/q882lcyHxdrmDfbXvXKIm/Jktd2Gq6OJODG23n6V6X
-         FFiQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=cdlsppHiLZTOsM13z6W1Cp7fdsqKE9BaC7RMZ/J9wUY=;
+        b=aiNV3vVZiXuLBKybeAPgsiWUsvt6pmq4xQAxUtys8cJQTrTNpeXd03r0zhH3GajZad
+         LcGU8gmuoCruJvOB0A9A339LxEdh94m6W4k6iLGT3X1WpvJ9m4xmHbwCT/ewrUNiwMeM
+         /TVG2P6AB3OQKgXJdxPxAVXCEtrGIUbWn1cTk6s7KGAWjQTEvL7rl9c33VrkMiW/B5T3
+         NapcckAB7O2wMj2hE8tz5D6fOpU2QhRLkqsr92N4HK54h+aNZ40nIh0CBCrZTP/jcu65
+         dO6B+ZuOIB009eV4MrogSOLrOokYmQWIopdmH02laCxzeRsy7ZKlyQrZsJjZhzeEi3pz
+         qIEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=esaHoJx4QHm8kkodcqDserNTJ99eLynAuTTriRkvM1E=;
-        b=b+DZnMYW6i6lCU3mkD8qV/79Ay9d6xQ3jwZQHObTQXMr8TIZGHCxYL2LFK3cNoC5cx
-         ZN0GsL9daBrohC5a6TPr1CbY3ST9u8WP+qW+lE6uwPo4gwpnIatIRGq5X/gcu/8RJfFd
-         qk/Li14QfpLHZbhTn1kcaP103E+7/UDVlabfJ8qLnIRCR+hYgV/B1tm4dBSxocSBL/OJ
-         4Spykfvkgajompuc9Wi1Ca32UEqIv3l+JM5I+IvemR+leEK/AO8VshX8Fw2XwAtMd9gP
-         kw8vKLWS/z8EINlXqACcWAkHj+7kMqqp/xyVeM9B5dGoFgYhlnIjS3q5Kbr3Jwkop9vx
-         mF7A==
-X-Gm-Message-State: AOAM5325IYSYcQaOi1u4ZdvS8D+Ow3jpVIoSxulrNvPuSHCkSNbxhgrJ
-        BBRqns8dA6fkDNTfInhgWZMYXth3qtQ=
-X-Google-Smtp-Source: ABdhPJwpLWEzuSHz7SS3Lyj8/PRvuGSF9l/ZPSaohSwLn3nPBg2LoIZqy+IfgxG012JNS1OBCWltPA==
-X-Received: by 2002:a5d:500c:: with SMTP id e12mr4375442wrt.193.1644343473212;
-        Tue, 08 Feb 2022 10:04:33 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=cdlsppHiLZTOsM13z6W1Cp7fdsqKE9BaC7RMZ/J9wUY=;
+        b=iCST0UYXYJOReCZl8iYI8ePCss8c5BkZFo5edWvsGxt6Ebt2V/NZy8HCjISVjAUBYv
+         05jh4u7niJWwEQl1Hub21mb2UW+3k5onUsaJq2LeVRc+se8RMZEzPEYjLh/CaoC5yR83
+         RpXhglh0YZonFvdyniYgKgusk9ZEZ5u6HfEiXOozIAAsSRaUI3Ig5oAHQrgev6TM2KwA
+         BbolZDIO6NsL4uQmtzWBkmSj/KKCQpVJQMbydEcFrMVN5nqsahNJN2f9tCYpz1+iYVSO
+         q8drDSVD9Fiv9w/T8+netQ4jfEj+Kyd8KbMelFMO70pM6lWrT34cWKHscGezOd/FUo2v
+         LSfw==
+X-Gm-Message-State: AOAM532vhIFfMt6zGdRGyMheVatq+rEiTjcf7/JoVk3Z0LahkkES0BN2
+        /c2QJQZIO7Ihtqd8Lo2NnSo=
+X-Google-Smtp-Source: ABdhPJwDfPSnlQNtt4HwMMQ8J71qo1hxlwHsxo4zZE5//41TRPJYCa2mS1yiwpIBiagXaSHHrQPLEw==
+X-Received: by 2002:a7b:c74c:: with SMTP id w12mr2083514wmk.140.1644343477019;
+        Tue, 08 Feb 2022 10:04:37 -0800 (PST)
 Received: from localhost.localdomain (host-95-245-2-16.retail.telecomitalia.it. [95.245.2.16])
-        by smtp.gmail.com with ESMTPSA id n26sm3176872wms.13.2022.02.08.10.04.31
+        by smtp.gmail.com with ESMTPSA id n26sm3176872wms.13.2022.02.08.10.04.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 10:04:32 -0800 (PST)
+        Tue, 08 Feb 2022 10:04:36 -0800 (PST)
 From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
 To:     Larry Finger <Larry.Finger@lwfinger.net>,
         Phillip Potter <phil@philpotter.co.uk>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
 Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Subject: [PATCH v2 0/2] staging: r8188eu: Use kzalloc() with GFP_ATOMIC in atomic context
-Date:   Tue,  8 Feb 2022 19:04:24 +0100
-Message-Id: <20220208180426.27455-1-fmdefrancesco@gmail.com>
+Subject: [PATCH v2 1/2] staging: r8188eu: Use sizeof dereferenced pointer in kzalloc()
+Date:   Tue,  8 Feb 2022 19:04:25 +0100
+Message-Id: <20220208180426.27455-2-fmdefrancesco@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220208180426.27455-1-fmdefrancesco@gmail.com>
+References: <20220208180426.27455-1-fmdefrancesco@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -70,33 +72,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the GFP_ATOMIC flag of kzalloc() in two memory allocation in rtw_set_key().
-This function is not allowed to sleep because it executes in atomic context. With
-the GFP_ATOMIC type flag, the allocation is high priority and cannot sleep.
-
-This issue is detected by Smatch which emits the following warning:
-drivers/staging/r8188eu/core/rtw_mlme.c:1603 rtw_set_key() warn: sleeping in atomic context
-
-Before the above-mentioned changes, checkpatch.pl reports the following issues:
+checkpatch.pl emits the following warning:
 
 CHECK: Prefer kzalloc(sizeof(*pcmd)...) over kzalloc(sizeof(struct cmd_obj)...)
-+       pcmd = kzalloc(sizeof(struct cmd_obj), GFP_ATOMIC);
++       pcmd = kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
 
 CHECK: Prefer kzalloc(sizeof(*psetkeyparm)...) over kzalloc(sizeof(struct setkey_parm)...)
-+       psetkeyparm = kzalloc(sizeof(struct setkey_parm), GFP_ATOMIC).
++       psetkeyparm = kzalloc(sizeof(struct setkey_parm), GFP_KERNEL).
 
-According to the above "CHECK[S]", use the preferred style in the two kzalloc().
+According to the above "CHECK[S]", use the preferred style in the two kzalloc()
+of rtw_set_key().
 
-Changes from v1: Split one patch into two according to a requirement by
-Greg Kroah-Hartman.
-
-Fabio M. De Francesco (2):
-  staging: r8188eu: Use size of dereferenced pointers in kzalloc()
-  staging: r8188eu: Use kzalloc() with GFP_ATOMIC in atomic context
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+---
 
  drivers/staging/r8188eu/core/rtw_mlme.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/staging/r8188eu/core/rtw_mlme.c b/drivers/staging/r8188eu/core/rtw_mlme.c
+index 038bddc361c3..f5b2df72e0f4 100644
+--- a/drivers/staging/r8188eu/core/rtw_mlme.c
++++ b/drivers/staging/r8188eu/core/rtw_mlme.c
+@@ -1600,12 +1600,12 @@ int rtw_set_key(struct adapter *adapter, struct security_priv *psecuritypriv, in
+ 	struct mlme_priv		*pmlmepriv = &adapter->mlmepriv;
+ 	int	res = _SUCCESS;
+ 
+-	pcmd = kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
++	pcmd = kzalloc(sizeof(*pcmd), GFP_KERNEL);
+ 	if (!pcmd) {
+ 		res = _FAIL;  /* try again */
+ 		goto exit;
+ 	}
+-	psetkeyparm = kzalloc(sizeof(struct setkey_parm), GFP_KERNEL);
++	psetkeyparm = kzalloc(sizeof(*psetkeyparm), GFP_KERNEL);
+ 	if (!psetkeyparm) {
+ 		kfree(pcmd);
+ 		res = _FAIL;
 -- 
 2.34.1
 

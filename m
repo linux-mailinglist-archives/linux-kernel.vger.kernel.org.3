@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42CB54AE44E
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:30:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9ABE4AE452
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:30:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387192AbiBHW1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 17:27:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43256 "EHLO
+        id S1387516AbiBHW23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 17:28:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386199AbiBHTnn (ORCPT
+        with ESMTP id S1386201AbiBHTnp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 14:43:43 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1487C0613CB
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 11:43:42 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id c8-20020a17090a674800b001b91184b732so477022pjm.5
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 11:43:42 -0800 (PST)
+        Tue, 8 Feb 2022 14:43:45 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B357CC0613CB
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 11:43:44 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id n23so320475pfo.1
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 11:43:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=IzYAh6mtxyAZ2drjtva0WxDIoe1TxiIdW6u31Cu1VZ0=;
-        b=Z59AvqUCCa7UbRG2nJztf5OxSI9qQovj8CB7b/+6lPnCSxvE10jTasby5VST/dsbG1
-         OVAlzmtRVmJN3/xEluUeFGgv1tku1k8Nky1bf3K3UyyMEpAv+4GM/d3AktiTvQIyazqO
-         5j10K6DkStDMQzABmX4PqlAbgIRA6ciTLM7NS6tIMDt/dmzNEbNc3VkwyT9Qn+EJxZ85
-         ktaf1EYyxRpltgGfKwJJdoDhXWsasI/9JyvWq2tCFdcmgLPYumpRIDSQiOnjS8z/KHie
-         7ZKsxkOiOyeOUpXGax2FJI5NkjnTyMtx31xhASonu1EuJA+sL7BBAK3xT03dxNzO4c6a
-         8g8g==
+        bh=OMn1l57PTLxYtwc+HI0U7xszWZxDsxBNDoAjSgoqiTo=;
+        b=eB1ulFLlG3MvjHSKqJMMPP76xZ5tzmritayHnxYj4pjoQSG31cYP4slT9wT97U7F0R
+         tp0KYs48AvrVX4+VZj7CEwvYxNYoDtC2XN9IbBEi19IVT6jFC+dCWJWh2LhsinDz6s0Y
+         WWnGw0c7L2wyr5fDrnnrYoT9AbQOeiBA1xVP2mSS6jhy8I81TidsErrdFVJ1xE013E1u
+         yfS+FM+wkCjg3S5Q+FluIUilTHtzPX0I4W+T1MTf61x6x+jZTCd9E+JRKOvjiYz0RkOR
+         m8V4+FLxsZc0S4V9/pF3CBOZZ3wDhIngfKi9ZRYAe3qEXvtjSm3p2Qd56MsIYlERVOvQ
+         P6pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=IzYAh6mtxyAZ2drjtva0WxDIoe1TxiIdW6u31Cu1VZ0=;
-        b=798saKTHREHNW+qICWqHQ8FXa3iqOvuVjDPa3yU2ABYor4A+nVFeKlTtrK4GXGfeqB
-         L9xpoNvvU7qoCVOQk+WlW5BjjXQy0MXKjhL4D6z/GIgAJkFeFcLjJN2uuLkSON83SHLS
-         K4ir4Ug0ytSqxjtRwMhvsnDtGBlHCGUZKWBUh33YC3/AV1BLov/Y5pNhTPgJ4Tntvpim
-         5H7xjvjsYGMfw66pnjp2H9MmGI1eyEZDAae07+l9rpjVb6O37vtujO/5ZH00FLiV3tBA
-         AplvbzclveJzWXBAuPiRmYU5luvITDTVD8badcV6IexTlwM8/ynm9/34YydhDxkNKgX7
-         1dnA==
-X-Gm-Message-State: AOAM53172iod4rzI5P7vFZiJ9hSOFhpShT+MTHNhCGnQnyXfgkNyZzH+
-        0PTRY9C98fzsESp4N3rPm+8=
-X-Google-Smtp-Source: ABdhPJxHfW73Un1j2m77knqGc5baEAyVhu9540XuJH25WpcdoAtQ7dfy05NOE3I/jDz5uR2KU/cH5w==
-X-Received: by 2002:a17:903:248:: with SMTP id j8mr3728183plh.123.1644349422264;
-        Tue, 08 Feb 2022 11:43:42 -0800 (PST)
+        bh=OMn1l57PTLxYtwc+HI0U7xszWZxDsxBNDoAjSgoqiTo=;
+        b=2Zvye8aT5ttDjsmR5xpxUykf34f3DQ/tvcWVgevfZ13x643fNf/30rfZqOX98665bZ
+         7/VOLl5o75gNp+06ay9bnRbLJLJvuL6YmdcIm/izBoX/X3JiaLEQapPbtvQDpMCb0oRI
+         YdQh0La/5McxYlkz1WUfLld7sDHeUVs0BhFiByhqsiSjbQn2cux8dWh5v0+jyyU91+ml
+         1MDYQDKbQbg8Nf6zFDUgMZI6H39SUG80THbccRZTFsr4yfX7j7leDWfqYrX8CitWYS+d
+         dkg8tS9zPiabhhgtHlQ7sHXu5WHay4xpwG7PgbXstjxItzYCJ7xpaVkJ9yrETZTA0Of+
+         +azg==
+X-Gm-Message-State: AOAM533MQDqLMdv4sK1WXC+qLYF52qNPM2GVWWicVXA9YhdjX3kK1sOj
+        POIwa0J+pv5J2cQ3stJbAYY=
+X-Google-Smtp-Source: ABdhPJxa3EJBSsbwQz/XZzLop6zZQaddVuKoxQrvRvkGQbStZq8FBYijx/2PQqDl+XAyFFBowzvwOw==
+X-Received: by 2002:a05:6a00:23d5:: with SMTP id g21mr5835863pfc.78.1644349424241;
+        Tue, 08 Feb 2022 11:43:44 -0800 (PST)
 Received: from balhae.hsd1.ca.comcast.net ([2601:647:4800:c6f0:347f:e607:176:4358])
-        by smtp.gmail.com with ESMTPSA id w11sm16876839pfu.50.2022.02.08.11.43.40
+        by smtp.gmail.com with ESMTPSA id w11sm16876839pfu.50.2022.02.08.11.43.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 11:43:41 -0800 (PST)
+        Tue, 08 Feb 2022 11:43:43 -0800 (PST)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Peter Zijlstra <peterz@infradead.org>,
@@ -60,10 +60,11 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Byungchul Park <byungchul.park@lge.com>,
         "Paul E. McKenney" <paulmck@kernel.org>,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Radoslaw Burny <rburny@google.com>
-Subject: [PATCH 03/12] timer: Protect lockdep functions with #ifdef
-Date:   Tue,  8 Feb 2022 11:43:15 -0800
-Message-Id: <20220208194324.85333-4-namhyung@kernel.org>
+        Radoslaw Burny <rburny@google.com>, Tejun Heo <tj@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Subject: [PATCH 04/12] workqueue: Protect lockdep functions with #ifdef
+Date:   Tue,  8 Feb 2022 11:43:16 -0800
+Message-Id: <20220208194324.85333-5-namhyung@kernel.org>
 X-Mailer: git-send-email 2.35.0.263.gb82422642f-goog
 In-Reply-To: <20220208194324.85333-1-namhyung@kernel.org>
 References: <20220208194324.85333-1-namhyung@kernel.org>
@@ -85,51 +86,82 @@ functions without enabling CONFIG_LOCKDEP actually.  The existing code
 assumes those functions will be removed by the preprocessor but it's
 not the case anymore.  Let's protect the code with #ifdef's explicitly.
 
-Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Tejun Heo <tj@kernel.org>
+Cc: Lai Jiangshan <jiangshanlai@gmail.com>
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- kernel/time/timer.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ kernel/workqueue.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/kernel/time/timer.c b/kernel/time/timer.c
-index 85f1021ad459..4af95dbf6435 100644
---- a/kernel/time/timer.c
-+++ b/kernel/time/timer.c
-@@ -794,7 +794,10 @@ static void do_init_timer(struct timer_list *timer,
- 	if (WARN_ON_ONCE(flags & ~TIMER_INIT_FLAGS))
- 		flags &= TIMER_INIT_FLAGS;
- 	timer->flags = flags | raw_smp_processor_id();
-+
+diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+index 33f1106b4f99..405e27385f74 100644
+--- a/kernel/workqueue.c
++++ b/kernel/workqueue.c
+@@ -2279,8 +2279,11 @@ __acquires(&pool->lock)
+ 
+ 	raw_spin_unlock_irq(&pool->lock);
+ 
 +#ifdef CONFIG_LOCKDEP
- 	lockdep_init_map(&timer->lockdep_map, name, key, 0);
-+#endif
- }
- 
- /**
-@@ -1409,19 +1412,22 @@ static void call_timer_fn(struct timer_list *timer,
- 	struct lockdep_map lockdep_map;
- 
- 	lockdep_copy_map(&lockdep_map, &timer->lockdep_map);
--#endif
-+
- 	/*
- 	 * Couple the lock chain with the lock chain at
- 	 * del_timer_sync() by acquiring the lock_map around the fn()
- 	 * call here and in del_timer_sync().
- 	 */
+ 	lock_map_acquire(&pwq->wq->lockdep_map);
  	lock_map_acquire(&lockdep_map);
 +#endif
- 
- 	trace_timer_expire_entry(timer, baseclk);
- 	fn(timer);
- 	trace_timer_expire_exit(timer);
- 
++
+ 	/*
+ 	 * Strictly speaking we should mark the invariant state without holding
+ 	 * any locks, that is, before these two lock_map_acquire()'s.
+@@ -2310,8 +2313,11 @@ __acquires(&pool->lock)
+ 	 * point will only record its address.
+ 	 */
+ 	trace_workqueue_execute_end(work, worker->current_func);
++
 +#ifdef CONFIG_LOCKDEP
  	lock_map_release(&lockdep_map);
+ 	lock_map_release(&pwq->wq->lockdep_map);
 +#endif
  
- 	if (count != preempt_count()) {
- 		WARN_ONCE(1, "timer: %pS preempt leak: %08x -> %08x\n",
+ 	if (unlikely(in_atomic() || lockdep_depth(current) > 0)) {
+ 		pr_err("BUG: workqueue leaked lock or atomic: %s/0x%08x/%d\n"
+@@ -2824,8 +2830,10 @@ void flush_workqueue(struct workqueue_struct *wq)
+ 	if (WARN_ON(!wq_online))
+ 		return;
+ 
++#ifdef CONFIG_LOCKDEP
+ 	lock_map_acquire(&wq->lockdep_map);
+ 	lock_map_release(&wq->lockdep_map);
++#endif
+ 
+ 	mutex_lock(&wq->mutex);
+ 
+@@ -3052,6 +3060,7 @@ static bool start_flush_work(struct work_struct *work, struct wq_barrier *barr,
+ 	insert_wq_barrier(pwq, barr, work, worker);
+ 	raw_spin_unlock_irq(&pool->lock);
+ 
++#ifdef CONFIG_LOCKDEP
+ 	/*
+ 	 * Force a lock recursion deadlock when using flush_work() inside a
+ 	 * single-threaded or rescuer equipped workqueue.
+@@ -3066,6 +3075,8 @@ static bool start_flush_work(struct work_struct *work, struct wq_barrier *barr,
+ 		lock_map_acquire(&pwq->wq->lockdep_map);
+ 		lock_map_release(&pwq->wq->lockdep_map);
+ 	}
++#endif
++
+ 	rcu_read_unlock();
+ 	return true;
+ already_gone:
+@@ -3084,10 +3095,12 @@ static bool __flush_work(struct work_struct *work, bool from_cancel)
+ 	if (WARN_ON(!work->func))
+ 		return false;
+ 
++#ifdef CONFIG_LOCKDEP
+ 	if (!from_cancel) {
+ 		lock_map_acquire(&work->lockdep_map);
+ 		lock_map_release(&work->lockdep_map);
+ 	}
++#endif
+ 
+ 	if (start_flush_work(work, &barr, from_cancel)) {
+ 		wait_for_completion(&barr.done);
 -- 
 2.35.0.263.gb82422642f-goog
 

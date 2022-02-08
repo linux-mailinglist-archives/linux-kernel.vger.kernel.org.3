@@ -2,138 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8AF54ADBB9
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 15:56:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBAC84ADBB0
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 15:56:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244797AbiBHOz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 09:55:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47892 "EHLO
+        id S1378708AbiBHOzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 09:55:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378716AbiBHOzQ (ORCPT
+        with ESMTP id S1378789AbiBHOzS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 09:55:16 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69B51C03FEEE
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 06:55:12 -0800 (PST)
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id BE7163F33A
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 14:55:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1644332110;
-        bh=s1IMl3bQpWn4BmhYXFrJkGqIg7SbAYtbaNCslVtkn9A=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=HMAz8B7Dwmmca22gRczJKVzfb1knOeIvmBsbxZreOTVJVcaaT3db50py4DW/FlxuD
-         PFFg1TLTIazeQ31Vyj0G1PiCPf597wcdHPLiwr3Ri1ulaZAJ0KpkGRLbhDg9URsP64
-         aOUODZm98XB+vg39V84E3jvyumQvdLY7DgKouH4upi/GKkWA2OOpvqqej3AHGEfxwj
-         9uoLnLGjumotGTq4sTXu8i81kieYfwAjJjT9z7hlhJpPusfRLIMzrJZ6VkK2OvzKq5
-         +GvEPINRZMjxl8QUeurHsMR9ToW4vTThNwh1dxGKZJ+TaIA4cFGyZNo3hEupnBO7oI
-         11fttRKcpHGrQ==
-Received: by mail-ej1-f71.google.com with SMTP id aj9-20020a1709069a4900b006cd205be806so956744ejc.18
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 06:55:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=s1IMl3bQpWn4BmhYXFrJkGqIg7SbAYtbaNCslVtkn9A=;
-        b=SmfSU5yQzJbl/hBhgtkJGK7K+9aoxMSn95QxIUC2sK5fM+N38Fn5HTbK9z40EsK0pd
-         5accPw52yWwOARj6CjdprkOgKO6+i1MwMgnwodL0zltxCtWW0fU547p6houv7u2RZLRe
-         6rL7DLtl8iWryg0uME4qunCnBZnUzEserJBr0qix+4/sOG61bGHFjicu47SBLwi+c5fN
-         dPnJteuLkRdyhJDGWNDKTAFwzAr2rXEIBP+9Ti+29o4rzoi0hboYGJefVWtdlreCaUQm
-         6R3W85aikzJ2ARJm3IWaJUaTxXbNsXfB43tCsue06bzGmfNVcX6EKdZM6h5zvbM/hU3p
-         Nn5A==
-X-Gm-Message-State: AOAM530GrBEBeBAGMRE27RbzvMB9tD5o8NiKwkWSH4R87BqMnFRAqFwd
-        FDSKVSe3SAIp5nBL4jeA46KUXbnhxewHujeHF58IPcUAcZxvHJOnxSPtsDlihgIDgKCH+NSELJo
-        3C8j5/1Pmo2tETMmvT0A4nMpVyISh60Q2ni9i3fXBhg==
-X-Received: by 2002:a17:907:1c01:: with SMTP id nc1mr4166734ejc.659.1644332110288;
-        Tue, 08 Feb 2022 06:55:10 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzBDSawfyjI97i8H3epieO8DgpiikxUatxwAPQp6uSpUnl0g6llplmwOmXOOamh8buC1ms3Yg==
-X-Received: by 2002:a17:907:1c01:: with SMTP id nc1mr4166711ejc.659.1644332110105;
-        Tue, 08 Feb 2022 06:55:10 -0800 (PST)
-Received: from [192.168.0.93] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id o11sm7026147edh.75.2022.02.08.06.55.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Feb 2022 06:55:09 -0800 (PST)
-Message-ID: <bca78043-d552-a7e4-149b-087c6226d8bf@canonical.com>
-Date:   Tue, 8 Feb 2022 15:55:08 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 1/3] dt-bindings: crypto: Convert Atmel AES to yaml
+        Tue, 8 Feb 2022 09:55:18 -0500
+Received: from IND01-BMX-obe.outbound.protection.outlook.com (mail-bmxind01olkn2040.outbound.protection.outlook.com [40.92.103.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C49FC061579;
+        Tue,  8 Feb 2022 06:55:17 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=c/RaUpfE+i6cLfq1zRwScRhO5byBr+oRsoyUL/n5aiKx9G/kjRwWSIsSF0HxrdYfaQXOvvLjWcqJo8KuCFQh1Lt7y2ih0REgk+9iyNqMcYWA3J8ej2EBqBN/tjNzl0X6Ja9S5B/+ZVUViBd+cczAQe2VcrucQ8jfMVZZdHF82zqc3gLEwJznuwxXOxkCrOZu0XCkZRwgjKqk+kkL9nb4x+g+0bzwnQi5FGyEUjWTUF2W/96QeAGJotCoK+8DYbcmWCc762x41BfwP4kpRwRRND63E+NfdNH4mnXYKpp9N10xwSsIGB4Rz1oQpCAer9QWt9+ShZeocKyEeKou5Twtrg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bUtTusyOT4md75lry1P1HozY6Mx/2UJg5nQjOAuY/3Y=;
+ b=B0YIz8RZ9ljc2UVjyeexCtHECPF08Yxh7jfSTmI7fLPXKicOKGuJT/77yJLRUDKlsoPyesXfVn04tEKV0/HUW1WrZcvZT1NFxo90UfuJqTzWw2qnTtV2Fo6PkSyIc15LopMPaTtr/TlQgOym0ATcFJAxZp+VH8evvi7X4HNgSfr/IM04mm3+NBbS/jTiVrjK6IEOgUb11F2q2JTi7ddV3rGJKQ03MqkPgKE7mjx6iE2huoqlbJrOqvvoZlZnMOCTzNdjeDW0FgZA7R4p6u4tknaMtaCRuvP/fpvIjofAEzHsM3q9vMntU8lGK25XqX6sgrwfyzOHNdXYwb9j4mXtJA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bUtTusyOT4md75lry1P1HozY6Mx/2UJg5nQjOAuY/3Y=;
+ b=unejyP3mhe05eN4d3HTv6HR3GzR+WHbwGckOGiYzJRzml6jjVvX7pOog/ThRs7rk8hoh0O0bK9d6Tn3zWT30SDlNc+j2pVJzkUXanU6Im4mqN1tmA5hZe4mgv179rr2KjTh9OTcsGXix8Hj0kFcYKs1FmiJgHWXWopN137EX+do5SH0BTcN1qbI4L82edHGT3U3IN/mOiaxUkbt7RNYb5bPUDKxTcA2wxZA5If8x9T2NTlHU6slnje1lWw8ZlIYmYTnwYiVsi7nurQT5MFXwapzCK+DX0dKTrmXfOb7XiaCyMyDrXsmzNqffWy0mN5XY78J1Hh9isGPlHbzsXFBIOA==
+Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:1b::13)
+ by BMXPR01MB4759.INDPRD01.PROD.OUTLOOK.COM (2603:1096:b01:3::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Tue, 8 Feb
+ 2022 14:55:12 +0000
+Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::d19b:7cd1:3760:b055]) by PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::d19b:7cd1:3760:b055%9]) with mapi id 15.20.4951.019; Tue, 8 Feb 2022
+ 14:55:12 +0000
+From:   Aditya Garg <gargaditya08@live.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+CC:     Jeremy Kerr <jk@ozlabs.org>, Matthew Garrett <mjg59@srcf.ucam.org>,
+        Orlando Chamberlain <redecorating@protonmail.com>,
+        Aun-Ali Zaidi <admin@kodeit.net>,
+        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [BUG SEVERE] Failure to enable EFI Runtime services on T2 Macs
+Thread-Topic: [BUG SEVERE] Failure to enable EFI Runtime services on T2 Macs
+Thread-Index: AQHYHPN9yWRx6QwxHkme7awzoxWFeKyJr1oAgAAOewA=
+Date:   Tue, 8 Feb 2022 14:55:12 +0000
+Message-ID: <2A5B5047-23DE-4660-9ABD-446EE264CC54@live.com>
+References: <E5DB4C43-F2AB-412A-9891-C13255374AD9@live.com>
+ <CAMj1kXEUudnnX8FaAhtUmcKB+jt237BUTsMrNC8ZoOepf4P3pQ@mail.gmail.com>
+In-Reply-To: <CAMj1kXEUudnnX8FaAhtUmcKB+jt237BUTsMrNC8ZoOepf4P3pQ@mail.gmail.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Tudor.Ambarus@microchip.com, herbert@gondor.apana.org.au
-Cc:     Nicolas.Ferre@microchip.com, Claudiu.Beznea@microchip.com,
-        alexandre.belloni@bootlin.com, linux-crypto@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Kavyasree.Kotagiri@microchip.com, devicetree@vger.kernel.org
-References: <20220208104918.226156-1-tudor.ambarus@microchip.com>
- <20220208104918.226156-2-tudor.ambarus@microchip.com>
- <f5563605-7b61-c23e-68ec-6e315efb268d@canonical.com>
- <d72a96a9-f99c-5204-00d0-00f78ea96772@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <d72a96a9-f99c-5204-00d0-00f78ea96772@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-tmn:  [2Mj+BrPDiwCh14Icn7nf1NO6WYuyCFAe/LSDpc49abQHuVX2DeKhnIeAJioc0lRP]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 08714fdb-5138-45ec-4fdc-08d9eb130250
+x-ms-traffictypediagnostic: BMXPR01MB4759:EE_
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: w1qfulWiPOoeYNxOIXS3awvfT+1HlWNqb5DVZuTdVuVfHGbUQoBlEF8d23QcuLPmuoTjxZZC2d+0fPu/QFHm4SzQTqdYhbe0aatrmS2URRASVMQyJ8RYK6UOB9rc4K/veScS9hR26fMf1iZYzFmkd9D3ZCd8fXH8PewDwzvyLT4c2h9Tc5yaVkBL6fx+HXhpEOJ6aJCbRn6M7UWTqJZQpssbBNQQpMpJubmnZABuTqB5USsX+MsCQ4KBoqcnPJYSO7vGH/mF1cQODCHEt1UWsUBc5BQJ9U2z1ZE3krIyjh2Bw1ooGF5mp5T5B3IbjmLaCAA4Oa8I16VOQzMd0ngKpGEtTUisxbouJPhL9LDiisuNRShlqXvzHtBLtpwZpkmurGdRN7EaPhkRwA1rMoKynpGGpcR2//LXgyOp8gpcINQ+iVk+6lsr0Jc0otgaZ6LuS1UOocB0MmOA0Hj+lacS8tqUaBww3up/gY6RtMiOUKGaafLNyK3O9goI/JHspDSv+NujBC5TXKGxDslhDnGb8WxdVuQh7optcpzIE/k2bacyxt+WTyJwQ7TM9hdEz/L1SEuqhv8E0FdYtW9DTKWX3r+VC2JwybHNP9c56Q4o3/r3kyW9e7eqdMATQqkfhfKIm9u+FoSderMa2UGi4jzrz7TE95dd52+s+YqX5jovsLU=
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Xz+tAYMh6cVFspX/EZyRwi96O5a9RTNFlWfc5uXnSmy+g59IM2Gk+mikYKW0?=
+ =?us-ascii?Q?LnYDoSWu+STTU2+qayTRdwTgRMfkyviR8rsq8bdyUflpiMyS1zfAZNyBw53Z?=
+ =?us-ascii?Q?TThvdzwHXHewvOXovE71iaEXYnaWAG4gdW8ApZ1TT1nbwg9Blbb4XyhYgglF?=
+ =?us-ascii?Q?Z868G7h6duY+SVXaBur4mTkpZX6A6C/Mh8RILnNpD61ZO+unG8/XrDwQ5lfx?=
+ =?us-ascii?Q?c0C+VgwAZ5+kqZpMnLIg1QfwQUDYCa+ICjW7Vq2gc5Iz8dileR4zTY79kgcQ?=
+ =?us-ascii?Q?yY0zc5RXA1lYTVYew16I+XUg7hQ6ttkuA/+KQ5gndlnS1D6YTi9hWju0VmdC?=
+ =?us-ascii?Q?8u5kHCigSY77brCJhJPF8wE9+64xDqrcllGXClHAs8J/80/0EBUR8esPRNbb?=
+ =?us-ascii?Q?sKS7JdqoagUNgQPecTs276Ff4zlx5Q7D6mU0o06xlM66AEGZCe6CIjz3GKDK?=
+ =?us-ascii?Q?3Dsh/PrwH9RHhvG7ANgCa6rP8h1mDjjibCMGVVeTpjdRn8ucoccPj9AvYZCM?=
+ =?us-ascii?Q?bERxCVDUvRj3A8j8h35//t2DFrJTDwzFu5AYCPvRYZpNDsY2D4PorfHnWhlO?=
+ =?us-ascii?Q?BKiw09y1qU0Wuxj8/BAdV3HkJ9amjiRcdN+cYZYQcgKmGYmKlViALQBO1OGg?=
+ =?us-ascii?Q?M5bB7pUCL6L57EaYU1bgB14z1VEEifyPvDxkk5jzM18qu+1t3kxKkLjQdlAc?=
+ =?us-ascii?Q?EET5u/5seVKRo82z02r2MZzPCRgBc/nbisBgcPD0CvoTzRYporaDqoLjifqy?=
+ =?us-ascii?Q?o/wLqpUoRT/3EoEmSEmjmScgT/QkPnorH197XUMUSm4ilp9BlQDkxC5u4imS?=
+ =?us-ascii?Q?22bosdfSj1L0pOpGNYtW0I/oRL+1OHrBhgHqrTnPDpzVTyRqahKHYvAgWJp5?=
+ =?us-ascii?Q?CRxD+02CBRV7+6VHE5nMKNgQqGBz9/hlDX5MsE2IR0KIrAhn3xV3cGEJzuyW?=
+ =?us-ascii?Q?xEe48bLEVsBwscCW/aGcIqjOIidlZH9HrjimWEmQ7VMJO2JUI/8WTVN21h9g?=
+ =?us-ascii?Q?2b4CUrAcJnwgwPzX9Nq/Ul+M2g=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <D236C2EBE10B1346A17B09B513A1DBEA@INDPRD01.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: 08714fdb-5138-45ec-4fdc-08d9eb130250
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Feb 2022 14:55:12.5047
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BMXPR01MB4759
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/02/2022 15:40, Tudor.Ambarus@microchip.com wrote:
-> On 2/8/22 13:58, Krzysztof Kozlowski wrote:
->> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
->>
->> On 08/02/2022 11:49, Tudor Ambarus wrote:
->>> Convert Atmel AES documentation to yaml format. With the conversion the
->>> clock and clock-names properties are made mandatory. The driver returns
->>> -EINVAL if "aes_clk" is not found, reflect that in the bindings and make
->>> the clock and clock-names properties mandatory. Update the example to
->>> better describe how one should define the dt node.
->>>
->>> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
->>> ---
->>>  .../crypto/atmel,at91sam9g46-aes.yaml         | 65 +++++++++++++++++++
->>>  .../bindings/crypto/atmel-crypto.txt          | 20 ------
->>>  2 files changed, 65 insertions(+), 20 deletions(-)
->>>  create mode 100644 Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-aes.yaml
->>>
->>
->> I understand that you keep the license GPL-2.0 (not recommended mix)
->> because of example coming from previous bindings or from DTS (both GPL-2.0)?
->>
-> 
-> The previous bindings did not have a license specified. We have DTS files with
-> these nodes that are either (GPL-2.0+ OR MIT) or GPL-2.0-or-later. The drivers
-> are GPL-2.0. I thought to follow the drivers. I see the example in [1] uses
-> (GPL-2.0-only OR BSD-2-Clause). I see the crypto bindings that are converted
-> to yaml are either (GPL-2.0-only OR BSD-2-Clause) or GPL-2.0-only. Is there
-> another guideline that I miss?
-> 
-
-Yes, there is. Run checkpatch (your question kinds of point to the fact
-that you did not run it...):
-WARNING: DT binding documents should be licensed (GPL-2.0-only OR
-BSD-2-Clause)
 
 
-If your new bindings use copied/derivative description or DTS code which
-is licensed as only GPL-2.0, the bindings itself as derivative work
-might need to stay as GPL-2.0 as well. Unless copyright holders agree to
-re-license this as GPL2-OR-BSD. As representing company, your patch
-might be enough to re-license, but maybe other people contributed. I
-don't know.
+> On 08-Feb-2022, at 7:33 PM, Ard Biesheuvel <ardb@kernel.org> wrote:
+>=20
+> On Tue, 8 Feb 2022 at 14:55, Aditya Garg <gargaditya08@live.com> wrote:
+>>=20
+>> On using some specific kernel configuration, on Macs with the T2 Securit=
+y chip, EFI Runtime services fail to start. Some logs which may be useful a=
+re as follows :-
+>>=20
+>> Feb 08 17:11:11 MacBook kernel: [Firmware Bug]: Page fault caused by fir=
+mware at PA: 0xffffa79840068000
+>> Feb 08 17:11:11 MacBook kernel: WARNING: CPU: 11 PID: 150 at arch/x86/pl=
+atform/efi/quirks.c:735 efi_crash_gracefully_on_page_fault+0x50/0xd0
+>=20
+> This means the firmware is broken. There is very little we can do
+> about this beyond disabling EFI runtime services entirely on such
+> systems.
+>=20
+> ...
+>=20
+>> The kernel configuration where this bug is seen is on https://github.com=
+/t2linux/T2-Ubuntu-Kernel/blob/Mainline/templates/default-config
+>>=20
+>> I had an old kernel configuration, where I did not face this issue and w=
+as easily able to write to the NVRAM. That kernel configuration is on https=
+://github.com/t2linux/T2-Ubuntu-Kernel/blob/b5c20b8c7689251dd943e22dbe02cef=
+9020db8d1/templates/default-config
+>>=20
+>> I believe these lines in the kernel config, which are present in the for=
+mer but absent in the latter are causing the issue :-
+>>=20
+> ...
+>=20
+>> Especially CONFIG_LOAD_UEFI_KEYS=3Dy is which I guess may be the culprit=
+.
+>>=20
+>=20
+> Yes, that seems likely.
+>=20
+>> I request you to reply to my issue as soon as possible
+>>=20
+>=20
+> Please stop demanding attention like this, even though it is thinly
+> veiled as courteous.
+>=20
+> If you want to run bleeding edge kernels on non-standard EFI hardware,
+> you have to be able to sort yourself out to some extent. I am the
+> EFI-on-Linux maintainer, but that doesn't mean I work for you and have
+> to be on call to fix your problems.
 
-I just wanted to be sure that you use GPL-2.0 in purpose, because
-GPL2-OR-BSD cannot be used.
+Looks like I offended you. Heartiest apologies for that. I guess being from=
+ a non English background my works had a negative effect on you. My intenti=
+on was just to get help, not complain.
 
-Best regards,
-Krzysztof
+Regards
+Aditya
+

@@ -2,100 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3594E4AE163
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 19:49:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75C724AE171
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 19:49:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385458AbiBHSsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 13:48:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42782 "EHLO
+        id S1385501AbiBHSt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 13:49:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385468AbiBHSsP (ORCPT
+        with ESMTP id S1385498AbiBHStO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 13:48:15 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A6A0C061579
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 10:48:15 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id t9so94161plg.13
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 10:48:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=bIoZDesM5AyInsr4M1gx9YJxvXmEwtTsATISevIQ9SU=;
-        b=qQiR5qxJuRA5CHx4cFWS46nKdM8jpZCQvszdI2IncKWnPwnDHAm8h6j/uok/XZmlRf
-         riuuvVHmGez4GJmvigyCtXadcHIMNSV4Pos0X8xQ8rSmBjlDpXQ6JvnhrL6u3fwWgrM7
-         ZzblNZiiW9Gvei/wUV/f2QDOoZteo47tbS976stIw9GHG9qGOSU4WkBhvPzq9NpBXrVm
-         r68NCiQqNCgJaoYwmY23hhrek44kM6mqrjFmQ3wgvrGB389TZ1HXJUdxfdfU5zgX4vye
-         hDSMXH4bb+6Ld/JssYJZeTuRZn4/T46s8NHbmwAKnGDUYJAFUS6xTSh5V9dY0JpGaLs7
-         zAxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=bIoZDesM5AyInsr4M1gx9YJxvXmEwtTsATISevIQ9SU=;
-        b=vP5GeNOlCQdAgBv28Keq9C5snPXUTSWDPR+H1aKeOA9H0MzO/nPM84mhhowPrbSOMY
-         nrf/++ntg6TUIl9sz6mKkGWSfcKQ3M6k7ZNnaglIdNOo/4iMIc3w8lKIxz2rpsSvACJs
-         rVUTpQ9WyxcZUcYKCFKa2W5eJQyQeKvMMnyrIdIOlP3LxK6CN+UGxEitCCgNhIapa/1f
-         ob4FqFJCMhOzXEJVk/QSAz0cDIp5++6Ir2F1mRhHDYtamGQVeah6PMx7YJvueQ0bzz8f
-         0H/UgzyC3RmvKyOO+s+2jhaASi1BMjfe3hJqgZ9FwImLqTNUWKmmZgvLKQN+m9bsS9BJ
-         QXiw==
-X-Gm-Message-State: AOAM531H0s3Bz7UPrL/a5XOgsdEi3wHWjurIe3UMNj7z6w8gviDmoLGx
-        RbtR/VKrQTZyPRhWErLDksc=
-X-Google-Smtp-Source: ABdhPJwQUJi9CkT9USiF1Y7+qvOezRjjJhU+4/PKcZmsMdaS211UXRoY47JBrVr9kSGJvU6tZJ09eQ==
-X-Received: by 2002:a17:90a:7605:: with SMTP id s5mr2849505pjk.194.1644346094692;
-        Tue, 08 Feb 2022 10:48:14 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id r10sm2927084pgk.74.2022.02.08.10.48.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 10:48:14 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 8 Feb 2022 08:48:13 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Byungchul Park <byungchul.park@lge.com>,
-        "Paul E. McKenney" <paul.mckenney@linaro.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Radoslaw Burny <rburny@google.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-Subject: Re: [PATCH 04/12] workqueue: Protect lockdep functions with #ifdef
-Message-ID: <YgK67dQabIMam8nc@slm.duckdns.org>
-References: <20220208184208.79303-1-namhyung@kernel.org>
- <20220208184208.79303-5-namhyung@kernel.org>
+        Tue, 8 Feb 2022 13:49:14 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 835D2C0612BA
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 10:49:13 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2C2701FB;
+        Tue,  8 Feb 2022 10:49:13 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.89.190])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 53D813F73B;
+        Tue,  8 Feb 2022 10:49:12 -0800 (PST)
+Date:   Tue, 8 Feb 2022 18:49:07 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     kernel test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [peterz-queue:sched/core 32/32]
+ arch/arm64/include/asm/preempt.h:85:1: error: type defaults to 'int' in
+ declaration of 'DECLARE_STATIC_KEY_TRUE'
+Message-ID: <YgK7I2bMJQA8IPmt@FVFF77S0Q05N>
+References: <202202081918.RDLHzFHh-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220208184208.79303-5-namhyung@kernel.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <202202081918.RDLHzFHh-lkp@intel.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 08, 2022 at 10:42:00AM -0800, Namhyung Kim wrote:
-> With upcoming lock tracepoints config, it'd define some of lockdep
-> functions without enabling CONFIG_LOCKDEP actually.  The existing code
-> assumes those functions will be removed by the preprocessor but it's
-> not the case anymore.  Let's protect the code with #ifdef's explicitly.
-> 
-> Cc: Tejun Heo <tj@kernel.org>
-> Cc: Lai Jiangshan <jiangshanlai@gmail.com>
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+On Tue, Feb 08, 2022 at 07:08:33PM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/core
+> head:   ac7695a93a578befdcf4900a90860bf19e057e1b
+> commit: ac7695a93a578befdcf4900a90860bf19e057e1b [32/32] arm64: support PREEMPT_DYNAMIC
 
-Can you wrap them in inlines and add some comment?
+> >> arch/arm64/include/asm/preempt.h:85:1: warning: data definition has no type or storage class
+>       85 | DECLARE_STATIC_KEY_TRUE(sk_dynamic_irqentry_exit_cond_resched);
+>          | ^~~~~~~~~~~~~~~~~~~~~~~
 
-Thanks.
+This is because I forgot to include <linux/jump_label.h>, so GCC has no idea
+what `DECLARE_STATIC_KEY_TRUE` means.
 
--- 
-tejun
+I'll go add that where needed and check that doesn't introduce a circular
+dependency.
+
+Thanks,
+Mark.

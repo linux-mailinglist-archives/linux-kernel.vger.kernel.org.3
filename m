@@ -2,133 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 256994AD999
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 14:22:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DF8B4AD9A1
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 14:22:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358092AbiBHNV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 08:21:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37822 "EHLO
+        id S1359750AbiBHNV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 08:21:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376474AbiBHNJf (ORCPT
+        with ESMTP id S1376458AbiBHNJd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 08:09:35 -0500
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45411C03FED0
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 05:09:34 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id x193so20562208oix.0
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 05:09:34 -0800 (PST)
+        Tue, 8 Feb 2022 08:09:33 -0500
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EA4DC03FECE
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 05:09:31 -0800 (PST)
+Received: by mail-qv1-xf32.google.com with SMTP id o5so6311828qvm.3
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 05:09:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SbtrRuHy+NSlAeGtvroJmD9+7e6TK8yWL1WcOGDbT60=;
-        b=ipB2P1DX/pWgxuTpermK6N6bN/NM8fq3jGkEyjPKIkXcJpx6XjJ9MZa/NKoDWwrzzR
-         H9zOo26gGXSh73UucCAB3b8IrpsW1y9z8bWdX9TuGNUEUL6P7BodxWlew7CktkYe46lB
-         mTSdFCPQ3OkT1RP1x/cWc1BBjlCdCs9vkvqtGoNIO1KIyvUoux1SlJZUjb+j4n02gssA
-         tpx4yKREirT9e4vk7X0IQqZIvUbeUkL8uwPIArNFxbd4OjMiyavTrZuTe4VqePCEvIIW
-         C/es6W9/nRSRO9vZv0UYJzlCUwVtwQXGAEyGo2tiEFSLhexMFTuNnQ6mlfn+EXqCeeBl
-         yteQ==
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/s8FiFoNXLlWJsEmo8dsRXHngSoVZR77SSlKzOXt7DI=;
+        b=QohgGiltFrcaDVrGMMj2PZ8boBvyEj0cqCLWL7vcz5XGkiAJ0tuv/Z5UkNsIOyiwMG
+         aaKAT8a83xmJsTJ2pcdAOOM6ZXTv9b8fqJxtB4wP0yuKrBJCSBsfJJkhRFQuwm/1ciE5
+         QqqanCkfFbGJbk264uR9ysMViQXC5fqWfzFvhaxCkMikCe82TMerVEOOxDK0L3kGNATY
+         1f5BxY7lD44t7ZoYNXCNTyY+eVSjDyXfRcrzt7G27POwqZYhmCu2pveGJxzCkv3Y6x+C
+         QTfNUvr8z8I9gPr2hqMHsUTz/VwjPKB51GdPoRFXEXJQ29/J3UxIYjfQh8R66g9h/ZU5
+         oAcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SbtrRuHy+NSlAeGtvroJmD9+7e6TK8yWL1WcOGDbT60=;
-        b=dHVf5++LQSVBKcKleiDyUrVOBOposbcXhiv9nSkxHqwWKJLkCFx7F6OWKlrmu4Yaq8
-         ltLnZp4zKbl8fTjp9TyTD3Vy31g6I54ZJTq7IuZYsEbFojraiHWBMe5WpzHZp4ZL0rtw
-         8gHbgWnSZH9J8RgfHgharJKq0uzHC3gHB7Zm6JfGy+wYZ2hT27p8XXIGN6MfCCyY/HTK
-         LVLv89MJcJ52/TN6fFebJoKUnm2C/R1GsDv/37RD44JnY+VyqcaUx2ZFN+jTO/S6t5Hk
-         6UkeXdMzIeo8CfUeozAWvuqx2dst4KSVDTLJd/En8mIw4CgyWwT26wx8iw7vj6sGzGuJ
-         Feaw==
-X-Gm-Message-State: AOAM530kP8B7HAxve3veDfkkUbGH5bDdt5FjmwNcLzjIAeoMeuynd7TB
-        upOEEtvsqWWGDRhFkFKo34yLJZcte/ca8NRZfxHY9ojFDIobLA==
-X-Google-Smtp-Source: ABdhPJyJ9Zma2ZEin8GNpdoeNj2ZN7XXaEM/ArByR8cTF7OFgqG6jNtpwnZynRpkSVBbmdgOEJlE7ZQrWSvJLj3ECJY=
-X-Received: by 2002:a05:6808:1819:: with SMTP id bh25mr454334oib.35.1644325772109;
- Tue, 08 Feb 2022 05:09:32 -0800 (PST)
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/s8FiFoNXLlWJsEmo8dsRXHngSoVZR77SSlKzOXt7DI=;
+        b=5rULkR3fkNb0blHZWkxF9tEaccrNcsBvgCWlVWe3OzdmRi6Jx1YujAQZjR5PTGxqam
+         WoQMdNFyKfjGDnDlCmGUc6VUij7K4nfC4fJjZGNEhs9qTLOJp5yK0VbPuR62aR5R9KmG
+         XHGLFqWh7Gfq1YevCTJpzOozumTgOky/NOQudIXG2oWOzl0bL+AKpSZTB3ckc03GLvBD
+         JXS11mEVrVF7RoNaAQjrCmvVMRGOrJiC3cw4wH50a6q2EtGeEpUuM9q1UVcOrGIspoY4
+         f4vI9B7hrI3ZvUWdveMRQbIBC2VGqQS54bh4oUupNBYpwlIz/IYRblQ7tX7nDa+D7s2q
+         QpMg==
+X-Gm-Message-State: AOAM533ADF5ysr7ba5bkEDDQpQVdyLaD9FU1BYhefS1vRuyMTp5/7Hlu
+        kKOvxAa7hMHrb4wisl4kRf0=
+X-Google-Smtp-Source: ABdhPJxub5M8X2BfoYXJ/OcdvPF/ttHYF+U/7kF+/8iFMr+Mhgsh7qFlN9/MWHAE93sNGZBtdzD3yg==
+X-Received: by 2002:a05:6214:b66:: with SMTP id ey6mr2827201qvb.131.1644325770607;
+        Tue, 08 Feb 2022 05:09:30 -0800 (PST)
+Received: from localhost ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id q12sm7657455qtx.51.2022.02.08.05.09.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 05:09:29 -0800 (PST)
+Message-ID: <62026b89.1c69fb81.b9102.7042@mx.google.com>
+X-Google-Original-Message-ID: <20220208130926.GA1537772@cgel.zte@gmail.com>
+Date:   Tue, 8 Feb 2022 13:09:26 +0000
+From:   CGEL <cgel.zte@gmail.com>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>, akpm@linux-foundation.org,
+        sfr@canb.auug.org.au, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Yang Yang <yang.yang29@zte.com.cn>
+Subject: Re: [PATCH] psi: Treat ksm swapping in copy as memstall
+References: <20220116152150.859520-1-yang.yang29@zte.com.cn>
+ <YeVdvVVBvrXH5U0L@cmpxchg.org>
+ <61e7ac25.1c69fb81.e8938.bc67@mx.google.com>
+ <YegK7+oKFG8EPRp9@cmpxchg.org>
+ <61ea820f.1c69fb81.e79d5.09c9@mx.google.com>
+ <YfNG5KAog6fI0kYu@cmpxchg.org>
+ <61f35591.1c69fb81.48dad.3244@mx.google.com>
+ <72532675-d898-9f30-1ba4-318fbd61786@google.com>
 MIME-Version: 1.0
-References: <20220125084702.3636253-1-andrew@daynix.com> <1643183537.4001389-1-xuanzhuo@linux.alibaba.com>
- <CAOEp5OcwLiLZuVOAxx+pt6uztP-cGTgqsUSQj7N7HKTZgmyN3w@mail.gmail.com>
-In-Reply-To: <CAOEp5OcwLiLZuVOAxx+pt6uztP-cGTgqsUSQj7N7HKTZgmyN3w@mail.gmail.com>
-From:   Andrew Melnichenko <andrew@daynix.com>
-Date:   Tue, 8 Feb 2022 15:09:21 +0200
-Message-ID: <CABcq3pE43rYojwUCAmpW-FKv5=ABcS47B944Y-3kDqr-PeqLwQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/5] TUN/VirtioNet USO features support.
-To:     Yuri Benditovich <yuri.benditovich@daynix.com>
-Cc:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Yan Vugenfirer <yan@daynix.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <72532675-d898-9f30-1ba4-318fbd61786@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi people,
-Can you please review this series?
+On Mon, Feb 07, 2022 at 07:22:22PM -0800, Hugh Dickins wrote:
+> On Fri, 28 Jan 2022, CGEL wrote:
+> > On Thu, Jan 27, 2022 at 08:29:08PM -0500, Johannes Weiner wrote:
+> > > On Fri, Jan 21, 2022 at 09:51:08AM +0000, CGEL wrote:
+> > > >  Wed, Jan 19, 2022 at 07:58:23AM -0500, Johannes Weiner wrote:
+> > > > > On Wed, Jan 19, 2022 at 06:13:54AM +0000, CGEL wrote:
+> > > > > > I did a test, when we use zram, it takes longer time for ksm copying than
+> > > > > > swap_readpage(). Ksm copying average takes 147263ns, swap_readpage()
+> > > > > > average takes 55639ns. So I think this patch is reasonable.
+> > > > > 
+> > > > > Ok, that sounds reasonable to me as well. Please add the
+> > > > > PageWorkingset() check and resubmit the patch. Thanks!
+> > > > I am a litte confused about adding PageWorkingset(), since I
+> > > > think ksm_might_need_to_copy() memstall is like swap_readpage()
+> > > > memstall and swap_readpage() doesn't add PageWorkingset().
+> > > 
+> > > That's actually a bug! It should do that.
+> > I recently found that too. Please CC to me your new patch, thanks!
+> > And I will send V2 of this patch "psi: Treat ksm swapping in copy
+> > as memstall" with PageWorkingset().
+> 
+> I'm entirely PSI-ignorant, and reluctant to disagree with Johannes,
+> but I don't see how your patch to ksm_might_need_to_copy() could be
+> correct - maybe the "swapping" in your subject is confusing.
+> 
+> There is no PSI enter and exit around the page allocation and copying
+> in wp_page_copy(), so why in the analogous ksm_might_need_to_copy()?
+>
+I think it's two questions, first why PSI didn't treat wp_page_copy() as
+memstall, second why should PSI treat ksm_might_need_to_copy() as memstall.
 
-On Wed, Jan 26, 2022 at 10:32 AM Yuri Benditovich
-<yuri.benditovich@daynix.com> wrote:
->
-> On Wed, Jan 26, 2022 at 9:54 AM Xuan Zhuo <xuanzhuo@linux.alibaba.com> wrote:
-> >
-> > On Tue, 25 Jan 2022 10:46:57 +0200, Andrew Melnychenko <andrew@daynix.com> wrote:
-> > > Added new offloads for TUN devices TUN_F_USO4 and TUN_F_USO6.
-> > > Technically they enable NETIF_F_GSO_UDP_L4
-> > > (and only if USO4 & USO6 are set simultaneously).
-> > > It allows to transmission of large UDP packets.
-> > >
-> > > Different features USO4 and USO6 are required for qemu where Windows guests can
-> > > enable disable USO receives for IPv4 and IPv6 separately.
-> > > On the other side, Linux can't really differentiate USO4 and USO6, for now.
-> > > For now, to enable USO for TUN it requires enabling USO4 and USO6 together.
-> > > In the future, there would be a mechanism to control UDP_L4 GSO separately.
-> > >
-> > > Test it WIP Qemu https://github.com/daynix/qemu/tree/Dev_USOv2
-> > >
-> > > New types for VirtioNet already on mailing:
-> > > https://lists.oasis-open.org/archives/virtio-comment/202110/msg00010.html
-> >
-> > Seems like this hasn't been upvoted yet.
-> >
-> >         https://github.com/oasis-tcs/virtio-spec#use-of-github-issues
->
-> Yes, correct. This is a reason why this series of patches is RFC.
->
-> >
-> > Thanks.
-> >
-> > >
-> > > Also, there is a known issue with transmitting packages between two guests.
-> > > Without hacks with skb's GSO - packages are still segmented on the host's postrouting.
-> > >
-> > > Andrew Melnychenko (5):
-> > >   uapi/linux/if_tun.h: Added new ioctl for tun/tap.
-> > >   driver/net/tun: Added features for USO.
-> > >   uapi/linux/virtio_net.h: Added USO types.
-> > >   linux/virtio_net.h: Added Support for GSO_UDP_L4 offload.
-> > >   drivers/net/virtio_net.c: Added USO support.
-> > >
-> > >  drivers/net/tap.c               | 18 ++++++++++++++++--
-> > >  drivers/net/tun.c               | 15 ++++++++++++++-
-> > >  drivers/net/virtio_net.c        | 22 ++++++++++++++++++----
-> > >  include/linux/virtio_net.h      | 11 +++++++++++
-> > >  include/uapi/linux/if_tun.h     |  3 +++
-> > >  include/uapi/linux/virtio_net.h |  4 ++++
-> > >  6 files changed, 66 insertions(+), 7 deletions(-)
-> > >
-> > > --
-> > > 2.34.1
-> > >
-> > > _______________________________________________
-> > > Virtualization mailing list
-> > > Virtualization@lists.linux-foundation.org
-> > > https://lists.linuxfoundation.org/mailman/listinfo/virtualization
+The first question is unrelated with this patch. I think the reason is PSI
+focous on memory contending(see Documentation/accounting/psi.rst), and
+wp_page_copy() is not caused by memory contending. Actually wp_page_copy()
+will still be called if memory is not contending.
+
+For the second question, ksm_might_need_to_copy() is called only becaused
+of swapping, and swap is caused by memory contending, so PSI better treat
+it as memstall.
+
+Thanks.
+> Hugh

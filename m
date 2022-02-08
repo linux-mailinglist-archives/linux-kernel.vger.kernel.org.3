@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EBEF4ACDCD
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:18:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AABDF4ACDAD
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:18:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244040AbiBHBJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 20:09:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59350 "EHLO
+        id S1343983AbiBHBJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 20:09:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344159AbiBHAqN (ORCPT
+        with ESMTP id S1344162AbiBHAqN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 7 Feb 2022 19:46:13 -0500
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C2EEC061355;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5A26C0612A4;
         Mon,  7 Feb 2022 16:46:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1644281172; x=1675817172;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=bkkbubhpgksylAdJ5GIuG4s5L7IcqFdVjXHVqGP1L64=;
-  b=j4rwqOgDot52Nje7np1wi/8/Je13o0VT+AOo9wETjk/FLDkDbKYH41Bx
-   5SjNWMUcKQWiNETCfvyeWqLFRCZ1XLfOdt2DXWMPzhxxOlzuIpLAhNLPJ
-   NT3S0O3AFF0VcAeyzDFQW652NadlbSMW16bUF84zZ7hhSiUdqcVJ9C4wa
-   5Kj8yB1m2shlgTaX2j5cqyzO83DwXJACL024jGlRMFw/qLKkz8dkKFxcF
-   fHL8cHl5I2Kz9AnBudvoiEOk9nA3CmFwf35ZH/gOwMfKXFFMjfDWuFW4F
-   ExNWBqGnEm0S1JTU2eYHzD59aernV6v8a3LGhQhcglQtFJ37DkpJj8opU
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="232407946"
+  bh=Stk+3fvhrUfHLDS05QiXyxq3INLSvoy9CWL37/WB/Mk=;
+  b=WlMurCTWPepPg9RaXwc7eQG62jqy/GE8a0NP7yCId50IP34mnBBWhQPO
+   tISGbEnfvt2MrKF5q1FFN+IXoF1LByxaEUyDglRdYrQJCXHpH5b1f1ZEP
+   JNOIM7xUSsKAmuCeuV/s8HC3j0Ealoth8XGUtlTFBHW5hItaBfCBn1RyX
+   C/GV9fWoO7wYILv4XOSJH7t0jiJZ+A3I0L1yn/iI1t2YB+DgBCNzqagqm
+   ib5nPfBGqKGLZPcZXu4+bvBX8PGadN0Cz/uCa5NZCa/GHI1Q1r8a2k5DH
+   /TPGClXkLb6ixSZoS2l8x52wLg1XqYoptm+qeCTUiGvGO3HJEiTjQbI3b
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="232407948"
 X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
-   d="scan'208";a="232407946"
+   d="scan'208";a="232407948"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 16:46:08 -0800
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 16:46:09 -0800
 X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
-   d="scan'208";a="499389486"
+   d="scan'208";a="499389489"
 Received: from rchatre-ws.ostc.intel.com ([10.54.69.144])
   by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 16:46:08 -0800
 From:   Reinette Chatre <reinette.chatre@intel.com>
@@ -45,9 +45,9 @@ Cc:     seanjc@google.com, kai.huang@intel.com, cathy.zhang@intel.com,
         cedric.xing@intel.com, haitao.huang@intel.com,
         mark.shanahan@intel.com, hpa@zytor.com,
         linux-kernel@vger.kernel.org
-Subject: [PATCH V2 07/32] x86/sgx: Add pfn_mkwrite() handler for present PTEs
-Date:   Mon,  7 Feb 2022 16:45:29 -0800
-Message-Id: <00f26961350fcbc27f1b6e0ccb24532876705289.1644274683.git.reinette.chatre@intel.com>
+Subject: [PATCH V2 08/32] x86/sgx: x86/sgx: Add sgx_encl_page->vm_run_prot_bits for dynamic permission changes
+Date:   Mon,  7 Feb 2022 16:45:30 -0800
+Message-Id: <5136c1984544a18aadf17df040dfd8c846a22f18.1644274683.git.reinette.chatre@intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1644274683.git.reinette.chatre@intel.com>
 References: <cover.1644274683.git.reinette.chatre@intel.com>
@@ -63,165 +63,175 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-By default a write page fault on a present PTE inherits the
-permissions of the VMA.
+Enclave creators declare their enclave page permissions (EPCM
+permissions) at the time the pages are added to the enclave. These
+page permissions are the vetted permissible accesses of the enclave
+pages and stashed off (in struct sgx_encl_page->vm_max_prot_bits)
+for later comparison with enclave PTEs and VMAs.
 
-When using SGX2, enclave page permissions maintained in the
-hardware's Enclave Page Cache Map (EPCM) may change after a VMA
-accessing the page is created. A VMA's permissions may thus be
-more relaxed than the EPCM permissions even though the VMA was
-originally created not to have more relaxed permissions. Following
-the default behavior during a page fault on a present PTE while
-the VMA permissions are more relaxed than the EPCM permissions would
-result in the PTE for an enclave page to be writable even
-though the page is not writable according to the EPCM permissions.
+Current permission support assume that EPCM permissions remain static
+for the lifetime of the enclave. This is about to change with the
+addition of support for SGX2 where the EPCM permissions of enclave
+pages belonging to an initialized enclave may change during the
+enclave's lifetime.
 
-The kernel should not allow writing to a page if that page is not
-writable: the PTE should accurately reflect the EPCM permissions
-while not being more relaxed than the VMA permissions.
+Support for changing of EPCM permissions should continue to respect
+the vetted maximum protection bits maintained in
+sgx_encl_page->vm_max_prot_bits. Towards this end, add
+sgx_encl_page->vm_run_prot_bits in preparation for support of
+enclave page permission changes. sgx_encl_page->vm_run_prot_bits
+reflect the active EPCM permissions of an enclave page and are not to
+exceed sgx_encl_page->vm_max_prot_bits.
 
-Do not blindly accept VMA permissions on a page fault due to a
-write attempt to a present PTE. Install a pfn_mkwrite() handler
-that ensures that the VMA permissions agree with the EPCM
-permissions in this regard.
+Two permission fields are used: sgx_encl_page->vm_run_prot_bits
+reflects the current EPCM permissions and is used to manage the page
+table entries while sgx_encl_page->vm_max_prot_bits contains the vetted
+maximum protection bits and is used to guide which EPCM permissions
+are allowed in the upcoming SGX2 permission changing support (it guides
+what values sgx_encl_page->vm_run_prot_bits may have).
 
-Before and after page fault flow scenarios
-==========================================
+Consider this example how sgx_encl_page->vm_max_prot_bits and
+sgx_encl_page->vm_run_prot_bits are used:
 
-Consider the following scenario that will be possible when using SGX2:
-* An enclave page exists with RW EPCM permissions.
-* A RW VMA maps the range spanning the enclave page.
-* The enclave page's EPCM permissions are changed to read-only.
-* There is no PTE for the enclave page.
+(1) Add an enclave page with secinfo of RW to an uninitialized enclave:
+    sgx_encl_page->vm_max_prot_bits = RW
+    sgx_encl_page->vm_run_prot_bits = RW
 
-Considering that the PTE is not present in the scenario,
-user space will observe the following when attempting to write to the
-enclave page from within the enclave:
- 1) Instruction writing to enclave page is run from within the enclave.
- 2) A page fault with second and third bits set (0x6) is encountered
-    and handled by the SGX handler sgx_vma_fault() that installs a
-    read-only page table entry following previous patch that installs
-    a PTE with permissions that VMA and enclave agree on
-    (read-only in this case).
- 3) Instruction writing to enclave page is re-attempted.
- 4) A page fault with first three bits set (0x7) is encountered and
-    transparently (from SGX driver and user space perspective) handled
-    by the kernel with the PTE made writable because the VMA is
-    writable.
- 5) Instruction writing to enclave page is re-attempted.
- 6) Since the EPCM permissions prevents writing to the page a new page
-    fault is encountered, this time with the SGX flag set in the error
-    code (0x8007). No action is taken by the kernel for this page fault
-    and execution returns to user space.
- 7) Typically such a fault will be passed on to an application with a
-    signal but if the enclave is entered with the vDSO function provided
-    by the kernel then user space does not receive a signal but instead
-    the vDSO function returns successfully with exception information
-    (vector=14, error code=0x8007, and address) within the exception
-    fields within the vDSO function's struct sgx_enclave_run.
+    At this point RW VMAs would be allowed to access this page and PTEs
+    would allow write access as guided by
+    sgx_encl_page->vm_run_prot_bits.
 
-As can be observed it is not possible for user space to write to an
-enclave page if that page's EPCM permissions do not allow so,
-no matter what the VMA or PTE allows.
+(2) User space invokes SGX2 to change the EPCM permissions to read-only.
+    This is allowed because sgx_encl_page->vm_max_prot_bits = RW:
+    sgx_encl_page->vm_max_prot_bits = RW
+    sgx_encl_page->vm_run_prot_bits = R
 
-Even so, the kernel should not allow writing to a page if that page is
-not writable. The PTE should accurately reflect the EPCM permissions.
+    At this point only new read-only VMAs would be allowed to access
+    this page and PTEs would not allow write access as guided
+    by sgx_encl_page->vm_run_prot_bits.
 
-With a pfn_mkwrite() handler that ensures that the VMA permissions
-agree with the EPCM permissions user space observes the following
-when attempting to write to the enclave page from within the enclave:
- 1) Instruction writing to enclave page is run from within the enclave.
- 2) A page fault with second and third bits set (0x6) is encountered
-    and handled by the SGX handler sgx_vma_fault() that installs a
-    read-only page table entry following previous patch that installs
-    a PTE with permissions that VMA and enclave agree on
-    (read-only in this case).
- 3) Instruction writing to enclave page is re-attempted.
- 4) A page fault with first three bits set (0x7) is encountered and
-    passed to the pfn_mkwrite() handler for consideration. The handler
-    determines that the page should not be writable and returns SIGBUS.
- 5) Typically such a fault will be passed on to an application with a
-    signal but if the enclave is entered with the vDSO function provided
-    by the kernel then user space does not receive a signal but instead
-    the vDSO function returns successfully with exception information
-    (vector=14, error code=0x7, and address) within the exception fields
-    within the vDSO function's struct sgx_enclave_run.
+(3) User space invokes SGX2 to change the EPCM permissions to RX.
+    This will not be supported by the kernel because
+    sgx_encl_page->vm_max_prot_bits = RW:
+    sgx_encl_page->vm_max_prot_bits = RW
+    sgx_encl_page->vm_run_prot_bits = R
 
-The accurate exception information supports the SGX runtime, which is
-virtually always implemented inside a shared library, by providing
-accurate information in support of its management of the SGX enclave.
+(3) User space invokes SGX2 to change the EPCM permissions to RW.
+    This will be allowed because sgx_encl_page->vm_max_prot_bits = RW:
+    sgx_encl_page->vm_max_prot_bits = RW
+    sgx_encl_page->vm_run_prot_bits = RW
+
+    At this point RW VMAs would again be allowed to access this page
+    and PTEs would allow write access as guided by
+    sgx_encl_page->vm_run_prot_bits.
+
+struct sgx_encl_page hosting this information is maintained for each
+enclave page so the space consumed by the struct is important.
+The existing sgx_encl_page->vm_max_prot_bits is already unsigned long
+while only using three bits. Transition to a bitfield for the two
+members containing protection bits.
 
 Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
 ---
 Changes since V1:
-- Highlight in commit message that the behavior cannot happen in
-  existing code but instead is behavior that becomes possible with SGX2
+- Add snippet to Documentation/x86/sgx.rst that details the difference
+  between vm_max_prot_bits and vm_run_prot_bits (Andy and Jarkko).
+- Change subject line (Jarkko).
+- Refer to actual variables instead of using English rephrasing -
+  sgx_encl_page->vm_run_prot_bits instead of "runtime
+  protection bits" (Jarkko).
+- Add information in commit message on why two fields are needed
   (Jarkko).
-- Reword commit message and remove the Q&A format (Jarkko).
 
- arch/x86/kernel/cpu/sgx/encl.c | 42 ++++++++++++++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
+ Documentation/x86/sgx.rst       | 10 ++++++++++
+ arch/x86/kernel/cpu/sgx/encl.c  |  6 +++---
+ arch/x86/kernel/cpu/sgx/encl.h  |  3 ++-
+ arch/x86/kernel/cpu/sgx/ioctl.c |  6 ++++++
+ 4 files changed, 21 insertions(+), 4 deletions(-)
 
+diff --git a/Documentation/x86/sgx.rst b/Documentation/x86/sgx.rst
+index 5659932728a5..9df620b59f83 100644
+--- a/Documentation/x86/sgx.rst
++++ b/Documentation/x86/sgx.rst
+@@ -99,6 +99,16 @@ The relationships between the different permission masks are:
+ * PTEs are installed to match the EPCM permissions, but not be more
+   relaxed than the VMA permissions.
+ 
++During runtime the EPCM permissions of enclave pages belonging to an
++initialized enclave can change on systems supporting SGX2. In support
++of these runtime changes the kernel maintains (for each enclave page)
++the most permissive EPCM permission mask allowed by policy as
++the ``vm_max_prot_bits`` of that page. EPCM permissions are not allowed
++to be relaxed beyond ``vm_max_prot_bits``.  The kernel also maintains
++the currently active EPCM permissions of an enclave page as its
++``vm_run_prot_bits`` to ensure PTEs and new VMAs respect the active
++EPCM permission values.
++
+ On systems supporting SGX2 EPCM permissions may change while the
+ enclave page belongs to a VMA without impacting the VMA permissions.
+ This means that a running VMA may appear to allow access to an enclave
 diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/encl.c
-index b6105d9e7c46..1ba01c75a579 100644
+index 1ba01c75a579..a980d8458949 100644
 --- a/arch/x86/kernel/cpu/sgx/encl.c
 +++ b/arch/x86/kernel/cpu/sgx/encl.c
-@@ -184,6 +184,47 @@ static vm_fault_t sgx_vma_fault(struct vm_fault *vmf)
- 	return VM_FAULT_NOPAGE;
+@@ -164,7 +164,7 @@ static vm_fault_t sgx_vma_fault(struct vm_fault *vmf)
+ 	 * exceed the VMA permissions.
+ 	 */
+ 	vm_prot_bits = vma->vm_flags & (VM_READ | VM_WRITE | VM_EXEC);
+-	page_prot_bits = entry->vm_max_prot_bits & vm_prot_bits;
++	page_prot_bits = entry->vm_run_prot_bits & vm_prot_bits;
+ 	/*
+ 	 * Add VM_SHARED so that PTE is made writable right away if VMA
+ 	 * and EPCM are writable (no COW in SGX).
+@@ -217,7 +217,7 @@ static vm_fault_t sgx_vma_pfn_mkwrite(struct vm_fault *vmf)
+ 		goto out;
+ 	}
+ 
+-	if (!(entry->vm_max_prot_bits & VM_WRITE))
++	if (!(entry->vm_run_prot_bits & VM_WRITE))
+ 		ret = VM_FAULT_SIGBUS;
+ 
+ out:
+@@ -280,7 +280,7 @@ int sgx_encl_may_map(struct sgx_encl *encl, unsigned long start,
+ 	mutex_lock(&encl->lock);
+ 	xas_lock(&xas);
+ 	xas_for_each(&xas, page, PFN_DOWN(end - 1)) {
+-		if (~page->vm_max_prot_bits & vm_prot_bits) {
++		if (~page->vm_run_prot_bits & vm_prot_bits) {
+ 			ret = -EACCES;
+ 			break;
+ 		}
+diff --git a/arch/x86/kernel/cpu/sgx/encl.h b/arch/x86/kernel/cpu/sgx/encl.h
+index fec43ca65065..dc262d843411 100644
+--- a/arch/x86/kernel/cpu/sgx/encl.h
++++ b/arch/x86/kernel/cpu/sgx/encl.h
+@@ -27,7 +27,8 @@
+ 
+ struct sgx_encl_page {
+ 	unsigned long desc;
+-	unsigned long vm_max_prot_bits;
++	unsigned long vm_max_prot_bits:8;
++	unsigned long vm_run_prot_bits:8;
+ 	struct sgx_epc_page *epc_page;
+ 	struct sgx_encl *encl;
+ 	struct sgx_va_page *va_page;
+diff --git a/arch/x86/kernel/cpu/sgx/ioctl.c b/arch/x86/kernel/cpu/sgx/ioctl.c
+index 83df20e3e633..7e0819a89532 100644
+--- a/arch/x86/kernel/cpu/sgx/ioctl.c
++++ b/arch/x86/kernel/cpu/sgx/ioctl.c
+@@ -197,6 +197,12 @@ static struct sgx_encl_page *sgx_encl_page_alloc(struct sgx_encl *encl,
+ 	/* Calculate maximum of the VM flags for the page. */
+ 	encl_page->vm_max_prot_bits = calc_vm_prot_bits(prot, 0);
+ 
++	/*
++	 * At time of allocation, the runtime protection bits are the same
++	 * as the maximum protection bits.
++	 */
++	encl_page->vm_run_prot_bits = encl_page->vm_max_prot_bits;
++
+ 	return encl_page;
  }
  
-+/*
-+ * A fault occurred while writing to a present enclave PTE. Since PTE is
-+ * present this will not be handled by sgx_vma_fault(). VMA may allow
-+ * writing to the page while enclave (as based on EPCM permissions) does
-+ * not. Do not follow the default of inheriting VMA permissions in this
-+ * regard, ensure enclave also allows writing to the page.
-+ */
-+static vm_fault_t sgx_vma_pfn_mkwrite(struct vm_fault *vmf)
-+{
-+	unsigned long addr = (unsigned long)vmf->address;
-+	struct vm_area_struct *vma = vmf->vma;
-+	struct sgx_encl_page *entry;
-+	struct sgx_encl *encl;
-+	vm_fault_t ret = 0;
-+
-+	encl = vma->vm_private_data;
-+
-+	/*
-+	 * It's very unlikely but possible that allocating memory for the
-+	 * mm_list entry of a forked process failed in sgx_vma_open(). When
-+	 * this happens, vm_private_data is set to NULL.
-+	 */
-+	if (unlikely(!encl))
-+		return VM_FAULT_SIGBUS;
-+
-+	mutex_lock(&encl->lock);
-+
-+	entry = xa_load(&encl->page_array, PFN_DOWN(addr));
-+	if (!entry) {
-+		ret = VM_FAULT_SIGBUS;
-+		goto out;
-+	}
-+
-+	if (!(entry->vm_max_prot_bits & VM_WRITE))
-+		ret = VM_FAULT_SIGBUS;
-+
-+out:
-+	mutex_unlock(&encl->lock);
-+	return ret;
-+}
-+
- static void sgx_vma_open(struct vm_area_struct *vma)
- {
- 	struct sgx_encl *encl = vma->vm_private_data;
-@@ -381,6 +422,7 @@ const struct vm_operations_struct sgx_vm_ops = {
- 	.mprotect = sgx_vma_mprotect,
- 	.open = sgx_vma_open,
- 	.access = sgx_vma_access,
-+	.pfn_mkwrite = sgx_vma_pfn_mkwrite,
- };
- 
- /**
 -- 
 2.25.1
 

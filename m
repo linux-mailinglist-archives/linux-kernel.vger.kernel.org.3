@@ -2,285 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04B0A4AE5A3
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 00:50:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C57954AE5AC
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 00:53:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238575AbiBHXup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 18:50:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52470 "EHLO
+        id S238699AbiBHXx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 18:53:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238488AbiBHXun (ORCPT
+        with ESMTP id S236561AbiBHXx1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 18:50:43 -0500
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE43C06157B
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 15:50:42 -0800 (PST)
-Received: by mail-oi1-x22e.google.com with SMTP id r27so808948oiw.4
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 15:50:42 -0800 (PST)
+        Tue, 8 Feb 2022 18:53:27 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78C8EC061576
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 15:53:26 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id x65so1163773pfx.12
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 15:53:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ZfjRDOxBlYHHE14BCEgNLKQP/YKV4fajU6/9Z4+F+7A=;
-        b=BS1mRT/hnJZLCPbRnmOQrH/RP9NXql41p4yiX3I3vTpbaWa9H2QX9ueT/PbbIIpBuO
-         wKqnqoM3msoIl9hG3IiOugSaK1fQ8hoYA+r15JyTQPHg8hfVsy9t1ilb+jSAzpn6wcMK
-         gAS/tWHJXvWOtI1yFKDxXFYr2mF3e/kdxYNAAeEeMGFHRkJwhl3TCK59jaVEx76efa3A
-         DaCnejo/My5XGJocCbE3m5k8l7o9LKYrF0frYXql9fHASVIExKIvafASKEGaBPqk/WJR
-         /4Tthh1oC+i21lhVB8JNUmUR187U/N30084/wUF/y8Noy8UWZtM8jrTTKwcemIGn34+C
-         AIjw==
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=9yllLJXxvJNbb7TJ6F8GXcTe3gXNYnW6vmBXP6xHdmQ=;
+        b=1TP2oV0hvpTVvUc38sU25Nq8P8dLloqnVrR1dLnL0k00RIz6cxvWF4JovZ1JHdh+Iq
+         QjJ5AHaidFx9YmqNTrZ5h5qyJPKM/tziAB9DhO4YFzjPd5bpNTRb+YsjUwlfA7jtVsFK
+         U7OdrJqAvGZ07hdSarMyxYyjKgkfa4xWh2cbsWw1St7pAb9nNM89cLwW6fNieqLKy8A0
+         lEy6S237O1zyS6B6nOobWB1RoW/2FsR/vn8FET1ptCNsh08iwgcstMONTlv3sghEwQq4
+         uOxijQbfhnxc35FRPR6EYrfjLYHOlXzLa9Vs6xBYs94IsyLrdPrgdUt8qrZhQDjGtN/K
+         zJ5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ZfjRDOxBlYHHE14BCEgNLKQP/YKV4fajU6/9Z4+F+7A=;
-        b=2sBS1MCCsB4f/GIxEWuxdcc+D6E+zSpxXsu6OVfsAy+vKQjTsuyaqmeLAxyOGwUbuK
-         jG+mvJ7xsyorC9ZcKscYNbXwuIVAP/LLPTMhZ5GgcoemD5TKw/XDAbWJ7ovk7rwjmCud
-         M3lzyRMWnWNRCUSnaNEo2aOXL1rCYuHNY7B//TVG7LJdeR522zvZusrmcbltDsbp9wkc
-         w+rIAYS66SZmAySyXIYAGP3MYZscaXhiTxDzb4QHWIKx8tOZShnSHWtVVoQKd+Gm3JdC
-         /FpDZvaow9V8ito+I3MywZpPAvjiqQwmvp9gvJlmOfsF2BubZz6vjatizjxzGtWGHPF7
-         vGDg==
-X-Gm-Message-State: AOAM5306tGn/P3SDAj+RQcuOG6q1AAczQdSOuGO/i6MygjHxkgsCeeTt
-        X6WZu6fxUzFaGP9MXzSQ7ghjuw==
-X-Google-Smtp-Source: ABdhPJwsbbOsQ2Ax/QBE65F8Xax4Q1ry58y4ohjRKiITBFnYm47y1u0Jiw5XKGU8I+Mz56JLFI6/nA==
-X-Received: by 2002:a05:6808:1920:: with SMTP id bf32mr177216oib.304.1644364241902;
-        Tue, 08 Feb 2022 15:50:41 -0800 (PST)
-Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id d22sm5729003otp.79.2022.02.08.15.50.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 15:50:41 -0800 (PST)
-Date:   Tue, 8 Feb 2022 15:52:59 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Sankeerth Billakanti <quic_sbillaka@quicinc.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, agross@kernel.org, robh+dt@kernel.org,
-        robdclark@gmail.com, seanpaul@chromium.org, swboyd@chromium.org,
-        dianders@chromium.org, krzysztof.kozlowski@canonical.com,
-        thierry.reding@gmail.com, sam@ravnborg.org, airlied@linux.ie,
-        daniel@ffwll.ch, quic_kalyant@quicinc.com,
-        quic_abhinavk@quicinc.com, quic_khsieh@quicinc.com,
-        quic_mkrishn@quicinc.com
-Subject: Re: [PATCH v2 2/4] arm64: dts: qcom: sc7280: Add support for eDP
- panel on CRD
-Message-ID: <YgMCW9GrY6SRteOU@ripper>
-References: <1644333525-30920-1-git-send-email-quic_sbillaka@quicinc.com>
- <1644333525-30920-3-git-send-email-quic_sbillaka@quicinc.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=9yllLJXxvJNbb7TJ6F8GXcTe3gXNYnW6vmBXP6xHdmQ=;
+        b=xEiepmTR6X4uNPweOm1l93auT/Q+esfh7KxCvypDPao3ePcaGrSgciJLjYpB7zywqO
+         EtgG05VmyLx23mhO/dH+C4J62FKEPLH+o9+hj4V2LLduUTMYYkkmnyGJzHozNTeSlPAC
+         5qUeh5DfgA8xLLDzsThAX8/h8cL5GbdiNBtx4Lmc4JINyiurzGM7ZSlRHK1Hy1ysZLj7
+         HyJK/edlyJgl+qiH6gFV8AmSIsSZvDvckyDhtsxyqo9Tat8Io0gT8mo5sNykdE3fFpee
+         C4nLiVA7M63IPwdKCQacO0Zv89gJztx6uPhfSjBRMqbaXUW3jcPJ20TIm9R5SVx9LjdQ
+         OyzA==
+X-Gm-Message-State: AOAM530FKxWck/dLcE+98GikmkOWHQ26stOiq1jhZqHIyZOOfWwonO2o
+        qGyef+Gbw+W7xptqF21HoREjVeyeZNAm7a+kDhDOZg==
+X-Google-Smtp-Source: ABdhPJxeYY0PWIjCV0oL3qSXzPE/CqXZVnxQ/6hAd62TUxvblfYAlcQYEDEiHEyZHUJKW9dSv16xGL4Nt/VbJK9Vxe0=
+X-Received: by 2002:a63:8849:: with SMTP id l70mr2640980pgd.437.1644364405842;
+ Tue, 08 Feb 2022 15:53:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1644333525-30920-3-git-send-email-quic_sbillaka@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220207063249.1833066-1-hch@lst.de> <20220207063249.1833066-7-hch@lst.de>
+ <CAPcyv4iYfnJN+5=0Gzw8gKpNCG3PJS1MEZxxoPwuojhU6XHNRA@mail.gmail.com>
+In-Reply-To: <CAPcyv4iYfnJN+5=0Gzw8gKpNCG3PJS1MEZxxoPwuojhU6XHNRA@mail.gmail.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Tue, 8 Feb 2022 15:53:14 -0800
+Message-ID: <CAPcyv4jfNa2BBuE7E0+8LO5VT9APS1eF3c4Rw99oKY6y+1re9w@mail.gmail.com>
+Subject: Re: [PATCH 6/8] mm: don't include <linux/memremap.h> in <linux/mm.h>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Alistair Popple <apopple@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>, nouveau@lists.freedesktop.org,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Linux MM <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 08 Feb 07:18 PST 2022, Sankeerth Billakanti wrote:
+On Mon, Feb 7, 2022 at 3:49 PM Dan Williams <dan.j.williams@intel.com> wrot=
+e:
+>
+> On Sun, Feb 6, 2022 at 10:33 PM Christoph Hellwig <hch@lst.de> wrote:
+> >
+> > Move the check for the actual pgmap types that need the free at refcoun=
+t
+> > one behavior into the out of line helper, and thus avoid the need to
+> > pull memremap.h into mm.h.
+>
+> Looks good to me assuming the compile bots agree.
+>
+> Reviewed-by: Dan Williams <dan.j.williams@intel.com>
 
-> Enable the eDP display panel support without HPD on sc7280 platform.
-> 
-> Signed-off-by: Sankeerth Billakanti <quic_sbillaka@quicinc.com>
-> ---
-> 
-> Changes in v2:
->   - sort node references alphabetically
->   - improve readability
->   - move the pwm pinctrl to pwm node
->   - move the regulators to root
->   - define backlight power
->   - remove dummy regulator node
->   - cleanup pinctrl definitions
-> 
->  arch/arm64/boot/dts/qcom/sc7280-crd.dts | 122 ++++++++++++++++++++++++++++++++
->  arch/arm64/boot/dts/qcom/sc7280.dtsi    |   2 -
->  2 files changed, 122 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-crd.dts b/arch/arm64/boot/dts/qcom/sc7280-crd.dts
-> index e2efbdd..bff2707 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280-crd.dts
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-crd.dts
-> @@ -21,6 +21,34 @@
->  	chosen {
->  		stdout-path = "serial0:115200n8";
->  	};
-> +
-> +	backlight_power: backlight-power {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "backlight_power";
-> +
-> +		regulator-min-microvolt = <1800000>;
-> +		regulator-max-microvolt = <1800000>;
-> +
-> +		gpio = <&pm8350c_gpios 7 GPIO_ACTIVE_HIGH>;
-> +		enable-active-high;
-> +
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&edp_bl_power>;
-> +	};
-> +
-> +	edp_power: edp-power {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "edp_power";
-> +
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +
-> +		gpio = <&tlmm 80 GPIO_ACTIVE_HIGH>;
-> +		enable-active-high;
-> +
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&edp_panel_power>;
-> +	};
->  };
->  
->  &apps_rsc {
-> @@ -76,6 +104,42 @@ ap_ts_pen_1v8: &i2c13 {
->  	};
->  };
->  
-> +&edp_out {
+Yeah, same as Logan:
 
-Sorry for missing this while merging changes in sc7280.dtsi. But it
-would be really nice if this was labeled mdss_edp_out instead (or
-possibly defined within the &mdss_edp node).
+mm/memcontrol.c: In function =E2=80=98get_mctgt_type=E2=80=99:
+mm/memcontrol.c:5724:29: error: implicit declaration of function
+=E2=80=98is_device_private_page=E2=80=99; did you mean
+=E2=80=98is_device_private_entry=E2=80=99? [-Werror=3Dimplicit-function-dec=
+laration]
+ 5724 |                         if (is_device_private_page(page))
+      |                             ^~~~~~~~~~~~~~~~~~~~~~
+      |                             is_device_private_entry
 
-Now you will have &edp_out and &dp_out floating around away from the edp
-and dp nodes...
+...needs:
 
-> +	remote-endpoint = <&edp_panel_in>;
-> +};
-> +
-> +&mdss {
-> +	status = "okay";
-> +};
-> +
-> +&mdss_edp {
-> +	status = "okay";
-> +
-> +	vdda-1p2-supply = <&vreg_l6b_1p2>;
-> +	vdda-0p9-supply = <&vreg_l10c_0p8>;
-> +};
-> +
-> +&mdss_edp_phy {
-> +	status = "okay";
-> +
-> +	vdda-1p2-supply = <&vreg_l6b_1p2>;
-> +	vdda-0p9-supply = <&vreg_l10c_0p8>;
-> +};
-> +
-> +&mdss_dp {
-> +	status = "okay";
-> +
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&dp_hot_plug_det>;
-> +	data-lanes = <0 1>;
-> +	vdda-1p2-supply = <&vreg_l6b_1p2>;
-> +	vdda-0p9-supply = <&vreg_l1b_0p8>;
-> +};
-> +
-> +&mdss_mdp {
-> +	status = "okay";
-> +};
-> +
->  &nvme_3v3_regulator {
->  	gpio = <&tlmm 51 GPIO_ACTIVE_HIGH>;
->  };
-> @@ -84,7 +148,65 @@ ap_ts_pen_1v8: &i2c13 {
->  	pins = "gpio51";
->  };
->  
-> +&pm8350c_pwm {
-
-This label doesn't exist, so I won't be able to merge this patch.
-
-> +	status = "okay";
-> +
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&edp_bl_pwm>;
-> +};
-> +
-> +&pm8350c_gpios {
-> +	edp_bl_power: edp-bl-power {
-> +		pins = "gpio7";
-> +		function = "normal";
-> +		qcom,drive-strength = <PMIC_GPIO_STRENGTH_LOW>;
-> +		bias-disable;
-> +		output-low;
-> +	};
-> +
-> +	edp_bl_pwm: edp-bl-pwm {
-> +		pins = "gpio8";
-> +		function = "func1";
-> +		qcom,drive-strength = <PMIC_GPIO_STRENGTH_LOW>;
-> +		bias-disable;
-> +		output-low;
-> +	};
-> +};
-> +
-> +&soc {
-> +	edp_backlight: edp-backlight {
-> +		compatible = "pwm-backlight";
-
-This is not a device on the mmio bus, so it should not love within the
-&soc.
-
-> +
-> +		power-supply = <&backlight_power>;
-> +		pwms = <&pm8350c_pwm 3 65535>;
-> +	};
-> +
-> +	edp_panel: edp_panel {
-
-Ditto.
-
-Regards,
-Bjorn
-
-> +		compatible = "sharp,lq140m1jw46";
-> +
-> +		power-supply = <&edp_power>;
-> +		backlight = <&edp_backlight>;
-> +
-> +		ports {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			port@0 {
-> +				reg = <0>;
-> +				edp_panel_in: endpoint {
-> +					remote-endpoint = <&edp_out>;
-> +				};
-> +			};
-> +		};
-> +	};
-> +};
-> +
->  &tlmm {
-> +	edp_panel_power: edp-panel-power {
-> +		pins = "gpio80";
-> +		function = "gpio";
-> +		bias-pull-down;
-> +	};
-> +
->  	tp_int_odl: tp-int-odl {
->  		pins = "gpio7";
->  		function = "gpio";
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> index 3572399..f8fa716 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> @@ -3012,8 +3012,6 @@
->  
->  			mdss_edp: edp@aea0000 {
->  				compatible = "qcom,sc7280-edp";
-> -				pinctrl-names = "default";
-> -				pinctrl-0 = <&edp_hot_plug_det>;
->  
->  				reg = <0 0xaea0000 0 0x200>,
->  				      <0 0xaea0200 0 0x200>,
-> -- 
-> 2.7.4
-> 
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index d1e97a54ae53..0ac7515c85f9 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -62,6 +62,7 @@
+ #include <linux/tracehook.h>
+ #include <linux/psi.h>
+ #include <linux/seq_buf.h>
++#include <linux/memremap.h>
+ #include "internal.h"
+ #include <net/sock.h>
+ #include <net/ip.h>

@@ -2,90 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAE724ACE89
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 03:00:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B45B64ACEE9
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 03:28:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345204AbiBHB7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 20:59:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46220 "EHLO
+        id S1345911AbiBHC2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 21:28:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235393AbiBHB7W (ORCPT
+        with ESMTP id S237161AbiBHC2W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 20:59:22 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E030C061355
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 17:59:21 -0800 (PST)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Jt5kz3VgHzccpd;
-        Tue,  8 Feb 2022 09:58:19 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 8 Feb 2022 09:59:18 +0800
-Subject: Re: [PATCH] mm/memory_hotplug: fix kfree() of bootmem memory
-To:     David Hildenbrand <david@redhat.com>
-CC:     <isimatu.yasuaki@jp.fujitsu.com>, <toshi.kani@hp.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20220207135618.17231-1-linmiaohe@huawei.com>
- <6d4ab70e-b944-5f7d-e9a3-979ac66c70f7@redhat.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <828c9b16-6ff0-abb7-3a16-277d2d60de81@huawei.com>
-Date:   Tue, 8 Feb 2022 09:59:18 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Mon, 7 Feb 2022 21:28:22 -0500
+X-Greylist: delayed 1672 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 18:28:20 PST
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA6BCC061355;
+        Mon,  7 Feb 2022 18:28:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=JMHymrZvU08T3r4BdtgDATv2Fh8Jo5X8RbDz8bhcHfM=; b=PD1RoF42O49tywgxC//b8v0Bbb
+        5VYGVygkbqH0eSUMoGyii6i/7Lm6bX7BC5lRZkcSUw1o6LDiyd2rOyOHOIMuozL5ASp+OY5x+kT4H
+        2DwRaaWzjSHb7qHU3yN9UOVFGvKYeL6CGo+eqjY/gmvhKRPVr4RojS6bTJ3D9IwjsFI8=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nHFnu-004jlK-0o; Tue, 08 Feb 2022 03:00:26 +0100
+Date:   Tue, 8 Feb 2022 03:00:26 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Pawel Dembicki <paweldembicki@gmail.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 2/2] ARM: dts: kirkwood: Add Ctera C-200 V1 board
+Message-ID: <YgHOup5cKZJyxWFB@lunn.ch>
+References: <20220207212014.28551-1-paweldembicki@gmail.com>
+ <20220207212014.28551-2-paweldembicki@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <6d4ab70e-b944-5f7d-e9a3-979ac66c70f7@redhat.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220207212014.28551-2-paweldembicki@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi:
-On 2022/2/7 22:33, David Hildenbrand wrote:
-> On 07.02.22 14:56, Miaohe Lin wrote:
->> We can't use kfree() to release the resource as it might come from bootmem.
->> Use release_mem_region() instead.
+On Mon, Feb 07, 2022 at 10:20:14PM +0100, Pawel Dembicki wrote:
+> Ctera C200 V1 is kirkwood-based 2-Bay NAS.
 > 
-> How can this happen? release_mem_region() is called either from
-> __add_memory() or from add_memory_driver_managed(), where we allocated
-> the region via register_memory_resource(). Both functions shouldn't ever
-> be called before the buddy is up an running.
+> Hardware:
+>   - SoC: Marvell 88F6281-A1 ARMv5TE Processor 1.2GHz
+>   - Ram: 512MB (4x Nanya NT5TU128M8GE-AC)
+>   - NAND Flash: 256MB (Samsung 216 K9F2G08U0C)
+>   - Lan: 1x GBE (Marvell 88E1116R-NNC1)
+>   - Storage: 2x SATA HDD 3.5" Slot
+>   - USB: 2x USB 2.0 port
+>   - Console: Internal J3 connector (1: Vcc, 2: Rx, 3: Tx, 4: GND)
+>   - LEDs: 13x GPIO controlled
+>   - Buttons: 2x GPIO controlled
 > 
-> Do you have a backtrace of an actual instance of this issue? Or was this
-> identified as possibly broken by code inspection?
-> 
+> Signed-off-by: Pawel Dembicki <paweldembicki@gmail.com>
 
-This is identified as possibly broken by code inspection. IIUC, alloc_resource
-is always used to allocate the resource. It has the below logic:
+Hi Pawel
 
-  if (bootmem_resource_free) {
-	res = bootmem_resource_free;
-	bootmem_resource_free = res->sibling;
-  }
+It is a good idea to Cc: the mvebu maintainers, since kirkwood is part
+of that.
 
-where bootmem_resource_free is used to reusing the resource entries allocated by boot
-mem after the system is up:
+> +	leds {
+> +		compatible = "gpio-leds";
+> +		pinctrl-0 = <&pmx_leds>;
+> +		pinctrl-names = "default";
+> +
+> +
 
-/*
- * For memory hotplug, there is no way to free resource entries allocated
- * by boot mem after the system is up. So for reusing the resource entry
- * we need to remember the resource.
- */
-static struct resource *bootmem_resource_free;
+Please avoid 2 blank lines. This happens a few times in this file.
 
-So I think register_memory_resource() can reuse the resource allocated by bootmem.
-Or am I miss anything?
+> +&pciec {
+> +	status = "okay";
+> +};
 
-Thanks.
+It would be nice to have a comment about what is on the PCIe bus. Or
+is it just a socket?
+
+> +
+> +&pcie0 {
+> +	status = "okay";
+> +};
+> +
+> +&pinctrl {
+> +	/* buzzer gpios are connected to two pins of buzzer
+> +	 * leave it as is due lack of proper driver
+> +	 */
+> +	pmx_buzzer: pmx-buzzer {
+> +		marvell,pins = "mpp12", "mpp13";
+> +		marvell,function = "gpio";
+> +	};
+
+Is it possible to use "gpio-beeper"?
+
+        beeper: beeper {
+                /* 4KHz Piezoelectric buzzer */
+                compatible = "gpio-beeper";
+                pinctrl-0 = <&pmx_beeper>;
+                pinctrl-names = "default";
+                gpios = <&gpio1 8 GPIO_ACTIVE_HIGH>;
+        };
+
+	Andrew

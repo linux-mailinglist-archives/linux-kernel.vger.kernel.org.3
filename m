@@ -2,121 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B180C4ADE85
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 17:45:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7597B4ADE2D
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 17:20:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352300AbiBHQof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 11:44:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33180 "EHLO
+        id S1382788AbiBHQUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 11:20:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238504AbiBHQoe (ORCPT
+        with ESMTP id S1383054AbiBHQUn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 11:44:34 -0500
-X-Greylist: delayed 1368 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Feb 2022 08:44:32 PST
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018F1C061579;
-        Tue,  8 Feb 2022 08:44:31 -0800 (PST)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 218GLaqt094798;
-        Tue, 8 Feb 2022 10:21:36 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1644337296;
-        bh=pUuWQr+L14zdI+Vc3J1KTPWgbWU9dWvEhXxZKxw3cCk=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=GpDKsn9r44cfaqqMWKNvTVOHoo3C3VZt8oW0UDJ2JEBWbPRyZ1TR2HJO5SBr6FAnV
-         EX5QzWSZdUuaP/HrM7XA4PQX5Ry1D26Ch9V1cs2wpBjtZ6UdnwoYzzAqVlPV4IFBoW
-         Z7CS7ifGsDiyPmlwXT/LNnTr2hAC/ipthtcHSF8U=
-Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 218GLa2k116010
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 8 Feb 2022 10:21:36 -0600
-Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 8
- Feb 2022 10:20:24 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 8 Feb 2022 10:20:24 -0600
-Received: from [10.250.233.13] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 218GKLAD068450;
-        Tue, 8 Feb 2022 10:20:22 -0600
-Message-ID: <93916792-67f6-9018-e93b-4bdc8987af20@ti.com>
-Date:   Tue, 8 Feb 2022 21:50:20 +0530
+        Tue, 8 Feb 2022 11:20:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCACBC061576;
+        Tue,  8 Feb 2022 08:20:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 56C4F616B8;
+        Tue,  8 Feb 2022 16:20:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63FC9C004E1;
+        Tue,  8 Feb 2022 16:20:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644337241;
+        bh=p6ssO5fKNiJOSoSBu1ARzzUWvgx5q89QAvBfdf4gyM4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=QcCLEMiE++29yOF63ODIEl4thzwLCRttGJx082qnm68+ZYEIzo/DsGkUYnxA0dfQp
+         7Kp/gMFH+1i2JcnwXf2SNUxF6qaNzOUuxEk6FA+jyzcrgNQH5RNM7rOw2FfN1V6V+R
+         aJIGZATY5PAvkUsyxT5i7SWuWhbvez7Lr1j9EbhAow9DRp2mPEdu6Xs5xXPd1RLRyb
+         M+Bn8qDuzkAXlkrnCa0VkG67A5c9/0NKOd2+okVIOsBYBcwUx856BC5Q7GGTpCTz3k
+         yXpCuUDTEvcG5No1AVKUxTSgu3rU34FghwpCqtq4ZWCyfdAu9nIYKYYjV+pO6hZaxe
+         7TffOGjuLrs7A==
+Date:   Tue, 8 Feb 2022 10:20:39 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>, bhelgaas@google.com,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 4/5] PCI: keystone: Add quirk to mark AM654 RC BAR
+ flag as IORESOURCE_UNSET
+Message-ID: <20220208162039.GA477897@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v5] ASoC: dt-bindings: davinci-mcasp: convert McASP
- bindings to yaml schema
-Content-Language: en-US
-To:     =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>,
-        <robh+dt@kernel.org>
-CC:     <lgirdwood@gmail.com>, <broonie@kernel.org>,
-        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220103074427.4233-1-j-choudhary@ti.com>
- <2cf3c89c-169f-3421-25d4-c80a6c9737ae@gmail.com>
- <83c51ee4-ac10-0e44-d1cc-f69cebcbf0b8@gmail.com>
- <f2bf4959-af15-04ad-78c3-aca883173d65@ti.com>
- <609b03e1-66e0-9bfd-cbe1-810d816df659@gmail.com>
-From:   Jayesh Choudhary <j-choudhary@ti.com>
-In-Reply-To: <609b03e1-66e0-9bfd-cbe1-810d816df659@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220208115344.GB6233@lpieralisi>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Feb 08, 2022 at 11:53:44AM +0000, Lorenzo Pieralisi wrote:
+> On Fri, Feb 04, 2022 at 08:38:46PM +0530, Kishon Vijay Abraham I wrote:
+> > On 11/01/22 11:53 am, Kishon Vijay Abraham I wrote:
+> > > On 04/01/22 9:27 pm, Lorenzo Pieralisi wrote:
+> > >> On Fri, Nov 26, 2021 at 02:01:18PM +0530, Kishon Vijay Abraham I wrote:
+> > >>> AM654 RootComplex has a hard coded 64 bit BAR of size 1MB and
+> > >>> also has both MSI and MSI-X capability in it's config space.
+> > >>> If PCIEPORTBUS is enabled, it tries to configure MSI-X and
+> > >>> msix_mask_all() adds about 10 Second boot up delay when it
+> > >>> tries to write to undefined location.
 
+s/AM654 RootComplex/The AM654 Root Complex/
 
-On 29/01/22 01:48, Péter Ujfalusi wrote:
-> 
-> On 1/17/22 12:07, Jayesh Choudhary wrote:
-> 
->>>>> +properties:
->>>>> +  compatible:
->>>>> +    enum:
->>>>> +      - ti,dm646x-mcasp-audio
->>>>> +      - ti,da830-mcasp-audio
->>>>> +      - ti,am33xx-mcasp-audio
->>>>> +      - ti,dra7-mcasp-audio
->>>>> +      - ti,omap4-mcasp-audio
->>>
->>> This is the only thing which bugs me: the pointless '-audio' postfix for
->>> the compatible string...
->>>
->>
->> Removing the postfix would also require a lot of dts changes which might
->> be backward incompatible. So it is probably not a good idea.
-> 
-> My plan was to not convert the ti,*-mcasp-audio txt file to yaml in the
-> first place, but do it right with as ti,*-mcasp
-> 
-> One of the outstanding issue is the multiple serializer support. It
-> should be in core as things are just working by luck atm when more than
-> one serializer is in use (via the card node).
-> 
->> Should we still consider this?
-> 
-> Since we are officially documenting the -mcasp-audio, I don't think it
-> would be a good idea to introduce different binding for the very same IP
-> just for the sake of it.
-> 
-> The new (and imho correct) binding would require quite a bit of work in
-> the driver and in the core level (plus the simple-card family), but I'm
-> afraid, I will not have time for it.
-> 
+But Root Complexes are not normally materialized as PCI devices with
+their own bus/device/function address, config space, BARs, etc.
+Sounds like this might really be a Root *Port*, not a Root Complex?
 
-Peter,
+s/it's config/its config/
+s/10 Second/10 second/
 
-I think all the new changes can be picked up later on.
-For now, to support the current device tree and binding, I am posting a
-v6 patch with 'acked-by' and 'reviewed-by' so that they are not lost in
-this thread and this patch could be merged.
+> > >>> Add quirk to mark AM654 RC BAR flag as IORESOURCE_UNSET so
+> > >>> that msix_map_region() returns NULL for Root Complex and avoid
+> > >>> un-desirable writes to MSI-X table.
+> > >>
+> > >> I don't think this is the right fix (it is not even a fix, just
+> > >> a plaster to workaround an issue).
+> > >>
+> > >> What do you mean by "writing to an undefined location" ?
+> > >>
+> > >> What does "a hard coded BAR" mean ?
+> > >>
+> > >> What happens if we _rightly_ write into it (ie to size it) ?
+> > > 
+> > > There are two parts w.r.t setting the BAR; one is during the
+> > > configuration and the other is during the enumeration.
+> > > i) During the configuration, the size of the BAR is configured
+> > >    and the inbound ATU is configured to map the BAR to a
+> > >    physical memory.
+> > > ii) During the enumeration, the size of the BAR is obtained and
+> > >     an address is allocated and programmed in the BAR.
+> > > 
+> > > In the case of RC, for (i) above, the BAR size is configured as '0'
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/pci/controller/dwc/pcie-designware-host.c#n556
+> > > and the inbound ATU is not programmed at all.
+> > > 
+> > > However, in the case of AM654, the HW configures BAR0 for a
+> > > fixed size of 1MB (irrespective of what SW programmed in [i]).
+> > > While this was done more for a endpoint usecase, since the same
+> > > IP is configured for both RC mode and EP mode, the fixed BAR
+> > > size is seen with RC mode as well.
+
+This doesn't seem to quite answer Lorenzo's question.  On AM654, does
+__pci_read_base() discover the 1MB size correctly for both RC and EP
+mode?
+
+What value should BAR0 contain in RC mode?  Does the device respond at
+that address?  Do we still need to ensure that 1MB address space is
+not assigned to any other device?
+
+> > > AM654 also has MSI-X capability for RC mode (the IP should have
+> > > been ideally configured to have MSI-X capability for EP mode).
+> > > This results in PCIEPORTBUS doing some undesired access in
+> > > msix_mask_all().
+
+We have several quirks that set dev->no_msi.  Maybe that would be a
+better way to prevent use of MSI-X (it would also prevent use of MSI;
+not sure whether that needs to be avoided as well)?
+
+> > > Here I configure IORESOURCE_UNSET so that memory is not
+> > > allocated for RC BAR.
+
+I guess this implies that this device (RP?  I don't think RCs have
+BARs) never responds to PCI address space described by BAR0?
+
+> > Do you need further clarifications on this?
+> 
+> There are two things here:
+> 
+> 1) As Rob mentioned, you can write it as a quirk applying only to
+>    the bridge _only_
+> 2) What you want is that the BAR should not be visible to the OS
+>    since it is not an actual resource. What I am questioning is
+>    whether your way of doing that complies with how this is done in
+>    the kernel for other devices/bridges. I need Bjorn's input on
+>    this since he knows better (especially wrt IORESOURCE_UNSET
+>    usage). I don't want to add any other IORESOURCE_UNSET usage that
+>    deviates from what's expected from it
+
+If BAR0 should not exist at all as far as the OS is concerned, I think
+you should just set r->flags = 0.  But that assumes the device never
+uses the value in the BAR, and it never responds using whatever
+address is there, even when PCI_COMMAND_MEMORY is set.
+
+> > >>> Signed-off-by: Kishon Vijay Abraham I <kishon@ti.com>
+> > >>> ---
+> > >>>  drivers/pci/controller/dwc/pci-keystone.c | 8 +++++++-
+> > >>>  1 file changed, 7 insertions(+), 1 deletion(-)
+> > >>>
+> > >>> diff --git a/drivers/pci/controller/dwc/pci-keystone.c b/drivers/pci/controller/dwc/pci-keystone.c
+> > >>> index 52d20fe17ee9..73e6626a0d8f 100644
+> > >>> --- a/drivers/pci/controller/dwc/pci-keystone.c
+> > >>> +++ b/drivers/pci/controller/dwc/pci-keystone.c
+> > >>> @@ -557,8 +557,14 @@ static void ks_pcie_quirk(struct pci_dev *dev)
+> > >>>  		{ 0, },
+> > >>>  	};
+> > >>>  
+> > >>> -	if (pci_is_root_bus(bus))
+> > >>> +	if (pci_is_root_bus(bus)) {
+> > >>>  		bridge = dev;
+> > >>> +		if (pci_match_id(am6_pci_devids, bridge)) {
+> > >>> +			struct resource *r = &dev->resource[0];
+> > >>> +
+> > >>> +			r->flags |= IORESOURCE_UNSET;
+> > >>> +		}
+> > >>> +	}
+> > >>>  
+> > >>>  	/* look for the host bridge */
+> > >>>  	while (!pci_is_root_bus(bus)) {
+> > >>> -- 
+> > >>> 2.17.1
+> > >>>

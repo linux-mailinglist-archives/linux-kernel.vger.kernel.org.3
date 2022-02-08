@@ -2,146 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DFEE4AE48E
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:37:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C19A4AE34B
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:21:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389085AbiBHWd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 17:33:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54572 "EHLO
+        id S1386541AbiBHWVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 17:21:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386426AbiBHUcQ (ORCPT
+        with ESMTP id S1386437AbiBHUdf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 15:32:16 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87501C0613CB
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 12:32:14 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id j14so1092077ejy.6
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 12:32:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gtsDfpCrFsnfisbUPJhBruwT+fgEbgdfMntNnmidtvM=;
-        b=OgouE37mlONXTn5boL+/fmyvPcIbs4YGlNMohOcrJSJvZTWscTei0nRrlBlR9sRaU1
-         o+ETGcoKZIRIy5tNRm874mJI2WJBAR2VFhJPclA+G6fbtYgbWRqrR3OGD+Q4ToeWJXlb
-         KZUxeKagOPnpDSBAGcXHUoTBPzK1WOY/8J+NnrsmH7YuGcdOpFu5ENh4JZjnwy0kSIWH
-         iwQPyodsMlEy2e28ISFyrdzj7cfYB3S6JCUyFI1cOT2wCY81pkDnrE9iEB0J7zs1myN8
-         hhLglJfFPBiDBT9ua1Jfm5H7ODAZWluunQCTH4LFMLQhL00YmWRaEtU7nYkPJd6sC4AU
-         jheA==
+        Tue, 8 Feb 2022 15:33:35 -0500
+Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D65C0613CB;
+        Tue,  8 Feb 2022 12:33:35 -0800 (PST)
+Received: by mail-oo1-f44.google.com with SMTP id r15-20020a4ae5cf000000b002edba1d3349so58414oov.3;
+        Tue, 08 Feb 2022 12:33:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gtsDfpCrFsnfisbUPJhBruwT+fgEbgdfMntNnmidtvM=;
-        b=LC9G8DoJd1+8+ri4i8QQNbTfRRCHIfmoc5Qr/z90/x2msjaUy23J2EnO2t21goiNlq
-         d6mhao8IKmGE2mZ8mj3mbfecWI5zYYVVwmcbAaa/CHbC++s5V34hBoe1y8rLGfpIWMwD
-         9TJIVUmpJPdgGyuIBg36COx96KKUFcWMYMBQmpHiOWGzYeVOfgyRjLnY2s8WwActMjTU
-         KIjYa1rB08Vi+DofUh50CkfUnss2BUMiCl4laEamlkrVtbK2YkYLDoTwAFlviID1fjyH
-         HB+vvEFjxRfaYWDa59TmHtGRty0fSqfC5wDIIjO8kuR7lSh3kK/QC6H6B17aZlGMCQSV
-         8HOg==
-X-Gm-Message-State: AOAM533/Q5fXY+yVRIiaj7gUwquXGRLxohzbxGeDc6QwBxuBArpRwUnZ
-        GL6ZRQzZKLnBz7s0t7Ae2qQlL7N8YLX+Ceb+gzcN7RU8o9Q=
-X-Google-Smtp-Source: ABdhPJyKX2QCjePrd78NKzT7Vs0ZKfpBWbGmmdWVdIe7lQvwiKYAbFCZ2zFkA5UPbCuFPWzwLZ8OwhUUUp+1Jgv18ZE=
-X-Received: by 2002:a17:906:4fca:: with SMTP id i10mr4866638ejw.542.1644352332735;
- Tue, 08 Feb 2022 12:32:12 -0800 (PST)
-MIME-Version: 1.0
-References: <20220208040122.695258-1-davidgow@google.com>
-In-Reply-To: <20220208040122.695258-1-davidgow@google.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Tue, 8 Feb 2022 12:32:01 -0800
-Message-ID: <CAGS_qxrrgq0v3pXGv+33KkH2NZMhx-Yt_0XEq8P2NAag4DkgLQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] list: test: Add test for list_del_init_careful()
-To:     David Gow <davidgow@google.com>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=JRPrSLHlMGFs/3ziWzW4DwHIjPmQfKs7GHoGvsPVseE=;
+        b=Dui+ygRdtRvnuNNl8Az4C1xnDVuCud4J8YazRDVoZaKuMm1CL41TAIybF8J+2coTTi
+         w8rz983OochhgpVp1DekkSUfSweUKZLmEj3ioQje0K2vIdydMfCIwBzhYReInGndcO3H
+         Xi/GuMLJuKum+7VxG5yCIj//eTRMoXP7uTcaJlpd0Io6mBZYPbnQWHVppJ20asBCEqAV
+         Xz+yufUu1rRbo7VvkaAZC/a+VCAG5va3Lsb210x7AsU6AUdRQ7n9eYBKpSEoi0ouvJSX
+         9Gd6QuAHYmvuJw4DNmKRXVWeLP68LLLLXnjbC7TuZxLEfpOcYsTXWSGP5VM/uITc6ae4
+         ZAvg==
+X-Gm-Message-State: AOAM531PTXxCWmEfh7bByDz++xtcrZjcSZX/H3c9KO5rMIglncwv2UnR
+        kGcjnfK01r/ccluTn6emWw==
+X-Google-Smtp-Source: ABdhPJy992PXewYBALzEYZBXPGbQ5OcH8lbZ6CwXGZxPSunoTW7Rr/84sO8nvJNszKtykvGlJvCgtg==
+X-Received: by 2002:a05:6870:1215:: with SMTP id 21mr1027834oan.166.1644352414225;
+        Tue, 08 Feb 2022 12:33:34 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id u5sm5887627ooo.46.2022.02.08.12.33.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 12:33:33 -0800 (PST)
+Received: (nullmailer pid 2969145 invoked by uid 1000);
+        Tue, 08 Feb 2022 20:33:32 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Yifeng Zhao <yifeng.zhao@rock-chips.com>
+Cc:     heiko@sntech.de, vkoul@kernel.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, robh+dt@kernel.org,
+        lee.jones@linaro.org, cl@rock-chips.com, kishon@ti.com,
+        kever.yang@rock-chips.com, linux-arm-kernel@lists.infradead.org,
+        david.wu@rock-chips.com, michael.riesch@wolfvision.net,
+        linux-phy@lists.infradead.org, wulf@rock-chips.com,
+        p.zabel@pengutronix.de, jbx6244@gmail.com
+In-Reply-To: <20220208091326.12495-3-yifeng.zhao@rock-chips.com>
+References: <20220208091326.12495-1-yifeng.zhao@rock-chips.com> <20220208091326.12495-3-yifeng.zhao@rock-chips.com>
+Subject: Re: [PATCH v8 2/4] dt-bindings: phy: rockchip: Add Naneng combo PHY bindings
+Date:   Tue, 08 Feb 2022 14:33:32 -0600
+Message-Id: <1644352412.075016.2969144.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 7, 2022 at 8:01 PM David Gow <davidgow@google.com> wrote:
->
-> The list_del_init_careful() function was added[1] after the list KUnit
-> test. Add a very basic test to cover it.
->
-> Note that this test only covers the single-threaded behaviour (which
-> matches list_del_init()), as is already the case with the test for
-> list_empty_careful().
->
-> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c6fe44d96fc1536af5b11cd859686453d1b7bfd1
->
-> Signed-off-by: David Gow <davidgow@google.com>
+On Tue, 08 Feb 2022 17:13:24 +0800, Yifeng Zhao wrote:
+> Add the compatible strings for the Naneng combo PHY found on rockchip SoC.
+> 
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Yifeng Zhao <yifeng.zhao@rock-chips.com>
+> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
 > ---
->
-> Changes since v1:
-> https://lore.kernel.org/linux-kselftest/20220205061539.273330-1-davidgow@google.com/
-> - Patch 1/3 unchanged
->
-> ---
->  lib/list-test.c | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
->
-> diff --git a/lib/list-test.c b/lib/list-test.c
-> index ee09505df16f..976e9ae1f3c5 100644
-> --- a/lib/list-test.c
-> +++ b/lib/list-test.c
-> @@ -161,6 +161,24 @@ static void list_test_list_del_init(struct kunit *test)
->         KUNIT_EXPECT_TRUE(test, list_empty_careful(&a));
->  }
->
-> +static void list_test_list_del_init_careful(struct kunit *test)
-> +{
-> +       /* This test doesn't check correctness under concurrent access */
+> 
+> Changes in v8: None
+> Changes in v7:
+> - remove u3otg0_port_en, u3otg1_port_en and pipe_sgmii_mac_sel
+> 
+> Changes in v5:
+> - modify description for ssc and ext-refclk
+> - remove apb reset
+> 
+> Changes in v4:
+> - restyle
+> - remove some minItems
+> - add more properties
+> - remove reset-names
+> - move #phy-cells
+> - add rockchip,rk3568-pipe-grf
+> - add rockchip,rk3568-pipe-phy-grf
+> 
+> Changes in v3: None
+> Changes in v2:
+> - Fix dtschema/dtc warnings/errors
+> 
+>  .../phy/phy-rockchip-naneng-combphy.yaml      | 109 ++++++++++++++++++
+>  1 file changed, 109 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/phy/phy-rockchip-naneng-combphy.yaml
+> 
 
-nit: I personally didn't read this comment in the intended way at first.
-I'd personally find something like
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-NOTE: this doesn't test for concurrency/memory
-ordering/however-you-want-to-word-it issues
+yamllint warnings/errors:
 
-a bit more readable.
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/phy/phy-rockchip-naneng-combphy.example.dt.yaml:0:0: /example-0/syscon@fdc50000: failed to match any schema with compatible: ['rockchip,rk3568-pipe-grf', 'syscon']
+Documentation/devicetree/bindings/phy/phy-rockchip-naneng-combphy.example.dt.yaml:0:0: /example-0/syscon@fdc70000: failed to match any schema with compatible: ['rockchip,rk3568-pipe-phy-grf', 'syscon']
 
-> +       struct list_head a, b;
-> +       LIST_HEAD(list);
-> +
-> +       list_add_tail(&a, &list);
-> +       list_add_tail(&b, &list);
-> +
-> +       /* before: [list] -> a -> b */
-> +       list_del_init(&a);
+doc reference errors (make refcheckdocs):
 
-Is this supposed to use list_del_init_careful(&a)?
-That would make it match the name of the test case.
+See https://patchwork.ozlabs.org/patch/1589719
 
-> +       /* after: [list] -> b, a initialised */
-> +
-> +       KUNIT_EXPECT_PTR_EQ(test, list.next, &b);
-> +       KUNIT_EXPECT_PTR_EQ(test, b.prev, &list);
-> +       KUNIT_EXPECT_TRUE(test, list_empty_careful(&a));
-> +}
-> +
->  static void list_test_list_move(struct kunit *test)
->  {
->         struct list_head a, b;
-> @@ -707,6 +725,7 @@ static struct kunit_case list_test_cases[] = {
->         KUNIT_CASE(list_test_list_replace_init),
->         KUNIT_CASE(list_test_list_swap),
->         KUNIT_CASE(list_test_list_del_init),
-> +       KUNIT_CASE(list_test_list_del_init_careful),
->         KUNIT_CASE(list_test_list_move),
->         KUNIT_CASE(list_test_list_move_tail),
->         KUNIT_CASE(list_test_list_bulk_move_tail),
-> --
-> 2.35.0.263.gb82422642f-goog
->
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+

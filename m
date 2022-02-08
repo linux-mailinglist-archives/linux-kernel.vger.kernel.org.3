@@ -2,222 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 821DD4AD389
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 09:33:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E1B34AD341
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 09:26:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349997AbiBHIdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 03:33:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33816 "EHLO
+        id S1349357AbiBHIZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 03:25:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347610AbiBHIdw (ORCPT
+        with ESMTP id S1349668AbiBHIZw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 03:33:52 -0500
-X-Greylist: delayed 507 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Feb 2022 00:33:50 PST
-Received: from first.geanix.com (first.geanix.com [116.203.34.67])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227DBC03FEC0;
-        Tue,  8 Feb 2022 00:33:49 -0800 (PST)
-Received: from zen.. (unknown [185.17.218.86])
-        by first.geanix.com (Postfix) with ESMTPSA id 3B30AE28D1;
-        Tue,  8 Feb 2022 08:25:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
-        t=1644308719; bh=Efu6zjcxm/eWjynAIA8LNMAq9G0qvlYvhealE9QUzXQ=;
-        h=From:To:Cc:Subject:Date;
-        b=C2ohMC85IOb51JqunUAZHpOrmNCwKkz1ZlbIrTMm12tmkPSAGUPUtAfynh+pxU2Tb
-         Jo9+i8yz8kitAON4mcrNf3/w4EtR5N8Re3sf8JaxSkApNWKxWUj5fgk7o7Gw9Fgl5k
-         ETMGo2aW2WdWjlo8gIcp+EuGIY3s1aLfLZinpZsemsX5vAHCsK+ShtX4soNyB5MFim
-         3dd0ZiVf6IldfoR/NtOUeIiYWM0NEh9s3qigwgsRRfp51es91ujVqeKHTjk9NpbVN/
-         bdQGmEZDldUJszJYssqmSm7uO979MI71LCtWrIHzXf6X6b6L+jK7zOnELzlULxN9vA
-         rwCmCD1jUkLOA==
-From:   Sean Nyekjaer <sean@geanix.com>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Boris Brezillon <bbrezillon@kernel.org>
-Cc:     Sean Nyekjaer <sean@geanix.com>, stable@vger.kernel.org,
-        sfr@canb.auug.org.au,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] mtd: rawnand: protect access to rawnand devices while in suspend
-Date:   Tue,  8 Feb 2022 09:25:06 +0100
-Message-Id: <20220208082507.1837764-1-sean@geanix.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 8 Feb 2022 03:25:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1B04FC03FEC0
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 00:25:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644308750;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vK6N04AyX07pMpT7bwBFBL+2ctaA8ouHGk0qanbWuN4=;
+        b=NU4Uk+H6vDLPr9KtLjREbNbG4ed04M4vxojLvSIV07AhRSN9AspH74i9Nms3ItFmcahiGa
+        hsmG9iyJpprrMcSQpd6NRvwPZQGQJfwFV7R8k7d0wbbzXCXzC5L66VRXdjVtjSkATSx+lV
+        1KlMOUQjdrhqvtrqV5r5Zx04Kf359xs=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-529-1inVdJlxMqu0gbU8xnULhQ-1; Tue, 08 Feb 2022 03:25:49 -0500
+X-MC-Unique: 1inVdJlxMqu0gbU8xnULhQ-1
+Received: by mail-wr1-f70.google.com with SMTP id j8-20020adfa548000000b001e33074ac51so1342131wrb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 00:25:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=vK6N04AyX07pMpT7bwBFBL+2ctaA8ouHGk0qanbWuN4=;
+        b=TVAiMiscbmGS8YHwLhKAuJ2QQWc5k2KaiDcy+nCRONmrYd0cu0cj2+xnvJQ7rLkFzP
+         JhkFr6d6PooCRUGrKTEk7GtLSrgtBjwWPt/aP5/bWn+r05oL+Ra/M2+1hsv/zkNPMCzQ
+         i/6WvvtGIlUPMcuN9UGFLueb7o9kEavGklNaVG3L5hwEaI/DYVUpe/cM3dG/12Wl0LJZ
+         3YXTpzJQuIoHOakigJeFSb3Zvqprohm4HvDDTotpyrLxwLvxWx1E+7hS4SA7viO24EUG
+         jz6/oEFjPiLX++oI5mnaFV2g0wDplWpglriiuYD6X09Ys0a3ka++3kZ/N4Wr4mCxYdEL
+         TG1w==
+X-Gm-Message-State: AOAM532N3RZRYi6LP7sHPybQ7sI26KQcMjWOQAJovRzi9yaTHYMRFaxZ
+        CromvQP+oNOR2+Xe94Ncu+tdTfXLRqphNoWUtT1+B9ldihb5y8PG3RJTTSc/7QB/tBNhHEm8v1l
+        sz7hWDVUhyURDQoDcgP9yFjIW
+X-Received: by 2002:a1c:f004:: with SMTP id a4mr92374wmb.1.1644308747829;
+        Tue, 08 Feb 2022 00:25:47 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxwcIp4GwwlLjr351VgLNGexExdoCChF42UovxVNCbQl1Hb3RiYgQkMtyyft5+2jnWx1EvDaA==
+X-Received: by 2002:a1c:f004:: with SMTP id a4mr92362wmb.1.1644308747614;
+        Tue, 08 Feb 2022 00:25:47 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-96-254.dyn.eolo.it. [146.241.96.254])
+        by smtp.gmail.com with ESMTPSA id e17sm13943510wrt.27.2022.02.08.00.25.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 00:25:47 -0800 (PST)
+Message-ID: <0300acca47b10384e6181516f32caddda043f3e4.camel@redhat.com>
+Subject: Re: [PATCH] net: fix wrong network header length
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Lina Wang <lina.wang@mediatek.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, maze@google.com,
+        willemb@google.com, edumazet@google.com
+Date:   Tue, 08 Feb 2022 09:25:45 +0100
+In-Reply-To: <20220208025511.1019-1-lina.wang@mediatek.com>
+References: <20220208025511.1019-1-lina.wang@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Prevent rawnend access while in a suspended state.
+Hello,
 
-Commit 013e6292aaf5 ("mtd: rawnand: Simplify the locking") allows the
-rawnand layer to return errors rather than waiting in a blocking wait.
+On Tue, 2022-02-08 at 10:55 +0800, Lina Wang wrote:
+> When clatd starts with ebpf offloaing, and NETIF_F_GRO_FRAGLIST is enable,
+> several skbs are gathered in skb_shinfo(skb)->frag_list. The first skb's
+> ipv6 header will be changed to ipv4 after bpf_skb_proto_6_to_4,
+> network_header\transport_header\mac_header have been updated as ipv4 acts,
+> but other skbs in frag_list didnot update anything, just ipv6 packets.
+> 
+> udp_queue_rcv_skb will call skb_segment_list to traverse other skbs in
+> frag_list and make sure right udp payload is delivered to user space.
+> Unfortunately, other skbs in frag_list who are still ipv6 packets are
+> updated like the first skb and will have wrong transport header length.
+> 
+> e.g.before bpf_skb_proto_6_to_4,the first skb and other skbs in frag_list
+> has the same network_header(24)& transport_header(64), after
+> bpf_skb_proto_6_to_4, ipv6 protocol has been changed to ipv4, the first
+> skb's network_header is 44,transport_header is 64, other skbs in frag_list
+> didnot change.After skb_segment_list, the other skbs in frag_list has
+> different network_header(24) and transport_header(44), so there will be 20
+> bytes difference,that is difference between ipv6 header and ipv4 header.
 
-Tested on a iMX6ULL.
+> Actually, there are two solutions to fix it, one is traversing all skbs
+> and changing every skb header in bpf_skb_proto_6_to_4, the other is
+> modifying frag_list skb's header in skb_segment_list. 
 
-Fixes: 013e6292aaf5 ("mtd: rawnand: Simplify the locking")
-Signed-off-by: Sean Nyekjaer <sean@geanix.com>
-Reviewed-by: Boris Brezillon <boris.brezillon@collabora.com>
----
-Follow-up on discussion in:
-https://lkml.org/lkml/2021/10/4/41
-https://lkml.org/lkml/2021/10/11/435
-https://lkml.org/lkml/2021/10/20/184
-https://lkml.org/lkml/2021/10/25/288
-https://lkml.org/lkml/2021/10/26/55
-https://lkml.org/lkml/2021/11/2/352
+I don't think the above should be addressed into the GSO layer. The
+ebpf program is changing the GRO packet in arbitrary way violating the
+GSO packet constraint - arguably, it's corrupting the packet.
 
-Changes since v1:
- - fixed uninitialized return
+I think it would be better change the bpf_skb_proto_6_to_4() to
+properly handle FRAGLIST GSO packets.
 
-Changes since v2:
- - fixed wait queue description
+If traversing the segments become too costly, you can try replacing
+GRO_FRAGLIST with GRO_UDP_FWD.
 
- drivers/mtd/nand/raw/nand_base.c | 44 +++++++++++++++-----------------
- include/linux/mtd/rawnand.h      |  2 ++
- 2 files changed, 22 insertions(+), 24 deletions(-)
+Thanks!
 
-diff --git a/drivers/mtd/nand/raw/nand_base.c b/drivers/mtd/nand/raw/nand_base.c
-index e7b2ba016d8c..8daaba96edb2 100644
---- a/drivers/mtd/nand/raw/nand_base.c
-+++ b/drivers/mtd/nand/raw/nand_base.c
-@@ -338,16 +338,19 @@ static int nand_isbad_bbm(struct nand_chip *chip, loff_t ofs)
-  *
-  * Return: -EBUSY if the chip has been suspended, 0 otherwise
-  */
--static int nand_get_device(struct nand_chip *chip)
-+static void nand_get_device(struct nand_chip *chip)
- {
--	mutex_lock(&chip->lock);
--	if (chip->suspended) {
-+	/* Wait until the device is resumed. */
-+	while (1) {
-+		mutex_lock(&chip->lock);
-+		if (!chip->suspended) {
-+			mutex_lock(&chip->controller->lock);
-+			return;
-+		}
- 		mutex_unlock(&chip->lock);
--		return -EBUSY;
--	}
--	mutex_lock(&chip->controller->lock);
- 
--	return 0;
-+		wait_event(chip->resume_wq, !chip->suspended);
-+	}
- }
- 
- /**
-@@ -576,9 +579,7 @@ static int nand_block_markbad_lowlevel(struct nand_chip *chip, loff_t ofs)
- 		nand_erase_nand(chip, &einfo, 0);
- 
- 		/* Write bad block marker to OOB */
--		ret = nand_get_device(chip);
--		if (ret)
--			return ret;
-+		nand_get_device(chip);
- 
- 		ret = nand_markbad_bbm(chip, ofs);
- 		nand_release_device(chip);
-@@ -3826,9 +3827,7 @@ static int nand_read_oob(struct mtd_info *mtd, loff_t from,
- 	    ops->mode != MTD_OPS_RAW)
- 		return -ENOTSUPP;
- 
--	ret = nand_get_device(chip);
--	if (ret)
--		return ret;
-+	nand_get_device(chip);
- 
- 	if (!ops->datbuf)
- 		ret = nand_do_read_oob(chip, from, ops);
-@@ -4415,13 +4414,11 @@ static int nand_write_oob(struct mtd_info *mtd, loff_t to,
- 			  struct mtd_oob_ops *ops)
- {
- 	struct nand_chip *chip = mtd_to_nand(mtd);
--	int ret;
-+	int ret = 0;
- 
- 	ops->retlen = 0;
- 
--	ret = nand_get_device(chip);
--	if (ret)
--		return ret;
-+	nand_get_device(chip);
- 
- 	switch (ops->mode) {
- 	case MTD_OPS_PLACE_OOB:
-@@ -4481,9 +4478,7 @@ int nand_erase_nand(struct nand_chip *chip, struct erase_info *instr,
- 		return -EIO;
- 
- 	/* Grab the lock and see if the device is available */
--	ret = nand_get_device(chip);
--	if (ret)
--		return ret;
-+	nand_get_device(chip);
- 
- 	/* Shift to get first page */
- 	page = (int)(instr->addr >> chip->page_shift);
-@@ -4570,7 +4565,7 @@ static void nand_sync(struct mtd_info *mtd)
- 	pr_debug("%s: called\n", __func__);
- 
- 	/* Grab the lock and see if the device is available */
--	WARN_ON(nand_get_device(chip));
-+	nand_get_device(chip);
- 	/* Release it and go back */
- 	nand_release_device(chip);
- }
-@@ -4587,9 +4582,7 @@ static int nand_block_isbad(struct mtd_info *mtd, loff_t offs)
- 	int ret;
- 
- 	/* Select the NAND device */
--	ret = nand_get_device(chip);
--	if (ret)
--		return ret;
-+	nand_get_device(chip);
- 
- 	nand_select_target(chip, chipnr);
- 
-@@ -4660,6 +4653,8 @@ static void nand_resume(struct mtd_info *mtd)
- 			__func__);
- 	}
- 	mutex_unlock(&chip->lock);
-+
-+	wake_up_all(&chip->resume_wq);
- }
- 
- /**
-@@ -5437,6 +5432,7 @@ static int nand_scan_ident(struct nand_chip *chip, unsigned int maxchips,
- 	chip->cur_cs = -1;
- 
- 	mutex_init(&chip->lock);
-+	init_waitqueue_head(&chip->resume_wq);
- 
- 	/* Enforce the right timings for reset/detection */
- 	chip->current_interface_config = nand_get_reset_interface_config();
-diff --git a/include/linux/mtd/rawnand.h b/include/linux/mtd/rawnand.h
-index 5b88cd51fadb..dcf90144d70b 100644
---- a/include/linux/mtd/rawnand.h
-+++ b/include/linux/mtd/rawnand.h
-@@ -1240,6 +1240,7 @@ struct nand_secure_region {
-  * @lock: Lock protecting the suspended field. Also used to serialize accesses
-  *        to the NAND device
-  * @suspended: Set to 1 when the device is suspended, 0 when it's not
-+ * @resume_wq: wait queue to sleep if rawnand is in suspended state.
-  * @cur_cs: Currently selected target. -1 means no target selected, otherwise we
-  *          should always have cur_cs >= 0 && cur_cs < nanddev_ntargets().
-  *          NAND Controller drivers should not modify this value, but they're
-@@ -1294,6 +1295,7 @@ struct nand_chip {
- 	/* Internals */
- 	struct mutex lock;
- 	unsigned int suspended : 1;
-+	wait_queue_head_t resume_wq;
- 	int cur_cs;
- 	int read_retries;
- 	struct nand_secure_region *secure_regions;
--- 
-2.34.1
+Paolo
 

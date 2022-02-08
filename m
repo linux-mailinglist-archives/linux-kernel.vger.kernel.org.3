@@ -2,140 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AF444ADDE8
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 17:04:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EF514ADDED
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 17:05:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382681AbiBHQEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 11:04:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41966 "EHLO
+        id S1382701AbiBHQFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 11:05:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239269AbiBHQEW (ORCPT
+        with ESMTP id S240514AbiBHQFR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 11:04:22 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D6EC061576;
-        Tue,  8 Feb 2022 08:04:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 53FDD6168C;
-        Tue,  8 Feb 2022 16:04:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3931FC004E1;
-        Tue,  8 Feb 2022 16:04:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644336260;
-        bh=fkcM/cj5TPbLIL53k1xCwKgNr/uerJzMAH9JtGLwnIY=;
+        Tue, 8 Feb 2022 11:05:17 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C598C061576;
+        Tue,  8 Feb 2022 08:05:16 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B0C45A04;
+        Tue,  8 Feb 2022 17:05:14 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1644336314;
+        bh=hYlIvvM93lCc9l231DKm9wPmfJPGBh1jXIbdK7qXkgc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=W2ObtUKMEXvRy3dBC56Fc90mt+dAL+rivWu2owCuXVq8ZkTywujYcg7GOXvqjaWWp
-         k1pRIEVq8nEywWeHrVSZZCzZ9wVomBrnw5TiJO8JAPHGaQs0/XpWJ+ZhMQgghtnEBQ
-         zt5+pTF0G8ydZtXrTlgEAMNpnskaa3TOQRqYoTqbb82TLr88AyZNd0B5+TlKhp+HFu
-         284mtD2ZKWuxgUlOrQUub9s0VTX9HFVkNtvDeFVONHQTtrxa5k4W0g3Ts8j+0fwE0O
-         PEYwLJnJvqSXkdHI2rljnF9jkSuDrQr8mz9byg6MSbhL6JBxS1RdPOBWzerws73Ax6
-         NPl8wJWcYhfVQ==
-Date:   Tue, 8 Feb 2022 09:04:16 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        llvm@lists.linux.dev, stable <stable@vger.kernel.org>
-Subject: Re: [PATCH v2] Makefile.extrawarn: Move -Wunaligned-access to W=1
-Message-ID: <YgKUgI95kAPKGOZY@dev-arch.archlinux-ax161>
-References: <20220202230515.2931333-1-nathan@kernel.org>
- <CAKwvOdkQ__2A3NohrcJgF+JABSDnSyEKzD97qVa4cpM==GPONQ@mail.gmail.com>
- <CAK7LNASCGbLWkDXYqyCf08sFHjGqvqSgmFsJ741MHGSKzkifLg@mail.gmail.com>
+        b=SShJje1m2YMxOzxRu6/GA+1Z+52ZhOQHCDkUkfdWackYMfuADsmD65wsXs1yhbcdO
+         UPGf9moBW0oAit8xPQIMhEcrFIpjAzRhVm9BVOmA3vGrtRe9dTVswizhjjdQU+jWno
+         WZzwguZMwMA622+i7lgKuOmEtc2dzqCHF329ZJ4Q=
+Date:   Tue, 8 Feb 2022 18:05:12 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
+Cc:     dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
+        kernel-list@raspberrypi.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org, lukasz@jany.st,
+        mchehab@kernel.org, naush@raspberrypi.com, robh@kernel.org,
+        tomi.valkeinen@ideasonboard.com,
+        bcm-kernel-feedback-list@broadcom.com, stefan.wahren@i2se.com
+Subject: Re: [PATCH v5 08/11] media: imx219: Switch from open to init_cfg
+Message-ID: <YgKUuLdsOuvHopWp@pendragon.ideasonboard.com>
+References: <20220208155027.891055-1-jeanmichel.hautbois@ideasonboard.com>
+ <20220208155027.891055-9-jeanmichel.hautbois@ideasonboard.com>
+ <YgKUKauDwCIBFovX@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAK7LNASCGbLWkDXYqyCf08sFHjGqvqSgmFsJ741MHGSKzkifLg@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YgKUKauDwCIBFovX@pendragon.ideasonboard.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 08, 2022 at 01:23:32PM +0900, Masahiro Yamada wrote:
-> On Thu, Feb 3, 2022 at 8:12 AM Nick Desaulniers <ndesaulniers@google.com> wrote:
-> >
-> > On Wed, Feb 2, 2022 at 3:07 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> > >
-> > > -Wunaligned-access is a new warning in clang that is default enabled for
-> > > arm and arm64 under certain circumstances within the clang frontend (see
-> > > LLVM commit below). On v5.17-rc2, an ARCH=arm allmodconfig build shows
-> > > 1284 total/70 unique instances of this warning (most of the instances
-> > > are in header files), which is quite noisy.
-> > >
-> > > To keep a normal build green through CONFIG_WERROR, only show this
-> > > warning with W=1, which will allow automated build systems to catch new
-> > > instances of the warning so that the total number can be driven down to
-> > > zero eventually since catching unaligned accesses at compile time would
-> > > be generally useful.
-> > >
-> > > Cc: stable@vger.kernel.org
-> > > Link: https://github.com/llvm/llvm-project/commit/35737df4dcd28534bd3090157c224c19b501278a
-> > > Link: https://github.com/ClangBuiltLinux/linux/issues/1569
-> > > Link: https://github.com/ClangBuiltLinux/linux/issues/1576
-> > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> >
-> > Thanks to you and Arnd for working out whether this is important to
-> > pursue. Sounds like it is.
-> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> >
-> > > ---
+On Tue, Feb 08, 2022 at 06:02:50PM +0200, Laurent Pinchart wrote:
+> Hi Jean-Michel,
 > 
+> Thank you for the patch.
 > 
-> I assume this should be considered as a bug fix
-> to avoid the error for the combination of CONFIG_WERROR=y
-> and the latest Clang.
+> On Tue, Feb 08, 2022 at 04:50:24PM +0100, Jean-Michel Hautbois wrote:
+> > Use the init_cfg pad level operation instead of the internal subdev
+> > open operation to set default formats on the pads.
+> > While at it, make the imx219_pad_ops more easier to read.
 > 
-> Applied to linux-kbuild/fixes.
-> Thanks.
+> It could have been useful to explain here why there's a separate
+> imx219_init_formats() function, as reviewers could wonder. It's clear
+> when reviewing the next patches though.
+> 
+> > Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
+> > ---
+> >  drivers/media/i2c/imx219.c | 63 +++++++++++++++-----------------------
+> >  1 file changed, 25 insertions(+), 38 deletions(-)
+> > 
+> > diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
+> > index 74dba5e61201..abcaee15c4a0 100644
+> > --- a/drivers/media/i2c/imx219.c
+> > +++ b/drivers/media/i2c/imx219.c
+> > @@ -685,34 +685,6 @@ static void imx219_set_default_format(struct imx219 *imx219)
+> >  	fmt->field = V4L2_FIELD_NONE;
+> >  }
+> >  
+> > -static int imx219_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
+> > -{
+> > -	struct imx219 *imx219 = to_imx219(sd);
+> > -	struct v4l2_mbus_framefmt *try_fmt =
+> > -		v4l2_subdev_get_try_format(sd, fh->state, 0);
+> > -	struct v4l2_rect *try_crop;
+> > -
+> > -	mutex_lock(&imx219->mutex);
+> > -
+> > -	/* Initialize try_fmt */
+> > -	try_fmt->width = supported_modes[0].width;
+> > -	try_fmt->height = supported_modes[0].height;
+> > -	try_fmt->code = imx219_get_format_code(imx219,
+> > -					       MEDIA_BUS_FMT_SRGGB10_1X10);
+> > -	try_fmt->field = V4L2_FIELD_NONE;
+> > -
+> > -	/* Initialize try_crop rectangle. */
+> > -	try_crop = v4l2_subdev_get_try_crop(sd, fh->state, 0);
+> > -	try_crop->top = IMX219_PIXEL_ARRAY_TOP;
+> > -	try_crop->left = IMX219_PIXEL_ARRAY_LEFT;
+> > -	try_crop->width = IMX219_PIXEL_ARRAY_WIDTH;
+> > -	try_crop->height = IMX219_PIXEL_ARRAY_HEIGHT;
+> 
+> The crop rectangle initialization is removed here, but not added below.
+> 
+> > -
+> > -	mutex_unlock(&imx219->mutex);
+> > -
+> > -	return 0;
+> > -}
+> > -
+> >  static int imx219_set_ctrl(struct v4l2_ctrl *ctrl)
+> >  {
+> >  	struct imx219 *imx219 =
+> > @@ -802,6 +774,25 @@ static const struct v4l2_ctrl_ops imx219_ctrl_ops = {
+> >  	.s_ctrl = imx219_set_ctrl,
+> >  };
+> >  
+> > +static void imx219_init_formats(struct v4l2_subdev_state *state)
+> > +{
+> > +	struct v4l2_mbus_framefmt *format;
+> > +
+> > +	format = v4l2_state_get_stream_format(state, 0, 0);
 
-Yes, this is what I was hoping for! Thank you, I'll try to make that
-more clear in the future.
+Also, this won't work until you create routes. The function will return
+NULL and you'll crash. This is fixed in subsequent patches, but it
+breaks bisection.
 
-Cheers,
-Nathan
-
-> > >
-> > > v1 -> v2: https://lore.kernel.org/r/20220201232229.2992968-1-nathan@kernel.org/
-> > >
-> > > * Move to W=1 instead of W=2 so that new instances are caught (Arnd).
-> > > * Add links to the ClangBuiltLinux issue tracker.
-> > >
-> > >  scripts/Makefile.extrawarn | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > >
-> > > diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
-> > > index d53825503874..8be892887d71 100644
-> > > --- a/scripts/Makefile.extrawarn
-> > > +++ b/scripts/Makefile.extrawarn
-> > > @@ -51,6 +51,7 @@ KBUILD_CFLAGS += -Wno-sign-compare
-> > >  KBUILD_CFLAGS += -Wno-format-zero-length
-> > >  KBUILD_CFLAGS += $(call cc-disable-warning, pointer-to-enum-cast)
-> > >  KBUILD_CFLAGS += -Wno-tautological-constant-out-of-range-compare
-> > > +KBUILD_CFLAGS += $(call cc-disable-warning, unaligned-access)
-> > >  endif
-> > >
-> > >  endif
-> > >
-> > > base-commit: 26291c54e111ff6ba87a164d85d4a4e134b7315c
-> > > --
-> > > 2.35.1
-> > >
-> >
-> >
-> > --
-> > Thanks,
-> > ~Nick Desaulniers
-> 
-> 
+> > +	format->code = imx219_mbus_formats[0];
+> > +	format->width = supported_modes[0].width;
+> > +	format->height = supported_modes[0].height;
+> > +	format->field = V4L2_FIELD_NONE;
+> > +	format->colorspace = V4L2_COLORSPACE_RAW;
+> > +}
+> > +
+> > +static int imx219_init_cfg(struct v4l2_subdev *sd,
+> > +			   struct v4l2_subdev_state *state)
+> > +{
+> > +	imx219_init_formats(state);
+> > +	return 0;
+> > +}
+> > +
+> >  static int imx219_enum_mbus_code(struct v4l2_subdev *sd,
+> >  				 struct v4l2_subdev_state *sd_state,
+> >  				 struct v4l2_subdev_mbus_code_enum *code)
+> > @@ -1255,11 +1246,12 @@ static const struct v4l2_subdev_video_ops imx219_video_ops = {
+> >  };
+> >  
+> >  static const struct v4l2_subdev_pad_ops imx219_pad_ops = {
+> > -	.enum_mbus_code = imx219_enum_mbus_code,
+> > -	.get_fmt = imx219_get_pad_format,
+> > -	.set_fmt = imx219_set_pad_format,
+> > -	.get_selection = imx219_get_selection,
+> > -	.enum_frame_size = imx219_enum_frame_size,
+> > +	.init_cfg		= imx219_init_cfg,
+> > +	.enum_mbus_code		= imx219_enum_mbus_code,
+> > +	.get_fmt		= imx219_get_pad_format,
+> > +	.set_fmt		= imx219_set_pad_format,
+> > +	.get_selection		= imx219_get_selection,
+> > +	.enum_frame_size	= imx219_enum_frame_size,
+> >  };
+> >  
+> >  static const struct v4l2_subdev_ops imx219_subdev_ops = {
+> > @@ -1268,10 +1260,6 @@ static const struct v4l2_subdev_ops imx219_subdev_ops = {
+> >  	.pad = &imx219_pad_ops,
+> >  };
+> >  
+> > -static const struct v4l2_subdev_internal_ops imx219_internal_ops = {
+> > -	.open = imx219_open,
+> > -};
+> > -
+> >  /* Initialize control handlers */
+> >  static int imx219_init_controls(struct imx219 *imx219)
+> >  {
+> > @@ -1520,7 +1508,6 @@ static int imx219_probe(struct i2c_client *client)
+> >  		goto error_power_off;
+> >  
+> >  	/* Initialize subdev */
+> > -	imx219->sd.internal_ops = &imx219_internal_ops;
+> >  	imx219->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
+> >  			    V4L2_SUBDEV_FL_HAS_EVENTS;
+> >  	imx219->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
 > 
 > -- 
-> Best Regards
-> Masahiro Yamada
+> Regards,
+> 
+> Laurent Pinchart
+
+-- 
+Regards,
+
+Laurent Pinchart

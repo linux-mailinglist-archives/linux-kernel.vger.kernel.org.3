@@ -2,240 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D4994AD645
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:23:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 556014AD646
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:23:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235101AbiBHLXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 06:23:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46480 "EHLO
+        id S1347736AbiBHLXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 06:23:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348233AbiBHJtV (ORCPT
+        with ESMTP id S236991AbiBHJts (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 04:49:21 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5ABAC03FEC0;
-        Tue,  8 Feb 2022 01:49:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1644313760; x=1675849760;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=+chmDD8jtf0IVStKfP0KZ6iXAQijgoNr4T0r/wm0uHU=;
-  b=MFaKPPsYsCKhyl86x0mTTqDq7SFBlqT6P7chgsOl1W/YE4gLdLlm6Lj7
-   Rbt0G1LueW08QvZNwqKO36lPGlokVSFuRPG3DtG49xshvnoVT0Id+czve
-   s8tjined5LvhFOBUO8ctYkpfx0nvPxABSMFMgZaIPRvFXyAPMZyeehMwa
-   bXOi0ku342wU6XT22xRlU5Vd3KWNqlB5rPwWPZ4KP32taYkyfRi+io1Yz
-   JDsLW7rbehTSre6iBxwqrvg1kyorr8TibcNcPk46LAXjRY9d/X065kxOH
-   TDBsISHNE0LzFGKRHtzajQxqmt0xjdgsIsRBIF/hg/rPEnqTJAvA0Y+Ys
-   A==;
-IronPort-SDR: PvghNCsLmnAvdKekfEAkS6KEiboQuEKXWzInV0dYlAvauae6HTY4txo6B0gKOJma5syIQRSxGd
- rxcfLLa2LFJf67kok47AHyqljXk42fRUmtFbuz0KOynHCKLXaTzHkNHY4f8FOf/Lmowm41g5Ii
- 3g7lSFOLLrjJVU4p/CqKL1uBy7hhl7+NnIhHFsbdoAxk90EwwebQitPtlWc3IaHE1zjxYGINDI
- IUqeuMyhWxy1tNtEuac6JDEg9iFya8Dxii8Y92bWutGNc3OZzmnXFA7L8A9Rb2Y3LP1cMJ5VS6
- ziSyyAYrsHshVTpD9qXlgHER
-X-IronPort-AV: E=Sophos;i="5.88,352,1635231600"; 
-   d="scan'208";a="161454621"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Feb 2022 02:49:19 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 8 Feb 2022 02:49:19 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17 via Frontend Transport; Tue, 8 Feb 2022 02:49:19 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lBjECbBOiKCDcYf6AZpMpy4CCLyZBSNK3B2zbO3sbykumbHdBtx83Ig4CEhlCCZ/T0+56LtXIpFvZgC7SGLWvzFhqCkqoybHMoXItrHiutgXF27vunUzO84OKewCwuVVjhJ6W4L2rGgN4dReaZXB6R2M3qKIpWWVR1LYNnXunP2GEZKjwT/xylzVRJG2N7SfXpwbfEnaimW4z4KRO1f6yWJGX7FvhTv66DtEMz9cszMeLjqe1JQB4L1yLszakLPPKIrD7oWR8Qo9wGVNmPR/5pAUVQP6xjy79C7YAbID5jLht6VhFOaHjSQExsqcHPTjM6PrsQWZtGGi3tyDAy/gHg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+chmDD8jtf0IVStKfP0KZ6iXAQijgoNr4T0r/wm0uHU=;
- b=Q5O+CHBOMuV6H6pM+3gaJFUE3aBrpOZoh/z+QwB+fCulczqVfEQp/bDPgjqZh7mz1I6dGLjhNs8hyAThreDXLyR/T/FI+5wQ91njoFZLvn1i8wqPN/tvOYxYKv+xAYPFElbM7biFxLLz4KZc+IRIMEZT7sFQ8Zze7F0wCLcl2uh/oP6U8L7q7ZPL7QTNV9IN7DrdvUANDpRPA+gh0GHv9PMAeeKlc53KJbXDb4Py68onEzPkGFwjq6pSQqTwalk3mMN4b7+27XxDgmRXYVsTM4Fpw5eNpyITOSWxFuUIu/tf5Sl7zTEblzr1Wn86p1/GB5Xizjsk79nhIF4Kr38huw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+chmDD8jtf0IVStKfP0KZ6iXAQijgoNr4T0r/wm0uHU=;
- b=sQrU7p2qVNcF6kToqv1gdJkNC0KGp9YUomXPbPGV7WNu+NRa38OZGQLqswciCGiD8xaGwkHMeTgOdFCNwOk7w09QIxoXV45bWoOlBhA/DURU+wrDjVDUIQokpZiOTJEdBfNBRhvccWMSbCVEM6ASaF8Q4Q0QIsMwyAx+xA3CZew=
-Received: from SA2PR11MB4874.namprd11.prod.outlook.com (2603:10b6:806:f9::23)
- by DM5PR11MB2058.namprd11.prod.outlook.com (2603:10b6:3:12::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.18; Tue, 8 Feb
- 2022 09:49:14 +0000
-Received: from SA2PR11MB4874.namprd11.prod.outlook.com
- ([fe80::49cd:dd25:384:e918]) by SA2PR11MB4874.namprd11.prod.outlook.com
- ([fe80::49cd:dd25:384:e918%5]) with mapi id 15.20.4975.011; Tue, 8 Feb 2022
- 09:49:14 +0000
-From:   <Tudor.Ambarus@microchip.com>
-To:     <krzysztof.kozlowski@canonical.com>, <herbert@gondor.apana.org.au>,
-        <robh+dt@kernel.org>
-CC:     <davem@davemloft.net>, <Nicolas.Ferre@microchip.com>,
-        <Claudiu.Beznea@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/3] dt-bindings: crypto: Convert Atmel AES to yaml
-Thread-Topic: [PATCH 1/3] dt-bindings: crypto: Convert Atmel AES to yaml
-Thread-Index: AQHYHKHL8qImLgFE70qvWtR3NAgIig==
-Date:   Tue, 8 Feb 2022 09:49:14 +0000
-Message-ID: <eba691b4-e75f-f3ca-5359-9dc8b3bd3558@microchip.com>
-References: <20220207032405.70733-1-tudor.ambarus@microchip.com>
- <20220207032405.70733-2-tudor.ambarus@microchip.com>
- <f8387f12-24f9-4a39-e9b8-3b83f1de078d@canonical.com>
- <ec358f0f-e3e2-a97b-e09a-d397edc65c72@microchip.com>
- <7b787aee-ceea-d035-38b1-02ba0bcd3f21@canonical.com>
-In-Reply-To: <7b787aee-ceea-d035-38b1-02ba0bcd3f21@canonical.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: a2ac3562-1eaa-4b7d-7974-08d9eae8441d
-x-ms-traffictypediagnostic: DM5PR11MB2058:EE_
-x-microsoft-antispam-prvs: <DM5PR11MB20581477DADD2E6009C72545F02D9@DM5PR11MB2058.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: APlOMr/qbVP45P5r2mSO/0m6o7lH/4GpczcYQe3O8S0T9EpqdFGydTposPmXelZHV8w9rfhiRw7zeq5PJ+R0fxI1CzjC/LdwjX3fPU3XjNs1bDBP4V8ekOW4aBQbNEDSHW1njS5BUzhdPjULolTMA0ncOiUqgRVQ1ekmLNer6AZwOMWp3ojVzdfCDRS9t4+ohWV+bcz8veMnuwphXV4sf5WU0uK2fZzJ6tCuin3YGW5advsvCVNllQ7n0zpzKP296/RhFIiWNlAErBTEicosbh4Lugb69x4mpmCKuSTIRF60SoblzwzYOriSJvwa+iw+oU1Vq11av57PcDw7CW6JeobaUHbTIFTbipZIcBqG+rYtbfLaO29BjCmqzO1j3IKsf/2lX9Mo4vDI63xCV2M8qIfzwMixrFyb5mCn3/991T3TwyEc/n0LiDfwDPpcrOZZ+QTfbvHUI/+8oIX15CZvad/C28osrCaRDnbfjvBiOsMixgqrqJ9R4Zc1BtaN3bIrwMs0d5RoYaTzlAGZSXXpmkX8wjqHnNf8zRchE1IniERVHR0hG9DAx341XhlQeSuP1/s/nNhMyP4G24UIL2lBVP0hIS9K+ZymNSdyPmKXf7ZmdYYZDkCqH10uwDd5DaYPhRm3vtW8jkRZ6RWxgXEFx5bQxowybdCt3/rpZ8QbU7QH+k8n+76c/OPGJz/VVR2cz2JOE9gE1D3ywdq63oC71LibRIYNTTUzNtbTlrnHU0tsnKbeiKfmHVWmyJbdnRx9tRJq3AMJR154BuubO1ztkPneRs9pBmHiU72r5gs6EEN08Z8vEVRGDpo8xNh3hQjB6NiuMhyqJ6ishDVzPzmvG9fH8MI1vpj4ars4bqEshw7o7z6bWU7ZW00ZLrY/Q7n6T/o2rpoeNkGC31bpByiBYQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA2PR11MB4874.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(186003)(31696002)(54906003)(5660300002)(316002)(86362001)(83380400001)(53546011)(36756003)(6506007)(6512007)(66476007)(26005)(91956017)(76116006)(38100700002)(8936002)(8676002)(4326008)(66446008)(66556008)(66946007)(71200400001)(64756008)(122000001)(6486002)(31686004)(508600001)(2616005)(966005)(2906002)(38070700005)(110136005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bCt6Z0p4ZkR5dW96WmpjUTBtOVdXdjgrbWZ2NG9QbmtDR1NRZVNUM3VmQ3BL?=
- =?utf-8?B?dUlKc2c5MjB0Z3FVblhzS3k2WGxKcHVERkRIdkN6eFAyZVByWVVjVEc1c3dz?=
- =?utf-8?B?VkRZM1VGQS9tckZkZFNhRTlrVGhLRGhmcE1YS2t1c3QrZi9CcS94aG02eWVU?=
- =?utf-8?B?UzdQQUtyVTV0cEFVT1hWZWM5ZlB0U0ZHU2YrUWwyMGs5T2t1Q2tvRHZYN09v?=
- =?utf-8?B?MFBVbnJ3NUpkaWY1d1JTalNGYzM5d2FRNkdERjQyQWpuVGs5aEl5Y21oUmF0?=
- =?utf-8?B?MDRKM3VWdTIvNzhZY05FN0c3aDBNQzZLNmpRbnBOSEs3aEk3Y2ViRDdiZEVk?=
- =?utf-8?B?OGpLMGluaU02eURjUEdYeDZ5emMzTUpkRm9KYnkzZDR1dk5HRlRId21xeXdw?=
- =?utf-8?B?TCsycEZucWpCN1Jhb1RPcWMzNXhSeDhnSElvRm1JWnBlQ2p6cERtd28vM04y?=
- =?utf-8?B?aHp5c21vYUNRNWhjTlB6RnRzVUZJL09EbWhSZ2lPNzFBcm1UVG85S1VxYkJQ?=
- =?utf-8?B?cFZWbDhUNEIwbVJ4a0VEMHFoelp1TktCMHdDeEwyeWo4NEVySTFZMTFPTDRS?=
- =?utf-8?B?T3ZOR1dXSDBhSElwaTZOYUU2ZjExSlVPbW8yVkZlQ0M2L1BDUCtwd1RHZzF5?=
- =?utf-8?B?OGR5L2ZXK0hyNTJKYTBlNTZkYTl5RUNZUm1IQys0OGRGbWxEaEJzeXZac0RY?=
- =?utf-8?B?a1BvaGs2SGp3bjlpV3hpbjhJWElOdndEcVVrK2VaK2FrVk9qaldMWG9ENDlP?=
- =?utf-8?B?Q0lkQjhHNUh1UUJ0eEFsUXlGcm9GVGMrOVhiQVRhM1VUVThzZnNqd3JkMjZZ?=
- =?utf-8?B?R0ZRYjIweEZaNHFqdXJHd1hLYjZMK1hMa2ZnYzF1NmNaVjlrTnNGeTk4d0J6?=
- =?utf-8?B?NUQ3RCtmV1gySUNCQzJncW4yZTVhRTZWUEhaRytQSzFSTG8raTB4WDlxamhH?=
- =?utf-8?B?L21tK0JoYzl5bFFGTGJFYS9xWUhzTHEwZGZ6Mlk1RnVNY2Evdm4zK29qbTJa?=
- =?utf-8?B?KzlUWGszUHVLTUJ2MEZRZWljMWxaTlRLcUs3S1AxUjUzbGN2ZnNPcmZ4cGN5?=
- =?utf-8?B?QlpnZXViY0dkMDcvKzB5UDJjOEhoU0UreFAwaEJiOXpwaDh4eGltNmtiT3VF?=
- =?utf-8?B?NEtwallENWpVWTU0T2VEbnh3RGVBaHdPMTJwMUV5Rm1hS1ZyMHh0eHFIdjh5?=
- =?utf-8?B?MUFZald3bVphM1E4UlB1K1paaGM2UmZyMGlGN1ZwaFEwekVNQWRLSEo5TkJD?=
- =?utf-8?B?Q2dnOW1Ld3I5NTh3RmRJUHBidVJ3TForb1IzN3gyNTlUVkRvV1pGVDlBcnVE?=
- =?utf-8?B?YXJLVytKQ0hPTEdYN055RUpveDU3Y0xKYmtCdHdLVExuZ1JZbUNGNFZJeitH?=
- =?utf-8?B?YWVrOWNBZG1KYW93TTQ0V1ZiK2hKRW9Zbnl2d2VBT0JvRWhXendDK3B6b3Vt?=
- =?utf-8?B?eno4R2liQ0RJK1JGWHpzU2QxdTFJL1I3UEFYZk1rR0xyME9KanUvcUhvZ25p?=
- =?utf-8?B?ZVBIYmJRVHFlekJHMXlvdDMrYmtHZ0FpUml4S05rT0F1MXFGbk5JSnlRSWlV?=
- =?utf-8?B?ZTkvMjQ2KzgxUEcwYStoVTYxZnVaR1FsWFBheWpkTi94dkpURGpjOGlkZGwy?=
- =?utf-8?B?RjlSallqNmp4eGtzVGpBOFlrOUNPM2NPOU5Cb2puSGVyWU9EZ0hYM0pEN0JZ?=
- =?utf-8?B?eWtMeHN2SFlHVTg0RDF0Mm1yOElVZzFpV084Q0NROTBmSks0YS9SRUJIbVc4?=
- =?utf-8?B?VFZUNmpNRk1ZMUFkbE90dU5uTGhiMEdYbThDVjNGYnBNUmx0SHk2UnlKWCtq?=
- =?utf-8?B?VEU1dkRmcDBVTkpaVmdEV3k3OGc0eE90cWdUT2ozWWtDQ244dDRMdXNpTUxM?=
- =?utf-8?B?bVJVVzdhNE4xY2FJOHZGUlhQQ1FOUVpJeXdvMzBIRFBPaUQxOVZLd1JDbDcr?=
- =?utf-8?B?ZjB4ajJjV1NidW0vNzVDWmcxNXBwUkljSEsrVjlsaGVEaUc4R0haL2hSTXlU?=
- =?utf-8?B?T1VUQUc4WUpEOVBnaWZLL1Vvb2xmYU5vV1N4Nld0OUZONWIvUllTMFJXdzh1?=
- =?utf-8?B?NkdzaTNQLzU3WVN6NVVFVUtSaXBCN0tXMGJ2d0RobFlzWmUybVNCZThoYjJT?=
- =?utf-8?B?RWF4OG9oOXU0RFByUGNkaEJiTVVJck5naHhUZ1RWa1o1YTl6YlJ2cUp3TnFr?=
- =?utf-8?B?WTF2THI2R3lQUGEyN1NhOTIyU2g0RklzR1ZNUlo1ODJmaFgySGpxdHE1MXl5?=
- =?utf-8?B?dnI1UHpTNlVmTWwyT1VnRkhNNDd3PT0=?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <465A7F0D460E854EAB7CFB60FC1F8877@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Tue, 8 Feb 2022 04:49:48 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8685AC03FEC0;
+        Tue,  8 Feb 2022 01:49:47 -0800 (PST)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2188t2TA015903;
+        Tue, 8 Feb 2022 09:49:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=cGqfdZdFG3v555YcIcqixPUI/qiCGICPivDNypU4S84=;
+ b=bZI/bnRRjlAtbjs/TvsnLrJQFHzuP52rt4wZNJya+AqQvUHpnu1JNCUQDx9MksypuOoq
+ XS/Ei5pizwF+KoSUwLkK6qboiSgq/46hWxzguBuWfot+3H115dRl/Nm6xCOn/qEXdU2w
+ 53HpwrS4nLAIgrg/rf4dVEHcDYZVVzjhBzY5KsLeYb0hGGgj+DU+kYCBitx1bjrfMkn0
+ vvjFy57KVI17xDV77i0KiZ1aYOAsWWAa0gw+Hz7RTo5aQAAb8B55rVN/qKTljWLrnwym
+ N0Dnf6jYhKif9oTqfB72TD1OOh3rR66o285NxjrT9DG+oFv5QXdbSD+B29AVhsNkDQ// lA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e3e1thn9f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Feb 2022 09:49:46 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 2188d7a0010584;
+        Tue, 8 Feb 2022 09:49:46 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e3e1thn90-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Feb 2022 09:49:46 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2189j2a9019761;
+        Tue, 8 Feb 2022 09:49:44 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma06fra.de.ibm.com with ESMTP id 3e1ggj38df-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Feb 2022 09:49:43 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2189neh246399924
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 8 Feb 2022 09:49:40 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B979A42041;
+        Tue,  8 Feb 2022 09:49:40 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1B44642049;
+        Tue,  8 Feb 2022 09:49:40 +0000 (GMT)
+Received: from [9.145.150.231] (unknown [9.145.150.231])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue,  8 Feb 2022 09:49:39 +0000 (GMT)
+Message-ID: <547db2d5-c7ec-5ea5-4c47-d05f8e8205de@linux.ibm.com>
+Date:   Tue, 8 Feb 2022 10:49:39 +0100
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA2PR11MB4874.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a2ac3562-1eaa-4b7d-7974-08d9eae8441d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Feb 2022 09:49:14.4949
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: dGewukT7qFQYb/Fz2Cmahdqqy9AJHMF4TkwaEQhQUQ1Vb+w75MFevx/G1ms0JuG93Zz9QeFrBpQzAAbvUq+etcHhJtTSdjjElhL3zRQOKxk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR11MB2058
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 11/11] KVM: s390: Update api documentation for memop
+ ioctl
+Content-Language: en-US
+To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>
+Cc:     Alexander Gordeev <agordeev@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+References: <20220207165930.1608621-1-scgl@linux.ibm.com>
+ <20220207165930.1608621-12-scgl@linux.ibm.com>
+From:   Janosch Frank <frankja@linux.ibm.com>
+In-Reply-To: <20220207165930.1608621-12-scgl@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: LbFei_4M4IDDOh2l2PqbYMWKTP1_I00W
+X-Proofpoint-ORIG-GUID: -xubOHISQIi-dq3nBlrUlhh5rd7NFz7r
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-08_02,2022-02-07_02,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ malwarescore=0 bulkscore=0 priorityscore=1501 suspectscore=0 mlxscore=0
+ phishscore=0 spamscore=0 mlxlogscore=831 lowpriorityscore=0 clxscore=1015
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202080054
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMi84LzIyIDEwOjU5LCBLcnp5c3p0b2YgS296bG93c2tpIHdyb3RlOg0KPiBFWFRFUk5BTCBF
-TUFJTDogRG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4gYXR0YWNobWVudHMgdW5sZXNzIHlvdSBr
-bm93IHRoZSBjb250ZW50IGlzIHNhZmUNCj4gDQo+IE9uIDA4LzAyLzIwMjIgMDU6MTAsIFR1ZG9y
-LkFtYmFydXNAbWljcm9jaGlwLmNvbSB3cm90ZToNCj4+IEhpLCBLcnp5c3p0b2YsDQo+Pg0KPj4g
-T24gMi83LzIyIDE3OjU2LCBLcnp5c3p0b2YgS296bG93c2tpIHdyb3RlOg0KPj4+IEVYVEVSTkFM
-IEVNQUlMOiBEbyBub3QgY2xpY2sgbGlua3Mgb3Igb3BlbiBhdHRhY2htZW50cyB1bmxlc3MgeW91
-IGtub3cgdGhlIGNvbnRlbnQgaXMgc2FmZQ0KPj4+DQo+Pj4gT24gMDcvMDIvMjAyMiAwNDoyNCwg
-VHVkb3IgQW1iYXJ1cyB3cm90ZToNCj4+Pj4gQ29udmVydCBBdG1lbCBBRVMgZG9jdW1lbnRhdGlv
-biB0byB5YW1sIGZvcm1hdC4gV2l0aCB0aGUgY29udmVyc2lvbiB0aGUNCj4+Pj4gY2xvY2sgYW5k
-IGNsb2NrLW5hbWVzIHByb3BlcnRpZXMgYXJlIG1hZGUgbWFuZGF0b3J5LiBUaGUgZHJpdmVyIHJl
-dHVybnMNCj4+Pj4gLUVJTlZBTCBpZiAiYWVzX2NsayIgaXMgbm90IGZvdW5kLCByZWZsZWN0IHRo
-YXQgaW4gdGhlIGJpbmRpbmdzIGFuZCBtYWtlDQo+Pj4+IHRoZSBjbG9jayBhbmQgY2xvY2stbmFt
-ZXMgcHJvcGVydGllcyBtYW5kYXRvcnkuIFVwZGF0ZSB0aGUgZXhhbXBsZSB0bw0KPj4+PiBiZXR0
-ZXIgZGVzY3JpYmUgaG93IG9uZSBzaG91bGQgZGVmaW5lIHRoZSBkdCBub2RlLg0KPj4+Pg0KPj4+
-PiBTaWduZWQtb2ZmLWJ5OiBUdWRvciBBbWJhcnVzIDx0dWRvci5hbWJhcnVzQG1pY3JvY2hpcC5j
-b20+DQo+Pj4+IC0tLQ0KPj4+PiAgLi4uL2RldmljZXRyZWUvYmluZGluZ3MvY3J5cHRvL2F0bWVs
-LGFlcy55YW1sIHwgNjUgKysrKysrKysrKysrKysrKysrKw0KPj4+PiAgLi4uL2JpbmRpbmdzL2Ny
-eXB0by9hdG1lbC1jcnlwdG8udHh0ICAgICAgICAgIHwgMjAgLS0tLS0tDQo+Pj4+ICAyIGZpbGVz
-IGNoYW5nZWQsIDY1IGluc2VydGlvbnMoKyksIDIwIGRlbGV0aW9ucygtKQ0KPj4+PiAgY3JlYXRl
-IG1vZGUgMTAwNjQ0IERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9jcnlwdG8vYXRt
-ZWwsYWVzLnlhbWwNCj4+Pj4NCj4+Pj4gZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24vZGV2aWNl
-dHJlZS9iaW5kaW5ncy9jcnlwdG8vYXRtZWwsYWVzLnlhbWwgYi9Eb2N1bWVudGF0aW9uL2Rldmlj
-ZXRyZWUvYmluZGluZ3MvY3J5cHRvL2F0bWVsLGFlcy55YW1sDQo+Pj4+IG5ldyBmaWxlIG1vZGUg
-MTAwNjQ0DQo+Pj4+IGluZGV4IDAwMDAwMDAwMDAwMC4uZjc3ZWMwNGRiYWJlDQo+Pj4+IC0tLSAv
-ZGV2L251bGwNCj4+Pj4gKysrIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2Ny
-eXB0by9hdG1lbCxhZXMueWFtbA0KPj4+PiBAQCAtMCwwICsxLDY1IEBADQo+Pj4+ICsjIFNQRFgt
-TGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wLW9ubHkNCj4+Pj4gKyVZQU1MIDEuMg0KPj4+PiAr
-LS0tDQo+Pj4+ICskaWQ6IGh0dHA6Ly9kZXZpY2V0cmVlLm9yZy9zY2hlbWFzL2NyeXB0by9hdG1l
-bCxhZXMueWFtbCMNCj4+Pj4gKyRzY2hlbWE6IGh0dHA6Ly9kZXZpY2V0cmVlLm9yZy9tZXRhLXNj
-aGVtYXMvY29yZS55YW1sIw0KPj4+PiArDQo+Pj4+ICt0aXRsZTogQXRtZWwgQWR2YW5jZWQgRW5j
-cnlwdGlvbiBTdGFuZGFyZCAoQUVTKSBIVyBjcnlwdG9ncmFwaGljIGFjY2VsZXJhdG9yDQo+Pj4+
-ICsNCj4+Pj4gK21haW50YWluZXJzOg0KPj4+PiArICAtIFR1ZG9yIEFtYmFydXMgPHR1ZG9yLmFt
-YmFydXNAbWljcm9jaGlwLmNvbT4NCj4+Pj4gKw0KPj4+PiArcHJvcGVydGllczoNCj4+Pj4gKyAg
-Y29tcGF0aWJsZToNCj4+Pj4gKyAgICBjb25zdDogYXRtZWwsYXQ5MXNhbTlnNDYtYWVzDQo+Pj4+
-ICsNCj4+Pj4gKyAgcmVnOg0KPj4+PiArICAgIG1heEl0ZW1zOiAxDQo+Pj4+ICsNCj4+Pj4gKyAg
-aW50ZXJydXB0czoNCj4+Pj4gKyAgICBtYXhJdGVtczogMQ0KPj4+PiArDQo+Pj4+ICsgIGNsb2Nr
-czoNCj4+Pj4gKyAgICBtYXhJdGVtczogMQ0KPj4+PiArDQo+Pj4+ICsgIGNsb2NrLW5hbWVzOg0K
-Pj4+PiArICAgIGNvbnN0OiBhZXNfY2xrDQo+Pj4+ICsNCj4+Pj4gKyAgZG1hczoNCj4+Pj4gKyAg
-ICBpdGVtczoNCj4+Pj4gKyAgICAgIC0gZGVzY3JpcHRpb246IFRYIERNQSBDaGFubmVsDQo+Pj4+
-ICsgICAgICAtIGRlc2NyaXB0aW9uOiBSWCBETUEgQ2hhbm5lbA0KPj4+PiArDQo+Pj4+ICsgIGRt
-YS1uYW1lczoNCj4+Pj4gKyAgICBpdGVtczoNCj4+Pj4gKyAgICAgIC0gY29uc3Q6IHR4DQo+Pj4+
-ICsgICAgICAtIGNvbnN0OiByeA0KPj4+PiArDQo+Pj4+ICtyZXF1aXJlZDoNCj4+Pj4gKyAgLSBj
-b21wYXRpYmxlDQo+Pj4+ICsgIC0gcmVnDQo+Pj4+ICsgIC0gaW50ZXJydXB0cw0KPj4+PiArICAt
-IGNsb2Nrcw0KPj4+PiArICAtIGNsb2NrLW5hbWVzDQo+Pj4+ICsgIC0gZG1hcw0KPj4+PiArICAt
-IGRtYS1uYW1lcw0KPj4+PiArDQo+Pj4+ICthZGRpdGlvbmFsUHJvcGVydGllczogZmFsc2UNCj4+
-Pj4gKw0KPj4+PiArZXhhbXBsZXM6DQo+Pj4+ICsgIC0gfA0KPj4+PiArICAgICNpbmNsdWRlIDxk
-dC1iaW5kaW5ncy9pbnRlcnJ1cHQtY29udHJvbGxlci9pcnEuaD4NCj4+Pj4gKyAgICAjaW5jbHVk
-ZSA8ZHQtYmluZGluZ3MvaW50ZXJydXB0LWNvbnRyb2xsZXIvYXJtLWdpYy5oPg0KPj4+PiArICAg
-ICNpbmNsdWRlIDxkdC1iaW5kaW5ncy9jbG9jay9hdDkxLmg+DQo+Pj4+ICsgICAgI2luY2x1ZGUg
-PGR0LWJpbmRpbmdzL2RtYS9hdDkxLmg+DQo+Pj4NCj4+PiBPbmUgZW1wdHkgbGluZSBmb3IgcmVh
-ZGFiaWxpdHkuDQo+Pg0KPj4gT2suDQo+Pg0KPj4+DQo+Pj4+ICsgICAgYWVzOiBhZXNAZjgwMzgw
-MDAgew0KPj4+DQo+Pj4gR2VuZXJpYyBub2RlIG5hbWUsIHNvICJjcnlwdG8iLg0KPj4NCj4+IEht
-LCBJJ20gbm90IGNvbnZpbmNlZCB3aHksIHdvdWxkIHlvdSBwbGVhc2UgZ2l2ZSBtb3JlIGRldGFp
-bHMgYWJvdXQgdGhpcw0KPj4gcmVxdWlyZW1lbnQ/IFRoaXMgSVAgaXMgY2FwYWJsZSBvZiBkb2lu
-ZyBqdXN0IEFFUyBvcGVyYXRpb25zLCBJIGZpbmQgaXQNCj4+IGdlbmVyaWMgZW5vdWdoLiBXZSB1
-c2UgdGhlICJhZXMiIG5hbWUgb24gYWxsIG91ciBTb0NzIHRoYXQgaGF2ZSBhIHZlcnNpb24NCj4+
-IG9mIHRoaXMgSVAsIHRoYXQgd291bGQgYmUgcXVpdGUgYSBjaGFuZ2UuIFNvIEkgd291bGQgcHJl
-ZmVyIHRvIGtlZXAgdGhlDQo+PiAiYWVzIiBuYW1lIGlmIHBvc3NpYmxlLg0KPj4NCj4gDQo+IFRo
-ZSByZXF1aXJlbWVudCBjb21lcyBmcm9tIERUIHNwZWNpZmljYXRpb24uDQo+ICJUaGUgbmFtZSBv
-ZiBhIG5vZGUgc2hvdWxkIGJlIHNvbWV3aGF0IGdlbmVyaWMsIHJlZmxlY3RpbmcgdGhlIGZ1bmN0
-aW9uDQo+IG9mIHRoZSBkZXZpY2UgYW5kIG5vdCBpdHMgcHJlY2lzZSBwcm9ncmFtbWluZw0KPiAg
-bW9kZWwuIElmIGFwcHJvcHJpYXRlLCB0aGUgbmFtZSBzaG91bGQgYmUgb25lIG9mIHRoZSBmb2xs
-b3dpbmcgY2hvaWNlIg0KPiBBRVMgaXMgbm90IGdlbmVyaWMuIEFFUyBpcyBzcGVjaWZpYyBjcnlw
-dG8gb3BlcmF0aW9uLiBUaGUgc3BlYyBnaXZlcw0KPiBleGFtcGxlIC0gImNyeXB0byIsIHNvIHVz
-ZSB0aGlzIG9uZSBqdXN0IGxpa2Ugb3RoZXJzIGFyZSB1c2luZy4gQXRtZWwgaXMNCj4gbm90IHNw
-ZWNpYWwgaW4gdGhhdCBtYXR0ZXIuDQo+IA0KSSBzZWUsIHRoYW5rcyBmb3IgdGhlIGV4cGxhbmF0
-aW9uLiBJIHdpbGwgcHV0IHRoZSBub2RlIG5hbWUgYXMgImNyeXB0byIsIGFuZCBhZGQNCmEgbGFi
-ZWwgdG8gaXQgYXMgImFlcyI6DQphZXM6IGNyeXB0b0BmODAzODAwMCB7DQoNCkNoZWVycywNCnRh
-DQo=
+On 2/7/22 17:59, Janis Schoetterl-Glausch wrote:
+> Document all currently existing operations, flags and explain under
+> which circumstances they are available. Document the recently
+> introduced absolute operations and the storage key protection flag,
+> as well as the existing SIDA operations.
+
+We're missing the reference to KVM_CAP_S390_PROTECTED which also 
+indicates the SIDA ops.
+
+Apart from that this looks good so feel free to send an updated version 
+of this patch in reply to this mail. No need for a full set of patches 
+as most of the other patches are already reviewed.
+
+> 
+> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+> ---
+>   Documentation/virt/kvm/api.rst | 112 ++++++++++++++++++++++++++-------
+>   1 file changed, 90 insertions(+), 22 deletions(-)
+> 
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> index a4267104db50..7b28657fe9de 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -3683,15 +3683,17 @@ The fields in each entry are defined as follows:
+>   4.89 KVM_S390_MEM_OP
+>   --------------------
+>   
+> -:Capability: KVM_CAP_S390_MEM_OP
+> +:Capability: KVM_CAP_S390_MEM_OP, KVM_CAP_S390_MEM_OP_EXTENSION
+>   :Architectures: s390
+> -:Type: vcpu ioctl
+> +:Type: vm ioctl, vcpu ioctl
+>   :Parameters: struct kvm_s390_mem_op (in)
+>   :Returns: = 0 on success,
+>             < 0 on generic error (e.g. -EFAULT or -ENOMEM),
+>             > 0 if an exception occurred while walking the page tables
+>   
+> -Read or write data from/to the logical (virtual) memory of a VCPU.
+> +Read or write data from/to the VM's memory.
+> +The KVM_CAP_S390_MEM_OP_EXTENSION capability specifies what functionality is
+> +supported.
+>   
+>   Parameters are specified via the following structure::
+>   
+> @@ -3701,33 +3703,99 @@ Parameters are specified via the following structure::
+>   	__u32 size;		/* amount of bytes */
+>   	__u32 op;		/* type of operation */
+>   	__u64 buf;		/* buffer in userspace */
+> -	__u8 ar;		/* the access register number */
+> -	__u8 reserved[31];	/* should be set to 0 */
+> +	union {
+> +		struct {
+> +			__u8 ar;	/* the access register number */
+> +			__u8 key;	/* access key to use for storage key protection */
+> +		};
+> +		__u32 sida_offset; /* offset into the sida */
+> +		__u8 reserved[32]; /* must be set to 0 */
+> +	};
+>     };
+>   
+> -The type of operation is specified in the "op" field. It is either
+> -KVM_S390_MEMOP_LOGICAL_READ for reading from logical memory space or
+> -KVM_S390_MEMOP_LOGICAL_WRITE for writing to logical memory space. The
+> -KVM_S390_MEMOP_F_CHECK_ONLY flag can be set in the "flags" field to check
+> -whether the corresponding memory access would create an access exception
+> -(without touching the data in the memory at the destination). In case an
+> -access exception occurred while walking the MMU tables of the guest, the
+> -ioctl returns a positive error number to indicate the type of exception.
+> -This exception is also raised directly at the corresponding VCPU if the
+> -flag KVM_S390_MEMOP_F_INJECT_EXCEPTION is set in the "flags" field.
+> -
+>   The start address of the memory region has to be specified in the "gaddr"
+>   field, and the length of the region in the "size" field (which must not
+>   be 0). The maximum value for "size" can be obtained by checking the
+>   KVM_CAP_S390_MEM_OP capability. "buf" is the buffer supplied by the
+>   userspace application where the read data should be written to for
+> -KVM_S390_MEMOP_LOGICAL_READ, or where the data that should be written is
+> -stored for a KVM_S390_MEMOP_LOGICAL_WRITE. When KVM_S390_MEMOP_F_CHECK_ONLY
+> -is specified, "buf" is unused and can be NULL. "ar" designates the access
+> -register number to be used; the valid range is 0..15.
+> +a read access, or where the data that should be written is stored for
+> +a write access.  The "reserved" field is meant for future extensions.
+> +Reserved and unused bytes must be set to 0. If any of the following are used,
+> +this is enforced and -EINVAL will be returned:
+> +``KVM_S390_MEMOP_ABSOLUTE_READ/WRITE``, ``KVM_S390_MEMOP_F_SKEY_PROTECTION``.
+> +
+> +The type of operation is specified in the "op" field. Flags modifying
+> +their behavior can be set in the "flags" field. Undefined flag bits must
+> +be set to 0.
+> +
+> +Possible operations are:
+> +  * ``KVM_S390_MEMOP_LOGICAL_READ``
+> +  * ``KVM_S390_MEMOP_LOGICAL_WRITE``
+> +  * ``KVM_S390_MEMOP_ABSOLUTE_READ``
+> +  * ``KVM_S390_MEMOP_ABSOLUTE_WRITE``
+> +  * ``KVM_S390_MEMOP_SIDA_READ``
+> +  * ``KVM_S390_MEMOP_SIDA_WRITE``
+> +
+> +Logical read/write:
+> +^^^^^^^^^^^^^^^^^^^
+> +
+> +Access logical memory, i.e. translate the given guest address to an absolute
+> +address given the state of the VCPU and use the absolute address as target of
+> +the access. "ar" designates the access register number to be used; the valid
+> +range is 0..15.
+> +Logical accesses are permitted for the VCPU ioctl only.
+> +Logical accesses are permitted for non secure guests only.
+> +
+> +Supported flags:
+> +  * ``KVM_S390_MEMOP_F_CHECK_ONLY``
+> +  * ``KVM_S390_MEMOP_F_INJECT_EXCEPTION``
+> +  * ``KVM_S390_MEMOP_F_SKEY_PROTECTION``
+> +
+> +The KVM_S390_MEMOP_F_CHECK_ONLY flag can be set to check whether the
+> +corresponding memory access would cause an access exception, without touching
+> +the data in memory at the destination.
+> +In this case, "buf" is unused and can be NULL.
+> +
+> +In case an access exception occurred during the access (or would occur
+> +in case of KVM_S390_MEMOP_F_CHECK_ONLY), the ioctl returns a positive
+> +error number indicating the type of exception. This exception is also
+> +raised directly at the corresponding VCPU if the flag
+> +KVM_S390_MEMOP_F_INJECT_EXCEPTION is set.
+> +
+> +If the KVM_S390_MEMOP_F_SKEY_PROTECTION flag is set, storage key
+> +protection is also in effect and may cause exceptions if accesses are
+> +prohibited given the access key passed in "key".
+> +KVM_S390_MEMOP_F_SKEY_PROTECTION is available if KVM_CAP_S390_MEM_OP_EXTENSION
+> +is > 0.
+> +
+> +Absolute read/write:
+> +^^^^^^^^^^^^^^^^^^^^
+> +
+> +Access absolute memory. This operation is intended to be used with the
+> +KVM_S390_MEMOP_F_SKEY_PROTECTION flag, to allow accessing memory and performing
+> +the checks required for storage key protection as one operation (as opposed to
+> +user space getting the storage keys, performing the checks, and accessing
+> +memory thereafter, which could lead to a delay between check and access).
+> +Absolute accesses are permitted for the VM ioctl if KVM_CAP_S390_MEM_OP_EXTENSION
+> +is > 0.
+> +Currently absolute accesses are not permitted for VCPU ioctls.
+> +Absolute accesses are permitted for non secure guests only.
+> +
+> +Supported flags:
+> +  * ``KVM_S390_MEMOP_F_CHECK_ONLY``
+> +  * ``KVM_S390_MEMOP_F_SKEY_PROTECTION``
+> +
+> +The semantics of the flags are as for logical accesses.
+> +
+> +SIDA read/write:
+> +^^^^^^^^^^^^^^^^
+> +
+> +Access the secure instruction data area which contains memory operands necessary
+> +for instruction emulation for secure guests.
+> +SIDA accesses are permitted for the VCPU ioctl only.
+> +SIDA accesses are permitted for secure guests only.
+>   
+> -The "reserved" field is meant for future extensions. It is not used by
+> -KVM with the currently defined set of flags.
+> +No flags are supported.
+>   
+>   4.90 KVM_S390_GET_SKEYS
+>   -----------------------
+

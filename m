@@ -2,62 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E7004AD76D
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:35:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E3844AD76A
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:35:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352777AbiBHLek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 06:34:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37884 "EHLO
+        id S236991AbiBHLet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 06:34:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233747AbiBHLMW (ORCPT
+        with ESMTP id S1356919AbiBHLMd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 06:12:22 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB8FC03FEC0
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 03:12:19 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nHOPo-0003m2-J3; Tue, 08 Feb 2022 12:12:08 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nHOPo-00FHrC-0B; Tue, 08 Feb 2022 12:12:07 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nHOPm-00BpnB-FQ; Tue, 08 Feb 2022 12:12:06 +0100
-Date:   Tue, 8 Feb 2022 12:12:03 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Harald Seiler <hws@denx.de>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-kernel@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
-        linux-serial@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] tty: serial: imx: Add fast path when rs485 delays are 0
-Message-ID: <20220208111203.qi6fpo2l6um6znkz@pengutronix.de>
-References: <20220119145204.238767-1-hws@denx.de>
- <20220119151145.zft47rzebnabiej2@pengutronix.de>
- <0df5d9ea2081f5d798f80297efb973f542dae183.camel@denx.de>
- <20220119162122.jmnz2hxid76p4hli@pengutronix.de>
- <5cab27cab5a39ef5e19992bc54e57c3f6106dafe.camel@denx.de>
- <YgJADKxWfOZroS35@kroah.com>
+        Tue, 8 Feb 2022 06:12:33 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5312CC03FEC0;
+        Tue,  8 Feb 2022 03:12:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1644318753; x=1675854753;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=05urutNyZTswWjeb7wt10gcHvbrqmnvKF+7rarJvQ/A=;
+  b=xvVhUBBzGYR9kkK736rpgKjTVKRjXTiBQER1+EHu4G1fb93DRG0bo7eZ
+   n9LDLwF6dAR3FK3qOqVZmu1UAyVlzG5k8+sC8BFXgh+eXwKVLMj53JAcv
+   XCocag2SMHy1mfgAzB//Tc0VTtEhHY+CFUnQeA7ZmFFZm9q4K9ZsOcRYQ
+   IcKOMGSZKBxHLeY6SEC5qlnUUQC92e7yzLYiO+S4clE7I5wS706lKUcAA
+   /kjluaVw43dJM1Mj6bfnzvqpqiqWfp0WSQxz2hjCP3xQbGqG3p09ok8Gm
+   uY1e41MwmRbd7wk2u41zuDkeRPRq49pPM654CjEC4OgTbrgHaDPWgDrMF
+   w==;
+IronPort-SDR: Xeleq6+aLlK7L3OKMq+TGS3K1Izyc+7b2jyNkcFWtglhpbiCwdOmdWJ3kFn0UneLoX9y9evo8p
+ uhIo+xGvfeK7HBDd8RbXPtjDXqeZLoUaVOO4TzggdMTrsuPlva8e/LEuRjHPiKOWdR6GTgnu1C
+ 0gHExuuGh2rvKAwCCTTUbXEKm2Qg4XShDXC/xWZnIUXlz+to8gsb/5N02riCFsjxOSFP/hHeA6
+ 0wGGEN2ZtudeHeEsE84ANFTm0y7eyHTV+7/RuaYNazGKDa3GLtCzgOZOscVv1a29agOls7KJCp
+ N9WpAVM0DyBCuBANNGbXH08g
+X-IronPort-AV: E=Sophos;i="5.88,352,1635231600"; 
+   d="scan'208";a="161461447"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Feb 2022 04:12:32 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Tue, 8 Feb 2022 04:12:32 -0700
+Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Tue, 8 Feb 2022 04:12:29 -0700
+From:   Tudor Ambarus <tudor.ambarus@microchip.com>
+To:     <nicolas.ferre@microchip.com>, <claudiu.beznea@microchip.com>,
+        <alexandre.belloni@bootlin.com>
+CC:     <robh+dt@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kavyasree.kotagiri@microchip.com>,
+        <krzysztof.kozlowski@canonical.com>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>
+Subject: [PATCH] ARM: dts: at91: Use the generic "crypto" node name for the crypto IPs
+Date:   Tue, 8 Feb 2022 13:12:25 +0200
+Message-ID: <20220208111225.234685-1-tudor.ambarus@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cofqnvm6jpalvn3e"
-Content-Disposition: inline
-In-Reply-To: <YgJADKxWfOZroS35@kroah.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,142 +69,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The DT specification recommeds that:
+"The name of a node should be somewhat generic, reflecting the function of
+the device and not its precise programming model. If appropriate, the name
+should be one of the following choices:"
+"crypto" being the recommendation for the crypto nodes. Follow the DT
+recommendation and use the generic "crypto" node name for the at91 crypto
+IPs. While at this, add labels to the crypto nodes where they missed, for
+easier reference purposes.
 
---cofqnvm6jpalvn3e
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+---
+ arch/arm/boot/dts/sam9x60.dtsi | 6 +++---
+ arch/arm/boot/dts/sama5d2.dtsi | 6 +++---
+ arch/arm/boot/dts/sama5d3.dtsi | 6 +++---
+ arch/arm/boot/dts/sama5d4.dtsi | 6 +++---
+ 4 files changed, 12 insertions(+), 12 deletions(-)
 
-Hello Greg,
+diff --git a/arch/arm/boot/dts/sam9x60.dtsi b/arch/arm/boot/dts/sam9x60.dtsi
+index ec45ced3cde6..ec686f617ec7 100644
+--- a/arch/arm/boot/dts/sam9x60.dtsi
++++ b/arch/arm/boot/dts/sam9x60.dtsi
+@@ -270,7 +270,7 @@ pit64b: timer@f0028000 {
+ 				clock-names = "pclk", "gclk";
+ 			};
+ 
+-			sha: sha@f002c000 {
++			sha: crypto@f002c000 {
+ 				compatible = "atmel,at91sam9g46-sha";
+ 				reg = <0xf002c000 0x100>;
+ 				interrupts = <41 IRQ_TYPE_LEVEL_HIGH 0>;
+@@ -291,7 +291,7 @@ trng: trng@f0030000 {
+ 				status = "okay";
+ 			};
+ 
+-			aes: aes@f0034000 {
++			aes: crypto@f0034000 {
+ 				compatible = "atmel,at91sam9g46-aes";
+ 				reg = <0xf0034000 0x100>;
+ 				interrupts = <39 IRQ_TYPE_LEVEL_HIGH 0>;
+@@ -307,7 +307,7 @@ AT91_XDMAC_DT_PERID(32))>,
+ 				status = "okay";
+ 			};
+ 
+-			tdes: tdes@f0038000 {
++			tdes: crypto@f0038000 {
+ 				compatible = "atmel,at91sam9g46-tdes";
+ 				reg = <0xf0038000 0x100>;
+ 				interrupts = <40 IRQ_TYPE_LEVEL_HIGH 0>;
+diff --git a/arch/arm/boot/dts/sama5d2.dtsi b/arch/arm/boot/dts/sama5d2.dtsi
+index c700c3b19e4c..51e80611aa02 100644
+--- a/arch/arm/boot/dts/sama5d2.dtsi
++++ b/arch/arm/boot/dts/sama5d2.dtsi
+@@ -306,7 +306,7 @@ qspi1: spi@f0024000 {
+ 				status = "disabled";
+ 			};
+ 
+-			sha@f0028000 {
++			sha: crypto@f0028000 {
+ 				compatible = "atmel,at91sam9g46-sha";
+ 				reg = <0xf0028000 0x100>;
+ 				interrupts = <12 IRQ_TYPE_LEVEL_HIGH 0>;
+@@ -319,7 +319,7 @@ sha@f0028000 {
+ 				status = "okay";
+ 			};
+ 
+-			aes@f002c000 {
++			aes: crypto@f002c000 {
+ 				compatible = "atmel,at91sam9g46-aes";
+ 				reg = <0xf002c000 0x100>;
+ 				interrupts = <9 IRQ_TYPE_LEVEL_HIGH 0>;
+@@ -1084,7 +1084,7 @@ pioBU: secumod@fc040000 {
+ 				#gpio-cells = <2>;
+ 			};
+ 
+-			tdes@fc044000 {
++			tdes: crypto@fc044000 {
+ 				compatible = "atmel,at91sam9g46-tdes";
+ 				reg = <0xfc044000 0x100>;
+ 				interrupts = <11 IRQ_TYPE_LEVEL_HIGH 0>;
+diff --git a/arch/arm/boot/dts/sama5d3.dtsi b/arch/arm/boot/dts/sama5d3.dtsi
+index d1841bffe3c5..8fa423c52592 100644
+--- a/arch/arm/boot/dts/sama5d3.dtsi
++++ b/arch/arm/boot/dts/sama5d3.dtsi
+@@ -381,7 +381,7 @@ usart3: serial@f8024000 {
+ 				status = "disabled";
+ 			};
+ 
+-			sha@f8034000 {
++			sha: crypto@f8034000 {
+ 				compatible = "atmel,at91sam9g46-sha";
+ 				reg = <0xf8034000 0x100>;
+ 				interrupts = <42 IRQ_TYPE_LEVEL_HIGH 0>;
+@@ -391,7 +391,7 @@ sha@f8034000 {
+ 				clock-names = "sha_clk";
+ 			};
+ 
+-			aes@f8038000 {
++			aes: crypto@f8038000 {
+ 				compatible = "atmel,at91sam9g46-aes";
+ 				reg = <0xf8038000 0x100>;
+ 				interrupts = <43 IRQ_TYPE_LEVEL_HIGH 0>;
+@@ -402,7 +402,7 @@ aes@f8038000 {
+ 				clock-names = "aes_clk";
+ 			};
+ 
+-			tdes@f803c000 {
++			tdes: crypto@f803c000 {
+ 				compatible = "atmel,at91sam9g46-tdes";
+ 				reg = <0xf803c000 0x100>;
+ 				interrupts = <44 IRQ_TYPE_LEVEL_HIGH 0>;
+diff --git a/arch/arm/boot/dts/sama5d4.dtsi b/arch/arm/boot/dts/sama5d4.dtsi
+index f6e3e6f57252..1dff79a29012 100644
+--- a/arch/arm/boot/dts/sama5d4.dtsi
++++ b/arch/arm/boot/dts/sama5d4.dtsi
+@@ -673,7 +673,7 @@ adc0: adc@fc034000 {
+ 				status = "disabled";
+ 			};
+ 
+-			aes@fc044000 {
++			aes: crypto@fc044000 {
+ 				compatible = "atmel,at91sam9g46-aes";
+ 				reg = <0xfc044000 0x100>;
+ 				interrupts = <12 IRQ_TYPE_LEVEL_HIGH 0>;
+@@ -687,7 +687,7 @@ aes@fc044000 {
+ 				status = "okay";
+ 			};
+ 
+-			tdes@fc04c000 {
++			tdes: crypto@fc04c000 {
+ 				compatible = "atmel,at91sam9g46-tdes";
+ 				reg = <0xfc04c000 0x100>;
+ 				interrupts = <14 IRQ_TYPE_LEVEL_HIGH 0>;
+@@ -701,7 +701,7 @@ tdes@fc04c000 {
+ 				status = "okay";
+ 			};
+ 
+-			sha@fc050000 {
++			sha: crypto@fc050000 {
+ 				compatible = "atmel,at91sam9g46-sha";
+ 				reg = <0xfc050000 0x100>;
+ 				interrupts = <15 IRQ_TYPE_LEVEL_HIGH 0>;
+-- 
+2.25.1
 
-On Tue, Feb 08, 2022 at 11:03:56AM +0100, Greg Kroah-Hartman wrote:
-> On Wed, Jan 19, 2022 at 05:59:46PM +0100, Harald Seiler wrote:
-> > On Wed, 2022-01-19 at 17:21 +0100, Uwe Kleine-K=F6nig wrote:
-> > > On Wed, Jan 19, 2022 at 04:20:12PM +0100, Harald Seiler wrote:
-> > > > Hi,
-> > > >=20
-> > > > On Wed, 2022-01-19 at 16:11 +0100, Uwe Kleine-K=F6nig wrote:
-> > > > > On Wed, Jan 19, 2022 at 03:52:03PM +0100, Harald Seiler wrote:
-> > > > > > Right now, even when `delay_rts_before_send` and `delay_rts_aft=
-er_send`
-> > > > > > are 0, the hrtimer is triggered (with timeout 0) which can intr=
-oduce a
-> > > > > > few 100us of additional overhead on slower i.MX platforms.
-> > > > > >=20
-> > > > > > Implement a fast path when the delays are 0, where the RTS sign=
-al is
-> > > > > > toggled immediately instead of going through an hrtimer.  This =
-fast path
-> > > > > > behaves identical to the code before delay support was implemen=
-ted.
-> > > > > >=20
-> > > > > > Signed-off-by: Harald Seiler <hws@denx.de>
-> > > > > > ---
-> > > > > >  drivers/tty/serial/imx.c | 18 ++++++++++++++----
-> > > > > >  1 file changed, 14 insertions(+), 4 deletions(-)
-> > > > > >=20
-> > > > > > diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
-> > > > > > index df8a0c8b8b29..67bbbb69229d 100644
-> > > > > > --- a/drivers/tty/serial/imx.c
-> > > > > > +++ b/drivers/tty/serial/imx.c
-> > > > > > @@ -455,9 +455,14 @@ static void imx_uart_stop_tx(struct uart_p=
-ort *port)
-> > > > > >  	if (port->rs485.flags & SER_RS485_ENABLED) {
-> > > > > >  		if (sport->tx_state =3D=3D SEND) {
-> > > > > >  			sport->tx_state =3D WAIT_AFTER_SEND;
-> > > > > > -			start_hrtimer_ms(&sport->trigger_stop_tx,
-> > > > > > +
-> > > > > > +			if (port->rs485.delay_rts_after_send > 0) {
-> > > > > > +				start_hrtimer_ms(&sport->trigger_stop_tx,
-> > > > > >  					 port->rs485.delay_rts_after_send);
-> > > > > > -			return;
-> > > > > > +				return;
-> > > > > > +			}
-> > > > > > +
-> > > > > > +			/* continue without any delay */
-> > > > >=20
-> > > > > Is it right to keep the assignment sport->tx_state =3D WAIT_AFTER=
-_SEND ?
-> > > >=20
-> > > > I am keeping the assignment intentionally, to fall into the
-> > > > if(state =3D=3D WAIT_AFTER_RTS) below (which then sets the state to=
- OFF).
-> > > > I originally had the code structured like this:
-> > > >=20
-> > > > 	if (port->rs485.delay_rts_after_send > 0) {
-> > > > 		sport->tx_state =3D WAIT_AFTER_SEND;
-> > > > 		start_hrtimer_ms(&sport->trigger_stop_tx,
-> > > > 			 port->rs485.delay_rts_after_send);
-> > > > 		return;
-> > > > 	} else {
-> > > > 		/* continue without any delay */
-> > > > 		sport->tx_state =3D WAIT_AFTER_SEND;
-> > > > 	}
-> > > >=20
-> > > > This is functionally identical, but maybe a bit more explicit.
-> > > >=20
-> > > > Not sure what is more clear to read?
-> > >=20
-> > > I didn't oppose to the readability thing. With your patch you skip
-> > > starting the stop_tx timer and that would usually care for calling
-> > > imx_uart_stop_tx and setting sport->tx_state =3D OFF. This doesn't ha=
-ppen
-> > > with your patch any more.
-> >=20
-> > Not starting the timer is the entire point of the patch - instead, the
-> > code which would run inside the timer callback now runs immediately. To
-> > do this, I set the tx_state to WAIT_AFTER_SEND and _don't_ do the early
-> > return which leads into the if(tx_state =3D=3D WAIT_AFTER_SEND) below. =
- This
-> > is the code-path which normally runs later in the hrtimer callback.
-> >=20
-> > I suppose it would have been good to provide more context lines in the
-> > patch... Here is the relevant bit (in the changed version now):
-> >=20
-> > 	if (sport->tx_state =3D=3D SEND) {
-> > 		sport->tx_state =3D WAIT_AFTER_SEND;
-> >=20
-> > 		if (port->rs485.delay_rts_after_send > 0) {
-> > 			start_hrtimer_ms(&sport->trigger_stop_tx,
-> > 				 port->rs485.delay_rts_after_send);
-> > 			return;
-> > 		}
-> >=20
-> > 		/* continue without any delay */
-> > 	}
-> >=20
-> > 	if (sport->tx_state =3D=3D WAIT_AFTER_RTS ||
-> > 	    sport->tx_state =3D=3D WAIT_AFTER_SEND) {
-> > 		/* ... actual rts toggling ... */
-> >=20
-> > 		sport->tx_state =3D OFF;
-> > 	}
-> >=20
->=20
-> Uwe, any thoughts about if this patch should be taken or not?
-
-I will take a deeper look later today and tell you my thoughts.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---cofqnvm6jpalvn3e
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmICUAAACgkQwfwUeK3K
-7AkCVggAiaCfK44uF1z68o5GGrLoOxmCBoUtRqyKPMZpAfss1DpikhesyhQfors+
-HsNakAxm+vUb7LX5ABOQpOQ8RCE8RaHN/y/NP0adsItH3ncycnUUZF/hQ2p1CE0F
-8GNSjkgorw6KI+49JoSLIZS2f662FMRJHHpkZopdbg5cTHajB/uyLhbmeavrvI5h
-8oN+P4hiDLb28frPesEw+qDkm2mh8sVdv+mvsiY78ILd6EDf/f2JCe35s1MLNd45
-rITAcLeUkQEEWKZnlR2h3wfaznBl8lm2FkVDqelhhuld0+EJIL9ZVb0zLTebV6Sx
-I8/3kveSia/OPuLzIa4Sy8BM6Mm/gw==
-=xTHA
------END PGP SIGNATURE-----
-
---cofqnvm6jpalvn3e--

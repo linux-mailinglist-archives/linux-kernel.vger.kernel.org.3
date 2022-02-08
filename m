@@ -2,79 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 583FA4ACF2E
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 03:51:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABE104ACF35
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 03:53:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346147AbiBHCu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 21:50:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38748 "EHLO
+        id S1346158AbiBHCxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 21:53:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239892AbiBHCu4 (ORCPT
+        with ESMTP id S233685AbiBHCxK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 21:50:56 -0500
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC91EC061A73
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 18:50:55 -0800 (PST)
-Received: by mail-qk1-x72b.google.com with SMTP id j24so12678507qkk.10
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 18:50:55 -0800 (PST)
+        Mon, 7 Feb 2022 21:53:10 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E39C061355;
+        Mon,  7 Feb 2022 18:53:09 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id v4so8961079pjh.2;
+        Mon, 07 Feb 2022 18:53:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=j9YGDJIhJbgnGLmj0QUvoFwQuw8xnpg1AzQucPN0JeY=;
-        b=dxsmwqNqTY0yk5MZkE09dvQgYkWhdAH7tRcKGXCEUWzoRiCPAhciPiVgXYBdb/U1gv
-         rzMJp5n8vSg+38I8TImrWnxNDtR5sCA7xEx9WlC58mIl0D7kjdAr1SP6k7luQD91rbsq
-         I+3vg5OJ4Dy6X2DIIshBxl8aCcpbxKZYTI24Nstp4Is7e8vx2Vu5aQYsaQkDFXbT/6/0
-         9VltcYbbJuVo5bhPz1blV2amggNLeDFg19zPx8nyjZ7C+CwyLXCPxLncNANP1h8jrfHP
-         yC4scqaJwkYnSzraqUtWzpqjqCi0vx1DkImtWkCqRlMZe1R5e107LJtc20GVGFCV8jzk
-         Iwng==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=FHvEEsTakrojeNRd6lGWIzvkLLl9CJaFPC3mOTNvRw4=;
+        b=NFft9JIvnH+k8y3DuoDdh0h7tYf1A+rTKolC2dO9OdB2ZVbQsII9LNGb5+O+n9Pjgy
+         Qd5xqzdMnq3A+LSG/w9gGB4FgRZPexyS4lTTB6ExNps+7Qk6twyadlVUAdNCxkA6o0UO
+         ICucyXzRFeN5T4v25an9awp+jlu1CC+xTStUIJao+Ht0yZOWJ5TtUEKqM1M/Skzy9EVe
+         jQSgaxANRo9wBlkp8FARYZGy+1+5I9tRbLhUm5lI6XIDkiNhOtIivyIWfgfcLakfRMYT
+         EB/fcbH8ZbtjiYLRgDf3/WgmfVRkihdgW007Xj1QwiPuyg/NLdQSuAv+PHog76kleml/
+         1KFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=j9YGDJIhJbgnGLmj0QUvoFwQuw8xnpg1AzQucPN0JeY=;
-        b=bD8FW67P6HqLy2e+gGLxh1ErmKILlDHmTZODkqoUSdB7pcnNmoNt8tRGRGhhAb6LlF
-         wzOclBHCxhsyydbjBn1CoX0qWmdmRFE7sJHDCsKFD3MK1519+QpaVwxZJjD/CLm8JZvT
-         quF+21jTnlPQl6MR+g2Dv0Ds771gRSIfPsXl5Rn9r3ip2O5BUzxuM38MOV4+S1iR1tef
-         Hxf95t/hzOVB6pRWF6Wav7T0OXbXloBGYZgEOE5Q4hP+f2dANwVyyHPPexfnNMHh4M5W
-         LxLHjwNy5JW7GXXv6p+fuNyXztBIyQOuiIXrUdLD9GPEYtkkQsCEzaQ8lnB8c5Nqx9m6
-         eSow==
-X-Gm-Message-State: AOAM532kIY/hA4fTkw2Yp1HI6UzKNDXYPYiAz2gm3KjAQxIasPodl4Op
-        rnh0yyUR3x8Yj/zy7BEbClaJ8w==
-X-Google-Smtp-Source: ABdhPJxe19l38PCbgZ8NckrEXyc1qlW9qQwdU1aNCgvkaaQ+6PGFh5Q8soT3N412a5DjGqXnMNRUSw==
-X-Received: by 2002:a05:620a:f05:: with SMTP id v5mr1577430qkl.692.1644288654728;
-        Mon, 07 Feb 2022 18:50:54 -0800 (PST)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id b8sm6938297qtx.79.2022.02.07.18.50.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 18:50:54 -0800 (PST)
-Date:   Mon, 7 Feb 2022 18:50:40 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.anvils
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-cc:     Rajat Jain <rajatja@google.com>, Wolfram Sang <wsa@kernel.org>,
-        Hugh Dickins <hughd@google.com>,
-        Derek Basehore <dbasehore@chromium.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        "loic.poulain@linaro.org" <loic.poulain@linaro.org>,
-        Andrew Duggan <aduggan@synaptics.com>,
-        vincent.huang@tw.synaptics.com, cheiny@synaptics.com,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-input <linux-input@vger.kernel.org>
-Subject: Re: 5.17-rc regression: rmi4 clients cannot deal with asynchronous
- suspend? (was: X1 Carbon touchpad not resumed)
-In-Reply-To: <YgHTYrODoo2ou49J@google.com>
-Message-ID: <b76771e5-b8e-54c9-2474-d5a73d236cba@google.com>
-References: <89456fcd-a113-4c82-4b10-a9bcaefac68f@google.com> <YgF/0QGFN4SppLKg@shikoro> <CACK8Z6Etj-gq1VKpkUBstiXEETekPWG9p9gKBtuFaZF05pQEvQ@mail.gmail.com> <CACK8Z6FUsceYgBoaAtN8o4m9HpZaBZMt0Nqtvw0a1Z3EuD_nWg@mail.gmail.com> <YgHTYrODoo2ou49J@google.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=FHvEEsTakrojeNRd6lGWIzvkLLl9CJaFPC3mOTNvRw4=;
+        b=FexZXflT3lBipzb+DaKPoVAUvov5p6T2ikUJPQtuCcN9AgbjnxZWvdf4M7cpguaz+D
+         VdmMjEEG53Ws+zk1AERf9P9hbu2ebFHmz5VsXH/Rr76L8oViaTbGOrUaEWkzFHmMWjBE
+         Bic5r/+mrPMK6xz+UK7867PiPiavgtYXn9B3u1eLiX4RMfpGsSIdT1iWu5qF4UdAzAs1
+         km3md5Tgj2I5lc3wKJl+5JKpQxiW3+ITkNciQjLQjyWwVvuO/Fd+8fzHFr7OeOmGQ0SP
+         TDdkCYB8eQ98Op+UFFeBaCuDIk9bDNEs0aKsl+HFqmAirbqX+jxVO8tcSCbwdYEKhQ33
+         Ja6w==
+X-Gm-Message-State: AOAM532duhYQQLD7Atx8gvuV1Rq+DOJaDbAx0cU5BCzBwCJ5G/eTO8zC
+        PuRtdKP3b/p7c1GFdV0hQbs=
+X-Google-Smtp-Source: ABdhPJx6TLFiQTRxVx6o0QBsvhPZejzhqjTs5YNHuChXj/dfNgtKlAfSUxcwost38eA/f8kJDpbaOA==
+X-Received: by 2002:a17:902:b941:: with SMTP id h1mr2622972pls.73.1644288789067;
+        Mon, 07 Feb 2022 18:53:09 -0800 (PST)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id t1sm9426770pgj.43.2022.02.07.18.53.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Feb 2022 18:53:08 -0800 (PST)
+Message-ID: <88caec5c-c509-124e-5f6b-22b94f968aea@gmail.com>
+Date:   Mon, 7 Feb 2022 18:53:06 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v8 net-next 01/10] dt-bindings: net: dsa: dt bindings for
+ microchip lan937x
+Content-Language: en-US
+To:     Prasanna Vengateshan <prasanna.vengateshan@microchip.com>,
+        andrew@lunn.ch, netdev@vger.kernel.org, olteanv@gmail.com,
+        robh+dt@kernel.org
+Cc:     UNGLinuxDriver@microchip.com, woojung.huh@microchip.com,
+        hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        vivien.didelot@gmail.com, devicetree@vger.kernel.org,
+        Rob Herring <robh@kernel.org>
+References: <20220207172204.589190-1-prasanna.vengateshan@microchip.com>
+ <20220207172204.589190-2-prasanna.vengateshan@microchip.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220207172204.589190-2-prasanna.vengateshan@microchip.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,100 +81,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 7 Feb 2022, Dmitry Torokhov wrote:
-> On Mon, Feb 07, 2022 at 01:41:36PM -0800, Rajat Jain wrote:
-> > +linux-input@vger.kernel.org
-> > 
-> > On Mon, Feb 7, 2022 at 1:09 PM Rajat Jain <rajatja@google.com> wrote:
-> > >
-> > > +Rafael (for any inputs on asynchronous suspend / resume)
-> > > +Dmitry Torokhov (since no other maintainer of rmi4 in MAINTAINERS file)
-> > > +loic.poulain@linaro.org (who fixed RMI device hierarchy recently)
-> > > + Some Synaptics folks (from recent commits - Vincent Huang, Andrew
-> > > Duggan, Cheiny)
-> > >
-> > > On Mon, Feb 7, 2022 at 12:23 PM Wolfram Sang <wsa@kernel.org> wrote:
-> > > >
-> > > > Hello Hugh,
-> > > >
-> > > > > Bisection led to 172d931910e1db800f4e71e8ed92281b6f8c6ee2
-> > > > > ("i2c: enable async suspend/resume on i2c client devices")
-> > > > > and reverting that fixes it for me.
-> > > >
-> > > > Thank you for the report plus bisection and sorry for the regression!
-> > >
-> > > +1, Thanks for the bisection, and apologies for the inconveniences.
-> > >
-> > > The problem here seems to be that for some reason, some devices (all
-> > > connected to rmi4 adapter) failed to resume, but only when
-> > > asynchronous suspend is enabled (by 172d931910e1):
-> > >
-> > > [   79.221064] rmi4_smbus 6-002c: failed to get SMBus version number!
-> > > [   79.265074] rmi4_physical rmi4-00: rmi_driver_reset_handler: Failed
-> > > to read current IRQ mask.
-> > > [   79.308330] rmi4_f01 rmi4-00.fn01: Failed to restore normal operation: -6.
-> > > [   79.308335] rmi4_f01 rmi4-00.fn01: Resume failed with code -6.
-> > > [   79.308339] rmi4_physical rmi4-00: Failed to suspend functions: -6
-> > > [   79.308342] rmi4_smbus 6-002c: Failed to resume device: -6
-> > > [   79.351967] rmi4_physical rmi4-00: Failed to read irqs, code=-6
-> > >
-> > > A resume failure that only shows up during asynchronous resume,
-> > > typically means that the device is dependent on some other device to
-> > > resume first, but this dependency is NOT established in a parent child
-> > > relationship (which is wrong and needs to be fixed, perhaps using
-> > > device_add_link()). Thus the kernel may be resuming these devices
-> > > without first resuming some other device that these devices need to
-> > > depend on.
-> > >
-> > > TBH, I'm not sure how to fix this. The only hint I see is that all of
-> > > these devices seem to be attached to rmi4 device so perhaps something
-> > > there? I see 6e4860410b828f recently fixed device hierarchy for rmi4,
-> > > and so seemingly should have fixed this very issue (as also seen in
-> > > commit message)?
-> > >
-> > > >
-> > > > I will wait a few days if people come up with a fix. If not, I will
-> > > > revert the offending commit.
-> > >
-> > > While I'll be sad because this means no i2c-client can now resume in
-> > > parallel and increases resume latency by a *LOT* (hundreds of ms on
-> > > all Linux systems), I understand that this needs to be done unless
-> > > someone comes up with a fix.
-> 
-> There is intricate dance happening switching touchpad from legacy PS/2
-> into RMI mode, with touchpad being dependent not only on SMbus
-> controller, but also on i8042 keyboard controller and its PS/2 port (or
-> rather their emulation by the system firmware).
-> 
-> I wonder if we could apply a little bit more targeted patch:
-> 
-> diff --git a/drivers/input/rmi4/rmi_smbus.c b/drivers/input/rmi4/rmi_smbus.c
-> index 2407ea43de59..3901d06d38ca 100644
-> --- a/drivers/input/rmi4/rmi_smbus.c
-> +++ b/drivers/input/rmi4/rmi_smbus.c
-> @@ -335,6 +335,7 @@ static int rmi_smb_probe(struct i2c_client *client,
->  		return error;
->  	}
->  
-> +	device_disable_async_suspend(&client->dev);
->  	return 0;
->  }
->  
-> 
-> ... and if that works then we cant try to establish proper dependencies
-> via device links later.
-> 
-> Hugh, could you please try this out and see if it helps?
 
-Yes, that works nicely, thanks Dmitry.
 
-By the way, my memory's been jogged by "rmi4" and the discussion above:
-I had a similar-ish problem with it a year ago, discussed with PM guys,
+On 2/7/2022 9:21 AM, Prasanna Vengateshan wrote:
+> Documentation in .yaml format and updates to the MAINTAINERS
+> Also 'make dt_binding_check' is passed.
+> 
+> RGMII internal delay values for the mac is retrieved from
+> rx-internal-delay-ps & tx-internal-delay-ps as per the feedback from
+> v3 patch series.
+> https://lore.kernel.org/netdev/20210802121550.gqgbipqdvp5x76ii@skbuf/
+> 
+> It supports only the delay value of 0ns and 2ns.
+> 
+> Signed-off-by: Prasanna Vengateshan <prasanna.vengateshan@microchip.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> ---
+>   .../bindings/net/dsa/microchip,lan937x.yaml   | 179 ++++++++++++++++++
+>   MAINTAINERS                                   |   1 +
+>   2 files changed, 180 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/net/dsa/microchip,lan937x.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/net/dsa/microchip,lan937x.yaml b/Documentation/devicetree/bindings/net/dsa/microchip,lan937x.yaml
+> new file mode 100644
+> index 000000000000..5657a0b89e4e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/dsa/microchip,lan937x.yaml
+> @@ -0,0 +1,179 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/dsa/microchip,lan937x.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: LAN937x Ethernet Switch Series Tree Bindings
+> +
+> +maintainers:
+> +  - UNGLinuxDriver@microchip.com
+> +
+> +allOf:
+> +  - $ref: dsa.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - microchip,lan9370
+> +      - microchip,lan9371
+> +      - microchip,lan9372
+> +      - microchip,lan9373
+> +      - microchip,lan9374
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  spi-max-frequency:
+> +    maximum: 50000000
+> +
+> +  reset-gpios:
+> +    description: Optional gpio specifier for a reset line
+> +    maxItems: 1
+> +
+> +  mdio:
+> +    $ref: /schemas/net/mdio.yaml#
+> +    unevaluatedProperties: false
 
-https://lore.kernel.org/linux-pm/alpine.LSU.2.11.2101102010200.25762@eggly.anvils/
+This should be moved to dsa.yaml since this is about describing the 
+switch's internal MDIO bus controller. This is applicable to any switch, 
+really.
 
-I'm not saying you have to read through that thread, but you may find
-some relevance in it - Saravana concluded rmi4 driver isn't capturing
-parent/child relationship correctly (at that time, anyway).
+> +
+> +patternProperties:
+> +  "^(ethernet-)?ports$":
+> +    patternProperties:
+> +      "^(ethernet-)?port@[0-7]+$":
+> +        allOf:
+> +          - if:
+> +              properties:
+> +                phy-mode:
+> +                  contains:
+> +                    enum:
+> +                      - rgmii
+> +                      - rgmii-rxid
+> +                      - rgmii-txid
+> +                      - rgmii-id
+> +            then:
+> +              properties:
+> +                rx-internal-delay-ps:
+> +                  $ref: "#/$defs/internal-delay-ps"
+> +                tx-internal-delay-ps:
+> +                  $ref: "#/$defs/internal-delay-ps"
 
-Hugh
+Likewise, this should actually be changed in ethernet-controller.yaml
+-- 
+Florian

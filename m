@@ -2,138 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04A314AD7ED
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:52:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E35534AD7F2
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:53:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237935AbiBHLwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 06:52:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42964 "EHLO
+        id S245559AbiBHLwz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 06:52:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231327AbiBHLwR (ORCPT
+        with ESMTP id S239521AbiBHLwy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 06:52:17 -0500
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 69AA8C03FECA;
-        Tue,  8 Feb 2022 03:52:15 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id B60908106;
-        Tue,  8 Feb 2022 11:51:49 +0000 (UTC)
-Date:   Tue, 8 Feb 2022 13:52:13 +0200
-From:   Tony Lindgren <tony@atomide.com>
-To:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>, soc@kernel.org,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>, jan.kiszka@siemens.com,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Nishanth Menon <nm@ti.com>
-Subject: Re: [PATCH v2 1/2] arm64: dts: ti: k3-am65: disable optional
- peripherals by default
-Message-ID: <YgJZbdOlazrde7O/@atomide.com>
-References: <20220203140240.973690-1-matthias.schiffer@ew.tq-group.com>
- <20220204143108.653qk2ihnlhsr5aa@prior>
- <YgDCLaBHA3DDQAUd@atomide.com>
- <5944ba0ce568eaf507917799b1dfd89a3d0ca492.camel@ew.tq-group.com>
- <YgEBml9HvFzSl289@atomide.com>
- <9923df6525212389b86cb635624bcfb5c27a8bc5.camel@ew.tq-group.com>
+        Tue, 8 Feb 2022 06:52:54 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F48CC03FEC0;
+        Tue,  8 Feb 2022 03:52:53 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id qe15so6515535pjb.3;
+        Tue, 08 Feb 2022 03:52:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=DRIuUc2VDgRmjcevfIz/V5hKd5UgUekQHsS7kXsTMhA=;
+        b=QKI0U/4xxaT2com3DuGoQVRH9mne7idQfR9378gfAFlSah1PStbuQ9B85ooqlRIxnp
+         T28Zw7GJE/sM1hfJ2T5XmY5uDLDGaiSkGD/d+QYqXsnecgaI47QHjT/Q2/CODjHf9FvA
+         Pm8wrhQ0vfpAjs1T93rmyqWEj/sZgDCXgd/8ITYb92/ZmncGwL+2MHTC/B8CZzHzO4lm
+         7bxkue+PlQ6BI46uFF/hOovMlUUr6JMArMwdKitcUA/Y4HfSJQGg/ZB031Y1qMUuOO3y
+         65ZWx+ucRsIYYTCX0xD6EhaVHHlxgQOSu3VqEZTWISl+mvVCm+HZ7R8E9oVcqH7gIViR
+         7tog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=DRIuUc2VDgRmjcevfIz/V5hKd5UgUekQHsS7kXsTMhA=;
+        b=VXM8Xkb6cxECM0L3tqfWEBpw35SPRWqoOo6ip1Gzqbyv3RJXRHJqEsRP5TgrhgARUM
+         qa4xdZgZ+S9HmQS+roKrXe8/OW1sR425yLkuGPtEc7Te6XAKaD10vqqGX6XMybvRcC3m
+         zkg+H5qBFk+p8EAc6JxxKTAd88V41ql7Q05LrQ2yHVe8LRCtYzkit3NcOnh0tHOKcPWw
+         1C5f4MMxmmKXdgYnMToHXoLKu/mxYnABpfAED6SwCKw2STxdFH+LvDWU0z63e3TetP0k
+         NzgKRA11NxzrUrFAn/R0cKged1MCZ7/NRtwNicE3uKTbrQgXvB/oSBPC3OTVwLTFV6Em
+         cDgQ==
+X-Gm-Message-State: AOAM532yN4rnH+5CzJvEVvJzXBmZMCP9X3LH6VXVpCjnj8OHIaqs76+5
+        9g6ZeW75U8vpwbsAo4lEsbz2stU++z77HQ==
+X-Google-Smtp-Source: ABdhPJzYHJeYL4cKG1G4ja0goc702EwvDIt/NyPpJMLgZUDpZ9o4TUGSoI/uApB9b8L9616LwKmT6w==
+X-Received: by 2002:a17:902:7049:: with SMTP id h9mr4334023plt.121.1644321172817;
+        Tue, 08 Feb 2022 03:52:52 -0800 (PST)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id ml19sm2789049pjb.52.2022.02.08.03.52.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Feb 2022 03:52:52 -0800 (PST)
+Message-ID: <319bd90e-5315-35c2-0d0c-32ced685a147@gmail.com>
+Date:   Tue, 8 Feb 2022 19:52:40 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9923df6525212389b86cb635624bcfb5c27a8bc5.camel@ew.tq-group.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.0
+Subject: Re: [PATCH kvm/queue v2 2/3] perf: x86/core: Add interface to query
+ perfmon_event_map[] directly
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Jim Mattson <jmattson@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Like Xu <likexu@tencent.com>
+References: <20220117085307.93030-1-likexu@tencent.com>
+ <20220117085307.93030-3-likexu@tencent.com>
+ <20220202144308.GB20638@worktop.programming.kicks-ass.net>
+From:   Like Xu <like.xu.linux@gmail.com>
+Organization: Tencent
+In-Reply-To: <20220202144308.GB20638@worktop.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Matthias Schiffer <matthias.schiffer@ew.tq-group.com> [220208 10:53]:
-> On Mon, 2022-02-07 at 13:25 +0200, Tony Lindgren wrote:
-> > * Matthias Schiffer <matthias.schiffer@ew.tq-group.com> [220207
-> > 08:45]:
-> > > Generally I think that it's a bootloader's responsiblity to disable
-> > > unneeded devices - the kernel may not even have a driver for some
-> > > peripherals, leading to the same behaviour as a "disabled" status.
-> > > For
-> > > this reason I believe that it should always be okay to set unneeded
-> > > devices to "disabled", and it should be considered a safe default.
-> > 
-> > Not possible, think kexec for example :) How would the previous
-> > kernel
-> > even know what to disable if Linux has no idea about the devices?
+On 2/2/2022 10:43 pm, Peter Zijlstra wrote:
+> On Mon, Jan 17, 2022 at 04:53:06PM +0800, Like Xu wrote:
+>> From: Like Xu <likexu@tencent.com>
+>>
+>> Currently, we have [intel|knc|p4|p6]_perfmon_event_map on the Intel
+>> platforms and amd_[f17h]_perfmon_event_map on the AMD platforms.
+>>
+>> Early clumsy KVM code or other potential perf_event users may have
+>> hard-coded these perfmon_maps (e.g., arch/x86/kvm/svm/pmu.c), so
+>> it would not make sense to program a common hardware event based
+>> on the generic "enum perf_hw_id" once the two tables do not match.
+>>
+>> Let's provide an interface for callers outside the perf subsystem to get
+>> the counter config based on the perfmon_event_map currently in use,
+>> and it also helps to save bytes.
+>>
+>> Cc: Peter Zijlstra <peterz@infradead.org>
+>> Signed-off-by: Like Xu <likexu@tencent.com>
+>> ---
+>>   arch/x86/events/core.c            | 9 +++++++++
+>>   arch/x86/include/asm/perf_event.h | 2 ++
+>>   2 files changed, 11 insertions(+)
+>>
+>> diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
+>> index 38b2c779146f..751048f4cc97 100644
+>> --- a/arch/x86/events/core.c
+>> +++ b/arch/x86/events/core.c
+>> @@ -693,6 +693,15 @@ void x86_pmu_disable_all(void)
+>>   	}
+>>   }
+>>   
+>> +u64 perf_get_hw_event_config(int perf_hw_id)
+>> +{
+>> +	if (perf_hw_id < x86_pmu.max_events)
+>> +		return x86_pmu.event_map(perf_hw_id);
+>> +
+>> +	return 0;
+>> +}
 > 
-> Well, optimally, bootloader and all kernels would agree on the devices
-> that are actually available, but I get your point.
+> Where does perf_hw_id come from? Does this need to be
+> array_index_nospec() ?
+
+A valid incoming parameter will be a member of the generic "enum perf_hw_id" table.
+
+If array_index_nospec() helps, how about:
+
++u64 perf_get_hw_event_config(int hw_event)
++{
++	int max = x86_pmu.max_events;
++
++	if (hw_event < max)
++		return x86_pmu.event_map(array_index_nospec(hw_event, max));
++
++	return 0;
++}
+
 > 
-> > 
-> > If there are issues you're seeing, it's likely a bug in some of the
-> > device drivers for not checking for the necessary resources like
-> > pinctrl for i2c lines.
+>> +EXPORT_SYMBOL_GPL(perf_get_hw_event_config);
 > 
-> I don't think it's common for individual drivers to care about pinctrl
-> unless switching between different pin settings is required at runtime.
-> Many drivers can be used on different hardware, some of which may
-> require pinmuxing, while others don't.
+> Urgh... hate on kvm being a module again. We really need something like
+> EXPORT_SYMBOL_KVM() or something.
 
-Yeah that's true, some configurations only do pin muxing in the
-bootloader. So pins are not a good criteria for devicetree status enabled
-for when the device is operational.
+As opposed to maintaining the obsolete {intel|amd}_event_mapping[] in the out 
+context of perf,
+a more appropriate method is to set up the table in the KVM through the new perf 
+interface.
 
-Probably a better criteria for devicetree "operational" status is the
-device can be clocked and configured or idled. Some devices like GPUs
-can render to memory with no external pin configuration for example.
+Well, I probably need Paolo's clarity to trigger more changes, whether it's 
+introducing EXPORT_SYMBOL_KVM or a built-in KVM as a necessary prerequisite for 
+vPMU.
 
-Following Linux running on a PC analogy.. If ACPI has some device that
-causes driver warnings on Linux boot, do we patch the ACPI table and
-pretend the device does not exist? Or do we patch the device driver to
-deal with the random buggy bootloader state for the device? :)
-
-> Also, what is the expected behavior of a driver that is probed for an
-> unusable device? Wouldn't this require some as-of-yet nonexisting
-> status between "okay" and "disabled" that conveys something like "probe
-> this device, initialize (and disable) PM, but don't register anything",
-> so no unusable devices become visible to userspace (and possibly other
-> kernel drivers)?
-
-I did some experimental patches several years ago to add devicetree
-status for incomplete, but eventually came to the conclusion that it
-was not really needed. Feel free to revisit that if you have the
-spare cycles :)
-
-Having the drivers check for the resources like clocks and then just
-idle the device after probe solved the issues I was seeing for warnings
-and kexec. In some cases the device may need to be reset or at least
-properly reconfigured in the probe as the state can be unknown from the
-bootloader. That's about all there is to it. Sure you could save some
-memory with less instances for some devices, so maybe the status =
-"incomplete" could be used to do the trick for that.
-
-> > > I'm not sure what the consensus on these issues is. I'm more
-> > > familiar
-> > > with NXP's i.MX and Layerscape SoCs, where it's common to have all
-> > > muxable peripherals set to "disabled" in the base DTSI, and a quick
-> > > grep through a few dts directories gives me the impression that
-> > > this is
-> > > the case for most other vendors as well.
-> > 
-> > This approach only works for SoCs that don't need the kernel to idle
-> > devices for runtime PM.
 > 
-> I'm pretty sure that most modern SoCs I looked at have runtime PM, and
-> it is simply expected that unusable devices are never enabled in the
-> first place, so there is no need for the kernel to know about them.
+> 
+>>   struct perf_guest_switch_msr *perf_guest_get_msrs(int *nr)
+>>   {
+>>   	return static_call(x86_pmu_guest_get_msrs)(nr);
+>> diff --git a/arch/x86/include/asm/perf_event.h b/arch/x86/include/asm/perf_event.h
+>> index 8fc1b5003713..d1e325517b74 100644
+>> --- a/arch/x86/include/asm/perf_event.h
+>> +++ b/arch/x86/include/asm/perf_event.h
+>> @@ -492,9 +492,11 @@ static inline void perf_check_microcode(void) { }
+>>   
+>>   #if defined(CONFIG_PERF_EVENTS) && defined(CONFIG_CPU_SUP_INTEL)
+>>   extern struct perf_guest_switch_msr *perf_guest_get_msrs(int *nr);
+>> +extern u64 perf_get_hw_event_config(int perf_hw_id);
+>>   extern int x86_perf_get_lbr(struct x86_pmu_lbr *lbr);
+>>   #else
+>>   struct perf_guest_switch_msr *perf_guest_get_msrs(int *nr);
+>> +u64 perf_get_hw_event_config(int perf_hw_id);
+> 
+> I think Paolo already spotted this one.
 
-Yeah well that assumption is the difference in getting runtime PM to
-work in a sane way across multiple SoCs and devices :)
+Indeed, I will apply it.
 
-Devices tagged with status = "disabled" are completely ignored by the
-kernel. Interconnect and bus related code may not know the details on
-how to reset and idle the child devices. Relying on firmware to do the
-reset and idle of unused devices may be too generic, can be buggy, and
-probably depends on the firmware revision.
-
-Regards,
-
-Tony
+> 
+>>   static inline int x86_perf_get_lbr(struct x86_pmu_lbr *lbr)
+>>   {
+>>   	return -1;
+>> -- 
+>> 2.33.1
+>>

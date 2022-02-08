@@ -2,101 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2C284AE165
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 19:49:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCA3C4AE167
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 19:49:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385439AbiBHSr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 13:47:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42386 "EHLO
+        id S1385478AbiBHSsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 13:48:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385423AbiBHSrv (ORCPT
+        with ESMTP id S1358560AbiBHSst (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 13:47:51 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2839BC0612C0
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 10:47:49 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id cn6so279017edb.5
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 10:47:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6mUKs8mr76hd0MFknp8EWX6G4mUT2iT6oVgdRjhWDVQ=;
-        b=AW0ZMG08jE40Og2RDKzb836NI3DmQ5Nu2DfyA7c1/xy506HgYpHJVANCQ/2zAYYrYb
-         5xvgX0ZI55zcLmwGg+ahNT13LuSAFFh8qo/mDDMm4qR8AggnjS+lDT2shOluS0uXzumN
-         hezE1macEKIORPLttPi6sYf8/psKfsFsO+QFk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6mUKs8mr76hd0MFknp8EWX6G4mUT2iT6oVgdRjhWDVQ=;
-        b=TDc+i5XG7itg9edQXj0NfPRA44BL+WxJNOhdbOWceZnhGC0NidM3yconlJ+Y1rO18E
-         vMTWaX556G0Py7QnemLpA42YLAOg8AfwIkyLz5nB36XYIdqt4zojgLzKDUPvFjMpXiE4
-         LNCUKNXbgiLN+dpvvYt9R5L9k9M6fBezIgM3yt1Mfd0B/ktoCIFRobLJBe1sY1fao5gc
-         OuDy/cyhsQLR8zxFd/k3hgl/PqowECSj0xq97gha5qJBLm4ifiSnXLwOa1lnVsEdnZVJ
-         ptgtjHbU/ETsZ+DzyRBg/RNg0rxYVvHAwOStL2V+BCh+e7olcGxP0DAafQ57RKghhPbq
-         Zoxg==
-X-Gm-Message-State: AOAM533KavJQhlg22YHpNggGs7/Yl9IA3NEgCGBldf4iJFLGqvdgsO83
-        9O2yw3Z3pIa/17kdFjfgdI9/gQMF8+9JGgAa
-X-Google-Smtp-Source: ABdhPJz9lsO8lrif2mHMAqCKB22bmc9FthRdcECpz30/tZVspoGvxIEH8RK+ZR6zkWVVOkyNBG40uA==
-X-Received: by 2002:a05:6402:26ce:: with SMTP id x14mr5875613edd.211.1644346067574;
-        Tue, 08 Feb 2022 10:47:47 -0800 (PST)
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com. [209.85.221.49])
-        by smtp.gmail.com with ESMTPSA id z2sm3391827ejr.68.2022.02.08.10.47.46
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Feb 2022 10:47:46 -0800 (PST)
-Received: by mail-wr1-f49.google.com with SMTP id q7so4269220wrc.13
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 10:47:46 -0800 (PST)
-X-Received: by 2002:adf:f90c:: with SMTP id b12mr4520200wrr.97.1644346066360;
- Tue, 08 Feb 2022 10:47:46 -0800 (PST)
+        Tue, 8 Feb 2022 13:48:49 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03D4DC0612C1;
+        Tue,  8 Feb 2022 10:48:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644346129; x=1675882129;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=GKYfrOdPKIidCVFdft/pVkcauP1SFgER+aJOOG3WDEA=;
+  b=nvxCrdDs4OeAnUM9i++1tL6hCNiNV1a8ZMXu2s/MV/yWXB2zsl5q/G61
+   cR3AyMXgHkhgE1wdVY7YftNxyMDaCiFAGTERLvGXYD/zrmMDkr5rUoHOR
+   bzZsILWoaMRTBOqBVQCN1uQhEFjJ6PLpOWyb2cbxm+Msg6CGClNMsTkkB
+   D0RqUTQkseeqYgAt9JvJYLEG4idlo1UwKatmXwyzChHR2wG3RHSwNJ9aA
+   IioWmKRt1h5QFFSJ/oDu/nrDG72iwpLLEbjmsgSOIWuVvZG6XRsC4NDSF
+   5uNLZ/UwS1MlXxO3ocA7Iyz/zy9RnqlSAkYHXnMTni+mxnfNLc5X4nt5v
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="236430341"
+X-IronPort-AV: E=Sophos;i="5.88,353,1635231600"; 
+   d="scan'208";a="236430341"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 10:48:14 -0800
+X-IronPort-AV: E=Sophos;i="5.88,353,1635231600"; 
+   d="scan'208";a="484914385"
+Received: from rchatre-ws.ostc.intel.com ([10.54.69.144])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 10:48:14 -0800
+From:   Reinette Chatre <reinette.chatre@intel.com>
+To:     dave.hansen@linux.intel.com, jarkko@kernel.org, tglx@linutronix.de,
+        bp@alien8.de, luto@kernel.org, mingo@redhat.com,
+        linux-sgx@vger.kernel.org, x86@kernel.org
+Cc:     vijay.dhanraj@intel.com, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: [PATCH V3] x86/sgx: Silence softlockup detection when releasing large enclaves
+Date:   Tue,  8 Feb 2022 10:48:07 -0800
+Message-Id: <ced01cac1e75f900251b0a4ae1150aa8ebd295ec.1644345232.git.reinette.chatre@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220208150625.374191-1-Jason@zx2c4.com>
-In-Reply-To: <20220208150625.374191-1-Jason@zx2c4.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 8 Feb 2022 10:47:29 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wi3fRiQXynJrLvaD5DDqF0MzgX1xSGFSJS_2frwXT1E5Q@mail.gmail.com>
-Message-ID: <CAHk-=wi3fRiQXynJrLvaD5DDqF0MzgX1xSGFSJS_2frwXT1E5Q@mail.gmail.com>
-Subject: Re: [GIT PULL] random number generator fixes for 5.17-rc4
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 8, 2022 at 7:07 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
->
-> Given that these fixes are for a security issue (albeit a probably relatively
-> low grade one), sending this mid-cycle feels like the "responsible" thing to
-> do, and 5.17 will resultantly have a more secure RNG. However, I also would
-> understand that, diffstat not withstanding, you think this is a bit much and
-> want to reject this pull until 5.18. Either way works for me, though I
-> naturally lean heavily toward the former, hence making this pull request in
-> the first place.
+Vijay reported that the "unclobbered_vdso_oversubscribed" selftest
+triggers the softlockup detector.
 
-I think the changes look fine, but this definitely conceptually is a
-"new feature" to me, rather than some security fix.
+Actual SGX systems have 128GB of enclave memory or more.  The
+"unclobbered_vdso_oversubscribed" selftest creates one enclave which
+consumes all of the enclave memory on the system. Tearing down such a
+large enclave takes around a minute, most of it in the loop where
+the EREMOVE instruction is applied to each individual 4k enclave page.
 
-Using a hash instead of an LFSR sounds like the modern and sane thing
-to do, and simplifies the code a lot. But I also don't think the old
-LFSR model is broken in practice.
+Spending one minute in a loop triggers the softlockup detector.
 
-I don't think the pool leaking has been a real or realistic attack,
-and when the issue is lack of any actual real entropy (which _has_
-been an issue), I don't think it really changes anything in practice.
+Add a cond_resched() to give other tasks a chance to run and placate
+the softlockup detector.
 
-So I think this is improving the code, but I don't think the old
-approach was so broken that there's much argument for a mid-rc update
-like this (and if it was, we'd have to mark this cc:stable all the way
-back).
+Cc: stable@vger.kernel.org
+Fixes: 1728ab54b4be ("x86/sgx: Add a page reclaimer")
+Reported-by: Vijay Dhanraj <vijay.dhanraj@intel.com>
+Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Tested-by: Jarkko Sakkinen <jarkko@kernel.org>  (kselftest as sanity check)
+Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
+---
+Softlockup message:
 
-In contrast, as a 5.18 merge window pull request, this makes complete sense.
+watchdog: BUG: soft lockup - CPU#7 stuck for 22s! [test_sgx:11502]
+Kernel panic - not syncing: softlockup: hung tasks
+<snip>
+sgx_encl_release+0x86/0x1c0
+sgx_release+0x11c/0x130
+__fput+0xb0/0x280
+____fput+0xe/0x10
+task_work_run+0x6c/0xc0
+exit_to_user_mode_prepare+0x1eb/0x1f0
+syscall_exit_to_user_mode+0x1d/0x50
+do_syscall_64+0x46/0xb0
+entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-           Linus
+Changes since V2:
+- V2: https://lore.kernel.org/lkml/b5e9f218064aa76e3026f778e1ad0a1d823e3db8.1643133224.git.reinette.chatre@intel.com/
+- Add Jarkko's "Reviewed-by" and "Tested-by" tags.
+
+Changes since V1:
+- V1: https://lore.kernel.org/lkml/1aa037705e5aa209d8b7a075873c6b4190327436.1642530802.git.reinette.chatre@intel.com/
+- Add comment provided by Jarkko.
+
+ arch/x86/kernel/cpu/sgx/encl.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/encl.c
+index 001808e3901c..48afe96ae0f0 100644
+--- a/arch/x86/kernel/cpu/sgx/encl.c
++++ b/arch/x86/kernel/cpu/sgx/encl.c
+@@ -410,6 +410,8 @@ void sgx_encl_release(struct kref *ref)
+ 		}
+ 
+ 		kfree(entry);
++		/* Invoke scheduler to prevent soft lockups. */
++		cond_resched();
+ 	}
+ 
+ 	xa_destroy(&encl->page_array);
+-- 
+2.25.1
+

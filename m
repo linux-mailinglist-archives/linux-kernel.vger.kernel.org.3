@@ -2,96 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FB184AE193
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 19:56:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CA6F4AE195
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 19:57:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385551AbiBHS40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 13:56:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48048 "EHLO
+        id S1385430AbiBHS5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 13:57:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244274AbiBHS4Y (ORCPT
+        with ESMTP id S1385021AbiBHS5C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 13:56:24 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EDD3C0613CB;
-        Tue,  8 Feb 2022 10:56:23 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id t14-20020a17090a3e4e00b001b8f6032d96so2625213pjm.2;
-        Tue, 08 Feb 2022 10:56:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=yeJo/5hRrRCyM2Jlw/wQyb6VESGf89gzXf+99lk7a3A=;
-        b=FgXOB2hB2inJYKtI8UTi1vhmT/jH47kpKuzq3ZMCZb5yW1Yur9p0av+LCMiF0KmOCm
-         8uj8z+CeQrwdAXzc99xk9QOR43b/6OV4H9IDViFxOF9JIpk67dSU3t+67ax9WJcZeIvb
-         Cnu4pChuxVQ+IkuMOUdlP6g0nfsG/Y7CZbroTNarO5AZMV/pUkua1pULsJpmRjFJrzDb
-         Jdy49h0K2QW5qQNM7joc55BAMkbWWIfdvZZftvLPG2Z1pNbl9qRXeR5W8hly0TZbZwlJ
-         QwjqmeubH6D8bZkLrwXMf7t9ShWiajbusghkt0ayHmnDnnG/bNaspO0S4LAM2fqZZObb
-         Toiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=yeJo/5hRrRCyM2Jlw/wQyb6VESGf89gzXf+99lk7a3A=;
-        b=yf+RaRC0AHB+WsNI2IPajlXpbwOTAU6HDX8d0dUbCAshdwPtsiZGc4y0D+UQDPunGd
-         F1X/TWABYf0j1fJno+uNkKm6nqxpAIYAZMNdu6yt37sCAWIeDpzNmu0vXTZTN663q70b
-         S55mjfZ1G48pgDH2BbVMmMJlT6Q+C+5uI1gntm6pbvZup/bmbwQa4KrGZqCrGiVSGK5F
-         FabLLmJmDj0J+QQ2haGA1QWwt41Afbml2wl5oxS+JoU/OK+Hf0ixx8NPwgwdxolMHRfm
-         hB4fIugn1UuqipZvjW0MUDjD5W/wyROo1cL/IRHk7bZgCQLt7qJ8egB1WS9fTugeQEMv
-         VszQ==
-X-Gm-Message-State: AOAM5327Hvbw0+Iama/2Vfdre4K65egLscVCI/C5K9ZsiEbucM6yqkbr
-        MUv0xuAxnrqN6CmNptwAimOKJu4/NV8=
-X-Google-Smtp-Source: ABdhPJzNZbZrbclkhIGMjgr6jnTBCIGd7035cZq8xL4tSAq9c/zh578nWHZgv101gyl1ot5pbnemMg==
-X-Received: by 2002:a17:90a:8e84:: with SMTP id f4mr2828258pjo.215.1644346582712;
-        Tue, 08 Feb 2022 10:56:22 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id z13sm17177810pfj.23.2022.02.08.10.56.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 10:56:22 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 8 Feb 2022 08:56:20 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@fb.com, rostedt@goodmis.org,
-        Mukesh Ojha <quic_mojha@quicinc.com>
-Subject: Re: [PATCH rcu 3/3] rcu: Allow expedited RCU grace periods on
- incoming CPUs
-Message-ID: <YgK81N+w/zsW12N9@slm.duckdns.org>
-References: <20220204225409.GA4193020@paulmck-ThinkPad-P17-Gen-1>
- <20220204225507.4193113-3-paulmck@kernel.org>
+        Tue, 8 Feb 2022 13:57:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F1FC0612C0;
+        Tue,  8 Feb 2022 10:57:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8AC49613FB;
+        Tue,  8 Feb 2022 18:57:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B991EC004E1;
+        Tue,  8 Feb 2022 18:56:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644346620;
+        bh=OgIu6AK4dgnMnAdqrBey/VPos4o+Hdn3KXBEeOS9NZE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=MRurM7rglIFff8R+cc3JtR6t1ZAmhGXTRzcDlPpHwjWz0LKUPybd4Cy6aYfv/56XD
+         Yh1KddAwSZP5ShE9DOC+1W4kW74TDXZ7VCQJL3k3tmUw7G0L+59KDxjpey2fklq/xl
+         JbIpF6PEonVknoj75KQXe0g4A0y4xRoabw1rJCJK1GjbEA322iaERjl7jGHU8y7J+D
+         trvw4GGeWGo4DIejwmwByDHKtQbgK6CuQ9Dc+lkt075c7b5reL2QptRQLNydBzfxNX
+         gvkW/ybVgSmG47B8JPzVchhclLeL1M0+rly/JPgiw5M1OG8QZimBz5Ouzy8rMynfU/
+         qiynlyHJ0c4dw==
+Date:   Tue, 8 Feb 2022 12:56:58 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Jan Kiszka <jan.kiszka@siemens.com>
+Cc:     linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        David Spencer <dspencer577@gmail.com>,
+        Joey Corleone <joey.corleone@mail.ru>,
+        Sergiu Deitsch <sergiu.deitsch@gmail.com>
+Subject: Re: [PATCH v2] PCI/portdrv: Do not setup up IRQs if there are no
+ users
+Message-ID: <20220208185658.GA489586@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220204225507.4193113-3-paulmck@kernel.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <5f6bc890-3a49-3056-ccee-210de546688e@siemens.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 04, 2022 at 02:55:07PM -0800, Paul E. McKenney wrote:
-> Although it is usually safe to invoke synchronize_rcu_expedited() from a
-> preemption-enabled CPU-hotplug notifier, if it is invoked from a notifier
-> between CPUHP_AP_RCUTREE_ONLINE and CPUHP_AP_ACTIVE, its attempts to
-> invoke a workqueue handler will hang due to RCU waiting on a CPU that
-> the scheduler is not paying attention to.  This commit therefore expands
-> use of the existing workqueue-independent synchronize_rcu_expedited()
-> from early boot to also include CPUs that are being hotplugged.
+[+cc David, Joey, Sergiu]
+
+On Mon, Jan 31, 2022 at 10:22:28PM +0100, Jan Kiszka wrote:
+> On 30.08.21 10:08, Jan Kiszka wrote:
+> > From: Jan Kiszka <jan.kiszka@siemens.com>
+> > 
+> > Avoid registering service IRQs if there is no service that offers them
+> > or no driver to register a handler against them. This saves IRQ vectors
+> > when they are limited (e.g. on x86) and also avoids that spurious events
+> > could hit a missing handler. Such spurious events need to be generated
+> > by the Jailhouse hypervisor for active MSI vectors when enabling or
+> > disabling itself.
+> > 
+> > Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
+> > ---
+> > 
+> > Changes in v2:
+> >   - move initialization of irqs to address test bot finding
+> > 
+> >   drivers/pci/pcie/portdrv_core.c | 47 +++++++++++++++++++++------------
+> >   1 file changed, 30 insertions(+), 17 deletions(-)
+> > 
+> > diff --git a/drivers/pci/pcie/portdrv_core.c b/drivers/pci/pcie/portdrv_core.c
+> > index e1fed6649c41..0e2556269429 100644
+> > --- a/drivers/pci/pcie/portdrv_core.c
+> > +++ b/drivers/pci/pcie/portdrv_core.c
+> > @@ -166,9 +166,6 @@ static int pcie_init_service_irqs(struct pci_dev *dev, int *irqs, int mask)
+> >   {
+> >   	int ret, i;
+> > -	for (i = 0; i < PCIE_PORT_DEVICE_MAXSERVICES; i++)
+> > -		irqs[i] = -1;
+> > -
+> >   	/*
+> >   	 * If we support PME but can't use MSI/MSI-X for it, we have to
+> >   	 * fall back to INTx or other interrupts, e.g., a system shared
+> > @@ -312,8 +309,10 @@ static int pcie_device_init(struct pci_dev *pdev, int service, int irq)
+> >    */
+> >   int pcie_port_device_register(struct pci_dev *dev)
+> >   {
+> > -	int status, capabilities, i, nr_service;
+> > -	int irqs[PCIE_PORT_DEVICE_MAXSERVICES];
+> > +	int status, capabilities, irq_services, i, nr_service;
+> > +	int irqs[PCIE_PORT_DEVICE_MAXSERVICES] = {
+> > +		[0 ... PCIE_PORT_DEVICE_MAXSERVICES-1] = -1
+> > +	};
+> >   	/* Enable PCI Express port device */
+> >   	status = pci_enable_device(dev);
+> > @@ -326,18 +325,32 @@ int pcie_port_device_register(struct pci_dev *dev)
+> >   		return 0;
+> >   	pci_set_master(dev);
+> > -	/*
+> > -	 * Initialize service irqs. Don't use service devices that
+> > -	 * require interrupts if there is no way to generate them.
+> > -	 * However, some drivers may have a polling mode (e.g. pciehp_poll_mode)
+> > -	 * that can be used in the absence of irqs.  Allow them to determine
+> > -	 * if that is to be used.
+> > -	 */
+> > -	status = pcie_init_service_irqs(dev, irqs, capabilities);
+> > -	if (status) {
+> > -		capabilities &= PCIE_PORT_SERVICE_HP;
+> > -		if (!capabilities)
+> > -			goto error_disable;
+> > +
+> > +	irq_services = 0;
+> > +	if (IS_ENABLED(CONFIG_PCIE_PME))
+> > +		irq_services |= PCIE_PORT_SERVICE_PME;
+> > +	if (IS_ENABLED(CONFIG_PCIEAER))
+> > +		irq_services |= PCIE_PORT_SERVICE_AER;
+> > +	if (IS_ENABLED(CONFIG_HOTPLUG_PCI_PCIE))
+> > +		irq_services |= PCIE_PORT_SERVICE_HP;
+> > +	if (IS_ENABLED(CONFIG_PCIE_DPC))
+> > +		irq_services |= PCIE_PORT_SERVICE_DPC;
+> > +	irq_services &= capabilities;
+> > +
+> > +	if (irq_services) {
+> > +		/*
+> > +		 * Initialize service irqs. Don't use service devices that
+> > +		 * require interrupts if there is no way to generate them.
+> > +		 * However, some drivers may have a polling mode (e.g.
+> > +		 * pciehp_poll_mode) that can be used in the absence of irqs.
+> > +		 * Allow them to determine if that is to be used.
+> > +		 */
+> > +		status = pcie_init_service_irqs(dev, irqs, irq_services);
+> > +		if (status) {
+> > +			irq_services &= PCIE_PORT_SERVICE_HP;
+> > +			if (!irq_services)
+> > +				goto error_disable;
+> > +		}
+> >   	}
+> >   	/* Allocate child services if any */
 > 
-> Link: https://lore.kernel.org/lkml/7359f994-8aaf-3cea-f5cf-c0d3929689d6@quicinc.com/
-> Reported-by: Mukesh Ojha <quic_mojha@quicinc.com>
-> Cc: Tejun Heo <tj@kernel.org>
-> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> It turns out that this patch causes troubles on some machines, see [1].
+> That could be "resolved" by doing
+> 
+> diff --git a/drivers/pci/pcie/portdrv_core.c b/drivers/pci/pcie/portdrv_core.c
+> index bda630889f95..68b0013c3662 100644
+> --- a/drivers/pci/pcie/portdrv_core.c
+> +++ b/drivers/pci/pcie/portdrv_core.c
+> @@ -331,7 +331,7 @@ int pcie_port_device_register(struct pci_dev *dev)
+>  	pci_set_master(dev);
+> -	irq_services = 0;
+> +	irq_services = PCIE_PORT_SERVICE_BWNOTIF;
+>  	if (IS_ENABLED(CONFIG_PCIE_PME))
+>  		irq_services |= PCIE_PORT_SERVICE_PME;
+>  	if (IS_ENABLED(CONFIG_PCIEAER))
+> 
+> thus considering bandwidth notification as an IRQ-providing service as
+> well. But as far as I can see, there is no driver for this port service,
+> thus no one should ever request or even handle that interrupt.
+> 
+> I'm not yet seeing the key difference that could explain this effect.
+> What else happens via pcie_device_init() when called for
+> PCIE_PORT_SERVICE_BWNOTIF, although there will never be a driver?
+> 
+> Jan
+> 
+> [1] https://bugzilla.kernel.org/show_bug.cgi?id=215533
 
-Acked-by: Tejun Heo <tj@kernel.org>
+Comparing David's "pci=earlydump" logs from [2,3] I see these
+differences:
 
-Thanks.
+  - BIOS 1.12
+  + BIOS 1.14
+      00:1d.0 Root Port to [bus 04]
+  -     Status: INTx-
+  +     Status: INTx+
+  -       DevSta: CorrErr+
+  +       DevSta: CorrErr-
+  -       LnkCtl: CommClk+ AutWidDis+ BWInt- AutBWInt+
+  +       LnkCtl: CommClk- AutWidDis- BWInt+ AutBWInt-
+      04:00.0 NVMe SSD
+  -       LnkCtl: CommClk+ ClockPM-
+  +       LnkCtl: CommClk- ClockPM+
 
--- 
-tejun
+It looks like BIOS 1.14 leaves the BWInt bit (Link Bandwidth
+Management Interrupt Enable) *set*, while BIOS 1.12 left it cleared.
+
+Joey's log [4] with BIOS 1.14 also shows BWInt set:
+
+  + BIOS 1.14
+      00:1d.0 Root Port to [bus 04]
+  +     Status: INTx+
+  +       DevSta: CorrErr-
+  +       LnkCtl: CommClk- AutWidDis- BWInt+ AutBWInt-
+      04:00.0 NVMe SSD
+  +       LnkCtl: CommClk- ClockPM-
+
+In my opinion this is a BIOS defect.  The BIOS should not leave an
+interrupt enabled unless it is prepared to handle the interrupt.
+
+But Linux should be able to tolerate this.  Maybe we could clear
+PCI_EXP_LNKCTL_LBMIE and PCI_EXP_LNKCTL_LABIE somewhere like
+pci_configure_device().
+
+Maybe we should also clear other PCIe interrupt enables like
+PCI_EXP_SLTCTL_CCIE, PCI_EXP_SLTCTL_HPIE, PCI_EXP_RTCTL_PMEIE.
+They should be enabled after installing an interrupt handler for them.
+
+Bjorn
+
+[2] https://bugzilla.kernel.org/attachment.cgi?id=300397 [BIOS 1.12 (David)]
+[3] https://bugzilla.kernel.org/attachment.cgi?id=300396 [BIOS 1.14 (David)]
+[4] https://bugzilla.kernel.org/attachment.cgi?id=300370 [BIOS 1.14 (Joey)]

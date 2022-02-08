@@ -2,106 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 632824AD9C5
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 14:29:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C1DF4AD9D0
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 14:29:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350549AbiBHN2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 08:28:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53120 "EHLO
+        id S1350729AbiBHN3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 08:29:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358510AbiBHN2e (ORCPT
+        with ESMTP id S1357622AbiBHN2u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 08:28:34 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E602E028D09
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 05:24:03 -0800 (PST)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 218AFQnH025080;
-        Tue, 8 Feb 2022 13:23:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=NFuth8SxiHwdmFbcPnyaVO1InzUXePr0k67t1UmkMEM=;
- b=aTGP0ADJI14AB+qhFWvzuFyeodxrfD04gp+4dgtNwMe3Ej750mbD3v/IAso6I+smpNGl
- Z+yPqXzrR0LANby6wvEt1gpSbI9fh2Ad9nwXiN5fE/IZHCaqeXdzj8DVRaJe6FxT9fRl
- SkfTGtnmc4n4GSko6UKV1Nu+ezFryKAECMmLIAFgTVZyt9ArIRICQvnEhySu7xqGLNFQ
- zBlWoFIafCXCsuQrte/rR05pXWdSOu+3yscjiqazNTUNHBq2hPsVhEhhjXd3SPPdyBxi
- NEIkNAnYmaZoVH30ZoXZf3AMZwBv/V1Sg+FMekt1/8WlTNLEmUA1u7nUmTdSds5BxKcR vQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e22trhw5g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Feb 2022 13:23:34 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 218BvqJw023388;
-        Tue, 8 Feb 2022 13:23:34 GMT
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e22trhw53-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Feb 2022 13:23:34 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 218DDqXW007058;
-        Tue, 8 Feb 2022 13:23:32 GMT
-Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
-        by ppma04dal.us.ibm.com with ESMTP id 3e1gvb7tre-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Feb 2022 13:23:32 +0000
-Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
-        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 218DNVwO11338066
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 8 Feb 2022 13:23:31 GMT
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6F9E3112062;
-        Tue,  8 Feb 2022 13:23:31 +0000 (GMT)
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 61763112061;
-        Tue,  8 Feb 2022 13:23:30 +0000 (GMT)
-Received: from li-24c3614c-2adc-11b2-a85c-85f334518bdb.ibm.com (unknown [9.65.233.120])
-        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTPS;
-        Tue,  8 Feb 2022 13:23:30 +0000 (GMT)
-Date:   Tue, 8 Feb 2022 07:23:28 -0600
-From:   "Paul A. Clarke" <pc@us.ibm.com>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     Paul Menzel <pmenzel@molgen.mpg.de>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linuxppc-dev@lists.ozlabs.org, Ingo Molnar <mingo@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: ppc64le: `NOHZ tick-stop error: Non-RCU local softirq work is
- pending, handler #20!!!` when turning off SMT
-Message-ID: <YgJu0DZ6rz4kq9JR@li-24c3614c-2adc-11b2-a85c-85f334518bdb.ibm.com>
-References: <0baca95b-771f-2217-1098-2d0eee568ea7@molgen.mpg.de>
- <20220208131703.GA538566@lothringen>
+        Tue, 8 Feb 2022 08:28:50 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4A92C1DCB1D;
+        Tue,  8 Feb 2022 05:24:38 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id p15so52239072ejc.7;
+        Tue, 08 Feb 2022 05:24:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=s2gKXuCGuMo1+8hjYi2Ki/qC2fMJ6xlt3gzOw+cIe1k=;
+        b=l+K8KSmNlUs9aaqjwJWukCGd0o2XiojzbY0BzX0LACRA/f3KcSxGHCURDQGYEnuVM3
+         OFrJoBD+5XM1r6tVWDL5noneT2ZPwLbwf44ZN8XTdgyn/hzjCe7KSnCGvTvQDhSPbrzl
+         rXia9JxtXHQT7mu2UfyjBLoCadCA45LusypsUREitl3+7kxlXJqKNjpEejYMV5neWk1x
+         usTl19pxhV4mVUu5E24gmE7P6j3cSiL6HWX6IXmFQgsBBdG+oK+ip0I6JVuTcemGJTwO
+         fapx7fvkyJ765ZHxtX9k9MUDZpFUnJV///sNzE1P+IfJqHl+V8te64YQO55gvqRKdDYt
+         WJ4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=s2gKXuCGuMo1+8hjYi2Ki/qC2fMJ6xlt3gzOw+cIe1k=;
+        b=mXS6XEjAxqm40qKh/t2eoWdGXol+v4y+Nr+c2ZkUSmheA1zEs7j0watiroNoABCtpA
+         GFrZW5TZCcd95fppKv4i15E9FH5AsHFsHmPL9jynslOCqVlzC/nIWz8j6H+CiT6+1OVr
+         Jlgv30TmY1ZsAfzWxWBwQFbeXZ3jZJbC6fjpvakfdeJpPa/xRZ9ymxb9CZ8xujrg0sWK
+         TU8eBwBx60jx9Fwx5TARUJFJBFQd5Ai2RNucISgHWGyx7SbH39ku9b7U6z8wnBFlHgPf
+         PicALpGjxE4c/7UoPUexx/8EsZwIKjQ0pgTrWdsAOKja1gQgCCaZv/vP9rIDK58Of0cm
+         ELTw==
+X-Gm-Message-State: AOAM532kAlOOgGkS10C3sX8yijijE+9O/6NKS0+NxyGdaSB9nw3tVsmd
+        NE6x0CuXu9XvzBTq3fb/P8iWRwFvWaYweDz99ZQ=
+X-Google-Smtp-Source: ABdhPJw3EhA0CqFcCP8d5QPcz068Sxel66gqn+hYlHAtJxvhj9XFIhbMhKjLeFZNzYl+ATKvF/DQ6a7agdWUq/3OlIc=
+X-Received: by 2002:a17:906:99c5:: with SMTP id s5mr3800882ejn.497.1644326677005;
+ Tue, 08 Feb 2022 05:24:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220208131703.GA538566@lothringen>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: IchAwxR61oGk0GZE9eikQPycGdF7avgf
-X-Proofpoint-GUID: rLUYCc53TXB1MU5eT9jJpepkvxp_L9gc
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-08_04,2022-02-07_02,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=720
- impostorscore=0 phishscore=0 suspectscore=0 malwarescore=0 mlxscore=0
- spamscore=0 priorityscore=1501 clxscore=1011 bulkscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202080082
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220208031944.3444-1-bjorn.andersson@linaro.org> <20220208031944.3444-7-bjorn.andersson@linaro.org>
+In-Reply-To: <20220208031944.3444-7-bjorn.andersson@linaro.org>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 8 Feb 2022 15:24:00 +0200
+Message-ID: <CAHp75VcQ+HAmaH6eS7vX-hxVFbBS50iYFpNTJRjs6Q40t7=1ww@mail.gmail.com>
+Subject: Re: [PATCH v2 6/6] usb: typec: mux: Add On Semi fsa4480 driver
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        USB <linux-usb@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 08, 2022 at 02:17:03PM +0100, Frederic Weisbecker wrote:
-> On Tue, Feb 08, 2022 at 08:32:37AM +0100, Paul Menzel wrote:
-> > once warned about a NOHZ tick-stop error, when I executed `sudo
-> > /usr/sbin/ppc64_cpu --smt=off` (so that KVM would work).
-> 
-> I see, so I assume this sets some CPUs offline, right?
+On Tue, Feb 8, 2022 at 1:26 PM Bjorn Andersson
+<bjorn.andersson@linaro.org> wrote:
+>
+> The ON Semiconductor FSA4480 is a USB Type-C port multimedia switch with
+> support for analog audio headsets. It allows sharing a common USB Type-C
+> port to pass USB2.0 signal, analog audio, sideband use wires and analog
+> microphone signal.
+>
+> Due to lacking upstream audio support for testing, the audio muxing is
+> left untouched, but implementation of muxing the SBU lines is provided
+> as a pair of TypeC mux and switch devices. This provides the necessary
+> support for enabling the DisplayPort altmode on devices with this
+> circuit.
 
-ppc64_cpu --smt=off sets all but the first CPU per core offline.
+...
 
-PC
+> +config TYPEC_MUX_FSA4480
+> +       tristate "ON Semi FSA4480 Analog Audio Switch driver"
+> +       depends on I2C
+> +       select REGMAP_I2C
+> +       help
+> +         Driver for the ON Semiconductor FSA4480 Analog Audio Switch, which
+> +         provides support for muxing analog audio and sideband signals on a
+> +         common USB Type-C connector.
+
+What would be the module name?
+
+...
+
+> +/*
+> + * Copyright (C) 2021 Linaro Ltd.
+
+2021-2022 ?
+
+> + * Copyright (C) 2018-2020 The Linux Foundation
+> + */
+
+...
+
+Missed mod_devicetable.h ?
+
+...
+
+> +#define FSA4480_ENABLE_DEVICE  BIT(7)
+> +#define FSA4480_ENABLE_SBU     GENMASK(6, 5)
+> +#define FSA4480_ENABLE_USB     GENMASK(4, 3)
+
+Don't forget to include bits.h
+
+...
+
+> +       /* used to serialize concurrect change requests */
+
+concurrent
+
+...
+
+> +static const struct regmap_config fsa4480_regmap_config = {
+> +       .reg_bits = 8,
+> +       .val_bits = 8,
+
+> +       .max_register = FSA4480_RESET,
+
+I would create a specific macro, to avoid confusion in case if there
+will be more hw revisions with slightly different register layouts.
+
+> +};
+
+
+...
+
+> +       fsa->regmap = devm_regmap_init_i2c(client, &fsa4480_regmap_config);
+> +       if (IS_ERR(fsa->regmap)) {
+
+> +               dev_err(dev, "failed to initialize regmap\n");
+> +               return PTR_ERR(fsa->regmap);
+
+return dev_err_probe();
+
+> +       }
+
+...
+
+> +       fsa->sw = typec_switch_register(dev, &sw_desc);
+> +       if (IS_ERR(fsa->sw)) {
+> +               dev_err(dev, "failed to register typec switch: %ld\n", PTR_ERR(fsa->sw));
+> +               return PTR_ERR(fsa->sw);
+
+Ditto.
+
+> +       }
+
+...
+
+> +       mux_desc.fwnode = dev->fwnode;
+
+Please, avoid dereferencing fwnode, use dev_fwnode() instead.
+
+...
+
+> +       fsa->mux = typec_mux_register(dev, &mux_desc);
+> +       if (IS_ERR(fsa->mux)) {
+> +               typec_switch_unregister(fsa->sw);
+> +               dev_err(dev, "failed to register typec mux: %ld\n", PTR_ERR(fsa->mux));
+> +               return PTR_ERR(fsa->mux);
+
+return dev_err_probe();
+
+> +       }
+
+...
+
+> +static struct i2c_driver fsa4480_driver = {
+> +       .driver = {
+> +               .name = "fsa4480",
+> +               .of_match_table = fsa4480_of_table,
+> +       },
+> +       .probe_new      = fsa4480_probe,
+> +       .remove         = fsa4480_remove,
+> +       .id_table       = fsa4480_table,
+> +};
+
+> +
+
+Redundant blank line.
+
+> +module_i2c_driver(fsa4480_driver);
+
+-- 
+With Best Regards,
+Andy Shevchenko

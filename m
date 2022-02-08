@@ -2,61 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F01E4AD4A7
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 10:21:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06FED4AD4B0
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 10:22:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354043AbiBHJVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 04:21:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33604 "EHLO
+        id S1354068AbiBHJWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 04:22:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349319AbiBHJV3 (ORCPT
+        with ESMTP id S1347495AbiBHJWn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 04:21:29 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1186BC0401F0
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 01:21:29 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8EBBB1EC0464;
-        Tue,  8 Feb 2022 10:21:23 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1644312083;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=Pirq4Ce8HvVA4CBKjmLpxusEm8fBG9H/WFgNnW9VPkk=;
-        b=HhE83olgD7kknUCWQFywejmYrtZEj19gx9HkMXIdZq1SbfzU7CJVUwCvrVn830ANHfnk3i
-        Vey8kuuqusfh538t4GVlJ93aBaEgOySLGZ+TJuabNx/2gCq/l+pAxInpAt2h8M//VNAY0U
-        G6aiQp9KvCMXkvxiP/bCb/g8X5GAD6A=
-Date:   Tue, 8 Feb 2022 10:21:18 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Jim Mattson <jmattson@google.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        Jing Liu <jing2.liu@intel.com>, linux-kernel@vger.kernel.org,
-        "Bae, Chang Seok" <chang.seok.bae@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH] x86/cpufeatures: Move the definition of
- X86_FEATURE_AMX_* to the word 18
-Message-ID: <YgI2DrJeImNVgaGG@zn.tnic>
-References: <20220117062344.58862-1-likexu@tencent.com>
- <8b274c5f-6b68-aed9-117d-f89249e57e18@intel.com>
- <47362220-30d5-c513-a2aa-61187ee91c41@redhat.com>
- <bc272301-af11-621a-3bda-ee398754fd0a@gmail.com>
- <YfVM+xdDS76E3d6r@zn.tnic>
- <1105cf7d-0d61-3ae2-f372-3b1f80c08c60@gmail.com>
- <YgIvCIEeWK0wnq8M@zn.tnic>
- <f3a9ccd2-bd6c-691a-f6c2-43fb549b3d4b@gmail.com>
+        Tue, 8 Feb 2022 04:22:43 -0500
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD0F8C0401F0;
+        Tue,  8 Feb 2022 01:22:42 -0800 (PST)
+Received: by mail-qv1-xf32.google.com with SMTP id fh9so5700406qvb.1;
+        Tue, 08 Feb 2022 01:22:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=CYVaXukRgUCEvFAm5Rvccoy4E4azJEZwAWMrVoUo60s=;
+        b=k7DIfwDI7lJiplAzuKEv1ztD9Ak9R+8xzxXZwM2usNppLiqm5bdYqIWjxkDIV/hyth
+         ohH/mlhrT+QZKqQQcL4CVOEUStEq97nRWHFMcuBpSGh8p21ytE+IJyOPEqHc9spG2xBW
+         C2ygszJiPgi6KJkccRu5ROmtgEnrKUhGWEmUSxXbx+XquhltiVUwk007dTvR1zFvr1mg
+         4IKqahTBJrweYv7eF2lTvrY2L9Wf+Xlu2XxweOif/adWLK3ZobULps3DQMQXxzH5uHmr
+         oeFKqTDxURrYQKIfoBjWfKCCmG6qhyEcL94CbAWjJjN24gAitBWghlsnh+R6+geClxmu
+         t3Gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=CYVaXukRgUCEvFAm5Rvccoy4E4azJEZwAWMrVoUo60s=;
+        b=gDZkykNl6bFFXUwCsyJvQqDd9MDQXHUx8apA5RK+Xu0rjarQ5WQAqYVZKcC5LSbmeb
+         Me307N6fZw/28hp4SlxFsRCKuUy8VmNe/J1Q4O5D80nfhQBhSXagkq0itZIzzfRSagSi
+         PExFLAbXMBnFO9m4QdeIw1PseV/lxF7Tu1sL+o/P47fTQO/PSFXXFBiqr0beRdfYjTUj
+         vuJFUwIZbuaXAoP34DnTF+f9ZRqybmMzGplevgnNhCZxS0oDSZSrNdxthN2ZQC0eOjqu
+         /1I2l3M1QqSM7L6OfnvoVey3Fxw7VCqUAm2g6z3VEIU99GMuricWXMLbDv0ETGgrTijV
+         52gA==
+X-Gm-Message-State: AOAM533/M/ILzyAxyGhkXxuQwzECIBS3GZpEOiV5t5Xc8zIQb7zLmZiO
+        SbmzMSkGZBSSUl+sdClrkDYyuuXn2ISG7MHV5CI=
+X-Google-Smtp-Source: ABdhPJyIzKvFKpf1BBmc+9sLhRsGbOh9ftgw+xxzEK5Z04ibvmuVWz+wsnEwZUKatWlmrd9PAjYjXFPw3XpMNV/ekhc=
+X-Received: by 2002:a05:6214:1cc7:: with SMTP id g7mr2490810qvd.124.1644312162002;
+ Tue, 08 Feb 2022 01:22:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <f3a9ccd2-bd6c-691a-f6c2-43fb549b3d4b@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+References: <20220207063338.6570-1-warp5tw@gmail.com> <20220207063338.6570-7-warp5tw@gmail.com>
+In-Reply-To: <20220207063338.6570-7-warp5tw@gmail.com>
+From:   Tali Perry <tali.perry1@gmail.com>
+Date:   Tue, 8 Feb 2022 11:22:30 +0200
+Message-ID: <CAHb3i=vdc_+J4pCBcY--C85ZR1uXO1LG02UsttsfSnsQBDKWAg@mail.gmail.com>
+Subject: Re: [PATCH v1 6/6] i2c: npcm: Support NPCM845
+To:     Tyrone Ting <warp5tw@gmail.com>
+Cc:     avifishman70@gmail.com, Tomer Maimon <tmaimon77@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        semen.protsenko@linaro.org, yangyicong@hisilicon.com,
+        Wolfram Sang <wsa@kernel.org>, jie.deng@intel.com,
+        sven@svenpeter.dev, bence98@sch.bme.hu, lukas.bulwahn@gmail.com,
+        arnd@arndb.de, olof@lixom.net,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Tali Perry <tali.perry@nuvoton.com>,
+        Avi Fishman <Avi.Fishman@nuvoton.com>,
+        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
+        kfting@nuvoton.com, OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,15 +82,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 08, 2022 at 05:06:04PM +0800, Like Xu wrote:
-> It would make more sense to put them in order, what do you think?
+>On 08/02/2022 09:51, Tali Perry wrote:
+>>> On 08/02/2022 08:14, Tali Perry wrote:
+>>>>> Subject: Re: [PATCH v1 6/6] i2c: npcm: Support NPCM845
+>>>>>
+>>>>> On 07/02/2022 13:00, Jonathan Neusch=C3=A4fer wrote:
+>>>>>> Hello,
+>>>>>>
+>>>>>> On Mon, Feb 07, 2022 at 02:33:38PM +0800, Tyrone Ting wrote:
+>>>>>>> From: Tyrone Ting <kfting@nuvoton.com>
+>>>>>>>
+>>>>>>> NPCM8XX uses a similar i2c module as NPCM7XX.
+>>>>>>> The only difference is that the internal HW FIFO is larger.
+>>>>>>>
+>>>>>>> Related Makefile and Kconfig files are modified to support as well.
+>>>>>>>
+>>>>>>> Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller
+>>>>>>> driver")
+>>>>>>
+>>>>>> It's not really a bug fix, but rather an additional feature.
+>>>>>> Therefore, I suggest removing the Fixes tag from this patch.
+>>>>>>
+>>>>>>> Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
+>>>>>>> Signed-off-by: Tali Perry <tali.perry1@gmail.com>
+>>>>>>> ---
+>>>>>> [...]
+>>>>>>>  /* init register and default value required to enable module */
+>>>>>>>  #define NPCM_I2CSEGCTL 0xE4
+>>>>>>> +#ifdef CONFIG_ARCH_NPCM7XX
+>>>>>>>  #define NPCM_I2CSEGCTL_INIT_VAL 0x0333F000
+>>>>>>> +#else
+>>>>>>> +#define NPCM_I2CSEGCTL_INIT_VAL 0x9333F000
+>>>>>>> +#endif
+>>>>>>
+>>>>>> This is going to cause problems when someone tries to compile a kern=
+el
+>>>>>> that runs on both NPCM7xx and NPCM8xx (because the driver will then
+>>>>>> only work on NPCM7xx).
+>>>>>
+>>>>> Yes, good catch.
+>>>>>
+>>>>> The NPCM7XX is multiplatform, I guess NPCM8xx will be as well, so thi=
+s looks like an invalid code. How such code is supposed to work on multipla=
+tform kernel?
+>>>>>
+>>>>
+>>>> NPCM7xx and NPCM8xx are very different devices.
+>>>> They share same driver sources for some of the modules but it's not AB=
+I.
+>>>> Users cannot compile a single kernel with two separate DTS.
+>>>> In case of the i2c controller, the npcm7xx has a 16 byte HW FIFO,
+>>>> and the NPCM8xx has 32 bytes HW FIFO.
+>>>> This also means that registers fields are slightly different.
+>>>> For init data we can move it to the DTS, but register field sizes
+>>>> can't be handled with this approach.
+>>>>
+>>>
+>>> What do you mean they cannot compile a kernel with different DTS? Of
+>>> course they can - when we talk about multiplatform sub-architectures!
+>>> Maybe there is something specific in NPCMxxx which stops it but then it
+>>> should not be marked multiplatform.
+>>>
+>>
+>>
+>> NCPM7xx is ARM32 bit (dual core Cortex A9)
+>> NPCM8xx is ARM64 bit (quad core Cortex A35)
+>>
+>> They have completely different architecture so not ABI compliant.
+>> I2C module is similar, but the devices are quite different and have
+>> separate architectures.
+>
+>OK, in such case usually you indeed can't have both. :)
+>
+>> Sorry for the confusion.
+>> This is the first patch we try to upstream for NPCM8xx.
+>> In the coming weeks we will upstream the architecture of NPCM8xx as well=
+.
+>
+>Still, ARCH_XXX should not be hard-coded in the drivers to change the
+>driver's behavior, even if driver won't be used simultaneously. It
+>breaks all design principles and prevents any further re-use if a new
+>use case appears.
+>
+>You can use "ifdef ARCH_XXX" to skip building of some parts of the
+>driver, but it's not the case here.
+>
 
-Ah, good catch, thanks.
+Correct, the main change is in FIFO size:
++#ifdef CONFIG_ARCH_NPCM7XX
+#define I2C_HW_FIFO_SIZE               16
++#else
++#define I2C_HW_FIFO_SIZE               32
++#endif /* CONFIG_ARCH_NPCM7XX */
 
-I'll edit the patch directly.
+NPCM7XX will always have 16 bytes, all the next gens will have 32.
 
--- 
-Regards/Gruss,
-    Boris.
+This impact some registers sizes, like this one:
 
-https://people.kernel.org/tglx/notes-about-netiquette
++#ifdef CONFIG_ARCH_NPCM7XX
+#define NPCM_I2CRXF_STS_RX_BYTES       GENMASK(4, 0)
++#else
++#define NPCM_I2CRXF_STS_RX_BYTES       GENMASK(5, 0)
++#endif /*CONFIG_ARCH_NPCM7XX*/
+
+For this, the FIFO size should be defined before compilation.
+I also don't want to let users select FIFO size per architecture.
+NPCM7XX has 16, NPCM8XX has 32. This is not a user selection.
+It's part of the arch.
+
+
+
+>
+>Best regards,
+>Krzysztof
+
+Thanks,
+Tali

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 689864AE11D
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 19:43:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7D894AE119
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 19:43:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385185AbiBHSma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 13:42:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37156 "EHLO
+        id S1385205AbiBHSml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 13:42:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356333AbiBHSmW (ORCPT
+        with ESMTP id S1385150AbiBHSmY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 13:42:22 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8287C0612AA
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 10:42:19 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id t9so81124plg.13
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 10:42:19 -0800 (PST)
+        Tue, 8 Feb 2022 13:42:24 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DECDBC0612BD
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 10:42:21 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id t9so81194plg.13
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 10:42:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=IzYAh6mtxyAZ2drjtva0WxDIoe1TxiIdW6u31Cu1VZ0=;
-        b=Rn7TMd/F12tHX5PTTIfciknUnwo2d7sRReHQLBHclrIbs4kzH1kmWQfBKSijxIYqNK
-         9CmfuIRHZSF3joepIGkZW8ahirN3q1TzibCOEBECrLRobrWRJI8tCZ5W1dzfI8wylYQE
-         d0flpx4A9y3tzSBvR49MoHK7mbPF4EtMP1QAUBDtdVigkbhe7d+V89KqIWBctTMKY8Sk
-         kp8OlmWqElx4SkCpRznucWmMQMjaE+vZwDax5fDsxrwCovsgwA3z/0krvCKpIvUtWUcD
-         twN6kX5t0DC0Kw8WJFwWG3HrDuXRy0m69JjLJB0SQNsZ4m9+ZClz0rLcsfIY+JxmS+EM
-         4KTw==
+        bh=OMn1l57PTLxYtwc+HI0U7xszWZxDsxBNDoAjSgoqiTo=;
+        b=o9SjEHZADcNSyr7kIMSmxDmrRyunOK4Zze+YfvQDfD0E1RbBUkq5KMXUjAJaTDzc2Q
+         QPt2sooIHMYmaeKYTQudDqJdHnxnWMWXQyerNxcun7+ba6IewVEyBBW+zzRA4P3iiERs
+         5Z1dc6Doq7qvWiLulDd8c6DELwPasB5LQS72mwm/NmQiiyc4SnDte9xpse/XUL9Va2EW
+         cGIy6R28reZmUrPUCYplNtPdYEthpfCC7kZXD4WzcdSzVAZIMGbuj+SmgoupsKn7wh35
+         QDC89kCsEazDy2uoEN/KNOCJfkerIA8UdikgAT3pFwngcECBea3ov9YPTOoWUHXhLCiB
+         xjFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=IzYAh6mtxyAZ2drjtva0WxDIoe1TxiIdW6u31Cu1VZ0=;
-        b=ePluCcSFRbfZjbXAgfo9oQ1i4SNEq2ROSh4YZttYrdMm1tPR+KKqq1UTgb3Zs+1wXU
-         vy6SEiN5dIH82vm8pIKvOyH73MUk/3J/R0jFgYolQrdEoge2pmoZj4/wAev6DIoYEDKK
-         Q7GPv95sUgJCQj4HsWLx0+iTkEKWKbVoviVxYDtvjxHDK2BV4FEoJckmCrn9mhi3NjHs
-         qDt+urYBZim7BoXrlxC16EoEqyJ1u1nR12dYFrdQgkHDLv7uCl9ym7jx5cluL3SUQPmj
-         tuV1gg2TURLfpf/IjPGNkZIpvL390tepxm7g9vCZQ4EG/ntlAExAiOkMjHDLHn/To+z1
-         bv6Q==
-X-Gm-Message-State: AOAM533vLexharKkhnATUI32EX0ObMK4vbA4szPR4P9pVJYh8VmDtjgv
-        6vkCU2xcPs0X1s7qtjBXiXCc7t5TySU=
-X-Google-Smtp-Source: ABdhPJyDr72d0npd7vA3/hqnRU5jkANyKzduN67CIKfYJwax2Iq8Ps0vZjn5x17osa4MIjO33IkbMw==
-X-Received: by 2002:a17:902:e801:: with SMTP id u1mr5662822plg.124.1644345739249;
-        Tue, 08 Feb 2022 10:42:19 -0800 (PST)
+        bh=OMn1l57PTLxYtwc+HI0U7xszWZxDsxBNDoAjSgoqiTo=;
+        b=duy/0twHFPo4IjEHBzMlpIbDUVrYHntcXJ1iw40y5nj0Kf2dLE9FSU2Qss4642qwJy
+         RLu64nX016Zo8F2XdhI4FoHAEJNUx8/6irEiBBLUuxdVNnz1RRkSTUgXN1vM1nj40c0O
+         z3A8LNTNSi8TSRJdKWmFqN7MpI+t1odm8ceNo4+538Kk3smgQeMb7nzWS0PSjU+51IA+
+         MVhyjPVG8803JoW4iBCb66DZl/WGWbEWmS7OQA/JrG2xob0ciH0PJaxVrbw/2AlWqNlQ
+         1Yk7AyNUUqRWwg27tDPgxY2h3sKvf2YDorMzuvRae6D/svPx4N5U7jLr40dSdgID9GBu
+         OUpA==
+X-Gm-Message-State: AOAM531qEfcmeaho2Kdyab+LgDmyC2hDjX+WdeVnhL+1MCAkfrdimkbI
+        yel3UMeFRdkf2BnCmTYhfpg=
+X-Google-Smtp-Source: ABdhPJzREdedAjALPPJFwvhAPxPktZZFP+RvyCXQKKUdPFesrs5xzql+otLdPMXYFEFYwaeis5dU2Q==
+X-Received: by 2002:a17:902:da8e:: with SMTP id j14mr6023931plx.53.1644345741417;
+        Tue, 08 Feb 2022 10:42:21 -0800 (PST)
 Received: from balhae.hsd1.ca.comcast.net ([2601:647:4800:c6f0:347f:e607:176:4358])
-        by smtp.gmail.com with ESMTPSA id l14sm3517027pjf.1.2022.02.08.10.42.17
+        by smtp.gmail.com with ESMTPSA id l14sm3517027pjf.1.2022.02.08.10.42.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 10:42:18 -0800 (PST)
+        Tue, 08 Feb 2022 10:42:20 -0800 (PST)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Peter Zijlstra <peterz@infradead.org>,
@@ -60,10 +60,11 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Byungchul Park <byungchul.park@lge.com>,
         "Paul E. McKenney" <paul.mckenney@linaro.org>,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Radoslaw Burny <rburny@google.com>
-Subject: [PATCH 03/12] timer: Protect lockdep functions with #ifdef
-Date:   Tue,  8 Feb 2022 10:41:59 -0800
-Message-Id: <20220208184208.79303-4-namhyung@kernel.org>
+        Radoslaw Burny <rburny@google.com>, Tejun Heo <tj@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Subject: [PATCH 04/12] workqueue: Protect lockdep functions with #ifdef
+Date:   Tue,  8 Feb 2022 10:42:00 -0800
+Message-Id: <20220208184208.79303-5-namhyung@kernel.org>
 X-Mailer: git-send-email 2.35.0.263.gb82422642f-goog
 In-Reply-To: <20220208184208.79303-1-namhyung@kernel.org>
 References: <20220208184208.79303-1-namhyung@kernel.org>
@@ -85,51 +86,82 @@ functions without enabling CONFIG_LOCKDEP actually.  The existing code
 assumes those functions will be removed by the preprocessor but it's
 not the case anymore.  Let's protect the code with #ifdef's explicitly.
 
-Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Tejun Heo <tj@kernel.org>
+Cc: Lai Jiangshan <jiangshanlai@gmail.com>
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- kernel/time/timer.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ kernel/workqueue.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/kernel/time/timer.c b/kernel/time/timer.c
-index 85f1021ad459..4af95dbf6435 100644
---- a/kernel/time/timer.c
-+++ b/kernel/time/timer.c
-@@ -794,7 +794,10 @@ static void do_init_timer(struct timer_list *timer,
- 	if (WARN_ON_ONCE(flags & ~TIMER_INIT_FLAGS))
- 		flags &= TIMER_INIT_FLAGS;
- 	timer->flags = flags | raw_smp_processor_id();
-+
+diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+index 33f1106b4f99..405e27385f74 100644
+--- a/kernel/workqueue.c
++++ b/kernel/workqueue.c
+@@ -2279,8 +2279,11 @@ __acquires(&pool->lock)
+ 
+ 	raw_spin_unlock_irq(&pool->lock);
+ 
 +#ifdef CONFIG_LOCKDEP
- 	lockdep_init_map(&timer->lockdep_map, name, key, 0);
-+#endif
- }
- 
- /**
-@@ -1409,19 +1412,22 @@ static void call_timer_fn(struct timer_list *timer,
- 	struct lockdep_map lockdep_map;
- 
- 	lockdep_copy_map(&lockdep_map, &timer->lockdep_map);
--#endif
-+
- 	/*
- 	 * Couple the lock chain with the lock chain at
- 	 * del_timer_sync() by acquiring the lock_map around the fn()
- 	 * call here and in del_timer_sync().
- 	 */
+ 	lock_map_acquire(&pwq->wq->lockdep_map);
  	lock_map_acquire(&lockdep_map);
 +#endif
- 
- 	trace_timer_expire_entry(timer, baseclk);
- 	fn(timer);
- 	trace_timer_expire_exit(timer);
- 
++
+ 	/*
+ 	 * Strictly speaking we should mark the invariant state without holding
+ 	 * any locks, that is, before these two lock_map_acquire()'s.
+@@ -2310,8 +2313,11 @@ __acquires(&pool->lock)
+ 	 * point will only record its address.
+ 	 */
+ 	trace_workqueue_execute_end(work, worker->current_func);
++
 +#ifdef CONFIG_LOCKDEP
  	lock_map_release(&lockdep_map);
+ 	lock_map_release(&pwq->wq->lockdep_map);
 +#endif
  
- 	if (count != preempt_count()) {
- 		WARN_ONCE(1, "timer: %pS preempt leak: %08x -> %08x\n",
+ 	if (unlikely(in_atomic() || lockdep_depth(current) > 0)) {
+ 		pr_err("BUG: workqueue leaked lock or atomic: %s/0x%08x/%d\n"
+@@ -2824,8 +2830,10 @@ void flush_workqueue(struct workqueue_struct *wq)
+ 	if (WARN_ON(!wq_online))
+ 		return;
+ 
++#ifdef CONFIG_LOCKDEP
+ 	lock_map_acquire(&wq->lockdep_map);
+ 	lock_map_release(&wq->lockdep_map);
++#endif
+ 
+ 	mutex_lock(&wq->mutex);
+ 
+@@ -3052,6 +3060,7 @@ static bool start_flush_work(struct work_struct *work, struct wq_barrier *barr,
+ 	insert_wq_barrier(pwq, barr, work, worker);
+ 	raw_spin_unlock_irq(&pool->lock);
+ 
++#ifdef CONFIG_LOCKDEP
+ 	/*
+ 	 * Force a lock recursion deadlock when using flush_work() inside a
+ 	 * single-threaded or rescuer equipped workqueue.
+@@ -3066,6 +3075,8 @@ static bool start_flush_work(struct work_struct *work, struct wq_barrier *barr,
+ 		lock_map_acquire(&pwq->wq->lockdep_map);
+ 		lock_map_release(&pwq->wq->lockdep_map);
+ 	}
++#endif
++
+ 	rcu_read_unlock();
+ 	return true;
+ already_gone:
+@@ -3084,10 +3095,12 @@ static bool __flush_work(struct work_struct *work, bool from_cancel)
+ 	if (WARN_ON(!work->func))
+ 		return false;
+ 
++#ifdef CONFIG_LOCKDEP
+ 	if (!from_cancel) {
+ 		lock_map_acquire(&work->lockdep_map);
+ 		lock_map_release(&work->lockdep_map);
+ 	}
++#endif
+ 
+ 	if (start_flush_work(work, &barr, from_cancel)) {
+ 		wait_for_completion(&barr.done);
 -- 
 2.35.0.263.gb82422642f-goog
 

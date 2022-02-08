@@ -2,119 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30C024AD3D0
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 09:44:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E2DE4AD3D5
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 09:44:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352045AbiBHIoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 03:44:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39964 "EHLO
+        id S1352053AbiBHIoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 03:44:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351427AbiBHInj (ORCPT
+        with ESMTP id S1351365AbiBHInp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 03:43:39 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F02C03E931
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 00:43:27 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nHM5r-0002Xc-Q8; Tue, 08 Feb 2022 09:43:23 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nHM5q-00FGOF-Re; Tue, 08 Feb 2022 09:43:22 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nHM5o-00Bgwf-VR; Tue, 08 Feb 2022 09:43:20 +0100
-Date:   Tue, 8 Feb 2022 09:43:18 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Helge Deller <deller@gmx.de>, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-pwm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
-Subject: Re: [PATCH] backlight: pwm_bl: Avoid open coded arithmetic in memory
- allocation
-Message-ID: <20220208084318.pkfs6xtpe4cz77sd@pengutronix.de>
-References: <bd3d74acfa58d59f6f5f81fc5a9fb409edb8d747.1644046817.git.christophe.jaillet@wanadoo.fr>
- <20220207080128.xmvommcddjfgz7ey@pengutronix.de>
- <YgDm1FWtlneMLCTS@google.com>
+        Tue, 8 Feb 2022 03:43:45 -0500
+Received: from mail-vk1-xa42.google.com (mail-vk1-xa42.google.com [IPv6:2607:f8b0:4864:20::a42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 176FBC03F93C
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 00:43:32 -0800 (PST)
+Received: by mail-vk1-xa42.google.com with SMTP id 48so9386343vki.0
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 00:43:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=edeevZ54MxyNr2ONaDsC9jI+UtdZjrCL/LCuSFC70Ao=;
+        b=QvjhunuNO8r16PKypuCdrachST6yXHIKLmrVAmm1fY9jgIyDx/5nuaO2Pwi2GiqW2B
+         y3T9ScMXoknCi4MzeG0G4mYZV7FvO5v4AkTPMCsC30rz5vAb97o9IyGFE2M1jFci41zh
+         wOytP4iaP2zv3wL+KEjK3XEvc8S3s/itCvuySs3WCmZXIU4wBzIdDAY4hb/oqG8VRWYu
+         n+XhOcxWsv/r9vQ5BYoq7JNJKiQgQ/IzzgqncW1w/Tkor2GHYOHxI5AK+GKVNR+tqv1V
+         2t703ywu9JorFFnpi4djB66Cf/056cbSXRmPhsAAxlMq/2WmkJMdwVn2CUpQSTsrFBjK
+         RdsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=edeevZ54MxyNr2ONaDsC9jI+UtdZjrCL/LCuSFC70Ao=;
+        b=yvacXA6d2psn7veXXCS3T+kw0eZSxiZ47G9WkhRpr7Xn6U9xQh0kBirt1EYstvQsAx
+         cmMxJb9FPpxwj5OIKJaLpT/KTFUktlPzLH8nupsGupG+7AxNFglwwDhhd0NCySqJmC7q
+         v92NwLkS6JHaAiKi/WPn3oRZ5Pl4qarQiYXXswF/oQ3An5gmb28BOU+MDLskBiGWTifj
+         zLXxDsbUxBIgTWg1r58Ex34XK4FaO+GE4CdLJwVoFchAqo5Gwc/0hefcKiFDxBpxlXP4
+         Aqm5Pvj+sA5w+8HgOwE2d0DLmTl7bwG2qioqpSWWBZCa9GHiuBikoBHJW7jDzlTdwLj4
+         SDlQ==
+X-Gm-Message-State: AOAM532SUrfMM14pouIkrYS4P3/yXROV4Vwl95h/K2J3/PmGsfE0qi0s
+        7eIFUDYVVnSZFxBVpW+pDaZmZFXwagkuKHSo6FQ=
+X-Google-Smtp-Source: ABdhPJzZQn1EaCqRMqsuYIcH+C7RpG+lwrJT+RNnO9Yiljp06wkeSVejZxXgkS7NBIOXb/H0s5Oh1fbTnACKXJVE068=
+X-Received: by 2002:a1f:7301:: with SMTP id o1mr37679vkc.4.1644309811016; Tue,
+ 08 Feb 2022 00:43:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pdixcmr5l2jhzb4h"
-Content-Disposition: inline
-In-Reply-To: <YgDm1FWtlneMLCTS@google.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:ab0:2bc5:0:0:0:0:0 with HTTP; Tue, 8 Feb 2022 00:43:30 -0800 (PST)
+Reply-To: saeedmohammedsaeed085@gmail.com
+From:   Mohammed Saeed <nzubewwwww@gmail.com>
+Date:   Tue, 8 Feb 2022 11:43:30 +0300
+Message-ID: <CAMj4HvTqbEjkDKhCipFXDZsqTQO37tQLsSKX=dgvTiL8KEB+YQ@mail.gmail.com>
+Subject: Proposal
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:a42 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  1.0 HK_RANDOM_ENVFROM Envelope sender username looks random
+        *  0.6 HK_RANDOM_FROM From username looks random
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [nzubewwwww[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [saeedmohammedsaeed085[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.4 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Salam alaikum,
 
---pdixcmr5l2jhzb4h
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I am the investment officer of UAE based investment company who are
+ready to fund projects outside UAE, in the form of debt finance. We
+grant loan to both Corporate and private entities at a low interest
+rate of 2% ROI per annum. The terms are very flexible and
+interesting.Kindly revert back if you have projects that needs funding
+for further discussion and negotiation.
 
-On Mon, Feb 07, 2022 at 09:31:00AM +0000, Lee Jones wrote:
-> On Mon, 07 Feb 2022, Uwe Kleine-K=F6nig wrote:
->=20
-> > On Sat, Feb 05, 2022 at 08:40:48AM +0100, Christophe JAILLET wrote:
-> > > kmalloc_array()/kcalloc() should be used to avoid potential overflow =
-when
-> > > a multiplication is needed to compute the size of the requested memor=
-y.
-> > >=20
-> > > So turn a kzalloc()+explicit size computation into an equivalent kcal=
-loc().
-> > >=20
-> > > Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> >=20
-> > LGTM
-> >=20
-> > Acked-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> >=20
-> > Thanks
-> > Uwe
->=20
-> I am totally confused!
+Thanks
 
-An rightfully so. Copy-paste-fail, this was supposed to be
-
-Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-
-Sorry!
-
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---pdixcmr5l2jhzb4h
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmICLSMACgkQwfwUeK3K
-7AkbYgf/RNIxNrujniat17dztKQmOsg7ALfQgtXaD7tJg70b7hHEABMPGSfUeTD4
-NmvXDBOnN1LiF8tOP/wJQlsM+vQzWJfIT4IQkiravbjwlUW4dgP7791/tH96r0uk
-S5Cz5KuSYksD6aj/RnsSC5lGtXQzjX2u7zC/H0oIMdOQ7VotZMSsKYVkkayAukP4
-HY6htMhSXDfTLemlM0oVWGOwMzO+LvG1szPEKsUdaOTiT0qMMozlRBd+gt/4Panz
-OnodFwSXAmgEH9IH+s/wH8xsVe5TYibaqhPnsj9JBaMRjGVNnCf7ziwL+BSC3P1m
-6guPRpOxNHkPy8j+kGt+RekqdmL/QQ==
-=Iulx
------END PGP SIGNATURE-----
-
---pdixcmr5l2jhzb4h--
+investment officer

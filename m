@@ -2,191 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F9EF4ADB77
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 15:45:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D0D44ADB7F
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 15:47:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351650AbiBHOpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 09:45:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43006 "EHLO
+        id S1377790AbiBHOqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 09:46:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351484AbiBHOp2 (ORCPT
+        with ESMTP id S1351484AbiBHOqh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 09:45:28 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA8BCC03FED4;
-        Tue,  8 Feb 2022 06:45:27 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 6EEFD1F387;
-        Tue,  8 Feb 2022 14:45:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1644331526; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=F8fCX7jpBJSdTGWVH6OOOBQBhn3uvoR/Uftrbxcu2D0=;
-        b=gZUkN49ITaU744saGHPoaBrHxebr7OVW0K3A02xnMR0qLfJHWISh2ExbOqTgBd+pm7+txn
-        TpHyxG9CeReB6H1Rq68OUBo+JGURds0H56Cnc9mfJ7JP5NtHwSNSsY5ZmZy7l+fMgxNzVy
-        BrG5Pw30Bbd1nXt7jBrKLZZcCGdnkYk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1644331526;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=F8fCX7jpBJSdTGWVH6OOOBQBhn3uvoR/Uftrbxcu2D0=;
-        b=zF1lHTovq6sClWtl35NOT8VHMi1709bKDEzHdRe3pUQMftZY1A99N/+9uU95qZQpK6CO1F
-        1xK69EzqDluIeSAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D9CE413C79;
-        Tue,  8 Feb 2022 14:45:25 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 0a1rMwWCAmI3DgAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Tue, 08 Feb 2022 14:45:25 +0000
-Date:   Tue, 8 Feb 2022 15:45:24 +0100
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Terry Bowman <terry.bowman@amd.com>
-Cc:     <linux@roeck-us.net>, <linux-watchdog@vger.kernel.org>,
-        <jdelvare@suse.com>, <linux-i2c@vger.kernel.org>, <wsa@kernel.org>,
-        <andy.shevchenko@gmail.com>, <rafael.j.wysocki@intel.com>,
-        <linux-kernel@vger.kernel.org>, <wim@linux-watchdog.org>,
-        <rrichter@amd.com>, <thomas.lendacky@amd.com>,
-        <sudheesh.mavila@amd.com>, <Nehal-bakulchandra.Shah@amd.com>,
-        <Basavaraj.Natikar@amd.com>, <Shyam-sundar.S-k@amd.com>,
-        <Mario.Limonciello@amd.com>
-Subject: Re: [PATCH v4 3/9] i2c: piix4: Move port I/O region request/release
- code into functions
-Message-ID: <20220208154524.283609ad@endymion.delvare>
-In-Reply-To: <20220130184130.176646-4-terry.bowman@amd.com>
-References: <20220130184130.176646-1-terry.bowman@amd.com>
-        <20220130184130.176646-4-terry.bowman@amd.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        Tue, 8 Feb 2022 09:46:37 -0500
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B809C061576
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 06:46:36 -0800 (PST)
+Received: by mail-yb1-xb2c.google.com with SMTP id v47so25521776ybi.4
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 06:46:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=eclypsium.com; s=google;
+        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
+         :cc;
+        bh=pXLh2jk1Z5DyKwbaDzU4ZXUm9KkKKdIX40yYnKqb7yU=;
+        b=cnvuxvrhvCSz2YmLeAMBE3Hkn3heyjZmftsHbRe8SM5jMXKaeRDWGmnoiJ4LdP45fs
+         cmoNsUcPmqdKYy7P/7A2H2rELJspjJYoTzrw1YeseidbjIExfym9T04B4ATWwLd/eax8
+         xaA7Zn3fEHzzxCDuQc8Gx6VaIs4Ll3nRB2FHFxVuir63eVR2FRDDq2VZda/ptZQz+IlJ
+         I3FXBGv4xmfaVXl59O0k6wdq7ppKKCwwCz++WOwFeh5qiRmunHsPKNsJw7f5o+zxz2dV
+         a68oS23gXJsfngJlXc+SQqn4l8s+iJhmqR93xwXxOFpnVSMcqZ60XBiqcQ1SyRge3+Qf
+         oeHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from:date
+         :message-id:subject:to:cc;
+        bh=pXLh2jk1Z5DyKwbaDzU4ZXUm9KkKKdIX40yYnKqb7yU=;
+        b=7euR3XMN5nsv7DJWjHoH2YVmJp9e8UwMDHWt8TeB0xgMsQtAn8ckD6pl3LA89CEYcr
+         uoB6130EXB3G4YJb+RvXIeFOA6zZ87Ahvy6AXK7cXpqp+8cZfyfUMEKMBn+Jl7NNdJOn
+         H6xY7qfVkdD0SjiZZmk1tycTRyf3bGCh5ZpkLucqhMssrjIo2FMWfE5acEiR+3bZVcRb
+         XX55R/hzB/QOiyI+2Tt9NWrDTLpl+RL3E3PSgYnMZgRJH8CZGRu+Q4lHhPwCb1SGXti3
+         41nt7ZYm9eiizOZfJLOFvm5v1AO38S7ZY06XSMIX1zbJF7zlQZlDOMKD72oyDzjJVszA
+         cebA==
+X-Gm-Message-State: AOAM532wAxAtQdpxUC/atXGoWOKTefPixBYzAcIHU1PEecBbbFxKBGfW
+        QdThqLo3epOFh4KrUEOwbdUESxHd9mpsEL+D/uCHvw==
+X-Google-Smtp-Source: ABdhPJw3zLZ5rb2vMvO+voneN64QRVGVtNXPYGq81Iy7mzFGfJ7V55MCZB4lYrvRxvM1YX+ZdXb5MaH4Hac/AkZKLXc=
+X-Received: by 2002:a05:6902:120f:: with SMTP id s15mr5231070ybu.612.1644331595542;
+ Tue, 08 Feb 2022 06:46:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Received: by 2002:a81:174d:0:0:0:0:0 with HTTP; Tue, 8 Feb 2022 06:46:35 -0800 (PST)
+In-Reply-To: <202202071351.AEEEA92@keescook>
+References: <20220203164328.203629-1-martin.fernandez@eclypsium.com>
+ <20220203164328.203629-5-martin.fernandez@eclypsium.com> <202202071351.AEEEA92@keescook>
+From:   Martin Fernandez <martin.fernandez@eclypsium.com>
+Date:   Tue, 8 Feb 2022 11:46:35 -0300
+Message-ID: <CAKgze5YORW6b4ePx=0v22gKcEEh2iF6eh+W5pYv+OprmfsucqQ@mail.gmail.com>
+Subject: Re: [PATCH v6 4/6] x86/e820: Tag e820_entry with crypto capabilities
+To:     Kees Cook <keescook@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-mm@kvack.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        ardb@kernel.org, dvhart@infradead.org, andy@infradead.org,
+        gregkh@linuxfoundation.org, rafael@kernel.org, rppt@kernel.org,
+        akpm@linux-foundation.org, daniel.gutson@eclypsium.com,
+        hughsient@gmail.com, alex.bazhaniuk@eclypsium.com,
+        alison.schofield@intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Terry,
+On 2/7/22, Kees Cook <keescook@chromium.org> wrote:
+> On Thu, Feb 03, 2022 at 01:43:26PM -0300, Martin Fernandez wrote:
+>> Add a new enum for crypto capabilities.
+>>
+>> Add a new member in e820_entry to hold whether an entry is able to do
+>> hardware memory encryption or not.
+>>
+>> Add a new function e820__range_set_crypto_capable to mark all the
+>> entries in a range of addresses as encryptable. This will be called
+>> when initializing EFI.
+>>
+>> Change e820__update_table to handle merging and overlap problems
+>> taking into account crypto_capable.
+>>
+>> Signed-off-by: Martin Fernandez <martin.fernandez@eclypsium.com>
+>> ---
+>>  arch/x86/include/asm/e820/api.h   |   1 +
+>>  arch/x86/include/asm/e820/types.h |  12 +++-
+>>  arch/x86/kernel/e820.c            | 114 ++++++++++++++++++++++++++++--
+>>  3 files changed, 119 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/arch/x86/include/asm/e820/api.h
+>> b/arch/x86/include/asm/e820/api.h
+>> index e8f58ddd06d9..4b3b01fafdd1 100644
+>> --- a/arch/x86/include/asm/e820/api.h
+>> +++ b/arch/x86/include/asm/e820/api.h
+>> @@ -17,6 +17,7 @@ extern bool e820__mapped_all(u64 start, u64 end, enum
+>> e820_type type);
+>>  extern void e820__range_add   (u64 start, u64 size, enum e820_type
+>> type);
+>>  extern u64  e820__range_update(u64 start, u64 size, enum e820_type
+>> old_type, enum e820_type new_type);
+>>  extern u64  e820__range_remove(u64 start, u64 size, enum e820_type
+>> old_type, bool check_type);
+>> +extern u64  e820__range_set_crypto_capable(u64 start, u64 size);
+>>
+>>  extern void e820__print_table(char *who);
+>>  extern int  e820__update_table(struct e820_table *table);
+>> diff --git a/arch/x86/include/asm/e820/types.h
+>> b/arch/x86/include/asm/e820/types.h
+>> index 314f75d886d0..aef03c665f5e 100644
+>> --- a/arch/x86/include/asm/e820/types.h
+>> +++ b/arch/x86/include/asm/e820/types.h
+>> @@ -46,6 +46,11 @@ enum e820_type {
+>>  	E820_TYPE_RESERVED_KERN	= 128,
+>>  };
+>>
+>> +enum e820_crypto_capabilities {
+>> +	E820_NOT_CRYPTO_CAPABLE	= 0,
+>> +	E820_CRYPTO_CAPABLE	= 1,
+>> +};
+>
+> Is this expected to grow beyond a bool?
+>
 
-On Sun, 30 Jan 2022 12:41:24 -0600, Terry Bowman wrote:
-> Move duplicated region request and release code into a function. Move is
-> in preparation for following MMIO changes.
-> 
-> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
-> ---
->  drivers/i2c/busses/i2c-piix4.c | 39 +++++++++++++++++++++++-----------
->  1 file changed, 27 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-piix4.c b/drivers/i2c/busses/i2c-piix4.c
-> index 3ff68967034e..5a98970ac60a 100644
-> --- a/drivers/i2c/busses/i2c-piix4.c
-> +++ b/drivers/i2c/busses/i2c-piix4.c
-> @@ -165,6 +165,24 @@ struct i2c_piix4_adapdata {
->  	u8 port;		/* Port number, shifted */
->  };
->  
-> +static int piix4_sb800_region_request(struct device *dev)
-> +{
-> +	if (!request_muxed_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE,
-> +				  "sb800_piix4_smb")) {
-> +		dev_err(dev,
-> +			"SMBus base address index region 0x%x already in use.\n",
-> +			SB800_PIIX4_SMB_IDX);
-> +		return -EBUSY;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static void piix4_sb800_region_release(struct device *dev)
-> +{
-> +	release_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE);
-> +}
-> +
->  static int piix4_setup(struct pci_dev *PIIX4_dev,
->  		       const struct pci_device_id *id)
->  {
-> @@ -270,6 +288,7 @@ static int piix4_setup_sb800(struct pci_dev *PIIX4_dev,
->  	unsigned short piix4_smba;
->  	u8 smba_en_lo, smba_en_hi, smb_en, smb_en_status, port_sel;
->  	u8 i2ccfg, i2ccfg_offset = 0x10;
-> +	int retval;
->  
->  	/* SB800 and later SMBus does not support forcing address */
->  	if (force || force_addr) {
-> @@ -291,20 +310,16 @@ static int piix4_setup_sb800(struct pci_dev *PIIX4_dev,
->  	else
->  		smb_en = (aux) ? 0x28 : 0x2c;
->  
-> -	if (!request_muxed_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE,
-> -				  "sb800_piix4_smb")) {
-> -		dev_err(&PIIX4_dev->dev,
-> -			"SMB base address index region 0x%x already in use.\n",
-> -			SB800_PIIX4_SMB_IDX);
-> -		return -EBUSY;
-> -	}
-> +	retval = piix4_sb800_region_request(&PIIX4_dev->dev);
-> +	if (retval)
-> +		return retval;
->  
->  	outb_p(smb_en, SB800_PIIX4_SMB_IDX);
->  	smba_en_lo = inb_p(SB800_PIIX4_SMB_IDX + 1);
->  	outb_p(smb_en + 1, SB800_PIIX4_SMB_IDX);
->  	smba_en_hi = inb_p(SB800_PIIX4_SMB_IDX + 1);
->  
-> -	release_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE);
-> +	piix4_sb800_region_release(&PIIX4_dev->dev);
->  
->  	if (!smb_en) {
->  		smb_en_status = smba_en_lo & 0x10;
-> @@ -685,9 +700,9 @@ static s32 piix4_access_sb800(struct i2c_adapter *adap, u16 addr,
->  	u8 port;
->  	int retval;
->  
-> -	if (!request_muxed_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE,
-> -				  "sb800_piix4_smb"))
-> -		return -EBUSY;
-> +	retval = piix4_sb800_region_request(&adap->dev);
-> +	if (retval)
-> +		return retval;
->  
->  	/* Request the SMBUS semaphore, avoid conflicts with the IMC */
->  	smbslvcnt  = inb_p(SMBSLVCNT);
-> @@ -762,7 +777,7 @@ static s32 piix4_access_sb800(struct i2c_adapter *adap, u16 addr,
->  		piix4_imc_wakeup();
->  
->  release:
-> -	release_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE);
-> +	piix4_sb800_region_release(&adap->dev);
->  	return retval;
->  }
->  
+People commented that maybe it was a good idea to have the source of
+the cryptographic capabilities, in this case that would be the EFI
+memmap. So this could grow in that case.
 
-There's a third occurrence of request_muxed_region(SB800_PIIX4_SMB_IDX,
-...) / release_region(SB800_PIIX4_SMB_IDX, ...) in function
-piix4_setup_sb800. Any reason why you don't make use of the new helper
-functions there as well?
-
-OK, I see that this part of the code is specific to the original (ATI)
-SB800, so it can't use MMIO, therefore you don't *have* to call the
-helper functions. But for consistency, wouldn't it still make sense to
-use them?
-
--- 
-Jean Delvare
-SUSE L3 Support
+Also the enum makes it self explanatory while using it in the code.

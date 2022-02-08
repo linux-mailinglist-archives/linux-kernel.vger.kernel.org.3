@@ -2,143 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C66B4ACE4B
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:49:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1AC34ACE67
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:50:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344116AbiBHBtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 20:49:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33822 "EHLO
+        id S1345330AbiBHBun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 20:50:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344425AbiBHBjR (ORCPT
+        with ESMTP id S1344798AbiBHBkb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 20:39:17 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F890C061A73;
-        Mon,  7 Feb 2022 17:39:16 -0800 (PST)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21816aGl005365;
-        Tue, 8 Feb 2022 01:39:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=sVx6COLO4Sd9YlLY2EIXXK8MIIh+dQJ2YyW4Db5R0oo=;
- b=Lh/2WaDCeAnPBKpX0CWOjiYFqgsPuu7Mvci25KUObIjkXoEObWs30yepo8vy7NHDZygs
- Ciabd7lPC6rusSJ87kLB9/LRA3It2FNWdIhZx1OeVcc+Mrq++4w1KLQ3oGN+6p2G8vYW
- XEocB+k/NmlDEgIFH/+JLYkI2vKXy7RrEh01Jqu8HuBdsjwGA5a+2MQIdX16yMUNwr7o
- gPo0lOeQ7KvMbXeUTfGB+p8bJIFI563I0IYQLs6cD7DV7+18m8dJAmYQnjrG96Ew+Gja
- iyt7MZ4CdDcu4WHFc9GNN0nLZTdqGH9UX5FQAdQnamEktl3nRYQ1tecMx3VjH1Z7nY11 CQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e355ap16v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Feb 2022 01:39:14 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 2181dDtS020804;
-        Tue, 8 Feb 2022 01:39:13 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e355ap169-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Feb 2022 01:39:13 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2181WWM7028456;
-        Tue, 8 Feb 2022 01:39:11 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03ams.nl.ibm.com with ESMTP id 3e1gv99jd6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Feb 2022 01:39:10 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2181T1ks43057468
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 8 Feb 2022 01:29:01 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B85E711C04A;
-        Tue,  8 Feb 2022 01:39:04 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2380211C04C;
-        Tue,  8 Feb 2022 01:39:04 +0000 (GMT)
-Received: from li-e979b1cc-23ba-11b2-a85c-dfd230f6cf82 (unknown [9.171.70.169])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with SMTP;
-        Tue,  8 Feb 2022 01:39:04 +0000 (GMT)
-Date:   Tue, 8 Feb 2022 02:38:35 +0100
-From:   Halil Pasic <pasic@linux.ibm.com>
-To:     Tony Krowiak <akrowiak@linux.ibm.com>
-Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, jjherne@linux.ibm.com, freude@linux.ibm.com,
-        borntraeger@de.ibm.com, cohuck@redhat.com, mjrosato@linux.ibm.com,
-        alex.williamson@redhat.com, kwankhede@nvidia.com,
-        fiuczy@linux.ibm.com, Halil Pasic <pasic@linux.ibm.com>
-Subject: Re: [PATCH v17 14/15] s390/ap: notify drivers on config changed and
- scan complete callbacks
-Message-ID: <20220208023835.1fc8c6dd.pasic@linux.ibm.com>
-In-Reply-To: <573f8647-7479-3561-cd88-035b4db33e36@linux.ibm.com>
-References: <20211021152332.70455-1-akrowiak@linux.ibm.com>
-        <20211021152332.70455-15-akrowiak@linux.ibm.com>
-        <20220204114359.4898b9c5.pasic@linux.ibm.com>
-        <573f8647-7479-3561-cd88-035b4db33e36@linux.ibm.com>
-Organization: IBM
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        Mon, 7 Feb 2022 20:40:31 -0500
+Received: from relay3.hostedemail.com (relay3.hostedemail.com [64.99.140.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3EEFC061A73
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 17:40:30 -0800 (PST)
+Received: from omf14.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay06.hostedemail.com (Postfix) with ESMTP id 3E6E02282B;
+        Tue,  8 Feb 2022 01:40:29 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf14.hostedemail.com (Postfix) with ESMTPA id EAB782D;
+        Tue,  8 Feb 2022 01:40:12 +0000 (UTC)
+Message-ID: <103681860759d72b1acf712eed334b1d4ef6b7d5.camel@perches.com>
+Subject: Re: [PATCH V6 1/3] platform/x86: Add Intel Software Defined Silicon
+ driver
+From:   Joe Perches <joe@perches.com>
+To:     "David E. Box" <david.e.box@linux.intel.com>, hdegoede@redhat.com,
+        gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com,
+        srinivas.pandruvada@intel.com, mgross@linux.intel.com
+Cc:     linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        Mark Gross <markgross@kernel.org>
+Date:   Mon, 07 Feb 2022 17:40:26 -0800
+In-Reply-To: <20220208005444.487209-2-david.e.box@linux.intel.com>
+References: <20220208005444.487209-1-david.e.box@linux.intel.com>
+         <20220208005444.487209-2-david.e.box@linux.intel.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Q35ZFvgSB15WKZ95VOoEEYhKvc2u_QRC
-X-Proofpoint-ORIG-GUID: i67ciEUarlaYDAk_fJb5-51AaOinIXHV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-07_07,2022-02-07_02,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- suspectscore=0 clxscore=1015 lowpriorityscore=0 bulkscore=0 malwarescore=0
- priorityscore=1501 spamscore=0 mlxlogscore=999 phishscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202080006
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Server: rspamout06
+X-Rspamd-Queue-Id: EAB782D
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Stat-Signature: cqp3gnqhxdfm9599fkk1o4kd3ab9ky5j
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1/rw6BEZ0kR964qVgcoew+I17VtKpWRSzg=
+X-HE-Tag: 1644284412-993389
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 7 Feb 2022 14:39:31 -0500
-Tony Krowiak <akrowiak@linux.ibm.com> wrote:
-
-> > Back to the topic of locking: it looks to me that on this path you
-> > do the filtering and thus the accesses to matrix_mdev->shadow_apcb,
-> > matrix_mdev->matrix and matrix_dev->config_info some of which are
-> > of type write whithout the matrix_dev->lock held. More precisely
-> > only with the matrix_dev->guests_lock held in "read" mode.
-> >
-> > Did I misread the code? If not, how is that OK?  
+On Mon, 2022-02-07 at 16:54 -0800, David E. Box wrote:
+> Intel Software Defined Silicon (SDSi) is a post manufacturing mechanism for
+> activating additional silicon features. Features are enabled through a
+> license activation process.  The SDSi driver provides a per socket, sysfs
+> attribute interface for applications to perform 3 main provisioning
+> functions:
+[]
+> ---
+> V6
+>   - Replace,
+>               return (ret < 0) ? ret : size;
+>     with,
+>               if (ret)
+>                    return ret;
+>               return size
 > 
-> You make a valid point, a struct rw_semaphore is not adequate for the 
-> purposes
-> it is used in this patch series. It needs to be a mutex.
-> 
+>     Besides the style change (suggested by GKH) this fixes a klocwork
+>     warning.
 
-Good we agree that v17 is racy.
+thanks.
 
-> 
-> For v18 which is forthcoming probably this week, I've been reworking the 
-> locking
-> based on your observation that the struct ap_guest is not necessary given we
-> already have a list of the mediated devices which contain the KVM 
-> pointer. On the other
+> diff --git a/drivers/platform/x86/intel/sdsi.c b/drivers/platform/x86/intel/sdsi.c
 
-[..]
-> 
-> >
-> > BTW I got delayed on my "locking rules" writeup. Sorry for that!  
-> 
-> No worries, I've been writing up a vfio-ap-locking.rst document to 
-> include with the next
-> version of the patch series.
+[]
 
-I'm looking forward to v18 including that document. I prefer not to
-discuss what you wrote about the approach taken in v18 now. It is easier
-to me when I have both the text stating the intended design, and the
-code that is supposed to adhere to this design.
+> +/* SDSi mailbox operations must be performed using 64bit mov instructions */
+> +static __always_inline void
+> +sdsi_memcpy64_toio(u64 __iomem *to, const u64 *from, size_t count_bytes)
+> +{
+> +	size_t count = count_bytes / sizeof(*to);
+> +	int i;
+> +
+> +	for (i = 0; i < count; i++)
+> +		writeq(from[i], &to[i]);
 
-Regards,
-Halil
+Any chance the byte count is not a multiple of sizeof(u64) ?
+
+> +static __always_inline void
+> +sdsi_memcpy64_fromio(u64 *to, const u64 __iomem *from, size_t count_bytes)
+> +{
+> +	size_t count = count_bytes / sizeof(*to);
+> +	int i;
+> +
+> +	for (i = 0; i < count; i++)
+> +		to[i] = readq(&from[i]);
+> +}
+
+here too.
+
+[]
+
+> +static int sdsi_mbox_cmd_read(struct sdsi_priv *priv, struct sdsi_mbox_info *info,
+> +			      size_t *data_size)
+> +{
+> +	struct device *dev = priv->dev;
+> +	u32 total, loop, eom, status, message_size;
+[]
+> +		if (packet_size > SDSI_SIZE_MAILBOX) {
+> +			dev_err(dev, "Packet size to large\n");
+
+too
+
+[]
+> +	/* Message size check is only valid for multi-packet transfers */
+> +	if (loop && total != message_size)
+> +		dev_warn(dev, "Read count %d differs from expected count %d\n",
+
+%u
+
+> +			 total, message_size);
+
+
+> +static int sdsi_map_mbox_registers(struct sdsi_priv *priv, struct pci_dev *parent,
+> +				   struct disc_table *disc_table, struct resource *disc_res)
+> +{
+> +	u32 access_type = FIELD_GET(DT_ACCESS_TYPE, disc_table->access_info);
+> +	u32 size = FIELD_GET(DT_SIZE, disc_table->access_info);
+> +	u32 tbir = FIELD_GET(DT_TBIR, disc_table->offset);
+> +	u32 offset = DT_OFFSET(disc_table->offset);
+> +	u32 features_offset;
+> +	struct resource res = {};
+> +
+> +	/* Starting location of SDSi MMIO region based on access type */
+> +	switch (access_type) {
+> +	case ACCESS_TYPE_LOCAL:
+> +		if (tbir) {
+> +			dev_err(priv->dev, "Unsupported BAR index %d for access type %d\n",
+> +				tbir, access_type);
+
+%u here too
+
+[]
+> +		dev_err(priv->dev, "Unrecognized access_type %d\n", access_type);
+
+and here
+
 

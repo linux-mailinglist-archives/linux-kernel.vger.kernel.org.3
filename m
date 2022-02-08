@@ -2,125 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F15C4AD79C
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:38:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F3074AD794
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:38:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357656AbiBHLgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 06:36:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39902 "EHLO
+        id S1358083AbiBHLgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 06:36:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357021AbiBHLTL (ORCPT
+        with ESMTP id S236560AbiBHLUl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 06:19:11 -0500
-X-Greylist: delayed 91127 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Feb 2022 03:19:10 PST
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E7CAC03FEC0
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 03:19:10 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id E6A291F40DB2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644319148;
-        bh=YZ4vl5dn4dGgAIbf9dSevrTrJvjW1muxZxlPq1Ez3H0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=b+B+WOsCW8uf+hliLI9pK0Q1jfdIXl1UAKsX71b6kncuJjnC5hvbygSy89Hfgo3Kb
-         DgJr53dAhlbPw1H/rO/I6EE1HDAV00+aUr8DqygFT4eSkvxv3VEBv0+jAPkAVarl+z
-         xAmoAykC6HzAsh3t3MET8KvQNTFjUVXYYSVKm5aFdlnVqngWNmYWj6I7Y0qa0jw3Gk
-         YgAohlu4E3ubs0lMjbJ9eW3Tt5f0WcWMhlo+kbDtdA03rBc8lMreQnxEhQLPJ1H6o4
-         SB3cZnH5wBJ/AlsVysgzXiJSbqk6Pbnc36Ia7CTAd375DumCoVIJm0gE4/s7/QZLYM
-         JdkLaHYo21Jxw==
-Message-ID: <95383ff1-2696-6dac-26ab-1239b5323c8c@collabora.com>
-Date:   Tue, 8 Feb 2022 12:19:04 +0100
+        Tue, 8 Feb 2022 06:20:41 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C8E0C03FEC0
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 03:20:39 -0800 (PST)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JtL6x4JJbz1FCwd;
+        Tue,  8 Feb 2022 19:16:25 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 8 Feb 2022 19:20:36 +0800
+Subject: Re: [PATCH] mm/memory_hotplug: fix kfree() of bootmem memory
+To:     David Hildenbrand <david@redhat.com>
+CC:     <isimatu.yasuaki@jp.fujitsu.com>, <toshi.kani@hp.com>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20220207135618.17231-1-linmiaohe@huawei.com>
+ <6d4ab70e-b944-5f7d-e9a3-979ac66c70f7@redhat.com>
+ <828c9b16-6ff0-abb7-3a16-277d2d60de81@huawei.com>
+ <72ae5d5b-512e-4dd4-4bb0-d867fb788f60@redhat.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <9fa3f18e-dccb-4dc1-7fdb-ba169e042246@huawei.com>
+Date:   Tue, 8 Feb 2022 19:20:36 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v2 15/31] clk: mediatek: Implement
- mtk_clk_unregister_fixed_clks() API
+In-Reply-To: <72ae5d5b-512e-4dd4-4bb0-d867fb788f60@redhat.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        Miles Chen <miles.chen@mediatek.com>,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220202134834.690675-1-wenst@chromium.org>
- <20220202134834.690675-16-wenst@chromium.org>
- <752d5d00-4e05-1bd6-564f-3bce21a35713@collabora.com>
- <CAGXv+5HSLh0OgJc=EU=wvB4DaOMDLjsgJ6qnHY423d1L5+DixQ@mail.gmail.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <CAGXv+5HSLh0OgJc=EU=wvB4DaOMDLjsgJ6qnHY423d1L5+DixQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 08/02/22 04:50, Chen-Yu Tsai ha scritto:
-> Hi,
-> 
-> On Thu, Feb 3, 2022 at 5:47 PM AngeloGioacchino Del Regno
-> <angelogioacchino.delregno@collabora.com> wrote:
->>
->> Il 02/02/22 14:48, Chen-Yu Tsai ha scritto:
->>> mtk_clk_register_fixed_clks(), as the name suggests, is used to register
->>> a given list of fixed rate clks. However it is lacking a counterpart
->>> unregister API.
+On 2022/2/8 17:19, David Hildenbrand wrote:
+> On 08.02.22 02:59, Miaohe Lin wrote:
+>> Hi:
+>> On 2022/2/7 22:33, David Hildenbrand wrote:
+>>> On 07.02.22 14:56, Miaohe Lin wrote:
+>>>> We can't use kfree() to release the resource as it might come from bootmem.
+>>>> Use release_mem_region() instead.
 >>>
->>> Implement said unregister API so that the various clock platform drivers
->>> can utilize it to do proper unregistration, cleanup and removal.
+>>> How can this happen? release_mem_region() is called either from
+>>> __add_memory() or from add_memory_driver_managed(), where we allocated
+>>> the region via register_memory_resource(). Both functions shouldn't ever
+>>> be called before the buddy is up an running.
 >>>
->>> In the header file, the register function's declaration is also
->>> reformatted to fit code style guidelines.
+>>> Do you have a backtrace of an actual instance of this issue? Or was this
+>>> identified as possibly broken by code inspection?
 >>>
->>> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
->>> Reviewed-by: Miles Chen <miles.chen@mediatek.com>
 >>
->> Hello Chen-Yu,
+>> This is identified as possibly broken by code inspection. IIUC, alloc_resource
+>> is always used to allocate the resource. It has the below logic:
 >>
->> I like this entire series, but I had to manually apply this patch (and some of
->> the other ones)...
-> 
-> This was based on linux-next, which already has a couple clk patches queued
-> up.
-> 
->> Especially for the ones that will be touching MT8195 clock drivers, can you
->> please rebase over series [1] by Chun-Jie?
-> 
-> I think this series supersedes the first patch in that series? As for the
-> other two, I think the discussion about the bindings is ongoing, which
-> might affect the third patch as well?
-
-You're right about that - besides, the mentioned series will take a bit of time to
-get merged in and this cleanup should not be waiting for all that time, as it's
-very, very nice...
-In any case, I don't think that the third patch from that series will be affected,
-as it's a double-definition instance: the vppsys{0,1} are really defined in mmsys
-and they're simply moving it around... The committer forgot to add the two
-properties (the ones that he removed from mt8195-clock) to mediatek,mmsys.yaml,
-I'll send a reply over that thread.
-
-Anyway, yes, this series definitely supersedes patch 1 in that series, so,
-I'm sorry for the noise, and:
-
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-> 
-> ChenYu
-> 
->> [1] https://patchwork.kernel.org/project/linux-mediatek/list/?series=603955
+>>   if (bootmem_resource_free) {
+>> 	res = bootmem_resource_free;
+>> 	bootmem_resource_free = res->sibling;
+>>   }
 >>
->> Thanks,
->> Angelo
+>> where bootmem_resource_free is used to reusing the resource entries allocated by boot
+>> mem after the system is up:
 >>
+>> /*
+>>  * For memory hotplug, there is no way to free resource entries allocated
+>>  * by boot mem after the system is up. So for reusing the resource entry
+>>  * we need to remember the resource.
+>>  */
+>> static struct resource *bootmem_resource_free;
+>>
+>> So I think register_memory_resource() can reuse the resource allocated by bootmem.
+>> Or am I miss anything?
+> 
+> I think you're right, if we did a previous free_resource() of a resource allocated
+> during boot we could end up reusing that here. My best guess is that this never
+> really happens.
+> 
 
+Agree with you. This reusing mechanism is introduced since 2013 and this possible
+issue never happens.
 
+> Wow, that's ugly. It affects essentially anybody reserving+freeing a resource.
+> 
+> E.g., dax/kmem.c similarly does a release_resource(res)+kfree(res)
+> 
+> 
+> We could either
+> 
+> a) Expose free_resource() and replace all kfree(res) instances by it
+> 
+> b) Just simplify that. I don't think we care about saving a couple of 
+>    bytes in corner cases. I might be wrong (IIRC primarily ppc64 really 
+>    succeeds in unplugging boot memory)
+> 
+
+I prefer this one or there will be a huge change if we choose a.
+I will drop my patch and below patch looks good to me.
+
+Many thanks!
+
+> 
+> diff --git a/kernel/resource.c b/kernel/resource.c
+> index 9c08d6e9eef2..fe91a72fd951 100644
+> --- a/kernel/resource.c
+> +++ b/kernel/resource.c
+> @@ -56,14 +56,6 @@ struct resource_constraint {
+>  
+>  static DEFINE_RWLOCK(resource_lock);
+>  
+> -/*
+> - * For memory hotplug, there is no way to free resource entries allocated
+> - * by boot mem after the system is up. So for reusing the resource entry
+> - * we need to remember the resource.
+> - */
+> -static struct resource *bootmem_resource_free;
+> -static DEFINE_SPINLOCK(bootmem_resource_lock);
+> -
+>  static struct resource *next_resource(struct resource *p)
+>  {
+>         if (p->child)
+> @@ -160,36 +152,19 @@ __initcall(ioresources_init);
+>  
+>  static void free_resource(struct resource *res)
+>  {
+> -       if (!res)
+> -               return;
+> -
+> -       if (!PageSlab(virt_to_head_page(res))) {
+> -               spin_lock(&bootmem_resource_lock);
+> -               res->sibling = bootmem_resource_free;
+> -               bootmem_resource_free = res;
+> -               spin_unlock(&bootmem_resource_lock);
+> -       } else {
+> +       /*
+> +        * If the resource was allocated using memblock early during boot
+> +        * we'll leak it here: we can only return full pages back to the
+> +        * buddy and trying to be smart and reusing them eventually in
+> +        * alloc_resource() overcomplicates resource handling.
+> +        */
+> +       if (res && PageSlab(virt_to_head_page(res)))
+>                 kfree(res);
+> -       }
+>  }
+>  
+>  static struct resource *alloc_resource(gfp_t flags)
+>  {
+> -       struct resource *res = NULL;
+> -
+> -       spin_lock(&bootmem_resource_lock);
+> -       if (bootmem_resource_free) {
+> -               res = bootmem_resource_free;
+> -               bootmem_resource_free = res->sibling;
+> -       }
+> -       spin_unlock(&bootmem_resource_lock);
+> -
+> -       if (res)
+> -               memset(res, 0, sizeof(struct resource));
+> -       else
+> -               res = kzalloc(sizeof(struct resource), flags);
+> -
+> -       return res;
+> +       return kzalloc(sizeof(struct resource), flags);
+>  }
+>  
+>  /* Return the conflict entry if you can't request it */
+> 
+> 
 

@@ -2,54 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77F3C4AD986
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 14:20:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C013F4AD96B
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 14:18:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349807AbiBHNUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 08:20:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36812 "EHLO
+        id S244138AbiBHNSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 08:18:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376423AbiBHNFi (ORCPT
+        with ESMTP id S233560AbiBHNGB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 08:05:38 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8EF7C03FEC0;
-        Tue,  8 Feb 2022 05:05:36 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: andrzej.p)
-        with ESMTPSA id 8B08C1F445AC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644325534;
-        bh=+LYk/UmBswNwBd6wWfrZcVl5V3vV0QlUdcWtoUKbDuQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=IanUsb20GeXPoeXi8WV425L3Z8GSZZDMd0uxkgXYPzceXXkZJh9UCows5Csu7Wvvc
-         B3yIDNzZT4Xy4oCBqx+wDXMTsql5c19joggI4o0NCcavdvhcu3HPkMpjZ/JTdD6lWt
-         1ci/i++lztI4rFx09BtouRBuOS0jm/JXSjF08/fdua7R5mT+LTCOVWOseeYR57JO/y
-         F8xL5qxuJXEYjUHYtf3h4CECr7JoSHdDDNkOa0IoiA0+n5gq7baWcQ99XTE/UFrhyZ
-         qQy+aeuj0dfnjFYL/C7+b/vqY40oUyVHUW3CjmgJ3qxzYqA3twd6xi4DcFWuX0Xd6J
-         8kaYKsldRv48Q==
-Message-ID: <73b30627-2908-8472-01db-d07e176ce129@collabora.com>
-Date:   Tue, 8 Feb 2022 14:05:30 +0100
+        Tue, 8 Feb 2022 08:06:01 -0500
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [IPv6:2001:4b98:dc4:8::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03B22C03FEC0
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 05:05:59 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id F3BEE20000A;
+        Tue,  8 Feb 2022 13:05:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1644325557;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=II38vjLqRQLg/txnWaGaYMH5G+TMjmxUgp39Q+KTFOI=;
+        b=cg78R25fOkgb5ywOTBX32Ds9RDk2APYA7e1uYvGLZfPi06/mTEq8+GkVPwGTaR1fLB1WVs
+        MeA+3P/QBgqREUS/55SrecEY7vmpaW579tgSxLcqqHTqoO1BDIommGnumCSg+8i2aZNL5O
+        m4E4t5GhKA6ICt0hiBOdfqaVhVhFCKj00Np/wM7cfEJjZrh22izqYdMuF3he0kmw7z5Cwm
+        zcMMF++SjVytXqfTbvC3aprnLqBdYO/RWujfqLSLVQHiozdu7DAc0JckuC2AlQrnRykiE9
+        ejCHAzAkhskQWJP59w3q/fys6innvYxgNfqEB/0ajLCHg8OQcMlC9/WzFn3lkw==
+Date:   Tue, 8 Feb 2022 14:05:51 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
+Cc:     <vigneshr@ti.com>, <richard@nod.at>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <git@xilinx.com>
+Subject: Re: [PATCH] mtd: rawnand: pl353: Set the nand chip node as the
+ flash node
+Message-ID: <20220208140551.6271f976@xps13>
+In-Reply-To: <20220208125738.32162-1-amit.kumar-mahapatra@xilinx.com>
+References: <20220208125738.32162-1-amit.kumar-mahapatra@xilinx.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] drm/rockchip: vop: Correct RK3399 VOP register fields
-Content-Language: en-US
-To:     Brian Norris <briannorris@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>
-Cc:     Sandy Huang <hjc@rock-chips.com>, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        stable@vger.kernel.org, Mark Yao <markyao0591@gmail.com>
-References: <20220119161104.1.I1d01436bef35165a8cdfe9308789c0badb5ff46a@changeid>
-From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-In-Reply-To: <20220119161104.1.I1d01436bef35165a8cdfe9308789c0badb5ff46a@changeid>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,77 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Brian,
+Hi Amit,
 
-Sorry about the delay.
+amit.kumar-mahapatra@xilinx.com wrote on Tue, 8 Feb 2022 18:27:38 +0530:
 
-W dniu 20.01.2022 o 01:11, Brian Norris pisze:
-> Commit 7707f7227f09 ("drm/rockchip: Add support for afbc") switched up
-> the rk3399_vop_big[] register windows, but it did so incorrectly.
-> 
-> The biggest problem is in rk3288_win23_data[] vs.
-> rk3368_win23_data[] .format field:
-> 
->    RK3288's format: VOP_REG(RK3288_WIN2_CTRL0, 0x7, 1)
->    RK3368's format: VOP_REG(RK3368_WIN2_CTRL0, 0x3, 5)
-> 
-> Bits 5:6 (i.e., shift 5, mask 0x3) are correct for RK3399, according to
-> the TRM.
-> 
-> There are a few other small differences between the 3288 and 3368
-> definitions that were swapped in commit 7707f7227f09. I reviewed them to
-> the best of my ability according to the RK3399 TRM and fixed them up.
-> 
-> This fixes IOMMU issues (and display errors) when testing with BG24
-> color formats.
-> 
-> Fixes: 7707f7227f09 ("drm/rockchip: Add support for afbc")
-> Cc: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Brian Norris <briannorris@chromium.org>
+> In devicetree the flash information is embedded within nand chip node,
+> so during nand chip initialization the nand chip node should be passed
+> to nand_set_flash_node() api, instead of nand controller node.
+>=20
+> Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
 
-Tested-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Can you please add Fixes tag?
 
 > ---
-> I'd appreciate notes or testing from Andrzej, since I'm not sure how he
-> tested his original AFBC work.
-> 
->   drivers/gpu/drm/rockchip/rockchip_vop_reg.c | 8 +++++---
->   1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/rockchip/rockchip_vop_reg.c b/drivers/gpu/drm/rockchip/rockchip_vop_reg.c
-> index 1f7353f0684a..798b542e5916 100644
-> --- a/drivers/gpu/drm/rockchip/rockchip_vop_reg.c
-> +++ b/drivers/gpu/drm/rockchip/rockchip_vop_reg.c
-> @@ -902,6 +902,7 @@ static const struct vop_win_phy rk3399_win01_data = {
->   	.enable = VOP_REG(RK3288_WIN0_CTRL0, 0x1, 0),
->   	.format = VOP_REG(RK3288_WIN0_CTRL0, 0x7, 1),
->   	.rb_swap = VOP_REG(RK3288_WIN0_CTRL0, 0x1, 12),
-> +	.x_mir_en = VOP_REG(RK3288_WIN0_CTRL0, 0x1, 21),
->   	.y_mir_en = VOP_REG(RK3288_WIN0_CTRL0, 0x1, 22),
->   	.act_info = VOP_REG(RK3288_WIN0_ACT_INFO, 0x1fff1fff, 0),
->   	.dsp_info = VOP_REG(RK3288_WIN0_DSP_INFO, 0x0fff0fff, 0),
-> @@ -912,6 +913,7 @@ static const struct vop_win_phy rk3399_win01_data = {
->   	.uv_vir = VOP_REG(RK3288_WIN0_VIR, 0x3fff, 16),
->   	.src_alpha_ctl = VOP_REG(RK3288_WIN0_SRC_ALPHA_CTRL, 0xff, 0),
->   	.dst_alpha_ctl = VOP_REG(RK3288_WIN0_DST_ALPHA_CTRL, 0xff, 0),
-> +	.channel = VOP_REG(RK3288_WIN0_CTRL2, 0xff, 0),
->   };
->   
->   /*
-> @@ -922,11 +924,11 @@ static const struct vop_win_phy rk3399_win01_data = {
->   static const struct vop_win_data rk3399_vop_win_data[] = {
->   	{ .base = 0x00, .phy = &rk3399_win01_data,
->   	  .type = DRM_PLANE_TYPE_PRIMARY },
-> -	{ .base = 0x40, .phy = &rk3288_win01_data,
-> +	{ .base = 0x40, .phy = &rk3368_win01_data,
->   	  .type = DRM_PLANE_TYPE_OVERLAY },
-> -	{ .base = 0x00, .phy = &rk3288_win23_data,
-> +	{ .base = 0x00, .phy = &rk3368_win23_data,
->   	  .type = DRM_PLANE_TYPE_OVERLAY },
-> -	{ .base = 0x50, .phy = &rk3288_win23_data,
-> +	{ .base = 0x50, .phy = &rk3368_win23_data,
->   	  .type = DRM_PLANE_TYPE_CURSOR },
->   };
->   
+> BRANCH: nand/next
+> ---
+>  drivers/mtd/nand/raw/pl35x-nand-controller.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/mtd/nand/raw/pl35x-nand-controller.c b/drivers/mtd/n=
+and/raw/pl35x-nand-controller.c
+> index 8a91e069ee2e..3c6f6aff649f 100644
+> --- a/drivers/mtd/nand/raw/pl35x-nand-controller.c
+> +++ b/drivers/mtd/nand/raw/pl35x-nand-controller.c
+> @@ -1062,7 +1062,7 @@ static int pl35x_nand_chip_init(struct pl35x_nandc =
+*nfc,
+>  	chip->controller =3D &nfc->controller;
+>  	mtd =3D nand_to_mtd(chip);
+>  	mtd->dev.parent =3D nfc->dev;
+> -	nand_set_flash_node(chip, nfc->dev->of_node);
+> +	nand_set_flash_node(chip, np);
+>  	if (!mtd->name) {
+>  		mtd->name =3D devm_kasprintf(nfc->dev, GFP_KERNEL,
+>  					   "%s", PL35X_NANDC_DRIVER_NAME);
 
+yup, that was wrong.
+
+Thanks,
+Miqu=C3=A8l

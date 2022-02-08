@@ -2,86 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 856B94AD46D
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 10:12:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 248224AD475
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 10:13:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351635AbiBHJMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 04:12:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56012 "EHLO
+        id S1353181AbiBHJNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 04:13:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240331AbiBHJMK (ORCPT
+        with ESMTP id S240331AbiBHJNB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 04:12:10 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67523C03FEC1
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 01:12:08 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id v12so751111wrv.2
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 01:12:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=PJbKv3ScWJ3/TAfgKO6PRsVz/IUNS0H9jBQYHa3CD78=;
-        b=MikKXHNC7i8rGs44Asf8Jltk2wDHP5beBwjhNrJRwru1xPj9434goPNBtOm01gMVIK
-         nRZtnKT7utsqD8aIkFYbhKrp4NQOyle38PSLs0r2HG3vo1RvzhCJFDIS7GazFXHq6b09
-         tnzf6yX8f5EhR0SR+laSdQcmjhJEu+6EsgrmNc0+24LBvmXTUseN45DA/GfPAy1tXq8N
-         4KLMlvbltpmOjIcLoy2IcZsWnOEVffib1NqGtaKIBhFI4feR1i+DwmMdBpMquWzL7iL6
-         fmmGVGG6R3dWzy3WVCoJl14kCKefoAfykRgUojxb/TfM7gbgoPvjs6Ah3qLYFmX9cyS0
-         t/Zg==
+        Tue, 8 Feb 2022 04:13:01 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0F75CC03FEC0
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 01:12:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644311576;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=F+Wu/sGGNFwRVA6o9CxafTUWjc6Pw1cGgpDABPbC3kU=;
+        b=gH5poQNAp+psXERXpBdlDDmVN7Wi5FwHHIVbsZJRTY/eKGQVeEI4KMfF5Q9IsfuGexHBsK
+        J0gzp7tYhAtAf+XuZhMqjZkvvOLuFS+jCLl9/JI4xhbcPImz8xEf8gvg0wdHLGUp5BO/2c
+        oFoxtvJhYAM/sneCGR5/uhPt3ooK+OY=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-37-avGnWjRdOimiTs_D6DsVVg-1; Tue, 08 Feb 2022 04:12:54 -0500
+X-MC-Unique: avGnWjRdOimiTs_D6DsVVg-1
+Received: by mail-ed1-f70.google.com with SMTP id f9-20020a056402354900b0040fb9c35a02so228204edd.18
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 01:12:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=PJbKv3ScWJ3/TAfgKO6PRsVz/IUNS0H9jBQYHa3CD78=;
-        b=zgc/czfJ+WyT4KE5NIVTV8i1jvnb4VghBYbon7bCxWxq+0Ctz6i2MDE2aIiCjz55m3
-         iw0kGSFOfw46bM9pb29ZjqZoT417MWjn2V0jCv3VaANnLM6b1h48NCGitboAGSE5oZTu
-         S56p7doEUeCgIaDfG9fv30RkDT7iNNvqgjKrBQ4Ew5s+Ifx05G7+BwjEXe4ZjEZVYR8y
-         FZk2zJKiGmHtj989/hIfFC3gpBW/QoVp4rUmmxKjokMxHUj7ChbPofWocQxtt7pwoun2
-         iHdyxicWc+W4kFf47w6H7vHR5tOyXca+w3h7Jw4691NCHjVxXD3FO5kFqGh9PJoDGg8R
-         fodg==
-X-Gm-Message-State: AOAM530DkmXaIKh8JdZKCEegGFr/yGJfKyhZQUJAzjAKmhmgokxWgXCW
-        8dG4gWPM5xKeFM4/i6zgRzPayA==
-X-Google-Smtp-Source: ABdhPJxPp5FT1Ln9HKzS0CItdTmHplu9PkCnWQ1NkcWrbT8LwTxXwyvXSrHh1aLxTYM8Z/xM2BydOQ==
-X-Received: by 2002:a5d:598a:: with SMTP id n10mr2648769wri.136.1644311526908;
-        Tue, 08 Feb 2022 01:12:06 -0800 (PST)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id 24sm1460362wmf.48.2022.02.08.01.12.05
+         :mime-version:content-disposition:in-reply-to;
+        bh=F+Wu/sGGNFwRVA6o9CxafTUWjc6Pw1cGgpDABPbC3kU=;
+        b=1xQ87bFMAVKnBGrBGQSohdX2sQwjUuLhpwwkSZE9962yg4Ax0nORYKwKV/98tyXOIz
+         LM8u2WZWDzwp0mPLdKSghYRoXzJiHhh9VEgg4oQHCnQUnORIrEynmhw9MFhRhjLBf5XI
+         kpnsSLo7IYP72MbpGD++KzdnuK1oLDq9wyvssnP2p5C5B1CxMU5qm+0CuFRZekoX9Dq4
+         cu1gTcVLdJNh0L5C1EVGP6cF0QXu2mBAyrr5vyYpAbygan2HXneYGxdivwbxLMvWJcd4
+         vMKPiJoCQsRMGR7Y6IEJ8mhVZA49n8vK8jsbVep1O0IKdElht888duHXydY8yeMOHJsy
+         gvTg==
+X-Gm-Message-State: AOAM5301k6oUccnGtOLRoeEQ0CzhhUgIrJbBMqY6wm8fyw1j2CWDRXYp
+        hNZBcb9i4QOpf+m4LPgfJV3x6t44bFSFXJGTPRzug3M4gbb5cVOrzruPy8Ydc3AB0npIgWnzwuX
+        +N3wErqAncAHRsmBxzlh4OClI
+X-Received: by 2002:a17:906:4fc1:: with SMTP id i1mr2822062ejw.248.1644311573609;
+        Tue, 08 Feb 2022 01:12:53 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwYBF44TL/lfB6QHqHH1Nak9YF+ZhC2FLFpMGaXqPMTlTXjPgdPNfD12GOzYHV1JeeVLqiaiA==
+X-Received: by 2002:a17:906:4fc1:: with SMTP id i1mr2822039ejw.248.1644311573396;
+        Tue, 08 Feb 2022 01:12:53 -0800 (PST)
+Received: from krava (nat-pool-brq-u.redhat.com. [213.175.37.12])
+        by smtp.gmail.com with ESMTPSA id l7sm5760193edb.53.2022.02.08.01.12.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 01:12:06 -0800 (PST)
-Date:   Tue, 8 Feb 2022 09:12:03 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Quan Nguyen <quan@os.amperecomputing.com>
-Cc:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org, Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Derek Kiernan <derek.kiernan@xilinx.com>,
-        Dragan Cvetic <dragan.cvetic@xilinx.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>,
-        Open Source Submission <patches@amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-Subject: Re: [PATCH v6 2/9] mfd: smpro-mfd: Adds Ampere's Altra SMpro MFD
- driver
-Message-ID: <YgIz484pt8IJmP85@google.com>
-References: <20211224041352.29405-1-quan@os.amperecomputing.com>
- <20211224041352.29405-3-quan@os.amperecomputing.com>
+        Tue, 08 Feb 2022 01:12:52 -0800 (PST)
+Date:   Tue, 8 Feb 2022 10:12:51 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Jiri Olsa <olsajiri@gmail.com>
+Subject: Re: [PATCH 6/8] libbpf: Add bpf_program__attach_kprobe_opts for
+ multi kprobes
+Message-ID: <YgI0E1D6v0RZa5/Z@krava>
+References: <20220202135333.190761-1-jolsa@kernel.org>
+ <20220202135333.190761-7-jolsa@kernel.org>
+ <CAEf4BzZPSYzyoxrPC4uNHedhTr_75b2Qa8h3OC7GCK-n6mYrdg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211224041352.29405-3-quan@os.amperecomputing.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <CAEf4BzZPSYzyoxrPC4uNHedhTr_75b2Qa8h3OC7GCK-n6mYrdg@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,164 +89,184 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 24 Dec 2021, Quan Nguyen wrote:
+On Mon, Feb 07, 2022 at 10:59:29AM -0800, Andrii Nakryiko wrote:
 
-> Adds Multi-function devices driver for SMpro co-processor found on the
-> Mt.Jade hardware reference platform with Ampere's Altra processor family.
-> 
-> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
-> ---
-> Changes in v6:
->   + Update license part to reflect that this driver is clone from
->   simple-mfd-i2c driver [Quan]
-> 
-> Changes in v5:
->   + Dropped the use of simple-mfd-i2c driver [Quan]
->   + Introduced drivers/mfd/smpro-mfd.c driver to instantiate
->   sub-devices. This is to avoid DT nodes without resource issue [Quan]
->   + Revised commit message [Quan]
-> 
-> Changes in v4:
->   + Add "depends on I2C" to fix build issue found by kernel test
->   robot [Guenter]
-> 
-> Changes in v3:
->   + None
-> 
-> Changes in v2:
->   + Used 'struct of_device_id's .data attribute [Lee Jones]
-> 
->  drivers/mfd/Kconfig     | 12 +++++++
->  drivers/mfd/Makefile    |  1 +
->  drivers/mfd/smpro-mfd.c | 76 +++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 89 insertions(+)
->  create mode 100644 drivers/mfd/smpro-mfd.c
-> 
-> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> index a21cbdf89477..a886da5018b1 100644
-> --- a/drivers/mfd/Kconfig
-> +++ b/drivers/mfd/Kconfig
-> @@ -77,6 +77,18 @@ config MFD_AS3711
->  	help
->  	  Support for the AS3711 PMIC from AMS
->  
-> +config MFD_SMPRO
-> +	tristate "Ampere Computing MFD SMpro core driver"
-> +	depends on I2C
-> +	select MFD_CORE
-> +	select REGMAP_I2C
-> +	help
-> +	  Say yes here to enable SMpro driver support for Ampere's Altra
-> +	  processor family.
-> +
-> +	  Ampere's Altra SMpro exposes an I2C regmap interface that can
-> +	  be accessed by child devices.
-> +
->  config MFD_AS3722
->  	tristate "ams AS3722 Power Management IC"
->  	select MFD_CORE
-> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> index 4d53e951a92d..fbcd09dce5ce 100644
-> --- a/drivers/mfd/Makefile
-> +++ b/drivers/mfd/Makefile
-> @@ -267,6 +267,7 @@ obj-$(CONFIG_MFD_QCOM_PM8008)	+= qcom-pm8008.o
->  
->  obj-$(CONFIG_SGI_MFD_IOC3)	+= ioc3.o
->  obj-$(CONFIG_MFD_SIMPLE_MFD_I2C)	+= simple-mfd-i2c.o
-> +obj-$(CONFIG_MFD_SMPRO)		+= smpro-mfd.o
->  obj-$(CONFIG_MFD_INTEL_M10_BMC)   += intel-m10-bmc.o
->  
->  obj-$(CONFIG_MFD_ATC260X)	+= atc260x-core.o
-> diff --git a/drivers/mfd/smpro-mfd.c b/drivers/mfd/smpro-mfd.c
-> new file mode 100644
-> index 000000000000..132d4e2dde12
-> --- /dev/null
-> +++ b/drivers/mfd/smpro-mfd.c
-> @@ -0,0 +1,76 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Ampere Altra Family SMPro MFD - I2C
-> + *
-> + * Copyright (c) 2021, Ampere Computing LLC
-> + * Author: Quan Nguyen <quan@os.amperecomputing..com>
-> + *
-> + * Based on simple-mfd-i2c.c:
+SNIP
 
-Why aren't you just using this?
+> > +struct fprobe_resolve {
+> > +       const char *name;
+> > +       __u64 *addrs;
+> > +       __u32 alloc;
+> > +       __u32 cnt;
+> > +};
+> > +
+> > +static bool glob_matches(const char *glob, const char *s)
+> 
+> we've since added more generic glob_match() implementation (see
+> test_progs.c), let's copy/paste that one (it's actually shorter and
+> doesn't do hacky input args modification). Let's maybe also add '?'
+> handling (it's trivial). Both original code in perf and the one in
+> test_progs.c are GPL-2.0-only, so let's also get acks from original
+> authors.
 
-> + * Copyright (c) by Michael Walle <michael@walle.cc>
-> + */
-> +
-> +#include <linux/i2c.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/of_platform.h>
-> +#include <linux/mfd/core.h>
-> +#include <linux/regmap.h>
-> +
-> +/* Identification Registers */
-> +#define MANUFACTURER_ID_REG     0x02
-> +#define AMPERE_MANUFACTURER_ID  0xCD3A
-> +
-> +static const struct regmap_config simple_word_regmap_config = {
-> +	.reg_bits = 8,
-> +	.val_bits = 16,
-> +};
-> +
-> +static const struct mfd_cell smpro_devs[] = {
-> +	MFD_CELL_NAME("smpro-hwmon"),
-> +};
+ok, will check
 
-What are the other devices?
+> 
+> > +{
+> > +       int n = strlen(glob);
+> > +
+> > +       if (n == 1 && glob[0] == '*')
+> > +               return true;
+> > +
+> > +       if (glob[0] == '*' && glob[n - 1] == '*') {
+> > +               const char *subs;
+> > +               /* substring match */
+> > +
+> > +               /* this is hacky, but we don't want to allocate
+> > +                * for no good reason
+> > +                */
+> > +               ((char *)glob)[n - 1] = '\0';
+> > +               subs = strstr(s, glob + 1);
+> > +               ((char *)glob)[n - 1] = '*';
+> > +
+> > +               return subs != NULL;
+> > +       } else if (glob[0] == '*') {
+> > +               size_t nn = strlen(s);
+> > +               /* suffix match */
+> > +
+> > +               /* too short for a given suffix */
+> > +               if (nn < n - 1)
+> > +                       return false;
+> > +               return strcmp(s + nn - (n - 1), glob + 1) == 0;
+> > +       } else if (glob[n - 1] == '*') {
+> > +               /* prefix match */
+> > +               return strncmp(s, glob, n - 1) == 0;
+> > +       } else {
+> > +               /* exact match */
+> > +               return strcmp(glob, s) == 0;
+> > +       }
+> > +}
+> > +
+> > +static int resolve_fprobe_cb(void *arg, unsigned long long sym_addr,
+> > +                            char sym_type, const char *sym_name)
+> > +{
+> > +       struct fprobe_resolve *res = arg;
+> > +       __u64 *p;
+> > +
+> > +       if (!glob_matches(res->name, sym_name))
+> > +               return 0;
+> > +
+> > +       if (res->cnt == res->alloc) {
+> > +               res->alloc = max((__u32) 16, res->alloc * 3 / 2);
+> > +               p = libbpf_reallocarray(res->addrs, res->alloc, sizeof(__u32));
+> > +               if (!p)
+> > +                       return -ENOMEM;
+> > +               res->addrs = p;
+> > +       }
+> 
+> please use libbpf_ensure_mem() instead
 
-> +static int smpro_mfd_probe(struct i2c_client *i2c)
-> +{
-> +	const struct regmap_config *config;
-> +	struct regmap *regmap;
-> +	unsigned int val;
-> +	int ret;
-> +
-> +	config = device_get_match_data(&i2c->dev);
-> +	if (!config)
-> +		config = &simple_word_regmap_config;
-> +
-> +	regmap = devm_regmap_init_i2c(i2c, config);
-> +	if (IS_ERR(regmap))
-> +		return PTR_ERR(regmap);
-> +
-> +	/* Check for valid ID */
-> +	ret = regmap_read(regmap, MANUFACTURER_ID_REG, &val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (val != AMPERE_MANUFACTURER_ID)
-> +		return -ENODEV;
-> +
-> +	return devm_mfd_add_devices(&i2c->dev, PLATFORM_DEVID_AUTO,
-> +				    smpro_devs, ARRAY_SIZE(smpro_devs), NULL, 0, NULL);
-> +}
-> +
-> +static const struct of_device_id smpro_mfd_of_match[] = {
-> +	{ .compatible = "ampere,smpro", .data = &simple_word_regmap_config },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, smpro_mfd_of_match);
-> +
-> +static struct i2c_driver smpro_mfd_driver = {
-> +	.probe_new = smpro_mfd_probe,
-> +	.driver = {
-> +		.name = "smpro-mfd-i2c",
-> +		.of_match_table = smpro_mfd_of_match,
-> +	},
-> +};
-> +module_i2c_driver(smpro_mfd_driver);
-> +
-> +MODULE_AUTHOR("Quan Nguyen <quan@os.amperecomputing.com>");
-> +MODULE_DESCRIPTION("SMPRO MFD - I2C driver");
-> +MODULE_LICENSE("GPL v2");
+ok
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+> 
+> 
+> > +       res->addrs[res->cnt++] = sym_addr;
+> > +       return 0;
+> > +}
+> > +
+> > +static struct bpf_link *
+> > +attach_fprobe_opts(const struct bpf_program *prog,
+> > +                  const char *func_name,
+> 
+> func_glob or func_pattern?
+
+ok
+
+> 
+> > +                  const struct bpf_kprobe_opts *kopts)
+> > +{
+> > +       DECLARE_LIBBPF_OPTS(bpf_link_create_opts, opts);
+> > +       struct fprobe_resolve res = {
+> > +               .name = func_name,
+> > +       };
+> > +       struct bpf_link *link = NULL;
+> > +       char errmsg[STRERR_BUFSIZE];
+> > +       int err, link_fd, prog_fd;
+> > +       bool retprobe;
+> > +
+> > +       err = libbpf__kallsyms_parse(&res, resolve_fprobe_cb);
+> > +       if (err)
+> > +               goto error;
+> > +       if (!res.cnt) {
+> > +               err = -ENOENT;
+> > +               goto error;
+> > +       }
+> > +
+> > +       retprobe = OPTS_GET(kopts, retprobe, false);
+> > +
+> > +       opts.fprobe.addrs = (__u64) res.addrs;
+> 
+> ptr_to_u64()
+
+ok
+
+> 
+> > +       opts.fprobe.cnt = res.cnt;
+> > +       opts.flags = retprobe ? BPF_F_FPROBE_RETURN : 0;
+> > +
+> > +       link = calloc(1, sizeof(*link));
+> > +       if (!link) {
+> > +               err = -ENOMEM;
+> > +               goto error;
+> > +       }
+> > +       link->detach = &bpf_link__detach_fd;
+> > +
+> > +       prog_fd = bpf_program__fd(prog);
+> > +       link_fd = bpf_link_create(prog_fd, 0, BPF_TRACE_FPROBE, &opts);
+> > +       if (link_fd < 0) {
+> > +               err = -errno;
+> > +               pr_warn("prog '%s': failed to attach to %s: %s\n",
+> > +                       prog->name, res.name,
+> > +                       libbpf_strerror_r(err, errmsg, sizeof(errmsg)));
+> > +               goto error;
+> > +       }
+> > +       link->fd = link_fd;
+> > +       free(res.addrs);
+> > +       return link;
+> > +
+> > +error:
+> > +       free(link);
+> > +       free(res.addrs);
+> > +       return libbpf_err_ptr(err);
+> > +}
+> > +
+> >  struct bpf_link *
+> >  bpf_program__attach_kprobe_opts(const struct bpf_program *prog,
+> >                                 const char *func_name,
+> > @@ -10047,6 +10166,9 @@ bpf_program__attach_kprobe_opts(const struct bpf_program *prog,
+> >         if (!OPTS_VALID(opts, bpf_kprobe_opts))
+> >                 return libbpf_err_ptr(-EINVAL);
+> >
+> > +       if (prog->expected_attach_type == BPF_TRACE_FPROBE)
+> > +               return attach_fprobe_opts(prog, func_name, opts);
+> > +
+> >         retprobe = OPTS_GET(opts, retprobe, false);
+> >         offset = OPTS_GET(opts, offset, 0);
+> >         pe_opts.bpf_cookie = OPTS_GET(opts, bpf_cookie, 0);
+> > @@ -10112,6 +10234,14 @@ struct bpf_link *bpf_program__attach_kprobe(const struct bpf_program *prog,
+> >         return bpf_program__attach_kprobe_opts(prog, func_name, &opts);
+> >  }
+> >
+> > +static int init_kprobe(struct bpf_program *prog, long cookie)
+> > +{
+> > +       /* If we have wildcard, switch to fprobe link. */
+> > +       if (strchr(prog->sec_name, '*'))
+> 
+> ugh... :( maybe let's have a separate SEC("kprobe.multi/<glob>") and
+> same for kretprobe?
+
+I agree new SEC type is more clear ;-) ok
+
+thanks,
+jirka
+

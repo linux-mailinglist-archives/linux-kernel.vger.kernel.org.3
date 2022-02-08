@@ -2,124 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 969634AE636
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 01:44:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A0D44AE684
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 03:39:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240748AbiBIAod (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 19:44:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43782 "EHLO
+        id S234249AbiBICjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 21:39:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231954AbiBIAoc (ORCPT
+        with ESMTP id S234611AbiBHXE7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 19:44:32 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26858C06157B;
-        Tue,  8 Feb 2022 16:44:32 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id u12so775808plq.10;
-        Tue, 08 Feb 2022 16:44:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PhTkr9X2ah1asuD3CJaoPYxIIUBXeUj/IV+DwOdgVXo=;
-        b=Lp9hYtALz3JjG+ygVTjC/6yQYeq6ycUyyf5FSqYciSLle2keOrS7A85VJ1s/QHxqkn
-         DwBpgRFt7BdEq/3FEN27loA0dh7v5uYwnbXf7hEq66NVlQhl9sS9EiuhGNujx4BknmhZ
-         FBrSxOAPmz4QBqVefdhi0x+ji6IU5sBEFN/T0kzpP1yshJyiusF9MsLKLnO40jDT4rn6
-         waVKeEzoBPoiptU0qX2CAFBQN+gYUoTlghBlMvi0Es4xaBeSteZuKxOsJoySQcVXMDYJ
-         3jqm7XaRVTt5HUgYu2zKtNKQsSjSCrAbGoGjikuPBSf0Q6gBpBaCk7SVxXY4uezq13OQ
-         B0vA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PhTkr9X2ah1asuD3CJaoPYxIIUBXeUj/IV+DwOdgVXo=;
-        b=UgNWoTsIRc+zl3MpZz98zVFm6lUbNcu+MGMcoWnHs6OkK1JVwrBKFVAnQSxB4RY2XF
-         RSkDxFRzHsZSAiGznfWMGTyfptVvqs9Jh7AE+0Rrd+nOgAuA0zpBQwZUPU0bkDQ1jOlO
-         XpbizGrmtPfzTXzrJINmRT8ix6KR+SJomM2Hmoz757YUjQEIjYFTPeTcokj2d9KFxaWt
-         hZ045dCVQ5uNvuIQgnqLnvziagT5MwDxsxpi5Pq+zZ1vxxMM/QnYOP/4Ri5ncmADZjkk
-         wpiiv0Wo6gIAQI95yYg0iPaYyBf4cKs/OCQDHJXSv0SSJs/Sk1BiPJPI8oR9R2pDkxq6
-         KG0w==
-X-Gm-Message-State: AOAM530HUK9CNeF2PJVEm8NAGvAyThzzeye/wNnY2s64hUS19aWHLB+J
-        De1uU6eiFkm9JZ79Ff5Z1kg=
-X-Google-Smtp-Source: ABdhPJytSqgPHdkgDrOt40m/jphipT+7Bnqd121V07WmUoJqTHxyqx5C0HU0dq8NUKaJM60Z/onu9Q==
-X-Received: by 2002:a17:902:a58b:: with SMTP id az11mr762807plb.138.1644367471668;
-        Tue, 08 Feb 2022 16:44:31 -0800 (PST)
-Received: from localhost.localdomain (192.243.120.166.16clouds.com. [192.243.120.166])
-        by smtp.gmail.com with ESMTPSA id o125sm13339621pfb.116.2022.02.08.16.44.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 16:44:31 -0800 (PST)
-From:   davidcomponentone@gmail.com
-To:     jikos@kernel.org
-Cc:     davidcomponentone@gmail.com, benjamin.tissoires@redhat.com,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yang Guang <yang.guang5@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] HID: sony: replace snprintf with sysfs_emit
-Date:   Wed,  9 Feb 2022 08:44:18 +0800
-Message-Id: <2f021167336d2404aaba4c3bd7a075867a6a7e39.1644285940.git.yang.guang5@zte.com.cn>
-X-Mailer: git-send-email 2.30.2
+        Tue, 8 Feb 2022 18:04:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41695C061578
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 15:04:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A4F856177A
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 23:04:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76A5AC004E1;
+        Tue,  8 Feb 2022 23:04:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644361498;
+        bh=EWe+0R/ZVsm3W7XmSmNv2KN70VcPiLPtwrmHpmDlzu0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LTnv+2dK+6rYrMI0nFMsYl3iOw/V23R9x1TPnCSsewDe0UKYledTtwmnIFcsw6iTh
+         AYc6XJ7tK2ZwKO6vz7aEvlhxkxWTzrW4q2BubAqrU3n8Jo/2+RwrlnUpWilhbU4r1B
+         7FPmI1ya7W2VmtxkeBQO+c8qNdO4phap3WwX6MjJmsPUBtanuitQkAiLJf6jQtB+ly
+         f8bxt2SWTZ/AnQaB/vYZ8yZms1ACQDGLE87P5qduIN3tVbITkNxNRbvjYHLetvF6XS
+         uM2BJwR1WTbGH4ngZcVANvrij8Jg8HxS2G160oR9Z3U+7lD9CfleE6tJkILgvrPkpR
+         DuJD86MOgXhfg==
+Date:   Wed, 9 Feb 2022 00:04:55 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Mukesh Ojha <quic_mojha@quicinc.com>
+Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
+        tglx@linutronix.de, paulmck@kernel.org, will@kernel.org,
+        dave@stgolabs.net
+Subject: Re: [PATCH] softirq: Remove raise_softirq from
+ tasklet_action_common()
+Message-ID: <20220208230455.GA539926@lothringen>
+References: <1644066805-17212-1-git-send-email-quic_mojha@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1644066805-17212-1-git-send-email-quic_mojha@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Guang <yang.guang5@zte.com.cn>
+On Sat, Feb 05, 2022 at 06:43:25PM +0530, Mukesh Ojha wrote:
+> Think about a scenario when all other cores are in suspend
+> and one core is only running ksoftirqd and it is because
+> some client has invoked tasklet_hi_schedule() only once
+> during that phase.
+> 
+> tasklet_action_common() handles that softirq and marks the
+> same softirq as pending again. And due to that core keeps
+> running the softirq handler [1] forever and it is not able to
+> go to suspend.
+> 
+> We can get rid of raising softirq from tasklet handler.
+> 
+> [1]
+> <idle>-0    [003]   13058.769081:  softirq_entry   vec=0  action=HI_SOFTIRQ
+> <idle>-0     [003]  13058.769085: softirq_raise:        vec=0 [action=HI_SOFTIRQ]
+> <idle>-0    [003]   13058.769087:  softirq_exit   vec=0  action=HI_SOFTIRQ
+> <idle>-0    [003]   13058.769091:  softirq_entry   vec=0  action=HI_SOFTIRQ
+> <idle>-0     [003]  13058.769094: softirq_raise:        vec=0 [action=HI_SOFTIRQ]
+> <idle>-0    [003]   13058.769097:  softirq_exit   vec=0  action=HI_SOFTIRQ
+> <idle>-0    [003]   13058.769100:  softirq_entry   vec=0  action=HI_SOFTIRQ
+> <idle>-0     [003]  13058.769103: softirq_raise:        vec=0 [action=HI_SOFTIRQ]
+> <idle>-0    [003]   13058.769106:  softirq_exit   vec=0  action=HI_SOFTIRQ
+> <idle>-0    [003]   13058.769109:  softirq_entry   vec=0  action=HI_SOFTIRQ
+> <idle>-0    [003]   13059.058923:  softirq_entry   vec=0  action=HI_SOFTIRQ
+> ...
+> ..
+> ..
+> ..
+> 
+> <idle>-0    [003]   13059.058951:  softirq_entry   vec=0  action=HI_SOFTIRQ
+> <idle>-0     [003]  13059.058954: softirq_raise:        vec=0 [action=HI_SOFTIRQ]
+> <idle>-0    [003]   13059.058957:  softirq_exit   vec=0  action=HI_SOFTIRQ
+> <idle>-0    [003]   13059.058960:  softirq_entry   vec=0  action=HI_SOFTIRQ
+> <idle>-0     [003]  13059.058963: softirq_raise:        vec=0 [action=HI_SOFTIRQ]
+> <idle>-0    [003]   13059.058966:  softirq_exit   vec=0  action=HI_SOFTIRQ
+> <idle>-0    [003]   13059.058969:  softirq_entry   vec=0  action=HI_SOFTIRQ
+> <idle>-0     [003]  13059.058972: softirq_raise:        vec=0 [action=HI_SOFTIRQ]
+> <idle>-0    [003]   13059.058975:  softirq_exit   vec=0  action=HI_SOFTIRQ
+> <idle>-0    [003]   13059.058978:  softirq_entry   vec=0  action=HI_SOFTIRQ
+> <idle>-0     [003]  13059.058981: softirq_raise:        vec=0 [action=HI_SOFTIRQ]
+> <idle>-0    [003]   13059.058984:  softirq_exit   vec=0  action=HI_SOFTIRQ
+> <idle>-0    [003]   13059.058987:  softirq_entry   vec=0  action=HI_SOFTIRQ
+> <idle>-0     [003]  13059.058990: softirq_raise:        vec=0 [action=HI_SOFTIRQ]
+> <idle>-0    [003]   13059.058993:  softirq_exit   vec=0  action=HI_SOFTIRQ
+> <idle>-0    [003]   13059.058996:  softirq_entry   vec=0  action=HI_SOFTIRQ
+> <idle>-0     [003]  13059.059000: softirq_raise:        vec=0 [action=HI_SOFTIRQ]
+> <idle>-0    [003]   13059.059002:  softirq_exit   vec=0  action=HI_SOFTIRQ
+> 
+> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+> ---
+>  kernel/softirq.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/kernel/softirq.c b/kernel/softirq.c
+> index 41f4709..d3e6fb9 100644
+> --- a/kernel/softirq.c
+> +++ b/kernel/softirq.c
+> @@ -795,7 +795,6 @@ static void tasklet_action_common(struct softirq_action *a,
+>  		t->next = NULL;
+>  		*tl_head->tail = t;
+>  		tl_head->tail = &t->next;
+> -		__raise_softirq_irqoff(softirq_nr);
+>  		local_irq_enable();
 
-coccinelle report:
-./drivers/hid/hid-sony.c:710:8-16:
-WARNING: use scnprintf or sprintf
-./drivers/hid/hid-sony.c:747:8-16:
-WARNING: use scnprintf or sprintf
-./drivers/hid/hid-sony.c:759:8-16:
-WARNING: use scnprintf or sprintf
+That requeue happens when the tasklet is already executing on some other CPU
+or when it has been disabled through tasklet_disable().
 
-Use sysfs_emit instead of scnprintf or sprintf makes more sense.
+So you can't just remove that line or you'll break everything.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Yang Guang <yang.guang5@zte.com.cn>
-Signed-off-by: David Yang <davidcomponentone@gmail.com>
----
- drivers/hid/hid-sony.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+It would be nice to identify which tasklet keeps being requeued. Is it because
+something called tasklet_disable() to it and never called back tasklet_enable() ?
 
-diff --git a/drivers/hid/hid-sony.c b/drivers/hid/hid-sony.c
-index 60ec2b29d54d..94291472b381 100644
---- a/drivers/hid/hid-sony.c
-+++ b/drivers/hid/hid-sony.c
-@@ -707,7 +707,7 @@ static ssize_t ds4_show_poll_interval(struct device *dev,
- 	struct hid_device *hdev = to_hid_device(dev);
- 	struct sony_sc *sc = hid_get_drvdata(hdev);
- 
--	return snprintf(buf, PAGE_SIZE, "%i\n", sc->ds4_bt_poll_interval);
-+	return sysfs_emit(buf, "%i\n", sc->ds4_bt_poll_interval);
- }
- 
- static ssize_t ds4_store_poll_interval(struct device *dev,
-@@ -744,7 +744,7 @@ static ssize_t sony_show_firmware_version(struct device *dev,
- 	struct hid_device *hdev = to_hid_device(dev);
- 	struct sony_sc *sc = hid_get_drvdata(hdev);
- 
--	return snprintf(buf, PAGE_SIZE, "0x%04x\n", sc->fw_version);
-+	return sysfs_emit(buf, "0x%04x\n", sc->fw_version);
- }
- 
- static DEVICE_ATTR(firmware_version, 0444, sony_show_firmware_version, NULL);
-@@ -756,7 +756,7 @@ static ssize_t sony_show_hardware_version(struct device *dev,
- 	struct hid_device *hdev = to_hid_device(dev);
- 	struct sony_sc *sc = hid_get_drvdata(hdev);
- 
--	return snprintf(buf, PAGE_SIZE, "0x%04x\n", sc->hw_version);
-+	return sysfs_emit(buf, "0x%04x\n", sc->hw_version);
- }
- 
- static DEVICE_ATTR(hardware_version, 0444, sony_show_hardware_version, NULL);
--- 
-2.30.2
-
+Thanks.

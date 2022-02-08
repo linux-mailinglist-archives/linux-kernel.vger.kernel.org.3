@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8F044AD66B
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:25:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 851474AD66E
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:25:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347785AbiBHLZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 06:25:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50966 "EHLO
+        id S1348645AbiBHLZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 06:25:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233846AbiBHKIM (ORCPT
+        with ESMTP id S1356078AbiBHKIQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 05:08:12 -0500
+        Tue, 8 Feb 2022 05:08:16 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BAD92C03FEC0
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 02:08:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A2BF8C03FEC5
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 02:08:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644314889;
+        s=mimecast20190719; t=1644314892;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=/5S4XDfxZ1BjoNRlGqkcUaTGd2PiN/Xr23rumFXVMW4=;
-        b=fnDPnSqdqUcxv066LfRmSrWFo6L0mfLGY7CX+2RE4pASDviXLTtQvI9Q/czIG59yMW9+gP
-        YKbp6vQ5/ZiNOhiIvgV3F3TtvFcXjEXmQ1jRs+XXU7Pd+htaLKd/NaX53ah0SpJS2SGcEX
-        3ABH/W/99l0rFjix0ia8xjZxII5l3vw=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=06BnTZzuO/korL6R8pKHINxYBCZYhmQu6E/SNPlqJdA=;
+        b=iAX/EShPndDeYp5EHNyKy4xWd21m4kp8Yv/XqvhEEssuLgQ+cgaiMzdzlWYwghfMEiKx6s
+        Jze8krcyqO1q5scDvMG37pLcEe1Bkj1iczhVD25+iY5cgVxO+XRcD2nC0A9L/teF02n7p3
+        +HzygEfx0t1ZBHTh+CdNeXWWFib50lY=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-531-SCAixNRsO0qqmRa41D522g-1; Tue, 08 Feb 2022 05:08:08 -0500
-X-MC-Unique: SCAixNRsO0qqmRa41D522g-1
-Received: by mail-wr1-f72.google.com with SMTP id e11-20020adf9bcb000000b001e316b01456so2118009wrc.21
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 02:08:08 -0800 (PST)
+ us-mta-571-PAPW0Rs0MPuzLPpuHBXqxw-1; Tue, 08 Feb 2022 05:08:09 -0500
+X-MC-Unique: PAPW0Rs0MPuzLPpuHBXqxw-1
+Received: by mail-wm1-f72.google.com with SMTP id h82-20020a1c2155000000b003552c13626cso844631wmh.3
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 02:08:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/5S4XDfxZ1BjoNRlGqkcUaTGd2PiN/Xr23rumFXVMW4=;
-        b=tf4H3R3kYRS41n8ghmer9tHPouFhN1+w0wBBcxRffay1R1w4QNLOUVhuzv8IQvE/3Z
-         xTxq29C5sSyMfSylty+4EcnXgnTs7Z+zlzgXNNqd0hsAs5zYzUowhw09aowzeUS/YOPg
-         tZeSLhTXQGbWWAHUFBKKbr8oIHDvRmNf0buLcvzxpRAQAdZy+9Ex8ndJxPiGsd6RBtOU
-         vURqaRVruib+e9MFmfkFiP/cdK3pmdicuKW1kQGDyXzpI3gOTHHA+M6EqYY410SEVkKi
-         fNlFc1kzPDMV5LDg2Y8OJNrqZCPvdpEukKcG6IWavWVdiNX26pWJQUpU4o8epRVXrdrG
-         rF+Q==
-X-Gm-Message-State: AOAM533zR5I1/UuV1n2L03JcupdWrJLFTOn3r1I+2m3tvEYxURJgm4EU
-        Bvf5kuPrBaOZ9+SYPfOJHJ8i/azspgW4gwfkCf4lBolHl2v++dp4mfDHAi5dN0rKnijZYCsHOIe
-        3QrsGlG6cLb7vTzUCNo2g5chQ
-X-Received: by 2002:a7b:c38b:: with SMTP id s11mr482611wmj.8.1644314887516;
-        Tue, 08 Feb 2022 02:08:07 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwNjDnp3Jr2FFOpmvX2BdIj4+Rf7cKfg7pGmJRiTn4xwTkduEPi/F++Dbaej9jQZVbCxyMKRg==
-X-Received: by 2002:a7b:c38b:: with SMTP id s11mr482592wmj.8.1644314887270;
-        Tue, 08 Feb 2022 02:08:07 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=06BnTZzuO/korL6R8pKHINxYBCZYhmQu6E/SNPlqJdA=;
+        b=d9hUUz+9qUs16U+P7kPgGWG/tkUbrkrjyq47s3JfbQLaqItA8vcKpHo/0FvVvvSFdr
+         /89TbA1Ni+i9T+DCAj1t+UI2ps3yT4klOPOdtX2G/g+1MBF+fHj3KTkQBus5SFwS27PL
+         XvhSNOTpwGw3SQai91NPxRsVUWXCiiHYRllF2zeT0L6DInwVDxdtVDFnfvkW446wRceq
+         /2xHFDaXb9c/GollauNxEl9BDKw3Kp7oy4emNu9+Lx+sw1yLs4Oi/RDCLzqIqFhSNsxB
+         FSQsWU+GqsdQ3Hb3BvvzvHKrvxqKDbXGx6HwojQWZGg9ruPUrUUuAfkCWW1NDnjEiOzC
+         Kbdg==
+X-Gm-Message-State: AOAM532RAUk2HPgS8zXsdYHg83I3tRigPBCBnvX4oHmwIOEQOjiplcEv
+        cuA6YjMXsh0ryVduj6r68cpKquunBNlESJXn2gmbl124ZGm1uuNIFntn7Lmnmd0O/7Z9WrF6js8
+        Bb73nDDtBPkqewMCKbHMzbYEt
+X-Received: by 2002:a5d:598a:: with SMTP id n10mr2855194wri.136.1644314888328;
+        Tue, 08 Feb 2022 02:08:08 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwuwfP5ZaDGYodWgAe1/7/aVA7WVQ/n8GvAre37Zc/wm6jhpzE0k3j7exY7ATMbFHhoeCIUVw==
+X-Received: by 2002:a5d:598a:: with SMTP id n10mr2855168wri.136.1644314888026;
+        Tue, 08 Feb 2022 02:08:08 -0800 (PST)
 Received: from vian.redhat.com ([2a0c:5a80:1204:1500:37e7:8150:d9df:36f])
-        by smtp.gmail.com with ESMTPSA id z5sm1911027wmp.10.2022.02.08.02.08.06
+        by smtp.gmail.com with ESMTPSA id z5sm1911027wmp.10.2022.02.08.02.08.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 02:08:06 -0800 (PST)
+        Tue, 08 Feb 2022 02:08:07 -0800 (PST)
 From:   Nicolas Saenz Julienne <nsaenzju@redhat.com>
 To:     akpm@linux-foundation.org
 Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
@@ -61,15 +62,17 @@ Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         mgorman@suse.de, linux-rt-users@vger.kernel.org, vbabka@suse.cz,
         cl@linux.com, paulmck@kernel.org, willy@infradead.org,
         Nicolas Saenz Julienne <nsaenzju@redhat.com>
-Subject: [PATCH 0/2] mm/page_alloc: Remote per-cpu lists drain support
-Date:   Tue,  8 Feb 2022 11:07:48 +0100
-Message-Id: <20220208100750.1189808-1-nsaenzju@redhat.com>
+Subject: [PATCH 1/2] mm/page_alloc: Access lists in 'struct per_cpu_pages' indirectly
+Date:   Tue,  8 Feb 2022 11:07:49 +0100
+Message-Id: <20220208100750.1189808-2-nsaenzju@redhat.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220208100750.1189808-1-nsaenzju@redhat.com>
+References: <20220208100750.1189808-1-nsaenzju@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,235 +80,394 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series replaces mm/page_alloc's per-cpu page lists drain mechanism with
-one that allows accessing the lists remotely. Currently, only a local CPU is
-permitted to change its per-cpu lists, and it's expected to do so, on-demand,
-whenever a process demands it by means of queueing a drain task on the local
-CPU. This causes problems for NOHZ_FULL CPUs and real-time systems that can't
-take any sort of interruption and to some lesser extent inconveniences idle and
-virtualised systems.
+In preparation to adding remote per-cpu page list drain support, let's
+bundle 'struct per_cpu_pages's' page lists and page count into a new
+structure: 'struct pcplists', and have all code access it indirectly
+through a pointer. It'll be used by upcoming patches in order to
+maintain multiple instances of 'pcplists' and switch the pointer
+atomically.
 
-The new algorithm will atomically switch the pointer to the per-cpu page lists
-and use RCU to make sure it's not being concurrently used before draining the
-lists. And its main benefit of is that it fixes the issue for good, avoiding
-the need for configuration based heuristics or having to modify applications
-(i.e. using the isolation prctrl being worked by Marcello Tosatti ATM).
+The 'struct pcplists' instance lives inside 'struct per_cpu_pages', and
+shouldn't be accessed directly. It is setup as such since these
+structures are used during early boot when no memory allocation is
+possible and to simplify memory hotplug code paths.
 
-All this with minimal performance implications: a page allocation
-microbenchmark was run on multiple systems and architectures generally showing
-no performance differences, only the more extreme cases showed a 1-3%
-degradation. See data below. Needless to say that I'd appreciate if someone
-could validate my values independently.
+free_pcppages_bulk() and __rmqueue_pcplist()'s function signatures
+change a bit so as to accommodate these changes without affecting
+performance.
 
-The approach has been stress-tested: I forced 100 drains/s while running
-mmtests' pft in a loop for a full day on multiple machines and archs (arm64,
-x86_64, ppc64le).
+No functional change intended.
 
-Note that this is not the first attempt at fixing this per-cpu page lists:
- - The first attempt[1] tried to conditionally change the pagesets locking
-   scheme based the NOHZ_FULL config. It was deemed hard to maintain as the
-   NOHZ_FULL code path would be rarely tested. Also, this only solves the issue
-   for NOHZ_FULL setups, which isn't ideal.
- - The second[2] unanimously switched the local_locks to per-cpu spinlocks. The
-   performance degradation was too big.
-
-Previous RFC: https://lkml.org/lkml/2021/10/8/793
-
-Thanks!
-
-[1] https://lkml.org/lkml/2021/9/21/599
-[2] https://lkml.org/lkml/2021/11/3/644
-
+Signed-off-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
 ---
 
 Changes since RFC:
- - Get rid of aesthetic changes that affected performance
- - Add more documentation
- - Add better commit messages
- - Pass sparse tests
- - Verify this_cpu_*() usage
- - Performance measurements
+ - Add more info in commit message.
+ - Removed __private attribute, in hindsight doesn't really fit what
+   we're doing here.
+ - Use raw_cpu_ptr() where relevant to avoid warnings.
 
-Nicolas Saenz Julienne (2):
-  mm/page_alloc: Access lists in 'struct per_cpu_pages' indirectly
-  mm/page_alloc: Add remote draining support to per-cpu lists
+ include/linux/mmzone.h | 10 +++--
+ mm/page_alloc.c        | 87 +++++++++++++++++++++++++-----------------
+ mm/vmstat.c            |  6 +--
+ 3 files changed, 62 insertions(+), 41 deletions(-)
 
- include/linux/mmzone.h |  28 +++++-
- mm/page_alloc.c        | 212 ++++++++++++++++++++++++++---------------
- mm/vmstat.c            |   6 +-
- 3 files changed, 162 insertions(+), 84 deletions(-)
-
-
--------------------------Performance results-----------------------------
-
-I'm focusing on mmtests' Page Fault Test (pft), as it's page allocator
-intensive.
-
-- AMD Daytona Reference System, 2 sockets, AMD EPYC 7742, Zen 2, 64-Core,
-  4 NUMA nodes, x86_64
-
-pft timings:
-                                     vanilla                    rcu
-Amean     system-1          58.52 (   0.00%)       58.92 *  -0.68%*
-Amean     system-4          61.00 (   0.00%)       61.41 *  -0.67%*
-Amean     system-7          61.55 (   0.00%)       61.74 *  -0.30%*
-Amean     system-12         64.91 (   0.00%)       64.94 *  -0.05%*
-Amean     system-21         98.80 (   0.00%)       99.92 *  -1.13%*
-Amean     system-30        147.68 (   0.00%)      145.83 *   1.25%*
-Amean     system-48        237.04 (   0.00%)      241.29 *  -1.79%*
-Amean     system-79        286.61 (   0.00%)      283.72 *   1.01%*
-Amean     system-110       303.40 (   0.00%)      299.91 *   1.15%*
-Amean     system-128       345.07 (   0.00%)      342.10 *   0.86%*
-Amean     elapsed-1         61.21 (   0.00%)       61.65 *  -0.71%*
-Amean     elapsed-4         15.94 (   0.00%)       16.05 *  -0.69%*
-Amean     elapsed-7          9.24 (   0.00%)        9.28 *  -0.47%*
-Amean     elapsed-12         5.70 (   0.00%)        5.70 *  -0.07%*
-Amean     elapsed-21         5.11 (   0.00%)        5.06 *   1.13%*
-Amean     elapsed-30         5.28 (   0.00%)        5.14 *   2.73%*
-Amean     elapsed-48         5.28 (   0.00%)        5.24 *   0.74%*
-Amean     elapsed-79         4.41 (   0.00%)        4.31 *   2.17%*
-Amean     elapsed-110        3.45 (   0.00%)        3.44 *   0.40%*
-Amean     elapsed-128        2.75 (   0.00%)        2.75 *  -0.28%*
-
-- AMD Speedway Reference System, 2 sockets, AMD EPYC 7601, Zen 1, 64-core, 8
-  NUMA nodes, x86_64. Lots of variance between tests on this platform. It'll
-  easily swing -+5% on each result. 
-
-pft timings:
-                                     vanilla                    rcu
-Amean     system-1          69.20 (   0.00%)       66.21 *   4.32%*
-Amean     system-4          70.79 (   0.00%)       69.01 *   2.52%*
-Amean     system-7          71.34 (   0.00%)       69.16 *   3.05%*
-Amean     system-12         74.00 (   0.00%)       72.74 *   1.70%*
-Amean     system-21         86.01 (   0.00%)       85.70 *   0.36%*
-Amean     system-30         89.21 (   0.00%)       89.93 *  -0.80%*
-Amean     system-48         92.39 (   0.00%)       92.43 *  -0.04%*
-Amean     system-79        120.19 (   0.00%)      121.30 *  -0.92%*
-Amean     system-110       172.79 (   0.00%)      179.37 *  -3.81%*
-Amean     system-128       201.70 (   0.00%)      212.57 *  -5.39%*
-Amean     elapsed-1         72.23 (   0.00%)       69.29 *   4.08%*
-Amean     elapsed-4         18.69 (   0.00%)       18.28 *   2.20%*
-Amean     elapsed-7         10.80 (   0.00%)       10.54 *   2.41%*
-Amean     elapsed-12         6.62 (   0.00%)        6.53 *   1.30%*
-Amean     elapsed-21         4.68 (   0.00%)        4.69 *  -0.14%*
-Amean     elapsed-30         3.44 (   0.00%)        3.50 *  -1.66%*
-Amean     elapsed-48         2.40 (   0.00%)        2.42 *  -1.00%*
-Amean     elapsed-79         2.05 (   0.00%)        2.09 *  -1.90%*
-Amean     elapsed-110        1.83 (   0.00%)        1.91 *  -4.60%*
-Amean     elapsed-128        1.75 (   0.00%)        1.85 *  -5.99%*
-
-- IBM 9006-22C system, 2 sockets, POWER9, 64-Core, 1 NUMA node per cpu,
-  pppc64le.
-
-pft timings:
-                                     vanilla                    rcu
-Amean     system-1           1.82 (   0.00%)        1.85 *  -1.43%*
-Amean     system-4           2.18 (   0.00%)        2.22 *  -2.02%*
-Amean     system-7           3.27 (   0.00%)        3.28 *  -0.15%*
-Amean     system-12          5.22 (   0.00%)        5.20 *   0.26%*
-Amean     system-21         10.10 (   0.00%)       10.20 *  -1.00%*
-Amean     system-30         15.00 (   0.00%)       14.52 *   3.20%*
-Amean     system-48         26.41 (   0.00%)       25.96 *   1.71%*
-Amean     system-79         29.35 (   0.00%)       29.70 *  -1.21%*
-Amean     system-110        24.01 (   0.00%)       23.40 *   2.54%*
-Amean     system-128        24.57 (   0.00%)       25.32 *  -3.06%*
-Amean     elapsed-1          1.85 (   0.00%)        1.87 *  -1.28%*
-Amean     elapsed-4          0.56 (   0.00%)        0.57 *  -1.72%*
-Amean     elapsed-7          0.51 (   0.00%)        0.50 *   0.07%*
-Amean     elapsed-12         0.51 (   0.00%)        0.51 *   0.06%*
-Amean     elapsed-21         0.54 (   0.00%)        0.54 *   0.06%*
-Amean     elapsed-30         0.54 (   0.00%)        0.53 *   2.22%*
-Amean     elapsed-48         0.58 (   0.00%)        0.57 *   1.73%*
-Amean     elapsed-79         0.49 (   0.00%)        0.48 *   0.89%*
-Amean     elapsed-110        0.37 (   0.00%)        0.37 *  -1.08%*
-Amean     elapsed-128        0.33 (   0.00%)        0.33 *   0.00%*
-
-- Ampere MtSnow, 1 socket, Neoverse-N1, 80-Cores, 1 NUMA node, arm64.
-
-pft timings:
-                                    vanilla		       rcu
-Amean     system-1         11.92 (   0.00%)       11.99 *  -0.61%*
-Amean     system-4         13.13 (   0.00%)       13.09 *   0.31%*
-Amean     system-7         13.91 (   0.00%)       13.94 *  -0.20%*
-Amean     system-12        15.77 (   0.00%)       15.69 *   0.48%*
-Amean     system-21        21.32 (   0.00%)       21.42 *  -0.46%*
-Amean     system-30        28.58 (   0.00%)       29.12 *  -1.90%*
-Amean     system-48        47.41 (   0.00%)       46.91 *   1.04%*
-Amean     system-79        76.76 (   0.00%)       77.16 *  -0.52%*
-Amean     system-80        77.98 (   0.00%)       78.23 *  -0.32%*
-Amean     elapsed-1        12.46 (   0.00%)       12.53 *  -0.58%*
-Amean     elapsed-4         3.47 (   0.00%)        3.46 *   0.34%*
-Amean     elapsed-7         2.18 (   0.00%)        2.21 *  -1.58%*
-Amean     elapsed-12        1.41 (   0.00%)        1.42 *  -0.80%*
-Amean     elapsed-21        1.09 (   0.00%)        1.12 *  -2.60%*
-Amean     elapsed-30        0.98 (   0.00%)        1.01 *  -3.08%*
-Amean     elapsed-48        1.08 (   0.00%)        1.10 *  -1.78%*
-Amean     elapsed-79        1.32 (   0.00%)        1.28 *   2.71%*
-Amean     elapsed-80        1.32 (   0.00%)        1.28 *   3.23%*
-
-- Dell R430, 2 sockets, Intel Xeon E5-2640 v3, Sandy Bridge, 16-Cores, 2 NUMA
-  nodes, x86_64.
-
-pft timings:
-                                    vanilla		       rcu
-Amean     system-1         11.10 (   0.00%)       11.07 *   0.24%*
-Amean     system-3         11.14 (   0.00%)       11.10 *   0.34%*
-Amean     system-5         11.18 (   0.00%)       11.13 *   0.47%*
-Amean     system-7         11.21 (   0.00%)       11.17 *   0.38%*
-Amean     system-12        11.28 (   0.00%)       11.28 (  -0.03%)
-Amean     system-18        13.24 (   0.00%)       13.25 *  -0.11%*
-Amean     system-24        17.12 (   0.00%)       17.14 (  -0.13%)
-Amean     system-30        21.10 (   0.00%)       21.23 *  -0.60%*
-Amean     system-32        22.31 (   0.00%)       22.47 *  -0.71%*
-Amean     elapsed-1        11.76 (   0.00%)       11.73 *   0.29%*
-Amean     elapsed-3         3.93 (   0.00%)        3.93 *   0.17%*
-Amean     elapsed-5         2.39 (   0.00%)        2.37 *   0.74%*
-Amean     elapsed-7         1.72 (   0.00%)        1.71 *   0.81%*
-Amean     elapsed-12        1.02 (   0.00%)        1.03 (  -0.42%)
-Amean     elapsed-18        1.13 (   0.00%)        1.14 (  -0.18%)
-Amean     elapsed-24        0.87 (   0.00%)        0.88 *  -0.65%*
-Amean     elapsed-30        0.77 (   0.00%)        0.78 *  -0.86%*
-Amean     elapsed-32        0.74 (   0.00%)        0.74 (   0.00%)
-
-- HPE Apollo 70, 2 sockets, Cavium ThunderX2, 128-Cores, 2 NUMA nodes, arm64.
-  NOTE: The test here only goes up to 128 for some reason, although there are
-  256 CPUs. Maybe a mmtests issue? I didn't investigate.
-
-pft timings:
-                                     vanilla		        rcu
-Amean     system-1           4.42 (   0.00%)        4.36 *   1.29%*
-Amean     system-4           4.56 (   0.00%)        4.51 *   1.05%*
-Amean     system-7           4.63 (   0.00%)        4.65 *  -0.42%*
-Amean     system-12          5.96 (   0.00%)        6.02 *  -1.00%*
-Amean     system-21         10.97 (   0.00%)       11.01 *  -0.32%*
-Amean     system-30         16.01 (   0.00%)       16.04 *  -0.19%*
-Amean     system-48         26.81 (   0.00%)       26.78 *   0.09%*
-Amean     system-79         30.80 (   0.00%)       30.85 *  -0.16%*
-Amean     system-110        31.87 (   0.00%)       31.93 *  -0.19%*
-Amean     system-128        36.27 (   0.00%)       36.31 *  -0.10%*
-Amean     elapsed-1          4.88 (   0.00%)        4.85 *   0.60%*
-Amean     elapsed-4          1.27 (   0.00%)        1.26 *   1.00%*
-Amean     elapsed-7          0.73 (   0.00%)        0.74 *  -0.46%*
-Amean     elapsed-12         0.55 (   0.00%)        0.55 *   1.09%*
-Amean     elapsed-21         0.59 (   0.00%)        0.60 *  -0.96%*
-Amean     elapsed-30         0.60 (   0.00%)        0.60 *   0.28%*
-Amean     elapsed-48         0.60 (   0.00%)        0.60 *   0.44%*
-Amean     elapsed-79         0.49 (   0.00%)        0.49 *  -0.07%*
-Amean     elapsed-110        0.36 (   0.00%)        0.36 *   0.28%*
-Amean     elapsed-128        0.31 (   0.00%)        0.31 *  -0.43%*
-
-- Raspberry Pi 4, 1 socket, bcm2711, Cortex-A72, 4-Cores, 1 NUMA node, arm64.
-
-pft timings:
-                                   vanilla		      rcu
-Amean     system-1         0.67 (   0.00%)        0.67 *  -1.25%*
-Amean     system-3         1.30 (   0.00%)        1.29 *   0.62%*
-Amean     system-4         1.61 (   0.00%)        1.59 *   0.95%*
-Amean     elapsed-1        0.71 (   0.00%)        0.72 *  -1.17%*
-Amean     elapsed-3        0.45 (   0.00%)        0.45 *   0.88%*
-Amean     elapsed-4        0.42 (   0.00%)        0.42 *   1.19%*
-
-
+diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
+index 3fff6deca2c0..b4cb85d9c6e8 100644
+--- a/include/linux/mmzone.h
++++ b/include/linux/mmzone.h
+@@ -381,7 +381,6 @@ enum zone_watermarks {
+ 
+ /* Fields and list protected by pagesets local_lock in page_alloc.c */
+ struct per_cpu_pages {
+-	int count;		/* number of pages in the list */
+ 	int high;		/* high watermark, emptying needed */
+ 	int batch;		/* chunk size for buddy add/remove */
+ 	short free_factor;	/* batch scaling factor during free */
+@@ -389,8 +388,13 @@ struct per_cpu_pages {
+ 	short expire;		/* When 0, remote pagesets are drained */
+ #endif
+ 
+-	/* Lists of pages, one per migrate type stored on the pcp-lists */
+-	struct list_head lists[NR_PCP_LISTS];
++	struct pcplists *lp;
++	struct pcplists {
++		/* Number of pages in the pcplists */
++		int count;
++		/* Lists of pages, one per migrate type stored on the pcp-lists */
++		struct list_head lists[NR_PCP_LISTS];
++	} __pcplists; /* Do not access directly */
+ };
+ 
+ struct per_cpu_zonestat {
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 4f549123150c..4f37815b0e4c 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -1449,13 +1449,12 @@ static inline void prefetch_buddy(struct page *page)
+  * count is the number of pages to free.
+  */
+ static void free_pcppages_bulk(struct zone *zone, int count,
+-					struct per_cpu_pages *pcp)
++			       int batch, struct pcplists *lp)
+ {
+ 	int pindex = 0;
+ 	int batch_free = 0;
+ 	int nr_freed = 0;
+ 	unsigned int order;
+-	int prefetch_nr = READ_ONCE(pcp->batch);
+ 	bool isolated_pageblocks;
+ 	struct page *page, *tmp;
+ 	LIST_HEAD(head);
+@@ -1464,7 +1463,7 @@ static void free_pcppages_bulk(struct zone *zone, int count,
+ 	 * Ensure proper count is passed which otherwise would stuck in the
+ 	 * below while (list_empty(list)) loop.
+ 	 */
+-	count = min(pcp->count, count);
++	count = min(lp->count, count);
+ 	while (count > 0) {
+ 		struct list_head *list;
+ 
+@@ -1479,7 +1478,7 @@ static void free_pcppages_bulk(struct zone *zone, int count,
+ 			batch_free++;
+ 			if (++pindex == NR_PCP_LISTS)
+ 				pindex = 0;
+-			list = &pcp->lists[pindex];
++			list = &lp->lists[pindex];
+ 		} while (list_empty(list));
+ 
+ 		/* This is the only non-empty list. Free them all. */
+@@ -1513,13 +1512,13 @@ static void free_pcppages_bulk(struct zone *zone, int count,
+ 			 * avoid excessive prefetching due to large count, only
+ 			 * prefetch buddy for the first pcp->batch nr of pages.
+ 			 */
+-			if (prefetch_nr) {
++			if (batch) {
+ 				prefetch_buddy(page);
+-				prefetch_nr--;
++				batch--;
+ 			}
+ 		} while (count > 0 && --batch_free && !list_empty(list));
+ 	}
+-	pcp->count -= nr_freed;
++	lp->count -= nr_freed;
+ 
+ 	/*
+ 	 * local_lock_irq held so equivalent to spin_lock_irqsave for
+@@ -3130,14 +3129,16 @@ static int rmqueue_bulk(struct zone *zone, unsigned int order,
+  */
+ void drain_zone_pages(struct zone *zone, struct per_cpu_pages *pcp)
+ {
++	struct pcplists *lp;
+ 	unsigned long flags;
+ 	int to_drain, batch;
+ 
+ 	local_lock_irqsave(&pagesets.lock, flags);
+ 	batch = READ_ONCE(pcp->batch);
+-	to_drain = min(pcp->count, batch);
++	lp = pcp->lp;
++	to_drain = min(lp->count, batch);
+ 	if (to_drain > 0)
+-		free_pcppages_bulk(zone, to_drain, pcp);
++		free_pcppages_bulk(zone, to_drain, batch, lp);
+ 	local_unlock_irqrestore(&pagesets.lock, flags);
+ }
+ #endif
+@@ -3153,12 +3154,14 @@ static void drain_pages_zone(unsigned int cpu, struct zone *zone)
+ {
+ 	unsigned long flags;
+ 	struct per_cpu_pages *pcp;
++	struct pcplists *lp;
+ 
+ 	local_lock_irqsave(&pagesets.lock, flags);
+ 
+ 	pcp = per_cpu_ptr(zone->per_cpu_pageset, cpu);
+-	if (pcp->count)
+-		free_pcppages_bulk(zone, pcp->count, pcp);
++	lp = pcp->lp;
++	if (lp->count)
++		free_pcppages_bulk(zone, lp->count, READ_ONCE(pcp->batch), lp);
+ 
+ 	local_unlock_irqrestore(&pagesets.lock, flags);
+ }
+@@ -3219,7 +3222,7 @@ static void drain_local_pages_wq(struct work_struct *work)
+  *
+  * drain_all_pages() is optimized to only execute on cpus where pcplists are
+  * not empty. The check for non-emptiness can however race with a free to
+- * pcplist that has not yet increased the pcp->count from 0 to 1. Callers
++ * pcplist that has not yet increased the lp->count from 0 to 1. Callers
+  * that need the guarantee that every CPU has drained can disable the
+  * optimizing racy check.
+  */
+@@ -3258,24 +3261,24 @@ static void __drain_all_pages(struct zone *zone, bool force_all_cpus)
+ 	 * disables preemption as part of its processing
+ 	 */
+ 	for_each_online_cpu(cpu) {
+-		struct per_cpu_pages *pcp;
+ 		struct zone *z;
+ 		bool has_pcps = false;
++		struct pcplists *lp;
+ 
+ 		if (force_all_cpus) {
+ 			/*
+-			 * The pcp.count check is racy, some callers need a
++			 * The lp->count check is racy, some callers need a
+ 			 * guarantee that no cpu is missed.
+ 			 */
+ 			has_pcps = true;
+ 		} else if (zone) {
+-			pcp = per_cpu_ptr(zone->per_cpu_pageset, cpu);
+-			if (pcp->count)
++			lp = per_cpu_ptr(zone->per_cpu_pageset, cpu)->lp;
++			if (lp->count)
+ 				has_pcps = true;
+ 		} else {
+ 			for_each_populated_zone(z) {
+-				pcp = per_cpu_ptr(z->per_cpu_pageset, cpu);
+-				if (pcp->count) {
++				lp = per_cpu_ptr(z->per_cpu_pageset, cpu)->lp;
++				if (lp->count) {
+ 					has_pcps = true;
+ 					break;
+ 				}
+@@ -3427,19 +3430,21 @@ static void free_unref_page_commit(struct page *page, int migratetype,
+ {
+ 	struct zone *zone = page_zone(page);
+ 	struct per_cpu_pages *pcp;
++	struct pcplists *lp;
+ 	int high;
+ 	int pindex;
+ 
+ 	__count_vm_event(PGFREE);
+ 	pcp = this_cpu_ptr(zone->per_cpu_pageset);
++	lp = pcp->lp;
+ 	pindex = order_to_pindex(migratetype, order);
+-	list_add(&page->lru, &pcp->lists[pindex]);
+-	pcp->count += 1 << order;
++	list_add(&page->lru, &lp->lists[pindex]);
++	lp->count += 1 << order;
+ 	high = nr_pcp_high(pcp, zone);
+-	if (pcp->count >= high) {
++	if (lp->count >= high) {
+ 		int batch = READ_ONCE(pcp->batch);
+ 
+-		free_pcppages_bulk(zone, nr_pcp_free(pcp, high, batch), pcp);
++		free_pcppages_bulk(zone, nr_pcp_free(pcp, high, batch), batch, lp);
+ 	}
+ }
+ 
+@@ -3660,7 +3665,8 @@ struct page *__rmqueue_pcplist(struct zone *zone, unsigned int order,
+ 			int migratetype,
+ 			unsigned int alloc_flags,
+ 			struct per_cpu_pages *pcp,
+-			struct list_head *list)
++			struct list_head *list,
++			int *count)
+ {
+ 	struct page *page;
+ 
+@@ -3682,14 +3688,14 @@ struct page *__rmqueue_pcplist(struct zone *zone, unsigned int order,
+ 					batch, list,
+ 					migratetype, alloc_flags);
+ 
+-			pcp->count += alloced << order;
++			*count += alloced << order;
+ 			if (unlikely(list_empty(list)))
+ 				return NULL;
+ 		}
+ 
+ 		page = list_first_entry(list, struct page, lru);
+ 		list_del(&page->lru);
+-		pcp->count -= 1 << order;
++		*count -= 1 << order;
+ 	} while (check_new_pcp(page));
+ 
+ 	return page;
+@@ -3703,8 +3709,10 @@ static struct page *rmqueue_pcplist(struct zone *preferred_zone,
+ {
+ 	struct per_cpu_pages *pcp;
+ 	struct list_head *list;
++	struct pcplists *lp;
+ 	struct page *page;
+ 	unsigned long flags;
++	int *count;
+ 
+ 	local_lock_irqsave(&pagesets.lock, flags);
+ 
+@@ -3715,8 +3723,11 @@ static struct page *rmqueue_pcplist(struct zone *preferred_zone,
+ 	 */
+ 	pcp = this_cpu_ptr(zone->per_cpu_pageset);
+ 	pcp->free_factor >>= 1;
+-	list = &pcp->lists[order_to_pindex(migratetype, order)];
+-	page = __rmqueue_pcplist(zone, order, migratetype, alloc_flags, pcp, list);
++	lp = pcp->lp;
++	list = &lp->lists[order_to_pindex(migratetype, order)];
++	count = &lp->count;
++	page = __rmqueue_pcplist(zone, order, migratetype, alloc_flags,
++				 pcp, list, count);
+ 	local_unlock_irqrestore(&pagesets.lock, flags);
+ 	if (page) {
+ 		__count_zid_vm_events(PGALLOC, page_zonenum(page), 1);
+@@ -5255,9 +5266,11 @@ unsigned long __alloc_pages_bulk(gfp_t gfp, int preferred_nid,
+ 	struct per_cpu_pages *pcp;
+ 	struct list_head *pcp_list;
+ 	struct alloc_context ac;
++	struct pcplists *lp;
+ 	gfp_t alloc_gfp;
+ 	unsigned int alloc_flags = ALLOC_WMARK_LOW;
+ 	int nr_populated = 0, nr_account = 0;
++	int *count;
+ 
+ 	/*
+ 	 * Skip populated array elements to determine if any pages need
+@@ -5333,7 +5346,9 @@ unsigned long __alloc_pages_bulk(gfp_t gfp, int preferred_nid,
+ 	/* Attempt the batch allocation */
+ 	local_lock_irqsave(&pagesets.lock, flags);
+ 	pcp = this_cpu_ptr(zone->per_cpu_pageset);
+-	pcp_list = &pcp->lists[order_to_pindex(ac.migratetype, 0)];
++	lp = pcp->lp;
++	pcp_list = &lp->lists[order_to_pindex(ac.migratetype, 0)];
++	count = &lp->count;
+ 
+ 	while (nr_populated < nr_pages) {
+ 
+@@ -5344,7 +5359,7 @@ unsigned long __alloc_pages_bulk(gfp_t gfp, int preferred_nid,
+ 		}
+ 
+ 		page = __rmqueue_pcplist(zone, 0, ac.migratetype, alloc_flags,
+-								pcp, pcp_list);
++					 pcp, pcp_list, count);
+ 		if (unlikely(!page)) {
+ 			/* Try and get at least one page */
+ 			if (!nr_populated)
+@@ -5947,7 +5962,7 @@ void show_free_areas(unsigned int filter, nodemask_t *nodemask)
+ 			continue;
+ 
+ 		for_each_online_cpu(cpu)
+-			free_pcp += per_cpu_ptr(zone->per_cpu_pageset, cpu)->count;
++			free_pcp += per_cpu_ptr(zone->per_cpu_pageset, cpu)->lp->count;
+ 	}
+ 
+ 	printk("active_anon:%lu inactive_anon:%lu isolated_anon:%lu\n"
+@@ -6041,7 +6056,7 @@ void show_free_areas(unsigned int filter, nodemask_t *nodemask)
+ 
+ 		free_pcp = 0;
+ 		for_each_online_cpu(cpu)
+-			free_pcp += per_cpu_ptr(zone->per_cpu_pageset, cpu)->count;
++			free_pcp += per_cpu_ptr(zone->per_cpu_pageset, cpu)->lp->count;
+ 
+ 		show_node(zone);
+ 		printk(KERN_CONT
+@@ -6084,7 +6099,7 @@ void show_free_areas(unsigned int filter, nodemask_t *nodemask)
+ 			K(zone_page_state(zone, NR_MLOCK)),
+ 			K(zone_page_state(zone, NR_BOUNCE)),
+ 			K(free_pcp),
+-			K(this_cpu_read(zone->per_cpu_pageset->count)),
++			K(raw_cpu_ptr(zone->per_cpu_pageset)->lp->count),
+ 			K(zone_page_state(zone, NR_FREE_CMA_PAGES)));
+ 		printk("lowmem_reserve[]:");
+ 		for (i = 0; i < MAX_NR_ZONES; i++)
+@@ -6971,7 +6986,7 @@ static int zone_highsize(struct zone *zone, int batch, int cpu_online)
+ 
+ /*
+  * pcp->high and pcp->batch values are related and generally batch is lower
+- * than high. They are also related to pcp->count such that count is lower
++ * than high. They are also related to pcp->lp->count such that count is lower
+  * than high, and as soon as it reaches high, the pcplist is flushed.
+  *
+  * However, guaranteeing these relations at all times would require e.g. write
+@@ -6979,7 +6994,7 @@ static int zone_highsize(struct zone *zone, int batch, int cpu_online)
+  * thus be prone to error and bad for performance. Thus the update only prevents
+  * store tearing. Any new users of pcp->batch and pcp->high should ensure they
+  * can cope with those fields changing asynchronously, and fully trust only the
+- * pcp->count field on the local CPU with interrupts disabled.
++ * pcp->lp->count field on the local CPU with interrupts disabled.
+  *
+  * mutex_is_locked(&pcp_batch_high_lock) required when calling this function
+  * outside of boot time (or some other assurance that no concurrent updaters
+@@ -6999,8 +7014,10 @@ static void per_cpu_pages_init(struct per_cpu_pages *pcp, struct per_cpu_zonesta
+ 	memset(pcp, 0, sizeof(*pcp));
+ 	memset(pzstats, 0, sizeof(*pzstats));
+ 
++	pcp->lp = &pcp->__pcplists;
++
+ 	for (pindex = 0; pindex < NR_PCP_LISTS; pindex++)
+-		INIT_LIST_HEAD(&pcp->lists[pindex]);
++		INIT_LIST_HEAD(&pcp->lp->lists[pindex]);
+ 
+ 	/*
+ 	 * Set batch and high values safe for a boot pageset. A true percpu
+diff --git a/mm/vmstat.c b/mm/vmstat.c
+index d5cc8d739fac..576b2b932ccd 100644
+--- a/mm/vmstat.c
++++ b/mm/vmstat.c
+@@ -856,7 +856,7 @@ static int refresh_cpu_vm_stats(bool do_pagesets)
+ 			 * if not then there is nothing to expire.
+ 			 */
+ 			if (!__this_cpu_read(pcp->expire) ||
+-			       !__this_cpu_read(pcp->count))
++			       !this_cpu_ptr(pcp)->lp->count)
+ 				continue;
+ 
+ 			/*
+@@ -870,7 +870,7 @@ static int refresh_cpu_vm_stats(bool do_pagesets)
+ 			if (__this_cpu_dec_return(pcp->expire))
+ 				continue;
+ 
+-			if (__this_cpu_read(pcp->count)) {
++			if (this_cpu_ptr(pcp)->lp->count) {
+ 				drain_zone_pages(zone, this_cpu_ptr(pcp));
+ 				changes++;
+ 			}
+@@ -1728,7 +1728,7 @@ static void zoneinfo_show_print(struct seq_file *m, pg_data_t *pgdat,
+ 			   "\n              high:  %i"
+ 			   "\n              batch: %i",
+ 			   i,
+-			   pcp->count,
++			   pcp->lp->count,
+ 			   pcp->high,
+ 			   pcp->batch);
+ #ifdef CONFIG_SMP
 -- 
 2.34.1
 

@@ -2,79 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22FA94ACEF2
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 03:31:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 501BF4ACF1C
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 03:46:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345969AbiBHCbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 21:31:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59480 "EHLO
+        id S1344341AbiBHCpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 21:45:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345937AbiBHCbF (ORCPT
+        with ESMTP id S232395AbiBHCpM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 21:31:05 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A6EAC06109E;
-        Mon,  7 Feb 2022 18:31:03 -0800 (PST)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Jt6Qy1T5tz9s2j;
-        Tue,  8 Feb 2022 10:29:30 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 8 Feb 2022 10:31:00 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Tue, 8 Feb
- 2022 10:31:00 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>
-CC:     <mchehab@kernel.org>, <jimmy.su@intel.com>
-Subject: [PATCH -next] media: i2c: ov08d10: Fix missing unlock on error in ov08d10_enum_frame_size()
-Date:   Tue, 8 Feb 2022 10:41:45 +0800
-Message-ID: <20220208024145.1994589-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 7 Feb 2022 21:45:12 -0500
+Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6EF1C061A73;
+        Mon,  7 Feb 2022 18:45:11 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id EACAE580226;
+        Mon,  7 Feb 2022 21:45:10 -0500 (EST)
+Received: from imap49 ([10.202.2.99])
+  by compute2.internal (MEProxy); Mon, 07 Feb 2022 21:45:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        sladewatkins.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; bh=GPPvZF7CrpCa01
+        ldSCH7Kb3KmYZSJ9z2RRGc0QtN2mA=; b=fgRaUT5qeuwprMW3BODkLqX1dvpX4k
+        qkUGQjdyG4wmHvvAYApgKyAQnoxYsdsIXrgEdKtvxrdTfHY7PXM7fJ4lYVv3oEeb
+        l6c5rkM55KUvocuqYMeL8lX17iLukdreL4Xg2cQbOIqUDFkrkBoRB9v2I31vF7+b
+        n7dAIOMYLXyjRa45h9PBWui9KW4NsG6fZcGUsdmb0JSVZnmHGlElNPGUtehNjdbH
+        qqm4vQqajztuUWCRiTEzVgdCE9ZDK9EO2Te77x0eHlp5nQisHPzSEriv1v91xSES
+        /SkC/a3H2MXjNPXxzY5dvn/ZCRfnBYIZC+e5djgXbzLaGz1RQR3zHYJQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=GPPvZF7CrpCa01ldS
+        CH7Kb3KmYZSJ9z2RRGc0QtN2mA=; b=H8qie7AUArXm59XzaaMdQwY94zK5KwaOV
+        OVMzNW/dt8YkvWzyZBLHsFvia1eqFozoJLUYNopumbATEutcRz6TA9R68GV3xccT
+        nvpmkDbTMgBRxTaQ0R5YKzhhEW5yrhQFkgOK5djeAu6O4Y5jBRKELoUfnhLk8Iwg
+        21jEEOHK8Ofqf8oHsyMoWBpWEi1Xma1fWoDFx1YECie5nW6ma0VbotAfCTnXvqxb
+        NmDEYCLQnQY0rnUr1M/Mh5w7dJYCqgRWG10y4Ix4lFs1Ft+CiE6Jziv6FFqgHtU0
+        lXl8qkLV6IxECch2N3+iHaUDKpnw15yX03MTiLQwv9cKhdWkDHlog==
+X-ME-Sender: <xms:NtkBYm0yxdkSGk9RDEkpGesAX3EDyT_Q_EO_0uiEardh0CWe7tSqUQ>
+    <xme:NtkBYpGCti6om80-GadM4pTZvm2qkCaZiWyzqoPZljFDJQsKoartQlneorPTLa5-M
+    ye8FoKLaja6irqf5us>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrheeigdegkecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedfufhlrggu
+    vgcuhggrthhkihhnshdfuceoshhlrgguvgesshhlrgguvgifrghtkhhinhhsrdgtohhmqe
+    enucggtffrrghtthgvrhhnpeeuieffteejieetgfevteelheevudehteeihffhteehtdet
+    leegtedtvdevvddugeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
+    hlfhhrohhmpehslhgruggvsehslhgruggvfigrthhkihhnshdrtghomh
+X-ME-Proxy: <xmx:NtkBYu41EPCdE_0v57zg3tcKvZdGechEREtIZ9y3grCipX3J3caiEQ>
+    <xmx:NtkBYn02pidNS-Qw6Re1xR8h638E9jucaYrM7mfEFS7eQbLfvdFzjg>
+    <xmx:NtkBYpFFORRd5u8xfCGt4KD3p-jzr2puPCQRHArzq-HH83pooRKvPw>
+    <xmx:NtkBYh9eMAvTDAcfbRo_rEj6XOfjVje9ujBv66qqhupORmbcj9e21yocmcE>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 2C8EFF6007E; Mon,  7 Feb 2022 21:45:10 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-4748-g31a5b5f50e-fm-cal2020-20220204.001-g31a5b5f5
+Mime-Version: 1.0
+Message-Id: <07d66f94-1290-4d87-bf94-dacd550e6a21@www.fastmail.com>
+In-Reply-To: <20220207103757.232676988@linuxfoundation.org>
+References: <20220207103757.232676988@linuxfoundation.org>
+Date:   Mon, 07 Feb 2022 21:45:09 -0500
+From:   "Slade Watkins" <slade@sladewatkins.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org,
+        "Linus Torvalds" <torvalds@linux-foundation.org>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Guenter Roeck" <linux@roeck-us.net>, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org,
+        "Pavel Machek" <pavel@denx.de>,
+        "Jon Hunter" <jonathanh@nvidia.com>,
+        "Florian Fainelli" <f.fainelli@gmail.com>,
+        "Sudip Mukherjee" <sudipm.mukherjee@gmail.com>
+Subject: Re: [PATCH 5.10 00/74] 5.10.99-rc1 review
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the missing unlock before return from function ov08d10_enum_frame_size()
-in the error handling case.
+On Mon, Feb 7, 2022, at 6:05 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.99 release.
+> There are 74 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 09 Feb 2022 10:37:42 +0000.
+> Anything received after that time might be too late.
 
-Fixes: 7be91e02ed57 ("media: i2c: Add ov08d10 camera sensor driver")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/media/i2c/ov08d10.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Compiled and booted 5.10.99-rc1 on my x86_64 test system successfully without errors or regressions.
 
-diff --git a/drivers/media/i2c/ov08d10.c b/drivers/media/i2c/ov08d10.c
-index 1f42dd714ef6..e5ef6466a3ec 100644
---- a/drivers/media/i2c/ov08d10.c
-+++ b/drivers/media/i2c/ov08d10.c
-@@ -1264,8 +1264,10 @@ static int ov08d10_enum_frame_size(struct v4l2_subdev *sd,
- 		return -EINVAL;
- 
- 	mutex_lock(&ov08d10->mutex);
--	if (fse->code != ov08d10_get_format_code(ov08d10))
-+	if (fse->code != ov08d10_get_format_code(ov08d10)) {
-+		mutex_unlock(&ov08d10->mutex);
- 		return -EINVAL;
-+	}
- 	mutex_unlock(&ov08d10->mutex);
- 
- 	fse->min_width = ov08d10->priv_lane->sp_modes[fse->index].width;
--- 
-2.25.1
+Tested-by: Slade Watkins <slade@sladewatkins.com>
 
+Thanks,
+Slade

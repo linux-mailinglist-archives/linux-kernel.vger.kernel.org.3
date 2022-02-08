@@ -2,73 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 623644AD75D
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:33:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 454684AD770
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:35:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239781AbiBHLdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 06:33:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35566 "EHLO
+        id S242327AbiBHLdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 06:33:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236964AbiBHLCw (ORCPT
+        with ESMTP id S1349560AbiBHLH2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 06:02:52 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70344C03FEC0;
-        Tue,  8 Feb 2022 03:02:50 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id t14-20020a17090a3e4e00b001b8f6032d96so1117290pjm.2;
-        Tue, 08 Feb 2022 03:02:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=DC04a195i1zvZt11lWzbiso1M82DwOlOuX2AuxB9O58=;
-        b=UhdTUDLycpQZpVNf8jlWDX+gExRIqMUNrl4WNEAHorGKILuaG0cajSvVg4n2nUlKM8
-         7PWAc3dm3t68KFFDHQFE0PlXpIK+U8tKv1GRMvlvsV42xhfhHn9kJFwjUX1nYhKsnEFs
-         hnf7WVSyVUOxzTnSL2o1F3XapDI0SSsrgdRGlwlJE4ciXGABFhB+LLk5M1TO3kvzshAB
-         S7Wz757V9kcK/XbZZQMHoTx1fL+Keh6raFoAkA0JqwXfxN/8ZF7sQKfHvLcEygd48S0E
-         9U7PkZwWCNiOTeayY9qV7LNkeFBgixKwAXXsI3Ba94ERN0PEhxHx9MBTJ7QLMuI1ZybY
-         UnSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=DC04a195i1zvZt11lWzbiso1M82DwOlOuX2AuxB9O58=;
-        b=ruL9nT8oSNk14oacvd+LLp1W/9thcFfHPEr3SOFNYs49btEPh5jLv9um3R/Gi7GqHZ
-         Fxl3YgDZzffSqSAIxt7zTrtkLafd9Q/8Um8HbwrDH+G8GwqXcq1/onbOxfNghiBBHmiD
-         u8YSwx9ifDHxmdcd/5msYT020MPU9/AIaj0eQR57Y6RmKqgaGiG/iDtDll7M8jGNedjE
-         Y//+4S78LcKXstcuMktWdnv8zIuQm5PGPcldBffPUathOg+/86pLlvOdo8li2O3mgv9Z
-         VhEgBuOF4peNFbOJchkp3+Gs63kCWxaAA2j0kcOyrJ1CQ5+EnvhNTeyyx83vK/F94diW
-         pm7A==
-X-Gm-Message-State: AOAM533Oz7zndfrDWkpQOxkgTwLphAxmiVcr4WhvIpqfBEDGvqJtTyq8
-        Vlxc31S0Vu+TdMX3nTt6YTE=
-X-Google-Smtp-Source: ABdhPJx5XPyRKUW58UZe5unsM1B6JEeuOeEyZH4w4NWnRpFInGg4RagyKOT4aqaz0rH+dfOnzTqa8Q==
-X-Received: by 2002:a17:90b:390a:: with SMTP id ob10mr754002pjb.110.1644318169614;
-        Tue, 08 Feb 2022 03:02:49 -0800 (PST)
-Received: from vimal-VirtualBox.. ([49.207.201.237])
-        by smtp.gmail.com with ESMTPSA id nu15sm2675935pjb.5.2022.02.08.03.02.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 03:02:49 -0800 (PST)
-From:   Vimal Agrawal <avimalin@gmail.com>
-X-Google-Original-From: Vimal Agrawal <vimal.agrawal@sophos.com>
-To:     mcgrof@kernel.org
-Cc:     hch@infradead.org, masahiroy@kernel.org, michal.lkml@markovi.net,
-        ndesaulniers@google.com, JBeulich@suse.com, jeffm@suse.com,
-        sam@ravnborg.org, linux-kbuild@vger.kernel.org, jeyu@kernel.org,
-        linux-kernel@vger.kernel.org, avimalin@gmail.com,
-        vimal.agrawal@sophos.com, nishit.shah@sophos.com,
-        gregkh@linuxfoundation.org,
-        Dirk VanDerMerwe <Dirk.VanDerMerwe@Sophos.com>
-Subject: [PATCH v6] modules: add heuristic when stripping unneeded symbols
-Date:   Tue,  8 Feb 2022 16:32:31 +0530
-Message-Id: <20220208110231.2896-1-vimal.agrawal@sophos.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <CALkUMdSVV=Vju3TtryObKney7Q1TJLgGd7G7OB4X3FW9eJf4-w@mail.gmail.com>
-References: <CALkUMdSVV=Vju3TtryObKney7Q1TJLgGd7G7OB4X3FW9eJf4-w@mail.gmail.com>
+        Tue, 8 Feb 2022 06:07:28 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 093D5C03FEC0;
+        Tue,  8 Feb 2022 03:07:26 -0800 (PST)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JtKqh3kXGz1FCrv;
+        Tue,  8 Feb 2022 19:03:12 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 8 Feb 2022 19:07:23 +0800
+CC:     <gregkh@linuxfoundation.org>, <helgaas@kernel.org>,
+        <alexander.shishkin@linux.intel.com>, <lorenzo.pieralisi@arm.com>,
+        <will@kernel.org>, <mark.rutland@arm.com>,
+        <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
+        <mike.leach@linaro.org>, <leo.yan@linaro.org>,
+        <daniel.thompson@linaro.org>, <joro@8bytes.org>,
+        <john.garry@huawei.com>, <shameerali.kolothum.thodi@huawei.com>,
+        <robin.murphy@arm.com>, <peterz@infradead.org>, <mingo@redhat.com>,
+        <acme@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <coresight@lists.linaro.org>, <linux-pci@vger.kernel.org>,
+        <linux-perf-users@vger.kernel.org>,
+        <iommu@lists.linux-foundation.org>, <prime.zeng@huawei.com>,
+        <liuqi115@huawei.com>, <zhangshaokun@hisilicon.com>,
+        <linuxarm@huawei.com>, <song.bao.hua@hisilicon.com>
+Subject: Re: [PATCH v3 1/8] hwtracing: Add trace function support for
+ HiSilicon PCIe Tune and Trace device
+To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+        Yicong Yang <yangyicong@hisilicon.com>
+References: <20220124131118.17887-1-yangyicong@hisilicon.com>
+ <20220124131118.17887-2-yangyicong@hisilicon.com>
+ <20220207114223.00001d2a@Huawei.com>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <5a095797-0e07-572f-700a-9c29fd5d4a1f@huawei.com>
+Date:   Tue, 8 Feb 2022 19:07:23 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <20220207114223.00001d2a@Huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,181 +66,282 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If kernel modules are stripped off symbols for some reason then stack
-traces in dmesg do not show symbol name for address. It just prints
-absolute address sometimes (if there is no good match with any symbol)
+On 2022/2/7 19:42, Jonathan Cameron wrote:
+> On Mon, 24 Jan 2022 21:11:11 +0800
+> Yicong Yang <yangyicong@hisilicon.com> wrote:
+> 
+>> HiSilicon PCIe tune and trace device(PTT) is a PCIe Root Complex
+>> integrated Endpoint(RCiEP) device, providing the capability
+>> to dynamically monitor and tune the PCIe traffic, and trace
+>> the TLP headers.
+>>
+>> Add the driver for the device to enable the trace function.
+>> This patch adds basic function of trace, including the device's
+>> probe and initialization, functions for trace buffer allocation
+>> and trace enable/disable, register an interrupt handler to
+>> simply response to the DMA events. The user interface of trace
+>> will be added in the following patch.
+>>
+>> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+> Hi Yicong,
+> 
+> I've not been following all the earlier discussion on this driver closely
+> so I may well raise something that has already been addressed. If so
+> just ignore the comment.
 
-This was seen with OpenWrt which uses option INSTALL_MOD_STRIP=
-"--strip-unneeded" at kernel/module build/install time, and so modules
-are stripped off unneeded symbols.
+Thanks for the comments. It's ok for me to clarify it :).
+Part replies inline and I need to do some test on the others.
 
-[245864.699580]  do_nmi+0x12f/0x370
-[245864.699583]  end_repeat_nmi+0x16/0x50
-[245864.699585] RIP: 0010:0xffffffffc06b67ec                           <<<<<<<<
-[245864.699585] RSP: 0000:ffffaaa540cffe48 EFLAGS: 00000097
-[245864.699586] RAX: 0000000000000001 RBX: ffff93357a729000 RCX: 0000000000000001
-[245864.699587] RDX: ffff93357a729050 RSI: 0000000000000000 RDI: ffff93357a729000
-[245864.699588] RBP: ffff9335cf521300 R08: 0000000000000001 R09: 0000000000000004
-[245864.699588] R10: ffffaaa545b23ed0 R11: 0000000000000001 R12: ffffffffc06b61a0
-[245864.699589] R13: ffffaaa540cffe60 R14: ffff9335c77fa3c0 R15: ffff9335cf51d7c0
-[245864.699590]  ? 0xffffffffc06b61a0
-[245864.699592]  ? 0xffffffffc06b67ec                                  <<<<<<<<
-[245864.699593]  ? 0xffffffffc06b67ec
-[245864.699594]  </NMI>
+> 
+> Thanks,
+> 
+> Jonathan
+> 
+>> ---
+>>  drivers/Makefile                 |   1 +
+>>  drivers/hwtracing/Kconfig        |   2 +
+>>  drivers/hwtracing/ptt/Kconfig    |  11 +
+>>  drivers/hwtracing/ptt/Makefile   |   2 +
+>>  drivers/hwtracing/ptt/hisi_ptt.c | 398 +++++++++++++++++++++++++++++++
+>>  drivers/hwtracing/ptt/hisi_ptt.h | 159 ++++++++++++
+>>  6 files changed, 573 insertions(+)
+>>  create mode 100644 drivers/hwtracing/ptt/Kconfig
+>>  create mode 100644 drivers/hwtracing/ptt/Makefile
+>>  create mode 100644 drivers/hwtracing/ptt/hisi_ptt.c
+>>  create mode 100644 drivers/hwtracing/ptt/hisi_ptt.h
+>>
+[...]
+>> +
+>> +static int hisi_ptt_alloc_trace_buf(struct hisi_ptt *hisi_ptt)
+>> +{
+>> +	struct hisi_ptt_trace_ctrl *ctrl = &hisi_ptt->trace_ctrl;
+>> +	struct device *dev = &hisi_ptt->pdev->dev;
+>> +	struct hisi_ptt_dma_buffer *buffer;
+>> +	int i, ret;
+>> +
+>> +	hisi_ptt->trace_ctrl.buf_index = 0;
+>> +
+>> +	/* Make sure the trace buffer is empty before allocating */
+> 
+> This comment is misleading as it suggests it not being empty is
+> a bad thing but the code handles it as an acceptable path.
+> Perhaps:
+> 	/*
+> 	 * If the trace buffer has already been allocated, zero the
+> 	 * memory.
+> 	 */
+> 
 
-Note RIP: 0010:0xffffffffc06b67ec and 0xffffffffc06b67ec printed in above
-stack trace as absolute address. There is no easy way in case box crashes
-as we loose information on load address of specific module.
+will make it less misleading. thanks.
 
-This changes the symbol decoding (in kernel/module.c) such that it can
-print offset from start of section (.text or .init.text) in case there
-is no good match with any symbol.
+>> +	if (!list_empty(&ctrl->trace_buf)) {
+>> +		list_for_each_entry(buffer, &ctrl->trace_buf, list)
+>> +			memset(buffer->addr, 0, buffer->size);
+>> +		return 0;
+>> +	}
+>> +
+>> +	for (i = 0; i < HISI_PTT_TRACE_BUF_CNT; ++i) {
+>> +		buffer = kzalloc(sizeof(*buffer), GFP_KERNEL);
+>> +		if (!buffer) {
+>> +			ret = -ENOMEM;
+>> +			goto err;
+>> +		}
+>> +
+>> +		buffer->addr = dma_alloc_coherent(dev, ctrl->buffer_size,
+>> +						  &buffer->dma, GFP_KERNEL);
+>> +		if (!buffer->addr) {
+>> +			kfree(buffer);
+>> +			ret = -ENOMEM;
+>> +			goto err;
+>> +		}
+>> +
+>> +		memset(buffer->addr, 0, buffer->size);
+> See:
+> https://lore.kernel.org/lkml/20190108130701.14161-4-hch@lst.de/
+> dma_alloc_coherent() always zeros the memory for us hence there
+> is no longer a dma_kzalloc_coherent()
+> 
 
-It will now decode address in such cases to [module]+ offset/size or
-[module __init]+offset/size depending on where the address lies (in
-core/.text or init/.init.text section of module).
+thanks for the information. Then the memset here is redundant and will drop it.
 
-One can use objdump/readelf/nm to find symbols with offset from .init.text
-and .text sections.
+>> +
+>> +		buffer->index = i;
+> 
+> Carrying an index inside a list which corresponds directly
+> to the position in the list is not particularly nice.
+> Why can't we compute this index on the fly where the list
+> is walked?  Or am I misunderstanding and the order of the buffers
+> is changed in a later patch?
+> 
 
-steps to reproduce the problem:
--------------------------------
-1. Add WARN_ON_ONCE(1) in module e.g. test_module.c
-2. Build and strip the module using --strip-unneeded option
-3. Load the module and check RIP in dmesg
+The index is fixed once allocated and I stored it to avoid later
+computing. But seems it's highly recommended to compute these sort
+of things on the fly when necessary. John recommends the same things
+on some other places so I think I can get these addressed.
 
-tests done:
------------
-1. Added WARN_ON_ONE(1) in functions of a module for testing
--------------------------------------------------------------
-[  407.934085] CPU: 0 PID: 2956 Comm: insmod Tainted: G        W   E     5.16.0-rc5-next-20211220+ #2
-[  407.934087] Hardware name: innotek GmbH VirtualBox/VirtualBox, BIOS VirtualBox 12/01/2006
-[  407.934088] RIP: 0010:[module __init]+0x4/0x7 [test_module]
-[  407.934097] Code: Unable to access opcode bytes at RIP 0xffffffffc07edfda.
-[  407.934098] RSP: 0018:ffffb21440487c20 EFLAGS: 00010202
-[  407.934100] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-[  407.934101] RDX: 0000000000000000 RSI: ffffffff9c38e5e1 RDI: 0000000000000001
-[  407.934102] RBP: ffffb21440487c28 R08: 0000000000000000 R09: ffffb21440487a20
-[  407.934103] R10: ffffb21440487a18 R11: ffffffff9c755248 R12: ffffffffc07ee007
-[  407.934104] R13: ffff92a0f1e260b0 R14: 0000000000000000 R15: 0000000000000000
-[  407.934105] FS:  00007f578ebc4400(0000) GS:ffff92a1c0e00000(0000) knlGS:0000000000000000
-[  407.934107] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  407.934108] CR2: ffffffffc07edfda CR3: 00000000063ea006 CR4: 00000000000706f0
-[  407.934113] Call Trace:
-[  407.934114]  <TASK>
-[  407.934116]  ? init_module+0x55/0xff9 [test_module]
-...
-[  407.934232] CPU: 0 PID: 2956 Comm: insmod Tainted: G        W   E     5.16.0-rc5-next-20211220+ #2
-[  407.934234] Hardware name: innotek GmbH VirtualBox/VirtualBox, BIOS VirtualBox 12/01/2006
-[  407.934242] RIP: 0010:[module]+0x4/0x7 [test_module]
-[  407.934248] Code: Unable to access opcode bytes at RIP 0xffffffffc07e1fda.
-[  407.934249] RSP: 0018:ffffb21440487c20 EFLAGS: 00010202
-[  407.934251] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-[  407.934252] RDX: 0000000000000000 RSI: ffffffff9c38e5e1 RDI: 0000000000000001
-[  407.934253] RBP: ffffb21440487c28 R08: 0000000000000000 R09: ffffb21440487a20
-[  407.934254] R10: ffffb21440487a18 R11: ffffffff9c755248 R12: ffffffffc07ee007
-[  407.934255] R13: ffff92a0f1e260b0 R14: 0000000000000000 R15: 0000000000000000
-[  407.934256] FS:  00007f578ebc4400(0000) GS:ffff92a1c0e00000(0000) knlGS:0000000000000000
-[  407.934257] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  407.934258] CR2: ffffffffc07e1fda CR3: 00000000063ea006 CR4: 00000000000706f0
-[  407.934260] Call Trace:
-[  407.934260]  <TASK>
-[  407.934261]  ? init_module+0x5a/0xff9 [test_module]
+> As a side note, is a list actually appropriate when we always
+> have 4 of these buffers?  Feels like an array of buffer
+> structures might be cheaper.
+> 
+>> +		buffer->size = ctrl->buffer_size;
+>> +		list_add_tail(&buffer->list, &ctrl->trace_buf);
+>> +	}
+>> +
+>> +	return 0;
+>> +err:
+>> +	hisi_ptt_free_trace_buf(hisi_ptt);
+>> +	return ret;
+>> +}
+>> +
+>> +static void hisi_ptt_trace_end(struct hisi_ptt *hisi_ptt)
+>> +{
+>> +	writel(0, hisi_ptt->iobase + HISI_PTT_TRACE_CTRL);
+>> +	hisi_ptt->trace_ctrl.status = HISI_PTT_TRACE_STATUS_OFF;
+>> +}
+>> +
+>> +static int hisi_ptt_trace_start(struct hisi_ptt *hisi_ptt)
+>> +{
+>> +	struct hisi_ptt_trace_ctrl *ctrl = &hisi_ptt->trace_ctrl;
+>> +	struct hisi_ptt_dma_buffer *cur;
+>> +	u32 val;
+>> +
+>> +	/* Check device idle before start trace */
+>> +	if (hisi_ptt_wait_trace_hw_idle(hisi_ptt)) {
+>> +		pci_err(hisi_ptt->pdev, "Failed to start trace, the device is still busy.\n");
+>> +		return -EBUSY;
+>> +	}
+>> +
+>> +	/* Reset the DMA before start tracing */
+>> +	val = readl(hisi_ptt->iobase + HISI_PTT_TRACE_CTRL);
+>> +	val |= HISI_PTT_TRACE_CTRL_RST;
+>> +	writel(val, hisi_ptt->iobase + HISI_PTT_TRACE_CTRL);
+>> +
+>> +	/*
+>> +	 * We'll be in the perf context where preemption is disabled,
+>> +	 * so use busy loop here.
+>> +	 */
+>> +	mdelay(HISI_PTT_RESET_WAIT_MS);
+> 
+> Busy look for 1 second?  Ouch.  If we can reduce this in any way
+> that would be great or if there is a means to do it before
+> we disable preemption.
+> 
 
-note that it is able to decode RIP to an offset from module start or
-init start now.
+It's inherited from the previous version that was using msleep() and it's
+somehow unacceptable in an atomic context I think. The reset here is
+going to reset the write pointer of the hardware DMA so we can check the
+whether the pointer before dereset it. I confirmed with our hardware
+teams that it can be reduced to 10us. So I'll poll the write pointer register
+for about 10us before continue here.
 
-tested on linux->next (tag next-20211220)
+thanks for catching this!
 
-Signed-off-by: Vimal Agrawal <vimal.agrawal@sophos.com>
-Acked-by: Nishit Shah <nishit.shah@sophos.com>
-Suggested-by: Dirk VanDerMerwe <Dirk.VanDerMerwe@Sophos.com>
----
- kernel/module.c | 44 +++++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 39 insertions(+), 5 deletions(-)
+>> +
+>> +	val = readl(hisi_ptt->iobase + HISI_PTT_TRACE_CTRL);
+>> +	val &= ~HISI_PTT_TRACE_CTRL_RST;
+>> +	writel(val, hisi_ptt->iobase + HISI_PTT_TRACE_CTRL);
+>> +
+>> +	/* Clear the interrupt status */
+>> +	writel(HISI_PTT_TRACE_INT_STAT_MASK, hisi_ptt->iobase + HISI_PTT_TRACE_INT_STAT);
+>> +	writel(0, hisi_ptt->iobase + HISI_PTT_TRACE_INT_MASK);
+>> +
+>> +	/* Configure the trace DMA buffer */
+>> +	list_for_each_entry(cur, &ctrl->trace_buf, list) {
+> 
+> I comment on the use of cur->index above.  Here it would be easy to compute
+> the index as we go for example assuming we never end up with holes
+> in the list.
+> 
 
-diff --git a/kernel/module.c b/kernel/module.c
-index 24dab046e16c..635e631c92f1 100644
---- a/kernel/module.c
-+++ b/kernel/module.c
-@@ -4260,6 +4260,19 @@ static const char *kallsyms_symbol_name(struct mod_kallsyms *kallsyms, unsigned
- 	return kallsyms->strtab + kallsyms->symtab[symnum].st_name;
- }
- 
-+/*
-+ * Check if module address (addr) passed is as per init passed
-+ * if init is true then check in init layout
-+ * else check in core layout
-+ */
-+bool match_address_layout(struct module *mod, unsigned long addr, bool init)
-+{
-+	if (init)
-+		return within_module_init(addr, mod);
-+	else
-+		return within_module_core(addr, mod);
-+}
-+
- /*
-  * Given a module and address, find the corresponding symbol and return its name
-  * while providing its size and offset if needed.
-@@ -4270,14 +4283,22 @@ static const char *find_kallsyms_symbol(struct module *mod,
- 					unsigned long *offset)
- {
- 	unsigned int i, best = 0;
--	unsigned long nextval, bestval;
-+	unsigned long baseval, nextval, bestval;
- 	struct mod_kallsyms *kallsyms = rcu_dereference_sched(mod->kallsyms);
-+	char *module_base_name;
-+	bool is_init_address = false;
- 
- 	/* At worse, next value is at end of module */
--	if (within_module_init(addr, mod))
-+	if (within_module_init(addr, mod)) {
-+		baseval = (unsigned long)mod->init_layout.base;
- 		nextval = (unsigned long)mod->init_layout.base+mod->init_layout.text_size;
--	else
-+		module_base_name = "[module __init]";
-+		is_init_address = true;
-+	} else {
-+		baseval = (unsigned long)mod->core_layout.base;
- 		nextval = (unsigned long)mod->core_layout.base+mod->core_layout.text_size;
-+		module_base_name = "[module]";
-+	}
- 
- 	bestval = kallsyms_symbol_value(&kallsyms->symtab[best]);
- 
-@@ -4300,7 +4321,8 @@ static const char *find_kallsyms_symbol(struct module *mod,
- 		    || is_arm_mapping_symbol(kallsyms_symbol_name(kallsyms, i)))
- 			continue;
- 
--		if (thisval <= addr && thisval > bestval) {
-+		if ((thisval <= addr && thisval > bestval) &&
-+			(match_address_layout(mod, thisval, is_init_address))) {
- 			best = i;
- 			bestval = thisval;
- 		}
-@@ -4308,8 +4330,20 @@ static const char *find_kallsyms_symbol(struct module *mod,
- 			nextval = thisval;
- 	}
- 
--	if (!best)
-+	if (!best) {
-+		if (is_module_text_address(addr)) {
-+			/*
-+			 * return MODULE base and offset if we could not find
-+			 * any best match for text address
-+			 */
-+			if (size)
-+				*size = nextval - baseval;
-+			if (offset)
-+				*offset = addr - baseval;
-+			return module_base_name;
-+		}
- 		return NULL;
-+	}
- 
- 	if (size)
- 		*size = nextval - bestval;
--- 
-2.32.0
+ok.
+
+>> +		writel(lower_32_bits(cur->dma),
+>> +		       hisi_ptt->iobase + HISI_PTT_TRACE_ADDR_BASE_LO_0 +
+>> +		       cur->index * HISI_PTT_TRACE_ADDR_STRIDE);
+>> +		writel(upper_32_bits(cur->dma),
+>> +		       hisi_ptt->iobase + HISI_PTT_TRACE_ADDR_BASE_HI_0 +
+>> +		       cur->index * HISI_PTT_TRACE_ADDR_STRIDE);
+>> +	}
+>> +	writel(ctrl->buffer_size, hisi_ptt->iobase + HISI_PTT_TRACE_ADDR_SIZE);
+>> +
+>> +	/* Set the trace control register */
+>> +	val = FIELD_PREP(HISI_PTT_TRACE_CTRL_TYPE_SEL, ctrl->type);
+>> +	val |= FIELD_PREP(HISI_PTT_TRACE_CTRL_RXTX_SEL, ctrl->direction);
+>> +	val |= FIELD_PREP(HISI_PTT_TRACE_CTRL_DATA_FORMAT, ctrl->format);
+>> +	val |= FIELD_PREP(HISI_PTT_TRACE_CTRL_TARGET_SEL, hisi_ptt->trace_ctrl.filter);
+>> +	if (!hisi_ptt->trace_ctrl.is_port)
+>> +		val |= HISI_PTT_TRACE_CTRL_FILTER_MODE;
+>> +
+>> +	/* Start the Trace */
+>> +	val |= HISI_PTT_TRACE_CTRL_EN;
+>> +	writel(val, hisi_ptt->iobase + HISI_PTT_TRACE_CTRL);
+>> +
+>> +	ctrl->status = HISI_PTT_TRACE_STATUS_ON;
+>> +
+>> +	return 0;
+>> +}
+>> +
+> 
+> ...
+> 
+>> +
+>> +static void hisi_ptt_init_ctrls(struct hisi_ptt *hisi_ptt)
+>> +{
+>> +	struct pci_dev *pdev = hisi_ptt->pdev;
+>> +	struct pci_bus *bus;
+>> +	u32 reg;
+>> +
+>> +	INIT_LIST_HEAD(&hisi_ptt->port_filters);
+>> +	INIT_LIST_HEAD(&hisi_ptt->req_filters);
+>> +
+>> +	/*
+>> +	 * The device range register provides the information about the
+>> +	 * root ports which the RCiEP can control and trace. The RCiEP
+>> +	 * and the root ports it support are on the same PCIe core, with
+>> +	 * same domain number but maybe different bus number. The device
+>> +	 * range register will tell us which root ports we can support,
+>> +	 * Bit[31:16] indicates the upper BDF numbers of the root port,
+>> +	 * while Bit[15:0] indicates the lower.
+>> +	 */
+>> +	reg = readl(hisi_ptt->iobase + HISI_PTT_DEVICE_RANGE);
+>> +	hisi_ptt->upper = reg >> 16;
+>> +	hisi_ptt->lower = reg & 0xffff;
+> Trivial:
+> Perhaps worthing define HISI_PTT_DEVICE_RANGE_UPPER_MASK etc adn using
+> FIELD_GET?
+> 
+
+sure.
+
+>> +
+>> +	reg = readl(hisi_ptt->iobase + HISI_PTT_LOCATION);
+>> +	hisi_ptt->core_id = FIELD_GET(HISI_PTT_CORE_ID, reg);
+>> +	hisi_ptt->sicl_id = FIELD_GET(HISI_PTT_SICL_ID, reg);
+>> +
+>> +	bus = pci_find_bus(pci_domain_nr(pdev->bus), PCI_BUS_NUM(hisi_ptt->upper));
+>> +	if (bus)
+>> +		pci_walk_bus(bus, hisi_ptt_init_filters, hisi_ptt);
+>> +
+>> +	/* Initialize trace controls */
+>> +	INIT_LIST_HEAD(&hisi_ptt->trace_ctrl.trace_buf);
+>> +	hisi_ptt->trace_ctrl.buffer_size = HISI_PTT_TRACE_BUF_SIZE;
+>> +	hisi_ptt->trace_ctrl.default_cpu = cpumask_first(cpumask_of_node(dev_to_node(&pdev->dev)));
+>> +}
+>> +
+[...]
+>> +
+>> +#define HISI_PCIE_CORE_PORT_ID(devfn)	(PCI_FUNC(devfn) << 1)
+>> +
+>> +enum hisi_ptt_trace_status {
+>> +	HISI_PTT_TRACE_STATUS_OFF = 0,
+>> +	HISI_PTT_TRACE_STATUS_ON,
+>> +};
+> 
+> Why not just use a boolean given we only have off and on states?
+> 
+
+An enum may make the code more readable I think.
+
+Thanks,
+Yicong
 

@@ -2,51 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1695A4ADE8B
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 17:46:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D36554ADE8D
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 17:46:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383484AbiBHQqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 11:46:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33732 "EHLO
+        id S1383522AbiBHQqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 11:46:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236202AbiBHQp7 (ORCPT
+        with ESMTP id S1352314AbiBHQp7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 8 Feb 2022 11:45:59 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88750C061576;
-        Tue,  8 Feb 2022 08:45:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=kPMXXd6d9rnGjX69ktGIh5H3gUoF6mPBzgaLD0J5WWE=; b=DMbClZXJMFdvLYy1aodWs4Sqkg
-        2eB8zSA3W0Zl9gjg22rBO+5vtKAUgnIoZfWHoe19xhqn8AvMfGgKLz7yVPSzgCabdhODC0Fr5lfh3
-        81svV47f2bu6GHqDR8CW49ww8fA0Lzy9t/HeEh7QOgvteCyVNPGMCCr9t+BOUrc6wF60CviFBtz8T
-        w1Q4kDskFQs0Zla8cW9CYTRGfhQjO7hSpSY+o6JqCi4Cs+yOTbL8I+krA857zUZgykGmpD2HZHDnk
-        +LTxiiXtHQkdkkxAil6GT6xDhzXkkzN7yWMMbGVgtf0ZVv8H7GsNqK1JX8EsWBU+r9yDeZCGPK0t4
-        +yZrffbw==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nHTci-0089v9-NB; Tue, 08 Feb 2022 16:45:49 +0000
-Message-ID: <b5cf2337-770f-1834-dd37-2d0c579aa113@infradead.org>
-Date:   Tue, 8 Feb 2022 08:45:41 -0800
+Received: from relay05.th.seeweb.it (relay05.th.seeweb.it [IPv6:2001:4b7a:2000:18::166])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F733C061579
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 08:45:58 -0800 (PST)
+Received: from [192.168.1.101] (abxk84.neoplus.adsl.tpnet.pl [83.9.4.84])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id F01183F727;
+        Tue,  8 Feb 2022 17:45:49 +0100 (CET)
+Message-ID: <6b839237-74f0-7270-2f33-f5c17e6b59de@somainline.org>
+Date:   Tue, 8 Feb 2022 17:45:48 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.1
-Subject: Re: [PATCH v2] gpiolib: make struct comments into real kernel docs
+Subject: Re: [PATCH] mtd: nand: raw: qcom_nandc: Don't clear_bam_transaction
+ on READID
 Content-Language: en-US
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220208104831.308722-1-brgl@bgdev.pl>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220208104831.308722-1-brgl@bgdev.pl>
+To:     Sricharan Ramabadhran <sricharan@codeaurora.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Manivannan Sadhasivam <mani@kernel.org>, pragalla@codeaurora.org,
+        ~postmarketos/upstreaming@lists.sr.ht, martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mdalam@codeaurora.org,
+        bbhatt@codeaurora.org, hemantk@codeaurora.org
+References: <20220113184427.2259509-1-konrad.dybcio@somainline.org>
+ <20220114082718.32a2fc83@xps13> <20220126111613.3ab0021e@xps13>
+ <20220126103316.GA212068@thinkpad> <20220126114200.4cc3c21b@xps13>
+ <fc80a6e7-bd44-3b3e-fca2-1316a76d65f5@codeaurora.org>
+ <a6fcc533-e7cd-7b55-4db0-cec80c07b46a@codeaurora.org>
+ <0a8d6550-aa19-0af1-abae-66bf34c91ea8@somainline.org>
+ <be779ed9-bd80-8f01-fe7f-d3c07d3d85aa@codeaurora.org>
+ <12cad24a-fa2f-9a82-cf43-241a0a6fe4f6@somainline.org>
+ <20220201145204.54646475@xps13>
+ <d79bf21d-5a90-0074-cef6-896f66e80d28@somainline.org>
+ <c63d5410-7f08-80fe-28ac-f4867038ff30@codeaurora.org>
+ <cc1302f4-9150-0145-421c-bf2b7a7bf258@codeaurora.org>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <cc1302f4-9150-0145-421c-bf2b7a7bf258@codeaurora.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,153 +65,188 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
 
-On 2/8/22 02:48, Bartosz Golaszewski wrote:
-> We have several comments that start with '/**' but don't conform to the
-> kernel doc standard. Add proper detailed descriptions for the affected
-> definitions and move the docs from the forward declarations to the
-> struct definitions where applicable.
+
+On 4.02.2022 18:17, Sricharan Ramabadhran wrote:
 > 
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-Tested-by: Randy Dunlap <rdunlap@infradead.org>
-
-> ---
-> v1 -> v2:
-> - described fields not yet documented
-> - added missing '@'
-> - made using periods consistent
-> - fixed struct references
+> On 2/2/2022 12:54 PM, Sricharan Ramabadhran wrote:
+>> Hi Konrad/Miquel,
+>>
+>> On 2/1/2022 9:21 PM, Konrad Dybcio wrote:
+>>>
+>>> On 01/02/2022 14:52, Miquel Raynal wrote:
+>>>> Hi Konrad,
+>>>>
+>>>> konrad.dybcio@somainline.org wrote on Mon, 31 Jan 2022 20:54:12 +0100:
+>>>>
+>>>>> On 31/01/2022 15:13, Sricharan Ramabadhran wrote:
+>>>>>> Hi Konrad,
+>>>>>>
+>>>>>> On 1/31/2022 3:39 PM, Konrad Dybcio wrote:
+>>>>>>> On 28/01/2022 18:50, Sricharan Ramabadhran wrote:
+>>>>>>>> Hi Konrad,
+>>>>>>>>
+>>>>>>>> On 1/28/2022 9:55 AM, Sricharan Ramabadhran wrote:
+>>>>>>>>> Hi Miquel,
+>>>>>>>>>
+>>>>>>>>> On 1/26/2022 4:12 PM, Miquel Raynal wrote:
+>>>>>>>>>> Hi Mani,
+>>>>>>>>>>
+>>>>>>>>>> mani@kernel.org wrote on Wed, 26 Jan 2022 16:03:16 +0530:
+>>>>>>>>>>> On Wed, Jan 26, 2022 at 11:16:13AM +0100, Miquel Raynal wrote:
+>>>>>>>>>>>> Hello,
+>>>>>>>>>>>>
+>>>>>>>>>>>> miquel.raynal@bootlin.com wrote on Fri, 14 Jan 2022 08:27:18 +0100:
+>>>>>>>>>>>>> Hi Konrad,
+>>>>>>>>>>>>>
+>>>>>>>>>>>>> konrad.dybcio@somainline.org wrote on Thu, 13 Jan 2022 19:44:26 >>>>>>>> +0100:
+>>>>>>>>>>>>>> While I have absolutely 0 idea why and how, running >>>>>>>>> clear_bam_transaction
+>>>>>>>>>>>>>> when READID is issued makes the DMA totally clog up and refuse >>>>>>>>> to function
+>>>>>>>>>>>>>> at all on mdm9607. In fact, it is so bad that all the data >>>>>>>>> gets garbled
+>>>>>>>>>>>>>> and after a short while in the nand probe flow, the CPU >>>>>>>>> decides that
+>>>>>>>>>>>>>> sepuku is the only option.
+>>>>>>>>>>>>>>
+>>>>>>>>>>>>>> Removing _READID from the if condition makes it work like a >>>>>>>>> charm, I can
+>>>>>>>>>>>>>> read data and mount partitions without a problem.
+>>>>>>>>>>>>>>
+>>>>>>>>>>>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+>>>>>>>>>>>>>> ---
+>>>>>>>>>>>>>> This is totally just an observation which took me an inhumane >>>>>>>>> amount of
+>>>>>>>>>>>>>> debug prints to find.. perhaps there's a better reason behind >>>>>>>>> this, but
+>>>>>>>>>>>>>> I can't seem to find any answers.. Therefore, this is a BIG RFC!
+>>>>>>>>>>>>> I'm adding two people from codeaurora who worked a lot on this >>>>>>>> driver.
+>>>>>>>>>>>>> Hopefully they will have an idea :)
+>>>>>>>>>>>> Sadre, I've spent a significant amount of time reviewing your >>>>>>> patches,
+>>>>>>>>>>>> now it's your turn to not take a month to answer to your peers
+>>>>>>>>>>>> proposals.
+>>>>>>>>>>>>
+>>>>>>>>>>>> Please help reviewing this patch.
+>>>>>>>>>>> Sorry. I was hoping that Qcom folks would chime in as I don't >>>>>> have any idea
+>>>>>>>>>>> about the mdm9607 platform. It could be that the mail server >>>>>> migration from
+>>>>>>>>>>> codeaurora to quicinc put a barrier here.
+>>>>>>>>>>>
+>>>>>>>>>>> Let me ping them internally.
+>>>>>>>>>> Oh, ok, I didn't know. Thanks!
+>>>>>>>>>     Sorry Miquel, somehow we did not get this email in our inbox.
+>>>>>>>>>     Thanks to Mani for pinging us, we will test this up today and >>>> get back.
+>>>>>>>>        While we could not reproduce this issue on our ipq boards (do >>> not have a mdm9607 right now) and
+>>>>>>>>         issue does not look any obvious.
+>>>>>>>>        can you please give the debug logs that you did for the above >>> stage by stage ?
+>>>>>>> I won't have access to the board for about two weeks, sorry.
+>>>>>>>
+>>>>>>> When I get to it, I'll surely try to send you the logs, though there
+>>>>>>>
+>>>>>>> wasn't much more than just something jumping to who-knows-where
+>>>>>>>
+>>>>>>> after clear_bam_transaction was called, resulting in values >> associated with
+>>>>>>>
+>>>>>>> the NAND being all zeroed out in pr_err/_debug/etc.
+>>>>>>>
+>>>>>>      Ok sure. So was the READID command itself failing (or) the > subsequent one ?
+>>>>>>     We can check which parameter reset by the clear_bam_transaction is > causing the
+>>>>>>     failure.  Meanwhile, looping in Pradeep who has access to the > board, so in a better
+>>>>>>     position to debug.
+>>>>> I'm sorry I have so few details on hand, and no kernel tree (no access to that machine either, for now).
+>>>>>
+>>>>>
+>>>>> I will try to describe to the best of my abilities what I recall.
+>>>>>
+>>>>>
+>>>>> My methodology of making sure things don't go haywire was to print the oob size
+>>>>>
+>>>>> of our NAND basically every two lines of code (yes, i was very desperate at one point),
+>>>>>
+>>>>> as that was zeroed out when *the bug* happened,
+>>>> This does look like a pointer error at some point and some kernel data
+>>>> has been corrupted very badly by the driver.
+>>>>
+>>>>> leading to a kernel bug/panic/stall
+>>>>>
+>>>>> (can't recall what exactly it was, but it said something along the lines of "no support for
+>>>>>
+>>>>> oob size 0" and then it didn't fail graceully, leading to some bad jumps and ultimately
+>>>>>
+>>>>> a dead platform..)
+>>>>>
+>>>>>
+>>>>> after hours of digging, I found out that everything goes fine until clear_bam_transaction is called,
+>>>> Do you remember if this function was called for the first time when
+>>>> this happened?
+>>>
+>>> I think so, if I recall correctly there are no more callers in this path, as readid is the first nand command executed in flash probe flow.
+>>>
+>>>
+>>>
+>>>>
+>>>>> after that gets executed every nand op starts reading all zeroes (for example in JEDEC ID check)
+>>>>>
+>>>>> so I added the changes from this patch, and things magically started working... My suspicion is
+>>>>>
+>>>>> that the underlying FIFO isn't fully drained (is it a FIFO on 9607? bah, i work on too many socs at once)
+>>>> I don't see it in the list of supported devices, what's the exact
+>>>> compatible used?
+>>>
+>>> qcom,ipq4019-nand
+>>>
+>>>
+>>>
+>>>>
+>>>>> and this function only makes Linux think it is, without actually draining it, and the leftover
+>>>>>
+>>>>> commands get executed with some parts of them getting overwritten, resulting in the
+>>>>>
+>>>>> famous garbage in - garbage out situation, but that's only a guesstimate..
+>>>> I would bet for a non allocated bam-ish pointer that is reset to zero
+>>>> in the clear_bam_transaction() helper.
+>>>>
+>>>> Can you get your hands on the board again?
+>>>
+>>> Sure, but as I mentioned previously, only in about 2 weeks, I can't really do any dev before then.. :(
+>>>
+>>>
+>>>
+>>>> It would be nice to check if the allocation always occurs before use,
+>>>> and if yes on how much bytes.
+>>>>
+>>>> If the pointer is not dangling, then perhaps something else smashes
+>>>> that pointer.
+>>>
+>>>
+>>> Konrad
+>>>
+>>>>
+>>>>> Do note this somehow worked fine on 5.11 and then broke on 5.12/13. I went as far as replacing most
+>>>>>
+>>>>> of the kernel with the updated/downgraded parts via git checkout (i tried many combinations),
+>>>>>
+>>>>> to no avail.. I even tried different compilers and optimization levels, thinking it could have been
+>>>>>
+>>>>> a codegen issue, but no luck either.
+>>>>>
+>>>>>
+>>>>> I.. do understand this email is a total mess to read, as much as it was to write, but
+>>>>>
+>>>>> without access to my code and the machine itself I can't give you solid details, and
+>>>>>
+>>>>> the fact this situation is far from ordinary doesn't help either..
+>>>>>
+>>>>>
+>>>>> The latest (ancient, not quite pretty, but probably working if my memory is correct) version of my patches
+>>>>>
+>>>>> for the mdm9607 is available at [1], I will push the new revision after I get access to the workstation.
+>>>>>
+>>   + few more who have access to the board.
+>>
+>>    Going by the description, for kernel corruption, we can try out a KASAN build.
+>>    Since you have mentioned it worked till 5.11, you bisected the driver till 5.11 head and it worked ?
+>>
+>    Tried running a KASAN enabled image on IPQ board, but no luck. Nothing came out.
+>    Only if someone with the board can help here, we can proceed
 > 
->  drivers/gpio/gpiolib.h        | 34 ++++++++++++++++++++++++++++++++++
->  include/linux/gpio/consumer.h | 35 ++++++++++++++++-------------------
->  2 files changed, 50 insertions(+), 19 deletions(-)
 > 
-> diff --git a/drivers/gpio/gpiolib.h b/drivers/gpio/gpiolib.h
-> index 30bc3f80f83e..40723a179902 100644
-> --- a/drivers/gpio/gpiolib.h
-> +++ b/drivers/gpio/gpiolib.h
-> @@ -37,6 +37,9 @@
->   * or name of the IP component in a System on Chip.
->   * @data: per-instance data assigned by the driver
->   * @list: links gpio_device:s together for traversal
-> + * @notifier: used to notify subscribers about lines being requested, released
-> + *            or reconfigured
-> + * @pin_ranges: range of pins served by the GPIO driver
->   *
->   * This state container holds most of the runtime variable data
->   * for a GPIO device and can hold references and live on after the
-> @@ -72,6 +75,20 @@ struct gpio_device {
->  /* gpio suffixes used for ACPI and device tree lookup */
->  static __maybe_unused const char * const gpio_suffixes[] = { "gpios", "gpio" };
->  
-> +/**
-> + * struct gpio_array - Opaque descriptor for a structure of GPIO array attributes
-> + *
-> + * @desc:		Array of pointers to the GPIO descriptors
-> + * @size:		Number of elements in desc
-> + * @chip:		Parent GPIO chip
-> + * @get_mask:		Get mask used in fastpath
-> + * @set_mask:		Set mask used in fastpath
-> + * @invert_mask:	Invert mask used in fastpath
-> + *
-> + * This structure is attached to struct gpiod_descs obtained from
+> Regards,
+>   Sricharan
+> 
+I have the board with me again. Please tell me where do we start :)
 
-maybe
-                                    &struct gpiod_descs
-
-> + * gpiod_get_array() and can be passed back to get/set array functions in order
-> + * to activate fast processing path if applicable.
-> + */
->  struct gpio_array {
->  	struct gpio_desc	**desc;
->  	unsigned int		size;
-> @@ -96,6 +113,23 @@ int gpiod_set_array_value_complex(bool raw, bool can_sleep,
->  extern spinlock_t gpio_lock;
->  extern struct list_head gpio_devices;
->  
-> +
-> +/**
-> + * struct gpio_desc - Opaque descriptor for a GPIO
-> + *
-> + * @gdev:		Pointer to the parent GPIO device
-> + * @flags:		Binary descriptor flags
-> + * @label:		Name of the consumer
-> + * @name:		Line name
-> + * @hog:		Pointer to the device node that hogs this line (if any)
-> + * @debounce_period_us:	Debounce period in microseconds
-> + *
-> + * These are obtained using gpiod_get() and are preferable to the old
-> + * integer-based handles.
-> + *
-> + * Contrary to integers, a pointer to a &struct gpio_desc is guaranteed to be
-> + * valid until the GPIO is released.
-> + */
->  struct gpio_desc {
->  	struct gpio_device	*gdev;
->  	unsigned long		flags;
-> diff --git a/include/linux/gpio/consumer.h b/include/linux/gpio/consumer.h
-> index 3ad67b4a72be..c3aa8b330e1c 100644
-> --- a/include/linux/gpio/consumer.h
-> +++ b/include/linux/gpio/consumer.h
-> @@ -8,27 +8,16 @@
->  #include <linux/err.h>
->  
->  struct device;
-> -
-> -/**
-> - * Opaque descriptor for a GPIO. These are obtained using gpiod_get() and are
-> - * preferable to the old integer-based handles.
-> - *
-> - * Contrary to integers, a pointer to a gpio_desc is guaranteed to be valid
-> - * until the GPIO is released.
-> - */
->  struct gpio_desc;
-> -
-> -/**
-> - * Opaque descriptor for a structure of GPIO array attributes.  This structure
-> - * is attached to struct gpiod_descs obtained from gpiod_get_array() and can be
-> - * passed back to get/set array functions in order to activate fast processing
-> - * path if applicable.
-> - */
->  struct gpio_array;
->  
->  /**
-> - * Struct containing an array of descriptors that can be obtained using
-> - * gpiod_get_array().
-> + * struct gpio_descs - Struct containing an array of descriptors that can be
-> + *                     obtained using gpiod_get_array()
-> + *
-> + * @info:	Pointer to the opaque gpio_array structure
-> + * @ndescs:	Number of held descriptors
-> + * @desc:	Array of pointers to GPIO descriptors
->   */
->  struct gpio_descs {
->  	struct gpio_array *info;
-> @@ -43,8 +32,16 @@ struct gpio_descs {
->  #define GPIOD_FLAGS_BIT_NONEXCLUSIVE	BIT(4)
->  
->  /**
-> - * Optional flags that can be passed to one of gpiod_* to configure direction
-> - * and output value. These values cannot be OR'd.
-> + * enum gpiod_flags - Optional flags that can be passed to one of gpiod_* to
-> + *                    configure direction and output value. These values
-> + *                    cannot be OR'd.
-> + *
-> + * @GPIOD_ASIS:			Don't change anything
-> + * @GPIOD_IN:			Set lines to input mode
-> + * @GPIOD_OUT_LOW:		Set lines to output and drive them low
-> + * @GPIOD_OUT_HIGH:		Set lines to output and drive them high
-> + * @GPIOD_OUT_LOW_OPEN_DRAIN:	Set lines to open-drain output and drive them low
-> + * @GPIOD_OUT_HIGH_OPEN_DRAIN:	Set lines to open-drain output and drive them high
->   */
->  enum gpiod_flags {
->  	GPIOD_ASIS	= 0,
-
-
-thanks.
--- 
-~Randy
+Konrad

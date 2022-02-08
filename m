@@ -2,57 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FFC84AD496
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 10:18:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0D374AD49A
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 10:19:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353677AbiBHJSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 04:18:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59734 "EHLO
+        id S244149AbiBHJSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 04:18:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238582AbiBHJSK (ORCPT
+        with ESMTP id S238582AbiBHJSo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 04:18:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEA5CC03FEC3
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 01:18:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B02961465
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 09:18:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23CD4C340EE;
-        Tue,  8 Feb 2022 09:18:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644311886;
-        bh=I7Xie7sMfICHs14aE9eDxrmpTe6fMPFsk6GoOxJmkV8=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=g2SIl1sv37Wg4HfiTuc4dZnLg2S/byf3jUtnH3uIc4WvhjoID1lqvjW6LXqKoZ09y
-         KJaXGAbCLiMOl0wys7ZCmWmeT2Fx2xPwaTXoZ3ZZJZ6lVnKu3/rQkqPNJ1f5NEJeMk
-         1Ovl49WTI0DoSyXnD9KNIDP39i5U+0J28WZuuFMKPe+UV2PbVEY93HpsSm6pkDcWOo
-         zi9BuuErpypqH+TrJl38bj6QOjzLVmakbAjevbg858sHUeDausKlm4Tsu3MfoJDQXh
-         Ei3Wb7fUIFDqoMCTQGPh/JHreg5ddJVjBg2shjWIIvmLVKeAMytFsfIEb4Ruc3xhCQ
-         qUjloscENnUNg==
-Message-ID: <2cd93012-16b8-6681-cabe-c1401987bf27@kernel.org>
-Date:   Tue, 8 Feb 2022 17:18:02 +0800
+        Tue, 8 Feb 2022 04:18:44 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2051C03FEC0;
+        Tue,  8 Feb 2022 01:18:42 -0800 (PST)
+Received: from kwepemi500017.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JtHQD3v4Fz1FD3D;
+        Tue,  8 Feb 2022 17:14:28 +0800 (CST)
+Received: from kwepemm600001.china.huawei.com (7.193.23.3) by
+ kwepemi500017.china.huawei.com (7.221.188.110) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 8 Feb 2022 17:18:39 +0800
+Received: from [10.174.176.245] (10.174.176.245) by
+ kwepemm600001.china.huawei.com (7.193.23.3) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 8 Feb 2022 17:18:38 +0800
+Subject: Re: [BUG] net: ipv4: The sent udp broadcast message may be converted
+ to an arp request message
+To:     Ido Schimmel <idosch@idosch.org>
+CC:     David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, <edumazet@google.com>,
+        <yoshfuji@linux-ipv6.org>, <dsahern@kernel.org>,
+        <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <55a04a8f-56f3-f73c-2aea-2195923f09d1@huawei.com>
+ <YgIhGhh75mR5uLaS@shredder>
+From:   "wanghai (M)" <wanghai38@huawei.com>
+Message-ID: <f4a0f41c-d315-22a8-ee1f-b12bbf56187a@huawei.com>
+Date:   Tue, 8 Feb 2022 17:18:37 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [f2fs-dev] [PATCH] f2fs: avoid unneeded preflush during
- checkpoint()
-Content-Language: en-US
-From:   Chao Yu <chao@kernel.org>
-To:     Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-References: <20220207113516.9489-1-chao@kernel.org>
- <YgFvqnoa61BspqmW@google.com>
- <59da7f3e-92bd-1165-00e3-3dc18ae19aea@kernel.org>
-In-Reply-To: <59da7f3e-92bd-1165-00e3-3dc18ae19aea@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <YgIhGhh75mR5uLaS@shredder>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Originating-IP: [10.174.176.245]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600001.china.huawei.com (7.193.23.3)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,69 +58,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/2/8 9:35, Chao Yu wrote:
-> On 2022/2/8 3:14, Jaegeuk Kim wrote:
->> On 02/07, Chao Yu wrote:
->>> During checkpoint, we have committed preflush command via f2fs_flush_device_cache()
->>
->>   787 int f2fs_flush_device_cache(struct f2fs_sb_info *sbi)
->>   788 {
->>   789         int ret = 0, i;
->>   790
->>   791         if (!f2fs_is_multi_device(sbi))
->>   792                 return 0;
->>
->> Seems a wrong assumption.
-> 
-> Oh, I missed that f2fs_flush_device_cache was introduced to flush devices except
-> first device when multi-device feature is on.
-> 
->      for (i = 1; i < sbi->s_ndevs; i++) {
->          int count = DEFAULT_RETRY_IO_COUNT;
-> 
-> So, this patch seems wrong...
-> 
-> Instead, below case looks wrong since it needs to trigger flush during checkpoint()
-> no matter nobarrier is on or off.
 
-Wrong comments, let's ignore this patch, sorry.
-
-Thanks,
-
-> 
->      if (test_opt(sbi, NOBARRIER))
->          return 0;
-> 
-> Thanks,
-> 
+在 2022/2/8 15:51, Ido Schimmel 写道:
+> On Mon, Feb 07, 2022 at 10:09:49PM +0800, wanghai (M) wrote:
+>> Hello,
 >>
->>> to persist all metadata pages except last #2 CP pack page, so we don't need to
->>> commit another preflush command in commit_checkpoint(), remove it to avoid unneeded
->>> write cache overhead.
->>>
->>> Signed-off-by: Chao Yu <chao@kernel.org>
->>> ---
->>>   fs/f2fs/data.c | 2 +-
->>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
->>> index 8c417864c66a..15ac18bbbc8e 100644
->>> --- a/fs/f2fs/data.c
->>> +++ b/fs/f2fs/data.c
->>> @@ -598,7 +598,7 @@ static void __f2fs_submit_merged_write(struct f2fs_sb_info *sbi,
->>>           io->fio.op = REQ_OP_WRITE;
->>>           io->fio.op_flags = REQ_META | REQ_PRIO | REQ_SYNC;
->>>           if (!test_opt(sbi, NOBARRIER))
->>> -            io->fio.op_flags |= REQ_PREFLUSH | REQ_FUA;
->>> +            io->fio.op_flags |= REQ_FUA;
->>>       }
->>>       __submit_merged_bio(io);
->>>       up_write(&io->io_rwsem);
->>> -- 
->>> 2.32.0
-> 
-> 
-> _______________________________________________
-> Linux-f2fs-devel mailing list
-> Linux-f2fs-devel@lists.sourceforge.net
-> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
+>> I found a bug, but I don't know how to fix it. Anyone have some good ideas?
+>>
+>> This bug will cause udp broadcast messages not to be sent, but instead send
+>> non-expected arp request messages.
+>>
+>> Deleting the ip while sending udp broadcast messages and then configuring
+>> the ip again will probably trigger the bug.
+>>
+>> The following is the timing diagram of the bug, cpu0 sends a broadcast
+>> message and cpu1 deletes the routing table at the appropriate time.
+>>
+>> cpu0                                        cpu1
+>> send()
+>>    udp_sendmsg()
+>>      ip_route_output_flow()
+>>      |  fib_lookup()
+>>      udp_send_skb()
+>>        ip_send_skb()
+>>          ip_finish_output2()
+>>
+>>                                              ifconfig eth0:2 down
+>>                                                fib_del_ifaddr
+>>                                                  fib_table_delete // delete
+>> fib table
+>>
+>>            ip_neigh_for_gw()
+>>            |  ip_neigh_gw4()
+>>            |    __ipv4_neigh_lookup_noref()
+>>            |    __neigh_create()
+>>            |      tbl->constructor(n) --> arp_constructor()
+>>            |        neigh->type = inet_addr_type_dev_table(); // no route,
+>> neigh->type = RTN_UNICAST
+>>            neigh_output() // unicast, send an arp request and create an
+>> exception arp entry
+>>
+>> After the above operation, an abnormal arp entry will be generated. If
+>> the ip is configured again(ifconfig eth0:2 12.0.208.0), the abnormal arp
+>> entry will still exist, and the udp broadcast message will be converted
+>> to an arp request message when it is sent.
+> Can you try the below? Not really happy with it, but don't have a better
+> idea at the moment. It seemed better to handle it from the control path
+> than augmenting the data path with more checks
+>
+> diff --git a/include/net/arp.h b/include/net/arp.h
+> index 031374ac2f22..9e6a1961b64c 100644
+> --- a/include/net/arp.h
+> +++ b/include/net/arp.h
+> @@ -64,6 +64,7 @@ void arp_send(int type, int ptype, __be32 dest_ip,
+>   	      const unsigned char *dest_hw,
+>   	      const unsigned char *src_hw, const unsigned char *th);
+>   int arp_mc_map(__be32 addr, u8 *haddr, struct net_device *dev, int dir);
+> +int arp_invalidate(struct net_device *dev, __be32 ip);
+>   void arp_ifdown(struct net_device *dev);
+>   
+>   struct sk_buff *arp_create(int type, int ptype, __be32 dest_ip,
+> diff --git a/net/ipv4/arp.c b/net/ipv4/arp.c
+> index 4db0325f6e1a..b81665ce2b57 100644
+> --- a/net/ipv4/arp.c
+> +++ b/net/ipv4/arp.c
+> @@ -1116,7 +1116,7 @@ static int arp_req_get(struct arpreq *r, struct net_device *dev)
+>   	return err;
+>   }
+>   
+> -static int arp_invalidate(struct net_device *dev, __be32 ip)
+> +int arp_invalidate(struct net_device *dev, __be32 ip)
+>   {
+>   	struct neighbour *neigh = neigh_lookup(&arp_tbl, &ip, dev);
+>   	int err = -ENXIO;
+> diff --git a/net/ipv4/fib_frontend.c b/net/ipv4/fib_frontend.c
+> index 4d61ddd8a0ec..2d7085232cb5 100644
+> --- a/net/ipv4/fib_frontend.c
+> +++ b/net/ipv4/fib_frontend.c
+> @@ -1112,9 +1112,11 @@ void fib_add_ifaddr(struct in_ifaddr *ifa)
+>   		return;
+>   
+>   	/* Add broadcast address, if it is explicitly assigned. */
+> -	if (ifa->ifa_broadcast && ifa->ifa_broadcast != htonl(0xFFFFFFFF))
+> +	if (ifa->ifa_broadcast && ifa->ifa_broadcast != htonl(0xFFFFFFFF)) {
+>   		fib_magic(RTM_NEWROUTE, RTN_BROADCAST, ifa->ifa_broadcast, 32,
+>   			  prim, 0);
+> +		arp_invalidate(dev, ifa->ifa_broadcast);
+> +	}
+>   
+>   	if (!ipv4_is_zeronet(prefix) && !(ifa->ifa_flags & IFA_F_SECONDARY) &&
+>   	    (prefix != addr || ifa->ifa_prefixlen < 32)) {
+> @@ -1128,6 +1130,7 @@ void fib_add_ifaddr(struct in_ifaddr *ifa)
+>   		if (ifa->ifa_prefixlen < 31) {
+>   			fib_magic(RTM_NEWROUTE, RTN_BROADCAST, prefix | ~mask,
+>   				  32, prim, 0);
+> +			arp_invalidate(dev, prefix | ~mask);
+>   		}
+>   	}
+>   }
+
+Thank you for your help. I tested it and it solved my problem.
+
+Tested-by: Wang Hai <wanghai38@huawei.com>
+
+> .
+>
+-- 
+Wang Hai
+

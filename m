@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B62034ACDCB
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:18:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76DCA4ACDC4
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:18:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345830AbiBHBMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 20:12:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34412 "EHLO
+        id S1345907AbiBHBMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 20:12:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344290AbiBHBAm (ORCPT
+        with ESMTP id S1344294AbiBHBAo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 20:00:42 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0152BC0612A4;
-        Mon,  7 Feb 2022 17:00:41 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id cn6so11266121edb.5;
-        Mon, 07 Feb 2022 17:00:41 -0800 (PST)
+        Mon, 7 Feb 2022 20:00:44 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B916C061355;
+        Mon,  7 Feb 2022 17:00:43 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id m4so47375367ejb.9;
+        Mon, 07 Feb 2022 17:00:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=HTGRbwlc2wTEYrwUQpON9SLosHIdDZCHpfCw94mlpzY=;
-        b=WgMfcs+p3R5Y+RdipgsuX3NYA4JuPvS3OWO/Zqwk7yhvpsq06d0Bgf9S+8SizIysAN
-         n3L42HeIJGL8wR01vQv49bl1yZ3Od5CWNVId6j+CKn57L70mCswqgU/0MWqk3IgH9zgU
-         dJFMTfT0uWmnomAl5nlUTGMAaP/nvza/Cc33/XMqQe3sbADlbOHeRgk6Pp9iAg2SmwXJ
-         vcOdCGwXcwVK+Nslb1IPRsJtKDcQUdOh90wQQGET1JU/7xZoYG286nc0NZEcuXJY4zx5
-         j480bSR/QJufeZepIyfVGJAtnx02zcId4ZQSTqunPmELxqIu5f9DB/W9YBHrPPgNlcNI
-         u0vg==
+        bh=4AnqRCRHjum3Lv75PRk6QZY+wEi1sAnkZbU7KAtSshc=;
+        b=auyI6aPbNuUFdfUjxJxiRmUGahJ4TwWMZw3ksVpVMn9npSrgLIyDrJJwWZ14iZifK2
+         ch5nLC62ZL++VH40QcNEGFUYdWmnWLxBNo6hoSjfZK5KoN+4gMTciMQkJB/jgvwX/mlw
+         LojDYK00XTV7JY4I7ePApg/rziod7t1VZz5xPzpQRPAtylQ/LO4FY1cyuFUOz0vRG3fB
+         TmKaqYEFk4ZUyybFxDqq8lInJsN+C2fuid9Be8+ZN+LRaoccx70rrV5riPWBocCWNqYh
+         UCnfwRBEBIKPekmYn4x5BA4vgs6IbHBiVTmmlHIYttGFe3e6OrPR7Mm20rwe1YLzs2r8
+         JaQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=HTGRbwlc2wTEYrwUQpON9SLosHIdDZCHpfCw94mlpzY=;
-        b=y+3HCnMoaOOy26wl3krJ6i06VBMIgEHXTahU8Mm3oJ3YIy46I/y7fl4PdjzwWJCHtA
-         X5/iomIdjji3ezayLD1nUK51XWuHDQTuAXfeI6P/yZqqfU6Xs1W6pxpc91ZGiqCmZNkb
-         eY1eTc56nVcKA86jXog8OBCZt/o2wuPYq2mYewApnyZPffB12Q7e9yyOap+03yZAs6p9
-         xiCd9lkhL9hfpfoa71v1xhL4pWhzDJdHYg4ZABckB+7q7MMkIXgrcG6ya88mhrsFWVpm
-         6MXLoEwN29vOKk5kp4t1LCJdLKwh/55zaGp+RMjMBPVkfj53NwZiqs+e1fPofLDlfRNy
-         Vhvw==
-X-Gm-Message-State: AOAM531ZT2U4AxXW0ufV51krDZ+Q5sqgmrwXcpCsWdU/h7DpjMweTaxp
-        jkE5FuEIzdb/DvbZsVpRpv7ler6UDcm5gWWJAUY=
-X-Google-Smtp-Source: ABdhPJy9W8AXR7U1Azwfja2RBr5nCZOBH6CzUaJwggVEZNIR5PiJ6S+5H1CdMXLGXidM290sUntvYg==
-X-Received: by 2002:aa7:c917:: with SMTP id b23mr2083443edt.118.1644282040519;
-        Mon, 07 Feb 2022 17:00:40 -0800 (PST)
+        bh=4AnqRCRHjum3Lv75PRk6QZY+wEi1sAnkZbU7KAtSshc=;
+        b=eFDOuMFQRmxD1uBu36SoSi3J48x2Adh+SVZdPHM66Krmxg0Amb+pl+244lXETRo+nl
+         qKwC/pd+VuVJ/xGMBJHPH9hPKa8sL+mKiCI4RVY2aruDSCxooAwMn/Zu8O3LoVVjuM2D
+         ExYak1/Ib/YR/UQ5n84qhM8lUjConPtTwgf5lQEttgTrwd0pImZZDByN13UBN+Om8XCB
+         9bvvH7AfFGzCwctOLR/v1BOFFDCDgmOpUM2RGBFgF7qbyyBpmbdqSsVW1V8IoXwuUOqm
+         0yUj2OiFkGEZUPzP7eUkFo5aoO7vUEqfPDuEWMdFc61ldkXtX5L3F9C7x2/q1wBPFjXQ
+         coBQ==
+X-Gm-Message-State: AOAM532wHizztS+kNON2K+zcFvMPTf39O3qfMmaWxmMCyMOuh2M9vkxj
+        qOtytaZr1S17uXahj+nix/RbGl5qJ4OUyXO6uBg=
+X-Google-Smtp-Source: ABdhPJwNFE50vrDF3pdDDcyR9PGwiJlGOk1zd+59R/0BBV5d0q7msHi0nA7wLrhOTCG/pSfZPUyDKg==
+X-Received: by 2002:a17:906:e20d:: with SMTP id gf13mr1702834ejb.414.1644282041605;
+        Mon, 07 Feb 2022 17:00:41 -0800 (PST)
 Received: from localhost (92.40.202.227.threembb.co.uk. [92.40.202.227])
-        by smtp.gmail.com with ESMTPSA id p19sm4197644ejc.42.2022.02.07.17.00.39
+        by smtp.gmail.com with ESMTPSA id p19sm4197644ejc.42.2022.02.07.17.00.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 17:00:40 -0800 (PST)
+        Mon, 07 Feb 2022 17:00:41 -0800 (PST)
 From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 To:     paul@crapouillou.net, mturquette@baylibre.com, sboyd@kernel.org
 Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/3] clk: ingenic: Allow specifying common clock flags
-Date:   Tue,  8 Feb 2022 01:00:46 +0000
-Message-Id: <20220208010048.211691-2-aidanmacdonald.0x0@gmail.com>
+Subject: [PATCH 2/3] clk: ingenic: Mark critical clocks in Ingenic SoCs
+Date:   Tue,  8 Feb 2022 01:00:47 +0000
+Message-Id: <20220208010048.211691-3-aidanmacdonald.0x0@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220208010048.211691-1-aidanmacdonald.0x0@gmail.com>
 References: <20220208010048.211691-1-aidanmacdonald.0x0@gmail.com>
@@ -69,52 +69,175 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Provide a flags field for clocks under the ingenic-cgu driver,
-which can be used to set generic common clock framework flags
-on the created clocks. For example, the CLK_IS_CRITICAL flag
-is needed for some clocks (such as CPU or memory) to stop them
-being automatically disabled.
+Consider the CPU, L2 cache, and memory as critical to ensure they
+are not disabled.
 
 Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 ---
- drivers/clk/ingenic/cgu.c | 2 +-
- drivers/clk/ingenic/cgu.h | 3 +++
- 2 files changed, 4 insertions(+), 1 deletion(-)
+ drivers/clk/ingenic/jz4725b-cgu.c | 2 ++
+ drivers/clk/ingenic/jz4740-cgu.c  | 2 ++
+ drivers/clk/ingenic/jz4760-cgu.c  | 2 ++
+ drivers/clk/ingenic/jz4770-cgu.c  | 1 +
+ drivers/clk/ingenic/jz4780-cgu.c  | 3 +++
+ drivers/clk/ingenic/x1000-cgu.c   | 3 +++
+ drivers/clk/ingenic/x1830-cgu.c   | 3 +++
+ 7 files changed, 16 insertions(+)
 
-diff --git a/drivers/clk/ingenic/cgu.c b/drivers/clk/ingenic/cgu.c
-index af31633a8862..861c50d6cb24 100644
---- a/drivers/clk/ingenic/cgu.c
-+++ b/drivers/clk/ingenic/cgu.c
-@@ -660,7 +660,7 @@ static int ingenic_register_clock(struct ingenic_cgu *cgu, unsigned idx)
- 	ingenic_clk->idx = idx;
+diff --git a/drivers/clk/ingenic/jz4725b-cgu.c b/drivers/clk/ingenic/jz4725b-cgu.c
+index 744d136b721b..639fa4e29b05 100644
+--- a/drivers/clk/ingenic/jz4725b-cgu.c
++++ b/drivers/clk/ingenic/jz4725b-cgu.c
+@@ -87,6 +87,7 @@ static const struct ingenic_cgu_clk_info jz4725b_cgu_clocks[] = {
  
- 	clk_init.name = clk_info->name;
--	clk_init.flags = 0;
-+	clk_init.flags = clk_info->flags;
- 	clk_init.parent_names = parent_names;
+ 	[JZ4725B_CLK_CCLK] = {
+ 		"cclk", CGU_CLK_DIV,
++		.flags = CLK_IS_CRITICAL,
+ 		.parents = { JZ4725B_CLK_PLL, -1, -1, -1 },
+ 		.div = {
+ 			CGU_REG_CPCCR, 0, 1, 4, 22, -1, -1, 0,
+@@ -114,6 +115,7 @@ static const struct ingenic_cgu_clk_info jz4725b_cgu_clocks[] = {
  
- 	caps = clk_info->type;
-diff --git a/drivers/clk/ingenic/cgu.h b/drivers/clk/ingenic/cgu.h
-index bfc2b9c38a41..147b7df0d657 100644
---- a/drivers/clk/ingenic/cgu.h
-+++ b/drivers/clk/ingenic/cgu.h
-@@ -136,6 +136,7 @@ struct ingenic_cgu_custom_info {
-  * struct ingenic_cgu_clk_info - information about a clock
-  * @name: name of the clock
-  * @type: a bitmask formed from CGU_CLK_* values
-+ * @flags: common clock flags to set on this clock
-  * @parents: an array of the indices of potential parents of this clock
-  *           within the clock_info array of the CGU, or -1 in entries
-  *           which correspond to no valid parent
-@@ -161,6 +162,8 @@ struct ingenic_cgu_clk_info {
- 		CGU_CLK_CUSTOM		= BIT(7),
- 	} type;
+ 	[JZ4725B_CLK_MCLK] = {
+ 		"mclk", CGU_CLK_DIV,
++		.flags = CLK_IS_CRITICAL,
+ 		.parents = { JZ4725B_CLK_PLL, -1, -1, -1 },
+ 		.div = {
+ 			CGU_REG_CPCCR, 12, 1, 4, 22, -1, -1, 0,
+diff --git a/drivers/clk/ingenic/jz4740-cgu.c b/drivers/clk/ingenic/jz4740-cgu.c
+index 43ffb62c42bb..2b6f7a9fcea8 100644
+--- a/drivers/clk/ingenic/jz4740-cgu.c
++++ b/drivers/clk/ingenic/jz4740-cgu.c
+@@ -102,6 +102,7 @@ static const struct ingenic_cgu_clk_info jz4740_cgu_clocks[] = {
  
-+	unsigned long flags;
-+
- 	int parents[4];
+ 	[JZ4740_CLK_CCLK] = {
+ 		"cclk", CGU_CLK_DIV,
++		.flags = CLK_IS_CRITICAL,
+ 		.parents = { JZ4740_CLK_PLL, -1, -1, -1 },
+ 		.div = {
+ 			CGU_REG_CPCCR, 0, 1, 4, 22, -1, -1, 0,
+@@ -129,6 +130,7 @@ static const struct ingenic_cgu_clk_info jz4740_cgu_clocks[] = {
  
- 	union {
+ 	[JZ4740_CLK_MCLK] = {
+ 		"mclk", CGU_CLK_DIV,
++		.flags = CLK_IS_CRITICAL,
+ 		.parents = { JZ4740_CLK_PLL, -1, -1, -1 },
+ 		.div = {
+ 			CGU_REG_CPCCR, 12, 1, 4, 22, -1, -1, 0,
+diff --git a/drivers/clk/ingenic/jz4760-cgu.c b/drivers/clk/ingenic/jz4760-cgu.c
+index 8fdd383560fb..7920df2cee1a 100644
+--- a/drivers/clk/ingenic/jz4760-cgu.c
++++ b/drivers/clk/ingenic/jz4760-cgu.c
+@@ -143,6 +143,7 @@ static const struct ingenic_cgu_clk_info jz4760_cgu_clocks[] = {
+ 
+ 	[JZ4760_CLK_CCLK] = {
+ 		"cclk", CGU_CLK_DIV,
++		.flags = CLK_IS_CRITICAL,
+ 		.parents = { JZ4760_CLK_PLL0, },
+ 		.div = {
+ 			CGU_REG_CPCCR, 0, 1, 4, 22, -1, -1, 0,
+@@ -175,6 +176,7 @@ static const struct ingenic_cgu_clk_info jz4760_cgu_clocks[] = {
+ 	},
+ 	[JZ4760_CLK_MCLK] = {
+ 		"mclk", CGU_CLK_DIV,
++		.flags = CLK_IS_CRITICAL,
+ 		.parents = { JZ4760_CLK_PLL0, },
+ 		.div = {
+ 			CGU_REG_CPCCR, 12, 1, 4, 22, -1, -1, 0,
+diff --git a/drivers/clk/ingenic/jz4770-cgu.c b/drivers/clk/ingenic/jz4770-cgu.c
+index 7ef91257630e..02b266c2a537 100644
+--- a/drivers/clk/ingenic/jz4770-cgu.c
++++ b/drivers/clk/ingenic/jz4770-cgu.c
+@@ -149,6 +149,7 @@ static const struct ingenic_cgu_clk_info jz4770_cgu_clocks[] = {
+ 
+ 	[JZ4770_CLK_CCLK] = {
+ 		"cclk", CGU_CLK_DIV,
++		.flags = CLK_IS_CRITICAL,
+ 		.parents = { JZ4770_CLK_PLL0, },
+ 		.div = {
+ 			CGU_REG_CPCCR, 0, 1, 4, 22, -1, -1, 0,
+diff --git a/drivers/clk/ingenic/jz4780-cgu.c b/drivers/clk/ingenic/jz4780-cgu.c
+index e357c228e0f1..014674486038 100644
+--- a/drivers/clk/ingenic/jz4780-cgu.c
++++ b/drivers/clk/ingenic/jz4780-cgu.c
+@@ -341,12 +341,14 @@ static const struct ingenic_cgu_clk_info jz4780_cgu_clocks[] = {
+ 
+ 	[JZ4780_CLK_CPU] = {
+ 		"cpu", CGU_CLK_DIV,
++		.flags = CLK_IS_CRITICAL,
+ 		.parents = { JZ4780_CLK_CPUMUX, -1, -1, -1 },
+ 		.div = { CGU_REG_CLOCKCONTROL, 0, 1, 4, 22, -1, -1 },
+ 	},
+ 
+ 	[JZ4780_CLK_L2CACHE] = {
+ 		"l2cache", CGU_CLK_DIV,
++		.flags = CLK_IS_CRITICAL,
+ 		.parents = { JZ4780_CLK_CPUMUX, -1, -1, -1 },
+ 		.div = { CGU_REG_CLOCKCONTROL, 4, 1, 4, -1, -1, -1 },
+ 	},
+@@ -380,6 +382,7 @@ static const struct ingenic_cgu_clk_info jz4780_cgu_clocks[] = {
+ 
+ 	[JZ4780_CLK_DDR] = {
+ 		"ddr", CGU_CLK_MUX | CGU_CLK_DIV,
++		.flags = CLK_IS_CRITICAL,
+ 		.parents = { -1, JZ4780_CLK_SCLKA, JZ4780_CLK_MPLL, -1 },
+ 		.mux = { CGU_REG_DDRCDR, 30, 2 },
+ 		.div = { CGU_REG_DDRCDR, 0, 1, 4, 29, 28, 27 },
+diff --git a/drivers/clk/ingenic/x1000-cgu.c b/drivers/clk/ingenic/x1000-cgu.c
+index 3c4d5a77ccbd..1bd421cc2ab3 100644
+--- a/drivers/clk/ingenic/x1000-cgu.c
++++ b/drivers/clk/ingenic/x1000-cgu.c
+@@ -251,6 +251,7 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
+ 
+ 	[X1000_CLK_CPU] = {
+ 		"cpu", CGU_CLK_DIV | CGU_CLK_GATE,
++		.flags = CLK_IS_CRITICAL,
+ 		.parents = { X1000_CLK_CPUMUX, -1, -1, -1 },
+ 		.div = { CGU_REG_CPCCR, 0, 1, 4, 22, -1, -1 },
+ 		.gate = { CGU_REG_CLKGR, 30 },
+@@ -258,6 +259,7 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
+ 
+ 	[X1000_CLK_L2CACHE] = {
+ 		"l2cache", CGU_CLK_DIV,
++		.flags = CLK_IS_CRITICAL,
+ 		.parents = { X1000_CLK_CPUMUX, -1, -1, -1 },
+ 		.div = { CGU_REG_CPCCR, 4, 1, 4, 22, -1, -1 },
+ 	},
+@@ -290,6 +292,7 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
+ 
+ 	[X1000_CLK_DDR] = {
+ 		"ddr", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
++		.flags = CLK_IS_CRITICAL,
+ 		.parents = { -1, X1000_CLK_SCLKA, X1000_CLK_MPLL, -1 },
+ 		.mux = { CGU_REG_DDRCDR, 30, 2 },
+ 		.div = { CGU_REG_DDRCDR, 0, 1, 4, 29, 28, 27 },
+diff --git a/drivers/clk/ingenic/x1830-cgu.c b/drivers/clk/ingenic/x1830-cgu.c
+index e01ec2dc7a1a..b08e318aa095 100644
+--- a/drivers/clk/ingenic/x1830-cgu.c
++++ b/drivers/clk/ingenic/x1830-cgu.c
+@@ -225,6 +225,7 @@ static const struct ingenic_cgu_clk_info x1830_cgu_clocks[] = {
+ 
+ 	[X1830_CLK_CPU] = {
+ 		"cpu", CGU_CLK_DIV | CGU_CLK_GATE,
++		.flags = CLK_IS_CRITICAL,
+ 		.parents = { X1830_CLK_CPUMUX, -1, -1, -1 },
+ 		.div = { CGU_REG_CPCCR, 0, 1, 4, 22, -1, -1 },
+ 		.gate = { CGU_REG_CLKGR1, 15 },
+@@ -232,6 +233,7 @@ static const struct ingenic_cgu_clk_info x1830_cgu_clocks[] = {
+ 
+ 	[X1830_CLK_L2CACHE] = {
+ 		"l2cache", CGU_CLK_DIV,
++		.flags = CLK_IS_CRITICAL,
+ 		.parents = { X1830_CLK_CPUMUX, -1, -1, -1 },
+ 		.div = { CGU_REG_CPCCR, 4, 1, 4, 22, -1, -1 },
+ 	},
+@@ -264,6 +266,7 @@ static const struct ingenic_cgu_clk_info x1830_cgu_clocks[] = {
+ 
+ 	[X1830_CLK_DDR] = {
+ 		"ddr", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
++		.flags = CLK_IS_CRITICAL,
+ 		.parents = { -1, X1830_CLK_SCLKA, X1830_CLK_MPLL, -1 },
+ 		.mux = { CGU_REG_DDRCDR, 30, 2 },
+ 		.div = { CGU_REG_DDRCDR, 0, 1, 4, 29, 28, 27 },
 -- 
 2.34.1
 

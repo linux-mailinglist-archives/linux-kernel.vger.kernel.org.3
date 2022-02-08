@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF5834AE520
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:59:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13F334AE524
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 00:01:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231989AbiBHW73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 17:59:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58752 "EHLO
+        id S232388AbiBHXAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 18:00:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231624AbiBHW71 (ORCPT
+        with ESMTP id S231519AbiBHXAn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 17:59:27 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BEF7C061576
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 14:59:25 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id m18so826827lfq.4
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 14:59:25 -0800 (PST)
+        Tue, 8 Feb 2022 18:00:43 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F2EEC061576
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 15:00:39 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id i34so859905lfv.2
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 15:00:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=ItA6TI8Ni0PvSK9MRYCU3UPCNW2YkPVfVW+7WyXcgIY=;
-        b=afjxbKw+HzBUlQ3VvuygQbzk9tugRPl9+vCKl+hHOnudj3FtAdcYJm+J0obNuEvQkF
-         mMdDm1UwYtIBcQYD+5S69w2LC/oAIIi/zEFuRkTuJXaT25X71WtPXS4N9QxghiI29Zw6
-         K2PCvrwgk7c+ntSYrQLtBLuKdljo30Ej3qX5OIQqDw9temAZsjNWDUrOXXTu/gYTG+0B
-         4IHqkeQKU0bmSqngH3QnAumzP+5C6EPz0BRZ1WQ8bNcJX8DsOqVPh+foqEjAMVhADIvv
-         fJaCY0xTm3hvMswNVpOcc3EIMuqy51gbtJE7qUz4sn7uTHYRZmCOEQWmQZNFkthU435E
-         H9jw==
+        bh=MQGz6t0law5MVgqGGrzII5NWEt2DOl/FdzL0iPkOG9k=;
+        b=E9TiYK6DZsY1U5F0Tz/ZT9q4LEvVWT6mkphsbB6E0Y1n5Dlkxhz4SP8L5DIe0g0vw0
+         TBjFERjJM/SoPlnnskAFnDAxXbaaA/VBkK3AwKQZZQoeH0aXbtWhAa4ckS8Msfw9sMt/
+         L/hwgWpDqGuZ26Xz3UnMuQ0f1DPRvr8rAwZpmJYC3SezqbcKajn15tKuUHb/A4Kq6NtJ
+         I8jIqfhBUMKDLr0ovEbwGyHpY7X8wJB35ug8ElrKLDs/jIZGeIop6uAXzkxw3U0KSBRP
+         HRW0PcDbqGlJDKpseICjPdFOfuyB2wOlgkYr3/iFjOdIE6/GrzEpdpJLM2ZvF146Jr3D
+         ToMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ItA6TI8Ni0PvSK9MRYCU3UPCNW2YkPVfVW+7WyXcgIY=;
-        b=cJUToYhzLWaDY/k8diAzBwUfwnun9MKEF2otGIMy6A/jNRPfoBnx9xg5H2D+DEQnZH
-         c+AXuX5njIgIOUSGs9PVBzkBMD8TM/GkiTjWj1z38hX0Pqy/jJQj6JIEyD+HlKCBaMrl
-         mzXaOWPoi+fzTDuYfgkFqoamvObcYrCT7VR4btXtpc8D259EMDatKhuvUqNzb/T1tEHR
-         oken1ga89YQpcN7RuTdWkBqlHft4pM+fYvQ5/TxAyPatTWbfvLBlOl5QG9+/DvAZwiV1
-         ilP6rsPrRYc5Q6UI+7r4QL9Ikly4xOJHWF64y3hlLKdNBXDXqEGfSfzvWi9UALcy7L6M
-         8rQA==
-X-Gm-Message-State: AOAM531X0YROoZ3I8m/PNP5WPKVe3QqW8vavwE75DrMUVb70csmHupNt
-        64vhNOl82tEQaDECLtDgYUKTUNTnf92l/tZ+A0vnGg==
-X-Google-Smtp-Source: ABdhPJzrXjvmHbg4P8xDaIMkX3/azpSsByQPI0FL0T+S/upQWiXIjKfa7421S1XvVu6Ron9ZMXcooOEZEXBDJE9GEbk=
-X-Received: by 2002:ac2:43db:: with SMTP id u27mr1290745lfl.651.1644361163719;
- Tue, 08 Feb 2022 14:59:23 -0800 (PST)
+        bh=MQGz6t0law5MVgqGGrzII5NWEt2DOl/FdzL0iPkOG9k=;
+        b=3gaffxUPanDAwHNufbE/Ru1/YtHr9q1vsvsyPu2hrM1zUejDGrRzPJLVxHXkIeMVI/
+         XSn0M5jDpo4IL8EIIMBFJvtFzyszJtNLwylV4feGE9cuSf2KdxR2OxUzczRKr5XFisdL
+         FhobBheZDSDZm3bdlBiF/RWfPUgudlTsWlgkfxV5yU4uXPCGYfh1dKkZrREeh+swhTT7
+         GGyvQ98f+MCmaE4kNe7aPJYdxc3HO/T6XYkAAOsAP4jREaJRg7iWllbycJPPCxVeSI/N
+         ILsmp6lzL6rtSPxSXuSnPTXwoUInHkxwlX9/hloLYB5j8ikuOX9k1GbWlTmns+lzqeF2
+         PTWQ==
+X-Gm-Message-State: AOAM532h709kOcn5ebDS1DdiBQrA+wI9QLXuhGpokNUmJAUN3YzKC7F/
+        gnhSbLaWibW4AiJPYrgMEhT2/RQa+M5ecWo0+vb6Tw==
+X-Google-Smtp-Source: ABdhPJx8HIMe+XoTHDDgW/Bf8ZuBvIj0tal1BRdAYtu9iAQbllOd6YD7uh/lhTuv7ckF9ZyKCebOEGMWskDEAM7zE8g=
+X-Received: by 2002:a05:6512:3f97:: with SMTP id x23mr2035026lfa.550.1644361237277;
+ Tue, 08 Feb 2022 15:00:37 -0800 (PST)
 MIME-Version: 1.0
-References: <20220208225350.1331628-1-keescook@chromium.org> <20220208225350.1331628-2-keescook@chromium.org>
-In-Reply-To: <20220208225350.1331628-2-keescook@chromium.org>
+References: <20220208225350.1331628-1-keescook@chromium.org> <20220208225350.1331628-3-keescook@chromium.org>
+In-Reply-To: <20220208225350.1331628-3-keescook@chromium.org>
 From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 8 Feb 2022 14:59:11 -0800
-Message-ID: <CAKwvOdm425gzxFbjcq8UmWOiBNV_POYemFgqK9CyZtdyg=Z8Qg@mail.gmail.com>
-Subject: Re: [PATCH v7 1/8] fortify: Replace open-coded __gnu_inline attribute
+Date:   Tue, 8 Feb 2022 15:00:25 -0800
+Message-ID: <CAKwvOdn0huB+HYMCkO9VEryg0AwPA2gpwaUJHGEvV+4846ytSw@mail.gmail.com>
+Subject: Re: [PATCH v7 2/8] Compiler Attributes: Add __pass_object_size for Clang
 To:     Kees Cook <keescook@chromium.org>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
+Cc:     Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev,
+        Miguel Ojeda <ojeda@kernel.org>,
         George Burgess IV <gbiv@google.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        llvm@lists.linux.dev
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -71,30 +70,59 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Tue, Feb 8, 2022 at 2:53 PM Kees Cook <keescook@chromium.org> wrote:
 >
-> Replace open-coded gnu_inline attribute with the normal kernel
-> convention for attributes: __gnu_inline
+> In order to gain greater visibility to type information when using
+> __builtin_object_size(), Clang has a function attribute "pass_object_size"
+> that will make size information available for marked arguments in
+> a function by way of implicit additional function arguments that are
+> then wired up the __builtin_object_size().
+>
+> This is needed to implement FORTIFY_SOURCE in Clang, as a workaround
+> to Clang's __builtin_object_size() having limited visibility[1] into types
+> across function calls (even inlines).
+>
+> This attribute has an additional benefit that it can be used even on
+> non-inline functions to gain argument size information.
+>
+> [1] https://github.com/llvm/llvm-project/issues/53516
 
+Thanks for the patch!
 Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
 >
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: llvm@lists.linux.dev
+> Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
 > Signed-off-by: Kees Cook <keescook@chromium.org>
 > ---
->  include/linux/fortify-string.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  include/linux/compiler_attributes.h | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
 >
-> diff --git a/include/linux/fortify-string.h b/include/linux/fortify-string.h
-> index 53123712bb3b..439aad24ab3b 100644
-> --- a/include/linux/fortify-string.h
-> +++ b/include/linux/fortify-string.h
-> @@ -2,7 +2,7 @@
->  #ifndef _LINUX_FORTIFY_STRING_H_
->  #define _LINUX_FORTIFY_STRING_H_
+> diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
+> index 37e260020221..d0c503772061 100644
+> --- a/include/linux/compiler_attributes.h
+> +++ b/include/linux/compiler_attributes.h
+> @@ -263,6 +263,20 @@
+>   */
+>  #define __packed                        __attribute__((__packed__))
 >
-> -#define __FORTIFY_INLINE extern __always_inline __attribute__((gnu_inline))
-> +#define __FORTIFY_INLINE extern __always_inline __gnu_inline
->  #define __RENAME(x) __asm__(#x)
->
->  void fortify_panic(const char *name) __noreturn __cold;
+> +/*
+> + * Note: the "type" argument should match any __builtin_object_size(p, type) usage.
+> + *
+> + * Optional: not supported by gcc.
+> + * Optional: not supported by icc.
+> + *
+> + * clang: https://clang.llvm.org/docs/AttributeReference.html#pass-object-size-pass-dynamic-object-size
+> + */
+> +#if __has_attribute(__pass_object_size__)
+> +# define __pass_object_size(type)      __attribute__((__pass_object_size__(type)))
+> +#else
+> +# define __pass_object_size(type)
+> +#endif
+> +
+>  /*
+>   *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-pure-function-attribute
+>   */
 > --
 > 2.30.2
 >

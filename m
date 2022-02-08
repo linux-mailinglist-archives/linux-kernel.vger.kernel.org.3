@@ -2,104 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F39F4AD695
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:27:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 167914AD697
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:28:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358836AbiBHL1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 06:27:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56314 "EHLO
+        id S232400AbiBHL1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 06:27:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356311AbiBHKbL (ORCPT
+        with ESMTP id S1356333AbiBHKc2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 05:31:11 -0500
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B5DC03FEC0
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 02:31:08 -0800 (PST)
-Received: by mail-pf1-x430.google.com with SMTP id d187so18083531pfa.10
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 02:31:08 -0800 (PST)
+        Tue, 8 Feb 2022 05:32:28 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58749C03FEC0;
+        Tue,  8 Feb 2022 02:32:27 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id co28so9394010edb.1;
+        Tue, 08 Feb 2022 02:32:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=heitbaum.com; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=n2sPaAfs1e3r3EaCKrH3flEyvxcUKOyg9+DSgqzK2kY=;
-        b=MW9d5dMmZamQEEDqf3yut7WOOWrRcS9vhDUuzD2Qffdf/ZkuPQhYNVJrqUO5rQG5Pv
-         kn3LuLy1MF4EdVeySja+iqHd3GGUdxUdGhtaGb4++TeB9bN24bxPl81e7bMbbLxkMuYZ
-         n0dIQqRgAafGZ04HEA3KQBKFpMY/BIIwW9rF8=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=v3+9Y32cf+Ax3G/iWkV5vM08y7nrpNijPcp38VaOUAE=;
+        b=Kw06RO75rbLUFrLHJ93ga19ZxxshO5/eizKWNfLYjMLV3cJLg4d6s+I98J5q0VdCGo
+         NS6bdVcwDSY89lrxKuzs2BAoT4Fpucs1BIEecy7QnncI/TKM2grUufsKf8mumEt7xgzB
+         gElndbyM+A7LeU83VNqK8dqsVA2jgtQfpn0Ew0uTKWbBmFbbM9waSxznq4LOd2UFOfIi
+         5AoAAcr/B87VPn5AjrWpUQgsdKowxCKuJIGRJwVMstEcDgP+PZ/CajWf3g7IBNv9uLXt
+         1s0Ml5wnJw0nag6BMDmDNPHTcbRIdl6rALNKSZTP67OzwrJaU5Q7Edci0gw/YsRFEyCp
+         XiQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=n2sPaAfs1e3r3EaCKrH3flEyvxcUKOyg9+DSgqzK2kY=;
-        b=Tgz3XJaaTzevvjsSeu8IhGMMud9D2uw0O9I/cmxxFH1qLoyHO7Oos9zePhqY8Gk+AI
-         XOyrgLBxm8WsRC+9nWTZZJ1TbFY2oeMnXqhiXYvcod2wQSL8+UEsayyFzea3AqAeFRx4
-         Nf64fsc5ne7LoELb6i5npvzueE3ApzbVZCMSitI87JaS4fbMFN9/VCAwqFT5UDtjHrKf
-         4ANP+l0dXTiu3qk4e/UwSBXhgJgXQbU8udu2Ab3MlzED71j95lG48X3LFB0yEfnYgJHN
-         RIh5MBz8FP8XKldJrJj4Z6jAUBKqBNamxvT+Uza5bKizyDbQPySEQ5gjrRztIyY0A9mr
-         iNcQ==
-X-Gm-Message-State: AOAM532fJ2qd89Pyhp/jJFL3isQGlkfIcY4XJcx0ib4twXGbSpIo1kal
-        9bqlHEP734WF424mpPrhojr4Dw==
-X-Google-Smtp-Source: ABdhPJw5CoJJ5j92QzzAFiXKwho86u7TKH2Dj9d4eLJJvDDSEUpwHs5VzBuY1DioqejlBbgmzCMXMQ==
-X-Received: by 2002:a05:6a00:d5c:: with SMTP id n28mr3738935pfv.9.1644316267474;
-        Tue, 08 Feb 2022 02:31:07 -0800 (PST)
-Received: from f59db626e9e0 ([203.221.136.13])
-        by smtp.gmail.com with ESMTPSA id q16sm15514674pfu.194.2022.02.08.02.31.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 02:31:06 -0800 (PST)
-Date:   Tue, 8 Feb 2022 10:30:56 +0000
-From:   Rudi Heitbaum <rudi@heitbaum.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.16 000/127] 5.16.8-rc2 review
-Message-ID: <20220208103056.GA29@f59db626e9e0>
-References: <20220207133856.644483064@linuxfoundation.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=v3+9Y32cf+Ax3G/iWkV5vM08y7nrpNijPcp38VaOUAE=;
+        b=pYlp37jRKIhFlVBCUt9GLmcknxEzsOO1OzQ5+iBlcqzwuXhXFVDTxiM+iInwIvPgiZ
+         FY+Ccuj8mCVzscoQ9M4wCxpLZIvwIa9VPeKCOnrfZ6+dhvnoBw3fVQ2wnmbmseoDT5ic
+         3LfdygKlaQIE+4YZ93iun+XiRbseuig9ynwkIGnryMkcKXxD/Yb3V+KX+ez1mPygIK3x
+         vdk1IUs8hYOEM1PzuhOvNnG1es0tlsRHvay3nQrmloxwAz72wwCEV91WnZj7bnKYgA8i
+         jd0nO4pNIy6aT+0Q44CcuW0KiyNnQ9IPYa4ywj4ETG2VJODz5+qvqC8AgBKy1tdvNVyn
+         RyQw==
+X-Gm-Message-State: AOAM530gdBl8apMDHCHG83EFqJFWjFXFqplOlolnvDo+qwoXsP+Xgfek
+        g/t4Qus1AhnDuI9XyVh0SmIopHrRAbrYMAz6jtY=
+X-Google-Smtp-Source: ABdhPJwz3uJ6NB6o/NiskBls8cso3tajnnfMcijvIzyd4aD0huokx70+fDoPUd5tajwSs1cuxL+FwQ51hqdYoSjLnWo=
+X-Received: by 2002:a05:6402:2741:: with SMTP id z1mr3760419edd.264.1644316345736;
+ Tue, 08 Feb 2022 02:32:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220207133856.644483064@linuxfoundation.org>
+References: <20220207232129.402882-1-athierry@redhat.com>
+In-Reply-To: <20220207232129.402882-1-athierry@redhat.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 8 Feb 2022 12:31:49 +0200
+Message-ID: <CAHp75VexSp1kijGHoOijSHB44fHTWqj6LZPzhSBhN2ms2huh-g@mail.gmail.com>
+Subject: Re: [PATCH v3] serial: 8250_bcm2835aux: Add ACPI support
+To:     Adrien Thierry <athierry@redhat.com>
+Cc:     "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        linux-rpi-kernel <linux-rpi-kernel@lists.infradead.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jeremy Linton <jeremy.linton@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 03:04:44PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.16.8 release.
-> There are 127 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 09 Feb 2022 13:38:34 +0000.
-> Anything received after that time might be too late.
+On Tue, Feb 8, 2022 at 11:13 AM Adrien Thierry <athierry@redhat.com> wrote:
+>
+> Add ACPI support to 8250_bcm2835aux driver. This makes it possible to
+> use the miniuart on the Raspberry Pi with the tianocore/edk2 UEFI
 
-Hi Greg,
+TianoCore EDK II
 
-5.16.8-rc2 tested.
+> firmware.
 
-Run tested on:
-- Allwinner H6 (Tanix TX6)
-- Intel Tiger Lake x86_64 (nuc11 i7-1165G7)
+...
 
-In addition - build tested on:
-- Allwinner A64
-- Allwinner H3
-- Allwinner H5
-- NXP iMX6
-- NXP iMX8
-- Qualcomm Dragonboard
-- Rockchip RK3288
-- Rockchip RK3328
-- Rockchip RK3399pro
-- Samsung Exynos
+>         /* get the clock - this also enables the HW */
+> -       data->clk = devm_clk_get(&pdev->dev, NULL);
 
-Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
---
-Rudi
+> -       if (IS_ERR(data->clk))
+> -               return dev_err_probe(&pdev->dev, PTR_ERR(data->clk), "could not get clk\n");
+
+You shouldn't remove the error handling. Even if optional there may be
+other types of errors that need to be reported.
+
+> +       data->clk = devm_clk_get_optional(&pdev->dev, NULL);
+
+...
+
+
+> +       bcm_data = device_get_match_data(&pdev->dev);
+
+Move this closer to the condition where it's used the first time.
+
+> +       /* Some UEFI implementations (e.g. tianocore/edk2 for the Raspberry Pi)
+.
+If there are some not doing that, can we end up in the situation when
+for the same ID we have different offset?
+Also, Why not go and fix that implementation?
+Can you provide a DSDT excerpt to show how it looks there?
+
+TianoCore EDK II
+
+/*
+ * Multi-line comments should look
+ * like this.
+ */
+
+> +        * describe the miniuart with a base address that encompasses the auxiliary
+> +        * registers shared between the miniuart and spi.
+
+SPI
+
+> +        *
+> +        * This is due to historical reasons, see discussion here :
+> +        * https://edk2.groups.io/g/devel/topic/87501357#84349
+> +        *
+> +        * We need to add the offset between the miniuart and auxiliary
+> +        * registers to get the real miniuart base address.
+> +        */
+> +       if (bcm_data)
+> +               offset = bcm_data->offset;
+
+...
+
+> +static const struct acpi_device_id bcm2835aux_serial_acpi_match[] = {
+> +       { "BCM2836", (kernel_ulong_t)&bcm2835_acpi_data },
+> +       { }
+> +};
+
+I believe this ID is allocated by Broadcom. Can we have a confirmation, please?
+
+-- 
+With Best Regards,
+Andy Shevchenko

@@ -2,43 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D2F44AD6F4
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:31:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 682EB4AD6F6
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:31:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357493AbiBHLar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 06:30:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60998 "EHLO
+        id S1358214AbiBHLbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 06:31:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238928AbiBHKvV (ORCPT
+        with ESMTP id S240563AbiBHKvr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 05:51:21 -0500
-Received: from outbound-smtp25.blacknight.com (outbound-smtp25.blacknight.com [81.17.249.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D235AC03FEC0
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 02:51:19 -0800 (PST)
-Received: from mail.blacknight.com (pemlinmail02.blacknight.ie [81.17.254.11])
-        by outbound-smtp25.blacknight.com (Postfix) with ESMTPS id 638ABCB22E
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 10:51:18 +0000 (GMT)
-Received: (qmail 12525 invoked from network); 8 Feb 2022 10:51:18 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.17.223])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 8 Feb 2022 10:51:18 -0000
-Date:   Tue, 8 Feb 2022 10:51:16 +0000
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     K Prateek Nayak <kprateek.nayak@amd.com>
-Cc:     peterz@infradead.org, aubrey.li@linux.intel.com, efault@gmx.de,
-        gautham.shenoy@amd.com, linux-kernel@vger.kernel.org,
-        mingo@kernel.org, song.bao.hua@hisilicon.com,
-        srikar@linux.vnet.ibm.com, valentin.schneider@arm.com,
-        vincent.guittot@linaro.org
-Subject: Re: [PATCH] sched/fair: Consider cpu affinity when allowing NUMA
- imbalance in find_idlest_group
-Message-ID: <20220208105116.GO3366@techsingularity.net>
-References: <20220207155921.21321-1-kprateek.nayak@amd.com>
+        Tue, 8 Feb 2022 05:51:47 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A3BC03FEC0;
+        Tue,  8 Feb 2022 02:51:44 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 4E47A1F387;
+        Tue,  8 Feb 2022 10:51:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1644317503; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Xfvi4t6v0E3o8m/BrX7OSyshdoPR/okbuDAi6c9K9Rc=;
+        b=By/NatfU9q5/32V4vpdjlTTwvMuHnRPEfjJni8g4r2EgT6xLl48+zn+/fJ0VU9xgEr9zWa
+        HW1oGFPuTLIoHd7m+IShMeqYSY+XUU/aeUGXBT7k6ly/qyW/AEaS0oJmdcMw4fMrG/xB0W
+        iJ9ZbifzVS3EPlo+CS0nhO3K00YBGWc=
+Received: from suse.cz (unknown [10.100.216.66])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id DA181A3B91;
+        Tue,  8 Feb 2022 10:51:42 +0000 (UTC)
+Date:   Tue, 8 Feb 2022 11:51:42 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Vlastimil Babka <vbabka@suse.cz>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, Ira Weiny <ira.weiny@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Roman Gushchin <guro@fb.com>, Rafael Aquini <aquini@redhat.com>
+Subject: Re: [PATCH v4 2/4] mm/page_owner: Use scnprintf() to avoid excessive
+ buffer overrun check
+Message-ID: <YgJLPpUqkTaA298Y@alley>
+References: <20220131192308.608837-5-longman@redhat.com>
+ <20220202203036.744010-3-longman@redhat.com>
+ <5c03fa31-35a5-4cbc-6b0e-872d5db82a41@suse.cz>
+ <42cca916-d4c8-daa1-4a91-60738c499c89@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220207155921.21321-1-kprateek.nayak@amd.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+In-Reply-To: <42cca916-d4c8-daa1-4a91-60738c499c89@redhat.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -47,64 +69,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 09:29:21PM +0530, K Prateek Nayak wrote:
-> Neither the sched/tip nor Mel's v5 patchset [1] provides an optimal
-> new-task wakeup strategy when the tasks are affined to a subset of cpus
-> which can result in piling of tasks on the same set of CPU in a NUMA
-> group despite there being other cpus in a different NUMA group where the
-> task could have run in. A good placement makes a difference especially
-> in case of short lived task where the delay in load balancer kicking in
-> can cause degradation in perfromance.
+On Thu 2022-02-03 13:49:02, Waiman Long wrote:
+> On 2/3/22 10:46, Vlastimil Babka wrote:
+> > On 2/2/22 21:30, Waiman Long wrote:
+> > > The snprintf() function can return a length greater than the given
+> > > input size. That will require a check for buffer overrun after each
+> > > invocation of snprintf(). scnprintf(), on the other hand, will never
+> > > return a greater length. By using scnprintf() in selected places, we
+> > > can avoid some buffer overrun checks except after stack_depot_snprint()
+> > > and after the last snprintf().
+> > > 
+> > > Signed-off-by: Waiman Long <longman@redhat.com>
+> > > Acked-by: David Rientjes <rientjes@google.com>
+> > > Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+> > Looks like this will work, but note that if the purpose of patch 1/4 was
+> > that after the first scnprintf() that overflows the following calls will be
+> > short-cut thanks to passing the size as 0, AFAICS that won't work. Because
+> > scnprintf() returns the number without trailing zero, 'ret' will be 'count -
+> > 1' after the overflow, so 'count - ret' will be 1, never 0.
 > 
+> Yes, I am aware of that. Patch 1 is just a micro-optimization for the very
+> rare case.
 
-Thanks.
+In theory, we might micro-optimize also the case when "size == 1".
 
-V6 was posted based on previous feedback. While this patch is building
-on top of it, please add Acked-by or Tested-by if the imbalance series
-helps the general problem of handling imbalances when there are multiple
-last level caches.
+Well, I am not sure if it is worth it. After all, the primary use-case
+is to print the message into a big-enough buffer. Lost information is
+a bigger problem than the speed ;-)
 
-> <SNIP>
->
-> Aggressive NUMA balancing is only done when needed. We select the
-> minimum of number of allowed cpus in sched group and the calculated
-> sd.imb_numa_nr as our imbalance threshold and the default behavior
-> of mel-v5 is only modified when the former is smaller than
-> the latter.
-> 
-
-In this context, it should be safe to reuse select_idle_mask like this
-build tested patch
-
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 538756bd8e7f..1e759c21371b 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -9128,6 +9128,8 @@ find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu)
- 
- 	case group_has_spare:
- 		if (sd->flags & SD_NUMA) {
-+			struct cpumask *cpus;
-+			int imb;
- #ifdef CONFIG_NUMA_BALANCING
- 			int idlest_cpu;
- 			/*
-@@ -9145,10 +9147,15 @@ find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu)
- 			 * Otherwise, keep the task close to the wakeup source
- 			 * and improve locality if the number of running tasks
- 			 * would remain below threshold where an imbalance is
--			 * allowed. If there is a real need of migration,
--			 * periodic load balance will take care of it.
-+			 * allowed while accounting for the possibility the
-+			 * task is pinned to a subset of CPUs.  If there is a
-+			 * real need of migration, periodic load balance will
-+			 * take care of it.
- 			 */
--			if (allow_numa_imbalance(local_sgs.sum_nr_running + 1, sd->imb_numa_nr))
-+			cpus = this_cpu_cpumask_var_ptr(select_idle_mask);
-+			cpumask_and(cpus, sched_group_span(local), p->cpus_ptr);
-+			imb = min(cpumask_weight(cpus), sd->imb_numa_nr);
-+			if (allow_numa_imbalance(local_sgs.sum_nr_running + 1, imb))
- 				return NULL;
- 		}
- 
+Best Regards,
+Petr

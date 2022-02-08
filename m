@@ -2,180 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 510174ADE74
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 17:39:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14C124ADE78
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 17:41:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383193AbiBHQjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 11:39:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59154 "EHLO
+        id S1383398AbiBHQj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 11:39:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232725AbiBHQjD (ORCPT
+        with ESMTP id S232725AbiBHQj4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 11:39:03 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4668DC061576;
-        Tue,  8 Feb 2022 08:39:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644338342; x=1675874342;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CaBZdofp3ykhk8RNvPuDfsy0ml+vizGXPsdsETYU1ho=;
-  b=aZQB4DCAe9st6fb5vThwdWNzAXuc50hRBPWdSk0RFSyAqvNrhy0pNLhO
-   AGQsgst7V1G/AeJSVw8kY6orlstfptdGs8auWzZMA9BVOVEFOGhqc+HEV
-   WuiyOtjviTKKHDFbizbd4dz4l0dO/BWKSeyVKVLuggCCMZZ5ZH1LlZJaB
-   IcBY2YLJi3rSmuqqGz3Rx9sMiW8LHdY5MEzk69/66rWlbG1WckuEw1w4z
-   RGMTd4mNCjgGbUPjl/MxZ1PIHvJ74sQ10TEyXce8jJs7MSZboS3B/Dxn9
-   6NWgeT55lgYA9iF6QXG6/gCe9KKCQQPOeGERbOfUREJMs7133O0IPE6DU
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="273520855"
-X-IronPort-AV: E=Sophos;i="5.88,353,1635231600"; 
-   d="scan'208";a="273520855"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 08:38:53 -0800
-X-IronPort-AV: E=Sophos;i="5.88,353,1635231600"; 
-   d="scan'208";a="771037216"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 08:38:49 -0800
-Received: by lahna (sSMTP sendmail emulation); Tue, 08 Feb 2022 18:38:47 +0200
-Date:   Tue, 8 Feb 2022 18:38:47 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Myron Stowe <myron.stowe@redhat.com>,
-        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        linux-acpi <linux-acpi@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>, x86@kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Benoit =?iso-8859-1?Q?Gr=E9goire?= <benoitg@coeus.ca>,
-        Hui Wang <hui.wang@canonical.com>
-Subject: Re: [5.17 regression] "x86/PCI: Ignore E820 reservations for bridge
- windows on newer systems" breaks suspend/resume
-Message-ID: <YgKcl9YX4HfjqZxS@lahna>
-References: <a7ad05fe-c2ab-a6d9-b66e-68e8c5688420@redhat.com>
- <697aaf96-ec60-4e11-b011-0e4151e714d7@redhat.com>
+        Tue, 8 Feb 2022 11:39:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C5010C061576
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 08:39:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644338394;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ResiOMSkqLaFwecOSm6Y41C9FDzk+Q7FwcTKW53EBiY=;
+        b=YWLicH1npxuQ3j3nI3QYmk1ganMa/7eL/GI8wG0qMApjMEOSzm/P6HIq2kV1F+eB6gBOuS
+        aJvX6lz+rTqIRCy2IhqqeuPuJ6ZaHWHDXOCqrzj0Jl8L3qNOLOV4L/JTxJkOmfPkZKNL4N
+        C2bCXxQRZkAdjyw+KIYVfknizG0/Osk=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-649-5Oas98BiM-KtHahzRmNmEw-1; Tue, 08 Feb 2022 11:39:51 -0500
+X-MC-Unique: 5Oas98BiM-KtHahzRmNmEw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B3AD21006AB3;
+        Tue,  8 Feb 2022 16:39:49 +0000 (UTC)
+Received: from llong.com (unknown [10.22.35.8])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 094E2879D3;
+        Tue,  8 Feb 2022 16:39:21 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Christian Brauner <brauner@kernel.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Alexey Gladkov <legion@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jann Horn <jannh@google.com>, Al Viro <viro@zeniv.linux.org.uk>
+Cc:     linux-kernel@vger.kernel.org, Waiman Long <longman@redhat.com>
+Subject: [PATCH] copy_process(): Move fd_install() out of sighand->siglock critical section
+Date:   Tue,  8 Feb 2022 11:39:12 -0500
+Message-Id: <20220208163912.1084752-1-longman@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <697aaf96-ec60-4e11-b011-0e4151e714d7@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hans,
+I was made aware of the following lockdep splat:
 
-On Tue, Feb 08, 2022 at 04:59:13PM +0100, Hans de Goede wrote:
-> Hi,
-> 
-> On 2/8/22 16:25, Hans de Goede wrote:
-> > Hi All,
-> > 
-> > Unfortunately I've just learned that commit 7f7b4236f204 ("x86/PCI:
-> > Ignore E820 reservations for bridge windows on newer systems"):
-> > 
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7f7b4236f2040d19df1ddaf30047128b41e78de7
-> > 
-> > breaks suspend/resume on at least one laptop model, the Lenovo ThinkPad
-> > X1 gen 2, see:
-> > https://bugzilla.redhat.com/show_bug.cgi?id=2029207
+[ 2516.308763] =====================================================
+[ 2516.309085] WARNING: HARDIRQ-safe -> HARDIRQ-unsafe lock order detected
+[ 2516.309433] 5.14.0-51.el9.aarch64+debug #1 Not tainted
+[ 2516.309703] -----------------------------------------------------
+[ 2516.310149] stress-ng/153663 [HC0[0]:SC0[0]:HE0:SE1] is trying to acquire:
+[ 2516.310512] ffff0000e422b198 (&newf->file_lock){+.+.}-{2:2}, at: fd_install+0x368/0x4f0
+[ 2516.310944]
+               and this task is already holding:
+[ 2516.311248] ffff0000c08140d8 (&sighand->siglock){-.-.}-{2:2}, at: copy_process+0x1e2c/0x3e80
+[ 2516.311804] which would create a new lock dependency:
+[ 2516.312066]  (&sighand->siglock){-.-.}-{2:2} -> (&newf->file_lock){+.+.}-{2:2}
+[ 2516.312446]
+               but this new dependency connects a HARDIRQ-irq-safe lock:
+[ 2516.312983]  (&sighand->siglock){-.-.}-{2:2}
+   :
+[ 2516.330700]  Possible interrupt unsafe locking scenario:
 
-:-(
+[ 2516.331075]        CPU0                    CPU1
+[ 2516.331328]        ----                    ----
+[ 2516.331580]   lock(&newf->file_lock);
+[ 2516.331790]                                local_irq_disable();
+[ 2516.332231]                                lock(&sighand->siglock);
+[ 2516.332579]                                lock(&newf->file_lock);
+[ 2516.332922]   <Interrupt>
+[ 2516.333069]     lock(&sighand->siglock);
+[ 2516.333291]
+                *** DEADLOCK ***
+[ 2516.389845]
+               stack backtrace:
+[ 2516.390101] CPU: 3 PID: 153663 Comm: stress-ng Kdump: loaded Not tainted 5.14.0-51.el9.aarch64+debug #1
+[ 2516.390756] Hardware name: QEMU KVM Virtual Machine, BIOS 0.0.0 02/06/2015
+[ 2516.391155] Call trace:
+[ 2516.391302]  dump_backtrace+0x0/0x3e0
+[ 2516.391518]  show_stack+0x24/0x30
+[ 2516.391717]  dump_stack_lvl+0x9c/0xd8
+[ 2516.391938]  dump_stack+0x1c/0x38
+[ 2516.392247]  print_bad_irq_dependency+0x620/0x710
+[ 2516.392525]  check_irq_usage+0x4fc/0x86c
+[ 2516.392756]  check_prev_add+0x180/0x1d90
+[ 2516.392988]  validate_chain+0x8e0/0xee0
+[ 2516.393215]  __lock_acquire+0x97c/0x1e40
+[ 2516.393449]  lock_acquire.part.0+0x240/0x570
+[ 2516.393814]  lock_acquire+0x90/0xb4
+[ 2516.394021]  _raw_spin_lock+0xe8/0x154
+[ 2516.394244]  fd_install+0x368/0x4f0
+[ 2516.394451]  copy_process+0x1f5c/0x3e80
+[ 2516.394678]  kernel_clone+0x134/0x660
+[ 2516.394895]  __do_sys_clone3+0x130/0x1f4
+[ 2516.395128]  __arm64_sys_clone3+0x5c/0x7c
+[ 2516.395478]  invoke_syscall.constprop.0+0x78/0x1f0
+[ 2516.395762]  el0_svc_common.constprop.0+0x22c/0x2c4
+[ 2516.396050]  do_el0_svc+0xb0/0x10c
+[ 2516.396252]  el0_svc+0x24/0x34
+[ 2516.396436]  el0t_64_sync_handler+0xa4/0x12c
+[ 2516.396688]  el0t_64_sync+0x198/0x19c
+[ 2517.491197] NET: Registered PF_ATMPVC protocol family
+[ 2517.491524] NET: Registered PF_ATMSVC protocol family
+[ 2591.991877] sched: RT throttling activated
 
-> > This regression was actually caught be Fedora already carrying this
-> > patch for a while now and as such it has been reproduced with 5.15
-> > with an older version of the patch which still allowed turning the
-> > new behavior of by adding "pci=use_e820". Dmesg output with and
-> > without the option has just been attached to the bug, I've not
-> > analyzed this any further yet.
-> > 
-> > I guess that for now this means that we need to revert commit
-> > 7f7b4236f204. Rafael, I'll send you a revert with a commit msg
-> > explaining why this needs to be reverted tomorrow.
-> > 
-> > More interesting IMHO is finding out another solution. Both the touchpad
-> > problem which got me looking into this:
-> > https://bugzilla.redhat.com/show_bug.cgi?id=1868899
-> > 
-> > As well as the thunderbolt hotplug issue Mika was looking at:
-> > https://bugzilla.kernel.org/show_bug.cgi?id=206459
-> > 
-> > both are cases where we fail to find a memory-window for a
-> > BAR which has not been setup yet.
-> > 
-> > So I see a couple of options here:
-> > 
-> > 1. Detect that the e820 reservations fully cover (one of)
-> > the PCI bridge main 32 bit memory windows and if that happens
-> > ignore them. This actually was my first plan when I started
-> > working on this. In the end I choose the other option
-> > because Bjorn indicated that in hindsight honoring the e820
-> > reservations might have been a mistake and maybe we should
-> > get rid of honoring them all together.
-> > 
-> > 2. Have a flag which, when we fail to alloc a 32 bit
-> > (or 64 bit) memory PCI BAR, is set if not already set
-> > and then retry the alloc. And make the e820 reservation
-> > carve-out get skipped in this case.
-> > 
-> > 3. When booting with pci=nocrs as a workaround for
-> > the touchpad case a 64 but memory window ends up getting
-> > used. There already is some special handling for some
-> > AMD bridges where if there are no 64 bit memory Windows
-> > in the _CRS for the bridge, one gets added. Maybe we need
-> > to do the same for Intel bridges ?
-> 
-> 4. It seems that all devices which have issues with allocating
-> a PCI bar are Ice Lake based; and the model where the ignoring
-> of e820 reservations has been reported to cause issues is somewhat
-> old. It is a Haswell, but still getting BIOS updates causing
-> the BIOS date check to enable the new behavior. So another
-> solution might be to only ignore e820 reservations on machines
-> with Intel Ice Lake (and presumably also Tiger Lake) CPUs.
-> 
-> 
-> 5. It also seems that the troublesome e820 entry on all devices
-> ends at 0xcfffffff and starts well below 0x8000000 :
-> 
-> Yoga C940:
-> [    0.000000] BIOS-e820: [mem 0x000000004bc50000-0x00000000cfffffff] reserved
-> 
-> IdeaPad 3 15IIL05:
-> [    0.000000] BIOS-e820: [mem 0x000000004bc50000-0x00000000cfffffff] reserved
-> 
-> Lenovo IdeaPad 5 14IIL05:
-> [    0.000000] BIOS-e820: [mem 0x000000005bc50000-0x00000000cfffffff] reserved
+One way to solve this problem is to move the fd_install() call out of
+the sighand->siglock critical section.
 
-I don't remember the details anymore but looking at the commit log of my
-"fix" attempt here:
+Before commit 6fd2fe494b17 ("copy_process(): don't use ksys_close()
+on cleanups"), the pidfd installation was done without holding both
+the task_list lock and the sighand->siglock. Obviously, holding these
+two locks are not really needed to protect the fd_install() call.
+So move the fd_install() call down to after the releases of both locks.
 
-https://bugzilla.kernel.org/attachment.cgi?id=287661
+Fixes: 6fd2fe494b17 ("copy_process(): don't use ksys_close() on cleanups")
+Signed-off-by: Waiman Long <longman@redhat.com>
+---
+ kernel/fork.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-The EFI memory map actually seems to consists of several entries that somehow
-are merged by something (I think this is the EFI stub but not sure). Booting
-with "efi=debug" may help us to understand this further (or not).
+diff --git a/kernel/fork.c b/kernel/fork.c
+index d75a528f7b21..007af7fb47c7 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -2323,10 +2323,6 @@ static __latent_entropy struct task_struct *copy_process(
+ 		goto bad_fork_cancel_cgroup;
+ 	}
+ 
+-	/* past the last point of failure */
+-	if (pidfile)
+-		fd_install(pidfd, pidfile);
+-
+ 	init_task_pid_links(p);
+ 	if (likely(p->pid)) {
+ 		ptrace_init_task(p, (clone_flags & CLONE_PTRACE) || trace);
+@@ -2375,6 +2371,9 @@ static __latent_entropy struct task_struct *copy_process(
+ 	syscall_tracepoint_update(p);
+ 	write_unlock_irq(&tasklist_lock);
+ 
++	if (pidfile)
++		fd_install(pidfd, pidfile);
++
+ 	proc_fork_connector(p);
+ 	sched_post_fork(p, args);
+ 	cgroup_post_fork(p, args);
+-- 
+2.27.0
 
-On that Yoga system, this:
-
-  [Reserved           |   |  |  |  |  |  |  | |   |WB|WT|WC|UC] range=[0x000000002bc50000-0x000000003fffffff] (323MB)
-  [Reserved           |   |  |  |  |  |  |  | |   |WB|  |  |UC] range=[0x0000000040000000-0x0000000040ffffff] (16MB)
-  [Reserved           |   |  |  |  |  |  |  | |   |  |  |  |  ] range=[0x0000000041000000-0x00000000453fffff] (68MB)
-  [Memory Mapped I/O  |RUN|  |  |  |  |  |  | |   |  |  |  |UC] range=[0x0000000045400000-0x00000000cfffffff] (2220MB)
-
-became this:
-
-  BIOS-e820: [mem 0x000000002bc50000-0x00000000cfffffff] reserved
-
-Since the area (0x45400000-0xcfffffff) is marked as MMIO I think maybe we can
-simply skip those areas in arch_remove_reservations() or so?
-
-I may be missing a lots of details, though. ;-)

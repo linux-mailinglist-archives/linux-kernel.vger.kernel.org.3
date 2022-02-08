@@ -2,68 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 680D14AE58F
+	by mail.lfdr.de (Postfix) with ESMTP id B5E5C4AE590
 	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 00:42:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237815AbiBHXmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 18:42:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48796 "EHLO
+        id S237883AbiBHXmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 18:42:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231750AbiBHXmR (ORCPT
+        with ESMTP id S237833AbiBHXmf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 18:42:17 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0BBBC061576
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 15:42:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644363736; x=1675899736;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZN/KZTfrbYax2SZ9l2CHYYmA37NRe0JPlS8tinExvVo=;
-  b=AHaJ+hLnDnuzFM9xbXxZYBhXYjd3u5COl+vKcm9j0dEpCuOckxeZJ0To
-   fSdQy9cBFDHqbPGLnZRQhLFp2bSR1dczUqPTK0+6kgBXBd/8btzQa6dMg
-   3f6iHOtCyhoYPXhlbQVPoEcAEERyJsjZPgr2Y7Zft6d8eGHDe/FAoHqgV
-   OHkN7b6FjLnh84L9NFUEdcYSJJsWLQqe1SulrNNaWtVj9k6kujW20VOl1
-   MzGknK35e3m5PKk3mOWVQv2H3AOoDaN04FHvu/lr9n2wKUqUqq5J0UXko
-   r/bR0ITCPWQT2y9iMMJcC0hCHmbmwh0VfERarhg+TEgcaX54GJrKJxaes
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="309822141"
-X-IronPort-AV: E=Sophos;i="5.88,354,1635231600"; 
-   d="scan'208";a="309822141"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 15:42:16 -0800
-X-IronPort-AV: E=Sophos;i="5.88,354,1635231600"; 
-   d="scan'208";a="540838470"
-Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 15:42:16 -0800
-Date:   Tue, 8 Feb 2022 15:42:16 -0800
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V8 36/44] memremap_pages: Reserve a PKS PKey for eventual
- use by PMEM
-Message-ID: <20220208234215.GJ785175@iweiny-DESK2.sc.intel.com>
-References: <20220127175505.851391-1-ira.weiny@intel.com>
- <20220127175505.851391-37-ira.weiny@intel.com>
- <2193142f0cf3785a4225e0393eace397cbbe86e6.camel@intel.com>
- <CAPcyv4i_Jc865zEzNxbQB_XHqCwSS6zm_evquLv2BBu9ipa39Q@mail.gmail.com>
- <20220205054039.GE785175@iweiny-DESK2.sc.intel.com>
- <CAPcyv4hcKsy1Z78OyhPK+gPCqqEsbr9fuNRzOBNah03guDzktA@mail.gmail.com>
- <20220208224803.GI785175@iweiny-DESK2.sc.intel.com>
- <CAPcyv4iPT8r9ButHRJ2DsPQQMBN1rHCe1zSiV-rrag9vdqoW7w@mail.gmail.com>
+        Tue, 8 Feb 2022 18:42:35 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D02ABC061576
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 15:42:34 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id x3so700370pll.3
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 15:42:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=6+sTXDYmgUQsDsJLKYnziAyPf1hDavDmQY5J7q52kzU=;
+        b=bxG+vq9e3SrwYf4/FxA1grj/gUOyczUGU1bFcT8v36LdowcfF2hAgXMQPHKEzV9/pB
+         qXQRxGgd+B1VbFvyV2nq0D9IW3lLsBBAWiT8It3alVq/ceJ6kUx35g1PnKdOKBG0ssv+
+         R3aiUo/pBVqYnCHUtdp1fR3OKs0RsLlgkId68=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6+sTXDYmgUQsDsJLKYnziAyPf1hDavDmQY5J7q52kzU=;
+        b=1jqI8QjWu2CiGcSrqdAfG4laWOK4UkS/Kr7FRTmjzZWTbL6LWNogRZYe9Pv1nowyN4
+         bcAJZj2GXGbBNa1UGHtZe2onOS62HifyvSOIEGYimLlE30DUfNdrX3S6ZVfdILDMT0TW
+         eFCZ3szB8YqXAP/L+PLBRplhKQd3dqWlfqSzF9Ue8/66Z9c8KtVv3ORl/1C+B9T6+Azc
+         ETu6m8oD5Fbo4FvsD7KulLlcfx3fS/fUPCtInbIN9IdpjyY9BYHCKcTbm5MyH+5OWUqd
+         xtbBq7CRJuKmf98Sc1s6xISNPKnJ8LDtWLtFrI9Est/b5E8EwWfiwBWVK4mpwT6bpF8h
+         hWJg==
+X-Gm-Message-State: AOAM530QqErmar48aQos7d7Cqwf+0uGF7OB67do6Po0SgXZf95gh5Scg
+        Iip1BBmTrbDsoRUnG2WVNDm14Q==
+X-Google-Smtp-Source: ABdhPJwTLtJC/y2Hfm5dxqRTIRR0DSoV4UErP93LtFhCa3/CUZLVU+T2+AgQOZF+ju/qlCZhIZYMzA==
+X-Received: by 2002:a17:903:1207:: with SMTP id l7mr7035725plh.19.1644363754281;
+        Tue, 08 Feb 2022 15:42:34 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id s14sm17294592pfk.65.2022.02.08.15.42.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 15:42:34 -0800 (PST)
+Date:   Tue, 8 Feb 2022 15:42:33 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     joao@overdrivepizza.com
+Cc:     Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        hjl.tools@gmail.com, jpoimboe@redhat.com,
+        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
+        ndesaulniers@google.com, samitolvanen@google.com
+Subject: Re: [RFC][PATCH 6/6] objtool: Add IBT validation / fixups
+Message-ID: <202202081541.900F9E1B@keescook>
+References: <20211122170301.764232470@infradead.org>
+ <20211122170805.338489412@infradead.org>
+ <6ebb0ab131c522f20c094294d49091fc@overdrivepizza.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAPcyv4iPT8r9ButHRJ2DsPQQMBN1rHCe1zSiV-rrag9vdqoW7w@mail.gmail.com>
-User-Agent: Mutt/1.11.1 (2018-12-01)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <6ebb0ab131c522f20c094294d49091fc@overdrivepizza.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,28 +71,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 08, 2022 at 03:22:22PM -0800, Dan Williams wrote:
-> On Tue, Feb 8, 2022 at 2:48 PM Ira Weiny <ira.weiny@intel.com> wrote:
-> [..]
-> >  *      // 5) Add initial value to PKS_INIT_VALUE
-> >  *      #define PKS_INIT_VALUE ((PKS_ALL_AD & (GENMASK(31, PKS_KEY_MAX * PKR_BITS_PER_PKEY))) | \
-> >  *                              PKS_KEY_DEFAULT_INIT | \
-> >  *                              PKS_KEY_MY_FEATURE_INIT | \
+On Thu, Dec 23, 2021 at 06:05:50PM -0800, joao@overdrivepizza.com wrote:
+> On 2021-11-22 09:03, Peter Zijlstra wrote:
+> > Objtool based IBT validation in 3 passes:
+> > 
+> >  --ibt-fix-direct:
+> > 
+> >     Detect and rewrite any code/reloc from a JMP/CALL instruction
+> >     to an ENDBR instruction. This is basically a compiler bug since
+> >     neither needs the ENDBR and decoding it is a pure waste of time.
+> > 
+> >  --ibt:
+> > 
+> >     Report code relocs that are not JMP/CALL and don't point to ENDBR
+> > 
+> >     There's a bunch of false positives, for eg. static_call_update()
+> >     and copy_thread() and kprobes. But most of them were due to
+> >     _THIS_IP_ which has been taken care of with the prior annotation.
+> > 
+> >  --ibt-seal:
+> > 
+> >     Find and NOP superfluous ENDBR instructions. Any function that
+> >     doesn't have it's address taken should not have an ENDBR
+> >     instruction. This removes about 1-in-4 ENDBR instructions.
+> > 
 > 
-> Does this compile? I.e. can you have a '|' operator with nothing on
-> the right hand side?
-
-Oops... yes but only because this is a comment (kernel doc) from the compiler
-POV.  Thanks I'll fix it.
-
+> I did some experimentation with compiler-based implementation for two of the
+> features described here (plus an additional one). Before going into details,
+> just a quick highlight that the compiler has limited visibility over
+> handwritten assembly sources thus, depending on the feature, a
+> compiler-based approach will not cover as much as objtool. All the
+> observations below were made when compiling the kernel with defconfig, +
+> CLANG-related options, + LTO sometimes. Here I used kernel revision
+> 0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1 with PeterZ's IBT Beginning patches
+> applied on top (plus changes to Kbuild), thus, IBT was not really enforced.
+> Tests consisted mostly of Clang's synthetics tests + booting a compiled
+> kernel.
 > 
-> >  *                              )
-> >  */
-> >
-> >
-> > Let me know if this is clear enough?
+> Prototypes of the features are available in:
+> https://github.com/lvwr/llvm/tree/joao/ibt -- I fixed as many corner cases I
+> could find while trying it out, but I believe some might still be haunting.
+> Also, I'm not very keen to Kbuild internals nor to however the kernel
+> patches itself during runtime, so I may have missed some details.
 > 
-> Looks good to me.
+> Finally, I'm interested in general feedback about this... better ways of
+> implementing, alternative approaches, new possible optimizations and
+> everything. I should be AFK for a few days in the next weeks, but I'll be
+> glad to discuss this in January and then. Happy Holidays :)
+> 
+> The features:
+> 
+> -mibt-seal:
+> 
+> Add ENDBRs exclusively to address-taken functions regardless of its linkage
+> visibility. Only make sense together with LTO.
+> 
+> Observations: Reduced drastically the number of ENDBRs placed in the kernel
+> binary (From 44383 to 33192), but still missed some that were later fixed by
+> objtool (Number of fixes by objtool reduced from 11730 to 540). I did not
+> investigate further why these superfluous ENDBRs were still left in the
+> binary, but at this point my hypotheses spin around (i) false-positive
+> address-taken conclusions by the compiler, possibly due to things like
+> exported symbols and such; (ii) assembly sources which are invisible to the
+> compiler (although this would more likely hide address taken functions);
+> (iii) other binary level transformations done by objtool.
+> 
+> Runtime testing: The kernel was verified to properly boot after being
+> compiled with -mibt-seal (+ LTO).
+> 
+> Note: This feature was already submitted for upstreaming with the
+> llvm-project: https://reviews.llvm.org/D116070
 
-Thanks,
-Ira
+Ah nice; I see this has been committed now.
+
+Given that IBT will need to work with both Clang and gcc, I suspect the
+objtool approach will still end up needing to do all the verification.
+
+(And as you say, it has limited visibility into assembly.)
+
+-Kees
+
+-- 
+Kees Cook

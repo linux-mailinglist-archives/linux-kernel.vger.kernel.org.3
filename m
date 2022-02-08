@@ -2,54 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCF404AE0B8
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 19:25:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A3E54AE0BA
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 19:26:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384916AbiBHSZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 13:25:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56452 "EHLO
+        id S1384922AbiBHS0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 13:26:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384908AbiBHSZ1 (ORCPT
+        with ESMTP id S1355630AbiBHS0n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 13:25:27 -0500
-Received: from mx2.smtp.larsendata.com (mx2.smtp.larsendata.com [91.221.196.228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 412BFC061576
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 10:25:26 -0800 (PST)
-Received: from mail01.mxhotel.dk (mail01.mxhotel.dk [91.221.196.236])
-        by mx2.smtp.larsendata.com (Halon) with ESMTPS
-        id a16c29e0-890c-11ec-ac19-0050568cd888;
-        Tue, 08 Feb 2022 18:26:28 +0000 (UTC)
-Received: from ravnborg.org (80-162-45-141-cable.dk.customer.tdc.net [80.162.45.141])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: sam@ravnborg.org)
-        by mail01.mxhotel.dk (Postfix) with ESMTPSA id EB6D7194BAE;
-        Tue,  8 Feb 2022 19:25:24 +0100 (CET)
-Date:   Tue, 8 Feb 2022 19:25:22 +0100
-X-Report-Abuse-To: abuse@mxhotel.dk
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     DRI Development <dri-devel@lists.freedesktop.org>,
-        linux-fbdev@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Du Cheng <ducheng2@gmail.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Claudio Suarez <cssk@net-c.es>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Daniel Vetter <daniel.vetter@intel.com>
-Subject: Re: [PATCH 13/21] fbcon: move more common code into fb_open()
-Message-ID: <YgK1ktxamm7x0aCa@ravnborg.org>
-References: <20220131210552.482606-1-daniel.vetter@ffwll.ch>
- <20220131210552.482606-14-daniel.vetter@ffwll.ch>
- <Yf2AAx9rlIsh/h8I@ravnborg.org>
- <YgJ19zts7nxCjGk5@phenom.ffwll.local>
+        Tue, 8 Feb 2022 13:26:43 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F82C061578
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 10:26:42 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id c10so1472111pfi.9
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 10:26:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Oedbq8uCfgl/Lmier/kIS95BKeP6ZEkA8SDWcSTE1FI=;
+        b=grDnjNcZkEEhpCEfjigfvL1FDIQrRjnM1TMnJGjPMzCpftYc4E1x+pbMOfDIhFJs0W
+         bRclRAm+tx4bYGZx6b9T4LTCqadYtwRgzynyiIwx47ykyqynQiyCOuUp7Pd2+kq0C30O
+         oaaGvabktvOgzD9Ab5uG+GoZURiTqdIesGgEbZ9XHjWvQPv+cUwEIauZB3M1FxQFovGB
+         TpTjgwvdk1C5j2g6SjO+Pw5sEYdkaMYzyG8iGOncU870sQLfAVp78jezRhYl2bCkq4e6
+         +OUgN4QSbHJwRNDcxDrA4HGYRjfUe8jUZ4J1WbfJdeyKs+03biUSPg5R9xTgY+WS6F9p
+         Q3KQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=Oedbq8uCfgl/Lmier/kIS95BKeP6ZEkA8SDWcSTE1FI=;
+        b=wZsCSkZaF03x/2aKSUseqcUi9R1MKk0OvrYoazfLB0rPgAfIPVukTEYahPD/5kwp5z
+         zZgMFmNmRJqJXbPcV6dtRJut6D06AHG8b4y+lQYRkpcCq14jMcPnPcvnr5Cn4G0HkT6M
+         Jzor76Gk7Eq/DdsP5Pmb/1nl4hlP4MdwDBI5otkZl5i2Rma+Fs1fY8NwKC6wvIzIXdir
+         u709EPqAxTHcOdEVCzU3WSjiTzV46EIZe79d9kvstb0Y0IukiGr9HAsl9dl0KGUyX1mL
+         PGiEo1DQgllftUGB6Y8mKB0o1CFn6rUwdgjNkbHAUQK12OXMFZbJKzAocPd2y8LyFcsd
+         0Rfw==
+X-Gm-Message-State: AOAM532cH69wQ0LqnSN+8ubQX0Y/MZnsUPBaDPOUZkuLzzbauff95JrR
+        Fp26jgLS/uVOc7hFvHKo34k=
+X-Google-Smtp-Source: ABdhPJz/99dHFmQjV+UhB4YqEZrLsVL026VTFnva2vhgxqBuNMNkSw9NfCwXwO9g7mYvh3sdxXfswQ==
+X-Received: by 2002:a63:690a:: with SMTP id e10mr4516261pgc.599.1644344802118;
+        Tue, 08 Feb 2022 10:26:42 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
+        by smtp.gmail.com with ESMTPSA id k14sm16950038pff.25.2022.02.08.10.26.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 10:26:41 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 8 Feb 2022 08:26:40 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Imran Khan <imran.f.khan@oracle.com>
+Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 2/2] kernfs: Replace per-fs global rwsem with per-fs
+ hashed rwsem.
+Message-ID: <YgK14ElTBW1BOXxW@slm.duckdns.org>
+References: <20220206010925.1033990-1-imran.f.khan@oracle.com>
+ <20220206010925.1033990-3-imran.f.khan@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YgJ19zts7nxCjGk5@phenom.ffwll.local>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <20220206010925.1033990-3-imran.f.khan@oracle.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,136 +73,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 08, 2022 at 02:53:59PM +0100, Daniel Vetter wrote:
-> On Fri, Feb 04, 2022 at 08:35:31PM +0100, Sam Ravnborg wrote:
-> > On Mon, Jan 31, 2022 at 10:05:44PM +0100, Daniel Vetter wrote:
-> > > No idea why con2fb_acquire_newinfo() initializes much less than
-> > > fbcon_startup(), but so be it. From a quick look most of the
-> > > un-initialized stuff should be fairly harmless, but who knows.
-> > > 
-> > > Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
-> > > Cc: Daniel Vetter <daniel@ffwll.ch>
-> > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > Cc: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-> > > Cc: Thomas Zimmermann <tzimmermann@suse.de>
-> > > Cc: Claudio Suarez <cssk@net-c.es>
-> > > Cc: Du Cheng <ducheng2@gmail.com>
-> > > ---
-> > >  drivers/video/fbdev/core/fbcon.c | 74 +++++++++++++-------------------
-> > >  1 file changed, 31 insertions(+), 43 deletions(-)
-> > > 
-> > > diff --git a/drivers/video/fbdev/core/fbcon.c b/drivers/video/fbdev/core/fbcon.c
-> > > index b83a5a77d8a8..5a3391ff038d 100644
-> > > --- a/drivers/video/fbdev/core/fbcon.c
-> > > +++ b/drivers/video/fbdev/core/fbcon.c
-> > > @@ -680,8 +680,18 @@ static int fbcon_invalid_charcount(struct fb_info *info, unsigned charcount)
-> > >  
-> > >  #endif /* CONFIG_MISC_TILEBLITTING */
-> > >  
-> > > +static void fbcon_release(struct fb_info *info)
-> > > +{
-> > > +	if (info->fbops->fb_release)
-> > > +		info->fbops->fb_release(info, 0);
-> > > +
-> > > +	module_put(info->fbops->owner);
-> > > +}
-> > > +
-> > >  static int fbcon_open(struct fb_info *info)
-> > >  {
-> > > +	struct fbcon_ops *ops;
-> > > +
-> > >  	if (!try_module_get(info->fbops->owner))
-> > >  		return -ENODEV;
-> > >  
-> > > @@ -691,19 +701,22 @@ static int fbcon_open(struct fb_info *info)
-> > >  		return -ENODEV;
-> > >  	}
-> > >  
-> > > -	return 0;
-> > > -}
-> > > +	ops = kzalloc(sizeof(struct fbcon_ops), GFP_KERNEL);
-> > > +	if (!ops) {
-> > > +		fbcon_release(info);
-> > > +		return -ENOMEM;
-> > > +	}
-> > >  
-> > > -static void fbcon_release(struct fb_info *info)
-> > > -{
-> > > -	if (info->fbops->fb_release)
-> > > -		info->fbops->fb_release(info, 0);
-> > > +	INIT_DELAYED_WORK(&ops->cursor_work, fb_flashcursor);
-> > > +	ops->info = info;
-> > > +	info->fbcon_par = ops;
-> > > +	ops->cur_blink_jiffies = HZ / 5;
-> > >  
-> > > -	module_put(info->fbops->owner);
-> > > +	return 0;
-> > >  }
-> > >  
-> > >  static int con2fb_acquire_newinfo(struct vc_data *vc, struct fb_info *info,
-> > > -				  int unit, int oldidx)
-> > > +				  int unit)
-> > >  {
-> > >  	struct fbcon_ops *ops = NULL;
-> > >  	int err;
-> > > @@ -712,27 +725,10 @@ static int con2fb_acquire_newinfo(struct vc_data *vc, struct fb_info *info,
-> > >  	if (err)
-> > >  		return err;
-> > >  
-> > > -	if (!err) {
-> > > -		ops = kzalloc(sizeof(struct fbcon_ops), GFP_KERNEL);
-> > > -		if (!ops)
-> > > -			err = -ENOMEM;
-> > > -
-> > > -		INIT_DELAYED_WORK(&ops->cursor_work, fb_flashcursor);
-> > > -	}
-> > > -
-> > > -	if (!err) {
-> > > -		ops->cur_blink_jiffies = HZ / 5;
-> > > -		ops->info = info;
-> > > -		info->fbcon_par = ops;
-> > > -
-> > > -		if (vc)
-> > > -			set_blitting_type(vc, info);
-> > > -	}
-> > > +	ops = info->fbcon_par;
-> > >  
-> > > -	if (err) {
-> > > -		con2fb_map[unit] = oldidx;
-> > > -		fbcon_release(info);
-> > > -	}
-> > > +	if (vc)
-> > > +		set_blitting_type(vc, info);
-> > >  
-> > >  	return err;
-> > >  }
-> > > @@ -840,9 +836,11 @@ static int set_con2fb_map(int unit, int newidx, int user)
-> > >  
-> > >  	found = search_fb_in_map(newidx);
-> > >  
-> > > -	con2fb_map[unit] = newidx;
-> > > -	if (!err && !found)
-> > > -		err = con2fb_acquire_newinfo(vc, info, unit, oldidx);
-> > > +	if (!err && !found) {
-> > > +		err = con2fb_acquire_newinfo(vc, info, unit);
-> > > +		if (!err)
-> > > +			con2fb_map[unit] = newidx;
-> > > +	}
-> > This looks like an unintentional change of functionality as con2fb_map[unit] is
-> > only assigned when we do a con2fb_acquire_newinfo().
-> > 
-> > Staring at the code I could not say it is wrong, but not nice to hide
-> > the change in this patch.
-> 
-> Nope, it's not an unintentional bugfix. The old con2fb_acquire_newinfo did
-> reset con2fb_map to oldidx upon failure, which I've found to be a most
-> bizarre calling convention. So this sorts this out.
-> 
-> The reason I smashed this into the same patch is that I had to remove the
-> fbcon_release call, and so the error handling in there looked even more
-> funny. But I indeed failed to explain this all in the commit message.
-> 
-> Ack with that explainer, or do you want me to split this out properly?
+Hello,
 
-Please update the commit message, then this patch has my:
-Acked-by: Sam Ravnborg <sam@ravnborg.org>
+On Sun, Feb 06, 2022 at 12:09:25PM +1100, Imran Khan wrote:
+> Having a single rwsem to synchronize all operations across a kernfs
+> based file system (cgroup, sysfs etc.) does not scale well. Replace
+> it with a hashed rwsem to reduce contention around single per-fs
+> rwsem.
+> Also introduce a perfs rwsem to protect per-fs list of kernfs_super_info.
+
+Can you split the two conversions into separate patches? Also, I'm not sure
+about the per-fs hashtable as before.
+
+>  static bool kernfs_active(struct kernfs_node *kn)
+>  {
+> -	lockdep_assert_held(&kernfs_root(kn)->kernfs_rwsem);
+> +	int idx = hash_ptr(kn, NR_KERNFS_LOCK_BITS);
+> +
+> +	lockdep_assert_held(&kernfs_root(kn)->kernfs_rwsem[idx]);
+
+Please encapsulate this into a function. If possible, it'd be ideal if the
+conversion can be done in steps - e.g. first introduce lock encapsulation
+interface while leaving locking itself alone and then switch the actual
+locking.
+
+> -static void kernfs_drain(struct kernfs_node *kn)
+> -	__releases(&kernfs_root(kn)->kernfs_rwsem)
+> -	__acquires(&kernfs_root(kn)->kernfs_rwsem)
+> +static void kernfs_drain(struct kernfs_node *kn, struct kernfs_node *anc)
+> +	__releases(&kernfs_root(anc)->kernfs_rwsem[a_idx])
+> +	__acquires(&kernfs_root(anc)->kernfs_rwsem[a_idx])
+>  {
+>  	struct kernfs_root *root = kernfs_root(kn);
+> +	int a_idx = hash_ptr(anc, NR_KERNFS_LOCK_BITS);
+>  
+> -	lockdep_assert_held_write(&root->kernfs_rwsem);
+> -	WARN_ON_ONCE(kernfs_active(kn));
+> +	lockdep_assert_held_write(&root->kernfs_rwsem[a_idx]);
+> +	WARN_ON_ONCE(atomic_read(&kn->active) >= 0);
+
+Ditto, I'd much prefer to see the lock lookup and accompanying operations to
+be encapsulated somehow.
+
+> @@ -1588,37 +1597,65 @@ int kernfs_rename_ns(struct kernfs_node *kn, struct kernfs_node *new_parent,
+>  		     const char *new_name, const void *new_ns)
+>  {
+>  	struct kernfs_node *old_parent;
+> -	struct kernfs_root *root;
+>  	const char *old_name = NULL;
+> -	int error;
+> +	int error, idx, np_idx, p_idx;
+>  
+>  	/* can't move or rename root */
+>  	if (!kn->parent)
+>  		return -EINVAL;
+>  
+> -	root = kernfs_root(kn);
+> -	down_write(&root->kernfs_rwsem);
+> +	/*
+> +	 * Take lock of node's old (current) parent.
+> +	 * If new parent has a different lock, then take that
+> +	 * lock as well.
+> +	 */
+> +	idx = hash_ptr(kn, NR_KERNFS_LOCK_BITS);
+> +	p_idx = hash_ptr(kn->parent, NR_KERNFS_LOCK_BITS);
+> +	np_idx = hash_ptr(new_parent, NR_KERNFS_LOCK_BITS);
+> +
+> +	/*
+> +	 * Take only kn's lock. The subsequent kernfs_put
+> +	 * may free up old_parent so if old_parent has a
+> +	 * different lock, we will explicitly release that.
+> +	 */
+> +	down_write_kernfs_rwsem(kn, LOCK_SELF, 0);
+> +
+> +	if (idx != np_idx) /* new parent hashes to different lock */
+> +		down_write_kernfs_rwsem(new_parent, LOCK_SELF, 1);
+> +
+> +	/* old_parent hashes to a different lock */
+> +	if (idx != p_idx && p_idx != np_idx)
+> +		down_write_kernfs_rwsem(kn->parent, LOCK_SELF, 2);
+
+Can't this lead to ABBA deadlock? When double locking, the locking order
+should always be consistent. If we were doing per-kernfs_node lock, child ->
+parent ordering works but we're hashing locks, so that doesn't work anymore
+- one child-parent combo can lock A then B while the other child-parent
+combo hash the other way around and lock B then A. The only order we can
+define is in terms of the locks themselves - e.g. if the address (or index)
+of lock A < lock B, then we lock A first whether that maps to the child or
+parent.
+
+Also, please encapsulate double locking in a set of functions. We really
+don't wanna see all the details in the users.
+
+> --- a/fs/kernfs/kernfs-internal.h
+> +++ b/fs/kernfs/kernfs-internal.h
+> @@ -19,6 +19,9 @@
+>  #include <linux/kernfs.h>
+>  #include <linux/fs_context.h>
+>  
+> +#define LOCK_SELF 0
+> +#define LOCK_SELF_AND_PARENT 1
+
+I get that this is private header but can you please add some identifying
+prefix and make them enums? That makes it way easier for debuggers, bpf and
+tracing.
+
+> +/*
+> + * If both node and it's parent need locking,
+> + * lock child first so that kernfs_rename_ns
+> + * does not change the parent, leaving us
+> + * with old parent here.
+> + */
+
+Please reflow it close to 80 chars and ditto with above. We can't follow
+child -> parent order with hashed locks.
+
+Thanks.
+
+-- 
+tejun

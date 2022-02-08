@@ -2,115 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F3694AE59C
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 00:48:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 209DF4AE5A8
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 00:52:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238434AbiBHXsl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 18:48:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51774 "EHLO
+        id S238656AbiBHXwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 18:52:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238260AbiBHXsk (ORCPT
+        with ESMTP id S236600AbiBHXv6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 18:48:40 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0990C061576
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 15:48:39 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id a39so350347pfx.7
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 15:48:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=EQW9/+RZogYh703IuTOkdvN8ZBL4saxG1Lh7/q0hvoU=;
-        b=FAEKTjopxXcIpR64eAjnUudiMds0fOmTb8dmx4oEdm4vkuH3aUvgu/bcaP4w8DudaQ
-         aCmTUVMhuAMQFuR2d4un9QvPCE7H4IJKvLP829fNbzl7BNqhpOe0l/3v5wvR5NWd6onW
-         IWwJ7XrnbFuofM8ClCMdocuygG2Mrndj3R7wk=
+        Tue, 8 Feb 2022 18:51:58 -0500
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBCBEC061576;
+        Tue,  8 Feb 2022 15:51:56 -0800 (PST)
+Received: by mail-lf1-f54.google.com with SMTP id i34so1030632lfv.2;
+        Tue, 08 Feb 2022 15:51:56 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=EQW9/+RZogYh703IuTOkdvN8ZBL4saxG1Lh7/q0hvoU=;
-        b=Pooj9UA5h1sm23nvnamsGOQtcDUXGJY5GtNSDg0OXPsPHe1z9kLA+N2aDjyCn7u5K1
-         IvfqpOzTtOeLpREWdXBIFV+5omUan3szXDBwJZWR1e6W/A9AFLEM+256Jc3w9kak7eiW
-         YtqKxJF2waWgTisIwLpSjGCd0BmqvIJvnBukQyoa+61G2ukaW1enPvjrvw+hP1GueBw2
-         wG6ixRqCA/0KdpGM6lOPosQnsU3MFDT2qRJ1nCyzIu21mzvjNgZy6+wM+MImM4FYMDQ4
-         eQzv9UgWwlFGQAamuRU95PsuJ8zUm2uRKHYTqqUIGWfV6Xc6/qPO/otKDWgA6W8TU3KJ
-         CkeQ==
-X-Gm-Message-State: AOAM533FAqfeuhnCQpyZnUeKP6fmz8C6ky4snh6t6V7OjNrZadKjpur1
-        CoK7b+l+sbGwlmGkYlnEObZflQ==
-X-Google-Smtp-Source: ABdhPJzMAKazgkQ9W3sC+zrddFZCCMcUN8d+F+2QgDe2A93wwYdv6zu2aMc2VBQfetdRUUkF3EwvVw==
-X-Received: by 2002:a63:f709:: with SMTP id x9mr5367873pgh.428.1644364119427;
-        Tue, 08 Feb 2022 15:48:39 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id on14sm3995861pjb.34.2022.02.08.15.48.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 15:48:39 -0800 (PST)
-Date:   Tue, 8 Feb 2022 15:48:38 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
-        jpoimboe@redhat.com, andrew.cooper3@citrix.com,
-        linux-kernel@vger.kernel.org, ndesaulniers@google.com,
-        samitolvanen@google.com
-Subject: Re: [RFC][PATCH 0/6] x86: Kernel IBT beginnings
-Message-ID: <202202081543.5C4EF7F9DE@keescook>
-References: <20211122170301.764232470@infradead.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JXBA9Bf6g5bwrheDyWU+pJqTnLEiYG/XMhVWfsgYsuI=;
+        b=JxeB+WsaL82CArm1yXDgKHNLFOa+1i63KJSWgKqoHndsVUREuQwvB08kAOEKT7RPD6
+         n8lPk4Ba6YD90mZxGiQGE5AOACpbDz2hZd3khUoVVjz4FkuGQjbzv3MxoP4Pl+Sy3X+e
+         XKMcOaypgJO9xrPAMW6W1F+4cP13NwyMoJdjFGNmfkpLb4jz3aX/tPWTB/wNJUNJ6wkw
+         v9moiB/+UAy+8jmoZPbDsRBrUVdRGefN4wbkBS7Biq6PwOSJnzjuEgU8V8sK6utHscad
+         1ZokzT3/Qi/yPWVapRUemLpkgsTSIKTQIBnIgQlypSZ1RKs97qN+JU8nxR3R30VbrmOl
+         QwEA==
+X-Gm-Message-State: AOAM533RpaS83poIp2bTIPU2gfbKO1YbM4kTU7Y56r7vzyoGNqZbJMWP
+        kQyXXys/wIB/8Ym1erLksPV3eE9cL/hlneuq+C4=
+X-Google-Smtp-Source: ABdhPJyzRDsgErMiiKVoZ/UAFL3OnJ9rGziwDnv+IxwH5Xu7WN0ZYCjD+CwNuzPFt5GJLTQdxZ0aa3fbqBQPpHf/euY=
+X-Received: by 2002:ac2:4bc1:: with SMTP id o1mr4565388lfq.528.1644364314961;
+ Tue, 08 Feb 2022 15:51:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211122170301.764232470@infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220208184208.79303-1-namhyung@kernel.org> <20220208184208.79303-3-namhyung@kernel.org>
+ <YgK6k4TXnRbm02dh@slm.duckdns.org> <CAM9d7cgKLycpFuXq0VgC=ADtAipXtKdfRcDqvZwMrNBz7hXd7A@mail.gmail.com>
+In-Reply-To: <CAM9d7cgKLycpFuXq0VgC=ADtAipXtKdfRcDqvZwMrNBz7hXd7A@mail.gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Tue, 8 Feb 2022 15:51:43 -0800
+Message-ID: <CAM9d7cgFHxiru+1_-1_nVvgwE0dHdKGR-QS6AAVdAo0Hf0-mLA@mail.gmail.com>
+Subject: Re: [PATCH 02/12] cgroup: rstat: Make cgroup_rstat_cpu_lock name readable
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Byungchul Park <byungchul.park@lge.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Radoslaw Burny <rburny@google.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 22, 2021 at 06:03:01PM +0100, Peter Zijlstra wrote:
-> It is the very bare beginnings of kernel IBT support. Since I'm lacking any
-> sort of actual hardware it even lacks fun things like code to write to the MSRs
-> to enable the IBT tracker etc..
+On Tue, Feb 8, 2022 at 11:16 AM Namhyung Kim <namhyung@kernel.org> wrote:
+>
+> Hi Tejun,
+>
+> On Tue, Feb 8, 2022 at 10:46 AM Tejun Heo <tj@kernel.org> wrote:
+> >
+> > On Tue, Feb 08, 2022 at 10:41:58AM -0800, Namhyung Kim wrote:
+> > > The raw_spin_lock_init() uses the argument to name its lockdep map.
+> > > But passing per_cpu_ptr() macro directly makes it a very very long
+> > > name as it expanded like below:
+> > >
+> > >   ({ do { const void *__vpp_verify = (typeof((&cgroup_rstat_cpu_lock) ...
+> > >
+> > > Let's fix it by passing a local variable instead.  With this change,
+> > > the name now looks like:
+> > >
+> > >   cgrp_rstat_cpu_lock
+> > >
+> > > Cc: Tejun Heo <tj@kernel.org>
+> > > Cc: Zefan Li <lizefan.x@bytedance.com>
+> > > Cc: Johannes Weiner <hannes@cmpxchg.org>
+> > > Cc: cgroups@vger.kernel.org
+> > > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> >
+> > Acked-by: Tejun Heo <tj@kernel.org>
+>
+> Thanks!
+>
+> >
+> > but maybe add a comment explaining what's going on?
+>
+> Sure, I'll add the comment.
 
-Heh. I have hardware to test with -- recent laptops all have the
-support. I haven't checked in QEMU can emulate it, though. Bochs seems
-to.
+Actually it depends on CONFIG_DEBUG_SPINLOCK.
+If it's enabled, the name looks fine.  But if not, the macro
+expansion would happen and generate the long name.
 
-> However, it should have most of the ENDBR instructions in the right place -- I
-> hope :-) That said; I would *really* like compiler support for this stuff to be
-> improved, the amount of fixups done by objtool is obscene.
-> 
-> The end result still boots on ancient x86-64 hardware, for whatever that's
-> worth (when built with the below turd included that is).
-
-Should the below roughly be patch 7?
-
-> 
-> Enjoy!
-> 
-> ---
-> 
-> diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-> index 5cdd9bc5c385..1d180bbe7b28 100755
-> --- a/scripts/link-vmlinux.sh
-> +++ b/scripts/link-vmlinux.sh
-> @@ -142,6 +142,11 @@ objtool_link()
->  		info OBJTOOL ${1}
->  		tools/objtool/objtool ${objtoolcmd} ${objtoolopt} ${1}
->  	fi
-> +
-> +	if [ "${CONFIG_X86_IBT}" = "y" ]; then
-> +		# XXX less ugleh
-> +		tools/objtool/objtool check --no-fp --retpoline --uaccess --vmlinux --duplicate --ibt --ibt-fix-direct --ibt-seal ${1}
-> +	fi
->  }
->  
->  # Link of vmlinux
-> 
-
-Have you had a chance to get this into shape for a v1?
-
--- 
-Kees Cook
+Thanks,
+Namhyung

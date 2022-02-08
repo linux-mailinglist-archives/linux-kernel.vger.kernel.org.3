@@ -2,218 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64AED4AE4C7
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:37:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 481074AE443
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:30:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347541AbiBHWeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 17:34:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52852 "EHLO
+        id S1387458AbiBHW1y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 17:27:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387272AbiBHWU4 (ORCPT
+        with ESMTP id S239316AbiBHWUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 17:20:56 -0500
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAEC3C0612B8;
-        Tue,  8 Feb 2022 14:20:55 -0800 (PST)
-Received: from localhost.localdomain (ip5f5aebc2.dynamic.kabel-deutschland.de [95.90.235.194])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 4669B61E64846;
-        Tue,  8 Feb 2022 23:20:54 +0100 (CET)
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-To:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Paul Menzel <pmenzel@molgen.mpg.de>,
-        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] Revert "Bluetooth: RFCOMM: Replace use of memcpy_from_msg with bt_skb_sendmmsg"
-Date:   Tue,  8 Feb 2022 23:19:11 +0100
-Message-Id: <20220208221911.57058-2-pmenzel@molgen.mpg.de>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220208221911.57058-1-pmenzel@molgen.mpg.de>
-References: <20220208221911.57058-1-pmenzel@molgen.mpg.de>
+        Tue, 8 Feb 2022 17:20:15 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB85C0612BC
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 14:20:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644358813; x=1675894813;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Yufv6cv4/3vguwhcn1V790iDRzQOgdMBKx6n1D9pxAQ=;
+  b=lK6Iv/bM7E8q+QRTxe0MKdXVYANrkp2EOb7FwbmTI2XUyw+BAtIkdRrm
+   DLI1W78yQ2cW/IslRyrKNKUpJVcPMjQ3uUeb6QUxDpjuGuFWzBsC7ocTT
+   jfqDWMwHndYNeYX8wxsPwzqXm7eE6JApPdOFU4pThJRRkgPbLRM427KJp
+   CDTa/bs1oK+vAggf3FVdxJmxpWq/aNujaauPMKunkDPpBgZbKspBbnrGx
+   AbcLf4XaQ2FQalhkVO05gjVSsEaPb4gBqDAHzkYkR0tNI4VXIzvTVfHP2
+   j9m9j4gTYsktNsHSb5IEK2B9h76yfL2JJTDRY3PICKA6onipmzZF9VtwL
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="248826565"
+X-IronPort-AV: E=Sophos;i="5.88,353,1635231600"; 
+   d="scan'208";a="248826565"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 14:20:13 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,353,1635231600"; 
+   d="scan'208";a="484976933"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 08 Feb 2022 14:20:12 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nHYqJ-0000ol-FR; Tue, 08 Feb 2022 22:20:11 +0000
+Date:   Wed, 9 Feb 2022 06:19:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Alexander Aring <aahringo@redhat.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        David Teigland <teigland@redhat.com>
+Subject: fs/dlm/midcomms.c:913:22: sparse: sparse: restricted __le32 degrades
+ to integer
+Message-ID: <202202090632.SQ22xw2f-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit 81be03e026dc0c16dc1c64e088b2a53b73caa895.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   555f3d7be91a873114c9656069f1a9fa476ec41a
+commit: 658bd576f95ed597e519cdadf1c86ac87c17aea5 fs: dlm: move version conversion to compile time
+date:   3 months ago
+config: x86_64-rhel-8.3-kselftests (https://download.01.org/0day-ci/archive/20220209/202202090632.SQ22xw2f-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=658bd576f95ed597e519cdadf1c86ac87c17aea5
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 658bd576f95ed597e519cdadf1c86ac87c17aea5
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Since the commit, transferring files greater than some bytes to the
-Nokia N9 (MeeGo) or Jolla (Sailfish OS) is not possible anymore.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-    # obexctl
-    [NEW] Client /org/bluez/obex
-    [obex]# connect 40:98:4E:5B:CE:XX
-    Attempting to connect to 40:98:4E:5B:CE:XX
-    [NEW] Session /org/bluez/obex/client/session0 [default]
-    [NEW] ObjectPush /org/bluez/obex/client/session0
-    Connection successful
-    [40:98:4E:5B:CE:XX]# send /lib/systemd/systemd
-    Attempting to send /lib/systemd/systemd to /org/bluez/obex/client/session0
-    [NEW] Transfer /org/bluez/obex/client/session0/transfer0
-    Transfer /org/bluez/obex/client/session0/transfer0
-        Status: queued
-        Name: systemd
-        Size: 1841712
-        Filename: /lib/systemd/systemd
-        Session: /org/bluez/obex/client/session0
-    [CHG] Transfer /org/bluez/obex/client/session0/transfer0 Status: active
-    [CHG] Transfer /org/bluez/obex/client/session0/transfer0 Transferred: 32737 (@32KB/s 00:55)
-    [CHG] Transfer /org/bluez/obex/client/session0/transfer0 Status: error
-    [DEL] Transfer /org/bluez/obex/client/session0/transfer0
 
-Reverting it, fixes the regression.
+sparse warnings: (new ones prefixed by >>)
+   fs/dlm/midcomms.c:213:1: sparse: sparse: symbol '__srcu_struct_nodes_srcu' was not declared. Should it be static?
+   fs/dlm/midcomms.c:570:25: sparse: sparse: cast to restricted __le32
+   fs/dlm/midcomms.c:678:19: sparse: sparse: cast to restricted __le16
+   fs/dlm/midcomms.c:680:16: sparse: sparse: cast to restricted __le16
+   fs/dlm/midcomms.c:718:27: sparse: sparse: cast to restricted __le16
+   fs/dlm/midcomms.c:737:25: sparse: sparse: cast to restricted __le32
+   fs/dlm/midcomms.c:747:25: sparse: sparse: cast to restricted __le32
+   fs/dlm/midcomms.c:756:23: sparse: sparse: cast to restricted __le32
+   fs/dlm/midcomms.c:766:42: sparse: sparse: cast to restricted __le16
+   fs/dlm/midcomms.c:769:26: sparse: sparse: cast to restricted __le16
+   fs/dlm/midcomms.c:804:23: sparse: sparse: cast to restricted __le32
+   fs/dlm/midcomms.c:838:27: sparse: sparse: cast to restricted __le16
+   fs/dlm/midcomms.c:898:26: sparse: sparse: cast to restricted __le16
+   fs/dlm/midcomms.c:920:25: sparse: sparse: cast to restricted __le32
+>> fs/dlm/midcomms.c:913:22: sparse: sparse: restricted __le32 degrades to integer
+   fs/dlm/midcomms.c:916:22: sparse: sparse: restricted __le32 degrades to integer
+   fs/dlm/midcomms.c:1056:20: sparse: sparse: context imbalance in 'dlm_midcomms_get_mhandle' - wrong count at exit
+   fs/dlm/midcomms.c: note: in included file (through include/linux/notifier.h, arch/x86/include/asm/uprobes.h, include/linux/uprobes.h, ...):
+   include/linux/srcu.h:188:9: sparse: sparse: context imbalance in 'dlm_midcomms_commit_mhandle' - unexpected unlock
 
-Link: https://lore.kernel.org/linux-bluetooth/aa3ee7ac-6c52-3861-1798-3cc1a37f6ebf@molgen.mpg.de/T/#m1f9673e4ab0d55a7dccf87905337ab2e67d689f1
-Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
+vim +913 fs/dlm/midcomms.c
+
+   871	
+   872	/*
+   873	 * Called from the low-level comms layer to process a buffer of
+   874	 * commands.
+   875	 */
+   876	
+   877	int dlm_process_incoming_buffer(int nodeid, unsigned char *buf, int len)
+   878	{
+   879		const unsigned char *ptr = buf;
+   880		const struct dlm_header *hd;
+   881		uint16_t msglen;
+   882		int ret = 0;
+   883	
+   884		while (len >= sizeof(struct dlm_header)) {
+   885			hd = (struct dlm_header *)ptr;
+   886	
+   887			/* no message should be more than DLM_MAX_SOCKET_BUFSIZE or
+   888			 * less than dlm_header size.
+   889			 *
+   890			 * Some messages does not have a 8 byte length boundary yet
+   891			 * which can occur in a unaligned memory access of some dlm
+   892			 * messages. However this problem need to be fixed at the
+   893			 * sending side, for now it seems nobody run into architecture
+   894			 * related issues yet but it slows down some processing.
+   895			 * Fixing this issue should be scheduled in future by doing
+   896			 * the next major version bump.
+   897			 */
+   898			msglen = le16_to_cpu(hd->h_length);
+   899			if (msglen > DLM_MAX_SOCKET_BUFSIZE ||
+   900			    msglen < sizeof(struct dlm_header)) {
+   901				log_print("received invalid length header: %u from node %d, will abort message parsing",
+   902					  msglen, nodeid);
+   903				return -EBADMSG;
+   904			}
+   905	
+   906			/* caller will take care that leftover
+   907			 * will be parsed next call with more data
+   908			 */
+   909			if (msglen > len)
+   910				break;
+   911	
+   912			switch (hd->h_version) {
+ > 913			case cpu_to_le32(DLM_VERSION_3_1):
+   914				dlm_midcomms_receive_buffer_3_1((union dlm_packet *)ptr, nodeid);
+   915				break;
+   916			case cpu_to_le32(DLM_VERSION_3_2):
+   917				dlm_midcomms_receive_buffer_3_2((union dlm_packet *)ptr, nodeid);
+   918				break;
+   919			default:
+   920				log_print("received invalid version header: %u from node %d, will skip this message",
+   921					  le32_to_cpu(hd->h_version), nodeid);
+   922				break;
+   923			}
+   924	
+   925			ret += msglen;
+   926			len -= msglen;
+   927			ptr += msglen;
+   928		}
+   929	
+   930		return ret;
+   931	}
+   932	
+
 ---
- net/bluetooth/rfcomm/core.c | 50 ++++++-------------------------------
- net/bluetooth/rfcomm/sock.c | 46 ++++++++++++++++++++++++++--------
- 2 files changed, 43 insertions(+), 53 deletions(-)
-
-diff --git a/net/bluetooth/rfcomm/core.c b/net/bluetooth/rfcomm/core.c
-index 7324764384b6..f2bacb464ccf 100644
---- a/net/bluetooth/rfcomm/core.c
-+++ b/net/bluetooth/rfcomm/core.c
-@@ -549,58 +549,22 @@ struct rfcomm_dlc *rfcomm_dlc_exists(bdaddr_t *src, bdaddr_t *dst, u8 channel)
- 	return dlc;
- }
- 
--static int rfcomm_dlc_send_frag(struct rfcomm_dlc *d, struct sk_buff *frag)
--{
--	int len = frag->len;
--
--	BT_DBG("dlc %p mtu %d len %d", d, d->mtu, len);
--
--	if (len > d->mtu)
--		return -EINVAL;
--
--	rfcomm_make_uih(frag, d->addr);
--	__skb_queue_tail(&d->tx_queue, frag);
--
--	return len;
--}
--
- int rfcomm_dlc_send(struct rfcomm_dlc *d, struct sk_buff *skb)
- {
--	unsigned long flags;
--	struct sk_buff *frag, *next;
--	int len;
-+	int len = skb->len;
- 
- 	if (d->state != BT_CONNECTED)
- 		return -ENOTCONN;
- 
--	frag = skb_shinfo(skb)->frag_list;
--	skb_shinfo(skb)->frag_list = NULL;
--
--	/* Queue all fragments atomically. */
--	spin_lock_irqsave(&d->tx_queue.lock, flags);
--
--	len = rfcomm_dlc_send_frag(d, skb);
--	if (len < 0 || !frag)
--		goto unlock;
--
--	for (; frag; frag = next) {
--		int ret;
--
--		next = frag->next;
--
--		ret = rfcomm_dlc_send_frag(d, frag);
--		if (ret < 0) {
--			kfree_skb(frag);
--			goto unlock;
--		}
-+	BT_DBG("dlc %p mtu %d len %d", d, d->mtu, len);
- 
--		len += ret;
--	}
-+	if (len > d->mtu)
-+		return -EINVAL;
- 
--unlock:
--	spin_unlock_irqrestore(&d->tx_queue.lock, flags);
-+	rfcomm_make_uih(skb, d->addr);
-+	skb_queue_tail(&d->tx_queue, skb);
- 
--	if (len > 0 && !test_bit(RFCOMM_TX_THROTTLED, &d->flags))
-+	if (!test_bit(RFCOMM_TX_THROTTLED, &d->flags))
- 		rfcomm_schedule();
- 	return len;
- }
-diff --git a/net/bluetooth/rfcomm/sock.c b/net/bluetooth/rfcomm/sock.c
-index 5938af3e9936..2c95bb58f901 100644
---- a/net/bluetooth/rfcomm/sock.c
-+++ b/net/bluetooth/rfcomm/sock.c
-@@ -575,20 +575,46 @@ static int rfcomm_sock_sendmsg(struct socket *sock, struct msghdr *msg,
- 	lock_sock(sk);
- 
- 	sent = bt_sock_wait_ready(sk, msg->msg_flags);
-+	if (sent)
-+		goto done;
- 
--	release_sock(sk);
-+	while (len) {
-+		size_t size = min_t(size_t, len, d->mtu);
-+		int err;
- 
--	if (sent)
--		return sent;
-+		skb = sock_alloc_send_skb(sk, size + RFCOMM_SKB_RESERVE,
-+				msg->msg_flags & MSG_DONTWAIT, &err);
-+		if (!skb) {
-+			if (sent == 0)
-+				sent = err;
-+			break;
-+		}
-+		skb_reserve(skb, RFCOMM_SKB_HEAD_RESERVE);
-+
-+		err = memcpy_from_msg(skb_put(skb, size), msg, size);
-+		if (err) {
-+			kfree_skb(skb);
-+			if (sent == 0)
-+				sent = err;
-+			break;
-+		}
-+
-+		skb->priority = sk->sk_priority;
-+
-+		err = rfcomm_dlc_send(d, skb);
-+		if (err < 0) {
-+			kfree_skb(skb);
-+			if (sent == 0)
-+				sent = err;
-+			break;
-+		}
- 
--	skb = bt_skb_sendmmsg(sk, msg, len, d->mtu, RFCOMM_SKB_HEAD_RESERVE,
--			      RFCOMM_SKB_TAIL_RESERVE);
--	if (IS_ERR_OR_NULL(skb))
--		return PTR_ERR(skb);
-+		sent += size;
-+		len  -= size;
-+	}
- 
--	sent = rfcomm_dlc_send(d, skb);
--	if (sent < 0)
--		kfree_skb(skb);
-+done:
-+	release_sock(sk);
- 
- 	return sent;
- }
--- 
-2.34.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

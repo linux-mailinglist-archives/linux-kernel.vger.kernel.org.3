@@ -2,97 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 383304AD1C3
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 07:48:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 045814AD1C5
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 07:49:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347783AbiBHGsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 01:48:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43562 "EHLO
+        id S1347816AbiBHGsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 01:48:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236745AbiBHGsF (ORCPT
+        with ESMTP id S1347792AbiBHGsi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 01:48:05 -0500
-Received: from sender4-pp-o95.zoho.com (sender4-pp-o95.zoho.com [136.143.188.95])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 266D7C0401F5;
-        Mon,  7 Feb 2022 22:48:03 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1644302876; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=Mz5nes1S9Bv7uWg7mSdSkoWdqOUwx1ai6CPGy/4ZaRCeK/so4I5iIctzdQhCKtG/ItC82VgSQY1gm3W7XO0pBlnJS6EENrejw8S1jwffSvmnF64PeEfWEJ2/31yqUaxsBo5OmHbYeVOXXl08TSWnPYTQtL7rHDzEByRe9GR8WqU=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1644302876; h=Content-Type:Content-Transfer-Encoding:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=9rkLAN/8k6qz/+MCyKkO/cuBmp6HwOLZxvM3wynyJt8=; 
-        b=b8idG1FPq+aVw4jPrnJ0JeQPt3nrFc3C0Lz7VT9tQcMFq8Dbn+SD+WHI9J8W5CZE539xnjcJq5vnhEWNsEiy+vpi9oVM8dlbBWwXsW06pfbzOVB35oS+d7Cszlu9LVDSnPw7VRkMtgNzyl2gnKTBjng+nxP4xm+YME2OCDTvfAU=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=zohomail.com;
-        spf=pass  smtp.mailfrom=lchen.firstlove@zohomail.com;
-        dmarc=pass header.from=<lchen.firstlove@zohomail.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1644302876;
-        s=zm2020; d=zohomail.com; i=lchen.firstlove@zohomail.com;
-        h=Date:From:To:Message-ID:In-Reply-To:References:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding;
-        bh=9rkLAN/8k6qz/+MCyKkO/cuBmp6HwOLZxvM3wynyJt8=;
-        b=jmm5HoQ8dH4kGzfEOCCZz0VFiJml/KwoXdh5nV1+P342P3NkjkjhQMpbB7MOs4u1
-        Vs4I9hAW0AF3rAy+HBgTD+Ipb+8++kkddaP/UPnwRzXey3Wg1/UnG7yKYFl2XUpgM7v
-        rVJNRYUK6cFuFyFQp/dY8WnuZ2GUmSeCh+cMJ3Mc=
-Received: from mail.zoho.com by mx.zohomail.com
-        with SMTP id 1644302874384547.2045927238538; Mon, 7 Feb 2022 22:47:54 -0800 (PST)
-Received: from  [45.80.185.140] by mail.zoho.com
-        with HTTP;Mon, 7 Feb 2022 22:47:54 -0800 (PST)
-Date:   Tue, 08 Feb 2022 01:47:54 -0500
-From:   Li Chen <lchen.firstlove@zohomail.com>
-To:     "Kishon Vijay Abraham I" <kishon@ti.com>,
-        "Lorenzo Pieralisi" <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?Q?=22Krzysztof_Wilczy=C5=84ski=22?= <kw@linux.com>,
-        "Bjorn Helgaas" <bhelgaas@google.com>,
-        "linux-pci" <linux-pci@vger.kernel.org>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>
-Message-ID: <17ed816b6f3.d4fb44fb69745.1048447841721382920@zohomail.com>
-In-Reply-To: <17e7b9b9ee6.c6d9c6a02564.4545388417402742326@zohomail.com>
-References: <17e7b9b9ee6.c6d9c6a02564.4545388417402742326@zohomail.com>
-Subject: Re: [PATCH] PCI: endpoint fix misused goto label
+        Tue, 8 Feb 2022 01:48:38 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D00E4C0401F2;
+        Mon,  7 Feb 2022 22:48:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6DD1B61605;
+        Tue,  8 Feb 2022 06:48:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6AA8C004E1;
+        Tue,  8 Feb 2022 06:48:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644302916;
+        bh=dqtHfl1ZlQ/aqoV7BiXslJfNRbt2e+V2Yl0qeT7NtOM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SGulEKnyIsffiHFhbNnmjUaC1uCHs1YCXWqZK5OKECUr4pFRLFrn+cgZgM255v9aQ
+         LyWgspTr/kg9HxCIRJ+jTa77jHyEILJL7N3j9ncm0auVMX8KAcsLBsoc9532Bukjoo
+         ve/MfkoPUgRin8P0ut/w0bh3k9INnWQn5uZ6fT4KQ7r8ij8ygiJLZDX5fwY5yRH1Ir
+         A0S1m9+nog8J5mAesuf9aTiYlXKSe64L+YFVca313xMRN4gao6oDmbeokzG2zxjWgS
+         zsTK2+wN7cLWwZSTxE4Igl2/GC6T4tNdnStxc8f4Stm7jpLEKIT5otpvVv9/0ZvL9k
+         w9sBKpLvfytPQ==
+Date:   Mon, 7 Feb 2022 22:48:35 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
+Subject: Re: [PATCH v3 0/5] random: use computational hash for entropy
+ extraction, and related fixes
+Message-ID: <YgISQ3RXJ7DpAMqA@sol.localdomain>
+References: <20220205160118.252698-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220205160118.252698-1-Jason@zx2c4.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ping
+On Sat, Feb 05, 2022 at 05:01:13PM +0100, Jason A. Donenfeld wrote:
+> The bulk of the motivation for this and description of crypto
+> vulnerabilities is in the first patch of this series. The following
+> three patches then fix up entropy accounting for the new model. The last
+> patch fixes a minor code safety issue.
+> 
+> This v3 fixes comments and commit message wording, simplifies a bit of
+> code in a cmpxchg loop, and adjusts semantics around the poll write
+> wakeup threshold.
+> 
+> Jason A. Donenfeld (5):
+>   random: use computational hash for entropy extraction
+>   random: simplify entropy debiting
+>   random: use linear min-entropy accumulation crediting
+>   random: always wake up entropy writers after extraction
+>   random: make credit_entropy_bits() always safe
+> 
+>  drivers/char/random.c         | 501 ++++++----------------------------
+>  include/trace/events/random.h |  30 +-
+>  2 files changed, 87 insertions(+), 444 deletions(-)
 
- ---- On Fri, 21 Jan 2022 02:48:23 -0500 Li Chen <lchen.firstlove@zohomail.com> wrote ----
- > From: Li Chen <lchen@ambarella.com>
- > 
- > If we goto err_map_addr here, buf allocated
- > via kmalloc won't get freeed, then memoryleak.
- > 
- > Signed-off-by: Li Chen <lchen@ambarella.com>
- > ---
- >  drivers/pci/endpoint/functions/pci-epf-test.c | 2 +-
- >  1 file changed, 1 insertion(+), 1 deletion(-)
- > 
- > diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/drivers/pci/endpoint/functions/pci-epf-test.c
- > index 96489cfdf58db..60303223976a1 100644
- > --- a/drivers/pci/endpoint/functions/pci-epf-test.c
- > +++ b/drivers/pci/endpoint/functions/pci-epf-test.c
- > @@ -441,7 +441,7 @@ static int pci_epf_test_write(struct pci_epf_test *epf_test)
- >          if (!epf_test->dma_supported) {
- >              dev_err(dev, "Cannot transfer data using DMA\n");
- >              ret = -EINVAL;
- > -            goto err_map_addr;
- > +            goto err_dma_map;
- >          }
- >  
- >          src_phys_addr = dma_map_single(dma_dev, buf, reg->size,
- > -- 
- > 2.34.1
- > 
- > 
- > 
+Looks good, thanks!  You can add for the series:
+
+Reviewed-by: Eric Biggers <ebiggers@google.com>
+
+- Eric

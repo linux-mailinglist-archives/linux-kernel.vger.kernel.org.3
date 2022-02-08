@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 711574AE494
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:37:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FFFD4AE406
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:25:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388440AbiBHWc5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 17:32:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43230 "EHLO
+        id S1387570AbiBHWZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 17:25:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386195AbiBHTnj (ORCPT
+        with ESMTP id S1386197AbiBHTnl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 14:43:39 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E49C0613CB
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 11:43:38 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id i30so243639pfk.8
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 11:43:38 -0800 (PST)
+        Tue, 8 Feb 2022 14:43:41 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD47AC0613CB;
+        Tue,  8 Feb 2022 11:43:40 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id z13so302851pfa.3;
+        Tue, 08 Feb 2022 11:43:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=/az7RkqUaZSIeoYuZW+qHEklI+WUcZiVSMlf0uKOOFw=;
-        b=JOsxju/wOm454arqDgajrlARrWDaVLj0HR7UVryPAnxH7XH7HS8UGf5OS/oLAwCAnd
-         yhIdC/jNbcvc8TgSJjnkcLoa4wCNqJd0xR5Ou3Tv7VZ1HwFWoACM9svSynMCHE/yPwRE
-         9/cLp0vFcYNRrCPRNTtT+N0Cqn/9QBZnVT83EykUzknVIZhwNfYd7CmYfrZBtLvOZV8/
-         nZT1nZCnitQrXPUkF9pOg5bbo0LXk/RmmiAzf3OZftfm19cajiJoZPz09/QUz6Hh7hN1
-         XhDXXR3tfcozRmC1cj3Q/1tHicZQnip4coOUaiJiBBgtRMISyd7VVW3vHj1wiK8UuyNz
-         nSCA==
+        bh=Ufb8JerL9tDT7g1v4aJC4XJXyEpEyj9Y7QxoUEiNuQM=;
+        b=l8GUnslAu32x2n2gXuW8E6fzALxUMJ0TwywQoY3fKUoNyKJBqq58O/62kH0swgU77u
+         DbHskTdVQLu0Tdr9fEJ2kCUH9L/S//grixVe8rw4M3vpH1XFpXDTqUJYyKMEILKF1MkG
+         hNgLMNVINDbz/fRhL7lq0u7gY3Q1eRgLlyHbu5XWBWVJD7moK9FcLDHoF21NtVZMRtp5
+         wWo93xO3wzaNO8NKVWPxd2UX00xbuNMSUxt45F9VVuVGAAxCzn4Ya+E2pjQbOiAsQzlG
+         YHCeOJSR/NtzKWhs/gvZ0VKN22ynW8TsN+SOc0Ur0FgHjnIbTvjt2eQHzwWd/JDEO7iN
+         CgtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=/az7RkqUaZSIeoYuZW+qHEklI+WUcZiVSMlf0uKOOFw=;
-        b=6yhl3xIyMN3Zzt0v0OT1Xyip3FLYPuXS9hVPGfTOfxFS94vE6k5hw/UtAUiOWXOxDN
-         r1A3jyg0TgUzmgGoplmAffbStdxeXLZWBvRMfdo14hz+Ue3qJw/4f2pxaQ0VVqHE4cEI
-         oHkCyE4R8BnD3d/PKrqMY1Hs12I+tzMDYO0GaExhodOBb0q1qssRm7EtOkKZzMKM/nDb
-         YSLfKH3iDzeD88hGr6J7yeGcQ+WXkqsLEaw0CmsE5q12OWEtzQCB8pij14UjV9ElCIZq
-         mMRWLsyEL7Jgmh9oT2cYZakywoHpAUU9QaDynYFGpzQG3UqiHeGJbEVE65++wdnhx9ZF
-         3rTw==
-X-Gm-Message-State: AOAM532fIvTu9a6gLloKdmfaG7zRlC6oMS4Yz/tvI8UZlSbZ0GynNBOi
-        my2bgyoiUlwrrzR1XtY44MM=
-X-Google-Smtp-Source: ABdhPJw2un2/IIK5To0WebGHV3SG+FNgAkkT4/lDOq/MmV3Nb41SBSDz0MTtmaYkhZzNNFqr33k7Pg==
-X-Received: by 2002:a63:1d4:: with SMTP id 203mr4763109pgb.462.1644349418094;
-        Tue, 08 Feb 2022 11:43:38 -0800 (PST)
+        bh=Ufb8JerL9tDT7g1v4aJC4XJXyEpEyj9Y7QxoUEiNuQM=;
+        b=csvpIatJnEJoQKMXVojIT0mD9sQV1EC8REOW0yI1irlbsKUgmKxHOnP6kW5P/uW3Ct
+         a6wu3mKHUxOK9GubuUfkbyTyVD9/WX/BeUGNYI7AQSeNDTpXH1MbVKW4gCOq1aH7b0Bw
+         TmhIANCAo/A0te++7j4IsOSpyUJBn9smV0v+RAyStbMiG7xr6hSMUvRAag+BjD1wadSk
+         vrji/mTSfaSUw0ID3vZISlS2znIYGz6b7pom3OjzIs9vVxg1mMHAsCJUgVue5hDddeOZ
+         I2vUQw0Q2TxJzVtAo5HBx95h9aSj/Lec6jiURvefH/2HcIWQuQgJzWIr1BKV6sVRDn7y
+         A/ig==
+X-Gm-Message-State: AOAM530j0J9Uio0fbfmev4RML+gxc9a3O0b5tcumNhhh404s1KMW4ln3
+        sLMhXRkUkd3mRFG4yGpkRbQ=
+X-Google-Smtp-Source: ABdhPJwrwivlWofm2UOfe8OdlqbFVCbp5LnU7jaGnUKTctny/cMMRUv76SfiAeYangOlGnt5tOCHAw==
+X-Received: by 2002:a65:4d0d:: with SMTP id i13mr4696818pgt.483.1644349420393;
+        Tue, 08 Feb 2022 11:43:40 -0800 (PST)
 Received: from balhae.hsd1.ca.comcast.net ([2601:647:4800:c6f0:347f:e607:176:4358])
-        by smtp.gmail.com with ESMTPSA id w11sm16876839pfu.50.2022.02.08.11.43.36
+        by smtp.gmail.com with ESMTPSA id w11sm16876839pfu.50.2022.02.08.11.43.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 11:43:37 -0800 (PST)
+        Tue, 08 Feb 2022 11:43:39 -0800 (PST)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Peter Zijlstra <peterz@infradead.org>,
@@ -60,10 +60,13 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Byungchul Park <byungchul.park@lge.com>,
         "Paul E. McKenney" <paulmck@kernel.org>,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Radoslaw Burny <rburny@google.com>
-Subject: [PATCH 01/12] locking: Pass correct outer wait type info
-Date:   Tue,  8 Feb 2022 11:43:13 -0800
-Message-Id: <20220208194324.85333-2-namhyung@kernel.org>
+        Radoslaw Burny <rburny@google.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
+        Tejun Heo <tj@kernel.org>
+Subject: [PATCH 02/12] cgroup: rstat: Make cgroup_rstat_cpu_lock name readable
+Date:   Tue,  8 Feb 2022 11:43:14 -0800
+Message-Id: <20220208194324.85333-3-namhyung@kernel.org>
 X-Mailer: git-send-email 2.35.0.263.gb82422642f-goog
 In-Reply-To: <20220208194324.85333-1-namhyung@kernel.org>
 References: <20220208194324.85333-1-namhyung@kernel.org>
@@ -80,28 +83,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In lockdep_init_map_wait(), it didn't pass the given outer argument
-to lockdep_init_map_type and use LD_WAIT_INV unconditionally.  It
-seems like a copy-and-paste bug, let's fix it.
+The raw_spin_lock_init() uses the argument to name its lockdep map.
+But passing per_cpu_ptr() macro directly makes it a very very long
+name as it expanded like below:
 
+  ({ do { const void *__vpp_verify = (typeof((&cgroup_rstat_cpu_lock) ...
+
+Let's fix it by passing a local variable instead.  With this change,
+the name now looks like:
+
+  cgrp_rstat_cpu_lock
+
+Cc: Zefan Li <lizefan.x@bytedance.com>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: cgroups@vger.kernel.org
+Acked-by: Tejun Heo <tj@kernel.org>
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- include/linux/lockdep.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/cgroup/rstat.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
-index 467b94257105..0cc2b338a006 100644
---- a/include/linux/lockdep.h
-+++ b/include/linux/lockdep.h
-@@ -192,7 +192,7 @@ static inline void
- lockdep_init_map_waits(struct lockdep_map *lock, const char *name,
- 		       struct lock_class_key *key, int subclass, u8 inner, u8 outer)
+diff --git a/kernel/cgroup/rstat.c b/kernel/cgroup/rstat.c
+index 9d331ba44870..371f54a59c38 100644
+--- a/kernel/cgroup/rstat.c
++++ b/kernel/cgroup/rstat.c
+@@ -286,9 +286,17 @@ void cgroup_rstat_exit(struct cgroup *cgrp)
+ void __init cgroup_rstat_boot(void)
  {
--	lockdep_init_map_type(lock, name, key, subclass, inner, LD_WAIT_INV, LD_LOCK_NORMAL);
-+	lockdep_init_map_type(lock, name, key, subclass, inner, outer, LD_LOCK_NORMAL);
+ 	int cpu;
++	raw_spinlock_t *cgrp_rstat_cpu_lock;
+ 
+-	for_each_possible_cpu(cpu)
+-		raw_spin_lock_init(per_cpu_ptr(&cgroup_rstat_cpu_lock, cpu));
++	for_each_possible_cpu(cpu) {
++		/*
++		 * raw_spin_lock_init() uses the argument to name the lock in
++		 * lockdep results.  Passing per_cpu_ptr() directly created a
++		 * cryptic name as the macro was expanded before stringified.
++		 */
++		cgrp_rstat_cpu_lock = per_cpu_ptr(&cgroup_rstat_cpu_lock, cpu);
++		raw_spin_lock_init(cgrp_rstat_cpu_lock);
++	}
  }
  
- static inline void
+ /*
 -- 
 2.35.0.263.gb82422642f-goog
 

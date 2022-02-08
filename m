@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C75A64ADF42
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 18:19:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B84DD4ADF3D
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 18:19:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383850AbiBHRTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 12:19:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50002 "EHLO
+        id S1383894AbiBHRTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 12:19:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359824AbiBHRTS (ORCPT
+        with ESMTP id S1358775AbiBHRTW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 12:19:18 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD24AC06157B
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 09:19:17 -0800 (PST)
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
+        Tue, 8 Feb 2022 12:19:22 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA0ABC0613CB
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 09:19:18 -0800 (PST)
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 6C67A3FFFC
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 17:19:16 +0000 (UTC)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id B7E8440063
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 17:19:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1644340756;
-        bh=l6GLEJQBNYaUkQu6nP76MmMixqQI8BIhtEzQgNTHbCs=;
+        s=20210705; t=1644340757;
+        bh=xz+e2Key3mN9wN61xdroLJbkY7yAPV1tZJHM8lGcmj4=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version;
-        b=jJbR3dD1dR8eB+sF5Af+tbU9bCdma/0rycRMeJKGC41Rti+74nOZsWvxxewxcWkRc
-         M6PdKIWlVTu0JqixeceHV1kUC7/cJK6PQjXt9QonPDzWPfYT0NXXyic1mPSts7Gwrs
-         Chz/84OZnfX54fuCj+luIIS7vUf8x/WR8E7bJTaBWBbJpMAFAtE+XFae6jE2Brq+nw
-         2YMREqJQa9aadshgGGn1tefj7OlleLh5PxEJJ2lyGzK7DV0FOzFFSQvroPeqMBGNfA
-         mXL2XJTA5MzDBEqmIFDRyk1GAwNG/HalOsCHuvioSpriTr6XEOtyM4+ducLaSQlh+N
-         4d367w/+WOAFA==
-Received: by mail-ej1-f70.google.com with SMTP id vj1-20020a170907130100b006ccc4f41d03so2261249ejb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 09:19:16 -0800 (PST)
+        b=luCaGGDJauHTYulIzxh1oWS5W8+JXEagn3vJNY2FxKr8gkQX7dqRkJJMe3E1VWe8Z
+         Eq9Jz+7nCDUcst4Q61kFocM5eUYvgB8MxXyV6HLrpi13saI7PaT97z9ubEEhijLQRp
+         WLJiazsfkZvV8cHykwg079fcEkUv4HA8mQgDULYte/5Z+R0f83OY1cpLq84XRqMv8p
+         Mg2VhlSvDID1N9PSJGS2KBfJlrUxO2SlM7BQzR0a+2fPWDWJao8k9aDuR1ZnIfa+GA
+         Z+7Isc51SN2d0m3pgD8AELLtbACRfZndnyGdlXtIZQtW8/MVITTueBDpeSt4absCX5
+         2ksjnnD16tuEA==
+Received: by mail-ej1-f69.google.com with SMTP id vj1-20020a170907130100b006ccc4f41d03so2261265ejb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 09:19:17 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=l6GLEJQBNYaUkQu6nP76MmMixqQI8BIhtEzQgNTHbCs=;
-        b=oBMikV8ZXKFY22mQKq4Hx5HfhfosCJGFFoPr2WzmtCfamNQRLBLBnOdMb4ag40QunL
-         MKSvfJrRcySqxXnaiQqjgaQMUktlTVjphpSsmNAT+gkto1DCQkZM7ocv7OgjFUZ08oPv
-         h1DBNbgJn3mHutAyvjlP/8QLbPQRL4xrYIWtFzomPaxb0eyKRqGznAHxdZTJc+v4o0Y3
-         sePXv3Mp119x1tb1f3Wxc+SQx/z40wJTZq11cLRHOgiKh2ooJ7qga4cRx6wyJPtIR4TI
-         f5qAOQcIix/I8ulHBxW6nk9sxoKHEc+nlQBm891iV9K4hS/GOpacWZogXgTu5o9q8X6f
-         ookQ==
-X-Gm-Message-State: AOAM533t/x1VCCsnnFufVfX0aybWm81c5jAUrdT8a2IzAYb578aDQfto
-        fqGpmGeW+xepXwm/lVLV4ovNKxmwxI1AZWbbqATNihNZzRBmEgVmaWSglnA0nVPNk/BdxcDDOSa
-        piA69FgoSFLv6zq/L4x+527AYYfYz1mbylx7x77a33w==
-X-Received: by 2002:a05:6402:144d:: with SMTP id d13mr5605664edx.278.1644340755965;
-        Tue, 08 Feb 2022 09:19:15 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJywRBR8e0kw/RhEs71GGAD57QuTcxgRhdmY0auFh0LiEtWtT2U86ImRk3V9+GHN9os3JiLMhw==
-X-Received: by 2002:a05:6402:144d:: with SMTP id d13mr5605638edx.278.1644340755766;
-        Tue, 08 Feb 2022 09:19:15 -0800 (PST)
+        bh=xz+e2Key3mN9wN61xdroLJbkY7yAPV1tZJHM8lGcmj4=;
+        b=AkcY70JIHhuGazmzeAz/y2yGP1ZpjotBrPGMHzu4itpdx/zMOjGgUGZEhUW+Gb5FPX
+         Kxf9Yo7qyuUe0udDbVyMQgmehn8iI+L1e+5FEcpg+EON+OACY0JQcZk6u9bsQ+P6ATD7
+         KlUpc0mj1V1pslZZprHhZKoICGHRsMNUHd9VzTNfAVyMA3gNaiyCpXJgaKb4RoWhHiE6
+         o+CsEAeeLwMXQneo1uAeVvkYH0h5v2UAeBydqMCdJekY70zHHXnNnU6GtLwRFmgiWgJQ
+         eko6wT5uZ6wFEX9t5nnnFmNCI24AjR4pG240LzebpNLG7ZXVvYPNqS4DyJ+wnYRQF355
+         zRVQ==
+X-Gm-Message-State: AOAM531p+fhXL8tU/wUMSk9IVumde1tLpFPCck5kGV5cRYj0HNhiSMz4
+        Nj4la2eg6iItNbm2n4skdMkyvHB4MMuPStETdLu7aTkXP/01gNQFLh/RVr3VR6uolQZ2PYahsKb
+        VAx6DjMkSZC9GYYVRnShG/K9omzc/x0gv7isBpzRRTQ==
+X-Received: by 2002:a17:906:3d72:: with SMTP id r18mr4481095ejf.111.1644340756993;
+        Tue, 08 Feb 2022 09:19:16 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzQyCyrqP/YqXHfEAo7IFUzQx4++eo+ig8qWHqbf9DAruggxjPaZtPMpWwxC0+hH1p/f+OZFQ==
+X-Received: by 2002:a17:906:3d72:: with SMTP id r18mr4481063ejf.111.1644340756736;
+        Tue, 08 Feb 2022 09:19:16 -0800 (PST)
 Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id r10sm5125550ejy.148.2022.02.08.09.19.14
+        by smtp.gmail.com with ESMTPSA id r10sm5125550ejy.148.2022.02.08.09.19.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 09:19:15 -0800 (PST)
+        Tue, 08 Feb 2022 09:19:16 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 To:     Inki Dae <inki.dae@samsung.com>,
         Joonyoung Shim <jy0922.shim@samsung.com>,
@@ -74,9 +74,9 @@ To:     Inki Dae <inki.dae@samsung.com>,
         linux-phy@lists.infradead.org
 Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
         Sylwester Nawrocki <snawrocki@kernel.org>
-Subject: [PATCH 04/10] dt-bindings: display: samsung,exynos5433-decon: convert to dtschema
-Date:   Tue,  8 Feb 2022 18:18:17 +0100
-Message-Id: <20220208171823.226211-5-krzysztof.kozlowski@canonical.com>
+Subject: [PATCH 05/10] dt-bindings: display: samsung,exynos7-decon: convert to dtschema
+Date:   Tue,  8 Feb 2022 18:18:18 +0100
+Message-Id: <20220208171823.226211-6-krzysztof.kozlowski@canonical.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220208171823.226211-1-krzysztof.kozlowski@canonical.com>
 References: <20220208171823.226211-1-krzysztof.kozlowski@canonical.com>
@@ -84,7 +84,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,103 +92,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the Exynos5433 DECON display controller bindings to DT schema
+Convert the Exynos7 DECON display controller bindings to DT schema
 format.
-
-The conversion includes also updates to the bindings, matching the
-current DTS and Linux driver:
-1. Require "fifo" interrupt.
-2. Add "dsd" as a last clock.
-3. Document "power-domains" and "iommus" properties.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 ---
- .../display/exynos/exynos5433-decon.txt       |  60 -------
- .../samsung/samsung,exynos5433-decon.yaml     | 148 ++++++++++++++++++
- MAINTAINERS                                   |   1 +
- 3 files changed, 149 insertions(+), 60 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/display/exynos/exynos5433-decon.txt
- create mode 100644 Documentation/devicetree/bindings/display/samsung/samsung,exynos5433-decon.yaml
+ .../bindings/display/exynos/exynos7-decon.txt |  65 ----------
+ .../samsung/samsung,exynos7-decon.yaml        | 120 ++++++++++++++++++
+ 2 files changed, 120 insertions(+), 65 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/display/exynos/exynos7-decon.txt
+ create mode 100644 Documentation/devicetree/bindings/display/samsung/samsung,exynos7-decon.yaml
 
-diff --git a/Documentation/devicetree/bindings/display/exynos/exynos5433-decon.txt b/Documentation/devicetree/bindings/display/exynos/exynos5433-decon.txt
+diff --git a/Documentation/devicetree/bindings/display/exynos/exynos7-decon.txt b/Documentation/devicetree/bindings/display/exynos/exynos7-decon.txt
 deleted file mode 100644
-index 775193e1c641..000000000000
---- a/Documentation/devicetree/bindings/display/exynos/exynos5433-decon.txt
+index 53912c99ec38..000000000000
+--- a/Documentation/devicetree/bindings/display/exynos/exynos7-decon.txt
 +++ /dev/null
-@@ -1,60 +0,0 @@
--Device-Tree bindings for Samsung Exynos SoC display controller (DECON)
+@@ -1,65 +0,0 @@
+-Device-Tree bindings for Samsung Exynos7 SoC display controller (DECON)
 -
 -DECON (Display and Enhancement Controller) is the Display Controller for the
--Exynos series of SoCs which transfers the image data from a video memory
+-Exynos7 series of SoCs which transfers the image data from a video memory
 -buffer to an external LCD interface.
 -
 -Required properties:
--- compatible: value should be one of:
--	"samsung,exynos5433-decon", "samsung,exynos5433-decon-tv";
+-- compatible: value should be "samsung,exynos7-decon";
+-
 -- reg: physical base address and length of the DECON registers set.
--- interrupt-names: should contain the interrupt names depending on mode of work:
--		video mode: "vsync",
--		command mode: "lcd_sys",
--		command mode with software trigger: "lcd_sys", "te".
--- interrupts or interrupts-extended: list of interrupt specifiers corresponding
--		to names privided in interrupt-names, as described in
--		interrupt-controller/interrupts.txt
+-
+-- interrupts: should contain a list of all DECON IP block interrupts in the
+-		 order: FIFO Level, VSYNC, LCD_SYSTEM. The interrupt specifier
+-		 format depends on the interrupt controller used.
+-
+-- interrupt-names: should contain the interrupt names: "fifo", "vsync",
+-	"lcd_sys", in the same order as they were listed in the interrupts
+-        property.
+-
+-- pinctrl-0: pin control group to be used for this controller.
+-
+-- pinctrl-names: must contain a "default" entry.
+-
 -- clocks: must include clock specifiers corresponding to entries in the
--	  clock-names property.
+-         clock-names property.
+-
 -- clock-names: list of clock names sorted in the same order as the clocks
--	       property. Must contain "pclk", "aclk_decon", "aclk_smmu_decon0x",
--	       "aclk_xiu_decon0x", "pclk_smmu_decon0x", "aclk_smmu_decon1x",
--	       "aclk_xiu_decon1x", "pclk_smmu_decon1x", clk_decon_vclk",
--	       "sclk_decon_eclk"
--- ports: contains a port which is connected to mic node. address-cells and
--	 size-cells must 1 and 0, respectively.
--- port: contains an endpoint node which is connected to the endpoint in the mic
--	node. The reg value muset be 0.
+-               property. Must contain "pclk_decon0", "aclk_decon0",
+-	       "decon0_eclk", "decon0_vclk".
+-- i80-if-timings: timing configuration for lcd i80 interface support.
+-
+-Optional Properties:
+-- power-domains: a phandle to DECON power domain node.
+-- display-timings: timing settings for DECON, as described in document [1].
+-		Can be used in case timings cannot be provided otherwise
+-		or to override timings provided by the panel.
+-
+-[1]: Documentation/devicetree/bindings/display/panel/display-timing.txt
 -
 -Example:
+-
 -SoC specific DT entry:
--decon: decon@13800000 {
--	compatible = "samsung,exynos5433-decon";
--	reg = <0x13800000 0x2104>;
--	clocks = <&cmu_disp CLK_ACLK_DECON>, <&cmu_disp CLK_ACLK_SMMU_DECON0X>,
--		<&cmu_disp CLK_ACLK_XIU_DECON0X>,
--		<&cmu_disp CLK_PCLK_SMMU_DECON0X>,
--		<&cmu_disp CLK_ACLK_SMMU_DECON1X>,
--		<&cmu_disp CLK_ACLK_XIU_DECON1X>,
--		<&cmu_disp CLK_PCLK_SMMU_DECON1X>,
--		<&cmu_disp CLK_SCLK_DECON_VCLK>,
--		<&cmu_disp CLK_SCLK_DECON_ECLK>;
--	clock-names = "aclk_decon", "aclk_smmu_decon0x", "aclk_xiu_decon0x",
--		"pclk_smmu_decon0x", "aclk_smmu_decon1x", "aclk_xiu_decon1x",
--		"pclk_smmu_decon1x", "sclk_decon_vclk", "sclk_decon_eclk";
--	interrupt-names = "vsync", "lcd_sys";
--	interrupts = <0 202 0>, <0 203 0>;
 -
--	ports {
--		#address-cells = <1>;
--		#size-cells = <0>;
--
--		port@0 {
--			reg = <0>;
--			decon_to_mic: endpoint {
--				remote-endpoint = <&mic_to_decon>;
--			};
--		};
+-	decon@13930000 {
+-		compatible = "samsung,exynos7-decon";
+-		interrupt-parent = <&combiner>;
+-		reg = <0x13930000 0x1000>;
+-		interrupt-names = "lcd_sys", "vsync", "fifo";
+-		interrupts = <0 188 0>, <0 189 0>, <0 190 0>;
+-		clocks = <&clock_disp PCLK_DECON_INT>,
+-			 <&clock_disp ACLK_DECON_INT>,
+-			 <&clock_disp SCLK_DECON_INT_ECLK>,
+-			 <&clock_disp SCLK_DECON_INT_EXTCLKPLL>;
+-		clock-names = "pclk_decon0", "aclk_decon0", "decon0_eclk",
+-				"decon0_vclk";
+-		status = "disabled";
 -	};
--};
-diff --git a/Documentation/devicetree/bindings/display/samsung/samsung,exynos5433-decon.yaml b/Documentation/devicetree/bindings/display/samsung/samsung,exynos5433-decon.yaml
+-
+-Board specific DT entry:
+-
+-	decon@13930000 {
+-		pinctrl-0 = <&lcd_clk &pwm1_out>;
+-		pinctrl-names = "default";
+-		status = "okay";
+-	};
+diff --git a/Documentation/devicetree/bindings/display/samsung/samsung,exynos7-decon.yaml b/Documentation/devicetree/bindings/display/samsung/samsung,exynos7-decon.yaml
 new file mode 100644
-index 000000000000..6f796835ea03
+index 000000000000..afa137d47922
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/display/samsung/samsung,exynos5433-decon.yaml
-@@ -0,0 +1,148 @@
++++ b/Documentation/devicetree/bindings/display/samsung/samsung,exynos7-decon.yaml
+@@ -0,0 +1,120 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/display/samsung/samsung,exynos5433-decon.yaml#
++$id: http://devicetree.org/schemas/display/samsung/samsung,exynos7-decon.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Samsung Exynos5433 SoC Display and Enhancement Controller (DECON)
++title: Samsung Exynos7 SoC Display and Enhancement Controller (DECON)
 +
 +maintainers:
 +  - Inki Dae <inki.dae@samsung.com>
@@ -199,63 +197,69 @@ index 000000000000..6f796835ea03
 +
 +description: |
 +  DECON (Display and Enhancement Controller) is the Display Controller for the
-+  Exynos5433 series of SoCs which transfers the image data from a video memory
++  Exynos7 series of SoCs which transfers the image data from a video memory
 +  buffer to an external LCD interface.
 +
 +properties:
 +  compatible:
-+    enum:
-+      - samsung,exynos5433-decon
-+      - samsung,exynos5433-decon-tv
++    const: samsung,exynos7-decon
 +
 +  clocks:
-+    minItems: 11
-+    maxItems: 11
++    minItems: 4
++    maxItems: 4
 +
 +  clock-names:
 +    items:
-+      - const: pclk
-+      - const: aclk_decon
-+      - const: aclk_smmu_decon0x
-+      - const: aclk_xiu_decon0x
-+      - const: pclk_smmu_decon0x
-+      - const: aclk_smmu_decon1x
-+      - const: aclk_xiu_decon1x
-+      - const: pclk_smmu_decon1x
-+      - const: sclk_decon_vclk
-+      - const: sclk_decon_eclk
-+      - const: dsd
++      - const: pclk_decon0
++      - const: aclk_decon0
++      - const: decon0_eclk
++      - const: decon0_vclk
++
++  display-timings:
++    $ref: ../panel/display-timings.yaml#
++
++  i80-if-timings:
++    type: object
++    description: timing configuration for lcd i80 interface support
++    properties:
++      cs-setup:
++        $ref: /schemas/types.yaml#/definitions/uint32
++        description:
++          Clock cycles for the active period of address signal is enabled until
++          chip select is enabled.
++        default: 0
++
++      wr-active:
++        $ref: /schemas/types.yaml#/definitions/uint32
++        description:
++          Clock cycles for the active period of CS is enabled.
++        default: 1
++
++      wr-hold:
++        $ref: /schemas/types.yaml#/definitions/uint32
++        description:
++          Clock cycles for the active period of CS is disabled until write
++          signal is disabled.
++        default: 0
++
++      wr-setup:
++        $ref: /schemas/types.yaml#/definitions/uint32
++        description:
++          Clock cycles for the active period of CS signal is enabled until
++          write signal is enabled.
++        default: 0
 +
 +  interrupts:
-+    minItems: 3
-+    maxItems: 4
-+    description: |
-+      Interrupts depend on mode of work:
-+       - video mode: vsync
-+       - command mode: lcd_sys
-+       - command mode with software trigger: lcd_sys, te
++    items:
++      - description: FIFO level
++      - description: VSYNC
++      - description: LCD system
 +
 +  interrupt-names:
-+    minItems: 3
 +    items:
 +      - const: fifo
 +      - const: vsync
 +      - const: lcd_sys
-+      - const: te
-+
-+  iommus:
-+    minItems: 2
-+    maxItems: 2
-+
-+  iommu-names:
-+    items:
-+      - const: m0
-+      - const: m1
-+
-+  ports:
-+    $ref: /schemas/graph.yaml#/properties/ports
-+    description:
-+      Contains a port which is connected to mic node.
 +
 +  power-domains:
 +    maxItems: 1
@@ -263,85 +267,39 @@ index 000000000000..6f796835ea03
 +  reg:
 +    maxItems: 1
 +
-+  samsung,disp-sysreg:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description:
-+      Phandle to DISP system controller interface.
-+
 +required:
 +  - compatible
 +  - clocks
 +  - clock-names
 +  - interrupts
 +  - interrupt-names
-+  - ports
 +  - reg
 +
 +additionalProperties: false
 +
 +examples:
 +  - |
-+    #include <dt-bindings/clock/exynos5433.h>
++    #include <dt-bindings/clock/exynos7-clk.h>
 +    #include <dt-bindings/interrupt-controller/arm-gic.h>
 +
-+    display-controller@13800000 {
-+        compatible = "samsung,exynos5433-decon";
-+        reg = <0x13800000 0x2104>;
-+        clocks = <&cmu_disp CLK_PCLK_DECON>,
-+                 <&cmu_disp CLK_ACLK_DECON>,
-+                 <&cmu_disp CLK_ACLK_SMMU_DECON0X>,
-+                 <&cmu_disp CLK_ACLK_XIU_DECON0X>,
-+                 <&cmu_disp CLK_PCLK_SMMU_DECON0X>,
-+                 <&cmu_disp CLK_ACLK_SMMU_DECON1X>,
-+                 <&cmu_disp CLK_ACLK_XIU_DECON1X>,
-+                 <&cmu_disp CLK_PCLK_SMMU_DECON1X>,
-+                 <&cmu_disp CLK_SCLK_DECON_VCLK>,
-+                 <&cmu_disp CLK_SCLK_DECON_ECLK>,
-+                 <&cmu_disp CLK_SCLK_DSD>;
-+        clock-names = "pclk",
-+                      "aclk_decon",
-+                      "aclk_smmu_decon0x",
-+                      "aclk_xiu_decon0x",
-+                      "pclk_smmu_decon0x",
-+                      "aclk_smmu_decon1x",
-+                      "aclk_xiu_decon1x",
-+                      "pclk_smmu_decon1x",
-+                      "sclk_decon_vclk",
-+                      "sclk_decon_eclk",
-+                      "dsd";
-+        power-domains = <&pd_disp>;
++    display-controller@13930000 {
++        compatible = "samsung,exynos7-decon";
++        reg = <0x13930000 0x1000>;
 +        interrupt-names = "fifo", "vsync", "lcd_sys";
-+        interrupts = <GIC_SPI 201 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 202 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 203 IRQ_TYPE_LEVEL_HIGH>;
-+        samsung,disp-sysreg = <&syscon_disp>;
-+        iommus = <&sysmmu_decon0x>, <&sysmmu_decon1x>;
-+        iommu-names = "m0", "m1";
-+
-+        ports {
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            port@0 {
-+                reg = <0>;
-+                decon_to_mic: endpoint {
-+                    remote-endpoint = <&mic_to_decon>;
-+                };
-+            };
-+        };
++        interrupts = <GIC_SPI 190 IRQ_TYPE_LEVEL_HIGH>,
++                     <GIC_SPI 189 IRQ_TYPE_LEVEL_HIGH>,
++                     <GIC_SPI 188 IRQ_TYPE_LEVEL_HIGH>;
++        clocks = <&clock_disp 100>, /* PCLK_DECON_INT */
++                 <&clock_disp 101>, /* ACLK_DECON_INT */
++                 <&clock_disp 102>, /* SCLK_DECON_INT_ECLK */
++                 <&clock_disp 103>; /* SCLK_DECON_INT_EXTCLKPLL */
++        clock-names = "pclk_decon0",
++                      "aclk_decon0",
++                      "decon0_eclk",
++                      "decon0_vclk";
++        pinctrl-0 = <&lcd_clk &pwm1_out>;
++        pinctrl-names = "default";
 +    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index ddcee331dc09..a0ad276b3159 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -6417,6 +6417,7 @@ L:	dri-devel@lists.freedesktop.org
- S:	Supported
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/daeinki/drm-exynos.git
- F:	Documentation/devicetree/bindings/display/exynos/
-+F:	Documentation/devicetree/bindings/display/samsung/
- F:	drivers/gpu/drm/exynos/
- F:	include/uapi/drm/exynos_drm.h
- 
 -- 
 2.32.0
 

@@ -2,326 +2,338 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2B104ADA18
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 14:38:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C76874AD9BD
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 14:26:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358235AbiBHNiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 08:38:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36494 "EHLO
+        id S1357152AbiBHNZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 08:25:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350534AbiBHNiO (ORCPT
+        with ESMTP id S1355470AbiBHNZT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 08:38:14 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00412C03FECE;
-        Tue,  8 Feb 2022 05:38:13 -0800 (PST)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 218DIpN4046522;
-        Tue, 8 Feb 2022 07:18:51 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1644326331;
-        bh=2Lrs2N/K+QHBIr8RlKTBV2F6IiXsG6T8xZqSAtgp5gs=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=GEAENK9IcN6NprWk200mpWbV45p6xoizIpjapBwbqpDfTU5eFCW5cIl29CvjZR8xe
-         HCubRdr2FlwEGgW6Ka+DRLtQ2tevJ5tVcNGj1Fx52wO4KAB1yLXu74h72o7XC+hk15
-         v5r+30JlYpYa+BXmoisN21dk4+rdZA7Vp3t2mH1k=
-Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 218DIpbQ108801
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 8 Feb 2022 07:18:51 -0600
-Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 8
- Feb 2022 07:18:50 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 8 Feb 2022 07:18:51 -0600
-Received: from ula0132425.ent.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 218DIUCk117228;
-        Tue, 8 Feb 2022 07:18:48 -0600
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH 5/5] arm64: dts: ti: Add support for AM62-SK
-Date:   Tue, 8 Feb 2022 18:48:27 +0530
-Message-ID: <20220208131827.1430086-6-vigneshr@ti.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220208131827.1430086-1-vigneshr@ti.com>
-References: <20220208131827.1430086-1-vigneshr@ti.com>
+        Tue, 8 Feb 2022 08:25:19 -0500
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60044.outbound.protection.outlook.com [40.107.6.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43E5C0086B7;
+        Tue,  8 Feb 2022 05:18:52 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dTFXpDeqhGBp8/54IlEB6EgGju1APBP8TyCN41lJMvIBfmDG6Q2vRMMjTnThewagtUyE3HVucewL5qnqjQ0VXx7bqA6WpssP/EOEykUQNDMzJQl6yqwuQCfoDWjGq8yDHKMh0HJgdX0zwQWV2AzWlas4qZCP4ndwtLdQMYN8sFDsoz5KAlf/O4ar0fFrV2s7KcJERVApK0VIgiSbHcXRAfRzZMBLOY7sVZmo2s7OIj2+jPiM5lj45pg45s7T6YC8wwiPcn9M3zV8FdOzG3dNFtBurGTx1ym5PdVTMLNveMcJ9/0EmJVmnY/uWmbVyrH9jkU0iY/CSprCEy/7ppwDsg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=84z0OEyb3VV0tqXocEWfInmSXFPxtRLnGm7fdZA1fgY=;
+ b=dnkDk7k9WKRRXf6siTP0mVyOdSDkfGqf/sjvRYdTudEeiGTGSSbeY9zQLluuhHrkKJ8aa0rAHMCm5euK7MhJ3i2H7jZMfh5n9OPsr0ExR832crjgPT+Qgwj9XkmbuLMO7lnY6lzIqWuDaLHOfp4ODEnZA89KS8HZuz5Ms+HMgd+zHhpdzQLFZFOYTWUeuIunwQR9q/Npp1XG2lIdvduPAoXkGhhvZfMyl3qHEYiphO8ryfSHKE1AOOysOLHgvuoumgzskZAYBA1u/3dKAFO+//my6+s7XchOme4n94Zrc99wvkR5b0Vk4hsO+gDTB4NaGPUYr5XZ82A4gLM4Y6JzZA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=84z0OEyb3VV0tqXocEWfInmSXFPxtRLnGm7fdZA1fgY=;
+ b=no5DRHIVXGqai/wh9+6rsJF+6Yg/is2xkrJAvbKX8au1tOeKRMeuK7yBRMfBgZvguHfgsjuajVvpPcLzvwT7GCgxd5y+NG6omBGC4Ma2a0J4DkDjV+pjswtqxvHWBaJqRov9K+GKtnG69t+EfP2JxbQqsZfpDpkuC4jIFrobWv4=
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
+ by AM5PR04MB3202.eurprd04.prod.outlook.com (2603:10a6:206:8::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.19; Tue, 8 Feb
+ 2022 13:18:50 +0000
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::95cf:8c40:b887:a7b9]) by VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::95cf:8c40:b887:a7b9%4]) with mapi id 15.20.4951.019; Tue, 8 Feb 2022
+ 13:18:50 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     Colin Foster <colin.foster@in-advantage.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>
+Subject: Re: [PATCH v5 net-next 3/3] net: mscc: ocelot: use bulk reads for
+ stats
+Thread-Topic: [PATCH v5 net-next 3/3] net: mscc: ocelot: use bulk reads for
+ stats
+Thread-Index: AQHYHKbq8GXukjoutEaxquFuvaFzqayJo4OA
+Date:   Tue, 8 Feb 2022 13:18:50 +0000
+Message-ID: <20220208131849.7n5hr5hc3fgcgpnz@skbuf>
+References: <20220208044644.359951-1-colin.foster@in-advantage.com>
+ <20220208044644.359951-4-colin.foster@in-advantage.com>
+In-Reply-To: <20220208044644.359951-4-colin.foster@in-advantage.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 7db90fd5-d657-4971-4098-08d9eb058bc9
+x-ms-traffictypediagnostic: AM5PR04MB3202:EE_
+x-microsoft-antispam-prvs: <AM5PR04MB3202EF67A02417598BF9B0B4E02D9@AM5PR04MB3202.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6108;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: /XZhsJzajVfeHl8e+7GWvO9Un3FAc/V2aoVQnTJ7ViEdTSwV3XSxxulcxSqelOvWVmTewXYvZPhn22UBnq5DJTtmh58RicCFw9PBQJS3QOJVGn8l8NVFviWvak/Oasnec7n5KcPs+lDlCk7nL5IrGbtnaapGdxCeuuAzdCGQG78FNoscX6/7Z6Hm4vj+01YwGc+o7KrKVyYaePy3R3RLj5uPxdlrOCDrimF8yA682mi0vDg4WUwCtY/jKyI97CtkXJcWsgy7Cs/4K040dpBu8VxqSE0wpHDaHdeCECNYDHlW9jhBM05gCkjC5oWllsqJu4P6wVSnNlLnriecnoscJVwnjxdsAoqX1OY+/icITKj8i823uk8xdo8rmxDzEp3iYEbB+ZCqxD+M9ZyORztKmFXEaK6eZ+BadUhbtDDd2Xif+x2b/NDrzowmYCnYG0WRz/jq+slCSP24lD2a7eLRCDGEK7YImIwJJj6mqQQd9k7pznwln9dqGyQy+8IUhzAjWS1Try95yX/T9YMG+G9GXz/R4gWKdT/pxZQEX151sjKB2y/dQeizxT7pzzNQ2qvGQgZhyVwDbWvGDykerAXyErc/KQX3Ix+BWd6kdI8Ter9mFjbDI+FDuy8SLD4LYdoSWCkn59K8U4gOHUoD+4vGnDUMBe5exn9CM6/BC+xZQxygaIAoKj24ML4rzgEAlga1H5l5iiftopgjyEAZIXEiOw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(4636009)(366004)(9686003)(71200400001)(6486002)(83380400001)(5660300002)(186003)(33716001)(44832011)(38070700005)(1076003)(508600001)(6512007)(26005)(6506007)(2906002)(122000001)(86362001)(6916009)(54906003)(66556008)(316002)(66476007)(66446008)(64756008)(66946007)(38100700002)(4326008)(76116006)(8936002)(8676002)(91956017);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?S4T8NwYxcHr2lFkaaxIPSToVRQzO86dXHaGq354MxxRFNWP5v/NA/ztSwr57?=
+ =?us-ascii?Q?l8p91xvjuKFCS8fG8vAbk8u22MkuoKdeuLUrZlD3iU0Bh53hvFO5ciewSB/S?=
+ =?us-ascii?Q?Vf4zy34OUe/qrP5RLZo9KW7HtBa75t+SY5v/laFhPdVC0wwtH2uwu2G8+w88?=
+ =?us-ascii?Q?zBYdKr8vrckbSmFF3sQEqiHRHeK0B0QtUoPcPSnneTDPUG9QzO9lhLxl6qvs?=
+ =?us-ascii?Q?WhrDmIsHxNt/BWyxYwPUdfujbVClnYYQ4vrd1Ta5zFaoJPEEpP3hPVC5nTNR?=
+ =?us-ascii?Q?9JfBhzDroiYAyjJajpeDds1C6W0y2/WUaHXPEUtKx8slMTl0sS6q1oW7+Trc?=
+ =?us-ascii?Q?9CRPErGvvZtosJXpi7iLcg0jZvgUoxD9WYdJHWzhEeQMWV8dn1M6130We3zC?=
+ =?us-ascii?Q?ON29QDKn+zqq1TKus8/dD6VE6QSam69aQBjM5fKdJVpTxUfsAzGN0RbuKGnI?=
+ =?us-ascii?Q?VNSR/0aKZ0Pjr322NwY5CD4vOXmt6SVI/0AZrCA/q2j71UlXRci137LNZQFr?=
+ =?us-ascii?Q?9VlI685hbGJqmBU83iDmS/nPv15a7xIxbwTwh5IGuRElOLjvU3pezufmDpWj?=
+ =?us-ascii?Q?DwnVwPCss5h6su6nBH6YGUwBied9UqeqHvSRyTN6ewL7J9r8F73G+c0eKJR1?=
+ =?us-ascii?Q?XaDt45hbTVgvMEWgrVFy/V9OCmtWSxdUVXVLSHdSTXY17thA2MAj/kCSVFrG?=
+ =?us-ascii?Q?QipichdXuSJern8dwyHRJQCFpRcD2T58H3TtE1cbMGrgP76WSaOyqwxKvnqu?=
+ =?us-ascii?Q?9a0fw3vgJJcdqxL4MCggyrgSBFME1dIZOMrmcb1KZP7fQ73aRHMrT3HMQvFU?=
+ =?us-ascii?Q?KPMf8lg7MK46d9FSvtCC/OhXAlAnfNK5fquoNN+2wemKcSweWX6a9ZhOxSLV?=
+ =?us-ascii?Q?SzThUGiNHjWKmUeeBV0uq/XB+dDSIQj51nAyZA0qxXG6IIGO2NGW2nMSKPyo?=
+ =?us-ascii?Q?YEfPRsp/hhFUr8cvcGVeocP0blMSBtmiVDxrg+PV8TaXzjq4e4gDDo3L9cah?=
+ =?us-ascii?Q?iFwP4VJuRCRV4zVTDbdFcGu2hvb1Hcru1pdninnIwOVhkzPfEbtSjEa/RBzm?=
+ =?us-ascii?Q?ISn4Sl1GzkEU3SCMd0psfOAtttLax6B02tHt2xQLdz5yHHYDeZWjzdGGDMNm?=
+ =?us-ascii?Q?bsy84rm6tWSUS7RtBy465nh2G/xvnqBS0EWLDTmYPxFHCARzy8CgU6NIU5Qw?=
+ =?us-ascii?Q?GWg+H+atXi7B28P51qErH53HCrTY3CY2I44uOmLhkdG8FXAmDovcvTxaLwnj?=
+ =?us-ascii?Q?Bb9YKqkuboyFNyUr41UBc0oWnBDsJlTndn0rAd5keuj+Riux2/aIWpPRW/T2?=
+ =?us-ascii?Q?uLeLLI91mLIqE6vewxvVsYKssizoHGMNqqMiERaq2A/iBHYZBHn3z95IIaih?=
+ =?us-ascii?Q?gsdZP6XeFdSkt0z7k6QHlrdRUcLZtZedmQ+od4BegN74TJYZUucq4zAGNhnK?=
+ =?us-ascii?Q?VwkfwbYzr7Zq0m7s5DWq0tcSADdcfmPa1VOibvOZ/WJnOWinSOXGgfVSwr9j?=
+ =?us-ascii?Q?NZJmoa/h3zqOmgXvoNwhYlKIVOS6NuXxYbNXFnXpELRYrbfWlyIiReDfoxI7?=
+ =?us-ascii?Q?qN2sFGP4cSjkIIx4DidtPx11dGEx2kXiFzbe3Nu4W7oXANtqKun9R2COIlFk?=
+ =?us-ascii?Q?/7TW/Rzdxe3JAHWPo9N2r83YkzPkT11tPqTRDRZc070O?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <CED7D1BA4F9F4E4A822F8A0EB41821BA@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7db90fd5-d657-4971-4098-08d9eb058bc9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Feb 2022 13:18:50.1597
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: E6RGqlyzJR2HVIQf3Nf5fekzx4MlsKfmfNdGOTcjde7cUIKYjHzoYV3aUy/TjWrWSHWmtOL/jSTlrX4dNnGUOA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM5PR04MB3202
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nishanth Menon <nm@ti.com>
+On Mon, Feb 07, 2022 at 08:46:44PM -0800, Colin Foster wrote:
+> Create and utilize bulk regmap reads instead of single access for gatheri=
+ng
+> stats. The background reading of statistics happens frequently, and over
+> a few contiguous memory regions.
+>=20
+> High speed PCIe buses and MMIO access will probably see negligible
+> performance increase. Lower speed buses like SPI and I2C could see
+> significant performance increase, since the bus configuration and registe=
+r
+> access times account for a large percentage of data transfer time.
+>=20
+> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
+> ---
 
-AM62 StarterKit (SK) board is a low cost, small form factor board
-designed for TI’s AM625 SoC. It supports the following interfaces:
-* 2 GB DDR4 RAM
-* x2 Gigabit Ethernet interfaces capable of working in Switch and MAC mode
-* x1 HDMI Port with audio + x1 OLDI/LVDS Display interface for Dual Display
-* x1 Headphone Jack
-* x1 USB2.0 Hub with two Type A host and x1 USB Type-C DRP Port
-* x1 UHS-1 capable µSD card slot
-* 2.4/5 GHz WLAN + Bluetooth 4.2 through WL1837
-* 512 Mbit OSPI flash
-* x4 UART through UART-USB bridge
-* XDS110 for onboard JTAG debug using USB
-* Temperature sensors, user push buttons and LEDs
-* 40-pin User Expansion Connector
-* 24-pin header for peripherals in MCU island (I2C, UART, SPI, IO)
-* 20-pin header for Programmable Realtime Unit (PRU) IO pins
-* 15-pin CSI header
+Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-Add basic support for AM62-SK.
+Just one minor comment below, but all in all it's fine as is, too.
 
-Schematics: https://www.ti.com/lit/zip/sprr448
+>  drivers/net/ethernet/mscc/ocelot.c | 78 +++++++++++++++++++++++++-----
+>  include/soc/mscc/ocelot.h          |  8 +++
+>  2 files changed, 73 insertions(+), 13 deletions(-)
+>=20
+> diff --git a/drivers/net/ethernet/mscc/ocelot.c b/drivers/net/ethernet/ms=
+cc/ocelot.c
+> index 455293aa6343..5efb1f3a1410 100644
+> --- a/drivers/net/ethernet/mscc/ocelot.c
+> +++ b/drivers/net/ethernet/mscc/ocelot.c
+> @@ -1737,32 +1737,41 @@ void ocelot_get_strings(struct ocelot *ocelot, in=
+t port, u32 sset, u8 *data)
+>  }
+>  EXPORT_SYMBOL(ocelot_get_strings);
+> =20
+> -static void ocelot_update_stats(struct ocelot *ocelot)
+> +static int ocelot_update_stats(struct ocelot *ocelot)
+>  {
+> -	int i, j;
+> +	struct ocelot_stats_region *region;
+> +	int i, j, err =3D 0;
+> =20
+>  	mutex_lock(&ocelot->stats_lock);
+> =20
+>  	for (i =3D 0; i < ocelot->num_phys_ports; i++) {
+> +		unsigned int idx =3D 0;
+> +
+>  		/* Configure the port to read the stats from */
+>  		ocelot_write(ocelot, SYS_STAT_CFG_STAT_VIEW(i), SYS_STAT_CFG);
+> =20
+> -		for (j =3D 0; j < ocelot->num_stats; j++) {
+> -			u32 val;
+> -			unsigned int idx =3D i * ocelot->num_stats + j;
+> +		list_for_each_entry(region, &ocelot->stats_regions, node) {
+> +			err =3D ocelot_bulk_read_rix(ocelot, SYS_COUNT_RX_OCTETS,
+> +						   region->offset, region->buf,
+> +						   region->count);
+> +			if (err)
+> +				goto out;
+> =20
+> -			val =3D ocelot_read_rix(ocelot, SYS_COUNT_RX_OCTETS,
+> -					      ocelot->stats_layout[j].offset);
+> +			for (j =3D 0; j < region->count; j++) {
+> +				if (region->buf[j] < (ocelot->stats[idx + j] & U32_MAX))
+> +					ocelot->stats[idx + j] +=3D (u64)1 << 32;
+> =20
+> -			if (val < (ocelot->stats[idx] & U32_MAX))
+> -				ocelot->stats[idx] +=3D (u64)1 << 32;
+> +				ocelot->stats[idx + j] =3D (ocelot->stats[idx + j] &
+> +							~(u64)U32_MAX) + region->buf[j];
+> +			}
+> =20
+> -			ocelot->stats[idx] =3D (ocelot->stats[idx] &
+> -					      ~(u64)U32_MAX) + val;
+> +			idx +=3D region->count;
+>  		}
+>  	}
+> =20
+> +out:
+>  	mutex_unlock(&ocelot->stats_lock);
+> +	return err;
+>  }
+> =20
+>  static void ocelot_check_stats_work(struct work_struct *work)
+> @@ -1779,10 +1788,11 @@ static void ocelot_check_stats_work(struct work_s=
+truct *work)
+> =20
+>  void ocelot_get_ethtool_stats(struct ocelot *ocelot, int port, u64 *data=
+)
+>  {
+> -	int i;
+> +	int i, err;
+> =20
+>  	/* check and update now */
+> -	ocelot_update_stats(ocelot);
+> +	err =3D ocelot_update_stats(ocelot);
+> +	WARN_ONCE(err, "Error %d updating ethtool stats\n", err);
 
-Signed-off-by: Nishanth Menon <nm@ti.com>
-Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
----
- arch/arm64/boot/dts/ti/Makefile        |   2 +
- arch/arm64/boot/dts/ti/k3-am625-sk.dts | 206 +++++++++++++++++++++++++
- 2 files changed, 208 insertions(+)
- create mode 100644 arch/arm64/boot/dts/ti/k3-am625-sk.dts
+I think a dev_err(ocelot->dev, ...) would be more appropriate here.
+WARN_ON() should be used for truly critical errors (things that should
+never happen unless bugs are present). When the assertion holds true, a
+WARN_ON() will print a stack trace, and when "panic_on_warn" is enabled,
+a WARN() is effectively a BUG() and crashes the kernel.
 
-diff --git a/arch/arm64/boot/dts/ti/Makefile b/arch/arm64/boot/dts/ti/Makefile
-index 90be511bc4d0..02e5d80344d0 100644
---- a/arch/arm64/boot/dts/ti/Makefile
-+++ b/arch/arm64/boot/dts/ti/Makefile
-@@ -21,3 +21,5 @@ dtb-$(CONFIG_ARCH_K3) += k3-j721s2-common-proc-board.dtb
- 
- dtb-$(CONFIG_ARCH_K3) += k3-am642-evm.dtb
- dtb-$(CONFIG_ARCH_K3) += k3-am642-sk.dtb
-+
-+dtb-$(CONFIG_ARCH_K3) += k3-am625-sk.dtb
-diff --git a/arch/arm64/boot/dts/ti/k3-am625-sk.dts b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
-new file mode 100644
-index 000000000000..9a6ff601f44d
---- /dev/null
-+++ b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
-@@ -0,0 +1,206 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * AM625 SK: https://www.ti.com/lit/zip/sprr448
-+ *
-+ * Copyright (C) 2021-2022 Texas Instruments Incorporated - https://www.ti.com/
-+ */
-+
-+/dts-v1/;
-+
-+#include <dt-bindings/leds/common.h>
-+#include <dt-bindings/gpio/gpio.h>
-+#include "k3-am625.dtsi"
-+
-+/ {
-+	compatible =  "ti,am625-sk", "ti,am625";
-+	model = "Texas Instruments AM625 SK";
-+
-+	aliases {
-+		serial2 = &main_uart0;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial2:115200n8";
-+		bootargs = "console=ttyS2,115200n8 earlycon=ns16550a,mmio32,0x02800000";
-+	};
-+
-+	memory@80000000 {
-+		device_type = "memory";
-+		/* 2G RAM */
-+		reg = <0x00000000 0x80000000 0x00000000 0x80000000>;
-+
-+	};
-+
-+	reserved-memory {
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges;
-+
-+		secure_tfa_ddr: tfa@9e780000 {
-+			reg = <0x00 0x9e780000 0x00 0x80000>;
-+			alignment = <0x1000>;
-+			no-map;
-+		};
-+
-+		secure_ddr: optee@9e800000 {
-+			reg = <0x00 0x9e800000 0x00 0x01800000>; /* for OP-TEE */
-+			alignment = <0x1000>;
-+			no-map;
-+		};
-+
-+		wkup_r5fss0_core0_dma_memory_region: r5f-dma-memory@a0000000 {
-+			compatible = "shared-dma-pool";
-+			reg = <0x00 0xa0000000 0x00 0x200000>;
-+			no-map;
-+		};
-+	};
-+
-+	vmain_pd: fixed-regulator-vmain-pd {
-+		/* TPS65988 PD CONTROLLER OUTPUT */
-+		compatible = "regulator-fixed";
-+		regulator-name = "vmain_pd";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		regulator-always-on;
-+		regulator-boot-on;
-+	};
-+
-+	vcc_5v0: fixedregulator-vcc5v0 {
-+		/* Output of LM34936 */
-+		compatible = "regulator-fixed";
-+		regulator-name = "vcc_5v0";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		vin-supply = <&vmain_pd>;
-+		regulator-always-on;
-+		regulator-boot-on;
-+	};
-+
-+	vcc_3v3_sys: fixedregulator-vcc-3v3-sys {
-+		/* output of LM61460-Q1 */
-+		compatible = "regulator-fixed";
-+		regulator-name = "vcc_3v3_sys";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		vin-supply = <&vmain_pd>;
-+		regulator-always-on;
-+		regulator-boot-on;
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&usr_led_pins_default>;
-+
-+		led-0 {
-+			label = "am62-sk:green:heartbeat";
-+			gpios = <&main_gpio1 49 GPIO_ACTIVE_HIGH>;
-+			linux,default-trigger = "heartbeat";
-+			function = LED_FUNCTION_HEARTBEAT;
-+			default-state = "off";
-+		};
-+	};
-+};
-+
-+&main_pmx0 {
-+	main_uart0_pins_default: main-uart0-pins-default {
-+		pinctrl-single,pins = <
-+			AM62X_IOPAD(0x1c8, PIN_INPUT, 0) /* (D14) UART0_RXD */
-+			AM62X_IOPAD(0x1cc, PIN_OUTPUT, 0) /* (E14) UART0_TXD */
-+		>;
-+	};
-+
-+	main_i2c0_pins_default: main-i2c0-pins-default {
-+		pinctrl-single,pins = <
-+			AM62X_IOPAD(0x1e0, PIN_INPUT_PULLUP, 0) /* (B16) I2C0_SCL */
-+			AM62X_IOPAD(0x1e4, PIN_INPUT_PULLUP, 0) /* (A16) I2C0_SDA */
-+		>;
-+	};
-+
-+	main_i2c1_pins_default: main-i2c1-pins-default {
-+		pinctrl-single,pins = <
-+			AM62X_IOPAD(0x1e8, PIN_INPUT_PULLUP, 0) /* (B17) I2C1_SCL */
-+			AM62X_IOPAD(0x1ec, PIN_INPUT_PULLUP, 0) /* (A17) I2C1_SDA */
-+		>;
-+	};
-+
-+	usr_led_pins_default: usr-led-pins-default {
-+		pinctrl-single,pins = <
-+			AM62X_IOPAD(0x244, PIN_OUTPUT, 7) /* (C17) MMC1_SDWP.GPIO1_49 */
-+		>;
-+	};
-+};
-+
-+&wkup_uart0 {
-+	/* WKUP UART0 is used by DM firmware */
-+	status = "reserved";
-+};
-+
-+&mcu_uart0 {
-+	status = "disabled";
-+};
-+
-+&main_uart0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_uart0_pins_default>;
-+};
-+
-+&main_uart1 {
-+	/* Main UART1 is used by TIFS firmware */
-+	status = "reserved";
-+};
-+
-+&main_uart2 {
-+	status = "disabled";
-+};
-+
-+&main_uart3 {
-+	status = "disabled";
-+};
-+
-+&main_uart4 {
-+	status = "disabled";
-+};
-+
-+&main_uart5 {
-+	status = "disabled";
-+};
-+
-+&main_uart6 {
-+	status = "disabled";
-+};
-+
-+&mcu_i2c0 {
-+	status = "disabled";
-+};
-+
-+&wkup_i2c0 {
-+	status = "disabled";
-+};
-+
-+&main_i2c0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_i2c0_pins_default>;
-+	clock-frequency = <400000>;
-+};
-+
-+&main_i2c1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_i2c1_pins_default>;
-+	clock-frequency = <400000>;
-+};
-+
-+&main_i2c2 {
-+	status = "disabled";
-+};
-+
-+&main_i2c3 {
-+	status = "disabled";
-+};
-+
-+&mailbox0_cluster0 {
-+	mbox_m4_0: mbox-m4-0 {
-+		ti,mbox-rx = <0 0 0>;
-+		ti,mbox-tx = <1 0 0>;
-+	};
-+};
--- 
-2.35.1
+include/asm-generic/bug.h says:
 
+/*
+ * WARN(), WARN_ON(), WARN_ON_ONCE, and so on can be used to report
+ * significant kernel issues that need prompt attention if they should ever
+ * appear at runtime.
+ *
+ * Do not use these macros when checking for invalid external inputs
+ * (e.g. invalid system call arguments, or invalid data coming from
+ * network/devices), and on transient conditions like ENOMEM or EAGAIN.
+ * These macros should be used for recoverable kernel issues only.
+ * For invalid external inputs, transient conditions, etc use
+ * pr_err[_once/_ratelimited]() followed by dump_stack(), if necessary.
+ * Do not include "BUG"/"WARNING" in format strings manually to make these
+ * conditions distinguishable from kernel issues.
+ *
+ * Use the versions with printk format strings to provide better diagnostic=
+s.
+ */
+
+> =20
+>  	/* Copy all counters */
+>  	for (i =3D 0; i < ocelot->num_stats; i++)
+> @@ -1799,6 +1809,41 @@ int ocelot_get_sset_count(struct ocelot *ocelot, i=
+nt port, int sset)
+>  }
+>  EXPORT_SYMBOL(ocelot_get_sset_count);
+> =20
+> +static int ocelot_prepare_stats_regions(struct ocelot *ocelot)
+> +{
+> +	struct ocelot_stats_region *region =3D NULL;
+> +	unsigned int last;
+> +	int i;
+> +
+> +	INIT_LIST_HEAD(&ocelot->stats_regions);
+> +
+> +	for (i =3D 0; i < ocelot->num_stats; i++) {
+> +		if (region && ocelot->stats_layout[i].offset =3D=3D last + 1) {
+> +			region->count++;
+> +		} else {
+> +			region =3D devm_kzalloc(ocelot->dev, sizeof(*region),
+> +					      GFP_KERNEL);
+> +			if (!region)
+> +				return -ENOMEM;
+> +
+> +			region->offset =3D ocelot->stats_layout[i].offset;
+> +			region->count =3D 1;
+> +			list_add_tail(&region->node, &ocelot->stats_regions);
+> +		}
+> +
+> +		last =3D ocelot->stats_layout[i].offset;
+> +	}
+> +
+> +	list_for_each_entry(region, &ocelot->stats_regions, node) {
+> +		region->buf =3D devm_kcalloc(ocelot->dev, region->count,
+> +					   sizeof(*region->buf), GFP_KERNEL);
+> +		if (!region->buf)
+> +			return -ENOMEM;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  int ocelot_get_ts_info(struct ocelot *ocelot, int port,
+>  		       struct ethtool_ts_info *info)
+>  {
+> @@ -2799,6 +2844,13 @@ int ocelot_init(struct ocelot *ocelot)
+>  				 ANA_CPUQ_8021_CFG_CPUQ_BPDU_VAL(6),
+>  				 ANA_CPUQ_8021_CFG, i);
+> =20
+> +	ret =3D ocelot_prepare_stats_regions(ocelot);
+> +	if (ret) {
+> +		destroy_workqueue(ocelot->stats_queue);
+> +		destroy_workqueue(ocelot->owq);
+> +		return ret;
+> +	}
+> +
+>  	INIT_DELAYED_WORK(&ocelot->stats_work, ocelot_check_stats_work);
+>  	queue_delayed_work(ocelot->stats_queue, &ocelot->stats_work,
+>  			   OCELOT_STATS_CHECK_DELAY);
+> diff --git a/include/soc/mscc/ocelot.h b/include/soc/mscc/ocelot.h
+> index 312b72558659..d3291a5f7e88 100644
+> --- a/include/soc/mscc/ocelot.h
+> +++ b/include/soc/mscc/ocelot.h
+> @@ -542,6 +542,13 @@ struct ocelot_stat_layout {
+>  	char name[ETH_GSTRING_LEN];
+>  };
+> =20
+> +struct ocelot_stats_region {
+> +	struct list_head node;
+> +	u32 offset;
+> +	int count;
+> +	u32 *buf;
+> +};
+> +
+>  enum ocelot_tag_prefix {
+>  	OCELOT_TAG_PREFIX_DISABLED	=3D 0,
+>  	OCELOT_TAG_PREFIX_NONE,
+> @@ -673,6 +680,7 @@ struct ocelot {
+>  	struct regmap_field		*regfields[REGFIELD_MAX];
+>  	const u32 *const		*map;
+>  	const struct ocelot_stat_layout	*stats_layout;
+> +	struct list_head		stats_regions;
+>  	unsigned int			num_stats;
+> =20
+>  	u32				pool_size[OCELOT_SB_NUM][OCELOT_SB_POOL_NUM];
+> --=20
+> 2.25.1
+>=

@@ -2,69 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D75F4AE373
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:23:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1617E4AE4C5
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:37:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387305AbiBHWWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 17:22:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57852 "EHLO
+        id S1344746AbiBHWeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 17:34:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386509AbiBHUqC (ORCPT
+        with ESMTP id S1386515AbiBHUsK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 15:46:02 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E88C0613CB
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 12:46:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=yF5UcKFGU/samSHsGDregSgKCpT7s6aDPXmfk7zYBtM=; b=XzuhX99mlQKkLO0D7MPlvbCNsT
-        S3nvR89L000uXMP1dF73NgG5R/DKClIfbKDjATU8dyILBRZvZ7ciQBAR5zixVjJR//QA9YNHEx7Yn
-        mMG9ZakZFzDUEw//XZ1DyFbHoG/noPZMwx7F7AE09AzErpwRW3Cw48kQJz1BvN69NncNAfPvHdfFC
-        U3Vp9c/9pNtbRhVLp/PK/yw+/vED7AN+jdX6iw351ri8MOB/no/5JRjjX/DWGbZLp7JBsZhmOP+AM
-        s80dMNqw0gY2sFrJbn8WAa/5fYfcl2foE6qCMRjfQ/D90FooMFBSmCVeLadar6siVCOjHEvcFhsHZ
-        1o4bKxlA==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nHXMv-008DTy-C8; Tue, 08 Feb 2022 20:45:46 +0000
-Message-ID: <2434f050-b82c-03e6-ee8f-8c8799119815@infradead.org>
-Date:   Tue, 8 Feb 2022 12:45:38 -0800
+        Tue, 8 Feb 2022 15:48:10 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88F5FC0613CB
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 12:48:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644353289; x=1675889289;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=T1Dq70dqxoGsKjC3M8rAVhSwDwdOT6gVU2rJNwMN/fY=;
+  b=aVdVvj7Yqa2mXwqBAZRfcgSD4QlVlTNTuS2j7l4BOUQ9HVWIIpMOGDgf
+   w4oxL9q1D+/Yz0nHdivUBvA8ET+dm7qBXhUbuZW/6Sn1f72RNqk4SK7Pg
+   CRuuaNKmaCJI4xgYn/cm75HGhA67fJVz0L1S4u6FpbGYHZ9KpnBWtFB8d
+   sjrUjvqkUSxYME8v5sMUXjgRh8TrvXARy488VSrfQ2ej6wNjsyqNYPVf5
+   Zd6zEpG9EZb+ZQrscyQG+Pxx7pg31GfK1nn38AfAri5w1oAoiIY7ksGsG
+   obQ71T9kdpp4w7idHSoK3fYYaSX/v3zIesSmuTamB35fxV17ADS7ATnLY
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="229020844"
+X-IronPort-AV: E=Sophos;i="5.88,353,1635231600"; 
+   d="scan'208";a="229020844"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 12:48:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,353,1635231600"; 
+   d="scan'208";a="632976632"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 08 Feb 2022 12:48:07 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nHXPD-0000j5-2E; Tue, 08 Feb 2022 20:48:07 +0000
+Date:   Wed, 9 Feb 2022 04:47:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [mark:arm64/preempt-dynamic-static-key 7/7]
+ arch/arm64/include/asm/preempt.h:85:25: error: a parameter list without
+ types is only allowed in a function definition
+Message-ID: <202202090439.RWVJ0AMJ-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: Kconfig CONFIG_FB dependency regression
-Content-Language: en-US
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Arnd Bergmann <arnd@kernel.org>
-Cc:     Fabio Estevam <festevam@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        John Youn <John.Youn@synopsys.com>,
-        Bing Yuan <Bing.Yuan@synopsys.com>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <6fc4a81f-1a13-bff9-7b2e-d5bec382cb42@synopsys.com>
- <9bab4777-3034-b789-fdf6-ca8d7e6a8c35@infradead.org>
- <CAOMZO5Aa4WxuadfoFGwwyYyD4UGPm-E258xTWU3-ozp_hwG-7g@mail.gmail.com>
- <d8981e2a-4f61-72bb-e5cc-bf4ded29c08a@synopsys.com>
- <CAK8P3a3ELrSC=KX6cr8UnP6kkJN0AXeAE4EG4oUY=Zz7gG_dgg@mail.gmail.com>
- <b44de208-6d5f-3fcd-0e36-f05745297747@synopsys.com>
- <CAK8P3a27RtHxYwtj=rjxcDzkMdKhC-w9ho=SApHpczma_vU8JQ@mail.gmail.com>
- <6743d6b1-13fe-9c83-f706-82338dd03897@synopsys.com>
- <7ed6137e-cf19-3614-9404-e89389411a8f@infradead.org>
- <992f01cc-eb0c-b503-f9b4-4a037c6cf67a@synopsys.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <992f01cc-eb0c-b503-f9b4-4a037c6cf67a@synopsys.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,139 +63,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git arm64/preempt-dynamic-static-key
+head:   106f60395c0b424e5e05a69bbd40075152f9a17f
+commit: 106f60395c0b424e5e05a69bbd40075152f9a17f [7/7] arm64: support PREEMPT_DYNAMIC
+config: arm64-randconfig-r025-20220208 (https://download.01.org/0day-ci/archive/20220209/202202090439.RWVJ0AMJ-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e8bff9ae54a55b4dbfeb6ba55f723abbd81bf494)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?id=106f60395c0b424e5e05a69bbd40075152f9a17f
+        git remote add mark https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git
+        git fetch --no-tags mark arm64/preempt-dynamic-static-key
+        git checkout 106f60395c0b424e5e05a69bbd40075152f9a17f
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 prepare
 
-On 2/8/22 12:10, Thinh Nguyen wrote:
-> Randy Dunlap wrote:
->>
->>
->> On 2/3/22 19:21, Thinh Nguyen wrote:
->>> Arnd Bergmann wrote:
->>>> On Thu, Feb 3, 2022 at 12:55 AM Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
->>>>> Arnd Bergmann wrote:
->>>>>> On Wed, Feb 2, 2022 at 1:14 AM Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
->>>>>>> Fabio Estevam wrote:
->>>>>>
->>>>>> CONFIG_FB should not normally be needed for booting, so unless
->>>>>> you have a graphical application in your initramfs that requires the /dev/fb0
->>>>>> device to work, it is not supposed to make a difference.
->>>>>>
->>>>>
->>>>> I'm not sure, but it seems like the setup we have isn't the only one
->>>>> that needed it. Fabio also noted that the imx_v6_v7_defconfig also needs
->>>>> to have CONFIG_FB set.
->>>>
->>>> No, that one is different: the change for imx_v6_v7_defconfig was
->>>> done because they actually use a framebuffer console on some devices,
->>>> so the patch just adds the symbol to enable the drivers they are using.
->>>>
->>>> This is expected with my original patch that doesn't implicitly enable
->>>> the framebuffer layer any more. What is not expected is for the kernel
->>>> to hang during boot as you reported for your unidentified platform.
->>>>
->>>>>> Are there any other differences in your .config before and after the patch?
->>>>>> It's possible that you use some other driver that in turn depends on
->>>>>> CONFIG_FB. Does your machine have any graphical output device?
->>>>>> If yes, which driver do you use?
->>>>>
->>>>> I don't have the answer to those questions yet. Need more investigation.
->>>>> I'm new to this particular test setup.
->>>>
->>>> Do you mean you don't know if there is a screen attached to the system?
->>>>
->>>
->>> It does have a graphical output device, but I didn't check what it is or
->>> what driver is driving it. I just notice that after the reported commit,
->>> something stopped working.
->>>
->>>>>>
->>>>>> You may also want to make sure that you have 9d6366e743f3 ("drm:
->>>>>> fb_helper: improve CONFIG_FB dependency") in your kernel, which
->>>>>> fixes a minor problem with my original patch.
->>>>>>
->>>>>
->>>>> The issue also occurs in mainline, which has your minor fix commit
->>>>> above. The revert isn't clean for the latest kernel version. I also have
->>>>> to revert some of the changes along with CONFIG_FB. The revert looks
->>>>> more like this for the latest kernel:
->>>>>
->>>>> diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
->>>>> index b1f22e457fd0..7cbc733a8569 100644
->>>>> --- a/drivers/gpu/drm/Kconfig
->>>>> +++ b/drivers/gpu/drm/Kconfig
->>>>> @@ -118,8 +118,9 @@ config DRM_DEBUG_MODESET_LOCK
->>>>>
->>>>>  config DRM_FBDEV_EMULATION
->>>>>         bool "Enable legacy fbdev support for your modesetting driver"
->>>>> -       depends on DRM_KMS_HELPER
->>>>> -       depends on FB=y || FB=DRM_KMS_HELPER
->>>>> +       depends on DRM
->>>>> +       select DRM_KMS_HELPER
->>>>> +       select FB
->>>>>         select FB_CFB_FILLRECT
->>>>>         select FB_CFB_COPYAREA
->>>>>         select FB_CFB_IMAGEBLIT
->>>>>
->>>>>
->>>>>
->>>>> I attached the configs for kernel v5.17-rc1. The "bad" config is without
->>>>> any revert, the "good" config is with the change above.
->>>>
->>>> Looking at the config, I see that this is for an x86 machine,
->>>> and you have the FB_EFI driver and EFI_EARLYCON enabled.
->>>>
->>>> What I suspec is going on is that you are looking at a screen rather
->>>> than a serial console, and the kernel doesn't actually hang but you
->>>> just don't see any more messages after the DRM driver takes
->>>> over from EFI_EARLYCON because there is no console driver.
->>>>
->>>> In this case, what you see is the intended behavior, not a bug.
->>>> If you want a graphical console in your system, you need to
->>>> enable the support for this in your config.
->>>>
->>>
->>> It sounds like that's the case. Unfortunately I'm not familiar with this
->>> subsystem to say that's what happening. If there's nothing actually
->>> broken from review, we can ignore this email thread.
->>
->> Hi,
->> I don't know of anything that is broken...
->>
->> I am curious how CONFIG_FB_EFI came to be set when going from bad.config to
->> good.config.  Can you explain that?
->>
-> 
-> I just use the change above and "make" with olddefconfig option. Is it
-> not expected?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Maybe I am not doing the same as you. If I take your previous bad.config
-with kernel v5.17-rc2 and use your Kconfig patch:
+All error/warnings (new ones prefixed by >>):
 
-diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
-index b1f22e457fd0..7cbc733a8569 100644
---- a/drivers/gpu/drm/Kconfig
-+++ b/drivers/gpu/drm/Kconfig
-@@ -118,8 +118,9 @@ config DRM_DEBUG_MODESET_LOCK
-
- config DRM_FBDEV_EMULATION
-        bool "Enable legacy fbdev support for your modesetting driver"
--       depends on DRM_KMS_HELPER
--       depends on FB=y || FB=DRM_KMS_HELPER
-+       depends on DRM
-+       select DRM_KMS_HELPER
-+       select FB
-        select FB_CFB_FILLRECT
-        select FB_CFB_COPYAREA
-        select FB_CFB_IMAGEBLIT
-
-and then run
-'make olddefconfig', I see:
-
-# CONFIG_FB_EFI is not set
-
-which is what I would expect to see.
+   In file included from arch/arm64/kernel/asm-offsets.c:10:
+   In file included from include/linux/arm_sdei.h:8:
+   In file included from include/acpi/ghes.h:5:
+   In file included from include/acpi/apei.h:9:
+   In file included from include/linux/acpi.h:13:
+   In file included from include/linux/irqdomain.h:35:
+   In file included from include/linux/of.h:17:
+   In file included from include/linux/kobject.h:20:
+   In file included from include/linux/sysfs.h:16:
+   In file included from include/linux/kernfs.h:11:
+   In file included from include/linux/mutex.h:17:
+   In file included from include/linux/lockdep.h:14:
+   In file included from include/linux/smp.h:110:
+   In file included from include/linux/preempt.h:78:
+>> arch/arm64/include/asm/preempt.h:85:1: warning: declaration specifier missing, defaulting to 'int'
+   DECLARE_STATIC_KEY_TRUE(sk_dynamic_irqentry_exit_cond_resched);
+   ^
+   int
+>> arch/arm64/include/asm/preempt.h:85:25: error: a parameter list without types is only allowed in a function definition
+   DECLARE_STATIC_KEY_TRUE(sk_dynamic_irqentry_exit_cond_resched);
+                           ^
+   1 warning and 1 error generated.
+   make[2]: *** [scripts/Makefile.build:121: arch/arm64/kernel/asm-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1191: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 
-thanks.
--- 
-~Randy
+vim +85 arch/arm64/include/asm/preempt.h
+
+    84	
+  > 85	DECLARE_STATIC_KEY_TRUE(sk_dynamic_irqentry_exit_cond_resched);
+    86	void dynamic_preempt_schedule(void);
+    87	#define __preempt_schedule()		dynamic_preempt_schedule()
+    88	void dynamic_preempt_schedule_notrace(void);
+    89	#define __preempt_schedule_notrace()	dynamic_preempt_schedule_notrace()
+    90	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

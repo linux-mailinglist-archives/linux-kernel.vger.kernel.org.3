@@ -2,117 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 916964AD4DA
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 10:28:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B0C74AD4E6
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 10:30:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354704AbiBHJ2g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 04:28:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37810 "EHLO
+        id S1354721AbiBHJ32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 04:29:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237653AbiBHJ2e (ORCPT
+        with ESMTP id S237653AbiBHJ3X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 04:28:34 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E643CC03FEC0;
-        Tue,  8 Feb 2022 01:28:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 81C35614C4;
-        Tue,  8 Feb 2022 09:28:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AAC7C004E1;
-        Tue,  8 Feb 2022 09:28:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644312511;
-        bh=xg6lF3WqgMKyMC4n+ayD5APVx6cp2PqDNjyejBcqeJY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uqOPs70ARuits274PJBtl8AYteGVMbp1Q+Rcn46o0mE+MQ1hmG2FguFczvPl5d7/i
-         /TESayuhRAd1GIqhCiJIn2nkiZ70wMp3Vk/JkRr6hERDIyhpjuljH1MyzZft6uUzxO
-         7lNnEwWQ+3W+ZRKUaVcLlArJSQl9DxA/W4hL0eNF/lQcXLL1JxrI0nHDVTXgR6kiVK
-         et5vFWP7sG3fEO1CRvAc4tHHnFmC0FpppfFWZTTVfPOxoLOef/cw+AyUlZPItgecUL
-         GlTPzZXiL1HwAYzRQGbON1NkCwL7sVvjBXbbwVop09qk0OdM/7RV+hRA+bkYki8ZQ9
-         JMbC9rhwzp1zQ==
-Date:   Tue, 8 Feb 2022 10:28:56 +0100
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Eric Snowberg <eric.snowberg@oracle.com>, dhowells@redhat.com,
-        dwmw2@infradead.org, ardb@kernel.org, jmorris@namei.org,
-        serge@hallyn.com, nayna@linux.ibm.com, keescook@chromium.org,
-        torvalds@linux-foundation.org, weiyongjun1@huawei.com,
-        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-security-module@vger.kernel.org,
-        James.Bottomley@hansenpartnership.com, pjones@redhat.com,
-        konrad.wilk@oracle.com
-Subject: Re: [PATCH v10 0/8] Enroll kernel keys thru MOK
-Message-ID: <YgI32LAFgGSW6ugh@iki.fi>
-References: <20220126025834.255493-1-eric.snowberg@oracle.com>
- <YfFP6OHqBVNWKL2C@iki.fi>
- <YfFTf6vIpNMIrwH0@iki.fi>
- <78d2c13ad60b5f845cb841d257d1b41290f575c6.camel@linux.ibm.com>
+        Tue, 8 Feb 2022 04:29:23 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D52AC03FEC1;
+        Tue,  8 Feb 2022 01:29:22 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id j14so23571624lja.3;
+        Tue, 08 Feb 2022 01:29:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=9jFgBcCwyw+JzDYCLTCZj7IYtY0O/7Fz6FpDwFz3WSA=;
+        b=Cxuiov0oEhEhABwISaLLYTLHN3tzQ6PF+RTizCxpWY8feQ6Sz2x+TM3jmZxxWmNjv0
+         q28EFyaFYTlAbN1maWEM6RERHZTjoR/WE4mgvNqHUPt7F6oC+sNYeL39cBMJkac7Rt4k
+         kUBoOyjvcvD5l4yg9lsDUOOVNrISyrJwp9TnBNmBymRYU5g+xMtxKKXGdSLwIbGt40Xr
+         9xIN01VqwKLFRMjcCZqZdmBpwPLLHoO8truWxbF68Q80kAncmQE0NdLHt8zNjFWP7x3c
+         bFBayng/aXL7nLzKIHE6ncR/BwiQDML3zbzzfgLrBoV66II6hhCr/WvsDuz+OaCQo3Nv
+         Uy9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=9jFgBcCwyw+JzDYCLTCZj7IYtY0O/7Fz6FpDwFz3WSA=;
+        b=L79+gecAXd+TkUFcY1fbPB9uM7A0iR5Oo0eh13n0QIo4HoEhYzAO/t+DQBv4HGYQIP
+         LZeSF8q/t70KJ30pByt0cqk/OulCBwbWVxbw/Hy2YjrLQZ82Pz91AFD+N2XmH1zaFYmp
+         42u6DiQfWgzTe6+pPymFeWTYFJEyuFOtri3FxinlEmXojzYCkcC4tgVD/t+EEo4/n8ER
+         yZEibR6dfJGVEdPSq5JYr113YG9FH86IZopaEe/7WlWRzueTT5gesf/EUGbJ4CS+J+6P
+         +4S35uWOt4KwgyIs3rIJ/q5QkAlCpDgnQGcPNFrSmJHEhmKB1p8tnqHB8UtsJLDMjfus
+         ddUQ==
+X-Gm-Message-State: AOAM532MZkSEdK7rmsE8WqPdmVej+E/mxiTcPVaTH+9tkz75HKuQIFz+
+        jOdNmQG8wl5JE8907/OemHw=
+X-Google-Smtp-Source: ABdhPJxU2OmzIM9fb0K8HePdfkwJ4Iqh+Y8JVXS0ExB8DZQYOb2juUMhr/5kpFM8JthwVNZVVhO1Yg==
+X-Received: by 2002:a2e:8751:: with SMTP id q17mr2240779ljj.65.1644312560537;
+        Tue, 08 Feb 2022 01:29:20 -0800 (PST)
+Received: from grain.localdomain ([5.18.251.97])
+        by smtp.gmail.com with ESMTPSA id p16sm1958258ljc.86.2022.02.08.01.29.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 01:29:19 -0800 (PST)
+Received: by grain.localdomain (Postfix, from userid 1000)
+        id C01F55A0020; Tue,  8 Feb 2022 12:29:18 +0300 (MSK)
+Date:   Tue, 8 Feb 2022 12:29:18 +0300
+From:   Cyrill Gorcunov <gorcunov@gmail.com>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Adrian Reber <adrian@lisas.de>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
+        kcc@google.com, eranian@google.com,
+        Andrei Vagin <avagin@gmail.com>,
+        Dmitry Safonov <0x7f454c46@gmail.com>
+Subject: Re: [PATCH 00/35] Shadow stacks for userspace
+Message-ID: <YgI37n+3JfLSNQCQ@grain>
+References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
+ <YgAWVSGQg8FPCeba@kernel.org>
+ <YgDIIpCm3UITk896@lisas.de>
+ <8f96c2a6-9c03-f97a-df52-73ffc1d87957@intel.com>
+ <YgI1A0CtfmT7GMIp@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <78d2c13ad60b5f845cb841d257d1b41290f575c6.camel@linux.ibm.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YgI1A0CtfmT7GMIp@kernel.org>
+User-Agent: Mutt/2.0.7 (2021-05-04)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 05:06:09PM -0500, Mimi Zohar wrote:
-> Hi Jarkko,
+On Tue, Feb 08, 2022 at 11:16:51AM +0200, Mike Rapoport wrote:
+>  
+> > Any thoughts on how you would _like_ to see this resolved?
 > 
-> > > Thank you. I'll pick these soon. Is there any objections?
+> Ideally, CRIU will need a knob that will tell the kernel/CET machinery
+> where the next RET will jump, along the lines of
+> restore_signal_shadow_stack() AFAIU.
 > 
-> No objections.
-> > 
-> > Mimi brought up that we need a MAINTAINERS update for this and also
-> > .platform.
-> > 
-> > We have these:
-> > 
-> > - KEYS/KEYRINGS
-> > - CERTIFICATE HANDLING
-> > 
-> > I would put them under KEYRINGS for now and would not consider further
-> > subdivision for the moment.
-> 
-> IMA has dependencies on the platform_certs/ and now on the new .machine
-> keyring.  Just adding "F: security/integrity/platform_certs/" to the
-> KEYS/KEYRINGS record, ignores that dependency.  The discussion wouldn't
-> even be on the linux-integrity mailing list.
-> 
-> Existing requirement:
-> - The keys on the .platform keyring are limited to verifying the kexec
-> image.
-> 
-> New requirements based on Eric Snowbergs' patch set:
-> - When IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY is enabled,
-> the MOK keys will not be loaded directly onto the .machine keyring or
-> indirectly onto the .secondary_trusted_keys keyring.
-> 
-> - Only when a new IMA Kconfig explicitly allows the keys on the
-> .machine keyrings, will the CA keys stored in MOK be loaded onto the
-> .machine keyring.
-> 
-> Unfortunately I don't think there is any choice, but to define a new
-> MAINTAINERS entry.  Perhaps something along the lines of:
-> 
-> KEYS/KEYRINGS_INTEGRITY
-> M:     Jarkko Sakkinen <jarkko@kernel.org>
-> M:     Mimi Zohar <zohar@linux.ibm.com>
-> L:      keyrings@vger.kernel.org
-> L:      linux-integrity@vger.kernel.org
-> F:      security/integrity/platform_certs
+> But such a knob will immediately reduce the security value of the entire
+> thing, and I don't have good ideas how to deal with it :(
 
-WFM. BTW, the patches are now in my tree:
-
-git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
-
-I can add any tags requested. I'll mirror this at some point to linux-next.
-
-/Jarkko
+Probably a kind of latch in the task_struct which would trigger off once
+returt to a different address happened, thus we would be able to jump inside
+paratite code. Of course such trigger should be available under proper
+capability only.

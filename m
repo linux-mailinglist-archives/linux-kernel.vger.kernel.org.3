@@ -2,56 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4BF44ADC60
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 16:21:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7481B4ADC75
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 16:23:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351380AbiBHPVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 10:21:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37298 "EHLO
+        id S1379991AbiBHPW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 10:22:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351513AbiBHPVJ (ORCPT
+        with ESMTP id S233761AbiBHPWz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 10:21:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B514C061577;
-        Tue,  8 Feb 2022 07:21:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 8 Feb 2022 10:22:55 -0500
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EFB4C061576;
+        Tue,  8 Feb 2022 07:22:54 -0800 (PST)
+Received: from localhost.localdomain (ip5f5aebc2.dynamic.kabel-deutschland.de [95.90.235.194])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AEC43615A9;
-        Tue,  8 Feb 2022 15:21:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA49FC004E1;
-        Tue,  8 Feb 2022 15:21:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644333668;
-        bh=lrdpahtoYJMkygHUgb9le9T470vkRfKNDjH3vkLwGbE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=E4sQNblNYa15SBvxVJ+OImzGroFaQLkvFnmGLE2dJKUmWMWoMo2dDOqFYCYGxP6nw
-         5sVn0PeO5rF+J1X+dLm2O8uh9W9VOY9WJScBZNPsRhU55kzFPjy5fGWarNczlzZ66h
-         OToNdl7w9igkGADhcSTGrPBrxnilpXEjY+rHCRGklgNIxiyuV9k5I0T5BNbBLN751N
-         CS+M5xZBH3WkSsWidbI2COz/A6WPeH0FcqkGWTEoqFrUbQ22doExNLI4Bw2tmUcHXv
-         f+vPlvHAyMwEpwOBn5qojtZQv2I+55CVHQytZIPFCLq+VrPlGD1/b/UHPvMPFAgZI4
-         CgpYroZYsiwYA==
-Date:   Tue, 8 Feb 2022 09:21:06 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Li Chen <lchen.firstlove@zohomail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?utf-8?Q?=22Krzysztof_Wilczy=C5=84ski=22?= <kw@linux.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V6] misc: pci_endpoint_test: simplify endpoint test read
- and write operations
-Message-ID: <20220208152106.GA476995@bhelgaas>
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 51C0D61E6478B;
+        Tue,  8 Feb 2022 16:22:52 +0100 (CET)
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>
+Cc:     Paul Menzel <pmenzel@molgen.mpg.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev@lists.ozlabs.org, Song Liu <song@kernel.org>,
+        linux-raid@vger.kernel.org,
+        Matt Brown <matthew.brown.dev@gmail.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH v2 1/2] lib/raid6/test/Makefile: Use `$(pound)` instead of `\#` for Make 4.3
+Date:   Tue,  8 Feb 2022 16:21:48 +0100
+Message-Id: <20220208152148.48534-1-pmenzel@molgen.mpg.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <17ed78f886f.d22c200668349.8594449941761827257@zohomail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,36 +53,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 11:20:15PM -0500, Li Chen wrote:
->  ---- On Mon, 07 Feb 2022 12:56:13 -0500 Bjorn Helgaas <helgaas@kernel.org> wrote ----
->  > On Mon, Feb 07, 2022 at 04:09:05AM -0500, Li Chen wrote:
->  > > #define to_endpoint_test(priv) container_of((priv), struct pci_endpoint_test, \
->  > > -                     miscdev)
->  > > +                        miscdev)
->  > 
->  > Always indent with tabs when possible:
->  > 
->  >   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/coding-style.rst?id=v5.16#n18
->  > 
->  > Hmm, coding-style.rst is unfortunately not very explicit about that.
->  > 
->  > But it's obvious from the existing code in this file that things
->  > should not be indented four spaces, as you did in
->  > pci_endpoint_test_transfer_data().
-> 
-> So, can I say space is not allowed in indentation? If so, I should
-> not use emacs's tabify, because it will not convert 4 space to
-> 8-width tab. I'm also not sure is scripts/Lindent or clang-format is
-> a good choice here, they do too much changes.
+Buidling `raid6test` on Ubuntu 21.10 (ppc64le) with GNU Make 4.3 shows the
+errors below:
 
-I don't know how emacs, Lindent, clang-format, etc work.  I *can* tell
-you that in Linux code:
+    $ cd lib/raid6/test/
+    $ make
+    <stdin>:1:1: error: stray ‘\’ in program
+    <stdin>:1:2: error: stray ‘#’ in program
+    <stdin>:1:11: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘<’ token
+    cp -f ../int.uc int.uc
+    awk -f ../unroll.awk -vN=1 < int.uc > int1.c
+    gcc -I.. -I ../../../include -g -O2                      -c -o int1.o int1.c
+    awk -f ../unroll.awk -vN=2 < int.uc > int2.c
+    gcc -I.. -I ../../../include -g -O2                      -c -o int2.o int2.c
+    awk -f ../unroll.awk -vN=4 < int.uc > int4.c
+    gcc -I.. -I ../../../include -g -O2                      -c -o int4.o int4.c
+    awk -f ../unroll.awk -vN=8 < int.uc > int8.c
+    gcc -I.. -I ../../../include -g -O2                      -c -o int8.o int8.c
+    awk -f ../unroll.awk -vN=16 < int.uc > int16.c
+    gcc -I.. -I ../../../include -g -O2                      -c -o int16.o int16.c
+    awk -f ../unroll.awk -vN=32 < int.uc > int32.c
+    gcc -I.. -I ../../../include -g -O2                      -c -o int32.o int32.c
+    rm -f raid6.a
+    ar cq raid6.a int1.o int2.o int4.o int8.o int16.o int32.o recov.o algos.o tables.o
+    ranlib raid6.a
+    gcc -I.. -I ../../../include -g -O2                      -o raid6test test.c raid6.a
+    /usr/bin/ld: raid6.a(algos.o):/dev/shm/linux/lib/raid6/test/algos.c:28: multiple definition of `raid6_call'; /scratch/local/ccIJjN8s.o:/dev/shm/linux/lib/raid6/test/test.c:22: first defined here
+    collect2: error: ld returned 1 exit status
+    make: *** [Makefile:72: raid6test] Error 1
 
-  - indents always use tabs (width 8) when possible,
+The errors come from the `HAS_ALTIVEC` test, which fails, and the POWER
+optimized versions are not built. That’s also reason nobody noticed on the
+other architectures.
 
-  - up to 7 spaces are allowed after a tab when needed to align
-    something with the previous line, and
+GNU Make 4.3 does not remove the backslash anymore. From the 4.3 release
+announcment:
 
-  - a tab never directly follows a space.
+> * WARNING: Backward-incompatibility!
+>   Number signs (#) appearing inside a macro reference or function invocation
+>   no longer introduce comments and should not be escaped with backslashes:
+>   thus a call such as:
+>     foo := $(shell echo '#')
+>   is legal.  Previously the number sign needed to be escaped, for example:
+>     foo := $(shell echo '\#')
+>   Now this latter will resolve to "\#".  If you want to write makefiles
+>   portable to both versions, assign the number sign to a variable:
+>     H := \#
+>     foo := $(shell echo '$H')
+>   This was claimed to be fixed in 3.81, but wasn't, for some reason.
+>   To detect this change search for 'nocomment' in the .FEATURES variable.
 
-Bjorn
+So, do the same as commit 9564a8cf422d ("Kbuild: fix # escaping in .cmd
+files for future Make") and commit 929bef467771 ("bpf: Use $(pound) instead
+of \# in Makefiles") and define and use a `$(pound)` variable.
+
+Reference for the change in make:
+https://git.savannah.gnu.org/cgit/make.git/commit/?id=c6966b323811c37acedff05b57
+
+Cc: Matt Brown <matthew.brown.dev@gmail.com>
+Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
+---
+v2: Fix checkpatch.pl errors by adding missing quotes around git commit
+message summary/title.
+
+ lib/raid6/test/Makefile | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/lib/raid6/test/Makefile b/lib/raid6/test/Makefile
+index a4c7cd74cff5..4fb7700a741b 100644
+--- a/lib/raid6/test/Makefile
++++ b/lib/raid6/test/Makefile
+@@ -4,6 +4,8 @@
+ # from userspace.
+ #
+ 
++pound := \#
++
+ CC	 = gcc
+ OPTFLAGS = -O2			# Adjust as desired
+ CFLAGS	 = -I.. -I ../../../include -g $(OPTFLAGS)
+@@ -42,7 +44,7 @@ else ifeq ($(HAS_NEON),yes)
+         OBJS   += neon.o neon1.o neon2.o neon4.o neon8.o recov_neon.o recov_neon_inner.o
+         CFLAGS += -DCONFIG_KERNEL_MODE_NEON=1
+ else
+-        HAS_ALTIVEC := $(shell printf '\#include <altivec.h>\nvector int a;\n' |\
++        HAS_ALTIVEC := $(shell printf '$(pound)include <altivec.h>\nvector int a;\n' |\
+                          gcc -c -x c - >/dev/null && rm ./-.o && echo yes)
+         ifeq ($(HAS_ALTIVEC),yes)
+                 CFLAGS += -I../../../arch/powerpc/include
+-- 
+2.34.1
+

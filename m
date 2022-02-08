@@ -2,170 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 941264ADC2A
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 16:13:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7B504ADC31
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 16:15:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379758AbiBHPN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 10:13:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60696 "EHLO
+        id S1349771AbiBHPPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 10:15:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379730AbiBHPNN (ORCPT
+        with ESMTP id S229952AbiBHPPL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 10:13:13 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97C5FC0611DA
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 07:13:10 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id o2so8486374lfd.1
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 07:13:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=/9sKVsOnc0cVS/8zSZ6ugv07iRnjigV6S3zogn8KAC4=;
-        b=y91GP3EZwetiQxMDhlIjjv1c5AykdxJ9Y1SiEXTEOftWxlju22wr2p5GIX3gSBN7iX
-         tFN8XytqW4DUsP8zFMkTGIqM3c6Jw5VCyBqDZYVkicU8hynDjraLo+tHNiMnpr0cydL6
-         x1QHnY6wlwhPbyUo7ucsdSNimadY0DmegaLo6NOqVBLy7t6N3f2QLwHoo5VGoUUUF0zm
-         dPyCzyiPYgXzAbB1NORdIAnathOKKdqwx0iUSjSk/vDCRq0kmSWWDIeT+SD9WTJVOqSj
-         ezBdEl4YkT2ZSQFrKnldxcyJypYejHxI2V/XNuCVR5rIF59sb9TRJ3K5ZUJpCvoYAsmr
-         PTNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=/9sKVsOnc0cVS/8zSZ6ugv07iRnjigV6S3zogn8KAC4=;
-        b=eKtFRjUX+6FXwp8gsazZNPGikFvIeTaUPUiTzy9XsM7T6F+TvjUaJFEUZDyzR/M7nr
-         /xDXnywH+PMzk0rgCOqyFaCHP5Ln4QWVkGS2ai7id1QuKlowALXpPQfxKlOtLw4bkJhu
-         oC+i4eyRznPgCkinUHZ/MmEzfET4WNB3XVlBonu+lGRvuw1xAHiSUroyPJvCiDO2Z+aw
-         Vtjeo83MC422rxaCN9Df9AfPWB+gA9U+3/7YhoKnAYbbi3U+ZOs1uwdlVm5JXUsCReUY
-         Omf2om/2n9l8X0snfjSx7uncZ48xff9k65lr/uEROZVtB7+nZxI7L3nFNp3W9LJUgNRm
-         Tp8g==
-X-Gm-Message-State: AOAM530NecCl9DgicXRnNFM9lEHWxZNUs4tjmwjM8imYJWpbEOF0wer+
-        Si7YLhd1ZKyW9rbNCtMwOUgZEfDytoMFNg4D/gon3A==
-X-Google-Smtp-Source: ABdhPJyNaIalMELpU7nV+Rc098C+S/9d3w1YEoJ5s6tRsR+iyYvZ0Ifdgwyu9N/cr3jjwp+NttkpZxdZ1gPMnzGz+8I=
-X-Received: by 2002:a05:6512:3da8:: with SMTP id k40mr981439lfv.358.1644333188959;
- Tue, 08 Feb 2022 07:13:08 -0800 (PST)
+        Tue, 8 Feb 2022 10:15:11 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A29F0C061576
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 07:15:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644333307; x=1675869307;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=vva12Cv/vVjOHL2Orkmr3Xei9YBMVXoD6aTawTWdu5U=;
+  b=awv47y42SdOyMwzJ1Nu1nrjxAOWzSF4ZfYQJRuuJux3DGBZ65vT9mywD
+   OV0DRl86677nTQzd3tGgrV3KBcgwoygz4hv3B0uYwpEILH57el3dfBPPI
+   ZFQcM31BZ5PR+vwCFCMwxcco66pH2o1u8zBMnCV7HeatGuf4+DLJBgx4P
+   QSKIJKG5bClXeAEgDgNv7DWd3UNsHu3iWAxqCYvXcDj3wxTTrLMb1pDTw
+   AU0C/mI39dY+v1+A/WWBSt8AUbiZPvNltZOBUdMzHd7KyiXZMrS26lIr5
+   Wkm0AacgZcVQ9Vx7R7+zYa6YUS40rsi3BL6slgspb+fHdRItC39KArky9
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="246555559"
+X-IronPort-AV: E=Sophos;i="5.88,353,1635231600"; 
+   d="scan'208";a="246555559"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 07:15:07 -0800
+X-IronPort-AV: E=Sophos;i="5.88,353,1635231600"; 
+   d="scan'208";a="540636634"
+Received: from ijbeckin-mobl2.ger.corp.intel.com (HELO localhost) ([10.252.19.63])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 07:15:03 -0800
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Zhi Wang <zhi.wang.linux@gmail.com>, hch@lst.de, jgg@nvidia.com
+Cc:     intel-gfx@lists.freedesktop.org,
+        intel-gvt-dev@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Zhi Wang <zhi.wang.linux@gmail.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Vivi Rodrigo <rodrigo.vivi@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Terrence Xu <terrence.xu@intel.com>
+Subject: Re: [PATCH v6 1/3] i915/gvt: Introduce the mmio table to support
+ VFIO new mdev API
+In-Reply-To: <20220208111151.13115-1-zhi.a.wang@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20220208111151.13115-1-zhi.a.wang@intel.com>
+Date:   Tue, 08 Feb 2022 17:15:00 +0200
+Message-ID: <871r0dqtjf.fsf@intel.com>
 MIME-Version: 1.0
-References: <5e5f2e45d0a14a55a8b7a9357846114b@hyperstone.com>
- <7c4757cc707740e580c61c39f963a04d@hyperstone.com> <CAPDyKFr0YXCwL-8F9M7mkpNzSQpzw6gNUq2zaiJEXj1jNxUbrg@mail.gmail.com>
- <5c66833d-4b35-2c76-db54-0306e08843e5@intel.com> <79d44b0c54e048b0a9cc86319a24cc19@hyperstone.com>
- <bc706a6ab08c4fe2834ba0c05a804672@hyperstone.com> <b047d374-c282-8c63-32c1-2135eec11fb6@intel.com>
-In-Reply-To: <b047d374-c282-8c63-32c1-2135eec11fb6@intel.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 8 Feb 2022 16:12:32 +0100
-Message-ID: <CAPDyKFrhBdOO5O2Ef1Ny9BuvDCm6vt9TAL1rO=Qsx23xgb6LZA@mail.gmail.com>
-Subject: Re: [PATCHv2] mmc: block: fix read single on recovery logic
-To:     Adrian Hunter <adrian.hunter@intel.com>,
-        =?UTF-8?Q?Christian_L=C3=B6hle?= <CLoehle@hyperstone.com>
-Cc:     "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Avri Altman <avri.altman@wdc.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 8 Feb 2022 at 07:37, Adrian Hunter <adrian.hunter@intel.com> wrote:
+On Tue, 08 Feb 2022, Zhi Wang <zhi.wang.linux@gmail.com> wrote:
+> From: Zhi Wang <zhi.wang.linux@gmail.com>
 >
-> On 04/02/2022 17:11, Christian L=C3=B6hle wrote:
-> > On reads with MMC_READ_MULTIPLE_BLOCK that fail,
-> > the recovery handler will use MMC_READ_SINGLE_BLOCK for
-> > each of the blocks, up to MMC_READ_SINGLE_RETRIES times each.
-> > The logic for this is fixed to never report unsuccessful reads
-> > as success to the block layer.
-> >
-> > On command error with retries remaining, blk_update_request was
-> > called with whatever value error was set last to.
-> > In case it was last set to BLK_STS_OK (default), the read will be
-> > reported as success, even though there was no data read from the device=
-.
-> > This could happen on a CRC mismatch for the response,
-> > a card rejecting the command (e.g. again due to a CRC mismatch).
-> > In case it was last set to BLK_STS_IOERR, the error is reported correct=
-ly,
-> > but no retries will be attempted.
-> >
-> > Fixes: 81196976ed946c ("mmc: block: Add blk-mq support")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
+> To support the new mdev interfaces and the re-factor patches from
+> Christoph, which moves the GVT-g code into a dedicated module, the GVT-g
+> initialization path has to be separated into two phases:
 >
-> Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
+> a) Early initialization.
+>
+> The early initialization of GVT requires to be done when loading i915.
+> Mostly it's because the initial clean HW state needs to be saved before
+> i915 touches the HW.
+>
+> b) Late initalization.
+>
+> This phases of initalization will setup the rest components of GVT-g,
+> which can be done later when the dedicated module is being loaded.
 
-Applied for fixes, thanks to both of you!
-
-Kind regards
-Uffe
-
+What's the baseline for this series?
 
 >
-> > ---
-> > v2:
-> >   - Do not allow data error retries
-> >   - Actually retry MMC_READ_SINGLE_RETRIES times instead of
-> >   MMC_READ_SINGLE_RETRIES-1
-> >
-> >
-> >  drivers/mmc/core/block.c | 28 ++++++++++++++--------------
-> >  1 file changed, 14 insertions(+), 14 deletions(-)
-> >
-> > diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
-> > index 4e61b28a002f..8d718aa56d33 100644
-> > --- a/drivers/mmc/core/block.c
-> > +++ b/drivers/mmc/core/block.c
-> > @@ -1682,31 +1682,31 @@ static void mmc_blk_read_single(struct mmc_queu=
-e *mq, struct request *req)
-> >       struct mmc_card *card =3D mq->card;
-> >       struct mmc_host *host =3D card->host;
-> >       blk_status_t error =3D BLK_STS_OK;
-> > -     int retries =3D 0;
-> >
-> >       do {
-> >               u32 status;
-> >               int err;
-> > +             int retries =3D 0;
-> >
-> > -             mmc_blk_rw_rq_prep(mqrq, card, 1, mq);
-> > +             while (retries++ <=3D MMC_READ_SINGLE_RETRIES) {
-> > +                     mmc_blk_rw_rq_prep(mqrq, card, 1, mq);
-> >
-> > -             mmc_wait_for_req(host, mrq);
-> > +                     mmc_wait_for_req(host, mrq);
-> >
-> > -             err =3D mmc_send_status(card, &status);
-> > -             if (err)
-> > -                     goto error_exit;
-> > -
-> > -             if (!mmc_host_is_spi(host) &&
-> > -                 !mmc_ready_for_data(status)) {
-> > -                     err =3D mmc_blk_fix_state(card, req);
-> > +                     err =3D mmc_send_status(card, &status);
-> >                       if (err)
-> >                               goto error_exit;
-> > -             }
-> >
-> > -             if (mrq->cmd->error && retries++ < MMC_READ_SINGLE_RETRIE=
-S)
-> > -                     continue;
-> > +                     if (!mmc_host_is_spi(host) &&
-> > +                         !mmc_ready_for_data(status)) {
-> > +                             err =3D mmc_blk_fix_state(card, req);
-> > +                             if (err)
-> > +                                     goto error_exit;
-> > +                     }
-> >
-> > -             retries =3D 0;
-> > +                     if (!mrq->cmd->error)
-> > +                             break;
-> > +             }
-> >
-> >               if (mrq->cmd->error ||
-> >                   mrq->data->error ||
-> >
+> v6:
 >
+> - Move the mmio_table.c into i915. (Christoph)
+> - Keep init_device_info and related structures in GVT-g. (Christoph)
+> - Refine the callbacks of the iterator. (Christoph)
+> - Move the flags of MMIO register defination to GVT-g. (Chrsitoph)
+> - Move the mmio block handling to GVT-g.
+>
+> v5:
+>
+> - Re-design the mmio table framework. (Christoph)
+>
+> v4:
+>
+> - Fix the errors of patch checking scripts.
+>
+> v3:
+>
+> - Fix the errors when CONFIG_DRM_I915_WERROR is turned on. (Jani)
+>
+> v2:
+>
+> - Implement a mmio table instead of generating it by marco in i915. (Jani)
+>
+> Cc: Christoph Hellwig <hch@lst.de>
+> Cc: Jason Gunthorpe <jgg@nvidia.com>
+> Cc: Jani Nikula <jani.nikula@linux.intel.com>
+> Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+> Cc: Vivi Rodrigo <rodrigo.vivi@intel.com>
+> Cc: Zhenyu Wang <zhenyuw@linux.intel.com>
+> Cc: Zhi Wang <zhi.a.wang@intel.com>
+> Tested-by: Terrence Xu <terrence.xu@intel.com>
+> Signed-off-by: Zhi Wang <zhi.wang.linux@gmail.com>
+> ---
+>  drivers/gpu/drm/i915/Makefile               |    2 +-
+>  drivers/gpu/drm/i915/gvt/cmd_parser.c       |    2 +-
+>  drivers/gpu/drm/i915/gvt/gvt.h              |    3 +-
+>  drivers/gpu/drm/i915/gvt/handlers.c         | 1062 ++-------------
+>  drivers/gpu/drm/i915/gvt/mmio.h             |   17 -
+>  drivers/gpu/drm/i915/gvt/reg.h              |    9 +-
+>  drivers/gpu/drm/i915/intel_gvt.c            |   20 +-
+>  drivers/gpu/drm/i915/intel_gvt.h            |   37 +
+>  drivers/gpu/drm/i915/intel_gvt_mmio_table.c | 1308 +++++++++++++++++++
+>  9 files changed, 1501 insertions(+), 959 deletions(-)
+>  create mode 100644 drivers/gpu/drm/i915/intel_gvt_mmio_table.c
+>
+
+> diff --git a/drivers/gpu/drm/i915/intel_gvt.h b/drivers/gpu/drm/i915/intel_gvt.h
+> index d7d3fb6186fd..6d3031f3ac25 100644
+> --- a/drivers/gpu/drm/i915/intel_gvt.h
+> +++ b/drivers/gpu/drm/i915/intel_gvt.h
+> @@ -26,7 +26,32 @@
+>  
+>  struct drm_i915_private;
+>  
+> +#include <linux/kernel.h>
+
+Please use minimal includes. Looks like linux/types.h is enough. Please
+also put the includes before the forward declarations.
+
+> +
+>  #ifdef CONFIG_DRM_I915_GVT
+> +
+> +#define D_BDW   (1 << 0)
+> +#define D_SKL	(1 << 1)
+> +#define D_KBL	(1 << 2)
+> +#define D_BXT	(1 << 3)
+> +#define D_CFL	(1 << 4)
+> +
+> +#define D_GEN9PLUS	(D_SKL | D_KBL | D_BXT | D_CFL)
+> +#define D_GEN8PLUS	(D_BDW | D_SKL | D_KBL | D_BXT | D_CFL)
+> +
+> +#define D_SKL_PLUS	(D_SKL | D_KBL | D_BXT | D_CFL)
+> +#define D_BDW_PLUS	(D_BDW | D_SKL | D_KBL | D_BXT | D_CFL)
+> +
+> +#define D_PRE_SKL	(D_BDW)
+> +#define D_ALL		(D_BDW | D_SKL | D_KBL | D_BXT | D_CFL)
+
+If these really need to be in a header in i915/, I think they need to be
+longer with some namespacing or something. I do wish these could be
+hidden though.
+
+> +
+> +struct intel_gvt_mmio_table_iter {
+> +	struct drm_i915_private *i915;
+> +	void *data;
+> +	int (*handle_mmio_cb)(struct intel_gvt_mmio_table_iter *iter,
+> +			      u32 offset, u32 device, u32 size);
+> +};
+
+We're heavily transitioning towards having a corresponding .h for each
+.c instead of catch all headers. It's still a work in progress, but I'd
+prefer having the declarations for stuff in intel_gvt_mmio_table.c
+placed in intel_gvt_mmio_table.h, and named accordingly. Like I
+suggested in my previous mails.
+
+> +
+>  int intel_gvt_init(struct drm_i915_private *dev_priv);
+>  void intel_gvt_driver_remove(struct drm_i915_private *dev_priv);
+>  int intel_gvt_init_device(struct drm_i915_private *dev_priv);
+> @@ -34,6 +59,8 @@ void intel_gvt_clean_device(struct drm_i915_private *dev_priv);
+>  int intel_gvt_init_host(void);
+>  void intel_gvt_sanitize_options(struct drm_i915_private *dev_priv);
+>  void intel_gvt_resume(struct drm_i915_private *dev_priv);
+> +unsigned long intel_gvt_get_device_type(struct drm_i915_private *i915);
+> +int intel_gvt_iterate_mmio_table(struct intel_gvt_mmio_table_iter *iter);
+>  #else
+>  static inline int intel_gvt_init(struct drm_i915_private *dev_priv)
+>  {
+> @@ -51,6 +78,16 @@ static inline void intel_gvt_sanitize_options(struct drm_i915_private *dev_priv)
+>  static inline void intel_gvt_resume(struct drm_i915_private *dev_priv)
+>  {
+>  }
+> +
+> +unsigned long intel_gvt_get_device_type(struct drm_i915_private *i915)
+> +{
+> +	return 0;
+> +}
+> +
+> +int intel_gvt_iterate_mmio_table(struct intel_gvt_mmio_table_iter *iter)
+> +{
+> +	return 0;
+> +}
+
+Stubs need to be static inlines.
+
+>  #endif
+>  
+>  #endif /* _INTEL_GVT_H_ */
+> diff --git a/drivers/gpu/drm/i915/intel_gvt_mmio_table.c b/drivers/gpu/drm/i915/intel_gvt_mmio_table.c
+> new file mode 100644
+> index 000000000000..b9de72e939d3
+> --- /dev/null
+> +++ b/drivers/gpu/drm/i915/intel_gvt_mmio_table.c
+> @@ -0,0 +1,1308 @@
+> +/*
+> + * Copyright(c) 2021 Intel Corporation. All rights reserved.
+> + *
+> + * Permission is hereby granted, free of charge, to any person obtaining a
+> + * copy of this software and associated documentation files (the "Software"),
+> + * to deal in the Software without restriction, including without limitation
+> + * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+> + * and/or sell copies of the Software, and to permit persons to whom the
+> + * Software is furnished to do so, subject to the following conditions:
+> + *
+> + * The above copyright notice and this permission notice (including the next
+> + * paragraph) shall be included in all copies or substantial portions of the
+> + * Software.
+> + *
+> + * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+> + * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+> + * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+> + * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+> + * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+> + * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+> + * SOFTWARE.
+
+Please use SPDX headers for new files.
+
+
+BR,
+Jani.
+
+-- 
+Jani Nikula, Intel Open Source Graphics Center

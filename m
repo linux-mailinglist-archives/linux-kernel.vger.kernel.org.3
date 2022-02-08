@@ -2,38 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E3534ACF41
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 03:55:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD3CA4ACF4A
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 03:58:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346262AbiBHCzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 21:55:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40892 "EHLO
+        id S1346284AbiBHC6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 21:58:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346250AbiBHCzL (ORCPT
+        with ESMTP id S231955AbiBHC6I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 21:55:11 -0500
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CCCDC0401DC;
-        Mon,  7 Feb 2022 18:55:08 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0V3tqOcC_1644288902;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V3tqOcC_1644288902)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 08 Feb 2022 10:55:02 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     damien.lemoal@opensource.wdc.com, jejb@linux.ibm.com
-Cc:     jinpu.wang@cloud.ionos.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next v3] scsi: pm8001: clean up some inconsistent indentin
-Date:   Tue,  8 Feb 2022 10:55:00 +0800
-Message-Id: <20220208025500.29511-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Mon, 7 Feb 2022 21:58:08 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF8EC061355;
+        Mon,  7 Feb 2022 18:58:07 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id ki18-20020a17090ae91200b001b8be87e9abso633956pjb.1;
+        Mon, 07 Feb 2022 18:58:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=PsxFbDSNZpcmTWdPPUN2ubBjBHt1BmUNOa7pdHIl9Mw=;
+        b=cxhN56UzIkk3/riQammDVj5UrW9BJKAVVSVT6UpMhgozg62JaDp3AuntV6fGmwm+3j
+         HOKlesYtObZSWCYqKAKGp7/GhfJ9tLbTB3uDszoNc7CFDPMPKpQXo/mGMnYEk1v3RDmX
+         wvi+BnLW4OciI1cJ0vy3SRACodDXXmqMRVqXnaMkdFVumYKC22KeuwYiklrIKcPAMcA5
+         rqvf4YOzzmrN9rCdoU+FcvwmHoGpoSMO9Asmo7OgOHfFjQQG3lLMofCxVy+HmbzbFQj1
+         2EKuBmjuq8lYKnApBnK1FNbWFf96MWrDguEEbZecsy7D2a1iEpQujrdatUKn4VLT5hX+
+         XsiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=PsxFbDSNZpcmTWdPPUN2ubBjBHt1BmUNOa7pdHIl9Mw=;
+        b=Rsc5I0swD8W2d1NJc7lsAv/TlWI6Eyvq3KPqUU8HIP0sS7FrZnmiNIQitVURl5Ob5w
+         CQ62eBh+cbJPsVF9lvvbPRCmpJ0rIMX+RGP95vk4bjNZor/U0U93c6J+L8SPAUbaeYTM
+         AZyDpOtkK0hzFeOcpurBGJOlKvyM+7D6ik/rqKRKaHUwOW+R/DFeM1iOrHVjJ1aBMbwN
+         9y+Mwb0wwGlF4RhtnWlnO3joI7BOT3UXkQ5xtImjSDa+leKWRnoLRiL5TSHBNJg+0Rtu
+         Eqi2FeNoy9PTVboB1b4xV8qv9wj0vX8EF4o+7vIPXznmBU+/uT/M4f8X8pXU1+qZWPW1
+         XRQQ==
+X-Gm-Message-State: AOAM531l/sn4f/l/oXLjFUaqpQVV1eCNmGpbOHHnAZoEDcnZJFEWk6wg
+        CGxwDuakoW6rBTNsoz5kWnQ=
+X-Google-Smtp-Source: ABdhPJyUI4ouCTpVRF2nnm+Plx9CMBupCNydX9ZAikZ8jgpIdAx7sIl4oCxweW4CCKAnp4QLqLeH2A==
+X-Received: by 2002:a17:902:6a81:: with SMTP id n1mr2232499plk.105.1644289086915;
+        Mon, 07 Feb 2022 18:58:06 -0800 (PST)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id j14sm13855391pfj.218.2022.02.07.18.58.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Feb 2022 18:58:05 -0800 (PST)
+Message-ID: <a25c41ac-22fe-2142-5939-44d5fa288b79@gmail.com>
+Date:   Mon, 7 Feb 2022 18:58:04 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v8 net-next 08/10] net: dsa: microchip: add support for
+ port mirror operations
+Content-Language: en-US
+To:     Prasanna Vengateshan <prasanna.vengateshan@microchip.com>,
+        andrew@lunn.ch, netdev@vger.kernel.org, olteanv@gmail.com,
+        robh+dt@kernel.org
+Cc:     UNGLinuxDriver@microchip.com, woojung.huh@microchip.com,
+        hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        vivien.didelot@gmail.com, devicetree@vger.kernel.org
+References: <20220207172204.589190-1-prasanna.vengateshan@microchip.com>
+ <20220207172204.589190-9-prasanna.vengateshan@microchip.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220207172204.589190-9-prasanna.vengateshan@microchip.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -41,103 +80,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Eliminate the follow smatch warning:
-drivers/scsi/pm8001/pm8001_ctl.c:760 pm8001_update_flash() warn:
-inconsistent indenting
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
 
-  Changes in v3:
---According to Damien's suggestion
-  1) "u32 fc_len = 0;" -> "u32 fc_len;".
-  2) Add spaces around the "-" and remove the unnecessary parenthesis.
-  3) Move "fc_len = (partitionSize + HEADER_LEN) % IOCTL_BUF_SIZE;"down,
-     right above the "if" where the variable is used.
+On 2/7/2022 9:22 AM, Prasanna Vengateshan wrote:
+> Added support for port_mirror_add() and port_mirror_del operations
+> 
+> Sniffing is limited to one port & alert the user if any new
+> sniffing port is selected
+> 
+> Signed-off-by: Prasanna Vengateshan <prasanna.vengateshan@microchip.com>
+> Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
 
- drivers/scsi/pm8001/pm8001_ctl.c | 61 ++++++++++++++++----------------
- 1 file changed, 31 insertions(+), 30 deletions(-)
-
-diff --git a/drivers/scsi/pm8001/pm8001_ctl.c b/drivers/scsi/pm8001/pm8001_ctl.c
-index 41a63c9b719b..66307783c73c 100644
---- a/drivers/scsi/pm8001/pm8001_ctl.c
-+++ b/drivers/scsi/pm8001/pm8001_ctl.c
-@@ -727,6 +727,8 @@ static int pm8001_update_flash(struct pm8001_hba_info *pm8001_ha)
- 	u32		sizeRead = 0;
- 	u32		ret = 0;
- 	u32		length = 1024 * 16 + sizeof(*payload) - 1;
-+	u32		fc_len;
-+	u8		*read_buf;
- 
- 	if (pm8001_ha->fw_image->size < 28) {
- 		pm8001_ha->fw_status = FAIL_FILE_SIZE;
-@@ -755,36 +757,35 @@ static int pm8001_update_flash(struct pm8001_hba_info *pm8001_ha)
- 			fwControl->retcode = 0;/* OUT */
- 			fwControl->offset = loopNumber * IOCTL_BUF_SIZE;/*OUT */
- 
--		/* for the last chunk of data in case file size is not even with
--		4k, load only the rest*/
--		if (((loopcount-loopNumber) == 1) &&
--			((partitionSize + HEADER_LEN) % IOCTL_BUF_SIZE)) {
--			fwControl->len =
--				(partitionSize + HEADER_LEN) % IOCTL_BUF_SIZE;
--			memcpy((u8 *)fwControl->buffer,
--				(u8 *)pm8001_ha->fw_image->data + sizeRead,
--				(partitionSize + HEADER_LEN) % IOCTL_BUF_SIZE);
--			sizeRead +=
--				(partitionSize + HEADER_LEN) % IOCTL_BUF_SIZE;
--		} else {
--			memcpy((u8 *)fwControl->buffer,
--				(u8 *)pm8001_ha->fw_image->data + sizeRead,
--				IOCTL_BUF_SIZE);
--			sizeRead += IOCTL_BUF_SIZE;
--		}
--
--		pm8001_ha->nvmd_completion = &completion;
--		ret = PM8001_CHIP_DISP->fw_flash_update_req(pm8001_ha, payload);
--		if (ret) {
--			pm8001_ha->fw_status = FAIL_OUT_MEMORY;
--			goto out;
--		}
--		wait_for_completion(&completion);
--		if (fwControl->retcode > FLASH_UPDATE_IN_PROGRESS) {
--			pm8001_ha->fw_status = fwControl->retcode;
--			ret = -EFAULT;
--			goto out;
--		}
-+			/*
-+			 * for the last chunk of data in case file size is
-+			 * not even with 4k, load only the rest
-+			 */
-+
-+			read_buf  = (u8 *)pm8001_ha->fw_image->data + sizeRead;
-+			fc_len = (partitionSize + HEADER_LEN) % IOCTL_BUF_SIZE;
-+
-+			if (loopcount - loopNumber == 1 && fc_len) {
-+				fwControl->len = fc_len;
-+				memcpy((u8 *)fwControl->buffer, read_buf, fc_len);
-+				sizeRead += fc_len;
-+			} else {
-+				memcpy((u8 *)fwControl->buffer, read_buf, IOCTL_BUF_SIZE);
-+				sizeRead += IOCTL_BUF_SIZE;
-+			}
-+
-+			pm8001_ha->nvmd_completion = &completion;
-+			ret = PM8001_CHIP_DISP->fw_flash_update_req(pm8001_ha, payload);
-+			if (ret) {
-+				pm8001_ha->fw_status = FAIL_OUT_MEMORY;
-+				goto out;
-+			}
-+			wait_for_completion(&completion);
-+			if (fwControl->retcode > FLASH_UPDATE_IN_PROGRESS) {
-+				pm8001_ha->fw_status = fwControl->retcode;
-+				ret = -EFAULT;
-+				goto out;
-+			}
- 		}
- 	}
- out:
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-2.20.1.7.g153144c
-
+Florian

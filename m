@@ -2,112 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFD534AE04E
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 19:05:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F08424AE050
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 19:06:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384517AbiBHSEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 13:04:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46404 "EHLO
+        id S1384541AbiBHSFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 13:05:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384451AbiBHSEq (ORCPT
+        with ESMTP id S1384451AbiBHSFF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 13:04:46 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22A67C06157B
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 10:04:43 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id e3so18296619wra.0
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 10:04:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=rd4kXiCHX1JiB3XHGRQrPutLCcRUBpsFocZnJyKVeYA=;
-        b=Zekmcg/F0gXl2lTHQ+Iuf+YDVpXmk8DGyGcYKxpgugmaot8g+yWX82rTWFuFGN1kS5
-         aFJOxReAILg1ETjWOPttcJ6oI8xi2hhL2Zvjqe57i3V6opHKDjPWkkQPA1CPSYMJimmo
-         52obj1Tp1FohouuLlGKSbO8rTOcvnuO1Tmo1Zb0K/GULbxUS3kEUhvbQIVNWCTmYZlmQ
-         9JAZo8hD+RdE13bIDCngVhut0hagwfUVoxOtq8oKZKZDM0ANYGW6aXXKaqQ+SrKCr+g9
-         n2XYSpMiiNnD2er375NvRle9F0HI/p9bFB7iXMSE/sjgq8htImz9UTKk+cFxikC/WtB5
-         SRzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=rd4kXiCHX1JiB3XHGRQrPutLCcRUBpsFocZnJyKVeYA=;
-        b=OnAEejvFcsCYx7bdIy69KX5/f3Pytmqe8j2O78a0NtgCo0h7OXuWAt3QxSVyRJPfMs
-         sVaRjsMPXsQATaL3xs07cnSI60ALDSJX5QTSqvJ5ru05WYgnFuQbP7dUWBq34Eg3bfaZ
-         hJQE8N/PEbKYrWz6Cs5uvJ7GjB8k9VG5TelKxVxl73ln2e9ShkwZFsl4y5KZXH4+dguc
-         fXvyCD1QtOpE2AYX8Th62ekXnBwKIithHW1WQP/FxTJEtiKScN49NEvSg+SzCcKyqEqD
-         Jg8xf6yZqQCqaXtATsmds3NJ9paCOkBmXTMc9r/m7e7aTXcbefkLrnar2DMGr56ELnGk
-         B7FQ==
-X-Gm-Message-State: AOAM532yFOt53MBonxIwG1oxxAnth13Zdc+lYxL4T/oRdW6LZ+RAtkQv
-        gDnavUb0UKkRp4kScfstPzc=
-X-Google-Smtp-Source: ABdhPJz6VHSsE0bxxnuY/CnoGXeD4TPVnfrv8CkWjmRReX2sSZvNww99j70HMbHPdto99+fvEXXB5A==
-X-Received: by 2002:adf:e18d:: with SMTP id az13mr4632410wrb.521.1644343481727;
-        Tue, 08 Feb 2022 10:04:41 -0800 (PST)
-Received: from localhost.localdomain (host-95-245-2-16.retail.telecomitalia.it. [95.245.2.16])
-        by smtp.gmail.com with ESMTPSA id n26sm3176872wms.13.2022.02.08.10.04.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 10:04:41 -0800 (PST)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Subject: [PATCH v2 2/2] staging: r8188eu: Use kzalloc() with GFP_ATOMIC in atomic context
-Date:   Tue,  8 Feb 2022 19:04:26 +0100
-Message-Id: <20220208180426.27455-3-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220208180426.27455-1-fmdefrancesco@gmail.com>
-References: <20220208180426.27455-1-fmdefrancesco@gmail.com>
+        Tue, 8 Feb 2022 13:05:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E58A6C061576;
+        Tue,  8 Feb 2022 10:05:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8164761769;
+        Tue,  8 Feb 2022 18:05:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D92F3C004E1;
+        Tue,  8 Feb 2022 18:05:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644343503;
+        bh=x3ZJuDBTniUyDf3Xnvsfn74XEYbYNZ//7DynsFShFaQ=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=TyvPKbJKH33KIeXflepn3AXItCnR743wcrZ3ppKSgbz+7JA41e40pOowWKFbyRxd2
+         CQYpK8aHcVcBmHKdHPYOCZwWztqeMZp1PVl/jq+Ql2mwIrkKurq2sOq3zm/ulOPDk4
+         1NrVdwu3pVGy/qH17MaQNjQL8xdnpaNmSjw80sXJRjbQIRSCUyLx7gyV1ZqGkxJ2KF
+         /eOWTHnTvJGSwGoGHO4zb8QbdX0mcQVui6yvJS2tW5t1wKrO0rOBdI4Qnr6XYllAd7
+         aGM4Mr0HwaDczU5/h7yOdUwUqD8BNB79yFRooUnWinLqL2hiJoTdBqNaY8npT4MRAB
+         g+z277SmdDm2w==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 9F2D25C043B; Tue,  8 Feb 2022 10:05:03 -0800 (PST)
+Date:   Tue, 8 Feb 2022 10:05:03 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, rcu@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rcutorture: Add missing - to `--do-allmodconfig` in usage
+Message-ID: <20220208180503.GR4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220208105240.43600-1-pmenzel@molgen.mpg.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220208105240.43600-1-pmenzel@molgen.mpg.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the GFP_ATOMIC flag of kzalloc() with two memory allocation in rtw_set_key() 
-because it is not allowed to sleep while it executes in atomic context.
+On Tue, Feb 08, 2022 at 11:52:40AM +0100, Paul Menzel wrote:
+> The usage currently lists `--doallmodconfig`, resulting in:
+> 
+>     $ tools/testing/selftests/rcutorture/bin/torture.sh --doallmodconfig
+>     Unknown argument --doallmodconfig
+>     […]
+> 
+> Add the missing dash for `--do-allmodconfig`.
+> 
+> Fixes: a115a775a8d5 ("torture: Add "make allmodconfig" to torture.sh")
+> Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
 
-With the GFP_ATOMIC type flag, the allocation is high priority and thus it 
-cannot sleep.
+Good eyes, thank you!
 
-This issue is detected by Smatch which emits the following warning:
+I will add your Reported-by and your Fixes line (with attribution) to
+this commit in -rcu:
 
-"drivers/staging/r8188eu/core/rtw_mlme.c:1603 rtw_set_key() warn: sleeping in atomic context".
+dbc3fa1ffb4b ("torture: Make torture.sh help message match reality")
 
-Fixes: 79f712ea994d ("staging: r8188eu: Remove wrappers for kalloc() and kzalloc()")
-Fixes: 15865124feed ("staging: r8188eu: introduce new core dir for RTL8188eu driver")
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
----
- drivers/staging/r8188eu/core/rtw_mlme.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+							Thanx, Paul
 
-diff --git a/drivers/staging/r8188eu/core/rtw_mlme.c b/drivers/staging/r8188eu/core/rtw_mlme.c
-index f5b2df72e0f4..860835e29b79 100644
---- a/drivers/staging/r8188eu/core/rtw_mlme.c
-+++ b/drivers/staging/r8188eu/core/rtw_mlme.c
-@@ -1600,12 +1600,12 @@ int rtw_set_key(struct adapter *adapter, struct security_priv *psecuritypriv, in
- 	struct mlme_priv		*pmlmepriv = &adapter->mlmepriv;
- 	int	res = _SUCCESS;
- 
--	pcmd = kzalloc(sizeof(*pcmd), GFP_KERNEL);
-+	pcmd = kzalloc(sizeof(*pcmd), GFP_ATOMIC);
- 	if (!pcmd) {
- 		res = _FAIL;  /* try again */
- 		goto exit;
- 	}
--	psetkeyparm = kzalloc(sizeof(*psetkeyparm), GFP_KERNEL);
-+	psetkeyparm = kzalloc(sizeof(*psetkeyparm), GFP_ATOMIC);
- 	if (!psetkeyparm) {
- 		kfree(pcmd);
- 		res = _FAIL;
--- 
-2.34.1
-
+> ---
+>  tools/testing/selftests/rcutorture/bin/torture.sh | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/rcutorture/bin/torture.sh b/tools/testing/selftests/rcutorture/bin/torture.sh
+> index eae88aacca2a..3adcc83dd55d 100755
+> --- a/tools/testing/selftests/rcutorture/bin/torture.sh
+> +++ b/tools/testing/selftests/rcutorture/bin/torture.sh
+> @@ -72,7 +72,7 @@ usage () {
+>  	echo "       --configs-locktorture \"config-file list w/ repeat factor (10*LOCK01)\""
+>  	echo "       --configs-scftorture \"config-file list w/ repeat factor (2*CFLIST)\""
+>  	echo "       --doall"
+> -	echo "       --doallmodconfig / --do-no-allmodconfig"
+> +	echo "       --do-allmodconfig / --do-no-allmodconfig"
+>  	echo "       --do-clocksourcewd / --do-no-clocksourcewd"
+>  	echo "       --do-kasan / --do-no-kasan"
+>  	echo "       --do-kcsan / --do-no-kcsan"
+> -- 
+> 2.34.1
+> 

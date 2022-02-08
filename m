@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FD714ACE45
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:49:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81C0C4ACE4F
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:49:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239123AbiBHBsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 20:48:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58926 "EHLO
+        id S243574AbiBHBsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 20:48:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242270AbiBHB1s (ORCPT
+        with ESMTP id S245423AbiBHB1y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 20:27:48 -0500
+        Mon, 7 Feb 2022 20:27:54 -0500
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD42C043189
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 17:27:48 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592C1C0401C9
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 17:27:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644283668; x=1675819668;
+  t=1644283672; x=1675819672;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=yrnVpbUTBJshPuiouZjgXbQVpQ4Ovq0yS3i0Rg1TiQc=;
-  b=GMMM8E/WO/6dr+a+FiqV7UK7/z50KLslARxpMy5aakIFtmKrrhBAY6W8
-   wIKoEPxqLjcyOzR7n724y4SpSp6uVjjwB/ql9V+jZDWefnzWVGHE6LwE4
-   lyFGom7COV8XGy+5RoU04yoU9iBDLLkx0fPheBWkISLvor99eGE6+mCac
-   kYGdFvi3siTxS1OlE1N55kD/ZuVIMTHFFV1QC8RgzrY5gY/D7uss5P46s
-   eXQIZE6XzEtpExxP08bwhbauftitol2gpD+PK8/KVIuwUBB6t0c1tNKx9
-   KwremeDl3RDKAlY/8y0tX11NvHfwFFSeVpySTWW6l299WoEbLMoQD4mR+
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="236251973"
+  bh=v33tBhS6iHtpgvcd5VzkFlhXhg4W9ZiFf3SVGw4ZxjY=;
+  b=npF3fdGPL5iyGpKmyBy4ZaX9fy7RQ2CZCbzu+VTfRgzccr5Ek5KkWb0c
+   P/7W8VQQSgvMoq78MJAJ71wdj8CaiuofKN6rwcWViZohNWJ9Fd6odLyI3
+   HmCIE3jz7w8HqN/gnuzoohQKOup+3cKQIDjcmyw4eIKITB/XwHxyBoP/r
+   ME3fErJAg3quzFtn6WpCISlB7YLSoZhtVuCpu8zh2mOCZmXaHw5WeLKsb
+   LXorwq8WEYhZ+3EMcMy20E1mgAlQUoAurqelYA/VA6RU+ruYoEAys6ENw
+   Vkn1pcFPs8BU0A3eSN1Wh/DyQj6a8H7mw0Jjw2nucG6XzyLfGkxF0dpnk
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="236251981"
 X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
-   d="scan'208";a="236251973"
+   d="scan'208";a="236251981"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 17:27:47 -0800
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 17:27:52 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
-   d="scan'208";a="677948831"
+   d="scan'208";a="677948843"
 Received: from allen-box.sh.intel.com ([10.239.159.118])
-  by fmsmga001.fm.intel.com with ESMTP; 07 Feb 2022 17:27:44 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 07 Feb 2022 17:27:48 -0800
 From:   Lu Baolu <baolu.lu@linux.intel.com>
 To:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
         Christoph Hellwig <hch@infradead.org>,
@@ -54,10 +54,11 @@ Cc:     Alex Williamson <alex.williamson@redhat.com>,
         Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        Lu Baolu <baolu.lu@linux.intel.com>
-Subject: [PATCH v2 05/10] iommu: Remove apply_resv_region
-Date:   Tue,  8 Feb 2022 09:25:54 +0800
-Message-Id: <20220208012559.1121729-6-baolu.lu@linux.intel.com>
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Christoph Hellwig <hch@lst.de>
+Subject: [PATCH v2 06/10] drm/nouveau/device: Get right pgsize_bitmap of iommu_domain
+Date:   Tue,  8 Feb 2022 09:25:55 +0800
+Message-Id: <20220208012559.1121729-7-baolu.lu@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220208012559.1121729-1-baolu.lu@linux.intel.com>
 References: <20220208012559.1121729-1-baolu.lu@linux.intel.com>
@@ -73,54 +74,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The apply_resv_region callback in iommu_ops was introduced to reserve an
-IOVA range in the given DMA domain when the IOMMU driver manages the IOVA
-by itself. As all drivers converted to use dma-iommu in the core, there's
-no driver using this anymore. Remove it to avoid dead code.
+The supported page sizes of an iommu_domain are saved in the pgsize_bitmap
+field. Retrieve the value from the right place.
 
-Suggested-by: Robin Murphy <robin.murphy@arm.com>
 Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+Reviewed-by: Robin Murphy <robin.murphy@arm.com>
+Link: https://lore.kernel.org/r/20211218074546.1772553-1-baolu.lu@linux.intel.com
+Reviewed-by: Christoph Hellwig <hch@lst.de>
 ---
- include/linux/iommu.h | 4 ----
- drivers/iommu/iommu.c | 3 ---
- 2 files changed, 7 deletions(-)
+ drivers/gpu/drm/nouveau/nvkm/engine/device/tegra.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-index 9983a01373b2..9ffa2e88f3d0 100644
---- a/include/linux/iommu.h
-+++ b/include/linux/iommu.h
-@@ -214,7 +214,6 @@ struct iommu_iotlb_gather {
-  * @set_pgtable_quirks: Set io page table quirks (IO_PGTABLE_QUIRK_*)
-  * @get_resv_regions: Request list of reserved regions for a device
-  * @put_resv_regions: Free list of reserved regions for a device
-- * @apply_resv_region: Temporary helper call-back for iova reserved ranges
-  * @of_xlate: add OF master IDs to iommu grouping
-  * @is_attach_deferred: Check if domain attach should be deferred from iommu
-  *                      driver init to device driver init (default no)
-@@ -268,9 +267,6 @@ struct iommu_ops {
- 	/* Request/Free a list of reserved regions for a device */
- 	void (*get_resv_regions)(struct device *dev, struct list_head *list);
- 	void (*put_resv_regions)(struct device *dev, struct list_head *list);
--	void (*apply_resv_region)(struct device *dev,
--				  struct iommu_domain *domain,
--				  struct iommu_resv_region *region);
- 
- 	int (*of_xlate)(struct device *dev, struct of_phandle_args *args);
- 	bool (*is_attach_deferred)(struct iommu_domain *domain, struct device *dev);
-diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-index cf54dc925827..df6bd1d58c74 100644
---- a/drivers/iommu/iommu.c
-+++ b/drivers/iommu/iommu.c
-@@ -785,9 +785,6 @@ static int iommu_create_device_direct_mappings(struct iommu_group *group,
- 		dma_addr_t start, end, addr;
- 		size_t map_size = 0;
- 
--		if (domain->ops->apply_resv_region)
--			domain->ops->apply_resv_region(dev, domain, entry);
--
- 		start = ALIGN(entry->start, pg_size);
- 		end   = ALIGN(entry->start + entry->length, pg_size);
- 
+diff --git a/drivers/gpu/drm/nouveau/nvkm/engine/device/tegra.c b/drivers/gpu/drm/nouveau/nvkm/engine/device/tegra.c
+index d0d52c1d4aee..992cc285f2fe 100644
+--- a/drivers/gpu/drm/nouveau/nvkm/engine/device/tegra.c
++++ b/drivers/gpu/drm/nouveau/nvkm/engine/device/tegra.c
+@@ -133,7 +133,7 @@ nvkm_device_tegra_probe_iommu(struct nvkm_device_tegra *tdev)
+ 		 * or equal to the system's PAGE_SIZE, with a preference if
+ 		 * both are equal.
+ 		 */
+-		pgsize_bitmap = tdev->iommu.domain->ops->pgsize_bitmap;
++		pgsize_bitmap = tdev->iommu.domain->pgsize_bitmap;
+ 		if (pgsize_bitmap & PAGE_SIZE) {
+ 			tdev->iommu.pgshift = PAGE_SHIFT;
+ 		} else {
 -- 
 2.25.1
 

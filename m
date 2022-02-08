@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1E344AE4BB
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:37:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F8D44AE4A2
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:37:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388518AbiBHWdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 17:33:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43346 "EHLO
+        id S1388929AbiBHWdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 17:33:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386215AbiBHTnz (ORCPT
+        with ESMTP id S1386217AbiBHTn5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 14:43:55 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A04E8C0613CB
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 11:43:54 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id c10so234587pfi.9
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 11:43:54 -0800 (PST)
+        Tue, 8 Feb 2022 14:43:57 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A896CC0613CB
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 11:43:56 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id y7so265902plp.2
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 11:43:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Yy80CGDeGmOdUiLaU44tdYuu65avXredLZvHqvqZxvA=;
-        b=coFrZx+umVb8C/9VoaeNS8agdUuDH1jjXrRj9GBST7lfrgMyXv+urqHK84NA+cqHK2
-         YPP8ni+X5Tj3wenKzAOVxLCtqjfiED+u36ZZ9ETh3Bwnpy4r2M/jDQIWtW0kD7tvva6G
-         pjqXROY4r0loXEnFtL3ug4ia+hY746GpzMeAFbHuyUR4/gs28nIldej+IlIS5Y156+Fz
-         5Y+DXajDA+R/a+8V2WhjcIXodpHFPeTJcw8LsNLBv2zyWhu0/h6Ya6/k+ydhZ94Sax7g
-         +DICq7kdEw6BwaGWi6hz1N7nDIXFOPBr0r4QYmYf8NMT52ruOU6Kv8biZ560q5sTpmpH
-         wRrA==
+        bh=EQBAIvQLg20+7U3cvyTRGOoJ39hD5GGWkL0kfjAijZk=;
+        b=CVu9Gz+7ny2CqqZn2AmzB3OZOJ8utvXtXJT+uTffuOURUE7m4sHaUmMxkTYnuAhjoE
+         WpvdEV50nl2YkgqjdIKaYtuRoS3DB4UiLkqWjg/dv4A+P3BReIxixbAewFUz2NQQubFe
+         KQD5fRBJmUpctn8R3PjppV/eI3j0rSXbamBOg2pu/94SJA4cfQBIt6b9fZP60mKKypUB
+         pzmXNpsKN5p1sAx5d1LjmQkGihT8h7oNOAHEGN3TYqf7AvNBnnOiuPJqolor6KiojPLv
+         39Y4hiOKcfBzu+T0JM4gSp34xrYGPzsM06mtkCY6KPhOnsuzaH9X2Qc1v45E0KMUOFtp
+         3P2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=Yy80CGDeGmOdUiLaU44tdYuu65avXredLZvHqvqZxvA=;
-        b=fds3bzHD+7AYHSnr5zKyX29d4hr2d7puTCGzchel4RlQNyTGKITGy+4NkUg1vUAtiW
-         p4E+Lu9z3fjTefucWqUvkC/v3kIdgVxufHoBIYzP5K/sP9RStnXD1nMZ6W89Fb+1eE+k
-         D/QE1SQ88zeI8pE8HPzOCIVML0MfdsjoVn2uRS9DozPUpCll3s0Ba7KOEg9raBMJs5y6
-         UsXmDulyZ+GEhSNUEST/Fh6did+kHx5bEmBnj8UjOOQA/xjqF/YyWWH7IjliznhQsieA
-         uNvGxHShN0UXabi3iZWazYT5tNRayhHDrW+XKLPxQ1WO0xCeAZO2C++LK30HzAJRJ4bS
-         QFmw==
-X-Gm-Message-State: AOAM533ngFyDB9/hyAFJ2nmHrMFcNbFwu4LO/Js0DW+8wv3jFeo+4WBy
-        OfCAbwxhouNfSzP8VKiSub0=
-X-Google-Smtp-Source: ABdhPJywJ/lu8GWNpkww16VbmJlUtxqslBTWQrZ6DMFizoxzO0kUsn0kJ6BhawqySiiptym920qTOw==
-X-Received: by 2002:a63:6942:: with SMTP id e63mr4761524pgc.226.1644349434067;
-        Tue, 08 Feb 2022 11:43:54 -0800 (PST)
+        bh=EQBAIvQLg20+7U3cvyTRGOoJ39hD5GGWkL0kfjAijZk=;
+        b=s1N/M/TJAr22BItTOg36HQRYZ2rQoKYwUaia9AH8Tj57LuFQja93/97zUL6JdaS/e9
+         aRE8YITynTeQxBmsfGgzUhwARKcHlMMOkfwsmTBi4I+FK7kYG/ceiBUM4y73qWW5gYmc
+         tKKkEqJFZOa3FRkdSt7d+52jmZX93vcdcw+1A9i/u40joPVNkLnoB+Ttd3sisTkY9BkI
+         pWAzKKN4Bw9/sx0HWnTr5YhKcVETxNXMoETqGRoAXbFhirRCkPq1htLiDvLARZozxf37
+         mGT9rHmtonEycvX/Vnz7jB1C7ytVU7+bpCcMvy1Jh1Qjpl3VGGOfL608IYFocpKxV688
+         KiAw==
+X-Gm-Message-State: AOAM533kcTkneyU9GkjP4mIaaPvAfYLSraMzwLXyj2AnYOvh58KSMTRZ
+        0dsul55qpxYW+5SW+I29nas=
+X-Google-Smtp-Source: ABdhPJyICADZ4Q8xypnNJExN/AykweFdN/mOihQHXR6DZjO77wctgdJUTCWQBnfu9A3Uju2fskiKyA==
+X-Received: by 2002:a17:903:2d2:: with SMTP id s18mr6187922plk.56.1644349436130;
+        Tue, 08 Feb 2022 11:43:56 -0800 (PST)
 Received: from balhae.hsd1.ca.comcast.net ([2601:647:4800:c6f0:347f:e607:176:4358])
-        by smtp.gmail.com with ESMTPSA id w11sm16876839pfu.50.2022.02.08.11.43.52
+        by smtp.gmail.com with ESMTPSA id w11sm16876839pfu.50.2022.02.08.11.43.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 11:43:53 -0800 (PST)
+        Tue, 08 Feb 2022 11:43:55 -0800 (PST)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Peter Zijlstra <peterz@infradead.org>,
@@ -61,9 +61,9 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         "Paul E. McKenney" <paulmck@kernel.org>,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         Radoslaw Burny <rburny@google.com>
-Subject: [PATCH 09/12] locking: Add more static lockdep init macros
-Date:   Tue,  8 Feb 2022 11:43:21 -0800
-Message-Id: <20220208194324.85333-10-namhyung@kernel.org>
+Subject: [PATCH 10/12] locking: Add CONFIG_LOCK_TRACEPOINTS option
+Date:   Tue,  8 Feb 2022 11:43:22 -0800
+Message-Id: <20220208194324.85333-11-namhyung@kernel.org>
 X-Mailer: git-send-email 2.35.0.263.gb82422642f-goog
 In-Reply-To: <20220208194324.85333-1-namhyung@kernel.org>
 References: <20220208194324.85333-1-namhyung@kernel.org>
@@ -80,305 +80,348 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add STATIC_LOCKDEP_MAP_INIT_{WAIT,TYPE} macros and use it for various
-lock init codes.  This helps having different implementations of
-CONFIG_LOCK_INFO like lockdep and tracepoints.
+This option enables the following tracepoints for lock analysis.  This
+can be used to trace lock/unlock pairs and their contentions without
+enabling LOCKDEP and LOCK_STAT.
+
+ * lock_acquire
+ * lock_release
+ * lock_contended
+ * lock_acquired
+
+It selects CONFIG_LOCK_INFO to have lock names properly, and make the
+lockdep functions inline to check if the corresponding tracepoint is
+enabled before calling the function.  Then it could avoid unnecessary
+overhead setting up the arguments in the tracepoint when disabled.
 
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- drivers/gpu/drm/drm_connector.c     |  5 ++---
- include/linux/local_lock_internal.h | 10 ++++------
- include/linux/lockdep.h             | 23 +++++++++++++++++------
- include/linux/mutex.h               |  6 ++----
- include/linux/rtmutex.h             |  8 +++-----
- include/linux/rwlock_types.h        |  5 +----
- include/linux/rwsem.h               |  8 +++-----
- include/linux/spinlock_types_raw.h  | 24 ++++++++----------------
- kernel/printk/printk.c              | 10 ++++------
- kernel/rcu/update.c                 | 27 +++++++++------------------
- mm/memcontrol.c                     |  5 ++---
- 11 files changed, 55 insertions(+), 76 deletions(-)
+ include/linux/lockdep.h       | 141 +++++++++++++++++++++++++++++++++-
+ include/linux/lockdep_types.h |   8 +-
+ include/trace/events/lock.h   |   4 +-
+ kernel/locking/Makefile       |   1 +
+ kernel/locking/lockdep.c      |  40 +++++++++-
+ lib/Kconfig.debug             |   9 +++
+ 6 files changed, 195 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connector.c
-index 94931b32a491..7f470de2ef2b 100644
---- a/drivers/gpu/drm/drm_connector.c
-+++ b/drivers/gpu/drm/drm_connector.c
-@@ -677,9 +677,8 @@ const char *drm_get_connector_force_name(enum drm_connector_force force)
- }
- 
- #ifdef CONFIG_LOCK_INFO
--static struct lockdep_map connector_list_iter_dep_map = {
--	.name = "drm_connector_list_iter"
--};
-+static struct lockdep_map connector_list_iter_dep_map =
-+	STATIC_LOCKDEP_MAP_INIT("drm_connector_list_iter", NULL);
- #endif
- 
- /**
-diff --git a/include/linux/local_lock_internal.h b/include/linux/local_lock_internal.h
-index 56f03f588aa7..dd280fcfadec 100644
---- a/include/linux/local_lock_internal.h
-+++ b/include/linux/local_lock_internal.h
-@@ -16,12 +16,10 @@ typedef struct {
- } local_lock_t;
- 
- #ifdef CONFIG_LOCK_INFO
--# define LOCAL_LOCK_DEBUG_INIT(lockname)		\
--	.dep_map = {					\
--		.name = #lockname,			\
--		.wait_type_inner = LD_WAIT_CONFIG,	\
--		.lock_type = LD_LOCK_PERCPU,		\
--	},						\
-+# define LOCAL_LOCK_DEBUG_INIT(lockname)				\
-+	.dep_map = STATIC_LOCKDEP_MAP_INIT_TYPE(#lockname, NULL,	\
-+					LD_WAIT_CONFIG, LD_WAIT_INV,	\
-+					LD_LOCK_PERCPU),		\
- 	.owner = NULL,
- 
- static inline void local_lock_acquire(local_lock_t *l)
 diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
-index 0cc2b338a006..38cbef7601c7 100644
+index 38cbef7601c7..4e728d2957db 100644
 --- a/include/linux/lockdep.h
 +++ b/include/linux/lockdep.h
-@@ -237,6 +237,19 @@ static inline void lockdep_init_map(struct lockdep_map *lock, const char *name,
- #define lockdep_set_novalidate_class(lock) \
- 	lockdep_set_class_and_name(lock, &__lockdep_no_validate__, #lock)
+@@ -14,6 +14,8 @@
+ #include <linux/smp.h>
+ #include <asm/percpu.h>
  
++#include <linux/tracepoint-defs.h>
++
+ struct task_struct;
+ 
+ /* for sysctl */
+@@ -367,12 +369,104 @@ static inline void lockdep_set_selftest_task(struct task_struct *task)
+ {
+ }
+ 
++#ifdef CONFIG_LOCK_TRACEPOINTS
++DECLARE_TRACEPOINT(lock_acquire);
++DECLARE_TRACEPOINT(lock_release);
++
++extern void __lock_acquire(struct lockdep_map *lock, unsigned int subclass,
++			   int trylock, int read, int check,
++			   struct lockdep_map *nest_lock, unsigned long ip);
++extern void __lock_release(struct lockdep_map *lock, unsigned long ip);
++
++static inline void lock_acquire(struct lockdep_map *lock, unsigned int subclass,
++				int trylock, int read, int check,
++				struct lockdep_map *nest_lock, unsigned long ip)
++{
++	if (tracepoint_enabled(lock_acquire))
++		__lock_acquire(lock, subclass, trylock, read, check, nest_lock, ip);
++}
++
++static inline void lock_release(struct lockdep_map *lock, unsigned long ip)
++{
++	if (tracepoint_enabled(lock_release))
++		__lock_release(lock, ip);
++}
++#else /* !CONFIG_LOCK_TRACEPOINTS */
+ # define lock_acquire(l, s, t, r, c, n, i)	do { } while (0)
+ # define lock_release(l, i)			do { } while (0)
++#endif /* CONFIG_LOCK_TRACEPOINTS */
++
+ # define lock_downgrade(l, i)			do { } while (0)
+ # define lock_set_class(l, n, k, s, i)		do { } while (0)
+ # define lock_set_subclass(l, s, i)		do { } while (0)
+ # define lockdep_init()				do { } while (0)
++
++#ifdef CONFIG_LOCK_INFO
++
++static inline void
++lockdep_init_map_type(struct lockdep_map *lock, const char *name,
++		      struct lock_class_key *key, int subclass,
++		      u8 inner, u8 outer, u8 type)
++{
++	if (!name)
++		name = "NULL";
++
++	lock->name = name;
++}
++
++static inline void
++lockdep_init_map_waits(struct lockdep_map *lock, const char *name,
++		       struct lock_class_key *key, int subclass,
++		       u8 inner, u8 outer)
++{
++	lockdep_init_map_type(lock, name, key, subclass, inner, outer, 0);
++}
++
++static inline void
++lockdep_init_map_wait(struct lockdep_map *lock, const char *name,
++		      struct lock_class_key *key, int subclass, u8 inner)
++{
++	lockdep_init_map_waits(lock, name, key, subclass, inner, 0);
++}
++
++static inline void
++lockdep_init_map(struct lockdep_map *lock, const char *name,
++		 struct lock_class_key *key, int subclass)
++{
++	lockdep_init_map_wait(lock, name, key, subclass, 0);
++}
++
++/* Reinitialize a lock name - other info will be ignore. */
++# define lockdep_set_class(lock, key)				\
++	lockdep_init_map(&(lock)->dep_map, #key, key, 0)
++
++# define lockdep_set_class_and_name(lock, key, name)		\
++	lockdep_init_map(&(lock)->dep_map, name, key, 0)
++
++# define lockdep_set_class_and_subclass(lock, key, sub)		\
++	lockdep_init_map(&(lock)->dep_map, #key, key, sub)
++
++# define lockdep_set_subclass(lock, sub)			\
++	lockdep_init_map(&(lock)->dep_map, #lock, NULL, sub)
++
++# define lockdep_set_novalidate_class(lock) \
++	lockdep_set_class_and_name(lock, NULL, #lock)
++
 +/*
 + * To initialize a lockdep_map statically use this macro.
 + * Note that _name must not be NULL.
 + */
-+#define STATIC_LOCKDEP_MAP_INIT(_name, _key) \
-+	{ .name = (_name), .key = (void *)(_key), }
++# define STATIC_LOCKDEP_MAP_INIT(_name, _key)			\
++	{ .name = (_name), }
 +
-+#define STATIC_LOCKDEP_MAP_INIT_WAIT(_name, _key, _inner)	\
-+	{ .name = (_name), .key = (void *)(_key), .wait_type_inner = (_inner), }
++# define STATIC_LOCKDEP_MAP_INIT_WAIT(_name, _key, _inner)	\
++	{ .name = (_name), }
 +
-+#define STATIC_LOCKDEP_MAP_INIT_TYPE(_name, _key, _inner, _outer, _type)	\
-+	{ .name = (_name), .key = (void *)(_key), .wait_type_inner = (_inner),	\
-+	  .wait_type_outer = (_outer), .lock_type = (_type), }
- /*
-  * Compare locking classes
-  */
-@@ -377,6 +390,10 @@ static inline void lockdep_set_selftest_task(struct task_struct *task)
++# define STATIC_LOCKDEP_MAP_INIT_TYPE(_name, _key, _inner, _outer, _type) \
++	{ .name = (_name), }
++
++#else /* !CONFIG_LOCK_INFO */
++
+ # define lockdep_init_map_type(lock, name, key, sub, inner, outer, type) \
+ 		do { (void)(name); (void)(key); } while (0)
+ # define lockdep_init_map_waits(lock, name, key, sub, inner, outer) \
+@@ -394,6 +488,8 @@ static inline void lockdep_set_selftest_task(struct task_struct *task)
+ #define STATIC_LOCKDEP_MAP_INIT_WAIT(_name, _key, _inner) { }
+ #define STATIC_LOCKDEP_MAP_INIT_TYPE(_name, _key, _inner, _outer, _type) { }
  
- #define lockdep_set_novalidate_class(lock) do { } while (0)
- 
-+#define STATIC_LOCKDEP_MAP_INIT(_name, _key) { }
-+#define STATIC_LOCKDEP_MAP_INIT_WAIT(_name, _key, _inner) { }
-+#define STATIC_LOCKDEP_MAP_INIT_TYPE(_name, _key, _inner, _outer, _type) { }
++#endif /* CONFIG_LOCK_INFO */
 +
  /*
   * We don't define lockdep_match_class() and lockdep_match_key() for !LOCKDEP
   * case since the result is not well defined and the caller should rather
-@@ -432,12 +449,6 @@ enum xhlock_context_t {
- };
+@@ -479,7 +575,48 @@ do {								\
+ 	____err;						\
+ })
  
- #define lockdep_init_map_crosslock(m, n, k, s) do {} while (0)
--/*
-- * To initialize a lockdep_map statically use this macro.
-- * Note that _name must not be NULL.
-- */
--#define STATIC_LOCKDEP_MAP_INIT(_name, _key) \
--	{ .name = (_name), .key = (void *)(_key), }
- 
- static inline void lockdep_invariant_state(bool force) {}
- static inline void lockdep_free_task(struct task_struct *task) {}
-diff --git a/include/linux/mutex.h b/include/linux/mutex.h
-index 369c1abbf3d0..b2d018250a41 100644
---- a/include/linux/mutex.h
-+++ b/include/linux/mutex.h
-@@ -22,10 +22,8 @@
- 
- #ifdef CONFIG_LOCK_INFO
- # define __DEP_MAP_MUTEX_INITIALIZER(lockname)			\
--		, .dep_map = {					\
--			.name = #lockname,			\
--			.wait_type_inner = LD_WAIT_SLEEP,	\
--		}
-+	, .dep_map = STATIC_LOCKDEP_MAP_INIT_WAIT(#lockname,	\
-+					NULL, LD_WAIT_SLEEP)
- #else
- # define __DEP_MAP_MUTEX_INITIALIZER(lockname)
- #endif
-diff --git a/include/linux/rtmutex.h b/include/linux/rtmutex.h
-index 8eafdd6dcf35..887ffcd5fc09 100644
---- a/include/linux/rtmutex.h
-+++ b/include/linux/rtmutex.h
-@@ -77,11 +77,9 @@ do { \
- } while (0)
- 
- #ifdef CONFIG_LOCK_INFO
--#define __DEP_MAP_RT_MUTEX_INITIALIZER(mutexname)	\
--	.dep_map = {					\
--		.name = #mutexname,			\
--		.wait_type_inner = LD_WAIT_SLEEP,	\
--	}
-+#define __DEP_MAP_RT_MUTEX_INITIALIZER(mutexname)			\
-+	.dep_map = STATIC_LOCKDEP_MAP_INIT_WAIT(#mutexname,		\
-+						NULL, LD_WAIT_SLEEP)
- #else
- #define __DEP_MAP_RT_MUTEX_INITIALIZER(mutexname)
- #endif
-diff --git a/include/linux/rwlock_types.h b/include/linux/rwlock_types.h
-index 3e621bfd7cd0..438d8639a229 100644
---- a/include/linux/rwlock_types.h
-+++ b/include/linux/rwlock_types.h
-@@ -7,10 +7,7 @@
- 
- #ifdef CONFIG_LOCK_INFO
- # define RW_DEP_MAP_INIT(lockname)					\
--	.dep_map = {							\
--		.name = #lockname,					\
--		.wait_type_inner = LD_WAIT_CONFIG,			\
--	}
-+	.dep_map = STATIC_LOCKDEP_MAP_INIT_WAIT(#lockname, NULL, LD_WAIT_CONFIG)
- #else
- # define RW_DEP_MAP_INIT(lockname)
- #endif
-diff --git a/include/linux/rwsem.h b/include/linux/rwsem.h
-index c488485861f5..39126e6d97a1 100644
---- a/include/linux/rwsem.h
-+++ b/include/linux/rwsem.h
-@@ -17,11 +17,9 @@
- #include <linux/err.h>
- 
- #ifdef CONFIG_LOCK_INFO
--# define __RWSEM_DEP_MAP_INIT(lockname)			\
--	.dep_map = {					\
--		.name = #lockname,			\
--		.wait_type_inner = LD_WAIT_SLEEP,	\
--	},
-+# define __RWSEM_DEP_MAP_INIT(lockname)				\
-+	.dep_map = STATIC_LOCKDEP_MAP_INIT_WAIT(#lockname,	\
-+					NULL, LD_WAIT_SLEEP),
- #else
- # define __RWSEM_DEP_MAP_INIT(lockname)
- #endif
-diff --git a/include/linux/spinlock_types_raw.h b/include/linux/spinlock_types_raw.h
-index 564092a30cc4..006250640e76 100644
---- a/include/linux/spinlock_types_raw.h
-+++ b/include/linux/spinlock_types_raw.h
-@@ -27,23 +27,15 @@ typedef struct raw_spinlock {
- #define SPINLOCK_OWNER_INIT	((void *)-1L)
- 
- #ifdef CONFIG_LOCK_INFO
--# define RAW_SPIN_DEP_MAP_INIT(lockname)		\
--	.dep_map = {					\
--		.name = #lockname,			\
--		.wait_type_inner = LD_WAIT_SPIN,	\
--	}
--# define SPIN_DEP_MAP_INIT(lockname)			\
--	.dep_map = {					\
--		.name = #lockname,			\
--		.wait_type_inner = LD_WAIT_CONFIG,	\
--	}
-+# define RAW_SPIN_DEP_MAP_INIT(lockname)					\
-+	.dep_map = STATIC_LOCKDEP_MAP_INIT_WAIT(#lockname, NULL, LD_WAIT_SPIN)
- 
--# define LOCAL_SPIN_DEP_MAP_INIT(lockname)		\
--	.dep_map = {					\
--		.name = #lockname,			\
--		.wait_type_inner = LD_WAIT_CONFIG,	\
--		.lock_type = LD_LOCK_PERCPU,		\
--	}
-+# define SPIN_DEP_MAP_INIT(lockname)						\
-+	.dep_map = STATIC_LOCKDEP_MAP_INIT_WAIT(#lockname, NULL, LD_WAIT_CONFIG)
+-#else /* CONFIG_LOCK_STAT */
++#elif defined(CONFIG_LOCK_TRACEPOINTS)
 +
-+# define LOCAL_SPIN_DEP_MAP_INIT(lockname)					\
-+	.dep_map = STATIC_LOCKDEP_MAP_INIT_TYPE(#lockname, NULL, LD_WAIT_CONFIG,\
-+						LD_WAIT_INV, LD_LOCK_PERCPU)
- #else
- # define RAW_SPIN_DEP_MAP_INIT(lockname)
- # define SPIN_DEP_MAP_INIT(lockname)
-diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-index e45664e0ca30..7889df01a378 100644
---- a/kernel/printk/printk.c
-+++ b/kernel/printk/printk.c
-@@ -94,9 +94,8 @@ EXPORT_SYMBOL_GPL(console_drivers);
- int __read_mostly suppress_printk;
++DECLARE_TRACEPOINT(lock_contended);
++DECLARE_TRACEPOINT(lock_acquired);
++
++extern void __lock_contended(struct lockdep_map *lock, unsigned long ip);
++extern void __lock_acquired(struct lockdep_map *lock, unsigned long ip);
++
++static inline void lock_contended(struct lockdep_map *lock, unsigned long ip)
++{
++	if (tracepoint_enabled(lock_contended))
++		__lock_contended(lock, ip);
++}
++
++static inline void lock_acquired(struct lockdep_map *lock, unsigned long ip)
++{
++	if (tracepoint_enabled(lock_acquired))
++		__lock_acquired(lock, ip);
++}
++
++#define LOCK_CONTENDED(_lock, try, lock)			\
++do {								\
++	if (!try(_lock)) {					\
++		lock_contended(&(_lock)->dep_map, _RET_IP_);	\
++		lock(_lock);					\
++	}							\
++	lock_acquired(&(_lock)->dep_map, _RET_IP_);		\
++} while (0)
++
++#define LOCK_CONTENDED_RETURN(_lock, try, lock)			\
++({								\
++	int ____err = 0;					\
++	if (!try(_lock)) {					\
++		lock_contended(&(_lock)->dep_map, _RET_IP_);	\
++		____err = lock(_lock);				\
++	}							\
++	if (!____err)						\
++		lock_acquired(&(_lock)->dep_map, _RET_IP_);	\
++	____err;						\
++})
++
++#else /* !CONFIG_LOCK_STAT && !CONFIG_LOCK_TRACEPOINTS */
  
- #ifdef CONFIG_LOCK_INFO
--static struct lockdep_map console_lock_dep_map = {
--	.name = "console_lock"
--};
-+static struct lockdep_map console_lock_dep_map =
-+	STATIC_LOCKDEP_MAP_INIT("console_lock", NULL);
- #endif
+ #define lock_contended(lockdep_map, ip) do {} while (0)
+ #define lock_acquired(lockdep_map, ip) do {} while (0)
+@@ -490,7 +627,7 @@ do {								\
+ #define LOCK_CONTENDED_RETURN(_lock, try, lock) \
+ 	lock(_lock)
  
- enum devkmsg_log_bits {
-@@ -1753,9 +1752,8 @@ SYSCALL_DEFINE3(syslog, int, type, char __user *, buf, int, len)
+-#endif /* CONFIG_LOCK_STAT */
++#endif /* CONFIG_LOCK_STAT || CONFIG_LOCK_TRACEPOINTS */
+ 
+ #ifdef CONFIG_PROVE_LOCKING
+ extern void print_irqtrace_events(struct task_struct *curr);
+diff --git a/include/linux/lockdep_types.h b/include/linux/lockdep_types.h
+index d22430840b53..340138c9023e 100644
+--- a/include/linux/lockdep_types.h
++++ b/include/linux/lockdep_types.h
+@@ -197,9 +197,13 @@ struct pin_cookie { unsigned int val; };
+ struct lock_class_key { };
+ 
+ /*
+- * The lockdep_map takes no space if lockdep is disabled:
++ * The lockdep_map takes no space if lockdep and lock_info is disabled:
   */
+-struct lockdep_map { };
++struct lockdep_map {
++#ifdef CONFIG_LOCK_INFO
++	const char	*name;
++#endif
++};
  
- #ifdef CONFIG_LOCK_INFO
--static struct lockdep_map console_owner_dep_map = {
--	.name = "console_owner"
--};
-+static struct lockdep_map console_owner_dep_map =
-+	STATIC_LOCKDEP_MAP_INIT("console_owner", NULL);
- #endif
+ struct pin_cookie { };
  
- static DEFINE_RAW_SPINLOCK(console_owner_lock);
-diff --git a/kernel/rcu/update.c b/kernel/rcu/update.c
-index 156892c22bb5..8202ab6ddb4c 100644
---- a/kernel/rcu/update.c
-+++ b/kernel/rcu/update.c
-@@ -243,30 +243,21 @@ core_initcall(rcu_set_runtime_mode);
+diff --git a/include/trace/events/lock.h b/include/trace/events/lock.h
+index d7512129a324..74667841ae02 100644
+--- a/include/trace/events/lock.h
++++ b/include/trace/events/lock.h
+@@ -8,7 +8,7 @@
+ #include <linux/lockdep.h>
+ #include <linux/tracepoint.h>
  
- #ifdef CONFIG_DEBUG_LOCK_ALLOC
- static struct lock_class_key rcu_lock_key;
--struct lockdep_map rcu_lock_map = {
--	.name = "rcu_read_lock",
--	.key = &rcu_lock_key,
--	.wait_type_outer = LD_WAIT_FREE,
--	.wait_type_inner = LD_WAIT_CONFIG, /* PREEMPT_RT implies PREEMPT_RCU */
--};
-+struct lockdep_map rcu_lock_map = /* PREEMPT_RT implies PREEMPT_RCU */
-+	STATIC_LOCKDEP_MAP_INIT_TYPE("rcu_read_lock", &rcu_lock_key,
-+				     LD_WAIT_CONFIG, LD_WAIT_FREE, 0);
- EXPORT_SYMBOL_GPL(rcu_lock_map);
+-#ifdef CONFIG_LOCKDEP
++#if defined(CONFIG_LOCKDEP) || defined(CONFIG_LOCK_TRACEPOINTS)
  
- static struct lock_class_key rcu_bh_lock_key;
--struct lockdep_map rcu_bh_lock_map = {
--	.name = "rcu_read_lock_bh",
--	.key = &rcu_bh_lock_key,
--	.wait_type_outer = LD_WAIT_FREE,
--	.wait_type_inner = LD_WAIT_CONFIG, /* PREEMPT_RT makes BH preemptible. */
--};
-+struct lockdep_map rcu_bh_lock_map = /* PREEMPT_RT makes BH preemptable. */
-+	STATIC_LOCKDEP_MAP_INIT_TYPE("rcu_read_lock_bh", &rcu_bh_lock_key,
-+				     LD_WAIT_CONFIG, LD_WAIT_FREE, 0);
- EXPORT_SYMBOL_GPL(rcu_bh_lock_map);
+ TRACE_EVENT(lock_acquire,
  
- static struct lock_class_key rcu_sched_lock_key;
--struct lockdep_map rcu_sched_lock_map = {
--	.name = "rcu_read_lock_sched",
--	.key = &rcu_sched_lock_key,
--	.wait_type_outer = LD_WAIT_FREE,
--	.wait_type_inner = LD_WAIT_SPIN,
--};
-+struct lockdep_map rcu_sched_lock_map =
-+	STATIC_LOCKDEP_MAP_INIT_TYPE("rcu_read_lock_sched", &rcu_sched_lock_key,
-+				     LD_WAIT_SPIN, LD_WAIT_FREE, 0);
- EXPORT_SYMBOL_GPL(rcu_sched_lock_map);
+@@ -62,7 +62,7 @@ DEFINE_EVENT(lock, lock_release,
+ 	TP_ARGS(lock, ip)
+ );
  
- // Tell lockdep when RCU callbacks are being invoked.
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index d4ecfdd5eb8f..a561a6c66b2f 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -1672,9 +1672,8 @@ static int mem_cgroup_soft_reclaim(struct mem_cgroup *root_memcg,
+-#ifdef CONFIG_LOCK_STAT
++#if defined(CONFIG_LOCK_STAT) || defined(CONFIG_LOCK_TRACEPOINTS)
+ 
+ DEFINE_EVENT(lock, lock_contended,
+ 
+diff --git a/kernel/locking/Makefile b/kernel/locking/Makefile
+index d51cabf28f38..d772a37470a6 100644
+--- a/kernel/locking/Makefile
++++ b/kernel/locking/Makefile
+@@ -17,6 +17,7 @@ endif
+ obj-$(CONFIG_DEBUG_IRQFLAGS) += irqflag-debug.o
+ obj-$(CONFIG_DEBUG_MUTEXES) += mutex-debug.o
+ obj-$(CONFIG_LOCKDEP) += lockdep.o
++obj-$(CONFIG_LOCK_TRACEPOINTS) += lockdep.o
+ ifeq ($(CONFIG_PROC_FS),y)
+ obj-$(CONFIG_LOCKDEP) += lockdep_proc.o
+ endif
+diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
+index 2e6892ec3756..f234e981d1c7 100644
+--- a/kernel/locking/lockdep.c
++++ b/kernel/locking/lockdep.c
+@@ -58,11 +58,13 @@
+ 
+ #include <asm/sections.h>
+ 
+-#include "lockdep_internals.h"
+-
+ #define CREATE_TRACE_POINTS
+ #include <trace/events/lock.h>
+ 
++#ifdef CONFIG_LOCKDEP
++
++#include "lockdep_internals.h"
++
+ #ifdef CONFIG_PROVE_LOCKING
+ int prove_locking = 1;
+ module_param(prove_locking, int, 0644);
+@@ -6566,3 +6568,37 @@ void lockdep_rcu_suspicious(const char *file, const int line, const char *s)
+ 	dump_stack();
  }
+ EXPORT_SYMBOL_GPL(lockdep_rcu_suspicious);
++
++#elif defined(CONFIG_LOCK_TRACEPOINTS)
++
++void __lock_acquire(struct lockdep_map *lock, unsigned int subclass,
++			  int trylock, int read, int check,
++			  struct lockdep_map *nest_lock, unsigned long ip)
++{
++	trace_lock_acquire(lock, subclass, trylock, read, check, nest_lock, ip);
++}
++EXPORT_SYMBOL_GPL(__lock_acquire);
++EXPORT_TRACEPOINT_SYMBOL_GPL(lock_acquire);
++
++void __lock_release(struct lockdep_map *lock, unsigned long ip)
++{
++	trace_lock_release(lock, ip);
++}
++EXPORT_SYMBOL_GPL(__lock_release);
++EXPORT_TRACEPOINT_SYMBOL_GPL(lock_release);
++
++void __lock_contended(struct lockdep_map *lock, unsigned long ip)
++{
++	trace_lock_contended(lock, ip);
++}
++EXPORT_SYMBOL_GPL(__lock_contended);
++EXPORT_TRACEPOINT_SYMBOL_GPL(lock_contended);
++
++void __lock_acquired(struct lockdep_map *lock, unsigned long ip)
++{
++	trace_lock_acquired(lock, ip);
++}
++EXPORT_SYMBOL_GPL(__lock_acquired);
++EXPORT_TRACEPOINT_SYMBOL_GPL(lock_acquired);
++
++#endif /* CONFIG_LOCKDEP */
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 5f64ffe23c35..749de6c1ba50 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -1452,6 +1452,15 @@ config LOCK_INFO
+ 	bool
+ 	default n
  
- #ifdef CONFIG_LOCK_INFO
--static struct lockdep_map memcg_oom_lock_dep_map = {
--	.name = "memcg_oom_lock",
--};
-+static struct lockdep_map memcg_oom_lock_dep_map =
-+	STATIC_LOCKDEP_MAP_INIT("memcg_oom_lock", NULL);
- #endif
- 
- static DEFINE_SPINLOCK(memcg_oom_lock);
++config LOCK_TRACEPOINTS
++	bool "Enable lock tracepoints"
++	depends on !LOCKDEP
++	select LOCK_INFO
++	help
++	  This enables all lock events required by "perf lock", subcommand of
++	  perf, without enabling LOCKDEP and LOCK_STAT.  If you want to use
++	  "perf lock", you also need to turn on CONFIG_EVENT_TRACING.
++
+ config DEBUG_ATOMIC_SLEEP
+ 	bool "Sleep inside atomic section checking"
+ 	select PREEMPT_COUNT
 -- 
 2.35.0.263.gb82422642f-goog
 

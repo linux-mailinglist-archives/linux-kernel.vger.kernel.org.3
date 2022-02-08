@@ -2,139 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5D5F4ADB89
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 15:50:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3180D4ADB92
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 15:52:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378416AbiBHOt4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 8 Feb 2022 09:49:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44928 "EHLO
+        id S1378435AbiBHOvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 09:51:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbiBHOtx (ORCPT
+        with ESMTP id S229577AbiBHOvJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 09:49:53 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DB48C061576;
-        Tue,  8 Feb 2022 06:49:52 -0800 (PST)
-Received: from fraeml742-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JtQmS54Rhz6801q;
-        Tue,  8 Feb 2022 22:45:44 +0800 (CST)
-Received: from lhreml717-chm.china.huawei.com (10.201.108.68) by
- fraeml742-chm.china.huawei.com (10.206.15.223) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 8 Feb 2022 15:49:49 +0100
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- lhreml717-chm.china.huawei.com (10.201.108.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 8 Feb 2022 14:49:49 +0000
-Received: from lhreml710-chm.china.huawei.com ([169.254.81.184]) by
- lhreml710-chm.china.huawei.com ([169.254.81.184]) with mapi id
- 15.01.2308.021; Tue, 8 Feb 2022 14:49:48 +0000
-From:   Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-CC:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "mgurtovoy@nvidia.com" <mgurtovoy@nvidia.com>,
-        "yishaih@nvidia.com" <yishaih@nvidia.com>,
-        Linuxarm <linuxarm@huawei.com>,
-        liulongfang <liulongfang@huawei.com>,
-        "Zengtao (B)" <prime.zeng@hisilicon.com>,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        "Wangzhou (B)" <wangzhou1@hisilicon.com>
-Subject: RE: [RFC v4 6/8] crypto: hisilicon/qm: Add helper to retrieve the PF
- qm data
-Thread-Topic: [RFC v4 6/8] crypto: hisilicon/qm: Add helper to retrieve the PF
- qm data
-Thread-Index: AQHYHPDtLJcNOLWDh0OuZhX3BN5rGayJtYqAgAAE/IA=
-Date:   Tue, 8 Feb 2022 14:49:48 +0000
-Message-ID: <05460d58380b435fb629d2e04a83a1aa@huawei.com>
-References: <20220208133425.1096-1-shameerali.kolothum.thodi@huawei.com>
- <20220208133425.1096-7-shameerali.kolothum.thodi@huawei.com>
- <20220208142525.GE4160@nvidia.com>
-In-Reply-To: <20220208142525.GE4160@nvidia.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.202.227.178]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Tue, 8 Feb 2022 09:51:09 -0500
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FB66C061576
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 06:51:08 -0800 (PST)
+Received: by mail-il1-f197.google.com with SMTP id y3-20020a920903000000b002be462612d7so3230181ilg.10
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 06:51:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=gyoR7YM+mgvf6gynog/ilFRl/dnvDf1mCVSF3t4qaro=;
+        b=VSZhTp2HK/FEHyD8xEgCZQoftiifol7rmDMtNdsSdt9TZqYUQgie9iSXO8nGFaGsvg
+         lhgleqfR6VDD/o7G9VChp++4XX3Sgc1Jr4wUd80ZjGHVf8iqXGstaarghjjjjd6/KzQr
+         ENkuYPMi+7EOEEBz3LG//qRI1aqICl66D98xcRjZdRSMCJP7dG6cGUVNfiegIOz35iq6
+         AA/7bR9pFJQpzo/fm1rf+xoRv7Xck/VyrZDC/DRQgdVGVtqrbT6/9jf9v3jkG4QWDd0l
+         XzFTR0H1It6T1ixw1QgBy+AtMSjHZwEQDuW+9hg38pci20/5tmi2ibm//O+BAa5hVBYP
+         f98g==
+X-Gm-Message-State: AOAM532sOKn9grfAha5wZ/kgQwEB4DWJpsyPR9Wqq+egDAg/dUYRy1B9
+        JVdZWqHOu0GPNQm1p7drI6pvadQwdxSVISRx8wpHUeSy1LXt
+X-Google-Smtp-Source: ABdhPJyrUpevVYRtKHnpJMXJjRCIBtEle9LkYgAgiZm93aCVhOQ2Ko/U9yzPvwo4+Gb4ic59T/FQlqCtLdjX1jXFHAD2iLfsIHlG
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:1ea:: with SMTP id t10mr2189767jaq.77.1644331867846;
+ Tue, 08 Feb 2022 06:51:07 -0800 (PST)
+Date:   Tue, 08 Feb 2022 06:51:07 -0800
+In-Reply-To: <2114181.C4sosBPzcN@leap>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e03f4e05d782d886@google.com>
+Subject: Re: [syzbot] WARNING in component_del
+From:   syzbot <syzbot+60df062e1c41940cae0f@syzkaller.appspotmail.com>
+To:     dri-devel@lists.freedesktop.org, fmdefrancesco@gmail.com,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        rafael@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-> -----Original Message-----
-> From: Jason Gunthorpe [mailto:jgg@nvidia.com]
-> Sent: 08 February 2022 14:25
-> To: Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-> Cc: kvm@vger.kernel.org; linux-kernel@vger.kernel.org;
-> linux-crypto@vger.kernel.org; alex.williamson@redhat.com;
-> cohuck@redhat.com; mgurtovoy@nvidia.com; yishaih@nvidia.com; Linuxarm
-> <linuxarm@huawei.com>; liulongfang <liulongfang@huawei.com>; Zengtao (B)
-> <prime.zeng@hisilicon.com>; Jonathan Cameron
-> <jonathan.cameron@huawei.com>; Wangzhou (B) <wangzhou1@hisilicon.com>
-> Subject: Re: [RFC v4 6/8] crypto: hisilicon/qm: Add helper to retrieve the PF
-> qm data
-> 
-> On Tue, Feb 08, 2022 at 01:34:23PM +0000, Shameer Kolothum wrote:
-> 
-> > +struct hisi_qm *hisi_qm_get_pf_qm(struct pci_dev *pdev)
-> > +{
-> > +	struct hisi_qm	*pf_qm;
-> > +	struct pci_driver *(*fn)(void) = NULL;
-> > +
-> > +	if (!pdev->is_virtfn)
-> > +		return NULL;
-> > +
-> > +	switch (pdev->device) {
-> > +	case PCI_DEVICE_ID_HUAWEI_SEC_VF:
-> > +		fn = symbol_get(hisi_sec_get_pf_driver);
-> > +		break;
-> > +	case PCI_DEVICE_ID_HUAWEI_HPRE_VF:
-> > +		fn = symbol_get(hisi_hpre_get_pf_driver);
-> > +		break;
-> > +	case PCI_DEVICE_ID_HUAWEI_ZIP_VF:
-> > +		fn = symbol_get(hisi_zip_get_pf_driver);
-> > +		break;
-> > +	default:
-> > +		return NULL;
-> > +	}
-> > +
-> > +	if (!fn)
-> > +		return NULL;
-> > +
-> > +	pf_qm = pci_iov_get_pf_drvdata(pdev, fn());
-> > +
-> > +	if (pdev->device == PCI_DEVICE_ID_HUAWEI_SEC_VF)
-> > +		symbol_put(hisi_sec_get_pf_driver);
-> > +	else if (pdev->device == PCI_DEVICE_ID_HUAWEI_HPRE_VF)
-> > +		symbol_put(hisi_hpre_get_pf_driver);
-> > +	else
-> > +		symbol_put(hisi_zip_get_pf_driver);
-> > +
-> > +	return !IS_ERR(pf_qm) ? pf_qm : NULL;
-> > +}
-> > +EXPORT_SYMBOL_GPL(hisi_qm_get_pf_qm);
-> 
-> Why put this in this driver, why not in the vfio driver? And why use
-> symbol_get ?
+Reported-and-tested-by: syzbot+60df062e1c41940cae0f@syzkaller.appspotmail.com
 
-QM driver provides a generic common interface for all HiSilicon ACC
-drivers. So thought of placing it here. And symbol_get/put is used
-to avoid having dependency of all the ACC drivers being built along
-with the vfio driver. Is there a better way to retrieve the struct pci_driver *
-associated with each ACC PF driver? Please let me know.
+Tested on:
 
-Thanks,
-Shameer
+commit:         555f3d7b Merge tag '5.17-rc3-ksmbd-server-fixes' of gi..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=266de9da75c71a45
+dashboard link: https://syzkaller.appspot.com/bug?extid=60df062e1c41940cae0f
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=111f7428700000
+
+Note: testing is done by a robot and is best-effort only.

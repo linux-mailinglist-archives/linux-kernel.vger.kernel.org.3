@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98AD34AD2AA
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 09:03:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 613BB4AD2AC
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 09:03:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348707AbiBHIC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 03:02:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44878 "EHLO
+        id S1348728AbiBHIDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 03:03:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233941AbiBHIC4 (ORCPT
+        with ESMTP id S233941AbiBHIDi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 03:02:56 -0500
-X-Greylist: delayed 17256 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Feb 2022 00:02:55 PST
-Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36516C0401EF
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 00:02:55 -0800 (PST)
-X-QQ-mid: bizesmtp33t1644307361t10mqirs
+        Tue, 8 Feb 2022 03:03:38 -0500
+X-Greylist: delayed 17255 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Feb 2022 00:03:37 PST
+Received: from smtpproxy21.qq.com (smtpbg701.qq.com [203.205.195.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B95ACC0401EF
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 00:03:37 -0800 (PST)
+X-QQ-mid: bizesmtp11t1644307407tplb3bxa
 Received: from localhost.localdomain (unknown [58.240.82.166])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 08 Feb 2022 16:02:37 +0800 (CST)
-X-QQ-SSF: 00400000002000B0H000B00A0000000
-X-QQ-FEAT: zD6y7hNAcUB0CO7eAtJeOBqOod74zZzxKc9Z5p7I4/HrPepLCfJzCWjdo72xF
-        gQZlUSwaOM05cGmmj58PWwdBNEHju8GTAvTUnuOAqnawnSBQQMYzyUeUjy3u8Hc/rfjzBcL
-        Ee66Z2FskkgLFReyfCgL4+rMBCxm9KMZrSNk8hvZ41FhZQ0j+bVPh9UTUNy/FWBVE2dgxje
-        07ap/9lyPyQnGQFbHOEiOb5F3/yQNStKnYkbzIXteJpKJpLHB8R7et1eU0JMjAFmmes8im8
-        uMqPeuvzCr6NOSWvkzw4/qtkAi8WX0oufIDctkJTwwcZOOY9Ao6bTUOu/VSREoQ2ZhODd8y
-        FN2DwSkR/lqc2673+vk6htik4RUikaU+zjxdwhR
+        id ; Tue, 08 Feb 2022 16:03:22 +0800 (CST)
+X-QQ-SSF: 01400000002000B0H000B00A0000000
+X-QQ-FEAT: FXvDfBZI5O4IwGAI4Arhf0Dt8rHM7FibgTP78zDJF6wrXhJ/JLYUvVyC1W7a1
+        qRmp3/fmzDIVWYaBhbyc8lSBKamRQ5NTx+30u0DdfHrn3meV9adKtjly2GR2w1+juwcH2uK
+        HtPitFRw4l5tS/AgwIXCFuXA4/BVyJyfpl9L56dsx662NTrOTjx6Y9J+nihms76pDBUc+aY
+        ajXC9MjN+QmbR91xgW+SkkmSVWde44T5t4BYIO5koO7hZ8Z5sL5D0CypqA9AqXfSag9qKx7
+        FCMfHK8gs8Sxe7Ofsja6yJAGXp1Bm7nuVC+I+tEOI5AlSUD2H8jNTTBhrR3dY+WZWVXqgg4
+        rjaWYxRgUowaIjYHBR6dpVEMUDLlKXqsBGrqyAX
 X-QQ-GoodBg: 2
 From:   zhanglianjie <zhanglianjie@uniontech.com>
 To:     =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
@@ -36,14 +36,14 @@ Cc:     Alex Deucher <alexander.deucher@amd.com>,
         dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         zhanglianjie <zhanglianjie@uniontech.com>
 Subject: [PATCH v3 2/2] drm/radeon/uvd: Fix forgotten unmap buffer objects
-Date:   Tue,  8 Feb 2022 16:02:35 +0800
-Message-Id: <20220208080235.26349-1-zhanglianjie@uniontech.com>
+Date:   Tue,  8 Feb 2022 16:03:20 +0800
+Message-Id: <20220208080320.26484-1-zhanglianjie@uniontech.com>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=y
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign2
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign5
 X-QQ-Bgrelay: 1
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham

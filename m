@@ -2,66 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8AAF4AD225
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 08:25:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABBC34AD228
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 08:26:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347092AbiBHHZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 02:25:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56544 "EHLO
+        id S1348105AbiBHH0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 02:26:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231803AbiBHHZx (ORCPT
+        with ESMTP id S231803AbiBHH0W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 02:25:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E81F2C0401EF
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 23:25:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 81A0FB81871
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 07:25:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C49BC004E1;
-        Tue,  8 Feb 2022 07:25:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644305150;
-        bh=5UMPgP3FCgOcckOEl4rLqJUApkfH1cOpstnmc2Ib2fk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=15esu/r8BwlpYdys2vW2Ra58+OHO/vhZE03SaMDiJNmk1hRmjtdHiLYM4GeleHrgj
-         CwVr1NzW5bZWDWndy7okY4ZGsYo146vzDw1sCPFl3vDXm7aLSAZSfzewthCpdRAzoW
-         XvBuaIkceIjgggD4/XdOM+5b0/PBaDkH1MRgCm28=
-Date:   Tue, 8 Feb 2022 08:25:45 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Guixin Liu <kanie@linux.alibaba.com>
-Cc:     xiaoguang.wang@linux.alibaba.com, xlpang@linux.alibaba.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] uio: Replace mutex info_lock with percpu_ref to improve
- performance
-Message-ID: <YgIa+W6kAsWMUdj3@kroah.com>
-References: <1644304760-11862-1-git-send-email-kanie@linux.alibaba.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1644304760-11862-1-git-send-email-kanie@linux.alibaba.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 8 Feb 2022 02:26:22 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B83CAC0401EF;
+        Mon,  7 Feb 2022 23:26:21 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 5D6C0210E8;
+        Tue,  8 Feb 2022 07:26:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1644305180; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=II+IS4KDwpqSpimGkm2q9HvvSXPbRbxSS2crl2NidcU=;
+        b=FsNx798jSiLc+8G9Zb45lZpw5cfp7GsUCtEjIoBrvlOj+/8s4FaSmcH3RvaJ0UqaGd5m/4
+        gtgEfdDvQMHP8D6mp1m2eZMqrn9Zn8CVkxTaJe+I8IlaYsgnrf5qu4+SMdZeTfDhkfEUaq
+        Kj6EUwXRas0c+55B2G7LI9gmMI3dTMI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1644305180;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=II+IS4KDwpqSpimGkm2q9HvvSXPbRbxSS2crl2NidcU=;
+        b=9hZjcQv4yVfghU7DDzsmChwVWMUGjKTau5j+RTxrBpmqao2X3E1eq0wVXNz7V9tCybtbFA
+        2wEjaZDVynbDGpCQ==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 3C970A3B84;
+        Tue,  8 Feb 2022 07:26:20 +0000 (UTC)
+Date:   Tue, 08 Feb 2022 08:26:20 +0100
+Message-ID: <s5h8rulu8df.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, Shuah Khan <shuah@kernel.org>,
+        alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][next] kselftest: alsa: fix spelling mistake "desciptor" -> "descriptor"
+In-Reply-To: <20220207092235.240284-1-colin.i.king@gmail.com>
+References: <20220207092235.240284-1-colin.i.king@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 08, 2022 at 03:19:20PM +0800, Guixin Liu wrote:
-> This patch includes a modification to repace mutex info_lock with
-> percpu_ref, in order to improve uio performance.
+On Mon, 07 Feb 2022 10:22:35 +0100,
+Colin Ian King wrote:
+> 
+> There are some spelling mistakes in some ksft messages. Fix them.
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
-How does it improve performance?  What benchmark are you using and what
-are the results?
+Thanks, applied now to for-next branch.
 
-These changes are quite complex, you need to better describe these in
-order to be able to have them accepted.
 
-thanks,
-
-greg k-h
+Takashi

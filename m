@@ -2,122 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46F1D4ADE9E
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 17:50:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D92F4ADEA0
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 17:50:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383536AbiBHQuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 11:50:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35516 "EHLO
+        id S1383547AbiBHQuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 11:50:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235286AbiBHQuB (ORCPT
+        with ESMTP id S1383545AbiBHQuN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 11:50:01 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2109.outbound.protection.outlook.com [40.107.94.109])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31626C061576;
-        Tue,  8 Feb 2022 08:50:00 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Pr28Q9CTVHE/HHlsODG3azskayQm6FK28jLdqUfcv4Y1Bt7VHRcBTxwMyP9U6zRgnqacyqhqilzZGWrH3kivYrNDw86oscX8cXFtIEsgnHkQP7xjkiTVUEKTouF+rH38Znid7ee2vvi9QJ4xiWuEGuobFeCe69hI579Q/jlNto1ARy324t2e3Re/3xSoaXR1I9LyN+G/mNAYM1HJHAQYnGi/mWd9xUhFQslQp7LLzIocbzHdB2jPerLDDVtZla4ws/wQHlw+ZqGPlv7Id4h49obEgSb6clklsDxyh6RdntCd5tl9Lr3eI2/vbI5ax2J8+7mTvM7YXRLNIh8rwAexog==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9Af+aRsW+IVMdrxbigPu+UO921LMb7qJCux2LaLSm4w=;
- b=SU5UXQjDDVWpoKFhKDI4q49yzhNBSX7b+xbbtIt94FxjucCRFqxQcfmwY79WIKNJdnwvy/oz69LcpeuCAIvIpgukrt+AS4G1leh1hxBuxly+AaNpQA1P8yf3MpZ7xx6vsBFNL/yLa5Of6D/1sTJHqVIaYPw6XXcIkOdlqYqwJfbfTWXGB9ofHlb516ZHjcZTHe/fUu/PujV3MEX5UGjv3bP3cCYRo9loTLEkj3ilIY8reag/p7vgFna6qNn8iSRnO1+JYXqyhsc4RgSpHjcTaFF3tuvktvFi4bcXMwW2/AFQKj281I4h2O+lHCZwjjZyuxg+gRAdByyvOqc/pqtpug==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
+        Tue, 8 Feb 2022 11:50:13 -0500
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BABD5C0613CB
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 08:50:11 -0800 (PST)
+Received: by mail-qv1-xf29.google.com with SMTP id c14so6605363qvl.12
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 08:50:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9Af+aRsW+IVMdrxbigPu+UO921LMb7qJCux2LaLSm4w=;
- b=mSyVdZCl07ZeklpURSnq3kEk9ZK2Ge2rLkU4uFV0qlA0z1RZX9i4pX3RqFNHUramzndUvRJEHXnrDvqV9s+jcchtSunHioiHvEk9P4S4uAbyCMgsF6pvPrhGtfnSKpJWFV31SJbc38dC44H/NjbV7d07jqj2XZ9zYDwSEbYCPuY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=in-advantage.com;
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37) by MN2PR10MB3551.namprd10.prod.outlook.com
- (2603:10b6:208:112::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.16; Tue, 8 Feb
- 2022 16:49:57 +0000
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::2d52:2a96:7e6c:460f]) by MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::2d52:2a96:7e6c:460f%4]) with mapi id 15.20.4951.018; Tue, 8 Feb 2022
- 16:49:57 +0000
-Date:   Tue, 8 Feb 2022 08:49:52 -0800
-From:   Colin Foster <colin.foster@in-advantage.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>
-Subject: Re: [PATCH v5 net-next 3/3] net: mscc: ocelot: use bulk reads for
- stats
-Message-ID: <20220208164952.GA238@COLIN-DESKTOP1.localdomain>
-References: <20220208044644.359951-1-colin.foster@in-advantage.com>
- <20220208044644.359951-4-colin.foster@in-advantage.com>
- <20220208150303.afoabx742j4ijry7@skbuf>
- <20220208153913.GA4785@euler>
- <20220208154515.poeg7uartqkae26r@skbuf>
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=uyO1MEQNps5iP9oCUciIE1rzkZYVSZzJb+muZcFYOk4=;
+        b=7XADFpc43QE/qt3E2nOE7ZKJdXQmQHBogj8fnQWh7+4WrlwFlcR/DwHHHOuuOsKMzF
+         ExPTEWDXBgZBHf+ouoy6HcCW2F1IGloyK+6wcpTxC+goATrzrxIK+324QzKWUnCSZyW8
+         Ri2uC4GQ61xus0satGVJWldH+w/uS8/tp2JUDHoz8Amm6FZJ346hIPhYKIGvMs8CY1vi
+         w3r2Kt7goS4sWztJwu1Qh+B1FjvqM4sFH2hMgeP1PFxsnwhqL8mu/VjtMUo7FoBWqtRm
+         EcgJoePCZR5LmlW/bwoeFY65V8ujtI5jSUJop3tYEbLBYGWyTMcBvlXMlRLxQZ4zEm1T
+         CJLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=uyO1MEQNps5iP9oCUciIE1rzkZYVSZzJb+muZcFYOk4=;
+        b=CFo7at3NJYtT/jIUQ+drOZW1wHBxqRIM3Jyi68oUJaba04SCz83W30S9BBagR5/av0
+         GA9RRDZ33KGktZndgY4b3W7v9l0Wlwujx5qWFnQAD/zjqkRPeouWlFxxhsPLeLg7Klpm
+         g7wNbrz1AIiJD/nMSfK0OWCTMlH7U2T+oxiic0AkVdklAc+0vlZO5hqjuObLZuj87PO7
+         f5aHNSO7ubP/xSdx2aIsyFx74ovjlhGeEnFUoZgSs/ZSAZzbKsHUrqT7pME4y5Pkd0FH
+         LShuweXgNFxFbPZGF/1jCzcmqmJ2e/UWJCTM4v1d3nKXeg9FZNxy5wbsKlquFP8kcRjq
+         rOiA==
+X-Gm-Message-State: AOAM530fDCkT0Qn/xN7nKqPRTWiKPJUenrQwji3/FhXVTvJFDf7GZRyd
+        zXI5boq31Q5a97b0SWxxQr9BF6mKYy3SRA==
+X-Google-Smtp-Source: ABdhPJz+Mim2S0L7J3jzU/RU666khnWwq0OnAnSRMBnKl8t1dS2pUe3shi/y15pML0DetMa4dYFnKQ==
+X-Received: by 2002:ad4:5ec9:: with SMTP id jm9mr3851203qvb.15.1644339010896;
+        Tue, 08 Feb 2022 08:50:10 -0800 (PST)
+Received: from localhost (cpe-98-15-154-102.hvc.res.rr.com. [98.15.154.102])
+        by smtp.gmail.com with ESMTPSA id r7sm7196497qti.69.2022.02.08.08.50.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 08:50:10 -0800 (PST)
+Date:   Tue, 8 Feb 2022 11:50:09 -0500
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Barry Song <21cnbao@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        page-reclaim@google.com, x86@kernel.org,
+        Brian Geffon <bgeffon@google.com>,
+        Jan Alexander Steffens <heftig@archlinux.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Steven Barrett <steven@liquorix.net>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Daniel Byrne <djbyrne@mtu.edu>,
+        Donald Carr <d@chaos-reins.com>,
+        Holger =?iso-8859-1?Q?Hoffst=E4tte?= 
+        <holger@applied-asynchrony.com>,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
+        Shuang Zhai <szhai2@cs.rochester.edu>,
+        Sofia Trinh <sofia.trinh@edi.works>
+Subject: Re: [PATCH v7 05/12] mm: multigenerational LRU: minimal
+ implementation
+Message-ID: <YgKfQVKcBebL7pY3@cmpxchg.org>
+References: <20220208081902.3550911-1-yuzhao@google.com>
+ <20220208081902.3550911-6-yuzhao@google.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220208154515.poeg7uartqkae26r@skbuf>
-X-ClientProxiedBy: MW4PR02CA0004.namprd02.prod.outlook.com
- (2603:10b6:303:16d::19) To MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ec6f6b5e-dd44-4c17-0291-08d9eb2309a4
-X-MS-TrafficTypeDiagnostic: MN2PR10MB3551:EE_
-X-Microsoft-Antispam-PRVS: <MN2PR10MB35515253A6F95218578BB474A42D9@MN2PR10MB3551.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qoHBP9XowFHJP1z5eXIhwuqniw+jU4gbPwCwrmBqnsgU7r97QpR4eAAefS3Kw2CB2LJ8B6o/SJX9v8jl0ScAykj0t3x2tCLYxKC2g5Rq/Tf/jiVZ6W4HGxTKtXG417fDxCHDtdwkmRvt6mw8AW6I/ZChKBmIVvbYZVyx/ACbqHjSPU0dxxQoodYfx26M+tEoKCyFiAzuNYB88MIFcExRKdiqmt0KorP47akaN2knOb3pkxM8Ki2xx0VYsZhNk1FtTBupBt3t8BU33pMgyLInDqirPGyDhS17T3nx5Xo6wclnCk/AdSK40Kkw6sz/6nrcONfa6pnWcM1cXejCx3Q+g1f/RH1p9Y8l5+96Rl3rUIuM7lFD72MZI6MjV1nCsztYp7ftfb/Y4mG1dtA0YVQlhrxuVzvg6N0YnlWF8d6pftF6HpxJjYq/rSB+p0SDSNFiifwhdeyLOE/SpoN13t116gDu0NCDKG0KdoBs6veXLfgUJspPQB4K7uG4scm0IPDnSDJNxU1GAF7FyxCgH8iU7VKsVHIL8pl6tEPIgEqwhM0xVtgB17CxKsYxsI+NyZtySWfTMXHxw32wFBJC7KQ0z1uTzaruMpF5Q8/6W4lIqnKlKaxTW8SrTgND5QAiKwfdjx8VhXDxl2i6RzCZD0hpA9+zG3d1ECBVRVYMP1lMnKxxzh0cvDrBDcH8QUcnnuZxKAsPmijkvO6vfX/Q/8hJNg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(42606007)(136003)(376002)(396003)(39830400003)(346002)(366004)(186003)(1076003)(33656002)(26005)(38100700002)(38350700002)(6512007)(86362001)(6486002)(66556008)(8676002)(4326008)(66946007)(66476007)(6916009)(316002)(54906003)(508600001)(8936002)(4744005)(6666004)(6506007)(44832011)(5660300002)(52116002)(2906002)(9686003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ObhA8bRiWqzscqSI2Nn6H6tYo6LkusXMQR9+EzwBaE+pkWHez8xQwPKfwooU?=
- =?us-ascii?Q?70+HpAYOWDkANTAOplrgUfsyU19rFHfLM5XiT6CtldeDc8KIgNHjAWIXCYMJ?=
- =?us-ascii?Q?goLzU3mkgI6we2Nsc0S92+sXSC7EyhAFmMZGe+7+YFCnGRsV22yyRA0H/RMb?=
- =?us-ascii?Q?ZWRmpkXfLLD+l/lKg6RV7/RV2MwmivoJLsTFYaK6E6ED5S9oKQED2SZ7Ludw?=
- =?us-ascii?Q?azpQE1lVH7NQ3KvVuTxobaJEHNdp9yCFO/MTAaTsMYyseyhixjlrAhQ1ZT0G?=
- =?us-ascii?Q?710qh+BUMv3tY0d6jrCmWXqkiBBFyx+9tN/vKpUxpvrxZnUl/vk/Ht+GpnEB?=
- =?us-ascii?Q?LjgN4NedSGgJzlzqWRjl8R5rlhMS67TZA7dh1rcBFcCgNIB6Ji0cIctdI+4l?=
- =?us-ascii?Q?q2sug7y8p79ar00na3hzuFxNj6GMU21FDn5fFswzFGIrlrvufPIlFeli0Bq4?=
- =?us-ascii?Q?u00jnBmk6fjt49LrRp/2TvtdyIWDxg3V1qZDTTh/MF4Lm7y13u9raKjpkfBG?=
- =?us-ascii?Q?MXq4m7xIC5WGWbuhvzbpt++BnhpMiidcmGL/rHghw8QGHK2VusB0Eqkcqkve?=
- =?us-ascii?Q?CFWf9oiV6XrnMFGUmvzwHqg6EABbZB/g+IqRlVXJLTJMl6hLpuJ280vMNdE+?=
- =?us-ascii?Q?hKsOfNMyeRtUGRIM9DXBfw/hFCyPrNCEjFZLN6uKNo6Zvk92dX8xbV0FsS58?=
- =?us-ascii?Q?m+8l05NvFuiY5CJeXqxdAFX/mHNZvVaa5s/7gN0FGXwNeZopBm6pZmquFN+f?=
- =?us-ascii?Q?CyXGLZNh+gxipjobXts9l7bhfsaDdJUrPNCw0TFZGyJQRRzn3qbRPw+crNML?=
- =?us-ascii?Q?50f/gt3/XjucBK7NpvXzwKz7Q69U31Uf06urVpVjKW8vACSXeny6jrz4xnGq?=
- =?us-ascii?Q?6SW6i1rVI++OPSSFLzvSkjcUaO+ygUkT9cCufH/lZppXQKCW9UFXCr8dNIrg?=
- =?us-ascii?Q?jufNf68hMe5Rm8GjrUoejC1EB5udniwCcMWlbH04SrF4Dk8AF+hYgKIf/hmX?=
- =?us-ascii?Q?uAZZkdTIMxBefxJPdcVxtxBut7Fc7Yj4/OldtarXgtZOx/Mfl2ozGw3xVFNe?=
- =?us-ascii?Q?x9p8scxnWcPxcWVMgQT6VHcVv7ZOQ64wh6+0oi1Ga0kI7aXOs13mjDh83Wnf?=
- =?us-ascii?Q?ebq3W9UH3ZkTJj2bhHPzKjHE24XVPG/Fz3M7T288Hz+ANNMfQgd8if1fl/LW?=
- =?us-ascii?Q?Ab1ocxODyvSa5AoKM0tpgW9FDt6DqZ4M0nLPb2jLmMsEVeb7D3TqAD2Rf1p0?=
- =?us-ascii?Q?mB5+nHDP817q7O+WffsZk4n8TYnIR2J1WtSRAj5ftC3bptbNNcoKVPDBq3mr?=
- =?us-ascii?Q?Qc1VtJYv86BPKX0KscPvSNwbKbkf7VOAuSVs6OJ9G1CMdq2b8wQGsAtJz8E7?=
- =?us-ascii?Q?xzaVQSshRUgGO3UB8CXKiVS4dTeppJIi1AALUJz6A99BOs+zcXePui6NPquE?=
- =?us-ascii?Q?QI9XlcPCd+OQ3Q5LrvwV2QC4Ao1wMA4SY1BpVjgZGmgRYWf0cJTVMzLMTCON?=
- =?us-ascii?Q?4Sf3gYVGfUQAcwIqRJK8zkHKxmY+haJ/Rce0xkGdjJT2Js+asheluCIfEuhE?=
- =?us-ascii?Q?5CtdepktxFxpdiUJcu8TOwJ16Y4cdSI1FEtWDzAgTCeF+uolOmsNPh9f8by/?=
- =?us-ascii?Q?umYZY4ZmpUnhFZJokFqZXThQWaQtE+AHB+W6hNKBuO9u1XT0NtS4l6dXMENT?=
- =?us-ascii?Q?bXTCRjbpKeht5dRvQ0QAHMZSyC8=3D?=
-X-OriginatorOrg: in-advantage.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ec6f6b5e-dd44-4c17-0291-08d9eb2309a4
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Feb 2022 16:49:57.0105
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Oed+ZJ0N2BOqL2PNfe8SUVuMzwi4rqq28FSFoaCHgbTHwYIWAT3QlxrnCyM1qNF+FqZ/8nafQh2AMGST1Agu4yOY/Or4Hl1gg0Iwlo+jWvk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR10MB3551
+In-Reply-To: <20220208081902.3550911-6-yuzhao@google.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -125,18 +102,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 08, 2022 at 03:45:15PM +0000, Vladimir Oltean wrote:
-> On Tue, Feb 08, 2022 at 07:41:56AM -0800, Colin Foster wrote:
-> > I see that now. It is confusing and I'll clear it up. I never caught
-> > this because I'm testing in a setup where port 0 is the CPU port, so I
-> > can't get ethtool stats. Thanks!
-> 
-> You can retrieve the stats on the CPU port, as they are appended to the
-> ethtool stats of the DSA master, prefixed with "p%02d_", cpu_dp->index.
-> 
-> ethtool -S eth0 | grep -v ': 0' # where eth0 is the DSA master
+Hi Yu,
 
-Thanks for this hint. I didn't even think to go looking for it since the
-DSA Documenation mentions an "inability to fetch CPU port statistics
-counters using ethtool." I see now that this bullet point is from 2015,
-and probably should be removed entirely.
+Thanks for restructuring this from the last version. It's easier to
+learn the new model when you start out with the bare bones, then let
+optimizations and self-contained features follow later.
+
+On Tue, Feb 08, 2022 at 01:18:55AM -0700, Yu Zhao wrote:
+> To avoid confusions, the terms "promotion" and "demotion" will be
+> applied to the multigenerational LRU, as a new convention; the terms
+> "activation" and "deactivation" will be applied to the active/inactive
+> LRU, as usual.
+> 
+> The aging produces young generations. Given an lruvec, it increments
+> max_seq when max_seq-min_seq+1 approaches MIN_NR_GENS. The aging
+> promotes hot pages to the youngest generation when it finds them
+> accessed through page tables; the demotion of cold pages happens
+> consequently when it increments max_seq. Since the aging is only
+> interested in hot pages, its complexity is O(nr_hot_pages). Promotion
+> in the aging path doesn't require any LRU list operations, only the
+> updates of the gen counter and lrugen->nr_pages[]; demotion, unless
+> as the result of the increment of max_seq, requires LRU list
+> operations, e.g., lru_deactivate_fn().
+
+I'm having trouble with this changelog. It opens with a footnote and
+summarizes certain aspects of the implementation whose importance to
+the reader aren't entirely clear at this time.
+
+It would be better to start with a high-level overview of the problem
+and how this algorithm solves it. How the reclaim algorithm needs to
+find the page that is most suitable for eviction and to signal when
+it's time to give up and OOM. Then explain how grouping pages into
+multiple generations accomplishes that - in particular compared to the
+current two use-once/use-many lists.
+
+Explain the problem of MMU vs syscall references, and how tiering
+addresses this.
+
+Explain the significance of refaults and how the algorithm responds to
+them. Not in terms of which running averages are updated, but in terms
+of user-visible behavior ("will start swapping (more)" etc.)
+
+Express *intent*, how it's supposed to behave wrt workloads and memory
+pressure. The code itself will explain the how, its complexity etc.
+
+Most reviewers will understand the fundamental challenges of page
+reclaim. The difficulty is matching individual aspects of the problem
+space to your individual components and design choices you have made.
+
+Let us in on that thinking, please ;)
+
+> @@ -892,6 +892,50 @@ config ANON_VMA_NAME
+>  	  area from being merged with adjacent virtual memory areas due to the
+>  	  difference in their name.
+>  
+> +# multigenerational LRU {
+> +config LRU_GEN
+> +	bool "Multigenerational LRU"
+> +	depends on MMU
+> +	# the following options can use up the spare bits in page flags
+> +	depends on !MAXSMP && (64BIT || !SPARSEMEM || SPARSEMEM_VMEMMAP)
+> +	help
+> +	  A high performance LRU implementation for memory overcommit. See
+> +	  Documentation/admin-guide/mm/multigen_lru.rst and
+> +	  Documentation/vm/multigen_lru.rst for details.
+
+These files don't exist at this time, please introduce them before or
+when referencing them. If they document things introduced later in the
+patchset, please start with a minimal version of the file and update
+it as you extend the algorithm and add optimizations etc.
+
+It's really important to only reference previous patches, not later
+ones. This allows reviewers to read the patches linearly.  Having to
+search for missing pieces in patches you haven't looked at yet is bad.
+
+> +config NR_LRU_GENS
+> +	int "Max number of generations"
+> +	depends on LRU_GEN
+> +	range 4 31
+> +	default 4
+> +	help
+> +	  Do not increase this value unless you plan to use working set
+> +	  estimation and proactive reclaim to optimize job scheduling in data
+> +	  centers.
+> +
+> +	  This option uses order_base_2(N+1) bits in page flags.
+> +
+> +config TIERS_PER_GEN
+> +	int "Number of tiers per generation"
+> +	depends on LRU_GEN
+> +	range 2 4
+> +	default 4
+> +	help
+> +	  Do not decrease this value unless you run out of spare bits in page
+> +	  flags, i.e., you see the "Not enough bits in page flags" build error.
+> +
+> +	  This option uses N-2 bits in page flags.
+
+Linus had pointed out that we shouldn't ask these questions of the
+user. How do you pick numbers here? I'm familiar with workingset
+estimation and proactive reclaim usecases but I wouldn't know.
+
+Even if we removed the config option and hardcoded the number, this is
+a question for kernel developers: What does "4" mean? How would
+behavior differ if it were 3 or 5 instead? Presumably there is some
+sort of behavior gradient. "As you increase the number of
+generations/tiers, the user-visible behavior of the kernel will..."
+This should really be documented.
+
+I'd also reiterate Mel's point: Distribution kernels need to support
+the full spectrum of applications and production environments. Unless
+using non-defaults it's an extremely niche usecase (like compiling out
+BUG() calls) compile-time options are not the right choice. If we do
+need a tunable, it could make more sense to have a compile time upper
+limit (to determine page flag space) combined with a runtime knob?
+
+Thanks!

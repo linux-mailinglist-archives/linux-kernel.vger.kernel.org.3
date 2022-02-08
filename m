@@ -2,74 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 371AB4AD666
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:25:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7503C4AD662
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:25:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356220AbiBHLYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 06:24:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49856 "EHLO
+        id S1357106AbiBHLYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 06:24:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355952AbiBHKDZ (ORCPT
+        with ESMTP id S244906AbiBHKEE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 05:03:25 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F27F1C03FEC1
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 02:03:23 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id z35so935396pfw.2
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 02:03:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9a3aAuOX50mvJsMuY1a5GIiQFDm5tr+cq08+mjsTm/A=;
-        b=jO+m7uXJ0ZUsSfU096+lVi4qrs6BxSoRtlFtzYxMtb6l884fj4D4haoyEmKRMYQh9t
-         wsH5X2j6OfZBEcejNWSwnjUuKY8iS5FMjYo/t58fLaUQPcPNVpKy4yyy3OrH9NG3TFLg
-         r3gPtFIyX16vftj8Baq1dxYLHHOIDXyPBMWa89uhcMMtKpdkazzaf0F0IfcT2izHvzl0
-         P4hfEnOhRCWl1Bfzo7o/QtcNu8hvlG9pOboAdpGINN8wYbYecb9d2bPhdlhBzv9IZ65g
-         B0uPsjm7U1jHLX/gJMGiUjwkoqXYDAAK/QQr+BLB248VzAwJHF0gsYTtOZ0PL6d/75DR
-         dCbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9a3aAuOX50mvJsMuY1a5GIiQFDm5tr+cq08+mjsTm/A=;
-        b=a3EippkrQNlR+8H3BAnsxohLaIS+31DJoSKk/t2ObAWdw3Zwzfv4KkMrt5EAxP5B4o
-         6UYgcD4XJjl47gfIr79G2a7hO+HdxUeirci2mPDN9LHvsy48O8YPTZbxfgYvVoLgo9im
-         Pvol8wYmEVc+2i57wiwKjjhdXlbmEAASZUbW81sUB7l/UrCwqoMJXHet+05cNYBkM4uX
-         rjEok38fRuxUqo14sAr9mc3f6pZwdBwdF1IYwH6GkZLCVwJsV/BPpXsqXXL1JIta8aG/
-         5jgbX4fxBbJ7Tyf+snLnXAnjs9wELEH1mu0amlvdoYUfRaO5nxXy96qZhSOPDjeStDsD
-         Qz0g==
-X-Gm-Message-State: AOAM532EqvGdRzURgJmkpT/d9geFMpCYhBXn5x1bhX7vHYebxb5d6qKw
-        DsUMLSOToC/v/CNLC+Sc5WiXjH25EiOejGYugZQ9Tw==
-X-Google-Smtp-Source: ABdhPJzM1hWIXSKOwV6kGVpFedZHrHLLv1V3cuWj33KBZJnMAZXYl7Qh3XGfqDHsnPuc/C0mPbz0ojj4DRX9max7+mM=
-X-Received: by 2002:a63:4a49:: with SMTP id j9mr2877151pgl.178.1644314603174;
- Tue, 08 Feb 2022 02:03:23 -0800 (PST)
+        Tue, 8 Feb 2022 05:04:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3497FC03FEC0;
+        Tue,  8 Feb 2022 02:04:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C82C5B819AA;
+        Tue,  8 Feb 2022 10:04:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0D1CC340ED;
+        Tue,  8 Feb 2022 10:03:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1644314639;
+        bh=9XRxX5n5xmPLXTFls/kdqprhfHPlsurq93wudUcHvmI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ydMfYgvttYlxl9uRj9Idy5Mfb8u3n3OXW3As+08WOsMeVgyEFsIELiokvKXAza88c
+         q+ArZi2JeMzdkwiYIC0h7rfZzDkecdHEsCX5Opcb2I4tCAzLDMedbto4z8meqsvHsG
+         itZ329OsvY3CyLkSCy7t5yq0VrQU3vmhnOF9VhfA=
+Date:   Tue, 8 Feb 2022 11:03:56 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Harald Seiler <hws@denx.de>
+Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        linux-serial@vger.kernel.org,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-kernel@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] tty: serial: imx: Add fast path when rs485 delays are 0
+Message-ID: <YgJADKxWfOZroS35@kroah.com>
+References: <20220119145204.238767-1-hws@denx.de>
+ <20220119151145.zft47rzebnabiej2@pengutronix.de>
+ <0df5d9ea2081f5d798f80297efb973f542dae183.camel@denx.de>
+ <20220119162122.jmnz2hxid76p4hli@pengutronix.de>
+ <5cab27cab5a39ef5e19992bc54e57c3f6106dafe.camel@denx.de>
 MIME-Version: 1.0
-References: <89456fcd-a113-4c82-4b10-a9bcaefac68f@google.com>
- <YgF/0QGFN4SppLKg@shikoro> <CACK8Z6Etj-gq1VKpkUBstiXEETekPWG9p9gKBtuFaZF05pQEvQ@mail.gmail.com>
- <CACK8Z6FUsceYgBoaAtN8o4m9HpZaBZMt0Nqtvw0a1Z3EuD_nWg@mail.gmail.com>
- <YgHTYrODoo2ou49J@google.com> <b76771e5-b8e-54c9-2474-d5a73d236cba@google.com>
-In-Reply-To: <b76771e5-b8e-54c9-2474-d5a73d236cba@google.com>
-From:   Loic Poulain <loic.poulain@linaro.org>
-Date:   Tue, 8 Feb 2022 11:02:47 +0100
-Message-ID: <CAMZdPi8PBd6RJ4BSoS_Vfb8CCv16nApLZA4n6a4fBbs5CjeMxw@mail.gmail.com>
-Subject: Re: 5.17-rc regression: rmi4 clients cannot deal with asynchronous
- suspend? (was: X1 Carbon touchpad not resumed)
-To:     Hugh Dickins <hughd@google.com>, Rajat Jain <rajatja@google.com>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Derek Basehore <dbasehore@chromium.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Andrew Duggan <aduggan@synaptics.com>,
-        vincent.huang@tw.synaptics.com, cheiny@synaptics.com,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-input <linux-input@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5cab27cab5a39ef5e19992bc54e57c3f6106dafe.camel@denx.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,119 +65,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi folks,
+On Wed, Jan 19, 2022 at 05:59:46PM +0100, Harald Seiler wrote:
+> Hi,
+> 
+> On Wed, 2022-01-19 at 17:21 +0100, Uwe Kleine-König wrote:
+> > On Wed, Jan 19, 2022 at 04:20:12PM +0100, Harald Seiler wrote:
+> > > Hi,
+> > > 
+> > > On Wed, 2022-01-19 at 16:11 +0100, Uwe Kleine-König wrote:
+> > > > On Wed, Jan 19, 2022 at 03:52:03PM +0100, Harald Seiler wrote:
+> > > > > Right now, even when `delay_rts_before_send` and `delay_rts_after_send`
+> > > > > are 0, the hrtimer is triggered (with timeout 0) which can introduce a
+> > > > > few 100us of additional overhead on slower i.MX platforms.
+> > > > > 
+> > > > > Implement a fast path when the delays are 0, where the RTS signal is
+> > > > > toggled immediately instead of going through an hrtimer.  This fast path
+> > > > > behaves identical to the code before delay support was implemented.
+> > > > > 
+> > > > > Signed-off-by: Harald Seiler <hws@denx.de>
+> > > > > ---
+> > > > >  drivers/tty/serial/imx.c | 18 ++++++++++++++----
+> > > > >  1 file changed, 14 insertions(+), 4 deletions(-)
+> > > > > 
+> > > > > diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
+> > > > > index df8a0c8b8b29..67bbbb69229d 100644
+> > > > > --- a/drivers/tty/serial/imx.c
+> > > > > +++ b/drivers/tty/serial/imx.c
+> > > > > @@ -455,9 +455,14 @@ static void imx_uart_stop_tx(struct uart_port *port)
+> > > > >  	if (port->rs485.flags & SER_RS485_ENABLED) {
+> > > > >  		if (sport->tx_state == SEND) {
+> > > > >  			sport->tx_state = WAIT_AFTER_SEND;
+> > > > > -			start_hrtimer_ms(&sport->trigger_stop_tx,
+> > > > > +
+> > > > > +			if (port->rs485.delay_rts_after_send > 0) {
+> > > > > +				start_hrtimer_ms(&sport->trigger_stop_tx,
+> > > > >  					 port->rs485.delay_rts_after_send);
+> > > > > -			return;
+> > > > > +				return;
+> > > > > +			}
+> > > > > +
+> > > > > +			/* continue without any delay */
+> > > > 
+> > > > Is it right to keep the assignment sport->tx_state = WAIT_AFTER_SEND ?
+> > > 
+> > > I am keeping the assignment intentionally, to fall into the
+> > > if(state == WAIT_AFTER_RTS) below (which then sets the state to OFF).
+> > > I originally had the code structured like this:
+> > > 
+> > > 	if (port->rs485.delay_rts_after_send > 0) {
+> > > 		sport->tx_state = WAIT_AFTER_SEND;
+> > > 		start_hrtimer_ms(&sport->trigger_stop_tx,
+> > > 			 port->rs485.delay_rts_after_send);
+> > > 		return;
+> > > 	} else {
+> > > 		/* continue without any delay */
+> > > 		sport->tx_state = WAIT_AFTER_SEND;
+> > > 	}
+> > > 
+> > > This is functionally identical, but maybe a bit more explicit.
+> > > 
+> > > Not sure what is more clear to read?
+> > 
+> > I didn't oppose to the readability thing. With your patch you skip
+> > starting the stop_tx timer and that would usually care for calling
+> > imx_uart_stop_tx and setting sport->tx_state = OFF. This doesn't happen
+> > with your patch any more.
+> 
+> Not starting the timer is the entire point of the patch - instead, the
+> code which would run inside the timer callback now runs immediately. To
+> do this, I set the tx_state to WAIT_AFTER_SEND and _don't_ do the early
+> return which leads into the if(tx_state == WAIT_AFTER_SEND) below.  This
+> is the code-path which normally runs later in the hrtimer callback.
+> 
+> I suppose it would have been good to provide more context lines in the
+> patch... Here is the relevant bit (in the changed version now):
+> 
+> 	if (sport->tx_state == SEND) {
+> 		sport->tx_state = WAIT_AFTER_SEND;
+> 
+> 		if (port->rs485.delay_rts_after_send > 0) {
+> 			start_hrtimer_ms(&sport->trigger_stop_tx,
+> 				 port->rs485.delay_rts_after_send);
+> 			return;
+> 		}
+> 
+> 		/* continue without any delay */
+> 	}
+> 
+> 	if (sport->tx_state == WAIT_AFTER_RTS ||
+> 	    sport->tx_state == WAIT_AFTER_SEND) {
+> 		/* ... actual rts toggling ... */
+> 
+> 		sport->tx_state = OFF;
+> 	}
+> 
 
-On Tue, 8 Feb 2022 at 03:50, Hugh Dickins <hughd@google.com> wrote:
->
-> On Mon, 7 Feb 2022, Dmitry Torokhov wrote:
-> > On Mon, Feb 07, 2022 at 01:41:36PM -0800, Rajat Jain wrote:
-> > > +linux-input@vger.kernel.org
-> > >
-> > > On Mon, Feb 7, 2022 at 1:09 PM Rajat Jain <rajatja@google.com> wrote:
-> > > >
-> > > > +Rafael (for any inputs on asynchronous suspend / resume)
-> > > > +Dmitry Torokhov (since no other maintainer of rmi4 in MAINTAINERS file)
-> > > > +loic.poulain@linaro.org (who fixed RMI device hierarchy recently)
-> > > > + Some Synaptics folks (from recent commits - Vincent Huang, Andrew
-> > > > Duggan, Cheiny)
-> > > >
-> > > > On Mon, Feb 7, 2022 at 12:23 PM Wolfram Sang <wsa@kernel.org> wrote:
-> > > > >
-> > > > > Hello Hugh,
-> > > > >
-> > > > > > Bisection led to 172d931910e1db800f4e71e8ed92281b6f8c6ee2
-> > > > > > ("i2c: enable async suspend/resume on i2c client devices")
-> > > > > > and reverting that fixes it for me.
-> > > > >
-> > > > > Thank you for the report plus bisection and sorry for the regression!
-> > > >
-> > > > +1, Thanks for the bisection, and apologies for the inconveniences.
-> > > >
-> > > > The problem here seems to be that for some reason, some devices (all
-> > > > connected to rmi4 adapter) failed to resume, but only when
-> > > > asynchronous suspend is enabled (by 172d931910e1):
-> > > >
-> > > > [   79.221064] rmi4_smbus 6-002c: failed to get SMBus version number!
+Uwe, any thoughts about if this patch should be taken or not?
 
-Looks like this is the initial issue. Does the rmi device lose power
-while suspended? if so could it be that enabling async_suspend makes
-the device resuming earlier, at a time it is not yet ready? What if
-you simply start with a naive msleep(200) in rmi_smb_resume()?
+thanks,
 
-The rmi4 bus does not rely on generic device suspend/resume
-infrastructure for its subdevices, so async_suspend should only impact
-the moment at which the smbus rmi4 root device is resumed, but not the
-way it and its subdevices are resumed.
-
-Would be interesting to get some pm_debug/pm_trace to compare the
-good/bad cases.
-
-
-
-
-> > > > [   79.265074] rmi4_physical rmi4-00: rmi_driver_reset_handler: Failed
-> > > > to read current IRQ mask.
-> > > > [   79.308330] rmi4_f01 rmi4-00.fn01: Failed to restore normal operation: -6.
-> > > > [   79.308335] rmi4_f01 rmi4-00.fn01: Resume failed with code -6.
-> > > > [   79.308339] rmi4_physical rmi4-00: Failed to suspend functions: -6
-> > > > [   79.308342] rmi4_smbus 6-002c: Failed to resume device: -6
-> > > > [   79.351967] rmi4_physical rmi4-00: Failed to read irqs, code=-6
-> > > >
-> > > > A resume failure that only shows up during asynchronous resume,
-> > > > typically means that the device is dependent on some other device to
-> > > > resume first, but this dependency is NOT established in a parent child
-> > > > relationship (which is wrong and needs to be fixed, perhaps using
-> > > > device_add_link()). Thus the kernel may be resuming these devices
-> > > > without first resuming some other device that these devices need to
-> > > > depend on.
-> > > >
-> > > > TBH, I'm not sure how to fix this. The only hint I see is that all of
-> > > > these devices seem to be attached to rmi4 device so perhaps something
-> > > > there? I see 6e4860410b828f recently fixed device hierarchy for rmi4,
-> > > > and so seemingly should have fixed this very issue (as also seen in
-> > > > commit message)?
-> > > >
-> > > > >
-> > > > > I will wait a few days if people come up with a fix. If not, I will
-> > > > > revert the offending commit.
-> > > >
-> > > > While I'll be sad because this means no i2c-client can now resume in
-> > > > parallel and increases resume latency by a *LOT* (hundreds of ms on
-> > > > all Linux systems), I understand that this needs to be done unless
-> > > > someone comes up with a fix.
-> >
-> > There is intricate dance happening switching touchpad from legacy PS/2
-> > into RMI mode, with touchpad being dependent not only on SMbus
-> > controller, but also on i8042 keyboard controller and its PS/2 port (or
-> > rather their emulation by the system firmware).
-> >
-> > I wonder if we could apply a little bit more targeted patch:
-> >
-> > diff --git a/drivers/input/rmi4/rmi_smbus.c b/drivers/input/rmi4/rmi_smbus.c
-> > index 2407ea43de59..3901d06d38ca 100644
-> > --- a/drivers/input/rmi4/rmi_smbus.c
-> > +++ b/drivers/input/rmi4/rmi_smbus.c
-> > @@ -335,6 +335,7 @@ static int rmi_smb_probe(struct i2c_client *client,
-> >               return error;
-> >       }
-> >
-> > +     device_disable_async_suspend(&client->dev);
-> >       return 0;
-> >  }
-> >
-> >
-> > ... and if that works then we cant try to establish proper dependencies
-> > via device links later.
-> >
-> > Hugh, could you please try this out and see if it helps?
->
-> Yes, that works nicely, thanks Dmitry.
->
-> By the way, my memory's been jogged by "rmi4" and the discussion above:
-> I had a similar-ish problem with it a year ago, discussed with PM guys,
->
-> https://lore.kernel.org/linux-pm/alpine.LSU.2.11.2101102010200.25762@eggly.anvils/
->
-> I'm not saying you have to read through that thread, but you may find
-> some relevance in it - Saravana concluded rmi4 driver isn't capturing
-> parent/child relationship correctly (at that time, anyway).
+greg k-h

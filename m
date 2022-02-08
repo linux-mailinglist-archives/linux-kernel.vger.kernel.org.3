@@ -2,163 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2C604AE0AF
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 19:24:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E34B4AE0B1
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 19:24:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384825AbiBHSYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 13:24:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55626 "EHLO
+        id S1384840AbiBHSYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 13:24:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235351AbiBHSYJ (ORCPT
+        with ESMTP id S1384827AbiBHSY3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 13:24:09 -0500
-Received: from mx1.smtp.larsendata.com (mx1.smtp.larsendata.com [91.221.196.215])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1840EC061576
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 10:24:07 -0800 (PST)
-Received: from mail01.mxhotel.dk (mail01.mxhotel.dk [91.221.196.236])
-        by mx1.smtp.larsendata.com (Halon) with ESMTPS
-        id 72537d88-890c-11ec-b20b-0050568c148b;
-        Tue, 08 Feb 2022 18:25:09 +0000 (UTC)
-Received: from ravnborg.org (80-162-45-141-cable.dk.customer.tdc.net [80.162.45.141])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: sam@ravnborg.org)
-        by mail01.mxhotel.dk (Postfix) with ESMTPSA id 16C32194BDF;
-        Tue,  8 Feb 2022 19:24:06 +0100 (CET)
-Date:   Tue, 8 Feb 2022 19:24:03 +0100
-X-Report-Abuse-To: abuse@mxhotel.dk
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     DRI Development <dri-devel@lists.freedesktop.org>,
-        linux-fbdev@vger.kernel.org, Du Cheng <ducheng2@gmail.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Claudio Suarez <cssk@net-c.es>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Daniel Vetter <daniel.vetter@intel.com>
-Subject: Re: [PATCH 11/21] fbcon: Extract fbcon_open/release helpers
-Message-ID: <YgK1Qz6eIKD9wHre@ravnborg.org>
-References: <20220131210552.482606-1-daniel.vetter@ffwll.ch>
- <20220131210552.482606-12-daniel.vetter@ffwll.ch>
- <YfxF4jq7BLX5rJe5@ravnborg.org>
- <YgJ0relUFpnxRvhg@phenom.ffwll.local>
+        Tue, 8 Feb 2022 13:24:29 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0797BC061576;
+        Tue,  8 Feb 2022 10:24:27 -0800 (PST)
+Received: from [192.168.1.17] (unknown [192.182.151.181])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 7F43B20B90CC;
+        Tue,  8 Feb 2022 10:24:26 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7F43B20B90CC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1644344666;
+        bh=QMYPts7c7dD+rlJaWW7pjZHqR53IRrbmcgY9kyd0KSE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=WkXj8oQ+bsG5VrIynKlh0LQUSCIhJuYfTkw+ZzaLwGaUGdlx9PQ6ITKwakNa2L8ga
+         tGGebby3r6b56nlMeoRPjoesYxuPlQ54B8zvqENkMllOzeXB/a4eQ2QWQuerhTflFx
+         vfvjHfiGD2ADOcgRAKtFOa00ijb0GQpGtbcBzc88=
+Message-ID: <5493bb21-7c85-9a8a-07f6-983d1d5c425b@linux.microsoft.com>
+Date:   Tue, 8 Feb 2022 10:24:26 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YgJ0relUFpnxRvhg@phenom.ffwll.local>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v2 01/24] drivers: hv: dxgkrnl: Driver initialization and
+ creation of dxgadapter
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org, spronovo@microsoft.com
+References: <cover.1644025661.git.iourit@linux.microsoft.com>
+ <98fe53740526526c4df85a3a3d2e13e88c95f229.1644025661.git.iourit@linux.microsoft.com>
+ <Yf40f9MBfPPfyNuS@kroah.com>
+ <a10cc7b6-98bc-e123-edfa-2cd4eba6c5c3@linux.microsoft.com>
+ <YgIZzKWCSCaEWPF7@kroah.com>
+From:   Iouri Tarassov <iourit@linux.microsoft.com>
+In-Reply-To: <YgIZzKWCSCaEWPF7@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+Hi Greg,
 
-On Tue, Feb 08, 2022 at 02:48:29PM +0100, Daniel Vetter wrote:
-> On Thu, Feb 03, 2022 at 10:15:14PM +0100, Sam Ravnborg wrote:
-> > Hi Daniel,
+On 2/7/2022 11:20 PM, Greg KH wrote:
+> On Mon, Feb 07, 2022 at 10:59:25AM -0800, Iouri Tarassov wrote:
 > > 
-> > On Mon, Jan 31, 2022 at 10:05:42PM +0100, Daniel Vetter wrote:
-> > > There's two minor behaviour changes in here:
-> > > - in error paths we now consistently call fb_ops->fb_release
-> > > - fb_release really can't fail (fbmem.c ignores it too) and there's no
-> > >   reasonable cleanup we can do anyway.
+> > On 2/5/2022 12:25 AM, Greg KH wrote:
+> > > On Fri, Feb 04, 2022 at 06:33:59PM -0800, Iouri Tarassov wrote:
+> > > > This is the first commit for adding support for a Hyper-V based
+> > > > vGPU implementation that exposes the DirectX API to Linux userspace.
+> > > >
 > > > 
-> > > Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
-> > > Cc: Daniel Vetter <daniel@ffwll.ch>
-> > > Cc: Claudio Suarez <cssk@net-c.es>
-> > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > Cc: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-> > > Cc: Du Cheng <ducheng2@gmail.com>
-> > > ---
-> > >  drivers/video/fbdev/core/fbcon.c | 107 +++++++++++++++----------------
-> > >  1 file changed, 53 insertions(+), 54 deletions(-)
+> > > Only add the interfaces for the changes that you need in this commit.
+> > > Do not add them all and then use them later, that makes it impossible to
+> > > review.
 > > > 
-> > > diff --git a/drivers/video/fbdev/core/fbcon.c b/drivers/video/fbdev/core/fbcon.c
-> > > index fa30e1909164..eea2ee14b64c 100644
-> > > --- a/drivers/video/fbdev/core/fbcon.c
-> > > +++ b/drivers/video/fbdev/core/fbcon.c
-> > > @@ -680,19 +680,37 @@ static int fbcon_invalid_charcount(struct fb_info *info, unsigned charcount)
-> > >  
-> > >  #endif /* CONFIG_MISC_TILEBLITTING */
-> > >  
-> > > +static int fbcon_open(struct fb_info *info)
-> > > +{
-> > > +	if (!try_module_get(info->fbops->owner))
-> > > +		return -ENODEV;
-> > > +
-> > > +	if (info->fbops->fb_open &&
-> > > +	    info->fbops->fb_open(info, 0)) {
-> > > +		module_put(info->fbops->owner);
-> > > +		return -ENODEV;
-> > > +	}
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +static void fbcon_release(struct fb_info *info)
-> > > +{
-> > > +	if (info->fbops->fb_release)
-> > > +		info->fbops->fb_release(info, 0);
-> > > +
-> > > +	module_put(info->fbops->owner);
-> > > +}
-> > >  
-> > >  static int con2fb_acquire_newinfo(struct vc_data *vc, struct fb_info *info,
-> > >  				  int unit, int oldidx)
-> > >  {
-> > >  	struct fbcon_ops *ops = NULL;
-> > > -	int err = 0;
-> > > -
-> > > -	if (!try_module_get(info->fbops->owner))
-> > > -		err = -ENODEV;
-> > > +	int err;
-> > >  
-> > > -	if (!err && info->fbops->fb_open &&
-> > > -	    info->fbops->fb_open(info, 0))
-> > > -		err = -ENODEV;
-> > > +	err = fbcon_open(info);
-> > > +	if (err)
-> > > +		return err;
-> > >  
-> > >  	if (!err) {
-> > >  		ops = kzalloc(sizeof(struct fbcon_ops), GFP_KERNEL);
-> > > @@ -713,7 +731,7 @@ static int con2fb_acquire_newinfo(struct vc_data *vc, struct fb_info *info,
-> > >  
-> > >  	if (err) {
-> > >  		con2fb_map[unit] = oldidx;
-> > > -		module_put(info->fbops->owner);
-> > > +		fbcon_release(info);
-> > >  	}
-> > >  
-> > >  	return err;
-> > > @@ -724,45 +742,34 @@ static int con2fb_release_oldinfo(struct vc_data *vc, struct fb_info *oldinfo,
-> > >  				  int oldidx, int found)
-> > >  {
-> > >  	struct fbcon_ops *ops = oldinfo->fbcon_par;
-> > > -	int err = 0, ret;
-> > > +	int ret;
-> > >  
-> > > -	if (oldinfo->fbops->fb_release &&
-> > > -	    oldinfo->fbops->fb_release(oldinfo, 0)) {
-> > > -		con2fb_map[unit] = oldidx;
-> > The old code assigns con2fb_map[unit] before is calls
-> > newinfo->fbops->fb_release).
-> > I wonder if there can be any callback to fbcon where the value
-> > of con2fb_map[unit] matters?
-> 
-> It's all protected by console_lock, so other threads cannot see the
-> inconsistent state.
-> 
-> Essentially everything in fbcon.c is protected by console_lock().
-> 
-> Do you want me to hammer this in somewhere (maybe in the commit message),
-> or good enough for your ack?
+> > > > ---
+> > > >  MAINTAINERS                     |    7 +
+> > > >  drivers/hv/Kconfig              |    2 +
+> > > >  drivers/hv/Makefile             |    1 +
+> > > >  drivers/hv/dxgkrnl/Kconfig      |   26 +
+> > > >  drivers/hv/dxgkrnl/Makefile     |    5 +
+> > > >  drivers/hv/dxgkrnl/dxgadapter.c |  172 +++
+> > > >  drivers/hv/dxgkrnl/dxgkrnl.h    |  223 ++++
+> > > >  drivers/hv/dxgkrnl/dxgmodule.c  |  736 ++++++++++++
+> > > >  drivers/hv/dxgkrnl/dxgprocess.c |   17 +
+> > > >  drivers/hv/dxgkrnl/dxgvmbus.c   |  578 +++++++++
+> > > >  drivers/hv/dxgkrnl/dxgvmbus.h   |  855 ++++++++++++++
+> > > >  drivers/hv/dxgkrnl/hmgr.c       |   23 +
+> > > >  drivers/hv/dxgkrnl/hmgr.h       |   75 ++
+> > > >  drivers/hv/dxgkrnl/ioctl.c      |   24 +
+> > > >  drivers/hv/dxgkrnl/misc.c       |   37 +
+> > > >  drivers/hv/dxgkrnl/misc.h       |   89 ++
+> > > >  include/linux/hyperv.h          |   16 +
+> > > >  include/uapi/misc/d3dkmthk.h    | 1945 +++++++++++++++++++++++++++++++
+> > > >  18 files changed, 4831 insertions(+)
+> > > 
+> > > Would you want to review a 4800 line patch all at once?
+> > > 
+> > > greg k-h
+> > 
+> > Hi Greg,
+> > 
+> > Thank you for reviewing. I appreciate your time.
+> > 
+> > 1. d3dkmthk.h defines the user mode interface structures. This is ported
+> > from
+> >  the windows header at once. Is it acceptable to add it at it is?
+>
+> No, again, would you want to be presented with code that is not used at
+> all?  How would you want this to look if you had to review this?
 
-No need to spell it out more.
-Add my a-b and apply it.
+Could you recommend a similar in size driver to look how it was first 
+submitted?
 
-	Sam
+I looked at the Habanalabs driver submission, which was signed off by you.
+
+The commit 1ea2a20e91a4d0543a933b4df706c2585db7e3ae adds 94 header 
+files, without using the definitions.
+
+     habanalabs: add Goya registers header files
+     This patch just adds a lot of header files that contain description of
+     Goya's registers.
+     Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+How did you review this? I do not see much difference between defining 
+an interface to a virtual device and
+defining an interface to a hardware device.
+
+d3dkmthk.h defines a binary interface to the compute driver. It cannot 
+be changed, because it must
+be binary compatible with the Windows display graphics model.
+In my opinion the only thing to review here is the usage of the correct 
+Linux types and coding style.
+I can submit the file in a dedicated patch.
+
+> > 2. dxgvmbus.h defines the VM bus interface between the linux guest and the
+> > host.
+> > It was ported from the windows version at once. Is it acceptable to add it
+> > as it is?
+>
+> Again, no.
+
+The same here.
+dxgvmbus.h defines the binary VM bus interface between the host and guest.
+It must be compatible with the existing interface.It cannot be changed.
+In my opinion the only thing to review here is the usage of the correct 
+Linux types and coding style.
+I can submit the file in a dedicated patch.
+
+What are you looking to review in these interface? I am trying to avoid 
+unnecessary work, but will do it
+if it really helps during review.
+
+Thanks a lot,
+Iouri
+
+

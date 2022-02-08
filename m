@@ -2,84 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14EAE4AD43F
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 10:02:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E5DC4AD43B
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 10:02:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352741AbiBHJBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 04:01:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50666 "EHLO
+        id S1352774AbiBHJBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 04:01:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352732AbiBHJBl (ORCPT
+        with ESMTP id S1352751AbiBHJBu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 04:01:41 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 00D6CC03FEC0
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 01:01:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644310900;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=teClNrONiYXVnmCwa1h1q0ixCqq3xRiV2+FUHXxwnkg=;
-        b=XJr+XUCnlX3t14kvQdmGWTGKPMg/sEMcoLKkpkChaA+qcpIg4EvAtjZlqqayhSIgmwIWjy
-        rry18MLDincWHsjXykq1nUjxPSY6C7tTZAQVWlJCRcLMnnirqOL0SgCjEfPEk1b2oopkb4
-        cAt/A7sSsjpnE3qZxHww4anMZ26gm5E=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-144-mdkJlDz9Ore6Q7Kp9E1Y6Q-1; Tue, 08 Feb 2022 04:01:36 -0500
-X-MC-Unique: mdkJlDz9Ore6Q7Kp9E1Y6Q-1
-Received: by mail-wm1-f70.google.com with SMTP id u14-20020a05600c210e00b0037bddd0562eso271513wml.1
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 01:01:36 -0800 (PST)
+        Tue, 8 Feb 2022 04:01:50 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAAA9C03FEC5
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 01:01:49 -0800 (PST)
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id D5CF64003D
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 09:01:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644310908;
+        bh=6X3Cd7CM1Wrr8f+z4sbuv+5q5Ur8HKLsDoDl3wbmedI=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=k8O+TItiPu2d7/LzwgVtOj4Lpo7mUd0O3GQ1AJ/BHN1fzGI2ITZM75pRcrwAjCgXy
+         UfkQa5xDi/BiRQGqNRDYsKDni5h3Fj1DfzT8be8LTQVoqSkwbgavtT72qvmQQ3h6gX
+         PzVpTcOXV2fJjNP4ksFUgrb5B2HVfot2iOsWiCsQEEzDIyJ1apNaeQiFYMg5yBwdOI
+         YN57mP2xF6LyNaMivp2NZIIlcKJ9qSNuivJpjqXAwtTjj9zjACv65x7zHA/iyQohfm
+         geykPhQ38xELTb7GPVH1RUoWARzZFQyn8gSvAg/T6GLrVJl9CKyElCnXk3b/BE0cL2
+         WT5Hjc/EVfaUA==
+Received: by mail-ed1-f69.google.com with SMTP id dn20-20020a05640222f400b0040f8cdfb542so1870692edb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 01:01:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=teClNrONiYXVnmCwa1h1q0ixCqq3xRiV2+FUHXxwnkg=;
-        b=3ObVY7AuNl+zN56J5kjZIl0zSju+uSs3092KbFCZgbdRCsqIgs2x/7MNAfw8B8an79
-         CklP08wGi7WRJsu5lF9cxREhaGVPVvskT3E/sw56xMHubeY1J2/IDwYcwnfO6WEB+EhJ
-         Nsa+DQYcpq6D1xMbd5PLQ1whopKMLg/vAzuqegmUzaNNsxK85d/gWxdjjsWvGutPKFra
-         Eaa2Gz7ckZ3s7ca5nApHRpnmP+2zMmsGxqkLUnDWLdF/yFlekLvh/1DWKh4QTHoWLLnJ
-         Lb6W9RnuUSebGe7NSRPWdM5RjdlIzxu4mUk2NxleiK0HoeKDBS3EhneyPGP+w60WT3Re
-         Pq9g==
-X-Gm-Message-State: AOAM5313++uzD7YTSfMTbMNAy7iKMhKhEhHgC6xmNGvDccVW8lxh5B/E
-        8Y/2MOhRfbL/9IG10+9Dj7TK3INoYRtjlge3wgv0Hh8qz6WahDYo1LpiQVi447zSPk0Hg0/3QTM
-        VOLD9QV4U4V5awdLu6Oeq9aos
-X-Received: by 2002:a05:600c:35c5:: with SMTP id r5mr179779wmq.195.1644310895805;
-        Tue, 08 Feb 2022 01:01:35 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyrVaaJIU8wUcTZyPhODOggfPw3ee0UatWxMSdfB4lHP3hYokLnrCC49IDRTBsBo3R5aJzqjQ==
-X-Received: by 2002:a05:600c:35c5:: with SMTP id r5mr179756wmq.195.1644310895582;
-        Tue, 08 Feb 2022 01:01:35 -0800 (PST)
-Received: from ?IPV6:2003:cb:c712:a800:a1a0:a823:5301:d1af? (p200300cbc712a800a1a0a8235301d1af.dip0.t-ipconnect.de. [2003:cb:c712:a800:a1a0:a823:5301:d1af])
-        by smtp.gmail.com with ESMTPSA id e13sm13822419wrq.35.2022.02.08.01.01.34
+        bh=6X3Cd7CM1Wrr8f+z4sbuv+5q5Ur8HKLsDoDl3wbmedI=;
+        b=k2mGq3+pCuOLKbBHUfmk1t4T6pk33b0naRb/boAKho3cGPn/hdyUYhGxr20kk7PyKt
+         h6dOZRWE1Syqu6pZLTrCaSnhUFEDsipsBKkqpKc9MqU0d+qMQbx09Dg6FjLoQq6/3MSh
+         0+OBjyc9YvkOvwiEAGdqsl6zo87inleafHsNLUyn7//QgdBtYDBAsUOUdcBGsisOo5U2
+         nHvw/QgPwitNJpr+dCxhTwenXiz+3kilAZLUnb1TFhQw+1/bl1eUPArzl7gCcKf+vKgU
+         4NaARHbUkfKRC2WMu8v+t1Q6Zsvwygsl31apsT7XGF98mXvkNUZQ0XQfAa4h6ti28Ad6
+         rPDw==
+X-Gm-Message-State: AOAM531znmXxnY552B0tqjZcxTs3j6vFWG35FLNtEkP0d6vr8rR6O60x
+        gUdZ1JJZJeJyn5lCDrc5x/DGV7Yqq0ajM8z8CbbccvfhDjkyPIqh1uFX0H1eRldh8SqSIhFuem+
+        pOOuQtER2YHzyKGl10YGIP9kR5OF/YmQI8UHxrFMYdw==
+X-Received: by 2002:a17:906:ecf1:: with SMTP id qt17mr2816863ejb.481.1644310908542;
+        Tue, 08 Feb 2022 01:01:48 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwnTepgwgfhWKl1j7F8MsIf3A3OvU3tKzyXvM3N6w/vnMOP+3rf4FCufkCqQPpyX8yWdotahg==
+X-Received: by 2002:a17:906:ecf1:: with SMTP id qt17mr2816841ejb.481.1644310908352;
+        Tue, 08 Feb 2022 01:01:48 -0800 (PST)
+Received: from [192.168.0.92] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id pj22sm2710423ejb.192.2022.02.08.01.01.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Feb 2022 01:01:34 -0800 (PST)
-Message-ID: <dcb5d9c7-ae5c-e0c5-adee-37f5b92281e0@redhat.com>
-Date:   Tue, 8 Feb 2022 10:01:32 +0100
+        Tue, 08 Feb 2022 01:01:47 -0800 (PST)
+Message-ID: <e353cec3-9839-7274-d244-5b80b5a3fe55@canonical.com>
+Date:   Tue, 8 Feb 2022 10:01:47 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] mm/damon: Add option to monitor only writes
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 2/3] dt-bindings: crypto: Convert Atmel TDES to yaml
 Content-Language: en-US
-To:     Pedro Gomes <pedrodemargomes@gmail.com>
-Cc:     SeongJae Park <sj@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, John Hubbard <jhubbard@nvidia.com>
-References: <20220203131237.298090-1-pedrodemargomes@gmail.com>
- <c4128a09-1dc7-24b3-8ff2-eaf61f3de5e5@redhat.com>
- <CACpbsfapGSbno_n7ZJYJ2E4KkqWdWe_Wz8PuECBa3PZBp2Xnxw@mail.gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <CACpbsfapGSbno_n7ZJYJ2E4KkqWdWe_Wz8PuECBa3PZBp2Xnxw@mail.gmail.com>
+To:     Tudor.Ambarus@microchip.com, herbert@gondor.apana.org.au,
+        robh+dt@kernel.org
+Cc:     davem@davemloft.net, Nicolas.Ferre@microchip.com,
+        Claudiu.Beznea@microchip.com, alexandre.belloni@bootlin.com,
+        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220207032405.70733-1-tudor.ambarus@microchip.com>
+ <20220207032405.70733-3-tudor.ambarus@microchip.com>
+ <c7e160b0-16fb-79ca-c291-05571bbe8341@canonical.com>
+ <6aa72f5a-e9c2-cd8e-ab26-fc8b4ad5cc25@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <6aa72f5a-e9c2-cd8e-ab26-fc8b4ad5cc25@microchip.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,45 +89,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08.02.22 03:05, Pedro Gomes wrote:
-> On Mon, Feb 7, 2022 at 7:32 AM David Hildenbrand <david@redhat.com> wrote:
->>
->> Just like clearrefs, this can race against GUP-fast to detect pinned
->> pages. And just like clearrefs, we're not handling PMDs properly. And
->> just like anything that write-protects random anon pages right now, this
->> does not consider O_DIRECT as is.
->>
->> Fortunately, there are not too many users of clearreefs/softdirty
->> tracking out there (my search a while ago returned no open source
->> users). My assumption is that your feature might see more widespread use.
->>
->> Adding more random write protection until we fixed the COW issues [1]
->> really makes my stomach hurt on a Monday morning.
+On 08/02/2022 05:04, Tudor.Ambarus@microchip.com wrote:
+> Hi, Krzysztof,
 > 
-> I was not aware of these issues.
-> 
->> Please, let's defer any more features that rely on write-protecting
->> random anon pages until we have ways in place to not corrupt random user
->> space.
+> On 2/7/22 18:04, Krzysztof Kozlowski wrote:
+>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
 >>
->> That is:
->> 1) Teaching the COW logic to not copy pages that are pinned -- I'm
->> working on that.
->> 2) Converting O_DIRECT to use FOLL_PIN instead of FOLL_GET. John is
->> working on that.
+>> On 07/02/2022 04:24, Tudor Ambarus wrote:
+>>> Convert Atmel TDES documentation to yaml format. With the conversion the
+>>> clock and clock-names properties are made mandatory. The driver returns
+>>> -EINVAL if "tdes_clk" is not found, reflect that in the bindings and make
+>>> the clock and clock-names properties mandatory. Update the example to
+>>> better describe how one should define the dt node.
+>>>
+>>> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+>>> ---
+>>>  .../bindings/crypto/atmel,tdes.yaml           | 63 +++++++++++++++++++
+>>>  .../bindings/crypto/atmel-crypto.txt          | 23 -------
+>>>  2 files changed, 63 insertions(+), 23 deletions(-)
+>>>  create mode 100644 Documentation/devicetree/bindings/crypto/atmel,tdes.yaml
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/crypto/atmel,tdes.yaml b/Documentation/devicetree/bindings/crypto/atmel,tdes.yaml
+>>> new file mode 100644
+>>> index 000000000000..7efa5e4acaa1
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/crypto/atmel,tdes.yaml
+>>> @@ -0,0 +1,63 @@
+>>> +# SPDX-License-Identifier: GPL-2.0-only
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/crypto/atmel,tdes.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: Atmel Triple Data Encryption Standard (TDES) HW cryptographic accelerator
+>>> +
+>>> +maintainers:
+>>> +  - Tudor Ambarus <tudor.ambarus@microchip.com>
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    const: atmel,at91sam9g46-tdes
+>>> +
 >>
->> So I'm not against this change. I'm against this change at this point in
->> time.
+>> Same comments as for patch 1 plus one new (also applying to previous
+>> one). You named the file quite generic "atmel,tdes" or "atmel,aes", but
+>> what if something newer comes for at91? Maybe name it instead
+>> "atmel,at91sam9-aes"?
+>>
 > 
-> I agree. I will wait until the COW problems are solved to send this patch.
-> 
-> 
+> For historical reasons, the atmel-{aes,tdes,sha} drivers use their own
+> fixed compatible. The differentiation between the versions of the same IP
+> and their capabilities is done at run-time, by interrogating a version
+> register. Thus I expect that no new compatible will be added for neither of
+> these IPs.
 
-I'll put you on CC once I have something ready to at least handle pinned
-pages (FOLL_PIN) as expected, to not get them accidentally COWed.
+I was not talking about compatibles. I was talking about file name. You
+called it "atmel,tdes" which is quite generic. If Microchip (not
+Atmel...) comes with a new type of AES/TDES/SHA block for new line of
+architectures, how are you going to name the bindings?
 
--- 
-Thanks,
-
-David / dhildenb
-
+Best regards,
+Krzysztof

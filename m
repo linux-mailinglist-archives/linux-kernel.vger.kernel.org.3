@@ -2,100 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E5964AD795
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:38:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3F4B4AD79B
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:38:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358845AbiBHLgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 06:36:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40894 "EHLO
+        id S1359216AbiBHLgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 06:36:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbiBHLXG (ORCPT
+        with ESMTP id S1354263AbiBHLXg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 06:23:06 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A2AEC03FEC0;
-        Tue,  8 Feb 2022 03:23:05 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id m7so15894133pjk.0;
-        Tue, 08 Feb 2022 03:23:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:from:subject:cc:message-id:date:user-agent:mime-version
-         :content-transfer-encoding:content-language;
-        bh=yGdvePtA5J3T6k1Kw9exNjT0dNJZhtguuHy3n/iDjLY=;
-        b=Hr8wTdnT0O/0KmLlu487Qb/smC8jLqUcQsEX+G/dEgowpk3OTwYmXeDqiUOJpYrqKO
-         QY/XWRsLEwFCRIqQ0QabaOlDkfBiAK0dr3Dr8VOxX+l/iOiWzi6OngzUa8SrrdwSH02m
-         IdF0zT5OuQbiB3Cic3wycyEzIi6jMlK1Lekth1+wi/TQp55IwHgucgjpKn2F04xedVC1
-         inSUvte4ZyZjszTKJtllQL4VjLvAzuVLeJnzulIZdeznsr29VzrZ55nyXc5wTlR7JzL2
-         XwBPQihX1k8gBTfbraXTFuz35qX5YIgJdxGwF6tnkmRLa+8Cifcl/8knjpJvdZXFcced
-         SVlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:to:from:subject:cc:message-id:date:user-agent
-         :mime-version:content-transfer-encoding:content-language;
-        bh=yGdvePtA5J3T6k1Kw9exNjT0dNJZhtguuHy3n/iDjLY=;
-        b=Wl8/C7WZMEicbmD4s45A2IA/f9o7z7wvO+rY5kPwElHnlDP54c91VUnIzStB3rVxtB
-         RnAe56Bz7kaHymY8PXS6TOFJXQr1oxpKmggSpwSZzN647uUT+lxTTHTiwklkpn4WlEL8
-         k4umEhVyT8pXbFado9Qy6eoLW+5TOPkA4J9u4F2bUCdZjaQhotsA32/f9Hg8teV4gv6I
-         Q6h9ega0eing1uV1yGpU6XrNkQfFWt+ULigVpwNLuiMpWqU30xlLW0/Fd79gYcD7oi1c
-         scD8bg9ccN/6lXb3wCQfuNVLGtyuyfXuFRzHHHyagJfYC+4LjI7agDjHjHCsKUgdLxHO
-         cY0Q==
-X-Gm-Message-State: AOAM5320Xl9KScxlmX/BJi1atNJzM2c4zhx8EfQ3HABsLyxAn72X+LTI
-        BFeNQzFYRcrK0e/PTdVy2JbTcrUxlnY=
-X-Google-Smtp-Source: ABdhPJxxkZQCGQ/F57OmjRz+c/13EOwyHYr+V5dIqqaQ0+VjrV3Y5rzJ8tsWGJ+tYNXh3eXzWO8HPQ==
-X-Received: by 2002:a17:902:cec4:: with SMTP id d4mr3923507plg.158.1644319384555;
-        Tue, 08 Feb 2022 03:23:04 -0800 (PST)
-Received: from [192.168.1.100] ([166.111.139.99])
-        by smtp.gmail.com with ESMTPSA id c7sm15437310pfp.164.2022.02.08.03.23.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Feb 2022 03:23:03 -0800 (PST)
-To:     njavali@marvell.com, mrangankar@marvell.com,
-        GR-QLogic-Storage-Upstream@marvell.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com
-From:   Jia-Ju Bai <baijiaju1990@gmail.com>
-Subject: [BUG] scsi: qedi: possible ABBA deadlock in qedi_process_tmf_resp()
- and qedi_process_cmd_cleanup_resp()
-Cc:     linux-scsi@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Message-ID: <e468fdcb-f47f-e01a-da65-68da79020165@gmail.com>
-Date:   Tue, 8 Feb 2022 19:23:01 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        Tue, 8 Feb 2022 06:23:36 -0500
+Received: from vulcan.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6971AC03FED5
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 03:23:30 -0800 (PST)
+Received: from spock.localnet (unknown [83.148.33.151])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vulcan.natalenko.name (Postfix) with ESMTPSA id 8B816DB9038;
+        Tue,  8 Feb 2022 12:23:23 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
+        s=dkim-20170712; t=1644319403;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=my5/8th5a1G7ebhyaPdVtVtFmJbJrOhNxNQVFvXgC40=;
+        b=Fnhwtslj8SYrkR8v0r6PKFfWgEtB3HXbPMoKJXMvRmOemwUCnV61p8NyytmFYHIxsngfbx
+        X6J0GZxqNznkUW8ewaCtXL4RgXBRrqb+incxzeMpQl4thLb8d+AOBKEcNWcQJ7mKr9JL9X
+        QPzs5JWZ/G/ywB8xYdBUfoeEoMukvMM=
+From:   Oleksandr Natalenko <oleksandr@natalenko.name>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Mel Gorman <mgorman@suse.de>, Yu Zhao <yuzhao@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Barry Song <21cnbao@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        page-reclaim@google.com, x86@kernel.org
+Subject: Re: [PATCH v7 00/12] Multigenerational LRU Framework
+Date:   Tue, 08 Feb 2022 12:23:22 +0100
+Message-ID: <2228442.ElGaqSPkdT@natalenko.name>
+In-Reply-To: <YgJQeBUDaPbuDHi+@dhcp22.suse.cz>
+References: <20220208081902.3550911-1-yuzhao@google.com> <4714886.31r3eYUQgx@natalenko.name> <YgJQeBUDaPbuDHi+@dhcp22.suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hello.
 
-My static analysis tool reports a possible ABBA deadlock in the qedi 
-driver in Linux 5.16:
+On =FAter=FD 8. =FAnora 2022 12:14:00 CET Michal Hocko wrote:
+> On Tue 08-02-22 11:11:02, Oleksandr Natalenko wrote:
+> [...]
+> > Is the patch submission broken for everyone, or for me only? I see raw
+> > emails cluttered with some garbage like =3D2D, and hence I cannot apply
+> > those neither from my email client nor from lore.
+>=20
+> The patchset seems to be OK both in my inbox and b4[1] has downloaded
+> the full thread without any issues and I could apply all the patches
+> just fine
+>=20
+> [1] https://git.kernel.org/pub/scm/utils/b4/b4.git
 
-qedi_process_tmf_resp()
-   spin_lock(&session->back_lock); --> Line 201 (Lock A)
-   spin_lock(&qedi_conn->tmf_work_lock); --> Line 230 (Lock B)
+Thanks, b4 worked for me as well.
 
-qedi_process_cmd_cleanup_resp()
-   spin_lock_bh(&qedi_conn->tmf_work_lock); --> Line 752 (Lock B)
-   spin_lock_bh(&conn->session->back_lock); --> Line 784 (Lock A)
-
-When qedi_process_tmf_resp() and qedi_process_cmd_cleanup_resp() are 
-concurrently executed, the deadlock can occur.
-
-I am not quite sure whether this possible deadlock is real and how to 
-fix it if it is real.
-Any feedback would be appreciated, thanks :)
-
-Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+=2D-=20
+Oleksandr Natalenko (post-factum)
 
 
-Best wishes,
-Jia-Ju Bai

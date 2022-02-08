@@ -2,84 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32F9A4AD98E
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 14:22:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57BCA4AD983
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 14:20:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352742AbiBHNUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 08:20:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54616 "EHLO
+        id S1348474AbiBHNUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 08:20:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356823AbiBHMY1 (ORCPT
+        with ESMTP id S1344931AbiBHM06 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 07:24:27 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A0F7BC03FECA
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 04:24:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644323065;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OmNk9x3t77ts5HOhyjEsKGS6qVWrt92aX3uBiIq4k1Y=;
-        b=NB6girQ7CODOoany7Zjll+I059oVrlmvvp3XLVQuQ6l94Uk77QIaY++Bmktu79plXex1Gf
-        uSwHUTNkp2VPeGNQv/z0aOXbkkfwncWpPUL10F/jNegrgNE70awjYCNu2tVHHQZQDqMN0S
-        QeoDSTjfNzQ9ll13P0+bW7vTUm8n/S0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-635-cl1sK-SEMRGwiMugl2xPOw-1; Tue, 08 Feb 2022 07:24:22 -0500
-X-MC-Unique: cl1sK-SEMRGwiMugl2xPOw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B3B0C19251AB;
-        Tue,  8 Feb 2022 12:24:19 +0000 (UTC)
-Received: from starship (unknown [10.40.192.15])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1EB102B44E;
-        Tue,  8 Feb 2022 12:24:09 +0000 (UTC)
-Message-ID: <f198aca18f64b2e788ee53d5a03e739abe6a6697.camel@redhat.com>
-Subject: Re: [PATCH RESEND 07/30] KVM: x86: nSVM: deal with L1 hypervisor
- that intercepts interrupts but lets L2 control them
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
-Cc:     Tony Luck <tony.luck@intel.com>,
-        "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kernel@vger.kernel.org,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        intel-gvt-dev@lists.freedesktop.org,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Sean Christopherson <seanjc@google.com>,
-        David Airlie <airlied@linux.ie>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Jim Mattson <jmattson@google.com>, x86@kernel.org,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Borislav Petkov <bp@alien8.de>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>
-Date:   Tue, 08 Feb 2022 14:24:08 +0200
-In-Reply-To: <0c20990f2543413f4a087b7918cff14db48bc774.camel@redhat.com>
-References: <20220207155447.840194-1-mlevitsk@redhat.com>
-         <20220207155447.840194-8-mlevitsk@redhat.com>
-         <dd9305d6-1e3a-24f9-1d48-c5dac440112d@redhat.com>
-         <0c20990f2543413f4a087b7918cff14db48bc774.camel@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Tue, 8 Feb 2022 07:26:58 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D024C03FEC0
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 04:26:57 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id p15so51772593ejc.7
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 04:26:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=M8fVVO69k6oFQmGgr86L7p4G8m91URmGx/JG7vItFGs=;
+        b=dAsTDu0+VLjq0oBcw9NnZRu5y2DTId/+y+M247gWdZefn7zWi36p0IIYIl89FtNG+y
+         ZmoMBA6A2WGST+9q3NV3cIi63JW+J1w5/gvOmjbNvX3J2+jQQ403n8WzdV3WtqbkG8pj
+         ZZGQzQxIn5MvzxefYZ/HWt/x2wGLHEr6jQzqY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=M8fVVO69k6oFQmGgr86L7p4G8m91URmGx/JG7vItFGs=;
+        b=g3jlb2OKvK+HQWXrffO9k4rHZF7x840QsQAJCTkWecG9WPIpaAWeQj8wXO3HD+6loW
+         FtOCOHUED9G24vphYtAzvV06A8Gk1lBZcyqPogLoQYDyiqq0rK9xwTcbnl6Y/ZbcknHp
+         bl7TvY34sLLSSlnco89FHyU7r7NEoT4PS949Mm1wdIbwiIBLDwiajVsbY+Kwwl7XLdhX
+         9fIRlpNiIk4il18k1gCCgUq14WqI/reWvYdO+H1ZflL3Ohkv/15kcMbpPegaINUK1rHf
+         sNO6RpYH/w+AEzaIbOsJStrSjyludrJi+neNG8iwFUIugqan8mxjO8XNusIaxLLiyTK6
+         MekA==
+X-Gm-Message-State: AOAM53069l4+1yiqOcOjf2dm5NyUPhU6P3zJCdyaq9nhUBqoW2tJfXa/
+        NCtmeAzQ7u67b0MV5RJPbVW+IA==
+X-Google-Smtp-Source: ABdhPJw7c5LEuehZYQwnQ5zdMdwsVOu9wqdYqAvYs7q5kZCAp5j9VLgZXrO4g6Gb8AVX2xj/iHVgDA==
+X-Received: by 2002:a17:906:9b87:: with SMTP id dd7mr3386674ejc.178.1644323215615;
+        Tue, 08 Feb 2022 04:26:55 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id d7sm1613552ejp.98.2022.02.08.04.26.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 04:26:54 -0800 (PST)
+Date:   Tue, 8 Feb 2022 13:26:53 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     syzbot <syzbot+10e27961f4da37c443b2@syzkaller.appspotmail.com>,
+        Gerd Hoffmann <kraxel@redhat.com>
+Cc:     christian.koenig@amd.com, dri-devel@lists.freedesktop.org,
+        hch@lst.de, iommu@lists.linux-foundation.org,
+        linaro-mm-sig-owner@lists.linaro.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, m.szyprowski@samsung.com,
+        robin.murphy@arm.com, sumit.semwal@linaro.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] WARNING in __dma_map_sg_attrs
+Message-ID: <YgJhjdAbRHdnCZ4T@phenom.ffwll.local>
+Mail-Followup-To: syzbot <syzbot+10e27961f4da37c443b2@syzkaller.appspotmail.com>,
+        Gerd Hoffmann <kraxel@redhat.com>, christian.koenig@amd.com,
+        dri-devel@lists.freedesktop.org, hch@lst.de,
+        iommu@lists.linux-foundation.org,
+        linaro-mm-sig-owner@lists.linaro.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, m.szyprowski@samsung.com,
+        robin.murphy@arm.com, sumit.semwal@linaro.org,
+        syzkaller-bugs@googlegroups.com
+References: <000000000000f0196305d219b2fe@google.com>
+ <000000000000b968f305d74b1195@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000000000000b968f305d74b1195@google.com>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -88,109 +85,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-02-08 at 13:55 +0200, Maxim Levitsky wrote:
-> On Tue, 2022-02-08 at 12:33 +0100, Paolo Bonzini wrote:
-> > On 2/7/22 16:54, Maxim Levitsky wrote:
-> > > Fix a corner case in which the L1 hypervisor intercepts
-> > > interrupts (INTERCEPT_INTR) and either doesn't set
-> > > virtual interrupt masking (V_INTR_MASKING) or enters a
-> > > nested guest with EFLAGS.IF disabled prior to the entry.
-> > > 
-> > > In this case, despite the fact that L1 intercepts the interrupts,
-> > > KVM still needs to set up an interrupt window to wait before
-> > > injecting the INTR vmexit.
-> > > 
-> > > Currently the KVM instead enters an endless loop of 'req_immediate_exit'.
-> > > 
-> > > Exactly the same issue also happens for SMIs and NMI.
-> > > Fix this as well.
-> > > 
-> > > Note that on VMX, this case is impossible as there is only
-> > > 'vmexit on external interrupts' execution control which either set,
-> > > in which case both host and guest's EFLAGS.IF
-> > > are ignored, or not set, in which case no VMexits are delivered.
-> > > 
-> > > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> > > ---
-> > >   arch/x86/kvm/svm/svm.c | 17 +++++++++++++----
-> > >   1 file changed, 13 insertions(+), 4 deletions(-)
-> > > 
-> > > diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> > > index 9a4e299ed5673..22e614008cf59 100644
-> > > --- a/arch/x86/kvm/svm/svm.c
-> > > +++ b/arch/x86/kvm/svm/svm.c
-> > > @@ -3372,11 +3372,13 @@ static int svm_nmi_allowed(struct kvm_vcpu *vcpu, bool for_injection)
-> > >   	if (svm->nested.nested_run_pending)
-> > >   		return -EBUSY;
-> > >   
-> > > +	if (svm_nmi_blocked(vcpu))
-> > > +		return 0;
-> > > +
-> > >   	/* An NMI must not be injected into L2 if it's supposed to VM-Exit.  */
-> > >   	if (for_injection && is_guest_mode(vcpu) && nested_exit_on_nmi(svm))
-> > >   		return -EBUSY;
-> > > -
-> > > -	return !svm_nmi_blocked(vcpu);
-> > > +	return 1;
-> > >   }
-> > >   
-> > >   static bool svm_get_nmi_mask(struct kvm_vcpu *vcpu)
-> > > @@ -3428,9 +3430,13 @@ bool svm_interrupt_blocked(struct kvm_vcpu *vcpu)
-> > >   static int svm_interrupt_allowed(struct kvm_vcpu *vcpu, bool for_injection)
-> > >   {
-> > >   	struct vcpu_svm *svm = to_svm(vcpu);
-> > > +
-> > >   	if (svm->nested.nested_run_pending)
-> > >   		return -EBUSY;
-> > >   
-> > > +	if (svm_interrupt_blocked(vcpu))
-> > > +		return 0;
-> > > +
-> > >   	/*
-> > >   	 * An IRQ must not be injected into L2 if it's supposed to VM-Exit,
-> > >   	 * e.g. if the IRQ arrived asynchronously after checking nested events.
-> > > @@ -3438,7 +3444,7 @@ static int svm_interrupt_allowed(struct kvm_vcpu *vcpu, bool for_injection)
-> > >   	if (for_injection && is_guest_mode(vcpu) && nested_exit_on_intr(svm))
-> > >   		return -EBUSY;
-> > >   
-> > > -	return !svm_interrupt_blocked(vcpu);
-> > > +	return 1;
-> > >   }
-> > >   
-> > >   static void svm_enable_irq_window(struct kvm_vcpu *vcpu)
-> > > @@ -4169,11 +4175,14 @@ static int svm_smi_allowed(struct kvm_vcpu *vcpu, bool for_injection)
-> > >   	if (svm->nested.nested_run_pending)
-> > >   		return -EBUSY;
-> > >   
-> > > +	if (svm_smi_blocked(vcpu))
-> > > +		return 0;
-> > > +
-> > >   	/* An SMI must not be injected into L2 if it's supposed to VM-Exit.  */
-> > >   	if (for_injection && is_guest_mode(vcpu) && nested_exit_on_smi(svm))
-> > >   		return -EBUSY;
-> > >   
-> > > -	return !svm_smi_blocked(vcpu);
-> > > +	return 1;
-> > >   }
-> > >   
-> > >   static int svm_enter_smm(struct kvm_vcpu *vcpu, char *smstate)
-> > 
-> > Can you prepare a testcase for at least the interrupt case?
+On Sat, Feb 05, 2022 at 12:18:23PM -0800, syzbot wrote:
+> syzbot has found a reproducer for the following issue on:
 > 
-> Yep, I already wrote a kvm unit tests for all the cases, and I will send them very soon.
-
-Done.
-
-I also included tests for LBR virtualization which I think I already posted but I am not sure.
-
-Best regards,
-	Maxim Levitsky
+> HEAD commit:    0457e5153e0e Merge tag 'for-linus' of git://git.kernel.org..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=11b2637c700000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=6f043113811433a5
+> dashboard link: https://syzkaller.appspot.com/bug?extid=10e27961f4da37c443b2
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11c65542700000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1163f480700000
 > 
-> Best regards,
-> 	Maxim Levitsky
-> > Thanks,
-> > 
-> > Paolo
-> > 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+10e27961f4da37c443b2@syzkaller.appspotmail.com
 
+Adding Gerd, since this seems to blow up in udmabuf.
 
+I wonder why syzbot didn't figure this out, since it seems to have
+correctly added both dma-api and dma-buf people. Just not the maintainer
+for the begin_cpu_udmabuf function in the middle of the backtrace?
+-Daniel
+
+> 
+
+> ------------[ cut here ]------------
+> WARNING: CPU: 1 PID: 3595 at kernel/dma/mapping.c:188 __dma_map_sg_attrs+0x181/0x1f0 kernel/dma/mapping.c:188
+> Modules linked in:
+> CPU: 0 PID: 3595 Comm: syz-executor249 Not tainted 5.17.0-rc2-syzkaller-00316-g0457e5153e0e #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> RIP: 0010:__dma_map_sg_attrs+0x181/0x1f0 kernel/dma/mapping.c:188
+> Code: 00 00 00 00 00 fc ff df 48 c1 e8 03 80 3c 10 00 75 71 4c 8b 3d c0 83 b5 0d e9 db fe ff ff e8 b6 0f 13 00 0f 0b e8 af 0f 13 00 <0f> 0b 45 31 e4 e9 54 ff ff ff e8 a0 0f 13 00 49 8d 7f 50 48 b8 00
+> RSP: 0018:ffffc90002a07d68 EFLAGS: 00010293
+> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+> RDX: ffff88807e25e2c0 RSI: ffffffff81649e91 RDI: ffff88801b848408
+> RBP: ffff88801b848000 R08: 0000000000000002 R09: ffff88801d86c74f
+> R10: ffffffff81649d72 R11: 0000000000000001 R12: 0000000000000002
+> R13: ffff88801d86c680 R14: 0000000000000001 R15: 0000000000000000
+> FS:  0000555556e30300(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00000000200000cc CR3: 000000001d74a000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  dma_map_sgtable+0x70/0xf0 kernel/dma/mapping.c:264
+>  get_sg_table.isra.0+0xe0/0x160 drivers/dma-buf/udmabuf.c:72
+>  begin_cpu_udmabuf+0x130/0x1d0 drivers/dma-buf/udmabuf.c:126
+>  dma_buf_begin_cpu_access+0xfd/0x1d0 drivers/dma-buf/dma-buf.c:1164
+>  dma_buf_ioctl+0x259/0x2b0 drivers/dma-buf/dma-buf.c:363
+>  vfs_ioctl fs/ioctl.c:51 [inline]
+>  __do_sys_ioctl fs/ioctl.c:874 [inline]
+>  __se_sys_ioctl fs/ioctl.c:860 [inline]
+>  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:860
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> RIP: 0033:0x7f62fcf530f9
+> Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007ffe3edab9b8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f62fcf530f9
+> RDX: 0000000020000200 RSI: 0000000040086200 RDI: 0000000000000006
+> RBP: 00007f62fcf170e0 R08: 0000000000000000 R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000246 R12: 00007f62fcf17170
+> R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+>  </TASK>
+> 
+
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

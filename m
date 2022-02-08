@@ -2,77 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A6C14ACF3D
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 03:54:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D27314ACF3F
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 03:54:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346223AbiBHCyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 21:54:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40400 "EHLO
+        id S1346229AbiBHCys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 21:54:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346192AbiBHCyg (ORCPT
+        with ESMTP id S1346242AbiBHCyo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 21:54:36 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A87FC0401DF;
-        Mon,  7 Feb 2022 18:54:34 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id x4so5099254plb.4;
-        Mon, 07 Feb 2022 18:54:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=YQrZjm5FVCt3CzXB4OEDvbxS3DAlxh4k11n3126hcOQ=;
-        b=f1Hp4a12Brw5KIuwLtuBeTMD4d/k1uEcg0p0jCUxc5ZVue5VGe1VezPKzZCtBgFKjZ
-         SrwZcxT89FKzmvckqU7rFoeZZjqEBcSdtaYoirymHzs72auTaF7lCqBTBPMyZd/ZZEhf
-         emQk0dQ9Lo0S1XcxerwC4rQH7Qj7YCg7Sr8xTCddl/TtuHqILwEHGZ1NCIsLD8+scZeS
-         wd9qcViijEIbWJQGx7/hm6fqQ0ZMkMAjiQDZAgjMb02haawd1nD0eM6im/Jd48XNGIRU
-         5fSkbxGpyeis4P5XJkRYpeC6n+IZhIQbkx68quV630GDawktwu3P0Ikd2yudgNs4tGEr
-         Joig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=YQrZjm5FVCt3CzXB4OEDvbxS3DAlxh4k11n3126hcOQ=;
-        b=GmNv79+ZunJtRtobJCAMfzd8b16mVP3s93PIKuQjBGgP4QSt6/iAeJWd9Z+mYmIJ5H
-         XJFdhvMhnNQ4RP5PPq/Yl4s27nKR/4I3/X9YxVv1DYbU0HmxGZPxBzYuL4YwkpyYY2LW
-         taViwx96mqft7rvriOuVE7BbE8brFrs3L9KBNEHrHSUxYPb8HpgH+fC7MWEdnv4UFD5p
-         I4l4WLm/gLtgTZz6A0j56txaqm5zEYV1KlVy4UbriHPt4OhmkknGw2H2DqtdWnIY8ZMd
-         TlqfL+sPtseGUY7YtKMFvTxa7T7Pu66U9MTdLztkaQvt6z1mf6zkSvBkUUvFi4aa5K8I
-         lxrg==
-X-Gm-Message-State: AOAM530auQ8cXSJGsMFiTFTtOW8G850IXd/1gpeWiPLFApGPLOS0uKur
-        Ztb39NYHQ8zjvpSLzgGKsSY=
-X-Google-Smtp-Source: ABdhPJycgAVHfE38MvByjC6e/WUYVmp1S8kmKd3EG/Q7KMQqqXnFmuwRt8M8/mc7DacFBuzhVAk3lg==
-X-Received: by 2002:a17:90b:1c06:: with SMTP id oc6mr2108714pjb.213.1644288873515;
-        Mon, 07 Feb 2022 18:54:33 -0800 (PST)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id o7sm12681802pfk.184.2022.02.07.18.54.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Feb 2022 18:54:32 -0800 (PST)
-Message-ID: <4aaf6437-97f8-948c-f28e-47fb611c5423@gmail.com>
-Date:   Mon, 7 Feb 2022 18:54:30 -0800
+        Mon, 7 Feb 2022 21:54:44 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 394E8C0401C9;
+        Mon,  7 Feb 2022 18:54:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644288881; x=1675824881;
+  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=6IOSsvUamZzHAOJQun2LOjMi6FELRZcH68wuHsOsUKg=;
+  b=VfNoYJkEWO6vgZ/FQAljDNnbIW+fngDkwjTykJJ4vyewirdEU1NJgxpn
+   5ZjuKYCDH2TVDZkb3836EH3ZDIbJL5uLXIy6hZKEjU2Hd6ClAEPciybrM
+   LYUWnnPlurAXzZ4uMJXX1n9l/+9q1YhbcM4RAIqORTFXMwJTMN6CWfnh4
+   TuFCYM6t7uzHxQgmElb4yu3bzdgng0iAj8jbBnSOhyry2WYdqc0Frz3BG
+   YynKlcf8UNfxc4zPoy7F+qXz2R/LAyEBpD4Vybxv6n7KIBcihse3uwpCP
+   amsvKLCGhHQbQVMrwYrvgJZoofXQp8OUxT4Io1Z8ImogLb382M0jWmu5Z
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="246447942"
+X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
+   d="scan'208";a="246447942"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 18:54:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
+   d="scan'208";a="585044998"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga008.fm.intel.com with ESMTP; 07 Feb 2022 18:54:40 -0800
+Received: from cbaldes-mobl.amr.corp.intel.com (unknown [10.212.183.65])
+        by linux.intel.com (Postfix) with ESMTP id 9A693580970;
+        Mon,  7 Feb 2022 18:54:40 -0800 (PST)
+Message-ID: <d52b50f3b704280e476e60417323c98f45baf54a.camel@linux.intel.com>
+Subject: Re: [PATCH V6 1/3] platform/x86: Add Intel Software Defined Silicon
+ driver
+From:   "David E. Box" <david.e.box@linux.intel.com>
+Reply-To: david.e.box@linux.intel.com
+To:     Joe Perches <joe@perches.com>, hdegoede@redhat.com,
+        gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com,
+        srinivas.pandruvada@intel.com, mgross@linux.intel.com
+Cc:     linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        Mark Gross <markgross@kernel.org>
+Date:   Mon, 07 Feb 2022 18:54:40 -0800
+In-Reply-To: <103681860759d72b1acf712eed334b1d4ef6b7d5.camel@perches.com>
+References: <20220208005444.487209-1-david.e.box@linux.intel.com>
+         <20220208005444.487209-2-david.e.box@linux.intel.com>
+         <103681860759d72b1acf712eed334b1d4ef6b7d5.camel@perches.com>
+Organization: David E. Box
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v8 net-next 04/10] net: dsa: tag_ksz: add tag handling for
- Microchip LAN937x
-Content-Language: en-US
-To:     Prasanna Vengateshan <prasanna.vengateshan@microchip.com>,
-        andrew@lunn.ch, netdev@vger.kernel.org, olteanv@gmail.com,
-        robh+dt@kernel.org
-Cc:     UNGLinuxDriver@microchip.com, woojung.huh@microchip.com,
-        hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        vivien.didelot@gmail.com, devicetree@vger.kernel.org
-References: <20220207172204.589190-1-prasanna.vengateshan@microchip.com>
- <20220207172204.589190-5-prasanna.vengateshan@microchip.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220207172204.589190-5-prasanna.vengateshan@microchip.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,16 +71,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2/7/2022 9:21 AM, Prasanna Vengateshan wrote:
-> The Microchip LAN937X switches have a tagging protocol which is
-> very similar to KSZ tagging. So that the implementation is added to
-> tag_ksz.c and reused common APIs
+On Mon, 2022-02-07 at 17:40 -0800, Joe Perches wrote:
+> On Mon, 2022-02-07 at 16:54 -0800, David E. Box wrote:
+> > Intel Software Defined Silicon (SDSi) is a post manufacturing mechanism for
+> > activating additional silicon features. Features are enabled through a
+> > license activation process.  The SDSi driver provides a per socket, sysfs
+> > attribute interface for applications to perform 3 main provisioning
+> > functions:
+> []
+> > ---
+> > V6
+> >   - Replace,
+> >               return (ret < 0) ? ret : size;
+> >     with,
+> >               if (ret)
+> >                    return ret;
+> >               return size
+> > 
+> >     Besides the style change (suggested by GKH) this fixes a klocwork
+> >     warning.
 > 
-> Signed-off-by: Prasanna Vengateshan <prasanna.vengateshan@microchip.com>
-> Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+> thanks.
+> 
+> > diff --git a/drivers/platform/x86/intel/sdsi.c
+> > b/drivers/platform/x86/intel/sdsi.c
+> 
+> []
+> 
+> > +/* SDSi mailbox operations must be performed using 64bit mov instructions
+> > */
+> > +static __always_inline void
+> > +sdsi_memcpy64_toio(u64 __iomem *to, const u64 *from, size_t count_bytes)
+> > +{
+> > +	size_t count = count_bytes / sizeof(*to);
+> > +	int i;
+> > +
+> > +	for (i = 0; i < count; i++)
+> > +		writeq(from[i], &to[i]);
+> 
+> Any chance the byte count is not a multiple of sizeof(u64) ?
 
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+No. The value passed to count_bytes is either u64 or rounded up to sizeof(u64).
+But I'd like to know how I could guard against accidentally passing something
+different in the future.
+
+Andy had suggested just adding support for 64 bit memcpy io, but I hadn't time
+to look at this.
+
+> 
+> > +static __always_inline void
+> > +sdsi_memcpy64_fromio(u64 *to, const u64 __iomem *from, size_t count_bytes)
+> > +{
+> > +	size_t count = count_bytes / sizeof(*to);
+> > +	int i;
+> > +
+> > +	for (i = 0; i < count; i++)
+> > +		to[i] = readq(&from[i]);
+> > +}
+> 
+> here too.
+
+Same.
+
+> 
+> []
+> 
+> > +static int sdsi_mbox_cmd_read(struct sdsi_priv *priv, struct sdsi_mbox_info
+> > *info,
+> > +			      size_t *data_size)
+> > +{
+> > +	struct device *dev = priv->dev;
+> > +	u32 total, loop, eom, status, message_size;
+> []
+> > +		if (packet_size > SDSI_SIZE_MAILBOX) {
+> > +			dev_err(dev, "Packet size to large\n");
+> 
+> too
+
+Sorry, I'm missing the question here. If it's whether packet_size could also not
+be a multiple of sizeof(u64) the answer here is yes. But I don't see how that
+matters. packet_size is a value read from the hardware. This is just a sanity
+check.
+
+> 
+> []
+> > +	/* Message size check is only valid for multi-packet transfers */
+> > +	if (loop && total != message_size)
+> > +		dev_warn(dev, "Read count %d differs from expected count %d\n",
+> 
+> %u
+> 
+> > +			 total, message_size);
+> > +static int sdsi_map_mbox_registers(struct sdsi_priv *priv, struct pci_dev
+> > *parent,
+> > +				   struct disc_table *disc_table, struct
+> > resource *disc_res)
+> > +{
+> > +	u32 access_type = FIELD_GET(DT_ACCESS_TYPE, disc_table->access_info);
+> > +	u32 size = FIELD_GET(DT_SIZE, disc_table->access_info);
+> > +	u32 tbir = FIELD_GET(DT_TBIR, disc_table->offset);
+> > +	u32 offset = DT_OFFSET(disc_table->offset);
+> > +	u32 features_offset;
+> > +	struct resource res = {};
+> > +
+> > +	/* Starting location of SDSi MMIO region based on access type */
+> > +	switch (access_type) {
+> > +	case ACCESS_TYPE_LOCAL:
+> > +		if (tbir) {
+> > +			dev_err(priv->dev, "Unsupported BAR index %d for access
+> > type %d\n",
+> > +				tbir, access_type);
+> 
+> %u here too
+> 
+> []
+> > +		dev_err(priv->dev, "Unrecognized access_type %d\n",
+> > access_type);
+> 
+> and here
+
+Ack on the specifier changes. Thanks.
+
+> 
+> 
+

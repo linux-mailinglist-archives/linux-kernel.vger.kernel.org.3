@@ -2,63 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65CF54AD642
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:23:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B8904AD654
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:24:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236502AbiBHLXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 06:23:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45904 "EHLO
+        id S229746AbiBHLYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 06:24:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355586AbiBHJqv (ORCPT
+        with ESMTP id S1355894AbiBHJ7c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 04:46:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7B06C03FEC0
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 01:46:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 62F44B81990
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 09:46:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86753C004E1;
-        Tue,  8 Feb 2022 09:46:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644313608;
-        bh=8UbAjj/H6avAWOylioig6EnD0MGcFmQgIPkZQYteBMI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NL4mPYiCgOPwGpLfECYMdrXx3UnBrMG1x8wFtDUHy63Yp9jTV2gbwD65NwdCBr+LQ
-         yDQuC8cCfuCJtkdD1Dehs3YIBY8/jAa4RrVpIyyA/S3OQf3zj1e8gjf86MmYGwHXtu
-         gn/ibnf871eQ+VlCXDQLN1HXJ1z5Fhb5yxcdFvDU=
-Date:   Tue, 8 Feb 2022 10:46:45 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Tong Zhang <ztong0001@gmail.com>
-Cc:     Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev, insop.song@gainspeed.com,
-        devel@driverdev.osuosl.org, dan.carpenter@oracle.com
-Subject: Re: [PATCH] staging: drop fpgaboot driver
-Message-ID: <YgI8BQlUa671AvkY@kroah.com>
-References: <Yf025dphJw2rUVR5@kroah.com>
- <20220204190847.3809405-1-ztong0001@gmail.com>
+        Tue, 8 Feb 2022 04:59:32 -0500
+X-Greylist: delayed 654 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Feb 2022 01:59:29 PST
+Received: from chinatelecom.cn (prt-mail.chinatelecom.cn [42.123.76.222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3EB1CC03FEC0;
+        Tue,  8 Feb 2022 01:59:29 -0800 (PST)
+HMM_SOURCE_IP: 172.18.0.48:33584.1340775733
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-110.86.5.91 (unknown [172.18.0.48])
+        by chinatelecom.cn (HERMES) with SMTP id A4EC62800A8;
+        Tue,  8 Feb 2022 17:48:27 +0800 (CST)
+X-189-SAVE-TO-SEND: zhenggy@chinatelecom.cn
+Received: from  ([172.18.0.48])
+        by app0024 with ESMTP id 138a66c129c44c58b32f4233f37be3ab for linux-kernel@vger.kernel.org;
+        Tue, 08 Feb 2022 17:48:30 CST
+X-Transaction-ID: 138a66c129c44c58b32f4233f37be3ab
+X-Real-From: zhenggy@chinatelecom.cn
+X-Receive-IP: 172.18.0.48
+X-MEDUSA-Status: 0
+Sender: zhenggy@chinatelecom.cn
+To:     bcrl@kvack.org, viro@zeniv.linux.org.uk, ebiggers@kernel.org,
+        axboe@kernel.dk
+Cc:     linux-aio@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+From:   zhenggy <zhenggy@chinatelecom.cn>
+Subject: [PATCH] aio: inform block layer of how many requests we are
+ submitting
+Message-ID: <8e0186ed-04bb-7bb8-ff09-581a7b9fdf03@chinatelecom.cn>
+Date:   Tue, 8 Feb 2022 17:47:17 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220204190847.3809405-1-ztong0001@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=gbk
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 04, 2022 at 11:08:35AM -0800, Tong Zhang wrote:
-> The gs_fpgaboot driver is totally broken since 2014 and no one even
-> noticed the driver is not probing. Given the quality of the driver
-> and its current state it makes sense to drop it.
-> 
-> Signed-off-by: Tong Zhang <ztong0001@gmail.com>
+After commit 47c122e35d7e ("block: pre-allocate requests if plug is
+started and is a batch"), block layer can make smarter request allocation
+if it know how many requests it need to submit, so switch to use
+blk_start_plug_nr_ios here to pass the number of requests we will submit.
 
-Thanks, now dropped!
+Signed-off-by: GuoYong Zheng <zhenggy@chinatelecom.cn>
+---
+ fs/aio.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/fs/aio.c b/fs/aio.c
+index 4ceba13..7c4935e 100644
+--- a/fs/aio.c
++++ b/fs/aio.c
+@@ -2071,7 +2071,7 @@ static int io_submit_one(struct kioctx *ctx, struct iocb __user *user_iocb,
+ 		nr = ctx->nr_events;
+
+ 	if (nr > AIO_PLUG_THRESHOLD)
+-		blk_start_plug(&plug);
++		blk_start_plug_nr_ios(&plug, nr);
+ 	for (i = 0; i < nr; i++) {
+ 		struct iocb __user *user_iocb;
+
+-- 
+1.8.3.1
 

@@ -2,69 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12CBB4AD764
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:35:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D90D84AD771
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:35:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355469AbiBHLfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 06:35:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38162 "EHLO
+        id S1355784AbiBHLfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 06:35:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236598AbiBHLNT (ORCPT
+        with ESMTP id S1356935AbiBHLNc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 06:13:19 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AECB3C03FEC0;
-        Tue,  8 Feb 2022 03:13:18 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id z13so640698pfa.3;
-        Tue, 08 Feb 2022 03:13:18 -0800 (PST)
+        Tue, 8 Feb 2022 06:13:32 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 426C3C03FEC7
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 03:13:31 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id u18so36356773edt.6
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 03:13:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:message-id:date:user-agent:mime-version
-         :content-transfer-encoding:content-language;
-        bh=jT1cKosXcRAQ3QgcohgO2Lw1KpFQbKWn6saHhs1RKHA=;
-        b=lj/XmEGsyYOviX8Ubzy8vnxlCH4B3X5gXp8BQ4iYG8FxHjtJqU29xFPQUBNV3uTr8q
-         FyEWO6FAoRy9hFENyGTMdp2oo49IlOk9TmOHenmQXdaKZ4yy3nVgIOtPxUb1B+UJ10f4
-         cdkr1AWz0VfCm9xRKPL7htfXKHMtaCxYkDHzulU21jFlEkmbttO0PDakAsaGqwZHaVpc
-         lClPrf0p4eBUilZdeaJEnhDrtxxWUJxNR/ZS70y8Y0WmBkZj3mZoWDhuUTOwV4jOKiRA
-         ZxX08P7jH8pGt8ccDZR1eg7eBIXleA0IbJH2lmFZIGS5Zy3XG/RX1nfVhdZ5WfMlPbmh
-         eMhw==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3G2225l3e7AAW7cvW9DSbSKu70gKYyiFP+/P2AbU0GE=;
+        b=Xyf7gEeeFQZpkKXO8gzF2AgluqdrifnT/FgKVNNk/lOKTNzDZiaZpxWZkJBQ3wk8ue
+         hYn6eA9FXNG9IBGN9B+GjYUHQ8714SRdBNzbQJ82JTECIlg3js0Ids8PtzlFJlwQ8/No
+         KjSJpWys4J2GcMk8T8YisSEgyfTJXbUXne3m/y0TCeoQoimlXHHwP1M4P31cZ7kOgtbc
+         +zWBrbmshVSmfUyRDLeErcgLx7SVrFU5Zk0tjgRWRfH+3NXn/PL8N0Wfp1ujODljr+4m
+         cAdFJR6/y3QWMGHdJ/QVE6BBFoYdz9z3MzSn6nX0V+TefwaKjnvOZqYCVvi9JflBbb1S
+         qJ5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:message-id:date:user-agent
-         :mime-version:content-transfer-encoding:content-language;
-        bh=jT1cKosXcRAQ3QgcohgO2Lw1KpFQbKWn6saHhs1RKHA=;
-        b=z07O4ULcxNTPTCg9t7BKokYFCrqqNdrMhHTltqUDUQwXSRAzyOosVn2QZmxwhOAwnE
-         eiNYQ1LlWSzubHT+5cvSQnR0gPlFF3h2A878XyVSDaxmBYfAYlXNKD9hJ48wwJ6VJ7U7
-         lVbA8eWL1UIl3j/bAOzPgUOOV74moAAhxfi2EQRGwZuatqB/Hjx4PLTNhTyiOmmoAijs
-         /koOOSOZUgjA14gvB0BPSpfB5Up6DJgcYwvhlN8blH8XHjIH6XJCEGw8fOZ7JhIFADdk
-         PMLyLbPqOpIg4RpOmLgzCX/KsapmaYACK78Dm5TXrj8XWNsEiCYPCBxhsJP+m8Zzi63H
-         Z1vQ==
-X-Gm-Message-State: AOAM5318s//PoN6UrvDJ8w3INSugOm5toD3EOT7O5jyY04Nhe/ClUWSJ
-        GcY/8wCIG9ej4p5N/EukfIV/ZJYzY8s=
-X-Google-Smtp-Source: ABdhPJzdPftreTii6GmmT++vd2facGVqjUbf4A6ncaTkAs98QhKLW+qK8LqOjFuc4VSa+LQe0eyH7Q==
-X-Received: by 2002:a63:ad44:: with SMTP id y4mr3097759pgo.160.1644318797989;
-        Tue, 08 Feb 2022 03:13:17 -0800 (PST)
-Received: from [192.168.1.100] ([166.111.139.99])
-        by smtp.gmail.com with ESMTPSA id rj1sm2581464pjb.49.2022.02.08.03.13.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Feb 2022 03:13:17 -0800 (PST)
-From:   Jia-Ju Bai <baijiaju1990@gmail.com>
-To:     pontus.fuchs@gmail.com, Kalle Valo <kvalo@codeaurora.org>
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: [BUG] ar5523: possible deadlocks involving locking and waiting
- operations
-Message-ID: <7c9bb278-5042-3bdc-9598-95a10e42f78d@gmail.com>
-Date:   Tue, 8 Feb 2022 19:13:15 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3G2225l3e7AAW7cvW9DSbSKu70gKYyiFP+/P2AbU0GE=;
+        b=3davzk8ulLQJDrzVnmXp+IzQhZ72cS6D3p8dFfnQnNiba7+kG/1XKo1DL/UrMFKI6t
+         B/oCQRkbUQgeqqI8x6DnOxfQ/emW4tgVJ3SvmoZ/6G7xsFtDZuyJfLRjNHzqqndYxyrV
+         yvMz2sXykis/S4JiGXcOfzrVguhW+MUAdYl0PrIhPG+Ct5qlCGokdsJEniOl0jmutz/n
+         SpsAQQMiCy/s4rInu/98xggnMqzvXunkZS85exrs2FciBsIkTEDHkdqrfQCKuxpNghm3
+         xO+VS9Z8kAxSlVAjQgAQdqd1PoTTiBDxemS0YWv8qxPEo/wK1AkLIoP9K/jDpnxhLl7t
+         6erg==
+X-Gm-Message-State: AOAM532ysx2/CYPhRLVPjIuS/LuV0p/iCInEM2x0gSMat2XTdEWdBBXY
+        nRn3b46AkTOhYGnWTd0y5zcPb5UNW1J50Kr5UdegxA==
+X-Google-Smtp-Source: ABdhPJywJZL0jTPvvCbkGnYtFW82KoshEzkqB1HixUSDNK3JM1+qqwgc2BPOGxgMTLyu8AS04o5CLxS9fyGFvEJzrWk=
+X-Received: by 2002:aa7:db49:: with SMTP id n9mr3902542edt.100.1644318809786;
+ Tue, 08 Feb 2022 03:13:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+References: <20220201120310.878267-1-maz@kernel.org>
+In-Reply-To: <20220201120310.878267-1-maz@kernel.org>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Tue, 8 Feb 2022 12:13:19 +0100
+Message-ID: <CAMRc=Me=VTqTfa4=p3HOa4_NmE3W6h+YyPLZGKXZo6dqUoxWmg@mail.gmail.com>
+Subject: Re: [PATCH 00/12] genirq: Move irqchip runtime PM over to irq domain
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC..." 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-OMAP <linux-omap@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Emil Renner Berthing <kernel@esmil.dk>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,46 +80,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Feb 1, 2022 at 1:03 PM Marc Zyngier <maz@kernel.org> wrote:
+>
+> Our irq_chip data structure currently suffers from two problems:
+>
+> (1) the 'name' field is often dynamically populated with a reference
+>     to the underlying HW (DT node dame, for example)
+>
+> (2) the 'parent_device' which is used to implement runtime PM is also
+>     dynamically populated
+>
+> (3) there is at least one instance of a subsystem messing with the
+>     internals of irq_chip structures (gpiochip_set_irq_hooks is
+>     what I know about)
+>
+> These things mean that although the primary use of irq_chip is to only
+> contain function pointers and other *static* information, the above
+> two fields result in these structures being copied in a number of
+> drivers. Eventually, it would be much better if the various drivers
+> would use irq_chip as an 'ops' data structure (potentially made
+> read-only), and keep the dynamic information somewhere more suitable.
+>
+> For (2) we already have the irqdomain structure that is designed to
+> deal with the context in which interrupts are used, and it makes sense
+> to move the 'parent_device' field over to this structure. This is what
+> this small series is doing, with some minor cleanup on the way.
+>
+> (1) and (3) will be dealt in separate series (and I don't have a good
+> solution for (3) yet).
+>
+> Thanks,
+>
+>         M.
+>
+> Marc Zyngier (12):
+>   genirq: Allow the PM device to originate from irq domain
+>   irqchip/gic: Move PM device over to irq domain
+>   irqchip/renesas-intc-gpio: Move PM device over to irq domain
+>   irqchip/renesas-irqc: Move PM device over to irq domain
+>   irqchip/imx-intmux: Move PM device over to irq domain
+>   gpio: mt7621: Kill parent_device usage
+>   gpio: omap: Move PM device over to irq domain
+>   gpio: rcar: Move PM device over to irq domain
+>   gpio: tpmx86: Move PM device over to irq domain
+>   pinctrl: npcm: Fix broken references to chip->parent_device
+>   pinctrl: starfive: Move PM device over to irq domain
+>   genirq: Kill irq_chip::parent_device
+>
+>  drivers/gpio/gpio-mt7621.c                |  1 -
+>  drivers/gpio/gpio-omap.c                  |  7 ++++---
+>  drivers/gpio/gpio-rcar.c                  |  2 +-
+>  drivers/gpio/gpio-tqmx86.c                |  3 ++-
+>  drivers/irqchip/irq-gic.c                 | 12 +++++------
+>  drivers/irqchip/irq-imx-intmux.c          |  8 +++-----
+>  drivers/irqchip/irq-renesas-intc-irqpin.c |  3 ++-
+>  drivers/irqchip/irq-renesas-irqc.c        |  3 ++-
+>  drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c | 25 +++++++++++------------
+>  drivers/pinctrl/pinctrl-starfive.c        |  3 ++-
+>  include/linux/irq.h                       |  2 --
+>  include/linux/irqdomain.h                 | 10 +++++++++
+>  kernel/irq/chip.c                         | 20 +++++++++++++-----
+>  13 files changed, 59 insertions(+), 40 deletions(-)
+>
+> --
+> 2.30.2
+>
 
-My static analysis tool reports two possible deadlocks in the ar5523 
-driver in Linux 5.16:
+The changes for GPIO are small so:
 
-#BUG 1
-ar5523_hwconfig()
-   mutex_lock(&ar->mutex); --> Line 1135 (Lock A)
-   ar5523_flush_tx()
-     wait_event_timeout(ar->tx_flush_waitq, ...) --> Line 926 (Wait X)
+Acked-by: Bartosz Golaszewski <brgl@bgdev.pl>
 
-ar5523_tx_work()
-   mutex_lock(&ar->mutex); --> Line 888 (Lock A)
-   ar5523_tx_work_locked()
-     ar5523_data_tx_pkt_put()
-       wake_up(&ar->tx_flush_waitq); --> Line 727 (Wake X)
+You can take it through your tree and if there are any conflicts, I'll
+just ask for an immutable branch.
 
-#BUG 2
-ar5523_configure_filter()
-   mutex_lock(&ar->mutex); --> Line 1331 (Lock A)
-   ar5523_flush_tx()
-     wait_event_timeout(ar->tx_flush_waitq, ...) --> Line 926 (Wait X)
-
-ar5523_tx_work()
-   mutex_lock(&ar->mutex); --> Line 888 (Lock A)
-   ar5523_tx_work_locked()
-     ar5523_data_tx_pkt_put()
-       wake_up(&ar->tx_flush_waitq); --> Line 727 (Wake X)
-
-When ar5523_hwconfig()/ar5523_configure_filter() is executed, "Wait X" 
-is performed by holding "Lock A". If ar5523_tx_work() is executed at 
-this time, "Wake X" cannot be performed to wake up "Wait X", because 
-"Lock A" has been already held, causing possible deadlock.
-I find that "Wait X" is performed with a timeout, to relieve the 
-possible deadlocks; but I think this timeout can cause inefficient 
-execution.
-
-I am not quite sure whether these possible problems are real.
-Any feedback would be appreciated, thanks :)
-
-
-Best wishes,
-Jia-Ju Bai
+Bart

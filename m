@@ -2,113 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EABB4AE192
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 19:56:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED6374AE19A
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 19:57:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385578AbiBHSzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 13:55:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47530 "EHLO
+        id S1385566AbiBHS5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 13:57:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385551AbiBHSzh (ORCPT
+        with ESMTP id S1353465AbiBHS5G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 13:55:37 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA5A9C0612C0;
-        Tue,  8 Feb 2022 10:55:36 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id r7so12891811wmq.5;
-        Tue, 08 Feb 2022 10:55:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=s2rLFrwGSf/fjUuAvUVyqkzahpLoS6qof5NPWyop7JA=;
-        b=EK3T3ZR1A7H31bUygylx4Ud9sCiarT3y28W/L+LJ7Q2Z8G3xmKezXiw/q9adC1ar4i
-         PRnlYBsJrSSwSAExNZkYsQ+1TYLC+vWf9wo2aLAc+OSbtN3+z8znofX7nmWwdiUlEA1c
-         p3VnU7ENuGTTwEQ25sQZ5R3LlIAf9udJr4YAoTSffFGUWGwG8MDav4aqv9csrZ38uRLZ
-         oCchCrOEqf+jb50ezwbdxdTmlobOkW9rsy5+RHORovdwzpocRiFmqc/ki44CU8cHjJ40
-         jbpwMGzt9GHw8Q/yGzPoSuDIHZeLhEOU4thfyaoEL1aPaY+6U92nL1mCLCGdJVBeOxg1
-         lVmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=s2rLFrwGSf/fjUuAvUVyqkzahpLoS6qof5NPWyop7JA=;
-        b=iq8G4XIwNifhsbeZOV8DTgb1QAAreyCiNWPHXb8lqsgFWURp9+WrB1JVemvMO/zYDt
-         m5S70cYmt5Gw8Aa/7e/Qfim66IWVVu8JknW2NuVF+U5TNoN8d5mUY7OejTR6uIuAUPov
-         B39VhPwDsN3+7WHZkCo/crQCoQl4Eh05NCYl5k55V81JZZIz0ljk/d2z6BcNl3Zsq/CX
-         PqMdBw4qrOAge1/Z0/I5Oly+SiDQjjxNOc2n3b3TKQY/yV8+tcUL5/DirmIX3b4lXGCX
-         35EacApmTTxnzLOcLKcYnqVOeh9HiA5SOUUYhwyPl2DBHDfJu0Rcsl9ZIdJBa3D95O8s
-         5pcw==
-X-Gm-Message-State: AOAM530BdrOXyS6bwHB8xT2gLQQVXs5D9UZTgHF4G+J9aZe3he+e5H6H
-        tvFUnpneVtyxmhghQjweYLI=
-X-Google-Smtp-Source: ABdhPJy+NGsLX5KnwKNlbDgAb6Z0yHzKcjQnt/ojyVP35AQc8/ANOmzJAIjSf9RSIaEAtI8uEhhBiA==
-X-Received: by 2002:a05:600c:3552:: with SMTP id i18mr2256601wmq.21.1644346535282;
-        Tue, 08 Feb 2022 10:55:35 -0800 (PST)
-Received: from localhost.localdomain ([94.73.33.246])
-        by smtp.gmail.com with ESMTPSA id w6sm11897613wrp.51.2022.02.08.10.55.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 10:55:35 -0800 (PST)
-From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-To:     jikos@kernel.org
-Cc:     benjamin.tissoires@redhat.com, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-Subject: [PATCH v2] HID: apple: Report Magic Keyboard 2021 with fingerprint reader battery over USB
-Date:   Tue,  8 Feb 2022 19:55:30 +0100
-Message-Id: <20220208185530.51690-1-jose.exposito89@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 8 Feb 2022 13:57:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77DE2C0613CB;
+        Tue,  8 Feb 2022 10:57:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1575A613F8;
+        Tue,  8 Feb 2022 18:57:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68983C004E1;
+        Tue,  8 Feb 2022 18:57:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644346624;
+        bh=JI4DEvYaY6EOL+Uro39kJ5nMr68u1NR9D7nmYx+BQCA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=YdhcaZfap181gsTUJQKhQwRXtE/rFTSeZAMQXZuB5IOmbJntWIPHvZHA32n2L2Dqq
+         VTqBugrj41q61o1KIII5r/Qgrq56TgOOXSzuCHXCujZhbGpzuBgYXKh+QXBIuUpw1e
+         UThiDdpvlT/ownHTGOdKSvdciCRNTDeHDHRGMJPeE7SXCsVpFLpLdOzIhysQ5nNwV7
+         VeMgLa1xYdqVIv/JEdkEPV3ZEIWP4m5paZ5ZHyf0QlTwuSApkSjesF50qFZwGzPbBN
+         RjMK+ZAnXD1paCF0uu3V7f6bYZ4ngvjpwWCw6aMV7H7uUnQ/fldt1JjNULjYiT3kkc
+         n6D0EjKaD+8bw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.lan)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nHVfh-006MEi-V5; Tue, 08 Feb 2022 18:57:02 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Mark Rutland <mark.rutland@arm.com>, Will Deacon <will@kernel.org>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dougall <dougallj@gmail.com>, kernel-team@android.com
+Subject: [PATCH v5 00/10] drivers/perf: CPU PMU driver for Apple M1
+Date:   Tue,  8 Feb 2022 18:55:54 +0000
+Message-Id: <20220208185604.1097957-1-maz@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, mark.rutland@arm.com, will@kernel.org, marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io, robh+dt@kernel.org, tglx@linutronix.de, dougallj@gmail.com, kernel-team@android.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Like the Apple Magic Keyboard 2015, when connected over USB, the 2021
-version with fingerprint reader registers 2 different interfaces. One of
-them is used to report the battery level.
+The M1 SoC embeds a per-CPU PMU that has a very different programming
+interface compared to the architected PMUv3 that is normally present
+on standard implementations.
 
-However, unlike when connected over Bluetooth, the battery level is not
-reported automatically and it is required to fetch it manually.
+This small series adds a driver for this HW by leveraging the arm_pmu
+infrastructure, resulting in a rather simple driver.
 
-Add the APPLE_RDESC_BATTERY quirk to fix the battery report descriptor
-and manually fetch the battery level.
+Of course, we know next to nothing about the actual events this PMU
+counts, aside from CPU cycles and instructions. Everything else is
+undocumented (though as Dougall pointed out, someone could extract the
+relevant information from a macOS install if they wanted -- I don't).
+I'm looking at allowing the perf userspace tool to load the event
+descriptions at runtime, which would probably help.
 
-Tested with the ANSI variant of the keyboard with and without numpad.
+* From v4 [4]:
+  - More DT binding tweaks
+  - Collected RB from Rob
+  - Rebased on 5.17-rc3
 
-Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+* From v3 [3]:
+  - DT binding fixes
+  - Typo fixes (and probably more added)
+  - Rebased on 5.17-rc1
 
----
+* From v2 [2]:
+  - Reworked the way the FIQ virtual affinity is exposed (now coming
+    from the DT instead of being internal to the irqchip driver)
+  - Dropped the locking from the PMU driver after Mark's review
+  - Required the exclude_guest flag to be set, as the PMU doesn't seem
+    to be able to count guest events, at least by default
+  - Dropped the counter-stop on interrupt and instead stop the whole
+    PMU on interrupt
+  - Dropped the kernel taint, as I couldn't find a good way to do that
+    on first use
+  - Collected RBs from Hector
 
-v2: Rebased on master, it was for-next
----
- drivers/hid/hid-apple.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+* From v1 [1]:
+  - Added a few comments clarifying the event mapping to counters
+  - Spelling fixes
+  - Collected Acks from Rob
 
-diff --git a/drivers/hid/hid-apple.c b/drivers/hid/hid-apple.c
-index 24802a4a636e..5117d354af18 100644
---- a/drivers/hid/hid-apple.c
-+++ b/drivers/hid/hid-apple.c
-@@ -752,11 +752,11 @@ static const struct hid_device_id apple_devices[] = {
- 	{ HID_BLUETOOTH_DEVICE(BT_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_MAGIC_KEYBOARD_2021),
- 		.driver_data = APPLE_HAS_FN | APPLE_ISO_TILDE_QUIRK },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_MAGIC_KEYBOARD_FINGERPRINT_2021),
--		.driver_data = APPLE_HAS_FN | APPLE_ISO_TILDE_QUIRK },
-+		.driver_data = APPLE_HAS_FN | APPLE_ISO_TILDE_QUIRK | APPLE_RDESC_BATTERY },
- 	{ HID_BLUETOOTH_DEVICE(BT_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_MAGIC_KEYBOARD_FINGERPRINT_2021),
- 		.driver_data = APPLE_HAS_FN | APPLE_ISO_TILDE_QUIRK },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_MAGIC_KEYBOARD_NUMPAD_2021),
--		.driver_data = APPLE_HAS_FN | APPLE_ISO_TILDE_QUIRK },
-+		.driver_data = APPLE_HAS_FN | APPLE_ISO_TILDE_QUIRK | APPLE_RDESC_BATTERY },
- 	{ HID_BLUETOOTH_DEVICE(BT_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_MAGIC_KEYBOARD_NUMPAD_2021),
- 		.driver_data = APPLE_HAS_FN | APPLE_ISO_TILDE_QUIRK },
- 
+[1] https://lore.kernel.org/r/20211113115429.4027571-1-maz@kernel.org
+[2] https://lore.kernel.org/r/20211201134909.390490-1-maz@kernel.org
+[3] https://lore.kernel.org/r/20211214182634.727330-1-maz@kernel.org
+[4] https://lore.kernel.org/r/20220124201231.298961-1-maz@kernel.org
+
+Marc Zyngier (10):
+  dt-bindings: arm-pmu: Document Apple PMU compatible strings
+  dt-bindings: apple,aic: Add CPU PMU per-cpu pseudo-interrupts
+  dt-bindings: apple,aic: Add affinity description for per-cpu
+    pseudo-interrupts
+  irqchip/apple-aic: Parse FIQ affinities from device-tree
+  irqchip/apple-aic: Wire PMU interrupts
+  arm64: dts: apple: Add t8103 PMU interrupt affinities
+  arm64: dts: apple: Add t8303 PMU nodes
+  irqchip/apple-aic: Move PMU-specific registers to their own include
+    file
+  drivers/perf: arm_pmu: Handle 47 bit counters
+  drivers/perf: Add Apple icestorm/firestorm CPU PMU driver
+
+ .../devicetree/bindings/arm/pmu.yaml          |   2 +
+ .../interrupt-controller/apple,aic.yaml       |  31 +
+ arch/arm64/boot/dts/apple/t8103.dtsi          |  24 +
+ arch/arm64/include/asm/apple_m1_pmu.h         |  64 ++
+ drivers/irqchip/irq-apple-aic.c               |  94 ++-
+ drivers/perf/Kconfig                          |   7 +
+ drivers/perf/Makefile                         |   1 +
+ drivers/perf/apple_m1_cpu_pmu.c               | 584 ++++++++++++++++++
+ drivers/perf/arm_pmu.c                        |   2 +
+ .../interrupt-controller/apple-aic.h          |   2 +
+ include/linux/perf/arm_pmu.h                  |   2 +
+ 11 files changed, 791 insertions(+), 22 deletions(-)
+ create mode 100644 arch/arm64/include/asm/apple_m1_pmu.h
+ create mode 100644 drivers/perf/apple_m1_cpu_pmu.c
+
 -- 
-2.25.1
+2.30.2
 

@@ -2,97 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56EFF4ADDB1
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 16:54:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 011684ADDBD
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 16:55:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382016AbiBHPy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 10:54:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35522 "EHLO
+        id S1381154AbiBHPz3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 10:55:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382359AbiBHPyV (ORCPT
+        with ESMTP id S232356AbiBHPz1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 10:54:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281EEC061266;
-        Tue,  8 Feb 2022 07:54:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Tue, 8 Feb 2022 10:55:27 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DDB4C061576
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 07:55:27 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id D9B4E1F387;
+        Tue,  8 Feb 2022 15:55:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1644335725; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WijHXTObJseuOiFvlli9+l6jvFN1GY3799lbVAl5WkE=;
+        b=Q/oTXjVzIERW9PT1/jqOi+5kUSo+JlJzQAki6xLupLsmyEFPvg+sF0ejxlPPXB4DmZBVDB
+        AEgyHruOJN/0q12D3uaXghhnWeUV2B87jCmWhVLFetFM+G1xhIg4/7UJQI9VlXbJUqu2ZV
+        VYiAjqrWFIelN1tUNEwmpM6blOPQ7z8=
+Received: from suse.cz (unknown [10.100.216.66])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E239BB81BD2;
-        Tue,  8 Feb 2022 15:54:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 349A4C340E9;
-        Tue,  8 Feb 2022 15:54:17 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="YoX924Qk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1644335656;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vBP+JsWMxcggJGLLXQ2ZKVQO9bvMzdwL7er8u9wTpII=;
-        b=YoX924QkkUedetsM5jg1+mO+UDCr37VPTT3iB1ap8nt+YrkKYiCo4Sg01f+x9cmOK4wxyX
-        GNyFjY4WktOSa9gVYb5Zo3I+sjigoM/iTQ/Hs+w1C+AWdzIziay13fDveHZgYyW7YxDZl5
-        MXVmILVdIWW3VUs9PXk2HHy6H+RpSNQ=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 838a1684 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 8 Feb 2022 15:54:16 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>
-Subject: [PATCH v1 7/7] random: remove outdated INT_MAX >> 6 check in urandom_read()
-Date:   Tue,  8 Feb 2022 16:53:35 +0100
-Message-Id: <20220208155335.378318-8-Jason@zx2c4.com>
-In-Reply-To: <20220208155335.378318-1-Jason@zx2c4.com>
-References: <20220208155335.378318-1-Jason@zx2c4.com>
+        by relay2.suse.de (Postfix) with ESMTPS id 9E7D3A3B83;
+        Tue,  8 Feb 2022 15:55:25 +0000 (UTC)
+Date:   Tue, 8 Feb 2022 16:55:25 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Andre Kalb <andre.kalb@sma.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] printk: Set console_set_on_cmdline=1 when using
+ console="" or console=null
+Message-ID: <YgKSbe9d3haHKMid@alley>
+References: <YfMkJKUuGBwyT611@pc6682>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YfMkJKUuGBwyT611@pc6682>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In 79a8468747c5 ("random: check for increase of entropy_count because of
-signed conversion"), a number of checks were added around what values
-were passed to account(), because account() was doing fancy fixed point
-fractional arithmetic, and a user had some ability to pass large values
-directly into it. One of things in that commit was limiting those values
-to INT_MAX >> 6.
+On Fri 2022-01-28 00:00:52, Andre Kalb wrote:
+> In case of using console="" or console=null set console_set_on_cmdline=1
+> to disable chosen{ "stdout-path" } node from devicetree.
+> 
+> To jump out from drivers/of/base.c, line 2087 of_console_check function
+> with false.
 
-However, for several years now, urandom reads no longer touch entropy
-accounting, and so this check serves no purpose. The current flow is:
+It makes sense. I would just fix it slightly different way, see below.
 
-urandom_read_nowarn()-->get_random_bytes_user()-->chacha20_block()
+> Signed-off-by: Andre Kalb <andre.kalb@sma.de>
+> ---
+>  kernel/printk/printk.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+> index 82abfaf3c2aa..df5ab35b8af2 100644
+> --- a/kernel/printk/printk.c
+> +++ b/kernel/printk/printk.c
+> @@ -2385,6 +2385,7 @@ static int __init console_setup(char *str)
+>  	 */
+>  	if (str[0] == 0 || strcmp(str, "null") == 0) {
+>  		__add_preferred_console("ttynull", 0, NULL, NULL,
+> true); 
+> +		console_set_on_cmdline = 1;
 
-We arrive at urandom_read_nowarn() in the first place either via
-ordinary fops, which limits reads to MAX_RW_COUNT, or via getrandom()
-which limits reads to INT_MAX.
+We basically always need to set it when __add_preferred_console() is
+called with user_specified == true.
 
-Cc: Theodore Ts'o <tytso@mit.edu>
-Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- drivers/char/random.c | 1 -
- 1 file changed, 1 deletion(-)
+Therefore, we should move the assigment into
+__add_preferred_console(). We should do something like:
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index ac22dc94b037..fa366ab38263 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -1324,7 +1324,6 @@ static ssize_t urandom_read_nowarn(struct file *file, char __user *buf,
- {
- 	int ret;
+diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+index 82abfaf3c2aa..3654695ca5d2 100644
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -2324,6 +2324,15 @@ asmlinkage __visible void early_printk(const char *fmt, ...)
+ }
+ #endif
  
--	nbytes = min_t(size_t, nbytes, INT_MAX >> 6);
- 	ret = get_random_bytes_user(buf, nbytes);
- 	trace_urandom_read(8 * nbytes, 0, input_pool.entropy_count);
- 	return ret;
--- 
-2.35.0
++static void set_user_specified(struct console_cmdline *c, bool user_specified)
++{
++	if (!user_specified)
++		return;
++
++	c->user_specified = true;
++	console_set_on_cmdline = 1;
++}
++
+ static int __add_preferred_console(char *name, int idx, char *options,
+ 				   char *brl_options, bool user_specified)
+ {
+@@ -2340,8 +2349,7 @@ static int __add_preferred_console(char *name, int idx, char *options,
+ 		if (strcmp(c->name, name) == 0 && c->index == idx) {
+ 			if (!brl_options)
+ 				preferred_console = i;
+-			if (user_specified)
+-				c->user_specified = true;
++			set_user_specified(c, user_specified);
+ 			return 0;
+ 		}
+ 	}
+@@ -2351,7 +2359,7 @@ static int __add_preferred_console(char *name, int idx, char *options,
+ 		preferred_console = i;
+ 	strlcpy(c->name, name, sizeof(c->name));
+ 	c->options = options;
+-	c->user_specified = user_specified;
++	set_user_specified(c, user_specified);
+ 	braille_set_options(c, brl_options);
+ 
+ 	c->index = idx;
+@@ -2417,7 +2425,6 @@ static int __init console_setup(char *str)
+ 	*s = 0;
+ 
+ 	__add_preferred_console(buf, idx, options, brl_options, true);
+-	console_set_on_cmdline = 1;
+ 	return 1;
+ }
+ __setup("console=", console_setup);
 
+
+Best Regards,
+Petr

@@ -2,56 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D164B4AD37D
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 09:32:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9F044AD37A
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 09:32:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349808AbiBHIcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 03:32:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60982 "EHLO
+        id S1349889AbiBHIc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 03:32:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239909AbiBHIcH (ORCPT
+        with ESMTP id S1349905AbiBHIcX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 03:32:07 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40042C0401F6;
-        Tue,  8 Feb 2022 00:32:05 -0800 (PST)
-X-UUID: ab91830bc8c843acbb42b2d06d77bc71-20220208
-X-UUID: ab91830bc8c843acbb42b2d06d77bc71-20220208
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 629433519; Tue, 08 Feb 2022 16:32:01 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Tue, 8 Feb 2022 16:32:00 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 8 Feb 2022 16:32:00 +0800
-Message-ID: <b886b9a8a3368127be7357e8921e18358987033d.camel@mediatek.com>
-Subject: Re: [PATCH v4] drm/mediatek: mtk_dsi: Avoid EPROBE_DEFER loop with
- external bridge
-From:   CK Hu <ck.hu@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        <dri-devel@lists.freedesktop.org>
-CC:     <chunkuang.hu@kernel.org>, <airlied@linux.ie>,
-        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>,
-        <andrzej.hajda@intel.com>, <linux-mediatek@lists.infradead.org>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        <matthias.bgg@gmail.com>, <kernel@collabora.com>,
-        <linux-arm-kernel@lists.infradead.org>
-Date:   Tue, 8 Feb 2022 16:32:00 +0800
-In-Reply-To: <20755168cc2be0d1bb5e40907cfe27cea25a9363.camel@mediatek.com>
-References: <20220131085520.287105-1-angelogioacchino.delregno@collabora.com>
-         <20755168cc2be0d1bb5e40907cfe27cea25a9363.camel@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 8 Feb 2022 03:32:23 -0500
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C418C03FECE
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 00:32:21 -0800 (PST)
+Received: by mail-il1-f200.google.com with SMTP id q15-20020a92ca4f000000b002be3e7707ffso3182309ilo.4
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 00:32:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=Ak7DGjpz8u+yF2tUMgurDsjOzzk2JV1a40V2RS9Gck8=;
+        b=kL2S0fTlRXm0slykmp1ZonkiVhOSowWNGMTFGqtMiSM4GaR6ddM+jZ5kpKMsqlDQ+2
+         GJ3U17uZnrTXJDw/SPp0u1JUX4Y1vyDfXM53kXnOk/Zsl1C82Rrxh7+hoYqF3KUO9Xjm
+         iS5nRi6iHwiEhUHX4879H7xmTEzouidy3hAL25FG1gMM17CXAir6D3QQEMcDmJgIeuZR
+         xUA5796abqCkdHyDJloBxr9F/rqqc7w02vHdagXI3xfpMMrh8BbIMrnq+BvdQegx2YEQ
+         IBg8MvS1ZqjLKvlTfEZ9+Eys+0//FJjamTQfHglNVoo2BqKHMEKEAuxuMPR1rXkKZGHl
+         ISeQ==
+X-Gm-Message-State: AOAM531FeEWnBfgHT4fkt0X8kFr6PIH82x62N5f/jehFSlB2ve7uyN2r
+        T/2QRU11w8HtBCMFZLmOUdlyucB4HVHYQEa5z86loIn5PS7a
+X-Google-Smtp-Source: ABdhPJy+foHVsEDATvpMe56nchUDiGYkbjVPttKtcXmM5hZNEADLd3cG6tcj3Vkz6WcEeVtjb5ev9mO+QTcW9ge+vdYOTdXIxh1T
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+X-Received: by 2002:a05:6602:168b:: with SMTP id s11mr1598578iow.208.1644309140646;
+ Tue, 08 Feb 2022 00:32:20 -0800 (PST)
+Date:   Tue, 08 Feb 2022 00:32:20 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003aafee05d77d8e55@google.com>
+Subject: [syzbot] KCSAN: data-race in wg_packet_send_staged_packets /
+ wg_packet_send_staged_packets (3)
+From:   syzbot <syzbot+6ba34f16b98fe40daef1@syzkaller.appspotmail.com>
+To:     Jason@zx2c4.com, davem@davemloft.net, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, wireguard@lists.zx2c4.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,181 +54,167 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Angelo:
+Hello,
 
-On Tue, 2022-02-08 at 16:20 +0800, CK Hu wrote:
-> Hi, Angelo:
-> 
-> On Mon, 2022-01-31 at 09:55 +0100, AngeloGioacchino Del Regno wrote:
-> > DRM bridge drivers are now attaching their DSI device at probe
-> > time,
-> > which requires us to register our DSI host in order to let the
-> > bridge
-> > to probe: this recently started producing an endless -EPROBE_DEFER
-> > loop on some machines that are using external bridges, like the
-> > parade-ps8640, found on the ACER Chromebook R13.
-> > 
-> > Now that the DSI hosts/devices probe sequence is documented, we can
-> > do adjustments to the mtk_dsi driver as to both fix now and make
-> > sure
-> > to avoid this situation in the future: for this, following what is
-> > documented in drm_bridge.c, move the mtk_dsi component_add() to the
-> > mtk_dsi_ops.attach callback and delete it in the detach callback;
-> > keeping in mind that we are registering a drm_bridge for our DSI,
-> > which is only used/attached if the DSI Host is bound, it wouldn't
-> > make sense to keep adding our bridge at probe time (as it would
-> > be useless to have it if mtk_dsi_ops.attach() fails!), so also move
-> > that one to the dsi host attach function (and remove it in detach).
-> > 
-> > Cc: <stable@vger.kernel.org> # 5.15.x
-> > Signed-off-by: AngeloGioacchino Del Regno <
-> > angelogioacchino.delregno@collabora.com>
-> > Reviewed-by: Andrzej Hajda <andrzej.hajda@intel.com>
-> > Reviewed-by: Jagan Teki <jagan@amarulasolutions.com>
-> > 
-> > ---
-> >  drivers/gpu/drm/mediatek/mtk_dsi.c | 167 +++++++++++++++----------
-> > ----
-> >  1 file changed, 84 insertions(+), 83 deletions(-)
-> > 
-> > diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c
-> > b/drivers/gpu/drm/mediatek/mtk_dsi.c
-> > index 5d90d2eb0019..bced4c7d668e 100644
-> > --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
-> > +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
-> > @@ -786,18 +786,101 @@ void mtk_dsi_ddp_stop(struct device *dev)
-> >  	mtk_dsi_poweroff(dsi);
-> >  }
-> >  
-> > 
-> 
-> [snip]
-> 
-> > +
-> >  static int mtk_dsi_host_attach(struct mipi_dsi_host *host,
-> >  			       struct mipi_dsi_device *device)
-> >  {
-> >  	struct mtk_dsi *dsi = host_to_dsi(host);
-> > +	struct device *dev = host->dev;
-> > +	int ret;
-> >  
-> >  	dsi->lanes = device->lanes;
-> >  	dsi->format = device->format;
-> >  	dsi->mode_flags = device->mode_flags;
-> > +	dsi->next_bridge = devm_drm_of_get_bridge(dev, dev->of_node, 0,
-> > 0);
-> 
-> The original would process panel. Why do you remove the panel part?
-> It's better that someone has a platform of DSI->Panel to test this
-> patch.
+syzbot found the following issue on:
 
-Sorry, devm_drm_of_get_bridge() has processed the panel part, so for
-this patch,
+HEAD commit:    2ade8eef993c Merge tag 'ata-5.17-rc4' of git://git.kernel...
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=16c03872700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=1dcc3374da7c1f7c
+dashboard link: https://syzkaller.appspot.com/bug?extid=6ba34f16b98fe40daef1
+compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Reviewed-by: CK Hu <ck.hu@mediatek.com>
+Unfortunately, I don't have any reproducer for this issue yet.
 
-> 
-> Regards,
-> CK
-> 
-> > +	if (IS_ERR(dsi->next_bridge))
-> > +		return PTR_ERR(dsi->next_bridge);
-> > +
-> > +	drm_bridge_add(&dsi->bridge);
-> > +
-> > +	ret = component_add(host->dev, &mtk_dsi_component_ops);
-> > +	if (ret) {
-> > +		DRM_ERROR("failed to add dsi_host component: %d\n",
-> > ret);
-> > +		drm_bridge_remove(&dsi->bridge);
-> > +		return ret;
-> > +	}
-> >  
-> >  	return 0;
-> >  }
-> >  
-> > +static int mtk_dsi_host_detach(struct mipi_dsi_host *host,
-> > +			       struct mipi_dsi_device *device)
-> > +{
-> > +	struct mtk_dsi *dsi = host_to_dsi(host);
-> > +
-> > +	component_del(host->dev, &mtk_dsi_component_ops);
-> > +	drm_bridge_remove(&dsi->bridge);
-> > +	return 0;
-> > +}
-> > +
-> >  static void mtk_dsi_wait_for_idle(struct mtk_dsi *dsi)
-> >  {
-> >  	int ret;
-> > @@ -938,73 +1021,14 @@ static ssize_t mtk_dsi_host_transfer(struct
-> > mipi_dsi_host *host,
-> >  
-> >  static const struct mipi_dsi_host_ops mtk_dsi_ops = {
-> >  	.attach = mtk_dsi_host_attach,
-> > +	.detach = mtk_dsi_host_detach,
-> >  	.transfer = mtk_dsi_host_transfer,
-> >  };
-> >  
-> > 
-> 
-> [snip]
-> 
-> > -
-> >  static int mtk_dsi_probe(struct platform_device *pdev)
-> >  {
-> >  	struct mtk_dsi *dsi;
-> >  	struct device *dev = &pdev->dev;
-> > -	struct drm_panel *panel;
-> >  	struct resource *regs;
-> >  	int irq_num;
-> >  	int ret;
-> > @@ -1021,19 +1045,6 @@ static int mtk_dsi_probe(struct
-> > platform_device *pdev)
-> >  		return ret;
-> >  	}
-> >  
-> > -	ret = drm_of_find_panel_or_bridge(dev->of_node, 0, 0,
-> > -					  &panel, &dsi->next_bridge);
-> > -	if (ret)
-> > -		goto err_unregister_host;
-> > -
-> > -	if (panel) {
-> > -		dsi->next_bridge = devm_drm_panel_bridge_add(dev,
-> > panel);
-> > -		if (IS_ERR(dsi->next_bridge)) {
-> > -			ret = PTR_ERR(dsi->next_bridge);
-> > -			goto err_unregister_host;
-> > -		}
-> > -	}
-> > -
-> >  	dsi->driver_data = of_device_get_match_data(dev);
-> >  
-> >  	dsi->engine_clk = devm_clk_get(dev, "engine");
-> > @@ -1098,14 +1109,6 @@ static int mtk_dsi_probe(struct
-> > platform_device *pdev)
-> >  	dsi->bridge.of_node = dev->of_node;
-> >  	dsi->bridge.type = DRM_MODE_CONNECTOR_DSI;
-> >  
-> > -	drm_bridge_add(&dsi->bridge);
-> > -
-> > -	ret = component_add(&pdev->dev, &mtk_dsi_component_ops);
-> > -	if (ret) {
-> > -		dev_err(&pdev->dev, "failed to add component: %d\n",
-> > ret);
-> > -		goto err_unregister_host;
-> > -	}
-> > -
-> >  	return 0;
-> >  
-> >  err_unregister_host:
-> > @@ -1118,8 +1121,6 @@ static int mtk_dsi_remove(struct
-> > platform_device *pdev)
-> >  	struct mtk_dsi *dsi = platform_get_drvdata(pdev);
-> >  
-> >  	mtk_output_dsi_disable(dsi);
-> > -	drm_bridge_remove(&dsi->bridge);
-> > -	component_del(&pdev->dev, &mtk_dsi_component_ops);
-> >  	mipi_dsi_host_unregister(&dsi->host);
-> >  
-> >  	return 0;
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+6ba34f16b98fe40daef1@syzkaller.appspotmail.com
 
+==================================================================
+BUG: KCSAN: data-race in wg_packet_send_staged_packets / wg_packet_send_staged_packets
+
+read to 0xffff888133f5eac8 of 4 bytes by interrupt on cpu 0:
+ wg_cpumask_next_online drivers/net/wireguard/queueing.h:129 [inline]
+ wg_queue_enqueue_per_device_and_peer drivers/net/wireguard/queueing.h:176 [inline]
+ wg_packet_create_data drivers/net/wireguard/send.c:320 [inline]
+ wg_packet_send_staged_packets+0x41a/0x800 drivers/net/wireguard/send.c:387
+ wg_packet_send_keepalive+0xfc/0x110 drivers/net/wireguard/send.c:239
+ wg_expired_send_persistent_keepalive+0x38/0x50 drivers/net/wireguard/timers.c:141
+ call_timer_fn+0x2e/0x240 kernel/time/timer.c:1421
+ expire_timers+0x116/0x240 kernel/time/timer.c:1466
+ __run_timers+0x368/0x410 kernel/time/timer.c:1734
+ run_timer_softirq+0x2e/0x60 kernel/time/timer.c:1747
+ __do_softirq+0x158/0x2de kernel/softirq.c:558
+ __irq_exit_rcu kernel/softirq.c:637 [inline]
+ irq_exit_rcu+0x37/0x70 kernel/softirq.c:649
+ sysvec_apic_timer_interrupt+0x8d/0xb0 arch/x86/kernel/apic/apic.c:1097
+ asm_sysvec_apic_timer_interrupt+0x12/0x20
+ __x64_sys_clock_nanosleep+0x54/0x60 kernel/time/posix-timers.c:1245
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+write to 0xffff888133f5eac8 of 4 bytes by interrupt on cpu 1:
+ wg_cpumask_next_online drivers/net/wireguard/queueing.h:133 [inline]
+ wg_queue_enqueue_per_device_and_peer drivers/net/wireguard/queueing.h:176 [inline]
+ wg_packet_create_data drivers/net/wireguard/send.c:320 [inline]
+ wg_packet_send_staged_packets+0x455/0x800 drivers/net/wireguard/send.c:387
+ wg_packet_send_keepalive+0xfc/0x110 drivers/net/wireguard/send.c:239
+ wg_expired_send_persistent_keepalive+0x38/0x50 drivers/net/wireguard/timers.c:141
+ call_timer_fn+0x2e/0x240 kernel/time/timer.c:1421
+ expire_timers+0x116/0x240 kernel/time/timer.c:1466
+ __run_timers+0x368/0x410 kernel/time/timer.c:1734
+ run_timer_softirq+0x2e/0x60 kernel/time/timer.c:1747
+ __do_softirq+0x158/0x2de kernel/softirq.c:558
+ __irq_exit_rcu kernel/softirq.c:637 [inline]
+ irq_exit_rcu+0x37/0x70 kernel/softirq.c:649
+ sysvec_apic_timer_interrupt+0x8d/0xb0 arch/x86/kernel/apic/apic.c:1097
+ asm_sysvec_apic_timer_interrupt+0x12/0x20
+ is_atomic kernel/kcsan/core.c:262 [inline]
+ should_watch kernel/kcsan/core.c:275 [inline]
+ check_access kernel/kcsan/core.c:741 [inline]
+ __tsan_read2+0x13e/0x180 kernel/kcsan/core.c:1012
+ tlb_flush_pte_range include/asm-generic/tlb.h:524 [inline]
+ zap_pte_range+0x559/0x10e0 mm/memory.c:1366
+ zap_pmd_range mm/memory.c:1490 [inline]
+ zap_pud_range mm/memory.c:1519 [inline]
+ zap_p4d_range mm/memory.c:1540 [inline]
+ unmap_page_range+0x2dc/0x3d0 mm/memory.c:1561
+ unmap_single_vma+0x157/0x210 mm/memory.c:1606
+ unmap_vmas+0xd0/0x180 mm/memory.c:1638
+ exit_mmap+0x261/0x4b0 mm/mmap.c:3178
+ __mmput+0x27/0x1b0 kernel/fork.c:1114
+ mmput+0x3d/0x50 kernel/fork.c:1135
+ exit_mm+0xdb/0x170 kernel/exit.c:507
+ do_exit+0x569/0x16a0 kernel/exit.c:793
+ do_group_exit+0xa5/0x160 kernel/exit.c:935
+ get_signal+0x8cf/0x15d0 kernel/signal.c:2862
+ arch_do_signal_or_restart+0x8c/0x2e0 arch/x86/kernel/signal.c:868
+ handle_signal_work kernel/entry/common.c:148 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:172 [inline]
+ exit_to_user_mode_prepare+0x113/0x190 kernel/entry/common.c:207
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
+ syscall_exit_to_user_mode+0x20/0x40 kernel/entry/common.c:300
+ do_syscall_64+0x50/0xd0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+value changed: 0x00000001 -> 0x00000000
+
+Reported by Kernel Concurrency Sanitizer on:
+CPU: 1 PID: 21549 Comm: syz-executor.4 Not tainted 5.17.0-rc3-syzkaller-00013-g2ade8eef993c-dirty #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+==================================================================
+sd 0:0:1:0: [sda] tag#3016 FAILED Result: hostbyte=DID_ABORT driverbyte=DRIVER_OK cmd_age=0s
+sd 0:0:1:0: [sda] tag#3016 CDB: opcode=0xe5 (vendor)
+sd 0:0:1:0: [sda] tag#3016 CDB[00]: e5 f4 32 73 2f 4e 09 6d 26 e2 c7 35 d1 35 12 1c
+sd 0:0:1:0: [sda] tag#3016 CDB[10]: 92 1b da 40 b8 58 5b a8 d4 7d 34 f3 90 4c f1 2d
+sd 0:0:1:0: [sda] tag#3016 CDB[20]: ba
+sd 0:0:1:0: [sda] tag#3023 FAILED Result: hostbyte=DID_ABORT driverbyte=DRIVER_OK cmd_age=0s
+sd 0:0:1:0: [sda] tag#3023 CDB: opcode=0xe5 (vendor)
+sd 0:0:1:0: [sda] tag#3023 CDB[00]: e5 f4 32 73 2f 4e 09 6d 26 e2 c7 35 d1 35 12 1c
+sd 0:0:1:0: [sda] tag#3023 CDB[10]: 92 1b da 40 b8 58 5b a8 d4 7d 34 f3 90 4c f1 2d
+sd 0:0:1:0: [sda] tag#3023 CDB[20]: ba
+sd 0:0:1:0: [sda] tag#3025 FAILED Result: hostbyte=DID_ABORT driverbyte=DRIVER_OK cmd_age=0s
+sd 0:0:1:0: [sda] tag#3025 CDB: opcode=0xe5 (vendor)
+sd 0:0:1:0: [sda] tag#3025 CDB[00]: e5 f4 32 73 2f 4e 09 6d 26 e2 c7 35 d1 35 12 1c
+sd 0:0:1:0: [sda] tag#3025 CDB[10]: 92 1b da 40 b8 58 5b a8 d4 7d 34 f3 90 4c f1 2d
+sd 0:0:1:0: [sda] tag#3025 CDB[20]: ba
+sd 0:0:1:0: [sda] tag#3026 FAILED Result: hostbyte=DID_ABORT driverbyte=DRIVER_OK cmd_age=0s
+sd 0:0:1:0: [sda] tag#3026 CDB: opcode=0xe5 (vendor)
+sd 0:0:1:0: [sda] tag#3026 CDB[00]: e5 f4 32 73 2f 4e 09 6d 26 e2 c7 35 d1 35 12 1c
+sd 0:0:1:0: [sda] tag#3026 CDB[10]: 92 1b da 40 b8 58 5b a8 d4 7d 34 f3 90 4c f1 2d
+sd 0:0:1:0: [sda] tag#3026 CDB[20]: ba
+sd 0:0:1:0: [sda] tag#3027 FAILED Result: hostbyte=DID_ABORT driverbyte=DRIVER_OK cmd_age=0s
+sd 0:0:1:0: [sda] tag#3027 CDB: opcode=0xe5 (vendor)
+sd 0:0:1:0: [sda] tag#3027 CDB[00]: e5 f4 32 73 2f 4e 09 6d 26 e2 c7 35 d1 35 12 1c
+sd 0:0:1:0: [sda] tag#3027 CDB[10]: 92 1b da 40 b8 58 5b a8 d4 7d 34 f3 90 4c f1 2d
+sd 0:0:1:0: [sda] tag#3027 CDB[20]: ba
+sd 0:0:1:0: [sda] tag#3029 FAILED Result: hostbyte=DID_ABORT driverbyte=DRIVER_OK cmd_age=0s
+sd 0:0:1:0: [sda] tag#3029 CDB: opcode=0xe5 (vendor)
+sd 0:0:1:0: [sda] tag#3029 CDB[00]: e5 f4 32 73 2f 4e 09 6d 26 e2 c7 35 d1 35 12 1c
+sd 0:0:1:0: [sda] tag#3029 CDB[10]: 92 1b da 40 b8 58 5b a8 d4 7d 34 f3 90 4c f1 2d
+sd 0:0:1:0: [sda] tag#3029 CDB[20]: ba
+sd 0:0:1:0: [sda] tag#3056 FAILED Result: hostbyte=DID_ABORT driverbyte=DRIVER_OK cmd_age=0s
+sd 0:0:1:0: [sda] tag#3056 CDB: opcode=0xe5 (vendor)
+sd 0:0:1:0: [sda] tag#3056 CDB[00]: e5 f4 32 73 2f 4e 09 6d 26 e2 c7 35 d1 35 12 1c
+sd 0:0:1:0: [sda] tag#3056 CDB[10]: 92 1b da 40 b8 58 5b a8 d4 7d 34 f3 90 4c f1 2d
+sd 0:0:1:0: [sda] tag#3056 CDB[20]: ba
+sd 0:0:1:0: [sda] tag#3057 FAILED Result: hostbyte=DID_ABORT driverbyte=DRIVER_OK cmd_age=0s
+sd 0:0:1:0: [sda] tag#3057 CDB: opcode=0xe5 (vendor)
+sd 0:0:1:0: [sda] tag#3057 CDB[00]: e5 f4 32 73 2f 4e 09 6d 26 e2 c7 35 d1 35 12 1c
+sd 0:0:1:0: [sda] tag#3057 CDB[10]: 92 1b da 40 b8 58 5b a8 d4 7d 34 f3 90 4c f1 2d
+sd 0:0:1:0: [sda] tag#3057 CDB[20]: ba
+sd 0:0:1:0: [sda] tag#3059 FAILED Result: hostbyte=DID_ABORT driverbyte=DRIVER_OK cmd_age=0s
+sd 0:0:1:0: [sda] tag#3059 CDB: opcode=0xe5 (vendor)
+sd 0:0:1:0: [sda] tag#3059 CDB[00]: e5 f4 32 73 2f 4e 09 6d 26 e2 c7 35 d1 35 12 1c
+sd 0:0:1:0: [sda] tag#3059 CDB[10]: 92 1b da 40 b8 58 5b a8 d4 7d 34 f3 90 4c f1 2d
+sd 0:0:1:0: [sda] tag#3059 CDB[20]: ba
+sd 0:0:1:0: [sda] tag#3060 FAILED Result: hostbyte=DID_ABORT driverbyte=DRIVER_OK cmd_age=0s
+sd 0:0:1:0: [sda] tag#3060 CDB: opcode=0xe5 (vendor)
+sd 0:0:1:0: [sda] tag#3060 CDB[00]: e5 f4 32 73 2f 4e 09 6d 26 e2 c7 35 d1 35 12 1c
+sd 0:0:1:0: [sda] tag#3060 CDB[10]: 92 1b da 40 b8 58 5b a8 d4 7d 34 f3 90 4c f1 2d
+sd 0:0:1:0: [sda] tag#3060 CDB[20]: ba
+sd 0:0:1:0: [sda] tag#3061 FAILED Result: hostbyte=DID_ABORT driverbyte=DRIVER_OK cmd_age=0s
+sd 0:0:1:0: [sda] tag#3061 CDB: opcode=0xe5 (vendor)
+sd 0:0:1:0: [sda] tag#3061 CDB[00]: e5 f4 32 73 2f 4e 09 6d 26 e2 c7 35 d1 35 12 1c
+sd 0:0:1:0: [sda] tag#3061 CDB[10]: 92 1b da 40 b8 58 5b a8 d4 7d 34 f3 90 4c f1 2d
+sd 0:0:1:0: [sda] tag#3061 CDB[20]: ba
+sd 0:0:1:0: [sda] tag#3062 FAILED Result: hostbyte=DID_ABORT driverbyte=DRIVER_OK cmd_age=0s
+sd 0:0:1:0: [sda] tag#3062 CDB: opcode=0xe5 (vendor)
+sd 0:0:1:0: [sda] tag#3062 CDB[00]: e5 f4 32 73 2f 4e 09 6d 26 e2 c7 35 d1 35 12 1c
+sd 0:0:1:0: [sda] tag#3062 CDB[10]: 92 1b da 40 b8 58 5b a8 d4 7d 34 f3 90 4c f1 2d
+sd 0:0:1:0: [sda] tag#3062 CDB[20]: ba
+sd 0:0:1:0: [sda] tag#3063 FAILED Result: hostbyte=DID_ABORT driverbyte=DRIVER_OK cmd_age=0s
+sd 0:0:1:0: [sda] tag#3063 CDB: opcode=0xe5 (vendor)
+sd 0:0:1:0: [sda] tag#3063 CDB[00]: e5 f4 32 73 2f 4e 09 6d 26 e2 c7 35 d1 35 12 1c
+sd 0:0:1:0: [sda] tag#3063 CDB[10]: 92 1b da 40 b8 58 5b a8 d4 7d 34 f3 90 4c f1 2d
+sd 0:0:1:0: [sda] tag#3063 CDB[20]: ba
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

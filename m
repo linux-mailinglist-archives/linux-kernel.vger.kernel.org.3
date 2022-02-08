@@ -2,220 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F33F4ADC72
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 16:23:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE6C74ADC44
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 16:19:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379759AbiBHPVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 10:21:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37984 "EHLO
+        id S1379538AbiBHPTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 10:19:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230234AbiBHPVk (ORCPT
+        with ESMTP id S1352926AbiBHPS7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 10:21:40 -0500
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2CCAC061576;
-        Tue,  8 Feb 2022 07:21:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1644333700; x=1675869700;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=ZLy+VydtbyF6fTJrG/RozIsN85Y7hFPmu++UBQG8hPc=;
-  b=gDKHFg22HCSKZ+v8QVAgHmw+lfZFlzrMD7kBMf5hTkhgcrSsk73jHCAf
-   Y5KJZFpNN1EV5ijqzDT1xS7FGx1hssrKHXDXkr4P1Y2vJsPQQOhw2wx5/
-   WOz1ugRBFAC+ECYwnICBRaA1KhFKLU/WqR6osiYtWB5Mv6Lxj6SMpnyUx
-   E=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 08 Feb 2022 07:19:37 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 07:19:36 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Tue, 8 Feb 2022 07:19:36 -0800
-Received: from sbillaka-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Tue, 8 Feb 2022 07:19:30 -0800
-From:   Sankeerth Billakanti <quic_sbillaka@quicinc.com>
-To:     <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <agross@kernel.org>,
-        <bjorn.andersson@linaro.org>, <robh+dt@kernel.org>,
-        <robdclark@gmail.com>, <seanpaul@chromium.org>,
-        <swboyd@chromium.org>, <dianders@chromium.org>,
-        <krzysztof.kozlowski@canonical.com>, <thierry.reding@gmail.com>,
-        <sam@ravnborg.org>, <airlied@linux.ie>, <daniel@ffwll.ch>
-CC:     Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        <quic_kalyant@quicinc.com>, <quic_abhinavk@quicinc.com>,
-        <quic_khsieh@quicinc.com>, <quic_mkrishn@quicinc.com>
-Subject: [PATCH v2 4/4] drm/msm/dp: Add driver support to utilize drm panel
-Date:   Tue, 8 Feb 2022 20:48:45 +0530
-Message-ID: <1644333525-30920-5-git-send-email-quic_sbillaka@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1644333525-30920-1-git-send-email-quic_sbillaka@quicinc.com>
-References: <1644333525-30920-1-git-send-email-quic_sbillaka@quicinc.com>
+        Tue, 8 Feb 2022 10:18:59 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 62BB4C061579
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 07:18:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644333537;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=g1dLWDlmAylsVAbFh6dRuuTZBM7U6UZUvU1LhCTc2yU=;
+        b=flUpgXq44x+f0mO57dp4hx5VDlip8gCZc7xvHd9CWpfA7WktHMqBxJZWMX4JfRx/SUYF6R
+        UFax4CY7E1Fyd/bYHsjjn75ZcwvjR3eL8IOf+7moQnfZjlZEbKbXPEC6lZYQ7myVV+x+Y8
+        rN9fEfqoqPKXwdC3N+rp6YiujSBl4fs=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-248-I9bifseCM4KMxFAxU_QPrg-1; Tue, 08 Feb 2022 10:18:56 -0500
+X-MC-Unique: I9bifseCM4KMxFAxU_QPrg-1
+Received: by mail-wr1-f71.google.com with SMTP id g6-20020adfbc86000000b001a2d62be244so6178791wrh.23
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 07:18:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=g1dLWDlmAylsVAbFh6dRuuTZBM7U6UZUvU1LhCTc2yU=;
+        b=wZL2ve2OYvnw+KGRIOhG3SOMBxLTTgis/bA9zm8BA8wkIc5X8zSQ6Th++pEbU+ztzq
+         ty0taWBLoe1VBBIZSHdlyF7F47nBaqw2iMghcIZf8AjOHyKWoWW4xy+EGvbTeUCG0zH5
+         aoohJAklzOsDXonNmvtwQHh5DO04eaCQm4mtXTbN/oWkJyeN3Rfnl0/aoZEc4iDqZ9pc
+         +AiWV276GGaoCIbiENE1SxKj3VhSo4lbClReDqt+HS94u7tY3aLWAuYoFe3JGRDW3EOR
+         tWcp5rVtU0nxZWn2AV+/C0Gs+PKBFrMiS5uu81vH643/o/aWx0xg8QvRgFBzIMjoPBTq
+         WNMw==
+X-Gm-Message-State: AOAM533XWuWe86QtKhxY3lSZcvhbx6JnUnbFnbEZfF9mJsUngJN9pWka
+        uTxjcMWARLcXoEWY5GecNnhdIYfwDXahT9Qqh0ZI4P5sXK0pFA7wQJjGrWvRuV7I8Q/JfA3x/ox
+        HPsmAcs1XCmXSASb/Y54qvgI=
+X-Received: by 2002:a05:600c:3846:: with SMTP id s6mr1562110wmr.26.1644333535407;
+        Tue, 08 Feb 2022 07:18:55 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxlF2zSt7RYRFVBT770zFzAYkbM60g4+C9WVjw78vwP9vz+XHesCTBfEzpGpKZYFpy9H8xlRg==
+X-Received: by 2002:a05:600c:3846:: with SMTP id s6mr1562097wmr.26.1644333535246;
+        Tue, 08 Feb 2022 07:18:55 -0800 (PST)
+Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
+        by smtp.gmail.com with ESMTPSA id f13sm2630160wmq.29.2022.02.08.07.18.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 07:18:54 -0800 (PST)
+Date:   Tue, 8 Feb 2022 15:18:53 +0000
+From:   Aaron Tomlin <atomlin@redhat.com>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     mcgrof@kernel.org, cl@linux.com, mbenes@suse.cz,
+        akpm@linux-foundation.org, jeyu@kernel.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        live-patching@vger.kernel.org, atomlin@atomlin.com,
+        ghalat@redhat.com, allen.lkml@gmail.com, void@manifault.com,
+        joe@perches.com
+Subject: Re: [RFC PATCH v4 03/13] module: Move livepatch support to a
+ separate file
+Message-ID: <20220208151853.avy4e7sgyutuempk@ava.usersys.com>
+X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
+X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
+References: <20220130213214.1042497-1-atomlin@redhat.com>
+ <20220130213214.1042497-4-atomlin@redhat.com>
+ <YgJXEhiwn5B4Psxa@alley>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YgJXEhiwn5B4Psxa@alley>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support in the DP driver to utilize the custom eDP panels
-from drm/panels.
+On Tue 2022-02-08 12:42 +0100, Petr Mladek wrote:
+> This should go to internal.h.
+> 
+> Alternative is to move both is_livepatch_module() and
+> set_livepatch_module() into include/linux/livepatch.h.
+> 
+> I do not have strong opinion.
 
-An eDP panel is always connected to the platform. So, the eDP
-connector can be reported as always connected. The display mode
-will be sourced from the panel. The panel mode will be set after
-the link training is completed.
+Hi Petr,
 
-The eDP driver needs to register for IRQ_HPD only.
-This support will be added later.
+Firstly, thank you for your feedback.
 
-Signed-off-by: Sankeerth Billakanti <quic_sbillaka@quicinc.com>
----
- drivers/gpu/drm/msm/dp/dp_display.c |  8 ++++++
- drivers/gpu/drm/msm/dp/dp_drm.c     | 54 +++++++++++++++++++++++++++++++++----
- drivers/gpu/drm/msm/dp/dp_parser.h  |  3 +++
- 3 files changed, 60 insertions(+), 5 deletions(-)
+In my opinion, I believe is_livepatch_module() should remain as it may
+continue to be used externally i.e., outside of kernel/module/; albeit,
+indeed set_livepatch_module() should be moved to kernel/module/internal.h
+given its use is exclusive to core code.
 
-diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-index 7cc4d21..410fda4 100644
---- a/drivers/gpu/drm/msm/dp/dp_display.c
-+++ b/drivers/gpu/drm/msm/dp/dp_display.c
-@@ -1513,6 +1513,10 @@ int msm_dp_display_enable(struct msm_dp *dp, struct drm_encoder *encoder)
- 		return -EINVAL;
- 	}
- 
-+	/* handle eDP on */
-+	if (dp->connector_type == DRM_MODE_CONNECTOR_eDP)
-+		dp_hpd_plug_handle(dp_display, 0);
-+
- 	mutex_lock(&dp_display->event_mutex);
- 
- 	/* stop sentinel checking */
-@@ -1577,6 +1581,10 @@ int msm_dp_display_disable(struct msm_dp *dp, struct drm_encoder *encoder)
- 
- 	dp_display = container_of(dp, struct dp_display_private, dp_display);
- 
-+	/* handle edp off */
-+	if (dp->connector_type == DRM_MODE_CONNECTOR_eDP)
-+		dp_hpd_unplug_handle(dp_display, 0);
-+
- 	mutex_lock(&dp_display->event_mutex);
- 
- 	/* stop sentinel checking */
-diff --git a/drivers/gpu/drm/msm/dp/dp_drm.c b/drivers/gpu/drm/msm/dp/dp_drm.c
-index d4d360d..12fa8c1 100644
---- a/drivers/gpu/drm/msm/dp/dp_drm.c
-+++ b/drivers/gpu/drm/msm/dp/dp_drm.c
-@@ -39,6 +39,10 @@ static enum drm_connector_status dp_connector_detect(struct drm_connector *conn,
- 
- 	dp = to_dp_connector(conn)->dp_display;
- 
-+	/* eDP is always  connected */
-+	if (dp->connector_type == DRM_MODE_CONNECTOR_eDP)
-+		return connector_status_connected;
-+
- 	DRM_DEBUG_DP("is_connected = %s\n",
- 		(dp->is_connected) ? "true" : "false");
- 
-@@ -123,6 +127,35 @@ static enum drm_mode_status dp_connector_mode_valid(
- 	return dp_display_validate_mode(dp_disp, mode->clock);
- }
- 
-+static int edp_connector_get_modes(struct drm_connector *connector)
-+{
-+	struct msm_dp *dp;
-+
-+	if (!connector)
-+		return 0;
-+
-+	dp = to_dp_connector(connector)->dp_display;
-+
-+	return drm_bridge_get_modes(dp->panel_bridge, connector);
-+}
-+
-+static enum drm_mode_status edp_connector_mode_valid(
-+		struct drm_connector *connector,
-+		struct drm_display_mode *mode)
-+{
-+	struct msm_dp *dp;
-+
-+	if (!connector)
-+		return 0;
-+
-+	dp = to_dp_connector(connector)->dp_display;
-+
-+	if (mode->clock > EDP_MAX_PIXEL_CLK_KHZ)
-+		return MODE_BAD;
-+
-+	return MODE_OK;
-+}
-+
- static const struct drm_connector_funcs dp_connector_funcs = {
- 	.detect = dp_connector_detect,
- 	.fill_modes = drm_helper_probe_single_connector_modes,
-@@ -137,6 +170,12 @@ static const struct drm_connector_helper_funcs dp_connector_helper_funcs = {
- 	.mode_valid = dp_connector_mode_valid,
- };
- 
-+static const struct drm_connector_helper_funcs edp_connector_helper_funcs = {
-+	.get_modes = edp_connector_get_modes,
-+	.mode_valid = edp_connector_mode_valid,
-+
-+};
-+
- /* connector initialization */
- struct drm_connector *dp_drm_connector_init(struct msm_dp *dp_display)
- {
-@@ -160,12 +199,17 @@ struct drm_connector *dp_drm_connector_init(struct msm_dp *dp_display)
- 	if (ret)
- 		return ERR_PTR(ret);
- 
--	drm_connector_helper_add(connector, &dp_connector_helper_funcs);
-+	if (dp_display->connector_type == DRM_MODE_CONNECTOR_eDP) {
-+		drm_connector_helper_add(connector,
-+				&edp_connector_helper_funcs);
-+	} else {
-+		drm_connector_helper_add(connector, &dp_connector_helper_funcs);
- 
--	/*
--	 * Enable HPD to let hpd event is handled when cable is connected.
--	 */
--	connector->polled = DRM_CONNECTOR_POLL_HPD;
-+		/*
-+		 * Enable HPD to let hpd event is handled when cable is connected.
-+		 */
-+		connector->polled = DRM_CONNECTOR_POLL_HPD;
-+	}
- 
- 	drm_connector_attach_encoder(connector, dp_display->encoder);
- 
-diff --git a/drivers/gpu/drm/msm/dp/dp_parser.h b/drivers/gpu/drm/msm/dp/dp_parser.h
-index 3172da0..58c4f27 100644
---- a/drivers/gpu/drm/msm/dp/dp_parser.h
-+++ b/drivers/gpu/drm/msm/dp/dp_parser.h
-@@ -17,6 +17,9 @@
- #define DP_MAX_PIXEL_CLK_KHZ	675000
- #define DP_MAX_NUM_DP_LANES	4
- 
-+/* Maximum validated clock */
-+#define EDP_MAX_PIXEL_CLK_KHZ	285550
-+
- enum dp_pm_type {
- 	DP_CORE_PM,
- 	DP_CTRL_PM,
+
+Kind regards,
+
 -- 
-2.7.4
+Aaron Tomlin
 

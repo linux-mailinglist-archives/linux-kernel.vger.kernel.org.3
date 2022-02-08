@@ -2,184 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E7814AD319
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 09:22:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E46A4AD323
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 09:22:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349354AbiBHIV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 03:21:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54464 "EHLO
+        id S1349353AbiBHIWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 03:22:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349200AbiBHIUw (ORCPT
+        with ESMTP id S1349342AbiBHIVp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 03:20:52 -0500
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2090.outbound.protection.outlook.com [40.107.255.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F6CBC03E909;
-        Tue,  8 Feb 2022 00:20:12 -0800 (PST)
+        Tue, 8 Feb 2022 03:21:45 -0500
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2120.outbound.protection.outlook.com [40.107.255.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36668C03FEFB;
+        Tue,  8 Feb 2022 00:21:04 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ar6rQ+NfXVhVxlHyUK9RTpFE0/SyPS1HSC5wVSWCF+ta3LgkYAzh7/JiS0uojD4I4TZZUSYqjC7t95oqM+44y7GekzegwRQssw/FPKRsC0QZ2PTngpiWS+PAZYShHSZlnKVIEgOULueoE9NcJbkWUYrADg0YwUuijPsPb8hfGta1iP8tw3J4ACKLTvvjT42GsJNs0uBK+OFjTILBLPDgxPbIh8WkFYXmib5F/3if7zSyNwr8EQzPOaCWzDx6t7zplrRSCjsCkZjYs9CmS4Yihb87e1467T3pHrK7FZEs6Y7WD9Ogb5tu02ef6U9Z0h9vEgxCzDMn4JRHFKZ0WNgLzA==
+ b=BOT9+nCyXNjHGZQhFtxZiFZ/dcGQszSlcxoc9Ea1QIDnzBOJKMs1kGAFW+1ncLOLxOt2MrJtdX5+jXoIS/+06oBPQNKzbKRoJTlwC9NpL/onvvBRElDMy6SmHAAWAYIcSrvV779YFMazEbXO6U/qI452pG9C9djXDloMqODLW5t75atLL+CvFLbi3fl03BMyuV9sLbr+aYaLu6xDS0Uu5xXSrx89Ovb113kZMeOHVFBg2T6c0loENXh8oqqxxNRCRXV+4OtSQ/fLYevGndob0+FK0ts7CLNP5tpYvPXsXVnGuq0sRIPfZL8NxmQP2n7FkaI3v+DLLVPApMTD+JRPaw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KbT4h+5k/NObLmhCfW8T/QRYumfuC5GUOVniSmQq25I=;
- b=VAAbkv4UK95DHjbJCZBFV1cAQbvRyyrHjm/jO1a8v+8qvC8Uju/kySmvxmZvtWaaEoOWkpiiYfezCNS2shTcFxocvBnT6fNr41CgATDs5MjApnGnSANM5M5c0bs6H5VGJQxTkl/m0wbrz+3zS5p6+QjdRNi8rxZvzOANCWe2Pw2Y2TCe/K0addvtPyYB01UI5BYpeodmmj3X1FZnUbqEgTS6avPVc5owwLXQ27U1HcrzVpOjIpiB6Ook15Aih+IzPuR2LmnEhk7i4DLTnv+LG0eKZMW40ifUaOGk5PNEF1G78JqzAF4CqdOe+wf2mEQPVKl/O/B9nzK1NbjvvY9yEA==
+ bh=0ecczZEZ+AGswLhGxbXj01lDhToSxPBEZ3Sbp1zv3bw=;
+ b=F1+Bdg0TgAugD5r9FyR8begZOVNykWMeJMA9WIVoSU8w9hbWo7hyeprEmwMSvk20TFUgT15mNRANWSwKy++iGiiNRUauCCspEr5pUynYIR29QVJVl2Mtx3FNdr5XG8aOeSLeXZ+gCTveXpfs+myERZ3P24KAZMulxApaHhgsKR+WPyKQT+hfhGw3SBNDViVEJFyqcAAfvocEfnYM7zzzS/bDVaUXOYaqEKS6STzjIbU6AUylGKF9rbUG6764yqysLA2Tj6njePiFXmWNljen1AUIq6rGeJEsIsaoTLlMvagX4poIFNuObwSW6gEBWvqEkcVA/x1Yisa0vVsRHiduTg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
- s=selector1;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=quantacorp.onmicrosoft.com; s=selector2-quantacorp-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KbT4h+5k/NObLmhCfW8T/QRYumfuC5GUOVniSmQq25I=;
- b=YeILRRb08WdbWfQszSksYRL1/y4ynghB6fJ3TDPYl16PAdeT8C1hRxExLWqC+liyZ7Ve/wTpsHgxkf3s0VnWNs9VBdpDpwewM4DVH1tdYV/piTURRxrJm3lxoRam1DMGliCvKTJeY72JKnpBFP5NJOYRXvDwTG+oKPAxe6L/HJk25L+fBE2//R9Bx1O9a9yIQrsduhN8y0k9UJ6G9o8MdqeAQXC2pFwbh9clHJwQ17jJM8x7nnh4pTXEQG3wkYqFnNUDf7rgpiuxA7wi5RiObwbc9GgchgV+t9WhNri308AKmVtdfkJLT9iSIDLJKSHbS/iqIFCPHlH4KcjGZkx3sQ==
-Received: from HK0PR06MB3202.apcprd06.prod.outlook.com (2603:1096:203:87::17)
- by TY2PR06MB2512.apcprd06.prod.outlook.com (2603:1096:404:4b::12) with
+ bh=0ecczZEZ+AGswLhGxbXj01lDhToSxPBEZ3Sbp1zv3bw=;
+ b=hlLAc7tq9YtMVDwEJHItjJfCYpo5NOW3mmDsvWDNi3GCB6aPGJ3Wp/mBaR5i4LS/d0VQLBqZQDOpuVzqMhzvJ3nbodsaGwkn59Ghi8586y5LpWaOLfdeQkf5L78CizlL3stKKYJimr0YSyIermzqsdCZkFFZ0PNXGI+WwSHVwE8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=quantatw.com;
+Received: from HK0PR04MB3282.apcprd04.prod.outlook.com (2603:1096:203:89::17)
+ by TYZPR04MB5735.apcprd04.prod.outlook.com (2603:1096:400:1f9::10) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Tue, 8 Feb
- 2022 08:20:08 +0000
-Received: from HK0PR06MB3202.apcprd06.prod.outlook.com
- ([fe80::d069:2ca1:99cb:b937]) by HK0PR06MB3202.apcprd06.prod.outlook.com
- ([fe80::d069:2ca1:99cb:b937%5]) with mapi id 15.20.4951.019; Tue, 8 Feb 2022
- 08:20:07 +0000
-From:   Neal Liu <neal_liu@aspeedtech.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Alan Stern <stern@rowland.harvard.edu>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        Tao Ren <rentao.bupt@gmail.com>, BMC-SW <BMC-SW@aspeedtech.com>
-Subject: RE: [PATCH] usb: ehci: add pci device support for Aspeed platforms
-Thread-Topic: [PATCH] usb: ehci: add pci device support for Aspeed platforms
-Thread-Index: AQHYHLU/wak6DMtWCU2KemAPJzVaSayJRCQAgAALm1A=
-Date:   Tue, 8 Feb 2022 08:20:07 +0000
-Message-ID: <HK0PR06MB32026A17E53EB76DB898A399802D9@HK0PR06MB3202.apcprd06.prod.outlook.com>
-References: <20220208062927.3527137-1-neal_liu@aspeedtech.com>
- <YgId0AhvRAmIcEA0@kroah.com>
-In-Reply-To: <YgId0AhvRAmIcEA0@kroah.com>
-Accept-Language: en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=aspeedtech.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 8e43b5d9-f6c3-450b-64ac-08d9eadbd125
-x-ms-traffictypediagnostic: TY2PR06MB2512:EE_
-x-microsoft-antispam-prvs: <TY2PR06MB25126D0B2BF607A952AFF7B6802D9@TY2PR06MB2512.apcprd06.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:2000;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: V8sKQaXva0gXPtXlspjXX8NPgXLNsQx9RFJylQbe6bTcDEx6j2aviV95Ty4YqN8xB3Jvlupm/7qY9eLGRE9pQ38bniILflfBLc3+niO3CDE0+a4f0cWXn1WgnYuPzNKZiIE9Tiu9sK1BTItRQsIZhDCUgR6yTmyzfgtj3eoGH+xNWQaEeYbPh7AhzE2ntdip/f3xucnw/1x32WH5fySp0trxTq7pDIfPfEMtA1dJ7yCpflux6mEQpte6CQ2XNLqyi9pX3ICZEYqA/ihZbsrNZLBLlJruc2Nzi3NVJJaiDmSsFWMLNe/QUYg6EMmJGN9pnd64vtb6a6rJGopSCUcfNkoKWdPEEAejciRQkNhLvZZPmeLaoeCrlUGcNTWSdBGuP3HcWD3E1IeDDmlrR7/HyctyGUKnaPn8xn+MFc94eqaO0KHDx+d3BwCE6Zcn4OYrS1zXQ5UusXR4Bvh59v/8jxFhhhC8jarc9NcBbXhndgrQSjCPBnCMst/uiaY8zzSVJOAxC752xsDk46Xwg5loc1k8rhBuzE/X/bqmWv2Ygbh1m3xwHPZ6clT8VDdaeXwt+Cw+cOzv741jdgh/VARHLI+YJL2Oj/Uv2gDtAOyCP7LBL04lRMZIuk3KT7xLuiqkgKHHFCMM4VdDYPCyZtxtJdlIyQfn/k2fr8RYpAQ/uIADwQ0JOQmuiI3WayboioWtSSbAhL20JRRn5dhAyW3BFQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR06MB3202.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(376002)(346002)(136003)(396003)(366004)(39840400004)(4326008)(6506007)(7696005)(53546011)(2906002)(38070700005)(83380400001)(508600001)(66556008)(38100700002)(122000001)(64756008)(5660300002)(33656002)(6916009)(76116006)(66946007)(8676002)(8936002)(54906003)(71200400001)(66476007)(66446008)(316002)(186003)(52536014)(26005)(107886003)(9686003)(86362001)(55016003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?rTJbzwO9b8r6qqrwuWrXBu1yJA5+2f7KICkpFwBB+1Qd19nqiiuQ8gx1KE/H?=
- =?us-ascii?Q?GcgjU9uLaYWXEBMYQQp6Tu8dFY90dPCqrh2lf5Rjwm7nklq2IRsul2q2CqPT?=
- =?us-ascii?Q?HpTJfFgt1QOud5Zqwpkm1cgd7a2p/xMFF6eVvg/ZpbhbksAzL+A0eu7hGcCR?=
- =?us-ascii?Q?0axHbvzHcoUL1SltttbSrLaABmVr10exRVjFP33Cl9iDBN1I1SYq9DTJ8i3v?=
- =?us-ascii?Q?axoIcAqv84JDvcHaXe22pRE32AooILUFxlTBfOFXa0hq5rl+x2litv7+NBHh?=
- =?us-ascii?Q?KZ+A0YpdSeKoLKJJeKqOG+AGIZKgAeAE0dxb5Ux3DNjfRakCet73NxFjsxfu?=
- =?us-ascii?Q?kuYAKaDBggAtKxB3nStQi2AmJB/OngoEib9sI6t0Vr1Ns0xsHbokSZ2N0PWU?=
- =?us-ascii?Q?aUsjw02FA+k17EQ7rPfX2uQkzOmVm9wvUqGWPqdUSoGsC58/EtlV4S3Urs+V?=
- =?us-ascii?Q?Dy8AGAPDNnNsOhWdVO2MCCBbxgyMVQUW7v69D20upOyUqgyFDTUAIHBcTTMi?=
- =?us-ascii?Q?1bd2+PBTm3ApdBnQxylPp03uAswgF2lVMa1/B1696w2EJu/WwtBTFs3lbIQZ?=
- =?us-ascii?Q?TYGRfNMJJugl7h53aPRkVb7KQd4Ofdfb5m1r8EVEDR1VJ4h0YopyoEFfV94j?=
- =?us-ascii?Q?YEydZcDCia7omJGWHm2h4hDoR+colGke4xIwNeN3VmYlAa/7ORs3Hc+5Oq4I?=
- =?us-ascii?Q?BfVDcs/RsHu4+u5lXizj7IhtJ+/UILDwveqXQWYt1G99XG43IrqTo8XrnkRc?=
- =?us-ascii?Q?koHWLfRfE1Zmi6o4JxqRUixM3PtajCOK2+UM/wWrZhFqYPB5WDbDzV0EuruL?=
- =?us-ascii?Q?TxCEabnHpQ4J+djTvKyCVnsQVvyyRwJMl9ir7EGd8WDNvrUmd6K5ngpZQYVl?=
- =?us-ascii?Q?D0cvwCFbBl6+zxiu+qDEW+4RH5u9hXCmjxC+uuOu9RH0/j+BmnLRa2ajE4RH?=
- =?us-ascii?Q?ORN782nvqc82X5f5aQQE/ep6rbz6b23yhOTxtV0qp+1VbCMvFDXBPeeTDChW?=
- =?us-ascii?Q?ClP/OAu4AV+u2rTfuR5woQ/mfuYNMGc8wIov/lCpgxcDU4fivev8WHQND8Ih?=
- =?us-ascii?Q?gWBps/CmASksLZ+3IteRA2Yq4FftPFLN4o5Qa6aTa1JMm64g8vIOqvFoSsyc?=
- =?us-ascii?Q?2CpHBkkqrJJ9Brn0F0NSyn5JVCXDR7ckR2nm2dExodOdiIwQcGle0BBhay90?=
- =?us-ascii?Q?5+fsaLevJq+6Y5yx8I+3J0sDk11kG0Dh5CqZvXQm3aKaqjyRJ9yrhI0/qdMn?=
- =?us-ascii?Q?HWWwHrEn5/5RGwiRhSZq1Cjpu6B+1Qs3uvvjo53EkdxvxMpWgwV9RUc08oG+?=
- =?us-ascii?Q?348ZJfeCy5DzE2N9DOPL27uAfxJfPBTc3WHyZaMmR5PWXcIfJbUmgqIb6N2e?=
- =?us-ascii?Q?g2NDlnuU4vl0VJs5numT8M+bxYQtQR1MUsfIeJuZyw1Kt5LrHZEA5a21UxTd?=
- =?us-ascii?Q?yLdh1egguu2s457nox1GFGU/t3qRiQjWGvtvltxwrAyXLeefyGPE5OgktXbW?=
- =?us-ascii?Q?8lBub9MHMcYB1bgmw9W2sE27kiC9GkVW3FP62Ws95mDmN53CHDRsdTFjO31q?=
- =?us-ascii?Q?2eM5RWTtNJ04+zW/9UtIYTdRWY77Obo9g14PKWt895v7msjmGyIGwsUooE7v?=
- =?us-ascii?Q?+Q=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+ 2022 08:21:01 +0000
+Received: from HK0PR04MB3282.apcprd04.prod.outlook.com
+ ([fe80::8160:1a0:97e1:9e53]) by HK0PR04MB3282.apcprd04.prod.outlook.com
+ ([fe80::8160:1a0:97e1:9e53%3]) with mapi id 15.20.4951.019; Tue, 8 Feb 2022
+ 08:21:01 +0000
+From:   Potin Lai <potin.lai@quantatw.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Patrick Williams <patrick@stwcx.xyz>,
+        Potin Lai <potin.lai@quantatw.com>
+Subject: [PATCH 0/2] Add a interface for passing supported PD rev from TCPC
+Date:   Tue,  8 Feb 2022 16:20:24 +0800
+Message-Id: <20220208082026.4855-1-potin.lai@quantatw.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: HK2PR02CA0148.apcprd02.prod.outlook.com
+ (2603:1096:202:16::32) To HK0PR04MB3282.apcprd04.prod.outlook.com
+ (2603:1096:203:89::17)
 MIME-Version: 1.0
-X-OriginatorOrg: aspeedtech.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6b1bfc86-698b-4314-481e-08d9eadbf109
+X-MS-TrafficTypeDiagnostic: TYZPR04MB5735:EE_
+X-Microsoft-Antispam-PRVS: <TYZPR04MB57359933BB661795435B7BDC8E2D9@TYZPR04MB5735.apcprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3826;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: O1561WVWiZHI7gjdpbRlNGmSowtle1t1dS1T47+aIIpPaFnV4IFohkpmKp9Is9yK3nQd2fu99rAZxOtzyGR7649AxKyVHzSmrOXrOBLZk1Zgk6Mx0JBvvZWZ8rUNYQq2TfXWnORl04TT/JytwqoSAWCd0MmPQPri5X8tgGiKKBgOisq0jpC5xGTfBzeE3Kqfhe+Z8v3rJhUIDKMxcpk8gisHC6FpqLR/E7aE3k287EClQ0s2ULIYMtMTD6U2MxXihgHsL6UhyYa5bZMFrjub546zCDDYn8vHJoGq+mh3Ya6jNBacHsMSgdVZWrmBgoEkUhKJpLv0zJUHA0cwXt/FTPtef8DnPEcHaKO8294cltPt4v/5z52xDzSO6eVF6oPdjA+QwVomiFpSffDPt0eAgKO4ZTIvVzsPBVNL1xv7wEdZ//6IPDYS00VOPtCcis0Dw667YwFLunBFYAEYbH7S638VV16jjMHHOd/J6d6iJrRK4rxrmueikcxogiJFNu/rbBKfH6/SuEEQ1wK13tre88Smcan3ZFfZIXD5LG9R8W8bFUGFrydQp6Zc7gSpsD+QwY4vgQaFQIugJ7DUYRVW95Z56FhYd6NMjaDp1QXdy1qrLuUKRFl37FQ0aievWVUDPukdONKO8l/gYOEIUCfW3uK4HMdudhj/jI4ppLrT8T+6bmiJZ4Au9xktdT4q7QmjK480f0uNCbJbTRAG+VmbqQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR04MB3282.apcprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(4326008)(83380400001)(8676002)(8936002)(36756003)(316002)(5660300002)(66946007)(66556008)(66476007)(6506007)(44832011)(86362001)(2906002)(38100700002)(38350700002)(4744005)(6666004)(508600001)(52116002)(110136005)(54906003)(6486002)(1076003)(186003)(107886003)(26005)(6512007)(2616005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zbOlAbe5zeH/O2wHGKgwT3FWKmMMeX6/Eg2Qc/eM4w4yiBXZEiZZp8iGMhRj?=
+ =?us-ascii?Q?axfNS0uhAO7E0KTFrPMi05EP7M4lEHET8jOkJ+KLcAgLS/AyfCEm9q3iPLzW?=
+ =?us-ascii?Q?ZtQo1J2gk7EKGB90cAOVXtwzHGpvgiSKuqB5SJaWRMB00LyxlvBb25B9QnN2?=
+ =?us-ascii?Q?Cm6Yr3nMpT0GJuyapnzZR+93wR8mR5mEVE5KFFJz7SKeGJ7tg2Zl49DuLG2R?=
+ =?us-ascii?Q?TfX6CU1o0mwTKlEDGXR5XiteXPMeiE2FdQGJCsRRQag+9BgEpl/cKrt9tLQS?=
+ =?us-ascii?Q?vUcLeJ5dvaAYbGcDVHck75XpeVEhQA343ibTV0ZsmPyuIrfuT2Hcr7piYhd6?=
+ =?us-ascii?Q?y5WM+Ktx5CnW1wLDYUC5PgR6SrlIc9InHtSnVC9arQID+/NAyReFPyQrbPjG?=
+ =?us-ascii?Q?nlmCjLMgssqW1jIf4w7m1BEnR5SvjvephqZm+ycHKlZn7lYV70wIBbnAizqx?=
+ =?us-ascii?Q?zU5xLCJrGBnEswa72MQOb/gVoNMJ/CbiXoRwpehGN3AyYF0TKoEzOXVYfBT8?=
+ =?us-ascii?Q?3HXwBAQcMzPxjeIVR5CkXxzZ52ojOEpnFC6kPFjpj2IYbaFYkpxmhbY1xEBC?=
+ =?us-ascii?Q?HcCgM0zEnczy60hldJ5yNgnXFjfV15o7qTCiFKJimbUkvvB1UMEMOLXygIXB?=
+ =?us-ascii?Q?0ejD1VLB2oVsbHflq/4PspCm0nFgbYKbsrCsIlIQeHBMkh04Qxx4YiMovE0M?=
+ =?us-ascii?Q?SmPkO6aJAZFpQ9Er5mjKU1rVx9tIcKgq4Y02mSs3CDuMCz4Sr8UIn+sLpWFc?=
+ =?us-ascii?Q?g6JhU7Sr1LIlmL6gvyG6Tj6D9SZPlWkMNXyTRIAvNJtw8S+FGSs0rhA1zXmP?=
+ =?us-ascii?Q?aiNF4VR+L/itVkvi/cbX7g7q0w6nWvC3/BykZHRYWyv8MKEM/UfsPjKTIMQS?=
+ =?us-ascii?Q?LZxTFQ5uPYAvYZZflFqsC/J6S9m3Vop97kxH9wIP/Nnw48Kb6O9PWxH+ZNiu?=
+ =?us-ascii?Q?JFpMbvP+UFNMyVu4Jn8xa0252WQ6/RVaDxwoCKxLMQZVq2CF5HnoZ2PgAY8I?=
+ =?us-ascii?Q?3t9U85fUsOzzSOUdR7+aN06GIE7JGReyiNqpXrBX9ynPPJ/F3BF9YteTWFjm?=
+ =?us-ascii?Q?ugTk2OG0HCyXNonyzvA9N9TheIOnDnVdO38RAIgbWMNF0EEPOG+p5oTLycy2?=
+ =?us-ascii?Q?9ujCbwVKsedCh7A9A5balceFybpQ34UP7gK9cN5CSJgnC2XPZxNpOeYvSlIe?=
+ =?us-ascii?Q?ukj9tJmLHnbw7xLwOMsYd76bcZQFbMARRc6gEb858vajEsSTnMmu1hrRr40p?=
+ =?us-ascii?Q?JvSlfYjZVTNDHGwksYyhX58DtFeaYSMsP1oYKjegYOnSj3dx/3y2qOvLAqcV?=
+ =?us-ascii?Q?Tx6SlKYApqp2hUG9J1xg5WNbWEw9l4bRUMSHBNL9gMstkcYmpaMTe4GZTupQ?=
+ =?us-ascii?Q?IQeEICZ6mBH5l7WrKdWx+AHFDpKeLLEv6Hv7cLcvYoY91JI+70NWy08gx8h3?=
+ =?us-ascii?Q?e6MI4Bych/7acJGj2gsJb1A5i3g57e+SWgqa6/L0iqubmz+neGYjp9Zm7qX+?=
+ =?us-ascii?Q?CM5kBX5zc5NPAHUVhk2GjuC8JV7l5ulBmzLzcChV0t7Zst0FPXP98mZvDyDE?=
+ =?us-ascii?Q?1BHzdVhhuYf497lCDFspKhFpsXjoL92mMmmUc0PrmDgkK/6YtMJ9nRdGwLuj?=
+ =?us-ascii?Q?hbL/+IrHVcN6Xx77K0Gz/0M=3D?=
+X-OriginatorOrg: quantatw.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6b1bfc86-698b-4314-481e-08d9eadbf109
+X-MS-Exchange-CrossTenant-AuthSource: HK0PR04MB3282.apcprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: HK0PR06MB3202.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8e43b5d9-f6c3-450b-64ac-08d9eadbd125
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Feb 2022 08:20:07.4449
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Feb 2022 08:21:01.3540
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 6rsZpcKhtGF4N+QtAEJYtG1KQX17ZPNnJeoCshm4yKYDJa+PdfzRgwKSo438Fp26ygpCTgdZDn9ffVLS0HTHfw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY2PR06MB2512
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 179b0327-07fc-4973-ac73-8de7313561b2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /CWPqtIup3Mw0T45F3X3xL+SNe05oibLv3ZMF5aqASxbeC/GNjaVvLVKbAIVHgL/434oc11xk2LAEhxXMoRkjQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR04MB5735
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> -----Original Message-----
-> From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Sent: Tuesday, February 8, 2022 3:38 PM
-> To: Neal Liu <neal_liu@aspeedtech.com>
-> Cc: Alan Stern <stern@rowland.harvard.edu>; Bjorn Helgaas
-> <bhelgaas@google.com>; linux-usb@vger.kernel.org;
-> linux-kernel@vger.kernel.org; linux-pci@vger.kernel.org; Tao Ren
-> <rentao.bupt@gmail.com>; BMC-SW <BMC-SW@aspeedtech.com>
-> Subject: Re: [PATCH] usb: ehci: add pci device support for Aspeed platfor=
-ms
->=20
-> On Tue, Feb 08, 2022 at 02:29:27PM +0800, Neal Liu wrote:
-> > Enable Aspeed quirks in commit 7f2d73788d90 ("usb: ehci:
-> > handshake CMD_RUN instead of STS_HALT") to support Aspeed ehci-pci
-> > device.
-> >
-> > Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
-> > ---
-> >  drivers/usb/host/ehci-pci.c | 6 ++++++
-> >  include/linux/pci_ids.h     | 3 +++
-> >  2 files changed, 9 insertions(+)
-> >
-> > diff --git a/drivers/usb/host/ehci-pci.c b/drivers/usb/host/ehci-pci.c
-> > index e87cf3a00fa4..a91b25d216ae 100644
-> > --- a/drivers/usb/host/ehci-pci.c
-> > +++ b/drivers/usb/host/ehci-pci.c
-> > @@ -222,6 +222,12 @@ static int ehci_pci_setup(struct usb_hcd *hcd)
-> >  			ehci->has_synopsys_hc_bug =3D 1;
-> >  		}
-> >  		break;
-> > +	case PCI_VENDOR_ID_ASPEED:
-> > +		if (pdev->device =3D=3D PCI_DEVICE_ID_ASPEED_EHCI) {
-> > +			ehci_info(ehci, "applying Aspeed HC workaround\n");
-> > +			ehci->is_aspeed =3D 1;
-> > +		}
-> > +		break;
-> >  	}
-> >
-> >  	/* optional debug port, normally in the first BAR */ diff --git
-> > a/include/linux/pci_ids.h b/include/linux/pci_ids.h index
-> > aad54c666407..410b395fe56c 100644
-> > --- a/include/linux/pci_ids.h
-> > +++ b/include/linux/pci_ids.h
-> > @@ -3096,4 +3096,7 @@
-> >
-> >  #define PCI_VENDOR_ID_NCUBE		0x10ff
-> >
-> > +#define PCI_VENDOR_ID_ASPEED		0x1a03
-> > +#define PCI_DEVICE_ID_ASPEED_EHCI	0x2603
->=20
-> Please read the top of this file, this does not need to be added here.
->=20
-> thanks,
->=20
-> greg k-h
+This series add an interface for TCPC passing supported PD revision.
+supported_pd_rev is optional, TCPM will get PD rev for negotiation if 
+lower level driver has implementaion, otherwise use PD_MAX_REV for 
+negotiation
 
-Are you suggesting to hard code vendor/device ID in driver instead?
-Thanks
+Potin Lai (2):
+  usb: typec: tcpm: add interface for passing supported_pd_rev from
+    tcpc_dev
+  usb: typec: fusb302: add support of supported_pd_rev
 
--Neal
+ drivers/usb/typec/tcpm/fusb302.c | 20 ++++++++++++++++++++
+ drivers/usb/typec/tcpm/tcpm.c    | 14 ++++++++++++--
+ include/linux/usb/tcpm.h         |  4 ++++
+ 3 files changed, 36 insertions(+), 2 deletions(-)
+
+-- 
+2.17.1
+

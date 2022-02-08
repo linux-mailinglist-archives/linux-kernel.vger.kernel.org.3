@@ -2,73 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B465D4AD15B
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 07:11:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D94A74AD15C
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 07:12:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346067AbiBHGLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 01:11:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56620 "EHLO
+        id S1346611AbiBHGM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 01:12:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233167AbiBHGLv (ORCPT
+        with ESMTP id S1346513AbiBHGMX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 01:11:51 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE82BC0401DC;
-        Mon,  7 Feb 2022 22:11:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 048F2CE136D;
-        Tue,  8 Feb 2022 06:11:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18DAAC340FA;
-        Tue,  8 Feb 2022 06:11:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644300705;
-        bh=98Jh+JdWit2Ec3uBZ9fZIIVMOmAGVkhi9qoKSGmN8mE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=dkarkc84bxml1mYT97ga5a+lFTT5OA3SIThy/3q5pqmFTn+KKM8Wg/T9xSG65SqlF
-         WLPC5nfYthRwdLylQ3ozJKWc5Tvp6yGUIofsIZlxG4v0KCS6gYJYZPIeo/F4MgOlTJ
-         Q7H/dx9Mbl7Mn6qjOOUcEdADy2vJgJh+vOdGgX1ZZtLQZWWDJ2E8zNNoDMp0uLvrGS
-         0fec9ZljUZ42rP+thwv1TLb4835/iY1wMkbYXnK1osqEJFPOXkcwjHqPwYaB1V0ROv
-         gLVs9OBYLHSqGC7finXbpaw8HivhQcd0m0xpbpN7bV/shGYT8WaGdn+NO9dLe5h3kq
-         sgjpEzPLES1QQ==
-Received: by mail-vs1-f48.google.com with SMTP id g10so2258313vss.1;
-        Mon, 07 Feb 2022 22:11:45 -0800 (PST)
-X-Gm-Message-State: AOAM530JkzbCupbTvdOoKjzq/IYazaNil5n7yMzP8T0KvBdAuf/snDU5
-        Bt5j0Ly/h1FCrQOuf6hc7c8zt9qZr4mcy1hk34o=
-X-Google-Smtp-Source: ABdhPJyoKG0uf9goGLZSjJNhyKf+bvy86AJ6ENV92VZKmmSAQhXAV+vpsm1T7Vkj70pF26s11ZlBhJpkUaWtRESj8gk=
-X-Received: by 2002:a67:ec4e:: with SMTP id z14mr1017480vso.8.1644300703865;
- Mon, 07 Feb 2022 22:11:43 -0800 (PST)
+        Tue, 8 Feb 2022 01:12:23 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F7D8C0401EF
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 22:12:23 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id bt13so22934187ybb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 22:12:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OLS1qG2/31/qv95jBrunYz8W6LmWRIuON498ceRNCdU=;
+        b=Q/LnvOvx7/obZ/wdiMqJNB/3sgZQ9TkVmhG8RJcQVbM/RAJKOyeUZsThaytxw5LwRG
+         F0V7L/LF99sYMeIGsXtarFL53NlT+j40Yr4IR7/XK32DqxUEfzvupmSYQI5knbiAtdiE
+         hbR1SIKE7mb3cRGGQMy4PnupF1nHo56/yPtzo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OLS1qG2/31/qv95jBrunYz8W6LmWRIuON498ceRNCdU=;
+        b=EhDtJyKM2cp8ZgtiXNbLwnyayTNLk7MFRitVie/wECYXi0O3NGs261P35fO+53rIXd
+         u6tbYm//jT0kXZnsEToIlwntc3CP9zU2l0U/6sbpaqCf60uwp9nkDqczZeGL6RKCokNE
+         e7km6CV2ZQkBrSdrBM8Z+QK9BpbkZt+QqX6RVlXxoIqXjMnjZ0mSBHu+k+DABNneh48P
+         6RrAdw9LsOyov9VeLYk98rudZkaN6W6ETdjdhzbBjBT5JJJDYe6aZWL7FNXhJAPAPw7r
+         BSX3xsMVZiImH54bW5LMHc1nNwDkV7vIGzGZRD0O6OGwj4Bk0r7RFKFbpQ2+hqDq9jRm
+         Rvlw==
+X-Gm-Message-State: AOAM530INPhzSz15TxQml/lUdKcrWBidXh0oYHhqLj3L9YN38UI5WSOD
+        fPNUc58rWf0CyVrW5wz7GDRJKlxX8iNuwqiL+h98yA==
+X-Google-Smtp-Source: ABdhPJxOPkZl//mWeFNC4iG9V3hjqFnSJwuUjnu2Vdy5KQg2ABwkunMvuTuvMx6CptgF3dGHlnD19raQKa+8V7xy478=
+X-Received: by 2002:a25:be43:: with SMTP id d3mr3156548ybm.454.1644300742373;
+ Mon, 07 Feb 2022 22:12:22 -0800 (PST)
 MIME-Version: 1.0
-References: <20220126114452.692512-1-apatel@ventanamicro.com> <20220126114452.692512-3-apatel@ventanamicro.com>
-In-Reply-To: <20220126114452.692512-3-apatel@ventanamicro.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 8 Feb 2022 14:11:32 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQPC0-VHdwayu96UTWY5GOePLZ5dCH1z8vhseLVztr3jQ@mail.gmail.com>
-Message-ID: <CAJF2gTQPC0-VHdwayu96UTWY5GOePLZ5dCH1z8vhseLVztr3jQ@mail.gmail.com>
-Subject: Re: [PATCH v10 2/8] RISC-V: Rename relocate() and make it global
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Sandeep Tripathy <milun.tripathy@gmail.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Liush <liush@allwinnertech.com>,
-        Anup Patel <anup@brainfault.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pm@vger.kernel.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        kvm-riscv@lists.infradead.org
+References: <20220207214026.1526151-1-pmalani@chromium.org>
+ <20220207214026.1526151-4-pmalani@chromium.org> <YgIBv2SQdwXm7RLt@google.com>
+In-Reply-To: <YgIBv2SQdwXm7RLt@google.com>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Mon, 7 Feb 2022 22:12:10 -0800
+Message-ID: <CACeCKaezRNgsqrq3QJ1ViHjYScFrjpC-kCaYmE8kOXCcW9MRrw@mail.gmail.com>
+Subject: Re: [PATCH 3/4] platform/chrome: cros_ec_typec: Configure muxes at
+ start of port update
+To:     Tzung-Bi Shih <tzungbi@google.com>
+Cc:     linux-kernel@vger.kernel.org, Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        "open list:CHROMEOS EC USB TYPE-C DRIVER" 
+        <chrome-platform@lists.linux.dev>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,71 +66,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Guo Ren <guoren@kernel.org>
+Hi Tzung-Bi,
 
-On Wed, Jan 26, 2022 at 7:46 PM Anup Patel <apatel@ventanamicro.com> wrote:
+On Mon, Feb 7, 2022 at 9:38 PM Tzung-Bi Shih <tzungbi@google.com> wrote:
 >
-> From: Anup Patel <anup.patel@wdc.com>
+> On Mon, Feb 07, 2022 at 09:40:28PM +0000, Prashant Malani wrote:
+> > There are situations where the mux state reported by the Embedded
+> > Controller (EC), might lag the partner "connected" state. So, the mux
+> > state might still suggest that a partner is connected, while the PD
+> > "connected" state, being in Try.SNK (for example) suggests that the
+> > partner is disconnected.
+> >
+> > In such a scenario, we will end up sending a disconnect command to the
+> > mux driver, followed by a connect command, since the mux is configured
+> > later. Avoid this by configuring the mux before
+> > registering/disconnecting a partner.
 >
-> The low-level relocate() function enables mmu and relocates
-> execution to link-time addresses. We rename relocate() function
-> to relocate_enable_mmu() function which is more informative.
->
-> Also, the relocate_enable_mmu() function will be used in the
-> resume path when a CPU wakes-up from a non-retentive suspend
-> so we make it global symbol.
->
-> Signed-off-by: Anup Patel <anup.patel@wdc.com>
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> ---
->  arch/riscv/kernel/head.S | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
->
-> diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
-> index 2363b43312fc..5f4c6b6c4974 100644
-> --- a/arch/riscv/kernel/head.S
-> +++ b/arch/riscv/kernel/head.S
-> @@ -90,7 +90,8 @@ pe_head_start:
->
->  .align 2
->  #ifdef CONFIG_MMU
-> -relocate:
-> +       .global relocate_enable_mmu
-> +relocate_enable_mmu:
->         /* Relocate return address */
->         la a1, kernel_map
->         XIP_FIXUP_OFFSET a1
-> @@ -185,7 +186,7 @@ secondary_start_sbi:
->         /* Enable virtual memory and relocate to virtual address */
->         la a0, swapper_pg_dir
->         XIP_FIXUP_OFFSET a0
-> -       call relocate
-> +       call relocate_enable_mmu
->  #endif
->         call setup_trap_vector
->         tail smp_callin
-> @@ -329,7 +330,7 @@ clear_bss_done:
->  #ifdef CONFIG_MMU
->         la a0, early_pg_dir
->         XIP_FIXUP_OFFSET a0
-> -       call relocate
-> +       call relocate_enable_mmu
->  #endif /* CONFIG_MMU */
->
->         call setup_trap_vector
-> --
-> 2.25.1
->
->
-> --
-> kvm-riscv mailing list
-> kvm-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/kvm-riscv
+> I failed to understand the description.  It looks like some protocol details.
+> Could you provide some brief explanation in the commit message?
 
+I'm not sure how else I can better elaborate on this in the commit message than
+as currently stated.
+Since the EC is an independent controller, the mux state *can* lag the
+"connected" state.
+So, as described in the commit message, when a disconnect happens, we could have
+a disconnect (since PD_CTRL contains the "connected state") followed
+by a configure_mux
+with the mux state still suggesting a connected device (the drivers
+which implement the
+mux/switch controls can misconstrue the old mux state) which results
+in a connect. This
+patch eliminates that.
 
+>
+> On a related note, followed up the example scenario, which one of the
+> understanding is the most applicable:
+> 1) The disconnect followed by a connect is suboptimal.  The patch cleans it.
+> 2) The disconnect followed by a connect is a bug.  The patch fixes it.
+This one (number 2)
 
--- 
-Best Regards
- Guo Ren
+>
+> > @@ -965,6 +965,11 @@ static int cros_typec_port_update(struct cros_typec_data *typec, int port_num)
+> >       if (ret < 0)
+> >               return ret;
+> >
+> > +     /* Update the switches if they exist, according to requested state */
+> > +     ret = cros_typec_configure_mux(typec, port_num, &resp);
+> > +     if (ret)
+> > +             dev_warn(typec->dev, "Configure muxes failed, err = %d\n", ret);
+>
+> It used the fact that the function returns `ret` at the end.  After the move,
+> the block is no longer the last thing before function returns.
+>
+> Does it make more sense to return earlier if cros_typec_configure_mux() fails?
+> Does the rest of code need to be executed even if cros_typec_configure_mux()
+> fails?
 
-ML: https://lore.kernel.org/linux-csky/
+Yes, it should still be executed (we still need to update the port
+state). That is why the return is eliminated.
+
+>
+> > @@ -980,11 +985,6 @@ static int cros_typec_port_update(struct cros_typec_data *typec, int port_num)
+> >       if (typec->typec_cmd_supported)
+> >               cros_typec_handle_status(typec, port_num);
+> >
+> > -     /* Update the switches if they exist, according to requested state */
+> > -     ret = cros_typec_configure_mux(typec, port_num, &resp);
+> > -     if (ret)
+> > -             dev_warn(typec->dev, "Configure muxes failed, err = %d\n", ret);
+> > -
+> >       return ret;
+>
+> If the function decides to return earlier, it can be `return 0;`.
+Sure, I can change this in the next version

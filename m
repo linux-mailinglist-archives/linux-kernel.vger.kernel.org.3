@@ -2,148 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFD324ACFDD
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 04:47:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F89C4ACFE0
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 04:50:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344985AbiBHDrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 22:47:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60120 "EHLO
+        id S1346423AbiBHDu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 22:50:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245562AbiBHDq4 (ORCPT
+        with ESMTP id S241667AbiBHDuz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 22:46:56 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22412C0401E8
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 19:46:55 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id w1so3205311plb.6
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 19:46:55 -0800 (PST)
+        Mon, 7 Feb 2022 22:50:55 -0500
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AAB3C0401DC
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 19:50:54 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id p5so46050175ybd.13
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 19:50:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=a/iY+LYCIITobxV+U+gryLnkcw30JcLX+QDe3StT71U=;
-        b=Cu6tSzvdr3yyYqAV76D+Y74xDnkWul7CsRpMnMutOz8e+8VYQMvVcJH+A170U72vZH
-         zj/g2rjBg0t9e/dg5i8cF/3xQHRRdO5TXCJnaA5DJYoQEZwoxZFi8GE3zeecFrE4rJSz
-         F3l+erY+2uVOyLur97/KP72wIS4yoL8Y4j7U7b3ipc3xw/iFtKSv926FtSOBRzWqs1BN
-         Uk/jQBNcqc4gXe54CgSZn54/1Xok42N9zuY5LGJpakyLp2Y/10LcRGYhM8Mf9F4+Oy/K
-         L8lYSIxzHGo8vu+ba/qqBS8wYPbq5YkFlrjJVQAvz22D3cKe1mm+nx+BNgXlbDiwBtQ0
-         BH9w==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gGJv0AFVdfHzUa0yHqnma3btGQlzXWk1wSqSnWWw9Dk=;
+        b=mJm2SUkp44PAeoyfQimwj06GljPK6ZlqDXI5AuQfTSigjQ8pV5o1ebijkpLq4WG/Gp
+         IMzFiyeYTiPnV9e/8k+G2x9dJnUo4cXsJQZN66aXlRdWYuZXJrMfHg7zybpBtcAi6Xqn
+         kL1U1hw+GGReC6MiCpqdsZ/N7V4pxLg3Zj3Tw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=a/iY+LYCIITobxV+U+gryLnkcw30JcLX+QDe3StT71U=;
-        b=PkPsxwxIbBpu0uVKOQZ18udNnlATt55umY1xsiOFgW3pDKlF4fY56Knjqz4m1rcwnd
-         GLW87/Gh0IW30RaWvcmOX1F45JlbmFwKtyNB1GKv/2II12Aryr84+SEkgBfCihC8gMwL
-         kAUYsFOLdFw3D7PZ/DYgCnkq9HMvb9pinJnC0tFYWSDJ1z5FMgHgdNImCKpIhMP6wUL3
-         rTkPMXFQ7WC0U/04f+hZJ4C1N73vGUrSQHeMQAb+0jwpIoUaIeaRfhhVNzEadtEAu6P6
-         gdX9V6f9pdDk3gxoK6VlaYIbzLmz61f3ZbLupGv3OzbCcAf6Itu26IqqYm+vVDrfi5/R
-         sx+w==
-X-Gm-Message-State: AOAM530cD9YkW7wJCxkHkWN9ZI2mbri+ThBo7osgmXL2Kd9q0CUZ4sb4
-        pQ6A67I7obve3v5DTCdg9s2YLQ==
-X-Google-Smtp-Source: ABdhPJwqUMxAa6iHs4gBOdkeC8g/8E2NUBCfcixF/w3JXosdm7T9AnMKwOu/33hwyTZoc1D9flcrAQ==
-X-Received: by 2002:a17:902:a9c2:: with SMTP id b2mr2696201plr.168.1644292014639;
-        Mon, 07 Feb 2022 19:46:54 -0800 (PST)
-Received: from [10.76.43.192] ([61.120.150.76])
-        by smtp.gmail.com with ESMTPSA id d12sm9379702pgk.29.2022.02.07.19.46.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Feb 2022 19:46:54 -0800 (PST)
-Message-ID: <43428234-93e3-806a-b0ff-0f1c2d7b7cb9@bytedance.com>
-Date:   Tue, 8 Feb 2022 11:46:45 +0800
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gGJv0AFVdfHzUa0yHqnma3btGQlzXWk1wSqSnWWw9Dk=;
+        b=OgyzyCUV//eMl1wDBAnPcGlO9RcY72ua6mvVN294Lak3l/Qw/iCXByiK8Q1hIRCLs/
+         Z5CtvrulZWPfTroOMXcNrh8pBXeEHvWj0GOI8P7Aq385leEqGkkJY03NH5C0Khx1bbq0
+         79BhhtcjLV2yR76wqgyhxliklZsHty3BuJ3J1anB4PzQGCEnGST/xD25WtOI927uJoda
+         1mgBrRFn2a1PuomsXOurX4Z81IXq49qhLxOTo+/VQvEMHH94T953AbyuxR32a+50PguW
+         YpQjjMU1D1OzLm6+qlqBvx918uHVE5nOfqfBV+6fARAOQxJrwMsjsVkQw4sPZXtZvoi8
+         m65A==
+X-Gm-Message-State: AOAM532TRmLm31A0Gz8ZkhcjmDzYhthvrIiqCnlVsxZ0ylmOVg1IMqJA
+        vKGoQ260fQYkVPGbaaAQ9CSl3JU87jQpMTKTYmzGoQ==
+X-Google-Smtp-Source: ABdhPJzBnKRYSQxz0sUuAXLlIdIIDiufeVnpjx8TXskOYyz1WTj3X8uhPzwU+v2jw3moTuLJEUn06yrPSPGxjYtAf04=
+X-Received: by 2002:a81:1b4e:: with SMTP id b75mr2986110ywb.295.1644292253418;
+ Mon, 07 Feb 2022 19:50:53 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.1
-Subject: Re: Re: [PATCH v3] sched/numa: add per-process numa_balancing
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>, Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
-        songmuchun@bytedance.com, zhengqi.arch@bytedance.com
-References: <20211206024530.11336-1-ligang.bdlg@bytedance.com>
- <Yd7pKuvjayH4q14L@hirez.programming.kicks-ass.net>
-From:   Gang Li <ligang.bdlg@bytedance.com>
-In-Reply-To: <Yd7pKuvjayH4q14L@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220202134834.690675-1-wenst@chromium.org> <20220202134834.690675-16-wenst@chromium.org>
+ <752d5d00-4e05-1bd6-564f-3bce21a35713@collabora.com>
+In-Reply-To: <752d5d00-4e05-1bd6-564f-3bce21a35713@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Tue, 8 Feb 2022 11:50:42 +0800
+Message-ID: <CAGXv+5HSLh0OgJc=EU=wvB4DaOMDLjsgJ6qnHY423d1L5+DixQ@mail.gmail.com>
+Subject: Re: [PATCH v2 15/31] clk: mediatek: Implement mtk_clk_unregister_fixed_clks()
+ API
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/1/12 22:43, Peter Zijlstra wrote:
-> On Mon, Dec 06, 2021 at 10:45:28AM +0800, Gang Li wrote:
->> This patch add a new api PR_NUMA_BALANCING in prctl.
->>
->> A large number of page faults will cause performance loss when numa
->> balancing is performing. Thus those processes which care about worst-case
->> performance need numa balancing disabled. Others, on the contrary, allow a
->> temporary performance loss in exchange for higher average performance, so
->> enable numa balancing is better for them.
->>
->> Numa balancing can only be controlled globally by
->> /proc/sys/kernel/numa_balancing. Due to the above case, we want to
->> disable/enable numa_balancing per-process instead.
->>
->> Add numa_balancing under mm_struct. Then use it in task_tick_fair.
->>
->> Set per-process numa balancing:
->> 	prctl(PR_NUMA_BALANCING, PR_SET_NUMAB_DISABLE); //disable
->> 	prctl(PR_NUMA_BALANCING, PR_SET_NUMAB_ENABLE);  //enable
->> 	prctl(PR_NUMA_BALANCING, PR_SET_NUMAB_DEFAULT); //follow global
-> 
-> This seems to imply you can prctl(ENABLE) even if the global is
-> disabled, IOW sched_numa_balancing is off.
-> 
+Hi,
 
-Of course, this semantic has been discussed here FYI.
-  https://lore.kernel.org/all/20211118085819.GD3301@suse.de/
+On Thu, Feb 3, 2022 at 5:47 PM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> Il 02/02/22 14:48, Chen-Yu Tsai ha scritto:
+> > mtk_clk_register_fixed_clks(), as the name suggests, is used to register
+> > a given list of fixed rate clks. However it is lacking a counterpart
+> > unregister API.
+> >
+> > Implement said unregister API so that the various clock platform drivers
+> > can utilize it to do proper unregistration, cleanup and removal.
+> >
+> > In the header file, the register function's declaration is also
+> > reformatted to fit code style guidelines.
+> >
+> > Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+> > Reviewed-by: Miles Chen <miles.chen@mediatek.com>
+>
+> Hello Chen-Yu,
+>
+> I like this entire series, but I had to manually apply this patch (and some of
+> the other ones)...
 
-On 11/18/21 4:58 PM, Mel Gorman wrote:
- > On Thu, Nov 18, 2021 at 11:26:30AM +0800, Gang Li wrote:
- >> 3. prctl(PR_NUMA_BALANCING, PR_SET_NUMAB_ENABLE);  //enable
- >
- > If PR_SET_NUMAB_ENABLE enables numa balancing for a task when
- > kernel.numa_balancing == 0 instead of returning an error then sure.
+This was based on linux-next, which already has a couple clk patches queued
+up.
 
+> Especially for the ones that will be touching MT8195 clock drivers, can you
+> please rebase over series [1] by Chun-Jie?
 
->> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
->> index 884f29d07963..2980f33ac61f 100644
->> --- a/kernel/sched/fair.c
->> +++ b/kernel/sched/fair.c
->> @@ -11169,8 +11169,12 @@ static void task_tick_fair(struct rq *rq, struct task_struct *curr, int queued)
->>   		entity_tick(cfs_rq, se, queued);
->>   	}
->>   
->> -	if (static_branch_unlikely(&sched_numa_balancing))
->> +#ifdef CONFIG_NUMA_BALANCING
->> +	if (curr->mm && (curr->mm->numab_enabled == NUMAB_ENABLED
->> +	    || (static_branch_unlikely(&sched_numa_balancing)
->> +	    && curr->mm->numab_enabled == NUMAB_DEFAULT)))
->>   		task_tick_numa(rq, curr);
->> +#endif
->>   
->>   	update_misfit_status(curr, rq);
->>   	update_overutilized_status(task_rq(curr));
-> 
-> There's just about everything wrong there... not least of all the
-> horrific coding style.
+I think this series supersedes the first patch in that series? As for the
+other two, I think the discussion about the bindings is ongoing, which
+might affect the third patch as well?
 
-horrible code, yes.
-I'll do some code clean.
--- 
-Thanks
-Gang Li
+ChenYu
 
+> [1] https://patchwork.kernel.org/project/linux-mediatek/list/?series=603955
+>
+> Thanks,
+> Angelo
+>

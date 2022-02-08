@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B057B4AE13C
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 19:45:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 801D34AE13E
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 19:45:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385274AbiBHSpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 13:45:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40242 "EHLO
+        id S1385189AbiBHSpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 13:45:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385359AbiBHSpB (ORCPT
+        with ESMTP id S1385349AbiBHSpB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 8 Feb 2022 13:45:01 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E61C03FEEF;
-        Tue,  8 Feb 2022 10:44:53 -0800 (PST)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 218Gc5su007554;
-        Tue, 8 Feb 2022 18:44:23 GMT
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF91C03FEE0;
+        Tue,  8 Feb 2022 10:44:51 -0800 (PST)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 218ILqQQ020213;
+        Tue, 8 Feb 2022 18:44:24 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references :
  content-transfer-encoding : content-type : mime-version;
- s=corp-2021-07-09; bh=CirLBKQAk+kqw/rFQuK3wh8l0X95JKJGfm1ou7/quDY=;
- b=qCPTtc/GjLah0fGNzPV1zbDX6X71em6bnpb8vjETJpWtFXIRLbVb6npcR7iReLXkgN1H
- o4KSolmrjyz+nRx0npYhmW1f7cikzKGPn/nI/qk0VfMXjqVB9q/1K/TMDJw1qC+oq2Zd
- o1tj9pPI5chO+I+nwGFrZxQT77clLVP2Vv9slkTpPT7qZwKRzyINDEJxy2/UE0e4+ng/
- H9PARHapOvBGtzRjLyEJN8L/SlIxHXVrDFwUOP3/fNNBdUOeTxluI1nT/msREZ11UG7I
- e91gECNG3R2ueQyENs3jyTBDP/NdUGsGJkeNbLvIt7yGs/02bRyhyRKqOi/XLW7DEaAe 6w== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3e368tunk2-1
+ s=corp-2021-07-09; bh=EJD1NXkyPpVL2e6EUCJnMp0hne6/ZXEXfHgkebDyDt8=;
+ b=vewfROWgWbldW7bfRzfJ6sczC8YwiiHI4dZtc++rDSKwaTw2lvFSCb2dEz547ROg+TPn
+ c+efZ8hbxGzZsA1fhEqLfvqhomXeA89MXRav5DUq0oJdhI5sadHHYPBVZSwlBMu4GNTb
+ bCYcz4rEGWQL6y7IodJtTrXaLoezaCALRitg494LSNcvx14bQfBEBT+2S46O8Spub4rs
+ ekxx+/wVwMggyHdGDZYa4HwldKkvxSd0+ENVwZnU4y9zdgXZpCr188kfgZ9ehjQpVEr9
+ pTf2s/Mv/OSzDEDEoZitP+3yO1quLLh+T9u/O27ODBXB3FA/aSr8i46vCKK+2uh8N+Cq yQ== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3e366wus0y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 08 Feb 2022 18:44:23 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 218Ia5NH082722;
+        Tue, 8 Feb 2022 18:44:22 GMT
+Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam08lp2048.outbound.protection.outlook.com [104.47.73.48])
+        by aserp3030.oracle.com with ESMTP id 3e1f9fuvna-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Tue, 08 Feb 2022 18:44:22 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 218IZYnX159440;
-        Tue, 8 Feb 2022 18:44:18 GMT
-Received: from nam02-dm3-obe.outbound.protection.outlook.com (mail-dm3nam07lp2043.outbound.protection.outlook.com [104.47.56.43])
-        by aserp3020.oracle.com with ESMTP id 3e1h26thwd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 08 Feb 2022 18:44:17 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=L04uH9tKSIW9X0p6og1gegugxYfQmjXgtrT5CZdQ+I08odM4tH3CucjNHp2XXeNVt1uMib/jwRQgfF11YzsIEF8vp4GGZ4P7CGSq/NWUOm9sUJqQznqQZpGJKLDd87dfJQsqrekNMlFVT2SkbvaF5XypOvTaYtpZhWg2maQ3/LCuX8oHtox6Grbrzg3MFs/4Pm/yp/usWTH2Wh4qsvslZzM5vwRt8Bov/bVz4DKvysphs+oGadR5YH+4F60B55X8pNjhljROTAyOlXDn2pFtHPIB+ghqhfnJhr+lvFli9Cla9sntZ55dc7Wtr7ITXdWkNUdsgxMwRSGns49GMkHORw==
+ b=lx7YDPoCu0+I/YNIcLxjiyXRR8LXl2/Dn/Xqo601XsV8ouytUNlS3D1uiJqtFzFM4t62flLJDbkXO5adC1Jo7nQZZHSreJV9WrEqyNVQ71FFSRYdaBcIzZ3zVBSj6HvKuD++W7m83r8lKrSVHZn03dqKQsIOIfUhIo5/sUikOWmZc02q0vGUmfotSsQRckUta42rtIwIm/on0wfHvVv+vEtuAVL93PwC4BjeohbHHhfcmlz5QneK2TQLhTk33735qfMkJQ6kJlV4w02v4pJDrr3QD54FBB1XfxZQNzMSVMuFMRwV1HP8f2jx02B4zZaV5ZeCros7cG351rBdkO8UUw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CirLBKQAk+kqw/rFQuK3wh8l0X95JKJGfm1ou7/quDY=;
- b=mxghW6EWJ0MkGuHP87Fb8dY3iuYYQugsc5D0BD7CEVWAny0LoM9qlkikNpZLEL9Bz8H0KoyNAdtLGThVMdgKMYIkkaiWN0ka50QQcyQyIkGQjGBnZHcwOSsxu5aQYipn9rpsmokWMT9gAlpLE9HYZGyO4fFrgZaMXP472I30GI1N2ZXUVH+9Cg4FzTQdDY8PMYnt344wXKaIPvDzyUVo59iyyVzZHHeN2lIVcaF36E3jWuuvXCCaFOHk/dIXkbJFl2teDcYHlkKB/xEB+vbvsUsFGcLGdKXoHIftyZDKnZCW8SqzOE1268NmwToOlBErZylOljAQGr+04WcW3db2hg==
+ bh=EJD1NXkyPpVL2e6EUCJnMp0hne6/ZXEXfHgkebDyDt8=;
+ b=CtkoBsoVv9b/mAwyD1EONLMAshVky9Pf1jvV4NLawE6a5OTNeEC/TslUqtCYqV6uOyfHdY7iDA6cPHrEEC6RRGm7Cbzlj6yJFJK3T9CDdGsZbsyCXBFASTgGiNQYovnBRSFuHSBe2jwgwdeEStcMX3KQBZFViK+W5QSjqJfr0mW6tlbnuANPpaqxa48esGd4oaR7y/0ktLlT12EG8d27gGwvemLVkuF6DLAlZGOE8ZFw70Ny3GQspfC+HFgUSdkLbXx4q3U7pG43f0dgUbQWYd0DiTThHQFvT2uzOyAPF5vrjXcqj/0YkZQH5HWxCqd7eXk8+UCU/X0RFrgUbyrlNQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CirLBKQAk+kqw/rFQuK3wh8l0X95JKJGfm1ou7/quDY=;
- b=pQ9xIFTkVdvnOh+FdUXJ3y+0xu7EUxFTxZHHJot7kqgYCoBB/C5hCxmT2ZZ6wojhvm+cadSFIHy6YAtktiZmIATacRpuHkXLHv1rksRfvWl/o0QeXhDesoIuCr9Mc+8RfQnLEBE3qIfrt3wIMMf8yfMDVxfnrl7EqewjvDTXb6c=
+ bh=EJD1NXkyPpVL2e6EUCJnMp0hne6/ZXEXfHgkebDyDt8=;
+ b=xa2Lol9j9PzQ+rqC3MhDmetZym+G7RkD8FCc3L/iWox4FU96Udj7QebBBTJZ8PFGqa12L3UWrTZEOXsBqsaKLgulCl57BE6u7RakT/9hpocuH/nMrappiLBRpQhpLxfZJk2/oW1qRBJ1DzHbEEgC50Se5sewdhkszdBuXODjACY=
 Received: from SA2PR10MB4715.namprd10.prod.outlook.com (2603:10b6:806:fb::10)
- by SA1PR10MB5781.namprd10.prod.outlook.com (2603:10b6:806:23e::14) with
+ by DM6PR10MB3114.namprd10.prod.outlook.com (2603:10b6:5:1a1::11) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.19; Tue, 8 Feb
- 2022 18:44:16 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Tue, 8 Feb
+ 2022 18:44:19 +0000
 Received: from SA2PR10MB4715.namprd10.prod.outlook.com
  ([fe80::644e:5828:a72c:c1de]) by SA2PR10MB4715.namprd10.prod.outlook.com
  ([fe80::644e:5828:a72c:c1de%3]) with mapi id 15.20.4951.019; Tue, 8 Feb 2022
- 18:44:15 +0000
+ 18:44:19 +0000
 From:   Nick Alcock <nick.alcock@oracle.com>
 To:     mcgrof@kernel.org, masahiroy@kernel.org
 Cc:     jolsa@kernel.org, rostedt@goodmis.org, bas@baslab.org,
@@ -71,9 +71,9 @@ Cc:     jolsa@kernel.org, rostedt@goodmis.org, bas@baslab.org,
         linux-kernel@vger.kernel.org, arnd@arndb.de,
         akpm@linux-foundation.org, eugene.loh@oracle.com,
         kris.van.hees@oracle.com
-Subject: [PATCH v8 4/6] kallsyms: introduce sections needed to map symbols to built-in modules
-Date:   Tue,  8 Feb 2022 18:43:07 +0000
-Message-Id: <20220208184309.148192-5-nick.alcock@oracle.com>
+Subject: [PATCH v8 5/6] kallsyms: optimize .kallsyms_modules*
+Date:   Tue,  8 Feb 2022 18:43:08 +0000
+Message-Id: <20220208184309.148192-6-nick.alcock@oracle.com>
 X-Mailer: git-send-email 2.35.0.260.gb82b153193.dirty
 In-Reply-To: <20220208184309.148192-1-nick.alcock@oracle.com>
 References: <20220208184309.148192-1-nick.alcock@oracle.com>
@@ -84,62 +84,62 @@ X-ClientProxiedBy: LO2P123CA0088.GBRP123.PROD.OUTLOOK.COM
  (2603:10b6:806:fb::10)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ea166568-82bb-46ac-9044-08d9eb3301e5
-X-MS-TrafficTypeDiagnostic: SA1PR10MB5781:EE_
-X-Microsoft-Antispam-PRVS: <SA1PR10MB57814EC1A11D101FEF0CAB278B2D9@SA1PR10MB5781.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1923;
+X-MS-Office365-Filtering-Correlation-Id: 10ef29cc-889d-477e-6eb6-08d9eb3303dc
+X-MS-TrafficTypeDiagnostic: DM6PR10MB3114:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR10MB3114B2FC399CD5550D93E9FF8B2D9@DM6PR10MB3114.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3173;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: EDX7zK//pOpXjKar0clQG4ALKk93B3GkiXUYGz2VWqtABv7JJ2fZK2llai724cJmgXoxEvS8maMkKZNzNB+5QzUS4FqxPbOpyxBt8TiipLUhQlWP3Fg0uLKR7VSBoyEve8xoF9YmElBK+Xk5g6Rab7E82MpNrEh38OQ+EZD5tGq3eApyDNupUB0n7DFk0Ztvku1EVsyxkbjfjpZY/b88RA+KkLhawi7+Ca8Spae2njKM4rICQx5u9wYylmJfpllTMatvj79+ZYd/Fik+a86utwFUS6hwqhxOq0kydKTJDstasQIyyb8Y0LlQiEkP5WErc9bWkgcyJ93agU+WmF9tD125K0TCW1FSYvBSlHIQL06NPj+EsLK8JGPpNceVDifepgxBwWIq3TWjQGq1hSSacFlvedIWpu6K4FE+bdmNE3E/FkeWUcsfMKrKpYmyvkcMRqwMxofmIxPn9lqUi44LHOZptZayenaqnsmiTpAOdvMBWiqdVyxJ1sh1sMBn5QZSj1rJPdmeQoRgaGC0lnBjun384Iltb1aey85Lq6058W5/fl9wJInRrqMFc9ceCksKGkxI1nf5UWyVSX4uOo2lua5A7nvA94CS40NaDUrq/3YrfSxE7CzdxXNgoqwvr2BM7dKubbCqcb5D21dMkkV3Yg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA2PR10MB4715.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(83380400001)(107886003)(86362001)(6486002)(36756003)(52116002)(5660300002)(6512007)(30864003)(1076003)(508600001)(6506007)(7416002)(186003)(6666004)(8676002)(44832011)(66556008)(316002)(2906002)(8936002)(66476007)(4326008)(2616005)(38100700002)(66946007);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: /dO46U8shIzcEB+mbxdIwmNIYb6Z9M0inBqJ/uQf/LSa7J4sg9X3yvPl0yDQ32CbeYLuA7zuesfHgSclsUUlnkynElrk3AnQjeKLV7o6etbLhwB1Jktg2bvcHydZwGrAfJtMhihHXD2ZgAhYOnhyt5z2u9Z1JAYZv4LrEmpeNsabNnjBTFEWwEE2edoeb5FdYz9Hy06hQ4ZfMZ+m0QbR4l1IpXOaqZ4TewYEnKXc+xprFfHWmZGVLVoNAQdXywCVxhXQ+GOKIqFwYWBQ9SpA3JKrJ4Wa/kPG0DAwXx9b2FNx2MosfsjcaaR3YRVyP1jecFFUPEfJjerUlirI8jX8ze/UB9RJ4i+tUCioML/pcmHF2cLsDPN+tYAQPtJZo6Bnhn6XRmh030aH7CEVfy11RGw2mOPbpKXQBfU2Fi5tVCaz4wtmhVajH7Fs+zeprOg4jiXWOG/lwVSM3Q6/tlT9xjltIflJDbDM+aD6nkdwip1Id0k8UnIcI4TOYKjiPYCGUr6pbeNLY2FpbWTgEqZCJg9NmtJFOr1bje6AzzF+VqhraKxiZuOjFuSFqGLtpIh4e83cwKTnGre280SfnZVSKVbPXW3IA5PHJJ560hBbPqtmC9QncPQBRcMF5jmJWnTs7uFfmqS7HrVw7JTlgwb8JHfCpLgMIbs//rZtoINiAhKDTh8G9tg4I8o8thwzFohHX2370SE/O/s/UR14hUCNsg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA2PR10MB4715.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(6486002)(508600001)(66556008)(86362001)(316002)(2616005)(6506007)(38100700002)(5660300002)(6512007)(44832011)(52116002)(1076003)(4326008)(8676002)(6666004)(83380400001)(30864003)(107886003)(2906002)(186003)(7416002)(66946007)(8936002)(66476007)(36756003)(142923001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ootrgJI0Ou9l8EbbkalnpvwBMiL7OFTHBUERh2wQc1jWVMjKqRxBWtI+B9KE?=
- =?us-ascii?Q?zXGVw/BKE+youJ3DDHETVspGmRd70YKjlX9JJ3IFIczuo++HjJ/3z1wTCIZr?=
- =?us-ascii?Q?kwDcwLlVdQpjZSltKH9a/WZxJHlWWEhgUIdTX1j1SOzEazgRw9hQsQUQcNBi?=
- =?us-ascii?Q?lk7HCueocrjKymhj7BONYMDzDmYndfcPixVKTBgrLwwkQj10qsszsTjCYNv3?=
- =?us-ascii?Q?u1b0EcyTfZeeaXEw7eb8mPHF+VLuXwK3jcJ1M/ZIs4JFAaHbZIG5bMkgPp9V?=
- =?us-ascii?Q?ryVOQYak+NngEX95nKr2VuYE5xgJuevh8rzo4jhLXBTNlbsyPhdN/E5kmesu?=
- =?us-ascii?Q?lLXwAtLcVNUmBO3nG7vHZq7ogOhOUtFb+eUO5w2+W4CEAw+mrP5BTpSrRRtM?=
- =?us-ascii?Q?UlziP4f72M1oN/AvRzVc7hpyXtHNxCOCrhNgHi+FA/34ZvgD37c6hkzXIk0Q?=
- =?us-ascii?Q?KoAA6PVEsOCqCBSHuE5KiBaM8AOe1LKg8gqJ2k0CZW0gU95oiq9jNuQoR5Lm?=
- =?us-ascii?Q?m4mNM3+Mt65OZ43xoWUUYtPba54pxa/du1qiCGb83o1KVdXPn4hSEJfOwElo?=
- =?us-ascii?Q?wmaXHHf5I10uMZLMh0330WA5HdxmZ77ASEilnM1wrcJT7KKeGzFSyz1EnmSK?=
- =?us-ascii?Q?KlNneCXfSKKYfcILsZVRb0DQJGZE8VVNaMw4lZgqw07/GTlItAhnlmKF/twk?=
- =?us-ascii?Q?VmfCKvJECLytBqr7Pityqa8q9P/pnntjpQMVdSIfzNgHUJboHyNO7ah+UScp?=
- =?us-ascii?Q?WCRLFwHf3Tml0OyrubEYCtpcdlbeZKZaBO7rJcn8ppwBMNZkwoCtX5ib4rUj?=
- =?us-ascii?Q?yANNpj+Ltl1WJjnr1F/2tOxW0RyoiHoIba33XsLkgWC1Po3RxI7AGnOy6Kk9?=
- =?us-ascii?Q?36pxeXzKh5lkAV14eNvulhw94wvtWu/K1/lJEvjXqEzBMNs4J5wKto8l3HVg?=
- =?us-ascii?Q?qytBtwr623ORdDrnd2qv34aHAqG9DzMibFJ92OhnZPZBfYw8VYsRyMITc6M+?=
- =?us-ascii?Q?MK0O2lA7u2soFSyPDWBrSlFQgHkSMmpIC/570NYzUeLTF8ehEyUR06zT02Fl?=
- =?us-ascii?Q?OkNLz6S163mxuZAtzlJ/bvZGtKvXPqn1ivBTgGqSCGsOxnKOoAn9zLL6Zs2U?=
- =?us-ascii?Q?0owhzgFyCZYZ8E1DL7RmfoZjWYNJQjdrFe6kAuemm6aBzfw9lBL1LXEnGRd+?=
- =?us-ascii?Q?tHcmlRuHBERo9Eh6l4PaWI/3oAdIlFHn5+aSSVCq5Or0n/fkzsuqbZWw6QTv?=
- =?us-ascii?Q?jfVd7h6UID6DrcCfDdnezP/OMWbA0gpMaw9K/w2VNaGCnITAhYRyIHrZ2PPU?=
- =?us-ascii?Q?prKKnTuWfoLPGyggZLOM54brrBZFHRPQ2WIZjJbVzouQ7ibyEKJIvde7YL4p?=
- =?us-ascii?Q?KuBzLbxDxouJvWbOV9wO3Dr/zw/meooDBqA6YBJxahD9XIyxVqWDuvn1ABMu?=
- =?us-ascii?Q?eBIKkVsJCmtMnGBkVW5qkPw38Z3/Hrla7jcr4EYt1mmwY8rr/MZMSpW4Iurn?=
- =?us-ascii?Q?F15rKzlaPR363eqvCXJ/YDL2GOw6/iYiYlkOSCvU+hnkUI9sDsfLvLvnB3S5?=
- =?us-ascii?Q?stXU2MLO3M2n8nu5yrFnSeGHmE556MRdvYznQuBBe+qsp+xtmyqJw9YQfidY?=
- =?us-ascii?Q?bURmgSw2Mg1pH9OgAPC4kYt5MzNOODhl8n/l9RE+m0FN?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ibdEeo0bnNT/BsXUVvhP+VTRvFa8uiBCYqgOffvzpdlfR/aDApUy2t3bOKek?=
+ =?us-ascii?Q?kCGAzn6IQE5JQBqQEfv/M+A+1wPrSKFcDNth43dxY9oz0wx3aHZcELRUIT8T?=
+ =?us-ascii?Q?secgDwO4aTk3gALcINwTHcpihWj6uhPy5sPsxmVmVH8YmvJDHfgqP8+Tnaof?=
+ =?us-ascii?Q?RXW5JspKW5tmVG06cB8GAoBOrxTjYEmZ25HSAP8j5xnEhBG5kBOYaSLd+MtD?=
+ =?us-ascii?Q?2xAcVR2JTqD3NCCVUac6/S8g+od5oNIr64IC+8v++1uAxYt4pU1UhPtvxgzX?=
+ =?us-ascii?Q?+ZGT/nSCcwFXppjlJa/1r34aGwYhHjWd13Sv7IvXaf3WbYHfrYM1bxMl9suY?=
+ =?us-ascii?Q?PjvdF0sNDJBJTO0kYdurT03GsjRso82SlGzXfG5biosY/QcD/AaQdITAwBaO?=
+ =?us-ascii?Q?lqxFbX6E5hhBOdKPM1OJeE96fIhSVM++wLZ2BSQBoUucqBobvoCmUlXF7Dtv?=
+ =?us-ascii?Q?hwmrAqgq2VWFOzoKx9wshNs25mGQoSxDtbdxTxUowiENZ4oiVi7FIXXxTdYh?=
+ =?us-ascii?Q?Si7Q8BALhLU05jY7pc7ccUdv302svPqdMksMWTqEIyOsbyk1JuxOLvKIhtVV?=
+ =?us-ascii?Q?Ru2Cm5o7Eex4dSxZPeAArF4odKT4whmw6VC8x5/Jciu5AIOn22jQy5qZrlzr?=
+ =?us-ascii?Q?XjeG0drhrTKPrKTQwrNjTEGg+EqpVKeuX50b3ZVdYIbxIjy1vMTpE36wWpA5?=
+ =?us-ascii?Q?McA1/hK3uqETheZWk3oE8vqSeV5uP9UYvVRQrEU4no5uMJ6kyv3cfbDTgQ2h?=
+ =?us-ascii?Q?wa8uqXFPfQuSUZjU7WNXrTWi9CUlkUbKW8DKWf1uBzQ2LS+ZKzB3pxzdnIJU?=
+ =?us-ascii?Q?zOQnu0m4jXEEIwZ3+MNJou3mOd3Nt/YjJaC4kuImd6Q8LbrETpQgdzqUT+VQ?=
+ =?us-ascii?Q?29/qKZvZA0AKGkjc0KkwEdcoYRmzGwbpYu1i1yV+2feIoGXex4kayNulfP1q?=
+ =?us-ascii?Q?yfz7xYMHTIHEKcIqufeQIGIblTOr6AsN2tQ5BRWCimA8yaKS5cAVdfgiZaFc?=
+ =?us-ascii?Q?jVD5w7N7vSS74NahFPbSGwu/ZI6L6mRG6wqIdhlfEbQaJqQIip2yfLIRJ/lm?=
+ =?us-ascii?Q?rEs7s3Wd6bwIrshAiYzheHw55rFLlLUNdJ/g9AOaWV87fG2tKnJLJmge/ojx?=
+ =?us-ascii?Q?XlXJzWQQK5uNc/mDnGUjuGK0c3NFwrxIfJu8KSwiY7NCwacAmpVwxhz/HP5l?=
+ =?us-ascii?Q?wi88/4sXZS63IlHVpRllpuS/xofsBtz+dMEstozeW/JbdAGZKHwNXwFGMfUt?=
+ =?us-ascii?Q?DT+oiVbLnu47AF8glY5hthg8uqemlLT3BxhHNt9cWCINS0piRgYenE9eBjwQ?=
+ =?us-ascii?Q?70o5I6mFkW8FvhwZBgAIEqlu47vQ57Pwo7mG+YfIj6Uq2gRTHluNg1+LgW2X?=
+ =?us-ascii?Q?Gbd6qND8Ld4ZZR8H6W/2fHFog6cZgFQgFQLWe7U4vPXIFW6SIlvAScti8Y2j?=
+ =?us-ascii?Q?mxvRaeBBR+doqCOyOzzEMVpZOdJedeqZzpjBpa1YGMR1hbRXruiSHIWg+HoO?=
+ =?us-ascii?Q?AXQd89t/mNYsx3AX5Xrpevizt2LiYcnzPW8MOQEQT0DBcEzyCmpiv/lzNde1?=
+ =?us-ascii?Q?8ju5plKepkV7mIi/n0qCQtqUFL4vgmFMkw7rrrU8m4O0CvVygoU5ESYTksty?=
+ =?us-ascii?Q?Cp53wzCaeDX0sntPamLmF201y0zQ6vt2l2dtD6BIzRwu?=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ea166568-82bb-46ac-9044-08d9eb3301e5
+X-MS-Exchange-CrossTenant-Network-Message-Id: 10ef29cc-889d-477e-6eb6-08d9eb3303dc
 X-MS-Exchange-CrossTenant-AuthSource: SA2PR10MB4715.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Feb 2022 18:44:15.8955
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Feb 2022 18:44:19.1693
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: udsjD8THGRaiXlSVo7i05gjNdmnhqjSQecgU3dE2Gk/kdMegzEqeftiJ0Fjc0AIRx1YISR2yZKyM19FHwYlkXA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR10MB5781
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3+gC7i0Kl3Ft2gCqbCJUmfsOmmTb9439tRfaQXnd4okgXVczx841syKlgMS2frelPiwm5VRgLsNKGyTLpm0A6A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB3114
 X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10252 signatures=673431
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxscore=0 bulkscore=0
- phishscore=0 malwarescore=0 mlxlogscore=999 adultscore=0 spamscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 adultscore=0
+ mlxlogscore=999 suspectscore=0 mlxscore=0 phishscore=0 malwarescore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
  definitions=main-2202080109
-X-Proofpoint-ORIG-GUID: 5tGzvZ0u-74UbeNCZC4idTwX_QkD7yLj
-X-Proofpoint-GUID: 5tGzvZ0u-74UbeNCZC4idTwX_QkD7yLj
+X-Proofpoint-GUID: apyUiTFpsP5UN8DOcHHDYKDWc4vlbFe1
+X-Proofpoint-ORIG-GUID: apyUiTFpsP5UN8DOcHHDYKDWc4vlbFe1
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -150,578 +150,429 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The mapping consists of three new symbols, computed by integrating the
-information in the (just-added) .tmp_vmlinux.ranges and
-modules_thick.builtin: taken together, they map address ranges
-(corresponding to object files on the input) to the names of zero or
-more modules containing those address ranges.
+These symbols are terribly inefficiently stored at the moment.  Add a
+simple optimizer which fuses obj2mod_elem entries and uses this to
+implement three cheap optimizations:
 
- - kallsyms_module_addresses/kallsyms_module_offsets encodes the
-   address/offset of each object file (derived from the linker map), in
-   exactly the same way as kallsyms_addresses/kallsyms_offsets does
-   for symbols.  There is no size: instead, the object files are assumed
-   to tile the address space.  (This is slightly more space-efficient
-   than using a size).  Non-text-section addresses are skipped: for now,
-   all the users of this interface only need module/non-module
-   information for instruction pointer addresses, not absolute-addressed
-   symbols and the like.  This restriction can easily be lifted in
-   future.  (Regarding the name: right now the entries correspond pretty
-   closely to object files, so we could call the section
-   kallsyms_objfiles or something, but the optimizer added in the next
-   commit will change this.)
+ - duplicate names are eliminated from .kallsyms_module_names.
 
- - kallsyms_module_names encodes the name of each module in a modified
-   form of strtab: notably, if an object file appears in *multiple*
-   modules, all of which are built in, this is encoded via a zero byte,
-   a one-byte module count, then a series of that many null-terminated
-   strings.  As a special case, the table starts with a single zero byte
-   which does *not* represent the start of a multi-module list.
+ - entries in .kallsyms_modules which point at single-file modules which
+   also appear in a multi-module list are redirected to point inside
+   that list, and the single-file entry is dropped from
+   .kallsyms_module_names.  Thus, modules which contain some object
+   files shared with other modules and some object files exclusive to
+   them do not double up the module name.  (There might still be some
+   duplication between multiple multi-module lists, but this is an
+   extremely marginal size effect, and resolving it would require an
+   extra layer of lookup tables which would be even more complex, and
+   incompressible to boot).
 
- - kallsyms_modules connects the two, encoding a table associated 1:1
-   with kallsyms_module_addresses / kallsyms_module_offsets, pointing
-   at an offset in kallsyms_module_names describing which module (or
-   modules, for a multi-module list) the code occupying this address
-   range is part of.  If an address range is part of no module (always
-   built-in) it points at 0 (the null byte at the start of the
-   kallsyms_module_names list).
+ - Entries in .kallsyms_modules that would contain the same value after
+   the above optimizations are fused together, along with their
+   corresponding .kallsyms_module_addresses/offsets entries.  Due to
+   this fusion process, and because object files can be split apart into
+   multiple parts by the linker for hot/cold partitioning and the like,
+   entries in .kallsyms_module_addresses/offsets no longer correspond
+   1:1 to object files, but more to some contiguous range of addresses
+   which are guaranteed to belong to a single built-in module, but which
+   may well stretch over multiple object files.
 
-There is no optimization yet: kallsyms_modules and
-kallsyms_module_names will almost certainly contain many duplicate
-entries, and kallsyms_module_{addresses,offsets} may contain
-consecutive entries that point to the same place.  The size hit is
-fairly substantial as a result, though still much less than a naive
-implementation mapping each symbol to a module name would be: 50KiB or
-so.
+The optimizer's time complexity is O(log n) in the number of objfiles at
+most (and probably much lower), so, given the relatively low number of
+objfiles, its runtime overhead is in the noise.
+
+Optimization reduces the overhead of the kallmodsyms tables by about
+7500 items, dropping the .tmp_kallsyms2.o object file size by about
+33KiB, leaving it 8672 bytes larger than before: a gain of .4%.
+
+The vmlinux size is not yet affected because the variables are not used
+and are eliminated by the linker: but if they were used (after the next
+commit), the size impact of all of this on the final kernel is minimal:
+in my testing, vmlinux grew by 0.17% (10824 bytes), and the compressed
+vmlinux only grew by 0.08% (7552 bytes): though this is very
+configuration-dependent, it seems likely to scale roughly with the
+kernel as a whole.
 
 Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
 Reviewed-by: Kris Van Hees <kris.van.hees@oracle.com>
 ---
- Makefile           |   2 +-
- init/Kconfig       |   8 +
- scripts/Makefile   |   6 +
- scripts/kallsyms.c | 366 +++++++++++++++++++++++++++++++++++++++++++--
- 4 files changed, 371 insertions(+), 11 deletions(-)
+ scripts/kallsyms.c | 267 +++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 258 insertions(+), 9 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 5e823fe8390f..b719244cb571 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1151,7 +1151,7 @@ cmd_link-vmlinux =                                                 \
- 	$(CONFIG_SHELL) $< "$(LD)" "$(KBUILD_LDFLAGS)" "$(LDFLAGS_vmlinux)";    \
- 	$(if $(ARCH_POSTLINK), $(MAKE) -f $(ARCH_POSTLINK) $@, true)
- 
--vmlinux: scripts/link-vmlinux.sh autoksyms_recursive $(vmlinux-deps) FORCE
-+vmlinux: scripts/link-vmlinux.sh autoksyms_recursive $(vmlinux-deps) modules_thick.builtin FORCE
- 	+$(call if_changed_dep,link-vmlinux)
- 
- targets := vmlinux
-diff --git a/init/Kconfig b/init/Kconfig
-index e9119bf54b1f..e1ca3d70cb1c 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -1530,6 +1530,14 @@ config POSIX_TIMERS
- 
- 	  If unsure say y.
- 
-+config KALLMODSYMS
-+	default y
-+	bool "Enable support for /proc/kallmodsyms" if EXPERT
-+	depends on KALLSYMS
-+	help
-+	  This option enables the /proc/kallmodsyms file, which maps symbols
-+	  to addresses and their associated modules.
-+
- config PRINTK
- 	default y
- 	bool "Enable support for printk" if EXPERT
-diff --git a/scripts/Makefile b/scripts/Makefile
-index ce5aa9030b74..c5cc4ac3d660 100644
---- a/scripts/Makefile
-+++ b/scripts/Makefile
-@@ -29,6 +29,12 @@ ifdef CONFIG_BUILDTIME_MCOUNT_SORT
- HOSTCFLAGS_sorttable.o += -DMCOUNT_SORT_ENABLED
- endif
- 
-+kallsyms-objs  := kallsyms.o
-+
-+ifdef CONFIG_KALLMODSYMS
-+kallsyms-objs += modules_thick.o
-+endif
-+
- # The following programs are only built on demand
- hostprogs += unifdef
- 
 diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-index 54ad86d13784..8f87b724d0fa 100644
+index 8f87b724d0fa..93fdf0dcf587 100644
 --- a/scripts/kallsyms.c
 +++ b/scripts/kallsyms.c
-@@ -5,7 +5,10 @@
-  * This software may be used and distributed according to the terms
-  * of the GNU General Public License, incorporated herein by reference.
-  *
-- * Usage: nm -n vmlinux | scripts/kallsyms [--all-symbols] > symbols.S
-+ * Usage: nm -n vmlinux
-+ *        | scripts/kallsyms [--all-symbols] [--absolute-percpu]
-+ *             [--base-relative] [--builtin=modules_thick.builtin]
-+ *        > symbols.S
-  *
-  *      Table compression uses all the unused char codes on the symbols and
-  *  maps these to the most used substrings (tokens). For instance, it might
-@@ -24,6 +27,10 @@
- #include <string.h>
- #include <ctype.h>
- #include <limits.h>
-+#include <assert.h>
-+#include "modules_thick.h"
-+
-+#include "../include/generated/autoconf.h"
+@@ -85,6 +85,17 @@ static unsigned int strhash(const char *s)
+ 	return hash;
+ }
  
- #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof(arr[0]))
- 
-@@ -67,11 +74,116 @@ static int token_profit[0x10000];
- static unsigned char best_table[256][2];
- static unsigned char best_table_len[256];
- 
-+#ifdef CONFIG_KALLMODSYMS
-+static unsigned int strhash(const char *s)
++static unsigned int memhash(char *s, size_t len)
 +{
 +	/* fnv32 hash */
 +	unsigned int hash = 2166136261U;
++	size_t i;
 +
-+	for (; *s; s++)
-+		hash = (hash ^ *s) * 0x01000193;
++	for (i = 0; i < len; i++)
++		hash = (hash ^ *(s + i)) * 0x01000193;
 +	return hash;
 +}
 +
-+#define OBJ2MOD_BITS 10
-+#define OBJ2MOD_N (1 << OBJ2MOD_BITS)
-+#define OBJ2MOD_MASK (OBJ2MOD_N - 1)
-+struct obj2mod_elem {
-+	char *obj;
-+	char *mods;			/* sorted module name strtab */
-+	size_t nmods;			/* number of modules in "mods" */
-+	size_t mods_size;		/* size of all mods together */
-+	int mod_offset;			/* offset in .kallsyms_module_names */
-+	struct obj2mod_elem *obj2mod_next;
-+};
-+
-+/*
-+ * Map from object files to obj2mod entries (a unique mapping).
-+ */
-+
-+static struct obj2mod_elem *obj2mod[OBJ2MOD_N];
-+static size_t num_objfiles;
-+
-+/*
-+ * An ordered list of address ranges and the objfile that occupies that range.
-+ */
-+struct addrmap_entry {
-+	unsigned long long addr;
-+	struct obj2mod_elem *objfile;
-+};
-+static struct addrmap_entry *addrmap;
-+static int addrmap_num, addrmap_alloced;
-+
-+static void obj2mod_init(void)
-+{
-+	memset(obj2mod, 0, sizeof(obj2mod));
-+}
-+
-+static struct obj2mod_elem *obj2mod_get(const char *obj)
-+{
-+	int i = strhash(obj) & OBJ2MOD_MASK;
-+	struct obj2mod_elem *elem;
-+
-+	for (elem = obj2mod[i]; elem; elem = elem->obj2mod_next) {
-+		if (strcmp(elem->obj, obj) == 0)
-+			return elem;
-+	}
-+	return NULL;
-+}
-+
-+/*
-+ * Note that a given object file is found in some module, interning it in the
-+ * obj2mod hash.  Should not be called more than once for any given (module,
-+ * object) pair.
-+ */
-+static void obj2mod_add(char *obj, char *mod)
-+{
-+	int i = strhash(obj) & OBJ2MOD_MASK;
-+	struct obj2mod_elem *elem;
-+
-+	elem = obj2mod_get(obj);
-+	if (!elem) {
-+		elem = malloc(sizeof(struct obj2mod_elem));
-+		if (!elem)
-+			goto oom;
-+		memset(elem, 0, sizeof(struct obj2mod_elem));
-+		elem->obj = strdup(obj);
-+		if (!elem->obj)
-+			goto oom;
-+		elem->mods = strdup(mod);
-+		if (!elem->mods)
-+			goto oom;
-+
-+		elem->obj2mod_next = obj2mod[i];
-+		obj2mod[i] = elem;
-+		num_objfiles++;
-+	} else {
-+		elem->mods = realloc(elem->mods, elem->mods_size +
-+				     strlen(mod) + 1);
-+		if (!elem->mods)
-+			goto oom;
-+		strcpy(elem->mods + elem->mods_size, mod);
-+	}
-+
-+	elem->mods_size += strlen(mod) + 1;
-+	elem->nmods++;
-+	if (elem->nmods > 255) {
-+		fprintf(stderr, "kallsyms: %s: too many modules associated with this object file\n",
-+			obj);
-+		exit(EXIT_FAILURE);
-+	}
-+	return;
-+oom:
-+	fprintf(stderr, "kallsyms: out of memory\n");
-+	exit(1);
-+}
-+#endif /* CONFIG_KALLMODSYMS */
+ #define OBJ2MOD_BITS 10
+ #define OBJ2MOD_N (1 << OBJ2MOD_BITS)
+ #define OBJ2MOD_MASK (OBJ2MOD_N - 1)
+@@ -94,14 +105,24 @@ struct obj2mod_elem {
+ 	size_t nmods;			/* number of modules in "mods" */
+ 	size_t mods_size;		/* size of all mods together */
+ 	int mod_offset;			/* offset in .kallsyms_module_names */
++	/*
++	 * If set at emission time, this points at another obj2mod entry that
++	 * contains the module name we need (possibly at a slightly later
++	 * offset, if the entry is for an objfile that appears in many modules).
++	 */
++	struct obj2mod_elem *xref;
+ 	struct obj2mod_elem *obj2mod_next;
++	struct obj2mod_elem *mod2obj_next;
+ };
  
- static void usage(void)
- {
--	fprintf(stderr, "Usage: kallsyms [--all-symbols] "
--			"[--base-relative] < in.map > out.S\n");
-+	fprintf(stderr, "Usage: kallsyms [--all-symbols] [--absolute-percpu] "
-+			"[--base-relative] [--builtin=modules_thick.builtin] "
-+			"< nm_vmlinux.out > symbols.S\n");
+ /*
+- * Map from object files to obj2mod entries (a unique mapping).
++ * Map from object files to obj2mod entries (a unique mapping), and vice versa
++ * (not unique, but entries for objfiles in more than one module in this hash
++ * are ignored).
+  */
+ 
+ static struct obj2mod_elem *obj2mod[OBJ2MOD_N];
++static struct obj2mod_elem *mod2obj[OBJ2MOD_N];
+ static size_t num_objfiles;
+ 
+ /*
+@@ -143,6 +164,8 @@ static void obj2mod_add(char *obj, char *mod)
+ 
+ 	elem = obj2mod_get(obj);
+ 	if (!elem) {
++		int j = strhash(mod) & OBJ2MOD_MASK;
++
+ 		elem = malloc(sizeof(struct obj2mod_elem));
+ 		if (!elem)
+ 			goto oom;
+@@ -156,8 +179,15 @@ static void obj2mod_add(char *obj, char *mod)
+ 
+ 		elem->obj2mod_next = obj2mod[i];
+ 		obj2mod[i] = elem;
++		elem->mod2obj_next = mod2obj[j];
++		mod2obj[j] = elem;
+ 		num_objfiles++;
+ 	} else {
++		/*
++		 * TU appears in multiple modules.  mod2obj for this entry will
++		 * be ignored from now on, except insofar as it is needed to
++		 * maintain the hash chain.
++		 */
+ 		elem->mods = realloc(elem->mods, elem->mods_size +
+ 				     strlen(mod) + 1);
+ 		if (!elem->mods)
+@@ -177,6 +207,164 @@ static void obj2mod_add(char *obj, char *mod)
+ 	fprintf(stderr, "kallsyms: out of memory\n");
  	exit(1);
  }
- 
-@@ -95,10 +207,16 @@ static bool is_ignored_symbol(const char *name, char type)
- 		"kallsyms_offsets",
- 		"kallsyms_relative_base",
- 		"kallsyms_num_syms",
-+		"kallsyms_num_modules",
- 		"kallsyms_names",
- 		"kallsyms_markers",
- 		"kallsyms_token_table",
- 		"kallsyms_token_index",
-+		"kallsyms_module_offsets",
-+		"kallsyms_module_addresses",
-+		"kallsyms_modules",
-+		"kallsyms_module_names",
-+		"kallsyms_module_names_len",
- 		/* Exclude linker generated symbols which vary between passes */
- 		"_SDA_BASE_",		/* ppc */
- 		"_SDA2_BASE_",		/* ppc */
-@@ -246,8 +364,8 @@ static struct sym_entry *read_symbol(FILE *in)
- 	return sym;
- }
- 
--static int symbol_in_range(const struct sym_entry *s,
--			   const struct addr_range *ranges, int entries)
-+static int addr_in_range(unsigned long long addr,
-+			 const struct addr_range *ranges, int entries)
- {
- 	size_t i;
- 	const struct addr_range *ar;
-@@ -255,7 +373,7 @@ static int symbol_in_range(const struct sym_entry *s,
- 	for (i = 0; i < entries; ++i) {
- 		ar = &ranges[i];
- 
--		if (s->addr >= ar->start && s->addr <= ar->end)
-+		if (addr >= ar->start && addr <= ar->end)
- 			return 1;
- 	}
- 
-@@ -269,8 +387,8 @@ static int symbol_valid(const struct sym_entry *s)
- 	/* if --all-symbols is not specified, then symbols outside the text
- 	 * and inittext sections are discarded */
- 	if (!all_symbols) {
--		if (symbol_in_range(s, text_ranges,
--				    ARRAY_SIZE(text_ranges)) == 0)
-+		if (addr_in_range(s->addr, text_ranges,
-+				  ARRAY_SIZE(text_ranges)) == 0)
- 			return 0;
- 		/* Corner case.  Discard any symbols with the same value as
- 		 * _etext _einittext; they can move between pass 1 and 2 when
-@@ -352,6 +470,121 @@ static void output_address(unsigned long long addr)
- 		printf("\tPTR\t_text - %#llx\n", _text - addr);
- }
- 
-+#ifdef CONFIG_KALLMODSYMS
-+/* Output the .kallmodsyms_modules symbol content. */
-+static void output_kallmodsyms_modules(void)
-+{
++
++/*
++ * Used inside optimize_obj2mod to identify duplicate module entries.
++ */
++struct obj2mod_modhash_elem {
 +	struct obj2mod_elem *elem;
-+	size_t offset = 1;
++	unsigned int modhash;		/* hash value of this entry */
++};
++
++static int qstrcmp(const void *a, const void *b)
++{
++	return strcmp((const char *) a, (const char *) b);
++}
++
++static int qmodhash(const void *a, const void *b)
++{
++	const struct obj2mod_modhash_elem *el_a = a;
++	const struct obj2mod_modhash_elem *el_b = b;
++	if (el_a->modhash < el_b->modhash)
++		return -1;
++	else if (el_a->modhash > el_b->modhash)
++		return 1;
++	return 0;
++}
++
++/*
++ * Associate all TUs in obj2mod which refer to the same module with a single
++ * obj2mod entry for emission, preferring to point into the module list in a
++ * multi-module objfile.
++ */
++static void optimize_obj2mod(void)
++{
 +	size_t i;
++	size_t n = 0;
++	struct obj2mod_elem *elem;
++	struct obj2mod_elem *dedup;
++	/* An array of all obj2mod_elems, later sorted by hashval.  */
++	struct obj2mod_modhash_elem *uniq;
++	struct obj2mod_modhash_elem *last;
 +
 +	/*
-+	 * Traverse and emit, updating mod_offset accordingly.
-+	 * Emit a single \0 at the start, to encode non-modular objfiles.
++	 * Canonicalize all module lists by sorting them, then compute their
++	 * hash values.
 +	 */
-+	output_label("kallsyms_module_names");
-+	printf("\t.byte\t0\n");
-+	for (i = 0; i < OBJ2MOD_N; i++) {
-+		for (elem = obj2mod[i]; elem;
-+		     elem = elem->obj2mod_next) {
-+			const char *onemod;
-+			size_t i;
-+
-+			elem->mod_offset = offset;
-+			onemod = elem->mods;
-+
-+			/*
-+			 * Technically this is a waste of space: we could just
-+			 * as well implement multimodule entries by pointing one
-+			 * byte further back, to the trailing \0 of the previous
-+			 * entry, but doing it this way makes it more obvious
-+			 * when an entry is a multimodule entry.
-+			 */
-+			if (elem->nmods != 1) {
-+				printf("\t.byte\t0\n");
-+				printf("\t.byte\t%zi\n", elem->nmods);
-+				offset += 2;
-+			}
-+
-+			for (i = elem->nmods; i > 0; i--) {
-+				printf("\t.asciz\t\"%s\"\n", onemod);
-+				offset += strlen(onemod) + 1;
-+				onemod += strlen(onemod) + 1;
-+			}
-+		}
-+	}
-+	printf("\n");
-+	output_label("kallsyms_module_names_len");
-+	printf("\t.long\t%zi\n", offset);
-+}
-+
-+static void output_kallmodsyms_objfiles(void)
-+{
-+	size_t i = 0;
-+	size_t emitted_offsets = 0;
-+	size_t emitted_objfiles = 0;
-+
-+	if (base_relative)
-+		output_label("kallsyms_module_offsets");
-+	else
-+		output_label("kallsyms_module_addresses");
-+
-+	for (i = 0; i < addrmap_num; i++) {
-+		long long offset;
-+		int overflow;
-+
-+		if (base_relative) {
-+			if (!absolute_percpu) {
-+				offset = addrmap[i].addr - relative_base;
-+				overflow = (offset < 0 || offset > UINT_MAX);
-+			} else {
-+				offset = relative_base - addrmap[i].addr - 1;
-+				overflow = (offset < INT_MIN || offset >= 0);
-+			}
-+			if (overflow) {
-+				fprintf(stderr, "kallsyms failure: "
-+					"objfile %s at address %#llx out of range in relative mode\n",
-+					addrmap[i].objfile ? addrmap[i].objfile->obj :
-+					"in always-built-in object", table[i]->addr);
-+				exit(EXIT_FAILURE);
-+			}
-+			printf("\t.long\t0x%x\n", (int)offset);
-+		} else
-+			printf("\tPTR\t%#llx\n", addrmap[i].addr);
-+		emitted_offsets++;
-+	}
-+
-+	output_label("kallsyms_modules");
-+
-+	for (i = 0; i < addrmap_num; i++) {
-+		struct obj2mod_elem *elem = addrmap[i].objfile;
-+		/*
-+		 * Address range cites no object file: point at 0, the built-in
-+		 * module.
-+		 */
-+		if (addrmap[i].objfile == NULL) {
-+			printf("\t.long\t0x0\n");
-+			emitted_objfiles++;
-+			continue;
-+		}
-+
-+		/*
-+		 * Zero offset is the initial \0, there to catch uninitialized
-+		 * obj2mod entries, and is forbidden.
-+		 */
-+		assert (elem->mod_offset != 0);
-+
-+		printf("\t.long\t0x%x\n", elem->mod_offset);
-+		emitted_objfiles++;
-+	}
-+
-+	assert (emitted_offsets == emitted_objfiles);
-+	output_label("kallsyms_num_modules");
-+	printf("\t.long\t%zi\n", emitted_objfiles);
-+	printf("\n");
-+}
-+#endif /* CONFIG_KALLMODSYMS */
-+
- /* uncompress a compressed symbol. When this function is called, the best table
-  * might still be compressed itself, so the function needs to be recursive */
- static int expand_symbol(const unsigned char *data, int len, char *result)
-@@ -451,6 +684,11 @@ static void write_src(void)
- 		printf("\n");
- 	}
- 
-+#ifdef CONFIG_KALLMODSYMS
-+	output_kallmodsyms_modules();
-+	output_kallmodsyms_objfiles();
-+#endif
-+
- 	output_label("kallsyms_num_syms");
- 	printf("\t.long\t%u\n", table_cnt);
- 	printf("\n");
-@@ -735,7 +973,7 @@ static void make_percpus_absolute(void)
- 	unsigned int i;
- 
- 	for (i = 0; i < table_cnt; i++)
--		if (symbol_in_range(table[i], &percpu_range, 1)) {
-+		if (addr_in_range(table[i]->addr, &percpu_range, 1)) {
- 			/*
- 			 * Keep the 'A' override for percpu symbols to
- 			 * ensure consistent behavior compared to older
-@@ -762,17 +1000,124 @@ static void record_relative_base(void)
- 		}
- }
- 
-+#ifdef CONFIG_KALLMODSYMS
-+/*
-+ * Read the linker map.
-+ */
-+static void read_linker_map(void)
-+{
-+	unsigned long long addr, size;
-+	char obj[PATH_MAX+1];
-+	FILE *f = fopen(".tmp_vmlinux.ranges", "r");
-+
-+	if (!f) {
-+		fprintf(stderr, "Cannot open '.tmp_vmlinux.ranges'.\n");
-+		exit(1);
-+	}
-+
-+	addrmap_num = 0;
-+	addrmap_alloced = 4096;
-+	addrmap = malloc(sizeof(*addrmap) * addrmap_alloced);
-+	if (!addrmap)
++	uniq = malloc(sizeof(struct obj2mod_modhash_elem) * num_objfiles);
++	if (uniq == NULL)
 +		goto oom;
 +
++	for (i = 0; i < OBJ2MOD_N; i++) {
++		for (elem = obj2mod[i]; elem; elem = elem->obj2mod_next) {
++			if (elem->nmods >= 2) {
++				char **sorter;
++				char *walk;
++				char *tmp_mods;
++				size_t j;
++
++				tmp_mods = malloc(elem->mods_size);
++				sorter = malloc(sizeof(char *) * elem->nmods);
++				if (sorter == NULL || tmp_mods == NULL)
++					goto oom;
++				memcpy(tmp_mods, elem->mods, elem->mods_size);
++
++				for (j = 0, walk = tmp_mods; j < elem->nmods;
++				     j++) {
++					sorter[j] = walk;
++					walk += strlen(walk) + 1;
++				}
++				qsort(sorter, elem->nmods, sizeof (char *),
++				      qstrcmp);
++				for (j = 0, walk = elem->mods; j < elem->nmods;
++				     j++) {
++					strcpy(walk, sorter[j]);
++					walk += strlen(walk) + 1;
++				}
++				free(tmp_mods);
++				free(sorter);
++			}
++
++			uniq[n].elem = elem;
++			uniq[n].modhash = memhash(elem->mods, elem->mods_size);
++			n++;
++		}
++	}
++
++	qsort (uniq, num_objfiles, sizeof (struct obj2mod_modhash_elem),
++	       qmodhash);
++
 +	/*
-+	 * For each address range, add to addrmap the address and the objfile
-+	 * entry to which the range maps.  Only add entries relating to text
-+	 * ranges.  (We assume that the text ranges are tightly packed, because
-+	 * in any reasonable object file format they will be, so we can ignore
-+	 * the size.)
-+	 *
-+	 * Ranges that do not correspond to a built-in module, but to an
-+	 * always-built-in object file, have no obj2mod_elem and point at NULL
-+	 * instead.
++	 * Work over multimodule entries.  These must be emitted into
++	 * .kallsyms_module_names as a unit, but we can still optimize by
++	 * reusing some other identical entry.  Single-file modules are amenable
++	 * to the same optimization, but we avoid doing it for now so that we
++	 * can prefer to point them directly inside a multimodule entry.
 +	 */
++	for (i = 0, last = NULL; i < num_objfiles; i++) {
++		const char *onemod;
++		size_t j;
 +
-+	while (fscanf(f, "%llx %llx %s\n", &addr, &size, obj) == 3) {
-+		struct obj2mod_elem *elem = obj2mod_get(obj);
-+
-+		if (addr == 0 || size == 0 ||
-+		    !addr_in_range(addr, text_ranges, ARRAY_SIZE(text_ranges)))
++		if (uniq[i].elem->nmods < 2)
 +			continue;
 +
-+		if (addrmap_num >= addrmap_alloced) {
-+			addrmap_alloced *= 2;
-+			addrmap = realloc(addrmap,
-+			    sizeof(*addrmap) * addrmap_alloced);
-+			if (!addrmap)
-+				goto oom;
++		/* Duplicate multimodule.  Reuse the first we saw.  */
++		if (last != NULL && last->modhash == uniq[i].modhash) {
++			uniq[i].elem->xref = last->elem;
++			continue;
 +		}
 +
-+                addrmap[addrmap_num].addr = addr;
-+                addrmap[addrmap_num].objfile = elem;
-+		addrmap_num++;
++		/*
++		 * Single-module entries relating to modules also emitted as
++		 * part of this multimodule entry can refer to it: later, we
++		 * will hunt down the right specific module name within this
++		 * multimodule entry and point directly to it.
++		 */
++		onemod = uniq[i].elem->mods;
++		for (j = uniq[i].elem->nmods; j > 0; j--) {
++			int h = strhash(onemod) & OBJ2MOD_MASK;
++
++			for (dedup = mod2obj[h]; dedup;
++			     dedup = dedup->mod2obj_next) {
++				if (dedup->nmods > 1)
++					continue;
++
++				if (strcmp(dedup->mods, onemod) != 0)
++					continue;
++				dedup->xref = uniq[i].elem;
++				assert (uniq[i].elem->xref == NULL);
++			}
++			onemod += strlen(onemod) + 1;
++		}
++
++		last = &uniq[i];
 +	}
-+	fclose(f);
++
++	/*
++	 * Now traverse all single-module entries, xreffing every one that
++	 * relates to a given module to the first one we saw that refers to that
++	 * module.
++	 */
++	for (i = 0, last = NULL; i < num_objfiles; i++) {
++		if (uniq[i].elem->nmods > 1)
++			continue;
++
++		if (uniq[i].elem->xref != NULL)
++			continue;
++
++		/* Duplicate module name.  Reuse the first we saw.  */
++		if (last != NULL && last->modhash == uniq[i].modhash) {
++			uniq[i].elem->xref = last->elem;
++			assert (last->elem->xref == NULL);
++			continue;
++		}
++		last = &uniq[i];
++	}
 +	return;
-+
 +oom:
-+	fprintf(stderr, "kallsyms: out of memory\n");
-+	exit(1);
++	fprintf(stderr, "kallsyms: out of memory optimizing module list\n");
++	exit(EXIT_FAILURE);
 +}
-+
-+/*
-+ * Read "modules_thick.builtin" (the list of built-in modules).  Construct the
-+ * obj2mod hash to track objfile -> module mappings.  Read ".tmp_vmlinux.ranges"
-+ * (the linker map) and build addrmap[], which maps address ranges to built-in
-+ * module names (using obj2mod).
-+ */
-+static void read_modules(const char *modules_builtin)
-+{
-+	struct modules_thick_iter *i;
-+	char *module_name = NULL;
-+	char **module_paths;
-+
-+	obj2mod_init();
-+	/*
-+	 * Iterate over all modules in modules_thick.builtin and add each.
-+	 */
-+	i = modules_thick_iter_new(modules_builtin);
-+	if (i == NULL) {
-+		fprintf(stderr, "Cannot iterate over builtin modules.\n");
-+		exit(1);
-+	}
-+
-+	while ((module_paths = modules_thick_iter_next(i, &module_name))) {
-+		char **walk = module_paths;
-+		while (*walk) {
-+			obj2mod_add(*walk, module_name);
-+			walk++;
-+		}
-+		free(module_paths);
-+	}
-+
-+	free(module_name);
-+	modules_thick_iter_free(i);
-+
-+	/*
-+	 * Read linker map.
-+	 */
-+	read_linker_map();
-+}
-+#else
-+static void read_modules(const char *unused) {}
-+#endif /* CONFIG_KALLMODSYMS */
-+
- int main(int argc, char **argv)
- {
-+	const char *modules_builtin = "modules_thick.builtin";
-+
- 	if (argc >= 2) {
- 		int i;
- 		for (i = 1; i < argc; i++) {
--			if(strcmp(argv[i], "--all-symbols") == 0)
-+			if (strcmp(argv[i], "--all-symbols") == 0)
- 				all_symbols = 1;
- 			else if (strcmp(argv[i], "--absolute-percpu") == 0)
- 				absolute_percpu = 1;
- 			else if (strcmp(argv[i], "--base-relative") == 0)
- 				base_relative = 1;
-+			else if (strncmp(argv[i], "--builtin=", 10) == 0)
-+				modules_builtin = &argv[i][10];
- 			else
- 				usage();
- 		}
-@@ -780,6 +1125,7 @@ int main(int argc, char **argv)
- 		usage();
+ #endif /* CONFIG_KALLMODSYMS */
  
- 	read_map(stdin);
-+	read_modules(modules_builtin);
- 	shrink_table();
- 	if (absolute_percpu)
- 		make_percpus_absolute();
+ static void usage(void)
+@@ -479,7 +667,7 @@ static void output_kallmodsyms_modules(void)
+ 	size_t i;
+ 
+ 	/*
+-	 * Traverse and emit, updating mod_offset accordingly.
++	 * Traverse and emit, chasing xref and updating mod_offset accordingly.
+ 	 * Emit a single \0 at the start, to encode non-modular objfiles.
+ 	 */
+ 	output_label("kallsyms_module_names");
+@@ -489,9 +677,15 @@ static void output_kallmodsyms_modules(void)
+ 		     elem = elem->obj2mod_next) {
+ 			const char *onemod;
+ 			size_t i;
++			struct obj2mod_elem *out_elem = elem;
+ 
+-			elem->mod_offset = offset;
+-			onemod = elem->mods;
++			if (elem->xref)
++				out_elem = elem->xref;
++			if (out_elem->mod_offset != 0)
++				continue;	/* Already emitted.  */
++
++			out_elem->mod_offset = offset;
++			onemod = out_elem->mods;
+ 
+ 			/*
+ 			 * Technically this is a waste of space: we could just
+@@ -500,13 +694,13 @@ static void output_kallmodsyms_modules(void)
+ 			 * entry, but doing it this way makes it more obvious
+ 			 * when an entry is a multimodule entry.
+ 			 */
+-			if (elem->nmods != 1) {
++			if (out_elem->nmods != 1) {
+ 				printf("\t.byte\t0\n");
+-				printf("\t.byte\t%zi\n", elem->nmods);
++				printf("\t.byte\t%zi\n", out_elem->nmods);
+ 				offset += 2;
+ 			}
+ 
+-			for (i = elem->nmods; i > 0; i--) {
++			for (i = out_elem->nmods; i > 0; i--) {
+ 				printf("\t.asciz\t\"%s\"\n", onemod);
+ 				offset += strlen(onemod) + 1;
+ 				onemod += strlen(onemod) + 1;
+@@ -533,6 +727,13 @@ static void output_kallmodsyms_objfiles(void)
+ 		long long offset;
+ 		int overflow;
+ 
++                /*
++                 * Fuse consecutive address ranges citing the same object file
++                 * into one.
++                 */
++                if (i > 0 && addrmap[i-1].objfile == addrmap[i].objfile)
++                        continue;
++
+ 		if (base_relative) {
+ 			if (!absolute_percpu) {
+ 				offset = addrmap[i].addr - relative_base;
+@@ -558,6 +759,13 @@ static void output_kallmodsyms_objfiles(void)
+ 
+ 	for (i = 0; i < addrmap_num; i++) {
+ 		struct obj2mod_elem *elem = addrmap[i].objfile;
++		int orig_nmods;
++		const char *orig_modname;
++		int mod_offset;
++
++		if (i > 0 && addrmap[i-1].objfile == addrmap[i].objfile)
++			continue;
++
+ 		/*
+ 		 * Address range cites no object file: point at 0, the built-in
+ 		 * module.
+@@ -568,13 +776,53 @@ static void output_kallmodsyms_objfiles(void)
+ 			continue;
+ 		}
+ 
++		orig_nmods = elem->nmods;
++		orig_modname = elem->mods;
++
++		/*
++		 * Chase down xrefs, if need be.  There can only be one layer of
++		 * these: from single-module entry to other single-module entry,
++		 * or from single- or multi-module entry to another multi-module
++		 * entry.  Single -> single and multi -> multi always points at
++		 * the start of the xref target, so its offset can be used as is.
++		 */
++		if (elem->xref)
++			elem = elem->xref;
++
++		if (elem->nmods == 1 || orig_nmods > 1)
++			mod_offset = elem->mod_offset;
++		else {
++			/*
++			 * If this is a reference from a single-module entry to
++			 * a multi-module entry, hunt down the offset to this
++			 * specific module's name (which is guaranteed to be
++			 * present: see optimize_obj2mod).
++			 */
++
++			size_t j = elem->nmods;
++			const char *onemod = elem->mods;
++			mod_offset = elem->mod_offset;
++
++			for (; j > 0; j--) {
++				if (strcmp(orig_modname, onemod) == 0)
++					break;
++				onemod += strlen(onemod) + 1;
++			}
++			assert (j > 0);
++			/*
++			 * +2 to skip the null byte and count at the start of
++			 * the multimodule entry.
++			 */
++			mod_offset += onemod - elem->mods + 2;
++		}
++
+ 		/*
+ 		 * Zero offset is the initial \0, there to catch uninitialized
+ 		 * obj2mod entries, and is forbidden.
+ 		 */
+-		assert (elem->mod_offset != 0);
++		assert (mod_offset != 0);
+ 
+-		printf("\t.long\t0x%x\n", elem->mod_offset);
++		printf("\t.long\t0x%x\n", mod_offset);
+ 		emitted_objfiles++;
+ 	}
+ 
+@@ -1093,6 +1341,7 @@ static void read_modules(const char *modules_builtin)
+ 
+ 	free(module_name);
+ 	modules_thick_iter_free(i);
++	optimize_obj2mod();
+ 
+ 	/*
+ 	 * Read linker map.
 -- 
 2.35.0.260.gb82b153193.dirty
 

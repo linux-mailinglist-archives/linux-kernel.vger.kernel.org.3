@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A41A54ACD92
+	by mail.lfdr.de (Postfix) with ESMTP id F37894ACD93
 	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:08:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239297AbiBHBHG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 20:07:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50368 "EHLO
+        id S240999AbiBHBHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 20:07:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241033AbiBHAGn (ORCPT
+        with ESMTP id S1343927AbiBHAGq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 19:06:43 -0500
+        Mon, 7 Feb 2022 19:06:46 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A1937C0612A4
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 16:06:42 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 07E81C061355
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 16:06:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644278801;
+        s=mimecast20190719; t=1644278805;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=PV5Mmr2VlS4HwOkDqkagpZEdfNnA+PNHZfxNlSNeOwY=;
-        b=GC6E6xQHb4qhRiUBgAM/MTDp2yeJ1zGBTGApe1wdDvdlzv+gUYJ2LcPycAm/cgbsphhaZ6
-        OVwKfzG5yxDX8bggYF0/Tm+V9uykFfirsYvGrZv6OeHgDISLfAn5OuVuIqVHPOn0E8ig86
-        PYWpH2e1epIsvw5FLOJ4gzb6q0e2Rgg=
+        bh=qSeJD0brKmpckZLSCQ8ujFjUI9lZNWQ7mt4YwsrLwjM=;
+        b=i1SiNLuRMdqmNL95ihW13+2EDTD3oQkc6Wm59AmdYTKaoTLX/vjVsmIiXwf9sOT8ivU/V9
+        9uc7abwYoqhStPpGuYDEZtTW6BzRwWM5q9OKmtccv+i9SbfidJPSL74tb7t/Oju6/4u9sj
+        m/x//9ITAN4QaOGAHXNcvRMGwBsq0V0=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-211-_M34AWNBMSe7Z7hE3yHh8Q-1; Mon, 07 Feb 2022 19:06:38 -0500
-X-MC-Unique: _M34AWNBMSe7Z7hE3yHh8Q-1
+ us-mta-615-FLVScr2gNwyjB6VhCJlrJA-1; Mon, 07 Feb 2022 19:06:40 -0500
+X-MC-Unique: FLVScr2gNwyjB6VhCJlrJA-1
 Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id ECB0018397A7;
-        Tue,  8 Feb 2022 00:06:35 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id CA50D8143EF;
+        Tue,  8 Feb 2022 00:06:37 +0000 (UTC)
 Received: from llong.com (unknown [10.22.32.15])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C63395C2F1;
-        Tue,  8 Feb 2022 00:06:01 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1AC0A5C2EF;
+        Tue,  8 Feb 2022 00:06:36 +0000 (UTC)
 From:   Waiman Long <longman@redhat.com>
 To:     Johannes Weiner <hannes@cmpxchg.org>,
         Michal Hocko <mhocko@kernel.org>,
@@ -54,11 +54,10 @@ Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
         David Rientjes <rientjes@google.com>,
         Roman Gushchin <guro@fb.com>,
         Rafael Aquini <aquini@redhat.com>,
-        Waiman Long <longman@redhat.com>,
-        Mike Rapoport <rppt@linux.ibm.com>
-Subject: [PATCH v5 3/4] mm/page_owner: Print memcg information
-Date:   Mon,  7 Feb 2022 19:05:31 -0500
-Message-Id: <20220208000532.1054311-4-longman@redhat.com>
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH v5 4/4] mm/page_owner: Record task command name
+Date:   Mon,  7 Feb 2022 19:05:32 -0500
+Message-Id: <20220208000532.1054311-5-longman@redhat.com>
 In-Reply-To: <20220208000532.1054311-1-longman@redhat.com>
 References: <20220208000532.1054311-1-longman@redhat.com>
 MIME-Version: 1.0
@@ -66,7 +65,7 @@ Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,96 +73,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It was found that a number of dying memcgs were not freed because
-they were pinned by some charged pages that were present. Even "echo 1 >
-/proc/sys/vm/drop_caches" wasn't able to free those pages. These dying
-but not freed memcgs tend to increase in number over time with the side
-effect that percpu memory consumption as shown in /proc/meminfo also
-increases over time.
+The page_owner information currently includes the pid of the calling
+task. That is useful as long as the task is still running. Otherwise,
+the number is meaningless. To have more information about the allocating
+tasks that had exited by the time the page_owner information is
+retrieved, we need to store the command name of the task.
 
-In order to find out more information about those pages that pin
-dying memcgs, the page_owner feature is extended to print memory
-cgroup information especially whether the cgroup is dying or not.
-RCU read lock is taken when memcg is being accessed to make sure
-that it won't be freed.
+Add a new comm field into page_owner structure to store the command name
+and display it when the page_owner information is retrieved.
 
 Signed-off-by: Waiman Long <longman@redhat.com>
-Acked-by: David Rientjes <rientjes@google.com>
-Acked-by: Roman Gushchin <guro@fb.com>
-Acked-by: Mike Rapoport <rppt@linux.ibm.com>
 ---
- mm/page_owner.c | 44 ++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
+ mm/page_owner.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
 diff --git a/mm/page_owner.c b/mm/page_owner.c
-index 28dac73e0542..d4c311455753 100644
+index d4c311455753..0d2017ebe3d8 100644
 --- a/mm/page_owner.c
 +++ b/mm/page_owner.c
-@@ -10,6 +10,7 @@
- #include <linux/migrate.h>
- #include <linux/stackdepot.h>
- #include <linux/seq_file.h>
-+#include <linux/memcontrol.h>
- #include <linux/sched/clock.h>
+@@ -29,6 +29,7 @@ struct page_owner {
+ 	depot_stack_handle_t free_handle;
+ 	u64 ts_nsec;
+ 	u64 free_ts_nsec;
++	char comm[TASK_COMM_LEN];
+ 	pid_t pid;
+ };
  
- #include "internal.h"
-@@ -325,6 +326,47 @@ void pagetypeinfo_showmixedcount_print(struct seq_file *m,
- 	seq_putc(m, '\n');
- }
+@@ -165,6 +166,8 @@ static inline void __set_page_owner_handle(struct page_ext *page_ext,
+ 		page_owner->last_migrate_reason = -1;
+ 		page_owner->pid = current->pid;
+ 		page_owner->ts_nsec = local_clock();
++		strlcpy(page_owner->comm, current->comm,
++			sizeof(page_owner->comm));
+ 		__set_bit(PAGE_EXT_OWNER, &page_ext->flags);
+ 		__set_bit(PAGE_EXT_OWNER_ALLOCATED, &page_ext->flags);
  
-+/*
-+ * Looking for memcg information and print it out
-+ */
-+static inline int print_page_owner_memcg(char *kbuf, size_t count, int ret,
-+					 struct page *page)
-+{
-+#ifdef CONFIG_MEMCG
-+	unsigned long memcg_data;
-+	struct mem_cgroup *memcg;
-+	bool dying;
-+
-+	rcu_read_lock();
-+	memcg_data = READ_ONCE(page->memcg_data);
-+	if (!memcg_data)
-+		goto out_unlock;
-+
-+	if (memcg_data & MEMCG_DATA_OBJCGS)
-+		ret += scnprintf(kbuf + ret, count - ret,
-+				"Slab cache page\n");
-+
-+	memcg = page_memcg_check(page);
-+	if (!memcg)
-+		goto out_unlock;
-+
-+	dying = (memcg->css.flags & CSS_DYING);
-+	ret += scnprintf(kbuf + ret, count - ret,
-+			"Charged %sto %smemcg ",
-+			PageMemcgKmem(page) ? "(via objcg) " : "",
-+			dying ? "dying " : "");
-+
-+	/* Write cgroup name directly into kbuf */
-+	cgroup_name(memcg->css.cgroup, kbuf + ret, count - ret);
-+	ret += strlen(kbuf + ret);
-+	ret += scnprintf(kbuf + ret, count - ret, "\n");
-+out_unlock:
-+	rcu_read_unlock();
-+#endif /* CONFIG_MEMCG */
-+
-+	return ret;
-+}
-+
- static ssize_t
- print_page_owner(char __user *buf, size_t count, unsigned long pfn,
- 		struct page *page, struct page_owner *page_owner,
-@@ -365,6 +407,8 @@ print_page_owner(char __user *buf, size_t count, unsigned long pfn,
- 			migrate_reason_names[page_owner->last_migrate_reason]);
- 	}
+@@ -232,6 +235,7 @@ void __folio_copy_owner(struct folio *newfolio, struct folio *old)
+ 	new_page_owner->pid = old_page_owner->pid;
+ 	new_page_owner->ts_nsec = old_page_owner->ts_nsec;
+ 	new_page_owner->free_ts_nsec = old_page_owner->ts_nsec;
++	strcpy(new_page_owner->comm, old_page_owner->comm);
  
-+	ret = print_page_owner_memcg(kbuf, count, ret, page);
-+
- 	ret += snprintf(kbuf + ret, count - ret, "\n");
- 	if (ret >= count)
- 		goto err;
+ 	/*
+ 	 * We don't clear the bit on the old folio as it's going to be freed
+@@ -381,10 +385,11 @@ print_page_owner(char __user *buf, size_t count, unsigned long pfn,
+ 		return -ENOMEM;
+ 
+ 	ret = scnprintf(kbuf, count,
+-			"Page allocated via order %u, mask %#x(%pGg), pid %d, ts %llu ns, free_ts %llu ns\n",
++			"Page allocated via order %u, mask %#x(%pGg), pid %d (%s), ts %llu ns, free_ts %llu ns\n",
+ 			page_owner->order, page_owner->gfp_mask,
+ 			&page_owner->gfp_mask, page_owner->pid,
+-			page_owner->ts_nsec, page_owner->free_ts_nsec);
++			page_owner->comm, page_owner->ts_nsec,
++			page_owner->free_ts_nsec);
+ 
+ 	/* Print information relevant to grouping pages by mobility */
+ 	pageblock_mt = get_pageblock_migratetype(page);
+@@ -451,9 +456,10 @@ void __dump_page_owner(const struct page *page)
+ 	else
+ 		pr_alert("page_owner tracks the page as freed\n");
+ 
+-	pr_alert("page last allocated via order %u, migratetype %s, gfp_mask %#x(%pGg), pid %d, ts %llu, free_ts %llu\n",
++	pr_alert("page last allocated via order %u, migratetype %s, gfp_mask %#x(%pGg), pid %d (%s), ts %llu, free_ts %llu\n",
+ 		 page_owner->order, migratetype_names[mt], gfp_mask, &gfp_mask,
+-		 page_owner->pid, page_owner->ts_nsec, page_owner->free_ts_nsec);
++		 page_owner->pid, page_owner->comm, page_owner->ts_nsec,
++		 page_owner->free_ts_nsec);
+ 
+ 	handle = READ_ONCE(page_owner->handle);
+ 	if (!handle)
 -- 
 2.27.0
 

@@ -2,72 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43A1D4ADAFF
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 15:17:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED0D74ADB07
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 15:19:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377889AbiBHORl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 09:17:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59220 "EHLO
+        id S1377944AbiBHOTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 09:19:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351022AbiBHORi (ORCPT
+        with ESMTP id S1351022AbiBHOT3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 09:17:38 -0500
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 295F1C03FED0;
-        Tue,  8 Feb 2022 06:17:37 -0800 (PST)
-Received: by mail-yb1-xb2c.google.com with SMTP id g14so50150350ybs.8;
-        Tue, 08 Feb 2022 06:17:37 -0800 (PST)
+        Tue, 8 Feb 2022 09:19:29 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6259C03FECE;
+        Tue,  8 Feb 2022 06:19:28 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id v13-20020a17090ac90d00b001b87bc106bdso2160396pjt.4;
+        Tue, 08 Feb 2022 06:19:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5/FE6hmUPURE2i3GPevS9tMynrU15skMhSUEqO7ROt4=;
-        b=Zj6YSgTNHhWFU5YsQtmVDBxj7unBXZewQHRDfw/kcADAF4Z6ZEzXKgHBdTd1lYRV/i
-         ZdeJSd4gQaPF61rqGVfC0YTCATUINkKpBHGGJw9Z7P+whQQRM486tFytfIf/DPPF6lfm
-         LBQSefSp4GS2lUxz9DBwKA4JcyqJEmXUiP1Lk13BKsQ9JcZJKg6o+IZm/nSeiJIKGjpF
-         DkE08eLC3Z3Xeii8Oo2lzRG4ZxNpMz3lwomDXWZzb2HiMGtiGtofKDLZKvIxu464R5cs
-         2trqHW2vV6D5SVwo2UYLSknkZboAOOQDULCf6FUxLXvBm1ex2zGf2JAkLSaV5sQm6s/f
-         h2TA==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=wxTG+XyoVyvm3qwt67A3uD8d+hQFZ2NnOQ/flBE0K98=;
+        b=Dcro/51npE6vWkDlp954rF9hqbFflacWu4JiIGGktclCeAmxm93szVWwkjci8bhdFJ
+         36QJEAczLxpsK0jwHsOuPvdjL2WToJgY8N6aGnUP+w9Gj9WgMP5r0XsFE9yIv4NdnMlu
+         qfYKz8q0A1LMRLC/dRdGUw94ANm9VgfZC+Ljakagf8CsKcv5Occ3rxLsAfjrGm5Uy37D
+         8lAMM00gBwsDDMrFyNMhI0YpEesWLlk2gvmGPe4Dpra7S+uucD57GJ1CAmsaN5RruBio
+         nabdG4q6UQb6hkdxr08YJY9bZObUVDCuO/tlaF1Q2MuUGuo1A8N5HpVqWPXRQDqMcRkJ
+         f2pA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5/FE6hmUPURE2i3GPevS9tMynrU15skMhSUEqO7ROt4=;
-        b=TTCv4a82LsDbXNk2bCfcZmfAu0FaMc9EVny7pV+KuGKdCAINrwr45rJRJztnRzBIlc
-         ElNERRgES8k5vl6XM8KGGdsIttXx5UhLxoruAJSFTkF6zeWewRvgwdtze7BZ6Iaj3kkF
-         oM8juX6LGWtH/APzeknbRlb/1DLH+U5tevJA6fFcYEk9TFBG/TwrjsCFZCUhWvzxYGqi
-         GC5dCx0N4qlpCnsm7PVDIamZgvQZlnjEpBNbujpqZLI/4viyfhjJ/7VZpSqP7RJYro9+
-         T/yTNdkx/fBHhe5gDMMuZH1biTOA4pBnad1w2NiIfSYvj83wIDWa8R3JMqa+U2LX6Ry7
-         327w==
-X-Gm-Message-State: AOAM5319WybRT1aHLzxBJPQM9yLi73UWt3lDfKCDyieO6wsOTd5kF6Va
-        mJYz6NY9/hpe5SWTxy5FO+EzZRu/mDGMgY/nKaE=
-X-Google-Smtp-Source: ABdhPJwYhAgwHyZnl0slapiFYcBS/AzPy7Nq6zVIJXkharwaHYzW5eGKUPywo4sm9iQpLAfIRtF3vAyOK97Br+zd2Q4=
-X-Received: by 2002:a81:4319:: with SMTP id q25mr4866506ywa.369.1644329856283;
- Tue, 08 Feb 2022 06:17:36 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=wxTG+XyoVyvm3qwt67A3uD8d+hQFZ2NnOQ/flBE0K98=;
+        b=qngM5bA7epZ885Qrq3ETHaNVBYqRZyQoMHOYTSD0yEcf99oxFirkqyXn3oTQ8gEEwd
+         BA74DUSlvpd6A9r5FlGeVcH8IgPL73VGw1DK36/iajZGk3x7KLgY4jno630APGGR5cRz
+         h+IEoAbioc34Y6rI+aP/499ZZ6REILdGD1nDUR5JO7Wi93Oeam9SlowRjU53uF6SUZMA
+         0Xk2Lrvip/mjibTDB/sovxMNHo1F1F9m/ZyWnGDnERPseZsa3T/CSbxDV3Ik5JllMuN5
+         hUwU9IMZr6PT/k0Yb763NI8LcNERFYbVHkaa/f4aLbPu0YdSHzbilKSLX608PuHO21Du
+         YoXA==
+X-Gm-Message-State: AOAM5300+RO+6W3HS9hqynu3/TxGpn/9PXzBvmthTJOp/9bKdErQmd1Y
+        WOXNXZpJ3SSdQS2X7ZIgwsIxa/Xtuw+pGBQ8
+X-Google-Smtp-Source: ABdhPJz67xSgge/ra2Q7eUO/CH9AuwGGYdwz22g+8hA50Wkv9TgPYjVaIUTlf8RdSMiEj29u5mBg6A==
+X-Received: by 2002:a17:903:120e:: with SMTP id l14mr4691979plh.124.1644329968221;
+        Tue, 08 Feb 2022 06:19:28 -0800 (PST)
+Received: from ?IPV6:2404:f801:10:102:8000::f381? ([2404:f801:8050:1:c1::f381])
+        by smtp.gmail.com with ESMTPSA id f15sm16713478pfv.189.2022.02.08.06.19.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Feb 2022 06:19:27 -0800 (PST)
+Message-ID: <6ee926b0-5579-bb9b-da94-51d793a3d782@gmail.com>
+Date:   Tue, 8 Feb 2022 22:19:19 +0800
 MIME-Version: 1.0
-References: <4df50e95-6173-4ed1-9d08-3c1c4abab23f@gmail.com>
- <CAHC9VhSjTqT-4TMxBnQOQHkj+djONihfeoPVyy1egrZY2t10XA@mail.gmail.com>
- <c8a616e4-26a6-af51-212c-31dca0e265cd@gmail.com> <CAHC9VhQTZdeNOx3AXdoc9LXUzDk5n7wyGBX-tV-ZaovhPAdWwQ@mail.gmail.com>
- <e85dd38b-ef7b-ed7e-882e-124cdf942c44@gmail.com> <CAHC9VhROuJtvNHuVaR6pEekNFacH3Tywx58_hn1f5Mwk+kjC8g@mail.gmail.com>
- <b7e55304-d114-bcbe-08d2-b54828121a01@gmail.com> <CAHC9VhSdgD4Nfaxbnnn4r-OK8koSZ7+zQoPShDbGi9PvkJFpng@mail.gmail.com>
- <478e1651-a383-05ff-d011-6dda771b8ce8@linux.microsoft.com> <875ypt5zmz.fsf@defensec.nl>
-In-Reply-To: <875ypt5zmz.fsf@defensec.nl>
-From:   William Roberts <bill.c.roberts@gmail.com>
-Date:   Tue, 8 Feb 2022 08:17:25 -0600
-Message-ID: <CAFftDdo9JmbyPzPWRjOYgZBOS9b5d+OGKKf8egS8_ysbbWW87Q@mail.gmail.com>
-Subject: Re: [PATCH] SELinux: Always allow FIOCLEX and FIONCLEX
-To:     Dominick Grift <dominick.grift@defensec.nl>
-Cc:     Chris PeBenito <chpebeni@linux.microsoft.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Demi Marie Obenour <demiobenour@gmail.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        SElinux list <selinux@vger.kernel.org>,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
-        selinux-refpolicy@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] Netvsc: Call hv_unmap_memory() in the
+ netvsc_device_remove()
+Content-Language: en-US
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>
+Cc:     Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+References: <20220201163211.467423-1-ltykernel@gmail.com>
+ <MWHPR21MB15935F58E55D05A171AE9ED4D7279@MWHPR21MB1593.namprd21.prod.outlook.com>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <MWHPR21MB15935F58E55D05A171AE9ED4D7279@MWHPR21MB1593.namprd21.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,59 +94,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-<snip>
+On 2/3/2022 1:05 AM, Michael Kelley (LINUX) wrote:
+> From: Tianyu Lan<ltykernel@gmail.com>  Sent: Tuesday, February 1, 2022 8:32 AM
+>> netvsc_device_remove() calls vunmap() inside which should not be
+>> called in the interrupt context. Current code calls hv_unmap_memory()
+>> in the free_netvsc_device() which is rcu callback and maybe called
+>> in the interrupt context. This will trigger BUG_ON(in_interrupt())
+>> in the vunmap(). Fix it via moving hv_unmap_memory() to netvsc_device_
+>> remove().
+> I think this change can fail to call hv_unmap_memory() in an error case.
+> 
+> If netvsc_init_buf() fails after hv_map_memory() succeeds for the receive
+> buffer or for the send buffer, no corresponding hv_unmap_memory() will
+> be done.  The failure in netvsc_init_buf() will cause netvsc_connect_vsp()
+> to fail, so netvsc_add_device() will "goto close" where free_netvsc_device()
+> will be called.  But free_netvsc_device() no longer calls hv_unmap_memory(),
+> so it won't ever happen.   netvsc_device_remove() is never called in this case
+> because netvsc_add_device() failed.
+> 
 
-This is getting too long for me.
+Hi Michael:
+       Thanks for your review. Nice catch and will fix in the next
+version.
 
-> >
-> > I don't have a strong opinion either way.  If one were to allow this
-> > using a policy rule, it would result in a major policy breakage.  The
-> > rule would turn on extended perm checks across the entire system,
-> > which the SELinux Reference Policy isn't written for.  I can't speak
-> > to the Android policy, but I would imagine it would be the similar
-> > problem there too.
->
-> Excuse me if I am wrong but AFAIK adding a xperm rule does not turn on
-> xperm checks across the entire system.
-
-It doesn't as you state below its target + class.
-
->
-> If i am not mistaken it will turn on xperm checks only for the
-> operations that have the same source and target/target class.
-
-That's correct.
-
->
-> This is also why i don't (with the exception TIOSCTI for termdev
-> chr_file) use xperms by default.
->
-> 1. it is really easy to selectively filter ioctls by adding xperm rules
-> for end users (and since ioctls are often device/driver specific they
-> know best what is needed and what not)
-
-> >>> and FIONCLEX can be trivially bypassed unless fcntl(F_SETFD)
->
-> 2. if you filter ioctls in upstream policy for example like i do with
-> TIOSCTI using for example (allowx foo bar (ioctl chr_file (not
-> (0xXXXX)))) then you cannot easily exclude additional ioctls later where source is
-> foo and target/tclass is bar/chr_file because there is already a rule in
-> place allowing the ioctl (and you cannot add rules)
-
-Currently, fcntl flag F_SETFD is never checked, it's silently allowed, but
-the equivalent FIONCLEX and FIOCLEX are checked. So if you wrote policy
-to block the FIO*CLEX flags, it would be bypassable through F_SETFD and
-FD_CLOEXEC. So the patch proposed makes the FIO flags behave like
-F_SETFD. Which means upstream policy users could drop this allow, which
-could then remove the target/class rule and allow all icotls. Which is easy
-to prevent and fix you could be a rule in to allowx 0 as documented in the
-wiki: https://selinuxproject.org/page/XpermRules
-
-The questions I think we have here are:
-1. Do we agree that the behavior between SETFD and the FIO flags are equivalent?
-  I think they are.
-2. Do we want the interfaces to behave the same?
-  I think they should.
-3. Do upstream users of the policy construct care?
-  The patch is backwards compat, but I don't want their to be cruft
-floating around with extra allowxperm rules.

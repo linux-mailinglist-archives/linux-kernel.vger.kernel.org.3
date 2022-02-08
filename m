@@ -2,159 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7FFB4AD1A7
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 07:37:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02C2B4AD1A8
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 07:37:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347616AbiBHGh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 01:37:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39406 "EHLO
+        id S1347645AbiBHGhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 01:37:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347556AbiBHGhZ (ORCPT
+        with ESMTP id S1347615AbiBHGhc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 01:37:25 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82ED6C0401EF;
-        Mon,  7 Feb 2022 22:37:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644302244; x=1675838244;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=DG+xa0PnRRQdvZ7t1yNYWlenZClK6CulMIOQACerRMg=;
-  b=hqFa+b3lBeT4PwvSRhkviQrlp6vx6HN11nluqrdFgG0A7W1DmoepThbw
-   KG9A0s5kBAFzdH+7+AFut8bj7ws0ENjjOwI95S/fcekUtnUCMzgM80f02
-   anGLpSAl+iZsih31vQsGVVNM+RQg2sU1uizCq8Hi5qpePDaQdpOkWxPkf
-   y+nzq946Lsa5gEbHetNPuDqwiasSs4YarOiDIHe9qvD88SA5e/JBWoXFk
-   os8gYi2jsEXLj0mnuPmZPbZG3+6OVvzTKvO/tKd/MsHzYyMxIPPfULRHf
-   5cedLJUGVge/ni+oJL2X5IwrXeaGGX/sOzY18DC05kl4tcLY/HZhbtR2A
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="273412483"
-X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
-   d="scan'208";a="273412483"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 22:37:13 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
-   d="scan'208";a="632744902"
-Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.92]) ([10.237.72.92])
-  by orsmga004.jf.intel.com with ESMTP; 07 Feb 2022 22:37:11 -0800
-Subject: Re: [PATCHv2] mmc: block: fix read single on recovery logic
-To:     =?UTF-8?Q?Christian_L=c3=b6hle?= <CLoehle@hyperstone.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Avri Altman <avri.altman@wdc.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-References: <5e5f2e45d0a14a55a8b7a9357846114b@hyperstone.com>
- <7c4757cc707740e580c61c39f963a04d@hyperstone.com>
- <CAPDyKFr0YXCwL-8F9M7mkpNzSQpzw6gNUq2zaiJEXj1jNxUbrg@mail.gmail.com>
- <5c66833d-4b35-2c76-db54-0306e08843e5@intel.com>
- <79d44b0c54e048b0a9cc86319a24cc19@hyperstone.com>
- <bc706a6ab08c4fe2834ba0c05a804672@hyperstone.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-Message-ID: <b047d374-c282-8c63-32c1-2135eec11fb6@intel.com>
-Date:   Tue, 8 Feb 2022 08:37:10 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        Tue, 8 Feb 2022 01:37:32 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A04DCC0401F1;
+        Mon,  7 Feb 2022 22:37:31 -0800 (PST)
+Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nHK80-00008M-MC; Tue, 08 Feb 2022 07:37:28 +0100
+Message-ID: <80db7043-b854-ed20-16aa-e25552e0748e@leemhuis.info>
+Date:   Tue, 8 Feb 2022 07:37:26 +0100
 MIME-Version: 1.0
-In-Reply-To: <bc706a6ab08c4fe2834ba0c05a804672@hyperstone.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: 5.17-rc regression: X1 Carbon touchpad not resumed
+Content-Language: en-BS
+To:     Hugh Dickins <hughd@google.com>,
+        Derek Basehore <dbasehore@chromium.org>
+Cc:     Rajat Jain <rajatja@google.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
+References: <89456fcd-a113-4c82-4b10-a9bcaefac68f@google.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <89456fcd-a113-4c82-4b10-a9bcaefac68f@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1644302251;6714fcf3;
+X-HE-SMSGID: 1nHK80-00008M-MC
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/02/2022 17:11, Christian Löhle wrote:
-> On reads with MMC_READ_MULTIPLE_BLOCK that fail,
-> the recovery handler will use MMC_READ_SINGLE_BLOCK for
-> each of the blocks, up to MMC_READ_SINGLE_RETRIES times each.
-> The logic for this is fixed to never report unsuccessful reads
-> as success to the block layer.
-> 
-> On command error with retries remaining, blk_update_request was
-> called with whatever value error was set last to.
-> In case it was last set to BLK_STS_OK (default), the read will be
-> reported as success, even though there was no data read from the device.
-> This could happen on a CRC mismatch for the response,
-> a card rejecting the command (e.g. again due to a CRC mismatch).
-> In case it was last set to BLK_STS_IOERR, the error is reported correctly,
-> but no retries will be attempted.
-> 
-> Fixes: 81196976ed946c ("mmc: block: Add blk-mq support")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
+[TLDR: I'm adding the regression report below to regzbot, the Linux
+kernel regression tracking bot; all text you find below is compiled from
+a few templates paragraphs you might have encountered already already
+from similar mails.]
 
-Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
+Hi, this is your Linux kernel regression tracker speaking.
 
-> ---
-> v2:
->   - Do not allow data error retries
->   - Actually retry MMC_READ_SINGLE_RETRIES times instead of
->   MMC_READ_SINGLE_RETRIES-1
+On 07.02.22 20:45, Hugh Dickins wrote:
+> 5.17-rc[1-3] on Lenovo ThinkPad X1 Carbon 5th gen: when lid closed
+> and opened and system resumed, the touchpad cursor cannot be moved.
 > 
+> Some dmesg from bootup:
+> [    2.211061] rmi4_smbus 6-002c: registering SMbus-connected sensor
+> [    2.263809] ucsi_acpi USBC000:00: UCSI_GET_PDOS failed (-95)
+> [    2.291782] rmi4_f01 rmi4-00.fn01: found RMI device, manufacturer: Synaptics, product: TM3289-002, fw id: 2492434
+> [    2.371377] input: Synaptics TM3289-002 as /devices/pci0000:00/0000:00:1f.4/i2c-6/6-002c/rmi4-00/input/input8
+> [    2.380820] serio: RMI4 PS/2 pass-through port at rmi4-00.fn03
+> ...
+> [    2.725471] input: PS/2 Generic Mouse as /devices/pci0000:00/0000:00:1f.4/i2c-6/6-002c/rmi4-00/rmi4-00.fn03/serio2/input/input9
 > 
->  drivers/mmc/core/block.c | 28 ++++++++++++++--------------
->  1 file changed, 14 insertions(+), 14 deletions(-)
+> Some dmesg from resume:
+> [   79.221064] rmi4_smbus 6-002c: failed to get SMBus version number!
+> [   79.265074] rmi4_physical rmi4-00: rmi_driver_reset_handler: Failed to read current IRQ mask.
+> [   79.308330] rmi4_f01 rmi4-00.fn01: Failed to restore normal operation: -6.
+> [   79.308335] rmi4_f01 rmi4-00.fn01: Resume failed with code -6.
+> [   79.308339] rmi4_physical rmi4-00: Failed to suspend functions: -6
+> [   79.308342] rmi4_smbus 6-002c: Failed to resume device: -6
+> [   79.351967] rmi4_physical rmi4-00: Failed to read irqs, code=-6
 > 
-> diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
-> index 4e61b28a002f..8d718aa56d33 100644
-> --- a/drivers/mmc/core/block.c
-> +++ b/drivers/mmc/core/block.c
-> @@ -1682,31 +1682,31 @@ static void mmc_blk_read_single(struct mmc_queue *mq, struct request *req)
->  	struct mmc_card *card = mq->card;
->  	struct mmc_host *host = card->host;
->  	blk_status_t error = BLK_STS_OK;
-> -	int retries = 0;
->  
->  	do {
->  		u32 status;
->  		int err;
-> +		int retries = 0;
->  
-> -		mmc_blk_rw_rq_prep(mqrq, card, 1, mq);
-> +		while (retries++ <= MMC_READ_SINGLE_RETRIES) {
-> +			mmc_blk_rw_rq_prep(mqrq, card, 1, mq);
->  
-> -		mmc_wait_for_req(host, mrq);
-> +			mmc_wait_for_req(host, mrq);
->  
-> -		err = mmc_send_status(card, &status);
-> -		if (err)
-> -			goto error_exit;
-> -
-> -		if (!mmc_host_is_spi(host) &&
-> -		    !mmc_ready_for_data(status)) {
-> -			err = mmc_blk_fix_state(card, req);
-> +			err = mmc_send_status(card, &status);
->  			if (err)
->  				goto error_exit;
-> -		}
->  
-> -		if (mrq->cmd->error && retries++ < MMC_READ_SINGLE_RETRIES)
-> -			continue;
-> +			if (!mmc_host_is_spi(host) &&
-> +			    !mmc_ready_for_data(status)) {
-> +				err = mmc_blk_fix_state(card, req);
-> +				if (err)
-> +					goto error_exit;
-> +			}
->  
-> -		retries = 0;
-> +			if (!mrq->cmd->error)
-> +				break;
-> +		}
->  
->  		if (mrq->cmd->error ||
->  		    mrq->data->error ||
-> 
+> Bisection led to 172d931910e1db800f4e71e8ed92281b6f8c6ee2
+> ("i2c: enable async suspend/resume on i2c client devices")
+> and reverting that fixes it for me.
 
+Thanks for the report.
+
+To be sure this issue doesn't fall through the cracks unnoticed, I'm
+adding it to regzbot, my Linux kernel regression tracking bot:
+
+#regzbot ^introduced 172d931910e1db800f4e71e8ed92281b6f8c6ee2
+#regzbot title i2c/input/hid: X1 Carbon touchpad not resumed
+#regzbot ignore-activity
+
+Reminder for developers: when fixing the issue, please add a 'Link:'
+tags pointing to the report (the mail quoted above) using
+lore.kernel.org/r/, as explained in
+'Documentation/process/submitting-patches.rst' and
+'Documentation/process/5.Posting.rst'. This allows the bot to connect
+the report with any patches posted or committed to fix the issue; this
+again allows the bot to show the current status of regressions and
+automatically resolve the issue when the fix hits the right tree.
+
+I'm sending this to everyone that got the initial report, to make them
+aware of the tracking. I also hope that messages like this motivate
+people to directly get at least the regression mailing list and ideally
+even regzbot involved when dealing with regressions, as messages like
+this wouldn't be needed then.
+
+Don't worry, I'll send further messages wrt to this regression just to
+the lists (with a tag in the subject so people can filter them away), if
+they are relevant just for regzbot. With a bit of luck no such messages
+will be needed anyway.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+P.S.: As the Linux kernel's regression tracker I'm getting a lot of
+reports on my table. I can only look briefly into most of them and lack
+knowledge about most of the areas they concern. I thus unfortunately
+will sometimes get things wrong or miss something important. I hope
+that's not the case here; if you think it is, don't hesitate to tell me
+in a public reply, it's in everyone's interest to set the public record
+straight.
+
+-- 
+Additional information about regzbot:
+
+If you want to know more about regzbot, check out its web-interface, the
+getting start guide, and the references documentation:
+
+https://linux-regtracking.leemhuis.info/regzbot/
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
+
+The last two documents will explain how you can interact with regzbot
+yourself if your want to.
+
+Hint for reporters: when reporting a regression it's in your interest to
+CC the regression list and tell regzbot about the issue, as that ensures
+the regression makes it onto the radar of the Linux kernel's regression
+tracker -- that's in your interest, as it ensures your report won't fall
+through the cracks unnoticed.
+
+Hint for developers: you normally don't need to care about regzbot once
+it's involved. Fix the issue as you normally would, just remember to
+include 'Link:' tag in the patch descriptions pointing to all reports
+about the issue. This has been expected from developers even before
+regzbot showed up for reasons explained in
+'Documentation/process/submitting-patches.rst' and
+'Documentation/process/5.Posting.rst'.

@@ -2,136 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E7D84AE446
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:30:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B559E4AE4CE
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:40:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387478AbiBHWYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 17:24:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47688 "EHLO
+        id S1386808AbiBHWet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 17:34:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387124AbiBHV7a (ORCPT
+        with ESMTP id S1387141AbiBHWCZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 16:59:30 -0500
-Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE4DAC0612B8
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 13:59:29 -0800 (PST)
-Received: from in01.mta.xmission.com ([166.70.13.51]:35296)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nHYWF-00D3Sx-RE; Tue, 08 Feb 2022 14:59:27 -0700
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:40330 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nHYWE-002oBP-Rc; Tue, 08 Feb 2022 14:59:27 -0700
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Waiman Long <longman@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Alexey Gladkov <legion@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jann Horn <jannh@google.com>, linux-kernel@vger.kernel.org
-References: <20220208163912.1084752-1-longman@redhat.com>
-        <YgKziblMKsmHkP4f@zeniv-ca.linux.org.uk>
-        <bd83aca3-059f-92dd-e094-b27f51f9481a@redhat.com>
-        <YgK/fdYWi0wWysci@zeniv-ca.linux.org.uk>
-Date:   Tue, 08 Feb 2022 15:59:06 -0600
-In-Reply-To: <YgK/fdYWi0wWysci@zeniv-ca.linux.org.uk> (Al Viro's message of
-        "Tue, 8 Feb 2022 19:07:41 +0000")
-Message-ID: <874k59f2ad.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Tue, 8 Feb 2022 17:02:25 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1541AC0612BC
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 14:02:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644357742;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=v+/tNcBi1hqQ3zAZ+kreP8zrjRNSZd5An8aAqUlnWDs=;
+        b=ExJ0+p7vaRbH+dUZ6MoGanoV76XMzIcKjmmTJcrdpS1T+087S6tg9QzkZo771YA9V2fm18
+        72VU4BHPVx6Wc1fv2UJAkpv/tXnb15KjzDkKnd6Y5X7eEN707DRXh+Ojpo5VlL0FWlTEkC
+        EB28nZSL/MEENUQZNpSMJxXCdaoVeqU=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-126-mpKvkRn2NK-N-qiSwhyuWQ-1; Tue, 08 Feb 2022 17:02:21 -0500
+X-MC-Unique: mpKvkRn2NK-N-qiSwhyuWQ-1
+Received: by mail-qk1-f199.google.com with SMTP id g26-20020a05620a13da00b0047e14765148so171568qkl.1
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 14:02:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:organization:user-agent:mime-version
+         :content-transfer-encoding;
+        bh=v+/tNcBi1hqQ3zAZ+kreP8zrjRNSZd5An8aAqUlnWDs=;
+        b=gr5nF73HzLftpGUt2L+PHEsGiWc0IU6A7Eo5hc/P71tnncAOlx5MXePpWa98xE7boT
+         pQRbaOYRHivCYDUd+VzKQOUQKpsFVdK9YzvVXYuLfxx3BWSn27eK+tx1RMpVX/YHoabr
+         ZGhOyJlM/L/+SvzsUT8qQWyAVbdA/eZU1IWv1BgLH2oWlfIdcB0HG76d3MwX7O14AYCV
+         ToW67MQg01rV2MTSMhn8asuLCFE1p+UTBmTgohvKVt0/HCv3eSuZwW/ChpbnbGHgZWGp
+         t5ce8EgkUKXlxOX86v5iF8KgeYzOsCEiNYHxZ/yEnw0kN7d74Ks6+GjR8tmfLjz+hjy4
+         tQmg==
+X-Gm-Message-State: AOAM530PzJA/DXCq3lLPV9NrXqpXkuGzNrhDSbrZtnDNrrHxSDONnBHj
+        bc1GpqPiJ+OQSahK3PqaULt3cJkNKqNChjVpo1QKjtU4TF+EezBzuqCfxrT4jrIqJ/2Ysg9WPdq
+        +Zzd6Lr9DdrTIOi5dTmwBUaOz
+X-Received: by 2002:a05:6214:62b:: with SMTP id a11mr4576797qvx.99.1644357741261;
+        Tue, 08 Feb 2022 14:02:21 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxzDmob0mRw3m+J1LeJvrujTFW2KQpp8qCWQ71N6Q6IhmpZwPecRLzOaHkQFsysr2sKjwHqKQ==
+X-Received: by 2002:a05:6214:62b:: with SMTP id a11mr4576772qvx.99.1644357741022;
+        Tue, 08 Feb 2022 14:02:21 -0800 (PST)
+Received: from [192.168.8.138] (pool-96-230-100-15.bstnma.fios.verizon.net. [96.230.100.15])
+        by smtp.gmail.com with ESMTPSA id d6sm8080823qtb.55.2022.02.08.14.02.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 14:02:20 -0800 (PST)
+Message-ID: <10bfefe40b9cb82610d4f1e8d3e7293824fac03b.camel@redhat.com>
+Subject: Re: [PATCH] drm/i915/psr: Disable PSR2 selective fetch for all TGL
+ steps
+From:   Lyude Paul <lyude@redhat.com>
+To:     "Souza, Jose" <jose.souza@intel.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>
+Cc:     "airlied@linux.ie" <airlied@linux.ie>,
+        "ville.syrjala@linux.intel.com" <ville.syrjala@linux.intel.com>,
+        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
+        "joonas.lahtinen@linux.intel.com" <joonas.lahtinen@linux.intel.com>,
+        "Mun, Gwan-gyeong" <gwan-gyeong.mun@intel.com>,
+        "Roper, Matthew D" <matthew.d.roper@intel.com>,
+        "tvrtko.ursulin@linux.intel.com" <tvrtko.ursulin@linux.intel.com>,
+        "Kahola, Mika" <mika.kahola@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "jani.nikula@linux.intel.com" <jani.nikula@linux.intel.com>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "Hogander, Jouni" <jouni.hogander@intel.com>,
+        "De Marchi, Lucas" <lucas.demarchi@intel.com>
+Date:   Tue, 08 Feb 2022 17:02:18 -0500
+In-Reply-To: <47eed687da699a6abbfd7726439fd307786c9d93.camel@intel.com>
+References: <20220207213923.3605-1-lyude@redhat.com>
+         <47eed687da699a6abbfd7726439fd307786c9d93.camel@intel.com>
+Organization: Red Hat Inc.
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1nHYWE-002oBP-Rc;;;mid=<874k59f2ad.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX19ah3ujpA0uSRXc7hWxYjEDlJ9CtDrmagE=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: *;Al Viro <viro@zeniv.linux.org.uk>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 421 ms - load_scoreonly_sql: 0.04 (0.0%),
-        signal_user_changed: 11 (2.5%), b_tie_ro: 9 (2.2%), parse: 0.93 (0.2%),
-         extract_message_metadata: 12 (2.9%), get_uri_detail_list: 1.71 (0.4%),
-         tests_pri_-1000: 7 (1.8%), tests_pri_-950: 1.25 (0.3%),
-        tests_pri_-900: 1.01 (0.2%), tests_pri_-90: 84 (20.0%), check_bayes:
-        82 (19.6%), b_tokenize: 7 (1.8%), b_tok_get_all: 7 (1.7%),
-        b_comp_prob: 2.5 (0.6%), b_tok_touch_all: 61 (14.6%), b_finish: 0.97
-        (0.2%), tests_pri_0: 289 (68.6%), check_dkim_signature: 0.62 (0.1%),
-        check_dkim_adsp: 2.7 (0.6%), poll_dns_idle: 0.39 (0.1%), tests_pri_10:
-        2.2 (0.5%), tests_pri_500: 9 (2.2%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH] copy_process(): Move fd_install() out of
- sighand->siglock critical section
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Al Viro <viro@zeniv.linux.org.uk> writes:
+Opened the issue at https://gitlab.freedesktop.org/drm/intel/-/issues/5077 ,
+included dmesg + video. Feel free to let me know if you need any more info, or
+need me to try any patches
 
-> On Tue, Feb 08, 2022 at 01:51:35PM -0500, Waiman Long wrote:
->> On 2/8/22 13:16, Al Viro wrote:
->> > On Tue, Feb 08, 2022 at 11:39:12AM -0500, Waiman Long wrote:
->> > 
->> > > One way to solve this problem is to move the fd_install() call out of
->> > > the sighand->siglock critical section.
->> > > 
->> > > Before commit 6fd2fe494b17 ("copy_process(): don't use ksys_close()
->> > > on cleanups"), the pidfd installation was done without holding both
->> > > the task_list lock and the sighand->siglock. Obviously, holding these
->> > > two locks are not really needed to protect the fd_install() call.
->> > > So move the fd_install() call down to after the releases of both locks.
->> > 	Umm... That assumes we can delay it that far.  IOW, that nothing
->> > relies upon having pidfd observable in /proc/*/fd as soon as the child
->> > becomes visible there in the first place.
->> > 
->> > 	What warranties are expected from CLONE_PIDFD wrt observation of
->> > child's descriptor table?
->> > 
->> I think the fd_install() call can be moved after the release of
->> sighand->siglock but before the release the tasklist_lock. Will that be good
->> enough?
->
-> Looks like it should, but I'd rather hear from the CLONE_PIDFD authors first...
-> Christian, could you comment on that?
+On Tue, 2022-02-08 at 13:06 +0000, Souza, Jose wrote:
+> On Mon, 2022-02-07 at 16:38 -0500, Lyude Paul wrote:
+> > As we've unfortunately started to come to expect from PSR on Intel
+> > platforms, PSR2 selective fetch is not at all ready to be enabled on
+> > Tigerlake as it results in severe flickering issues - at least on this
+> > ThinkPad X1 Carbon 9th generation. The easiest way I've found of
+> > reproducing these issues is to just move the cursor around the left border
+> > of the screen (suspicious…).
+> 
+> Where is the bug for that? Where is the logs?
+> We can't go from enabled to disabled without any debug and because of a
+> single device.
+> In the mean time you have the option to set the i915 parameter to disable
+> it.
+> 
+> > 
+> > So, fix people's displays again and turn PSR2 selective fetch off for all
+> > steppings of Tigerlake. This can be re-enabled again if someone from Intel
+> > finds the time to fix this functionality on OEM machines.
+> > 
+> > Signed-off-by: Lyude Paul <lyude@redhat.com>
+> > Fixes: 7f6002e58025 ("drm/i915/display: Enable PSR2 selective fetch by
+> > default")
+> > Cc: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
+> > Cc: Ville Syrjälä <ville.syrjala@linux.intel.com>
+> > Cc: José Roberto de Souza <jose.souza@intel.com>
+> > Cc: Jani Nikula <jani.nikula@linux.intel.com>
+> > Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
+> > Cc: intel-gfx@lists.freedesktop.org
+> > Cc: <stable@vger.kernel.org> # v5.16+
+> > ---
+> >  drivers/gpu/drm/i915/display/intel_psr.c | 10 +++++++---
+> >  1 file changed, 7 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/gpu/drm/i915/display/intel_psr.c
+> > b/drivers/gpu/drm/i915/display/intel_psr.c
+> > index a1a663f362e7..25c16abcd9cd 100644
+> > --- a/drivers/gpu/drm/i915/display/intel_psr.c
+> > +++ b/drivers/gpu/drm/i915/display/intel_psr.c
+> > @@ -737,10 +737,14 @@ static bool intel_psr2_sel_fetch_config_valid(struct
+> > intel_dp *intel_dp,
+> >                 return false;
+> >         }
+> >  
+> > -       /* Wa_14010254185 Wa_14010103792 */
+> > -       if (IS_TGL_DISPLAY_STEP(dev_priv, STEP_A0, STEP_C0)) {
+> > +       /*
+> > +        * There's two things stopping this from being enabled on TGL:
+> > +        * For steps A0-C0: workarounds Wa_14010254185 Wa_14010103792 are
+> > missing
+> > +        * For all steps: PSR2 selective fetch causes screen flickering
+> > +        */
+> > +       if (IS_TIGERLAKE(dev_priv)) {
+> >                 drm_dbg_kms(&dev_priv->drm,
+> > -                           "PSR2 sel fetch not enabled, missing the
+> > implementation of WAs\n");
+> > +                           "PSR2 sel fetch not enabled, currently broken
+> > on TGL\n");
+> >                 return false;
+> >         }
+> >  
+> 
 
-The tasklist_lock and the siglock provide no protection against
-being looked up in proc.
+-- 
+Cheers,
+ Lyude Paul (she/her)
+ Software Engineer at Red Hat
 
-The proc filesystem looks up process information with things only
-protected by the rcu_read_lock().  Which means that the process
-will be visible through proc after "attach_pid(p, PIDTYPE_PID".
-
-The fd is being installed in the fdtable of the parent process,
-and the siglock and tasklist_lock are held to protect the child.
-
-
-Further fd_install is exposing the fd to userspace where it can be used
-by the process_madvise and the process_mrelease system calls, from
-anything that shares the fdtable of the parent thread.  Which means it
-needs to be guaranteed that kernel_clone will call wake_up_process
-before it is safe to call fd_install.
-
-
-So it appears to me that moving fd_install earlier fundamentally unsafe,
-and the locks are meaningless from an fd_install perspective.
-
-Which means it should be perfectly fine to move the fd_install outside
-of the tasklist_lock and the outside siglock.
-
-
-I don't see how we could support the fd appearing in the fdtable sooner
-which seems to make the question moot as to weather userspace in some
-odd corner case expects the fd to appear in the fdtable sooner.
-
-So I say move fd_install down with proc_fork_connector and friends.
-
-Eric

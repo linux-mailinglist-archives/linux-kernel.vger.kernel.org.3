@@ -2,117 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F3454AD4B6
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 10:23:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9C364AD446
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 10:03:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354113AbiBHJXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 04:23:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34774 "EHLO
+        id S1352780AbiBHJCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 04:02:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354117AbiBHJXr (ORCPT
+        with ESMTP id S236759AbiBHJCt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 04:23:47 -0500
-X-Greylist: delayed 1294 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Feb 2022 01:23:46 PST
-Received: from qproxy4-pub.mail.unifiedlayer.com (qproxy4-pub.mail.unifiedlayer.com [66.147.248.250])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29EBBC03FEC6
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 01:23:45 -0800 (PST)
-Received: from gproxy1-pub.mail.unifiedlayer.com (gproxy1-pub.mail.unifiedlayer.com [69.89.25.95])
-        by qproxy4.mail.unifiedlayer.com (Postfix) with ESMTP id 4BD6C802E59B
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 09:02:11 +0000 (UTC)
-Received: from cmgw13.mail.unifiedlayer.com (unknown [10.0.90.128])
-        by progateway3.mail.pro1.eigbox.com (Postfix) with ESMTP id 97D1E1004733B
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 09:02:10 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id HMO2nh862EaNCHMO2nc4Bf; Tue, 08 Feb 2022 09:02:10 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=fNX8YbWe c=1 sm=1 tr=0 ts=62023192
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=oGFeUVbbRNcA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=NjNOBljHOn0YkUJ5KKXki1nVeez07hjn+mmexGx7Yz8=; b=szxKvTH9Pmt57WEcUfEdeo1hxA
-        bHEhYdQuukSVdWmTpIvQeU1h5D52VKzHVamntCgdl3HeAzidkQ7TDaPchJr3XkIEVAidrJjXb5FX6
-        rJyXOl4YkucwYtETw2SGuEl6O;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:53772 helo=[10.0.1.23])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <re@w6rz.net>)
-        id 1nHMO1-0021xE-QM; Tue, 08 Feb 2022 02:02:09 -0700
-Message-ID: <8986fe5b-edf5-3511-0ff9-eb0e5b0e672a@w6rz.net>
-Date:   Tue, 8 Feb 2022 01:02:08 -0800
+        Tue, 8 Feb 2022 04:02:49 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A297EC03FEC0
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 01:02:48 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id h6so10696522wrb.9
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 01:02:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=n56/xrs0hxqVo6GWZnZfSDoECfRT5lppeZnAG5F+a1s=;
+        b=qwFnLzTKi1NrFw2maL+H23WzNX3hCDYLFGXpOmbb9C72/aL4Vhje0ATD3SuwK7qE4o
+         OMRXCZHC+KH3MIJiQZzShe+/HY+gWlP2zipO8ZsWEtvNwUPYblUchZCiPKVKMWR5mriN
+         IXk3E57qaqocs7fnciZK84zaq3exz4edSi6KYuRtVnHXmFnlYBNpK4TbND2z0qEGMV2U
+         1RX4nZd5OEOEFoXx7VpV0QfdLxHxg3waJsAG1OKncxsKPMs/oQYmjtkWv0y/NM2uBq86
+         cyvjrpCQy+Ic19itZZEfs3DB5BK2Z3P3863z9GHY6B7zUNfzyz7KY8w7Q8SjfUt/5/Fe
+         oKQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=n56/xrs0hxqVo6GWZnZfSDoECfRT5lppeZnAG5F+a1s=;
+        b=6/6CT7DxOdlFBGkEW5T5CkWk3XrOBRNZdVXm9uBF2qsr6pB798vzs45Uve9zVTo5rL
+         jSZMupQLi2KKseBJqqBZyXexevG3d6rmIDzpMyj7PiologQ8sgter6CX0ezxMI9pIf+9
+         r6/m9m+uc+RTMJGjigWwmb5uF9Fja2zQ9HzObOFA2ocnMeCgglQLrH3yUaVHCUhhpd2Q
+         36lvoOK1rpzvAJQXDqoZKKoj+vS5sDkUhw2nj8Zd3Wx65q6owyOLiHKoko1YPsAlba7b
+         cHwSXnhC0EcV02h7TK9UnJFcit3SjSr9Lrso/fCBqtfqXfd0EezRPsov2Kz6HLJ0Fl+/
+         n66g==
+X-Gm-Message-State: AOAM532v1i1CsBRaYHSDOU7o/LwMh9xNeUi+xTuCvI6fnUerCFYClnIu
+        ID2sig+F2/i4iqSs0VZ/pTXJzw==
+X-Google-Smtp-Source: ABdhPJwHEfvaeXH5AKLjxqQv5p5c9KMMC6f5d8Nv1AxuhlRU5I2VVi4/kVGTCYKWqNEr6kFOycPc0Q==
+X-Received: by 2002:a05:6000:108a:: with SMTP id y10mr2602424wrw.464.1644310967268;
+        Tue, 08 Feb 2022 01:02:47 -0800 (PST)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id y3sm13294390wry.109.2022.02.08.01.02.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 01:02:46 -0800 (PST)
+Date:   Tue, 8 Feb 2022 09:02:44 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        linux-arm-kernel@lists.infradead.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mfd: db8500-prcmu: remove dead code for a non-existing
+ config
+Message-ID: <YgIxtOX1UhxYWUMw@google.com>
+References: <20211227064839.21405-1-lukas.bulwahn@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 5.16 000/127] 5.16.8-rc2 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220207133856.644483064@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-In-Reply-To: <20220207133856.644483064@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1nHMO1-0021xE-QM
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.23]) [73.162.232.9]:53772
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 13
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211227064839.21405-1-lukas.bulwahn@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/7/22 06:04, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.16.8 release.
-> There are 127 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 09 Feb 2022 13:38:34 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.8-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Mon, 27 Dec 2021, Lukas Bulwahn wrote:
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+> The config DBX500_PRCMU_QOS_POWER was never introduced in the kernel
+> repository. So, the ifdef in  ./include/linux/mfd/dbx500-prcmu.h was never
+> effective.
+> 
+> Remove these dead function prototypes.
+> 
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> ---
+>  include/linux/mfd/dbx500-prcmu.h | 18 ------------------
+>  1 file changed, 18 deletions(-)
 
-Tested-by: Ron Economos <re@w6rz.net>
+Applied, thanks.
 
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

@@ -2,82 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B78424AE43F
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:29:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8652A4AE48A
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:37:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386520AbiBHW2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 17:28:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44566 "EHLO
+        id S1388890AbiBHWdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 17:33:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387020AbiBHVqp (ORCPT
+        with ESMTP id S1387023AbiBHVq6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 16:46:45 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64EF4C0612B8
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 13:46:44 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id 10so512305plj.1
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 13:46:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=eN+hmNONJyG0na16U/kNOjqhgqoQ8Ez+z5PohZnpZkE=;
-        b=LNQPpQeD8iyN++3r8W02WPfs6uZofuPIvByExxMAWF0qDNj4IzqjIBr/W4NTXrsVCZ
-         kjpNceWCbdR5x2EpmL07tmFDmI0wGT7HTbOEds+oWrY3xOrZ2BTS8NJq87UZu8DyVOpy
-         LxcQj/f1C0APcdVz+CzaIwdimXcBaKvXCQsif+vwRxBmjLIiKvoR65m8+jsQjmx2wGmR
-         R1wbVEKbYlrVxRC/jFnmTnULNV9KkWHChtx4i0Ir45fiLL52uRY8LKiwJ64/Mo2I+mZj
-         ba7ar8tKS6y9kqQ8NJdQYOBNQYHls9d6zsJoXQGvy71lMsuUIUKxtup00ETxuIq/ep9n
-         /Fbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eN+hmNONJyG0na16U/kNOjqhgqoQ8Ez+z5PohZnpZkE=;
-        b=V5pxKlWFdX1T7N8I7FrxynIF9zchjZAsBa/IJpBs8m7rxvleUcgE8v3QrN+ayaV8SM
-         7fVnvq3snm3MQeKlSWnPGs7M59DiJnEFZBD2KKV/94QfH8mmJOJ3jxQuzN1sPkA8zHTk
-         PCQ3t2du1AvynYaafITel8RCsjovOlslzFcNmemeJFotrNDBd4ZUf/J9X6F1z7kRy+lD
-         Qse8t6tXMw5E+ClnRMLZFVv9tDXX6MfyyUVE3ZTvPw21i82ml+HZoaC1zraf2NLk6kqN
-         ngAdTnWcwFRSkuF3mlCnt5HpEEWDdCDthOy5NH8P3ZGavpBZjcZbO2R8TbpNyyYQDLyw
-         BGvw==
-X-Gm-Message-State: AOAM533I+4Yi/FoFvma/fxC5ylE0kg/qZHZeRodDsb9UpEEqnkXb2v8S
-        dIs0Um0kofOgsAx0cIctmso1lfaaVP203r/3fVhmg6jeEU941VaO
-X-Google-Smtp-Source: ABdhPJzU8YEy66gam05lnihXH2xqumQUZnJEaa4p6ds3bkY2fyLPDZAWJ4qmz8U1JK3UJhmcPIm38CMIVYxZyGLqMFA=
-X-Received: by 2002:a17:903:187:: with SMTP id z7mr6391730plg.123.1644356803467;
- Tue, 08 Feb 2022 13:46:43 -0800 (PST)
+        Tue, 8 Feb 2022 16:46:58 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8318BC0612B8;
+        Tue,  8 Feb 2022 13:46:57 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 1E1601F383;
+        Tue,  8 Feb 2022 21:46:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1644356816; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6Y4cqlpGJFVeRUEbBtoO3aZV+LJk6nsh0uPbojI7rXM=;
+        b=VOLE94XELXtFUqsCfzwaLtl1ioehxDM+6T4zC+XmXO4afpyMVrzOcCjW+iNddp9RxmjsNc
+        lRKVM8C8Jk95OCWPmEsya5u/aJm+rGzNS4U8mvXllVyXTOh3ac/dqK/oR7Vu0AV9GuL2EG
+        0cJmF5YbTZ7WGLqx1WdRA7mmqB8+Ov8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1644356816;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6Y4cqlpGJFVeRUEbBtoO3aZV+LJk6nsh0uPbojI7rXM=;
+        b=XpMJKhki4kVnEkQE/U0fzVHvjwBQ/bzO72KOv2BltNkEEcRvmid1ZsP0fAD4K83kULjP6C
+        9zR4plpxRx5op5AA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8AED6139C1;
+        Tue,  8 Feb 2022 21:46:55 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id G0GPH8/kAmLCRQAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Tue, 08 Feb 2022 21:46:55 +0000
+Date:   Tue, 8 Feb 2022 22:46:53 +0100
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Terry Bowman <Terry.Bowman@amd.com>
+Cc:     linux@roeck-us.net, linux-watchdog@vger.kernel.org,
+        linux-i2c@vger.kernel.org, wsa@kernel.org,
+        andy.shevchenko@gmail.com, rafael.j.wysocki@intel.com,
+        linux-kernel@vger.kernel.org, wim@linux-watchdog.org,
+        rrichter@amd.com, thomas.lendacky@amd.com, sudheesh.mavila@amd.com,
+        Nehal-bakulchandra.Shah@amd.com, Basavaraj.Natikar@amd.com,
+        Shyam-sundar.S-k@amd.com, Mario.Limonciello@amd.com
+Subject: Re: [PATCH v4 0/9] i2c: piix4: Replace cd6h/cd7h port I/O accesses
+ with MMIO accesses
+Message-ID: <20220208224653.6a62ba22@endymion.delvare>
+In-Reply-To: <4ae57999-0f23-7578-008d-2009bc36d46b@amd.com>
+References: <20220130184130.176646-1-terry.bowman@amd.com>
+        <20220208181114.180a99ba@endymion.delvare>
+        <4ae57999-0f23-7578-008d-2009bc36d46b@amd.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-References: <20220208040122.695258-1-davidgow@google.com> <20220208040122.695258-2-davidgow@google.com>
-In-Reply-To: <20220208040122.695258-2-davidgow@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Tue, 8 Feb 2022 16:46:32 -0500
-Message-ID: <CAFd5g47dbWswjdidj-sGJczsCBe3cDG32SO-WEsjmR8HsB6aXA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] list: test: Add a test for list_is_head()
-To:     David Gow <davidgow@google.com>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Daniel Latypov <dlatypov@google.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 7, 2022 at 11:02 PM David Gow <davidgow@google.com> wrote:
->
-> list_is_head() was added recently[1], and didn't have a KUnit test. The
-> implementation is trivial, so it's not a particularly exciting test, but
-> it'd be nice to get back to full coverage of the list functions.
->
-> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/include/linux/list.h?id=0425473037db40d9e322631f2d4dc6ef51f97e88
->
-> Signed-off-by: David Gow <davidgow@google.com>
+On Tue, 8 Feb 2022 13:36:55 -0600, Terry Bowman wrote:
+> On 2/8/22 11:11, Jean Delvare wrote:
+> > Unfortunately I'm not really able to test this series. While I do have
+> > an AMD-based laptop which uses the i2c-piix4 driver, the SMBus has
+> > never been usable on it. The driver creates 3 i2c buses (port 0 at
+> > 0b00, port 2 at 0b00 and port 1 at 0b20). The first 2 do not seem to
+> > have any device on them (i2cdetect returns empty). The last one must
+> > have some devices on it, I see address 0x1c answers the ping,
+> > unfortunately as soon as probing reaches address 0x2c, all later pings
+> > return success, regardless of the address. It seems that some I2C
+> > device (probably the one at 0x2c, but I don't know what it is) is
+> > holding SDA low forever, therefore preventing any use of the whole
+> > SMBus port until the next reboot.
+> 
+> My understanding is the OEM may have different i2c devices because it
+> is mainboard specific.
 
-Acked-by: Brendan Higgins <brendanhiggins@google.com>
+Yes, the devices on the SMBus could be anything Lenovo decided to use.
+Tomorrow I'll try to scan the SMBus but skipping the problematic
+address, to see if it works around the problem.
+
+> >> (...)
+> >> Changes in v4:
+> >> (...)
+> >>  - Removed iowrite32(ioread32(...), ...). Unnecessary because MMIO is
+> >>    already enabled. (Terry Bowman)  
+> > 
+> > I'm curious, how can you be sure of that actually?
+> 
+> The removed code was using a MMIO region to write 1 to 'mmioen'. This was 
+> using the MMIO region to enable same MMIO region.
+
+Ah ah, I get it now. Nice chicken or the egg situation :-)
+
+> Programmer's manual shows FCH::PM::ISACONTROL[mmioen] has a '1' reset value.
+> Per programmer's manual, FCH::PM::ISACONTROL[mmioen] enables MMIO mapping 
+> at FED8_0000h..FED8_1FFFh. The FCH::PM::ISACONTROL register is MMIO 
+> mapped at FED8_0304h. 'mmioen' was intended to be set using port I/O to 
+> enable MMIO but, port I/O access to these registers is now disabled.
+
+Is my understanding correct that there is some overlapping of the
+access methods and there are certain chipsets where both legacy I/O and
+MMIO access is possible?
+
+If so, while there's indeed nothing to be done for the most recent
+systems where only MMIO access is possible, you may still need to
+enable MMIO access through legacy I/O if you try to use MMIO on
+chipsets where both are possible. I'm not sure what exactly where you
+set the limit. In the last patch you say that 0x51 is the first
+revision of the family 17h CPUs, but is family 17h the first where MMIO
+is available, or the first where legacy I/O isn't?
+
+-- 
+Jean Delvare
+SUSE L3 Support

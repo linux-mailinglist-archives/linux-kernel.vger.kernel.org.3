@@ -2,104 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60C4B4ADAAA
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 15:02:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94DE74ADAB2
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 15:03:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377440AbiBHOCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 09:02:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51340 "EHLO
+        id S1377513AbiBHODl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 09:03:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344364AbiBHOCm (ORCPT
+        with ESMTP id S1377460AbiBHODf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 09:02:42 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92502C03FED0;
-        Tue,  8 Feb 2022 06:02:41 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id v12so2231304wrv.2;
-        Tue, 08 Feb 2022 06:02:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Xp9QZN/2z/upaKAhd3EP5sH3V0LGEoUW36DmbK5D1mg=;
-        b=ksZMV3wZESIE8s3J+vkEoZkwAmwMNgXzV9D6ABMTidn81xM22dEolwar416EYM0ixW
-         X9glk6wkCWMndCidF8Yx/ulOlgs/9T6gVVnFXJnbze1EaQ1TZgIVm5jFZT/jvpQTCPxr
-         8GVVXnDR5G2hiLdT2LVRg8opk0K/hGxyMx1GQsvtU7T0C3kOLhch6NFxiO+cxrBMD/SD
-         o/mPZuSNF7sxcraugnXC75Y/grsfqMHVxg5SwJ+R64AN3ldEr7MDQa0DilIs7FtPkLQp
-         CvipfInGq0fJ5mRKXollmJTSwtco25lCmOUhu4UM9QXesusAgWL8nXDQktewIv6RMaan
-         FpKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Xp9QZN/2z/upaKAhd3EP5sH3V0LGEoUW36DmbK5D1mg=;
-        b=RODyjfBn4+fdb1RCQHhjLMoE4ckmwrwohbZe023qpeBmbJjcC8HGgTOwaLBDXQbXKJ
-         tcDn0vHRtLMYlSOZSXHLU89C1HE1JpeCRIxnabbUOhTUxNBqEAM6V8HXrzbnPs7ZNguD
-         N/CeXqjZI334TyJhWjkhh9CK3UrZ7XbDVFSisyp8FShpc+S9obrn1X0HllEzHiwu7eey
-         kxTaxdsRRH0B0VxM/XQiv6TN1U3eToJUF9XrT6YEwRSu5HqcxWAgt4ZR7TSE/7wFrQSf
-         a9Prx49oE1nn3bcyn3NxZIXAsJi2WBPDyGJaJYgWmcb1kRI6+eepo+lpXGYGS974Eo/8
-         NMvQ==
-X-Gm-Message-State: AOAM530T3GQJByYrHrz+6ZjYCI1Vf22BxL9yF5dMuHsx8dC6YFdjUP+A
-        jHmYr1xx/xs75op1L8N+3wo=
-X-Google-Smtp-Source: ABdhPJxvppN8OLWxCr62/0Hv9hDWKUKj61tfD4E/YEG8VR8gsHj0IZwiv4IYdKRcs/NueVeFgvyXmg==
-X-Received: by 2002:adf:f90c:: with SMTP id b12mr3624219wrr.97.1644328960198;
-        Tue, 08 Feb 2022 06:02:40 -0800 (PST)
-Received: from debian (host-78-145-97-89.as13285.net. [78.145.97.89])
-        by smtp.gmail.com with ESMTPSA id h4sm15477041wre.0.2022.02.08.06.02.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 06:02:39 -0800 (PST)
-Date:   Tue, 8 Feb 2022 14:02:38 +0000
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 4.19 00/86] 4.19.228-rc1 review
-Message-ID: <YgJ3/tVg/MT4G2qi@debian>
-References: <20220207103757.550973048@linuxfoundation.org>
+        Tue, 8 Feb 2022 09:03:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0695C03FED4;
+        Tue,  8 Feb 2022 06:03:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BCBC61019;
+        Tue,  8 Feb 2022 14:03:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE259C340EF;
+        Tue,  8 Feb 2022 14:03:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644329013;
+        bh=Xa3UBrXhuGTsrY6ZL5Pdx4rWJE7m4s0PC5jjWeIEjew=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=gRMnHXKD4D83mDb93SFgR40rK+dqWAHmuiZlcspcGEev+KgSKZU9Mq5lhMLuEwOzU
+         hj71f3lKsgUESjNZ/rChvgROSK1ndTz7fryQUzEc2cosLNIr7BInc0v3EXiiSgFb6/
+         VHtHYWBcZAm2ZsWzjnCvkPmbmoKsT4Yi4NhJ+c9CUKAFOUOReYKXTCUH8OyinDht5u
+         16VL1ociMYbXeziEy/bwSvaCqKWJUfDmtmjfiMT0s6hfvBuCwo72dru72gTQRLWhSY
+         mSCDuA3yiBCHtGEC3jDhN5SPFeTxxOQefA7xXaU9Y9Jmo88ZmMJAVvZsNU9yi3ZZj9
+         6z+sxaJ8L43eQ==
+Received: by mail-wr1-f49.google.com with SMTP id e3so16991292wra.0;
+        Tue, 08 Feb 2022 06:03:33 -0800 (PST)
+X-Gm-Message-State: AOAM532j/DSi/DnRyJFtRkozhFwKxtPnnaKIDy+pPSXKw0SKVx5G19Kd
+        6VbD/APTynsFgtRp/Qoo6RxQQ6b/M5nyp/S+hHE=
+X-Google-Smtp-Source: ABdhPJyi+Kijy3/qJKCYBCr9I63+NQlNBMxsy+QBROXXF12wveFBs6WamrDlOJ04QNZaDx+f9yZ34KVqpMmjT9dGhx0=
+X-Received: by 2002:a05:6000:1b88:: with SMTP id r8mr3744166wru.447.1644329012050;
+ Tue, 08 Feb 2022 06:03:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220207103757.550973048@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <E5DB4C43-F2AB-412A-9891-C13255374AD9@live.com>
+In-Reply-To: <E5DB4C43-F2AB-412A-9891-C13255374AD9@live.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Tue, 8 Feb 2022 15:03:20 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXEUudnnX8FaAhtUmcKB+jt237BUTsMrNC8ZoOepf4P3pQ@mail.gmail.com>
+Message-ID: <CAMj1kXEUudnnX8FaAhtUmcKB+jt237BUTsMrNC8ZoOepf4P3pQ@mail.gmail.com>
+Subject: Re: [BUG SEVERE] Failure to enable EFI Runtime services on T2 Macs
+To:     Aditya Garg <gargaditya08@live.com>
+Cc:     Jeremy Kerr <jk@ozlabs.org>, Matthew Garrett <mjg59@srcf.ucam.org>,
+        Orlando Chamberlain <redecorating@protonmail.com>,
+        Aun-Ali Zaidi <admin@kodeit.net>,
+        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Tue, 8 Feb 2022 at 14:55, Aditya Garg <gargaditya08@live.com> wrote:
+>
+> On using some specific kernel configuration, on Macs with the T2 Security=
+ chip, EFI Runtime services fail to start. Some logs which may be useful ar=
+e as follows :-
+>
+> Feb 08 17:11:11 MacBook kernel: [Firmware Bug]: Page fault caused by firm=
+ware at PA: 0xffffa79840068000
+> Feb 08 17:11:11 MacBook kernel: WARNING: CPU: 11 PID: 150 at arch/x86/pla=
+tform/efi/quirks.c:735 efi_crash_gracefully_on_page_fault+0x50/0xd0
 
-On Mon, Feb 07, 2022 at 12:05:23PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.19.228 release.
-> There are 86 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 09 Feb 2022 10:37:42 +0000.
-> Anything received after that time might be too late.
+This means the firmware is broken. There is very little we can do
+about this beyond disabling EFI runtime services entirely on such
+systems.
 
-Build test:
-mips (gcc version 11.2.1 20220121): 63 configs -> no failure
-arm (gcc version 11.2.1 20220121): 116 configs -> no new failure
-arm64 (gcc version 11.2.1 20220121): 2 configs -> no failure
-x86_64 (gcc version 11.2.1 20220121): 4 configs -> no failure
+...
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
+> The kernel configuration where this bug is seen is on https://github.com/=
+t2linux/T2-Ubuntu-Kernel/blob/Mainline/templates/default-config
+>
+> I had an old kernel configuration, where I did not face this issue and wa=
+s easily able to write to the NVRAM. That kernel configuration is on https:=
+//github.com/t2linux/T2-Ubuntu-Kernel/blob/b5c20b8c7689251dd943e22dbe02cef9=
+020db8d1/templates/default-config
+>
+> I believe these lines in the kernel config, which are present in the form=
+er but absent in the latter are causing the issue :-
+>
+...
 
-[1]. https://openqa.qa.codethink.co.uk/tests/722
+> Especially CONFIG_LOAD_UEFI_KEYS=3Dy is which I guess may be the culprit.
+>
 
+Yes, that seems likely.
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+> I request you to reply to my issue as soon as possible
+>
 
---
-Regards
-Sudip
+Please stop demanding attention like this, even though it is thinly
+veiled as courteous.
 
+If you want to run bleeding edge kernels on non-standard EFI hardware,
+you have to be able to sort yourself out to some extent. I am the
+EFI-on-Linux maintainer, but that doesn't mean I work for you and have
+to be on call to fix your problems.

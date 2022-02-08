@@ -2,78 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 369344ADDC3
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 16:58:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 760C04ADDCE
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 17:00:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352025AbiBHP6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 10:58:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38060 "EHLO
+        id S1382505AbiBHP72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 10:59:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232350AbiBHP57 (ORCPT
+        with ESMTP id S1381811AbiBHP7X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 10:57:59 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F2BCC061578;
-        Tue,  8 Feb 2022 07:57:59 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id k17so14221320plk.0;
-        Tue, 08 Feb 2022 07:57:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=+/JyyE+URKj87BO7QT8MnRUrWcrYgGPbIYYPz/QVNhY=;
-        b=N4nxQL4kLDKcA34UlvpL/6UjYKpg3lUPka1TZ+URuphai7tRxpXxJHmboJhzQS5Z2U
-         OyHRdBdHWRSvLkKIxDS88p5VRjGX1ptwPN2YO897RK+jnj1YzdoQZxHE2gm8I3q2lC+a
-         4fgaogNHIynEJ9zZk2N5IF4bA1WbZfaCderIMZN4QpWmmYwT8Ds249312Mz47ovII+p9
-         yd0UXpMD7Uf3gwcbiyU82JNQTegW/vw3DvNasO4x9OvqarF0zfvWCp5AoUpfhQCojhww
-         uQif3zXay9ca27TjK+cN69mfcgt0RZpbyAkaEqLkMXXjca9FJJJ1NTubsA2yc04r9WIw
-         CVQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=+/JyyE+URKj87BO7QT8MnRUrWcrYgGPbIYYPz/QVNhY=;
-        b=qx83yGREVb7Jh2tzCLUvDDWup6KPBYHpfAsqIhPHHp+D5hiCKT+DgAeQgNheNTaYXj
-         3aB/+UBUXymJQsZKyeupqzML8vIk4JfkkqIc1Xqv7WTOjCdD8vDdlQgNc0bAv2Y+Q6KV
-         D6xxtsjMdQoRVMfDyYmbdi1lv0HPP9Vejuh+8YkYfD80+Kf/2b7ptRkOAygYkNz9i6Bg
-         TpFBy7zVGxjADzeOXY6zs5IBMXwSSeVOYK2uD53qtGt2d71y+90jolnt5+7tRNFqHxrA
-         TY2CAO6YxFWOHFX/dlDLizpm/2Pwk/6AYZ5us4VUXPnqcLtiRY+EJWdsi4QVi7lIzFMw
-         CF+w==
-X-Gm-Message-State: AOAM531ZnYUFZG6PYDR2mqYPEYFPiAHLCekYbduf6B502hMFxyPgd6xA
-        68iLhOyfmlQFH0YyjDL2f4o=
-X-Google-Smtp-Source: ABdhPJw9GI3LmijANA6YNg6ucBYaKBZ1Kmmqr0H5BC9suvjUjyEtX6w/E9WyIaPKUu+RN4l/U0sJLA==
-X-Received: by 2002:a17:902:dac8:: with SMTP id q8mr5025423plx.164.1644335878641;
-        Tue, 08 Feb 2022 07:57:58 -0800 (PST)
-Received: from localhost ([2405:201:2003:b021:6001:8ce1:3e29:705e])
-        by smtp.gmail.com with ESMTPSA id s4sm11481437pgg.80.2022.02.08.07.57.55
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 08 Feb 2022 07:57:58 -0800 (PST)
-Date:   Tue, 8 Feb 2022 21:27:52 +0530
-From:   Raag Jadav <raagjadav@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Steen Hegelund <steen.hegelund@microchip.com>,
-        Bjarni Jonasson <bjarni.jonasson@microchip.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: phy: mscc: enable MAC SerDes autonegotiation
-Message-ID: <20220208155752.GB3003@localhost>
-References: <1644043492-31307-1-git-send-email-raagjadav@gmail.com>
- <Yf6QbbqaxZhZPUdC@lunn.ch>
- <20220206171234.GA5778@localhost>
- <YgANBQjsrmK+T/N+@lunn.ch>
- <20220207174948.GA5183@localhost>
- <YgHQ7Kf+2c9knxk3@lunn.ch>
+        Tue, 8 Feb 2022 10:59:23 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 62362C061576;
+        Tue,  8 Feb 2022 07:59:22 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2862C1FB;
+        Tue,  8 Feb 2022 07:59:22 -0800 (PST)
+Received: from [10.57.36.220] (unknown [10.57.36.220])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8899D3F70D;
+        Tue,  8 Feb 2022 07:59:20 -0800 (PST)
+Message-ID: <2d52edc4-c6e6-b641-b291-d1726cc20b30@arm.com>
+Date:   Tue, 8 Feb 2022 15:58:55 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YgHQ7Kf+2c9knxk3@lunn.ch>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [RFC PATCH v2 0/5] topdown with metrics
+Content-Language: en-US
+From:   Andrew Kilroy <andrew.kilroy@arm.com>
+To:     John Garry <john.garry@huawei.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, acme@kernel.org,
+        irogers@google.com, ak@linux.intel.com
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>
+References: <4fefb1bc-49b2-bc5b-23cd-cd8fabe8c588@huawei.com>
+ <20220111150749.13365-1-andrew.kilroy@arm.com>
+ <7cd7bd11-4900-81c4-de84-6e5fc63ec87c@huawei.com>
+ <1fa70669-146c-7ec6-cee9-4f59751eb334@arm.com>
+In-Reply-To: <1fa70669-146c-7ec6-cee9-4f59751eb334@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,26 +52,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 08, 2022 at 03:09:48AM +0100, Andrew Lunn wrote:
-> > MAC implementation[1] in a lot of NXP SoCs comes with in-band aneg enabled
-> > by default, and it does expect Clause 37 auto-negotiation to complete
-> > between MAC and PHY before the actual data transfer happens.
-> > 
-> > [1] https://community.nxp.com/pwmxy87654/attachments/pwmxy87654/t-series/3241/1/AN3869(1).pdf
-> > 
-> > I faced such issue while integrating VSC85xx PHY
-> > with one of the recent NXP SoC having similar MAC implementation.
-> > Not sure if this is a problem on MAC side or PHY side,
-> > But having Clause 37 support should help in most cases I believe.
+
+
+On 27/01/2022 11:42, Andrew Kilroy wrote:
 > 
-> So please use this information in the commit message.
 > 
-> The only danger with this change is, is the PHY O.K with auto-neg
-> turned on, with a MAC which does not actually perform auto-neg? It
-> could be we have boards which work now because PHY autoneg is turned
-> off.
+> On 20/01/2022 09:26, John Garry wrote:
+>> On 11/01/2022 15:07, Andrew Kilroy wrote:
+>>> This patch series adds the ability for the --topdown option to use
+>>> metrics (defined in json files in the pmu-events directory) to describe
+>>> how to calculate and determine the output columns for topdown level 1.
+>>>
+>>> For this to work, a number of metrics have to be defined for the
+>>> relevant processor with the MetricGroup name "TopDownL1".  perf will
+>>> arrange for the events defined in each metric to be collected, and each
+>>> metric will be displayed in the output, as if
+>>>
+>>>    perf stat -M 'TopDownL1' --metric-only -- exampleapp
+>>>
+>>> had been used.
+>>>
+>>> Topdown was already implemented where certain kernel events are defined.
+>>> If these kernel events are defined, the new json metrics behaviour is
+>>> not used.  The json metrics approach is only used if the kernel events
+>>> are absent.
+>>>
+>>> The last patch in the series disables the json metrics behaviour on x86.
+>>> This is because of concerns that due to SMT it's not straightforward to
+>>> express the various formulas as json for certain x86 cpus.  See
+>>
+>> I suppose this solution is ok.
+>>
+> 
+> Thanks, would you mind giving it a Reviewed-By?
+> 
+>> A concern is that today we only have 1x arm64 platform which actually 
+>> supports this in mainline.
+>>
+>> Do you have any more which you plan to support?
+>>
+> 
+> The Neoverse cores, mainly.
 > 
 
-Introducing an optional device tree property could be of any help?
+Thanks for the feedback on this RFC, I think we'll resubmit these 
+patches at a later time, when we've got a json metrics file or two.
 
->       Andrew
+Thanks,
+Andrew

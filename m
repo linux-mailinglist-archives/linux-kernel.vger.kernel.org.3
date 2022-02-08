@@ -2,129 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECEBC4AD339
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 09:24:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 821DD4AD389
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 09:33:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349259AbiBHIYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 03:24:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56934 "EHLO
+        id S1349997AbiBHIdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 03:33:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231538AbiBHIYT (ORCPT
+        with ESMTP id S1347610AbiBHIdw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 03:24:19 -0500
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84A1C03FEC0
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 00:24:18 -0800 (PST)
-Received: by mail-io1-xd35.google.com with SMTP id h7so20172902iof.3
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 00:24:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=5xEJb5dGtkxnE3DtyMZwk9XL+cYr5+2XHsmtJGbNn9w=;
-        b=EQfrfLZxUCkGh+GkX3mWS9OkZA/2OhdrueRQPYkMoFFyxvFSW2s2Il8NdOT6E+n9/O
-         5x4ciq9rZpVLgGZObrl9GmF2Z0MA2sloPjyTHgo+7o2CUNDxQqt3zD/4o/R9DFBUMOFY
-         YIMD8S8bgDHl2b26431AcMAeqYJ+7fZQujWRpHC0xYgfE74KQZdY4/+rebqFBI/3YstE
-         0vUNNpqIRLp0Mssr4eK1bCBO+doe0IXOPB3V2GTfWyvMgI2Z+McTB/VzdXYsa/HPs5Qi
-         JAEoHlzFaMya6tWxKtHQ5ksXavkCAunD7RQK3MNjE6AGrvICXgPgSD+J96OYRIru6PyF
-         C3JA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5xEJb5dGtkxnE3DtyMZwk9XL+cYr5+2XHsmtJGbNn9w=;
-        b=JYPydGPRzSl8AMaLxlAXh6d1DsmcHqNrnvtKRTauun4oMVoAfCJVzfbLe8YbnmN8hA
-         Kv2G2/9u/WPwPAg2WcDukyMOCbvAwcmTj5amGyJb8f7l3t/J+dwtVknG5Hn/9tX5janB
-         xDRdakXLMKb8qvhhAzECEhEYQ3w0Z1zQSCHco4GTQ06FiJ49P/z714MAtM+Eq+6NMtj2
-         efc9C5lnCM66ZumtqcGTQ38LdcxeGSnUN67kBRN3Inzs7NbXfS1esTvdLa3lxCVDmuWc
-         XtDA5MUwIjJe7pzim3MsmhMwQtG9ZXXsWhCqvey+2sC+xs2Xr9GJ7kek+hzCeyXKi0dQ
-         MqlQ==
-X-Gm-Message-State: AOAM532ADjw5WIYe2SNMyGbTwkgkPZIj/vfxiGV6N3l2gHyWbfQfptTT
-        cCIriCZVpzZud+QycsaAUc/IJw==
-X-Google-Smtp-Source: ABdhPJz0275GX25s4HD4rXh2vegbV0ySFaSIArfKRzAwnXPerqERRCHYLW7W1lSQppGMHug4USPTww==
-X-Received: by 2002:a05:6638:10c5:: with SMTP id q5mr1493113jad.113.1644308658203;
-        Tue, 08 Feb 2022 00:24:18 -0800 (PST)
-Received: from google.com ([2620:15c:183:200:5f31:19c3:21f5:7300])
-        by smtp.gmail.com with ESMTPSA id x7sm2989090ilp.88.2022.02.08.00.24.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 00:24:17 -0800 (PST)
-Date:   Tue, 8 Feb 2022 01:24:13 -0700
-From:   Yu Zhao <yuzhao@google.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>
-Cc:     Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Barry Song <21cnbao@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        page-reclaim@google.com, x86@kernel.org,
-        Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        Holger =?iso-8859-1?Q?Hoffst=E4tte?= 
-        <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>
-Subject: Re: [PATCH v7 01/12] mm: x86, arm64: add arch_has_hw_pte_young()
-Message-ID: <YgIorS8g6N1YlpzB@google.com>
-References: <20220208081902.3550911-1-yuzhao@google.com>
- <20220208081902.3550911-2-yuzhao@google.com>
+        Tue, 8 Feb 2022 03:33:52 -0500
+X-Greylist: delayed 507 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Feb 2022 00:33:50 PST
+Received: from first.geanix.com (first.geanix.com [116.203.34.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227DBC03FEC0;
+        Tue,  8 Feb 2022 00:33:49 -0800 (PST)
+Received: from zen.. (unknown [185.17.218.86])
+        by first.geanix.com (Postfix) with ESMTPSA id 3B30AE28D1;
+        Tue,  8 Feb 2022 08:25:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
+        t=1644308719; bh=Efu6zjcxm/eWjynAIA8LNMAq9G0qvlYvhealE9QUzXQ=;
+        h=From:To:Cc:Subject:Date;
+        b=C2ohMC85IOb51JqunUAZHpOrmNCwKkz1ZlbIrTMm12tmkPSAGUPUtAfynh+pxU2Tb
+         Jo9+i8yz8kitAON4mcrNf3/w4EtR5N8Re3sf8JaxSkApNWKxWUj5fgk7o7Gw9Fgl5k
+         ETMGo2aW2WdWjlo8gIcp+EuGIY3s1aLfLZinpZsemsX5vAHCsK+ShtX4soNyB5MFim
+         3dd0ZiVf6IldfoR/NtOUeIiYWM0NEh9s3qigwgsRRfp51es91ujVqeKHTjk9NpbVN/
+         bdQGmEZDldUJszJYssqmSm7uO979MI71LCtWrIHzXf6X6b6L+jK7zOnELzlULxN9vA
+         rwCmCD1jUkLOA==
+From:   Sean Nyekjaer <sean@geanix.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Boris Brezillon <bbrezillon@kernel.org>
+Cc:     Sean Nyekjaer <sean@geanix.com>, stable@vger.kernel.org,
+        sfr@canb.auug.org.au,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] mtd: rawnand: protect access to rawnand devices while in suspend
+Date:   Tue,  8 Feb 2022 09:25:06 +0100
+Message-Id: <20220208082507.1837764-1-sean@geanix.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220208081902.3550911-2-yuzhao@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 08, 2022 at 01:18:51AM -0700, Yu Zhao wrote:
+Prevent rawnend access while in a suspended state.
 
-<snipped>
+Commit 013e6292aaf5 ("mtd: rawnand: Simplify the locking") allows the
+rawnand layer to return errors rather than waiting in a blocking wait.
 
-> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-> index c4ba047a82d2..990358eca359 100644
-> --- a/arch/arm64/include/asm/pgtable.h
-> +++ b/arch/arm64/include/asm/pgtable.h
-> @@ -999,23 +999,13 @@ static inline void update_mmu_cache(struct vm_area_struct *vma,
->   * page after fork() + CoW for pfn mappings. We don't always have a
->   * hardware-managed access flag on arm64.
->   */
-> -static inline bool arch_faults_on_old_pte(void)
-> -{
-> -	WARN_ON(preemptible());
-> -
-> -	return !cpu_has_hw_af();
-> -}
-> -#define arch_faults_on_old_pte		arch_faults_on_old_pte
-> +#define arch_has_hw_pte_young		cpu_has_hw_af
+Tested on a iMX6ULL.
 
-Reworked arch_has_hw_pte_young() for arm64 according to:
-https://lore.kernel.org/linux-mm/20220111141901.GA10338@willie-the-truck/
+Fixes: 013e6292aaf5 ("mtd: rawnand: Simplify the locking")
+Signed-off-by: Sean Nyekjaer <sean@geanix.com>
+Reviewed-by: Boris Brezillon <boris.brezillon@collabora.com>
+---
+Follow-up on discussion in:
+https://lkml.org/lkml/2021/10/4/41
+https://lkml.org/lkml/2021/10/11/435
+https://lkml.org/lkml/2021/10/20/184
+https://lkml.org/lkml/2021/10/25/288
+https://lkml.org/lkml/2021/10/26/55
+https://lkml.org/lkml/2021/11/2/352
 
-<snipped>
+Changes since v1:
+ - fixed uninitialized return
+
+Changes since v2:
+ - fixed wait queue description
+
+ drivers/mtd/nand/raw/nand_base.c | 44 +++++++++++++++-----------------
+ include/linux/mtd/rawnand.h      |  2 ++
+ 2 files changed, 22 insertions(+), 24 deletions(-)
+
+diff --git a/drivers/mtd/nand/raw/nand_base.c b/drivers/mtd/nand/raw/nand_base.c
+index e7b2ba016d8c..8daaba96edb2 100644
+--- a/drivers/mtd/nand/raw/nand_base.c
++++ b/drivers/mtd/nand/raw/nand_base.c
+@@ -338,16 +338,19 @@ static int nand_isbad_bbm(struct nand_chip *chip, loff_t ofs)
+  *
+  * Return: -EBUSY if the chip has been suspended, 0 otherwise
+  */
+-static int nand_get_device(struct nand_chip *chip)
++static void nand_get_device(struct nand_chip *chip)
+ {
+-	mutex_lock(&chip->lock);
+-	if (chip->suspended) {
++	/* Wait until the device is resumed. */
++	while (1) {
++		mutex_lock(&chip->lock);
++		if (!chip->suspended) {
++			mutex_lock(&chip->controller->lock);
++			return;
++		}
+ 		mutex_unlock(&chip->lock);
+-		return -EBUSY;
+-	}
+-	mutex_lock(&chip->controller->lock);
+ 
+-	return 0;
++		wait_event(chip->resume_wq, !chip->suspended);
++	}
+ }
+ 
+ /**
+@@ -576,9 +579,7 @@ static int nand_block_markbad_lowlevel(struct nand_chip *chip, loff_t ofs)
+ 		nand_erase_nand(chip, &einfo, 0);
+ 
+ 		/* Write bad block marker to OOB */
+-		ret = nand_get_device(chip);
+-		if (ret)
+-			return ret;
++		nand_get_device(chip);
+ 
+ 		ret = nand_markbad_bbm(chip, ofs);
+ 		nand_release_device(chip);
+@@ -3826,9 +3827,7 @@ static int nand_read_oob(struct mtd_info *mtd, loff_t from,
+ 	    ops->mode != MTD_OPS_RAW)
+ 		return -ENOTSUPP;
+ 
+-	ret = nand_get_device(chip);
+-	if (ret)
+-		return ret;
++	nand_get_device(chip);
+ 
+ 	if (!ops->datbuf)
+ 		ret = nand_do_read_oob(chip, from, ops);
+@@ -4415,13 +4414,11 @@ static int nand_write_oob(struct mtd_info *mtd, loff_t to,
+ 			  struct mtd_oob_ops *ops)
+ {
+ 	struct nand_chip *chip = mtd_to_nand(mtd);
+-	int ret;
++	int ret = 0;
+ 
+ 	ops->retlen = 0;
+ 
+-	ret = nand_get_device(chip);
+-	if (ret)
+-		return ret;
++	nand_get_device(chip);
+ 
+ 	switch (ops->mode) {
+ 	case MTD_OPS_PLACE_OOB:
+@@ -4481,9 +4478,7 @@ int nand_erase_nand(struct nand_chip *chip, struct erase_info *instr,
+ 		return -EIO;
+ 
+ 	/* Grab the lock and see if the device is available */
+-	ret = nand_get_device(chip);
+-	if (ret)
+-		return ret;
++	nand_get_device(chip);
+ 
+ 	/* Shift to get first page */
+ 	page = (int)(instr->addr >> chip->page_shift);
+@@ -4570,7 +4565,7 @@ static void nand_sync(struct mtd_info *mtd)
+ 	pr_debug("%s: called\n", __func__);
+ 
+ 	/* Grab the lock and see if the device is available */
+-	WARN_ON(nand_get_device(chip));
++	nand_get_device(chip);
+ 	/* Release it and go back */
+ 	nand_release_device(chip);
+ }
+@@ -4587,9 +4582,7 @@ static int nand_block_isbad(struct mtd_info *mtd, loff_t offs)
+ 	int ret;
+ 
+ 	/* Select the NAND device */
+-	ret = nand_get_device(chip);
+-	if (ret)
+-		return ret;
++	nand_get_device(chip);
+ 
+ 	nand_select_target(chip, chipnr);
+ 
+@@ -4660,6 +4653,8 @@ static void nand_resume(struct mtd_info *mtd)
+ 			__func__);
+ 	}
+ 	mutex_unlock(&chip->lock);
++
++	wake_up_all(&chip->resume_wq);
+ }
+ 
+ /**
+@@ -5437,6 +5432,7 @@ static int nand_scan_ident(struct nand_chip *chip, unsigned int maxchips,
+ 	chip->cur_cs = -1;
+ 
+ 	mutex_init(&chip->lock);
++	init_waitqueue_head(&chip->resume_wq);
+ 
+ 	/* Enforce the right timings for reset/detection */
+ 	chip->current_interface_config = nand_get_reset_interface_config();
+diff --git a/include/linux/mtd/rawnand.h b/include/linux/mtd/rawnand.h
+index 5b88cd51fadb..dcf90144d70b 100644
+--- a/include/linux/mtd/rawnand.h
++++ b/include/linux/mtd/rawnand.h
+@@ -1240,6 +1240,7 @@ struct nand_secure_region {
+  * @lock: Lock protecting the suspended field. Also used to serialize accesses
+  *        to the NAND device
+  * @suspended: Set to 1 when the device is suspended, 0 when it's not
++ * @resume_wq: wait queue to sleep if rawnand is in suspended state.
+  * @cur_cs: Currently selected target. -1 means no target selected, otherwise we
+  *          should always have cur_cs >= 0 && cur_cs < nanddev_ntargets().
+  *          NAND Controller drivers should not modify this value, but they're
+@@ -1294,6 +1295,7 @@ struct nand_chip {
+ 	/* Internals */
+ 	struct mutex lock;
+ 	unsigned int suspended : 1;
++	wait_queue_head_t resume_wq;
+ 	int cur_cs;
+ 	int read_retries;
+ 	struct nand_secure_region *secure_regions;
+-- 
+2.34.1
+

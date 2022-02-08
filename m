@@ -2,128 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CBE34ADE48
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 17:23:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEB0A4ADD42
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 16:45:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383113AbiBHQXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 11:23:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52392 "EHLO
+        id S1351917AbiBHPpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 10:45:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352165AbiBHQXc (ORCPT
+        with ESMTP id S1381426AbiBHPpJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 11:23:32 -0500
-X-Greylist: delayed 2318 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Feb 2022 08:23:31 PST
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 509BAC061576
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 08:23:30 -0800 (PST)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 218AXaZg001203;
-        Tue, 8 Feb 2022 16:44:19 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=ddNKQeBNsufwtCR82T3hW0VvpqNHVS9IOC40mmH+H4Y=;
- b=r7xz+kjguAgrfwFsWKvHgj8PszyLfubCiP0Sm9Ix80tW1MFjXbvTFgXLqOTb7v6CwgdB
- oCSg34AYk0aNVKnfP3wIlIM/vbiYxBTIcgevTazRr8y0P7jh7PskiqSjKQF6l8KlR0Ql
- kxt9VIzRQQ7jN3sKzPe7AUgjqcslVHx5lRerGl5Pxj8YS61QlE242zVsdyTSOss2myJT
- dtgjyEKvMhFwkjXAU1wgO9oVMLqUNPJ+trprw16r+NFf9dMrnoRu46SDsNsYIwQrXTMh
- c3gAdRYfYxom5aFLtg00gc4BeWUM9ZXD9CU3X82sAI1lDAI4UVzjr9PJTwK40GKW0vQo +g== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3e37nk5n3r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Feb 2022 16:44:19 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E317F10002A;
-        Tue,  8 Feb 2022 16:44:17 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id D584E221778;
-        Tue,  8 Feb 2022 16:44:17 +0100 (CET)
-Received: from [10.129.7.146] (10.75.127.51) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 8 Feb
- 2022 16:44:17 +0100
-Message-ID: <aea58d59-9b1c-608b-7212-1d64ce2f07db@foss.st.com>
-Date:   Tue, 8 Feb 2022 16:44:16 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] drm/stm: Avoid using val uninitialized in
- ltdc_set_ycbcr_config()
-Content-Language: en-US
-To:     Nathan Chancellor <nathan@kernel.org>,
-        Philippe Cornu <philippe.cornu@foss.st.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>
-CC:     Nick Desaulniers <ndesaulniers@google.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
-References: <20220207165304.1046867-1-nathan@kernel.org>
-From:   yannick Fertre <yannick.fertre@foss.st.com>
-In-Reply-To: <20220207165304.1046867-1-nathan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.51]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-08_05,2022-02-07_02,2021-12-02_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 8 Feb 2022 10:45:09 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CA604C061579
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 07:45:07 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 713422B;
+        Tue,  8 Feb 2022 07:45:07 -0800 (PST)
+Received: from e120937-lin.home (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CF2033F73B;
+        Tue,  8 Feb 2022 07:45:05 -0800 (PST)
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     sudeep.holla@arm.com, james.quinlan@broadcom.com,
+        Jonathan.Cameron@Huawei.com, f.fainelli@gmail.com,
+        etienne.carriere@linaro.org, vincent.guittot@linaro.org,
+        souvik.chakravarty@arm.com, peter.hilber@opensynergy.com,
+        igor.skalkin@opensynergy.com, cristian.marussi@arm.com
+Subject: [PATCH v3 0/8] Add SCMI Virtio & Clock atomic support
+Date:   Tue,  8 Feb 2022 15:44:44 +0000
+Message-Id: <20220208154452.39428-1-cristian.marussi@arm.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nathan,
-Thenks for the patch.
+Hi,
 
-Acked-by: Yannick Fertre <yannick.fertre@foss.st.com>
+This small series is the tail-subset of the previous V8 series about atomic
+support in SCMI [1], whose 8-patches head-subset has now been queued on
+[2]; as such, it is based on [2] on top of tag scmi-updates-5.17:
 
-Best regards
+commit 94d0cd1da14a ("firmware: arm_scmi: Add new parameter to
+		     mark_txdone")
 
-On 2/7/22 17:53, Nathan Chancellor wrote:
-> Clang warns:
-> 
->    drivers/gpu/drm/stm/ltdc.c:625:2: warning: variable 'val' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
->            default:
->            ^~~~~~~
->    drivers/gpu/drm/stm/ltdc.c:635:2: note: uninitialized use occurs here
->            val |= LxPCR_YCEN;
->            ^~~
->    drivers/gpu/drm/stm/ltdc.c:600:9: note: initialize the variable 'val' to silence this warning
->            u32 val;
->                   ^
->                    = 0
->    1 warning generated.
-> 
-> Use a return instead of break in the default case to fix the warning.
-> Add an error message so that this return is not silent, which could hide
-> issues in the future.
-> 
-> Fixes: 484e72d3146b ("drm/stm: ltdc: add support of ycbcr pixel formats")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1575
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->   drivers/gpu/drm/stm/ltdc.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
-> index 5eeb32c9c9ce..447ddde1786c 100644
-> --- a/drivers/gpu/drm/stm/ltdc.c
-> +++ b/drivers/gpu/drm/stm/ltdc.c
-> @@ -624,7 +624,8 @@ static inline void ltdc_set_ycbcr_config(struct drm_plane *plane, u32 drm_pix_fm
->   		break;
->   	default:
->   		/* RGB or not a YCbCr supported format */
-> -		break;
-> +		drm_err(plane->dev, "Unsupported pixel format: %u\n", drm_pix_fmt);
-> +		return;
->   	}
->   
->   	/* Enable limited range */
-> 
-> base-commit: 542898c5aa5c6a3179dffb1d1606884a63f75fed
+Patch [1/8] substitute virtio-scmi ready flag and lock with a reference
+counter to keep track of vio channels lifetime while removing the need of
+a wide spinlocked section (that would cause issues with introduction of
+virtio polling support)
+
+Patch [2/8] adds a few helpers to handle the TX free_list and a dedicated
+spinlock to reduce the reliance on the main one.
+
+Patch [3/8] adds polling mode to SCMI VirtIO transport in order to support
+atomic operations on such transport.
+
+Patches [4,5/8] introduce a new optional SCMI binding, atomic_threshold, to
+configure a platform specific time threshold used in the following patches
+to select with a finer grain which SCMI resources should be eligible for
+atomic operations when requested.
+
+Patch [6/8] exposes new SCMI Clock protocol operations to allow an SCMI
+user to request atomic mode on clock enable commands.
+
+Patch [7/8] adds support to SCMI Clock protocol for a new clock attributes
+field which advertises typical enable latency for a specific resource.
+
+Finally patch [8/8] add support for atomic operations to the SCMI clock
+driver; the underlying logic here is that we register with the Clock
+framework atomic-capable clock resources if and only if the backing SCMI
+transport is capable of atomic operations AND the specific clock resource
+has been advertised by the SCMI platform as having:
+
+	clock_enable_latency <= atomic_threshold
+
+The idea is to avoid costly atomic busy-waiting for resources that have
+been advertised as 'slow' to operate upon. (i.e. a PLL vs a gating clock)
+
+To ease testing the whole series can be find at [3].
+
+Any feedback/testing welcome as usual.
+
+Thanks,
+Cristian
+
+[1]: https://lore.kernel.org/linux-arm-kernel/20211220195646.44498-1-cristian.marussi@arm.com/
+[2]: https://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git/tag/?h=scmi-updates-5.17
+[3]: https://gitlab.arm.com/linux-arm/linux-cm/-/commits/scmi_atomic_clk_virtio_V3/
+
+---
+V2 --> V3
+ - split out virtio_ring RFC patch into a distinct series
+ - calling virtqueue_broke_device when cleaning up channel
+ - removed RFC tags from CLK related patches
+
+V1 --> V2
+ - added vio channel refcount support patch
+ - reviewed free_list support and usage
+ - added virtio_ring RFC patch
+ - shrinked spinlocked section within virtio_poll_done to exclude
+   virtqueue_poll call
+ - removed poll_lock
+ - use vio channel refcount acquire/release logic when polling
+ - using new free_list accessors
+ - added new dedicated pending_lock to access pending_cmds_list
+ - fixed a few comments
+
+
+Cristian Marussi (8):
+  firmware: arm_scmi: Add a virtio channel refcount
+  firmware: arm_scmi: Review virtio free_list handling
+  firmware: arm_scmi: Add atomic mode support to virtio transport
+  dt-bindings: firmware: arm,scmi: Add atomic_threshold optional
+    property
+  firmware: arm_scmi: Support optional system wide atomic_threshold
+  firmware: arm_scmi: Add atomic support to clock protocol
+  firmware: arm_scmi: Add support for clock_enable_latency
+  clk: scmi: Support atomic clock enable/disable API
+
+ .../bindings/firmware/arm,scmi.yaml           |  11 +
+ drivers/clk/clk-scmi.c                        |  71 ++-
+ drivers/firmware/arm_scmi/Kconfig             |  15 +
+ drivers/firmware/arm_scmi/clock.c             |  34 +-
+ drivers/firmware/arm_scmi/driver.c            |  36 +-
+ drivers/firmware/arm_scmi/virtio.c            | 495 +++++++++++++++---
+ include/linux/scmi_protocol.h                 |   9 +-
+ 7 files changed, 566 insertions(+), 105 deletions(-)
+
+-- 
+2.17.1
+

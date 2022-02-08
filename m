@@ -2,95 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6E194AE511
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:55:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8DC94AE51B
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:58:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231678AbiBHWzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 17:55:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55720 "EHLO
+        id S231217AbiBHW5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 17:57:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233331AbiBHWy7 (ORCPT
+        with ESMTP id S231727AbiBHW5R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 17:54:59 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CCB9AC06157A;
-        Tue,  8 Feb 2022 14:54:58 -0800 (PST)
-Received: from [192.168.1.17] (unknown [192.182.151.181])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 56ABC20B90DE;
-        Tue,  8 Feb 2022 14:54:58 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 56ABC20B90DE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1644360898;
-        bh=PXDFHmo+Dn60GWarEPhOD+A65Emq1lrbDy0sHhKFVXI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=qpedj7YILdoUCnUlRWICdS3/lYz+s1X3wnab+qIx5QXDN8EZqA40xWZ5s4hLIwANT
-         ZI9ZWYjL8hNCkpcPHdK8IoAIuuAsay7rdIimQ/RdC6XRR4yvXu0TYqU/A6W14FNzI1
-         nJEtNEeyB2tc+iunwH4GFgFEb5YgMPGNKa+ClJIU=
-Message-ID: <a4a00a29-89f8-5f42-0a7f-668e6b68f5d4@linux.microsoft.com>
-Date:   Tue, 8 Feb 2022 14:54:57 -0800
+        Tue, 8 Feb 2022 17:57:17 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 337CFC061576
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 14:57:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644361035; x=1675897035;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=K4jE4Xz4TPAezzSkAV1LgHsvIXgAVLU7xov1ZSlNkyo=;
+  b=OUxfSD1tmQtdxKDIlJwsFbUJYtz93v9KTUWNXgqhZYgZVqMsbI+yvxYm
+   qOJFxmGz7YLIkjL2nIIHe85k8yOIyv82SXyxA1GSxHyQxfoTiT72Et+NB
+   IpZMXbMy9FY09JHPnpuuEmngo66QbWpkzKn7TkdF3zJLa+S0/18qoSgRj
+   a7qYj0VCNkVzp59oJP3MBUoxKnnqEEUL/YIjTlwjaf81EUWUlsSVUuZTj
+   nNzEn0n++zNLlLuGWgrG5RavYnOVgGm6kRkRS48pFiBQI7bdJ5sBDW2U/
+   fbAPJWjrpIeG1s1JybwkrrlOwAYaGPItA/hd6QhwxiTikfHnDDBu9l38h
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="229041989"
+X-IronPort-AV: E=Sophos;i="5.88,354,1635231600"; 
+   d="scan'208";a="229041989"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 14:57:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,354,1635231600"; 
+   d="scan'208";a="585355573"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 08 Feb 2022 14:57:13 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nHZQ9-0000se-8b; Tue, 08 Feb 2022 22:57:13 +0000
+Date:   Wed, 09 Feb 2022 06:56:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/cpu] BUILD SUCCESS
+ fa31a4d669bd471e9510db1abf9b91e1a6be6ff7
+Message-ID: <6202f515./zPVag/LkWrlw4P4%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v2 19/24] drivers: hv: dxgkrnl: Simple IOCTLs LX_DXESCAPE,
- LX_DXMARKDEVICEASERROR, LX_DXQUERYSTATISTICS, LX_DXQUERYCLOCKCALIBRATION
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, spronovo@microsoft.com
-References: <cover.1644025661.git.iourit@linux.microsoft.com>
- <07c352a82707304cc5836313b97dfd97be8c7354.1644025661.git.iourit@linux.microsoft.com>
- <Yf41lZtUntrb8V7Z@kroah.com>
-From:   Iouri Tarassov <iourit@linux.microsoft.com>
-In-Reply-To: <Yf41lZtUntrb8V7Z@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/cpu
+branch HEAD: fa31a4d669bd471e9510db1abf9b91e1a6be6ff7  x86/cpufeatures: Put the AMX macros in the word 18 block
 
-On 2/5/2022 12:30 AM, Greg KH wrote:
-> On Fri, Feb 04, 2022 at 06:34:17PM -0800, Iouri Tarassov wrote:
->
-> >       on the host.
-> > 
-> >     - LX_DXQUERYCLOCKCALIBRATION
-> >       The IOCTL queries clock from the compute device.
->
-> Why is this not broken up into one-patch-per-ioctl like I asked?
->
-Hi Greg,
+elapsed time: 729m
 
-There is an article, which asks not to submit too many patches at once:
-Submitting patches: the essential guide to getting your code into the 
-kernel — The Linux Kernel documentation 
-<https://www.kernel.org/doc/html/latest/process/submitting-patches.html><https://www.kernel.org/doc/html/latest/process/submitting-patches.html>
+configs tested: 124
+configs skipped: 4
 
-NO!!!! No more huge patch bombs 
-to<https://www.kernel.org/doc/html/latest/process/submitting-patches.html>linux-kernel@vger.kernel.org 
-<mailto:linux-kernel%40vger.kernel.org>people!
-<https://www.kernel.org/doc/html/latest/process/submitting-patches.html>
-    <https://www.kernel.org/doc/html/latest/process/submitting-patches.html>
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-    <
-    <https://www.kernel.org/doc/html/latest/process/submitting-patches.html>https://lore.kernel.org/r/20050711.125305.08322243.davem@davemloft.net
-    <https://lore.kernel.org/r/20050711.125305.08322243.davem@davemloft.net>>
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                          randconfig-c001
+powerpc                    sam440ep_defconfig
+arm                         cm_x300_defconfig
+h8300                            alldefconfig
+sh                          sdk7780_defconfig
+sh                         apsh4a3a_defconfig
+ia64                             alldefconfig
+powerpc                 mpc837x_rdb_defconfig
+sh                          rsk7264_defconfig
+mips                  decstation_64_defconfig
+sh                           se7750_defconfig
+openrisc                         alldefconfig
+sparc                       sparc64_defconfig
+m68k                        m5272c3_defconfig
+powerpc                        warp_defconfig
+alpha                               defconfig
+mips                         cobalt_defconfig
+mips                     decstation_defconfig
+sh                               j2_defconfig
+sh                           se7712_defconfig
+arm                        mini2440_defconfig
+arm                          iop32x_defconfig
+arm                      jornada720_defconfig
+powerpc                     tqm8541_defconfig
+mips                      fuloong2e_defconfig
+mips                        bcm47xx_defconfig
+xtensa                  nommu_kc705_defconfig
+parisc                           alldefconfig
+m68k                        m5407c3_defconfig
+powerpc                     tqm8548_defconfig
+sh                           se7780_defconfig
+arm                         axm55xx_defconfig
+powerpc                  storcenter_defconfig
+arm                         assabet_defconfig
+sh                           se7343_defconfig
+mips                 decstation_r4k_defconfig
+arm                  randconfig-c002-20220208
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                                defconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+csky                                defconfig
+nios2                            allyesconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a002
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+x86_64                        randconfig-a004
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+riscv                          rv32_defconfig
+riscv                               defconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+x86_64                              defconfig
 
-This is confusing as you are requesting more patches. What options do I 
-have?
-- should I remove linux-kernel@vger.kernel.org until you are happy with 
-the review?
-- can I submit a small number of patches for a non fully functional 
-driver and submit the next portion after they are reviewed and accepted?
+clang tested configs:
+riscv                randconfig-c006-20220208
+x86_64                        randconfig-c007
+powerpc              randconfig-c003-20220208
+mips                 randconfig-c004-20220208
+arm                  randconfig-c002-20220208
+mips                        qi_lb60_defconfig
+arm                          ixp4xx_defconfig
+powerpc                   bluestone_defconfig
+powerpc                          allyesconfig
+arm                          ep93xx_defconfig
+mips                      bmips_stb_defconfig
+arm                        spear3xx_defconfig
+mips                  cavium_octeon_defconfig
+powerpc                     kmeter1_defconfig
+arm                         orion5x_defconfig
+arm                         hackkit_defconfig
+powerpc                     mpc512x_defconfig
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+i386                          randconfig-a004
+i386                          randconfig-a002
+i386                          randconfig-a006
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a015
+hexagon              randconfig-r045-20220208
+hexagon              randconfig-r041-20220208
+riscv                randconfig-r042-20220208
 
-Thanks
-Iouri
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

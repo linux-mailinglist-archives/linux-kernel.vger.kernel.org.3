@@ -2,73 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8E4B4AD147
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 06:53:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 954414AD14D
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 06:56:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243218AbiBHFwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 00:52:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50396 "EHLO
+        id S245171AbiBHF4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 00:56:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241616AbiBHFwD (ORCPT
+        with ESMTP id S233686AbiBHF4r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 00:52:03 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CE44C0401ED;
-        Mon,  7 Feb 2022 21:52:03 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id u130so17068011pfc.2;
-        Mon, 07 Feb 2022 21:52:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ZLuzhS9mpAsa68IzrkcFELBJbuL/U6yaQdmHB+sIbmQ=;
-        b=pJ5k9u7DsQhT4m3WLMULPqmPvLDCOPemnJy+LVyt6UblDhM3h+9ChipQWwkxML/qmL
-         qIcROrJ1tGf4Rwd0i3idG0eGzmhkYgI4I8m/JlfHflITQnaDcv8+xbQdXM0gWTr3HpxK
-         h1AkXmEHQOgpUjUaV0PsFuUMwCw6bkA0XMu2N6FfobRYE+VKAtyApH9Fv7jE4lGY+EOX
-         byXzhqzEUVoxGJpFelZMOQp/SJ/nM6nFv7tc8eGcVLax9/silgoJJ7UXwczEhsMeyaZW
-         8+TvU2SCcA0YwWXtI8pOEoQr0JhwKJ5UOXpvKdD6NtPbCrm7dFH5DJBqBhIGRW1RKqtk
-         rqHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ZLuzhS9mpAsa68IzrkcFELBJbuL/U6yaQdmHB+sIbmQ=;
-        b=0zISPWDPY3hAeX0vYi75TJ+gbjOFVD7z5KdDWMMYul2F1Q9fg67doF3HgQtTmwlrO0
-         C6dAF4mc753et/OBpaQDMxlmp7JB7fPd9NyUI25ty0mr1mzdKe+B6wtq1Kh/ZVvUV0Yu
-         Kvx6JRxINv/2UQmn85GxQvvg1iNNqf1BbTTlC0pWApzDdDJFDOde5Hp77p1LJzbwleZ6
-         Ee7ZlT4TAkg3dhG/EhA5N1d78rB9LzMbxP+9uI4Hl3uSpaMPvtxcgU6WexPphktQavf4
-         9qpPyNJy3Sc3NaSxIN1qA3m2QR+wD5JkCrttsQPZ86o48xW8+7s5k2IkLfjttyi/g8+g
-         psLQ==
-X-Gm-Message-State: AOAM5318FLwUTjEu5YjgFDWTtJRrZZrnM0sWOVuabQxJGKiPXfkjEHZC
-        /o05P3u//JC9Nrr/uyV9ePw=
-X-Google-Smtp-Source: ABdhPJw/qE/ac6I/582HmyblUw3dJARRiZ5C8iGiN7CAokxqsV9kIAnmQMwIT5uMXuvibt0EYldZ0g==
-X-Received: by 2002:a05:6a00:1709:: with SMTP id h9mr2786398pfc.23.1644299522547;
-        Mon, 07 Feb 2022 21:52:02 -0800 (PST)
-Received: from google.com ([2620:15c:202:201:7164:d581:d7ee:53bb])
-        by smtp.gmail.com with ESMTPSA id gb5sm1273066pjb.16.2022.02.07.21.52.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 21:52:01 -0800 (PST)
-Date:   Mon, 7 Feb 2022 21:51:59 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Mattijs Korpershoek <mkorpershoek@baylibre.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Fabien Parent <fparent@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 3/4] Input: mtk-pmic-keys - add support for MT6358
-Message-ID: <YgIE/806gDmRJYCn@google.com>
-References: <20220121140323.4080640-1-mkorpershoek@baylibre.com>
- <20220121140323.4080640-4-mkorpershoek@baylibre.com>
+        Tue, 8 Feb 2022 00:56:47 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D74EC0401DC;
+        Mon,  7 Feb 2022 21:56:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644299806; x=1675835806;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=/E3+XDZn+fI4PCSgbxMj37rovQtgfKS2C5AACs5xPYs=;
+  b=LcXFhytTuK1lXzVQrayUaKmUJ1JT7GIKTrP3IrPSSzSWIU0cD5Lg//fM
+   CGGzApENWyGG5nCrQ0ujueLyFxlX/S1S3JlS2wU0TAo6gjG8NnnjdTEf+
+   woAuO1dKLxIuDzTgRyi/Y7788cev91GUg3kFmJORtG4EeKuLgZ1eCbUn8
+   All7THtn60lNLN1wJ+EMkSTM/2fT8O40EZpEr37DqoDNNI7H976y6YnX0
+   IK1XDeTtx/9lTZVi3pYnQr4ezWN1DQt7Kng3er8VeT4C0QlYL7/5n+Pb3
+   N92FAiJ9eu3crH7HACbWkYSF1efoU40gz9BGhMvKbvPz3PCky6CATWU1w
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="246468556"
+X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
+   d="scan'208";a="246468556"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 21:56:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
+   d="scan'208";a="678001282"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
+  by fmsmga001.fm.intel.com with ESMTP; 07 Feb 2022 21:56:39 -0800
+Message-ID: <608192e0-136a-57fc-cb2c-3ebb42874788@linux.intel.com>
+Date:   Tue, 8 Feb 2022 13:55:29 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220121140323.4080640-4-mkorpershoek@baylibre.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Cc:     baolu.lu@linux.intel.com, Christoph Hellwig <hch@infradead.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 02/14] driver core: Add dma_cleanup callback in
+ bus_type
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jason Gunthorpe <jgg@nvidia.com>
+References: <20220104015644.2294354-1-baolu.lu@linux.intel.com>
+ <20220104015644.2294354-3-baolu.lu@linux.intel.com>
+ <YdQcpHrV7NwUv+qc@infradead.org> <20220104123911.GE2328285@nvidia.com>
+ <YdRFyXWay/bdSSem@kroah.com>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+In-Reply-To: <YdRFyXWay/bdSSem@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,13 +90,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 03:03:22PM +0100, Mattijs Korpershoek wrote:
-> MT6358 pmic keys behave differently than mt6397 and mt6323: there are
-> two interrupts per key: one for press, the other one for release (_r)
+Hi Greg,
+
+On 1/4/22 9:04 PM, Greg Kroah-Hartman wrote:
+> On Tue, Jan 04, 2022 at 08:39:11AM -0400, Jason Gunthorpe wrote:
+>> On Tue, Jan 04, 2022 at 02:08:36AM -0800, Christoph Hellwig wrote:
+>>> All these bus callouts still looks horrible and just create tons of
+>>> boilerplate code.
+>>
+>> Yes, Lu - Greg asked questions then didn't respond to their answers
+>> meaning he accepts them, you should stick with the v4 version.
 > 
-> Signed-off-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
+> Trying to catch up on emails from the break, that was way down my list
+> of things to get back to as it's messy and non-obvious.  I'll revisit it
+> again after 5.17-rc1 is out, this is too late for that merge window
+> anyway.
 
-Applied, thank you.
+In this series we want to add calls into the iommu subsystem during
+device driver binding/unbinding, so that the device DMA ownership
+conflict (kernel driver vs. user-space) could be detected and avoided
+before calling into device driver's .probe().
 
--- 
-Dmitry
+In this v5 series, we implemented this in the affected buses (amba/
+platform/fsl-mc/pci) which are known to support assigning devices to
+user space through the vfio framework currently. And more buses are
+possible to be affected in the future if they also want to support
+device assignment. Christoph commented that this will create boilerplate
+code in various bus drivers.
+
+Back to v4 of this series (please refer to below link [1]), we added
+this call in the driver core if buses have provided the dma_configure()
+callback (please refer to below link [2]).
+
+Which would you prefer, or any other suggestions? We need your guide to
+move this series ahead. Please help to suggest.
+
+[1] 
+https://lore.kernel.org/linux-iommu/20211217063708.1740334-1-baolu.lu@linux.intel.com/
+[2] 
+https://lore.kernel.org/linux-iommu/20211217063708.1740334-3-baolu.lu@linux.intel.com/
+
+Best regards,
+baolu

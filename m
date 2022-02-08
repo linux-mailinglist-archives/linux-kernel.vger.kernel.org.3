@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7D894AE119
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 19:43:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 617374AE11B
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 19:43:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385205AbiBHSml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 13:42:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37178 "EHLO
+        id S1385232AbiBHSmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 13:42:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385150AbiBHSmY (ORCPT
+        with ESMTP id S1385162AbiBHSm0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 13:42:24 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DECDBC0612BD
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 10:42:21 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id t9so81194plg.13
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 10:42:21 -0800 (PST)
+        Tue, 8 Feb 2022 13:42:26 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25001C0611DA
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 10:42:24 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id m7so57845pjk.0
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 10:42:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=OMn1l57PTLxYtwc+HI0U7xszWZxDsxBNDoAjSgoqiTo=;
-        b=o9SjEHZADcNSyr7kIMSmxDmrRyunOK4Zze+YfvQDfD0E1RbBUkq5KMXUjAJaTDzc2Q
-         QPt2sooIHMYmaeKYTQudDqJdHnxnWMWXQyerNxcun7+ba6IewVEyBBW+zzRA4P3iiERs
-         5Z1dc6Doq7qvWiLulDd8c6DELwPasB5LQS72mwm/NmQiiyc4SnDte9xpse/XUL9Va2EW
-         cGIy6R28reZmUrPUCYplNtPdYEthpfCC7kZXD4WzcdSzVAZIMGbuj+SmgoupsKn7wh35
-         QDC89kCsEazDy2uoEN/KNOCJfkerIA8UdikgAT3pFwngcECBea3ov9YPTOoWUHXhLCiB
-         xjFA==
+        bh=sJjbNLxKnq2MLHtlOHVGr5cmsCqOoxOU5S439s399rs=;
+        b=mP+JA2jOmXnN0QJajfkIUt/2J+YY274d73Tpsayrg0OPhRz09HHxfcvuU3B3mwiqnY
+         hzY0Lbl2ZeFudSA8gidRqmKkzOBsskPWAA95Zhxz8AtGg7QzLr/mkOq6pIW/roTuds6T
+         RD8W3Hr++o41fiElpLT3ULAynuFkC4d6yBwqaZvLGC9j+mi5ijc3EeXbJLUotnx9rN39
+         HARmHpca2ynWd/QIQHy20dDcT4nFTlWV+f9iNzfI+mRidIjU2ZEa1iTlRQilY+y877y9
+         i75AiuaSyy8HT1tgf4RtYq2nyiarZfbhBBea1TzXMYz7ONYn80/FFFIyDt9ns+5pFD0M
+         /PlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=OMn1l57PTLxYtwc+HI0U7xszWZxDsxBNDoAjSgoqiTo=;
-        b=duy/0twHFPo4IjEHBzMlpIbDUVrYHntcXJ1iw40y5nj0Kf2dLE9FSU2Qss4642qwJy
-         RLu64nX016Zo8F2XdhI4FoHAEJNUx8/6irEiBBLUuxdVNnz1RRkSTUgXN1vM1nj40c0O
-         z3A8LNTNSi8TSRJdKWmFqN7MpI+t1odm8ceNo4+538Kk3smgQeMb7nzWS0PSjU+51IA+
-         MVhyjPVG8803JoW4iBCb66DZl/WGWbEWmS7OQA/JrG2xob0ciH0PJaxVrbw/2AlWqNlQ
-         1Yk7AyNUUqRWwg27tDPgxY2h3sKvf2YDorMzuvRae6D/svPx4N5U7jLr40dSdgID9GBu
-         OUpA==
-X-Gm-Message-State: AOAM531qEfcmeaho2Kdyab+LgDmyC2hDjX+WdeVnhL+1MCAkfrdimkbI
-        yel3UMeFRdkf2BnCmTYhfpg=
-X-Google-Smtp-Source: ABdhPJzREdedAjALPPJFwvhAPxPktZZFP+RvyCXQKKUdPFesrs5xzql+otLdPMXYFEFYwaeis5dU2Q==
-X-Received: by 2002:a17:902:da8e:: with SMTP id j14mr6023931plx.53.1644345741417;
-        Tue, 08 Feb 2022 10:42:21 -0800 (PST)
+        bh=sJjbNLxKnq2MLHtlOHVGr5cmsCqOoxOU5S439s399rs=;
+        b=rMHwDzSk51n4xwP6B06IAZwLSnMAShJdqjh9BrDhEF+TxS5ocsSrF/dQv/Hi8a/0f1
+         AtFmY4ovbwc7za/L0731kEjlcL5PPhjoc/0/xJsF+rdiP/PduZNQzdFTXR+b902Higi4
+         dio0cD6zqb5naU03pbqr0n0T/yR00BM2KMZK88ax3W3PTreTuNdV2wongevQG0kkTOP3
+         OpJoeXmyGmxSd+VAUaEJ0yvQg8b4T2vvDZNidDt35J3dS35S5OrLDQjoOZxKOycq3qXI
+         PDvA78i6tWISa5QzA2mMOpQGsWaFK5m6iloUDbnXhX3ZFNdKqYzv3qJaQCN9jRFQ03LG
+         apoA==
+X-Gm-Message-State: AOAM5336klqFd6X4SDdhKuiFDTvh6bUYjHpH260x4OLVkH6XOg/+ujBh
+        O4evhTGIwGarbsy4ixKz4A8=
+X-Google-Smtp-Source: ABdhPJzBjlE3rwJV9oAI24HmL30J4frNkDJPBvRKrr6l9+m4t4xU0yXmOxL4eqLQrp0Uc4O4QKknBA==
+X-Received: by 2002:a17:902:e74e:: with SMTP id p14mr5639468plf.95.1644345743659;
+        Tue, 08 Feb 2022 10:42:23 -0800 (PST)
 Received: from balhae.hsd1.ca.comcast.net ([2601:647:4800:c6f0:347f:e607:176:4358])
-        by smtp.gmail.com with ESMTPSA id l14sm3517027pjf.1.2022.02.08.10.42.19
+        by smtp.gmail.com with ESMTPSA id l14sm3517027pjf.1.2022.02.08.10.42.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 10:42:20 -0800 (PST)
+        Tue, 08 Feb 2022 10:42:23 -0800 (PST)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Peter Zijlstra <peterz@infradead.org>,
@@ -60,21 +60,25 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Byungchul Park <byungchul.park@lge.com>,
         "Paul E. McKenney" <paul.mckenney@linaro.org>,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Radoslaw Burny <rburny@google.com>, Tejun Heo <tj@kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-Subject: [PATCH 04/12] workqueue: Protect lockdep functions with #ifdef
-Date:   Tue,  8 Feb 2022 10:42:00 -0800
-Message-Id: <20220208184208.79303-5-namhyung@kernel.org>
+        Radoslaw Burny <rburny@google.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        intel-gfx@lists.freedesktop.org
+Subject: [PATCH 05/12] drm/i915: Protect lockdep functions with #ifdef
+Date:   Tue,  8 Feb 2022 10:42:01 -0800
+Message-Id: <20220208184208.79303-6-namhyung@kernel.org>
 X-Mailer: git-send-email 2.35.0.263.gb82422642f-goog
 In-Reply-To: <20220208184208.79303-1-namhyung@kernel.org>
 References: <20220208184208.79303-1-namhyung@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -86,82 +90,32 @@ functions without enabling CONFIG_LOCKDEP actually.  The existing code
 assumes those functions will be removed by the preprocessor but it's
 not the case anymore.  Let's protect the code with #ifdef's explicitly.
 
-Cc: Tejun Heo <tj@kernel.org>
-Cc: Lai Jiangshan <jiangshanlai@gmail.com>
+Cc: Jani Nikula <jani.nikula@linux.intel.com>
+Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
+Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc: intel-gfx@lists.freedesktop.org
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- kernel/workqueue.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ drivers/gpu/drm/i915/intel_wakeref.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-index 33f1106b4f99..405e27385f74 100644
---- a/kernel/workqueue.c
-+++ b/kernel/workqueue.c
-@@ -2279,8 +2279,11 @@ __acquires(&pool->lock)
+diff --git a/drivers/gpu/drm/i915/intel_wakeref.c b/drivers/gpu/drm/i915/intel_wakeref.c
+index dfd87d082218..6e4b8d036283 100644
+--- a/drivers/gpu/drm/i915/intel_wakeref.c
++++ b/drivers/gpu/drm/i915/intel_wakeref.c
+@@ -106,8 +106,11 @@ void __intel_wakeref_init(struct intel_wakeref *wf,
+ 	wf->wakeref = 0;
  
- 	raw_spin_unlock_irq(&pool->lock);
- 
-+#ifdef CONFIG_LOCKDEP
- 	lock_map_acquire(&pwq->wq->lockdep_map);
- 	lock_map_acquire(&lockdep_map);
-+#endif
-+
- 	/*
- 	 * Strictly speaking we should mark the invariant state without holding
- 	 * any locks, that is, before these two lock_map_acquire()'s.
-@@ -2310,8 +2313,11 @@ __acquires(&pool->lock)
- 	 * point will only record its address.
- 	 */
- 	trace_workqueue_execute_end(work, worker->current_func);
+ 	INIT_DELAYED_WORK(&wf->work, __intel_wakeref_put_work);
 +
 +#ifdef CONFIG_LOCKDEP
- 	lock_map_release(&lockdep_map);
- 	lock_map_release(&pwq->wq->lockdep_map);
+ 	lockdep_init_map(&wf->work.work.lockdep_map,
+ 			 "wakeref.work", &key->work, 0);
 +#endif
+ }
  
- 	if (unlikely(in_atomic() || lockdep_depth(current) > 0)) {
- 		pr_err("BUG: workqueue leaked lock or atomic: %s/0x%08x/%d\n"
-@@ -2824,8 +2830,10 @@ void flush_workqueue(struct workqueue_struct *wq)
- 	if (WARN_ON(!wq_online))
- 		return;
- 
-+#ifdef CONFIG_LOCKDEP
- 	lock_map_acquire(&wq->lockdep_map);
- 	lock_map_release(&wq->lockdep_map);
-+#endif
- 
- 	mutex_lock(&wq->mutex);
- 
-@@ -3052,6 +3060,7 @@ static bool start_flush_work(struct work_struct *work, struct wq_barrier *barr,
- 	insert_wq_barrier(pwq, barr, work, worker);
- 	raw_spin_unlock_irq(&pool->lock);
- 
-+#ifdef CONFIG_LOCKDEP
- 	/*
- 	 * Force a lock recursion deadlock when using flush_work() inside a
- 	 * single-threaded or rescuer equipped workqueue.
-@@ -3066,6 +3075,8 @@ static bool start_flush_work(struct work_struct *work, struct wq_barrier *barr,
- 		lock_map_acquire(&pwq->wq->lockdep_map);
- 		lock_map_release(&pwq->wq->lockdep_map);
- 	}
-+#endif
-+
- 	rcu_read_unlock();
- 	return true;
- already_gone:
-@@ -3084,10 +3095,12 @@ static bool __flush_work(struct work_struct *work, bool from_cancel)
- 	if (WARN_ON(!work->func))
- 		return false;
- 
-+#ifdef CONFIG_LOCKDEP
- 	if (!from_cancel) {
- 		lock_map_acquire(&work->lockdep_map);
- 		lock_map_release(&work->lockdep_map);
- 	}
-+#endif
- 
- 	if (start_flush_work(work, &barr, from_cancel)) {
- 		wait_for_completion(&barr.done);
+ int intel_wakeref_wait_for_idle(struct intel_wakeref *wf)
 -- 
 2.35.0.263.gb82422642f-goog
 

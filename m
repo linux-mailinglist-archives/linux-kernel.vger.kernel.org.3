@@ -2,138 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB1144AD975
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 14:18:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D2D84AD99B
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 14:22:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348942AbiBHNS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 08:18:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34976 "EHLO
+        id S1358273AbiBHNVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 08:21:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376366AbiBHM5u (ORCPT
+        with ESMTP id S230256AbiBHNA4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 07:57:50 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2056.outbound.protection.outlook.com [40.107.244.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603F0C03FEC0
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 04:57:48 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EAbVY9/VIjy8GFKeNRbHuAAJcf1wEFZc52GKxOXXqENQe9fbVs0Vl4S3ADE+9w+XlHPZq7yE31CdHFfqjKi+4/UVeTwPss5RNhu0GqzEPIVw9yj/o8CfMMh6PrPcaz4l8/GSqLrwdRCdwPnd82HcEY2mOKiPuMtJJYxmmWu2bjSFXdfFF1/taXmnlc+Q8oFU2Qa0qcFIGsz9Hok1OAUuovrEUcF78hIcr5h0FDZ58XpUqP0mzl3XTJnb24rMzNlSXi81BJgEL5jCm+fcYn6ks5SBZWquw58CiIT8GnNs796A0Y/KJE9UUlcwTxh4LP4pLmjTT+jRsPYa6fu7lWdkeA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2ztjqr1QYyqqbTkuQaTkAxMFfubmfc6Z5cJXFi20Exw=;
- b=ge6y/wQLygDiJRlfCqmVo3FSJi6vSdZ3fj1j6JFnbe4R54LSadi/yKrReBcBRanHnOU4ydkZ1Qlm3T6eXgAdQ68SXkRUth4o0HT0aspT3FOmjd5s/LEpbU7PT+ALNXfHeSC/u7WIdu6lpXJlNfQgFD++V31XqwHkXEJfInj83kJwNwQPraw0glWEDnD44zNNCqBUb0gt7VPJHBhsCkzqAu2f7fasvc/L+9I/grkzxa0zaMSGYal5ObT4IzCf7vaxdRKMW5Z04eV/jealfUwyNYzNJgkxcOBYTE6GgnkUfWHCjSDoFHxZXGNGLhx0EXYrNEQfY/q0v+SxNHVNzVOgmA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=bootlin.com smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
+        Tue, 8 Feb 2022 08:00:56 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F41C03FEC0
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 05:00:55 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id p15so52040002ejc.7
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 05:00:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2ztjqr1QYyqqbTkuQaTkAxMFfubmfc6Z5cJXFi20Exw=;
- b=HH0CUwYhfnJx0JjGgHzZM6DyvZVzw/lW2aSNtuhfxjdmoOKVXZk50l64MwssONmewYLjAkZdnJG1iQ5CtwDyYBD8FlKBj98tF76M8KzcP2lxmfGh5tqh1/JjMUA8R+IVvED7sXEj4vamRR1DDILWSA33+5+o/ujzkOuX+2YjEQM=
-Received: from BN9PR03CA0519.namprd03.prod.outlook.com (2603:10b6:408:131::14)
- by SJ0PR02MB7744.namprd02.prod.outlook.com (2603:10b6:a03:31b::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Tue, 8 Feb
- 2022 12:57:46 +0000
-Received: from BN1NAM02FT005.eop-nam02.prod.protection.outlook.com
- (2603:10b6:408:131:cafe::17) by BN9PR03CA0519.outlook.office365.com
- (2603:10b6:408:131::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12 via Frontend
- Transport; Tue, 8 Feb 2022 12:57:46 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- BN1NAM02FT005.mail.protection.outlook.com (10.13.2.124) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4951.12 via Frontend Transport; Tue, 8 Feb 2022 12:57:46 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Tue, 8 Feb 2022 04:57:43 -0800
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Tue, 8 Feb 2022 04:57:43 -0800
-Envelope-to: git@xilinx.com,
- miquel.raynal@bootlin.com,
- vigneshr@ti.com,
- richard@nod.at,
- linux-mtd@lists.infradead.org,
- linux-kernel@vger.kernel.org
-Received: from [10.140.6.18] (port=57436 helo=xhdlakshmis40.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <amit.kumar-mahapatra@xilinx.com>)
-        id 1nHQ3z-0007s6-DJ; Tue, 08 Feb 2022 04:57:43 -0800
-From:   Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
-To:     <miquel.raynal@bootlin.com>, <vigneshr@ti.com>
-CC:     <richard@nod.at>, <linux-mtd@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <git@xilinx.com>,
-        Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
-Subject: [PATCH] mtd: rawnand: pl353: Set the nand chip node as the flash node
-Date:   Tue, 8 Feb 2022 18:27:38 +0530
-Message-ID: <20220208125738.32162-1-amit.kumar-mahapatra@xilinx.com>
-X-Mailer: git-send-email 2.17.1
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=sgE/xQ/+9cclDjXn3p9Poq5b+nUiXr8NosRhKU1WPOI=;
+        b=u0NGyojcfUrrXm7SA9UB6FvjZCVTK2c3+k5JX8hnf13T0wAr7bHay4EuWIGxlqc7ht
+         URWuXbXGijtB2CErJs54bRz+VolKQ5aI7p43JPRRALiy2RBrGmRD07kYrmVIPqkN5b3B
+         qNVBR2AZlI4KTqy7Zyjsw7P3f9Tj6tNVhg2zZsQgUdWXOuUTyA8Cuv9UfzQOOGNUKap5
+         QHJ3coUKIzh13R9l5RWmisTrOhGrpst/lqjT5tf8Wpqy5wSALdEJNIyMJoYkrOjLBhA8
+         gAq0kwPTEbUNFLUTiCVxLit9RYIbDVVLXvceQWiAE/lHjj51dKDFtVvZrgnsqJxDTHxb
+         tZmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=sgE/xQ/+9cclDjXn3p9Poq5b+nUiXr8NosRhKU1WPOI=;
+        b=fpaDPdXbxDNQvqUuKomBcHz9TNp+XwgUxk8aI/LXhCFDtfQlsHshTTellab9Bqasbw
+         XitAe68XJJDwFuWDlKBieTvNVclpcrp+WTiEMd5nTJ25GYad6jUf8jaEo6yP1e7ODEp7
+         V4CRSzrp/0a+dAVyogNBx/l+nmClCeJyY3TmHLof9HMBvJs9ftKrpp3+yf/GdgTn/S91
+         x5x069pINNgn1nyDGAf1riMedr9EN4HOJAblfnW76m75L78JZd/VQ1G6d4yiLX3/XLAg
+         jXp149EuE0wCjSHCH16fvoqzn947Xt4iForV2EEqSeddrcOnvG2AzkERBPRx2FN4ViJN
+         n9DQ==
+X-Gm-Message-State: AOAM530TPRkEwb3YfzhLJ14GLgIe0Nhj5dwyfTEmQUQx6xsGVLNukxX9
+        GesoN2Bf59lnpz63tnogXPMyPg==
+X-Google-Smtp-Source: ABdhPJx0Xa0/oSNN61iMZmiZDaLdK5fU7sB6YAOngEbNBgD+TUspwhEFssy+nEbHiA9adB0tdhR3eQ==
+X-Received: by 2002:a17:907:6d1e:: with SMTP id sa30mr2000503ejc.24.1644325253383;
+        Tue, 08 Feb 2022 05:00:53 -0800 (PST)
+Received: from leoy-ThinkPad-X240s ([104.245.96.65])
+        by smtp.gmail.com with ESMTPSA id z2sm3032818ejr.68.2022.02.08.05.00.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 05:00:52 -0800 (PST)
+Date:   Tue, 8 Feb 2022 21:00:47 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     German Gomez <german.gomez@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        will@kernel.org, mark.rutland@arm.com, james.clark@arm.com
+Subject: Re: [RFC PATCH 1/2] perf: arm_spe: Fix consistency of PMSCR register
+ bit CX
+Message-ID: <20220208130047.GA273989@leoy-ThinkPad-X240s>
+References: <20220117124432.3119132-1-german.gomez@arm.com>
+ <20220117124432.3119132-2-german.gomez@arm.com>
+ <20220205153940.GB391033@leoy-ThinkPad-X240s>
+ <4d5951ee-d7d2-1e76-eb24-5f3c46d1662c@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f2d1af60-3186-4359-d04c-08d9eb029a67
-X-MS-TrafficTypeDiagnostic: SJ0PR02MB7744:EE_
-X-Microsoft-Antispam-PRVS: <SJ0PR02MB774424A692222F32EF701CACBA2D9@SJ0PR02MB7744.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:2512;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: v1jT5mKBnbNQbv9wAvK3TLnBnjKjeL0i12+SAspVCTyiN/ujw3g+9Q5WPS3Dg+5sArYbY8l4Gm4d9g7TGFSsYe145v96UEyZMIHDUMqjkKUDiYIPTUJb/7uaIJ3J2f0v5YyWSxeczHtDqqJ+mh8yJZBv3kY3inHIsdJE7sIH0rMJ9KT6zYsZtU3BmPkiFnhxm5okLTq4YMm7cZI3JVVz1qCnKOM/XzVH9DyN3UwQ+DoyvANRwuizuenkOvoFQOeo6IVE49QD6TIIBlpgv20mLGMWl50wIBm3d76ZDPCG2Ao8884Ajn2rmPH+k2dZTEm22lnnaTd9eyeRq+eKyrTt5sOsMT1ecACwZaDXHx/X9Ajb9Irmrwzqsh0r3NE0f1G/0BnINoW70FiAXkRI8VWlMFCduwsM4XnYJ3cT5KowmiYlQg/SwhViDRbF2N8kWSUFviJ2wZAdYPYN+xMpFsOYAWOI/p1eeZ9BhUS7ghC2+LrYBu5vU+plMWPcRg6oKBKiuoH1t3h7cXBNSAmIWhCk/pJEhXz7wf/tdmZu/iEDW1IdWmtZG/C4GjkUhCGAl/QCFxKG1keQjf6a227aWdIcswgxSSg53BLmwEyMTD2m4LHzWbOt62fhe0ToaZljCrlxULmQjgS0Xw8FKcpTUkm8KHdvelAm658dMbbRTG1omGHhCyw+iHPhQne1aMWHvUOATHFtOYv+9TiM5pJUkkrV/A==
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(40460700003)(82310400004)(6666004)(7696005)(7636003)(36860700001)(2906002)(47076005)(508600001)(2616005)(83380400001)(186003)(9786002)(356005)(5660300002)(336012)(426003)(26005)(8936002)(4326008)(110136005)(70206006)(36756003)(54906003)(107886003)(316002)(70586007)(8676002)(1076003)(102446001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Feb 2022 12:57:46.1186
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f2d1af60-3186-4359-d04c-08d9eb029a67
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT005.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR02MB7744
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4d5951ee-d7d2-1e76-eb24-5f3c46d1662c@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In devicetree the flash information is embedded within nand chip node,
-so during nand chip initialization the nand chip node should be passed
-to nand_set_flash_node() api, instead of nand controller node.
+Hi German,
 
-Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
----
-BRANCH: nand/next
----
- drivers/mtd/nand/raw/pl35x-nand-controller.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Mon, Feb 07, 2022 at 12:06:14PM +0000, German Gomez wrote:
 
-diff --git a/drivers/mtd/nand/raw/pl35x-nand-controller.c b/drivers/mtd/nand/raw/pl35x-nand-controller.c
-index 8a91e069ee2e..3c6f6aff649f 100644
---- a/drivers/mtd/nand/raw/pl35x-nand-controller.c
-+++ b/drivers/mtd/nand/raw/pl35x-nand-controller.c
-@@ -1062,7 +1062,7 @@ static int pl35x_nand_chip_init(struct pl35x_nandc *nfc,
- 	chip->controller = &nfc->controller;
- 	mtd = nand_to_mtd(chip);
- 	mtd->dev.parent = nfc->dev;
--	nand_set_flash_node(chip, nfc->dev->of_node);
-+	nand_set_flash_node(chip, np);
- 	if (!mtd->name) {
- 		mtd->name = devm_kasprintf(nfc->dev, GFP_KERNEL,
- 					   "%s", PL35X_NANDC_DRIVER_NAME);
--- 
-2.17.1
+[...]
 
+> > I reviewed the code and also traced the backtrace for the function
+> > arm_spe_pmu_start(), I can confirm that every time perf session will
+> > execute below flow:
+> >
+> >   evlist__enable()
+> >     __evlist__enable()
+> >       evlist__for_each_cpu() {  -> call affinity__set()
+> >         evsel__enable_cpu()
+> >       }
+> >
+> > We can see the macro evlist__for_each_cpu() will extend to invoke
+> > evlist__cpu_begin() and affinity__set(); affinity__set() will set CPU
+> > affinity to the target CPU, thus perf process will firstly migrate to
+> > the target CPU and enable event on the target CPU.  This means perf
+> > will not send remote IPI and it directly runs on target CPU, and the
+> > dd program will not interfere capabilities for perf session.
+>
+> Thank you for looking at this,
+> 
+> I re-tested on the N1SDP (previously I was using a graviton2 instance).
+> I had to adjust the command slightly with "-m,2" to get it consistently
+> this time:
+> 
+> $ taskset --cpu-list 0 sudo dd if=/dev/random of=/dev/null &
+> $ perf record -e arm_spe_0// -C0 -m,2 -- sleep 1
+> $ perf report -D | grep CONTEXT | head
+> .  0000000e:  65 b5 6e 00 00                                  CONTEXT 0x6eb5 el2
+> .  0000004e:  65 b5 6e 00 00                                  CONTEXT 0x6eb5 el2
+> .  0000008e:  65 b5 6e 00 00                                  CONTEXT 0x6eb5 el2
+> [...]
+
+Indeed!  I can reproduce the issue now.  And I can capture backtrace
+for arm_spe_pmu_start() with below commands:
+
+# cd /home/leoy/linux/tools/perf
+# ./perf probe --add "arm_spe_pmu_start" -s /home/leoy/linux/ -k /home/leoy/linux/vmlinux
+# echo 1 > /sys/kernel/debug/tracing/events/probe/arm_spe_pmu_start/enable
+# echo stacktrace > /sys/kernel/debug/tracing/events/probe/arm_spe_pmu_start/trigger
+
+... run your commands with non-root user ...
+
+# cat /sys/kernel/debug/tracing/trace
+
+             dd-7697    [000] d.h2.   506.068700: arm_spe_pmu_start: (arm_spe_pmu_start+0x8/0xe0)
+             dd-7697    [000] d.h3.   506.068701: <stack trace>
+=> kprobe_dispatcher
+=> kprobe_breakpoint_handler
+=> call_break_hook
+=> brk_handler
+=> do_debug_exception
+=> el1_dbg
+=> el1h_64_sync_handler
+=> el1h_64_sync
+=> arm_spe_pmu_start
+=> event_sched_in.isra.0
+=> merge_sched_in
+=> visit_groups_merge.constprop.0
+=> ctx_sched_in
+=> perf_event_sched_in
+=> ctx_resched
+=> __perf_event_enable
+=> event_function
+=> remote_function
+=> flush_smp_call_function_queue
+=> generic_smp_call_function_single_interrupt
+=> ipi_handler
+=> handle_percpu_devid_irq
+=> generic_handle_domain_irq
+=> gic_handle_irq
+=> call_on_irq_stack
+=> do_interrupt_handler
+=> el1_interrupt
+=> el1h_64_irq_handler
+=> el1h_64_irq
+=> _raw_spin_unlock_irqrestore
+=> urandom_read_nowarn.isra.0
+=> random_read
+=> vfs_read
+=> ksys_read
+=> __arm64_sys_read
+=> invoke_syscall
+=> el0_svc_common.constprop.0
+=> do_el0_svc
+=> el0_svc
+=> el0t_64_sync_handler
+=> el0t_64_sync
+
+The backtrace clearly shows the function arm_spe_pmu_start() is
+invoked in the 'dd' process (dd-7697); the flow is:
+- perf program sends IPI to CPU0;
+- 'dd' process is running on CPU0 and it's interrupted to handle IPI;
+- 'dd' process has root capabilities, so it will enable context
+  tracing for non-root perf session.
+
+> >> One way to fix this is by caching the value of the CX bit during the
+> >> initialization of the PMU event, so that it remains consistent for the
+> >> duration of the session.
+> >>
+> >> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/perf/arm_spe_pmu.c?h=v5.16#n275
+> >> [2]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/perf/arm_spe_pmu.c?h=v5.16#n713
+> >> [3]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/perf/arm_spe_pmu.c?h=v5.16#n751
+> >>
+> >> Signed-off-by: German Gomez <german.gomez@arm.com>
+> >> ---
+> >>  drivers/perf/arm_spe_pmu.c | 6 ++++--
+> >>  1 file changed, 4 insertions(+), 2 deletions(-)
+> >>
+> >> diff --git a/drivers/perf/arm_spe_pmu.c b/drivers/perf/arm_spe_pmu.c
+> >> index d44bcc29d..8515bf85c 100644
+> >> --- a/drivers/perf/arm_spe_pmu.c
+> >> +++ b/drivers/perf/arm_spe_pmu.c
+> >> @@ -57,6 +57,7 @@ struct arm_spe_pmu {
+> >>  	u16					pmsver;
+> >>  	u16					min_period;
+> >>  	u16					counter_sz;
+> >> +	bool					pmscr_cx;
+
+So the patch makes sense to me.  Just a minor comment:
+
+Here we can define a u64 for recording pmscr value rather than a
+bool value.
+
+struct arm_spe_pmu {
+    ...
+    u64 pmscr;
+};
+
+> >>  
+> >>  #define SPE_PMU_FEAT_FILT_EVT			(1UL << 0)
+> >>  #define SPE_PMU_FEAT_FILT_TYP			(1UL << 1)
+> >> @@ -260,6 +261,7 @@ static const struct attribute_group *arm_spe_pmu_attr_groups[] = {
+> >>  static u64 arm_spe_event_to_pmscr(struct perf_event *event)
+> >>  {
+> >>  	struct perf_event_attr *attr = &event->attr;
+> >> +	struct arm_spe_pmu *spe_pmu = to_spe_pmu(event->pmu);
+> >>  	u64 reg = 0;
+> >>  
+> >>  	reg |= ATTR_CFG_GET_FLD(attr, ts_enable) << SYS_PMSCR_EL1_TS_SHIFT;
+> >> @@ -272,7 +274,7 @@ static u64 arm_spe_event_to_pmscr(struct perf_event *event)
+> >>  	if (!attr->exclude_kernel)
+> >>  		reg |= BIT(SYS_PMSCR_EL1_E1SPE_SHIFT);
+> >>  
+> >> -	if (IS_ENABLED(CONFIG_PID_IN_CONTEXTIDR) && perfmon_capable())
+> >> +	if (IS_ENABLED(CONFIG_PID_IN_CONTEXTIDR) && spe_pmu->pmscr_cx)
+> >>  		reg |= BIT(SYS_PMSCR_EL1_CX_SHIFT);
+> >>  
+> >>  	return reg;
+> >> @@ -709,10 +711,10 @@ static int arm_spe_pmu_event_init(struct perf_event *event)
+> >>  	    !(spe_pmu->features & SPE_PMU_FEAT_FILT_LAT))
+> >>  		return -EOPNOTSUPP;
+> >>  
+> >> +	spe_pmu->pmscr_cx = perfmon_capable();
+> >>  	reg = arm_spe_event_to_pmscr(event);
+
+Thus here we can change as:
+
+  spe_pmu->pmscr = arm_spe_event_to_pmscr(event);
+
+And then in the function arm_spe_pmu_start(), we can skip calling
+arm_spe_event_to_pmscr() and directly set PMSCR register:
+
+static void arm_spe_pmu_start(struct perf_event *event, int flags)
+{
+    ...
+
+    isb();
+    write_sysreg_s(spe_pmu->pmscr, SYS_PMSCR_EL1);
+}
+
+Thanks,
+Leo
+
+> >>  	if (!perfmon_capable() &&
+> >>  	    (reg & (BIT(SYS_PMSCR_EL1_PA_SHIFT) |
+> >> -		    BIT(SYS_PMSCR_EL1_CX_SHIFT) |
+> >>  		    BIT(SYS_PMSCR_EL1_PCT_SHIFT))))
+> >>  		return -EACCES;
+> >>  
+> >> -- 
+> >> 2.25.1
+> >>

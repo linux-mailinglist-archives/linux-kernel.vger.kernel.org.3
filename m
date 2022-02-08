@@ -2,161 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 915E84AD94E
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 14:17:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 689364AD9AA
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 14:22:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239539AbiBHNRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 08:17:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57824 "EHLO
+        id S1377376AbiBHNW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 08:22:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343843AbiBHMhV (ORCPT
+        with ESMTP id S240887AbiBHMa5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 07:37:21 -0500
-X-Greylist: delayed 438 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Feb 2022 04:37:18 PST
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3308C03FECA
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 04:37:18 -0800 (PST)
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20220208122956euoutp017da114aec742da591306d358dcdb095b~Rz2qsJNA80229102291euoutp01q
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 12:29:56 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20220208122956euoutp017da114aec742da591306d358dcdb095b~Rz2qsJNA80229102291euoutp01q
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1644323396;
-        bh=jZc97aeAsEvvpN9tAfHxmY3tUD4xtDYsP0SBRSqq3ZI=;
-        h=Date:Subject:To:From:In-Reply-To:References:From;
-        b=jp58hwoamFlZrbE/mS5xM9RMCWW/gMVd4K0utVIrhY8xfKEwVZH/gskWSNPPAcsMn
-         jWRiBBi/D1bFVnW/FBcCOEpRV2xQn/UfwsJpDX+6+XxM1Nsov5aOsiKvM8I3sNSrSK
-         BEJwZMxLc1tbt06y01GHOU2DoHAtmWeZ2UWLRMIU=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20220208122955eucas1p23619f0d4cb5827cbe650eeaec7ced526~Rz2qUYoby0233702337eucas1p2t;
-        Tue,  8 Feb 2022 12:29:55 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id 0E.33.10009.34262026; Tue,  8
-        Feb 2022 12:29:55 +0000 (GMT)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220208122955eucas1p2d4e32f51224242e9ebd0bce58b9c04ca~Rz2pwxCFp2822328223eucas1p2k;
-        Tue,  8 Feb 2022 12:29:55 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220208122955eusmtrp109c71f4b9e7262f46c9594bc30fdf8d0~Rz2pvufy50537505375eusmtrp1J;
-        Tue,  8 Feb 2022 12:29:55 +0000 (GMT)
-X-AuditID: cbfec7f2-e7fff70000002719-df-620262432b31
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 0C.E7.09404.24262026; Tue,  8
-        Feb 2022 12:29:54 +0000 (GMT)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20220208122954eusmtip29a0f6f47337d4dbacc3fea2650576ed6~Rz2pN4-Zw2819028190eusmtip2F;
-        Tue,  8 Feb 2022 12:29:54 +0000 (GMT)
-Message-ID: <39f1b598-58ca-1e3d-3065-8dd692ee7c9f@samsung.com>
-Date:   Tue, 8 Feb 2022 13:29:55 +0100
+        Tue, 8 Feb 2022 07:30:57 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26DF2C03FEC0
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 04:30:56 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id j14so28396056ejy.6
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 04:30:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pyOlF6UmaaIPMj49n9I5e2YrqASqQxHSgQMcnkz9Ds4=;
+        b=IBUDla5NdRwnTD1y7ixnE9OWuHg3ICqgKArWpjAignm88vnnqODVf8RIL+vDRRZdK8
+         kyb0bO1C2pvtzynJNC7afc+k9jgk5mbQgtQ/jfgVfPPR0GCmZNHFhwKET7oodghB1RU7
+         jiKwOHaoxH1VvD6ERbTGE6q0K3ctkR/gh4iwU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=pyOlF6UmaaIPMj49n9I5e2YrqASqQxHSgQMcnkz9Ds4=;
+        b=7X/38X+Oy0GcYupliGYqr0as4VRwhrbzyZtVYOvacboQJndKq4sLlDVEjIXJ7u5kIN
+         jAlwytUYsY9NQh6Wk4YuMm3BDaQ1DQRfzV5bEsWilafP2PvKKnDCnasarD3vndK58FOp
+         kJNQ9HVaHFrIA05irfuUrji5mn/7L1BQfJSuf6TsJL6VyHW5zxcFA37SYaOg1kWjpsO0
+         azO2QN3kX0N55/SUTP4JokKmrIf+92KFk+ESxV2mx3wG09fDAjJDBnHcz28LOp3RPi6U
+         1JJe7qIo8EL4NUWVGb6C9jW8lGtXifYnZAfmNCh2o28nFDSoXdv9v6KtKbLklW18/Kkj
+         osjQ==
+X-Gm-Message-State: AOAM533Ccsy3ZOAmUh3/PnULdzQMMl1hLExNDEMFh+fnj9sFrDPxCAj0
+        P43dxbfBmMJkGqDWqjdLgmJywA==
+X-Google-Smtp-Source: ABdhPJwXYw4q1btwyGQoyQq1y6twywUuMFtmW+XmsRH9NZB9ermSewsnO3Ku4Glqh91lKOk5bYCRbQ==
+X-Received: by 2002:a17:907:a41f:: with SMTP id sg31mr3426142ejc.645.1644323454658;
+        Tue, 08 Feb 2022 04:30:54 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id m17sm5598646edr.62.2022.02.08.04.30.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 04:30:54 -0800 (PST)
+Date:   Tue, 8 Feb 2022 13:30:52 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     syzbot <syzbot+60df062e1c41940cae0f@syzkaller.appspotmail.com>
+Cc:     dri-devel@lists.freedesktop.org, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, rafael@kernel.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] WARNING in component_del
+Message-ID: <YgJifE4GcWXS9p2H@phenom.ffwll.local>
+Mail-Followup-To: syzbot <syzbot+60df062e1c41940cae0f@syzkaller.appspotmail.com>,
+        dri-devel@lists.freedesktop.org, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, rafael@kernel.org,
+        syzkaller-bugs@googlegroups.com
+References: <00000000000016f4ae05d5cec832@google.com>
+ <0000000000001e4c2e05d77cfcbb@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
-        Gecko/20100101 Thunderbird/91.5.1
-Subject: Re: [PATCH v2] regmap-irq: Use regmap_irq_update_bits instead of
- regmap_write
-Content-Language: en-US
-To:     Prasad Kumpatla <quic_pkumpatl@quicinc.com>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        'Linux Samsung SOC' <linux-samsung-soc@vger.kernel.org>
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <20220119142953.1804-1-quic_pkumpatl@quicinc.com>
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprJKsWRmVeSWpSXmKPExsWy7djPc7rOSUxJBpefSltMffiEzaJ58Xo2
-        i/PnN7BbXN41h81ixvl9TBZr/i1mtpj7ZSqzA7vHplWdbB77565h95i4p87j8ya5AJYoLpuU
-        1JzMstQifbsEroz2eQ/ZC/5wVezdvI61gfEzRxcjB4eEgInEqWcsXYxcHEICKxgldp16zgzh
-        fGGUOH9lF5TzmVHi45wLQGWcYB1v+icyQSSWM0rcXvcLqv8jo8TJ4xvZQap4Bewktp5bC2az
-        CKhILDq5gQUiLihxcuYTMFtUIEnics9xRhBbWCBCYuOh5UwgNrOAuMStJ/PBNogIbGCS+LTi
-        KliCTcBQouttFxuIzQm0oOXdV2aIBnmJ7W/ngN0qIXCEQ+Lo51/sELe6SKy51gFlC0u8Or4F
-        ypaROD25hwWioZlR4iHYqSBOD6PE5aYZjBBV1hJ3zv1iA4UTs4CmxPpd+hBhR4l7R0+yQ4KP
-        T+LGW0GII/gkJm2bzgwR5pXoaBOCqFaTmHV8HdzagxcuMUPYHhKvpq1mmsCoOAspXGYh+X8W
-        ktdmIdywgJFlFaN4amlxbnpqsWFearlecWJucWleul5yfu4mRmDqOf3v+KcdjHNffdQ7xMjE
-        wXiIUYKDWUmEV6b7f6IQb0piZVVqUX58UWlOavEhRmkOFiVx3uTMDYlCAumJJanZqakFqUUw
-        WSYOTqkGJin9pyFbLMP42bm6jGZnrPqVVRLeJMa3+/ui8w0/Fx82e1NVcfL10k3xP5bKFvRz
-        /hB84cpwpPTc6722S1wsojX694RfyGnhn121eKePe9Smq9ctIz/nvzh/0j7/h33xHzeBRedq
-        Wqxc3q3gcVj5/L1PwdvCkrRLzw/FZU2eF/HixpVAwynBM78KepywZPq4oUK/8rkr6/FJPzK+
-        skyYUi/LnKEcnijJIVbTcEkp4NST6/XLf/s+Oq38YTWbVqmmhnSJmdwDrYSLtkpmf5ti3548
-        e24Je+rj4+z91zu6HTTtf1ze0NBY9ivz067A2YG7trje1ggK7Iyfot68qOPp8uTbb4PqGeSd
-        hL5N5l2RrMRSnJFoqMVcVJwIAJEzONqsAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprPIsWRmVeSWpSXmKPExsVy+t/xe7pOSUxJBtv/mVtMffiEzaJ58Xo2
-        i/PnN7BbXN41h81ixvl9TBZr/i1mtpj7ZSqzA7vHplWdbB77565h95i4p87j8ya5AJYoPZui
-        /NKSVIWM/OISW6VoQwsjPUNLCz0jE0s9Q2PzWCsjUyV9O5uU1JzMstQifbsEvYz2eQ/ZC/5w
-        VezdvI61gfEzRxcjJ4eEgInEm/6JTF2MXBxCAksZJQ4sm8AIkZCRODmtgRXCFpb4c62LDaLo
-        PaPEoxv/2EASvAJ2ElvPrWUHsVkEVCQWndzAAhEXlDg58wmYLSqQJPFw8TuwemGBCImNh5Yz
-        gdjMAuISt57MB9ssIrCJSeLnjkNgDUICthItzb1gDWwChhJdb7vAbE6gZS3vvjJDNJtJdG3t
-        YoSw5SW2v53DPIFRcBaS3bOQ7JiFpGUWkpYFjCyrGEVSS4tz03OLjfSKE3OLS/PS9ZLzczcx
-        AmNq27GfW3Ywrnz1Ue8QIxMH4yFGCQ5mJRFeme7/iUK8KYmVValF+fFFpTmpxYcYTYEBMJFZ
-        SjQ5HxjVeSXxhmYGpoYmZpYGppZmxkrivJ4FHYlCAumJJanZqakFqUUwfUwcnFINTJmxp6Wr
-        fub3Bb1cKpKrKhb9vLkkZPXyhZWXpzL8dz6T8UVu3oxbnxNWFhVWmezZlFd8+mbvjEMffS72
-        uW5/tjRNLu2Zs+qVosudh748mJ0p+JLza+a3Hw7GbMktrkm/veOM3nJbtaTO/c5/01SuonFy
-        zX42uSmG1/1r//9eW+k8qY/b5BefzPwM456gq1lqK9we7+Zxmspq9ivkj9+xkGePX4o6bhJk
-        mbrRlT938byPDhc2dplYpRQYW0nKsb7jXOkmvebSIolmtcc3BGdflLm4JmfV3z/LUipOKmRU
-        zA5R/z5F3/Eky4NcgeD5JXcvb3DcfErpm4diLbM16/7k+ZxTU07+OFdx22BF7QnGVUosxRmJ
-        hlrMRcWJAOoX6jkyAwAA
-X-CMS-MailID: 20220208122955eucas1p2d4e32f51224242e9ebd0bce58b9c04ca
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20220208122955eucas1p2d4e32f51224242e9ebd0bce58b9c04ca
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20220208122955eucas1p2d4e32f51224242e9ebd0bce58b9c04ca
-References: <20220119142953.1804-1-quic_pkumpatl@quicinc.com>
-        <CGME20220208122955eucas1p2d4e32f51224242e9ebd0bce58b9c04ca@eucas1p2.samsung.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0000000000001e4c2e05d77cfcbb@google.com>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prasad,
+On Mon, Feb 07, 2022 at 11:51:29PM -0800, syzbot wrote:
+> syzbot has found a reproducer for the following issue on:
+> 
+> HEAD commit:    555f3d7be91a Merge tag '5.17-rc3-ksmbd-server-fixes' of gi..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=130a0c2c700000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=266de9da75c71a45
+> dashboard link: https://syzkaller.appspot.com/bug?extid=60df062e1c41940cae0f
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15880d84700000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14de0c77b00000
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+60df062e1c41940cae0f@syzkaller.appspotmail.com
 
-On 19.01.2022 15:29, Prasad Kumpatla wrote:
-> With the existing logic by using regmap_write() all the bits in
-> the register are being updated which is not expected. To update only the
-> interrupt raised bit and not tocuhing other bits, replace regmap_write()
-> with regmap_irq_update_bits().
->
-> This patch is to fix the issue observed in MBHC button press/release events.
->
-> Fixes: 3a6f0fb7b8eb ("regmap: irq: Add support to clear ack registers")
-> Signed-off-by: Prasad Kumpatla <quic_pkumpatl@quicinc.com>
+From a quick grep usb seems to have indeed gained some component code, and
+I'm not aware of any drm usb drivers using component. So I think this is
+an usb issue, not a drm one.
 
-There is something wrong with this patch. Since it landed in linux-next 
-(20220204) I get an interrupt storm on two of my test devices:
+Greg, thoughts?
+-Daniel
 
-1. ARM 32bit Exynos4412-based Trats2 ("wm8994-codec wm8994-codec: FIFO 
-error" message)
+> 
+> ------------[ cut here ]------------
+> WARNING: CPU: 0 PID: 3598 at drivers/base/component.c:767 component_del+0x40c/0x540 drivers/base/component.c:765
+> Modules linked in:
+> CPU: 0 PID: 3598 Comm: syz-executor255 Not tainted 5.17.0-rc3-syzkaller-00020-g555f3d7be91a #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> RIP: 0010:component_del+0x40c/0x540 drivers/base/component.c:767
+> Code: 00 48 39 6b 20 75 82 e8 72 b1 07 fd 48 c7 43 20 00 00 00 00 e9 70 ff ff ff e8 60 b1 07 fd 48 c7 c7 20 aa 67 8c e8 84 d4 db 04 <0f> 0b 31 ed e8 4b b1 07 fd 48 89 ef 5b 5d 41 5c 41 5d 41 5e 41 5f
+> RSP: 0018:ffffc90001aafa68 EFLAGS: 00010286
+> RAX: 0000000000000000 RBX: dffffc0000000000 RCX: ffff8880745c8000
+> RDX: 0000000000000000 RSI: 0000000000000008 RDI: ffffc90001aaf9b0
+> RBP: ffffffff8c67a9e0 R08: 0000000000000001 R09: ffffc90001aaf9b7
+> R10: fffff52000355f36 R11: 0000000000000001 R12: ffff88801dce5008
+> R13: ffffffff8a4c0dc0 R14: ffff88801dce5008 R15: ffff88801dce5000
+> FS:  0000555556461300(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007fb3739a5130 CR3: 000000001996f000 CR4: 0000000000350ef0
+> Call Trace:
+>  <TASK>
+>  usb_hub_remove_port_device+0x272/0x370 drivers/usb/core/port.c:653
+>  hub_disconnect+0x171/0x510 drivers/usb/core/hub.c:1737
+>  usb_unbind_interface+0x1d8/0x8e0 drivers/usb/core/driver.c:458
+>  __device_release_driver+0x5d7/0x700 drivers/base/dd.c:1206
+>  device_release_driver_internal drivers/base/dd.c:1237 [inline]
+>  device_release_driver+0x26/0x40 drivers/base/dd.c:1260
+>  usb_driver_release_interface+0x102/0x180 drivers/usb/core/driver.c:627
+>  proc_ioctl.part.0+0x4d6/0x560 drivers/usb/core/devio.c:2332
+>  proc_ioctl drivers/usb/core/devio.c:170 [inline]
+>  proc_ioctl_default drivers/usb/core/devio.c:2375 [inline]
+>  usbdev_do_ioctl drivers/usb/core/devio.c:2731 [inline]
+>  usbdev_ioctl+0x2b29/0x36c0 drivers/usb/core/devio.c:2791
+>  vfs_ioctl fs/ioctl.c:51 [inline]
+>  __do_sys_ioctl fs/ioctl.c:874 [inline]
+>  __se_sys_ioctl fs/ioctl.c:860 [inline]
+>  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:860
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> RIP: 0033:0x7fb3739346f9
+> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007fff3db9d808 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+> RAX: ffffffffffffffda RBX: 00007fb373978194 RCX: 00007fb3739346f9
+> RDX: 0000000020000380 RSI: 00000000c0105512 RDI: 0000000000000003
+> RBP: 0000000000000000 R08: 00007fff3db9d280 R09: 0000000000000001
+> R10: 000000000000ffff R11: 0000000000000246 R12: 00007fff3db9d81c
+> R13: 431bde82d7b634db R14: 0000000000000000 R15: 0000000000000000
+>  </TASK>
+> 
 
-2. ARM 64bit Exynos5433-based TM2e ("arizona spi1.0: Mixer dropped 
-sample" message)
-
-Definitely the interrupts are not acknowledged properly. Once I find 
-some spare time, I will check it further which regmap configuration 
-triggers the issue, but it is definitely related to this patch. 
-Reverting it on top of current linux-next fixes the issue.
-
-> ---
-> Changes Since V1:
-> -- Update commit message.
->
->   drivers/base/regmap/regmap-irq.c | 52 ++++++++++++++++++--------------
->   1 file changed, 29 insertions(+), 23 deletions(-)
->
-> ...
-
-Best regards
 -- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
-
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

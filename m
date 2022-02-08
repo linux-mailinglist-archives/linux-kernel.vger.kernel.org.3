@@ -2,68 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D27314ACF3F
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 03:54:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E3534ACF41
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 03:55:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346229AbiBHCys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 21:54:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40542 "EHLO
+        id S1346262AbiBHCzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 21:55:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346242AbiBHCyo (ORCPT
+        with ESMTP id S1346250AbiBHCzL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 21:54:44 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 394E8C0401C9;
-        Mon,  7 Feb 2022 18:54:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644288881; x=1675824881;
-  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=6IOSsvUamZzHAOJQun2LOjMi6FELRZcH68wuHsOsUKg=;
-  b=VfNoYJkEWO6vgZ/FQAljDNnbIW+fngDkwjTykJJ4vyewirdEU1NJgxpn
-   5ZjuKYCDH2TVDZkb3836EH3ZDIbJL5uLXIy6hZKEjU2Hd6ClAEPciybrM
-   LYUWnnPlurAXzZ4uMJXX1n9l/+9q1YhbcM4RAIqORTFXMwJTMN6CWfnh4
-   TuFCYM6t7uzHxQgmElb4yu3bzdgng0iAj8jbBnSOhyry2WYdqc0Frz3BG
-   YynKlcf8UNfxc4zPoy7F+qXz2R/LAyEBpD4Vybxv6n7KIBcihse3uwpCP
-   amsvKLCGhHQbQVMrwYrvgJZoofXQp8OUxT4Io1Z8ImogLb382M0jWmu5Z
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="246447942"
-X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
-   d="scan'208";a="246447942"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 18:54:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
-   d="scan'208";a="585044998"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga008.fm.intel.com with ESMTP; 07 Feb 2022 18:54:40 -0800
-Received: from cbaldes-mobl.amr.corp.intel.com (unknown [10.212.183.65])
-        by linux.intel.com (Postfix) with ESMTP id 9A693580970;
-        Mon,  7 Feb 2022 18:54:40 -0800 (PST)
-Message-ID: <d52b50f3b704280e476e60417323c98f45baf54a.camel@linux.intel.com>
-Subject: Re: [PATCH V6 1/3] platform/x86: Add Intel Software Defined Silicon
- driver
-From:   "David E. Box" <david.e.box@linux.intel.com>
-Reply-To: david.e.box@linux.intel.com
-To:     Joe Perches <joe@perches.com>, hdegoede@redhat.com,
-        gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com,
-        srinivas.pandruvada@intel.com, mgross@linux.intel.com
-Cc:     linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        Mark Gross <markgross@kernel.org>
-Date:   Mon, 07 Feb 2022 18:54:40 -0800
-In-Reply-To: <103681860759d72b1acf712eed334b1d4ef6b7d5.camel@perches.com>
-References: <20220208005444.487209-1-david.e.box@linux.intel.com>
-         <20220208005444.487209-2-david.e.box@linux.intel.com>
-         <103681860759d72b1acf712eed334b1d4ef6b7d5.camel@perches.com>
-Organization: David E. Box
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Mon, 7 Feb 2022 21:55:11 -0500
+Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CCCDC0401DC;
+        Mon,  7 Feb 2022 18:55:08 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0V3tqOcC_1644288902;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V3tqOcC_1644288902)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 08 Feb 2022 10:55:02 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     damien.lemoal@opensource.wdc.com, jejb@linux.ibm.com
+Cc:     jinpu.wang@cloud.ionos.com, martin.petersen@oracle.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next v3] scsi: pm8001: clean up some inconsistent indentin
+Date:   Tue,  8 Feb 2022 10:55:00 +0800
+Message-Id: <20220208025500.29511-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,127 +41,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-02-07 at 17:40 -0800, Joe Perches wrote:
-> On Mon, 2022-02-07 at 16:54 -0800, David E. Box wrote:
-> > Intel Software Defined Silicon (SDSi) is a post manufacturing mechanism for
-> > activating additional silicon features. Features are enabled through a
-> > license activation process.  The SDSi driver provides a per socket, sysfs
-> > attribute interface for applications to perform 3 main provisioning
-> > functions:
-> []
-> > ---
-> > V6
-> >   - Replace,
-> >               return (ret < 0) ? ret : size;
-> >     with,
-> >               if (ret)
-> >                    return ret;
-> >               return size
-> > 
-> >     Besides the style change (suggested by GKH) this fixes a klocwork
-> >     warning.
-> 
-> thanks.
-> 
-> > diff --git a/drivers/platform/x86/intel/sdsi.c
-> > b/drivers/platform/x86/intel/sdsi.c
-> 
-> []
-> 
-> > +/* SDSi mailbox operations must be performed using 64bit mov instructions
-> > */
-> > +static __always_inline void
-> > +sdsi_memcpy64_toio(u64 __iomem *to, const u64 *from, size_t count_bytes)
-> > +{
-> > +	size_t count = count_bytes / sizeof(*to);
-> > +	int i;
-> > +
-> > +	for (i = 0; i < count; i++)
-> > +		writeq(from[i], &to[i]);
-> 
-> Any chance the byte count is not a multiple of sizeof(u64) ?
+Eliminate the follow smatch warning:
+drivers/scsi/pm8001/pm8001_ctl.c:760 pm8001_update_flash() warn:
+inconsistent indenting
 
-No. The value passed to count_bytes is either u64 or rounded up to sizeof(u64).
-But I'd like to know how I could guard against accidentally passing something
-different in the future.
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
 
-Andy had suggested just adding support for 64 bit memcpy io, but I hadn't time
-to look at this.
+  Changes in v3:
+--According to Damien's suggestion
+  1) "u32 fc_len = 0;" -> "u32 fc_len;".
+  2) Add spaces around the "-" and remove the unnecessary parenthesis.
+  3) Move "fc_len = (partitionSize + HEADER_LEN) % IOCTL_BUF_SIZE;"down,
+     right above the "if" where the variable is used.
 
-> 
-> > +static __always_inline void
-> > +sdsi_memcpy64_fromio(u64 *to, const u64 __iomem *from, size_t count_bytes)
-> > +{
-> > +	size_t count = count_bytes / sizeof(*to);
-> > +	int i;
-> > +
-> > +	for (i = 0; i < count; i++)
-> > +		to[i] = readq(&from[i]);
-> > +}
-> 
-> here too.
+ drivers/scsi/pm8001/pm8001_ctl.c | 61 ++++++++++++++++----------------
+ 1 file changed, 31 insertions(+), 30 deletions(-)
 
-Same.
-
-> 
-> []
-> 
-> > +static int sdsi_mbox_cmd_read(struct sdsi_priv *priv, struct sdsi_mbox_info
-> > *info,
-> > +			      size_t *data_size)
-> > +{
-> > +	struct device *dev = priv->dev;
-> > +	u32 total, loop, eom, status, message_size;
-> []
-> > +		if (packet_size > SDSI_SIZE_MAILBOX) {
-> > +			dev_err(dev, "Packet size to large\n");
-> 
-> too
-
-Sorry, I'm missing the question here. If it's whether packet_size could also not
-be a multiple of sizeof(u64) the answer here is yes. But I don't see how that
-matters. packet_size is a value read from the hardware. This is just a sanity
-check.
-
-> 
-> []
-> > +	/* Message size check is only valid for multi-packet transfers */
-> > +	if (loop && total != message_size)
-> > +		dev_warn(dev, "Read count %d differs from expected count %d\n",
-> 
-> %u
-> 
-> > +			 total, message_size);
-> > +static int sdsi_map_mbox_registers(struct sdsi_priv *priv, struct pci_dev
-> > *parent,
-> > +				   struct disc_table *disc_table, struct
-> > resource *disc_res)
-> > +{
-> > +	u32 access_type = FIELD_GET(DT_ACCESS_TYPE, disc_table->access_info);
-> > +	u32 size = FIELD_GET(DT_SIZE, disc_table->access_info);
-> > +	u32 tbir = FIELD_GET(DT_TBIR, disc_table->offset);
-> > +	u32 offset = DT_OFFSET(disc_table->offset);
-> > +	u32 features_offset;
-> > +	struct resource res = {};
-> > +
-> > +	/* Starting location of SDSi MMIO region based on access type */
-> > +	switch (access_type) {
-> > +	case ACCESS_TYPE_LOCAL:
-> > +		if (tbir) {
-> > +			dev_err(priv->dev, "Unsupported BAR index %d for access
-> > type %d\n",
-> > +				tbir, access_type);
-> 
-> %u here too
-> 
-> []
-> > +		dev_err(priv->dev, "Unrecognized access_type %d\n",
-> > access_type);
-> 
-> and here
-
-Ack on the specifier changes. Thanks.
-
-> 
-> 
+diff --git a/drivers/scsi/pm8001/pm8001_ctl.c b/drivers/scsi/pm8001/pm8001_ctl.c
+index 41a63c9b719b..66307783c73c 100644
+--- a/drivers/scsi/pm8001/pm8001_ctl.c
++++ b/drivers/scsi/pm8001/pm8001_ctl.c
+@@ -727,6 +727,8 @@ static int pm8001_update_flash(struct pm8001_hba_info *pm8001_ha)
+ 	u32		sizeRead = 0;
+ 	u32		ret = 0;
+ 	u32		length = 1024 * 16 + sizeof(*payload) - 1;
++	u32		fc_len;
++	u8		*read_buf;
+ 
+ 	if (pm8001_ha->fw_image->size < 28) {
+ 		pm8001_ha->fw_status = FAIL_FILE_SIZE;
+@@ -755,36 +757,35 @@ static int pm8001_update_flash(struct pm8001_hba_info *pm8001_ha)
+ 			fwControl->retcode = 0;/* OUT */
+ 			fwControl->offset = loopNumber * IOCTL_BUF_SIZE;/*OUT */
+ 
+-		/* for the last chunk of data in case file size is not even with
+-		4k, load only the rest*/
+-		if (((loopcount-loopNumber) == 1) &&
+-			((partitionSize + HEADER_LEN) % IOCTL_BUF_SIZE)) {
+-			fwControl->len =
+-				(partitionSize + HEADER_LEN) % IOCTL_BUF_SIZE;
+-			memcpy((u8 *)fwControl->buffer,
+-				(u8 *)pm8001_ha->fw_image->data + sizeRead,
+-				(partitionSize + HEADER_LEN) % IOCTL_BUF_SIZE);
+-			sizeRead +=
+-				(partitionSize + HEADER_LEN) % IOCTL_BUF_SIZE;
+-		} else {
+-			memcpy((u8 *)fwControl->buffer,
+-				(u8 *)pm8001_ha->fw_image->data + sizeRead,
+-				IOCTL_BUF_SIZE);
+-			sizeRead += IOCTL_BUF_SIZE;
+-		}
+-
+-		pm8001_ha->nvmd_completion = &completion;
+-		ret = PM8001_CHIP_DISP->fw_flash_update_req(pm8001_ha, payload);
+-		if (ret) {
+-			pm8001_ha->fw_status = FAIL_OUT_MEMORY;
+-			goto out;
+-		}
+-		wait_for_completion(&completion);
+-		if (fwControl->retcode > FLASH_UPDATE_IN_PROGRESS) {
+-			pm8001_ha->fw_status = fwControl->retcode;
+-			ret = -EFAULT;
+-			goto out;
+-		}
++			/*
++			 * for the last chunk of data in case file size is
++			 * not even with 4k, load only the rest
++			 */
++
++			read_buf  = (u8 *)pm8001_ha->fw_image->data + sizeRead;
++			fc_len = (partitionSize + HEADER_LEN) % IOCTL_BUF_SIZE;
++
++			if (loopcount - loopNumber == 1 && fc_len) {
++				fwControl->len = fc_len;
++				memcpy((u8 *)fwControl->buffer, read_buf, fc_len);
++				sizeRead += fc_len;
++			} else {
++				memcpy((u8 *)fwControl->buffer, read_buf, IOCTL_BUF_SIZE);
++				sizeRead += IOCTL_BUF_SIZE;
++			}
++
++			pm8001_ha->nvmd_completion = &completion;
++			ret = PM8001_CHIP_DISP->fw_flash_update_req(pm8001_ha, payload);
++			if (ret) {
++				pm8001_ha->fw_status = FAIL_OUT_MEMORY;
++				goto out;
++			}
++			wait_for_completion(&completion);
++			if (fwControl->retcode > FLASH_UPDATE_IN_PROGRESS) {
++				pm8001_ha->fw_status = fwControl->retcode;
++				ret = -EFAULT;
++				goto out;
++			}
+ 		}
+ 	}
+ out:
+-- 
+2.20.1.7.g153144c
 

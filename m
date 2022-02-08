@@ -2,286 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 514654AD27F
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 08:49:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 544B74AD284
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 08:50:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348572AbiBHHts (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 02:49:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38834 "EHLO
+        id S1348588AbiBHHus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 02:50:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234614AbiBHHtq (ORCPT
+        with ESMTP id S1348578AbiBHHul (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 02:49:46 -0500
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E556C0401EF;
-        Mon,  7 Feb 2022 23:49:44 -0800 (PST)
-Received: from [192.168.0.2] (ip5f5aebc2.dynamic.kabel-deutschland.de [95.90.235.194])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 6DD7161EA1923;
-        Tue,  8 Feb 2022 08:49:42 +0100 (CET)
-Message-ID: <aa3ee7ac-6c52-3861-1798-3cc1a37f6ebf@molgen.mpg.de>
-Date:   Tue, 8 Feb 2022 08:49:40 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: Unable to transfer big files to Nokia N9
+        Tue, 8 Feb 2022 02:50:41 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2055.outbound.protection.outlook.com [40.107.243.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19E3AC0401EF
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 23:50:41 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WpSTCwd9by0DDWO26McBQlfsOpPf7M080cBbe2GlwLTt2X91Xi+90Aop5DB1Vhl3xN5U80SvCH76rzwjhd1wy0gGqvVkKdliuv/u/tkBpOdyzeA5a+GtQ0cN4r81rPhZS7h2qxmfCTwL2ziM2R/edhX9YkMU2Yqpy5Wy28xSsOaCAKgqWFP0oQv0sePqR68NeTREYpMFGv9qG8oLIss0r7WItbvmjluQSmqgXA67QN1Ew3A6bKQGoa3hWKA7G2fm3s8P0e5IczEOTiadFCqxWu88lCDOeFPdV3dTKOLPk+I6iO2eaC4zyvWmopQrWUWrti+MUP26re1YV9IwPY0LRQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KiWrys8sp4PaHF6WH1Imh+jgwgEopExnPUVfDy1o8C0=;
+ b=BNY+0wQY2K6S74OIoCkEVsjrk88BfYZI8g35RAP/c4GuK62zz/THFjLPiT6vgPRprQ4mjeAzcrKrQb/G1mObd4fRMPgtU9sM1E4O0NVh9jgDnES+XUJmLvwqs/3/FKKqOlYUCiFjXYNeWkpedc3l58CGefOv8QZ9NS9+gX2zcCK4o9Et2D8Hxfy4cor8HC1fhDxwAjf7feKQE8KNHGye/Fwe+BhSNWOnRcw+YuNCdVqxHyBZmaEnrzfgpkQ+Hm7l1hL8sPmRk1O8TUxTMwewoPaEmicSOpoxPdtYgcK9fyeCG3Ui//vaGX6kI5Dh/5uwn+Nu/HdgbimQk/RYOH8qPw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KiWrys8sp4PaHF6WH1Imh+jgwgEopExnPUVfDy1o8C0=;
+ b=dI/dYyeeNX3K2vWsyMpP0ZP4p7faH2InPsZnEEZfbD4Po116/SpKfdrkv9SV4opUXc+JdFQxNjh0lmGixw+BNyUq7xaiYlh0ADVl/v3hlIBCG1mBH8XL8U+DNZYyVMo80SLVPItX9oHMaAEH5rrJ6/D1kyUFbYKRaR4Qy0A70kcsiLm+yiKO2Zs1Mu4jm+7la/SPrjkCkC2Uo1yj1bsSp316A7K5mMKY6OAgij/ibJpWMxoE03I/okX10L7m3Tcj5UCL3PJCflgYB44IvFUSvnzCiJIgIFY0EC9iSw3yYaWGRDBcqs4QgoPdN+gJC3sERNCCvr8O9O7XiptQG+BALw==
+Received: from MW2PR12MB4667.namprd12.prod.outlook.com (2603:10b6:302:12::28)
+ by BYAPR12MB3253.namprd12.prod.outlook.com (2603:10b6:a03:12f::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.18; Tue, 8 Feb
+ 2022 07:50:39 +0000
+Received: from MW2PR12MB4667.namprd12.prod.outlook.com
+ ([fe80::846c:d3cd:5a30:c35]) by MW2PR12MB4667.namprd12.prod.outlook.com
+ ([fe80::846c:d3cd:5a30:c35%5]) with mapi id 15.20.4951.019; Tue, 8 Feb 2022
+ 07:50:39 +0000
+From:   Chaitanya Kulkarni <chaitanyak@nvidia.com>
+To:     Christoph Hellwig <hch@lst.de>,
+        Andrew Morton <akpm@linux-foundation.org>
+CC:     Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?utf-8?B?Q2hyaXN0aWFuIEvDtm5pZw==?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Alistair Popple <apopple@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "nouveau@lists.freedesktop.org" <nouveau@lists.freedesktop.org>,
+        "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>
+Subject: Re: [PATCH 5/8] mm: simplify freeing of devmap managed pages
+Thread-Topic: [PATCH 5/8] mm: simplify freeing of devmap managed pages
+Thread-Index: AQHYHMCPFas1VHS2U0CDnrSRuC236g==
+Date:   Tue, 8 Feb 2022 07:50:38 +0000
+Message-ID: <01ae1d08-33ba-c38e-07ba-40721b95ed5c@nvidia.com>
+References: <20220207063249.1833066-1-hch@lst.de>
+ <20220207063249.1833066-6-hch@lst.de>
+In-Reply-To: <20220207063249.1833066-6-hch@lst.de>
+Accept-Language: en-US
 Content-Language: en-US
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-To:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        linux-bluetooth@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>, regressions@lists.linux.dev,
-        Takashi Iwai <tiwai@suse.com>
-References: <eb6d86eb-d156-d7ac-0965-181719023d51@molgen.mpg.de>
- <CABBYNZLENxvXMCh6XbBSnu0jasV1F0QestEK5v2mnNUpJdw3Vw@mail.gmail.com>
- <cf71bdea-ec22-e4c9-016c-69e94a130607@molgen.mpg.de>
- <a93c0fa7-7b84-6aea-265b-c913e0c84678@molgen.mpg.de>
- <d7206e12-1b99-c3be-84f4-df22af427ef5@molgen.mpg.de>
- <371027df-7f32-edab-208d-d4cdd2202ba6@leemhuis.info>
- <d41d8b41-c347-47e7-e52b-39d7211c8952@molgen.mpg.de>
-In-Reply-To: <d41d8b41-c347-47e7-e52b-39d7211c8952@molgen.mpg.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 2892362d-c824-4d6f-9416-08d9ead7b2f2
+x-ms-traffictypediagnostic: BYAPR12MB3253:EE_
+x-microsoft-antispam-prvs: <BYAPR12MB325336D00C5B2818293A1DBFA32D9@BYAPR12MB3253.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:5797;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: +mzupTcvjgPtuUOgWrHLTEejgZWrmcSmuQw5/BajKaIGFaXa09zlpTgJ8vBwsFXv4BxBgfm5z6czJuznYcQQnQjThHV+lH8AYEp1Fg2Qqtf9AKqtRAKE6h+JfL0Hqb52PCx4U/phkC524+UErkrFsPZ+OuCzzPYraWLUC6w7vGaTo3i7JkBcW126DzuxPnoFnpPD7fbzf7YdsnwtF9L6z0/eGQYxkURDeeOkkglF2XfbHYS1AlagJ2DoAAD0gj/cg4ChT16DcPmvMPNtvGzuVyB3UjBI2LjTenYCA//mK8rDg0Aigyhb+YsrU3RCr2nDTzMVLjwCJAuxGWJ/KTgNRmGHDxQUryj9ckVcRX3oLJMpn9YRUnE/55kh8qOp/7HQ6GQEtmAeDzI28dK6HX4TMH+MnTNi08N+8q3gleVleXDPYYOlN6SkYFJwAa5c0reM60PaRTf/phgkuVUkB+6uP6VYU9IsX6KWsAeo8Qq5Zb6LgUQrPvhGTmrcTxMa/RkCP90YS9W7Se4itCPWTBDzfh7G92kYHshumM8pNrPQx2b3I336mH4MdaL5p+6h2BbrRTyQMRXKGzPLZeyPFYRfjy5GCvkJcfAQBh63SqAgcULvloKwdVNhYdgGxRhghj9pDHlkvaal/Q+HvyiNDTTyCRfrJnwR6Ygatus8GIQllTC6ufzk0WWLf7UpzK8OYCCj5nzPZ5jZYDUSOV29Q3Je6E8Lyh5Icu9PE9TTrmo6JlM0bZSTQ5LTOqVNf0L3HRLZYPzIg2b55FYkTb9+wXZ6FQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR12MB4667.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(31686004)(66946007)(76116006)(66556008)(66446008)(64756008)(6506007)(66476007)(186003)(91956017)(6486002)(38100700002)(122000001)(71200400001)(7416002)(36756003)(508600001)(5660300002)(8676002)(54906003)(31696002)(2906002)(110136005)(316002)(6512007)(86362001)(4326008)(38070700005)(8936002)(2616005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NXltVU53YWtVZmcyVTJBcjJuSzBualUxblVtWkpCaVVMQlAralQya283ekdO?=
+ =?utf-8?B?cjJNNUFxV2FBRnliQkVPRGRyOUVXNzNlMjNmdXpWWTcwTmFNQnRnVkJCMkVJ?=
+ =?utf-8?B?dGd5QXlqQS9zdFRZaFZ1ZHJpSm1VaHAvUlpSM0YxMjNWVml4YnVuOHNDUGRV?=
+ =?utf-8?B?Nk5BVDhNbE1iYjRBRU1JcldlanltTXlraWhtNHAvT3NBa1JROFRnblBqSCtj?=
+ =?utf-8?B?WnNuVm1zUTdOOGQ3TUpqRVF1eW5oRU5sbmtBSmZ4eEhRT3ZFdGdBQjVMVVp4?=
+ =?utf-8?B?ZVdsejd3cS81RDlCSUpEMXRhZDlpS2d6Nk9WZnZCcWttQ3FHcXhDTWcxdUhn?=
+ =?utf-8?B?TEZQYWlxVWN6Rm5Sc0p5Q2h5MURXKzJUVDFBYjdMRnVIU2huNXk1Z1hvd2hG?=
+ =?utf-8?B?TXJWc2NuSE9pVmc1a1ZuN1FQWjRROElaWCtaZzZuYWQrdHhtTGdGMHlQQVRu?=
+ =?utf-8?B?YSsyOFlBZ1daeTB6VXFVOHNFL0duaDQ4YUpNMzZUT1Q2OFJQWi9vU1dQYW8y?=
+ =?utf-8?B?OEVidGJRa3I2RTBYYkJPWHlkT2J6U05CdzRzMDdHR21MbVVKbUdMUzdqSGZu?=
+ =?utf-8?B?Qm1UelluWEtmaWFkbHJ3aFBZWWFjWHl5TDc4dGZTbDZZbjJVTU5ScjVBT2VC?=
+ =?utf-8?B?SnU2SElVYThVL3pyckhDaVpqWlRzRjNzU2g4SVRrWUJEa0poSVdtazhDdHFP?=
+ =?utf-8?B?ckVQSitWbno4cVZiWFJkOFNuR2wzanN2cThPL1kwb2cweVdCeGZaZm9KM25w?=
+ =?utf-8?B?dG9wUERvTy96YlovT1ZreXpzVGhjSEdZYmVMSFFCZGZpcDhLUHVSRnE0bkZJ?=
+ =?utf-8?B?Wk5Qd2pydlVVT3c5VHZ5VHN4VUFPNFRkU1BNOXF6eXhwbUNSUzBuZjhZdnBh?=
+ =?utf-8?B?V3UwRWxBazhjYk1NVis2SjN0RzFiQmN5OHF4NDNPS0ptbFdFbjBnOWIweW5z?=
+ =?utf-8?B?K09rV3U1NzNTRms4NyszMjZGeTBQa0JWQ202dWNZREljb2lqYmVKdE96aWVj?=
+ =?utf-8?B?YkRNSnJydTMwVlRNNks3QWpHYWtpL28xU1EvRzFQMU9lRk1QcndvMTJTMFJm?=
+ =?utf-8?B?dXVUeCsrM2dGNmx5NHQ2SGx1dmNvbzhwRjBnVmNYUTVPWVZRS3MvdUE4cnpR?=
+ =?utf-8?B?bTgvTnQrWmc1L09nRGxxUHlMTHlOTnBIQ095QjNLdWxacXpNd05pQlZXdnZ5?=
+ =?utf-8?B?c1V3cjhRS3BLcGF4L1I4NWhqeTk5S1N2ajVCNFVGUDI1by92cWV2YytpY1FC?=
+ =?utf-8?B?dE5VcS91ZmU0dkpFWGVCSjYwSWZMM29aWldwL1p6WXVXOWdsejZYZFFaMHpt?=
+ =?utf-8?B?OCtqU0tTenU1THpEbGlmT050RXpUUUlXdjBDajh1Tk5GNHhXVGEwSGQyc1g4?=
+ =?utf-8?B?OTFhU3RWSzRZcjJsellWcm1VVTBLSTErM3Urcjg5b2RMNVNnYTJBbWxORzFj?=
+ =?utf-8?B?MHBsYkxOd005MUJHMGpYODZNMTR0TDJ3Sk9rOVV1bEVyZGpPT1IzSHBOMEc2?=
+ =?utf-8?B?VmFxTE5rOUxiTG5wanJuMTgvN2dLcUxmTjBXWktkaWFFZnZLTTVoclBBUnBu?=
+ =?utf-8?B?Ymc1eE1wZ0FXZFVndURpS2RvWHN5K0JYWTNITXcrRlJoOXN4M3dualpML1FH?=
+ =?utf-8?B?UUVHVUkyQ0RVeGtka0dCNmFRWTNwRVZyUUtHNXJjOGZKN2R3cmw4dDNMQzlM?=
+ =?utf-8?B?ZXFZeGR1bWVmcTlpZXgrcFRWR1FMbjNKTHNHSjhnS0VNVWl6ZkVqNWVpYnZw?=
+ =?utf-8?B?SnZDbFgyai9LemkvdmxwL3ZxWnFqTlhKbnRvbnczbkkraUhXYjB0M2g3TXNn?=
+ =?utf-8?B?bnFHbDRhalpSK3daYTFOOWtKUkVUSEI2emFYY3ppZ2FEaWJyTDdiZ3BNZVN2?=
+ =?utf-8?B?Q0ZnZjB2alJpMzg2V1J4V0dDV0hMd1lTbmZpZzNiL3dCeHozM0ZrSDBLYWNL?=
+ =?utf-8?B?WXZMTldaZzJxTjJhUG54UU56K3d0MmtXQ0grYWFScGZtUXNkamVzdS9DT2tP?=
+ =?utf-8?B?b0hKaTMrb2ttZEs4OXM0SkFKTm9acmNwM2lrcll6N1JXS3J3NjIyOHRWTWF4?=
+ =?utf-8?B?UjZjWEhaa25GdjA2QlZtQ0cweFZRT3FrU043QXpFV3Q5N1ZuWk5MREhTaHRu?=
+ =?utf-8?B?OTNvOXFaZXhnM2pNYWZRRDVTWmVPRitPMlRDUU1lOXEwRC93dEJ1ZnNsbXRK?=
+ =?utf-8?Q?mKNkRKN4HSFtrf3jkiKddEUUsMSgRr3iKFmh+54fgFvj?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <554A8CC2C3CBEA4FBD0791392D98C6C9@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW2PR12MB4667.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2892362d-c824-4d6f-9416-08d9ead7b2f2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Feb 2022 07:50:38.9652
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: bbhrlHa6F4y/FzW+Eq27C7vo4s9ISqj6g3mn+EBcV1gYxer4vgpX0aK6LmdWtrZM1gW3KWw7wxlfcfVv6li0Tw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3253
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Thorsten, dear Luiz,
-
-
-Am 07.02.22 um 14:14 schrieb Paul Menzel:
-
-> Am 28.01.22 um 11:36 schrieb Thorsten Leemhuis:
->> Hi, this is your Linux kernel regression tracker speaking.
-> 
-> Thorsten, thank you for following up on this.
-> 
->> On 16.01.22 14:27, Paul Menzel wrote:
->>> #regzbot introduced: 81be03e026dc0c16dc1c64e088b2a53b73caa895
->>
->> thx for getting regzbot involved, much appreciated!
->>
->>> Dear Luiz,
->>>
->>> It turns out there was a regression in Linux 5.16-rc1.
->>
->> @bt-maintaners, what's the status here? Paul reported that over ten days
->> ago and there wasn't a single reply. Or did the discussion move
->> somewhere else?
->>
->> @Paul: just wondering, did you give 5.17-rc1 a try? Might be worth a
->> shot, if only to confirm the issue is still present.
-> 
-> I just tried with 5.17-rc3, and the issue is still present.
-
-Merging 4840aa67576b (Bluetooth: hci_core: Fix leaking sent_cmd skb) from
-
-https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git
-
-into Linux 5.17-rc3, the resulting Linux kernel also has the problem.
-
-
-Kind regards,
-
-Paul
-
-
->>> Am 20.12.21 um 22:31 schrieb Paul Menzel:
->>>
->>>> Am 01.12.21 um 23:07 schrieb Paul Menzel:
->>>>
->>>>> Am 01.12.21 um 19:29 schrieb Luiz Augusto von Dentz:
->>>>>
->>>>>> On Wed, Dec 1, 2021 at 9:39 AM Paul Menzel <pmenzel@molgen.mpg.de>
->>>>>> wrote:
->>>>>
->>>>>>> For the first time, I wanted to transfer a 2 MB PDF file from a Dell
->>>>>>> Latitude E7250 with Debian sid/unstable with Linux 5.16-rc1 to a Nokia
->>>>>>> N9 (MeeGo/Harmattan). Using the package *bluez-obexd* 5.61-1 and GNOME
->>>>>>> 41, the device was found, and paired fine. Then I selected to transfer
->>>>>>> the 2 MB file, and after starting for a second, it timed out after the
->>>>>>> progress bar moves forward ones and failed.
->>>>>>>
->>>>>>> The systemd journal contains:
->>>>>>>
->>>>>>>        obexd[21139]: Transfer(0x56243fe4f790) Error: Timed out waiting for response
->>>>>>>
->>>>>>> Testing with a a 5 byte test text file, worked fine. Also testing with a
->>>>>>> Galaly M32, both files were transferred without problems (though slowly
->>>>>>> with 32 KB/s.)
->>>>>>>
->>>>>>> Trying to connect to the device with bluetoothctl failed for me,
->>>>>>> and the journal contained, it failed.
->>>>>>>
->>>>>>>        $ bluetoothctl
->>>>>>>        Agent registered
->>>>>>>        [bluetooth]# connect 40:98:4E:5B:CE:XX
->>>>>>>        Attempting to connect to 40:98:4E:5B:CE:XX
->>>>>>>        Failed to connect: org.bluez.Error.Failed
->>>>>>>
->>>>>>>        bluetoothd[21104]: src/service.c:btd_service_connect() a2dp-source profile connect failed for 40:98:4E:5B:CE:B3: Protocol not 
-available
->>>>>>>
->>>>>>> As the Nokia N9 was once pretty popular in the Linux community, I am
->>>>>>> pretty sure, it used to work fine in the past, and there is some
->>>>>>> regression. It’d be great, if you could give me some hints how to
->>>>>>> further debug the issue.
->>>>>>
->>>>>> We will need some logs, obexd and btmon, if possible.
->>>>>
->>>>> I only managed to get the btmon trace [1]. I did `sudo modprobe -r
->>>>> btusb` and `sudo btmon -w /dev/shm/trace.log`.
->>>>>
->>>>> Linux messages:
->>>>>
->>>>>       [29880.100381] calling  btusb_driver_init+0x0/0x1000 [btusb] @28716
->>>>>       [29880.239603] usbcore: registered new interface driver btusb
->>>>>       [29880.239608] initcall btusb_driver_init+0x0/0x1000 [btusb] returned 0 after 135952 usecs
->>>>>       [29880.240706] Bluetooth: hci0: unexpected event for opcode 0x0500
->>>>>       [29880.241598] Bluetooth: hci0: Legacy ROM 2.5 revision 1.0 build 3 week 17 2014
->>>>>       [29880.241605] Bluetooth: hci0: Intel device is already patched. patch num: 32
->>>>>
->>>>>   From the system journal:
->>>>>
->>>>>       Dez 01 22:52:19 ersatz obexd[21139]: Transfer(0x56243fe53dd0) Error: Timed out waiting for response
->>>>
->>>> Were you able to see anything in the attached logs? If the obexd logs
->>>> are missing, can you please tell how I should capture them?
->>>>
->>>> I also tested with Ubuntu 20.04 (*linux-image-5.11.0-27-generic*) and
->>>> 21.10 (*linux-image-5.13.0-19-generic*) live systems booted from a USB
->>>> storage device, and transferring `/usr/bin/systemctl`
->>>> (`/lib/systemd/systemd`) with size of 1.8 MB worked fine.
->>>>
->>>> Could there be a regression in that area? Unfortunately, it’s not easy
->>>> for me to do a bisection on the device at hand.
->>>>
->>>> (Would it be possible to do with QEMU and USB controller and Bluetooth
->>>> device passthrough? How can I transfer the file on the command line so
->>>> I wouldn’t need to install a desktop environment?)
->>>
->>> Turns out, that is indeed possible [2], but turned out to be cumbersome,
->>> as I hit the regression [3], which seems to have been fixed by commit
->>> 95655456e7ce (Bluetooth: btintel: Fix broken LED quirk for legacy ROM
->>> devices) merged in the current Linux 5.17 cycle this week.
->>>
->>> As a work around, I applied a hunk from Takashi’s patch.
->>>
->>> -       { USB_DEVICE(0x8087, 0x0a2a), .driver_info = BTUSB_INTEL_COMBINED },
->>> +       { USB_DEVICE(0x8087, 0x0a2a), .driver_info =  BTUSB_INTEL_COMBINED |
->>> + BTUSB_INTEL_BROKEN_INITIAL_NCMD },
->>>
->>> My problem with the Nokia N9 is still present in Linus’ master branch.
->>>
->>> Then I built a minimal Linux kernel for QEMU, and ran:
->>>
->>>      qemu-system-x86_64 -cpu host -m 2G -enable-kvm \
->>>        -usb -device usb-host,vendorid=0x8087,productid=0x0a2a \
->>>        -drive file=/dev/shm/debian-64.img,format=raw,if=virtio \
->>>        -net nic -net user,hostfwd=tcp::22223-:22 \
->>>        -kernel /dev/shm/bzImage -append "root=/dev/vda1 rw quiet"
->>>
->>> In the Debian sid/unstable VM, I used
->>>
->>>      ssh root@localhost -p 22223
->>>
->>> I once had to pair the VM with the Nokia N9 in bluetoothctl, and then
->>> started `/usr/libexec/bluetooth/obexd`, and ran `obexctl`, and connected
->>> first with `connect`, and then ran `send /lib/systemd/systemd` to
->>> transfer the file. In the problematic cases it stopped/hung after the
->>> first progress message.
->>>
->>>      # obexctl
->>>      [NEW] Client /org/bluez/obex
->>>      [obex]# connect 40:98:4E:5B:CE:XX
->>>      Attempting to connect to 40:98:4E:5B:CE:XX
->>>      [NEW] Session /org/bluez/obex/client/session0 [default]
->>>      [NEW] ObjectPush /org/bluez/obex/client/session0
->>>      Connection successful
->>>      [40:98:4E:5B:CE:XX]# send /lib/systemd/systemd
->>>      Attempting to send /lib/systemd/systemd to /org/bluez/obex/client/session0
->>>      [NEW] Transfer /org/bluez/obex/client/session0/transfer0
->>>      Transfer /org/bluez/obex/client/session0/transfer0
->>>          Status: queued
->>>          Name: systemd
->>>          Size: 1841712
->>>          Filename: /lib/systemd/systemd
->>>          Session: /org/bluez/obex/client/session0
->>>      [CHG] Transfer /org/bluez/obex/client/session0/transfer0 Status: active
->>>      [CHG] Transfer /org/bluez/obex/client/session0/transfer0 Transferred: 32737 (@32KB/s 00:55)
->>>      [CHG] Transfer /org/bluez/obex/client/session0/transfer0 Status: error
->>>      [DEL] Transfer /org/bluez/obex/client/session0/transfer0
->>>
->>> Some manual bisection of Linux releases, verified, that the regression
->>> was introduced in Linux 5.16-rc1. (Lucky me, I started using Bluetooth
->>> with the Nokia with Linux 5.16-rc1.) Then I verified it was introduced
->>> by the Bluetooth pull request for Linux 5.16. Then I picked commit
->>> 81be03e026dc0c16dc1c64e088b2a53b73caa895 due to the commit message, and
->>> bisected from there, and it turns out, that this commit is actually
->>> introducing the regression.
->>>
->>>      $ git bisect good
->>>      81be03e026dc0c16dc1c64e088b2a53b73caa895 is the first bad commit
->>>      commit 81be03e026dc0c16dc1c64e088b2a53b73caa895
->>>      Author: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
->>>      Date:   Fri Sep 3 15:27:32 2021 -0700
->>>
->>>          Bluetooth: RFCOMM: Replace use of memcpy_from_msg with bt_skb_sendmmsg
->>>
->>>          This makes use of bt_skb_sendmmsg instead using memcpy_from_msg which
->>>          is not considered safe to be used when lock_sock is held.
->>>
->>>          Also make rfcomm_dlc_send handle skb with fragments and queue them all
->>>          atomically.
->>>
->>>          Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
->>>          Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
->>>
->>>       net/bluetooth/rfcomm/core.c | 50 ++++++++++++++++++++++++++++++++++++++-------
->>>       net/bluetooth/rfcomm/sock.c | 46 +++++++++--------------------------------
->>>       2 files changed, 53 insertions(+), 43 deletions(-)
->>>
->>> Unfortunately, the patch does not cleanly revert, so users have to wait
->>> until an expert can take a look, and come up with a fix.
->>>
->>>
->>> Kind regards,
->>>
->>> Paul
->>>
->>>
->>> PS: For the records:
->>>
->>>      $ git bisect log
->>>      # bad: [81be03e026dc0c16dc1c64e088b2a53b73caa895] Bluetooth: RFCOMM: Replace use of memcpy_from_msg with bt_skb_sendmmsg
->>>      # good: [49d8a5606428ca0962d09050a5af81461ff90fbb] Bluetooth: fix init and cleanup of sco_conn.timeout_work
->>>      git bisect start '81be03e026dc0' 'HEAD^'
->>>      # good: [904c139a2517191e48f9cb1bb2d611ae59434009] Bluetooth: Add support for msbc coding format
->>>      git bisect good 904c139a2517191e48f9cb1bb2d611ae59434009
->>>      # good: [8bba13b1d08d42e2e8308924fa5c1551a7b2b011] Bluetooth: btintel: Fix incorrect out of memory check
->>>      git bisect good 8bba13b1d08d42e2e8308924fa5c1551a7b2b011
->>>      # good: [38f64f650dc0e44c146ff88d15a7339efa325918] Bluetooth: Add bt_skb_sendmsg helper
->>>      git bisect good 38f64f650dc0e44c146ff88d15a7339efa325918
->>>      # good: [0771cbb3b97d3c1d68eecd7f00055f599954c34e] Bluetooth: SCO: Replace use of memcpy_from_msg with bt_skb_sendmsg
->>>      git bisect good 0771cbb3b97d3c1d68eecd7f00055f599954c34e
->>>      # first bad commit: [81be03e026dc0c16dc1c64e088b2a53b73caa895] Bluetooth: RFCOMM: Replace use of memcpy_from_msg with bt_skb_sendmmsg
->>>
->>>
->>> Kind regards,
->>>
->>> Paul
->>>
->>>
->>>>> [1]: https://owww.molgen.mpg.de/~pmenzel/trace.log.7z
->>> [2]: https://lore.kernel.org/linux-bluetooth/5891f0d5-8d51-9da5-7663-718f301490b1@molgen.mpg.de/T/#u 
->>> [3]: https://lore.kernel.org/linux-bluetooth/20211202162256.31837-1-tiwai@suse.de/
+PiAtc3RhdGljIGlubGluZSBib29sIHBhZ2VfaXNfZGV2bWFwX21hbmFnZWQoc3RydWN0IHBhZ2Ug
+KnBhZ2UpDQo+ICtib29sIF9fcHV0X2Rldm1hcF9tYW5hZ2VkX3BhZ2Uoc3RydWN0IHBhZ2UgKnBh
+Z2UpOw0KPiArc3RhdGljIGlubGluZSBib29sIHB1dF9kZXZtYXBfbWFuYWdlZF9wYWdlKHN0cnVj
+dCBwYWdlICpwYWdlKQ0KPiAgIHsNCj4gICAJaWYgKCFzdGF0aWNfYnJhbmNoX3VubGlrZWx5KCZk
+ZXZtYXBfbWFuYWdlZF9rZXkpKQ0KPiAgIAkJcmV0dXJuIGZhbHNlOw0KPiAgIAlpZiAoIWlzX3pv
+bmVfZGV2aWNlX3BhZ2UocGFnZSkpDQo+ICAgCQlyZXR1cm4gZmFsc2U7DQo+IC0Jc3dpdGNoIChw
+YWdlLT5wZ21hcC0+dHlwZSkgew0KPiAtCWNhc2UgTUVNT1JZX0RFVklDRV9QUklWQVRFOg0KPiAt
+CWNhc2UgTUVNT1JZX0RFVklDRV9GU19EQVg6DQo+IC0JCXJldHVybiB0cnVlOw0KPiAtCWRlZmF1
+bHQ6DQo+IC0JCWJyZWFrOw0KPiAtCX0NCg0Kbml0Oi0gaG93IHNvbWUgdmFyaWFudCBvZiBmb2xs
+b3dpbmcgdG8gbWFrZXMgYWxsIGNhc2VzIGV2aWRlbnQNCndpdGhvdXQgaGF2aW5nIHRvIGxvb2sg
+aW50byBtZW1yZW1hcC5oIGZvciBvdGhlciBlbnVtIHZhbHVlcyA/DQoNCiAgICAgICAgIHN3aXRj
+aCAocGFnZS0+cGdtYXAtPnR5cGUpIHsNCiAgICAgICAgIGNhc2UgTUVNT1JZX0RFVklDRV9QUklW
+QVRFOg0KICAgICAgICAgY2FzZSBNRU1PUllfREVWSUNFX0ZTX0RBWDoNCiAgICAgICAgICAgICAg
+ICAgcmV0dXJuIF9fcHV0X2Rldm1hcF9tYW5hZ2VkX3BhZ2UocGFnZSk7DQogICAgICAgICBjYXNl
+IE1FTU9SWV9ERVZJQ0VfR0VORVJJQzoNCiAgICAgICAgIGNhc2UgTUVNT1JZX0RFVklDRV9QQ0lf
+UDJQRE1BOg0KICAgICAgICAgICAgICAgICByZXR1cm4gZmFsc2U7DQogICAgICAgICBkZWZhdWx0
+Og0KICAgICAgICAgICAgICAgICBXQVJOX09OX09OQ0UoMSk7DQogICAgICAgICAgICAgICAgIHJl
+dHVybiBmYWxzZTsNCiAgICAgICAgIH0NCg0KDQo+IC0JcmV0dXJuIGZhbHNlOw0KPiArCWlmIChw
+YWdlLT5wZ21hcC0+dHlwZSAhPSBNRU1PUllfREVWSUNFX1BSSVZBVEUgJiYNCj4gKwkgICAgcGFn
+ZS0+cGdtYXAtPnR5cGUgIT0gTUVNT1JZX0RFVklDRV9GU19EQVgpDQo+ICsJCXJldHVybiBmYWxz
+ZTsNCj4gKwlyZXR1cm4gX19wdXRfZGV2bWFwX21hbmFnZWRfcGFnZShwYWdlKTsNCg0Kbml0Oi0g
+d2UgYXJlIG9ubHkgcmV0dXJuaW5nIHRydWUgdmFsdWUgZnJvbSBfX3B1dF9kZXZtYXBfbWFuYWdl
+ZF9wYWdlKCkNCmluIHRoaXMgcGF0Y2guIFBlcmhhcHMgbWFrZSBpdCBfX3B1dF9kZXZfbWFwX21h
+bmFnZWRfcGFnZSgpDQpyZXR1cm4gdm9pZCBhbmQgcmV0dXJuIHRydWUgZnJvbSBhYm92ZSA/DQoN
+Cm9yIG1heWJlIHNvbWVvbmUgY2FuIHNlbmQgYSBjbGVhbnVwIG9uY2UgdGhpcyBpcyBtZXJnZWQu
+DQoNCj4gICB9DQo+ICAgDQoNCklycmVzcGVjdGl2ZSBvZiBhYm92ZSBjb21tZW50KHMpLCBsb29r
+cyBnb29kLg0KDQpSZXZpZXdlZC1ieTogQ2hhaXRhbnlhIEt1bGthcm5pIDxrY2hAbnZpZGlhLmNv
+bT4NCg0K

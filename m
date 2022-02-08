@@ -2,100 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 682EB4AD6F6
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:31:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D7964AD6F7
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:31:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358214AbiBHLbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 06:31:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32878 "EHLO
+        id S1358686AbiBHLbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 06:31:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240563AbiBHKvr (ORCPT
+        with ESMTP id S1356582AbiBHKwF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 05:51:47 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A3BC03FEC0;
-        Tue,  8 Feb 2022 02:51:44 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 4E47A1F387;
-        Tue,  8 Feb 2022 10:51:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1644317503; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Xfvi4t6v0E3o8m/BrX7OSyshdoPR/okbuDAi6c9K9Rc=;
-        b=By/NatfU9q5/32V4vpdjlTTwvMuHnRPEfjJni8g4r2EgT6xLl48+zn+/fJ0VU9xgEr9zWa
-        HW1oGFPuTLIoHd7m+IShMeqYSY+XUU/aeUGXBT7k6ly/qyW/AEaS0oJmdcMw4fMrG/xB0W
-        iJ9ZbifzVS3EPlo+CS0nhO3K00YBGWc=
-Received: from suse.cz (unknown [10.100.216.66])
+        Tue, 8 Feb 2022 05:52:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AADBEC03FEC0
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 02:52:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id DA181A3B91;
-        Tue,  8 Feb 2022 10:51:42 +0000 (UTC)
-Date:   Tue, 8 Feb 2022 11:51:42 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, Ira Weiny <ira.weiny@intel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Roman Gushchin <guro@fb.com>, Rafael Aquini <aquini@redhat.com>
-Subject: Re: [PATCH v4 2/4] mm/page_owner: Use scnprintf() to avoid excessive
- buffer overrun check
-Message-ID: <YgJLPpUqkTaA298Y@alley>
-References: <20220131192308.608837-5-longman@redhat.com>
- <20220202203036.744010-3-longman@redhat.com>
- <5c03fa31-35a5-4cbc-6b0e-872d5db82a41@suse.cz>
- <42cca916-d4c8-daa1-4a91-60738c499c89@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 46E1461538
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 10:52:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64169C004E1;
+        Tue,  8 Feb 2022 10:52:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644317523;
+        bh=LOsnrHhtZ02v5wdKdIpP4CXhD4olCp1tiNeKEg5L2bY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ZGsO2CWjFjH85KytSFltbGoyHDgWbO/Dc/g9b7Td1eDR+IV2ALxBKXIFYLDwZK1Oj
+         cNWK2Xn/hl9E9p/B80AnW7flcfVTu6EU4bLsC+2fnlC/uww4gzRwUADmy44COeqpuY
+         dhF1evwfHhsJcpvWXM/1UzZ9MKMmNl3/g7dDYR+N/0GP9NPCCc7VmaYBFJlAMvwKUE
+         HeIUUW7Dl4xWGT7OgYqZZNBKTZX/B+7ZezvtKLJv+1px5zczdsr8BAOZsSbw3kYlPc
+         JCx0o4fb+u0TjaNH51THr+tkcq2ozqk4LN2Cj3vuuNTmb/7p212imlyhO6r5ZBtq7g
+         6fDvlM/G1q22w==
+From:   Chao Yu <chao@kernel.org>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>
+Subject: [PATCH RFC] f2fs: sync node page without cp_rwsem during block_operations()
+Date:   Tue,  8 Feb 2022 18:51:56 +0800
+Message-Id: <20220208105156.3810115-1-chao@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <42cca916-d4c8-daa1-4a91-60738c499c89@redhat.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 2022-02-03 13:49:02, Waiman Long wrote:
-> On 2/3/22 10:46, Vlastimil Babka wrote:
-> > On 2/2/22 21:30, Waiman Long wrote:
-> > > The snprintf() function can return a length greater than the given
-> > > input size. That will require a check for buffer overrun after each
-> > > invocation of snprintf(). scnprintf(), on the other hand, will never
-> > > return a greater length. By using scnprintf() in selected places, we
-> > > can avoid some buffer overrun checks except after stack_depot_snprint()
-> > > and after the last snprintf().
-> > > 
-> > > Signed-off-by: Waiman Long <longman@redhat.com>
-> > > Acked-by: David Rientjes <rientjes@google.com>
-> > > Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
-> > Looks like this will work, but note that if the purpose of patch 1/4 was
-> > that after the first scnprintf() that overflows the following calls will be
-> > short-cut thanks to passing the size as 0, AFAICS that won't work. Because
-> > scnprintf() returns the number without trailing zero, 'ret' will be 'count -
-> > 1' after the overflow, so 'count - ret' will be 1, never 0.
-> 
-> Yes, I am aware of that. Patch 1 is just a micro-optimization for the very
-> rare case.
+Let's avoid holding cp_rwsem write lock during f2fs_sync_node_pages()
+in block_operations(), then cp_rwsem write lock's coverage in checkpoint
+can be shrunk, then it expects there will be more opportunity that
+foreground operator can grab cp_rwsem read lock.
 
-In theory, we might micro-optimize also the case when "size == 1".
+Signed-off-by: Chao Yu <chao@kernel.org>
+---
+ fs/f2fs/checkpoint.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
-Well, I am not sure if it is worth it. After all, the primary use-case
-is to print the message into a big-enough buffer. Lost information is
-a bigger problem than the speed ;-)
+diff --git a/fs/f2fs/checkpoint.c b/fs/f2fs/checkpoint.c
+index f7cb4277de70..7596faa0be45 100644
+--- a/fs/f2fs/checkpoint.c
++++ b/fs/f2fs/checkpoint.c
+@@ -1190,6 +1190,8 @@ static int block_operations(struct f2fs_sb_info *sbi)
+ 		.for_reclaim = 0,
+ 	};
+ 	int err = 0, cnt = 0;
++	bool sync_lockless = true;
++	unsigned int retry_cnt = 3;
+ 
+ 	/*
+ 	 * Let's flush inline_data in dirty node pages.
+@@ -1249,15 +1251,25 @@ static int block_operations(struct f2fs_sb_info *sbi)
+ 
+ 	if (get_pages(sbi, F2FS_DIRTY_NODES)) {
+ 		f2fs_up_write(&sbi->node_write);
++		if (!retry_cnt--)
++			sync_lockless = false;
++		if (sync_lockless) {
++			f2fs_up_write(&sbi->node_change);
++			f2fs_unlock_all(sbi);
++		}
+ 		atomic_inc(&sbi->wb_sync_req[NODE]);
+ 		err = f2fs_sync_node_pages(sbi, &wbc, false, FS_CP_NODE_IO);
+ 		atomic_dec(&sbi->wb_sync_req[NODE]);
+ 		if (err) {
+-			f2fs_up_write(&sbi->node_change);
+-			f2fs_unlock_all(sbi);
++			if (!sync_lockless) {
++				f2fs_up_write(&sbi->node_change);
++				f2fs_unlock_all(sbi);
++			}
+ 			return err;
+ 		}
+ 		cond_resched();
++		if (sync_lockless)
++			goto retry_flush_quotas;
+ 		goto retry_flush_nodes;
+ 	}
+ 
+-- 
+2.25.1
 
-Best Regards,
-Petr

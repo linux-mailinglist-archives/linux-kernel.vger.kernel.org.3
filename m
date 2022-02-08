@@ -2,115 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF4D54ADB10
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 15:21:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B6614ADA27
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 14:40:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351078AbiBHOU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 09:20:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60426 "EHLO
+        id S1358831AbiBHNkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 08:40:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378114AbiBHOUV (ORCPT
+        with ESMTP id S243023AbiBHNke (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 09:20:21 -0500
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A0BC03FED7;
-        Tue,  8 Feb 2022 06:20:18 -0800 (PST)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21870EL5014985;
-        Tue, 8 Feb 2022 07:39:59 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=PODMain02222019;
- bh=nkkxloxaF4pUquRyB1WrPUg/qAN5/QHz1+sCxGlhwFs=;
- b=ixcsMq48PQq2gk2+7pRw/0kThEXBPt6PtTBAXRttzDhrymsiFXhuYTW458wqH4WzvPKn
- ZKll9m2izwvudmETtqODuqKIt6QP0IGamHmUSUCPqeXN9+nCBcpB4PEafuPnDQtEJDeU
- ukcDEbaBQyVe0+zaGn59lmy70PiMew1Y+1xxkEZH5uv4dVML0dYdnswBd6WqzrH+HDK5
- qdXgwSwZGITdu4ZD4EOGdKn21CA9KT8MkHfMI+amCzsUUyuQwckoL0tEUzYj38aZ/c11
- /+V2sI2ySIAT2SGRSW7Kb/zkqdTt5omY2rgzjKOm+SP26JyGUY0VO4e2QNq5lHQYWylz 6A== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3e34y5sc49-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Tue, 08 Feb 2022 07:39:58 -0600
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Tue, 8 Feb
- 2022 13:39:57 +0000
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
- Transport; Tue, 8 Feb 2022 13:39:57 +0000
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 43AE3B13;
-        Tue,  8 Feb 2022 13:39:57 +0000 (UTC)
-Date:   Tue, 8 Feb 2022 13:39:57 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-CC:     Prasad Kumpatla <quic_pkumpatl@quicinc.com>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        'Linux Samsung SOC' <linux-samsung-soc@vger.kernel.org>
-Subject: Re: [PATCH v2] regmap-irq: Use regmap_irq_update_bits instead of
- regmap_write
-Message-ID: <20220208133957.GC112838@ediswmail.ad.cirrus.com>
-References: <20220119142953.1804-1-quic_pkumpatl@quicinc.com>
- <CGME20220208122955eucas1p2d4e32f51224242e9ebd0bce58b9c04ca@eucas1p2.samsung.com>
- <39f1b598-58ca-1e3d-3065-8dd692ee7c9f@samsung.com>
+        Tue, 8 Feb 2022 08:40:34 -0500
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D13AEC03FED0
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 05:40:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1644327633; x=1675863633;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Q4G/SZPJo4bllBcLYXaoB9cwYQmtRawt9cIr4MkpgHo=;
+  b=gGGv/KWinz9aUxQcKmOIzK22oVCITGuce2AfUdYu/tIT60gKziz9JXKz
+   Cmpn/y9s519RR59K8KokEUvLFbg43On0rRIc+4UyIgLGJDdczNk6kdexE
+   99rAWCeI7Fp7hQexO4KOcJo2O5YBq73+L4t3lLepvY+UMRJ1wwxw7M3Om
+   Y=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 08 Feb 2022 05:40:32 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 05:40:32 -0800
+Received: from [10.216.32.197] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.47.97.222) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Tue, 8 Feb 2022
+ 05:40:29 -0800
+Message-ID: <4b8ae129-45f9-33f9-673e-b134b4c36324@quicinc.com>
+Date:   Tue, 8 Feb 2022 19:10:22 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <39f1b598-58ca-1e3d-3065-8dd692ee7c9f@samsung.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-GUID: r7QGDAE2Izqj91E9qdhI8ZHoSsKTYhwg
-X-Proofpoint-ORIG-GUID: r7QGDAE2Izqj91E9qdhI8ZHoSsKTYhwg
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] softirq: Remove raise_softirq from
+ tasklet_action_common()
+Content-Language: en-US
+To:     <linux-kernel@vger.kernel.org>
+CC:     <peterz@infradead.org>, <tglx@linutronix.de>, <paulmck@kernel.org>,
+        <will@kernel.org>, <dave@stgolabs.net>, <frederic@kernel.org>
+References: <1644066805-17212-1-git-send-email-quic_mojha@quicinc.com>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <1644066805-17212-1-git-send-email-quic_mojha@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01c.na.qualcomm.com (10.47.97.222)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 08, 2022 at 01:29:55PM +0100, Marek Szyprowski wrote:
-> Hi Prasad,
-> 
-> On 19.01.2022 15:29, Prasad Kumpatla wrote:
-> > With the existing logic by using regmap_write() all the bits in
-> > the register are being updated which is not expected. To update only the
-> > interrupt raised bit and not tocuhing other bits, replace regmap_write()
-> > with regmap_irq_update_bits().
-> >
-> > This patch is to fix the issue observed in MBHC button press/release events.
-> >
-> > Fixes: 3a6f0fb7b8eb ("regmap: irq: Add support to clear ack registers")
-> > Signed-off-by: Prasad Kumpatla <quic_pkumpatl@quicinc.com>
-> 
-> There is something wrong with this patch. Since it landed in linux-next 
-> (20220204) I get an interrupt storm on two of my test devices:
-> 
-> 1. ARM 32bit Exynos4412-based Trats2 ("wm8994-codec wm8994-codec: FIFO 
-> error" message)
-> 
-> 2. ARM 64bit Exynos5433-based TM2e ("arizona spi1.0: Mixer dropped 
-> sample" message)
-> 
-> Definitely the interrupts are not acknowledged properly. Once I find 
-> some spare time, I will check it further which regmap configuration 
-> triggers the issue, but it is definitely related to this patch. 
-> Reverting it on top of current linux-next fixes the issue.
-> 
+Hi All,
 
-Yeah I was just looking at this patch it looks a bit weird. Like
-most IRQ acks are write 1 to clear, so doing an update_bits seems
-unlikely to work, as it will ack every pending interrupt. As the
-whole idea of doing a regmap_write was to only write 1 to the bits
-that need ACKed.
+Sorry for the reminder so quickly as we are hitting this issue more 
+frequently.
+Please suggest if whether below patch will have any side-effect.
 
-I suspect what is needed here is the inverted case wants an
-update bits but the normal case needs to stay as a regmap_write.
+-Mukesh
 
-Thanks,
-Charles
+On 2/5/2022 6:43 PM, Mukesh Ojha wrote:
+> Think about a scenario when all other cores are in suspend
+> and one core is only running ksoftirqd and it is because
+> some client has invoked tasklet_hi_schedule() only once
+> during that phase.
+>
+> tasklet_action_common() handles that softirq and marks the
+> same softirq as pending again. And due to that core keeps
+> running the softirq handler [1] forever and it is not able to
+> go to suspend.
+>
+> We can get rid of raising softirq from tasklet handler.
+>
+> [1]
+> <idle>-0    [003]   13058.769081:  softirq_entry   vec=0  action=HI_SOFTIRQ
+> <idle>-0     [003]  13058.769085: softirq_raise:        vec=0 [action=HI_SOFTIRQ]
+> <idle>-0    [003]   13058.769087:  softirq_exit   vec=0  action=HI_SOFTIRQ
+> <idle>-0    [003]   13058.769091:  softirq_entry   vec=0  action=HI_SOFTIRQ
+> <idle>-0     [003]  13058.769094: softirq_raise:        vec=0 [action=HI_SOFTIRQ]
+> <idle>-0    [003]   13058.769097:  softirq_exit   vec=0  action=HI_SOFTIRQ
+> <idle>-0    [003]   13058.769100:  softirq_entry   vec=0  action=HI_SOFTIRQ
+> <idle>-0     [003]  13058.769103: softirq_raise:        vec=0 [action=HI_SOFTIRQ]
+> <idle>-0    [003]   13058.769106:  softirq_exit   vec=0  action=HI_SOFTIRQ
+> <idle>-0    [003]   13058.769109:  softirq_entry   vec=0  action=HI_SOFTIRQ
+> <idle>-0    [003]   13059.058923:  softirq_entry   vec=0  action=HI_SOFTIRQ
+> ...
+> ..
+> ..
+> ..
+>
+> <idle>-0    [003]   13059.058951:  softirq_entry   vec=0  action=HI_SOFTIRQ
+> <idle>-0     [003]  13059.058954: softirq_raise:        vec=0 [action=HI_SOFTIRQ]
+> <idle>-0    [003]   13059.058957:  softirq_exit   vec=0  action=HI_SOFTIRQ
+> <idle>-0    [003]   13059.058960:  softirq_entry   vec=0  action=HI_SOFTIRQ
+> <idle>-0     [003]  13059.058963: softirq_raise:        vec=0 [action=HI_SOFTIRQ]
+> <idle>-0    [003]   13059.058966:  softirq_exit   vec=0  action=HI_SOFTIRQ
+> <idle>-0    [003]   13059.058969:  softirq_entry   vec=0  action=HI_SOFTIRQ
+> <idle>-0     [003]  13059.058972: softirq_raise:        vec=0 [action=HI_SOFTIRQ]
+> <idle>-0    [003]   13059.058975:  softirq_exit   vec=0  action=HI_SOFTIRQ
+> <idle>-0    [003]   13059.058978:  softirq_entry   vec=0  action=HI_SOFTIRQ
+> <idle>-0     [003]  13059.058981: softirq_raise:        vec=0 [action=HI_SOFTIRQ]
+> <idle>-0    [003]   13059.058984:  softirq_exit   vec=0  action=HI_SOFTIRQ
+> <idle>-0    [003]   13059.058987:  softirq_entry   vec=0  action=HI_SOFTIRQ
+> <idle>-0     [003]  13059.058990: softirq_raise:        vec=0 [action=HI_SOFTIRQ]
+> <idle>-0    [003]   13059.058993:  softirq_exit   vec=0  action=HI_SOFTIRQ
+> <idle>-0    [003]   13059.058996:  softirq_entry   vec=0  action=HI_SOFTIRQ
+> <idle>-0     [003]  13059.059000: softirq_raise:        vec=0 [action=HI_SOFTIRQ]
+> <idle>-0    [003]   13059.059002:  softirq_exit   vec=0  action=HI_SOFTIRQ
+>
+> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+> ---
+>   kernel/softirq.c | 1 -
+>   1 file changed, 1 deletion(-)
+>
+> diff --git a/kernel/softirq.c b/kernel/softirq.c
+> index 41f4709..d3e6fb9 100644
+> --- a/kernel/softirq.c
+> +++ b/kernel/softirq.c
+> @@ -795,7 +795,6 @@ static void tasklet_action_common(struct softirq_action *a,
+>   		t->next = NULL;
+>   		*tl_head->tail = t;
+>   		tl_head->tail = &t->next;
+> -		__raise_softirq_irqoff(softirq_nr);
+>   		local_irq_enable();
+>   	}
+>   }

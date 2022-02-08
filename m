@@ -2,122 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 359CE4ACEBC
+	by mail.lfdr.de (Postfix) with ESMTP id 846184ACEBD
 	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 03:16:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345450AbiBHCQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 21:16:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53688 "EHLO
+        id S1345662AbiBHCQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 21:16:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345506AbiBHCPX (ORCPT
+        with ESMTP id S1345677AbiBHCPs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 21:15:23 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92215C0401D1
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 18:15:20 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id c3so12629918pls.5
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 18:15:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=91NCb5EYzhKuUKp45uli6bWUtNYygLxTpv0v3uA27sw=;
-        b=CU8VEHfQz9jVkk1c6wJRXsKSB2I+vbMObObLLyLNFjd+VjxdrQBj+KZiVNu3q08t3D
-         RApgG6wN3M/Upu1lQkKgzCl1+5cut8jj1M23oA0YXQVGlp2iBtVvECFjjzxz6X+l1X3i
-         dqAQ0LLi3aXxwjC6+YiwHofT25bh8Jy2rFd+I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=91NCb5EYzhKuUKp45uli6bWUtNYygLxTpv0v3uA27sw=;
-        b=PtMbmtv14KeZpQw59gbDxI9Op/5BJt5AUPjhw2FEZHpHr+ELQfhZp6SrS6Zb0F5zRy
-         sNNUgsjHMhA52/6YAXX6uz+QMxGmyD+3bBr+YTINFtOzLzOKOB9mrpVETKzAKypJzjmC
-         2v9IHnDnW7AU7BqQomZr9nHGNmWe+2//w+NlIGzuDduaHl9jRbJOgQnCHQ4NicWPVv4i
-         A6I+nXS6Oy9cM1Ky16MWjJq69jN+6DcAi9+6CLTRdFE+qLC5fy49QYdB0rZ8r7n++CdS
-         gtBsA5c0FXVROwyDhCzG7ZGu9ga9ucgSKZQM75F4CkKwe/7ubO8t86E9ExNsKNGfD4j/
-         2u7Q==
-X-Gm-Message-State: AOAM532TNYwJzleyO04v3qspfdnYkFaz2iRNmqJh2Pk5+W/Lg1TmCUv8
-        qfrjGOepGTP6rQWLqBEq3Tw/u3Yb/1LZnw==
-X-Google-Smtp-Source: ABdhPJxhBh2LyplB7VAkibhOk0liXWx3no7Si+rJUmdEQcNClFx57L54r2dMEdxk0TkxMgyHBHUNRQ==
-X-Received: by 2002:a17:902:6942:: with SMTP id k2mr2483316plt.133.1644286520072;
-        Mon, 07 Feb 2022 18:15:20 -0800 (PST)
-Received: from google.com ([2401:fa00:8f:203:892d:3c06:3dca:f230])
-        by smtp.gmail.com with ESMTPSA id s42sm14215487pfg.146.2022.02.07.18.15.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 18:15:19 -0800 (PST)
-Date:   Tue, 8 Feb 2022 11:15:15 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Stephen Brennan <stephen.s.brennan@oracle.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org,
-        John Ogness <john.ogness@linutronix.de>
-Subject: Re: [PATCH v3 4/4] printk: Drop console_sem during panic
-Message-ID: <YgHSM3nc/04X6F7s@google.com>
-References: <20220201185802.98345-1-stephen.s.brennan@oracle.com>
- <20220201185802.98345-5-stephen.s.brennan@oracle.com>
- <Yfyl2TSdFmn7HqmV@google.com>
- <87v8xuea4j.fsf@stepbren-lnx.us.oracle.com>
+        Mon, 7 Feb 2022 21:15:48 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 184CBC043181;
+        Mon,  7 Feb 2022 18:15:46 -0800 (PST)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Jt63Q2n6GzdZTk;
+        Tue,  8 Feb 2022 10:12:34 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 8 Feb 2022 10:15:44 +0800
+CC:     <jarkko.nikula@linux.intel.com>, <mika.westerberg@linux.intel.com>,
+        <wsa@kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <prime.zeng@hisilicon.com>,
+        <linuxarm@huawei.com>, <irina.tirdea@intel.com>,
+        <linus.walleij@linaro.org>, <linux-gpio@vger.kernel.org>
+Subject: Re: [PATCH 1/2] i2c: hisi: Add generic GPIO bus recovery support
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Yicong Yang <yangyicong@hisilicon.com>
+References: <20220125124930.50369-1-yangyicong@hisilicon.com>
+ <20220125124930.50369-2-yangyicong@hisilicon.com>
+ <YgD/3Xi0yLPHCu+L@smile.fi.intel.com> <YgEAeOmobDhqRMGx@smile.fi.intel.com>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <5de8e304-05b7-48ec-6b8f-e1f856e86697@huawei.com>
+Date:   Tue, 8 Feb 2022 10:15:44 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87v8xuea4j.fsf@stepbren-lnx.us.oracle.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YgEAeOmobDhqRMGx@smile.fi.intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/02/04 10:53), Stephen Brennan wrote:
-> Sergey Senozhatsky <senozhatsky@chromium.org> writes:
-> > On (22/02/01 10:58), Stephen Brennan wrote:
-> >> +/*
-> >> + * Return true when this CPU should unlock console_sem without pushing all
-> >> + * messages to the console. This reduces the chance that the console is
-> >> + * locked when the panic CPU tries to use it.
-> >> + */
-> >> +static bool abandon_console_lock_in_panic(void)
-> >> +{
-> >> +	if (!panic_in_progress())
-> >> +		return false;
-> >> +
-> >> +	/*
-> >> +	 * We can use raw_smp_processor_id() here because it is impossible for
-> >> +	 * the task to be migrated to the panic_cpu, or away from it. If
-> >> +	 * panic_cpu has already been set, and we're not currently executing on
-> >> +	 * that CPU, then we never will be.
-> >> +	 */
-> >> +	return atomic_read(&panic_cpu) != raw_smp_processor_id();
-> >> +}
-> >> +
-> >>  /*
-> >>   * Can we actually use the console at this time on this cpu?
-> >>   *
-> >> @@ -2746,6 +2765,10 @@ void console_unlock(void)
-> >>  		if (handover)
-> >>  			return;
-> >>  
-> >> +		/* Allow panic_cpu to take over the consoles safely */
-> >> +		if (abandon_console_lock_in_panic())
-> >> +			break;
-> >
-> > Sorry, why not just `return` like in handover case?
+[ +cc pinctrl list for visible ]
+
+Hi Andy,
+
+Thanks for the reply.
+
+On 2022/2/7 19:20, Andy Shevchenko wrote:
+> On Mon, Feb 07, 2022 at 01:17:49PM +0200, Andy Shevchenko wrote:
+>> On Tue, Jan 25, 2022 at 08:49:29PM +0800, Yicong Yang wrote:
+>>> Add generic GPIO bus recovery support for i2c-hisi driver
+>>> by registering the recovery information with core provided
+>>> i2c_generic_scl_recovery() method.
+>>>
+>>> As the SCL/SDA pins are multiplexed with GPIO, we need to
+>>> switch the pins mux to GPIO before recovery and switch back
+>>> after recovery. It's implemented by the ACPI method in
+>>> the i2c_bus_recovery_info->{prepare,unprepare}_recovery()
+>>> method.
+>>
+>> NAK.
+>>
+>> ACPI has its own resources for that. What is missed is the layer between ACPI
+>> and pin control.
 > 
-> We need to drop console_sem before returning, since the whole benefit
-> here is to increase the chance that console_sem is unlocked when the
-> panic_cpu halts this CPU.
 
-Yes, that makes sense.
+I think that's where the problem is and why we use this approach. When I looked into
+devm_pinctrl_get(), it stops when fails to retrieve the pin info from device tree.
+So I cannot use it on our ACPI server for the pinmux.
 
-> in the handover case, there's another cpu waiting, and we're essentially
-> transferring the console_sem ownership to that cpu, so we explicitly
-> return and skip the unlocking portion.
+I looked into the history that Irina raised an RFC for adding the ACPI support in pinctrl[1],
+but at that time seems it lacks some standard support. But maybe now we can support it?
+
+But based on the current situation maybe the implementation of this patch suits best.
+And currently we don't have a pinctrl driver for doing the multiplexing (though I think it's
+easy to add one but maybe only configures 2 pins for now).
+
+[1] https://lore.kernel.org/all/CACRpkdbj==q5wp2Z5-ZXkbfeXa4y+beLF_3YN-vS3CtyAKGwkg@mail.gmail.com/
+
+Thanks,
+Yicong
+
+> To be more precise,
 > 
-> Does this need some comments to clarify it?
-
-No. Everything looks good. Thanks.
+> https://uefi.org/specs/ACPI/6.4/19_ASL_Reference/ACPI_Source_Language_Reference.html?highlight=pinfunction#pinconfig-pin-configuration-descriptor-macro
+> 
+> https://uefi.org/specs/ACPI/6.4/19_ASL_Reference/ACPI_Source_Language_Reference.html?highlight=pinfunction#pinfunction-pin-function-descriptor-macro
+> 
+> https://uefi.org/specs/ACPI/6.4/19_ASL_Reference/ACPI_Source_Language_Reference.html?highlight=pinfunction#pingroup-pin-group-descriptor-macro
+> 
+> https://uefi.org/specs/ACPI/6.4/19_ASL_Reference/ACPI_Source_Language_Reference.html?highlight=pinfunction#pingroupconfig-pin-group-configuration-descriptor-macro
+> 

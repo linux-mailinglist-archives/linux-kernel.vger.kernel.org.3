@@ -2,116 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36A3B4AD439
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 10:01:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F5954AD40A
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 09:53:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352727AbiBHJBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 04:01:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50506 "EHLO
+        id S1352085AbiBHIx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 03:53:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241271AbiBHJBY (ORCPT
+        with ESMTP id S231657AbiBHIxY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 04:01:24 -0500
-X-Greylist: delayed 503 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Feb 2022 01:01:22 PST
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F07F5C03FEC0
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 01:01:22 -0800 (PST)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2187FPYI029207;
-        Tue, 8 Feb 2022 09:52:35 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=v3Nw6M+6Dsi+fs1JPP1dSSIm9lpFQHB7g75gslpbKeY=;
- b=Mgq5P9NB3nwoHZdVJ6tMjysBImyErUzr19msvPqqz/FQ5su4diuk4I96fqnfOhnwlDhv
- lB7cKCACz3Sc6atiQ8xnt6n52YdWoAJh2M+QrQqiCwt9NoCNku+bZwbyjSulSmTUWgxR
- i1KICRpFL5346yegj5hlh6oEk9gNN2NWdxRAETo4tqc+QUE0ejJARTpaCkMkNGlgqGNM
- 49v0iGD21x+9DC1dQ9KuskABfbYRzmuWZUmR37xtkwCz4/u/9P0VldiHLtEXU/htZ3Q1
- WnZ4MJliElInn3GE4UIJge/z8id89T9piEoLjrMVCEJkxSREAs1fUx/VSKF7cXwDFMT+ xQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3e3kyhgmje-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Feb 2022 09:52:35 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B7C1A10002A;
-        Tue,  8 Feb 2022 09:52:33 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A885E211F3D;
-        Tue,  8 Feb 2022 09:52:33 +0100 (CET)
-Received: from [10.129.7.145] (10.75.127.51) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 8 Feb
- 2022 09:52:33 +0100
-Message-ID: <4f666fe5-080e-6c82-5bef-c0b52cb57207@foss.st.com>
-Date:   Tue, 8 Feb 2022 09:52:32 +0100
+        Tue, 8 Feb 2022 03:53:24 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70ED3C03FEC0;
+        Tue,  8 Feb 2022 00:53:23 -0800 (PST)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JtGwh4xFCzbkKJ;
+        Tue,  8 Feb 2022 16:52:20 +0800 (CST)
+Received: from [10.67.110.173] (10.67.110.173) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 8 Feb 2022 16:53:20 +0800
+Message-ID: <e852660c-17fa-cd75-e361-45dd77b8884d@huawei.com>
+Date:   Tue, 8 Feb 2022 16:53:20 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] drm/stm: Avoid using val uninitialized in
- ltdc_set_ycbcr_config()
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
 Content-Language: en-US
-To:     Nathan Chancellor <nathan@kernel.org>,
-        Yannick Fertre <yannick.fertre@foss.st.com>,
-        Philippe Cornu <philippe.cornu@foss.st.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>
-CC:     <llvm@lists.linux.dev>, Nick Desaulniers <ndesaulniers@google.com>,
-        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20220207165304.1046867-1-nathan@kernel.org>
-From:   Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
-In-Reply-To: <20220207165304.1046867-1-nathan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+To:     Mimi Zohar <zohar@linux.ibm.com>
+CC:     Roberto Sassu <roberto.sassu@huawei.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        wangweiyang <wangweiyang2@huawei.com>,
+        "xiujianfeng@huawei.com" <xiujianfeng@huawei.com>
+From:   "Guozihua (Scott)" <guozihua@huawei.com>
+Subject: Problem with commit ccf11dbaa07b ("evm: Fix memleak in init_desc")
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.75.127.51]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-08_02,2022-02-07_02,2021-12-02_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.67.110.173]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500024.china.huawei.com (7.185.36.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Nathan,
+Hi Mimi,
 
+I found an issue with commit ccf11dbaa07b ("evm: Fix memleak in init_desc").
 
-On 2/7/22 17:53, Nathan Chancellor wrote:
-> Clang warns:
->
->   drivers/gpu/drm/stm/ltdc.c:625:2: warning: variable 'val' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
->           default:
->           ^~~~~~~
->   drivers/gpu/drm/stm/ltdc.c:635:2: note: uninitialized use occurs here
->           val |= LxPCR_YCEN;
->           ^~~
->   drivers/gpu/drm/stm/ltdc.c:600:9: note: initialize the variable 'val' to silence this warning
->           u32 val;
->                  ^
->                   = 0
->   1 warning generated.
->
-> Use a return instead of break in the default case to fix the warning.
-> Add an error message so that this return is not silent, which could hide
-> issues in the future.
->
-> Fixes: 484e72d3146b ("drm/stm: ltdc: add support of ycbcr pixel formats")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1575
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  drivers/gpu/drm/stm/ltdc.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+This commit tries to free variable "tmp_tfm" if something went wrong 
+after the "alloc" label in function init_desc, which would potentially 
+cause a user-after-free issue
 
+The codes are as follows:
 
-Reviewed-by: Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
+   1 static struct shash_desc *init_desc(char type, uint8_t hash_algo)
+   2 {
+   3 	long rc;
+   4 	const char *algo;
+   5 	struct crypto_shash **tfm, *tmp_tfm = NULL;
+   6 	struct shash_desc *desc;
+   7
+   8 	if (type == EVM_XATTR_HMAC) {
+   9 		if (!(evm_initialized & EVM_INIT_HMAC)) {
+  10 			pr_err_once("HMAC key is not set\n");
+  11 			return ERR_PTR(-ENOKEY);
+  12 		}
+  13 		tfm = &hmac_tfm;
+  14 		algo = evm_hmac;
+  15 	} else {
+  16 		if (hash_algo >= HASH_ALGO__LAST)
+  17 			return ERR_PTR(-EINVAL);
+  18
+  19 		tfm = &evm_tfm[hash_algo];
+  20 		algo = hash_algo_name[hash_algo];
+  21 	}
+  22
+  23 	if (*tfm)
+  24 		goto alloc;
+  25 	mutex_lock(&mutex);
+  26 	if (*tfm)
+  27 		goto unlock;
+  28
+  29 	tmp_tfm = crypto_alloc_shash(algo, 0, CRYPTO_NOLOAD);
+  30 	if (IS_ERR(tmp_tfm)) {
+  31 		pr_err("Can not allocate %s (reason: %ld)\n", algo,
+  32 		       PTR_ERR(tmp_tfm));
+  33 		mutex_unlock(&mutex);
+  34 		return ERR_CAST(tmp_tfm);
+  35 	}
+  36 	if (type == EVM_XATTR_HMAC) {
+  37 		rc = crypto_shash_setkey(tmp_tfm, evmkey, evmkey_len);
+  38 		if (rc) {
+  39 			crypto_free_shash(tmp_tfm);
+  40 			⋅mutex_unlock(&mutex);
+  41 			return ERR_PTR(rc);
+  42 		}
+  43 	}
+  44 	*tfm = tmp_tfm;
+  45 unlock:
+  46 	mutex_unlock(&mutex);
+  47 alloc:
+  48 	desc = kmalloc(sizeof(*desc) + crypto_shash_descsize(*tfm),
+  49 			GFP_KERNEL);
+  50 	if (!desc) {
+  51 		crypto_free_shash(tmp_tfm);
+  52 		return ERR_PTR(-ENOMEM);
+  53 	}
+  54
+  55 	desc->tfm = *tfm;
+  56
+  57 	rc = crypto_shash_init(desc);
+  58 	if (rc) {
+  59 		crypto_free_shash(tmp_tfm);
+  60 		kfree(desc);
+  61 		return ERR_PTR(rc);
+  62 	}
+  63 	return desc;
+  64 }
 
+As we can see, variable *tfm points to one of the two global variable 
+hmac_tfm or evm_tfm[hash_algo]. tmp_tfm is used as an intermediate 
+variable for initializing these global variables. Freeing tmp_tfm after 
+line 44 would invalidate these global variables and potentially cause a 
+user-after-free issue.
 
-Thanks,
+I think this commit should be reverted.
 
-Raphaël
+Reference: commit 843385694721 ("evm: Fix a small race in init_desc()")
 
+-- 
+Best
+GUO Zihua

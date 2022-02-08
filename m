@@ -2,348 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 124494ADC9B
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 16:27:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7853C4ADC9F
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 16:28:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376875AbiBHP1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 10:27:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42638 "EHLO
+        id S1380354AbiBHP2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 10:28:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232168AbiBHP1g (ORCPT
+        with ESMTP id S1380317AbiBHP2A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 10:27:36 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0369AC061576
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 07:27:35 -0800 (PST)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 218EXKc4024574;
-        Tue, 8 Feb 2022 15:27:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=p12du2hDwvetB0fMT94MAlGny81UMquYUwY3x3iLJQU=;
- b=rhNviVZBGXNE/l0+eAKLRPy2bxiGL5ZOqwOd0PJqEkuBjWcxqb1ADte6qn8Z9E870IA/
- WFe1M8YF0++0jzlOQck7SCxpmXNk6lKZTnQ6KafjokzP5MfDDPBjlGaHDNvGQlq5vVFt
- +M9f4nkoyyG9oSxvSKNTU59KhYRKKgvoe4kIsARuxZ4NCHB5iFfxz554TyImNKve9PJc
- kz09nGd37w24MMIwjZTgTxXNyFUtoGFtbEPlERuVtOLrg0qACkoCOrA4a8Xtv4TA0DOL
- BeEElqS8c56OSC3ZZY2QPdQZKZLX8kWih6pJnjvAcsgJ+nB1XEsgelmQBPkqephh9MdW hA== 
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e3npsgpsx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Feb 2022 15:27:26 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 218FKTRB017692;
-        Tue, 8 Feb 2022 15:27:25 GMT
-Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
-        by ppma02dal.us.ibm.com with ESMTP id 3e3gpyd3up-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Feb 2022 15:27:25 +0000
-Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
-        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 218FROa628705272
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 8 Feb 2022 15:27:24 GMT
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3C486124064;
-        Tue,  8 Feb 2022 15:27:24 +0000 (GMT)
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B616C12405B;
-        Tue,  8 Feb 2022 15:27:22 +0000 (GMT)
-Received: from [9.163.31.52] (unknown [9.163.31.52])
-        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue,  8 Feb 2022 15:27:22 +0000 (GMT)
-Message-ID: <8cedee1b-c380-b13e-1769-df8778a70ff0@linux.ibm.com>
-Date:   Tue, 8 Feb 2022 09:27:21 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] fsi: occ: Improve response status checking
+        Tue, 8 Feb 2022 10:28:00 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A00C061578;
+        Tue,  8 Feb 2022 07:27:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1644334079; x=1675870079;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=8IVDJKt7buS0qbojbGI30U389EPhzSkQAwkSnNqfgCA=;
+  b=xIaAtGKNZWHiQqE4aAZwC3XDOul3AVZW7U33Rh+1flOPR8tkem3b/4ww
+   ysjTcPWTMzzE262e3kZYR1li7zTRZYnVWH6TYOL+ey+x+Rc9xDrVDZ9iT
+   iqsynmKrnu3titknH02NKCtyLofCtnUR5+IhPB/tn4T5gxP/2C0TqO4WT
+   uUTz+B14GOH//HiMGFRE5DuzIkPJq131LsaadcQOfo1ATOZwSUd5MCZoB
+   Gv2VAE6dN8ZRgFWJbWjs8GuAA1b5uvrlPIGhehj2VC1vxXo89BJs2iPxv
+   fFPNRbqQmzgSFqkmYiTXTwmYtKdIqKLoU5i4xox+ClTm01az+11efOmN0
+   A==;
+IronPort-SDR: b/eu7wtO8lZxL1EbD8cq/sGn/BMIAsTzW1OQBM4v+xrd/no1jk9C0J504lkQoBMel05uKPthgR
+ QnTAKPytke+jBZAP23xlEtowTfJUWMHfdLNq3dgvNjf/aUMKatNGb3H3Ml4vMsI4SPjqMpQnc1
+ TgTxSOS9IR23eQfIt9CYIV/i19/ggioql48v6U3pCOO4eL43TyYSc7+HjK9VcYQPPcXwS9Ln7+
+ Efbii6KFr4yktoUtSG7SWCIoLBdb1ImK26Pknlxd1YVAyJcKoUgd4y/3SsiD5bA0BWxc5FKruG
+ XOXtKwy57szhn1zEQoCjiz9Z
+X-IronPort-AV: E=Sophos;i="5.88,353,1635231600"; 
+   d="scan'208";a="148002490"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Feb 2022 08:27:58 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Tue, 8 Feb 2022 08:27:57 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17 via Frontend Transport; Tue, 8 Feb 2022 08:27:57 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FvpzPBpAOzdOwnWJmCz1lgwQA56b4YUVEkT8q9NYCjZViklMPxw3a835PiaF7hDvKH4QC6gZSOpVYdCPR594WgNHYhsD8MEo+aOlfNiytudtlm5p9CaIIF29eZ3x/JVl0zgXTSYdVi7Pkd5u7CPyGQZFskIQfmKdIsGf9uIash0ryUjhPZ1i3sUjbwXuY+iFn0oNjMTgkfkUmAs3mcw8ngrySFt53jVJXW4nA/nLVV9/kqrGAibYmenS53B++YNsVqTs2MlEHramI2wvd4XyoxFvS4lUgtRU2KfoOPL3VCOVs2Ao8e8Poesn6SIvnBDmY0hG+usT5VOv7Y5o5CVq0Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8IVDJKt7buS0qbojbGI30U389EPhzSkQAwkSnNqfgCA=;
+ b=hLqYKpDiW4x7keUwoYG7H8gg+UYx0g6H08Bhmw4HAccPDdWU2LYW23ow6BR4woAkBS9UTFk7pnueBZp4sbrZ4EdKT6MIAC0TpIZo7IhZXH0LKMZ/+3KRviV0+EOiATUJFwCnm9lJ6bh1dU+fG6npYwUzwzgZe0FOlnWceTcezoCYRPhgpc5r279ONMiRkqn5GltNSN8rWa5bxlYAbRLLzJp9X0EaeZgB5HC8anxWHlwSmYrpkKs2CkVHWncxk7eBLS7PvKGGeQXTipytKdq76vPfCETwOKNq3KBJ/Ab/00nH6xQD1eiU8YZp5CVy5oJNRhbtYQ9/FtBR9p0Wzulscg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8IVDJKt7buS0qbojbGI30U389EPhzSkQAwkSnNqfgCA=;
+ b=VpBNHVP/Gs8yLgHlmh4hz2AQgTCZpV7CPTucT5xO4TDGMpvdN+TStTe9Xv/e0FlnuR9FjoR0c1V6toF/ikG64La1BN7/xnwL+Z0/5PP8TBSDSoR4YfI8SJwj/4HD40w7q9t9iaRAoIWOWKAZKAB6jG6YrTmDVEFNzRpkXF+54I0=
+Received: from SA2PR11MB4874.namprd11.prod.outlook.com (2603:10b6:806:f9::23)
+ by SA2PR11MB5097.namprd11.prod.outlook.com (2603:10b6:806:11a::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.11; Tue, 8 Feb
+ 2022 15:27:47 +0000
+Received: from SA2PR11MB4874.namprd11.prod.outlook.com
+ ([fe80::49cd:dd25:384:e918]) by SA2PR11MB4874.namprd11.prod.outlook.com
+ ([fe80::49cd:dd25:384:e918%5]) with mapi id 15.20.4975.011; Tue, 8 Feb 2022
+ 15:27:46 +0000
+From:   <Tudor.Ambarus@microchip.com>
+To:     <krzysztof.kozlowski@canonical.com>, <herbert@gondor.apana.org.au>
+CC:     <Nicolas.Ferre@microchip.com>, <Claudiu.Beznea@microchip.com>,
+        <alexandre.belloni@bootlin.com>, <linux-crypto@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <Kavyasree.Kotagiri@microchip.com>,
+        <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v2 1/3] dt-bindings: crypto: Convert Atmel AES to yaml
+Thread-Topic: [PATCH v2 1/3] dt-bindings: crypto: Convert Atmel AES to yaml
+Thread-Index: AQHYHPnDVT4dxUSni0qjnycASWeRyw==
+Date:   Tue, 8 Feb 2022 15:27:46 +0000
+Message-ID: <2703df0f-a47c-f7cd-4d79-954b797cb57a@microchip.com>
+References: <20220208104918.226156-1-tudor.ambarus@microchip.com>
+ <20220208104918.226156-2-tudor.ambarus@microchip.com>
+ <f5563605-7b61-c23e-68ec-6e315efb268d@canonical.com>
+ <d72a96a9-f99c-5204-00d0-00f78ea96772@microchip.com>
+ <bca78043-d552-a7e4-149b-087c6226d8bf@canonical.com>
+In-Reply-To: <bca78043-d552-a7e4-149b-087c6226d8bf@canonical.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Joel Stanley <joel@jms.id.au>
-Cc:     linux-fsi@lists.ozlabs.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alistair Popple <alistair@popple.id.au>,
-        Jeremy Kerr <jk@ozlabs.org>
-References: <20220110155827.13976-1-eajames@linux.ibm.com>
- <CACPK8XdgOYTwy5aOQgSuSJaQUjxnobN2c3ph=dkAcWYJDVbN+w@mail.gmail.com>
- <3897c432-4365-7c54-b336-7331bb328350@linux.ibm.com>
- <CACPK8XcoJ2O=0RYZy0R=9xHCRne4F4f_3Q1hQYCAmiypepz7yw@mail.gmail.com>
-From:   Eddie James <eajames@linux.ibm.com>
-In-Reply-To: <CACPK8XcoJ2O=0RYZy0R=9xHCRne4F4f_3Q1hQYCAmiypepz7yw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: gQQ0_KFFsySE6AsrxtkVXSINHYeUFihj
-X-Proofpoint-GUID: gQQ0_KFFsySE6AsrxtkVXSINHYeUFihj
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-08_05,2022-02-07_02,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
- spamscore=0 bulkscore=0 phishscore=0 suspectscore=0 mlxlogscore=999
- priorityscore=1501 mlxscore=0 impostorscore=0 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202080093
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d660fb86-b242-4cd9-0e25-08d9eb178f40
+x-ms-traffictypediagnostic: SA2PR11MB5097:EE_
+x-microsoft-antispam-prvs: <SA2PR11MB5097275ED55D4BF0FCF54EDFF02D9@SA2PR11MB5097.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 5TV477xmtJ0t96FXjXelRtoQhYSmGdNDZyn9P09RjjHFnYpzb3sKyy/d1susbT28GgE+zjKSH68CYHJ3e+4uA773LZCsSgtO/L3uMLbrylTezSwKWwTo7p83hjWLtv9P79ug2yVPYCOMTGLyyk2uJfT1QZRXDqRYuGbawtYNByqLA+JTD0dx8NoHvv8cFBBnDQOgnAh4ocEc/e/nc2peYytLLlIjUTsH8ZXfYNvVx1M3B98JTWqbT/Zma9cgwPy6Vg1RnHfBZqnyFc1yOvEmJAwniV/sdCvAQzkqndVevNM4TjkLSmAwmgBIWVsj9u5LcVeHwDgB3NzJ5Yt1OuDJHSTuY4GNC+6clknIQsD64BoXobTxhG9P4TOLEKqxIna/WB1J8MpVSglS/g0Ar6Y4R513aDxkGk/6axqfh75CJUDK9XPw6s7PiD3Rsld9RskW4hvwV9uPaC3uRjNDos5SxXO2B3AHeq8BgJidQ4JlN6p61LUMYKxT4NeUhnrEBJLyQETxoHidTvDIzPwwmCNDrWFveCnmuYu+aDZod4Zx9jsZ7Xdl+iqCA9Mm0LgEh8J5spAiLQTKUZkTt8DNxOID9Xe9QMTFZq+7qnK1Xa40upl0PI1BBfFOxB658Z8dUUyXHqLW+Kl6CfGGPfhhqvTmJtk3jDCMPEiidA+JhbmcxP9odZnwKx5M05B+tiWtPjN/YjIGFAoT06AuPrhk/zK6YrP4Y3I3KFQFVfKER5Lae+nhHaC/XDsmiZN7+2gsuDK+u9fkIoUHMwOjMLIvY5uPZQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA2PR11MB4874.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(54906003)(6486002)(86362001)(8936002)(8676002)(122000001)(64756008)(66446008)(76116006)(66946007)(66556008)(38100700002)(66476007)(91956017)(316002)(4326008)(186003)(26005)(2616005)(71200400001)(36756003)(83380400001)(31696002)(508600001)(6512007)(6506007)(53546011)(38070700005)(110136005)(31686004)(5660300002)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?N05XcllUc3JsckxkZHRZbHUzWnVJR3kwTUdHNm9IOWVESlVkREtlVDc2VC8x?=
+ =?utf-8?B?UnArb3dwNk5pWTJjL3hsZUpQVmRCTlZrc1lhamdSMi9UL3JWZXYxSUYvQWRE?=
+ =?utf-8?B?ODJnUGw5cVliNVpxN3J2REcwV0hkNjJILzVDeGFDRmRIa1VxZHdaU0VQbEpV?=
+ =?utf-8?B?WlAwakRXQ0ROUGkxVFA0TnBYVFAwT1ZjSEliWXZnUDZnay8rcjMrM3NEU3Y4?=
+ =?utf-8?B?NjV2V3VFK3o3NzRDL3hXbktVYzVaZlIzVEc3VGtwT1RpV3pGOStCVk90YlhG?=
+ =?utf-8?B?bFhHY1dRV1YrQUMzNkFKc0NlZE15WDljTVgxNGtta1h5T2xzWGJsSGxLekw3?=
+ =?utf-8?B?b0xqNlBmUzRiUjEzTE5NRCs1QWZnOGVGY2JjQmhCVjIxY3oxNlM5ek56VGtD?=
+ =?utf-8?B?Uk1zaVZMZHR5S0ZLSndrNGozUFhDWkd1NkpOZEYwdzRYRzIwNWNqUmcvSU9z?=
+ =?utf-8?B?V1htZWIrTDd5MS9zQi9ia1hXT3owaFlyMFJNUktOQ01sUGdGUVBUcFA0Y0FW?=
+ =?utf-8?B?cjZ4bzN1ckFaZTJ0TW14dW9GdENDN2t6Wnlxa2lwK1ZjaGFXMW1OZGdiYm4r?=
+ =?utf-8?B?N1pXUnkrOFdHU2JuZ2xmTjVhTUZxUHZFKzQ3SWUrTEc1YUNXcm5PQ1hhS05v?=
+ =?utf-8?B?bHRqSXFJMkEwd0JzZXB6VmdtbWlucllDZTVxeTZkWnZ4aDhsOGsvUjVsL1Yw?=
+ =?utf-8?B?NVJEcStZTkhBYkx2OTYyMlZEeGQyeDZUSFZSTkg3Y0l2L213Z3YyeENQUkNG?=
+ =?utf-8?B?d1hpaktRUTlvQUdpTk9QVXE0L1pPZG1EWUJmL0x0NnM4SENjZ2oycmp3ZDZM?=
+ =?utf-8?B?T2pOWnN3YWx1MkNSRjM4azNEU24rT2wwVzdvM3NFVzJpZGJWeHRhR1VNK3Rm?=
+ =?utf-8?B?dG9jaGxOSUNFWEV0UmQrL3JRbVZSVUtxREd1eXJPeERZKzNsQ1E0OFZQVlFy?=
+ =?utf-8?B?a0tFcENMa3ovYWFUNXB0Nmg2Nko5dmNNdjFGYUtoeVpFcWY3V01tclNLVGNI?=
+ =?utf-8?B?NXUzdXVKYXNPb2U1OWYzQUNpOE9Qa3NTY21ZUDZzcExLbk04REVBaDE1aDZU?=
+ =?utf-8?B?dVdWMTFmVW1uMld3NC8xZ25FNzdzUUJRYXozQnRlWld1U1R2cFNDemE3WnFZ?=
+ =?utf-8?B?MzZwb1g0ZC9KcTlrSXpIU2RVZENwQk5SbjhlcC82QzFxaEdmakdSWk8xUW9Z?=
+ =?utf-8?B?emhPYm5sdnUrTDBncTJGOFhEbkxSN1JFZzEyYU1FS2FqcktaeVBWSEdRSnNF?=
+ =?utf-8?B?azcyTDYvVUk4djRjYjdya2Y4ZzMxYURnc1hEMTh1Z0k2U3lDSVp3eTUyKysv?=
+ =?utf-8?B?ZlNqNnlnZlZDWVg3akFWbHZQaFI3T2dpWk02MERBaEc2VUZySkdCaGxkZE1a?=
+ =?utf-8?B?MDd4aEdUQW5lM3dzd3BmclZwL1Z4dnRkY2puZGdNKyt6anRwOE5ZM1ZkZ3Jx?=
+ =?utf-8?B?dS9tVjAyb1dPZ1hZcWkvcnRTUFZzbXlmNkJYYUF0aTdPWEVla2tMcUhDR2x4?=
+ =?utf-8?B?Y3VVUHBLSnRORSt1cHNvc25Vd2ZjUTBFdGZDTzVYcERVd3lpZkZWRVhvSXI4?=
+ =?utf-8?B?clhMczByL3JDSTZlY2NlMTBTTG5VTXBuNzFnT1o5U0txdEpxbHRweEJaeDdB?=
+ =?utf-8?B?Wk1UeFhkSTBsZXZleEdSVUpWZ2ZLTEVBeFQ3Z2FWY05tR1U4YlM2YVdrdVFG?=
+ =?utf-8?B?WmNxaWcwZjAyVFlEYUZweTcxd1JnMWRqQ1dUQzhxSTI5cTE5d1h6QzJNdmJI?=
+ =?utf-8?B?Wm5DbFo3U2JTdEovYXdNN0c4TWFlSDlPeGE2dUdMcnFOZVV3Q2tyVVBxYmp4?=
+ =?utf-8?B?dnlTc0xDVlM3My82NnhGd3FaZHRBeXJRRVl0TWtRZ2tTWkJrOHdwNWdpUzBU?=
+ =?utf-8?B?UmpDZDZZQTd6UytQWHBPY3hBc09lZGd2NklydU1CZFNCa1NCdTEvZklkK0lz?=
+ =?utf-8?B?SGRQVkNQNW5iUm1veXkySGQ0aGpXT3ZTSFljcVN1YlVxNjU3WXMyOFFuaDZ6?=
+ =?utf-8?B?RGhMeGE4SER5MXdMQk1US05oRUZwb0ZsREo3K3RwdlN6LzFzQ1pwbmpwWWQ1?=
+ =?utf-8?B?QkQ1VXpVbk40VzM4N3VrTG8rY2JIRU03R1FoRFBnTWk3ZmQydmVxSlZaOWZ2?=
+ =?utf-8?B?ZTcyeVI2K05tMzBPWmkwc3BMMlZiU0V0MkNHdzYzU09XckpBaUx4Sm16NG1t?=
+ =?utf-8?B?cysxSDhaNWpsUVFmbmFPTWlwSUhXbFVBSVlFbk15V1k3RVZ0RnNhd2hUeW8r?=
+ =?utf-8?B?bmNaWCtrQVZsb24wRzZTdDFtRzlnPT0=?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <7CA652B2E3B278479C9E6BCE570DB478@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA2PR11MB4874.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d660fb86-b242-4cd9-0e25-08d9eb178f40
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Feb 2022 15:27:46.9282
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: QGXc9di1HWjp+u2x/wvPK+HZvLGghwMvNyO6ZpRNBlydWCyu/3WJw5TNrl5CIiUMwL5MBFm9Q81LHdvWNcn6U8gomD1Q8pmQA86gLBtEZjo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB5097
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 2/7/22 03:56, Joel Stanley wrote:
-> On Mon, 31 Jan 2022 at 15:29, Eddie James <eajames@linux.ibm.com> wrote:
->>
->> On 1/30/22 23:56, Joel Stanley wrote:
->>> On Mon, 10 Jan 2022 at 15:58, Eddie James <eajames@linux.ibm.com> wrote:
->>>> If the driver sequence number coincidentally equals the previous
->>>> command response sequence number, the driver may proceed with
->>>> fetching the entire buffer before the OCC has processed the current
->>>> command. To be sure the correct response is obtained, check the
->>>> command type and also retry if any of the response parameters have
->>>> changed when the rest of the buffer is fetched.
->>>>
->>>> Signed-off-by: Eddie James <eajames@linux.ibm.com>
->>>> ---
->>>>    drivers/fsi/fsi-occ.c | 63 ++++++++++++++++++++++++++++++-------------
->>>>    1 file changed, 44 insertions(+), 19 deletions(-)
->>>>
->>>> diff --git a/drivers/fsi/fsi-occ.c b/drivers/fsi/fsi-occ.c
->>>> index 7eaab1be0aa4..67569282dd69 100644
->>>> --- a/drivers/fsi/fsi-occ.c
->>>> +++ b/drivers/fsi/fsi-occ.c
->>>> @@ -451,6 +451,15 @@ static int occ_trigger_attn(struct occ *occ)
->>>>           return rc;
->>>>    }
->>>>
->>>> +static void fsi_occ_print_timeout(struct occ *occ, struct occ_response *resp,
->>>> +                                 u8 seq_no, u8 cmd_type)
->>>> +{
->>>> +       dev_err(occ->dev,
->>>> +               "resp timeout status=%02x seq=%d cmd=%d, our seq=%d cmd=%d\n",
->>>> +               resp->return_status, resp->seq_no, resp->cmd_type, seq_no,
->>>> +               cmd_type);
->>>> +}
->>>> +
->>>>    int fsi_occ_submit(struct device *dev, const void *request, size_t req_len,
->>>>                      void *response, size_t *resp_len)
->>>>    {
->>>> @@ -461,12 +470,14 @@ int fsi_occ_submit(struct device *dev, const void *request, size_t req_len,
->>>>           struct occ_response *resp = response;
->>>>           size_t user_resp_len = *resp_len;
->>>>           u8 seq_no;
->>>> +       u8 cmd_type;
->>>>           u16 checksum = 0;
->>>>           u16 resp_data_length;
->>>>           const u8 *byte_request = (const u8 *)request;
->>>> -       unsigned long start;
->>>> +       unsigned long end;
->>>>           int rc;
->>>>           size_t i;
->>>> +       bool retried = false;
->>>>
->>>>           *resp_len = 0;
->>>>
->>>> @@ -478,6 +489,8 @@ int fsi_occ_submit(struct device *dev, const void *request, size_t req_len,
->>>>                   return -EINVAL;
->>>>           }
->>>>
->>>> +       cmd_type = byte_request[1];
->>>> +
->>>>           /* Checksum the request, ignoring first byte (sequence number). */
->>>>           for (i = 1; i < req_len - 2; ++i)
->>>>                   checksum += byte_request[i];
->>>> @@ -509,30 +522,30 @@ int fsi_occ_submit(struct device *dev, const void *request, size_t req_len,
->>>>           if (rc)
->>>>                   goto done;
->>>>
->>>> -       /* Read occ response header */
->>>> -       start = jiffies;
->>>> +retry:
->>>> +       end = jiffies + timeout;
->>>>           do {
->>>> +               /* Read occ response header */
->>>>                   rc = occ_getsram(occ, 0, resp, 8);
->>>>                   if (rc)
->>>>                           goto done;
->>>>
->>>>                   if (resp->return_status == OCC_RESP_CMD_IN_PRG ||
->>>>                       resp->return_status == OCC_RESP_CRIT_INIT ||
->>>> -                   resp->seq_no != seq_no) {
->>>> -                       rc = -ETIMEDOUT;
->>>> -
->>>> -                       if (time_after(jiffies, start + timeout)) {
->>>> -                               dev_err(occ->dev, "resp timeout status=%02x "
->>>> -                                       "resp seq_no=%d our seq_no=%d\n",
->>>> -                                       resp->return_status, resp->seq_no,
->>>> -                                       seq_no);
->>>> +                   resp->seq_no != seq_no || resp->cmd_type != cmd_type) {
->>> You're testing for two different types of conditions. The first is
->>> when the SBE is busy doing something else:
->>>
->>>                   if (resp->return_status == OCC_RESP_CMD_IN_PRG ||
->>>                        resp->return_status == OCC_RESP_CRIT_INIT ||
->>>
->>> And the others are when the message is not for the current user:
->>>
->>>                         resp->seq_no != seq_no || resp->cmd_type != cmd_type) {
->>>
->>> Should we be separating them out? It makes sense that the first means
->>> we should keep trying. For the second case should we bail straight
->>> away, instead of waiting for the timeout?
->>
->> They're really the same thing actually. If the sequence number or
->> command type is incorrect, it means the OCC is processing a different
->> command, and we need to wait for it to get to our command.
-> And we sometimes see one but not the other (ie, the return_status
-> doesn't cover all cases)?
-
-
-Yes, we definitely can see each one without the others, so we have to 
-check for them all.
-
-
->
->>
->>> How often do we see one vs the other?
->>>
->>>> +                       if (time_after(jiffies, end)) {
->>>> +                               fsi_occ_print_timeout(occ, resp, seq_no,
->>>> +                                                     cmd_type);
->>>> +                               rc = -ETIMEDOUT;
->>>>                                   goto done;
->>>>                           }
->>>>
->>>>                           set_current_state(TASK_UNINTERRUPTIBLE);
->>>>                           schedule_timeout(wait_time);
->>>> +               } else {
->>>> +                       break;
->>>>                   }
->>>> -       } while (rc);
->>>> +       } while (true);
->>> Use while (true) instead of do { } while (true) to make it clearer
->>> what's going on. Or refactor it to put the time_after in the while(),
->>> as this is what the loop is waiting on.
->>
->> OK, I went in circles (pun intended) working on this loop, but I'll try
->> and make it look better.
->>
->>
->>>>           /* Extract size of response data */
->>>>           resp_data_length = get_unaligned_be16(&resp->data_length);
->>>> @@ -543,17 +556,29 @@ int fsi_occ_submit(struct device *dev, const void *request, size_t req_len,
->>>>                   goto done;
->>>>           }
->>>>
->>>> -       dev_dbg(dev, "resp_status=%02x resp_data_len=%d\n",
->>>> -               resp->return_status, resp_data_length);
->>>> -
->>>> -       /* Grab the rest */
->>>> +       /* Now get the entire response; get header again in case it changed */
->>>>           if (resp_data_length > 1) {
->>>> -               /* already got 3 bytes resp, also need 2 bytes checksum */
->>>> -               rc = occ_getsram(occ, 8, &resp->data[3], resp_data_length - 1);
->>>> +               rc = occ_getsram(occ, 0, resp, resp_data_length + 7);
->>>>                   if (rc)
->>>>                           goto done;
->>>> +
->>>> +               if (resp->return_status == OCC_RESP_CMD_IN_PRG ||
->>>> +                   resp->return_status == OCC_RESP_CRIT_INIT ||
->>>> +                   resp->seq_no != seq_no || resp->cmd_type != cmd_type) {
->>>> +                       if (!retried) {
->>>> +                               retried = true;
->>>> +                               goto retry;
->>> Not sure about this.
->>>
->>> How often did this situation come up?
->>>
->>> Did you consider instead returning an error here?
->>
->> Well I can't say it's frequent, but hitting this condition was what
->> drove making this change in the first place. It needs to be handled.
-> I was concerned about the pattern of using goto back up the function.
->
-> Would it make more sense the have the caller retry, instead of adding
-> retries in the sbefifo driver?
-
-
-I've refactored it in v2. I don't think making the caller retry makes 
-sense, since it would be a lot of wasted work, since we only need to 
-re-read the response at that point.
-
-
->
->> Previously if this occurrred, we got a checksum error, so it effectively
->> already returned an error.
->>
->>
->>>> +                       }
->>>> +
->>>> +                       fsi_occ_print_timeout(occ, resp, seq_no, cmd_type);
->>>> +                       rc = -ETIMEDOUT;
->>>> +                       goto done;
->>>> +               }
->>>>           }
->>>>
->>>> +       dev_dbg(dev, "resp_status=%02x resp_data_len=%d\n",
->>>> +               resp->return_status, resp_data_length);
->>>> +
->>>>           occ->client_response_size = resp_data_length + 7;
->>>>           rc = occ_verify_checksum(occ, resp, resp_data_length);
->>>>
->>>> @@ -598,7 +623,7 @@ static int occ_probe(struct platform_device *pdev)
->>>>           occ->version = (uintptr_t)of_device_get_match_data(dev);
->>>>           occ->dev = dev;
->>>>           occ->sbefifo = dev->parent;
->>>> -       occ->sequence_number = 1;
->>>> +       occ->sequence_number = (u8)((jiffies % 0xff) + 1);
->>> This is interesting. You didn't mention this in the commit message;
->>> you're trying to get a random number for the sequence number?
->>
->> Yea, this reduces the chances of hitting that retry above. If it's
->> always 1, then every time the driver is bound it tries the first command
->> with the same sequence number. This is a problem when FSI scanning with
->> the host already running, as the driver gets unbound/rebound several
->> times in a row, and we easily hit the checksum problem, since we proceed
->> to get the full response even though it's not for the latest command,
->> and then the buffer is updated at the same time. So using a non-zero
->> random number is very helpful.
-> Makes sense. Perhaps do something like this instead of hand rolling it?
->
-> get_random_bytes(occ->sequence_number, 1);
-
-
-I thought about this, but I ended up just adding a comment and sticking 
-with jiffies. get_random_bytes seems a little heavy-handed, especially 
-since you're supposed to call wait_for_random_bytes first.
-
-
-Thanks,
-
-Eddie
-
-
->
-> If you could add some of your explanations to the commit message, I'd
-> like to get this fix merged soon.
->
-> Cheers,
->
-> Joel
->
->
->
->>
->> Thanks,
->>
->> Eddie
->>
->>
->>>>           mutex_init(&occ->occ_lock);
->>>>
->>>>           if (dev->of_node) {
->>>> --
->>>> 2.27.0
->>>>
+T24gMi84LzIyIDE2OjU1LCBLcnp5c3p0b2YgS296bG93c2tpIHdyb3RlOg0KPiBFWFRFUk5BTCBF
+TUFJTDogRG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4gYXR0YWNobWVudHMgdW5sZXNzIHlvdSBr
+bm93IHRoZSBjb250ZW50IGlzIHNhZmUNCj4gDQo+IE9uIDA4LzAyLzIwMjIgMTU6NDAsIFR1ZG9y
+LkFtYmFydXNAbWljcm9jaGlwLmNvbSB3cm90ZToNCj4+IE9uIDIvOC8yMiAxMzo1OCwgS3J6eXN6
+dG9mIEtvemxvd3NraSB3cm90ZToNCj4+PiBFWFRFUk5BTCBFTUFJTDogRG8gbm90IGNsaWNrIGxp
+bmtzIG9yIG9wZW4gYXR0YWNobWVudHMgdW5sZXNzIHlvdSBrbm93IHRoZSBjb250ZW50IGlzIHNh
+ZmUNCj4+Pg0KPj4+IE9uIDA4LzAyLzIwMjIgMTE6NDksIFR1ZG9yIEFtYmFydXMgd3JvdGU6DQo+
+Pj4+IENvbnZlcnQgQXRtZWwgQUVTIGRvY3VtZW50YXRpb24gdG8geWFtbCBmb3JtYXQuIFdpdGgg
+dGhlIGNvbnZlcnNpb24gdGhlDQo+Pj4+IGNsb2NrIGFuZCBjbG9jay1uYW1lcyBwcm9wZXJ0aWVz
+IGFyZSBtYWRlIG1hbmRhdG9yeS4gVGhlIGRyaXZlciByZXR1cm5zDQo+Pj4+IC1FSU5WQUwgaWYg
+ImFlc19jbGsiIGlzIG5vdCBmb3VuZCwgcmVmbGVjdCB0aGF0IGluIHRoZSBiaW5kaW5ncyBhbmQg
+bWFrZQ0KPj4+PiB0aGUgY2xvY2sgYW5kIGNsb2NrLW5hbWVzIHByb3BlcnRpZXMgbWFuZGF0b3J5
+LiBVcGRhdGUgdGhlIGV4YW1wbGUgdG8NCj4+Pj4gYmV0dGVyIGRlc2NyaWJlIGhvdyBvbmUgc2hv
+dWxkIGRlZmluZSB0aGUgZHQgbm9kZS4NCj4+Pj4NCj4+Pj4gU2lnbmVkLW9mZi1ieTogVHVkb3Ig
+QW1iYXJ1cyA8dHVkb3IuYW1iYXJ1c0BtaWNyb2NoaXAuY29tPg0KPj4+PiAtLS0NCj4+Pj4gIC4u
+Li9jcnlwdG8vYXRtZWwsYXQ5MXNhbTlnNDYtYWVzLnlhbWwgICAgICAgICB8IDY1ICsrKysrKysr
+KysrKysrKysrKysNCj4+Pj4gIC4uLi9iaW5kaW5ncy9jcnlwdG8vYXRtZWwtY3J5cHRvLnR4dCAg
+ICAgICAgICB8IDIwIC0tLS0tLQ0KPj4+PiAgMiBmaWxlcyBjaGFuZ2VkLCA2NSBpbnNlcnRpb25z
+KCspLCAyMCBkZWxldGlvbnMoLSkNCj4+Pj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBEb2N1bWVudGF0
+aW9uL2RldmljZXRyZWUvYmluZGluZ3MvY3J5cHRvL2F0bWVsLGF0OTFzYW05ZzQ2LWFlcy55YW1s
+DQo+Pj4+DQo+Pj4NCj4+PiBJIHVuZGVyc3RhbmQgdGhhdCB5b3Uga2VlcCB0aGUgbGljZW5zZSBH
+UEwtMi4wIChub3QgcmVjb21tZW5kZWQgbWl4KQ0KPj4+IGJlY2F1c2Ugb2YgZXhhbXBsZSBjb21p
+bmcgZnJvbSBwcmV2aW91cyBiaW5kaW5ncyBvciBmcm9tIERUUyAoYm90aCBHUEwtMi4wKT8NCj4+
+Pg0KPj4NCj4+IFRoZSBwcmV2aW91cyBiaW5kaW5ncyBkaWQgbm90IGhhdmUgYSBsaWNlbnNlIHNw
+ZWNpZmllZC4gV2UgaGF2ZSBEVFMgZmlsZXMgd2l0aA0KPj4gdGhlc2Ugbm9kZXMgdGhhdCBhcmUg
+ZWl0aGVyIChHUEwtMi4wKyBPUiBNSVQpIG9yIEdQTC0yLjAtb3ItbGF0ZXIuIFRoZSBkcml2ZXJz
+DQo+PiBhcmUgR1BMLTIuMC4gSSB0aG91Z2h0IHRvIGZvbGxvdyB0aGUgZHJpdmVycy4gSSBzZWUg
+dGhlIGV4YW1wbGUgaW4gWzFdIHVzZXMNCj4+IChHUEwtMi4wLW9ubHkgT1IgQlNELTItQ2xhdXNl
+KS4gSSBzZWUgdGhlIGNyeXB0byBiaW5kaW5ncyB0aGF0IGFyZSBjb252ZXJ0ZWQNCj4+IHRvIHlh
+bWwgYXJlIGVpdGhlciAoR1BMLTIuMC1vbmx5IE9SIEJTRC0yLUNsYXVzZSkgb3IgR1BMLTIuMC1v
+bmx5LiBJcyB0aGVyZQ0KPj4gYW5vdGhlciBndWlkZWxpbmUgdGhhdCBJIG1pc3M/DQo+Pg0KPiAN
+Cj4gWWVzLCB0aGVyZSBpcy4gUnVuIGNoZWNrcGF0Y2ggKHlvdXIgcXVlc3Rpb24ga2luZHMgb2Yg
+cG9pbnQgdG8gdGhlIGZhY3QNCj4gdGhhdCB5b3UgZGlkIG5vdCBydW4gaXQuLi4pOg0KPiBXQVJO
+SU5HOiBEVCBiaW5kaW5nIGRvY3VtZW50cyBzaG91bGQgYmUgbGljZW5zZWQgKEdQTC0yLjAtb25s
+eSBPUg0KPiBCU0QtMi1DbGF1c2UpDQoNClJpZ2h0LiBJIHVzdWFsbHkgcnVuIGNoZWNrcGF0Y2gg
+LS1zdHJpY3QsIGJ1dCB0aGlzIHdhcm5pbmcgc2xpcHBlZCBzb21laG93Lg0KTWF5YmUgYmVjYXVz
+ZSBvZiB0aGUgdHdvIG90aGVyIGZhbHNlIHBvc2l0aXZlcywgdG9vIG11Y2ggbm9pc2UuDQo+IA0K
+PiANCj4gSWYgeW91ciBuZXcgYmluZGluZ3MgdXNlIGNvcGllZC9kZXJpdmF0aXZlIGRlc2NyaXB0
+aW9uIG9yIERUUyBjb2RlIHdoaWNoDQo+IGlzIGxpY2Vuc2VkIGFzIG9ubHkgR1BMLTIuMCwgdGhl
+IGJpbmRpbmdzIGl0c2VsZiBhcyBkZXJpdmF0aXZlIHdvcmsNCj4gbWlnaHQgbmVlZCB0byBzdGF5
+IGFzIEdQTC0yLjAgYXMgd2VsbC4gVW5sZXNzIGNvcHlyaWdodCBob2xkZXJzIGFncmVlIHRvDQo+
+IHJlLWxpY2Vuc2UgdGhpcyBhcyBHUEwyLU9SLUJTRC4gQXMgcmVwcmVzZW50aW5nIGNvbXBhbnks
+IHlvdXIgcGF0Y2gNCj4gbWlnaHQgYmUgZW5vdWdoIHRvIHJlLWxpY2Vuc2UsIGJ1dCBtYXliZSBv
+dGhlciBwZW9wbGUgY29udHJpYnV0ZWQuIEkNCj4gZG9uJ3Qga25vdy4NCj4gDQo+IEkganVzdCB3
+YW50ZWQgdG8gYmUgc3VyZSB0aGF0IHlvdSB1c2UgR1BMLTIuMCBpbiBwdXJwb3NlLCBiZWNhdXNl
+DQo+IEdQTDItT1ItQlNEIGNhbm5vdCBiZSB1c2VkLg0KDQpPaywgdGhhbmtzIGZvciB0aGUgZXhw
+bGFuYXRpb24uIEkgaGF2ZSB0byBhZG1pdCBJJ20gbm90IHRvbyBmYW1pbGlhciB3aXRoDQp0aGUg
+Y29udGVudHMgb2YgZWFjaCBsaWNlbnNlLiBXaWxsIHJlYWQgdGhlbSBhbmQgY29tZSBiYWNrIHdp
+dGggYSBmb2xsb3cgdXAuDQoNCnRhDQo=

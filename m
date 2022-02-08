@@ -2,76 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E40F84ACEB2
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 03:11:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 608034ACEB4
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 03:13:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345864AbiBHCKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 21:10:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50500 "EHLO
+        id S237248AbiBHCNB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 21:13:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345928AbiBHCKY (ORCPT
+        with ESMTP id S230123AbiBHCM7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 21:10:24 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD4DC03E907;
-        Mon,  7 Feb 2022 18:09:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=E1JRzX7mOGLhHiS73dczVs4lf+o1P6khOplF/he8OTo=; b=esBuyYaicdEcEBw43ZI5nhYoTI
-        s8NGh821NpRFGdar3iha+ICGEgQ9B4+VM5LuFiLR/Z4/603fsfmJcxEH+I/sq4aVl7iDhjxBO+t/a
-        oH9FbbjhicRFTpF1Prs93SxPFpXMOOW+nLhyWqug572rfBx+OliXa9+W8+bHrkKqstuc=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nHFwy-004jou-8n; Tue, 08 Feb 2022 03:09:48 +0100
-Date:   Tue, 8 Feb 2022 03:09:48 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Raag Jadav <raagjadav@gmail.com>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Steen Hegelund <steen.hegelund@microchip.com>,
-        Bjarni Jonasson <bjarni.jonasson@microchip.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: phy: mscc: enable MAC SerDes autonegotiation
-Message-ID: <YgHQ7Kf+2c9knxk3@lunn.ch>
-References: <1644043492-31307-1-git-send-email-raagjadav@gmail.com>
- <Yf6QbbqaxZhZPUdC@lunn.ch>
- <20220206171234.GA5778@localhost>
- <YgANBQjsrmK+T/N+@lunn.ch>
- <20220207174948.GA5183@localhost>
+        Mon, 7 Feb 2022 21:12:59 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8819C061355;
+        Mon,  7 Feb 2022 18:12:58 -0800 (PST)
+Received: from dggeme756-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Jt62j1PC2zccRR;
+        Tue,  8 Feb 2022 10:11:57 +0800 (CST)
+Received: from [10.174.176.103] (10.174.176.103) by
+ dggeme756-chm.china.huawei.com (10.3.19.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.21; Tue, 8 Feb 2022 10:12:56 +0800
+Message-ID: <6e7fe188-a258-8d10-2f86-027c6b6f434c@huawei.com>
+Date:   Tue, 8 Feb 2022 10:12:56 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220207174948.GA5183@localhost>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH -next] block: update io_ticks when io hang
+From:   "zhangwensheng (E)" <zhangwensheng5@huawei.com>
+To:     <axboe@kernel.dk>
+References: <20220125091938.1799001-1-zhangwensheng5@huawei.com>
+ <45c2ae11-c44e-f27d-f029-66efe96b0804@huawei.com>
+CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+In-Reply-To: <45c2ae11-c44e-f27d-f029-66efe96b0804@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.103]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggeme756-chm.china.huawei.com (10.3.19.102)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> MAC implementation[1] in a lot of NXP SoCs comes with in-band aneg enabled
-> by default, and it does expect Clause 37 auto-negotiation to complete
-> between MAC and PHY before the actual data transfer happens.
-> 
-> [1] https://community.nxp.com/pwmxy87654/attachments/pwmxy87654/t-series/3241/1/AN3869(1).pdf
-> 
-> I faced such issue while integrating VSC85xx PHY
-> with one of the recent NXP SoC having similar MAC implementation.
-> Not sure if this is a problem on MAC side or PHY side,
-> But having Clause 37 support should help in most cases I believe.
+friendly ping...
 
-So please use this information in the commit message.
-
-The only danger with this change is, is the PHY O.K with auto-neg
-turned on, with a MAC which does not actually perform auto-neg? It
-could be we have boards which work now because PHY autoneg is turned
-off.
-
-      Andrew
+在 2022/1/28 14:22, zhangwensheng (E) 写道:
+> friendly ping...
+>
+> 在 2022/1/25 17:19, Zhang Wensheng 写道:
+>> When the inflight IOs are slow and no new IOs are issued, we expect
+>> iostat could manifest the IO hang problem. However after
+>> commit 5b18b5a73760 ("block: delete part_round_stats and switch to less
+>> precise counting"), io_tick and time_in_queue will not be updated until
+>> the end of IO, and the avgqu-sz and %util columns of iostat will be 
+>> zero.
+>>
+>> Because it has using stat.nsecs accumulation to express time_in_queue
+>> which is not suitable to change, and may %util will express the status
+>> better when io hang occur. To fix io_ticks, we use update_io_ticks and
+>> inflight to update io_ticks when diskstats_show and part_stat_show
+>> been called.
+>>
+>> Fixes: 5b18b5a73760 ("block: delete part_round_stats and switch to 
+>> less precise counting")
+>> Signed-off-by: Zhang Wensheng <zhangwensheng5@huawei.com>
+>> ---
+>>   block/genhd.c | 8 ++++++--
+>>   1 file changed, 6 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/block/genhd.c b/block/genhd.c
+>> index 626c8406f21a..df0656ffb4ad 100644
+>> --- a/block/genhd.c
+>> +++ b/block/genhd.c
+>> @@ -913,12 +913,14 @@ ssize_t part_stat_show(struct device *dev,
+>>       struct disk_stats stat;
+>>       unsigned int inflight;
+>>   -    part_stat_read_all(bdev, &stat);
+>>       if (queue_is_mq(q))
+>>           inflight = blk_mq_in_flight(q, bdev);
+>>       else
+>>           inflight = part_in_flight(bdev);
+>>   +    if (inflight)
+>> +        update_io_ticks(bdev, jiffies, true);
+>> +    part_stat_read_all(bdev, &stat);
+>>       return sprintf(buf,
+>>           "%8lu %8lu %8llu %8u "
+>>           "%8lu %8lu %8llu %8u "
+>> @@ -1174,12 +1176,14 @@ static int diskstats_show(struct seq_file 
+>> *seqf, void *v)
+>>       xa_for_each(&gp->part_tbl, idx, hd) {
+>>           if (bdev_is_partition(hd) && !bdev_nr_sectors(hd))
+>>               continue;
+>> -        part_stat_read_all(hd, &stat);
+>>           if (queue_is_mq(gp->queue))
+>>               inflight = blk_mq_in_flight(gp->queue, hd);
+>>           else
+>>               inflight = part_in_flight(hd);
+>>   +        if (inflight)
+>> +            update_io_ticks(hd, jiffies, true);
+>> +        part_stat_read_all(hd, &stat);
+>>           seq_printf(seqf, "%4d %7d %pg "
+>>                  "%lu %lu %lu %u "
+>>                  "%lu %lu %lu %u "

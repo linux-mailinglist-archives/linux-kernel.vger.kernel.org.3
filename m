@@ -2,214 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F2674AD460
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 10:09:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EB5E4AD462
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 10:10:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353090AbiBHJJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 04:09:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54598 "EHLO
+        id S1349994AbiBHJKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 04:10:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232042AbiBHJJS (ORCPT
+        with ESMTP id S233082AbiBHJKj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 04:09:18 -0500
-Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 020C4C0401F0;
-        Tue,  8 Feb 2022 01:09:17 -0800 (PST)
-Received: by mail-vs1-xe31.google.com with SMTP id j21so476042vsg.6;
-        Tue, 08 Feb 2022 01:09:16 -0800 (PST)
+        Tue, 8 Feb 2022 04:10:39 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2114.outbound.protection.outlook.com [40.107.243.114])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E52D4C0401F0;
+        Tue,  8 Feb 2022 01:10:38 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ex+yIwtC9l2R5cv1KNglGEjB+t7m+3ehtd6SfBZhJziMIPcgxLvBXvyQftqFNAoE5hYYvZLMCA/JFWpXH4dwh8BQ/T+OJL8EO6bXIlXU5+we3GS5/Zi5IbI0gV56HrZcUB0GSFS2qJ9t0ZBvm9Lu/aVTgfUJiUe5Csp5DGkbQ/bb7j6XU2ce+freIAungq7xwdVJxqse0vYwntdGZxePiVFTM0lipe1V48VljvXWAJ7C5bh7TqrJb4NibEkXKbG16Tjlygbb0B6yvjtQs8dsYziq+SvfqX0hEsQL8/8Grl5q2V+2RrOR/bDLlLaff28syfVa9sVMLkYoZtHt8n9+nw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zIPcd0vzLWLMyD/5DelS7XzaV4lmcUmxd16HYNOhlrk=;
+ b=VCSfRvh/T8H9owJfJ2nlh/upXPsh6kPrrsdrsY2Z0/6e5UO3/YeGDm9QRHy3JeaVVE7zBy2YGSELfFxdyB9MUldEYel/EmU4pJ1MlZXNcheX0ZTPKn4M/gkaM8HEj0ZnT0ty7WheXi5vKiiODrUViWBQPaWk2SmEHBoKBulyHnEbXQdZpSIVLW5Bhq/sb7PBsg3JxXdCQmPvYBf1bCCTssTPRRD6r1kEvIjmYcyfySAN1yx7t6YAg2XoJhEDZRvBa1vzVKoX0U6uC+qHcfnxo/aXKdooWuI+srZ89MFuHwlctLWgRVcx6FEtV4c2G+Rh59HlaKZBaw8d0sPfI3fgHg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=CCHth88Qr2ytEl3s0pF6IBKShG9LzGdQHlQOpQypTvA=;
-        b=lrjRELFWDYhcJuAkkSBPXf0gK+ZbWEFQ2EOAZtm9bL/A/4qBch+VQrxdqszjHHLvY5
-         NMKnTwq+ZFx9TxinR/3SePAQw1bBmDapFpI9z5PmOB9sLKycfne5Dn9iXCrSG6nPT8OI
-         T1I44KzY8T/0hm/VA4FYab4/lKWqk1pZ364ZtmULYRk82ghY0lvCwJP3OAJnaO3Yy+3G
-         0ns1TevvoW1SsMuL8gj6zSPO8g5owrI/fMAG1ZihN9SMekB/g4hyGE5gdAf+jxV4zb65
-         U/RnGSViOd9X1y/67z4nSWrvFppPCaUu9twOLDdAI9ZgEod4txc5WpuWPjvLDRurKYtd
-         U5bA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=CCHth88Qr2ytEl3s0pF6IBKShG9LzGdQHlQOpQypTvA=;
-        b=62NdbodUBFzDda2U/A/1zWLw/oPuWvLYH+rG6JKPpyHNSoY2WLXCv7GcAjbbqcrWOz
-         EXRhWgxkFxV7Tru0KnS7COlIpX6jdcFluJG3NUWw4M5ZSDhUDPHWylaTZ6m2eNjHvV1l
-         2opgKuWQuIKm8UwfgNmVSPRkMHSXo9bi/K7ExbZBMTfEE+GNboy0CGj4PAXlSnA84kLZ
-         trTqcBu4TNmAcWT8GSm3l5lpz/utAV/GeAjs0U9mFLdPfr1NKiqKoXQCESdp9k6UtMzU
-         R55rdxFR2HWR1qirBa7xPFhrBngYjuPPSQMuuJHXzQkki0VFzTRlvlaoVRBmrgGhSBsM
-         N8Vg==
-X-Gm-Message-State: AOAM5329pbOJwBGxDuGHDpLqg3tRSJLpfKkd+1IJX0iBrDQkAy2KDyo0
-        Ka3b9TOxrMV2xbu6+GX4IAhLjVNP8Ek2kCUagHSpY4vjKwsQ
-X-Google-Smtp-Source: ABdhPJw86WEF7nEm1yDt7OhMgg5VCB62C8EeQOyyXG7bqGfeibsMDBqqRqxZ3e3CfST+8/BYaJ/Ptxxv0Npj3EmNUd4=
-X-Received: by 2002:a67:f349:: with SMTP id p9mr1214944vsm.50.1644311356069;
- Tue, 08 Feb 2022 01:09:16 -0800 (PST)
+ d=Analogixsemi.onmicrosoft.com; s=selector2-Analogixsemi-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zIPcd0vzLWLMyD/5DelS7XzaV4lmcUmxd16HYNOhlrk=;
+ b=BxAvAC8LMk/tqBLOXa0O17KVpTL/6YvpsyQuNR5z4ph3Nl8D8X06ib9s1rhmxwTUVK0spXZKYgrWvr0vcBPlnX/0G5uKHoHTyxIyJHC//kheJkrkFyqKXwG3XHyoZls0P4YGppYh19TN7EEywiHQ5kA9n9qaWiUil/3uFrktd/M=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=analogixsemi.com;
+Received: from BY5PR04MB6739.namprd04.prod.outlook.com (2603:10b6:a03:229::8)
+ by BY5PR04MB6644.namprd04.prod.outlook.com (2603:10b6:a03:22f::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Tue, 8 Feb
+ 2022 09:10:35 +0000
+Received: from BY5PR04MB6739.namprd04.prod.outlook.com
+ ([fe80::8545:a99f:9aba:4cd4]) by BY5PR04MB6739.namprd04.prod.outlook.com
+ ([fe80::8545:a99f:9aba:4cd4%5]) with mapi id 15.20.4975.011; Tue, 8 Feb 2022
+ 09:10:35 +0000
+Date:   Tue, 8 Feb 2022 17:10:28 +0800
+From:   Xin Ji <xji@analogixsemi.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        bliang@analogixsemi.com, qwen@analogixsemi.com,
+        jli@analogixsemi.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v4 2/2] usb: typec: anx7411: Add Analogix PD ANX7411
+ support
+Message-ID: <20220208091028.GA3679538@anxtwsw-Precision-3640-Tower>
+References: <20220208084240.3678980-1-xji@analogixsemi.com>
+ <20220208084240.3678980-2-xji@analogixsemi.com>
+ <YgIuUIQ8EJqzNw6s@kroah.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YgIuUIQ8EJqzNw6s@kroah.com>
+X-ClientProxiedBy: SG2PR01CA0150.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:8f::30) To BY5PR04MB6739.namprd04.prod.outlook.com
+ (2603:10b6:a03:229::8)
 MIME-Version: 1.0
-References: <20220207063338.6570-1-warp5tw@gmail.com> <20220207063338.6570-3-warp5tw@gmail.com>
- <YgECF6jZ7wj8TOfl@latitude>
-In-Reply-To: <YgECF6jZ7wj8TOfl@latitude>
-From:   warp5tw <warp5tw@gmail.com>
-Date:   Tue, 8 Feb 2022 17:09:04 +0800
-Message-ID: <CACD3sJaN01pVHn-NCH+-UQLYg9EhU0beadVP-84byauj_23Acw@mail.gmail.com>
-Subject: Re: [PATCH v1 2/6] i2c: npcm: Fix timeout calculation
-To:     =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
-        venture@google.com, yuenn@google.com, benjaminfair@google.com,
-        robh+dt@kernel.org, krzysztof.kozlowski@canonical.com,
-        semen.protsenko@linaro.org, yangyicong@hisilicon.com,
-        wsa@kernel.org, sven@svenpeter.dev, bence98@sch.bme.hu,
-        lukas.bulwahn@gmail.com, arnd@arndb.de, olof@lixom.net,
-        andriy.shevchenko@linux.intel.com, tali.perry@nuvoton.com,
-        Avi.Fishman@nuvoton.com, tomer.maimon@nuvoton.com,
-        KWLIU@nuvoton.com, JJLIU0@nuvoton.com, kfting@nuvoton.com,
-        devicetree@vger.kernel.org, openbmc@lists.ozlabs.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 58e193cf-24cc-4559-4027-08d9eae2ddb7
+X-MS-TrafficTypeDiagnostic: BY5PR04MB6644:EE_
+X-Microsoft-Antispam-PRVS: <BY5PR04MB6644AAEBD7B540D459BF9D7EC72D9@BY5PR04MB6644.namprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4941;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: dKroRyjSzTDB/GPFueFWBYiJ0N54MEB1UGvLSX5tx89zgM8b29S6aVe0ZVN69jqALOH8pEeS1lz4Siaqh+X+FJGUs/9R6BJKMQWEsvanoV3Rimh4j0XNE0JITcLZnNKjrI9OsVIOWfUipnXdAjJSNzK6Z4T7OZ+Z3vY/21Lux51VtqZARU+VxlICuYHsJaZ3OXnLAZSQPMGhMbMmA3jpCN9wSxDV03txowsPqWjYSqgna8bfbBBRQIz08DPrtXe2er0bzGdl92cJWGcSPP8gDKwYx37CDN+vHdh3t2gv0Ll8MFKYrtTPa7KzHiRDKDYdTbqmY/870o6OR9PIdoNmSrBmSw41L6JFYB43lFOUUg/FIH1Jnkpwj4XwmbI39Vw1gXHDwB49gDA71/n0qpEkV3v1NvTMN+pqlyvYe/Qey64CA9JLEv4awQVOP3uTeT9BI1+d7d8CR7QnUIwYk9eM8yEpbjRxDJFCdAWcM9ArPy8nkyqFkGwiMpm3tOmIeBf27YwurcnXQGSEqgUKvT/LRFfCAG/hLw6BaMOGXVk3Ea7olg4p/4+iaIwVu2L93/hO6XcmSsR7xkNerrSOtXkPwPVnHJEwnG0Phezekt/5zTqz1k8DbpLeGLmj/iyo2JdWLjnbHdP0zok5bKLag93INcyI2tc+A7pgDBTfxw/p1TrxTcxbBmtOZu1SxbJxMg/wvZs4jtZaAB+G6LlqrP3u+A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR04MB6739.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(136003)(376002)(346002)(396003)(39840400004)(366004)(1076003)(186003)(26005)(2906002)(66946007)(33716001)(4326008)(8936002)(8676002)(6916009)(52116002)(4744005)(66556008)(66476007)(316002)(33656002)(5660300002)(38100700002)(6512007)(6506007)(6666004)(508600001)(55236004)(86362001)(9686003)(6486002)(38350700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?cjW7jVQoj559jtTbsitllvzhfkRK4IGuygbpjt+ZJGSGAR06V/LNn67+n++L?=
+ =?us-ascii?Q?SvaqBYZmpaVmg4QTd9inQdAY9MI5c5FKXUZR7Dw14qdRRME8mK/xbV6s4Fky?=
+ =?us-ascii?Q?x2cQuW8Q4ACdJuBV/O9/XbGQAPHnRdoyI3TNxiATVoAyZ/owR4yYgLARyAfN?=
+ =?us-ascii?Q?ktY7/+f0lAId4UVxjYkmERZmpTT5dTuXQ6vbWl14ZLHviy4veA+Ih1go7Po9?=
+ =?us-ascii?Q?zdnTG1UNoMcToSrwHACC7QsU00AZ/Z9oDRsBPVgS8Vm+UhAbyZxhOnIyJLJ6?=
+ =?us-ascii?Q?DNAzXS9BDW/DWYIN4+93+43JmE9HJZHoi3Bs/vWLZhXdJ/Tf0LnSwJibW1oN?=
+ =?us-ascii?Q?Tqyl7jWwXmiCWqJ3MF/NuU4ttKXDYkife7qCrd+ynUmtbpD15+bHHdS/lh9T?=
+ =?us-ascii?Q?pAW7JnVnLgar3K19do2xOSIlMxyvsNzfAdeCsBXkRBS33gp5kvOfIX8qBhg0?=
+ =?us-ascii?Q?C/ArN36zqk9dVdRV38hHtaxxtYVpRLBwN6xv3K1xTlNLpA/qltKWU1D+Q+eL?=
+ =?us-ascii?Q?XvZ0V4jKh45sbkExxwVBFG+CRti1TtwdAOP6/9ZL6q8T4rMb/vBYoODqur6S?=
+ =?us-ascii?Q?pHkXRaqrv56E9RfQJ2JMagZAwthi3s31Y74fh8Lvjd2/O+bhxh8PnmEd49Io?=
+ =?us-ascii?Q?kFBzm44S8rXh0FYOcF6/NTA4inSz98lrpB8v74k9m6FZWvr7NR1fBdX1kcsl?=
+ =?us-ascii?Q?lqd7wqJ78jJKer3QXu1o36ymDOx9TK7e6SlFV7/NNthhshHZnYaT5yJKv0OW?=
+ =?us-ascii?Q?Rs6uJojaEhkBmGV7MFhD6beUjzdYzox+jsGXTbEiWmN2c8RM4x4HamqzL1w1?=
+ =?us-ascii?Q?GJsZ7p5sV3XaXflFMA/Vx+f2lydAtTI6vvhbJ9yHfM+Zwd0iuc/g8gWdrdDZ?=
+ =?us-ascii?Q?PEYdtrA8xerQIyPa8KX4ycNaD5iUJpeymHoee4un9fscDtcla0MqJKAJwAgJ?=
+ =?us-ascii?Q?IXSCk6saj5K/ar2u14a5numkfjoEDN+hoa9jNdRUPb/Q9cMmtuwmWzadDzEz?=
+ =?us-ascii?Q?Rl84dOItWq3nXGpytTtqve+nuCinIi/bWSwaf0jrOoDmnwkf4A4t4e5hZLe6?=
+ =?us-ascii?Q?LBJD5CXIwochB8uS/PbiZ+3uZYVUNYpFu4qnnXTS/GQ25VUbp+doUqhasJ59?=
+ =?us-ascii?Q?IG4BLtRyz7S8d3DIKvC7ypLrpI8cB7acr4n5Sz3TBgVSuTigC0p5/M2A56tN?=
+ =?us-ascii?Q?JAmds5QMCqlYGXX2PaLSD1pMdOQufrzW8scY7dNUihE99k83ZF6NNxuPHamN?=
+ =?us-ascii?Q?ohRkEprRTLDvxXpM6n/R3CmkIQvzc1MzAc+2Xq9nj8/qnlqmqEIkXr/+vL2M?=
+ =?us-ascii?Q?7oheV4zyN8tHeFuB0ZN22dh0+Di7/hRRvIh8aeuSzJ44TkGWMMX0D40ckqgS?=
+ =?us-ascii?Q?jdqH8l3jwAB4onRORn5jxBng8eBSbcHvlhRqTl/Qy7ou3lBLMPvAIBO2qD6u?=
+ =?us-ascii?Q?1sFTd1g4I2zDS1Ch59TerS55UXZzwL7/al7HXdS/IoOPdLFcyyMNXiwKgK11?=
+ =?us-ascii?Q?+/x426P1Wn4z7v/sUS5wa9jahFNAE3pzVgnSoWemWZAyAnsbgnMRQzg+n8Yt?=
+ =?us-ascii?Q?eo0TlFBeDPBCIikmgH9FxUUYTMzSJlJWKlfTSYy2OyC0gZ22Wka7FlhD02Ae?=
+ =?us-ascii?Q?+0Ct8jmT3e2EV8oBRcGkVp8=3D?=
+X-OriginatorOrg: analogixsemi.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 58e193cf-24cc-4559-4027-08d9eae2ddb7
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR04MB6739.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Feb 2022 09:10:35.4324
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: b099b0b4-f26c-4cf5-9a0f-d5be9acab205
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: fNNb9OYePu7UMxdfpC57AprVOXyHUz2jtlSpBervFIx7tEBDr4yiIozoBey/1pJYfdf/yMd5InmkSwtK2GdweQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR04MB6644
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all:
+On Tue, Feb 08, 2022 at 09:48:16AM +0100, Greg Kroah-Hartman wrote:
+> On Tue, Feb 08, 2022 at 04:42:39PM +0800, Xin Ji wrote:
+> > +#define DEBUG
+> 
+> Please no.  Rely on dynamic debugging options, not hard-coded ones like
+> this.
+> 
+> Please remove this.
+Hi Greg k-h, thanks for your comment, I'll remove it in the next version.
 
-Thank you for your comments and they will be addressed.
-
-Regards,
-Tyrone
-
-
-Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net> =E6=96=BC 2022=E5=B9=B42=
-=E6=9C=887=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=887:27=E5=AF=AB=E9=
-=81=93=EF=BC=9A
->
-> Hello,
->
-> On Mon, Feb 07, 2022 at 02:33:34PM +0800, Tyrone Ting wrote:
-> > From: Tali Perry <tali.perry1@gmail.com>
-> >
-> > Use adap.timeout for timeout calculation instead of hard-coded
-> > value of 35ms.
->
->
-> > Use syscon to access gcr, instead of "compatible".
->
-> Please put the GCR/syscon change into a separate patch, because it is
-> not obvious from the commit title that such a change would happen in
-> this patch.
->
-> >
-> > Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller dri=
-ver")
-> > Signed-off-by: Tali Perry <tali.perry1@gmail.com>
-> > Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
-> > ---
-> >  drivers/i2c/busses/i2c-npcm7xx.c | 18 +++++++-----------
-> >  1 file changed, 7 insertions(+), 11 deletions(-)
-> >
-> > diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-=
-npcm7xx.c
-> > index 2ad166355ec9..ddeee6f53621 100644
-> > --- a/drivers/i2c/busses/i2c-npcm7xx.c
-> > +++ b/drivers/i2c/busses/i2c-npcm7xx.c
-> > @@ -2047,7 +2047,7 @@ static int npcm_i2c_master_xfer(struct i2c_adapte=
-r *adap, struct i2c_msg *msgs,
-> >       u16 nwrite, nread;
-> >       u8 *write_data, *read_data;
-> >       u8 slave_addr;
-> > -     int timeout;
-> > +     unsigned long timeout;
-> >       int ret =3D 0;
-> >       bool read_block =3D false;
-> >       bool read_PEC =3D false;
-> > @@ -2099,13 +2099,13 @@ static int npcm_i2c_master_xfer(struct i2c_adap=
-ter *adap, struct i2c_msg *msgs,
-> >        * 9: bits per transaction (including the ack/nack)
-> >        */
-> >       timeout_usec =3D (2 * 9 * USEC_PER_SEC / bus->bus_freq) * (2 + nr=
-ead + nwrite);
-> > -     timeout =3D max(msecs_to_jiffies(35), usecs_to_jiffies(timeout_us=
-ec));
-> > +     timeout =3D max(bus->adap.timeout, usecs_to_jiffies(timeout_usec)=
-);
-> >       if (nwrite >=3D 32 * 1024 || nread >=3D 32 * 1024) {
-> >               dev_err(bus->dev, "i2c%d buffer too big\n", bus->num);
-> >               return -EINVAL;
-> >       }
-> >
-> > -     time_left =3D jiffies + msecs_to_jiffies(DEFAULT_STALL_COUNT) + 1=
-;
-> > +     time_left =3D jiffies + timeout + 1;
-> >       do {
-> >               /*
-> >                * we must clear slave address immediately when the bus i=
-s not
-> > @@ -2131,7 +2131,7 @@ static int npcm_i2c_master_xfer(struct i2c_adapte=
-r *adap, struct i2c_msg *msgs,
-> >       }
-> >
-> >       npcm_i2c_init_params(bus);
-> > -     bus->dest_addr =3D slave_addr;
-> > +     bus->dest_addr =3D slave_addr << 1;
->
-> This seems unrelated to timeout calculation.
->
-> >       bus->msgs =3D msgs;
-> >       bus->msgs_num =3D num;
-> >       bus->cmd_err =3D 0;
-> > @@ -2233,9 +2233,9 @@ static int npcm_i2c_probe_bus(struct platform_dev=
-ice *pdev)
-> >       struct i2c_adapter *adap;
-> >       struct clk *i2c_clk;
-> >       static struct regmap *gcr_regmap;
-> > -     static struct regmap *clk_regmap;
-> >       int irq;
-> >       int ret;
-> > +     struct device_node *np =3D pdev->dev.of_node;
-> >
-> >       bus =3D devm_kzalloc(&pdev->dev, sizeof(*bus), GFP_KERNEL);
-> >       if (!bus)
-> > @@ -2250,15 +2250,11 @@ static int npcm_i2c_probe_bus(struct platform_d=
-evice *pdev)
-> >               return PTR_ERR(i2c_clk);
-> >       bus->apb_clk =3D clk_get_rate(i2c_clk);
-> >
-> > -     gcr_regmap =3D syscon_regmap_lookup_by_compatible("nuvoton,npcm75=
-0-gcr");
-> > +     gcr_regmap =3D syscon_regmap_lookup_by_phandle(np, "syscon");
-> >       if (IS_ERR(gcr_regmap))
-> >               return PTR_ERR(gcr_regmap);
-> >       regmap_write(gcr_regmap, NPCM_I2CSEGCTL, NPCM_I2CSEGCTL_INIT_VAL)=
-;
-> >
-> > -     clk_regmap =3D syscon_regmap_lookup_by_compatible("nuvoton,npcm75=
-0-clk");
-> > -     if (IS_ERR(clk_regmap))
-> > -             return PTR_ERR(clk_regmap);
->
-> I agree that clk_regmap can be removed, but I'd rather see it in a
-> separate patch, because it's unrelated to the timeout calculation.
->
-> > -
-> >       bus->reg =3D devm_platform_ioremap_resource(pdev, 0);
-> >       if (IS_ERR(bus->reg))
-> >               return PTR_ERR(bus->reg);
-> > @@ -2269,7 +2265,7 @@ static int npcm_i2c_probe_bus(struct platform_dev=
-ice *pdev)
-> >       adap =3D &bus->adap;
-> >       adap->owner =3D THIS_MODULE;
-> >       adap->retries =3D 3;
-> > -     adap->timeout =3D HZ;
-> > +     adap->timeout =3D msecs_to_jiffies(35);
-> >       adap->algo =3D &npcm_i2c_algo;
-> >       adap->quirks =3D &npcm_i2c_quirks;
-> >       adap->algo_data =3D bus;
->
->
-> Best regards,
-> Jonathan
+Thanks,
+Xin
+> 
+> thanks,
+> 
+> greg k-h

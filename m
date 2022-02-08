@@ -2,199 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06FED4AD4B0
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 10:22:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB99F4AD4B3
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 10:23:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354068AbiBHJWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 04:22:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34092 "EHLO
+        id S1349186AbiBHJXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 04:23:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347495AbiBHJWn (ORCPT
+        with ESMTP id S1347495AbiBHJXI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 04:22:43 -0500
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD0F8C0401F0;
-        Tue,  8 Feb 2022 01:22:42 -0800 (PST)
-Received: by mail-qv1-xf32.google.com with SMTP id fh9so5700406qvb.1;
-        Tue, 08 Feb 2022 01:22:42 -0800 (PST)
+        Tue, 8 Feb 2022 04:23:08 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AECB4C03FEC0
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 01:23:07 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id p19so1515623ybc.6
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 01:23:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=CYVaXukRgUCEvFAm5Rvccoy4E4azJEZwAWMrVoUo60s=;
-        b=k7DIfwDI7lJiplAzuKEv1ztD9Ak9R+8xzxXZwM2usNppLiqm5bdYqIWjxkDIV/hyth
-         ohH/mlhrT+QZKqQQcL4CVOEUStEq97nRWHFMcuBpSGh8p21ytE+IJyOPEqHc9spG2xBW
-         C2ygszJiPgi6KJkccRu5ROmtgEnrKUhGWEmUSxXbx+XquhltiVUwk007dTvR1zFvr1mg
-         4IKqahTBJrweYv7eF2lTvrY2L9Wf+Xlu2XxweOif/adWLK3ZobULps3DQMQXxzH5uHmr
-         oeFKqTDxURrYQKIfoBjWfKCCmG6qhyEcL94CbAWjJjN24gAitBWghlsnh+R6+geClxmu
-         t3Gg==
+         :cc;
+        bh=v76WYw+Y0qvP4uX30X1KgyYe/e2hfdHgurh6EKNW+q8=;
+        b=n1nAaz8mpAHyjSZbhJO8QIbsIa5zxJfvygj1pQr2QNjKJTccmyrcbRbzPDkMAKs5ts
+         DJ87Gl3nQ4o6p1LkBwQmsl2gOa0Z+zt7j/lDCunDTBVsG16tbwuBLsHvQ2C0uIRpgOQA
+         WYxkyc+QaeiMs25HR9WMBholE65iyKKgdQkEaenWyoXhTQn/KVfgNajmSMdPzCChmIwR
+         ciN14kdB1jJNt9G5Nn92zW+ZWRtc/X9vD7+Ujddwmk1bo+ITNcHy7NVkCrDk8prn/sMW
+         FjF5Onpw+OSdNTVDCKJ7xujLHo2FogRS/e5D9a1MfNzQF10J/zUGlMLJPlrDjkEttoVs
+         FNTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=CYVaXukRgUCEvFAm5Rvccoy4E4azJEZwAWMrVoUo60s=;
-        b=gDZkykNl6bFFXUwCsyJvQqDd9MDQXHUx8apA5RK+Xu0rjarQ5WQAqYVZKcC5LSbmeb
-         Me307N6fZw/28hp4SlxFsRCKuUy8VmNe/J1Q4O5D80nfhQBhSXagkq0itZIzzfRSagSi
-         PExFLAbXMBnFO9m4QdeIw1PseV/lxF7Tu1sL+o/P47fTQO/PSFXXFBiqr0beRdfYjTUj
-         vuJFUwIZbuaXAoP34DnTF+f9ZRqybmMzGplevgnNhCZxS0oDSZSrNdxthN2ZQC0eOjqu
-         /1I2l3M1QqSM7L6OfnvoVey3Fxw7VCqUAm2g6z3VEIU99GMuricWXMLbDv0ETGgrTijV
-         52gA==
-X-Gm-Message-State: AOAM533/M/ILzyAxyGhkXxuQwzECIBS3GZpEOiV5t5Xc8zIQb7zLmZiO
-        SbmzMSkGZBSSUl+sdClrkDYyuuXn2ISG7MHV5CI=
-X-Google-Smtp-Source: ABdhPJyIzKvFKpf1BBmc+9sLhRsGbOh9ftgw+xxzEK5Z04ibvmuVWz+wsnEwZUKatWlmrd9PAjYjXFPw3XpMNV/ekhc=
-X-Received: by 2002:a05:6214:1cc7:: with SMTP id g7mr2490810qvd.124.1644312162002;
- Tue, 08 Feb 2022 01:22:42 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=v76WYw+Y0qvP4uX30X1KgyYe/e2hfdHgurh6EKNW+q8=;
+        b=hwIkrcscUQqrLxr9QUqYEGaAliosuPHW1b3OjQ7CfmFL973f5m9BWqxfp1bDlO1SVa
+         bz3a5VR2H9tWl/PfmLHjF63/1/M6sm9Bm4CpE1Do4wDytk2AFu2piNL9hNvMgXyZ/NkH
+         ISX5EEM7i0ZLMPNBA8y5L301JlKuvdR0v6hju6S0zKO8zek1kr9O1m+fMcNM3oFmtvRh
+         pK5gLnJfvzziHEfepJlndgNj7+Oc6F7LJ2R1pe3tDGIoKD6ImD8u6gekgO70JwN+zJ6G
+         88X9BNoU1Cel3jJrMHPdjhWQ+/OHfBU/xzzuQKEW7fw/Gb/v40ZtJ+UQfJp9CYHdgYXW
+         cQcA==
+X-Gm-Message-State: AOAM531LTSYPKboqSl5B36upcOOw79CQ6vBicUHl98i60kJq1VWn+OlN
+        bcKx0nLMFm0HzpwzvcwG5a9LmoGPdSjWF8LQEQO33Q==
+X-Google-Smtp-Source: ABdhPJzLRXokh9NY389zkuq7SRqJcDaCXcyuFgSKt6O1g6TLHOTBGT49eRBXwG18qgajp+IKjQlAfWJwMSjXV8jlX64=
+X-Received: by 2002:a25:148b:: with SMTP id 133mr3797329ybu.270.1644312186679;
+ Tue, 08 Feb 2022 01:23:06 -0800 (PST)
 MIME-Version: 1.0
-References: <20220207063338.6570-1-warp5tw@gmail.com> <20220207063338.6570-7-warp5tw@gmail.com>
-In-Reply-To: <20220207063338.6570-7-warp5tw@gmail.com>
-From:   Tali Perry <tali.perry1@gmail.com>
-Date:   Tue, 8 Feb 2022 11:22:30 +0200
-Message-ID: <CAHb3i=vdc_+J4pCBcY--C85ZR1uXO1LG02UsttsfSnsQBDKWAg@mail.gmail.com>
-Subject: Re: [PATCH v1 6/6] i2c: npcm: Support NPCM845
-To:     Tyrone Ting <warp5tw@gmail.com>
-Cc:     avifishman70@gmail.com, Tomer Maimon <tmaimon77@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        semen.protsenko@linaro.org, yangyicong@hisilicon.com,
-        Wolfram Sang <wsa@kernel.org>, jie.deng@intel.com,
-        sven@svenpeter.dev, bence98@sch.bme.hu, lukas.bulwahn@gmail.com,
-        arnd@arndb.de, olof@lixom.net,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Tali Perry <tali.perry@nuvoton.com>,
-        Avi Fishman <Avi.Fishman@nuvoton.com>,
-        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
-        kfting@nuvoton.com, OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <000000000000f5988505d77e20e4@google.com>
+In-Reply-To: <000000000000f5988505d77e20e4@google.com>
+From:   Marco Elver <elver@google.com>
+Date:   Tue, 8 Feb 2022 10:22:55 +0100
+Message-ID: <CANpmjNPW7Y9oHkdvfYjgEo0OCbtN1Ymf1mXE1CHFBj2oryfJ=g@mail.gmail.com>
+Subject: Re: [syzbot] KCSAN: data-race in wg_packet_handshake_receive_worker /
+ wg_packet_rx_poll (3)
+To:     syzbot <syzbot+ed414b05fe54c96947f8@syzkaller.appspotmail.com>
+Cc:     Jason@zx2c4.com, davem@davemloft.net, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, wireguard@lists.zx2c4.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->On 08/02/2022 09:51, Tali Perry wrote:
->>> On 08/02/2022 08:14, Tali Perry wrote:
->>>>> Subject: Re: [PATCH v1 6/6] i2c: npcm: Support NPCM845
->>>>>
->>>>> On 07/02/2022 13:00, Jonathan Neusch=C3=A4fer wrote:
->>>>>> Hello,
->>>>>>
->>>>>> On Mon, Feb 07, 2022 at 02:33:38PM +0800, Tyrone Ting wrote:
->>>>>>> From: Tyrone Ting <kfting@nuvoton.com>
->>>>>>>
->>>>>>> NPCM8XX uses a similar i2c module as NPCM7XX.
->>>>>>> The only difference is that the internal HW FIFO is larger.
->>>>>>>
->>>>>>> Related Makefile and Kconfig files are modified to support as well.
->>>>>>>
->>>>>>> Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller
->>>>>>> driver")
->>>>>>
->>>>>> It's not really a bug fix, but rather an additional feature.
->>>>>> Therefore, I suggest removing the Fixes tag from this patch.
->>>>>>
->>>>>>> Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
->>>>>>> Signed-off-by: Tali Perry <tali.perry1@gmail.com>
->>>>>>> ---
->>>>>> [...]
->>>>>>>  /* init register and default value required to enable module */
->>>>>>>  #define NPCM_I2CSEGCTL 0xE4
->>>>>>> +#ifdef CONFIG_ARCH_NPCM7XX
->>>>>>>  #define NPCM_I2CSEGCTL_INIT_VAL 0x0333F000
->>>>>>> +#else
->>>>>>> +#define NPCM_I2CSEGCTL_INIT_VAL 0x9333F000
->>>>>>> +#endif
->>>>>>
->>>>>> This is going to cause problems when someone tries to compile a kern=
-el
->>>>>> that runs on both NPCM7xx and NPCM8xx (because the driver will then
->>>>>> only work on NPCM7xx).
->>>>>
->>>>> Yes, good catch.
->>>>>
->>>>> The NPCM7XX is multiplatform, I guess NPCM8xx will be as well, so thi=
-s looks like an invalid code. How such code is supposed to work on multipla=
-tform kernel?
->>>>>
->>>>
->>>> NPCM7xx and NPCM8xx are very different devices.
->>>> They share same driver sources for some of the modules but it's not AB=
-I.
->>>> Users cannot compile a single kernel with two separate DTS.
->>>> In case of the i2c controller, the npcm7xx has a 16 byte HW FIFO,
->>>> and the NPCM8xx has 32 bytes HW FIFO.
->>>> This also means that registers fields are slightly different.
->>>> For init data we can move it to the DTS, but register field sizes
->>>> can't be handled with this approach.
->>>>
->>>
->>> What do you mean they cannot compile a kernel with different DTS? Of
->>> course they can - when we talk about multiplatform sub-architectures!
->>> Maybe there is something specific in NPCMxxx which stops it but then it
->>> should not be marked multiplatform.
->>>
->>
->>
->> NCPM7xx is ARM32 bit (dual core Cortex A9)
->> NPCM8xx is ARM64 bit (quad core Cortex A35)
->>
->> They have completely different architecture so not ABI compliant.
->> I2C module is similar, but the devices are quite different and have
->> separate architectures.
+On Tue, 8 Feb 2022 at 10:13, syzbot
+<syzbot+ed414b05fe54c96947f8@syzkaller.appspotmail.com> wrote:
 >
->OK, in such case usually you indeed can't have both. :)
+> Hello,
 >
->> Sorry for the confusion.
->> This is the first patch we try to upstream for NPCM8xx.
->> In the coming weeks we will upstream the architecture of NPCM8xx as well=
-.
+> syzbot found the following issue on:
 >
->Still, ARCH_XXX should not be hard-coded in the drivers to change the
->driver's behavior, even if driver won't be used simultaneously. It
->breaks all design principles and prevents any further re-use if a new
->use case appears.
+> HEAD commit:    455e73a07f6e Merge tag 'clk-for-linus' of git://git.kernel..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=131009feb00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=e1f9a6122410716
+> dashboard link: https://syzkaller.appspot.com/bug?extid=ed414b05fe54c96947f8
+> compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
 >
->You can use "ifdef ARCH_XXX" to skip building of some parts of the
->driver, but it's not the case here.
+> Unfortunately, I don't have any reproducer for this issue yet.
 >
-
-Correct, the main change is in FIFO size:
-+#ifdef CONFIG_ARCH_NPCM7XX
-#define I2C_HW_FIFO_SIZE               16
-+#else
-+#define I2C_HW_FIFO_SIZE               32
-+#endif /* CONFIG_ARCH_NPCM7XX */
-
-NPCM7XX will always have 16 bytes, all the next gens will have 32.
-
-This impact some registers sizes, like this one:
-
-+#ifdef CONFIG_ARCH_NPCM7XX
-#define NPCM_I2CRXF_STS_RX_BYTES       GENMASK(4, 0)
-+#else
-+#define NPCM_I2CRXF_STS_RX_BYTES       GENMASK(5, 0)
-+#endif /*CONFIG_ARCH_NPCM7XX*/
-
-For this, the FIFO size should be defined before compilation.
-I also don't want to let users select FIFO size per architecture.
-NPCM7XX has 16, NPCM8XX has 32. This is not a user selection.
-It's part of the arch.
-
-
-
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+ed414b05fe54c96947f8@syzkaller.appspotmail.com
 >
->Best regards,
->Krzysztof
+> ==================================================================
+> BUG: KCSAN: data-race in wg_packet_handshake_receive_worker / wg_packet_rx_poll
+>
+> read to 0xffff88813238a9e0 of 8 bytes by interrupt on cpu 1:
+>  update_rx_stats drivers/net/wireguard/receive.c:28 [inline]
+>  wg_packet_consume_data_done drivers/net/wireguard/receive.c:365 [inline]
+>  wg_packet_rx_poll+0xf6b/0x11f0 drivers/net/wireguard/receive.c:481
+>  __napi_poll+0x65/0x3f0 net/core/dev.c:6365
+>  napi_poll net/core/dev.c:6432 [inline]
+>  net_rx_action+0x29e/0x650 net/core/dev.c:6519
+>  __do_softirq+0x158/0x2de kernel/softirq.c:558
+>  do_softirq+0xb1/0xf0 kernel/softirq.c:459
+>  __local_bh_enable_ip+0x68/0x70 kernel/softirq.c:383
+>  __raw_spin_unlock_bh include/linux/spinlock_api_smp.h:167 [inline]
+>  _raw_spin_unlock_bh+0x33/0x40 kernel/locking/spinlock.c:210
+>  spin_unlock_bh include/linux/spinlock.h:394 [inline]
+>  ptr_ring_consume_bh include/linux/ptr_ring.h:367 [inline]
+>  wg_packet_decrypt_worker+0x73c/0x780 drivers/net/wireguard/receive.c:506
+>  process_one_work+0x3f6/0x960 kernel/workqueue.c:2307
+>  worker_thread+0x616/0xa70 kernel/workqueue.c:2454
+>  kthread+0x2c7/0x2e0 kernel/kthread.c:327
+>  ret_from_fork+0x1f/0x30
+>
+> write to 0xffff88813238a9e0 of 8 bytes by task 5035 on cpu 0:
+>  update_rx_stats drivers/net/wireguard/receive.c:28 [inline]
+>  wg_receive_handshake_packet drivers/net/wireguard/receive.c:205 [inline]
+>  wg_packet_handshake_receive_worker+0x54a/0x6e0 drivers/net/wireguard/receive.c:220
+>  process_one_work+0x3f6/0x960 kernel/workqueue.c:2307
+>  worker_thread+0x616/0xa70 kernel/workqueue.c:2454
+>  kthread+0x2c7/0x2e0 kernel/kthread.c:327
+>  ret_from_fork+0x1f/0x30
+>
+> value changed: 0x0000000000000aa8 -> 0x0000000000000ac8
+
+Hi Jason,
+
+For stats data races, in the majority of cases if the semantics is
+"approximate" no harm is done, so the usual resolution is to mark them
+intentionally racy with data_race() [1].
+
+I've released these for completeness, but I can also skip them in
+future. However, marking them appropriately helps because when all
+intentionally racy accesses are marked, only "bad races" will be left,
+and we can do less pre-moderation.
 
 Thanks,
-Tali
+-- Marco
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/memory-model/Documentation/access-marking.txt

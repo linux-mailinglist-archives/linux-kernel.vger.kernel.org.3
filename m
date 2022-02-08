@@ -2,123 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9956B4AD3B3
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 09:42:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C6244AD3C2
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 09:43:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347491AbiBHImS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 03:42:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38822 "EHLO
+        id S1351288AbiBHImz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 03:42:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231542AbiBHImI (ORCPT
+        with ESMTP id S1350732AbiBHImo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 03:42:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F937C03FECC;
-        Tue,  8 Feb 2022 00:42:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 37DF5B81884;
-        Tue,  8 Feb 2022 08:42:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 584EFC004E1;
-        Tue,  8 Feb 2022 08:42:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644309724;
-        bh=sAeco6xgxqRwjb0iDifRLfjcvvAG94ttN6jFbAjdq4g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VKy28vKSsxSfOorEu59O9ozNaCmVobA6oiAQfsc3SNbif0ZaJ3aNHb0cEivAtrfXK
-         0iylLNzah58dMoMr6hqFJyJun5fPVXnl8D6FY/RInPa3geORWcvXavP+kGtGE6HP86
-         HPJSJhR4t0smUhqJmn1ovN7cK0+/ziAZfE66f2Yk=
-Date:   Tue, 8 Feb 2022 09:41:57 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Neal Liu <neal_liu@aspeedtech.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        Tao Ren <rentao.bupt@gmail.com>, BMC-SW <BMC-SW@aspeedtech.com>
-Subject: Re: [PATCH] usb: ehci: add pci device support for Aspeed platforms
-Message-ID: <YgIs1fIu9nzuCKeA@kroah.com>
-References: <20220208062927.3527137-1-neal_liu@aspeedtech.com>
- <YgId0AhvRAmIcEA0@kroah.com>
- <HK0PR06MB32026A17E53EB76DB898A399802D9@HK0PR06MB3202.apcprd06.prod.outlook.com>
+        Tue, 8 Feb 2022 03:42:44 -0500
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A83BC03FECE
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 00:42:42 -0800 (PST)
+Received: by mail-lj1-x236.google.com with SMTP id t14so23372295ljh.8
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 00:42:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cogentembedded-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7sXih+ccMxcBT8wCEbMO89tjHCwmk+TU2IW/0GU1YNk=;
+        b=xMglItI55LyHwpmXQT9i4/capUmQ/SyZQhS2ZQe4/yss+9baUfxpl12RZOkkUW6UV/
+         4HSga1o/zvckGlgofr3fjrpXMQzELQlpiDrNiO157uRtYaqpkvxNvu+8zX3bJhuGMzLq
+         vFSNYE2of3XjzCoL3ZpxzFL0hFce6VPr3kEiiaTHsNCgUWhm4c0I3u6pDnia8W1c4ZA+
+         8qPIsrEBjf3XsuA5pKW1Ccau2ovabd/q8H0ihEE+xIhJoZxpEn5MfbnyUbcReEc5PgzL
+         83/QZrF9Xqs+warW5FjW5t+KggMqEV8WeckAUhliMW1GxxA0hmPHwRypkxtJMaL06uA8
+         fE7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7sXih+ccMxcBT8wCEbMO89tjHCwmk+TU2IW/0GU1YNk=;
+        b=4s+EU3YLLl3/FyszsHrK7ZI7mpy8XyTsIim4dCtF1L6DuUbfRbYRkuf0IBjqRtahWW
+         SGZfRe2lSyoV0cwpfCTjgsn+W4Iz+ovEoBI5FlqNL+CYzUnE/wbqNcqI4yPL/elZFlGP
+         nxDfa30QroEZ9P1uc6Q/cpGuvlcpLDt8cFZXEcPrVRN6se7WoVsl6yg78FjHiZ3AiqlW
+         3/RxuJBzYmZJjnnAGjZ7fdd40U/M+7EQXvWo0rSEDEm7ymF240LWToDULU7Yd4HZDF1f
+         9pYq07j7xLOZC7Hre6dYBa98rW6zo7p+9CsbuCfidupWfdMKGdQ9SVFaCLcRa2ed+pvb
+         pBfg==
+X-Gm-Message-State: AOAM531GaGtHjuYKb9V9USr9v7HunDF3NaqoXmaDGotqKDY0FyIB9fsB
+        ilBgvciKYMLeIVUshzwBX+JzKQ==
+X-Google-Smtp-Source: ABdhPJxj3u6KYnR1Lph70mDUde0CqcWPX+n/2AA8smx6d6xJkBjAYWrLPu6pDbFJHGQjQ5BzunD3dg==
+X-Received: by 2002:a2e:95da:: with SMTP id y26mr2206876ljh.203.1644309760597;
+        Tue, 08 Feb 2022 00:42:40 -0800 (PST)
+Received: from cobook.home (nikaet.starlink.ru. [94.141.168.29])
+        by smtp.gmail.com with ESMTPSA id o12sm1830361lfu.96.2022.02.08.00.42.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 00:42:40 -0800 (PST)
+From:   Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+Subject: [PATCH 0/4] ASoC: pcm3168a: code cleanup
+Date:   Tue,  8 Feb 2022 11:42:16 +0300
+Message-Id: <20220208084220.1289836-1-nikita.yoush@cogentembedded.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <HK0PR06MB32026A17E53EB76DB898A399802D9@HK0PR06MB3202.apcprd06.prod.outlook.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 08, 2022 at 08:20:07AM +0000, Neal Liu wrote:
-> > -----Original Message-----
-> > From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Sent: Tuesday, February 8, 2022 3:38 PM
-> > To: Neal Liu <neal_liu@aspeedtech.com>
-> > Cc: Alan Stern <stern@rowland.harvard.edu>; Bjorn Helgaas
-> > <bhelgaas@google.com>; linux-usb@vger.kernel.org;
-> > linux-kernel@vger.kernel.org; linux-pci@vger.kernel.org; Tao Ren
-> > <rentao.bupt@gmail.com>; BMC-SW <BMC-SW@aspeedtech.com>
-> > Subject: Re: [PATCH] usb: ehci: add pci device support for Aspeed platforms
-> > 
-> > On Tue, Feb 08, 2022 at 02:29:27PM +0800, Neal Liu wrote:
-> > > Enable Aspeed quirks in commit 7f2d73788d90 ("usb: ehci:
-> > > handshake CMD_RUN instead of STS_HALT") to support Aspeed ehci-pci
-> > > device.
-> > >
-> > > Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
-> > > ---
-> > >  drivers/usb/host/ehci-pci.c | 6 ++++++
-> > >  include/linux/pci_ids.h     | 3 +++
-> > >  2 files changed, 9 insertions(+)
-> > >
-> > > diff --git a/drivers/usb/host/ehci-pci.c b/drivers/usb/host/ehci-pci.c
-> > > index e87cf3a00fa4..a91b25d216ae 100644
-> > > --- a/drivers/usb/host/ehci-pci.c
-> > > +++ b/drivers/usb/host/ehci-pci.c
-> > > @@ -222,6 +222,12 @@ static int ehci_pci_setup(struct usb_hcd *hcd)
-> > >  			ehci->has_synopsys_hc_bug = 1;
-> > >  		}
-> > >  		break;
-> > > +	case PCI_VENDOR_ID_ASPEED:
-> > > +		if (pdev->device == PCI_DEVICE_ID_ASPEED_EHCI) {
-> > > +			ehci_info(ehci, "applying Aspeed HC workaround\n");
-> > > +			ehci->is_aspeed = 1;
-> > > +		}
-> > > +		break;
-> > >  	}
-> > >
-> > >  	/* optional debug port, normally in the first BAR */ diff --git
-> > > a/include/linux/pci_ids.h b/include/linux/pci_ids.h index
-> > > aad54c666407..410b395fe56c 100644
-> > > --- a/include/linux/pci_ids.h
-> > > +++ b/include/linux/pci_ids.h
-> > > @@ -3096,4 +3096,7 @@
-> > >
-> > >  #define PCI_VENDOR_ID_NCUBE		0x10ff
-> > >
-> > > +#define PCI_VENDOR_ID_ASPEED		0x1a03
-> > > +#define PCI_DEVICE_ID_ASPEED_EHCI	0x2603
-> > 
-> > Please read the top of this file, this does not need to be added here.
-> > 
-> > thanks,
-> > 
-> > greg k-h
-> 
-> Are you suggesting to hard code vendor/device ID in driver instead?
+These patches clean up pcm3168a driver, without introducing any
+functional change.
 
-Or put the define in the ehci-pci.c file like other drivers do.  Only
-add to the pci_ids.h file if your define is needed in multiple drivers,
-otherwise it is a merge nightmare.
+Nikita Yushchenko (4):
+  ASoC: pcm3168a: cleanup unintuitive mask usage
+  ASoC: pcm3168a: refactor hw_params routine
+  ASoC: pcm3168a: refactor format handling
+  ASoC: pcm3168a: remove numeric PCM3168A_NUM_SUPPLIES
 
-thanks,
+ sound/soc/codecs/pcm3168a.c | 150 +++++++++++++++++-------------------
+ 1 file changed, 70 insertions(+), 80 deletions(-)
 
-greg k-h
+-- 
+2.30.2
+

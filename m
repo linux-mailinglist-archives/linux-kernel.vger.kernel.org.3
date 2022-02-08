@@ -2,73 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D085D4AD11A
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 06:38:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5D564AD11D
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 06:39:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241223AbiBHFiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 00:38:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39520 "EHLO
+        id S1347013AbiBHFiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 00:38:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347193AbiBHFh6 (ORCPT
+        with ESMTP id S1347038AbiBHFif (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 00:37:58 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14C4C02B670
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 21:34:13 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id e6so16969261pfc.7
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 21:34:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
-        b=MdQJomWtaDqVcTFXrMYXkeJfc2Obdsm07SSfH7XaxQx+LLFKfKFbXkAxylSqgKnIwV
-         Yjuj/G2ymp39dVrIHcii/Kdv+M1D8QK+sQbRj7cPNkGF45Jpa1dN53yf7lwAY+Pj6xC/
-         FRAkWpATSQsJSWwxAQkvxhIeuBSKI8bqQE9MKoARalBNRC/KDRwsSgxM4WXsyLf/Bwpf
-         PBVhapPrM6rrS6mjcW0/fqNK2vvo9JAMls6xPFayODpUR+aPSrfPHRUYU8Nc2nni1BF9
-         5K1BtTsyFEbK7IsKNBx/dC7z7HiTuVWX05wWmsKYRX2d4WmgicJN5ED8B16zAt6bgxra
-         NtvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
-        b=BKe/w3QkWg36lL86yqp07h5NQNIl6YxSXtaDuXmS7zCXzhD1IAyYfY7FcLZBF6PXJc
-         IGbdxbp8ohoCynixj4iYWmliqXt5TdD2X1wmi1+BCdrEutOs0b4i1L8OTLUFI8I3fAau
-         FCVP6w0LhalMDmq7QNGUWIBwrkgZiiSQLERRdkdF51KOp/kZ/GWIjMCjL6YSgWCN7g/a
-         59Xu/QSnNQSf/H+rH2Ewgxwd+ZmrH9PsQJCKShbrx6zbsCXkbDnzSkRni19MiKwZ1Y0b
-         eqm53/xyGO+2dXaTbAG44Cc1ZiVWvJ6I+tQXQDygOXyFgJXbWd4ykp6WPADtjyR3GHIW
-         1hrA==
-X-Gm-Message-State: AOAM531NON+pqs1JkldMCetIXsE8f8XMt34u4vSYykJUH7RebHEjsL8W
-        QfcI5Wp25v4bxwjcnaW2yBrwFQWljeZiSWtmbAI=
-X-Google-Smtp-Source: ABdhPJyyzgEA1fTxScqxlnjNhHRsU7J4UYdnwDDvnQc4sKJYJQtfQ1tPa6C1MIXWw/yjIqd6D7NGf/7KxNSf3Y6fXaw=
-X-Received: by 2002:a63:1043:: with SMTP id 3mr2252143pgq.16.1644298442816;
- Mon, 07 Feb 2022 21:34:02 -0800 (PST)
+        Tue, 8 Feb 2022 00:38:35 -0500
+Received: from relay5.hostedemail.com (relay5.hostedemail.com [64.99.140.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24D9FC03E968;
+        Mon,  7 Feb 2022 21:34:50 -0800 (PST)
+Received: from omf09.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay11.hostedemail.com (Postfix) with ESMTP id 3704080D59;
+        Tue,  8 Feb 2022 05:34:25 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf09.hostedemail.com (Postfix) with ESMTPA id 8911B20024;
+        Tue,  8 Feb 2022 05:34:23 +0000 (UTC)
+Message-ID: <dd4150af8858115c96ebab690182190556669050.camel@perches.com>
+Subject: Re: [PATCH V6 1/3] platform/x86: Add Intel Software Defined Silicon
+ driver
+From:   Joe Perches <joe@perches.com>
+To:     david.e.box@linux.intel.com, hdegoede@redhat.com,
+        gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com,
+        srinivas.pandruvada@intel.com, mgross@linux.intel.com
+Cc:     linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        Mark Gross <markgross@kernel.org>
+Date:   Mon, 07 Feb 2022 21:34:22 -0800
+In-Reply-To: <d52b50f3b704280e476e60417323c98f45baf54a.camel@linux.intel.com>
+References: <20220208005444.487209-1-david.e.box@linux.intel.com>
+         <20220208005444.487209-2-david.e.box@linux.intel.com>
+         <103681860759d72b1acf712eed334b1d4ef6b7d5.camel@perches.com>
+         <d52b50f3b704280e476e60417323c98f45baf54a.camel@linux.intel.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-Received: by 2002:a05:6a06:1791:b0:496:9424:180 with HTTP; Mon, 7 Feb 2022
- 21:33:59 -0800 (PST)
-Reply-To: avamedicinemed3@gmail.com
-From:   Dr Ava Smith <bonarikan3@gmail.com>
-Date:   Mon, 7 Feb 2022 21:33:59 -0800
-Message-ID: <CABdGGoDsrtBDLxF_r9-g3uNyzb9krN8=PgKf393jiW3-SdKOWw@mail.gmail.com>
-Subject: From Dr Ava Smith from United States
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_20,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Transfer-Encoding: 7bit
+X-Stat-Signature: 9bmhhg7au4o3rkbkfsrjtm3ti5u7dj3q
+X-Rspamd-Server: rspamout03
+X-Rspamd-Queue-Id: 8911B20024
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX18nGjmqsA11IvQ+pY/sUSKZek1OHKssEwQ=
+X-HE-Tag: 1644298463-572210
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hello Dear,
-how are you today?hope you are fine
-My name is Dr Ava Smith ,Am an English and French nationalities.
-I will give you pictures and more details about me as soon as i hear from you
-Thanks
-Ava
+On Mon, 2022-02-07 at 18:54 -0800, David E. Box wrote:
+> On Mon, 2022-02-07 at 17:40 -0800, Joe Perches wrote:
+> > On Mon, 2022-02-07 at 16:54 -0800, David E. Box wrote:
+> > > Intel Software Defined Silicon (SDSi) is a post manufacturing mechanism for
+> > > activating additional silicon features. Features are enabled through a
+> > > license activation process.  The SDSi driver provides a per socket, sysfs
+> > > attribute interface for applications to perform 3 main provisioning
+> > > functions:
+[]
+> > > +static int sdsi_mbox_cmd_read(struct sdsi_priv *priv, struct sdsi_mbox_info
+> > > *info,
+> > > +			      size_t *data_size)
+> > > +{
+> > > +	struct device *dev = priv->dev;
+> > > +	u32 total, loop, eom, status, message_size;
+> > []
+> > > +		if (packet_size > SDSI_SIZE_MAILBOX) {
+> > > +			dev_err(dev, "Packet size to large\n");
+> > 
+> > too
+> 
+> Sorry, I'm missing the question here. If it's whether packet_size could also not
+> be a multiple of sizeof(u64) the answer here is yes. But I don't see how that
+> matters. packet_size is a value read from the hardware. This is just a sanity
+> check.
+
+just a to/too typo.
+
+"Packet size too large\n"
+
+

@@ -2,69 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1608A4ADB36
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 15:35:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8169F4ADB39
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 15:35:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377718AbiBHOfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 09:35:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37238 "EHLO
+        id S1378154AbiBHOfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 09:35:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377698AbiBHOfD (ORCPT
+        with ESMTP id S1377723AbiBHOfK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 09:35:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C052C03FECE;
-        Tue,  8 Feb 2022 06:35:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 8 Feb 2022 09:35:10 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A6034C03FEDA
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 06:35:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644330908;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KmFJeladEEskqQ9EzVNc5xq5Av17QOOXTzYVPPQJwR0=;
+        b=EMMTL8OVPoDaBeFVCF/v9hzof5gkvdZfm+Pi7byxKFWxAamklaGgo+KCzmef+yPa7fbbdG
+        xuatshQ3E6aPisxq/5gBWipNZjinFq/DhSIRKhYZ3IUyh5e6SUteBp1QZyBocMU6XMUX6t
+        1sdFiJwa4e8SmUOYshxoRsKhKpEJuv8=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-580-w8KinnD_NgmHPWZeWZ7idg-1; Tue, 08 Feb 2022 09:35:05 -0500
+X-MC-Unique: w8KinnD_NgmHPWZeWZ7idg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4D044B81AF8;
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D31ED1091DA0;
         Tue,  8 Feb 2022 14:35:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FC78C340F4;
-        Tue,  8 Feb 2022 14:35:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644330900;
-        bh=MrCNTTZmKlzAuz3fwnSg3bS0Qka94fcpFrFcZ3Mq0ow=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Z1sh7V+nSOP9Xw+WaHe/Pd5mAeLjC6KNy6v3Vk6r02zerPzzwiu+lmz6HXtb450zq
-         K8VGu3fZbe1EJsV1QmrKvOCbZYraliQLRbosS7/NKPOeAjPrwuz8K/XQehnC80K3nY
-         QEm4YhVEAVqypa0UgkSvFlzX19mCfCB5ec5MS5WlK4h/8WaVSDPsj/Bdd8VFhc42Uk
-         eOS7orjVYe6aQxFoPxpHj0HQ+1gXvbcZyiA35O73rADWOLGV90KrehQkp9Qh8nYokp
-         d8I9gt+g31RQoXsmvIaJ/ZTT1SJ023b/viLHLt24iIjHDblyr28Al3DSQWatqwzIOV
-         Ek9EhUOVRYxaQ==
-Received: by mail-ed1-f41.google.com with SMTP id u18so37534102edt.6;
-        Tue, 08 Feb 2022 06:35:00 -0800 (PST)
-X-Gm-Message-State: AOAM531Qx2f7G1Xv8EXVgBjdFttRy3KhbtGe7Pq7xmktu6WyphbmIidy
-        MgbYhBL2fNFfh2mgIXjNWtc2n105hM/9jGbp+g==
-X-Google-Smtp-Source: ABdhPJy79mBKqHZM3sFn6qThXw/30s+hgz04lOPjxO5dJceaXnncLpPviPXlfIbr9FBR1E+ZpwotuJSjNklQfR51GjU=
-X-Received: by 2002:a50:8a89:: with SMTP id j9mr4760118edj.111.1644330896918;
- Tue, 08 Feb 2022 06:34:56 -0800 (PST)
-MIME-Version: 1.0
-References: <20211129173637.303201-1-robh@kernel.org> <Yf2wTLjmcRj+AbDv@xps13.dannf>
- <CAL_Jsq+4b4Yy8rJGJv9j9j_TCm6mTAkW5fzcDuuW-jOoiZ2GLg@mail.gmail.com>
- <CALdTtnuK+D7gNbEDgHbrc29pFFCR3XYAHqrK3=X_hQxUx-Seow@mail.gmail.com>
- <CAL_JsqJUmjG-SiuR9T7f=5nGcSjTLhuF_382EQDf74kcqdAq_w@mail.gmail.com> <YgHFFIRT6E0j9TlX@xps13.dannf>
-In-Reply-To: <YgHFFIRT6E0j9TlX@xps13.dannf>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 8 Feb 2022 08:34:45 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJLTkDm_ZbFWSKwKvVAh0KpxiS9y6LEwmhQ-kejTcLq7A@mail.gmail.com>
-Message-ID: <CAL_JsqJLTkDm_ZbFWSKwKvVAh0KpxiS9y6LEwmhQ-kejTcLq7A@mail.gmail.com>
-Subject: Re: [PATCH] PCI: xgene: Fix IB window setup
-To:     dann frazier <dann.frazier@canonical.com>
-Cc:     Toan Le <toan@os.amperecomputing.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Andrew Murray <amurray@thegoodpenguin.co.uk>,
-        =?UTF-8?Q?St=C3=A9phane_Graber?= <stgraber@ubuntu.com>,
-        stable <stable@vger.kernel.org>, PCI <linux-pci@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Received: from starship (unknown [10.40.192.15])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C6AD070F55;
+        Tue,  8 Feb 2022 14:34:54 +0000 (UTC)
+Message-ID: <0cdac80177eea408b7e316bd1fc4c0c5839ba1d4.camel@redhat.com>
+Subject: Re: [PATCH v3 2/6] KVM: x86: add force_intercept_exceptions_mask
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, Kieran Bingham <kbingham@kernel.org>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Andrew Jones <drjones@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Jessica Yu <jeyu@kernel.org>,
+        Jim Mattson <jmattson@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Yang Weijiang <weijiang.yang@intel.com>,
+        linux-kernel@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Borislav Petkov <bp@suse.de>
+Date:   Tue, 08 Feb 2022 16:34:53 +0200
+In-Reply-To: <YTECUaPa9kySQxRX@google.com>
+References: <20210811122927.900604-1-mlevitsk@redhat.com>
+         <20210811122927.900604-3-mlevitsk@redhat.com> <YTECUaPa9kySQxRX@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,209 +83,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 7, 2022 at 7:19 PM dann frazier <dann.frazier@canonical.com> wr=
-ote:
->
-> On Mon, Feb 07, 2022 at 10:09:31AM -0600, Rob Herring wrote:
-> > On Sat, Feb 5, 2022 at 3:13 PM dann frazier <dann.frazier@canonical.com=
-> wrote:
-> > >
-> > > On Sat, Feb 5, 2022 at 9:05 AM Rob Herring <robh@kernel.org> wrote:
-> > > >
-> > > > On Fri, Feb 4, 2022 at 5:01 PM dann frazier <dann.frazier@canonical=
-.com> wrote:
-> > > > >
-> > > > > On Mon, Nov 29, 2021 at 11:36:37AM -0600, Rob Herring wrote:
-> > > > > > Commit 6dce5aa59e0b ("PCI: xgene: Use inbound resources for set=
-up")
-> > > > > > broke PCI support on XGene. The cause is the IB resources are n=
-ow sorted
-> > > > > > in address order instead of being in DT dma-ranges order. The r=
-esult is
-> > > > > > which inbound registers are used for each region are swapped. I=
- don't
-> > > > > > know the details about this h/w, but it appears that IB region =
-0
-> > > > > > registers can't handle a size greater than 4GB. In any case, li=
-miting
-> > > > > > the size for region 0 is enough to get back to the original ass=
-ignment
-> > > > > > of dma-ranges to regions.
-> > > > >
-> > > > > hey Rob!
-> > > > >
-> > > > > I've been seeing a panic on HP Moonshoot m400 cartridges (X-Gene1=
-) -
-> > > > > only during network installs - that I also bisected down to commi=
-t
-> > > > > 6dce5aa59e0b ("PCI: xgene: Use inbound resources for setup"). I w=
-as
-> > > > > hoping that this patch that fixed the issue on St=C3=A9phane's X-=
-Gene2
-> > > > > system would also fix my issue, but no luck. In fact, it seems to=
- just
-> > > > > makes it fail differently. Reverting both patches is required to =
-get a
-> > > > > v5.17-rc kernel to boot.
-> > > > >
-> > > > > I've collected the following logs - let me know if anything else =
-would
-> > > > > be useful.
-> > > > >
-> > > > > 1) v5.17-rc2+ (unmodified):
-> > > > >    http://dannf.org/bugs/m400-no-reverts.log
-> > > > >    Note that the mlx4 driver fails initialization.
-> > > > >
-> > > > > 2) v5.17-rc2+, w/o the commit that fixed St=C3=A9phane's system:
-> > > > >    http://dannf.org/bugs/m400-xgene2-fix-reverted.log
-> > > > >    Note the mlx4 MSI-X timeout, and later panic.
-> > > > >
-> > > > > 3) v5.17-rc2+, w/ both commits reverted (works)
-> > > > >    http://dannf.org/bugs/m400-both-reverted.log
-> > > >
-> > > > The ranges and dma-ranges addresses don't appear to match up with a=
-ny
-> > > > upstream dts files. Can you send me the DT?
-> > >
-> > > Sure: http://dannf.org/bugs/fdt
-> >
-> > The first fix certainly is a problem. It's going to need something
-> > besides size to key off of (originally it was dependent on order of
-> > dma-ranges entries).
-> >
-> > The 2nd issue is the 'dma-ranges' has a second entry that is now ignore=
-d:
-> >
-> > dma-ranges =3D <0x42000000 0x40 0x00 0x40 0x00 0x40 0x00 0x00>, <0x00
-> > 0x79000000 0x00 0x79000000 0x00 0x800000>;
-> >
-> > Based on the flags (3rd addr cell: 0x0), we have an inbound config
-> > space which the kernel now ignores because inbound config space
-> > accesses make no sense. But clearly some setup is needed. Upstream, in
-> > contrast, sets up a memory range that includes this region, so the
-> > setup does happen:
-> >
-> > <0x42000000 0x00 0x00000000 0x00 0x00000000 0x80 0x00000000>
-> >
-> > Minimally, I suspect it will work if you change dma-ranges 2nd entry to=
-:
-> >
-> > <0x42000000 0x79000000 0x00 0x79000000 0x00 0x800000>
->
-> Thanks for looking into this Rob. I tried to test that theory, but it
-> didn't seem to work. This is what I tried:
->
-> --- m400.dts    2022-02-07 20:16:44.840475323 +0000
-> +++ m400.dts.dmaonly    2022-02-08 00:17:54.097132000 +0000
-> @@ -446,7 +446,7 @@
->                         reg =3D <0x00 0x1f2b0000 0x00 0x10000 0xe0 0xd000=
-0000 0x00 0x200000 0x00 0x79e00000 0x00 0x2000000 0x00 0x79000000 0x00 0x80=
-0000>;
->                         reg-names =3D "csr\0cfg\0msi_gen\0msi_term";
->                         ranges =3D <0x1000000 0x00 0x00 0xe0 0x10000000 0=
-x00 0x10000 0x2000000 0x00 0x30000000 0xe1 0x30000000 0x00 0x80000000>;
-> -                       dma-ranges =3D <0x42000000 0x40 0x00 0x40 0x00 0x=
-40 0x00 0x00 0x00 0x79000000 0x00 0x79000000 0x00 0x800000>;
-> +                       dma-ranges =3D <0x42000000 0x40 0x00 0x40 0x00 0x=
-40 0x00 0x00 0x42000000 0x79000000 0x00 0x79000000 0x00 0x800000>;
->                         ib-ranges =3D <0x42000000 0x40 0x00 0x40 0x00 0x4=
-0 0x00 0x00 0x00 0x79000000 0x00 0x79000000 0x00 0x800000>;
->                         ib-ranges-ep =3D <0x2000000 0x00 0x00 0x00 0x00 0=
-x00 0x400000 0x2000000 0x00 0x00 0x00 0x00 0x00 0x400000 0x2000000 0x00 0x7=
-9000000 0x00 0x79000000 0x00 0x100000>;
->                         interrupts =3D <0x00 0x10 0x04>;
-> @@ -471,7 +471,7 @@
->                         reg =3D <0x00 0x1f2c0000 0x00 0x10000 0xd0 0xd000=
-0000 0x00 0x200000 0x00 0x79e00000 0x00 0x2000000 0x00 0x79000000 0x00 0x80=
-0000>;
->                         reg-names =3D "csr\0cfg\0msi_gen\0msi_term";
->                         ranges =3D <0x1000000 0x00 0x00 0xd0 0x10000000 0=
-x00 0x10000 0x2000000 0x00 0x30000000 0xd1 0x30000000 0x00 0x80000000>;
-> -                       dma-ranges =3D <0x42000000 0x40 0x00 0x40 0x00 0x=
-40 0x00 0x00 0x00 0x79000000 0x00 0x79000000 0x00 0x800000>;
-> +                       dma-ranges =3D <0x42000000 0x40 0x00 0x40 0x00 0x=
-40 0x00 0x00 0x42000000 0x79000000 0x00 0x79000000 0x00 0x800000>;
->                         ib-ranges =3D <0x42000000 0x40 0x00 0x40 0x00 0x4=
-0 0x00 0x00 0x00 0x79000000 0x00 0x79000000 0x00 0x800000>;
->                         ib-ranges-ep =3D <0x2000000 0x00 0x00 0x00 0x00 0=
-x00 0x400000 0x2000000 0x00 0x00 0x00 0x00 0x00 0x400000 0x2000000 0x00 0x7=
-9000000 0x00 0x79000000 0x00 0x100000>;
->                         interrupts =3D <0x00 0x10 0x04>;
-> @@ -496,7 +496,7 @@
->                         reg =3D <0x00 0x1f2d0000 0x00 0x10000 0x90 0xd000=
-0000 0x00 0x200000 0x00 0x79e00000 0x00 0x2000000 0x00 0x79000000 0x00 0x80=
-0000>;
->                         reg-names =3D "csr\0cfg\0msi_gen\0msi_term";
->                         ranges =3D <0x1000000 0x00 0x00 0x90 0x10000000 0=
-x00 0x10000 0x2000000 0x00 0x30000000 0x91 0x30000000 0x00 0x80000000>;
-> -                       dma-ranges =3D <0x42000000 0x40 0x00 0x40 0x00 0x=
-40 0x00 0x00 0x00 0x79000000 0x00 0x79000000 0x00 0x800000>;
-> +                       dma-ranges =3D <0x42000000 0x40 0x00 0x40 0x00 0x=
-40 0x00 0x00 0x42000000 0x79000000 0x00 0x79000000 0x00 0x800000>;
->                         ib-ranges =3D <0x42000000 0x40 0x00 0x40 0x00 0x4=
-0 0x00 0x00 0x00 0x79000000 0x00 0x79000000 0x00 0x800000>;
->                         ib-ranges-ep =3D <0x2000000 0x00 0x00 0x00 0x00 0=
-x00 0x400000 0x2000000 0x00 0x00 0x00 0x00 0x00 0x400000 0x2000000 0x00 0x7=
-9000000 0x00 0x79000000 0x00 0x100000>;
->                         interrupts =3D <0x00 0x10 0x04>;
-> @@ -522,7 +522,7 @@
->                         reg =3D <0x00 0x1f500000 0x00 0x10000 0xa0 0xd000=
-0000 0x00 0x200000 0x00 0x79e00000 0x00 0x2000000 0x00 0x79000000 0x00 0x80=
-0000>;
->                         reg-names =3D "csr\0cfg\0msi_gen\0msi_term";
->                         ranges =3D <0x2000000 0x00 0x30000000 0xa1 0x3000=
-0000 0x00 0x80000000>;
-> -                       dma-ranges =3D <0x42000000 0x40 0x00 0x40 0x00 0x=
-40 0x00 0x00 0x00 0x79000000 0x00 0x79000000 0x00 0x800000>;
-> +                       dma-ranges =3D <0x42000000 0x40 0x00 0x40 0x00 0x=
-40 0x00 0x00 0x42000000 0x79000000 0x00 0x79000000 0x00 0x800000>;
->                         ib-ranges =3D <0x42000000 0x40 0x00 0x40 0x00 0x4=
-0 0x00 0x00 0x00 0x79000000 0x00 0x79000000 0x00 0x800000>;
->                         ib-ranges-ep =3D <0x2000000 0x00 0x00 0x00 0x00 0=
-x00 0x400000 0x2000000 0x00 0x00 0x00 0x00 0x00 0x400000 0x2000000 0x00 0x7=
-9000000 0x00 0x79000000 0x00 0x100000>;
->                         interrupts =3D <0x00 0x10 0x04>;
-> @@ -547,7 +547,7 @@
->                         reg =3D <0x00 0x1f510000 0x00 0x10000 0xc0 0xd000=
-0000 0x00 0x200000 0x00 0x79e00000 0x00 0x2000000 0x00 0x79000000 0x00 0x80=
-0000>;
->                         reg-names =3D "csr\0cfg\0msi_gen\0msi_term";
->                         ranges =3D <0x1000000 0x00 0x00 0xc0 0x10000000 0=
-x00 0x10000 0x2000000 0x00 0x30000000 0xc1 0x30000000 0x00 0x80000000>;
-> -                       dma-ranges =3D <0x42000000 0x40 0x00 0x40 0x00 0x=
-40 0x00 0x00 0x00 0x79000000 0x00 0x79000000 0x00 0x800000>;
-> +                       dma-ranges =3D <0x42000000 0x40 0x00 0x40 0x00 0x=
-40 0x00 0x00 0x42000000 0x79000000 0x00 0x79000000 0x00 0x800000>;
->                         ib-ranges =3D <0x42000000 0x40 0x00 0x40 0x00 0x4=
-0 0x00 0x00 0x00 0x79000000 0x00 0x79000000 0x00 0x800000>;
->                         ib-ranges-ep =3D <0x2000000 0x00 0x00 0x00 0x00 0=
-x00 0x400000 0x2000000 0x00 0x00 0x00 0x00 0x00 0x400000 0x2000000 0x00 0x7=
-9000000 0x00 0x79000000 0x00 0x100000>;
->                         interrupts =3D <0x00 0x10 0x04>;
->
-> And that failed to boot with a 5.17-rc3. Since dma-ranges was
-> previously identical to ib-ranges, I also tried making the same change
-> to ib-ranges, but with no success.
+On Thu, 2021-09-02 at 16:56 +0000, Sean Christopherson wrote:
+> Assuming this hasn't been abandoned...
+> 
+> On Wed, Aug 11, 2021, Maxim Levitsky wrote:
+> > This parameter will be used by VMX and SVM code to force
+> > interception of a set of exceptions, given by a bitmask
+> > for guest debug and/or kvm debug.
+> > 
+> > This is based on an idea first shown here:
+> > https://patchwork.kernel.org/project/kvm/patch/20160301192822.GD22677@pd.tnic/
+> > 
+> > CC: Borislav Petkov <bp@suse.de>
+> > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> > ---
+> >  arch/x86/kvm/x86.c | 3 +++
+> >  arch/x86/kvm/x86.h | 2 ++
+> >  2 files changed, 5 insertions(+)
+> > 
+> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> > index fdc0c18339fb..092e2fad3c0d 100644
+> > --- a/arch/x86/kvm/x86.c
+> > +++ b/arch/x86/kvm/x86.c
+> > @@ -184,6 +184,9 @@ module_param(force_emulation_prefix, bool, S_IRUGO);
+> >  int __read_mostly pi_inject_timer = -1;
+> >  module_param(pi_inject_timer, bint, S_IRUGO | S_IWUSR);
+> >  
+> > +uint force_intercept_exceptions_mask;
+> > +module_param(force_intercept_exceptions_mask, uint, S_IRUGO | S_IWUSR);
+> 
+> Use octal permissions.  This also can't be a simple writable param, at least not
+> without a well-documented disclaimer, as there's no guarantee a vCPU will update
+> its exception bitmap in a timely fashion.  An alternative to a module param would
+> be to extend/add a per-VM ioctl(), e.g. maybe KVM_SET_GUEST_DEBUG?  The downside
+> of an ioctl() is that it would require userspace enabling :-/
+> 
 
-Failed to boot at all or just PCIe still didn't work causing boot to
-eventually fail? 'ib-ranges' is unknown to the kernel, so the firmware
-is using it somehow?
+All other module params in this file use macros for permissions, that is why
+I used them too.
 
-You also need to revert the first fix for PCIe to work.
+I'll add a comment with a disclaimer here - this is only for debug.
+I strongly don't want to have this as ioctl as that will indeed need qemu patches,
+not to mention things like unit tests and which don't even always use qemu.
+
+Or I can make this parameter read-only. I don't mind reloading kvm module when
+I change this parameter.
 
 
-> > While we shouldn't break existing DTs, the moonshot DT doesn't use
-> > what's documented upstream. There are multiple differences compared to
-> > what's documented. Is upstream supposed to support upstream DTs,
-> > downstream DTs, and ACPI for XGene which is an abandoned platform with
-> > only a handful of users?
->
-> That's a fair question, though it's one of a policy, and I feel I'd be
-> overstepping by weighing in. I suppose one option I have is to try
-> and create and upstream a dts for these systems and modify our
-> boot.scr to always load that over the one provided by firmware. While
-> we do have some of these systems in production, they are being retired
-> and replaced with newer kit over time, and it's possible we'll never
-> need to upgrade them to a modern kernel.
->
->   -dann
+Best regards,
+	Maxim Levitsky
+
+PS: Forgot to send this mail, it was in my drafts folder.
+

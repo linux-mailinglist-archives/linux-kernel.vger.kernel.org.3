@@ -2,143 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 148024AD261
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 08:40:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2287A4AD269
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 08:41:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348496AbiBHHkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 02:40:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35646 "EHLO
+        id S1348557AbiBHHlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 02:41:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348497AbiBHHkl (ORCPT
+        with ESMTP id S237648AbiBHHlq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 02:40:41 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 559A0C0401EF;
-        Mon,  7 Feb 2022 23:40:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EF70761616;
-        Tue,  8 Feb 2022 07:40:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38174C004E1;
-        Tue,  8 Feb 2022 07:40:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644306039;
-        bh=hCaoJ9viHY+9jSGZzSXxNK60/DZEM/xN7vZj/9sKfXA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QjPNGi2j2Y6pYYNZq4wFMBTpYumZsgXxoGwPppPNbtjBXUorM+gdM6Djm98W4TjHr
-         uLW9XzYBtWFjHrwFaLIybU8f7Fx+fnzbIjUsSRSvgZN9yuyWKyidGhLdZcaG/FXlIb
-         u9lvxCXvzTTR6lJIoE07Hjd3xDeKhOIi6qa+ROO0=
-Date:   Tue, 8 Feb 2022 08:40:35 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 2/2] drm/msm/dp: Implement oob_hotplug_event()
-Message-ID: <YgIecy+W/lGzL6ac@kroah.com>
-References: <20220208044328.588860-1-bjorn.andersson@linaro.org>
- <20220208044328.588860-2-bjorn.andersson@linaro.org>
+        Tue, 8 Feb 2022 02:41:46 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C30EC0401EF;
+        Mon,  7 Feb 2022 23:41:45 -0800 (PST)
+Received: from mail-wr1-f41.google.com ([209.85.221.41]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1Mt71D-1oAoGP1Qgz-00tSqo; Tue, 08 Feb 2022 08:41:44 +0100
+Received: by mail-wr1-f41.google.com with SMTP id s18so29062642wrv.7;
+        Mon, 07 Feb 2022 23:41:44 -0800 (PST)
+X-Gm-Message-State: AOAM530GE+mfRIufNAVlDXE0bIg6nZn2YIwEQ6szSTd6g3pMebjQfMg1
+        Z9CGkELCbbkHkXtofGA68sf2oYk/S/34sL+BNww=
+X-Google-Smtp-Source: ABdhPJwSN/RUlrPrmkpZbmWEmlsZtj8WZCi5YXxWOOSj9Q39433eqrfugxQNfyVR5WUl9iWtCZ9J5roLsYcDSDBre7Q=
+X-Received: by 2002:a05:6000:178d:: with SMTP id e13mr2313626wrg.317.1644306103969;
+ Mon, 07 Feb 2022 23:41:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220208044328.588860-2-bjorn.andersson@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20211203031332.902485-1-jerry.huang@nxp.com> <20211203031332.902485-2-jerry.huang@nxp.com>
+ <VE1PR04MB6477BB08C1AF9F1E5A0B0C1BFE2D9@VE1PR04MB6477.eurprd04.prod.outlook.com>
+In-Reply-To: <VE1PR04MB6477BB08C1AF9F1E5A0B0C1BFE2D9@VE1PR04MB6477.eurprd04.prod.outlook.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 8 Feb 2022 08:41:28 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0dr_Qe47MnuAJSuEPiuzBMfnC_7gDZN0MsUiYE2bqrOg@mail.gmail.com>
+Message-ID: <CAK8P3a0dr_Qe47MnuAJSuEPiuzBMfnC_7gDZN0MsUiYE2bqrOg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] ARM: dts: Add initial LS1021A IoT board dts support
+To:     Jerry Huang <jerry.huang@nxp.com>
+Cc:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>, "olof@lixom.net" <olof@lixom.net>,
+        "soc@kernel.org" <soc@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        Leo Li <leoyang.li@nxp.com>,
+        "krzysztof.kozlowski@canonical.com" 
+        <krzysztof.kozlowski@canonical.com>,
+        "linux@rempel-privat.de" <linux@rempel-privat.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "tharvey@gateworks.com" <tharvey@gateworks.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        "jagan@amarulasolutions.com" <jagan@amarulasolutions.com>,
+        "dev@lynxeye.de" <dev@lynxeye.de>,
+        "cniedermaier@dh-electronics.com" <cniedermaier@dh-electronics.com>,
+        "sebastian.reichel@collabora.com" <sebastian.reichel@collabora.com>,
+        Alison Wang <alison.wang@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:Y1XQD3ttRgW9Wgwx/euX2wGwhlQ+SrjeqQQeQ+6QQOMdVdAh/GA
+ D9xW1v095WAUbkCh7ZJcCNUQTnNEdauxT1KM636rk6IAUUD+CbgVyYui5jJmhY3gae0tV5b
+ yqzZaZwZynLBeGaQwF7xPJYKpDXT3CeXNPW0bcutSmc5gvhe/4ugOccozptqo8l3pCAsUZL
+ 0tkULrejpWRJwXtAQpjGw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:QxW65tKqB5o=:E4ki8ByPG7R6TsheBK9EIJ
+ cs3d9BhbxqNmFFJJdPsZituUW0wi2wxC2QvBLGyaszdd233W8MZNTQ2QA7NubutxE0VudYRdB
+ GNOioM/R9ovvCl50qOTXYwTcIHCD9uLHJ+EnjGGkHWfSCRWGDrbW0yYy5FOyG+gAJXAseF5wu
+ 1+v++hUTzpksNYTqUzr6hHcjExttMAMMdP8HaTHOGLBPmte6/Q2X6txNwlI6I1gjDq1k2RItC
+ Ke+n+3c0wD3nTUlpgJYTE+GW2xz9rL2lvCbzl9aUyIDq2W2AAc/Xrt76fg1BbMP7Ey3IeNZSz
+ CVbNwrm3iTjerGqozYZg4q/PgIrDqQz7HYUd8lOPI2wZS89/UeChKt1Mw1YsI73E7ZOoyC88h
+ 87J8NVeYsBhlbBttPMoOaM/6PK8IUw0UZD66OrBClDP3yv+ihH8dtLW1meMtasueiNarK2ly3
+ Z1UlGCJ73AjtC3ON9EbbZYPPYsWw/ojoI1ROP7zrpcemtUf3R9SI9/1EprI9NAbK8CvVGfTSg
+ zVMbqxAuS/Ioa35ng29nKr9TLsFgIrqYgnlmxBN8M0TVQubhiRyHeNNb5znpja9HxibbcDxCy
+ tkU85+4mk0oIUr5cmAP8POeD0xZVjxF87LFZJF4ktKfgGa0oVnLkBBJ0Fm4o4W8hMR2ZBG9r/
+ 1LZ1G12+mV820zYsJHQNFojRVOtO+jmLroxauwHBPQM5xmpmNxmLN9YS3QC2DNi8TJK6S4JS5
+ T+TRFUMrHIxmrqy8vANvGPvCSOBR8V2MYXvlRR4OqK2rUpoiW57zqGRVC6naKWIXw5G6M742Q
+ pd8N2YPDBpjUCAAHaBxV/m44plKZduG42wtwYAOrOBAPJgCQPU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 08:43:28PM -0800, Bjorn Andersson wrote:
-> The Qualcomm DisplayPort driver contains traces of the necessary
-> plumbing to hook up USB HPD, in the form of the dp_hpd module and the
-> dp_usbpd_cb struct. Use this as basis for implementing the
-> oob_hotplug_event() callback, by amending the dp_hpd module with the
-> missing logic.
-> 
-> Overall the solution is similar to what's done downstream, but upstream
-> all the code to disect the HPD notification lives on the calling side of
-> drm_connector_oob_hotplug_event().
-> 
-> drm_connector_oob_hotplug_event() performs the lookup of the
-> drm_connector based on fwnode, hence the need to assign the fwnode in
-> dp_drm_connector_init().
-> 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
->  drivers/gpu/drm/msm/dp/dp_display.c |  8 ++++++++
->  drivers/gpu/drm/msm/dp/dp_display.h |  2 ++
->  drivers/gpu/drm/msm/dp/dp_drm.c     | 10 ++++++++++
->  drivers/gpu/drm/msm/dp/dp_hpd.c     | 19 +++++++++++++++++++
->  drivers/gpu/drm/msm/dp/dp_hpd.h     |  4 ++++
->  5 files changed, 43 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-> index 7cc4d21f2091..124a2f794382 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_display.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
-> @@ -414,6 +414,13 @@ static int dp_display_usbpd_configure_cb(struct device *dev)
->  	return dp_display_process_hpd_high(dp);
->  }
->  
-> +void dp_display_oob_hotplug_event(struct msm_dp *dp_display, bool hpd_state)
-> +{
-> +	struct dp_display_private *dp = container_of(dp_display, struct dp_display_private, dp_display);
-> +
-> +	dp->usbpd->oob_event(dp->usbpd, hpd_state);
-> +}
-> +
->  static int dp_display_usbpd_disconnect_cb(struct device *dev)
->  {
->  	struct dp_display_private *dp = dev_get_dp_display_private(dev);
-> @@ -1251,6 +1258,7 @@ static int dp_display_probe(struct platform_device *pdev)
->  	dp->pdev = pdev;
->  	dp->name = "drm_dp";
->  	dp->dp_display.connector_type = desc->connector_type;
-> +	dp->dp_display.dev = &pdev->dev;
+On Tue, Feb 8, 2022 at 2:49 AM Jerry Huang <jerry.huang@nxp.com> wrote:
+>
+> Any comment for this patch?
 
-You did not properly reference count this pointer you just saved.  What
-is to keep that pointer from going away without you knowing about it?
+Shawn gave a detailed review in December, maybe you missed it:
 
-And you already have a pointer to pdev, why save another one here?
+https://lore.kernel.org/linux-arm-kernel/20211214040228.GD10916@dragon/
 
->  
->  	rc = dp_init_sub_modules(dp);
->  	if (rc) {
-> diff --git a/drivers/gpu/drm/msm/dp/dp_display.h b/drivers/gpu/drm/msm/dp/dp_display.h
-> index e3adcd578a90..1f856b3bca79 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_display.h
-> +++ b/drivers/gpu/drm/msm/dp/dp_display.h
-> @@ -11,6 +11,7 @@
->  #include "disp/msm_disp_snapshot.h"
->  
->  struct msm_dp {
-> +	struct device *dev;
->  	struct drm_device *drm_dev;
->  	struct device *codec_dev;
-
-So you now have pointers to 3 different devices here?  What does 'dev'
-point to that the other ones do not?  This needs to be documented really
-well here.
-
-thanks,
-
-greg k-h
+         Arnd

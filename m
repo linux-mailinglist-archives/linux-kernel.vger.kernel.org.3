@@ -2,180 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A8A04AD8CD
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 14:16:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF1284AD9A8
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 14:22:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344726AbiBHNPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 08:15:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52472 "EHLO
+        id S1350752AbiBHNWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 08:22:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234748AbiBHMQ2 (ORCPT
+        with ESMTP id S240515AbiBHMRm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 07:16:28 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBFC3C03FEC0
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 04:16:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644322587; x=1675858587;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Olp7rK6zk5YLYG7Pc7r9QucePjQot3Nd7pJoWAbt+Ss=;
-  b=S+e+P+RfotLkXlPud5+Jt2i9MgPVDRgSwgq7whC313uBnuTM20vaJUCa
-   wF5Xh63J5jFSJAoQJzE+sLKJjr7P9w0G3JR8UP+6p7hEPWQFQ/47rk6t4
-   pzOEvrrg0v0+6Fc81kYk4xoMVLaouzqKgnrHI0gm0aawF4b0QTatYOTF2
-   Erzy3+wc9hNGH0I7wDfMr5d5azZ/AiIVMCNlBQJd6ZS8qnyH2VEEw8sGN
-   Mf4tcYAaxHuq0eQk7JPJnVzJEon0F88MPk5LDVNWSweC/vd7DTaf8woh3
-   csftjO6rZdmTyGphDe+LFWq/3Fylau9Aa3GKkKFhxjD6/JFsb9ztDqgkl
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="232501378"
-X-IronPort-AV: E=Sophos;i="5.88,352,1635231600"; 
-   d="scan'208";a="232501378"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 04:16:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,352,1635231600"; 
-   d="scan'208";a="484792694"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 08 Feb 2022 04:16:25 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nHPQ1-00009M-5y; Tue, 08 Feb 2022 12:16:25 +0000
-Date:   Tue, 8 Feb 2022 20:15:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Song Liu <song@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>
-Subject: [bpf-next:master 216/221] kernel/bpf/core.c:826:37: error: statement
- expression not allowed at file scope
-Message-ID: <202202082002.DBLucTeM-lkp@intel.com>
+        Tue, 8 Feb 2022 07:17:42 -0500
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70082.outbound.protection.outlook.com [40.107.7.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E2E7C03FEC0
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 04:17:41 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UdMmAKY/OCXTJMaUuuFnzPHwBQdNE2Cz0fffXIwUMh1JCUb42NszijgWs0W1Erc+oSS6NumgaLq5GHvK1IF5zdvAGX8qxhq+uprJ1NxlBNAfdvHxLmmXdF40GTUqMdtcW3q4gdK2nzf02CAkiO4gRlFgiyHNO00qKPDe1/rgf/G5NaI2P7mRhoIn9sEzaCAMJYBLV0v177LRai1XQCsBf4fmHu+T6s/9oBWcVx34TZv3Ra7XvHvn3g4eMAOlmWAArUPSge76bryXLgrTyhtPPZJn7sc4YJL3r4dmb6HAmPC760aGZhr2NnIG6BoW/pFo6/FYqH+OEtwut954IPbrPA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Jehz2CGQ/78gH5W6bQj7gRfwRkj1JZMXA4L762ITIXc=;
+ b=lZuDh9VrgJzfTZtFgnE3poFP2FXrSfc7kn3rnDQiLxkupzs4URxxOiQbkrnisQq66ec0okI52eLLFe6iJS+QSPdz9Ha3+xSJt3zBPbHCXvw25YqSpIAx2wYEwSVljx0DlPBr6TSIVcfiTADxYInEMz7XnePmfyTWDPDEqh7vNZy32ifDXJlJV0jp+8I4Uhx1AQvjXQ/FhMx36b8mFCEF/9zcITxCYtj6Jrz9Kmn9N1lxCuw6GOXWkDrCAUZ4QhpTUn2EMGjwu1ALQ9N/9KxybECBo9AxMJ/pNXgLdi7MUV1vd+6m55EFwcIaWu0aovYjkbcUBVOMI/7q3kV/iwBX+g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Jehz2CGQ/78gH5W6bQj7gRfwRkj1JZMXA4L762ITIXc=;
+ b=FC6K9Xe0vC+xjEn6tAn95NZdFydA/1dwLZE4j1dUeF3d2U06/AeqG6zinmKoZXq6vPhPc0zgFAkpFWkT7V0a27KT9jelERK9RbUpyaZ5pvbTFFzPv8C3Pebq7rrsN0ErP8kQonHiKTlJy6DFzHRLqRrNtQPaVgc7SFK63Dp/2cQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from VI1PR04MB5005.eurprd04.prod.outlook.com (2603:10a6:803:57::30)
+ by PAXPR04MB8301.eurprd04.prod.outlook.com (2603:10a6:102:1c5::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.19; Tue, 8 Feb
+ 2022 12:17:37 +0000
+Received: from VI1PR04MB5005.eurprd04.prod.outlook.com
+ ([fe80::acb8:bd1e:d125:8259]) by VI1PR04MB5005.eurprd04.prod.outlook.com
+ ([fe80::acb8:bd1e:d125:8259%4]) with mapi id 15.20.4951.017; Tue, 8 Feb 2022
+ 12:17:37 +0000
+From:   "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Shengjiu Wang <shengjiu.wang@freescale.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Viorel Suman <viorel.suman@nxp.com>,
+        patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] ASoC: codec: wm8960: complete discharge on BIAS OFF->STANDBY
+Date:   Tue,  8 Feb 2022 14:17:27 +0200
+Message-Id: <20220208121727.4461-1-viorel.suman@oss.nxp.com>
+X-Mailer: git-send-email 2.26.3
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: VI1PR07CA0226.eurprd07.prod.outlook.com
+ (2603:10a6:802:58::29) To VI1PR04MB5005.eurprd04.prod.outlook.com
+ (2603:10a6:803:57::30)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7adaf6bb-0bfa-4989-65c4-08d9eafcfe8a
+X-MS-TrafficTypeDiagnostic: PAXPR04MB8301:EE_
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-Microsoft-Antispam-PRVS: <PAXPR04MB83018F0596BAC61D9C73D4B8D32D9@PAXPR04MB8301.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2276;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: OOSzTEbdhg6LJbwyS10LhO1TviSBY7ErJNtoLMXTnf/fLrAKi1V5FW94jqZZYUblnqi6fGGJMTH5Y/o6dOzEC785efrMkpIynC3QDOzMGV4GlWSYFl7hlKl89gKunVeSvOGIK6jKSb/F1XIZ31YC8oIelhadXTyGivOY1vnkLtOaSLt1DvqUX0ocd6wznMD8tS6hgRZ/AToGiGU5yQML/cQQAOh1fm15yCr+tx8Ygma+DzZw/oBJjPs4Agu/hIkTqEG3Soh5D5yLGHhB538xK3ySaP1/ae727Kq/rCA3HKcR2HDeV6cNpDQ4I+MuBH9PgI540J+WxKZEx0PmiAW00GHG4+UkZ1V4SgUGYD3CB60LWx3LUbponObm8idbUoOV8Zg01X3m4bAKYMl8CYK2SYQw1Yb2OQHHWnCV4NvIP5/Zze33m8r7KF6n4Pk1QVCYr+aM2z2IXS0SGeGGyh/YLIarL/4kDWGpnhDX1X10QvN9axvgz3OHRq6oAFFnP/EMi8thUwg1MqdCbl8mpslZV0FmJbA8wrCMidlqoVkjL9OTgwTaiKbD7QMJPHhco46u6mNnJeKPSNJaU/p74MPJLtSbt+0gK0hWYR3/5yXJeh+XhcT5Ef6NGQpyCAekKcBffQmD6XIW+CfknCBGR0rIdJBIMEksxECLrHMB2wT0L1QCIw/er+zR8pMDD7egahOxGNYIWFelur/lI9+IWVL4i/t8nm8krdqf7fa5ILkcL1Q=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5005.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(186003)(1076003)(6506007)(316002)(26005)(508600001)(6486002)(83380400001)(52116002)(2616005)(2906002)(86362001)(6666004)(8676002)(8936002)(66946007)(66556008)(66476007)(110136005)(6512007)(38350700002)(38100700002)(921005)(5660300002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0IF+Pkw0vvYQdLysxzUMX4tU2BlekP/Qowj4t25m7/jcw5JCjntPXoZ66itp?=
+ =?us-ascii?Q?i51nOdKlxT7wvkAqTyOtwheSFCTWyg3+Ub1MtcZL6fyvqxnsxpi93oyvWkfT?=
+ =?us-ascii?Q?Un+Ig+XBKnuoj0M9ijFB4o+Q+iJj2bnwaCHGtVRWD443IyEbU3h0ojSXgYn0?=
+ =?us-ascii?Q?6XLMLZdNlqHbUa0jsIrp3KAN8mVc2yYKcCFsB+0ISIQUh4I/7+7POTvF+CIs?=
+ =?us-ascii?Q?qYE8C2bQ/nXQv+ZcfPn2r6jLJGFYDNiGgciZlxWSVhdA/2uItLs4iRYEjDFu?=
+ =?us-ascii?Q?De1gM/YI6J36zg8bDUl4u8j1QWCXHoVDqWGb0pB8idDg4iaSkNrhiNXJXm2h?=
+ =?us-ascii?Q?48ERuA7ukfWdzIXfieMJ4J/KuYqM98rlZa3vjIK4S4DSKqplytGM6N4dvUTq?=
+ =?us-ascii?Q?oxev5Sn4hsriVXc8ULF6uIw9u5h+Be4MAaDtWuBcXX11W2qTFy/W2CeefqHX?=
+ =?us-ascii?Q?KWdENYf1J4eSoV2zz6c03BoeUSrYeaiH6P6xbzqCu8I0D42O4jOA4pgYa3qN?=
+ =?us-ascii?Q?NOfZWt8snBMc4HDxmJiPxC/3Cv7o1cuvCcomkYILj25NT2zTjDhjj03GHGSu?=
+ =?us-ascii?Q?f78XNV0V1gUovMOwJb0KtBsWOsDHbw/KT4+PZEPVBfZKVvgSOO/l0sJ3jc6L?=
+ =?us-ascii?Q?hskhBcaLvNRcVKs+PA0XFedpIJeprnaavLpv7Qk8zS+HSzKReVDzeJdl5YF9?=
+ =?us-ascii?Q?qrozeJlhoWwbqLm28U/BOyt2WXcWNJrHLhpuaBDrNloPXxouttVuAw5ZSTZz?=
+ =?us-ascii?Q?Exk+q0lozAB5qA61LPigIp8ZUq7Iw4RbfKCD6Bh9J9VKLZZoAbnlSlrFr8pe?=
+ =?us-ascii?Q?NRoVQovcYtcLBDhWv2KXN4srSiebe6Nv6Uy5kbds8VSYspqNUXF0EGyTy3H6?=
+ =?us-ascii?Q?ZQ4F3re+7BKuxKVtgEE3Td8H+q6PzI74qZxrojTp15NZyen3kCl9RvCvvW5R?=
+ =?us-ascii?Q?5JD0HljZ58tgtLStBRIhImeSHZx+8aeHBz8uLQsfQUJ2ve3Qzv2GU5bavK1h?=
+ =?us-ascii?Q?Ltpfu0nN2atimAe3Z+9tGNtyPQ1mkRGz56pGaow3AXYCDUw4AsHuebLJbF71?=
+ =?us-ascii?Q?BkMqS8FgwPmn/KtdqQ4eiCdkukr++djK+V3F45ZqHK3+BE8OniSHLodZqArg?=
+ =?us-ascii?Q?0/ilRthKjKffKRtXd8fAKRul3y0wuEYKSpW8K6jJD/G+H1R9V3C7MUu6Gveu?=
+ =?us-ascii?Q?ZUWM9fKR+0sHKi29EvIk+atiNFxRclvXk6WabsL8I0ZwqU9niVKyR/23hhlM?=
+ =?us-ascii?Q?4Ldp1JErD+qseY4XFjFwAkZGUR0yXc8j0VMDsCOP2HsWHg2pEqXlhIyS1O3N?=
+ =?us-ascii?Q?VIgJUEmVmZlmEayAEMyEWXLLV0aY7QPUIbkbMn/wOisOuH9fK3XwWeabDktE?=
+ =?us-ascii?Q?ldWW+xwd90wsf9e7Jl8mLFeogLBO4cso91hc9FDsYW7hVYLNFxWPzChrjqTP?=
+ =?us-ascii?Q?g9pmrxpewwxTpF+U0C9pl2hXINVHy0agwiI/odQwbbydL1N481iIfLWWGM/N?=
+ =?us-ascii?Q?bkoJG+7CHHSMykU78eeTm7+XrlnmMy48lVtHSczaO/DM5Cs4hOxOFI0bCtxl?=
+ =?us-ascii?Q?qvP0Tf0mSpx//F947Fceenz15kQpVPa0x6OvTvqDRcnq7qKbVf3up+YfjAUp?=
+ =?us-ascii?Q?2b1E2sl0x0KuJmjYdqY5cJ8=3D?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7adaf6bb-0bfa-4989-65c4-08d9eafcfe8a
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5005.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Feb 2022 12:17:37.5589
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DU0k1w1dTVMB0+KahZTV0Cw8FhNvLL0i04geWu1/nMScb4a2q0vhP/rwVCHngCHjvc8dDy6WnKs87mw6EAGtcw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8301
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-head:   5d1e9f437df5ef21e7567f1970a00fda3b5d1126
-commit: 57631054fae6dcc9c892ae6310b58bbb6f6e5048 [216/221] bpf: Introduce bpf_prog_pack allocator
-config: s390-randconfig-r044-20220208 (https://download.01.org/0day-ci/archive/20220208/202202082002.DBLucTeM-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e8bff9ae54a55b4dbfeb6ba55f723abbd81bf494)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit/?id=57631054fae6dcc9c892ae6310b58bbb6f6e5048
-        git remote add bpf-next https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
-        git fetch --no-tags bpf-next master
-        git checkout 57631054fae6dcc9c892ae6310b58bbb6f6e5048
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+From: Viorel Suman <viorel.suman@nxp.com>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On BIAS STANDBY->OFF transition the current implementation sleeps
+600ms on suspend in order to discharge the chip. The suspend is
+propagated from "snd_soc_suspend" call for all audio cards in a
+serial fashion, thus in case of boards like i.MX8DXL EVK which has
+3 distinct WM8960 codecs the total cumulated sleep on suspend is 1.8
+seconds.
 
-All errors (new ones prefixed by >>):
+On the other hand the BIAS OFF->STANDBY transition happens
+asynchronously with regard to "snd_soc_resume" - the call is
+propagated from "soc_resume_deferred" which is just scheduled
+from "snd_soc_resume", each card having its own work scheduled to
+execute "soc_resume_deferred" call.
 
-   In file included from kernel/bpf/core.c:21:
-   In file included from include/linux/filter.h:12:
-   In file included from include/linux/skbuff.h:31:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from kernel/bpf/core.c:21:
-   In file included from include/linux/filter.h:12:
-   In file included from include/linux/skbuff.h:31:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from kernel/bpf/core.c:21:
-   In file included from include/linux/filter.h:12:
-   In file included from include/linux/skbuff.h:31:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> kernel/bpf/core.c:826:37: error: statement expression not allowed at file scope
-           unsigned long bitmap[BITS_TO_LONGS(BPF_PROG_CHUNK_COUNT)];
-                                              ^
-   kernel/bpf/core.c:821:31: note: expanded from macro 'BPF_PROG_CHUNK_COUNT'
-   #define BPF_PROG_CHUNK_COUNT    (BPF_PROG_PACK_SIZE / BPF_PROG_CHUNK_SIZE)
-                                    ^
-   kernel/bpf/core.c:817:28: note: expanded from macro 'BPF_PROG_PACK_SIZE'
-   #define BPF_PROG_PACK_SIZE      HPAGE_PMD_SIZE
-                                   ^
-   include/linux/huge_mm.h:333:24: note: expanded from macro 'HPAGE_PMD_SIZE'
-   #define HPAGE_PMD_SIZE ({ BUILD_BUG(); 0; })
-                          ^
-   12 warnings and 1 error generated.
+The patch performs discharge completion on BIAS OFF->STANDBY transition
+so that the cumulated effect on suspend described above is avoided
+and discharge is completed in paralel in case of multiple WM8960
+codecs on the board.
 
-
-vim +826 kernel/bpf/core.c
-
-   822	
-   823	struct bpf_prog_pack {
-   824		struct list_head list;
-   825		void *ptr;
- > 826		unsigned long bitmap[BITS_TO_LONGS(BPF_PROG_CHUNK_COUNT)];
-   827	};
-   828	
-
+Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ sound/soc/codecs/wm8960.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/sound/soc/codecs/wm8960.c b/sound/soc/codecs/wm8960.c
+index 75de6a81465df..b7a2246184e08 100644
+--- a/sound/soc/codecs/wm8960.c
++++ b/sound/soc/codecs/wm8960.c
+@@ -45,6 +45,8 @@
+ #define WM8960_DISOP     0x40
+ #define WM8960_DRES_MASK 0x30
+ 
++#define WM8960_DSCH_TOUT	600 /* discharge timeout, ms */
++
+ static bool is_pll_freq_available(unsigned int source, unsigned int target);
+ static int wm8960_set_pll(struct snd_soc_component *component,
+ 		unsigned int freq_in, unsigned int freq_out);
+@@ -133,6 +135,7 @@ struct wm8960_priv {
+ 	int freq_in;
+ 	bool is_stream_in_use[2];
+ 	struct wm8960_data pdata;
++	ktime_t dsch_start;
+ };
+ 
+ #define wm8960_reset(c)	regmap_write(c, WM8960_RESET, 0)
+@@ -898,6 +901,7 @@ static int wm8960_set_bias_level_out3(struct snd_soc_component *component,
+ 	struct wm8960_priv *wm8960 = snd_soc_component_get_drvdata(component);
+ 	u16 pm2 = snd_soc_component_read(component, WM8960_POWER2);
+ 	int ret;
++	ktime_t tout;
+ 
+ 	switch (level) {
+ 	case SND_SOC_BIAS_ON:
+@@ -944,6 +948,11 @@ static int wm8960_set_bias_level_out3(struct snd_soc_component *component,
+ 
+ 	case SND_SOC_BIAS_STANDBY:
+ 		if (snd_soc_component_get_bias_level(component) == SND_SOC_BIAS_OFF) {
++			/* ensure discharge is complete */
++			tout = WM8960_DSCH_TOUT - ktime_ms_delta(ktime_get(), wm8960->dsch_start);
++			if (tout > 0)
++				msleep(tout);
++
+ 			regcache_sync(wm8960->regmap);
+ 
+ 			/* Enable anti-pop features */
+@@ -973,9 +982,9 @@ static int wm8960_set_bias_level_out3(struct snd_soc_component *component,
+ 			     WM8960_POBCTRL | WM8960_SOFT_ST |
+ 			     WM8960_BUFDCOPEN | WM8960_BUFIOEN);
+ 
+-		/* Disable VMID and VREF, let them discharge */
++		/* Disable VMID and VREF, mark discharge */
+ 		snd_soc_component_write(component, WM8960_POWER1, 0);
+-		msleep(600);
++		wm8960->dsch_start = ktime_get();
+ 		break;
+ 	}
+ 
+-- 
+2.26.3
+

@@ -2,112 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9C9B4AE073
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 19:14:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DE164AE080
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 19:16:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384711AbiBHSNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 13:13:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50676 "EHLO
+        id S1353278AbiBHSPt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 13:15:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234806AbiBHSNn (ORCPT
+        with ESMTP id S1384720AbiBHSPp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 13:13:43 -0500
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9680C061579;
-        Tue,  8 Feb 2022 10:13:40 -0800 (PST)
-Received: from [192.168.0.2] (ip5f5aebc2.dynamic.kabel-deutschland.de [95.90.235.194])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 01AE361E6478B;
-        Tue,  8 Feb 2022 19:13:37 +0100 (CET)
-Message-ID: <0235e04a-18aa-ccbf-f520-38a2d55e8b54@molgen.mpg.de>
-Date:   Tue, 8 Feb 2022 19:13:37 +0100
+        Tue, 8 Feb 2022 13:15:45 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 150ABC061576
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 10:15:44 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id z19so34849661lfq.13
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 10:15:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=daynix-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ubojHHrasWsqhS6qr/dbMNAqWg0S4l0W2lxdG9od6YA=;
+        b=7UmIQ9z5CVY4nqjy1zfqHmy+itjDZKx6BB61jiQKXprE09I4TN+opuJCV0itXXHB6E
+         4q4L7vf1nz8jfx3Zw2r0+PaePFmZFUnhdn8aAobd4I3TnJZa7rm88wwbanBWNjPqiY0b
+         gy1tLj1MKefoY88SmyTtwXJwsKSHGhA+t1JDChEd6+LTE7F0LyVVFhzGVIxBB2BWBjND
+         435WBDpWdFtnwyRORG+wXCj4Gxkqfz35P7VKT0e/lLWY5D1+nguQThqh1Y9oflq6pcT8
+         gmaZlYkg+SLGBG3soegU/pCCO0fQ69Vq4hmDuUFCsy3CGmJGrB0dcwdI/C/IuI7U2A8P
+         Wfww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ubojHHrasWsqhS6qr/dbMNAqWg0S4l0W2lxdG9od6YA=;
+        b=IO7JX2hwxAF25DsHUPhZprNP4JTKHYMF90Ap9ETCfuBFS753ZuVGb50RGmw0rULydx
+         ahBz9VTFObN+OHUuwRr1+mniVFgEZYyrLi3knJsQuqztfxC6Ju03JpF6U++nVYH4M/mI
+         gkivn2XHJzbpuWM/uvtqNVQBDxGz+b/a6QTHckek/GNq8e6OJpw1rnrGySdRL5Trin+W
+         9rOsWtClf1PLS3/WQlxQN55Si+Yl8oHR0PPOjd55c2PeOsAlGcabusvYcGPHUd+chLcv
+         yyfXePxDd00WLOI64AZJvxgwZTcgPDd6JeHvFJ2PfsucmLEGNRANBsYdPQM5M9YYiYX7
+         iLAA==
+X-Gm-Message-State: AOAM530hyAcshmpJwdHR9V8EmalGbLaYV4KjTpuDlYSz3WNjYwxfhCyP
+        JjWvMk7RxrOPDbujAoSpRGqLNA==
+X-Google-Smtp-Source: ABdhPJwzqbI+mN9KcrTVXPsPB3UD7i65WJfgtYokQzM0tLnA7+rYbrnDMW8UVrsv6pAndRL6TU+ZaA==
+X-Received: by 2002:a05:6512:2821:: with SMTP id cf33mr3740205lfb.37.1644344142449;
+        Tue, 08 Feb 2022 10:15:42 -0800 (PST)
+Received: from navi.cosmonova.net.ua ([95.67.24.131])
+        by smtp.gmail.com with ESMTPSA id p16sm2125082ljc.86.2022.02.08.10.15.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 10:15:41 -0800 (PST)
+From:   Andrew Melnychenko <andrew@daynix.com>
+To:     netdev@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        jasowang@redhat.com, mst@redhat.com
+Cc:     yan@daynix.com, yuri.benditovich@daynix.com
+Subject: [PATCH v3 0/4] RSS support for VirtioNet.
+Date:   Tue,  8 Feb 2022 20:15:06 +0200
+Message-Id: <20220208181510.787069-1-andrew@daynix.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [Regression 5.17-rc2] Symlink on NFS mount to directory on other
- NFS mount not resolved on first access
-Content-Language: en-US
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-To:     Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <Anna.Schumaker@Netapp.com>
-Cc:     Lyu Tao <tao.lyu@epfl.ch>, linux-nfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, it+linux-nfs@molgen.mpg.de,
-        regressions@lists.linux.dev
-References: <bd2075f0-2343-5bfa-83bf-0e916303727d@molgen.mpg.de>
-In-Reply-To: <bd2075f0-2343-5bfa-83bf-0e916303727d@molgen.mpg.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Linux folks,
+Virtio-net supports "hardware" RSS with toeplitz key.
+Also, it allows receiving calculated hash in vheader
+that may be used with RPS.
+Added ethtools callbacks to manipulate RSS.
 
+Technically hash calculation may be set only for
+SRC+DST and SRC+DST+PORTSRC+PORTDST hashflows.
+The completely disabling hash calculation for TCP or UDP
+would disable hash calculation for IP.
 
-Am 08.02.22 um 15:36 schrieb Paul Menzel:
-> #regzbot introduced: ac795161c93699d600db16c1a8cc23a65a1eceaf
+RSS/RXHASH is disabled by default.
 
+Changes since v2:
+* Fixed issue with calculating padded header length.
+  During review/tests, there was found an issue that
+  will crash the kernel if VIRTIO_NET_F_MRG_RXBUF
+  was not set. (thx to Jason Wang <jasowang@redhat.com>)
+* Refactored the code according to review.
 
-> Commit ac795161c936 (NFSv4: Handle case where the lookup of a directory 
-> fails) [1], part of Linux since 5.17-rc2, introduced a regression, where 
-> a symbolic link on an NFS mount to a directory on another NFS does not 
-> resolve(?) the first time it is accessed:
+Changes since v1:
+* Refactored virtnet_set_hashflow.
+* Refactored virtio_net_ctrl_rss.
+* Moved hunks between patches a bit.
 
-I forgot to include, that we are using autofs/automount for these 
-directories.
+Changes since rfc:
+* Code refactored.
+* Patches reformatted.
+* Added feature validation.
 
-> ```
-> $ ls -dl /src/mariux/beeroot/build-archives
-> lrwxrwxrwx 1 root root 39 May  5  2021 /src/mariux/beeroot/build-archives -> /src/mariux_data/beeroot/build-archives
-> $ df /src/mariux{,_data}
-> Filesystem                                           1K-blocks Used   Available Use% Mounted on
-> macheteinfach:/amd/macheteinfach/1/src/mariux      17575970816 2930189312 14645781504  17% /src/mariux
-> macheteinfach:/amd/macheteinfach/1/src/mariux_data 17575970816 2930189312 14645781504  17% /src/mariux_data
-> 
-> $ sudo umount /src/mariux /src/mariux_data
-> $ echo /src/mariux/beeroot/build-archives/*5.17*
-> /src/mariux/beeroot/build-archives/*5.17*
-> $ strace -e openat echo /src/mariux/beeroot/build-archives/*5.17*
-> openat(AT_FDCWD, "/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3
-> openat(AT_FDCWD, "/lib/libc.so.6", O_RDONLY|O_CLOEXEC) = 3
-> openat(AT_FDCWD, "/usr/lib/locale/locale-archive", O_RDONLY|O_CLOEXEC) = 3
-> /src/mariux/beeroot/build-archives/*5.17*
-> +++ exited with 0 +++
-> $ echo /src/mariux/beeroot/build-archives/*5.17*
-> /src/mariux/beeroot/build-archives/linux-5.17_rc1-423.x86_64.beebuild.tar.bz2 
-> /src/mariux/beeroot/build-archives/linux-5.17_rc2-424.x86_64.beebuild.tar.bz2 
-> /src/mariux/beeroot/build-archives/linux-5.17_rc3-426.x86_64.beebuild.tar.bz2 
-> /src/mariux/beeroot/build-archives/mariux64-caret_R-3.0.2-5.17_7-0.x86_64.beebuild.tar.bz2 
-> 
-> 
-> Using a dot in the path works around the issue:
-> 
-> ```
-> $ sudo umount /src/mariux /src/mariux_data
-> $ strace -e openat echo /src/mariux/beeroot/build-archives/./*5.17*
-> openat(AT_FDCWD, "/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3
-> openat(AT_FDCWD, "/lib/libc.so.6", O_RDONLY|O_CLOEXEC) = 3
-> openat(AT_FDCWD, "/usr/lib/locale/locale-archive", O_RDONLY|O_CLOEXEC) = 3
-> /src/mariux/beeroot/build-archives/./linux-5.17_rc1-423.x86_64.beebuild.tar.bz2 
-> /src/mariux/beeroot/build-archives/./linux-5.17_rc2-424.x86_64.beebuild.tar.bz2 
-> /src/mariux/beeroot/build-archives/./linux-5.17_rc3-426.x86_64.beebuild.tar.bz2 
-> /src/mariux/beeroot/build-archives/./mariux64-caret_R-3.0.2-5.17_7-0.x86_64.beebuild.tar.bz2 
-> 
-> +++ exited with 0 +++
-> ```
+Andrew Melnychenko (4):
+  drivers/net/virtio_net: Fixed padded vheader to use v1 with hash.
+  drivers/net/virtio_net: Added basic RSS support.
+  drivers/net/virtio_net: Added RSS hash report.
+  drivers/net/virtio_net: Added RSS hash report control.
 
+ drivers/net/virtio_net.c | 382 +++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 369 insertions(+), 13 deletions(-)
 
-Kind regards,
+-- 
+2.34.1
 
-Paul
-
-
-> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ac795161c93699d600db16c1a8cc23a65a1eceaf 

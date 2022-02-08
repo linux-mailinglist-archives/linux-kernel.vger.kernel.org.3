@@ -2,97 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1E934AD180
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 07:27:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 605E54AD187
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 07:29:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347326AbiBHG1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 01:27:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34710 "EHLO
+        id S1347318AbiBHG2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 01:28:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347304AbiBHG1I (ORCPT
+        with ESMTP id S243403AbiBHG2w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 01:27:08 -0500
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F90C0401F0;
-        Mon,  7 Feb 2022 22:27:07 -0800 (PST)
-Received: by mail-wr1-f44.google.com with SMTP id k1so12259774wrd.8;
-        Mon, 07 Feb 2022 22:27:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Ml/x/PyxdLV1/Hir7HAdb60W83k0QDNVYkweRtj8UqE=;
-        b=mTmO8zfQzHTmMz6im1SZ6nXgCvme10cy6yvSQm2JiT8TrwxxosD6tgLqa0p6fKhpXw
-         TtjyfL+j5fNkSsms3KzXMJdJ8fKNlvjccMqea++vezFHt8EpHlTwflUjCS+jxRWyuqlZ
-         CqIfWeMjzwmdyPO3PPdLLyLFnQVyqn4yjdBRwUYzf9b5YPAA2Zg6wK8JdPo2cYxNpo7i
-         CziYQo4I80iflgCqaKt0RTbU6qxPBXybx7g9Xkv3sXGtBSHPP1oH0acC2weRno6KoObR
-         Qcj5XwwxEo5/0ojdJs2P9MW7wQl5A8gD9WVg23eoRCmccgQsIOI+lRMJXWmkL2xWDXsD
-         +FHQ==
-X-Gm-Message-State: AOAM532dp+qoiViv6E5H3fgZxk1sZzpKFX1lpEpa62R5wcFmSO/2sBff
-        v1cMeWQPfhqNz31yNI2SJYm98RV0QAo=
-X-Google-Smtp-Source: ABdhPJx+i47vYzVLrYAoFB5BP3d95i3dalrtqRYiBA7T9N+ghG3VKgk1xxE73gx3LiFoOYTU45VhZA==
-X-Received: by 2002:adf:f54d:: with SMTP id j13mr2077800wrp.596.1644301626253;
-        Mon, 07 Feb 2022 22:27:06 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id o3sm4070742wrc.41.2022.02.07.22.27.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Feb 2022 22:27:05 -0800 (PST)
-Message-ID: <7aa14a1e-2814-0014-a682-f40666f635ac@kernel.org>
-Date:   Tue, 8 Feb 2022 07:27:04 +0100
+        Tue, 8 Feb 2022 01:28:52 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 137D0C0401DC
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 22:28:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644301732; x=1675837732;
+  h=subject:from:to:cc:references:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=yNaPz/gyRdt0tGsQijXVGSZ9IZW4oWjqhsRDzA7wKSs=;
+  b=V87kfiD4BXhBfV4kTi/bJ+9sUywpP3IB78O0BzZvrEY0vcHiiX6dwwHc
+   hI7ZrTc1ZCDSnkpNeHRMH4bqVwERdy3yADjx8NPGCMbjcNwXpaY8Xj8ky
+   +ef3pNyzkPy8wy7FhWpQYn9/8eteGe6f+v0vMEi1vGPynyCfxZ4Wnvi44
+   MiR7wqGVfHsFSzXHyKpfCdtZgrRLZzngovzONrQj3fMMlvISSyOpPVibY
+   3z/L00biRNrLnmJy9Zbqkgjg8MJyUPU6rCfYcjOQHTqsyGXx+Rj4m42GG
+   UIN3rvJTsXS+VicMNpcL88UL8M+VXF8QcITLkWRBqgH3xA4jKAExlABph
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="248831772"
+X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
+   d="scan'208";a="248831772"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 22:28:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
+   d="scan'208";a="632742045"
+Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.92]) ([10.237.72.92])
+  by orsmga004.jf.intel.com with ESMTP; 07 Feb 2022 22:28:48 -0800
+Subject: Re: [PATCH V2 0/2] perf/x86/intel/pt: Add support for event tracing
+ and TNT disabling
+From:   Adrian Hunter <adrian.hunter@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>, linux-kernel@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        H Peter Anvin <hpa@zytor.com>
+References: <20220126104815.2807416-1-adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+Message-ID: <dc5342b7-97d4-23c0-a093-1ba2dfec5ee7@intel.com>
+Date:   Tue, 8 Feb 2022 08:28:48 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v7 2/2] serial:sunplus-uart:Add Sunplus SoC UART Driver
+In-Reply-To: <20220126104815.2807416-1-adrian.hunter@intel.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-To:     Hammer Hsieh <hammerh0314@gmail.com>, gregkh@linuxfoundation.org,
-        robh+dt@kernel.org, linux-serial@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        p.zabel@pengutronix.de
-Cc:     wells.lu@sunplus.com, hammer.hsieh@sunplus.com
-References: <1644213481-20321-1-git-send-email-hammerh0314@gmail.com>
- <1644213481-20321-3-git-send-email-hammerh0314@gmail.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <1644213481-20321-3-git-send-email-hammerh0314@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 26/01/2022 12:48, Adrian Hunter wrote:
+> Hi
+> 
+> As of Intel SDM (https://www.intel.com/sdm) version 076, there are 2 new
+> Intel PT features called Event Trace and TNT-Disable.
+> 
+> Event Trace exposes details about asynchronous events such as interrupts
+> and VM-Entry/Exit.
+> 
+> TNT-Disable disables TNT packets to reduce the tracing overhead, but with
+> the result that exact control flow information is lost.
+> 
+> Tools patches are being sent in a separate patch set, but can be found
+> here:
+> 
+> 	https://github.com/ahunter6/linux/tree/event-trace
+> 
+> 
+> Changes in V2:
+> 
+> 	Add my SOB
 
-On 07. 02. 22, 6:58, Hammer Hsieh wrote:
-> +static void sunplus_shutdown(struct uart_port *port)
-> +{
-> +	unsigned long flags;
-> +	unsigned int isc;
-> +
-> +	spin_lock_irqsave(&port->lock, flags);
-> +
-> +	isc = readl(port->membase + SUP_UART_ISC);
-> +	isc &= ~(SUP_UART_ISC_RXM | SUP_UART_ISC_TXM);
+Ping
 
-Is this correct? I mean: will the SUP_UART_ISC read contain the control 
-bits, not only status bits?
 
-> +	writel(isc, port->membase + SUP_UART_ISC);
-> +
-> +	spin_unlock_irqrestore(&port->lock, flags);
-> +
-> +	free_irq(port->irq, port);
+> 
+> 
+> Alexander Shishkin (2):
+>       perf/x86/intel/pt: Add a capability and config bit for event tracing
+>       perf/x86/intel/pt: Add a capability and config bit for disabling TNTs
+> 
+>  arch/x86/events/intel/pt.c       | 16 ++++++++++++++++
+>  arch/x86/include/asm/intel_pt.h  |  2 ++
+>  arch/x86/include/asm/msr-index.h |  2 ++
+>  3 files changed, 20 insertions(+)
+> 
+> 
+> Regards
+> Adrian 
+> 
 
-I am still waiting for explanation why this is safe with respect to 
-posted writes.
-
-regards,
--- 
-js
-suse labs

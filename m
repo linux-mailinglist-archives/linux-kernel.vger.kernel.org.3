@@ -2,141 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E33554AD3F8
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 09:51:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9556B4AD3FB
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 09:51:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243773AbiBHIvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 03:51:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44822 "EHLO
+        id S1351883AbiBHIv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 03:51:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350546AbiBHIvJ (ORCPT
+        with ESMTP id S1351868AbiBHIvY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 03:51:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7FCC03FEC0;
-        Tue,  8 Feb 2022 00:51:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 07F2661309;
-        Tue,  8 Feb 2022 08:51:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE671C004E1;
-        Tue,  8 Feb 2022 08:51:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644310267;
-        bh=LF21Pve9wnpG/No0P1OZHAk/VrRqWJcQttpv2IYdL1Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RbADg1SI8fGdpeBVaFt3AEOknG01qJNSGYgx0juGBF/bdr/s0r+VJS3R7dWc4Q2TL
-         kJjGHycLQQ0uCcYRfYJYJMduTiPFLb+6+t6vTr6uC+q1bgBetUADfyjuBZWHc1PanZ
-         H9fqaZYQVKxRGAA9mnoLO8H41Ioya59f8DXbSYHs=
-Date:   Tue, 8 Feb 2022 09:51:04 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Andrey Smirnov <andrew.smirnov@gmail.com>
-Cc:     platform-driver-x86@vger.kernel.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] platform/x86: Add Steam Deck driver
-Message-ID: <YgIu+Lrt0p85yog1@kroah.com>
-References: <20220206022023.376142-1-andrew.smirnov@gmail.com>
+        Tue, 8 Feb 2022 03:51:24 -0500
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99D6EC03FEC8;
+        Tue,  8 Feb 2022 00:51:23 -0800 (PST)
+Received: by mail-qv1-xf36.google.com with SMTP id c14so5599387qvl.12;
+        Tue, 08 Feb 2022 00:51:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=52Mlxc/AZaE8Cndi19CrmZAb2xd8snlWb6gzXeW+f8c=;
+        b=LIoXET1Vcm+0Yo/759v2FqsPM9tUsLx5soPaRzhSfagqaev0i/jq4YTBq0QXQKPdRn
+         Kbs1VbKM9Vys9h4DE73AhMh80HqZqIG2ciDb+cZAARKQHBryRqURWDb9PWl4iykUvLbx
+         vhFCNNRDwT9aWmNTKkotXhcTvlI0jVPKnUeMRvIF3F5xyP3uidSK1o+FyDLyVobzE5Xc
+         +RYq4C22VTpWstKp9vrwLat1X3z0vDt0sPLkTADDz1kEv0wGLwyOmR6ZxECbWsNA4Plv
+         PyAIXzKAaKValqytpOhB/H/LFIwFoJLFeYiLPMNP5/P/cp2GJJU75tKzVP5CXWisQu/D
+         xx9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=52Mlxc/AZaE8Cndi19CrmZAb2xd8snlWb6gzXeW+f8c=;
+        b=U9Ia4OpCwKrSB4WWagEh9WvIWggsaIO1in+ZRP0FOmVqYjT2S91v9AeU4OILl5prPq
+         oAzRnffNqUkKc7wJKDb9r7LNguubOCFNpBqYzCsSYmqeJVNZv2mqlXprwbqIu3K62N6K
+         g2PS/WaBp+NBgZZspx4Zib33E4z6l9Lhw725j7TqlSdzhucuovMu0rdzYcwo9hd8QBGf
+         hOSC+TOEqrTIeet6DbSKGxQIA1aY3aaYrvqM8TMXny96IxLtFOC51Y9UoE3KPxDDXNwe
+         cvFeXci4kDOoVAYbPUeXNQ1DH5fvXPVYDwdU3dprRoX4smxSwKDezCouFvuECMI2I3Ay
+         D3NA==
+X-Gm-Message-State: AOAM533rYDeALvVu2U0NpaG6bh5tzsAig44gdZMJmKKkxdUjZ6zCFFEP
+        2AhzhbHT9bWthVtMk2fuMjnEwAQAiPugYoiVXNA=
+X-Google-Smtp-Source: ABdhPJwBqxeW2lVYe2YhpeD6J4pREP12QDacbTsGlkhFVIN+DKzqGhtZN16Vv4UkriLaHnkPuW7YJ4oDA16S2sfvwzY=
+X-Received: by 2002:a05:6214:1cc7:: with SMTP id g7mr2429769qvd.124.1644310282674;
+ Tue, 08 Feb 2022 00:51:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220206022023.376142-1-andrew.smirnov@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220207063338.6570-1-warp5tw@gmail.com> <20220207063338.6570-7-warp5tw@gmail.com>
+ <YgEJ1M40AG9EuRPI@latitude> <086655b0-b9d2-30ed-1496-47cdc6346003@canonical.com>
+ <CAHb3i=vpFwez+ZzDhHkSxjkios3tyoM2urRpCxOn3vfwzvewog@mail.gmail.com> <30ac5fe7-9d96-a756-24b0-384361b48a2d@canonical.com>
+In-Reply-To: <30ac5fe7-9d96-a756-24b0-384361b48a2d@canonical.com>
+From:   Tali Perry <tali.perry1@gmail.com>
+Date:   Tue, 8 Feb 2022 10:51:11 +0200
+Message-ID: <CAHb3i=ukzVr4DDgcPQ2+DO+LXWWtgjCe03WbG-CqvsOP_qqvUw@mail.gmail.com>
+Subject: Re: [PATCH v1 6/6] i2c: npcm: Support NPCM845
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Tyrone Ting <warp5tw@gmail.com>, avifishman70@gmail.com,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Rob Herring <robh+dt@kernel.org>, semen.protsenko@linaro.org,
+        yangyicong@hisilicon.com, Wolfram Sang <wsa@kernel.org>,
+        jie.deng@intel.com, sven@svenpeter.dev, bence98@sch.bme.hu,
+        lukas.bulwahn@gmail.com, arnd@arndb.de, olof@lixom.net,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Tali Perry <tali.perry@nuvoton.com>,
+        Avi Fishman <Avi.Fishman@nuvoton.com>,
+        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
+        kfting@nuvoton.com, devicetree <devicetree@vger.kernel.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 05, 2022 at 06:20:23PM -0800, Andrey Smirnov wrote:
-> +#define STEAMDECK_ATTR_RO(_name, _method)				\
-> +	static ssize_t _name##_show(struct device *dev,			\
-> +				    struct device_attribute *attr,	\
-> +				    char *buf)				\
-> +	{								\
-> +		struct steamdeck *jup = dev_get_drvdata(dev);		\
-> +		unsigned long long val;					\
-> +									\
-> +		if (ACPI_FAILURE(acpi_evaluate_integer(			\
-> +					 jup->adev->handle,		\
-> +					 _method, NULL, &val)))		\
-> +			return -EIO;					\
-> +									\
-> +		return sprintf(buf, "%llu\n", val);			\
+>On 08/02/2022 08:14, Tali Perry wrote:
+>>> Subject: Re: [PATCH v1 6/6] i2c: npcm: Support NPCM845
+>>>
+>>> On 07/02/2022 13:00, Jonathan Neusch=C3=A4fer wrote:
+>>>> Hello,
+>>>>
+>>>> On Mon, Feb 07, 2022 at 02:33:38PM +0800, Tyrone Ting wrote:
+>>>>> From: Tyrone Ting <kfting@nuvoton.com>
+>>>>>
+>>>>> NPCM8XX uses a similar i2c module as NPCM7XX.
+>>>>> The only difference is that the internal HW FIFO is larger.
+>>>>>
+>>>>> Related Makefile and Kconfig files are modified to support as well.
+>>>>>
+>>>>> Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller
+>>>>> driver")
+>>>>
+>>>> It's not really a bug fix, but rather an additional feature.
+>>>> Therefore, I suggest removing the Fixes tag from this patch.
+>>>>
+>>>>> Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
+>>>>> Signed-off-by: Tali Perry <tali.perry1@gmail.com>
+>>>>> ---
+>>>> [...]
+>>>>>  /* init register and default value required to enable module */
+>>>>>  #define NPCM_I2CSEGCTL 0xE4
+>>>>> +#ifdef CONFIG_ARCH_NPCM7XX
+>>>>>  #define NPCM_I2CSEGCTL_INIT_VAL 0x0333F000
+>>>>> +#else
+>>>>> +#define NPCM_I2CSEGCTL_INIT_VAL 0x9333F000
+>>>>> +#endif
+>>>>
+>>>> This is going to cause problems when someone tries to compile a kernel
+>>>> that runs on both NPCM7xx and NPCM8xx (because the driver will then
+>>>> only work on NPCM7xx).
+>>>
+>>> Yes, good catch.
+>>>
+>>> The NPCM7XX is multiplatform, I guess NPCM8xx will be as well, so this =
+looks like an invalid code. How such code is supposed to work on multiplatf=
+orm kernel?
+>>>
+>>
+>> NPCM7xx and NPCM8xx are very different devices.
+>> They share same driver sources for some of the modules but it's not ABI.
+>> Users cannot compile a single kernel with two separate DTS.
+>> In case of the i2c controller, the npcm7xx has a 16 byte HW FIFO,
+>> and the NPCM8xx has 32 bytes HW FIFO.
+>> This also means that registers fields are slightly different.
+>> For init data we can move it to the DTS, but register field sizes
+>> can't be handled with this approach.
+>>
+>
+>What do you mean they cannot compile a kernel with different DTS? Of
+>course they can - when we talk about multiplatform sub-architectures!
+>Maybe there is something specific in NPCMxxx which stops it but then it
+>should not be marked multiplatform.
+>
 
-Please use sysfs_emit() for this and any other sysfs show functions.
 
-Also, you have no Documenation/ABI/ entries for all of these new sysfs
-files you are creating.  How do we know what these entries are for, and
-what they contain?  Please add that in future versions of this commit,
-as-is we can't take this :(
+NCPM7xx is ARM32 bit (dual core Cortex A9)
+NPCM8xx is ARM64 bit (quad core Cortex A35)
 
+They have completely different architecture so not ABI compliant.
+I2C module is similar, but the devices are quite different and have
+separate architectures.
 
-> +	}								\
-> +	static DEVICE_ATTR_RO(_name)
-> +
-> +STEAMDECK_ATTR_RO(firmware_version, "PDFW");
-> +STEAMDECK_ATTR_RO(board_id, "BOID");
-> +STEAMDECK_ATTR_RO(pdcs, "PDCS");
-> +
-> +static umode_t
-> +steamdeck_is_visible(struct kobject *kobj, struct attribute *attr, int index)
-> +{
-> +	return attr->mode;
-> +}
-
-As Guenter pointed out, this is not needed.
+Sorry for the confusion.
+This is the first patch we try to upstream for NPCM8xx.
+In the coming weeks we will upstream the architecture of NPCM8xx as well.
 
 
-> +
-> +static struct attribute *steamdeck_attributes[] = {
-> +	&dev_attr_target_cpu_temp.attr,
-> +	&dev_attr_gain.attr,
-> +	&dev_attr_ramp_rate.attr,
-> +	&dev_attr_hysteresis.attr,
-> +	&dev_attr_maximum_battery_charge_rate.attr,
-> +	&dev_attr_recalculate.attr,
-> +	&dev_attr_power_cycle_display.attr,
-> +
-> +	&dev_attr_led_brightness.attr,
-> +	&dev_attr_content_adaptive_brightness.attr,
-> +	&dev_attr_gamma_set.attr,
-> +	&dev_attr_display_brightness.attr,
-> +	&dev_attr_ctrl_display.attr,
-> +	&dev_attr_cabc_minimum_brightness.attr,
-> +	&dev_attr_memory_data_access_control.attr,
-> +
-> +	&dev_attr_display_normal_mode_on.attr,
-> +	&dev_attr_display_inversion_off.attr,
-> +	&dev_attr_display_inversion_on.attr,
-> +	&dev_attr_idle_mode_on.attr,
-> +
-> +	&dev_attr_firmware_version.attr,
-> +	&dev_attr_board_id.attr,
-> +	&dev_attr_pdcs.attr,
-> +
-> +	NULL
-> +};
-> +
-> +static const struct attribute_group steamdeck_group = {
-> +	.attrs = steamdeck_attributes,
-> +	.is_visible = steamdeck_is_visible,
-> +};
-> +
-> +static const struct attribute_group *steamdeck_groups[] = {
-> +	&steamdeck_group,
-> +	NULL
-> +};
 
-ATTRIBUTE_GROUPS()?
+>
+>Best regards,
+>Krzysztof
 
-thanks,
-
-greg k-h
+Thanks!
+Tali

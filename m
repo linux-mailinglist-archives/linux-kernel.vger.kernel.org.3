@@ -2,235 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE5C54ADE60
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 17:32:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4B754ADBE8
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 16:03:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383414AbiBHQcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 11:32:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56632 "EHLO
+        id S1379216AbiBHPCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 10:02:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234343AbiBHQck (ORCPT
+        with ESMTP id S1350967AbiBHPCP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 11:32:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 95896C061576
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 08:32:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644337958;
+        Tue, 8 Feb 2022 10:02:15 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E41B2C061576;
+        Tue,  8 Feb 2022 07:02:13 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DE2981EC053F;
+        Tue,  8 Feb 2022 16:02:07 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1644332528;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=L9wKL0mFcQI+dpfyUTo+H+hKAl43nfgO4cY94TcdTW8=;
-        b=Bu/guvaS8zFQft8iBQFzkOt5CITC9WYDYIKLEyboPphirLJtDeSUuIM+1A7DcR5EnQ9rcO
-        2tELa/WFcn7MzZwiSjUFZfseaEson4CyOChBLLaEPyqfYsdZqCUhHMMp7ya5/TKJzlLOcq
-        qHwBFfiRHOdZ1Zq0pSbd/2Z4wa3QBTY=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-480-yScnzixDNL69_svQtZlp-w-1; Tue, 08 Feb 2022 11:32:37 -0500
-X-MC-Unique: yScnzixDNL69_svQtZlp-w-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id DC72E8519E9;
-        Tue,  8 Feb 2022 16:32:35 +0000 (UTC)
-Received: from fuller.cnet (ovpn-112-4.gru2.redhat.com [10.97.112.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id AA3641086486;
-        Tue,  8 Feb 2022 16:32:34 +0000 (UTC)
-Received: by fuller.cnet (Postfix, from userid 1000)
-        id 2A618416CE5D; Mon,  7 Feb 2022 12:16:34 -0300 (-03)
-Date:   Mon, 7 Feb 2022 12:16:33 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Nitesh Lal <nilal@redhat.com>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Christoph Lameter <cl@linux.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alex Belits <abelits@belits.com>, Peter Xu <peterx@redhat.com>,
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=PmHLjCv8QPKB/e0+L9sQuWzLs6/HCLu3AQwtoLxemqY=;
+        b=cJ+v1YVsVB5ysTBNNKVmP99U334P0+41QjVaIkHm37ZZu0pzwjEgVIAgukztHCJgE2F/PO
+        hQoUIH1TReaIabKCaPXeoP8tiEZpWM2lFT8soN7USRwTa8yQgE+fdaVrHtV/SUlbm6aVVm
+        K9pkhVbpBPWSCiDhwDpLe4oaZ7nng1U=
+Date:   Tue, 8 Feb 2022 16:02:02 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     Brijesh Singh <brijesh.singh@amd.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
         Thomas Gleixner <tglx@linutronix.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Oscar Shiang <oscar0225@livemail.tw>
-Subject: Re: [patch v11 05/13] task isolation: sync vmstats on return to
- userspace
-Message-ID: <YgE30X7z8htKWzbS@fuller.cnet>
-References: <20220204173537.429902988@fedora.localdomain>
- <20220204173554.676117258@fedora.localdomain>
- <20220207145718.GA523931@lothringen>
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v9 33/43] x86/compressed: Add SEV-SNP feature
+ detection/setup
+Message-ID: <YgKF6kzR87WuXj/a@zn.tnic>
+References: <20220128171804.569796-1-brijesh.singh@amd.com>
+ <20220128171804.569796-34-brijesh.singh@amd.com>
+ <Yf/6NhnS50UDv4xV@zn.tnic>
+ <20220208135009.7rfrau33kxivx5h3@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220207145718.GA523931@lothringen>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220208135009.7rfrau33kxivx5h3@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 03:57:18PM +0100, Frederic Weisbecker wrote:
-> On Fri, Feb 04, 2022 at 02:35:42PM -0300, Marcelo Tosatti wrote:
-> > The logic to disable vmstat worker thread, when entering
-> > nohz full, does not cover all scenarios. For example, it is possible
-> > for the following to happen:
-> > 
-> > 1) enter nohz_full, which calls refresh_cpu_vm_stats, syncing the stats.
-> > 2) app runs mlock, which increases counters for mlock'ed pages.
-> > 3) start -RT loop
-> > 
-> > Since refresh_cpu_vm_stats from nohz_full logic can happen _before_
-> > the mlock, vmstat shepherd can restart vmstat worker thread on
-> > the CPU in question.
-> > 
-> > To fix this, use the task isolation prctl interface to quiesce 
-> > deferred actions when returning to userspace.
-> > 
-> > This patch adds hooks to fork and exit code paths.
-> > 
-> > Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
-> > 
-> > ---
-> > v11: fold patch to add task_isol_exit hooks (Frederic)
-> >      Use _TIF_TASK_ISOL bit on thread flags (Frederic)
-> >      
-> > v6: modify exit_to_user_mode_loop to cover exceptions and interrupts
-> > v5: no changes
-> > v4: add oneshot mode support
-> > 
-> >  include/linux/task_isolation.h |   16 ++++++++++++++++
-> >  include/linux/vmstat.h         |    8 ++++++++
-> >  kernel/entry/common.c          |   15 +++++++++++----
-> >  kernel/task_isolation.c        |   21 +++++++++++++++++++++
-> >  mm/vmstat.c                    |   21 +++++++++++++++++++++
-> >  5 files changed, 77 insertions(+), 4 deletions(-)
-> > 
-> > Index: linux-2.6/include/linux/task_isolation.h
-> > ===================================================================
-> > --- linux-2.6.orig/include/linux/task_isolation.h
-> > +++ linux-2.6/include/linux/task_isolation.h
-> > @@ -27,6 +27,13 @@ static inline void task_isol_free(struct
-> >  		__task_isol_free(tsk);
-> >  }
-> >  
-> > +void __task_isol_exit(struct task_struct *tsk);
-> > +static inline void task_isol_exit(struct task_struct *tsk)
-> > +{
-> > +	if (tsk->task_isol_info)
-> > +		__task_isol_exit(tsk);
-> > +}
-> > +
-> >  int prctl_task_isol_feat_get(unsigned long arg2, unsigned long arg3,
-> >  			     unsigned long arg4, unsigned long arg5);
-> >  int prctl_task_isol_cfg_get(unsigned long arg2, unsigned long arg3,
-> > @@ -40,12 +47,22 @@ int prctl_task_isol_activate_set(unsigne
-> >  
-> >  int __copy_task_isol(struct task_struct *tsk);
-> >  
-> > +void task_isol_exit_to_user_mode(void);
-> > +
-> >  #else
-> >  
-> > +static inline void task_isol_exit_to_user_mode(void)
-> > +{
-> > +}
-> > +
-> >  static inline void task_isol_free(struct task_struct *tsk)
-> >  {
-> >  }
-> >  
-> > +static inline void task_isol_exit(struct task_struct *tsk)
-> > +{
-> > +}
-> > +
-> >  static inline int prctl_task_isol_feat_get(unsigned long arg2,
-> >  					   unsigned long arg3,
-> >  					   unsigned long arg4,
-> > Index: linux-2.6/include/linux/vmstat.h
-> > ===================================================================
-> > --- linux-2.6.orig/include/linux/vmstat.h
-> > +++ linux-2.6/include/linux/vmstat.h
-> > @@ -21,6 +21,14 @@ int sysctl_vm_numa_stat_handler(struct c
-> >  		void *buffer, size_t *length, loff_t *ppos);
-> >  #endif
-> >  
-> > +#if defined(CONFIG_SMP) && defined(CONFIG_TASK_ISOLATION)
-> > +void sync_vmstat(void);
-> > +#else
-> > +static inline void sync_vmstat(void)
-> > +{
-> > +}
-> > +#endif
-> > +
-> >  struct reclaim_stat {
-> >  	unsigned nr_dirty;
-> >  	unsigned nr_unqueued_dirty;
-> > Index: linux-2.6/kernel/entry/common.c
-> > ===================================================================
-> > --- linux-2.6.orig/kernel/entry/common.c
-> > +++ linux-2.6/kernel/entry/common.c
-> > @@ -6,6 +6,7 @@
-> >  #include <linux/livepatch.h>
-> >  #include <linux/audit.h>
-> >  #include <linux/tick.h>
-> > +#include <linux/task_isolation.h>
-> >  
-> >  #include "common.h"
-> >  
-> > @@ -174,6 +175,9 @@ static unsigned long exit_to_user_mode_l
-> >  		if (ti_work & _TIF_NOTIFY_RESUME)
-> >  			tracehook_notify_resume(regs);
-> >  
-> > +		if (ti_work & _TIF_TASK_ISOL)
-> > +			task_isol_exit_to_user_mode();
-> > +
-> >  		/* Architecture specific TIF work */
-> >  		arch_exit_to_user_mode_work(regs, ti_work);
-> >  
-> > Index: linux-2.6/kernel/task_isolation.c
-> > ===================================================================
-> > --- linux-2.6.orig/kernel/task_isolation.c
-> > +++ linux-2.6/kernel/task_isolation.c
-> > @@ -18,6 +18,12 @@
-> >  #include <linux/sysfs.h>
-> >  #include <linux/init.h>
-> >  #include <linux/sched/task.h>
-> > +#include <linux/mm.h>
-> > +#include <linux/vmstat.h>
-> > +
-> > +void __task_isol_exit(struct task_struct *tsk)
-> > +{
-> > +}
-> >  
-> >  void __task_isol_free(struct task_struct *tsk)
-> >  {
-> > @@ -251,6 +257,9 @@ static int cfg_feat_quiesce_set(unsigned
-> >  	task_isol_info->quiesce_mask = i_qctrl->quiesce_mask;
-> >  	task_isol_info->oneshot_mask = i_qctrl->quiesce_oneshot_mask;
-> >  	task_isol_info->conf_mask |= ISOL_F_QUIESCE;
-> > +	if (task_isol_info->quiesce_mask & ISOL_F_QUIESCE_VMSTATS)
-> > +		set_thread_flag(TIF_TASK_ISOL);
+On Tue, Feb 08, 2022 at 07:50:09AM -0600, Michael Roth wrote:
+> I'm assuming that would be considered 'non-static' since it would need
+> to be exported if sev-shared.c was compiled separately instead of
+> directly #include'd.
+
+No, that one can lose the prefix too. We'll cross that bridge when we
+get to it.
+
+> And then there's also these which are static helpers that are only used
+> within sev-shared.c:
 > 
-> Should you check if (i->active_mask == ISOL_F_QUIESCE) before setting the
-> flag?
+>   snp_cpuid_info_get_ptr()
+
+So looking at that one - and it felt weird reading that code because it
+said "cpuid_info" but that's not an "info" - that should be:
+
+struct snp_cpuid_table {
+        u32 count;
+        u32 __reserved1;
+        u64 __reserved2;
+        struct snp_cpuid_fn fn[SNP_CPUID_COUNT_MAX];
+} __packed;
+
+just call it what it is - a SNP CPUID *table*.
+
+And then you can have
+
+	const struct snp_cpuid_table *cpuid_tbl = snp_cpuid_get_table();
+
+and that makes it crystal clear what this does.
+
+>   snp_cpuid_calc_xsave_size()
+>   snp_cpuid_get_validated_func()
+>
+>   snp_cpuid_check_range()
+
+You can merge that small function into its only call site and put a
+comment above the code:
+
+	/* Check function is within the supported CPUID leafs ranges */
+
+>   snp_cpuid_hv()
+>   snp_cpuid_postprocess()
+>   snp_cpuid()
 > 
-> > +
-> >  	ret = 0;
-> >  
-> >  out_free:
-> > @@ -303,6 +312,7 @@ int __copy_task_isol(struct task_struct
-> >  		new_info->active_mask = info->active_mask;
-> >  
-> >  	tsk->task_isol_info = new_info;
-> > +	set_ti_thread_flag(task_thread_info(tsk), TIF_TASK_ISOL);
-> 
-> Same here?
+> but in those cases it seems useful to keep them grouped under the
+> snp_cpuid_* prefix since they become ambiguous otherwise, and
+> just using cpuid_* as a prefix (or suffix/etc) makes it unclear
+> that they are only used for SNP and not for general CPUID handling.
+> Should we leave those as-is?
 
-Yes, should fix that.
+Yap, the rest make sense to denote to what functionality they belong to.
 
-Will wait for more comments before resending -v12.
+Thx.
 
+-- 
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette

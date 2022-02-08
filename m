@@ -2,110 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15D114ACE62
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:50:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CAFE4ACE46
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:49:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345044AbiBHBuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 20:50:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34850 "EHLO
+        id S1344159AbiBHBtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 20:49:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230232AbiBHBms (ORCPT
+        with ESMTP id S1343704AbiBHBbj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 20:42:48 -0500
-X-Greylist: delayed 419 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 17:42:47 PST
-Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 894AEC061355;
-        Mon,  7 Feb 2022 17:42:47 -0800 (PST)
-Date:   Tue, 8 Feb 2022 09:28:36 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1644283742;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CBZrZTZQLMab60F64iv26tpNim6K99BBtJF8+iTwoVU=;
-        b=NqTfGr8PC+Sb9bqsTj61J6OCI/euKLYU8oHkev3w5UFcs8XeQpJ5stv63wXKd1nDl3mIMR
-        X3PATFhRKhvD/ImrOemyKtoP7tHkSjWbY9GS0u4jzIMMpDJadOVw2E/7v/gYKk+ZEx9SdB
-        U6qbtIqYrRFpGOdtmm3fkq0CbUaeIgE=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Cai Huoqing <cai.huoqing@linux.dev>
-To:     Joel Stanley <joel@jms.id.au>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Karol Gugala <kgugala@antmicro.com>,
-        Mateusz Holenko <mholenko@antmicro.com>,
-        Gabriel Somlo <gsomlo@gmail.com>,
-        Cai Huoqing <caihuoqing@baidu.com>,
-        Networking <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] net: ethernet: litex: Add the dependency on HAS_IOMEM
-Message-ID: <20220208012836.GA6024@chq-T47>
-References: <20220207084912.9309-1-cai.huoqing@linux.dev>
- <CACPK8Xcs-qsO5COcSPZBsShhJWtDwfhreuYfkBy1pLXh8nz3Ow@mail.gmail.com>
+        Mon, 7 Feb 2022 20:31:39 -0500
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1023C061355
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 17:31:38 -0800 (PST)
+Received: by mail-yb1-xb31.google.com with SMTP id bt13so21440160ybb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 17:31:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tCJweZfHtprqNwQuPKuSEa8equXJDKCDWHoJe/Xk+94=;
+        b=fmLm2+b0Vi8fyFlno+sBzlvxdiOinqMMSjhhIC3lIyAfleRXnfHq74bS8lB/mSNU8r
+         6jXDw5garFcyc7Ibtr6uEe4zrLDIHhuXcAVhvSYY8XJk0M9XM2O4lmcd1N9IThzroYpZ
+         GucSNu7NmuuXNL0Ogw6Vd9IvU1Z5hyTPnJEJgWN+khl8OBW3dRCn4iHISMga3oykiq7U
+         /odbVMN5shA5S6T1+BhLTqlF1xEgfnx7Wvx7GmHCeL4ye0G2pCRNhk1L4EJTbXHbPAWc
+         Dgyv9VK9aMkYe5wpKd+SpryQ89VHUSyQubkEYPIopT0zcrKn5+/SeOfDcTM6mu4ZSSTC
+         OYUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tCJweZfHtprqNwQuPKuSEa8equXJDKCDWHoJe/Xk+94=;
+        b=I4zz8TlrSqc6ra+R3UScHJ/bpOqh3Jq7xYMNXHNnkexIZZ/e25rdqx4zmvYeTsVKx4
+         MmXjN63psC6ufX7l1x4Vq0dW0+hewm0E9oW46EjLVye5zP1xBSvJXYfaN/u5m4fVvluI
+         m0pemRGcOaU7cn2Pi+gGNtrLt3RDjV5Rsjz31/5koDMVU7T/bJGiQoIjr2QTSNpLJLZc
+         WTx1iOpUiVO3Byiieul6hD8UBeQRdShhU+lRrPlSKJOMp4NKAzSrqCfG25XRBOSnPLwf
+         KCUzHj6FFgsorxKrdA2kq9y8UjokUtuirwQCVBnHEKkCjOsiglg62A5y7/izVE/nyOaq
+         Isiw==
+X-Gm-Message-State: AOAM530p6rjknNM9gOIeGgTyxnS/xx/mPpn+VUbWYJJTn8KG+KbMAukd
+        DYGRzv5ooHZE1X0jFcWXA649F/kHwW3pcvnp+ceasQ==
+X-Google-Smtp-Source: ABdhPJx2mKqMDRjehybx6rXQuL9bFCnGNeOOYN9Q7Az3jEMiEEcSFx0PdKX3wUIXfBWRwy8D1KGwzva4m8d0S9EV95E=
+X-Received: by 2002:a25:7a47:: with SMTP id v68mr2663451ybc.488.1644283897723;
+ Mon, 07 Feb 2022 17:31:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACPK8Xcs-qsO5COcSPZBsShhJWtDwfhreuYfkBy1pLXh8nz3Ow@mail.gmail.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220128131006.67712-1-michel@lespinasse.org> <20220128131006.67712-23-michel@lespinasse.org>
+ <20220129121319.3593-1-hdanton@sina.com> <CAJuCfpHBfSQBuz8=LHYhX-aOgZ1ng6nNfpv_jeBLz+KVr1OU5w@mail.gmail.com>
+ <20220201020958.3720-1-hdanton@sina.com> <CAJuCfpG95cA68Y047MKsXYjvGMENXsjSzHkhYktagcT=fjagWw@mail.gmail.com>
+ <20220208002059.2670-1-hdanton@sina.com>
+In-Reply-To: <20220208002059.2670-1-hdanton@sina.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Mon, 7 Feb 2022 17:31:26 -0800
+Message-ID: <CAJuCfpEEWFYJehwRhmMAEBx8+gf6TsV=kxuSGDVXaPwhNLt1JQ@mail.gmail.com>
+Subject: Re: [PATCH v2 22/35] percpu-rwsem: enable percpu_sem destruction in
+ atomic context
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     Michel Lespinasse <michel@lespinasse.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07 2月 22 09:25:42, Joel Stanley wrote:
-> On Mon, 7 Feb 2022 at 08:49, Cai Huoqing <cai.huoqing@linux.dev> wrote:
+On Mon, Feb 7, 2022 at 4:21 PM Hillf Danton <hdanton@sina.com> wrote:
+>
+> On Mon, 7 Feb 2022 11:31:38 -0800 Suren Baghdasaryan wrote:
 > >
-> > The helper function devm_platform_ioremap_resource_xxx()
-> > needs HAS_IOMEM enabled, so add the dependency on HAS_IOMEM.
-> >
-> > Fixes: 464a57281f29 ("net/mlxbf_gige: Make use of devm_platform_ioremap_resourcexxx()")
-> 
-> That looks wrong...
-> 
-> $ git show --oneline --stat  464a57281f29
-> 464a57281f29 net/mlxbf_gige: Make use of devm_platform_ioremap_resourcexxx()
->  drivers/net/ethernet/litex/litex_liteeth.c                 |  7 ++-----
->  drivers/net/ethernet/mellanox/mlxbf_gige/mlxbf_gige_main.c | 21
-> +++------------------
->  drivers/net/ethernet/mellanox/mlxbf_gige/mlxbf_gige_mdio.c |  7 +------
->  drivers/net/ethernet/ni/nixge.c
-> 
-> That's a strange commit message for the litex driver. Similarly for
-> the ni driver. Did something go wrong there?
-no, ni driver has the dependency on HAS_IOMEM in
-drivers/net/ethernet/ni/Kconfig.
-> 
-> A better fixes line would be ee7da21ac4c3be1f618b6358e0a38739a5d1773e,
-ok.
-Thanks
-Cai
-> as the original driver addition also has the iomem dependency.
-> 
-> > Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
-> > ---
-> >  drivers/net/ethernet/litex/Kconfig | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/net/ethernet/litex/Kconfig b/drivers/net/ethernet/litex/Kconfig
-> > index f99adbf26ab4..04345b929d8e 100644
-> > --- a/drivers/net/ethernet/litex/Kconfig
-> > +++ b/drivers/net/ethernet/litex/Kconfig
-> > @@ -17,7 +17,7 @@ if NET_VENDOR_LITEX
-> >
-> >  config LITEX_LITEETH
-> >         tristate "LiteX Ethernet support"
-> > -       depends on OF
-> > +       depends on OF && HAS_IOMEM
-> >         help
-> >           If you wish to compile a kernel for hardware with a LiteX LiteEth
-> >           device then you should answer Y to this.
-> > --
-> > 2.25.1
-> >
+> > Sorry for the delay. Are you concerned about the use of spin_lock()
+> > inside percpu_rwsem_async_destroy() which would become a sleeping lock
+> > in case of PREEMPT_RT? If so, we can use raw_spin_lock() when locking
+> > destroy_list_lock. Please confirm. Thanks!
+>
+> Yes please replace spin lock with the raw version which can fit in
+> more scenarios.
+
+Thanks for confirmation! I'll rework my patch and will send it to
+Michel to include in the next version of his patchset.
+
+>
+> Hillf
+>

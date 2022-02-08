@@ -2,90 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D36124AE0FD
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 19:39:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 131A54AE09C
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 19:22:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385066AbiBHSjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 13:39:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34746 "EHLO
+        id S1384774AbiBHSWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 13:22:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231149AbiBHSjA (ORCPT
+        with ESMTP id S1384542AbiBHSWI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 13:39:00 -0500
-X-Greylist: delayed 1053 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Feb 2022 10:38:58 PST
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E69EC061579;
-        Tue,  8 Feb 2022 10:38:58 -0800 (PST)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 218ILMhw124429;
-        Tue, 8 Feb 2022 12:21:22 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1644344482;
-        bh=1nkGGCWScu2aD1m/BHp/eL9jSeS7UsELkjz8CZraFUc=;
-        h=From:To:CC:Subject:Date;
-        b=NhWuEc0KIz2LBcVl968jVOIZF9e8fMyyxTgeeBm6UVU/1dg7t6JfT6dkUzRZVK5U7
-         2mZjWsLaGAz9wwN77QyxF+uvOgJnrbb+eS/Ewd3GXdlIjR1AD2vtPgGEcOtlsvUWjD
-         Jft0SunS5xd8hF6R7EfCAXZbVAtJvF37QuO43fSw=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 218ILMat004125
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 8 Feb 2022 12:21:22 -0600
-Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 8
- Feb 2022 12:21:22 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 8 Feb 2022 12:21:22 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 218ILMfn029185;
-        Tue, 8 Feb 2022 12:21:22 -0600
-From:   Hari Nagalla <hnagalla@ti.com>
-To:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <nm@ti.com>, <vigneshr@ti.com>, <robh+dt@kernel.org>
-Subject: [PATCH] arm64: dts: ti: k3-am64: Add ESM0 to device memory map
-Date:   Tue, 8 Feb 2022 12:21:19 -0600
-Message-ID: <20220208182119.24707-1-hnagalla@ti.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 8 Feb 2022 13:22:08 -0500
+Received: from mx2.smtp.larsendata.com (mx2.smtp.larsendata.com [91.221.196.228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A71C061579
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 10:22:07 -0800 (PST)
+Received: from mail01.mxhotel.dk (mail01.mxhotel.dk [91.221.196.236])
+        by mx2.smtp.larsendata.com (Halon) with ESMTPS
+        id 2ab33094-890c-11ec-ac19-0050568cd888;
+        Tue, 08 Feb 2022 18:23:09 +0000 (UTC)
+Received: from ravnborg.org (80-162-45-141-cable.dk.customer.tdc.net [80.162.45.141])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: sam@ravnborg.org)
+        by mail01.mxhotel.dk (Postfix) with ESMTPSA id 0133D194BAE;
+        Tue,  8 Feb 2022 19:22:05 +0100 (CET)
+Date:   Tue, 8 Feb 2022 19:22:03 +0100
+X-Report-Abuse-To: abuse@mxhotel.dk
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     DRI Development <dri-devel@lists.freedesktop.org>,
+        linux-fbdev@vger.kernel.org,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Helge Deller <deller@gmx.de>
+Subject: Re: [PATCH 10/21] fb: Delete fb_info->queue
+Message-ID: <YgK0y1S0PKb1E3RV@ravnborg.org>
+References: <20220131210552.482606-1-daniel.vetter@ffwll.ch>
+ <20220131210552.482606-11-daniel.vetter@ffwll.ch>
+ <YfxJlH2NDnLk/GUw@ravnborg.org>
+ <YgJ0OQxt4KIPD9uz@phenom.ffwll.local>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YgJ0OQxt4KIPD9uz@phenom.ffwll.local>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-AM64x SoCs have two ESM modules, with one in MAIN voltage domain and the
-other in MCU voltage domain. The error output from Main ESM module can
-be routed to the MCU ESM module. The error output of MCU ESM can be
-configured to reset the device.
+Hi Daniel,
 
-For ESM details please refer technical reference manual at
-https://www.ti.com/lit/pdf/spruim2
+On Tue, Feb 08, 2022 at 02:46:33PM +0100, Daniel Vetter wrote:
+> On Thu, Feb 03, 2022 at 10:31:00PM +0100, Sam Ravnborg wrote:
+> > On Mon, Jan 31, 2022 at 10:05:41PM +0100, Daniel Vetter wrote:
+> > > It was only used by fbcon, and that now switched to its own,
+> > > private work.
+> > > 
+> > > Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
+> > > Cc: Helge Deller <deller@gmx.de>
+> > > Cc: linux-fbdev@vger.kernel.org
+> > I would merge this with the patch that drops the usage
+> 
+> Yeah, but I like to split these out so that if this does break something,
+> it's much easier to revert. In case I overlooked something somewhere.
+> 
+> It's imo different if the cleanup is directly related to the preceeding
+> prep work, but this is a generic workqueue, and the cursor logic is rather
+> unrelated. And if I remember my history digging right, there were actually
+> other uses of this.
 
-Signed-off-by: Hari Nagalla <hnagalla@ti.com>
----
- arch/arm64/boot/dts/ti/k3-am64.dtsi | 1 +
- 1 file changed, 1 insertion(+)
+So you basically say that because in the past there may have been other
+users, this deserves a dedicated removal commit.
 
-diff --git a/arch/arm64/boot/dts/ti/k3-am64.dtsi b/arch/arm64/boot/dts/ti/k3-am64.dtsi
-index 120974726be8..0622a93ec136 100644
---- a/arch/arm64/boot/dts/ti/k3-am64.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am64.dtsi
-@@ -66,6 +66,7 @@
- 		#address-cells = <2>;
- 		#size-cells = <2>;
- 		ranges = <0x00 0x000f4000 0x00 0x000f4000 0x00 0x000002d0>, /* PINCTRL */
-+			 <0x00 0x00420000 0x00 0x00420000 0x00 0x00001000>, /* ESM0 */
- 			 <0x00 0x00600000 0x00 0x00600000 0x00 0x00001100>, /* GPIO */
- 			 <0x00 0x00a40000 0x00 0x00a40000 0x00 0x00000800>, /* Timesync router */
- 			 <0x00 0x01000000 0x00 0x01000000 0x00 0x02330400>, /* First peripheral window */
--- 
-2.17.1
+That works for me too.
+Acked-by: Sam Ravnborg <sam@ravnborg.org>
 
+	Sam

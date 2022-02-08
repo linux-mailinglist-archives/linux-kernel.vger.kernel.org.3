@@ -2,608 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAEC34AD96A
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 14:18:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32F9A4AD98E
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 14:22:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231666AbiBHNR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 08:17:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54746 "EHLO
+        id S1352742AbiBHNUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 08:20:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356857AbiBHMY5 (ORCPT
+        with ESMTP id S1356823AbiBHMY1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 07:24:57 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00112C03FEC0
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 04:24:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644323096; x=1675859096;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=k+gmBvQ7B8ZXOmEDi2JL9k+/Wgtm//CxEfF0X55SqRE=;
-  b=Im9x5i+HmUxHAqSmCCOaSPqur5t1RcfaEuH2Loz6uozPW39vdzoPml8x
-   srAQeSNkZr8PcPxTq2cZ1Z+kc3JvuAuWaAi1+L4o4+yl/6FR6SgsmAjDt
-   zMBnfOPLVWc+HdJHi2bQgljg8fUUxvT0f+CeNYGGnAT6iw9VkkOBVnJ4/
-   grfev4avk2sW5ft2irXUDyt/I1I5b37JLIRn7TADeB94uKEEMZV4k835A
-   8Jd3FrD3aA9knWJktPTWWm7InCb6W77Tj5rs8cMF1RNPxQhriQbTl+s36
-   ylwFU6NiBJUFwlsMM8BVyyuWTy7pAuJUWky2Y/aJE0KFI69YK+hTG543x
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="236342714"
-X-IronPort-AV: E=Sophos;i="5.88,352,1635231600"; 
-   d="scan'208";a="236342714"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 04:24:55 -0800
-X-IronPort-AV: E=Sophos;i="5.88,352,1635231600"; 
-   d="scan'208";a="540575964"
-Received: from ywan154-mobl.ccr.corp.intel.com (HELO yhuang6-mobl1.ccr.corp.intel.com) ([10.254.212.247])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 04:24:53 -0800
-From:   Huang Ying <ying.huang@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Huang Ying <ying.huang@intel.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Ingo Molnar <mingo@redhat.com>, Mel Gorman <mgorman@suse.de>,
-        Rik van Riel <riel@surriel.com>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-Subject: [RFC PATCH -V2] NUMA balancing: fix NUMA topology for systems with CPU-less nodes
-Date:   Tue,  8 Feb 2022 20:23:22 +0800
-Message-Id: <20220208122322.604285-1-ying.huang@intel.com>
-X-Mailer: git-send-email 2.30.2
+        Tue, 8 Feb 2022 07:24:27 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A0F7BC03FECA
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 04:24:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644323065;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OmNk9x3t77ts5HOhyjEsKGS6qVWrt92aX3uBiIq4k1Y=;
+        b=NB6girQ7CODOoany7Zjll+I059oVrlmvvp3XLVQuQ6l94Uk77QIaY++Bmktu79plXex1Gf
+        uSwHUTNkp2VPeGNQv/z0aOXbkkfwncWpPUL10F/jNegrgNE70awjYCNu2tVHHQZQDqMN0S
+        QeoDSTjfNzQ9ll13P0+bW7vTUm8n/S0=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-635-cl1sK-SEMRGwiMugl2xPOw-1; Tue, 08 Feb 2022 07:24:22 -0500
+X-MC-Unique: cl1sK-SEMRGwiMugl2xPOw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B3B0C19251AB;
+        Tue,  8 Feb 2022 12:24:19 +0000 (UTC)
+Received: from starship (unknown [10.40.192.15])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1EB102B44E;
+        Tue,  8 Feb 2022 12:24:09 +0000 (UTC)
+Message-ID: <f198aca18f64b2e788ee53d5a03e739abe6a6697.camel@redhat.com>
+Subject: Re: [PATCH RESEND 07/30] KVM: x86: nSVM: deal with L1 hypervisor
+ that intercepts interrupts but lets L2 control them
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
+Cc:     Tony Luck <tony.luck@intel.com>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-kernel@vger.kernel.org,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        intel-gvt-dev@lists.freedesktop.org,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Sean Christopherson <seanjc@google.com>,
+        David Airlie <airlied@linux.ie>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Jim Mattson <jmattson@google.com>, x86@kernel.org,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Borislav Petkov <bp@alien8.de>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>
+Date:   Tue, 08 Feb 2022 14:24:08 +0200
+In-Reply-To: <0c20990f2543413f4a087b7918cff14db48bc774.camel@redhat.com>
+References: <20220207155447.840194-1-mlevitsk@redhat.com>
+         <20220207155447.840194-8-mlevitsk@redhat.com>
+         <dd9305d6-1e3a-24f9-1d48-c5dac440112d@redhat.com>
+         <0c20990f2543413f4a087b7918cff14db48bc774.camel@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The NUMA topology parameters (sched_numa_topology_type,
-sched_domains_numa_levels, and sched_max_numa_distance, etc.)
-identified by scheduler may be wrong for systems with CPU-less nodes.
+On Tue, 2022-02-08 at 13:55 +0200, Maxim Levitsky wrote:
+> On Tue, 2022-02-08 at 12:33 +0100, Paolo Bonzini wrote:
+> > On 2/7/22 16:54, Maxim Levitsky wrote:
+> > > Fix a corner case in which the L1 hypervisor intercepts
+> > > interrupts (INTERCEPT_INTR) and either doesn't set
+> > > virtual interrupt masking (V_INTR_MASKING) or enters a
+> > > nested guest with EFLAGS.IF disabled prior to the entry.
+> > > 
+> > > In this case, despite the fact that L1 intercepts the interrupts,
+> > > KVM still needs to set up an interrupt window to wait before
+> > > injecting the INTR vmexit.
+> > > 
+> > > Currently the KVM instead enters an endless loop of 'req_immediate_exit'.
+> > > 
+> > > Exactly the same issue also happens for SMIs and NMI.
+> > > Fix this as well.
+> > > 
+> > > Note that on VMX, this case is impossible as there is only
+> > > 'vmexit on external interrupts' execution control which either set,
+> > > in which case both host and guest's EFLAGS.IF
+> > > are ignored, or not set, in which case no VMexits are delivered.
+> > > 
+> > > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> > > ---
+> > >   arch/x86/kvm/svm/svm.c | 17 +++++++++++++----
+> > >   1 file changed, 13 insertions(+), 4 deletions(-)
+> > > 
+> > > diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> > > index 9a4e299ed5673..22e614008cf59 100644
+> > > --- a/arch/x86/kvm/svm/svm.c
+> > > +++ b/arch/x86/kvm/svm/svm.c
+> > > @@ -3372,11 +3372,13 @@ static int svm_nmi_allowed(struct kvm_vcpu *vcpu, bool for_injection)
+> > >   	if (svm->nested.nested_run_pending)
+> > >   		return -EBUSY;
+> > >   
+> > > +	if (svm_nmi_blocked(vcpu))
+> > > +		return 0;
+> > > +
+> > >   	/* An NMI must not be injected into L2 if it's supposed to VM-Exit.  */
+> > >   	if (for_injection && is_guest_mode(vcpu) && nested_exit_on_nmi(svm))
+> > >   		return -EBUSY;
+> > > -
+> > > -	return !svm_nmi_blocked(vcpu);
+> > > +	return 1;
+> > >   }
+> > >   
+> > >   static bool svm_get_nmi_mask(struct kvm_vcpu *vcpu)
+> > > @@ -3428,9 +3430,13 @@ bool svm_interrupt_blocked(struct kvm_vcpu *vcpu)
+> > >   static int svm_interrupt_allowed(struct kvm_vcpu *vcpu, bool for_injection)
+> > >   {
+> > >   	struct vcpu_svm *svm = to_svm(vcpu);
+> > > +
+> > >   	if (svm->nested.nested_run_pending)
+> > >   		return -EBUSY;
+> > >   
+> > > +	if (svm_interrupt_blocked(vcpu))
+> > > +		return 0;
+> > > +
+> > >   	/*
+> > >   	 * An IRQ must not be injected into L2 if it's supposed to VM-Exit,
+> > >   	 * e.g. if the IRQ arrived asynchronously after checking nested events.
+> > > @@ -3438,7 +3444,7 @@ static int svm_interrupt_allowed(struct kvm_vcpu *vcpu, bool for_injection)
+> > >   	if (for_injection && is_guest_mode(vcpu) && nested_exit_on_intr(svm))
+> > >   		return -EBUSY;
+> > >   
+> > > -	return !svm_interrupt_blocked(vcpu);
+> > > +	return 1;
+> > >   }
+> > >   
+> > >   static void svm_enable_irq_window(struct kvm_vcpu *vcpu)
+> > > @@ -4169,11 +4175,14 @@ static int svm_smi_allowed(struct kvm_vcpu *vcpu, bool for_injection)
+> > >   	if (svm->nested.nested_run_pending)
+> > >   		return -EBUSY;
+> > >   
+> > > +	if (svm_smi_blocked(vcpu))
+> > > +		return 0;
+> > > +
+> > >   	/* An SMI must not be injected into L2 if it's supposed to VM-Exit.  */
+> > >   	if (for_injection && is_guest_mode(vcpu) && nested_exit_on_smi(svm))
+> > >   		return -EBUSY;
+> > >   
+> > > -	return !svm_smi_blocked(vcpu);
+> > > +	return 1;
+> > >   }
+> > >   
+> > >   static int svm_enter_smm(struct kvm_vcpu *vcpu, char *smstate)
+> > 
+> > Can you prepare a testcase for at least the interrupt case?
+> 
+> Yep, I already wrote a kvm unit tests for all the cases, and I will send them very soon.
 
-For example, the ACPI SLIT of a system with CPU-less persistent
-memory (Intel Optane DCPMM) nodes is as follows,
+Done.
 
-[000h 0000   4]                    Signature : "SLIT"    [System Locality Information Table]
-[004h 0004   4]                 Table Length : 0000042C
-[008h 0008   1]                     Revision : 01
-[009h 0009   1]                     Checksum : 59
-[00Ah 0010   6]                       Oem ID : "XXXX"
-[010h 0016   8]                 Oem Table ID : "XXXXXXX"
-[018h 0024   4]                 Oem Revision : 00000001
-[01Ch 0028   4]              Asl Compiler ID : "INTL"
-[020h 0032   4]        Asl Compiler Revision : 20091013
+I also included tests for LBR virtualization which I think I already posted but I am not sure.
 
-[024h 0036   8]                   Localities : 0000000000000004
-[02Ch 0044   4]                 Locality   0 : 0A 15 11 1C
-[030h 0048   4]                 Locality   1 : 15 0A 1C 11
-[034h 0052   4]                 Locality   2 : 11 1C 0A 1C
-[038h 0056   4]                 Locality   3 : 1C 11 1C 0A
+Best regards,
+	Maxim Levitsky
+> 
+> Best regards,
+> 	Maxim Levitsky
+> > Thanks,
+> > 
+> > Paolo
+> > 
 
-While the `numactl -H` output is as follows,
-
-available: 4 nodes (0-3)
-node 0 cpus: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71
-node 0 size: 64136 MB
-node 0 free: 5981 MB
-node 1 cpus: 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95
-node 1 size: 64466 MB
-node 1 free: 10415 MB
-node 2 cpus:
-node 2 size: 253952 MB
-node 2 free: 253920 MB
-node 3 cpus:
-node 3 size: 253952 MB
-node 3 free: 253951 MB
-node distances:
-node   0   1   2   3
-  0:  10  21  17  28
-  1:  21  10  28  17
-  2:  17  28  10  28
-  3:  28  17  28  10
-
-In this system, there are only 2 sockets.  In each memory controller,
-both DRAM and PMEM DIMMs are installed.  Although the physical NUMA
-topology is simple, the logical NUMA topology becomes a little
-complex.  Because both the distance(0, 1) and distance (1, 3) are less
-than the distance (0, 3), it appears that node 1 sits between node 0
-and node 3.  And the whole system appears to be a glueless mesh NUMA
-topology type.  But it's definitely not, there is even no CPU in node 3.
-
-This isn't a practical problem now yet.  Because the PMEM nodes (node
-2 and node 3 in example system) are offlined by default during system
-boot.  So init_numa_topology_type() called during system boot will
-ignore them and set sched_numa_topology_type to NUMA_DIRECT.  And
-init_numa_topology_type() is only called at runtime when a CPU of a
-never-onlined-before node gets plugged in.  And there's no CPU in the
-PMEM nodes.  But it appears better to fix this to make the code more
-robust.
-
-To test the potential problem.  We have used a debug patch to call
-init_numa_topology_type() when the PMEM node is onlined (in
-__set_migration_target_nodes()).  With that, the NUMA parameters
-identified by scheduler is as follows,
-
-sched_numa_topology_type:	NUMA_GLUELESS_MESH
-sched_domains_numa_levels:	4
-sched_max_numa_distance:	28
-
-To fix the issue, the CPU-less nodes are ignored when the NUMA topology
-parameters are identified.  Because a node may become CPU-less or not
-at run time because of CPU hotplug, the NUMA topology parameters need
-to be re-initialized at runtime for CPU hotplug too.
-
-With the patch, the NUMA parameters identified for the example system
-above is as follows,
-
-sched_numa_topology_type:	NUMA_DIRECT
-sched_domains_numa_levels:	2
-sched_max_numa_distance:	21
-
-Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
-Cc: Valentin Schneider <valentin.schneider@arm.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Mel Gorman <mgorman@suse.de>
-Cc: Rik van Riel <riel@surriel.com>
-Cc: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
----
- kernel/sched/core.c     |   4 +-
- kernel/sched/fair.c     |   2 +-
- kernel/sched/sched.h    |   3 +-
- kernel/sched/topology.c | 204 +++++++++++++++++++++++-----------------
- 4 files changed, 126 insertions(+), 87 deletions(-)
-
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 848eaa0efe0e..ec97834dbc0e 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -9044,6 +9044,7 @@ int sched_cpu_activate(unsigned int cpu)
- 	set_cpu_active(cpu, true);
- 
- 	if (sched_smp_initialized) {
-+		sched_reinit_numa(true, cpu);
- 		sched_domains_numa_masks_set(cpu);
- 		cpuset_cpu_active();
- 	}
-@@ -9122,6 +9123,7 @@ int sched_cpu_deactivate(unsigned int cpu)
- 	if (!sched_smp_initialized)
- 		return 0;
- 
-+	sched_reinit_numa(false, cpu);
- 	ret = cpuset_cpu_inactive(cpu);
- 	if (ret) {
- 		balance_push_set(cpu, false);
-@@ -9228,7 +9230,7 @@ int sched_cpu_dying(unsigned int cpu)
- 
- void __init sched_init_smp(void)
- {
--	sched_init_numa();
-+	sched_init_numa(NUMA_NO_NODE);
- 
- 	/*
- 	 * There's no userspace yet to cause hotplug operations; hence all the
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 5146163bfabb..fe5450ef78e0 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -1283,7 +1283,7 @@ static unsigned long score_nearby_nodes(struct task_struct *p, int nid,
- 		 * The furthest away nodes in the system are not interesting
- 		 * for placement; nid was already counted.
- 		 */
--		if (dist == sched_max_numa_distance || node == nid)
-+		if (dist >= sched_max_numa_distance || node == nid)
- 			continue;
- 
- 		/*
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index de53be905739..0481a385c7a9 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -1662,7 +1662,8 @@ enum numa_topology_type {
- extern enum numa_topology_type sched_numa_topology_type;
- extern int sched_max_numa_distance;
- extern bool find_numa_distance(int distance);
--extern void sched_init_numa(void);
-+extern void sched_init_numa(int offline_node);
-+extern void sched_reinit_numa(bool online, int cpu);
- extern void sched_domains_numa_masks_set(unsigned int cpu);
- extern void sched_domains_numa_masks_clear(unsigned int cpu);
- extern int sched_numa_find_closest(const struct cpumask *cpus, int cpu);
-diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-index d201a7052a29..82107788dc3d 100644
---- a/kernel/sched/topology.c
-+++ b/kernel/sched/topology.c
-@@ -1492,8 +1492,6 @@ static int			sched_domains_curr_level;
- int				sched_max_numa_distance;
- static int			*sched_domains_numa_distance;
- static struct cpumask		***sched_domains_numa_masks;
--
--static unsigned long __read_mostly *sched_numa_onlined_nodes;
- #endif
- 
- /*
-@@ -1651,6 +1649,7 @@ static struct sched_domain_topology_level default_topology[] = {
- 
- static struct sched_domain_topology_level *sched_domain_topology =
- 	default_topology;
-+static struct sched_domain_topology_level *sched_domain_topology_saved;
- 
- #define for_each_sd_topology(tl)			\
- 	for (tl = sched_domain_topology; tl->mask; tl++)
-@@ -1661,6 +1660,7 @@ void set_sched_topology(struct sched_domain_topology_level *tl)
- 		return;
- 
- 	sched_domain_topology = tl;
-+	sched_domain_topology_saved = NULL;
- }
- 
- #ifdef CONFIG_NUMA
-@@ -1684,8 +1684,12 @@ static void sched_numa_warn(const char *str)
- 
- 	for (i = 0; i < nr_node_ids; i++) {
- 		printk(KERN_WARNING "  ");
--		for (j = 0; j < nr_node_ids; j++)
--			printk(KERN_CONT "%02d ", node_distance(i,j));
-+		for (j = 0; j < nr_node_ids; j++) {
-+			if (!node_state(i, N_CPU) || !node_state(j, N_CPU))
-+				printk(KERN_CONT "(%02d) ", node_distance(i,j));
-+			else
-+				printk(KERN_CONT " %02d  ", node_distance(i,j));
-+		}
- 		printk(KERN_CONT "\n");
- 	}
- 	printk(KERN_WARNING "\n");
-@@ -1693,19 +1697,34 @@ static void sched_numa_warn(const char *str)
- 
- bool find_numa_distance(int distance)
- {
--	int i;
-+	bool found = false;
-+	int i, *distances;
- 
- 	if (distance == node_distance(0, 0))
- 		return true;
- 
-+	rcu_read_lock();
-+	distances = rcu_dereference(sched_domains_numa_distance);
-+	if (!distances)
-+		goto unlock;
- 	for (i = 0; i < sched_domains_numa_levels; i++) {
--		if (sched_domains_numa_distance[i] == distance)
--			return true;
-+		if (distances[i] == distance) {
-+			found = true;
-+			break;
-+		}
- 	}
-+unlock:
-+	rcu_read_unlock();
- 
--	return false;
-+	return found;
- }
- 
-+#define for_each_cpu_node_but(n, nbut)		\
-+	for_each_node_state(n, N_CPU)		\
-+		if (n == nbut)			\
-+			continue;		\
-+		else
-+
- /*
-  * A system can have three types of NUMA topology:
-  * NUMA_DIRECT: all nodes are directly connected, or not a NUMA system
-@@ -1725,7 +1744,7 @@ bool find_numa_distance(int distance)
-  *   there is an intermediary node C, which is < N hops away from both
-  *   nodes A and B, the system is a glueless mesh.
-  */
--static void init_numa_topology_type(void)
-+static void init_numa_topology_type(int offline_node)
- {
- 	int a, b, c, n;
- 
-@@ -1736,14 +1755,14 @@ static void init_numa_topology_type(void)
- 		return;
- 	}
- 
--	for_each_online_node(a) {
--		for_each_online_node(b) {
-+	for_each_cpu_node_but(a, offline_node) {
-+		for_each_cpu_node_but(b, offline_node) {
- 			/* Find two nodes furthest removed from each other. */
- 			if (node_distance(a, b) < n)
- 				continue;
- 
- 			/* Is there an intermediary node between a and b? */
--			for_each_online_node(c) {
-+			for_each_cpu_node_but(c, offline_node) {
- 				if (node_distance(a, c) < n &&
- 				    node_distance(b, c) < n) {
- 					sched_numa_topology_type =
-@@ -1756,17 +1775,22 @@ static void init_numa_topology_type(void)
- 			return;
- 		}
- 	}
-+
-+	pr_err("Failed to find a NUMA topology type, defaulting to DIRECT\n");
-+	sched_numa_topology_type = NUMA_DIRECT;
- }
- 
- 
- #define NR_DISTANCE_VALUES (1 << DISTANCE_BITS)
- 
--void sched_init_numa(void)
-+void sched_init_numa(int offline_node)
- {
- 	struct sched_domain_topology_level *tl;
- 	unsigned long *distance_map;
- 	int nr_levels = 0;
- 	int i, j;
-+	int *distances;
-+	struct cpumask ***masks;
- 
- 	/*
- 	 * O(nr_nodes^2) deduplicating selection sort -- in order to find the
-@@ -1777,12 +1801,13 @@ void sched_init_numa(void)
- 		return;
- 
- 	bitmap_zero(distance_map, NR_DISTANCE_VALUES);
--	for (i = 0; i < nr_node_ids; i++) {
--		for (j = 0; j < nr_node_ids; j++) {
-+	for_each_cpu_node_but(i, offline_node) {
-+		for_each_cpu_node_but(j, offline_node) {
- 			int distance = node_distance(i, j);
- 
- 			if (distance < LOCAL_DISTANCE || distance >= NR_DISTANCE_VALUES) {
- 				sched_numa_warn("Invalid distance value range");
-+				bitmap_free(distance_map);
- 				return;
- 			}
- 
-@@ -1795,16 +1820,17 @@ void sched_init_numa(void)
- 	 */
- 	nr_levels = bitmap_weight(distance_map, NR_DISTANCE_VALUES);
- 
--	sched_domains_numa_distance = kcalloc(nr_levels, sizeof(int), GFP_KERNEL);
--	if (!sched_domains_numa_distance) {
-+	distances = kcalloc(nr_levels, sizeof(int), GFP_KERNEL);
-+	if (!distances) {
- 		bitmap_free(distance_map);
- 		return;
- 	}
- 
- 	for (i = 0, j = 0; i < nr_levels; i++, j++) {
- 		j = find_next_bit(distance_map, NR_DISTANCE_VALUES, j);
--		sched_domains_numa_distance[i] = j;
-+		distances[i] = j;
- 	}
-+	rcu_assign_pointer(sched_domains_numa_distance, distances);
- 
- 	bitmap_free(distance_map);
- 
-@@ -1826,8 +1852,8 @@ void sched_init_numa(void)
- 	 */
- 	sched_domains_numa_levels = 0;
- 
--	sched_domains_numa_masks = kzalloc(sizeof(void *) * nr_levels, GFP_KERNEL);
--	if (!sched_domains_numa_masks)
-+	masks = kzalloc(sizeof(void *) * nr_levels, GFP_KERNEL);
-+	if (!masks)
- 		return;
- 
- 	/*
-@@ -1835,31 +1861,20 @@ void sched_init_numa(void)
- 	 * CPUs of nodes that are that many hops away from us.
- 	 */
- 	for (i = 0; i < nr_levels; i++) {
--		sched_domains_numa_masks[i] =
--			kzalloc(nr_node_ids * sizeof(void *), GFP_KERNEL);
--		if (!sched_domains_numa_masks[i])
-+		masks[i] = kzalloc(nr_node_ids * sizeof(void *), GFP_KERNEL);
-+		if (!masks[i])
- 			return;
- 
--		for (j = 0; j < nr_node_ids; j++) {
-+		for_each_cpu_node_but(j, offline_node) {
- 			struct cpumask *mask = kzalloc(cpumask_size(), GFP_KERNEL);
- 			int k;
- 
- 			if (!mask)
- 				return;
- 
--			sched_domains_numa_masks[i][j] = mask;
--
--			for_each_node(k) {
--				/*
--				 * Distance information can be unreliable for
--				 * offline nodes, defer building the node
--				 * masks to its bringup.
--				 * This relies on all unique distance values
--				 * still being visible at init time.
--				 */
--				if (!node_online(j))
--					continue;
-+			masks[i][j] = mask;
- 
-+			for_each_cpu_node_but(k, offline_node) {
- 				if (sched_debug() && (node_distance(j, k) != node_distance(k, j)))
- 					sched_numa_warn("Node-distance not symmetric");
- 
-@@ -1870,6 +1885,7 @@ void sched_init_numa(void)
- 			}
- 		}
- 	}
-+	rcu_assign_pointer(sched_domains_numa_masks, masks);
- 
- 	/* Compute default topology size */
- 	for (i = 0; sched_domain_topology[i].mask; i++);
-@@ -1907,59 +1923,67 @@ void sched_init_numa(void)
- 		};
- 	}
- 
-+	sched_domain_topology_saved = sched_domain_topology;
- 	sched_domain_topology = tl;
- 
- 	sched_domains_numa_levels = nr_levels;
- 	sched_max_numa_distance = sched_domains_numa_distance[nr_levels - 1];
- 
--	init_numa_topology_type();
--
--	sched_numa_onlined_nodes = bitmap_alloc(nr_node_ids, GFP_KERNEL);
--	if (!sched_numa_onlined_nodes)
--		return;
--
--	bitmap_zero(sched_numa_onlined_nodes, nr_node_ids);
--	for_each_online_node(i)
--		bitmap_set(sched_numa_onlined_nodes, i, 1);
-+	init_numa_topology_type(offline_node);
- }
- 
--static void __sched_domains_numa_masks_set(unsigned int node)
--{
--	int i, j;
--
--	/*
--	 * NUMA masks are not built for offline nodes in sched_init_numa().
--	 * Thus, when a CPU of a never-onlined-before node gets plugged in,
--	 * adding that new CPU to the right NUMA masks is not sufficient: the
--	 * masks of that CPU's node must also be updated.
--	 */
--	if (test_bit(node, sched_numa_onlined_nodes))
--		return;
- 
--	bitmap_set(sched_numa_onlined_nodes, node, 1);
--
--	for (i = 0; i < sched_domains_numa_levels; i++) {
--		for (j = 0; j < nr_node_ids; j++) {
--			if (!node_online(j) || node == j)
--				continue;
-+void sched_reset_numa(void)
-+{
-+	int nr_levels, *distances;
-+	struct cpumask ***masks;
- 
--			if (node_distance(j, node) > sched_domains_numa_distance[i])
-+	nr_levels = sched_domains_numa_levels;
-+	sched_domains_numa_levels = 0;
-+	sched_max_numa_distance = 0;
-+	sched_numa_topology_type = NUMA_DIRECT;
-+	distances = sched_domains_numa_distance;
-+	rcu_assign_pointer(sched_domains_numa_distance, NULL);
-+	masks = sched_domains_numa_masks;
-+	rcu_assign_pointer(sched_domains_numa_masks, NULL);
-+	if (distances || masks) {
-+		int i, j;
-+
-+		synchronize_rcu();
-+		kfree(distances);
-+		for (i = 0; i < nr_levels && masks; i++) {
-+			if (!masks[i])
- 				continue;
--
--			/* Add remote nodes in our masks */
--			cpumask_or(sched_domains_numa_masks[i][node],
--				   sched_domains_numa_masks[i][node],
--				   sched_domains_numa_masks[0][j]);
-+			for_each_node(j)
-+				kfree(masks[i][j]);
-+			kfree(masks[i]);
- 		}
-+		kfree(masks);
- 	}
-+	if (sched_domain_topology_saved) {
-+		kfree(sched_domain_topology);
-+		sched_domain_topology = sched_domain_topology_saved;
-+		sched_domain_topology_saved = NULL;
-+	}
-+}
-+
-+/*
-+ * Call with hotplug lock held
-+ */
-+void sched_reinit_numa(bool online, int cpu)
-+{
-+	int node;
- 
-+	node = cpu_to_node(cpu);
- 	/*
--	 * A new node has been brought up, potentially changing the topology
--	 * classification.
--	 *
--	 * Note that this is racy vs any use of sched_numa_topology_type :/
-+	 * Scheduler NUMA topology is updated when the first CPU of a
-+	 * node is onlined or the last CPU of a node is offlined.
- 	 */
--	init_numa_topology_type();
-+	if (cpumask_weight(cpumask_of_node(node)) != 1)
-+		return;
-+
-+	sched_reset_numa();
-+	sched_init_numa(online ? NUMA_NO_NODE : node);
- }
- 
- void sched_domains_numa_masks_set(unsigned int cpu)
-@@ -1967,11 +1991,9 @@ void sched_domains_numa_masks_set(unsigned int cpu)
- 	int node = cpu_to_node(cpu);
- 	int i, j;
- 
--	__sched_domains_numa_masks_set(node);
--
- 	for (i = 0; i < sched_domains_numa_levels; i++) {
- 		for (j = 0; j < nr_node_ids; j++) {
--			if (!node_online(j))
-+			if (!node_state(j, N_CPU))
- 				continue;
- 
- 			/* Set ourselves in the remote node's masks */
-@@ -1986,8 +2008,10 @@ void sched_domains_numa_masks_clear(unsigned int cpu)
- 	int i, j;
- 
- 	for (i = 0; i < sched_domains_numa_levels; i++) {
--		for (j = 0; j < nr_node_ids; j++)
--			cpumask_clear_cpu(cpu, sched_domains_numa_masks[i][j]);
-+		for (j = 0; j < nr_node_ids; j++) {
-+			if (sched_domains_numa_masks[i][j])
-+				cpumask_clear_cpu(cpu, sched_domains_numa_masks[i][j]);
-+		}
- 	}
- }
- 
-@@ -2001,14 +2025,26 @@ void sched_domains_numa_masks_clear(unsigned int cpu)
-  */
- int sched_numa_find_closest(const struct cpumask *cpus, int cpu)
- {
--	int i, j = cpu_to_node(cpu);
-+	int i, j = cpu_to_node(cpu), found = nr_cpu_ids;
-+	struct cpumask ***masks;
- 
-+	rcu_read_lock();
-+	masks = rcu_dereference(sched_domains_numa_masks);
-+	if (!masks)
-+		goto unlock;
- 	for (i = 0; i < sched_domains_numa_levels; i++) {
--		cpu = cpumask_any_and(cpus, sched_domains_numa_masks[i][j]);
--		if (cpu < nr_cpu_ids)
--			return cpu;
-+		if (!masks[i][j])
-+			break;
-+		cpu = cpumask_any_and(cpus, masks[i][j]);
-+		if (cpu < nr_cpu_ids) {
-+			found = cpu;
-+			break;
-+		}
- 	}
--	return nr_cpu_ids;
-+unlock:
-+	rcu_read_unlock();
-+
-+	return found;
- }
- 
- #endif /* CONFIG_NUMA */
--- 
-2.30.2
 

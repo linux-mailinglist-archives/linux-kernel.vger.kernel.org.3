@@ -2,78 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CB984AD1E2
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 08:03:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8501E4AD1E3
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 08:03:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347832AbiBHHDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 02:03:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48178 "EHLO
+        id S1347836AbiBHHDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 02:03:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233309AbiBHHDQ (ORCPT
+        with ESMTP id S233309AbiBHHDm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 02:03:16 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B3EC0401EF;
-        Mon,  7 Feb 2022 23:03:15 -0800 (PST)
-Received: from kwepemi100019.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JtDT25kH9z9sWj;
-        Tue,  8 Feb 2022 15:01:42 +0800 (CST)
-Received: from kwepemm600007.china.huawei.com (7.193.23.208) by
- kwepemi100019.china.huawei.com (7.221.188.189) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 8 Feb 2022 15:03:13 +0800
-Received: from DESKTOP-8RFUVS3.china.huawei.com (10.174.185.179) by
- kwepemm600007.china.huawei.com (7.193.23.208) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 8 Feb 2022 15:03:12 +0800
-From:   Zenghui Yu <yuzenghui@huawei.com>
-To:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski@canonical.com>
-CC:     <kernel.yuz@gmail.com>, <wanghaibin.wang@huawei.com>,
-        <wangjingyi11@huawei.com>, Zenghui Yu <yuzenghui@huawei.com>
-Subject: [PATCH] dt-bindings: arm: Trivial typo fixes in cpu-capacity.txt
-Date:   Tue, 8 Feb 2022 15:03:00 +0800
-Message-ID: <20220208070300.1610-1-yuzenghui@huawei.com>
-X-Mailer: git-send-email 2.23.0.windows.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.185.179]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600007.china.huawei.com (7.193.23.208)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 8 Feb 2022 02:03:42 -0500
+Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 007BEC0401F4;
+        Mon,  7 Feb 2022 23:03:38 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id D1CE35801C4;
+        Tue,  8 Feb 2022 02:03:35 -0500 (EST)
+Received: from imap49 ([10.202.2.99])
+  by compute2.internal (MEProxy); Tue, 08 Feb 2022 02:03:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        sladewatkins.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; bh=1zZeOHN8TQZQpX
+        SBE9ns/EHrQBA4/VHUOn1td3lu4bY=; b=UPeru9y8pzDYJINqGGFCZLTaoiE2Cc
+        NjBbWZ8dz+XyohKX+vsHRBDrFAPeZdNfZr/qqQcUbWpUBi/o6tK6rdTaAlvlexGO
+        49rKVQSpZa09AZijMIhybcogle1+cQlg1xF2RiNql5rbdKLHcqQ11dgoL5tVwyV5
+        bdKdOvaZItuTbIGn4c+mRhLmInbmq3g2a+wO/MCZKCaEYVxt4l2Eoc04SI9x3+7K
+        QpCY1zMPY+75f3qCgrLdW6eGUuaCrTRpypMv8Hd5+T6JLUzL1WLVEzNI1MWZ916P
+        kXEAakTn3Du5RV09kwY4NVd9I2BOHas5DpIpE8HQgTOFr59qHKYNO5VA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=1zZeOHN8TQZQpXSBE
+        9ns/EHrQBA4/VHUOn1td3lu4bY=; b=kCzv7xzpIq7NAwTR6wdnR/Xlc8apTdgz9
+        uWiA8MFf/uvYZQDhulKNlqybNVQii+7YHNV7jb1qQv6WI3M9DWycoAumsMeFok++
+        U7qiApcX+YNe6zgrPBfEM/r+XBt2Kk1HLKFPU3WJHAJfpMA5Gtj5iJiSHzx5gfO6
+        KmQq/PGcYfGv3kzy/pKwkcKGczWWNo+Kd5KvAFpMK1T7hqTBzxcKpNA80GIzng7L
+        D6+20bn6CatlPwd9l02HECDEJ1sJvtOQ+kG+UW0nVps1PrqCsjkpWTmyKtE+Wm6D
+        mWJ4tsEN0M5dC2DMj5FXmiqMAN8Laa7XbNl6Z5C03hx9rIxSIgwXw==
+X-ME-Sender: <xms:xhUCYmkROP--4Oe2xv_yfKO-ck5upi_vNrHamTBPa1tCvZebTM__jw>
+    <xme:xhUCYt3bRW2NwkLZMxmxjIR15EoosSxdENleGL2nx_FOfZDyKab1Iy7cg2RlIvQY4
+    pn4z-kQikTSXYEvaKs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrheeigddutddvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdfulhgr
+    uggvucghrghtkhhinhhsfdcuoehslhgruggvsehslhgruggvfigrthhkihhnshdrtghomh
+    eqnecuggftrfgrthhtvghrnhepueeiffetjeeitefgveetleehveduheetiefhhfethedt
+    teelgeettddvvedvudegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
+    hilhhfrhhomhepshhlrgguvgesshhlrgguvgifrghtkhhinhhsrdgtohhm
+X-ME-Proxy: <xmx:xhUCYkqDY5eEl7_pdGQSlNL1hNjkl_AwxV7yMPfhOPjnVjeAW3Yj8A>
+    <xmx:xhUCYqnOblalu6JZb__5uDzjbrlPyo2FbT1lxQiA8OGQIMaTgJnb7Q>
+    <xmx:xhUCYk2Y6ajGQ_zUSgGSPvHOWWinMZfL_T770ceGmj-iBZ6EU91MWA>
+    <xmx:xxUCYtvXyik6yDHJxqssZVzsf-ZNyYdXU45__DV0xwlaUDQ5nJBvU_0U4Cw>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id CEAC9F6007E; Tue,  8 Feb 2022 02:03:34 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-4748-g31a5b5f50e-fm-cal2020-20220204.001-g31a5b5f5
+Mime-Version: 1.0
+Message-Id: <16bbddcb-d827-490a-ac80-cd5a75404d6f@www.fastmail.com>
+In-Reply-To: <20220207133856.644483064@linuxfoundation.org>
+References: <20220207133856.644483064@linuxfoundation.org>
+Date:   Tue, 08 Feb 2022 02:03:33 -0500
+From:   "Slade Watkins" <slade@sladewatkins.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org,
+        "Linus Torvalds" <torvalds@linux-foundation.org>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Guenter Roeck" <linux@roeck-us.net>, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org,
+        "Pavel Machek" <pavel@denx.de>,
+        "Jon Hunter" <jonathanh@nvidia.com>,
+        "Florian Fainelli" <f.fainelli@gmail.com>,
+        "Sudip Mukherjee" <sudipm.mukherjee@gmail.com>
+Subject: Re: [PATCH 5.16 000/127] 5.16.8-rc2 review
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Correct the spelling of 'cluster1@max-freq' and fix the wrong
-capacity-dmips-mhz value 576 (which should be 578 instead).
+On Mon, Feb 7, 2022, at 9:04 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.16.8 release.
+> There are 127 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 09 Feb 2022 13:38:34 +0000.
+> Anything received after that time might be too late.
 
-Signed-off-by: Zenghui Yu <yuzenghui@huawei.com>
----
- Documentation/devicetree/bindings/arm/cpu-capacity.txt | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Compiled and booted 5.16.8-rc2 on my x86_64 test system successfully without errors or regressions.
 
-diff --git a/Documentation/devicetree/bindings/arm/cpu-capacity.txt b/Documentation/devicetree/bindings/arm/cpu-capacity.txt
-index 380e21c5fc7e..cc5e190390b7 100644
---- a/Documentation/devicetree/bindings/arm/cpu-capacity.txt
-+++ b/Documentation/devicetree/bindings/arm/cpu-capacity.txt
-@@ -62,8 +62,8 @@ Example 1 (ARM 64-bit, 6-cpu system, two clusters):
- The capacities-dmips-mhz or DMIPS/MHz values (scaled to 1024)
- are 1024 and 578 for cluster0 and cluster1. Further normalization
- is done by the operating system based on cluster0@max-freq=1100 and
--custer1@max-freq=850, final capacities are 1024 for cluster0 and
--446 for cluster1 (576*850/1100).
-+cluster1@max-freq=850, final capacities are 1024 for cluster0 and
-+446 for cluster1 (578*850/1100).
- 
- cpus {
- 	#address-cells = <2>;
--- 
-2.19.1
+Tested-by: Slade Watkins <slade@sladewatkins.com>
 
+Thanks,
+Slade

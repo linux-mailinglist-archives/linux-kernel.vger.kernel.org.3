@@ -2,138 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E9904AD809
+	by mail.lfdr.de (Postfix) with ESMTP id 6D9B74AD80A
 	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:58:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356394AbiBHL5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 06:57:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46080 "EHLO
+        id S1356697AbiBHL6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 06:58:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233434AbiBHL5L (ORCPT
+        with ESMTP id S1344218AbiBHL6r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 06:57:11 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38EFEC03FEC0;
-        Tue,  8 Feb 2022 03:57:10 -0800 (PST)
-Received: from fraeml704-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JtLw80t75z688jd;
-        Tue,  8 Feb 2022 19:52:08 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml704-chm.china.huawei.com (10.206.15.53) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.21; Tue, 8 Feb 2022 12:57:07 +0100
-Received: from [10.47.82.28] (10.47.82.28) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Tue, 8 Feb
- 2022 11:56:53 +0000
-Message-ID: <144329a3-8125-1975-7f23-a247343a679e@huawei.com>
-Date:   Tue, 8 Feb 2022 11:56:48 +0000
+        Tue, 8 Feb 2022 06:58:47 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD282C03FECE
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 03:58:46 -0800 (PST)
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 8F0C33FE41
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 11:58:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644321525;
+        bh=P+HobyeC3bQCcGpxberLLoh6gpapBvcaDJDz9Lhr76E=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=Q8w/6cqsWvnt+l4u2KUPq+gEMrkjhHYBw88uKQx+ifnB4MowqhU6+hKtSjQ1z/da8
+         3+XITIIHdVxvcQhnqF6LjAzJiTtZPxfB597H/rXs/dPKU1+7zpPsPUcinuSpruhIGD
+         9gM5DGdpwkR1h2JJ0WsZ90OSaBdlWd9QSPAT8ALuAwqX2DXySaiEHWyKLoQlfEpCJw
+         FBkAp3hDaZyhLVWag6jhG6Wwi1w/vN4nYoFgbojS7YXobnRJHeCrENojlmC1j4lJYW
+         wrJmcdt5blq8t+SCd1zhXqrvDhLKWwwRplRvLuhxbpVHpZdXLe0BWIB5z4++7FKssR
+         1kxn36lDpwMIA==
+Received: by mail-ej1-f71.google.com with SMTP id o7-20020a170906860700b006cbe6deec1bso1961446ejx.22
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 03:58:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=P+HobyeC3bQCcGpxberLLoh6gpapBvcaDJDz9Lhr76E=;
+        b=ME+rAP0yaHoCIzLu1AXHMYYbjN/EqKfbzY00Dof7rPOIFkvbQwzETuWg41ekJyfZj6
+         OTP1SNCpJppqdWx6I2UOZ5pvWPGRFYPXu7ZrhHj3nI6zcEu4hVr9ovPT8vyQjZ8Adzg9
+         m1LLGEU0/q2oSnIVd9pqJ4oj90XDlesyH/ETAbKdww32CEubBsgitXW3z17vxamG91Zv
+         EV3HG30DFtTGmWshtZK1Mv1zwBHHGzwIWhRedl8WXRHeKnF+HtyOUiIIlvWoUIUiScId
+         z84s40ts++DUoDf7E03DqdCQ3uDn8hUuNtYOAdsngK8/IQAERq5IGgdO77rYPwPPHfBQ
+         XSRw==
+X-Gm-Message-State: AOAM531pqTX4q8HtcEpyUbsLO10dM0C+ZWaTeIgCQay44X7xnHnpMXuX
+        6TrZJlIheV/8IPpcsQqktT9HoSlAAb3U7rgH+kFEagsSbeumc8Q4IP3jU9kMpAKh2Hjr5t9YsZ2
+        Y51lBar0ksiYCb6w/X8OVYv0ABvmy2VhHT7P4umcJGw==
+X-Received: by 2002:a17:906:72dc:: with SMTP id m28mr319001ejl.163.1644321525145;
+        Tue, 08 Feb 2022 03:58:45 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz9a1MhDXtiay9NU1pHyJzzyQxLYCRSLs2dpBgS8l6BBII4mq5a8o/AZSnO3Zpzup21jbBJFw==
+X-Received: by 2002:a17:906:72dc:: with SMTP id m28mr318989ejl.163.1644321525003;
+        Tue, 08 Feb 2022 03:58:45 -0800 (PST)
+Received: from [192.168.0.93] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id y5sm1455630ejf.142.2022.02.08.03.58.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Feb 2022 03:58:44 -0800 (PST)
+Message-ID: <f5563605-7b61-c23e-68ec-6e315efb268d@canonical.com>
+Date:   Tue, 8 Feb 2022 12:58:44 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v3 8/8] iommu/arm-smmu-v3: Make default domain type of
- HiSilicon PTT device to identity
-To:     Yicong Yang <yangyicong@huawei.com>,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "helgaas@kernel.org" <helgaas@kernel.org>,
-        "alexander.shishkin@linux.intel.com" 
-        <alexander.shishkin@linux.intel.com>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "mathieu.poirier@linaro.org" <mathieu.poirier@linaro.org>,
-        "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
-        "mike.leach@linaro.org" <mike.leach@linaro.org>,
-        "leo.yan@linaro.org" <leo.yan@linaro.org>,
-        "Jonathan Cameron" <jonathan.cameron@huawei.com>,
-        "daniel.thompson@linaro.org" <daniel.thompson@linaro.org>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "Shameerali Kolothum Thodi" <shameerali.kolothum.thodi@huawei.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "acme@kernel.org" <acme@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "coresight@lists.linaro.org" <coresight@lists.linaro.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>
-CC:     "Zengtao (B)" <prime.zeng@hisilicon.com>,
-        "liuqi (BA)" <liuqi115@huawei.com>,
-        Zhangshaokun <zhangshaokun@hisilicon.com>,
-        Linuxarm <linuxarm@huawei.com>,
-        "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>
-References: <20220124131118.17887-1-yangyicong@hisilicon.com>
- <20220124131118.17887-9-yangyicong@hisilicon.com>
- <4f6f6e0f-4398-3018-cc35-6aa7ea1305fe@huawei.com>
- <ae45a637-2c67-4126-3007-6829320d5659@huawei.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <ae45a637-2c67-4126-3007-6829320d5659@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.47.82.28]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 1/3] dt-bindings: crypto: Convert Atmel AES to yaml
+Content-Language: en-US
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        herbert@gondor.apana.org.au
+Cc:     nicolas.ferre@microchip.com, claudiu.beznea@microchip.com,
+        alexandre.belloni@bootlin.com, linux-crypto@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kavyasree.kotagiri@microchip.com, devicetree@vger.kernel.org
+References: <20220208104918.226156-1-tudor.ambarus@microchip.com>
+ <20220208104918.226156-2-tudor.ambarus@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220208104918.226156-2-tudor.ambarus@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/02/2022 11:21, Yicong Yang wrote:
->> This patch should be earlier in the series, before the PTT driver, and the comment on hisi_ptt_check_iommu_mapping() should mention what is going on here.
->>
-> ok I'll reorder the serives and modify the comments of hisi_ptt_check_iommu_mapping() like:
+On 08/02/2022 11:49, Tudor Ambarus wrote:
+> Convert Atmel AES documentation to yaml format. With the conversion the
+> clock and clock-names properties are made mandatory. The driver returns
+> -EINVAL if "aes_clk" is not found, reflect that in the bindings and make
+> the clock and clock-names properties mandatory. Update the example to
+> better describe how one should define the dt node.
 > 
-> /*
->   * The DMA of PTT trace can only use direct mapping, due to some
->   * hardware restriction. Check whether there is an iommu or the
->   * policy of the iommu domain is passthrough, otherwise the trace
->   * cannot work.
-
-IOMMU, capitalize acronyms
-
->   *
->   * The PTT device is supposed to behind the arm smmu v3, which
->   * should have passthrough the device by a quirk. Otherwise user
->   * should manually set the iommu domain type to identity through
->   * sysfs.
-
-Sorry, but I don't really understand your meaning here.
-
-I did not think that if we have a default domain then we can change via 
-sysfs to anything else.
-
->   */
-> 
->>> Signed-off-by: Yicong Yang<yangyicong@hisilicon.com>
->>> ---
->>>    drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 16 ++++++++++++++++
->>>    1 file changed, 16 insertions(+)
->>>
->>> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
->>> index 6dc6d8b6b368..6f67a2b1dd27 100644
->>> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
->>> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
->>> @@ -2838,6 +2838,21 @@ static int arm_smmu_dev_disable_feature(struct device *dev,
->>>        }
->>>    }
->>>    +#define IS_HISI_PTT_DEVICE(pdev)    ((pdev)->vendor == PCI_VENDOR_ID_HUAWEI && \
->>> +                     (pdev)->device == 0xa12e)
->> I assume that not all revisions will require this check, right?
-
-So if you are very confident that the next revision will be fixed then I 
-would add a check for this current broken revision.
-
->>
-> For current revisions it's necessary.
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+> ---
+>  .../crypto/atmel,at91sam9g46-aes.yaml         | 65 +++++++++++++++++++
+>  .../bindings/crypto/atmel-crypto.txt          | 20 ------
+>  2 files changed, 65 insertions(+), 20 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-aes.yaml
 > 
 
+I understand that you keep the license GPL-2.0 (not recommended mix)
+because of example coming from previous bindings or from DTS (both GPL-2.0)?
+
+Best regards,
+Krzysztof

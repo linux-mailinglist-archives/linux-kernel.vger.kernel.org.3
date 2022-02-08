@@ -2,128 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D19AD4AD493
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 10:17:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FFC84AD496
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 10:18:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353674AbiBHJR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 04:17:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59142 "EHLO
+        id S1353677AbiBHJSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 04:18:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350674AbiBHJRW (ORCPT
+        with ESMTP id S238582AbiBHJSK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 04:17:22 -0500
+        Tue, 8 Feb 2022 04:18:10 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA2FC03FEDA;
-        Tue,  8 Feb 2022 01:17:19 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEA5CC03FEC3
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 01:18:06 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2EF1E61479;
-        Tue,  8 Feb 2022 09:17:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D140C340ED;
-        Tue,  8 Feb 2022 09:17:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B02961465
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 09:18:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23CD4C340EE;
+        Tue,  8 Feb 2022 09:18:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644311838;
-        bh=BRQppVmJemnXXpfZXfcxyJ76Uix+mNSFNn+dOUBit+Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=B3EKAJXrMGa7sLQ/UIGqVwvEhckiwK7KbAYqdpGASMWBfI35qyTU08kJM7VInr/u7
-         L3HW1aG+k1r2XrAoYTgGpNICjfxqai3FcsJnTbxo86tYp1wj+Lde7V60xIX006sEyW
-         w09Bzpsf6vUTpugq2l6spY1jKstIAX00/fA4FVKSIgpKT8VVKnfmsCzaZnWrOOkBuZ
-         ZDGUROkTnlT3AX2stNNHZlSY1kqNoYYReLMvuXDSyWKrcWommrFseWqRFSjPujgbYj
-         mceqt8Wcr0mdJ9QEWbQ+WTEH7UJPk61Et2a1RF9hTSjIIBGoS0jwmY4WoekJXtIegp
-         mM1Lptsk/sLWA==
-Date:   Tue, 8 Feb 2022 11:16:51 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Adrian Reber <adrian@lisas.de>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com,
-        Andrei Vagin <avagin@gmail.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>
-Subject: Re: [PATCH 00/35] Shadow stacks for userspace
-Message-ID: <YgI1A0CtfmT7GMIp@kernel.org>
-References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
- <YgAWVSGQg8FPCeba@kernel.org>
- <YgDIIpCm3UITk896@lisas.de>
- <8f96c2a6-9c03-f97a-df52-73ffc1d87957@intel.com>
+        s=k20201202; t=1644311886;
+        bh=I7Xie7sMfICHs14aE9eDxrmpTe6fMPFsk6GoOxJmkV8=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=g2SIl1sv37Wg4HfiTuc4dZnLg2S/byf3jUtnH3uIc4WvhjoID1lqvjW6LXqKoZ09y
+         KJaXGAbCLiMOl0wys7ZCmWmeT2Fx2xPwaTXoZ3ZZJZ6lVnKu3/rQkqPNJ1f5NEJeMk
+         1Ovl49WTI0DoSyXnD9KNIDP39i5U+0J28WZuuFMKPe+UV2PbVEY93HpsSm6pkDcWOo
+         zi9BuuErpypqH+TrJl38bj6QOjzLVmakbAjevbg858sHUeDausKlm4Tsu3MfoJDQXh
+         Ei3Wb7fUIFDqoMCTQGPh/JHreg5ddJVjBg2shjWIIvmLVKeAMytFsfIEb4Ruc3xhCQ
+         qUjloscENnUNg==
+Message-ID: <2cd93012-16b8-6681-cabe-c1401987bf27@kernel.org>
+Date:   Tue, 8 Feb 2022 17:18:02 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [f2fs-dev] [PATCH] f2fs: avoid unneeded preflush during
+ checkpoint()
+Content-Language: en-US
+From:   Chao Yu <chao@kernel.org>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+References: <20220207113516.9489-1-chao@kernel.org>
+ <YgFvqnoa61BspqmW@google.com>
+ <59da7f3e-92bd-1165-00e3-3dc18ae19aea@kernel.org>
+In-Reply-To: <59da7f3e-92bd-1165-00e3-3dc18ae19aea@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <8f96c2a6-9c03-f97a-df52-73ffc1d87957@intel.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 08:30:50AM -0800, Dave Hansen wrote:
-> On 2/6/22 23:20, Adrian Reber wrote:
-> >>> 	CRIU Support
-> >>> 	------------
-> >>> 	In the past there was some speculation on the mailing list about 
-> >>> 	whether CRIU would need to be taught about CET. It turns out, it does. 
-> >>> 	The first issue hit is that CRIU calls sigreturn directly from its 
-> >>> 	“parasite code” that it injects into the dumper process. This violates
-> >>> 	this shadow stack implementation’s protection that intends to prevent
-> >>> 	attackers from doing this.
-> ...
-> >>From the CRIU side I can say that I would definitely like to see this
-> > resolved. CRIU just went through a similar exercise with rseq() being
-> > enabled in glibc and CI broke all around for us and other projects
-> > relying on CRIU. Although rseq() was around for a long time we were not
-> > aware of it but luckily 5.13 introduced a way to handle it for CRIU with
-> > ptrace. An environment variable existed but did not really help when
-> > CRIU is called somewhere in the middle of the container software stack.
-> > 
-> >>From my point of view a solution not involving an environment variable
-> > would definitely be preferred.
+On 2022/2/8 9:35, Chao Yu wrote:
+> On 2022/2/8 3:14, Jaegeuk Kim wrote:
+>> On 02/07, Chao Yu wrote:
+>>> During checkpoint, we have committed preflush command via f2fs_flush_device_cache()
+>>
+>>   787 int f2fs_flush_device_cache(struct f2fs_sb_info *sbi)
+>>   788 {
+>>   789         int ret = 0, i;
+>>   790
+>>   791         if (!f2fs_is_multi_device(sbi))
+>>   792                 return 0;
+>>
+>> Seems a wrong assumption.
 > 
-> Have there been things like this for CRIU in the past?  Something where
-> CRIU needs control but that's also security-sensitive?
+> Oh, I missed that f2fs_flush_device_cache was introduced to flush devices except
+> first device when multi-device feature is on.
+> 
+>      for (i = 1; i < sbi->s_ndevs; i++) {
+>          int count = DEFAULT_RETRY_IO_COUNT;
+> 
+> So, this patch seems wrong...
+> 
+> Instead, below case looks wrong since it needs to trigger flush during checkpoint()
+> no matter nobarrier is on or off.
 
-Generally CRIU requires (almost) root privileges to work, but I don't think
-it handles something as security sensitive and restrictive as shadow stacks. 
- 
-> Any thoughts on how you would _like_ to see this resolved?
+Wrong comments, let's ignore this patch, sorry.
 
-Ideally, CRIU will need a knob that will tell the kernel/CET machinery
-where the next RET will jump, along the lines of
-restore_signal_shadow_stack() AFAIU.
+Thanks,
 
-But such a knob will immediately reduce the security value of the entire
-thing, and I don't have good ideas how to deal with it :(
-
--- 
-Sincerely yours,
-Mike.
+> 
+>      if (test_opt(sbi, NOBARRIER))
+>          return 0;
+> 
+> Thanks,
+> 
+>>
+>>> to persist all metadata pages except last #2 CP pack page, so we don't need to
+>>> commit another preflush command in commit_checkpoint(), remove it to avoid unneeded
+>>> write cache overhead.
+>>>
+>>> Signed-off-by: Chao Yu <chao@kernel.org>
+>>> ---
+>>>   fs/f2fs/data.c | 2 +-
+>>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+>>> index 8c417864c66a..15ac18bbbc8e 100644
+>>> --- a/fs/f2fs/data.c
+>>> +++ b/fs/f2fs/data.c
+>>> @@ -598,7 +598,7 @@ static void __f2fs_submit_merged_write(struct f2fs_sb_info *sbi,
+>>>           io->fio.op = REQ_OP_WRITE;
+>>>           io->fio.op_flags = REQ_META | REQ_PRIO | REQ_SYNC;
+>>>           if (!test_opt(sbi, NOBARRIER))
+>>> -            io->fio.op_flags |= REQ_PREFLUSH | REQ_FUA;
+>>> +            io->fio.op_flags |= REQ_FUA;
+>>>       }
+>>>       __submit_merged_bio(io);
+>>>       up_write(&io->io_rwsem);
+>>> -- 
+>>> 2.32.0
+> 
+> 
+> _______________________________________________
+> Linux-f2fs-devel mailing list
+> Linux-f2fs-devel@lists.sourceforge.net
+> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel

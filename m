@@ -2,219 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9F044AD37A
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 09:32:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9A2A4AD383
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 09:33:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349889AbiBHIc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 03:32:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32856 "EHLO
+        id S1349895AbiBHIdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 03:33:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349905AbiBHIcX (ORCPT
+        with ESMTP id S1349888AbiBHIdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 03:32:23 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C418C03FECE
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 00:32:21 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id q15-20020a92ca4f000000b002be3e7707ffso3182309ilo.4
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 00:32:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=Ak7DGjpz8u+yF2tUMgurDsjOzzk2JV1a40V2RS9Gck8=;
-        b=kL2S0fTlRXm0slykmp1ZonkiVhOSowWNGMTFGqtMiSM4GaR6ddM+jZ5kpKMsqlDQ+2
-         GJ3U17uZnrTXJDw/SPp0u1JUX4Y1vyDfXM53kXnOk/Zsl1C82Rrxh7+hoYqF3KUO9Xjm
-         iS5nRi6iHwiEhUHX4879H7xmTEzouidy3hAL25FG1gMM17CXAir6D3QQEMcDmJgIeuZR
-         xUA5796abqCkdHyDJloBxr9F/rqqc7w02vHdagXI3xfpMMrh8BbIMrnq+BvdQegx2YEQ
-         IBg8MvS1ZqjLKvlTfEZ9+Eys+0//FJjamTQfHglNVoo2BqKHMEKEAuxuMPR1rXkKZGHl
-         ISeQ==
-X-Gm-Message-State: AOAM531FeEWnBfgHT4fkt0X8kFr6PIH82x62N5f/jehFSlB2ve7uyN2r
-        T/2QRU11w8HtBCMFZLmOUdlyucB4HVHYQEa5z86loIn5PS7a
-X-Google-Smtp-Source: ABdhPJy+foHVsEDATvpMe56nchUDiGYkbjVPttKtcXmM5hZNEADLd3cG6tcj3Vkz6WcEeVtjb5ev9mO+QTcW9ge+vdYOTdXIxh1T
+        Tue, 8 Feb 2022 03:33:25 -0500
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2068.outbound.protection.outlook.com [40.107.92.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 921D7C0401F6
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 00:33:23 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HuXxksN0b0u+vb0omF4IMv5SD32SxC8jKHcS1bVKDu4+jdw1xgMq0f1YpJb/D8tr4twpYc9lCLoLPMViAp52ha7rjN/6iUgWfrvJPiH/+5s+/DJ8pidst9aM4F5iAjYcCY1pW/rXnYf4ugZrelVT9NCR0Sx4xblwKh0TnVlH/W/aP86w+/GHPpMxgeAVnbTbFNnF2RXGZn7ZnwisEwrpgxqMmCvJbhx3hJP5AkXAqIiJUQygxTJl1dtR06l2xz0FkgJi2f8X1lvPTd8cO9F23zrux/YUmjNvkzgEL9noypqAUQw3NsxAFbqPUFTdjGYKTaLE4fAs9cmdfBjoYJ/zWw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Tyn7cxWmGX1U23zhTevKwkbhsGVR52kEp144JhyqTSM=;
+ b=acSn05nB/Sa8r/wj64lCnK2VMc/65joc2UnJw/qDen9xkGvlZUqGHQDZGAYKDay5OcP9vWDN4Y/iK96gv5Pp/f4Rg+dI921SAk4BhpCIkqG/uGX9BZNHh0WF8WZvXCv2mOBnvIkJvbRO+o0wa9XT8O1/mPxNDxckQatZyQGR3z7QTPUkivmwUoQ5L4IF5i4EMOASmV42qLq1b5k9Al+hqfjLLTksdg0aheXH+EUdWxzFRU/J5mntUZpvR9pixkfpftmsQPvmIEIczI2FJh0RonRjOli/ovsL/NoP5pKmkbUgS6Y+h82uXbQclYeIj1olShbZJgGfTZD6Syr7Q2xyQw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Tyn7cxWmGX1U23zhTevKwkbhsGVR52kEp144JhyqTSM=;
+ b=NIooCz/FdSxLu9yXFr4GeiLs4ist+Z3Gh5NZwK7GUvXTok9jn8cYCPWa1QY4PX50jLmZROC/VXk5Ax/JD40+sflBhGKbgIKLK5NY0tY/rvLihGZEzDPnKtftSz9x0xSZW2nPfbU1qpPrvi4oM9n0EhyT00nRyEA0FGta89U7IRo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by BYAPR12MB4629.namprd12.prod.outlook.com (2603:10b6:a03:111::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.18; Tue, 8 Feb
+ 2022 08:33:21 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::d861:5699:8188:7bd3]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::d861:5699:8188:7bd3%3]) with mapi id 15.20.4951.019; Tue, 8 Feb 2022
+ 08:33:21 +0000
+Message-ID: <00c5b899-ed35-44a0-6b22-bc3e882e49d4@amd.com>
+Date:   Tue, 8 Feb 2022 09:33:14 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4 2/2] drm/radeon/uvd: Fix forgotten unmap buffer objects
+Content-Language: en-US
+To:     zhanglianjie <zhanglianjie@uniontech.com>
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        PanXinhui <Xinhui.Pan@amd.com>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20220208081443.28210-1-zhanglianjie@uniontech.com>
+ <108cc1b0-8630-7f41-5ef9-73df69d250e9@amd.com>
+ <400b7279-b738-5614-dff7-0e2f6f395a0e@uniontech.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <400b7279-b738-5614-dff7-0e2f6f395a0e@uniontech.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: AM7PR04CA0021.eurprd04.prod.outlook.com
+ (2603:10a6:20b:110::31) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:168b:: with SMTP id s11mr1598578iow.208.1644309140646;
- Tue, 08 Feb 2022 00:32:20 -0800 (PST)
-Date:   Tue, 08 Feb 2022 00:32:20 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000003aafee05d77d8e55@google.com>
-Subject: [syzbot] KCSAN: data-race in wg_packet_send_staged_packets /
- wg_packet_send_staged_packets (3)
-From:   syzbot <syzbot+6ba34f16b98fe40daef1@syzkaller.appspotmail.com>
-To:     Jason@zx2c4.com, davem@davemloft.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, wireguard@lists.zx2c4.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 90fc0054-761b-4720-b5b3-08d9eadda9be
+X-MS-TrafficTypeDiagnostic: BYAPR12MB4629:EE_
+X-Microsoft-Antispam-PRVS: <BYAPR12MB46290449DFD0FAE94EC4F833832D9@BYAPR12MB4629.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3513;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: KxWdkZ2AvKe6ax/3jz9Kh1c0Ls/SQZRncVyrqombmJc0gKKIK90HhcWDCTAO9M1TZxbEhcazmnAbHkaYqw2BR7+LRh5vRVOxZ3u4iK+lzbd59sG2+NGrrjq0h+BczPPGwsENdqMXrJMUQj+8fUBWzXIhnnhCrGLF+6TL+iRcvXoI+d7Q3eHpXp1kb1C36V3JloeyuwEd+pSSvJQjl7uv5QcwlSiITfvjdr2cntCwKnOY8N4dNbT/2fFF+b31Y4TabixU5ydUtiMwdD6pfSyEJZWF1yv2yvFLamtBFpUUBWGoghyZTq9Z37SWavXOWP61dLAZCbL5vAnF2FAoyLJ0SO4beIJiaWoLEx7GbfpsoX4Y6csCttbE8CN336C9YyyiaGWlL1D26EPEXjB2hEJlQ+s6cYiX5O/AZ0HOeIapier+nqkp/x5ll6LL1yKXqCCQpObQFsYrr/SyTqPIeKaDYpn8fnViOkv4+M6Q8z1TMEHZ7TgaTO4WkWLsV408fv63LZTo22hlluCaFSmtEESrpFBZJGB1VAfo23CEyUmck7xyH9z+NCrzOjTp1q9rk2pHTToy8avVgJT3WJfQ1Fzegb3YstKcpXmrbsK+IadbQepkMr45bnZMzKfzPaSr/evnTINNBc7J6mPzNuusap8eqISgbr90+darUNMu0d5tBHno8YNNqhUXgZmHxSySigo4tj174NzRRzY8RxicRt27NRodaqS0K4LGjS/NrOb3Oo8zYKjunlz9zGVLiGDb9OH6
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(316002)(66556008)(8936002)(66946007)(66476007)(5660300002)(186003)(54906003)(86362001)(6916009)(31686004)(6486002)(6506007)(31696002)(6666004)(508600001)(83380400001)(38100700002)(4326008)(2906002)(8676002)(2616005)(6512007)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZFpEcTE0SVJ4ZkpGY3h5RmZIZVAzK3h1cTlpNmpOYVYyMGkrZTV5enZNY3NZ?=
+ =?utf-8?B?bGYzL012bk1vK01FckF6ZFAzRmR6b1NVeDhjOEVxbXdYU3YxNGhFTmNlWVh0?=
+ =?utf-8?B?a0hUVEtqcWU4ZmZUY0VGL29nMGpPV0dLM2haOTNMY3pwRGhEeG1Va2pyOVhv?=
+ =?utf-8?B?cFFUYVc1Tnhub1FtQ1RLWldnNE1ETW1YOUhZZEVaVkowdkNqVFJYNW5lN0lk?=
+ =?utf-8?B?Z1kvK0diaUk1ZzlmcU41NXJDYVE4elgrTERPL3BWWDhJYlk0VzVOVVFhNlNr?=
+ =?utf-8?B?cHcvLzN3VW1zRDNPRlVGR1cyUlkzck1TWFpzanZmQkJFMy9TVURTV1A0U1dE?=
+ =?utf-8?B?dTFyVWR4ZGpkV2hjS1UwU2ZLRFNsNEt4cjhlU0xueWI3VXMvYzl3QjUzN2dy?=
+ =?utf-8?B?cjFpb1hxWVY5UmpTWng1djFIT3FCRllHd0dWZ29DeUduRXZhMFUwRk03WUVZ?=
+ =?utf-8?B?Z1VmaGtBbVUwMEdBU0VoVm8zanNjcW43eHcwbWVWamlWaG5pRnlXaEJ4RzZl?=
+ =?utf-8?B?Mk1NYm1hWFVIenV2Rmk0Wm11Z0VxcEROUVQ0SjY1a1hycTZBVDAvWERLdVJQ?=
+ =?utf-8?B?a3MyZ1pGdHNWYnlBMGgxZi9BNTl0d2xveHJXZlNjeDFjZzhJVEJFV0Mxd2sr?=
+ =?utf-8?B?MXE1N3IxK2d0MWxweng0aUxrZnlUOGVDL0VkalhOb3lLNDdqdm5LeHFHdjhi?=
+ =?utf-8?B?OTc1WWt5U0YwejlyU2d6ZWFFVEVRSlBDUlRhZmZLRkRvN2U2Y3VjS0RBdnAw?=
+ =?utf-8?B?T3BmSU11UTJ5WDNnci94NkpwYUt3L2dnQUJpbjNRdmlHeG9tN21KOEJBQjlo?=
+ =?utf-8?B?TnljdFkvY1hhOVdwdFV3YUVEWmJpT2hGenFSMXZhVmhhZmllNjMyUHByZmo0?=
+ =?utf-8?B?Mkc1SFp2VXZLejlHZ3RheDdJL0ZpMlpxK2pZVHBkWlZ4WjBqNGxFL01sOU85?=
+ =?utf-8?B?bVkxbGUwZlp3aFh6bTdwUXRBaEIxeEdGTGZ0Q3pNN3JGUjhzREl1M0czMjUy?=
+ =?utf-8?B?RURWdXhtRVZOWXVrZVdZNFhkSW1mbVpPcWV3ZFdybExVM011dVgxS1ZZQ3hB?=
+ =?utf-8?B?ckJSVDlOMjNpV043bno5Z0RtTXNpczRVTHVZRVVBaS80elIvMFBmS2hRVEtZ?=
+ =?utf-8?B?VVE1eUNETmo4SlJSQ1REVGFMenpyVnFXRGdtT2k2YmpLZ1pDbjRNeUQ2aGZt?=
+ =?utf-8?B?MjZnSEMyTTliZDN0NTg1VFM4VVpLVlo4RzJHMjZydXJCbjNhY1NrR0dtVWNQ?=
+ =?utf-8?B?YmRzdGlNTy9kOWk3akFjTkVBa05pUW83YU9rUEs1Q3I2dGpuMERTMmNHZHcz?=
+ =?utf-8?B?TGtyeEtXMzFCNFZ5MUVBbzdsM3liRFIvR0c5Zm0yYnZxeWdRdjB4SktHdFdN?=
+ =?utf-8?B?TTVUSjhNUHcrME1sNTdqN0lNZHJQektZK2xNSWZzdzFPKzMxang3MWg0dFlk?=
+ =?utf-8?B?WXNZM2ZqN0l6c0VJWVVYQUxLelFiaUprdW40cG4rK2NjakJ2U1dEaHd2ZnUz?=
+ =?utf-8?B?M1ZwbDJQd21xeU9HemZUaVJMK2pEYnZXWEFNc3JvY1YyYUswQ3V2UEJmQ29a?=
+ =?utf-8?B?T09KUjk2emt3OUpGSCtVd2QvYVBqMnVUTkNlUHZRbnJrVHJ6MmgwZkJQS2Yz?=
+ =?utf-8?B?SUM1TW1UdUpYMDAzeUFWWHZtVThmSmJ3dzNpUnBQVUhzWi9McmJ1eEx5bjJj?=
+ =?utf-8?B?Y2tuMW9LN2hkS1dFUHgvcGxXeGpCSzN4aW0wc2FVakFXbUpZcnd4VlQvZEpK?=
+ =?utf-8?B?b3hrM0JGYTBWa2VuWXV2NHo1SlJMVENjVWp6Zk1WS0xUNnowL3FHa1dWT1Jp?=
+ =?utf-8?B?NGdzVElSa29FeVdhdGRXcnlYdzkvb3R0QlFkWGUrOVhIdHhEK2tLSnA2UXk1?=
+ =?utf-8?B?cFZuS3lhZVVHRDlBWHlWZXNsQVF6UUFNVWpBbGwxbWVvOEZqSHBxbmJCcTd6?=
+ =?utf-8?B?M3hrOUJ2R05xeURNNDZOUmowVERKYTNsRGp4cXBacVhXOENjeFpKYTV5WDFB?=
+ =?utf-8?B?aUloMURIWWlYRkhoSEF3RzZycXZwQ05QZDhUSW51Q0RxQlpGRk5OZktFdyts?=
+ =?utf-8?B?bVBsWnZLZ2g2N2h3bGRDeVlkOVFsZWxDMVIrUVc3VVlQZnZVSkRrdmRXV3g3?=
+ =?utf-8?B?ZUtEYldSQWtqQzVlWW1WZlBjK0NFSmZSR2duVDQzRGhQK0NKRDhtUXJIbldO?=
+ =?utf-8?Q?EyCZq6v6ERZBjH2jBykLGj0=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 90fc0054-761b-4720-b5b3-08d9eadda9be
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Feb 2022 08:33:20.9124
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Q2d8hgc8K9Rl+06bmh/JRP5R5EdLhPFbDwAfOAdIdz0tEHe/uKHOVk/tgKT1SAuM
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB4629
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+I think so, Alex will probably pick that up.
 
-syzbot found the following issue on:
+Thanks,
+Christian.
 
-HEAD commit:    2ade8eef993c Merge tag 'ata-5.17-rc4' of git://git.kernel...
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=16c03872700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=1dcc3374da7c1f7c
-dashboard link: https://syzkaller.appspot.com/bug?extid=6ba34f16b98fe40daef1
-compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
+Am 08.02.22 um 09:28 schrieb zhanglianjie:
+> I am very sorry that I submitted many times due to the character 
+> coding problem. Can PATCH V4 be used?
+>
+>> I'm scratching my head what you are doing here?
+>>
+>> That's the fives time you send out the same patch, so something is 
+>> going wrong here :)
+>>
+>> Please double check why that lands in your outbox over and over again.
+>>
+>> Regards,
+>> Christian.
+>>
+>> Am 08.02.22 um 09:14 schrieb zhanglianjie:
+>>> after the buffer object is successfully mapped, call 
+>>> radeon_bo_kunmap before the function returns.
+>>>
+>>> Signed-off-by: zhanglianjie <zhanglianjie@uniontech.com>
+>>> Reviewed-by: Christian König <christian.koenig@amd.com>
+>>>
+>>> diff --git a/drivers/gpu/drm/radeon/radeon_uvd.c 
+>>> b/drivers/gpu/drm/radeon/radeon_uvd.c
+>>> index 377f9cdb5b53..0558d928d98d 100644
+>>> --- a/drivers/gpu/drm/radeon/radeon_uvd.c
+>>> +++ b/drivers/gpu/drm/radeon/radeon_uvd.c
+>>> @@ -497,6 +497,7 @@ static int radeon_uvd_cs_msg(struct 
+>>> radeon_cs_parser *p, struct radeon_bo *bo,
+>>>       handle = msg[2];
+>>>
+>>>       if (handle == 0) {
+>>> +        radeon_bo_kunmap(bo);
+>>>           DRM_ERROR("Invalid UVD handle!\n");
+>>>           return -EINVAL;
+>>>       }
+>>> @@ -559,12 +560,10 @@ static int radeon_uvd_cs_msg(struct 
+>>> radeon_cs_parser *p, struct radeon_bo *bo,
+>>>           return 0;
+>>>
+>>>       default:
+>>> -
+>>>           DRM_ERROR("Illegal UVD message type (%d)!\n", msg_type);
+>>> -        return -EINVAL;
+>>>       }
+>>>
+>>> -    BUG();
+>>> +    radeon_bo_kunmap(bo);
+>>>       return -EINVAL;
+>>>   }
+>>>
+>>> -- 
+>>> 2.20.1
+>>>
+>>>
+>>>
+>>
+>>
+>
+>
+>
 
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+6ba34f16b98fe40daef1@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KCSAN: data-race in wg_packet_send_staged_packets / wg_packet_send_staged_packets
-
-read to 0xffff888133f5eac8 of 4 bytes by interrupt on cpu 0:
- wg_cpumask_next_online drivers/net/wireguard/queueing.h:129 [inline]
- wg_queue_enqueue_per_device_and_peer drivers/net/wireguard/queueing.h:176 [inline]
- wg_packet_create_data drivers/net/wireguard/send.c:320 [inline]
- wg_packet_send_staged_packets+0x41a/0x800 drivers/net/wireguard/send.c:387
- wg_packet_send_keepalive+0xfc/0x110 drivers/net/wireguard/send.c:239
- wg_expired_send_persistent_keepalive+0x38/0x50 drivers/net/wireguard/timers.c:141
- call_timer_fn+0x2e/0x240 kernel/time/timer.c:1421
- expire_timers+0x116/0x240 kernel/time/timer.c:1466
- __run_timers+0x368/0x410 kernel/time/timer.c:1734
- run_timer_softirq+0x2e/0x60 kernel/time/timer.c:1747
- __do_softirq+0x158/0x2de kernel/softirq.c:558
- __irq_exit_rcu kernel/softirq.c:637 [inline]
- irq_exit_rcu+0x37/0x70 kernel/softirq.c:649
- sysvec_apic_timer_interrupt+0x8d/0xb0 arch/x86/kernel/apic/apic.c:1097
- asm_sysvec_apic_timer_interrupt+0x12/0x20
- __x64_sys_clock_nanosleep+0x54/0x60 kernel/time/posix-timers.c:1245
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-write to 0xffff888133f5eac8 of 4 bytes by interrupt on cpu 1:
- wg_cpumask_next_online drivers/net/wireguard/queueing.h:133 [inline]
- wg_queue_enqueue_per_device_and_peer drivers/net/wireguard/queueing.h:176 [inline]
- wg_packet_create_data drivers/net/wireguard/send.c:320 [inline]
- wg_packet_send_staged_packets+0x455/0x800 drivers/net/wireguard/send.c:387
- wg_packet_send_keepalive+0xfc/0x110 drivers/net/wireguard/send.c:239
- wg_expired_send_persistent_keepalive+0x38/0x50 drivers/net/wireguard/timers.c:141
- call_timer_fn+0x2e/0x240 kernel/time/timer.c:1421
- expire_timers+0x116/0x240 kernel/time/timer.c:1466
- __run_timers+0x368/0x410 kernel/time/timer.c:1734
- run_timer_softirq+0x2e/0x60 kernel/time/timer.c:1747
- __do_softirq+0x158/0x2de kernel/softirq.c:558
- __irq_exit_rcu kernel/softirq.c:637 [inline]
- irq_exit_rcu+0x37/0x70 kernel/softirq.c:649
- sysvec_apic_timer_interrupt+0x8d/0xb0 arch/x86/kernel/apic/apic.c:1097
- asm_sysvec_apic_timer_interrupt+0x12/0x20
- is_atomic kernel/kcsan/core.c:262 [inline]
- should_watch kernel/kcsan/core.c:275 [inline]
- check_access kernel/kcsan/core.c:741 [inline]
- __tsan_read2+0x13e/0x180 kernel/kcsan/core.c:1012
- tlb_flush_pte_range include/asm-generic/tlb.h:524 [inline]
- zap_pte_range+0x559/0x10e0 mm/memory.c:1366
- zap_pmd_range mm/memory.c:1490 [inline]
- zap_pud_range mm/memory.c:1519 [inline]
- zap_p4d_range mm/memory.c:1540 [inline]
- unmap_page_range+0x2dc/0x3d0 mm/memory.c:1561
- unmap_single_vma+0x157/0x210 mm/memory.c:1606
- unmap_vmas+0xd0/0x180 mm/memory.c:1638
- exit_mmap+0x261/0x4b0 mm/mmap.c:3178
- __mmput+0x27/0x1b0 kernel/fork.c:1114
- mmput+0x3d/0x50 kernel/fork.c:1135
- exit_mm+0xdb/0x170 kernel/exit.c:507
- do_exit+0x569/0x16a0 kernel/exit.c:793
- do_group_exit+0xa5/0x160 kernel/exit.c:935
- get_signal+0x8cf/0x15d0 kernel/signal.c:2862
- arch_do_signal_or_restart+0x8c/0x2e0 arch/x86/kernel/signal.c:868
- handle_signal_work kernel/entry/common.c:148 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:172 [inline]
- exit_to_user_mode_prepare+0x113/0x190 kernel/entry/common.c:207
- __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
- syscall_exit_to_user_mode+0x20/0x40 kernel/entry/common.c:300
- do_syscall_64+0x50/0xd0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-value changed: 0x00000001 -> 0x00000000
-
-Reported by Kernel Concurrency Sanitizer on:
-CPU: 1 PID: 21549 Comm: syz-executor.4 Not tainted 5.17.0-rc3-syzkaller-00013-g2ade8eef993c-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-==================================================================
-sd 0:0:1:0: [sda] tag#3016 FAILED Result: hostbyte=DID_ABORT driverbyte=DRIVER_OK cmd_age=0s
-sd 0:0:1:0: [sda] tag#3016 CDB: opcode=0xe5 (vendor)
-sd 0:0:1:0: [sda] tag#3016 CDB[00]: e5 f4 32 73 2f 4e 09 6d 26 e2 c7 35 d1 35 12 1c
-sd 0:0:1:0: [sda] tag#3016 CDB[10]: 92 1b da 40 b8 58 5b a8 d4 7d 34 f3 90 4c f1 2d
-sd 0:0:1:0: [sda] tag#3016 CDB[20]: ba
-sd 0:0:1:0: [sda] tag#3023 FAILED Result: hostbyte=DID_ABORT driverbyte=DRIVER_OK cmd_age=0s
-sd 0:0:1:0: [sda] tag#3023 CDB: opcode=0xe5 (vendor)
-sd 0:0:1:0: [sda] tag#3023 CDB[00]: e5 f4 32 73 2f 4e 09 6d 26 e2 c7 35 d1 35 12 1c
-sd 0:0:1:0: [sda] tag#3023 CDB[10]: 92 1b da 40 b8 58 5b a8 d4 7d 34 f3 90 4c f1 2d
-sd 0:0:1:0: [sda] tag#3023 CDB[20]: ba
-sd 0:0:1:0: [sda] tag#3025 FAILED Result: hostbyte=DID_ABORT driverbyte=DRIVER_OK cmd_age=0s
-sd 0:0:1:0: [sda] tag#3025 CDB: opcode=0xe5 (vendor)
-sd 0:0:1:0: [sda] tag#3025 CDB[00]: e5 f4 32 73 2f 4e 09 6d 26 e2 c7 35 d1 35 12 1c
-sd 0:0:1:0: [sda] tag#3025 CDB[10]: 92 1b da 40 b8 58 5b a8 d4 7d 34 f3 90 4c f1 2d
-sd 0:0:1:0: [sda] tag#3025 CDB[20]: ba
-sd 0:0:1:0: [sda] tag#3026 FAILED Result: hostbyte=DID_ABORT driverbyte=DRIVER_OK cmd_age=0s
-sd 0:0:1:0: [sda] tag#3026 CDB: opcode=0xe5 (vendor)
-sd 0:0:1:0: [sda] tag#3026 CDB[00]: e5 f4 32 73 2f 4e 09 6d 26 e2 c7 35 d1 35 12 1c
-sd 0:0:1:0: [sda] tag#3026 CDB[10]: 92 1b da 40 b8 58 5b a8 d4 7d 34 f3 90 4c f1 2d
-sd 0:0:1:0: [sda] tag#3026 CDB[20]: ba
-sd 0:0:1:0: [sda] tag#3027 FAILED Result: hostbyte=DID_ABORT driverbyte=DRIVER_OK cmd_age=0s
-sd 0:0:1:0: [sda] tag#3027 CDB: opcode=0xe5 (vendor)
-sd 0:0:1:0: [sda] tag#3027 CDB[00]: e5 f4 32 73 2f 4e 09 6d 26 e2 c7 35 d1 35 12 1c
-sd 0:0:1:0: [sda] tag#3027 CDB[10]: 92 1b da 40 b8 58 5b a8 d4 7d 34 f3 90 4c f1 2d
-sd 0:0:1:0: [sda] tag#3027 CDB[20]: ba
-sd 0:0:1:0: [sda] tag#3029 FAILED Result: hostbyte=DID_ABORT driverbyte=DRIVER_OK cmd_age=0s
-sd 0:0:1:0: [sda] tag#3029 CDB: opcode=0xe5 (vendor)
-sd 0:0:1:0: [sda] tag#3029 CDB[00]: e5 f4 32 73 2f 4e 09 6d 26 e2 c7 35 d1 35 12 1c
-sd 0:0:1:0: [sda] tag#3029 CDB[10]: 92 1b da 40 b8 58 5b a8 d4 7d 34 f3 90 4c f1 2d
-sd 0:0:1:0: [sda] tag#3029 CDB[20]: ba
-sd 0:0:1:0: [sda] tag#3056 FAILED Result: hostbyte=DID_ABORT driverbyte=DRIVER_OK cmd_age=0s
-sd 0:0:1:0: [sda] tag#3056 CDB: opcode=0xe5 (vendor)
-sd 0:0:1:0: [sda] tag#3056 CDB[00]: e5 f4 32 73 2f 4e 09 6d 26 e2 c7 35 d1 35 12 1c
-sd 0:0:1:0: [sda] tag#3056 CDB[10]: 92 1b da 40 b8 58 5b a8 d4 7d 34 f3 90 4c f1 2d
-sd 0:0:1:0: [sda] tag#3056 CDB[20]: ba
-sd 0:0:1:0: [sda] tag#3057 FAILED Result: hostbyte=DID_ABORT driverbyte=DRIVER_OK cmd_age=0s
-sd 0:0:1:0: [sda] tag#3057 CDB: opcode=0xe5 (vendor)
-sd 0:0:1:0: [sda] tag#3057 CDB[00]: e5 f4 32 73 2f 4e 09 6d 26 e2 c7 35 d1 35 12 1c
-sd 0:0:1:0: [sda] tag#3057 CDB[10]: 92 1b da 40 b8 58 5b a8 d4 7d 34 f3 90 4c f1 2d
-sd 0:0:1:0: [sda] tag#3057 CDB[20]: ba
-sd 0:0:1:0: [sda] tag#3059 FAILED Result: hostbyte=DID_ABORT driverbyte=DRIVER_OK cmd_age=0s
-sd 0:0:1:0: [sda] tag#3059 CDB: opcode=0xe5 (vendor)
-sd 0:0:1:0: [sda] tag#3059 CDB[00]: e5 f4 32 73 2f 4e 09 6d 26 e2 c7 35 d1 35 12 1c
-sd 0:0:1:0: [sda] tag#3059 CDB[10]: 92 1b da 40 b8 58 5b a8 d4 7d 34 f3 90 4c f1 2d
-sd 0:0:1:0: [sda] tag#3059 CDB[20]: ba
-sd 0:0:1:0: [sda] tag#3060 FAILED Result: hostbyte=DID_ABORT driverbyte=DRIVER_OK cmd_age=0s
-sd 0:0:1:0: [sda] tag#3060 CDB: opcode=0xe5 (vendor)
-sd 0:0:1:0: [sda] tag#3060 CDB[00]: e5 f4 32 73 2f 4e 09 6d 26 e2 c7 35 d1 35 12 1c
-sd 0:0:1:0: [sda] tag#3060 CDB[10]: 92 1b da 40 b8 58 5b a8 d4 7d 34 f3 90 4c f1 2d
-sd 0:0:1:0: [sda] tag#3060 CDB[20]: ba
-sd 0:0:1:0: [sda] tag#3061 FAILED Result: hostbyte=DID_ABORT driverbyte=DRIVER_OK cmd_age=0s
-sd 0:0:1:0: [sda] tag#3061 CDB: opcode=0xe5 (vendor)
-sd 0:0:1:0: [sda] tag#3061 CDB[00]: e5 f4 32 73 2f 4e 09 6d 26 e2 c7 35 d1 35 12 1c
-sd 0:0:1:0: [sda] tag#3061 CDB[10]: 92 1b da 40 b8 58 5b a8 d4 7d 34 f3 90 4c f1 2d
-sd 0:0:1:0: [sda] tag#3061 CDB[20]: ba
-sd 0:0:1:0: [sda] tag#3062 FAILED Result: hostbyte=DID_ABORT driverbyte=DRIVER_OK cmd_age=0s
-sd 0:0:1:0: [sda] tag#3062 CDB: opcode=0xe5 (vendor)
-sd 0:0:1:0: [sda] tag#3062 CDB[00]: e5 f4 32 73 2f 4e 09 6d 26 e2 c7 35 d1 35 12 1c
-sd 0:0:1:0: [sda] tag#3062 CDB[10]: 92 1b da 40 b8 58 5b a8 d4 7d 34 f3 90 4c f1 2d
-sd 0:0:1:0: [sda] tag#3062 CDB[20]: ba
-sd 0:0:1:0: [sda] tag#3063 FAILED Result: hostbyte=DID_ABORT driverbyte=DRIVER_OK cmd_age=0s
-sd 0:0:1:0: [sda] tag#3063 CDB: opcode=0xe5 (vendor)
-sd 0:0:1:0: [sda] tag#3063 CDB[00]: e5 f4 32 73 2f 4e 09 6d 26 e2 c7 35 d1 35 12 1c
-sd 0:0:1:0: [sda] tag#3063 CDB[10]: 92 1b da 40 b8 58 5b a8 d4 7d 34 f3 90 4c f1 2d
-sd 0:0:1:0: [sda] tag#3063 CDB[20]: ba
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

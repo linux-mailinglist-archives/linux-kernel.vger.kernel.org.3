@@ -2,135 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DA544AD2D1
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 09:08:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 388124AD2D6
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 09:09:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243948AbiBHIIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 03:08:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48076 "EHLO
+        id S1348908AbiBHIJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 03:09:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229833AbiBHII2 (ORCPT
+        with ESMTP id S229543AbiBHIJk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 03:08:28 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F4FC0401EF
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 00:08:27 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id v5-20020a17090a4ec500b001b8b702df57so1410391pjl.2
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 00:08:27 -0800 (PST)
+        Tue, 8 Feb 2022 03:09:40 -0500
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 784A7C0401EF
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 00:09:40 -0800 (PST)
+Received: by mail-yb1-xb32.google.com with SMTP id v186so47709986ybg.1
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 00:09:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=icZsox5sq6ultu6TBsIJo70bSWmvRrOrYh40bnoCXSA=;
-        b=f7BLPpX9Kdcp6c+XKww27RgznlN9w7vJ/rwnYc8aXFfbhuPjTKndfj98aEe9aGp/H0
-         gDW0Pbxs49VUqPYttoU+IDhO88/znyPoQFDeWB7NEEoAttwom3pdt7Xf6CXIpp9ToWmH
-         CXUhHUtr2zA9exLVlapzmyY5arLAdeyZgG6fnhps8gJiedratNKwoa6lisn53DHrCdjx
-         drF4YV3XNcz/DRTLYi8EKs9oWPIpGofhQpe+OAUP5ShZFW/l2AC+6ZFgz5VFyvVDf/tO
-         93TZDufIftMx1+LivUOiuw4moCgCviWOLRQuM/YNE1k3L1DSd9/8M8dlFl9vOr/TAjfh
-         JbTw==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DC5h5QPa2MMSD8jMuUZaOZTMv0rKCEv7tr+WwakctiM=;
+        b=UKt/5gqtEQEDR+I4jR//5bWv57hPVaW9KmAr8xHRshFW+V9PDSWkFrBE8Hyb8wlSkA
+         QQKQ+stzgyEgp5J4DyVY4bvPNBtHP4wSzJ6uJck+8cplu8GPkuIVWQ+Y8zm1xv27s0Zu
+         cR2ljgqob8w9EmBGVw0EdJVkId5N+xNPUHeADg5epuSLdcXTrW9Tqo5OcA22EaRu8U3K
+         l3cuLzKBbOc9GbQXk+h497gXyT6KtsqpW966ysKE5jotsGOXr7l3B+dKnggATk5GoyUy
+         KJOt1xwxzqYiEqEVIBRmXg0oLWnTj4m1q1+iR+FtOucXjtQu9GfhLJMBe3O/kYgazNfR
+         tnQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=icZsox5sq6ultu6TBsIJo70bSWmvRrOrYh40bnoCXSA=;
-        b=mDIPvgGS4IcapT2e+F+zc4ZFY/5fkH3cWW4qJ71RBLA7weu9GJU8bffVo1ft9YnhmG
-         hZFh+KlARENPurZO0Jz87y/8vlNRtqto/yLKq769brq6A3HjSwTeonTGcjuP+uWmWYoS
-         8W32ME1GT01x5H0y0AxbEiUTehDd0Fx1ZLObMTea6RJ4tDzDh5JjngytjRW+WFXw9Gn2
-         ed9rg4fwiTzUXj4N2GdtpVNIPIiRp3DBuP9znjdikMqoncBtPK+4AVtHyBiwDO+osSof
-         sBqZuMkxnHnmdtk3MRXFKLMVQ4ZQMLl8UCZgMjF+w7eeVIqZZn3pVynvGyiMUQ3aSMtZ
-         ZzhQ==
-X-Gm-Message-State: AOAM530IZdAxS5uT03DKU/xz5uK0VbxijnbbbLlfi+zqXgew+QVygvio
-        WmcdmZqri1MVuWB1EKoADUM=
-X-Google-Smtp-Source: ABdhPJz+3oXn7aGYiRSFAyWkWE8xU9mGG0mXjlBNYy3tYZjcQz67PEbxPu/fK6PzUMZpvm6ZKiQmOg==
-X-Received: by 2002:a17:90b:4c8e:: with SMTP id my14mr23545pjb.243.1644307707177;
-        Tue, 08 Feb 2022 00:08:27 -0800 (PST)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id p1sm15875187pfh.98.2022.02.08.00.08.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Feb 2022 00:08:26 -0800 (PST)
-Message-ID: <1105cf7d-0d61-3ae2-f372-3b1f80c08c60@gmail.com>
-Date:   Tue, 8 Feb 2022 16:08:17 +0800
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DC5h5QPa2MMSD8jMuUZaOZTMv0rKCEv7tr+WwakctiM=;
+        b=OafxFoHz1oOiGrgQDdCEoRA3DqcwOJzSK/dFs/YnOhzM+gyEfjHmv1jeIlDJZfW4Q2
+         nt6qXaQCduRieqyHriWXIw+qG/OqrudoYxbi33yY4qKf7odG2lNlO7V+zxNdOL8fKY2K
+         h3KYeZk9mnHDW0DyGiDF+9Id4iqqfw6QqInny2vqCq4mHVxFAO0lyJckIs1vcYePUEZz
+         MYMb2aioWu/RzfU9lhE4hIpQi2H9ZI8IUWDS/DuF11gil5B6Nzn+pUoVq1/bcL+kGqlQ
+         4wUnoZdydDdmUN1DFzMMmvNJI1TEV8gGlRrml2M7KyEcgSx6lh4wIaVhyI3ZYeYoePEU
+         k56Q==
+X-Gm-Message-State: AOAM530ASzqYYA7W1DmwHpZhpvZfV3z47BFPr5rXfAl1urDsAK16cHTe
+        WKv9mDMrujXJlQ8tpqhqiuyUjLKGKsq9v6r1MBx2KA==
+X-Google-Smtp-Source: ABdhPJyFSmuR7M4HIJ31YSJoOUpobAKTBK69kzVotLKdLdB2NRipgBTZ2XLKWECEqSNiqnwAnFetqc4Ion8CCMp0OGY=
+X-Received: by 2002:a81:ad46:: with SMTP id l6mr3668263ywk.31.1644307779769;
+ Tue, 08 Feb 2022 00:09:39 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.0
-Subject: Re: [PATCH] x86/cpufeatures: Move the definition of X86_FEATURE_AMX_*
- to the word 18
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        Jing Liu <jing2.liu@intel.com>, linux-kernel@vger.kernel.org,
-        "Bae, Chang Seok" <chang.seok.bae@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-References: <20220117062344.58862-1-likexu@tencent.com>
- <8b274c5f-6b68-aed9-117d-f89249e57e18@intel.com>
- <47362220-30d5-c513-a2aa-61187ee91c41@redhat.com>
- <bc272301-af11-621a-3bda-ee398754fd0a@gmail.com> <YfVM+xdDS76E3d6r@zn.tnic>
-From:   Like Xu <like.xu.linux@gmail.com>
-Organization: Tencent
-In-Reply-To: <YfVM+xdDS76E3d6r@zn.tnic>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220207063249.1833066-1-hch@lst.de> <20220207063249.1833066-5-hch@lst.de>
+In-Reply-To: <20220207063249.1833066-5-hch@lst.de>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Tue, 8 Feb 2022 16:09:03 +0800
+Message-ID: <CAMZfGtUqbU9VpCOA-9bdU6d1CoQ7n8D+26v4j79uLcH1uc5Q2w@mail.gmail.com>
+Subject: Re: [PATCH 4/8] mm: move free_devmap_managed_page to memremap.c
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Alistair Popple <apopple@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        nouveau@lists.freedesktop.org, nvdimm@lists.linux.dev,
+        Linux Memory Management List <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/1/2022 10:19 pm, Borislav Petkov wrote:
-> On Wed, Jan 19, 2022 at 11:41:31AM +0800, Like Xu wrote:
->> Thanks Dave and Paolo.  Just for your convenience:
->>
->>  From 588c2221999c1f5860188a7cbaeb0d4f80c6d727 Mon Sep 17 00:00:00 2001
->> From: Like Xu <likexu@tencent.com>
->> Date: Mon, 17 Jan 2022 14:23:44 +0800
->> Subject: [PATCH v2] x86/cpufeatures: Move AMX CPU feature defines to correct
->>   word location
->>
->> From: Like Xu <likexu@tencent.com>
->>
->> The word 18 for Intel-defined CPU features from CPUID level 0x00000007:0 (EDX)
->> has been defined in the same file. Move the definitions of X86_FEATURE_AMX_* to
->> the right entry to prevent misinterpretation. No functional change intended.
->>
->> Signed-off-by: Like Xu <likexu@tencent.com>
->> Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
->> ---
->> v1 -> v2 Changelog:
->> - Refine the commit message and subject; (Dave)
->>
->>   arch/x86/include/asm/cpufeatures.h | 6 +++---
->>   1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> $ test-apply.sh /tmp/urgent.01
+On Mon, Feb 7, 2022 at 2:42 PM Christoph Hellwig <hch@lst.de> wrote:
+>
+> free_devmap_managed_page has nothing to do with the code in swap.c,
+> move it to live with the rest of the code for devmap handling.
+>
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
 
-Emm, are you willing to make "test-apply.sh" public (or have done) and let 
-others benefit ?
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
 
-> checking file arch/x86/include/asm/cpufeatures.h
-> Hunk #1 FAILED at 299.
-> patch: **** malformed patch at line 45: IBPB) */
-> 
-> Don't ever send patches from
-
-Got you.
-
-> 
-> User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0) Gecko/20100101 Thunderbird/91.5.0
-> 
-> That thing mangles them.
-> 
-> See Documentation/process/email-clients.rst for further info.
-> 
-
-Sorry for the late reply, and here's a new version from git-send-email:
-
-https://lore.kernel.org/lkml/20220208080103.8119-1-likexu@tencent.com/
+Thanks.

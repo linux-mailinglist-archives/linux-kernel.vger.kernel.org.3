@@ -2,61 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7503C4AD662
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:25:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EBA64AD664
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:25:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357106AbiBHLYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 06:24:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49996 "EHLO
+        id S1343512AbiBHLYy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 06:24:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244906AbiBHKEE (ORCPT
+        with ESMTP id S243254AbiBHKEb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 05:04:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3497FC03FEC0;
-        Tue,  8 Feb 2022 02:04:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C82C5B819AA;
-        Tue,  8 Feb 2022 10:04:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0D1CC340ED;
-        Tue,  8 Feb 2022 10:03:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644314639;
-        bh=9XRxX5n5xmPLXTFls/kdqprhfHPlsurq93wudUcHvmI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ydMfYgvttYlxl9uRj9Idy5Mfb8u3n3OXW3As+08WOsMeVgyEFsIELiokvKXAza88c
-         q+ArZi2JeMzdkwiYIC0h7rfZzDkecdHEsCX5Opcb2I4tCAzLDMedbto4z8meqsvHsG
-         itZ329OsvY3CyLkSCy7t5yq0VrQU3vmhnOF9VhfA=
-Date:   Tue, 8 Feb 2022 11:03:56 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Harald Seiler <hws@denx.de>
-Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        linux-serial@vger.kernel.org,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-kernel@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] tty: serial: imx: Add fast path when rs485 delays are 0
-Message-ID: <YgJADKxWfOZroS35@kroah.com>
-References: <20220119145204.238767-1-hws@denx.de>
- <20220119151145.zft47rzebnabiej2@pengutronix.de>
- <0df5d9ea2081f5d798f80297efb973f542dae183.camel@denx.de>
- <20220119162122.jmnz2hxid76p4hli@pengutronix.de>
- <5cab27cab5a39ef5e19992bc54e57c3f6106dafe.camel@denx.de>
+        Tue, 8 Feb 2022 05:04:31 -0500
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5CBAC03FEC0;
+        Tue,  8 Feb 2022 02:04:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1644314671; x=1675850671;
+  h=message-id:date:mime-version:subject:from:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=FDupWd2GNrhG73l1IP8maOM/OD173X5J2JD8dNdxWlI=;
+  b=vjp7fRjtWlkpApX6/Q2fO4CGAfzbkv0cMksiOaV6/sfDhgy8kY8nDMrH
+   7hLXrTkbo6GuFdGh2Ufn6Mruw4psV543v7lKsp6FCQ2mFD/P0BrLegHpL
+   z6H2Xrgv9xq00UCB8S+Cs70VQmUgSBxt5SYSraclJXYSvMByRjI8/CTWY
+   0=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 08 Feb 2022 02:04:31 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 02:04:30 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Tue, 8 Feb 2022 02:04:29 -0800
+Received: from [10.216.24.23] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Tue, 8 Feb 2022
+ 02:04:26 -0800
+Message-ID: <ca306d7c-d816-3cbd-8c65-2c3619739d47@quicinc.com>
+Date:   Tue, 8 Feb 2022 15:34:22 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v5] usb: host: xhci-plat: Set XHCI_SKIP_PHY_INIT quirk for
+ DWC3 controller
+Content-Language: en-US
+From:   Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        "Doug Anderson" <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>
+References: <1640153383-21036-1-git-send-email-quic_c_sanm@quicinc.com>
+ <Ydb79/twbxLDJB8/@kroah.com>
+ <d17330f1-d85e-b8c2-9e87-10d109c25abb@quicinc.com>
+ <YfE9s06CIv1P3bA/@kroah.com>
+ <f45f5952-e31c-5e9d-2560-064199beb29f@quicinc.com>
+In-Reply-To: <f45f5952-e31c-5e9d-2560-064199beb29f@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <5cab27cab5a39ef5e19992bc54e57c3f6106dafe.camel@denx.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,103 +77,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 05:59:46PM +0100, Harald Seiler wrote:
-> Hi,
-> 
-> On Wed, 2022-01-19 at 17:21 +0100, Uwe Kleine-K�nig wrote:
-> > On Wed, Jan 19, 2022 at 04:20:12PM +0100, Harald Seiler wrote:
-> > > Hi,
-> > > 
-> > > On Wed, 2022-01-19 at 16:11 +0100, Uwe Kleine-K�nig wrote:
-> > > > On Wed, Jan 19, 2022 at 03:52:03PM +0100, Harald Seiler wrote:
-> > > > > Right now, even when `delay_rts_before_send` and `delay_rts_after_send`
-> > > > > are 0, the hrtimer is triggered (with timeout 0) which can introduce a
-> > > > > few 100us of additional overhead on slower i.MX platforms.
-> > > > > 
-> > > > > Implement a fast path when the delays are 0, where the RTS signal is
-> > > > > toggled immediately instead of going through an hrtimer.  This fast path
-> > > > > behaves identical to the code before delay support was implemented.
-> > > > > 
-> > > > > Signed-off-by: Harald Seiler <hws@denx.de>
-> > > > > ---
-> > > > >  drivers/tty/serial/imx.c | 18 ++++++++++++++----
-> > > > >  1 file changed, 14 insertions(+), 4 deletions(-)
-> > > > > 
-> > > > > diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
-> > > > > index df8a0c8b8b29..67bbbb69229d 100644
-> > > > > --- a/drivers/tty/serial/imx.c
-> > > > > +++ b/drivers/tty/serial/imx.c
-> > > > > @@ -455,9 +455,14 @@ static void imx_uart_stop_tx(struct uart_port *port)
-> > > > >  	if (port->rs485.flags & SER_RS485_ENABLED) {
-> > > > >  		if (sport->tx_state == SEND) {
-> > > > >  			sport->tx_state = WAIT_AFTER_SEND;
-> > > > > -			start_hrtimer_ms(&sport->trigger_stop_tx,
-> > > > > +
-> > > > > +			if (port->rs485.delay_rts_after_send > 0) {
-> > > > > +				start_hrtimer_ms(&sport->trigger_stop_tx,
-> > > > >  					 port->rs485.delay_rts_after_send);
-> > > > > -			return;
-> > > > > +				return;
-> > > > > +			}
-> > > > > +
-> > > > > +			/* continue without any delay */
-> > > > 
-> > > > Is it right to keep the assignment sport->tx_state = WAIT_AFTER_SEND ?
-> > > 
-> > > I am keeping the assignment intentionally, to fall into the
-> > > if(state == WAIT_AFTER_RTS) below (which then sets the state to OFF).
-> > > I originally had the code structured like this:
-> > > 
-> > > 	if (port->rs485.delay_rts_after_send > 0) {
-> > > 		sport->tx_state = WAIT_AFTER_SEND;
-> > > 		start_hrtimer_ms(&sport->trigger_stop_tx,
-> > > 			 port->rs485.delay_rts_after_send);
-> > > 		return;
-> > > 	} else {
-> > > 		/* continue without any delay */
-> > > 		sport->tx_state = WAIT_AFTER_SEND;
-> > > 	}
-> > > 
-> > > This is functionally identical, but maybe a bit more explicit.
-> > > 
-> > > Not sure what is more clear to read?
-> > 
-> > I didn't oppose to the readability thing. With your patch you skip
-> > starting the stop_tx timer and that would usually care for calling
-> > imx_uart_stop_tx and setting sport->tx_state = OFF. This doesn't happen
-> > with your patch any more.
-> 
-> Not starting the timer is the entire point of the patch - instead, the
-> code which would run inside the timer callback now runs immediately. To
-> do this, I set the tx_state to WAIT_AFTER_SEND and _don't_ do the early
-> return which leads into the if(tx_state == WAIT_AFTER_SEND) below.  This
-> is the code-path which normally runs later in the hrtimer callback.
-> 
-> I suppose it would have been good to provide more context lines in the
-> patch... Here is the relevant bit (in the changed version now):
-> 
-> 	if (sport->tx_state == SEND) {
-> 		sport->tx_state = WAIT_AFTER_SEND;
-> 
-> 		if (port->rs485.delay_rts_after_send > 0) {
-> 			start_hrtimer_ms(&sport->trigger_stop_tx,
-> 				 port->rs485.delay_rts_after_send);
-> 			return;
-> 		}
-> 
-> 		/* continue without any delay */
-> 	}
-> 
-> 	if (sport->tx_state == WAIT_AFTER_RTS ||
-> 	    sport->tx_state == WAIT_AFTER_SEND) {
-> 		/* ... actual rts toggling ... */
-> 
-> 		sport->tx_state = OFF;
-> 	}
-> 
+Hi Greg,
 
-Uwe, any thoughts about if this patch should be taken or not?
+On 1/27/2022 10:28 AM, Sandeep Maheswaram wrote:
+>
+> On 1/26/2022 5:55 PM, Greg Kroah-Hartman wrote:
+>> On Fri, Jan 07, 2022 at 10:27:59AM +0530, Sandeep Maheswaram wrote:
+>>> On 1/6/2022 7:55 PM, Greg Kroah-Hartman wrote:
+>>>> On Wed, Dec 22, 2021 at 11:39:43AM +0530, Sandeep Maheswaram wrote:
+>>>>> Set XHCI_SKIP_PHY_INIT quirk to avoid phy initialization twice.
+>>>>> Runtime suspend of phy drivers was failing from DWC3 driver as 
+>>>>> runtime
+>>>>> usage value is 2 because the phy is initialized from DWC3 and HCD 
+>>>>> core.
+>>>>> DWC3 manages phy in their core drivers. Set this quirk to avoid phy
+>>>>> initialization in HCD core.
+>>>>>
+>>>>> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+>>>>> ---
+>>>>> v5:
+>>>>> Added comment to explain the change done.
+>>>>> v4:
+>>>>> Changed pdev->dev.parent->of_node to sysdev->of_node
+>>>>>
+>>>>>    drivers/usb/host/xhci-plat.c | 8 ++++++++
+>>>>>    1 file changed, 8 insertions(+)
+>>>>>
+>>>>> diff --git a/drivers/usb/host/xhci-plat.c 
+>>>>> b/drivers/usb/host/xhci-plat.c
+>>>>> index c1edcc9..e6014d4 100644
+>>>>> --- a/drivers/usb/host/xhci-plat.c
+>>>>> +++ b/drivers/usb/host/xhci-plat.c
+>>>>> @@ -327,6 +327,14 @@ static int xhci_plat_probe(struct 
+>>>>> platform_device *pdev)
+>>>>>                         &xhci->imod_interval);
+>>>>>        }
+>>>>> +    /*
+>>>>> +     * Set XHCI_SKIP_PHY_INIT quirk to avoid phy initialization 
+>>>>> twice.
+>>>>> +     * DWC3 manages phy in their core drivers. Set this quirk to 
+>>>>> avoid phy
+>>>>> +     * initialization in HCD core.
+>>>>> +     */
+>>>>> +    if (of_device_is_compatible(sysdev->of_node, "snps,dwc3"))
+>>>>> +        xhci->quirks |= XHCI_SKIP_PHY_INIT;
+>>>>> +
+>>>> Why is this function caring about dwc3 stuff?  Shoudn't this be a
+>>>> "generic" device property instead of this device-specific one?
+>>>>
+>>>> thanks,
+>>>>
+>>>> greg k-h
+>>> This quirk is set only if required for some controllers (eg: dwc3 & 
+>>> cdns3).
+>>>
+>>> Please check below commit.
+>>>
+>>> https://lore.kernel.org/all/20200918131752.16488-5-mathias.nyman@linux.intel.com/ 
+>>>
+>> That commit has nothing to do with a specific "dwc3" quirk anywhere.
+>> Why not set this flag in the specific platform xhci driver instead where
+>> it belongs?
+>>
+>> thanks,
+>>
+>> greg k-h
+>
+> There is no specific xhci platform driver for dwc3 controllers.
+>
+> dwc3 controllers use xhci-plat driver .
+>
+> We can add this quirk in usb/dwc3/host.c as cdns3 does but that 
+> requires tying dwc3 and xhci driver .
+>
+> https://patchwork.kernel.org/project/linux-arm-msm/patch/1633946518-13906-1-git-send-email-sanm@codeaurora.org/ 
+>
+>
+> Regards
+>
+> Sandeep
+>
+>
+Can you suggest any other method to set this quirk for dwc3 controllers.
 
-thanks,
+Regards
 
-greg k-h
+Sandeep
+

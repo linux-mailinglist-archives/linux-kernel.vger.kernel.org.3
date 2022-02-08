@@ -2,147 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F37894ACD93
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:08:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C408C4ACD95
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:08:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240999AbiBHBHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 20:07:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50392 "EHLO
+        id S239043AbiBHBHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 20:07:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343927AbiBHAGq (ORCPT
+        with ESMTP id S1343938AbiBHALK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 19:06:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 07E81C061355
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 16:06:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644278805;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qSeJD0brKmpckZLSCQ8ujFjUI9lZNWQ7mt4YwsrLwjM=;
-        b=i1SiNLuRMdqmNL95ihW13+2EDTD3oQkc6Wm59AmdYTKaoTLX/vjVsmIiXwf9sOT8ivU/V9
-        9uc7abwYoqhStPpGuYDEZtTW6BzRwWM5q9OKmtccv+i9SbfidJPSL74tb7t/Oju6/4u9sj
-        m/x//9ITAN4QaOGAHXNcvRMGwBsq0V0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-615-FLVScr2gNwyjB6VhCJlrJA-1; Mon, 07 Feb 2022 19:06:40 -0500
-X-MC-Unique: FLVScr2gNwyjB6VhCJlrJA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id CA50D8143EF;
-        Tue,  8 Feb 2022 00:06:37 +0000 (UTC)
-Received: from llong.com (unknown [10.22.32.15])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1AC0A5C2EF;
-        Tue,  8 Feb 2022 00:06:36 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, Ira Weiny <ira.weiny@intel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Roman Gushchin <guro@fb.com>,
-        Rafael Aquini <aquini@redhat.com>,
-        Waiman Long <longman@redhat.com>
-Subject: [PATCH v5 4/4] mm/page_owner: Record task command name
-Date:   Mon,  7 Feb 2022 19:05:32 -0500
-Message-Id: <20220208000532.1054311-5-longman@redhat.com>
-In-Reply-To: <20220208000532.1054311-1-longman@redhat.com>
-References: <20220208000532.1054311-1-longman@redhat.com>
+        Mon, 7 Feb 2022 19:11:10 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BF7FC061355
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 16:11:09 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id p5so44899751ybd.13
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 16:11:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nzVf95jt9Q8X/Ra0n/mrM0IlQCfTHamEzF56FJSu1k4=;
+        b=Hac8v4TTt2SQ4hjUwDGtWfK7fRdekCOu2cRFwefzFpm9OlbrD0yQw+21oaUoqEiheh
+         rQWxUdL+jeSocJkvGBzMR9yXBTic6I/9PLuh1a2wqh2HEtLM6ZpFtZny3rU44280Qw1F
+         sDJ5gsHrI9JcedE34z6i72q0p0vEs5QEORBqQIgYVqukLsTLSsRfhfDLB5NDLxFFHtvG
+         DmU2D/wClFeKS6xZwG9I3mjXImZ8F85qS/vYksQ5xGMUNRFAHlyo9t6rWkhOAB0u8/J2
+         SnjQrD6b1+uuG7FR2mGbAYRrLNiwQGxtwQxTJMe7IFpDzUMbNBPndIg1kLsgAjCoCpRL
+         uDQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nzVf95jt9Q8X/Ra0n/mrM0IlQCfTHamEzF56FJSu1k4=;
+        b=Pb2ja9/YRZAZEFxrmA7bSzOGT0ZGblNa2PLCOZt/ePjvQ3kyXwpfJkC9n5X0VI6dA2
+         1vC4tHQrq49tsgM5qfpK/UCvOceZacCHiHxAizbbiDOEjy+eTk5p1pje17dVgW+9hPru
+         H/sDLM3wevJmxZ3ACOOFWeNym6+Xvqr3ZvN0dYIywq6rK68479Qxja4E3WYBMUZbzO6Z
+         uc2INQeqwuoJ2KNlr8Px90fiI3IlkBs1RPVIGOVovMYYA3HMXg0KcXV4Nw0JrIWCNu3d
+         hTfclMnvE9Ur9fgE2yk2/adSgFoav0u35FEo4JN0t4toBbDHqY/fAoZWSL3LwO26ttvi
+         kRhw==
+X-Gm-Message-State: AOAM531LXcOHVYQoFIu2Bqs1NXxPMwI9ZhtsqmfbJIvjidrd32qVEoRv
+        kSS1y+3x8U1q+jElMt+ROqmhJIRbYXpxhzD3zPnRHA==
+X-Google-Smtp-Source: ABdhPJzV/lpNRtplRw1CaUDDK2Gq2nnv2HEyGcDe4Ret09Fj0j7bjUT++W9fszNJkrNhkZJ4PgHUUI06TYLj0M05Ey4=
+X-Received: by 2002:a25:610e:: with SMTP id v14mr2481774ybb.722.1644279068498;
+ Mon, 07 Feb 2022 16:11:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <e10b79cf-d6d5-ffcc-bce4-edd92b7cb6b9@molgen.mpg.de>
+ <CAHmME9pktmNpcBS_DJhJ5Z+6xO9P1wroQ9_gwx8KZMBxk1FBeQ@mail.gmail.com> <CAG48ez17i5ObZ62BtDFF5UguO-n_0qvcvrsqVp4auvq2R4NPTA@mail.gmail.com>
+In-Reply-To: <CAG48ez17i5ObZ62BtDFF5UguO-n_0qvcvrsqVp4auvq2R4NPTA@mail.gmail.com>
+From:   Marco Elver <elver@google.com>
+Date:   Tue, 8 Feb 2022 01:10:57 +0100
+Message-ID: <CANpmjNPVJP_Y6TjsHAR9dm=RpjY5V-=O5u7iP61dBjH2ePGrRw@mail.gmail.com>
+Subject: Re: BUG: KCSAN: data-race in add_device_randomness+0x20d/0x290
+To:     Jann Horn <jannh@google.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Dmitry Vyukov <dvyukov@google.com>,
+        kasan-dev <kasan-dev@googlegroups.com>, pmenzel@molgen.mpg.de,
+        "Theodore Y. Ts'o" <tytso@mit.edu>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The page_owner information currently includes the pid of the calling
-task. That is useful as long as the task is still running. Otherwise,
-the number is meaningless. To have more information about the allocating
-tasks that had exited by the time the page_owner information is
-retrieved, we need to store the command name of the task.
+On Mon, 7 Feb 2022 at 22:49, Jann Horn <jannh@google.com> wrote:
+> +KCSAN people
+>
+> On Mon, Feb 7, 2022 at 7:42 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> > Thanks for the report. I assume that this is actually an old bug. Do
+> > you have a vmlinux or a random.o from this kernel you could send me to
+> > double check? Without that, my best guess, which I'd say I have
+> > relatively high confidence about,
+>
+> Maybe KCSAN should go through the same instruction-bytes-dumping thing
+> as normal BUG() does? That might be helpful for cases like this...
 
-Add a new comm field into page_owner structure to store the command name
-and display it when the page_owner information is retrieved.
+A BUG() on x86 actually generates a ud2, and somewhere along the way
+it uses pt_regs in show_opcodes(). Generating KCSAN stack traces is
+very different, and there's no pt_regs because it's going through
+compiler instrumentation.
 
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- mm/page_owner.c | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+In general, I wouldn't spend much time on one-sided non-symbolized
+KCSAN reports, unless it's obvious what's going on. I've been thinking
+of making CONFIG_KCSAN_REPORT_VALUE_CHANGE_ONLY=n the default, because
+the one-sided race reports are not very useful. We need to see what
+we're racing against. With the normal reports where both threads'
+stack traces are shown it's usually much easier to narrow down what's
+happening even in the absence of symbolized stack traces.
 
-diff --git a/mm/page_owner.c b/mm/page_owner.c
-index d4c311455753..0d2017ebe3d8 100644
---- a/mm/page_owner.c
-+++ b/mm/page_owner.c
-@@ -29,6 +29,7 @@ struct page_owner {
- 	depot_stack_handle_t free_handle;
- 	u64 ts_nsec;
- 	u64 free_ts_nsec;
-+	char comm[TASK_COMM_LEN];
- 	pid_t pid;
- };
- 
-@@ -165,6 +166,8 @@ static inline void __set_page_owner_handle(struct page_ext *page_ext,
- 		page_owner->last_migrate_reason = -1;
- 		page_owner->pid = current->pid;
- 		page_owner->ts_nsec = local_clock();
-+		strlcpy(page_owner->comm, current->comm,
-+			sizeof(page_owner->comm));
- 		__set_bit(PAGE_EXT_OWNER, &page_ext->flags);
- 		__set_bit(PAGE_EXT_OWNER_ALLOCATED, &page_ext->flags);
- 
-@@ -232,6 +235,7 @@ void __folio_copy_owner(struct folio *newfolio, struct folio *old)
- 	new_page_owner->pid = old_page_owner->pid;
- 	new_page_owner->ts_nsec = old_page_owner->ts_nsec;
- 	new_page_owner->free_ts_nsec = old_page_owner->ts_nsec;
-+	strcpy(new_page_owner->comm, old_page_owner->comm);
- 
- 	/*
- 	 * We don't clear the bit on the old folio as it's going to be freed
-@@ -381,10 +385,11 @@ print_page_owner(char __user *buf, size_t count, unsigned long pfn,
- 		return -ENOMEM;
- 
- 	ret = scnprintf(kbuf, count,
--			"Page allocated via order %u, mask %#x(%pGg), pid %d, ts %llu ns, free_ts %llu ns\n",
-+			"Page allocated via order %u, mask %#x(%pGg), pid %d (%s), ts %llu ns, free_ts %llu ns\n",
- 			page_owner->order, page_owner->gfp_mask,
- 			&page_owner->gfp_mask, page_owner->pid,
--			page_owner->ts_nsec, page_owner->free_ts_nsec);
-+			page_owner->comm, page_owner->ts_nsec,
-+			page_owner->free_ts_nsec);
- 
- 	/* Print information relevant to grouping pages by mobility */
- 	pageblock_mt = get_pageblock_migratetype(page);
-@@ -451,9 +456,10 @@ void __dump_page_owner(const struct page *page)
- 	else
- 		pr_alert("page_owner tracks the page as freed\n");
- 
--	pr_alert("page last allocated via order %u, migratetype %s, gfp_mask %#x(%pGg), pid %d, ts %llu, free_ts %llu\n",
-+	pr_alert("page last allocated via order %u, migratetype %s, gfp_mask %#x(%pGg), pid %d (%s), ts %llu, free_ts %llu\n",
- 		 page_owner->order, migratetype_names[mt], gfp_mask, &gfp_mask,
--		 page_owner->pid, page_owner->ts_nsec, page_owner->free_ts_nsec);
-+		 page_owner->pid, page_owner->comm, page_owner->ts_nsec,
-+		 page_owner->free_ts_nsec);
- 
- 	handle = READ_ONCE(page_owner->handle);
- 	if (!handle)
--- 
-2.27.0
+My suggestion would be to try and get a normal "2-sided" data race report.
 
+I also haven't found something similar in my pile of data race reports
+sitting in syzbot moderation.
+
+Jason - if you're interested in KCSAN data race reports in some
+subsystems you maintain (I see a few in Wireguard), let me know, and
+I'll release them from syzbot's moderation queue. The way we're trying
+to do it with KCSAN is that we pre-moderate and ask maintainers if
+they're happy to be forwarded all reports that syzbot finds (currently
+some Networking and RCU, though the latter finds almost all data races
+via KCSAN-enabled rcutorture).
+
+Thanks,
+-- Marco

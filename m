@@ -2,73 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7A404ACDA3
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:08:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02DC14ACDA4
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:08:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232284AbiBHBIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 20:08:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56856 "EHLO
+        id S239806AbiBHBIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 20:08:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230499AbiBHAfQ (ORCPT
+        with ESMTP id S233453AbiBHAg2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 19:35:16 -0500
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2D48C061355
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 16:35:12 -0800 (PST)
-Received: by mail-qk1-x731.google.com with SMTP id 13so12458556qkd.13
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 16:35:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=L5Y6tZ7R3KyR03w5zcFELc4O16jaupwakXADGje8Tdc=;
-        b=X2Yr6MGhvVb6PTuHIw5jF9tlHEgzZoalL5ybQEqPTb/qd7/U7yZhENC+0oxeSj8IRB
-         SwlxlJ/mEMpqHyBbYePbI5X0/NH7W2rE4Yd7txmWMcs+UW8cqCkl4qO0YS46t+CuSi3B
-         OsQ0d0lnsRoZ7lDicoRZMdYwG7Q0J1RJVzJdHbGJy8WXRSruie6FPM/aROTdlN0QjwHa
-         hOLT5hWWMFzMBiSY9KHZUKMqhfcM5Z5pIMPg/S9yMZh1rSlJCGPsyK0RfnvKO3NdobrM
-         LcN7iIDBK2ZVe6eGw3hYJgY7QVEt1kLc7Fc4roh3JVgTQHWOiO8+8Qv4iWE5Dz94L7YJ
-         J4tQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=L5Y6tZ7R3KyR03w5zcFELc4O16jaupwakXADGje8Tdc=;
-        b=EJZidULqr0GOLuhJX0kPFi5dfChHKNEcjAPmXwzNigKnNuhXSNRSUvubl2XugOVh8E
-         ohcfP+LBo8OJcxMXCWxVbWY8TTY/SIBqVQpHHqcV04Yd0xB2n7QGOrEadUigSY3dPvVU
-         qTZutMRzZP7BHIon5m4CNBQxMVi8gCtWiHlNoctkBDuN4e8kF+d6aH7lqm9IrveMtyjc
-         tmM6XtfjHo0tu0HF0yAPDAXS4bnxOzv+Ssqtr1Jt9q4PFA64otbSFbaE6xPVumDaJTNZ
-         9KOe+zNEUahYMDe3gvpGNvJsBF4sNgW4KzIH+LmJw5C/afDjj5KmVXgKHrhK5GwNZr6A
-         nyUA==
-X-Gm-Message-State: AOAM533D7sji328WTblIV/GosEBIeKE8VQi4ZAEEbX1J+Fdz3nhyRvrk
-        pifdqEYOL9vHF5OhHDflKyg=
-X-Google-Smtp-Source: ABdhPJwZMRlToBG5m/cjFWjEY1VUrIRmNm8ofG/GqyL7YGNGCqOdI8Lu8XRi4Phm3gAFv2HLEONNdw==
-X-Received: by 2002:a05:620a:170e:: with SMTP id az14mr1401831qkb.780.1644280510441;
-        Mon, 07 Feb 2022 16:35:10 -0800 (PST)
-Received: from mail.google.com ([207.246.89.135])
-        by smtp.gmail.com with ESMTPSA id b184sm6354942qkf.87.2022.02.07.16.35.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 16:35:09 -0800 (PST)
-Date:   Tue, 8 Feb 2022 08:35:02 +0800
-From:   Changbin Du <changbin.du@gmail.com>
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     ChangbinCONFIG_IRQSOFF_TRACER Du <changbin.du@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] riscv: fix oops caused by irq on/off tracer
-Message-ID: <20220208003502.62gi5xhyg6bk2t2h@mail.google.com>
-References: <20220129004226.32868-1-changbin.du@gmail.com>
- <YgAEb425uqy5/dw1@xhacker>
- <20220207123850.l4r5qjswaegwisbx@mail.google.com>
- <YgE7XRE/Uc6gTCWd@xhacker>
+        Mon, 7 Feb 2022 19:36:28 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363AFC061355
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 16:36:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C37EF60ED0
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 00:36:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C2B0C340F0
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 00:36:25 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="A2f5wHJE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1644280582;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yJt8rbu3AYDoBNc/EdQTMBvSLH8yRYqHWGRsR+89oog=;
+        b=A2f5wHJEAXgAt0T7iWdYtzPxyGiOv442ggfCLgAEVGPsQ3zjcSaGco8vyhZAEYxtfd8BWp
+        JA+8PonRf4Klw2Nk7Svp1QYVcVtJZHTMpgkMLAWma4MgW5J69ix7yfJfBrnX5uKtU+QEh4
+        3gri3t2hV089X/3lhl//WSKk7CdM2Sc=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 55871bb8 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
+        for <linux-kernel@vger.kernel.org>;
+        Tue, 8 Feb 2022 00:36:21 +0000 (UTC)
+Received: by mail-yb1-f173.google.com with SMTP id 124so44503565ybw.6
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 16:36:21 -0800 (PST)
+X-Gm-Message-State: AOAM5330qQHfBFS0z7XhAVv3JDHjTrB0HWClunfsNxERbK89NCOLm/vo
+        m67lwrd6pJ69jflMGt7O83STrL+UvAWChyvKDr4=
+X-Google-Smtp-Source: ABdhPJweAimco5zPp1mHY1t7UXPEjwVynXI4FfQ9H1oBNFhgY/j7o+kBMl8UwoNjH07uMlMn0qtpkYL06j/0gaZt2Pw=
+X-Received: by 2002:a05:6902:14d:: with SMTP id p13mr2403206ybh.638.1644280580410;
+ Mon, 07 Feb 2022 16:36:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YgE7XRE/Uc6gTCWd@xhacker>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Received: by 2002:a05:7110:6254:b0:129:4164:158b with HTTP; Mon, 7 Feb 2022
+ 16:36:19 -0800 (PST)
+In-Reply-To: <CANpmjNPVJP_Y6TjsHAR9dm=RpjY5V-=O5u7iP61dBjH2ePGrRw@mail.gmail.com>
+References: <e10b79cf-d6d5-ffcc-bce4-edd92b7cb6b9@molgen.mpg.de>
+ <CAHmME9pktmNpcBS_DJhJ5Z+6xO9P1wroQ9_gwx8KZMBxk1FBeQ@mail.gmail.com>
+ <CAG48ez17i5ObZ62BtDFF5UguO-n_0qvcvrsqVp4auvq2R4NPTA@mail.gmail.com> <CANpmjNPVJP_Y6TjsHAR9dm=RpjY5V-=O5u7iP61dBjH2ePGrRw@mail.gmail.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Tue, 8 Feb 2022 01:36:19 +0100
+X-Gmail-Original-Message-ID: <CAHmME9oPGnAQ23ZGGJg+ZZRDjG8M+hkqvTko1Zkrc5+zQYUvVg@mail.gmail.com>
+Message-ID: <CAHmME9oPGnAQ23ZGGJg+ZZRDjG8M+hkqvTko1Zkrc5+zQYUvVg@mail.gmail.com>
+Subject: Re: BUG: KCSAN: data-race in add_device_randomness+0x20d/0x290
+To:     Marco Elver <elver@google.com>
+Cc:     Jann Horn <jannh@google.com>, Dmitry Vyukov <dvyukov@google.com>,
+        kasan-dev <kasan-dev@googlegroups.com>, pmenzel@molgen.mpg.de,
+        "Theodore Y. Ts'o" <tytso@mit.edu>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,54 +72,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 11:31:41PM +0800, Jisheng Zhang wrote:
-> On Mon, Feb 07, 2022 at 08:38:50PM +0800, ChangbinCONFIG_IRQSOFF_TRACER Du wrote:
-> > On Mon, Feb 07, 2022 at 01:25:03AM +0800, Jisheng Zhang wrote:
-> > > On Sat, Jan 29, 2022 at 08:42:26AM +0800, Changbin Du wrote:
-> > > > The trace_hardirqs_on/off requires at least two parent call frames.
-> > > > If not, the code generated by CALLER_ADDR1 (aka. ftrace_return_address(1))
-> > > > could trigger memory access fault.
-> > > > 
-> > > > [    0.039615][    T0] Unable to handle kernel NULL pointer dereference at virtual address 00000000000000f8
-> > > > [    0.041925][    T0] Oops [#1]
-> > > > [    0.042063][    T0] Modules linked in:
-> > > > [    0.042864][    T0] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.17.0-rc1-00233-g9a20c48d1ed2 #29
-> > > > [    0.043568][    T0] Hardware name: riscv-virtio,qemu (DT)
-> > > > [    0.044343][    T0] epc : trace_hardirqs_on+0x56/0xe2
-> > > > [    0.044601][    T0]  ra : restore_all+0x12/0x6e
-> > > > [    0.044721][    T0] epc : ffffffff80126a5c ra : ffffffff80003b94 sp : ffffffff81403db0
-> > > > [    0.044801][    T0]  gp : ffffffff8163acd8 tp : ffffffff81414880 t0 : 0000000000000020
-> > > > [    0.044882][    T0]  t1 : 0098968000000000 t2 : 0000000000000000 s0 : ffffffff81403de0
-> > > > [    0.044967][    T0]  s1 : 0000000000000000 a0 : 0000000000000001 a1 : 0000000000000100
-> > > > [    0.045046][    T0]  a2 : 0000000000000000 a3 : 0000000000000000 a4 : 0000000000000000
-> > > > [    0.045124][    T0]  a5 : 0000000000000000 a6 : 0000000000000000 a7 : 0000000054494d45
-> > > > [    0.045210][    T0]  s2 : ffffffff80003b94 s3 : ffffffff81a8f1b0 s4 : ffffffff80e27b50
-> > > > [    0.045289][    T0]  s5 : ffffffff81414880 s6 : ffffffff8160fa00 s7 : 00000000800120e8
-> > > > [    0.045389][    T0]  s8 : 0000000080013100 s9 : 000000000000007f s10: 0000000000000000
-> > > > [    0.045474][    T0]  s11: 0000000000000000 t3 : 7fffffffffffffff t4 : 0000000000000000
-> > > > [    0.045548][    T0]  t5 : 0000000000000000 t6 : ffffffff814aa368
-> > > > [    0.045620][    T0] status: 0000000200000100 badaddr: 00000000000000f8 cause: 000000000000000d
-> > > > [    0.046402][    T0] [<ffffffff80003b94>] restore_all+0x12/0x6e
-> > > > 
-> > > 
-> > > Hi Changbin,
-> > > 
-> > > Could you please provide the reproduce steps? It looks a bit
-> > > interesting.
-> > >
-> > Just enable CONFIG_IRQSOFF_TRACER and rebuild kernel with llvm. Then boot the
-> > new kernel.
-> 
-> Thanks for the information. I tried IRQSOFF_TRACER with gcc+binutils,
-> can't reproduce the issue. I forget to try clang+llvm. From another side
-> The fact that gcc+bintuils can't reproduce it means this is a clang+llvm
-> speicial case, no?
-The behaviour of GCC is a bit different, please refer to another disccusion:
-https://lore.kernel.org/lkml/C2470F2D-9E45-49D7-A03B-E6A7BB4B9738@jrtc27.com/T/
+Hi Marco,
 
-But I suppose it still has similar issue. Make sure FRAME_POINTER is enabled
-also.
+On 2/8/22, Marco Elver <elver@google.com> wrote:
+> Jason - if you're interested in KCSAN data race reports in some
+> subsystems you maintain (I see a few in Wireguard), let me know, and
+> I'll release them from syzbot's moderation queue. The way we're trying
+> to do it with KCSAN is that we pre-moderate and ask maintainers if
+> they're happy to be forwarded all reports that syzbot finds (currently
+> some Networking and RCU, though the latter finds almost all data races
+> via KCSAN-enabled rcutorture).
 
--- 
-Cheers,
-Changbin Du
+Oh that'd be great. Please feel free to forward whatever for WireGuard
+or random.c to jason@zx2c4.com and I'll gladly try to fix what needs
+fixing.
+
+Jason

@@ -2,195 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC4614ADDD2
+	by mail.lfdr.de (Postfix) with ESMTP id 4FC1E4ADDD0
 	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 17:00:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381818AbiBHP7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 10:59:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38798 "EHLO
+        id S1382580AbiBHP7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 10:59:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381200AbiBHP7T (ORCPT
+        with ESMTP id S1382495AbiBHP71 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 10:59:19 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D5B8EC06157B
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 07:59:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644335957;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PlwsX93v8/uDsNJTw9WiZgWB70ZjhyAy4HgLUlsk+JU=;
-        b=akSmGCNeCxXjNnyCbE+wtpphrnuPE/XuaWFh1qZPvrpQi6dyiAd0NT1aowcWM0ajE3XNFB
-        We1TU1KY8FnsFA/aj3wa6fZDppjfoGEJipxyBiYqUNQl+/vs2m2ONuPgboNnJW8FmfJN+d
-        c7UGQIy7h2KXqWvS21PVt7T1RTdbZ1c=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-85-8lWmJDtcN8C9UhsRZWMo_g-1; Tue, 08 Feb 2022 10:59:15 -0500
-X-MC-Unique: 8lWmJDtcN8C9UhsRZWMo_g-1
-Received: by mail-ed1-f72.google.com with SMTP id k5-20020a508ac5000000b00408dec8390aso9848749edk.13
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 07:59:15 -0800 (PST)
+        Tue, 8 Feb 2022 10:59:27 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A38C0613CA
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 07:59:24 -0800 (PST)
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id EB1C13F32B
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 15:59:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644335962;
+        bh=GCejdhR+a/xBJu0EdDNmDz0h5nAc0bdug5YEZYD9D0o=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=d6dKpMYQ7SqpS6VioALkwrSX/7lH0jVSalazDnvVWhF4ZpEoixxyrA/mbodWQNFxw
+         bC16r3FexJ8wqrnnr7hd/yqQv1FS1G5ml4nZOeexf7hMGRwuhW2HWF567xxuJBmiPJ
+         dqbWBkpONGPWH24tHGJ8QMD6O9jtdUJcXzcBQ6rZAAEdelmY5sr+Bg0HYH3WRIMkKn
+         1otuQiX0zGw/LpPHHQblBqr50OAzBoTYmhlrjrA8Uf8kZs/1CcRruSVU1B7N4q5eFi
+         pbXWebr1t5dj9SoW08IVipWBoiUKeFEU8Kg4I2kY5ckW/zAoshtvBAcugabtWceZrZ
+         WX3wjj22etH/A==
+Received: by mail-ej1-f71.google.com with SMTP id ka12-20020a170907990c00b006c41c582397so4433899ejc.11
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 07:59:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=PlwsX93v8/uDsNJTw9WiZgWB70ZjhyAy4HgLUlsk+JU=;
-        b=1ZC3QH+NAFxfHFxkjR4vLv+ELDhca/JeXVNPLQEvNV9DKeqcyXSEV9vDxLYEtetz87
-         fuAf67FZrM4asesRc+C4KX27Wl7NOwTL1sWpoPa64KvRYDp4pkxWVBrF9muk127f9K8j
-         uGC9/h6J8HlOFd6diPQ5eNGZQyiXx80F0W7Vhbxve/pBokgPvwTlqMWayLxU1ZD+ble3
-         C/Fn6vsWZ76l6S4aMi3honaenQEb4ohomsc7Igrm3lXW9WkoY9BqobUpHkrN4vCsiQVB
-         8guM6QAFmmGopMYSv7k3OTxyWEbMT4xaHv/AR50gfAmS8hKQ9LRZVFFG00nvkoJcXgHO
-         OsmA==
-X-Gm-Message-State: AOAM532BxB9d9t4jR/7jhe/Zeii42o/LEDrTuRYmkL8Vef06cZONUVmp
-        PK3TAa35szTiOUY0XuzQ4bRl/P0CGh5cFMb+a052eXSvEOywG6qbHwhiQ7X2kDfypz+bI8BXCzU
-        z8sPB1TgRz0kJ7k2S4vLo//K0
-X-Received: by 2002:a05:6402:3546:: with SMTP id f6mr5072801edd.363.1644335954699;
-        Tue, 08 Feb 2022 07:59:14 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwTF1YDJPIGG4cDjD1lyprXQikArGmVnKZPFLgjQS8/etKgsBhO7waVCKhb/P6kJxST02jpKA==
-X-Received: by 2002:a05:6402:3546:: with SMTP id f6mr5072785edd.363.1644335954528;
-        Tue, 08 Feb 2022 07:59:14 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id f16sm3414509eds.0.2022.02.08.07.59.13
+        bh=GCejdhR+a/xBJu0EdDNmDz0h5nAc0bdug5YEZYD9D0o=;
+        b=6avZ2Ob/gLA3NUsgCmqfwaZRKUxAduUWQXoxMAssFvB7nto5muRQeNur9H8HnDG2AB
+         NXSxEMlNTYSBkXefSAktpn8swpnyA61bTEJ4X6fsRt6waAzfdzz4HsZz4qPsazJjQfqY
+         0QAD/qvYTD95HPiit1mC3zIek4Snwzr2KJXR3/f8TV5vxR4lFE1UOWAzmn4wkirPxbd1
+         1Bis6pbHttiEA9XtCHKcKvE4Iicyl8tpsuYfXGTSHPt7d/BCc90drrJHUVdKJfni3Gb0
+         XWg+hVIzfJUspS/dAlkPiUTHMBYbbOuP9SexS7VLfr8m2lTfr6iHIk+REB7xCKbC+Fr5
+         WlLw==
+X-Gm-Message-State: AOAM533pmNnFuNBVS6Na7ZZkqDtc5N7rXBxC43YXbxx+YsfyCf/BFex3
+        sa3dL1w/PFWo1aSpSoiYjep9hqudFh84yQE50u/6TOpr3uF2jGN4kzKfZOU/27FY4upng22zE3r
+        O7ejTbQfbQHewcGbkY4Rb3OI3wEe2nztEuk8TPViqOQ==
+X-Received: by 2002:a17:907:60d0:: with SMTP id hv16mr4209716ejc.668.1644335962378;
+        Tue, 08 Feb 2022 07:59:22 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzzMWiC01ysSyAaBuDoWTE5s3bHip+jTOUASLhVK6NUfNE19TNoA/lCw7TRiHSeEzA5hH0AUg==
+X-Received: by 2002:a17:907:60d0:: with SMTP id hv16mr4209691ejc.668.1644335962134;
+        Tue, 08 Feb 2022 07:59:22 -0800 (PST)
+Received: from [192.168.0.94] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id q4sm4956884ejb.109.2022.02.08.07.59.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Feb 2022 07:59:13 -0800 (PST)
-Message-ID: <697aaf96-ec60-4e11-b011-0e4151e714d7@redhat.com>
-Date:   Tue, 8 Feb 2022 16:59:13 +0100
+        Tue, 08 Feb 2022 07:59:21 -0800 (PST)
+Message-ID: <fea9a9b3-5e15-e177-a0ee-ac08fa2b91ab@canonical.com>
+Date:   Tue, 8 Feb 2022 16:59:20 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [5.17 regression] "x86/PCI: Ignore E820 reservations for bridge
- windows on newer systems" breaks suspend/resume
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 3/3] dt-bindings: crypto: Convert Atmel SHA to yaml
 Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Myron Stowe <myron.stowe@redhat.com>,
-        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        linux-acpi <linux-acpi@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>, x86@kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        =?UTF-8?Q?Benoit_Gr=c3=a9goire?= <benoitg@coeus.ca>,
-        Hui Wang <hui.wang@canonical.com>
-References: <a7ad05fe-c2ab-a6d9-b66e-68e8c5688420@redhat.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <a7ad05fe-c2ab-a6d9-b66e-68e8c5688420@redhat.com>
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        herbert@gondor.apana.org.au
+Cc:     nicolas.ferre@microchip.com, claudiu.beznea@microchip.com,
+        alexandre.belloni@bootlin.com, linux-crypto@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kavyasree.kotagiri@microchip.com, devicetree@vger.kernel.org
+References: <20220208104918.226156-1-tudor.ambarus@microchip.com>
+ <20220208104918.226156-4-tudor.ambarus@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220208104918.226156-4-tudor.ambarus@microchip.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 2/8/22 16:25, Hans de Goede wrote:
-> Hi All,
+On 08/02/2022 11:49, Tudor Ambarus wrote:
+> Convert Atmel SHA documentation to yaml format. With the conversion the
+> clock and clock-names properties are made mandatory. The driver returns
+> -EINVAL if "sha_clk" is not found, reflect that in the bindings and make
+> the clock and clock-names properties mandatory. Update the example to
+> better describe how one should define the dt node.
 > 
-> Unfortunately I've just learned that commit 7f7b4236f204 ("x86/PCI:
-> Ignore E820 reservations for bridge windows on newer systems"):
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+> ---
+>  .../crypto/atmel,at91sam9g46-sha.yaml         | 59 +++++++++++++++++++
+>  .../bindings/crypto/atmel-crypto.txt          | 25 --------
+>  2 files changed, 59 insertions(+), 25 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-sha.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/crypto/atmel-crypto.txt
 > 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7f7b4236f2040d19df1ddaf30047128b41e78de7
-> 
-> breaks suspend/resume on at least one laptop model, the Lenovo ThinkPad
-> X1 gen 2, see:
-> https://bugzilla.redhat.com/show_bug.cgi?id=2029207
-> 
-> This regression was actually caught be Fedora already carrying this
-> patch for a while now and as such it has been reproduced with 5.15
-> with an older version of the patch which still allowed turning the
-> new behavior of by adding "pci=use_e820". Dmesg output with and
-> without the option has just been attached to the bug, I've not
-> analyzed this any further yet.
-> 
-> I guess that for now this means that we need to revert commit
-> 7f7b4236f204. Rafael, I'll send you a revert with a commit msg
-> explaining why this needs to be reverted tomorrow.
-> 
-> More interesting IMHO is finding out another solution. Both the touchpad
-> problem which got me looking into this:
-> https://bugzilla.redhat.com/show_bug.cgi?id=1868899
-> 
-> As well as the thunderbolt hotplug issue Mika was looking at:
-> https://bugzilla.kernel.org/show_bug.cgi?id=206459
-> 
-> both are cases where we fail to find a memory-window for a
-> BAR which has not been setup yet.
-> 
-> So I see a couple of options here:
-> 
-> 1. Detect that the e820 reservations fully cover (one of)
-> the PCI bridge main 32 bit memory windows and if that happens
-> ignore them. This actually was my first plan when I started
-> working on this. In the end I choose the other option
-> because Bjorn indicated that in hindsight honoring the e820
-> reservations might have been a mistake and maybe we should
-> get rid of honoring them all together.
-> 
-> 2. Have a flag which, when we fail to alloc a 32 bit
-> (or 64 bit) memory PCI BAR, is set if not already set
-> and then retry the alloc. And make the e820 reservation
-> carve-out get skipped in this case.
-> 
-> 3. When booting with pci=nocrs as a workaround for
-> the touchpad case a 64 but memory window ends up getting
-> used. There already is some special handling for some
-> AMD bridges where if there are no 64 bit memory Windows
-> in the _CRS for the bridge, one gets added. Maybe we need
-> to do the same for Intel bridges ?
+> diff --git a/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-sha.yaml b/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-sha.yaml
+> new file mode 100644
+> index 000000000000..e454f4468dc5
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-sha.yaml
+> @@ -0,0 +1,59 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/crypto/atmel,at91sam9g46-sha.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Atmel Secure Hash Algorithm (SHA) HW cryptographic accelerator
+> +
+> +maintainers:
+> +  - Tudor Ambarus <tudor.ambarus@microchip.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: atmel,at91sam9g46-sha
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  clock-names:
+> +    const: sha_clk
+> +
+> +  dmas:
+> +    maxItems: 1
+> +    description: TX DMA Channel
+> +
 
-4. It seems that all devices which have issues with allocating
-a PCI bar are Ice Lake based; and the model where the ignoring
-of e820 reservations has been reported to cause issues is somewhat
-old. It is a Haswell, but still getting BIOS updates causing
-the BIOS date check to enable the new behavior. So another
-solution might be to only ignore e820 reservations on machines
-with Intel Ice Lake (and presumably also Tiger Lake) CPUs.
+One-item-description should work as well, so if you are going to resend:
+
++  dmas:
++    items:
++      - description: TX DMA Channel
+
+but the code looks equivalent, so:
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
 
-5. It also seems that the troublesome e820 entry on all devices
-ends at 0xcfffffff and starts well below 0x8000000 :
-
-Yoga C940:
-[    0.000000] BIOS-e820: [mem 0x000000004bc50000-0x00000000cfffffff] reserved
-
-IdeaPad 3 15IIL05:
-[    0.000000] BIOS-e820: [mem 0x000000004bc50000-0x00000000cfffffff] reserved
-
-Lenovo IdeaPad 5 14IIL05:
-[    0.000000] BIOS-e820: [mem 0x000000005bc50000-0x00000000cfffffff] reserved
-
-
-Actually even the lower addresses seem to follow a pattern.
-
-So I guess that we could do a really narrow fix here where we only
-ignore the *this* e820 reservation using the properties that:
-
-a) It is "huge"
-b) Always ends at 0x00000000cfffffff
-
-To identify it.
-
-
-
-I was at first tempted to choose 1 as fix, which basically is also
-based on this huge reservation covering the entire 32 bit mem window of
-the pci-bridge(s) in the system. But that seems to boil down to the same
-thing as 5. Where as 5 can be a really narrowly tailored fix, requiring
-only changes to arch/x86/kernel/resource.c . So atm I'm leaning towards
-trying 5.  As already said, plase let me know what you think.
-
-Regards,
-
-Hans
-
-
+Best regards,
+Krzysztof

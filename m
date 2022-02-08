@@ -2,307 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94AA24AD41E
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 09:56:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 094844AD426
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 09:57:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352369AbiBHI4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 03:56:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47922 "EHLO
+        id S1352414AbiBHI4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 03:56:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231657AbiBHI4H (ORCPT
+        with ESMTP id S232806AbiBHI4u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 03:56:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F2A8FC03FEC0
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 00:56:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644310566;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HqHf6EUSPiajiRiec1PDYOjczpr3OtMb+80DurOQm1Q=;
-        b=ezOyJQgyV11S8QI8LeSycVL1pEqDadexsV7uNrc+JbyLYz+iBP+vcWHQktmIIoyUfeMc9D
-        5naXFgjdljni+Z6Kt06TZ0SdGpinuNyEvWBKLGh9pFDpa48tPGvfrablRsE6NWNuc8EbJl
-        xIBcYOGfPbBqJ4xuIphX0Vhy4wR8DLM=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-437-mefsVjGMM9uxplibzJVBXg-1; Tue, 08 Feb 2022 03:56:05 -0500
-X-MC-Unique: mefsVjGMM9uxplibzJVBXg-1
-Received: by mail-ed1-f71.google.com with SMTP id ed6-20020a056402294600b004090fd8a936so9332694edb.23
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 00:56:04 -0800 (PST)
+        Tue, 8 Feb 2022 03:56:50 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D985C03FEC0
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 00:56:49 -0800 (PST)
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id EBFF83F4B6
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 08:56:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644310607;
+        bh=jrCjP6cigoq2hUV57n4k5BTndMW5LQallJ585bA4v4U=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=b/sAkhKFjLJazsU5AjfDQ0dfetpumh0ZCRtRzNLaG9HlL/l9B5qlX02p1J15ENeM7
+         B7ipymFrHwOWbahXFByDwJZMcj3z9HLaslUyaTQ043b+m451WEl5KALWk+xcjeaA/B
+         YF1kdQ/HGnxlKK88xq+hl3iXYXGUscqo77EQgusRNYpMihufgzIkI1tuPNGe+wClDI
+         pfaw9d+73hWYXQ9Royk4TJlNA4Q9oCfU30nW9IIgNE+4VE6/HHNX7+rdbbiyO1JGA+
+         QWzqOk1nOtfHAQWefqSOBFH9fK5z7olpawtzbYTXCHAymP7wcV3/LHmwb/GvPZwsTS
+         Pesz19Yy/gN+w==
+Received: by mail-ej1-f72.google.com with SMTP id la22-20020a170907781600b006a7884de505so5431113ejc.7
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 00:56:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=HqHf6EUSPiajiRiec1PDYOjczpr3OtMb+80DurOQm1Q=;
-        b=6JB7vbt7s42lHo7O79DuoEiQlJAtYX+vYUGyx557G8JXmsrzpo3fvUpqv3UTr85sHN
-         gzjyOOHwxmvcxzeRf3wYFxGESJOxisC2o9d8ynx3pHLzgTbpaeNv+g6va6GZCeZg6o76
-         Wc/MUtBevLatT+ZHNfXcm8Vuy4YVVTBR+pR8yWMlC7jy3LaMJdMyq3xboqRZl8V74i2a
-         p2PacdffFKmY8Dk9GMdLJdUAUqUNeS8G32EliDBDbkrbXusSZSG5kNQbrv3LJDBaPhVM
-         vrjp0ZeZTPMhEoqped/2ly5KLLIinxJ/CShtWQrKXyZJ9jEBFy91uOMZGCwA7NwcUcek
-         WiUQ==
-X-Gm-Message-State: AOAM533Htgs3TYfhxyKE2urJKFj6gSisKdxQV2BcDBI+SqMNPYo69y9z
-        jP8gbNTEO/BeDsqlG3piceckFLzxWxodyNESjce1BP81MNtRwnza4m6DvsrLGjZqa06zA32fHMQ
-        VnAO3b+fiv33lUYFujFXnuuyT
-X-Received: by 2002:a17:906:ece8:: with SMTP id qt8mr2833149ejb.738.1644310563747;
-        Tue, 08 Feb 2022 00:56:03 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxgmPnTDJ6VlcDa8upD9ktiB96Y6h6udXwi5BYuSzgtm0wmNJhiXp3oe3DRP7Kchc8LQVc1Ew==
-X-Received: by 2002:a17:906:ece8:: with SMTP id qt8mr2833120ejb.738.1644310563433;
-        Tue, 08 Feb 2022 00:56:03 -0800 (PST)
-Received: from krava (nat-pool-brq-u.redhat.com. [213.175.37.12])
-        by smtp.gmail.com with ESMTPSA id hw16sm1427914ejc.10.2022.02.08.00.56.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 00:56:02 -0800 (PST)
-Date:   Tue, 8 Feb 2022 09:56:01 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Jiri Olsa <olsajiri@gmail.com>
-Subject: Re: [PATCH 1/8] bpf: Add support to attach kprobe program with fprobe
-Message-ID: <YgIwISCfw+DfIBTR@krava>
-References: <20220202135333.190761-1-jolsa@kernel.org>
- <20220202135333.190761-2-jolsa@kernel.org>
- <CAEf4BzZYepTYLN6LrPAAaOXUtCBv07bQQJzgarntu03L+cj2GQ@mail.gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=jrCjP6cigoq2hUV57n4k5BTndMW5LQallJ585bA4v4U=;
+        b=j7eab2RE9XXTifRHqBZMMfcvz83cBIBlGUzdmHDGSDb+8Su/5eh4f5V4mehOtAga+0
+         9YqRou+Ou8BfxcxvjGH0h2SKcOwZcTPgFNBWI3CFk+2DyDD8mjMhO3G8Hk+DfuvQY0Mx
+         AlXei/sg0L7QB3NVdymDXI7es5ixPe7rRJraI6sFlEcaC+Q33vvT88NmjJyoSKsFwlZo
+         4fVZmjaGHioHa+DbBPHpc/DQqS1qzc9jeWTyA+puUl0I+1SPrAU6evcxRBmafhgxaeBP
+         LlFb80dDkzaxoL57NLhKxCM9zN6+gK7eXW6sTQbTGkV1whmRbkdRji1twaXckUW6dwPq
+         deuw==
+X-Gm-Message-State: AOAM5323AtcrtU45gugPefvBRqgC/7YFqbNqcaWftE61Lsy8qI1Oan1L
+        g0kllIckO0Ah1Vk9WCiwvgS25QOgwWOHC31IzeuGuYMVgMC2hhJX4SbQyM9OGifLhTtg6XzLY2j
+        1oiG+fQJ7Jy4O6N+HN0uZw6GUDJD2XRhzKuhdZUe4mg==
+X-Received: by 2002:a17:907:948c:: with SMTP id dm12mr2940481ejc.770.1644310607492;
+        Tue, 08 Feb 2022 00:56:47 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwWL7auPyMvH/eI9rxLnQiNw2PVY1Wgkiymv6mfS8QZo6OPnHvXX90ldKMwT7Z004YsVjstlQ==
+X-Received: by 2002:a17:907:948c:: with SMTP id dm12mr2940447ejc.770.1644310607251;
+        Tue, 08 Feb 2022 00:56:47 -0800 (PST)
+Received: from [192.168.0.92] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id a21sm4220537eds.5.2022.02.08.00.56.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Feb 2022 00:56:46 -0800 (PST)
+Message-ID: <1a172e64-f662-2a36-71ef-4214cfe5bffc@canonical.com>
+Date:   Tue, 8 Feb 2022 09:56:45 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzZYepTYLN6LrPAAaOXUtCBv07bQQJzgarntu03L+cj2GQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v1 6/6] i2c: npcm: Support NPCM845
+Content-Language: en-US
+To:     Tali Perry <tali.perry1@gmail.com>
+Cc:     =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
+        Tyrone Ting <warp5tw@gmail.com>, avifishman70@gmail.com,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Rob Herring <robh+dt@kernel.org>, semen.protsenko@linaro.org,
+        yangyicong@hisilicon.com, Wolfram Sang <wsa@kernel.org>,
+        jie.deng@intel.com, sven@svenpeter.dev, bence98@sch.bme.hu,
+        lukas.bulwahn@gmail.com, arnd@arndb.de, olof@lixom.net,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Tali Perry <tali.perry@nuvoton.com>,
+        Avi Fishman <Avi.Fishman@nuvoton.com>,
+        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
+        kfting@nuvoton.com, devicetree <devicetree@vger.kernel.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220207063338.6570-1-warp5tw@gmail.com>
+ <20220207063338.6570-7-warp5tw@gmail.com> <YgEJ1M40AG9EuRPI@latitude>
+ <086655b0-b9d2-30ed-1496-47cdc6346003@canonical.com>
+ <CAHb3i=vpFwez+ZzDhHkSxjkios3tyoM2urRpCxOn3vfwzvewog@mail.gmail.com>
+ <30ac5fe7-9d96-a756-24b0-384361b48a2d@canonical.com>
+ <CAHb3i=ukzVr4DDgcPQ2+DO+LXWWtgjCe03WbG-CqvsOP_qqvUw@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <CAHb3i=ukzVr4DDgcPQ2+DO+LXWWtgjCe03WbG-CqvsOP_qqvUw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 10:59:14AM -0800, Andrii Nakryiko wrote:
-> On Wed, Feb 2, 2022 at 5:53 AM Jiri Olsa <jolsa@redhat.com> wrote:
-> >
-> > Adding new link type BPF_LINK_TYPE_FPROBE that attaches kprobe program
-> > through fprobe API.
-> >
-> > The fprobe API allows to attach probe on multiple functions at once very
-> > fast, because it works on top of ftrace. On the other hand this limits
-> > the probe point to the function entry or return.
-> >
-> > The kprobe program gets the same pt_regs input ctx as when it's attached
-> > through the perf API.
-> >
-> > Adding new attach type BPF_TRACE_FPROBE that enables such link for kprobe
-> > program.
-> >
-> > User provides array of addresses or symbols with count to attach the kprobe
-> > program to. The new link_create uapi interface looks like:
-> >
-> >   struct {
-> >           __aligned_u64   syms;
-> >           __aligned_u64   addrs;
-> >           __u32           cnt;
-> >           __u32           flags;
-> >   } fprobe;
-> >
-> > The flags field allows single BPF_F_FPROBE_RETURN bit to create return fprobe.
-> >
-> > Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
-> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > ---
-> >  include/linux/bpf_types.h      |   1 +
-> >  include/uapi/linux/bpf.h       |  13 ++
-> >  kernel/bpf/syscall.c           | 248 ++++++++++++++++++++++++++++++++-
-> >  tools/include/uapi/linux/bpf.h |  13 ++
-> >  4 files changed, 270 insertions(+), 5 deletions(-)
-> >
+On 08/02/2022 09:51, Tali Perry wrote:
+>> On 08/02/2022 08:14, Tali Perry wrote:
+>>>> Subject: Re: [PATCH v1 6/6] i2c: npcm: Support NPCM845
+>>>>
+>>>> On 07/02/2022 13:00, Jonathan Neuschäfer wrote:
+>>>>> Hello,
+>>>>>
+>>>>> On Mon, Feb 07, 2022 at 02:33:38PM +0800, Tyrone Ting wrote:
+>>>>>> From: Tyrone Ting <kfting@nuvoton.com>
+>>>>>>
+>>>>>> NPCM8XX uses a similar i2c module as NPCM7XX.
+>>>>>> The only difference is that the internal HW FIFO is larger.
+>>>>>>
+>>>>>> Related Makefile and Kconfig files are modified to support as well.
+>>>>>>
+>>>>>> Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller
+>>>>>> driver")
+>>>>>
+>>>>> It's not really a bug fix, but rather an additional feature.
+>>>>> Therefore, I suggest removing the Fixes tag from this patch.
+>>>>>
+>>>>>> Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
+>>>>>> Signed-off-by: Tali Perry <tali.perry1@gmail.com>
+>>>>>> ---
+>>>>> [...]
+>>>>>>  /* init register and default value required to enable module */
+>>>>>>  #define NPCM_I2CSEGCTL 0xE4
+>>>>>> +#ifdef CONFIG_ARCH_NPCM7XX
+>>>>>>  #define NPCM_I2CSEGCTL_INIT_VAL 0x0333F000
+>>>>>> +#else
+>>>>>> +#define NPCM_I2CSEGCTL_INIT_VAL 0x9333F000
+>>>>>> +#endif
+>>>>>
+>>>>> This is going to cause problems when someone tries to compile a kernel
+>>>>> that runs on both NPCM7xx and NPCM8xx (because the driver will then
+>>>>> only work on NPCM7xx).
+>>>>
+>>>> Yes, good catch.
+>>>>
+>>>> The NPCM7XX is multiplatform, I guess NPCM8xx will be as well, so this looks like an invalid code. How such code is supposed to work on multiplatform kernel?
+>>>>
+>>>
+>>> NPCM7xx and NPCM8xx are very different devices.
+>>> They share same driver sources for some of the modules but it's not ABI.
+>>> Users cannot compile a single kernel with two separate DTS.
+>>> In case of the i2c controller, the npcm7xx has a 16 byte HW FIFO,
+>>> and the NPCM8xx has 32 bytes HW FIFO.
+>>> This also means that registers fields are slightly different.
+>>> For init data we can move it to the DTS, but register field sizes
+>>> can't be handled with this approach.
+>>>
+>>
+>> What do you mean they cannot compile a kernel with different DTS? Of
+>> course they can - when we talk about multiplatform sub-architectures!
+>> Maybe there is something specific in NPCMxxx which stops it but then it
+>> should not be marked multiplatform.
+>>
 > 
-> [...]
 > 
-> >
-> > +#ifdef CONFIG_FPROBE
-> > +
-> > +struct bpf_fprobe_link {
-> > +       struct bpf_link link;
-> > +       struct fprobe fp;
-> > +       unsigned long *addrs;
-> > +};
-> > +
-> > +static void bpf_fprobe_link_release(struct bpf_link *link)
-> > +{
-> > +       struct bpf_fprobe_link *fprobe_link;
-> > +
-> > +       fprobe_link = container_of(link, struct bpf_fprobe_link, link);
-> > +       unregister_fprobe(&fprobe_link->fp);
-> > +}
-> > +
-> > +static void bpf_fprobe_link_dealloc(struct bpf_link *link)
-> > +{
-> > +       struct bpf_fprobe_link *fprobe_link;
-> > +
-> > +       fprobe_link = container_of(link, struct bpf_fprobe_link, link);
-> > +       kfree(fprobe_link->addrs);
-> > +       kfree(fprobe_link);
-> > +}
-> > +
-> > +static const struct bpf_link_ops bpf_fprobe_link_lops = {
-> > +       .release = bpf_fprobe_link_release,
-> > +       .dealloc = bpf_fprobe_link_dealloc,
-> > +};
-> > +
+> NCPM7xx is ARM32 bit (dual core Cortex A9)
+> NPCM8xx is ARM64 bit (quad core Cortex A35)
 > 
-> should this whole new link implementation (including
-> fprobe_link_prog_run() below) maybe live in kernel/trace/bpf_trace.c?
-> Seems a bit more fitting than kernel/bpf/syscall.c
+> They have completely different architecture so not ABI compliant.
+> I2C module is similar, but the devices are quite different and have
+> separate architectures.
 
-right, it's trace related
+OK, in such case usually you indeed can't have both. :)
 
-> 
-> > +static int fprobe_link_prog_run(struct bpf_fprobe_link *fprobe_link,
-> > +                               struct pt_regs *regs)
-> > +{
-> > +       int err;
-> > +
-> > +       if (unlikely(__this_cpu_inc_return(bpf_prog_active) != 1)) {
-> > +               err = 0;
-> > +               goto out;
-> > +       }
-> > +
-> > +       rcu_read_lock();
-> > +       migrate_disable();
-> > +       err = bpf_prog_run(fprobe_link->link.prog, regs);
-> > +       migrate_enable();
-> > +       rcu_read_unlock();
-> > +
-> > + out:
-> > +       __this_cpu_dec(bpf_prog_active);
-> > +       return err;
-> > +}
-> > +
-> > +static void fprobe_link_entry_handler(struct fprobe *fp, unsigned long entry_ip,
-> > +                                     struct pt_regs *regs)
-> > +{
-> > +       unsigned long saved_ip = instruction_pointer(regs);
-> > +       struct bpf_fprobe_link *fprobe_link;
-> > +
-> > +       /*
-> > +        * Because fprobe's regs->ip is set to the next instruction of
-> > +        * dynamic-ftrace insturction, correct entry ip must be set, so
-> > +        * that the bpf program can access entry address via regs as same
-> > +        * as kprobes.
-> > +        */
-> > +       instruction_pointer_set(regs, entry_ip);
-> > +
-> > +       fprobe_link = container_of(fp, struct bpf_fprobe_link, fp);
-> > +       fprobe_link_prog_run(fprobe_link, regs);
-> > +
-> > +       instruction_pointer_set(regs, saved_ip);
-> > +}
-> > +
-> > +static void fprobe_link_exit_handler(struct fprobe *fp, unsigned long entry_ip,
-> > +                                    struct pt_regs *regs)
-> 
-> isn't it identical to fprobe_lnk_entry_handler? Maybe use one callback
-> for both entry and exit?
+> Sorry for the confusion.
+> This is the first patch we try to upstream for NPCM8xx.
+> In the coming weeks we will upstream the architecture of NPCM8xx as well.
 
-heh, did not notice that :) yep, looks that way, will check
+Still, ARCH_XXX should not be hard-coded in the drivers to change the
+driver's behavior, even if driver won't be used simultaneously. It
+breaks all design principles and prevents any further re-use if a new
+use case appears.
 
-> 
-> > +{
-> > +       unsigned long saved_ip = instruction_pointer(regs);
-> > +       struct bpf_fprobe_link *fprobe_link;
-> > +
-> > +       instruction_pointer_set(regs, entry_ip);
-> > +
-> > +       fprobe_link = container_of(fp, struct bpf_fprobe_link, fp);
-> > +       fprobe_link_prog_run(fprobe_link, regs);
-> > +
-> > +       instruction_pointer_set(regs, saved_ip);
-> > +}
-> > +
-> > +static int fprobe_resolve_syms(const void *usyms, u32 cnt,
-> > +                              unsigned long *addrs)
-> > +{
-> > +       unsigned long addr, size;
-> > +       const char **syms;
-> > +       int err = -ENOMEM;
-> > +       unsigned int i;
-> > +       char *func;
-> > +
-> > +       size = cnt * sizeof(*syms);
-> > +       syms = kzalloc(size, GFP_KERNEL);
-> 
-> any reason not to use kvzalloc() here?
+You can use "ifdef ARCH_XXX" to skip building of some parts of the
+driver, but it's not the case here.
 
-probably just my ignorance ;-) will check
 
-> 
-> > +       if (!syms)
-> > +               return -ENOMEM;
-> > +
-> 
-> [...]
-> 
-> > +
-> > +static int bpf_fprobe_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
-> > +{
-> > +       struct bpf_fprobe_link *link = NULL;
-> > +       struct bpf_link_primer link_primer;
-> > +       unsigned long *addrs;
-> > +       u32 flags, cnt, size;
-> > +       void __user *uaddrs;
-> > +       void __user *usyms;
-> > +       int err;
-> > +
-> > +       /* no support for 32bit archs yet */
-> > +       if (sizeof(u64) != sizeof(void *))
-> > +               return -EINVAL;
-> 
-> -EOPNOTSUPP?
-
-ok
-
-> 
-> > +
-> > +       if (prog->expected_attach_type != BPF_TRACE_FPROBE)
-> > +               return -EINVAL;
-> > +
-> > +       flags = attr->link_create.fprobe.flags;
-> > +       if (flags & ~BPF_F_FPROBE_RETURN)
-> > +               return -EINVAL;
-> > +
-> > +       uaddrs = u64_to_user_ptr(attr->link_create.fprobe.addrs);
-> > +       usyms = u64_to_user_ptr(attr->link_create.fprobe.syms);
-> > +       if ((!uaddrs && !usyms) || (uaddrs && usyms))
-> > +               return -EINVAL;
-> 
-> !!uaddrs == !!usyms ?
-
-ah right, will change
-
-> 
-> > +
-> > +       cnt = attr->link_create.fprobe.cnt;
-> > +       if (!cnt)
-> > +               return -EINVAL;
-> > +
-> > +       size = cnt * sizeof(*addrs);
-> > +       addrs = kzalloc(size, GFP_KERNEL);
-> 
-> same, why not kvzalloc? Also, aren't you overwriting each addrs entry
-> anyway, so "z" is not necessary, right?
-
-true, no need for zeroing
-
-thanks,
-jirka
-
+Best regards,
+Krzysztof

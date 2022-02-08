@@ -2,129 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C19CA4AE4B3
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:37:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE4A94AE453
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:30:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346269AbiBHWeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 17:34:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60796 "EHLO
+        id S1386724AbiBHW1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 17:27:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386594AbiBHU5t (ORCPT
+        with ESMTP id S1386608AbiBHU7G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 15:57:49 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01A6CC0612C3;
-        Tue,  8 Feb 2022 12:57:49 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id w1so398572plb.6;
-        Tue, 08 Feb 2022 12:57:48 -0800 (PST)
+        Tue, 8 Feb 2022 15:59:06 -0500
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552DAC0612B9
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 12:59:05 -0800 (PST)
+Received: by mail-vs1-xe2a.google.com with SMTP id m24so376834vsp.7
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 12:59:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=lER0Yn2EpeMSnVJPYoZJVlBcAkY3FCI93VU6xZwJrHE=;
-        b=DR4hOjfQMDg56Ra5Gcb+pNcHpV3LBEcOn5SQ/ZzCsKGrKBq1HQFmyEzf7GgN42JujR
-         nzXgmsfhSsO2CDqmgur4Hi/VMyUrx0wGzZtTiLIiGVI2ZYwxgOqJeAks9XECFpd/AgcG
-         1QyRsg9s0BTKMJPVb+8c/SS7JVko9ew1/oEZE/LVhESBmLzBv7gDHZiSHDDyF8N+4HF/
-         XtRxoBUBoMNdeKRi1obyUsESFfYu5Yp4lIe2vxx/4fnk3WaBwiIdxhIMtetuYbdjBe9g
-         BB3kTzDOVS8vJc4GG0HfhqSbSW1Gk1PpV+2EathmCnaTpaK7W1leiapaOvDDMKgjJ6jV
-         t+dA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NxB7BzC6ZAoAU/UTQQPI/XYwGHJmUDw1BkVBGKXBE4c=;
+        b=Y3dHeM9K1rCwczLjQBwnOlwAC1lSGX6KBBSSvc9OyYXm6MqTlm+Arx3JxBqbvT2562
+         W0x2T60xfaRmhG7hTPmRYxjsLOT4FN+LbwHOE0BH68Xi/mXCfSwaGROEhPdmrgqDlHqJ
+         JPRWBGOJQ1PS76ChpBJzY0tx4VNWTjdTb5fVBwWSghrT8vsr7qedw4jQ2c13cNgs/aAc
+         e+yl1ENT+jlXNFeDSWDJK7+ZX7++Mr0D+/gQpLUqOG41iNLxTrInsNBCQIyOYpRI8+tI
+         gAz2GORpxqQe3vUVD0C0We+OO0BwCa4LDGZN8KtEOfBlMnFIXOa75bonu1iLcDzr68hi
+         cOrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=lER0Yn2EpeMSnVJPYoZJVlBcAkY3FCI93VU6xZwJrHE=;
-        b=OG6cLLmFi4r9bTxy3hu2PVsKWJlf3xpEAmLUyBiqunmEt+pZjKTXQ+JTzuL446uB8h
-         azf72FT7mCWAn4sLIa6fZLTZckhjVIAzHepnGGaZPKA5TCZ8TF2WI2/zHCPp0nYwzHeN
-         VFoGxvoViu68ab6bDMRsPRV/xWJRURnNnDCd2UZm00qVi+JZyhA4jNALNzt8f4q2q0G0
-         l78wPHXnajjz9hlrmnudpSRJaw8+83dyYo68Yd6gqJlcIGl5zEYPSRtAeeAvD9vhmQZb
-         cppluBxdX15WXhWzQ8+MSvVrUc9pc88455bllyOSR3LnsVGR3JGAf+Gcvc1ylY+6PQkQ
-         3gnQ==
-X-Gm-Message-State: AOAM530NNQr86ZLYp9jpCZ4dP/ARWnmktAL68HwmPfEPmO6JA/Ngo1gl
-        7etvZpXq1fqBDRCofUSTWMlF9NgFbQc=
-X-Google-Smtp-Source: ABdhPJyD1XSVqyDQR8eoIbfVTTIK7WZth2TwLe+zSUDXHBELSyDkPp+Hst2Y7r4jyog9YA4ytner2Q==
-X-Received: by 2002:a17:902:e844:: with SMTP id t4mr6280526plg.104.1644353867631;
-        Tue, 08 Feb 2022 12:57:47 -0800 (PST)
-Received: from google.com ([2620:15c:202:201:3a7a:5580:400f:1e51])
-        by smtp.gmail.com with ESMTPSA id b24sm12184296pgs.1.2022.02.08.12.57.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 12:57:46 -0800 (PST)
-Date:   Tue, 8 Feb 2022 12:57:44 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-Cc:     rydberg@bitmath.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Peter Hutterer <peter.hutterer@who-t.net>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jiri Kosina <jkosina@suse.cz>
-Subject: Re: [PATCH RESEND v3] Input: clear BTN_RIGHT/MIDDLE on buttonpads
-Message-ID: <YgLZSNqx0BN1JXhC@google.com>
-References: <20220208174806.17183-1-jose.exposito89@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NxB7BzC6ZAoAU/UTQQPI/XYwGHJmUDw1BkVBGKXBE4c=;
+        b=cP9WBqne1z6ClEjvP94L9NiDXVXdLepdvydSC55SlNuPv5/FiPckYN7Ba5nWIzIgDK
+         1WcuaHu1RPqY+xFRD2nMePYiFJ9isxAwQjkUpmvCIV23Tbln54vdO5M5HwGWc1Zh2Tbt
+         cKuJ1H+1weXwKB4/XrnxMlerfaco66m/Nyycp7ZnXt3g41BxMaGVj1MBdKFpGCHsIdpZ
+         BeB6sE2+5UoH/fKrodoRxakDZYjSeH4MmVZpZe58Wgrc25tOfhQtF7hyUx40pq1CYbgy
+         bTDGPkFLcTLvR5Ys3x6+ChhnqzS1YsVDtTv3lUd0lDtQkfl3jkxryBzZvIoUW9My2BLT
+         xzIA==
+X-Gm-Message-State: AOAM530gm00rQCr/RrTkrLroRXIXP/T77N4WpWM6tOyhskaWqPEcXoD4
+        RqXXERjDLIvsAipl81oucjbePA7RFRQFmA==
+X-Google-Smtp-Source: ABdhPJyyfanTQDxZMI+Jy+IyYwdJMxOWexbUN7I0gtgGgqc5bnpDIsiu2xMy3H+xfKxHQx3t7X20aQ==
+X-Received: by 2002:a67:e1c3:: with SMTP id p3mr2029151vsl.31.1644353944505;
+        Tue, 08 Feb 2022 12:59:04 -0800 (PST)
+Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com. [209.85.222.48])
+        by smtp.gmail.com with ESMTPSA id k20sm2770518vsg.14.2022.02.08.12.59.03
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Feb 2022 12:59:04 -0800 (PST)
+Received: by mail-ua1-f48.google.com with SMTP id e17so247240uad.9
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 12:59:03 -0800 (PST)
+X-Received: by 2002:ab0:384c:: with SMTP id h12mr2198570uaw.122.1644353943533;
+ Tue, 08 Feb 2022 12:59:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220208174806.17183-1-jose.exposito89@gmail.com>
+References: <20220208181510.787069-1-andrew@daynix.com> <20220208181510.787069-5-andrew@daynix.com>
+In-Reply-To: <20220208181510.787069-5-andrew@daynix.com>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Tue, 8 Feb 2022 15:58:27 -0500
+X-Gmail-Original-Message-ID: <CA+FuTScRp5hhkvETuVRsUxMRCZVU0wVrmd5_=a5UoKNLDv4LnA@mail.gmail.com>
+Message-ID: <CA+FuTScRp5hhkvETuVRsUxMRCZVU0wVrmd5_=a5UoKNLDv4LnA@mail.gmail.com>
+Subject: Re: [PATCH v3 4/4] drivers/net/virtio_net: Added RSS hash report control.
+To:     Andrew Melnychenko <andrew@daynix.com>
+Cc:     netdev@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        jasowang@redhat.com, mst@redhat.com, yan@daynix.com,
+        yuri.benditovich@daynix.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 08, 2022 at 06:48:06PM +0100, José Expósito wrote:
-> Buttonpads are expected to map the INPUT_PROP_BUTTONPAD property bit
-> and the BTN_LEFT key bit.
-> 
-> As explained in the specification, where a device has a button type
-> value of 0 (click-pad) or 1 (pressure-pad) there should not be
-> discrete buttons:
-> https://docs.microsoft.com/en-us/windows-hardware/design/component-guidelines/touchpad-windows-precision-touchpad-collection#device-capabilities-feature-report
-> 
-> However, some drivers map the BTN_RIGHT and/or BTN_MIDDLE key bits even
-> though the device is a buttonpad and therefore does not have those
-> buttons.
-> 
-> This behavior has forced userspace applications like libinput to
-> implement different workarounds and quirks to detect buttonpads and
-> offer to the user the right set of features and configuration options.
-> For more information:
-> https://gitlab.freedesktop.org/libinput/libinput/-/merge_requests/726
-> 
-> In order to avoid this issue clear the BTN_RIGHT and BTN_MIDDLE key
-> bits when the input device is register if the INPUT_PROP_BUTTONPAD
-> property bit is set.
-> 
-> Notice that this change will not affect udev because it does not check
-> for buttons. See systemd/src/udev/udev-builtin-input_id.c.
-> 
-> List of known affected hardware:
-> 
->  - Chuwi AeroBook Plus
->  - Chuwi Gemibook
->  - Framework Laptop
->  - GPD Win Max
->  - Huawei MateBook 2020
->  - Prestigio Smartbook 141 C2
->  - Purism Librem 14v1
->  - StarLite Mk II   - AMI firmware
->  - StarLite Mk II   - Coreboot firmware
->  - StarLite Mk III  - AMI firmware
->  - StarLite Mk III  - Coreboot firmware
->  - StarLabTop Mk IV - AMI firmware
->  - StarLabTop Mk IV - Coreboot firmware
->  - StarBook Mk V
-> 
-> Acked-by: Peter Hutterer <peter.hutterer@who-t.net>
-> Acked-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> Acked-by: Jiri Kosina <jkosina@suse.cz>
-> Signed-off-by: José Expósito <jose.exposito89@gmail.com>
-> 
+On Tue, Feb 8, 2022 at 1:19 PM Andrew Melnychenko <andrew@daynix.com> wrote:
+>
+> Now it's possible to control supported hashflows.
+> Added hashflow set/get callbacks.
+> Also, disabling RXH_IP_SRC/DST for TCP would disable then for UDP.
 
-Applied, thank you.
+I don't follow this comment. Can you elaborate?
 
--- 
-Dmitry
+> TCP and UDP supports only:
+> ethtool -U eth0 rx-flow-hash tcp4 sd
+>     RXH_IP_SRC + RXH_IP_DST
+> ethtool -U eth0 rx-flow-hash tcp4 sdfn
+>     RXH_IP_SRC + RXH_IP_DST + RXH_L4_B_0_1 + RXH_L4_B_2_3
+>
+> Signed-off-by: Andrew Melnychenko <andrew@daynix.com>
+> ---
+>  drivers/net/virtio_net.c | 141 ++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 140 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> index 543da2fbdd2d..88759d5e693c 100644
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> @@ -231,6 +231,7 @@ struct virtnet_info {
+>         u8 rss_key_size;
+>         u16 rss_indir_table_size;
+>         u32 rss_hash_types_supported;
+> +       u32 rss_hash_types_saved;
+
+hash_types_active?
+
+> +static bool virtnet_set_hashflow(struct virtnet_info *vi, struct ethtool_rxnfc *info)
+> +{
+> +       u32 new_hashtypes = vi->rss_hash_types_saved;
+> +       bool is_disable = info->data & RXH_DISCARD;
+> +       bool is_l4 = info->data == (RXH_IP_SRC | RXH_IP_DST | RXH_L4_B_0_1 | RXH_L4_B_2_3);
+> +
+> +       /* supports only 'sd', 'sdfn' and 'r' */
+> +       if (!((info->data == (RXH_IP_SRC | RXH_IP_DST)) | is_l4 | is_disable))
+
+maybe add an is_l3
+
+> +               return false;
+> +
+> +       switch (info->flow_type) {
+> +       case TCP_V4_FLOW:
+> +               new_hashtypes &= ~(VIRTIO_NET_RSS_HASH_TYPE_IPv4 | VIRTIO_NET_RSS_HASH_TYPE_TCPv4);
+> +               if (!is_disable)
+> +                       new_hashtypes |= VIRTIO_NET_RSS_HASH_TYPE_IPv4
+> +                               | (is_l4 ? VIRTIO_NET_RSS_HASH_TYPE_TCPv4 : 0);
+> +               break;
+> +       case UDP_V4_FLOW:
+> +               new_hashtypes &= ~(VIRTIO_NET_RSS_HASH_TYPE_IPv4 | VIRTIO_NET_RSS_HASH_TYPE_UDPv4);
+> +               if (!is_disable)
+> +                       new_hashtypes |= VIRTIO_NET_RSS_HASH_TYPE_IPv4
+> +                               | (is_l4 ? VIRTIO_NET_RSS_HASH_TYPE_UDPv4 : 0);
+> +               break;
+> +       case IPV4_FLOW:
+> +               new_hashtypes &= ~VIRTIO_NET_RSS_HASH_TYPE_IPv4;
+> +               if (!is_disable)
+> +                       new_hashtypes = VIRTIO_NET_RSS_HASH_TYPE_IPv4;
+> +               break;
+> +       case TCP_V6_FLOW:
+> +               new_hashtypes &= ~(VIRTIO_NET_RSS_HASH_TYPE_IPv6 | VIRTIO_NET_RSS_HASH_TYPE_TCPv6);
+> +               if (!is_disable)
+> +                       new_hashtypes |= VIRTIO_NET_RSS_HASH_TYPE_IPv6
+> +                               | (is_l4 ? VIRTIO_NET_RSS_HASH_TYPE_TCPv6 : 0);
+> +               break;
+> +       case UDP_V6_FLOW:
+> +               new_hashtypes &= ~(VIRTIO_NET_RSS_HASH_TYPE_IPv6 | VIRTIO_NET_RSS_HASH_TYPE_UDPv6);
+> +               if (!is_disable)
+> +                       new_hashtypes |= VIRTIO_NET_RSS_HASH_TYPE_IPv6
+> +                               | (is_l4 ? VIRTIO_NET_RSS_HASH_TYPE_UDPv6 : 0);
+> +               break;
+> +       case IPV6_FLOW:
+> +               new_hashtypes &= ~VIRTIO_NET_RSS_HASH_TYPE_IPv6;
+> +               if (!is_disable)
+> +                       new_hashtypes = VIRTIO_NET_RSS_HASH_TYPE_IPv6;
+> +               break;
+> +       default:
+> +               /* unsupported flow */
+> +               return false;
+> +       }
+> +
+> +       /* if unsupported hashtype was set */
+> +       if (new_hashtypes != (new_hashtypes & vi->rss_hash_types_supported))
+> +               return false;
+> +
+> +       if (new_hashtypes != vi->rss_hash_types_saved) {
+> +               vi->rss_hash_types_saved = new_hashtypes;
+
+should only be updated if the commit function returned success?

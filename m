@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF0EC4AE116
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 19:43:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 689864AE11D
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 19:43:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385194AbiBHSmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 13:42:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37034 "EHLO
+        id S1385185AbiBHSma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 13:42:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385146AbiBHSmT (ORCPT
+        with ESMTP id S1356333AbiBHSmW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 13:42:19 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8095C0612C3;
-        Tue,  8 Feb 2022 10:42:17 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id y15-20020a17090a474f00b001b88562650aso2105924pjg.0;
-        Tue, 08 Feb 2022 10:42:17 -0800 (PST)
+        Tue, 8 Feb 2022 13:42:22 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8287C0612AA
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 10:42:19 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id t9so81124plg.13
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 10:42:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=DVqQIGXek9gqjDYZ5x5feEwzLs2GJZs4gUa7i+kzwxU=;
-        b=eZkvb8+7UyFnR21L5G1zcGI8qmb7Z6a9FPI1whMSBLG+SQouRtRGXHvgWofofksj4X
-         gZB5sFr6ghXQvJW/Qq3wOP/ubVYRVVqZWpEXOJmHLHA+9yVi2iic/bTxbCgLKsYFNUWx
-         nWOGj1PItndZXy9CxHYxkoPIZYgXs+AvTDgCbI5hEiHLb/9u/ASKrijJAysQub7y88RG
-         FMA3a1+KBL0mqLyGYcIfSihA58L1nbkquzmiHjIu9u28yKitN1sxuU6vO4J9BW61CWiX
-         1gvLzqO7GENqtEdf8SQH8I9Z6MeL3HfDxjye5PqXcFHWOAn5lm2GV0kMVKD8KMbkYT/q
-         pwKg==
+        bh=IzYAh6mtxyAZ2drjtva0WxDIoe1TxiIdW6u31Cu1VZ0=;
+        b=Rn7TMd/F12tHX5PTTIfciknUnwo2d7sRReHQLBHclrIbs4kzH1kmWQfBKSijxIYqNK
+         9CmfuIRHZSF3joepIGkZW8ahirN3q1TzibCOEBECrLRobrWRJI8tCZ5W1dzfI8wylYQE
+         d0flpx4A9y3tzSBvR49MoHK7mbPF4EtMP1QAUBDtdVigkbhe7d+V89KqIWBctTMKY8Sk
+         kp8OlmWqElx4SkCpRznucWmMQMjaE+vZwDax5fDsxrwCovsgwA3z/0krvCKpIvUtWUcD
+         twN6kX5t0DC0Kw8WJFwWG3HrDuXRy0m69JjLJB0SQNsZ4m9+ZClz0rLcsfIY+JxmS+EM
+         4KTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=DVqQIGXek9gqjDYZ5x5feEwzLs2GJZs4gUa7i+kzwxU=;
-        b=QEzwdvk1lVt9FjghcctL+1QZHRinBTR8kAjnaN6x7kbm6JQIbh968JAVLQahrbsdv4
-         q2jjAPfYYLU/I0lnutC/UUK1D0euVn4fG+nSi22WPU6FfYmMGN7zUChbZUxXYoQ38btF
-         21YfoBvSnTtLAACnTPzzo1eHN78v9kfMpwp2vg2sBZURkkf0MpiEqmN98neNGdW46T8A
-         00PGXUuVNci6JbLcAlPE7Ce6XgUQ8fXCysGx4VPeNQE5t6kiXQBK1mp81R1hdwRSPJ84
-         LLfOVAj6CwGzU5qsov9sMVJKS4Fn1UElKqMfB35ILqGXBjqsvi0ACRMynIODYxTAbHG/
-         rLIA==
-X-Gm-Message-State: AOAM532y7BOlvAlkN0hAQLFL/YS4hOdcgPhTDkjigRnrIST91gE/PUeq
-        zPmZkq6uD4YHd7kKFFSDqLs=
-X-Google-Smtp-Source: ABdhPJwsjxQ3u2LpAw1F/tqKqnFKbzNVq4Q+hoDFw5+tcDW6bW7HXozAs0DUWSMEaDvFGixXm0DrNg==
-X-Received: by 2002:a17:903:20ca:: with SMTP id i10mr6101929plb.112.1644345737400;
-        Tue, 08 Feb 2022 10:42:17 -0800 (PST)
+        bh=IzYAh6mtxyAZ2drjtva0WxDIoe1TxiIdW6u31Cu1VZ0=;
+        b=ePluCcSFRbfZjbXAgfo9oQ1i4SNEq2ROSh4YZttYrdMm1tPR+KKqq1UTgb3Zs+1wXU
+         vy6SEiN5dIH82vm8pIKvOyH73MUk/3J/R0jFgYolQrdEoge2pmoZj4/wAev6DIoYEDKK
+         Q7GPv95sUgJCQj4HsWLx0+iTkEKWKbVoviVxYDtvjxHDK2BV4FEoJckmCrn9mhi3NjHs
+         qDt+urYBZim7BoXrlxC16EoEqyJ1u1nR12dYFrdQgkHDLv7uCl9ym7jx5cluL3SUQPmj
+         tuV1gg2TURLfpf/IjPGNkZIpvL390tepxm7g9vCZQ4EG/ntlAExAiOkMjHDLHn/To+z1
+         bv6Q==
+X-Gm-Message-State: AOAM533vLexharKkhnATUI32EX0ObMK4vbA4szPR4P9pVJYh8VmDtjgv
+        6vkCU2xcPs0X1s7qtjBXiXCc7t5TySU=
+X-Google-Smtp-Source: ABdhPJyDr72d0npd7vA3/hqnRU5jkANyKzduN67CIKfYJwax2Iq8Ps0vZjn5x17osa4MIjO33IkbMw==
+X-Received: by 2002:a17:902:e801:: with SMTP id u1mr5662822plg.124.1644345739249;
+        Tue, 08 Feb 2022 10:42:19 -0800 (PST)
 Received: from balhae.hsd1.ca.comcast.net ([2601:647:4800:c6f0:347f:e607:176:4358])
-        by smtp.gmail.com with ESMTPSA id l14sm3517027pjf.1.2022.02.08.10.42.15
+        by smtp.gmail.com with ESMTPSA id l14sm3517027pjf.1.2022.02.08.10.42.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 10:42:16 -0800 (PST)
+        Tue, 08 Feb 2022 10:42:18 -0800 (PST)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Peter Zijlstra <peterz@infradead.org>,
@@ -60,12 +60,10 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Byungchul Park <byungchul.park@lge.com>,
         "Paul E. McKenney" <paul.mckenney@linaro.org>,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Radoslaw Burny <rburny@google.com>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org
-Subject: [PATCH 02/12] cgroup: rstat: Make cgroup_rstat_cpu_lock name readable
-Date:   Tue,  8 Feb 2022 10:41:58 -0800
-Message-Id: <20220208184208.79303-3-namhyung@kernel.org>
+        Radoslaw Burny <rburny@google.com>
+Subject: [PATCH 03/12] timer: Protect lockdep functions with #ifdef
+Date:   Tue,  8 Feb 2022 10:41:59 -0800
+Message-Id: <20220208184208.79303-4-namhyung@kernel.org>
 X-Mailer: git-send-email 2.35.0.263.gb82422642f-goog
 In-Reply-To: <20220208184208.79303-1-namhyung@kernel.org>
 References: <20220208184208.79303-1-namhyung@kernel.org>
@@ -82,45 +80,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The raw_spin_lock_init() uses the argument to name its lockdep map.
-But passing per_cpu_ptr() macro directly makes it a very very long
-name as it expanded like below:
+With upcoming lock tracepoints config, it'd define some of lockdep
+functions without enabling CONFIG_LOCKDEP actually.  The existing code
+assumes those functions will be removed by the preprocessor but it's
+not the case anymore.  Let's protect the code with #ifdef's explicitly.
 
-  ({ do { const void *__vpp_verify = (typeof((&cgroup_rstat_cpu_lock) ...
-
-Let's fix it by passing a local variable instead.  With this change,
-the name now looks like:
-
-  cgrp_rstat_cpu_lock
-
-Cc: Tejun Heo <tj@kernel.org>
-Cc: Zefan Li <lizefan.x@bytedance.com>
-Cc: Johannes Weiner <hannes@cmpxchg.org>
-Cc: cgroups@vger.kernel.org
+Cc: Thomas Gleixner <tglx@linutronix.de>
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- kernel/cgroup/rstat.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ kernel/time/timer.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/cgroup/rstat.c b/kernel/cgroup/rstat.c
-index 9d331ba44870..d1845f1196c9 100644
---- a/kernel/cgroup/rstat.c
-+++ b/kernel/cgroup/rstat.c
-@@ -286,9 +286,12 @@ void cgroup_rstat_exit(struct cgroup *cgrp)
- void __init cgroup_rstat_boot(void)
- {
- 	int cpu;
-+	raw_spinlock_t *cgrp_rstat_cpu_lock;
- 
--	for_each_possible_cpu(cpu)
--		raw_spin_lock_init(per_cpu_ptr(&cgroup_rstat_cpu_lock, cpu));
-+	for_each_possible_cpu(cpu) {
-+		cgrp_rstat_cpu_lock = per_cpu_ptr(&cgroup_rstat_cpu_lock, cpu);
-+		raw_spin_lock_init(cgrp_rstat_cpu_lock);
-+	}
+diff --git a/kernel/time/timer.c b/kernel/time/timer.c
+index 85f1021ad459..4af95dbf6435 100644
+--- a/kernel/time/timer.c
++++ b/kernel/time/timer.c
+@@ -794,7 +794,10 @@ static void do_init_timer(struct timer_list *timer,
+ 	if (WARN_ON_ONCE(flags & ~TIMER_INIT_FLAGS))
+ 		flags &= TIMER_INIT_FLAGS;
+ 	timer->flags = flags | raw_smp_processor_id();
++
++#ifdef CONFIG_LOCKDEP
+ 	lockdep_init_map(&timer->lockdep_map, name, key, 0);
++#endif
  }
  
- /*
+ /**
+@@ -1409,19 +1412,22 @@ static void call_timer_fn(struct timer_list *timer,
+ 	struct lockdep_map lockdep_map;
+ 
+ 	lockdep_copy_map(&lockdep_map, &timer->lockdep_map);
+-#endif
++
+ 	/*
+ 	 * Couple the lock chain with the lock chain at
+ 	 * del_timer_sync() by acquiring the lock_map around the fn()
+ 	 * call here and in del_timer_sync().
+ 	 */
+ 	lock_map_acquire(&lockdep_map);
++#endif
+ 
+ 	trace_timer_expire_entry(timer, baseclk);
+ 	fn(timer);
+ 	trace_timer_expire_exit(timer);
+ 
++#ifdef CONFIG_LOCKDEP
+ 	lock_map_release(&lockdep_map);
++#endif
+ 
+ 	if (count != preempt_count()) {
+ 		WARN_ONCE(1, "timer: %pS preempt leak: %08x -> %08x\n",
 -- 
 2.35.0.263.gb82422642f-goog
 

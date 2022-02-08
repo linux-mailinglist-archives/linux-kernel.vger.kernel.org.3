@@ -2,254 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7B504ADC31
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 16:15:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 456FC4ADC65
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 16:21:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349771AbiBHPPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 10:15:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33670 "EHLO
+        id S1376597AbiBHPUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 10:20:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229952AbiBHPPL (ORCPT
+        with ESMTP id S1379465AbiBHPPI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 10:15:11 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A29F0C061576
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 07:15:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644333307; x=1675869307;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=vva12Cv/vVjOHL2Orkmr3Xei9YBMVXoD6aTawTWdu5U=;
-  b=awv47y42SdOyMwzJ1Nu1nrjxAOWzSF4ZfYQJRuuJux3DGBZ65vT9mywD
-   OV0DRl86677nTQzd3tGgrV3KBcgwoygz4hv3B0uYwpEILH57el3dfBPPI
-   ZFQcM31BZ5PR+vwCFCMwxcco66pH2o1u8zBMnCV7HeatGuf4+DLJBgx4P
-   QSKIJKG5bClXeAEgDgNv7DWd3UNsHu3iWAxqCYvXcDj3wxTTrLMb1pDTw
-   AU0C/mI39dY+v1+A/WWBSt8AUbiZPvNltZOBUdMzHd7KyiXZMrS26lIr5
-   Wkm0AacgZcVQ9Vx7R7+zYa6YUS40rsi3BL6slgspb+fHdRItC39KArky9
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="246555559"
-X-IronPort-AV: E=Sophos;i="5.88,353,1635231600"; 
-   d="scan'208";a="246555559"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 07:15:07 -0800
-X-IronPort-AV: E=Sophos;i="5.88,353,1635231600"; 
-   d="scan'208";a="540636634"
-Received: from ijbeckin-mobl2.ger.corp.intel.com (HELO localhost) ([10.252.19.63])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 07:15:03 -0800
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Zhi Wang <zhi.wang.linux@gmail.com>, hch@lst.de, jgg@nvidia.com
-Cc:     intel-gfx@lists.freedesktop.org,
-        intel-gvt-dev@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Zhi Wang <zhi.wang.linux@gmail.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Vivi Rodrigo <rodrigo.vivi@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        Terrence Xu <terrence.xu@intel.com>
-Subject: Re: [PATCH v6 1/3] i915/gvt: Introduce the mmio table to support
- VFIO new mdev API
-In-Reply-To: <20220208111151.13115-1-zhi.a.wang@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20220208111151.13115-1-zhi.a.wang@intel.com>
-Date:   Tue, 08 Feb 2022 17:15:00 +0200
-Message-ID: <871r0dqtjf.fsf@intel.com>
+        Tue, 8 Feb 2022 10:15:08 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEA6EC061577;
+        Tue,  8 Feb 2022 07:15:07 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 423561F383;
+        Tue,  8 Feb 2022 15:15:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1644333306; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=iIBn4Rav1LBR3y1c5hDMynQtqqgJZkX7I4kc9wq3uRs=;
+        b=GsdnHU3cwdGn8OVGCJqWUbt20HF/QLQRsCFXZSmYmHY+SdULFqDf9IupBsQHpwsFqVyVQN
+        Gf+fXxoyvKtpXIKaNdc14frKvMo3qSkwkkXPgfEDDToghZmni984WZ8/2vUDKVj61efMNJ
+        iq6cAZzQVWGnl0xMx12l/0sRp5UgpnA=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id CEED9A3B92;
+        Tue,  8 Feb 2022 15:15:05 +0000 (UTC)
+Date:   Tue, 8 Feb 2022 16:15:05 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, Ira Weiny <ira.weiny@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Roman Gushchin <guro@fb.com>,
+        Rafael Aquini <aquini@redhat.com>,
+        Mike Rapoport <rppt@linux.ibm.com>
+Subject: Re: [PATCH v5 3/4] mm/page_owner: Print memcg information
+Message-ID: <YgKI+Y1/AKgJbpem@dhcp22.suse.cz>
+References: <20220208000532.1054311-1-longman@redhat.com>
+ <20220208000532.1054311-4-longman@redhat.com>
+ <YgJeWth50eP9L0PK@dhcp22.suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YgJeWth50eP9L0PK@dhcp22.suse.cz>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 08 Feb 2022, Zhi Wang <zhi.wang.linux@gmail.com> wrote:
-> From: Zhi Wang <zhi.wang.linux@gmail.com>
->
-> To support the new mdev interfaces and the re-factor patches from
-> Christoph, which moves the GVT-g code into a dedicated module, the GVT-g
-> initialization path has to be separated into two phases:
->
-> a) Early initialization.
->
-> The early initialization of GVT requires to be done when loading i915.
-> Mostly it's because the initial clean HW state needs to be saved before
-> i915 touches the HW.
->
-> b) Late initalization.
->
-> This phases of initalization will setup the rest components of GVT-g,
-> which can be done later when the dedicated module is being loaded.
+On Tue 08-02-22 13:13:15, Michal Hocko wrote:
+> On Mon 07-02-22 19:05:31, Waiman Long wrote:
+[...]
+> > +	ret += scnprintf(kbuf + ret, count - ret, "\n");
+> 
+> I do not see any overflow prevention here. I believe you really need to
+> check ret >= count after each scnprintf/cgroup_name.
 
-What's the baseline for this series?
-
->
-> v6:
->
-> - Move the mmio_table.c into i915. (Christoph)
-> - Keep init_device_info and related structures in GVT-g. (Christoph)
-> - Refine the callbacks of the iterator. (Christoph)
-> - Move the flags of MMIO register defination to GVT-g. (Chrsitoph)
-> - Move the mmio block handling to GVT-g.
->
-> v5:
->
-> - Re-design the mmio table framework. (Christoph)
->
-> v4:
->
-> - Fix the errors of patch checking scripts.
->
-> v3:
->
-> - Fix the errors when CONFIG_DRM_I915_WERROR is turned on. (Jani)
->
-> v2:
->
-> - Implement a mmio table instead of generating it by marco in i915. (Jani)
->
-> Cc: Christoph Hellwig <hch@lst.de>
-> Cc: Jason Gunthorpe <jgg@nvidia.com>
-> Cc: Jani Nikula <jani.nikula@linux.intel.com>
-> Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-> Cc: Vivi Rodrigo <rodrigo.vivi@intel.com>
-> Cc: Zhenyu Wang <zhenyuw@linux.intel.com>
-> Cc: Zhi Wang <zhi.a.wang@intel.com>
-> Tested-by: Terrence Xu <terrence.xu@intel.com>
-> Signed-off-by: Zhi Wang <zhi.wang.linux@gmail.com>
-> ---
->  drivers/gpu/drm/i915/Makefile               |    2 +-
->  drivers/gpu/drm/i915/gvt/cmd_parser.c       |    2 +-
->  drivers/gpu/drm/i915/gvt/gvt.h              |    3 +-
->  drivers/gpu/drm/i915/gvt/handlers.c         | 1062 ++-------------
->  drivers/gpu/drm/i915/gvt/mmio.h             |   17 -
->  drivers/gpu/drm/i915/gvt/reg.h              |    9 +-
->  drivers/gpu/drm/i915/intel_gvt.c            |   20 +-
->  drivers/gpu/drm/i915/intel_gvt.h            |   37 +
->  drivers/gpu/drm/i915/intel_gvt_mmio_table.c | 1308 +++++++++++++++++++
->  9 files changed, 1501 insertions(+), 959 deletions(-)
->  create mode 100644 drivers/gpu/drm/i915/intel_gvt_mmio_table.c
->
-
-> diff --git a/drivers/gpu/drm/i915/intel_gvt.h b/drivers/gpu/drm/i915/intel_gvt.h
-> index d7d3fb6186fd..6d3031f3ac25 100644
-> --- a/drivers/gpu/drm/i915/intel_gvt.h
-> +++ b/drivers/gpu/drm/i915/intel_gvt.h
-> @@ -26,7 +26,32 @@
->  
->  struct drm_i915_private;
->  
-> +#include <linux/kernel.h>
-
-Please use minimal includes. Looks like linux/types.h is enough. Please
-also put the includes before the forward declarations.
-
-> +
->  #ifdef CONFIG_DRM_I915_GVT
-> +
-> +#define D_BDW   (1 << 0)
-> +#define D_SKL	(1 << 1)
-> +#define D_KBL	(1 << 2)
-> +#define D_BXT	(1 << 3)
-> +#define D_CFL	(1 << 4)
-> +
-> +#define D_GEN9PLUS	(D_SKL | D_KBL | D_BXT | D_CFL)
-> +#define D_GEN8PLUS	(D_BDW | D_SKL | D_KBL | D_BXT | D_CFL)
-> +
-> +#define D_SKL_PLUS	(D_SKL | D_KBL | D_BXT | D_CFL)
-> +#define D_BDW_PLUS	(D_BDW | D_SKL | D_KBL | D_BXT | D_CFL)
-> +
-> +#define D_PRE_SKL	(D_BDW)
-> +#define D_ALL		(D_BDW | D_SKL | D_KBL | D_BXT | D_CFL)
-
-If these really need to be in a header in i915/, I think they need to be
-longer with some namespacing or something. I do wish these could be
-hidden though.
-
-> +
-> +struct intel_gvt_mmio_table_iter {
-> +	struct drm_i915_private *i915;
-> +	void *data;
-> +	int (*handle_mmio_cb)(struct intel_gvt_mmio_table_iter *iter,
-> +			      u32 offset, u32 device, u32 size);
-> +};
-
-We're heavily transitioning towards having a corresponding .h for each
-.c instead of catch all headers. It's still a work in progress, but I'd
-prefer having the declarations for stuff in intel_gvt_mmio_table.c
-placed in intel_gvt_mmio_table.h, and named accordingly. Like I
-suggested in my previous mails.
-
-> +
->  int intel_gvt_init(struct drm_i915_private *dev_priv);
->  void intel_gvt_driver_remove(struct drm_i915_private *dev_priv);
->  int intel_gvt_init_device(struct drm_i915_private *dev_priv);
-> @@ -34,6 +59,8 @@ void intel_gvt_clean_device(struct drm_i915_private *dev_priv);
->  int intel_gvt_init_host(void);
->  void intel_gvt_sanitize_options(struct drm_i915_private *dev_priv);
->  void intel_gvt_resume(struct drm_i915_private *dev_priv);
-> +unsigned long intel_gvt_get_device_type(struct drm_i915_private *i915);
-> +int intel_gvt_iterate_mmio_table(struct intel_gvt_mmio_table_iter *iter);
->  #else
->  static inline int intel_gvt_init(struct drm_i915_private *dev_priv)
->  {
-> @@ -51,6 +78,16 @@ static inline void intel_gvt_sanitize_options(struct drm_i915_private *dev_priv)
->  static inline void intel_gvt_resume(struct drm_i915_private *dev_priv)
->  {
->  }
-> +
-> +unsigned long intel_gvt_get_device_type(struct drm_i915_private *i915)
-> +{
-> +	return 0;
-> +}
-> +
-> +int intel_gvt_iterate_mmio_table(struct intel_gvt_mmio_table_iter *iter)
-> +{
-> +	return 0;
-> +}
-
-Stubs need to be static inlines.
-
->  #endif
->  
->  #endif /* _INTEL_GVT_H_ */
-> diff --git a/drivers/gpu/drm/i915/intel_gvt_mmio_table.c b/drivers/gpu/drm/i915/intel_gvt_mmio_table.c
-> new file mode 100644
-> index 000000000000..b9de72e939d3
-> --- /dev/null
-> +++ b/drivers/gpu/drm/i915/intel_gvt_mmio_table.c
-> @@ -0,0 +1,1308 @@
-> +/*
-> + * Copyright(c) 2021 Intel Corporation. All rights reserved.
-> + *
-> + * Permission is hereby granted, free of charge, to any person obtaining a
-> + * copy of this software and associated documentation files (the "Software"),
-> + * to deal in the Software without restriction, including without limitation
-> + * the rights to use, copy, modify, merge, publish, distribute, sublicense,
-> + * and/or sell copies of the Software, and to permit persons to whom the
-> + * Software is furnished to do so, subject to the following conditions:
-> + *
-> + * The above copyright notice and this permission notice (including the next
-> + * paragraph) shall be included in all copies or substantial portions of the
-> + * Software.
-> + *
-> + * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-> + * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-> + * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
-> + * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-> + * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-> + * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-> + * SOFTWARE.
-
-Please use SPDX headers for new files.
-
-
-BR,
-Jani.
-
+OK, I have only now realized that scnprintf would return size - 1 on
+overflow so explicitly checking for the overlow shouldn't be reallu
+necessary.
 -- 
-Jani Nikula, Intel Open Source Graphics Center
+Michal Hocko
+SUSE Labs

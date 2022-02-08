@@ -2,251 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17BAC4ADFD7
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 18:44:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F5BB4ADFDA
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 18:45:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384378AbiBHRn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 12:43:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35472 "EHLO
+        id S1352870AbiBHRpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 12:45:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241855AbiBHRn0 (ORCPT
+        with ESMTP id S234672AbiBHRpD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 12:43:26 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A222AC061578
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 09:43:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644342204;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fTAtQQtX8ynRTOTjJerCkOOYhkWBiy04WDPWHFPH1vo=;
-        b=Wd+6ZGHbb/6CvWy9FZTpSuRaPdJhZntm7ziR772mS+0VCpvQbC5/Jy/DU1oYetPd54muxP
-        eyo8+CPX+4CFe3WDZm833hf3uJ5v/lFZ+HI6Jpzm057JiEABQZFBp0j5wbr8dE62CT520Y
-        0Qchh7+0eQNsPytxFQMS3fVIzjFKmQs=
-Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
- [209.85.161.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-417-B1AfAqMiPKmdMBsSu0qI-Q-1; Tue, 08 Feb 2022 12:43:23 -0500
-X-MC-Unique: B1AfAqMiPKmdMBsSu0qI-Q-1
-Received: by mail-oo1-f69.google.com with SMTP id t10-20020a4ad0aa000000b002fd44c52176so11866388oor.9
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 09:43:23 -0800 (PST)
+        Tue, 8 Feb 2022 12:45:03 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E23EC061578
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 09:45:02 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id p21so16492435ljn.13
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 09:45:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+2ZOKjsTypCf57frmi1Jqd7Dt7KnItcHNvGL+OMmMpI=;
+        b=HmnZrkgiLYXAkRHXqwu5HRn8hAE5ABYzHtzdcNr2aI/43FVw5XZoXDLOe8HJxQZieN
+         2MjvRMPQXZl299rU9Knx9Ij48msciGp1dRfUUzi+wlCZcEF8Tng16N7jD0bpcS9zg+4G
+         oYIPkkGg9d1egvRkDBlB4lsSpDQOo2KUFWB4PQ9s8Xi8WBvOLeqxN3+2uVrAGUbgEALR
+         7PIyPvTfNFAbl5cIkYkHkOAOHeKL8hQxBVRKAyJmQAEvfbCtqpRj/z5QZH2h7DvqVQEj
+         HVsEMOsp3KiO7pleWWHNVJ/W0WAW+0qU8v/acQx/twwkqUFn376l6fAmAw9pSM4Vvd/x
+         FPUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=fTAtQQtX8ynRTOTjJerCkOOYhkWBiy04WDPWHFPH1vo=;
-        b=J/rERayi0gX53PVYoX0g1ZyOJbNRMwKa/H11sgGjD65mAdgIG7Kwhq2eYkMfAKH9Ea
-         iK4gCJEK+C7b/kLluqEmer3S8mMgKJ9xtucP1yC+91qqSQqEgQqYoaHohmJaO1oe7GPu
-         9pVPNdzP3Uu8QoSZmSzmzFQ1spONxUBqs8kGsEsjvVgJhz8GqY2Rxz5+k13fT6OxABGb
-         vfe25rRip6yLQYKLBP5DMhUUwzf84Oo/62y0ZakSBedk90atU/e1tXQWKSr7lc9SZjni
-         hM6pQ5I/fufhe21dsLQlUDQkSvvj+8gaFfy1ZDhtK3oH84cF1ruWxzL0BQw7XOXco3jJ
-         1BKg==
-X-Gm-Message-State: AOAM532aoJALRhVSzWmEq36uHJliIkKd3RXygludm4lCI7BF+/X3uQIf
-        kFuysy4DnRCjnArCBFsRr9h3UE73eaB2kU4kxf3DaWJFdYEsih3J0hlHImr0C64joUTP8KwkE+N
-        EmJYO0eUICMUmqm29wdsnTuJE
-X-Received: by 2002:a9d:7745:: with SMTP id t5mr2336028otl.254.1644342201839;
-        Tue, 08 Feb 2022 09:43:21 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwO9ltSzIoG91Af/O1KWvnxNeiLqj6JxqFTQKli+Ed+9vVShlH1mHu2H9ZNDPJSfzOIE9vpMQ==
-X-Received: by 2002:a9d:7745:: with SMTP id t5mr2336007otl.254.1644342201559;
-        Tue, 08 Feb 2022 09:43:21 -0800 (PST)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id 12sm6101166oaj.31.2022.02.08.09.43.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 09:43:21 -0800 (PST)
-Date:   Tue, 8 Feb 2022 10:43:19 -0700
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Matthew Rosato <mjrosato@linux.ibm.com>
-Cc:     linux-s390@vger.kernel.org, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com, pmorel@linux.ibm.com,
-        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
-        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@nvidia.com>
-Subject: Re: [PATCH v3 24/30] vfio-pci/zdev: wire up group notifier
-Message-ID: <20220208104319.4861fb22.alex.williamson@redhat.com>
-In-Reply-To: <20220204211536.321475-25-mjrosato@linux.ibm.com>
-References: <20220204211536.321475-1-mjrosato@linux.ibm.com>
-        <20220204211536.321475-25-mjrosato@linux.ibm.com>
-Organization: Red Hat
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+2ZOKjsTypCf57frmi1Jqd7Dt7KnItcHNvGL+OMmMpI=;
+        b=XquP7eNVIe0Xnir0fq46Dqb08hja3hQc8R4/jyN/S6XgteF8tKwt1NyXZqC48EK7k8
+         SEMqr2Va2OMOueaOA50ye02RM6Ou32uiCtgNclt6gi1GSfqRpa9IoEKFmaNS4KcBzONd
+         cDOvweSiGv7GU1qAkx84se8OIrrhpZzt3e2zTa9/LxaF3T5VfGn2nDBpdmQnRuBrGe3R
+         Q+V5dUF35rgwTQZIJTtX2GiRwaSHGdsKLBWbpYhkf+shHsc7puywi9a7KgH2d6TuJMg4
+         aUdIb/sPCdusJd0xzlqFBNmfg4DWc+NFIvWr9rb/1Ci+RYq9Wy5KbYgO3yOIPsbeEmks
+         fOvg==
+X-Gm-Message-State: AOAM530Z7XcvrtwV0gTqNyQO+Yj+SHCi/omgNfac0AG+6rhZhFQ4u4Hy
+        m1gIN4DrCQhHeX37fKYO7ABsNzz2KbbDJCD9Ae1IxA==
+X-Google-Smtp-Source: ABdhPJzNrdZ68YdmVvWF4hTmS7YeVVol3VHv3vV2v9o+W/Ks7y29yAhoN2Wv6L+jm4G3Wbc7HBw11ESczjaG7Lg2RPg=
+X-Received: by 2002:a05:651c:1253:: with SMTP id h19mr3483007ljh.338.1644342300206;
+ Tue, 08 Feb 2022 09:45:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220204123740.GA4077@xsang-OptiPlex-9020> <CAKwvOdm0+bB=UY91V=ai2TPg3XCbNUZQfBzxrSUA0AtW=zM=LA@mail.gmail.com>
+ <202202071858.0B5538E7CB@keescook>
+In-Reply-To: <202202071858.0B5538E7CB@keescook>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 8 Feb 2022 09:44:48 -0800
+Message-ID: <CAKwvOdm1k51OxYqSq1v9UVp8ZptBkJj7FgOA_QhDjEC6vaU+RQ@mail.gmail.com>
+Subject: Re: [x86] 1099ce55b0: BUG:kernel_NULL_pointer_dereference,address
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Arvind Sankar <nivedita@alum.mit.edu>,
+        Fangrui Song <maskray@google.com>,
+        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
+        lkp@intel.com, kernel test robot <oliver.sang@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri,  4 Feb 2022 16:15:30 -0500
-Matthew Rosato <mjrosato@linux.ibm.com> wrote:
+On Mon, Feb 7, 2022 at 7:09 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Mon, Feb 07, 2022 at 04:23:06PM -0800, Nick Desaulniers wrote:
+> > On Fri, Feb 4, 2022 at 4:37 AM kernel test robot <oliver.sang@intel.com> wrote:
+> > > FYI, we noticed the following commit (built with clang-15):
+> > >
+> > > commit: 1099ce55b0530ff429312dc37362ad43aee8c5c0 ("x86: don't build CONFIG_X86_32 as -ffreestanding")
+> > > https://git.kernel.org/cgit/linux/kernel/git/kees/linux.git for-next/memcpy
+> > >
+> > > in testcase: boot
+> > [...]
+> > I've been having a hard time pinpointing via bisection when this
+> > stopped working.  I suspect it's actually the change on llvm's side
+> > that would replace memcmp with bcmp.  With this diff, we can boot
+> > ARCH=i386 defconfig
+> >
+> > ```
+> > diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+> > index 7ef211865239..5e4570495206 100644
+> > --- a/arch/x86/Makefile
+> > +++ b/arch/x86/Makefile
+> > @@ -88,6 +88,8 @@ ifeq ($(CONFIG_X86_32),y)
+> >          include $(srctree)/arch/x86/Makefile_32.cpu
+> >          KBUILD_CFLAGS += $(cflags-y)
+> >
+> > +        KBUILD_CFLAGS += -fno-builtin-bcmp
+> > +
+> >         ifeq ($(CONFIG_STACKPROTECTOR),y)
+> >                 ifeq ($(CONFIG_SMP),y)
+> >                         KBUILD_CFLAGS +=
+> > -mstack-protector-guard-reg=fs
+> > -mstack-protector-guard-symbol=__stack_chk_guard
+> > ```
+> >
+> > It looks like the call argument setup in the _callers_ of memcmp is messed up.
+> >
+> > Before:
+> > pushl %ecx
+> > pushl %ebx
+> > pushl -24(%ebp)
+> > calll bcmp
+> >
+> > After:
+> > movl  %ebx, %eax
+> > movl  %esi, %edx
+> > movl  %ecx, %ebx
+> > calll memcmp
+> >
+> > it looks like they're not obeying `-mregparm=3`.
+> >
+> > https://godbolt.org/z/z3fjveP4h
+> >
+> > Diffing the IR between `-mregparm=3` vs not, it looks like there's an
+> > LLVM IR function argument attribute inreg.
+> > https://llvm.org/docs/LangRef.html#parameter-attributes
+> > >> This indicates that this parameter or return value should be treated in a
+> > >> special target-dependent fashion while emitting code for a function call
+> > >> or return (usually, by putting it in a register as opposed to memory,
+> > >> though some targets use it to distinguish between two different kinds of
+> > >> registers). Use of this attribute is target-specific.
+> >
+> > As is tradition, instcombine is not checking+carrying over the
+> > function argument attributes when replacing calls to memcmp w/ bcmp.
+> >
+> > Before:
+> >   %4 = call i32 @memcmp(i8* inreg noundef %3, i8* inreg noundef %0,
+> > i32 inreg noundef %1) #4, !dbg !22
+> >
+> > After:
+> >   %bcmp = call i32 @bcmp(i8* %3, i8* %0, i32 %1), !dbg !22
+> >
+> > Filed:
+> > https://github.com/llvm/llvm-project/issues/53645
+> >
+> > So I think the best course of action is to disable memcmp to bcmp
+> > BEFORE the removal of -ffreestanding, and only for clang until we have
+> > a fix in hand.
+>
+> What do you mean about BEFORE the removal of -ffreestanding? As in, add
+> two patches, one to add -fno-builtin-bcmp and the next to remove
+> -ffreestanding? i.e.:
+>
+>
+> diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+> index e84cdd409b64..c92f69e916b4 100644
+> --- a/arch/x86/Makefile
+> +++ b/arch/x86/Makefile
+> @@ -90,6 +90,9 @@ ifeq ($(CONFIG_X86_32),y)
+>
+>          # temporary until string.h is fixed
+>          KBUILD_CFLAGS += -ffreestanding
+> +        ifdef CONFIG_CC_IS_CLANG
+> +                KBUILD_CFLAGS += -fno-builtin-bcmp
+> +        endif
+>
+>         ifeq ($(CONFIG_STACKPROTECTOR),y)
+>                 ifeq ($(CONFIG_SMP),y)
+>
+>
+> then:
+>
+>
+>
+> diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+> index c92f69e916b4..f56936aeed9e 100644
+> --- a/arch/x86/Makefile
+> +++ b/arch/x86/Makefile
+> @@ -88,8 +88,6 @@ ifeq ($(CONFIG_X86_32),y)
+>          include $(srctree)/arch/x86/Makefile_32.cpu
+>          KBUILD_CFLAGS += $(cflags-y)
+>
+> -        # temporary until string.h is fixed
+> -        KBUILD_CFLAGS += -ffreestanding
+>          ifdef CONFIG_CC_IS_CLANG
+>                  KBUILD_CFLAGS += -fno-builtin-bcmp
+>          endif
+>
+> ?
 
-> KVM zPCI passthrough device logic will need a reference to the associated
-> kvm guest that has access to the device.  Let's register a group notifier
-> for VFIO_GROUP_NOTIFY_SET_KVM to catch this information in order to create
-> an association between a kvm guest and the host zdev.
-> 
-> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
-> ---
->  arch/s390/include/asm/kvm_pci.h  |  2 ++
->  drivers/vfio/pci/vfio_pci_core.c |  2 ++
->  drivers/vfio/pci/vfio_pci_zdev.c | 46 ++++++++++++++++++++++++++++++++
->  include/linux/vfio_pci_core.h    | 10 +++++++
->  4 files changed, 60 insertions(+)
-> 
-> diff --git a/arch/s390/include/asm/kvm_pci.h b/arch/s390/include/asm/kvm_pci.h
-> index e4696f5592e1..16290b4cf2a6 100644
-> --- a/arch/s390/include/asm/kvm_pci.h
-> +++ b/arch/s390/include/asm/kvm_pci.h
-> @@ -16,6 +16,7 @@
->  #include <linux/kvm.h>
->  #include <linux/pci.h>
->  #include <linux/mutex.h>
-> +#include <linux/notifier.h>
->  #include <asm/pci_insn.h>
->  #include <asm/pci_dma.h>
->  
-> @@ -32,6 +33,7 @@ struct kvm_zdev {
->  	u64 rpcit_count;
->  	struct kvm_zdev_ioat ioat;
->  	struct zpci_fib fib;
-> +	struct notifier_block nb;
->  };
->  
->  int kvm_s390_pci_dev_open(struct zpci_dev *zdev);
-> diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
-> index f948e6cd2993..fc57d4d0abbe 100644
-> --- a/drivers/vfio/pci/vfio_pci_core.c
-> +++ b/drivers/vfio/pci/vfio_pci_core.c
-> @@ -452,6 +452,7 @@ void vfio_pci_core_close_device(struct vfio_device *core_vdev)
->  
->  	vfio_pci_vf_token_user_add(vdev, -1);
->  	vfio_spapr_pci_eeh_release(vdev->pdev);
-> +	vfio_pci_zdev_release(vdev);
->  	vfio_pci_core_disable(vdev);
->  
->  	mutex_lock(&vdev->igate);
-> @@ -470,6 +471,7 @@ EXPORT_SYMBOL_GPL(vfio_pci_core_close_device);
->  void vfio_pci_core_finish_enable(struct vfio_pci_core_device *vdev)
->  {
->  	vfio_pci_probe_mmaps(vdev);
-> +	vfio_pci_zdev_open(vdev);
->  	vfio_spapr_pci_eeh_open(vdev->pdev);
->  	vfio_pci_vf_token_user_add(vdev, 1);
->  }
+Yeah, that's what I had in mind yesterday afternoon. Thinking more
+about this in the evening though, I think this is a pretty
+catastrophic compiler bug in LLVM.
 
-If this handling were for a specific device, I think we'd be suggesting
-this is the point at which we cross over to a vendor variant making use
-of vfio-pci-core rather than hooking directly into the core code.  But
-this is meant to extend vfio-pci proper for the whole arch.  Is there a
-compromise in using #ifdefs in vfio_pci_ops to call into zpci specific
-code that implements these arch specific hooks and the core for
-everything else?  SPAPR code could probably converted similarly, it
-exists here for legacy reasons. [Cc Jason]
+The compiler does change the calling convention (somewhat) as part of
+optimizations when the caller and callee are visible within the same
+TU. Here, the callee is not visible, and yet the caller is modifying
+the calling convention with no corresponding change to the callee.
 
-Also, please note the DEVICE_FEATURE generalizations in the latest
-series from NVIDIA for mlx5 migration support:
+Essentially, -ffreestanding is holding -mregparam=3 together for
+ARCH=i386 LLVM=1 builds.  That my above diff that only avoided the
+issue for memcmp -> bcmp was able to boot to command line is kind of a
+miracle.  I'm sure there's all kind of things that don't work right,
+and we can't ship that since it will come back to bite us for 32b x86
+(such as Android Cuttlefish).
 
-https://lore.kernel.org/all/20220207172216.206415-8-yishaih@nvidia.com/
+Do we need to remove -ffreestanding for ARCH=i386 for FORTIFY_SOURCE
+to work _for GCC_?
 
-If this series were to go in via the s390 tree, I'd request a branch so
-that we can continue to work on this in vfio code as well.  Thanks,
+If yes, then perhaps we can only add -ffreestanding for clang for now?
+If no, then perhaps we should leave -ffreestanding for now?
 
-Alex
+Either way, I would shelve FORTIFY_SOURCE for ARCH=i386 LLVM=1 until
+this compiler bug is fixed (and drop my patch, or I can send a v2).
+https://github.com/llvm/llvm-project/issues/53645
 
-> diff --git a/drivers/vfio/pci/vfio_pci_zdev.c b/drivers/vfio/pci/vfio_pci_zdev.c
-> index ea4c0d2b0663..9f8284499111 100644
-> --- a/drivers/vfio/pci/vfio_pci_zdev.c
-> +++ b/drivers/vfio/pci/vfio_pci_zdev.c
-> @@ -13,6 +13,7 @@
->  #include <linux/vfio_zdev.h>
->  #include <asm/pci_clp.h>
->  #include <asm/pci_io.h>
-> +#include <asm/kvm_pci.h>
->  
->  #include <linux/vfio_pci_core.h>
->  
-> @@ -136,3 +137,48 @@ int vfio_pci_info_zdev_add_caps(struct vfio_pci_core_device *vdev,
->  
->  	return ret;
->  }
-> +
-> +static int vfio_pci_zdev_group_notifier(struct notifier_block *nb,
-> +					unsigned long action, void *data)
-> +{
-> +	struct kvm_zdev *kzdev = container_of(nb, struct kvm_zdev, nb);
-> +
-> +	if (action == VFIO_GROUP_NOTIFY_SET_KVM) {
-> +		if (!data || !kzdev->zdev)
-> +			return NOTIFY_DONE;
-> +		kzdev->kvm = data;
-> +	}
-> +
-> +	return NOTIFY_OK;
-> +}
-> +
-> +void vfio_pci_zdev_open(struct vfio_pci_core_device *vdev)
-> +{
-> +	unsigned long events = VFIO_GROUP_NOTIFY_SET_KVM;
-> +	struct zpci_dev *zdev = to_zpci(vdev->pdev);
-> +
-> +	if (!zdev)
-> +		return;
-> +
-> +	if (kvm_s390_pci_dev_open(zdev))
-> +		return;
-> +
-> +	zdev->kzdev->nb.notifier_call = vfio_pci_zdev_group_notifier;
-> +
-> +	if (vfio_register_notifier(vdev->vdev.dev, VFIO_GROUP_NOTIFY,
-> +				   &events, &zdev->kzdev->nb))
-> +		kvm_s390_pci_dev_release(zdev);
-> +}
-> +
-> +void vfio_pci_zdev_release(struct vfio_pci_core_device *vdev)
-> +{
-> +	struct zpci_dev *zdev = to_zpci(vdev->pdev);
-> +
-> +	if (!zdev || !zdev->kzdev)
-> +		return;
-> +
-> +	vfio_unregister_notifier(vdev->vdev.dev, VFIO_GROUP_NOTIFY,
-> +				 &zdev->kzdev->nb);
-> +
-> +	kvm_s390_pci_dev_release(zdev);
-> +}
-> diff --git a/include/linux/vfio_pci_core.h b/include/linux/vfio_pci_core.h
-> index 5e2bca3b89db..05287f8ac855 100644
-> --- a/include/linux/vfio_pci_core.h
-> +++ b/include/linux/vfio_pci_core.h
-> @@ -198,12 +198,22 @@ static inline int vfio_pci_igd_init(struct vfio_pci_core_device *vdev)
->  #ifdef CONFIG_VFIO_PCI_ZDEV
->  extern int vfio_pci_info_zdev_add_caps(struct vfio_pci_core_device *vdev,
->  				       struct vfio_info_cap *caps);
-> +void vfio_pci_zdev_open(struct vfio_pci_core_device *vdev);
-> +void vfio_pci_zdev_release(struct vfio_pci_core_device *vdev);
->  #else
->  static inline int vfio_pci_info_zdev_add_caps(struct vfio_pci_core_device *vdev,
->  					      struct vfio_info_cap *caps)
->  {
->  	return -ENODEV;
->  }
-> +
-> +static inline void vfio_pci_zdev_open(struct vfio_pci_core_device *vdev)
-> +{
-> +}
-> +
-> +static inline void vfio_pci_zdev_release(struct vfio_pci_core_device *vdev)
-> +{
-> +}
->  #endif
->  
->  /* Will be exported for vfio pci drivers usage */
-
+That said, I would consider this lower priority than
+https://github.com/llvm/llvm-project/issues/53118, which looks like a
+very obvious clang-14 regression (the 14 release is almost done, so
+it's time to fix regression NOW) that produces an true positive
+objtool warning.
+-- 
+Thanks,
+~Nick Desaulniers

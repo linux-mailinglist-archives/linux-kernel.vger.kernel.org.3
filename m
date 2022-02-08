@@ -2,387 +2,307 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 046614AD417
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 09:54:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94AA24AD41E
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 09:56:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352271AbiBHIyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 03:54:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47246 "EHLO
+        id S1352369AbiBHI4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 03:56:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231657AbiBHIyS (ORCPT
+        with ESMTP id S231657AbiBHI4H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 03:54:18 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C245AC03FEC5
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 00:54:17 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id k18so29362197wrg.11
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 00:54:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ad/AIeKw/gggP6Br2uoykBbNKFVMSxSNAtQyiBt1RW0=;
-        b=5KxMGJIrZxz0UdJJ4KFG3h5rV0PZviBM1D2ZlImvgl2AYSR7uVDIp9FOmugYxXR0jd
-         /uG/+J603tKg3P37pGqHHlbr3fFTWLeZiT1w6+erAhedOqoJk8L3BOwALYuFUkgt9rFv
-         jQiGMsXhV5QujyODOTCAMmYW8e/ggOnHL5d6jTVn1If8szV5+b8LHzdFdowkrSUMEWah
-         jPTmEQXdKOuovazsDjAlCKdIyJVrK45UjaRmuw4mwTheKA34Yrm9QDVifKZ9hcVLF1Go
-         vZJYetHiq9fRPxQVsdpQnn9p5KE/Ol1buMRKZZWhAVmq4hbRovF1sdC/5fDZhn2tpOSm
-         5hLQ==
+        Tue, 8 Feb 2022 03:56:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F2A8FC03FEC0
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 00:56:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644310566;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HqHf6EUSPiajiRiec1PDYOjczpr3OtMb+80DurOQm1Q=;
+        b=ezOyJQgyV11S8QI8LeSycVL1pEqDadexsV7uNrc+JbyLYz+iBP+vcWHQktmIIoyUfeMc9D
+        5naXFgjdljni+Z6Kt06TZ0SdGpinuNyEvWBKLGh9pFDpa48tPGvfrablRsE6NWNuc8EbJl
+        xIBcYOGfPbBqJ4xuIphX0Vhy4wR8DLM=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-437-mefsVjGMM9uxplibzJVBXg-1; Tue, 08 Feb 2022 03:56:05 -0500
+X-MC-Unique: mefsVjGMM9uxplibzJVBXg-1
+Received: by mail-ed1-f71.google.com with SMTP id ed6-20020a056402294600b004090fd8a936so9332694edb.23
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 00:56:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ad/AIeKw/gggP6Br2uoykBbNKFVMSxSNAtQyiBt1RW0=;
-        b=zvIScZptmZCLpLfdBN5kUdKy6kelj1Gs2T/HXPIyz75LkTMv0NCCWUy4w1dmBHVKl5
-         0ykP+T/XMa2CNFJg2hm+Ixyj5Wy6vyDVqaNusLyq6dGYNiCYallLRXMnv9uGfT5cJ6rr
-         Q/L3q79dpSQ+Q9O0JVufz2xBBzU5sIsV+M6N8e7tpX7zad08TWuBgcXVq5UFZAOCXNq7
-         WFkE7YbcOqLYLRNsVYE4Jcid38+3283LYFzAsaIYyMXeX3SUnEq4Qq2D/vEYXSxqUbiP
-         o3bb1gnwLaPZ9pvI3efM0numFsyUGP3ipZM+zkO2Sq5ghD0iqfzb49ebHDhWX/y0fFtF
-         ygGA==
-X-Gm-Message-State: AOAM530OjegXAcNP4tRkOw1aNZHtTFxkR7S6Z21v8V9CNLpwUs2hysJn
-        uq/sXVl0Mdp/Mm1bvkZdYaFHMEs4rkVBEhenWem8+Q==
-X-Google-Smtp-Source: ABdhPJzgSop4y+Hsg6mK+sVfvqbbliyC19eTL7sLF/m+UVhe/JN/7WOPjVFLYB6Xxfkqx+mpiM4ybuPoWNgcPTqKJbA=
-X-Received: by 2002:adf:bc44:: with SMTP id a4mr2655518wrh.346.1644310456139;
- Tue, 08 Feb 2022 00:54:16 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=HqHf6EUSPiajiRiec1PDYOjczpr3OtMb+80DurOQm1Q=;
+        b=6JB7vbt7s42lHo7O79DuoEiQlJAtYX+vYUGyx557G8JXmsrzpo3fvUpqv3UTr85sHN
+         gzjyOOHwxmvcxzeRf3wYFxGESJOxisC2o9d8ynx3pHLzgTbpaeNv+g6va6GZCeZg6o76
+         Wc/MUtBevLatT+ZHNfXcm8Vuy4YVVTBR+pR8yWMlC7jy3LaMJdMyq3xboqRZl8V74i2a
+         p2PacdffFKmY8Dk9GMdLJdUAUqUNeS8G32EliDBDbkrbXusSZSG5kNQbrv3LJDBaPhVM
+         vrjp0ZeZTPMhEoqped/2ly5KLLIinxJ/CShtWQrKXyZJ9jEBFy91uOMZGCwA7NwcUcek
+         WiUQ==
+X-Gm-Message-State: AOAM533Htgs3TYfhxyKE2urJKFj6gSisKdxQV2BcDBI+SqMNPYo69y9z
+        jP8gbNTEO/BeDsqlG3piceckFLzxWxodyNESjce1BP81MNtRwnza4m6DvsrLGjZqa06zA32fHMQ
+        VnAO3b+fiv33lUYFujFXnuuyT
+X-Received: by 2002:a17:906:ece8:: with SMTP id qt8mr2833149ejb.738.1644310563747;
+        Tue, 08 Feb 2022 00:56:03 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxgmPnTDJ6VlcDa8upD9ktiB96Y6h6udXwi5BYuSzgtm0wmNJhiXp3oe3DRP7Kchc8LQVc1Ew==
+X-Received: by 2002:a17:906:ece8:: with SMTP id qt8mr2833120ejb.738.1644310563433;
+        Tue, 08 Feb 2022 00:56:03 -0800 (PST)
+Received: from krava (nat-pool-brq-u.redhat.com. [213.175.37.12])
+        by smtp.gmail.com with ESMTPSA id hw16sm1427914ejc.10.2022.02.08.00.56.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 00:56:02 -0800 (PST)
+Date:   Tue, 8 Feb 2022 09:56:01 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Jiri Olsa <olsajiri@gmail.com>
+Subject: Re: [PATCH 1/8] bpf: Add support to attach kprobe program with fprobe
+Message-ID: <YgIwISCfw+DfIBTR@krava>
+References: <20220202135333.190761-1-jolsa@kernel.org>
+ <20220202135333.190761-2-jolsa@kernel.org>
+ <CAEf4BzZYepTYLN6LrPAAaOXUtCBv07bQQJzgarntu03L+cj2GQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220126114452.692512-1-apatel@ventanamicro.com>
- <20220126114452.692512-9-apatel@ventanamicro.com> <CAJF2gTQsSn1KBgX2bg2LiSUbCmbGD3oF5KcmK5gq2Dd49BWDBQ@mail.gmail.com>
-In-Reply-To: <CAJF2gTQsSn1KBgX2bg2LiSUbCmbGD3oF5KcmK5gq2Dd49BWDBQ@mail.gmail.com>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Tue, 8 Feb 2022 14:24:04 +0530
-Message-ID: <CAAhSdy3Dkv6ga0ZMp5rMFa8nV9EDHgOMBwuJ4z4-w52T8EaUag@mail.gmail.com>
-Subject: Re: [PATCH v10 8/8] RISC-V: Enable RISC-V SBI CPU Idle driver for
- QEMU virt machine
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Anup Patel <apatel@ventanamicro.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Sandeep Tripathy <milun.tripathy@gmail.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Liush <liush@allwinnertech.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        kvm-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzZYepTYLN6LrPAAaOXUtCBv07bQQJzgarntu03L+cj2GQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 8, 2022 at 12:16 PM Guo Ren <guoren@kernel.org> wrote:
->
-> Another question:
->
-> Have you put "idle-states {" in qemu's DTS? or how do you test your patches?
+On Mon, Feb 07, 2022 at 10:59:14AM -0800, Andrii Nakryiko wrote:
+> On Wed, Feb 2, 2022 at 5:53 AM Jiri Olsa <jolsa@redhat.com> wrote:
+> >
+> > Adding new link type BPF_LINK_TYPE_FPROBE that attaches kprobe program
+> > through fprobe API.
+> >
+> > The fprobe API allows to attach probe on multiple functions at once very
+> > fast, because it works on top of ftrace. On the other hand this limits
+> > the probe point to the function entry or return.
+> >
+> > The kprobe program gets the same pt_regs input ctx as when it's attached
+> > through the perf API.
+> >
+> > Adding new attach type BPF_TRACE_FPROBE that enables such link for kprobe
+> > program.
+> >
+> > User provides array of addresses or symbols with count to attach the kprobe
+> > program to. The new link_create uapi interface looks like:
+> >
+> >   struct {
+> >           __aligned_u64   syms;
+> >           __aligned_u64   addrs;
+> >           __u32           cnt;
+> >           __u32           flags;
+> >   } fprobe;
+> >
+> > The flags field allows single BPF_F_FPROBE_RETURN bit to create return fprobe.
+> >
+> > Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > ---
+> >  include/linux/bpf_types.h      |   1 +
+> >  include/uapi/linux/bpf.h       |  13 ++
+> >  kernel/bpf/syscall.c           | 248 ++++++++++++++++++++++++++++++++-
+> >  tools/include/uapi/linux/bpf.h |  13 ++
+> >  4 files changed, 270 insertions(+), 5 deletions(-)
+> >
+> 
+> [...]
+> 
+> >
+> > +#ifdef CONFIG_FPROBE
+> > +
+> > +struct bpf_fprobe_link {
+> > +       struct bpf_link link;
+> > +       struct fprobe fp;
+> > +       unsigned long *addrs;
+> > +};
+> > +
+> > +static void bpf_fprobe_link_release(struct bpf_link *link)
+> > +{
+> > +       struct bpf_fprobe_link *fprobe_link;
+> > +
+> > +       fprobe_link = container_of(link, struct bpf_fprobe_link, link);
+> > +       unregister_fprobe(&fprobe_link->fp);
+> > +}
+> > +
+> > +static void bpf_fprobe_link_dealloc(struct bpf_link *link)
+> > +{
+> > +       struct bpf_fprobe_link *fprobe_link;
+> > +
+> > +       fprobe_link = container_of(link, struct bpf_fprobe_link, link);
+> > +       kfree(fprobe_link->addrs);
+> > +       kfree(fprobe_link);
+> > +}
+> > +
+> > +static const struct bpf_link_ops bpf_fprobe_link_lops = {
+> > +       .release = bpf_fprobe_link_release,
+> > +       .dealloc = bpf_fprobe_link_dealloc,
+> > +};
+> > +
+> 
+> should this whole new link implementation (including
+> fprobe_link_prog_run() below) maybe live in kernel/trace/bpf_trace.c?
+> Seems a bit more fitting than kernel/bpf/syscall.c
 
-I usually do the following:
-1) Dump QEMU virt machine DTB
-2) Convert QEMU virt machine DTB into DTS
-3) Add "idle-states" in QEMU virt machine DTS
-4) Create QEMU virt machine DTB with "idle-states"
-5) Use the new QEMU virt machine DTB for testing this series.
+right, it's trace related
 
-Here's one of the DTS files which I used for testing on QEMU virt machine:
+> 
+> > +static int fprobe_link_prog_run(struct bpf_fprobe_link *fprobe_link,
+> > +                               struct pt_regs *regs)
+> > +{
+> > +       int err;
+> > +
+> > +       if (unlikely(__this_cpu_inc_return(bpf_prog_active) != 1)) {
+> > +               err = 0;
+> > +               goto out;
+> > +       }
+> > +
+> > +       rcu_read_lock();
+> > +       migrate_disable();
+> > +       err = bpf_prog_run(fprobe_link->link.prog, regs);
+> > +       migrate_enable();
+> > +       rcu_read_unlock();
+> > +
+> > + out:
+> > +       __this_cpu_dec(bpf_prog_active);
+> > +       return err;
+> > +}
+> > +
+> > +static void fprobe_link_entry_handler(struct fprobe *fp, unsigned long entry_ip,
+> > +                                     struct pt_regs *regs)
+> > +{
+> > +       unsigned long saved_ip = instruction_pointer(regs);
+> > +       struct bpf_fprobe_link *fprobe_link;
+> > +
+> > +       /*
+> > +        * Because fprobe's regs->ip is set to the next instruction of
+> > +        * dynamic-ftrace insturction, correct entry ip must be set, so
+> > +        * that the bpf program can access entry address via regs as same
+> > +        * as kprobes.
+> > +        */
+> > +       instruction_pointer_set(regs, entry_ip);
+> > +
+> > +       fprobe_link = container_of(fp, struct bpf_fprobe_link, fp);
+> > +       fprobe_link_prog_run(fprobe_link, regs);
+> > +
+> > +       instruction_pointer_set(regs, saved_ip);
+> > +}
+> > +
+> > +static void fprobe_link_exit_handler(struct fprobe *fp, unsigned long entry_ip,
+> > +                                    struct pt_regs *regs)
+> 
+> isn't it identical to fprobe_lnk_entry_handler? Maybe use one callback
+> for both entry and exit?
 
-/dts-v1/;
+heh, did not notice that :) yep, looks that way, will check
 
-/ {
-    #address-cells = <0x02>;
-    #size-cells = <0x02>;
-    compatible = "riscv-virtio";
-    model = "riscv-virtio,qemu";
+> 
+> > +{
+> > +       unsigned long saved_ip = instruction_pointer(regs);
+> > +       struct bpf_fprobe_link *fprobe_link;
+> > +
+> > +       instruction_pointer_set(regs, entry_ip);
+> > +
+> > +       fprobe_link = container_of(fp, struct bpf_fprobe_link, fp);
+> > +       fprobe_link_prog_run(fprobe_link, regs);
+> > +
+> > +       instruction_pointer_set(regs, saved_ip);
+> > +}
+> > +
+> > +static int fprobe_resolve_syms(const void *usyms, u32 cnt,
+> > +                              unsigned long *addrs)
+> > +{
+> > +       unsigned long addr, size;
+> > +       const char **syms;
+> > +       int err = -ENOMEM;
+> > +       unsigned int i;
+> > +       char *func;
+> > +
+> > +       size = cnt * sizeof(*syms);
+> > +       syms = kzalloc(size, GFP_KERNEL);
+> 
+> any reason not to use kvzalloc() here?
 
-    chosen {
-        linux,initrd-end = <0x8855d200>;
-        linux,initrd-start = <0x88200000>;
-        bootargs = "root=/dev/ram rw console=ttyS0 earlycon";
-        stdout-path = "/soc/uart@10000000";
-    };
+probably just my ignorance ;-) will check
 
-    memory@80000000 {
-        device_type = "memory";
-        reg = <0x00 0x80000000 0x00 0x10000000>;
-    };
+> 
+> > +       if (!syms)
+> > +               return -ENOMEM;
+> > +
+> 
+> [...]
+> 
+> > +
+> > +static int bpf_fprobe_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+> > +{
+> > +       struct bpf_fprobe_link *link = NULL;
+> > +       struct bpf_link_primer link_primer;
+> > +       unsigned long *addrs;
+> > +       u32 flags, cnt, size;
+> > +       void __user *uaddrs;
+> > +       void __user *usyms;
+> > +       int err;
+> > +
+> > +       /* no support for 32bit archs yet */
+> > +       if (sizeof(u64) != sizeof(void *))
+> > +               return -EINVAL;
+> 
+> -EOPNOTSUPP?
 
-    cpus {
-        #address-cells = <0x01>;
-        #size-cells = <0x00>;
-        timebase-frequency = <0x989680>;
+ok
 
-        cpu@0 {
-            phandle = <0x07>;
-            device_type = "cpu";
-            reg = <0x00>;
-            status = "okay";
-            compatible = "riscv";
-            riscv,isa = "rv64imafdcsu";
-            mmu-type = "riscv,sv48";
-            cpu-idle-states = <&CPU_NONRET_DEF>;
+> 
+> > +
+> > +       if (prog->expected_attach_type != BPF_TRACE_FPROBE)
+> > +               return -EINVAL;
+> > +
+> > +       flags = attr->link_create.fprobe.flags;
+> > +       if (flags & ~BPF_F_FPROBE_RETURN)
+> > +               return -EINVAL;
+> > +
+> > +       uaddrs = u64_to_user_ptr(attr->link_create.fprobe.addrs);
+> > +       usyms = u64_to_user_ptr(attr->link_create.fprobe.syms);
+> > +       if ((!uaddrs && !usyms) || (uaddrs && usyms))
+> > +               return -EINVAL;
+> 
+> !!uaddrs == !!usyms ?
 
-            interrupt-controller {
-                #interrupt-cells = <0x01>;
-                interrupt-controller;
-                compatible = "riscv,cpu-intc";
-                phandle = <0x08>;
-            };
-        };
+ah right, will change
 
-        cpu@1 {
-            phandle = <0x05>;
-            device_type = "cpu";
-            reg = <0x01>;
-            status = "okay";
-            compatible = "riscv";
-            riscv,isa = "rv64imafdcsu";
-            mmu-type = "riscv,sv48";
-            cpu-idle-states = <&CPU_RET_DEF>;
+> 
+> > +
+> > +       cnt = attr->link_create.fprobe.cnt;
+> > +       if (!cnt)
+> > +               return -EINVAL;
+> > +
+> > +       size = cnt * sizeof(*addrs);
+> > +       addrs = kzalloc(size, GFP_KERNEL);
+> 
+> same, why not kvzalloc? Also, aren't you overwriting each addrs entry
+> anyway, so "z" is not necessary, right?
 
-            interrupt-controller {
-                #interrupt-cells = <0x01>;
-                interrupt-controller;
-                compatible = "riscv,cpu-intc";
-                phandle = <0x06>;
-            };
-        };
+true, no need for zeroing
 
-        cpu@2 {
-            phandle = <0x03>;
-            device_type = "cpu";
-            reg = <0x02>;
-            status = "okay";
-            compatible = "riscv";
-            riscv,isa = "rv64imafdcsu";
-            mmu-type = "riscv,sv48";
-            cpu-idle-states = <&CPU_NONRET_DEF>;
+thanks,
+jirka
 
-            interrupt-controller {
-                #interrupt-cells = <0x01>;
-                interrupt-controller;
-                compatible = "riscv,cpu-intc";
-                phandle = <0x04>;
-            };
-        };
-
-        cpu@3 {
-            phandle = <0x01>;
-            device_type = "cpu";
-            reg = <0x03>;
-            status = "okay";
-            compatible = "riscv";
-            riscv,isa = "rv64imafdcsu";
-            mmu-type = "riscv,sv48";
-            cpu-idle-states = <&CPU_RET_DEF>;
-
-            interrupt-controller {
-                #interrupt-cells = <0x01>;
-                interrupt-controller;
-                compatible = "riscv,cpu-intc";
-                phandle = <0x02>;
-            };
-        };
-
-        cpu-map {
-
-            cluster0 {
-
-                core0 {
-                    cpu = <0x07>;
-                };
-
-                core1 {
-                    cpu = <0x05>;
-                };
-
-                core2 {
-                    cpu = <0x03>;
-                };
-
-                core3 {
-                    cpu = <0x01>;
-                };
-            };
-        };
-
-        idle-states {
-            CPU_RET_DEF: cpu-retentive-default {
-                compatible = "riscv,idle-state";
-                riscv,sbi-suspend-param = <0x00000000>;
-                entry-latency-us = <10>;
-                exit-latency-us = <10>;
-                min-residency-us = <100>;
-            };
-
-            CPU_NONRET_DEF: cpu-nonretentive-default {
-                compatible = "riscv,idle-state";
-                riscv,sbi-suspend-param = <0x80000000>;
-                entry-latency-us = <100>;
-                exit-latency-us = <100>;
-                min-residency-us = <1000>;
-            };
-        };
-    };
-
-    soc {
-        #address-cells = <0x02>;
-        #size-cells = <0x02>;
-        compatible = "simple-bus";
-        ranges;
-
-        flash@20000000 {
-            bank-width = <0x04>;
-            reg = <0x00 0x20000000 0x00 0x2000000 0x00 0x22000000 0x00
-0x2000000>;
-            compatible = "cfi-flash";
-        };
-
-        rtc@101000 {
-            interrupts = <0x0b>;
-            interrupt-parent = <0x09>;
-            reg = <0x00 0x101000 0x00 0x1000>;
-            compatible = "google,goldfish-rtc";
-        };
-
-        uart@10000000 {
-            interrupts = <0x0a>;
-            interrupt-parent = <0x09>;
-            clock-frequency = <0x384000>;
-            reg = <0x00 0x10000000 0x00 0x100>;
-            compatible = "ns16550a";
-        };
-
-        poweroff {
-            value = <0x5555>;
-            offset = <0x00>;
-            regmap = <0x0a>;
-            compatible = "syscon-poweroff";
-        };
-
-        reboot {
-            value = <0x7777>;
-            offset = <0x00>;
-            regmap = <0x0a>;
-            compatible = "syscon-reboot";
-        };
-
-        test@100000 {
-            phandle = <0x0a>;
-            reg = <0x00 0x100000 0x00 0x1000>;
-            compatible = "sifive,test1\0sifive,test0\0syscon";
-        };
-
-        pci@30000000 {
-            interrupt-map-mask = <0x1800 0x00 0x00 0x07>;
-            interrupt-map = <0x00 0x00 0x00 0x01 0x09 0x20 0x00 0x00
-0x00 0x02 0x09 0x21 0x00 0x00 0x00 0x03 0x09 0x22 0x00 0x00 0x00 0x04
-0x09 0x23 0x800 0x00 0x00 0x01 0x09 0x21 0x800 0x00 0x00 0x02 0x09
-0x22 0x800 0x00 0x00 0x03 0x09 0x23 0x800 0x00 0x00 0x04 0x09 0x20
-0x1000 0x00 0x00 0x01 0x09 0x22 0x1000 0x00 0x00 0x02 0x09 0x23 0x1000
-0x00 0x00 0x03 0x09 0x20 0x1000 0x00 0x00 0x04 0x09 0x21 0x1800 0x00
-0x00 0x01 0x09 0x23 0x1800 0x00 0x00 0x02 0x09 0x20 0x1800 0x00 0x00
-0x03 0x09 0x21 0x1800 0x00 0x00 0x04 0x09 0x22>;
-            ranges = <0x1000000 0x00 0x00 0x00 0x3000000 0x00 0x10000
-0x2000000 0x00 0x40000000 0x00 0x40000000 0x00 0x40000000>;
-            reg = <0x00 0x30000000 0x00 0x10000000>;
-            dma-coherent;
-            bus-range = <0x00 0xff>;
-            linux,pci-domain = <0x00>;
-            device_type = "pci";
-            compatible = "pci-host-ecam-generic";
-            #size-cells = <0x02>;
-            #interrupt-cells = <0x01>;
-            #address-cells = <0x03>;
-        };
-
-        virtio_mmio@10008000 {
-            interrupts = <0x08>;
-            interrupt-parent = <0x09>;
-            reg = <0x00 0x10008000 0x00 0x1000>;
-            compatible = "virtio,mmio";
-        };
-
-        virtio_mmio@10007000 {
-            interrupts = <0x07>;
-            interrupt-parent = <0x09>;
-            reg = <0x00 0x10007000 0x00 0x1000>;
-            compatible = "virtio,mmio";
-        };
-
-        virtio_mmio@10006000 {
-            interrupts = <0x06>;
-            interrupt-parent = <0x09>;
-            reg = <0x00 0x10006000 0x00 0x1000>;
-            compatible = "virtio,mmio";
-        };
-
-        virtio_mmio@10005000 {
-            interrupts = <0x05>;
-            interrupt-parent = <0x09>;
-            reg = <0x00 0x10005000 0x00 0x1000>;
-            compatible = "virtio,mmio";
-        };
-
-        virtio_mmio@10004000 {
-            interrupts = <0x04>;
-            interrupt-parent = <0x09>;
-            reg = <0x00 0x10004000 0x00 0x1000>;
-            compatible = "virtio,mmio";
-        };
-
-        virtio_mmio@10003000 {
-            interrupts = <0x03>;
-            interrupt-parent = <0x09>;
-            reg = <0x00 0x10003000 0x00 0x1000>;
-            compatible = "virtio,mmio";
-        };
-
-        virtio_mmio@10002000 {
-            interrupts = <0x02>;
-            interrupt-parent = <0x09>;
-            reg = <0x00 0x10002000 0x00 0x1000>;
-            compatible = "virtio,mmio";
-        };
-
-        virtio_mmio@10001000 {
-            interrupts = <0x01>;
-            interrupt-parent = <0x09>;
-            reg = <0x00 0x10001000 0x00 0x1000>;
-            compatible = "virtio,mmio";
-        };
-
-        plic@c000000 {
-            phandle = <0x09>;
-            riscv,ndev = <0x35>;
-            reg = <0x00 0xc000000 0x00 0x210000>;
-            interrupts-extended = <0x08 0x0b 0x08 0x09 0x06 0x0b 0x06
-0x09 0x04 0x0b 0x04 0x09 0x02 0x0b 0x02 0x09>;
-            interrupt-controller;
-            compatible = "riscv,plic0";
-            #interrupt-cells = <0x01>;
-            #address-cells = <0x00>;
-        };
-
-        clint@2000000 {
-            interrupts-extended = <0x08 0x03 0x08 0x07 0x06 0x03 0x06
-0x07 0x04 0x03 0x04 0x07 0x02 0x03 0x02 0x07>;
-            reg = <0x00 0x2000000 0x00 0x10000>;
-            compatible = "riscv,clint0";
-        };
-    };
-};
-
-Regards,
-Anup

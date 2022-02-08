@@ -2,137 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7F104AD04C
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 05:20:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD3264AD055
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 05:24:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345913AbiBHEUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 23:20:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47252 "EHLO
+        id S1346907AbiBHEYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 23:24:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233749AbiBHEU2 (ORCPT
+        with ESMTP id S1346871AbiBHEYj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 23:20:28 -0500
-Received: from sender4-pp-o95.zoho.com (sender4-pp-o95.zoho.com [136.143.188.95])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19FF1C0401DC;
-        Mon,  7 Feb 2022 20:20:26 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1644294016; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=A/gZ4I2W1aFDF/7HB6EFQWWvauCeg2zwErlsABsQdO7YXK3o6iwT75rOn9X6Jm3sz5eMhqmxEBxlBhref12Eb/REUm34PTohaSUjrhVUKQb6qJ3knwZhWihN/ryZGsjUko2fUBz6IgSMjMwSJ1Tf7yp6BXbopmZF9jbcobGHtEs=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1644294016; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=Fd1dN+H9VpLs2Rn96C0ylDOWq0q9ugp5pJzIMQqGhXc=; 
-        b=UCxIu+4iZdjV7OXZLMc/pMjWN7GvUcVk9cqQoM/ncGf+fHY6DBxO8mGvtRwPF4SUrhKUI/JRCJLirNKnajGufAneWwbnbkYnMQz2Hx9btOiG/WF2fdkMRxotVEkeXYV1/L6UDIiIqlPLQdvfMz3NeqtaLbkpbcbmkS9+4S5iiIU=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=zohomail.com;
-        spf=pass  smtp.mailfrom=lchen.firstlove@zohomail.com;
-        dmarc=pass header.from=<lchen.firstlove@zohomail.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1644294016;
-        s=zm2020; d=zohomail.com; i=lchen.firstlove@zohomail.com;
-        h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding;
-        bh=Fd1dN+H9VpLs2Rn96C0ylDOWq0q9ugp5pJzIMQqGhXc=;
-        b=Z0bAkZa11QHSnDBoKchxvwAKwUtv30GQ7YYOZyf9jOOXhEqcXifJk9OfpEZD2mdH
-        cLYmhP0qsH98apYNmyHFh3j3IpCAyJDHBon/KHo5/SdQuY46YjNv5G5MlsSOvaw6luE
-        ADiPnpnTGMYA24Cn18X508G+QwRa90rb5aoEKu9w=
-Received: from mail.zoho.com by mx.zohomail.com
-        with SMTP id 1644294015113890.2803542207891; Mon, 7 Feb 2022 20:20:15 -0800 (PST)
-Received: from  [45.80.185.188] by mail.zoho.com
-        with HTTP;Mon, 7 Feb 2022 20:20:15 -0800 (PST)
-Date:   Mon, 07 Feb 2022 23:20:15 -0500
-From:   Li Chen <lchen.firstlove@zohomail.com>
-To:     "Bjorn Helgaas" <helgaas@kernel.org>
-Cc:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Kishon Vijay Abraham I" <kishon@ti.com>,
-        "Lorenzo Pieralisi" <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?Q?=22Krzysztof_Wilczy=C5=84ski=22?= <kw@linux.com>,
-        "Arnd Bergmann" <arnd@arndb.de>,
-        "Bjorn Helgaas" <bhelgaas@google.com>,
-        "linux-pci" <linux-pci@vger.kernel.org>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>
-Message-ID: <17ed78f886f.d22c200668349.8594449941761827257@zohomail.com>
-In-Reply-To: <20220207175613.GA404082@bhelgaas>
-References: <20220207175613.GA404082@bhelgaas>
-Subject: Re: [PATCH V6] misc: pci_endpoint_test: simplify endpoint test read
- and write operations
+        Mon, 7 Feb 2022 23:24:39 -0500
+Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C85C9C0401EA;
+        Mon,  7 Feb 2022 20:24:37 -0800 (PST)
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171]) (authenticated)
+        by conssluserg-06.nifty.com with ESMTP id 2184O8tY026277;
+        Tue, 8 Feb 2022 13:24:09 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 2184O8tY026277
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1644294249;
+        bh=19uR+JQrTDSNjb/M+uvq075l3b28UXxtfZ5ZKrtYtzw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=k640Df3SrCi6fK+IspeoU5KOGEeWwlg3V0VARZ5jpH+hr622BV+dar0DE7tkD4ftM
+         Nl8bp7u1erlyxLSu7DOS28i/BOL9BBocT+yIqqO7x9ZpcSkjsj+n9yvxR4KvIayebH
+         8CvETzc3aKM1ewcrZCpzZ5q3npOMgarvQjNQzmwWYbLHbozp/qZbEIQP8kVXptxpts
+         YzYU6N2O/jGo/3gqJdnr2ZkNdRl1cEtBqTBLLrtZIsfzqTvO7xvhq6S6y1SidE9aV4
+         /LCU14Cc8LW50UKekJ/LMXcHcDbfM8FCjJDb6kxxozk8tZvjnq2yCERk2OTRQgr0Yd
+         L7TBqmYiSvgPA==
+X-Nifty-SrcIP: [209.85.214.171]
+Received: by mail-pl1-f171.google.com with SMTP id y7so7560887plp.2;
+        Mon, 07 Feb 2022 20:24:09 -0800 (PST)
+X-Gm-Message-State: AOAM531RgVJZ+A9WM1ZLG1XjKixD4UM5vQADJkBYYfHk6Qg/EnmBFXDI
+        VVsGhGZIASjueIUHKlLrYEOujnWPK0/+QjUM4Lo=
+X-Google-Smtp-Source: ABdhPJz2z9KXlrVLO5E7bA267/kU9GqMyolRq34mQQWWV79UiH2n6X5+/PWBXovs/xUvLsayHJ/bKqkNLxzPi6m7E1k=
+X-Received: by 2002:a17:902:6948:: with SMTP id k8mr2866496plt.136.1644294248161;
+ Mon, 07 Feb 2022 20:24:08 -0800 (PST)
 MIME-Version: 1.0
+References: <20220202230515.2931333-1-nathan@kernel.org> <CAKwvOdkQ__2A3NohrcJgF+JABSDnSyEKzD97qVa4cpM==GPONQ@mail.gmail.com>
+In-Reply-To: <CAKwvOdkQ__2A3NohrcJgF+JABSDnSyEKzD97qVa4cpM==GPONQ@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 8 Feb 2022 13:23:32 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASCGbLWkDXYqyCf08sFHjGqvqSgmFsJ741MHGSKzkifLg@mail.gmail.com>
+Message-ID: <CAK7LNASCGbLWkDXYqyCf08sFHjGqvqSgmFsJ741MHGSKzkifLg@mail.gmail.com>
+Subject: Re: [PATCH v2] Makefile.extrawarn: Move -Wunaligned-access to W=1
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        llvm@lists.linux.dev, stable <stable@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- ---- On Mon, 07 Feb 2022 12:56:13 -0500 Bjorn Helgaas <helgaas@kernel.org> wrote ----
- > On Mon, Feb 07, 2022 at 04:09:05AM -0500, Li Chen wrote:
- > > From: Li Chen <lchen@ambarella.com>
- > > 
- > > Introduce pci_endpoint_epf_transfer_data to simplify
- > > read and write operations.
- > > 
- > > Also tabify this file.
- > 
- > Thanks for the patch.
- > 
- > This doesn't apply cleanly on v5.17-rc1.  Please make it apply cleanly
- > there or at least mention where it *does* apply.
+On Thu, Feb 3, 2022 at 8:12 AM Nick Desaulniers <ndesaulniers@google.com> wrote:
+>
+> On Wed, Feb 2, 2022 at 3:07 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> >
+> > -Wunaligned-access is a new warning in clang that is default enabled for
+> > arm and arm64 under certain circumstances within the clang frontend (see
+> > LLVM commit below). On v5.17-rc2, an ARCH=arm allmodconfig build shows
+> > 1284 total/70 unique instances of this warning (most of the instances
+> > are in header files), which is quite noisy.
+> >
+> > To keep a normal build green through CONFIG_WERROR, only show this
+> > warning with W=1, which will allow automated build systems to catch new
+> > instances of the warning so that the total number can be driven down to
+> > zero eventually since catching unaligned accesses at compile time would
+> > be generally useful.
+> >
+> > Cc: stable@vger.kernel.org
+> > Link: https://github.com/llvm/llvm-project/commit/35737df4dcd28534bd3090157c224c19b501278a
+> > Link: https://github.com/ClangBuiltLinux/linux/issues/1569
+> > Link: https://github.com/ClangBuiltLinux/linux/issues/1576
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+>
+> Thanks to you and Arnd for working out whether this is important to
+> pursue. Sounds like it is.
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+>
+> > ---
 
-Ok, will send v7 which will be based on v5.17-rc3.
 
- > 
- > Please separate the whitespace tabification changes and the
- > pci_endpoint_epf_transfer_data() changes into two separate patches.
- > When they're mixed together, it's harder to review the patch.
- > 
- > > #define to_endpoint_test(priv) container_of((priv), struct pci_endpoint_test, \
- > > -                     miscdev)
- > > +                        miscdev)
- > 
- > Always indent with tabs when possible:
- > 
- >   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/coding-style.rst?id=v5.16#n18
- > 
- > Hmm, coding-style.rst is unfortunately not very explicit about that.
- > 
- > But it's obvious from the existing code in this file that things
- > should not be indented four spaces, as you did in
- > pci_endpoint_test_transfer_data().
+I assume this should be considered as a bug fix
+to avoid the error for the combination of CONFIG_WERROR=y
+and the latest Clang.
 
-So, can I say space is not allowed in indentation? If so, I should not use emacs's tabify, because it will not convert 4 space to 8-width tab. I'm also not sure is scripts/Lindent or clang-format is a good
-choice here, they do too much changes.
+Applied to linux-kbuild/fixes.
+Thanks.
 
- > 
- > Your patch should match the style of the existing code.
- > 
- > > +static bool pci_endpoint_test_transfer_data(struct pci_endpoint_test *test,
- > > +                unsigned long arg, const int operation)
- > > +{
- > > +    struct pci_endpoint_test_xfer_param param;
- > > +    bool ret = false;
- > > +    u32 flags = 0;
- > 
- > 
- > > +    // if we ask rc to write to ep, then ep should do read operation, and vice versa.
- > 
- > Please use /* */ comments to match the prevailing kernel comment
- > style:
- > 
- >   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/coding-style.rst?id=v5.16#n598
- > 
- > And spell out or at least capitalize "RC" and "EP" since they're not
- > real words.
- > 
 
-Thanks, will do it in v7.
 
- > Bjorn
- > 
+> >
+> > v1 -> v2: https://lore.kernel.org/r/20220201232229.2992968-1-nathan@kernel.org/
+> >
+> > * Move to W=1 instead of W=2 so that new instances are caught (Arnd).
+> > * Add links to the ClangBuiltLinux issue tracker.
+> >
+> >  scripts/Makefile.extrawarn | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
+> > index d53825503874..8be892887d71 100644
+> > --- a/scripts/Makefile.extrawarn
+> > +++ b/scripts/Makefile.extrawarn
+> > @@ -51,6 +51,7 @@ KBUILD_CFLAGS += -Wno-sign-compare
+> >  KBUILD_CFLAGS += -Wno-format-zero-length
+> >  KBUILD_CFLAGS += $(call cc-disable-warning, pointer-to-enum-cast)
+> >  KBUILD_CFLAGS += -Wno-tautological-constant-out-of-range-compare
+> > +KBUILD_CFLAGS += $(call cc-disable-warning, unaligned-access)
+> >  endif
+> >
+> >  endif
+> >
+> > base-commit: 26291c54e111ff6ba87a164d85d4a4e134b7315c
+> > --
+> > 2.35.1
+> >
+>
+>
+> --
+> Thanks,
+> ~Nick Desaulniers
 
-Regards,
-Li
+
+
+-- 
+Best Regards
+Masahiro Yamada

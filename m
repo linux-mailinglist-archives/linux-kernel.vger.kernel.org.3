@@ -2,127 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 705E44AD316
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 09:21:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E7814AD319
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 09:22:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349251AbiBHIVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 03:21:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53274 "EHLO
+        id S1349354AbiBHIV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 03:21:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349199AbiBHIUp (ORCPT
+        with ESMTP id S1349200AbiBHIUw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 03:20:45 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AF8CC03FEDC
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 00:19:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644308396; x=1675844396;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=tuIR9wF0k+6Vhg3ZZvw4XQ2JjoGwBZ5JjajcPWMoMh8=;
-  b=bW4c3AMAWcSipm+vvG/WWWAfR5yTsqqmk3vEQF11fPLZKWSSEK5ZNmy0
-   HfSUdkxsXFbsxXzuRQ2FFkkf0I5qImk6JqrHmBpnbG0XLRuHxNQA5Klrl
-   0o1CT6CMmZJ9vTrZI75QzI/RUTCWAKJL/7HYiEJq8ku19e8YdfM+PdoL0
-   nlMdEbUMEljdRVvEQ4bOABX+0lti3wv2JxOHhjJBp8AWo5AyNXYC8tJuZ
-   N6jk+MupxNS6IrlJlVkFHpuJwazxnnV+d+hHTgOPdFqICPR6Wf0zcVkNw
-   2ZROS7Mp1HjDlC9qlDzTt3gkmRR530hPviVy+TF5jYWmdgCCrzxeTru0f
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="232466294"
-X-IronPort-AV: E=Sophos;i="5.88,352,1635231600"; 
-   d="scan'208";a="232466294"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 00:19:56 -0800
-X-IronPort-AV: E=Sophos;i="5.88,352,1635231600"; 
-   d="scan'208";a="525460508"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.11])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 00:19:54 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Mel Gorman <mgorman@suse.de>, linux-kernel@vger.kernel.org,
-        Ingo Molnar <mingo@redhat.com>, Rik van Riel <riel@surriel.com>
-Subject: Re: [RFC PATCH 2/2] NUMA balancing: avoid to migrate task to
- CPU-less node
-References: <20220128023842.1946583-1-ying.huang@intel.com>
-        <20220128023842.1946583-2-ying.huang@intel.com>
-        <20220128053341.GB618915@linux.vnet.ibm.com>
-        <877dakti0n.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <20220201055904.GD618915@linux.vnet.ibm.com>
-Date:   Tue, 08 Feb 2022 16:19:52 +0800
-In-Reply-To: <20220201055904.GD618915@linux.vnet.ibm.com> (Srikar Dronamraju's
-        message of "Tue, 1 Feb 2022 11:29:04 +0530")
-Message-ID: <8735ktn51z.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Tue, 8 Feb 2022 03:20:52 -0500
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2090.outbound.protection.outlook.com [40.107.255.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F6CBC03E909;
+        Tue,  8 Feb 2022 00:20:12 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ar6rQ+NfXVhVxlHyUK9RTpFE0/SyPS1HSC5wVSWCF+ta3LgkYAzh7/JiS0uojD4I4TZZUSYqjC7t95oqM+44y7GekzegwRQssw/FPKRsC0QZ2PTngpiWS+PAZYShHSZlnKVIEgOULueoE9NcJbkWUYrADg0YwUuijPsPb8hfGta1iP8tw3J4ACKLTvvjT42GsJNs0uBK+OFjTILBLPDgxPbIh8WkFYXmib5F/3if7zSyNwr8EQzPOaCWzDx6t7zplrRSCjsCkZjYs9CmS4Yihb87e1467T3pHrK7FZEs6Y7WD9Ogb5tu02ef6U9Z0h9vEgxCzDMn4JRHFKZ0WNgLzA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KbT4h+5k/NObLmhCfW8T/QRYumfuC5GUOVniSmQq25I=;
+ b=VAAbkv4UK95DHjbJCZBFV1cAQbvRyyrHjm/jO1a8v+8qvC8Uju/kySmvxmZvtWaaEoOWkpiiYfezCNS2shTcFxocvBnT6fNr41CgATDs5MjApnGnSANM5M5c0bs6H5VGJQxTkl/m0wbrz+3zS5p6+QjdRNi8rxZvzOANCWe2Pw2Y2TCe/K0addvtPyYB01UI5BYpeodmmj3X1FZnUbqEgTS6avPVc5owwLXQ27U1HcrzVpOjIpiB6Ook15Aih+IzPuR2LmnEhk7i4DLTnv+LG0eKZMW40ifUaOGk5PNEF1G78JqzAF4CqdOe+wf2mEQPVKl/O/B9nzK1NbjvvY9yEA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KbT4h+5k/NObLmhCfW8T/QRYumfuC5GUOVniSmQq25I=;
+ b=YeILRRb08WdbWfQszSksYRL1/y4ynghB6fJ3TDPYl16PAdeT8C1hRxExLWqC+liyZ7Ve/wTpsHgxkf3s0VnWNs9VBdpDpwewM4DVH1tdYV/piTURRxrJm3lxoRam1DMGliCvKTJeY72JKnpBFP5NJOYRXvDwTG+oKPAxe6L/HJk25L+fBE2//R9Bx1O9a9yIQrsduhN8y0k9UJ6G9o8MdqeAQXC2pFwbh9clHJwQ17jJM8x7nnh4pTXEQG3wkYqFnNUDf7rgpiuxA7wi5RiObwbc9GgchgV+t9WhNri308AKmVtdfkJLT9iSIDLJKSHbS/iqIFCPHlH4KcjGZkx3sQ==
+Received: from HK0PR06MB3202.apcprd06.prod.outlook.com (2603:1096:203:87::17)
+ by TY2PR06MB2512.apcprd06.prod.outlook.com (2603:1096:404:4b::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Tue, 8 Feb
+ 2022 08:20:08 +0000
+Received: from HK0PR06MB3202.apcprd06.prod.outlook.com
+ ([fe80::d069:2ca1:99cb:b937]) by HK0PR06MB3202.apcprd06.prod.outlook.com
+ ([fe80::d069:2ca1:99cb:b937%5]) with mapi id 15.20.4951.019; Tue, 8 Feb 2022
+ 08:20:07 +0000
+From:   Neal Liu <neal_liu@aspeedtech.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Alan Stern <stern@rowland.harvard.edu>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        Tao Ren <rentao.bupt@gmail.com>, BMC-SW <BMC-SW@aspeedtech.com>
+Subject: RE: [PATCH] usb: ehci: add pci device support for Aspeed platforms
+Thread-Topic: [PATCH] usb: ehci: add pci device support for Aspeed platforms
+Thread-Index: AQHYHLU/wak6DMtWCU2KemAPJzVaSayJRCQAgAALm1A=
+Date:   Tue, 8 Feb 2022 08:20:07 +0000
+Message-ID: <HK0PR06MB32026A17E53EB76DB898A399802D9@HK0PR06MB3202.apcprd06.prod.outlook.com>
+References: <20220208062927.3527137-1-neal_liu@aspeedtech.com>
+ <YgId0AhvRAmIcEA0@kroah.com>
+In-Reply-To: <YgId0AhvRAmIcEA0@kroah.com>
+Accept-Language: en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=aspeedtech.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 8e43b5d9-f6c3-450b-64ac-08d9eadbd125
+x-ms-traffictypediagnostic: TY2PR06MB2512:EE_
+x-microsoft-antispam-prvs: <TY2PR06MB25126D0B2BF607A952AFF7B6802D9@TY2PR06MB2512.apcprd06.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2000;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: V8sKQaXva0gXPtXlspjXX8NPgXLNsQx9RFJylQbe6bTcDEx6j2aviV95Ty4YqN8xB3Jvlupm/7qY9eLGRE9pQ38bniILflfBLc3+niO3CDE0+a4f0cWXn1WgnYuPzNKZiIE9Tiu9sK1BTItRQsIZhDCUgR6yTmyzfgtj3eoGH+xNWQaEeYbPh7AhzE2ntdip/f3xucnw/1x32WH5fySp0trxTq7pDIfPfEMtA1dJ7yCpflux6mEQpte6CQ2XNLqyi9pX3ICZEYqA/ihZbsrNZLBLlJruc2Nzi3NVJJaiDmSsFWMLNe/QUYg6EMmJGN9pnd64vtb6a6rJGopSCUcfNkoKWdPEEAejciRQkNhLvZZPmeLaoeCrlUGcNTWSdBGuP3HcWD3E1IeDDmlrR7/HyctyGUKnaPn8xn+MFc94eqaO0KHDx+d3BwCE6Zcn4OYrS1zXQ5UusXR4Bvh59v/8jxFhhhC8jarc9NcBbXhndgrQSjCPBnCMst/uiaY8zzSVJOAxC752xsDk46Xwg5loc1k8rhBuzE/X/bqmWv2Ygbh1m3xwHPZ6clT8VDdaeXwt+Cw+cOzv741jdgh/VARHLI+YJL2Oj/Uv2gDtAOyCP7LBL04lRMZIuk3KT7xLuiqkgKHHFCMM4VdDYPCyZtxtJdlIyQfn/k2fr8RYpAQ/uIADwQ0JOQmuiI3WayboioWtSSbAhL20JRRn5dhAyW3BFQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR06MB3202.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(376002)(346002)(136003)(396003)(366004)(39840400004)(4326008)(6506007)(7696005)(53546011)(2906002)(38070700005)(83380400001)(508600001)(66556008)(38100700002)(122000001)(64756008)(5660300002)(33656002)(6916009)(76116006)(66946007)(8676002)(8936002)(54906003)(71200400001)(66476007)(66446008)(316002)(186003)(52536014)(26005)(107886003)(9686003)(86362001)(55016003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?rTJbzwO9b8r6qqrwuWrXBu1yJA5+2f7KICkpFwBB+1Qd19nqiiuQ8gx1KE/H?=
+ =?us-ascii?Q?GcgjU9uLaYWXEBMYQQp6Tu8dFY90dPCqrh2lf5Rjwm7nklq2IRsul2q2CqPT?=
+ =?us-ascii?Q?HpTJfFgt1QOud5Zqwpkm1cgd7a2p/xMFF6eVvg/ZpbhbksAzL+A0eu7hGcCR?=
+ =?us-ascii?Q?0axHbvzHcoUL1SltttbSrLaABmVr10exRVjFP33Cl9iDBN1I1SYq9DTJ8i3v?=
+ =?us-ascii?Q?axoIcAqv84JDvcHaXe22pRE32AooILUFxlTBfOFXa0hq5rl+x2litv7+NBHh?=
+ =?us-ascii?Q?KZ+A0YpdSeKoLKJJeKqOG+AGIZKgAeAE0dxb5Ux3DNjfRakCet73NxFjsxfu?=
+ =?us-ascii?Q?kuYAKaDBggAtKxB3nStQi2AmJB/OngoEib9sI6t0Vr1Ns0xsHbokSZ2N0PWU?=
+ =?us-ascii?Q?aUsjw02FA+k17EQ7rPfX2uQkzOmVm9wvUqGWPqdUSoGsC58/EtlV4S3Urs+V?=
+ =?us-ascii?Q?Dy8AGAPDNnNsOhWdVO2MCCBbxgyMVQUW7v69D20upOyUqgyFDTUAIHBcTTMi?=
+ =?us-ascii?Q?1bd2+PBTm3ApdBnQxylPp03uAswgF2lVMa1/B1696w2EJu/WwtBTFs3lbIQZ?=
+ =?us-ascii?Q?TYGRfNMJJugl7h53aPRkVb7KQd4Ofdfb5m1r8EVEDR1VJ4h0YopyoEFfV94j?=
+ =?us-ascii?Q?YEydZcDCia7omJGWHm2h4hDoR+colGke4xIwNeN3VmYlAa/7ORs3Hc+5Oq4I?=
+ =?us-ascii?Q?BfVDcs/RsHu4+u5lXizj7IhtJ+/UILDwveqXQWYt1G99XG43IrqTo8XrnkRc?=
+ =?us-ascii?Q?koHWLfRfE1Zmi6o4JxqRUixM3PtajCOK2+UM/wWrZhFqYPB5WDbDzV0EuruL?=
+ =?us-ascii?Q?TxCEabnHpQ4J+djTvKyCVnsQVvyyRwJMl9ir7EGd8WDNvrUmd6K5ngpZQYVl?=
+ =?us-ascii?Q?D0cvwCFbBl6+zxiu+qDEW+4RH5u9hXCmjxC+uuOu9RH0/j+BmnLRa2ajE4RH?=
+ =?us-ascii?Q?ORN782nvqc82X5f5aQQE/ep6rbz6b23yhOTxtV0qp+1VbCMvFDXBPeeTDChW?=
+ =?us-ascii?Q?ClP/OAu4AV+u2rTfuR5woQ/mfuYNMGc8wIov/lCpgxcDU4fivev8WHQND8Ih?=
+ =?us-ascii?Q?gWBps/CmASksLZ+3IteRA2Yq4FftPFLN4o5Qa6aTa1JMm64g8vIOqvFoSsyc?=
+ =?us-ascii?Q?2CpHBkkqrJJ9Brn0F0NSyn5JVCXDR7ckR2nm2dExodOdiIwQcGle0BBhay90?=
+ =?us-ascii?Q?5+fsaLevJq+6Y5yx8I+3J0sDk11kG0Dh5CqZvXQm3aKaqjyRJ9yrhI0/qdMn?=
+ =?us-ascii?Q?HWWwHrEn5/5RGwiRhSZq1Cjpu6B+1Qs3uvvjo53EkdxvxMpWgwV9RUc08oG+?=
+ =?us-ascii?Q?348ZJfeCy5DzE2N9DOPL27uAfxJfPBTc3WHyZaMmR5PWXcIfJbUmgqIb6N2e?=
+ =?us-ascii?Q?g2NDlnuU4vl0VJs5numT8M+bxYQtQR1MUsfIeJuZyw1Kt5LrHZEA5a21UxTd?=
+ =?us-ascii?Q?yLdh1egguu2s457nox1GFGU/t3qRiQjWGvtvltxwrAyXLeefyGPE5OgktXbW?=
+ =?us-ascii?Q?8lBub9MHMcYB1bgmw9W2sE27kiC9GkVW3FP62Ws95mDmN53CHDRsdTFjO31q?=
+ =?us-ascii?Q?2eM5RWTtNJ04+zW/9UtIYTdRWY77Obo9g14PKWt895v7msjmGyIGwsUooE7v?=
+ =?us-ascii?Q?+Q=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: aspeedtech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: HK0PR06MB3202.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8e43b5d9-f6c3-450b-64ac-08d9eadbd125
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Feb 2022 08:20:07.4449
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 6rsZpcKhtGF4N+QtAEJYtG1KQX17ZPNnJeoCshm4yKYDJa+PdfzRgwKSo438Fp26ygpCTgdZDn9ffVLS0HTHfw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY2PR06MB2512
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Srikar Dronamraju <srikar@linux.vnet.ibm.com> writes:
+> -----Original Message-----
+> From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Sent: Tuesday, February 8, 2022 3:38 PM
+> To: Neal Liu <neal_liu@aspeedtech.com>
+> Cc: Alan Stern <stern@rowland.harvard.edu>; Bjorn Helgaas
+> <bhelgaas@google.com>; linux-usb@vger.kernel.org;
+> linux-kernel@vger.kernel.org; linux-pci@vger.kernel.org; Tao Ren
+> <rentao.bupt@gmail.com>; BMC-SW <BMC-SW@aspeedtech.com>
+> Subject: Re: [PATCH] usb: ehci: add pci device support for Aspeed platfor=
+ms
+>=20
+> On Tue, Feb 08, 2022 at 02:29:27PM +0800, Neal Liu wrote:
+> > Enable Aspeed quirks in commit 7f2d73788d90 ("usb: ehci:
+> > handshake CMD_RUN instead of STS_HALT") to support Aspeed ehci-pci
+> > device.
+> >
+> > Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
+> > ---
+> >  drivers/usb/host/ehci-pci.c | 6 ++++++
+> >  include/linux/pci_ids.h     | 3 +++
+> >  2 files changed, 9 insertions(+)
+> >
+> > diff --git a/drivers/usb/host/ehci-pci.c b/drivers/usb/host/ehci-pci.c
+> > index e87cf3a00fa4..a91b25d216ae 100644
+> > --- a/drivers/usb/host/ehci-pci.c
+> > +++ b/drivers/usb/host/ehci-pci.c
+> > @@ -222,6 +222,12 @@ static int ehci_pci_setup(struct usb_hcd *hcd)
+> >  			ehci->has_synopsys_hc_bug =3D 1;
+> >  		}
+> >  		break;
+> > +	case PCI_VENDOR_ID_ASPEED:
+> > +		if (pdev->device =3D=3D PCI_DEVICE_ID_ASPEED_EHCI) {
+> > +			ehci_info(ehci, "applying Aspeed HC workaround\n");
+> > +			ehci->is_aspeed =3D 1;
+> > +		}
+> > +		break;
+> >  	}
+> >
+> >  	/* optional debug port, normally in the first BAR */ diff --git
+> > a/include/linux/pci_ids.h b/include/linux/pci_ids.h index
+> > aad54c666407..410b395fe56c 100644
+> > --- a/include/linux/pci_ids.h
+> > +++ b/include/linux/pci_ids.h
+> > @@ -3096,4 +3096,7 @@
+> >
+> >  #define PCI_VENDOR_ID_NCUBE		0x10ff
+> >
+> > +#define PCI_VENDOR_ID_ASPEED		0x1a03
+> > +#define PCI_DEVICE_ID_ASPEED_EHCI	0x2603
+>=20
+> Please read the top of this file, this does not need to be added here.
+>=20
+> thanks,
+>=20
+> greg k-h
 
-> * Huang, Ying <ying.huang@intel.com> [2022-01-28 15:51:36]:
->
->> Srikar Dronamraju <srikar@linux.vnet.ibm.com> writes:
->> 
->> > * Huang Ying <ying.huang@intel.com> [2022-01-28 10:38:42]:
->> >
->> This sounds reasonable.  How about the following solution?  If a
->> CPU-less node is selected as migration target, we select a nearest node
->> with CPU instead?  That is, something like the below patch.
->> 
->> Best Regards,
->> Huang, Ying
->> 
->> ------------------------------8<---------------------------------
->> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
->> index 5146163bfabb..52d926d8cbdb 100644
->> --- a/kernel/sched/fair.c
->> +++ b/kernel/sched/fair.c
->> @@ -2401,6 +2401,23 @@ static void task_numa_placement(struct task_struct *p)
->>  		}
->>  	}
->> 
->> +	/* Cannot migrate task to CPU-less node */
->> +	if (!node_state(max_nid, N_CPU)) {
->> +		int near_nid = max_nid;
->> +		int distance, near_distance = INT_MAX;
->> +
->> +		for_each_online_node(nid) {
->> +			if (!node_state(nid, N_CPU))
->> +				continue;
->> +			distance = node_distance(max_nid, nid);
->> +			if (distance < near_distance) {
->> +				near_nid = nid;
->> +				near_distance = distance;
->> +			}
->> +		}
->> +		max_nid = near_nid;
->> +	}
->> +
->
->
-> This looks good. but should we move this into preferred_group_nid()?
+Are you suggesting to hard code vendor/device ID in driver instead?
+Thanks
 
-Yes.  We need to take care of preferred_group_nid() too.  Will do that
-in the next version.
-
-> i.e should we care for !ng case, since those would mean only private faults.
-
-IMO we need to care for !ng case.  If the fault number of the CPU-less
-node is the max, we need to migrate to the nearest node with CPU
-instead.
-
-Best Regards,
-Huang, Ying
-
->>  	if (ng) {
->>  		numa_group_count_active_nodes(ng);
->>  		spin_unlock_irq(group_lock);
+-Neal

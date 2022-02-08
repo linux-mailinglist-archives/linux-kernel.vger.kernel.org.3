@@ -2,338 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FFFD4AE41C
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:26:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8EF94AE43D
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:28:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387795AbiBHW0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 17:26:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37752 "EHLO
+        id S1386304AbiBHW1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 17:27:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386890AbiBHVR0 (ORCPT
+        with ESMTP id S1386893AbiBHVRo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 16:17:26 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5787CC0612BC
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 13:17:25 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id 2-20020a251302000000b006118f867dadso324967ybt.12
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 13:17:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=AfnR3Nm7yc5ok/MjiQ3WXGdZyImD71++/kH8RUzdzEo=;
-        b=iGiHWkFBaBN5bvqSrIpm9CvlBfMgTkuuVA6EthbtpSWjMnmORtCnFFKEJ/EOCl0OUb
-         tQQgi/sCdNelt5HSNHz3jJuediSGaFROqcHQs4qMfU6KIGnae3LaZL805GJhUeowx9eH
-         c/shKP4YQqL95KEdx3uYl4Er+lR0fVRv/ZvedjYQtLUj+26q0ZWVFkXWSNJyOoOlU76J
-         4UzH/XErzqOQ/YWKTnkyFaYSIflQMoHK78qvthYhr2jiOoV8X6iQ4pKK4zV0VhJ6gt4T
-         9l6OjznvCKouvsD9qCaob3Pa/n2Za2bW673iX/L+JWg3cG/gggiJysDrCHtcyQiBIswk
-         yLVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=AfnR3Nm7yc5ok/MjiQ3WXGdZyImD71++/kH8RUzdzEo=;
-        b=x0fbLW+GMVfXzmFThHBldfWXvRbN3DrbBQTWhjP7RBBAk8IyKPk+667CaLcsX2W2fj
-         59hGrkBu4BaR0aJTA6YqWmcVm/q+JT+Va2ZpIqvY3KWw3fj3Xe5VE1inFu2i3zoNhKRB
-         9ui80VnRZ5JtTa0YDJxOnArdnLj79NBt4MN9LAk8JqrlkK5iqJHCStyJluct/HkBz/AC
-         hW8dGV/amC1SvZBK2GO4XGKqUMEX5whwrFqnNz3ZiXI9J/YGwQIA21fVUchzkwbxzMc1
-         pHRBKGA1chCRdgaEggO/dVIARzf8rHH2ctMUAkb5GWp6ximfzWJWBw0EhXXYA8Doh0Dd
-         EXjw==
-X-Gm-Message-State: AOAM532+aisc7LweC3FWMEcu03OInp+5gM0TuALhQJ3aXLXSIesDwtCT
-        A4cm8mWiaJD5s1ji7v+RF11SBa8iijnCgb9RtYJCWUXJh6ssNRk62VqLtRjJmrwRDT5JGlMwSXb
-        +65PRwsGLOdN1olXS5FJdqxZT1+kGF1ZsIwIzc2Rsovznsvz+kIhUZ07NzHHI3FRpbSfis1wN
-X-Google-Smtp-Source: ABdhPJxsi9V32l7wcvyjIOPe9zUkfV3MbtC27mX+fQ98jrFwTM1ryS5Noz2QhHdTWMjuLjoRcr7A1Z8UtjFv
-X-Received: from uluru3.svl.corp.google.com ([2620:15c:2cd:202:6875:3c51:69be:6e2c])
- (user=eranian job=sendgmr) by 2002:a25:bcd0:: with SMTP id
- l16mr5459204ybm.59.1644355044562; Tue, 08 Feb 2022 13:17:24 -0800 (PST)
-Date:   Tue,  8 Feb 2022 13:16:37 -0800
-In-Reply-To: <20220208211637.2221872-1-eranian@google.com>
-Message-Id: <20220208211637.2221872-13-eranian@google.com>
-Mime-Version: 1.0
-References: <20220208211637.2221872-1-eranian@google.com>
-X-Mailer: git-send-email 2.35.0.263.gb82422642f-goog
-Subject: [PATCH v6 12/12] perf report: add addr_from/addr_to sort dimensions
-From:   Stephane Eranian <eranian@google.com>
+        Tue, 8 Feb 2022 16:17:44 -0500
+Received: from sonic311-27.consmr.mail.ne1.yahoo.com (sonic311-27.consmr.mail.ne1.yahoo.com [66.163.188.208])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F086CC0612B8
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 13:17:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=att.net; s=s1024; t=1644355063; bh=jfCMh7HeiHuFFlvX6qW05R7eta1QF42/tYrxrrE7auA=; h=Date:From:Subject:To:References:From:Subject:Reply-To; b=JIrFyOfbyxP9HIDUhzKVugF33FpML0sJap+bcAP5TT9AqnBP7T47aNZXoKHm47S2GL1mmmGLVnvjSgnZk31oB3Ny4E0/0d1WtIbeBGSYruwjqufkOWnoWKjzk5iUlRf0xJOWQwdL9aDBDTav5bg2JXUvSeQd3pgsfGjxc4RJWLg=
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1644355063; bh=Cs/wAZNwlOPJigJzrBy82H8oAZD/GzDX5y8zezP0vTQ=; h=X-Sonic-MF:Date:From:Subject:To:From:Subject; b=e0KDCoW/7cvvppDQMkfLF0H2G/uCaFTxjI4VySwy31vzHNyQ8Fq1qG59oCz/gBxyCPAcegqPLWSEjhb2g0TqDEvMIGmkGOvR4y7MN5gF8tZzcOKfPunB7CZdc5sy2NfSTTT2/Qx20x0rPNcUFXOzim2v/zvtqDZ/lDB1dx3BliufkTK+CL16XtDYatskZ/SX06DVlnitgsxzqNkdjVKNSxL8TTv7yczMStN7r5vb51Pr6U0N0NjdTRdHv2uJ1sFggtAxbztkuCuiM7VM7xSuZXcY09Kw3K8blj5YiCOSjnI83RXKf2bLwB+gBGZg+DzWQiODRxdXbwV6LeDkGOTCTA==
+X-YMail-OSG: lazw2LsVM1k2YChY7iZc6yT7Z8BhjYZZEkvgf_dRxy1gsO4wzmIAMGEbnhTqBys
+ 1Hvbza07CRn76qR2bF2cTlXtN7hi70fuKYOqGOIDibzv5kQHKN4qmSZM8b33OrLXgyfUkweq45hx
+ duhHUOuHtz77vobQ3N04DDOh5ZpD_GnZQOlUn2Z.KgxOydq9F_XM39_PK8U55Uv2LkrFzXQj5r2t
+ tIdKdl2rHC.6hyOfaCVm_HebS0phZhI4sJjuON5TlOPY2OdKbjuatOni7RXyk4Ykdop1k6RCCUUV
+ 3oDor7MxyaZcWpZ2L8NzsXMBn4USy_InVBrHZf0UWvb_dBfsq8pSRHHiq6n7kqYsWIPVgbKW7.jz
+ 84ndB0_dAoH60kBaa3pYs7oKFF3ffPdWf3qDJOhDRYT3Hh275txs38X54j9jrc_5jVSalBUEjcQy
+ ApIifWa.MbpU37vQ_ZGjbDd4fGbJ6fazx2nwJHZyjPaTC.3QwMnUx9y1L6DVJDnLVpa73pRu5FoX
+ r.SjIMcCQqs1Gt2C4K_lfxwdp9rLYzQEQWry9hY2.nTPgQY.tTw60RCBt_nWs2KCSZ2jNq7k64kx
+ OLbigcuIekWR9WgNJhUAueUtiFHnJTTnCjfEl6Q.GbPMYYvxaa5Mk.ETYWf8sukF9RY1wZtuRWSk
+ sLaGPDytB9F1uqF_iibZomiuBZOsY1Xf6lFgwMlfKb3svpYc9nL8dNEFfhMyrDsmJUWQlA1eSTVk
+ SAptrtF345ULtDByi6r5wekMHaLx8d78f70luuo577Bdkv_YujdcoZThFdoV5ZGHibW9aP0thm1N
+ unl8uVjbj0c3dNFpkoYBke_KLYEicdd4gMuq4k64DIDzxtGgwxbGKyDOaccJ8.j8nYLVLml0_nw5
+ 0YPu26Z.z8Hjjty48xJHEHH8z49pizZ9Pbg4LGvn3KnSUxfSJKlXX0sW8dIoHgn7ysWFfD2NdtG1
+ 8OcRd1uSZQzBZkpGkbcDEYGhismpmpF0dk.3E4xeV.jhfO6BeEI8roSAdIyGznmf6Rud_JIxoWzo
+ yKoW1__SAjdihJIFZznWLnO0FFLNYAZfZO7fjk4YUF_AHkw.XmzlvV37gImtgF89izDppjzCmVjB
+ 9Zq8tSa6HGHhBRQayjd7dZGjkrwTE2TWjm.4Z9AyIMlro6YyvzCEPzBJku2wqNQunl4xirdKX8dp
+ 9ERncEOEgNueaX0420Xh10t5ZbfTTBktcV5u2jChj3bcWWRyLP7P5wcVUBP2xgTZ5AHVSv1ldg.I
+ LzHf0r7gIA76x9AdB18pTn91NxKdnirKCN3ThJmOSoO2FyQAcoLQ9_aN7iUA0kabxK8fVfzOuhqq
+ bLNM2Ic89fjbHnC8_XAu_eLm6vrQ.YY5AckYOFjblovRw5aDWRJuauFVwk0f1ZXwgRrdKwo3EU1u
+ W4DwO3.5v_yoUEEymf0AGvfQhMifZ1aACO7.pk2z0p9.zuiw4zifoo86JmFIoz202jPlEJXChoAp
+ z_hJ49Iw5PFy8D4aLWz3Jikk4aO4IcB.qGo6nO7gzgwbJwYyVo93bPICv2_cgqNKZ3Ve3ZRVVbjl
+ UKTYqnsJ6sK1GwLp_MqJpshqLWtndu08S6WKWYBC8sZHOvYk5kJNq.KkPxfKoMOqk5xY8cwFpiF5
+ l82Nq1S3jBzooU6uaXmfNRgQcXAEIs0caUxE24dRFpFg35qjVLP31gv_ATSKPXByYMkj.3eUgNcs
+ xgJ4HZ0M5QGOu.5L1KoKYudnfTiMwrgc8j4d5.H4gV51iCQxDm4zbTn4e3HIHPfXM1TY2W2losAr
+ ecamGtdTBLWtQsWAm8TNbx2xySyLpSveLvWDmSzAEnOGzAOiPYmdT.N3RKHQOD9XNj8B8KhOGbK9
+ gStlGaNdCbmC555EQLb94pZ4fGKfXAsqN7UqMFSUjm8zd1dBnLviKznwgGh68g3lxfblKoyyLCI7
+ nKd6gPPx8.W72W1KKzZ4iBzkgcKeSN_OZoNu9DQhIaDHS7grd8wp4lgxFesTBniO1HD.GbH07p4u
+ poa6lUrWqVorFph2MR5b17nMfp4mAfcAff9KRuBbefo_64R5ro8shaqDMV.A.vdOvCAlPAkyLux2
+ 7KCxHCqqZ_Jb_ERiFV0lhzJWzGKYuqlOZI13ZfcVXziY4N0MOdg4CLyywAxi06rebF4oMqSwTXeI
+ tgZEJqzKvyb5xEEbFX5HEExdPxzDUSN6KG0X4q9d46XEMm_2Z9BTZgtDMInXtr4lHBL2WR9kXCdA
+ cIcZX
+X-Sonic-MF: <pheonix.sja@att.net>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.ne1.yahoo.com with HTTP; Tue, 8 Feb 2022 21:17:43 +0000
+Received: by kubenode527.mail-prod1.omega.ne1.yahoo.com (VZM Hermes SMTP Server) with ESMTPA ID 8a22ca70b6a728a6946f0ea8611dddc4;
+          Tue, 08 Feb 2022 21:17:40 +0000 (UTC)
+Date:   Tue, 08 Feb 2022 16:17:38 -0500
+From:   Steven J Abner <pheonix.sja@att.net>
+Subject: amd apu crashes
 To:     linux-kernel@vger.kernel.org
-Cc:     peterz@infradead.org, kim.phillips@amd.com, acme@redhat.com,
-        jolsa@redhat.com, songliubraving@fb.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-Id: <1644355058.23272.0@smtp.mail.att.net>
+X-Mailer: pantheon-mail/1.0.8
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+References: <1644355058.23272.0.ref@smtp.mail.att.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With the existing symbol_from/symbol_to, branches captured in the same
-function would be collapsed into a single function if the latencies associated
-with the each branch (cycles) were all the same.  That is the case on Intel
-Broadwell, for instance. Since Intel Skylake, the latency is captured by
-hardware and therefore is used to disambiguate branches.
+Hi
+  I've been trying out kernel 5.16. Lots of amdgpu upgrades? However it 
+seems to be
+getting worse :(
+  On AMD Ryzen 5 2400G, elementary OS 5.1.7, Ubuntu 18.04.6 LTS, Linux 
+5.15.5-051505-generic, GTK 3.22.30. Background: Was using 5.16.6 when 
+it started it's triple threat, so went back to 5.15 in panic. 
+Previously, back in November, my first triple threat, I was on system 
+with btrfs which destroyed my hard drive.
+Rebuilt with ext4 and still trying to recreate the losses. Cant use 
+higher Ubuntu due to still need afp to connect with mac for transfer, 
+and elementary went even heavier with gtk, so crawls. I did find better 
+workaround to afp, but not happy with Ubuntu's treatment of bug.
+  The triple threat is when monitor flashes 3 times before total 
+lockup. The last may have been but I was ready, hit reboot before third 
+flash, so no test on it killing my hard drive.
+  Guessing, it's not a true kernel problem, but gtk exploiting a 
+weakness. Probably uninitialized pointer. But with new kernels, the 
+crashes seem to be more frequent.
+Here are the last few:
+$ journalctl -o short-precise -f -k -b -3
+-- Logs begin at Mon 2022-01-03 17:21:50 EST. --
+Feb 05 08:37:32.229754 steven-ryzen kernel: AMD-Vi: Completion-Wait 
+loop timed out
+Feb 05 08:37:32.230639 steven-ryzen kernel: AMD-Vi: Completion-Wait 
+loop timed out
+Feb 05 08:37:32.273370 steven-ryzen kernel: AMD-Vi: Completion-Wait 
+loop timed out
+Feb 05 08:37:32.668947 steven-ryzen kernel: AMD-Vi: Completion-Wait 
+loop timed out
+Feb 05 08:37:32.794231 steven-ryzen kernel: AMD-Vi: Completion-Wait 
+loop timed out
+Feb 05 08:37:32.919503 steven-ryzen kernel: AMD-Vi: Completion-Wait 
+loop timed out
+Feb 05 08:37:33.044753 steven-ryzen kernel: AMD-Vi: Completion-Wait 
+loop timed out
+Feb 05 08:37:33.169986 steven-ryzen kernel: AMD-Vi: Completion-Wait 
+loop timed out
+Feb 05 08:37:33.295263 steven-ryzen kernel: AMD-Vi: Completion-Wait 
+loop timed out
+Feb 05 08:37:33.420514 steven-ryzen kernel: AMD-Vi: Completion-Wait 
+loop timed out
 
-Add addr_from/addr_to sort dimensions to sort branches based on their
-addresses and not the function there are in. The output is still the function
-name but the offset within the function is provided to uniquely identify each
-branch.  These new sort dimensions also help with annotate because they create
-different entries in the histogram which, in turn, generates proper branch
-annotations.
+$ journalctl -o short-precise -f -k -b -2
+-- Logs begin at Mon 2022-01-03 17:21:50 EST. --
+Feb 07 06:11:47.495092 steven-ryzen kernel: amdgpu 0000:38:00.0: 
+amdgpu: RW: 0x0
+Feb 07 06:11:47.495199 steven-ryzen kernel: amdgpu 0000:38:00.0: 
+amdgpu: [mmhub0] retry page fault (src_id:0 ring:0 vmid:7 pasid:32782, 
+for process WebKitWebProces pid 5037 thread WebKitWebP:cs0 pid 5101)
+Feb 07 06:11:47.495304 steven-ryzen kernel: amdgpu 0000:38:00.0: 
+amdgpu: in page starting at address 0x000080010e24d000 from IH client 
+0x12 (VMC)
+Feb 07 06:11:47.495413 steven-ryzen kernel: amdgpu 0000:38:00.0: 
+amdgpu: VM_L2_PROTECTION_FAULT_STATUS:0x00000000
+Feb 07 06:11:47.495520 steven-ryzen kernel: amdgpu 0000:38:00.0: 
+amdgpu: Faulty UTCL2 client ID: MP1 (0x0)
+Feb 07 06:11:47.495631 steven-ryzen kernel: amdgpu 0000:38:00.0: 
+amdgpu: MORE_FAULTS: 0x0
+Feb 07 06:11:47.495766 steven-ryzen kernel: amdgpu 0000:38:00.0: 
+amdgpu: WALKER_ERROR: 0x0
+Feb 07 06:11:47.495875 steven-ryzen kernel: amdgpu 0000:38:00.0: 
+amdgpu: PERMISSION_FAULTS: 0x0
+Feb 07 06:11:47.495987 steven-ryzen kernel: amdgpu 0000:38:00.0: 
+amdgpu: MAPPING_ERROR: 0x0
+Feb 07 06:11:47.496108 steven-ryzen kernel: amdgpu 0000:38:00.0: 
+amdgpu: RW: 0x0
 
-Here is an example using AMD's branch sampling:
+$ journalctl -o short-precise -f -k -b -1
+-- Logs begin at Mon 2022-01-03 17:21:50 EST. --
+Feb 07 16:49:00.229782 steven-ryzen kernel: amdgpu 0000:38:00.0: 
+amdgpu: RW: 0x0
+Feb 07 16:49:00.229898 steven-ryzen kernel: amdgpu 0000:38:00.0: 
+amdgpu: [mmhub0] retry page fault (src_id:0 ring:0 vmid:3 pasid:32769, 
+for process Xorg pid 2061 thread Xorg:cs0 pid 2062)
+Feb 07 16:49:00.230010 steven-ryzen kernel: amdgpu 0000:38:00.0: 
+amdgpu: in page starting at address 0x0000800101955000 from IH client 
+0x12 (VMC)
+Feb 07 16:49:00.230114 steven-ryzen kernel: amdgpu 0000:38:00.0: 
+amdgpu: VM_L2_PROTECTION_FAULT_STATUS:0x00000000
+Feb 07 16:49:00.230220 steven-ryzen kernel: amdgpu 0000:38:00.0: 
+amdgpu: Faulty UTCL2 client ID: MP1 (0x0)
+Feb 07 16:49:00.230425 steven-ryzen kernel: amdgpu 0000:38:00.0: 
+amdgpu: MORE_FAULTS: 0x0
+Feb 07 16:49:00.230535 steven-ryzen kernel: amdgpu 0000:38:00.0: 
+amdgpu: WALKER_ERROR: 0x0
+Feb 07 16:49:00.230646 steven-ryzen kernel: amdgpu 0000:38:00.0: 
+amdgpu: PERMISSION_FAULTS: 0x0
+Feb 07 16:49:00.230771 steven-ryzen kernel: amdgpu 0000:38:00.0: 
+amdgpu: MAPPING_ERROR: 0x0
+Feb 07 16:49:00.230910 steven-ryzen kernel: amdgpu 0000:38:00.0: 
+amdgpu: RW: 0x0
 
-$ perf record -a -b -c 1000037 -e cpu/branch-brs/ test_prg
-
-$ perf report
-Samples: 6M of event 'cpu/branch-brs/', Event count (approx.): 6901276
-Overhead  Command          Source Shared Object  Source Symbol                                   Target Symbol                                   Basic Block Cycle
-  99.65%  test_prg	   test_prg              [.] test_thread                                 [.] test_thread                                 -
-   0.02%  test_prg         [kernel.vmlinux]      [k] asm_sysvec_apic_timer_interrupt             [k] error_entry                                 -
-
-$ perf report -F overhead,comm,dso,addr_from,addr_to
-Samples: 6M of event 'cpu/branch-brs/', Event count (approx.): 6901276
-Overhead  Command          Shared Object     Source Address          Target Address
-   4.22%  test_prg         test_prg          [.] test_thread+0x3c    [.] test_thread+0x4
-   4.13%  test_prg         test_prg          [.] test_thread+0x4     [.] test_thread+0x3a
-   4.09%  test_prg         test_prg          [.] test_thread+0x3a    [.] test_thread+0x6
-   4.08%  test_prg         test_prg          [.] test_thread+0x2     [.] test_thread+0x3c
-   4.06%  test_prg         test_prg          [.] test_thread+0x3e    [.] test_thread+0x2
-   3.87%  test_prg         test_prg          [.] test_thread+0x6     [.] test_thread+0x38
-   3.84%  test_prg         test_prg          [.] test_thread         [.] test_thread+0x3e
-   3.76%  test_prg         test_prg          [.] test_thread+0x1e    [.] test_thread
-   3.76%  test_prg         test_prg          [.] test_thread+0x38    [.] test_thread+0x8
-   3.56%  test_prg         test_prg          [.] test_thread+0x22    [.] test_thread+0x1e
-   3.54%  test_prg         test_prg          [.] test_thread+0x8     [.] test_thread+0x36
-   3.47%  test_prg         test_prg          [.] test_thread+0x1c    [.] test_thread+0x22
-   3.45%  test_prg         test_prg          [.] test_thread+0x36    [.] test_thread+0xa
-   3.28%  test_prg         test_prg          [.] test_thread+0x24    [.] test_thread+0x1c
-   3.25%  test_prg         test_prg          [.] test_thread+0xa     [.] test_thread+0x34
-   3.24%  test_prg         test_prg          [.] test_thread+0x1a    [.] test_thread+0x24
-   3.20%  test_prg         test_prg          [.] test_thread+0x34    [.] test_thread+0xc
-   3.04%  test_prg         test_prg          [.] test_thread+0x26    [.] test_thread+0x1a
-   3.01%  test_prg         test_prg          [.] test_thread+0xc     [.] test_thread+0x32
-   2.98%  test_prg         test_prg          [.] test_thread+0x18    [.] test_thread+0x26
-   2.94%  test_prg         test_prg          [.] test_thread+0x32    [.] test_thread+0xe
-   2.76%  test_prg         test_prg          [.] test_thread+0x28    [.] test_thread+0x18
-   2.73%  test_prg         test_prg          [.] test_thread+0xe     [.] test_thread+0x30
-   2.67%  test_prg         test_prg          [.] test_thread+0x30    [.] test_thread+0x10
-   2.67%  test_prg         test_prg          [.] test_thread+0x16    [.] test_thread+0x28
-   2.46%  test_prg         test_prg          [.] test_thread+0x10    [.] test_thread+0x2e
-   2.44%  test_prg         test_prg          [.] test_thread+0x2a    [.] test_thread+0x16
-   2.38%  test_prg         test_prg          [.] test_thread+0x14    [.] test_thread+0x2a
-   2.32%  test_prg         test_prg          [.] test_thread+0x2e    [.] test_thread+0x12
-   2.28%  test_prg         test_prg          [.] test_thread+0x12    [.] test_thread+0x2c
-   2.16%  test_prg         test_prg          [.] test_thread+0x2c    [.] test_thread+0x14
-   0.02%  test_prg         [kernel.vmlinux]  [k] asm_sysvec_apic_ti+0x5  [k] error_entry
-
-Signed-off-by: Stephane Eranian <eranian@google.com>
----
- tools/perf/util/hist.c |   2 +
- tools/perf/util/hist.h |   2 +
- tools/perf/util/sort.c | 128 +++++++++++++++++++++++++++++++++++++++++
- tools/perf/util/sort.h |   2 +
- 4 files changed, 134 insertions(+)
-
-diff --git a/tools/perf/util/hist.c b/tools/perf/util/hist.c
-index 0a8033b09e28..1c085ab56534 100644
---- a/tools/perf/util/hist.c
-+++ b/tools/perf/util/hist.c
-@@ -124,6 +124,7 @@ void hists__calc_col_len(struct hists *hists, struct hist_entry *h)
- 		} else {
- 			symlen = unresolved_col_width + 4 + 2;
- 			hists__new_col_len(hists, HISTC_SYMBOL_FROM, symlen);
-+			hists__new_col_len(hists, HISTC_ADDR_FROM, symlen);
- 			hists__set_unres_dso_col_len(hists, HISTC_DSO_FROM);
- 		}
- 
-@@ -138,6 +139,7 @@ void hists__calc_col_len(struct hists *hists, struct hist_entry *h)
- 		} else {
- 			symlen = unresolved_col_width + 4 + 2;
- 			hists__new_col_len(hists, HISTC_SYMBOL_TO, symlen);
-+			hists__new_col_len(hists, HISTC_ADDR_TO, symlen);
- 			hists__set_unres_dso_col_len(hists, HISTC_DSO_TO);
- 		}
- 
-diff --git a/tools/perf/util/hist.h b/tools/perf/util/hist.h
-index 2a15e22fb89c..7ed4648d2fc2 100644
---- a/tools/perf/util/hist.h
-+++ b/tools/perf/util/hist.h
-@@ -77,6 +77,8 @@ enum hist_column {
- 	HISTC_GLOBAL_INS_LAT,
- 	HISTC_LOCAL_P_STAGE_CYC,
- 	HISTC_GLOBAL_P_STAGE_CYC,
-+	HISTC_ADDR_FROM,
-+	HISTC_ADDR_TO,
- 	HISTC_NR_COLS, /* Last entry */
- };
- 
-diff --git a/tools/perf/util/sort.c b/tools/perf/util/sort.c
-index 2da081ef532b..6d5588e80935 100644
---- a/tools/perf/util/sort.c
-+++ b/tools/perf/util/sort.c
-@@ -990,6 +990,128 @@ struct sort_entry sort_sym_to = {
- 	.se_width_idx	= HISTC_SYMBOL_TO,
- };
- 
-+static int _hist_entry__addr_snprintf(struct map_symbol *ms,
-+				     u64 ip, char level, char *bf, size_t size,
-+				     unsigned int width)
-+{
-+	struct symbol *sym = ms->sym;
-+	struct map *map = ms->map;
-+	size_t ret = 0, offs;
-+
-+	ret += repsep_snprintf(bf + ret, size - ret, "[%c] ", level);
-+	if (sym && map) {
-+		if (sym->type == STT_OBJECT) {
-+			ret += repsep_snprintf(bf + ret, size - ret, "%s", sym->name);
-+			ret += repsep_snprintf(bf + ret, size - ret, "+0x%llx",
-+					ip - map->unmap_ip(map, sym->start));
-+		} else {
-+			ret += repsep_snprintf(bf + ret, size - ret, "%.*s",
-+					       width - ret,
-+					       sym->name);
-+			offs = ip - sym->start;
-+			if (offs)
-+				ret += repsep_snprintf(bf + ret, size - ret, "+0x%llx", offs);
-+		}
-+	} else {
-+		size_t len = BITS_PER_LONG / 4;
-+		ret += repsep_snprintf(bf + ret, size - ret, "%-#.*llx",
-+				       len, ip);
-+	}
-+
-+	return ret;
-+}
-+
-+static int hist_entry__addr_from_snprintf(struct hist_entry *he, char *bf,
-+					 size_t size, unsigned int width)
-+{
-+	if (he->branch_info) {
-+		struct addr_map_symbol *from = &he->branch_info->from;
-+
-+		return _hist_entry__addr_snprintf(&from->ms, from->al_addr,
-+						 he->level, bf, size, width);
-+	}
-+
-+	return repsep_snprintf(bf, size, "%-*.*s", width, width, "N/A");
-+}
-+
-+static int hist_entry__addr_to_snprintf(struct hist_entry *he, char *bf,
-+				       size_t size, unsigned int width)
-+{
-+	if (he->branch_info) {
-+		struct addr_map_symbol *to = &he->branch_info->to;
-+
-+		return _hist_entry__addr_snprintf(&to->ms, to->al_addr,
-+						 he->level, bf, size, width);
-+	}
-+
-+	return repsep_snprintf(bf, size, "%-*.*s", width, width, "N/A");
-+}
-+
-+static int64_t
-+sort__addr_from_cmp(struct hist_entry *left, struct hist_entry *right)
-+{
-+	struct addr_map_symbol *from_l;
-+	struct addr_map_symbol *from_r;
-+	int64_t ret;
-+
-+	if (!left->branch_info || !right->branch_info)
-+		return cmp_null(left->branch_info, right->branch_info);
-+
-+	from_l = &left->branch_info->from;
-+	from_r = &right->branch_info->from;
-+
-+	/*
-+	 * comparing symbol address alone is not enough since it's a
-+	 * relative address within a dso.
-+	 */
-+	ret = _sort__dso_cmp(from_l->ms.map, from_r->ms.map);
-+	if (ret != 0)
-+		return ret;
-+
-+	return _sort__addr_cmp(from_l->addr, from_r->addr);
-+}
-+
-+static int64_t
-+sort__addr_to_cmp(struct hist_entry *left, struct hist_entry *right)
-+{
-+	struct addr_map_symbol *to_l;
-+	struct addr_map_symbol *to_r;
-+	int64_t ret;
-+
-+	if (!left->branch_info || !right->branch_info)
-+		return cmp_null(left->branch_info, right->branch_info);
-+
-+	to_l = &left->branch_info->to;
-+	to_r = &right->branch_info->to;
-+
-+	/*
-+	 * comparing symbol address alone is not enough since it's a
-+	 * relative address within a dso.
-+	 */
-+	ret = _sort__dso_cmp(to_l->ms.map, to_r->ms.map);
-+	if (ret != 0)
-+		return ret;
-+
-+	return _sort__addr_cmp(to_l->addr, to_r->addr);
-+}
-+
-+struct sort_entry sort_addr_from = {
-+	.se_header	= "Source Address",
-+	.se_cmp		= sort__addr_from_cmp,
-+	.se_snprintf	= hist_entry__addr_from_snprintf,
-+	.se_filter	= hist_entry__sym_from_filter, /* shared with sym_from */
-+	.se_width_idx	= HISTC_ADDR_FROM,
-+};
-+
-+struct sort_entry sort_addr_to = {
-+	.se_header	= "Target Address",
-+	.se_cmp		= sort__addr_to_cmp,
-+	.se_snprintf	= hist_entry__addr_to_snprintf,
-+	.se_filter	= hist_entry__sym_to_filter, /* shared with sym_to */
-+	.se_width_idx	= HISTC_ADDR_TO,
-+};
-+
-+
- static int64_t
- sort__mispredict_cmp(struct hist_entry *left, struct hist_entry *right)
- {
-@@ -1893,6 +2015,8 @@ static struct sort_dimension bstack_sort_dimensions[] = {
- 	DIM(SORT_SRCLINE_FROM, "srcline_from", sort_srcline_from),
- 	DIM(SORT_SRCLINE_TO, "srcline_to", sort_srcline_to),
- 	DIM(SORT_SYM_IPC, "ipc_lbr", sort_sym_ipc),
-+	DIM(SORT_ADDR_FROM, "addr_from", sort_addr_from),
-+	DIM(SORT_ADDR_TO, "addr_to", sort_addr_to),
- };
- 
- #undef DIM
-@@ -3126,6 +3250,10 @@ static bool get_elide(int idx, FILE *output)
- 		return __get_elide(symbol_conf.dso_from_list, "dso_from", output);
- 	case HISTC_DSO_TO:
- 		return __get_elide(symbol_conf.dso_to_list, "dso_to", output);
-+	case HISTC_ADDR_FROM:
-+		return __get_elide(symbol_conf.sym_from_list, "addr_from", output);
-+	case HISTC_ADDR_TO:
-+		return __get_elide(symbol_conf.sym_to_list, "addr_to", output);
- 	default:
- 		break;
- 	}
-diff --git a/tools/perf/util/sort.h b/tools/perf/util/sort.h
-index f994261888e1..2ddc00d1c464 100644
---- a/tools/perf/util/sort.h
-+++ b/tools/perf/util/sort.h
-@@ -251,6 +251,8 @@ enum sort_type {
- 	SORT_SRCLINE_FROM,
- 	SORT_SRCLINE_TO,
- 	SORT_SYM_IPC,
-+	SORT_ADDR_FROM,
-+	SORT_ADDR_TO,
- 
- 	/* memory mode specific sort keys */
- 	__SORT_MEMORY_MODE,
--- 
-2.35.0.263.gb82422642f-goog
+I haven't dealt with kernel debug for years, so please if more info 
+needed, I probably don't remember how to get it.
+If this is a bother, sorry I troubled you.
+Per 'Do I have to be subscribed to post to the list?':
+I wish to be personally CC'ed the answers/comments posted to the list 
+in response to your posting, please.
+Thanks Steve
 

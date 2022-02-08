@@ -2,81 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FD6C4ADD41
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 16:45:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D36184ADD50
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 16:46:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381476AbiBHPpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 10:45:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54918 "EHLO
+        id S1381655AbiBHPqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 10:46:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236426AbiBHPpI (ORCPT
+        with ESMTP id S1381717AbiBHPpY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 10:45:08 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 54823C061576
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 07:45:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644335106;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5c6BokZGpjxZJfiqo2/4IGY86UdM0DHCzeepgSZdBO4=;
-        b=gmcMstuU52ZwnCV68nKfxM/TPV7A5LTxiBexqgoPJGBR2reUmzj+gRGEIMVdjusLn3TrOc
-        DNFNxv9qYKcsr58o4vbWvcTpndXBi43KJxTisHHI27TIBynhmYIwXqvvfSur6FnsC2L2la
-        w86SF5X6qKq1rBU23luRO4jSM0S0M54=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-173-4lDkcB_5NYykzZO5OFEJhQ-1; Tue, 08 Feb 2022 10:45:05 -0500
-X-MC-Unique: 4lDkcB_5NYykzZO5OFEJhQ-1
-Received: by mail-qk1-f199.google.com with SMTP id b204-20020a3767d5000000b004b2a0d2e930so11167264qkc.15
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 07:45:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=5c6BokZGpjxZJfiqo2/4IGY86UdM0DHCzeepgSZdBO4=;
-        b=J0tRp14j6EaxKybkvpku8UgN3lCL/Did8X4mrGey9HN5gpVIXCbAsR8YaQ3Q6BA7bw
-         mQLMJbc9vJjQF4IK0o6FL8wjE5yqetBoL4dP/UqZlwJIinp5a6wo2RZm5KVrRD6uzgfK
-         uOG6Vt12p7zqJZsk5IeB7fs+UOZ4wynjgY1gxX2CjAfZZ8wG7dWZX4X+gmFoiv7Hkwo8
-         JC1yDt4LjE/sBpmsl07L2OnheAcccVhI9hs14OOiVNa7Hm//MuRGuwRA7bTA5Nvvxa6g
-         kHZdT8dlyZ/pj8y/VuAB6y6NATr+UGsOFvE922xZ/HbGLxbvQeJ3xRa2wXL1ca0gvHcl
-         othw==
-X-Gm-Message-State: AOAM5320o/4vcDlMBZgQMZQKcpTQ63q+PzcwpPvmYLVdpTd9Rrrb+gtw
-        vEZRwWkbbCv4UWGzYv95J0U7hMwRmO3VPigb49Ux5ePlKEEHyYlbnA9wsyA+5YIZEBEvxH2MI4y
-        tzGmtDn348llHmIXjwLi/7keB
-X-Received: by 2002:a05:620a:1a82:: with SMTP id bl2mr2924990qkb.360.1644335104014;
-        Tue, 08 Feb 2022 07:45:04 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwPdAD8h7XP4irSwKpgb8bE8kYshYN6EWQP1VYm2uzSHInxS6E2UNAok247/mFO4RH8j4wVOg==
-X-Received: by 2002:a05:620a:1a82:: with SMTP id bl2mr2924977qkb.360.1644335103780;
-        Tue, 08 Feb 2022 07:45:03 -0800 (PST)
-Received: from [192.168.1.9] (pool-68-163-101-245.bstnma.fios.verizon.net. [68.163.101.245])
-        by smtp.gmail.com with ESMTPSA id 5sm7649569qtp.81.2022.02.08.07.45.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Feb 2022 07:45:03 -0800 (PST)
-Subject: Re: [PATCH v2] livepatch: Skip livepatch tests if ftrace cannot be
- configured
-To:     David Vernet <void@manifault.com>, live-patching@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jpoimboe@redhat.com,
-        pmladek@suse.com, jikos@kernel.org, mbenes@suse.cz, corbet@lwn.net
-Cc:     kernel-team@fb.com
-References: <20220203233205.1554034-1-void@manifault.com>
- <20220204205625.2628328-1-void@manifault.com>
-From:   Joe Lawrence <joe.lawrence@redhat.com>
-Message-ID: <89a430e9-6da4-761a-68aa-187a3faa9c53@redhat.com>
-Date:   Tue, 8 Feb 2022 10:45:02 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
-MIME-Version: 1.0
-In-Reply-To: <20220204205625.2628328-1-void@manifault.com>
-Content-Type: text/plain; charset=utf-8
+        Tue, 8 Feb 2022 10:45:24 -0500
+Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-eopbgr140075.outbound.protection.outlook.com [40.107.14.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 216B7C03FED9;
+        Tue,  8 Feb 2022 07:45:19 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WqOQxEIc/9t9xGSBSkjXfECwuAziKY9Oe/MvHy0vV8ADTGfVWq2uYWbgfBIx3fuSGeNzItPspI3VPqp3OQ2ZgyR/Ms4qlD9Swglsye4qcO3C0qT1xD6VROR2/EK1Nyp337cE8wfd0O5KqNAqgZpDe+kszz5TAvh8b2+skBhOubKCE+PncZwGnTveKQ5/Wv+Eg4nTekID2nZX2+rqLz6THvB8B4PhvBLdgEmOKleMnWA6BzP00pYo+7WdfAkjTAwql4otco42Ry6QSHNR4o/+wN1MhaynCXNGquT4zj+tmEVC7rqVR1FJ8y0jfAeTSN4wd6HFupfgRLHRfwImDKlHlw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KUxYheqcwJTUHir4nj02XNVT5N7PvHK6CYYisq/vGUM=;
+ b=i22QbxTDQbzn9xsMjBePo7PuIDm1KWQ3aqIyX+C0DqF1yK5Nq/bKNLtOGw6ki7USd00hnaoo4u121uOS3Wjp+kXBq1X0r3CKm1hM+ilUZIf/e3KBHEb+DIZwJ/E8ducM89m6IHB4PCGb+HkjsG/gQUEkqu46u591y5hHBWdZJflyyC87sk+8GFLpxEIYbtRKV7+VS1lIsxbJzp7tMh5xJYHhp3mgpMC/jYLZjU8+30BjBG4BYDnuqrbEc962Tc00+50ztTJIIO7BXxQL6c8LLIWc8UNwigHFmZz+WfffQ5nLMU0svyBfhDXIvdFgdGSLdKs0y3mQch2Ax/sNh6VfiQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KUxYheqcwJTUHir4nj02XNVT5N7PvHK6CYYisq/vGUM=;
+ b=RofB2wcEWC07oVhrSf/JpNTXBFGLu3/Yo0b9dUX3eyzMtKdDqwG02TyuJF/LUcoTmCbdOiVoaBshEmkIXiB2eILhG9IYhbL5JTlCOsjVQ1GIyYLwAyCkv+xdupSxsR4d3wkgxJ4epF+B8z1+rj8aU9qNXmnFBWI3sN4fGvJkZ+I=
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
+ by HE1PR04MB3180.eurprd04.prod.outlook.com (2603:10a6:7:22::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.19; Tue, 8 Feb
+ 2022 15:45:15 +0000
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::95cf:8c40:b887:a7b9]) by VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::95cf:8c40:b887:a7b9%4]) with mapi id 15.20.4951.019; Tue, 8 Feb 2022
+ 15:45:15 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     Colin Foster <colin.foster@in-advantage.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>
+Subject: Re: [PATCH v5 net-next 3/3] net: mscc: ocelot: use bulk reads for
+ stats
+Thread-Topic: [PATCH v5 net-next 3/3] net: mscc: ocelot: use bulk reads for
+ stats
+Thread-Index: AQHYHKbq8GXukjoutEaxquFuvaFzqayJwKKAgAAK3QCAAADugA==
+Date:   Tue, 8 Feb 2022 15:45:15 +0000
+Message-ID: <20220208154515.poeg7uartqkae26r@skbuf>
+References: <20220208044644.359951-1-colin.foster@in-advantage.com>
+ <20220208044644.359951-4-colin.foster@in-advantage.com>
+ <20220208150303.afoabx742j4ijry7@skbuf> <20220208153913.GA4785@euler>
+In-Reply-To: <20220208153913.GA4785@euler>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 5f10980e-d24d-428f-1de4-08d9eb1a005a
+x-ms-traffictypediagnostic: HE1PR04MB3180:EE_
+x-microsoft-antispam-prvs: <HE1PR04MB31803C48CF212B8E01E7357EE02D9@HE1PR04MB3180.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:4303;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ROtcp7LuIlmgceQmTp+eQkchbyjEFJxseTDdk00JN/7+acDiwuRC3d08PFtPQuJHOCXl9vQpO2MhUJg7CIB0RAcfHgv1A5FeoK9/ItNqbcbjyazUHRCrq/oSgUalP8LSztPIEPgUbD2srjGz1fLszLzoygYY8cjekzjEr+pvjnoY+oXgInH4PC7jEclcxJRJ3UdqW8hCawATn7aFA598ONg/b1gHZXo54kTMFRvXPJKWKnBPqYHkz2ACeOxrV5ug6EHqrgqzcGPFEkx4UAiFCljrgaW5Mrmr2G+vs0BvGwQXKRlI7P4nT8oT2Y238gsra8pOPbg8hOnH0m4ghwd1acuf+9QOe5I4LYmwRDU+K6QlNbGuEp221ht6n3FpX5KHdUTDf8fpDDrpkGkpbY2D9ZA09394ZWRI4DBXU3qUJQqOWAMYpb+W5IUbQgM6i5irCey0UyEgCTae4B6Pioi5jOe3x4FMaVBNRemjdaeTtBxvJC9HOsD1fmWjVoq3R4oRJrsIBYs9w2jniQ4T5ttYWP5oupbNvQVEx+eEc+uqeQpGm+YiiMyEM3vp91FpVqbzgr1+f1hzHylyAMrAW4HEZrNb/1JekDXaEqiZps/exQ8fF/AM2cPEASUMkyHXUAb+JZvarMhguRj2mQoUA9gwJmzd2bxN1Q1eypBYfOPipPAsVvrY5++O5KEM49fBjP9AxNpmCEueZXve1580MNDZPQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(4636009)(366004)(4744005)(4326008)(38100700002)(5660300002)(6506007)(44832011)(9686003)(6512007)(76116006)(66446008)(64756008)(66946007)(66556008)(8936002)(54906003)(2906002)(8676002)(26005)(186003)(6486002)(71200400001)(1076003)(508600001)(38070700005)(6916009)(122000001)(66476007)(316002)(86362001)(33716001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?oIPks6dKi5SvfmiRSSEcv5Fg4b481/ektWbFoFhphC6ywoT/7js4iaNoFtS9?=
+ =?us-ascii?Q?elmxuzx2eDzb3U2frl/dU8eFgkEG7ndJHa9QvcBCHB9oMgeucSE0XaDMmrva?=
+ =?us-ascii?Q?yIIbyug1JXHOctx/sK38gnQyQG/l2nKbUtE8zDtyBfS/dw+Mf+QwmNnCcNQp?=
+ =?us-ascii?Q?tO08zQJ6h+xH3NhucMSw8JOcbtwMuGl1wjoOf4wHykUZ88+svgTClMcw0UYn?=
+ =?us-ascii?Q?N1SHl7Osip7oX6xPafCvPlhIDArVAzv5X9n3J76um1oDVEiG528FRiLHcOwy?=
+ =?us-ascii?Q?hoDAZnlLB3mjeXcB5aURKAT/NCGjs+BFZbNB4c91ubX4gfTp9CcbQvKCVBde?=
+ =?us-ascii?Q?WQEwlz7X7nZeuz69qaEi9PweY6OIEyPchXIpt9MRr4NYU/AVDNbK7iKFsNk3?=
+ =?us-ascii?Q?HmOCJ/67wTm61ZSpIfv5/CdOdjZKXa2BiI4DefTIyW+MulVCSkh5xsCFhn6l?=
+ =?us-ascii?Q?8KgfeXsMgMXI9OucupFUJy9kDot3o3Dgq6ldFmuciO6OpmPxjiY4iskpLt1g?=
+ =?us-ascii?Q?YCVmu4rhJebwDti6eWmn0U434lffHcQUp2nvy6A7w+8CzJLHAIhq8ACQfC3P?=
+ =?us-ascii?Q?By+GiJtg4T4OliiiL8yuGYl9JLJO9c+Jp17VPFO22WMt7bWK9n0CwIPBI/d1?=
+ =?us-ascii?Q?yycQsXfimzq7mr0dbv0zJb+sUswNIXchf5VejEdzIyu6eyvnHhk5oAbV5hhq?=
+ =?us-ascii?Q?sKvp+bLHnesZhMDvJfKVXDEwTYl0ggunb6orX4KR4yFRwi3C022p3/S64Zqs?=
+ =?us-ascii?Q?j46m4J3RK6RSCK2rCkwlVXePt/NRH0/3i8PCf4M4hfduID+mxjQEF+4OCvDY?=
+ =?us-ascii?Q?osA1vrOBTBrV/9/9yn7WOlh+IHrexQnCliclDoM4RLozcuWySwsrLXAlb864?=
+ =?us-ascii?Q?jsMGQ4abDJkiuJ6QaD9i51F7LMDSrokTMX7+BXrLi+g/7lngabl3kfYOhnML?=
+ =?us-ascii?Q?4ITa0NWT4szpH7Zi4hb7FavkHc2M9CCdquFAlJ31VFXKAAu8MFVDhn/Fc5as?=
+ =?us-ascii?Q?UG20p/D9bn2YoogE5Zak2a5k/Nxiovq/yDDaEC4KnuMsobm0F2OLs7S2ibyH?=
+ =?us-ascii?Q?yfaZtct3Vub+72KcmQy3XSxr3nobAa7yuZgI5UM8+K5nlfsI4dQR/z1xXkpE?=
+ =?us-ascii?Q?ygetSGY9rAcFGcF3k0sIck+qvuErXtKLISdPlnN6IHW10a2wnzKjgroLcpiq?=
+ =?us-ascii?Q?kQ2ZYz2QWlMqpsnvVftI3/AeV8j4iWKbf4KcPt0gxWNC7U6L6LfWJAAPVFqs?=
+ =?us-ascii?Q?CKuXdOKOoAXec5JWXwv2s6ObUJO1nMQs1r0k/lXwhPSShQtCCpx+H76WnJqb?=
+ =?us-ascii?Q?nPK/M7gQI+hyAADRE3SamhcSAZcHHZBO5EPo17ZLXa8r6kiExqD5VIpjIf12?=
+ =?us-ascii?Q?cRhh4yvyIGr3WFWJ8+B0TchyCvGDumcKD5UsnW/+TpFsd+3prd9ZZeCnA56m?=
+ =?us-ascii?Q?js0dml4CUGyGXVoxV+UhHT845OzAwoF33IxHz8TQLpItPYeR2P6LsziLE1xV?=
+ =?us-ascii?Q?qmJUoyyg3McuCFP4euHHnYjB+6mZjtQObCgZT12Pkmah6cwDP1/NTmY5aTBP?=
+ =?us-ascii?Q?5fVhmk5voq1wdJhsJeXon2sk/23uJ/frZFTGWIz+pYYChLzIAbSs0pn5JA5e?=
+ =?us-ascii?Q?NF6dtEu+Nw3Zn1tn+io4MlaJq3tHPLi4qGl7Lr3qu82/?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <869712DA8CE1F247A49672AF7F1A13A3@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5f10980e-d24d-428f-1de4-08d9eb1a005a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Feb 2022 15:45:15.6125
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: dC1O+vsOqrYKxSzimJsvdWypEhkcDCMnDZUpZqbZDLgG+jAp0q4rr1il5/FDFdkmF8XETsSborPsh6jekD7qfQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR04MB3180
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,67 +127,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/4/22 3:56 PM, David Vernet wrote:
-> livepatch has a set of selftests that are used to validate the behavior of
-> the livepatching subsystem.  One of the testcases in the livepatch
-> testsuite is test-ftrace.sh, which among other things, validates that
-> livepatching gracefully fails when ftrace is disabled.  In the event that
-> ftrace cannot be disabled using 'sysctl kernel.ftrace_enabled=0', the test
-> will fail later due to it unexpectedly successfully loading the
-> test_klp_livepatch module.
-> 
-> While the livepatch selftests are careful to remove any of the livepatch
-> test modules between testcases to avoid this situation, ftrace may still
-> fail to be disabled if another trace is active on the system that was
-> enabled with FTRACE_OPS_FL_PERMANENT.  For example, any active BPF programs
-> that use trampolines will cause this test to fail due to the trampoline
-> being implemented with register_ftrace_direct().  The following is an
-> example of such a trace:
-> 
-> tcp_drop (1) R I D      tramp: ftrace_regs_caller+0x0/0x58
-> (call_direct_funcs+0x0/0x30)
->         direct-->bpf_trampoline_6442550536_0+0x0/0x1000
-> 
-> In order to make the test more resilient to system state that is out of its
-> control, this patch adds a check to set_ftrace_enabled() to skip the tests
-> if the sysctl invocation fails.
-> 
-> Signed-off-by: David Vernet <void@manifault.com>
-> ---
-> v2:
->   - Fix typo in newly added comment (s/permament/permanent).
->   - Adjust the location of the added newline to be before the new comment
->     rather than that the end of the function.
->   - Make the failure-path check a bit less brittle by checking for the
->     exact expected string, rather than specifically for "Device or resource
->     busy".
-> 
->  tools/testing/selftests/livepatch/functions.sh | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
-> index 846c7ed71556..32970324dd7e 100644
-> --- a/tools/testing/selftests/livepatch/functions.sh
-> +++ b/tools/testing/selftests/livepatch/functions.sh
-> @@ -78,6 +78,12 @@ function set_ftrace_enabled() {
->  	result=$(sysctl -q kernel.ftrace_enabled="$1" 2>&1 && \
->  		 sysctl kernel.ftrace_enabled 2>&1)
->  	echo "livepatch: $result" > /dev/kmsg
-> +
-> +	# Skip the test if ftrace is busy.  This can happen under normal system
-> +	# conditions if a trace is marked as permanent.
-> +	if [[ "$result" != "kernel.ftrace_enabled = $1" ]]; then
-> +		skip "failed to set kernel.ftrace_enabled=$1"
-> +	fi
->  }
->  
->  function cleanup() {
-> 
+On Tue, Feb 08, 2022 at 07:41:56AM -0800, Colin Foster wrote:
+> I see that now. It is confusing and I'll clear it up. I never caught
+> this because I'm testing in a setup where port 0 is the CPU port, so I
+> can't get ethtool stats. Thanks!
 
-Thanks for updating.
+You can retrieve the stats on the CPU port, as they are appended to the
+ethtool stats of the DSA master, prefixed with "p%02d_", cpu_dp->index.
 
-Acked-by: Joe Lawrence <joe.lawrence@redhat.com>
-
--- 
-Joe
-
+ethtool -S eth0 | grep -v ': 0' # where eth0 is the DSA master=

@@ -2,179 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5925A4AD9B0
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 14:22:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98BE74AD977
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 14:19:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349966AbiBHNWr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 08:22:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35444 "EHLO
+        id S1344041AbiBHNTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 08:19:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376385AbiBHM75 (ORCPT
+        with ESMTP id S242857AbiBHMl0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 07:59:57 -0500
-X-Greylist: delayed 1150 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Feb 2022 04:59:47 PST
-Received: from bddwd-sys-mailin04.bddwd.baidu.com (mx402.baidu.com [124.64.201.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 21509C03FEC0;
-        Tue,  8 Feb 2022 04:59:47 -0800 (PST)
-Received: from bjhw-sys-rpm015653cc5.bjhw.baidu.com (bjhw-sys-rpm015653cc5.bjhw.baidu.com [10.227.53.39])
-        by bddwd-sys-mailin04.bddwd.baidu.com (Postfix) with ESMTP id 8B65B13D80030;
-        Tue,  8 Feb 2022 20:40:20 +0800 (CST)
-Received: from localhost (localhost [127.0.0.1])
-        by bjhw-sys-rpm015653cc5.bjhw.baidu.com (Postfix) with ESMTP id 7F6B3D9932;
-        Tue,  8 Feb 2022 20:40:20 +0800 (CST)
-From:   Yuan ZhaoXiong <yuanzhaoxiong@baidu.com>
-To:     pbonzini@redhat.com, seanjc@google.com, wanpengli@tencent.com,
-        vkuznets@redhat.com, jmattson@google.com, joro@8bytes.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com
-Cc:     lirongqing@baidu.com, x86@kernel.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] KVM: X86: Introduce vfio_intr_stat per-vm debugfs file
+        Tue, 8 Feb 2022 07:41:26 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A37C03FECA
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 04:41:26 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id y9so8504310pjf.1
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 04:41:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=R3JoellM0j3/drkIwePqf6xNXC0okTaVtKIbynTeAOc=;
+        b=cDbvFXn+++jD2RBihOfm+4NuHtNk8YlQxYmPjF35O1yrsUbdXxfadniAuG4XR5nFwS
+         6AjlYWaCgdXKEQ9wtER+Kay6SUeGumXjw601aAOrw5/VgQcSA14qgibFM3JGqGXyIn/9
+         ETByjiRDfguEMxbmnwqFjDAIY6/V0+X2N5eCw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=R3JoellM0j3/drkIwePqf6xNXC0okTaVtKIbynTeAOc=;
+        b=dRdzVIyRAR88s6P7IKyUmRUaQyzK4CE9ZtRXlhPJHke7VqgvUCsT5j+5BswzPtEC1g
+         zlo3Mh/KMbznxDnxeyopPcmY6lg6sT5mQdNkwUZVN+ZlHV7WrcaQn1RncEjPthgNqWS0
+         UsNKGMdjLX4YUOMUKdRzd6WbJJNFD9Od7lCs1ImEOGesNruB72OSQXXvsDL4jNdbQvZl
+         leiv9VZvRX6w7pfK6bE5gBQw58/vQNWgn+Zce5kE9jKiGAN7KiYW0WfbLEkyV+ynrMbH
+         H2fEicIG+16zXk4CM1D57Jn8Z+/zjMScQjcgvIe8qjh04icavJksapWtk+z9c4scbUkO
+         7FYg==
+X-Gm-Message-State: AOAM5334gxBMRIfftTnOWqkQgDYQ3al0uHfe4HhiDu6ms3Ps5B0pxenk
+        cQtBnJt7U2Kra5/iICJsQ+ofGQ==
+X-Google-Smtp-Source: ABdhPJySG6k3d+lfO+J6p0YF76ehegEmYbi/IhHoJqpoMykEiunvLKUkSg7jAzY0zepF1RSOzn+Q1w==
+X-Received: by 2002:a17:90b:3a86:: with SMTP id om6mr1151521pjb.99.1644324085808;
+        Tue, 08 Feb 2022 04:41:25 -0800 (PST)
+Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:41b6:813e:c823:609c])
+        by smtp.gmail.com with ESMTPSA id h11sm15056939pfe.214.2022.02.08.04.41.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 04:41:25 -0800 (PST)
+From:   Chen-Yu Tsai <wenst@chromium.org>
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Chen-Yu Tsai <wenst@chromium.org>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 17/31] clk: mediatek: Implement mtk_clk_unregister_divider_clks() API
 Date:   Tue,  8 Feb 2022 20:40:20 +0800
-Message-Id: <1644324020-17639-1-git-send-email-yuanzhaoxiong@baidu.com>
-X-Mailer: git-send-email 1.7.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Message-Id: <20220208124034.414635-18-wenst@chromium.org>
+X-Mailer: git-send-email 2.35.0.263.gb82422642f-goog
+In-Reply-To: <20220208124034.414635-1-wenst@chromium.org>
+References: <20220208124034.414635-1-wenst@chromium.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use this file to export correspondence between guest_irq, host_irq,
-vector and vcpu belonging to VFIO passthrough devices.
+mtk_clk_register_divider_clks(), as the name suggests, is used to register
+a given list of divider clks. However it is lacking a counterpart
+unregister API.
 
-An example output of this looks like (a vm with VFIO passthrough
-devices):
-   guest_irq     host_irq       vector         vcpu
-          24          201           37            8
-          25          202           35           25
-          26          203           35           20
-   ......
+Implement said unregister API so that the various clock platform drivers
+can utilize it to do proper unregistration, cleanup and removal.
 
-When a VM has VFIO passthrough devices, the correspondence between
-guest_irq, host_irq, vector and vcpu may need to be known especially
-in AMD platform with avic disabled. The AMD avic is disabled, and
-the passthrough devices may cause vcpu vm exit twice for a interrupt.
-One extrernal interrupt caused by vfio host irq, other ipi to inject
-a interrupt to vm.
+In the header file, the register function's declaration is also
+reformatted to fit code style guidelines.
 
-If the system administrator known these information, set vfio host
-irq affinity to Pcpu which the correspondece guest irq affinited vcpu,
-to avoid extra vm exit.
-
-Co-developed-by: Li RongQing <lirongqing@baidu.com>
-Signed-off-by: Li RongQing <lirongqing@baidu.com>
-Signed-off-by: Yuan ZhaoXiong <yuanzhaoxiong@baidu.com>
+Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+Reviewed-by: Miles Chen <miles.chen@mediatek.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
-v1: https://lore.kernel.org/lkml/1642593015-28729-1-git-send-email-yuanzhaoxiong@baidu.com/
-v1->v2: 
-- remove the HAVE_KVM_IRQ_BYPASS conditional judgment
-- Modifying code format and remove unnecessary curly braces
+ drivers/clk/mediatek/clk-mtk.c | 19 +++++++++++++++++++
+ drivers/clk/mediatek/clk-mtk.h |  8 +++++---
+ 2 files changed, 24 insertions(+), 3 deletions(-)
 
- arch/x86/kvm/debugfs.c | 78 ++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 78 insertions(+)
-
-diff --git a/arch/x86/kvm/debugfs.c b/arch/x86/kvm/debugfs.c
-index 9240b3b..fef9014 100644
---- a/arch/x86/kvm/debugfs.c
-+++ b/arch/x86/kvm/debugfs.c
-@@ -6,6 +6,8 @@
-  */
- #include <linux/kvm_host.h>
- #include <linux/debugfs.h>
-+#include <linux/kvm_irqfd.h>
-+#include <asm/irq_remapping.h>
- #include "lapic.h"
- #include "mmu.h"
- #include "mmu/mmu_internal.h"
-@@ -181,9 +183,85 @@ static int kvm_mmu_rmaps_stat_release(struct inode *inode, struct file *file)
- 	.release	= kvm_mmu_rmaps_stat_release,
- };
- 
-+static int kvm_vfio_intr_stat_show(struct seq_file *m, void *v)
-+{
-+	struct kvm_kernel_irq_routing_entry *e;
-+	struct kvm_irq_routing_table *irq_rt;
-+	unsigned int host_irq, guest_irq;
-+	struct kvm_kernel_irqfd *irqfd;
-+	struct kvm *kvm = m->private;
-+	struct kvm_lapic_irq irq;
-+	struct kvm_vcpu *vcpu;
-+	int idx;
-+
-+	if (!kvm_arch_has_assigned_device(kvm) ||
-+	    !irq_remapping_cap(IRQ_POSTING_CAP))
-+		return 0;
-+
-+	seq_printf(m, "%12s %12s %12s %12s\n",
-+		   "guest_irq", "host_irq", "vector", "vcpu");
-+
-+	spin_lock_irq(&kvm->irqfds.lock);
-+	idx = srcu_read_lock(&kvm->irq_srcu);
-+	irq_rt = srcu_dereference(kvm->irq_routing, &kvm->irq_srcu);
-+
-+	list_for_each_entry(irqfd, &kvm->irqfds.items, list) {
-+		if (!irqfd->producer)
-+			continue;
-+
-+		host_irq = irqfd->producer->irq;
-+		guest_irq = irqfd->gsi;
-+
-+		if (guest_irq >= irq_rt->nr_rt_entries ||
-+		    hlist_empty(&irq_rt->map[guest_irq]))
-+			continue;
-+
-+		hlist_for_each_entry(e, &irq_rt->map[guest_irq], link) {
-+			if (e->type != KVM_IRQ_ROUTING_MSI)
-+				continue;
-+
-+			kvm_set_msi_irq(kvm, e, &irq);
-+			if (kvm_intr_is_single_vcpu(kvm, &irq, &vcpu))
-+				seq_printf(m, "%12u %12u %12u %12u\n",
-+					   guest_irq, host_irq, irq.vector, vcpu->vcpu_id);
-+		}
-+	}
-+	srcu_read_unlock(&kvm->irq_srcu, idx);
-+	spin_unlock_irq(&kvm->irqfds.lock);
-+	return 0;
-+}
-+
-+static int kvm_vfio_intr_stat_open(struct inode *inode, struct file *file)
-+{
-+	struct kvm *kvm = inode->i_private;
-+
-+	if (!kvm_get_kvm_safe(kvm))
-+		return -ENOENT;
-+
-+	return single_open(file, kvm_vfio_intr_stat_show, kvm);
-+}
-+
-+static int kvm_vfio_intr_stat_release(struct inode *inode, struct file *file)
-+{
-+	struct kvm *kvm = inode->i_private;
-+
-+	kvm_put_kvm(kvm);
-+	return single_release(inode, file);
-+}
-+
-+static const struct file_operations vfio_intr_stat_fops = {
-+	.open    = kvm_vfio_intr_stat_open,
-+	.read    = seq_read,
-+	.llseek  = seq_lseek,
-+	.release = kvm_vfio_intr_stat_release,
-+};
-+
- int kvm_arch_create_vm_debugfs(struct kvm *kvm)
- {
- 	debugfs_create_file("mmu_rmaps_stat", 0644, kvm->debugfs_dentry, kvm,
- 			    &mmu_rmaps_stat_fops);
-+
-+	debugfs_create_file("vfio_intr_stat", 0444, kvm->debugfs_dentry, kvm,
-+			    &vfio_intr_stat_fops);
- 	return 0;
+diff --git a/drivers/clk/mediatek/clk-mtk.c b/drivers/clk/mediatek/clk-mtk.c
+index b267b2f04b84..3a6dfe445e63 100644
+--- a/drivers/clk/mediatek/clk-mtk.c
++++ b/drivers/clk/mediatek/clk-mtk.c
+@@ -286,6 +286,25 @@ void mtk_clk_register_dividers(const struct mtk_clk_divider *mcds,
+ 	}
  }
+ 
++void mtk_clk_unregister_dividers(const struct mtk_clk_divider *mcds, int num,
++				 struct clk_onecell_data *clk_data)
++{
++	int i;
++
++	if (!clk_data)
++		return;
++
++	for (i = num; i > 0; i--) {
++		const struct mtk_clk_divider *mcd = &mcds[i - 1];
++
++		if (IS_ERR_OR_NULL(clk_data->clks[mcd->id]))
++			continue;
++
++		clk_unregister_divider(clk_data->clks[mcd->id]);
++		clk_data->clks[mcd->id] = ERR_PTR(-ENOENT);
++	}
++}
++
+ int mtk_clk_simple_probe(struct platform_device *pdev)
+ {
+ 	const struct mtk_clk_desc *mcd;
+diff --git a/drivers/clk/mediatek/clk-mtk.h b/drivers/clk/mediatek/clk-mtk.h
+index 4db1a97c1250..e3ae22fb0334 100644
+--- a/drivers/clk/mediatek/clk-mtk.h
++++ b/drivers/clk/mediatek/clk-mtk.h
+@@ -176,9 +176,11 @@ struct mtk_clk_divider {
+ 		.div_width = _width,				\
+ }
+ 
+-void mtk_clk_register_dividers(const struct mtk_clk_divider *mcds,
+-			int num, void __iomem *base, spinlock_t *lock,
+-				struct clk_onecell_data *clk_data);
++void mtk_clk_register_dividers(const struct mtk_clk_divider *mcds, int num,
++			       void __iomem *base, spinlock_t *lock,
++			       struct clk_onecell_data *clk_data);
++void mtk_clk_unregister_dividers(const struct mtk_clk_divider *mcds, int num,
++				 struct clk_onecell_data *clk_data);
+ 
+ struct clk_onecell_data *mtk_alloc_clk_data(unsigned int clk_num);
+ void mtk_free_clk_data(struct clk_onecell_data *clk_data);
 -- 
-1.8.3.1
+2.35.0.263.gb82422642f-goog
 

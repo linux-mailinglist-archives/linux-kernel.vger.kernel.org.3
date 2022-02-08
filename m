@@ -2,68 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2116D4AD488
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 10:17:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D19AD4AD493
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 10:17:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353511AbiBHJQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 04:16:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58536 "EHLO
+        id S1353674AbiBHJR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 04:17:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353481AbiBHJQq (ORCPT
+        with ESMTP id S1350674AbiBHJRW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 04:16:46 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2EDC03FEC0
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 01:16:46 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id k6-20020a05600c1c8600b003524656034cso1124056wms.2
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 01:16:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=aTV3U+AJk3RD6eElzaHJxvZSwRxCXoAkfgtxJLXFRFw=;
-        b=eTLX2PjnknBzMEs63P9J5qTgHvbTDhnOrYiM2TX6TbZV+47bgq+VSpLq/ZqxN6CJWE
-         7nA6mdE6VoktNAgaHZ7tvT4zpkTv6ckjTcBLxqC+Smlg30OQCy/HmMmBkBKBjzKOoU86
-         cRj9ysOCCZ5uP4CmEekFnB+5GB2uAT+xCOuICGB3hCyxZWn8hgo+dWt5uXrvQn/v2ctO
-         3wNeAi7unLyYNTBxKkt9WDcF2ZCj2fSaNrgW1jKZc8gIl+QD75fyeAUAyl1pQ1eWjVF8
-         oZOACsmYFnhhhWNAopbkop8f7YaO9X56wHO3QqCck8a2XFpsbzx8SPSw/q0CbJzQdTH5
-         L9Yw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=aTV3U+AJk3RD6eElzaHJxvZSwRxCXoAkfgtxJLXFRFw=;
-        b=iSK6bickcevZoLnSD21eG5unDUo7lUpTq6KAeCvYbc3KRVOJTBsBx3fPI93J6m3qL4
-         tR0PshxMzB6r0JITlaJYsphWNd+8wvpZllmHRrs4WbpPQWD5opD7HzpHzBxjM3vXXXqQ
-         pNl8oOuWmSVpasZT7xdqp7oYGIUhVDuw2YIeOqm1ZhDNVbFLFB9v/XZ5enMgMPULmakG
-         k5ymvctja7MKUhywbUkNQB39m7RQoSb3Mm5OzkNcUpgER/xhDBaCl6IkqBxcAOOwZTaH
-         MTuHrD/HwvXCrp0vFcbfFVn+zoidPAaLuvjndvTenqDcjoX+PKYUqI1lgcJvLJMlv/K4
-         1/KQ==
-X-Gm-Message-State: AOAM5314cwU39zBG738hVwuPTkdlBKmvVOPAE7aS2eJysI3MbFj6PU/E
-        wCPlUODzAtrKgMDbJw1h0igrLIrzOEYPtA==
-X-Google-Smtp-Source: ABdhPJz/sE6q7xgayZl9ZsT3Os6LZbSfWA/5GSsWB0JSC9aDckNJyeH+5rZz0nvZSx6OAb3Y+sumCA==
-X-Received: by 2002:a05:600c:2b88:: with SMTP id j8mr260262wmc.55.1644311804527;
-        Tue, 08 Feb 2022 01:16:44 -0800 (PST)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id d7sm15565033wri.117.2022.02.08.01.16.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 01:16:44 -0800 (PST)
-Date:   Tue, 8 Feb 2022 09:16:41 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc:     patches@opensource.cirrus.com, linux-kernel@vger.kernel.org
-Subject: Re: [RESEND PATCH] mfd: arizona: Add missing statics to the
- of_match_tables
-Message-ID: <YgI0+VL2a7675lQy@google.com>
-References: <20220104165435.26782-1-ckeepax@opensource.cirrus.com>
+        Tue, 8 Feb 2022 04:17:22 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA2FC03FEDA;
+        Tue,  8 Feb 2022 01:17:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2EF1E61479;
+        Tue,  8 Feb 2022 09:17:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D140C340ED;
+        Tue,  8 Feb 2022 09:17:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644311838;
+        bh=BRQppVmJemnXXpfZXfcxyJ76Uix+mNSFNn+dOUBit+Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=B3EKAJXrMGa7sLQ/UIGqVwvEhckiwK7KbAYqdpGASMWBfI35qyTU08kJM7VInr/u7
+         L3HW1aG+k1r2XrAoYTgGpNICjfxqai3FcsJnTbxo86tYp1wj+Lde7V60xIX006sEyW
+         w09Bzpsf6vUTpugq2l6spY1jKstIAX00/fA4FVKSIgpKT8VVKnfmsCzaZnWrOOkBuZ
+         ZDGUROkTnlT3AX2stNNHZlSY1kqNoYYReLMvuXDSyWKrcWommrFseWqRFSjPujgbYj
+         mceqt8Wcr0mdJ9QEWbQ+WTEH7UJPk61Et2a1RF9hTSjIIBGoS0jwmY4WoekJXtIegp
+         mM1Lptsk/sLWA==
+Date:   Tue, 8 Feb 2022 11:16:51 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Adrian Reber <adrian@lisas.de>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
+        kcc@google.com, eranian@google.com,
+        Andrei Vagin <avagin@gmail.com>,
+        Dmitry Safonov <0x7f454c46@gmail.com>
+Subject: Re: [PATCH 00/35] Shadow stacks for userspace
+Message-ID: <YgI1A0CtfmT7GMIp@kernel.org>
+References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
+ <YgAWVSGQg8FPCeba@kernel.org>
+ <YgDIIpCm3UITk896@lisas.de>
+ <8f96c2a6-9c03-f97a-df52-73ffc1d87957@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220104165435.26782-1-ckeepax@opensource.cirrus.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <8f96c2a6-9c03-f97a-df52-73ffc1d87957@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,23 +87,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 04 Jan 2022, Charles Keepax wrote:
-
-> When the match tables were split for I2C and SPI a static should have
-> been added since the tables are no longer exported.
+On Mon, Feb 07, 2022 at 08:30:50AM -0800, Dave Hansen wrote:
+> On 2/6/22 23:20, Adrian Reber wrote:
+> >>> 	CRIU Support
+> >>> 	------------
+> >>> 	In the past there was some speculation on the mailing list about 
+> >>> 	whether CRIU would need to be taught about CET. It turns out, it does. 
+> >>> 	The first issue hit is that CRIU calls sigreturn directly from its 
+> >>> 	“parasite code” that it injects into the dumper process. This violates
+> >>> 	this shadow stack implementation’s protection that intends to prevent
+> >>> 	attackers from doing this.
+> ...
+> >>From the CRIU side I can say that I would definitely like to see this
+> > resolved. CRIU just went through a similar exercise with rseq() being
+> > enabled in glibc and CI broke all around for us and other projects
+> > relying on CRIU. Although rseq() was around for a long time we were not
+> > aware of it but luckily 5.13 introduced a way to handle it for CRIU with
+> > ptrace. An environment variable existed but did not really help when
+> > CRIU is called somewhere in the middle of the container software stack.
+> > 
+> >>From my point of view a solution not involving an environment variable
+> > would definitely be preferred.
 > 
-> Fixes: 3f65555c417c ("mfd: arizona: Split of_match table into I2C and SPI versions")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-> ---
->  drivers/mfd/arizona-i2c.c | 2 +-
->  drivers/mfd/arizona-spi.c | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> Have there been things like this for CRIU in the past?  Something where
+> CRIU needs control but that's also security-sensitive?
 
-Applied, thanks.
+Generally CRIU requires (almost) root privileges to work, but I don't think
+it handles something as security sensitive and restrictive as shadow stacks. 
+ 
+> Any thoughts on how you would _like_ to see this resolved?
+
+Ideally, CRIU will need a knob that will tell the kernel/CET machinery
+where the next RET will jump, along the lines of
+restore_signal_shadow_stack() AFAIU.
+
+But such a knob will immediately reduce the security value of the entire
+thing, and I don't have good ideas how to deal with it :(
 
 -- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Sincerely yours,
+Mike.

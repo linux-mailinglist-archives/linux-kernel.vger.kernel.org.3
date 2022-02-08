@@ -2,169 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFE3E4AE441
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:29:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF8FE4AE495
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:37:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345324AbiBHW20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 17:28:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43176 "EHLO
+        id S1388130AbiBHWgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 17:36:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386193AbiBHTn1 (ORCPT
+        with ESMTP id S1386248AbiBHTvM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 14:43:27 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B519C0613CB
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 11:43:25 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id a25so355905lji.9
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 11:43:25 -0800 (PST)
+        Tue, 8 Feb 2022 14:51:12 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F48AC0613CB
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 11:51:09 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id k18so228010wrg.11
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 11:51:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:user-agent:references
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
          :mime-version:content-disposition:in-reply-to;
-        bh=1tEJAxplWOdsST7VjAL8Y9Sw3P8bafgTU+Sinq81TpA=;
-        b=qgIYmDi/ZeicFaofjllkpa+BrnvfUv4EOU+wxz9K63WiLaH5xS0CZFXk2kZgFuo8Mq
-         g3NXYajQoNtsik4kRxCC7rtl9YSyG5jPbpFs3bjV8s0XW7PhyVR+Ns3Y+ETMrKmeRI7H
-         Xdi9HF2KuPX5VHeRLrOrheb1zXHfPTtvAtoryglvLUUHsOCbU4KkCYo0/1UzIAHT5aKU
-         xcWGY7P//34ib2u47l3dszXaLnD84GjUVRc5fvjRKeMYAJxocxB3vxrPy0iiamDFw+K8
-         xRWuGX0cG6+//fzzHOKklg+gAdyHOE+/KAm7v/fwnIbh/z7FkI7mpG5sepn43VzK1K9W
-         neEQ==
+        bh=BvBYtnROK0NJX3e3ojisBGf1paUJFvCP5ALRDikwoCo=;
+        b=TWDZjxkf7M6rgIp4JfZtaKW4Sjca9LqbZMy9b+5DrAZaJ2rDVB9YJtodNNsdrAJlf4
+         WYG9TGJZgkRvaXASeEw7DPJThBOR1JCHe7M4V1UyHCI0s7YkznBYBFAF4r8yIE5My8rD
+         nzSIuGCwjR9kuhafqLbUr25bqyY6ReIBIOcSQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:user-agent
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=1tEJAxplWOdsST7VjAL8Y9Sw3P8bafgTU+Sinq81TpA=;
-        b=h6ClAI2swmxHKSww/Sfmm1wsxJ4mX/1qdwt6PBvgq1n/TvPgDoRZaO7eDoBs/JnE/2
-         549W+VqZCjVJDH9qtwPofII4GhCmKusGnHzm4Gp4Me1mZMpXJyBW0c5BTKyVEbOdFX54
-         psezIbXOUbOoZxEGiOcZrZC5yqrZYwNlwk29GRvii40NpVQCiXKzDifexXyLW4EiDx+t
-         Ytg7X/kt1aSoaEaLt6nV1oNVEYX45kTl9ZCfbDgPCP0Zms4fTU/vQTaj8eSvZiSW/GHD
-         gnlN3VAS4ZoBUqmJXydGsm/ky+Y4BY35a5ZgTN/+VXnbLeJAqJBprJUcUe8OCrUUIwLR
-         hSwQ==
-X-Gm-Message-State: AOAM530mc30lQIBONo9atUzn6bI/Gq4KooBZy8TZmKtbpl/vNuvWYDKd
-        LbLoBRUNEQkR7SABmd4ubXua8vCZXtg=
-X-Google-Smtp-Source: ABdhPJy2TPJeIGKofeUIN1Ki9KOHuEUkQIzaTDtyAX5L3UBuGUlxdnB00lMLWmvVS9I3SdVYp91G7Q==
-X-Received: by 2002:a2e:2ac1:: with SMTP id q184mr3755627ljq.360.1644349403757;
-        Tue, 08 Feb 2022 11:43:23 -0800 (PST)
-Received: from localhost.localdomain (broadband-95-84-228-163.ip.moscow.rt.ru. [95.84.228.163])
-        by smtp.gmail.com with ESMTPSA id t16sm352001lfp.137.2022.02.08.11.43.22
-        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
-        Tue, 08 Feb 2022 11:43:23 -0800 (PST)
-Date:   Tue, 8 Feb 2022 22:49:21 +0300
-From:   Alexander Sergeyev <sergeev917@gmail.com>
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     "moderated list:SOUND" <alsa-devel@alsa-project.org>,
-        Kailang Yang <kailang@realtek.com>,
-        Jeremy Szu <jeremy.szu@canonical.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>, tiwai@suse.com,
-        Hui Wang <hui.wang@canonical.com>,
-        PeiSen Hou <pshou@realtek.com>,
-        Jian-Hong Pan <jhp@endlessos.org>
-Subject: Re: [PATCH 1/4] ALSA: hda/realtek: fix mute/micmute LEDs for HP 855
- G8
-Message-ID: <20220208194921.kqx4rguwe5i7rnvg@localhost.localdomain>
-User-Agent: mtt
-References: <20220119093249.eaxem33bjqjxcher@localhost.localdomain>
- <20220122190522.ycaygrqcen7d3hj2@localhost.localdomain>
- <20220122205637.7gzurdu7xl4sthxw@localhost.localdomain>
- <s5ho83yldu3.wl-tiwai@suse.de>
- <20220129144704.xlmeylllvy3b3fum@localhost.localdomain>
- <20220130111020.44gzrm5ckrakjta2@localhost.localdomain>
- <s5htudk9cn3.wl-tiwai@suse.de>
- <20220205150016.gvrst7ldvgjh7fra@localhost.localdomain>
- <20220205175132.ihwp5wlxga4efngl@localhost.localdomain>
- <s5hzgn2u589.wl-tiwai@suse.de>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=BvBYtnROK0NJX3e3ojisBGf1paUJFvCP5ALRDikwoCo=;
+        b=2QcZKaThnih24KCbJw7B26AhIC0kor6Exn3ssBP3xM0sCMPk6OyzrEFezL86Blr7Yi
+         lFqM6J4Lmd0ZY/XVL9Uw51Wht1LDi8g2kaSW9EobP42W0kloin21AxtWN/AdroFglFwr
+         SgYMRqWR1gFUldbLKkOHMgSp0qtAiXKscKdBGOuhRB8uBm6/GhH5avtOzUHztEIYT+O4
+         ASZUuzT1nN4Td+MFc4AmvLS2qsFmClTI+H7Tx6zzw6vhw9mA791I4iKxz+EMv+r8sVbA
+         uTiSPWIKoITYKvEMab7Bh97PUcBFImWnZN6GSUsgl6FPpNTMfbSHsupxGVBTn7y16rRT
+         mCKQ==
+X-Gm-Message-State: AOAM533nthgb8fRnA3aS5hpHEKNK5hTOL2dIyeHfCulwYJEN/PRMYja3
+        3628ohnt3StRtw8YMZbtpSB0exoDobpqXQ==
+X-Google-Smtp-Source: ABdhPJx3tBpO0LLVvJvdPoySy41lhcsT/t4WBAmc1/sxYixWb4kanChwoDH9nrVUpWQo3RbB0d6VVg==
+X-Received: by 2002:a05:6000:178d:: with SMTP id e13mr4611824wrg.317.1644349867919;
+        Tue, 08 Feb 2022 11:51:07 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id n126sm1930000wmn.27.2022.02.08.11.51.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 11:51:07 -0800 (PST)
+Date:   Tue, 8 Feb 2022 20:51:05 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Sam Ravnborg <sam@ravnborg.org>
+Cc:     DRI Development <dri-devel@lists.freedesktop.org>,
+        linux-fbdev@vger.kernel.org, Du Cheng <ducheng2@gmail.com>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Claudio Suarez <cssk@net-c.es>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Vetter <daniel.vetter@intel.com>
+Subject: Re: [Intel-gfx] [PATCH 11/21] fbcon: Extract fbcon_open/release
+ helpers
+Message-ID: <YgLJqeRX0BWF4j29@phenom.ffwll.local>
+Mail-Followup-To: Sam Ravnborg <sam@ravnborg.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        linux-fbdev@vger.kernel.org, Du Cheng <ducheng2@gmail.com>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>, Claudio Suarez <cssk@net-c.es>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Vetter <daniel.vetter@intel.com>
+References: <20220131210552.482606-1-daniel.vetter@ffwll.ch>
+ <20220131210552.482606-12-daniel.vetter@ffwll.ch>
+ <YfxF4jq7BLX5rJe5@ravnborg.org>
+ <YgJ0relUFpnxRvhg@phenom.ffwll.local>
+ <YgK1Qz6eIKD9wHre@ravnborg.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <s5hzgn2u589.wl-tiwai@suse.de>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YgK1Qz6eIKD9wHre@ravnborg.org>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 03:21:58PM +0100, Takashi Iwai wrote:
-> > In the last functions a circular buffer is used to write commands. The 
-> > problem is that "bus->corb.buf[wp]" and "bus->rirb.res[addr]" are nowhere 
-> > close to the IOMMU-reported address of the offending memory access. It's 
-> > likely that I've missed other communication channels. But is it possible 
-> > that IOMMU-reported address and buffers addresses are of different kinds 
-> > (physical/virtual) or different regions mapped to the same physical pages?
-> Hm, I'm not sure, either.  But let's try to avoid some possible
-> confusion at first, e.g. a patch like below.
+On Tue, Feb 08, 2022 at 07:24:03PM +0100, Sam Ravnborg wrote:
+> Hi Daniel,
+> 
+> On Tue, Feb 08, 2022 at 02:48:29PM +0100, Daniel Vetter wrote:
+> > On Thu, Feb 03, 2022 at 10:15:14PM +0100, Sam Ravnborg wrote:
+> > > Hi Daniel,
+> > > 
+> > > On Mon, Jan 31, 2022 at 10:05:42PM +0100, Daniel Vetter wrote:
+> > > > There's two minor behaviour changes in here:
+> > > > - in error paths we now consistently call fb_ops->fb_release
+> > > > - fb_release really can't fail (fbmem.c ignores it too) and there's no
+> > > >   reasonable cleanup we can do anyway.
+> > > > 
+> > > > Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
+> > > > Cc: Daniel Vetter <daniel@ffwll.ch>
+> > > > Cc: Claudio Suarez <cssk@net-c.es>
+> > > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > > Cc: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+> > > > Cc: Du Cheng <ducheng2@gmail.com>
+> > > > ---
+> > > >  drivers/video/fbdev/core/fbcon.c | 107 +++++++++++++++----------------
+> > > >  1 file changed, 53 insertions(+), 54 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/video/fbdev/core/fbcon.c b/drivers/video/fbdev/core/fbcon.c
+> > > > index fa30e1909164..eea2ee14b64c 100644
+> > > > --- a/drivers/video/fbdev/core/fbcon.c
+> > > > +++ b/drivers/video/fbdev/core/fbcon.c
+> > > > @@ -680,19 +680,37 @@ static int fbcon_invalid_charcount(struct fb_info *info, unsigned charcount)
+> > > >  
+> > > >  #endif /* CONFIG_MISC_TILEBLITTING */
+> > > >  
+> > > > +static int fbcon_open(struct fb_info *info)
+> > > > +{
+> > > > +	if (!try_module_get(info->fbops->owner))
+> > > > +		return -ENODEV;
+> > > > +
+> > > > +	if (info->fbops->fb_open &&
+> > > > +	    info->fbops->fb_open(info, 0)) {
+> > > > +		module_put(info->fbops->owner);
+> > > > +		return -ENODEV;
+> > > > +	}
+> > > > +
+> > > > +	return 0;
+> > > > +}
+> > > > +
+> > > > +static void fbcon_release(struct fb_info *info)
+> > > > +{
+> > > > +	if (info->fbops->fb_release)
+> > > > +		info->fbops->fb_release(info, 0);
+> > > > +
+> > > > +	module_put(info->fbops->owner);
+> > > > +}
+> > > >  
+> > > >  static int con2fb_acquire_newinfo(struct vc_data *vc, struct fb_info *info,
+> > > >  				  int unit, int oldidx)
+> > > >  {
+> > > >  	struct fbcon_ops *ops = NULL;
+> > > > -	int err = 0;
+> > > > -
+> > > > -	if (!try_module_get(info->fbops->owner))
+> > > > -		err = -ENODEV;
+> > > > +	int err;
+> > > >  
+> > > > -	if (!err && info->fbops->fb_open &&
+> > > > -	    info->fbops->fb_open(info, 0))
+> > > > -		err = -ENODEV;
+> > > > +	err = fbcon_open(info);
+> > > > +	if (err)
+> > > > +		return err;
+> > > >  
+> > > >  	if (!err) {
+> > > >  		ops = kzalloc(sizeof(struct fbcon_ops), GFP_KERNEL);
+> > > > @@ -713,7 +731,7 @@ static int con2fb_acquire_newinfo(struct vc_data *vc, struct fb_info *info,
+> > > >  
+> > > >  	if (err) {
+> > > >  		con2fb_map[unit] = oldidx;
+> > > > -		module_put(info->fbops->owner);
+> > > > +		fbcon_release(info);
+> > > >  	}
+> > > >  
+> > > >  	return err;
+> > > > @@ -724,45 +742,34 @@ static int con2fb_release_oldinfo(struct vc_data *vc, struct fb_info *oldinfo,
+> > > >  				  int oldidx, int found)
+> > > >  {
+> > > >  	struct fbcon_ops *ops = oldinfo->fbcon_par;
+> > > > -	int err = 0, ret;
+> > > > +	int ret;
+> > > >  
+> > > > -	if (oldinfo->fbops->fb_release &&
+> > > > -	    oldinfo->fbops->fb_release(oldinfo, 0)) {
+> > > > -		con2fb_map[unit] = oldidx;
+> > > The old code assigns con2fb_map[unit] before is calls
+> > > newinfo->fbops->fb_release).
+> > > I wonder if there can be any callback to fbcon where the value
+> > > of con2fb_map[unit] matters?
+> > 
+> > It's all protected by console_lock, so other threads cannot see the
+> > inconsistent state.
+> > 
+> > Essentially everything in fbcon.c is protected by console_lock().
+> > 
+> > Do you want me to hammer this in somewhere (maybe in the commit message),
+> > or good enough for your ack?
+> 
+> No need to spell it out more.
 
-No changes with the patch applied. Also, I added logs for dma_type used:
+I think this was a very good question, since I had to spend a few minutes
+figuring out what exactly and why I've done it too.
 
-snd_hdac_bus_alloc_stream_pages: dma_type = 2
-snd_hdac_bus_alloc_stream_pages: dma_type = 2
-snd_hdac_bus_alloc_stream_pages: dma_type = 2
+So I'll add this explainer, it really should have been in the commit
+message!
 
-Which matches SNDRV_DMA_TYPE_DEV, so the same behavior is expected.
+> Add my a-b and apply it.
 
-I've noticed that the IO_PAGE_FAULT regularly comes shortly after the write 
-position overflows and restarts from 0, while after the driver binding the wp 
-starts from 1 and not 0. Correlation does not mean causation, through. A 
-similar overflow happens during the initial kernel bootup with no error 
-messages. An another way of looking on it -- the fault comes on wp=0x1, which 
-corresponds to the first re-used address in the buffer.
+Well I need to resend, since there was a minor change due to rebasing on
+top of Helge's fbcon scrolling patches instead of mine.
 
-bus->corb.buf[wp] = cpu_to_le32(val) // = 0x14ba000, wp=0xfe, &buf[wp]=000000005b92167d
-snd_hdac_bus_get_response: reading result from 0000000096c36d67
-bus->corb.buf[wp] = cpu_to_le32(val) // = 0x14b8000, wp=0xff, &buf[wp]=00000000a91a3679
-snd_hdac_bus_get_response: reading result from 0000000096c36d67
-bus->corb.buf[wp] = cpu_to_le32(val) // = 0x2ba000, wp=0x0, &buf[wp]=000000002fda9222
-snd_hdac_bus_get_response: reading result from 0000000096c36d67
-bus->corb.buf[wp] = cpu_to_le32(val) // = 0x2b8000, wp=0x1, &buf[wp]=000000009747a629
-snd_hda_intel 0000:05:00.6: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x0015 address=0x1fffff800 flags=0x0020]
-snd_hda_intel 0000:05:00.6: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x0015 address=0x1fffff800 flags=0x0020]
+Thanks for your review
+-Daniel
+> 
+> 	Sam
 
-And I finally got "out of range cmd", but logging is limited to IO addresses.
-
-bus->corb.buf[wp] = cpu_to_le32(val) // = 0x14ba000, wp=0xfe, &buf[wp]=0000000036a02eae
-snd_hdac_bus_get_response: reading result from 0000000037aa0724
-bus->corb.buf[wp] = cpu_to_le32(val) // = 0x14b8000, wp=0xff, &buf[wp]=00000000ce140303
-snd_hdac_bus_get_response: reading result from 0000000037aa0724
-bus->corb.buf[wp] = cpu_to_le32(val) // = 0x2ba000, wp=0x0, &buf[wp]=000000004c6aa283
-snd_hdac_bus_get_response: reading result from 0000000037aa0724
-bus->corb.buf[wp] = cpu_to_le32(val) // = 0x2b8000, wp=0x1, &buf[wp]=000000002a825cc8
-snd_hda_intel 0000:05:00.6: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x0015 address=0x1fffff800 flags=0x0020]
-snd_hda_intel 0000:05:00.6: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x0015 address=0x1fffff800 flags=0x0020]
-snd_hdac_bus_get_response: reading result from 0000000037aa0724
-bus->corb.buf[wp] = cpu_to_le32(val) // = 0x239000, wp=0x2, &buf[wp]=0000000078eca2cf
-snd_hda_intel 0000:05:00.6: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x0015 address=0x1fffff800 flags=0x0020]
-snd_hdac_bus_get_response: reading result from 0000000037aa0724
-bus->corb.buf[wp] = cpu_to_le32(val) // = 0x1970724, wp=0x3, &buf[wp]=00000000613071da
-snd_hdac_bus_get_response: reading result from 0000000037aa0724
-bus->corb.buf[wp] = cpu_to_le32(val) // = 0x1270720, wp=0x4, &buf[wp]=000000006db33d93
-snd_hda_intel 0000:05:00.6: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x0015 address=0x1fffff800 flags=0x0020]
-snd_hdac_bus_get_response: reading result from 0000000037aa0724
-snd_hda_intel 0000:05:00.6: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x0015 address=0x1fffff820 flags=0x0020]
-bus->corb.buf[wp] = cpu_to_le32(val) // = 0x8b2000, wp=0x5, &buf[wp]=000000002a3c7e90
-snd_hda_intel 0000:05:00.6: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x0015 address=0x1fffff820 flags=0x0020]
-snd_hdac_bus_get_response: reading result from 0000000037aa0724
-bus->corb.buf[wp] = cpu_to_le32(val) // = 0x836080, wp=0x6, &buf[wp]=00000000571d53bf
-snd_hdac_bus_get_response: reading result from 0000000037aa0724
-bus->corb.buf[wp] = cpu_to_le32(val) // = 0x8b0000, wp=0x7, &buf[wp]=000000000a52a2af
-snd_hda_intel 0000:05:00.6: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x0015 address=0x1fffff820 flags=0x0020]
-snd_hda_intel 0000:05:00.6: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x0015 address=0x1fffff820 flags=0x0020]
-snd_hdac_bus_get_response: reading result from 0000000037aa0724
-bus->corb.buf[wp] = cpu_to_le32(val) // = 0x835080, wp=0x8, &buf[wp]=00000000f139c302
-snd_hda_intel 0000:05:00.6: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x0015 address=0x1fffff840 flags=0x0020]
-snd_hdac_bus_get_response: reading result from 0000000037aa0724
-bus->corb.buf[wp] = cpu_to_le32(val) // = 0x23f000d, wp=0x9, &buf[wp]=000000003c565021
-snd_hda_intel 0000:05:00.6: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x0015 address=0x1fffff840 flags=0x0020]
-snd_hdac_bus_get_response: reading result from 0000000037aa0724
-...
-bus->corb.buf[wp] = cpu_to_le32(val) // = 0x205000b, wp=0x3e, &buf[wp]=000000002ce016ac
-snd_hdac_bus_get_response: reading result from 0000000037aa0724
-bus->corb.buf[wp] = cpu_to_le32(val) // = 0x20c0000, wp=0x3f, &buf[wp]=000000003ad48d6f
-snd_hdac_bus_get_response: reading result from 0000000037aa0724
-bus->corb.buf[wp] = cpu_to_le32(val) // = 0x8350a7, wp=0x40, &buf[wp]=0000000098c2fb2d
-snd_hdac_bus_get_response: reading result from 0000000037aa0724
-bus->corb.buf[wp] = cpu_to_le32(val) // = 0x205000b, wp=0x41, &buf[wp]=000000006e281f5b
-snd_hdac_bus_get_response: reading result from 0000000037aa0724
-snd_hda_codec_realtek hdaudioC1D0: out of range cmd 0:20:400:40600001
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

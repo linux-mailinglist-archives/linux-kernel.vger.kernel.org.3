@@ -2,97 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C6B64AE434
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:27:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBC754AE49A
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:37:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240776AbiBHW0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 17:26:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60542 "EHLO
+        id S1389004AbiBHWdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 17:33:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386584AbiBHU4r (ORCPT
+        with ESMTP id S1386599AbiBHU6L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 15:56:47 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A07E7C0612B8
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 12:56:42 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id f17so581397wrx.1
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 12:56:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8rCyE259QoTAuF9ujcMI8WQXkRdDBnGG4G9shkzQjfs=;
-        b=TClcMH3/O8IpIo3td4YsN56mO1iC7OT2x7WX2FMn/DpIGkX8EwvlmyzJbHfyaO9kmA
-         QR+OyCNEr5uu9lVSwWwjtgl0lfk3CYGV3p3l0yw3SkRJWXcGZ93pUtqvBqM9Zhqox2W1
-         OsfUI+doa0d/YIr1nV4EX0pA8AvKm9sFFLitM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=8rCyE259QoTAuF9ujcMI8WQXkRdDBnGG4G9shkzQjfs=;
-        b=uT5ulw9Rr8ONw2qblgpoaIgy+uu+XirdIeCEqkikrJrIpMyq+gwpK6u39qzCg1N6w7
-         Pb98TtbYHPdLMxZI1MWOzcBLget3B8trh/HYgyc1Cy7+qL7b7u76CxGPQ+m06jHmpD5o
-         g2Gbbe3gihRJR4RxyKvB8yuYdjFPpJ/Jozk29TveuX+CNbobs4pBwyxk0bJYW5EVrIlp
-         q+RmypOFD0dfFy9Xt2RT1oivpSu65lkQagkQzcZ2edtftoXrHBNpcEZb5tQXsd1sH9jN
-         YNcOOMI0y1lvUm73hQbSKQ+oertTubDFnZPuWTjdsnefu1FXoK/qFLKc9S8ZRFYWo7Mv
-         h+cg==
-X-Gm-Message-State: AOAM532WO+BfkXmrq6AtIkuwlz1IT3Tjk0cCvEmrsp5apXx1F4zHSpWI
-        QrSxfHLN/0r1GkhOoiQMTQrf0ZTWK7ZIVQ==
-X-Google-Smtp-Source: ABdhPJz/N9Po0VxZ50ccE3Hf10GsDJ0883pAqCSvxgXcU5GA5wUMfraP7XMA8MXRBfr2C51K9jlMiQ==
-X-Received: by 2002:a05:6000:1a89:: with SMTP id f9mr5048305wry.573.1644353801125;
-        Tue, 08 Feb 2022 12:56:41 -0800 (PST)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id b16sm3490549wrj.26.2022.02.08.12.56.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 12:56:40 -0800 (PST)
-Date:   Tue, 8 Feb 2022 21:56:38 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Sam Ravnborg <sam@ravnborg.org>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        linux-fbdev@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
-        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
-        Jens Frederich <jfrederich@gmail.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        linux-staging@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Jon Nettleton <jon.nettleton@gmail.com>,
-        Helge Deller <deller@gmx.de>
-Subject: Re: [PATCH 21/21] fbdev: Make registered_fb[] private to fbmem.c
-Message-ID: <YgLZBlrXW+DYNkFN@phenom.ffwll.local>
-Mail-Followup-To: Sam Ravnborg <sam@ravnborg.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        linux-fbdev@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
-        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
-        Jens Frederich <jfrederich@gmail.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        linux-staging@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Jon Nettleton <jon.nettleton@gmail.com>,
-        Helge Deller <deller@gmx.de>
-References: <20220131210552.482606-1-daniel.vetter@ffwll.ch>
- <20220131210552.482606-22-daniel.vetter@ffwll.ch>
- <YgK91i6zHWPBwYOq@ravnborg.org>
+        Tue, 8 Feb 2022 15:58:11 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66C6FC0612B8
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 12:58:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644353890; x=1675889890;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=U0KqN0/RMKUKOMUlz+y1xlsDDkqqQ9ypXbMSo/DGJJI=;
+  b=Z/Bi6xJBqVB837C9Yhoj+LtrwEIvf4RJ2pvp0+F1jF6jpITymSvlrYmf
+   rWDw3X2vYzyORTIKLbpgQJyC4rJ3Q1VccSr0vshF1/gztCXXSRzGHZB9z
+   ENnm0HnHF+qUP19htD5NbMiYT2o+FXao61+IH/I6/YiR9VkMZwM3Sv5MK
+   +uCqFTidC3GXwKWeY5yWXZUUrjZbdBE9UCrjbd06LNwaSxnCMResKGDcw
+   w/WsMyNX1nS38yfIh06H/XUb+8MhzBiXolVd/Nem/kI6nRb0quidwfuGz
+   2o5aeTlF2r8lJmsChR6bzoA4vVnnn7qaPfFXXICsRPYGGo4TANY42B96Q
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="248998885"
+X-IronPort-AV: E=Sophos;i="5.88,353,1635231600"; 
+   d="scan'208";a="248998885"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 12:58:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,353,1635231600"; 
+   d="scan'208";a="632978729"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 08 Feb 2022 12:58:07 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nHXYt-0000jW-8e; Tue, 08 Feb 2022 20:58:07 +0000
+Date:   Wed, 9 Feb 2022 04:57:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     JaeSang Yoo <js.yoo.5b@gmail.com>, rostedt@goodmis.org
+Cc:     kbuild-all@lists.01.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org, JaeSang Yoo <jsyoo5b@gmail.com>
+Subject: Re: [PATCH v2] trace: param: fix tp_printk option related with
+ tp_printk_stop_on_boot
+Message-ID: <202202090421.PMWXYPxl-lkp@intel.com>
+References: <20220208163031.885332-1-jsyoo5b@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YgK91i6zHWPBwYOq@ravnborg.org>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <20220208163031.885332-1-jsyoo5b@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -101,108 +65,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 08, 2022 at 08:00:38PM +0100, Sam Ravnborg wrote:
-> Hi Daniel,
-> 
-> On Mon, Jan 31, 2022 at 10:05:52PM +0100, Daniel Vetter wrote:
-> > Well except when the olpc dcon fbdev driver is enabled, that thing
-> > digs around in there in rather unfixable ways.
-> > 
-> > Cc oldc_dcon maintainers as fyi.
-> > 
-> > Cc: Jens Frederich <jfrederich@gmail.com>
-> > Cc: Jon Nettleton <jon.nettleton@gmail.com>
-> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Cc: linux-staging@lists.linux.dev
-> > Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
-> > Cc: Daniel Vetter <daniel@ffwll.ch>
-> > Cc: Helge Deller <deller@gmx.de>
-> > Cc: Matthew Wilcox <willy@infradead.org>
-> > Cc: Sam Ravnborg <sam@ravnborg.org>
-> > Cc: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-> > Cc: Zhen Lei <thunder.leizhen@huawei.com>
-> > Cc: Alex Deucher <alexander.deucher@amd.com>
-> > Cc: Xiyu Yang <xiyuyang19@fudan.edu.cn>
-> > Cc: linux-fbdev@vger.kernel.org
-> > Cc: Zheyu Ma <zheyuma97@gmail.com>
-> > Cc: Guenter Roeck <linux@roeck-us.net>
-> 
-> with the build thingy fixed:
-> Acked-by: Sam Ravnborg <sam@ravnborg.org>
-> 
-> I do wonder if there is a more clean way to trigger a blank
-> in the main fbdev driver from the olpc driver.
-> 
-> The current hack is not nice and it would be good to see it gone.
+Hi JaeSang,
 
-Yeah this is just badly engineered. In drm we'd do this with the self
-refresh helpers, which pretty much give you this exact functionality, but
-in the helpers, while not randomly breaking actual visible behaviour of
-the display driver.
+Thank you for the patch! Yet something to improve:
 
-Well ok the illusion is not perfect, since if the display is suspended the
-next page flip will take a tad longer. But that's it.
+[auto build test ERROR on rostedt-trace/for-next]
+[also build test ERROR on v5.17-rc3 next-20220208]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-I'll also add this to the TODO.
--Daniel
+url:    https://github.com/0day-ci/linux/commits/JaeSang-Yoo/trace-param-fix-tp_printk-option-related-with-tp_printk_stop_on_boot/20220209-003316
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git for-next
+config: x86_64-randconfig-m001 (https://download.01.org/0day-ci/archive/20220209/202202090421.PMWXYPxl-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/0day-ci/linux/commit/2f6eb784171798586c7fde6d2f2e445ac5a344c3
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review JaeSang-Yoo/trace-param-fix-tp_printk-option-related-with-tp_printk_stop_on_boot/20220209-003316
+        git checkout 2f6eb784171798586c7fde6d2f2e445ac5a344c3
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-> 
-> 	Sam
-> 
-> > ---
-> >  drivers/video/fbdev/core/fbmem.c | 8 ++++++--
-> >  include/linux/fb.h               | 7 +++----
-> >  2 files changed, 9 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/drivers/video/fbdev/core/fbmem.c b/drivers/video/fbdev/core/fbmem.c
-> > index 904ef1250677..dad6572942fa 100644
-> > --- a/drivers/video/fbdev/core/fbmem.c
-> > +++ b/drivers/video/fbdev/core/fbmem.c
-> > @@ -48,10 +48,14 @@
-> >  static DEFINE_MUTEX(registration_lock);
-> >  
-> >  struct fb_info *registered_fb[FB_MAX] __read_mostly;
-> > -EXPORT_SYMBOL(registered_fb);
-> > -
-> >  int num_registered_fb __read_mostly;
-> > +#if IS_ENABLED(CONFIG_OLPC_DCON)
-> > +EXPORT_SYMBOL(registered_fb);
-> >  EXPORT_SYMBOL(num_registered_fb);
-> > +#endif
-> > +#define for_each_registered_fb(i)		\
-> > +	for (i = 0; i < FB_MAX; i++)		\
-> > +		if (!registered_fb[i]) {} else
-> >  
-> >  bool fb_center_logo __read_mostly;
-> >  
-> > diff --git a/include/linux/fb.h b/include/linux/fb.h
-> > index a8a00d2ba1f3..e236817502c2 100644
-> > --- a/include/linux/fb.h
-> > +++ b/include/linux/fb.h
-> > @@ -622,16 +622,15 @@ extern int fb_get_color_depth(struct fb_var_screeninfo *var,
-> >  extern int fb_get_options(const char *name, char **option);
-> >  extern int fb_new_modelist(struct fb_info *info);
-> >  
-> > +#if IS_ENABLED(CONFIG_OLPC_DCON)
-> >  extern struct fb_info *registered_fb[FB_MAX];
-> > +
-> >  extern int num_registered_fb;
-> > +#endif
-> >  extern bool fb_center_logo;
-> >  extern int fb_logo_count;
-> >  extern struct class *fb_class;
-> >  
-> > -#define for_each_registered_fb(i)		\
-> > -	for (i = 0; i < FB_MAX; i++)		\
-> > -		if (!registered_fb[i]) {} else
-> > -
-> >  static inline void lock_fb_info(struct fb_info *info)
-> >  {
-> >  	mutex_lock(&info->lock);
-> > -- 
-> > 2.33.0
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+All errors (new ones prefixed by >>):
+
+   kernel/trace/trace.c: In function 'set_tracepoint_printk':
+>> kernel/trace/trace.c:256:11: error: expected ';' before 'if'
+     256 |   return 0
+         |           ^
+         |           ;
+     257 |  if ((strcmp(str, "=0") != 0 && strcmp(str, "=off") != 0))
+         |  ~~        
+   kernel/trace/trace.c: In function 'trace_check_vprintf':
+   kernel/trace/trace.c:3824:3: warning: function 'trace_check_vprintf' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+    3824 |   trace_seq_vprintf(&iter->seq, iter->fmt, ap);
+         |   ^~~~~~~~~~~~~~~~~
+   kernel/trace/trace.c:3891:3: warning: function 'trace_check_vprintf' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+    3891 |   trace_seq_vprintf(&iter->seq, p, ap);
+         |   ^~~~~~~~~~~~~~~~~
+   At top level:
+   kernel/trace/trace.c:1672:37: warning: 'tracing_max_lat_fops' defined but not used [-Wunused-const-variable=]
+    1672 | static const struct file_operations tracing_max_lat_fops;
+         |                                     ^~~~~~~~~~~~~~~~~~~~
+
+
+vim +256 kernel/trace/trace.c
+
+   252	
+   253	static int __init set_tracepoint_printk(char *str)
+   254	{
+   255		if (*str == '_')
+ > 256			return 0
+   257		if ((strcmp(str, "=0") != 0 && strcmp(str, "=off") != 0))
+   258			tracepoint_printk = 1;
+   259		return 1;
+   260	}
+   261	__setup("tp_printk", set_tracepoint_printk);
+   262	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,48 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E7154ADD90
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 16:52:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 564654ADDA8
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 16:52:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382362AbiBHPva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 10:51:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60032 "EHLO
+        id S1382030AbiBHPwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 10:52:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381822AbiBHPuz (ORCPT
+        with ESMTP id S1376280AbiBHPwX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 10:50:55 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A8C8C061579;
-        Tue,  8 Feb 2022 07:50:54 -0800 (PST)
-Received: from tatooine.ideasonboard.com (unknown [IPv6:2a01:e0a:169:7140:b99c:2ebe:5dcf:6513])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2719B1ACF;
-        Tue,  8 Feb 2022 16:50:39 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1644335439;
-        bh=WiTtD1gxOa7KIxusmuuCKRanHdefRD8S2eFJBwqXD/o=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UDsDHjcS0d1zx/lRB1dOIIiqkzR1dR2aPFMt1M2zoQiIrsVyOqeFqPs4PMpSWoWNo
-         13RYHHNp7fDtr+IO2DLeeDBLgXUYXt2mnbPAynSt1yCE1vPHNwEtYYMLtVtvphlkqm
-         c24ns5ueCuD4yCYUv90z7ikCs0bF2ERw8e3Eba4o=
-From:   Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
-To:     jeanmichel.hautbois@ideasonboard.com
-Cc:     dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
-        kernel-list@raspberrypi.com, laurent.pinchart@ideasonboard.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        lukasz@jany.st, mchehab@kernel.org, naush@raspberrypi.com,
-        robh@kernel.org, tomi.valkeinen@ideasonboard.com,
-        bcm-kernel-feedback-list@broadcom.com, stefan.wahren@i2se.com
-Subject: [PATCH v5 11/11] media: imx219: Add support for the V4L2 subdev active state
-Date:   Tue,  8 Feb 2022 16:50:27 +0100
-Message-Id: <20220208155027.891055-12-jeanmichel.hautbois@ideasonboard.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220208155027.891055-1-jeanmichel.hautbois@ideasonboard.com>
-References: <20220208155027.891055-1-jeanmichel.hautbois@ideasonboard.com>
+        Tue, 8 Feb 2022 10:52:23 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2079.outbound.protection.outlook.com [40.107.220.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84841C061579;
+        Tue,  8 Feb 2022 07:52:22 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DeUvhhK2ZBlyK7eJ4F2r4khfKx++K9lRMWF2G7xYa9BiEiIpILU+yfpwsATXElATq1hP4P8Oka7M/HnEkjLvBw/Mb+2UfPUQ4kQiHY+S/PL65B66YQpiHnV2E4M/7ZgNuPCwcB9hfLS14FpuTduY5CeWuJ4Lmu98PUz9hQ5fskoI08QmQel//VYkwzd/jaQ7H3rhLUop4u0QXjgHNHSTfIKe5dAEiDZ9AAWhfEyQbsFhf7wsbiofhhC+yzIQak1MmN+rQY5cpIc09Ils4bVExoclkLyYDY7nyZ7IW86aO7stjSE8MOXuC8o+V9vuq7t1KNTgUpwPd3Df2qCPBqW5Xw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VcsVLRBAK5JKotjr/PZnpfox5eHfXvmkxZKbc32faXM=;
+ b=nAhb7aSQ9/vsCrApodx1uN4SSpQSo45KrAX22eV423aCMEQMdlphDJH9/MBJyoCRCEQr4IxsTHBGP4i66Y8YpPmVHTqh06PG14ncysOuAQ30Jh+VmZGhErARbIMUNEGRWuaRiXDFeNMwT5qmxQPpsvpQ3YRLjqtJ8oH2I7FjHPvcyCEQYStpxOh/guJXr2nOjPBDR+Fh87pvJW0PRuhJGwbY/6A99N9HWs3QM8wfrovrb4LUuHP5S8kdIY4DMIbY7kuF4BmSClRY1j/oYXvM0RnWyyjp2qnkThD4hmEo+BtyhxheQ+l9cpevv21DLXtNhLUOFULy8XUwq7XYsLlnKQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=grandegger.com smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VcsVLRBAK5JKotjr/PZnpfox5eHfXvmkxZKbc32faXM=;
+ b=jp1Db41dNoJh7k07Hp7ZHe1bAynsuC8ZzkBn600Gj/qaC0vRdZ3AqUpi+vn5nP7aYgNwua51iP1h+OYpAE5rL1tqZ670KDE3jzErBNhtlfN/Tbfmj9ykVJWt/7vdWMItqpeZboA3dD2YYRFIXgTWZC2gW5VkwLmEI3MxtMQJFz8=
+Received: from SN7PR18CA0012.namprd18.prod.outlook.com (2603:10b6:806:f3::35)
+ by BYAPR02MB4869.namprd02.prod.outlook.com (2603:10b6:a03:45::29) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Tue, 8 Feb
+ 2022 15:52:19 +0000
+Received: from SN1NAM02FT0040.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:806:f3:cafe::ac) by SN7PR18CA0012.outlook.office365.com
+ (2603:10b6:806:f3::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.11 via Frontend
+ Transport; Tue, 8 Feb 2022 15:52:19 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ SN1NAM02FT0040.mail.protection.outlook.com (10.97.5.204) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4951.12 via Frontend Transport; Tue, 8 Feb 2022 15:52:19 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Tue, 8 Feb 2022 07:52:15 -0800
+Received: from smtp.xilinx.com (172.19.127.95) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Tue, 8 Feb 2022 07:52:15 -0800
+Envelope-to: git@xilinx.com,
+ wg@grandegger.com,
+ mkl@pengutronix.de,
+ davem@davemloft.net,
+ kuba@kernel.org,
+ robh+dt@kernel.org,
+ linux-can@vger.kernel.org,
+ netdev@vger.kernel.org,
+ devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+Received: from [10.140.6.18] (port=57654 helo=xhdlakshmis40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <amit.kumar-mahapatra@xilinx.com>)
+        id 1nHSmt-000Bhv-1m; Tue, 08 Feb 2022 07:52:15 -0800
+From:   Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
+To:     <appana.durga.rao@xilinx.com>, <wg@grandegger.com>,
+        <mkl@pengutronix.de>, <davem@davemloft.net>, <kuba@kernel.org>,
+        <robh+dt@kernel.org>
+CC:     <git@xilinx.com>, <naga.sureshkumar.relli@xilinx.com>,
+        <michal.simek@xilinx.com>, <linux-can@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Amit Kumar Mahapatra" <amit.kumar-mahapatra@xilinx.com>
+Subject: [PATCH] dt-bindings: can: xilinx_can: Convert Xilinx CAN binding to YAML
+Date:   Tue, 8 Feb 2022 21:22:09 +0530
+Message-ID: <20220208155209.25926-1-amit.kumar-mahapatra@xilinx.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 4cb79005-e24b-4a6d-ed4b-08d9eb1afcb8
+X-MS-TrafficTypeDiagnostic: BYAPR02MB4869:EE_
+X-Microsoft-Antispam-PRVS: <BYAPR02MB4869CA4545FE38346799D64CBA2D9@BYAPR02MB4869.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:849;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: a3J0SJut709RW7Kvsik48icIJEZz227eKWrDKGVvl9K8KaPjQ70afMQU56jsTSvBqdNi/3M2ENDWDVRpoO0/K1oeouEkbWnBKs1qvW7J2UNwD+43u5YKkYDDlG1E1pUdvcMg0aUNIgsU4cjAEfPMC+jqyK3pCZchpUmelLEaF0kd0bovY/zbdb4xcXkm2UsXhXLTQ6hax5djoH3guWxvSWbbuZuwvITwRdguT6Fzv5M1j/Q8wYPQFNX5FJab0vFL2zOdSFd66gVjH7oOww96l8tcUslS5Wy84YxGAFvq/7d5/iS0ZW16XMWJRVAEbpJC1we4IhRdBLNrEOfInPmbF0qZzCPEq6YuU3KLYuOaGnagSCH7VU6jg+PXQUmYai/68HELAj6QdFXsnA/iJVdDolT/1UmkysgOzgnaaly/x1mx+OoOxAKSdPL4vTr4YMM6E1F4OoJ81F75S6Wf+/U74Bprmhx9yAm7OvScUDuOsDuuhl7wqqL4iPUewjPEdqsIOaK3fSKQBsunXnMMxzcWw8mdhpwkcGY/BAAzeikPPP8zqkUd5oNkvRCjSGnmnXNhEksJTlWyZIslCZ/1D5HvkW5QqTm2ZXGW+EvtdK7LIVRx0iyKi3bzonIR4e9PIiV72y5WLoOI/Fytpl0NRK5gG3pK6htD+QbdSKJLDY8sOV2HdnCjOtRJ+2LwcGkK5wmmF247IL8S4JULprVKOFzEyMzDcoVPGQTNCNj3YXxsEZTKoBhlFeeFWlwvH65UnYvwxgRU++NilPFWwsjua/CGGj0Ezsu+ZaylS9cVwQqX8Tc=
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(4326008)(508600001)(8936002)(70206006)(36860700001)(316002)(9786002)(966005)(70586007)(426003)(54906003)(47076005)(2906002)(8676002)(110136005)(82310400004)(36756003)(7416002)(7636003)(336012)(356005)(7696005)(5660300002)(107886003)(2616005)(1076003)(26005)(186003)(6666004)(83380400001)(102446001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Feb 2022 15:52:19.0353
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4cb79005-e24b-4a6d-ed4b-08d9eb1afcb8
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0040.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR02MB4869
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,264 +120,237 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that we have multiplexed streams support in the V4L2 API, add
-support for the subdev active state in the sensor.
+Convert Xilinx CAN binding documentation to YAML.
 
-In order to use state to manage the active configuration, we need to
-initialize the subdevice state with a call to
-v4l2_subdev_init_finalize() before registering it. The call to
-v4l2_subdev_cleanup() is also required to release the resources before
-unregistering.
-
-Accessing the configuration is then done after a call to
-v4l2_subdev_lock_state() and the set_fmt operation can then call
-v4l2_state_get_stream_format() directly.
-
-The get_fmt operation does not need to be complex, and a simple call to
-v4l2_subdev_get_fmt will do the trick, as it will grab the configured
-format based on the state.
-
-Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
+Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
 ---
- drivers/media/i2c/imx219.c | 151 +++++++++++++++++++------------------
- 1 file changed, 77 insertions(+), 74 deletions(-)
+BRANCH: yaml
+---
+ .../bindings/net/can/xilinx_can.txt           |  61 --------
+ .../bindings/net/can/xilinx_can.yaml          | 146 ++++++++++++++++++
+ 2 files changed, 146 insertions(+), 61 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/net/can/xilinx_can.txt
+ create mode 100644 Documentation/devicetree/bindings/net/can/xilinx_can.yaml
 
-diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
-index f005ad8d2124..f6322f39c3f1 100644
---- a/drivers/media/i2c/imx219.c
-+++ b/drivers/media/i2c/imx219.c
-@@ -887,78 +887,43 @@ static int imx219_enum_frame_size(struct v4l2_subdev *sd,
- 				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_frame_size_enum *fse)
- {
--	struct imx219 *imx219 = to_imx219(sd);
--	u32 code;
+diff --git a/Documentation/devicetree/bindings/net/can/xilinx_can.txt b/Documentation/devicetree/bindings/net/can/xilinx_can.txt
+deleted file mode 100644
+index 100cc40b8510..000000000000
+--- a/Documentation/devicetree/bindings/net/can/xilinx_can.txt
++++ /dev/null
+@@ -1,61 +0,0 @@
+-Xilinx Axi CAN/Zynq CANPS controller Device Tree Bindings
+----------------------------------------------------------
 -
--	if (fse->index >= ARRAY_SIZE(supported_modes))
--		return -EINVAL;
+-Required properties:
+-- compatible		: Should be:
+-			  - "xlnx,zynq-can-1.0" for Zynq CAN controllers
+-			  - "xlnx,axi-can-1.00.a" for Axi CAN controllers
+-			  - "xlnx,canfd-1.0" for CAN FD controllers
+-			  - "xlnx,canfd-2.0" for CAN FD 2.0 controllers
+-- reg			: Physical base address and size of the controller
+-			  registers map.
+-- interrupts		: Property with a value describing the interrupt
+-			  number.
+-- clock-names		: List of input clock names
+-			  - "can_clk", "pclk" (For CANPS),
+-			  - "can_clk", "s_axi_aclk" (For AXI CAN and CAN FD).
+-			  (See clock bindings for details).
+-- clocks		: Clock phandles (see clock bindings for details).
+-- tx-fifo-depth		: Can Tx fifo depth (Zynq, Axi CAN).
+-- rx-fifo-depth		: Can Rx fifo depth (Zynq, Axi CAN, CAN FD in
+-                          sequential Rx mode).
+-- tx-mailbox-count	: Can Tx mailbox buffer count (CAN FD).
+-- rx-mailbox-count	: Can Rx mailbox buffer count (CAN FD in mailbox Rx
+-			  mode).
 -
--	mutex_lock(&imx219->mutex);
--	code = imx219_get_format_code(imx219, fse->code);
--	mutex_unlock(&imx219->mutex);
--	if (fse->code != code)
--		return -EINVAL;
 -
--	fse->min_width = supported_modes[fse->index].width;
--	fse->max_width = fse->min_width;
--	fse->min_height = supported_modes[fse->index].height;
--	fse->max_height = fse->min_height;
-+	unsigned int i;
- 
--	return 0;
--}
-+	if (fse->stream == 0) {
-+		for (i = 0; i < ARRAY_SIZE(imx219_mbus_formats); ++i) {
-+			if (imx219_mbus_formats[i] == fse->code)
-+				break;
-+		}
- 
--static void imx219_reset_colorspace(struct v4l2_mbus_framefmt *fmt)
--{
--	fmt->colorspace = V4L2_COLORSPACE_SRGB;
--	fmt->ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(fmt->colorspace);
--	fmt->quantization = V4L2_MAP_QUANTIZATION_DEFAULT(true,
--							  fmt->colorspace,
--							  fmt->ycbcr_enc);
--	fmt->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(fmt->colorspace);
--}
-+		if (i == ARRAY_SIZE(imx219_mbus_formats))
-+			return -EINVAL;
- 
--static void imx219_update_pad_format(struct imx219 *imx219,
--				     const struct imx219_mode *mode,
--				     struct v4l2_subdev_format *fmt)
--{
--	fmt->format.width = mode->width;
--	fmt->format.height = mode->height;
--	fmt->format.field = V4L2_FIELD_NONE;
--	imx219_reset_colorspace(&fmt->format);
--}
-+		if (fse->index >= ARRAY_SIZE(supported_modes))
-+			return -EINVAL;
- 
--static int __imx219_get_pad_format(struct imx219 *imx219,
--				   struct v4l2_subdev_state *sd_state,
--				   struct v4l2_subdev_format *fmt)
--{
--	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
--		struct v4l2_mbus_framefmt *try_fmt =
--			v4l2_subdev_get_try_format(&imx219->sd, sd_state,
--						   fmt->pad);
--		/* update the code which could change due to vflip or hflip: */
--		try_fmt->code = imx219_get_format_code(imx219, try_fmt->code);
--		fmt->format = *try_fmt;
-+		fse->min_width  = supported_modes[fse->index].width;
-+		fse->max_width  = fse->min_width;
-+		fse->max_height = supported_modes[fse->index].height;
-+		fse->min_height = fse->max_height;
- 	} else {
--		imx219_update_pad_format(imx219, imx219->mode, fmt);
--		fmt->format.code = imx219_get_format_code(imx219,
--							  imx219->fmt.code);
-+		if (fse->code != MEDIA_BUS_FMT_METADATA_8)
-+			return -EINVAL;
-+
-+		fse->min_width = IMX219_EMBEDDED_LINE_WIDTH;
-+		fse->max_width = fse->min_width;
-+		fse->min_height = IMX219_NUM_EMBEDDED_LINES;
-+		fse->max_height = fse->min_height;
- 	}
- 
- 	return 0;
- }
- 
--static int imx219_get_pad_format(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_state *sd_state,
--				 struct v4l2_subdev_format *fmt)
-+static void imx219_update_metadata_pad_format(struct v4l2_subdev_format *fmt)
- {
--	struct imx219 *imx219 = to_imx219(sd);
--	int ret;
+-Example:
 -
--	mutex_lock(&imx219->mutex);
--	ret = __imx219_get_pad_format(imx219, sd_state, fmt);
--	mutex_unlock(&imx219->mutex);
--
--	return ret;
-+	fmt->format.width = IMX219_EMBEDDED_LINE_WIDTH;
-+	fmt->format.height = IMX219_NUM_EMBEDDED_LINES;
-+	fmt->format.code = MEDIA_BUS_FMT_METADATA_8;
-+	fmt->format.field = V4L2_FIELD_NONE;
- }
- 
- static int imx219_set_pad_format(struct v4l2_subdev *sd,
-@@ -966,32 +931,58 @@ static int imx219_set_pad_format(struct v4l2_subdev *sd,
- 				 struct v4l2_subdev_format *fmt)
- {
- 	struct imx219 *imx219 = to_imx219(sd);
-+	struct i2c_client *client = v4l2_get_subdevdata(&imx219->sd);
- 	const struct imx219_mode *mode;
--	struct v4l2_mbus_framefmt *framefmt;
-+	struct v4l2_mbus_framefmt *format;
- 	int exposure_max, exposure_def, hblank;
- 	unsigned int i;
-+	int ret = 0;
- 
- 	mutex_lock(&imx219->mutex);
- 
-+	if (fmt->pad != 0) {
-+		dev_err(&client->dev, "%s Could not get pad %d\n", __func__,
-+			fmt->pad);
-+		ret = -EINVAL;
-+		goto done;
-+	}
+-For Zynq CANPS Dts file:
+-	zynq_can_0: can@e0008000 {
+-			compatible = "xlnx,zynq-can-1.0";
+-			clocks = <&clkc 19>, <&clkc 36>;
+-			clock-names = "can_clk", "pclk";
+-			reg = <0xe0008000 0x1000>;
+-			interrupts = <0 28 4>;
+-			interrupt-parent = <&intc>;
+-			tx-fifo-depth = <0x40>;
+-			rx-fifo-depth = <0x40>;
+-		};
+-For Axi CAN Dts file:
+-	axi_can_0: axi-can@40000000 {
+-			compatible = "xlnx,axi-can-1.00.a";
+-			clocks = <&clkc 0>, <&clkc 1>;
+-			clock-names = "can_clk","s_axi_aclk" ;
+-			reg = <0x40000000 0x10000>;
+-			interrupt-parent = <&intc>;
+-			interrupts = <0 59 1>;
+-			tx-fifo-depth = <0x40>;
+-			rx-fifo-depth = <0x40>;
+-		};
+-For CAN FD Dts file:
+-	canfd_0: canfd@40000000 {
+-			compatible = "xlnx,canfd-1.0";
+-			clocks = <&clkc 0>, <&clkc 1>;
+-			clock-names = "can_clk", "s_axi_aclk";
+-			reg = <0x40000000 0x2000>;
+-			interrupt-parent = <&intc>;
+-			interrupts = <0 59 1>;
+-			tx-mailbox-count = <0x20>;
+-			rx-fifo-depth = <0x20>;
+-		};
+diff --git a/Documentation/devicetree/bindings/net/can/xilinx_can.yaml b/Documentation/devicetree/bindings/net/can/xilinx_can.yaml
+new file mode 100644
+index 000000000000..cdf2e4a20662
+--- /dev/null
++++ b/Documentation/devicetree/bindings/net/can/xilinx_can.yaml
+@@ -0,0 +1,146 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/net/can/xilinx_can.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+	if (fmt->stream == 1) {
-+		/* Only one embedded data mode is supported */
-+		imx219_update_metadata_pad_format(fmt);
-+		ret = 0;
-+		goto done;
-+	}
++title:
++  Xilinx Axi CAN/Zynq CANPS controller Binding
 +
- 	for (i = 0; i < ARRAY_SIZE(imx219_mbus_formats); i++)
- 		if (imx219_mbus_formats[i] == fmt->format.code)
- 			break;
- 	if (i >= ARRAY_SIZE(imx219_mbus_formats))
- 		i = 0;
- 
--	/* Bayer order varies with flips */
--	fmt->format.code = imx219_get_format_code(imx219, imx219_mbus_formats[i]);
--
- 	mode = v4l2_find_nearest_size(supported_modes,
- 				      ARRAY_SIZE(supported_modes),
- 				      width, height,
- 				      fmt->format.width, fmt->format.height);
--	imx219_update_pad_format(imx219, mode, fmt);
--	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
--		framefmt = v4l2_subdev_get_try_format(sd, sd_state, fmt->pad);
--		*framefmt = fmt->format;
--	} else if (imx219->mode != mode ||
--		   imx219->fmt.code != fmt->format.code) {
++maintainers:
++  - Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>
 +
-+	v4l2_subdev_lock_state(sd_state);
++properties:
++  compatible:
++    oneOf:
++      - const: xlnx,zynq-can-1.0
++        description: For Zynq CAN controller
++      - const: xlnx,axi-can-1.00.a
++        description: For Axi CAN controller
++      - const: xlnx,canfd-1.0
++        description: For CAN FD controller
++      - const: xlnx,canfd-2.0
++        description: For CAN FD 2.0 controller
 +
-+	/* Update the stored format and return it. */
-+	format = v4l2_state_get_stream_format(sd_state, fmt->pad, fmt->stream);
++  reg:
++    maxItems: 1
 +
-+	if (fmt->which == V4L2_SUBDEV_FORMAT_ACTIVE && imx219->streaming) {
-+		ret = -EBUSY;
-+		goto err_state;
-+	}
++  interrupts:
++    maxItems: 1
 +
-+	/* Bayer order varies with flips */
-+	format->code = imx219_get_format_code(imx219, imx219_mbus_formats[i]);
-+	format->width = mode->width;
-+	format->height = mode->height;
-+	/* Bayer order varies with flips */
-+	fmt->format = *format;
++  clocks:
++    description: |
++      CAN functional clock phandle
++    maxItems: 2
 +
-+	if (fmt->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
- 		imx219->fmt = fmt->format;
- 		imx219->mode = mode;
- 		/* Update limits and set FPS to default */
-@@ -1018,9 +1009,12 @@ static int imx219_set_pad_format(struct v4l2_subdev *sd,
- 					 hblank);
- 	}
- 
-+err_state:
-+	v4l2_subdev_unlock_state(sd_state);
-+done:
- 	mutex_unlock(&imx219->mutex);
- 
--	return 0;
-+	return ret;
- }
- 
- static int imx219_set_framefmt(struct imx219 *imx219)
-@@ -1322,7 +1316,7 @@ static const struct v4l2_subdev_video_ops imx219_video_ops = {
- static const struct v4l2_subdev_pad_ops imx219_pad_ops = {
- 	.init_cfg		= imx219_init_cfg,
- 	.enum_mbus_code		= imx219_enum_mbus_code,
--	.get_fmt		= imx219_get_pad_format,
-+	.get_fmt		= v4l2_subdev_get_fmt,
- 	.set_fmt		= imx219_set_pad_format,
- 	.get_selection		= imx219_get_selection,
- 	.set_routing		= imx219_set_routing,
-@@ -1602,10 +1596,16 @@ static int imx219_probe(struct i2c_client *client)
- 		goto error_handler_free;
- 	}
- 
-+	ret = v4l2_subdev_init_finalize(sd);
-+	if (ret) {
-+		dev_err(dev, "failed to finalize sensor init: %d\n", ret);
-+		goto error_media_entity;
-+	}
++  tx-fifo-depth:
++    description: |
++      CAN Tx fifo depth (Zynq, Axi CAN).
 +
- 	ret = v4l2_async_register_subdev_sensor(sd);
- 	if (ret < 0) {
- 		dev_err(dev, "failed to register sensor sub-device: %d\n", ret);
--		goto error_media_entity;
-+		goto error_free_state;
- 	}
- 
- 	/* Enable runtime PM and turn off the device */
-@@ -1615,6 +1615,8 @@ static int imx219_probe(struct i2c_client *client)
- 
- 	return 0;
- 
-+error_free_state:
-+	v4l2_subdev_cleanup(sd);
- error_media_entity:
- 	media_entity_cleanup(&sd->entity);
- 
-@@ -1633,6 +1635,7 @@ static int imx219_remove(struct i2c_client *client)
- 	struct imx219 *imx219 = to_imx219(sd);
- 
- 	v4l2_async_unregister_subdev(sd);
-+	v4l2_subdev_cleanup(sd);
- 	media_entity_cleanup(&sd->entity);
- 	imx219_free_controls(imx219);
- 
++  rx-fifo-depth:
++    description: |
++      CAN Rx fifo depth (Zynq, Axi CAN, CAN FD in sequential Rx mode)
++
++  tx-mailbox-count:
++    description: |
++      CAN Tx mailbox buffer count (CAN FD)
++
++  rx-mailbox-count:
++    description: |
++      CAN Rx mailbox buffer count (CAN FD in mailbox Rx  mode)
++
++  clock-names:
++    maxItems: 2
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - clock-names
++
++additionalProperties: false
++
++allOf:
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: xlnx,zynq-can-1.0
++
++    then:
++      properties:
++        clock-names:
++          items:
++            - const: can_clk
++            - const: pclk
++      required:
++        - tx-fifo-depth
++        - rx-fifo-depth
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: xlnx,axi-can-1.00.a
++
++    then:
++      properties:
++        clock-names:
++          items:
++            - const: can_clk
++            - const: s_axi_aclk
++      required:
++        - tx-fifo-depth
++        - rx-fifo-depth
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: xlnx,canfd-1.0
++
++    then:
++      properties:
++        clock-names:
++          items:
++            - const: can_clk
++            - const: s_axi_aclk
++      required:
++        - tx-mailbox-count
++        - rx-fifo-depth
++
++examples:
++  - |
++    can@e0008000 {
++        compatible = "xlnx,zynq-can-1.0";
++        clocks = <&clkc 19>, <&clkc 36>;
++        clock-names = "can_clk", "pclk";
++        reg = <0xe0008000 0x1000>;
++        interrupts = <0 28 4>;
++        interrupt-parent = <&intc>;
++        tx-fifo-depth = <0x40>;
++        rx-fifo-depth = <0x40>;
++    };
++  - |
++    axi-can@40000000 {
++        compatible = "xlnx,axi-can-1.00.a";
++        clocks = <&clkc 0>, <&clkc 1>;
++        clock-names = "can_clk","s_axi_aclk" ;
++        reg = <0x40000000 0x10000>;
++        interrupt-parent = <&intc>;
++        interrupts = <0 59 1>;
++        tx-fifo-depth = <0x40>;
++        rx-fifo-depth = <0x40>;
++    };
++  - |
++    canfd@40000000 {
++        compatible = "xlnx,canfd-1.0";
++        clocks = <&clkc 0>, <&clkc 1>;
++        clock-names = "can_clk", "s_axi_aclk";
++        reg = <0x40000000 0x2000>;
++        interrupt-parent = <&intc>;
++        interrupts = <0 59 1>;
++        tx-mailbox-count = <0x20>;
++        rx-fifo-depth = <0x20>;
++    };
 -- 
-2.32.0
+2.17.1
 

@@ -2,122 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B0C74AD4E6
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 10:30:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0637D4AD4E1
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 10:30:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354721AbiBHJ32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 04:29:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38214 "EHLO
+        id S1354744AbiBHJ3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 04:29:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237653AbiBHJ3X (ORCPT
+        with ESMTP id S237653AbiBHJ3w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 04:29:23 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D52AC03FEC1;
-        Tue,  8 Feb 2022 01:29:22 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id j14so23571624lja.3;
-        Tue, 08 Feb 2022 01:29:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=9jFgBcCwyw+JzDYCLTCZj7IYtY0O/7Fz6FpDwFz3WSA=;
-        b=Cxuiov0oEhEhABwISaLLYTLHN3tzQ6PF+RTizCxpWY8feQ6Sz2x+TM3jmZxxWmNjv0
-         q28EFyaFYTlAbN1maWEM6RERHZTjoR/WE4mgvNqHUPt7F6oC+sNYeL39cBMJkac7Rt4k
-         kUBoOyjvcvD5l4yg9lsDUOOVNrISyrJwp9TnBNmBymRYU5g+xMtxKKXGdSLwIbGt40Xr
-         9xIN01VqwKLFRMjcCZqZdmBpwPLLHoO8truWxbF68Q80kAncmQE0NdLHt8zNjFWP7x3c
-         bFBayng/aXL7nLzKIHE6ncR/BwiQDML3zbzzfgLrBoV66II6hhCr/WvsDuz+OaCQo3Nv
-         Uy9g==
+        Tue, 8 Feb 2022 04:29:52 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FF9C03FEC0
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 01:29:51 -0800 (PST)
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id E0F873F17B
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 09:29:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644312588;
+        bh=Ui/6owStfQRYY+YD9HVYrRMZ2Sy2yY8RPY3JJ3hVfCQ=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=aMkxK1uEQsxaK/7peR0onjb7Mhj24OibpC4DvgujfsMwY/l52Oc+se79O1LC3ojFz
+         fvxCN3K2wdSM02R86k/YaREQrx6i780bs4DSjUL0SuW4YXnLAAz/uPOa1EB+AS+auZ
+         cF5Bvd6Sf6MSIdH4mGzG2PFtmEIgNunZzbFZIfCagfKW8bYCPqP2sjIwmvE0fy+r2O
+         if+PgMwWZDgLCcwdXVXp+JTly0/8tR6du/djkZPKtCoH8xoN+3iPXRpFmwOzyZPz2n
+         ypLTzX1ibGYumwvOoKdN/9M0WNQSyDSMELOyr5034rN+wtudwvMzwF1x+NykFJ9E37
+         1b9SD9oNNCiTQ==
+Received: by mail-ed1-f69.google.com with SMTP id w3-20020a50c443000000b0040696821132so9342223edf.22
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 01:29:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=9jFgBcCwyw+JzDYCLTCZj7IYtY0O/7Fz6FpDwFz3WSA=;
-        b=L79+gecAXd+TkUFcY1fbPB9uM7A0iR5Oo0eh13n0QIo4HoEhYzAO/t+DQBv4HGYQIP
-         LZeSF8q/t70KJ30pByt0cqk/OulCBwbWVxbw/Hy2YjrLQZ82Pz91AFD+N2XmH1zaFYmp
-         42u6DiQfWgzTe6+pPymFeWTYFJEyuFOtri3FxinlEmXojzYCkcC4tgVD/t+EEo4/n8ER
-         yZEibR6dfJGVEdPSq5JYr113YG9FH86IZopaEe/7WlWRzueTT5gesf/EUGbJ4CS+J+6P
-         +4S35uWOt4KwgyIs3rIJ/q5QkAlCpDgnQGcPNFrSmJHEhmKB1p8tnqHB8UtsJLDMjfus
-         ddUQ==
-X-Gm-Message-State: AOAM532MZkSEdK7rmsE8WqPdmVej+E/mxiTcPVaTH+9tkz75HKuQIFz+
-        jOdNmQG8wl5JE8907/OemHw=
-X-Google-Smtp-Source: ABdhPJxU2OmzIM9fb0K8HePdfkwJ4Iqh+Y8JVXS0ExB8DZQYOb2juUMhr/5kpFM8JthwVNZVVhO1Yg==
-X-Received: by 2002:a2e:8751:: with SMTP id q17mr2240779ljj.65.1644312560537;
-        Tue, 08 Feb 2022 01:29:20 -0800 (PST)
-Received: from grain.localdomain ([5.18.251.97])
-        by smtp.gmail.com with ESMTPSA id p16sm1958258ljc.86.2022.02.08.01.29.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 01:29:19 -0800 (PST)
-Received: by grain.localdomain (Postfix, from userid 1000)
-        id C01F55A0020; Tue,  8 Feb 2022 12:29:18 +0300 (MSK)
-Date:   Tue, 8 Feb 2022 12:29:18 +0300
-From:   Cyrill Gorcunov <gorcunov@gmail.com>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Adrian Reber <adrian@lisas.de>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com,
-        Andrei Vagin <avagin@gmail.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>
-Subject: Re: [PATCH 00/35] Shadow stacks for userspace
-Message-ID: <YgI37n+3JfLSNQCQ@grain>
-References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
- <YgAWVSGQg8FPCeba@kernel.org>
- <YgDIIpCm3UITk896@lisas.de>
- <8f96c2a6-9c03-f97a-df52-73ffc1d87957@intel.com>
- <YgI1A0CtfmT7GMIp@kernel.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Ui/6owStfQRYY+YD9HVYrRMZ2Sy2yY8RPY3JJ3hVfCQ=;
+        b=Hl3Y7PxNu61sJ0ecmdFPSSTclR16Tp3/C0AlBma3s0GoVdzBTqCKEtz8djfMrUlRuT
+         uIVAyIFFBz3VkJKVuvQx2s6V45BPdKRG9Row352nrXo/GER4zk4DZ6YMFOsGtVTnprrs
+         Vf0DgA4jr3OTQp6zpzAyDz0T05TneHMV2mGCXapODwlVwndeQRcFQLjJ7mZlrvIZ/f0S
+         FOuHlojHiwuKtC0R3I0PQ3gbtsk9ZI82ECiH8K+BxA4GLwnr2Hpgs0iga9h9pZdw5Vsr
+         3XF5LZuXiujB3gwFs21SyzPpBiYq8240dHEnEcl1Gk9EqR7lyZ6vL2cLEiW9AMjw2DwK
+         Mfqg==
+X-Gm-Message-State: AOAM531dZgI2hd/bqWeykmK9wNSzXniBJ5SyNC4ALwoPD1gNtKps7wFV
+        lU0GpaGVJMiGC1GHgjS83GBYKwoufTyDIBFtLY70yoyfnF11e9bbx8T3oM/YLYx5VCO3valH8Y7
+        stuaQ69wuFi3IX/BMcUvut/Y5N316aBz7MKoTOcgU7g==
+X-Received: by 2002:a17:907:7246:: with SMTP id ds6mr2993404ejc.762.1644312588570;
+        Tue, 08 Feb 2022 01:29:48 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxIIcu9utR18wxFBpEWYCI6O+IiGR9UvBn6XHif4bRYF5ZPoy1sYBX8oCI5IIrFXAlpCxsc7w==
+X-Received: by 2002:a17:907:7246:: with SMTP id ds6mr2993375ejc.762.1644312588328;
+        Tue, 08 Feb 2022 01:29:48 -0800 (PST)
+Received: from [192.168.0.93] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id t22sm6339403edv.105.2022.02.08.01.29.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Feb 2022 01:29:47 -0800 (PST)
+Message-ID: <36cc734d-2120-5834-27a9-5bd37e14d862@canonical.com>
+Date:   Tue, 8 Feb 2022 10:29:46 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YgI1A0CtfmT7GMIp@kernel.org>
-User-Agent: Mutt/2.0.7 (2021-05-04)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v1 6/6] i2c: npcm: Support NPCM845
+Content-Language: en-US
+To:     Tali Perry <tali.perry1@gmail.com>, Tyrone Ting <warp5tw@gmail.com>
+Cc:     avifishman70@gmail.com, Tomer Maimon <tmaimon77@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Rob Herring <robh+dt@kernel.org>, semen.protsenko@linaro.org,
+        yangyicong@hisilicon.com, Wolfram Sang <wsa@kernel.org>,
+        jie.deng@intel.com, sven@svenpeter.dev, bence98@sch.bme.hu,
+        lukas.bulwahn@gmail.com, arnd@arndb.de, olof@lixom.net,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Tali Perry <tali.perry@nuvoton.com>,
+        Avi Fishman <Avi.Fishman@nuvoton.com>,
+        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
+        kfting@nuvoton.com, OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220207063338.6570-1-warp5tw@gmail.com>
+ <20220207063338.6570-7-warp5tw@gmail.com>
+ <CAHb3i=vdc_+J4pCBcY--C85ZR1uXO1LG02UsttsfSnsQBDKWAg@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <CAHb3i=vdc_+J4pCBcY--C85ZR1uXO1LG02UsttsfSnsQBDKWAg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 08, 2022 at 11:16:51AM +0200, Mike Rapoport wrote:
->  
-> > Any thoughts on how you would _like_ to see this resolved?
+On 08/02/2022 10:22, Tali Perry wrote:
+>> On 08/02/2022 09:51, Tali Perry wrote:
+>>>> On 08/02/2022 08:14, Tali Perry wrote:
+>>>>>> Subject: Re: [PATCH v1 6/6] i2c: npcm: Support NPCM845
+>>>>>>
+>>>>>> On 07/02/2022 13:00, Jonathan Neuschäfer wrote:
+>>>>>>> Hello,
+>>>>>>>
+>>>>>>> On Mon, Feb 07, 2022 at 02:33:38PM +0800, Tyrone Ting wrote:
+>>>>>>>> From: Tyrone Ting <kfting@nuvoton.com>
+>>>>>>>>
+>>>>>>>> NPCM8XX uses a similar i2c module as NPCM7XX.
+>>>>>>>> The only difference is that the internal HW FIFO is larger.
+>>>>>>>>
+>>>>>>>> Related Makefile and Kconfig files are modified to support as well.
+>>>>>>>>
+>>>>>>>> Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller
+>>>>>>>> driver")
+>>>>>>>
+>>>>>>> It's not really a bug fix, but rather an additional feature.
+>>>>>>> Therefore, I suggest removing the Fixes tag from this patch.
+>>>>>>>
+>>>>>>>> Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
+>>>>>>>> Signed-off-by: Tali Perry <tali.perry1@gmail.com>
+>>>>>>>> ---
+>>>>>>> [...]
+>>>>>>>>  /* init register and default value required to enable module */
+>>>>>>>>  #define NPCM_I2CSEGCTL 0xE4
+>>>>>>>> +#ifdef CONFIG_ARCH_NPCM7XX
+>>>>>>>>  #define NPCM_I2CSEGCTL_INIT_VAL 0x0333F000
+>>>>>>>> +#else
+>>>>>>>> +#define NPCM_I2CSEGCTL_INIT_VAL 0x9333F000
+>>>>>>>> +#endif
+>>>>>>>
+>>>>>>> This is going to cause problems when someone tries to compile a kernel
+>>>>>>> that runs on both NPCM7xx and NPCM8xx (because the driver will then
+>>>>>>> only work on NPCM7xx).
+>>>>>>
+>>>>>> Yes, good catch.
+>>>>>>
+>>>>>> The NPCM7XX is multiplatform, I guess NPCM8xx will be as well, so this looks like an invalid code. How such code is supposed to work on multiplatform kernel?
+>>>>>>
+>>>>>
+>>>>> NPCM7xx and NPCM8xx are very different devices.
+>>>>> They share same driver sources for some of the modules but it's not ABI.
+>>>>> Users cannot compile a single kernel with two separate DTS.
+>>>>> In case of the i2c controller, the npcm7xx has a 16 byte HW FIFO,
+>>>>> and the NPCM8xx has 32 bytes HW FIFO.
+>>>>> This also means that registers fields are slightly different.
+>>>>> For init data we can move it to the DTS, but register field sizes
+>>>>> can't be handled with this approach.
+>>>>>
+>>>>
+>>>> What do you mean they cannot compile a kernel with different DTS? Of
+>>>> course they can - when we talk about multiplatform sub-architectures!
+>>>> Maybe there is something specific in NPCMxxx which stops it but then it
+>>>> should not be marked multiplatform.
+>>>>
+>>>
+>>>
+>>> NCPM7xx is ARM32 bit (dual core Cortex A9)
+>>> NPCM8xx is ARM64 bit (quad core Cortex A35)
+>>>
+>>> They have completely different architecture so not ABI compliant.
+>>> I2C module is similar, but the devices are quite different and have
+>>> separate architectures.
+>>
+>> OK, in such case usually you indeed can't have both. :)
+>>
+>>> Sorry for the confusion.
+>>> This is the first patch we try to upstream for NPCM8xx.
+>>> In the coming weeks we will upstream the architecture of NPCM8xx as well.
+>>
+>> Still, ARCH_XXX should not be hard-coded in the drivers to change the
+>> driver's behavior, even if driver won't be used simultaneously. It
+>> breaks all design principles and prevents any further re-use if a new
+>> use case appears.
+>>
+>> You can use "ifdef ARCH_XXX" to skip building of some parts of the
+>> driver, but it's not the case here.
+>>
 > 
-> Ideally, CRIU will need a knob that will tell the kernel/CET machinery
-> where the next RET will jump, along the lines of
-> restore_signal_shadow_stack() AFAIU.
+> Correct, the main change is in FIFO size:
+> +#ifdef CONFIG_ARCH_NPCM7XX
+> #define I2C_HW_FIFO_SIZE               16
+> +#else
+> +#define I2C_HW_FIFO_SIZE               32
+> +#endif /* CONFIG_ARCH_NPCM7XX */
 > 
-> But such a knob will immediately reduce the security value of the entire
-> thing, and I don't have good ideas how to deal with it :(
+> NPCM7XX will always have 16 bytes, all the next gens will have 32.
+> 
+> This impact some registers sizes, like this one:
+> 
+> +#ifdef CONFIG_ARCH_NPCM7XX
+> #define NPCM_I2CRXF_STS_RX_BYTES       GENMASK(4, 0)
+> +#else
+> +#define NPCM_I2CRXF_STS_RX_BYTES       GENMASK(5, 0)
+> +#endif /*CONFIG_ARCH_NPCM7XX*/
+> 
+> For this, the FIFO size should be defined before compilation.
 
-Probably a kind of latch in the task_struct which would trigger off once
-returt to a different address happened, thus we would be able to jump inside
-paratite code. Of course such trigger should be available under proper
-capability only.
+No, it does not have to. We solved it numerous time with quirks or
+per-chip-drvdata. It's common.
+
+> I also don't want to let users select FIFO size per architecture.
+> NPCM7XX has 16, NPCM8XX has 32. This is not a user selection.
+> It's part of the arch.
+
+I understand it is part of the architecture but why Nuvoton is different
+than other architectures and requires special treatment here? With most
+of the drivers, regardless of possibility of running same build on
+different hardware, we strive to make it ifdef-independent.
+
+Please run:
+  git grep ARCH -- drivers/i2c/busses/*c
+and see how many of such ifdef patterns you see. You also won't find
+them if you grep for CONFIG...
+
+The driver should be designed in portable way. The driver should not
+have architecture-dependent code.
+
+Best regards,
+Krzysztof

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC3E94AE4A4
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:37:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB1134AE490
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:37:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388172AbiBHWc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 17:32:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43372 "EHLO
+        id S1377028AbiBHWeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 17:34:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386219AbiBHTn7 (ORCPT
+        with ESMTP id S1386224AbiBHToD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 14:43:59 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E651C0613CB
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 11:43:58 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id qe15so135630pjb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 11:43:58 -0800 (PST)
+        Tue, 8 Feb 2022 14:44:03 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14669C0613CB
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 11:44:02 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id n23so321745pfo.1
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 11:44:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=m+nDZJr8SEJtsWfN1yVA4KOFdHwD0VQADvkkthoRg+M=;
-        b=KIWKaeu5lVDhyRByVq+Pe2NXQKxY7H7Aa5F2qlk9aEux7BT74ca5PXzOVfwTMs8G0d
-         aIQ/1GcK0JRJBaF5uURR1HltBeHPcOSTkM+qj2Wy2E2pVBP2v1/zaiXMgUvue/Uo5xt+
-         YABUPItp8vr+PKjsZfQRekvc/Uo4MSz6cnYvNxWYFCmDeQdeWEcIV2qwsZgCZQNazxRB
-         7GjDpffuHBV+YJNDTRnZViM6bl+vVxv1pwIxFmP8Qfps1Dk3ZcJAflTlrUHisnm9REo2
-         Cyb3jnnlNXscoB2YoKpvgdpT9OeYaWYj3SlrnSkaA+OTsgpqORsrfdmey/0HhrZ83jE/
-         vQqQ==
+        bh=YblOd1MvT8NiXh69QNSwkAqyNRZA5ZxOXoJicXqw4d8=;
+        b=oFWxPltJgO7Yyjjqxn8nZJZOd67ZLTQvioVscHLVnXkmdXa7iezFJuEhtQLNA1/g3j
+         EFngKn54zgAF+trHsmNcjk3jMcWhVtFT0yX3iEJpoRotKrbKH4Pk7H8n/jr4xIZUF63j
+         1dRyduxXMMhbl1Chu1b/1pvRWwQ7iHNFPsqQDUTCePMPICjmZxRsHur+mIbSI5dLw8CO
+         Nh1NEeFvfcU4jnVlqed/v6LuOdfRyE+zdlI220FrxUoGpFXvLTWeyB44tDkof33lSASK
+         4gPy7MC07EK0zZ/so08sD/vnkTuNpDaSf+5BmQ8QzEbMAwWmmy2HUDdpBKaD0LQuy6XR
+         7RUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=m+nDZJr8SEJtsWfN1yVA4KOFdHwD0VQADvkkthoRg+M=;
-        b=tt3zlOjdFyQ7I7WpbmLzKqKbO1Ib0EEm4OwUZPC8Pt6jkdoSh9PZ00zZNas2DfnYKu
-         plSQ58XHLPik5VqdxTd/BoCXrel35aHu+FkOalGJ/E/oX7Zr3+3JadMU+kCCrNIVFshQ
-         I29bAXo3bx6y7ybZupDNeIuJE/LZPZQT1f3DpejJsFRbYyX+n+FaF8zZvZsFMtiENnxO
-         vRmG+jKQUtcJb/82h9Xt/+cpHUFUTA0MStQwjINi8MHTognm3WEmP5mZ6WveWs2IiXxz
-         hSm/YutCDBdKI9qMGO6OoosG5pJ54NReQ21Bk+zyRIxyfE3SxYpDKfpt2Lkejp9qg5sQ
-         GJTQ==
-X-Gm-Message-State: AOAM5306b2Iw4TKUY+7dSgR11Us3B0yGfxXE/Un7qkYi8L24Tv5PdgyI
-        qUrZ3cxurCKPYlUU8YtIDnk=
-X-Google-Smtp-Source: ABdhPJxfAWIl+DPBI2EOdOQgu6DTp1/Md6wPiyy/z2kttS9Zsr3fF3IE+mW+xojQu5VQE4/u/rovaw==
-X-Received: by 2002:a17:90b:3b42:: with SMTP id ot2mr3048087pjb.147.1644349437992;
-        Tue, 08 Feb 2022 11:43:57 -0800 (PST)
+        bh=YblOd1MvT8NiXh69QNSwkAqyNRZA5ZxOXoJicXqw4d8=;
+        b=w/y3QK/zmnX7BKzFxExT4AGI1A4Q0DHkAIOhF++tTaVTdLiufkPU8CK3F8WPI4xNyp
+         pIgmhHtVOyd7drzDYVwqFiZK0vWfL4iwr9r5akrm5Iu4E9JtYdlRO2ha6j+877+SdV+v
+         bau1bKx7bvOadtsgMxWqwysnRFPr8FRu9VVfDwCFzHWObm8G5G4KA9xIhdTsDvnAQ66A
+         /r1cjKMWwVX1izWZEROSFmjyH1DoNog56zPe1Km670uNBQqVVqtGPq7XZH1stG3hsX38
+         //LQyyiZkkRNgdPws454BK7+zYpY4WVXSmdth3UH9Wgg4q+7ti9sZHh581ZVU8KoCI8F
+         t7/w==
+X-Gm-Message-State: AOAM533nCzwqU9FxSJ+B9onXsIuBeQHzBsUcfEWxKv9cmwE2M2E4vp6K
+        37KxEFPOzO3UMc3UubWwMpE=
+X-Google-Smtp-Source: ABdhPJwUo0N6U6Zq/adD98J6NPWalNyeAX/ePj0YT7DO2jYUnhPNw4w625Hk8Jxpoa3sLKMzFYhILA==
+X-Received: by 2002:a63:a102:: with SMTP id b2mr4753591pgf.459.1644349441578;
+        Tue, 08 Feb 2022 11:44:01 -0800 (PST)
 Received: from balhae.hsd1.ca.comcast.net ([2601:647:4800:c6f0:347f:e607:176:4358])
-        by smtp.gmail.com with ESMTPSA id w11sm16876839pfu.50.2022.02.08.11.43.56
+        by smtp.gmail.com with ESMTPSA id w11sm16876839pfu.50.2022.02.08.11.43.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 11:43:57 -0800 (PST)
+        Tue, 08 Feb 2022 11:44:01 -0800 (PST)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Peter Zijlstra <peterz@infradead.org>,
@@ -61,9 +61,9 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         "Paul E. McKenney" <paulmck@kernel.org>,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         Radoslaw Burny <rburny@google.com>
-Subject: [PATCH 11/12] locking/mutex: Revive fast functions for CONFIG_LOCK_TRACEPOINTS
-Date:   Tue,  8 Feb 2022 11:43:23 -0800
-Message-Id: <20220208194324.85333-12-namhyung@kernel.org>
+Subject: [PATCH 12/12] locking: Move lock_acquired() from the fast path
+Date:   Tue,  8 Feb 2022 11:43:24 -0800
+Message-Id: <20220208194324.85333-13-namhyung@kernel.org>
 X-Mailer: git-send-email 2.35.0.263.gb82422642f-goog
 In-Reply-To: <20220208194324.85333-1-namhyung@kernel.org>
 References: <20220208194324.85333-1-namhyung@kernel.org>
@@ -80,158 +80,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The CONFIG_LOCK_TRACEPOINTS used the same path as CONFIG_DEBUG_ALLOC
-or CONFIG_LOCKDEP but it caused performance impact on mutex as it
-removes _fast variants at the beginning.
+The lock_acquired() function is used by CONFIG_LOCK_STAT to track wait
+time for contended locks.  So it's meaningful only if the given lock
+is in the slow path (contended).  Let's move the call into the if
+block so that we can skip it in the fast path.  This also move the
+tracepoint to be called only after lock_contended().
 
-I'm not entirely sure why it removed the fast versions when lockdep is
-on.  It seems easy to add the required annotation when the fast
-version is succeeded as far as the tracpoints are concerned.
+It might affect bounce_acquired stats rarely (if it's on a different
+cpu than when you call lock_acquire) but I'm not sure it's possible in
+uncontended cases.  Otherwise, this should have no functional changes
+in the LOCKDEP and LOCK_STAT.
 
-It reduces around 2% of elapsed time when I ran a micro-benchmark.  It
-was `perf bench sched messaging -p -l 1000000` and it had a pretty low
-lock contention rate (under 1% of total lock acquisition).  So the
-improvement should come from the fast path.
+Userspace tools that use the tracepoint might see the difference, but
+I think most of them can handle the missing lock_acquired() in
+non-contended case properly as it's the case when using a trylock
+function to grab a lock.  At least it seems ok for the perf
+tools ('perf lock' command specifically).
+
+Add similar change in the __mutex_lock_common() so that it can call
+lock_acquired() only after lock_contended().
 
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- include/linux/mutex.h  |  2 +-
- kernel/locking/mutex.c | 30 ++++++++++++++++++++----------
- 2 files changed, 21 insertions(+), 11 deletions(-)
+ Documentation/locking/lockstat.rst |  4 ++--
+ include/linux/lockdep.h            | 12 ++++++------
+ kernel/locking/mutex.c             |  4 +---
+ 3 files changed, 9 insertions(+), 11 deletions(-)
 
-diff --git a/include/linux/mutex.h b/include/linux/mutex.h
-index b2d018250a41..49bde305453e 100644
---- a/include/linux/mutex.h
-+++ b/include/linux/mutex.h
-@@ -172,7 +172,7 @@ do {							\
-  * See kernel/locking/mutex.c for detailed documentation of these APIs.
-  * Also see Documentation/locking/mutex-design.rst.
-  */
--#ifdef CONFIG_LOCK_INFO
-+#ifdef CONFIG_DEBUG_LOCK_ALLOC
- extern void mutex_lock_nested(struct mutex *lock, unsigned int subclass);
- extern void _mutex_lock_nest_lock(struct mutex *lock, struct lockdep_map *nest_lock);
+diff --git a/Documentation/locking/lockstat.rst b/Documentation/locking/lockstat.rst
+index 536eab8dbd99..3638ad1113c2 100644
+--- a/Documentation/locking/lockstat.rst
++++ b/Documentation/locking/lockstat.rst
+@@ -28,11 +28,11 @@ The graph below shows the relation between the lock functions and the various
+             |    __contended
+             |         |
+             |       <wait>
++            |         |
++            |    __acquired
+             | _______/
+             |/
+             |
+-       __acquired
+-            |
+             .
+           <hold>
+             .
+diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
+index 4e728d2957db..63b75ad2e17c 100644
+--- a/include/linux/lockdep.h
++++ b/include/linux/lockdep.h
+@@ -559,8 +559,8 @@ do {								\
+ 	if (!try(_lock)) {					\
+ 		lock_contended(&(_lock)->dep_map, _RET_IP_);	\
+ 		lock(_lock);					\
++		lock_acquired(&(_lock)->dep_map, _RET_IP_);	\
+ 	}							\
+-	lock_acquired(&(_lock)->dep_map, _RET_IP_);			\
+ } while (0)
+ 
+ #define LOCK_CONTENDED_RETURN(_lock, try, lock)			\
+@@ -569,9 +569,9 @@ do {								\
+ 	if (!try(_lock)) {					\
+ 		lock_contended(&(_lock)->dep_map, _RET_IP_);	\
+ 		____err = lock(_lock);				\
++		if (!____err)					\
++			lock_acquired(&(_lock)->dep_map, _RET_IP_); \
+ 	}							\
+-	if (!____err)						\
+-		lock_acquired(&(_lock)->dep_map, _RET_IP_);	\
+ 	____err;						\
+ })
+ 
+@@ -600,8 +600,8 @@ do {								\
+ 	if (!try(_lock)) {					\
+ 		lock_contended(&(_lock)->dep_map, _RET_IP_);	\
+ 		lock(_lock);					\
++		lock_acquired(&(_lock)->dep_map, _RET_IP_);	\
+ 	}							\
+-	lock_acquired(&(_lock)->dep_map, _RET_IP_);		\
+ } while (0)
+ 
+ #define LOCK_CONTENDED_RETURN(_lock, try, lock)			\
+@@ -610,9 +610,9 @@ do {								\
+ 	if (!try(_lock)) {					\
+ 		lock_contended(&(_lock)->dep_map, _RET_IP_);	\
+ 		____err = lock(_lock);				\
++		if (!____err)					\
++			lock_acquired(&(_lock)->dep_map, _RET_IP_); \
+ 	}							\
+-	if (!____err)						\
+-		lock_acquired(&(_lock)->dep_map, _RET_IP_);	\
+ 	____err;						\
+ })
  
 diff --git a/kernel/locking/mutex.c b/kernel/locking/mutex.c
-index 8733b96ce20a..f8bc4ae312a0 100644
+index f8bc4ae312a0..e67b5a16440b 100644
 --- a/kernel/locking/mutex.c
 +++ b/kernel/locking/mutex.c
-@@ -149,7 +149,7 @@ static inline bool __mutex_trylock(struct mutex *lock)
- 	return !__mutex_trylock_common(lock, false);
- }
+@@ -605,8 +605,6 @@ __mutex_lock_common(struct mutex *lock, unsigned int state, unsigned int subclas
  
--#ifndef CONFIG_LOCK_INFO
-+#ifndef CONFIG_DEBUG_LOCK_ALLOC
- /*
-  * Lockdep annotations are contained to the slow paths for simplicity.
-  * There is nothing that would stop spreading the lockdep annotations outwards
-@@ -245,7 +245,7 @@ static void __mutex_handoff(struct mutex *lock, struct task_struct *task)
- 	}
- }
+ 	if (__mutex_trylock(lock) ||
+ 	    mutex_optimistic_spin(lock, ww_ctx, NULL)) {
+-		/* got the lock, yay! */
+-		lock_acquired(&lock->dep_map, ip);
+ 		if (ww_ctx)
+ 			ww_mutex_set_context_fastpath(ww, ww_ctx);
+ 		preempt_enable();
+@@ -708,10 +706,10 @@ __mutex_lock_common(struct mutex *lock, unsigned int state, unsigned int subclas
  
--#ifndef CONFIG_LOCK_INFO
-+#ifndef CONFIG_DEBUG_LOCK_ALLOC
- /*
-  * We split the mutex lock/unlock logic into separate fastpath and
-  * slowpath functions, to reduce the register pressure on the fastpath.
-@@ -281,6 +281,8 @@ void __sched mutex_lock(struct mutex *lock)
+ 	debug_mutex_free_waiter(&waiter);
  
- 	if (!__mutex_trylock_fast(lock))
- 		__mutex_lock_slowpath(lock);
-+	else
-+		mutex_acquire(&lock->dep_map, 0, 0, _RET_IP_);
- }
- EXPORT_SYMBOL(mutex_lock);
- #endif
-@@ -533,9 +535,11 @@ static noinline void __sched __mutex_unlock_slowpath(struct mutex *lock, unsigne
-  */
- void __sched mutex_unlock(struct mutex *lock)
- {
--#ifndef CONFIG_LOCK_INFO
--	if (__mutex_unlock_fast(lock))
-+#ifndef CONFIG_DEBUG_LOCK_ALLOC
-+	if (__mutex_unlock_fast(lock)) {
-+		mutex_release(&lock->dep_map, _RET_IP_);
- 		return;
-+	}
- #endif
- 	__mutex_unlock_slowpath(lock, _RET_IP_);
- }
-@@ -591,7 +595,7 @@ __mutex_lock_common(struct mutex *lock, unsigned int state, unsigned int subclas
- 		if (ww_ctx->acquired == 0)
- 			ww_ctx->wounded = 0;
+-skip_wait:
+ 	/* got the lock - cleanup and rejoice! */
+ 	lock_acquired(&lock->dep_map, ip);
  
--#ifdef CONFIG_LOCK_INFO
-+#ifdef CONFIG_DEBUG_LOCK_ALLOC
- 		nest_lock = &ww_ctx->dep_map;
- #endif
- 	}
-@@ -778,7 +782,7 @@ int ww_mutex_trylock(struct ww_mutex *ww, struct ww_acquire_ctx *ww_ctx)
- }
- EXPORT_SYMBOL(ww_mutex_trylock);
- 
--#ifdef CONFIG_LOCK_INFO
-+#ifdef CONFIG_DEBUG_LOCK_ALLOC
- void __sched
- mutex_lock_nested(struct mutex *lock, unsigned int subclass)
- {
-@@ -937,7 +941,7 @@ static noinline void __sched __mutex_unlock_slowpath(struct mutex *lock, unsigne
- 	wake_up_q(&wake_q);
- }
- 
--#ifndef CONFIG_LOCK_INFO
-+#ifndef CONFIG_DEBUG_LOCK_ALLOC
- /*
-  * Here come the less common (and hence less performance-critical) APIs:
-  * mutex_lock_interruptible() and mutex_trylock().
-@@ -964,8 +968,10 @@ int __sched mutex_lock_interruptible(struct mutex *lock)
- {
- 	might_sleep();
- 
--	if (__mutex_trylock_fast(lock))
-+	if (__mutex_trylock_fast(lock)) {
-+		mutex_acquire(&lock->dep_map, 0, 0, _RET_IP_);
- 		return 0;
-+	}
- 
- 	return __mutex_lock_interruptible_slowpath(lock);
- }
-@@ -988,8 +994,10 @@ int __sched mutex_lock_killable(struct mutex *lock)
- {
- 	might_sleep();
- 
--	if (__mutex_trylock_fast(lock))
-+	if (__mutex_trylock_fast(lock)) {
-+		mutex_acquire(&lock->dep_map, 0, 0, _RET_IP_);
- 		return 0;
-+	}
- 
- 	return __mutex_lock_killable_slowpath(lock);
- }
-@@ -1078,7 +1086,7 @@ int __sched mutex_trylock(struct mutex *lock)
- }
- EXPORT_SYMBOL(mutex_trylock);
- 
--#ifndef CONFIG_LOCK_INFO
-+#ifndef CONFIG_DEBUG_LOCK_ALLOC
- int __sched
- ww_mutex_lock(struct ww_mutex *lock, struct ww_acquire_ctx *ctx)
- {
-@@ -1087,6 +1095,7 @@ ww_mutex_lock(struct ww_mutex *lock, struct ww_acquire_ctx *ctx)
- 	if (__mutex_trylock_fast(&lock->base)) {
- 		if (ctx)
- 			ww_mutex_set_context_fastpath(lock, ctx);
-+		mutex_acquire(&lock->base.dep_map, 0, 0, _RET_IP_);
- 		return 0;
- 	}
- 
-@@ -1102,6 +1111,7 @@ ww_mutex_lock_interruptible(struct ww_mutex *lock, struct ww_acquire_ctx *ctx)
- 	if (__mutex_trylock_fast(&lock->base)) {
- 		if (ctx)
- 			ww_mutex_set_context_fastpath(lock, ctx);
-+		mutex_acquire(&lock->base.dep_map, 0, 0, _RET_IP_);
- 		return 0;
- 	}
++skip_wait:
+ 	if (ww_ctx)
+ 		ww_mutex_lock_acquired(ww, ww_ctx);
  
 -- 
 2.35.0.263.gb82422642f-goog

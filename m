@@ -2,208 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7E9E4AD448
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 10:03:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 849AE4AD44E
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 10:05:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235999AbiBHJDa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 04:03:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51788 "EHLO
+        id S1352848AbiBHJEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 04:04:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237702AbiBHJD0 (ORCPT
+        with ESMTP id S237702AbiBHJEE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 04:03:26 -0500
-Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1875C03FEC3;
-        Tue,  8 Feb 2022 01:03:24 -0800 (PST)
-Received: by mail-vk1-xa35.google.com with SMTP id l14so9342238vko.12;
-        Tue, 08 Feb 2022 01:03:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=g7Zin2rUPB97FeKXpo4tsRMRhY3AWBi3dGQJ2mNf6+4=;
-        b=FwaJSf4cmxqj0kr3AaXMp8lonIfAVaWAyVNwBcpOaDNtXTtz9Dti2xOSdqS4zlW4Rx
-         NRVtec57NFaWGiPr4zyHMz6aFrNSn07YPX7X6ZDfShlaIntYqAn/xFhA3rLuvC8j5MCl
-         805BozXUKF0vruVlDQA3TIjjql9VCTaLZRdztZNCwgCc/E6jmAlGUsO2JRzdqUgiqM/t
-         VgJ1aAySF28mAeISOMCjM1GIFPG84kBmy90OhIfSEG++JWBuVRb7RhcabAiWWcSCB6wt
-         yM+Fj+ExdpsTKPQCGtN5rOFENv+Ja1z54EDdohiWtHdrLpVresiPAgvw69mgX/TTU42a
-         hAsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=g7Zin2rUPB97FeKXpo4tsRMRhY3AWBi3dGQJ2mNf6+4=;
-        b=i3cC4g0stJUZyyUQy8WrcaaWUtOTmtXGm3ufgqmF3i9APdJstOKqthG43cYxATAtMI
-         evP+8+mS4jzH1v/WfX0t1Lcp57nUyXctK72Bvn2MZcHxyy7MjCYQkRON38u6eq+9jG1+
-         4yQ4wjcJD4ZIvmHVxViZ0y7F7GbYvDDk63H/Z6Z98FxUlb7DB1I+T0VFolleOp7q6HzG
-         820XLjOHU47H1L1BCHRN/nRtjX11twc0IvEkldlFmVNDpCDfK6fkodxrS8/gQQs10Aad
-         +rzxgZrJ7c+8MbuqlzK0LGKCEwzfm2okSl46nK362Z1j8F5jzjuaAcPZbPInibrgsj4g
-         bl1A==
-X-Gm-Message-State: AOAM532o/VSW6Io3RvdwUPOsJbFbmAjyenHHR+HEE3vYNwpcRdakCjhG
-        VsA7DZcfjNHjV4SiXobmJRIK84qEbT7BNkUMTDzM65C6zTh6e90=
-X-Google-Smtp-Source: ABdhPJyinu4n6GoB11vkNuf0WE0tbwdWbilUOFXd8tUNEKbSfSiWxNOJhGqQ+2aAdj53Gyr6yQ2eJogPz61o5GOgXgc=
-X-Received: by 2002:a05:6122:8d2:: with SMTP id 18mr1267658vkg.31.1644311003630;
- Tue, 08 Feb 2022 01:03:23 -0800 (PST)
+        Tue, 8 Feb 2022 04:04:04 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF63C03FEC0;
+        Tue,  8 Feb 2022 01:04:03 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 5ED6B1F4474E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1644311042;
+        bh=9sgJPXTqfK75Hu2kDZUDOsgZGJfuQ/MhsF+51PqY9d8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=cxeCpY9JpTWim2lNGoN3hul0SMhHdA/NQydI8he7rdyfhWY7N9QUuad1cg8/AY4EW
+         E55D03ZuSDgOfbQo4tRF+hDHOQ2ew1uqD3KM63YuMNQjiS/tdWjLKKh5/1VY6lipsm
+         qEdIcTrFzLViuTltNWGVYE8IksuFoKoGdyXIw0n6DgNseDxH9jb+vFIbW3bvH6kAK4
+         gWmHxHi/8YMCppgoaUyjEncsnx7jK9hhehV6oZp0HyEw37HccDD37SONlwwcufc+KW
+         O4YMvTxxPVG/z2Sxymn98QaaU75LOL234XZt1qXP0oqe2GItnewSEEqfgAVwFpELgh
+         lmXub2km4nYnQ==
+Message-ID: <bf486a23-4322-328e-abdc-962a66792f23@collabora.com>
+Date:   Tue, 8 Feb 2022 10:03:58 +0100
 MIME-Version: 1.0
-References: <20220207063338.6570-1-warp5tw@gmail.com> <20220207063338.6570-2-warp5tw@gmail.com>
- <1644243760.823059.320509.nullmailer@robh.at.kernel.org>
-In-Reply-To: <1644243760.823059.320509.nullmailer@robh.at.kernel.org>
-From:   warp5tw <warp5tw@gmail.com>
-Date:   Tue, 8 Feb 2022 17:03:12 +0800
-Message-ID: <CACD3sJa4JOV2MYknMVGXVT0wEVbA4SkexaV5JLg_ukXqyE84+g@mail.gmail.com>
-Subject: Re: [PATCH v1 1/6] dt-bindings: i2c: npcm: support NPCM845
-To:     Rob Herring <robh@kernel.org>
-Cc:     Avi.Fishman@nuvoton.com, openbmc@lists.ozlabs.org,
-        lukas.bulwahn@gmail.com, bence98@sch.bme.hu, sven@svenpeter.dev,
-        devicetree@vger.kernel.org, tali.perry1@gmail.com,
-        krzysztof.kozlowski@canonical.com, arnd@arndb.de,
-        benjaminfair@google.com, tmaimon77@gmail.com, yuenn@google.com,
-        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
-        semen.protsenko@linaro.org, olof@lixom.net, venture@google.com,
-        wsa@kernel.org, avifishman70@gmail.com, robh+dt@kernel.org,
-        linux-i2c@vger.kernel.org, kfting@nuvoton.com,
-        tali.perry@nuvoton.com, yangyicong@hisilicon.com,
-        linux-kernel@vger.kernel.org, andriy.shevchenko@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v4] drm/mediatek: mtk_dsi: Avoid EPROBE_DEFER loop with
+ external bridge
+Content-Language: en-US
+To:     CK Hu <ck.hu@mediatek.com>, dri-devel@lists.freedesktop.org
+Cc:     chunkuang.hu@kernel.org, airlied@linux.ie,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        andrzej.hajda@intel.com, linux-mediatek@lists.infradead.org,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        matthias.bgg@gmail.com, kernel@collabora.com,
+        linux-arm-kernel@lists.infradead.org
+References: <20220131085520.287105-1-angelogioacchino.delregno@collabora.com>
+ <20755168cc2be0d1bb5e40907cfe27cea25a9363.camel@mediatek.com>
+ <b886b9a8a3368127be7357e8921e18358987033d.camel@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <b886b9a8a3368127be7357e8921e18358987033d.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all:
+Il 08/02/22 09:32, CK Hu ha scritto:
+> Hi, Angelo:
+> 
+> On Tue, 2022-02-08 at 16:20 +0800, CK Hu wrote:
+>> Hi, Angelo:
+>>
+>> On Mon, 2022-01-31 at 09:55 +0100, AngeloGioacchino Del Regno wrote:
+>>> DRM bridge drivers are now attaching their DSI device at probe
+>>> time,
+>>> which requires us to register our DSI host in order to let the
+>>> bridge
+>>> to probe: this recently started producing an endless -EPROBE_DEFER
+>>> loop on some machines that are using external bridges, like the
+>>> parade-ps8640, found on the ACER Chromebook R13.
+>>>
+>>> Now that the DSI hosts/devices probe sequence is documented, we can
+>>> do adjustments to the mtk_dsi driver as to both fix now and make
+>>> sure
+>>> to avoid this situation in the future: for this, following what is
+>>> documented in drm_bridge.c, move the mtk_dsi component_add() to the
+>>> mtk_dsi_ops.attach callback and delete it in the detach callback;
+>>> keeping in mind that we are registering a drm_bridge for our DSI,
+>>> which is only used/attached if the DSI Host is bound, it wouldn't
+>>> make sense to keep adding our bridge at probe time (as it would
+>>> be useless to have it if mtk_dsi_ops.attach() fails!), so also move
+>>> that one to the dsi host attach function (and remove it in detach).
+>>>
+>>> Cc: <stable@vger.kernel.org> # 5.15.x
+>>> Signed-off-by: AngeloGioacchino Del Regno <
+>>> angelogioacchino.delregno@collabora.com>
+>>> Reviewed-by: Andrzej Hajda <andrzej.hajda@intel.com>
+>>> Reviewed-by: Jagan Teki <jagan@amarulasolutions.com>
+>>>
+>>> ---
+>>>   drivers/gpu/drm/mediatek/mtk_dsi.c | 167 +++++++++++++++----------
+>>> ----
+>>>   1 file changed, 84 insertions(+), 83 deletions(-)
+>>>
+>>> diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c
+>>> b/drivers/gpu/drm/mediatek/mtk_dsi.c
+>>> index 5d90d2eb0019..bced4c7d668e 100644
+>>> --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
+>>> +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
+>>> @@ -786,18 +786,101 @@ void mtk_dsi_ddp_stop(struct device *dev)
+>>>   	mtk_dsi_poweroff(dsi);
+>>>   }
+>>>   
+>>>
+>>
+>> [snip]
+>>
+>>> +
+>>>   static int mtk_dsi_host_attach(struct mipi_dsi_host *host,
+>>>   			       struct mipi_dsi_device *device)
+>>>   {
+>>>   	struct mtk_dsi *dsi = host_to_dsi(host);
+>>> +	struct device *dev = host->dev;
+>>> +	int ret;
+>>>   
+>>>   	dsi->lanes = device->lanes;
+>>>   	dsi->format = device->format;
+>>>   	dsi->mode_flags = device->mode_flags;
+>>> +	dsi->next_bridge = devm_drm_of_get_bridge(dev, dev->of_node, 0,
+>>> 0);
+>>
+>> The original would process panel. Why do you remove the panel part?
+>> It's better that someone has a platform of DSI->Panel to test this
+>> patch.
+> 
+> Sorry, devm_drm_of_get_bridge() has processed the panel part, so for
+> this patch,
+> 
+> Reviewed-by: CK Hu <ck.hu@mediatek.com>
+> 
 
-Thank you for your comments and they will be addressed.
+No worries! Thanks for the review/approval.
 
 Regards,
-Tyrone
+Angelo
 
-
-Rob Herring <robh@kernel.org> =E6=96=BC 2022=E5=B9=B42=E6=9C=887=E6=97=A5 =
-=E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=8810:22=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> On Mon, 07 Feb 2022 14:33:33 +0800, Tyrone Ting wrote:
-> > From: Tyrone Ting <kfting@nuvoton.com>
-> >
-> > This commit adds compatible and syscon description for NPCM845 i2c modu=
-le.
-> >
-> > Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller dri=
-ver")
-> > Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
-> > Signed-off-by: Tali Perry <tali.perry1@gmail.com>
-> > ---
-> >  .../bindings/i2c/nuvoton,npcm7xx-i2c.yaml     | 21 ++++++++++++++-----
-> >  1 file changed, 16 insertions(+), 5 deletions(-)
-> >
->
-> Running 'make dtbs_check' with the schema in this patch gives the
-> following warnings. Consider if they are expected or the schema is
-> incorrect. These may not be new warnings.
->
-> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-> This will change in the future.
->
-> Full log is available here: https://patchwork.ozlabs.org/patch/1589171
->
->
-> i2c@80000: 'syscon' is a required property
->         arch/arm/boot/dts/nuvoton-npcm730-gbs.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm750-evb.dt.yaml
->
-> i2c@81000: 'syscon' is a required property
->         arch/arm/boot/dts/nuvoton-npcm730-gbs.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm730-gsj.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm730-kudo.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm750-evb.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm750-runbmc-olympus.dt.yaml
->
-> i2c@82000: 'syscon' is a required property
->         arch/arm/boot/dts/nuvoton-npcm730-gbs.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm730-gsj.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm730-kudo.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm750-evb.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm750-runbmc-olympus.dt.yaml
->
-> i2c@83000: 'syscon' is a required property
->         arch/arm/boot/dts/nuvoton-npcm730-gsj.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm730-kudo.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm750-evb.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm750-runbmc-olympus.dt.yaml
->
-> i2c@84000: 'syscon' is a required property
->         arch/arm/boot/dts/nuvoton-npcm730-gsj.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm730-kudo.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm750-runbmc-olympus.dt.yaml
->
-> i2c@85000: 'syscon' is a required property
->         arch/arm/boot/dts/nuvoton-npcm730-gbs.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm730-kudo.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm750-evb.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm750-runbmc-olympus.dt.yaml
->
-> i2c@86000: 'syscon' is a required property
->         arch/arm/boot/dts/nuvoton-npcm730-gbs.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm730-kudo.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm750-evb.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm750-runbmc-olympus.dt.yaml
->
-> i2c@87000: 'syscon' is a required property
->         arch/arm/boot/dts/nuvoton-npcm730-gbs.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm730-kudo.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm750-evb.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm750-runbmc-olympus.dt.yaml
->
-> i2c@88000: 'syscon' is a required property
->         arch/arm/boot/dts/nuvoton-npcm730-gbs.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm730-gsj.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm730-kudo.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm750-evb.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm750-runbmc-olympus.dt.yaml
->
-> i2c@89000: 'syscon' is a required property
->         arch/arm/boot/dts/nuvoton-npcm730-gbs.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm730-gsj.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm730-kudo.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm750-evb.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm750-runbmc-olympus.dt.yaml
->
-> i2c@8a000: 'syscon' is a required property
->         arch/arm/boot/dts/nuvoton-npcm730-gbs.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm730-gsj.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm730-kudo.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm750-evb.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm750-runbmc-olympus.dt.yaml
->
-> i2c@8b000: 'syscon' is a required property
->         arch/arm/boot/dts/nuvoton-npcm730-gbs.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm730-gsj.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm730-kudo.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm750-evb.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm750-runbmc-olympus.dt.yaml
->
-> i2c@8c000: 'syscon' is a required property
->         arch/arm/boot/dts/nuvoton-npcm730-gbs.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm730-gsj.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm730-kudo.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm750-runbmc-olympus.dt.yaml
->
-> i2c@8d000: 'syscon' is a required property
->         arch/arm/boot/dts/nuvoton-npcm730-gbs.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm730-kudo.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm750-runbmc-olympus.dt.yaml
->
-> i2c@8e000: 'syscon' is a required property
->         arch/arm/boot/dts/nuvoton-npcm730-gbs.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm730-kudo.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm750-evb.dt.yaml
->
-> i2c@8f000: 'syscon' is a required property
->         arch/arm/boot/dts/nuvoton-npcm730-gsj.dt.yaml
->         arch/arm/boot/dts/nuvoton-npcm730-kudo.dt.yaml
->
+>>
+>> Regards,
+>> CK
+>>

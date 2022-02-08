@@ -2,165 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 490464ADB1A
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 15:25:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C81904ADB20
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 15:27:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350949AbiBHOZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 09:25:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33890 "EHLO
+        id S1351121AbiBHO1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 09:27:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230420AbiBHOZ3 (ORCPT
+        with ESMTP id S230420AbiBHO1A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 09:25:29 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2048.outbound.protection.outlook.com [40.107.93.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8813C03FECE;
-        Tue,  8 Feb 2022 06:25:28 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YhoXAyshfsJ0j4RredlepLs1N6AuOMAWXvpX0DcF61mvyjwe/MyqcSCZcFddKwrB6yv5bo4DEU8XcvyIn1Hiv9nkb2THq6qUai9AVelq8oOw1sxdi1KdzFya3CK6+ZsTu0ZjXGIJBR/H/6u1o/O6Am06hwK55cQ/L3Gh1xIrgUccQzim62O83gdHFtn4PMElkfaQjzYHHA5M+ccOE5/Dxb62lPuIdlf5aVQIDrna9v9cAzo0FdHTuSPlGGW/C0L/duIQmDT7Rl3gJjRMj+cA7IQv28ShcMwzFi7f/wW2UJIqlq6X8DjYOBrTbUUGE4Uv0uVa3sqRP1lblYB/FK26yg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EyW/gbT74Ej03+W8Ptt+7HFbZ8syWo955rGIjHdQOX4=;
- b=GQOVxjZz/bV+xt12DUdnUiesrsIKrPSeRP645Zu7j92n2gzRkjbNwlaP6GmuCX56YHkLF36efUlQQ/vXaBcMASFiV+59qBdYH7dY1p0zyd5XGFmfiOOARWqcCiYu4MQGF+MonCc0YE4iNbdklxDcewpW3mFamvxRFHRk3wEUT+B9VrnLidJAtGeKlkv3V8rPIh20MCcp1W+fTqS6taCAvkG+IMbZ1KATHeXIdArHSdA+5sRG+V+JS3wlRJG/88NhPQSmUPsegOZySwGNPewQvjkJMRogp8MaRpIarNJsiIIPuPB/tqNF7/S+yCv/MPXVfdDOg84ylDrPzlow/uV34Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EyW/gbT74Ej03+W8Ptt+7HFbZ8syWo955rGIjHdQOX4=;
- b=OQlmjjAflzl5jSk05xUrLDbLuepcyXnACbelGSINcBVehY8oeIwvxAUjYomD5iL7/6u/S35DttJWfa6/mk3TqULoy+eBV04cYbuF0NN8UTdx/7A3GkyqD2wxhjHkCG/msZWgn7zdHfbsmScTgGHFMuARHIpvEbqFqAwzjM8yKGoVi/t7zKt+easSW48bZ5rSXXQQHZobwgAJbV5DOJBl1UDBU0izqq9Zj352Z9ENjXFH9UUSm6RrSgtKncBrfArQpkSsXSoSDMTBzoD1meQPznMiG9LIgnxIWd/0EVj3A0F3xfcNazEzP+2IupFpg6zi1T/UX9BEL8TtLlEPyBSxOA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by DM6PR12MB3386.namprd12.prod.outlook.com (2603:10b6:5:115::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Tue, 8 Feb
- 2022 14:25:27 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::e8f4:9793:da37:1bd3]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::e8f4:9793:da37:1bd3%4]) with mapi id 15.20.4975.011; Tue, 8 Feb 2022
- 14:25:27 +0000
-Date:   Tue, 8 Feb 2022 10:25:25 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, alex.williamson@redhat.com,
-        cohuck@redhat.com, mgurtovoy@nvidia.com, yishaih@nvidia.com,
-        linuxarm@huawei.com, liulongfang@huawei.com,
-        prime.zeng@hisilicon.com, jonathan.cameron@huawei.com,
-        wangzhou1@hisilicon.com
-Subject: Re: [RFC v4 6/8] crypto: hisilicon/qm: Add helper to retrieve the PF
- qm data
-Message-ID: <20220208142525.GE4160@nvidia.com>
-References: <20220208133425.1096-1-shameerali.kolothum.thodi@huawei.com>
- <20220208133425.1096-7-shameerali.kolothum.thodi@huawei.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220208133425.1096-7-shameerali.kolothum.thodi@huawei.com>
-X-ClientProxiedBy: BL1PR13CA0213.namprd13.prod.outlook.com
- (2603:10b6:208:2bf::8) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Tue, 8 Feb 2022 09:27:00 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD71BC03FECE;
+        Tue,  8 Feb 2022 06:26:59 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id t4-20020a17090a510400b001b8c4a6cd5dso2944130pjh.5;
+        Tue, 08 Feb 2022 06:26:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=i7CZiGzaoM7MiROudJbuMXrNK/FlD/qiY6ZK8KOg4qE=;
+        b=cXT1xaU/DTIMYTuPqjNzKGrQu15z+a5PiDD0FpGPJ0oc9Im0+gQDUrxeFG7TLrMEH4
+         /rRL7PUDpI/UiDAVJ2ZvYLvJOvUYI6Suoj6xf8A1xO41hFPEdY05IvcbKMD2f8U7RPsd
+         eI+C4uKHgnl6CwvEsMV8Va9HCbdDKr4InI2Szpu0bD6pblCqjQQV6WgwTwb/38VQ4SEn
+         t8TaqmNSQvozWsjnh5yVrnnMe8bpMEds72wEekbN1sVstIubHxIikS/Zw+xL6g/B5V+r
+         BbmCmdwctC1qqKgt3I5Tm3dece8BY3NIxLrujnsntwPkOxKjFtxZV36zEODB8YudsbDO
+         6aNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=i7CZiGzaoM7MiROudJbuMXrNK/FlD/qiY6ZK8KOg4qE=;
+        b=SR5RN+7vFW6o2S/i90i/DL/XHcP/EGAM8NmB6EjJvgZPzvUw2EuTHbZ+0ZyhvAzeND
+         2ok7FHzjyjPWj+zsP6wbBvtrTgSkLrmQIhih4D5YTS5LLmybRICDDYQ9khjNwNO5ru31
+         iuqHK9hOUdmDTrQE23Rs0eymVEMCkuu+PuljQLTa96POHdjb08hV2Zv8xalXiIEYmeld
+         c5txRexv7DAeiX1XII/p6fVg7XTak0FQlgHUq9N/8QOKNWM7b243vE1vNUT2n5oIqXre
+         PI/fNO5cxe067sMhUHPsddJ5R4X5dq3KJVvSTPNuQrTVhQbF2fFjsmKUslyGajFKDUVd
+         YY4Q==
+X-Gm-Message-State: AOAM532bLOs66moFIbRpoolz6cS5xJyxrn79cl4M0WCUYD4eEa1IG0K4
+        A04oruv/bJPssup0KbDbbMQ=
+X-Google-Smtp-Source: ABdhPJyLhzpQHUL4Vduk10Hi9sFVjTBsjeep62O0QRwUZhfmGgeXVWg7nzc77QevfV5HTjRZeCBOhA==
+X-Received: by 2002:a17:902:7c0b:: with SMTP id x11mr4845906pll.138.1644330419247;
+        Tue, 08 Feb 2022 06:26:59 -0800 (PST)
+Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:f:aca8:99fd:8b7b:976])
+        by smtp.gmail.com with ESMTPSA id h6sm16054101pfc.35.2022.02.08.06.26.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 06:26:58 -0800 (PST)
+From:   Tianyu Lan <ltykernel@gmail.com>
+To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, davem@davemloft.net,
+        kuba@kernel.org, michael.h.kelley@microsoft.com
+Cc:     Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH V2] Netvsc: Call hv_unmap_memory() in the netvsc_device_remove()
+Date:   Tue,  8 Feb 2022 09:26:52 -0500
+Message-Id: <20220208142652.186260-1-ltykernel@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: bb235078-df42-4a16-fdab-08d9eb0ed9e7
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3386:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR12MB3386C3F52F5ADCE0F74AA1D5C22D9@DM6PR12MB3386.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2887;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: HMG+v3caNkOiapFN5715t16D4am6DF6UkVtCdpesoQ4uS1fJhiQoX9xvJMjtklcyqtJZUJBNUWZSzNPbtS7rPyU3GCOU2PwSQy1aR3ngtS7NTs8w8DxN+GE6gDEZxWQRO32rY89/KeKUO9w3ib+tnmeCQtp8R3GeH+UW2Gw6BO04SFL6GqsBp+1VlKjBL4u57hZe2nj06YNNNPiZ1teqfj+uyBeZgR/otNp4/FvtU8Suvk0jarB3UaT4D/+Qel3RpTwbp64/Ui8RkV4zKBiG+tKMZoyMll/1gHoC4ie7w8BbXiQroH8yuf8DtXyspZgedR7tHUwKXSPjoexP4bKZK5iRplByuT5QQ/PVz0wUhZGyJIwT4LZ9vgLmcv7iJBH0RO9HJPd6riwOAbMV79595Xg1ykvWJX2GHLwtCJ8PY49N2ctmOZflFUyAW1kdvhphwgCzWoRlhqs0L1bH2TbM5pI1wDNKgmMUpJfGRSvKZaYklsbxgITbsYcGD2l9p0fy8hpsm0iK4f8EoGbSz5Uh1OBJ4pVqf7ztYBwcjkcCV+tOJBWq5T9o09g6jqfqF/wDELufOc1oxn/7s29ZXLmoVWjf2zS9UA1nG4WsC9pd/LP7dDtyeYpl30RO9b1FUn8EA5Kt9ZlyVbEIh6DuGwWbRg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(33656002)(6486002)(36756003)(8676002)(316002)(26005)(66556008)(66946007)(66476007)(8936002)(6916009)(4326008)(186003)(1076003)(2616005)(6512007)(508600001)(6506007)(86362001)(5660300002)(38100700002)(2906002)(7416002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?a7NdD92z9giKuMUZlFN+KRr+GBoHBnG3Pp5NjwuBX/ycxKG42tQkvKvN7gCi?=
- =?us-ascii?Q?B9bf9eFIxkvYnA/eyCPwEnvEbFcydcalMRDC3BUPXaBzJgMf3IUmKdgpYsUs?=
- =?us-ascii?Q?Y5c5UnDfMWzYMYQBk+izHszlabvIGIPkEb5Z+ET0obYVFjxPo6ML17CIoDyr?=
- =?us-ascii?Q?DRPx7UB0xNm618pmfthGNoUEn8Ab5e9QH2gIahjVLKg/9Nuop7yS+KrSLB+9?=
- =?us-ascii?Q?5glJP+Aux342Z2eVURqZRY6U6CEAVfrtw0DsoiFjZ3jXaRC00+zwmigb4p/y?=
- =?us-ascii?Q?VHaZR+z88m9umj+0f9RgKmkKH7PXfW+p9SudaUUe9sqGunQrsgDE+kP+xZRg?=
- =?us-ascii?Q?ByZrudtOXwM1DTDhfr+5IeR6KUPqAKh9ItMC7W4KMnl65CNTTY35qwOmuvuc?=
- =?us-ascii?Q?EroAAU52crzH1enpQq6zZSLEQjwtYzpr4rTyrpvfI/5qa1dAPhBJJBs+61+w?=
- =?us-ascii?Q?7xZDWKNsNpNP81yLrZr5B61TmxLFXt2WqD+7Yvkjd1C8pAbuJhhkVDHhhOOn?=
- =?us-ascii?Q?eA5ehhVMtzIPFsP8CjWMck39ZTxtbCJCbqWUKeZYdgEId0wZKORfvUsd6qxY?=
- =?us-ascii?Q?oNaELpQQXVhEsbUgrtqJMwDkjnGFI8isG8Rr0y8TiB0fw1dZ1IeriUgNpKXV?=
- =?us-ascii?Q?qPwreJIjMz6lhgrCWSjJ5H5C72iHoQLQ9OpyFYtSfDkWNIT11nYTdsaqOUqo?=
- =?us-ascii?Q?HV0oMLli3ViTwAcHM32MmGsfC+Z8zXMibkMpvOLN8Ti8/6lO/I6Q9gS7Fc4C?=
- =?us-ascii?Q?9pwfYvRFTGv+rkV6TyUJTVX1no1BOYd6v0sYw2wu95JBYTrRElXSJWwp7qgw?=
- =?us-ascii?Q?T9rdrTcVqd1OtX3S18uhbCsBUdWgFqddTpC8C9iIUpljZ9QIiAFAoQ0ve/mU?=
- =?us-ascii?Q?vTXDaLYbyoYzmd2vCALnsim11Moy07nUYPTEM+c7x1V4OHMVN9Hd+7ucYl8A?=
- =?us-ascii?Q?bH29EP0AsQiIFMJigFqwC9kOYWtou7N/g3MBywxbQOFjZGxb12HBfPsrnd00?=
- =?us-ascii?Q?ywKJntllnKkSIGmgkSs+eTQtBWxHEFCmb62we7wDcG6FPyTs93z+rZwGZ94T?=
- =?us-ascii?Q?V91cm+WZ9KjwSYl9pqBX2/+YNtwVMCgrVVeYMrYsvofI+VAMIa3AcHpDLpHP?=
- =?us-ascii?Q?0Two3uZ2baRzOSXFiL5kp4DnsnSMVK4hqZx9C/Yo3uPjnQK27yOhW7vC75TC?=
- =?us-ascii?Q?2MXBOOi66sJz5sowG4+MWngx6wPw92yTEfcGOxhzKzlQQzg+jhycRPEFQsid?=
- =?us-ascii?Q?8Xoo+XUZlOOBhM7VKW9QbGze/Wb84jGILKguhOaWYxIdb8Q5cLU/6KpH2Een?=
- =?us-ascii?Q?EDoxy2y1mSYQ9q6QOaSl2RGAfY/8eimf6do0zUJVYrx405UQ9YM1a+fgkWMr?=
- =?us-ascii?Q?iaXda+I3AwYs6a6i2vnEdqzS35NswOYlIA3BzZ+XfVKcu98nA041A6YN5LJ7?=
- =?us-ascii?Q?tq+jCN4saqs7TmYwZFPVrqjdRuxLEtf+IHlP7i+cJ62uzF9v9qsIK/4ZnQgP?=
- =?us-ascii?Q?bGFsyBZ0mnxz5aOQ+RR3FbV3ROX9ISG3EjMn4DEwovtTJkClt4US7HqobKMy?=
- =?us-ascii?Q?nRPLX20vQLsQaxwE1Dk=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bb235078-df42-4a16-fdab-08d9eb0ed9e7
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Feb 2022 14:25:26.9140
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NEv9wR92Bn1qkGOdKOYz2EE5G0Q/l11tmL9rw28xdpa46Mdor4CWuk1xyTfCf+YV
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3386
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 08, 2022 at 01:34:23PM +0000, Shameer Kolothum wrote:
+From: Tianyu Lan <Tianyu.Lan@microsoft.com>
 
-> +struct hisi_qm *hisi_qm_get_pf_qm(struct pci_dev *pdev)
-> +{
-> +	struct hisi_qm	*pf_qm;
-> +	struct pci_driver *(*fn)(void) = NULL;
-> +
-> +	if (!pdev->is_virtfn)
-> +		return NULL;
-> +
-> +	switch (pdev->device) {
-> +	case PCI_DEVICE_ID_HUAWEI_SEC_VF:
-> +		fn = symbol_get(hisi_sec_get_pf_driver);
-> +		break;
-> +	case PCI_DEVICE_ID_HUAWEI_HPRE_VF:
-> +		fn = symbol_get(hisi_hpre_get_pf_driver);
-> +		break;
-> +	case PCI_DEVICE_ID_HUAWEI_ZIP_VF:
-> +		fn = symbol_get(hisi_zip_get_pf_driver);
-> +		break;
-> +	default:
-> +		return NULL;
-> +	}
-> +
-> +	if (!fn)
-> +		return NULL;
-> +
-> +	pf_qm = pci_iov_get_pf_drvdata(pdev, fn());
-> +
-> +	if (pdev->device == PCI_DEVICE_ID_HUAWEI_SEC_VF)
-> +		symbol_put(hisi_sec_get_pf_driver);
-> +	else if (pdev->device == PCI_DEVICE_ID_HUAWEI_HPRE_VF)
-> +		symbol_put(hisi_hpre_get_pf_driver);
-> +	else
-> +		symbol_put(hisi_zip_get_pf_driver);
-> +
-> +	return !IS_ERR(pf_qm) ? pf_qm : NULL;
-> +}
-> +EXPORT_SYMBOL_GPL(hisi_qm_get_pf_qm);
+netvsc_device_remove() calls vunmap() inside which should not be
+called in the interrupt context. Current code calls hv_unmap_memory()
+in the free_netvsc_device() which is rcu callback and maybe called
+in the interrupt context. This will trigger BUG_ON(in_interrupt())
+in the vunmap(). Fix it via moving hv_unmap_memory() to netvsc_device_
+remove().
 
-Why put this in this driver, why not in the vfio driver? And why use
-symbol_get ?
+Fixes: 846da38de0e8 ("net: netvsc: Add Isolation VM support for netvsc driver")
+Signed-off-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
+---
+Change since v1:
+	* Call hv_unmap_memory() before free_netvsc_device() in the
+	  netvsc_device_remove().
+---
+ drivers/net/hyperv/netvsc.c | 24 ++++++++++++++++--------
+ 1 file changed, 16 insertions(+), 8 deletions(-)
 
-Jason
+diff --git a/drivers/net/hyperv/netvsc.c b/drivers/net/hyperv/netvsc.c
+index afa81a9480cc..e675d1016c3c 100644
+--- a/drivers/net/hyperv/netvsc.c
++++ b/drivers/net/hyperv/netvsc.c
+@@ -154,19 +154,15 @@ static void free_netvsc_device(struct rcu_head *head)
+ 
+ 	kfree(nvdev->extension);
+ 
+-	if (nvdev->recv_original_buf) {
+-		hv_unmap_memory(nvdev->recv_buf);
++	if (nvdev->recv_original_buf)
+ 		vfree(nvdev->recv_original_buf);
+-	} else {
++	else
+ 		vfree(nvdev->recv_buf);
+-	}
+ 
+-	if (nvdev->send_original_buf) {
+-		hv_unmap_memory(nvdev->send_buf);
++	if (nvdev->send_original_buf)
+ 		vfree(nvdev->send_original_buf);
+-	} else {
++	else
+ 		vfree(nvdev->send_buf);
+-	}
+ 
+ 	bitmap_free(nvdev->send_section_map);
+ 
+@@ -765,6 +761,12 @@ void netvsc_device_remove(struct hv_device *device)
+ 		netvsc_teardown_send_gpadl(device, net_device, ndev);
+ 	}
+ 
++	if (net_device->recv_original_buf)
++		hv_unmap_memory(net_device->recv_buf);
++
++	if (net_device->send_original_buf)
++		hv_unmap_memory(net_device->send_buf);
++
+ 	/* Release all resources */
+ 	free_netvsc_device_rcu(net_device);
+ }
+@@ -1821,6 +1823,12 @@ struct netvsc_device *netvsc_device_add(struct hv_device *device,
+ 	netif_napi_del(&net_device->chan_table[0].napi);
+ 
+ cleanup2:
++	if (net_device->recv_original_buf)
++		hv_unmap_memory(net_device->recv_buf);
++
++	if (net_device->send_original_buf)
++		hv_unmap_memory(net_device->send_buf);
++
+ 	free_netvsc_device(&net_device->rcu);
+ 
+ 	return ERR_PTR(ret);
+-- 
+2.25.1
+

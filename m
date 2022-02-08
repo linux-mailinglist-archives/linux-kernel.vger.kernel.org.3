@@ -2,207 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8DC94AE51B
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:58:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C23044AE51C
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:59:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231217AbiBHW5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 17:57:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57742 "EHLO
+        id S231502AbiBHW7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 17:59:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231727AbiBHW5R (ORCPT
+        with ESMTP id S231375AbiBHW7E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 17:57:17 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 337CFC061576
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 14:57:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644361035; x=1675897035;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=K4jE4Xz4TPAezzSkAV1LgHsvIXgAVLU7xov1ZSlNkyo=;
-  b=OUxfSD1tmQtdxKDIlJwsFbUJYtz93v9KTUWNXgqhZYgZVqMsbI+yvxYm
-   qOJFxmGz7YLIkjL2nIIHe85k8yOIyv82SXyxA1GSxHyQxfoTiT72Et+NB
-   IpZMXbMy9FY09JHPnpuuEmngo66QbWpkzKn7TkdF3zJLa+S0/18qoSgRj
-   a7qYj0VCNkVzp59oJP3MBUoxKnnqEEUL/YIjTlwjaf81EUWUlsSVUuZTj
-   nNzEn0n++zNLlLuGWgrG5RavYnOVgGm6kRkRS48pFiBQI7bdJ5sBDW2U/
-   fbAPJWjrpIeG1s1JybwkrrlOwAYaGPItA/hd6QhwxiTikfHnDDBu9l38h
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="229041989"
-X-IronPort-AV: E=Sophos;i="5.88,354,1635231600"; 
-   d="scan'208";a="229041989"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 14:57:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,354,1635231600"; 
-   d="scan'208";a="585355573"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 08 Feb 2022 14:57:13 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nHZQ9-0000se-8b; Tue, 08 Feb 2022 22:57:13 +0000
-Date:   Wed, 09 Feb 2022 06:56:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/cpu] BUILD SUCCESS
- fa31a4d669bd471e9510db1abf9b91e1a6be6ff7
-Message-ID: <6202f515./zPVag/LkWrlw4P4%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Tue, 8 Feb 2022 17:59:04 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7011C061576
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 14:59:02 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id y203so868092yby.11
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 14:59:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AGzDON1aKbzLetDZlMCnjknqeLyLCCcPTzjSkYj9G4k=;
+        b=EL8KgSe79vCVLCE0MOWC+XDo3o6kAvlEKG5flT4MS6v2TshmBUjTnsiz7lsf+w6LR+
+         BVbIexnKbvz6HGfDFI/ySGjQX645e2A+7ff+eQInNh2aFatNQ6n5x4XE6Iyiy9FV06hL
+         CQpCK2nOsHK4XLa9Jy/dcqjMCqc+SM8ET1mL8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AGzDON1aKbzLetDZlMCnjknqeLyLCCcPTzjSkYj9G4k=;
+        b=rOMaMRi9dpwTE11mYam7dz3nSNdEt9odnJKdNf2c5GokQWl4QOlJMoE+uUH8jJKNZV
+         REJXNco4KA2D2PLiKLvscst675MGWRcs8ovIR8pbECXmq1vUsAmCUHAjm7naBNbuz4LA
+         AMsqOVL5vBXVfU9Rs0G4T3jHwkVRWhAoGTgDpZEhj0SLnIWzeYUavhAjYxf6PB9kIT0T
+         pbh8JxefeLafqA9PTc0QsDnNxL+0kKb3s1ijN1/mqGcYe0CsBPBo6eyymRVW5ooxOXwl
+         uscN7YT96FOhIn4UGKz5H8lPy/EHkr+19GF33WoFZ2InYy1jIAWXk/Rq7NSScuDjjU1d
+         9mnQ==
+X-Gm-Message-State: AOAM532oRdLgGYa2T+W2LY7Wxo2X6OrIHbfPziqC1uzHV7ZQ66SRHflO
+        9qDYTq56IWXcLDD2e3DKwkKaeb8ZpYTb0m2Hj9gvfw==
+X-Google-Smtp-Source: ABdhPJyuo4KAjwHo+/b2WIN+jbHKYnvxgSAQfKnQHJwR5IJS+W11eXsw/S7k+33zQLL1cyN7i+3PnNLExQUgkeKKXDk=
+X-Received: by 2002:a81:b54a:: with SMTP id c10mr6995520ywk.283.1644361141958;
+ Tue, 08 Feb 2022 14:59:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220207214026.1526151-1-pmalani@chromium.org>
+ <20220207214026.1526151-4-pmalani@chromium.org> <YgIBv2SQdwXm7RLt@google.com>
+ <CACeCKaezRNgsqrq3QJ1ViHjYScFrjpC-kCaYmE8kOXCcW9MRrw@mail.gmail.com>
+ <YgJQ30D8nc4LWvUy@google.com> <CACeCKaf4+jxSkKFqx9g3YSPWj-FkbL=jrmHE3YEu7oU0ySPJ4Q@mail.gmail.com>
+In-Reply-To: <CACeCKaf4+jxSkKFqx9g3YSPWj-FkbL=jrmHE3YEu7oU0ySPJ4Q@mail.gmail.com>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Tue, 8 Feb 2022 14:58:51 -0800
+Message-ID: <CACeCKadujMj4pJqf_jNNmO4UkQinw9QNu_MXe5zkTySUn6R=dw@mail.gmail.com>
+Subject: Re: [PATCH 3/4] platform/chrome: cros_ec_typec: Configure muxes at
+ start of port update
+To:     Tzung-Bi Shih <tzungbi@google.com>
+Cc:     linux-kernel@vger.kernel.org, Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        "open list:CHROMEOS EC USB TYPE-C DRIVER" 
+        <chrome-platform@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/cpu
-branch HEAD: fa31a4d669bd471e9510db1abf9b91e1a6be6ff7  x86/cpufeatures: Put the AMX macros in the word 18 block
+On Tue, Feb 8, 2022 at 10:35 AM Prashant Malani <pmalani@chromium.org> wrote:
+>
+> On Tue, Feb 8, 2022 at 3:15 AM Tzung-Bi Shih <tzungbi@google.com> wrote:
+> >
+> > On Mon, Feb 07, 2022 at 10:12:10PM -0800, Prashant Malani wrote:
+> > > On Mon, Feb 7, 2022 at 9:38 PM Tzung-Bi Shih <tzungbi@google.com> wrote:
+> > > > On Mon, Feb 07, 2022 at 09:40:28PM +0000, Prashant Malani wrote:
+> > > > > There are situations where the mux state reported by the Embedded
+> > > > > Controller (EC), might lag the partner "connected" state. So, the mux
+> > > > > state might still suggest that a partner is connected, while the PD
+> > > > > "connected" state, being in Try.SNK (for example) suggests that the
+> > > > > partner is disconnected.
+> > > > >
+> > > > > In such a scenario, we will end up sending a disconnect command to the
+> > > > > mux driver, followed by a connect command, since the mux is configured
+> > > > > later. Avoid this by configuring the mux before
+> > > > > registering/disconnecting a partner.
+> > > >
+> > > > I failed to understand the description.  It looks like some protocol details.
+> > > > Could you provide some brief explanation in the commit message?
+> > >
+> > > I'm not sure how else I can better elaborate on this in the commit message than
+> > > as currently stated.
+> > > Since the EC is an independent controller, the mux state *can* lag the
+> > > "connected" state.
+> > > So, as described in the commit message, when a disconnect happens, we could have
+> > > a disconnect (since PD_CTRL contains the "connected state") followed
+> > > by a configure_mux
+> > > with the mux state still suggesting a connected device (the drivers
+> > > which implement the
+> > > mux/switch controls can misconstrue the old mux state) which results
+> > > in a connect. This
+> > > patch eliminates that.
+> >
+> > Pardon me if I ask, I am trying to understand why reorder the function calls
+> > in cros_typec_port_update() can fix the issue.  And I am wondering if the
+> > issue has fixed by the 4th patch in the series.
+>
+> It's not completely fixed by that; that is just an outstanding missing
+> state update.
+> If we just use just that patch, configure_mux() will still be executed
+> before the code in patch 4 runs.
+>
+> >
+> > To make sure I understand the issue correctly, imaging a "disconnect" event
+> > in cros_typec_port_update() originally:
+> >
+> > a. Get pd_ctrl via EC_CMD_USB_PD_CONTROL[1].
+> >
+> > b. Call cros_typec_remove_partner() in cros_typec_set_port_params_v1()[2].
+> > Is it the "disconnect" you were referring in the example?
+> >
+> > c. Get mux info via EC_CMD_USB_PD_MUX_INFO.
+> > Did you mean the mux info might be stale which is "partner connected"?
+>
+> Yes, it can.
+>
+> >
+> > d. Call cros_typec_enable_dp() in cros_typec_configure_mux()[3].
+> > Does it result in another connect?
+>
+> It can occur much earlier, depending on what the mux state is (example: [1])
+>
+> >
+> > [1]: https://elixir.bootlin.com/linux/v5.17-rc3/source/drivers/platform/chrome/cros_ec_typec.c#L955
+> > [2]: https://elixir.bootlin.com/linux/v5.17-rc3/source/drivers/platform/chrome/cros_ec_typec.c#L628
+> > [3]: https://elixir.bootlin.com/linux/v5.17-rc3/source/drivers/platform/chrome/cros_ec_typec.c#L548
+> >
+> > If the above understanding is correct, the patch fixes it by moving step b to
+> > the last.  As a result, it won't have a "disconnect" -> "connect" transition.
+>
+> Yes
+> >
+> > Further questions:
+> >
+> > - If mux info from step c would be stale, won't it exit earlier in [4]?
+> >
+> > [4]: https://elixir.bootlin.com/linux/v5.17-rc3/source/drivers/platform/chrome/cros_ec_typec.c#L986
+> >
+> > - The 4th patch[5] sets mux_flags to USB_PD_MUX_NONE.  If it won't exit earlier
+> >   from previous question, won't it fall into [6]?
+>
+> No. it depends on the mux flags and the pd_ctrl response.
+>
+> >
+> > [5]: https://patchwork.kernel.org/project/chrome-platform/patch/20220207214026.1526151-5-pmalani@chromium.org/
+> > [6]: https://elixir.bootlin.com/linux/v5.17-rc3/source/drivers/platform/chrome/cros_ec_typec.c#L523
+>
+> This link [6] points to cros_typec_enable_usb4(); it's doesn't relate
+> to your statement above.
 
-elapsed time: 729m
+Sorry, I misread where the link was pointing to. That said, it still
+won't fall into the condition you quoted.
+The configure_mux() is called first, then the
+cros_typec_set_port_params_v1() is called.
 
-configs tested: 124
-configs skipped: 4
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                          randconfig-c001
-powerpc                    sam440ep_defconfig
-arm                         cm_x300_defconfig
-h8300                            alldefconfig
-sh                          sdk7780_defconfig
-sh                         apsh4a3a_defconfig
-ia64                             alldefconfig
-powerpc                 mpc837x_rdb_defconfig
-sh                          rsk7264_defconfig
-mips                  decstation_64_defconfig
-sh                           se7750_defconfig
-openrisc                         alldefconfig
-sparc                       sparc64_defconfig
-m68k                        m5272c3_defconfig
-powerpc                        warp_defconfig
-alpha                               defconfig
-mips                         cobalt_defconfig
-mips                     decstation_defconfig
-sh                               j2_defconfig
-sh                           se7712_defconfig
-arm                        mini2440_defconfig
-arm                          iop32x_defconfig
-arm                      jornada720_defconfig
-powerpc                     tqm8541_defconfig
-mips                      fuloong2e_defconfig
-mips                        bcm47xx_defconfig
-xtensa                  nommu_kc705_defconfig
-parisc                           alldefconfig
-m68k                        m5407c3_defconfig
-powerpc                     tqm8548_defconfig
-sh                           se7780_defconfig
-arm                         axm55xx_defconfig
-powerpc                  storcenter_defconfig
-arm                         assabet_defconfig
-sh                           se7343_defconfig
-mips                 decstation_r4k_defconfig
-arm                  randconfig-c002-20220208
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                                defconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-csky                                defconfig
-nios2                            allyesconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a002
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-x86_64                        randconfig-a004
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                            allmodconfig
-riscv                          rv32_defconfig
-riscv                               defconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-x86_64                              defconfig
-
-clang tested configs:
-riscv                randconfig-c006-20220208
-x86_64                        randconfig-c007
-powerpc              randconfig-c003-20220208
-mips                 randconfig-c004-20220208
-arm                  randconfig-c002-20220208
-mips                        qi_lb60_defconfig
-arm                          ixp4xx_defconfig
-powerpc                   bluestone_defconfig
-powerpc                          allyesconfig
-arm                          ep93xx_defconfig
-mips                      bmips_stb_defconfig
-arm                        spear3xx_defconfig
-mips                  cavium_octeon_defconfig
-powerpc                     kmeter1_defconfig
-arm                         orion5x_defconfig
-arm                         hackkit_defconfig
-powerpc                     mpc512x_defconfig
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a004
-i386                          randconfig-a002
-i386                          randconfig-a006
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a015
-hexagon              randconfig-r045-20220208
-hexagon              randconfig-r041-20220208
-riscv                randconfig-r042-20220208
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>
+> >
+> > > > > @@ -965,6 +965,11 @@ static int cros_typec_port_update(struct cros_typec_data *typec, int port_num)
+> > > > >       if (ret < 0)
+> > > > >               return ret;
+> > > > >
+> > > > > +     /* Update the switches if they exist, according to requested state */
+> > > > > +     ret = cros_typec_configure_mux(typec, port_num, &resp);
+> > > > > +     if (ret)
+> > > > > +             dev_warn(typec->dev, "Configure muxes failed, err = %d\n", ret);
+> > > >
+> > > > It used the fact that the function returns `ret` at the end.  After the move,
+> > > > the block is no longer the last thing before function returns.
+> > > >
+> > > > Does it make more sense to return earlier if cros_typec_configure_mux() fails?
+> > > > Does the rest of code need to be executed even if cros_typec_configure_mux()
+> > > > fails?
+> > >
+> > > Yes, it should still be executed (we still need to update the port
+> > > state). That is why the return is eliminated.
+> >
+> > Got it, as long as it is intended.
+> >
+> > > > > @@ -980,11 +985,6 @@ static int cros_typec_port_update(struct cros_typec_data *typec, int port_num)
+> > > > >       if (typec->typec_cmd_supported)
+> > > > >               cros_typec_handle_status(typec, port_num);
+> > > > >
+> > > > > -     /* Update the switches if they exist, according to requested state */
+> > > > > -     ret = cros_typec_configure_mux(typec, port_num, &resp);
+> > > > > -     if (ret)
+> > > > > -             dev_warn(typec->dev, "Configure muxes failed, err = %d\n", ret);
+> > > > > -
+> > > > >       return ret;
+> > > >
+> > > > If the function decides to return earlier, it can be `return 0;`.
+> > > Sure, I can change this in the next version
+> >
+> > No, I guess you would like to leave it as is to propagate return value from
+> > cros_typec_configure_mux().
+>
+> No, it is better to not propogate that return value (we're doing it
+> earlier, but there isn't
+> anything the caller can do about it). We should just print a warn and
+> still update the port
+> state (userspace still reads the port state).
+>
+> In general, I think you may benefit from reading:
+> - The entire cros_ec_typec driver
+> - The EC Type C state machine [2] and interfaces [3][4]
+>
+> The above 2 will help understand how this entire stack works. Without
+> it, it is challenging
+> to process the flow (just from code review).
+>
+> If you have further questions our would like to better understand the
+> drivers, feel free to reach
+> out to me over IM/email. I don't think public list code review is the
+> best option for this
+> sort of explanation.
+>
+> [1] https://elixir.bootlin.com/linux/latest/source/drivers/platform/chrome/cros_ec_typec.c#L549
+> [2] https://source.chromium.org/chromiumos/chromiumos/codesearch/+/main:src/platform/ec/common/usbc/
+> [3] https://source.chromium.org/chromiumos/chromiumos/codesearch/+/main:src/platform/ec/driver/usb_mux/usb_mux.c
+> [4] https://source.chromium.org/chromiumos/chromiumos/codesearch/+/main:src/platform/ec/common/usb_pd_host_cmd.c

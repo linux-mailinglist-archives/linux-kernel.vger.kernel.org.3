@@ -2,104 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E2DE4AD3D5
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 09:44:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1694D4AD3E1
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 09:45:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352053AbiBHIoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 03:44:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40438 "EHLO
+        id S242532AbiBHIo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 03:44:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351365AbiBHInp (ORCPT
+        with ESMTP id S1351821AbiBHIoZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 03:43:45 -0500
-Received: from mail-vk1-xa42.google.com (mail-vk1-xa42.google.com [IPv6:2607:f8b0:4864:20::a42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 176FBC03F93C
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 00:43:32 -0800 (PST)
-Received: by mail-vk1-xa42.google.com with SMTP id 48so9386343vki.0
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 00:43:32 -0800 (PST)
+        Tue, 8 Feb 2022 03:44:25 -0500
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65392C03FEC7
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 00:44:22 -0800 (PST)
+Received: by mail-il1-x12d.google.com with SMTP id m8so6795054ilg.7
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 00:44:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=edeevZ54MxyNr2ONaDsC9jI+UtdZjrCL/LCuSFC70Ao=;
-        b=QvjhunuNO8r16PKypuCdrachST6yXHIKLmrVAmm1fY9jgIyDx/5nuaO2Pwi2GiqW2B
-         y3T9ScMXoknCi4MzeG0G4mYZV7FvO5v4AkTPMCsC30rz5vAb97o9IyGFE2M1jFci41zh
-         wOytP4iaP2zv3wL+KEjK3XEvc8S3s/itCvuySs3WCmZXIU4wBzIdDAY4hb/oqG8VRWYu
-         n+XhOcxWsv/r9vQ5BYoq7JNJKiQgQ/IzzgqncW1w/Tkor2GHYOHxI5AK+GKVNR+tqv1V
-         2t703ywu9JorFFnpi4djB66Cf/056cbSXRmPhsAAxlMq/2WmkJMdwVn2CUpQSTsrFBjK
-         RdsQ==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=Lker2+Uo8UhianHSMBGKA4jgSJ53TnoXXawYMAybIpQ=;
+        b=inNoanZN2Rt09wIpOdvGFFnihAY0clMiz0/jcty75GOYZgZPC4gcvH9kBYSKBfD88y
+         s+DnKZK8oJ9Hlymo5Ef8YFhQ7WZ1LjWUhS2h+yWzgHW6K5YFjDAlOTSSWa/lCRJdXFk+
+         obvXcQucOJwyDODiBADQfccHr1CHabOzg8XD2akiAv86jz2POoL9eVCdIOqmWQleCmWg
+         CKImx2dy4UvYJe7KvmME9K12wSZZtvsOowZoGN09g2iR+rZL9mgl5C7o1ULHuU3hwxPe
+         v3gVcatYK6Iavvn11SM34ScpS8PAwNE5kyv7lHpgPZMn3ILADORD3ot6QuxchDDst/SJ
+         SG0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=edeevZ54MxyNr2ONaDsC9jI+UtdZjrCL/LCuSFC70Ao=;
-        b=yvacXA6d2psn7veXXCS3T+kw0eZSxiZ47G9WkhRpr7Xn6U9xQh0kBirt1EYstvQsAx
-         cmMxJb9FPpxwj5OIKJaLpT/KTFUktlPzLH8nupsGupG+7AxNFglwwDhhd0NCySqJmC7q
-         v92NwLkS6JHaAiKi/WPn3oRZ5Pl4qarQiYXXswF/oQ3An5gmb28BOU+MDLskBiGWTifj
-         zLXxDsbUxBIgTWg1r58Ex34XK4FaO+GE4CdLJwVoFchAqo5Gwc/0hefcKiFDxBpxlXP4
-         Aqm5Pvj+sA5w+8HgOwE2d0DLmTl7bwG2qioqpSWWBZCa9GHiuBikoBHJW7jDzlTdwLj4
-         SDlQ==
-X-Gm-Message-State: AOAM532SUrfMM14pouIkrYS4P3/yXROV4Vwl95h/K2J3/PmGsfE0qi0s
-        7eIFUDYVVnSZFxBVpW+pDaZmZFXwagkuKHSo6FQ=
-X-Google-Smtp-Source: ABdhPJzZQn1EaCqRMqsuYIcH+C7RpG+lwrJT+RNnO9Yiljp06wkeSVejZxXgkS7NBIOXb/H0s5Oh1fbTnACKXJVE068=
-X-Received: by 2002:a1f:7301:: with SMTP id o1mr37679vkc.4.1644309811016; Tue,
- 08 Feb 2022 00:43:31 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Lker2+Uo8UhianHSMBGKA4jgSJ53TnoXXawYMAybIpQ=;
+        b=IER3DC/t064FQj6Za2ggUNzrUmnb+jClydL/TkRUwxmrUKs5UNGjMTh6mrWUXIQymV
+         Fl2NctODwzeO4AwFn1NBk0tJaOaHPjzvvvyhwSxkVTbL9mvhCcGMFgKE9LReNPMkSALL
+         yZe9lq07sf6Q1errwho+C5jJ/pExkEzPOaxu8Hapn3SvSBtZgMlFO1CTbjOZ2uV2TVfx
+         zOE32R6DZ2Rl5/wYGjeBn9rzrPs8Pw3yAmBSglt4mzK5lOPX9dmhf/0krmb04ZPmdp6R
+         5DOYN/fEt2UBgH+la7cfOoJNkwszGOdInuwmngMsmRbqOjxRA5MujLEiqGrOnsRlJ9vv
+         5sYQ==
+X-Gm-Message-State: AOAM530euun3G+ePN8nuuiqCstgkpEoT1uMIRwlv8iToM1YQQepAFtEy
+        KtX3At/9TsVEgBcm34ZUJLcaMg==
+X-Google-Smtp-Source: ABdhPJzy4PN1v9Ym56RqiLYKvfIGSfRqZ6U0AFJo4Ax8JsSXHMSyO+uLmPwv+PMfAgagxvT0qsNs+g==
+X-Received: by 2002:a92:ca0c:: with SMTP id j12mr1599235ils.176.1644309861600;
+        Tue, 08 Feb 2022 00:44:21 -0800 (PST)
+Received: from google.com ([2620:15c:183:200:5f31:19c3:21f5:7300])
+        by smtp.gmail.com with ESMTPSA id c13sm3355533ilr.55.2022.02.08.00.44.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 00:44:21 -0800 (PST)
+Date:   Tue, 8 Feb 2022 01:44:16 -0700
+From:   Yu Zhao <yuzhao@google.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>
+Cc:     Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Barry Song <21cnbao@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        page-reclaim@google.com, x86@kernel.org,
+        Brian Geffon <bgeffon@google.com>,
+        Jan Alexander Steffens <heftig@archlinux.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Steven Barrett <steven@liquorix.net>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Daniel Byrne <djbyrne@mtu.edu>,
+        Donald Carr <d@chaos-reins.com>,
+        Holger =?iso-8859-1?Q?Hoffst=E4tte?= 
+        <holger@applied-asynchrony.com>,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
+        Shuang Zhai <szhai2@cs.rochester.edu>,
+        Sofia Trinh <sofia.trinh@edi.works>
+Subject: Re: [PATCH v7 12/12] mm: multigenerational LRU: documentation
+Message-ID: <YgItYKpxJRRQj3RD@google.com>
+References: <20220208081902.3550911-1-yuzhao@google.com>
+ <20220208081902.3550911-13-yuzhao@google.com>
 MIME-Version: 1.0
-Received: by 2002:ab0:2bc5:0:0:0:0:0 with HTTP; Tue, 8 Feb 2022 00:43:30 -0800 (PST)
-Reply-To: saeedmohammedsaeed085@gmail.com
-From:   Mohammed Saeed <nzubewwwww@gmail.com>
-Date:   Tue, 8 Feb 2022 11:43:30 +0300
-Message-ID: <CAMj4HvTqbEjkDKhCipFXDZsqTQO37tQLsSKX=dgvTiL8KEB+YQ@mail.gmail.com>
-Subject: Proposal
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:a42 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  1.0 HK_RANDOM_ENVFROM Envelope sender username looks random
-        *  0.6 HK_RANDOM_FROM From username looks random
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [nzubewwwww[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [saeedmohammedsaeed085[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.4 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: ******
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220208081902.3550911-13-yuzhao@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Salam alaikum,
+On Tue, Feb 08, 2022 at 01:19:02AM -0700, Yu Zhao wrote:
+> Add a design doc and an admin guide.
+> 
+> Signed-off-by: Yu Zhao <yuzhao@google.com>
+> Acked-by: Brian Geffon <bgeffon@google.com>
+> Acked-by: Jan Alexander Steffens (heftig) <heftig@archlinux.org>
+> Acked-by: Oleksandr Natalenko <oleksandr@natalenko.name>
+> Acked-by: Steven Barrett <steven@liquorix.net>
+> Acked-by: Suleiman Souhlal <suleiman@google.com>
+> Tested-by: Daniel Byrne <djbyrne@mtu.edu>
+> Tested-by: Donald Carr <d@chaos-reins.com>
+> Tested-by: Holger Hoffstätte <holger@applied-asynchrony.com>
+> Tested-by: Konstantin Kharlamov <Hi-Angel@yandex.ru>
+> Tested-by: Shuang Zhai <szhai2@cs.rochester.edu>
+> Tested-by: Sofia Trinh <sofia.trinh@edi.works>
+> ---
+>  Documentation/admin-guide/mm/index.rst        |   1 +
+>  Documentation/admin-guide/mm/multigen_lru.rst | 121 ++++++++++++++
+>  Documentation/vm/index.rst                    |   1 +
+>  Documentation/vm/multigen_lru.rst             | 152 ++++++++++++++++++
+>  4 files changed, 275 insertions(+)
+>  create mode 100644 Documentation/admin-guide/mm/multigen_lru.rst
+>  create mode 100644 Documentation/vm/multigen_lru.rst
 
-I am the investment officer of UAE based investment company who are
-ready to fund projects outside UAE, in the form of debt finance. We
-grant loan to both Corporate and private entities at a low interest
-rate of 2% ROI per annum. The terms are very flexible and
-interesting.Kindly revert back if you have projects that needs funding
-for further discussion and negotiation.
+Refactored the doc into a separate patch as requested here:
+https://lore.kernel.org/linux-mm/Yd73pDkMOMVHhXzu@kernel.org/
 
-Thanks
+Reworked the doc as requested here:
+https://lore.kernel.org/linux-mm/YdwKB3SfF7hkB9Xv@kernel.org/
 
-investment officer
+<snipped>

@@ -2,332 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E944A4AD214
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 08:19:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2E994AD21A
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 08:21:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348032AbiBHHTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 02:19:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54172 "EHLO
+        id S1348046AbiBHHUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 02:20:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347990AbiBHHT3 (ORCPT
+        with ESMTP id S237283AbiBHHUw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 02:19:29 -0500
-Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 379EEC0401EF
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 23:19:28 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=kanie@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0V3vCOiy_1644304760;
-Received: from localhost(mailfrom:kanie@linux.alibaba.com fp:SMTPD_---0V3vCOiy_1644304760)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 08 Feb 2022 15:19:25 +0800
-From:   Guixin Liu <kanie@linux.alibaba.com>
-To:     gregkh@linuxfoundation.org
-Cc:     xiaoguang.wang@linux.alibaba.com, xlpang@linux.alibaba.com,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] uio: Replace mutex info_lock with percpu_ref to improve performance
-Date:   Tue,  8 Feb 2022 15:19:20 +0800
-Message-Id: <1644304760-11862-1-git-send-email-kanie@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 8 Feb 2022 02:20:52 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42422C0401EF;
+        Mon,  7 Feb 2022 23:20:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B426AB817D3;
+        Tue,  8 Feb 2022 07:20:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8C6EC004E1;
+        Tue,  8 Feb 2022 07:20:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1644304848;
+        bh=WMxbne3dqYu6oWo2knWZ3QdtB7OF/7OyKubW4l9Wi6w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Vm2GB/TVOsqx2edVv1wKFOjRrOIqqT6LLOxc/SheDTOWjDKr8N5mS6bBtRzWq3iBP
+         2XFJDiBuFOL11+b+J/MmO3MYhO6CJqcEvDbHOCwIxCjUDCrP+9CjT3xf8qEJ85q1Nv
+         zG7VDSGqrR0zrGVRpuINKHPK0Y/mG3gUy86ldRvo=
+Date:   Tue, 8 Feb 2022 08:20:44 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Iouri Tarassov <iourit@linux.microsoft.com>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org, spronovo@microsoft.com
+Subject: Re: [PATCH v2 01/24] drivers: hv: dxgkrnl: Driver initialization and
+ creation of dxgadapter
+Message-ID: <YgIZzKWCSCaEWPF7@kroah.com>
+References: <cover.1644025661.git.iourit@linux.microsoft.com>
+ <98fe53740526526c4df85a3a3d2e13e88c95f229.1644025661.git.iourit@linux.microsoft.com>
+ <Yf40f9MBfPPfyNuS@kroah.com>
+ <a10cc7b6-98bc-e123-edfa-2cd4eba6c5c3@linux.microsoft.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a10cc7b6-98bc-e123-edfa-2cd4eba6c5c3@linux.microsoft.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch includes a modification to repace mutex info_lock with
-percpu_ref, in order to improve uio performance.
+On Mon, Feb 07, 2022 at 10:59:25AM -0800, Iouri Tarassov wrote:
+> 
+> On 2/5/2022 12:25 AM, Greg KH wrote:
+> > On Fri, Feb 04, 2022 at 06:33:59PM -0800, Iouri Tarassov wrote:
+> > > This is the first commit for adding support for a Hyper-V based
+> > > vGPU implementation that exposes the DirectX API to Linux userspace.
+> > >
+> > 
+> > Only add the interfaces for the changes that you need in this commit.
+> > Do not add them all and then use them later, that makes it impossible to
+> > review.
+> > 
+> > > ---
+> > >  MAINTAINERS                     |    7 +
+> > >  drivers/hv/Kconfig              |    2 +
+> > >  drivers/hv/Makefile             |    1 +
+> > >  drivers/hv/dxgkrnl/Kconfig      |   26 +
+> > >  drivers/hv/dxgkrnl/Makefile     |    5 +
+> > >  drivers/hv/dxgkrnl/dxgadapter.c |  172 +++
+> > >  drivers/hv/dxgkrnl/dxgkrnl.h    |  223 ++++
+> > >  drivers/hv/dxgkrnl/dxgmodule.c  |  736 ++++++++++++
+> > >  drivers/hv/dxgkrnl/dxgprocess.c |   17 +
+> > >  drivers/hv/dxgkrnl/dxgvmbus.c   |  578 +++++++++
+> > >  drivers/hv/dxgkrnl/dxgvmbus.h   |  855 ++++++++++++++
+> > >  drivers/hv/dxgkrnl/hmgr.c       |   23 +
+> > >  drivers/hv/dxgkrnl/hmgr.h       |   75 ++
+> > >  drivers/hv/dxgkrnl/ioctl.c      |   24 +
+> > >  drivers/hv/dxgkrnl/misc.c       |   37 +
+> > >  drivers/hv/dxgkrnl/misc.h       |   89 ++
+> > >  include/linux/hyperv.h          |   16 +
+> > >  include/uapi/misc/d3dkmthk.h    | 1945 +++++++++++++++++++++++++++++++
+> > >  18 files changed, 4831 insertions(+)
+> > 
+> > Would you want to review a 4800 line patch all at once?
+> > 
+> > greg k-h
+> 
+> Hi Greg,
+> 
+> Thank you for reviewing. I appreciate your time.
+> 
+> I am trying to find compromise between the number of patches and making
+> review easy. There are about 70 IOCTLs in the driver interface, so having a
+> patch
+> for every IOCTL seems excessive.
+> 
+> I tried to add only definitions for the internal objects, which are used in
+> the patch.
+> 
+> 1. d3dkmthk.h defines the user mode interface structures. This is ported
+> from
+>  the windows header at once. Is it acceptable to add it at it is?
 
-Reviewed-by: Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
-Signed-off-by: Guixin Liu <kanie@linux.alibaba.com>
----
- drivers/uio/uio.c          | 95 ++++++++++++++++++++++++++++++++++------------
- include/linux/uio_driver.h |  5 ++-
- 2 files changed, 75 insertions(+), 25 deletions(-)
+No, again, would you want to be presented with code that is not used at
+all?  How would you want this to look if you had to review this?
 
-diff --git a/drivers/uio/uio.c b/drivers/uio/uio.c
-index 43afbb7..0cc0655 100644
---- a/drivers/uio/uio.c
-+++ b/drivers/uio/uio.c
-@@ -24,6 +24,8 @@
- #include <linux/kobject.h>
- #include <linux/cdev.h>
- #include <linux/uio_driver.h>
-+#include <linux/completion.h>
-+#include <linux/percpu-refcount.h>
- 
- #define UIO_MAX_DEVICES		(1U << MINORBITS)
- 
-@@ -218,7 +220,9 @@ static ssize_t name_show(struct device *dev,
- 	struct uio_device *idev = dev_get_drvdata(dev);
- 	int ret;
- 
--	mutex_lock(&idev->info_lock);
-+	if (!percpu_ref_tryget_live(&idev->info_ref))
-+		return -EINVAL;
-+
- 	if (!idev->info) {
- 		ret = -EINVAL;
- 		dev_err(dev, "the device has been unregistered\n");
-@@ -228,7 +232,7 @@ static ssize_t name_show(struct device *dev,
- 	ret = sprintf(buf, "%s\n", idev->info->name);
- 
- out:
--	mutex_unlock(&idev->info_lock);
-+	percpu_ref_put(&idev->info_ref);
- 	return ret;
- }
- static DEVICE_ATTR_RO(name);
-@@ -239,7 +243,9 @@ static ssize_t version_show(struct device *dev,
- 	struct uio_device *idev = dev_get_drvdata(dev);
- 	int ret;
- 
--	mutex_lock(&idev->info_lock);
-+	if (!percpu_ref_tryget_live(&idev->info_ref))
-+		return -EINVAL;
-+
- 	if (!idev->info) {
- 		ret = -EINVAL;
- 		dev_err(dev, "the device has been unregistered\n");
-@@ -249,7 +255,7 @@ static ssize_t version_show(struct device *dev,
- 	ret = sprintf(buf, "%s\n", idev->info->version);
- 
- out:
--	mutex_unlock(&idev->info_lock);
-+	percpu_ref_put(&idev->info_ref);
- 	return ret;
- }
- static DEVICE_ATTR_RO(version);
-@@ -489,16 +495,20 @@ static int uio_open(struct inode *inode, struct file *filep)
- 	listener->event_count = atomic_read(&idev->event);
- 	filep->private_data = listener;
- 
--	mutex_lock(&idev->info_lock);
-+	if (!percpu_ref_tryget_live(&idev->info_ref)) {
-+		ret = -EINVAL;
-+		goto err_infoopen;
-+	}
-+
- 	if (!idev->info) {
--		mutex_unlock(&idev->info_lock);
-+		percpu_ref_put(&idev->info_ref);
- 		ret = -EINVAL;
- 		goto err_infoopen;
- 	}
- 
- 	if (idev->info->open)
- 		ret = idev->info->open(idev->info, inode);
--	mutex_unlock(&idev->info_lock);
-+	percpu_ref_put(&idev->info_ref);
- 	if (ret)
- 		goto err_infoopen;
- 
-@@ -531,10 +541,12 @@ static int uio_release(struct inode *inode, struct file *filep)
- 	struct uio_listener *listener = filep->private_data;
- 	struct uio_device *idev = listener->dev;
- 
--	mutex_lock(&idev->info_lock);
-+	if (!percpu_ref_tryget_live(&idev->info_ref))
-+		return -EINVAL;
-+
- 	if (idev->info && idev->info->release)
- 		ret = idev->info->release(idev->info, inode);
--	mutex_unlock(&idev->info_lock);
-+	percpu_ref_put(&idev->info_ref);
- 
- 	module_put(idev->owner);
- 	kfree(listener);
-@@ -548,10 +560,12 @@ static __poll_t uio_poll(struct file *filep, poll_table *wait)
- 	struct uio_device *idev = listener->dev;
- 	__poll_t ret = 0;
- 
--	mutex_lock(&idev->info_lock);
-+	if (!percpu_ref_tryget_live(&idev->info_ref))
-+		return -EINVAL;
-+
- 	if (!idev->info || !idev->info->irq)
- 		ret = -EIO;
--	mutex_unlock(&idev->info_lock);
-+	percpu_ref_put(&idev->info_ref);
- 
- 	if (ret)
- 		return ret;
-@@ -577,13 +591,17 @@ static ssize_t uio_read(struct file *filep, char __user *buf,
- 	add_wait_queue(&idev->wait, &wait);
- 
- 	do {
--		mutex_lock(&idev->info_lock);
-+		if (!percpu_ref_tryget_live(&idev->info_ref)) {
-+			retval = -EINVAL;
-+			break;
-+		}
-+
- 		if (!idev->info || !idev->info->irq) {
- 			retval = -EIO;
--			mutex_unlock(&idev->info_lock);
-+			percpu_ref_put(&idev->info_ref);
- 			break;
- 		}
--		mutex_unlock(&idev->info_lock);
-+		percpu_ref_put(&idev->info_ref);
- 
- 		set_current_state(TASK_INTERRUPTIBLE);
- 
-@@ -631,7 +649,9 @@ static ssize_t uio_write(struct file *filep, const char __user *buf,
- 	if (copy_from_user(&irq_on, buf, count))
- 		return -EFAULT;
- 
--	mutex_lock(&idev->info_lock);
-+	if (!percpu_ref_tryget_live(&idev->info_ref))
-+		return -EINVAL;
-+
- 	if (!idev->info) {
- 		retval = -EINVAL;
- 		goto out;
-@@ -650,7 +670,7 @@ static ssize_t uio_write(struct file *filep, const char __user *buf,
- 	retval = idev->info->irqcontrol(idev->info, irq_on);
- 
- out:
--	mutex_unlock(&idev->info_lock);
-+	percpu_ref_put(&idev->info_ref);
- 	return retval ? retval : sizeof(s32);
- }
- 
-@@ -675,7 +695,9 @@ static vm_fault_t uio_vma_fault(struct vm_fault *vmf)
- 	vm_fault_t ret = 0;
- 	int mi;
- 
--	mutex_lock(&idev->info_lock);
-+	if (!percpu_ref_tryget_live(&idev->info_ref))
-+		return -EINVAL;
-+
- 	if (!idev->info) {
- 		ret = VM_FAULT_SIGBUS;
- 		goto out;
-@@ -702,8 +724,7 @@ static vm_fault_t uio_vma_fault(struct vm_fault *vmf)
- 	vmf->page = page;
- 
- out:
--	mutex_unlock(&idev->info_lock);
--
-+	percpu_ref_put(&idev->info_ref);
- 	return ret;
- }
- 
-@@ -772,7 +793,9 @@ static int uio_mmap(struct file *filep, struct vm_area_struct *vma)
- 
- 	vma->vm_private_data = idev;
- 
--	mutex_lock(&idev->info_lock);
-+	if (!percpu_ref_tryget_live(&idev->info_ref))
-+		return -EINVAL;
-+
- 	if (!idev->info) {
- 		ret = -EINVAL;
- 		goto out;
-@@ -811,7 +834,7 @@ static int uio_mmap(struct file *filep, struct vm_area_struct *vma)
- 	}
- 
-  out:
--	mutex_unlock(&idev->info_lock);
-+	percpu_ref_put(&idev->info_ref);
- 	return ret;
- }
- 
-@@ -907,6 +930,13 @@ static void uio_device_release(struct device *dev)
- 	kfree(idev);
- }
- 
-+static void uio_info_free(struct percpu_ref *ref)
-+{
-+	struct uio_device *idev = container_of(ref, struct uio_device, info_ref);
-+
-+	complete(&idev->free_done);
-+}
-+
- /**
-  * __uio_register_device - register a new userspace IO device
-  * @owner:	module that creates the new device
-@@ -937,10 +967,17 @@ int __uio_register_device(struct module *owner,
- 
- 	idev->owner = owner;
- 	idev->info = info;
--	mutex_init(&idev->info_lock);
- 	init_waitqueue_head(&idev->wait);
- 	atomic_set(&idev->event, 0);
- 
-+	ret = percpu_ref_init(&idev->info_ref, uio_info_free, 0, GFP_KERNEL);
-+	if (ret) {
-+		 pr_err("percpu_ref init failed!\n");
-+		 return ret;
-+	}
-+	init_completion(&idev->confirm_done);
-+	init_completion(&idev->free_done);
-+
- 	ret = uio_get_minor(idev);
- 	if (ret) {
- 		kfree(idev);
-@@ -1036,6 +1073,13 @@ int __devm_uio_register_device(struct module *owner,
- }
- EXPORT_SYMBOL_GPL(__devm_uio_register_device);
- 
-+static void uio_confirm_info(struct percpu_ref *ref)
-+{
-+	struct uio_device *idev = container_of(ref, struct uio_device, info_ref);
-+
-+	complete(&idev->confirm_done);
-+}
-+
- /**
-  * uio_unregister_device - unregister a industrial IO device
-  * @info:	UIO device capabilities
-@@ -1052,14 +1096,17 @@ void uio_unregister_device(struct uio_info *info)
- 	idev = info->uio_dev;
- 	minor = idev->minor;
- 
--	mutex_lock(&idev->info_lock);
-+	percpu_ref_kill_and_confirm(&idev->info_ref, uio_confirm_info);
-+	wait_for_completion(&idev->confirm_done);
-+	wait_for_completion(&idev->free_done);
-+
-+	/* now, we can set info to NULL */
- 	uio_dev_del_attributes(idev);
- 
- 	if (info->irq && info->irq != UIO_IRQ_CUSTOM)
- 		free_irq(info->irq, idev);
- 
- 	idev->info = NULL;
--	mutex_unlock(&idev->info_lock);
- 
- 	wake_up_interruptible(&idev->wait);
- 	kill_fasync(&idev->async_queue, SIGIO, POLL_HUP);
-diff --git a/include/linux/uio_driver.h b/include/linux/uio_driver.h
-index 47c5962..6d3d87f 100644
---- a/include/linux/uio_driver.h
-+++ b/include/linux/uio_driver.h
-@@ -16,6 +16,7 @@
- #include <linux/device.h>
- #include <linux/fs.h>
- #include <linux/interrupt.h>
-+#include <linux/percpu-refcount.h>
- 
- struct module;
- struct uio_map;
-@@ -74,9 +75,11 @@ struct uio_device {
- 	struct fasync_struct    *async_queue;
- 	wait_queue_head_t       wait;
- 	struct uio_info         *info;
--	struct mutex		info_lock;
- 	struct kobject          *map_dir;
- 	struct kobject          *portio_dir;
-+	struct percpu_ref       info_ref;
-+	struct completion       confirm_done;
-+	struct completion       free_done;
- };
- 
- /**
--- 
-1.8.3.1
+> 2. dxgvmbus.h defines the VM bus interface between the linux guest and the
+> host.
+> It was ported from the windows version at once. Is it acceptable to add it
+> as it is?
 
+Again, no.
+
+> 3. Is it acceptable to combine logically connected IOCTLs to a single patch?
+> For example, IOCTLs for creation/destruction sync object and submission of
+> wait/signal operations.
+
+Yes, that makes sense.
+
+Again, what would you want here if you had to review all of this?
+
+I suggest stopping and taking some time and start reviewing code on the
+mailing lists first.  Look at how others are doing this for large new
+features, and offer up your review to those changes.  That will give you
+the experience for how to do it yourself.  To expect to do this all
+correct the first time without ever being on the other side of the
+process very difficult.
+
+thanks,
+
+greg k-h

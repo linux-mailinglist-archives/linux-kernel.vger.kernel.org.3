@@ -2,137 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB99F4AD4B3
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 10:23:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF0494AD4B8
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 10:23:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349186AbiBHJXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 04:23:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34332 "EHLO
+        id S1354109AbiBHJXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 04:23:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347495AbiBHJXI (ORCPT
+        with ESMTP id S1354083AbiBHJXl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 04:23:08 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AECB4C03FEC0
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 01:23:07 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id p19so1515623ybc.6
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 01:23:07 -0800 (PST)
+        Tue, 8 Feb 2022 04:23:41 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09638C03FEC6
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 01:23:40 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id m14so29453831wrg.12
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 01:23:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=v76WYw+Y0qvP4uX30X1KgyYe/e2hfdHgurh6EKNW+q8=;
-        b=n1nAaz8mpAHyjSZbhJO8QIbsIa5zxJfvygj1pQr2QNjKJTccmyrcbRbzPDkMAKs5ts
-         DJ87Gl3nQ4o6p1LkBwQmsl2gOa0Z+zt7j/lDCunDTBVsG16tbwuBLsHvQ2C0uIRpgOQA
-         WYxkyc+QaeiMs25HR9WMBholE65iyKKgdQkEaenWyoXhTQn/KVfgNajmSMdPzCChmIwR
-         ciN14kdB1jJNt9G5Nn92zW+ZWRtc/X9vD7+Ujddwmk1bo+ITNcHy7NVkCrDk8prn/sMW
-         FjF5Onpw+OSdNTVDCKJ7xujLHo2FogRS/e5D9a1MfNzQF10J/zUGlMLJPlrDjkEttoVs
-         FNTA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=nv9eGMngUI4irs2c+oCw9hCjsOWg2bDP2XUBGqADoak=;
+        b=pjGIicdCBYz734ZtdMDLF0Vk0sQ4CQdXf13cqIefkoiIZvpwGSwsRPI7XLM+fzR/JU
+         66QDwlp33BgK6zTu5GMchSO6Ya9LIEeg4vIq/hsPX9qoPO/DBT617X9KBShEQ9HjKS3U
+         gVwWvGKzfRSOZn7GFMBRHHBpbfJhj1VVzWYRmEtM2bYZZmCn/l/ewK9rphxpSqANRpvG
+         E1nBnNFufGsa7tYM50+ZOtRY6zuv0Y53TRZq2ffG0QggCSdsLFY2h57mKKXYqGlDp4VO
+         pdzzVHt/rJ+K6LFu45fvQxTcKaMVXBNOCUfbuZEfXzpsVIs/gOslOA0VAS15MRIPWYTV
+         OKFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=v76WYw+Y0qvP4uX30X1KgyYe/e2hfdHgurh6EKNW+q8=;
-        b=hwIkrcscUQqrLxr9QUqYEGaAliosuPHW1b3OjQ7CfmFL973f5m9BWqxfp1bDlO1SVa
-         bz3a5VR2H9tWl/PfmLHjF63/1/M6sm9Bm4CpE1Do4wDytk2AFu2piNL9hNvMgXyZ/NkH
-         ISX5EEM7i0ZLMPNBA8y5L301JlKuvdR0v6hju6S0zKO8zek1kr9O1m+fMcNM3oFmtvRh
-         pK5gLnJfvzziHEfepJlndgNj7+Oc6F7LJ2R1pe3tDGIoKD6ImD8u6gekgO70JwN+zJ6G
-         88X9BNoU1Cel3jJrMHPdjhWQ+/OHfBU/xzzuQKEW7fw/Gb/v40ZtJ+UQfJp9CYHdgYXW
-         cQcA==
-X-Gm-Message-State: AOAM531LTSYPKboqSl5B36upcOOw79CQ6vBicUHl98i60kJq1VWn+OlN
-        bcKx0nLMFm0HzpwzvcwG5a9LmoGPdSjWF8LQEQO33Q==
-X-Google-Smtp-Source: ABdhPJzLRXokh9NY389zkuq7SRqJcDaCXcyuFgSKt6O1g6TLHOTBGT49eRBXwG18qgajp+IKjQlAfWJwMSjXV8jlX64=
-X-Received: by 2002:a25:148b:: with SMTP id 133mr3797329ybu.270.1644312186679;
- Tue, 08 Feb 2022 01:23:06 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=nv9eGMngUI4irs2c+oCw9hCjsOWg2bDP2XUBGqADoak=;
+        b=MqnPfF0GyzJHLPNFUTOTCXZP+6DX9LMJNH1pTjkGbbF+kVN5GXChZbOZMkrd4Xz1K6
+         I8cODWemCaDiUoB2uZJ57ZaTd3dAnFYHEAQwrbySoRPS6R5ovXu56dXn4nGNVuo0pdYU
+         RvamYrDVDMsmi99iriCBz3/+R4h4HwEdAzuOpk14+wfvYRO5Y3gJ7IS/be6rJA42gxeQ
+         jCzNQzYUovWDRQbxJTHUHjnFiuUOhxJh3iJ1xK+dwwYtkk/rnaegKs4EnVW3uMAZjAis
+         KoX2Sllc3Mi0j+4iKuaccd562a3xfNMHfmnOvhMwtohOdVIBvgU5498kBRLpYCAty25/
+         5wuQ==
+X-Gm-Message-State: AOAM530LFD5Ena8lm9IgIMLdIaks329XHaNmthgdBnFdqhAPmGM2gUD3
+        SV4j2/tsC+gJQVUfhRsHStnYEg==
+X-Google-Smtp-Source: ABdhPJxjRg1M0ImAnVJO2McmBHHY7WjBVt9i/brwoGpY52oPDZ+DU4XInyUB2s7IiA+cTZulDHS/rg==
+X-Received: by 2002:adf:b610:: with SMTP id f16mr2693143wre.266.1644312218574;
+        Tue, 08 Feb 2022 01:23:38 -0800 (PST)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id y1sm1771596wmi.36.2022.02.08.01.23.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 01:23:37 -0800 (PST)
+Date:   Tue, 8 Feb 2022 09:23:34 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Luca Weiss <luca.weiss@fairphone.com>
+Cc:     linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Kiran Gunda <kgunda@codeaurora.org>,
+        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/4] dt-bindings: backlight: qcom-wled: Add PM6150L
+ compatible
+Message-ID: <YgI2ltTYI/1mAxR+@google.com>
+References: <20211229170358.2457006-1-luca.weiss@fairphone.com>
+ <20211229170358.2457006-2-luca.weiss@fairphone.com>
 MIME-Version: 1.0
-References: <000000000000f5988505d77e20e4@google.com>
-In-Reply-To: <000000000000f5988505d77e20e4@google.com>
-From:   Marco Elver <elver@google.com>
-Date:   Tue, 8 Feb 2022 10:22:55 +0100
-Message-ID: <CANpmjNPW7Y9oHkdvfYjgEo0OCbtN1Ymf1mXE1CHFBj2oryfJ=g@mail.gmail.com>
-Subject: Re: [syzbot] KCSAN: data-race in wg_packet_handshake_receive_worker /
- wg_packet_rx_poll (3)
-To:     syzbot <syzbot+ed414b05fe54c96947f8@syzkaller.appspotmail.com>
-Cc:     Jason@zx2c4.com, davem@davemloft.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, wireguard@lists.zx2c4.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211229170358.2457006-2-luca.weiss@fairphone.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 8 Feb 2022 at 10:13, syzbot
-<syzbot+ed414b05fe54c96947f8@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following issue on:
->
-> HEAD commit:    455e73a07f6e Merge tag 'clk-for-linus' of git://git.kernel..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=131009feb00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=e1f9a6122410716
-> dashboard link: https://syzkaller.appspot.com/bug?extid=ed414b05fe54c96947f8
-> compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
->
-> Unfortunately, I don't have any reproducer for this issue yet.
->
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+ed414b05fe54c96947f8@syzkaller.appspotmail.com
->
-> ==================================================================
-> BUG: KCSAN: data-race in wg_packet_handshake_receive_worker / wg_packet_rx_poll
->
-> read to 0xffff88813238a9e0 of 8 bytes by interrupt on cpu 1:
->  update_rx_stats drivers/net/wireguard/receive.c:28 [inline]
->  wg_packet_consume_data_done drivers/net/wireguard/receive.c:365 [inline]
->  wg_packet_rx_poll+0xf6b/0x11f0 drivers/net/wireguard/receive.c:481
->  __napi_poll+0x65/0x3f0 net/core/dev.c:6365
->  napi_poll net/core/dev.c:6432 [inline]
->  net_rx_action+0x29e/0x650 net/core/dev.c:6519
->  __do_softirq+0x158/0x2de kernel/softirq.c:558
->  do_softirq+0xb1/0xf0 kernel/softirq.c:459
->  __local_bh_enable_ip+0x68/0x70 kernel/softirq.c:383
->  __raw_spin_unlock_bh include/linux/spinlock_api_smp.h:167 [inline]
->  _raw_spin_unlock_bh+0x33/0x40 kernel/locking/spinlock.c:210
->  spin_unlock_bh include/linux/spinlock.h:394 [inline]
->  ptr_ring_consume_bh include/linux/ptr_ring.h:367 [inline]
->  wg_packet_decrypt_worker+0x73c/0x780 drivers/net/wireguard/receive.c:506
->  process_one_work+0x3f6/0x960 kernel/workqueue.c:2307
->  worker_thread+0x616/0xa70 kernel/workqueue.c:2454
->  kthread+0x2c7/0x2e0 kernel/kthread.c:327
->  ret_from_fork+0x1f/0x30
->
-> write to 0xffff88813238a9e0 of 8 bytes by task 5035 on cpu 0:
->  update_rx_stats drivers/net/wireguard/receive.c:28 [inline]
->  wg_receive_handshake_packet drivers/net/wireguard/receive.c:205 [inline]
->  wg_packet_handshake_receive_worker+0x54a/0x6e0 drivers/net/wireguard/receive.c:220
->  process_one_work+0x3f6/0x960 kernel/workqueue.c:2307
->  worker_thread+0x616/0xa70 kernel/workqueue.c:2454
->  kthread+0x2c7/0x2e0 kernel/kthread.c:327
->  ret_from_fork+0x1f/0x30
->
-> value changed: 0x0000000000000aa8 -> 0x0000000000000ac8
+On Wed, 29 Dec 2021, Luca Weiss wrote:
 
-Hi Jason,
+> Document the compatible for the wled block found in PM6150L.
+> 
+> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> ---
+>  Documentation/devicetree/bindings/leds/backlight/qcom-wled.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 
-For stats data races, in the majority of cases if the semantics is
-"approximate" no harm is done, so the usual resolution is to mark them
-intentionally racy with data_race() [1].
+Applied, thanks.
 
-I've released these for completeness, but I can also skip them in
-future. However, marking them appropriately helps because when all
-intentionally racy accesses are marked, only "bad races" will be left,
-and we can do less pre-moderation.
-
-Thanks,
--- Marco
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/memory-model/Documentation/access-marking.txt
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

@@ -2,74 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE1964AD680
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:26:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4980F4AD67A
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:26:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350187AbiBHL0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 06:26:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51964 "EHLO
+        id S1357595AbiBHL0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 06:26:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356125AbiBHKMC (ORCPT
+        with ESMTP id S1347904AbiBHKMT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 05:12:02 -0500
-Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 692A2C03FEC0
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 02:12:01 -0800 (PST)
-Received: by mail-qk1-x741.google.com with SMTP id o25so13257940qkj.7
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 02:12:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=4hMay+JAuCcxTH5jMZax3EOAyZhyTNJ51MAkVpSdHBs=;
-        b=i4ZEAgTc90KR2dw5789B2FZFjLub2YRebTF6tPbT8UxBNPxXvi4S0F5QkiPiPMcze0
-         +dmks/Bz81taybpIJZTEUNr8JMKZfPWhCAakx5J4dKp/PeM5McPDFEjIwThD+Ky/pCrp
-         kHiQsN4wZJtkPyjCNUoH4aCVzGtH886xCj5kX2VNdWxwuWXDr/I2nZl9nRuTJOndkCE2
-         uNWb86GuWfSzhC5MTmVVCAsKgkKuCzttN0EcpfHL84zQf1ENEgEUyWq2HCClwqW1qGmY
-         loeKSFERbYhWXFY9HAUIdtJof3WVDB17FgpZJrd7flB0dOFQ/5fIql/1D37nlX05SkmP
-         T+mA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=4hMay+JAuCcxTH5jMZax3EOAyZhyTNJ51MAkVpSdHBs=;
-        b=033GevmLNnjAaJ3oWaC8IQLJlQQau1lxTwAhrW9JHCS5TZaLuAKE2gTuofQR9yrakw
-         J33i4lH95moQdpr2TRH6rMgWYZK0ufBpmVjF42WCxVEEycbv2AfcQwYLdc7s3u3yMuCo
-         CNo0aTUajejzpG+ZWwG0xGSVXJNEm94T5dvHBiTMYxQ/8o/KY7lhkv7p20/KYufoK/SW
-         aaKoOgXRfIFiwF/pm2EjpchXpWRDZTtYP2fnmo4r3LwXGXwdHp306l/oB9wu+vRfHbpO
-         VkQmF5p5Or0+NK1uw5YdkyqWIit6p/DhNdE0dDY02mqOc+ri8MFkZnNkV3aonSOjIB4h
-         ROXw==
-X-Gm-Message-State: AOAM531rjzYnJYf5isbmHwG92QMOXeSCinpr91+QZ0PTWhRd5C0mLRAZ
-        0xmG9DS7xy7aoTpiPPSQx3qs47JDOEJ4NU09sQc=
-X-Google-Smtp-Source: ABdhPJxWIHlpJWwcc15rbBaUR2/0JqkECVm2vceWCSkxvQHnhlD086iKNyQelEsnmkpnjwpXzKc77amgMy9MnfsICKQ=
-X-Received: by 2002:a05:620a:3181:: with SMTP id bi1mr2155197qkb.691.1644315120219;
- Tue, 08 Feb 2022 02:12:00 -0800 (PST)
+        Tue, 8 Feb 2022 05:12:19 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D7B9C03FEC0
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 02:12:18 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3A7A51F37C;
+        Tue,  8 Feb 2022 10:12:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1644315137; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=iqwBMSaQFzyUIyxqXWmPp13Hp0jtduJNpkZuJ0rwnFQ=;
+        b=L8UEVSKrQ+rwY8lgCeT7VNpSH9dnsBm2lWoqMAicLVEGJRxsw1nRjHrmqWEI79ExAcI1zf
+        QL6FhrdpkLc3LXFECxdSTUNRD/oiaUQrOpJ5PtAqGqfCzgK0sYAxfwBJII5cJ6RFBo8wIl
+        IHSGKLkF1/yHlgTSxE02U5fPUaV5RWQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1644315137;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=iqwBMSaQFzyUIyxqXWmPp13Hp0jtduJNpkZuJ0rwnFQ=;
+        b=rIsf6VLKCCJrrC+ErRWJ7PjbiCvTnYtgraF2EvIV0dQNmx66ENmqDFm/32/dw8BdqGqJeK
+        H/ydq8F704YnjbBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B916313BF9;
+        Tue,  8 Feb 2022 10:12:16 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id PgObKABCAmJDcgAAMHmgww
+        (envelope-from <osalvador@suse.de>); Tue, 08 Feb 2022 10:12:16 +0000
+Date:   Tue, 8 Feb 2022 11:12:14 +0100
+From:   Oscar Salvador <osalvador@suse.de>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/4] mm/memory_hotplug: fix misplaced comment in
+ offline_pages
+Message-ID: <YgJB/kxe0FU1x/tq@localhost.localdomain>
+References: <20220207133643.23427-1-linmiaohe@huawei.com>
+ <20220207133643.23427-5-linmiaohe@huawei.com>
 MIME-Version: 1.0
-Sender: hhm992119@gmail.com
-Received: by 2002:a05:622a:34d:0:0:0:0 with HTTP; Tue, 8 Feb 2022 02:11:59
- -0800 (PST)
-From:   Lisa Williams <lw23675851@gmail.com>
-Date:   Tue, 8 Feb 2022 10:11:59 +0000
-X-Google-Sender-Auth: 3Fx0cOb8FcAiKFE-wxAsfo7V6x0
-Message-ID: <CADwJ9u=iaLPJpJAOaUrQDEOipGDakBFxemaAb9puuVg_tq8i3A@mail.gmail.com>
-Subject: My name is Lisa Williams
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220207133643.23427-5-linmiaohe@huawei.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dear,
+On Mon, Feb 07, 2022 at 09:36:43PM +0800, Miaohe Lin wrote:
+> It's misplaced since commit 7960509329c2 ("mm, memory_hotplug: print reason
+> for the offlining failure"). Move it to the right place.
+> 
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 
-My name is Lisa  Williams, I am from the United States of America, Its
-my pleasure to contact you for new and special friendship, I will be
-glad to see your reply for us to know each other better and exchange
-pictures.
+Reviewed-by: Oscar Salvador <osalvador@suse.de>
 
-Yours
-Lisa
+> ---
+>  mm/memory_hotplug.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
+> index 4b9eef861ee4..7dc7e12302db 100644
+> --- a/mm/memory_hotplug.c
+> +++ b/mm/memory_hotplug.c
+> @@ -1966,6 +1966,7 @@ int __ref offline_pages(unsigned long start_pfn, unsigned long nr_pages,
+>  	return 0;
+>  
+>  failed_removal_isolated:
+> +	/* pushback to free area */
+>  	undo_isolate_page_range(start_pfn, end_pfn, MIGRATE_MOVABLE);
+>  	memory_notify(MEM_CANCEL_OFFLINE, &arg);
+>  failed_removal_pcplists_disabled:
+> @@ -1976,7 +1977,6 @@ int __ref offline_pages(unsigned long start_pfn, unsigned long nr_pages,
+>  		 (unsigned long long) start_pfn << PAGE_SHIFT,
+>  		 ((unsigned long long) end_pfn << PAGE_SHIFT) - 1,
+>  		 reason);
+> -	/* pushback to free area */
+>  	mem_hotplug_done();
+>  	return ret;
+>  }
+> -- 
+> 2.23.0
+> 
+> 
+
+-- 
+Oscar Salvador
+SUSE Labs

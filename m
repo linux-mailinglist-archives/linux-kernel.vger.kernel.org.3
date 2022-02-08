@@ -2,105 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8501E4AD1E3
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 08:03:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 843674AD1ED
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 08:09:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347836AbiBHHDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 02:03:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48478 "EHLO
+        id S1347888AbiBHHJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 02:09:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233309AbiBHHDm (ORCPT
+        with ESMTP id S230332AbiBHHJB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 02:03:42 -0500
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 007BEC0401F4;
-        Mon,  7 Feb 2022 23:03:38 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id D1CE35801C4;
-        Tue,  8 Feb 2022 02:03:35 -0500 (EST)
-Received: from imap49 ([10.202.2.99])
-  by compute2.internal (MEProxy); Tue, 08 Feb 2022 02:03:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        sladewatkins.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; bh=1zZeOHN8TQZQpX
-        SBE9ns/EHrQBA4/VHUOn1td3lu4bY=; b=UPeru9y8pzDYJINqGGFCZLTaoiE2Cc
-        NjBbWZ8dz+XyohKX+vsHRBDrFAPeZdNfZr/qqQcUbWpUBi/o6tK6rdTaAlvlexGO
-        49rKVQSpZa09AZijMIhybcogle1+cQlg1xF2RiNql5rbdKLHcqQ11dgoL5tVwyV5
-        bdKdOvaZItuTbIGn4c+mRhLmInbmq3g2a+wO/MCZKCaEYVxt4l2Eoc04SI9x3+7K
-        QpCY1zMPY+75f3qCgrLdW6eGUuaCrTRpypMv8Hd5+T6JLUzL1WLVEzNI1MWZ916P
-        kXEAakTn3Du5RV09kwY4NVd9I2BOHas5DpIpE8HQgTOFr59qHKYNO5VA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=1zZeOHN8TQZQpXSBE
-        9ns/EHrQBA4/VHUOn1td3lu4bY=; b=kCzv7xzpIq7NAwTR6wdnR/Xlc8apTdgz9
-        uWiA8MFf/uvYZQDhulKNlqybNVQii+7YHNV7jb1qQv6WI3M9DWycoAumsMeFok++
-        U7qiApcX+YNe6zgrPBfEM/r+XBt2Kk1HLKFPU3WJHAJfpMA5Gtj5iJiSHzx5gfO6
-        KmQq/PGcYfGv3kzy/pKwkcKGczWWNo+Kd5KvAFpMK1T7hqTBzxcKpNA80GIzng7L
-        D6+20bn6CatlPwd9l02HECDEJ1sJvtOQ+kG+UW0nVps1PrqCsjkpWTmyKtE+Wm6D
-        mWJ4tsEN0M5dC2DMj5FXmiqMAN8Laa7XbNl6Z5C03hx9rIxSIgwXw==
-X-ME-Sender: <xms:xhUCYmkROP--4Oe2xv_yfKO-ck5upi_vNrHamTBPa1tCvZebTM__jw>
-    <xme:xhUCYt3bRW2NwkLZMxmxjIR15EoosSxdENleGL2nx_FOfZDyKab1Iy7cg2RlIvQY4
-    pn4z-kQikTSXYEvaKs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrheeigddutddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdfulhgr
-    uggvucghrghtkhhinhhsfdcuoehslhgruggvsehslhgruggvfigrthhkihhnshdrtghomh
-    eqnecuggftrfgrthhtvghrnhepueeiffetjeeitefgveetleehveduheetiefhhfethedt
-    teelgeettddvvedvudegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
-    hilhhfrhhomhepshhlrgguvgesshhlrgguvgifrghtkhhinhhsrdgtohhm
-X-ME-Proxy: <xmx:xhUCYkqDY5eEl7_pdGQSlNL1hNjkl_AwxV7yMPfhOPjnVjeAW3Yj8A>
-    <xmx:xhUCYqnOblalu6JZb__5uDzjbrlPyo2FbT1lxQiA8OGQIMaTgJnb7Q>
-    <xmx:xhUCYk2Y6ajGQ_zUSgGSPvHOWWinMZfL_T770ceGmj-iBZ6EU91MWA>
-    <xmx:xxUCYtvXyik6yDHJxqssZVzsf-ZNyYdXU45__DV0xwlaUDQ5nJBvU_0U4Cw>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id CEAC9F6007E; Tue,  8 Feb 2022 02:03:34 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-4748-g31a5b5f50e-fm-cal2020-20220204.001-g31a5b5f5
-Mime-Version: 1.0
-Message-Id: <16bbddcb-d827-490a-ac80-cd5a75404d6f@www.fastmail.com>
-In-Reply-To: <20220207133856.644483064@linuxfoundation.org>
-References: <20220207133856.644483064@linuxfoundation.org>
-Date:   Tue, 08 Feb 2022 02:03:33 -0500
-From:   "Slade Watkins" <slade@sladewatkins.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org,
-        "Linus Torvalds" <torvalds@linux-foundation.org>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Guenter Roeck" <linux@roeck-us.net>, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org,
-        "Pavel Machek" <pavel@denx.de>,
-        "Jon Hunter" <jonathanh@nvidia.com>,
-        "Florian Fainelli" <f.fainelli@gmail.com>,
-        "Sudip Mukherjee" <sudipm.mukherjee@gmail.com>
-Subject: Re: [PATCH 5.16 000/127] 5.16.8-rc2 review
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 8 Feb 2022 02:09:01 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A8E9C0401F1;
+        Mon,  7 Feb 2022 23:08:58 -0800 (PST)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JtDXX4dRZz1FD31;
+        Tue,  8 Feb 2022 15:04:44 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 8 Feb 2022 15:08:55 +0800
+CC:     <gregkh@linuxfoundation.org>, <helgaas@kernel.org>,
+        <alexander.shishkin@linux.intel.com>, <lorenzo.pieralisi@arm.com>,
+        <will@kernel.org>, <mark.rutland@arm.com>,
+        <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
+        <mike.leach@linaro.org>, <leo.yan@linaro.org>,
+        <daniel.thompson@linaro.org>, <joro@8bytes.org>,
+        <john.garry@huawei.com>, <shameerali.kolothum.thodi@huawei.com>,
+        <robin.murphy@arm.com>, <peterz@infradead.org>, <mingo@redhat.com>,
+        <acme@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <coresight@lists.linaro.org>, <linux-pci@vger.kernel.org>,
+        <linux-perf-users@vger.kernel.org>,
+        <iommu@lists.linux-foundation.org>, <prime.zeng@huawei.com>,
+        <liuqi115@huawei.com>, <zhangshaokun@hisilicon.com>,
+        <linuxarm@huawei.com>, <song.bao.hua@hisilicon.com>
+Subject: Re: [PATCH v3 4/8] hisi_ptt: Add tune function support for HiSilicon
+ PCIe Tune and Trace device
+To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+        Yicong Yang <yangyicong@hisilicon.com>
+References: <20220124131118.17887-1-yangyicong@hisilicon.com>
+ <20220124131118.17887-5-yangyicong@hisilicon.com>
+ <20220207114911.0000127e@Huawei.com>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <15ebb616-bc5a-f589-a435-c8322202661a@huawei.com>
+Date:   Tue, 8 Feb 2022 15:08:55 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
+MIME-Version: 1.0
+In-Reply-To: <20220207114911.0000127e@Huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 7, 2022, at 9:04 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.16.8 release.
-> There are 127 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 09 Feb 2022 13:38:34 +0000.
-> Anything received after that time might be too late.
+On 2022/2/7 19:49, Jonathan Cameron wrote:
+> On Mon, 24 Jan 2022 21:11:14 +0800
+> Yicong Yang <yangyicong@hisilicon.com> wrote:
+> 
+>> Add tune function for the HiSilicon Tune and Trace device. The interface
+>> of tune is exposed through sysfs attributes of PTT PMU device.
+>>
+>> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+> 
+> A few trivial things inline, but looks good in general to me.
+> With those tidied up
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> 
 
-Compiled and booted 5.16.8-rc2 on my x86_64 test system successfully without errors or regressions.
+Thanks for the comments.
 
-Tested-by: Slade Watkins <slade@sladewatkins.com>
+> 
+>> ---
+>>  drivers/hwtracing/ptt/hisi_ptt.c | 154 +++++++++++++++++++++++++++++++
+>>  drivers/hwtracing/ptt/hisi_ptt.h |  19 ++++
+>>  2 files changed, 173 insertions(+)
+>>
+>> diff --git a/drivers/hwtracing/ptt/hisi_ptt.c b/drivers/hwtracing/ptt/hisi_ptt.c
+>> index 2994354e690b..b11e702eb506 100644
+>> --- a/drivers/hwtracing/ptt/hisi_ptt.c
+>> +++ b/drivers/hwtracing/ptt/hisi_ptt.c
+>> @@ -21,6 +21,159 @@
+>>  
+>>  #include "hisi_ptt.h"
+>>  
+>> +static int hisi_ptt_wait_tuning_finish(struct hisi_ptt *hisi_ptt)
+>> +{
+>> +	u32 val;
+>> +
+>> +	return readl_poll_timeout(hisi_ptt->iobase + HISI_PTT_TUNING_INT_STAT,
+>> +				  val, !(val & HISI_PTT_TUNING_INT_STAT_MASK),
+>> +				  HISI_PTT_WAIT_POLL_INTERVAL_US,
+>> +				  HISI_PTT_WAIT_TIMEOUT_US);
+>> +}
+>> +
+>> +static int hisi_ptt_tune_data_get(struct hisi_ptt *hisi_ptt,
+>> +				  u32 event, u16 *data)
+>> +{
+>> +	u32 reg;
+>> +
+>> +	reg = readl(hisi_ptt->iobase + HISI_PTT_TUNING_CTRL);
+>> +	reg &= ~(HISI_PTT_TUNING_CTRL_CODE | HISI_PTT_TUNING_CTRL_SUB);
+>> +	reg |= FIELD_PREP(HISI_PTT_TUNING_CTRL_CODE | HISI_PTT_TUNING_CTRL_SUB,
+>> +			  event);
+>> +	writel(reg, hisi_ptt->iobase + HISI_PTT_TUNING_CTRL);
+>> +
+>> +	/* Write all 1 to indicates it's the read process */
+>> +	writel(~0UL, hisi_ptt->iobase + HISI_PTT_TUNING_DATA);
+> 
+> Just to check, this is includes the bits above the DATA_VAL_MASK?
+> Fine if so, just seems odd to define a field but then write 
+> parts of the register that aren't part of that field.
+> 
 
-Thanks,
-Slade
+yes. The valid data field is [0,15]. But
+all 1 is used here to indicate that it's a
+read process rather than a write process.
+
+>> +
+>> +	if (hisi_ptt_wait_tuning_finish(hisi_ptt))
+>> +		return -ETIMEDOUT;
+>> +
+>> +	reg = readl(hisi_ptt->iobase + HISI_PTT_TUNING_DATA);
+>> +	reg &= HISI_PTT_TUNING_DATA_VAL_MASK;
+>> +	*data = (u16)reg;
+> 
+> As below, prefer a FIELD_GET() for this.
+> 
+
+sure. will use field ops here and below.
+
+Thanks.
+
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int hisi_ptt_tune_data_set(struct hisi_ptt *hisi_ptt,
+>> +				  u32 event, u16 data)
+>> +{
+>> +	u32 reg;
+>> +
+>> +	reg = readl(hisi_ptt->iobase + HISI_PTT_TUNING_CTRL);
+>> +	reg &= ~(HISI_PTT_TUNING_CTRL_CODE | HISI_PTT_TUNING_CTRL_SUB);
+>> +	reg |= FIELD_PREP(HISI_PTT_TUNING_CTRL_CODE | HISI_PTT_TUNING_CTRL_SUB,
+>> +			  event);
+>> +	writel(reg, hisi_ptt->iobase + HISI_PTT_TUNING_CTRL);
+>> +
+>> +	reg = data;
+> Given you defined HISI_PTT_TUNING_DATA_VAL_MASK why not use it here
+> 
+> writel(FIELD_PREP(..), ...)? 
+> 
+>> +	writel(reg, hisi_ptt->iobase + HISI_PTT_TUNING_DATA);
+>> +
+>> +	if (hisi_ptt_wait_tuning_finish(hisi_ptt))
+>> +		return -ETIMEDOUT;
+>> +
+>> +	return 0;
+>> +}
+>> +
+> 
+> 
+> .
+> 

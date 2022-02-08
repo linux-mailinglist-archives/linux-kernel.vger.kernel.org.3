@@ -2,198 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 720234AD993
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 14:22:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 495BA4AD976
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 14:19:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356775AbiBHNVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 08:21:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34080 "EHLO
+        id S1349466AbiBHNTF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 08:19:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359783AbiBHMyF (ORCPT
+        with ESMTP id S1376349AbiBHM52 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 07:54:05 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C36CC03FECA
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 04:54:04 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id s13so51894923ejy.3
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 04:54:03 -0800 (PST)
+        Tue, 8 Feb 2022 07:57:28 -0500
+Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2CA5C03FECE
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 04:57:27 -0800 (PST)
+Received: by mail-vs1-xe30.google.com with SMTP id t10so3242789vsp.8
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 04:57:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=EdOABUNENMY5hYtYPGRPZmVz5tXWbGx6V9rHvVTwsTo=;
-        b=KgFzVhnS+WwfF4ySk8R2/5G/qaN9zSc7f1Btrik8l3ywATzIA1H3npms8IV/EEj2KI
-         IEWyrGEr/Q+oBaB+rZIL/nu2xrfklQucAehi0E2n5WYRj0scoAYhI4cerIdykx1YxOFA
-         bOMwE/D9+192GSVfQxod36C2LT3HZ1niWajoU=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QZ2ThHzP4ksA4NOQgohi764WWAj9VnjVAoaKOn8fduI=;
+        b=EMNBfmRp2wjXy+C2nQjYiC4DxNdDT0Ya2c9ZJSm2s/IK+XPPjo+cGsdCTvp9u90FsG
+         tRqCGtNC3wCccHPKhPWChFxncjU99ntTEaBdEPB03bc9P8/U8FYgUFY7vdSZAP+LL66n
+         8muVbJxDU+xxi+GmHrXwjsvugC3kqxn9ef9hdQsp10IXD+NVENGlrxBTWY+UFPNoHPf4
+         RHbN11vXN69TDV8BidyZ8l4EP8cJ2ab/NHOkJSAN5IKDoyD0sZA7xP4PaeLcrr5DiYd4
+         g91AF4JgLxIiEs01Ea2luKoKeXr9sBtd2/KBDK+xVx2Jy59x8WCPTibulnNVsHC01Xk4
+         ZNtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=EdOABUNENMY5hYtYPGRPZmVz5tXWbGx6V9rHvVTwsTo=;
-        b=eyTprKEQRbzCbd1CcNQ0RgpAx3/hjath6W7bCC++9wSrOzyWGUeFkcuv6FdqvrAzc1
-         Ga4QPlB6Q0D37+NmceZ1WlCFusx60j3EZjAlrkxQN02icL/qTGPFbCm7pLEjCqdFpzAV
-         IaA6kW9t8L5Re/cl9nj8kq/y/LmkDBiF99gRwUe7vW80rh9AAvDpAlzxd56XgNZjZkfo
-         t46MHzEXMQ0xDo9zvJhraeCIofSwr6D4xMZ/a5Bc7ZKfVXBKAR45Cyocl/S+TFYtWkAo
-         ABJ6bpC0X+wlRjJQq6gC4x1mJ1AewuCPCI2W9bD6OEYHdh84GI/BtU6P6Fi0fhFAN3XR
-         SaeQ==
-X-Gm-Message-State: AOAM533txU0lyfTfHsH4/oZ8ggqATrVgKfEhSKT4iemadR/smXii4Q0+
-        lFOeAs6dmRX4TiO9gu8huN+pdstUYA/BVA==
-X-Google-Smtp-Source: ABdhPJyjoXx7TZnQW6xw4xjBqA0XWuDhxN1WRj0W2ugU65gZDBqDw0EPp6tl28mczrKVDEoZQx+16g==
-X-Received: by 2002:a17:906:94e:: with SMTP id j14mr3514523ejd.369.1644324842613;
-        Tue, 08 Feb 2022 04:54:02 -0800 (PST)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id d18sm4740261ejd.95.2022.02.08.04.54.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 04:54:01 -0800 (PST)
-Date:   Tue, 8 Feb 2022 13:53:59 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Russell King <rmk+kernel@arm.linux.org.uk>,
-        Saravana Kannan <saravanak@google.com>
-Subject: Re: [PATCH v6 02/35] component: Introduce the aggregate bus_type
-Message-ID: <YgJn57s8u2OsBGnW@phenom.ffwll.local>
-Mail-Followup-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Russell King <rmk+kernel@arm.linux.org.uk>,
-        Saravana Kannan <saravanak@google.com>
-References: <20220127200141.1295328-1-swboyd@chromium.org>
- <20220127200141.1295328-3-swboyd@chromium.org>
- <YffoqgmeUdxZ56zB@kroah.com>
- <CAKMK7uFYyQ9siB5ENHku+yVPWWM1H=TEn-NZofEKqpJnuEvMmw@mail.gmail.com>
- <YfgPkliOLorgXwVE@kroah.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QZ2ThHzP4ksA4NOQgohi764WWAj9VnjVAoaKOn8fduI=;
+        b=iNmiXjeQSM/PCaeCHOr1ayfOaLJoSx4OCk3oLwYKOiLudLKtmn9EFCcsZ/JhvJFVwh
+         3fQp1PP31AuYwuID+WgfKAhoaleMoFRCYEREyyMNZv1fsxz5GiKhCUsVrUYHX9URBfMF
+         /UyuYTNz2fAk4C9NAptHTUBcIrFkaTbhwGRaL7wbIePLvnLN8qVrMmKoQ0qDIBDYl+Ww
+         kDqdSUDfvCAoK0QjTZb62Fd6ggOW6epoK5hfHdS3DJVqJkeYNE1GKDeXcyhsOlzCLRQ3
+         SUIbFo8o7+M5rHuvc9s1oGI6ahJnncSB1C0v9tr3Z7Gfu5IzVHcVVeRpPJjl3MSnKiwv
+         LIYQ==
+X-Gm-Message-State: AOAM532w4WW3rES0RUkwB8xbdIl93B83BjmJhfdMjElKogpT4WAtq++E
+        8n75Fb3Ct6i4xGTSbeez4S7NZ6Ds/SGtwH8IymP/AQ==
+X-Google-Smtp-Source: ABdhPJwzYnmI8xSLok/uyBrzIkBQJkWypFop0Iw7jyMCJjojRBeCCoicMZcYrBL6mMytDpkckHcQi/Zv4nuSY6mysaM=
+X-Received: by 2002:a67:e146:: with SMTP id o6mr1574855vsl.12.1644325046779;
+ Tue, 08 Feb 2022 04:57:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YfgPkliOLorgXwVE@kroah.com>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220208025511.1019-1-lina.wang@mediatek.com> <0300acca47b10384e6181516f32caddda043f3e4.camel@redhat.com>
+In-Reply-To: <0300acca47b10384e6181516f32caddda043f3e4.camel@redhat.com>
+From:   =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
+Date:   Tue, 8 Feb 2022 04:57:14 -0800
+Message-ID: <CANP3RGe8ko=18F2cr0_hVMKw99nhTyOCf4Rd_=SMiwBtQ7AmrQ@mail.gmail.com>
+Subject: Re: [PATCH] net: fix wrong network header length
+To:     Paolo Abeni <pabeni@redhat.com>
+Cc:     Lina Wang <lina.wang@mediatek.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Linux NetDev <netdev@vger.kernel.org>,
+        Kernel hackers <linux-kernel@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Willem Bruijn <willemb@google.com>,
+        Eric Dumazet <edumazet@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 05:34:26PM +0100, Greg Kroah-Hartman wrote:
-> On Mon, Jan 31, 2022 at 04:15:09PM +0100, Daniel Vetter wrote:
-> > On Mon, Jan 31, 2022 at 2:48 PM Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > On Thu, Jan 27, 2022 at 12:01:08PM -0800, Stephen Boyd wrote:
-> > > > The component framework only provides 'bind' and 'unbind' callbacks to
-> > > > tell the host driver that it is time to assemble the aggregate driver
-> > > > now that all the components have probed. The component framework doesn't
-> > > > attempt to resolve runtime PM or suspend/resume ordering, and explicitly
-> > > > mentions this in the code. This lack of support leads to some pretty
-> > > > gnarly usages of the 'prepare' and 'complete' power management hooks in
-> > > > drivers that host the aggregate device, and it fully breaks down when
-> > > > faced with ordering shutdown between the various components, the
-> > > > aggregate driver, and the host driver that registers the whole thing.
-> > > >
-> > > > In a concrete example, the MSM display driver at drivers/gpu/drm/msm is
-> > > > using 'prepare' and 'complete' to call the drm helpers
-> > > > drm_mode_config_helper_suspend() and drm_mode_config_helper_resume()
-> > > > respectively, so that it can move the aggregate driver suspend/resume
-> > > > callbacks to be before and after the components that make up the drm
-> > > > device call any suspend/resume hooks they have. This only works as long
-> > > > as the component devices don't do anything in their own 'prepare' and
-> > > > 'complete' callbacks. If they did, then the ordering would be incorrect
-> > > > and we would be doing something in the component drivers before the
-> > > > aggregate driver could do anything. Yuck!
-> > > >
-> > > > Similarly, when trying to add shutdown support to the MSM driver we run
-> > > > across a problem where we're trying to shutdown the drm device via
-> > > > drm_atomic_helper_shutdown(), but some of the devices in the encoder
-> > > > chain have already been shutdown. This time, the component devices
-> > > > aren't the problem (although they could be if they did anything in their
-> > > > shutdown callbacks), but there's a DSI to eDP bridge in the encoder
-> > > > chain that has already been shutdown before the driver hosting the
-> > > > aggregate device runs shutdown. The ordering of driver probe is like
-> > > > this:
-> > > >
-> > > >  1. msm_pdev_probe() (host driver)
-> > > >  2. DSI bridge
-> > > >  3. aggregate bind
-> > > >
-> > > > When it comes to shutdown we have this order:
-> > > >
-> > > >  1. DSI bridge
-> > > >  2. msm_pdev_shutdown() (host driver)
-> > > >
-> > > > and so the bridge is already off, but we want to communicate to it to
-> > > > turn things off on the display during msm_pdev_shutdown(). Double yuck!
-> > > > Unfortunately, this time we can't split shutdown into multiple phases
-> > > > and swap msm_pdev_shutdown() with the DSI bridge.
-> > > >
-> > > > Let's make the component_master_ops into an actual device driver that has
-> > > > probe/remove/shutdown functions. The driver will only be bound to the
-> > > > aggregate device once all component drivers have called component_add()
-> > > > to indicate they're ready to assemble the aggregate driver. This allows
-> > > > us to attach shutdown logic (and in the future runtime PM logic) to the
-> > > > aggregate driver so that it runs the hooks in the correct order.
-> > >
-> > > I know I asked before, but I can not remember the answer.
-> > >
-> > > This really looks like it is turning into the aux bus code.  Why can't
-> > > you just use that instead here for this type of thing?  You are creating
-> > > another bus and drivers for that bus that are "fake" which is great, but
-> > > that's what the aux bus code was supposed to help out with, so we
-> > > wouldn't have to write more of these.
-> > >
-> > > So, if this really is different, can you document it here so I remember
-> > > next time you resend this patch series?
-> > 
-> > aux takes a device and splits it into a lot of sub-devices, each with
-> > their own driver.
-> > 
-> > This takes a pile of devices, and turns it into a single logical
-> > device with a single driver.
-> > 
-> > So aux is 1:N, component is N:1.
-> > 
-> > And yes you asked this already, I typed this up already :-)
-> 
-> Ok, thanks.  But then why is a bus needed if there's a single driver?
-> I guess a bus for that driver?  So one bus, one driver, and one device?
+On Tue, Feb 8, 2022 at 12:25 AM Paolo Abeni <pabeni@redhat.com> wrote:
+>
+> Hello,
+>
+> On Tue, 2022-02-08 at 10:55 +0800, Lina Wang wrote:
+> > When clatd starts with ebpf offloaing, and NETIF_F_GRO_FRAGLIST is enable,
+> > several skbs are gathered in skb_shinfo(skb)->frag_list. The first skb's
+> > ipv6 header will be changed to ipv4 after bpf_skb_proto_6_to_4,
+> > network_header\transport_header\mac_header have been updated as ipv4 acts,
+> > but other skbs in frag_list didnot update anything, just ipv6 packets.
+> >
+> > udp_queue_rcv_skb will call skb_segment_list to traverse other skbs in
+> > frag_list and make sure right udp payload is delivered to user space.
+> > Unfortunately, other skbs in frag_list who are still ipv6 packets are
+> > updated like the first skb and will have wrong transport header length.
+> >
+> > e.g.before bpf_skb_proto_6_to_4,the first skb and other skbs in frag_list
+> > has the same network_header(24)& transport_header(64), after
+> > bpf_skb_proto_6_to_4, ipv6 protocol has been changed to ipv4, the first
+> > skb's network_header is 44,transport_header is 64, other skbs in frag_list
+> > didnot change.After skb_segment_list, the other skbs in frag_list has
+> > different network_header(24) and transport_header(44), so there will be 20
+> > bytes difference,that is difference between ipv6 header and ipv4 header.
+>
+> > Actually, there are two solutions to fix it, one is traversing all skbs
+> > and changing every skb header in bpf_skb_proto_6_to_4, the other is
+> > modifying frag_list skb's header in skb_segment_list.
+>
+> I don't think the above should be addressed into the GSO layer. The
+> ebpf program is changing the GRO packet in arbitrary way violating the
+> GSO packet constraint - arguably, it's corrupting the packet.
+>
+> I think it would be better change the bpf_skb_proto_6_to_4() to
+> properly handle FRAGLIST GSO packets.
+>
+> If traversing the segments become too costly, you can try replacing
+> GRO_FRAGLIST with GRO_UDP_FWD.
 
-Maybe? I have honestly no idea how this should be best modelled in the
-linux device model.
+Yeah, I don't know...
 
-> I think we need better documentation here...
+I've considered that we could perhaps fix the 6to4 helper, and 4to6 helper...
+but then I think every *other* helper / code path that plays games
+with the packet header needs fixing as well,
+ie. everything dealing with encap/decap, vlan, etc..
 
-https://dri.freedesktop.org/docs/drm/driver-api/component.html?highlight=component_del#component-helper-for-aggregate-drivers
+At that point it seems to me like it's worth fixing here rather than
+in all those other places.
 
-There's a kerneldoc overview for component, but it's for driver authors
-that want to use component to glue different hw pieces into a logical
-driver, so it skips over these internals.
+In general it seems gro fraglist as implemented is just a bad idea...
+Packets (and things we treat like packets) really should only have 1 header.
+GRO fraglist - as implemented - violates this pretty fundamental assumption.
+As such it seems to be on the gro fraglist implementation to deal with it.
+That to me seems to mean it should be fixed here, and not elsewhere.
 
-And I'm honestly not sure how we want to leak implementation internals
-like the bus/driver/device structure ot users of component.c.
--Daniel
-
-> 
-> thanks,
-> 
-> greg k-h
-
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+(btw. wrt. this commit itself, it seems like the diff should be a signed int)

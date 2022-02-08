@@ -2,50 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43F8B4AD7E5
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:52:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E88314AD7E1
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:51:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358070AbiBHLvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 06:51:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39340 "EHLO
+        id S1359402AbiBHLvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 06:51:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358013AbiBHLuR (ORCPT
+        with ESMTP id S1358995AbiBHLuY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 06:50:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B579C08E834;
-        Tue,  8 Feb 2022 03:42:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 04C45B81852;
-        Tue,  8 Feb 2022 11:42:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E433CC004E1;
-        Tue,  8 Feb 2022 11:42:34 +0000 (UTC)
-Message-ID: <aa1312fc-197b-c1ab-6a18-369d49c1e8f8@xs4all.nl>
-Date:   Tue, 8 Feb 2022 12:42:33 +0100
+        Tue, 8 Feb 2022 06:50:24 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D1189C033258
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 03:44:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644320647;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ze2ok6U2dUNlyFHTiL48rRdUl5NktkbKOQVaBuFaMHs=;
+        b=BcKj6CMLMyX9Icdko1JlS3VGNy97bVrQ1K12p/4nB4vCLPIB5Vz9YX1dbccMx0qg9qEdGX
+        j/B35oIkWOpRv1ticQi4zvR3JzOI2UIMDXHfdcE7g3KHiW7PkH+0V9AIE5D9Sm6Y8sWr3f
+        RJvGen3BCeyYL+2dInHRoh6NYxzx1x8=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-638-TJQekKzTOP6i-JR1V3wtrw-1; Tue, 08 Feb 2022 06:44:06 -0500
+X-MC-Unique: TJQekKzTOP6i-JR1V3wtrw-1
+Received: by mail-wm1-f72.google.com with SMTP id v185-20020a1cacc2000000b0034906580813so945980wme.1
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 03:44:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=ze2ok6U2dUNlyFHTiL48rRdUl5NktkbKOQVaBuFaMHs=;
+        b=nBTHnGdbf+xs3o+XP9dwP5aa+8iWzEiCgY4twmhhKK4HvuXtYD1FrLzGnZgQ+1Xe2v
+         uwbVe5sodDSAd8XyutFZWOjOsJn00ab7gJAj05+xXiQqqWDzYncuf9sPURWVhj+IsnND
+         +wWmMVCDGnFHzlGNyt0gfkcTV9m4S+y2DMKF50fiehJgmckmk0PufvKANVnWjQVp8Dc1
+         JsQRj/F6NOZSX8ytrkSCpHgH2ldEkOPxqpiXiewinJNdQKGe329hDH2a1BeHIrUD2TsO
+         yNlkK4iHm+dUqfq1T0mxcO8VwxV03lcsMqQBxcNYrriCMz55+wxWT6RSe8b/aS/t4WkX
+         wZjw==
+X-Gm-Message-State: AOAM532/hchKA4jVju3MI3upM15K6HBbVh+zXA5+39NNKIQQpuWAC+po
+        h53XMbe1m/qcpzlIZCP2XKy1GnZAr4sx33aPoompa8h9FR/nu45Bc2IFl7k2NzIiXvoS+VJRsBf
+        TIDYJvGUM3THp+G+0oD6z/Rar
+X-Received: by 2002:a7b:cf03:: with SMTP id l3mr765570wmg.151.1644320644768;
+        Tue, 08 Feb 2022 03:44:04 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwOe2+6m1ZZLQr+0fJdBiNSKwp03uS1/8kFo/+PO6MTytpGrUJZleRcmSvBwnl7Q2NoKzrT2A==
+X-Received: by 2002:a7b:cf03:: with SMTP id l3mr765547wmg.151.1644320644496;
+        Tue, 08 Feb 2022 03:44:04 -0800 (PST)
+Received: from ?IPv6:2a0c:5a80:1204:1500:37e7:8150:d9df:36f? ([2a0c:5a80:1204:1500:37e7:8150:d9df:36f])
+        by smtp.gmail.com with ESMTPSA id ay3sm1849349wmb.44.2022.02.08.03.44.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 03:44:04 -0800 (PST)
+Message-ID: <9e55f768356892fcf10de3241419f97124efd4f7.camel@redhat.com>
+Subject: Re: [PATCH 2/6] drivers/input/joystick: sensehat: Raspberry Pi
+ Sense HAT joystick driver
+From:   Nicolas Saenz Julienne <nsaenzju@redhat.com>
+To:     Charles Mirabile <cmirabil@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Serge Schneider <serge@raspberrypi.org>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Mattias Brugger <mbrugger@suse.com>,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, fedora-rpi@googlegroups.com,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-input@vger.kernel.org, Mwesigwa Guma <mguma@redhat.com>,
+        Joel Savitz <jsavitz@redhat.com>
+Date:   Tue, 08 Feb 2022 12:44:03 +0100
+In-Reply-To: <20220203002521.162878-3-cmirabil@redhat.com>
+References: <20220203002521.162878-1-cmirabil@redhat.com>
+         <20220203002521.162878-3-cmirabil@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v4] dma-buf-map: Rename to iosys-map
-Content-Language: en-US
-To:     Lucas De Marchi <lucas.demarchi@intel.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org
-Cc:     srinivas.kandagatla@linaro.org, gregkh@linuxfoundation.org,
-        sumit.semwal@linaro.org, christian.koenig@amd.com,
-        daniel.vetter@ffwll.ch, airlied@linux.ie, lyude@redhat.com,
-        tzimmermann@suse.de, linux-media@vger.kernel.org,
-        nouveau@lists.freedesktop.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org
-References: <20220204170541.829227-1-lucas.demarchi@intel.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <20220204170541.829227-1-lucas.demarchi@intel.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,152 +87,206 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2/4/22 18:05, Lucas De Marchi wrote:
-> Rename struct dma_buf_map to struct iosys_map and corresponding APIs.
-> Over time dma-buf-map grew up to more functionality than the one used by
-> dma-buf: in fact it's just a shim layer to abstract system memory, that
-> can be accessed via regular load and store, from IO memory that needs to
-> be acessed via arch helpers.
+On Wed, 2022-02-02 at 19:25 -0500, Charles Mirabile wrote:
+> This patch adds the driver for the Sense HAT joystick. It outputs BTN_DPAD
+> key events when moved in any of the four directions and the BTN_SELECT
+> event when depressed.
 > 
-> The idea is to extend this API so it can fulfill other needs, internal
-> to a single driver. Example: in the i915 driver it's desired to share
-> the implementation for integrated graphics, which uses mostly system
-> memory, with discrete graphics, which may need to access IO memory.
-> 
-> The conversion was mostly done with the following semantic patch:
-> 
-> 	@r1@
-> 	@@
-> 	- struct dma_buf_map
-> 	+ struct iosys_map
-> 
-> 	@r2@
-> 	@@
-> 	(
-> 	- DMA_BUF_MAP_INIT_VADDR
-> 	+ IOSYS_MAP_INIT_VADDR
-> 	|
-> 	- dma_buf_map_set_vaddr
-> 	+ iosys_map_set_vaddr
-> 	|
-> 	- dma_buf_map_set_vaddr_iomem
-> 	+ iosys_map_set_vaddr_iomem
-> 	|
-> 	- dma_buf_map_is_equal
-> 	+ iosys_map_is_equal
-> 	|
-> 	- dma_buf_map_is_null
-> 	+ iosys_map_is_null
-> 	|
-> 	- dma_buf_map_is_set
-> 	+ iosys_map_is_set
-> 	|
-> 	- dma_buf_map_clear
-> 	+ iosys_map_clear
-> 	|
-> 	- dma_buf_map_memcpy_to
-> 	+ iosys_map_memcpy_to
-> 	|
-> 	- dma_buf_map_incr
-> 	+ iosys_map_incr
-> 	)
-> 
-> 	@@
-> 	@@
-> 	- #include <linux/dma-buf-map.h>
-> 	+ #include <linux/iosys-map.h>
-> 
-> Then some files had their includes adjusted and some comments were
-> update to remove mentions to dma-buf-map.
-> 
-> Since this is not specific to dma-buf anymore, move the documentation to
-> the "Bus-Independent Device Accesses" section.
-> 
-> v2:
->   - Squash patches
-> 
-> v3:
->   - Fix wrong removal of dma-buf.h from MAINTAINERS
->   - Move documentation from dma-buf.rst to device-io.rst
-> 
-> v4:
->   - Change documentation tile and level
-> 
-> Signed-off-by: Lucas De Marchi <lucas.demarchi@intel.com>
-> Acked-by: Christian König <christian.koenig@amd.com>
-> Acked-by: Sumit Semwal <sumit.semwal@linaro.org>
-> Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
+> Co-developed-by: Mwesigwa Guma <mguma@redhat.com>
+> Signed-off-by: Mwesigwa Guma <mguma@redhat.com>
+> Co-developed-by: Joel Savitz <jsavitz@redhat.com>
+> Signed-off-by: Joel Savitz <jsavitz@redhat.com>
+> Signed-off-by: Charles Mirabile <cmirabil@redhat.com>
 > ---
->  Documentation/driver-api/device-io.rst        |   9 +
->  Documentation/driver-api/dma-buf.rst          |   9 -
->  Documentation/gpu/todo.rst                    |  20 +-
->  MAINTAINERS                                   |   9 +-
->  drivers/dma-buf/dma-buf.c                     |  22 +-
->  drivers/dma-buf/heaps/cma_heap.c              |  10 +-
->  drivers/dma-buf/heaps/system_heap.c           |  10 +-
->  drivers/gpu/drm/ast/ast_drv.h                 |   2 +-
->  drivers/gpu/drm/ast/ast_mode.c                |   8 +-
->  drivers/gpu/drm/drm_cache.c                   |  18 +-
->  drivers/gpu/drm/drm_client.c                  |   9 +-
->  drivers/gpu/drm/drm_fb_helper.c               |  12 +-
->  drivers/gpu/drm/drm_gem.c                     |  12 +-
->  drivers/gpu/drm/drm_gem_cma_helper.c          |   9 +-
->  drivers/gpu/drm/drm_gem_framebuffer_helper.c  |  16 +-
->  drivers/gpu/drm/drm_gem_shmem_helper.c        |  15 +-
->  drivers/gpu/drm/drm_gem_ttm_helper.c          |   4 +-
->  drivers/gpu/drm/drm_gem_vram_helper.c         |  25 +-
->  drivers/gpu/drm/drm_internal.h                |   6 +-
->  drivers/gpu/drm/drm_mipi_dbi.c                |   8 +-
->  drivers/gpu/drm/drm_prime.c                   |   4 +-
->  drivers/gpu/drm/etnaviv/etnaviv_drv.h         |   2 +-
->  drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c   |   8 +-
->  drivers/gpu/drm/gud/gud_pipe.c                |   4 +-
->  drivers/gpu/drm/hyperv/hyperv_drm_modeset.c   |   5 +-
->  drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c    |   8 +-
->  .../drm/i915/gem/selftests/i915_gem_dmabuf.c  |   6 +-
->  .../gpu/drm/i915/gem/selftests/mock_dmabuf.c  |   6 +-
->  drivers/gpu/drm/lima/lima_gem.c               |   3 +-
->  drivers/gpu/drm/lima/lima_sched.c             |   4 +-
->  drivers/gpu/drm/mediatek/mtk_drm_gem.c        |   7 +-
->  drivers/gpu/drm/mediatek/mtk_drm_gem.h        |   5 +-
->  drivers/gpu/drm/mgag200/mgag200_mode.c        |   4 +-
->  drivers/gpu/drm/msm/msm_drv.h                 |   4 +-
->  drivers/gpu/drm/msm/msm_gem_prime.c           |   6 +-
->  drivers/gpu/drm/panfrost/panfrost_perfcnt.c   |  13 +-
->  drivers/gpu/drm/qxl/qxl_display.c             |   8 +-
->  drivers/gpu/drm/qxl/qxl_draw.c                |   6 +-
->  drivers/gpu/drm/qxl/qxl_drv.h                 |  10 +-
->  drivers/gpu/drm/qxl/qxl_object.c              |   8 +-
->  drivers/gpu/drm/qxl/qxl_object.h              |   4 +-
->  drivers/gpu/drm/qxl/qxl_prime.c               |   4 +-
->  drivers/gpu/drm/radeon/radeon_gem.c           |   1 +
->  drivers/gpu/drm/rockchip/rockchip_drm_gem.c   |   9 +-
->  drivers/gpu/drm/rockchip/rockchip_drm_gem.h   |   5 +-
->  drivers/gpu/drm/tegra/gem.c                   |  10 +-
->  drivers/gpu/drm/tiny/cirrus.c                 |   8 +-
->  drivers/gpu/drm/tiny/gm12u320.c               |   7 +-
->  drivers/gpu/drm/ttm/ttm_bo_util.c             |  16 +-
->  drivers/gpu/drm/ttm/ttm_resource.c            |  42 +--
->  drivers/gpu/drm/ttm/ttm_tt.c                  |   8 +-
->  drivers/gpu/drm/udl/udl_modeset.c             |   3 +-
->  drivers/gpu/drm/vboxvideo/vbox_mode.c         |   4 +-
->  drivers/gpu/drm/vkms/vkms_composer.c          |   4 +-
->  drivers/gpu/drm/vkms/vkms_drv.h               |   6 +-
->  drivers/gpu/drm/vkms/vkms_plane.c             |   2 +-
->  drivers/gpu/drm/vkms/vkms_writeback.c         |   2 +-
->  drivers/gpu/drm/xen/xen_drm_front_gem.c       |   7 +-
->  drivers/gpu/drm/xen/xen_drm_front_gem.h       |   6 +-
+>  drivers/input/joystick/Kconfig             |  11 ++
+>  drivers/input/joystick/Makefile            |   1 +
+>  drivers/input/joystick/sensehat-joystick.c | 128 +++++++++++++++++++++
+>  3 files changed, 140 insertions(+)
+>  create mode 100644 drivers/input/joystick/sensehat-joystick.c
+> 
+> diff --git a/drivers/input/joystick/Kconfig b/drivers/input/joystick/Kconfig
+> index 3b23078bc7b5..505a032e2786 100644
+> --- a/drivers/input/joystick/Kconfig
+> +++ b/drivers/input/joystick/Kconfig
+> @@ -399,4 +399,15 @@ config JOYSTICK_N64
+>  	  Say Y here if you want enable support for the four
+>  	  built-in controller ports on the Nintendo 64 console.
+>  
+> +config JOYSTICK_SENSEHAT
+> +	tristate "Raspberry Pi Sense HAT joystick"
+> +	depends on INPUT && I2C
+> +	select MFD_SIMPLE_MFD_I2C
+> +	help
+> +	  Say Y here if you want to enable the driver for the
+> +	  the Raspberry Pi Sense HAT.
+> +
+> +	  To compile this driver as a module, choose M here: the
+> +	  module will be called sensehat_joystick.
+> +
+>  endif
+> diff --git a/drivers/input/joystick/Makefile b/drivers/input/joystick/Makefile
+> index 5174b8aba2dd..39c8b5c6e5ae 100644
+> --- a/drivers/input/joystick/Makefile
+> +++ b/drivers/input/joystick/Makefile
+> @@ -28,6 +28,7 @@ obj-$(CONFIG_JOYSTICK_N64)		+= n64joy.o
+>  obj-$(CONFIG_JOYSTICK_PSXPAD_SPI)	+= psxpad-spi.o
+>  obj-$(CONFIG_JOYSTICK_PXRC)		+= pxrc.o
+>  obj-$(CONFIG_JOYSTICK_QWIIC)		+= qwiic-joystick.o
+> +obj-$(CONFIG_JOYSTICK_SENSEHAT)         += sensehat-joystick.o
+>  obj-$(CONFIG_JOYSTICK_SIDEWINDER)	+= sidewinder.o
+>  obj-$(CONFIG_JOYSTICK_SPACEBALL)	+= spaceball.o
+>  obj-$(CONFIG_JOYSTICK_SPACEORB)		+= spaceorb.o
+> diff --git a/drivers/input/joystick/sensehat-joystick.c b/drivers/input/joystick/sensehat-joystick.c
+> new file mode 100644
+> index 000000000000..a688cc8fbde3
+> --- /dev/null
+> +++ b/drivers/input/joystick/sensehat-joystick.c
+> @@ -0,0 +1,128 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Raspberry Pi Sense HAT joystick driver
+> + * http://raspberrypi.org
+> + *
+> + * Copyright (C) 2015 Raspberry Pi
+> + * Copyright (C) 2021 Charles Mirabile, Mwesigwa Guma, Joel Savitz
+> + *
+> + * Original Author: Serge Schneider
+> + * Revised for upstream Linux by: Charles Mirabile, Mwesigwa Guma, Joel Savitz
+> + */
+> +
+> +#include <linux/module.h>
+> +#include <linux/input.h>
+> +#include <linux/i2c.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +#include <linux/of_irq.h>
+> +#include <linux/property.h>
+> +
+> +struct sensehat_joystick {
+> +	struct platform_device *pdev;
+> +	struct input_dev *keys_dev;
+> +	unsigned long prev_states;
+> +	u32 joystick_register;
+> +};
+> +
+> +static const unsigned int keymap[] = {
+> +	BTN_DPAD_DOWN, BTN_DPAD_RIGHT, BTN_DPAD_UP, BTN_SELECT, BTN_DPAD_LEFT,
+> +};
+> +
+> +static irqreturn_t sensehat_joystick_report(int n, void *cookie)
+> +{
+> +	int i, error, keys;
+> +	struct sensehat_joystick *sensehat_joystick = cookie;
+> +	struct regmap *regmap =
+> +		dev_get_regmap(sensehat_joystick->pdev->dev.parent, NULL);
 
-For these three:
+I think it's better to get this during probe and save it in 'struct
+sensehat_joystick'. You'll avoid having to search for it everytime.
 
->  .../common/videobuf2/videobuf2-dma-contig.c   |   8 +-
->  .../media/common/videobuf2/videobuf2-dma-sg.c |   9 +-
->  .../common/videobuf2/videobuf2-vmalloc.c      |  11 +-
+> +	unsigned long curr_states, changes;
+> +
+> +	error = regmap_read(regmap, sensehat_joystick->joystick_register,
+> +			    &keys);
+> +	if (error < 0) {
+> +		dev_err(&sensehat_joystick->pdev->dev,
+> +			"Failed to read joystick state: %d", error);
+> +		return IRQ_NONE;
+> +	}
+> +	curr_states = keys;
+> +	bitmap_xor(&changes, &curr_states, &sensehat_joystick->prev_states,
+> +		   ARRAY_SIZE(keymap));
+> +
+> +	for_each_set_bit(i, &changes, ARRAY_SIZE(keymap)) {
+> +		input_report_key(sensehat_joystick->keys_dev, keymap[i],
+> +				 curr_states & BIT(i));
+> +	}
+> +
+> +	input_sync(sensehat_joystick->keys_dev);
+> +	sensehat_joystick->prev_states = keys;
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static int sensehat_joystick_probe(struct platform_device *pdev)
+> +{
+> +	int error, i;
+> +	struct sensehat_joystick *sensehat_joystick = devm_kzalloc(
+> +		&pdev->dev, sizeof(*sensehat_joystick), GFP_KERNEL);
+> +
+> +	sensehat_joystick->pdev = pdev;
+> +	sensehat_joystick->keys_dev = devm_input_allocate_device(&pdev->dev);
+> +	if (!sensehat_joystick->keys_dev) {
+> +		dev_err(&pdev->dev, "Could not allocate input device.\n");
+> +		return -ENOMEM;
+> +	}
+> +
+> +	for (i = 0; i < ARRAY_SIZE(keymap); i++)
+> +		set_bit(keymap[i], sensehat_joystick->keys_dev->keybit);
+> +
+> +	sensehat_joystick->keys_dev->name = "Raspberry Pi Sense HAT Joystick";
+> +	sensehat_joystick->keys_dev->phys = "sensehat-joystick/input0";
+> +	sensehat_joystick->keys_dev->id.bustype = BUS_I2C;
+> +	sensehat_joystick->keys_dev->evbit[0] =
+> +		BIT_MASK(EV_KEY) | BIT_MASK(EV_REP);
+> +
+> +	error = input_register_device(sensehat_joystick->keys_dev);
+> +	if (error) {
+> +		dev_err(&pdev->dev, "Could not register input device.\n");
+> +		return error;
+> +	}
+> +
+> +	error = device_property_read_u32(&pdev->dev, "reg",
+> +					 &sensehat_joystick->joystick_register);
+> +	if (error) {
+> +		dev_err(&pdev->dev, "Could not read register property.\n");
+> +		return error;
+> +	}
 
-Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+I don't think you really need to pass this information through the devicetree.
+It's just the address to a register, not a HW design detail (i.e. how the board
+is layout). Using a define is good enough.
 
-Regards,
+> +
+> +	error = devm_request_threaded_irq(&pdev->dev,
+> +					  of_irq_get(pdev->dev.of_node, 0),
 
-	Hans
+Use platform_get_irq() and remember the function may fail, both unrecoverable
+errors and EPROBE_DEFER when the irqchip isn't ready yet.
+
+> +					  NULL, sensehat_joystick_report,
+> +					  IRQF_ONESHOT, "keys",
+> +					  sensehat_joystick);
+> +
+> +	if (error) {
+> +		dev_err(&pdev->dev, "IRQ request failed.\n");
+> +		return error;
+> +	}
+
+nit: space here
+
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id sensehat_joystick_device_id[] = {
+> +	{ .compatible = "raspberrypi,sensehat-joystick" },
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(of, sensehat_joystick_device_id);
+> +
+> +static struct platform_driver sensehat_joystick_driver = {
+> +	.probe = sensehat_joystick_probe,
+> +	.driver = {
+> +		.name = "sensehat-joystick",
+> +		.of_match_table = sensehat_joystick_device_id,
+> +	},
+> +};
+> +
+> +module_platform_driver(sensehat_joystick_driver);
+> +
+> +MODULE_DESCRIPTION("Raspberry Pi Sense HAT joystick driver");
+> +MODULE_AUTHOR("Serge Schneider <serge@raspberrypi.org>");
+> +MODULE_LICENSE("GPL");
+
+-- 
+Nicolás Sáenz
+

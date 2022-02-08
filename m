@@ -2,290 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 917B34ADD63
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 16:48:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D444F4ADD6B
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 16:48:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381926AbiBHPsY convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 8 Feb 2022 10:48:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58076 "EHLO
+        id S1381968AbiBHPsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 10:48:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381888AbiBHPsX (ORCPT
+        with ESMTP id S1382007AbiBHPsf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 10:48:23 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B11C0613C9;
-        Tue,  8 Feb 2022 07:48:19 -0800 (PST)
-Received: from fraeml740-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JtS3v6bbrz67XhV;
-        Tue,  8 Feb 2022 23:44:11 +0800 (CST)
-Received: from lhreml712-chm.china.huawei.com (10.201.108.63) by
- fraeml740-chm.china.huawei.com (10.206.15.221) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 8 Feb 2022 16:48:17 +0100
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- lhreml712-chm.china.huawei.com (10.201.108.63) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 8 Feb 2022 15:48:16 +0000
-Received: from lhreml710-chm.china.huawei.com ([169.254.81.184]) by
- lhreml710-chm.china.huawei.com ([169.254.81.184]) with mapi id
- 15.01.2308.021; Tue, 8 Feb 2022 15:48:16 +0000
-From:   Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-CC:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "mgurtovoy@nvidia.com" <mgurtovoy@nvidia.com>,
-        "yishaih@nvidia.com" <yishaih@nvidia.com>,
-        Linuxarm <linuxarm@huawei.com>,
-        liulongfang <liulongfang@huawei.com>,
-        "Zengtao (B)" <prime.zeng@hisilicon.com>,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        "Wangzhou (B)" <wangzhou1@hisilicon.com>
-Subject: RE: [RFC v4 7/8] hisi_acc_vfio_pci: Add support for VFIO live
- migration
-Thread-Topic: [RFC v4 7/8] hisi_acc_vfio_pci: Add support for VFIO live
- migration
-Thread-Index: AQHYHPDyAsbl+xVOv0mWAZg3hAhxZqyJxXkAgAABtKA=
-Date:   Tue, 8 Feb 2022 15:48:16 +0000
-Message-ID: <bd69bdb6e0664667be868ff799e8629e@huawei.com>
-References: <20220208133425.1096-1-shameerali.kolothum.thodi@huawei.com>
- <20220208133425.1096-8-shameerali.kolothum.thodi@huawei.com>
- <20220208152226.GF4160@nvidia.com>
-In-Reply-To: <20220208152226.GF4160@nvidia.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.202.227.178]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Tue, 8 Feb 2022 10:48:35 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50654C0612BC;
+        Tue,  8 Feb 2022 07:48:31 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id j14so25095270lja.3;
+        Tue, 08 Feb 2022 07:48:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=KxYSiqV12Dhm8YIIbxVVPZPZ8DeDZ9T4ZM/yFNlt0P4=;
+        b=RCJH/+Jlb0WLMRrQOaeKkLw2zcgYhGFGq9EIE5cCcIrXrMKxY0eYUJydZobET1700n
+         iOG+u9NHqzmAPh5tqUFIHuf5qBlqkQYWCsIU0LmPKZ6NZW05XvolNBchVjmMwmpJ34rV
+         wdwdBwyiQ3TetWfh553Uj1uIMs2eVv8Vyn1DMzTO+S5FLW4PNHxvCqfTovmyxSl02VEy
+         P9Ec+IOUIER0y6542iKSfRvbjyEs3rOQJpQqDJ8auotuYdI79eqMZrxDUUlXLl+RCG0l
+         bzIPx3IJSNxUt+N5zYGmBgnbIAGPi5K8thj689pSZm2WW3t34iPIvuwGJYRcTcpgTW3t
+         RVSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=KxYSiqV12Dhm8YIIbxVVPZPZ8DeDZ9T4ZM/yFNlt0P4=;
+        b=t8FDkNtA5Bhs3X4UfYOEEALPtfSLnyESVk7hlVK8/MhA/UkemDDaFpu3xpBWh+tbcM
+         hn7Yckh6A8C/J/lIiB2ql15Hkj5tvwdih69vOoEWI1RV1LPuEfVBwYfrZCrqZq3xMiXe
+         l1K+WDXS1s9PG65yq/ip/l8VP4Wp7J5sLscz7Xcu2iWJylLDVaTsIhZ04qD5PTpye+qB
+         skW/01aemjtzH6v9NQrc00oulv6JOoaP+4srqFaNHy+DZ/hnTQf5Bg6jrWevscOQUuuK
+         6RORWj4Ka8QbGZA/WbNbexY1FW5GJaSDMJbAan+QrLFfXNZEdQskDP3NHlIWGFOD/0I3
+         Ajkw==
+X-Gm-Message-State: AOAM5300dt8zDxoWD4aWkSv80kXqDst0qGb/YiC/o5SipktrH8X1qxXB
+        5nRQEfNMsvncBeSp4BX0FrEEpNKI/Z7WCA==
+X-Google-Smtp-Source: ABdhPJySi/pdYPq6mdP6NmTInKPyJ648iKNTgmsWmxL8LMLykGhXyqhkOIbLNTmw+0/eXkf1WgB04A==
+X-Received: by 2002:a05:651c:3c7:: with SMTP id f7mr3269342ljp.62.1644335309629;
+        Tue, 08 Feb 2022 07:48:29 -0800 (PST)
+Received: from [192.168.1.11] ([94.103.224.201])
+        by smtp.gmail.com with ESMTPSA id w6sm2025770ljm.109.2022.02.08.07.48.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Feb 2022 07:48:29 -0800 (PST)
+Message-ID: <6f0615da-aa0b-df8e-589c-f5caf09d3449@gmail.com>
+Date:   Tue, 8 Feb 2022 18:48:24 +0300
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 1/2] ath9k: fix use-after-free in ath9k_hif_usb_rx_cb
+Content-Language: en-US
+To:     =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@toke.dk>,
+        ath9k-devel@qca.qualcomm.com, kvalo@kernel.org,
+        davem@davemloft.net, kuba@kernel.org, linville@tuxdriver.com
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        syzbot+03110230a11411024147@syzkaller.appspotmail.com,
+        syzbot+c6dde1f690b60e0b9fbe@syzkaller.appspotmail.com
+References: <80962aae265995d1cdb724f5362c556d494c7566.1644265120.git.paskripkin@gmail.com>
+ <87h799a007.fsf@toke.dk>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <87h799a007.fsf@toke.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Toke,
 
-
-> -----Original Message-----
-> From: Jason Gunthorpe [mailto:jgg@nvidia.com]
-> Sent: 08 February 2022 15:22
-> To: Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-> Cc: kvm@vger.kernel.org; linux-kernel@vger.kernel.org;
-> linux-crypto@vger.kernel.org; alex.williamson@redhat.com;
-> cohuck@redhat.com; mgurtovoy@nvidia.com; yishaih@nvidia.com; Linuxarm
-> <linuxarm@huawei.com>; liulongfang <liulongfang@huawei.com>; Zengtao (B)
-> <prime.zeng@hisilicon.com>; Jonathan Cameron
-> <jonathan.cameron@huawei.com>; Wangzhou (B) <wangzhou1@hisilicon.com>
-> Subject: Re: [RFC v4 7/8] hisi_acc_vfio_pci: Add support for VFIO live
-> migration
+On 2/8/22 17:47, Toke Høiland-Jørgensen wrote:
+> Pavel Skripkin <paskripkin@gmail.com> writes:
 > 
-> On Tue, Feb 08, 2022 at 01:34:24PM +0000, Shameer Kolothum wrote:
+>> Syzbot reported use-after-free Read in ath9k_hif_usb_rx_cb(). The
+>> problem was in incorrect htc_handle->drv_priv initialization.
+>>
+>> Probable call trace which can trigger use-after-free:
+>>
+>> ath9k_htc_probe_device()
+>>   /* htc_handle->drv_priv = priv; */
+>>   ath9k_htc_wait_for_target()      <--- Failed
+>>   ieee80211_free_hw()		   <--- priv pointer is freed
+>>
+>> <IRQ>
+>> ...
+>> ath9k_hif_usb_rx_cb()
+>>   ath9k_hif_usb_rx_stream()
+>>    RX_STAT_INC()		<--- htc_handle->drv_priv access
+>>
+>> In order to not add fancy protection for drv_priv we can move
+>> htc_handle->drv_priv initialization at the end of the
+>> ath9k_htc_probe_device() and add helper macro to make
+>> all *_STAT_* macros NULL save.
 > 
-> Overall this looks like a fine implementation, as far as I can tell it
-> meets the uAPI design perfectly.
+> I'm not too familiar with how the initialisation flow of an ath9k_htc
+> device works. Looking at htc_handle->drv_priv there seems to
+> be three other functions apart from the stat counters that dereference
+> it:
 > 
-> Why did you decide not to do the P2P support?
-
-I need to check that with our hardware folks. May be it is in pipeline. 
-
-> > +static struct file *
-> > +hisi_acc_vf_set_device_state(struct hisi_acc_vf_core_device *hisi_acc_vdev,
-> > +			     u32 new)
-> > +{
-> > +	u32 cur = hisi_acc_vdev->mig_state;
-> > +	int ret;
-> > +
-> > +	if (cur == VFIO_DEVICE_STATE_RUNNING && new ==
-> VFIO_DEVICE_STATE_STOP) {
-> > +		ret = hisi_acc_vf_stop_device(hisi_acc_vdev);
-> > +		if (ret)
-> > +			return ERR_PTR(ret);
+> ath9k_htc_suspend()
+> ath9k_htc_resume()
+> ath9k_hif_usb_disconnect()
 > 
-> Be mindful that qemu doesn't handle a failure here very well, I'm not
-> sure we will be able to fix this in the short term.
-
-Ok. I will check that and see how big of a problem it is.
-
-> > +static int hisi_acc_vfio_pci_init(struct hisi_acc_vf_core_device
-> *hisi_acc_vdev)
-> > +{
-> > +	struct vfio_pci_core_device *vdev = &hisi_acc_vdev->core_device;
-> > +	struct pci_dev *vf_dev = vdev->pdev;
-> > +	struct hisi_qm *vf_qm = &hisi_acc_vdev->vf_qm;
-> > +
-> > +	/*
-> > +	 * ACC VF dev BAR2 region consists of both functional register space
-> > +	 * and migration control register space. For migration to work, we
-> > +	 * need access to both. Hence, we map the entire BAR2 region here.
-> > +	 * But from a security point of view, we restrict access to the
-> > +	 * migration control space from Guest(Please see mmap/ioctl/read/write
-> > +	 * override functions).
-> > +	 *
-> > +	 * Also the HiSilicon ACC VF devices supported by this driver on
-> > +	 * HiSilicon hardware platforms are integrated end point devices
-> > +	 * and has no capability to perform PCIe P2P.
-> > +	 */
-> > +	vf_qm->io_base =
-> > +		ioremap(pci_resource_start(vf_dev, VFIO_PCI_BAR2_REGION_INDEX),
-> > +			pci_resource_len(vf_dev, VFIO_PCI_BAR2_REGION_INDEX));
-> > +	if (!vf_qm->io_base)
-> > +		return -EIO;
-> > +
-> > +	vf_qm->fun_type = QM_HW_VF;
-> > +	vf_qm->pdev = vf_dev;
-> > +	mutex_init(&vf_qm->mailbox_lock);
+> What guarantees that none of these will be called midway through
+> ath9k_htc_probe_device() (which would lead to a NULL deref after this
+> change)?
 > 
-> mailbox_lock seems unused
 
-I think we need that as that will be used in the QM driver APIs. I will add a
-comment here.
+IIUC, situation you are talking about may happen even without my change.
+I was thinking, that ath9k_htc_probe_device() is the real ->probe() 
+function, but things look a bit more tricky.
 
-> > +	hisi_acc_vdev->vf_id = PCI_FUNC(vf_dev->devfn);
-> 
-> Does this need to use the pci_iov_vf_id() function? funcs don't need
-> to be tightly packed, necessarily.
-> 
-> This should be set when the structure is allocated, not at open time.
 
-Ok. I will change and move it.
- 
-> > +	hisi_acc_vdev->vf_dev = vf_dev;
-> > +	vf_qm->dev_name = hisi_acc_vdev->pf_qm->dev_name;
-> 
-> Also unused
+So, the ->probe() function may be completed before 
+ath9k_htc_probe_device() is called, because it's called from fw loader 
+callback function. If ->probe() is completed, than we can call 
+->suspend(), ->resume() and others usb callbacks, right? And we can meet 
+NULL defer even if we leave drv_priv = priv initialization on it's place.
 
-I will see if we can get rid of it if it is not used by QM driver APIs used here.
+Please, correct me if I am wrong somewhere :)
 
-> 
-> > +	hisi_acc_vdev->mig_state = VFIO_DEVICE_STATE_RUNNING;
-> > +
-> > +	return 0;
-> > +}
-> >
-> >  static int hisi_acc_pci_rw_access_check(struct vfio_device *core_vdev,
-> >  					size_t count, loff_t *ppos,
-> > @@ -129,63 +1067,96 @@ static long hisi_acc_vfio_pci_ioctl(struct
-> vfio_device *core_vdev, unsigned int
-> >
-> >  static int hisi_acc_vfio_pci_open_device(struct vfio_device *core_vdev)
-> >  {
-> > -	struct vfio_pci_core_device *vdev =
-> > -		container_of(core_vdev, struct vfio_pci_core_device, vdev);
-> > +	struct hisi_acc_vf_core_device *hisi_acc_vdev = container_of(core_vdev,
-> > +			struct hisi_acc_vf_core_device, core_device.vdev);
-> > +	struct vfio_pci_core_device *vdev = &hisi_acc_vdev->core_device;
-> >  	int ret;
-> >
-> >  	ret = vfio_pci_core_enable(vdev);
-> >  	if (ret)
-> >  		return ret;
-> >
-> > -	vfio_pci_core_finish_enable(vdev);
-> > +	if (!hisi_acc_vdev->migration_support) {
-> 
-> This should just test the core flag and get rid of migration_support:
 
-Ok.
 
-> 
-> 		hisi_acc_vdev->core_device.vdev.migration_flags =
-> 			VFIO_MIGRATION_STOP_COPY;
-> 
-> > +++ b/drivers/vfio/pci/hisi_acc_vfio_pci.h
-> > @@ -0,0 +1,119 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +/* Copyright (c) 2021 HiSilicon Ltd. */
-> > +
-> > +#ifndef HISI_ACC_VFIO_PCI_H
-> > +#define HISI_ACC_VFIO_PCI_H
-> > +
-> > +#include <linux/hisi_acc_qm.h>
-> > +
-> > +#define VDM_OFFSET(x) offsetof(struct vfio_device_migration_info, x)
-> > +
-> > +#define HISI_ACC_MIG_REGION_DATA_OFFSET                \
-> > +	(sizeof(struct vfio_device_migration_info))
-> > +
-> > +#define HISI_ACC_MIG_REGION_DATA_SIZE (sizeof(struct acc_vf_data))
-> 
-> These three are not used any more
 
-True.
-
-> 
-> > +struct acc_vf_data {
-> > +#define QM_MATCH_SIZE 32L
-> > +	/* QM match information */
-> > +	u32 qp_num;
-> > +	u32 dev_id;
-> > +	u32 que_iso_cfg;
-> > +	u32 qp_base;
-> > +	/* QM reserved 4 match information */
-> > +	u32 qm_rsv_state[4];
-> > +
-> > +	/* QM RW regs */
-> > +	u32 aeq_int_mask;
-> > +	u32 eq_int_mask;
-> > +	u32 ifc_int_source;
-> > +	u32 ifc_int_mask;
-> > +	u32 ifc_int_set;
-> > +	u32 page_size;
-> > +
-> > +	/* QM_EQC_DW has 7 regs */
-> > +	u32 qm_eqc_dw[7];
-> > +
-> > +	/* QM_AEQC_DW has 7 regs */
-> > +	u32 qm_aeqc_dw[7];
-> > +
-> > +	/* QM reserved 5 regs */
-> > +	u32 qm_rsv_regs[5];
-> > +
-> > +	/* qm memory init information */
-> > +	dma_addr_t eqe_dma;
-> > +	dma_addr_t aeqe_dma;
-> > +	dma_addr_t sqc_dma;
-> > +	dma_addr_t cqc_dma;
-> 
-> You can't put dma_addr_t in a structure that needs to go
-> on-the-wire. This should be u64
-
-Ok.
-
-Thanks,
-Shameer
- 
-> > +};
-> > +
-> > +struct hisi_acc_vf_migration_file {
-> > +	struct file *filp;
-> > +	struct mutex lock;
-> > +	bool disabled;
-> > +
-> > +	struct acc_vf_data vf_data;
-> > +	size_t total_length;
-> > +};
-> > +
-> > +struct hisi_acc_vf_core_device {
-> > +	struct vfio_pci_core_device core_device;
-> > +	u8 migration_support:1;
-> > +	/* for migration state */
-> > +	struct mutex state_mutex;
-> > +	enum vfio_device_mig_state mig_state;
-> > +	struct pci_dev *pf_dev;
-> > +	struct pci_dev *vf_dev;
-> > +	struct hisi_qm *pf_qm;
-> > +	struct hisi_qm vf_qm;
-> > +	int vf_id;
-> > +
-> > +	struct hisi_acc_vf_migration_file *resuming_migf;
-> > +	struct hisi_acc_vf_migration_file *saving_migf;
-> > +};
-> > +#endif /* HISI_ACC_VFIO_PCI_H */
+With regards,
+Pavel Skripkin

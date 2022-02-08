@@ -2,65 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92B614ACEA6
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 03:09:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B47814ACEA1
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 03:09:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345848AbiBHCJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 21:09:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47888 "EHLO
+        id S1345261AbiBHCJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 21:09:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345447AbiBHCFC (ORCPT
+        with ESMTP id S1345468AbiBHCFP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 21:05:02 -0500
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 647F3C061355;
-        Mon,  7 Feb 2022 18:05:01 -0800 (PST)
-Received: by mail-qt1-x82f.google.com with SMTP id o3so13611551qtm.12;
-        Mon, 07 Feb 2022 18:05:01 -0800 (PST)
+        Mon, 7 Feb 2022 21:05:15 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19A6FC061355
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 18:05:15 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id v47so20623243ybi.4
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Feb 2022 18:05:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=4lFaVXaOEQ0S/iYKidAfI8kJNzQK67M6VoIAHTd3OhI=;
-        b=ndyROLy6GbL/8bzB4QYIlDvtD25Ac3AGNLI9bPBauHLoYN7WjxwWmaYVq/14CAkNv/
-         GFV8h+3L+w6sbrf7GmAzjJC2CImxmi/eXL8FVl5T6pHeK4JkISsGwKwa/3ZzsGGcs5pU
-         8xD/nKk3OC6J73McVTzFa3PnE/bFFqNFAxEormtKUcJDYSmE6lAj72QjlXn52n0JHbAw
-         KxzzVUKFQfDg9IwR6vIQqC+lsDIei/g6SxNLtOeZmoox0qStJJJvnJuqWF2rkQ22GD8t
-         NG6fKtLm05zGO5ES6nw4j9DlNxrzvcEwISjjVcY7z7Z4tcdn6bIvmoJBfGmwtesWisDU
-         MHkw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KD2mhkvCSD9l5DS6DbIhgn3YmMbk8ySuicBlkkQACtc=;
+        b=cqySIEy9bKgJKJ7/J7NeKqC3EVMbDwk/apfX1u6+XEeO0ytFU0hNat47ynchPwDIvK
+         +FyhYeCyEoFgI3wRksRZm8A6RIGyjxloYmYxadw/KEYQ755rBiuDOJcSeQMSg5eF+XMw
+         poZ0GAwwOtvBUtYVuZjz5/jjY93/2zQfg0c1+7bbWOR1kIsl8y72eNE6czFLu4NwELhg
+         +2KLKzfwV2QHFyD9k7qYBT3wp6je0O8o3Jv509qgiIgNvIlHrnEwIylA80nVHV8Mj/c5
+         y6Fv6x8nZITAIxuWzPZFJPbmREJwcmYPoGUsZZeyTdTA/4gymiIw5Ik+d7CJ/0gZFqhi
+         Yatg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=4lFaVXaOEQ0S/iYKidAfI8kJNzQK67M6VoIAHTd3OhI=;
-        b=BmWWeN+qKmu6XF4W7Q/Y0kj+gaQtjmfR0GFFUewXYkFvAmqFRQG0Lo1sEQHdUd9YwH
-         ItuTnzwo0+kBRnlLrELUuskM2nERziWQFnc4sACyXomLOIuErS7Hk0z+57VgrPFxWUOB
-         g9PBzkN4y0HfVVEYcFUXEAfvy0fnzoAKcyBoI0bxeHm19x9089UTPrJ9UNKZ3JipZUFB
-         0p4FwuZsSh8Ne5/JYfRjRBHta7zNxocesGAoCIeVnDuzM29lPlq1jj8gFdzaebt6iNa3
-         4vZ30V4cx+JHdVc2VI/DEHvKfF/g7W+XC6yshN+Ps4F8+qpZflaKdSnpbpEIsa4wOA0Q
-         BpzA==
-X-Gm-Message-State: AOAM533d9kSeT2ys29HgqnRRl8ydtVz1ijKWxrVswxxufbPtHd5Csj/l
-        jUjfNOcER6bRyLgtn75N0AMX3qAm7eE=
-X-Google-Smtp-Source: ABdhPJx95JuY11c+Q/4+2n5wjUQeI80A9QZNF6/nUbeForahEtccAeSDqZew+dpi/4LBntoNdK1vpg==
-X-Received: by 2002:ac8:7619:: with SMTP id t25mr1687748qtq.456.1644285900545;
-        Mon, 07 Feb 2022 18:05:00 -0800 (PST)
-Received: from shaak.. (modemcable055.92-163-184.mc.videotron.ca. [184.163.92.55])
-        by smtp.gmail.com with ESMTPSA id u9sm1416055qko.130.2022.02.07.18.04.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 18:05:00 -0800 (PST)
-From:   Liam Beguin <liambeguin@gmail.com>
-To:     liambeguin@gmail.com, peda@axentia.se, jic23@kernel.org,
-        andy.shevchenko@gmail.com, lars@metafoo.de
-Cc:     linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, robh+dt@kernel.org
-Subject: [PATCH v14 11/11] dt-bindings: iio: afe: add bindings for temperature transducers
-Date:   Mon,  7 Feb 2022 21:04:41 -0500
-Message-Id: <20220208020441.3081162-12-liambeguin@gmail.com>
-X-Mailer: git-send-email 2.35.1.4.g5d01301f2b86
-In-Reply-To: <20220208020441.3081162-1-liambeguin@gmail.com>
-References: <20220208020441.3081162-1-liambeguin@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KD2mhkvCSD9l5DS6DbIhgn3YmMbk8ySuicBlkkQACtc=;
+        b=46MGLA1G8BAUWI/bIqMAl8u1jOjUp/AQPObJjy9Bot67nBLXLJHHfBeLe/vXPa8TK3
+         PelQ4xFJyamvucFlkP3wdr1op1TZ8uZNWtthfwzYnQ0z+ZSMrg9AQTSfG41b9D4IPNVX
+         cpgTG/7KwSAhSjlvIw2UEI5/2Lny3NsxychCYTqhMnAl0Os0BhLcq41s0qqoqcocZZZD
+         5QOg3r5DNJLU7giAEcgKqQuBmkUidX1bSXTgvlAg8a8FuW1awAtuTiygb9wUxcgPPFFM
+         q2t7mt3rNGytkrHyt9cm2qYu2iUiIoXpgQ49shtELbg2Peo1xYnd3bTj6h6A7nr1JHfW
+         Sg5A==
+X-Gm-Message-State: AOAM530SsAXUUiSiBaodvYc1xOX2+3cA87HErcokF6op59XR/pdmzncw
+        baQVj37HrXcwk5FqCmvT/9bGyZnduFucI3qLFRI=
+X-Google-Smtp-Source: ABdhPJxeHugI3DEllGx+J2WDZamQf12x0W60JKjf1YUmXbHrs+2Lfdq4/jr6emHIFyZ/anRDxr2TC6phuups104YuN0=
+X-Received: by 2002:a05:6902:c4:: with SMTP id i4mr2597802ybs.343.1644285914274;
+ Mon, 07 Feb 2022 18:05:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220203131237.298090-1-pedrodemargomes@gmail.com> <c4128a09-1dc7-24b3-8ff2-eaf61f3de5e5@redhat.com>
+In-Reply-To: <c4128a09-1dc7-24b3-8ff2-eaf61f3de5e5@redhat.com>
+From:   Pedro Gomes <pedrodemargomes@gmail.com>
+Date:   Mon, 7 Feb 2022 23:05:03 -0300
+Message-ID: <CACpbsfapGSbno_n7ZJYJ2E4KkqWdWe_Wz8PuECBa3PZBp2Xnxw@mail.gmail.com>
+Subject: Re: [PATCH] mm/damon: Add option to monitor only writes
+To:     David Hildenbrand <david@redhat.com>
+Cc:     SeongJae Park <sj@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, John Hubbard <jhubbard@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -71,138 +68,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-An ADC is often used to measure other quantities indirectly.
-This binding describe one case, the measurement of a temperature
-through a temperature transducer (either voltage or current).
+On Mon, Feb 7, 2022 at 7:32 AM David Hildenbrand <david@redhat.com> wrote:
+>
+> Just like clearrefs, this can race against GUP-fast to detect pinned
+> pages. And just like clearrefs, we're not handling PMDs properly. And
+> just like anything that write-protects random anon pages right now, this
+> does not consider O_DIRECT as is.
+>
+> Fortunately, there are not too many users of clearreefs/softdirty
+> tracking out there (my search a while ago returned no open source
+> users). My assumption is that your feature might see more widespread use.
+>
+> Adding more random write protection until we fixed the COW issues [1]
+> really makes my stomach hurt on a Monday morning.
 
-Signed-off-by: Liam Beguin <liambeguin@gmail.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
-Reviewed-by: Peter Rosin <peda@axentia.se>
----
- .../iio/afe/temperature-transducer.yaml       | 114 ++++++++++++++++++
- 1 file changed, 114 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/iio/afe/temperature-transducer.yaml
+I was not aware of these issues.
 
-diff --git a/Documentation/devicetree/bindings/iio/afe/temperature-transducer.yaml b/Documentation/devicetree/bindings/iio/afe/temperature-transducer.yaml
-new file mode 100644
-index 000000000000..cfbf5350db27
---- /dev/null
-+++ b/Documentation/devicetree/bindings/iio/afe/temperature-transducer.yaml
-@@ -0,0 +1,114 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/iio/afe/temperature-transducer.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Temperature Transducer
-+
-+maintainers:
-+  - Liam Beguin <liambeguin@gmail.com>
-+
-+description: |
-+  A temperature transducer is a device that converts a thermal quantity
-+  into any other physical quantity. This binding applies to temperature to
-+  voltage (like the LTC2997), and temperature to current (like the AD590)
-+  linear transducers.
-+  In both cases these are assumed to be connected to a voltage ADC.
-+
-+  When an io-channel measures the output voltage of a temperature analog front
-+  end such as a temperature transducer, the interesting measurement is almost
-+  always the corresponding temperature, not the voltage output. This binding
-+  describes such a circuit.
-+
-+  The general transfer function here is (using SI units)
-+    V(T) = Rsense * Isense(T)
-+    T = (Isense(T) / alpha) + offset
-+    T = 1 / (Rsense * alpha) * (V + offset * Rsense * alpha)
-+
-+  When using a temperature to voltage transducer, Rsense is set to 1.
-+
-+  The following circuits show a temperature to current and a temperature to
-+  voltage transducer that can be used with this binding.
-+
-+           VCC
-+          -----
-+            |
-+        +---+---+
-+        | AD590 |                               VCC
-+        +---+---+                              -----
-+            |                                    |
-+            V proportional to T             +----+----+
-+            |                          D+ --+         |
-+            +---- Vout                      | LTC2997 +--- Vout
-+            |                          D- --+         |
-+        +---+----+                          +---------+
-+        | Rsense |                               |
-+        +---+----+                             -----
-+            |                                   GND
-+          -----
-+           GND
-+
-+properties:
-+  compatible:
-+    const: temperature-transducer
-+
-+  io-channels:
-+    maxItems: 1
-+    description: |
-+      Channel node of a voltage io-channel.
-+
-+  '#io-channel-cells':
-+    const: 0
-+
-+  sense-offset-millicelsius:
-+    description: |
-+      Temperature offset.
-+      This offset is commonly used to convert from Kelvins to degrees Celsius.
-+      In that case, sense-offset-millicelsius would be set to <(-273150)>.
-+    default: 0
-+
-+  sense-resistor-ohms:
-+    description: |
-+      The sense resistor.
-+      By default sense-resistor-ohms cancels out the resistor making the
-+      circuit behave like a temperature transducer.
-+    default: 1
-+
-+  alpha-ppm-per-celsius:
-+    description: |
-+      Sometimes referred to as output gain, slope, or temperature coefficient.
-+
-+      alpha is expressed in parts per million which can be micro-amps per
-+      degrees Celsius or micro-volts per degrees Celsius. The is the main
-+      characteristic of a temperature transducer and should be stated in the
-+      datasheet.
-+
-+additionalProperties: false
-+
-+required:
-+  - compatible
-+  - io-channels
-+  - alpha-ppm-per-celsius
-+
-+examples:
-+  - |
-+    ad950: temperature-sensor-0 {
-+        compatible = "temperature-transducer";
-+        #io-channel-cells = <0>;
-+        io-channels = <&temp_adc 3>;
-+
-+        sense-offset-millicelsius = <(-273150)>; /* Kelvin to degrees Celsius */
-+        sense-resistor-ohms = <8060>;
-+        alpha-ppm-per-celsius = <1>; /* 1 uA/K */
-+    };
-+  - |
-+    znq_tmp: temperature-sensor-1 {
-+        compatible = "temperature-transducer";
-+        #io-channel-cells = <0>;
-+        io-channels = <&temp_adc 2>;
-+
-+        sense-offset-millicelsius = <(-273150)>; /* Kelvin to degrees Celsius */
-+        alpha-ppm-per-celsius = <4000>; /* 4 mV/K */
-+    };
-+...
+> Please, let's defer any more features that rely on write-protecting
+> random anon pages until we have ways in place to not corrupt random user
+> space.
+>
+> That is:
+> 1) Teaching the COW logic to not copy pages that are pinned -- I'm
+> working on that.
+> 2) Converting O_DIRECT to use FOLL_PIN instead of FOLL_GET. John is
+> working on that.
+>
+> So I'm not against this change. I'm against this change at this point in
+> time.
+
+I agree. I will wait until the COW problems are solved to send this patch.
+
+
 -- 
-2.35.1.4.g5d01301f2b86
-
+Atenciosamente,
+Pedro Demarchi Gomes.

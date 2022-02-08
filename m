@@ -2,63 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D1044ADE61
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 17:32:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BB9D4ADD5E
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 16:47:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383442AbiBHQcn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 11:32:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56652 "EHLO
+        id S1381832AbiBHPru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 10:47:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383420AbiBHQcm (ORCPT
+        with ESMTP id S231406AbiBHPrs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 11:32:42 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4B434C061576
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 08:32:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644337960;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BtkJvAo+N9u8Ul05NhvoL9QDcGnWfbGW9BYYZdFX1lY=;
-        b=IbdOnHsp8rHImQLEuhPnpb1Jl5WRprTEMYOUrokXzG1CxbuDbVY/eAVYw/fe2MzI4Ag7N/
-        RgY/xvguoH/rqU2Wh5pm6TtMUxYXOFbnPftT6rdSQ6MeDQ8MDk4Sq6QrMwDnx/4HqI55vH
-        6ykdwcOiyARWt4MjODgtuCshXDQ+y1g=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-325-Yz1WSJKINhyj0X1oRqdZwg-1; Tue, 08 Feb 2022 11:32:37 -0500
-X-MC-Unique: Yz1WSJKINhyj0X1oRqdZwg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 189D48519E0;
-        Tue,  8 Feb 2022 16:32:35 +0000 (UTC)
-Received: from fuller.cnet (ovpn-112-4.gru2.redhat.com [10.97.112.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6E8B42A174;
-        Tue,  8 Feb 2022 16:32:34 +0000 (UTC)
-Received: by fuller.cnet (Postfix, from userid 1000)
-        id 5BB70416D5DD; Tue,  8 Feb 2022 12:47:10 -0300 (-03)
-Date:   Tue, 8 Feb 2022 12:47:10 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>
-Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, frederic@kernel.org, tglx@linutronix.de,
-        mgorman@suse.de, linux-rt-users@vger.kernel.org, vbabka@suse.cz,
-        cl@linux.com, paulmck@kernel.org, willy@infradead.org
-Subject: Re: [PATCH 2/2] mm/page_alloc: Add remote draining support to
- per-cpu lists
-Message-ID: <YgKQfsznPUDN34un@fuller.cnet>
-References: <20220208100750.1189808-1-nsaenzju@redhat.com>
- <20220208100750.1189808-3-nsaenzju@redhat.com>
+        Tue, 8 Feb 2022 10:47:48 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8FB65C061578;
+        Tue,  8 Feb 2022 07:47:47 -0800 (PST)
+Received: from [192.168.254.13] (unknown [72.85.44.115])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 3DB4E20B90C6;
+        Tue,  8 Feb 2022 07:47:46 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 3DB4E20B90C6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1644335267;
+        bh=KmL07M010/ylefc6zNElZjQYbSBmTpd/e1SNOQwetTM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=PJMmBh8HudgS0Eyy3CtKlIqOzn5Pav8NmMnir/hQca15xoFu+ZCXljT+Qd5p/gQsg
+         lLQqq0eq4lL6zH6U75lA+xrszXmWz9NcLfRErWB8pbDLJQBhiRZN/4P8Oj8OFWK0Dy
+         tAsi618Vp/hGxc8RkNyk9WTWmDUR1PVWipWf9V5U=
+Message-ID: <4be3fef6-63ca-af97-7fc6-d93d85a9b706@linux.microsoft.com>
+Date:   Tue, 8 Feb 2022 10:47:44 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220208100750.1189808-3-nsaenzju@redhat.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH] SELinux: Always allow FIOCLEX and FIONCLEX
+Content-Language: en-US
+To:     William Roberts <bill.c.roberts@gmail.com>,
+        Dominick Grift <dominick.grift@defensec.nl>
+Cc:     Paul Moore <paul@paul-moore.com>,
+        Demi Marie Obenour <demiobenour@gmail.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        SElinux list <selinux@vger.kernel.org>,
+        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
+        selinux-refpolicy@vger.kernel.org
+References: <4df50e95-6173-4ed1-9d08-3c1c4abab23f@gmail.com>
+ <CAHC9VhSjTqT-4TMxBnQOQHkj+djONihfeoPVyy1egrZY2t10XA@mail.gmail.com>
+ <c8a616e4-26a6-af51-212c-31dca0e265cd@gmail.com>
+ <CAHC9VhQTZdeNOx3AXdoc9LXUzDk5n7wyGBX-tV-ZaovhPAdWwQ@mail.gmail.com>
+ <e85dd38b-ef7b-ed7e-882e-124cdf942c44@gmail.com>
+ <CAHC9VhROuJtvNHuVaR6pEekNFacH3Tywx58_hn1f5Mwk+kjC8g@mail.gmail.com>
+ <b7e55304-d114-bcbe-08d2-b54828121a01@gmail.com>
+ <CAHC9VhSdgD4Nfaxbnnn4r-OK8koSZ7+zQoPShDbGi9PvkJFpng@mail.gmail.com>
+ <478e1651-a383-05ff-d011-6dda771b8ce8@linux.microsoft.com>
+ <875ypt5zmz.fsf@defensec.nl>
+ <CAFftDdo9JmbyPzPWRjOYgZBOS9b5d+OGKKf8egS8_ysbbWW87Q@mail.gmail.com>
+From:   Chris PeBenito <chpebeni@linux.microsoft.com>
+In-Reply-To: <CAFftDdo9JmbyPzPWRjOYgZBOS9b5d+OGKKf8egS8_ysbbWW87Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,119 +68,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 08, 2022 at 11:07:50AM +0100, Nicolas Saenz Julienne wrote:
-> The page allocator's per-cpu page lists (pcplists) are currently
-> protected using local_locks. While performance savvy, this doesn't allow
-> for remote access to these structures. CPUs requiring system-wide
-> changes to the per-cpu lists get around this by scheduling
-> workers on each CPU. That said, some setups like NOHZ_FULL CPUs,
-> aren't well suited to this since they can't handle interruptions
-> of any sort.
+On 2/8/2022 09:17, William Roberts wrote:
+> <snip>
 > 
-> To mitigate this, replace the current draining mechanism with one that
-> allows remotely draining the lists:
+> This is getting too long for me.
 > 
->  - Each CPU now has two pcplists pointers: one that points to a pcplists
->    instance that is in-use, 'pcp->lp', another that points to an idle
->    and empty instance, 'pcp->drain'. CPUs access their local pcplists
->    through 'pcp->lp' and the pointer is dereferenced atomically.
+>>>
+>>> I don't have a strong opinion either way.  If one were to allow this
+>>> using a policy rule, it would result in a major policy breakage.  The
+>>> rule would turn on extended perm checks across the entire system,
+>>> which the SELinux Reference Policy isn't written for.  I can't speak
+>>> to the Android policy, but I would imagine it would be the similar
+>>> problem there too.
+>>
+>> Excuse me if I am wrong but AFAIK adding a xperm rule does not turn on
+>> xperm checks across the entire system.
 > 
->  - When a CPU decides it needs to empty some remote pcplists, it'll
->    atomically exchange the remote CPU's 'pcp->lp' and 'pcp->drain'
->    pointers. A remote CPU racing with this will either have:
+> It doesn't as you state below its target + class.
 > 
->      - An old 'pcp->lp' reference, it'll soon be emptied by the drain
->        process, we just have to wait for it to finish using it.
+>>
+>> If i am not mistaken it will turn on xperm checks only for the
+>> operations that have the same source and target/target class.
 > 
->      - The new 'pcp->lp' reference, that is, an empty pcplists instance.
->        rcu_replace_pointer()'s release semantics ensures any prior
->        changes will be visible by the remote CPU, for example: changes
->        to 'pcp->high' and 'pcp->batch' when disabling the pcplists.
-> 
->  - The CPU that started the drain can now wait for an RCU grace period
->    to make sure the remote CPU is done using the old pcplists.
->    synchronize_rcu() counts as a full memory barrier, so any changes the
->    local CPU makes to the soon to be drained pcplists will be visible to
->    the draining CPU once it returns.
-> 
->  - Then the CPU can safely free the old pcplists. Nobody else holds a
->    reference to it. Note that concurrent access to the remote pcplists
->    drain is protected by the 'pcpu_drain_mutex'.
-> 
-> >From an RCU perspective, we're only protecting access to the pcplists
-> pointer, the drain operation is the writer and the local_lock critical
-> sections are the readers. RCU guarantees atomicity both while
-> dereferencing the pcplists pointer and replacing it. It also checks for
-> RCU critical section/locking correctness, as all readers have to hold
-> their per-cpu pagesets local_lock, which also counts as a critical
-> section from RCU's perspective.
-> 
-> >From a performance perspective, on production configurations, the patch
-> adds an extra dereference to all hot paths (under such circumstances
-> rcu_dereference() will simplify to READ_ONCE()). Extensive measurements
-> have been performed on different architectures to ascertain the
-> performance impact is minimal. Most platforms don't see any difference
-> and the worst-case scenario shows a 1-3% degradation on a page
-> allocation micro-benchmark. See cover letter for in-depth results.
-> 
-> Accesses to the pcplists like the ones in mm/vmstat.c don't require RCU
-> supervision since they can handle outdated data, but they do use
-> rcu_access_pointer() to avoid compiler weirdness make sparse happy.
-> 
-> Note that special care has been taken to verify there are no races with
-> the memory hotplug code paths. Notably with calls to zone_pcp_reset().
-> As Mel Gorman explains in a previous patch[1]: "The existing hotplug
-> paths guarantees the pcplists cannot be used after zone_pcp_enable()
-> [the one in offline_pages()]. That should be the case already because
-> all the pages have been freed and there is no page to put on the PCP
-> lists."
-> 
-> All in all, this technique allows for remote draining on all setups with
-> an acceptable performance impact. It benefits all sorts of use cases:
-> low-latency, real-time, HPC, idle systems, KVM guests.
-> 
-> [1] 8ca559132a2d ("mm/memory_hotplug: remove broken locking of zone PCP
->     structures during hot remove")
-> 
-> Signed-off-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
-> ---
-> 
-> Changes since RFC:
->  - Avoid unnecessary spin_lock_irqsave/restore() in free_pcppages_bulk()
->  - Add more detail to commit and code comments.
->  - Use synchronize_rcu() instead of synchronize_rcu_expedited(), the RCU
->    documentation says to avoid it unless really justified. I don't think
->    it's justified here, if we can schedule and join works, waiting for
->    an RCU grace period is OK.
+> That's correct.
 
-https://patchwork.ozlabs.org/project/netdev/patch/1306228052.3026.16.camel@edumazet-laptop/
+Just to clarify (Demi Marie also mentioned this earlier in the thread), 
+what I originally meant was how to emulate this patch by using policy 
+rules means you need a rule that allows the two ioctls on all domains 
+for all objects.  That results in xperms checks enabled everywhere.
 
-Adding 100ms to direct reclaim path might be problematic. It will also
-slowdown kcompactd (note it'll call drain_all_pages for each zone).
 
->  - Avoid sparse warnings by using rcu_access_pointer() and
->    rcu_dereference_protected().
+>> This is also why i don't (with the exception TIOSCTI for termdev
+>> chr_file) use xperms by default.
+>>
+>> 1. it is really easy to selectively filter ioctls by adding xperm rules
+>> for end users (and since ioctls are often device/driver specific they
+>> know best what is needed and what not)
 > 
->  include/linux/mmzone.h |  22 +++++-
->  mm/page_alloc.c        | 155 ++++++++++++++++++++++++++---------------
->  mm/vmstat.c            |   6 +-
->  3 files changed, 120 insertions(+), 63 deletions(-)
+>>>>> and FIONCLEX can be trivially bypassed unless fcntl(F_SETFD)
+>>
+>> 2. if you filter ioctls in upstream policy for example like i do with
+>> TIOSCTI using for example (allowx foo bar (ioctl chr_file (not
+>> (0xXXXX)))) then you cannot easily exclude additional ioctls later where source is
+>> foo and target/tclass is bar/chr_file because there is already a rule in
+>> place allowing the ioctl (and you cannot add rules)
 > 
-> diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-> index b4cb85d9c6e8..b0b593fd8e48 100644
-> --- a/include/linux/mmzone.h
-> +++ b/include/linux/mmzone.h
-> @@ -388,13 +388,31 @@ struct per_cpu_pages {
->  	short expire;		/* When 0, remote pagesets are drained */
->  #endif
->  
-> -	struct pcplists *lp;
-> +	/*
-> +	 * As a rule of thumb, any access to struct per_cpu_pages's 'lp' has
-> +	 * happen with the pagesets local_lock held and using
-> +	 * rcu_dereference_check(). If there is a need to modify both
-> +	 * 'lp->count' and 'lp->lists' in the same critical section 'pcp->lp'
-> +	 * can only be derefrenced once. See for example:
+> Currently, fcntl flag F_SETFD is never checked, it's silently allowed, but
+> the equivalent FIONCLEX and FIOCLEX are checked. So if you wrote policy
+> to block the FIO*CLEX flags, it would be bypassable through F_SETFD and
+> FD_CLOEXEC. So the patch proposed makes the FIO flags behave like
+> F_SETFD. Which means upstream policy users could drop this allow, which
+> could then remove the target/class rule and allow all icotls. Which is easy
+> to prevent and fix you could be a rule in to allowx 0 as documented in the
+> wiki: https://selinuxproject.org/page/XpermRules
+> 
+> The questions I think we have here are:
+> 1. Do we agree that the behavior between SETFD and the FIO flags are equivalent?
+>    I think they are.
+> 2. Do we want the interfaces to behave the same?
+>    I think they should.
 
-Typo.
+If you can bypass FIONCLEX and FIOCLEX checks by F_SETFD and FD_CLOEXEC, 
+then I agree that the two FIO checks don't have value and can be skipped 
+as F_SETFD is.
 
+> 3. Do upstream users of the policy construct care?
+>    The patch is backwards compat, but I don't want their to be cruft
+> floating around with extra allowxperm rules.
+
+Reference policy does not have any xperm rules at this time.  I looked 
+at the Fedora policy, and that doesn't have any.
+
+
+
+-- 
+Chris PeBenito

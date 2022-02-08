@@ -2,195 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF6314AE182
+	by mail.lfdr.de (Postfix) with ESMTP id 910964AE181
 	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 19:52:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238395AbiBHSvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 13:51:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45824 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385407AbiBHSvp (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S1385393AbiBHSvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 8 Feb 2022 13:51:45 -0500
-X-Greylist: delayed 2346 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Feb 2022 10:51:44 PST
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B84C0612C0
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 10:51:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=dAI4MRpXSkWD+3j3FS9v2m1/GR1G+MWPYwH2BqIc/V8=; b=acpIbYGaXGG1lU27jLdiD4AuIh
-        0ZnQ9t2EsSsZML9WQnth1+hU9k1SQN1EeLqwJ/p67VbyNeVqXbS4h3kSXUhuvV9MLfEE9qGeHmIqb
-        pk57xjXYarfFzRSJO5mdyIYTwI+3fs+KIjpTCCCzoBVTeI+wwXCpUb9d98U31jvicpCoWdLFmIjFz
-        WJTUYewJSL/xFLusqLPgMX2BBKejiTt6Qz21OeYAYLK8FrzkvA9POkkXNe9eqUE3kzgfIC4w6Rwe5
-        GWkCOXTpFUiu9IbhSs5lO94GWJfnwwAb5XpVQ3AqYTwyloGvZeqUn6xzXe6sem2zcqa2LWr+vbd/7
-        pKiAnJ0A==;
-Received: from 201-27-34-10.dsl.telesp.net.br ([201.27.34.10] helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1nHVaM-00010h-88; Tue, 08 Feb 2022 19:51:30 +0100
-Message-ID: <e2d39675-5df6-73fb-fa24-df906a97ee50@igalia.com>
-Date:   Tue, 8 Feb 2022 15:51:13 -0300
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45796 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239019AbiBHSvn (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 8 Feb 2022 13:51:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 93941C0612C0
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 10:51:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644346301;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y1o+F3uoG0nYTsfwRI5MWuT5Nxk+PO/5jW+NV0SQ7s4=;
+        b=VIB6Z+Oc+2jCOBfPZNC9eAnuhIWYvadgnV68imPxe5n1yxrpC/zmYXEosJea8TthVSjZk/
+        qXepdk2kK9jActw0qsiOTZrzJv4qSMyV+wcVGgdN1NnIW+RdidgvMk7u1P6o/LHstoOmXa
+        z5FkFX7f9ObpgsdaWZlck4Ktc70gchU=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-148-XzfkwCTPPWyAKnAO9UKWdA-1; Tue, 08 Feb 2022 13:51:38 -0500
+X-MC-Unique: XzfkwCTPPWyAKnAO9UKWdA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 090A3100C661;
+        Tue,  8 Feb 2022 18:51:37 +0000 (UTC)
+Received: from [10.22.35.8] (unknown [10.22.35.8])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9B367753DB;
+        Tue,  8 Feb 2022 18:51:35 +0000 (UTC)
+Message-ID: <bd83aca3-059f-92dd-e094-b27f51f9481a@redhat.com>
+Date:   Tue, 8 Feb 2022 13:51:35 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH V4] notifier/panic: Introduce panic_notifier_filter
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] copy_process(): Move fd_install() out of sighand->siglock
+ critical section
 Content-Language: en-US
-To:     Petr Mladek <pmladek@suse.com>, "bhe@redhat.com" <bhe@redhat.com>,
-        "dyoung@redhat.com" <dyoung@redhat.com>,
-        "vgoyal@redhat.com" <vgoyal@redhat.com>
-Cc:     "d.hatayama@fujitsu.com" <d.hatayama@fujitsu.com>,
-        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "halves@canonical.com" <halves@canonical.com>,
-        "kernel@gpiccoli.net" <kernel@gpiccoli.net>
-References: <20220108153451.195121-1-gpiccoli@igalia.com>
- <TYAPR01MB6507D06BA6D32218F6E88198955F9@TYAPR01MB6507.jpnprd01.prod.outlook.com>
- <fda509a5-ea0d-4d1d-a1c1-ca5e80010fc0@igalia.com>
- <TYAPR01MB6507D9747647685B554B8F8F955F9@TYAPR01MB6507.jpnprd01.prod.outlook.com>
- <fb5e66b6-049a-22ab-5913-a04cc302b629@igalia.com> <YfPxvzSzDLjO5ldp@alley>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <YfPxvzSzDLjO5ldp@alley>
-Content-Type: text/plain; charset=UTF-8
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Alexey Gladkov <legion@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jann Horn <jannh@google.com>, linux-kernel@vger.kernel.org
+References: <20220208163912.1084752-1-longman@redhat.com>
+ <YgKziblMKsmHkP4f@zeniv-ca.linux.org.uk>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <YgKziblMKsmHkP4f@zeniv-ca.linux.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/01/2022 10:38, Petr Mladek wrote:
-> [...] On Thu 2022-01-27 14:16:20, Guilherme G. Piccoli wrote:
-> First, I am sorry for the very long mail. But the problem is really
-> complicated. I did my best to describe it a clean way.
-> 
-> I have discussed these problems with a colleague and he had some good
-> points. And my view evolved even further.
+On 2/8/22 13:16, Al Viro wrote:
+> On Tue, Feb 08, 2022 at 11:39:12AM -0500, Waiman Long wrote:
+>
+>> One way to solve this problem is to move the fd_install() call out of
+>> the sighand->siglock critical section.
+>>
+>> Before commit 6fd2fe494b17 ("copy_process(): don't use ksys_close()
+>> on cleanups"), the pidfd installation was done without holding both
+>> the task_list lock and the sighand->siglock. Obviously, holding these
+>> two locks are not really needed to protect the fd_install() call.
+>> So move the fd_install() call down to after the releases of both locks.
+> 	Umm... That assumes we can delay it that far.  IOW, that nothing
+> relies upon having pidfd observable in /proc/*/fd as soon as the child
+> becomes visible there in the first place.
+>
+> 	What warranties are expected from CLONE_PIDFD wrt observation of
+> child's descriptor table?
+>
+I think the fd_install() call can be moved after the release of 
+sighand->siglock but before the release the tasklist_lock. Will that be 
+good enough?
 
-Thanks Petr for the very comprehensive and detailed email - this helps a
-lot in shaping the future of panic notifier(s)!
-
-
-> [...] 
-> I think about the following solution:
-> 
->     + split the notifiers into three lists:
-> 
-> 	+ info: stop watchdogs, provide extra info
-> 	+ hypervisor: poke hypervisor
-> 	+ reboot: actions needed only when crash dump did not happen
-> 
->     + allow to call hypervisor notifiers before or after kdump
-> 
->     + stop CPUs before kdump when either hypervisor notifiers or
->       kmsg_dump is enabled
-> 
-> Note that it still allows to call kdump as the first action when
-> hypervisor notifiers are called after kdump and no kmsg dumper
-> is registered.
-> 
-> 
-> void panic(void)
-> {
-> 	[...]
-> 
-> 	if (crash_kexec_post_hypervisor || panic_print || enabled_kmsg_dump()) {
-> 		/*
-> 		 * Stop CPUs when some extra action is required before
-> 		 * crash dump. We will need architecture dependent extra
-> 		 * works in addition to stopping other CPUs.
-> 		 */
-> 		 crash_smp_send_stop();
-> 		 cpus_stopped = true;
-> 	}
-> 
-> 	if (crash_kexec_post_hypervisor) {
-> 		  /* Tell hypervisor about the panic */
-> 		  atomic_notifier_call_chain(&panic_hypervisor_notifier_list, 0, buf);
-> 	}
-> 
-> 	if (enabled_kmsg_dump) {
-> 		  /*
-> 		   * Print extra info by notifiers.
-> 		   * Prevent rumors, for example, by stopping watchdogs.
-> 		   */
-> 		  atomic_notifier_call_chain(&panic_info_notifier_list, 0, buf);
-> 	}
-> 
-> 	/* Optional extra info */
-> 	panic_printk_sys_info();
-> 
-> 	/* No dumper by default */
-> 	kmsg_dump();
-> 
-> 	/* Used only when crash kernel loaded */
-> 	__crash_kexec(NULL);
-> 
-> 	if (!cpus_stopped) {
-> 		/*
-> 		 * Note smp_send_stop is the usual smp shutdown function, which
-> 		 * unfortunately means it may not be hardened to work in a
-> 		 * panic situation.
-> 		 */
-> 		smp_send_stop();
-> 	}
-> 
-> 	if (!crash_kexec_post_hypervisor) {
-> 		  /* Tell hypervisor about the panic */
-> 		  atomic_notifier_call_chain(&panic_hypervisor_notifier_list, 0, buf);
-> 	}
-> 
-> 	if (!enabled_kmsg_dump) {
-> 		  /*
-> 		   * Print extra info by notifiers.
-> 		   * Prevent rumors, for example, by stopping watchdogs.
-> 		   */
-> 		  atomic_notifier_call_chain(&panic_info_notifier_list, 0, buf);
-> 	}
-> 
-> 	/*
-> 	 * Help to reboot a safe way.
-> 	 */
-> 	atomic_notifier_call_chain(&panic_reboot_notifier_list, 0, buf);
-> 
-> 	[...]
-> }
-> 
-> Any opinion?
-> Do the notifier list names make sense?
-> 
-
-This was exposed very clearly, thanks. I agree with you, it's a good
-approach, and we can evolve that during the implementation phase, like
-"function A is not good in the hypervisor list because of this and
-that", so we move it to the reboot list. Also, name of the lists is not
-so relevant, might evolve in the implementation phase - I personally
-liked them, specially the "info" and "hypervisor" ones (reboot seems
-good but not great heh).
-
-So, what are the opinions from kdump maintainers about this idea?
-Baoquan / Vivek / Dave, does it make sense to you? Do you have any
-suggestions/concerns to add on top of Petr draft?
-
-I prefer this refactor than the filter, certainly. If nobody else
-working on that, I can try implementing that - it's very interesting.
-The only thing I'd like to have first is an ACK from the kdump
-maintainers about the general idea.
+I am afraid that I am not knowledgeable enough to talk about the 
+CLONE_PIDFD expectation. May other people chime in on this?
 
 Cheers,
+Longman
 
 
-Guilherme

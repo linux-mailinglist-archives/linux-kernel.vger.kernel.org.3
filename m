@@ -2,188 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B96874ADA0F
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 14:38:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BECE44AD9FB
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 14:36:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353015AbiBHNhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 08:37:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35108 "EHLO
+        id S1350657AbiBHNgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 08:36:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357695AbiBHNhI (ORCPT
+        with ESMTP id S1350440AbiBHNgC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 08:37:08 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CC61C03FEE6;
-        Tue,  8 Feb 2022 05:37:06 -0800 (PST)
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JtPDQ64hmz67nPb;
-        Tue,  8 Feb 2022 21:36:22 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 8 Feb 2022 14:37:04 +0100
-Received: from A2006125610.china.huawei.com (10.202.227.178) by
- lhreml710-chm.china.huawei.com (10.201.108.61) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 8 Feb 2022 13:36:58 +0000
-From:   Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
-To:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-crypto@vger.kernel.org>
-CC:     <alex.williamson@redhat.com>, <jgg@nvidia.com>,
-        <cohuck@redhat.com>, <mgurtovoy@nvidia.com>, <yishaih@nvidia.com>,
-        <linuxarm@huawei.com>, <liulongfang@huawei.com>,
-        <prime.zeng@hisilicon.com>, <jonathan.cameron@huawei.com>,
-        <wangzhou1@hisilicon.com>
-Subject: [RFC v4 8/8] hisi_acc_vfio_pci: Use its own PCI reset_done error handler
-Date:   Tue, 8 Feb 2022 13:34:25 +0000
-Message-ID: <20220208133425.1096-9-shameerali.kolothum.thodi@huawei.com>
-X-Mailer: git-send-email 2.12.0.windows.1
-In-Reply-To: <20220208133425.1096-1-shameerali.kolothum.thodi@huawei.com>
-References: <20220208133425.1096-1-shameerali.kolothum.thodi@huawei.com>
+        Tue, 8 Feb 2022 08:36:02 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C57C03FED0;
+        Tue,  8 Feb 2022 05:36:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 3D8E3CE1A3E;
+        Tue,  8 Feb 2022 13:35:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0F36C340F3;
+        Tue,  8 Feb 2022 13:35:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644327356;
+        bh=u79a7xGuIOnAI0hmeTWqkoFHjcZXOZRDz+/R4oy2k1k=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=mynva61oT3uZHMDFA069MvSDpcsyx1yMlXE/p+xa6vXqTHok4+/N7a/xNVtabTCFm
+         In2iYnW4vzK/uESK3I9urNHZtMxi1fB9fkN2IQf4jAamEuLuzovvObTU+FDDg+9BTs
+         s+qv+o6otTmMXtoMALrySTUxZXad4qLAAb6wOk9YCwCRtHkqQg7+WviieSIok1mneq
+         SH3auuQApRKdyj6gH7VRcPUx3pUkHuOLQ/vnqX/jNGXFsCXQ4u8uTjmuqI03rYsrKZ
+         AN8XP8Flm/7UjqWFefbbpP2ihy7dJvOKg+3rWDopxCX+nhVpYy8fWA4YmcgXU1ukT8
+         uRh9tnDM5k9/A==
+Received: by mail-wm1-f41.google.com with SMTP id v129so8644702wme.2;
+        Tue, 08 Feb 2022 05:35:56 -0800 (PST)
+X-Gm-Message-State: AOAM533RApj/RWWQhmah+WlKoQLAQcnWgW4vx5N7uFLZklkjcuqax0YA
+        ZuoSqeS51eAlSo81K3b1TvIiXHHL0y9GDJCwZC4=
+X-Google-Smtp-Source: ABdhPJwhL/oOOSs5ddtm4cjVywRdX/vv8D4K4D7Cs1AgelJH4RPgbhf1fkVoFXF1pKq0071dZJCgc6DVhHV7AxenYm4=
+X-Received: by 2002:a05:600c:4f84:: with SMTP id n4mr1204593wmq.106.1644327354967;
+ Tue, 08 Feb 2022 05:35:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.202.227.178]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220203083658.559803-1-arnd@kernel.org> <CAMj1kXG5W4nTXP5fXLmWhNfsQ_WigKbhdZz5yh1MNqE_VcD1TA@mail.gmail.com>
+ <CAK8P3a1GeHV4Mj6rcnAY7y0351r-A7imsyWevKfE_qwHMz0D1g@mail.gmail.com>
+In-Reply-To: <CAK8P3a1GeHV4Mj6rcnAY7y0351r-A7imsyWevKfE_qwHMz0D1g@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Tue, 8 Feb 2022 14:35:43 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXEB95mWGMNDC0LsOXm4o89tbAK83wF1ZBfK5jEozGw9ZA@mail.gmail.com>
+Message-ID: <CAMj1kXEB95mWGMNDC0LsOXm4o89tbAK83wF1ZBfK5jEozGw9ZA@mail.gmail.com>
+Subject: Re: [PATCH] [v2] ARM: sa1100/assabet: move dmabounce hack to ohci driver
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Register private handler for pci_error_handlers.reset_done and update
-state accordingly.
+On Tue, 8 Feb 2022 at 13:49, Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> On Thu, Feb 3, 2022 at 9:47 AM Ard Biesheuvel <ardb@kernel.org> wrote:
+> > On Thu, 3 Feb 2022 at 09:38, Arnd Bergmann <arnd@kernel.org> wrote:
+> >
+> > > There are two main downsides:
+> > >
+> > >  - rather than using a dynamically sized pool, this buffer needs
+> > >    to be allocated at probe time using a fixed size. Without
+> > >    having any idea of what it should be, I picked a size of
+> > >    64KB, which is between what the other two OHCI front-ends use
+> > >    in their SRAM. If anyone has a better idea what that size
+> > >    is reasonable, this can be trivially changed.
+> > >
+> >
+> > I suppose this is a problem if the driver falls back to ordinary DRAM
+> > once the allocation runs out?
+>
+> From what I can tell, there is no such fallback. If the localmem_pool
+> runs out, the allocation fails, which may cause other problems, but
+> it never falls back to the wrong DMA address.
+>
 
-Signed-off-by: Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
----
- drivers/vfio/pci/hisi_acc_vfio_pci.c | 54 ++++++++++++++++++++++++++--
- drivers/vfio/pci/hisi_acc_vfio_pci.h |  4 ++-
- 2 files changed, 54 insertions(+), 4 deletions(-)
+OK that is the least bad outcome I suppose.
 
-diff --git a/drivers/vfio/pci/hisi_acc_vfio_pci.c b/drivers/vfio/pci/hisi_acc_vfio_pci.c
-index 613bf86ceabf..55abbb20dec2 100644
---- a/drivers/vfio/pci/hisi_acc_vfio_pci.c
-+++ b/drivers/vfio/pci/hisi_acc_vfio_pci.c
-@@ -867,6 +867,25 @@ hisi_acc_vf_set_device_state(struct hisi_acc_vf_core_device *hisi_acc_vdev,
- 	return ERR_PTR(-EINVAL);
- }
- 
-+/*
-+ * This function is called in all state_mutex unlock cases to
-+ * handle a 'deferred_reset' if exists.
-+ */
-+static void hisi_acc_vf_state_mutex_unlock(struct hisi_acc_vf_core_device *hisi_acc_vdev)
-+{
-+again:
-+	spin_lock(&hisi_acc_vdev->reset_lock);
-+	if (hisi_acc_vdev->deferred_reset) {
-+		hisi_acc_vdev->deferred_reset = false;
-+		spin_unlock(&hisi_acc_vdev->reset_lock);
-+		hisi_acc_vdev->mig_state = VFIO_DEVICE_STATE_RUNNING;
-+		hisi_acc_vf_disable_fds(hisi_acc_vdev);
-+		goto again;
-+	}
-+	mutex_unlock(&hisi_acc_vdev->state_mutex);
-+	spin_unlock(&hisi_acc_vdev->reset_lock);
-+}
-+
- static struct file *
- hisi_acc_vfio_pci_set_device_state(struct vfio_device *vdev,
- 				   enum vfio_device_mig_state new_state)
-@@ -897,7 +916,7 @@ hisi_acc_vfio_pci_set_device_state(struct vfio_device *vdev,
- 			break;
- 		}
- 	}
--	mutex_unlock(&hisi_acc_vdev->state_mutex);
-+	hisi_acc_vf_state_mutex_unlock(hisi_acc_vdev);
- 	return res;
- }
- 
-@@ -910,7 +929,7 @@ hisi_acc_vfio_pci_get_device_state(struct vfio_device *vdev,
- 
- 	mutex_lock(&hisi_acc_vdev->state_mutex);
- 	*curr_state = hisi_acc_vdev->mig_state;
--	mutex_unlock(&hisi_acc_vdev->state_mutex);
-+	hisi_acc_vf_state_mutex_unlock(hisi_acc_vdev);
- 	return 0;
- }
- 
-@@ -1065,6 +1084,30 @@ static long hisi_acc_vfio_pci_ioctl(struct vfio_device *core_vdev, unsigned int
- 	return vfio_pci_core_ioctl(core_vdev, cmd, arg);
- }
- 
-+static void hisi_acc_vf_pci_aer_reset_done(struct pci_dev *pdev)
-+{
-+	struct hisi_acc_vf_core_device *hisi_acc_vdev = dev_get_drvdata(&pdev->dev);
-+
-+	if (!hisi_acc_vdev->migration_support)
-+		return;
-+
-+	/*
-+	 * As the higher VFIO layers are holding locks across reset and using
-+	 * those same locks with the mm_lock we need to prevent ABBA deadlock
-+	 * with the state_mutex and mm_lock.
-+	 * In case the state_mutex was taken already we defer the cleanup work
-+	 * to the unlock flow of the other running context.
-+	 */
-+	spin_lock(&hisi_acc_vdev->reset_lock);
-+	hisi_acc_vdev->deferred_reset = true;
-+	if (!mutex_trylock(&hisi_acc_vdev->state_mutex)) {
-+		spin_unlock(&hisi_acc_vdev->reset_lock);
-+		return;
-+	}
-+	spin_unlock(&hisi_acc_vdev->reset_lock);
-+	hisi_acc_vf_state_mutex_unlock(hisi_acc_vdev);
-+}
-+
- static int hisi_acc_vfio_pci_open_device(struct vfio_device *core_vdev)
- {
- 	struct hisi_acc_vf_core_device *hisi_acc_vdev = container_of(core_vdev,
-@@ -1168,12 +1211,17 @@ static const struct pci_device_id hisi_acc_vfio_pci_table[] = {
- 
- MODULE_DEVICE_TABLE(pci, hisi_acc_vfio_pci_table);
- 
-+static const struct pci_error_handlers hisi_acc_vf_err_handlers = {
-+	.reset_done = hisi_acc_vf_pci_aer_reset_done,
-+	.error_detected = vfio_pci_core_aer_err_detected,
-+};
-+
- static struct pci_driver hisi_acc_vfio_pci_driver = {
- 	.name = KBUILD_MODNAME,
- 	.id_table = hisi_acc_vfio_pci_table,
- 	.probe = hisi_acc_vfio_pci_probe,
- 	.remove = hisi_acc_vfio_pci_remove,
--	.err_handler = &vfio_pci_core_err_handlers,
-+	.err_handler = &hisi_acc_vf_err_handlers,
- };
- 
- module_pci_driver(hisi_acc_vfio_pci_driver);
-diff --git a/drivers/vfio/pci/hisi_acc_vfio_pci.h b/drivers/vfio/pci/hisi_acc_vfio_pci.h
-index ea87e0985d8d..7f1a5bc245da 100644
---- a/drivers/vfio/pci/hisi_acc_vfio_pci.h
-+++ b/drivers/vfio/pci/hisi_acc_vfio_pci.h
-@@ -104,6 +104,7 @@ struct hisi_acc_vf_migration_file {
- struct hisi_acc_vf_core_device {
- 	struct vfio_pci_core_device core_device;
- 	u8 migration_support:1;
-+	u8 deferred_reset:1;
- 	/* for migration state */
- 	struct mutex state_mutex;
- 	enum vfio_device_mig_state mig_state;
-@@ -112,7 +113,8 @@ struct hisi_acc_vf_core_device {
- 	struct hisi_qm *pf_qm;
- 	struct hisi_qm vf_qm;
- 	int vf_id;
--
-+	/* for reset handler */
-+	spinlock_t reset_lock;
- 	struct hisi_acc_vf_migration_file *resuming_migf;
- 	struct hisi_acc_vf_migration_file *saving_migf;
- };
--- 
-2.17.1
+> > >  - Previously, only USB transfers to unaddressable memory needed
+> > >    to go through the bounce buffer, now all of them do, which may
+> > >    impact runtime performance for USB endpoints that do a lot of
+> > >    transfers.
+> > >
+> > > On the upside, the local_mem support uses write-combining buffers,
+> > > which should be a bit faster for transfers to the device compared to
+> > > normal uncached coherent memory as used in dmabounce.
+> > >
+> >
+> > Talking from past experience using this trick on a NXP ARM9 SoC ~10
+> > years ago, using on-chip SRAM for USB DMA likely results in a
+> > significant performance boost, even without write combining, although
+> > the exact scenario obviously matters.
+>
+> Right, that makes sense, but it won't help here because there is
+> no SRAM. One detail  I noticed is that the localmem pool normally
+> gets mapped as WC, which is what I did in the new code as well, but
+> dma_alloc_flags(..., DMA_ATTR_WRITE_COMBINE) does not always
+> honor this flag. I think it will do it here because a GFP_KERNEL
+> allocation should be served by the remap_allocator, while
+> GFP_ATOMIC allocations would be served by pool_allocator_alloc(),
+> which ignores the flag.
+>
 
+Ah yes, ignore me. For some reason, I thought this was about on-chip SRAM.

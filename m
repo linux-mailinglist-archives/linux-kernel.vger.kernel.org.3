@@ -2,140 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C13F4ACDE7
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:19:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CCC74ACDEB
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:22:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245517AbiBHBTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 20:19:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53916 "EHLO
+        id S241717AbiBHBWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 20:22:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343998AbiBHBTQ (ORCPT
+        with ESMTP id S243428AbiBHBVy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 20:19:16 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3FA2C03FED0
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 17:10:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644282604; x=1675818604;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=RtrIuk6XnpXK6Bn1icYdRFqEsnH8wSVRifepjc0UwCM=;
-  b=HSMA8706Z5Ysy9qsyZNPzPIgfiA5m9RxO/48hLo5JQZiGr7ICNF4d4Az
-   RGpdoS/FJjOkhaE8THlql55ISwSsDXhVr4ONbuA77EItul7k9BoDfcxp3
-   V4zZdDY0PD2R6Ja4EG9cDpSdMhFPOu9aQhOB148bV7uFyNNDdWVoYduhY
-   DT1nVLEGgZ9yJjD5EMvfM97xNyN13XjnLVZBFfzn8atC5AtSvrg5tF0tC
-   w+2I/LCBrv1feR3EBOb5vAXSUujo8ATav1MsiFhgX8Iy32nBQfr0QSkLq
-   AaSDiTppH8sjprHEe7HY/E4z2wBTIjzUpGipjCpKyxDNGb54Jwg3uR6Pt
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="232411085"
-X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
-   d="scan'208";a="232411085"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 17:09:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
-   d="scan'208";a="567676656"
-Received: from lkp-server01.sh.intel.com (HELO 9dd77a123018) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 07 Feb 2022 17:09:03 -0800
-Received: from kbuild by 9dd77a123018 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nHF0B-00019s-3r; Tue, 08 Feb 2022 01:09:03 +0000
-Date:   Tue, 8 Feb 2022 09:08:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mahendran Ganesh <opensource.ganesh@gmail.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vinayak Menon <vinmenon@codeaurora.org>,
-        Charan Teja Reddy <charante@codeaurora.org>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android-gs-raviole-5.10-android12-qpr1-d
- 1711/8858] arch/arm64/mm/fault.c:492:31: sparse: sparse: incorrect type in
- return expression (different base types)
-Message-ID: <202202080945.Pweq3bsl-lkp@intel.com>
+        Mon, 7 Feb 2022 20:21:54 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11D71E038A59;
+        Mon,  7 Feb 2022 17:15:24 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 02A60340;
+        Tue,  8 Feb 2022 02:14:59 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1644282900;
+        bh=blvBN8apDdKJGfvkuQRdzEoFeeraC+PwppRok6BR2Zk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=G43PehzyokojQcX2wngd0xQ2hpShQbkk+sdysXF9nIvq9IeVUZvELzCr6NUwTkdL7
+         Z/mtgc3Vq4BH5ryF70FJonQVUVesvtOdgJ448B616j1cIG0kV/hSospSUs/QHAvpto
+         XBQ2Pvc86H7sQo3oVpVgtTkVBeW2jicD2Hq6axps=
+Date:   Tue, 8 Feb 2022 03:14:57 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: (EXT) Re: [PATCH 4/8] media: imx: Fail conversion if pixel
+ format not supported
+Message-ID: <YgHEEa4WhXmThiX0@pendragon.ideasonboard.com>
+References: <20220204121514.2762676-1-alexander.stein@ew.tq-group.com>
+ <Yf34CXvZQPQPAxma@pendragon.ideasonboard.com>
+ <20220205085151.61088d8e.dorota.czaplejewicz@puri.sm>
+ <1905895.usQuhbGJ8B@steina-w>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1905895.usQuhbGJ8B@steina-w>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android-gs-raviole-5.10-android12-qpr1-d
-head:   9771767708df4fcf51cd1642e041c804a86e740c
-commit: 2fd69fa6bcab984b56ccfd4860b10f11f1966bed [1711/8858] FROMLIST: arm64/mm: add speculative page fault
-config: arm64-randconfig-s031-20220207 (https://download.01.org/0day-ci/archive/20220208/202202080945.Pweq3bsl-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/ammarfaizi2/linux-block/commit/2fd69fa6bcab984b56ccfd4860b10f11f1966bed
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android-gs-raviole-5.10-android12-qpr1-d
-        git checkout 2fd69fa6bcab984b56ccfd4860b10f11f1966bed
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/mm/
+Hello,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On Mon, Feb 07, 2022 at 10:52:00AM +0100, Alexander Stein wrote:
+> Am Samstag, 5. Februar 2022, 08:51:51 CET schrieb Dorota Czaplejewicz:
+> > On Sat, 5 Feb 2022 06:07:37 +0200 Laurent Pinchart wrote:
+> > > On Fri, Feb 04, 2022 at 01:15:10PM +0100, Alexander Stein wrote:
+> > > > From: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
+> > > > 
+> > > > imx_media_find_mbus_format has NULL as a valid return value,
+> > > > therefore the caller should take it into account.
+> > > > 
+> > > > Signed-off-by: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
+> > > > Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> > > > ---
+> > > > 
+> > > >  drivers/staging/media/imx/imx-media-utils.c | 3 +++
+> > > >  1 file changed, 3 insertions(+)
+> > > > 
+> > > > diff --git a/drivers/staging/media/imx/imx-media-utils.c
+> > > > b/drivers/staging/media/imx/imx-media-utils.c index
+> > > > 32aaa2e81bea..e0a256a08c3b 100644
+> > > > --- a/drivers/staging/media/imx/imx-media-utils.c
+> > > > +++ b/drivers/staging/media/imx/imx-media-utils.c
+> > > > @@ -544,6 +544,9 @@ static int imx56_media_mbus_fmt_to_pix_fmt(struct
+> > > > v4l2_pix_format *pix,> > 
+> > > >  		cc = imx_media_find_mbus_format(code, PIXFMT_SEL_YUV);
+> > > 
+> > > The code passed to the function comes from the previous line:
+> > > 	imx_media_enum_mbus_formats(&code, 0, PIXFMT_SEL_YUV);
+> > > 
+> > > As far as I can tell, this is guaranteed to return a code that will
+> > > result in imx_media_find_mbus_format() returning a non-NULL pointer.
+> > 
+> > While I am not well-versed in the implicit code style of the kernel, I
+> > decided to leave it in because it makes the code more locally legible. With
+> > a check here, even a non-functional one, there's no need to understand the
+> > internals of `imx_media_find_mbus_format` that are only implicit. That
+> > makes the code less surprising when interested only in the outer function.
+> > 
+> > The other advantage of a check is becoming robust against future changes to
+> > `imx_media_find_mbus_format` itself.
+> > 
+> > I don't have a strong preference about keeping or leaving this patch, but if
+> > this check was there in the first place, I wouldn't have spent time trying
+> > to figure out whether there's a bug here.
+> 
+> Laurent, thanks for your feedback.
+> I'm on Dorota's side here. While you are right that the code from 
+>   imx_media_enum_mbus_formats(&code, 0, PIXFMT_SEL_YUV);
+> is guaranteed to return something. I don't lnek this implicit assumption over 
+> 2 function calls. Better be safe than sorry. For that reason code should be 
+> initialized as well. Will create a patch for that.
 
+I'm fine with hardening the code even if the issue can't occur at the
+moment.
 
-sparse warnings: (new ones prefixed by >>)
->> arch/arm64/mm/fault.c:492:31: sparse: sparse: incorrect type in return expression (different base types) @@     expected int @@     got restricted vm_fault_t @@
-   arch/arm64/mm/fault.c:492:31: sparse:     expected int
-   arch/arm64/mm/fault.c:492:31: sparse:     got restricted vm_fault_t
-   arch/arm64/mm/fault.c:561:15: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted vm_fault_t [usertype] fault @@     got int @@
-   arch/arm64/mm/fault.c:561:15: sparse:     expected restricted vm_fault_t [usertype] fault
-   arch/arm64/mm/fault.c:561:15: sparse:     got int
-   arch/arm64/mm/fault.c:591:15: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted vm_fault_t [usertype] fault @@     got int @@
-   arch/arm64/mm/fault.c:591:15: sparse:     expected restricted vm_fault_t [usertype] fault
-   arch/arm64/mm/fault.c:591:15: sparse:     got int
-   arch/arm64/mm/fault.c:620:13: sparse: sparse: restricted vm_fault_t degrades to integer
-   arch/arm64/mm/fault.c:620:13: sparse: sparse: restricted vm_fault_t degrades to integer
-   arch/arm64/mm/fault.c:665:39: sparse: sparse: restricted vm_fault_t degrades to integer
+-- 
+Regards,
 
-vim +492 arch/arm64/mm/fault.c
-
-1d18c47c735e8a Catalin Marinas   2012-03-05  471  
-1d18c47c735e8a Catalin Marinas   2012-03-05  472  	if (unlikely(!vma))
-4745224b45097d Anshuman Khandual 2019-06-07  473  		return VM_FAULT_BADMAP;
-1d18c47c735e8a Catalin Marinas   2012-03-05  474  
-1d18c47c735e8a Catalin Marinas   2012-03-05  475  	/*
-1d18c47c735e8a Catalin Marinas   2012-03-05  476  	 * Ok, we have a good vm_area for this memory access, so we can handle
-1d18c47c735e8a Catalin Marinas   2012-03-05  477  	 * it.
-1d18c47c735e8a Catalin Marinas   2012-03-05  478  	 */
-4745224b45097d Anshuman Khandual 2019-06-07  479  	if (unlikely(vma->vm_start > addr)) {
-4745224b45097d Anshuman Khandual 2019-06-07  480  		if (!(vma->vm_flags & VM_GROWSDOWN))
-4745224b45097d Anshuman Khandual 2019-06-07  481  			return VM_FAULT_BADMAP;
-4745224b45097d Anshuman Khandual 2019-06-07  482  		if (expand_stack(vma, addr))
-4745224b45097d Anshuman Khandual 2019-06-07  483  			return VM_FAULT_BADMAP;
-4745224b45097d Anshuman Khandual 2019-06-07  484  	}
-4745224b45097d Anshuman Khandual 2019-06-07  485  
-db6f41063cbdb5 Will Deacon       2013-07-19  486  	/*
-db6f41063cbdb5 Will Deacon       2013-07-19  487  	 * Check that the permissions on the VMA allow for the fault which
-cab15ce604e550 Catalin Marinas   2016-08-11  488  	 * occurred.
-db6f41063cbdb5 Will Deacon       2013-07-19  489  	 */
-4745224b45097d Anshuman Khandual 2019-06-07  490  	if (!(vma->vm_flags & vm_flags))
-4745224b45097d Anshuman Khandual 2019-06-07  491  		return VM_FAULT_BADACCESS;
-6a1bb025d28e10 Peter Xu          2020-08-11 @492  	return handle_mm_fault(vma, addr & PAGE_MASK, mm_flags, regs);
-1d18c47c735e8a Catalin Marinas   2012-03-05  493  }
-1d18c47c735e8a Catalin Marinas   2012-03-05  494  
-
-:::::: The code at line 492 was first introduced by commit
-:::::: 6a1bb025d28e1026fead73b7b33e2dfccba3f4d2 mm/arm64: use general page fault accounting
-
-:::::: TO: Peter Xu <peterx@redhat.com>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Laurent Pinchart

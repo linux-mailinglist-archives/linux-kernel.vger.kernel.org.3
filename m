@@ -2,230 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F09124AE448
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:30:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C6B64AE434
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:27:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387812AbiBHW2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 17:28:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60180 "EHLO
+        id S240776AbiBHW0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 17:26:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386582AbiBHUzS (ORCPT
+        with ESMTP id S1386584AbiBHU4r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 15:55:18 -0500
-Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EE5EC0612B8
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 12:55:16 -0800 (PST)
-Received: by mail-vk1-xa2a.google.com with SMTP id b2so52170vkl.1
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 12:55:16 -0800 (PST)
+        Tue, 8 Feb 2022 15:56:47 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A07E7C0612B8
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 12:56:42 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id f17so581397wrx.1
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 12:56:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Dav5GHwHoInVNFFUmD/+H7rFBilhhPolISX4pLfyPgs=;
-        b=I35aftOGkLR/ISv6OSLuGuNra4KAzA0XXAvR3HIzqJsZ4sbzSCT6m6eUErRZTsBdRZ
-         5zHFtqoTfYTj0VaC44XixtJmomtIqu6M2jaGsuJVIFo9NFo73pcMfzY6Ib6daRmOQQ6G
-         s61LlDd0JuL2BDMhfXFEtfUTzv8Gb82qMMbR0G9yretQLwALK2QmdEaFwNvtCZ+xTHcw
-         YsKyu3HM3enCJRsm6D5qPoryva8Zw7Tulo94jtMwvcQWakEadP5Kr9mEupdTsILy1yjH
-         aZAW1pjsKR/HlEntXIBoRge+jo1q74UJiwiUyNQKf6AdaelrV1Cb0N0B5Vj6vewPaFM1
-         JBSg==
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8rCyE259QoTAuF9ujcMI8WQXkRdDBnGG4G9shkzQjfs=;
+        b=TClcMH3/O8IpIo3td4YsN56mO1iC7OT2x7WX2FMn/DpIGkX8EwvlmyzJbHfyaO9kmA
+         QR+OyCNEr5uu9lVSwWwjtgl0lfk3CYGV3p3l0yw3SkRJWXcGZ93pUtqvBqM9Zhqox2W1
+         OsfUI+doa0d/YIr1nV4EX0pA8AvKm9sFFLitM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Dav5GHwHoInVNFFUmD/+H7rFBilhhPolISX4pLfyPgs=;
-        b=tlWZstrnbgGB+H37pN6QWDzlw6P+RHjjy+926YNDTKXoAvoDalTaazQCPzjF9LmH0x
-         3ZE8kIdd4iG9TpOs13AsM+vUmHNCUX5vAQWqj+e9XOPxXeSM3iT/ewKN+b5AQiE1Swop
-         qxjRQU/Rmpak/oezglZxKvxjFgzZCf2pN0bGizV0KD+ySLNPl5+QAuZybIXjB0e09oQK
-         DZEMCWVgSEXny+yOzxSTi+ouba0nbQUYMdX9R+DFpuCvqFGs4vKJp2r2cQjK9Y/mgAl9
-         nnfv8hc0hTd5j0T2cXRsK9WyUUiIFz8MGZ9eIXphe+6xvDJO8O91NPjoxsUnmxczWFXB
-         jAgw==
-X-Gm-Message-State: AOAM533nzMVdhbvMfyxTI1vgR7fMEf+OxKsUw9sgwmyWOblfSWxB2DUv
-        q5vGvX8stIl8yf2MJGUxyuA+8IRZoSEQfA==
-X-Google-Smtp-Source: ABdhPJyAds8ya3zvTpqvh0cGhMNUvwNedLZSTwG7MQ38DVVsr9CsQCJgB3X00FLv+ZZPfeQ3S7D/dg==
-X-Received: by 2002:a05:6122:202a:: with SMTP id l42mr2456574vkd.40.1644353715549;
-        Tue, 08 Feb 2022 12:55:15 -0800 (PST)
-Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com. [209.85.222.48])
-        by smtp.gmail.com with ESMTPSA id s15sm3164838uao.17.2022.02.08.12.55.15
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Feb 2022 12:55:15 -0800 (PST)
-Received: by mail-ua1-f48.google.com with SMTP id 60so263577uae.1
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 12:55:15 -0800 (PST)
-X-Received: by 2002:ab0:6718:: with SMTP id q24mr1146421uam.141.1644353714675;
- Tue, 08 Feb 2022 12:55:14 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=8rCyE259QoTAuF9ujcMI8WQXkRdDBnGG4G9shkzQjfs=;
+        b=uT5ulw9Rr8ONw2qblgpoaIgy+uu+XirdIeCEqkikrJrIpMyq+gwpK6u39qzCg1N6w7
+         Pb98TtbYHPdLMxZI1MWOzcBLget3B8trh/HYgyc1Cy7+qL7b7u76CxGPQ+m06jHmpD5o
+         g2Gbbe3gihRJR4RxyKvB8yuYdjFPpJ/Jozk29TveuX+CNbobs4pBwyxk0bJYW5EVrIlp
+         q+RmypOFD0dfFy9Xt2RT1oivpSu65lkQagkQzcZ2edtftoXrHBNpcEZb5tQXsd1sH9jN
+         YNcOOMI0y1lvUm73hQbSKQ+oertTubDFnZPuWTjdsnefu1FXoK/qFLKc9S8ZRFYWo7Mv
+         h+cg==
+X-Gm-Message-State: AOAM532WO+BfkXmrq6AtIkuwlz1IT3Tjk0cCvEmrsp5apXx1F4zHSpWI
+        QrSxfHLN/0r1GkhOoiQMTQrf0ZTWK7ZIVQ==
+X-Google-Smtp-Source: ABdhPJz/N9Po0VxZ50ccE3Hf10GsDJ0883pAqCSvxgXcU5GA5wUMfraP7XMA8MXRBfr2C51K9jlMiQ==
+X-Received: by 2002:a05:6000:1a89:: with SMTP id f9mr5048305wry.573.1644353801125;
+        Tue, 08 Feb 2022 12:56:41 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id b16sm3490549wrj.26.2022.02.08.12.56.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 12:56:40 -0800 (PST)
+Date:   Tue, 8 Feb 2022 21:56:38 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Sam Ravnborg <sam@ravnborg.org>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        linux-fbdev@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
+        Jens Frederich <jfrederich@gmail.com>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        linux-staging@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Jon Nettleton <jon.nettleton@gmail.com>,
+        Helge Deller <deller@gmx.de>
+Subject: Re: [PATCH 21/21] fbdev: Make registered_fb[] private to fbmem.c
+Message-ID: <YgLZBlrXW+DYNkFN@phenom.ffwll.local>
+Mail-Followup-To: Sam Ravnborg <sam@ravnborg.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        linux-fbdev@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
+        Jens Frederich <jfrederich@gmail.com>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        linux-staging@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Jon Nettleton <jon.nettleton@gmail.com>,
+        Helge Deller <deller@gmx.de>
+References: <20220131210552.482606-1-daniel.vetter@ffwll.ch>
+ <20220131210552.482606-22-daniel.vetter@ffwll.ch>
+ <YgK91i6zHWPBwYOq@ravnborg.org>
 MIME-Version: 1.0
-References: <20220208181510.787069-1-andrew@daynix.com> <20220208181510.787069-4-andrew@daynix.com>
-In-Reply-To: <20220208181510.787069-4-andrew@daynix.com>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Tue, 8 Feb 2022 15:54:38 -0500
-X-Gmail-Original-Message-ID: <CA+FuTSdrHwNWh1Mz7KT8w+Z69LcNipeTcasny6ioqOUYBisNXg@mail.gmail.com>
-Message-ID: <CA+FuTSdrHwNWh1Mz7KT8w+Z69LcNipeTcasny6ioqOUYBisNXg@mail.gmail.com>
-Subject: Re: [PATCH v3 3/4] drivers/net/virtio_net: Added RSS hash report.
-To:     Andrew Melnychenko <andrew@daynix.com>
-Cc:     netdev@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        jasowang@redhat.com, mst@redhat.com, yan@daynix.com,
-        yuri.benditovich@daynix.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YgK91i6zHWPBwYOq@ravnborg.org>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 8, 2022 at 1:19 PM Andrew Melnychenko <andrew@daynix.com> wrote:
->
-> Added features for RSS hash report.
-> If hash is provided - it sets to skb.
-> Added checks if rss and/or hash are enabled together.
->
-> Signed-off-by: Andrew Melnychenko <andrew@daynix.com>
-> ---
->  drivers/net/virtio_net.c | 51 ++++++++++++++++++++++++++++++++++------
->  1 file changed, 44 insertions(+), 7 deletions(-)
->
-> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> index 495aed524e33..543da2fbdd2d 100644
-> --- a/drivers/net/virtio_net.c
-> +++ b/drivers/net/virtio_net.c
-> @@ -227,6 +227,7 @@ struct virtnet_info {
->
->         /* Host supports rss and/or hash report */
->         bool has_rss;
-> +       bool has_rss_hash_report;
->         u8 rss_key_size;
->         u16 rss_indir_table_size;
->         u32 rss_hash_types_supported;
-> @@ -421,7 +422,7 @@ static struct sk_buff *page_to_skb(struct virtnet_info *vi,
->
->         hdr_len = vi->hdr_len;
->         if (vi->mergeable_rx_bufs)
-> -               hdr_padded_len = sizeof(*hdr);
-> +               hdr_padded_len = hdr_len;
+On Tue, Feb 08, 2022 at 08:00:38PM +0100, Sam Ravnborg wrote:
+> Hi Daniel,
+> 
+> On Mon, Jan 31, 2022 at 10:05:52PM +0100, Daniel Vetter wrote:
+> > Well except when the olpc dcon fbdev driver is enabled, that thing
+> > digs around in there in rather unfixable ways.
+> > 
+> > Cc oldc_dcon maintainers as fyi.
+> > 
+> > Cc: Jens Frederich <jfrederich@gmail.com>
+> > Cc: Jon Nettleton <jon.nettleton@gmail.com>
+> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Cc: linux-staging@lists.linux.dev
+> > Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
+> > Cc: Daniel Vetter <daniel@ffwll.ch>
+> > Cc: Helge Deller <deller@gmx.de>
+> > Cc: Matthew Wilcox <willy@infradead.org>
+> > Cc: Sam Ravnborg <sam@ravnborg.org>
+> > Cc: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+> > Cc: Zhen Lei <thunder.leizhen@huawei.com>
+> > Cc: Alex Deucher <alexander.deucher@amd.com>
+> > Cc: Xiyu Yang <xiyuyang19@fudan.edu.cn>
+> > Cc: linux-fbdev@vger.kernel.org
+> > Cc: Zheyu Ma <zheyuma97@gmail.com>
+> > Cc: Guenter Roeck <linux@roeck-us.net>
+> 
+> with the build thingy fixed:
+> Acked-by: Sam Ravnborg <sam@ravnborg.org>
+> 
+> I do wonder if there is a more clean way to trigger a blank
+> in the main fbdev driver from the olpc driver.
+> 
+> The current hack is not nice and it would be good to see it gone.
 
-Belongs in patch 1?
+Yeah this is just badly engineered. In drm we'd do this with the self
+refresh helpers, which pretty much give you this exact functionality, but
+in the helpers, while not randomly breaking actual visible behaviour of
+the display driver.
 
->         else
->                 hdr_padded_len = sizeof(struct padded_vnet_hdr);
->
-> @@ -1156,6 +1157,8 @@ static void receive_buf(struct virtnet_info *vi, struct receive_queue *rq,
->         struct net_device *dev = vi->dev;
->         struct sk_buff *skb;
->         struct virtio_net_hdr_mrg_rxbuf *hdr;
-> +       struct virtio_net_hdr_v1_hash *hdr_hash;
-> +       enum pkt_hash_types rss_hash_type;
->
->         if (unlikely(len < vi->hdr_len + ETH_HLEN)) {
->                 pr_debug("%s: short packet %i\n", dev->name, len);
-> @@ -1182,6 +1185,29 @@ static void receive_buf(struct virtnet_info *vi, struct receive_queue *rq,
->                 return;
->
->         hdr = skb_vnet_hdr(skb);
-> +       if (dev->features & NETIF_F_RXHASH && vi->has_rss_hash_report) {
+Well ok the illusion is not perfect, since if the display is suspended the
+next page flip will take a tad longer. But that's it.
 
-Can the first be true if the second is not?
+I'll also add this to the TODO.
+-Daniel
 
-> +               hdr_hash = (struct virtio_net_hdr_v1_hash *)(hdr);
-> +
-> +               switch (hdr_hash->hash_report) {
-> +               case VIRTIO_NET_HASH_REPORT_TCPv4:
-> +               case VIRTIO_NET_HASH_REPORT_UDPv4:
-> +               case VIRTIO_NET_HASH_REPORT_TCPv6:
-> +               case VIRTIO_NET_HASH_REPORT_UDPv6:
-> +               case VIRTIO_NET_HASH_REPORT_TCPv6_EX:
-> +               case VIRTIO_NET_HASH_REPORT_UDPv6_EX:
-> +                       rss_hash_type = PKT_HASH_TYPE_L4;
-> +                       break;
-> +               case VIRTIO_NET_HASH_REPORT_IPv4:
-> +               case VIRTIO_NET_HASH_REPORT_IPv6:
-> +               case VIRTIO_NET_HASH_REPORT_IPv6_EX:
-> +                       rss_hash_type = PKT_HASH_TYPE_L3;
-> +                       break;
-> +               case VIRTIO_NET_HASH_REPORT_NONE:
-> +               default:
-> +                       rss_hash_type = PKT_HASH_TYPE_NONE;
-> +               }
-> +               skb_set_hash(skb, hdr_hash->hash_value, rss_hash_type);
-> +       }
+> 
+> 	Sam
+> 
+> > ---
+> >  drivers/video/fbdev/core/fbmem.c | 8 ++++++--
+> >  include/linux/fb.h               | 7 +++----
+> >  2 files changed, 9 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/drivers/video/fbdev/core/fbmem.c b/drivers/video/fbdev/core/fbmem.c
+> > index 904ef1250677..dad6572942fa 100644
+> > --- a/drivers/video/fbdev/core/fbmem.c
+> > +++ b/drivers/video/fbdev/core/fbmem.c
+> > @@ -48,10 +48,14 @@
+> >  static DEFINE_MUTEX(registration_lock);
+> >  
+> >  struct fb_info *registered_fb[FB_MAX] __read_mostly;
+> > -EXPORT_SYMBOL(registered_fb);
+> > -
+> >  int num_registered_fb __read_mostly;
+> > +#if IS_ENABLED(CONFIG_OLPC_DCON)
+> > +EXPORT_SYMBOL(registered_fb);
+> >  EXPORT_SYMBOL(num_registered_fb);
+> > +#endif
+> > +#define for_each_registered_fb(i)		\
+> > +	for (i = 0; i < FB_MAX; i++)		\
+> > +		if (!registered_fb[i]) {} else
+> >  
+> >  bool fb_center_logo __read_mostly;
+> >  
+> > diff --git a/include/linux/fb.h b/include/linux/fb.h
+> > index a8a00d2ba1f3..e236817502c2 100644
+> > --- a/include/linux/fb.h
+> > +++ b/include/linux/fb.h
+> > @@ -622,16 +622,15 @@ extern int fb_get_color_depth(struct fb_var_screeninfo *var,
+> >  extern int fb_get_options(const char *name, char **option);
+> >  extern int fb_new_modelist(struct fb_info *info);
+> >  
+> > +#if IS_ENABLED(CONFIG_OLPC_DCON)
+> >  extern struct fb_info *registered_fb[FB_MAX];
+> > +
+> >  extern int num_registered_fb;
+> > +#endif
+> >  extern bool fb_center_logo;
+> >  extern int fb_logo_count;
+> >  extern struct class *fb_class;
+> >  
+> > -#define for_each_registered_fb(i)		\
+> > -	for (i = 0; i < FB_MAX; i++)		\
+> > -		if (!registered_fb[i]) {} else
+> > -
+> >  static inline void lock_fb_info(struct fb_info *info)
+> >  {
+> >  	mutex_lock(&info->lock);
+> > -- 
+> > 2.33.0
 
-so many lines, perhaps deserves a helper function
-
->
->         if (hdr->hdr.flags & VIRTIO_NET_HDR_F_DATA_VALID)
->                 skb->ip_summed = CHECKSUM_UNNECESSARY;
-> @@ -2232,7 +2258,8 @@ static bool virtnet_commit_rss_command(struct virtnet_info *vi)
->         sg_set_buf(&sgs[3], vi->ctrl->rss.key, sg_buf_size);
->
->         if (!virtnet_send_command(vi, VIRTIO_NET_CTRL_MQ,
-> -                                 VIRTIO_NET_CTRL_MQ_RSS_CONFIG, sgs)) {
-> +                                 vi->has_rss ? VIRTIO_NET_CTRL_MQ_RSS_CONFIG
-> +                                 : VIRTIO_NET_CTRL_MQ_HASH_CONFIG, sgs)) {
->                 dev_warn(&dev->dev, "VIRTIONET issue with committing RSS sgs\n");
->                 return false;
->         }
-> @@ -3230,6 +3257,8 @@ static bool virtnet_validate_features(struct virtio_device *vdev)
->              VIRTNET_FAIL_ON(vdev, VIRTIO_NET_F_CTRL_MAC_ADDR,
->                              "VIRTIO_NET_F_CTRL_VQ") ||
->              VIRTNET_FAIL_ON(vdev, VIRTIO_NET_F_RSS,
-> +                            "VIRTIO_NET_F_CTRL_VQ") ||
-> +            VIRTNET_FAIL_ON(vdev, VIRTIO_NET_F_HASH_REPORT,
->                              "VIRTIO_NET_F_CTRL_VQ"))) {
->                 return false;
->         }
-> @@ -3365,8 +3394,13 @@ static int virtnet_probe(struct virtio_device *vdev)
->         if (virtio_has_feature(vdev, VIRTIO_NET_F_MRG_RXBUF))
->                 vi->mergeable_rx_bufs = true;
->
-> -       if (virtio_has_feature(vdev, VIRTIO_NET_F_RSS)) {
-> +       if (virtio_has_feature(vdev, VIRTIO_NET_F_HASH_REPORT))
-> +               vi->has_rss_hash_report = true;
-> +
-> +       if (virtio_has_feature(vdev, VIRTIO_NET_F_RSS))
->                 vi->has_rss = true;
-> +
-> +       if (vi->has_rss || vi->has_rss_hash_report) {
->                 vi->rss_indir_table_size =
->                         virtio_cread16(vdev, offsetof(struct virtio_net_config,
-
-should indir table size be zero if only hash report is enabled?
-
->                                 rss_max_indirection_table_length));
-> @@ -3382,8 +3416,11 @@ static int virtnet_probe(struct virtio_device *vdev)
->
->                 dev->hw_features |= NETIF_F_RXHASH;
->         }
-> -       if (virtio_has_feature(vdev, VIRTIO_NET_F_MRG_RXBUF) ||
-> -           virtio_has_feature(vdev, VIRTIO_F_VERSION_1))
-> +
-> +       if (vi->has_rss_hash_report)
-> +               vi->hdr_len = sizeof(struct virtio_net_hdr_v1_hash);
-> +       else if (virtio_has_feature(vdev, VIRTIO_NET_F_MRG_RXBUF) ||
-> +                virtio_has_feature(vdev, VIRTIO_F_VERSION_1))
->                 vi->hdr_len = sizeof(struct virtio_net_hdr_mrg_rxbuf);
->         else
->                 vi->hdr_len = sizeof(struct virtio_net_hdr);
-> @@ -3450,7 +3487,7 @@ static int virtnet_probe(struct virtio_device *vdev)
->                 }
->         }
->
-> -       if (vi->has_rss)
-> +       if (vi->has_rss || vi->has_rss_hash_report)
->                 virtnet_init_default_rss(vi);
->
->         err = register_netdev(dev);
-> @@ -3585,7 +3622,7 @@ static struct virtio_device_id id_table[] = {
->         VIRTIO_NET_F_CTRL_MAC_ADDR, \
->         VIRTIO_NET_F_MTU, VIRTIO_NET_F_CTRL_GUEST_OFFLOADS, \
->         VIRTIO_NET_F_SPEED_DUPLEX, VIRTIO_NET_F_STANDBY, \
-> -       VIRTIO_NET_F_RSS
-> +       VIRTIO_NET_F_RSS, VIRTIO_NET_F_HASH_REPORT
->
->  static unsigned int features[] = {
->         VIRTNET_FEATURES,
-> --
-> 2.34.1
->
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

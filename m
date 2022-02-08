@@ -2,491 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 677A44ACDD9
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:18:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C13F4ACDE7
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:19:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344296AbiBHBNO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 20:13:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37120 "EHLO
+        id S245517AbiBHBTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 20:19:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245032AbiBHBH5 (ORCPT
+        with ESMTP id S1343998AbiBHBTQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 20:07:57 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 649BDC03FEC1;
-        Mon,  7 Feb 2022 17:05:56 -0800 (PST)
+        Mon, 7 Feb 2022 20:19:16 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3FA2C03FED0
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Feb 2022 17:10:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644282356; x=1675818356;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=RmcEBt/Tc2ZNpDmtkpC+8Teoj0FX4XdvKx/tePya/LE=;
-  b=YLpuo49U9T6Ttv5z0xswjk4u7YO65Spj6T72/14AXFJOV96rsF8h4OOq
-   r1C2V9NBZe7L0KmxMZXISIhXwz88ob1Pz32j9gWVswLrP7FqvpaLl5AE5
-   ws/t9L10lUV8MMj1N1NnwcIxiNHkoF8oAFvbsNtugzAXlhbUv3BOcs1m6
-   6enJYR5citXhk4B77AOG9hm6/uV+436wO9YVDxlyagVfYmNb8tj+izWxC
-   y/w/ho/7SmQKOPzJFA8kW26aMUywsTtZBShR6z2SeDdQCXhGq5QwdpJnm
-   sJx2tOhRN4CapO+FdQw8LGHZey+F1Q717MzQrndiZJNHYnlacp8CqrGkp
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="249053192"
+  t=1644282604; x=1675818604;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=RtrIuk6XnpXK6Bn1icYdRFqEsnH8wSVRifepjc0UwCM=;
+  b=HSMA8706Z5Ysy9qsyZNPzPIgfiA5m9RxO/48hLo5JQZiGr7ICNF4d4Az
+   RGpdoS/FJjOkhaE8THlql55ISwSsDXhVr4ONbuA77EItul7k9BoDfcxp3
+   V4zZdDY0PD2R6Ja4EG9cDpSdMhFPOu9aQhOB148bV7uFyNNDdWVoYduhY
+   DT1nVLEGgZ9yJjD5EMvfM97xNyN13XjnLVZBFfzn8atC5AtSvrg5tF0tC
+   w+2I/LCBrv1feR3EBOb5vAXSUujo8ATav1MsiFhgX8Iy32nBQfr0QSkLq
+   AaSDiTppH8sjprHEe7HY/E4z2wBTIjzUpGipjCpKyxDNGb54Jwg3uR6Pt
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="232411085"
 X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
-   d="scan'208";a="249053192"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 17:05:54 -0800
+   d="scan'208";a="232411085"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 17:09:05 -0800
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
-   d="scan'208";a="525348020"
-Received: from hgrunes-mobl1.amr.corp.intel.com (HELO [10.251.3.57]) ([10.251.3.57])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 17:05:53 -0800
-Message-ID: <9b6878b0-433e-b52a-caa1-aa306595c51a@intel.com>
-Date:   Mon, 7 Feb 2022 17:05:50 -0800
+   d="scan'208";a="567676656"
+Received: from lkp-server01.sh.intel.com (HELO 9dd77a123018) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 07 Feb 2022 17:09:03 -0800
+Received: from kbuild by 9dd77a123018 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nHF0B-00019s-3r; Tue, 08 Feb 2022 01:09:03 +0000
+Date:   Tue, 8 Feb 2022 09:08:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mahendran Ganesh <opensource.ganesh@gmail.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org,
+        Suren Baghdasaryan <surenb@google.com>,
+        Vinayak Menon <vinmenon@codeaurora.org>,
+        Charan Teja Reddy <charante@codeaurora.org>
+Subject: [ammarfaizi2-block:google/android/kernel/common/android-gs-raviole-5.10-android12-qpr1-d
+ 1711/8858] arch/arm64/mm/fault.c:492:31: sparse: sparse: incorrect type in
+ return expression (different base types)
+Message-ID: <202202080945.Pweq3bsl-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com
-Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
- <20220130211838.8382-10-rick.p.edgecombe@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH 09/35] x86/mm: Introduce _PAGE_COW
-In-Reply-To: <20220130211838.8382-10-rick.p.edgecombe@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/30/22 13:18, Rick Edgecombe wrote:
-> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> 
-> There is essentially no room left in the x86 hardware PTEs on some OSes
-> (not Linux).  That left the hardware architects looking for a way to
-> represent a new memory type (shadow stack) within the existing bits.
-> They chose to repurpose a lightly-used state: Write=0, Dirty=1.
-> 
-> The reason it's lightly used is that Dirty=1 is normally set by hardware
-> and cannot normally be set by hardware on a Write=0 PTE.  Software must
-> normally be involved to create one of these PTEs, so software can simply
-> opt to not create them.
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android-gs-raviole-5.10-android12-qpr1-d
+head:   9771767708df4fcf51cd1642e041c804a86e740c
+commit: 2fd69fa6bcab984b56ccfd4860b10f11f1966bed [1711/8858] FROMLIST: arm64/mm: add speculative page fault
+config: arm64-randconfig-s031-20220207 (https://download.01.org/0day-ci/archive/20220208/202202080945.Pweq3bsl-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/ammarfaizi2/linux-block/commit/2fd69fa6bcab984b56ccfd4860b10f11f1966bed
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android-gs-raviole-5.10-android12-qpr1-d
+        git checkout 2fd69fa6bcab984b56ccfd4860b10f11f1966bed
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/mm/
 
-This is kinda skipping over something important:
-
-	The reason it's lightly used is that Dirty=1 is normally set
-	_before_ a write.  A write with a Write=0 PTE would typically
-	only generate a fault, not set Dirty=1.  Hardware can (rarely)
-	both set Write=1 *and* generate the fault, resulting in a
-	Dirty=0,Write=1 PTE.  Hardware which supports shadow stacks
-	will no longer exhibit this oddity.
-
-> In places where Linux normally creates Write=0, Dirty=1, it can use the
-> software-defined _PAGE_COW in place of the hardware _PAGE_DIRTY.  In other
-> words, whenever Linux needs to create Write=0, Dirty=1, it instead creates
-> Write=0, Cow=1, except for shadow stack, which is Write=0, Dirty=1.  This
-> clearly separates shadow stack from other data, and results in the
-> following:
-
-Following _what_...  What are these?  I think they're PTE states.  Best
-to say that.
-
-> (a) A modified, copy-on-write (COW) page: (Write=0, Cow=1)
-
-Could you give an example of this?  Would this be a typical anonymous
-page which was Write=1,Dirty=1, then historically made Write=0,Dirty=1
-at fork()?
-
-> (b) A R/O page that has been COW'ed: (Write=0, Cow=1)
->     The user page is in a R/O VMA, and get_user_pages() needs a writable
->     copy.  The page fault handler creates a copy of the page and sets
->     the new copy's PTE as Write=0 and Cow=1.
-> (c) A shadow stack PTE: (Write=0, Dirty=1)
-> (d) A shared shadow stack PTE: (Write=0, Cow=1)
->     When a shadow stack page is being shared among processes (this happens
->     at fork()), its PTE is made Dirty=0, so the next shadow stack access
->     causes a fault, and the page is duplicated and Dirty=1 is set again.
->     This is the COW equivalent for shadow stack pages, even though it's
->     copy-on-access rather than copy-on-write.
-
-Just like code, it's also nice to format these in a way which allows
-them to be visually compared, trivially.  So, let's expand all the bits
-and vertically align everything.  To break this down a bit, we have two
-old states:
-
-[a] (Write=0, Dirty=0, Cow=1)
-[b] (Write=0, Dirty=0, Cow=1)
-
-And two new ones:
-
-[c] (Write=0, Dirty=1, Cow=0)
-[d] (Write=0, Dirty=0, Cow=1)
-
-That makes me wonder what the difference is between [a] and [b] and why
-they are separate.  Is their handling different?  How are those two
-states differentiated?
-
-> (e) A page where the processor observed a Write=1 PTE, started a write, set
->     Dirty=1, but then observed a Write=0 PTE.  That's possible today, but
->     will not happen on processors that support shadow stack.
-
-This left me wondering how you are going to detangle the mess where PTEs
-look like shadow-stack PTEs on non-shadow-stack hardware.  Could you
-cover that here?
-
-You can shorten that above bullet to this to help make the space:
-
-	(e) (Write=0, Dirty=1, Cow=0) PTE created when a processor
-	    without shadow stack support set Dirty=1.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
 
-> Define _PAGE_COW and update pte_*() helpers and apply the same changes to
-> pmd and pud.
-> 
-> After this, there are six free bits left in the 64-bit PTE, and no more
-> free bits in the 32-bit PTE (except for PAE) and Shadow Stack is not
-> implemented for the 32-bit kernel.
+sparse warnings: (new ones prefixed by >>)
+>> arch/arm64/mm/fault.c:492:31: sparse: sparse: incorrect type in return expression (different base types) @@     expected int @@     got restricted vm_fault_t @@
+   arch/arm64/mm/fault.c:492:31: sparse:     expected int
+   arch/arm64/mm/fault.c:492:31: sparse:     got restricted vm_fault_t
+   arch/arm64/mm/fault.c:561:15: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted vm_fault_t [usertype] fault @@     got int @@
+   arch/arm64/mm/fault.c:561:15: sparse:     expected restricted vm_fault_t [usertype] fault
+   arch/arm64/mm/fault.c:561:15: sparse:     got int
+   arch/arm64/mm/fault.c:591:15: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted vm_fault_t [usertype] fault @@     got int @@
+   arch/arm64/mm/fault.c:591:15: sparse:     expected restricted vm_fault_t [usertype] fault
+   arch/arm64/mm/fault.c:591:15: sparse:     got int
+   arch/arm64/mm/fault.c:620:13: sparse: sparse: restricted vm_fault_t degrades to integer
+   arch/arm64/mm/fault.c:620:13: sparse: sparse: restricted vm_fault_t degrades to integer
+   arch/arm64/mm/fault.c:665:39: sparse: sparse: restricted vm_fault_t degrades to integer
 
-Just say:
+vim +492 arch/arm64/mm/fault.c
 
-	There are six bits left available to software in the 64-bit PTE
-	after consuming a bit for _PAGE_COW.  No space is consumed in
-	32-bit kernels because shadow stacks are not enabled there.
+1d18c47c735e8a Catalin Marinas   2012-03-05  471  
+1d18c47c735e8a Catalin Marinas   2012-03-05  472  	if (unlikely(!vma))
+4745224b45097d Anshuman Khandual 2019-06-07  473  		return VM_FAULT_BADMAP;
+1d18c47c735e8a Catalin Marinas   2012-03-05  474  
+1d18c47c735e8a Catalin Marinas   2012-03-05  475  	/*
+1d18c47c735e8a Catalin Marinas   2012-03-05  476  	 * Ok, we have a good vm_area for this memory access, so we can handle
+1d18c47c735e8a Catalin Marinas   2012-03-05  477  	 * it.
+1d18c47c735e8a Catalin Marinas   2012-03-05  478  	 */
+4745224b45097d Anshuman Khandual 2019-06-07  479  	if (unlikely(vma->vm_start > addr)) {
+4745224b45097d Anshuman Khandual 2019-06-07  480  		if (!(vma->vm_flags & VM_GROWSDOWN))
+4745224b45097d Anshuman Khandual 2019-06-07  481  			return VM_FAULT_BADMAP;
+4745224b45097d Anshuman Khandual 2019-06-07  482  		if (expand_stack(vma, addr))
+4745224b45097d Anshuman Khandual 2019-06-07  483  			return VM_FAULT_BADMAP;
+4745224b45097d Anshuman Khandual 2019-06-07  484  	}
+4745224b45097d Anshuman Khandual 2019-06-07  485  
+db6f41063cbdb5 Will Deacon       2013-07-19  486  	/*
+db6f41063cbdb5 Will Deacon       2013-07-19  487  	 * Check that the permissions on the VMA allow for the fault which
+cab15ce604e550 Catalin Marinas   2016-08-11  488  	 * occurred.
+db6f41063cbdb5 Will Deacon       2013-07-19  489  	 */
+4745224b45097d Anshuman Khandual 2019-06-07  490  	if (!(vma->vm_flags & vm_flags))
+4745224b45097d Anshuman Khandual 2019-06-07  491  		return VM_FAULT_BADACCESS;
+6a1bb025d28e10 Peter Xu          2020-08-11 @492  	return handle_mm_fault(vma, addr & PAGE_MASK, mm_flags, regs);
+1d18c47c735e8a Catalin Marinas   2012-03-05  493  }
+1d18c47c735e8a Catalin Marinas   2012-03-05  494  
 
-There's no need to rub it in that 32-bit is out of space.
+:::::: The code at line 492 was first introduced by commit
+:::::: 6a1bb025d28e1026fead73b7b33e2dfccba3f4d2 mm/arm64: use general page fault accounting
 
-> -static inline int pte_dirty(pte_t pte)
-> +static inline bool pte_dirty(pte_t pte)
->  {
-> -	return pte_flags(pte) & _PAGE_DIRTY;
-> +	/*
-> +	 * A dirty PTE has Dirty=1 or Cow=1.
-> +	 */
+:::::: TO: Peter Xu <peterx@redhat.com>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
 
-I don't really like that comment because "Cow" isn't anywhere to be found.
-
-> +	return pte_flags(pte) & _PAGE_DIRTY_BITS;
-> +}
-> +
-> +static inline bool pte_shstk(pte_t pte)
-> +{
-> +	if (!cpu_feature_enabled(X86_FEATURE_SHSTK))
-> +		return false;
-> +
-> +	return (pte_flags(pte) & (_PAGE_RW | _PAGE_DIRTY)) == _PAGE_DIRTY;
->  }
->  
->  static inline int pte_young(pte_t pte)
-> @@ -133,9 +144,20 @@ static inline int pte_young(pte_t pte)
->  	return pte_flags(pte) & _PAGE_ACCESSED;
->  }
->  
-> -static inline int pmd_dirty(pmd_t pmd)
-> +static inline bool pmd_dirty(pmd_t pmd)
->  {
-> -	return pmd_flags(pmd) & _PAGE_DIRTY;
-> +	/*
-> +	 * A dirty PMD has Dirty=1 or Cow=1.
-> +	 */
-> +	return pmd_flags(pmd) & _PAGE_DIRTY_BITS;
-> +}
-> +
-> +static inline bool pmd_shstk(pmd_t pmd)
-> +{
-> +	if (!cpu_feature_enabled(X86_FEATURE_SHSTK))
-> +		return false;
-> +
-> +	return (pmd_flags(pmd) & (_PAGE_RW | _PAGE_DIRTY)) == _PAGE_DIRTY;
->  }
->  
->  static inline int pmd_young(pmd_t pmd)
-> @@ -143,9 +165,12 @@ static inline int pmd_young(pmd_t pmd)
->  	return pmd_flags(pmd) & _PAGE_ACCESSED;
->  }
->  
-> -static inline int pud_dirty(pud_t pud)
-> +static inline bool pud_dirty(pud_t pud)
->  {
-> -	return pud_flags(pud) & _PAGE_DIRTY;
-> +	/*
-> +	 * A dirty PUD has Dirty=1 or Cow=1.
-> +	 */
-> +	return pud_flags(pud) & _PAGE_DIRTY_BITS;
->  }
->  
->  static inline int pud_young(pud_t pud)
-> @@ -155,13 +180,23 @@ static inline int pud_young(pud_t pud)
->  
->  static inline int pte_write(pte_t pte)
->  {
-> -	return pte_flags(pte) & _PAGE_RW;
-> +	/*
-> +	 * Shadow stack pages are always writable - but not by normal
-> +	 * instructions, and only by shadow stack operations.  Therefore,
-> +	 * the W=0,D=1 test with pte_shstk().
-> +	 */
-
-I think that comment is off a bit.  It's not really connected to the
-code.  We don't, for instance need to know what the bit combination is
-inside pte_shstk().  Further, it's a bit mean to talk about "W" in the
-comment and _PAGE_RW in the code.  How about:
-
-	/*
-	 * Shadow stack pages are logically writable, but do not have
-	 * _PAGE_RW.  Check for them separately from _PAGE_RW itself.
-	 */
-
-> +	return (pte_flags(pte) & _PAGE_RW) || pte_shstk(pte);
->  }
->  
->  #define pmd_write pmd_write
->  static inline int pmd_write(pmd_t pmd)
->  {
-> -	return pmd_flags(pmd) & _PAGE_RW;
-> +	/*
-> +	 * Shadow stack pages are always writable - but not by normal
-> +	 * instructions, and only by shadow stack operations.  Therefore,
-> +	 * the W=0,D=1 test with pmd_shstk().
-> +	 */
-> +	return (pmd_flags(pmd) & _PAGE_RW) || pmd_shstk(pmd);
->  }
-
-Ditto on the comment.  Please copy the pte_write() one here too.
-
->  
->  #define pud_write pud_write
-> @@ -299,6 +334,24 @@ static inline pte_t pte_clear_flags(pte_t pte, pteval_t clear)
->  	return native_make_pte(v & ~clear);
->  }
->  
-> +static inline pte_t pte_mkcow(pte_t pte)
-> +{
-> +	if (!cpu_feature_enabled(X86_FEATURE_SHSTK))
-> +		return pte;
-> +
-> +	pte = pte_clear_flags(pte, _PAGE_DIRTY);
-> +	return pte_set_flags(pte, _PAGE_COW);
-> +}
-> +
-> +static inline pte_t pte_clear_cow(pte_t pte)
-> +{
-> +	if (!cpu_feature_enabled(X86_FEATURE_SHSTK))
-> +		return pte;
-> +
-> +	pte = pte_set_flags(pte, _PAGE_DIRTY);
-> +	return pte_clear_flags(pte, _PAGE_COW);
-> +}
-
-I think we need to say *SOMETHING* about the X86_FEATURE_SHSTK and
-_PAGE_COW connection here.  Otherwise they look like two random features
-that are interacting in an unknown way.
-
-Maybe even something this simple:
-
-/*
- * _PAGE_COW is unnecessary on !X86_FEATURE_SHSTK kernels.
- * See the _PAGE_COW definition for more details.
- */
-
-Also, the manipulation of _PAGE_DIRTY is not clear here.  It's obvious
-why we have to:
-
-	pte_clear_flags(pte, _PAGE_COW);
-
-in a function called pte_clear_cow() but, again, how does _PAGE_DIRTY fit?
-
->  #ifdef CONFIG_HAVE_ARCH_USERFAULTFD_WP
->  static inline int pte_uffd_wp(pte_t pte)
->  {
-> @@ -318,7 +371,7 @@ static inline pte_t pte_clear_uffd_wp(pte_t pte)
->  
->  static inline pte_t pte_mkclean(pte_t pte)
->  {
-> -	return pte_clear_flags(pte, _PAGE_DIRTY);
-> +	return pte_clear_flags(pte, _PAGE_DIRTY_BITS);
->  }
->  
->  static inline pte_t pte_mkold(pte_t pte)
-> @@ -328,7 +381,16 @@ static inline pte_t pte_mkold(pte_t pte)
->  
->  static inline pte_t pte_wrprotect(pte_t pte)
->  {
-> -	return pte_clear_flags(pte, _PAGE_RW);
-> +	pte = pte_clear_flags(pte, _PAGE_RW);
-> +
-> +	/*
-> +	 * Blindly clearing _PAGE_RW might accidentally create
-> +	 * a shadow stack PTE (RW=0, Dirty=1).  Move the hardware
-
-Could you grep this series and try to be consistent about the formatting
-here?  (Not that I've been perfect in this regard either).  I think we
-have at least:
-
-	Write=X,Dirty=Y
-	W=X,D=Y
-	RW=X,Dirty=Y
-
-> +	 * dirty value to the software bit.
-> +	 */
-> +	if (pte_dirty(pte))
-> +		pte = pte_mkcow(pte);
-> +	return pte;
->  }
-
-One of my logical checks for this is "does it all go away when this is
-compiled out".  Because of this:
-
-+static inline pte_t pte_mkcow(pte_t pte)
-+{
-+       if (!cpu_feature_enabled(X86_FEATURE_SHSTK))
-+               return pte;
-...
-
-the answer is yes!  So, this looks good to me.  Just thought I'd share a
-bit of my thought process.
-
->  static inline pte_t pte_mkexec(pte_t pte)
-> @@ -338,7 +400,18 @@ static inline pte_t pte_mkexec(pte_t pte)
->  
->  static inline pte_t pte_mkdirty(pte_t pte)
->  {
-> -	return pte_set_flags(pte, _PAGE_DIRTY | _PAGE_SOFT_DIRTY);
-> +	pteval_t dirty = _PAGE_DIRTY;
-> +
-> +	/* Avoid creating (HW)Dirty=1, Write=0 PTEs */
-
-The "(HW)" thing doesn't make a lot of sense any longer.  I think we had
-a set of HWDirty and SWDirty bits, but SWDirty ended up being morphed
-over to _PAGE_COW.
-
-> +	if (cpu_feature_enabled(X86_FEATURE_SHSTK) && !pte_write(pte))
-> +		dirty = _PAGE_COW;
-> +
-> +	return pte_set_flags(pte, dirty | _PAGE_SOFT_DIRTY);
-> +}
-> +
-> +static inline pte_t pte_mkwrite_shstk(pte_t pte)
-> +{
-> +	return pte_clear_cow(pte);
->  }
-
-This one is a bit of black magic.  This is taking a PTE from
-(presumably) states [c]->[d] from earlier in the changelog.
-
-	Write=0,Dirty=0,Cow=1
-to
-	Write=0,Dirty=1,Cow=0
-
-It's hard to wrap my head around how clearing a software bit (from the
-naming) will make this PTE writable.
-
-There's either something wrong with the naming, or something wrong with
-my mental model of what "COW clearing" is.
-
->  static inline pte_t pte_mkyoung(pte_t pte)
-> @@ -348,7 +421,12 @@ static inline pte_t pte_mkyoung(pte_t pte)
->  
->  static inline pte_t pte_mkwrite(pte_t pte)
->  {
-> -	return pte_set_flags(pte, _PAGE_RW);
-> +	pte = pte_set_flags(pte, _PAGE_RW);
-> +
-> +	if (pte_dirty(pte))
-> +		pte = pte_clear_cow(pte);
-> +
-> +	return pte;
->  }
-
-Along the same lines as the last few comments, this leaves me wondering
-why a pte_dirty() can't also be a "COW PTE".
-
-... <snipping the pmd/pud copies> ...
->  #ifdef CONFIG_HAVE_ARCH_SOFT_DIRTY
-> diff --git a/arch/x86/include/asm/pgtable_types.h b/arch/x86/include/asm/pgtable_types.h
-> index 3781a79b6388..1bfab70ff9ac 100644
-> --- a/arch/x86/include/asm/pgtable_types.h
-> +++ b/arch/x86/include/asm/pgtable_types.h
-> @@ -21,7 +21,8 @@
->  #define _PAGE_BIT_SOFTW2	10	/* " */
->  #define _PAGE_BIT_SOFTW3	11	/* " */
->  #define _PAGE_BIT_PAT_LARGE	12	/* On 2MB or 1GB pages */
-> -#define _PAGE_BIT_SOFTW4	58	/* available for programmer */
-> +#define _PAGE_BIT_SOFTW4	57	/* available for programmer */
-> +#define _PAGE_BIT_SOFTW5	58	/* available for programmer */
->  #define _PAGE_BIT_PKEY_BIT0	59	/* Protection Keys, bit 1/4 */
->  #define _PAGE_BIT_PKEY_BIT1	60	/* Protection Keys, bit 2/4 */
->  #define _PAGE_BIT_PKEY_BIT2	61	/* Protection Keys, bit 3/4 */
-> @@ -34,6 +35,15 @@
->  #define _PAGE_BIT_SOFT_DIRTY	_PAGE_BIT_SOFTW3 /* software dirty tracking */
->  #define _PAGE_BIT_DEVMAP	_PAGE_BIT_SOFTW4
->  
-> +/*
-> + * Indicates a copy-on-write page.
-> + */
-> +#ifdef CONFIG_X86_SHADOW_STACK
-> +#define _PAGE_BIT_COW		_PAGE_BIT_SOFTW5 /* copy-on-write */
-> +#else
-> +#define _PAGE_BIT_COW		0
-> +#endif
-> +
->  /* If _PAGE_BIT_PRESENT is clear, we use these: */
->  /* - if the user mapped it with PROT_NONE; pte_present gives true */
->  #define _PAGE_BIT_PROTNONE	_PAGE_BIT_GLOBAL
-> @@ -115,6 +125,36 @@
->  #define _PAGE_DEVMAP	(_AT(pteval_t, 0))
->  #endif
->  
-> +/*
-> + * The hardware requires shadow stack to be read-only and Dirty.
-> + * _PAGE_COW is a software-only bit used to separate copy-on-write PTEs
-> + * from shadow stack PTEs:
-> + * (a) A modified, copy-on-write (COW) page: (Write=0, Cow=1)
-> + * (b) A R/O page that has been COW'ed: (Write=0, Cow=1)
-> + *     The user page is in a R/O VMA, and get_user_pages() needs a
-> + *     writable copy.  The page fault handler creates a copy of the page
-> + *     and sets the new copy's PTE as Write=0, Cow=1.
-> + * (c) A shadow stack PTE: (Write=0, Dirty=1)
-> + * (d) A shared (copy-on-access) shadow stack PTE: (Write=0, Cow=1)
-> + *     When a shadow stack page is being shared among processes (this
-> + *     happens at fork()), its PTE is cleared of _PAGE_DIRTY, so the next
-> + *     shadow stack access causes a fault, and the page is duplicated and
-> + *     _PAGE_DIRTY is set again.  This is the COW equivalent for shadow
-> + *     stack pages, even though it's copy-on-access rather than
-> + *     copy-on-write.
-> + * (e) A page where the processor observed a Write=1 PTE, started a write,
-> + *     set Dirty=1, but then observed a Write=0 PTE (changed by another
-> + *     thread).  That's possible today, but will not happen on processors
-> + *     that support shadow stack.
-
-This info, again, is great.  Let's keep it, but please do reformat it
-like the changelog version to make the bit states easier to grok.
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

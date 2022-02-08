@@ -2,422 +2,303 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA6F74AD68C
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:27:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EE8C4AD69C
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 12:28:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349040AbiBHL05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 06:26:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53302 "EHLO
+        id S1348876AbiBHL1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 06:27:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356156AbiBHKRw (ORCPT
+        with ESMTP id S1344266AbiBHKUF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 05:17:52 -0500
+        Tue, 8 Feb 2022 05:20:05 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 207FDC03FEC0;
-        Tue,  8 Feb 2022 02:17:51 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0FB1C03FEC0;
+        Tue,  8 Feb 2022 02:20:03 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D5C761559;
-        Tue,  8 Feb 2022 10:17:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED064C340F5;
-        Tue,  8 Feb 2022 10:17:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644315470;
-        bh=B5kPKaKPj6WPHi2c1HyJFZySKtUKUS+F4wL45+EXYc8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=RabgyLZ3czHUYu9eQfVMsqKQjd28oIC2eAxgZIC/cMV5+hibcqoT2NuQmD7DOvK9P
-         GnRyg8wnvdKLog6dXkCzWblnagSXKBQck0iCu0oHCN3Ua0XyfVEoxg+uWlBd/oAQDt
-         rHBvl98IaSWDWY6FHyzInN0UsRrhTjDnogCM9Qa7l7kp94NkYHvumML5idokK2waW/
-         xrCoRrsEfriZZmjoX4JOgHOTZHMrPKXIz0qzqEElQ6EuLqleaKsW8xmLJSTvnFFVe3
-         xVd+g8G1mWmnWNc6aFYJwDtirwlqQ9A8ckL6chYsh34iLWS5JfJ/LSUQVthh0Q28q+
-         dxaweMMQtijaw==
-Received: by mail-vs1-f41.google.com with SMTP id l14so2786942vsm.3;
-        Tue, 08 Feb 2022 02:17:49 -0800 (PST)
-X-Gm-Message-State: AOAM530nG/Fh3hSF6uA3ihqocqhnCuZ0SEksEqPZLmy0BjTIE2cURkX/
-        vJninW//Pc1E/WVzzq2f64W3MmC4YpB5OAOw3bw=
-X-Google-Smtp-Source: ABdhPJw9ojF+FsTHyx00YzSyU8RZae2avCJuBYfyZzZ4Ycd7H1q1FgS5AkGIyag/uQm+hXTMiI6TevIA1CXIxIuiWe8=
-X-Received: by 2002:a67:ea4e:: with SMTP id r14mr840479vso.51.1644315468769;
- Tue, 08 Feb 2022 02:17:48 -0800 (PST)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4BA1861559;
+        Tue,  8 Feb 2022 10:20:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1930BC004E1;
+        Tue,  8 Feb 2022 10:20:01 +0000 (UTC)
+Date:   Tue, 8 Feb 2022 11:19:59 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        linux-usb@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] [v2] ARM: sa1100/assabet: move dmabounce hack to ohci
+ driver
+Message-ID: <YgJDz6UdVwvyCSvq@kroah.com>
+References: <20220203083658.559803-1-arnd@kernel.org>
 MIME-Version: 1.0
-References: <20220126114452.692512-1-apatel@ventanamicro.com>
- <20220126114452.692512-9-apatel@ventanamicro.com> <CAJF2gTQsSn1KBgX2bg2LiSUbCmbGD3oF5KcmK5gq2Dd49BWDBQ@mail.gmail.com>
- <CAAhSdy3Dkv6ga0ZMp5rMFa8nV9EDHgOMBwuJ4z4-w52T8EaUag@mail.gmail.com>
-In-Reply-To: <CAAhSdy3Dkv6ga0ZMp5rMFa8nV9EDHgOMBwuJ4z4-w52T8EaUag@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 8 Feb 2022 18:17:37 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSLmBcgUUE3VGsEq0JCWV74Yy-pkduS66rk=VPVwxk59g@mail.gmail.com>
-Message-ID: <CAJF2gTSLmBcgUUE3VGsEq0JCWV74Yy-pkduS66rk=VPVwxk59g@mail.gmail.com>
-Subject: Re: [PATCH v10 8/8] RISC-V: Enable RISC-V SBI CPU Idle driver for
- QEMU virt machine
-To:     Anup Patel <anup@brainfault.org>
-Cc:     Anup Patel <apatel@ventanamicro.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Sandeep Tripathy <milun.tripathy@gmail.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Liush <liush@allwinnertech.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        kvm-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220203083658.559803-1-arnd@kernel.org>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 8, 2022 at 4:54 PM Anup Patel <anup@brainfault.org> wrote:
->
-> On Tue, Feb 8, 2022 at 12:16 PM Guo Ren <guoren@kernel.org> wrote:
-> >
-> > Another question:
-> >
-> > Have you put "idle-states {" in qemu's DTS? or how do you test your patches?
->
-> I usually do the following:
-> 1) Dump QEMU virt machine DTB
-> 2) Convert QEMU virt machine DTB into DTS
-> 3) Add "idle-states" in QEMU virt machine DTS
-> 4) Create QEMU virt machine DTB with "idle-states"
-> 5) Use the new QEMU virt machine DTB for testing this series.
->
-> Here's one of the DTS files which I used for testing on QEMU virt machine:
->
-> /dts-v1/;
->
-> / {
->     #address-cells = <0x02>;
->     #size-cells = <0x02>;
->     compatible = "riscv-virtio";
->     model = "riscv-virtio,qemu";
->
->     chosen {
->         linux,initrd-end = <0x8855d200>;
->         linux,initrd-start = <0x88200000>;
->         bootargs = "root=/dev/ram rw console=ttyS0 earlycon";
->         stdout-path = "/soc/uart@10000000";
->     };
->
->     memory@80000000 {
->         device_type = "memory";
->         reg = <0x00 0x80000000 0x00 0x10000000>;
->     };
->
->     cpus {
->         #address-cells = <0x01>;
->         #size-cells = <0x00>;
->         timebase-frequency = <0x989680>;
->
->         cpu@0 {
->             phandle = <0x07>;
->             device_type = "cpu";
->             reg = <0x00>;
->             status = "okay";
->             compatible = "riscv";
->             riscv,isa = "rv64imafdcsu";
->             mmu-type = "riscv,sv48";
->             cpu-idle-states = <&CPU_NONRET_DEF>;
->
->             interrupt-controller {
->                 #interrupt-cells = <0x01>;
->                 interrupt-controller;
->                 compatible = "riscv,cpu-intc";
->                 phandle = <0x08>;
->             };
->         };
->
->         cpu@1 {
->             phandle = <0x05>;
->             device_type = "cpu";
->             reg = <0x01>;
->             status = "okay";
->             compatible = "riscv";
->             riscv,isa = "rv64imafdcsu";
->             mmu-type = "riscv,sv48";
->             cpu-idle-states = <&CPU_RET_DEF>;
->
->             interrupt-controller {
->                 #interrupt-cells = <0x01>;
->                 interrupt-controller;
->                 compatible = "riscv,cpu-intc";
->                 phandle = <0x06>;
->             };
->         };
->
->         cpu@2 {
->             phandle = <0x03>;
->             device_type = "cpu";
->             reg = <0x02>;
->             status = "okay";
->             compatible = "riscv";
->             riscv,isa = "rv64imafdcsu";
->             mmu-type = "riscv,sv48";
->             cpu-idle-states = <&CPU_NONRET_DEF>;
->
->             interrupt-controller {
->                 #interrupt-cells = <0x01>;
->                 interrupt-controller;
->                 compatible = "riscv,cpu-intc";
->                 phandle = <0x04>;
->             };
->         };
->
->         cpu@3 {
->             phandle = <0x01>;
->             device_type = "cpu";
->             reg = <0x03>;
->             status = "okay";
->             compatible = "riscv";
->             riscv,isa = "rv64imafdcsu";
->             mmu-type = "riscv,sv48";
->             cpu-idle-states = <&CPU_RET_DEF>;
->
->             interrupt-controller {
->                 #interrupt-cells = <0x01>;
->                 interrupt-controller;
->                 compatible = "riscv,cpu-intc";
->                 phandle = <0x02>;
->             };
->         };
->
->         cpu-map {
->
->             cluster0 {
->
->                 core0 {
->                     cpu = <0x07>;
->                 };
->
->                 core1 {
->                     cpu = <0x05>;
->                 };
->
->                 core2 {
->                     cpu = <0x03>;
->                 };
->
->                 core3 {
->                     cpu = <0x01>;
->                 };
->             };
->         };
->
->         idle-states {
->             CPU_RET_DEF: cpu-retentive-default {
->                 compatible = "riscv,idle-state";
->                 riscv,sbi-suspend-param = <0x00000000>;
->                 entry-latency-us = <10>;
->                 exit-latency-us = <10>;
->                 min-residency-us = <100>;
->             };
->
->             CPU_NONRET_DEF: cpu-nonretentive-default {
->                 compatible = "riscv,idle-state";
->                 riscv,sbi-suspend-param = <0x80000000>;
->                 entry-latency-us = <100>;
->                 exit-latency-us = <100>;
->                 min-residency-us = <1000>;
->             };
->         };
->     };
->
->     soc {
->         #address-cells = <0x02>;
->         #size-cells = <0x02>;
->         compatible = "simple-bus";
->         ranges;
->
->         flash@20000000 {
->             bank-width = <0x04>;
->             reg = <0x00 0x20000000 0x00 0x2000000 0x00 0x22000000 0x00
-> 0x2000000>;
->             compatible = "cfi-flash";
->         };
->
->         rtc@101000 {
->             interrupts = <0x0b>;
->             interrupt-parent = <0x09>;
->             reg = <0x00 0x101000 0x00 0x1000>;
->             compatible = "google,goldfish-rtc";
->         };
->
->         uart@10000000 {
->             interrupts = <0x0a>;
->             interrupt-parent = <0x09>;
->             clock-frequency = <0x384000>;
->             reg = <0x00 0x10000000 0x00 0x100>;
->             compatible = "ns16550a";
->         };
->
->         poweroff {
->             value = <0x5555>;
->             offset = <0x00>;
->             regmap = <0x0a>;
->             compatible = "syscon-poweroff";
->         };
->
->         reboot {
->             value = <0x7777>;
->             offset = <0x00>;
->             regmap = <0x0a>;
->             compatible = "syscon-reboot";
->         };
->
->         test@100000 {
->             phandle = <0x0a>;
->             reg = <0x00 0x100000 0x00 0x1000>;
->             compatible = "sifive,test1\0sifive,test0\0syscon";
->         };
->
->         pci@30000000 {
->             interrupt-map-mask = <0x1800 0x00 0x00 0x07>;
->             interrupt-map = <0x00 0x00 0x00 0x01 0x09 0x20 0x00 0x00
-> 0x00 0x02 0x09 0x21 0x00 0x00 0x00 0x03 0x09 0x22 0x00 0x00 0x00 0x04
-> 0x09 0x23 0x800 0x00 0x00 0x01 0x09 0x21 0x800 0x00 0x00 0x02 0x09
-> 0x22 0x800 0x00 0x00 0x03 0x09 0x23 0x800 0x00 0x00 0x04 0x09 0x20
-> 0x1000 0x00 0x00 0x01 0x09 0x22 0x1000 0x00 0x00 0x02 0x09 0x23 0x1000
-> 0x00 0x00 0x03 0x09 0x20 0x1000 0x00 0x00 0x04 0x09 0x21 0x1800 0x00
-> 0x00 0x01 0x09 0x23 0x1800 0x00 0x00 0x02 0x09 0x20 0x1800 0x00 0x00
-> 0x03 0x09 0x21 0x1800 0x00 0x00 0x04 0x09 0x22>;
->             ranges = <0x1000000 0x00 0x00 0x00 0x3000000 0x00 0x10000
-> 0x2000000 0x00 0x40000000 0x00 0x40000000 0x00 0x40000000>;
->             reg = <0x00 0x30000000 0x00 0x10000000>;
->             dma-coherent;
->             bus-range = <0x00 0xff>;
->             linux,pci-domain = <0x00>;
->             device_type = "pci";
->             compatible = "pci-host-ecam-generic";
->             #size-cells = <0x02>;
->             #interrupt-cells = <0x01>;
->             #address-cells = <0x03>;
->         };
->
->         virtio_mmio@10008000 {
->             interrupts = <0x08>;
->             interrupt-parent = <0x09>;
->             reg = <0x00 0x10008000 0x00 0x1000>;
->             compatible = "virtio,mmio";
->         };
->
->         virtio_mmio@10007000 {
->             interrupts = <0x07>;
->             interrupt-parent = <0x09>;
->             reg = <0x00 0x10007000 0x00 0x1000>;
->             compatible = "virtio,mmio";
->         };
->
->         virtio_mmio@10006000 {
->             interrupts = <0x06>;
->             interrupt-parent = <0x09>;
->             reg = <0x00 0x10006000 0x00 0x1000>;
->             compatible = "virtio,mmio";
->         };
->
->         virtio_mmio@10005000 {
->             interrupts = <0x05>;
->             interrupt-parent = <0x09>;
->             reg = <0x00 0x10005000 0x00 0x1000>;
->             compatible = "virtio,mmio";
->         };
->
->         virtio_mmio@10004000 {
->             interrupts = <0x04>;
->             interrupt-parent = <0x09>;
->             reg = <0x00 0x10004000 0x00 0x1000>;
->             compatible = "virtio,mmio";
->         };
->
->         virtio_mmio@10003000 {
->             interrupts = <0x03>;
->             interrupt-parent = <0x09>;
->             reg = <0x00 0x10003000 0x00 0x1000>;
->             compatible = "virtio,mmio";
->         };
->
->         virtio_mmio@10002000 {
->             interrupts = <0x02>;
->             interrupt-parent = <0x09>;
->             reg = <0x00 0x10002000 0x00 0x1000>;
->             compatible = "virtio,mmio";
->         };
->
->         virtio_mmio@10001000 {
->             interrupts = <0x01>;
->             interrupt-parent = <0x09>;
->             reg = <0x00 0x10001000 0x00 0x1000>;
->             compatible = "virtio,mmio";
->         };
->
->         plic@c000000 {
->             phandle = <0x09>;
->             riscv,ndev = <0x35>;
->             reg = <0x00 0xc000000 0x00 0x210000>;
->             interrupts-extended = <0x08 0x0b 0x08 0x09 0x06 0x0b 0x06
-> 0x09 0x04 0x0b 0x04 0x09 0x02 0x0b 0x02 0x09>;
->             interrupt-controller;
->             compatible = "riscv,plic0";
->             #interrupt-cells = <0x01>;
->             #address-cells = <0x00>;
->         };
->
->         clint@2000000 {
->             interrupts-extended = <0x08 0x03 0x08 0x07 0x06 0x03 0x06
-> 0x07 0x04 0x03 0x04 0x07 0x02 0x03 0x02 0x07>;
->             reg = <0x00 0x2000000 0x00 0x10000>;
->             compatible = "riscv,clint0";
->         };
->     };
-> };
+On Thu, Feb 03, 2022 at 09:36:33AM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The sa1111 platform is one of the two remaining users of the old Arm
+> specific "dmabounce" code, which is an earlier implementation of the
+> generic swiotlb.
+> 
+> Linus Walleij submitted a patch that removes dmabounce support from
+> the ixp4xx, and I had a look at the other user, which is the sa1111
+> companion chip.
+> 
+> Looking at how dmabounce is used, I could narrow it down to one driver
+> one three machines:
+> 
+>  - dmabounce is only initialized on assabet/neponset, jornada720 and
+>    badge4, which are the platforms that have an sa1111 and support
+>    DMA on it.
+> 
+>  - All three of these suffer from "erratum #7" that requires only
+>    doing DMA to half the memory sections based on one of the address
+>    lines, in addition, the neponset also can't DMA to the RAM that
+>    is connected to sa1111 itself.
+> 
+>  - the pxa lubbock machine also has sa1111, but does not support DMA
+>    on it and does not set dmabounce.
+> 
+>  - only the OHCI and audio devices on sa1111 support DMA, but as
+>    there is no audio driver for this hardware, only OHCI remains.
+> 
+> In the OHCI code, I noticed that two other platforms already have
+> a local bounce buffer support in the form of the "local_mem"
+> allocator. Specifically, TMIO and SM501 use this on a few other ARM
+> boards with 16KB or 128KB of local SRAM that can be accessed from the
+> OHCI and from the CPU.
+> 
+> While this is not the same problem as on sa1111, I could not find a
+> reason why we can't re-use the existing implementation but replace the
+> physical SRAM address mapping with a locally allocated DMA buffer.
+> 
+> There are two main downsides:
+> 
+>  - rather than using a dynamically sized pool, this buffer needs
+>    to be allocated at probe time using a fixed size. Without
+>    having any idea of what it should be, I picked a size of
+>    64KB, which is between what the other two OHCI front-ends use
+>    in their SRAM. If anyone has a better idea what that size
+>    is reasonable, this can be trivially changed.
+> 
+>  - Previously, only USB transfers to unaddressable memory needed
+>    to go through the bounce buffer, now all of them do, which may
+>    impact runtime performance for USB endpoints that do a lot of
+>    transfers.
+> 
+> On the upside, the local_mem support uses write-combining buffers,
+> which should be a bit faster for transfers to the device compared to
+> normal uncached coherent memory as used in dmabounce.
+> 
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Russell King <linux@armlinux.org.uk>
+> Cc: Christoph Hellwig <hch@infradead.org>
+> Cc: Laurentiu Tudor <laurentiu.tudor@nxp.com>
+> Cc: linux-usb@vger.kernel.org
+> Acked-by: Alan Stern <stern@rowland.harvard.edu>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Thx Anup, but it still couldn't work for testing suspend.
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-# echo mem > /sys/power/state
-sh: write error: Function not implemented
-
-Why there is no ARCH_SUSPEND_POSSIBLE in the patch series?
-
-ref arm64's:
-commit 166936bace056dfc11452d794209f39a5e9b0fb4
-Author: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Date:   Thu Nov 7 18:37:14 2013 +0000
-
-    arm64: kernel: add PM build infrastructure
-
-    This patch adds the required makefile and kconfig entries to enable PM
-    for arm64 systems.
-
-    The kernel relies on the cpu_{suspend}/{resume} infrastructure to
-    properly save the context for a CPU and put it to sleep, hence this
-    patch adds the config option required to enable cpu_{suspend}/{resume}
-    API.
-
-    In order to rely on the CPU PM implementation for saving and restoring
-    of CPU subsystems like GIC and PMU, the arch Kconfig must be also
-    augmented to select the CONFIG_CPU_PM option when SUSPEND or CPU_IDLE
-    kernel implementations are selected.
-
->
-> Regards,
-> Anup
-
-
-
--- 
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
+> ---
+> Changes in v2:
+> 
+>  - drop check for assabet, as bounce buffers are required on
+>    all sa1100 machines
+>  - select CONFIG_ZONE_DMA again
+>  - update comments and changelog text based on discussion
+> ---
+>  arch/arm/common/Kconfig        |  2 +-
+>  arch/arm/common/sa1111.c       | 64 ----------------------------------
+>  drivers/usb/core/hcd.c         | 17 +++++++--
+>  drivers/usb/host/ohci-sa1111.c | 25 +++++++++++++
+>  4 files changed, 40 insertions(+), 68 deletions(-)
+> 
+> diff --git a/arch/arm/common/Kconfig b/arch/arm/common/Kconfig
+> index c8e198631d41..bc158fd227e1 100644
+> --- a/arch/arm/common/Kconfig
+> +++ b/arch/arm/common/Kconfig
+> @@ -1,7 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  config SA1111
+>  	bool
+> -	select DMABOUNCE if !ARCH_PXA
+> +	select ZONE_DMA if ARCH_SA1100
+>  
+>  config DMABOUNCE
+>  	bool
+> diff --git a/arch/arm/common/sa1111.c b/arch/arm/common/sa1111.c
+> index 7df003b149c6..a00915883f78 100644
+> --- a/arch/arm/common/sa1111.c
+> +++ b/arch/arm/common/sa1111.c
+> @@ -1391,70 +1391,9 @@ void sa1111_driver_unregister(struct sa1111_driver *driver)
+>  }
+>  EXPORT_SYMBOL(sa1111_driver_unregister);
+>  
+> -#ifdef CONFIG_DMABOUNCE
+> -/*
+> - * According to the "Intel StrongARM SA-1111 Microprocessor Companion
+> - * Chip Specification Update" (June 2000), erratum #7, there is a
+> - * significant bug in the SA1111 SDRAM shared memory controller.  If
+> - * an access to a region of memory above 1MB relative to the bank base,
+> - * it is important that address bit 10 _NOT_ be asserted. Depending
+> - * on the configuration of the RAM, bit 10 may correspond to one
+> - * of several different (processor-relative) address bits.
+> - *
+> - * This routine only identifies whether or not a given DMA address
+> - * is susceptible to the bug.
+> - *
+> - * This should only get called for sa1111_device types due to the
+> - * way we configure our device dma_masks.
+> - */
+> -static int sa1111_needs_bounce(struct device *dev, dma_addr_t addr, size_t size)
+> -{
+> -	/*
+> -	 * Section 4.6 of the "Intel StrongARM SA-1111 Development Module
+> -	 * User's Guide" mentions that jumpers R51 and R52 control the
+> -	 * target of SA-1111 DMA (either SDRAM bank 0 on Assabet, or
+> -	 * SDRAM bank 1 on Neponset). The default configuration selects
+> -	 * Assabet, so any address in bank 1 is necessarily invalid.
+> -	 */
+> -	return (machine_is_assabet() || machine_is_pfs168()) &&
+> -		(addr >= 0xc8000000 || (addr + size) >= 0xc8000000);
+> -}
+> -
+> -static int sa1111_notifier_call(struct notifier_block *n, unsigned long action,
+> -	void *data)
+> -{
+> -	struct sa1111_dev *dev = to_sa1111_device(data);
+> -
+> -	switch (action) {
+> -	case BUS_NOTIFY_ADD_DEVICE:
+> -		if (dev->dev.dma_mask && dev->dma_mask < 0xffffffffUL) {
+> -			int ret = dmabounce_register_dev(&dev->dev, 1024, 4096,
+> -					sa1111_needs_bounce);
+> -			if (ret)
+> -				dev_err(&dev->dev, "failed to register with dmabounce: %d\n", ret);
+> -		}
+> -		break;
+> -
+> -	case BUS_NOTIFY_DEL_DEVICE:
+> -		if (dev->dev.dma_mask && dev->dma_mask < 0xffffffffUL)
+> -			dmabounce_unregister_dev(&dev->dev);
+> -		break;
+> -	}
+> -	return NOTIFY_OK;
+> -}
+> -
+> -static struct notifier_block sa1111_bus_notifier = {
+> -	.notifier_call = sa1111_notifier_call,
+> -};
+> -#endif
+> -
+>  static int __init sa1111_init(void)
+>  {
+>  	int ret = bus_register(&sa1111_bus_type);
+> -#ifdef CONFIG_DMABOUNCE
+> -	if (ret == 0)
+> -		bus_register_notifier(&sa1111_bus_type, &sa1111_bus_notifier);
+> -#endif
+>  	if (ret == 0)
+>  		platform_driver_register(&sa1111_device_driver);
+>  	return ret;
+> @@ -1463,9 +1402,6 @@ static int __init sa1111_init(void)
+>  static void __exit sa1111_exit(void)
+>  {
+>  	platform_driver_unregister(&sa1111_device_driver);
+> -#ifdef CONFIG_DMABOUNCE
+> -	bus_unregister_notifier(&sa1111_bus_type, &sa1111_bus_notifier);
+> -#endif
+>  	bus_unregister(&sa1111_bus_type);
+>  }
+>  
+> diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+> index 3c7c64ff3c0a..8417baedc89c 100644
+> --- a/drivers/usb/core/hcd.c
+> +++ b/drivers/usb/core/hcd.c
+> @@ -1260,7 +1260,8 @@ void usb_hcd_unlink_urb_from_ep(struct usb_hcd *hcd, struct urb *urb)
+>  EXPORT_SYMBOL_GPL(usb_hcd_unlink_urb_from_ep);
+>  
+>  /*
+> - * Some usb host controllers can only perform dma using a small SRAM area.
+> + * Some usb host controllers can only perform dma using a small SRAM area,
+> + * or have restrictions on addressable DRAM.
+>   * The usb core itself is however optimized for host controllers that can dma
+>   * using regular system memory - like pci devices doing bus mastering.
+>   *
+> @@ -3095,8 +3096,18 @@ int usb_hcd_setup_local_mem(struct usb_hcd *hcd, phys_addr_t phys_addr,
+>  	if (IS_ERR(hcd->localmem_pool))
+>  		return PTR_ERR(hcd->localmem_pool);
+>  
+> -	local_mem = devm_memremap(hcd->self.sysdev, phys_addr,
+> -				  size, MEMREMAP_WC);
+> +	/*
+> +	 * if a physical SRAM address was passed, map it, otherwise
+> +	 * allocate system memory as a buffer.
+> +	 */
+> +	if (phys_addr)
+> +		local_mem = devm_memremap(hcd->self.sysdev, phys_addr,
+> +					  size, MEMREMAP_WC);
+> +	else
+> +		local_mem = dmam_alloc_attrs(hcd->self.sysdev, size, &dma,
+> +					     GFP_KERNEL,
+> +					     DMA_ATTR_WRITE_COMBINE);
+> +
+>  	if (IS_ERR(local_mem))
+>  		return PTR_ERR(local_mem);
+>  
+> diff --git a/drivers/usb/host/ohci-sa1111.c b/drivers/usb/host/ohci-sa1111.c
+> index 137f66f6977f..0da2badf0658 100644
+> --- a/drivers/usb/host/ohci-sa1111.c
+> +++ b/drivers/usb/host/ohci-sa1111.c
+> @@ -206,6 +206,31 @@ static int ohci_hcd_sa1111_probe(struct sa1111_dev *dev)
+>  		goto err1;
+>  	}
+>  
+> +	/*
+> +	 * According to the "Intel StrongARM SA-1111 Microprocessor Companion
+> +	 * Chip Specification Update" (June 2000), erratum #7, there is a
+> +	 * significant bug in the SA1111 SDRAM shared memory controller.  If
+> +	 * an access to a region of memory above 1MB relative to the bank base,
+> +	 * it is important that address bit 10 _NOT_ be asserted. Depending
+> +	 * on the configuration of the RAM, bit 10 may correspond to one
+> +	 * of several different (processor-relative) address bits.
+> +	 *
+> +	 * Section 4.6 of the "Intel StrongARM SA-1111 Development Module
+> +	 * User's Guide" mentions that jumpers R51 and R52 control the
+> +	 * target of SA-1111 DMA (either SDRAM bank 0 on Assabet, or
+> +	 * SDRAM bank 1 on Neponset). The default configuration selects
+> +	 * Assabet, so any address in bank 1 is necessarily invalid.
+> +	 *
+> +	 * As a workaround, use a bounce buffer in addressable memory
+> +	 * as local_mem, relying on ZONE_DMA to provide an area that
+> +	 * fits within the above constraints.
+> +	 *
+> +	 * SZ_64K is an estimate for what size this might need.
+> +	 */
+> +	ret = usb_hcd_setup_local_mem(hcd, 0, 0, SZ_64K);
+> +	if (ret)
+> +		goto err1;
+> +
+>  	if (!request_mem_region(hcd->rsrc_start, hcd->rsrc_len, hcd_name)) {
+>  		dev_dbg(&dev->dev, "request_mem_region failed\n");
+>  		ret = -EBUSY;
+> -- 
+> 2.29.2
+> 

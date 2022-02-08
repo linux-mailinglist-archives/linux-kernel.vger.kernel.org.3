@@ -2,80 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4E864ACFE1
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 04:51:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AB494ACFE7
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 04:53:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346479AbiBHDvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 22:51:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33430 "EHLO
+        id S1346483AbiBHDxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 22:53:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238983AbiBHDvm (ORCPT
+        with ESMTP id S229639AbiBHDxr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 22:51:42 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8854EC0401DC;
-        Mon,  7 Feb 2022 19:51:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C6BF61529;
-        Tue,  8 Feb 2022 03:51:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36DBAC004E1;
-        Tue,  8 Feb 2022 03:51:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644292300;
-        bh=ABaVsbOIb3+OcYn2+ylzu6Byh3EUHq/wPhjW1EhoBIs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=IBYF/lrlFyeSuS2oqOc/d9fIcdy7zrA4gRdFau3P52O1c7B+0o3KhDqmNTPlsH/0i
-         sunvseBZ+AZWK+CfmcUkUJEE3Mv+4xW8md3dh+Q0vo+eYssqxMSr661akKap8ptas6
-         B8ugcNMyduW8TdDMPVYV7p4dTFqIJtzEWrHJOuLkz4hW4hzSuywV6C/pP61M1ziHtX
-         6QYbo+UbjMctfN34OuqMJGraQLIv0l9DSW8q96rWUEDU6eq0Pe63zjwDNorG/uHRIj
-         JTrCuucSraQq+eWphiznzSzOEKFNpL5uyVRyk9jkPbrH0TE8vhkSnWB/uWc9hzJpMM
-         Reo9UYUvAUa2w==
-Date:   Mon, 7 Feb 2022 19:51:39 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Jeffrey Ji <jeffreyjilinux@gmail.com>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Brian Vazquez <brianvv@google.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        jeffreyji <jeffreyji@google.com>
-Subject: Re: [PATCH v7 net-next] net-core: add InDropOtherhost counter
-Message-ID: <20220207195139.77d860cc@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20220207235714.1050160-1-jeffreyji@google.com>
-References: <20220207235714.1050160-1-jeffreyji@google.com>
+        Mon, 7 Feb 2022 22:53:47 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51D83C0401DC;
+        Mon,  7 Feb 2022 19:53:46 -0800 (PST)
+Received: from kwepemi100010.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Jt8H006zdzccpM;
+        Tue,  8 Feb 2022 11:52:43 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi100010.china.huawei.com (7.221.188.54) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 8 Feb 2022 11:53:43 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 8 Feb 2022 11:53:43 +0800
+Subject: Re: [PATCH v3 2/3] block, bfq: avoid moving bfqq to it's parent bfqg
+To:     <paolo.valente@linaro.org>, <jack@suse.cz>, <axboe@kernel.dk>
+CC:     <linux-block@vger.kernel.org>, <cgroups@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
+References: <20220129015924.3958918-1-yukuai3@huawei.com>
+ <20220129015924.3958918-3-yukuai3@huawei.com>
+From:   "yukuai (C)" <yukuai3@huawei.com>
+Message-ID: <c85b10ce-fb41-9e0a-772a-63c226227207@huawei.com>
+Date:   Tue, 8 Feb 2022 11:53:42 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220129015924.3958918-3-yukuai3@huawei.com>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon,  7 Feb 2022 23:57:14 +0000 Jeffrey Ji wrote:
-> From: jeffreyji <jeffreyji@google.com>
+ÔÚ 2022/01/29 9:59, Yu Kuai Ð´µÀ:
+> Moving bfqq to it's parent bfqg is pointless.
 > 
-> Increment InDropOtherhost counter when packet dropped due to incorrect dest
-> MAC addr.
-> 
-> An example when this drop can occur is when manually crafting raw
-> packets that will be consumed by a user space application via a tap
-> device. For testing purposes local traffic was generated using trafgen
-> for the client and netcat to start a server
-> 
-> example output from nstat:
-> \~# nstat -a | grep InMac
-> Ip6InDropOtherhost                  0                  0.0
-> IpExtInDropOtherhost                1                  0.0
-> 
-> Tested: Created 2 netns, sent 1 packet using trafgen from 1 to the other
-> with "{eth(daddr=$INCORRECT_MAC...}", verified that nstat showed the
-> counter was incremented.
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> ---
+>   block/bfq-cgroup.c | 10 +++++++++-
+>   1 file changed, 9 insertions(+), 1 deletion(-)
 
-As far as I can tell nobody objected to my suggestion of making this 
-a netdev counter, so please switch to working on that. Thanks.
+Hi, Paolo
+
+I make a clerical error in last version of this patch:
+
+bfq_group should be bfqq_group
+
+Can you please take a look of this patch? I do compile and
+test the patch this time...
+
+Thanks,
+Kuai

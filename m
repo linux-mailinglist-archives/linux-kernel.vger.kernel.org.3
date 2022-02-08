@@ -2,75 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECAAB4ADBCD
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 15:58:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5E434ADBD0
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 15:58:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379052AbiBHO6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 09:58:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50686 "EHLO
+        id S1379071AbiBHO6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 09:58:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378991AbiBHO56 (ORCPT
+        with ESMTP id S1348499AbiBHO6r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 09:57:58 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF58C061577;
-        Tue,  8 Feb 2022 06:57:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644332277; x=1675868277;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=epaAVu/BZF8UiZCX2b02ur3J1p5fNjEAMvw+qZXVmGM=;
-  b=nFkoh4+BSAqlcsZLqrDLBEev4BogmQwesrB8Lu3+MqPnk453Z1iFtw2H
-   V/cbHtpHr6hZSkvguNGoRJ2b8F0l4AtOns8LH0XW1s1rglJQ/0b4+Sznf
-   C2P06SwHWAkxmo22E9KFQlxJvEZ6BvW4fF9bsLuVYUKIxUfKLQnv3WD64
-   geTwR/rvjtU8Qg2e0aR8k/MkdUg+r0SQ8TZdv2c176TtgjKV0DjC8F9lc
-   aTVPM8l2cIU4QfYfxNQS5cVMK93bOjFwPqPU2vCw3W9CdxmRdtHBY+8zo
-   tv589PdSuOH/mDz82fvrlw0IuID4YXSebw2RblgiHtCv7BThmKtD2Ji6H
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="312257736"
-X-IronPort-AV: E=Sophos;i="5.88,353,1635231600"; 
-   d="scan'208";a="312257736"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 06:57:57 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,353,1635231600"; 
-   d="scan'208";a="700866386"
-Received: from unknown (HELO [10.237.72.51]) ([10.237.72.51])
-  by orsmga005.jf.intel.com with ESMTP; 08 Feb 2022 06:57:53 -0800
-Message-ID: <6f1103af-595c-ed0a-b946-97a9331ed148@linux.intel.com>
-Date:   Tue, 8 Feb 2022 16:57:53 +0200
+        Tue, 8 Feb 2022 09:58:47 -0500
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594B4C061577;
+        Tue,  8 Feb 2022 06:58:46 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 8C6265C0130;
+        Tue,  8 Feb 2022 09:58:45 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Tue, 08 Feb 2022 09:58:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=FZq4ssWYMzF04ugzd
+        U6+K23uZ05YdN5l+VMujCkRgRE=; b=Bqp07LPgsRAyzl+TYa3JiHKhBiEsDjSRb
+        mQYRMEGrYieX1NiRgGpCL5g0nYgx8R12ffhpdOAB+CheUOJGlqO9OSF7Od5opNRJ
+        5t0sd1FMDR/ql/52am+9dBlCKWfZKjwk7/tZ8fL2b8UNTrKwRUEIx5CIA5nBeuUP
+        kTFSH79WGJmrr8N1+v7OD+NzrW8no2UNUPQ7Ypg7WnYpKg5l0USZ646+OBzNrMdY
+        efquFiDlPofLiXQ/dCi2CTW1tkr5NmjXjlaq+y7ktIB1yUUDA7MVSIQ/BTNagUP9
+        J2mSyoctrgWEhSivUlvkKHE6SVyA9HdjNpfY6NyqW9WUDzSoj86wg==
+X-ME-Sender: <xms:JIUCYik-3y23dLZm0pm-KTnSeUphdjfIg3ZUIlbSzjS2ZduT0Eo-Sg>
+    <xme:JIUCYp1pqD32pHbcwcRkNkJl3ivjGyFmQsSUfj-6ncHm2B_Kbl1_iu_zUjgc1EHZw
+    lCvV57UYdkm9vk>
+X-ME-Received: <xmr:JIUCYgpetAlwpDA2JSi91BCyQkQb7Dxe_xnhZ7548_FLGuHmadbrs4ZZoggFqNzXVLrsN-jrL-GLo_pG-ZsXoFXiaNFbfg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrheejgdeijecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecunecujfgurhepfffhvffukfhfgggtuggjsehttdortd
+    dttddvnecuhfhrohhmpefkughoucfutghhihhmmhgvlhcuoehiughoshgthhesihguohhs
+    tghhrdhorhhgqeenucggtffrrghtthgvrhhnpefgjeevhfdvgeeiudekteduveegueejfe
+    fffeefteekkeeuueehjeduledtjeeuudenucevlhhushhtvghrufhiiigvpedtnecurfgr
+    rhgrmhepmhgrihhlfhhrohhmpehiughoshgthhesihguohhstghhrdhorhhg
+X-ME-Proxy: <xmx:JIUCYmlyZNDi2_wwfKMpjUNBsjV5OyJ_xHIUNX28kfP2YiSr-tB5HA>
+    <xmx:JIUCYg3RnrwEewoye8jaJTKVi7ak8RH_2u_ZOaebfzsHdPqKbD85Fw>
+    <xmx:JIUCYttMU35hvy5pnwYjPVei1khtRXVN0pys3BPbkqmzxo8ELFOYWA>
+    <xmx:JYUCYhmVI6ZU5xQMrqa9Ef8ZJ7Yzvh2UpTW0CByt6-2S-cqYM4QaqA>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 8 Feb 2022 09:58:44 -0500 (EST)
+Date:   Tue, 8 Feb 2022 16:58:39 +0200
+From:   Ido Schimmel <idosch@idosch.org>
+To:     menglong8.dong@gmail.com
+Cc:     rostedt@goodmis.org, mingo@redhat.com, nhorman@tuxdriver.com,
+        davem@davemloft.net, kuba@kernel.org, imagedong@tencent.com,
+        dsahern@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH v7 net-next 2/2] net: drop_monitor: support drop reason
+Message-ID: <YgKFHyQphAwMgsEY@shredder>
+References: <20220208072836.3540192-1-imagedong@tencent.com>
+ <20220208072836.3540192-3-imagedong@tencent.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.5.1
-Subject: Re: 5.17-rc regression: rmi4 clients cannot deal with asynchronous
- suspend? (was: X1 Carbon touchpad not resumed)
-Content-Language: en-US
-To:     Hugh Dickins <hughd@google.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Rajat Jain <rajatja@google.com>, Wolfram Sang <wsa@kernel.org>,
-        Derek Basehore <dbasehore@chromium.org>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        "loic.poulain@linaro.org" <loic.poulain@linaro.org>,
-        Andrew Duggan <aduggan@synaptics.com>,
-        vincent.huang@tw.synaptics.com, cheiny@synaptics.com,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-input <linux-input@vger.kernel.org>
-References: <89456fcd-a113-4c82-4b10-a9bcaefac68f@google.com>
- <YgF/0QGFN4SppLKg@shikoro>
- <CACK8Z6Etj-gq1VKpkUBstiXEETekPWG9p9gKBtuFaZF05pQEvQ@mail.gmail.com>
- <CACK8Z6FUsceYgBoaAtN8o4m9HpZaBZMt0Nqtvw0a1Z3EuD_nWg@mail.gmail.com>
- <YgHTYrODoo2ou49J@google.com>
- <b76771e5-b8e-54c9-2474-d5a73d236cba@google.com>
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-In-Reply-To: <b76771e5-b8e-54c9-2474-d5a73d236cba@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220208072836.3540192-3-imagedong@tencent.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,97 +73,161 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
-
-On 2/8/22 04:50, Hugh Dickins wrote:
-> On Mon, 7 Feb 2022, Dmitry Torokhov wrote:
->> On Mon, Feb 07, 2022 at 01:41:36PM -0800, Rajat Jain wrote:
->>>>>> Bisection led to 172d931910e1db800f4e71e8ed92281b6f8c6ee2
->>>>>> ("i2c: enable async suspend/resume on i2c client devices")
->>>>>> and reverting that fixes it for me.
->>>>>
->>>>> Thank you for the report plus bisection and sorry for the regression!
->>>>
->>>> +1, Thanks for the bisection, and apologies for the inconveniences.
->>>>
->>>> The problem here seems to be that for some reason, some devices (all
->>>> connected to rmi4 adapter) failed to resume, but only when
->>>> asynchronous suspend is enabled (by 172d931910e1):
->>>>
->>>> [   79.221064] rmi4_smbus 6-002c: failed to get SMBus version number!
->>>> [   79.265074] rmi4_physical rmi4-00: rmi_driver_reset_handler: Failed
->>>> to read current IRQ mask.
->>>> [   79.308330] rmi4_f01 rmi4-00.fn01: Failed to restore normal operation: -6.
->>>> [   79.308335] rmi4_f01 rmi4-00.fn01: Resume failed with code -6.
->>>> [   79.308339] rmi4_physical rmi4-00: Failed to suspend functions: -6
->>>> [   79.308342] rmi4_smbus 6-002c: Failed to resume device: -6
->>>> [   79.351967] rmi4_physical rmi4-00: Failed to read irqs, code=-6
->>>>
-
-v5.17-rc3 on Lenovo ThinkPad X1 Carbon 8th don't even suspend due the 
-same commit 172d931910e1. Sadly I tested the original patch on other 
-machine(s) but not on this one with rmi4 :-(
-
-[   39.957293] PM: suspend entry (s2idle)
-[   40.938666] Filesystems sync: 0.980 seconds
-[   40.942751] Freezing user space processes ... (elapsed 0.001 seconds) 
-done.
-[   40.945511] OOM killer disabled.
-[   40.946111] Freezing remaining freezable tasks ... (elapsed 0.001 
-seconds) done.
-[   40.948590] printk: Suspending console(s) (use no_console_suspend to 
-debug)
-[   40.993123] i801_smbus 0000:00:1f.4: No response
-[   40.993218] rmi4_f01 rmi4-00.fn01: Failed to write sleep mode: -6.
-[   40.993232] rmi4_f01 rmi4-00.fn01: Suspend failed with code -6.
-[   40.993241] rmi4_physical rmi4-00: Failed to suspend functions: -6
-[   40.993404] rmi4_smbus 1-002c: Failed to suspend device: -6
-[   40.993414] PM: dpm_run_callback(): rmi_smb_suspend+0x0/0x30 
-[rmi_smbus] returns -6
-[   40.993438] rmi4_smbus 1-002c: PM: failed to suspend async: error -6
-[   41.014198] PM: Some devices failed to suspend, or early wake event 
-detected
-[   41.021544] i801_smbus 0000:00:1f.4: No response
-[   41.021612] rmi4_f03 rmi4-00.fn03: rmi_f03_pt_write: Failed to write 
-to F03 TX register (-6).
-[   41.022189] i801_smbus 0000:00:1f.4: No response
-[   41.022230] rmi4_f03 rmi4-00.fn03: rmi_f03_pt_write: Failed to write 
-to F03 TX register (-6).
-[   41.023480] i801_smbus 0000:00:1f.4: No response
-[   41.023542] rmi4_physical rmi4-00: rmi_driver_clear_irq_bits: Failed 
-to change enabled interrupts!
-[   41.033850] i801_smbus 0000:00:1f.4: No response
-[   41.034006] OOM killer enabled.
-[   41.035449] i801_smbus 0000:00:1f.4: No response
-[   41.035722] Restarting tasks ...
-[   41.036705] rmi4_physical rmi4-00: rmi_driver_set_irq_bits: Failed to 
-change enabled interrupts!
-[   41.038367] done.
-[   41.039003] psmouse: probe of serio2 failed with error -1
-[   41.071700] PM: suspend exit
-
->> I wonder if we could apply a little bit more targeted patch:
->>
->> diff --git a/drivers/input/rmi4/rmi_smbus.c b/drivers/input/rmi4/rmi_smbus.c
->> index 2407ea43de59..3901d06d38ca 100644
->> --- a/drivers/input/rmi4/rmi_smbus.c
->> +++ b/drivers/input/rmi4/rmi_smbus.c
->> @@ -335,6 +335,7 @@ static int rmi_smb_probe(struct i2c_client *client,
->>   		return error;
->>   	}
->>   
->> +	device_disable_async_suspend(&client->dev);
->>   	return 0;
->>   }
->>   
->>
->> ... and if that works then we cant try to establish proper dependencies
->> via device links later.
->>
->> Hugh, could you please try this out and see if it helps?
+On Tue, Feb 08, 2022 at 03:28:36PM +0800, menglong8.dong@gmail.com wrote:
+> From: Menglong Dong <imagedong@tencent.com>
 > 
-> Yes, that works nicely, thanks Dmitry.
+> In the commit c504e5c2f964 ("net: skb: introduce kfree_skb_reason()")
+> drop reason is introduced to the tracepoint of kfree_skb. Therefore,
+> drop_monitor is able to report the drop reason to users by netlink.
 > 
-Gladly fixes the issue on ThinkPad X1 Carbon 8th too:
+> The drop reasons are reported as string to users, which is exactly
+> the same as what we do when reporting it to ftrace.
+> 
+> Signed-off-by: Menglong Dong <imagedong@tencent.com>
+> ---
+> v7:
+> - take the size of NET_DM_ATTR_REASON into accounting in
+>   net_dm_packet_report_size()
+> - let compiler define the size of drop_reasons
+> 
+> v6:
+> - check the range of drop reason in net_dm_packet_report_fill()
+> 
+> v5:
+> - check if drop reason larger than SKB_DROP_REASON_MAX
+> 
+> v4:
+> - report drop reasons as string
+> 
+> v3:
+> - referring to cb->reason and cb->pc directly in
+>   net_dm_packet_report_fill()
+> 
+> v2:
+> - get a pointer to struct net_dm_skb_cb instead of local var for
+>   each field
+> ---
+>  include/uapi/linux/net_dropmon.h |  1 +
+>  net/core/drop_monitor.c          | 34 ++++++++++++++++++++++++++++----
+>  2 files changed, 31 insertions(+), 4 deletions(-)
+> 
+> diff --git a/include/uapi/linux/net_dropmon.h b/include/uapi/linux/net_dropmon.h
+> index 66048cc5d7b3..1bbea8f0681e 100644
+> --- a/include/uapi/linux/net_dropmon.h
+> +++ b/include/uapi/linux/net_dropmon.h
+> @@ -93,6 +93,7 @@ enum net_dm_attr {
+>  	NET_DM_ATTR_SW_DROPS,			/* flag */
+>  	NET_DM_ATTR_HW_DROPS,			/* flag */
+>  	NET_DM_ATTR_FLOW_ACTION_COOKIE,		/* binary */
+> +	NET_DM_ATTR_REASON,			/* string */
+>  
+>  	__NET_DM_ATTR_MAX,
+>  	NET_DM_ATTR_MAX = __NET_DM_ATTR_MAX - 1
+> diff --git a/net/core/drop_monitor.c b/net/core/drop_monitor.c
+> index 7b288a121a41..28c55d605566 100644
+> --- a/net/core/drop_monitor.c
+> +++ b/net/core/drop_monitor.c
+> @@ -48,6 +48,19 @@
+>  static int trace_state = TRACE_OFF;
+>  static bool monitor_hw;
+>  
+> +#undef EM
+> +#undef EMe
+> +
+> +#define EM(a, b)	[a] = #b,
+> +#define EMe(a, b)	[a] = #b
+> +
+> +/* drop_reasons is used to translate 'enum skb_drop_reason' to string,
+> + * which is reported to user space.
+> + */
+> +static const char * const drop_reasons[] = {
+> +	TRACE_SKB_DROP_REASON
+> +};
+> +
+>  /* net_dm_mutex
+>   *
+>   * An overall lock guarding every operation coming from userspace.
+> @@ -126,6 +139,7 @@ struct net_dm_skb_cb {
+>  		struct devlink_trap_metadata *hw_metadata;
+>  		void *pc;
+>  	};
+> +	enum skb_drop_reason reason;
+>  };
+>  
+>  #define NET_DM_SKB_CB(__skb) ((struct net_dm_skb_cb *)&((__skb)->cb[0]))
+> @@ -498,6 +512,7 @@ static void net_dm_packet_trace_kfree_skb_hit(void *ignore,
+>  {
+>  	ktime_t tstamp = ktime_get_real();
+>  	struct per_cpu_dm_data *data;
+> +	struct net_dm_skb_cb *cb;
+>  	struct sk_buff *nskb;
+>  	unsigned long flags;
+>  
+> @@ -508,7 +523,9 @@ static void net_dm_packet_trace_kfree_skb_hit(void *ignore,
+>  	if (!nskb)
+>  		return;
+>  
+> -	NET_DM_SKB_CB(nskb)->pc = location;
+> +	cb = NET_DM_SKB_CB(nskb);
+> +	cb->reason = reason;
+> +	cb->pc = location;
+>  	/* Override the timestamp because we care about the time when the
+>  	 * packet was dropped.
+>  	 */
+> @@ -574,6 +591,8 @@ static size_t net_dm_packet_report_size(size_t payload_len)
+>  	       nla_total_size(sizeof(u32)) +
+>  	       /* NET_DM_ATTR_PROTO */
+>  	       nla_total_size(sizeof(u16)) +
+> +	       /* NET_DM_ATTR_REASON */
+> +	       nla_total_size(SKB_DR_MAX_LEN + 1) +
 
-Tested-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Nothing ensures that the reason is not longer than this length and
+nothing ensures that this assumption remains valid as more reasons are
+added.
+
+I think "SKB_DR_MAX_LEN" can be removed completely. Pass "reason" to
+this function and do "strlen(drop_reasons[reason]) + 1". Any reason it
+can't work?
+
+>  	       /* NET_DM_ATTR_PAYLOAD */
+>  	       nla_total_size(payload_len);
+>  }
+> @@ -606,8 +625,9 @@ static int net_dm_packet_report_in_port_put(struct sk_buff *msg, int ifindex,
+>  static int net_dm_packet_report_fill(struct sk_buff *msg, struct sk_buff *skb,
+>  				     size_t payload_len)
+>  {
+> -	u64 pc = (u64)(uintptr_t) NET_DM_SKB_CB(skb)->pc;
+> +	struct net_dm_skb_cb *cb = NET_DM_SKB_CB(skb);
+>  	char buf[NET_DM_MAX_SYMBOL_LEN];
+> +	unsigned int reason;
+>  	struct nlattr *attr;
+>  	void *hdr;
+>  	int rc;
+> @@ -620,10 +640,16 @@ static int net_dm_packet_report_fill(struct sk_buff *msg, struct sk_buff *skb,
+>  	if (nla_put_u16(msg, NET_DM_ATTR_ORIGIN, NET_DM_ORIGIN_SW))
+>  		goto nla_put_failure;
+>  
+> -	if (nla_put_u64_64bit(msg, NET_DM_ATTR_PC, pc, NET_DM_ATTR_PAD))
+> +	if (nla_put_u64_64bit(msg, NET_DM_ATTR_PC, (u64)(uintptr_t)cb->pc,
+> +			      NET_DM_ATTR_PAD))
+> +		goto nla_put_failure;
+> +
+> +	reason = (unsigned int)cb->reason;
+> +	if (reason < SKB_DROP_REASON_MAX &&
+
+In which cases can this happen? Might be better to perform this
+validation in net_dm_packet_trace_kfree_skb_hit() and set "cb->reason"
+to "SKB_DROP_REASON_NOT_SPECIFIED" in this case. That way we don't need
+to perform the validation in later code paths
+
+> +	    nla_put_string(msg, NET_DM_ATTR_REASON, drop_reasons[reason]))
+>  		goto nla_put_failure;
+>  
+> -	snprintf(buf, sizeof(buf), "%pS", NET_DM_SKB_CB(skb)->pc);
+> +	snprintf(buf, sizeof(buf), "%pS", cb->pc);
+>  	if (nla_put_string(msg, NET_DM_ATTR_SYMBOL, buf))
+>  		goto nla_put_failure;
+>  
+> -- 
+> 2.34.1
+> 

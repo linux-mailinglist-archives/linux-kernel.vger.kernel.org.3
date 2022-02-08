@@ -2,88 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B6814AE594
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 00:44:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 916D44AE595
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 00:44:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238033AbiBHXoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 18:44:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50016 "EHLO
+        id S238129AbiBHXox convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 8 Feb 2022 18:44:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231478AbiBHXo2 (ORCPT
+        with ESMTP id S231478AbiBHXos (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 18:44:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2770C061576
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 15:44:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 97BBEB81DB5
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 23:44:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 123CAC004E1;
-        Tue,  8 Feb 2022 23:44:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644363865;
-        bh=cR+ULfFQ6WBrXBJ0KAj9oQfc/nEUAc3t664hCR1VpV0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=au3oGqMAYQU0Oerx3qI/4+O7y1KpQGPEF0nrdR6pd8jSQbg0n1ue/yh8WRe9vr/mQ
-         tEa8PkCp1/T0g6k720t2a2HZEnv/RWYo7eRqeBEK3K2Cx+mO2jTa8aCXwBVFqE4bhK
-         QSFUV/bHlRV7RQchp5eWj0X7N+Lyznj0gpPC7Fj+SrjAMmGjm1Pk+RhPmHMgNY5rle
-         tR3/sD5ib+BqXKmqAy/6BOPxTknubevt3U/6kJwJvx5xTtAybWiYLhBF/R+gR158cl
-         TvjtQCbNu11prXOB5UmD2q6sP50X1HzChMILzAv4HzF9RTt6/zU6KqvBj7RfptKu/r
-         ufoy5/Zc4WCiQ==
-Date:   Tue, 8 Feb 2022 15:44:23 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, Andy Lutomirski <luto@kernel.org>,
-        Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Sultan Alsawaf <sultan@kerneltoast.com>
-Subject: Re: [PATCH v3 1/2] random: remove batched entropy locking
-Message-ID: <YgMAV2Ps/k80w48M@sol.localdomain>
-References: <20220207153914.365931-1-Jason@zx2c4.com>
- <20220207153914.365931-2-Jason@zx2c4.com>
+        Tue, 8 Feb 2022 18:44:48 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7A9B7C061576
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 15:44:47 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mtapsc-5-34ZSeE5ZPTGlj3py7oltng-1; Tue, 08 Feb 2022 23:44:44 +0000
+X-MC-Unique: 34ZSeE5ZPTGlj3py7oltng-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Tue, 8 Feb 2022 23:44:43 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Tue, 8 Feb 2022 23:44:43 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Dominick Grift' <dominick.grift@defensec.nl>,
+        Chris PeBenito <chpebeni@linux.microsoft.com>
+CC:     William Roberts <bill.c.roberts@gmail.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Demi Marie Obenour <demiobenour@gmail.com>,
+        "Stephen Smalley" <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        SElinux list <selinux@vger.kernel.org>,
+        "Linux kernel mailing list" <linux-kernel@vger.kernel.org>,
+        "selinux-refpolicy@vger.kernel.org" 
+        <selinux-refpolicy@vger.kernel.org>
+Subject: RE: [PATCH] SELinux: Always allow FIOCLEX and FIONCLEX
+Thread-Topic: [PATCH] SELinux: Always allow FIOCLEX and FIONCLEX
+Thread-Index: AQHYHQyXVOSyCHpUB0mpWP39zhRRb6yKUIVg
+Date:   Tue, 8 Feb 2022 23:44:43 +0000
+Message-ID: <23e35a8fc78e414c982ab40670157667@AcuMS.aculab.com>
+References: <4df50e95-6173-4ed1-9d08-3c1c4abab23f@gmail.com>
+        <CAHC9VhSjTqT-4TMxBnQOQHkj+djONihfeoPVyy1egrZY2t10XA@mail.gmail.com>
+        <c8a616e4-26a6-af51-212c-31dca0e265cd@gmail.com>
+        <CAHC9VhQTZdeNOx3AXdoc9LXUzDk5n7wyGBX-tV-ZaovhPAdWwQ@mail.gmail.com>
+        <e85dd38b-ef7b-ed7e-882e-124cdf942c44@gmail.com>
+        <CAHC9VhROuJtvNHuVaR6pEekNFacH3Tywx58_hn1f5Mwk+kjC8g@mail.gmail.com>
+        <b7e55304-d114-bcbe-08d2-b54828121a01@gmail.com>
+        <CAHC9VhSdgD4Nfaxbnnn4r-OK8koSZ7+zQoPShDbGi9PvkJFpng@mail.gmail.com>
+        <478e1651-a383-05ff-d011-6dda771b8ce8@linux.microsoft.com>
+        <875ypt5zmz.fsf@defensec.nl>
+        <CAFftDdo9JmbyPzPWRjOYgZBOS9b5d+OGKKf8egS8_ysbbWW87Q@mail.gmail.com>
+        <4be3fef6-63ca-af97-7fc6-d93d85a9b706@linux.microsoft.com>
+ <87ee4dnw52.fsf@defensec.nl>
+In-Reply-To: <87ee4dnw52.fsf@defensec.nl>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220207153914.365931-2-Jason@zx2c4.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 04:39:13PM +0100, Jason A. Donenfeld wrote:
-> Rather than use spinlocks to protect batched entropy, we can instead
-> disable interrupts locally, since we're dealing with per-cpu data, and
-> manage resets with a basic generation counter. At the same time, we
-> can't quite do this on PREEMPT_RT, where we still want spinlocks-as-
-> mutexes semantics. So we use a local_lock_t, which provides the right
-> behavior for each. Because this is a per-cpu lock, that generation
-> counter is still doing the necessary CPU-to-CPU communication.
-> 
-> This should improve performance a bit. It will also fix the linked splat
-> that Jonathan received with a PROVE_RAW_LOCK_NESTING=y.
-> 
-> Suggested-by: Andy Lutomirski <luto@kernel.org>
-> Reported-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
-> Tested-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
-> Link: https://lore.kernel.org/lkml/YfMa0QgsjCVdRAvJ@latitude/
-> Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> Cc: Sultan Alsawaf <sultan@kerneltoast.com>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> ---
->  drivers/char/random.c | 51 ++++++++++++++++++++++---------------------
->  1 file changed, 26 insertions(+), 25 deletions(-)
+From: Dominick Grift
+> Sent: 08 February 2022 16:47
+...
+> I would not mind removing these two checks, but i am not a big user of
+> xperms (i only filter TIOSCTI on terminal chr files and only for the
+> entities that write or append them).
 
-Looks good.  The comment above invalidate_batched_entropy() needs to be updated,
-though.
+TIOSCTI isn't your only problem.
+Much 'fun' can be had with terminals that support a settable
+answerback message.
+Possibly that is limited to physical serial terminals, but some
+emulators might be 'good enough' to support the relevant escape
+sequences.
 
-Also, please Cc patches for random.c to linux-crypto.
+Even the default answerback message can be very confusing.
 
-- Eric
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+

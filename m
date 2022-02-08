@@ -2,109 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F0664ACE7D
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:56:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24E6F4ACE83
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 02:58:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344524AbiBHB4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Feb 2022 20:56:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44348 "EHLO
+        id S1345180AbiBHB6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Feb 2022 20:58:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345806AbiBHB4R (ORCPT
+        with ESMTP id S244596AbiBHB6B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Feb 2022 20:56:17 -0500
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D50B4C061355;
-        Mon,  7 Feb 2022 17:56:15 -0800 (PST)
-Received: by mail-qk1-x730.google.com with SMTP id m25so12606713qka.9;
-        Mon, 07 Feb 2022 17:56:15 -0800 (PST)
+        Mon, 7 Feb 2022 20:58:01 -0500
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 397ABC061A73;
+        Mon,  7 Feb 2022 17:58:01 -0800 (PST)
+Received: by mail-io1-xd30.google.com with SMTP id h7so19366826iof.3;
+        Mon, 07 Feb 2022 17:58:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5iD3JAv2NJY5TryKV7Dj3UeZLdxf5ObNApLJn3kqghU=;
-        b=pI2HVe8/S4Y+G8xDNV/doYes7BMdmEzKOwMNl7CDEObwsbuznhLtxXks2G0+fmmtqk
-         OSyX7Z8b5Cw098Dal46LDTktIPK7mkbN9+/iqg0/oz2SC6OyjrfsxvjIG+1eI+S2pRLe
-         LN0MuicP9WdOvLvvxpWVtJeHt5nsFOgC5KiRzkgPHe1Glk4rl5+NVOc0ErrapRH1RLxm
-         N/4eiaijhDREgdPR3442hjLOZ88Y0dRiXhbXqLf4LY1CNZGO0AB6qIwhcUzflIGsP4Xs
-         lq9LKc7x/Jmuec8Rn6XmyylUnXgWfFD65WnYLKkObMGsrzSTnIkVpB+mdvGGkjz9lEgt
-         +pdg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Y6LL15sKBUCB5jpcMtEzuUx11A37XJsokGmfmwHbmTw=;
+        b=eRcL3Nm87C1GFPXlf9w0y99ThD2XUhUBMCPvD4G3K0WCSoDnhpHlbNxbOfOpviMiea
+         VwHLV+119v0VSfWHIhGhN951e8a2EEiqs3oNbWGnjQcWUn6pmO/c7nYriLm9TvLcSwXV
+         aWfFyH9bFY1k07MJ+Ssnsb2R+VSxFr1dsQP+9+zjnFHP0rKE9BzGWlEVMUAh2C1MFecx
+         JPAV3GUS4P6tswJ3LhAPrSX9pPuB0eZ1MnwkbL57jgfNAXBb2HkYDkOWg2PWMqCLF2TB
+         hnem8HhRiFw3z62j6glh3A8VV0qbsBgM3eaf/ZynTcYbipgqR0gEB21nz/GNHRFPSfes
+         kJNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5iD3JAv2NJY5TryKV7Dj3UeZLdxf5ObNApLJn3kqghU=;
-        b=cv4hckLoF2iUh7WP44PHeoc7PHVd1XtJtjMgbT0MPMRmJEIDR2WmhADKtF9TvBtDAm
-         MC/d0O4TDj/t6+3kzV57DERzJ90MjBCRjNjB85MAgyri9CsMFRuo/ebldCjPwyJ1Kbgl
-         joSdZkKO8qr3lYJ+bqJUzG/SGeUBitgO26vAJBj05tANzZLBUTlay9DmydlZYWUJOiwN
-         IyVP18aqzLCjMhC/ncQuGx6gli3UlAAfUxYqDEzgIZn7JmlZQPw8np9CwZ/QaV+2FWav
-         MWEe2oYSGutIIaJjOY0/NC8a0gfNhoo5Ti2cGrVO9j8HFM9eahqGmIhcDzkL4A9aH56h
-         CdDA==
-X-Gm-Message-State: AOAM531KcDTU4Q52aU1SkkQud2XqbpAS9l1DmG0KKxd5NkogwDR+HyYb
-        kFXWs76XtmOybi9R5uiA3SGy3JvDpic=
-X-Google-Smtp-Source: ABdhPJxFhOahqPUMM3z6x7O2UdmmKk2bvzsAtCng2yMFFMl9tpErPaNvbD7C4dAkwpclDF1KH6PNaQ==
-X-Received: by 2002:a37:a707:: with SMTP id q7mr1512997qke.229.1644285374971;
-        Mon, 07 Feb 2022 17:56:14 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id f14sm6395153qko.117.2022.02.07.17.56.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 17:56:14 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     kvalo@kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, wcn36xx@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Minghao Chi (CGEL ZTE)" <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH V2] wcn36xx: use struct_size over open coded arithmetic
-Date:   Tue,  8 Feb 2022 01:56:06 +0000
-Message-Id: <20220208015606.1514022-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Y6LL15sKBUCB5jpcMtEzuUx11A37XJsokGmfmwHbmTw=;
+        b=O2NhDqgRX6NuZpWLlm05DkWj388qxV0LFZSDFsuPkZO6JeCI9eet+e4OXAgeCl6UZm
+         jMoYWqlPT7kSkRT3xLq5TF6xQKQT416DnFHhp6BzTwlc6svL+WRrUETOae69hbv3PiXO
+         pRJyY3jS7eSN4FX6+OXYpJQC7p8wNzGRJyvbiNHC7ICnod/BeBf207qjkJmiicrm03sU
+         52ECgLkyBUdnoDIcfUYpWdQrvyUCXr0hUJ1W91ewyavyXNAzrQDjZoyrvZTycKeMrOhe
+         NKf1rlS0ImKwu+UD770/MJSf7RzTPhANt3Orohp+rKnS5EqKU9oq7DnN9R7LkDLYHu1I
+         rNBA==
+X-Gm-Message-State: AOAM5338rd2SmQzGxJN5JttCQ9s998yP0L4Rw55EyRmKUQTYiS8uEMS7
+        Mh/E4uITxKNZY5nvX/MrbWDfumEHS8gtntaUYIM=
+X-Google-Smtp-Source: ABdhPJyL4wkgnkqRf0wUUrIPAwFmAD6zaYr7NnN7z+A/JQrbvNh8Dv4kdWm/XKMy6lhdNgsbHa+kISWa0TIJlVfgy/o=
+X-Received: by 2002:a02:6988:: with SMTP id e130mr1129766jac.120.1644285480118;
+ Mon, 07 Feb 2022 17:58:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220207133856.644483064@linuxfoundation.org>
+In-Reply-To: <20220207133856.644483064@linuxfoundation.org>
+From:   Zan Aziz <zanaziz313@gmail.com>
+Date:   Mon, 7 Feb 2022 18:57:49 -0700
+Message-ID: <CAFU3qoYBZ1+nWTjiJUSaYNZMPdU8rfLR0X0vaQyr9kv8xA2fow@mail.gmail.com>
+Subject: Re: [PATCH 5.16 000/127] 5.16.8-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Minghao Chi (CGEL ZTE)" <chi.minghao@zte.com.cn>
+On Mon, Feb 7, 2022 at 8:18 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.16.8 release.
+> There are 127 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 09 Feb 2022 13:38:34 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.8-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Replace zero-length array with flexible-array member and make use
-of the struct_size() helper in kmalloc(). For example:
+Hi Greg,
 
-struct wcn36xx_hal_ind_msg {
-    struct list_head list;
-    size_t msg_len;
-    u8 msg[];
-};
+Compiled and booted on my test system Lenovo P50s: Intel Core i7
+No emergency and critical messages in the dmesg
 
-Make use of the struct_size() helper instead of an open-coded version
-in order to avoid any potential type mistakes.
+./perf bench sched all
+# Running sched/messaging benchmark...
+# 20 sender and receiver processes per group
+# 10 groups == 400 processes run
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
----
- drivers/net/wireless/ath/wcn36xx/smd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+     Total time: 0.449 [sec]
 
-diff --git a/drivers/net/wireless/ath/wcn36xx/smd.c b/drivers/net/wireless/ath/wcn36xx/smd.c
-index caeb68901326..59ad332156ae 100644
---- a/drivers/net/wireless/ath/wcn36xx/smd.c
-+++ b/drivers/net/wireless/ath/wcn36xx/smd.c
-@@ -3347,7 +3347,7 @@ int wcn36xx_smd_rsp_process(struct rpmsg_device *rpdev,
- 	case WCN36XX_HAL_DELETE_STA_CONTEXT_IND:
- 	case WCN36XX_HAL_PRINT_REG_INFO_IND:
- 	case WCN36XX_HAL_SCAN_OFFLOAD_IND:
--		msg_ind = kmalloc(sizeof(*msg_ind) + len, GFP_ATOMIC);
-+		msg_ind = kmalloc(struct_size(msg_ind, msg, len), GFP_ATOMIC);
- 		if (!msg_ind) {
- 			wcn36xx_err("Run out of memory while handling SMD_EVENT (%d)\n",
- 				    msg_header->msg_type);
--- 
-2.25.1
+# Running sched/pipe benchmark...
+# Executed 1000000 pipe operations between two processes
 
+     Total time: 9.039 [sec]
+
+       9.039568 usecs/op
+         110624 ops/sec
+
+Tested-by: Zan Aziz <zanaziz313@gmail.com>
+
+Thanks
+-Zan

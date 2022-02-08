@@ -2,74 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC1354AE4BF
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:37:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05CE14AE413
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Feb 2022 23:26:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386757AbiBHWfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 17:35:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55868 "EHLO
+        id S1386829AbiBHW0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 17:26:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386469AbiBHUhk (ORCPT
+        with ESMTP id S1386479AbiBHUkk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 15:37:40 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A56C0613CB
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 12:37:39 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id eg42so816289edb.7
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 12:37:39 -0800 (PST)
+        Tue, 8 Feb 2022 15:40:40 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49DE7C0612AA
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 12:40:38 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id d10so1056559eje.10
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 12:40:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=OW+l8k2do19la/JXNnlav8oVlWK2sJt3MhQuSFM7S30=;
-        b=lL5ReZjQMsAdWfcRmbvR6elnSObq1RPbWc2qqG2arpyoakVIWBoz46ZkAQqDvqgDln
-         lb3IS8jO1tP+fwjufsQN7XBhANMoPZBOJOyakGICEeUtHEvMyEju8McygMYjPcU9gfDI
-         bi1NHJ6O21q/h8T0FXAOcdZfsUxasKroKReNHkpQvDI65dBaHF+/gTvq1zjnbCK0ImjK
-         As5ji22vw52fb8/u2DicrZYlrz3EJjrvZSOfNa4QJeOwp1E58eVoUVorgd8z2fzIqTWB
-         zLQL5NfXKWU3H6KBFavLTYMSgOB2L8NGisU9R9OF8CWvDTBTwNbsJe73vSXM3c8ydFKs
-         qwYA==
+        bh=riOd2RA+5KJDbVMnXqZUdH3r+GgY7kzXJ+ElAY7cveY=;
+        b=NaHB/KvNkMyt15RxGmi1HV9jBeCWRKfN/Y/J3QJmYH0O25C91xheRRN24A3kEE+PMy
+         M4gmyTMFy9O490kq/FPlyMXc/lV9CSUBNMigNhTvQRhFmWan3V1t0kkD3+evnzp4LScn
+         KUz4GP3txGZQU0dUO9E/jW69V1HU4TGk/XzfohtEUQJAyA8z1GwZwgOjNHLK9UoAR83Y
+         SAvFbE+ZK7slEi+2HOYKtic9lzwlQ6rGO1pvv57VFsiLJfT1Vk++23lFRw80lxvAgKYe
+         5sogCgzFd1DofXr9bkcLHdNB3jw5BO8P7DczQatrpGBzgOzjtkhX8Vuz5HiCKJ8+8nc/
+         aBXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=OW+l8k2do19la/JXNnlav8oVlWK2sJt3MhQuSFM7S30=;
-        b=551qmizyITsVjIcEyoNle5Tt+IPWpVbpgbkpac5MDGVgY+Dr4Clk+nP7qOPxnrW+Cx
-         GBB6qnj/hYbvPxli0uh9Ic15tNtBXOrZuITQnzrwLzbmJDc46L96x4YORlh7/MlIggDM
-         ieyNeHXe4QL68YqmpT64eEc19dgBS18Rxp6hW3eP71jGhsepmXJKmdL7aVUOz02H1xDG
-         qeIMc89L6c2NOE05DTEv0imS8hSko2ZmqAQVTVXxAvmmpFPXYZP+2U+mrSTDiFYI4Ji2
-         fO3eiWP2zr+7l12FDVlqtG7QjSR5NqCPvkbbSvPdROM52AJ04L/K2kI3X4hlel6nBDpD
-         UmlA==
-X-Gm-Message-State: AOAM530LYukBCkO+uBx2ByuGukd0bAlYWhKhT9fzHLnV4cqxdd3ZqrrQ
-        OiRFH1jlfMlNCazyub6jLinEWPvk7il1bA==
-X-Google-Smtp-Source: ABdhPJxICT1CMcXNU7R3+ctNbcS8mNdoiph/x23blIKkaPL7h/gsicFpNM91gDbVtkAkta3Hy+J/aQ==
-X-Received: by 2002:a05:6402:348b:: with SMTP id v11mr6275033edc.353.1644352658063;
-        Tue, 08 Feb 2022 12:37:38 -0800 (PST)
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com. [209.85.221.52])
-        by smtp.gmail.com with ESMTPSA id n13sm4434570eja.67.2022.02.08.12.37.36
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Feb 2022 12:37:37 -0800 (PST)
-Received: by mail-wr1-f52.google.com with SMTP id v12so497432wrv.2
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 12:37:36 -0800 (PST)
-X-Received: by 2002:adf:f905:: with SMTP id b5mr4910731wrr.173.1644352656172;
- Tue, 08 Feb 2022 12:37:36 -0800 (PST)
+        bh=riOd2RA+5KJDbVMnXqZUdH3r+GgY7kzXJ+ElAY7cveY=;
+        b=M+V7n1zHZp2IV3ChfdXHMWdkq5y2Q5GIMIzmBeubURGKUgoYqKk4lyOUYH3MZMnTqk
+         Kuwpt2K/UFaZZM5KTJd0bCUJmO0cML3D/VF19EzXWKDvPsgAX9ruVtdgR92R+nCzIBa2
+         Ib8UYDxNHGPxysVLVEHLEkOdDxYm1Okl9Rt0GP7In1X9IwAzue2VDjdJunK/T/8Vf5Mz
+         5W5f5BHKTwqRsLSDPAkJTV81AKaRHNzvOYOi5MCuiIZgAn6xWTT9h3ri0G5jLZooQAMz
+         qkp62oCI2lW4KMJx0byXHpw7M3GzsCobYDZlyk2Hw5UcHo6ic6id7sTNSEIjWcVW1wVL
+         YZEg==
+X-Gm-Message-State: AOAM531ZJK0PEg8xwYWu5aEfp1/xMR4al0fOPGLfNcUlmPRnNBcWDtFm
+        9M0lIjEL3F9xPc++gilGJCKAEq3Rg2akgO3wMVkEWQ==
+X-Google-Smtp-Source: ABdhPJwDL8sKlWlLmV79N7zGT7H/XWpOJzLRcbYM4AcGKmTz0A/oCJ0vaPRAiaLpIvdkIfGDKfN1O19kAyG0CUw88IQ=
+X-Received: by 2002:a17:907:6d20:: with SMTP id sa32mr5259987ejc.425.1644352836393;
+ Tue, 08 Feb 2022 12:40:36 -0800 (PST)
 MIME-Version: 1.0
-References: <20220208181510.787069-1-andrew@daynix.com> <20220208181510.787069-3-andrew@daynix.com>
-In-Reply-To: <20220208181510.787069-3-andrew@daynix.com>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Tue, 8 Feb 2022 15:36:59 -0500
-X-Gmail-Original-Message-ID: <CA+FuTSfPq-052=D3GzibMjUNXEcHTz=p87vW_3qU0OH9dDHSPQ@mail.gmail.com>
-Message-ID: <CA+FuTSfPq-052=D3GzibMjUNXEcHTz=p87vW_3qU0OH9dDHSPQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/4] drivers/net/virtio_net: Added basic RSS support.
-To:     Andrew Melnychenko <andrew@daynix.com>
-Cc:     netdev@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        jasowang@redhat.com, mst@redhat.com, yan@daynix.com,
-        yuri.benditovich@daynix.com
+References: <20220208040122.695258-1-davidgow@google.com> <20220208040122.695258-2-davidgow@google.com>
+In-Reply-To: <20220208040122.695258-2-davidgow@google.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Tue, 8 Feb 2022 12:40:23 -0800
+Message-ID: <CAGS_qxqwb=AVyjNQKvzSAGYmQei3ChQLD383=x+RkeCwe5zS-A@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] list: test: Add a test for list_is_head()
+To:     David Gow <davidgow@google.com>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,296 +70,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 8, 2022 at 1:19 PM Andrew Melnychenko <andrew@daynix.com> wrote:
+On Mon, Feb 7, 2022 at 8:02 PM David Gow <davidgow@google.com> wrote:
 >
-> Added features for RSS.
-> Added initialization, RXHASH feature and ethtool ops.
-> By default RSS/RXHASH is disabled.
-> Virtio RSS "IPv6 extensions" hashes disabled.
-> Added ethtools ops to set key and indirection table.
+> list_is_head() was added recently[1], and didn't have a KUnit test. The
+> implementation is trivial, so it's not a particularly exciting test, but
+> it'd be nice to get back to full coverage of the list functions.
 >
-> Signed-off-by: Andrew Melnychenko <andrew@daynix.com>
+> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/include/linux/list.h?id=0425473037db40d9e322631f2d4dc6ef51f97e88
+>
+> Signed-off-by: David Gow <davidgow@google.com>
+
+Acked-by: Daniel Latypov <dlatypov@google.com>
+
+One very optional suggestion below.
+
 > ---
->  drivers/net/virtio_net.c | 191 +++++++++++++++++++++++++++++++++++++--
->  1 file changed, 185 insertions(+), 6 deletions(-)
 >
-> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> index 1404e683a2fd..495aed524e33 100644
-> --- a/drivers/net/virtio_net.c
-> +++ b/drivers/net/virtio_net.c
-> @@ -169,6 +169,24 @@ struct receive_queue {
->         struct xdp_rxq_info xdp_rxq;
->  };
+> Changes since v1:
+> https://lore.kernel.org/linux-kselftest/20220205061539.273330-2-davidgow@google.com/
+> - Test both non-head elements of the same list and head elements of
+>   different lists.
 >
-> +/* This structure can contain rss message with maximum settings for indirection table and keysize
-> + * Note, that default structure that describes RSS configuration virtio_net_rss_config
-> + * contains same info but can't handle table values.
-> + * In any case, structure would be passed to virtio hw through sg_buf split by parts
-> + * because table sizes may be differ according to the device configuration.
-> + */
-> +#define VIRTIO_NET_RSS_MAX_KEY_SIZE     40
-
-Future proof, may want to support larger sizes.
-
-netdevice.h defines NETDEV_RSS_KEY_LEN at 52.
-
-tools/testing/selftests/net/toeplitz.c supports up to 60
-
-> +#define VIRTIO_NET_RSS_MAX_TABLE_LEN    128
-> +struct virtio_net_ctrl_rss {
-> +       u32 hash_types;
-
-conversely, u32 is a bit extreme?
-
-> +       u16 indirection_table_mask;
-> +       u16 unclassified_queue;
-> +       u16 indirection_table[VIRTIO_NET_RSS_MAX_TABLE_LEN];
-> +       u16 max_tx_vq;
-> +       u8 hash_key_length;
-> +       u8 key[VIRTIO_NET_RSS_MAX_KEY_SIZE];
-> +};
-> +
->  /* Control VQ buffers: protected by the rtnl lock */
->  struct control_buf {
->         struct virtio_net_ctrl_hdr hdr;
-> @@ -178,6 +196,7 @@ struct control_buf {
->         u8 allmulti;
->         __virtio16 vid;
->         __virtio64 offloads;
-> +       struct virtio_net_ctrl_rss rss;
->  };
+> ---
+>  lib/list-test.c | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
 >
->  struct virtnet_info {
-> @@ -206,6 +225,12 @@ struct virtnet_info {
->         /* Host will merge rx buffers for big packets (shake it! shake it!) */
->         bool mergeable_rx_bufs;
->
-> +       /* Host supports rss and/or hash report */
-> +       bool has_rss;
-> +       u8 rss_key_size;
-> +       u16 rss_indir_table_size;
-> +       u32 rss_hash_types_supported;
-> +
->         /* Has control virtqueue */
->         bool has_cvq;
->
-> @@ -2184,6 +2209,56 @@ static void virtnet_get_ringparam(struct net_device *dev,
->         ring->tx_pending = ring->tx_max_pending;
+> diff --git a/lib/list-test.c b/lib/list-test.c
+> index 976e9ae1f3c5..1960615d1a9f 100644
+> --- a/lib/list-test.c
+> +++ b/lib/list-test.c
+> @@ -252,6 +252,23 @@ static void list_test_list_bulk_move_tail(struct kunit *test)
+>         KUNIT_EXPECT_EQ(test, i, 2);
 >  }
 >
-> +static bool virtnet_commit_rss_command(struct virtnet_info *vi)
+> +static void list_test_list_is_head(struct kunit *test)
 > +{
-> +       struct net_device *dev = vi->dev;
-> +       struct scatterlist sgs[4];
-> +       unsigned int sg_buf_size;
+> +       struct list_head a, b, c;
 > +
-> +       /* prepare sgs */
-> +       sg_init_table(sgs, 4);
+> +       /* Two lists: [a] -> b, [c] */
+> +       INIT_LIST_HEAD(&a);
+> +       INIT_LIST_HEAD(&c);
+> +       list_add_tail(&b, &a);
 > +
-> +       sg_buf_size = offsetof(struct virtio_net_ctrl_rss, indirection_table);
-> +       sg_set_buf(&sgs[0], &vi->ctrl->rss, sg_buf_size);
-> +
-> +       sg_buf_size = sizeof(uint16_t) * vi->rss_indir_table_size;
-> +       sg_set_buf(&sgs[1], vi->ctrl->rss.indirection_table, sg_buf_size);
-> +
-> +       sg_buf_size = offsetof(struct virtio_net_ctrl_rss, key)
-> +                       - offsetof(struct virtio_net_ctrl_rss, max_tx_vq);
-> +       sg_set_buf(&sgs[2], &vi->ctrl->rss.max_tx_vq, sg_buf_size);
-> +
-> +       sg_buf_size = vi->rss_key_size;
-> +       sg_set_buf(&sgs[3], vi->ctrl->rss.key, sg_buf_size);
-> +
-> +       if (!virtnet_send_command(vi, VIRTIO_NET_CTRL_MQ,
-> +                                 VIRTIO_NET_CTRL_MQ_RSS_CONFIG, sgs)) {
-> +               dev_warn(&dev->dev, "VIRTIONET issue with committing RSS sgs\n");
-> +               return false;
-> +       }
-> +       return true;
-> +}
-> +
-> +static void virtnet_init_default_rss(struct virtnet_info *vi)
-> +{
-> +       u32 indir_val = 0;
-> +       int i = 0;
-> +
-> +       vi->ctrl->rss.hash_types = vi->rss_hash_types_supported;
-> +       vi->ctrl->rss.indirection_table_mask = vi->rss_indir_table_size - 1;
+> +       KUNIT_EXPECT_TRUE(test, list_is_head(&a, &a));
+> +       /* Non-head element of same list */
+> +       KUNIT_EXPECT_FALSE(test, list_is_head(&a, &b));
+> +       /* Head element of different list */
+> +       KUNIT_EXPECT_FALSE(test, list_is_head(&a, &c));
 
-Is table size always a power of two?
+very optional,
+  KUNIT_EXPECT_FALSE_MSG(test, list_is_head(&a, &c), "Head of a
+different list");
+It goes over 80 char, so probably needs to be line-wrapped, and thus
+doesn't reduce # of lines.
 
-> +       vi->ctrl->rss.unclassified_queue = 0;
-> +
-> +       for (; i < vi->rss_indir_table_size; ++i) {
-> +               indir_val = ethtool_rxfh_indir_default(i, vi->curr_queue_pairs);
-> +               vi->ctrl->rss.indirection_table[i] = indir_val;
-> +       }
-> +
-> +       vi->ctrl->rss.max_tx_vq = vi->curr_queue_pairs;
-> +       vi->ctrl->rss.hash_key_length = vi->rss_key_size;
-> +
-> +       netdev_rss_key_fill(vi->ctrl->rss.key, vi->rss_key_size);
-> +}
-> +
->
->  static void virtnet_get_drvinfo(struct net_device *dev,
->                                 struct ethtool_drvinfo *info)
-> @@ -2412,6 +2487,71 @@ static void virtnet_update_settings(struct virtnet_info *vi)
->                 vi->duplex = duplex;
->  }
->
-> +static u32 virtnet_get_rxfh_key_size(struct net_device *dev)
-> +{
-> +       return ((struct virtnet_info *)netdev_priv(dev))->rss_key_size;
-> +}
-> +
-> +static u32 virtnet_get_rxfh_indir_size(struct net_device *dev)
-> +{
-> +       return ((struct virtnet_info *)netdev_priv(dev))->rss_indir_table_size;
-> +}
-> +
-> +static int virtnet_get_rxfh(struct net_device *dev, u32 *indir, u8 *key, u8 *hfunc)
-> +{
-> +       struct virtnet_info *vi = netdev_priv(dev);
-> +       int i;
-> +
-> +       if (indir) {
-> +               for (i = 0; i < vi->rss_indir_table_size; ++i)
-> +                       indir[i] = vi->ctrl->rss.indirection_table[i];
-> +       }
-> +
-> +       if (key)
-> +               memcpy(key, vi->ctrl->rss.key, vi->rss_key_size);
-> +
-> +       if (hfunc)
-> +               *hfunc = ETH_RSS_HASH_TOP;
-> +
-> +       return 0;
-> +}
-> +
-> +static int virtnet_set_rxfh(struct net_device *dev, const u32 *indir, const u8 *key, const u8 hfunc)
-> +{
-> +       struct virtnet_info *vi = netdev_priv(dev);
-> +       int i;
-> +
-> +       if (hfunc != ETH_RSS_HASH_NO_CHANGE && hfunc != ETH_RSS_HASH_TOP)
-> +               return -EOPNOTSUPP;
-> +
-> +       if (indir) {
-> +               for (i = 0; i < vi->rss_indir_table_size; ++i)
-> +                       vi->ctrl->rss.indirection_table[i] = indir[i];
-> +       }
-> +       if (key)
-> +               memcpy(vi->ctrl->rss.key, key, vi->rss_key_size);
-> +
-> +       virtnet_commit_rss_command(vi);
-> +
-> +       return 0;
-> +}
-> +
-> +static int virtnet_get_rxnfc(struct net_device *dev, struct ethtool_rxnfc *info, u32 *rule_locs)
-> +{
-> +       struct virtnet_info *vi = netdev_priv(dev);
-> +       int rc = 0;
-> +
-> +       switch (info->cmd) {
-> +       case ETHTOOL_GRXRINGS:
-> +               info->data = vi->curr_queue_pairs;
-> +               break;
-> +       default:
-> +               rc = -EOPNOTSUPP;
-> +       }
-> +
-> +       return rc;
-> +}
-> +
->  static const struct ethtool_ops virtnet_ethtool_ops = {
->         .supported_coalesce_params = ETHTOOL_COALESCE_MAX_FRAMES,
->         .get_drvinfo = virtnet_get_drvinfo,
-> @@ -2427,6 +2567,11 @@ static const struct ethtool_ops virtnet_ethtool_ops = {
->         .set_link_ksettings = virtnet_set_link_ksettings,
->         .set_coalesce = virtnet_set_coalesce,
->         .get_coalesce = virtnet_get_coalesce,
-> +       .get_rxfh_key_size = virtnet_get_rxfh_key_size,
-> +       .get_rxfh_indir_size = virtnet_get_rxfh_indir_size,
-> +       .get_rxfh = virtnet_get_rxfh,
-> +       .set_rxfh = virtnet_set_rxfh,
-> +       .get_rxnfc = virtnet_get_rxnfc,
->  };
->
->  static void virtnet_freeze_down(struct virtio_device *vdev)
-> @@ -2679,6 +2824,16 @@ static int virtnet_set_features(struct net_device *dev,
->                 vi->guest_offloads = offloads;
->         }
->
-> +       if ((dev->features ^ features) & NETIF_F_RXHASH) {
-> +               if (features & NETIF_F_RXHASH)
-> +                       vi->ctrl->rss.hash_types = vi->rss_hash_types_supported;
-> +               else
-> +                       vi->ctrl->rss.hash_types = VIRTIO_NET_HASH_REPORT_NONE;
-> +
-> +               if (!virtnet_commit_rss_command(vi))
-> +                       return -EINVAL;
-> +       }
-> +
->         return 0;
->  }
->
-> @@ -3073,6 +3228,8 @@ static bool virtnet_validate_features(struct virtio_device *vdev)
->                              "VIRTIO_NET_F_CTRL_VQ") ||
->              VIRTNET_FAIL_ON(vdev, VIRTIO_NET_F_MQ, "VIRTIO_NET_F_CTRL_VQ") ||
->              VIRTNET_FAIL_ON(vdev, VIRTIO_NET_F_CTRL_MAC_ADDR,
-> +                            "VIRTIO_NET_F_CTRL_VQ") ||
-> +            VIRTNET_FAIL_ON(vdev, VIRTIO_NET_F_RSS,
->                              "VIRTIO_NET_F_CTRL_VQ"))) {
->                 return false;
->         }
-> @@ -3113,13 +3270,14 @@ static int virtnet_probe(struct virtio_device *vdev)
->         u16 max_queue_pairs;
->         int mtu;
->
-> -       /* Find if host supports multiqueue virtio_net device */
-> -       err = virtio_cread_feature(vdev, VIRTIO_NET_F_MQ,
-> -                                  struct virtio_net_config,
-> -                                  max_virtqueue_pairs, &max_queue_pairs);
-> +       /* Find if host supports multiqueue/rss virtio_net device */
-> +       max_queue_pairs = 1;
-> +       if (virtio_has_feature(vdev, VIRTIO_NET_F_MQ) || virtio_has_feature(vdev, VIRTIO_NET_F_RSS))
-> +               max_queue_pairs =
-> +                    virtio_cread16(vdev, offsetof(struct virtio_net_config, max_virtqueue_pairs));
-
-Instead of testing either feature and treating them as somewhat equal,
-shouldn't RSS be dependent on MQ?
-
->
->         /* We need at least 2 queue's */
-> -       if (err || max_queue_pairs < VIRTIO_NET_CTRL_MQ_VQ_PAIRS_MIN ||
-> +       if (max_queue_pairs < VIRTIO_NET_CTRL_MQ_VQ_PAIRS_MIN ||
->             max_queue_pairs > VIRTIO_NET_CTRL_MQ_VQ_PAIRS_MAX ||
->             !virtio_has_feature(vdev, VIRTIO_NET_F_CTRL_VQ))
->                 max_queue_pairs = 1;
-> @@ -3207,6 +3365,23 @@ static int virtnet_probe(struct virtio_device *vdev)
->         if (virtio_has_feature(vdev, VIRTIO_NET_F_MRG_RXBUF))
->                 vi->mergeable_rx_bufs = true;
->
-> +       if (virtio_has_feature(vdev, VIRTIO_NET_F_RSS)) {
-> +               vi->has_rss = true;
-> +               vi->rss_indir_table_size =
-> +                       virtio_cread16(vdev, offsetof(struct virtio_net_config,
-> +                               rss_max_indirection_table_length));
-> +               vi->rss_key_size =
-> +                       virtio_cread8(vdev, offsetof(struct virtio_net_config, rss_max_key_size));
-> +
-> +               vi->rss_hash_types_supported =
-> +                   virtio_cread32(vdev, offsetof(struct virtio_net_config, supported_hash_types));
-> +               vi->rss_hash_types_supported &=
-> +                               ~(VIRTIO_NET_RSS_HASH_TYPE_IP_EX |
-> +                                 VIRTIO_NET_RSS_HASH_TYPE_TCP_EX |
-> +                                 VIRTIO_NET_RSS_HASH_TYPE_UDP_EX);
-> +
-> +               dev->hw_features |= NETIF_F_RXHASH;
-
-Only make the feature visible when the hash is actually reported in
-the skb, patch 3.
-
-Also, clearly separate the feature patches (2) rss, (3) rxhash, (4)
-rxhash config.
+Given the simplicity of this function (checks that its args are
+equal), I highly doubt it should ever fail, and so better error
+messages aren't really much of a bonus.

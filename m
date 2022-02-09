@@ -2,116 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E75CA4AF54C
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 16:32:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB8F84AF552
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 16:33:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235885AbiBIPcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 10:32:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47422 "EHLO
+        id S235901AbiBIPd0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 10:33:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232445AbiBIPcR (ORCPT
+        with ESMTP id S231329AbiBIPdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 10:32:17 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7997EC0613C9
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 07:32:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=oxuCF8ORO1xTrKAEPMmkYDhqQTzVRv2K+VOvw4OGVgg=; b=W4DMCJz66PiUooHtfrPEvL90ss
-        Ax7woRvg9pjNDajTAHEBNC8lHyL6v6sV5o8il3R5c3LneycYlJNFxMA/XPWcr3DnodMHtt5fl12bp
-        ih4Q4JrTtejvcGMD+sU4JSsAkGuIvJX/r4xT9TrqGYz86kSxs+VOv0Kn9Pe3aGdBLeR0ISSONsVWY
-        KWIi7xoqWBQIJsul4NbsST9rDj/IE4DxX5dOlox254DxVRCH8up8vMe3noWmmkZnUDxwQf6G+uadr
-        Kx2w5sZfHbFHA6GjS7RebqMprUIg3XAv5dRO+TqugC+wGgW4mUGI5sva1oAwjBrTwk4ccynURoJtP
-        1nBy5u8A==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nHoww-0084fT-NQ; Wed, 09 Feb 2022 15:32:06 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 390C230075A;
-        Wed,  9 Feb 2022 16:32:04 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 25A8F21075BA2; Wed,  9 Feb 2022 16:32:04 +0100 (CET)
-Date:   Wed, 9 Feb 2022 16:32:04 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Stephane Eranian <eranian@google.com>
-Cc:     linux-kernel@vger.kernel.org, kim.phillips@amd.com,
-        acme@redhat.com, jolsa@redhat.com, songliubraving@fb.com
-Subject: Re: [PATCH v6 06/12] perf/x86/amd: add AMD branch sampling period
- adjustment
-Message-ID: <YgPedIWUiPIzF8OW@hirez.programming.kicks-ass.net>
-References: <20220208211637.2221872-1-eranian@google.com>
- <20220208211637.2221872-7-eranian@google.com>
+        Wed, 9 Feb 2022 10:33:25 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C07C0613C9;
+        Wed,  9 Feb 2022 07:33:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644420808; x=1675956808;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/42HF8Fl+ZC1zv3DJFoHRFzFvjgFJQkv4Tte+gzujnA=;
+  b=QNcQgmPqBZkj1kTrnPjFuFb6Sn1TP6G2lhfh6qnpwfhI7vZcE+pKEJRA
+   aJ+sNT4KX+5teCNO1v78O6kBfkRVtovR2kkanwDPLylO4tEkOg8hF+r3R
+   ksD8XtpoAxpn8NFDllJghVCYuvFVwRZkKIwJLjyj83C8DwkSDBxIJZPQ4
+   sKJQV2W7tmQcr+h+53lZbNaIUupW2xiJehAH4Y9jUOepPdjmLo8HqEfdj
+   sxxP/o+r+I9wG08blP3BNPqugMk11SUotJQ6EeKR1S1zfVzLqFwBp/m54
+   YgYVBiCA6E/ywudORKlGwIEenI0OeF4H65ForIGMV06bphqIYpqQg1Cwy
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="232793615"
+X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
+   d="scan'208";a="232793615"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 07:33:19 -0800
+X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
+   d="scan'208";a="585596858"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 07:33:14 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nHox5-002em2-RY;
+        Wed, 09 Feb 2022 17:32:15 +0200
+Date:   Wed, 9 Feb 2022 17:32:15 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Mark Brown <broonie@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>
+Subject: Re: [PATCH v2 0/4] drm/tiny: Add driver for Solomon SSD1307 OLED
+ displays
+Message-ID: <YgPef3s5+AMqWpSH@smile.fi.intel.com>
+References: <20220204134347.1187749-1-javierm@redhat.com>
+ <CAMuHMdVTVX7LFay-rfv=oW96dMA24duMUVGRE62jQSNkrKtyMg@mail.gmail.com>
+ <f178de92-7cb1-dcc5-1f60-9ccfc56bc0a4@redhat.com>
+ <YgPF1cBMsd9973Dx@smile.fi.intel.com>
+ <CAMuHMdXQdL_Do8Hjay1egfmd9H05R7BjNeKfLGq67mU4bQNVZA@mail.gmail.com>
+ <f58b2608-0d51-3209-ae11-18bdac19dd66@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220208211637.2221872-7-eranian@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <f58b2608-0d51-3209-ae11-18bdac19dd66@redhat.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 08, 2022 at 01:16:31PM -0800, Stephane Eranian wrote:
-> Add code to adjust the sampling event period when used with the Branch
-> Sampling feature (BRS). Given the depth of the BRS (16), the period is
-> reduced by that depth such that in the best case scenario, BRS saturates at
-> the desired sampling period. In practice, though, the processor may execute
-> more branches. Given a desired period P and a depth D, the kernel programs
-> the actual period at P - D. After P occurrences of the sampling event, the
-> counter overflows. It then may take X branches (skid) before the NMI is
-> caught and held by the hardware and BRS activates. Then, after D branches,
-> BRS saturates and the NMI is delivered.  With no skid, the effective period
-> would be (P - D) + D = P. In practice, however, it will likely be (P - D) +
-> X + D. There is no way to eliminate X or predict X.
-> 
-> Signed-off-by: Stephane Eranian <eranian@google.com>
-> ---
->  arch/x86/events/core.c       |  7 +++++++
->  arch/x86/events/perf_event.h | 12 ++++++++++++
->  2 files changed, 19 insertions(+)
-> 
-> diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
-> index c2a890caeb0a..ed285f640efe 100644
-> --- a/arch/x86/events/core.c
-> +++ b/arch/x86/events/core.c
-> @@ -1374,6 +1374,13 @@ int x86_perf_event_set_period(struct perf_event *event)
->  	    x86_pmu.set_topdown_event_period)
->  		return x86_pmu.set_topdown_event_period(event);
->  
-> +	/*
-> +	 * decrease period by the depth of the BRS feature to get
-> +	 * the last N taken branches and approximate the desired period
-> +	 */
-> +	if (has_branch_stack(event))
-> +		period = amd_brs_adjust_period(period);
-> +
->  	/*
->  	 * If we are way outside a reasonable range then just skip forward:
->  	 */
-> diff --git a/arch/x86/events/perf_event.h b/arch/x86/events/perf_event.h
-> index 3485a4cf0241..25b037b571e4 100644
-> --- a/arch/x86/events/perf_event.h
-> +++ b/arch/x86/events/perf_event.h
-> @@ -1263,6 +1263,14 @@ static inline bool amd_brs_active(void)
->  	return cpuc->brs_active;
->  }
->  
-> +static inline s64 amd_brs_adjust_period(s64 period)
-> +{
-> +	if (period > x86_pmu.lbr_nr)
-> +		return period - x86_pmu.lbr_nr;
-> +
-> +	return period;
-> +}
+On Wed, Feb 09, 2022 at 03:42:16PM +0100, Javier Martinez Canillas wrote:
+> On 2/9/22 15:27, Geert Uytterhoeven wrote:
 
-This makes no sense to me without also enforcing that the event is in
-fact that branch retired thing.
+...
+
+> Now, this is a reason why I mentioned that the old fbdev driver shouldn't
+> be removed yet.
+
+I agree on this conclusion.
+
+I think based on the fbtft resurrection discussion I can send a new version
+to unorphan it, route via fbdev, and leave under staging, so it will be a
+compromise between all stakeholders.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

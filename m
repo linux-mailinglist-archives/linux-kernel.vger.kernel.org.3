@@ -2,225 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 719294AFEAE
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 21:47:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BBCA4AFEB0
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 21:47:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232207AbiBIUqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 15:46:16 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:41378 "EHLO
+        id S232245AbiBIUqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 15:46:30 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:41928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232182AbiBIUqM (ORCPT
+        with ESMTP id S232243AbiBIUqZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 15:46:12 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B8D9C001914;
-        Wed,  9 Feb 2022 12:46:14 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id c15so5090702ljf.11;
-        Wed, 09 Feb 2022 12:46:14 -0800 (PST)
+        Wed, 9 Feb 2022 15:46:25 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 265D8DF49885
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 12:46:23 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id y8so3739187pfa.11
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 12:46:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=42ix9pxIs7QFalbgN1HNWDOjCK4K43yFy41VvBVv7bU=;
-        b=Onp+VDgBymT6Qjqt7xi0TVQXh6aW285HL0JM2QRXaxxjhJncLeQCvVh5xa9XHDqQKW
-         SYg3J9gcjuP/bgxMVa4GNa/I22cDjDufZsCqM0xG3k8Oqe+YUOe5H/jGzJn9R61DGP/T
-         qaNkj86vgax5sLm4A7ZoczVUk4c1MiWShxe5kCsID2j8q8vbC9nJWDGffipL1HDWi5Ru
-         3IBhzF/DFoLfM6VzY6kCyZcvqM8s+ClpvjREukG9BsXWyd+W+FMTt0deSdlXu3LSDQrI
-         J7wsc9My83FqT6f0OH9Pan3Kkp5EP9RKUzwYhA2s8Tz7qE6vhPxhkp1IhPcMKm+1cury
-         pkmQ==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=78nJXDfmr//iqkCpJCXmmDUOzZ8w2oIwGyGP9nLOEfc=;
+        b=Vunja1WpaNu5p6wfFPAjyHKQ8YyGTJ6zeo0OoPoWTGhTqeSRtYhi4zvfqDseMj3UaW
+         f84lAthwXw3UmvPfjk8ltUYN+JefaEAAuhJdgRwPHutOufpI+G0S6FKbZCIaBsXQfbq6
+         NOLHolki2PKzt93ROK4Fj786sndwLxv4UVwArcIECjJ8Gu6H4LxHwMAT0wq3Nvz2Qjvw
+         PvdCas6sjRqGl9+A1kZY31Y9t8HYwweJ4LlzpklB2wR6mNTB0J1CCIzM5BRCQWAGOGml
+         PwNraH9ZBkJfm6V1UR7bFUixi9NJ7gwmInSV888GLX2Gia9BNowSFWJZMz90TiGIqWSV
+         CQhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=42ix9pxIs7QFalbgN1HNWDOjCK4K43yFy41VvBVv7bU=;
-        b=dY4X7HyRNBFm2In/6RSP8lHx9b5jASWJRpz1WwHTlj4RObUpgiKUCuBIfzZl1Qr25N
-         TWGjn+G64TKdEJZjctZIkjKQTjzfhMgrBZZLxqbO+AQikF3MvhSbBS508XlTSkXA5Suv
-         nB7oNQ727Kt5eeXlksVMGKyNqbHXS8GTwyhuQlUTDqDgtQDQIpHR5vSjKsOONjT++lez
-         atZ0+jpx/3JuapLJ5IlkaB6Vr4jCYJAip2/AP3BsuSaIdqK/vUL4zbBrr1L2uGxvnoHq
-         uTRORvVz8tpiNT+ZKmZZ14/bcJW7KBRBz4FaEz/yXg7BQHcWh+M8T0N23OB7cKFud4Hr
-         XmKg==
-X-Gm-Message-State: AOAM5308Xp8PWGtWsgHajeSrWpqOyI/G7rL9Lp1GpwocMwt/fxfTCvN8
-        6ECdwq4Wp0oH7CXBwRMcKI3V+UMDCAtjSeWKLgwdAR7k
-X-Google-Smtp-Source: ABdhPJzdBAwiMyPzlsScq3ntnIkas0zf9+ojPCvEbHlK2WeeLvCZt/RyzEKVwr5zPxum/aUwboUtisFGe+FOBhmtPDQ=
-X-Received: by 2002:a2e:b042:: with SMTP id d2mr2662421ljl.486.1644439572392;
- Wed, 09 Feb 2022 12:46:12 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=78nJXDfmr//iqkCpJCXmmDUOzZ8w2oIwGyGP9nLOEfc=;
+        b=yv/sC337L66wAYjA5x9g1Jihhxy1p/SU4WDM2/n/+N1M9YBqdD9q7bTtVWRyPh2VCw
+         ukYIcszK3TBTlDRFDa97QKvyYinmKh4agQbXUg2Ck4/OKT0dokEgcLnmG8MAvEbuT01Z
+         4+yiInKrqKEfk7yw36xSyQtUVFSu0sKyzEseO4gwohSD/rvp8MyO7r1DiJr8TpBWhGLM
+         LTuVaYT9tbuMk3rK0zJTOfMd6IrSjtwsfVCV8HBFJyx6rSQqsxDk1lg3hh8pWThOfo4V
+         RXxqAxjkt2r7fDY0WImO1sFxdYFcFOfgqOqDx3isPyrqwtxGwTkye4n9WkAVvznq0IrM
+         yLhQ==
+X-Gm-Message-State: AOAM532yD5JtBR9YNbXTtTv+hLRQ2e6mVvMhFmh22whwB0HLfnv0gUQG
+        fUnK2idEYrzFiiczHAI+yE/Gtw==
+X-Google-Smtp-Source: ABdhPJy1EPPPscPrTxELXF/O0JLfaezpMxmi2sVgyHAvQdoKK3cPB+OENHfWbpQDEBnNlosgsUtiKQ==
+X-Received: by 2002:a63:3d85:: with SMTP id k127mr3361676pga.350.1644439582562;
+        Wed, 09 Feb 2022 12:46:22 -0800 (PST)
+Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
+        by smtp.gmail.com with ESMTPSA id k14sm8399557pgt.73.2022.02.09.12.46.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Feb 2022 12:46:21 -0800 (PST)
+From:   Kevin Hilman <khilman@baylibre.com>
+To:     Christian Hewitt <christianshewitt@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Christian Hewitt <christianshewitt@gmail.com>
+Subject: Re: [PATCH] arm64: dts: meson: remove CPU opps below 1GHz for G12B/SM1
+In-Reply-To: <20220209135535.29547-1-christianshewitt@gmail.com>
+References: <20220209135535.29547-1-christianshewitt@gmail.com>
+Date:   Wed, 09 Feb 2022 12:46:21 -0800
+Message-ID: <7ha6ezojj6.fsf@baylibre.com>
 MIME-Version: 1.0
-References: <20211124193327.2736-1-cpp.code.lv@gmail.com> <CAOrHB_AUCGG0uF4d30Eb4dguPqwvDL8A2c=2EGXqdcqkqLZK-g@mail.gmail.com>
- <CAASuNyWViYk6rt7bpqVApMFJB+k9NKSwasm1H_70uMMRUHxoHw@mail.gmail.com>
- <CAOrHB_D1HKirnub8AQs=tjX60Mc+EP=aWf+xpr9YdOCOAPsi2Q@mail.gmail.com>
- <CAASuNyUKj+dsf++7mhdkjm2mabQggYW4x42_BV=y+VPPSBFqfA@mail.gmail.com> <CAOrHB_CyBoTYO8Qn-qtcfrbqfVc9TjaU6ib_2ZSQx-R9ns-bUQ@mail.gmail.com>
-In-Reply-To: <CAOrHB_CyBoTYO8Qn-qtcfrbqfVc9TjaU6ib_2ZSQx-R9ns-bUQ@mail.gmail.com>
-From:   Cpp Code <cpp.code.lv@gmail.com>
-Date:   Wed, 9 Feb 2022 12:46:01 -0800
-Message-ID: <CAASuNyWRh4++uLh4zPuJAuwX4NhYa4HvO1M7iMYdg3Dm0Qbc7Q@mail.gmail.com>
-Subject: Re: [PATCH net-next v8] net: openvswitch: IPv6: Add IPv6 extension
- header support
-To:     Pravin Shelar <pravin.ovn@gmail.com>
-Cc:     Linux Kernel Network Developers <netdev@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        ovs dev <dev@openvswitch.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 9, 2021 at 11:36 PM Pravin Shelar <pravin.ovn@gmail.com> wrote:
->
-> ()
->
-> On Mon, Dec 6, 2021 at 3:00 PM Cpp Code <cpp.code.lv@gmail.com> wrote:
-> >
-> > On Thu, Dec 2, 2021 at 9:28 PM Pravin Shelar <pravin.ovn@gmail.com> wrote:
-> > >
-> > > On Thu, Dec 2, 2021 at 12:20 PM Cpp Code <cpp.code.lv@gmail.com> wrote:
-> > > >
-> > > > On Wed, Dec 1, 2021 at 11:34 PM Pravin Shelar <pravin.ovn@gmail.com> wrote:
-> > > > >
-> > > > > On Wed, Nov 24, 2021 at 11:33 AM Toms Atteka <cpp.code.lv@gmail.com> wrote:
-> > > > > >
-> > > > > > This change adds a new OpenFlow field OFPXMT_OFB_IPV6_EXTHDR and
-> > > > > > packets can be filtered using ipv6_ext flag.
-> > > > > >
-> > > > > > Signed-off-by: Toms Atteka <cpp.code.lv@gmail.com>
-> > > > > > ---
-> > > > > >  include/uapi/linux/openvswitch.h |   6 ++
-> > > > > >  net/openvswitch/flow.c           | 140 +++++++++++++++++++++++++++++++
-> > > > > >  net/openvswitch/flow.h           |  14 ++++
-> > > > > >  net/openvswitch/flow_netlink.c   |  26 +++++-
-> > > > > >  4 files changed, 184 insertions(+), 2 deletions(-)
-> > > > > >
-> > > > > > diff --git a/include/uapi/linux/openvswitch.h b/include/uapi/linux/openvswitch.h
-> > > > > > index a87b44cd5590..43790f07e4a2 100644
-> > > > > > --- a/include/uapi/linux/openvswitch.h
-> > > > > > +++ b/include/uapi/linux/openvswitch.h
-> > > > > > @@ -342,6 +342,7 @@ enum ovs_key_attr {
-> > > > > >         OVS_KEY_ATTR_CT_ORIG_TUPLE_IPV4,   /* struct ovs_key_ct_tuple_ipv4 */
-> > > > > >         OVS_KEY_ATTR_CT_ORIG_TUPLE_IPV6,   /* struct ovs_key_ct_tuple_ipv6 */
-> > > > > >         OVS_KEY_ATTR_NSH,       /* Nested set of ovs_nsh_key_* */
-> > > > > > +       OVS_KEY_ATTR_IPV6_EXTHDRS,  /* struct ovs_key_ipv6_exthdr */
-> > > > > >
-> > > > > >  #ifdef __KERNEL__
-> > > > > >         OVS_KEY_ATTR_TUNNEL_INFO,  /* struct ip_tunnel_info */
-> > > > > > @@ -421,6 +422,11 @@ struct ovs_key_ipv6 {
-> > > > > >         __u8   ipv6_frag;       /* One of OVS_FRAG_TYPE_*. */
-> > > > > >  };
-> > > > > >
-> > > > > > +/* separate structure to support backward compatibility with older user space */
-> > > > > > +struct ovs_key_ipv6_exthdrs {
-> > > > > > +       __u16  hdrs;
-> > > > > > +};
-> > > > > > +
-> > > > > >  struct ovs_key_tcp {
-> > > > > >         __be16 tcp_src;
-> > > > > >         __be16 tcp_dst;
-> > > > > > diff --git a/net/openvswitch/flow.c b/net/openvswitch/flow.c
-> > > > > > index 9d375e74b607..28acb40437ca 100644
-> > > > > > --- a/net/openvswitch/flow.c
-> > > > > > +++ b/net/openvswitch/flow.c
-> > > > > > @@ -239,6 +239,144 @@ static bool icmphdr_ok(struct sk_buff *skb)
-> > > > > >                                   sizeof(struct icmphdr));
-> > > > > >  }
-> > > > > >
-> > > > > > +/**
-> > > > > > + * get_ipv6_ext_hdrs() - Parses packet and sets IPv6 extension header flags.
-> > > > > > + *
-> > > > > > + * @skb: buffer where extension header data starts in packet
-> > > > > > + * @nh: ipv6 header
-> > > > > > + * @ext_hdrs: flags are stored here
-> > > > > > + *
-> > > > > > + * OFPIEH12_UNREP is set if more than one of a given IPv6 extension header
-> > > > > > + * is unexpectedly encountered. (Two destination options headers may be
-> > > > > > + * expected and would not cause this bit to be set.)
-> > > > > > + *
-> > > > > > + * OFPIEH12_UNSEQ is set if IPv6 extension headers were not in the order
-> > > > > > + * preferred (but not required) by RFC 2460:
-> > > > > > + *
-> > > > > > + * When more than one extension header is used in the same packet, it is
-> > > > > > + * recommended that those headers appear in the following order:
-> > > > > > + *      IPv6 header
-> > > > > > + *      Hop-by-Hop Options header
-> > > > > > + *      Destination Options header
-> > > > > > + *      Routing header
-> > > > > > + *      Fragment header
-> > > > > > + *      Authentication header
-> > > > > > + *      Encapsulating Security Payload header
-> > > > > > + *      Destination Options header
-> > > > > > + *      upper-layer header
-> > > > > > + */
-> > > > > > +static void get_ipv6_ext_hdrs(struct sk_buff *skb, struct ipv6hdr *nh,
-> > > > > > +                             u16 *ext_hdrs)
-> > > > > > +{
-> > > > > > +       u8 next_type = nh->nexthdr;
-> > > > > > +       unsigned int start = skb_network_offset(skb) + sizeof(struct ipv6hdr);
-> > > > > > +       int dest_options_header_count = 0;
-> > > > > > +
-> > > > > > +       *ext_hdrs = 0;
-> > > > > > +
-> > > > > > +       while (ipv6_ext_hdr(next_type)) {
-> > > > > > +               struct ipv6_opt_hdr _hdr, *hp;
-> > > > > > +
-> > > > > > +               switch (next_type) {
-> > > > > > +               case IPPROTO_NONE:
-> > > > > > +                       *ext_hdrs |= OFPIEH12_NONEXT;
-> > > > > > +                       /* stop parsing */
-> > > > > > +                       return;
-> > > > > > +
-> > > > > > +               case IPPROTO_ESP:
-> > > > > > +                       if (*ext_hdrs & OFPIEH12_ESP)
-> > > > > > +                               *ext_hdrs |= OFPIEH12_UNREP;
-> > > > > > +                       if ((*ext_hdrs & ~(OFPIEH12_HOP | OFPIEH12_DEST |
-> > > > > > +                                          OFPIEH12_ROUTER | IPPROTO_FRAGMENT |
-> > > > > > +                                          OFPIEH12_AUTH | OFPIEH12_UNREP)) ||
-> > > > > > +                           dest_options_header_count >= 2) {
-> > > > > > +                               *ext_hdrs |= OFPIEH12_UNSEQ;
-> > > > > > +                       }
-> > > > > > +                       *ext_hdrs |= OFPIEH12_ESP;
-> > > > > > +                       break;
-> > > > > you need to check_header() before looking into each extension header.
-> > > >
-> > > > Could you elaborate why I need to add check_header(),
-> > > > skb_header_pointer() is doing sanitization.
-> > >
-> > > I mean check_header() would allow you to read the header without
-> > > copying the bits, it is used in ovs flow extraction so its usual
-> > > check.
-> >
-> > But check_header() will call *__pskb_pull_tail which in turn will copy
-> > bits if data will be fragmented.
-> >
-> OVS flow extract uses this function to extract flow upto L4, so
-> skb_header_pointer() is not saving any copy operation.
->
-> > /* Moves tail of skb head forward, copying data from fragmented part,
-> >  * when it is necessary.
-> >  * 1. It may fail due to malloc failure.
-> >  * 2. It may change skb pointers.
-> >  *
-> >  * It is pretty complicated. Luckily, it is called only in exceptional cases.
-> >  */
-> > void *__pskb_pull_tail(struct sk_buff *skb, int delta)
-> >
-> > as well I noticed that for example commit
-> > 4a06fa67c4da20148803525151845276cdb995c1 is moving from
-> > pskb_may_pull() to skb_header_pointer()
-> ok, I see advantage of using skb_header_pointer() in this case, but
-> replacing all check_header() with skb_header_pointer() would add lot
-> of copy operation in flow extract. Anyways for this use case
-> skb_header_pointer() is fine.
->
-> Acked-by: Pravin B Shelar <pshelar@ovn.org>
+Christian Hewitt <christianshewitt@gmail.com> writes:
 
-Hi,
+> Amlogic G12B and SM1 devices experience CPU stalls and random board
+> wedges when the system idles and CPU cores clock down to lower opp
+> points. Recent vendor kernels include a change to remove 100-250MHz
+> (with no explanation) [0] but other downstream sources also remove
+> the 500/667MHz points (also with no explanation). Unless 100-667Mhz
+> opps are removed or the CPU governor forced to performance, stalls
+> are observed, so let's remove them an improve stability/uptime.
+>
+> [0] https://github.com/khadas/linux/commit/20e237a4fe9f0302370e24950cb1416e038eee03
 
-Could this be applied please.
+hehe, not a very helpful changelog in that khadas kernel commit :(
 
-Thanks,
-Tom
+> Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
+> ---
+> Numerous people have experienced this issue and I have tested with
+> only the low opp-points removed and numerous voltage tweaks: but it
+> makes no difference. With the opp points present an Odroid N2 or
+> Khadas VIM3 reliably drop off my network after being left idling
+> overnight with UART showing a CPU stall splat. With the opp points
+> removed I see weeks of uninterupted uptime. It's beyond my skills
+> to research what the cause of the stalls might be, but if anyone
+> ever figures it out we can always restore things. NB: This issue
+> is not too widely reported in forums, but that's largely because
+> most of the Amlogic supporting distros have been including this
+> change picked from my kernel patchset for some time.
+
+Very interesting.  I've also noticed instability across suspend resume
+on VIM3/VIM3L and only got as far in debugging to noticing it was
+DVFS/OPP related, but didn't get much further yet.  I'll give this a try
+to see if it helps.
+
+Thanks for finding & posting!
+
+Kevin

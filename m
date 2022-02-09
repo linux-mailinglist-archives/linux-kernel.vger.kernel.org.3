@@ -2,222 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 499F74AF044
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 12:57:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E1714AF0D8
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 13:08:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231463AbiBIL4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 06:56:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57462 "EHLO
+        id S232609AbiBIMHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 07:07:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231520AbiBILzX (ORCPT
+        with ESMTP id S232813AbiBIMGO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 06:55:23 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ADAAE00F7E6;
-        Wed,  9 Feb 2022 02:53:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1644404000; x=1675940000;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=XHx2l/vD4N8IpF3Ze4UT7TCVcgCy1aFIim078qCWG8s=;
-  b=ntPwNDnevlFvSwsJi9AlMBKo59dRRnPVaA2hq4zD3NfB3avkr52is6xD
-   J65GRsdr3uHlo7zapprJVNIgHoJYyxHLkjfmFsD46G4R12g94JV0+tidg
-   UtI4CVB5AZZ5VRnLWQKS9au3swAsdkQMC++y/7tFhwdXfIPYfebNSoV1F
-   E=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 09 Feb 2022 00:56:25 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 00:56:24 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Wed, 9 Feb 2022 00:56:23 -0800
-Received: from sbillaka-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Wed, 9 Feb 2022 00:56:16 -0800
-From:   Sankeerth Billakanti <quic_sbillaka@quicinc.com>
-To:     <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <agross@kernel.org>,
-        <bjorn.andersson@linaro.org>, <robh+dt@kernel.org>,
-        <robdclark@gmail.com>, <seanpaul@chromium.org>,
-        <swboyd@chromium.org>, <dianders@chromium.org>,
-        <krzysztof.kozlowski@canonical.com>, <thierry.reding@gmail.com>,
-        <sam@ravnborg.org>, <airlied@linux.ie>, <daniel@ffwll.ch>
-CC:     Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        <quic_kalyant@quicinc.com>, <quic_abhinavk@quicinc.com>,
-        <quic_khsieh@quicinc.com>, <quic_mkrishn@quicinc.com>,
-        <quic_vproddut@quicinc.com>
-Subject: [PATCH v3 4/4] drm/msm/dp: Add driver support to utilize drm panel
-Date:   Wed, 9 Feb 2022 14:25:32 +0530
-Message-ID: <1644396932-17932-5-git-send-email-quic_sbillaka@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1644396932-17932-1-git-send-email-quic_sbillaka@quicinc.com>
-References: <1644396932-17932-1-git-send-email-quic_sbillaka@quicinc.com>
+        Wed, 9 Feb 2022 07:06:14 -0500
+X-Greylist: delayed 3605 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Feb 2022 03:16:10 PST
+Received: from qq.com (smtpbg403.qq.com [113.96.223.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3717C05CB9B
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 03:16:10 -0800 (PST)
+X-QQ-mid: bizesmtp37t1644397059tj91lubl
+Received: from localhost.localdomain (unknown [58.240.82.166])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 09 Feb 2022 16:57:33 +0800 (CST)
+X-QQ-SSF: 0140000000200010C000C00B0000000
+X-QQ-FEAT: MQdFpt6IGfGW25XRNRRXN+cnV3y8ABsHivnrSTLjmo8FU5lA7hwdk6Z7f+aVd
+        Zb1RQ7xkDYZhW6LBeLCdA6v4ZmVbOyJ2D50mjDccU0rDSSCOHow1ixJQrrx0qSxKqH6gQGL
+        ffHglCpzZMN1+kqSvNl3Cb7Wpwq3U1/qDQ52NCdeHx975rXeZrOGgSIzC9zp7SVw39wltpe
+        ASqSaURTMbg7/QokZQm6QfoC3S0XJ0umxSACAgv8ZMuhqMWrdFTBfTHHuc5hSarv+W4zK1o
+        lKcgFNiuh5tSw/En2CO8K1tnA5GiH7JhGEI/VkRy2JjrVzojh8gLxVx+kNOstLyTkn9b/dl
+        zVmDnI3rGXaBZzY1YHOqBd5aTleAdbfJSg6+2JW
+X-QQ-GoodBg: 2
+From:   Zhen Ni <nizhen@uniontech.com>
+To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        mcgrof@kernel.org, keescook@chromium.org
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Zhen Ni <nizhen@uniontech.com>
+Subject: [PATCH] sched: move uclamp_util sysctls to core.c
+Date:   Wed,  9 Feb 2022 16:57:30 +0800
+Message-Id: <20220209085730.22470-1-nizhen@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign6
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support in the DP driver to utilize the custom eDP panels
-from drm/panels.
+move uclamp_util sysctls to core.c and use the new
+register_sysctl_init() to register the sysctl interface.
 
-An eDP panel is always connected to the platform. So, the eDP
-connector can be reported as always connected. The display mode
-will be sourced from the panel. The panel mode will be set after
-the link training is completed.
-
-Signed-off-by: Sankeerth Billakanti <quic_sbillaka@quicinc.com>
+Signed-off-by: Zhen Ni <nizhen@uniontech.com>
 ---
+ include/linux/sched/sysctl.h |  8 -------
+ kernel/sched/core.c          | 43 ++++++++++++++++++++++++++++++++----
+ kernel/sysctl.c              | 23 -------------------
+ 3 files changed, 39 insertions(+), 35 deletions(-)
 
-Changes in v3:
-  None
-
- drivers/gpu/drm/msm/dp/dp_display.c |  8 ++++++
- drivers/gpu/drm/msm/dp/dp_drm.c     | 54 +++++++++++++++++++++++++++++++++----
- drivers/gpu/drm/msm/dp/dp_parser.h  |  3 +++
- 3 files changed, 60 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-index 7cc4d21..410fda4 100644
---- a/drivers/gpu/drm/msm/dp/dp_display.c
-+++ b/drivers/gpu/drm/msm/dp/dp_display.c
-@@ -1513,6 +1513,10 @@ int msm_dp_display_enable(struct msm_dp *dp, struct drm_encoder *encoder)
- 		return -EINVAL;
- 	}
+diff --git a/include/linux/sched/sysctl.h b/include/linux/sched/sysctl.h
+index c19dd5a2c05c..1f07d14cf9fc 100644
+--- a/include/linux/sched/sysctl.h
++++ b/include/linux/sched/sysctl.h
+@@ -35,12 +35,6 @@ extern int sysctl_sched_rt_runtime;
+ extern unsigned int sysctl_sched_dl_period_max;
+ extern unsigned int sysctl_sched_dl_period_min;
  
-+	/* handle eDP on */
-+	if (dp->connector_type == DRM_MODE_CONNECTOR_eDP)
-+		dp_hpd_plug_handle(dp_display, 0);
-+
- 	mutex_lock(&dp_display->event_mutex);
+-#ifdef CONFIG_UCLAMP_TASK
+-extern unsigned int sysctl_sched_uclamp_util_min;
+-extern unsigned int sysctl_sched_uclamp_util_max;
+-extern unsigned int sysctl_sched_uclamp_util_min_rt_default;
+-#endif
+-
+ #ifdef CONFIG_CFS_BANDWIDTH
+ extern unsigned int sysctl_sched_cfs_bandwidth_slice;
+ #endif
+@@ -56,8 +50,6 @@ int sched_rr_handler(struct ctl_table *table, int write, void *buffer,
+ 		size_t *lenp, loff_t *ppos);
+ int sched_rt_handler(struct ctl_table *table, int write, void *buffer,
+ 		size_t *lenp, loff_t *ppos);
+-int sysctl_sched_uclamp_handler(struct ctl_table *table, int write,
+-		void *buffer, size_t *lenp, loff_t *ppos);
+ int sysctl_numa_balancing(struct ctl_table *table, int write, void *buffer,
+ 		size_t *lenp, loff_t *ppos);
+ int sysctl_schedstats(struct ctl_table *table, int write, void *buffer,
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 848eaa0efe0e..1962111416e4 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -1254,10 +1254,10 @@ static void set_load_weight(struct task_struct *p, bool update_load)
+ static DEFINE_MUTEX(uclamp_mutex);
  
- 	/* stop sentinel checking */
-@@ -1577,6 +1581,10 @@ int msm_dp_display_disable(struct msm_dp *dp, struct drm_encoder *encoder)
+ /* Max allowed minimum utilization */
+-unsigned int sysctl_sched_uclamp_util_min = SCHED_CAPACITY_SCALE;
++static unsigned int sysctl_sched_uclamp_util_min = SCHED_CAPACITY_SCALE;
  
- 	dp_display = container_of(dp, struct dp_display_private, dp_display);
+ /* Max allowed maximum utilization */
+-unsigned int sysctl_sched_uclamp_util_max = SCHED_CAPACITY_SCALE;
++static unsigned int sysctl_sched_uclamp_util_max = SCHED_CAPACITY_SCALE;
  
-+	/* handle edp off */
-+	if (dp->connector_type == DRM_MODE_CONNECTOR_eDP)
-+		dp_hpd_unplug_handle(dp_display, 0);
-+
- 	mutex_lock(&dp_display->event_mutex);
+ /*
+  * By default RT tasks run at the maximum performance point/capacity of the
+@@ -1274,7 +1274,7 @@ unsigned int sysctl_sched_uclamp_util_max = SCHED_CAPACITY_SCALE;
+  * This knob will not override the system default sched_util_clamp_min defined
+  * above.
+  */
+-unsigned int sysctl_sched_uclamp_util_min_rt_default = SCHED_CAPACITY_SCALE;
++static unsigned int sysctl_sched_uclamp_util_min_rt_default = SCHED_CAPACITY_SCALE;
  
- 	/* stop sentinel checking */
-diff --git a/drivers/gpu/drm/msm/dp/dp_drm.c b/drivers/gpu/drm/msm/dp/dp_drm.c
-index d4d360d..12fa8c1 100644
---- a/drivers/gpu/drm/msm/dp/dp_drm.c
-+++ b/drivers/gpu/drm/msm/dp/dp_drm.c
-@@ -39,6 +39,10 @@ static enum drm_connector_status dp_connector_detect(struct drm_connector *conn,
+ /* All clamps are required to be less or equal than these values */
+ static struct uclamp_se uclamp_default[UCLAMP_CNT];
+@@ -1727,7 +1727,7 @@ static void uclamp_update_root_tg(void)
+ static void uclamp_update_root_tg(void) { }
+ #endif
  
- 	dp = to_dp_connector(conn)->dp_display;
- 
-+	/* eDP is always  connected */
-+	if (dp->connector_type == DRM_MODE_CONNECTOR_eDP)
-+		return connector_status_connected;
-+
- 	DRM_DEBUG_DP("is_connected = %s\n",
- 		(dp->is_connected) ? "true" : "false");
- 
-@@ -123,6 +127,35 @@ static enum drm_mode_status dp_connector_mode_valid(
- 	return dp_display_validate_mode(dp_disp, mode->clock);
+-int sysctl_sched_uclamp_handler(struct ctl_table *table, int write,
++static int sysctl_sched_uclamp_handler(struct ctl_table *table, int write,
+ 				void *buffer, size_t *lenp, loff_t *ppos)
+ {
+ 	bool update_root_tg = false;
+@@ -1792,6 +1792,40 @@ int sysctl_sched_uclamp_handler(struct ctl_table *table, int write,
+ 	return result;
  }
  
-+static int edp_connector_get_modes(struct drm_connector *connector)
-+{
-+	struct msm_dp *dp;
-+
-+	if (!connector)
-+		return 0;
-+
-+	dp = to_dp_connector(connector)->dp_display;
-+
-+	return drm_bridge_get_modes(dp->panel_bridge, connector);
-+}
-+
-+static enum drm_mode_status edp_connector_mode_valid(
-+		struct drm_connector *connector,
-+		struct drm_display_mode *mode)
-+{
-+	struct msm_dp *dp;
-+
-+	if (!connector)
-+		return 0;
-+
-+	dp = to_dp_connector(connector)->dp_display;
-+
-+	if (mode->clock > EDP_MAX_PIXEL_CLK_KHZ)
-+		return MODE_BAD;
-+
-+	return MODE_OK;
-+}
-+
- static const struct drm_connector_funcs dp_connector_funcs = {
- 	.detect = dp_connector_detect,
- 	.fill_modes = drm_helper_probe_single_connector_modes,
-@@ -137,6 +170,12 @@ static const struct drm_connector_helper_funcs dp_connector_helper_funcs = {
- 	.mode_valid = dp_connector_mode_valid,
- };
- 
-+static const struct drm_connector_helper_funcs edp_connector_helper_funcs = {
-+	.get_modes = edp_connector_get_modes,
-+	.mode_valid = edp_connector_mode_valid,
-+
++#ifdef CONFIG_SYSCTL
++static struct ctl_table sched_uclamp_util_sysctls[] = {
++	{
++		.procname       = "sched_util_clamp_min",
++		.data           = &sysctl_sched_uclamp_util_min,
++		.maxlen         = sizeof(unsigned int),
++		.mode           = 0644,
++		.proc_handler   = sysctl_sched_uclamp_handler,
++	},
++	{
++		.procname       = "sched_util_clamp_max",
++		.data           = &sysctl_sched_uclamp_util_max,
++		.maxlen         = sizeof(unsigned int),
++		.mode           = 0644,
++		.proc_handler   = sysctl_sched_uclamp_handler,
++	},
++	{
++		.procname       = "sched_util_clamp_min_rt_default",
++		.data           = &sysctl_sched_uclamp_util_min_rt_default,
++		.maxlen         = sizeof(unsigned int),
++		.mode           = 0644,
++		.proc_handler   = sysctl_sched_uclamp_handler,
++	},
++	{}
 +};
 +
- /* connector initialization */
- struct drm_connector *dp_drm_connector_init(struct msm_dp *dp_display)
- {
-@@ -160,12 +199,17 @@ struct drm_connector *dp_drm_connector_init(struct msm_dp *dp_display)
- 	if (ret)
- 		return ERR_PTR(ret);
- 
--	drm_connector_helper_add(connector, &dp_connector_helper_funcs);
-+	if (dp_display->connector_type == DRM_MODE_CONNECTOR_eDP) {
-+		drm_connector_helper_add(connector,
-+				&edp_connector_helper_funcs);
-+	} else {
-+		drm_connector_helper_add(connector, &dp_connector_helper_funcs);
- 
--	/*
--	 * Enable HPD to let hpd event is handled when cable is connected.
--	 */
--	connector->polled = DRM_CONNECTOR_POLL_HPD;
-+		/*
-+		 * Enable HPD to let hpd event is handled when cable is connected.
-+		 */
-+		connector->polled = DRM_CONNECTOR_POLL_HPD;
-+	}
- 
- 	drm_connector_attach_encoder(connector, dp_display->encoder);
- 
-diff --git a/drivers/gpu/drm/msm/dp/dp_parser.h b/drivers/gpu/drm/msm/dp/dp_parser.h
-index 3172da0..58c4f27 100644
---- a/drivers/gpu/drm/msm/dp/dp_parser.h
-+++ b/drivers/gpu/drm/msm/dp/dp_parser.h
-@@ -17,6 +17,9 @@
- #define DP_MAX_PIXEL_CLK_KHZ	675000
- #define DP_MAX_NUM_DP_LANES	4
- 
-+/* Maximum validated clock */
-+#define EDP_MAX_PIXEL_CLK_KHZ	285550
++static void __init sched_uclamp_sysctl_init(void)
++{
++	register_sysctl_init("kernel", sched_uclamp_util_sysctls);
++}
++#else
++#define sched_uclamp_sysctl_init() do { } while (0)
++#endif
 +
- enum dp_pm_type {
- 	DP_CORE_PM,
- 	DP_CTRL_PM,
+ static int uclamp_validate(struct task_struct *p,
+ 			   const struct sched_attr *attr)
+ {
+@@ -1955,6 +1989,7 @@ static void __init init_uclamp(void)
+ 		root_task_group.uclamp[clamp_id] = uc_max;
+ #endif
+ 	}
++	sched_uclamp_sysctl_init();
+ }
+ 
+ #else /* CONFIG_UCLAMP_TASK */
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index 5ae443b2882e..78996c0c8852 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -1727,29 +1727,6 @@ static struct ctl_table kern_table[] = {
+ 		.mode		= 0644,
+ 		.proc_handler	= sched_rr_handler,
+ 	},
+-#ifdef CONFIG_UCLAMP_TASK
+-	{
+-		.procname	= "sched_util_clamp_min",
+-		.data		= &sysctl_sched_uclamp_util_min,
+-		.maxlen		= sizeof(unsigned int),
+-		.mode		= 0644,
+-		.proc_handler	= sysctl_sched_uclamp_handler,
+-	},
+-	{
+-		.procname	= "sched_util_clamp_max",
+-		.data		= &sysctl_sched_uclamp_util_max,
+-		.maxlen		= sizeof(unsigned int),
+-		.mode		= 0644,
+-		.proc_handler	= sysctl_sched_uclamp_handler,
+-	},
+-	{
+-		.procname	= "sched_util_clamp_min_rt_default",
+-		.data		= &sysctl_sched_uclamp_util_min_rt_default,
+-		.maxlen		= sizeof(unsigned int),
+-		.mode		= 0644,
+-		.proc_handler	= sysctl_sched_uclamp_handler,
+-	},
+-#endif
+ #ifdef CONFIG_SCHED_AUTOGROUP
+ 	{
+ 		.procname	= "sched_autogroup_enabled",
 -- 
-2.7.4
+2.20.1
+
+
 

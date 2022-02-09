@@ -2,72 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 485AB4AEF5A
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 11:36:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49C714AEF2E
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 11:22:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbiBIKgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 05:36:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40144 "EHLO
+        id S234449AbiBIKVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 05:21:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiBIKgA (ORCPT
+        with ESMTP id S234345AbiBIKVY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 05:36:00 -0500
-X-Greylist: delayed 662 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Feb 2022 02:24:43 PST
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 179C5E04FF2E;
-        Wed,  9 Feb 2022 02:24:42 -0800 (PST)
+        Wed, 9 Feb 2022 05:21:24 -0500
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFDFCE08E798
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 02:15:51 -0800 (PST)
 Received: from localhost.localdomain ([81.221.85.15]) by mrelay.perfora.net
- (mreueus004 [74.208.5.2]) with ESMTPSA (Nemesis) id 1N3ryu-1oHIft0ig4-00zopa;
- Wed, 09 Feb 2022 11:01:41 +0100
+ (mreueus004 [74.208.5.2]) with ESMTPSA (Nemesis) id 1MMX5X-1nZgaN0dVf-00JeSf;
+ Wed, 09 Feb 2022 11:01:44 +0100
 From:   Marcel Ziswiler <marcel@ziswiler.com>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     Marek Vasut <marek.vasut@gmail.com>,
         Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Song Liu <songliubraving@fb.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
+        Adam Ford <aford173@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
         Biju Das <biju.das.jz@bp.renesas.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
         Enric Balletbo i Serra <enric.balletbo@collabora.com>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
         Krzysztof Kozlowski <krzk@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
         Olof Johansson <olof@lixom.net>,
         Shawn Guo <shawnguo@kernel.org>, Will Deacon <will@kernel.org>,
-        Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH v5 06/12] arm64: defconfig: enable bpf/cgroup firewalling
-Date:   Wed,  9 Feb 2022 11:00:49 +0100
-Message-Id: <20220209100055.181389-7-marcel@ziswiler.com>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v5 07/12] arm64: defconfig: enable imx8m pcie phy driver
+Date:   Wed,  9 Feb 2022 11:00:50 +0100
+Message-Id: <20220209100055.181389-8-marcel@ziswiler.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20220209100055.181389-1-marcel@ziswiler.com>
 References: <20220209100055.181389-1-marcel@ziswiler.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:Kw+BhOFTEuUQKmEHH4xL/6JksYEjaYP6yvF8rvBT0drqrWrhZUL
- +NOKeIXqZ9z0rR2/UQ69oL6ixxBvNn27jaF96mlpJjypAdRe6lwS6/HjJB2Be0xpUPb3/MR
- Z34gXF5/BT8bO6rRAL+ITnNnjcmp73lFlrrVNDLlmu83Hlqy1ooP2f+8tNHlcnxEpyDv1v2
- 0ivfnJbbEi8wcY4ceQMWw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:JR6ZoSCiM40=:frPillA8bAa+3F+EN/IdtP
- TBa70/SrOF0QJ5MROOkMr5nbD00xIov93nBUBHEhEQ0MSdYdMpUjVlmOHeqmCPQVdJKCh3tCI
- HYAu1FGZaWrv1/X0C+llreft9p1wFNj/d3HravTRqrQM0QXx/fF22xbq2QQIo0rim4SoLfUSx
- wezZb0o3Aqntqb2N94AgwYfYP6Z+74/kTRjmYDzReROhxz7oM7G63OhD6JwfhvrEUvEtVymt3
- /v59kklK7do1PH3O1+h9cCici6kEK1Z+M8dmdZICOsEGThbCAK7pPwgpnR7wcgatLU5vDhwb2
- kiCMVimaJvAcdihTTlpjAYs544Szq5Y6UhpeNA3ODXDh4pDNI1Ui57iZeDrf/y0UhZ+chDNZo
- NH0u9NHlPhfmDJ3WS0rZQlNFsYuitUwUWVaU+x51+lPvyDx/KqQM1MDKjc6VMAYLddflPkcvo
- 8SUpEg45k8zTSNsON9hRoeDLq+7IzT46KmCwmUFobNv4kKwrQVit7DHPLxEc5sX7PGrHgMBUb
- XfRnAe+okSO4w3No2Ugh/C33QCYuldsSvg5kW4OqgTnJnuz9s5WosoS3TZrrxmoyVGJ4D5fdx
- yuR4ve6yDDJJcQG/qBZR0l2rnpPX00Vg8+ArZo5VeD24vwJ6GsVxEUjUhVOfZr/2uYfWUL03d
- DRWjGOCHe0JQBIoqzN4fmPwykBHix3M9Uu66ltNXajfFLVqNt5c9sDmoLkQvOAwGBTO39igRR
- rUlnchakmjOUdOD4srYQsRW+S2lDYFCUY3+0HNGFiAjguwqk75KQEnIWP4vTsmQsIl3lxy8zC
- 4IxURdvXr2fLq4aFy5lkwSHj9R6Aw==
+X-Provags-ID: V03:K1:b8SxDQe9Yb+nS3ipl49PK5HYshZb8p5+G1Rd2UQm9N7ousmmQ2g
+ LRG+Upfp1tpC3xqPuysmqDGep2HL1khFHOCJHbIplt9mKpKOOygNFfFelL1Chqa5HawjDzh
+ 1zV6N+2J6ZK3NqxLy0sBQkwZkg0tN/0bCBaAkCiiYjvO0SZbW9ozndIzlW/e9l0q3byMGoZ
+ iXP4DdpiKmaWAQfoVPVyQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:hBcK5ZOCS4k=:hq0GLYH8hEm4hucAtivki7
+ PE6YnXKhaAG9BaHC7OG93baGW0Pa2Wo6eWMVfuAqv9Z7ocWRMV/qLNwSmDCybE2OLcCNOs61A
+ BBUlwxhl+BZv7jcLLQOS0crOJ597Wh0qWyRq8JbYI67VEqFHFDK/bjmZbuSmuPKFbtYUjrbZO
+ +puGt9xnSYKWHEGMqn/FDPmfOWmVlXO/qFJ7DLzvcrsuooznXh+bo7ICeFvGoJOUpskt2lDyw
+ b5i5mFphva+OUEfyYyNLNEYz9HWByBt2R9DZFuHmbJX/m6y3e8lC8LzYIVXNc8G1BvyVbo/08
+ r2Ec/o6YUnBbvebFhQrSOJtKPPp8047dvXvgzLYVKpTdaGthSg2mHkYi3BSrfVrSqrndGLQHz
+ 59VT4RNmyjIA9CUMZ775+3QwCtCPWy2WzcWidVfhSLmXNvGHhFCyvBm5IFS3Pz2aWXlJSkBk0
+ SwyiNUOBHsh9DW7oDOfQQJHlu+1KYxJDYSsfIuXScLebskfuCzKBhub/xNzr7Uoiwa1cJJA3S
+ EZEzOzFGyVWPUc8chsRKsQuEg1VV1DBqhXTUiU+30z/7MUn6LQ7EQ9CgRGBMox2QjIZ3njMfI
+ 5sttxDrBiR0T+7eVkqDaSg7YJMRA0NgX4dJfZppurlw8j91RE1hSDxmZcP2CigjzoWV9kOim8
+ 4NnnUFmecq5tPtzMkUBkMlfBqEK06QrK+/DbIcdVql6Eroepy+5jY/U1d2+wuwQnBhldqKDrF
+ ld4l7ALV4Fc8reNeszR3ViucebvPTY+kqbEreEeHA0hrnZixg54oHHF3TNUabRu80pGdIdeGp
+ aoHI1Kr/af7eN2FgBOxLGJP363p6A==
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -79,50 +68,33 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-This avoids the following systemd warning:
-
-[    2.618538] systemd[1]: system-getty.slice: unit configures an IP
- firewall, but the local system does not support BPF/cgroup firewalling.
-[    2.630916] systemd[1]: (This warning is only shown for the first
- unit using IP firewalling.)
+This enables the i.MX 8M PCIe PHY driver (CONFIG_PHY_FSL_IMX8M_PCIE)
+required for PCIe functionality.
 
 Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
-Acked-by: Song Liu <songliubraving@fb.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
 ---
 
 (no changes since v3)
 
 Changes in v3:
-- Add Krzysztof's reviewed-by tag.
+- New patch enabling imx8m pcie phy driver in arm64 defconfig.
 
-Changes in v2:
-- Add Song's acked-by tag.
-
- arch/arm64/configs/defconfig | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 530ad076b5cb..444fec9ec73a 100644
+index 444fec9ec73a..0fed8477e72e 100644
 --- a/arch/arm64/configs/defconfig
 +++ b/arch/arm64/configs/defconfig
-@@ -3,6 +3,7 @@ CONFIG_POSIX_MQUEUE=y
- CONFIG_AUDIT=y
- CONFIG_NO_HZ_IDLE=y
- CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_BPF_SYSCALL=y
- CONFIG_BPF_JIT=y
- CONFIG_PREEMPT=y
- CONFIG_IRQ_TIME_ACCOUNTING=y
-@@ -22,6 +23,7 @@ CONFIG_CPUSETS=y
- CONFIG_CGROUP_DEVICE=y
- CONFIG_CGROUP_CPUACCT=y
- CONFIG_CGROUP_PERF=y
-+CONFIG_CGROUP_BPF=y
- CONFIG_USER_NS=y
- CONFIG_SCHED_AUTOGROUP=y
- CONFIG_BLK_DEV_INITRD=y
+@@ -1121,6 +1121,7 @@ CONFIG_RESET_TI_SCI=y
+ CONFIG_PHY_XGENE=y
+ CONFIG_PHY_SUN4I_USB=y
+ CONFIG_PHY_MIXEL_MIPI_DPHY=m
++CONFIG_PHY_FSL_IMX8M_PCIE=y
+ CONFIG_PHY_HI6220_USB=y
+ CONFIG_PHY_HISTB_COMBPHY=y
+ CONFIG_PHY_HISI_INNO_USB2=y
 -- 
 2.33.1
 

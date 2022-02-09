@@ -2,98 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFC9D4AE7CD
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 04:16:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 087FB4AE7D1
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 04:16:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245267AbiBIDPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 22:15:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39622 "EHLO
+        id S1345109AbiBIDPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 22:15:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232860AbiBIDOy (ORCPT
+        with ESMTP id S1344499AbiBIDPI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 22:14:54 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B91A3C0612C2
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 19:14:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644376492;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=X9DHk6APJIsHE1UI+ceCyZijDLQACCuReEtHVHktgAg=;
-        b=AmXW1nf8BYebvD8R3j31GEa5KmvmSbdZ8Ns7MmDTx3dX+hx4r17ufHkODYgbgPe3yqzioj
-        QSZpLeJk+gmj5QQ5epZUGFtwOWvSMqub2zv5GImnSo8eoLfUvFt72+H/vivHS9EuaE4jtv
-        G9GwL4oE4Wf3T6hPL57IPLgxWoHcTI0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-533-TMv76d40NiuumRdfoHQ9zA-1; Tue, 08 Feb 2022 22:14:49 -0500
-X-MC-Unique: TMv76d40NiuumRdfoHQ9zA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E426E1091DA0;
-        Wed,  9 Feb 2022 03:14:47 +0000 (UTC)
-Received: from T590 (ovpn-8-25.pek2.redhat.com [10.72.8.25])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id A6EBD4D729;
-        Wed,  9 Feb 2022 03:14:31 +0000 (UTC)
-Date:   Wed, 9 Feb 2022 11:14:23 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Yu Kuai <yukuai3@huawei.com>
-Cc:     tj@kernel.org, axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com
-Subject: Re: [PATCH -next] blk-throttle: enable io throttle for root in
- cgroup v2
-Message-ID: <YgMxjyVjMjmkMQU5@T590>
-References: <20220114093000.3323470-1-yukuai3@huawei.com>
+        Tue, 8 Feb 2022 22:15:08 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEBABC0613CC;
+        Tue,  8 Feb 2022 19:15:06 -0800 (PST)
+Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JtlMK214Yz9s00;
+        Wed,  9 Feb 2022 11:13:33 +0800 (CST)
+Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
+ kwepemi500016.china.huawei.com (7.221.188.220) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 9 Feb 2022 11:15:04 +0800
+Received: from [10.174.178.208] (10.174.178.208) by
+ kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 9 Feb 2022 11:15:03 +0800
+Subject: Re: [PATCH 5.10 00/74] 5.10.99-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <stable@vger.kernel.org>, <torvalds@linux-foundation.org>,
+        <akpm@linux-foundation.org>, <linux@roeck-us.net>,
+        <shuah@kernel.org>, <patches@kernelci.org>,
+        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
+        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
+        <sudipm.mukherjee@gmail.com>, <slade@sladewatkins.com>
+References: <20220207103757.232676988@linuxfoundation.org>
+From:   Samuel Zou <zou_wei@huawei.com>
+Message-ID: <d426c87f-1684-e0e2-c84c-79ba742a2f30@huawei.com>
+Date:   Wed, 9 Feb 2022 11:15:02 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220114093000.3323470-1-yukuai3@huawei.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220207103757.232676988@linuxfoundation.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.208]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Yu Kuai,
 
-On Fri, Jan 14, 2022 at 05:30:00PM +0800, Yu Kuai wrote:
-> RFC patch: https://lkml.org/lkml/2021/9/9/1432
+
+On 2022/2/7 19:05, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.99 release.
+> There are 74 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> There is a proformance problem in our environment:
+> Responses should be made by Wed, 09 Feb 2022 10:37:42 +0000.
+> Anything received after that time might be too late.
 > 
-> A host can provide a remote device to difierent client. If one client is
-> under high io pressure, other clients might be affected.
-
-Can you use the linux kernel storage term to describe the issue?
-Such as, I guess here host means target server(iscsi, nvme target?),
-client should be scsi initiator, or nvme host. If not, can you provide
-one actual example for your storage use case?
-
-With common term used, it becomes pretty easy for people to understand &
-solve the issue, and avoid any misunderstanding.
-
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.99-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
 > 
-> Limit the overall iops/bps(io.max) from the client can fix the problem,
+> thanks,
+> 
+> greg k-h
+> 
 
-Just be curious how each client can figure out perfect iops/bps limit?
-Given one client doesn't know how many clients are connected to the
-target server.
+Tested on arm64 and x86 for 5.10.99-rc1,
 
-It sounds like the throttle shouldn't be done in client side cgroup,
-given the throttle is nothing to do with tasks. 
+Kernel repo:
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+Branch: linux-5.10.y
+Version: 5.10.99-rc1
+Commit: 9f5cb871ceb99f4667e351fd556d9de87b0de526
+Compiler: gcc version 7.3.0 (GCC)
 
-Maybe it should be done in server side, since server has enough
-information to provide fair iops/bps allocation for each clients.
+arm64:
+--------------------------------------------------------------------
+Testcase Result Summary:
+total: 9014
+passed: 9014
+failed: 0
+timeout: 0
+--------------------------------------------------------------------
 
+x86:
+--------------------------------------------------------------------
+Testcase Result Summary:
+total: 9014
+passed: 9014
+failed: 0
+timeout: 0
+--------------------------------------------------------------------
 
-Thanks, 
-Ming
-
+Tested-by: Hulk Robot <hulkrobot@huawei.com>

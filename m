@@ -2,48 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C25734AF312
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 14:40:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52D614AF316
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 14:41:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234332AbiBINkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 08:40:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60038 "EHLO
+        id S234193AbiBINlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 08:41:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232649AbiBINke (ORCPT
+        with ESMTP id S234348AbiBINkr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 08:40:34 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C93DC061355
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 05:40:35 -0800 (PST)
-Received: from kwepemi100010.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Jv19w2MpbzZfFs;
-        Wed,  9 Feb 2022 21:36:20 +0800 (CST)
-Received: from kwepemm600012.china.huawei.com (7.193.23.74) by
- kwepemi100010.china.huawei.com (7.221.188.54) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 9 Feb 2022 21:40:33 +0800
-Received: from huawei.com (10.174.177.28) by kwepemm600012.china.huawei.com
- (7.193.23.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Wed, 9 Feb
- 2022 21:40:32 +0800
-From:   liuyuntao <liuyuntao10@huawei.com>
-To:     <mike.kravetz@oracle.com>, <akpm@linux-foundation.org>,
-        <yaozhenguo1@gmail.com>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <wuxu.wu@huawei.com>, <fangchuangchuang@huawei.com>,
-        <windspectator@gmail.com>
-Subject: [PATCH] hugetlbfs: fix a truncation issue in hugepages parameter
-Date:   Wed, 9 Feb 2022 21:40:18 +0800
-Message-ID: <20220209134018.8242-1-liuyuntao10@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 9 Feb 2022 08:40:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77251C0612BE;
+        Wed,  9 Feb 2022 05:40:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3091FB8218F;
+        Wed,  9 Feb 2022 13:40:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C501CC340E7;
+        Wed,  9 Feb 2022 13:40:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644414047;
+        bh=3izH2xKMbzlKuZeeR09BaMHcKFQb6mTIbAisYxILrNI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=R5+GVZWsVS9K0c9rUczxq0H362X5W5j8dQKXyXllUP06ewaw/T63iFv11NE1/Q/Zd
+         lb77NZtgyWGedP9LIi9ErA1+AmTQB/WR28r/BhqlZb+J8bVWnadImO5xDRCbbEGZHi
+         T4RqJx0zHJbcN13jCpOEm7J/3uLOGc999tcG2I/lX0AdJsRXcyHObkyE9WFoPTp+Cf
+         jULqoIf1MAatF5u5Im3aKROzNjZg8hkcM8EJsub1HFGg7Wauq7Paih0VzsBPLgtOAV
+         NWax5WDMhVA9imjNbwVbdfMVaf81mgha0PNLIXwaLBkJq+68hxKF4uIk3k+dzMtFCf
+         6CDEb0i4AUapA==
+Date:   Wed, 9 Feb 2022 13:40:43 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Yun Zhou <yun.zhou@windriver.com>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ying.xue@windriver.com
+Subject: Re: [PATCH] spi: disable chipselect after complete transfer
+Message-ID: <YgPEWyEj7lbQJgAn@sirena.org.uk>
+References: <20220209100042.22941-1-yun.zhou@windriver.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.177.28]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600012.china.huawei.com (7.193.23.74)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5jCZZYA68rLFpXRe"
+Content-Disposition: inline
+In-Reply-To: <20220209100042.22941-1-yun.zhou@windriver.com>
+X-Cookie: Disc space -- the final frontier!
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -52,42 +56,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liu Yuntao <liuyuntao10@huawei.com>
 
-When we specify a large number for node in hugepages parameter,
-it may be parsed to another number due to truncation in this statement:
-	node = tmp;
+--5jCZZYA68rLFpXRe
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-For example, add following parameter in command line:
-	hugepagesz=1G hugepages=4294967297:5
-and kernel will allocate 5 hugepages for node 1 instead of ignoring it.
+On Wed, Feb 09, 2022 at 06:00:42PM +0800, Yun Zhou wrote:
+> If there are 2 slaves or more on a spi bus, e.g. A and B, we processed a
+> transfer to A, the CS will be selected for A whose 'last_cs_enable' will
+> be recorded to true at the same time. Then we processed a transfer to B,
+> the CS will be switched to B. And then if we transmit data to A again, it
+> will not enable CS back to A because 'last_cs_enable' is true.
+> In addition, if CS is not disabled, Some controllers in automatic
+> transmission state will receive unpredictable data, such as Cadence SPI
+> controller.
 
-I move the validation check earlier to fix this issue, and slightly
-simplifies the condition here.
+This sounds like you've got an issue with mixing devices with and
+without CS_HIGH - that is probably broken but...
 
-Fixes: b5389086ad7be0 ("hugetlbfs: extend the definition of hugepages parameter to support node allocation")
-Signed-off-by: Liu Yuntao <liuyuntao10@huawei.com>
----
- mm/hugetlb.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+>  out:
+> -	if (ret != 0 || !keep_cs)
+> -		spi_set_cs(msg->spi, false, false);
+> +	spi_set_cs(msg->spi, false, false);
 
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 61895cc01d09..0929547f6ad6 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -4159,10 +4159,10 @@ static int __init hugepages_setup(char *s)
- 				pr_warn("HugeTLB: architecture can't support node specific alloc, ignoring!\n");
- 				return 0;
- 			}
-+			if (tmp >= nr_online_nodes)
-+				goto invalid;
- 			node = tmp;
- 			p += count + 1;
--			if (node < 0 || node >= nr_online_nodes)
--				goto invalid;
- 			/* Parse hugepages */
- 			if (sscanf(p, "%lu%n", &tmp, &count) != 1)
- 				goto invalid;
--- 
-2.33.0
+...this will obviously break cs_change support, clearly that's not OK.
+The last_cs_high should be moved to the device.
 
+--5jCZZYA68rLFpXRe
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIDxFsACgkQJNaLcl1U
+h9AC5gf/QnfdqF4bxfMlcz/+CEL3cJsquOhbXqelLfIGLo7xhpl5E2fYklnxH7oI
+JskQEzXWCEHUndus0bQ4Cpz4NCoP/u2jseFdUcp8pw4dtqEHU4xEAN6lE36rKX/X
+gHhnGO17RjkH4ob4dG7wKBbBflSmSTEwVkgHZ4yfj3x58l2GYBnltI8OTZsOP1c7
+fnoPeV3otEr7hJ4TuB/u8JuAk2lja359T4zFNk/mcz2tFK/hqdu7Y7Bses89sRn8
+Lia7l+LJhlHtDCbwBYEY6JEP8evFE9LPqwP51g38qlzFp4FDyc7vp2nEa7dmSpad
+5xAH7YF2ykqoH/VyKtnhl4F0PuxSYA==
+=9k4w
+-----END PGP SIGNATURE-----
+
+--5jCZZYA68rLFpXRe--

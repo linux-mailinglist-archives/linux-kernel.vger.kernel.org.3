@@ -2,106 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BA2A4AEB6A
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 08:49:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72A0A4AEBA8
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 09:00:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239186AbiBIHs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 02:48:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43636 "EHLO
+        id S235744AbiBIIAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 03:00:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237374AbiBIHsz (ORCPT
+        with ESMTP id S235466AbiBIIAc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 02:48:55 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7E30C0613CB;
-        Tue,  8 Feb 2022 23:48:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644392939; x=1675928939;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UHxQ0y6ReTg5fAil+JKwO37ROUMI1ZBKsYOkDDrvDa0=;
-  b=JAKJTt7lQ3ErEl1627tkNZltivTKJCYgoSsISDIzydbmgqDXe5PULrxB
-   EIfJx62CVNN6HebphBDc/DnD+HsJW+d3nPGZvogpDXBV8gHgPFl9Ii5oC
-   V9atX26WowaahJXqHSYPu5Bl65ZAOx+vOKQKHd1I6rQkUyL4UDlZJQCH+
-   5AMwdrkE0Pw18bdf5ceUMNHldCzx4c9Bqo+gSo+8HqagjS7R0K0i0QKl6
-   Aih6qw0SL+oZrC1yCNFsgdtOFgEad2wDOD4fewyNeGRxOxZ1uNwtEp8KA
-   lEintS/aIaQq0l308ODwwZJQ4PqmwnNbg3BE4JYvp4vsfh/gfGY6I70fL
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="273682787"
-X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
-   d="scan'208";a="273682787"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 23:48:59 -0800
-X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
-   d="scan'208";a="525893576"
-Received: from gao-cwp.sh.intel.com (HELO gao-cwp) ([10.239.159.105])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 23:48:56 -0800
-Date:   Wed, 9 Feb 2022 15:59:51 +0800
-From:   Chao Gao <chao.gao@intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, pbonzini@redhat.com, kevin.tian@intel.com,
-        tglx@linutronix.de, John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Tony Lindgren <tony@atomide.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/4] KVM: Rename and move CPUHP_AP_KVM_STARTING to
- ONLINE section
-Message-ID: <20220209075950.GA7943@gao-cwp>
-References: <20220118064430.3882337-1-chao.gao@intel.com>
- <20220118064430.3882337-4-chao.gao@intel.com>
- <YgMLBYl7P1jFA2xe@google.com>
+        Wed, 9 Feb 2022 03:00:32 -0500
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92B88C05CB80;
+        Wed,  9 Feb 2022 00:00:35 -0800 (PST)
+Received: from g550jk.localnet (84-115-212-237.cable.dynamic.surfer.at [84.115.212.237])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 44725CDFCA;
+        Wed,  9 Feb 2022 08:00:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1644393634; bh=4FXw/m0qzG12tweb/SpzqvxhvTalonOAWhiKiVfi+U0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=vDuyTleEJgBCbkmvWKcbLvpyCp7hBGTI4BZVTpm7IdRqrvDBL3nRGisMJOhn+8xx8
+         jEDoW8C60Y6xIXcsExCaeXbtKPgfptE4EhsPU3EyZwqcbiBFFDcxUzg/VQNQQTWd58
+         zC1MtpWI0VpmkObfSvsUWRKjxD5e1W1zxbq+R54Q=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     Jack Matthews <jm5112356@gmail.com>
+Cc:     jm5112356@gmail.com, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ARM: dts: qcom: pm8226: add node for RTC
+Date:   Wed, 09 Feb 2022 09:00:33 +0100
+Message-ID: <3306547.mvXUDI8C0e@g550jk>
+In-Reply-To: <20220209052929.651881-1-jm5112356@gmail.com>
+References: <20220209052929.651881-1-jm5112356@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YgMLBYl7P1jFA2xe@google.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 09, 2022 at 12:29:57AM +0000, Sean Christopherson wrote:
->On Tue, Jan 18, 2022, Chao Gao wrote:
->> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
->> index 148f7169b431..528741601122 100644
->> --- a/virt/kvm/kvm_main.c
->> +++ b/virt/kvm/kvm_main.c
->> @@ -4856,13 +4856,25 @@ static void hardware_enable_nolock(void *junk)
->>  	}
->>  }
->>  
->> -static int kvm_starting_cpu(unsigned int cpu)
->> +static int kvm_online_cpu(unsigned int cpu)
->>  {
->> +	int ret = 0;
->> +
->>  	raw_spin_lock(&kvm_count_lock);
->> -	if (kvm_usage_count)
->> +	/*
->> +	 * Abort the CPU online process if hardware virtualization cannot
->> +	 * be enabled. Otherwise running VMs would encounter unrecoverable
->> +	 * errors when scheduled to this CPU.
->> +	 */
->> +	if (kvm_usage_count) {
->
->
->>  		hardware_enable_nolock(NULL);
->> +		if (atomic_read(&hardware_enable_failed)) {
->
->This needs:
->
->		atomic_set(&hardware_enable_failed, 0);
->
->otherwise failure to online one CPU will prevent onlining other non-broken CPUs.
->It's probably worth adding a WARN_ON_ONCE above this too, e.g.
+Hi Jack,
 
-Thanks. All your comments to this series make sense. I just post a revised
-version.
+On Mittwoch, 9. Februar 2022 06:29:28 CET Jack Matthews wrote:
+> Add a node for PM8226's real time clock.
+> 
+> Signed-off-by: Jack Matthews <jm5112356@gmail.com>
+> ---
+>  arch/arm/boot/dts/qcom-pm8226.dtsi | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/qcom-pm8226.dtsi
+> b/arch/arm/boot/dts/qcom-pm8226.dtsi index 04d070d98f97..ecc38ab1dc4b
+> 100644
+> --- a/arch/arm/boot/dts/qcom-pm8226.dtsi
+> +++ b/arch/arm/boot/dts/qcom-pm8226.dtsi
+> @@ -17,6 +17,13 @@ pwrkey@800 {
+>  			bias-pull-up;
+>  		};
+> 
+> +		rtc@6000 {
+
+Please keep the nodes sorted by address, so don't put @6000 between @800 and 
+@1000 please ;)
+
+Regards
+Luca
+
+> +			compatible = "qcom,pm8941-rtc";
+> +			reg = <0x6000>, <0x6100>;
+> +			reg-names = "rtc", "alarm";
+> +			interrupts = <0x0 0x61 0x1 
+IRQ_TYPE_EDGE_RISING>;
+> +		};
+> +
+>  		smbb: charger@1000 {
+>  			compatible = "qcom,pm8226-charger";
+>  			reg = <0x1000>;
+
+
+
+

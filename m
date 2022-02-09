@@ -2,206 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A72EA4AF31C
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 14:42:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C568C4AF322
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 14:43:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234338AbiBINmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 08:42:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34832 "EHLO
+        id S234375AbiBINm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 08:42:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233642AbiBINmp (ORCPT
+        with ESMTP id S234369AbiBINmy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 08:42:45 -0500
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E3CEC0613C9;
-        Wed,  9 Feb 2022 05:42:48 -0800 (PST)
+        Wed, 9 Feb 2022 08:42:54 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 880F2C0613C9;
+        Wed,  9 Feb 2022 05:42:54 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id n8so1499197wmk.3;
+        Wed, 09 Feb 2022 05:42:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1644414168; x=1675950168;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=ah1QRhwUGWPd0/YL2BGoTuq+YFwA+ZsHMG7MjzrAM0c=;
-  b=KqPIv1KJr4npF2QuHeHaVeli+cXeTISJLZAZQYb5XpvjhB8Ew6foS0nQ
-   ppOPnV90sekjh/HaJv5PCmKx7h6Gdahz67R/rFdpsQMARfmQGJm2Aa/dW
-   LBKwnK/fdlR2lPsGIu+5fa2cQ8C0a6DQQB758R4MLhz0zl/h8Y2wNNe9t
-   8=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 09 Feb 2022 05:42:48 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 05:42:47 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Wed, 9 Feb 2022 05:42:47 -0800
-Received: from [10.216.41.35] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Wed, 9 Feb 2022
- 05:42:43 -0800
-Subject: Re: [PATCH v2 1/3] arm64: dts: qcom: sc7280: Add pinmux for I2S
- speaker and Headset
-To:     Stephen Boyd <swboyd@chromium.org>, <agross@kernel.org>,
-        <bjorn.andersson@linaro.org>, <devicetree@vger.kernel.org>,
-        <dianders@chromium.org>, <judyhsiao@chromium.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <robh+dt@kernel.org>, <rohitkr@codeaurora.org>,
-        <srinivas.kandagatla@linaro.org>
-CC:     Venkata Prasad Potturu <quic_potturu@quicinc.com>
-References: <1644334454-16719-1-git-send-email-quic_srivasam@quicinc.com>
- <1644334454-16719-2-git-send-email-quic_srivasam@quicinc.com>
- <CAE-0n50PAtGfvHXjNrvQYe6edNEfJvEc1uYZFUeW2KHxn6fsBA@mail.gmail.com>
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Organization: Qualcomm
-Message-ID: <30805a84-b523-842c-d223-bc0d2043fa00@quicinc.com>
-Date:   Wed, 9 Feb 2022 19:12:40 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=YSwObgToM4kQkShxGRlE4JLVRXyN035rThcxif13VzA=;
+        b=OkHRuDgQwVHDaFa2UWL1r8LK6cbtlGI+crQyAALWgl0h2f9TP3qdmzNn3QsY+MfgGN
+         0b/rGu9nMf2WpGk78FU38nqihLnjuaokRaDAUZ6fN93AQuGwn4WLM6PcZVf2gGeHq8zG
+         rgmJ2NlUi1OCwtuDIrtLsjlSKuPGpHGRdbTPH4dATJY6hO4cmnqwxoNvACJ53K6evnv2
+         /UQn0Ivd8H0jo/A9g0UyQr8csk1Q9QsEb7pPKjQVmBKQa18TfKVXEZ5pxHQr2PRZIrqL
+         ORMHQfLK/PIDbkyoP3Nsro1UDM20wR4Bml7dIg+glp3kXJifR6awDXd4VK1refIrhXaR
+         fxWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=YSwObgToM4kQkShxGRlE4JLVRXyN035rThcxif13VzA=;
+        b=7P28akfqfXTrYnCiwWpmocEiNrejRYlJTx3P/qF98403g6NkCvII8Rf6lJzIawPICX
+         48T/pDMomwiTiidUynM3Utnygfm2DesLMg84H58IplSglHD6pYXTbF7FFEHJhboRpAfk
+         51DXt/X9x9bYvMY7CnQ+alfMTw2XZsecT+VBRPv3+XEUroTi6oQPWAT27S3RMYvp88KO
+         iqCkahpAk89eRItugbm7bini0wcRzVec5grM6Xy8lF/4rCdTGRMpDDIw+O0sPlBWwSQU
+         uUtLQSEZGIPggyVxYaClqrbU3ZtBT4MWJY/LQSjWfGaIZTR7FzJzWDtgbtAF/PYAh9yl
+         Zotw==
+X-Gm-Message-State: AOAM531DffLjQXuC/TbqlslY151g/WIVDDUUtkya4XjtaJbq2NhDk93e
+        FmRLRA9T/agyf0O73fMe6c4=
+X-Google-Smtp-Source: ABdhPJypFm6cL4U5dgqLRpJn5YYRjPRSd1zny+ieSxBrCf0f+XCVBug/Gc9F5C2zLYeoumwUbtAW4g==
+X-Received: by 2002:a7b:c749:: with SMTP id w9mr2084721wmk.149.1644414173043;
+        Wed, 09 Feb 2022 05:42:53 -0800 (PST)
+Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
+        by smtp.googlemail.com with ESMTPSA id o10sm3483320wrc.98.2022.02.09.05.42.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Feb 2022 05:42:52 -0800 (PST)
+Date:   Wed, 9 Feb 2022 14:42:50 +0100
+From:   Corentin Labbe <clabbe.montjoie@gmail.com>
+To:     Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+Cc:     davem@davemloft.net, herbert@gondor.apana.org.au,
+        krzysztof.kozlowski@canonical.com, robh+dt@kernel.org,
+        Corentin Labbe <clabbe@baylibre.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH] dt-bindings: crypto: convert rockchip-crypto to yaml
+Message-ID: <YgPE2qdHccJQm4mR@Red>
+References: <20220209124725.2080986-1-clabbe@baylibre.com>
+ <2571349.qrhAyUUNuM@diego>
 MIME-Version: 1.0
-In-Reply-To: <CAE-0n50PAtGfvHXjNrvQYe6edNEfJvEc1uYZFUeW2KHxn6fsBA@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2571349.qrhAyUUNuM@diego>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Le Wed, Feb 09, 2022 at 01:52:45PM +0100, Heiko Stübner a écrit :
+> Am Mittwoch, 9. Februar 2022, 13:47:25 CET schrieb Corentin Labbe:
+> > Convert rockchip-crypto to yaml.
+> > 
+> > Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+> > ---
+> >  .../bindings/crypto/rockchip-crypto.txt       | 28 --------
+> >  .../bindings/crypto/rockchip-crypto.yaml      | 64 +++++++++++++++++++
+> >  2 files changed, 64 insertions(+), 28 deletions(-)
+> >  delete mode 100644 Documentation/devicetree/bindings/crypto/rockchip-crypto.txt
+> >  create mode 100644 Documentation/devicetree/bindings/crypto/rockchip-crypto.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/crypto/rockchip-crypto.txt b/Documentation/devicetree/bindings/crypto/rockchip-crypto.txt
+> > deleted file mode 100644
+> > index 5e2ba385b8c9..000000000000
+> > --- a/Documentation/devicetree/bindings/crypto/rockchip-crypto.txt
+> > +++ /dev/null
+> > @@ -1,28 +0,0 @@
+> > -Rockchip Electronics And Security Accelerator
+> > -
+> > -Required properties:
+> > -- compatible: Should be "rockchip,rk3288-crypto"
+> > -- reg: Base physical address of the engine and length of memory mapped
+> > -       region
+> > -- interrupts: Interrupt number
+> > -- clocks: Reference to the clocks about crypto
+> > -- clock-names: "aclk" used to clock data
+> > -	       "hclk" used to clock data
+> > -	       "sclk" used to clock crypto accelerator
+> > -	       "apb_pclk" used to clock dma
+> > -- resets: Must contain an entry for each entry in reset-names.
+> > -	  See ../reset/reset.txt for details.
+> > -- reset-names: Must include the name "crypto-rst".
+> > -
+> > -Examples:
+> > -
+> > -	crypto: cypto-controller@ff8a0000 {
+> > -		compatible = "rockchip,rk3288-crypto";
+> > -		reg = <0xff8a0000 0x4000>;
+> > -		interrupts = <GIC_SPI 48 IRQ_TYPE_LEVEL_HIGH>;
+> > -		clocks = <&cru ACLK_CRYPTO>, <&cru HCLK_CRYPTO>,
+> > -			 <&cru SCLK_CRYPTO>, <&cru ACLK_DMAC1>;
+> > -		clock-names = "aclk", "hclk", "sclk", "apb_pclk";
+> > -		resets = <&cru SRST_CRYPTO>;
+> > -		reset-names = "crypto-rst";
+> > -	};
+> > diff --git a/Documentation/devicetree/bindings/crypto/rockchip-crypto.yaml b/Documentation/devicetree/bindings/crypto/rockchip-crypto.yaml
+> > new file mode 100644
+> > index 000000000000..392d89055398
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/crypto/rockchip-crypto.yaml
+> > @@ -0,0 +1,64 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/crypto/rockchip-crypto.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Rockchip Electronics And Security Accelerator
+> > +
+> > +maintainers:
+> > +  - Heiko Stuebner <heiko@sntech.de>
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: rockchip,rk3288-crypto
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +
+> > +  clocks:
+> > +    items:
+> > +      - description: clock data
+> > +      - description: clock data
+> > +      - description: clock crypto accelerator
+> > +      - description: clock dma
+> > +
+> > +  clock-names:
+> > +    items:
+> > +      - const: aclk
+> > +      - const: hclk
+> > +      - const: sclk
+> > +      - const: apb_pclk
+> > +
+> > +  resets:
+> > +    minItems: 1
+> > +
+> > +  reset-names:
+> > +    const: crypto-rst
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - interrupts
+> > +  - clocks
+> > +  - clock-names
+> > +  - resets
+> > +  - reset-names
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> 
+> Binding itself looks good.
+> 
+> But the constants below will probably trigger a compiler-error and
+> therefore Rob's bot.
+> 
+> You will need something like 
+> 
+>     #include <dt-bindings/clock/rk3399-cru.h>
+>     #include <dt-bindings/interrupt-controller/arm-gic.h>
+> 
+> here.
+> 
+> A "make ..... dt_binding_check" should show the issue and also
+> it going away with the right includes ;-)
+> 
+> Heiko
+> 
 
-On 2/9/2022 2:38 AM, Stephen Boyd wrote:
-Thanks for your time Stephen!!!
-> Quoting Srinivasa Rao Mandadapu (2022-02-08 07:34:12)
->> Add AMP enable node and pinmux for primary and secondary I2S
->> for SC7280 based platforms.
->>
->> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
->> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
->> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
->> ---
->>   arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 40 ++++++++++++++++++++++++++++++++
->>   arch/arm64/boot/dts/qcom/sc7280.dtsi     | 40 ++++++++++++++++++++++++++++++++
->>   2 files changed, 80 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
->> index d623d71..c7d6c46 100644
->> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
->> @@ -436,6 +436,39 @@
->>                  qcom,drive-strength = <3>;
->>          };
->>   };
-> Newline here
-Okay. will remove it.
->
->> +&pri_mi2s_data0 {
->> +       drive-strength = <6>;
->> +};
->> +
->> +&pri_mi2s_data1 {
->> +       drive-strength = <6>;
->> +};
->> +
->> +&pri_mi2s_mclk {
->> +       drive-strength = <6>;
->> +};
->> +
->> +&pri_mi2s_sclk {
->> +       drive-strength = <6>;
->> +};
->> +
->> +&pri_mi2s_ws {
->> +       drive-strength = <6>;
->> +};
->> +
->> +&sec_mi2s_data0 {
->> +       drive-strength = <6>;
->> +       bias-disable;
->> +};
->> +
->> +&sec_mi2s_sclk {
->> +       drive-strength = <6>;
->> +       bias-disable;
->> +};
->> +
->> +&sec_mi2s_ws {
->> +       drive-strength = <6>;
->> +};
-> Please sort these nodes alphabetically on node name.
-Okay.
->
->>   &qspi_cs0 {
->>          bias-disable;
->> @@ -491,6 +524,13 @@
->>   };
->>
->>   &tlmm {
->> +       amp_en: amp-en {
->> +               pins = "gpio63";
->> +               function = "gpio";
->> +               bias-disable;
-> Is there an external pull?
-I think no external pull. In trogdor mentioned bias-pull-down but you 
-suggested to remove it.
->
->> +               drive-strength = <2>;
->> +       };
->> +
->>          nvme_pwren: nvme-pwren {
->>                  function = "gpio";
->>          };
->> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
->> index 937c2e0..76e73e9 100644
->> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
->> @@ -3461,6 +3461,46 @@
->>                                  };
->>                          };
->>
->> +                       pri_mi2s_data0: pri-mi2s-data0 {
->> +                               pins = "gpio98";
->> +                               function = "mi2s0_data0";
->> +                       };
->> +
->> +                       pri_mi2s_data1: pri-mi2s-data1 {
->> +                               pins = "gpio99";
->> +                               function = "mi2s0_data1";
->> +                       };
->> +
->> +                       pri_mi2s_mclk: pri-mi2s-mclk {
->> +                               pins = "gpio96";
->> +                               function = "pri_mi2s";
->> +                       };
->> +
->> +                       pri_mi2s_sclk: pri-mi2s-sclk {
->> +                               pins = "gpio97";
->> +                               function = "mi2s0_sck";
->> +                       };
->> +
->> +                       pri_mi2s_ws: pri-mi2s-ws {
->> +                               pins = "gpio100";
->> +                               function = "mi2s0_ws";
->> +                       };
->> +
->> +                       sec_mi2s_data0: sec-mi2s-data0 {
->> +                               pins = "gpio107";
->> +                               function = "mi2s1_data0";
->> +                       };
->> +
->> +                       sec_mi2s_sclk: sec-mi2s-sclk {
->> +                               pins = "gpio106";
->> +                               function = "mi2s1_sck";
->> +                       };
->> +
->> +                       sec_mi2s_ws: sec-mi2s-ws {
->> +                               pins = "gpio108";
->> +                               function = "mi2s1_ws";
->> +                       };
-> Please sort these nodes alphabetically on node name.
-Okay.
+Right, I forgot to add this file in my "dt to check" via dt_binding_check, but the following make dtbs_check made me believe it was tested.
+
+I will send a v2 soon.
+
+Regards

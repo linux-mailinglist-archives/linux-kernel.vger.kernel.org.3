@@ -2,54 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF3384AF660
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:18:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20D534AF65C
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:18:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236665AbiBIQSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 11:18:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49682 "EHLO
+        id S236731AbiBIQSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 11:18:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236154AbiBIQRx (ORCPT
+        with ESMTP id S236165AbiBIQRx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 9 Feb 2022 11:17:53 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BB28C0613C9
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 08:17:56 -0800 (PST)
-Date:   Wed, 09 Feb 2022 16:17:53 -0000
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13919C061355
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 08:17:57 -0800 (PST)
+Date:   Wed, 09 Feb 2022 16:17:54 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1644423474;
+        s=2020; t=1644423475;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=/TtwJx9AVx6uukIol50AhI0AFPylO1cfq4nylzpatFw=;
-        b=YAe8Nk8d7JfRaoKS8wvjKTPuSDv//PJOnSWvYHWo889ddtpBUc+Wc9UNeTVAfKMsKvzDSv
-        bzlIt4Fe0NYTDLGShy9/js9+l0vNLKTVQFCIW++1+w3wDZLoeUkbKk3kxTUF1FRD1N91SL
-        21EkYSygk/cC2NPHrPgcaXebicrKHuplp/5IwiDxLEO3wfMLtoGTGscEHdJeC6+aUbjwDU
-        EUn6D2QOaDoPgbathXkDhOq5YpaO7ZsoAK3xYF9hZ1qLIvc8HJmpqXqW5V8Nq6dwrkSqJj
-        Jlaww0hmlErL+tiUmGrehrXTfsqduAiMCgvRsVLGtsFDowgTZi0RliiS1Obsyw==
+        bh=JE16wGRtYe7FISUqG//zgKuNklCMDzWrauzxs0rZDeE=;
+        b=a7bNXodLZBY0XTAFO2Pk0kOXqzXzN8+GElxj2J8t2c5ETZaMvtbl73CC7omWAt2Za0vso4
+        krwyqBfbkmeTq4YRP1D7GJDofqauH/o0/Nmr3o3UkSmIq7CjEgh1Fgh2LG6G6JqETJMCJc
+        gM2FxnrF1NQbDTAGyr8YBnt9ZnELWfFxAep0d3jOvbjrroG2PAlsQ75bc0mn3VjvwFrDC9
+        z6e2/mcPx7QFyN5Y3rcXGDsI7FLD74kkfWWj//YaeOQn/hkVBZleunKOvxc//6BuZVqAYk
+        Wkini0YthKNhedBJNd0ufanOiu0EaBIA+9smB7N6pI/aqJ+A9wiTz1XFfA8/ag==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1644423474;
+        s=2020e; t=1644423475;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=/TtwJx9AVx6uukIol50AhI0AFPylO1cfq4nylzpatFw=;
-        b=Tk/vPPp7o2ZKL33u8Pp888BFWzWn5hxnanP7GiL3pt+x64Vh2MFmkp6mn1EvmbfhZsiQvI
-        2KF9uklt1lEzcdCw==
+        bh=JE16wGRtYe7FISUqG//zgKuNklCMDzWrauzxs0rZDeE=;
+        b=QhgtXq8VKHp1Jx1ZP2Ervaj8PVD+hsqBeYaKnSZrqPHA9cBLXphlzgujMSdF0k2MuLOv3Z
+        ewsTOj5zJGdWQbAA==
 From:   "irqchip-bot for Marc Zyngier" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] gpio: tpmx86: Move PM device over to irq domain
-Cc:     Marc Zyngier <maz@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
-        tglx@linutronix.de
-In-Reply-To: <20220201120310.878267-10-maz@kernel.org>
-References: <20220201120310.878267-10-maz@kernel.org>
+Subject: [irqchip: irq/irqchip-next] gpio: rcar: Move PM device over to irq domain
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, tglx@linutronix.de
+In-Reply-To: <20220201120310.878267-9-maz@kernel.org>
+References: <20220201120310.878267-9-maz@kernel.org>
 MIME-Version: 1.0
-Message-ID: <164442347382.16921.7555196240601561130.tip-bot2@tip-bot2>
+Message-ID: <164442347471.16921.3227595274290721969.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,42 +67,43 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-Commit-ID:     924610607f191bee4379bc3775b0fd025ad7e922
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/924610607f191bee4379bc3775b0fd025ad7e922
+Commit-ID:     373d664b7d3babe1743f64746bc3c553ac23a1bd
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/373d664b7d3babe1743f64746bc3c553ac23a1bd
 Author:        Marc Zyngier <maz@kernel.org>
-AuthorDate:    Tue, 01 Feb 2022 12:03:07 
+AuthorDate:    Tue, 01 Feb 2022 12:03:06 
 Committer:     Marc Zyngier <maz@kernel.org>
-CommitterDate: Wed, 09 Feb 2022 13:36:54 
+CommitterDate: Wed, 09 Feb 2022 13:36:53 
 
-gpio: tpmx86: Move PM device over to irq domain
+gpio: rcar: Move PM device over to irq domain
 
 Move the reference to the device over to the irq domain.
 
 Signed-off-by: Marc Zyngier <maz@kernel.org>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
 Acked-by: Bartosz Golaszewski <brgl@bgdev.pl>
-Link: https://lore.kernel.org/r/20220201120310.878267-10-maz@kernel.org
+Link: https://lore.kernel.org/r/20220201120310.878267-9-maz@kernel.org
 ---
- drivers/gpio/gpio-tqmx86.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/gpio/gpio-rcar.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpio/gpio-tqmx86.c b/drivers/gpio/gpio-tqmx86.c
-index 5b10322..fa4bc74 100644
---- a/drivers/gpio/gpio-tqmx86.c
-+++ b/drivers/gpio/gpio-tqmx86.c
-@@ -281,7 +281,6 @@ static int tqmx86_gpio_probe(struct platform_device *pdev)
- 		u8 irq_status;
+diff --git a/drivers/gpio/gpio-rcar.c b/drivers/gpio/gpio-rcar.c
+index bd2e16d..3a76538 100644
+--- a/drivers/gpio/gpio-rcar.c
++++ b/drivers/gpio/gpio-rcar.c
+@@ -530,7 +530,6 @@ static int gpio_rcar_probe(struct platform_device *pdev)
  
- 		irq_chip->name = chip->label;
--		irq_chip->parent_device = &pdev->dev;
- 		irq_chip->irq_mask = tqmx86_gpio_irq_mask;
- 		irq_chip->irq_unmask = tqmx86_gpio_irq_unmask;
- 		irq_chip->irq_set_type = tqmx86_gpio_irq_set_type;
-@@ -316,6 +315,8 @@ static int tqmx86_gpio_probe(struct platform_device *pdev)
- 		goto out_pm_dis;
+ 	irq_chip = &p->irq_chip;
+ 	irq_chip->name = "gpio-rcar";
+-	irq_chip->parent_device = dev;
+ 	irq_chip->irq_mask = gpio_rcar_irq_disable;
+ 	irq_chip->irq_unmask = gpio_rcar_irq_enable;
+ 	irq_chip->irq_set_type = gpio_rcar_irq_set_type;
+@@ -552,6 +551,7 @@ static int gpio_rcar_probe(struct platform_device *pdev)
+ 		goto err0;
  	}
  
-+	irq_domain_set_pm_device(girq->domain, dev);
-+
- 	dev_info(dev, "GPIO functionality initialized with %d pins\n",
- 		 chip->ngpio);
- 
++	irq_domain_set_pm_device(gpio_chip->irq.domain, dev);
+ 	ret = devm_request_irq(dev, p->irq_parent, gpio_rcar_irq_handler,
+ 			       IRQF_SHARED, name, p);
+ 	if (ret) {

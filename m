@@ -2,103 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07DB54AF58D
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 16:41:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7049A4AF590
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 16:42:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236136AbiBIPlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 10:41:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55038 "EHLO
+        id S229593AbiBIPlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 10:41:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236177AbiBIPk6 (ORCPT
+        with ESMTP id S236177AbiBIPld (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 10:40:58 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2144AC0613CA;
-        Wed,  9 Feb 2022 07:40:59 -0800 (PST)
+        Wed, 9 Feb 2022 10:41:33 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C930C05CB89;
+        Wed,  9 Feb 2022 07:41:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644421259; x=1675957259;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ybIpsMmv2oQsujciJTHbw6FLtIsdAI/tnWcB5Lvr0nM=;
-  b=Bio9/O6aEtJH15JzT6gNHEb+eI0GM8j4b1gPHk2gBAzSvAp4k8OVRniS
-   OnY9O+UV9+A5kXCj6RCUKx39J8uH3+JRMAerq+sVT83Mcc0obtXweEqBw
-   scCb0TmnP8EJN1lE073hvI4yCafe7c3+GbNO5S1pkyaf9h8LJRbJGMENk
-   fLhkDrdI3OF8VG/MgJJwy2CCi4/5dhWFxo+e2GO4mA71KpRmlzkYQ3MEa
-   GGEtgNBaJeVLGQnL+iGx1oKzKcUQlLNiARSYE2vS/KGUG6Wc/iitk6J3a
-   cHrfZb961p452lrubEeuMhMtfnaAfnuXK8yxApT+4lOL1pZMzLg8YU+RM
+  t=1644421296; x=1675957296;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=nqAEzwP2CCzE4PuDlqHV3gy81D6zg7WpHFijeg3mZf8=;
+  b=DypwGKUp89RJcd+xcpeRpBJlKZ6nOVbGA5lwMshJ4hhMNS7DtsZB1/76
+   4v2AEKOHNFxfGIJCVRUG+nnFkaZTX/NLnHZY4kcC6LNGFANNrb+FAbER7
+   kz64AsnwnjbjpcTig4Qn06j+fvg9SLt2L1vUe4ZLEOBq8ML0fACpPNqCR
+   Zv3Tsk5rQmpCYmVd4SSizehLsoaMlwJp+5jd3yZWt6CEsK6wbJ5oSWXhn
+   M1SN04eFxrcYipYsEeuJ1XTSAcsLJE+lKYiLLTILJN9/Ed5u1RwkvjLEX
+   LpA6g1gvZHarXOGB8wapz9UfioYzCh6ln0OSoYd9OlckxNygr3dXi1K2a
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="248988099"
+X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="335631969"
 X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
-   d="scan'208";a="248988099"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 07:40:57 -0800
-X-ExtLoop1: 1
+   d="scan'208";a="335631969"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 07:41:02 -0800
 X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
-   d="scan'208";a="500003852"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 09 Feb 2022 07:40:53 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nHp5Q-0001ym-K7; Wed, 09 Feb 2022 15:40:52 +0000
-Date:   Wed, 9 Feb 2022 23:40:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: [ambarus:spi-nor/next 9/9] drivers/mtd/spi-nor/macronix.c:20:
- warning: This comment starts with '/**', but isn't a kernel-doc comment.
- Refer Documentation/doc-guide/kernel-doc.rst
-Message-ID: <202202092342.YwAYnHF4-lkp@intel.com>
+   d="scan'208";a="568271798"
+Received: from sanvery-mobl.amr.corp.intel.com (HELO [10.212.232.139]) ([10.212.232.139])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 07:41:02 -0800
+Message-ID: <69c0fc41-a5bd-fea9-43f6-4724368baf66@intel.com>
+Date:   Wed, 9 Feb 2022 07:40:59 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Jim Mattson <jmattson@google.com>
+Cc:     Like Xu <like.xu.linux@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Like Xu <likexu@tencent.com>,
+        Stephane Eranian <eranian@google.com>,
+        David Dunn <daviddunn@google.com>
+References: <20220117085307.93030-1-likexu@tencent.com>
+ <20220117085307.93030-3-likexu@tencent.com>
+ <20220202144308.GB20638@worktop.programming.kicks-ass.net>
+ <CALMp9eRBOmwz=mspp0m5Q093K3rMUeAsF3vEL39MGV5Br9wEQQ@mail.gmail.com>
+ <YgO/3usazae9rCEh@hirez.programming.kicks-ass.net>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCH kvm/queue v2 2/3] perf: x86/core: Add interface to query
+ perfmon_event_map[] directly
+In-Reply-To: <YgO/3usazae9rCEh@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ambarus/linux-0day spi-nor/next
-head:   89a4d99e9d41b68d34943980943207b58c433256
-commit: 89a4d99e9d41b68d34943980943207b58c433256 [9/9] mtd: spi-nor: macronix: Add support for mx66lm1g45g
-config: i386-randconfig-a003 (https://download.01.org/0day-ci/archive/20220209/202202092342.YwAYnHF4-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/ambarus/linux-0day/commit/89a4d99e9d41b68d34943980943207b58c433256
-        git remote add ambarus https://github.com/ambarus/linux-0day
-        git fetch --no-tags ambarus spi-nor/next
-        git checkout 89a4d99e9d41b68d34943980943207b58c433256
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/mtd/spi-nor/
+On 2/9/22 05:21, Peter Zijlstra wrote:
+> On Wed, Feb 02, 2022 at 02:35:45PM -0800, Jim Mattson wrote:
+>> 3) TDX is going to pull the rug out from under us anyway. When the TDX
+>> module usurps control of the PMU, any active host counters are going
+>> to stop counting. We are going to need a way of telling the host perf
+>> subsystem what's happening, or other host perf clients are going to
+>> get bogus data.
+> That's not acceptible behaviour. I'm all for unilaterally killing any
+> guest that does this.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I'm not sure where the "bogus data" comes or to what that refers
+specifically.  But, the host does have some level of control:
 
-All warnings (new ones prefixed by >>):
+> The host VMM controls whether a guest TD can use the performance
+> monitoring ISA using the TD’s ATTRIBUTES.PERFMON bit...
 
->> drivers/mtd/spi-nor/macronix.c:20: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Macronix SPI NOR flash operations.
+So, worst-case, we don't need to threaten to kill guests.  The host can
+just deny access in the first place.
 
+I'm not too picky about what the PMU does, but the TDX behavior didn't
+seem *that* onerous to me.  The gory details are all in "On-TD
+Performance Monitoring" here:
 
-vim +20 drivers/mtd/spi-nor/macronix.c
+> https://www.intel.com/content/dam/develop/external/us/en/documents/tdx-module-1.0-public-spec-v0.931.pdf
 
-    18	
-    19	/**
-  > 20	 * Macronix SPI NOR flash operations.
-    21	 */
-    22	#define SPI_NOR_MX_READ_CR2_OP(ndummy, buf, ndata)			\
-    23		SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_READ_CR2, 0),		\
-    24			   SPI_MEM_OP_ADDR(4, SPINOR_REG_CR2_MODE_ADDR, 0),	\
-    25			   SPI_MEM_OP_DUMMY(ndummy, 0),				\
-    26			   SPI_MEM_OP_DATA_IN(ndata, buf, 0))
-    27	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+My read on it is that TDX host _can_ cede the PMU to TDX guests if it
+wants.  I assume the context-switching model Jim mentioned is along the
+lines of what TDX is already doing on host<->guest transitions.

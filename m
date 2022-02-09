@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17EEA4AE743
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 03:46:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAA834AE727
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 03:45:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242735AbiBICqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 21:46:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44794 "EHLO
+        id S1344891AbiBICo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 21:44:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238304AbiBIArE (ORCPT
+        with ESMTP id S241003AbiBIAsJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 19:47:04 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A1C0C061576;
-        Tue,  8 Feb 2022 16:47:04 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id a11-20020a17090a740b00b001b8b506c42fso3640519pjg.0;
-        Tue, 08 Feb 2022 16:47:04 -0800 (PST)
+        Tue, 8 Feb 2022 19:48:09 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 544AFC061576;
+        Tue,  8 Feb 2022 16:48:08 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id y5so1405060pfe.4;
+        Tue, 08 Feb 2022 16:48:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=lQBeYPP3NnoU0nAcxubYc/fkF2bkRNl0GYFbA4mk8ZU=;
-        b=OufpY1qBhQPYKc9mNTnWn90fki/xDDQ3xfTi7TPwURnoUuuoTGxiZ9aJIYK4EZcxjq
-         Dt+qVDsIPeZQWPtUgc7sxRPoq+OrNoKZM8/V/KSBR8wHBWKU9rTArB7LSFD3C9pxt1G9
-         mzghIJ/3sCXuCgtp6VQwq9bSrpJ+0Mo/ndSYdB3kR/bVeInr/FH2twCxPeAFeYcTotC4
-         uIhDYsblK86LtMU8LXm+RPbLg5HAsIjQuM97uu4XTZtWY4v8pHqytH+YJrm+aGk/eeuz
-         yfHytX8BIpriEDLMO2ots5x3HNgxvU/6rRYc9aYFzW6TAy9ZnbmUal/KO8ttkz5pBQKC
-         3w5g==
+        bh=DxejLyJZOr+Wj9kJP5Bh3+D+UCu71YvuxzkpYt5n3nQ=;
+        b=ArHH/2BI46pSXLM93jBgG29wqGQ8UCztyzoxY8wYh+tDQ+LWbFQO4mEOozYkwuhLD0
+         ct1V56llS6x6hlyWQWOT/Mrs2LCthjkG66S6QankTK071FrAmUZbYc5H1WMwk4HTKG0x
+         JQvJhNgc13yjToQM4r0cL9SH9qrG2oON+rEge6jK7WYIpaqT3AlnZsSU7qgDEXzfpSMz
+         3jXCd+k5ob9o9VE2/RHIvYLL2jgm0DLwp0LSZYWzF4+RKmmt0oX3u44EvSRmR6hxRWLC
+         0rPspknfR4ed4C8X3m0lpDx+522dO01k9EpahIaQuIwMnL2XypDlXwmYWAkSxnjCmhjI
+         laWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=lQBeYPP3NnoU0nAcxubYc/fkF2bkRNl0GYFbA4mk8ZU=;
-        b=fw1+yHaF+ERoypJwTTCVmVE9u3vWi9agDvCB+iC1H7PpGht3ZGhn1BrR0BvfYdcl8w
-         L4jDQy7qDae88rhnsqrNykt24MUNYi5HG6ZL/823w8vll45VjVl5MrTw6JMSOF6m19nF
-         4cue5jqZLAv/JOer7yCQBu9LFdLuTNJ+ONSg5/AplstCzXQbrJoMDs83V333UEdr6BJ8
-         x+LYwwRKaJQ9EUPktg0vUv2ajtbUppqThi/CHINfra5UYAkltL+sxpsrzKZQwKZWjdwU
-         qf6wzGU/OeGqacRTS/+3vSBwtQv7/bmGdwM0O5T8pFF3m+CU+QhrIQuZFClqXHarQzmc
-         5V1A==
-X-Gm-Message-State: AOAM530ydzJKimwQVB8JFjZZSQDjy7fngalhMcIHJ8zIEYEIPQzyHi1b
-        UxPXzyoQQMLIxMV00AJ7w8Nduc77nRM=
-X-Google-Smtp-Source: ABdhPJx8Yk0nRxg3jcilweQYnJwaZcdG071f3ShvgtMH2GzIudEZAehF3vdI9wnlrXRRxLi1rxAliw==
-X-Received: by 2002:a17:90a:ad81:: with SMTP id s1mr652078pjq.194.1644367623817;
-        Tue, 08 Feb 2022 16:47:03 -0800 (PST)
+        bh=DxejLyJZOr+Wj9kJP5Bh3+D+UCu71YvuxzkpYt5n3nQ=;
+        b=UXRQIHHkYyROjIQK2bjT+JXKFmvfEGds3R6839psyHFgePfEFobjhn8kSClioe3igm
+         f+bF22p1uZLm0+Der4VLYW0u3VGft8EnCWPKqmq65tipyfkak0zLyCYiZ1s+HAJ4Txr/
+         ve72MbWH9SyWwaGkgKbdx0CJ/JBQXqRcLfruzjyuXn8GC7yJNGr4p/Y9jtdmyQtcPWiM
+         VZl8OX7Tew4J2ye+Uojh3+LTaHVs9a+iI1n+hdjJHjD7xcaPXe9SBnD5Q8KgiAMtWgFa
+         KEPTNsfyu7EZJq2Yss70bTngfLBocAbL/OOkW2N4211q3q0jsL/0nx9ctHz8VngRApd3
+         KHuw==
+X-Gm-Message-State: AOAM531hd1nbpNwXVIVY+diJc8nx5ytiLSVFUeulao8ya/nKfl32T1yg
+        3YVZzpkfvOiU9+zLEY9pv34=
+X-Google-Smtp-Source: ABdhPJzphsSMkiPhojvBatZrHfBuu0GRELRnZ5kBq4wN8yungzUl2GYKsMC8I3TevIAcEVFsPd27dA==
+X-Received: by 2002:a63:914b:: with SMTP id l72mr2989198pge.223.1644367687889;
+        Tue, 08 Feb 2022 16:48:07 -0800 (PST)
 Received: from localhost.localdomain (192.243.120.166.16clouds.com. [192.243.120.166])
-        by smtp.gmail.com with ESMTPSA id s32sm10977754pfw.80.2022.02.08.16.47.00
+        by smtp.gmail.com with ESMTPSA id t9sm3826518pjg.44.2022.02.08.16.48.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 16:47:03 -0800 (PST)
+        Tue, 08 Feb 2022 16:48:07 -0800 (PST)
 From:   davidcomponentone@gmail.com
-To:     ketan.mukadam@broadcom.com
-Cc:     davidcomponentone@gmail.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yang Guang <yang.guang5@zte.com.cn>,
+To:     jejb@linux.ibm.com
+Cc:     davidcomponentone@gmail.com, martin.petersen@oracle.com,
+        yang.guang5@zte.com.cn, bvanassche@acm.org,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] scsi: be2iscsi: replace snprintf with sysfs_emit
-Date:   Wed,  9 Feb 2022 08:46:51 +0800
-Message-Id: <610469dfb2cc5a4569c6b3c5105ea204b1a540b0.1644284406.git.yang.guang5@zte.com.cn>
+Subject: [PATCH] scsi: arcmsr: replace snprintf with sysfs_emit
+Date:   Wed,  9 Feb 2022 08:47:55 +0800
+Message-Id: <1c5ade32e6e60c94dd357c4a159df64a7e311459.1644283712.git.yang.guang5@zte.com.cn>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -73,13 +73,25 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 From: Yang Guang <yang.guang5@zte.com.cn>
 
 coccinelle report:
-./drivers/scsi/be2iscsi/be_mgmt.c:1251:9-17:
+./drivers/scsi/arcmsr/arcmsr_attr.c:297:8-16:
 WARNING: use scnprintf or sprintf
-./drivers/scsi/be2iscsi/be_mgmt.c:1145:8-16:
+./drivers/scsi/arcmsr/arcmsr_attr.c:273:8-16:
 WARNING: use scnprintf or sprintf
-./drivers/scsi/be2iscsi/be_mgmt.c:1164:8-16:
+./drivers/scsi/arcmsr/arcmsr_attr.c:285:8-16:
 WARNING: use scnprintf or sprintf
-./drivers/scsi/be2iscsi/be_mgmt.c:1280:8-16:
+./drivers/scsi/arcmsr/arcmsr_attr.c:261:8-16:
+WARNING: use scnprintf or sprintf
+./drivers/scsi/arcmsr/arcmsr_attr.c:374:8-16:
+WARNING: use scnprintf or sprintf
+./drivers/scsi/arcmsr/arcmsr_attr.c:309:8-16:
+WARNING: use scnprintf or sprintf
+./drivers/scsi/arcmsr/arcmsr_attr.c:348:8-16:
+WARNING: use scnprintf or sprintf
+./drivers/scsi/arcmsr/arcmsr_attr.c:335:8-16:
+WARNING: use scnprintf or sprintf
+./drivers/scsi/arcmsr/arcmsr_attr.c:361:8-16:
+WARNING: use scnprintf or sprintf
+./drivers/scsi/arcmsr/arcmsr_attr.c:322:8-16:
 WARNING: use scnprintf or sprintf
 
 Use sysfs_emit instead of scnprintf or sprintf makes more sense.
@@ -88,59 +100,111 @@ Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: Yang Guang <yang.guang5@zte.com.cn>
 Signed-off-by: David Yang <davidcomponentone@gmail.com>
 ---
- drivers/scsi/be2iscsi/be_mgmt.c | 16 +++++++---------
- 1 file changed, 7 insertions(+), 9 deletions(-)
+ drivers/scsi/arcmsr/arcmsr_attr.c | 30 ++++++++++--------------------
+ 1 file changed, 10 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/scsi/be2iscsi/be_mgmt.c b/drivers/scsi/be2iscsi/be_mgmt.c
-index 4e899ec1477d..8b9ace2b3fd3 100644
---- a/drivers/scsi/be2iscsi/be_mgmt.c
-+++ b/drivers/scsi/be2iscsi/be_mgmt.c
-@@ -1142,7 +1142,7 @@ ssize_t
- beiscsi_drvr_ver_disp(struct device *dev, struct device_attribute *attr,
- 		       char *buf)
+diff --git a/drivers/scsi/arcmsr/arcmsr_attr.c b/drivers/scsi/arcmsr/arcmsr_attr.c
+index baeb5e795690..e66d761926e9 100644
+--- a/drivers/scsi/arcmsr/arcmsr_attr.c
++++ b/drivers/scsi/arcmsr/arcmsr_attr.c
+@@ -258,8 +258,7 @@ static ssize_t
+ arcmsr_attr_host_driver_version(struct device *dev,
+ 				struct device_attribute *attr, char *buf)
  {
--	return snprintf(buf, PAGE_SIZE, BE_NAME "\n");
-+	return sysfs_emit(buf, BE_NAME "\n");
+-	return snprintf(buf, PAGE_SIZE,
+-			"%s\n",
++	return sysfs_emit(buf, "%s\n",
+ 			ARCMSR_DRIVER_VERSION);
  }
  
- /**
-@@ -1161,7 +1161,7 @@ beiscsi_fw_ver_disp(struct device *dev, struct device_attribute *attr,
- 	struct Scsi_Host *shost = class_to_shost(dev);
- 	struct beiscsi_hba *phba = iscsi_host_priv(shost);
- 
--	return snprintf(buf, PAGE_SIZE, "%s\n", phba->fw_ver_str);
-+	return sysfs_emit(buf, "%s\n", phba->fw_ver_str);
+@@ -270,8 +269,7 @@ arcmsr_attr_host_driver_posted_cmd(struct device *dev,
+ 	struct Scsi_Host *host = class_to_shost(dev);
+ 	struct AdapterControlBlock *acb =
+ 		(struct AdapterControlBlock *) host->hostdata;
+-	return snprintf(buf, PAGE_SIZE,
+-			"%4d\n",
++	return sysfs_emit(buf, "%4d\n",
+ 			atomic_read(&acb->ccboutstandingcount));
  }
  
- /**
-@@ -1248,16 +1248,14 @@ beiscsi_adap_family_disp(struct device *dev, struct device_attribute *attr,
- 	case BE_DEVICE_ID1:
- 	case OC_DEVICE_ID1:
- 	case OC_DEVICE_ID2:
--		return snprintf(buf, PAGE_SIZE,
--				"Obsolete/Unsupported BE2 Adapter Family\n");
-+		return sysfs_emit(buf, "Obsolete/Unsupported BE2 Adapter Family\n");
- 	case BE_DEVICE_ID2:
- 	case OC_DEVICE_ID3:
--		return snprintf(buf, PAGE_SIZE, "BE3-R Adapter Family\n");
-+		return sysfs_emit(buf, "BE3-R Adapter Family\n");
- 	case OC_SKH_ID1:
--		return snprintf(buf, PAGE_SIZE, "Skyhawk-R Adapter Family\n");
-+		return sysfs_emit(buf, "Skyhawk-R Adapter Family\n");
- 	default:
--		return snprintf(buf, PAGE_SIZE,
--				"Unknown Adapter Family: 0x%x\n", dev_id);
-+		return sysfs_emit(buf, "Unknown Adapter Family: 0x%x\n", dev_id);
- 	}
+@@ -282,8 +280,7 @@ arcmsr_attr_host_driver_reset(struct device *dev,
+ 	struct Scsi_Host *host = class_to_shost(dev);
+ 	struct AdapterControlBlock *acb =
+ 		(struct AdapterControlBlock *) host->hostdata;
+-	return snprintf(buf, PAGE_SIZE,
+-			"%4d\n",
++	return sysfs_emit(buf, "%4d\n",
+ 			acb->num_resets);
  }
  
-@@ -1277,7 +1275,7 @@ beiscsi_phys_port_disp(struct device *dev, struct device_attribute *attr,
- 	struct Scsi_Host *shost = class_to_shost(dev);
- 	struct beiscsi_hba *phba = iscsi_host_priv(shost);
+@@ -294,8 +291,7 @@ arcmsr_attr_host_driver_abort(struct device *dev,
+ 	struct Scsi_Host *host = class_to_shost(dev);
+ 	struct AdapterControlBlock *acb =
+ 		(struct AdapterControlBlock *) host->hostdata;
+-	return snprintf(buf, PAGE_SIZE,
+-			"%4d\n",
++	return sysfs_emit(buf, "%4d\n",
+ 			acb->num_aborts);
+ }
  
--	return snprintf(buf, PAGE_SIZE, "Port Identifier : %u\n",
-+	return sysfs_emit(buf, "Port Identifier : %u\n",
- 			phba->fw_config.phys_port);
+@@ -306,8 +302,7 @@ arcmsr_attr_host_fw_model(struct device *dev, struct device_attribute *attr,
+ 	struct Scsi_Host *host = class_to_shost(dev);
+ 	struct AdapterControlBlock *acb =
+ 		(struct AdapterControlBlock *) host->hostdata;
+-	return snprintf(buf, PAGE_SIZE,
+-			"%s\n",
++	return sysfs_emit(buf, "%s\n",
+ 			acb->firm_model);
+ }
+ 
+@@ -319,8 +314,7 @@ arcmsr_attr_host_fw_version(struct device *dev,
+ 	struct AdapterControlBlock *acb =
+ 			(struct AdapterControlBlock *) host->hostdata;
+ 
+-	return snprintf(buf, PAGE_SIZE,
+-			"%s\n",
++	return sysfs_emit(buf, "%s\n",
+ 			acb->firm_version);
+ }
+ 
+@@ -332,8 +326,7 @@ arcmsr_attr_host_fw_request_len(struct device *dev,
+ 	struct AdapterControlBlock *acb =
+ 		(struct AdapterControlBlock *) host->hostdata;
+ 
+-	return snprintf(buf, PAGE_SIZE,
+-			"%4d\n",
++	return sysfs_emit(buf, "%4d\n",
+ 			acb->firm_request_len);
+ }
+ 
+@@ -345,8 +338,7 @@ arcmsr_attr_host_fw_numbers_queue(struct device *dev,
+ 	struct AdapterControlBlock *acb =
+ 		(struct AdapterControlBlock *) host->hostdata;
+ 
+-	return snprintf(buf, PAGE_SIZE,
+-			"%4d\n",
++	return sysfs_emit(buf, "%4d\n",
+ 			acb->firm_numbers_queue);
+ }
+ 
+@@ -358,8 +350,7 @@ arcmsr_attr_host_fw_sdram_size(struct device *dev,
+ 	struct AdapterControlBlock *acb =
+ 		(struct AdapterControlBlock *) host->hostdata;
+ 
+-	return snprintf(buf, PAGE_SIZE,
+-			"%4d\n",
++	return sysfs_emit(buf, "%4d\n",
+ 			acb->firm_sdram_size);
+ }
+ 
+@@ -371,8 +362,7 @@ arcmsr_attr_host_fw_hd_channels(struct device *dev,
+ 	struct AdapterControlBlock *acb =
+ 		(struct AdapterControlBlock *) host->hostdata;
+ 
+-	return snprintf(buf, PAGE_SIZE,
+-			"%4d\n",
++	return sysfs_emit(buf, "%4d\n",
+ 			acb->firm_hd_channels);
  }
  
 -- 

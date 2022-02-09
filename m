@@ -2,100 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42EC64AE95F
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 06:38:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C925B4AE95E
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 06:38:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233303AbiBIFfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 00:35:07 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:37398 "EHLO
+        id S233586AbiBIFfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 00:35:14 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:45704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236417AbiBIFaG (ORCPT
+        with ESMTP id S230419AbiBIFeE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 00:30:06 -0500
-Received: from mail-qv1-xf42.google.com (mail-qv1-xf42.google.com [IPv6:2607:f8b0:4864:20::f42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12413C03C180;
-        Tue,  8 Feb 2022 21:30:10 -0800 (PST)
-Received: by mail-qv1-xf42.google.com with SMTP id o5so1009675qvm.3;
-        Tue, 08 Feb 2022 21:30:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=BaM2nun77Ox90ylhwBob4weqZHSsb78qbeuJ150+3wM=;
-        b=oW0NyvBN2TbhYrgNRdS2CWDkzWBELZWKx9Mw9NFWZGaqSHOA5FoFfs2knAaMqk+Lsx
-         rWxIjv9Iyqwq9jlvTY5/NQDha/Z1Su0Ia0QI5Osmsc5KCy/off+8Bx1faPgqljKPmZTD
-         Qw5doEehfyG9dYn1coZm9+VkgxjR8UFz1wUNTobVI6rz67FL/WZ02T4OjfLt8Fv3x3+M
-         h1XOEsxpo8V/i3WXYL3jWcMkicgJvrUWtbLB5PeNEdgKFPIvcOEO8LNR6O43/0psDnU7
-         xBn01RXAkkE1fRIeigAaFaoOgFf+r13IkC2zN/w1y0oF9K8hfQCkGl/Jgd2pGYEU8PMD
-         Qj6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=BaM2nun77Ox90ylhwBob4weqZHSsb78qbeuJ150+3wM=;
-        b=w0cArU7MPtrqg6GiJYt8Z5a4aF69CmvMWq/K8olYHMvF2zxC1gXDAvQ4WiAzRRo2pX
-         fRMgYDOdQMEEPPqyavuIhN2OZ435lLTPPg4vJOyXD28dOE1cBVJl2PsqB4aGSlFRvtwh
-         KbHR4VnjKlM/s+07pIotxiDjSQA0j5wb3yDfxaoe6pii+qGjX5v/DLELhr10dg6a3cXS
-         dwCGJfe/dC8Kmf3Hp51nTVoJBoJ1PLSwao0x+EfY21v/5V8VmuCsIIrGX+QSQIVgQOUH
-         JIm2Gn1IfhmK8dtzJD3jhhCTbrTYn6/fKPjY3Ln8dEChmFUaTtEwb1n5a0TBZ74p4wdw
-         23kg==
-X-Gm-Message-State: AOAM532/Xr0PS12m4lB+BA1NylfZUbvwFOEBsS98pcWLQxtXHwCEwUmW
-        eWmxBE+7hz0qV3ZhCjXFpdU=
-X-Google-Smtp-Source: ABdhPJxaXkYuErG/Usk8Th8d1w/eNR+TDPdBcWPz5mJUFFBM0jBbIzFtfCiDT7o7l4Yyvb0ydJVyDw==
-X-Received: by 2002:a05:6214:27ed:: with SMTP id jt13mr365729qvb.24.1644384606914;
-        Tue, 08 Feb 2022 21:30:06 -0800 (PST)
-Received: from lumia-dev.localdomain. (pool-96-225-98-253.nwrknj.fios.verizon.net. [96.225.98.253])
-        by smtp.googlemail.com with ESMTPSA id s1sm8712024qkp.40.2022.02.08.21.30.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 21:30:06 -0800 (PST)
-From:   Jack Matthews <jm5112356@gmail.com>
-Cc:     jm5112356@gmail.com, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM: dts: qcom: pm8226: add node for RTC
-Date:   Wed,  9 Feb 2022 05:29:28 +0000
-Message-Id: <20220209052929.651881-1-jm5112356@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 9 Feb 2022 00:34:04 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4E64C03C180
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 21:33:55 -0800 (PST)
+X-UUID: 3e4478ee8b9a48adad1dfc034d29a3c2-20220209
+X-UUID: 3e4478ee8b9a48adad1dfc034d29a3c2-20220209
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <mark-pk.tsai@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 203253098; Wed, 09 Feb 2022 13:33:53 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Wed, 9 Feb 2022 13:33:52 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 9 Feb 2022 13:33:51 +0800
+From:   Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+To:     <rostedt@goodmis.org>
+CC:     <matthias.bgg@gmail.com>, <akpm@linux-foundation.org>,
+        <mhiramat@kernel.org>, <vbabka@suse.cz>, <ahalaney@redhat.com>,
+        <wangkefeng.wang@huawei.com>, <linux@rasmusvillemoes.dk>,
+        <keescook@chromium.org>, <mark-pk.tsai@mediatek.com>,
+        <valentin.schneider@arm.com>, <peterz@infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <yj.chiang@mediatek.com>
+Subject: [PATCH] init: Use ktime_us_delta() to make initcall_debug log more precise
+Date:   Wed, 9 Feb 2022 13:33:50 +0800
+Message-ID: <20220209053350.15771-1-mark-pk.tsai@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a node for PM8226's real time clock.
+Use ktime_us_delta() to make the initcall_debug log more precise than
+right shifting the result of ktime_to_ns() by 10 bits.
 
-Signed-off-by: Jack Matthews <jm5112356@gmail.com>
+Signed-off-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
 ---
- arch/arm/boot/dts/qcom-pm8226.dtsi | 7 +++++++
- 1 file changed, 7 insertions(+)
+ init/main.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/arch/arm/boot/dts/qcom-pm8226.dtsi b/arch/arm/boot/dts/qcom-pm8226.dtsi
-index 04d070d98f97..ecc38ab1dc4b 100644
---- a/arch/arm/boot/dts/qcom-pm8226.dtsi
-+++ b/arch/arm/boot/dts/qcom-pm8226.dtsi
-@@ -17,6 +17,13 @@ pwrkey@800 {
- 			bias-pull-up;
- 		};
+diff --git a/init/main.c b/init/main.c
+index 65fa2e41a9c0..c8edcc3029b1 100644
+--- a/init/main.c
++++ b/init/main.c
+@@ -1246,15 +1246,11 @@ trace_initcall_start_cb(void *data, initcall_t fn)
+ static __init_or_module void
+ trace_initcall_finish_cb(void *data, initcall_t fn, int ret)
+ {
+-	ktime_t *calltime = (ktime_t *)data;
+-	ktime_t delta, rettime;
+-	unsigned long long duration;
++	ktime_t rettime, *calltime = (ktime_t *)data;
  
-+		rtc@6000 {
-+			compatible = "qcom,pm8941-rtc";
-+			reg = <0x6000>, <0x6100>;
-+			reg-names = "rtc", "alarm";
-+			interrupts = <0x0 0x61 0x1 IRQ_TYPE_EDGE_RISING>;
-+		};
-+
- 		smbb: charger@1000 {
- 			compatible = "qcom,pm8226-charger";
- 			reg = <0x1000>;
+ 	rettime = ktime_get();
+-	delta = ktime_sub(rettime, *calltime);
+-	duration = (unsigned long long) ktime_to_ns(delta) >> 10;
+ 	printk(KERN_DEBUG "initcall %pS returned %d after %lld usecs\n",
+-		 fn, ret, duration);
++		 fn, ret, (unsigned long long)ktime_us_delta(rettime, *calltime));
+ }
+ 
+ static ktime_t initcall_calltime;
 -- 
-2.25.1
+2.18.0
 

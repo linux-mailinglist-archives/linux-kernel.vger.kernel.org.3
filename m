@@ -2,105 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 998C84AF9F3
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 19:29:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2D254AFAB4
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 19:39:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239224AbiBIS3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 13:29:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48254 "EHLO
+        id S239833AbiBISjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 13:39:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239140AbiBIS3D (ORCPT
+        with ESMTP id S239972AbiBISi6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 13:29:03 -0500
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1CC8C05CB86;
-        Wed,  9 Feb 2022 10:29:06 -0800 (PST)
-Received: by mail-qv1-xf36.google.com with SMTP id p7so2502121qvk.11;
-        Wed, 09 Feb 2022 10:29:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=PzVf0KveynQIygGhQd/LrRGeBUE4pFRytDZ84NY3N/g=;
-        b=T6lGBSaL/3OruJFHgArFuER/e/PKIJfjSbyW1s3fjGFfTBagY1y00u4MiJqe/+IPac
-         RkWMrFjNgwPDoP5JIjd2OVBx32XHJzBvlKhkIZDRSiEOeP7e0HBrdhfBcPlKDjglZxu9
-         X8pIUptfBcq8jDUMwW4DHurgFuH3Vr74wtRD4lSlJe/Pu6jwoBbhVkMYi1NwM4+jkc6+
-         I+6OFzvjSLt67MJ7bvabe+vDect8gtjKrgR0CjWTbAok6RhplZ5RAbmHC8IUmS2BGrXH
-         KkDSPDdRIyhNsJG3LgnFzAyX3XArdZzhZous5FNCmWGy7qDZ+cdmJxAD7j9mfJDUi8Z3
-         7YGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=PzVf0KveynQIygGhQd/LrRGeBUE4pFRytDZ84NY3N/g=;
-        b=w7YkSCQyqaiGWfRTg7YnRrLT8NKCWMOft6Q0eaEYqzIa9ZpMM2FFjYf/0cK/f+MOLm
-         nTR7eaCHaMMYr6yoU8A68mcGYSktfoy214iIMZ5VkMF8OlbpWPtifOX9oDCPs9RXX2xR
-         kjtTgGLIcRbRWIwpcxhdlmdO58r1oSqbEGc1ugf6/bR0zbMYP1BR/GEe3oJsvdl40pZQ
-         H77WPcNN2lWZnXb5TR+GyY8AXSevG1qFeMAtUCapy0TdX5DaW9t7McoFdHsXeZ+b4Kdf
-         lhlQO6QoQp8B9zDEkV+wIkcdw3o0BTxndIFu0UbZgg5dhPqZDfxjsU98khf5SUIs/QL9
-         UwUQ==
-X-Gm-Message-State: AOAM5331WgdjDemvz6EUA7R/KX240QWOh0S9sJpCSwg9+2q5uOSSV+7H
-        b30tg8ZXYyv6IjuHWeGczU4=
-X-Google-Smtp-Source: ABdhPJyDVIivM6oORJ2ERX52QaSmjnCW422Y3k6n8aLbdRifSiUWu9R6XWlQWE7aVijGKenJFxoZww==
-X-Received: by 2002:ad4:5ec7:: with SMTP id jm7mr2559021qvb.46.1644431345933;
-        Wed, 09 Feb 2022 10:29:05 -0800 (PST)
-Received: from [192.168.1.201] (pool-108-18-137-133.washdc.fios.verizon.net. [108.18.137.133])
-        by smtp.googlemail.com with ESMTPSA id d6sm9209849qty.40.2022.02.09.10.29.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Feb 2022 10:29:05 -0800 (PST)
-Subject: Re: [PATCH] pinctrl: k210: Fix bias-pull-up
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org
-Cc:     Damien Le Moal <damien.lemoal@wdc.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@oracle.com>
-References: <20220209182822.640905-1-seanga2@gmail.com>
-From:   Sean Anderson <seanga2@gmail.com>
-Message-ID: <9e10e17b-f815-46be-eec8-246c9d827444@gmail.com>
-Date:   Wed, 9 Feb 2022 13:29:05 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        Wed, 9 Feb 2022 13:38:58 -0500
+X-Greylist: delayed 539 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Feb 2022 10:38:33 PST
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15877C03E97C;
+        Wed,  9 Feb 2022 10:38:32 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 578B63B44D6;
+        Wed,  9 Feb 2022 13:29:32 -0500 (EST)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id PvkRZioEQ2qz; Wed,  9 Feb 2022 13:29:31 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 959143B44D5;
+        Wed,  9 Feb 2022 13:29:31 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 959143B44D5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1644431371;
+        bh=+Zw/hovgsG1BmQcx6P8MQWbrVbn2r+dD1nEP9OsP7vM=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=d+/EJaPNp+fG2gPBRFh9aZtT/SzlY0BX9NyB3hkOcS9zHh3V1BO8Lz/3adWucY2QW
+         fmTuQ3YcN/KOYJrI8BuHL72b6g6lUEW6w4xwgAMoqSiW7w7szEM9zsL/eHioPgbpXt
+         BhOBvhBW78a6BZjb9dC5qSmzAh+B/y3sbfqKHplgFhF/QqJkHvfRrYlFNTh8PtgLE5
+         YuimU6VD1LdRv7w1yOFSszTZpzhDbxLS6XX6bIZpG6sh4sOKBDn+HUVj5k8p6VVtC1
+         gkcbUtZ/uVhNNHX3U8U1+Wcy3GCtGTDanpe09W6+vdOFPKH58JmcUWSnShPQC5H0Ee
+         EHG/4T/xZ8KSg==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id XNJjAuNwWaY3; Wed,  9 Feb 2022 13:29:31 -0500 (EST)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id 7E0593B4782;
+        Wed,  9 Feb 2022 13:29:31 -0500 (EST)
+Date:   Wed, 9 Feb 2022 13:29:31 -0500 (EST)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        rostedt <rostedt@goodmis.org>,
+        Byungchul Park <byungchul.park@lge.com>,
+        "Paul E. McKenney" <paul.mckenney@linaro.org>,
+        Radoslaw Burny <rburny@google.com>, Tejun Heo <tj@kernel.org>,
+        rcu <rcu@vger.kernel.org>, cgroups <cgroups@vger.kernel.org>,
+        linux-btrfs <linux-btrfs@vger.kernel.org>,
+        intel-gfx@lists.freedesktop.org
+Message-ID: <919214156.50301.1644431371345.JavaMail.zimbra@efficios.com>
+In-Reply-To: <24fe6a08-5931-8e8d-8d77-459388c4654e@redhat.com>
+References: <20220208184208.79303-1-namhyung@kernel.org> <20220209090908.GK23216@worktop.programming.kicks-ass.net> <24fe6a08-5931-8e8d-8d77-459388c4654e@redhat.com>
+Subject: Re: [RFC 00/12] locking: Separate lock tracepoints from
+ lockdep/lock_stat (v1)
 MIME-Version: 1.0
-In-Reply-To: <20220209182822.640905-1-seanga2@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4203 (ZimbraWebClient - FF96 (Linux)/8.8.15_GA_4203)
+Thread-Topic: locking: Separate lock tracepoints from lockdep/lock_stat (v1)
+Thread-Index: mgD4nhH5tY/jYF4873tct6XNo0H1KQ==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/9/22 1:28 PM, Sean Anderson wrote:
-> Using bias-pull-up would actually cause the pin to have its pull-down
-> enabled. Fix this.
-> 
-> Signed-off-by: Sean Anderson <seanga2@gmail.com>
-> ---
-> 
->   drivers/pinctrl/pinctrl-k210.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/pinctrl/pinctrl-k210.c b/drivers/pinctrl/pinctrl-k210.c
-> index 49e32684dbb2..1ad61b32ec88 100644
-> --- a/drivers/pinctrl/pinctrl-k210.c
-> +++ b/drivers/pinctrl/pinctrl-k210.c
-> @@ -527,7 +527,7 @@ static int k210_pinconf_set_param(struct pinctrl_dev *pctldev,
->   	case PIN_CONFIG_BIAS_PULL_UP:
->   		if (!arg)
->   			return -EINVAL;
-> -		val |= K210_PC_PD;
-> +		val |= K210_PC_PU;
->   		break;
->   	case PIN_CONFIG_DRIVE_STRENGTH:
->   		arg *= 1000;
-> 
+----- On Feb 9, 2022, at 1:19 PM, Waiman Long longman@redhat.com wrote:
 
-This should have
+> On 2/9/22 04:09, Peter Zijlstra wrote:
+>> On Tue, Feb 08, 2022 at 10:41:56AM -0800, Namhyung Kim wrote:
+>>
+>>> Eventually I'm mostly interested in the contended locks only and I
+>>> want to reduce the overhead in the fast path.  By moving that, it'd be
+>>> easy to track contended locks with timing by using two tracepoints.
+>> So why not put in two new tracepoints and call it a day?
+>>
+>> Why muck about with all that lockdep stuff just to preserve the name
+>> (and in the process continue to blow up data structures etc..). This
+>> leaves distros in a bind, will they enable this config and provide
+>> tracepoints while bloating the data structures and destroying things
+>> like lockref (which relies on sizeof(spinlock_t)), or not provide this
+>> at all.
+>>
+>> Yes, the name is convenient, but it's just not worth it IMO. It makes
+>> the whole proposition too much of a trade-off.
+>>
+>> Would it not be possible to reconstruct enough useful information from
+>> the lock callsite?
+>>
+> I second that as I don't want to see the size of a spinlock exceeds 4
+> bytes in a production system.
+> 
+> Instead of storing additional information (e.g. lock name) directly into
+> the lock itself. Maybe we can store it elsewhere and use the lock
+> address as the key to locate it in a hash table. We can certainly extend
+> the various lock init functions to do that. It will be trickier for
+> statically initialized locks, but we can probably find a way to do that too.
 
-Fixes: d4c34d09ab03 ("pinctrl: Add RISC-V Canaan Kendryte K210 FPIOA driver")
+If we go down that route, it would be nice if we can support a few different
+use-cases for various tracers out there.
+
+One use-case (a) requires the ability to query the lock name based on its address as key.
+For this a hash table is a good fit. This would allow tracers like ftrace to
+output lock names in its human-readable output which is formatted within the kernel.
+
+Another use-case (b) is to be able to "dump" the lock { name, address } tuples
+into the trace stream (we call this statedump events in lttng), and do the
+translation from address to name at post-processing. This simply requires
+that this information is available for iteration for both the core kernel
+and module locks, so the tracer can dump this information on trace start
+and module load.
+
+Use-case (b) is very similar to what is done for the kernel tracepoints. Based
+on this, implementing the init code that iterates on those sections and populates
+a hash table for use-case (a) should be easy enough.
+
+Thanks,
+
+Mathieu
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com

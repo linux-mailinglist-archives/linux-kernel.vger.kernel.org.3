@@ -2,102 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25D284AEAB7
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 08:04:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65A444AEABA
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 08:04:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235734AbiBIHEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 02:04:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59018 "EHLO
+        id S235792AbiBIHEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 02:04:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235596AbiBIHEK (ORCPT
+        with ESMTP id S235596AbiBIHEi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 02:04:10 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE184C0613CB;
-        Tue,  8 Feb 2022 23:04:13 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 8AF6A1F390;
-        Wed,  9 Feb 2022 07:04:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1644390252; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=I1UxFXVDdtsCDjZgHFf5AxR7egC3Pit8xnNYveVWhAc=;
-        b=j+9Jdm6onqPTFjKCVI/vgmxCixrmBCPIPSs9hcZJ6QhQyR2P2njU8D4k7eh+89C8Pm/AbO
-        yXN75K04SjBYTM7YPgq4xjd1Apn/J9pdlCslZ6oqIFXDF6GkxP4OQFbUoSQiE3D/pVFvst
-        iDB+sBufU64r0Ek4BR/FB4Aqrwfq9xc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1644390252;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=I1UxFXVDdtsCDjZgHFf5AxR7egC3Pit8xnNYveVWhAc=;
-        b=Jp+95xuu4T8ipI1FBSyp5W5LN9QQESji3skTAg1hN2dQc6d2qagkl1dRhZu0585/ic2+eI
-        faQEpSFsGgRBuXCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0149913487;
-        Wed,  9 Feb 2022 07:04:11 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id FNi2OWtnA2L0fQAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Wed, 09 Feb 2022 07:04:11 +0000
-Date:   Wed, 9 Feb 2022 08:04:10 +0100
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Terry Bowman <Terry.Bowman@amd.com>
-Cc:     linux@roeck-us.net, linux-watchdog@vger.kernel.org,
-        linux-i2c@vger.kernel.org, wsa@kernel.org,
-        andy.shevchenko@gmail.com, rafael.j.wysocki@intel.com,
-        linux-kernel@vger.kernel.org, wim@linux-watchdog.org,
-        rrichter@amd.com, thomas.lendacky@amd.com, sudheesh.mavila@amd.com,
-        Nehal-bakulchandra.Shah@amd.com, Basavaraj.Natikar@amd.com,
-        Shyam-sundar.S-k@amd.com, Mario.Limonciello@amd.com
-Subject: Re: [PATCH v4 0/9] i2c: piix4: Replace cd6h/cd7h port I/O accesses
- with MMIO accesses
-Message-ID: <20220209080410.1e7dddd9@endymion.delvare>
-In-Reply-To: <27e60021-30cb-3b1c-f429-2618bf891e5e@amd.com>
-References: <20220130184130.176646-1-terry.bowman@amd.com>
-        <20220208181114.180a99ba@endymion.delvare>
-        <4ae57999-0f23-7578-008d-2009bc36d46b@amd.com>
-        <20220208224653.6a62ba22@endymion.delvare>
-        <27e60021-30cb-3b1c-f429-2618bf891e5e@amd.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        Wed, 9 Feb 2022 02:04:38 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED99C0613CB
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 23:04:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644390282; x=1675926282;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=u8ruu3eizlEFYe7XXJfFj9y6REamWFcQJRgd8gx4IIk=;
+  b=e74xy43L7H4smtS7V+F6O7tHV+goRgA+BANgb+MuR5dxyeAjnriL1iNo
+   CsqosSdr7TXCMccMcYbEYHgNYx4KIV6pNQh6teOfBHapsymu195JyiQx5
+   mzDKxeTL7jq66sLTX8l2BAqs5BceWISEdfh8L+DMrXy6bD4oqKCIg1CDc
+   L+94VWeFavT/e6JA4V5aQncamkxO1we0ibJrYANkqrAoPMZAhztV3Y240
+   o0sfsFeLIGAJHoRcyJdoIUtnWTjGz74VdZEHdS2bfjWrF/rMs6ECx+pI7
+   f15QG13g21LOU4ydfaQ/3TT9Y6wXimYNLfOC7GpL8CHjMmIJwI2FNQPjs
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="249346239"
+X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
+   d="scan'208";a="249346239"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 23:04:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
+   d="scan'208";a="525878820"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 08 Feb 2022 23:04:31 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nHh1i-0001Np-EK; Wed, 09 Feb 2022 07:04:30 +0000
+Date:   Wed, 9 Feb 2022 15:04:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Pingfan Liu <kernelfans@gmail.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
+Subject: [ammarfaizi2-block:palmer/linux/fixes 6/6]
+ arch/riscv/kernel/cpu-hotplug.c:43:9: error: implicit declaration of
+ function 'numa_remove_cpu'; did you mean 'remove_cpu'?
+Message-ID: <202202091500.dMNAJXAU-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 8 Feb 2022 17:03:09 -0600, Terry Bowman wrote:
-> On 2/8/22 15:46, Jean Delvare wrote:
-> > If so, while there's indeed nothing to be done for the most recent
-> > systems where only MMIO access is possible, you may still need to
-> > enable MMIO access through legacy I/O if you try to use MMIO on
-> > chipsets where both are possible. I'm not sure what exactly where you
-> > set the limit. In the last patch you say that 0x51 is the first
-> > revision of the family 17h CPUs, but is family 17h the first where MMIO
-> > is available, or the first where legacy I/O isn't?
->
-> Family 17h, SMBus PCI ID >= 0x51 is the first where cd6h/cd7h port I/O is disabled. 
-> If SMBus PCI ID < 0x51 then cd6h/cd7h port I/O is used. 
+tree:   https://github.com/ammarfaizi2/linux-block palmer/linux/fixes
+head:   c3c94752087e789419be7024116c0a7b22883541
+commit: c3c94752087e789419be7024116c0a7b22883541 [6/6] riscv: cpu-hotplug: clear cpu from numa map when teardown
+config: riscv-randconfig-r042-20220209 (https://download.01.org/0day-ci/archive/20220209/202202091500.dMNAJXAU-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/c3c94752087e789419be7024116c0a7b22883541
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block palmer/linux/fixes
+        git checkout c3c94752087e789419be7024116c0a7b22883541
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
 
-OK, we are safe then :-)
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
--- 
-Jean Delvare
-SUSE L3 Support
+All errors (new ones prefixed by >>):
+
+   arch/riscv/kernel/cpu-hotplug.c: In function '__cpu_disable':
+>> arch/riscv/kernel/cpu-hotplug.c:43:9: error: implicit declaration of function 'numa_remove_cpu'; did you mean 'remove_cpu'? [-Werror=implicit-function-declaration]
+      43 |         numa_remove_cpu(cpu);
+         |         ^~~~~~~~~~~~~~~
+         |         remove_cpu
+   cc1: some warnings being treated as errors
+
+
+vim +43 arch/riscv/kernel/cpu-hotplug.c
+
+    24	
+    25	/*
+    26	 * __cpu_disable runs on the processor to be shutdown.
+    27	 */
+    28	int __cpu_disable(void)
+    29	{
+    30		int ret = 0;
+    31		unsigned int cpu = smp_processor_id();
+    32	
+    33		if (!cpu_ops[cpu] || !cpu_ops[cpu]->cpu_stop)
+    34			return -EOPNOTSUPP;
+    35	
+    36		if (cpu_ops[cpu]->cpu_disable)
+    37			ret = cpu_ops[cpu]->cpu_disable(cpu);
+    38	
+    39		if (ret)
+    40			return ret;
+    41	
+    42		remove_cpu_topology(cpu);
+  > 43		numa_remove_cpu(cpu);
+    44		set_cpu_online(cpu, false);
+    45		irq_migrate_all_off_this_cpu();
+    46	
+    47		return ret;
+    48	}
+    49	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

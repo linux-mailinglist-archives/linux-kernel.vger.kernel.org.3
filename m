@@ -2,67 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72A354AEA43
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 07:24:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E42C44AEA65
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 07:31:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235017AbiBIGYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 01:24:51 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:45930 "EHLO
+        id S233655AbiBIGbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 01:31:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233414AbiBIGXt (ORCPT
+        with ESMTP id S235882AbiBIG3R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 01:23:49 -0500
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF0F1E04EFD4
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 22:23:48 -0800 (PST)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 87E2668AFE; Wed,  9 Feb 2022 07:23:45 +0100 (CET)
-Date:   Wed, 9 Feb 2022 07:23:45 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Alistair Popple <apopple@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>, nouveau@lists.freedesktop.org,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
-        Linux MM <linux-mm@kvack.org>
-Subject: Re: [PATCH 7/8] mm: remove the extra ZONE_DEVICE struct page
- refcount
-Message-ID: <20220209062345.GB7739@lst.de>
-References: <20220207063249.1833066-1-hch@lst.de> <20220207063249.1833066-8-hch@lst.de> <CAPcyv4h_axDTmkZ35KFfCdzMoOp8V3dc6btYGq6gCj1OmLXM=g@mail.gmail.com>
+        Wed, 9 Feb 2022 01:29:17 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D23E02DFCD;
+        Tue,  8 Feb 2022 22:29:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644388161; x=1675924161;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=IbT91/fqiVPksbSJc2NP8Q4PbHBMZvsgMb4CiiQxRiA=;
+  b=DJdHFjWBtGJ/YqwGur1PuMotboSXOX+CNlStHTy6u5LJ/A5+4+wVtMs5
+   ewMrup5CSeewEFRuDz15HjHoo22uTKuvFLmGzR6neh33ghivBB5AeQ4sW
+   odrCoAbYE0EaGDMEg3gfPgL+gNTRvfoSf1Qo7Tcmf9vgYFRjDxvhcgDFh
+   gA7TsO9StQK/ViRLxLdlaoG6TUbrsqedeoW0+e2nMIyKdlp44e+ERFxGl
+   gcht7GE+yu8ohOa7Jz7hFDzTqd2uu2OwRpXXUD1pI+C7rNZATFJi6T1d2
+   zxdh7vrFiy2qHKg0Tw1wSzTGeaPUJOSWGbeNOV0hs3qPzUnBRxy9/cSEs
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="312428037"
+X-IronPort-AV: E=Sophos;i="5.88,354,1635231600"; 
+   d="scan'208";a="312428037"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 22:29:14 -0800
+X-IronPort-AV: E=Sophos;i="5.88,354,1635231600"; 
+   d="scan'208";a="540958500"
+Received: from duan-server-s2600bt.bj.intel.com ([10.240.192.123])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 22:29:12 -0800
+From:   Zhenzhong Duan <zhenzhong.duan@intel.com>
+To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com,
+        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org
+Subject: [PATCH] KVM: x86: Fix emulation in writing cr8
+Date:   Wed,  9 Feb 2022 14:24:28 +0800
+Message-Id: <20220209062428.332295-1-zhenzhong.duan@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPcyv4h_axDTmkZ35KFfCdzMoOp8V3dc6btYGq6gCj1OmLXM=g@mail.gmail.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 08, 2022 at 07:30:11PM -0800, Dan Williams wrote:
-> Interesting. I had expected that to really fix the refcount problem
-> that fs/dax.c would need to start taking real page references as pages
-> were added to a mapping, just like page cache.
+In emulation of writing to cr8, one of the lowest four bits in TPR[3:0]
+is kept.
 
-I think we should do that eventually.  But I think this series that
-just attacks the device private type and extends to the device coherent
-and p2p enhacements is a good first step to stop the proliferation of
-the one off refcount and to allow to deal with the fsdax pages in another
-more focuessed series.
+According to Intel SDM 10.8.6.1(baremetal scenario):
+"APIC.TPR[bits 7:4] = CR8[bits 3:0], APIC.TPR[bits 3:0] = 0";
+
+and SDM 28.3(use TPR shadow):
+"MOV to CR8. The instruction stores bits 3:0 of its source operand into
+bits 7:4 of VTPR; the remainder of VTPR (bits 3:0 and bits 31:8) are
+cleared.";
+
+so in KVM emulated scenario, clear TPR[3:0] to make a consistent behavior
+as in other scenarios.
+
+This doesn't impact evaluation and delivery of pending virtual interrupts
+because processor does not use the processor-priority sub-class to
+determine which interrupts to delivery and which to inhibit.
+
+Signed-off-by: Zhenzhong Duan <zhenzhong.duan@intel.com>
+---
+ arch/x86/kvm/lapic.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+index d7e6fde82d25..306025db9959 100644
+--- a/arch/x86/kvm/lapic.c
++++ b/arch/x86/kvm/lapic.c
+@@ -2242,10 +2242,7 @@ void kvm_set_lapic_tscdeadline_msr(struct kvm_vcpu *vcpu, u64 data)
+ 
+ void kvm_lapic_set_tpr(struct kvm_vcpu *vcpu, unsigned long cr8)
+ {
+-	struct kvm_lapic *apic = vcpu->arch.apic;
+-
+-	apic_set_tpr(apic, ((cr8 & 0x0f) << 4)
+-		     | (kvm_lapic_get_reg(apic, APIC_TASKPRI) & 4));
++	apic_set_tpr(vcpu->arch.apic, (cr8 & 0x0f) << 4);
+ }
+ 
+ u64 kvm_lapic_get_cr8(struct kvm_vcpu *vcpu)
+-- 
+2.25.1
+

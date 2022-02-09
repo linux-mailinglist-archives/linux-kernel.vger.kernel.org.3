@@ -2,99 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 964C74AF7EA
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 18:14:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D9224AF7EE
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 18:16:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237888AbiBIROq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 12:14:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46946 "EHLO
+        id S236162AbiBIRQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 12:16:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231834AbiBIROl (ORCPT
+        with ESMTP id S231834AbiBIRQJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 12:14:41 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 979F2C0613C9;
-        Wed,  9 Feb 2022 09:14:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C925DCE217B;
-        Wed,  9 Feb 2022 17:14:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51C0EC340E7;
-        Wed,  9 Feb 2022 17:14:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644426881;
-        bh=KmQnaxQsd8tWRUE0dgiUF3bbTMXeLTiG0S5CMRklXOk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iX3QFJXURiy/BYT/P/50Xt/nWPtP2qjDvG/MPzv8IELY2ZuIlrMTFNbPcCsCixe68
-         faT9XXs7PvSWUhPJ8iwW5DimfCHFmcTDQ+qqmO4ao0T9eLloCUOFZTA/I3202tc9X6
-         gad1RZrRNVSvZSjGnY8PEXcrIvrq671FjF7v53mXfeqeqDCE2lMG4MNx/NKPfpSays
-         GnmfTS8tUarC7ZPKZNdjhIQEBEo20LfEWGP0WVR0L7x165sukRV/nayc4WwSLEoPGc
-         90mcfPoEZKi7KpSXFvF/WAPMCveTUW+oVm9c7/8XEWGoR7DNfTUy4RVvu1EyDQC7uM
-         pfm+sNyuKrKGA==
-Date:   Wed, 9 Feb 2022 17:14:36 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@collabora.com>
-Cc:     Sanjay R Mehta <sanju.mehta@amd.com>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>
-Subject: Re: [PATCH 3/3] spi: amd: Add support for version AMDI0062
-Message-ID: <YgP2fIbASQym9sUP@sirena.org.uk>
-References: <20220209165733.43134-1-andrealmeid@collabora.com>
- <20220209165733.43134-4-andrealmeid@collabora.com>
+        Wed, 9 Feb 2022 12:16:09 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A4EBC0613C9
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 09:16:13 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id i30so5388624pfk.8
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 09:16:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=OS/vYOaEcHltj8pU0RU1HWmOJM4B0kiaQM88fHj6Yl0=;
+        b=hmlScaG/MxxcGv/Ce3Q4Oi9usYARksWWYafzDMafamI2qghv/S0/M4+43akD8WMij2
+         efXyMsqUtMgbmaz06fwBdZIlcl4RcHgu0W4zBpPwECH/FmNeJsFmH1nNhiwLwO0kFnRd
+         3iYQgsDZT4n3wg9BplUVExDHt5mw2okNzzUyebjeCYcuCTB+TPqZr9JcO+vp4eLdIH2V
+         s6nzk6+CA+HLokzqv0s96cGozIqi0Su0pNUGwIeo4ehZX6IuMnjbY7ju6Kg/1al0JiuP
+         V9oiitH4w/5+6jSVY14WjRjYFTINblj83m87TfnsjlbkgXEXSRsthZ5rIrJF7/Mpig2t
+         ciUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=OS/vYOaEcHltj8pU0RU1HWmOJM4B0kiaQM88fHj6Yl0=;
+        b=5AAdzMSuy569Q2np4u4oWAfkHoltWEA5mv5zgRixFCWkLpHvo7lt8B+aIuHEg5zDfo
+         PE6r/A5rCWtz0xPuOICzl1AI4N87JhxDtaGpxoL/0XluPcaRnTmd0v/o5oNTvA06/bex
+         SztFWIzhRoR4CtRQ3VA4gI1MaKb5Sz9heqRYnbfxeYo5s1H5qeCMKZzUzIpHOLlPDA0P
+         YmEV48AYerIEFDEe46qKMIpusFz4HDMGakTiKxv67wBRQR4dJZfl5qq3A+Z3jpqF8Nwj
+         1QS+W0F6jlwaIGU8+nUJlK5+HOOBHSX2k8xrlgEIBd4Kj++t4zTOWtJdwooCl/A/1aas
+         jcFA==
+X-Gm-Message-State: AOAM532bhUN64fcl09AsXvwLXWlBeKJV7L+YiylQhktmWNqGjLZXVuWO
+        VQoO20XWORYv7r7IPZ44bKIySg==
+X-Google-Smtp-Source: ABdhPJx8SCWRZTEmqxObdVShTYrZp66VDixB774iK68T4PYn/ZZtmlUWHXx0vQ8kdvJJiRwTXP0w4Q==
+X-Received: by 2002:a63:b207:: with SMTP id x7mr2638660pge.392.1644426972381;
+        Wed, 09 Feb 2022 09:16:12 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id q1sm3926434pfs.112.2022.02.09.09.16.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Feb 2022 09:16:11 -0800 (PST)
+Date:   Wed, 9 Feb 2022 17:16:08 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        vkuznets@redhat.com, mlevitsk@redhat.com, dmatlack@google.com
+Subject: Re: [PATCH 00/12] KVM: MMU: do not unload MMU roots on all role
+ changes
+Message-ID: <YgP22CSj7GHYslYa@google.com>
+References: <20220209170020.1775368-1-pbonzini@redhat.com>
+ <YgP04kJeEH0I+hIw@google.com>
+ <fc3a4cdc-5a88-55a9-cfcc-fb7936484cc8@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Nq1nuf3xSYjIUi2L"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220209165733.43134-4-andrealmeid@collabora.com>
-X-Cookie: Disc space -- the final frontier!
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <fc3a4cdc-5a88-55a9-cfcc-fb7936484cc8@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Feb 09, 2022, Paolo Bonzini wrote:
+> On 2/9/22 18:07, Sean Christopherson wrote:
+> > On Wed, Feb 09, 2022, Paolo Bonzini wrote:
+> > > The TDP MMU has a performance regression compared to the legacy MMU
+> > > when CR0 changes often.  This was reported for the grsecurity kernel,
+> > > which uses CR0.WP to implement kernel W^X.  In that case, each change to
+> > > CR0.WP unloads the MMU and causes a lot of unnecessary work.  When running
+> > > nested, this can even cause the L1 to hardly make progress, as the L0
+> > > hypervisor it is overwhelmed by the amount of MMU work that is needed.
+> > 
+> > FWIW, my flushing/zapping series fixes this by doing the teardown in an async
+> > worker.  There's even a selftest for this exact case :-)
+> > 
+> > https://lore.kernel.org/all/20211223222318.1039223-1-seanjc@google.com
+> 
+> I'll check it out (it's next on my list as soon as I finally push
+> kvm/{master,next}, which in turn was blocked by this work).
 
---Nq1nuf3xSYjIUi2L
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+No rush, I need to spin a new version (rebase, and hopefully drop unnecessarily
+complex be3havior).
 
-On Wed, Feb 09, 2022 at 01:57:33PM -0300, Andr=E9 Almeida wrote:
+> But not zapping the roots is even better
 
-> @@ -190,6 +237,9 @@ static inline int amd_spi_fifo_xfer(struct amd_spi *a=
-md_spi,
->  	message->actual_length =3D tx_len + rx_len + 1;
->  	/* complete the transaction */
->  	message->status =3D 0;
-> +
-> +	if (amd_spi->version =3D=3D AMD_SPI_V2)
-> +		amd_spi_clear_chip(amd_spi, message->spi->chip_select);
->  	spi_finalize_current_message(master);
-> =20
->  	return 0;
-
-Why is this one not a switch statement - what happens with v3?
-
---Nq1nuf3xSYjIUi2L
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmID9nsACgkQJNaLcl1U
-h9A0Qwf9Gg01GvU3Xy2gJheu2SLY5idNFtvNIaKyK/XGmRPzYfYoZAAyNRC/pQMk
-PksSF2s0WzzF/xSb5ErG6xRkGg03txjkbmRjIWI8hW5gCOcIj8ECgeHoUSMf7WQ2
-zyU+Sp1RaXOoW6JWiBeJ+7fYfuFrQeHVFbTc+Eo6QcVZ827I/NBcRD8w31CJx59B
-lRXzvSJJw2rf1SUd7IW76FGO24L90opSyK7giqRPnWgrFshnVcpZNNVhncF2sMgu
-acMj9gNnITIATnFokdb+VFWSpp3P3UIWZzmYew9M4hRFK1lj/QDMNXDFYc0oJnG0
-yzuCbLocnvPeVWGq3nbPLFB7dPBk+w==
-=/dze
------END PGP SIGNATURE-----
-
---Nq1nuf3xSYjIUi2L--
+No argument there :-)

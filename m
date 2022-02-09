@@ -2,155 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCD5A4AE72C
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 03:45:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 871794AE749
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 03:47:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345153AbiBICpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 21:45:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42126 "EHLO
+        id S241790AbiBICrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 21:47:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233796AbiBIChl (ORCPT
+        with ESMTP id S233820AbiBIClL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 21:37:41 -0500
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92866C061355;
-        Tue,  8 Feb 2022 18:37:40 -0800 (PST)
-Received: by mail-il1-x131.google.com with SMTP id z18so606374iln.2;
-        Tue, 08 Feb 2022 18:37:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=J2A+sjZnS5cRMoX3xrf2NiPs/KWZ3vKvmI0duGN4ktY=;
-        b=S8cMgrKplxI50Aumzypa+57fs1D2jx+SSXm19HgRZ1KkM/J7s5Bit0ZDnxpGQkfnCm
-         kYhc1+m+fPk5w64tsFAJlyRtiOh+6rK6xJjVIkzj2Fg3quIEHYo9nhCHyX6ny7wTlXoA
-         rw6++R8VC+iZXy9c8xTS+BfttUupCo5Tm/0n1/FnsFsMSV48dLxUuse6+unLrf/woFzM
-         I/j7wszoIl0+JhmQzkGjEW9NmiZ1Mj1TzCU16xa1HQfLXkXEmLA4RjnUrMWp8b9oYjLI
-         Tto1xS1Yy9Qyeqa/+vPUi/kIsh+PE7GvUcFecVTc55q/JR3muPZrIp1UH4qZmeV9WGtn
-         yE/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=J2A+sjZnS5cRMoX3xrf2NiPs/KWZ3vKvmI0duGN4ktY=;
-        b=b2r5TZ6pVRShWYdIc0d3NMNm3EH6kTD2FjGrT5CG6sDHfE8I47AnCIVicLC2zw+Ech
-         tW98Eq9DBNye0fKzt+aX+YB3Cye4gS2qlMpg3aTJEjCcpyLxUMFbCSbnVTG6VvBC1J5t
-         w8OtPs93o/GUZKNVIa+3/nRvZybyH+SJGZH5Itg77WKZEm/vHBi9To8/I7n6xOkVUZht
-         vA6dMFb760e+KJ8TxmBL99QkbgWEfWRV4IhSAKhfaQx/ca8EekJCKzExsXBdp0YmH+6G
-         GVUbM9r+Rxt4zNXWvvqw6RpP+fkr1i1ag6wRzf3hD22JwRPOldX+On8TigBAauqC/vvt
-         dG2w==
-X-Gm-Message-State: AOAM533R+BBHY5N88LUy69AGxXwGQcgQx2/EksWPpRc2fM/He8MzEXi3
-        sFQ5wq8x9k2Ou5JuEe0IdGQ=
-X-Google-Smtp-Source: ABdhPJzO/bwJZAuNb/YObVBnUoezD2/wuk46qw3zm3oPQ0zePvcUEqZbtucXf7YxO+GRY3zW3EEJ8Q==
-X-Received: by 2002:a05:6e02:1aa2:: with SMTP id l2mr65090ilv.111.1644374258027;
-        Tue, 08 Feb 2022 18:37:38 -0800 (PST)
-Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id p5sm8957352iof.50.2022.02.08.18.37.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 18:37:37 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 1FF9227C0054;
-        Tue,  8 Feb 2022 21:37:35 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Tue, 08 Feb 2022 21:37:36 -0500
-X-ME-Sender: <xms:7ygDYjr7dx3TR8Q-fRFbaegqjzVPWZMZYv2TxueDedGvDmEB85KdNg>
-    <xme:7ygDYtovOoWQe4OCsCAFASQR92NIDYQg-14X3R6QIWN8AMnEXspcO8N2PITUvKA4B
-    -Wa_n7t-oGWnUiTfw>
-X-ME-Received: <xmr:7ygDYgOUHCE7QkWmVsKloXRIP6mF-OlH5D6NKGf2yQjj76ZuwOyFf-gB>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrheekgdegiecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvffufffkofgggfestdekredtredttdenucfhrhhomhepuehoqhhunhcuhfgv
-    nhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrghtthgvrh
-    hnpeeijefhledvtdegudfhffeugeetveeluefgkeevhfeuudeuudfgveevhfetvdeuvden
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquh
-    hnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedqudej
-    jeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmhgvrd
-    hnrghmvg
-X-ME-Proxy: <xmx:7ygDYm4jzRc-M5hmb86t7Mbohn9y40_vJq62PExmC7lsAak20b8GkQ>
-    <xmx:7ygDYi6u2LkEKybkab_lWDVOdr1FwqgUmFS-VggvsKwDY_cHGhNmyQ>
-    <xmx:7ygDYugZDsVYd2Y2Qy9EzVc0T99jB1AbgXPICSajc8Ksz0ZHsxl6Qg>
-    <xmx:7ygDYiz5HXC2wyrtVIbrimxH8rIlMSDm28FHsgwvLqgK9gg7YVQAhE4ZOqc>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 8 Feb 2022 21:37:34 -0500 (EST)
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Wei Liu <wei.liu@kernel.org>
-Cc:     Sunil Muthuswamy <sunilmut@linux.microsoft.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [RFC PATCH] PCI: hv: Avoid the retarget interrupt hypercall in irq_unmask() on ARM64
-Date:   Wed,  9 Feb 2022 10:37:20 +0800
-Message-Id: <20220209023722.2866009-1-boqun.feng@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Tue, 8 Feb 2022 21:41:11 -0500
+Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 739AFC07E5C0
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 18:40:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1644374412; x=1675910412;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=5jGen3hKuAqmZCUZesezMs0C28vFlrjgrYakLwisLjM=;
+  b=hKy/hjvKzd+wIqTn77jqiAiJueNt9HGN/4y2HEor9n1j4eMfLic8s82O
+   x56+LUhtQJae5KaXY2KJgTVTI1fcf95F61b2peH9IpwUz8rxngU7ZxnS/
+   tD3MM34QDjq8aWQpak7JS6sbyfz0AALV9D7R1CZcaYJZONpKFwgDtbY4G
+   LI271eiSjsNb9+YMB1EdMireCu9bO8Y9BOIE73c4k9xUthkL5kyw/Qqcu
+   YjQiWwSp4tsBg4ld7OeMLlzUCXJHRibNiTz4QuRqmV/scg084XJx16Wjm
+   wHYi9fxhvUG1u5xx3DFJQQ4EP7nQnTF2cUMR+JDgFp54lJXUoIVudAMN+
+   A==;
+X-IronPort-AV: E=Sophos;i="5.88,354,1635177600"; 
+   d="scan'208";a="193449709"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 09 Feb 2022 10:40:12 +0800
+IronPort-SDR: wbGwYMLbbSKqgcknWsdbrl2RlEK6M5wq+kbblV9IKKxDhMPpKT69pOANxs5tEUgihxQdUmIXZt
+ DvHa/JQuiiXnGZhKWnICMgFSI/4l92FnvaV+hUehgSO87oYctQIOqxj5SxUFMfSOTkkqbrwwSj
+ 9LtZlcXc5IKyHfmHLuow7dNHTf3JUTtahPu5nIcGHTLpaCAtwuQalij/caX8bZzOmW/kljp9j0
+ bDQ5a3Gq5gWWiizmhpHeFe+MrLwoXDl2g7zuDbNREbn+rEHQ384vMLzixHEd7STaf8HD+/3fmx
+ WFmT6VPMD1Fm6dt+6yP3hBni
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 18:12:01 -0800
+IronPort-SDR: PRVvmd513psvC+D8OdYZTcjG/rX8LY+L6USNRxnjlb6Ya7hkYeO0iu/lc8t2RqXqCgSGKASaCL
+ IxVrp5doldXPozK96gB21wMTRjnBRh5EJOZKpIy/7JvpiIAGTZxj9e3+9QhdQSB417q+EiIw4X
+ bHGNB1zZVSxchmh8SAKPqj49qbv5MNQLv/mhI6BE2kCrMSv9Xft7a+7vybK7N8iMiQw5GRLIx4
+ 2OijRS8yEgDzkTono4cGeHk3hb62LG9KcmayZ/DDbxFf6MFSqOO+WbILwXXqC2Uv5ztV2RiFGX
+ NVA=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 18:40:12 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Jtkcq4g7Fz1SVp0
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 18:40:11 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1644374410; x=1646966411; bh=5jGen3hKuAqmZCUZesezMs0C28vFlrjgrYa
+        kLwisLjM=; b=b5vxNOXovYZpnITGpEvJ4Vr4BmUY9xkeyqQubYzQRSo317/KyUx
+        XdqsSzfDK8Nppd2BEZFG0GgvRyJHrNfJ/Jn0FHKxMYgogDO/51MVmU5qYYNebiSz
+        fzTZqxmcCdxYg/GRmLWpK04k4p1Slk1tg+J7oE9AAL7z1LE5xl9euMB2Co3JOVfQ
+        4OZW/Qi3ANlf2SOp4RT4SQdlt2Say/QfNQeA3lcEacEhpA2nVRI8tJXiYtNoHKvi
+        /PsjX5Stam2mDF25DsD8C6et4KnZ+tM5BfU58nH+p3FU70GHv8grXJXxxuBLSW3Y
+        ioeJz0mLZB0eM3ik1VWHfiz85WSzbMWkmRg==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 26x7ipbS-P36 for <linux-kernel@vger.kernel.org>;
+        Tue,  8 Feb 2022 18:40:10 -0800 (PST)
+Received: from [10.225.163.67] (unknown [10.225.163.67])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Jtkcm6B4Xz1Rwrw;
+        Tue,  8 Feb 2022 18:40:08 -0800 (PST)
+Message-ID: <a0ec0411-6388-197f-abaa-08b2dc9dac4d@opensource.wdc.com>
+Date:   Wed, 9 Feb 2022 11:40:07 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] scsi: ibmvfc: replace snprintf with sysfs_emit
+Content-Language: en-US
+To:     davidcomponentone@gmail.com, tyreld@linux.ibm.com
+Cc:     mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        linux-scsi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, Yang Guang <yang.guang5@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+References: <b4c150c86f539d3bac3fc8885252adb9f24ee48f.1644286482.git.yang.guang5@zte.com.cn>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <b4c150c86f539d3bac3fc8885252adb9f24ee48f.1644286482.git.yang.guang5@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On ARM64 Hyper-V guests, SPIs are used for the interrupts of virtual PCI
-devices, and SPIs can be managed directly via GICD registers. Therefore
-the retarget interrupt hypercall is not needed on ARM64.
+On 2/9/22 09:43, davidcomponentone@gmail.com wrote:
+> From: Yang Guang <yang.guang5@zte.com.cn>
+> 
+> coccinelle report:
+> ./drivers/scsi/ibmvscsi/ibmvfc.c:3453:8-16:
+> WARNING: use scnprintf or sprintf
+> ./drivers/scsi/ibmvscsi/ibmvfc.c:3416:8-16:
+> WARNING: use scnprintf or sprintf
+> ./drivers/scsi/ibmvscsi/ibmvfc.c:3436:8-16:
+> WARNING: use scnprintf or sprintf
+> ./drivers/scsi/ibmvscsi/ibmvfc.c:3426:8-16:
+> WARNING: use scnprintf or sprintf
+> ./drivers/scsi/ibmvscsi/ibmvfc.c:3445:8-16:
+> WARNING: use scnprintf or sprintf
+> ./drivers/scsi/ibmvscsi/ibmvfc.c:3406:8-16:
+> WARNING: use scnprintf or sprintf
+> 
+> Use sysfs_emit instead of scnprintf or sprintf makes more sense.
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Yang Guang <yang.guang5@zte.com.cn>
+> Signed-off-by: David Yang <davidcomponentone@gmail.com>
+> ---
+>  drivers/scsi/ibmvscsi/ibmvfc.c | 16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/scsi/ibmvscsi/ibmvfc.c b/drivers/scsi/ibmvscsi/ibmvfc.c
+> index d0eab5700dc5..d5a197d17e0a 100644
+> --- a/drivers/scsi/ibmvscsi/ibmvfc.c
+> +++ b/drivers/scsi/ibmvscsi/ibmvfc.c
+> @@ -3403,7 +3403,7 @@ static ssize_t ibmvfc_show_host_partition_name(struct device *dev,
+>  	struct Scsi_Host *shost = class_to_shost(dev);
+>  	struct ibmvfc_host *vhost = shost_priv(shost);
+>  
+> -	return snprintf(buf, PAGE_SIZE, "%s\n",
+> +	return sysfs_emit(buf, "%s\n",
+>  			vhost->login_buf->resp.partition_name);
+>  }
+>  
+> @@ -3413,7 +3413,7 @@ static ssize_t ibmvfc_show_host_device_name(struct device *dev,
+>  	struct Scsi_Host *shost = class_to_shost(dev);
+>  	struct ibmvfc_host *vhost = shost_priv(shost);
+>  
+> -	return snprintf(buf, PAGE_SIZE, "%s\n",
+> +	return sysfs_emit(buf, "%s\n",
+>  			vhost->login_buf->resp.device_name);
+>  }
+>  
+> @@ -3423,7 +3423,7 @@ static ssize_t ibmvfc_show_host_loc_code(struct device *dev,
+>  	struct Scsi_Host *shost = class_to_shost(dev);
+>  	struct ibmvfc_host *vhost = shost_priv(shost);
+>  
+> -	return snprintf(buf, PAGE_SIZE, "%s\n",
+> +	return sysfs_emit(buf, "%s\n",
+>  			vhost->login_buf->resp.port_loc_code);
+>  }
+>  
+> @@ -3433,7 +3433,7 @@ static ssize_t ibmvfc_show_host_drc_name(struct device *dev,
+>  	struct Scsi_Host *shost = class_to_shost(dev);
+>  	struct ibmvfc_host *vhost = shost_priv(shost);
+>  
+> -	return snprintf(buf, PAGE_SIZE, "%s\n",
+> +	return sysfs_emit(buf, "%s\n",
+>  			vhost->login_buf->resp.drc_name);
+>  }
+>  
+> @@ -3442,7 +3442,7 @@ static ssize_t ibmvfc_show_host_npiv_version(struct device *dev,
+>  {
+>  	struct Scsi_Host *shost = class_to_shost(dev);
+>  	struct ibmvfc_host *vhost = shost_priv(shost);
+> -	return snprintf(buf, PAGE_SIZE, "%d\n", be32_to_cpu(vhost->login_buf->resp.version));
+> +	return sysfs_emit(buf, "%d\n", be32_to_cpu(vhost->login_buf->resp.version));
 
-The retarget interrupt hypercall related code is now put in a helper
-function and only called on x86.
+The format should be %u, not %d. And while at it, please add a blank
+line after the declarations.
 
-Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
----
- drivers/pci/controller/pci-hyperv.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+>  }
+>  
+>  static ssize_t ibmvfc_show_host_capabilities(struct device *dev,
+> @@ -3450,7 +3450,7 @@ static ssize_t ibmvfc_show_host_capabilities(struct device *dev,
+>  {
+>  	struct Scsi_Host *shost = class_to_shost(dev);
+>  	struct ibmvfc_host *vhost = shost_priv(shost);
+> -	return snprintf(buf, PAGE_SIZE, "%llx\n", be64_to_cpu(vhost->login_buf->resp.capabilities));
+> +	return sysfs_emit(buf, "%llx\n", be64_to_cpu(vhost->login_buf->resp.capabilities));
+>  }
 
-diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
-index 20ea2ee330b8..80aa33ef5bf0 100644
---- a/drivers/pci/controller/pci-hyperv.c
-+++ b/drivers/pci/controller/pci-hyperv.c
-@@ -1457,7 +1457,7 @@ static void hv_irq_mask(struct irq_data *data)
- }
- 
- /**
-- * hv_irq_unmask() - "Unmask" the IRQ by setting its current
-+ * __hv_irq_unmask() - "Unmask" the IRQ by setting its current
-  * affinity.
-  * @data:	Describes the IRQ
-  *
-@@ -1466,7 +1466,7 @@ static void hv_irq_mask(struct irq_data *data)
-  * is built out of this PCI bus's instance GUID and the function
-  * number of the device.
-  */
--static void hv_irq_unmask(struct irq_data *data)
-+static void __hv_irq_unmask(struct irq_data *data)
- {
- 	struct msi_desc *msi_desc = irq_data_get_msi_desc(data);
- 	struct hv_retarget_device_interrupt *params;
-@@ -1569,6 +1569,13 @@ static void hv_irq_unmask(struct irq_data *data)
- 	if (!hv_result_success(res) && hbus->state != hv_pcibus_removing)
- 		dev_err(&hbus->hdev->device,
- 			"%s() failed: %#llx", __func__, res);
-+}
-+
-+static void hv_irq_unmask(struct irq_data *data)
-+{
-+	/* Only use a hypercall on x86 */
-+	if (IS_ENABLED(CONFIG_X86))
-+		__hv_irq_unmask(data);
- 
- 	if (data->parent_data->chip->irq_unmask)
- 		irq_chip_unmask_parent(data);
+Ditto for the blank line.
+
+>  
+>  /**
+> @@ -3471,7 +3471,7 @@ static ssize_t ibmvfc_show_log_level(struct device *dev,
+>  	int len;
+>  
+>  	spin_lock_irqsave(shost->host_lock, flags);
+> -	len = snprintf(buf, PAGE_SIZE, "%d\n", vhost->log_level);
+> +	len = sysfs_emit(buf, "%d\n", vhost->log_level);
+>  	spin_unlock_irqrestore(shost->host_lock, flags);
+>  	return len;
+>  }
+> @@ -3509,7 +3509,7 @@ static ssize_t ibmvfc_show_scsi_channels(struct device *dev,
+>  	int len;
+>  
+>  	spin_lock_irqsave(shost->host_lock, flags);
+> -	len = snprintf(buf, PAGE_SIZE, "%d\n", vhost->client_scsi_channels);
+> +	len = sysfs_emit(buf, "%d\n", vhost->client_scsi_channels);
+>  	spin_unlock_irqrestore(shost->host_lock, flags);
+>  	return len;
+>  }
+
+
 -- 
-2.35.1
-
+Damien Le Moal
+Western Digital Research

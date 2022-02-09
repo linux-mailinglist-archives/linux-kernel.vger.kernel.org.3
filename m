@@ -2,72 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9508C4AF34E
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 14:53:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C232E4AF352
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 14:53:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234492AbiBINxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 08:53:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48182 "EHLO
+        id S234477AbiBINxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 08:53:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234481AbiBINxF (ORCPT
+        with ESMTP id S232821AbiBINw6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 08:53:05 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DBA5C0613C9;
-        Wed,  9 Feb 2022 05:53:08 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id i186so4474766pfe.0;
-        Wed, 09 Feb 2022 05:53:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=E8/AZkkT2BVNgodrUD/MMatfmgWFwg9OSnHgJXVSPYQ=;
-        b=S0X5buGW6MxOtOof3n2zS6GPnSC4/FQ7SeVVq855JIk0l2BMxKbSsblrYi6bc+k+xz
-         e8jSjrBptslyDMOdc0nmzuu49RMdoen7n8XK+yLDeiFcCMRpifGCmsdRAHZsZd5BkhCH
-         FNWwBE7IN5j1WhGAd2nIrbZ5+qHQkCV6GgoLfnOA3meNwrRIe2srZfiUFki+Qch9yX+m
-         tA08obLFvoGwrT78EokS/TB6hgSO0EGhBwn/OZjEQ6nT6bdRj6i1kk8jROkumsnvg9bK
-         gNUPFdsmGTn3+CTwadqzqSo/erG3s/x86KhJoxiF6F5i6VkBoM/BjRtFBTGaV+M1e14b
-         NHzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=E8/AZkkT2BVNgodrUD/MMatfmgWFwg9OSnHgJXVSPYQ=;
-        b=oZu/oKf//VJEvJQsF1X3xJ8PZ2T+ZxlcXVJY3WiSPJYqjwaAvLFgCiu3DBF4GIPkyt
-         S0gCfBcbO++ut2wJ8SV3r5HnsSzfgn9mLQ6ZXkGiIepYFS7SQiHaZ+bX0f/G+bA+1s3d
-         UhoOgQJ4zxfk8nv7yQMxjx7AjGT8dblgQFIpbLivukMs5K58TzPXw3RYW6QX1lkwGar/
-         w+qGEm/hypKQvB1SV8MSBsTov1J+4fyoEAAwHaLS47nu57ZhX5j3kpb/vSzh1XFtCK+m
-         CDCPO2//G8OPcDp86fixdxbBCOCG5E0GsZ4lBwLTQsr038/rml9G5AHtsyT1icJECFPO
-         wvTw==
-X-Gm-Message-State: AOAM532wcQr6ovxuq1ZbzH8vocrz48isqsH0C3nBcB80k8xk2/jybGwL
-        NM4mo08W89OeynFOkn29b+tUyIQfb1dWFlnY1JI=
-X-Google-Smtp-Source: ABdhPJyfW3I/Z5JYdSp25pASfbFmWPnPOui+NwrZYdVF7p1gfcVVmgs/1PT+wZyzR9ZV+9ghLA0gQOPIJL0wl+bW4VI=
-X-Received: by 2002:a63:5d61:: with SMTP id o33mr1994897pgm.442.1644414787717;
- Wed, 09 Feb 2022 05:53:07 -0800 (PST)
+        Wed, 9 Feb 2022 08:52:58 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 88DBCC0612BE
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 05:53:00 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 089BB1FB;
+        Wed,  9 Feb 2022 05:53:00 -0800 (PST)
+Received: from [10.57.70.89] (unknown [10.57.70.89])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0AE473F70D;
+        Wed,  9 Feb 2022 05:52:56 -0800 (PST)
+Message-ID: <290a89f0-8318-6130-468c-6412add62cfb@arm.com>
+Date:   Wed, 9 Feb 2022 13:52:55 +0000
 MIME-Version: 1.0
-References: <alpine.DEB.2.22.394.2202082148490.52266@hadrien>
- <CAPybu_30=ua4emx3hP2eFeJ4gtoOncah+X+NmsBdQq7cTuqZ+g@mail.gmail.com> <YgO9uo1etPr+pCQr@sirena.org.uk>
-In-Reply-To: <YgO9uo1etPr+pCQr@sirena.org.uk>
-From:   Ricardo Ribalda Delgado <ricardo.ribalda@gmail.com>
-Date:   Wed, 9 Feb 2022 14:52:51 +0100
-Message-ID: <CAPybu_3MB9Dv_p9pgpF_8eBuCBoHAsnMdnz5to+Q8co3PG7OQw@mail.gmail.com>
-Subject: Re: [PATCH] spi: spi-xilinx: fix for_each_child.cocci warnings
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Julia Lawall <julia.lawall@inria.fr>,
-        Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
-        Michal Simek <monstr@monstr.eu>,
-        Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>,
-        Tejas Prajapati Rameshchandra <tejaspra@xilinx.com>,
-        Naga Sureshkumar Relli <nagasure@xilinx.com>,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        "moderated list:ARM/S5P EXYNOS AR..." 
-        <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>, kbuild-all@lists.01.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v2 08/10] iommu: Remove unused argument in
+ is_attach_deferred
+Content-Language: en-GB
+To:     Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>
+Cc:     Alex Williamson <alex.williamson@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+References: <20220208012559.1121729-1-baolu.lu@linux.intel.com>
+ <20220208012559.1121729-9-baolu.lu@linux.intel.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220208012559.1121729-9-baolu.lu@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,31 +60,149 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark
+On 2022-02-08 01:25, Lu Baolu wrote:
+> The is_attach_deferred iommu_ops callback is a device op. The domain
+> argument is unnecessary and never used. Remove it to make code clean.
+> 
+> Suggested-by: Robin Murphy <robin.murphy@arm.com>
+> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+> ---
+>   include/linux/iommu.h         |  2 +-
+>   drivers/iommu/amd/amd_iommu.h |  3 +--
+>   drivers/iommu/amd/iommu.c     |  3 +--
+>   drivers/iommu/amd/iommu_v2.c  |  2 +-
+>   drivers/iommu/intel/iommu.c   |  3 +--
+>   drivers/iommu/iommu.c         | 15 ++++++---------
+>   6 files changed, 11 insertions(+), 17 deletions(-)
+> 
+> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+> index eb2684f95018..47ca7eca5d7b 100644
+> --- a/include/linux/iommu.h
+> +++ b/include/linux/iommu.h
+> @@ -269,7 +269,7 @@ struct iommu_ops {
+>   	void (*put_resv_regions)(struct device *dev, struct list_head *list);
+>   
+>   	int (*of_xlate)(struct device *dev, struct of_phandle_args *args);
+> -	bool (*is_attach_deferred)(struct iommu_domain *domain, struct device *dev);
+> +	bool (*is_attach_deferred)(struct device *dev);
+>   
+>   	/* Per device IOMMU features */
+>   	bool (*dev_has_feat)(struct device *dev, enum iommu_dev_features f);
+> diff --git a/drivers/iommu/amd/amd_iommu.h b/drivers/iommu/amd/amd_iommu.h
+> index 416815a525d6..3b2f06b7aca6 100644
+> --- a/drivers/iommu/amd/amd_iommu.h
+> +++ b/drivers/iommu/amd/amd_iommu.h
+> @@ -116,8 +116,7 @@ void amd_iommu_domain_clr_pt_root(struct protection_domain *domain)
+>   
+>   
+>   extern bool translation_pre_enabled(struct amd_iommu *iommu);
+> -extern bool amd_iommu_is_attach_deferred(struct iommu_domain *domain,
+> -					 struct device *dev);
+> +extern bool amd_iommu_is_attach_deferred(struct device *dev);
+>   extern int __init add_special_device(u8 type, u8 id, u16 *devid,
+>   				     bool cmd_line);
+>   
+> diff --git a/drivers/iommu/amd/iommu.c b/drivers/iommu/amd/iommu.c
+> index 461f1844ed1f..37f2fbb4b129 100644
+> --- a/drivers/iommu/amd/iommu.c
+> +++ b/drivers/iommu/amd/iommu.c
+> @@ -2215,8 +2215,7 @@ static void amd_iommu_get_resv_regions(struct device *dev,
+>   	list_add_tail(&region->list, head);
+>   }
+>   
+> -bool amd_iommu_is_attach_deferred(struct iommu_domain *domain,
+> -				  struct device *dev)
+> +bool amd_iommu_is_attach_deferred(struct device *dev)
+>   {
+>   	struct iommu_dev_data *dev_data = dev_iommu_priv_get(dev);
+>   
+> diff --git a/drivers/iommu/amd/iommu_v2.c b/drivers/iommu/amd/iommu_v2.c
+> index 58da08cc3d01..7c94ec05d289 100644
+> --- a/drivers/iommu/amd/iommu_v2.c
+> +++ b/drivers/iommu/amd/iommu_v2.c
+> @@ -537,7 +537,7 @@ static int ppr_notifier(struct notifier_block *nb, unsigned long e, void *data)
+>   	ret = NOTIFY_DONE;
+>   
+>   	/* In kdump kernel pci dev is not initialized yet -> send INVALID */
+> -	if (amd_iommu_is_attach_deferred(NULL, &pdev->dev)) {
+> +	if (amd_iommu_is_attach_deferred(&pdev->dev)) {
+>   		amd_iommu_complete_ppr(pdev, iommu_fault->pasid,
+>   				       PPR_INVALID, tag);
+>   		goto out;
+> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+> index 2b5f4e57a8bb..80f1294be634 100644
+> --- a/drivers/iommu/intel/iommu.c
+> +++ b/drivers/iommu/intel/iommu.c
+> @@ -5052,8 +5052,7 @@ intel_iommu_dev_disable_feat(struct device *dev, enum iommu_dev_features feat)
+>   	}
+>   }
+>   
+> -static bool intel_iommu_is_attach_deferred(struct iommu_domain *domain,
+> -					   struct device *dev)
+> +static bool intel_iommu_is_attach_deferred(struct device *dev)
+>   {
+>   	return attach_deferred(dev);
 
-On Wed, Feb 9, 2022 at 2:12 PM Mark Brown <broonie@kernel.org> wrote:
->
-> On Wed, Feb 09, 2022 at 11:33:34AM +0100, Ricardo Ribalda Delgado wrote:
-> > On Tue, Feb 8, 2022 at 9:51 PM Julia Lawall <julia.lawall@inria.fr> wrote:
->
-> > > Fixes: 3973536c4560 ("spi: spi-xilinx: Updated axi-qspi controller driver")
-> > > CC: Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > > Signed-off-by: kernel test robot <lkp@intel.com>
-> > > Signed-off-by: Julia Lawall <julia.lawall@inria.fr>
->
-> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
->
-> That's not what Signed-off-by means, you should only be adding a signoff
-> if you're forwarding on a patch or you wrote it - please see
-> Documentation/process/submitting-patches.rst for details on what this is
-> and why it's important.  You probably meant an ack or a review.
+Seems like there's no need to wrap this now?
 
-Sorry, I pressed the wrong shortcut. My apologies.
+Robin.
 
-I meant ack
-
-
-
--- 
-Ricardo Ribalda
+>   }
+> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+> index de593a9cc09c..3dff30ddebdd 100644
+> --- a/drivers/iommu/iommu.c
+> +++ b/drivers/iommu/iommu.c
+> @@ -825,13 +825,12 @@ static int iommu_create_device_direct_mappings(struct iommu_group *group,
+>   	return ret;
+>   }
+>   
+> -static bool iommu_is_attach_deferred(struct iommu_domain *domain,
+> -				     struct device *dev)
+> +static bool iommu_is_attach_deferred(struct device *dev)
+>   {
+>   	const struct iommu_ops *ops = dev_iommu_ops(dev);
+>   
+>   	if (ops->is_attach_deferred)
+> -		return ops->is_attach_deferred(domain, dev);
+> +		return ops->is_attach_deferred(dev);
+>   
+>   	return false;
+>   }
+> @@ -888,7 +887,7 @@ int iommu_group_add_device(struct iommu_group *group, struct device *dev)
+>   
+>   	mutex_lock(&group->mutex);
+>   	list_add_tail(&device->list, &group->devices);
+> -	if (group->domain  && !iommu_is_attach_deferred(group->domain, dev))
+> +	if (group->domain  && !iommu_is_attach_deferred(dev))
+>   		ret = __iommu_attach_device(group->domain, dev);
+>   	mutex_unlock(&group->mutex);
+>   	if (ret)
+> @@ -1743,7 +1742,7 @@ static int iommu_group_do_dma_attach(struct device *dev, void *data)
+>   	struct iommu_domain *domain = data;
+>   	int ret = 0;
+>   
+> -	if (!iommu_is_attach_deferred(domain, dev))
+> +	if (!iommu_is_attach_deferred(dev))
+>   		ret = __iommu_attach_device(domain, dev);
+>   
+>   	return ret;
+> @@ -2018,9 +2017,7 @@ EXPORT_SYMBOL_GPL(iommu_attach_device);
+>   
+>   int iommu_deferred_attach(struct device *dev, struct iommu_domain *domain)
+>   {
+> -	const struct iommu_ops *ops = dev_iommu_ops(dev);
+> -
+> -	if (ops->is_attach_deferred && ops->is_attach_deferred(domain, dev))
+> +	if (iommu_is_attach_deferred(dev))
+>   		return __iommu_attach_device(domain, dev);
+>   
+>   	return 0;
+> @@ -2029,7 +2026,7 @@ int iommu_deferred_attach(struct device *dev, struct iommu_domain *domain)
+>   static void __iommu_detach_device(struct iommu_domain *domain,
+>   				  struct device *dev)
+>   {
+> -	if (iommu_is_attach_deferred(domain, dev))
+> +	if (iommu_is_attach_deferred(dev))
+>   		return;
+>   
+>   	if (unlikely(domain->ops->detach_dev == NULL))

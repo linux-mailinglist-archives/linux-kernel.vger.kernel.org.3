@@ -2,154 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B6034AFC08
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 19:53:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCBAD4AFBFE
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 19:52:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241243AbiBISws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 13:52:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43518 "EHLO
+        id S237479AbiBISwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 13:52:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241203AbiBISux (ORCPT
+        with ESMTP id S241207AbiBISuy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 13:50:53 -0500
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C32C004385;
-        Wed,  9 Feb 2022 10:46:12 -0800 (PST)
-Received: from apollo.. (unknown [IPv6:2a02:810b:4340:43bf:4685:ff:fe12:5967])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id ED23F223E9;
-        Wed,  9 Feb 2022 19:46:06 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1644432371;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Z3kgxFS1ym2jMG+9772IZvkBEpGz3sFlMVSHxffUrWM=;
-        b=bJT1JRSM2O9qHpztX4cECW3hufKFDmYDWAKTl3bYHw5U2ms5EDJuWTPy3RGOnlfiC+anaT
-        vKS8NNFLNbIUYKnfSEdo3eCTOWv26E8r5rlCRfubzZFuVw4k7dzqRTc8oLhgpCQHVvf4xS
-        YkE90e82Qx7jjxuOQXjx558m49hAlgk=
-From:   Michael Walle <michael@walle.cc>
-To:     kavyasree.kotagiri@microchip.com
-Cc:     Manohar.Puri@microchip.com, UNGLinuxDriver@microchip.com,
-        alexandre.belloni@bootlin.com, arnd@arndb.de,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, nicolas.ferre@microchip.com,
-        olof@lixom.net, robh+dt@kernel.org, soc@kernel.org,
-        Michael Walle <michael@walle.cc>
-Subject: Re: [PATCH v4] ARM: dts: add DT for lan966 SoC and 2-port board pcb8291
-Date:   Wed,  9 Feb 2022 19:46:00 +0100
-Message-Id: <20220209184600.1230365-1-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220209111318.21112-1-kavyasree.kotagiri@microchip.com>
-References: <20220209111318.21112-1-kavyasree.kotagiri@microchip.com>
+        Wed, 9 Feb 2022 13:50:54 -0500
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF277C0401F3;
+        Wed,  9 Feb 2022 10:46:17 -0800 (PST)
+Received: by mail-yb1-f177.google.com with SMTP id o19so8547647ybc.12;
+        Wed, 09 Feb 2022 10:46:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FOZOUKLJKTfcXhSl2Frn48yaywqWILrf0FOGMO8s1HA=;
+        b=tH6yIwGZrWuCUeSYtAFsvNZ4qfXpPlrbYzeKJegOFOLkz7y9I3chVLFYES/qy9UMjQ
+         N3rJRDbOr22jqEL9+QogsXudu4JlsYxcP9gtC4dw1KFXHktdOI9SDpfsMS/RWyUASlKd
+         psBKg9K5hnSt3qwuSHrR3YFw7re694antpouKGXRqwOixbsb03pXoMvc6kplv38MzUFv
+         LVcQQCOZXvlrr4vl8hdGdKeZr2r9rBbSEDdNZt8X4wBaEo+S6e85KVZYhakCGRZkaSCV
+         Gr453zS7cDigHDMg3EvvPBJMZHBWK9dN82TtPe0pP9g0KQxq8GGafSalpICOI7yUj5of
+         jADA==
+X-Gm-Message-State: AOAM530fBs11exwMSn3jLWDW3rbspw3S15KY4OsjKteJ1B64lnNYXAQV
+        7IHTB0dL3wwK5TunEfXO2oNNqiXR4mfiv+4vcKk=
+X-Google-Smtp-Source: ABdhPJwJGGD0nJAvFhNDkFGeYRyEdQdP75MnqP3EaVTzMLv3wT5lodwnLAvfEtrY884JKET27CdtDI1tBOtpbtwnJQ8=
+X-Received: by 2002:a81:8b4e:: with SMTP id e14mr3633769ywk.301.1644432377048;
+ Wed, 09 Feb 2022 10:46:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220209161342.91721-1-hdegoede@redhat.com>
+In-Reply-To: <20220209161342.91721-1-hdegoede@redhat.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 9 Feb 2022 19:46:06 +0100
+Message-ID: <CAJZ5v0ihi_jig=HejWo+rivn2Re7=U5VGPOL8gfmmW0UzBp6NA@mail.gmail.com>
+Subject: Re: [PATCH] x86/PCI: revert "Ignore E820 reservations for bridge
+ windows on newer systems"
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Myron Stowe <myron.stowe@redhat.com>,
+        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        =?UTF-8?Q?Benoit_Gr=C3=A9goire?= <benoitg@coeus.ca>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hui Wang <hui.wang@canonical.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Feb 9, 2022 at 5:14 PM Hans de Goede <hdegoede@redhat.com> wrote:
+>
+> Commit 7f7b4236f204 ("x86/PCI: Ignore E820 reservations for bridge windows
+> on newer systems") fixes the touchpad not working on laptops like
+> the Lenovo IdeaPad 3 15IIL05 and the Lenovo IdeaPad 5 14IIL05, as well as
+> fixing thunderbolt hotplug issues on the Lenovo Yoga C940.
+>
+> Unfortunately it turns out that this is causing issues with suspend/resume
+> on Lenovo ThinkPad X1 Carbon Gen 2 laptops. So, per the no regressions
+> policy, rever this. Note I'm looking into another fix for the issues this
+> fixed.
+>
+> Fixes: 7f7b4236f204 ("x86/PCI: Ignore E820 reservations for bridge windows on newer systems")
+> BugLink: https://bugzilla.redhat.com/show_bug.cgi?id=2029207
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 
-> +	clocks {
-[..]
-> +
-> +		nic_clk: nic_clk {
+Applied as 5.17-rc material and pushed out for -next, thanks!
 
-What does nic_clk stand for? If I had to guess, it
-has something to do with network. But..
-
-> +			compatible = "fixed-clock";
-> +			#clock-cells = <0>;
-> +			clock-frequency = <200000000>;
-> +		};
-> +	};
-> +
-> +	clks: clock-controller@e00c00a8 {
-> +		compatible = "microchip,lan966x-gck";
-> +		#clock-cells = <1>;
-> +		clocks = <&cpu_clk>, <&ddr_clk>, <&sys_clk>;
-> +		clock-names = "cpu", "ddr", "sys";
-> +		reg = <0xe00c00a8 0x38>;
-> +	};
-> +
-> +	timer {
-> +		compatible = "arm,armv7-timer";
-> +		interrupt-parent = <&gic>;
-> +		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
-> +			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
-> +			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
-> +			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>;
-> +		clock-frequency = <37500000>;
-> +		arm,cpu-registers-not-fw-configured;
-> +	};
-> +
-> +	soc {
-> +		compatible = "simple-bus";
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		ranges;
-> +
-> +		flx0: flexcom@e0040000 {
-> +			compatible = "atmel,sama5d2-flexcom";
-> +			reg = <0xe0040000 0x100>;
-> +			clocks = <&clks GCK_ID_FLEXCOM0>;
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +			ranges = <0x0 0xe0040000 0x800>;
-> +			status = "disabled";
-> +		};
-> +
-> +		flx1: flexcom@e0044000 {
-> +			compatible = "atmel,sama5d2-flexcom";
-> +			reg = <0xe0044000 0x100>;
-> +			clocks = <&clks GCK_ID_FLEXCOM1>;
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +			ranges = <0x0 0xe0044000 0x800>;
-> +			status = "disabled";
-> +		};
-> +
-> +		trng: trng@e0048000 {
-> +			compatible = "atmel,at91sam9g45-trng";
-> +			reg = <0xe0048000 0x100>;
-> +			clocks = <&nic_clk>;
-
-.. it is used here..
-
-
-> +		};
-> +
-> +		aes: aes@e004c000 {
-> +			compatible = "atmel,at91sam9g46-aes";
-> +			reg = <0xe004c000 0x100>;
-> +			interrupts = <GIC_SPI 53 IRQ_TYPE_LEVEL_HIGH>;
-> +			dmas = <&dma0 AT91_XDMAC_DT_PERID(13)>,
-> +			       <&dma0 AT91_XDMAC_DT_PERID(12)>;
-> +			dma-names = "rx", "tx";
-> +			clocks = <&nic_clk>;
-
-.. and here. and so on.
-
-So, is it some kind of internal clock?
-
-> +			interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
-> +		};
-> +
-> +		watchdog: watchdog@e0090000 {
-> +			compatible = "snps,dw-wdt";
-> +			reg = <0xe0090000 0x1000>;
-> +			interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&nic_clk>;
-
-Btw. can we disable all nodes by default and enable them
-in the board dts files?
-
+> ---
+>  arch/x86/kernel/resource.c | 23 +----------------------
+>  1 file changed, 1 insertion(+), 22 deletions(-)
+>
+> diff --git a/arch/x86/kernel/resource.c b/arch/x86/kernel/resource.c
+> index 9ae64f9af956..9b9fb7882c20 100644
+> --- a/arch/x86/kernel/resource.c
+> +++ b/arch/x86/kernel/resource.c
+> @@ -1,5 +1,4 @@
+>  // SPDX-License-Identifier: GPL-2.0
+> -#include <linux/dmi.h>
+>  #include <linux/ioport.h>
+>  #include <asm/e820/api.h>
+>
+> @@ -24,31 +23,11 @@ static void resource_clip(struct resource *res, resource_size_t start,
+>                 res->start = end + 1;
+>  }
+>
+> -/*
+> - * Some BIOS-es contain a bug where they add addresses which map to
+> - * system RAM in the PCI host bridge window returned by the ACPI _CRS
+> - * method, see commit 4dc2287c1805 ("x86: avoid E820 regions when
+> - * allocating address space"). To avoid this Linux by default excludes
+> - * E820 reservations when allocating addresses since 2010.
+> - * In 2019 some systems have shown-up with E820 reservations which cover
+> - * the entire _CRS returned PCI host bridge window, causing all attempts
+> - * to assign memory to PCI BARs to fail if Linux uses E820 reservations.
+> - *
+> - * Ideally Linux would fully stop using E820 reservations, but then
+> - * the old systems this was added for will regress.
+> - * Instead keep the old behavior for old systems, while ignoring the
+> - * E820 reservations for any systems from now on.
+> - */
+>  static void remove_e820_regions(struct resource *avail)
+>  {
+> -       int i, year = dmi_get_bios_year();
+> +       int i;
+>         struct e820_entry *entry;
+>
+> -       if (year >= 2018)
+> -               return;
+> -
+> -       pr_info_once("PCI: Removing E820 reservations from host bridge windows\n");
+> -
+>         for (i = 0; i < e820_table->nr_entries; i++) {
+>                 entry = &e820_table->entries[i];
+>
+> --
+> 2.33.1
+>

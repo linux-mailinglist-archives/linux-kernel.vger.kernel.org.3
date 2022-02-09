@@ -2,128 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CCA44AEF6D
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 11:39:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5FD14AEF72
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 11:40:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230252AbiBIKip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 05:38:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48868 "EHLO
+        id S229506AbiBIKkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 05:40:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbiBIKin (ORCPT
+        with ESMTP id S229478AbiBIKj6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 05:38:43 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 170E0E148DD0
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 02:25:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1644402359; x=1675938359;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=tKssAuH+rgarP0EYdoMpZsm6AfzDbRcpB7eIOckVr+8=;
-  b=ElRxGyoQ3UEHPyDBUiJNas0F6gyTGylkkaeOQ+TYKD4FGm8Sk9pexkdt
-   0V6WT5uxuRChELz6FJZ2bQ/biJxH2bsk/oJhYYHBVoW4sgU0KRVn6+RCY
-   63yhHq4T+lBtoR3GuzyBaKKOvidnkfjTZ4aZYZXtaLONN7gMhu7kHSpzs
-   WAJox1ozP3qAp6Z4h88sLn6vD8ZF2HEkHrT/XixQily7T70KdTuaEh+tR
-   Br1tJH5E9vLZdr4Oa17zQI3kowVVF750XUq1TP4MUv/L2Oc4krE4sNEaX
-   nf00Gl7T41/5DslA+0mtcht+6nDkjEFIkccw3/7qr714/jjAAwWPvalF0
-   w==;
-IronPort-SDR: nGNsrxLmsWkOMGuzZt+kNen+3rqOnR8/JnVhk0PEznY0smadEE71pwygWpO09i5NykHPK/ug/R
- oux1jfrqQOqnrN/1FNKtmBnr+MQctYQveZRFfKFR7CpE7o28FmaSNW+ZFn6rWNQCIv2wyXzErJ
- u1OT9+MhXcFNdrdd5ew/ZSobvHKbclmFNE0pbAp6aYHqufd+pYOID0KTU21RSFPUC2WGU+tFv7
- BZNmPVS5SkjeSBHupK/gs78e787jWmhSXmCPa0LPpdU2MrFG0ymkuwYQi3hsYGvixlyb6LHBiY
- gf+tWIdk1+o86FXk+4ZM2wog
-X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
-   d="scan'208";a="145378883"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Feb 2022 03:24:47 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 9 Feb 2022 03:24:47 -0700
-Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Wed, 9 Feb 2022 03:24:45 -0700
-Message-ID: <e33d303b-15d6-d133-bdb3-cb63e305ef24@microchip.com>
-Date:   Wed, 9 Feb 2022 11:24:43 +0100
+        Wed, 9 Feb 2022 05:39:58 -0500
+Received: from out199-2.us.a.mail.aliyun.com (out199-2.us.a.mail.aliyun.com [47.90.199.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592A1E09DDAC;
+        Wed,  9 Feb 2022 02:26:48 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0V4.4LdI_1644402398;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0V4.4LdI_1644402398)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 09 Feb 2022 18:26:44 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     axboe@kernel.dk
+Cc:     asml.silence@gmail.com, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] io_uring: Fix uninitialized use of ret in io_eventfd_register()
+Date:   Wed,  9 Feb 2022 18:26:37 +0800
+Message-Id: <20220209102637.34088-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] net: macb: Align the dma and coherent dma masks
-Content-Language: en-US
-To:     Harini Katakam <harini.katakam@xilinx.com>, <davem@davemloft.net>,
-        <claudiu.beznea@microchip.com>, <kuba@kernel.org>,
-        <Conor.Dooley@microchip.com>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <michal.simek@xilinx.com>, <harinikatakamlinux@gmail.com>,
-        <mstamand@ciena.com>
-References: <20220209094325.8525-1-harini.katakam@xilinx.com>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-In-Reply-To: <20220209094325.8525-1-harini.katakam@xilinx.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/02/2022 at 10:43, Harini Katakam wrote:
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> 
-> From: Marc St-Amand <mstamand@ciena.com>
-> 
-> Single page and coherent memory blocks can use different DMA masks
-> when the macb accesses physical memory directly. The kernel is clever
-> enough to allocate pages that fit into the requested address width.
-> 
-> When using the ARM SMMU, the DMA mask must be the same for single
-> pages and big coherent memory blocks. Otherwise the translation
-> tables turn into one big mess.
-> 
->    [   74.959909] macb ff0e0000.ethernet eth0: DMA bus error: HRESP not OK
->    [   74.959989] arm-smmu fd800000.smmu: Unhandled context fault: fsr=0x402, iova=0x3165687460, fsynr=0x20001, cbfrsynra=0x877, cb=1
->    [   75.173939] macb ff0e0000.ethernet eth0: DMA bus error: HRESP not OK
->    [   75.173955] arm-smmu fd800000.smmu: Unhandled context fault: fsr=0x402, iova=0x3165687460, fsynr=0x20001, cbfrsynra=0x877, cb=1
-> 
-> Since using the same DMA mask does not hurt direct 1:1 physical
-> memory mappings, this commit always aligns DMA and coherent masks.
-> 
-> Signed-off-by: Marc St-Amand <mstamand@ciena.com>
-> Signed-off-by: Harini Katakam <harini.katakam@xilinx.com>
+In some scenarios, ret is not assigned in the whole process, so it
+needs to be initialized at the beginning.
 
-Ok:
-Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+Clean up the following clang warning:
 
-Best regards,
-   Nicolas
+fs/io_uring.c:9373:13: note: initialize the variable 'ret' to silence
+this warning.
 
-> ---
->   drivers/net/ethernet/cadence/macb_main.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
-> index 1ce20bf52f72..4c231159b562 100644
-> --- a/drivers/net/ethernet/cadence/macb_main.c
-> +++ b/drivers/net/ethernet/cadence/macb_main.c
-> @@ -4765,7 +4765,7 @@ static int macb_probe(struct platform_device *pdev)
-> 
->   #ifdef CONFIG_ARCH_DMA_ADDR_T_64BIT
->          if (GEM_BFEXT(DAW64, gem_readl(bp, DCFG6))) {
-> -               dma_set_mask(&pdev->dev, DMA_BIT_MASK(44));
-> +               dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(44));
->                  bp->hw_dma_cap |= HW_DMA_CAP_64B;
->          }
->   #endif
-> --
-> 2.17.1
-> 
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+ fs/io_uring.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index 5479f0607430..7f277890f1ec 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -9370,7 +9370,7 @@ static int io_eventfd_register(struct io_ring_ctx *ctx, void __user *arg,
+ {
+ 	struct io_ev_fd *ev_fd;
+ 	__s32 __user *fds = arg;
+-	int fd, ret;
++	int fd, ret = 0;
+ 
+ 	ev_fd = rcu_dereference_protected(ctx->io_ev_fd,
+ 					lockdep_is_held(&ctx->uring_lock));
 -- 
-Nicolas Ferre
+2.20.1.7.g153144c
+

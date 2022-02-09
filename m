@@ -2,48 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8DAC4AF26D
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 14:11:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C6DE4AF26F
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 14:12:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233995AbiBINLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 08:11:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50484 "EHLO
+        id S234004AbiBINMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 08:12:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233968AbiBINLt (ORCPT
+        with ESMTP id S229732AbiBINM3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 08:11:49 -0500
+        Wed, 9 Feb 2022 08:12:29 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53DCEC05CBBB;
-        Wed,  9 Feb 2022 05:11:51 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22D1FC0613CA;
+        Wed,  9 Feb 2022 05:12:33 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DF15361924;
-        Wed,  9 Feb 2022 13:11:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85819C340E7;
-        Wed,  9 Feb 2022 13:11:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644412310;
-        bh=4r5rcK4jLguRj/Ewp6yZZZX2qQCo/K36PKV3SeN0yW0=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B23D56194A;
+        Wed,  9 Feb 2022 13:12:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98EFEC340E7;
+        Wed,  9 Feb 2022 13:12:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644412352;
+        bh=cWkt5CAtLtJYiO229ax41kQjdnyh3HcJOnSxlXQjmO0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YmnUogQgqQCLvsQthQlgwI7PusgW066+aROHvuRuBk4ae86M5sOndoHZp4EJuoFIu
-         YbVMy6ZD2PKSn1fMIMlnluXf94s7Oa2g+GjDVFRimXCV46xft0sOtwEHLSXVop4ZM/
-         qFs6WdBsgN+yskAunHWy9xvgWaA6RKwAzffd75so=
-Date:   Wed, 9 Feb 2022 14:11:47 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     luofei <luofei@unicloud.com>
-Cc:     stable@vger.kernel.org, tony.luck@intel.com, bp@alien8.de,
-        tglx@linutronix.de, mingo@redhat.com, hpa@zytor.com,
-        x86@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] x86/mm, mm/hwpoison: Fix the unmap kernel 1:1 pages
- check condition
-Message-ID: <YgO9kyM6C4HResiG@kroah.com>
-References: <20220208032028.852302-1-luofei@unicloud.com>
+        b=MyQ+FP6EwVfT+k+6zNxC1CVyR8NqghLmzz+6NC6B7ZfnJpoNJbAcfnzScg51cJ5WK
+         gBP+pVPpo8n+oDxv/le3j/KnmQCiMA5BXwPepoAsW54mSoaZ+Nz42Q3qZdBfN5d8h3
+         Sh205gigyOhOs60MvktC7a2zQWTOTiUfPfnig1sBZJcs/tmXCTvxptDKqpI5M7uyQG
+         GTni2KVbUAZTaGJgBNV/4VvCA4AdbXS05V2JSsWBco8Vg9Drh/2Hs4MZuA26M2BR0T
+         CqYomFC0Rcbj9c0mVMWWpKuNi1X6KACeSlhdZBpeeXVKC/5TMD7cuTlzXIsd7DOkr/
+         aLpm8TaE1DmXg==
+Date:   Wed, 9 Feb 2022 13:12:26 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Ricardo Ribalda Delgado <ricardo.ribalda@gmail.com>
+Cc:     Julia Lawall <julia.lawall@inria.fr>,
+        Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
+        Michal Simek <monstr@monstr.eu>,
+        Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>,
+        Tejas Prajapati Rameshchandra <tejaspra@xilinx.com>,
+        Naga Sureshkumar Relli <nagasure@xilinx.com>,
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        "moderated list:ARM/S5P EXYNOS AR..." 
+        <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>, kbuild-all@lists.01.org
+Subject: Re: [PATCH] spi: spi-xilinx: fix for_each_child.cocci warnings
+Message-ID: <YgO9uo1etPr+pCQr@sirena.org.uk>
+References: <alpine.DEB.2.22.394.2202082148490.52266@hadrien>
+ <CAPybu_30=ua4emx3hP2eFeJ4gtoOncah+X+NmsBdQq7cTuqZ+g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="KSvbXx2/FIuv+9D7"
 Content-Disposition: inline
-In-Reply-To: <20220208032028.852302-1-luofei@unicloud.com>
+In-Reply-To: <CAPybu_30=ua4emx3hP2eFeJ4gtoOncah+X+NmsBdQq7cTuqZ+g@mail.gmail.com>
+X-Cookie: Disc space -- the final frontier!
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -54,25 +66,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 10:20:28PM -0500, luofei wrote:
-> [ Upstream commit fd0e786d9d09024f67bd71ec094b110237dc3840 ]
-> 
-> This commit solves the problem of unmap kernel 1:1 pages
-> unconditionally, it appears in Linus's tree 4.16 and later
-> versions, and is backported to 4.14.x and 4.15.x stable branches.
-> 
-> But the backported patch has its logic reversed when calling
-> memory_failure() to determine whether it needs to unmap the
-> kernel page. Only when memory_failure() returns successfully,
-> the kernel page can be unmapped.
-> 
-> Signed-off-by: luofei <luofei@unicloud.com>
-> Cc: stable@vger.kernel.org #v4.14.x
-> Cc: stable@vger.kernel.org #v4.15.x
-> ---
->  arch/x86/kernel/cpu/mcheck/mce.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks, now queued up.
+--KSvbXx2/FIuv+9D7
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-greg k-h
+On Wed, Feb 09, 2022 at 11:33:34AM +0100, Ricardo Ribalda Delgado wrote:
+> On Tue, Feb 8, 2022 at 9:51 PM Julia Lawall <julia.lawall@inria.fr> wrote:
+
+> > Fixes: 3973536c4560 ("spi: spi-xilinx: Updated axi-qspi controller driver")
+> > CC: Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Signed-off-by: kernel test robot <lkp@intel.com>
+> > Signed-off-by: Julia Lawall <julia.lawall@inria.fr>
+
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+
+That's not what Signed-off-by means, you should only be adding a signoff
+if you're forwarding on a patch or you wrote it - please see
+Documentation/process/submitting-patches.rst for details on what this is
+and why it's important.  You probably meant an ack or a review.
+
+--KSvbXx2/FIuv+9D7
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIDvbkACgkQJNaLcl1U
+h9A70Af/VTsZEKIBkL/dr0x1V4cWskJo+0BJJecpWn+bkAz6z1Eu3J+SvBzuByX9
+bSD5VIUqmHx6bU7V97v4tro6qx2YwesLU7WUaATiF/VwqHZ99Ea0H1XIYkFGCLDg
+geEWc23edUaH39Xwbdi6bJBFFGMDeNsuNU3zcUHezyBFZqWygJEl0oxg8/tmCY7T
+EVqJqd7j+DpmUnR+kXmcr7+OBYvT3oVj0ykGouylHyGH9cSg6FZ14gaUjbGb9U61
+GPqOpdWX+0mRcBUL9sQ9DIjoGRRrp0dWZCG0wfb5ybeysPzvV+TaCrjSyx6/vbGS
+TasgyNZ+gl048iv/8U7mWsAZMzRR3Q==
+=8OCa
+-----END PGP SIGNATURE-----
+
+--KSvbXx2/FIuv+9D7--

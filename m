@@ -2,143 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F2A74AF544
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 16:31:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A7104AF53E
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 16:30:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235824AbiBIPa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 10:30:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45584 "EHLO
+        id S235832AbiBIPaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 10:30:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235551AbiBIPau (ORCPT
+        with ESMTP id S235824AbiBIPaK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 10:30:50 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 182ADC061355
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 07:30:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644420654; x=1675956654;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=zauU5vkXPysXVgTYyd3mR2l2ZQGaxYzjdyZI9mEhceI=;
-  b=hBIKhoPu8m/pJ9+Id/XUk15aTimE6/QZm3QNHaqbOhGJ9b3tnMT/1zI0
-   l2XwNw3aAnSARij/VWY1vIwsTNQz0F1/d9hZUhLd2LQkV9cHjetWpJp97
-   We6DLbdX23Jar2mxt8NqfAAS8+l1nh+cfDq7c+YaDloR1TwYd2yr0qQ6C
-   VsKDYpaqbVuYakJnptSXOBwYpEbpArolbiZ7mrqLvRTaokfy0iQJ8c1EW
-   uSU8VeWoyFS4HpDthbJv7Q+HOdDFT0L0x80pnZprzyhGdJbO5r09IPkFK
-   aOXuRFChFb3Z9+81XDz812yUw84hgYZmLz7j+ca6QElUuen55Rv3RBBu6
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="232793078"
-X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
-   d="scan'208";a="232793078"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 07:30:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
-   d="scan'208";a="485277870"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 09 Feb 2022 07:30:52 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nHovj-0001yX-AT; Wed, 09 Feb 2022 15:30:51 +0000
-Date:   Wed, 9 Feb 2022 23:29:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [norov:bitmap-20220204 10/48]
- drivers/net/ethernet/qlogic/qed/qed_rdma.c:332:7: error: use of undeclared
- identifier 'idx'
-Message-ID: <202202092311.nsDv5MPD-lkp@intel.com>
+        Wed, 9 Feb 2022 10:30:10 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02140C0613CA
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 07:30:14 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nHov5-0003JE-JH; Wed, 09 Feb 2022 16:30:11 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nHov5-00FX3x-4S; Wed, 09 Feb 2022 16:30:10 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nHov3-00DMcu-Px; Wed, 09 Feb 2022 16:30:09 +0100
+Date:   Wed, 9 Feb 2022 16:30:08 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Fabio Estevam <festevam@gmail.com>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        linux-serial@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-kernel@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Harald Seiler <hws@denx.de>, Jiri Slaby <jirislaby@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] tty: serial: imx: Add fast path when rs485 delays are 0
+Message-ID: <20220209153008.6qmt2t33ru7lhi6x@pengutronix.de>
+References: <20220119145204.238767-1-hws@denx.de>
+ <20220119151145.zft47rzebnabiej2@pengutronix.de>
+ <0df5d9ea2081f5d798f80297efb973f542dae183.camel@denx.de>
+ <20220119162122.jmnz2hxid76p4hli@pengutronix.de>
+ <5cab27cab5a39ef5e19992bc54e57c3f6106dafe.camel@denx.de>
+ <YgJADKxWfOZroS35@kroah.com>
+ <20220208111203.qi6fpo2l6um6znkz@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zhegztmaioghtjqo"
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220208111203.qi6fpo2l6um6znkz@pengutronix.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/norov/linux bitmap-20220204
-head:   6be3158022466595db078b4091472d0541e04bdc
-commit: 8bca8c2ba1a83d9ebf601431dab6c4ab05d9ca27 [10/48] qed: rework qed_rdma_bmap_free()
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220209/202202092311.nsDv5MPD-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e8bff9ae54a55b4dbfeb6ba55f723abbd81bf494)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/norov/linux/commit/8bca8c2ba1a83d9ebf601431dab6c4ab05d9ca27
-        git remote add norov https://github.com/norov/linux
-        git fetch --no-tags norov bitmap-20220204
-        git checkout 8bca8c2ba1a83d9ebf601431dab6c4ab05d9ca27
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/net/ethernet/qlogic/qed/
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+--zhegztmaioghtjqo
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-All errors (new ones prefixed by >>):
+Hello Greg,
 
->> drivers/net/ethernet/qlogic/qed/qed_rdma.c:332:7: error: use of undeclared identifier 'idx'
-           for (idx = 0; idx < bmap->max_count; idx += 512) {
-                ^
-   drivers/net/ethernet/qlogic/qed/qed_rdma.c:332:16: error: use of undeclared identifier 'idx'
-           for (idx = 0; idx < bmap->max_count; idx += 512) {
-                         ^
-   drivers/net/ethernet/qlogic/qed/qed_rdma.c:332:39: error: use of undeclared identifier 'idx'
-           for (idx = 0; idx < bmap->max_count; idx += 512) {
-                                                ^
-   drivers/net/ethernet/qlogic/qed/qed_rdma.c:333:37: error: use of undeclared identifier 'idx'
-                   b =  bmap->bitmap + BITS_TO_LONGS(idx);
-                                                     ^
-   drivers/net/ethernet/qlogic/qed/qed_rdma.c:334:33: error: use of undeclared identifier 'idx'
-                   nbits = min(bmap->max_count - idx, 512);
-                                                 ^
-   drivers/net/ethernet/qlogic/qed/qed_rdma.c:334:33: error: use of undeclared identifier 'idx'
-   drivers/net/ethernet/qlogic/qed/qed_rdma.c:338:30: error: use of undeclared identifier 'idx'
-                                     "line 0x%04x: %*pb\n", idx / 512, nbits, b);
-                                                            ^
-   7 errors generated.
+On Tue, Feb 08, 2022 at 12:12:03PM +0100, Uwe Kleine-K=F6nig wrote:
+> On Tue, Feb 08, 2022 at 11:03:56AM +0100, Greg Kroah-Hartman wrote:
+> > Uwe, any thoughts about if this patch should be taken or not?
+>=20
+> I will take a deeper look later today and tell you my thoughts.
 
+It took a bit longer, but after looking again with the driver open in my
+editor I agree that patch is fine.
 
-vim +/idx +332 drivers/net/ethernet/qlogic/qed/qed_rdma.c
+Reviewed-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
 
-   318	
-   319	void qed_rdma_bmap_free(struct qed_hwfn *p_hwfn,
-   320				struct qed_bmap *bmap, bool check)
-   321	{
-   322		unsigned int pos, weight, nbits;
-   323		unsigned long *b;
-   324	
-   325		if (!check || !(weight = bitmap_weight(bmap->bitmap, bmap->max_count)))
-   326			goto end;
-   327	
-   328		DP_NOTICE(p_hwfn,
-   329			  "%s bitmap not free - size=%d, weight=%d, 512 bits per line\n",
-   330			  bmap->name, bmap->max_count, weight);
-   331	
- > 332		for (idx = 0; idx < bmap->max_count; idx += 512) {
-   333			b =  bmap->bitmap + BITS_TO_LONGS(idx);
-   334			nbits = min(bmap->max_count - idx, 512);
-   335	
-   336			if (!bitmap_empty(b, nbits))
-   337				DP_NOTICE(p_hwfn,
-   338					  "line 0x%04x: %*pb\n", idx / 512, nbits, b);
-   339		}
-   340	
-   341	end:
-   342		kfree(bmap->bitmap);
-   343		bmap->bitmap = NULL;
-   344	}
-   345	
+Thanks
+Uwe
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--zhegztmaioghtjqo
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmID3f0ACgkQwfwUeK3K
+7AnwFAf/ak9YeP1DkOhL48uqmiyD6N1JIZCpjcPhBVlJEoUgkxH/Qb5ThAb13R4r
+tng7DlvdRKS6WHWiaILv6BmEw1rgOh4oyNaYdAI/8L9n8gC/YGDA03S6WI5MYQBj
+Q5kKUH34OGSvZGLPkKZ4EkSgjFZkkcwo+Ozr+Cr1knn1nJByTlYRTuzigua1Qu+X
+8h6hAeqM0RgBUbynzkmbRFtTU95hADWqDuARQuwHf5sLE6MrewZ0YKRjq0ynS8Ty
+TU0dvraeEI+COPFuP0pxCx3TVcCMIKhKA+zXlZf4IHwjQCi25sa6dMfmalAgnxWP
+OOdSBC8XMiDMdz5gQ7Xxn6Vz+/P8DQ==
+=RMjQ
+-----END PGP SIGNATURE-----
+
+--zhegztmaioghtjqo--

@@ -2,110 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D18AF4AEE76
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 10:51:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F3A94AEE21
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 10:41:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232362AbiBIJvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 04:51:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59926 "EHLO
+        id S234782AbiBIJjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 04:39:18 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:53092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiBIJv3 (ORCPT
+        with ESMTP id S233595AbiBIJfF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 04:51:29 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12DC0E0CEDEA
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 01:51:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1644400280; x=1675936280;
-  h=from:to:subject:date:message-id:mime-version;
-  bh=EKL23ZICjemdPDx3xCc3sIo7S0uH2JuId0XLQZ6xIUo=;
-  b=Ly6GFsGmhL4/+MBG+SXgAz/vOf74ASmgzrAzV4YC8Jar9JQVNXDgH397
-   1ckKsMevEz35JgebPls8leS/US4Q+BTKAPupvXNi+lCXISt7SKJgBBLDr
-   aMHNkLJhRM8BOr6QejMSh0SjiRQ6B/WdeubnbYEYmJwiAV882PGErU2Gf
-   qzsk1m8yf2rr9SZly4htMyWnOTLeypxU//hvkC9E6Gdo8BYd7siHqaat+
-   2+ZATBdI6ki4zNUcIlD2sbe7oPaI0LRC5RdaxM5xXzqE/p390lzE48azB
-   8++moL57jMKT0OCRhwwiXVAkWVKzUgQoPnxO6t978Q8cbww/NxCfGOD3Q
-   A==;
-IronPort-SDR: azLCwhdvQiyqxIZ0TViWvN/GvCS0HpmG3i6RWiniDEaua1CCKuxvh2Q5FXNAZksWLAwgT98Fow
- TjFdvygpSxkA9EO3ZlznUuRAZYz0iL4EeCg+Dd8Q4mnYI3B0dAcL2us2zlq1IDHpj4oFgbv/cQ
- obUPMCZ2ALQ628i7H7K8F/ECR8Bnx8/7U7llN+u+CQ1EINJJYzXHXe4xopxQK/OZc/4ERihm8T
- xU9ORNdNH2n1+UmTPogNeRfaFzAR+KsKeRjE2NhDrdaMthdmaT7lvXeirqoP/f8Wjqi6Hbl8c3
- kficdpvVGJFQxz25IeyYDTMP
-X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
-   d="scan'208";a="152430783"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Feb 2022 01:41:45 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 9 Feb 2022 01:41:43 -0700
-Received: from kavya-HP-Compaq-6000-Pro-SFF-PC.microchip.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Wed, 9 Feb 2022 01:41:41 -0700
-From:   Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-To:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <alexandre.belloni@bootlin.com>,
-        <linus.walleij@linaro.org>, <linux@armlinux.org.uk>
-Subject: [PATCH] ARM: at91: debug: add lan966 support
-Date:   Wed, 9 Feb 2022 14:11:39 +0530
-Message-ID: <20220209084139.29901-1-kavyasree.kotagiri@microchip.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 9 Feb 2022 04:35:05 -0500
+Received: from twspam01.aspeedtech.com (twspam01.aspeedtech.com [211.20.114.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44CA6E011168
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 01:34:55 -0800 (PST)
+Received: from twspam01.aspeedtech.com (localhost [127.0.0.2] (may be forged))
+        by twspam01.aspeedtech.com with ESMTP id 2198ZbGv073078
+        for <linux-kernel@vger.kernel.org>; Wed, 9 Feb 2022 16:35:37 +0800 (GMT-8)
+        (envelope-from jammy_huang@aspeedtech.com)
+Received: from mail.aspeedtech.com ([192.168.0.24])
+        by twspam01.aspeedtech.com with ESMTP id 2198YGiU072902;
+        Wed, 9 Feb 2022 16:34:16 +0800 (GMT-8)
+        (envelope-from jammy_huang@aspeedtech.com)
+Received: from JammyHuang-PC.aspeed.com (192.168.2.115) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 9 Feb
+ 2022 16:42:27 +0800
+From:   Jammy Huang <jammy_huang@aspeedtech.com>
+To:     <eajames@linux.ibm.com>, <mchehab@kernel.org>, <joel@jms.id.au>,
+        <andrew@aj.id.au>, <linux-media@vger.kernel.org>,
+        <openbmc@lists.ozlabs.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] media: aspeed: Use full swing as JFIF to fix incorrect color
+Date:   Wed, 9 Feb 2022 16:42:25 +0800
+Message-ID: <20220209084225.4456-1-jammy_huang@aspeedtech.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,SUSPICIOUS_RECIPS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [192.168.2.115]
+X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
+ (192.168.0.24)
+X-DNSRBL: 
+X-MAIL: twspam01.aspeedtech.com 2198YGiU072902
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        NO_DNS_FOR_FROM,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,
+        T_SPF_TEMPERROR autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for low-level debugging on FLEXCOM3 USART of
-LAN966 SoC.
+Current settings for video capture rgb-2-yuv is BT.601(studio swing),
+but JFIF uses BT.601(full swing) to deocde. This mismatch will lead
+to incorrect color. For example, input RGB value, (0, 0, 255), will
+become (16, 16, 235) after jpg decoded.
 
-Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+Add an enum, aspeed_video_capture_format, to define VR008[7:6]
+capture format and correct default settings for video capture to fix
+the problem.
+
+Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
 ---
- arch/arm/Kconfig.debug | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+v2:
+ - update subject from 'media: aspeed: Fix-incorrect-color' to
+   'media: aspeed: Use full swing as JFIF to fix incorrect'
+ - update commit message
+ - add enum, aspeed_video_capture_format, to define VR008[7:6]
+---
+ drivers/media/platform/aspeed-video.c | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm/Kconfig.debug b/arch/arm/Kconfig.debug
-index 976315dea958..7989d0633188 100644
---- a/arch/arm/Kconfig.debug
-+++ b/arch/arm/Kconfig.debug
-@@ -210,6 +210,14 @@ choice
- 		  Say Y here if you want kernel low-level debugging support
- 		  on the FLEXCOM3 port of SAMA7G5.
+diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
+index eb9c17ac0e14..5bcf60b4628b 100644
+--- a/drivers/media/platform/aspeed-video.c
++++ b/drivers/media/platform/aspeed-video.c
+@@ -86,8 +86,6 @@
+ #define  VE_CTRL_SOURCE			BIT(2)
+ #define  VE_CTRL_INT_DE			BIT(4)
+ #define  VE_CTRL_DIRECT_FETCH		BIT(5)
+-#define  VE_CTRL_YUV			BIT(6)
+-#define  VE_CTRL_RGB			BIT(7)
+ #define  VE_CTRL_CAPTURE_FMT		GENMASK(7, 6)
+ #define  VE_CTRL_AUTO_OR_CURSOR		BIT(8)
+ #define  VE_CTRL_CLK_INVERSE		BIT(11)
+@@ -202,6 +200,15 @@ enum {
+ 	VIDEO_CLOCKS_ON,
+ };
  
-+        config DEBUG_AT91_LAN966_FLEXCOM3
-+                bool "Kernel low-level debugging on LAN966 FLEXCOM3 USART"
-+                select DEBUG_AT91_UART
-+                depends on SOC_LAN966
-+                help
-+                  Say Y here if you want kernel low-level debugging support
-+                  on the FLEXCOM3 port of LAN966.
++// for VE_CTRL_CAPTURE_FMT
++enum aspeed_video_capture_format {
++	VIDEO_CAP_FMT_YUV_STUDIO = 0,
++	VIDEO_CAP_FMT_YUV_FULL,
++	VIDEO_CAP_FMT_RGB,
++	VIDEO_CAP_FMT_GRAY,
++	VIDEO_CAP_FMT_MAX
++};
 +
- 	config DEBUG_BCM2835
- 		bool "Kernel low-level debugging on BCM2835 PL011 UART"
- 		depends on ARCH_BCM2835 && ARCH_MULTI_V6
-@@ -1685,6 +1693,7 @@ config DEBUG_UART_PHYS
- 	default 0xd4017000 if DEBUG_MMP_UART2
- 	default 0xd4018000 if DEBUG_MMP_UART3
- 	default 0xe0000000 if DEBUG_SPEAR13XX
-+	default 0xe0040200 if DEBUG_AT91_LAN966_FLEXCOM3
- 	default 0xe1824200 if DEBUG_AT91_SAMA7G5_FLEXCOM3
- 	default 0xe4007000 if DEBUG_HIP04_UART
- 	default 0xe6c40000 if DEBUG_RMOBILE_SCIFA0
-@@ -1805,6 +1814,7 @@ config DEBUG_UART_VIRT
- 	default 0xfb10c000 if DEBUG_REALVIEW_PB1176_PORT
- 	default 0xfcfe8600 if DEBUG_BCM63XX_UART
- 	default 0xfd000000 if DEBUG_SPEAR3XX || DEBUG_SPEAR13XX
-+	default 0xfd040200 if DEBUG_AT91_LAN966_FLEXCOM3
- 	default 0xfd531000 if DEBUG_STIH41X_SBC_ASC1
- 	default 0xfd883000 if DEBUG_ALPINE_UART0
- 	default 0xfdd32000 if DEBUG_STIH41X_ASC2
+ struct aspeed_video_addr {
+ 	unsigned int size;
+ 	dma_addr_t dma;
+@@ -1089,7 +1096,8 @@ static void aspeed_video_init_regs(struct aspeed_video *video)
+ 	u32 comp_ctrl = VE_COMP_CTRL_RSVD |
+ 		FIELD_PREP(VE_COMP_CTRL_DCT_LUM, video->jpeg_quality) |
+ 		FIELD_PREP(VE_COMP_CTRL_DCT_CHR, video->jpeg_quality | 0x10);
+-	u32 ctrl = VE_CTRL_AUTO_OR_CURSOR;
++	u32 ctrl = VE_CTRL_AUTO_OR_CURSOR |
++		FIELD_PREP(VE_CTRL_CAPTURE_FMT, VIDEO_CAP_FMT_YUV_FULL);
+ 	u32 seq_ctrl = video->jpeg_mode;
+ 
+ 	if (video->frame_rate)
 -- 
-2.17.1
+2.25.1
 

@@ -2,127 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7F024AEF93
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 11:55:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF9284AF0F7
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 13:08:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229775AbiBIKzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 05:55:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46148 "EHLO
+        id S232486AbiBIMIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 07:08:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbiBIKzo (ORCPT
+        with ESMTP id S232834AbiBIMGP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 05:55:44 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42748E0A665D;
-        Wed,  9 Feb 2022 02:33:51 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id z13so3543337pfa.3;
-        Wed, 09 Feb 2022 02:33:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=h6uHadWE/39njI3VU+9mX9j/6jVx+OkIYtMIBoXqPnk=;
-        b=DP0yY9iOmpg4V3Ef5qPI0vrA+9KFzNb4Dj+xVQVwJtkAl8VpeO3Nu/zFfEuicePhC/
-         YS8bcFc4rydhmbSPoXuxcTz5ymgTQ7PxQ9h6aPmoZ6Y3vgAN5mdnL/jgddbq/LecnB/w
-         w0C7HWUnv4jQcHjzpCtY6HPj5ssVQHLbX26tsdm6m0el3GEACKIKNuoGJlIuyv5auM87
-         qorTfV76kKzXwayoPjfGYwrivMZpalBlune8219w2acqkdrJcNVRe2yeiCuEw4pxZ/3v
-         sdpiPZ2nVQJoLLkyNq7BaZS/a+b6uzROkHPMhFIrayMERY1NqIE8kmhzwYIuRZaEBUN4
-         zSVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=h6uHadWE/39njI3VU+9mX9j/6jVx+OkIYtMIBoXqPnk=;
-        b=LAIJ5wLUQs53msiBOoO5b82kfDcNzW0kf14P1eTTHLQyA0+hsEOSG5uRsof/tiAyTE
-         Z685t0Zei3M8C13VDAmVy9PZSRiek/KU9LVonHErUlm93IUblKVQLId+no6fWV+zePZQ
-         QVbjq2slTC2wMzP5xRmbtyI2s3LeQYuIhejUuUgz63mWlWiKOXCz8BiJ7hIGSL48P7Rq
-         /jVT171mY4UBeGUdM6JpvHF7dD2OC3KABc3yjkXbJngOU8f1SoX/Jm4KiswORf3lw1oK
-         dF3Cu0sItMs9AneZw1x3T/W56Tzyk3IEBbP7h2gMmEwku3rCdAEKlt/Ga6n3hxG9XObz
-         thMg==
-X-Gm-Message-State: AOAM530HA6kSgXssD+AmfnTcUYt1Jq7etWgqO/FuakAa8pZGY64xtWPd
-        /lc9rZQDzyhlq5Ukm55tLpYRzFUw7jENBW1nE4E=
-X-Google-Smtp-Source: ABdhPJx6txqMEFnOUoWn8WwwTdBxOp1W0O2unJFtdjod4jdQ5PB5EM3kBKUlCAqk0DV/S662JMa0eMJ6vyqhrZPvpDo=
-X-Received: by 2002:a63:5d61:: with SMTP id o33mr1386466pgm.442.1644402830673;
- Wed, 09 Feb 2022 02:33:50 -0800 (PST)
+        Wed, 9 Feb 2022 07:06:15 -0500
+Received: from isilmar-4.linta.de (isilmar-4.linta.de [136.243.71.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9255C07684B;
+        Wed,  9 Feb 2022 03:16:32 -0800 (PST)
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+Received: from owl.dominikbrodowski.net (owl.brodo.linta [10.2.0.111])
+        by isilmar-4.linta.de (Postfix) with ESMTPSA id B5DD820140A;
+        Wed,  9 Feb 2022 08:30:59 +0000 (UTC)
+Received: by owl.dominikbrodowski.net (Postfix, from userid 1000)
+        id 12E7780554; Wed,  9 Feb 2022 09:23:09 +0100 (CET)
+Date:   Wed, 9 Feb 2022 09:23:09 +0100
+From:   Dominik Brodowski <linux@dominikbrodowski.net>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tytso@mit.edu, ebiggers@kernel.org,
+        Eric Biggers <ebiggers@google.com>
+Subject: Re: [PATCH v2 4/9] random: ensure early RDSEED goes through mixer on
+ init
+Message-ID: <YgN57QP5xH9ebrH/@owl.dominikbrodowski.net>
+References: <20220209011919.493762-1-Jason@zx2c4.com>
+ <20220209011919.493762-5-Jason@zx2c4.com>
 MIME-Version: 1.0
-References: <alpine.DEB.2.22.394.2202082148490.52266@hadrien>
-In-Reply-To: <alpine.DEB.2.22.394.2202082148490.52266@hadrien>
-From:   Ricardo Ribalda Delgado <ricardo.ribalda@gmail.com>
-Date:   Wed, 9 Feb 2022 11:33:34 +0100
-Message-ID: <CAPybu_30=ua4emx3hP2eFeJ4gtoOncah+X+NmsBdQq7cTuqZ+g@mail.gmail.com>
-Subject: Re: [PATCH] spi: spi-xilinx: fix for_each_child.cocci warnings
-To:     Julia Lawall <julia.lawall@inria.fr>
-Cc:     Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
-        Michal Simek <monstr@monstr.eu>,
-        Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>,
-        Tejas Prajapati Rameshchandra <tejaspra@xilinx.com>,
-        Naga Sureshkumar Relli <nagasure@xilinx.com>,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
-        Mark Brown <broonie@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        "moderated list:ARM/S5P EXYNOS AR..." 
-        <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>, kbuild-all@lists.01.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220209011919.493762-5-Jason@zx2c4.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 8, 2022 at 9:51 PM Julia Lawall <julia.lawall@inria.fr> wrote:
->
-> From: kernel test robot <lkp@intel.com>
->
-> After for_each_available_child_of_node, of_node_put is needed before break
-> and return.
->
-> Generated by: scripts/coccinelle/iterators/for_each_child.cocci
->
-> Fixes: 3973536c4560 ("spi: spi-xilinx: Updated axi-qspi controller driver")
-> CC: Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Julia Lawall <julia.lawall@inria.fr>
+Am Wed, Feb 09, 2022 at 02:19:14AM +0100 schrieb Jason A. Donenfeld:
+> Continuing the reasoning of "random: use RDSEED instead of RDRAND in
+> entropy extraction" from this series, at init time we also don't want to
+> be xoring RDSEED directly into the crng. Instead it's safer to put it
+> into our entropy collector and then re-extract it, so that it goes
+> through a hash function with preimage resistance.
 
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> ---
->
-> tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v5.15
-> head:   1183ce490adb103e5e569b8ebd74c50c885ddc05
-> commit: 3973536c456079bf3d09e9a97bf33d29422b183f [861/872] spi: spi-xilinx: Updated axi-qspi controller driver
-> :::::: branch date: 7 days ago
-> :::::: commit date: 7 days ago
->
->  spi-xilinx.c |    5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
->
-> --- a/drivers/spi/spi-xilinx.c
-> +++ b/drivers/spi/spi-xilinx.c
-> @@ -693,13 +693,16 @@ static int xilinx_spi_probe(struct platf
->                 if (startup_block) {
->                         ret = of_property_read_u32(nc, "reg",
->                                                    &cs_num);
-> -                       if (ret < 0)
-> +                       if (ret < 0) {
-> +                               of_node_put(nc);
->                                 return -EINVAL;
-> +                       }
->                 }
->                 ret = of_property_read_u32(nc, "spi-rx-bus-width",
->                                            &rx_bus_width);
->                 if (!ret) {
->                         xspi->rx_bus_width = rx_bus_width;
-> +                       of_node_put(nc);
->                         break;
->                 }
->         }
+Any reason why you re-order
 
+> +	mix_pool_bytes(utsname(), sizeof(*(utsname())));
+>  	mix_pool_bytes(&now, sizeof(now));
 
+? It shouldn't matter, but it's an additional change I see no rationale for.
 
--- 
-Ricardo Ribalda
+Also, AFAICS, we now only call rdseed 8 times (to mix into the input pool
+directly and to update the primary pool indirectly) instead of 8 times (for
+the input pool) and 12 times (for initializing the primary pool). That's
+still 64 bytes, and we use that to seed 48 bytes, we're still on the safe
+side. So feel free to add my
+
+	Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
+
+Thanks,
+	Dominik

@@ -2,94 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B40EE4AE877
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 05:12:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D10D74AE87E
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 05:12:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348213AbiBIEL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 23:11:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48898 "EHLO
+        id S1346643AbiBIEMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 23:12:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347509AbiBIDtG (ORCPT
+        with ESMTP id S1347515AbiBIDvD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 22:49:06 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D836C06174F;
-        Tue,  8 Feb 2022 19:49:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DF752B81E57;
-        Wed,  9 Feb 2022 03:49:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D912C340E7;
-        Wed,  9 Feb 2022 03:49:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644378542;
-        bh=NH/0rQb0O2Au84RUhggPWG4HEjxTOHr2UcxZto/4Uhw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=foyT8vJq6VkQKzP0c23smMGcRl/maRyaVj5vNuuZ96ohBFb0F4ek91IrERNdj0D7G
-         yi+kE42/jSvQTbHzkDW7NMYDI27rnjQimCE8CBdBkbAnaQSHBSkpkCNr5bT2LxY86u
-         hxiEvsjvn0f9oou2Hf5lzNGVIUwx7GW4TL3gR4lWi/hINeA3QeqP+dHTWy/o8BoNLx
-         bhps5CvNF507w/eolYjFss9mLDTYrWNGtj2w7nvE17YmZJ71R2RBJ4my5acQqIK8Co
-         i1DI+EY8RGpn6BitStzJTWXy+yR+Qw//vo//gTB3ZRzs4pIZwWIqQKVaSjEoClaV6X
-         vXudEdveHDjQA==
-Date:   Tue, 8 Feb 2022 19:49:00 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Jia-Ju Bai <baijiaju1990@gmail.com>
-Cc:     simon.horman@corigine.com, David Miller <davem@davemloft.net>,
-        shenyang39@huawei.com, libaokun1@huawei.com,
-        oss-drivers@corigine.com, netdev@vger.kernel.org,
+        Tue, 8 Feb 2022 22:51:03 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A910C061578;
+        Tue,  8 Feb 2022 19:51:00 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id n32so1991213pfv.11;
+        Tue, 08 Feb 2022 19:51:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:subject:to:cc:message-id:date:user-agent:mime-version
+         :content-transfer-encoding:content-language;
+        bh=HRdPwXuWMTu44Hbd31o0zplR0BavrSo2F1orInPcfp8=;
+        b=cW5KWjK/tnZxVtckN0ujtQlJnhull6OIFZNKosetMnPdwE3H1iHp35lk8pXmEtdHEV
+         byHtfb+A8nHQgRGmpr9C5QwBE9eSRLSNK/To89h9+2xa9GU3cCWOwhWOXxgPjzdfEio/
+         V/WaMj8/bN97MTF7j8qqtR0b1SBdJV/acCBcSu42VfIMtqqf3EZGZmnDw+fs36NLdQ2O
+         pH09il0jwei6t2ONP3qNwmZODxET3tkPE753IrZxdnJdFqUhuusWZyl40Dz2LLV1cqzL
+         42iei88+m0MEnaDOgLqP7erD8jxup0bFVLWS5+Fyv0OyGSTgCJKLAxOTyPldsxOMPlzv
+         Pj9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:subject:to:cc:message-id:date:user-agent
+         :mime-version:content-transfer-encoding:content-language;
+        bh=HRdPwXuWMTu44Hbd31o0zplR0BavrSo2F1orInPcfp8=;
+        b=W1ntQnitLKzXp1YglWH0S7k49Dz5nHeLkjuocS3RN5hJ2MLlYm78TnxBnDy08REkBS
+         oWipfeJIkD+y623aQuLlXR/E0WWPt0qbn4tfpclWzav65b07oHgsx4wjzZsU+ovukO+z
+         fSXb8QolqCrqWQJbyccUYfjuerdg5af8k10/BvmGh+OKCZ4pqAKk1Ywr4NhRf0gHuFry
+         W4gBzCtdWtserL08wZG3lV/4A2xLOJRKCL7HzidpLXSilY4XrVofIwp95RsZ0YSkQOhT
+         g/oyDsFZkXVvZaDuzuhna6w5ZWBU69iNj6x9X0IZKNIIZBSZsMQj+fkokA7iEs77kdRM
+         RZ7g==
+X-Gm-Message-State: AOAM531EknoYgk+qEVSHEXSTkA9TA1dnvVM37+c31J03IurShDiRUygg
+        1U27BYA6WoMj8q3+Pr0/ikcecxvaBJY=
+X-Google-Smtp-Source: ABdhPJymSo30+5Ud2M4FxOnfKpR4Yr9Ce08b2ReafFmvyQjEDUryhQkWvhHck/SXLVaOE/vnQBaFVQ==
+X-Received: by 2002:a63:2c05:: with SMTP id s5mr430675pgs.106.1644378660080;
+        Tue, 08 Feb 2022 19:51:00 -0800 (PST)
+Received: from [10.73.0.6] ([45.128.198.44])
+        by smtp.gmail.com with ESMTPSA id l2sm4216426pju.52.2022.02.08.19.50.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Feb 2022 19:50:59 -0800 (PST)
+From:   Jia-Ju Bai <baijiaju1990@gmail.com>
+Subject: [BUG] usb: typec: ucsi: possible deadlock in ucsi_pr_swap() and
+ ucsi_handle_connector_change()
+To:     heikki.krogerus@linux.intel.com,
+        Greg KH <gregkh@linuxfoundation.org>, kyletso@google.com,
+        jackp@codeaurora.org, andy.shevchenko@gmail.com,
+        unixbhaskar@gmail.com, subbaram@codeaurora.org,
+        mrana@codeaurora.org
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
         linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [BUG] net: netronome: nfp: possible deadlock in
- nfp_cpp_area_acquire() and nfp_cpp_area_release()
-Message-ID: <20220208194900.6d1afbc4@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <922a002a-3ab6-eabe-131c-af3b8951866b@gmail.com>
-References: <922a002a-3ab6-eabe-131c-af3b8951866b@gmail.com>
+Message-ID: <037de7ac-e210-bdf5-ec7a-8c0c88a0be20@gmail.com>
+Date:   Wed, 9 Feb 2022 11:50:57 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 9 Feb 2022 10:50:44 +0800 Jia-Ju Bai wrote:
-> Hello,
->=20
-> My static analysis tool reports a possible deadlock in the nfp driver in=
-=20
-> Linux 5.16:
->=20
-> nfp_cpp_area_acquire()
->  =C2=A0 mutex_lock(&area->mutex); --> Line 455 (Lock A)
->  =C2=A0 __nfp_cpp_area_acquire()
->  =C2=A0=C2=A0=C2=A0 wait_event_interruptible(area->cpp->waitq, ...) --> L=
-ine 427 (Wait X)
->=20
-> nfp_cpp_area_release()
->  =C2=A0 mutex_lock(&area->mutex); --> Line 502 (Lock A)
->  =C2=A0 wake_up_interruptible_all(&area->cpp->waitq); --> Line 508 (Wake =
-X)
->=20
-> When nfp_cpp_area_acquire() is executed, "Wait X" is performed by=20
-> holding "Lock A". If nfp_cpp_area_release() is executed at this time,=20
-> "Wake X" cannot be performed to wake up "Wait X" in=20
-> nfp_cpp_area_acquire(), because "Lock A" has been already hold by=20
-> nfp_cpp_area_acquire(), causing a possible deadlock.
->=20
-> I am not quite sure whether this possible problem is real and how to fix=
-=20
-> it if it is real.
+Hello,
 
-It's not.
+My static analysis tool reports a possible deadlock in the ucsi driver 
+in Linux 5.16:
 
-> Any feedback would be appreciated, thanks :)
->
->
-> Best wishes,
-> Jia-Ju Bai
+ucsi_pr_swap()
+   mutex_lock(&con->lock); --> Line 962 (Lock A)
+   wait_for_completion_timeout(&con->complete, ...) --> Line 981 (Wait X)
 
+ucsi_handle_connector_change()
+   mutex_lock(&con->lock); --> Line 763 (Lock A)
+   complete(&con->complete); --> Line 782 (Wake X)
+   complete(&con->complete); --> Line 807 (Wake X)
+
+When ucsi_pr_swap() is executed, "Wait X" is performed by holding "Lock 
+A". If ucsi_handle_connector_change() is executed at this time, "Wake X" 
+cannot be performed to wake up "Wait X" in 
+ucsi_handle_connector_change(), because "Lock A" has been already held 
+by ucsi_handle_connector_change(), causing a possible deadlock.
+I find that "Wait X" is performed with a timeout, to relieve the 
+possible deadlock; but I think this timeout can cause inefficient execution.
+
+I am not quite sure whether this possible problem is real.
+Any feedback would be appreciated, thanks :)
+
+
+Best wishes,
+Jia-Ju Bai

@@ -2,120 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 478AB4AF9CB
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 19:18:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A64B4AF9D6
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 19:22:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239582AbiBISR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 13:17:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60702 "EHLO
+        id S239122AbiBISUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 13:20:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239224AbiBISRP (ORCPT
+        with ESMTP id S239128AbiBIST4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 13:17:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE6C6C0045C2
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 10:14:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 9 Feb 2022 13:19:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 34AC4C03C1AA
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 10:19:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644430761;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Qax2p4QYoRES22yBVTV0pqT1gnZb7y7VCXsID9Egc7E=;
+        b=L0mrJIQD61P+grJo6m1ZDIH5iYbwFQGbAmk/dDNFrOdm9xO+y/6nt9QIiEIBSYQSpAjwSy
+        klzIaxGN2GC1Dfw/pDxbehdDOtxnRgqKT9g3JzF3PW4/MmXg3e4igfs7W6xtuWqE546fQ/
+        7/kJIwm4+uUSGBYMscX6ovY/537caXk=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-620-zHSc6UrVO8a503hE2f2VtA-1; Wed, 09 Feb 2022 13:19:15 -0500
+X-MC-Unique: zHSc6UrVO8a503hE2f2VtA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0A7FFB82379
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 18:13:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F01CCC340E7;
-        Wed,  9 Feb 2022 18:13:42 +0000 (UTC)
-Date:   Wed, 9 Feb 2022 18:13:39 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, ardb@kernel.org,
-        bp@alien8.de, dave.hansen@linux.intel.com, frederic@kernel.org,
-        james.morse@arm.com, joey.gouly@arm.com, juri.lelli@redhat.com,
-        linux-kernel@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
-        peterz@infradead.org, tglx@linutronix.de,
-        valentin.schneider@arm.com, will@kernel.org
-Subject: Re: [PATCH v3 7/7] arm64: support PREEMPT_DYNAMIC
-Message-ID: <YgQEUzA+RkKuDus/@arm.com>
-References: <20220209153535.818830-1-mark.rutland@arm.com>
- <20220209153535.818830-8-mark.rutland@arm.com>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 68A4881433D;
+        Wed,  9 Feb 2022 18:19:11 +0000 (UTC)
+Received: from [10.22.9.207] (unknown [10.22.9.207])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 887577DE57;
+        Wed,  9 Feb 2022 18:19:08 +0000 (UTC)
+Message-ID: <24fe6a08-5931-8e8d-8d77-459388c4654e@redhat.com>
+Date:   Wed, 9 Feb 2022 13:19:07 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220209153535.818830-8-mark.rutland@arm.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [RFC 00/12] locking: Separate lock tracepoints from
+ lockdep/lock_stat (v1)
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Namhyung Kim <namhyung@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Byungchul Park <byungchul.park@lge.com>,
+        "Paul E. McKenney" <paul.mckenney@linaro.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Radoslaw Burny <rburny@google.com>, Tejun Heo <tj@kernel.org>,
+        rcu@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, intel-gfx@lists.freedesktop.org
+References: <20220208184208.79303-1-namhyung@kernel.org>
+ <20220209090908.GK23216@worktop.programming.kicks-ass.net>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20220209090908.GK23216@worktop.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 09, 2022 at 03:35:35PM +0000, Mark Rutland wrote:
-> This patch enables support for PREEMPT_DYNAMIC on arm64, allowing the
-> preemption model to be chosen at boot time.
-> 
-> Specifically, this patch selects HAVE_PREEMPT_DYNAMIC_KEY, so that each
-> preemption function is an out-of-line call with an early return
-> depending upon a static key. This leaves almost all the codegen up to
-> the compiler, and side-steps a number of pain points with static calls
-> (e.g. interaction with CFI schemes). This should have no worse overhead
-> than using non-inline static calls, as those use out-of-line trampolines
-> with early returns.
-> 
-> For example, the dynamic_cond_resched() wrapper looks as follows when
-> enabled. When disabled, the first `B` is replaced with a `NOP`,
-> resulting in an early return.
-> 
-> | <dynamic_cond_resched>:
-> |        bti     c
-> |        b       <dynamic_cond_resched+0x10>     // or `nop`
-> |        mov     w0, #0x0
-> |        ret
-> |        mrs     x0, sp_el0
-> |        ldr     x0, [x0, #8]
-> |        cbnz    x0, <dynamic_cond_resched+0x8>
-> |        paciasp
-> |        stp     x29, x30, [sp, #-16]!
-> |        mov     x29, sp
-> |        bl      <preempt_schedule_common>
-> |        mov     w0, #0x1
-> |        ldp     x29, x30, [sp], #16
-> |        autiasp
-> |        ret
-> 
-> ... compared to the regular form of the function:
-> 
-> | <__cond_resched>:
-> |        bti     c
-> |        mrs     x0, sp_el0
-> |        ldr     x1, [x0, #8]
-> |        cbz     x1, <__cond_resched+0x18>
-> |        mov     w0, #0x0
-> |        ret
-> |        paciasp
-> |        stp     x29, x30, [sp, #-16]!
-> |        mov     x29, sp
-> |        bl      <preempt_schedule_common>
-> |        mov     w0, #0x1
-> |        ldp     x29, x30, [sp], #16
-> |        autiasp
-> |        ret
-> 
-> Since arm64 does not yet use the generic entry code, we must define our
-> own `sk_dynamic_irqentry_exit_cond_resched`, which will be
-> enabled/disabled by the common code in kernel/sched/core.c. All other
-> preemption functions and associated static keys are defined there.
-> 
-> Note that PREEMPT_DYNAMIC is `def bool y`, so this will default to
-> enabled.
-> 
-> Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-> Cc: Ard Biesheuvel <ardb@kernel.org>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Frederic Weisbecker <frederic@kernel.org>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Joey Gouly <joey.gouly@arm.com>
-> Cc: Juri Lelli <juri.lelli@redhat.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Valentin Schneider <valentin.schneider@arm.com>
-> Cc: Will Deacon <will@kernel.org>
+On 2/9/22 04:09, Peter Zijlstra wrote:
+> On Tue, Feb 08, 2022 at 10:41:56AM -0800, Namhyung Kim wrote:
+>
+>> Eventually I'm mostly interested in the contended locks only and I
+>> want to reduce the overhead in the fast path.  By moving that, it'd be
+>> easy to track contended locks with timing by using two tracepoints.
+> So why not put in two new tracepoints and call it a day?
+>
+> Why muck about with all that lockdep stuff just to preserve the name
+> (and in the process continue to blow up data structures etc..). This
+> leaves distros in a bind, will they enable this config and provide
+> tracepoints while bloating the data structures and destroying things
+> like lockref (which relies on sizeof(spinlock_t)), or not provide this
+> at all.
+>
+> Yes, the name is convenient, but it's just not worth it IMO. It makes
+> the whole proposition too much of a trade-off.
+>
+> Would it not be possible to reconstruct enough useful information from
+> the lock callsite?
+>
+I second that as I don't want to see the size of a spinlock exceeds 4 
+bytes in a production system.
 
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+Instead of storing additional information (e.g. lock name) directly into 
+the lock itself. Maybe we can store it elsewhere and use the lock 
+address as the key to locate it in a hash table. We can certainly extend 
+the various lock init functions to do that. It will be trickier for 
+statically initialized locks, but we can probably find a way to do that too.
+
+Cheers,
+Longman
+
+

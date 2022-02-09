@@ -2,59 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 69CDD4AF636
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:12:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1FED4AF63C
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:12:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236663AbiBIQLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 11:11:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45966 "EHLO
+        id S236699AbiBIQM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 11:12:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233498AbiBIQLx (ORCPT
+        with ESMTP id S233603AbiBIQMV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 11:11:53 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B50AC0613C9
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 08:11:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644423116; x=1675959116;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=K76IZNl81El6uMeLRI2J523Uo7wzz+zbadhxDLmgMaQ=;
-  b=b5jvodo4YMc2WvmRNhuZV1p+qOwvkTfM80+Qd6pr9Yvj5p+pHrEpmyrs
-   lIdfFI5HmUdjFsTnwykH3YeSRWXaHKB84ngE0TRkarkqXir+YBYqKXoSb
-   oKFDa9IPmnfZO/rLoQvOEUkKc5FZFEJplsGbRFVK6ONttfkGdZW71qsYt
-   wiCr+XQ9ldIdRHaprehi3dPU0ag3z+Han0A9QCqyVfE0SL5mOJkwfhqn1
-   1+hBvmuK5+EBioSwIN8VIm5XQDfXZ6ewBJQdvTEbp7utOmxs5Wvvc7eEd
-   50vX5/wDuduPEU1iPIUWzIC3Gj91gA5f1Sh39RIh/KTJq6SLhnHJbdIQ1
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="229208311"
-X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
-   d="scan'208";a="229208311"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 08:11:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
-   d="scan'208";a="536972775"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 09 Feb 2022 08:11:54 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nHpZS-00021R-6F; Wed, 09 Feb 2022 16:11:54 +0000
-Date:   Thu, 10 Feb 2022 00:11:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Liu Yi L <yi.l.liu@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Wed, 9 Feb 2022 11:12:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91F37C0613C9;
+        Wed,  9 Feb 2022 08:12:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E7EF6178D;
+        Wed,  9 Feb 2022 16:12:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E587BC340E7;
+        Wed,  9 Feb 2022 16:12:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644423143;
+        bh=m3/DCmKw6+XqkFayBElGVHbTdWMUgdbgYLhOgJ1SVRQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=Eq2V2AOH7HmO+ekuO/1S0ugmsKp5DANBwvob+DQ7ABf5OR+IK2Lmg8R6kgtU/S/op
+         nqKzsF5XOT9XbWjFIQRj1Et9aUDff6jaIIjlCEDU0T9/L1QoLpcYFiaNaG35+YlG9l
+         EwKaz1rik05jWapb4XRrIA3YSFRFgK+8v7dZunborSwf+/ZqiDHcwCRskBBDEU810I
+         CmX2AIZtkVSru1zAasEY2X3fLmWiwUAbzfKZU+EeA7WL20cJc1nT8hEItyAAt/4yj3
+         OySfTc9HcdfKXU6ZpSQL5Cb2/ydDm9n3+xHyEYHTQ7yv1m40dooIvG2S/xCwPIfdLs
+         TCmfVXZ/UcUqw==
+Date:   Wed, 9 Feb 2022 10:12:20 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Boqun Feng <boqun.feng@gmail.com>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        Sunil Muthuswamy <sunilmut@linux.microsoft.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [luxis1999-iommufd:iommufd-v5.17-rc1 23/28]
- include/linux/iommufd.h:30:1: error: expected identifier or '('
-Message-ID: <202202100053.GJbVdZiP-lkp@intel.com>
+Subject: Re: [RFC PATCH] PCI: hv: Avoid the retarget interrupt hypercall in
+ irq_unmask() on ARM64
+Message-ID: <20220209161220.GA559499@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220209023722.2866009-1-boqun.feng@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,51 +64,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/luxis1999/iommufd iommufd-v5.17-rc1
-head:   ebf68af0385d0d5c209e63e8065d31db938275d8
-commit: 68a771c26362267465beafd67fabe1e751604493 [23/28] vfio/pci: Add VFIO_DEVICE_ATTACH_IOASPT
-config: hexagon-randconfig-r003-20220209 (https://download.01.org/0day-ci/archive/20220210/202202100053.GJbVdZiP-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e8bff9ae54a55b4dbfeb6ba55f723abbd81bf494)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/luxis1999/iommufd/commit/68a771c26362267465beafd67fabe1e751604493
-        git remote add luxis1999-iommufd https://github.com/luxis1999/iommufd
-        git fetch --no-tags luxis1999-iommufd iommufd-v5.17-rc1
-        git checkout 68a771c26362267465beafd67fabe1e751604493
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/vfio/
+On Wed, Feb 09, 2022 at 10:37:20AM +0800, Boqun Feng wrote:
+> On ARM64 Hyper-V guests, SPIs are used for the interrupts of virtual PCI
+> devices, and SPIs can be managed directly via GICD registers. Therefore
+> the retarget interrupt hypercall is not needed on ARM64.
+> 
+> The retarget interrupt hypercall related code is now put in a helper
+> function and only called on x86.
+> 
+> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> ---
+>  drivers/pci/controller/pci-hyperv.c | 11 +++++++++--
+>  1 file changed, 9 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
+> index 20ea2ee330b8..80aa33ef5bf0 100644
+> --- a/drivers/pci/controller/pci-hyperv.c
+> +++ b/drivers/pci/controller/pci-hyperv.c
+> @@ -1457,7 +1457,7 @@ static void hv_irq_mask(struct irq_data *data)
+>  }
+>  
+>  /**
+> - * hv_irq_unmask() - "Unmask" the IRQ by setting its current
+> + * __hv_irq_unmask() - "Unmask" the IRQ by setting its current
+>   * affinity.
+>   * @data:	Describes the IRQ
+>   *
+> @@ -1466,7 +1466,7 @@ static void hv_irq_mask(struct irq_data *data)
+>   * is built out of this PCI bus's instance GUID and the function
+>   * number of the device.
+>   */
+> -static void hv_irq_unmask(struct irq_data *data)
+> +static void __hv_irq_unmask(struct irq_data *data)
+>  {
+>  	struct msi_desc *msi_desc = irq_data_get_msi_desc(data);
+>  	struct hv_retarget_device_interrupt *params;
+> @@ -1569,6 +1569,13 @@ static void hv_irq_unmask(struct irq_data *data)
+>  	if (!hv_result_success(res) && hbus->state != hv_pcibus_removing)
+>  		dev_err(&hbus->hdev->device,
+>  			"%s() failed: %#llx", __func__, res);
+> +}
+> +
+> +static void hv_irq_unmask(struct irq_data *data)
+> +{
+> +	/* Only use a hypercall on x86 */
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This comment isn't useful because it only repeats what we can already
+see from the "IS_ENABLED(CONFIG_X86)" below and it doesn't say
+anything about *why*.
 
-All errors (new ones prefixed by >>):
+Didn't we just go though an exercise of adding interfaces for
+arch-specific things, i.e., 831c1ae725f7 ("PCI: hv: Make the code arch
+neutral by adding arch specific interfaces")?  Maybe this should be
+another such interface?
 
-   In file included from drivers/vfio/vfio.c:35:
->> include/linux/iommufd.h:30:1: error: expected identifier or '('
-   {
-   ^
-   1 error generated.
+If you add Hyper-V support for a third arch, this #ifdef will likely
+be silently incorrect.  If you add an interface, there's at least a
+clue that this needs to be evaluated.
 
-
-vim +30 include/linux/iommufd.h
-
-faffab36f0032f0 Jason Gunthorpe 2021-11-11  26  
-faffab36f0032f0 Jason Gunthorpe 2021-11-11  27  #else /* !CONFIG_IOMMUFD */
-faffab36f0032f0 Jason Gunthorpe 2021-11-11  28  static inline struct iommufd_device *
-faffab36f0032f0 Jason Gunthorpe 2021-11-11  29  iommufd_bind_pci_device(int fd, struct pci_dev *pdev, u32 *id);
-faffab36f0032f0 Jason Gunthorpe 2021-11-11 @30  {
-faffab36f0032f0 Jason Gunthorpe 2021-11-11  31  	return ERR_PTR(-EOPNOTSUPP);
-faffab36f0032f0 Jason Gunthorpe 2021-11-11  32  }
-faffab36f0032f0 Jason Gunthorpe 2021-11-11  33  
-
-:::::: The code at line 30 was first introduced by commit
-:::::: faffab36f0032f06ff2478067840ead66e38b543 iommufd: Add kAPI toward external drivers
-
-:::::: TO: Jason Gunthorpe <jgg@nvidia.com>
-:::::: CC: Jason Gunthorpe <jgg@nvidia.com>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> +	if (IS_ENABLED(CONFIG_X86))
+> +		__hv_irq_unmask(data);
+>  
+>  	if (data->parent_data->chip->irq_unmask)
+>  		irq_chip_unmask_parent(data);
+> -- 
+> 2.35.1
+> 

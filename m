@@ -2,87 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E9CA4AE83B
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 05:08:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE1AA4AE886
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 05:14:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345776AbiBIEHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 23:07:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45738 "EHLO
+        id S1347985AbiBIEOS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 23:14:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346744AbiBIDg0 (ORCPT
+        with ESMTP id S1346786AbiBIDhl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 22:36:26 -0500
-Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B045C0401C8;
-        Tue,  8 Feb 2022 19:36:24 -0800 (PST)
-Received: by mail-oo1-f47.google.com with SMTP id 189-20020a4a03c6000000b003179d7b30d8so1081160ooi.2;
-        Tue, 08 Feb 2022 19:36:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=M0eMaFLZdFHtOyElhZiC1aSTh7v5BhW9YI15xZRN/jo=;
-        b=KmlInnK6l/O6j3Sabmd2nypSsAbaBUwD3AU3mboYgK4gFBbRa4yySo+aZVcF6s8c4I
-         DwCXb9CORMnsJhDVXCIxQHAesXrqGxnWe6EXSJbT+PQvungBQrdobb8swrrV/yrjOyrg
-         dvJ75tl5a0XE1NdHeTvUofrtKq2oUTmaHZOkXcJeyxKC6BcVFtqN11hxN7LjSfcZFiAJ
-         qBmhQRK+en7OZCFvkZIVonQBS2np99Zgpxwx6BSRU/gmFaEtuHbayvHKb1bPlobERgOO
-         AVWz47kJl+P5hSPj6kPRJt5f4l7T5e4mQPcR+Y1rfkFgeJ98FS8oQcUpWEY+2Z8XC+8Y
-         Wghw==
-X-Gm-Message-State: AOAM532SCdoNllkfIESEQCaor5g/2Ag2zZwtaVT/SnB7dALuEacADKiH
-        BM+bNzx1oWm8wrkRsvpU61poc3hDSA==
-X-Google-Smtp-Source: ABdhPJz8GK79FXdMUJW3iiN73KqRsTqgE1epbU3os+/h7mom2viA19kzju50I1wi3jRxGSJOOYKM/A==
-X-Received: by 2002:a05:6870:3815:: with SMTP id y21mr142981oal.330.1644377783826;
-        Tue, 08 Feb 2022 19:36:23 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id b7sm6161947ooq.30.2022.02.08.19.36.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 19:36:23 -0800 (PST)
-Received: (nullmailer pid 3592618 invoked by uid 1000);
-        Wed, 09 Feb 2022 03:36:22 -0000
-Date:   Tue, 8 Feb 2022 21:36:22 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Biao Huang <biao.huang@mediatek.com>
-Cc:     srv_heupstream@mediatek.com, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Macpaul Lin <macpaul.lin@mediatek.com>,
-        Yinghua Pan <ot_yinghua.pan@mediatek.com>,
-        David Miller <davem@davemloft.net>,
-        Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        linux-mediatek@lists.infradead.org,
-        Fabien Parent <fparent@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH net-next v2 7/9] dt-bindings: net: mtk-star-emac: add
- description for new  properties
-Message-ID: <YgM2tu+Mo34QVAjC@robh.at.kernel.org>
-References: <20220127015857.9868-1-biao.huang@mediatek.com>
- <20220127015857.9868-8-biao.huang@mediatek.com>
+        Tue, 8 Feb 2022 22:37:41 -0500
+X-Greylist: delayed 106 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Feb 2022 19:37:38 PST
+Received: from m12-17.163.com (m12-17.163.com [220.181.12.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2BB3BC0401C7
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 19:37:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=YvOhP
+        o6ymYclh5k4417PVKOkRi78cNnblip3oZXJi9w=; b=b3YuP2NtlIcvzw+cUdRWX
+        qCYVAPNjHzVRBpDCLxd2eJznjz1YqUrjhVmmT+x+KLnqPDcCusJXBLNo54Bl+n5r
+        ThoAbeHLN1+Vi/W5cWYkEpSkfteSmZHwTWf2AqfILeL62CiVrtRXA4YC5gIxLUNB
+        YakRCn9UInoEXg1HMb0UoI=
+Received: from sysgbj8.hosso.cc (unknown [42.62.85.2])
+        by smtp13 (Coremail) with SMTP id EcCowABH3AnbNgNi+NtICA--.41353S2;
+        Wed, 09 Feb 2022 11:37:00 +0800 (CST)
+From:   chengchaohang@163.com
+To:     leon@kernel.org, maorg@nvidia.com, jgg@ziepe.ca,
+        logang@deltatee.com, thunder.leizhen@huawei.com
+Cc:     linux-kernel@vger.kernel.org,
+        "chaohang.cheng" <chaohang.cheng@horizon.ai>
+Subject: [PATCH] lib/scatterlist: Provide scatterlist hexdump.
+Date:   Wed,  9 Feb 2022 11:36:59 +0800
+Message-Id: <20220209033659.3461-1-chengchaohang@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220127015857.9868-8-biao.huang@mediatek.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: EcCowABH3AnbNgNi+NtICA--.41353S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWruF18ZF4xJF48AF48WFWkXrb_yoWkCrb_Ca
+        47Jw45Gr4fGF4IqFW3WFWftFy8WFZ8ZF1I9F1Igr93W3s8urs8X34vqr9rAF45Way8Ca1D
+        Gasaqas7XF1UXjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU5SeHDUUUUU==
+X-Originating-IP: [42.62.85.2]
+X-CM-SenderInfo: xfkh0wpfkd0xxdqjqiywtou0bp/xtbBzRyivF0CR+iuTgAAsf
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 27 Jan 2022 09:58:55 +0800, Biao Huang wrote:
-> Add description for new properties which will be parsed in driver.
-> 
-> Signed-off-by: Biao Huang <biao.huang@mediatek.com>
-> ---
->  .../bindings/net/mediatek,star-emac.yaml         | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
-> 
+From: "chaohang.cheng" <chaohang.cheng@horizon.ai>
 
-Acked-by: Rob Herring <robh@kernel.org>
+A scatterlist hexdump is essential during debug, sometimes.
+
+Signed-off-by: chaohang.cheng <chaohang.cheng@horizon.ai>
+---
+ include/linux/scatterlist.h | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/include/linux/scatterlist.h b/include/linux/scatterlist.h
+index 7ff9d6386c12..ef8ecaac0016 100644
+--- a/include/linux/scatterlist.h
++++ b/include/linux/scatterlist.h
+@@ -563,4 +563,21 @@ bool sg_miter_skip(struct sg_mapping_iter *miter, off_t offset);
+ bool sg_miter_next(struct sg_mapping_iter *miter);
+ void sg_miter_stop(struct sg_mapping_iter *miter);
+ 
++/*
++ * Hexdump scatterlist
++ *
++ * @sg: struct scatterlist* .
++ * it stands for the head of a scatterlist .
++ *
++ * note: print_hex_dump_debug is a dynamic debug .
++ *
++ */
++#define SG_HEXDUMP(sg)							\
++do {									\
++	struct scatterlist *sg_tmp = NULL;				\
++	for (sg_tmp = sg; sg_tmp; sg_tmp = sg_next(sg_tmp))		\
++		print_hex_dump_debug("", DUMP_PREFIX_OFFSET,		\
++			16, 1, sg_virt(sg_tmp), sg_tmp->length, true);	\
++} while (0)
++
+ #endif /* _LINUX_SCATTERLIST_H */
+-- 
+2.25.1
+

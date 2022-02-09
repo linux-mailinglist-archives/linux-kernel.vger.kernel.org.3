@@ -2,100 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49BE84AF042
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 12:57:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E2834AF048
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 12:57:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231560AbiBIL4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 06:56:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57558 "EHLO
+        id S231622AbiBIL5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 06:57:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231614AbiBILz0 (ORCPT
+        with ESMTP id S231650AbiBILzv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 06:55:26 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DCCDC1DC15D;
-        Wed,  9 Feb 2022 02:54:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E369EB81ED4;
-        Wed,  9 Feb 2022 10:54:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64930C340EE;
-        Wed,  9 Feb 2022 10:54:24 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ni01i6IV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1644404062;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aRdcgCtgYDraTbGYY/oTsQAtvoCi9zdr7hZIMT0rVQA=;
-        b=ni01i6IVybxjYFaa2OfDtFqEmv1gYUMXv1FVJLH20lOK8zc7343BumzW4i9Fs+jjYWwRLq
-        xupESrQHIL08L2QE2ul6ZzjWIJuKPOBZc1OAwycdFgZqfaav1SvCUp/3HrDxQCi6jjQXji
-        8UNjHiP3rTi61VkG/c0t2gnoIFktVRg=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id e0ca9df3 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Wed, 9 Feb 2022 10:54:22 +0000 (UTC)
-Received: by mail-yb1-f177.google.com with SMTP id x136so2921488ybe.11;
-        Wed, 09 Feb 2022 02:54:22 -0800 (PST)
-X-Gm-Message-State: AOAM5337/PxkZ1U88/eqFcXm5vS9Sf5xzbuNo9sQYOlvm0oBcxJ27nEI
-        5y4dR8+GJKRg5xwmhnBgOeyQLGlE13K5pCe3t+0=
-X-Google-Smtp-Source: ABdhPJwDHTynxX02xYXwDkdY5sCnwAq1Kr0Cmr4kv6M+XT6xBg88tirCRbBOdldTL6HY+3RRxC9cf2TTxekNdbckb5U=
-X-Received: by 2002:a05:6902:14d:: with SMTP id p13mr1452254ybh.638.1644404061495;
- Wed, 09 Feb 2022 02:54:21 -0800 (PST)
-MIME-Version: 1.0
-References: <20220209011919.493762-1-Jason@zx2c4.com> <20220209011919.493762-8-Jason@zx2c4.com>
- <YgN7mOTtQ03etVJX@owl.dominikbrodowski.net>
-In-Reply-To: <YgN7mOTtQ03etVJX@owl.dominikbrodowski.net>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Wed, 9 Feb 2022 11:54:10 +0100
-X-Gmail-Original-Message-ID: <CAHmME9qUv+FTShqpYn0GJjUwHgkWCpE8T7rDNg+2byWpCHANig@mail.gmail.com>
-Message-ID: <CAHmME9qUv+FTShqpYn0GJjUwHgkWCpE8T7rDNg+2byWpCHANig@mail.gmail.com>
-Subject: Re: [PATCH v2 7/9] random: use simpler fast key erasure flow on
- per-cpu keys
-To:     Dominik Brodowski <linux@dominikbrodowski.net>
-Cc:     Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 9 Feb 2022 06:55:51 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 793D0E00FA7A
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 02:56:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644404181; x=1675940181;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=ZzXvGDpuBIFPUCI015ca9co1l1JLyg3bO61AflE667Q=;
+  b=WLoYcHIfjaJ/Wmflq0gu+lbvVYVFLHutpnvAo7C26ve2nJF6FaAwmsYk
+   Yy/wuritJX/28y+VHl2k5JE7V0H87NRIsRH9rZsgEW4nQ3+YlWfDp8dFO
+   91G03ifDuBBvGbVSSD2UktZkZtmnH2WZqGxNXzOdsIk74OMuoOM19Hj6B
+   NpaMU3hxT7rRyNwDT9oKfOw0ag02cDFJGl1be/oEYsMEpbroDP82A3onF
+   bZuJRQ+E7O1kif6RCbmo7+LcJjJnrN/DKjlCfEOSpEKoFkkL3vfoazYzZ
+   9q8gf4z2sKxIGySv9simigmuZca1NVbNMLExWoKg4aOl0V4Jxb4ECjYvR
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="236584968"
+X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
+   d="scan'208";a="236584968"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 02:56:21 -0800
+X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
+   d="scan'208";a="485198181"
+Received: from ravicha1-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.255.88.114])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 02:56:15 -0800
+Date:   Wed, 9 Feb 2022 23:56:13 +1300
+From:   Kai Huang <kai.huang@intel.com>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <dave.hansen@intel.com>, <luto@kernel.org>, <peterz@infradead.org>,
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        <aarcange@redhat.com>, <ak@linux.intel.com>,
+        <dan.j.williams@intel.com>, <david@redhat.com>, <hpa@zytor.com>,
+        <jgross@suse.com>, <jmattson@google.com>, <joro@8bytes.org>,
+        <jpoimboe@redhat.com>, <knsathya@kernel.org>,
+        <pbonzini@redhat.com>, <sdeep@vmware.com>, <seanjc@google.com>,
+        <tony.luck@intel.com>, <vkuznets@redhat.com>,
+        <wanpengli@tencent.com>, <x86@kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCHv2 00/29] TDX Guest: TDX core support
+Message-Id: <20220209235613.652f5720cd196331d7a220ec@intel.com>
+In-Reply-To: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
+References: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 9, 2022 at 9:31 AM Dominik Brodowski
-<linux@dominikbrodowski.net> wrote:
-> Do we need a BUG_ON(random_data_len > 32) here?
 
-I suppose we do. I'll add it. I didn't have this originally because
-there are really only same-file callers which are careful, and the
-compiler can't optimize it out. But maybe that carefulness won't be
-there in the future, so seems like a good idea to add it.
+>  60 files changed, 2079 insertions(+), 142 deletions(-)
+>  create mode 100644 Documentation/x86/tdx.rst
+>  create mode 100644 arch/x86/boot/compressed/tdcall.S
+>  create mode 100644 arch/x86/boot/compressed/tdx.c
+>  create mode 100644 arch/x86/boot/compressed/tdx.h
+>  create mode 100644 arch/x86/boot/io.h
+>  create mode 100644 arch/x86/include/asm/shared/io.h
+>  create mode 100644 arch/x86/include/asm/shared/tdx.h
+>  create mode 100644 arch/x86/include/asm/tdx.h
+>  create mode 100644 arch/x86/kernel/tdcall.S
+>  create mode 100644 arch/x86/kernel/tdx.c
+> 
 
-> > +     memset(&chacha_state[12], 0, sizeof(u32) * 4);
->
-> No IV, no generation counter here? As you already have a generation counter
-> in use for other purposes, why not use it here as well as some non-zero
-> starting point?
+Hi,
 
-No. The "fast key erasure" proposal sets the nonce to zero and sets
-the counter from zero, so I'd like to do the same, and leave the nonce
-field available for some other interesting use in the future. For
-example, setting the nonce to smp_processor_id() if we do future
-interesting things with lockfree algorithms. For now we have already a
-256-bit key which is more than sufficient.
+Is it better to change the file name(s) to reflect they are for TDX guest
+support, for instance, especially the last one arch/x86/kernel/tdx.c?
 
-By the way, if https://blog.cr.yp.to/20170723-random.html (the
-original fast key erasure rng description) is a wall of text that's
-not too appealing, you can read Dan's implementation of it in
-supercop, which is remarkably simple:
-https://github.com/jedisct1/supercop/blob/master/crypto_rng/chacha20/ref/rng.c
-. You'll notice the new code in this commit isn't too far from there.
+TDX host support basically does detection of SEAM, TDX KeyIDs, P-SEAMLDR and
+initialize the TDX module, so likely TDX host support will introduce couple of
+new files to do above things respectively, and the majority of the code could be
+self-contained under some directory (currently under arch/x86/kernel/cpu/tdx/,
+but can be changed of course).  Could we have some suggestions on how to
+organize?
 
-Jason
+Thanks,
+-Kai

@@ -1,92 +1,90 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CB3C4AFD24
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 20:18:12 +0100 (CET)
+Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id DF1F34AFD84
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 20:32:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233460AbiBITRq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 14:17:46 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:50404 "EHLO
+        id S235831AbiBITbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 14:31:42 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:36506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233167AbiBITRb (ORCPT
+        with ESMTP id S235550AbiBITbQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 14:17:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3A39DD94E70;
-        Wed,  9 Feb 2022 11:17:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EDDEA61994;
-        Wed,  9 Feb 2022 19:16:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEA4AC340E7;
-        Wed,  9 Feb 2022 19:16:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644434164;
-        bh=AzOfA4WjjGO4YAkiQ0uYAQEZznXQvHRBsgUjIZu3g/s=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sNVtPV6dGjgZvBGP8lvJWEWLph9tCjOfxc3PTUx0LbGgejMhuNrjh9+hZPaSXYjJj
-         Oda2WuYRUmAumJItxQSR8Shrk0jA/0qnNhGuiGpJQwE83FbLswPuaykq4u7sXndmEz
-         HQH9ykZ2DCTup41v68ikBjZeI4Vny035oeVGPzoI=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jan Beulich <jbeulich@suse.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Subject: [PATCH 5.16 5/5] crypto: api - Move cryptomgr soft dependency into algapi
-Date:   Wed,  9 Feb 2022 20:14:37 +0100
-Message-Id: <20220209191250.080740576@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220209191249.887150036@linuxfoundation.org>
-References: <20220209191249.887150036@linuxfoundation.org>
-User-Agent: quilt/0.66
+        Wed, 9 Feb 2022 14:31:16 -0500
+Received: from smtp.smtpout.orange.fr (smtp10.smtpout.orange.fr [80.12.242.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C6037C0219A3
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 11:22:57 -0800 (PST)
+Received: from [192.168.1.18] ([90.126.236.122])
+        by smtp.orange.fr with ESMTPA
+        id HsQsnZO3wbnFGHsQtncXNY; Wed, 09 Feb 2022 20:15:16 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Wed, 09 Feb 2022 20:15:16 +0100
+X-ME-IP: 90.126.236.122
+Message-ID: <9c563d78-f883-65ee-9e7b-cf44e3b238e8@wanadoo.fr>
+Date:   Wed, 9 Feb 2022 20:15:13 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] staging: pi433: using div64_u64() instead of do_div()
+Content-Language: en-GB
+To:     David Laight <David.Laight@ACULAB.COM>,
+        'Jiapeng Chong' <jiapeng.chong@linux.alibaba.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+Cc:     "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Abaci Robot <abaci@linux.alibaba.com>
+References: <20220121114955.96979-1-jiapeng.chong@linux.alibaba.com>
+ <03591933cc384d7e91ede82f0cdd76a8@AcuMS.aculab.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <03591933cc384d7e91ede82f0cdd76a8@AcuMS.aculab.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Herbert Xu <herbert@gondor.apana.org.au>
+Le 21/01/2022 à 14:34, David Laight a écrit :
+> From: Jiapeng Chong
+>> Sent: 21 January 2022 11:50
+>> Subject: [PATCH] staging: pi433: using div64_u64() instead of do_div()
+>>
+>> Clean the following coccicheck warning:
+>>
+>> ./drivers/staging/pi433/rf69.c:286:1-7: WARNING: do_div() does a
+>> 64-by-32 division, please consider using div64_u64 instead.
+> 
+> That is one of patchcheck's worse warnings.
+> 
+> You need to check the domain of the divisor, not its type.
+> 
+> do_div() exists to avoid expensive 64bit divides when the
+> divisor is small.
+> 
+> 	David
+> 
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)
+> 
+> 
 
-commit c6ce9c5831cae515d375a01b97ae1778689acf19 upstream.
+Moreover, the patch is broken by itself.
 
-The soft dependency on cryptomgr is only needed in algapi because
-if algapi isn't present then no algorithms can be loaded.  This
-also fixes the case where api is built-in but algapi is built as
-a module as the soft dependency would otherwise get lost.
+See [1] were it was already reported that do_div() and div64_u64() don't 
+have the same calling convention.
 
-Fixes: 8ab23d547f65 ("crypto: api - Add softdep on cryptomgr")
-Reported-by: Jan Beulich <jbeulich@suse.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
-Tested-by: Jan Beulich <jbeulich@suse.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- crypto/algapi.c |    1 +
- crypto/api.c    |    1 -
- 2 files changed, 1 insertion(+), 1 deletion(-)
+Looks that div64_u64() and div64_ul() works the same way.
 
---- a/crypto/algapi.c
-+++ b/crypto/algapi.c
-@@ -1324,3 +1324,4 @@ module_exit(crypto_algapi_exit);
- 
- MODULE_LICENSE("GPL");
- MODULE_DESCRIPTION("Cryptographic algorithms API");
-+MODULE_SOFTDEP("pre: cryptomgr");
---- a/crypto/api.c
-+++ b/crypto/api.c
-@@ -643,4 +643,3 @@ EXPORT_SYMBOL_GPL(crypto_req_done);
- 
- MODULE_DESCRIPTION("Cryptographic core API");
- MODULE_LICENSE("GPL");
--MODULE_SOFTDEP("pre: cryptomgr");
 
+CJ
+
+[1]: 
+https://lore.kernel.org/linux-kernel/20211117112559.jix3hmx7uwqmuryg@pengutronix.de/ 
 

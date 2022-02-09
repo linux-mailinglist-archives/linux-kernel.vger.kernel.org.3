@@ -2,153 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E44BC4AEE13
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 10:37:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 845924AEE24
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 10:41:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238158AbiBIJcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 04:32:50 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:35676 "EHLO
+        id S236705AbiBIJjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 04:39:36 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:45504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235057AbiBIJa7 (ORCPT
+        with ESMTP id S238593AbiBIJdU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 04:30:59 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C9ABE0C5BE8;
-        Wed,  9 Feb 2022 01:30:56 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id c5-20020a17090a1d0500b001b904a7046dso3003430pjd.1;
-        Wed, 09 Feb 2022 01:30:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=5JCf3O060kbSSop2cpb2bg0F0aVQnL4uVtK8Kp7eaR4=;
-        b=dmQKEbuyufICCzb0Ducdg3ed34C/sqo8nRJ8SWwTzGmkjieQnq+ZeeT7dPZRpfrcsD
-         T/+0l+4JDXlVvK6CZ2EkXNH8apkToMifh3sessYqh9jjU8zDXNWTNu2TPIoidk5Cgwl7
-         SmFxgujepAQ8eW6uiE+c7PpfXX7dJHmc1xwf7GcaUDV4bwiZbDKa8QBMSA2QNmDZtZd3
-         GQkl0NBeHp6PcLSwKRe5KcLwyVKpERlexruONsb5k2QjjP8fVWvSi02PVy3FSd/+k7JA
-         S4pGtGsak5HOr47b+JIWYsgG81/2T9WtbGBV7mJHpo4U1DjyDHHsXQdvlZaknjIa41Am
-         wSew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=5JCf3O060kbSSop2cpb2bg0F0aVQnL4uVtK8Kp7eaR4=;
-        b=x2OWa5uvUbTkqHzrO4h69pR02pGaWSeSnh2oDQaBsDpoRuwWqGPra6sNrvNEve5Yee
-         JSv64Tn/88QIBeNTLFaDqUPXBaoiIAINYWwp8OtecClBMB7uX/g+bg7lwRXbbNwMRheR
-         OAWVKhWKuukgBLnrpYJIeiaTd5ILIYGcw1JPfj2MHnXnPwcbFvZC+MFWOgnkLgZaxaaR
-         8v8URxQw3jLmnXrkwVzKa4RIfCwXZX4bQB9xaH36S8Olfr8fq3A2GwMWRR1R+WYKyKXQ
-         VpfVxoNbMgSgYLGPdKbeODlc3xpDt6l/+fohWqO+kptG7+0toHvBe2Ib16jRBmauTYHW
-         djlg==
-X-Gm-Message-State: AOAM532r3eAEF8j9EVlk6k/JcOU1QlJ/MoDuklECr4hfpkQAyyGfFqq4
-        OKXsXJbx1jV6pRFknNIGD+g=
-X-Google-Smtp-Source: ABdhPJzTrZWO2VNfOhplT+u4kBtvyPgCVdMGaBIGEABbveTXYSqVS6ytt0fRPBV1gli1C3tuNl66zg==
-X-Received: by 2002:a17:902:b215:: with SMTP id t21mr1255668plr.73.1644399004379;
-        Wed, 09 Feb 2022 01:30:04 -0800 (PST)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id md9sm5462893pjb.6.2022.02.09.01.30.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Feb 2022 01:30:04 -0800 (PST)
-Message-ID: <43e6dad3-dfdf-ba4a-cd95-99eca2538384@gmail.com>
-Date:   Wed, 9 Feb 2022 17:29:55 +0800
+        Wed, 9 Feb 2022 04:33:20 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3960E05B1CC
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 01:33:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644399196; x=1675935196;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ijmXiHaC9NMp14wmzN7JkrQt24FQH775m1GD8fr5qsE=;
+  b=DQ9oWyuobaPvahxtmgVlsUtJEKwqmigVE8H3PbUn0Kf9/iEn5mIgzUbZ
+   jPsBD10QGmeL/mJAjm9nt0TMe8BeuHj1cmxAFR2yNLifGlAc7oXltKWxy
+   zxRdV4bd3N+KYzxgLvX7aWAicVCfDmQKeu0ngsxLYMXPfcGGgidQGLjb+
+   6gRsdauyNjoh7s7QLet2O4euGdH5N6tJEj+oobNy3ydvxgDaEpp9dNHsF
+   XlxlcHPsFJnedE1410UcluHyalnIUlVWE8M8xL9mIEjGVvRXz1LyyZmVm
+   xsTmYOoWwdiLTvNm5lit7U+cf9BeLH5ekYDhvgEpxaHi/3jVlqNum4/Ks
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="248925879"
+X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
+   d="scan'208";a="248925879"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 01:32:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
+   d="scan'208";a="701195000"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 09 Feb 2022 01:32:38 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nHjL3-0001a1-IN; Wed, 09 Feb 2022 09:32:37 +0000
+Date:   Wed, 9 Feb 2022 17:32:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Vineet Gupta <vgupta@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org
+Subject: arch/arc/kernel/smp.c:279:18: sparse: sparse: dereference of noderef
+ expression
+Message-ID: <202202091740.HWwIjRT0-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.0
-Subject: Re: [PATCH] KVM: x86/cpuid: Stop exposing unknown AMX Tile Palettes
- and accelerator units
-Content-Language: en-US
-From:   Like Xu <like.xu.linux@gmail.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220117065957.65335-1-likexu@tencent.com>
-Organization: Tencent
-In-Reply-To: <20220117065957.65335-1-likexu@tencent.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   e6251ab4551f51fa4cee03523e08051898c3ce82
+commit: e188f3330a13df904d77003846eafd3edf99009d ARC: cmpxchg/xchg: rewrite as macros to make type safe
+date:   6 months ago
+config: arc-randconfig-s032-20220209 (https://download.01.org/0day-ci/archive/20220209/202202091740.HWwIjRT0-lkp@intel.com/config)
+compiler: arc-elf-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e188f3330a13df904d77003846eafd3edf99009d
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout e188f3330a13df904d77003846eafd3edf99009d
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arc SHELL=/bin/bash arch/arc/kernel/
 
-KVM does not have much filtering in exposing the host cpuid (at least for Intel 
-PT and AMX),
-and innocent user spaces could be corrupted when unknown new bits are 
-accidentally exposed.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Comments on code changes in this direction are welcome.
 
-+ https://lore.kernel.org/kvm/20220112041100.26769-1-likexu@tencent.com/
+sparse warnings: (new ones prefixed by >>)
+   arch/arc/kernel/smp.c:264:48: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected unsigned long [noderef] __percpu *ipi_data_ptr @@     got unsigned long * @@
+   arch/arc/kernel/smp.c:264:48: sparse:     expected unsigned long [noderef] __percpu *ipi_data_ptr
+   arch/arc/kernel/smp.c:264:48: sparse:     got unsigned long *
+   arch/arc/kernel/smp.c:279:18: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile *v @@     got unsigned long [noderef] __percpu *__ai_ptr @@
+   arch/arc/kernel/smp.c:279:18: sparse:     expected void const volatile *v
+   arch/arc/kernel/smp.c:279:18: sparse:     got unsigned long [noderef] __percpu *__ai_ptr
+   arch/arc/kernel/smp.c:277:29: sparse: sparse: cast removes address space '__percpu' of expression
+   arch/arc/kernel/smp.c:413:72: sparse: sparse: incorrect type in argument 4 (different address spaces) @@     expected void [noderef] __percpu *percpu_dev_id @@     got int *dev @@
+   arch/arc/kernel/smp.c:413:72: sparse:     expected void [noderef] __percpu *percpu_dev_id
+   arch/arc/kernel/smp.c:413:72: sparse:     got int *dev
+>> arch/arc/kernel/smp.c:279:18: sparse: sparse: dereference of noderef expression
+>> arch/arc/kernel/smp.c:279:18: sparse: sparse: dereference of noderef expression
 
-On 17/1/2022 2:59 pm, Like Xu wrote:
-> From: Like Xu <likexu@tencent.com>
-> 
-> Guest enablement of Intel AMX requires a good co-work from both host and
-> KVM, which means that KVM should take a more safer approach to avoid
-> the accidental inclusion of new unknown AMX features, even though it's
-> designed to be an extensible architecture.
-> 
-> Per current spec, Intel CPUID Leaf 1EH sub-leaf 1 and above are reserved,
-> other bits in leaves 0x1d and 0x1e marked as "Reserved=0" shall be strictly
-> limited by definition for reporeted KVM_GET_SUPPORTED_CPUID.
-> 
-> Fixes: 690a757d610e ("kvm: x86: Add CPUID support for Intel AMX")
-> Signed-off-by: Like Xu <likexu@tencent.com>
-> ---
->   arch/x86/kvm/cpuid.c | 12 ++++++++----
->   1 file changed, 8 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-> index c55e57b30e81..3fde6610d314 100644
-> --- a/arch/x86/kvm/cpuid.c
-> +++ b/arch/x86/kvm/cpuid.c
-> @@ -661,7 +661,6 @@ static struct kvm_cpuid_entry2 *do_host_cpuid(struct kvm_cpuid_array *array,
->   	case 0x17:
->   	case 0x18:
->   	case 0x1d:
-> -	case 0x1e:
->   	case 0x1f:
->   	case 0x8000001d:
->   		entry->flags |= KVM_CPUID_FLAG_SIGNIFCANT_INDEX;
-> @@ -936,21 +935,26 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
->   		break;
->   	/* Intel AMX TILE */
->   	case 0x1d:
-> +		entry->ebx = entry->ecx = entry->edx = 0;
->   		if (!kvm_cpu_cap_has(X86_FEATURE_AMX_TILE)) {
-> -			entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
-> +			entry->eax = 0;
->   			break;
->   		}
->   
-> +		entry->eax = min(entry->eax, 1u);
->   		for (i = 1, max_idx = entry->eax; i <= max_idx; ++i) {
->   			if (!do_host_cpuid(array, function, i))
->   				goto out;
->   		}
->   		break;
-> -	case 0x1e: /* TMUL information */
-> +	/* TMUL Information */
-> +	case 0x1e:
-> +		entry->eax = entry->ecx = entry->edx = 0;
->   		if (!kvm_cpu_cap_has(X86_FEATURE_AMX_TILE)) {
-> -			entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
-> +			entry->ebx = 0;
->   			break;
->   		}
-> +		entry->ebx &= 0xffffffu;
->   		break;
->   	case KVM_CPUID_SIGNATURE: {
->   		const u32 *sigptr = (const u32 *)KVM_SIGNATURE;
+vim +279 arch/arc/kernel/smp.c
+
+41195d236e8445 Vineet Gupta    2013-01-18  261  
+ddf84433f411b6 Vineet Gupta    2013-11-25  262  static void ipi_send_msg_one(int cpu, enum ipi_msg_type msg)
+41195d236e8445 Vineet Gupta    2013-01-18  263  {
+f2a4aa5646687f Vineet Gupta    2013-11-26  264  	unsigned long __percpu *ipi_data_ptr = per_cpu_ptr(&ipi_data, cpu);
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  265  	unsigned long old, new;
+41195d236e8445 Vineet Gupta    2013-01-18  266  	unsigned long flags;
+41195d236e8445 Vineet Gupta    2013-01-18  267  
+f2a4aa5646687f Vineet Gupta    2013-11-26  268  	pr_debug("%d Sending msg [%d] to %d\n", smp_processor_id(), msg, cpu);
+f2a4aa5646687f Vineet Gupta    2013-11-26  269  
+41195d236e8445 Vineet Gupta    2013-01-18  270  	local_irq_save(flags);
+41195d236e8445 Vineet Gupta    2013-01-18  271  
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  272  	/*
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  273  	 * Atomically write new msg bit (in case others are writing too),
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  274  	 * and read back old value
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  275  	 */
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  276  	do {
+6aa7de059173a9 Mark Rutland    2017-10-23  277  		new = old = READ_ONCE(*ipi_data_ptr);
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  278  		new |= 1U << msg;
+d8e8c7dda11f5d Vineet Gupta    2013-11-28 @279  	} while (cmpxchg(ipi_data_ptr, old, new) != old);
+41195d236e8445 Vineet Gupta    2013-01-18  280  
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  281  	/*
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  282  	 * Call the platform specific IPI kick function, but avoid if possible:
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  283  	 * Only do so if there's no pending msg from other concurrent sender(s).
+82a423053eb3cf Changcheng Deng 2021-08-14  284  	 * Otherwise, receiver will see this msg as well when it takes the
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  285  	 * IPI corresponding to that msg. This is true, even if it is already in
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  286  	 * IPI handler, because !@old means it has not yet dequeued the msg(s)
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  287  	 * so @new msg can be a free-loader
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  288  	 */
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  289  	if (plat_smp_ops.ipi_send && !old)
+ddf84433f411b6 Vineet Gupta    2013-11-25  290  		plat_smp_ops.ipi_send(cpu);
+41195d236e8445 Vineet Gupta    2013-01-18  291  
+41195d236e8445 Vineet Gupta    2013-01-18  292  	local_irq_restore(flags);
+41195d236e8445 Vineet Gupta    2013-01-18  293  }
+41195d236e8445 Vineet Gupta    2013-01-18  294  
+
+:::::: The code at line 279 was first introduced by commit
+:::::: d8e8c7dda11f5d5cf90495f2e89d917a83509bc0 ARC: [SMP] optimize IPI send and receive
+
+:::::: TO: Vineet Gupta <vgupta@synopsys.com>
+:::::: CC: Vineet Gupta <vgupta@synopsys.com>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

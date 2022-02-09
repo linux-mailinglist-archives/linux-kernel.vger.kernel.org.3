@@ -2,91 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09CBB4AEDD7
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 10:20:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20BB04AEE26
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 10:41:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231565AbiBIJTa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 04:19:30 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:53280 "EHLO
+        id S235567AbiBIJjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 04:39:22 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:34498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbiBIJT3 (ORCPT
+        with ESMTP id S238768AbiBIJhY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 04:19:29 -0500
-Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67B14E04EC3F;
-        Wed,  9 Feb 2022 01:19:18 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=guwen@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0V4-Yw8X_1644398037;
-Received: from 30.225.24.53(mailfrom:guwen@linux.alibaba.com fp:SMTPD_---0V4-Yw8X_1644398037)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 09 Feb 2022 17:13:58 +0800
-Message-ID: <c15e185e-3d92-e5ce-fc99-600b98bfe3dd@linux.alibaba.com>
-Date:   Wed, 9 Feb 2022 17:13:57 +0800
+        Wed, 9 Feb 2022 04:37:24 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8653CE01645B
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 01:37:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644399442; x=1675935442;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=/6uiJQFfqhv44fXSuW+FhKqitrm0zUSNGD6jShAAAto=;
+  b=CHVqRHQCSJNpnXwQ1eISCK012gkZtoQDUqCp5p2p11qfj9qEapFGUYWx
+   x6w06zrhKNJ3kVu4a1hCRzBwtBbkWD3OfVdGUCf8fj6UEafT+4WoRysAr
+   mM3Bmlv6FknyJl6zqckMZLOr9o8QfVVRI3VxfQHao2wYMw2Xl/orlRMn0
+   MS5lJG6KEq1piw7j1XHkC1/iyUeNEoIb9in0DnJHWMauokMB9klvmHDjT
+   QGos/6Mpp0s5XK+rlJnl2xuPYAdlc5ej6xOHbGs2pUBmIAAarIxODHdnj
+   S3gT8DbUIrcMqLrNp7O/JcUue550FfGvQlYpnDBzSYX5jXWWnBlP0UeZo
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="236568952"
+X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
+   d="scan'208";a="236568952"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 01:14:37 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
+   d="scan'208";a="525918355"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 09 Feb 2022 01:14:36 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nHj3b-0001Xs-Pp; Wed, 09 Feb 2022 09:14:35 +0000
+Date:   Wed, 09 Feb 2022 17:13:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:dev.2022.02.03a] BUILD SUCCESS
+ bb642455a39a2f9a89b921e7782937023bb92fcd
+Message-ID: <620385d7.E1jVPSh0kkKj4xaa%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.0
-Subject: Re: [syzbot] BUG: MAX_LOCK_DEPTH too low! (3)
-To:     syzbot <syzbot+4de3c0e8a263e1e499bc@syzkaller.appspotmail.com>,
-        andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net,
-        john.fastabend@gmail.com, kafai@fb.com, kgraul@linux.ibm.com,
-        kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, songliubraving@fb.com,
-        syzkaller-bugs@googlegroups.com, yhs@fb.com
-References: <0000000000006d045e05d78776f6@google.com>
-From:   Wen Gu <guwen@linux.alibaba.com>
-In-Reply-To: <0000000000006d045e05d78776f6@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2022.02.03a
+branch HEAD: bb642455a39a2f9a89b921e7782937023bb92fcd  squash! mm: Check for SLAB_TYPESAFE_BY_RCU and __GFP_ZERO slab creation
 
+elapsed time: 1492m
 
-On 2022/2/9 4:21 am, syzbot wrote:
+configs tested: 170
+configs skipped: 4
 
-> The issue was bisected to:
-> 
-> commit 341adeec9adad0874f29a0a1af35638207352a39
-> Author: Wen Gu <guwen@linux.alibaba.com>
-> Date:   Wed Jan 26 15:33:04 2022 +0000
-> 
->      net/smc: Forward wakeup to smc socket waitqueue after fallback
-> 
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=11c2637c700000
-> final oops:     https://syzkaller.appspot.com/x/report.txt?x=13c2637c700000
-> console output: https://syzkaller.appspot.com/x/log.txt?x=15c2637c700000
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+4de3c0e8a263e1e499bc@syzkaller.appspotmail.com
-> Fixes: 341adeec9ada ("net/smc: Forward wakeup to smc socket waitqueue after fallback")
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Thanks for all the details provided by syzbot.
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                          randconfig-c001
+powerpc                   motionpro_defconfig
+sh                   sh7724_generic_defconfig
+sh                               alldefconfig
+arc                          axs103_defconfig
+sh                          rsk7264_defconfig
+mips                  decstation_64_defconfig
+arm                        cerfcube_defconfig
+sh                        dreamcast_defconfig
+sh                           se7750_defconfig
+openrisc                         alldefconfig
+sparc                       sparc64_defconfig
+m68k                        m5272c3_defconfig
+powerpc                        warp_defconfig
+alpha                               defconfig
+mips                         cobalt_defconfig
+sh                          urquell_defconfig
+mips                     decstation_defconfig
+sh                         microdev_defconfig
+xtensa                  nommu_kc705_defconfig
+arm                         cm_x300_defconfig
+sh                             espt_defconfig
+powerpc                       ppc64_defconfig
+h8300                     edosk2674_defconfig
+nds32                               defconfig
+m68k                       m5475evb_defconfig
+powerpc                      mgcoge_defconfig
+powerpc                 canyonlands_defconfig
+powerpc                     stx_gp3_defconfig
+sparc64                             defconfig
+powerpc                     taishan_defconfig
+mips                       bmips_be_defconfig
+mips                           jazz_defconfig
+powerpc                     sequoia_defconfig
+mips                         rt305x_defconfig
+arc                          axs101_defconfig
+ia64                      gensparse_defconfig
+powerpc                 mpc834x_itx_defconfig
+sh                   rts7751r2dplus_defconfig
+arm                        multi_v7_defconfig
+sh                          sdk7780_defconfig
+mips                         db1xxx_defconfig
+sh                             sh03_defconfig
+openrisc                            defconfig
+sh                        sh7763rdp_defconfig
+arm                        mvebu_v7_defconfig
+mips                            gpr_defconfig
+arm                     eseries_pxa_defconfig
+powerpc                 mpc8540_ads_defconfig
+sh                           se7724_defconfig
+sh                                  defconfig
+mips                     loongson1b_defconfig
+sh                   sh7770_generic_defconfig
+csky                             alldefconfig
+arc                           tb10x_defconfig
+microblaze                      mmu_defconfig
+powerpc                      tqm8xx_defconfig
+sh                          polaris_defconfig
+arm                         axm55xx_defconfig
+powerpc                  storcenter_defconfig
+arm                         assabet_defconfig
+sh                           se7343_defconfig
+mips                 decstation_r4k_defconfig
+powerpc                      arches_defconfig
+powerpc                  iss476-smp_defconfig
+powerpc                       maple_defconfig
+riscv                    nommu_k210_defconfig
+parisc                           alldefconfig
+sh                           se7619_defconfig
+arm                  randconfig-c002-20220209
+arm                  randconfig-c002-20220208
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                                defconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a002
+i386                          randconfig-a003
+i386                          randconfig-a001
+i386                          randconfig-a005
+x86_64                        randconfig-a004
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+x86_64                        randconfig-a011
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+arc                  randconfig-r043-20220208
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
 
-I reproduced this issue in my environment. It is caused by repeated calls to
-smc_switch_to_fallback().
+clang tested configs:
+riscv                randconfig-c006-20220209
+x86_64                        randconfig-c007
+powerpc              randconfig-c003-20220209
+i386                          randconfig-c001
+mips                 randconfig-c004-20220209
+arm                  randconfig-c002-20220209
+mips                        qi_lb60_defconfig
+arm                          ixp4xx_defconfig
+mips                        bcm63xx_defconfig
+mips                           ip27_defconfig
+arm                  colibri_pxa270_defconfig
+mips                        workpad_defconfig
+arm                         s3c2410_defconfig
+hexagon                             defconfig
+powerpc                        icon_defconfig
+powerpc                     tqm8540_defconfig
+mips                  cavium_octeon_defconfig
+powerpc                     kmeter1_defconfig
+arm                         orion5x_defconfig
+arm                         hackkit_defconfig
+powerpc                     mpc512x_defconfig
+mips                         tb0287_defconfig
+arm                       mainstone_defconfig
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+x86_64                        randconfig-a001
+i386                          randconfig-a004
+i386                          randconfig-a002
+i386                          randconfig-a006
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a015
+hexagon              randconfig-r045-20220208
+hexagon              randconfig-r041-20220208
+riscv                randconfig-r042-20220208
+s390                 randconfig-r044-20220208
 
-In 341adeec9ada ("net/smc: Forward wakeup to smc socket waitqueue after fallback"),
-smc_switch_to_fallback() saves the original callback function of clcsock in
-smc->clcsk_error_report and set clcsk->sk_error_report as smc_fback_error_report().
-
-If smc_switch_to_fallback() is called repeatedly, the smc->clcsk_error_report will be
-reset as clcsk->sk_error_report, which now is smc_fback_error_report().
-
-And the call trace will be:
-
-clcsk->sk_error_report
-   |- smc_fback_error_report() <----------------|
-        |- smc_fback_forward_wakeup()           |
-             |- clcsock_callback()              |
-                  |- smc->clcsk_error_report() -|
-
-Thus resulting in this issue.
-
-I will send a patch to fix it.
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,236 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B17464AF1A5
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 13:31:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE2434AF1A8
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 13:31:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbiBIMaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 07:30:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53158 "EHLO
+        id S233360AbiBIMa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 07:30:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233022AbiBIM3M (ORCPT
+        with ESMTP id S233344AbiBIM37 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 07:29:12 -0500
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F08C05CB96
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 04:29:15 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0V4.HsAW_1644409753;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0V4.HsAW_1644409753)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 09 Feb 2022 20:29:13 +0800
-From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        virtualization@lists.linux-foundation.org
-Subject: [PATCH v4 14/14] virtio_pci: queue_reset: support VIRTIO_F_RING_RESET
-Date:   Wed,  9 Feb 2022 20:29:01 +0800
-Message-Id: <20220209122901.51790-15-xuanzhuo@linux.alibaba.com>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20220209122901.51790-1-xuanzhuo@linux.alibaba.com>
-References: <20220209122901.51790-1-xuanzhuo@linux.alibaba.com>
+        Wed, 9 Feb 2022 07:29:59 -0500
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27124C03C19D
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 04:29:59 -0800 (PST)
+Received: by mail-qv1-xf33.google.com with SMTP id c14so1563294qvl.12
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 04:29:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=JpFYQSMAVe6I09BHQOjAX13imKhzUaXlc2+fdsD9V6E=;
+        b=Z4Eu786ojGcRgS8Eos4sLr66z2Uqqmgi/bDj6/Y33EEsvVWVKeCNJioyDR9vfy9xaY
+         yz3EOxCOZS/4g/fgKsh1/TNwzJVTuJBYxARJaHsw7OoHQBYA7L/O3QtbTl8+Tpf3u32c
+         Go3MoLTkH16938QXNFcpZV2qsCQ+/yOIxJO8+ooqAbmuC9zUdvg0Bg4KHC7DQZrRu5Pr
+         MEV4AdWysZ66pZX4YRzJgy6PJ/mfwT6AapS6FtqHr95tVUvZ/ng6ysJBJp+d6N+bSxfV
+         V5qGUskZ4AiQdRAYVMO4Llk3dzOmsNqH1liuPvseANE5HTBFUWXt5H7TVNAa03BHV8C3
+         wh9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=JpFYQSMAVe6I09BHQOjAX13imKhzUaXlc2+fdsD9V6E=;
+        b=RdmNsiN6JsPDsyZtaBR6Y3PdJ8GDVkn1j02tA0/azUO71Y/q1JISVbsKplBqhK1tw7
+         6sdPMc65Lgn3hDE9bC4KA5VD9Su+nXn8MuxpYn7ok4RpQqXs42gIXSav+vK3QDAlwZNI
+         czPSZFfD56rqT97lIGMOxqBe/6TkzQlzqg4954nIcj68l/m+GuKiyzgLwH6kRVgpKDUm
+         K1dk/TKM8duaswlWiaYGpQidmeXy9tjHpdLL3QVZOo+cPI0td1o2rHYVqU5ET5LHfgj7
+         xzdazcIZ4fJN/izq62zVZmXJxIcbqhbCRLGp5tU2yGOMxKSa85x2LvPDNSW2YIGTuWjl
+         1a9w==
+X-Gm-Message-State: AOAM530HtjBwgLdpVCF+v/5yU+iOEP7a89zdBE2SlokyUuzo9rzgFYUh
+        43tjbbEe6YsBT/7S/ia7vZ/fpg==
+X-Google-Smtp-Source: ABdhPJwf9mdnK2ldlbFJ89Gp7ICZZlJoeyugDA0YNF0idT1dfs12KR4knXDFD3wj+Sh7mIvt9ShqvQ==
+X-Received: by 2002:a05:6214:21ac:: with SMTP id t12mr1263884qvc.123.1644409797997;
+        Wed, 09 Feb 2022 04:29:57 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
+        by smtp.gmail.com with ESMTPSA id w13sm8052274qkb.106.2022.02.09.04.29.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Feb 2022 04:29:57 -0800 (PST)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1nHm6e-001DJi-6l; Wed, 09 Feb 2022 08:29:56 -0400
+Date:   Wed, 9 Feb 2022 08:29:56 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>, nouveau@lists.freedesktop.org,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Linux MM <linux-mm@kvack.org>
+Subject: Re: [PATCH 7/8] mm: remove the extra ZONE_DEVICE struct page refcount
+Message-ID: <20220209122956.GI49147@ziepe.ca>
+References: <20220207063249.1833066-1-hch@lst.de>
+ <20220207063249.1833066-8-hch@lst.de>
+ <CAPcyv4h_axDTmkZ35KFfCdzMoOp8V3dc6btYGq6gCj1OmLXM=g@mail.gmail.com>
+ <20220209062345.GB7739@lst.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220209062345.GB7739@lst.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch implements virtio pci support for QUEUE RESET.
+On Wed, Feb 09, 2022 at 07:23:45AM +0100, Christoph Hellwig wrote:
+> On Tue, Feb 08, 2022 at 07:30:11PM -0800, Dan Williams wrote:
+> > Interesting. I had expected that to really fix the refcount problem
+> > that fs/dax.c would need to start taking real page references as pages
+> > were added to a mapping, just like page cache.
+> 
+> I think we should do that eventually.  But I think this series that
+> just attacks the device private type and extends to the device coherent
+> and p2p enhacements is a good first step to stop the proliferation of
+> the one off refcount and to allow to deal with the fsdax pages in another
+> more focuessed series.
 
-Performing reset on a queue is divided into these steps:
+It is nice, but the other series are still impacted by the fsdax mess
+- they still stuff pages into ptes without proper refcounts and have
+to carry nonsense to dance around this problem.
 
-1. reset_vq: reset one vq
-2. recycle the buffer from vq by virtqueue_detach_unused_buf()
-3. release the ring of the vq by vring_release_virtqueue()
-4. enable_reset_vq: re-enable the reset queue
+I certainly would be unhappy if the amd driver, for instance, gained
+the fsdax problem as well and started pushing 4k pages into PMDs.
 
-This patch implements reset_vq, enable_reset_vq in the pci scenario
-
-Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
----
- drivers/virtio/virtio_pci_common.c |  8 +--
- drivers/virtio/virtio_pci_modern.c | 80 ++++++++++++++++++++++++++++--
- drivers/virtio/virtio_ring.c       |  2 +
- include/linux/virtio.h             |  1 +
- 4 files changed, 85 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/virtio/virtio_pci_common.c b/drivers/virtio/virtio_pci_common.c
-index cb01eb0cb2e4..303637ac4914 100644
---- a/drivers/virtio/virtio_pci_common.c
-+++ b/drivers/virtio/virtio_pci_common.c
-@@ -255,9 +255,11 @@ static void vp_del_vq(struct virtqueue *vq)
- 	struct virtio_pci_vq_info *info = vp_dev->vqs[vq->index];
- 	unsigned long flags;
- 
--	spin_lock_irqsave(&vp_dev->lock, flags);
--	list_del(&info->node);
--	spin_unlock_irqrestore(&vp_dev->lock, flags);
-+	if (!vq->reset) {
-+		spin_lock_irqsave(&vp_dev->lock, flags);
-+		list_del(&info->node);
-+		spin_unlock_irqrestore(&vp_dev->lock, flags);
-+	}
- 
- 	vp_dev->del_vq(info);
- 	kfree(info);
-diff --git a/drivers/virtio/virtio_pci_modern.c b/drivers/virtio/virtio_pci_modern.c
-index d29d40bf0b45..cc45515eda50 100644
---- a/drivers/virtio/virtio_pci_modern.c
-+++ b/drivers/virtio/virtio_pci_modern.c
-@@ -34,6 +34,9 @@ static void vp_transport_features(struct virtio_device *vdev, u64 features)
- 	if ((features & BIT_ULL(VIRTIO_F_SR_IOV)) &&
- 			pci_find_ext_capability(pci_dev, PCI_EXT_CAP_ID_SRIOV))
- 		__virtio_set_bit(vdev, VIRTIO_F_SR_IOV);
-+
-+	if (features & BIT_ULL(VIRTIO_F_RING_RESET))
-+		__virtio_set_bit(vdev, VIRTIO_F_RING_RESET);
- }
- 
- /* virtio config->finalize_features() implementation */
-@@ -176,6 +179,70 @@ static void vp_reset(struct virtio_device *vdev)
- 	vp_disable_cbs(vdev);
- }
- 
-+static int vp_modern_reset_vq(struct virtqueue *vq)
-+{
-+	struct virtio_pci_device *vp_dev = to_vp_device(vq->vdev);
-+	struct virtio_pci_modern_device *mdev = &vp_dev->mdev;
-+	struct virtio_pci_vq_info *info;
-+	unsigned long flags;
-+	u16 msix_vec;
-+
-+	if (!virtio_has_feature(vq->vdev, VIRTIO_F_RING_RESET))
-+		return -ENOENT;
-+
-+	vp_modern_set_queue_reset(mdev, vq->index);
-+
-+	info = vp_dev->vqs[vq->index];
-+	msix_vec = info->msix_vector;
-+
-+	/* Disable VQ callback. */
-+	if (vp_dev->per_vq_vectors && msix_vec != VIRTIO_MSI_NO_VECTOR)
-+		disable_irq(pci_irq_vector(vp_dev->pci_dev, msix_vec));
-+
-+	/* delete vq */
-+	spin_lock_irqsave(&vp_dev->lock, flags);
-+	list_del(&info->node);
-+	spin_unlock_irqrestore(&vp_dev->lock, flags);
-+
-+	vq->reset = true;
-+
-+	INIT_LIST_HEAD(&info->node);
-+
-+	return 0;
-+}
-+
-+static int vp_modern_enable_reset_vq(struct virtqueue *vq, u16 ring_num)
-+{
-+	struct virtio_pci_device *vp_dev = to_vp_device(vq->vdev);
-+	struct virtio_pci_modern_device *mdev = &vp_dev->mdev;
-+	struct virtio_pci_vq_info *info;
-+	struct virtqueue *_vq;
-+	u16 msix_vec;
-+
-+	if (!vq->reset)
-+		return -EPERM;
-+
-+	/* check queue reset status */
-+	if (vp_modern_get_queue_reset(mdev, vq->index) != 1)
-+		return -EBUSY;
-+
-+	info = vp_dev->vqs[vq->index];
-+	_vq = vp_setup_vq(vq->vdev, vq->index, NULL, NULL, NULL,
-+			 info->msix_vector, ring_num);
-+	if (IS_ERR(_vq)) {
-+		vq->reset = true;
-+		return PTR_ERR(_vq);
-+	}
-+
-+	vp_modern_set_queue_enable(&vp_dev->mdev, vq->index, true);
-+
-+	msix_vec = vp_dev->vqs[vq->index]->msix_vector;
-+	if (vp_dev->per_vq_vectors && msix_vec != VIRTIO_MSI_NO_VECTOR)
-+		enable_irq(pci_irq_vector(vp_dev->pci_dev, msix_vec));
-+
-+	return 0;
-+}
-+
- static u16 vp_config_vector(struct virtio_pci_device *vp_dev, u16 vector)
- {
- 	return vp_modern_config_vector(&vp_dev->mdev, vector);
-@@ -231,10 +298,13 @@ static struct virtqueue *setup_vq(struct virtio_pci_device *vp_dev,
- 				virtqueue_get_avail_addr(vq),
- 				virtqueue_get_used_addr(vq));
- 
--	vq->priv = (void __force *)vp_modern_map_vq_notify(mdev, index, NULL);
- 	if (!vq->priv) {
--		err = -ENOMEM;
--		goto err_map_notify;
-+		vq->priv = (void __force *)vp_modern_map_vq_notify(mdev, index,
-+								   NULL);
-+		if (!vq->priv) {
-+			err = -ENOMEM;
-+			goto err_map_notify;
-+		}
- 	}
- 
- 	if (msix_vec != VIRTIO_MSI_NO_VECTOR) {
-@@ -402,6 +472,8 @@ static const struct virtio_config_ops virtio_pci_config_nodev_ops = {
- 	.set_vq_affinity = vp_set_vq_affinity,
- 	.get_vq_affinity = vp_get_vq_affinity,
- 	.get_shm_region  = vp_get_shm_region,
-+	.reset_vq	 = vp_modern_reset_vq,
-+	.enable_reset_vq = vp_modern_enable_reset_vq,
- };
- 
- static const struct virtio_config_ops virtio_pci_config_ops = {
-@@ -420,6 +492,8 @@ static const struct virtio_config_ops virtio_pci_config_ops = {
- 	.set_vq_affinity = vp_set_vq_affinity,
- 	.get_vq_affinity = vp_get_vq_affinity,
- 	.get_shm_region  = vp_get_shm_region,
-+	.reset_vq	 = vp_modern_reset_vq,
-+	.enable_reset_vq = vp_modern_enable_reset_vq,
- };
- 
- /* the PCI probing function */
-diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-index b8747df8dc1f..4f6028e1e2d9 100644
---- a/drivers/virtio/virtio_ring.c
-+++ b/drivers/virtio/virtio_ring.c
-@@ -1731,6 +1731,7 @@ static struct virtqueue *vring_create_virtqueue_packed(
- 	vq->vq.vdev = vdev;
- 	vq->vq.num_free = num;
- 	vq->vq.index = index;
-+	vq->vq.reset = false;
- 	vq->we_own_ring = true;
- 	vq->notify = notify;
- 	vq->weak_barriers = weak_barriers;
-@@ -2220,6 +2221,7 @@ static int __vring_init_virtqueue(struct virtqueue *_vq,
- 	vq->vq.vdev = vdev;
- 	vq->vq.num_free = vring.num;
- 	vq->vq.index = index;
-+	vq->vq.reset = false;
- 	vq->we_own_ring = false;
- 	vq->notify = notify;
- 	vq->weak_barriers = weak_barriers;
-diff --git a/include/linux/virtio.h b/include/linux/virtio.h
-index dd1657c3a488..5d4817d79f3f 100644
---- a/include/linux/virtio.h
-+++ b/include/linux/virtio.h
-@@ -32,6 +32,7 @@ struct virtqueue {
- 	unsigned int index;
- 	unsigned int num_free;
- 	void *priv;
-+	bool reset;
- };
- 
- int virtqueue_add_outbuf(struct virtqueue *vq,
--- 
-2.31.0
-
+Jason

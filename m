@@ -2,101 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 836804AF28B
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 14:21:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E49A4AF28F
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 14:22:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231185AbiBINVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 08:21:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33244 "EHLO
+        id S232051AbiBINVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 08:21:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiBINVJ (ORCPT
+        with ESMTP id S229558AbiBINVw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 08:21:09 -0500
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C35ECC0613C9;
-        Wed,  9 Feb 2022 05:21:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1644412871;
-        bh=IBIP7D6ePluxofErTJHBz8DUwJsVyK1rB4p2Vuaclgs=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=isaITEAxFwx6i28OT7uW3+PnTYq2/xBzLsWPsZ0qEaDYDjst8Ycf7Qz3gSadFfmfx
-         OpIUj64P50jD+FjuoaCsyWHbgvYb6tAFlWzNGofyBnHA5fsbTEing9k3B52BmHqrvF
-         I5x8vHPfizGKO0blDoPsztrw2wKGsEG2Iu2XuACs=
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 76CD71280B90;
-        Wed,  9 Feb 2022 08:21:11 -0500 (EST)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 4yZeh4o7Bs5x; Wed,  9 Feb 2022 08:21:11 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1644412871;
-        bh=IBIP7D6ePluxofErTJHBz8DUwJsVyK1rB4p2Vuaclgs=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=isaITEAxFwx6i28OT7uW3+PnTYq2/xBzLsWPsZ0qEaDYDjst8Ycf7Qz3gSadFfmfx
-         OpIUj64P50jD+FjuoaCsyWHbgvYb6tAFlWzNGofyBnHA5fsbTEing9k3B52BmHqrvF
-         I5x8vHPfizGKO0blDoPsztrw2wKGsEG2Iu2XuACs=
-Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4300:c551::527])
+        Wed, 9 Feb 2022 08:21:52 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97107C0613C9;
+        Wed,  9 Feb 2022 05:21:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=oeFFjFlQuMCb4LjY09Gt4tIG1cY81yS5diz3DP2Ve1k=; b=BGeyLh/eMBiT+JHvm2PcXjlCcz
+        V1VCwafubxlWpyG51odgsFU0b+xm5Jd13JqbQsoWPEahsyrcgZ3JOXJEBg4AKiDCHHGFmwpCc11gg
+        Eqj8jNfW4CCkqDMsE9DKma7sjBvklb5C8OsvggKr47rtysYiD1oj9iUuBb1NqAqjBWR2P1Fsu7nMZ
+        vNHzA3SoEdJnNLroNJB8+OZIz9go5/JEDO4oBpncQgoljSh1ZMkroeH1KS4MmJoUqePSMJSNt53Q+
+        rX1ixwocRSiZy3zEIop5g5xybLde3Dt/S2VNw0qfjLVhmOmAH3VQS8+nOj4r0HnTIpUI0pOE/8WPz
+        ks/Mu1/Q==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nHmuf-007mBs-MU; Wed, 09 Feb 2022 13:21:37 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 4B0171280B8A;
-        Wed,  9 Feb 2022 08:21:10 -0500 (EST)
-Message-ID: <3d76ff7aab8cdc134aebf16af66582849bd53156.camel@HansenPartnership.com>
-Subject: Re: [PATCH v2] builddeb: Support signing kernels with the module
- signing key
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Matthew Wilcox <willy@infradead.org>,
-        Julian Andres Klode <julian.klode@canonical.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Ben Hutchings <ben@decadent.org.uk>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        efi@lists.einval.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>, keyrings@vger.kernel.org,
-        David Woodhouse <dwmw2@infradead.org>,
-        debian-kernel <debian-kernel@lists.debian.org>
-Date:   Wed, 09 Feb 2022 08:21:09 -0500
-In-Reply-To: <YgJrypdQium7AcWV@casper.infradead.org>
-References: <20211218031122.4117631-1-willy@infradead.org>
-         <CAK7LNAQUChvX3NoukBnjBfJJGu+a96pfbM--xHEHOygWPgE9eA@mail.gmail.com>
-         <YdSOV7LL0vWCMcWl@casper.infradead.org>
-         <CAK7LNAQgixJSnDUMfjc+tg90oMdVoh+i5faEn-rqgmHR3Bk6dQ@mail.gmail.com>
-         <20220208110122.2z4cmbqexmnxuxld@jak-t480s>
-         <YgJrypdQium7AcWV@casper.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 50CEA300478;
+        Wed,  9 Feb 2022 14:21:36 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 2F6FA20218D82; Wed,  9 Feb 2022 14:21:34 +0100 (CET)
+Date:   Wed, 9 Feb 2022 14:21:34 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Jim Mattson <jmattson@google.com>
+Cc:     Like Xu <like.xu.linux@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Like Xu <likexu@tencent.com>,
+        Stephane Eranian <eranian@google.com>,
+        David Dunn <daviddunn@google.com>
+Subject: Re: [PATCH kvm/queue v2 2/3] perf: x86/core: Add interface to query
+ perfmon_event_map[] directly
+Message-ID: <YgO/3usazae9rCEh@hirez.programming.kicks-ass.net>
+References: <20220117085307.93030-1-likexu@tencent.com>
+ <20220117085307.93030-3-likexu@tencent.com>
+ <20220202144308.GB20638@worktop.programming.kicks-ass.net>
+ <CALMp9eRBOmwz=mspp0m5Q093K3rMUeAsF3vEL39MGV5Br9wEQQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALMp9eRBOmwz=mspp0m5Q093K3rMUeAsF3vEL39MGV5Br9wEQQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-02-08 at 13:10 +0000, Matthew Wilcox wrote:
-> On Tue, Feb 08, 2022 at 12:01:22PM +0100, Julian Andres Klode wrote:
-> > It's worth pointing out that in Ubuntu, the generated MOK key
-> > is for module signing only (extended key usage
-> > 1.3.6.1.4.1.2312.16.1.2), kernels signed with it will NOT be
-> > bootable.
-> 
-> Why should these be separate keys?  There's no meaningful security
-> boundary between a kernel module and the ernel itself; a kernel
-> modulecan, for example, write to CR3, and that's game over for
-> any pretence at separation.
+On Wed, Feb 02, 2022 at 02:35:45PM -0800, Jim Mattson wrote:
+> 3) TDX is going to pull the rug out from under us anyway. When the TDX
+> module usurps control of the PMU, any active host counters are going
+> to stop counting. We are going to need a way of telling the host perf
+> subsystem what's happening, or other host perf clients are going to
+> get bogus data.
 
-It's standard practice for any automated build private key to be
-destroyed immediately to preserve security.  Thus the modules get
-signed with a per kernel ephemeral build key but the MoK key is a long
-term key with a special signing infrastructure, usually burned into the
-distro version of shim.  The kernel signing key usually has to be long
-term because you want shim to boot multiple kernels otherwise upgrading
-becomes a nightmare.
-
-James
-
-
+That's not acceptible behaviour. I'm all for unilaterally killing any
+guest that does this.

@@ -2,64 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A19BE4B0136
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 00:28:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A6E44B013A
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 00:29:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbiBIX2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 18:28:38 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:45816 "EHLO
+        id S229956AbiBIX3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 18:29:18 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:49626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230010AbiBIX2S (ORCPT
+        with ESMTP id S229777AbiBIX3Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 18:28:18 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9B6E057C0E;
-        Wed,  9 Feb 2022 15:28:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=VyiuDl3IpexkLMiuqnAvBqtY58D0U7tUwB8UiSDeVcI=; b=grTIEYFbVAFWjguDBt19JuKsUw
-        tDr9AL5CAGAp6o7VsbQCgRCFKHcsYQB6CtqrfKmQvfg+I2hyJlttajcvnSVItWRpnz7k71T0Qg2kI
-        RbFoZLzQKCKEEh5h3HLSkyMR6yz+AFhljmGoto9uyBNbg35xa04D7Zs1gaoVbSRpU0gn07JAsa11D
-        vZ9+Ov/aENr8JphK3j6B+t6tcRXVg+IJzmL+8cX1fxzhnsb9Zf6QDqqlFBj8lpiR1xah5drLUVCuf
-        0ICXACvFPzmd+dTstrbDNOVsLbVs9tuxGEingVY/XHSqX+OxzYFx9mkmylqRlGuwp8zPAZ8OO3FfM
-        YIXLeH9w==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nHwNW-0022x2-Bi; Wed, 09 Feb 2022 23:28:02 +0000
-Date:   Wed, 9 Feb 2022 15:28:02 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Zhen Ni <nizhen@uniontech.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        keescook@chromium.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH] sched: move uclamp_util sysctls to core.c
-Message-ID: <YgROAtIdjfUXO5lJ@bombadil.infradead.org>
-References: <20220209085730.22470-1-nizhen@uniontech.com>
+        Wed, 9 Feb 2022 18:29:16 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1EFDF8E3D2;
+        Wed,  9 Feb 2022 15:29:19 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id y5so7094351pfe.4;
+        Wed, 09 Feb 2022 15:29:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Vyxdt1qWwEixzQmfvtesRM+4XY4WJ+b7HT9Q8ZLfLAs=;
+        b=pZi+PzBgTTefzJeng26sb/vNM7MsBFngkh6o84QEptniKvStYo9EIzPewsyVg2dOyf
+         fG/NKLlkk0Sprdqloz7mNTwVMJR93Fg2z8pNm6e2jqtpDYjBmhDJdNKfHQXmzFXDiXCv
+         JA7Vtwt57onmIqPQYdaOknNh2Z6/sqm4jkjEAfQn4ynDMSIBekuHsbiByNBuXRcIF0EH
+         FCAQ2Z9HJ9GOs9ZQenWKWEoyA6iNyKABSXd+9DLjeajfXBmFlYZvBxZBkBjK/Z855UvD
+         kstoetOSqUgPaLcpDkWbIxoovoqKHk716dho+phSXFGtyI1CgQJ3M1+R2nypg592amPQ
+         CiPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=Vyxdt1qWwEixzQmfvtesRM+4XY4WJ+b7HT9Q8ZLfLAs=;
+        b=7m7Uyi7VT/Hx4sz3ie1wv8pFIyEw9luM5CaTuXOoTMNywn+XPccUgo5EErIiU5kT24
+         RnUSA25SeWNRCBQA5aJCCKu/rzXAWfayDp/3AMxw13A1UOXV0rKmLw/+KlV4gAh0YyNY
+         as6fgxhA4JuLLb7GlAeRHb8qHFITUxsItBF6QJGxJmrpfalYHm8Aguo3OMLpHVnWTONj
+         +enXwLl73glVH3CgjNtTsIJuy5mwKiQ3oXj4ar8H2sBqha39k8mz2FoayyqLlpzk1hQW
+         JgZ71A7KWkhuOGV9bU5cN/v5JaV5K/2Ph+BoVG4EMut6fzR7GnW4l5iPJHnGyH5ozLUe
+         zTCQ==
+X-Gm-Message-State: AOAM530TEBWtEKj3LVyEgBitJcTQUzF5t+CeyrpBItGd0iste+LwrVwf
+        MBD+xPKtfAZ5Sff24dRaWdrpHx62J24=
+X-Google-Smtp-Source: ABdhPJwN1FqlbLvru+RdaIITToi4kY4rSnARfUoR8U8SghkmHtwAHVYzs5D2kFAP90YsRg11gQPG2g==
+X-Received: by 2002:a05:6a00:130a:: with SMTP id j10mr4697420pfu.32.1644449358438;
+        Wed, 09 Feb 2022 15:29:18 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
+        by smtp.gmail.com with ESMTPSA id j185sm19558749pfd.85.2022.02.09.15.29.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Feb 2022 15:29:17 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 9 Feb 2022 13:29:16 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Namhyung Kim <namhyung@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Byungchul Park <byungchul.park@lge.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Radoslaw Burny <rburny@google.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org
+Subject: Re: [PATCH 02/12] cgroup: rstat: Make cgroup_rstat_cpu_lock name
+ readable
+Message-ID: <YgROTNCwS50FSCx9@slm.duckdns.org>
+References: <20220208194324.85333-1-namhyung@kernel.org>
+ <20220208194324.85333-3-namhyung@kernel.org>
+ <4b58c74d-6ad6-3658-30fb-1957a7b212dc@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220209085730.22470-1-nizhen@uniontech.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <4b58c74d-6ad6-3658-30fb-1957a7b212dc@redhat.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 09, 2022 at 04:57:30PM +0800, Zhen Ni wrote:
-> move uclamp_util sysctls to core.c and use the new
-> register_sysctl_init() to register the sysctl interface.
+On Wed, Feb 09, 2022 at 03:20:42PM -0500, Waiman Long wrote:
+> That is a standalone fix. Maybe Tejun can take it directly into the cgroup
+> tree.
 > 
-> Signed-off-by: Zhen Ni <nizhen@uniontech.com>
+> Acked-by: Waiman Long <longman@redhat.com>
 
-Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+Yeah, I sure can but the change is rather immaterial from cgroup POV and it
+might be easier to route it with the rest of the patchset to avoid cross
+tree pulls. I'd be happy either way. Please let me know once things settle
+and the patchset is ready for merging.
 
-  Luis
+Thanks.
+
+-- 
+tejun

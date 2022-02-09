@@ -2,248 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A4BA4AF363
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 14:55:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57FED4AF370
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 14:58:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233958AbiBINzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 08:55:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52364 "EHLO
+        id S234602AbiBIN4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 08:56:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbiBINzk (ORCPT
+        with ESMTP id S234583AbiBIN4h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 08:55:40 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B68DC0613C9;
-        Wed,  9 Feb 2022 05:55:42 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id l67-20020a1c2546000000b00353951c3f62so1619732wml.5;
-        Wed, 09 Feb 2022 05:55:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=7U/uYfF5BBXdgNLHE4+fM0Xnr2orfhJ3kV6quQhuKN8=;
-        b=A1Raudlcg8KbydfuTRJDWC+KE9y+kf05/OEpM2s89EkYAhXlrrtpi9qGKOnu+OqeMj
-         gz2TEjbu48jg57g5SiHYUxrwLtZEHADVglTk2P8p5a9fFeCfUR3mp41KaOUHsr2Gdr/9
-         2vBvYQjnHuYEtFoMhYKZtypiLMju1EoF2zOHQl2wHIWtcp2+LJDSC0NlnZbiVoYZp7E7
-         y0/JqL6hg1PE7TU3cm7stqKK+T3i7EZCVnwFjvwurHJMOOF756CQxi6wcfoTlZhKGTfc
-         SB0pcp3mDEPsC/pUEVdUa3i3Fg3QZgx2zoQf+qQ16qWiel7aCQdLbm/Us2DB8RFLZ0E1
-         tAJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=7U/uYfF5BBXdgNLHE4+fM0Xnr2orfhJ3kV6quQhuKN8=;
-        b=cMqSTgoKwJl/73fLX6iXKyztmS2387Xv/iwn6/xFFAPS+jmKtWKY4NyTkaFEfBEP6b
-         irns9P1hS16HVqH8JRQrsq9HFmGUTAU4Dkc2vtTBXqaNNsQ0VXlJj2bjKgr9gzrJ734B
-         3beQvS+XLi+qJxHH3Bvo2iFhrDjiO1Zp0mA9UW+8sN0WgmUn2HH/49BPy3BXVgooSDbo
-         eAphqoaY0a/ujwHW7/0SEATui6Lq6u33rxp8DOZpkrMurJrR1MG4hJogBgXc6cKxvC0V
-         7CCq/QXToOjujYhl/HbcM0s4M+ycdGm9UnIMFm0m+yolnElW94O5tYgnwf9O6XxaJ1SA
-         0u9A==
-X-Gm-Message-State: AOAM530mr1ZMfHgPHowgikrLFKE04jq+bJn5thiPork8Pa/mYb33TOw6
-        fHDAugkJZdWT7IiigfG2N2w=
-X-Google-Smtp-Source: ABdhPJwxjFBgHIB+UhKYGiBo3CoUpqS8lR5s3DiuLtu+98fiXKhZHC3z5PVCNCW/puAce4XBpJkvlQ==
-X-Received: by 2002:a05:600c:a03:: with SMTP id z3mr2688181wmp.73.1644414940868;
-        Wed, 09 Feb 2022 05:55:40 -0800 (PST)
-Received: from localhost.localdomain ([87.200.95.144])
-        by smtp.gmail.com with ESMTPSA id g14sm3014309wmq.3.2022.02.09.05.55.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 05:55:40 -0800 (PST)
-From:   Christian Hewitt <christianshewitt@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Christian Hewitt <christianshewitt@gmail.com>
-Subject: [PATCH] arm64: dts: meson: remove CPU opps below 1GHz for G12B/SM1
-Date:   Wed,  9 Feb 2022 13:55:35 +0000
-Message-Id: <20220209135535.29547-1-christianshewitt@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 9 Feb 2022 08:56:37 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C76BCC05CB8F
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 05:56:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644415000; x=1675951000;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xBjttyyMrZXC5nplVL/cvGF1ir/hZw4ovvvgsddLC8c=;
+  b=TWzrxNwBItv0MOyW/dxUEuuRpMn79gtnEChEWXoHl17ooT6vlzZTfUT7
+   L+todNecLU6lpnPXpGBLnjeGhysODDdtO93e+JrWjE/u2U6ga6iiVl8No
+   e0y1c3Dw7SmTpIQEF5UQ+yOItVjKDZZrZAcrXBgTZ+NsIuy/fnqwqoLqq
+   ItbyVqwiIPOIZpsKRuGQJTduI3u39CO2T5iKfSg9aXwtJmVc1iWtNu04z
+   m28qQBEjVJ0Km+XJ3T/mdJby+r/hhKTzCKP8lb4Xfopd0e2gVg5dqWRYT
+   pFJ1I1evpph+mDxRR+sAzC9lZcHnZqASgA7kmzdT4dfx3e56YcNs4FKrm
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="248967106"
+X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
+   d="scan'208";a="248967106"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 05:56:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
+   d="scan'208";a="678596354"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 09 Feb 2022 05:56:36 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 09 Feb 2022 15:56:36 +0200
+Date:   Wed, 9 Feb 2022 15:56:36 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     syzbot <syzbot+60df062e1c41940cae0f@syzkaller.appspotmail.com>,
+        andriy.shevchenko@linux.intel.com, dri-devel@lists.freedesktop.org,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        rafael.j.wysocki@intel.com, rafael@kernel.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] WARNING in component_del
+Message-ID: <YgPIFEJydBdOh/U5@kuha.fi.intel.com>
+References: <00000000000016f4ae05d5cec832@google.com>
+ <000000000000a17f2305d77f4cb7@google.com>
+ <YgPEtCGDlSrqa1fK@kuha.fi.intel.com>
+ <250ce1c2-95bf-3067-7bd6-5655038c5e69@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <250ce1c2-95bf-3067-7bd6-5655038c5e69@gmail.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Amlogic G12B and SM1 devices experience CPU stalls and random board
-wedges when the system idles and CPU cores clock down to lower opp
-points. Recent vendor kernels include a change to remove 100-250MHz
-(with no explanation) [0] but other downstream sources also remove
-the 500/667MHz points (also with no explanation). Unless 100-667Mhz
-opps are removed or the CPU governor forced to performance, stalls
-are observed, so let's remove them an improve stability/uptime.
+On Wed, Feb 09, 2022 at 04:51:44PM +0300, Pavel Skripkin wrote:
+> Hi Heikki,
+> 
+> On 2/9/22 16:42, Heikki Krogerus wrote:
+> > On Tue, Feb 08, 2022 at 02:37:10AM -0800, syzbot wrote:
+> > > syzbot has bisected this issue to:
+> > > 
+> > > commit 8c67d06f3fd9639c44d8147483fb1c132d71388f
+> > > Author: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > > Date:   Thu Dec 23 08:23:49 2021 +0000
+> > > 
+> > >     usb: Link the ports to the connectors they are attached to
+> > > 
+> > > bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14063168700000
+> > > start commit:   555f3d7be91a Merge tag '5.17-rc3-ksmbd-server-fixes' of gi..
+> > > git tree:       upstream
+> > > final oops:     https://syzkaller.appspot.com/x/report.txt?x=16063168700000
+> > > console output: https://syzkaller.appspot.com/x/log.txt?x=12063168700000
+> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=266de9da75c71a45
+> > > dashboard link: https://syzkaller.appspot.com/bug?extid=60df062e1c41940cae0f
+> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15880d84700000
+> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14de0c77b00000
+> > > 
+> > > Reported-by: syzbot+60df062e1c41940cae0f@syzkaller.appspotmail.com
+> > > Fixes: 8c67d06f3fd9 ("usb: Link the ports to the connectors they are attached to")
+> > > 
+> > > For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+> > 
+> > I'm guessing the component_add() is failing in this case. So I guess
+> > we need to consider the component_add() failures fatal in
+> > drivers/usb/core/port.c, which is a bit of a bummer. I'll send the
+> > fix.
+> > 
+> 
+> Seems something similar to your approach is already posted
+> 
+> https://lore.kernel.org/linux-usb/20220208170048.24718-1-fmdefrancesco@gmail.com/
 
-[0] https://github.com/khadas/linux/commit/20e237a4fe9f0302370e24950cb1416e038eee03
+Ah, thanks! That one seems to leave the peer links, so it's broken...
 
-Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
----
-Numerous people have experienced this issue and I have tested with
-only the low opp-points removed and numerous voltage tweaks: but it
-makes no difference. With the opp points present an Odroid N2 or
-Khadas VIM3 reliably drop off my network after being left idling
-overnight with UART showing a CPU stall splat. With the opp points
-removed I see weeks of uninterupted uptime. It's beyond my skills
-to research what the cause of the stalls might be, but if anyone
-ever figures it out we can always restore things. NB: This issue
-is not too widely reported in forums, but that's largely because
-most of the Amlogic supporting distros have been including this
-change picked from my kernel patchset for some time.
+Br,
 
- .../boot/dts/amlogic/meson-g12b-a311d.dtsi    | 40 -------------------
- .../boot/dts/amlogic/meson-g12b-s922x.dtsi    | 40 -------------------
- arch/arm64/boot/dts/amlogic/meson-sm1.dtsi    | 20 ----------
- 3 files changed, 100 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-a311d.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12b-a311d.dtsi
-index d61f43052a34..8e9ad1e51d66 100644
---- a/arch/arm64/boot/dts/amlogic/meson-g12b-a311d.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-g12b-a311d.dtsi
-@@ -11,26 +11,6 @@
- 		compatible = "operating-points-v2";
- 		opp-shared;
- 
--		opp-100000000 {
--			opp-hz = /bits/ 64 <100000000>;
--			opp-microvolt = <731000>;
--		};
--
--		opp-250000000 {
--			opp-hz = /bits/ 64 <250000000>;
--			opp-microvolt = <731000>;
--		};
--
--		opp-500000000 {
--			opp-hz = /bits/ 64 <500000000>;
--			opp-microvolt = <731000>;
--		};
--
--		opp-667000000 {
--			opp-hz = /bits/ 64 <667000000>;
--			opp-microvolt = <731000>;
--		};
--
- 		opp-1000000000 {
- 			opp-hz = /bits/ 64 <1000000000>;
- 			opp-microvolt = <761000>;
-@@ -71,26 +51,6 @@
- 		compatible = "operating-points-v2";
- 		opp-shared;
- 
--		opp-100000000 {
--			opp-hz = /bits/ 64 <100000000>;
--			opp-microvolt = <731000>;
--		};
--
--		opp-250000000 {
--			opp-hz = /bits/ 64 <250000000>;
--			opp-microvolt = <731000>;
--		};
--
--		opp-500000000 {
--			opp-hz = /bits/ 64 <500000000>;
--			opp-microvolt = <731000>;
--		};
--
--		opp-667000000 {
--			opp-hz = /bits/ 64 <667000000>;
--			opp-microvolt = <731000>;
--		};
--
- 		opp-1000000000 {
- 			opp-hz = /bits/ 64 <1000000000>;
- 			opp-microvolt = <731000>;
-diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-s922x.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12b-s922x.dtsi
-index 1e5d0ee5d541..44c23c984034 100644
---- a/arch/arm64/boot/dts/amlogic/meson-g12b-s922x.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-g12b-s922x.dtsi
-@@ -11,26 +11,6 @@
- 		compatible = "operating-points-v2";
- 		opp-shared;
- 
--		opp-100000000 {
--			opp-hz = /bits/ 64 <100000000>;
--			opp-microvolt = <731000>;
--		};
--
--		opp-250000000 {
--			opp-hz = /bits/ 64 <250000000>;
--			opp-microvolt = <731000>;
--		};
--
--		opp-500000000 {
--			opp-hz = /bits/ 64 <500000000>;
--			opp-microvolt = <731000>;
--		};
--
--		opp-667000000 {
--			opp-hz = /bits/ 64 <667000000>;
--			opp-microvolt = <731000>;
--		};
--
- 		opp-1000000000 {
- 			opp-hz = /bits/ 64 <1000000000>;
- 			opp-microvolt = <731000>;
-@@ -76,26 +56,6 @@
- 		compatible = "operating-points-v2";
- 		opp-shared;
- 
--		opp-100000000 {
--			opp-hz = /bits/ 64 <100000000>;
--			opp-microvolt = <751000>;
--		};
--
--		opp-250000000 {
--			opp-hz = /bits/ 64 <250000000>;
--			opp-microvolt = <751000>;
--		};
--
--		opp-500000000 {
--			opp-hz = /bits/ 64 <500000000>;
--			opp-microvolt = <751000>;
--		};
--
--		opp-667000000 {
--			opp-hz = /bits/ 64 <667000000>;
--			opp-microvolt = <751000>;
--		};
--
- 		opp-1000000000 {
- 			opp-hz = /bits/ 64 <1000000000>;
- 			opp-microvolt = <771000>;
-diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1.dtsi b/arch/arm64/boot/dts/amlogic/meson-sm1.dtsi
-index 3c07a89bfd27..80737731af3f 100644
---- a/arch/arm64/boot/dts/amlogic/meson-sm1.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-sm1.dtsi
-@@ -95,26 +95,6 @@
- 		compatible = "operating-points-v2";
- 		opp-shared;
- 
--		opp-100000000 {
--			opp-hz = /bits/ 64 <100000000>;
--			opp-microvolt = <730000>;
--		};
--
--		opp-250000000 {
--			opp-hz = /bits/ 64 <250000000>;
--			opp-microvolt = <730000>;
--		};
--
--		opp-500000000 {
--			opp-hz = /bits/ 64 <500000000>;
--			opp-microvolt = <730000>;
--		};
--
--		opp-667000000 {
--			opp-hz = /bits/ 64 <666666666>;
--			opp-microvolt = <750000>;
--		};
--
- 		opp-1000000000 {
- 			opp-hz = /bits/ 64 <1000000000>;
- 			opp-microvolt = <770000>;
 -- 
-2.17.1
-
+heikki

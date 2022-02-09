@@ -2,147 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 845924AEE24
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 10:41:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE8114AEE30
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 10:41:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236705AbiBIJjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 04:39:36 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:45504 "EHLO
+        id S235623AbiBIJjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 04:39:54 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:45330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238593AbiBIJdU (ORCPT
+        with ESMTP id S238558AbiBIJdR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 04:33:20 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3960E05B1CC
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 01:33:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644399196; x=1675935196;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ijmXiHaC9NMp14wmzN7JkrQt24FQH775m1GD8fr5qsE=;
-  b=DQ9oWyuobaPvahxtmgVlsUtJEKwqmigVE8H3PbUn0Kf9/iEn5mIgzUbZ
-   jPsBD10QGmeL/mJAjm9nt0TMe8BeuHj1cmxAFR2yNLifGlAc7oXltKWxy
-   zxRdV4bd3N+KYzxgLvX7aWAicVCfDmQKeu0ngsxLYMXPfcGGgidQGLjb+
-   6gRsdauyNjoh7s7QLet2O4euGdH5N6tJEj+oobNy3ydvxgDaEpp9dNHsF
-   XlxlcHPsFJnedE1410UcluHyalnIUlVWE8M8xL9mIEjGVvRXz1LyyZmVm
-   xsTmYOoWwdiLTvNm5lit7U+cf9BeLH5ekYDhvgEpxaHi/3jVlqNum4/Ks
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="248925879"
-X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
-   d="scan'208";a="248925879"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 01:32:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
-   d="scan'208";a="701195000"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 09 Feb 2022 01:32:38 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nHjL3-0001a1-IN; Wed, 09 Feb 2022 09:32:37 +0000
-Date:   Wed, 9 Feb 2022 17:32:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Vineet Gupta <vgupta@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org
-Subject: arch/arc/kernel/smp.c:279:18: sparse: sparse: dereference of noderef
- expression
-Message-ID: <202202091740.HWwIjRT0-lkp@intel.com>
+        Wed, 9 Feb 2022 04:33:17 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BD9AE05ADE1
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 01:33:12 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id q7so2861756wrc.13
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 01:33:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vD+/Cmu1Qo/Y2K+tLoqBHl5G/I2HgHP3zBZQPgA76XU=;
+        b=UE1ENqV54hus9qyKzyTo4+aJMKOa7Gfuj5kSXgr12/DrBx2E3f+/lze2MSXf19Wjr3
+         s8mijdNdLwW25Xa22N6izIjsluhrnI5XXht8rmVNKK5DLUOOWNOI29aOv2bjZLXygexx
+         buElQp7T1PBaDGMXsP6QWFJCDZgvONxxTfjuSTwMcC2HLVo7imZPJo5J2V12ryO75P/u
+         wP/TgCVqbyZYT7RT4Q7ZHIcbPTduh6ZCRH/ClCb2u+Ma9e4f5GSpL2aZbtj2gGUdJjVE
+         ZPVArEFUMRBFkgUXKh2DrS6usck0tziNMd7Kh+G+yUPzVEBs70/w/kGgKUwtQbfhIM3a
+         j8tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vD+/Cmu1Qo/Y2K+tLoqBHl5G/I2HgHP3zBZQPgA76XU=;
+        b=76JfVLRoV2L6BR4Y0E8QdsnRlymBwpymqcOyD/1emttCU/uAzfnnX+KO1m/EgCsmOZ
+         yNq4Me83saDCVwnM5q2RbgZiwTh3iHgpjFwjQoUVu5hbQeoJMBrHhC3fR6Zf3lpvIO1K
+         XLb0fV/IGC7vBdgtelUnRLLgWhAvuh3UCLtLPAvaYqJlnUqzLTakKENwCcqseRgXzYCZ
+         mLRxHVrw7oRhQUnrNQG77xaJLE+SykPl5dhC1JDSFyd6Ld64kL7Jrp4JOV4f9NthD1ag
+         QQithrBQxc9dOD9EMTJjsFoAa6bPktzefNIU/JH8I5Tk5aGBfxM5HJF468EC+9U4YCpV
+         D7Gw==
+X-Gm-Message-State: AOAM533jgcE+y1SO0MiSOfKLKX1Gf6OUmpFjU7ZflRWMFOllTATcqhKx
+        gBeryePwirIBWEiKuogxZDq+DqitDRPvlVh/WUeO3Q==
+X-Google-Smtp-Source: ABdhPJyZDacMwjglnsU7XGk9iLjX9iJ0g23M7rUy18zgTzfpJeurAK8DrcUeBy/mGNKTxVFS4gz+ofK2DEhu8fUPJpc=
+X-Received: by 2002:a5d:5850:: with SMTP id i16mr1298418wrf.519.1644399186067;
+ Wed, 09 Feb 2022 01:33:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220203120604.128396-1-james.clark@arm.com> <20220203120604.128396-2-james.clark@arm.com>
+ <1b649955-cb45-1283-68cd-c82582cef60c@arm.com> <7ba34443-d76a-253d-d112-4100d5a57e21@arm.com>
+In-Reply-To: <7ba34443-d76a-253d-d112-4100d5a57e21@arm.com>
+From:   Mike Leach <mike.leach@linaro.org>
+Date:   Wed, 9 Feb 2022 09:32:54 +0000
+Message-ID: <CAJ9a7Vj4TRmxkiGi=OMx3iYxWjD0me7AS25BnyvBktHRCCb_GQ@mail.gmail.com>
+Subject: Re: [PATCH v2 01/15] coresight: Make ETM4x TRCIDR0 register accesses
+ consistent with sysreg.h
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     Anshuman Khandual <Anshuman.Khandual@arm.com>,
+        James Clark <James.Clark@arm.com>, mathieu.poirier@linaro.org,
+        coresight@lists.linaro.org, leo.yan@linaro.com,
+        Leo Yan <leo.yan@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   e6251ab4551f51fa4cee03523e08051898c3ce82
-commit: e188f3330a13df904d77003846eafd3edf99009d ARC: cmpxchg/xchg: rewrite as macros to make type safe
-date:   6 months ago
-config: arc-randconfig-s032-20220209 (https://download.01.org/0day-ci/archive/20220209/202202091740.HWwIjRT0-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e188f3330a13df904d77003846eafd3edf99009d
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e188f3330a13df904d77003846eafd3edf99009d
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arc SHELL=/bin/bash arch/arc/kernel/
+Hi James,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+When reviewing another patch set I spotted that there is a FIELD_GET
+macro already defined for the kernel in include/linux/bitfield.h
+
+Advantage of this is that you only need to define a shifted mask for
+each field and the macro handles the extraction and shifting
+automatically.
+It also ensures does a bunch of compile time sanity checks to ensure
+that the masks are in range for the type.
+
+i.e. - define the mask _with_ the shift
+#define TRCIDR0_INSTP0_MASK                    GENMASK(2, 1)
+
+then
+drvdata->instrp0 = !!(FIELD_GET(TRCIDR0_INSTP0_MASK, etmidr0) == 0b11);
+
+which means all the shift #defines can be dropped
+
+Should we use this and drop the REG_VAL or whatever?
+
+Regards
+
+Mike
+
+On Tue, 8 Feb 2022 at 15:04, Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
+>
+> On 07/02/2022 05:44, Anshuman Khandual wrote:
+> > Hi James,
+> >
+> > These are all ETM4X specific changes. Something like this might be cleaner
+> > and also more compact. Also would suggest to follow the same for subsequent
+> > patches as well.
+> >
+> > coresight: etm4x: Cleanup TRCIDR0 register accesses
+> >
+> > Consistency with sysreg.h could be mentioned in the commit message itself.
+> >
+> > On 2/3/22 5:35 PM, James Clark wrote:
+> >> This is a no-op change for style and consistency and has no effect on the
+> >> binary produced by gcc-11.
+> >
+> > This patch adds register definitions, helper macros as well. Please expand
+> > the commit message to add more details. This is too short, for the change
+> > it creates. BTW why is it necessary to mention GCC version number here.
+> >
+> >>
+> >> Signed-off-by: James Clark <james.clark@arm.com>
+> >> ---
+> >>   .../coresight/coresight-etm4x-core.c          | 36 +++++--------------
+> >>   drivers/hwtracing/coresight/coresight-etm4x.h | 17 +++++++++
+> >>   drivers/hwtracing/coresight/coresight-priv.h  |  5 +++
+> >>   3 files changed, 30 insertions(+), 28 deletions(-)
+> >>
+> >> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> >> index e2eebd865241..107e81948f76 100644
+> >> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> >> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> >> @@ -1091,41 +1091,21 @@ static void etm4_init_arch_data(void *info)
+> >>      etmidr0 = etm4x_relaxed_read32(csa, TRCIDR0);
+> >>
+> >>      /* INSTP0, bits[2:1] P0 tracing support field */
+> >> -    if (BMVAL(etmidr0, 1, 2) == 0b11)
+> >> -            drvdata->instrp0 = true;
+> >> -    else
+> >> -            drvdata->instrp0 = false;
+> >> -
+> >> +    drvdata->instrp0 = !!(REG_VAL(etmidr0, TRCIDR0_INSTP0) == 0b11);
+> >>      /* TRCBB, bit[5] Branch broadcast tracing support bit */
+> >> -    if (BMVAL(etmidr0, 5, 5))
+> >> -            drvdata->trcbb = true;
+> >> -    else
+> >> -            drvdata->trcbb = false;
+> >> -
+> >> +    drvdata->trcbb = !!(etmidr0 & TRCIDR0_TRCBB);
+> >>      /* TRCCOND, bit[6] Conditional instruction tracing support bit */
+> >> -    if (BMVAL(etmidr0, 6, 6))
+> >> -            drvdata->trccond = true;
+> >> -    else
+> >> -            drvdata->trccond = false;
+> >> -
+> >> +    drvdata->trccond = !!(etmidr0 & TRCIDR0_TRCCOND);
+> >>      /* TRCCCI, bit[7] Cycle counting instruction bit */
+> >> -    if (BMVAL(etmidr0, 7, 7))
+> >> -            drvdata->trccci = true;
+> >> -    else
+> >> -            drvdata->trccci = false;
+> >> -
+> >> +    drvdata->trccci = !!(etmidr0 & TRCIDR0_TRCCCI);
+> >>      /* RETSTACK, bit[9] Return stack bit */
+> >> -    if (BMVAL(etmidr0, 9, 9))
+> >> -            drvdata->retstack = true;
+> >> -    else
+> >> -            drvdata->retstack = false;
+> >> -
+> >> +    drvdata->retstack = !!(etmidr0 & TRCIDR0_RETSTACK);
+> >>      /* NUMEVENT, bits[11:10] Number of events field */
+> >> -    drvdata->nr_event = BMVAL(etmidr0, 10, 11);
+> >> +    drvdata->nr_event = REG_VAL(etmidr0, TRCIDR0_NUMEVENT);
+> >>      /* QSUPP, bits[16:15] Q element support field */
+> >> -    drvdata->q_support = BMVAL(etmidr0, 15, 16);
+> >> +    drvdata->q_support = REG_VAL(etmidr0, TRCIDR0_QSUPP);
+> >>      /* TSSIZE, bits[28:24] Global timestamp size field */
+> >> -    drvdata->ts_size = BMVAL(etmidr0, 24, 28);
+> >> +    drvdata->ts_size = REG_VAL(etmidr0, TRCIDR0_TSSIZE);
+> >>
+> >>      /* maximum size of resources */
+> >>      etmidr2 = etm4x_relaxed_read32(csa, TRCIDR2);
+> >> diff --git a/drivers/hwtracing/coresight/coresight-etm4x.h b/drivers/hwtracing/coresight/coresight-etm4x.h
+> >> index 3c4d69b096ca..2bd8ad953b8e 100644
+> >> --- a/drivers/hwtracing/coresight/coresight-etm4x.h
+> >> +++ b/drivers/hwtracing/coresight/coresight-etm4x.h
+> >> @@ -130,6 +130,23 @@
+> >>
+> >>   #define TRCRSR_TA                  BIT(12)
+> >>
+> >> +/*
+> >> + * Bit positions of registers that are defined above, in the sysreg.h style
+> >> + * of _MASK, _SHIFT and BIT().
+> >> + */
+> >
+> > ^^^ not really necessary. Instead the format requirement for below mentioned
+> > CORESIGHT_REG_VAL() macro might be relevant and should be mentioned.
+> >
+> >> +#define TRCIDR0_INSTP0_SHIFT                        1
+> >> +#define TRCIDR0_INSTP0_MASK                 GENMASK(1, 0)
+> >> +#define TRCIDR0_TRCBB                               BIT(5)
+> >> +#define TRCIDR0_TRCCOND                             BIT(6)
+> >> +#define TRCIDR0_TRCCCI                              BIT(7)
+> >> +#define TRCIDR0_RETSTACK                    BIT(9)
+> >> +#define TRCIDR0_NUMEVENT_SHIFT                      10
+> >> +#define TRCIDR0_NUMEVENT_MASK                       GENMASK(1, 0)
+> >> +#define TRCIDR0_QSUPP_SHIFT                 15
+> >> +#define TRCIDR0_QSUPP_MASK                  GENMASK(1, 0)
+> >> +#define TRCIDR0_TSSIZE_SHIFT                        24
+> >> +#define TRCIDR0_TSSIZE_MASK                 GENMASK(4, 0)
+> >> +
+> >>   /*
+> >>    * System instructions to access ETM registers.
+> >>    * See ETMv4.4 spec ARM IHI0064F section 4.3.6 System instructions
+> >> diff --git a/drivers/hwtracing/coresight/coresight-priv.h b/drivers/hwtracing/coresight/coresight-priv.h
+> >> index ff1dd2092ac5..1452c6038421 100644
+> >> --- a/drivers/hwtracing/coresight/coresight-priv.h
+> >> +++ b/drivers/hwtracing/coresight/coresight-priv.h
+> >> @@ -36,6 +36,11 @@
+> >>
+> >>   #define TIMEOUT_US         100
+> >>   #define BMVAL(val, lsb, msb)       ((val & GENMASK(msb, lsb)) >> lsb)
+> >> +/*
+> >> + * Extract a field from a register where field is #defined in the form
+> >> + * <register_name>_<field_name>_MASK and <register_name>_<field_name>_SHIFT
+> >> + */
+> >
+> > Looking at the usage, <register_name> is already embedded in <filed_name>. So
+> > it requires <field_name>_SHIFT and <field_name>_MASK instead. Unless register
+> > name should be passed as separate argument (which actually might be better).
+> >
+> > REG_VAL(etmidr0, TRCIDR0_TSSIZE) ----> REG_VAL(etmidr0, TRCIDR0, TSSIZE)
+>
+> I don't see much difference here. So I am fine either way.
+>
+> >
+> > with some restructuring in the comment ..
+> >
+> > /*
+> >   * Extract a field from a coresight register
+> >   *
+> >   * Required fields are defined as macros like the following
+> >   *
+> >   * <register_name>_<field_name>_MASK and <register_name>_<field_name>_SHIFT
+> >   */
+> >
+> >> +#define REG_VAL(val, field) ((val & (field##_MASK << field##_SHIFT)) >> field##_SHIFT)
+> >
+> > This is too generic to be in a coresight header or it should just be
+> > named CORESIGHT_REG_VAL() instead, making it more specific for here.
+> >
+> > The build should fail in case any required macro definition is absent.
+> > I guess no more fortification is required in case macros are missing.
+> >
+> > However CORESIGHT_REG_VAL() is better placed in <coresight-etm4x.h>
+> > just before all the dependent SHIFT/MASK register field definition
+> > starts.
+>
+> Not necessarily. CORESIGHT_REG_VAL() is a generic function and doesn't
+> have anything specific to do with etm4x. We could reuse that for
+> cleaning up other drivers in CoreSight.
+>
+> Cheers
+> Suzuki
 
 
-sparse warnings: (new ones prefixed by >>)
-   arch/arc/kernel/smp.c:264:48: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected unsigned long [noderef] __percpu *ipi_data_ptr @@     got unsigned long * @@
-   arch/arc/kernel/smp.c:264:48: sparse:     expected unsigned long [noderef] __percpu *ipi_data_ptr
-   arch/arc/kernel/smp.c:264:48: sparse:     got unsigned long *
-   arch/arc/kernel/smp.c:279:18: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile *v @@     got unsigned long [noderef] __percpu *__ai_ptr @@
-   arch/arc/kernel/smp.c:279:18: sparse:     expected void const volatile *v
-   arch/arc/kernel/smp.c:279:18: sparse:     got unsigned long [noderef] __percpu *__ai_ptr
-   arch/arc/kernel/smp.c:277:29: sparse: sparse: cast removes address space '__percpu' of expression
-   arch/arc/kernel/smp.c:413:72: sparse: sparse: incorrect type in argument 4 (different address spaces) @@     expected void [noderef] __percpu *percpu_dev_id @@     got int *dev @@
-   arch/arc/kernel/smp.c:413:72: sparse:     expected void [noderef] __percpu *percpu_dev_id
-   arch/arc/kernel/smp.c:413:72: sparse:     got int *dev
->> arch/arc/kernel/smp.c:279:18: sparse: sparse: dereference of noderef expression
->> arch/arc/kernel/smp.c:279:18: sparse: sparse: dereference of noderef expression
 
-vim +279 arch/arc/kernel/smp.c
-
-41195d236e8445 Vineet Gupta    2013-01-18  261  
-ddf84433f411b6 Vineet Gupta    2013-11-25  262  static void ipi_send_msg_one(int cpu, enum ipi_msg_type msg)
-41195d236e8445 Vineet Gupta    2013-01-18  263  {
-f2a4aa5646687f Vineet Gupta    2013-11-26  264  	unsigned long __percpu *ipi_data_ptr = per_cpu_ptr(&ipi_data, cpu);
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  265  	unsigned long old, new;
-41195d236e8445 Vineet Gupta    2013-01-18  266  	unsigned long flags;
-41195d236e8445 Vineet Gupta    2013-01-18  267  
-f2a4aa5646687f Vineet Gupta    2013-11-26  268  	pr_debug("%d Sending msg [%d] to %d\n", smp_processor_id(), msg, cpu);
-f2a4aa5646687f Vineet Gupta    2013-11-26  269  
-41195d236e8445 Vineet Gupta    2013-01-18  270  	local_irq_save(flags);
-41195d236e8445 Vineet Gupta    2013-01-18  271  
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  272  	/*
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  273  	 * Atomically write new msg bit (in case others are writing too),
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  274  	 * and read back old value
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  275  	 */
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  276  	do {
-6aa7de059173a9 Mark Rutland    2017-10-23  277  		new = old = READ_ONCE(*ipi_data_ptr);
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  278  		new |= 1U << msg;
-d8e8c7dda11f5d Vineet Gupta    2013-11-28 @279  	} while (cmpxchg(ipi_data_ptr, old, new) != old);
-41195d236e8445 Vineet Gupta    2013-01-18  280  
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  281  	/*
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  282  	 * Call the platform specific IPI kick function, but avoid if possible:
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  283  	 * Only do so if there's no pending msg from other concurrent sender(s).
-82a423053eb3cf Changcheng Deng 2021-08-14  284  	 * Otherwise, receiver will see this msg as well when it takes the
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  285  	 * IPI corresponding to that msg. This is true, even if it is already in
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  286  	 * IPI handler, because !@old means it has not yet dequeued the msg(s)
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  287  	 * so @new msg can be a free-loader
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  288  	 */
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  289  	if (plat_smp_ops.ipi_send && !old)
-ddf84433f411b6 Vineet Gupta    2013-11-25  290  		plat_smp_ops.ipi_send(cpu);
-41195d236e8445 Vineet Gupta    2013-01-18  291  
-41195d236e8445 Vineet Gupta    2013-01-18  292  	local_irq_restore(flags);
-41195d236e8445 Vineet Gupta    2013-01-18  293  }
-41195d236e8445 Vineet Gupta    2013-01-18  294  
-
-:::::: The code at line 279 was first introduced by commit
-:::::: d8e8c7dda11f5d5cf90495f2e89d917a83509bc0 ARC: [SMP] optimize IPI send and receive
-
-:::::: TO: Vineet Gupta <vgupta@synopsys.com>
-:::::: CC: Vineet Gupta <vgupta@synopsys.com>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Mike Leach
+Principal Engineer, ARM Ltd.
+Manchester Design Centre. UK

@@ -2,87 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC9CC4AE5B5
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 01:00:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07EBB4AE5C4
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 01:10:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239038AbiBHX73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 18:59:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55560 "EHLO
+        id S239192AbiBIAJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 19:09:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239016AbiBHX72 (ORCPT
+        with ESMTP id S239106AbiBIAJQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 18:59:28 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D7A68C061577
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 15:59:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644364767;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1B+HhoEdav6Cob3bPb/BF6nu8D/2OQMn0TX9fIjaHGQ=;
-        b=ic2wNtBUam2bz3I4ll/IUk94uFAfcHQdZaWPQd7Hg+vh4iRcpSU//sYaSmkxWOpXWX8Dqf
-        jJ7dLcG3zHG9eU3zRy9SURbxI+vMn7Ud03/0m+klpZoeBEFWgFVh6Px2etZcYHvuf8dK01
-        lp69zuxLHkDb/xBdiBYGlXxCzxoJS08=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-106-CuqG3tJ7M4qhx5ukxKXnTQ-1; Tue, 08 Feb 2022 18:59:25 -0500
-X-MC-Unique: CuqG3tJ7M4qhx5ukxKXnTQ-1
-Received: by mail-wr1-f71.google.com with SMTP id g17-20020adfa591000000b001da86c91c22so308821wrc.5
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 15:59:25 -0800 (PST)
+        Tue, 8 Feb 2022 19:09:16 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29D7EC06173B
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 16:09:16 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id u6so1072434lfc.3
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 16:09:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=W19puUKhiHbEmWCxpE5TIFSUh7P9zJpCL7kz3pPFVgI=;
+        b=fYaC0L0JyyaNU+LhqGMLn+efsEyae3kO7jiGuXumIrVBofnhAwpNjW9F3p/EJ2h0bI
+         3JBqer8Zd9vnaYaZSxIIGbhHE/jmhyvFTyRVbZQYyisKQDOQ/O9OcJyABeCt6XjujJIL
+         ZmEppE0GQw/l7oP3w/MnKSZ7eHTJmwru04lCfff6W7IU4ybwE9kq44sshLmt9Dq/B4L0
+         84pwPtoY0w25HWnhZ5J4bqRxR+gwCtGYYdWogfKtXAiM2X4Us5jWVg+tvx3vVnMWe3ls
+         uKM1HOPbuQ10xmZs0thcUT14kyim1NNFdaSPdsqlzWphfbPvyxPhSdPzxgW4j6n0eS1w
+         pI7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1B+HhoEdav6Cob3bPb/BF6nu8D/2OQMn0TX9fIjaHGQ=;
-        b=dU1KnwZTTu4rG4DEP4c1gd2HopDu/VsGAysKJf8YIkPI8qaj70EEodxCnehG6NoozY
-         4jWQiA8h8X1S9iohvE0oZR0VdJmVsJkwg+h7OVAoaQvXmZ0PeykNqd18m5A/IFnr36jl
-         klIdQOO+zKGtbr+behyW7Ih3HeCOabMmiiC5bACOag+QeXsHqboh+ANj52U+Ybe7TwmL
-         pZuYQ2zEzoyl1AhMAiRSC7O8EmapmWPTul3nx+hICXG1PthRFdBNw4INjwoYO1WeKdC/
-         Tv5pp3dtppxXe6Oqxzv/fO1a7hcvyEPL/seAvOFFq6gK6j5/EFLhqaHLv59D0ULodBwT
-         nLWw==
-X-Gm-Message-State: AOAM533CKtUW8FUGskg0ZrE32KjhcKTZeCrQjw97hIIMnksKlVtPeRCm
-        SUut5mmtCjCC7AfTA5bfhQaU4xY0F9w2u9dSWDTc9mZfxGfAte89+AtPuUcxt4JeUuW53u+veOf
-        BgXHOAhysw+gM2kQf8G8D73Jg
-X-Received: by 2002:a1c:4c19:: with SMTP id z25mr302718wmf.105.1644364764702;
-        Tue, 08 Feb 2022 15:59:24 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwyxrdx5PAN39E9zDPgBt3t7VCZ+YkAG7VKuS1GxY71C3wn6MOzwm1KHjgao+aMLB+p3UZbTg==
-X-Received: by 2002:a1c:4c19:: with SMTP id z25mr302707wmf.105.1644364764502;
-        Tue, 08 Feb 2022 15:59:24 -0800 (PST)
-Received: from [192.168.1.102] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id l24sm3859205wms.24.2022.02.08.15.59.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Feb 2022 15:59:24 -0800 (PST)
-Message-ID: <c58f7b96-8d8c-030e-9fd2-358e259127e4@redhat.com>
-Date:   Wed, 9 Feb 2022 00:59:23 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=W19puUKhiHbEmWCxpE5TIFSUh7P9zJpCL7kz3pPFVgI=;
+        b=Ekeh6szj0p7kZ+4c15vkJKUuJq+Y00NOFUr8BIHxL8iA223WlA+OGD2FGdtsvurMiz
+         how/nXnKUyz2kQ+oxaKw4zVhNzGR6hKYcKMX33Dde4JNKRGxtkwHJePrwvh/Gc46IePg
+         scHpuAZ0kHxxnKcJnuCOZn/Mv3Il7MkrzE9lgeGr4oJ7zJ6y2u3/VyLr+vGgDx8KCb+7
+         YK/L9V1/SEYXwJjLXFnDCS8rd5D+Kmwmwmish0jeSjmYfLxmyiUWkGuAi9cjPw9pm7Ik
+         NUSTu4SzXYV3khTUHoX+kYDWPwGMOVAPgOUR4MCzJ9Zju39ifZZoGmyfsOByMNPi6vd3
+         HVJw==
+X-Gm-Message-State: AOAM532x2LbvpcIlyNw359nTu9tB0/8JH3o2SRPyPW5J3Vr+Dhi1RLEW
+        b0pt2oWlFcQTRLVKuybdCq8TJDca5a6Niy/mQSzOMw==
+X-Google-Smtp-Source: ABdhPJxF2pldIArsg4Ym1I6TGdhw72v/mmazF7M6SaN1/N2nCMj+9r5lENIBGFEGMsXlU/H+Y+YSJytyZo4DYgLAZn0=
+X-Received: by 2002:ac2:4e10:: with SMTP id e16mr4784298lfr.444.1644365354322;
+ Tue, 08 Feb 2022 16:09:14 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 06/19] fbcon: Use delayed work for cursor
-Content-Language: en-US
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        DRI Development <dri-devel@lists.freedesktop.org>
-Cc:     linux-fbdev@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Du Cheng <ducheng2@gmail.com>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Claudio Suarez <cssk@net-c.es>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Daniel Vetter <daniel.vetter@intel.com>
-References: <20220208210824.2238981-1-daniel.vetter@ffwll.ch>
- <20220208210824.2238981-7-daniel.vetter@ffwll.ch>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20220208210824.2238981-7-daniel.vetter@ffwll.ch>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20211122170301.764232470@infradead.org>
+In-Reply-To: <20211122170301.764232470@infradead.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 8 Feb 2022 16:09:02 -0800
+Message-ID: <CAKwvOdm_-Gf=pTbM0ai6tn99Yxo4eV217R1j__36zOj0vBQ-PQ@mail.gmail.com>
+Subject: Re: [RFC][PATCH 0/6] x86: Kernel IBT beginnings
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
+        jpoimboe@redhat.com, andrew.cooper3@citrix.com,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        samitolvanen@google.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,44 +68,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Daniel,
+On Mon, Nov 22, 2021 at 9:14 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> Hi,
+>
+> So I hacked this up on Friday night / Saturday morning and spend all of today
+> cleaning it up.
+>
+> It is the very bare beginnings of kernel IBT support. Since I'm lacking any
+> sort of actual hardware it even lacks fun things like code to write to the MSRs
+> to enable the IBT tracker etc..
+>
+> However, it should have most of the ENDBR instructions in the right place -- I
+> hope :-) That said; I would *really* like compiler support for this stuff to be
+> improved, the amount of fixups done by objtool is obscene.
+>
+> The end result still boots on ancient x86-64 hardware, for whatever that's
+> worth (when built with the below turd included that is).
 
-On 2/8/22 22:08, Daniel Vetter wrote:
-> Allows us to delete a bunch of hand-rolled stuff. Also to simplify the
-> code we initialize the cursor_work completely when we allocate the
-> fbcon_ops structure, instead of trying to cope with console
-> re-initialization.
-> 
+Thanks for the patches!
 
-Maybe also make it more explicit in the commit message that the delayed
-work is replacing a timer that was used before for the cursor ?
+Are there recommended command line args for qemu emulation to test
+this with? Tigerlake and Alderlake should be required for IBT support
+IIRC from our IRC discussion?
+https://qemu.readthedocs.io/en/latest/system/qemu-cpu-models.html#preferred-cpu-models-for-intel-x86-hosts
+No hits for:
+$ qemu-system-x86_64 -cpu help | grep -e tiger -e alder
+$ qemu-system-x86_64 --version
+QEMU emulator version 6.2.0 (Debian 1:6.2+dfsg-2)
+Copyright (c) 2003-2021 Fabrice Bellard and the QEMU Project developers
 
-> The motiviation here is that fbcon code stops using the fb_info.queue,
 
-motivation
-
-[snip]
-
->     /*
->      *    This is the interface between the low-level console driver and the
-> @@ -68,7 +68,7 @@ struct fbcon_ops {
->  	int  (*update_start)(struct fb_info *info);
->  	int  (*rotate_font)(struct fb_info *info, struct vc_data *vc);
->  	struct fb_var_screeninfo var;  /* copy of the current fb_var_screeninfo */
-> -	struct timer_list cursor_timer; /* Cursor timer */
-> +	struct delayed_work cursor_work; /* Cursor timer */
-
-A delayed_work uses a timer underneath but I wonder if the comment also
-needs to be updated since technically isn't a timer anymore but deferred
-work that gets re-scheduled each time on fb_flashcursor().
-
-The patch looks good to me and makes the logic much simpler than before.
-
-Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
-
-Best regards,
 -- 
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
-
+Thanks,
+~Nick Desaulniers

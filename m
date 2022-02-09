@@ -2,145 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E99A4AF03B
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 12:55:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1343B4AF04A
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 12:57:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231237AbiBILzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 06:55:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56934 "EHLO
+        id S231529AbiBIL4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 06:56:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231434AbiBILzV (ORCPT
+        with ESMTP id S231597AbiBILz0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 06:55:21 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C08FDE00F7CA;
-        Wed,  9 Feb 2022 02:52:49 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id m6so4625592ybc.9;
-        Wed, 09 Feb 2022 02:52:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=t9EOjDsFOoIpRxTzANo3FHWi1tKOlZeMj74re1dNnPQ=;
-        b=nol7K09L15nrTX8SbqhMA+n0uZ+Yv4qdgTEbQlIwvG7Pfmwj+9HWeqJLBSiMOkhi+6
-         exJdUcqqguQ9yQ27PdHc7yGPCVQ/2NovbX3RY0jCctPxdRbBwZ73gPci7bDwkh6MgbDR
-         NAp+wZOXbneBp/fyy80J6WJ3XPS6A27E8k2TpUpCnmlzvee9I/Yq+fsDNxmXPW9LYJHi
-         RT+nvRQE0EiUed3kBmTlNUAfsggE4fq6QRL8rXruXQnmphPwMxMUhdfQHShsEVqWFghj
-         K2ihaP+3K+nH6FePNUm346AGKRehV63ydLAibn3zs+J+TEorkSzztJ16Qjx9Vqt7/pVx
-         zh7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=t9EOjDsFOoIpRxTzANo3FHWi1tKOlZeMj74re1dNnPQ=;
-        b=uQP7/pE9+g4z9gAUdu/SAPV1wDqvaCq+gii8ncT/7N+3zd1ud7p9TCgPoWUQToJWr9
-         X76DcGBHCKGJQ4Lqki1koVDWvbY8hWM20NuNkTJ4doP0LXXZ/P2R0F1d5XgI3lHEStjp
-         cCpWlY68Z3YpAKkKJoZFvdPZf5Vn5qBZsKo7P0LtsyEeha/1++XVlw42Cl5g/65VF9NC
-         Z+9rmqP85bsXxKVSmFds1f3uDFMzYw1FA+HdZYkGd8PxH0mSPZcf4jSHcqYh1oU2b1Y5
-         NwhibK7Zi5DX6Is2GDjCjbiYuKXkawgjJztKPBeMJ4bDkXcvf2/GMeRWcPdrg45320QI
-         BTeg==
-X-Gm-Message-State: AOAM53123z0M19Oki8hVHBFmUTYAQwapY0JbKJ7sWfu8QXdHfm/kZJbf
-        oKLjrwGhTEC3nG38bGHl7mzKn7wC14wFtdEsBTk=
-X-Google-Smtp-Source: ABdhPJzYXzffFdYHs1OiBDSctVnmzVRTGomr66e7l7mljK4dP+oSHHewJhdr9uxcryg9p/0WcDqyTRDd/hFJxzUDL7k=
-X-Received: by 2002:a81:cf07:: with SMTP id u7mr1431288ywi.221.1644403968911;
- Wed, 09 Feb 2022 02:52:48 -0800 (PST)
+        Wed, 9 Feb 2022 06:55:26 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887D9C0045A9;
+        Wed,  9 Feb 2022 02:54:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1527B612E7;
+        Wed,  9 Feb 2022 10:54:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F355C340EE;
+        Wed,  9 Feb 2022 10:53:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644404049;
+        bh=8nfXi2bAkBkxKe4ZmVJ1McrLUR/vS+aiNoKC3c4V54c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=o8kvTb2TMbpq1whYqOyKIm1hlJzLi/Q/a7JoUpj/jGssXx7Qt2YZfBNYkEkw/hZXE
+         oSInBQ5nuOk5Os7WPqk0FsmT5MYuYpJeH1AwVx9/sNxYghplvePkYAHWRcNnd3okRc
+         M9krUM2hOFkqKwv1q7AvLokp6kWPbgxm4oByhL31KH+6gGAD8NURHSZGlgRPeJ34wR
+         oKsYkioVYxJpiwc0Ji4Sp/jM+78yoZTEYYk3XHfiYOqzRm+ha7Fh2SpXMJsyh6VB8N
+         ivZdoNTpo9Vm+5jKSaeoJXseiJK/X0ch6HI7SG9uzqs2raWQmeBW+yzpszfgW8m8ad
+         YPv9Vixyl0Iow==
+Date:   Wed, 9 Feb 2022 12:53:51 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "Lutomirski, Andy" <luto@kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "0x7f454c46@gmail.com" <0x7f454c46@gmail.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "adrian@lisas.de" <adrian@lisas.de>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "avagin@gmail.com" <avagin@gmail.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kcc@google.com" <kcc@google.com>, "bp@alien8.de" <bp@alien8.de>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "Moreira, Joao" <joao.moreira@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Dave.Martin@arm.com" <Dave.Martin@arm.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
+Subject: Re: [PATCH 00/35] Shadow stacks for userspace
+Message-ID: <YgOdP7YFwbX13SlP@kernel.org>
+References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
+ <YgAWVSGQg8FPCeba@kernel.org>
+ <YgDIIpCm3UITk896@lisas.de>
+ <8f96c2a6-9c03-f97a-df52-73ffc1d87957@intel.com>
+ <YgI1A0CtfmT7GMIp@kernel.org>
+ <YgI37n+3JfLSNQCQ@grain>
+ <357664de-b089-4617-99d1-de5098953c80@www.fastmail.com>
+ <YgKiKEcsNt7mpMHN@grain>
+ <8e36f20723ca175db49ed3cc73e42e8aa28d2615.camel@intel.com>
 MIME-Version: 1.0
-References: <1644213481-20321-1-git-send-email-hammerh0314@gmail.com>
- <1644213481-20321-3-git-send-email-hammerh0314@gmail.com> <7aa14a1e-2814-0014-a682-f40666f635ac@kernel.org>
- <CAOX-t569-0aTu73eGSY3k+btAuVgueRY91Jd5b9kbpjmxPp+Dw@mail.gmail.com> <YgJUiegS2Cc9MyHc@kroah.com>
-In-Reply-To: <YgJUiegS2Cc9MyHc@kroah.com>
-From:   hammer hsieh <hammerh0314@gmail.com>
-Date:   Wed, 9 Feb 2022 18:53:03 +0800
-Message-ID: <CAOX-t54HXyty96UYYDHVLc4TieQsY3wEq-JT66amXgHb=SB0wg@mail.gmail.com>
-Subject: Re: [PATCH v7 2/2] serial:sunplus-uart:Add Sunplus SoC UART Driver
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Jiri Slaby <jirislaby@kernel.org>, robh+dt@kernel.org,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
-        wells.lu@sunplus.com, "hammer.hsieh" <hammer.hsieh@sunplus.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8e36f20723ca175db49ed3cc73e42e8aa28d2615.camel@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ok, thanks for your explaination, I got it now.
-I will document "posted write" info in the top of the file or top of
-startup/shutdown function.
+Hi Rick,
 
-And kernel test robot report me build error and warning with gcc
-11.2.0 ia64 / powerpc.
-I will fix it and send next patch.
+On Wed, Feb 09, 2022 at 02:18:42AM +0000, Edgecombe, Rick P wrote:
+> On Tue, 2022-02-08 at 20:02 +0300, Cyrill Gorcunov wrote:
+> > On Tue, Feb 08, 2022 at 08:21:20AM -0800, Andy Lutomirski wrote:
+> > > > > But such a knob will immediately reduce the security value of
+> > > > > the entire
+> > > > > thing, and I don't have good ideas how to deal with it :(
+> > > > 
+> > > > Probably a kind of latch in the task_struct which would trigger
+> > > > off once
+> > > > returt to a different address happened, thus we would be able to
+> > > > jump inside
+> > > > paratite code. Of course such trigger should be available under
+> > > > proper
+> > > > capability only.
+> > > 
+> > > I'm not fully in touch with how parasite, etc works.  Are we
+> > > talking about save or restore?
+> > 
+> > We use parasite code in question during checkpoint phase as far as I
+> > remember.
+> > push addr/lret trick is used to run "injected" code (code injection
+> > itself is
+> > done via ptrace) in compat mode at least. Dima, Andrei, I didn't look
+> > into this code
+> > for years already, do we still need to support compat mode at all?
+> > 
+> > > If it's restore, what exactly does CRIU need to do?  Is it just
+> > > that CRIU needs to return
+> > > out from its resume code into the to-be-resumed program without
+> > > tripping CET?  Would it
+> > > be acceptable for CRIU to require that at least one shstk slot be
+> > > free at save time?
+> > > Or do we need a mechanism to atomically switch to a completely full
+> > > shadow stack at resume?
+> > > 
+> > > Off the top of my head, a sigreturn (or sigreturn-like mechanism)
+> > > that is intended for
+> > > use for altshadowstack could safely verify a token on the
+> > > altshdowstack, possibly
+> > > compare to something in ucontext (or not -- this isn't clearly
+> > > necessary) and switch
+> > > back to the previous stack.  CRIU could use that too.  Obviously
+> > > CRIU will need a way
+> > > to populate the relevant stacks, but WRUSS can be used for that,
+> > > and I think this
+> > > is a fundamental requirement for CRIU -- CRIU restore absolutely
+> > > needs a way to write
+> > > the saved shadow stack data into the shadow stack.
+> 
+> Still wrapping my head around the CRIU save and restore steps, but
+> another general approach might be to give ptrace the ability to
+> temporarily pause/resume/set CET enablement and SSP for a stopped
+> thread. Then injected code doesn't need to jump through any hoops or
+> possibly run into road blocks. I'm not sure how much this opens things
+> up if the thread has to be stopped...
+ 
+IIRC, criu dump does something like this:
+* Stop the process being dumped (victim) with ptrace
+* Inject parasite code and data into the victim, again with ptrace.
+  Among other things the parasite data contains a sigreturn frame with
+  saved victim state.
+* Resume the victim process, which will run parasite code now.
+* When parasite finishes it uses that frame to sigreturn to normal victim
+  execution
 
-Greg KH <gregkh@linuxfoundation.org> =E6=96=BC 2022=E5=B9=B42=E6=9C=888=E6=
-=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=887:31=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> On Tue, Feb 08, 2022 at 07:16:52PM +0800, hammer hsieh wrote:
-> > Jiri Slaby <jirislaby@kernel.org> =E6=96=BC 2022=E5=B9=B42=E6=9C=888=E6=
-=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=882:27=E5=AF=AB=E9=81=93=EF=BC=9A
-> > >
-> > > Hi,
-> > >
-> > > On 07. 02. 22, 6:58, Hammer Hsieh wrote:
-> > > > +static void sunplus_shutdown(struct uart_port *port)
-> > > > +{
-> > > > +     unsigned long flags;
-> > > > +     unsigned int isc;
-> > > > +
-> > > > +     spin_lock_irqsave(&port->lock, flags);
-> > > > +
-> > > > +     isc =3D readl(port->membase + SUP_UART_ISC);
-> > > > +     isc &=3D ~(SUP_UART_ISC_RXM | SUP_UART_ISC_TXM);
-> > >
-> > > Is this correct? I mean: will the SUP_UART_ISC read contain the contr=
-ol
-> > > bits, not only status bits?
-> > >
-> >
-> > I assume reviewers don't like writel(0,xxx).
-> > So I use definition to let the code easy to read.
-> > The purpose is to clear all interrupt.
-> > Bit[3:0] status bit only for read, write 1 or 0 no effect.
-> >
-> > > > +     writel(isc, port->membase + SUP_UART_ISC);
-> > > > +
-> > > > +     spin_unlock_irqrestore(&port->lock, flags);
-> > > > +
-> > > > +     free_irq(port->irq, port);
-> > >
-> > > I am still waiting for explanation why this is safe with respect to
-> > > posted writes.
-> > >
-> >
-> > Actually I'm not IC designer, not expert for bus design.
-> > About data incoherence issue between memory bus and peripheral bus.
-> > In case of AXI bus, use non-posted write can avoid data incoherence iss=
-ue.
-> > What if in case of posted write:
-> > Send a specific command after last write command.
-> > SDCTRL identify specific command, means previous write command done.
-> > Then send interrupt signal to interrupt controller.
-> > And then interrupt controller send done signal to Master.
-> > Master receive done signal, means write command done.
-> > Then issue a interrupt or proceed next write command.
->
-> But how does the kernel know when the write is completed?  The kernel
-> seems to ignore that here entirely, so the write could actually complete
-> seconds later, which would not be a good thing, right?
->
-> Traditionally, we want to ensure that a write() completes, so on some
-> busses, we have to do a read to ensure that the write made it to the
-> hardware before we can continue on.  That is not happening here which is
-> why Jiri keeps bringing it up.  It looks broken to us, and you need to
-> document it somewhere (in the changelog?  In the top of the file?) as to
-> why this is not needed.
->
-> thanks,
->
-> greg k-h
+So, my feeling is that for dump side WRUSS should be enough.
+
+> Cyrill, could it fit into the CRIU pause and resume flow? What action
+> causes the final resuming of execution of the restored process for
+> checkpointing and for restore? Wondering if we could somehow make CET
+> re-enable exactly then.
+> 
+> And I guess this also needs a way to create shadow stack allocations at
+> a specific address to match where they were in the dumped process. That
+> is missing in this series.
+
+Yes, criu restore will need to recreate shadow stack mappings. Currently,
+we recreate the restored process (target) address space based on
+/proc/pid/maps and /proc/pid/smaps. CRIU preserves the virtual addresses
+and VMA flags. The relevant steps of restore process can be summarised as:
+* Clone() the target process tree
+* Recreate VMAs with the needed size and flags, but not necessarily at the
+  correct place yet
+* Partially populate memory data from the saved images
+* Move VMAs to their exact addresses
+* Complete restoring the data
+* Create a frame for sigreturn and jump to the target.
+
+Here, the stack used after sigreturn contains the data that was captured
+during dump and it entirely different from what shadow stack will contain.
+
+There are several points when the target threads are stopped, so
+pausing/resuming CET may help.
+ 
+> > > So I think the only special capability that CRIU really needs is
+> > > WRUSS, and
+> > > we need to wire that up anyway.
+> > 
+> > Thanks for these notes, Andy! I can't provide any sane answer here
+> > since didn't
+> > read tech spec for this feature yet :-)
+> 
+> 
+> 
+> 
+
+-- 
+Sincerely yours,
+Mike.

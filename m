@@ -2,88 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FAC74AF23D
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 14:01:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6D954AF244
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 14:02:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231244AbiBINBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 08:01:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39000 "EHLO
+        id S233810AbiBINCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 08:02:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230519AbiBINBR (ORCPT
+        with ESMTP id S233322AbiBINCb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 08:01:17 -0500
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D506FC0613CA;
-        Wed,  9 Feb 2022 05:01:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1644411681; x=1675947681;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=KD6Lp4BkKlFVB0RGHgLuv8EhmfR4x5XxZN5wW9sPRTg=;
-  b=tQGYiPY/ggziLCvmO9LMADUZqOXI3GWtUvD1M3R5ZOUyZaGXfCrX9vx6
-   rDJwefnvyUWl8JayQsFGWZ/hUMO9X7/IL9rbbXU+B5fOCDnG46hXflKaO
-   nDEPhv8z20sMJTm0ncSPhDcs/GkjOD8C6TiYwl1G68PI09hz1eAB4CJxA
-   g=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 09 Feb 2022 05:01:19 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 05:01:19 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Wed, 9 Feb 2022 05:01:18 -0800
-Received: from [10.50.24.58] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Wed, 9 Feb 2022
- 05:01:15 -0800
-Message-ID: <c898d9e6-c63a-d79c-f0c6-f33112e70b33@quicinc.com>
-Date:   Wed, 9 Feb 2022 18:31:11 +0530
+        Wed, 9 Feb 2022 08:02:31 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B3BC0613CA;
+        Wed,  9 Feb 2022 05:02:35 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id BEC411F383;
+        Wed,  9 Feb 2022 13:02:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1644411753; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VZ0LfFGdQiKl3eiw2xncpOIiQjd52yjFcJ6ct5TXgnc=;
+        b=MxoCMoXz+Lpj3qNIfzq2Zw+kuMNga08HH7NObScsZ050PvnVt/HeO7Ewzdd/hL4RoZwsTW
+        58MLFv2V5bp8ByEvZFgGJK7/cYJJxDejK/y8GB4Fh0hAz+XgqU2s7vmI/vQ3PgbqrsKNuz
+        5uUiAuptUb3hO0NA9wOlYrIsneI/jws=
+Received: from suse.cz (pathway.suse.cz [10.100.12.24])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 952E1A3B83;
+        Wed,  9 Feb 2022 13:02:33 +0000 (UTC)
+Date:   Wed, 9 Feb 2022 14:02:33 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     David Vernet <void@manifault.com>
+Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jpoimboe@redhat.com, jikos@kernel.org, mbenes@suse.cz,
+        joe.lawrence@redhat.com, corbet@lwn.net, kernel-team@fb.com
+Subject: Re: [PATCH v2] livepatch: Skip livepatch tests if ftrace cannot be
+ configured
+Message-ID: <20220209130233.GB8279@pathway.suse.cz>
+References: <20220203233205.1554034-1-void@manifault.com>
+ <20220204205625.2628328-1-void@manifault.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.2
-Subject: Re: [PATCHv2 0/9] soc: qcom: llcc: Add LLCC support for SM8450 SoC
-Content-Language: en-US
-To:     Vinod Koul <vkoul@kernel.org>
-CC:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Prasad <quic_psodagud@quicinc.com>
-References: <cover.1643355594.git.quic_saipraka@quicinc.com>
- <Yf/XgGSHE9PwYrz0@matsya>
-From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-In-Reply-To: <Yf/XgGSHE9PwYrz0@matsya>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220204205625.2628328-1-void@manifault.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/6/2022 7:43 PM, Vinod Koul wrote:
-> On 28-01-22, 13:17, Sai Prakash Ranjan wrote:
->> This patch series adds support for LLCC on SM8450 SoC. It mainly
->> consists of LLCC driver changes to incorporate newer LLCC HW found
->> on SM8450 SoC and the corresponding DT bits to enable LLCC.
->> Based on qcom/for-next branch.
-> I have tested this on SM8450 QRD and MTP
->
-> Tested-by: Vinod Koul <vkoul@kernel.org>
->
+On Fri 2022-02-04 12:56:26, David Vernet wrote:
+> livepatch has a set of selftests that are used to validate the behavior of
+> the livepatching subsystem.  One of the testcases in the livepatch
+> testsuite is test-ftrace.sh, which among other things, validates that
+> livepatching gracefully fails when ftrace is disabled.  In the event that
+> ftrace cannot be disabled using 'sysctl kernel.ftrace_enabled=0', the test
+> will fail later due to it unexpectedly successfully loading the
+> test_klp_livepatch module.
+> 
+> While the livepatch selftests are careful to remove any of the livepatch
+> test modules between testcases to avoid this situation, ftrace may still
+> fail to be disabled if another trace is active on the system that was
+> enabled with FTRACE_OPS_FL_PERMANENT.  For example, any active BPF programs
+> that use trampolines will cause this test to fail due to the trampoline
+> being implemented with register_ftrace_direct().  The following is an
+> example of such a trace:
+> 
+> tcp_drop (1) R I D      tramp: ftrace_regs_caller+0x0/0x58
+> (call_direct_funcs+0x0/0x30)
+>         direct-->bpf_trampoline_6442550536_0+0x0/0x1000
+> 
+> In order to make the test more resilient to system state that is out of its
+> control, this patch adds a check to set_ftrace_enabled() to skip the tests
+> if the sysctl invocation fails.
+> 
+> Signed-off-by: David Vernet <void@manifault.com>
+> ---
+> v2:
+>   - Fix typo in newly added comment (s/permament/permanent).
+>   - Adjust the location of the added newline to be before the new comment
+>     rather than that the end of the function.
+>   - Make the failure-path check a bit less brittle by checking for the
+>     exact expected string, rather than specifically for "Device or resource
+>     busy".
+> 
+>  tools/testing/selftests/livepatch/functions.sh | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
+> index 846c7ed71556..32970324dd7e 100644
+> --- a/tools/testing/selftests/livepatch/functions.sh
+> +++ b/tools/testing/selftests/livepatch/functions.sh
+> @@ -78,6 +78,12 @@ function set_ftrace_enabled() {
+>  	result=$(sysctl -q kernel.ftrace_enabled="$1" 2>&1 && \
+>  		 sysctl kernel.ftrace_enabled 2>&1)
+>  	echo "livepatch: $result" > /dev/kmsg
+> +
+> +	# Skip the test if ftrace is busy.  This can happen under normal system
+> +	# conditions if a trace is marked as permanent.
+> +	if [[ "$result" != "kernel.ftrace_enabled = $1" ]]; then
+> +		skip "failed to set kernel.ftrace_enabled=$1"
+> +	fi
+>  }
+>  
 
-Thanks Vinod.
+Hmm, test-ftrace.sh fails with this patch:
 
--Sai
+localhost:/prace/kernel/linux/tools/testing/selftests/livepatch # ./test-ftrace.sh 
+TEST: livepatch interaction with ftrace_enabled sysctl ... SKIP: failed to set kernel.ftrace_enabled=0
+
+This is the dmesg output:
+
+[  436.176433] ===== TEST: livepatch interaction with ftrace_enabled sysctl =====
+[  436.186942] livepatch: kernel.ftrace_enabled = 0
+[  436.187854] % modprobe test_klp_livepatch
+[  436.217657] livepatch: enabling patch 'test_klp_livepatch'
+[  436.218467] livepatch: 'test_klp_livepatch': initializing patching transition
+[  436.219679] livepatch: failed to register ftrace handler for function 'cmdline_proc_show' (-16)
+[  436.221003] livepatch: failed to patch object 'vmlinux'
+[  436.221786] livepatch: failed to enable patch 'test_klp_livepatch'
+[  436.222716] livepatch: 'test_klp_livepatch': canceling patching transition, going to unpatch
+[  436.223955] livepatch: 'test_klp_livepatch': completing unpatching transition
+[  436.225476] livepatch: 'test_klp_livepatch': unpatching complete
+[  436.273295] modprobe: ERROR: could not insert 'test_klp_livepatch': Device or resource busy
+[  436.284522] livepatch: kernel.ftrace_enabled = 1
+[  436.305353] % modprobe test_klp_livepatch
+[  436.334929] livepatch: enabling patch 'test_klp_livepatch'
+[  436.335781] livepatch: 'test_klp_livepatch': initializing patching transition
+[  436.338099] livepatch: 'test_klp_livepatch': starting patching transition
+[  438.082707] livepatch: 'test_klp_livepatch': completing patching transition
+[  438.084106] livepatch: 'test_klp_livepatch': patching complete
+[  438.199997] livepatch: sysctl: setting key "kernel.ftrace_enabled": Device or resource busy
+[  438.201249] kernel.ftrace_enabled = 1
+[  438.201929] SKIP: failed to set kernel.ftrace_enabled=0
+
+
+The problem is the 2nd "set_ftrace_enabled 0" call in
+tools/testing/selftests/livepatch/test-ftrace.sh
+
+It is done when "test_klp_livepatch" is loaded. ftrace could not be
+disabled because it is used by the livepatch. It is expected behavior
+and the test should succeed in this case.
+
+Best Regards,
+Petr

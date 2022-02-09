@@ -2,129 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAB8F4AF150
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 13:20:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 489364AF157
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 13:21:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233054AbiBIMU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 07:20:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40784 "EHLO
+        id S232317AbiBIMUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 07:20:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232883AbiBIMTx (ORCPT
+        with ESMTP id S232846AbiBIMUU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 07:19:53 -0500
-Received: from EUR02-HE1-obe.outbound.protection.outlook.com (mail-eopbgr10068.outbound.protection.outlook.com [40.107.1.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65B2EE03AE79;
-        Wed,  9 Feb 2022 04:10:45 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BNHhuj3bWyDHd8or8qE8y/4bHDNJZtuDGghwgI7z2dwrLGOM3lO8rg9/wTh1wZvLAIG94J+rcs2whyKYuY0i+Jigj6XY/glVTmi9ZaNpkj46gRNzgRdJgnaFhTUVzFJFzBa9MUmFFf84YIVEU0sHLZ697u1dtf8tObK9rqYxLeh+esxAHPpyN3t6zlT9ETio6ofvSkKTBJsW1Z1kYogzxB9VtFs2IJfDsbEKRMbYyxZ+GkAg1Y6kycLKHcAad00prrHkaSBQns3p2W+2vuRD+6VllLOhC5+qinKbuIpKd1DNkB9fi5GaDqrBsbBbpJ9+XJ4np/CtqVqQqYiu7t7SJw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hKFkq4vaA09DoKzaPFr2DkisT358/E98zztfkyu8PEk=;
- b=W3W7VDZwI3mh8YwZqHGMGi5w4NnNiVMWEweoxK+kqG9laIyrs2tOBLjOWlA7+g0EwL31YxgqdpSN3XIXiTCbL7SeH9g+RktetFNKtrpCfIrLqvB2ahg1MJvdomoiWQ4Io01JcAAD/5PIYYgVuTUdSCl2YWYhGX8A+0cWZnNtkx3jXahw20kIiF2rAnY6obN4E9SkHXFU9I+QNakJxca0pn1dmS66WR16NM10uqQuFHS9lqYXITVugznocdTu7o0QG3solPnFj1PFLXWiMFhUFamSgKdegJ59BTSQZbEvmNPKhXY4WzsPHz1+wGvLSiMlLHeNxonrG81TIxiqP/WDCQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hKFkq4vaA09DoKzaPFr2DkisT358/E98zztfkyu8PEk=;
- b=I7EDEDANkX8q8nkkpD7OnQGuhWXwcIcgjzGu7U7J62kmWXWeAPARL5S3LY4+eIk2Dk91YqxgonHvv12l9Xx2B4ZFFMb8e9q6VNv9AhqYyYVDBdQ4Qo9kRtIolKPQx2MQzoW3RvpbfBs7xzwdCRDGtfOB80IM9XEoulFd88uTvmI=
-Received: from DBBPR04MB7818.eurprd04.prod.outlook.com (2603:10a6:10:1f2::23)
- by AM5PR0401MB2594.eurprd04.prod.outlook.com (2603:10a6:203:2e::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.11; Wed, 9 Feb
- 2022 12:10:41 +0000
-Received: from DBBPR04MB7818.eurprd04.prod.outlook.com
- ([fe80::a012:8f08:e448:9f4a]) by DBBPR04MB7818.eurprd04.prod.outlook.com
- ([fe80::a012:8f08:e448:9f4a%3]) with mapi id 15.20.4975.011; Wed, 9 Feb 2022
- 12:10:41 +0000
-From:   Po Liu <po.liu@nxp.com>
-To:     "davem@davemloft.net" <davem@davemloft.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "tim.gardner@canonical.com" <tim.gardner@canonical.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-CC:     Xiaoliang Yang <xiaoliang.yang_1@nxp.com>
-Subject: RE: [v1,net-next 3/3] net:enetc: enetc qos using the CBDR dma alloc
- function
-Thread-Topic: [v1,net-next 3/3] net:enetc: enetc qos using the CBDR dma alloc
- function
-Thread-Index: AQHYHXjzHIdRyLbZEUCY5PL+XVUC1KyLIJ1Q
-Date:   Wed, 9 Feb 2022 12:10:41 +0000
-Message-ID: <DBBPR04MB7818A5C49F93384F606EE128922E9@DBBPR04MB7818.eurprd04.prod.outlook.com>
-References: <20220209054929.10266-1-po.liu@nxp.com>
- <20220209054929.10266-3-po.liu@nxp.com>
-In-Reply-To: <20220209054929.10266-3-po.liu@nxp.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 3ccf9978-f314-44b3-bf25-08d9ebc53127
-x-ms-traffictypediagnostic: AM5PR0401MB2594:EE_
-x-microsoft-antispam-prvs: <AM5PR0401MB2594769ADB7648068978247A922E9@AM5PR0401MB2594.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7219;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: vaMMDLF0evf1WJvtMNDDya/1YS3NF/AlBqRqIUE1/v9+UXVsZYLk4sWdOF45O3I1idWIGEwB9R1zq4KzhOBACMsBfTIl+WkaRQk28Tqr4dAfLrLCe9bP2e8+UM6mNYsA00eDjS5wFkWs8nNcwV2RI6vAxTZryQPZy6c3tN2DjxcMk+9yyi7LcGnz3gEBlwqPxgwq2pfCjK4EDnph+8+01WTregiWEt8ShCE6VUIWjL+hs0cjq4qYVNlAXWQrYwInZqkYfgPCbj9VBKu/ukNG5rKi8gwcNqmWaG9MySajYC7iUzqaOg2GM4v+/GMljMR/HpabwIqbp0BFh+jyHoCo1TQUxLRNdp3ey2DnWe6LSY5k0+e1dEl7hM38ZH33ebNsezVLOz1MuQzve51jXONjdR3jpd/4nvuajO7aBVENYmrjg55XbqhIXHJZDi5cBSmOmGIta8Vp+8zhWT4l0+2hnyNVz761iISHgEzsONsF2waI+IK2JooBNfSIvLa+VPucuR+FZr5fjCIG33l5QsJyuaMZ/6WMTPcNCpENpq/4ifAbmfvqvGAhlMUL2EOOGjtP7YNvu6vjS9N5o05fr5AgEMUu9si9k38i+PyQnCNjbv5/lKt0ywvpR9501zaREVZLFptT2FlnguwlwW7Gffap4dLl4QpSJFAIgugU9Hb5rY+V/Hn4ZsL3nBAWRcvbKwhxHzDMMoFLN8S3BNAKB/Qzbg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBPR04MB7818.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66556008)(66946007)(8676002)(76116006)(4326008)(33656002)(38070700005)(64756008)(66446008)(66476007)(52536014)(122000001)(38100700002)(55016003)(5660300002)(8936002)(110136005)(6636002)(316002)(44832011)(2906002)(6506007)(9686003)(53546011)(7696005)(26005)(508600001)(186003)(83380400001)(71200400001)(86362001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?gb2312?B?dmxVa2xBeUR3emRmbXl2V3NJS3c0QXdoYnhCUnVJTEZLODlWeHNaUGxPOHJB?=
- =?gb2312?B?L1ZjbkkrZnZBWUlvRUczMEtKQjVTV3AxbTNsQWVWZlJKdEtwZjd1OHQyMVlY?=
- =?gb2312?B?bnJ3ZERJSTRsVnZ1T2xiaTVRdksrYUp4V1B1eitwUzFJbXB0eS8wdnl6TDgr?=
- =?gb2312?B?L05aSHFRcld6TkIxUUpoN0NuMUZSOXBTb3RqazV1czNwZ0RVMTZrUlJwZy9U?=
- =?gb2312?B?NTJNTFRPN2NaQ3BMT3IxUmJBMFpkeUNQL2ZlRGpGME1VamNHUFR3bE5Qajhw?=
- =?gb2312?B?VzJsWGVzQjhpMnhpb3VXMHB6WElVZFdkUVBjcFBLNHd0R2llZFFDUk80OUNt?=
- =?gb2312?B?Z1pwWmJLTmtjNXBuTVdBU1BtVUpMR0plaERmeWtFZW9VUktXY3lCb1lRaXl6?=
- =?gb2312?B?a1E5bDlOZTM3ako2YkpQR09oNVV3aWg5R094K1ExRlYvdGQ3WUFkeTVwWlpU?=
- =?gb2312?B?eEFqOXp2L2RMUmNXdnArQXhHOVc0WXFHbWJEYSs1ZktZSnZQQTFDRlFBL2Jt?=
- =?gb2312?B?c3ZzYWtXbWVKYnVlc01MRk9MYmcxTHhHencySEVuMnpRYkVXNE5sTlc4VEZt?=
- =?gb2312?B?b0ttOVh4a1RaYUxBR3JGcEhVcmpkMUNFNEJaNHJ4LzVacVpGVlA1MEhMYk9D?=
- =?gb2312?B?THVlTmdzQjkvak84TlF2TklSaU15aERGMnJEL0lQaEUyQXZHb2taU2o5eEZY?=
- =?gb2312?B?TVdCWEpSTVFWeUh2NlY5QnBlM1RvY2k0V08vS3ExSmR4cHhoRC9iaWtTTlBs?=
- =?gb2312?B?WWpGNytJWmpPU0N6WXUvcCtEZVRud0NoY2hTcWtJQUpKbkVlMjk4WXBWWlVq?=
- =?gb2312?B?UXg0Zkd5THB1bXYvN3VDSVcyQWR3VysrNHFHeUo5WmtOazE0dUhLbnBvODFK?=
- =?gb2312?B?eTcwYi8ySkVuWW1nUEYxYmZzSGh3KysvbFhOcDF6cEpUK3RTMTBWMDJ2cUlk?=
- =?gb2312?B?WUZWekFsblp2UU5XSzhKWWJQUDM0NEdtSk9NOFNTM2lCUjExY1hpc3B0Q29t?=
- =?gb2312?B?ZWt4a05SanlYcDRUUUlBNC9aN1cxa3E4VXhLYzYxaC9KekFUM010RFBKWnZ1?=
- =?gb2312?B?UktlUzR3U28rZGtGcW91OEpPS3l2NzFWSHJRcnUzby9kdFFyQVFLLy9GaUhU?=
- =?gb2312?B?U2wvcmkzSm9nSEg1R2ROVzJyVkcrSHh6eXBwTjJCMTFlM0ladjF6MEpvRkgx?=
- =?gb2312?B?cllKQ2ZkK1ZCcHlPTWY5eWgxdWxwYXA0eUdFMjc1RE1lazgwWmdmVEgvZWlC?=
- =?gb2312?B?aTY0S083NzA3bmlzaVRickI4WnNEUnljc0grdTFSVktuZFNPemN3Z2VZSTVI?=
- =?gb2312?B?MWZVN1RFSlN0RjFNMDVweU9SWER1U2FzVU44QllFUllpYzRncHNCUXpVQVB5?=
- =?gb2312?B?VDVONlpPTlJYbm1Wek85MXRhUm56QmFBY2VPZlh3clR3QUdPRVptNG40a0NB?=
- =?gb2312?B?WmZtUGcrVVJXWWNrNWt1bUh6NnRWcXAwdlZ1aGRVMTQxaXd4dTF3bUdFYmx0?=
- =?gb2312?B?OEJRSVVCcXNjYUVVTFkxTnlHeWpCck1raFFSZTYrZmZsdWhTaW00czJPeEJo?=
- =?gb2312?B?S2l2eFlWRHBGWDhjUVBzS0RvZnZhS3NzYlRjMkYrcUFKeU1OYlJVRnRDeVd3?=
- =?gb2312?B?TkpMSE0yNTVDQ1hmVkJ1QjUrUUlhMEhCZ3B4T0NxT3FFZDVCS1QzNEI4bWs5?=
- =?gb2312?B?a25oWnRLeUZ1QU5NK0dlSVhyU21aUXpiWkQ3WkxJa3RpUnNzaUtWVUpwN0Nj?=
- =?gb2312?B?NnMwMnBqVk9KQ1JxekpGRnhXaDk2K1NhYUpmVmsrcU4zWmRxRW8xTjRMbzRp?=
- =?gb2312?B?ejFEemd1blc1SExYNDZWOEZGSXhSS1FEaWlaUjhZN1V6UElrc0dkV0JrRHNq?=
- =?gb2312?B?enFmYTcvcURCSEc5cHBCaXl2NnhDRnloYlpveUpTTUpUbjk0R2JiQkVTS0pr?=
- =?gb2312?B?dXlSVFVmZHFmTUhXTTkxMTJzMW9Sdk50RmhvSkYydW1zaDFMSVhPR2VPSC9Z?=
- =?gb2312?B?dk5zOGhObzMwbGpwK055ZVNxUUNxcmI5ZjM0UUVKZm9pZmIyeXFiS3YwKzZV?=
- =?gb2312?B?cVFXYmgyc2U0a0Jjc0xQTlJka1JBTURPTVVqUT09?=
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+        Wed, 9 Feb 2022 07:20:20 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C35FC022581;
+        Wed,  9 Feb 2022 04:11:42 -0800 (PST)
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2199t02R004033;
+        Wed, 9 Feb 2022 12:11:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=qKIb/+xuoOxcV7SNQMvld2F2je0cwea6FDVZFqbCw9c=;
+ b=hEr8DxBJj8u3lNDMDpuO2BNzJcl6dEfS+n26CY3yLOUdvPJpOiYGgcBdeJn/pBVbpv8T
+ ArqebTX1hcq0v8ZSKbRtqjLfDmCJNSCkrq+NOXSjYMl1vTCLvmzi1fDwU0Ji5yUx4f9w
+ Um/zAJ0YVsV2xB2uXVjniUJazC7v2qrJ3JjrDmpzQ1wmQ+yXUT3O3DiDCur3Wr6sSwPc
+ cV+t3OQEkAvla3u1pSHXTQkqKO73GRX1mAMk3GZYeF2IdEA/NXFsNoKX+5i4GkQlYduq
+ cMWLSJNH6kn5meraqCPer7S1nzki/9EVISHlpbs0HWGMRQAWf5lnaDy6z/pAVpHbcEET Xg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e44v6u9eu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 09 Feb 2022 12:11:41 +0000
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 219BvC1r025822;
+        Wed, 9 Feb 2022 12:11:41 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e44v6u9e6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 09 Feb 2022 12:11:41 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 219BhOUw018109;
+        Wed, 9 Feb 2022 12:11:38 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma02fra.de.ibm.com with ESMTP id 3e1gv9n3mc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 09 Feb 2022 12:11:38 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 219CBX1K42926436
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 9 Feb 2022 12:11:33 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 07B03A4065;
+        Wed,  9 Feb 2022 12:11:33 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6C5BEA406B;
+        Wed,  9 Feb 2022 12:11:32 +0000 (GMT)
+Received: from [9.171.87.52] (unknown [9.171.87.52])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  9 Feb 2022 12:11:32 +0000 (GMT)
+Message-ID: <61d9aa7b-4474-fce9-4884-275d1f6dee99@linux.ibm.com>
+Date:   Wed, 9 Feb 2022 13:11:32 +0100
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DBBPR04MB7818.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3ccf9978-f314-44b3-bf25-08d9ebc53127
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Feb 2022 12:10:41.4315
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 73Yure+0VWgSVl1+ettoePN1pMW2x0LWtqmlE6rsj1QezMZW2/YFd9TzJ4Zd2dWd
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM5PR0401MB2594
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 05/11] KVM: s390: Add optional storage key checking to
+ MEMOP IOCTL
+Content-Language: en-US
+To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>
+Cc:     Alexander Gordeev <agordeev@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+References: <20220207165930.1608621-1-scgl@linux.ibm.com>
+ <20220207165930.1608621-6-scgl@linux.ibm.com>
+ <48d1678f-746c-dab6-5ec3-56397277f752@linux.ibm.com>
+ <71f07914-d0b2-e98b-22b2-bc05f04df2da@linux.ibm.com>
+ <6ea27647-fbbe-3962-03a0-8ca5340fc7fd@linux.ibm.com>
+ <8d502356c3a624847c0dd2fe5d5f60e72923a141.camel@linux.ibm.com>
+ <3ec91f7a-10ca-b984-d852-1327f965b1e8@linux.ibm.com>
+ <83408abf-86fe-20b0-564c-8cf840757e76@linux.ibm.com>
+ <ef35d70a-c0dc-e5ae-8182-79847085d593@linux.ibm.com>
+ <1eb6ae828fd02340ff30bfab6a949fff90e85d3b.camel@linux.ibm.com>
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+In-Reply-To: <1eb6ae828fd02340ff30bfab6a949fff90e85d3b.camel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: px9m-7OUSLTcuVstCH__cyu2AomgokHS
+X-Proofpoint-ORIG-GUID: 3pPkRYwkE_DT2IoDinPWPpjCx6y0Cezc
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-09_06,2022-02-09_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 bulkscore=0 suspectscore=0 malwarescore=0 phishscore=0
+ mlxlogscore=999 clxscore=1015 priorityscore=1501 mlxscore=0 adultscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202090072
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -132,27 +112,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IFBvIExpdSA8cG8ubGl1QG54
-cC5jb20+DQo+IFNlbnQ6IDIwMjLE6jLUwjnI1SAxMzo0OQ0KPiBUbzogZGF2ZW1AZGF2ZW1sb2Z0
-Lm5ldDsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsNCj4gbmV0ZGV2QHZnZXIua2VybmVs
-Lm9yZzsgdGltLmdhcmRuZXJAY2Fub25pY2FsLmNvbTsga3ViYUBrZXJuZWwub3JnOw0KPiBDbGF1
-ZGl1IE1hbm9pbCA8Y2xhdWRpdS5tYW5vaWxAbnhwLmNvbT47IFZsYWRpbWlyIE9sdGVhbg0KPiA8
-dmxhZGltaXIub2x0ZWFuQG54cC5jb20+DQo+IENjOiBYaWFvbGlhbmcgWWFuZyA8eGlhb2xpYW5n
-LnlhbmdfMUBueHAuY29tPjsgUG8gTGl1IDxwby5saXVAbnhwLmNvbT4NCj4gU3ViamVjdDogW3Yx
-LG5ldC1uZXh0IDMvM10gbmV0OmVuZXRjOiBlbmV0YyBxb3MgdXNpbmcgdGhlIENCRFIgZG1hIGFs
-bG9jDQo+IGZ1bmN0aW9uDQo+IA0KPiBOb3cgd2UgY2FuIHVzZSB0aGUgZW5ldGNfY2JkX2FsbG9j
-X2RhdGFfbWVtKCkgdG8gcmVwbGFjZSBjb21wbGljYXRlZA0KPiBETUEgZGF0YSBhbGxvYyBtZXRo
-b2QgYW5kIENCRFIgbWVtb3J5IGJhc2ljIHNldGluZy4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IFBv
-IExpdSA8cG8ubGl1QG54cC5jb20+DQo+IC0tLQ0KPiAgLi4uL25ldC9ldGhlcm5ldC9mcmVlc2Nh
-bGUvZW5ldGMvZW5ldGNfcW9zLmMgIHwgOTEgKysrKystLS0tLS0tLS0tLS0tLQ0KPiAgMSBmaWxl
-IGNoYW5nZWQsIDIxIGluc2VydGlvbnMoKyksIDcwIGRlbGV0aW9ucygtKQ0KPiANCj4gDQo+ICAJ
-bWVtc2V0KHNpX2RhdGEsIDAsIGRhdGFfc2l6ZSk7DQo+IA0KPiAtCWNiZC5sZW5ndGggPSBjcHVf
-dG9fbGUxNihkYXRhX3NpemUpOw0KPiAtDQo+IC0JY2JkLmFkZHJbMF0gPSBjcHVfdG9fbGUzMihs
-b3dlcl8zMl9iaXRzKGRtYV9hbGlnbikpOw0KPiAtCWNiZC5hZGRyWzFdID0gY3B1X3RvX2xlMzIo
-dXBwZXJfMzJfYml0cyhkbWFfYWxpZ24pKTsNCj4gLQ0KDQpTb3JyeSwgZm91bmQgdGhlcmUgaXMg
-aGFyZHdhcmUgc2V0dGluZyBidWcgaGVyZS4gV2lsbCB1cGRhdGUgc29vbiBmb3IgdjIuDQoNCj4g
-IAkvKiBWSURNIGRlZmF1bHQgdG8gYmUgMS4NCj4gIAkgKiBWSUQgTWF0Y2guIElmIHNldCAoYjEp
-IHRoZW4gdGhlIFZJRCBtdXN0IG1hdGNoLCBvdGhlcndpc2UNCj4gIAkgKiBhbnkgVklEIGlzIGNv
-bnNpZGVyZWQgYSBtYXRjaC4gVklETSBzZXR0aW5nIGlzIG9ubHkgdXNlZCBAQCAtNTYyLDgNCj4g
-KzUzNyw3IEBAIHN0YXRpYyBpbnQgZW5ldGNfc3RyZWFtaWRfaHdfc2V0KHN0cnVjdCBlbmV0Y19u
-ZGV2X3ByaXYgKnByaXYsDQoNCg==
+
+
+Am 09.02.22 um 12:04 schrieb Janis Schoetterl-Glausch:
+> On Wed, 2022-02-09 at 11:48 +0100, Christian Borntraeger wrote:
+>>
+>> Am 09.02.22 um 11:39 schrieb Janis Schoetterl-Glausch:
+>>> On 2/9/22 11:08, Christian Borntraeger wrote:
+>>>>
+>>>> Am 09.02.22 um 11:01 schrieb Janis Schoetterl-Glausch:
+>>>>> On Wed, 2022-02-09 at 10:08 +0100, Christian Borntraeger wrote:
+>>>>>> Am 09.02.22 um 09:49 schrieb Janis Schoetterl-Glausch:
+>>>>>>> On 2/9/22 08:34, Christian Borntraeger wrote:
+>>>>>>>> Am 07.02.22 um 17:59 schrieb Janis Schoetterl-Glausch:
+>>>>>>>>> User space needs a mechanism to perform key checked accesses when
+>>>>>>>>> emulating instructions.
+>>>>>>>>>
+>>>>>>>>> The key can be passed as an additional argument.
+>>>>>>>>> Having an additional argument is flexible, as user space can
+>>>>>>>>> pass the guest PSW's key, in order to make an access the same way the
+>>>>>>>>> CPU would, or pass another key if necessary.
+>>>>>>>>>
+>>>>>>>>> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+>>>>>>>>> Acked-by: Janosch Frank <frankja@linux.ibm.com>
+>>>>>>>>> Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+>>>>>>>>> ---
+>>>>>>>>>       arch/s390/kvm/kvm-s390.c | 49 +++++++++++++++++++++++++++++++---------
+>>>>>>>>>       include/uapi/linux/kvm.h |  8 +++++--
+>>>>>>>>>       2 files changed, 44 insertions(+), 13 deletions(-)
+>>>>>>>>>
+>>>>>>>>> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+>>>>>>>>> index cf347e1a4f17..71e61fb3f0d9 100644
+>>>>>>>>> --- a/arch/s390/kvm/kvm-s390.c
+>>>>>>>>> +++ b/arch/s390/kvm/kvm-s390.c
+>>>>>>>>> @@ -32,6 +32,7 @@
+>>>>>>>>>       #include <linux/sched/signal.h>
+>>>>>>>>>       #include <linux/string.h>
+>>>>>>>>>       #include <linux/pgtable.h>
+>>>>>>>>> +#include <linux/bitfield.h>
+>>>>>>>>>         #include <asm/asm-offsets.h>
+>>>>>>>>>       #include <asm/lowcore.h>
+>>>>>>>>> @@ -2359,6 +2360,11 @@ static int kvm_s390_handle_pv(struct kvm *kvm, struct kvm_pv_cmd *cmd)
+>>>>>>>>>           return r;
+>>>>>>>>>       }
+>>>>>>>>>       +static bool access_key_invalid(u8 access_key)
+>>>>>>>>> +{
+>>>>>>>>> +    return access_key > 0xf;
+>>>>>>>>> +}
+>>>>>>>>> +
+>>>>>>>>>       long kvm_arch_vm_ioctl(struct file *filp,
+>>>>>>>>>                      unsigned int ioctl, unsigned long arg)
+>>>>>>>>>       {
+>>>>>>>>> @@ -4687,34 +4693,54 @@ static long kvm_s390_guest_mem_op(struct kvm_vcpu *vcpu,
+>>>>>>>>>                         struct kvm_s390_mem_op *mop)
+>>>>>>>>>       {
+>>>>>>>>>           void __user *uaddr = (void __user *)mop->buf;
+>>>>>>>>> +    u8 access_key = 0, ar = 0;
+>>>>>>>>>           void *tmpbuf = NULL;
+>>>>>>>>> +    bool check_reserved;
+>>>>>>>>>           int r = 0;
+>>>>>>>>>           const u64 supported_flags = KVM_S390_MEMOP_F_INJECT_EXCEPTION
+>>>>>>>>> -                    | KVM_S390_MEMOP_F_CHECK_ONLY;
+>>>>>>>>> +                    | KVM_S390_MEMOP_F_CHECK_ONLY
+>>>>>>>>> +                    | KVM_S390_MEMOP_F_SKEY_PROTECTION;
+>>>>>>>>>       -    if (mop->flags & ~supported_flags || mop->ar >= NUM_ACRS || !mop->size)
+>>>>>>>>> +    if (mop->flags & ~supported_flags || !mop->size)
+>>>>>>>>>               return -EINVAL;
+>>>>>>>>> -
+>>>>>>>>>           if (mop->size > MEM_OP_MAX_SIZE)
+>>>>>>>>>               return -E2BIG;
+>>>>>>>>> -
+>>>>>>>>>           if (kvm_s390_pv_cpu_is_protected(vcpu))
+>>>>>>>>>               return -EINVAL;
+>>>>>>>>> -
+>>>>>>>>>           if (!(mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY)) {
+>>>>>>>>>               tmpbuf = vmalloc(mop->size);
+>>>>>>>>>               if (!tmpbuf)
+>>>>>>>>>                   return -ENOMEM;
+>>>>>>>>>           }
+>>>>>>>>> +    ar = mop->ar;
+>>>>>>>>> +    mop->ar = 0;
+>>>>>>>>
+>>>>>>>> Why this assignment to 0?
+>>>>>>>
+>>>>>>> It's so the check of reserved below works like that, they're all part of the anonymous union.
+>>>>>>
+>>>>>> Ah, I see. This is ugly :-)
+>>>>>
+>>>>> Yes :)
+>>>>>>>>> +    if (ar >= NUM_ACRS)
+>>>>>>>>> +        return -EINVAL;
+>>>>>>>>> +    if (mop->flags & KVM_S390_MEMOP_F_SKEY_PROTECTION) {
+>>>>>>>>> +        access_key = mop->key;
+>>>>>>>>> +        mop->key = 0;
+>>>>>>>>
+>>>>>>>> and this? I think we can leave mop unchanged.
+>>>>>>>>
+>>>>>>>> In fact, why do we add the ar and access_key variable?
+>>>>>>>> This breaks the check from above (if (mop->flags & ~supported_flags || mop->ar >= NUM_ACRS || !mop->size))  into two checks
+>>>>>>>> and it will create a memleak for tmpbuf.
+>>>>>>>
+>>>>>>> I can move the allocation down, goto out or get rid of the reserved check and keep everything as before.
+>>>>>>> First is simpler, but second makes handling that case more explicit and might help in the future.
+>>>>>>
+>>>>>> Maybe add a reserved_02 field in the anon struct and check this for being zero and get rid of the local variables?
+>>>>>
+>>>>> I think that would require us adding new fields in the struct by putting them in a union with reserved_02 and so on,
+>>>>> which could get rather messy.
+>>>>
+>>>> I think it is fine to rename reserved_02. Maybe rename that to dont_use_02 ?
+>>>
+>>> I don't know what kind of stability guarantees we give here, since it can only happen when recompiling with
+>>> a new header. dont_use is a lot better than reserved here, after all we tell user space to set
+>>> reserved bytes to 0, using reserved_02 to do that would be quite handy and therefore likely.
+>>>
+>>> The question is also what semantic we want for the check.
+>>> The way it works right now, user space also needs to set unused fields to 0, e.g. key if the flag is not set.
+>>> At least this is the case for the vm memop, the vcpu memop cannot do that because of backward compatibility.
+>>
+>> As an alternative just remove the check for reserved == 0 and do that later on as an add-on patch?
+> 
+> That would kinda defeat the purpose of the check, since misbehaving user space programs would
+> get an error then but not now.
+
+
+As a matter of fact, we do not check today. What about the following.
+1. remove the checkreserved logic. its too complicated
+2. do not check for reserved to be zero
+4. state that the reserved fields are ignored without the appropriate flag
+5. add the necessary flag as comment to the fields
+6. check for unkmown flags and bail out

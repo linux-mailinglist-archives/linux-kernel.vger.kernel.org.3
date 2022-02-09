@@ -2,120 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E77484B00B9
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 23:55:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FFFD4B00C0
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 23:56:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236571AbiBIWzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 17:55:16 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:33580 "EHLO
+        id S236586AbiBIWz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 17:55:58 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:34568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236557AbiBIWzB (ORCPT
+        with ESMTP id S236572AbiBIWz4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 17:55:01 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 249E4E04FF0E
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 14:55:04 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id w20so220783plq.12
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 14:55:04 -0800 (PST)
+        Wed, 9 Feb 2022 17:55:56 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D58D1E02DFE0
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 14:55:58 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id y7so250789plp.2
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 14:55:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=5OgBvBtD/pqZyY1Wyl2wDigiqIzipvE7VvYdDX53RaU=;
-        b=lr8JBDfah6TBBfm+fcfoKKyOkr4qRbOpNZKNSz0jmz/yX6P+3I80Gf127D2r/XjQUA
-         3Ks3cAXBSu53tT9w1ibvn5Il5wp07oxQoNqoZM1zcxtyyxZQIfHHyMuH9Wu320T/VBSm
-         k21jxvs3Wk0sFwnWQ/apaH2I3G85S6jN0k4LlkwrlkW2AKh84OQTIFYY2tRdMAOHMMV/
-         dfkRftgcaKD3gXqcUskLTUJDhSvmru45c+ZrJg5RDsasia1xMO8axDk51mSdiBvv5IkB
-         8wNBRxeXfiFuT4lbyXRgU8v4Qw+Z4RiFePK00zyExo7XeCKjmjW2zkmocLU63lo4OBBP
-         x8lQ==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BcFfUoNY4HHUcjlUWbU5C1496bb+P9NZHjZT7bpwHGA=;
+        b=KbW+HY8DgRG+TmRh4TbrFbBzl6xujiJpO4TS2TIDcw6nC5fOgV8xtkphxGKW8ji5uR
+         ymrecwpo87NB/R8gLI5XkSClErCV7KpbGTYTlbBkn1W4DW2nkdEeV7cBPxNi5xO8h4yF
+         AE8kylRc0xWzElF8tpi1DdbV0uDPDT8GMEPWM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5OgBvBtD/pqZyY1Wyl2wDigiqIzipvE7VvYdDX53RaU=;
-        b=CfamMLebIXwYxIlxlXKfUMNrHOjBUFhv9eGR6WFdVejSx/U78Ged2Tn7TDWd/vLPr+
-         UhH+Q6BwEsXWr0wWxE7jP9uWJfpW8Ch84yeP5TyogB3+3bB+68WesMNtMGF0qaTqwBBB
-         dNxa4eUlhVQXLt/U9m3b6kzzhzF/utPGIqsb8VuoC0OblfESFSLSTKnxlqTEbgwCwqBN
-         BZkeKYmSq8X+ldrbjp5dN1eFtI4nRUetwsGj0MUMR1V+stGol+j/YApLVGh8qIbDMOxj
-         H2z2n3htbRG9zEnIitryJ28Sveqt6eIhXTMf4u8UaBB0bJbXcsza02DX7YsCw6jkJr+Q
-         OI9A==
-X-Gm-Message-State: AOAM533Wn1ChfKA+BE5RJYx7eUBo2Hbx8euJGZoZOgJRm15iJ0qgO61h
-        KC2hklkVWIIfelYnfc0RJivNTQ==
-X-Google-Smtp-Source: ABdhPJx3fRoFf3m1YrhBm9bwMf/KNqL/k72G8kAET9jEP4tr4GMXepaIFbIEk883VTIOOZ9EPhHXZg==
-X-Received: by 2002:a17:90b:4f8f:: with SMTP id qe15mr5110563pjb.94.1644447303388;
-        Wed, 09 Feb 2022 14:55:03 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id nl7sm7362138pjb.5.2022.02.09.14.55.02
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BcFfUoNY4HHUcjlUWbU5C1496bb+P9NZHjZT7bpwHGA=;
+        b=KpzrrD9+STSyigCaGk17uqWeGrcyp89+xKu2K/9MXPFVMh+oliH+W2CwhIYc8jvAE7
+         S0hZ6T6XsWI1EMSPdgTn/mwoIqKU6wi8yqVirobrggZoi3y1Qjg0cWz8PeMYDLwynNyA
+         mWVelmm/DFqii1as9JVbpcKf1IGaZDumdD9ZLj3O5IX0mvjhIOdTIucln+Z6CTvFC2SH
+         X6jSCTFkCKnfpPv1T6xl6qamW0jaZKpycv48yYchlcxGyEibUD4celMp2w9U1IIezJz+
+         5CJaD2pAkCd5FBtd7clDc7kK+J85c+zS+/SJ/hLazD87v7clZD79/Fxk6htIEL9hChxa
+         b/2g==
+X-Gm-Message-State: AOAM531MOUZFFEGbnBC/0pWu8+ZaLRV8nby+RYS+MEihcjMMOB/gAnJE
+        WNLMw+ALwgKbC8U4aw1p0Rk7PWAnkR4pXg==
+X-Google-Smtp-Source: ABdhPJxSeXwyF0F7CE9HSgCb9AbUyBVZ1UQl15I0IKlKbEw0VHVmTAmtk9Ug/V671NFSj/6DiXPr/A==
+X-Received: by 2002:a17:90b:390f:: with SMTP id ob15mr6065545pjb.195.1644447358371;
+        Wed, 09 Feb 2022 14:55:58 -0800 (PST)
+Received: from smtp.gmail.com ([2620:15c:202:201:5193:6865:e38e:3a5b])
+        by smtp.gmail.com with ESMTPSA id b1sm5982015pgb.66.2022.02.09.14.55.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 14:55:02 -0800 (PST)
-Date:   Wed, 9 Feb 2022 22:54:59 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        dmatlack@google.com, vkuznets@redhat.com
-Subject: Re: [PATCH 03/23] KVM: MMU: remove valid from extended role
-Message-ID: <YgRGQ1HiB2jSTr5M@google.com>
-References: <20220204115718.14934-1-pbonzini@redhat.com>
- <20220204115718.14934-4-pbonzini@redhat.com>
+        Wed, 09 Feb 2022 14:55:58 -0800 (PST)
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     benjamin.tissoires@redhat.com,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jiri Kosina <jikos@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        "Sean O'Brien" <seobrien@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Zhengqiao Xia <xiazhengqiao@huaqin.corp-partner.google.com>
+Subject: [PATCH v2 0/5] Input/HID: Consolidate ChromeOS Vivaldi keyboard logic
+Date:   Wed,  9 Feb 2022 14:55:51 -0800
+Message-Id: <20220209225556.3992827-1-swboyd@chromium.org>
+X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220204115718.14934-4-pbonzini@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 04, 2022, Paolo Bonzini wrote:
-> The level field of the MMU role can act as a marker for validity
-> instead: it is guaranteed to be nonzero so a zero value means the role
-> is invalid and the MMU properties will be computed again.
+This is a follow-on to this thread[1] where we discussed the need to
+support the vivaldi keyboard function row keys in the google hammer
+driver. I've extracted the common code into a new vivaldi-keymap.c file
+that can be used by the various keyboard drivers used on ChromeOS
+devices to expose the function_row_physmap sysfs attribute. That's a
+good place to keep the HID parsing logic for the vivaldi and hammer
+keyboards too, so one function goes there for that as well. Finally, we
+add support for the function row physmap attribute to the hammer driver.
 
-Nope, it's not guaranteed to be non-zero:
+Changes from v1 (https://lore.kernel.org/r/20220204202021.895426-1-swboyd@chromium.org):
+ * Yet another new file for HID part to fix compilation problems
 
-static int role_regs_to_root_level(struct kvm_mmu_role_regs *regs)
-{
-	if (!____is_cr0_pg(regs))
-		return 0; <=============================================
-	else if (____is_efer_lma(regs))
-		return ____is_cr4_la57(regs) ? PT64_ROOT_5LEVEL :
-					       PT64_ROOT_4LEVEL;
-	else if (____is_cr4_pae(regs))
-		return PT32E_ROOT_LEVEL;
-	else
-		return PT32_ROOT_LEVEL;
-}
+Cc: Jiri Kosina <jikos@kernel.org> 
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: "Sean O'Brien" <seobrien@chromium.org>
+Cc: Douglas Anderson <dianders@chromium.org>
+Cc: Zhengqiao Xia <xiazhengqiao@huaqin.corp-partner.google.com>
 
+Stephen Boyd (4):
+  Input: atkbd: Convert function_row_physmap to u16 array
+  Input: Extract ChromeOS vivaldi physmap show function
+  HID: Extract vivaldi hid feature mapping for use in hid-hammer
+  HID: google: Add support for vivaldi to hid-hammer
 
-static union kvm_mmu_role
-kvm_calc_nested_mmu_role(struct kvm_vcpu *vcpu, struct kvm_mmu_role_regs *regs)
-{
-	union kvm_mmu_role role;
+Zhengqiao Xia (1):
+  HID: google: modify HID device groups of eel
 
-	role = kvm_calc_shadow_root_page_role_common(vcpu, regs, false);
+ drivers/hid/Kconfig                   | 11 +++
+ drivers/hid/Makefile                  |  1 +
+ drivers/hid/hid-google-hammer.c       | 97 +++++++++++++++++++++------
+ drivers/hid/hid-vivaldi-common.c      | 97 +++++++++++++++++++++++++++
+ drivers/hid/hid-vivaldi.c             | 88 ++----------------------
+ drivers/input/Kconfig                 |  7 ++
+ drivers/input/Makefile                |  1 +
+ drivers/input/keyboard/Kconfig        |  2 +
+ drivers/input/keyboard/atkbd.c        | 27 +++-----
+ drivers/input/keyboard/cros_ec_keyb.c | 30 +++------
+ drivers/input/vivaldi-keymap.c        | 39 +++++++++++
+ include/linux/input/vivaldi-keymap.h  | 37 ++++++++++
+ 12 files changed, 295 insertions(+), 142 deletions(-)
+ create mode 100644 drivers/hid/hid-vivaldi-common.c
+ create mode 100644 drivers/input/vivaldi-keymap.c
+ create mode 100644 include/linux/input/vivaldi-keymap.h
 
-	/*
-	 * Nested MMUs are used only for walking L2's gva->gpa, they never have
-	 * shadow pages of their own and so "direct" has no meaning.   Set it
-	 * to "true" to try to detect bogus usage of the nested MMU.
-	 */
-	role.base.direct = true;
-	role.base.level = role_regs_to_root_level(regs);
-	return role;
-}
+[1] https://lore.kernel.org/r/nycvar.YFH.7.76.2201140935460.28059@cbobk.fhfr.pm
 
+base-commit: dfd42facf1e4ada021b939b4e19c935dcdd55566
+-- 
+https://chromeos.dev
 
-static void init_kvm_nested_mmu(struct kvm_vcpu *vcpu)
-{
-	struct kvm_mmu_role_regs regs = vcpu_to_role_regs(vcpu);
-	union kvm_mmu_role new_role = kvm_calc_nested_mmu_role(vcpu, &regs);
-	struct kvm_mmu *g_context = &vcpu->arch.nested_mmu;
-
-	if (new_role.as_u64 == g_context->mmu_role.as_u64) <== theoretically can get a false positive
-		return;

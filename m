@@ -2,64 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE8114AEE30
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 10:41:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9ED24AEE2D
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 10:41:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235623AbiBIJjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 04:39:54 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:45330 "EHLO
+        id S237012AbiBIJjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 04:39:42 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:45324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238558AbiBIJdR (ORCPT
+        with ESMTP id S238517AbiBIJdR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 9 Feb 2022 04:33:17 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BD9AE05ADE1
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D33EEE05B1D2
         for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 01:33:12 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id q7so2861756wrc.13
+Received: by mail-ej1-x634.google.com with SMTP id ka4so5414659ejc.11
         for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 01:33:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vD+/Cmu1Qo/Y2K+tLoqBHl5G/I2HgHP3zBZQPgA76XU=;
-        b=UE1ENqV54hus9qyKzyTo4+aJMKOa7Gfuj5kSXgr12/DrBx2E3f+/lze2MSXf19Wjr3
-         s8mijdNdLwW25Xa22N6izIjsluhrnI5XXht8rmVNKK5DLUOOWNOI29aOv2bjZLXygexx
-         buElQp7T1PBaDGMXsP6QWFJCDZgvONxxTfjuSTwMcC2HLVo7imZPJo5J2V12ryO75P/u
-         wP/TgCVqbyZYT7RT4Q7ZHIcbPTduh6ZCRH/ClCb2u+Ma9e4f5GSpL2aZbtj2gGUdJjVE
-         ZPVArEFUMRBFkgUXKh2DrS6usck0tziNMd7Kh+G+yUPzVEBs70/w/kGgKUwtQbfhIM3a
-         j8tw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ZL5nsQJzlN6imps4+YiPtBhsGzf6yOFUap6AeTuCeNA=;
+        b=w6PJpjf74O74HjyL1Gj6ROIaBJicmTqsiYlGYWEZsKsyUkNTjPNiEpbRnjVh+P4NeF
+         WlM66ApstCsJi6ZyBn3sXMuPEvWWu9hqIoq0CHsKjOhhmk57u11PUNb7Tc641bueGcUk
+         9LLibEfyVfbOUR+kUcZK4aJ2ZuYGTKgO5jIEs7s8SfOBSP23gnWBPPukSS/QDNq35+Hk
+         Xq7tL8k+texo1S/u6BHcgF26AT61xhUe1vSg/e0Bv2U0318F4dDfkPTQpCDm6PuvVX+B
+         z8YMPepM9hBcUvms1dGNM9hVicB4rzQ4GmkI4EUXUw9gjUO/BEJg/RmlFoakrfEac+4H
+         s7AQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vD+/Cmu1Qo/Y2K+tLoqBHl5G/I2HgHP3zBZQPgA76XU=;
-        b=76JfVLRoV2L6BR4Y0E8QdsnRlymBwpymqcOyD/1emttCU/uAzfnnX+KO1m/EgCsmOZ
-         yNq4Me83saDCVwnM5q2RbgZiwTh3iHgpjFwjQoUVu5hbQeoJMBrHhC3fR6Zf3lpvIO1K
-         XLb0fV/IGC7vBdgtelUnRLLgWhAvuh3UCLtLPAvaYqJlnUqzLTakKENwCcqseRgXzYCZ
-         mLRxHVrw7oRhQUnrNQG77xaJLE+SykPl5dhC1JDSFyd6Ld64kL7Jrp4JOV4f9NthD1ag
-         QQithrBQxc9dOD9EMTJjsFoAa6bPktzefNIU/JH8I5Tk5aGBfxM5HJF468EC+9U4YCpV
-         D7Gw==
-X-Gm-Message-State: AOAM533jgcE+y1SO0MiSOfKLKX1Gf6OUmpFjU7ZflRWMFOllTATcqhKx
-        gBeryePwirIBWEiKuogxZDq+DqitDRPvlVh/WUeO3Q==
-X-Google-Smtp-Source: ABdhPJyZDacMwjglnsU7XGk9iLjX9iJ0g23M7rUy18zgTzfpJeurAK8DrcUeBy/mGNKTxVFS4gz+ofK2DEhu8fUPJpc=
-X-Received: by 2002:a5d:5850:: with SMTP id i16mr1298418wrf.519.1644399186067;
- Wed, 09 Feb 2022 01:33:06 -0800 (PST)
-MIME-Version: 1.0
-References: <20220203120604.128396-1-james.clark@arm.com> <20220203120604.128396-2-james.clark@arm.com>
- <1b649955-cb45-1283-68cd-c82582cef60c@arm.com> <7ba34443-d76a-253d-d112-4100d5a57e21@arm.com>
-In-Reply-To: <7ba34443-d76a-253d-d112-4100d5a57e21@arm.com>
-From:   Mike Leach <mike.leach@linaro.org>
-Date:   Wed, 9 Feb 2022 09:32:54 +0000
-Message-ID: <CAJ9a7Vj4TRmxkiGi=OMx3iYxWjD0me7AS25BnyvBktHRCCb_GQ@mail.gmail.com>
-Subject: Re: [PATCH v2 01/15] coresight: Make ETM4x TRCIDR0 register accesses
- consistent with sysreg.h
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ZL5nsQJzlN6imps4+YiPtBhsGzf6yOFUap6AeTuCeNA=;
+        b=P8ZhpVUDg1vxD/z5zP/NtlXFKj3Yf87qVmnVebjefR6DsBlc5XsH1X8MqNW9FvR1bd
+         lgkz2nyYIq2Fp4wZwTO/ZihbiuVyUsvhdD2teuyMg7R9x3i3ovHmOaD7oETSMuU5FI6P
+         FlnprZ11aH4h1RwF1ByFCdT1KxUrLFMq8ND21jtC+cmpqL95F84CHYPIO1p/8YXuy33i
+         7hcV2B93iiuhTE9WTmxcfExTJgb0m11i1lu7blcter4LATRwT5iAV309lGktbOc01sMI
+         9PmJrtSqFWjYlKOYFxpmfodUqdhGyCmw2jVvCMT13NU+ods8kNMhUGlkC87o6nzd8cEz
+         fCzA==
+X-Gm-Message-State: AOAM532H0/N+lyFFdOx+7c8+6BnIjnvu4KcK+egJuu6iD68AgLtcwx4i
+        Ehl8nTyvtMacYyzJmdQpfX6ULw==
+X-Google-Smtp-Source: ABdhPJwj2ogtAm01Cn4fpJI3qhVdtBFd94vapf/jKbUe9O7RLyxnsCzDlZd5IAM4WWK17xSSvSr2/A==
+X-Received: by 2002:a17:906:7948:: with SMTP id l8mr1126088ejo.636.1644399188930;
+        Wed, 09 Feb 2022 01:33:08 -0800 (PST)
+Received: from leoy-ThinkPad-X240s ([104.245.96.65])
+        by smtp.gmail.com with ESMTPSA id g9sm5796897ejm.152.2022.02.09.01.33.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Feb 2022 01:33:08 -0800 (PST)
+Date:   Wed, 9 Feb 2022 17:33:04 +0800
+From:   Leo Yan <leo.yan@linaro.org>
 To:     Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     Anshuman Khandual <Anshuman.Khandual@arm.com>,
-        James Clark <James.Clark@arm.com>, mathieu.poirier@linaro.org,
-        coresight@lists.linaro.org, leo.yan@linaro.com,
-        Leo Yan <leo.yan@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 RESEND 1/4] coresight: etm4x: Add lock for reading
+ virtual context ID comparator
+Message-ID: <20220209093304.GA334894@leoy-ThinkPad-X240s>
+References: <20220204152403.71775-1-leo.yan@linaro.org>
+ <20220204152403.71775-2-leo.yan@linaro.org>
+ <6b91293a-1149-2c77-04a4-421a45d4e1e0@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6b91293a-1149-2c77-04a4-421a45d4e1e0@arm.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -70,200 +76,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi James,
+Hi Suzuki,
 
-When reviewing another patch set I spotted that there is a FIELD_GET
-macro already defined for the kernel in include/linux/bitfield.h
+On Wed, Feb 09, 2022 at 05:47:24AM +0000, Suzuki Kuruppassery Poulose wrote:
+> Hi Leo
+> 
+> On 04/02/2022 15:24, Leo Yan wrote:
+> > Updates to the values and the index are protected via the spinlock.
+> > Ensure we use the same lock to read the value safely.
+> > 
+> > Signed-off-by: Leo Yan <leo.yan@linaro.org>
+> > Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+> > ---
+> >   drivers/hwtracing/coresight/coresight-etm4x-sysfs.c | 2 ++
+> >   1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c b/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
+> > index 10ef2a29006e..2f3b4eef8261 100644
+> > --- a/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
+> > +++ b/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
+> > @@ -2111,7 +2111,9 @@ static ssize_t vmid_val_show(struct device *dev,
+> >   	struct etmv4_drvdata *drvdata = dev_get_drvdata(dev->parent);
+> >   	struct etmv4_config *config = &drvdata->config;
+> > +	spin_lock(&drvdata->spinlock);
+> >   	val = (unsigned long)config->vmid_val[config->vmid_idx];
+> > +	spin_unlock(&drvdata->spinlock);
+> >   	return scnprintf(buf, PAGE_SIZE, "%#lx\n", val);
+> >   }
+> 
+> 
+> I have queued this patch.
 
-Advantage of this is that you only need to define a shifted mask for
-each field and the macro handles the extraction and shifting
-automatically.
-It also ensures does a bunch of compile time sanity checks to ensure
-that the masks are in range for the type.
+Thanks!
 
-i.e. - define the mask _with_ the shift
-#define TRCIDR0_INSTP0_MASK                    GENMASK(2, 1)
+> For the rest, we would need to wait until the helper lands in the rc.
 
-then
-drvdata->instrp0 = !!(FIELD_GET(TRCIDR0_INSTP0_MASK, etmidr0) == 0b11);
+The helper function patch has been landed on the mainline kernel,
+it would be safe to merge the rest patches.
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d7e4f8545b497b3f5687e592f1c355cbaee64c8c
 
-which means all the shift #defines can be dropped
+BTW, I think you could pick another two refactoring patches:
+https://lore.kernel.org/lkml/20220204135051.60639-2-leo.yan@linaro.org/
+https://lore.kernel.org/lkml/20220204135051.60639-3-leo.yan@linaro.org/
 
-Should we use this and drop the REG_VAL or whatever?
-
-Regards
-
-Mike
-
-On Tue, 8 Feb 2022 at 15:04, Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
->
-> On 07/02/2022 05:44, Anshuman Khandual wrote:
-> > Hi James,
-> >
-> > These are all ETM4X specific changes. Something like this might be cleaner
-> > and also more compact. Also would suggest to follow the same for subsequent
-> > patches as well.
-> >
-> > coresight: etm4x: Cleanup TRCIDR0 register accesses
-> >
-> > Consistency with sysreg.h could be mentioned in the commit message itself.
-> >
-> > On 2/3/22 5:35 PM, James Clark wrote:
-> >> This is a no-op change for style and consistency and has no effect on the
-> >> binary produced by gcc-11.
-> >
-> > This patch adds register definitions, helper macros as well. Please expand
-> > the commit message to add more details. This is too short, for the change
-> > it creates. BTW why is it necessary to mention GCC version number here.
-> >
-> >>
-> >> Signed-off-by: James Clark <james.clark@arm.com>
-> >> ---
-> >>   .../coresight/coresight-etm4x-core.c          | 36 +++++--------------
-> >>   drivers/hwtracing/coresight/coresight-etm4x.h | 17 +++++++++
-> >>   drivers/hwtracing/coresight/coresight-priv.h  |  5 +++
-> >>   3 files changed, 30 insertions(+), 28 deletions(-)
-> >>
-> >> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-> >> index e2eebd865241..107e81948f76 100644
-> >> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
-> >> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-> >> @@ -1091,41 +1091,21 @@ static void etm4_init_arch_data(void *info)
-> >>      etmidr0 = etm4x_relaxed_read32(csa, TRCIDR0);
-> >>
-> >>      /* INSTP0, bits[2:1] P0 tracing support field */
-> >> -    if (BMVAL(etmidr0, 1, 2) == 0b11)
-> >> -            drvdata->instrp0 = true;
-> >> -    else
-> >> -            drvdata->instrp0 = false;
-> >> -
-> >> +    drvdata->instrp0 = !!(REG_VAL(etmidr0, TRCIDR0_INSTP0) == 0b11);
-> >>      /* TRCBB, bit[5] Branch broadcast tracing support bit */
-> >> -    if (BMVAL(etmidr0, 5, 5))
-> >> -            drvdata->trcbb = true;
-> >> -    else
-> >> -            drvdata->trcbb = false;
-> >> -
-> >> +    drvdata->trcbb = !!(etmidr0 & TRCIDR0_TRCBB);
-> >>      /* TRCCOND, bit[6] Conditional instruction tracing support bit */
-> >> -    if (BMVAL(etmidr0, 6, 6))
-> >> -            drvdata->trccond = true;
-> >> -    else
-> >> -            drvdata->trccond = false;
-> >> -
-> >> +    drvdata->trccond = !!(etmidr0 & TRCIDR0_TRCCOND);
-> >>      /* TRCCCI, bit[7] Cycle counting instruction bit */
-> >> -    if (BMVAL(etmidr0, 7, 7))
-> >> -            drvdata->trccci = true;
-> >> -    else
-> >> -            drvdata->trccci = false;
-> >> -
-> >> +    drvdata->trccci = !!(etmidr0 & TRCIDR0_TRCCCI);
-> >>      /* RETSTACK, bit[9] Return stack bit */
-> >> -    if (BMVAL(etmidr0, 9, 9))
-> >> -            drvdata->retstack = true;
-> >> -    else
-> >> -            drvdata->retstack = false;
-> >> -
-> >> +    drvdata->retstack = !!(etmidr0 & TRCIDR0_RETSTACK);
-> >>      /* NUMEVENT, bits[11:10] Number of events field */
-> >> -    drvdata->nr_event = BMVAL(etmidr0, 10, 11);
-> >> +    drvdata->nr_event = REG_VAL(etmidr0, TRCIDR0_NUMEVENT);
-> >>      /* QSUPP, bits[16:15] Q element support field */
-> >> -    drvdata->q_support = BMVAL(etmidr0, 15, 16);
-> >> +    drvdata->q_support = REG_VAL(etmidr0, TRCIDR0_QSUPP);
-> >>      /* TSSIZE, bits[28:24] Global timestamp size field */
-> >> -    drvdata->ts_size = BMVAL(etmidr0, 24, 28);
-> >> +    drvdata->ts_size = REG_VAL(etmidr0, TRCIDR0_TSSIZE);
-> >>
-> >>      /* maximum size of resources */
-> >>      etmidr2 = etm4x_relaxed_read32(csa, TRCIDR2);
-> >> diff --git a/drivers/hwtracing/coresight/coresight-etm4x.h b/drivers/hwtracing/coresight/coresight-etm4x.h
-> >> index 3c4d69b096ca..2bd8ad953b8e 100644
-> >> --- a/drivers/hwtracing/coresight/coresight-etm4x.h
-> >> +++ b/drivers/hwtracing/coresight/coresight-etm4x.h
-> >> @@ -130,6 +130,23 @@
-> >>
-> >>   #define TRCRSR_TA                  BIT(12)
-> >>
-> >> +/*
-> >> + * Bit positions of registers that are defined above, in the sysreg.h style
-> >> + * of _MASK, _SHIFT and BIT().
-> >> + */
-> >
-> > ^^^ not really necessary. Instead the format requirement for below mentioned
-> > CORESIGHT_REG_VAL() macro might be relevant and should be mentioned.
-> >
-> >> +#define TRCIDR0_INSTP0_SHIFT                        1
-> >> +#define TRCIDR0_INSTP0_MASK                 GENMASK(1, 0)
-> >> +#define TRCIDR0_TRCBB                               BIT(5)
-> >> +#define TRCIDR0_TRCCOND                             BIT(6)
-> >> +#define TRCIDR0_TRCCCI                              BIT(7)
-> >> +#define TRCIDR0_RETSTACK                    BIT(9)
-> >> +#define TRCIDR0_NUMEVENT_SHIFT                      10
-> >> +#define TRCIDR0_NUMEVENT_MASK                       GENMASK(1, 0)
-> >> +#define TRCIDR0_QSUPP_SHIFT                 15
-> >> +#define TRCIDR0_QSUPP_MASK                  GENMASK(1, 0)
-> >> +#define TRCIDR0_TSSIZE_SHIFT                        24
-> >> +#define TRCIDR0_TSSIZE_MASK                 GENMASK(4, 0)
-> >> +
-> >>   /*
-> >>    * System instructions to access ETM registers.
-> >>    * See ETMv4.4 spec ARM IHI0064F section 4.3.6 System instructions
-> >> diff --git a/drivers/hwtracing/coresight/coresight-priv.h b/drivers/hwtracing/coresight/coresight-priv.h
-> >> index ff1dd2092ac5..1452c6038421 100644
-> >> --- a/drivers/hwtracing/coresight/coresight-priv.h
-> >> +++ b/drivers/hwtracing/coresight/coresight-priv.h
-> >> @@ -36,6 +36,11 @@
-> >>
-> >>   #define TIMEOUT_US         100
-> >>   #define BMVAL(val, lsb, msb)       ((val & GENMASK(msb, lsb)) >> lsb)
-> >> +/*
-> >> + * Extract a field from a register where field is #defined in the form
-> >> + * <register_name>_<field_name>_MASK and <register_name>_<field_name>_SHIFT
-> >> + */
-> >
-> > Looking at the usage, <register_name> is already embedded in <filed_name>. So
-> > it requires <field_name>_SHIFT and <field_name>_MASK instead. Unless register
-> > name should be passed as separate argument (which actually might be better).
-> >
-> > REG_VAL(etmidr0, TRCIDR0_TSSIZE) ----> REG_VAL(etmidr0, TRCIDR0, TSSIZE)
->
-> I don't see much difference here. So I am fine either way.
->
-> >
-> > with some restructuring in the comment ..
-> >
-> > /*
-> >   * Extract a field from a coresight register
-> >   *
-> >   * Required fields are defined as macros like the following
-> >   *
-> >   * <register_name>_<field_name>_MASK and <register_name>_<field_name>_SHIFT
-> >   */
-> >
-> >> +#define REG_VAL(val, field) ((val & (field##_MASK << field##_SHIFT)) >> field##_SHIFT)
-> >
-> > This is too generic to be in a coresight header or it should just be
-> > named CORESIGHT_REG_VAL() instead, making it more specific for here.
-> >
-> > The build should fail in case any required macro definition is absent.
-> > I guess no more fortification is required in case macros are missing.
-> >
-> > However CORESIGHT_REG_VAL() is better placed in <coresight-etm4x.h>
-> > just before all the dependent SHIFT/MASK register field definition
-> > starts.
->
-> Not necessarily. CORESIGHT_REG_VAL() is a generic function and doesn't
-> have anything specific to do with etm4x. We could reuse that for
-> cleaning up other drivers in CoreSight.
->
-> Cheers
-> Suzuki
-
-
-
--- 
-Mike Leach
-Principal Engineer, ARM Ltd.
-Manchester Design Centre. UK
+Thanks,
+Leo

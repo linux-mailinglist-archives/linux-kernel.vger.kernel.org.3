@@ -2,94 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 034DA4AE7B7
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 04:12:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CFF24AE762
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 04:03:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244084AbiBIDDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 22:03:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55672 "EHLO
+        id S243534AbiBIDC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 22:02:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359748AbiBICvY (ORCPT
+        with ESMTP id S1359764AbiBICvZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 21:51:24 -0500
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C4D5C061355;
-        Tue,  8 Feb 2022 18:50:29 -0800 (PST)
-Received: by mail-oi1-f177.google.com with SMTP id q8so1143420oiw.7;
-        Tue, 08 Feb 2022 18:50:29 -0800 (PST)
+        Tue, 8 Feb 2022 21:51:25 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C133C0612C2;
+        Tue,  8 Feb 2022 18:50:48 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id 10so1028045plj.1;
+        Tue, 08 Feb 2022 18:50:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-transfer-encoding:content-language;
+        bh=h0zU2sqp9DInM9RIto6tdU+ZDVJECbmLRz9DGlSBkQA=;
+        b=S+1HXZWBrFY+m0WszgouwfuXg8ZAQ+U1QGmFDQYqZvgyCeBFwx4xfexAqZ3a0cCgj2
+         d6ghHdTCktl0vbeo6k/ifXLCc6fNgo8L39m4ZnomSvwp5SxXi0GnKHKxmduLBMWUW8sm
+         zBbrM0J7YHJzy+LPt24oQpBsEma2qSfxhHCHnI4BTRVXwIpWU0rotWSUCk4HNJOksbK+
+         lRQOmYYAZH3h8SgPM6TeciIdyIOLuL9h022UvXV6A7ynjKWebIlY9DsM8PrXnArqI+p7
+         aCYY04cCte0FVJE2jtc++l3ne/7LLcxTA5Hh3vRhzh0OTBmW4kKDMGuIIl76QwByzxpt
+         vtPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=eZEq/8mCOjzwD9orqDe6jz1KcZnSjH/KbDDATUNgRXs=;
-        b=60WVH3fjF2nh+OBiYMCJFuUgFjNojCT3qpp3AvHCl2iKDn1JlydG7szmTbHYUdOWFh
-         j8MujpjjIoCUEb5I+h1M83u0JvAS2d+TgsTZ5wxxboazyZ1/peIinmq27dfDuAbvkAC4
-         jQ/5NCFkkn7+T6EVFd7kyv34MyChPAGQh96hunTXGFGoerHriC7pGXPF9UWEVPklhm+e
-         f7oUdAXNZO/AN0li8Fic+tuObxUUegTFTGVui8V1HYyu6c9dBpBGGvjGkus6BDHJLL3z
-         YrIXvXhJvI5CruA/sFFQKVf1YkQx0lauNzO4+4FBBA3gr/9rzoSUDdJj5RPW/Zg0sGw0
-         y89w==
-X-Gm-Message-State: AOAM532Hu6yzXoF+L3uM8Bm+j+PVtNlgIUosOhsFqbG/6AuWxfI2uW++
-        7bdllDT68kC/j3qYuHIyUg==
-X-Google-Smtp-Source: ABdhPJzDEYPyns9BvQ6gTLcGbC5N/bskfIdJfxxkiSmrX8PqpKdHv731s/65kutbSlVvehqXCGGzMg==
-X-Received: by 2002:aca:b708:: with SMTP id h8mr69166oif.137.1644375028706;
-        Tue, 08 Feb 2022 18:50:28 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id 5sm2226607oag.11.2022.02.08.18.50.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 18:50:27 -0800 (PST)
-Received: (nullmailer pid 3520304 invoked by uid 1000);
-        Wed, 09 Feb 2022 02:50:27 -0000
-Date:   Tue, 8 Feb 2022 20:50:27 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Marcello Sylvester Bauer <sylv@sylv.io>
-Cc:     linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/4] dt-bindings: vendor-prefixes: add Vicor
- Corporation
-Message-ID: <YgMr84b8BKHBNQwq@robh.at.kernel.org>
-References: <cover.1642434222.git.sylv@sylv.io>
- <58d2c7501edf746f3677681327c283fc3faaf872.1642434222.git.sylv@sylv.io>
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-transfer-encoding:content-language;
+        bh=h0zU2sqp9DInM9RIto6tdU+ZDVJECbmLRz9DGlSBkQA=;
+        b=6X0QuXo8+pw7gZ9TQcOlNIgUnJBPlYmhmynjUqGsB6Ete+tgCxQYDGgYKr3L3Tugy9
+         DUROw4k3hEjWJFGsGZ2/I9FzDU0v9FeXe1WpLd8fAa3GOEGO1d/mj/ehphhWjpnkW/fy
+         +BSLJA15gyjW49O0eXRve6abxpZSq1fbXvPAagsNyc1vWZEceNlbf0K8E8XsdYQF1DPH
+         xffkTSqsH1U7ThqlHHb8jWfwYAHvVfmygz71guxqEgBWBL2F4/izTHg4MbX3Fhy2BHMp
+         5WqtjSw1mL2ALRncxSNb3fw65vRFoPVOJjVEKRD3pNZL2n4GAGhRorrPrQZL9MHhHpT2
+         6oFQ==
+X-Gm-Message-State: AOAM530Ll8z5z71NoxMAleeWcKPkID8W1TARFjHF2De/71QhBE6//aX/
+        DzWKZApaJApcYLOJK7Px2wHKJKumd1s=
+X-Google-Smtp-Source: ABdhPJykVboULllJsI40xKPv9LbYcg5sq9410WhmFuByGFlzuxSllka4Pnp4oEshsoXzZvhpxWgMAA==
+X-Received: by 2002:a17:90b:23c9:: with SMTP id md9mr1082313pjb.173.1644375047431;
+        Tue, 08 Feb 2022 18:50:47 -0800 (PST)
+Received: from [192.168.1.100] ([166.111.139.99])
+        by smtp.gmail.com with ESMTPSA id r7sm6944390pgv.15.2022.02.08.18.50.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Feb 2022 18:50:46 -0800 (PST)
+To:     simon.horman@corigine.com, Jakub Kicinski <kuba@kernel.org>,
+        David Miller <davem@davemloft.net>, shenyang39@huawei.com,
+        libaokun1@huawei.com
+Cc:     oss-drivers@corigine.com, netdev@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+From:   Jia-Ju Bai <baijiaju1990@gmail.com>
+Subject: [BUG] net: netronome: nfp: possible deadlock in
+ nfp_cpp_area_acquire() and nfp_cpp_area_release()
+Message-ID: <922a002a-3ab6-eabe-131c-af3b8951866b@gmail.com>
+Date:   Wed, 9 Feb 2022 10:50:44 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <58d2c7501edf746f3677681327c283fc3faaf872.1642434222.git.sylv@sylv.io>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 05:12:47PM +0100, Marcello Sylvester Bauer wrote:
-> Add vendor prefix for Vicor Corporation.
-> 
-> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
-> ---
->  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> index 66d6432fd781..8a2a205d6d34 100644
-> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> @@ -1273,6 +1273,8 @@ patternProperties:
->    "^vdl,.*":
->      description: Van der Laan b.v.
->    "^via,.*":
-> +    description: Vicor Corporation
+Hello,
 
-You just changed the description for VIA.
+My static analysis tool reports a possible deadlock in the nfp driver in 
+Linux 5.16:
 
-> +  "^vicor,.*":
->      description: VIA Technologies, Inc.
->    "^videostrong,.*":
->      description: Videostrong Technology Co., Ltd.
-> -- 
-> 2.33.1
-> 
-> 
+nfp_cpp_area_acquire()
+   mutex_lock(&area->mutex); --> Line 455 (Lock A)
+   __nfp_cpp_area_acquire()
+     wait_event_interruptible(area->cpp->waitq, ...) --> Line 427 (Wait X)
+
+nfp_cpp_area_release()
+   mutex_lock(&area->mutex); --> Line 502 (Lock A)
+   wake_up_interruptible_all(&area->cpp->waitq); --> Line 508 (Wake X)
+
+When nfp_cpp_area_acquire() is executed, "Wait X" is performed by 
+holding "Lock A". If nfp_cpp_area_release() is executed at this time, 
+"Wake X" cannot be performed to wake up "Wait X" in 
+nfp_cpp_area_acquire(), because "Lock A" has been already hold by 
+nfp_cpp_area_acquire(), causing a possible deadlock.
+
+I am not quite sure whether this possible problem is real and how to fix 
+it if it is real.
+Any feedback would be appreciated, thanks :)
+
+
+Best wishes,
+Jia-Ju Bai

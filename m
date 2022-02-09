@@ -2,94 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5412C4AFE73
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 21:29:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51CE44AFE74
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 21:29:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231537AbiBIU2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 15:28:08 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:51996 "EHLO
+        id S231583AbiBIU3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 15:29:07 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:54998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230498AbiBIU2E (ORCPT
+        with ESMTP id S230498AbiBIU3F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 15:28:04 -0500
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C5F5E01566C
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 12:28:07 -0800 (PST)
-Received: by mail-oi1-x231.google.com with SMTP id u3so3694745oiv.12
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 12:28:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=tZ+ICUNOD4a/G9GF8NueyOkz08WKOuBo2WdTV0ZJvsw=;
-        b=aah8c1tqXvTU7RJNnPoeLLlrumzoU6ses4qrrQNE17jPo4ZKyEO5kPpRVtsM/JW+w9
-         18R31HlYz6R+M+IjhxZTPUf6FliUYCzWAlIs12ZsUbX1Mr6wNGMK875QeFTPoWcTBEt5
-         uYS1ZvQWmR3W/K5OjJp9heAOdxBWKv5vAsuWX/5tJhmCu1KQgkVUwg+vP98hwWvxAgag
-         8kJKhnAtCdgM9+bWjymOme938eoVKP3AlNJf76MKVIAJQZpuZZQEDxCHEQI1Rh6p0SCG
-         bI0iRQxZfIjPK3lLwusRQVP+aRwXUr4OYFF99yIm8HL7rlMLRxy7teVpna2n9ELqM6Fp
-         waNw==
+        Wed, 9 Feb 2022 15:29:05 -0500
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A577E022AFD;
+        Wed,  9 Feb 2022 12:29:07 -0800 (PST)
+Received: by mail-oi1-f177.google.com with SMTP id u3so3697498oiv.12;
+        Wed, 09 Feb 2022 12:29:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=tZ+ICUNOD4a/G9GF8NueyOkz08WKOuBo2WdTV0ZJvsw=;
-        b=ghMJkuh1s0rQ/B8cULoEOcAILsy0AY82Wsod2WSM94YNxUPZjFKSo9qZYt4DiMuNeB
-         2ihmkO01AX1NPU6/NUcfFMVmB1KEvNID/iE27vjqLNywHf5Q0R+ZQ9+VcufT7wPqW36r
-         aAIEXQ44JSPGvInrT8I0f/ozKnQCu8rH9iT3DgYD9DpE8z6oSt9ncqWmOSGERQ/ZF7ug
-         w7xwxuw9ZpGjGj2NybHyhJB7mG0DqhHdg2Q9UaAT0DI6E6QLUSjeDqwrX+q/eqZrdK8M
-         gLWIuW/qi8YW05UVX25sMQ8DaeL4Du/oI80M1cTiqD92pZl92YpDhN6vWsG3F8cSVcKt
-         n9JQ==
-X-Gm-Message-State: AOAM5305l9U4uj0wrqVOjl1EvhZBkbgI7TbQdbZkpGIzFFbVCCx0FiTx
-        3/dJHh8LpreE0Yoq7qBi3v24K854vPsF9Q==
-X-Google-Smtp-Source: ABdhPJy23WynfntBST1K1YK1LrOTCsePRqf4FOzpYNlOSn4/zQDoXbrUEiH+fwQBfmxxydu2gEVJwQ==
-X-Received: by 2002:a05:6808:1690:: with SMTP id bb16mr2182292oib.88.1644438486519;
-        Wed, 09 Feb 2022 12:28:06 -0800 (PST)
-Received: from localhost.localdomain ([2804:14d:4cd8:12bf:758b:9a0d:6e95:934f])
-        by smtp.gmail.com with ESMTPSA id d21sm6948035otq.68.2022.02.09.12.28.04
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qX/iv0/I3lulBzogE/XezC3rR6c9uyWKFDg4KqlAzQ4=;
+        b=spcUIoZN6g6Qx+YKJI+NXPybg4+mjDh9VCWvqQFgFhalq8XCR+ce6f/+ezMg5YGJui
+         BAva4DStFqSmbTMAIKhjqQ/NpUBCkrDMEdRBh0A7CQ14Duf2hPADnCrAwH/9RgSvGQZG
+         1WVv5lydr+rH3OcBQIDXO4suw12ojUke9IY2y4h9zsjbEYpTz63ylnGz1izecD+3+OWr
+         gDskbVwttQkvOJsuvTPu42v3lxWosXgIdh9tHaNYKMVq1GIEidX1aoI++RBZ7uDUJ6vL
+         92fFaP/PvjgIuu0OjF5L7pXFI3KVRnnkvPR1qrCErqZRo8uBtZepI9K0OKZD1cp43QTK
+         aM6A==
+X-Gm-Message-State: AOAM5310bktARrYV7Xd+Uc457LT2bTbOxdijNZ3F9kcjiShPVW4Bc3oe
+        zmOBKecRcTVJQnVa2pBO0w==
+X-Google-Smtp-Source: ABdhPJyeIlxx9yA912gKiYSVOckzCyB2ECcB5acxCzx2wrIfJzWy1fsVNYEgra580uClr8vGIPLCsQ==
+X-Received: by 2002:aca:a891:: with SMTP id r139mr2194753oie.337.1644438546936;
+        Wed, 09 Feb 2022 12:29:06 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id bl6sm7216978oib.38.2022.02.09.12.29.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 12:28:06 -0800 (PST)
-From:   Leonardo Araujo <leonardo.aa88@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        Leonardo Araujo <leonardo.aa88@gmail.com>
-Subject: [PATCH] Staging: r8188eu: core: Comparisons should place the constant on the right side of the test
-Date:   Wed,  9 Feb 2022 17:27:58 -0300
-Message-Id: <20220209202758.2940-1-leonardo.aa88@gmail.com>
-X-Mailer: git-send-email 2.29.0
+        Wed, 09 Feb 2022 12:29:05 -0800 (PST)
+Received: (nullmailer pid 849316 invoked by uid 1000);
+        Wed, 09 Feb 2022 20:29:04 -0000
+Date:   Wed, 9 Feb 2022 14:29:04 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Brian Norris <briannorris@chromium.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, Lin Huang <hl@rock-chips.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Heiko Stuebner <heiko@sntech.de>, linux-pm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Derek Basehore <dbasehore@chromium.org>
+Subject: Re: [PATCH v2 05/15] dt-bindings: devfreq: rk3399_dmc: Add more
+ disable-freq properties
+Message-ID: <YgQkEKKTy5hAMfpS@robh.at.kernel.org>
+References: <20220127230727.3369358-1-briannorris@chromium.org>
+ <20220127150615.v2.5.I382d4de737198ea52deb118c9bdc4d93d76e009e@changeid>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220127150615.v2.5.I382d4de737198ea52deb118c9bdc4d93d76e009e@changeid>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch fixes the following checkpatch.pl warning:
+On Thu, 27 Jan 2022 15:07:16 -0800, Brian Norris wrote:
+> DDR DVFS tuning has found that several power-saving features don't have
+> good tradeoffs at higher frequencies -- at higher frequencies, we'll see
+> glitches or other errors. Provide tuning controls so these can be
+> disabled at higher OPPs, and left active only at the lower ones.
+> 
+> Signed-off-by: Brian Norris <briannorris@chromium.org>
+> ---
+> 
+> Changes in v2:
+>  - hyphens, not underscores
+>  - *-hz units, and drop the types definition
+> 
+>  .../bindings/devfreq/rk3399_dmc.yaml          | 37 +++++++++++++++++++
+>  1 file changed, 37 insertions(+)
+> 
 
-WARNING: Comparisons should place the constant on the right side of the test
-
-Signed-off-by: Leonardo Araujo <leonardo.aa88@gmail.com>
----
- drivers/staging/r8188eu/core/rtw_cmd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/staging/r8188eu/core/rtw_cmd.c b/drivers/staging/r8188eu/core/rtw_cmd.c
-index a9a5453aa1cc..e236316188c1 100644
---- a/drivers/staging/r8188eu/core/rtw_cmd.c
-+++ b/drivers/staging/r8188eu/core/rtw_cmd.c
-@@ -618,7 +618,7 @@ u8 rtw_disassoc_cmd(struct adapter *padapter, u32 deauth_timeout_ms, bool enqueu
- 		res = rtw_enqueue_cmd(cmdpriv, cmdobj);
- 	} else {
- 		/* no need to enqueue, do the cmd hdl directly and free cmd parameter */
--		if (H2C_SUCCESS != disconnect_hdl(padapter, (u8 *)param))
-+		if (disconnect_hdl(padapter, (u8 *)param) != H2C_SUCCESS)
- 			res = _FAIL;
- 		kfree(param);
- 	}
--- 
-2.29.0
-
+Reviewed-by: Rob Herring <robh@kernel.org>

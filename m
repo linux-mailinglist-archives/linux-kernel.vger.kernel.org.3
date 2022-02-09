@@ -2,72 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F0D74AF601
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:06:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D4C14AF605
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:06:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236496AbiBIQFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 11:05:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40254 "EHLO
+        id S236528AbiBIQGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 11:06:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233209AbiBIQFO (ORCPT
+        with ESMTP id S236511AbiBIQF7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 11:05:14 -0500
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00208C0613C9;
-        Wed,  9 Feb 2022 08:05:16 -0800 (PST)
-Received: by mail-io1-xd34.google.com with SMTP id p63so3691307iod.11;
-        Wed, 09 Feb 2022 08:05:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1c/6l8Fp4RH5VPtrTh9qUA2jV+GD+5aUHsSlil0jKiA=;
-        b=RmxhaIRcr+PwhQu4PtzxQSrXEXKyLT5HnRTvT+BDinZcRUK81PdCfNC5t6nFX3qr8C
-         Lx3xEBUqecDkV+MHfhMouucqPtzvKsqRnTMjcLCscQ/AIZ/mJU7+rhkbWhYZ/lj4tYnW
-         QYtMP3fkC+vmqjRkdOsy57ykqyLVa/lgWcocGwOQuILqJPTpx+EDRPFvzPuqoRTZcuyW
-         8fRfsulDLSGHmU5/W3PnfzJ4xwp0k7hudmLhAUYDhDj9cKhHqy5aZqKJgMTQggp00/UF
-         ZMn5HZiBEiW4ihI7aq5Bjf3cqAIy3usaOLTfTkdxEGUg5QoadOQ4b851sQIDXzicxctu
-         NVZQ==
+        Wed, 9 Feb 2022 11:05:59 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E6445C0613C9
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 08:06:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644422762;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LEFCqKCSxGi9whZ4JcEN5a7NElBGZhBjkZkBGJeeZak=;
+        b=HAeQnG9zGRYf3Vk1WDDDN6FqSbmiqqmDfxjdt4BmR52Pu5LZX4pF/a6EREX3Si8GKV+d6D
+        TZStNHjtKklM0euRLn/ufFcohAwOae/jQimVkK0g7kzQrT3ZW44D6yBn5hXhXSSRBmehzQ
+        j9Q/g15D5pzHmt5VWkuAYXAlZAsa2Do=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-117-ti6C8oaOPkWmXn6-E0yAgA-1; Wed, 09 Feb 2022 11:05:22 -0500
+X-MC-Unique: ti6C8oaOPkWmXn6-E0yAgA-1
+Received: by mail-wr1-f71.google.com with SMTP id k20-20020adfc714000000b001e305cd1597so1265230wrg.19
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 08:05:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1c/6l8Fp4RH5VPtrTh9qUA2jV+GD+5aUHsSlil0jKiA=;
-        b=aiBA2I+9qD0vN/pbi0BQhfY4sUeiiHVDmNJqNHuL+p0OhKEJrr9MX3yBP5k+oRDvz7
-         4OWessttlzo9IYYB0jbxUpzDKaLg69zBOHc+eq1Au1X2nXXza4o1Uls/YyYNdr3OgIHQ
-         BAqjjmUs6rw0iMYAiw8wRtdnXKDeS2Nq6VeDx+mLsXLm7EAAgkMlsrzUMCeFIdqpYNQ6
-         p8f3qPdgLxcpVPfz/yFjGp36DTuFY3Fdy/+VtV+aYO1NqLUJ96nm1soxXO+/b/+Rw3oI
-         fyFARwhEJ6iTlig+BxtZeqi85M4neHowZcrbze3WjV52AEmdxCOM96TMvo3kFhPRbG0w
-         +qTQ==
-X-Gm-Message-State: AOAM533KOSVvbJRuQ/TEsukbW6xLkOxGwlitznMN6BAbPn7x+5mgHUtF
-        y3lzehCcSMyHQMhZiNIQ0mymTI4taFWFBEkg+Pk=
-X-Google-Smtp-Source: ABdhPJzwUJh9RJL8FHv95KrO3ujW9aTtOQ3nrC3twvNd8fY/dXsrOtRrHd9PRm6dTN9PV+G+Q3G0ZbIpyQe+F3zYpnE=
-X-Received: by 2002:a05:6638:2606:: with SMTP id m6mr1297132jat.93.1644422716327;
- Wed, 09 Feb 2022 08:05:16 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=LEFCqKCSxGi9whZ4JcEN5a7NElBGZhBjkZkBGJeeZak=;
+        b=yuC2hlU2JQ/h9RseXZ/NAPBN09jr2sXeZLR9QhUSHtH/dQss4nlpps+qYdo+5DOHqe
+         J7qb8Lgpu2v817hDdHjvAYBkVw62T5z7uDi5UJJVXSEhB2Rb6fNZvty81rli6eAP8IIB
+         FrT+djjUY6zEtlUwddKaMpavvpVcJGIen+E/5Qvfl7wdgXqR8gPOi3Q7dHhzxRxYpN0i
+         tp8zxr018Cwcap20HaH8yOdJc6lKXqOlGaQLO/uYd7SlMoHyDc4ZfGuf63Z7MnREsYbA
+         6m52a3mk1+7GFEr1Vm4xybHMj2pvFCitiXjYUbc1B0BXaWRi3gQ4VIlVe7M3N+39Dy5R
+         C/TA==
+X-Gm-Message-State: AOAM5316NgItAET2Ng4i19ulF2W4yJHH5wGq0NacgCRgzcmKuIaSgUTC
+        kHG1VxFz6cq9XGpYdwKNXkjBce8WzVe6Jld4Z0TDaPoBtvO4a/NxlozTTcesN8mxxlhoxEzBxT2
+        8+nhmlGWc7X3/nTW7rTSRWr/F
+X-Received: by 2002:a1c:2942:: with SMTP id p63mr2673410wmp.75.1644422721359;
+        Wed, 09 Feb 2022 08:05:21 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx+j9ANRMCysRCXC83SlIGGD+b29Hyb7iOR9cmkjVggSgqjPJ0r7Mq6unfGb1nTB3jvtmr0qA==
+X-Received: by 2002:a1c:2942:: with SMTP id p63mr2673393wmp.75.1644422721161;
+        Wed, 09 Feb 2022 08:05:21 -0800 (PST)
+Received: from [192.168.1.102] ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id i15sm1276298wmq.23.2022.02.09.08.05.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Feb 2022 08:05:20 -0800 (PST)
+Message-ID: <f3096131-4285-6e06-8e0a-47b23f8feb9c@redhat.com>
+Date:   Wed, 9 Feb 2022 17:05:19 +0100
 MIME-Version: 1.0
-References: <20220202135333.190761-1-jolsa@kernel.org> <20220202135333.190761-3-jolsa@kernel.org>
- <CAEf4Bzbrj01RJq7ArAo-kX-+8rPx9j5OH1OvGHxVJxiq8rn3FA@mail.gmail.com> <YgPXVXJnPKQ7lOi9@krava>
-In-Reply-To: <YgPXVXJnPKQ7lOi9@krava>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 9 Feb 2022 08:05:05 -0800
-Message-ID: <CAEf4BzYxtoE8Gu62oNSdVxvsv2K_5CPSdGS3Qd0Jgaegvw7sfw@mail.gmail.com>
-Subject: Re: [PATCH 2/8] bpf: Add bpf_get_func_ip kprobe helper for fprobe link
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Jiri Olsa <jolsa@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 4/7] drm/solomon: Add SSD130X OLED displays I2C support
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-fbdev@vger.kernel.org,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>
+References: <20220209090314.2511959-1-javierm@redhat.com>
+ <20220209090314.2511959-5-javierm@redhat.com>
+ <YgPanXaAYQxHTjMd@smile.fi.intel.com>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <YgPanXaAYQxHTjMd@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,117 +91,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 9, 2022 at 7:01 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+On 2/9/22 16:15, Andy Shevchenko wrote:
+> On Wed, Feb 09, 2022 at 10:03:11AM +0100, Javier Martinez Canillas wrote:
+>> The ssd130x driver only provides the core support for these devices but it
+>> does not have any bus transport logic. Add a driver to interface over I2C.
+> 
+> Thanks!
+> 
+> ...
+> 
+>> + * Authors: Javier Martinez Canillas <javierm@redhat.com>
+> 
+> s?!
 >
-> On Mon, Feb 07, 2022 at 10:59:18AM -0800, Andrii Nakryiko wrote:
-> > On Wed, Feb 2, 2022 at 5:53 AM Jiri Olsa <jolsa@redhat.com> wrote:
-> > >
-> > > Adding support to call get_func_ip_fprobe helper from kprobe
-> > > programs attached by fprobe link.
-> > >
-> > > Also adding support to inline it, because it's single load
-> > > instruction.
-> > >
-> > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > > ---
-> > >  kernel/bpf/verifier.c    | 19 ++++++++++++++++++-
-> > >  kernel/trace/bpf_trace.c | 16 +++++++++++++++-
-> > >  2 files changed, 33 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > > index 1ae41d0cf96c..a745ded00635 100644
-> > > --- a/kernel/bpf/verifier.c
-> > > +++ b/kernel/bpf/verifier.c
-> > > @@ -13625,7 +13625,7 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
-> > >                         continue;
-> > >                 }
-> > >
-> > > -               /* Implement bpf_get_func_ip inline. */
-> > > +               /* Implement tracing bpf_get_func_ip inline. */
-> > >                 if (prog_type == BPF_PROG_TYPE_TRACING &&
-> > >                     insn->imm == BPF_FUNC_get_func_ip) {
-> > >                         /* Load IP address from ctx - 16 */
-> > > @@ -13640,6 +13640,23 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
-> > >                         continue;
-> > >                 }
-> > >
-> > > +               /* Implement kprobe/fprobe bpf_get_func_ip inline. */
-> > > +               if (prog_type == BPF_PROG_TYPE_KPROBE &&
-> > > +                   eatype == BPF_TRACE_FPROBE &&
-> > > +                   insn->imm == BPF_FUNC_get_func_ip) {
-> > > +                       /* Load IP address from ctx (struct pt_regs) ip */
-> > > +                       insn_buf[0] = BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1,
-> > > +                                                 offsetof(struct pt_regs, ip));
-> >
-> > Isn't this architecture-specific? I'm starting to dislike this
->
-> ugh, it is.. I'm not sure we want #ifdef CONFIG_X86 in here,
-> or some arch_* specific function?
 
-
-So not inlining it isn't even considered? this function will be called
-once or at most a few times per BPF program invocation. Anyone calling
-it in a tight loop is going to use it very-very suboptimally (and even
-then useful program logic will dominate). There is no point in
-inlining it.
-
+Right.
+ 
+> ...
+> 
+>> +#include <linux/i2c.h>
+>> +#include <linux/module.h>
+> 
+> regmap.h ?
+> err.h?
 >
-> jirka
+
+The regmap.h header is included in ssd130x.h and err.h in regmap.h.
+
+> ...
+> 
+>> +	ssd130x = ssd130x_probe(&client->dev, regmap);
+> 
+>> +
+> 
+> Redundant blank line.
+> 
+
+Ok.
+
+>> +	if (IS_ERR(ssd130x))
+>> +		return PTR_ERR(ssd130x);
+> 
+> ...
+> 
+>> +	{ /* sentinel */ },
 >
-> > inlining whole more and more. It's just a complication in verifier
-> > without clear real-world benefits. We are clearly prematurely
-> > optimizing here. In practice you'll just call bpf_get_func_ip() once
-> > and that's it. Function call overhead will be negligible compare to
-> > other *userful* work you'll be doing in your BPF program.
-> >
-> >
-> > > +
-> > > +                       new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, 1);
-> > > +                       if (!new_prog)
-> > > +                               return -ENOMEM;
-> > > +
-> > > +                       env->prog = prog = new_prog;
-> > > +                       insn      = new_prog->insnsi + i + delta;
-> > > +                       continue;
-> > > +               }
-> > > +
-> > >  patch_call_imm:
-> > >                 fn = env->ops->get_func_proto(insn->imm, env->prog);
-> > >                 /* all functions that have prototype and verifier allowed
-> > > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> > > index a2024ba32a20..28e59e31e3db 100644
-> > > --- a/kernel/trace/bpf_trace.c
-> > > +++ b/kernel/trace/bpf_trace.c
-> > > @@ -1036,6 +1036,19 @@ static const struct bpf_func_proto bpf_get_func_ip_proto_kprobe = {
-> > >         .arg1_type      = ARG_PTR_TO_CTX,
-> > >  };
-> > >
-> > > +BPF_CALL_1(bpf_get_func_ip_fprobe, struct pt_regs *, regs)
-> > > +{
-> > > +       /* This helper call is inlined by verifier. */
-> > > +       return regs->ip;
-> > > +}
-> > > +
-> > > +static const struct bpf_func_proto bpf_get_func_ip_proto_fprobe = {
-> > > +       .func           = bpf_get_func_ip_fprobe,
-> > > +       .gpl_only       = false,
-> > > +       .ret_type       = RET_INTEGER,
-> > > +       .arg1_type      = ARG_PTR_TO_CTX,
-> > > +};
-> > > +
-> > >  BPF_CALL_1(bpf_get_attach_cookie_trace, void *, ctx)
-> > >  {
-> > >         struct bpf_trace_run_ctx *run_ctx;
-> > > @@ -1279,7 +1292,8 @@ kprobe_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
-> > >                 return &bpf_override_return_proto;
-> > >  #endif
-> > >         case BPF_FUNC_get_func_ip:
-> > > -               return &bpf_get_func_ip_proto_kprobe;
-> > > +               return prog->expected_attach_type == BPF_TRACE_FPROBE ?
-> > > +                       &bpf_get_func_ip_proto_fprobe : &bpf_get_func_ip_proto_kprobe;
-> > >         case BPF_FUNC_get_attach_cookie:
-> > >                 return &bpf_get_attach_cookie_proto_trace;
-> > >         default:
-> > > --
-> > > 2.34.1
-> > >
+> No comma for terminator entry.
+> 
+> 
+
+Right. I removed in one place bug forgot here.
+
+Best regards,
+-- 
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
+

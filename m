@@ -2,269 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BC5E4AE792
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 04:11:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BFF74AE770
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 04:11:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238304AbiBIDD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 22:03:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50208 "EHLO
+        id S242733AbiBIDES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 22:04:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354131AbiBICuA (ORCPT
+        with ESMTP id S243525AbiBIDC1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 21:50:00 -0500
-Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AE8DC0401D1
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 18:45:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1644374700; x=1675910700;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=H7X0q8+8Rf4sF4doHl8BZDH9YkalaHuLv0owIfyARug=;
-  b=Si+MChCymv5PUehx6G5WXnB48SwE3M50ksYCf6fZzVDdD5D7XBMRxrHE
-   sq0i9JlO9CEr3defsQCQZnO3Eb6VSPrg78Z+HPsTGrj3n2U31FhiPMey9
-   4J3sQ2YHZpam10MIek8fxgwRfd1RApDmj7dOqDLnuKizsIcVn84b0feVq
-   Mw0V1euO2QMthIlun8zljdLcnX5Ww1eU5P1vcnKZTXn7PlyFch+NRYQfT
-   8NGe6kPbieA9+sw61sptaV6ZEIjc02c9tGfb/JJnqSaTwhZth8l+sYk1d
-   GD+lHSdWyIlTgBIZEwJuMRDa7If1PwSOjt42Y0R+MCehFxTwKgDbyzFTf
-   A==;
-X-IronPort-AV: E=Sophos;i="5.88,354,1635177600"; 
-   d="scan'208";a="191407415"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 09 Feb 2022 10:44:58 +0800
-IronPort-SDR: LUluk24CgoIngvBak3CQe0/WL1FCaab5FtlaMlKVmXnOZVzve+oO7wJoSi1HtSIuqR+7aGdwjp
- 6dsuhg4/nt99U7+BztBcA/bDo7KyZ5HWnSDW2FFbStyoDrpn1XvNWMMKtpP33paMM8Lxe5xX6R
- iqOF4hruDxc5rGC7jnzBhxHqcLxGcEuA7oDzTrEvP/GD6uVNZzTs+BggiDfU2LIHrk8fZmQrbZ
- k4Vh/YuEX7jXlLqK4UR8f0UhFOYUN7Hi1Hnr7fNcK2Vj+ctxH18Ctr9Cx7UQvgpVGZgFPBuSwd
- XbaVoklUX0UWxcI0thCdohc0
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 18:17:57 -0800
-IronPort-SDR: wRg7hRa1o8S1PzDQc2iM9dz/760wufVIEPHaDJmCnfhEuA1PryCSB8lA8Nx61uAG1kv0+DiATT
- kdcDsxnkvG6GZq5vOkUjXkW5KzIzpReSD4N0MLpaUfbwVBW1Pwr29URSCHH69vkCNrgkzVHoVi
- oNm+EIQs5SvOaCt1k42nNyIPhNn6z4RB+bl2XeHG5MXpy5TeeoGu/Xfqp44aCR815T+tvP3P2I
- lPnOQHtszUW79bMVpNnctyiqqjR3SC7F2N4cKpfv4rlsbhceg+z8vfQg8W2N5GxScaVvGjma0P
- u0Q=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 18:44:59 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JtkkK75b4z1SVp5
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 18:44:57 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1644374696; x=1646966697; bh=H7X0q8+8Rf4sF4doHl8BZDH9YkalaHuLv0o
-        wIfyARug=; b=k2oav77+hmIPbaHN7yC1Y1a1CFzgg2SKukyV4vi0MQiUOBT/L8Q
-        LjPAw+CxG1S+yH7Siil4fyRBCwHy6hnLReLO26unlsP71enF8Wu6E7+9lAu64Qqb
-        OWQneM6bK3qItF0DultMCVm2PPtZuuTm+p4DaEycHPc5pWYaLnvQB0j4lK1yysqb
-        XzEX6WPR5vKA97QljcMq3F1rcJnCKXy/V22HUuS82IhCcypl0rd52tVYI5a27Obp
-        YPS4GNZPIXQKt4qgcJF7NxFSzbtZzjpmm4WPhphZj9bBwj6y7zE30i8IIOLcUJmz
-        PHYErrucJ7s5kfx0cJ2bEW8rVANg5+SUGjQ==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id D-WNElVKbn2k for <linux-kernel@vger.kernel.org>;
-        Tue,  8 Feb 2022 18:44:56 -0800 (PST)
-Received: from [10.225.163.67] (unknown [10.225.163.67])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JtkkH2fzGz1Rwrw;
-        Tue,  8 Feb 2022 18:44:55 -0800 (PST)
-Message-ID: <9fc56cf0-1a8c-fa9b-60ce-74b7c7104902@opensource.wdc.com>
-Date:   Wed, 9 Feb 2022 11:44:53 +0900
+        Tue, 8 Feb 2022 22:02:27 -0500
+X-Greylist: delayed 306 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Feb 2022 19:02:22 PST
+Received: from nksmu.kylinos.cn (mailgw.kylinos.cn [123.150.8.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30527C0612B8;
+        Tue,  8 Feb 2022 19:02:19 -0800 (PST)
+X-UUID: 1c6fefd360b84325acd0c6a5b21f4fbf-20220209
+X-CPASD-INFO: a079444d41a24f238cb4d3f7f296489f@qoBxWWFmYpRgUaN-g6l9bViUkmSUX4a
+        GqGxZZmJoZYaVhH5xTWJsXVKBfG5QZWNdYVN_eGpQYl9gZFB5i3-XblBgXoZgUZB3sHJxWWRiZA==
+X-CPASD-FEATURE: 0.0
+X-CLOUD-ID: a079444d41a24f238cb4d3f7f296489f
+X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,EXT:0.0,OB:0.0,URL:-5,T
+        VAL:143.0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:189.0,IP:-2.0,MAL:0.0,ATTNUM:0
+        .0,PHF:-5.0,PHC:-5.0,SPF:4.0,EDMS:-3,IPLABEL:-2.0,FROMTO:0,AD:0,FFOB:0.0,CFOB
+        :0.0,SPC:0.0,SIG:-5,AUF:14,DUF:32487,ACD:189,DCD:291,SL:0,AG:0,CFC:0.22,CFSR:
+        0.104,UAT:0,RAF:2,VERSION:2.3.4
+X-CPASD-ID: 1c6fefd360b84325acd0c6a5b21f4fbf-20220209
+X-CPASD-BLOCK: 1000
+X-CPASD-STAGE: 1, 1
+X-UUID: 1c6fefd360b84325acd0c6a5b21f4fbf-20220209
+X-User: xiehongyu1@kylinos.cn
+Received: from [192.168.123.123] [(111.48.58.12)] by nksmu.kylinos.cn
+        (envelope-from <xiehongyu1@kylinos.cn>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES128-GCM-SHA256 128/128)
+        with ESMTP id 1336843540; Wed, 09 Feb 2022 10:59:31 +0800
+Message-ID: <4f1bd7fb-050b-ddb3-da69-1e6d32a5a7a1@kylinos.cn>
+Date:   Wed, 9 Feb 2022 10:47:04 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH] scsi: arcmsr: replace snprintf with sysfs_emit
+Subject: Re: [PATCH -next] xhci: fix two places when dealing with return value
+ of function xhci_check_args
 Content-Language: en-US
-To:     davidcomponentone@gmail.com, jejb@linux.ibm.com
-Cc:     martin.petersen@oracle.com, yang.guang5@zte.com.cn,
-        bvanassche@acm.org, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>
-References: <1c5ade32e6e60c94dd357c4a159df64a7e311459.1644283712.git.yang.guang5@zte.com.cn>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <1c5ade32e6e60c94dd357c4a159df64a7e311459.1644283712.git.yang.guang5@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     Hongyu Xie <xy521521@gmail.com>, mathias.nyman@intel.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        125707942@qq.com, stable@vger.kernel.org
+References: <20220126094126.923798-1-xy521521@gmail.com>
+ <YfEZFtf9K8pFC8Mw@kroah.com>
+ <c7f6a8bb-76b6-cd2d-7551-b599a8276f5c@kylinos.cn>
+ <YfEnbRW3oU0ouGqH@kroah.com>
+ <e86972d3-e4a0-ad81-45ea-21137e3bfcb6@kylinos.cn>
+ <7af5b318-b1ac-0c74-1782-04ba50a3b5fa@linux.intel.com>
+ <ce40f4cd-a110-80b1-f766-e94dd8cedc7e@kylinos.cn>
+ <6da59964-ce0e-c202-8a9c-a753a1908f3e@linux.intel.com>
+From:   =?UTF-8?B?6LCi5rOT5a6H?= <xiehongyu1@kylinos.cn>
+In-Reply-To: <6da59964-ce0e-c202-8a9c-a753a1908f3e@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        NICE_REPLY_A,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/9/22 09:47, davidcomponentone@gmail.com wrote:
-> From: Yang Guang <yang.guang5@zte.com.cn>
-> 
-> coccinelle report:
-> ./drivers/scsi/arcmsr/arcmsr_attr.c:297:8-16:
-> WARNING: use scnprintf or sprintf
-> ./drivers/scsi/arcmsr/arcmsr_attr.c:273:8-16:
-> WARNING: use scnprintf or sprintf
-> ./drivers/scsi/arcmsr/arcmsr_attr.c:285:8-16:
-> WARNING: use scnprintf or sprintf
-> ./drivers/scsi/arcmsr/arcmsr_attr.c:261:8-16:
-> WARNING: use scnprintf or sprintf
-> ./drivers/scsi/arcmsr/arcmsr_attr.c:374:8-16:
-> WARNING: use scnprintf or sprintf
-> ./drivers/scsi/arcmsr/arcmsr_attr.c:309:8-16:
-> WARNING: use scnprintf or sprintf
-> ./drivers/scsi/arcmsr/arcmsr_attr.c:348:8-16:
-> WARNING: use scnprintf or sprintf
-> ./drivers/scsi/arcmsr/arcmsr_attr.c:335:8-16:
-> WARNING: use scnprintf or sprintf
-> ./drivers/scsi/arcmsr/arcmsr_attr.c:361:8-16:
-> WARNING: use scnprintf or sprintf
-> ./drivers/scsi/arcmsr/arcmsr_attr.c:322:8-16:
-> WARNING: use scnprintf or sprintf
-> 
-> Use sysfs_emit instead of scnprintf or sprintf makes more sense.
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Yang Guang <yang.guang5@zte.com.cn>
-> Signed-off-by: David Yang <davidcomponentone@gmail.com>
-> ---
->  drivers/scsi/arcmsr/arcmsr_attr.c | 30 ++++++++++--------------------
->  1 file changed, 10 insertions(+), 20 deletions(-)
-> 
-> diff --git a/drivers/scsi/arcmsr/arcmsr_attr.c b/drivers/scsi/arcmsr/arcmsr_attr.c
-> index baeb5e795690..e66d761926e9 100644
-> --- a/drivers/scsi/arcmsr/arcmsr_attr.c
-> +++ b/drivers/scsi/arcmsr/arcmsr_attr.c
-> @@ -258,8 +258,7 @@ static ssize_t
->  arcmsr_attr_host_driver_version(struct device *dev,
->  				struct device_attribute *attr, char *buf)
->  {
-> -	return snprintf(buf, PAGE_SIZE,
-> -			"%s\n",
-> +	return sysfs_emit(buf, "%s\n",
->  			ARCMSR_DRIVER_VERSION);
+Hi Mathias,
 
-No need for the line break.
+On 2022/1/28 17:48, Mathias Nyman wrote:
+> Hi
+>
+> On 28.1.2022 5.48, 谢泓宇 wrote:
+>> Hi Mathias,
+>>
+>>> xhci_urb_enqueue() shouldn't be called for roothub urbs, but if it is then we
+>>> should continue to return -EINVAL
+>> xhci_urb_enqueue() won't be called for roothub urbs, only for none roothub urbs(see usb_hcd_submit_urb()).>
+>> So xhci_urb_enqueue() will not get 0 from xhci_check_args().
+>>
+>> Still return -EINVAL if xhci_check_args() returns 0 in xhci_urb_enqueue()?
+>>
+> Yes. That is what it used to return.
+> This is more about code maintaining practice than this specific patch.
+>
+> Only make the necessary change to fix a bug, especially if the patch is going
+> to stable kernels.
+> The change to return success ("0") instead of -EINVAL in xhci_urb_enqueue() for
+> roothub URBs is irrelevant in fixing your issue.
+>
+> Debugging future issues is a lot harder when there are small undocumented
+> unrelated functional changes scattered around bugfixing patches.
+>
+> Other reason is that even if you can be almost certain xhci_urb_enqueue() won't
+> be called for roothub urbs for this kernel version, it's possible some old stable
+> kernel code looks very different, and this change can break that stable version.
+>
+> Seemingly odd checks in code can indicate the old original code was flawed, and
+> quickly worked around by adding the odd check.
+> That kernel version might still depend on this odd check even if newer versions
+> are fixed properly.
+>
+>>> xhci_check_args() should be rewritten later, but first we want a targeted fix
+>>> that can go to stable.
+>>>
+>>> Your original patch would be ok after following modification:
+>>> if (ret <= 0)
+>>>      return ret ? ret : -EINVAL;
+>> I have two questions:
+>>
+>>      1) Why return -EINVAL for roothub urbs?
+> - For all reasons stated above
+> - Because it used to, and changing it doesn't fix anything
+> - Because urbs sent to xhci_urb_enqueue() should have a valid urb->dev->parent,
+>    if they don't have it then they are INVALID
+>
+>>      2) Should I change all the return statements about xhci_check_args() in drivers/usb/host/xhci.c?
+>>
+>>      There are 6 of them.
+> Only make sure your patch doesn't change the functionality unnecessarily.
+> There are two places where we return -EINVAL if xhci_check_args() returns 0:
+> xhci_urb_enqueue() and xhci_check_streams_endpoint()
+> Keep that functionality.
+>
+> Thanks
+> Mathias
 
->  }
->  
-> @@ -270,8 +269,7 @@ arcmsr_attr_host_driver_posted_cmd(struct device *dev,
->  	struct Scsi_Host *host = class_to_shost(dev);
->  	struct AdapterControlBlock *acb =
->  		(struct AdapterControlBlock *) host->hostdata;
-> -	return snprintf(buf, PAGE_SIZE,
-> -			"%4d\n",
-> +	return sysfs_emit(buf, "%4d\n",
->  			atomic_read(&acb->ccboutstandingcount));
->  }
->  
-> @@ -282,8 +280,7 @@ arcmsr_attr_host_driver_reset(struct device *dev,
->  	struct Scsi_Host *host = class_to_shost(dev);
->  	struct AdapterControlBlock *acb =
->  		(struct AdapterControlBlock *) host->hostdata;
-> -	return snprintf(buf, PAGE_SIZE,
-> -			"%4d\n",
-> +	return sysfs_emit(buf, "%4d\n",
->  			acb->num_resets);
+I'll fix these in v2.
 
-Please add a blank line after the declarations and there is no need for
-the line break. The format should be %4u (unsigned value).
+Thanks
 
->  }
->  
-> @@ -294,8 +291,7 @@ arcmsr_attr_host_driver_abort(struct device *dev,
->  	struct Scsi_Host *host = class_to_shost(dev);
->  	struct AdapterControlBlock *acb =
->  		(struct AdapterControlBlock *) host->hostdata;
-> -	return snprintf(buf, PAGE_SIZE,
-> -			"%4d\n",
-> +	return sysfs_emit(buf, "%4d\n",
->  			acb->num_aborts);
+Hongyu Xie
 
-Same comments (all of them).
-
->  }
->  
-> @@ -306,8 +302,7 @@ arcmsr_attr_host_fw_model(struct device *dev, struct device_attribute *attr,
->  	struct Scsi_Host *host = class_to_shost(dev);
->  	struct AdapterControlBlock *acb =
->  		(struct AdapterControlBlock *) host->hostdata;
-> -	return snprintf(buf, PAGE_SIZE,
-> -			"%s\n",
-> +	return sysfs_emit(buf, "%s\n",
->  			acb->firm_model);
-
-blank line and line break comments apply.
-
->  }
->  
-> @@ -319,8 +314,7 @@ arcmsr_attr_host_fw_version(struct device *dev,
->  	struct AdapterControlBlock *acb =
->  			(struct AdapterControlBlock *) host->hostdata;
->  
-> -	return snprintf(buf, PAGE_SIZE,
-> -			"%s\n",
-> +	return sysfs_emit(buf, "%s\n",
->  			acb->firm_version);
-
-line break not needed.
-
->  }
->  
-> @@ -332,8 +326,7 @@ arcmsr_attr_host_fw_request_len(struct device *dev,
->  	struct AdapterControlBlock *acb =
->  		(struct AdapterControlBlock *) host->hostdata;
->  
-> -	return snprintf(buf, PAGE_SIZE,
-> -			"%4d\n",
-> +	return sysfs_emit(buf, "%4d\n",
->  			acb->firm_request_len);
-
-line break not needed and %u format.
-
->  }
->  
-> @@ -345,8 +338,7 @@ arcmsr_attr_host_fw_numbers_queue(struct device *dev,
->  	struct AdapterControlBlock *acb =
->  		(struct AdapterControlBlock *) host->hostdata;
->  
-> -	return snprintf(buf, PAGE_SIZE,
-> -			"%4d\n",
-> +	return sysfs_emit(buf, "%4d\n",
->  			acb->firm_numbers_queue);
-
-Same.
-
->  }
->  
-> @@ -358,8 +350,7 @@ arcmsr_attr_host_fw_sdram_size(struct device *dev,
->  	struct AdapterControlBlock *acb =
->  		(struct AdapterControlBlock *) host->hostdata;
->  
-> -	return snprintf(buf, PAGE_SIZE,
-> -			"%4d\n",
-> +	return sysfs_emit(buf, "%4d\n",
->  			acb->firm_sdram_size);
-
-Again same.
-
->  }
->  
-> @@ -371,8 +362,7 @@ arcmsr_attr_host_fw_hd_channels(struct device *dev,
->  	struct AdapterControlBlock *acb =
->  		(struct AdapterControlBlock *) host->hostdata;
->  
-> -	return snprintf(buf, PAGE_SIZE,
-> -			"%4d\n",
-> +	return sysfs_emit(buf, "%4d\n",
->  			acb->firm_hd_channels);
->  }
-
-And here too.
-
-
--- 
-Damien Le Moal
-Western Digital Research

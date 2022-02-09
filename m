@@ -2,79 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BEC14AF49C
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 16:02:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E90904AF4A1
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 16:02:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235441AbiBIPBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 10:01:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48652 "EHLO
+        id S235449AbiBIPCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 10:02:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235398AbiBIPBo (ORCPT
+        with ESMTP id S229606AbiBIPCU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 10:01:44 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11BECC05CB89;
-        Wed,  9 Feb 2022 07:01:47 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id m4so8100830ejb.9;
-        Wed, 09 Feb 2022 07:01:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=jA5A5o2lDwo4xmcSKwgw5QFTRfSshuwgrBOtx9w8wW0=;
-        b=oHB9Bl14ynHGMQS/2x+Xnz+WvVHpuvm2CfVVTeaO78huvnBTFbI4omugptd0yE6Ivi
-         WpMa3g4stuxYpvzidNuEnc7EkLjjk7ODv7wh+6bvBLW2gtUqSWVcF9+R6Gokb+Zq5QFB
-         5g7X3vxfZeF9bXPjjSs/3BOuNOyjkr+vrM5GcI9m0OoR2xGCz9mDt1JcIrxJTnYM1eYZ
-         4Kg9Prv3kha3wUxMOMPP+OAnefXjkTGNQyhE9w2wDW86ySWLhDNiguaQiE6eida4DEG4
-         jvgwKXSUM3yYJb/2HESLDdTx/uIYhQNt2eP3txuXfFcRQmfFa/VnneDFROs9EiYrcvKv
-         DDTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jA5A5o2lDwo4xmcSKwgw5QFTRfSshuwgrBOtx9w8wW0=;
-        b=CuOYNMu72NVC3V1k91hMoMetaHYx1UaX9IMxdRRhheyVyxPWw4KgwcGyP3p0A++klD
-         SBiqOf9ylHUPK6KAyyZryIh+SXvaqZRyzLXrKfJgqa3wIMLoLF6Of8IqPQYpEWNKMnuf
-         T5FawkquQ66NcJLAEJPHdSjPBEg03/3KXpCi7XsaDT2jNxpOIdlTPXV7p0843vlJct7C
-         rcqtb9zJwQD/cZ7gRt3Qjd+TQ+gBYPC+DJHnOJWq6RrIX/eKmVJLp4z+zk7iEqLhUOWI
-         lvVtzYAGwlI9ek1SLrUCS1M8Zvadg2lRioraFug5WpK6U2oZylCd2xSg+pgK+bZFdl2t
-         4cMw==
-X-Gm-Message-State: AOAM531ZxpwfVGAgoPA1vJw5a9iQfeUNsGY32lhyxTt/KZ8Xm6NkiTZP
-        fEGtSUqt/J4MPS1B+RAk+I0=
-X-Google-Smtp-Source: ABdhPJyJsyybi7jGr1+ecbHvUQGTWRUEGcnpPGhDFUL1sJSdbcND/VwhBv+HRJyc6t3YjijS+tFSkg==
-X-Received: by 2002:a17:907:984e:: with SMTP id jj14mr2258755ejc.223.1644418905306;
-        Wed, 09 Feb 2022 07:01:45 -0800 (PST)
-Received: from krava ([2a00:102a:5010:3235:47fb:6193:ef68:761d])
-        by smtp.gmail.com with ESMTPSA id s16sm2227842edt.91.2022.02.09.07.01.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 07:01:44 -0800 (PST)
-Date:   Wed, 9 Feb 2022 16:01:41 +0100
-From:   Jiri Olsa <olsajiri@gmail.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Jiri Olsa <jolsa@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCH 2/8] bpf: Add bpf_get_func_ip kprobe helper for fprobe
- link
-Message-ID: <YgPXVXJnPKQ7lOi9@krava>
-References: <20220202135333.190761-1-jolsa@kernel.org>
- <20220202135333.190761-3-jolsa@kernel.org>
- <CAEf4Bzbrj01RJq7ArAo-kX-+8rPx9j5OH1OvGHxVJxiq8rn3FA@mail.gmail.com>
+        Wed, 9 Feb 2022 10:02:20 -0500
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2061.outbound.protection.outlook.com [40.107.92.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28677C06157B;
+        Wed,  9 Feb 2022 07:02:23 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mZBWzu5K7ijYrbUU50AQxKXosYTlLwLq/S0xp4oXJGSXCDokFKj7ec+Ohb548AX3kQZdVBUnQ8Xo21iogs+UBtY8RqnXak8o5rA0hZTjBmCAL7QX4h87+qyKl8KiHIMaQHMrp88YVc5RS7QnSRf2GH1rUpgHvG9WGNZ53uRN4+OC8/BaYpmw1hDAV7bnhkNpx0l5+FMY7CMoeNtrA/udWYCzxWLYWHnPXvDY1TkbqRIXCrhFjARHQn3CzjTHO64IQ8UNzwyDfFp2Spo2YgkrmdXpYHDMqhP04GIUbpDsoo62hLz4XD5kVSJ9EjpEghewzMSItXGzGL9sDzDF8TwDeA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LOakBaZT51q+xP3NfPHyn9u2jOfdTHiBRaI4vTwuCgg=;
+ b=nZdphYa6wIzZ0FIm9k1/7aD6IEHTnC+GJK6x1oX8T79Bclpo8Cx271AsL6QJmt7K+FmX6es2QV6KgsnCqVOOb3CsBMNKgFkRKqm7tezWHWawEF0LBBlDF+m8srw8qps4U+IVu06gyTSgoAVmuoYTtJzTRJFknlpHfUYp4ctDbA9gXYRYD5Yd9GHB7WVtoSgNMmCe+JveSMK3Qz8Dun0iKNUXIhWMxb0T0fGfX/cM1D903dt2XXpKh8XxON3sMm83J6dpUZF/sJjdURxUmpEM4QJWDKwDtMK7w34veLafcm2zt7Ic37jCOtpV5MrLVTe888yryrj4kUprjQ45GnR2ew==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LOakBaZT51q+xP3NfPHyn9u2jOfdTHiBRaI4vTwuCgg=;
+ b=P50BL4Icq3mOvpCe5LT+Glb4M0qhkGSj3Hu/pL9O+3UnPyRyC+6yiSmvDB3yDQgrtTcZfyWagwRe292dAFo/9tF1i5d4uwIrGFlJ5MvRzLJEBBtU0tusYiajJ9+jaMhMSDEt1YqB4fNytrn4SRldPYJQ+5WdRTJHD/0syYkkrd8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from SN6PR12MB2718.namprd12.prod.outlook.com (2603:10b6:805:6f::22)
+ by DM5PR1201MB0252.namprd12.prod.outlook.com (2603:10b6:4:5b::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.14; Wed, 9 Feb
+ 2022 15:02:20 +0000
+Received: from SN6PR12MB2718.namprd12.prod.outlook.com
+ ([fe80::500e:b264:8e8c:1817]) by SN6PR12MB2718.namprd12.prod.outlook.com
+ ([fe80::500e:b264:8e8c:1817%5]) with mapi id 15.20.4951.019; Wed, 9 Feb 2022
+ 15:02:20 +0000
+Cc:     brijesh.singh@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        Venu Busireddy <venu.busireddy@oracle.com>
+Subject: Re: [PATCH v9 02/43] KVM: SVM: Create a separate mapping for the
+ SEV-ES save area
+To:     Borislav Petkov <bp@alien8.de>
+References: <20220128171804.569796-1-brijesh.singh@amd.com>
+ <20220128171804.569796-3-brijesh.singh@amd.com> <YfkvchuxmkHgnPWT@zn.tnic>
+From:   Brijesh Singh <brijesh.singh@amd.com>
+Message-ID: <8fe6224f-3051-8cbd-13d6-5baf888643b6@amd.com>
+Date:   Wed, 9 Feb 2022 09:02:14 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+In-Reply-To: <YfkvchuxmkHgnPWT@zn.tnic>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: CH0PR03CA0270.namprd03.prod.outlook.com
+ (2603:10b6:610:e5::35) To SN6PR12MB2718.namprd12.prod.outlook.com
+ (2603:10b6:805:6f::22)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4Bzbrj01RJq7ArAo-kX-+8rPx9j5OH1OvGHxVJxiq8rn3FA@mail.gmail.com>
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 3781f300-173b-4ef5-fdfa-08d9ebdd2b61
+X-MS-TrafficTypeDiagnostic: DM5PR1201MB0252:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR1201MB02522F09B2EB11401D999548E52E9@DM5PR1201MB0252.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:5516;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: VNbyoEmTeW5fIZbgVkN3QrZIy4GRkUMU6Jm3j1IKWevcU3ie9Mdu0Qr3blyluFWkCL4o7MaoiXaWmLtCiiRMfgjkkyB+3xsYy6PRJbNsqeDsp8zgWwoKpx9whhS6QAvXlW5zOfUNKrY3Cq71lwXGffZHuQ5svU6rnsw1CDo03j03+YlDvyUzwOzkTU459RY2xBc5tqFsnyQUEHzS6TAwfS2RXBvQLrot4XYGusApVtMntVQU26JiZK2cNUM4ZXHzLC2i57JQo5ZEW3y9RKht5rIg7wEOX04I7QfVsXpIixQfhxdfAy9G9w4MnLd1yP7mDznsDKHun1vYHBmr0ZiyKCTKad8l67TZhHLoIhlub9lWY+QElhG/YHktaSsN3jS8wb4NG2Ow14ga/2m7sfKoFR9jmvyJ0M9KY+YNBiXaMUHO7Cte0brje1U9QsLvZu1SV/KQKxON3cyOdHlhzLSOWgHqR1xGOUARPWFT4+TiuQdls1wJBsBdJ9L0z4J4wZ/NAkOTbLWCxoYyZNqps/1yRKcf8J6tYhN12F3JudfZpzU0V2aTJOIKHVc1aiBJ5Ctwpd4eAuxB3E1UCBxo0owFlqZ+hanIW+JyhOB0ne3Y7yRmGX538LMLlGDK2A1XMu48uF/WDJKCdR90zq9aDPtT3LzT8dmy883epQXQC04vAPQaBB6cIriI1C6aqSZfYChfQzR1HAyyirf4um42N6wU1OKvGEhPEyWNwsaepoEBbC1tuF/+3NCRIzxmVcmGU5m33YrKCUZmFYv8v9z7X79cGeGQtrvey731jOEaZKdu6W5RN/LMSGH6tIvctvs961+Y
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB2718.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38100700002)(83380400001)(6486002)(508600001)(7416002)(31686004)(966005)(2906002)(36756003)(2616005)(6666004)(5660300002)(66556008)(53546011)(66476007)(8936002)(54906003)(6916009)(26005)(6512007)(31696002)(7406005)(86362001)(66946007)(45080400002)(316002)(4326008)(186003)(8676002)(44832011)(6506007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OXFUTmpieXR6Q0diYzBuTGZkcnFMNThSMGFUQlJyZUJndzNTWXRkTTlIcmZS?=
+ =?utf-8?B?NnJVbFAxU1puclVEVjliSzBhWTdIUlFtOWI3SDlmU1RHaFhJVVc4VUo4K0ZP?=
+ =?utf-8?B?ZWNDNlhhV2Vla3dacDIzNWQ5S3B0Lzh1NEhHdXVraWFQOUNrNkxNek0rT2VI?=
+ =?utf-8?B?QURKSWdrakc5ZWFBY0p5eEN3c0RWYnRmUDFENkZVVU9xcjhQYkpMS1FDZGdy?=
+ =?utf-8?B?UFhqd1ByeW5KbGRrZkJqVVhNTFpuNndTQm1hN3l4SWVFYlc5VEJkU2hkdmVm?=
+ =?utf-8?B?T1lWNXFnTnA2SGxDTVM2ZTFCdnNEdEkrY3FVSkhMMGVHVlltQjNwV3BCZXU2?=
+ =?utf-8?B?eFhlRnRBK3o1Vzc5UkVzSlhtc3FGY1ZNTDhtdldGMHhteEJ5UWNMZUt5eUFP?=
+ =?utf-8?B?eWhMVnVucll1c2lpdDBSd2V0enFMTG8zVWpDbFJqRERSdVZpbkhWUHNyQm5B?=
+ =?utf-8?B?eUU4aytJNUE2dCsxaXFEVG4wSTVWMzNCdWF3ZDhmQitpb0owZDJmcEJDWjEz?=
+ =?utf-8?B?ZFlpZ3dWSmNvdks5QThoR0orOXVjK3E5Zk96M0VlVGpEWFZIdlRqcFhmMkdL?=
+ =?utf-8?B?czBkN0h0cmp1aCtKdDJhc1hHdlEwTGxKdDNZRUV5MlJ2S3dmWWRnWTl2RS9G?=
+ =?utf-8?B?SlViQVl4UU5IbkJiSXFlemVOL3RkeE9nWGZEcUQ1a1lmdy81M3ZmeG9XSVJ3?=
+ =?utf-8?B?ZklLcG11SUpwTUIwYXovYlRGbkdyUEV0WGxtSjB0YzZIall5Ums1UldoWWts?=
+ =?utf-8?B?MzBTVmJSQldvaGdLZHQ3RkZsckw5ZURYeE04d1ZLNjI4K0hHaFRWekNCZzRT?=
+ =?utf-8?B?Mi91RmEyWUIwbW1nMWM3VVI5WFNMVWJiNkRQaEVrNVcvYk9kWTlLQWx5UnBp?=
+ =?utf-8?B?RlNKVVp6bHZlM1dwMngzYlBvcFdVYzBCUnAxUmc5bWZrRkZ3QTAyY0kzQ0F4?=
+ =?utf-8?B?VnVtSHRHVVNKeitxdmF1bEtkdEQ5QklMZUhMUi9XSHdISHFReFRydHpjdGww?=
+ =?utf-8?B?SFJSSGFFaFAwbUFUUXM2NkV4a1lsait1OTFCeFBaRFM3b1ErUGxBS2VLdXRM?=
+ =?utf-8?B?NUxpTTdDOHR5YWNHMER4aHBaODFhVDYxcTVwOUE3dUQvd056WEhlcVQ0NUtS?=
+ =?utf-8?B?V0puNUJzMHh1ZkhzdkRMWHJTRmVSNDQrTytia3NoSHhMNysxclJVYW9vZVBV?=
+ =?utf-8?B?YVhCeHZ2WTlsdWNXazVVT2lvNlR1Q3doT2l4TkZXc2RVOGRlc1U4dHVzdloy?=
+ =?utf-8?B?STQ2K0hIcWRqZzNrTWZwWW1UVjU1V0Z4SDJGZ1hrUmNadzNCWXR1ZXJ0bU53?=
+ =?utf-8?B?QzI3SXNqMHh5TFZzaUQrWlc5eE9KaEZVTFRNdWxiWkErTzFxOVF6NGJaemgr?=
+ =?utf-8?B?QmEzVXl0SGV4WCtzRjFYaVZMYUNabzc0ZWw0VXhiM2Zpb2kydURGU3hFbkx6?=
+ =?utf-8?B?ZzBQYzN4QkxuTHJiYjEvM3pOSW5JN21lWE9uZUFpWXVOalRwS3VzNUtDaHpG?=
+ =?utf-8?B?ZVRGdFAydGFlb3B1MDFjNnVFOFBHWlplUTNCWmFiNklPWHVweHg5bVkycm1x?=
+ =?utf-8?B?RXFDYXFNdUROcDg3a0dma01BanNsVm9OTGZLRjlidElNQmwvWnlUblN0K2lr?=
+ =?utf-8?B?a3VHK1gyVnhxRTNLQ01jZ0puZmxSbGw1bUd4RDI3bmYzaWhKUkR0a0dKY2dV?=
+ =?utf-8?B?VmFWYnUwdGpyeVFsaWNuLzB5dS9hMUhKSUFjaDFBZUpnK0dxSFlaTmJaYnVr?=
+ =?utf-8?B?Tmk1UGtacGJMRDQrTUxoRzZENGhLZGtmYm0wcFVsV1hFaUFNMGZ5TDlaMk9X?=
+ =?utf-8?B?YzRHZ0pVTHo1dXc0b3h3VkNtQXVDMzhPUGZrQ0VmdkhrRHZQRjdISDMwVDdI?=
+ =?utf-8?B?Ym04OHVNR1dWVW9RMXd6RnZ0ZTlwVXhqRXNDMW5sZ2FlRHQvM0hJa05LZUZh?=
+ =?utf-8?B?UFBJUXVCeHVLcjFsLzc0REdXOHhObEkxTm81WE00T2hNV0l5ZTJ0NlZjQ2Ux?=
+ =?utf-8?B?ZEdrMzM3elhnelNTNUtLQyt4VFhGZWlzeUszVVdIUWFabFp4QVZSZ2lKODVJ?=
+ =?utf-8?B?Mndxa2JDaFdwdDNWdGxFUFJSR1Jjb0cyK243MWZzQi9JY01UcUZDblBQeDBU?=
+ =?utf-8?B?SE9QK0dWMll6OTlTV3JaRm5CQkUyNVQ2eDZNYWN2bW1IR3kwL0FvNTZreTF5?=
+ =?utf-8?Q?4j/osD1Yho8iyT5NvAZmfb4=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3781f300-173b-4ef5-fdfa-08d9ebdd2b61
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2718.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2022 15:02:20.0277
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hVnSz+fMIgWOFPhReaY92GqrMXe7ClVduqhFjR9WQGP29xpkXLKcH8JPuhCpvXRJTMyxjrwEc+B6mWqisn20Bw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR1201MB0252
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,107 +154,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 10:59:18AM -0800, Andrii Nakryiko wrote:
-> On Wed, Feb 2, 2022 at 5:53 AM Jiri Olsa <jolsa@redhat.com> wrote:
-> >
-> > Adding support to call get_func_ip_fprobe helper from kprobe
-> > programs attached by fprobe link.
-> >
-> > Also adding support to inline it, because it's single load
-> > instruction.
-> >
-> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > ---
-> >  kernel/bpf/verifier.c    | 19 ++++++++++++++++++-
-> >  kernel/trace/bpf_trace.c | 16 +++++++++++++++-
-> >  2 files changed, 33 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index 1ae41d0cf96c..a745ded00635 100644
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
-> > @@ -13625,7 +13625,7 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
-> >                         continue;
-> >                 }
-> >
-> > -               /* Implement bpf_get_func_ip inline. */
-> > +               /* Implement tracing bpf_get_func_ip inline. */
-> >                 if (prog_type == BPF_PROG_TYPE_TRACING &&
-> >                     insn->imm == BPF_FUNC_get_func_ip) {
-> >                         /* Load IP address from ctx - 16 */
-> > @@ -13640,6 +13640,23 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
-> >                         continue;
-> >                 }
-> >
-> > +               /* Implement kprobe/fprobe bpf_get_func_ip inline. */
-> > +               if (prog_type == BPF_PROG_TYPE_KPROBE &&
-> > +                   eatype == BPF_TRACE_FPROBE &&
-> > +                   insn->imm == BPF_FUNC_get_func_ip) {
-> > +                       /* Load IP address from ctx (struct pt_regs) ip */
-> > +                       insn_buf[0] = BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1,
-> > +                                                 offsetof(struct pt_regs, ip));
-> 
-> Isn't this architecture-specific? I'm starting to dislike this
 
-ugh, it is.. I'm not sure we want #ifdef CONFIG_X86 in here,
-or some arch_* specific function?
 
-jirka
+On 2/1/22 7:02 AM, Borislav Petkov wrote:
+> On Fri, Jan 28, 2022 at 11:17:23AM -0600, Brijesh Singh wrote:
+>> From: Tom Lendacky <thomas.lendacky@amd.com>
+>>
+>> The save area for SEV-ES/SEV-SNP guests, as used by the hardware, is
+>> different from the save area of a non SEV-ES/SEV-SNP guest.
+>>
+>> This is the first step in defining the multiple save areas to keep them
+>> separate and ensuring proper operation amongst the different types of
+>> guests. Create an SEV-ES/SEV-SNP save area and adjust usage to the new
+>> save area definition where needed.
+>>
+>> Reviewed-by: Venu Busireddy <venu.busireddy@oracle.com>
+>> Signed-off-by: Tom Lendacky <thomas.lendacky@amd.com>
+>> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+>> ---
+>>   arch/x86/include/asm/svm.h | 87 +++++++++++++++++++++++++++++---------
+>>   arch/x86/kvm/svm/sev.c     | 24 +++++------
+>>   arch/x86/kvm/svm/svm.h     |  2 +-
+>>   3 files changed, 80 insertions(+), 33 deletions(-)
+> 
+> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Fr%2FYc2jzOunYej4vwSc%40zn.tnic&amp;data=04%7C01%7Cbrijesh.singh%40amd.com%7C909b88bb6fb14010859508d9e583268e%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637793173738404187%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=uOR2wyzO1%2B6K%2B%2FhZCkwlRrfQutFqpSzXKh8RVbub9cA%3D&amp;reserved=0
+> 
 
-> inlining whole more and more. It's just a complication in verifier
-> without clear real-world benefits. We are clearly prematurely
-> optimizing here. In practice you'll just call bpf_get_func_ip() once
-> and that's it. Function call overhead will be negligible compare to
-> other *userful* work you'll be doing in your BPF program.
-> 
-> 
-> > +
-> > +                       new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, 1);
-> > +                       if (!new_prog)
-> > +                               return -ENOMEM;
-> > +
-> > +                       env->prog = prog = new_prog;
-> > +                       insn      = new_prog->insnsi + i + delta;
-> > +                       continue;
-> > +               }
-> > +
-> >  patch_call_imm:
-> >                 fn = env->ops->get_func_proto(insn->imm, env->prog);
-> >                 /* all functions that have prototype and verifier allowed
-> > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> > index a2024ba32a20..28e59e31e3db 100644
-> > --- a/kernel/trace/bpf_trace.c
-> > +++ b/kernel/trace/bpf_trace.c
-> > @@ -1036,6 +1036,19 @@ static const struct bpf_func_proto bpf_get_func_ip_proto_kprobe = {
-> >         .arg1_type      = ARG_PTR_TO_CTX,
-> >  };
-> >
-> > +BPF_CALL_1(bpf_get_func_ip_fprobe, struct pt_regs *, regs)
-> > +{
-> > +       /* This helper call is inlined by verifier. */
-> > +       return regs->ip;
-> > +}
-> > +
-> > +static const struct bpf_func_proto bpf_get_func_ip_proto_fprobe = {
-> > +       .func           = bpf_get_func_ip_fprobe,
-> > +       .gpl_only       = false,
-> > +       .ret_type       = RET_INTEGER,
-> > +       .arg1_type      = ARG_PTR_TO_CTX,
-> > +};
-> > +
-> >  BPF_CALL_1(bpf_get_attach_cookie_trace, void *, ctx)
-> >  {
-> >         struct bpf_trace_run_ctx *run_ctx;
-> > @@ -1279,7 +1292,8 @@ kprobe_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
-> >                 return &bpf_override_return_proto;
-> >  #endif
-> >         case BPF_FUNC_get_func_ip:
-> > -               return &bpf_get_func_ip_proto_kprobe;
-> > +               return prog->expected_attach_type == BPF_TRACE_FPROBE ?
-> > +                       &bpf_get_func_ip_proto_fprobe : &bpf_get_func_ip_proto_kprobe;
-> >         case BPF_FUNC_get_attach_cookie:
-> >                 return &bpf_get_attach_cookie_proto_trace;
-> >         default:
-> > --
-> > 2.34.1
-> >
+The rename may touch more files in KVM subsystem, so, I'll work on this 
+feedback while adding the SNP host support, and will submit it as a 
+per-requisite for the host support.
+
+-Brijesh

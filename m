@@ -2,109 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4471A4AF43D
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 15:40:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62E604AF443
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 15:41:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235114AbiBIOj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 09:39:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36104 "EHLO
+        id S235133AbiBIOky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 09:40:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230511AbiBIOj5 (ORCPT
+        with ESMTP id S230135AbiBIOku (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 09:39:57 -0500
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A39D0C06157B;
-        Wed,  9 Feb 2022 06:40:00 -0800 (PST)
-Received: by mail-pf1-x430.google.com with SMTP id z35so4659895pfw.2;
-        Wed, 09 Feb 2022 06:40:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=aO4fss2Kmx8HXgCQ0bzR08QPyCBZELu4B0EYTyczINo=;
-        b=aU3YQVKJbd9ljuFhYwuOMQbok4ZtDOreJ3/sOBsE90UxWU5YUc0CpZ1WSGJJJufXV/
-         p7lpfI89HdfTCYcIBHc6uGz21TBljfzRi53l652TC1wr6EyMN3g1MF3FgOW+yGG8EsHg
-         Mf7Wd8nGYsg6puc19z+YLJBXfd7O/UipITmWcKHW0lddc3oTeLHvj7dlt1SvP2TlrlTt
-         m6CbZAQVDgDarm57zOxVILgV4zECCSVwiZo4yFHD8OGT2gI15VbTqN9Qs551pUj68S1f
-         RXPhqzeiPUHBRL0O1kp3DrCKDE7JDxRqGhSchIKn41vaNrLc9aGWKY4brJX68QNPNhbc
-         hW9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=aO4fss2Kmx8HXgCQ0bzR08QPyCBZELu4B0EYTyczINo=;
-        b=B3BNQFPzk4m9ftjiE6lKn7Y+xvOQBYKNKJatNFOJpdKU+X7lX+ZcGcxzbicFK+VfkO
-         1rl7SfcuY88ZOfXWbshlA38sJsnAT/tbUKuDhMNTEGloJoTsAqRl/q5zXfmWxGcX/8LU
-         B3YtnkdVIgRTOqbHcTZ2jgJ3AXS/3ef6yqnmaTcpksoNxmUvQcX0D3bT/NzxRcBHLzhD
-         VldV2C19rOQU9LaLpW6vPmcq3pe3VuhnIpchtVU0RB37I3RsXqdv168ECeEMNE8SY4i/
-         pdJV6CowkqdFpE10nDdvPgOielAqO5lH97v+gn3COu11WUA3R7Lv0ck/fXZsFiaTpNkG
-         gr4g==
-X-Gm-Message-State: AOAM532Ryymfn1pQqxTgtbwWiGpgSt6uwn1566REcTJ2SjZM3zIyAlGJ
-        aSl/J1ZEW+WE2kSB7oEXYiAln3vcDUY2gQ==
-X-Google-Smtp-Source: ABdhPJxrjvgHhaZfZsKO5GvaCN6MHn5ZXO3ESedIlFsIiE8VU0hgKpTCaWJs6TA5Td/4tfHRJNRyAA==
-X-Received: by 2002:a63:74e:: with SMTP id 75mr2136067pgh.452.1644417600017;
-        Wed, 09 Feb 2022 06:40:00 -0800 (PST)
-Received: from localhost.localdomain ([114.91.20.102])
-        by smtp.gmail.com with ESMTPSA id o8sm20511586pfu.52.2022.02.09.06.39.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 06:39:59 -0800 (PST)
-From:   DENG Qingfang <dqfext@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Cc:     =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
-        Hauke Mehrtens <hauke@hauke-m.de>
-Subject: [PATCH net] net: phy: mediatek: remove PHY mode check on MT7531
-Date:   Wed,  9 Feb 2022 22:39:47 +0800
-Message-Id: <20220209143948.445823-1-dqfext@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 9 Feb 2022 09:40:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6CA0C06157B;
+        Wed,  9 Feb 2022 06:40:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6C1C0B821EA;
+        Wed,  9 Feb 2022 14:40:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7EEFC340E7;
+        Wed,  9 Feb 2022 14:40:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644417650;
+        bh=EKM+E1m9ba2sJX02hB2POGkw8eHy06YZEclCbdBgMzk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Gd4eBN2kJN6Cej7pTFXXBVlm2f29VYufJ5BWji3yIEJbwSkZPY/2a6eHURR3B7MlR
+         2ku0uAblBicVjlEVqoThuWXqsMlMgp/evMhAsowoO4YvoYm3BeMC4Lfb+IrsAgv8Wc
+         07agruI8F+H45+mNuvfqK8dsbcmaRE2UmlrZaUCs1dSGQZIpnNaixVWpT0vaklpE3y
+         bR2B8P7SQsB/feEhKcN2RhJxXkeA1DXk84N5BEg0sWK+EwapF9Go6iv0c0yai0aEGk
+         uRN5gNFvLQAGyR/gPY8DN+iRi5bBt02shiA/KFhiFbH/nzqCmOMFyGWS7adpnNmye3
+         cSqOSKOtZ79dg==
+Received: by mail-wr1-f43.google.com with SMTP id i14so4390024wrc.10;
+        Wed, 09 Feb 2022 06:40:49 -0800 (PST)
+X-Gm-Message-State: AOAM532Rn8KLCWXrJlgU7I9T4yH9ClkHWlbnQic7FLd20JQEaf24ww7d
+        JRyMr7oaRghF1Yla+0Iv5GRzV95nTmTXY4g7Y2U=
+X-Google-Smtp-Source: ABdhPJwU5/brQVWCcjSn+cr+1zP4jzaM99RD1wh7T2UGLi8lltk3Oe1QBv6DoDXF8nW5icqRGfyX9dTStexpEUxWut8=
+X-Received: by 2002:a5d:500c:: with SMTP id e12mr2350249wrt.219.1644417648257;
+ Wed, 09 Feb 2022 06:40:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <CAK8P3a22ntk5fTuk6xjh1pyS-eVbGo7zDQSVkn2VG1xgp01D9g@mail.gmail.com>
+ <20220117132757.1881981-1-arnd@kernel.org> <CAHTX3dKyAha8_nu=7e413pKr+SAaPBLp9=FTdQ=GZNdjQHW+zA@mail.gmail.com>
+In-Reply-To: <CAHTX3dKyAha8_nu=7e413pKr+SAaPBLp9=FTdQ=GZNdjQHW+zA@mail.gmail.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Wed, 9 Feb 2022 15:40:31 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a2Om2SYchx8q=ddkNeJ4o=1MVXD2MFSV2SGJ_vuTUcp0Q@mail.gmail.com>
+Message-ID: <CAK8P3a2Om2SYchx8q=ddkNeJ4o=1MVXD2MFSV2SGJ_vuTUcp0Q@mail.gmail.com>
+Subject: Re: [PATCH] microblaze: remove CONFIG_SET_FS
+To:     Michal Simek <monstr@monstr.eu>
+Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function mt7531_phy_mode_supported in the DSA driver set supported
-mode to PHY_INTERFACE_MODE_GMII instead of PHY_INTERFACE_MODE_INTERNAL
-for the internal PHY, so this check breaks the PHY initialization:
+On Wed, Feb 9, 2022 at 2:50 PM Michal Simek <monstr@monstr.eu> wrote:
+>
+> Hi Arnd,
+>
+> po 17. 1. 2022 v 14:28 odes=C3=ADlatel Arnd Bergmann <arnd@kernel.org> na=
+psal:
+> >
+> > From: Arnd Bergmann <arnd@arndb.de>
+> >
+> > I picked microblaze as one of the architectures that still
+> > use set_fs() and converted it not to.
+>
+> Can you please update the commit message because what is above is not
+> the right one?
 
-mt7530 mdio-bus:00 wan (uninitialized): failed to connect to PHY: -EINVAL
+Ah, sorry about that. I think you can copy from the openrisc patch,
+see https://lore.kernel.org/lkml/20220208064905.199632-1-shorne@gmail.com/
 
-Remove the check to make it work again.
-
-Reported-by: Hauke Mehrtens <hauke@hauke-m.de>
-Fixes: e40d2cca0189 ("net: phy: add MediaTek Gigabit Ethernet PHY driver")
-Signed-off-by: DENG Qingfang <dqfext@gmail.com>
----
- drivers/net/phy/mediatek-ge.c | 3 ---
- 1 file changed, 3 deletions(-)
-
-diff --git a/drivers/net/phy/mediatek-ge.c b/drivers/net/phy/mediatek-ge.c
-index b7a5ae20edd5..68ee434f9dea 100644
---- a/drivers/net/phy/mediatek-ge.c
-+++ b/drivers/net/phy/mediatek-ge.c
-@@ -55,9 +55,6 @@ static int mt7530_phy_config_init(struct phy_device *phydev)
- 
- static int mt7531_phy_config_init(struct phy_device *phydev)
- {
--	if (phydev->interface != PHY_INTERFACE_MODE_INTERNAL)
--		return -EINVAL;
--
- 	mtk_gephy_config_init(phydev);
- 
- 	/* PHY link down power saving enable */
--- 
-2.25.1
-
+         Arnd

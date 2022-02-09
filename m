@@ -2,102 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92DBC4AEF33
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 11:22:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02F1D4AEF52
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 11:33:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234294AbiBIKWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 05:22:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50222 "EHLO
+        id S230183AbiBIKbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 05:31:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233475AbiBIKWk (ORCPT
+        with ESMTP id S229478AbiBIKbm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 05:22:40 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1162DE1238F7;
-        Wed,  9 Feb 2022 02:16:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1644401803; x=1675937803;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=gOYuPQ6dWgF1FusoULpbO/FDaKmDWcPywDql506vEek=;
-  b=RLdIK9Nc8GJZ3QYzHmVWNLaRk5Po9P1kzz4vbSb51xIJLWAV9FxSpctl
-   roA4cdh463sJ/Si4D2oF8SV6O13rbMsrzhLXSInFAwAbifNAeoujdsGuR
-   EOfmDvc5CpBwO1KIMMMp1/tSE/cHvwyrGJ+VDY9GwspVjSHY5bFkCmEV+
-   6nRDMJPckTwsdrtljVogHcrAjOOzxp986j5a54vTlSsWEl6BWagzH3Tj4
-   qyLtBR2tHuqqXqJoFXh6wfo5wBovlHw01fo0P3FqehQCYrob12ZQ+/aTN
-   Y7q1qVmHuX65lr+f8s+azNBs7yrc7zzw3GaLIFXED3akZioVeJnTElOwO
-   Q==;
-IronPort-SDR: ntgf5eIqpbSay6+2xVHrEe4VepzensbJ0vhqzV8pIDje/eZl4hBICneIOSf2nL6FybI0slvbyo
- rqplrHVelTB4pceejbEVidLc5fui7CQFnxLpoDZWRlPQ4heQ/7X+64BkRpQFuiNK9LM+licBJr
- k0bvqaef7mjk1307nW+oLbxHY3y+sy5dAj/qg8wNNJ+GMdI5a1MMZgnI+XHDSpaYlz1l8KV5Vb
- a5FkR0xzPmRQVxVW9kW3uBP43qj2VvzwD3Eoo9jDVqo491NarwFlLbEzcF3AM8Ezbo3Q4U/vMU
- 5aoRswjdnorX84cPEwLpfLrN
-X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
-   d="scan'208";a="152969584"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Feb 2022 03:16:04 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 9 Feb 2022 03:16:03 -0700
-Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Wed, 9 Feb 2022 03:16:01 -0700
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <UNGLinuxDriver@microchip.com>, <davem@davemloft.net>,
-        <kuba@kernel.org>, Horatiu Vultur <horatiu.vultur@microchip.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH net-next] net: lan966x: Fix when CONFIG_IPV6 is not set
-Date:   Wed, 9 Feb 2022 11:18:23 +0100
-Message-ID: <20220209101823.1270489-1-horatiu.vultur@microchip.com>
-X-Mailer: git-send-email 2.33.0
+        Wed, 9 Feb 2022 05:31:42 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA8C5E1397D8
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 02:22:06 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id s10so3167440wra.5
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 02:22:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KHn/1GnLkO+cAfLyFzRg/GDk3ijEdB8uM8SM4d9QIy4=;
+        b=KLxD3BmGKTKsbl31hONDsn+QLA8sf00qG4CDP7rwSaqjzmWawGylMu0ZPHWA+d9ggb
+         FqugVsdV4JNntA55ZyL0Qp214YaLayaYgUVQHXS3PwiCu3z76W4j1bsfb3ePNnZ+UjC/
+         G5Xa7+cMzlMBZxpKWE+uYVN3uCa7UJ1c5MRy9O+gdJ8FlFest5VNJEwJ5g5yEN57x9LI
+         kcTFHV8Pu1/UN8Od/ixxNfOgft0g1Q2S5L8TlKrokHAfhGIt+4ENckOspP2qA5NjV988
+         3dPap8OlEW6Q75vafMhv4z8idGJ1y+xS0x86sf0VbRS/XmJD5kIf6k92oFvvJyPA4p66
+         lBrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KHn/1GnLkO+cAfLyFzRg/GDk3ijEdB8uM8SM4d9QIy4=;
+        b=ypv5b03FB8KeprHyodeCIKS8qgg5fZtqsWhr4wcvdzYwtAFkV70m31KbIxMer7xzYn
+         mQBANYpH6Sd/uajFBJTHD/feYGd1ay/H3Zs/uuJxKk8rfVHJNMzWqY49/qHYffZ6vXPX
+         i7Jsdy7EAe7OfQ+hRfFHmVw0WhcG7KhRnizu2jS4rsAeKiBCAxmVE32f1PjpmHwaSwym
+         bIExx54GOK+WH8HbLDVaGxET8d0lcUnv3j6cZHiv5SjWU4byLPHmt6NzXL1LONM5oxwC
+         d3ASdeDoxoRcWgGIQS38ycLsdgqDCGuafu+/rQByt/FFtvPAmk4x45k2qbPtX1hIzk0m
+         /q0Q==
+X-Gm-Message-State: AOAM531S9jF5gD7zM3ovfszFuM8sjxg0yoz3Tfv10WRbha4uyP3fL0Jt
+        K07Wum3LBt0YHrrneVjYgn8JOg==
+X-Google-Smtp-Source: ABdhPJzR0ymzxsVN/1lOSnhyjzWRuaU9S9tnS9OP9miFe2z9vDbMl/4a8hLFMgbN079yxZ7zkvP9kw==
+X-Received: by 2002:adf:f58b:: with SMTP id f11mr589980wro.427.1644402124499;
+        Wed, 09 Feb 2022 02:22:04 -0800 (PST)
+Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.googlemail.com with ESMTPSA id z17sm4360429wmf.11.2022.02.09.02.22.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Feb 2022 02:22:04 -0800 (PST)
+From:   Corentin Labbe <clabbe@baylibre.com>
+To:     davem@davemloft.net, herbert@gondor.apana.org.au
+Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Corentin Labbe <clabbe@baylibre.com>
+Subject: [PATCH] crypto: cavium/nitro: fix typo on crypto
+Date:   Wed,  9 Feb 2022 10:21:58 +0000
+Message-Id: <20220209102158.1661976-1-clabbe@baylibre.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When CONFIG_IPV6 is not set, then the compilation of the lan966x driver
-fails with the following error:
+crypto had a typo, fix it.
 
-drivers/net/ethernet/microchip/lan966x/lan966x_main.c:444: undefined
-reference to `ipv6_mc_check_mld'
-
-The fix consists in adding #ifdef around this code.
-
-Fixes: 47aeea0d57e80c ("net: lan966x: Implement the callback SWITCHDEV_ATTR_ID_BRIDGE_MC_DISABLED")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
 ---
- drivers/net/ethernet/microchip/lan966x/lan966x_main.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/crypto/cavium/nitrox/nitrox_req.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-index d62484f14564..526dc41e98f8 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-@@ -439,10 +439,12 @@ static bool lan966x_hw_offload(struct lan966x *lan966x, u32 port,
- 	    ip_hdr(skb)->protocol == IPPROTO_IGMP)
- 		return false;
- 
-+#if IS_ENABLED(CONFIG_IPV6)
- 	if (skb->protocol == htons(ETH_P_IPV6) &&
- 	    ipv6_addr_is_multicast(&ipv6_hdr(skb)->daddr) &&
- 	    !ipv6_mc_check_mld(skb))
- 		return false;
-+#endif
- 
- 	return true;
- }
+diff --git a/drivers/crypto/cavium/nitrox/nitrox_req.h b/drivers/crypto/cavium/nitrox/nitrox_req.h
+index ed174883c8e3..6bf088bcdd11 100644
+--- a/drivers/crypto/cavium/nitrox/nitrox_req.h
++++ b/drivers/crypto/cavium/nitrox/nitrox_req.h
+@@ -440,7 +440,7 @@ struct aqmq_command_s {
+ /**
+  * struct ctx_hdr - Book keeping data about the crypto context
+  * @pool: Pool used to allocate crypto context
+- * @dma: Base DMA address of the cypto context
++ * @dma: Base DMA address of the crypto context
+  * @ctx_dma: Actual usable crypto context for NITROX
+  */
+ struct ctx_hdr {
 -- 
-2.33.0
+2.34.1
 

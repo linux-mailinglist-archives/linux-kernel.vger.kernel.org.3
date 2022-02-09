@@ -2,67 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDFD14AFFF4
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 23:15:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F04F34AFFF2
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 23:15:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235121AbiBIWOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 17:14:12 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:35804 "EHLO
+        id S235146AbiBIWOX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 17:14:23 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:36598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235072AbiBIWOA (ORCPT
+        with ESMTP id S235126AbiBIWOO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 17:14:00 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 99F3EDF8E3F8
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 14:14:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644444841;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BOTWBC0hOhE1ppC7pifFcqnv228X+SVXx6iZSOt6Bgk=;
-        b=Rg4xtAXpLlqaL36gdqCH6MO/um88iO2noHOfHChkXIs0IppMWcLPfYB1ZWZ2MRzd8B5oSF
-        +KPCvBcTSybx6cnNrFjCR60djSdV+1bK59AIf20joyevaE2uohBPAS4AhC/Qb5SiDw+GzM
-        Sd6Bv5oHO39vUzzPqU6kr7lTgvgYmvk=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-397-ulG4GofINo6KDHgWQtL00A-1; Wed, 09 Feb 2022 17:13:58 -0500
-X-MC-Unique: ulG4GofINo6KDHgWQtL00A-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id EC95484E03F;
-        Wed,  9 Feb 2022 22:13:56 +0000 (UTC)
-Received: from madcap2.tricolour.ca (unknown [10.22.48.17])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9B4AF5DF37;
-        Wed,  9 Feb 2022 22:13:54 +0000 (UTC)
-Date:   Wed, 9 Feb 2022 17:13:52 -0500
-From:   Richard Guy Briggs <rgb@redhat.com>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     Jeff Mahoney <jeffm@suse.com>,
-        Linux-Audit Mailing List <linux-audit@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, Eric Paris <eparis@parisplace.org>,
-        Steve Grubb <sgrubb@redhat.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Eric Paris <eparis@redhat.com>, Tony Jones <tonyj@suse.de>
-Subject: Re: [PATCH v4 2/3] audit: add support for the openat2 syscall
-Message-ID: <20220209221352.GG1708086@madcap2.tricolour.ca>
-References: <cover.1621363275.git.rgb@redhat.com>
- <f5f1a4d8699613f8c02ce762807228c841c2e26f.1621363275.git.rgb@redhat.com>
- <c96031b4-b76d-d82c-e232-1cccbbf71946@suse.com>
- <CAHC9VhSHJwwG_3yy4bqNUuFAz87wFU8W-dGYfsoGBG786heTNg@mail.gmail.com>
- <CAHC9VhRCBMtWWscTFWe4W_F_KNdfLys7e5Ged+N_xddD2tkuRQ@mail.gmail.com>
+        Wed, 9 Feb 2022 17:14:14 -0500
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC541E015253;
+        Wed,  9 Feb 2022 14:14:13 -0800 (PST)
+Received: by mail-oi1-f176.google.com with SMTP id m10so4063960oie.2;
+        Wed, 09 Feb 2022 14:14:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5w3QoXmnLsihgEA/Et9MpIi6nloh2mbWHhlRSc4SJVU=;
+        b=fMz3x7ZDfNsSK72Zh3Qd99TfJ4MsQ1hMucgMv9K4hnnBsqACcDPJPFNERj8ElEkO22
+         JvWzLwwHs1Sw3FtypybNyb9DMYsZhs6gN3JkFFv7E9BWqsGOZ8/OcjpafCTCSjZeLqP4
+         96t7qpkueIs2SNKlcPpFVqZqr/LfGuoa+cO4CR3pspRvZHv6Pyk8sqbi+Kz4X0TJNFp+
+         mbtl56pLWiZfNcAQ6rue9Oy1vZvDwsZTrdhY6cMHCTlVo3X+TfwwwygMuPDaj3wMTfzh
+         2M24rpHZEJ/MFqTjmXLa5uQHsfYRoP4A9hqasluzUpZPvkRKWrOuVYo1qFws80UEge06
+         GfsA==
+X-Gm-Message-State: AOAM533p1Zyy1F5F5iGchp132iCXFB1yaucjvvFDPq4nUaFQcem+rVw+
+        YZr2c/3i3JIZErOg+Wn2Bg==
+X-Google-Smtp-Source: ABdhPJzweqXLNVP7+tC8UIOfrH2IH0wKhXWBXS/zBWs578C+quPBmzcGsHsOdY/vYUi67D0BCYkOXw==
+X-Received: by 2002:a54:488c:: with SMTP id r12mr2027834oic.104.1644444852983;
+        Wed, 09 Feb 2022 14:14:12 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id f21sm7069506otq.4.2022.02.09.14.14.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Feb 2022 14:14:12 -0800 (PST)
+Received: (nullmailer pid 1028963 invoked by uid 1000);
+        Wed, 09 Feb 2022 22:14:11 -0000
+Date:   Wed, 9 Feb 2022 16:14:11 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     linux-fbdev@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
+        David Airlie <airlied@linux.ie>,
+        Maxime Ripard <mripard@kernel.org>, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v2 4/4] dt-bindings: display: ssd1307fb: Add myself as
+ binding co-maintainer
+Message-ID: <YgQ8s5S3mqYMPyqW@robh.at.kernel.org>
+References: <20220204134347.1187749-1-javierm@redhat.com>
+ <20220204134347.1187749-5-javierm@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHC9VhRCBMtWWscTFWe4W_F_KNdfLys7e5Ged+N_xddD2tkuRQ@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220204134347.1187749-5-javierm@redhat.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,82 +74,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-09 16:18, Paul Moore wrote:
-> On Wed, Feb 9, 2022 at 10:57 AM Paul Moore <paul@paul-moore.com> wrote:
-> > On Tue, Feb 8, 2022 at 10:44 PM Jeff Mahoney <jeffm@suse.com> wrote:
-> > >
-> > > Hi Richard -
-> > >
-> > > On 5/19/21 16:00, Richard Guy Briggs wrote:
-> > > > The openat2(2) syscall was added in kernel v5.6 with commit fddb5d430ad9
-> > > > ("open: introduce openat2(2) syscall")
-> > > >
-> > > > Add the openat2(2) syscall to the audit syscall classifier.
-> > > >
-> > > > Link: https://github.com/linux-audit/audit-kernel/issues/67
-> > > > Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
-> > > > Link: https://lore.kernel.org/r/f5f1a4d8699613f8c02ce762807228c841c2e26f.1621363275.git.rgb@redhat.com
-> > > > ---
-> > >
-> > > [...]
-> > >
-> > > > diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-> > > > index d775ea16505b..3f59ab209dfd 100644
-> > > > --- a/kernel/auditsc.c
-> > > > +++ b/kernel/auditsc.c
-> > > > @@ -76,6 +76,7 @@
-> > > >  #include <linux/fsnotify_backend.h>
-> > > >  #include <uapi/linux/limits.h>
-> > > >  #include <uapi/linux/netfilter/nf_tables.h>
-> > > > +#include <uapi/linux/openat2.h>
-> > > >
-> > > >  #include "audit.h"
-> > > >
-> > > > @@ -196,6 +197,8 @@ static int audit_match_perm(struct audit_context *ctx, int mask)
-> > > >               return ((mask & AUDIT_PERM_WRITE) && ctx->argv[0] == SYS_BIND);
-> > > >       case AUDITSC_EXECVE:
-> > > >               return mask & AUDIT_PERM_EXEC;
-> > > > +     case AUDITSC_OPENAT2:
-> > > > +             return mask & ACC_MODE((u32)((struct open_how *)ctx->argv[2])->flags);
-> > > >       default:
-> > > >               return 0;
-> > > >       }
-> > >
-> > > ctx->argv[2] holds a userspace pointer and can't be dereferenced like this.
-> > >
-> > > I'm getting oopses, like so:
-> > > BUG: unable to handle page fault for address: 00007fff961bbe70
-> >
-> > Thanks Jeff.
-> >
-> > Yes, this is obviously the wrong thing to being doing; I remember
-> > checking to make sure we placed the audit_openat2_how() hook after the
-> > open_how was copied from userspace, but I missed the argv dereference
-> > in the syscall exit path when reviewing the code.
-> >
-> > Richard, as we are already copying the open_how info into
-> > audit_context::openat2 safely, the obvious fix is to convert
-> > audit_match_perm() to use the previously copied value instead of argv.
-> > If you can't submit a patch for this today please let me know.
+On Fri, 04 Feb 2022 14:43:47 +0100, Javier Martinez Canillas wrote:
+> The ssd130x DRM driver also makes use of this Device Tree binding to allow
+> existing users of the fbdev driver to migrate without the need to change
+> their Device Trees.
 > 
-> I haven't heard anything from Richard so I put together a patch which
-> should fix the problem (link below).  It's currently untested, but
-> I've got a kernel building now with the patch ...
-
-Well, the day wasn't over yet...  I've compiled and tested it.
-
-> https://lore.kernel.org/linux-audit/164444111699.153511.15656610495968926251.stgit@olly/T/#u
+> Add myself as another maintainer of the binding, to make sure that I will
+> be on Cc when patches are proposed for it.
 > 
-> -- 
-> paul-moore.com
+> Suggested-by: Sam Ravnborg <sam@ravnborg.org>
+> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+> ---
+> 
+> (no changes since v1)
+> 
+>  Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
 
-- RGB
-
---
-Richard Guy Briggs <rgb@redhat.com>
-Sr. S/W Engineer, Kernel Security, Base Operating Systems
-Remote, Ottawa, Red Hat Canada
-IRC: rgb, SunRaycer
-Voice: +1.647.777.2635, Internal: (81) 32635
-
+Acked-by: Rob Herring <robh@kernel.org>

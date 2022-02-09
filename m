@@ -2,211 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB79B4AFBC3
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 19:49:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ECEC4AFBCA
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 19:50:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240809AbiBISte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 13:49:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43716 "EHLO
+        id S240960AbiBISuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 13:50:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240966AbiBIStE (ORCPT
+        with ESMTP id S241012AbiBIStW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 13:49:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 635B9C1DC714;
-        Wed,  9 Feb 2022 10:45:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6C2D8B82384;
-        Wed,  9 Feb 2022 18:45:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E955C340E7;
-        Wed,  9 Feb 2022 18:44:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644432300;
-        bh=DxiS2imM2kRlhNNZ2tvupf0VGWXlv4zHDpnN/oeZKQ4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Qi/oahICIobWyK7CSM7nd80/5yyOeM7vONk7XuZQP6mjqrL84fbigD1COkl5eUCum
-         DyMLwSv5GzwIwd+8HQ8RhLy2+3q7NfYjZ9BPtOt77sNd/EmQqqV6TCOw9GsxgB76YD
-         GGhtpcK+vCH3kCi4q91Tqy3500LU0z/h34IA/sRh56ycR6W0/PGu4Co2O8BVqAu0np
-         qrX6MPcGPIDhH2ARxdLmmfA4JbtrcYrtW5og0MtEt0zotxajCf3VsEpFdL5tANrtmd
-         DUZhLtOTm51kbiyXGC+YTdJODchG59ryByToCH8VG83loxv+Diuvt6+wUFZxTDolYH
-         gdZErWv5KWOsA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Igor Pylypiv <ipylypiv@google.com>,
-        Changyuan Lyu <changyuanl@google.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Tejun Heo <tj@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, akpm@linux-foundation.org,
-        linux@rasmusvillemoes.dk, linux-modules@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 10/10] Revert "module, async: async_synchronize_full() on module init iff async is used"
-Date:   Wed,  9 Feb 2022 13:44:09 -0500
-Message-Id: <20220209184410.48223-10-sashal@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220209184410.48223-1-sashal@kernel.org>
-References: <20220209184410.48223-1-sashal@kernel.org>
+        Wed, 9 Feb 2022 13:49:22 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB965C1DC73E
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 10:45:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644432306; x=1675968306;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=NTKBgItqon3PHpzAhmJ9GKn354TNjgrjBMYjIi+U0GE=;
+  b=D1fa/Cyg77a1JFAewHB4JA/J/wV3PEzilEia9u6uMyXosHqBR/uUpUFg
+   jX23zihozNT1gqiSjwJwcLzpO/lTeJ3b6O7ct25m66PJBtHf++XHrL5O8
+   rp8+qU0iFYfOR7HRrXdT9cu7pYxHQjxnMcUTmZluZfGDtqO3sf5CZslJg
+   UgAoU4Bgccfy3nFoEqAkquC4Mti2rMdZQeyDmH0F8278USN7lkhYOEvy4
+   55usmpnJ8PKOquEh2TIjMxB//82mhpMz8WGGpEGTubfT7Pf91VMuxr8Lo
+   R7RhJ2YScjyxtLRXgIkKXvYJSQL10wSIHbah7bUwrIWVEnwe5L4cYh4L6
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="229274598"
+X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
+   d="scan'208";a="229274598"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 10:45:06 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
+   d="scan'208";a="701368970"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 09 Feb 2022 10:45:04 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nHrxf-0002B0-VJ; Wed, 09 Feb 2022 18:45:03 +0000
+Date:   Thu, 10 Feb 2022 02:44:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [ardb:efi-psci 2/3] include/linux/efi.h:1190:9: error: implicit
+ declaration of function 'arch_efi_call_virt_setup'
+Message-ID: <202202100235.AZGXkf7b-lkp@intel.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Igor Pylypiv <ipylypiv@google.com>
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git efi-psci
+head:   bd0da69cbeaed7490a6f8e3df789fe72645cd37f
+commit: 2f97f24371a482f0273be1de7164eb59cd427cf9 [2/3] efi: arm: implement PSCI method backed by EFI runtime code
+config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20220210/202202100235.AZGXkf7b-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?id=2f97f24371a482f0273be1de7164eb59cd427cf9
+        git remote add ardb git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git
+        git fetch --no-tags ardb efi-psci
+        git checkout 2f97f24371a482f0273be1de7164eb59cd427cf9
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash
 
-[ Upstream commit 67d6212afda218d564890d1674bab28e8612170f ]
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-This reverts commit 774a1221e862b343388347bac9b318767336b20b.
+All errors (new ones prefixed by >>):
 
-We need to finish all async code before the module init sequence is
-done.  In the reverted commit the PF_USED_ASYNC flag was added to mark a
-thread that called async_schedule().  Then the PF_USED_ASYNC flag was
-used to determine whether or not async_synchronize_full() needs to be
-invoked.  This works when modprobe thread is calling async_schedule(),
-but it does not work if module dispatches init code to a worker thread
-which then calls async_schedule().
+   In file included from drivers/firmware/psci/psci.c:12:
+   drivers/firmware/psci/psci.c: In function '__invoke_psci_fn_efi':
+>> include/linux/efi.h:1190:9: error: implicit declaration of function 'arch_efi_call_virt_setup' [-Werror=implicit-function-declaration]
+    1190 |         arch_efi_call_virt_setup();                                     \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/firmware/psci/psci.c:139:16: note: in expansion of macro 'efi_call_virt_pointer'
+     139 |         return efi_call_virt_pointer((&efi_psci), psci_handler, function_id,
+         |                ^~~~~~~~~~~~~~~~~~~~~
+>> include/linux/efi.h:1193:15: error: implicit declaration of function 'arch_efi_call_virt' [-Werror=implicit-function-declaration]
+    1193 |         __s = arch_efi_call_virt(p, f, args);                           \
+         |               ^~~~~~~~~~~~~~~~~~
+   drivers/firmware/psci/psci.c:139:16: note: in expansion of macro 'efi_call_virt_pointer'
+     139 |         return efi_call_virt_pointer((&efi_psci), psci_handler, function_id,
+         |                ^~~~~~~~~~~~~~~~~~~~~
+>> drivers/firmware/psci/psci.c:139:51: error: 'psci_handler' undeclared (first use in this function); did you mean 'proc_handler'?
+     139 |         return efi_call_virt_pointer((&efi_psci), psci_handler, function_id,
+         |                                                   ^~~~~~~~~~~~
+   include/linux/efi.h:1193:37: note: in definition of macro 'efi_call_virt_pointer'
+    1193 |         __s = arch_efi_call_virt(p, f, args);                           \
+         |                                     ^
+   drivers/firmware/psci/psci.c:139:51: note: each undeclared identifier is reported only once for each function it appears in
+     139 |         return efi_call_virt_pointer((&efi_psci), psci_handler, function_id,
+         |                                                   ^~~~~~~~~~~~
+   include/linux/efi.h:1193:37: note: in definition of macro 'efi_call_virt_pointer'
+    1193 |         __s = arch_efi_call_virt(p, f, args);                           \
+         |                                     ^
+>> include/linux/efi.h:1196:9: error: implicit declaration of function 'arch_efi_call_virt_teardown' [-Werror=implicit-function-declaration]
+    1196 |         arch_efi_call_virt_teardown();                                  \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/firmware/psci/psci.c:139:16: note: in expansion of macro 'efi_call_virt_pointer'
+     139 |         return efi_call_virt_pointer((&efi_psci), psci_handler, function_id,
+         |                ^~~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
 
-For example, PCI driver probing is invoked from a worker thread based on
-a node where device is attached:
 
-	if (cpu < nr_cpu_ids)
-		error = work_on_cpu(cpu, local_pci_probe, &ddi);
-	else
-		error = local_pci_probe(&ddi);
+vim +/arch_efi_call_virt_setup +1190 include/linux/efi.h
 
-We end up in a situation where a worker thread gets the PF_USED_ASYNC
-flag set instead of the modprobe thread.  As a result,
-async_synchronize_full() is not invoked and modprobe completes without
-waiting for the async code to finish.
+0d95981438c3bdb Dominik Brodowski 2019-11-06  1164  
+80e75596079f0a4 Alex Thorlton     2016-06-25  1165  /*
+80e75596079f0a4 Alex Thorlton     2016-06-25  1166   * Arch code can implement the following three template macros, avoiding
+80e75596079f0a4 Alex Thorlton     2016-06-25  1167   * reptition for the void/non-void return cases of {__,}efi_call_virt():
+80e75596079f0a4 Alex Thorlton     2016-06-25  1168   *
+80e75596079f0a4 Alex Thorlton     2016-06-25  1169   *  * arch_efi_call_virt_setup()
+80e75596079f0a4 Alex Thorlton     2016-06-25  1170   *
+80e75596079f0a4 Alex Thorlton     2016-06-25  1171   *    Sets up the environment for the call (e.g. switching page tables,
+80e75596079f0a4 Alex Thorlton     2016-06-25  1172   *    allowing kernel-mode use of floating point, if required).
+80e75596079f0a4 Alex Thorlton     2016-06-25  1173   *
+80e75596079f0a4 Alex Thorlton     2016-06-25  1174   *  * arch_efi_call_virt()
+80e75596079f0a4 Alex Thorlton     2016-06-25  1175   *
+80e75596079f0a4 Alex Thorlton     2016-06-25  1176   *    Performs the call. The last expression in the macro must be the call
+80e75596079f0a4 Alex Thorlton     2016-06-25  1177   *    itself, allowing the logic to be shared by the void and non-void
+80e75596079f0a4 Alex Thorlton     2016-06-25  1178   *    cases.
+80e75596079f0a4 Alex Thorlton     2016-06-25  1179   *
+80e75596079f0a4 Alex Thorlton     2016-06-25  1180   *  * arch_efi_call_virt_teardown()
+80e75596079f0a4 Alex Thorlton     2016-06-25  1181   *
+80e75596079f0a4 Alex Thorlton     2016-06-25  1182   *    Restores the usual kernel environment once the call has returned.
+80e75596079f0a4 Alex Thorlton     2016-06-25  1183   */
+80e75596079f0a4 Alex Thorlton     2016-06-25  1184  
+80e75596079f0a4 Alex Thorlton     2016-06-25  1185  #define efi_call_virt_pointer(p, f, args...)				\
+80e75596079f0a4 Alex Thorlton     2016-06-25  1186  ({									\
+80e75596079f0a4 Alex Thorlton     2016-06-25  1187  	efi_status_t __s;						\
+80e75596079f0a4 Alex Thorlton     2016-06-25  1188  	unsigned long __flags;						\
+80e75596079f0a4 Alex Thorlton     2016-06-25  1189  									\
+80e75596079f0a4 Alex Thorlton     2016-06-25 @1190  	arch_efi_call_virt_setup();					\
+80e75596079f0a4 Alex Thorlton     2016-06-25  1191  									\
+13b210ddf474d9f Julien Thierry    2019-01-31  1192  	__flags = efi_call_virt_save_flags();				\
+80e75596079f0a4 Alex Thorlton     2016-06-25 @1193  	__s = arch_efi_call_virt(p, f, args);				\
+80e75596079f0a4 Alex Thorlton     2016-06-25  1194  	efi_call_virt_check_flags(__flags, __stringify(f));		\
+80e75596079f0a4 Alex Thorlton     2016-06-25  1195  									\
+80e75596079f0a4 Alex Thorlton     2016-06-25 @1196  	arch_efi_call_virt_teardown();					\
+80e75596079f0a4 Alex Thorlton     2016-06-25  1197  									\
+80e75596079f0a4 Alex Thorlton     2016-06-25  1198  	__s;								\
+80e75596079f0a4 Alex Thorlton     2016-06-25  1199  })
+80e75596079f0a4 Alex Thorlton     2016-06-25  1200  
 
-The issue was discovered while loading the pm80xx driver:
-(scsi_mod.scan=async)
+:::::: The code at line 1190 was first introduced by commit
+:::::: 80e75596079f0a41f905836ad0ccaac68ba33612 efi: Convert efi_call_virt() to efi_call_virt_pointer()
 
-modprobe pm80xx                      worker
-...
-  do_init_module()
-  ...
-    pci_call_probe()
-      work_on_cpu(local_pci_probe)
-                                     local_pci_probe()
-                                       pm8001_pci_probe()
-                                         scsi_scan_host()
-                                           async_schedule()
-                                           worker->flags |= PF_USED_ASYNC;
-                                     ...
-      < return from worker >
-  ...
-  if (current->flags & PF_USED_ASYNC) <--- false
-  	async_synchronize_full();
+:::::: TO: Alex Thorlton <athorlton@sgi.com>
+:::::: CC: Ingo Molnar <mingo@kernel.org>
 
-Commit 21c3c5d28007 ("block: don't request module during elevator init")
-fixed the deadlock issue which the reverted commit 774a1221e862
-("module, async: async_synchronize_full() on module init iff async is
-used") tried to fix.
-
-Since commit 0fdff3ec6d87 ("async, kmod: warn on synchronous
-request_module() from async workers") synchronous module loading from
-async is not allowed.
-
-Given that the original deadlock issue is fixed and it is no longer
-allowed to call synchronous request_module() from async we can remove
-PF_USED_ASYNC flag to make module init consistently invoke
-async_synchronize_full() unless async module probe is requested.
-
-Signed-off-by: Igor Pylypiv <ipylypiv@google.com>
-Reviewed-by: Changyuan Lyu <changyuanl@google.com>
-Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
-Acked-by: Tejun Heo <tj@kernel.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/sched.h |  1 -
- kernel/async.c        |  3 ---
- kernel/module.c       | 25 +++++--------------------
- 3 files changed, 5 insertions(+), 24 deletions(-)
-
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index 761d0f85c4a50..f92d5ae6d04e7 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -1389,7 +1389,6 @@ extern struct pid *cad_pid;
- #define PF_MEMALLOC		0x00000800	/* Allocating memory */
- #define PF_NPROC_EXCEEDED	0x00001000	/* set_user() noticed that RLIMIT_NPROC was exceeded */
- #define PF_USED_MATH		0x00002000	/* If unset the fpu must be initialized before use */
--#define PF_USED_ASYNC		0x00004000	/* Used async_schedule*(), used by module init */
- #define PF_NOFREEZE		0x00008000	/* This thread should not be frozen */
- #define PF_FROZEN		0x00010000	/* Frozen for system suspend */
- #define PF_KSWAPD		0x00020000	/* I am kswapd */
-diff --git a/kernel/async.c b/kernel/async.c
-index a893d6170944f..4bf1b00a28d86 100644
---- a/kernel/async.c
-+++ b/kernel/async.c
-@@ -191,9 +191,6 @@ static async_cookie_t __async_schedule(async_func_t func, void *data, struct asy
- 	atomic_inc(&entry_count);
- 	spin_unlock_irqrestore(&async_lock, flags);
- 
--	/* mark that this task has queued an async job, used by module init */
--	current->flags |= PF_USED_ASYNC;
--
- 	/* schedule for execution */
- 	queue_work(system_unbound_wq, &entry->work);
- 
-diff --git a/kernel/module.c b/kernel/module.c
-index 68637e661d75c..42a604401c4dd 100644
---- a/kernel/module.c
-+++ b/kernel/module.c
-@@ -3526,12 +3526,6 @@ static noinline int do_init_module(struct module *mod)
- 	}
- 	freeinit->module_init = mod->init_layout.base;
- 
--	/*
--	 * We want to find out whether @mod uses async during init.  Clear
--	 * PF_USED_ASYNC.  async_schedule*() will set it.
--	 */
--	current->flags &= ~PF_USED_ASYNC;
--
- 	do_mod_ctors(mod);
- 	/* Start the module */
- 	if (mod->init != NULL)
-@@ -3557,22 +3551,13 @@ static noinline int do_init_module(struct module *mod)
- 
- 	/*
- 	 * We need to finish all async code before the module init sequence
--	 * is done.  This has potential to deadlock.  For example, a newly
--	 * detected block device can trigger request_module() of the
--	 * default iosched from async probing task.  Once userland helper
--	 * reaches here, async_synchronize_full() will wait on the async
--	 * task waiting on request_module() and deadlock.
--	 *
--	 * This deadlock is avoided by perfomring async_synchronize_full()
--	 * iff module init queued any async jobs.  This isn't a full
--	 * solution as it will deadlock the same if module loading from
--	 * async jobs nests more than once; however, due to the various
--	 * constraints, this hack seems to be the best option for now.
--	 * Please refer to the following thread for details.
-+	 * is done. This has potential to deadlock if synchronous module
-+	 * loading is requested from async (which is not allowed!).
- 	 *
--	 * http://thread.gmane.org/gmane.linux.kernel/1420814
-+	 * See commit 0fdff3ec6d87 ("async, kmod: warn on synchronous
-+	 * request_module() from async workers") for more details.
- 	 */
--	if (!mod->async_probe_requested && (current->flags & PF_USED_ASYNC))
-+	if (!mod->async_probe_requested)
- 		async_synchronize_full();
- 
- 	ftrace_free_mem(mod, mod->init_layout.base, mod->init_layout.base +
--- 
-2.34.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

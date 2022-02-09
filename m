@@ -2,148 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 879ED4AF39A
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 15:04:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E89E4AF3A5
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 15:07:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234726AbiBIOEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 09:04:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34554 "EHLO
+        id S234740AbiBIOHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 09:07:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231210AbiBIOEj (ORCPT
+        with ESMTP id S230004AbiBIOHH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 09:04:39 -0500
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A7ACC0613C9;
-        Wed,  9 Feb 2022 06:04:39 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 0A9AD5801A9;
-        Wed,  9 Feb 2022 09:04:37 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Wed, 09 Feb 2022 09:04:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; bh=6C3Zbv7qcftcJPNdinXDELfCRJAPbtGEO9aofq
-        ELC1c=; b=RbTJLLPSHVAvRbZaSx+PE/OOh6dwrdKo5fF8ddis1mPVVlOd+rbbOw
-        WNgNng9NOAg2tC7ME61PAATrqcEL2Iq1EhU+dNttV2/alXDEY+TRmrxgSI4qQ6Q2
-        gxdOFwVQgGTzVPWATM+X56Yfwqf/G/QqaTq5zIVe0XGUQaXIhYmh9RhVa+4gR9wR
-        cJMYUz0oxESU6HCz0r3DP7Q0h01iiI2FqG9xPc+CPwpN54Wajx7WXuQWFGAjozhZ
-        ItVHbeQ1H7j61Ph7OLb8cTuWMxdQDOyKAwRTHLNd+4MA7xfpA0zEl6cibfdfo2o1
-        g8FvQ8oaj8urf9tG307CeqSKVDoQsFng==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=6C3Zbv7qcftcJPNdi
-        nXDELfCRJAPbtGEO9aofqELC1c=; b=juG876JtEkhqls5pvMUbR4O2Cp+hpvAIr
-        qOrSZGofNApNDWdrr5kYUh/qFGSkFKWu6BCPnJ+gVk77IRw1hdFYl7WiNrIRZJja
-        cSrh7/Mj5EKxnb77Sg3nTOLeuRnztE4B6US5twBLQ4NvBrUC9ciMgBpfDc80XBLJ
-        pfBBmerR8Snh3eJVYst3S6GwUXxipNILBDktURLw1C7bCnA8G5tO2rVlzcLdCTSH
-        WncaYfPCHddxoQVG+01hWghQ0shscaRIQQDPM6DtlBE2APyBAvD4kh1BjdzxIGWs
-        YHK1yCF4HL9s5oqB/z4j0IMPlxxoCOWs2RmxX4DxkYpXwTf5gpFUg==
-X-ME-Sender: <xms:88kDYrTKYO8ov1PvHt0MleH7wilA9FoIlPoq0BwliyH0lvGYQfp5TQ>
-    <xme:88kDYswiOiC-Yrv9inepzR2830IQlOtLTUmaH6ucbennMlyTrvNKW12fzrD83st18
-    XBRqEd0MLehA_tmjuc>
-X-ME-Received: <xmr:88kDYg1xdOfDPeeTE6ibwkWTym6h9cuWHGrN7zmIWWx1C5xofp0BpVAO355Xa54_ex7L6-6JEK7AwpdiyR_vGdKhrHG9xzJ_yPRn5ZA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrheelgdehkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesghdtreertddtjeenucfhrhhomhepofgrgihimhgv
-    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
-    gvrhhnpeeutdfgjeeuudehvefgvedvtedtudelfffgffekledtffekgedukeejueevieeg
-    udenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrg
-    igihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:88kDYrA8Be05SyEG96uriDnvHQlCLxPXh5nTzO1T5HVsiQcoK83WMQ>
-    <xmx:88kDYki7RG4p27sdKSq9Gp2JD2Fj5MNRd26p_slr_pJFoFA3GAkoFg>
-    <xmx:88kDYvoJzUrLElH-l28YJDxD3tBKV1W_8MeALkc5wNUvd3dN9f3Evg>
-    <xmx:9MkDYta9hxxFCyROgf7oo6Q76Xof1_w0KIUC1bSOzptwSnCvgJVVvg>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 9 Feb 2022 09:04:34 -0500 (EST)
-Date:   Wed, 9 Feb 2022 15:04:32 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     Sui Jingfeng <15330273260@189.cn>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Zack Rusin <zackr@vmware.com>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        suijingfeng <suijingfeng@loongson.cn>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH v6 1/3] drm/lsdc: add drm driver for loongson display
- controller
-Message-ID: <20220209140432.ekqszxbtitmacpk5@houat>
-References: <20220203082546.3099-1-15330273260@189.cn>
- <20220203082546.3099-2-15330273260@189.cn>
- <20220203085851.yqstkfgt4dz7rcnw@houat>
- <57805e19-285a-76d3-16e3-09a3eb7a9540@189.cn>
- <20220209085215.65qbdsgwtnvujdng@houat>
- <8e7f7946-b9e5-7c4d-f5c9-e091bf5f814b@flygoat.com>
+        Wed, 9 Feb 2022 09:07:07 -0500
+X-Greylist: delayed 21838 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Feb 2022 06:07:09 PST
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C1AC0613C9;
+        Wed,  9 Feb 2022 06:07:09 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 1887B40009;
+        Wed,  9 Feb 2022 14:07:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1644415628;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=eFd4Jm9GVCcXp1h6wfnUeSFs7Eqix0iSEKe+49FbexI=;
+        b=jSJWS74p5j5+xT+MwPPEQpw2fPh9PNeUGUBSEnd2pe12T6yAtOFLrJ13olpNbfDAuE/eR1
+        HSr+f0PoYvtQ5Z3tCpbRlm42B3jIBnvvvN11aXyEhyaOjVIkocFdjammvOD76OEKxtB35J
+        CSNfMjn2nVFbPWUKbYHZGvPnAFoJddZyMMUVJT8iOJi06jL/p95vbzKiETQpJ4sIKwzG0c
+        CyvuPZ1pMfupxorlbMzOJdecv0FYFl9hCjCjee8G3F5WeI51Sad+RwNyNI8/xyTFmAqSHK
+        LoIsJsTRq1RMHBY863GhWbRg0MppttvvuECLrtGBouW1UgiRk4fS6QKqNOku0g==
+Date:   Wed, 9 Feb 2022 15:07:03 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Nishanth Menon <nm@ti.com>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        <broonie@kernel.org>, <mhocko@suse.cz>, <sfr@canb.auug.org.au>,
+        <linux-next@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <mm-commits@vger.kernel.org>, Roger Quadros <rogerq@kernel.org>,
+        <linux-mtd@lists.infradead.org>,
+        Uwe =?UTF-8?B?S2xl?= =?UTF-8?B?aW5lLUvDtm5pZw==?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>
+Subject: Re: mmotm 2022-02-08-15-31 uploaded (drivers/mtd/nand/raw/Kconfig)
+Message-ID: <20220209150703.253b16bd@xps13>
+In-Reply-To: <20220209135439.qcyge32xinvazn43@chewer>
+References: <20220208233156.E2CA6C004E1@smtp.kernel.org>
+        <b18fc937-9cc2-bb7b-fb58-3ba2555371c7@infradead.org>
+        <20220209090300.43241711@xps13>
+        <20220209135439.qcyge32xinvazn43@chewer>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vl5too7ki5enoddb"
-Content-Disposition: inline
-In-Reply-To: <8e7f7946-b9e5-7c4d-f5c9-e091bf5f814b@flygoat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Nishanth,
 
---vl5too7ki5enoddb
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+nm@ti.com wrote on Wed, 9 Feb 2022 07:54:39 -0600:
 
-On Wed, Feb 09, 2022 at 11:56:48AM +0000, Jiaxun Yang wrote:
+> On 09:03-20220209, Miquel Raynal wrote:
+> > Hi Randy,
+> >=20
+> > rdunlap@infradead.org wrote on Tue, 8 Feb 2022 22:30:23 -0800:
+> >  =20
+> > > On 2/8/22 15:31, Andrew Morton wrote: =20
+> > > > The mm-of-the-moment snapshot 2022-02-08-15-31 has been uploaded to
+> > > >=20
+> > > >    https://www.ozlabs.org/~akpm/mmotm/
+> > > >=20
+> > > > mmotm-readme.txt says
+> > > >=20
+> > > > README for mm-of-the-moment:
+> > > >=20
+> > > > https://www.ozlabs.org/~akpm/mmotm/
+> > > >=20
+> > > > This is a snapshot of my -mm patch queue.  Uploaded at random hopef=
+ully
+> > > > more than once a week.
+> > > >=20
+> > > > You will need quilt to apply these patches to the latest Linus rele=
+ase (5.x
+> > > > or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplic=
+ated in
+> > > > https://ozlabs.org/~akpm/mmotm/series
+> > > >=20
+> > > > The file broken-out.tar.gz contains two datestamp files: .DATE and
+> > > > .DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-m=
+m-ss,
+> > > > followed by the base kernel version against which this patch series=
+ is to
+> > > > be applied.   =20
+> > >=20
+> > > on i386:
+> > >=20
+> > > WARNING: unmet direct dependencies detected for OMAP_GPMC
+> > >   Depends on [n]: MEMORY [=3Dy] && OF_ADDRESS [=3Dn]
+> > >   Selected by [y]:
+> > >   - MTD_NAND_OMAP2 [=3Dy] && MTD [=3Dy] && MTD_RAW_NAND [=3Dy] && (AR=
+CH_OMAP2PLUS || ARCH_KEYSTONE || ARCH_K3 || COMPILE_TEST [=3Dy]) && HAS_IOM=
+EM [=3Dy]
+> > >=20
+> > >=20
+> > > Full randconfig file is attached. =20
+> >=20
+> > + Uwe, + K3 people + Krzysztof =20
 >=20
+> Thanks for looping me in.
 >=20
-> =E5=9C=A8 2022/2/9 8:52, Maxime Ripard =E5=86=99=E9=81=93:
-> > On Thu, Feb 03, 2022 at 11:47:16PM +0800, Sui Jingfeng wrote:
-> [...]
-> > DT isn't really a solution either. Let's take the distribution
-> > perspective there. Suppose you're a Fedora or Debian developer, and want
-> > to make a single kernel image, and ship a DT to the user for their board
-> > without any modification. How is either the Kconfig solution or DT flags
-> > solution any good there? It doesn't help them at all.
->
-> We are working in another way. As we can tell model of the board by strin=
-gs
-> passed from the firmware, we just built-in all poosible DTs into the kern=
-el
-> and then tell which DT to load at boot time. So we can ensure users has
-> smmoth experience.
+> >=20
+> > Uwe already raised the issue, and this was proposed:
+> >=20
+> > https://lore.kernel.org/linux-mtd/20220127105652.1063624-1-miquel.rayna=
+l@bootlin.com/T/ =20
+>=20
+> I will respond to the patch.
+>=20
+> >=20
+> > Maybe we should have added K3 people in Cc but their MAINTAINERS entry
+> > is incomplete so get_maintainers.pl did not immediately found them. =20
+>=20
+> What are we missing there?
 
-It's not really for you to say though. Once your driver is in a release,
-distros are going to use it. That's the whole point of you asking us to
-merge it.
+Actually nothing is missing, I overlooked the file name. I touched
+arch/arm64/Kconfig.platforms in my patch and of course
+get_maintainers.pl didn't look at the symbol owners. I should have
+checked that myself manually in the first place.
 
-Maxime
-
---vl5too7ki5enoddb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYgPJ8AAKCRDj7w1vZxhR
-xQ7jAP9etfpiFR/7BaYwCwRPhBjfmYKdaCacf+X7uAN8xqcKDwD9FtD6v8xZ4gAL
-l00pbTcOa2efVrqJ8frFZMlTOvz47QI=
-=gzq+
------END PGP SIGNATURE-----
-
---vl5too7ki5enoddb--
+Thanks,
+Miqu=C3=A8l

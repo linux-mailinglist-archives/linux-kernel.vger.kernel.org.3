@@ -2,186 +2,311 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5977F4AFD9A
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 20:39:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A368F4AFD9F
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 20:44:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230120AbiBITiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 14:38:19 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:42460 "EHLO
+        id S229608AbiBIToR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 14:44:17 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:43886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231546AbiBIThf (ORCPT
+        with ESMTP id S229449AbiBIToO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 14:37:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 27170DF28AF6
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 11:37:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644435455;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6JUoA8FsPLcKpPxdyzR/eLwwwQM5N1zY2+jV9i97vXk=;
-        b=ICfc0a/oZ+2WOJBecCd7rEfe9Rq0UdCZPTQv942+23mV0HpXPrU3lGZzlQdKQe9M3pO6QI
-        T20dNFW8J/3NrdNDORxyXID1QVIwn2yeQo6D6biD23LREWVInig/RYijLhIxY9jgCERpty
-        BCe8ak4V0L1ohTz14eVg17dyS5K+tm8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-286--3niNG3CP-uxRDxLwklcvQ-1; Wed, 09 Feb 2022 14:37:30 -0500
-X-MC-Unique: -3niNG3CP-uxRDxLwklcvQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 977438144E4;
-        Wed,  9 Feb 2022 19:37:27 +0000 (UTC)
-Received: from [10.22.9.207] (unknown [10.22.9.207])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7587E196FC;
-        Wed,  9 Feb 2022 19:37:24 +0000 (UTC)
-Message-ID: <5ac9e82e-c2f7-09a2-87d7-47e0cc10ad86@redhat.com>
-Date:   Wed, 9 Feb 2022 14:37:23 -0500
+        Wed, 9 Feb 2022 14:44:14 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EFDCE031484;
+        Wed,  9 Feb 2022 11:44:15 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: detlev)
+        with ESMTPSA id 34BBA1F45B06
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1644435854;
+        bh=Uzur0oFJqTGXNCRRY2rz54Y3ClxU2dY3kWwYq3T5mTQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Wm1k8TUpSiHqD1H07wEyB9er+qhZRgdls0SPJfg+TkFB5WobVeEHfmoChjFg/GTeH
+         KRMbdH5i2X4sWXwctmtl+Nmug8TWf971tH8+oTAXS4E92rKhutUU9el4pu7CglJTMp
+         qX+aC0h8Dkzg7f+7iMzM6A6W3BS6Y65bIJpAfhzYYwhnpOFmMTro4zdxIoMdz3SVDt
+         xmZjK/uYM3rRuxk+bgUrSQ/ssBj6OA8qO3d4QXrIGfbMCNZTlRxTeY96atVydbAxZn
+         WAlpa6zr5kCiI18RWThch+WoIYZDnRhqpBwL5go8kBwTcHV5SWnPwinoTNoSg1P33J
+         01pUYHz6796rw==
+From:   Detlev Casanova <detlev.casanova@collabora.com>
+To:     linux-kernel@vger.kernel.org,
+        Stefan Wahren <stefan.wahren@i2se.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        "maintainer:ARM AND ARM64 SoC SUB-ARCHITECTURES (COMMON PARTS)" 
+        <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        "maintainer:BROADCOM BCM281XX/BCM11XXX/BCM216XX ARM ARCHITE..." 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "moderated list:ARM AND ARM64 SoC SUB-ARCHITECTURES (COMMON PARTS)" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>
+Subject: Re: [PATCH 2/2] ARM: dts: Add bcm2711-rpi-4-b-7inch-ts-dsi.dts
+Date:   Wed, 09 Feb 2022 14:44:08 -0500
+Message-ID: <2136213.irdbgypaU6@falcon9>
+In-Reply-To: <d00a934e-a2e0-fd3a-6452-fa88f07e13d4@i2se.com>
+References: <20220209162515.706729-1-detlev.casanova@collabora.com> <20220209162515.706729-3-detlev.casanova@collabora.com> <d00a934e-a2e0-fd3a-6452-fa88f07e13d4@i2se.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [RFC 00/12] locking: Separate lock tracepoints from
- lockdep/lock_stat (v1)
-Content-Language: en-US
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        rostedt <rostedt@goodmis.org>,
-        Byungchul Park <byungchul.park@lge.com>,
-        "Paul E. McKenney" <paul.mckenney@linaro.org>,
-        Radoslaw Burny <rburny@google.com>, Tejun Heo <tj@kernel.org>,
-        rcu <rcu@vger.kernel.org>, cgroups <cgroups@vger.kernel.org>,
-        linux-btrfs <linux-btrfs@vger.kernel.org>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>
-References: <20220208184208.79303-1-namhyung@kernel.org>
- <20220209090908.GK23216@worktop.programming.kicks-ass.net>
- <24fe6a08-5931-8e8d-8d77-459388c4654e@redhat.com>
- <919214156.50301.1644431371345.JavaMail.zimbra@efficios.com>
- <69e5f778-8715-4acf-c027-58b6ec4a9e77@redhat.com>
- <593915946.50384.1644434229077.JavaMail.zimbra@efficios.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <593915946.50384.1644434229077.JavaMail.zimbra@efficios.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/9/22 14:17, Mathieu Desnoyers wrote:
-> ----- On Feb 9, 2022, at 2:02 PM, Waiman Long longman@redhat.com wrote:
->
->> On 2/9/22 13:29, Mathieu Desnoyers wrote:
->>> ----- On Feb 9, 2022, at 1:19 PM, Waiman Long longman@redhat.com wrote:
->>>
->>>> On 2/9/22 04:09, Peter Zijlstra wrote:
->>>>> On Tue, Feb 08, 2022 at 10:41:56AM -0800, Namhyung Kim wrote:
->>>>>
->>>>>> Eventually I'm mostly interested in the contended locks only and I
->>>>>> want to reduce the overhead in the fast path.  By moving that, it'd be
->>>>>> easy to track contended locks with timing by using two tracepoints.
->>>>> So why not put in two new tracepoints and call it a day?
->>>>>
->>>>> Why muck about with all that lockdep stuff just to preserve the name
->>>>> (and in the process continue to blow up data structures etc..). This
->>>>> leaves distros in a bind, will they enable this config and provide
->>>>> tracepoints while bloating the data structures and destroying things
->>>>> like lockref (which relies on sizeof(spinlock_t)), or not provide this
->>>>> at all.
->>>>>
->>>>> Yes, the name is convenient, but it's just not worth it IMO. It makes
->>>>> the whole proposition too much of a trade-off.
->>>>>
->>>>> Would it not be possible to reconstruct enough useful information from
->>>>> the lock callsite?
->>>>>
->>>> I second that as I don't want to see the size of a spinlock exceeds 4
->>>> bytes in a production system.
->>>>
->>>> Instead of storing additional information (e.g. lock name) directly into
->>>> the lock itself. Maybe we can store it elsewhere and use the lock
->>>> address as the key to locate it in a hash table. We can certainly extend
->>>> the various lock init functions to do that. It will be trickier for
->>>> statically initialized locks, but we can probably find a way to do that too.
->>> If we go down that route, it would be nice if we can support a few different
->>> use-cases for various tracers out there.
->>>
->>> One use-case (a) requires the ability to query the lock name based on its
->>> address as key.
->>> For this a hash table is a good fit. This would allow tracers like ftrace to
->>> output lock names in its human-readable output which is formatted within the
->>> kernel.
->>>
->>> Another use-case (b) is to be able to "dump" the lock { name, address } tuples
->>> into the trace stream (we call this statedump events in lttng), and do the
->>> translation from address to name at post-processing. This simply requires
->>> that this information is available for iteration for both the core kernel
->>> and module locks, so the tracer can dump this information on trace start
->>> and module load.
->>>
->>> Use-case (b) is very similar to what is done for the kernel tracepoints. Based
->>> on this, implementing the init code that iterates on those sections and
->>> populates
->>> a hash table for use-case (a) should be easy enough.
->> Yes, that are good use cases for this type of functionality. I do need
->> to think about how to do it for statically initialized lock first.
-> Tracepoints already solved that problem.
->
-> Look at the macro DEFINE_TRACE_FN() in include/linux/tracepoint.h. You will notice that
-> it statically defines a struct tracepoint in a separate section and a tracepoint_ptr_t
-> in a __tracepoints_ptrs section.
->
-> Then the other parts of the picture are in kernel/tracepoint.c:
->
-> extern tracepoint_ptr_t __start___tracepoints_ptrs[];
-> extern tracepoint_ptr_t __stop___tracepoints_ptrs[];
->
-> and kernel/module.c:find_module_sections()
->
-> #ifdef CONFIG_TRACEPOINTS
->          mod->tracepoints_ptrs = section_objs(info, "__tracepoints_ptrs",
->                                               sizeof(*mod->tracepoints_ptrs),
->                                               &mod->num_tracepoints);
-> #endif
->
-> and the iteration code over kernel and modules in kernel/tracepoint.c.
->
-> All you need in addition is in include/asm-generic/vmlinux.lds.h, we add
-> to the DATA_DATA define an entry such as:
->
->          STRUCT_ALIGN();                                                 \
->          *(__tracepoints)                                                \
->
-> and in RO_DATA:
->
->                  . = ALIGN(8);                                           \
->                  __start___tracepoints_ptrs = .;                         \
->                  KEEP(*(__tracepoints_ptrs)) /* Tracepoints: pointer array */ \
->                  __stop___tracepoints_ptrs = .;
->
-> AFAIU, if you do something similar for a structure that contains your relevant
-> lock information, it should be straightforward to handle statically initialized
-> locks.
->
-> Thanks,
->
-> Mathieu
+Hi Stefan,
 
-Thanks for the suggestion.
+On Wednesday, February 9, 2022 12:10:12 P.M. EST Stefan Wahren wrote:
+> Hi Detlev,
+> 
+> Am 09.02.22 um 17:25 schrieb Detlev Casanova:
+> > Add a device tree to support the official Raspberrypi 7" touchscreen for
+> > the Raspberry Pi 4 B
+> > 
+> > The panel is connected on the DSI 1 port and uses the simple-panel
+> > driver.
+> > 
+> > The device tree also makes sure to activate:
+> >  * dvp: bcm2711 clock driver
+> >  * hvs: Hardware Video Scaler
+> >  * pixelvalve[0-4]: CRTC modules
+> >  * txp: CRTC Writeback
+> > 
+> > Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
+> > ---
+> > 
+> >  arch/arm/boot/dts/Makefile                    |   1 +
+> >  .../boot/dts/bcm2711-rpi-4-b-7inch-ts-dsi.dts | 129 ++++++++++++++++++
+> >  arch/arm64/boot/dts/broadcom/Makefile         |   1 +
+> >  .../broadcom/bcm2711-rpi-4-b-7inch-ts-dsi.dts |   2 +
+> >  4 files changed, 133 insertions(+)
+> >  create mode 100644 arch/arm/boot/dts/bcm2711-rpi-4-b-7inch-ts-dsi.dts
+> >  create mode 100644
+> >  arch/arm64/boot/dts/broadcom/bcm2711-rpi-4-b-7inch-ts-dsi.dts> 
+> > diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+> > index 0de64f237cd8..b46daf2df4ce 100644
+> > --- a/arch/arm/boot/dts/Makefile
+> > +++ b/arch/arm/boot/dts/Makefile
+> > @@ -94,6 +94,7 @@ dtb-$(CONFIG_ARCH_BCM2835) += \
+> > 
+> >  	bcm2837-rpi-cm3-io3.dtb \
+> >  	bcm2711-rpi-400.dtb \
+> >  	bcm2711-rpi-4-b.dtb \
+> > 
+> > +	bcm2711-rpi-4-b-7inch-ts-dsi.dtb \
+> > 
+> >  	bcm2711-rpi-cm4-io.dtb \
+> >  	bcm2835-rpi-zero.dtb \
+> >  	bcm2835-rpi-zero-w.dtb
+> > 
+> > diff --git a/arch/arm/boot/dts/bcm2711-rpi-4-b-7inch-ts-dsi.dts
+> > b/arch/arm/boot/dts/bcm2711-rpi-4-b-7inch-ts-dsi.dts new file mode 100644
+> > index 000000000000..62e986358c2a
+> > --- /dev/null
+> > +++ b/arch/arm/boot/dts/bcm2711-rpi-4-b-7inch-ts-dsi.dts
+> 
+> i think this should be an overlay because this board can be connected to
+> different boards and we want to avoid copy & paste. Unfortunately i
+> don't know where this should be stored in the kernel tree.
 
-Cheers,
-Longman
+Yes, that is how it started but the upstream kernel doesn't use them. We 
+thought that a separate device-tree makes sense as it is the official raspberry 
+pi touchscreen. Do you know if there are plans for supporting device tree 
+overlays in the upstream kernel ?
+
+> > @@ -0,0 +1,129 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +
+> > +#include "bcm2711-rpi-4-b.dts"
+> > +
+> > +/ {
+> > +	model = "Raspberry Pi 4 Model B + Rpi 7inch touchscreen";
+> > +
+> > +	panel_disp1: panel_disp1@0 {
+> > +		reg = <0 0 0>;
+> > +		compatible = "raspberrypi,7inch-dsi", "simple-panel";
+> > +		backlight = <&reg_display>;
+> > +		power-supply = <&reg_display>;
+> > +		status = "okay";
+> > +
+> > +		port {
+> > +			panel_in: endpoint {
+> > +				remote-endpoint = <&bridge_out>;
+> > +			};
+> > +		};
+> > +	};
+> > +
+> > +	reg_bridge: reg_bridge@0 {
+> > +		reg = <0 0 0>;
+> > +		compatible = "regulator-fixed";
+> > +		regulator-name = "bridge_reg";
+> > +		gpio = <&reg_display 0 0>;
+> > +		vin-supply = <&reg_display>;
+> > +		enable-active-high;
+> > +		status = "okay";
+> > +	};
+> > +};
+> > +
+> > +&i2c_csi_dsi {
+> > +	ft5406: ts@38 {
+> 
+> s/ts/touchscreen/
+> 
+> > +		compatible = "edt,edt-ft5506";
+> > +		reg = <0x38>;
+> > +		status = "okay";
+> > +
+> > +		vcc-supply = <&reg_display>;
+> > +		reset-gpio = <&reg_display 1 1>;
+> > +
+> > +		touchscreen-size-x = < 800 >;
+> > +		touchscreen-size-y = < 480 >;
+> > +
+> > +		touchscreen-inverted-x;
+> > +		touchscreen-inverted-y;
+> > +	};
+> > +
+> > +	reg_display: reg_display@45 {
+> 
+> node name should be regulator
+
+Will change it to `reg_display: regulator@45`.
+
+> > +		compatible = "raspberrypi,7inch-touchscreen-panel-
+regulator";
+> > +		reg = <0x45>;
+> > +		gpio-controller;
+> > +		#gpio-cells = <2>;
+> > +		status = "okay";
+> > +	};
+> > +
+> > +};
+> > +
+> > +&dsi1 {
+> > +	#address-cells = <1>;
+> > +	#size-cells = <0>;
+> > +	status = "okay";
+> > +
+> > +	port {
+> > +		dsi_out: endpoint {
+> > +			remote-endpoint = <&bridge_in>;
+> > +		};
+> > +	};
+> > +
+> > +	bridge@0 {
+> > +		reg = <0>;
+> > +		compatible = "toshiba,tc358762";
+> > +		vddc-supply = <&reg_bridge>;
+> > +		ports {
+> > +			#address-cells = <1>;
+> > +			#size-cells = <0>;
+> > +
+> > +			port@0 {
+> > +				reg = <0>;
+> > +				bridge_in: endpoint {
+> > +					remote-endpoint = 
+<&dsi_out>;
+> > +				};
+> > +			};
+> > +
+> > +			port@1 {
+> > +				reg = <1>;
+> > +				bridge_out: endpoint {
+> > +					remote-endpoint = 
+<&panel_in>;
+> > +				};
+> > +			};
+> > +		};
+> > +	};
+> > +};
+> > +
+> > +&aon_intr {
+> > +	status = "okay";
+> > +};
+> > +
+> > +&dvp {
+> > +	status = "okay";
+> > +};
+> > +
+> > +&hvs {
+> > +	status = "okay";
+> > +};
+> 
+> From my understanding these three are not necessary
+
+Indeed, they are already enabled.
+
+> > +
+> > +&pixelvalve0 {
+> > +	status = "okay";
+> > +};
+> > +
+> > +&pixelvalve1 {
+> > +	status = "okay";
+> > +};
+> > +
+> > +&pixelvalve2 {
+> > +	status = "okay";
+> > +};
+> > +
+> > +&pixelvalve3 {
+> > +	status = "okay";
+> > +};
+> > +
+> > +&pixelvalve4 {
+> > +	status = "okay";
+> > +};
+> > +
+> > +&txp {
+> > +	status = "okay";
+> > +};
+> 
+> Also txp doesn't need to be enabled explicit.
+
+Yes, already active. This was more to make sure they were enabled when porting 
+to other devices, but that probably doesn't make much sense for them to be 
+disabled.
+
+> > diff --git a/arch/arm64/boot/dts/broadcom/Makefile
+> > b/arch/arm64/boot/dts/broadcom/Makefile index c6882032a428..965361bff829
+> > 100644
+> > --- a/arch/arm64/boot/dts/broadcom/Makefile
+> > +++ b/arch/arm64/boot/dts/broadcom/Makefile
+> > @@ -1,6 +1,7 @@
+> > 
+> >  # SPDX-License-Identifier: GPL-2.0
+> >  dtb-$(CONFIG_ARCH_BCM2835) += bcm2711-rpi-400.dtb \
+> >  
+> >  			      bcm2711-rpi-4-b.dtb \
+> > 
+> > +			      bcm2711-rpi-4-b-7inch-ts-dsi.dtb \
+> > 
+> >  			      bcm2711-rpi-cm4-io.dtb \
+> >  			      bcm2837-rpi-3-a-plus.dtb \
+> >  			      bcm2837-rpi-3-b.dtb \
+> > 
+> > diff --git a/arch/arm64/boot/dts/broadcom/bcm2711-rpi-4-b-7inch-ts-dsi.dts
+> > b/arch/arm64/boot/dts/broadcom/bcm2711-rpi-4-b-7inch-ts-dsi.dts new file
+> > mode 100644
+> > index 000000000000..c325adc4f874
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/broadcom/bcm2711-rpi-4-b-7inch-ts-dsi.dts
+> > @@ -0,0 +1,2 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +#include "arm/bcm2711-rpi-4-b-7inch-ts-dsi.dts"
+
+Thanks for the fast review,
+
+Detlev.
+
 

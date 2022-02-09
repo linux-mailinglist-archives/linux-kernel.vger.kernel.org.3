@@ -2,143 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7204E4AE96F
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 06:44:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 139204AE970
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 06:44:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230434AbiBIFm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 00:42:58 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:49638 "EHLO
+        id S232622AbiBIFoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 00:44:03 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:49594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234221AbiBIFfW (ORCPT
+        with ESMTP id S233777AbiBIFfU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 00:35:22 -0500
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2081.outbound.protection.outlook.com [40.107.96.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32560C0302CF
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 21:35:26 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=i066eOzf6ePeMwO7qZBCmmTRL5frCAVUH2Q+5bUWxDP+L39cjTS1HhRLmlVdxPY2/OJ/OZV2nq08sAvWJyM+V1yyC5x0jpK1RXfSA8NJriz3i8O58jzWsa7DA7+L8TinBik0ExIO6jXpmNYfuViXOrWJhBZrO7uicBp6VDUzhi4xTmzz/J48lILvbUy+ZMuFxxdChma1CPb7t3zxQV7YIQYOb43VhF7UtlYfGJYsiJBv+OndJXutjC7daXQfU4BAy0hmbLs9Gch19IXIYltSSl1m65Ozoqwd8XGI32D+G/oIiD9968OKH4qmBdgJrtRfpV3h2z3yoGMHZT06n8Qoiw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NU96ABsEwkCOAk2k+gW2zoCe4zQsiyREY4XgHyCEBjg=;
- b=bO95c8uL/ZqYY41ne78g+R0lvV0zmm+rjlRpNIiYY8px0Z8oXtXyFeHnb8FI8DnX5MPcTonUMk12Ngo9+xxQeSc8VVwmcTmxT8cWQ70KX6tpU5ps48G5wgAqXObH1IlFveLTJEsRIMW6/g7yQEtIrKx3U9MPLcpP3PLWozulOKdOm/kFftpYeAItHn75XXEWnuwtEsoostgbCQluriyDAvJy4k3DiF85vRcZpgwNSjO0U66wFhNQPQcefNVfqiYV8ZsRiEWc8vIVmWztfr3PaNSUqosFaaKstrHACwEuEwxX+TYmNuXKpxnaJNaWVeLpLIItZ99DU/3NlEWDFpPNGw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=bootlin.com smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NU96ABsEwkCOAk2k+gW2zoCe4zQsiyREY4XgHyCEBjg=;
- b=jg3cdPcg515O3GONQzTcvw0pLkBOK5kq01n8h7zE9w4A8ps539akIei/kUlB6IVX0X4AvyziRk5c5xIC1G18rPohNtU/KwhOrkuGT7qqEpWlPuW7ADpjuhfk82up7dem+gXSxNCO1e3kBqS9mrUREBStNrUIoLsWJQ3v6UgZzV0=
-Received: from BN8PR04CA0026.namprd04.prod.outlook.com (2603:10b6:408:70::39)
- by BL0PR02MB5393.namprd02.prod.outlook.com (2603:10b6:208:81::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.17; Wed, 9 Feb
- 2022 05:34:35 +0000
-Received: from BN1NAM02FT031.eop-nam02.prod.protection.outlook.com
- (2603:10b6:408:70:cafe::f6) by BN8PR04CA0026.outlook.office365.com
- (2603:10b6:408:70::39) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.11 via Frontend
- Transport; Wed, 9 Feb 2022 05:34:34 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
-Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- BN1NAM02FT031.mail.protection.outlook.com (10.13.2.145) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4975.11 via Frontend Transport; Wed, 9 Feb 2022 05:34:34 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Tue, 8 Feb 2022 21:34:32 -0800
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Tue, 8 Feb 2022 21:34:32 -0800
-Envelope-to: git@xilinx.com,
- miquel.raynal@bootlin.com,
- vigneshr@ti.com,
- richard@nod.at,
- linux-mtd@lists.infradead.org,
- linux-kernel@vger.kernel.org
-Received: from [10.140.6.18] (port=58200 helo=xhdlakshmis40.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <amit.kumar-mahapatra@xilinx.com>)
-        id 1nHfcd-000CJW-JI; Tue, 08 Feb 2022 21:34:32 -0800
-From:   Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
-To:     <miquel.raynal@bootlin.com>, <nagasure@xilinx.com>,
-        <vigneshr@ti.com>
-CC:     <richard@nod.at>, <git@xilinx.com>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
-Subject: [PATCH v2] mtd: rawnand: pl353: Set the nand chip node as the flash node
-Date:   Wed, 9 Feb 2022 11:04:27 +0530
-Message-ID: <20220209053427.27676-1-amit.kumar-mahapatra@xilinx.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 9 Feb 2022 00:35:20 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D2C9C004589
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 21:35:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644384924; x=1675920924;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KE6xfqngCfvzZJKMLOkMX94zaj2SFyiEC9rCfOFqENM=;
+  b=lkAd10fmMC0/H6g0Nk5x/yiSTWjh28NZpZeqH8TixmBotEFfEtWDLFhB
+   C+RmHLnVJOgoOQIAF40JMokj2xO5gdztW42OiTu8EwPbybkky9eAJ6mXY
+   5UZCuvDUB5DS0LJE6iw5/2816wGXv8zwlD7d0PwtxNrHdiIpTgskB0oSV
+   PuMYnviMyd48gFSMyeYH2ujMVcLfL9jTGFOQVtgrjSoePGxPEN2+mU6ca
+   TSU0DRPF+ufpnEwYPDpXwWB8TUM1OUmH+mINUDf3v6T96yteTdsxlTl5A
+   dcJbFcXGZr5FYaF9esG+YYa/Pei4qUwDpvhf1G1tgMM3gOs2yNxwE0+we
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="249331348"
+X-IronPort-AV: E=Sophos;i="5.88,354,1635231600"; 
+   d="scan'208";a="249331348"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 21:34:30 -0800
+X-IronPort-AV: E=Sophos;i="5.88,354,1635231600"; 
+   d="scan'208";a="525844931"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 21:34:30 -0800
+Date:   Tue, 8 Feb 2022 21:34:30 -0800
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V8 06/44] mm/pkeys: Add Kconfig options for PKS
+Message-ID: <20220209053430.GL785175@iweiny-DESK2.sc.intel.com>
+References: <20220127175505.851391-1-ira.weiny@intel.com>
+ <20220127175505.851391-7-ira.weiny@intel.com>
+ <9c4a8275-236d-67b6-07f9-5e46f66396c0@intel.com>
+ <20220128231015.GK785175@iweiny-DESK2.sc.intel.com>
+ <f72b0e17-11bf-b12e-fe7a-d38b0833acdc@intel.com>
+ <20220204190851.GY785175@iweiny-DESK2.sc.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7044c44a-c3ba-47cf-5e51-08d9eb8ddb11
-X-MS-TrafficTypeDiagnostic: BL0PR02MB5393:EE_
-X-Microsoft-Antispam-PRVS: <BL0PR02MB53932330A7224987BB2D76E9BA2E9@BL0PR02MB5393.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: hucCXKOSFUAlK9vgvgiFDOV2zRGIRkaAJvrAGweyiT1BIjuXOWiIcCRzMmFjuKfa9Vkt89sl8VnooKl3tHQBsGabSkJiM9MwJ7DTiE475OSSJkT3tXGsS9mewbWisgQ23UHpNeqLVaCvaPsRfaZ5UrRHo+O6KNA+Cm8gGwb/i1DnBzFJqBLDTQnraVErGU+6LwoIIP8PkshjymR3DIl4w0/aTuCP2yvlRWObS2cXxMnJSrmQCG6wb0SynzPkzsrqRWy4qjjqc07aPx78AMnoIuJM/Zw2Jq/Q1l3JWDoHkZsNH7pTvlRbZfTWlhOpAC7XHha5DOszJ3xoO5J3yfIqOygHoyTvwtU6gztykPgQg9dY2H2DYObZCeH5+4pwf7dl0GUw1VJz+WqhaM8QLIWpeAnorjsrm9hD3Kk9GKIFQ9CdPcyzyRIgRRUE/HhH1Jhpu9jE39cPnV5kKx9v0GVjWuxCa6oAXfGdc2JxTVPhTjtKVu8sz2q3UH9EvwOSN1/pGEHwBjJE9ECGAZMV4eUIgE57RLqxtVKdBN8WPGvU7jfVhmbuM6tQpfFvCB731CyHK6ZTg9kJItj8AMrbWse3AVScqjnc0SXfElYruH6CzC040LKahmAT4Z5P2eFcLydJUrViOvWSIsyFgY2CrNWP6vWkd8XSrWnTNgaCkK/JcDihOqm3ehhh8GjAaKIWgUGf
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(4326008)(1076003)(426003)(336012)(186003)(83380400001)(356005)(110136005)(2616005)(36860700001)(26005)(7636003)(107886003)(5660300002)(47076005)(316002)(7696005)(9786002)(70586007)(8676002)(70206006)(8936002)(6666004)(2906002)(82310400004)(508600001)(36756003)(54906003)(102446001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2022 05:34:34.6338
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7044c44a-c3ba-47cf-5e51-08d9eb8ddb11
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT031.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR02MB5393
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220204190851.GY785175@iweiny-DESK2.sc.intel.com>
+User-Agent: Mutt/1.11.1 (2018-12-01)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In devicetree the flash information is embedded within nand chip node,
-so during nand chip initialization the nand chip node should be passed
-to nand_set_flash_node() api, instead of nand controller node.
+On Fri, Feb 04, 2022 at 11:08:51AM -0800, 'Ira Weiny' wrote:
+> On Fri, Jan 28, 2022 at 03:51:56PM -0800, Dave Hansen wrote:
+> > On 1/28/22 15:10, Ira Weiny wrote:
+> > > This issue is that because PKS users are in kernel only and are not part of the
+> > > architecture specific code there needs to be 2 mechanisms within the Kconfig
+> > > structure.  One to communicate an architectures support PKS such that the user
+> > > who needs it can depend on that config as well as a second to allow that user
+> > > to communicate back to the architecture to enable PKS.
+> > 
+> > I *think* the point here is to ensure that PKS isn't compiled in unless
+> > it is supported *AND* needed.
+> 
+> Yes.
+> 
+> > You have to have architecture support
+> > (ARCH_HAS_SUPERVISOR_PKEYS) to permit features that depend on PKS to be
+> > enabled.  Then, once one ore more of *THOSE* is enabled,
+> > ARCH_ENABLE_SUPERVISOR_PKEYS comes into play and actually compiles the
+> > feature in.
+> > 
+> > In other words, there are two things that must happen before the code
+> > gets compiled in:
+> > 
+> > 1. Arch support
+> > 2. One or more features to use the arch support
+> 
+> Yes.  I really think we are both say the same thing with different words.
 
-Fixes: 08d8c62164a3 ("mtd: rawnand: pl353: Add support for the ARM PL353 SMC NAND controller")
-Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
----
-BRANCH: nand/next
+Is the following more clear?
 
-Changes in v2:
-- Added Fixes tag.
----
- drivers/mtd/nand/raw/pl35x-nand-controller.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+<commit>
 
-diff --git a/drivers/mtd/nand/raw/pl35x-nand-controller.c b/drivers/mtd/nand/raw/pl35x-nand-controller.c
-index 8a91e069ee2e..3c6f6aff649f 100644
---- a/drivers/mtd/nand/raw/pl35x-nand-controller.c
-+++ b/drivers/mtd/nand/raw/pl35x-nand-controller.c
-@@ -1062,7 +1062,7 @@ static int pl35x_nand_chip_init(struct pl35x_nandc *nfc,
- 	chip->controller = &nfc->controller;
- 	mtd = nand_to_mtd(chip);
- 	mtd->dev.parent = nfc->dev;
--	nand_set_flash_node(chip, nfc->dev->of_node);
-+	nand_set_flash_node(chip, np);
- 	if (!mtd->name) {
- 		mtd->name = devm_kasprintf(nfc->dev, GFP_KERNEL,
- 					   "%s", PL35X_NANDC_DRIVER_NAME);
--- 
-2.17.1
+PKS is only useful to kernel consumers and is only available on some
+architectures.  If no kernel consumers are configured or PKS support is
+not available the PKS code can be eliminated from the compile.
 
+Define a Kconfig structure which allows kernel consumers to detect
+architecture support (ARCH_HAS_SUPERVISOR_PKEYS) and, if available,
+indicate that PKS should be compiled in (ARCH_ENABLE_SUPERVISOR_PKEYS).
+
+In this patch ARCH_ENABLE_SUPERVISOR_PKEYS remains off until the first
+kernel consumer sets it.
+
+</commit>
+
+Thanks,
+Ira

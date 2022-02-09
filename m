@@ -2,139 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D5084AE867
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 05:09:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8EC74AE888
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 05:14:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347166AbiBIEJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 23:09:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41870 "EHLO
+        id S1348032AbiBIEOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 23:14:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344316AbiBIDUc (ORCPT
+        with ESMTP id S243116AbiBIDWy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 22:20:32 -0500
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40690C0613CC;
-        Tue,  8 Feb 2022 19:20:31 -0800 (PST)
-Received: by mail-ot1-f42.google.com with SMTP id x52-20020a05683040b400b0059ea92202daso644240ott.7;
-        Tue, 08 Feb 2022 19:20:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kdQVNApM57taqQgD/NZRSOMXZsBoQXgaGeZXyEv+t4I=;
-        b=QqombAXYQZa/PGhtpCItQ0hJV38gvViubn757gp/sUNAz73mIIevOVxYiaJUOkLdxZ
-         V4HiEFJ0WhPornk6A1tPq0uf9VvJHoPnF7fGyResrnDI/djQbvKcf7nG+Qb75fP/jNoz
-         58Aq+9AofZzvtzWI3ONKkWkgVy/Qt/rTQOGIort4FITJw8mQhFnvPEnyCrMYHDmXRqTL
-         fERsvCx4Drix16ecYrA5LlVp/aOwjCHRq4JixMTcFsD0C2imEa9bfmXqb/gMmzKQYd6k
-         CPXGd3AShUWMbO0OOcSXtZEfIpsa88BNjAbrUxtLf3wHVZGH9pC5iaK8/GV4u6KcSC5T
-         T37w==
-X-Gm-Message-State: AOAM5338TvqpHkUdQTd0lzm8x46zYx2xGZuXn0V+3xokGOnBeAqZQDT9
-        5hoYOcQDORnlm37/5S4agQahj819Fg==
-X-Google-Smtp-Source: ABdhPJyDXby0X48vpe/WjclBIIse+1y7tQFhP5v+u0kUS+sXrbfyjK6JDuWFThkBPr1v+Zg0wgZ9zg==
-X-Received: by 2002:a05:6830:2466:: with SMTP id x38mr162568otr.33.1644376830320;
-        Tue, 08 Feb 2022 19:20:30 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id t2sm6190687ooo.24.2022.02.08.19.20.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 19:20:29 -0800 (PST)
-Received: (nullmailer pid 3567489 invoked by uid 1000);
-        Wed, 09 Feb 2022 03:20:28 -0000
-Date:   Tue, 8 Feb 2022 21:20:28 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Hugo Villeneuve <hugo@hugovil.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        Tue, 8 Feb 2022 22:22:54 -0500
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE49EC061576;
+        Tue,  8 Feb 2022 19:22:53 -0800 (PST)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1644376968;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=hLaxf6+mwc2bWStgicWOQJDXt1cFA12+VvmMUCrykgo=;
+        b=L0ceTlel3Z0OmlSwarXSFM4seNY/em3QuxmSPL7wV5djK8cAV1YvelNQyqgMzAeuuNvroB
+        BluClShiGljeqh5B1BpH7UntjII+666CauVzpFX7OXiU3qhaiCJVuCJym7SPrU/OIJNhMz
+        A++8xvXXqOqZoOenVXSkS1e9IhuQAvI=
+From:   Cai Huoqing <cai.huoqing@linux.dev>
+To:     cai.huoqing@linux.dev
+Cc:     Vinod Koul <vkoul@kernel.org>, Salah Triki <salah.triki@gmail.com>,
+        Jason Wang <wangborong@cdjrlc.com>, dmaengine@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 10/10] dt-bindings: rtc: pcf2127: add PCF2131 INT_A and
- INT_B support
-Message-ID: <YgMy/CYL8lmf6Y+J@robh.at.kernel.org>
-References: <20220125200009.900660-1-hugo@hugovil.com>
- <20220125200009.900660-11-hugo@hugovil.com>
+Subject: [PATCH] dmaengine: ppc4xx: Make use of the helper macro LIST_HEAD()
+Date:   Wed,  9 Feb 2022 11:22:19 +0800
+Message-Id: <20220209032221.37211-1-cai.huoqing@linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220125200009.900660-11-hugo@hugovil.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,TO_EQ_FM_DIRECT_MX,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 03:00:09PM -0500, Hugo Villeneuve wrote:
-> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> 
-> The PCF2131 has two output interrupt pins, named INT_A and INT_B.
-> 
-> Add properties to identify onto which pin we want the alarm interrupt
-> to be routed. It can be either one, or both.
-> 
-> These properties are automatically set to false for variants other
-> than PCF2131 (ex: PCF2127).
-> 
-> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> ---
->  .../devicetree/bindings/rtc/nxp,pcf2127.yaml  | 23 +++++++++++++++++++
->  1 file changed, 23 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-> index 57eb0a58afa3..83656dd2f97f 100644
-> --- a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-> +++ b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-> @@ -24,6 +24,16 @@ properties:
->    interrupts:
->      maxItems: 1
->  
-> +  alarm-output-a:
+Replace "struct list_head head = LIST_HEAD_INIT(head)" with
+"LIST_HEAD(head)" to simplify the code.
 
-nxp,alarm-output-a
+Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
+---
+ drivers/dma/ppc4xx/adma.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> +    $ref: /schemas/types.yaml#/definitions/flag
-> +    description:
-> +      Enable alarm interrupt on INT_A output pin.
-> +
-> +  alarm-output-b:
-> +    $ref: /schemas/types.yaml#/definitions/flag
-> +    description:
-> +      Enable alarm interrupt on INT_B output pin.
-> +
->    start-year: true
->  
->    reset-source: true
-> @@ -32,6 +42,18 @@ required:
->    - compatible
->    - reg
->  
-> +if:
-> +  not:
-> +    properties:
-> +      compatible:
-> +        contains:
-> +          enum:
-> +            - nxp,pcf2131
-> +then:
-> +  properties:
-> +    alarm-output-a: false
-> +    alarm-output-b: false
-> +
->  additionalProperties: false
->  
->  examples:
-> @@ -62,6 +84,7 @@ examples:
->              pinctrl-0 = <&rtc_nint_pins>;
->              interrupts-extended = <&gpio1 16 IRQ_TYPE_LEVEL_HIGH>;
->              reset-source;
-> +            alarm-output-b;
->          };
->      };
->  
-> -- 
-> 2.30.2
-> 
-> 
+diff --git a/drivers/dma/ppc4xx/adma.c b/drivers/dma/ppc4xx/adma.c
+index 5e46e347e28b..6b5e91f26afc 100644
+--- a/drivers/dma/ppc4xx/adma.c
++++ b/drivers/dma/ppc4xx/adma.c
+@@ -1686,8 +1686,8 @@ static struct ppc440spe_adma_desc_slot *ppc440spe_adma_alloc_slots(
+ {
+ 	struct ppc440spe_adma_desc_slot *iter = NULL, *_iter;
+ 	struct ppc440spe_adma_desc_slot *alloc_start = NULL;
+-	struct list_head chain = LIST_HEAD_INIT(chain);
+ 	int slots_found, retry = 0;
++	LIST_HEAD(chain);
+ 
+ 
+ 	BUG_ON(!num_slots || !slots_per_op);
+-- 
+2.25.1
+

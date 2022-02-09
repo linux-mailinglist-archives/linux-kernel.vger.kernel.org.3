@@ -2,87 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A0D34B0036
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 23:29:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D5174B002F
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 23:29:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235633AbiBIW2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 17:28:50 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:57790 "EHLO
+        id S235700AbiBIW3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 17:29:03 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:59332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235632AbiBIW2Z (ORCPT
+        with ESMTP id S235679AbiBIW23 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 17:28:25 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86480E01A2DD;
-        Wed,  9 Feb 2022 14:27:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644445677; x=1675981677;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=SfeEZ6Op0bvafHg5MlJ6fjdSi90N4yjAydK+PCRbadk=;
-  b=lly4Pgpp4F2zK0o/xha6ocMtS/XxRo1XzPkLQ2tCtu17LSx0wu34pJrw
-   uOkr52lfHWnHNO7wrwas5AzAgoHk/a2k2KaubN38xYrLC20HgYFFRHO0Q
-   fAxiC2S9gkb0bff4S0hrYkhKrGko3Ls9dfOcgCiMizHZZffGEDhmg1yHk
-   1zcmSMJ0ePiUKYN2X5TAgGHfdX9wWeuYiG5n6f8nt72MqbmOrjUytZYHN
-   Uwgd1Rz/0cBTED8y+AsSsApbls5l2kM3wVQMbHiQmSiDRkOHApzzU0eK+
-   u6dN7qe4BkhpeC2FjL9Lmi3O7BHC4CFelB/KmXL8IwIbBCKXYlb9y3+P5
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="230003811"
-X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
-   d="scan'208";a="230003811"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 14:27:57 -0800
-X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
-   d="scan'208";a="585744850"
-Received: from sanvery-mobl.amr.corp.intel.com (HELO [10.212.232.139]) ([10.212.232.139])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 14:27:55 -0800
-Message-ID: <804adbac-61e6-0fd2-f726-5735fb290199@intel.com>
-Date:   Wed, 9 Feb 2022 14:27:53 -0800
+        Wed, 9 Feb 2022 17:28:29 -0500
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 021BDC1DF65E
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 14:28:31 -0800 (PST)
+Received: by mail-ot1-x335.google.com with SMTP id b17-20020a9d4791000000b005a17fc2dfc1so2574501otf.1
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 14:28:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :mime-version;
+        bh=ow76+gGSkaBY1EZZ1MFaphikeMi7h3bSFQ/+/XQlTq0=;
+        b=lKOXkVrnz3eFiyfyLCV70oVZ2uqhUlhTnU3QFUzperRTSy4QZUoR4uPenX7xHTwNVI
+         XMRpSC15xRvPOm6eJaXes0Krt4wXmHiX+aXgxqpTbkDaVSipu8EARSjH1pk7Xqn7+kR5
+         ++RcXbkVSGaZv6GLcEoWPNK4+RWJBFTabSUAUrvPFwGUo2rtYXfWqdwZvPyw6PaYbNX5
+         5LWJ5ebin3BSsLtzCorjoC78oCL1zbHNjlpI2/qZbD/y8i2KiQIaJ8q23t2Gx9DCpxHl
+         LJkwNpbVGdpflZTg9raNp1gOz+c8JSkhI3TMpvKYL6k5H734BWeHbeuSGD8NxnZNEsKB
+         85cw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:mime-version;
+        bh=ow76+gGSkaBY1EZZ1MFaphikeMi7h3bSFQ/+/XQlTq0=;
+        b=DaAPfb/Ceg1BpRXNWbcf2/7lFwU1lYdlVR/6muIvUUCopCVcEgRhL0DPSZ4HhzPj/4
+         pyuecUd3CuCA8ozg6ozGHHh1koLWDUG0EiLV5hw1IXOeAEwnxT/dI3XT4/lDBtpbc8zL
+         DliVY8Y3G5v66z7Pp6uwxTnylZaVBeFU1n6EVWns6gYeZXh9yXOGRkc3rxAJ4gQa5A25
+         uWSODRJ539lgDr79PNMmXrRXlB9HJxoJIfSRKFwMxUxtlv3Oab3CQi4qDER+I0Y8ZtND
+         M6+HrBX26r6vPUYYUdvRiXgI0wQoouwspMA82dNeBhRnTX2q+XoxiyaopAERMjROnxGe
+         UTAQ==
+X-Gm-Message-State: AOAM5336Wh60RMkvqUIee2LszA2H+EDmsqN37Qokj3xQ5rNDz6Xx2Fr7
+        0bZMDBgq8jtf3Q1Yg4Rd+Sac5Q==
+X-Google-Smtp-Source: ABdhPJzmBki7ktBHEFQa+yoDyLpAdLuMiGhYDC2N3odDv4pHXR1wMIGMYfAU6QZon5yqJeyuMqH2nw==
+X-Received: by 2002:a9d:7856:: with SMTP id c22mr1887179otm.192.1644445710788;
+        Wed, 09 Feb 2022 14:28:30 -0800 (PST)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id e16sm7155029otr.11.2022.02.09.14.28.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Feb 2022 14:28:29 -0800 (PST)
+Date:   Wed, 9 Feb 2022 14:28:08 -0800 (PST)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.anvils
+To:     Vlastimil Babka <vbabka@suse.cz>
+cc:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Rik van Riel <riel@surriel.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Yu Zhao <yuzhao@google.com>, Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 01/13] mm/munlock: delete page_mlock() and all its
+ works
+In-Reply-To: <4a5bc989-e59a-d421-faf4-8156f700ec99@suse.cz>
+Message-ID: <ed2c4952-f3e-688d-40c1-53afebe5c7cb@google.com>
+References: <8e4356d-9622-a7f0-b2c-f116b5f2efea@google.com> <5ed1f01-3e7e-7e26-cc1-2b7a574e2147@google.com> <4a5bc989-e59a-d421-faf4-8156f700ec99@suse.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com
-Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
- <20220130211838.8382-20-rick.p.edgecombe@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH 19/35] mm/mmap: Add shadow stack pages to memory
- accounting
-In-Reply-To: <20220130211838.8382-20-rick.p.edgecombe@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,51 +83,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/30/22 13:18, Rick Edgecombe wrote:
-> +bool is_shadow_stack_mapping(vm_flags_t vm_flags)
-> +{
-> +	return vm_flags & VM_SHADOW_STACK;
-> +}
-> diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-> index bc8713a76e03..21fdb1273571 100644
-> --- a/include/linux/pgtable.h
-> +++ b/include/linux/pgtable.h
-> @@ -911,6 +911,14 @@ static inline void ptep_modify_prot_commit(struct vm_area_struct *vma,
->  	__ptep_modify_prot_commit(vma, addr, ptep, pte);
->  }
->  #endif /* __HAVE_ARCH_PTEP_MODIFY_PROT_TRANSACTION */
-> +
-> +#ifndef is_shadow_stack_mapping
-> +static inline bool is_shadow_stack_mapping(vm_flags_t vm_flags)
-> +{
-> +	return false;
-> +}
-> +#endif
+On Wed, 9 Feb 2022, Vlastimil Babka wrote:
+> On 2/6/22 22:30, Hugh Dickins wrote:
+> 
+> While I understand the reasons to clear the ground first, wonder what are
+> the implications for bisectability - is there a risk of surprising failures?
+> Maybe we should at least explicitly spell out the implications here?
+> IIUC, pages that once become mlocked, will stay mlocked, implicating the
+> Mlocked meminfo counter and inability to reclaim them. But if e.g. a process
+> that did mlockall() exits, its exclusive pages will be freed anyway, so it's
+> not a catastrophic kind of leak, right?
 
-Hold your horses there.  Remember:
+Thanks for taking a look, Vlastimil.  You make a good point here.
 
-+#ifdef CONFIG_X86_SHADOW_STACK
-+# define VM_SHADOW_STACK       VM_HIGH_ARCH_5
-+#else
-+# define VM_SHADOW_STACK       VM_NONE
-+#endif
+I had satisfied myself that no stage of the series was going to introduce
+boot failures or BUGs; and if someone is bisecting some mlock/munlock
+misbehaviour, I would not worry about which commit of the series they
+alight on, but root cause it keeping all the patches in mind.
 
-Plus:
+But we certainly wouldn't want the series split up into separately
+submitted parts (that is, split anywhere between 01/13 and 07/13:
+splitting the rest apart wouldn't matter much); and it would be
+unfortunate if someone were bisecting some reclaim failure OOM problem
+elsewhere, and their test app happened to be using mlock, and their
+bisection landed part way between 01 and 07 here - the unimplemented
+munlock confusing the bisection for OOM.
 
-#define VM_NONE         0x00000000
+The worst of it would be, I think, landing between 05 and 07: where
+your mlockall could mlock a variety of shared libraries etc, moving
+all their pages to unevictable, and those pagecache pages not getting
+moved back to evictable when unmapped.  I forget the current shrinker
+situation, whether inode pressure could evict that pagecache or not.
 
-That means the arch-generic version, when CONFIG_X86_SHADOW_STACK is off
-compiles down to:
+Two mitigations come to mind, let me think on it some more (and hope
+nobody's bisecting OOMs meanwhile): one might be to shift 05 (the one
+which replaces clear_page_inode() on last unmap by clearance when
+freeing) later in the series - its position was always somewhat
+arbitrary, but that position is where it's been tested; another might
+be to put nothing at all on the unevictable list in between 01 and 07.
 
-bool is_shadow_stack_mapping(vm_flags_t vm_flags)
-{
-	return vm_flags & 0x00000000;
-}
+Though taking this apart and putting it back together brings its own
+dangers.  That second suggestion probably won't fly very well, with
+06/13 using mlock_count only while on the unevictable.  I'm not sure
+how much rethinking the bisection possibility deserves.
 
-I _suspect_ the compiler *might* compile that down to the same thing as:
+> Yet it differs from the existing "failure modes" where pages would be left
+> as "stranded" due to failure of being isolated, because they would at least
+> go through TestClearPageMlocked and counters update.
+> 
+> >  
+> >  /*
+> > @@ -413,75 +136,11 @@ static unsigned long __munlock_pagevec_fill(struct pagevec *pvec,
+> >   *
+> >   * Returns with VM_LOCKED cleared.  Callers must be prepared to
+> >   * deal with this.
+> > - *
+> > - * We don't save and restore VM_LOCKED here because pages are
+> > - * still on lru.  In unmap path, pages might be scanned by reclaim
+> > - * and re-mlocked by page_mlock/try_to_unmap before we unmap and
+> > - * free them.  This will result in freeing mlocked pages.
+> >   */
+> >  void munlock_vma_pages_range(struct vm_area_struct *vma,
+> >  			     unsigned long start, unsigned long end)
+> >  {
+> > -	vma->vm_flags &= VM_LOCKED_CLEAR_MASK;
+> 
+> Should we at least keep doing the flags clearing? I haven't check if there
+> are some VM_BUG_ONs that would trip on not cleared, but wouldn't be entirely
+> surprised.
 
-	return false;
+There are two flags in question here, VM_LOCKED and VM_LOCKONFAULT:
+I'm not sure which of them you're particularly concerned about.
 
-So, why not just have one version, no additional #ifdefs, and be done
-with it?  Heck, why have the helper in the first place?  Just check
-VM_SHADOW_STACK directly.
+As to VM_LOCKED: yes, you're right, at this stage of the series the
+munlock really ought to be clearing VM_LOCKED (even while it doesn't
+go on to do anything about the pages), as it claims in the comment above.
+I removed this line at a later stage (07/13), when changing it to
+mlock_vma_pages_range() serving both mlock and munlock according to
+whether VM_LOCKED is provided - and mistakenly folded back that deletion
+to this patch.  End result the same, but better to restore that maskout
+in this patch, as you suggest.
+
+As to VM_LOCKONFAULT: I had checked the rest of mm/mlock.c, and the
+rest of the tree, and it only ever reached here along with VM_LOCKED;
+so when in 07/13 I switched over to "vma->vm_flags = newflags" (or
+WRITE_ONCE equivalent), I just didn't see the need to mask it out in
+the munlocking case; but could add a VM_BUG_ON that newflags never
+has it without VM_LOCKED, if you like. 
+
+(You'll say VM_WARN_ON_ONCE, I'll say VM_BUG_ON because it never happens,
+then as soon as I put it in and run LTP or kselftests, I'll be ashamed
+to discover I've got it wrong, perhaps.)
+
+Hugh

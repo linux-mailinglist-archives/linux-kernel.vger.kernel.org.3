@@ -2,65 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA6EE4AE869
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 05:11:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 749C74AE88B
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 05:15:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347458AbiBIEKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 23:10:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47162 "EHLO
+        id S1348186AbiBIEOt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 23:14:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347329AbiBIDlw (ORCPT
+        with ESMTP id S1347340AbiBIDmL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 22:41:52 -0500
-Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02801C06174F;
-        Tue,  8 Feb 2022 19:41:51 -0800 (PST)
-Received: by mail-oi1-f179.google.com with SMTP id q8so1240236oiw.7;
-        Tue, 08 Feb 2022 19:41:50 -0800 (PST)
+        Tue, 8 Feb 2022 22:42:11 -0500
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93B2DC06174F
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 19:42:09 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id 192so2293333ybd.10
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 19:42:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CnPuieAA45R+Cn7cQOpi068J2AYd/JgSUtDlGNknSQI=;
+        b=AZnwjfRshXyPzqPIPPOZIBwXE2OBB4TSrGQFToT0R0Wu4pzLEYJsDVs4oqb2JDdI2b
+         NeQPh3dKpSqjUmhkIiEdUcdC2WLGHHYULSJfRHoCj+J0nyHK9KzthFi386KJOowopwvZ
+         00fFIXDuuJiUp0TZD2Sdh8n1KE2SAwXh0+i+Q=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2uBLFZ0bop4GNjuX3AfN0OvA74Zgje4mCs2rxqz1als=;
-        b=31aXIjLctDNLZLLgskwTD599B16SnHWgl/woimUvCZbB379m0VV0qvRWWM2hY9OYRu
-         uY7mECobfNoqzcyWM21dSbWMdSwdouvX2oqgHJj6Bs18l5X3R0ei7HH7OFCmaWqZZz2w
-         F+x983yhOjwfbqJR8GNi116/BWEu0fVHEIg5SBTGwjjedh+NimwGDue4KYHrfqebyIpJ
-         UWlztDvNkSNI+Nly0I2f3pvl0YO7IIwm0VjeZxmPrQbcM2vFlym2GsELVvjiiK3VWDge
-         +oQjajApK2g/4dkXyLeyR5Z5nSmLnxS9m8VknHdXBW0lfQy5jF5+qDBzo3U+4YTW6ZIQ
-         yqUw==
-X-Gm-Message-State: AOAM5326gJnxsVeYexnsaWxCUPazYzqkFM/Q2i7oZHWMzdocAGvdPXtk
-        irxzIijr2ZLEjKGx7m+LDA==
-X-Google-Smtp-Source: ABdhPJxHuCzQRSdgQbD/dpAHOEDefFhYMR9jsE8gC31ttWua2aUvf702XmQ5GzjfR7N8wqiNIbUWxg==
-X-Received: by 2002:a05:6808:1598:: with SMTP id t24mr478637oiw.50.1644378110345;
-        Tue, 08 Feb 2022 19:41:50 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id o1sm6591379oik.0.2022.02.08.19.41.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 19:41:49 -0800 (PST)
-Received: (nullmailer pid 3600805 invoked by uid 1000);
-        Wed, 09 Feb 2022 03:41:48 -0000
-Date:   Tue, 8 Feb 2022 21:41:48 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Greg KH <greg@kroah.com>, Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH net-next v1 1/4] dt-bindings: net: add schema for ASIX
- USB Ethernet controllers
-Message-ID: <YgM3/OHpGaIy+b/c@robh.at.kernel.org>
-References: <20220127104905.899341-1-o.rempel@pengutronix.de>
- <20220127104905.899341-2-o.rempel@pengutronix.de>
- <YfJ7JXrqEEybRLCi@kroah.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CnPuieAA45R+Cn7cQOpi068J2AYd/JgSUtDlGNknSQI=;
+        b=fyITL1FeE9d0wA4JNgwXhKxFBjUjMeTnP4jIqlqIVRgoU6to6E2ruB9qUbUbdY+EsZ
+         VQsAvWJ1DbsI2vw3j7f0ZaP+6rVq67G3sybVPwjZkUwrcLTDgrIqeyBsukFPU/6qAuaW
+         DuHMaqbSAQ04kUaepCIYGyx6lUvWnGLohzm1foNRJXGlxYEriJ9Qc7YwqT4Ru1iElt9K
+         TFS0nc2LYOD7pm89Di6fgK2+VSFIahsd7bl23SYzURpk2t+lUoohYqSG6cvwxPDBY6oh
+         A2CbQRbYHuyhw2J+W/OngepwB8++Iecn3Grovpj4Rp110lnGFhtMEig3rE8Dv0TSheLS
+         YLig==
+X-Gm-Message-State: AOAM530mSRDZikN/te8epHNBMjiCft5UXEjMUfjy/s4DO+G2U/AbCJge
+        7NWO2uaMXQh4PZLrbXw2sh0TCUwf7toS8L0tqWDiJw==
+X-Google-Smtp-Source: ABdhPJy4AuPuBilZB61l9fPeAtLlFGVf2W2h4Ha6zFYFfX08a8Ah4rVomwclUlKHdtLJRVjmPUVCKLciLbTpFwKoUPo=
+X-Received: by 2002:a81:34d7:: with SMTP id b206mr290747ywa.489.1644378128857;
+ Tue, 08 Feb 2022 19:42:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YfJ7JXrqEEybRLCi@kroah.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+References: <20220207214026.1526151-1-pmalani@chromium.org>
+ <20220207214026.1526151-4-pmalani@chromium.org> <YgIBv2SQdwXm7RLt@google.com>
+ <CACeCKaezRNgsqrq3QJ1ViHjYScFrjpC-kCaYmE8kOXCcW9MRrw@mail.gmail.com>
+ <YgJQ30D8nc4LWvUy@google.com> <CACeCKaf4+jxSkKFqx9g3YSPWj-FkbL=jrmHE3YEu7oU0ySPJ4Q@mail.gmail.com>
+ <CACeCKadujMj4pJqf_jNNmO4UkQinw9QNu_MXe5zkTySUn6R=dw@mail.gmail.com> <YgM1pjwN2MHaMQCJ@google.com>
+In-Reply-To: <YgM1pjwN2MHaMQCJ@google.com>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Tue, 8 Feb 2022 19:41:58 -0800
+Message-ID: <CACeCKafm3o2Ht3F0njQZ+JptDM=yZMpi0qUS=DR07LiCC_O4Ww@mail.gmail.com>
+Subject: Re: [PATCH 3/4] platform/chrome: cros_ec_typec: Configure muxes at
+ start of port update
+To:     Tzung-Bi Shih <tzungbi@google.com>
+Cc:     linux-kernel@vger.kernel.org, Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        "open list:CHROMEOS EC USB TYPE-C DRIVER" 
+        <chrome-platform@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,16 +69,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 11:59:49AM +0100, Greg KH wrote:
-> On Thu, Jan 27, 2022 at 11:49:02AM +0100, Oleksij Rempel wrote:
-> > Create initial schema for ASIX USB Ethernet controllers and import all
-> > currently supported USB IDs form drivers/net/usb/asix_devices.c
-> 
-> Again, you are setting yourself to play a game you are always going to
-> loose and be behind on.  This is not acceptable, sorry.
+On Tue, Feb 8, 2022 at 7:31 PM Tzung-Bi Shih <tzungbi@google.com> wrote:
+>
+> On Tue, Feb 08, 2022 at 02:58:51PM -0800, Prashant Malani wrote:
+> > On Tue, Feb 8, 2022 at 10:35 AM Prashant Malani <pmalani@chromium.org> wrote:
+> > > In general, I think you may benefit from reading:
+> > > - The entire cros_ec_typec driver
+> > > - The EC Type C state machine [2] and interfaces [3][4]
+> > >
+> > > The above 2 will help understand how this entire stack works. Without
+> > > it, it is challenging
+> > > to process the flow (just from code review).
+> > >
+> > > If you have further questions our would like to better understand the
+> > > drivers, feel free to reach
+> > > out to me over IM/email. I don't think public list code review is the
+> > > best option for this
+> > > sort of explanation.
+> > >
+> > > [1] https://elixir.bootlin.com/linux/latest/source/drivers/platform/chrome/cros_ec_typec.c#L549
+> > > [2] https://source.chromium.org/chromiumos/chromiumos/codesearch/+/main:src/platform/ec/common/usbc/
+> > > [3] https://source.chromium.org/chromiumos/chromiumos/codesearch/+/main:src/platform/ec/driver/usb_mux/usb_mux.c
+> > > [4] https://source.chromium.org/chromiumos/chromiumos/codesearch/+/main:src/platform/ec/common/usb_pd_host_cmd.c
+>
+> Thanks for the link pointers.  It would take me some time to understand the
+> background for reviewing the patch though.
+>
+> But in general, I would suggest to change the title for a stronger signal
+> that it fixes something (per [1]).  Otherwise, the title and the description
+> in cover letter looks like a move refactor.
 
-I would suggest adding just the IDs you need. There probably aren't many 
-which are hardwired. And if they aren't hardwired, what are they doing 
-in DT?
+I'm hesitant to use the term "fix" in the title; IMO the commit
+message describes the potential race involved.
+Since it is an unlikely edge case, brought about by limitations in how
+the EC updates its state,
+I'd like to avoid assigning it a "Fixes" label  too.
 
-Rob
+I can perhaps add some info to the cover letter, but I don't think
+that alone is worth a v3.
+I'll let this series hang for a few days; if there are other comments
+which necessitate a respin, I'll
+reword the cover letter.
+
+-Prashant
+
+>
+> [1]: https://patchwork.kernel.org/project/chrome-platform/patch/20220207214026.1526151-4-pmalani@chromium.org/#24727676

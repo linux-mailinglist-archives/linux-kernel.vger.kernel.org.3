@@ -2,99 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7ABE4AED18
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 09:51:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D21594AED11
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 09:49:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234810AbiBIItt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 03:49:49 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:60434 "EHLO
+        id S233575AbiBIItn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 03:49:43 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:60132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233050AbiBIItp (ORCPT
+        with ESMTP id S229969AbiBIItk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 03:49:45 -0500
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83314C0043F4;
-        Wed,  9 Feb 2022 00:49:40 -0800 (PST)
-Received: by mail-qt1-x833.google.com with SMTP id r14so1236176qtt.5;
-        Wed, 09 Feb 2022 00:49:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=VGdhIE5RG442DELBhFAVFpR6XS4hpzdg4tGBVA8vUWc=;
-        b=bBl0GrPApUyp9PKJrzZqGzE2GGrRkM9plAwR+Z3Y3Z5PPbvXHnNUw2sEdQOnDJDa+D
-         9t9stRmRhcDGlY0eRoXncTHtpPoAln863IeNlUPtg17MZ0YbAffrmhg3aZTSIQ3+Jmos
-         dG6lkh1if7EaNBoMufbF7I/un80y68bwIvmDGmv6ROk9kqKUgJNXCPR7MawgLlmjhs92
-         3jOnnd0gszVCokFPZ+VApCt89c+cseXtiU29mWJyqc7PLuUjaWIUwHjv9o2vNCm8WoDc
-         +TObwhVnJ60Y9FDSIHwpAhak0qGkLSkUY7qQ/lLkliqg0ORRKF0aIo6aZEIAHSrbxJ+I
-         DNdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=VGdhIE5RG442DELBhFAVFpR6XS4hpzdg4tGBVA8vUWc=;
-        b=P8BFTgoNyVAwzWQxJQ5EmlY7Yc9267KBXsOeOoaU/TZR7WO2feGuJx9dD4XzIKlDhv
-         ExrXdNEdEIos0CRvt8o7QcdqZMP7tPLTZ3sYsz72aC8M1lq9ChuSP2q6sUgtQhbp48P9
-         pJQ73wyhsa6h5C4bymVMPW/TzvlG3x9thVcM0aGxjwMfMTPl7MUCtLJ5EvJTBSDbW5jx
-         FFCXQF4fcNSWr25W6dmLmtbCUeZUFdeW8QR/Xl0EZ0khoy3h+37wHWNgV9I0rDER8WcU
-         1tvEN9h6Fqfhbpt/IQN2QjdagEDmz79UYEShurgbIw2Xciizx5TlHHVg+KUomdb46qJG
-         D/pQ==
-X-Gm-Message-State: AOAM533qHam5ZsRNPU1bmn7sJ6XXMl60cJ7qUB0R9d6lE7RYFRnSHaDK
-        Xy/r6CAMoPa1f79eaSq7ZAY=
-X-Google-Smtp-Source: ABdhPJyiOBYIcPBMcHHZfwdm7yELi0V71MeIsgZstO1OYCnrhoVrPiuIYR6gLmFJ5OgCeb24mFuAUw==
-X-Received: by 2002:ac8:5a52:: with SMTP id o18mr626863qta.33.1644396501284;
-        Wed, 09 Feb 2022 00:48:21 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id w13sm7857289qkb.106.2022.02.09.00.48.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 00:48:20 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: deng.changcheng@zte.com.cn
-To:     deller@gmx.de
-Cc:     daniel.vetter@ffwll.ch, geert@linux-m68k.org, svens@stackframe.org,
-        cssk@net-c.es, penguin-kernel@I-love.SAKURA.ne.jp,
-        deng.changcheng@zte.com.cn, ducheng2@gmail.com,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] fbcon: use min() to make code cleaner
-Date:   Wed,  9 Feb 2022 08:48:10 +0000
-Message-Id: <20220209084810.1561184-1-deng.changcheng@zte.com.cn>
+        Wed, 9 Feb 2022 03:49:40 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530F0E01647F;
+        Wed,  9 Feb 2022 00:49:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644396577; x=1675932577;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=jlouUnr12In+wfWxjcYG/0EnwZ1YwgpYLta7yRl7Qrg=;
+  b=KR0OxDM2q4Lsam+3gbvMF5XBwEXEBdujSRUk80N+PnpZVLSAqxubCIJq
+   NS3/6BlfKPM7rdHabkkc5+4hP9K/39QRcgtQtQJitA7CMXQg2PldJ0Eyt
+   xEhK91KDPmtrcnabgy7lWxBO87/Eu4bB0gfqVI/SEAzBKvqiOHpim1Voe
+   24LIKKbIhPauQL0B42AUYp4hmKvoaVmnJJNK3lt9F3HDZKMUyR8FEXEQw
+   zFdBsxA3+OSlFkdG1taqO2WsH9+mCllP6qPab3PeKdl6YnagieFg+6Zkn
+   lFCCmDtB7gOQvBWltC/OHkf2yuRDyerpYhWy1QNcpdhRRa1jX3j/LuspM
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="247992169"
+X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
+   d="scan'208";a="247992169"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 00:49:34 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
+   d="scan'208";a="568169164"
+Received: from ahunter-desktop.fi.intel.com ([10.237.72.92])
+  by orsmga001.jf.intel.com with ESMTP; 09 Feb 2022 00:49:30 -0800
+From:   Adrian Hunter <adrian.hunter@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>, linux-kernel@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        kvm@vger.kernel.org, H Peter Anvin <hpa@zytor.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Leo Yan <leo.yan@linaro.org>
+Subject: [PATCH 00/11] perf intel-pt: Add perf event clocks to better support VM tracing
+Date:   Wed,  9 Feb 2022 10:49:18 +0200
+Message-Id: <20220209084929.54331-1-adrian.hunter@intel.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki, Business Identity Code: 0357606 - 4, Domiciled in Helsinki
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Changcheng Deng <deng.changcheng@zte.com.cn>
+Hi
 
-Use min() in order to make code cleaner.
+These patches add 2 new perf event clocks based on TSC for use with VMs.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
----
- drivers/video/fbdev/core/fbcon.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The first patch is a minor fix, the next 2 patches add each of the 2 new
+clocks.  The remaining patches add minimal tools support and are based on
+top of the Intel PT Event Trace tools' patches.
 
-diff --git a/drivers/video/fbdev/core/fbcon.c b/drivers/video/fbdev/core/fbcon.c
-index f36829eeb5a9..61171159fee2 100644
---- a/drivers/video/fbdev/core/fbcon.c
-+++ b/drivers/video/fbdev/core/fbcon.c
-@@ -602,7 +602,7 @@ static void fbcon_prepare_logo(struct vc_data *vc, struct fb_info *info,
- 		save = kmalloc(array3_size(logo_lines, new_cols, 2),
- 			       GFP_KERNEL);
- 		if (save) {
--			int i = cols < new_cols ? cols : new_cols;
-+			int i = min(cols, new_cols);
- 			scr_memsetw(save, erase, array3_size(logo_lines, new_cols, 2));
- 			r = q - step;
- 			for (cnt = 0; cnt < logo_lines; cnt++, r += i)
--- 
-2.25.1
+The future work, to add the ability to use perf inject to inject perf
+events from a VM guest perf.data file into a VM host perf.data file,
+has yet to be implemented.
 
+
+Adrian Hunter (11):
+      perf/x86: Fix native_perf_sched_clock_from_tsc() with __sched_clock_offset
+      perf/x86: Add support for TSC as a perf event clock
+      perf/x86: Add support for TSC in nanoseconds as a perf event clock
+      perf tools: Add new perf clock IDs
+      perf tools: Add API probes for new clock IDs
+      perf tools: Add new clock IDs to "perf time to TSC" test
+      perf tools: Add perf_read_tsc_conv_for_clockid()
+      perf intel-pt: Add support for new clock IDs
+      perf intel-pt: Use CLOCK_PERF_HW_CLOCK_NS by default
+      perf intel-pt: Add config variables for timing parameters
+      perf intel-pt: Add documentation for new clock IDs
+
+ arch/x86/events/core.c                     | 43 +++++++++++---
+ arch/x86/include/asm/perf_event.h          |  5 ++
+ arch/x86/kernel/tsc.c                      |  3 +-
+ include/uapi/linux/perf_event.h            | 14 +++++
+ kernel/events/core.c                       | 13 +++++
+ tools/include/uapi/linux/perf_event.h      | 14 +++++
+ tools/perf/Documentation/perf-config.txt   | 18 ++++++
+ tools/perf/Documentation/perf-intel-pt.txt | 47 +++++++++++++++
+ tools/perf/Documentation/perf-record.txt   |  9 ++-
+ tools/perf/arch/x86/util/intel-pt.c        | 93 ++++++++++++++++++++++++++++--
+ tools/perf/builtin-record.c                |  2 +-
+ tools/perf/tests/perf-time-to-tsc.c        | 41 ++++++++++---
+ tools/perf/util/clockid.c                  |  6 ++
+ tools/perf/util/intel-pt.c                 | 27 +++++++--
+ tools/perf/util/intel-pt.h                 |  7 ++-
+ tools/perf/util/perf_api_probe.c           | 22 +++++++
+ tools/perf/util/perf_api_probe.h           |  2 +
+ tools/perf/util/record.h                   |  1 +
+ tools/perf/util/tsc.c                      | 56 ++++++++++++++++++
+ tools/perf/util/tsc.h                      |  1 +
+ 20 files changed, 395 insertions(+), 29 deletions(-)
+
+
+Regards
+Adrian

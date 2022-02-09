@@ -2,83 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D436E4AFEE0
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 22:03:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3B464AFEE5
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 22:04:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232732AbiBIVCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 16:02:17 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:51884 "EHLO
+        id S232812AbiBIVEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 16:04:10 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:54562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232707AbiBIVCJ (ORCPT
+        with ESMTP id S232767AbiBIVEJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 16:02:09 -0500
-Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A0C9C08C5F5;
-        Wed,  9 Feb 2022 13:02:11 -0800 (PST)
-Received: by mail-oo1-f46.google.com with SMTP id v17-20020a4ac911000000b002eac41bb3f4so3902456ooq.10;
-        Wed, 09 Feb 2022 13:02:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=uqMJ5pzDSIfGFtp8phHCNpFXexGgfsJe1tkP341IGSw=;
-        b=eCaN/dAk9m9/Ot+H03Xylxi+leU18gPbg5dF529pD0LOOv/203smV8bzcaOMfZCjKy
-         2Eu33ZSyuRD/0TArn3dLnW5AoRcAWUIJwX6F3VTjUqNnfZMx68avaNW6Zfr54TQPNVRK
-         V52SQNI/FomvtE5BHv0mKTCO5Pznxmgz6kex7LRmP6oWY7Mft0we3rZ2NZhZovwMPXcE
-         9JeIKJXyug2y1Gdffawkt9AIdrdKFWluyB3JQFGtQB4/+arA7sNhdZuf64inZZAFK22f
-         O8QgHuUXrB4XM8RXtlvqj8S28ZfgOynSGPhTfKK2DloPITb0XpCsL0KKuMW7CNHYzTC1
-         c3VA==
-X-Gm-Message-State: AOAM532VjAZP91Q30Xi8rAjZ9O+4xn73gyeugHXClOHKFNKcrbHkx+/Y
-        8o97xcpVPBSSlBvpkCVT6Q==
-X-Google-Smtp-Source: ABdhPJzXACJWwdiM5VhZ/DDuTscLU4MFdCxK6TgQGBOID8HvPrRhukIR3/QEt6KA8gv9Ks5tKVBJ3Q==
-X-Received: by 2002:a05:6870:e7c5:: with SMTP id q5mr1605332oak.284.1644440530853;
-        Wed, 09 Feb 2022 13:02:10 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id l15sm7101269ots.28.2022.02.09.13.02.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 13:02:09 -0800 (PST)
-Received: (nullmailer pid 904638 invoked by uid 1000);
-        Wed, 09 Feb 2022 21:02:09 -0000
-Date:   Wed, 9 Feb 2022 15:02:08 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Jonathan Bakker <xc-racer2@live.ca>,
-        alsa-devel@alsa-project.org, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 5/6] ASoC: dt-bindings: samsung,snow: convert to
- dtschema
-Message-ID: <YgQr0BTV4WDnDXrd@robh.at.kernel.org>
-References: <20220129122357.45545-1-krzysztof.kozlowski@canonical.com>
- <20220129122430.45694-4-krzysztof.kozlowski@canonical.com>
+        Wed, 9 Feb 2022 16:04:09 -0500
+Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C913C094CAC;
+        Wed,  9 Feb 2022 13:04:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1644440652; x=1675976652;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=10tm3cQsz7x9PrwW3/R/GSrD5sWBEjDc7ttJqudyxLM=;
+  b=B3GFd7auusninFXrghiq+YzqPFwqiU3hXrKH+DkC9I1DzNKUk0jre9hX
+   C+fQie6o9f2CHCRaycVnPC5XPEwgW1b2CKbDE6lqWeaKJpG/0O3fPzeKD
+   RSGPUv1xajvTbfFhEWAwbX47BtD0L6iNNKg6PfwF/9+KN+4mS5ssrEgqZ
+   g=;
+X-IronPort-AV: E=Sophos;i="5.88,356,1635206400"; 
+   d="scan'208";a="61888969"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-iad-1e-98691110.us-east-1.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP; 09 Feb 2022 21:04:10 +0000
+Received: from EX13MTAUWC002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1e-98691110.us-east-1.amazon.com (Postfix) with ESMTPS id DA0188124D;
+        Wed,  9 Feb 2022 21:04:07 +0000 (UTC)
+Received: from EX13D47UWC001.ant.amazon.com (10.43.162.39) by
+ EX13MTAUWC002.ant.amazon.com (10.43.162.240) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.28; Wed, 9 Feb 2022 21:04:06 +0000
+Received: from dev-dsk-jorcrous-2c-c78924fd.us-west-2.amazon.com
+ (10.43.162.55) by EX13D47UWC001.ant.amazon.com (10.43.162.39) with Microsoft
+ SMTP Server (TLS) id 15.0.1497.28; Wed, 9 Feb 2022 21:04:06 +0000
+From:   <jorcrous@amazon.com>
+To:     <linux-arm-msm@vger.kernel.org>
+CC:     Jordan Crouse <jorcrous@amazon.com>,
+        Akash Asthana <akashast@codeaurora.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mukesh Savaliya <msavaliy@codeaurora.org>,
+        Vinod Koul <vkoul@kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] i2c: qcom-geni: Fix return value for master_xfer
+Date:   Wed, 9 Feb 2022 21:03:56 +0000
+Message-ID: <20220209210356.2848-1-jorcrous@amazon.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220129122430.45694-4-krzysztof.kozlowski@canonical.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.43.162.55]
+X-ClientProxiedBy: EX13D24UWB002.ant.amazon.com (10.43.161.159) To
+ EX13D47UWC001.ant.amazon.com (10.43.162.39)
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 29 Jan 2022 13:24:29 +0100, Krzysztof Kozlowski wrote:
-> Convert the audio complex on Google Snow boards with Samsung Exynos SoC
-> to DT schema format.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> ---
->  .../bindings/sound/samsung,snow.yaml          | 74 +++++++++++++++++++
->  .../devicetree/bindings/sound/snow.txt        | 31 --------
->  2 files changed, 74 insertions(+), 31 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/sound/samsung,snow.yaml
->  delete mode 100644 Documentation/devicetree/bindings/sound/snow.txt
-> 
+From: Jordan Crouse <jorcrous@amazon.com>
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+The master_xfer function is supposed to return the number of messages that
+were processed. Both  geni_i2c_gpi_xfer and geni_i2c_fifo_xfer are
+returning 0 which is being interpeted as a error in the upper layers.
+
+Fixes: 8133682618cb ("i2c: qcom-geni: Add support for GPI DMA")
+Signed-off-by: Jordan Crouse <jorcrous@amazon.com>
+---
+
+ drivers/i2c/busses/i2c-qcom-geni.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
+index c5345f3421a8..e008161e1a67 100644
+--- a/drivers/i2c/busses/i2c-qcom-geni.c
++++ b/drivers/i2c/busses/i2c-qcom-geni.c
+@@ -619,7 +619,7 @@ static int geni_i2c_gpi_xfer(struct geni_i2c_dev *gi2c, struct i2c_msg msgs[], i
+ 		geni_i2c_gpi_unmap(gi2c, &msgs[i], tx_buf, tx_addr, rx_buf, rx_addr);
+ 	}
+ 
+-	return 0;
++	return num;
+ 
+ err:
+ 	dmaengine_terminate_sync(gi2c->rx_c);
+@@ -645,10 +645,10 @@ static int geni_i2c_fifo_xfer(struct geni_i2c_dev *gi2c,
+ 			ret = geni_i2c_tx_one_msg(gi2c, &msgs[i], m_param);
+ 
+ 		if (ret)
+-			break;
++			return ret;
+ 	}
+ 
+-	return ret;
++	return num;
+ }
+ 
+ static int geni_i2c_xfer(struct i2c_adapter *adap,
+-- 
+2.32.0
+

@@ -2,90 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07EE84AF618
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:09:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B375F4AF617
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:09:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234181AbiBIQIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 11:08:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43018 "EHLO
+        id S236581AbiBIQI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 11:08:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231704AbiBIQIO (ORCPT
+        with ESMTP id S231704AbiBIQIW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 11:08:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C6631C061355
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 08:08:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644422896;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0y+3D1mmDP+so7K35HmtJtJnfLKa5XZgyYtLZiIRCfU=;
-        b=LfeaPp9JDVMGL6GWsUeuC955pRKJu2tTgTL39A43aGh+cKeDy+sgnnUKDJDf/LDpxBV1zh
-        UL5UBrAkZtGcHnzVy5sxQqIclG23DuQ1QGVan9ZygV8dgZsaQ7qHi1gvxgVZmGwmQhkOXN
-        4xxMCiplzdu/GtpsDWlAgC/BOAIwZT8=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-28-bdePseLWPFWkC0Mb88jn6w-1; Wed, 09 Feb 2022 11:08:15 -0500
-X-MC-Unique: bdePseLWPFWkC0Mb88jn6w-1
-Received: by mail-ej1-f70.google.com with SMTP id ka12-20020a170907990c00b006c41c582397so1399080ejc.11
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 08:08:15 -0800 (PST)
+        Wed, 9 Feb 2022 11:08:22 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DFDBC0613C9;
+        Wed,  9 Feb 2022 08:08:25 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id k10so1121850ljq.2;
+        Wed, 09 Feb 2022 08:08:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=3LjZkfsnvFgUjcgFV9sB8nTwuBZrwGSMIL1VSbtAcMs=;
+        b=YyOQ+mqZzIkGZSYXQT5D4k2YHmoQkHau7yq2V43cGra3NFxDvDz0T+383EQ3fNTsm4
+         l+R03EqeEp4P7ZVu2utZxiyp6P0lGX6FE9GqsAnP/B9wEOudXOJGZSolz9hbLIHPKICZ
+         HXRECwP6WDfkaTEj4Dbudg9ZfcSf+OKFGkdOX4LTAU/esjpRm96mGuMgBnGu7qF8zemz
+         lXghhWestDkhs+kgAhDJ618gf2lBKcmNe2ip381kq7JRdjPF/1mUIKpw+l/XMAPJlqSS
+         57V5KYOSjTIvPUl/bg06ZaVpr+q0AW6ZWQwXyAkwjT1DnCc7eAAnz56BBBCcLs+BEPpw
+         Br4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=0y+3D1mmDP+so7K35HmtJtJnfLKa5XZgyYtLZiIRCfU=;
-        b=0eVoahyyntUWH1SYnZl2oOx8HfeyEoi7+Uc5Dil7widFBEptF+wFV80N/FYtHC5ROV
-         HUlWp3nPEqZ2wq7GDGgiC8qYmPZJ/TZwasPtB2/4v9Gpk1u8tisz4Hx1T9/Q6f3ZIX/R
-         mqjkqbBWSMMrZNqvRADrdNIO37ufPpR8iSQgSCXFY5PzyIxsa32RaVDeIZ5jxgTIcIy0
-         b946kuCTgjxQepQOaUCFntthIZnsyouGvkMGXgez/OJeol+CWrM3tkzPCYIBjWbUbCml
-         7T7AIJ9tGn8eTxtoZhRTpCeO4d+tWjQWjo+g7NFh34+vLwOgtKUtAPEdcx8J+ErVpd6N
-         RIfw==
-X-Gm-Message-State: AOAM530WYoE56DyyOztmIE6A7BkdiYm6o92WOB8Qi34fUfS9e+/UA3gS
-        1aClOy/A9SiYxCv+YDmJTS2FVm9ez55G97Hs7mXwfcZHX2/gHD7aOW56SWRbPWS8mIQ6brZOs9x
-        L7F3/rafnu92ZYsZOkNaViso2
-X-Received: by 2002:a17:906:15ca:: with SMTP id l10mr2696379ejd.435.1644422894519;
-        Wed, 09 Feb 2022 08:08:14 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxb6OkuwjdrgsvxBGJbTCnOXgla4rTIAOurtFalLqWz1KjOzLrxrYsGyj6nNlH9UONmPYU0kQ==
-X-Received: by 2002:a17:906:15ca:: with SMTP id l10mr2696358ejd.435.1644422894330;
-        Wed, 09 Feb 2022 08:08:14 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id va16sm4817409ejb.173.2022.02.09.08.08.13
+        bh=3LjZkfsnvFgUjcgFV9sB8nTwuBZrwGSMIL1VSbtAcMs=;
+        b=X5dBDClwqLJeQQBSuquXZVb113XlgIfOPeY3BcHV1hppFiZUexgUeTPzOZv8/mZIgW
+         qcceTP33f+PrkH0aZ/elyEqiEfFJTbTDrxlMISMEMzrJKsizd28Y79XH+sJp/0/ouMlP
+         +cjtjBti1z1YPWyaRrFP8KtpXdsQktjoefZ5n5MsGZ1hS6ZI3M1afAoLIGGOIOGY5YGV
+         Jy9k2nUrpNhANJmyXZVKjXnykFtevP+LwQdBVJ6oOEyL1UWN7JUQ4vnpv2r21oKi2dtd
+         OO42+h8iNlwT7CpeczT4Fnf03x3lSfHLZxrGi3BtwfGX428kdpy2D9Z5kioOCdy9Iidh
+         Zf3w==
+X-Gm-Message-State: AOAM5309YEjhwZPa92v2N8iF3mnxMsIzux+OOlA96Ky7yHnOZav5j9xM
+        AVGqSW5FGH1A9AwC87+j99eLyY8wxsdnDQ==
+X-Google-Smtp-Source: ABdhPJwJWSHIOJjXRlxqiBv7Mp09gR3VoqOHH7ZwVhTUHB69AxeeU/vDtYmpDFh3c4iLVL2uIGUU2A==
+X-Received: by 2002:a2e:93c9:: with SMTP id p9mr2009723ljh.397.1644422902208;
+        Wed, 09 Feb 2022 08:08:22 -0800 (PST)
+Received: from [192.168.1.103] ([178.176.73.27])
+        by smtp.gmail.com with ESMTPSA id s13sm2421825lfs.223.2022.02.09.08.08.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Feb 2022 08:08:13 -0800 (PST)
-Message-ID: <2f01e99d-e830-d03c-3a9d-30b95726cc2c@redhat.com>
-Date:   Wed, 9 Feb 2022 17:08:13 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [5.17 regression] "x86/PCI: Ignore E820 reservations for bridge
- windows on newer systems" breaks suspend/resume
-Content-Language: en-US
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Myron Stowe <myron.stowe@redhat.com>,
-        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        linux-acpi <linux-acpi@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>, x86@kernel.org,
+        Wed, 09 Feb 2022 08:08:21 -0800 (PST)
+Subject: Re: [PATCH 2/3] i2c: sh_mobile: Use platform_get_irq_optional() to
+ get the interrupt
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Chris Brandt <chris.brandt@renesas.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        linux-rpi-kernel <linux-rpi-kernel@lists.infradead.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        =?UTF-8?Q?Benoit_Gr=c3=a9goire?= <benoitg@coeus.ca>,
-        Hui Wang <hui.wang@canonical.com>
-References: <a7ad05fe-c2ab-a6d9-b66e-68e8c5688420@redhat.com>
- <697aaf96-ec60-4e11-b011-0e4151e714d7@redhat.com> <YgKcl9YX4HfjqZxS@lahna>
- <02994528-aaad-5259-1774-19aeacdd18fc@redhat.com> <YgPlQ6UK3+4/yzLk@lahna>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <YgPlQ6UK3+4/yzLk@lahna>
-Content-Type: text/plain; charset=UTF-8
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Linux-sh list <linux-sh@vger.kernel.org>
+References: <20211218165258.16716-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20211218165258.16716-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CAMuHMdUg3=q7gyaVHP0XcYUOo3PQUUv8Hc8wp5faVQ+bTBpg4A@mail.gmail.com>
+ <042a2183-3f04-088c-1861-656de870337d@gmail.com>
+ <CAK8P3a3owi7YWmq-tckD-C7NK5HaX+swGNW-QBkWQuQgVsVWrA@mail.gmail.com>
+ <d74ab454-9337-d168-9b21-842569431b4a@gmail.com>
+ <CAK8P3a20mwJXN4Mb063zQG+HAevj_Odpj58EzPHkX-p6pbtnGA@mail.gmail.com>
+ <7c47ce67-88ee-9cba-3356-a530b0d3e657@gmail.com>
+ <CAK8P3a0gf6TeK2vZ+u3NZ2VrrvrGUohAPz5WiZ4Mbk5QQg9FFg@mail.gmail.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <9a07be5a-914b-cec9-f6bc-8c1b0ecef766@gmail.com>
+Date:   Wed, 9 Feb 2022 19:08:20 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
+MIME-Version: 1.0
+In-Reply-To: <CAK8P3a0gf6TeK2vZ+u3NZ2VrrvrGUohAPz5WiZ4Mbk5QQg9FFg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,73 +98,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 2/9/22 7:02 PM, Arnd Bergmann wrote:
 
-On 2/9/22 17:01, Mika Westerberg wrote:
-> Hi Hans,
+>>>>> since 2009 after 1e1030dccb10 ("sh: nmi_debug support."). On a
+>>>>
+>>>>    Mhm... this commit changes the SH3 code while SH778x are SH4A, no?
+>>>
+>>> This code is shared between both:
+>>>
+>>> arch/sh/kernel/cpu/sh4/Makefile:common-y        += $(addprefix
+>>> ../sh3/, entry.o ex.o)
+>>
+>>    Ah, quite convoluted! :-)
+>>    So you mean thet broke the delivery of EVT 0x200 when mucking with NMI?
 > 
-> Thanks for looking into this!
+> Yes, exactly: If I read this right, the added code:
 > 
-> On Wed, Feb 09, 2022 at 04:12:32PM +0100, Hans de Goede wrote:
->> An alternative, much more elaborate fix would be to:
->>
->> 1. Add E820_TYPE_MMIO and E820_TYPE_MMIO_PCI_BRIDGE_WINDOW types to
->>    enum e820_type and modify the 2 places which check for type == reserved
->>    to treat these both as reserved too, so as to not have any functional
->>    changes there
->>
->> 2. Modify the code building e820 tables from the EFI memmap to use
->>    E820_TYPE_MMIO for MMIO EFI memmap entries and make e820_nomerge()
->>    treat E820_TYPE_MMIO as non mergable to retain these as is
->>
->> 3. Modify pci_acpi_root_prepare_resources() to compare ACPI provided
->>    bridge mmio windows against E820_TYPE_MMIO e820_Table entries and
->>    if there is an exact match (as is the case on the Yoga C940)
->>    then change the e820 type to E820_TYPE_MMIO_PCI_BRIDGE_WINDOW
->>
->>    This means that we are now very narrowly treating EFI MMIO marked
->>    regions special, in the special case where they are a 1:1 map
->>    to an ACPI PCI bridge window resource.
->>
->>    Note since we treat both E820_TYPE_MMIO and E820_TYPE_MMIO_PCI_BRIDGE_WINDOW
->>    identical to the old RESERVED everywhere there is no functional change
->>    here.
->>
->> 4. Modify arch/x86/kernel/resource.c: remove_e820_regions() to skip
->>    e820 table entries with a type of E820_TYPE_MMIO_PCI_BRIDGE_WINDOW,
->>    this would actually be a functional change and should fix the
->>    issues we are trying to fix.
->>
->> Note an alternative would be to skip having the extra E820_TYPE_MMIO_PCI_BRIDGE_WINDOW
->> type and to skip step 3. above. That would boil down to doing the same
->> as your original patch in a somewhat cleaner manner.
+> +       shlr2   r4
+> +       shlr    r4
+> +       mov     r4, r0          ! save vector->jmp table offset for later
+> +
+> +       shlr2   r4              ! vector to IRQ# conversion
+> +       add     #-0x10, r4
+> +
+> +       cmp/pz  r4              ! is it a valid IRQ?
+> +       bt      10f
 > 
-> I agree and my vote goes for this last alternative (e.g skipping step 3).
-> That would also make it slightly easier to follow the logic if someone
-> in the future needs to investigate possible issues around this, I think.
+> gets the vector (0x200 for this device), shifts it five bits to 0x10,
+> and subtracts 0x10,
+> then branches to do_IRQ if the interrupt number is non-zero, otherwise it goes
+> through the exception_handling_table.
 
-As mentioned in my email from 10 seconds ago I think a better simpler
-fix would be to just do:
+   The SH4 manual I found on my disk (have it from MontaVista times) tells me cmp/pz
+sets T if Rn is >= 0, then bt branches if T = 1. So I do think the code is correct.
+   One more thing: the board code for those boards was added in 2011, we can assume
+it was working back then, right? :-_
 
-diff --git a/arch/x86/kernel/resource.c b/arch/x86/kernel/resource.c
-index 9b9fb7882c20..18656f823764 100644
---- a/arch/x86/kernel/resource.c
-+++ b/arch/x86/kernel/resource.c
-@@ -28,6 +28,10 @@ static void remove_e820_regions(struct resource *avail)
- 	int i;
- 	struct e820_entry *entry;
- 
-+	/* Only remove E820 reservations on classic BIOS boot */
-+	if (efi_enabled(EFI_MEMMAP))
-+		return;
-+
- 	for (i = 0; i < e820_table->nr_entries; i++) {
- 		entry = &e820_table->entries[i];
- 
+>          Arnd
 
-I'm curious what you think of that?
-
-Regards,
-
-Hans
-
+MBR, Sergey

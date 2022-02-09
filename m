@@ -2,64 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3B464AFEE5
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 22:04:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D73A4AFEE9
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 22:04:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232812AbiBIVEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 16:04:10 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:54562 "EHLO
+        id S232815AbiBIVEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 16:04:39 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:54956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232767AbiBIVEJ (ORCPT
+        with ESMTP id S232762AbiBIVEe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 16:04:09 -0500
-Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C913C094CAC;
-        Wed,  9 Feb 2022 13:04:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1644440652; x=1675976652;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=10tm3cQsz7x9PrwW3/R/GSrD5sWBEjDc7ttJqudyxLM=;
-  b=B3GFd7auusninFXrghiq+YzqPFwqiU3hXrKH+DkC9I1DzNKUk0jre9hX
-   C+fQie6o9f2CHCRaycVnPC5XPEwgW1b2CKbDE6lqWeaKJpG/0O3fPzeKD
-   RSGPUv1xajvTbfFhEWAwbX47BtD0L6iNNKg6PfwF/9+KN+4mS5ssrEgqZ
-   g=;
-X-IronPort-AV: E=Sophos;i="5.88,356,1635206400"; 
-   d="scan'208";a="61888969"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-iad-1e-98691110.us-east-1.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP; 09 Feb 2022 21:04:10 +0000
-Received: from EX13MTAUWC002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1e-98691110.us-east-1.amazon.com (Postfix) with ESMTPS id DA0188124D;
-        Wed,  9 Feb 2022 21:04:07 +0000 (UTC)
-Received: from EX13D47UWC001.ant.amazon.com (10.43.162.39) by
- EX13MTAUWC002.ant.amazon.com (10.43.162.240) with Microsoft SMTP Server (TLS)
- id 15.0.1497.28; Wed, 9 Feb 2022 21:04:06 +0000
-Received: from dev-dsk-jorcrous-2c-c78924fd.us-west-2.amazon.com
- (10.43.162.55) by EX13D47UWC001.ant.amazon.com (10.43.162.39) with Microsoft
- SMTP Server (TLS) id 15.0.1497.28; Wed, 9 Feb 2022 21:04:06 +0000
-From:   <jorcrous@amazon.com>
-To:     <linux-arm-msm@vger.kernel.org>
-CC:     Jordan Crouse <jorcrous@amazon.com>,
-        Akash Asthana <akashast@codeaurora.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mukesh Savaliya <msavaliy@codeaurora.org>,
-        Vinod Koul <vkoul@kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] i2c: qcom-geni: Fix return value for master_xfer
-Date:   Wed, 9 Feb 2022 21:03:56 +0000
-Message-ID: <20220209210356.2848-1-jorcrous@amazon.com>
-X-Mailer: git-send-email 2.32.0
+        Wed, 9 Feb 2022 16:04:34 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA92C033255
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 13:04:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644440677; x=1675976677;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9WFgncTQailPw0fCuxpKTUIeFrcwnCEtfpmUPBiT+Zg=;
+  b=dpLoguLEY9t2TFtVeHbzyThtW2oSsiYEQbzS4XZaq/7QNJhAur4dn+2+
+   cj/hs8haeyfGETEl1l+CMgZYlfPkiIrwDKPF9muJISmFYKXsUx3N0Xr+m
+   rzid2pycZil+1sq/nO6+AdI4lH5qUfia1iNSx7KQRMDEQdPTgHToDBENP
+   6NCCCiaqvVmX0DvyyahjSuE8ScB/lo7kSsUho8TufyoCgYv3hyQ+4cbZi
+   R1hb7cah84krsnMZhEYgvelTsq9SoOlL0fKbOrLaHTdEI8Gvrq+DFBZ2F
+   7wvW4Hzeot7JpGN+ZY5xK6KBL0W8DwqRSJQ5hmGKS+smJ2kQgNp4TDcIG
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="246914846"
+X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
+   d="scan'208";a="246914846"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 13:04:36 -0800
+X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
+   d="scan'208";a="701411368"
+Received: from guptapa-mobl1.amr.corp.intel.com ([10.251.3.164])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 13:04:36 -0800
+Date:   Wed, 9 Feb 2022 13:04:36 -0800
+From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Andi Kleen <ak@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>, linux-kernel@vger.kernel.org,
+        antonio.gomez.iglesias@linux.intel.com, neelima.krishnan@intel.com
+Subject: [PATCH] x86/tsx: Use MSR_TSX_CTRL to clear CPUID bits
+Message-ID: <5bd785a1d6ea0b572250add0c6617b4504bc24d1.1644440311.git.pawan.kumar.gupta@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.43.162.55]
-X-ClientProxiedBy: EX13D24UWB002.ant.amazon.com (10.43.161.159) To
- EX13D47UWC001.ant.amazon.com (10.43.162.39)
-X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.0 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,45 +60,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jordan Crouse <jorcrous@amazon.com>
+tsx_clear_cpuid() uses MSR_TSX_FORCE_ABORT to clear CPUID.RTM and
+CPUID.HLE. Not all CPUs support MSR_TSX_FORCE_ABORT, alternatively use
+MSR_IA32_TSX_CTRL when supported.
 
-The master_xfer function is supposed to return the number of messages that
-were processed. Both  geni_i2c_gpi_xfer and geni_i2c_fifo_xfer are
-returning 0 which is being interpeted as a error in the upper layers.
-
-Fixes: 8133682618cb ("i2c: qcom-geni: Add support for GPI DMA")
-Signed-off-by: Jordan Crouse <jorcrous@amazon.com>
+Fixes: 293649307ef9 ("x86/tsx: Clear CPUID bits when TSX always force aborts")
+Reported-by: kernel test robot <lkp@intel.com>
+Tested-by: Neelima Krishnan <neelima.krishnan@intel.com>
+Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 ---
+ arch/x86/kernel/cpu/tsx.c | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
 
- drivers/i2c/busses/i2c-qcom-geni.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-index c5345f3421a8..e008161e1a67 100644
---- a/drivers/i2c/busses/i2c-qcom-geni.c
-+++ b/drivers/i2c/busses/i2c-qcom-geni.c
-@@ -619,7 +619,7 @@ static int geni_i2c_gpi_xfer(struct geni_i2c_dev *gi2c, struct i2c_msg msgs[], i
- 		geni_i2c_gpi_unmap(gi2c, &msgs[i], tx_buf, tx_addr, rx_buf, rx_addr);
- 	}
- 
--	return 0;
-+	return num;
- 
- err:
- 	dmaengine_terminate_sync(gi2c->rx_c);
-@@ -645,10 +645,10 @@ static int geni_i2c_fifo_xfer(struct geni_i2c_dev *gi2c,
- 			ret = geni_i2c_tx_one_msg(gi2c, &msgs[i], m_param);
- 
- 		if (ret)
--			break;
-+			return ret;
- 	}
- 
--	return ret;
-+	return num;
+diff --git a/arch/x86/kernel/cpu/tsx.c b/arch/x86/kernel/cpu/tsx.c
+index 9c7a5f049292..c2343ea911e8 100644
+--- a/arch/x86/kernel/cpu/tsx.c
++++ b/arch/x86/kernel/cpu/tsx.c
+@@ -58,7 +58,7 @@ void tsx_enable(void)
+ 	wrmsrl(MSR_IA32_TSX_CTRL, tsx);
  }
  
- static int geni_i2c_xfer(struct i2c_adapter *adap,
+-static bool __init tsx_ctrl_is_supported(void)
++static bool tsx_ctrl_is_supported(void)
+ {
+ 	u64 ia32_cap = x86_read_arch_cap_msr();
+ 
+@@ -97,6 +97,10 @@ void tsx_clear_cpuid(void)
+ 		rdmsrl(MSR_TSX_FORCE_ABORT, msr);
+ 		msr |= MSR_TFA_TSX_CPUID_CLEAR;
+ 		wrmsrl(MSR_TSX_FORCE_ABORT, msr);
++	} else if (tsx_ctrl_is_supported()) {
++		rdmsrl(MSR_IA32_TSX_CTRL, msr);
++		msr |= TSX_CTRL_CPUID_CLEAR;
++		wrmsrl(MSR_IA32_TSX_CTRL, msr);
+ 	}
+ }
+ 
+@@ -106,13 +110,11 @@ void __init tsx_init(void)
+ 	int ret;
+ 
+ 	/*
+-	 * Hardware will always abort a TSX transaction if both CPUID bits
+-	 * RTM_ALWAYS_ABORT and TSX_FORCE_ABORT are set. In this case, it is
+-	 * better not to enumerate CPUID.RTM and CPUID.HLE bits. Clear them
+-	 * here.
++	 * Hardware will always abort a TSX transaction when CPUID
++	 * RTM_ALWAYS_ABORT is set. In this case, it is better not to enumerate
++	 * CPUID.RTM and CPUID.HLE bits. Clear them here.
+ 	 */
+-	if (boot_cpu_has(X86_FEATURE_RTM_ALWAYS_ABORT) &&
+-	    boot_cpu_has(X86_FEATURE_TSX_FORCE_ABORT)) {
++	if (boot_cpu_has(X86_FEATURE_RTM_ALWAYS_ABORT)) {
+ 		tsx_ctrl_state = TSX_CTRL_RTM_ALWAYS_ABORT;
+ 		tsx_clear_cpuid();
+ 		setup_clear_cpu_cap(X86_FEATURE_RTM);
 -- 
-2.32.0
+2.31.1
 

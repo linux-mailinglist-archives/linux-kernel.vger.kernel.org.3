@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8316D4AF6A1
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:27:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FC3B4AF68D
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:26:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236985AbiBIQ1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 11:27:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56874 "EHLO
+        id S236884AbiBIQ0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 11:26:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236894AbiBIQ00 (ORCPT
+        with ESMTP id S236856AbiBIQ0P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 11:26:26 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 850EDC05CB8E;
-        Wed,  9 Feb 2022 08:26:21 -0800 (PST)
+        Wed, 9 Feb 2022 11:26:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16109C061355;
+        Wed,  9 Feb 2022 08:26:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7A7ABB822D1;
-        Wed,  9 Feb 2022 16:26:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DE65C340EE;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A6AE661646;
+        Wed,  9 Feb 2022 16:26:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13562C340E7;
         Wed,  9 Feb 2022 16:26:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1644423978;
-        bh=MRbUczyI2MxyyUekUmARNowdQaSt4+OAXAfxdGF+cjw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=cZWJh6dWKuwLXww8rTdHjvBoqL6fV44lWmMne0IA4lJ9ivhcV761mwmhF2zJeG3h+
-         aCa9LVm1bc1N1QtoSbRIvj8cBmI6KGARumsTJogeiLuU3Kkc2wthaoCIp/M/SSDJUi
-         svmEVR0mpCvx9ukLWZY468fX54ZGuXIRRPtKQ/QYFP6AmUhf8curB/pW2sbAHkVl3C
-         76Cgmw5jZy6WZPN0sdn3iN0YLm6EIJUVOMyUv7589U8Uw1yQmsIzbvxtmseZl0oi5I
-         XoBu+UeQOZNJdTBjd/Y/OaJN0QR7vVI//e4IrMYY5ErWLoF0OIKPz5EidhgBBakjdK
-         iGiBfFigYhU/w==
+        bh=IbKlzzfUm0Hi1oeEGCrh1Ryrimz2DXihVgaBj1ARG2M=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=OKOVWKm3XCa/ZYd6CjHUW55DG6Iad1FX96t254zS/Daa93KF2/5SI+LGu1ljuT5zn
+         HDKc1Fw9W8QkAk3Wn14AUZlhn1JmowHNa4mTtFLJwSdwMXCpC7R0nyPZae89dOkkgy
+         R1jZCs6yMKIV2DQiLZE4/Ru+ud29WsiQJ/d3ATXGAt1MOFJjG+XpARPY+8CXfibUc7
+         WmdJdvFEB/ZpL/q1qMlstVWWnrEokQ6waAEFFJRXPblt5fE7FjyNzMFvvabB1R4LJI
+         SA4SQD4+Cuuy84SHlKzV5VPEbnatoJARLEaGXNemqbMzRpyNR+YxjPcgScVJJyGogj
+         6x07cJT/I0lrg==
 Received: from sofa.misterjones.org ([185.219.108.64] helo=why.lan)
         by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <maz@kernel.org>)
-        id 1nHpnL-006fgT-Sd; Wed, 09 Feb 2022 16:26:15 +0000
+        id 1nHpnM-006fgT-79; Wed, 09 Feb 2022 16:26:16 +0000
 From:   Marc Zyngier <maz@kernel.org>
 To:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
@@ -53,10 +53,12 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
         Emil Renner Berthing <kernel@esmil.dk>,
         kernel-team@android.com
-Subject: [PATCH 00/10] irqchip: Prevent drivers abusing irq_chip::name
-Date:   Wed,  9 Feb 2022 16:25:57 +0000
-Message-Id: <20220209162607.1118325-1-maz@kernel.org>
+Subject: [PATCH 01/10] irqdomain: Let irq_domain_set_{info,hwirq_and_chip} take a const irq_chip
+Date:   Wed,  9 Feb 2022 16:25:58 +0000
+Message-Id: <20220209162607.1118325-2-maz@kernel.org>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220209162607.1118325-1-maz@kernel.org>
+References: <20220209162607.1118325-1-maz@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 185.219.108.64
@@ -73,64 +75,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Another common abuse in irqchip drivers (and derivatives) is to place
-a string representing the underlying device in the irq_chip::name
-field that gets displayed in /proc/interrupts while this should only
-be an indication of the "type" of interrupt controller.
+In order to let a const irqchip be fed to the irqchip layer, adjust
+the various prototypes. An extra cast in irq_domain_set_hwirq_and_chip()
+is required to avoid a warning.
 
-Not only this is pretty pointless (with hierarchical domains, you only
-see the top chip), but it also gets in the way of making the irq_chip
-structure const. For debug, we have a whole infrastructure that does
-everything you can imagine (and stuff you don't want to).
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+---
+ include/linux/irqdomain.h | 5 +++--
+ kernel/irq/irqdomain.c    | 7 ++++---
+ 2 files changed, 7 insertions(+), 5 deletions(-)
 
-We can't remove this name as it is visible from userspace and there is
-a whole collection of CI scripts that parse /proc/interrupts for good
-(and mostly bad) reasons. The solution is to use the irq_print_chip()
-callback and to let it output whatever string is necessary.
-
-Having done that, we can cleanup a few irqchip drivers and make their
-irq_chip structure const (which requires touching a handful of core
-functions). Whilst we're at it, we do the same for a couple of gpio
-drivers.
-
-This series relies on the one posted at [1].
-
-Thanks,
-
-	M.
-
-[1] https://lore.kernel.org/r/20220201120310.878267-1-maz@kernel.org
-
-Marc Zyngier (10):
-  irqdomain: Let irq_domain_set_{info,hwirq_and_chip} take a const
-    irq_chip
-  genirq: Allow irq_chip registration functions to take a const irq_chip
-  irqchip/gic: Switch to dynamic chip name output
-  irqchip/lpc32xx: Switch to dynamic chip name output
-  irqchip/mvebu-pic: Switch to dynamic chip name output
-  irqchip/ts4800: Switch to dynamic chip name output
-  irqchip/versatile-fpga: Switch to dynamic chip name output
-  gpio: mt7621: Switch to dynamic chip name output
-  gpio: omap: Switch to dynamic chip name output
-  pinctrl: starfive: Switch to dynamic chip name output
-
- drivers/gpio/gpio-mt7621.c             |  12 ++-
- drivers/gpio/gpio-omap.c               |  28 ++++---
- drivers/irqchip/irq-ftintc010.c        |   1 -
- drivers/irqchip/irq-gic.c              | 102 +++++++++++++------------
- drivers/irqchip/irq-lpc32xx.c          |  34 ++++++---
- drivers/irqchip/irq-mvebu-pic.c        |  28 ++++---
- drivers/irqchip/irq-ts4800.c           |  25 ++++--
- drivers/irqchip/irq-versatile-fpga.c   |  46 ++++++-----
- drivers/pinctrl/pinctrl-starfive.c     |  11 ++-
- include/linux/irq.h                    |   7 +-
- include/linux/irqchip/versatile-fpga.h |  14 ----
- include/linux/irqdomain.h              |   5 +-
- kernel/irq/chip.c                      |   9 +--
- kernel/irq/irqdomain.c                 |   7 +-
- 14 files changed, 189 insertions(+), 140 deletions(-)
- delete mode 100644 include/linux/irqchip/versatile-fpga.h
-
+diff --git a/include/linux/irqdomain.h b/include/linux/irqdomain.h
+index be25a33293e5..00d577f90883 100644
+--- a/include/linux/irqdomain.h
++++ b/include/linux/irqdomain.h
+@@ -479,7 +479,8 @@ int irq_destroy_ipi(unsigned int irq, const struct cpumask *dest);
+ extern struct irq_data *irq_domain_get_irq_data(struct irq_domain *domain,
+ 						unsigned int virq);
+ extern void irq_domain_set_info(struct irq_domain *domain, unsigned int virq,
+-				irq_hw_number_t hwirq, struct irq_chip *chip,
++				irq_hw_number_t hwirq,
++				const struct irq_chip *chip,
+ 				void *chip_data, irq_flow_handler_t handler,
+ 				void *handler_data, const char *handler_name);
+ extern void irq_domain_reset_irq_data(struct irq_data *irq_data);
+@@ -522,7 +523,7 @@ extern int irq_domain_alloc_irqs_hierarchy(struct irq_domain *domain,
+ extern int irq_domain_set_hwirq_and_chip(struct irq_domain *domain,
+ 					 unsigned int virq,
+ 					 irq_hw_number_t hwirq,
+-					 struct irq_chip *chip,
++					 const struct irq_chip *chip,
+ 					 void *chip_data);
+ extern void irq_domain_free_irqs_common(struct irq_domain *domain,
+ 					unsigned int virq,
+diff --git a/kernel/irq/irqdomain.c b/kernel/irq/irqdomain.c
+index bf38c546aa25..14cf52708890 100644
+--- a/kernel/irq/irqdomain.c
++++ b/kernel/irq/irqdomain.c
+@@ -1319,7 +1319,8 @@ EXPORT_SYMBOL_GPL(irq_domain_get_irq_data);
+  * @chip_data:	The associated chip data
+  */
+ int irq_domain_set_hwirq_and_chip(struct irq_domain *domain, unsigned int virq,
+-				  irq_hw_number_t hwirq, struct irq_chip *chip,
++				  irq_hw_number_t hwirq,
++				  const struct irq_chip *chip,
+ 				  void *chip_data)
+ {
+ 	struct irq_data *irq_data = irq_domain_get_irq_data(domain, virq);
+@@ -1328,7 +1329,7 @@ int irq_domain_set_hwirq_and_chip(struct irq_domain *domain, unsigned int virq,
+ 		return -ENOENT;
+ 
+ 	irq_data->hwirq = hwirq;
+-	irq_data->chip = chip ? chip : &no_irq_chip;
++	irq_data->chip = (struct irq_chip *)(chip ? chip : &no_irq_chip);
+ 	irq_data->chip_data = chip_data;
+ 
+ 	return 0;
+@@ -1347,7 +1348,7 @@ EXPORT_SYMBOL_GPL(irq_domain_set_hwirq_and_chip);
+  * @handler_name:	The interrupt handler name
+  */
+ void irq_domain_set_info(struct irq_domain *domain, unsigned int virq,
+-			 irq_hw_number_t hwirq, struct irq_chip *chip,
++			 irq_hw_number_t hwirq, const struct irq_chip *chip,
+ 			 void *chip_data, irq_flow_handler_t handler,
+ 			 void *handler_data, const char *handler_name)
+ {
 -- 
 2.30.2
 

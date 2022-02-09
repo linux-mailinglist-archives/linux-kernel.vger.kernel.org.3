@@ -2,187 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D4874AFAC6
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 19:40:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DE7A4AF9F6
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 19:31:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240017AbiBISkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 13:40:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53524 "EHLO
+        id S239267AbiBISb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 13:31:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240115AbiBISjg (ORCPT
+        with ESMTP id S238761AbiBISb0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 13:39:36 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF5B0C050CFA;
-        Wed,  9 Feb 2022 10:39:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644431944; x=1675967944;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=gzDP3bKlNEdaxBl3I199taLYxCzYF6uSO57sfhfmuKE=;
-  b=neUdap2cEHD8CfDO449futtLaLobtS5EZPb1FNguEXCTWst4YvHgfLGT
-   gi/UxulIzmNrU0YNbCPEqnG0AlxPlqwnXWB6lv+Jk4f/fo8Vlf3Qv74o7
-   Hdp0+iSJxGUsCySypvZiAauPxQ0DwVXGljmt0Z+0UUlXyb3dfXOK7/c/8
-   sraiFeI8SNykjrJfWjGj97+uquj7CozNLzW158Qi03tjRwS9q2PA3f6Kv
-   SqMLA++7YYgjuQv5FAW6so5v8SeWxp2zMpPWOv4m9crhCnQ+NQIt2cHmA
-   Gv/GxMhXc5iVJyNRo+Ay1GQDAO7knx0y4NUYiBsVhRy46wgt9WjM2cCtY
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="312592652"
-X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
-   d="scan'208";a="312592652"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 10:30:41 -0800
-X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
-   d="scan'208";a="485362361"
-Received: from sanvery-mobl.amr.corp.intel.com (HELO [10.212.232.139]) ([10.212.232.139])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 10:30:40 -0800
-Message-ID: <21f5b129-e52a-74b7-6c8b-2bf0ab3db649@intel.com>
-Date:   Wed, 9 Feb 2022 10:30:37 -0800
+        Wed, 9 Feb 2022 13:31:26 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33DA4C0613C9
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 10:31:29 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 8F09921107;
+        Wed,  9 Feb 2022 18:31:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1644431487; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yMhn/foFlPWj85JoD23YnerTlqudGiH7pAqZto4fg9U=;
+        b=etFlE1JMkGGbKv6nzsqVSgDCVnS9qgV4AWmz7Ytysy6AI87OYRQRRVglIx+dT0UmrhSIgA
+        jIsCL3X8Y/X/RyxIFEjxb/JHu5iL7IyaoKdjD9TpoDzV5SxEp4FjhQGzmQafM0WRPmvBmO
+        pbfq7R1on05QzcyFoT8JQsyNZRRAmTE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1644431487;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yMhn/foFlPWj85JoD23YnerTlqudGiH7pAqZto4fg9U=;
+        b=b2s2T20o/OE+G6C6c8NfWnD9vV2puA8DZ6pxtfEH73W3va/RzzB5l0LBsZxcsZQPXKSe9C
+        XCa8hkkFCG+IYuCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 58AE613D93;
+        Wed,  9 Feb 2022 18:31:27 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 6uHxFH8IBGLqZgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 09 Feb 2022 18:31:27 +0000
+Message-ID: <4a5bc989-e59a-d421-faf4-8156f700ec99@suse.cz>
+Date:   Wed, 9 Feb 2022 19:31:27 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
+ Thunderbird/91.5.1
 Content-Language: en-US
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com
-Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
- <20220130211838.8382-13-rick.p.edgecombe@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH 12/35] x86/mm: Update ptep_set_wrprotect() and
- pmdp_set_wrprotect() for transition from _PAGE_DIRTY to _PAGE_COW
-In-Reply-To: <20220130211838.8382-13-rick.p.edgecombe@intel.com>
+To:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Michal Hocko <mhocko@suse.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Rik van Riel <riel@surriel.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Yu Zhao <yuzhao@google.com>, Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+References: <8e4356d-9622-a7f0-b2c-f116b5f2efea@google.com>
+ <5ed1f01-3e7e-7e26-cc1-2b7a574e2147@google.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH 01/13] mm/munlock: delete page_mlock() and all its works
+In-Reply-To: <5ed1f01-3e7e-7e26-cc1-2b7a574e2147@google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/30/22 13:18, Rick Edgecombe wrote:
-> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
+On 2/6/22 22:30, Hugh Dickins wrote:
+> We have recommended some applications to mlock their userspace, but that
+> turns out to be counter-productive: when many processes mlock the same
+> file, contention on rmap's i_mmap_rwsem can become intolerable at exit: it
+> is needed for write, to remove any vma mapping that file from rmap's tree;
+> but hogged for read by those with mlocks calling page_mlock() (formerly
+> known as try_to_munlock()) on *each* page mapped from the file (the
+> purpose being to find out whether another process has the page mlocked,
+> so therefore it should not be unmlocked yet).
 > 
-> When Shadow Stack is introduced, [R/O + _PAGE_DIRTY] PTE is reserved for
-> shadow stack.  Copy-on-write PTEs have [R/O + _PAGE_COW].
-
-<sigh>  Another way to refer to these PTEs.  In the last patch, it was:
-
-	"read-only and Dirty PTE"
-and now:
-	"[R/O + _PAGE_DIRTY]"
-
-> When a PTE goes from [R/W + _PAGE_DIRTY] to [R/O + _PAGE_COW], it could
-> become a transient shadow stack PTE in two cases:
+> Several optimizations have been made in the past: one is to skip
+> page_mlock() when mapcount tells that nothing else has this page
+> mapped; but that doesn't help at all when others do have it mapped.
+> This time around, I initially intended to add a preliminary search
+> of the rmap tree for overlapping VM_LOCKED ranges; but that gets
+> messy with locking order, when in doubt whether a page is actually
+> present; and risks adding even more contention on the i_mmap_rwsem.
 > 
-> The first case is that some processors can start a write but end up seeing
-> a read-only PTE by the time they get to the Dirty bit, creating a transient
-> shadow stack PTE.  However, this will not occur on processors supporting
-> Shadow Stack, and a TLB flush is not necessary.
+> A solution would be much easier, if only there were space in struct page
+> for an mlock_count... but actually, most of the time, there is space for
+> it - an mlocked page spends most of its life on an unevictable LRU, but
+> since 3.18 removed the scan_unevictable_pages sysctl, that "LRU" has
+> been redundant.  Let's try to reuse its page->lru.
 > 
-> The second case is that when _PAGE_DIRTY is replaced with _PAGE_COW non-
-> atomically, a transient shadow stack PTE can be created as a result.
-> Thus, prevent that with cmpxchg.
+> But leave that until a later patch: in this patch, clear the ground by
+> removing page_mlock(), and all the infrastructure that has gathered
+> around it - which mostly hinders understanding, and will make reviewing
+> new additions harder.  Don't mind those old comments about THPs, they
+> date from before 4.5's refcounting rework: splitting is not a risk here.
+> 
+> Just keep a minimal version of munlock_vma_page(), as reminder of what it
+> should attend to (in particular, the odd way PGSTRANDED is counted out of
+> PGMUNLOCKED), and likewise a stub for munlock_vma_pages_range().  Move
+> unchanged __mlock_posix_error_return() out of the way, down to above its
+> caller: this series then makes no further change after mlock_fixup().
+> 
+> Signed-off-by: Hugh Dickins <hughd@google.com>
 
-== Background ==
+While I understand the reasons to clear the ground first, wonder what are
+the implications for bisectability - is there a risk of surprising failures?
+Maybe we should at least explicitly spell out the implications here?
+IIUC, pages that once become mlocked, will stay mlocked, implicating the
+Mlocked meminfo counter and inability to reclaim them. But if e.g. a process
+that did mlockall() exits, its exclusive pages will be freed anyway, so it's
+not a catastrophic kind of leak, right?
+Yet it differs from the existing "failure modes" where pages would be left
+as "stranded" due to failure of being isolated, because they would at least
+go through TestClearPageMlocked and counters update.
 
-Shadow stack PTEs always have [Write=0,Dirty=1].
-
-As currently implemented, ptep_set_wrprotect() simply clears _PAGE_RW:
-(Write=1 -> Write=0).
-
-== Problem ==
-
-This could cause a problem if ptep_set_wrprotect() caused a PTE to
-transition from:
-
-	[Write=1,Dirty=1]
-to
-	[Write=0,Dirty=1]
-
-Which would inadvertently create a shadow stack PTE instead of
-write-protecting it.  ptep_set_wrprotect() can not simply check for the
-Dirty=1 bit because the hardware can set it at any time.
-
-== Solution ==
-
-Perform a compare-and-exchange operation on the PTE to avoid racing with
-the hardware.  The cmpxchg is expected to be more expensive than the
-existing clear_bit().  Continue using the cheaper clear_bit() on when
-shadow stacks are not in play.
-
-> diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-> index 5c3886f6ccda..e1061b9cba6a 100644
-> --- a/arch/x86/include/asm/pgtable.h
-> +++ b/arch/x86/include/asm/pgtable.h
-> @@ -1295,6 +1295,24 @@ static inline void ptep_clear(struct mm_struct *mm, unsigned long addr,
->  static inline void ptep_set_wrprotect(struct mm_struct *mm,
->  				      unsigned long addr, pte_t *ptep)
+>  
+>  /*
+> @@ -413,75 +136,11 @@ static unsigned long __munlock_pagevec_fill(struct pagevec *pvec,
+>   *
+>   * Returns with VM_LOCKED cleared.  Callers must be prepared to
+>   * deal with this.
+> - *
+> - * We don't save and restore VM_LOCKED here because pages are
+> - * still on lru.  In unmap path, pages might be scanned by reclaim
+> - * and re-mlocked by page_mlock/try_to_unmap before we unmap and
+> - * free them.  This will result in freeing mlocked pages.
+>   */
+>  void munlock_vma_pages_range(struct vm_area_struct *vma,
+>  			     unsigned long start, unsigned long end)
 >  {
-> +	/*
-> +	 * If Shadow Stack is enabled, pte_wrprotect() moves _PAGE_DIRTY
-> +	 * to _PAGE_COW (see comments at pte_wrprotect()).
-> +	 * When a thread reads a RW=1, Dirty=0 PTE and before changing it
-> +	 * to RW=0, Dirty=0, another thread could have written to the page
-> +	 * and the PTE is RW=1, Dirty=1 now.  Use try_cmpxchg() to detect
-> +	 * PTE changes and update old_pte, then try again.
-> +	 */
+> -	vma->vm_flags &= VM_LOCKED_CLEAR_MASK;
 
-I think we can trim that down.  We don't need to explain what cmpxchg
-does or why it loops.  That's way too much detail that we don't need.
-Maybe:
-
-	/*
-	 * Avoid accidentally creating shadow stack PTEs
-	 * (Write=0,Dirty=1).  Use cmpxchg() to prevent races with
-	 * the hardware setting Dirty=1.
-	 */
-
-BTW, is it *really* a problem with other threads setting Dirty=1?  This
-is happening under the page table lock on this side at least.
-
-> +	if (cpu_feature_enabled(X86_FEATURE_SHSTK)) {
-> +		pte_t old_pte, new_pte;
-> +
-> +		old_pte = READ_ONCE(*ptep);
-> +		do {
-> +			new_pte = pte_wrprotect(old_pte);
-> +		} while (!try_cmpxchg(&ptep->pte, &old_pte.pte, new_pte.pte));
-> +
-> +		return;
-> +	}
->  	clear_bit(_PAGE_BIT_RW, (unsigned long *)&ptep->pte);
->  }
-
-
-
+Should we at least keep doing the flags clearing? I haven't check if there
+are some VM_BUG_ONs that would trip on not cleared, but wouldn't be entirely
+surprised.

@@ -2,55 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EFA14AF568
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 16:35:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 060DC4AF55E
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 16:35:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236020AbiBIPfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 10:35:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49184 "EHLO
+        id S235949AbiBIPfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 10:35:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235958AbiBIPfM (ORCPT
+        with ESMTP id S231876AbiBIPfH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 10:35:12 -0500
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13307C0612BE;
-        Wed,  9 Feb 2022 07:35:15 -0800 (PST)
-Received: by mail-oi1-f181.google.com with SMTP id s185so2847187oie.3;
-        Wed, 09 Feb 2022 07:35:15 -0800 (PST)
+        Wed, 9 Feb 2022 10:35:07 -0500
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0175AC0613CA;
+        Wed,  9 Feb 2022 07:35:11 -0800 (PST)
+Received: by mail-oi1-f182.google.com with SMTP id u13so2836989oie.5;
+        Wed, 09 Feb 2022 07:35:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=87D9xgRPVhpkd0CiBsmaPizvX+fSKhfflYptts+iImg=;
-        b=E2qcqOo0dafLx8B6g9pc8RNNiI4F4qvSteSGFpUFtfBfYdBWkBCVvVW52Z5BmIunMz
-         P2N2CXfS6Pyde6YnN7dJUiRqHHhF2pnvQ2GPl0J3GKwWaecKScEwo4XdrtcAi8P0ZhXC
-         duHMuelrLqLX4RnkoS0+b4R/XWzLtwwqsfOuaHP2OG8Vvv1WWeQACmVgDk8Qt56Z5u/Y
-         LIUSbkdbBl4DZz1OiocR/60lh+UpwKELf9IdeA82Q8mHl1NfqQaQr0DyESRe6DjeO7Rb
-         Qt6hjiVB7XtCaL1atXrjAhAtxy0FRttkX7U9GHAN9FRIX/dJz4C/rfnfqAv/x2LEnc2n
-         lL9w==
-X-Gm-Message-State: AOAM530WUI0iTckb2iqJKnqUZVD5YxDrsiGOK+hF4bAWe1JeP7UaR+K+
-        Mj+vs677OxDNKDJomtaGHQ==
-X-Google-Smtp-Source: ABdhPJyPtWLE9p5DCJLdWQMRseTeW96RxJVjhB+AI0HAGDUEn+OIKwknd3fnEw5Ei7fB18SrxNWNag==
-X-Received: by 2002:aca:1b05:: with SMTP id b5mr1554068oib.289.1644420914112;
-        Wed, 09 Feb 2022 07:35:14 -0800 (PST)
+        bh=rue2p+rxxRzTcpzXBjAx6Nrna1JsJ4CzugHpoyHjtrM=;
+        b=jWgL9d+b3mrrkbTSySQMVGizVkmdR3j62y1hkms5xbNTU0lK4/4r5j1IvaUbM+6lKj
+         435X0rgDRY6rfW9UzTMDQBtKftoCM7EbDit2F1L1BzP3Lybj1rkkbUnbxtqPgkbXJYTe
+         aphIedqoG2htmHDLdPP7k3h/s2qRyQpVuhki2pf+xycfZlWtuN16R74bCn4ezG3jsZJX
+         cARayLLhbtO4Sv6xysVnz2b1zAoU8lEHYMxwhnbb+u9bLHulZ7zhYqrasC30uiKDJHzg
+         DetqqKUgQp39WcCJ8Cc5I7UWHGf1wtV5qgrVbiznDkFCpUci3BQYCfCwe4S/bF27T0rM
+         w3Ww==
+X-Gm-Message-State: AOAM530SfkJns6Qz1H1VJZqU8QPcQYFSWeO9cAEsnBHpw3Tf9xUUxGkN
+        sMWD32bhFSaa+UBFNwYkcQ==
+X-Google-Smtp-Source: ABdhPJxWKdE43poQgnWFP4/5cT7wgQczeGULboq8vh/fIH2TWeERikdANfIAYgAS4jESe/UbnkGqnw==
+X-Received: by 2002:aca:1a0f:: with SMTP id a15mr1226523oia.61.1644420910248;
+        Wed, 09 Feb 2022 07:35:10 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id s11sm6498640otq.69.2022.02.09.07.35.12
+        by smtp.gmail.com with ESMTPSA id m26sm6845473ooa.36.2022.02.09.07.35.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 07:35:13 -0800 (PST)
-Received: (nullmailer pid 391815 invoked by uid 1000);
+        Wed, 09 Feb 2022 07:35:09 -0800 (PST)
+Received: (nullmailer pid 391812 invoked by uid 1000);
         Wed, 09 Feb 2022 15:35:08 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Corentin Labbe <clabbe@baylibre.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        heiko@sntech.de, robh+dt@kernel.org, linux-crypto@vger.kernel.org,
-        krzysztof.kozlowski@canonical.com, davem@davemloft.net,
-        linux-rockchip@lists.infradead.org, herbert@gondor.apana.org.au,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220209124725.2080986-1-clabbe@baylibre.com>
-References: <20220209124725.2080986-1-clabbe@baylibre.com>
-Subject: Re: [PATCH] dt-bindings: crypto: convert rockchip-crypto to yaml
+To:     Michael Riesch <michael.riesch@wolfvision.net>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        linux-kernel@vger.kernel.org, Liang Chen <cl@rock-chips.com>,
+        devicetree@vger.kernel.org, David Airlie <airlied@linux.ie>,
+        Alex Bee <knaerzche@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Rob Herring <robh+dt@kernel.org>
+In-Reply-To: <20220209085110.3588035-2-michael.riesch@wolfvision.net>
+References: <20220209085110.3588035-1-michael.riesch@wolfvision.net> <20220209085110.3588035-2-michael.riesch@wolfvision.net>
+Subject: Re: [PATCH v5 1/5] dt-bindings: gpu: mali-bifrost: describe clocks for the rk356x gpu
 Date:   Wed, 09 Feb 2022 09:35:08 -0600
-Message-Id: <1644420908.395763.391814.nullmailer@robh.at.kernel.org>
+Message-Id: <1644420908.380944.391811.nullmailer@robh.at.kernel.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -62,33 +69,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 09 Feb 2022 12:47:25 +0000, Corentin Labbe wrote:
-> Convert rockchip-crypto to yaml.
+On Wed, 09 Feb 2022 09:51:06 +0100, Michael Riesch wrote:
+> From: Alex Bee <knaerzche@gmail.com>
 > 
-> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+> The Bifrost GPU in Rockchip RK356x SoCs has a core and a bus clock.
+> Reflect this in the SoC specific part of the binding.
+> 
+> Signed-off-by: Alex Bee <knaerzche@gmail.com>
+> [move the changes to the SoC section]
+> Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
 > ---
->  .../bindings/crypto/rockchip-crypto.txt       | 28 --------
->  .../bindings/crypto/rockchip-crypto.yaml      | 64 +++++++++++++++++++
->  2 files changed, 64 insertions(+), 28 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/crypto/rockchip-crypto.txt
->  create mode 100644 Documentation/devicetree/bindings/crypto/rockchip-crypto.yaml
+>  .../devicetree/bindings/gpu/arm,mali-bifrost.yaml | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
 on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
 yamllint warnings/errors:
+./Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml:173:12: [warning] wrong indentation: expected 12 but found 11 (indentation)
 
 dtschema/dtc warnings/errors:
-Error: Documentation/devicetree/bindings/crypto/rockchip-crypto.example.dts:22.25-26 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:378: Documentation/devicetree/bindings/crypto/rockchip-crypto.example.dt.yaml] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1398: dt_binding_check] Error 2
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/patch/1590370
+See https://patchwork.ozlabs.org/patch/1590238
 
 This check can fail if there are any dependencies. The base for a patch
 series is generally the most recent rc1.

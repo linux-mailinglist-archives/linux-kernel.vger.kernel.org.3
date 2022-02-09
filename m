@@ -2,116 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9CDA4AEA81
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 07:43:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F1D04AEA87
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 07:45:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233569AbiBIGnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 01:43:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34222 "EHLO
+        id S234506AbiBIGoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 01:44:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232761AbiBIGnm (ORCPT
+        with ESMTP id S234367AbiBIGoT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 01:43:42 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83DDEC0401C7;
-        Tue,  8 Feb 2022 22:43:46 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id u6so2276156lfm.10;
-        Tue, 08 Feb 2022 22:43:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=pAAzM9YEmsN6BS7NBJa5z8OM37Zy1PTMVGmhl1fo81w=;
-        b=FlVvYLWZE91QEPrPjnkeKbrPdSH+5IeJN/XcHoBhkj2vD8EH3wR/24NglxFpdb+eTM
-         +Odo2S8UX7+C1f+j+JnNN86RN0MrROOerK5spsgTF6441CEsncZo/EiJgLd0UrXyq4ew
-         qHQXBblQ10ly18eF9co0j+Qc2WNfBqX5upTijJ/pjxqLnI8t+ay/agCNONO08mJ5AA1F
-         0ITPdrQi+oJsoFHrbIY0yP36MjyXKjJalN84O6oJ72h0/6YvgWje0y4XPRZiDWDr5CDT
-         n5JCD0U1OKqfyDCf0nIdC1BI7qsCi7MOC0jApbRuMropCtd+nHE/kgkqk9z586rPkztl
-         FYLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=pAAzM9YEmsN6BS7NBJa5z8OM37Zy1PTMVGmhl1fo81w=;
-        b=4J2o/wuZ3ZQn0gX1G8vxcly/RJJ04IULveF2oUi6s904Rdv2l0RuKSEVer3DbcVXPB
-         DKmOd/MpbEpR5T7uEo+T+HS6iHZ2F0xe0afrqF04UXpDPijGR6pSnzD9GGsk+46BJp1h
-         bbooWN/flwAcmF7YdbIwvncQBsFX+xaIxUnuJqA8o4z47OKOPo0XacX9LLJCxFK2qMiR
-         YjaNV/mr0jLuOCxDkOFr/Lcr/OxOEzD0jrsBuTWcmcnX3jBLR+Xo8L9qWuD+q/EU+UtF
-         HdmHRJQMoXHFSDysW4WVlbJjGHRGfdLFYvE8YWrrz+DKavER1CHmI4N2woQqBO0JZA8c
-         PAXg==
-X-Gm-Message-State: AOAM532hYOySh1LlGWvsXEs/cEH2IYboDCuNimrzb5I5ktnU8/gMdXL3
-        nIQPv1w6y3B1u0Y73GDYBoM=
-X-Google-Smtp-Source: ABdhPJypQnDZgbJ8Curzq6PkvfxuGqIegGNX0qm0cm40T1ctE7nHCinC134HL2iJXR+3MIPZGN5BQw==
-X-Received: by 2002:a05:6512:b11:: with SMTP id w17mr590074lfu.381.1644389024921;
-        Tue, 08 Feb 2022 22:43:44 -0800 (PST)
-Received: from grain.localdomain ([5.18.251.97])
-        by smtp.gmail.com with ESMTPSA id e13sm2328340ljj.85.2022.02.08.22.43.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 22:43:43 -0800 (PST)
-Received: by grain.localdomain (Postfix, from userid 1000)
-        id 349FD5A0020; Wed,  9 Feb 2022 09:43:43 +0300 (MSK)
-Date:   Wed, 9 Feb 2022 09:43:43 +0300
-From:   Cyrill Gorcunov <gorcunov@gmail.com>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "Lutomirski, Andy" <luto@kernel.org>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "0x7f454c46@gmail.com" <0x7f454c46@gmail.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "adrian@lisas.de" <adrian@lisas.de>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "avagin@gmail.com" <avagin@gmail.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kcc@google.com" <kcc@google.com>, "bp@alien8.de" <bp@alien8.de>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "Moreira, Joao" <joao.moreira@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "Dave.Martin@arm.com" <Dave.Martin@arm.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
-        alexander.mikhalitsyn@virtuozzo.com
-Subject: Re: [PATCH 00/35] Shadow stacks for userspace
-Message-ID: <YgNin5wkSaixCwdx@grain>
-References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
- <YgAWVSGQg8FPCeba@kernel.org>
- <YgDIIpCm3UITk896@lisas.de>
- <8f96c2a6-9c03-f97a-df52-73ffc1d87957@intel.com>
- <YgI1A0CtfmT7GMIp@kernel.org>
- <YgI37n+3JfLSNQCQ@grain>
- <357664de-b089-4617-99d1-de5098953c80@www.fastmail.com>
- <YgKiKEcsNt7mpMHN@grain>
- <8e36f20723ca175db49ed3cc73e42e8aa28d2615.camel@intel.com>
+        Wed, 9 Feb 2022 01:44:19 -0500
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6409EC0401C7;
+        Tue,  8 Feb 2022 22:44:18 -0800 (PST)
+Received: from [192.168.0.2] (ip5f5aee30.dynamic.kabel-deutschland.de [95.90.238.48])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 441A661E64846;
+        Wed,  9 Feb 2022 07:44:16 +0100 (CET)
+Message-ID: <b56fe3a2-b145-9d4e-acf2-4991204b3102@molgen.mpg.de>
+Date:   Wed, 9 Feb 2022 07:44:15 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8e36f20723ca175db49ed3cc73e42e8aa28d2615.camel@intel.com>
-User-Agent: Mutt/2.0.7 (2021-05-04)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v5 2/6] powerpc/kexec_file: Add KEXEC_SIG support.
+Content-Language: en-US
+To:     Michal Suchanek <msuchanek@suse.de>, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org
+Cc:     kexec@lists.infradead.org, Philipp Rudo <prudo@redhat.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Nayna <nayna@linux.vnet.ibm.com>, Rob Herring <robh@kernel.org>,
+        linux-s390@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Jessica Yu <jeyu@kernel.org>, linux-kernel@vger.kernel.org,
+        David Howells <dhowells@redhat.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        Frank van der Linden <fllinden@amazon.com>,
+        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
+        Daniel Axtens <dja@axtens.net>, buendgen@de.ibm.com,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Baoquan He <bhe@redhat.com>,
+        linux-security-module@vger.kernel.org
+References: <cover.1641900831.git.msuchanek@suse.de>
+ <d95f7c6865bcad5ee37dcbec240e79aa742f5e1d.1641900831.git.msuchanek@suse.de>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <d95f7c6865bcad5ee37dcbec240e79aa742f5e1d.1641900831.git.msuchanek@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -119,25 +74,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 09, 2022 at 02:18:42AM +0000, Edgecombe, Rick P wrote:
-...
-> 
-> Still wrapping my head around the CRIU save and restore steps, but
-> another general approach might be to give ptrace the ability to
-> temporarily pause/resume/set CET enablement and SSP for a stopped
-> thread. Then injected code doesn't need to jump through any hoops or
-> possibly run into road blocks. I'm not sure how much this opens things
-> up if the thread has to be stopped...
-> 
-> Cyrill, could it fit into the CRIU pause and resume flow? What action
-> causes the final resuming of execution of the restored process for
-> checkpointing and for restore? Wondering if we could somehow make CET
-> re-enable exactly then.
-> 
-> And I guess this also needs a way to create shadow stack allocations at
-> a specific address to match where they were in the dumped process. That
-> is missing in this series.
+Dear Michal,
 
-Thanks Rick! This sounds like an option. I need a couple of days to refresh
-my memory about criu internals. Let me CC a few current active criu developers
-(CC list is already big enough though:), maybe this will speedup the procedure.
+
+Thank you for the patch.
+
+
+Am 11.01.22 um 12:37 schrieb Michal Suchanek:
+
+Could you please remove the dot/period at the end of the git commit 
+message summary?
+
+> Copy the code from s390x
+> 
+> Both powerpc and s390x use appended signature format (as opposed to EFI
+> based patforms using PE format).
+
+patforms → platforms
+
+How can this be tested?
+
+> Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+> ---
+> v3: - Philipp Rudo <prudo@redhat.com>: Update the comit message with
+>        explanation why the s390 code is usable on powerpc.
+>      - Include correct header for mod_check_sig
+>      - Nayna <nayna@linux.vnet.ibm.com>: Mention additional IMA features
+>        in kconfig text
+> ---
+>   arch/powerpc/Kconfig        | 16 ++++++++++++++++
+>   arch/powerpc/kexec/elf_64.c | 36 ++++++++++++++++++++++++++++++++++++
+>   2 files changed, 52 insertions(+)
+> 
+> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+> index dea74d7717c0..1cde9b6c5987 100644
+> --- a/arch/powerpc/Kconfig
+> +++ b/arch/powerpc/Kconfig
+> @@ -560,6 +560,22 @@ config KEXEC_FILE
+>   config ARCH_HAS_KEXEC_PURGATORY
+>   	def_bool KEXEC_FILE
+>   
+> +config KEXEC_SIG
+> +	bool "Verify kernel signature during kexec_file_load() syscall"
+> +	depends on KEXEC_FILE && MODULE_SIG_FORMAT
+> +	help
+> +	  This option makes kernel signature verification mandatory for
+> +	  the kexec_file_load() syscall.
+> +
+> +	  In addition to that option, you need to enable signature
+> +	  verification for the corresponding kernel image type being
+> +	  loaded in order for this to work.
+> +
+> +	  Note: on powerpc IMA_ARCH_POLICY also implements kexec'ed kernel
+> +	  verification. In addition IMA adds kernel hashes to the measurement
+> +	  list, extends IMA PCR in the TPM, and implements kernel image
+> +	  blacklist by hash.
+
+So, what is the takeaway for the user? IMA_ARCH_POLICY is preferred? 
+What is the disadvantage, and two implementations(?) needed then? More 
+overhead?
+
+> +
+>   config RELOCATABLE
+>   	bool "Build a relocatable kernel"
+>   	depends on PPC64 || (FLATMEM && (44x || FSL_BOOKE))
+> diff --git a/arch/powerpc/kexec/elf_64.c b/arch/powerpc/kexec/elf_64.c
+> index eeb258002d1e..98d1cb5135b4 100644
+> --- a/arch/powerpc/kexec/elf_64.c
+> +++ b/arch/powerpc/kexec/elf_64.c
+> @@ -23,6 +23,7 @@
+>   #include <linux/of_fdt.h>
+>   #include <linux/slab.h>
+>   #include <linux/types.h>
+> +#include <linux/module_signature.h>
+>   
+>   static void *elf64_load(struct kimage *image, char *kernel_buf,
+>   			unsigned long kernel_len, char *initrd,
+> @@ -151,7 +152,42 @@ static void *elf64_load(struct kimage *image, char *kernel_buf,
+>   	return ret ? ERR_PTR(ret) : NULL;
+>   }
+>   
+> +#ifdef CONFIG_KEXEC_SIG
+> +int elf64_verify_sig(const char *kernel, unsigned long kernel_len)
+> +{
+> +	const unsigned long marker_len = sizeof(MODULE_SIG_STRING) - 1;
+> +	struct module_signature *ms;
+> +	unsigned long sig_len;
+
+Use size_t to match the signature of `verify_pkcs7_signature()`?
+
+> +	int ret;
+> +
+> +	if (marker_len > kernel_len)
+> +		return -EKEYREJECTED;
+> +
+> +	if (memcmp(kernel + kernel_len - marker_len, MODULE_SIG_STRING,
+> +		   marker_len))
+> +		return -EKEYREJECTED;
+> +	kernel_len -= marker_len;
+> +
+> +	ms = (void *)kernel + kernel_len - sizeof(*ms);
+> +	ret = mod_check_sig(ms, kernel_len, "kexec");
+> +	if (ret)
+> +		return ret;
+> +
+> +	sig_len = be32_to_cpu(ms->sig_len);
+> +	kernel_len -= sizeof(*ms) + sig_len;
+> +
+> +	return verify_pkcs7_signature(kernel, kernel_len,
+> +				      kernel + kernel_len, sig_len,
+> +				      VERIFY_USE_PLATFORM_KEYRING,
+> +				      VERIFYING_MODULE_SIGNATURE,
+> +				      NULL, NULL);
+> +}
+> +#endif /* CONFIG_KEXEC_SIG */
+> +
+>   const struct kexec_file_ops kexec_elf64_ops = {
+>   	.probe = kexec_elf_probe,
+>   	.load = elf64_load,
+> +#ifdef CONFIG_KEXEC_SIG
+> +	.verify_sig = elf64_verify_sig,
+> +#endif
+>   };
+
+
+Kind regards,
+
+Paul

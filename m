@@ -2,129 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4246A4AFE25
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 21:21:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D0CB4AFE29
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 21:21:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231210AbiBIUUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 15:20:54 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:45304 "EHLO
+        id S231226AbiBIUVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 15:21:49 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:47132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230449AbiBIUUx (ORCPT
+        with ESMTP id S229535AbiBIUVr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 15:20:53 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA26BE00E5A6
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 12:20:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644438055;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NifY2jezbBUetwsmzUwyvhafuJf4MPduuqMq0ll2twA=;
-        b=JZe4DtoKVOUYQkqvj92r9EEnuXxe//SCbX+d6w1mEUXFKqM1o1Oj21ZvPh2+sG3UYTPbsQ
-        Nd32E5BQyV3qFsjWSgcJs08nVBOUnkz1kuTSqhDIxMhROwC/h/8jeXIOG+oPyw+/FBNftw
-        onb4FHZDStmKT4KtHv6LaYW+eG4Lras=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-463-dG41el83N5qH0Lg7DIHjtQ-1; Wed, 09 Feb 2022 15:20:49 -0500
-X-MC-Unique: dG41el83N5qH0Lg7DIHjtQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 36769824F96;
-        Wed,  9 Feb 2022 20:20:46 +0000 (UTC)
-Received: from [10.22.9.207] (unknown [10.22.9.207])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 46E7D49A7;
-        Wed,  9 Feb 2022 20:20:43 +0000 (UTC)
-Message-ID: <4b58c74d-6ad6-3658-30fb-1957a7b212dc@redhat.com>
-Date:   Wed, 9 Feb 2022 15:20:42 -0500
+        Wed, 9 Feb 2022 15:21:47 -0500
+Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C34CE016DA6;
+        Wed,  9 Feb 2022 12:21:50 -0800 (PST)
+Received: by mail-oo1-f45.google.com with SMTP id k13-20020a4a948d000000b003172f2f6bdfso3841270ooi.1;
+        Wed, 09 Feb 2022 12:21:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=YmfSzxuqzirL1V0Zykp0UDWGW3LWKCMN5F4vQtCRtPI=;
+        b=d0+fVGjcTfbKzxAY3Ur1i2xEYcmjzxm+TLt5+HhHPliuFiDa0et4UW8PXhpoi8sylU
+         2htp7gSBKhghhvOk5yvjP//W35BsgVWKwQSra1l7yLZHdFQioLyrwxVDtWJJzy9bnXue
+         v3wNgnTVnzy0DiQLWe0xTmxtHg7ZRBdqbbru/GH+V7fFvnkUJLuA6Pfhikwz1cGGavdw
+         kuA5merNoEPVkdbaUKwKCDMdX7GIrn2i99C7CQAnC+JsFsdhBIMXPQVgs5lRNDL6lo6B
+         jamLOjth9LQbshWbW+diJw4NWMiPDr3r1bAlbM70OOX5sXJT50UajMYEfv+EZsu6dPd6
+         A2tQ==
+X-Gm-Message-State: AOAM532MDDcdcZC54iJ+WpBurDd4qbhPNdbr9uG0pZfDwaNkQ0yrI8hW
+        c2Sr4nON8pfla1IRVNo1sw==
+X-Google-Smtp-Source: ABdhPJwRFJgoaGuDGAhOtb0UhcP86Z5hgt7jSmayowRpL9dQ8ELxljV7pJYS2pDBKJqnY1e6nyk9nQ==
+X-Received: by 2002:a05:6870:d502:: with SMTP id b2mr1441779oan.94.1644438109620;
+        Wed, 09 Feb 2022 12:21:49 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id t4sm7283982oie.14.2022.02.09.12.21.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Feb 2022 12:21:48 -0800 (PST)
+Received: (nullmailer pid 832955 invoked by uid 1000);
+        Wed, 09 Feb 2022 20:21:47 -0000
+Date:   Wed, 9 Feb 2022 14:21:47 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Brian Norris <briannorris@chromium.org>
+Cc:     Derek Basehore <dbasehore@chromium.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        linux-pm@vger.kernel.org, Lin Huang <hl@rock-chips.com>,
+        linux-kernel@vger.kernel.org, Chanwoo Choi <cw00.choi@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-rockchip@lists.infradead.org,
+        Heiko Stuebner <heiko@sntech.de>,
+        Kyungmin Park <kyungmin.park@samsung.com>
+Subject: Re: [PATCH v2 04/15] dt-bindings: devfreq: rk3399_dmc: Specify idle
+ params in nanoseconds
+Message-ID: <YgQiW8PhI/G6OqR6@robh.at.kernel.org>
+References: <20220127230727.3369358-1-briannorris@chromium.org>
+ <20220127150615.v2.4.I01c6a2b2db578136686b42d463af985cfdff2fd9@changeid>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH 02/12] cgroup: rstat: Make cgroup_rstat_cpu_lock name
- readable
-Content-Language: en-US
-To:     Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Byungchul Park <byungchul.park@lge.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Radoslaw Burny <rburny@google.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
-        Tejun Heo <tj@kernel.org>
-References: <20220208194324.85333-1-namhyung@kernel.org>
- <20220208194324.85333-3-namhyung@kernel.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20220208194324.85333-3-namhyung@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220127150615.v2.4.I01c6a2b2db578136686b42d463af985cfdff2fd9@changeid>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/8/22 14:43, Namhyung Kim wrote:
-> The raw_spin_lock_init() uses the argument to name its lockdep map.
-> But passing per_cpu_ptr() macro directly makes it a very very long
-> name as it expanded like below:
->
->    ({ do { const void *__vpp_verify = (typeof((&cgroup_rstat_cpu_lock) ...
->
-> Let's fix it by passing a local variable instead.  With this change,
-> the name now looks like:
->
->    cgrp_rstat_cpu_lock
->
-> Cc: Zefan Li <lizefan.x@bytedance.com>
-> Cc: Johannes Weiner <hannes@cmpxchg.org>
-> Cc: cgroups@vger.kernel.org
-> Acked-by: Tejun Heo <tj@kernel.org>
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+On Thu, 27 Jan 2022 15:07:15 -0800, Brian Norris wrote:
+> It's inefficient to use the same number of cycles for all OPPs, since
+> lower frequencies make for longer idle times. Let's specify the idle
+> time instead, so software can pick the optimal number of cycles on its
+> own.
+> 
+> NB: these bindings aren't used anywhere yet.
+> 
+> Signed-off-by: Brian Norris <briannorris@chromium.org>
 > ---
->   kernel/cgroup/rstat.c | 12 ++++++++++--
->   1 file changed, 10 insertions(+), 2 deletions(-)
->
-> diff --git a/kernel/cgroup/rstat.c b/kernel/cgroup/rstat.c
-> index 9d331ba44870..371f54a59c38 100644
-> --- a/kernel/cgroup/rstat.c
-> +++ b/kernel/cgroup/rstat.c
-> @@ -286,9 +286,17 @@ void cgroup_rstat_exit(struct cgroup *cgrp)
->   void __init cgroup_rstat_boot(void)
->   {
->   	int cpu;
-> +	raw_spinlock_t *cgrp_rstat_cpu_lock;
->   
-> -	for_each_possible_cpu(cpu)
-> -		raw_spin_lock_init(per_cpu_ptr(&cgroup_rstat_cpu_lock, cpu));
-> +	for_each_possible_cpu(cpu) {
-> +		/*
-> +		 * raw_spin_lock_init() uses the argument to name the lock in
-> +		 * lockdep results.  Passing per_cpu_ptr() directly created a
-> +		 * cryptic name as the macro was expanded before stringified.
-> +		 */
-> +		cgrp_rstat_cpu_lock = per_cpu_ptr(&cgroup_rstat_cpu_lock, cpu);
-> +		raw_spin_lock_init(cgrp_rstat_cpu_lock);
-> +	}
->   }
->   
->   /*
+> 
+> Changes in v2:
+>  - New patch
+> 
+>  .../bindings/devfreq/rk3399_dmc.yaml          | 50 +++++++++++++++++--
+>  1 file changed, 45 insertions(+), 5 deletions(-)
+> 
 
-That is a standalone fix. Maybe Tejun can take it directly into the 
-cgroup tree.
-
-Acked-by: Waiman Long <longman@redhat.com>
-
+Reviewed-by: Rob Herring <robh@kernel.org>

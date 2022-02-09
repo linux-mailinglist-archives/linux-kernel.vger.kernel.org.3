@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ABBE4AE8DB
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 06:13:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3A5B4AE8CD
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 06:13:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242747AbiBIFIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 00:08:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38676 "EHLO
+        id S233225AbiBIFGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 00:06:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377704AbiBIEcD (ORCPT
+        with ESMTP id S1377714AbiBIEcE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 23:32:03 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2086.outbound.protection.outlook.com [40.107.223.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C7B9C0612A4;
-        Tue,  8 Feb 2022 20:24:07 -0800 (PST)
+        Tue, 8 Feb 2022 23:32:04 -0500
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2059.outbound.protection.outlook.com [40.107.92.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78BD1C0612AA;
+        Tue,  8 Feb 2022 20:24:09 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JzT8U6014ZPPIHFNms+GrFO2W4mPLbfv/KN+UmKVYMg3EyMGaZtDm7hqhQl9xOaQYAM897+q6Iq10ddc8Jt+fMGkJGEJ9hMEtYbZ49fkCzq2M0r8ImL7QWRT6JSn1GuU1+HjpqlyaECttkflNbfXQgOqq2P6CJQgtRNjERS3aixo4yQPeER4hhKwNZCnRM7QREbi//e4ZCuXxHsnGFu0hQRBCzEhcSGi2XhXL/sRzfP/l8+bZZH4ESrXdo3Ydn5oYgdQEVabNgls/B+QfgkEBko1wdmmkea03sF3dvGv2nA9L03qJIQhaBTt0wNf1NrUH8fPdGnB6zd1L6ExopHNhg==
+ b=UhPsm8T3wEIpOM+t7r02wP6jcCjcTxv1JvGb0ua7ZfBk3FiqArC5tBKq5JT+gIfS8gvqF9yOZjYTqygmykUqCsthjarxqB6hY0WWpET2h+KUvn3bkp31TW9Yq95aFH18+eThf5AXjDhxGvVCzaxs/6DO2kgv2qvIqLH4PJYcafUGUmWO29hNzN3jyMMstcfmMVTfIr0SIx3dY5jKE3nLZDIQBo7iP9I99CwfVTO1f0nTWNPqT0GlvdZeM0ijdJzkORn+1vjekB9tgenSrLiOpBf0agD4MiQ7NlQNDe7mJ8FrntIu6z6cTyhH1hfI/nIiwjnfQtNf1yYCk33dbl52Cw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ii7EdkTSEf4L9/vhdjfXV7XMODifvwEHdNeewlWZVZ4=;
- b=FkM1tslY+0DzRDPC7zpFocPMTAQJ/QXlWogKg6U5w/VKsRl1TGRg4L6h4ICc9A+MuQ2rbk9fA5UQ0NbPkGNitVnZk6WujzKI87b87FRvu0n+7tNo3W5ZBHNsMEWHRdSi9VDA+aSnTkd0aDW+4lXvHbsPdDoxTmxNSbN/vg4X6OVZPRDzhut6getiX19RBKpIqjIDIeWUKNH2RzMqmfTr0vXXYXre9FBL8f9CkXX8YzH+G/q/OY+VA9RJS0GkQT13stbAuUWslhbMDHoRzvEbTymPjJInRX0HbtwlBzhWOFMnmKZMaH/S5taYGQgMd8flvYifESQenR/veiERWljUOg==
+ bh=dZ8pWhBYxN4Z8njNSU7NHJbHmRMuwUbMwx09/TIKk9g=;
+ b=VkMwn7IpIBpwbQLMi2CVAZCDU+jPzGDbIoSCaJT+Eu400BO/4gP5HIJhOKEr6JLdhtulOXs8k4RYlQhV2nTj81fFwkAfzk26TJt7xS35i0TVj9327Phf4pzWK4MAMZ6cJgaIIthUL/ciRYY4refPKWfYDQE9MBVeShyIq7VMLmN/2OlBCFYC/PPn8hUQBeRXO+/Pj96hDcygl07Qb5EyJr3IfwV4QfDL6qb9P/xwtSKJKXvoYYzaRgXJ+AaddXdVJV2OgMV6faugyUyAnq4luVEYF0pJSfBH9KSpZDJSiRFnP5kA/PxIkC+tVyrm3QLNkeGCsG3Q+tWpgLHgYwKG8A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.236) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ 12.22.5.234) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ii7EdkTSEf4L9/vhdjfXV7XMODifvwEHdNeewlWZVZ4=;
- b=MsBux3tV0x/VNyj0+NAAtdRxkevoeumTP+gAeWamlF7zdQenQihXkhNa+4eTZAXmWi3XztLzibYdbqHmF/qT6buxy0xX84KqVy3IhdV7KVNAkRvjVjwo1ztEbDpBBGraWP+Hhrb3ydFLtQQXUXE4SC/fShLQQT6rW1B3yOqo9oAOf9Ar/FzPN5D7xNY9MybPuIU0eP8Z9RR7Og+60F9VUAR5Y7IqhnDp8r1Zl84Gv3oMaZDljjcN9cMdtjE4vouep6pDiMrU282+4BQCSezzQkOpg5UlpHTDF6YojVTgjHw4ex/U7nW6O+nbSN40zBimwF7VLohKZcIiP6VOdzvZ5g==
-Received: from MWHPR17CA0065.namprd17.prod.outlook.com (2603:10b6:300:93::27)
- by BL1PR12MB5240.namprd12.prod.outlook.com (2603:10b6:208:319::21) with
+ bh=dZ8pWhBYxN4Z8njNSU7NHJbHmRMuwUbMwx09/TIKk9g=;
+ b=CQJeakIJW73YX1Q28abiYsebgYySCLgVQvCU6Buq8POK16ivzF2HMdH3o5V9wGZMRyckxrkBc5sVmHarCPjAWI4IVXXTthGCWWrOP0tKqyvF9hxM+p2YnElQ+9jKcKe6jRAQTImDSXIPTnbJPgFS94pgA/oXzu9695jIK/Fxr2vkn20FLu4j2ppLTNM98FY5xsYR8xG2hc02DrgozPWTmhoMGOJkD527ReM0vPLsNrZpuBtnlQQ7gKHlaenbvE1uoKhrxp2Q59ULfvCoaE8Bq1xQfOo/Cwvb413YMqwXCdk0yd6Ibt6TFhiPxb+8bKg9l7jGTsUhA76av0MzHBuiIw==
+Received: from BN9P223CA0013.NAMP223.PROD.OUTLOOK.COM (2603:10b6:408:10b::18)
+ by BN7PR12MB2673.namprd12.prod.outlook.com (2603:10b6:408:27::15) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.11; Wed, 9 Feb
- 2022 04:24:04 +0000
-Received: from CO1NAM11FT029.eop-nam11.prod.protection.outlook.com
- (2603:10b6:300:93:cafe::34) by MWHPR17CA0065.outlook.office365.com
- (2603:10b6:300:93::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.11 via Frontend
- Transport; Wed, 9 Feb 2022 04:24:03 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
+ 2022 04:24:07 +0000
+Received: from BN8NAM11FT036.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:10b:cafe::54) by BN9P223CA0013.outlook.office365.com
+ (2603:10b6:408:10b::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12 via Frontend
+ Transport; Wed, 9 Feb 2022 04:24:07 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.234)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.236; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.236) by
- CO1NAM11FT029.mail.protection.outlook.com (10.13.174.214) with Microsoft SMTP
+ 12.22.5.234 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.234; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.234) by
+ BN8NAM11FT036.mail.protection.outlook.com (10.13.177.168) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4975.11 via Frontend Transport; Wed, 9 Feb 2022 04:24:03 +0000
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by DRHQMAIL109.nvidia.com
- (10.27.9.19) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 9 Feb
- 2022 04:24:02 +0000
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail204.nvidia.com
- (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ 15.20.4975.11 via Frontend Transport; Wed, 9 Feb 2022 04:24:07 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL101.nvidia.com
+ (10.27.9.10) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 9 Feb
+ 2022 04:24:06 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.9; Tue, 8 Feb 2022
- 20:24:02 -0800
+ 20:24:06 -0800
 Received: from mkumard.nvidia.com (10.127.8.13) by mail.nvidia.com
  (10.129.68.9) with Microsoft SMTP Server id 15.2.986.9 via Frontend
- Transport; Tue, 8 Feb 2022 20:23:58 -0800
+ Transport; Tue, 8 Feb 2022 20:24:02 -0800
 From:   Mohan Kumar <mkumard@nvidia.com>
 To:     <broonie@kernel.org>, <lgirdwood@gmail.com>, <robh+dt@kernel.org>,
         <thierry.reding@gmail.com>, <tiwai@suse.com>,
@@ -68,9 +68,9 @@ To:     <broonie@kernel.org>, <lgirdwood@gmail.com>, <robh+dt@kernel.org>,
 CC:     <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
         <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Mohan Kumar <mkumard@nvidia.com>
-Subject: [PATCH v1 3/6] ALSA: hda/tegra: Update scratch reg. communication
-Date:   Wed, 9 Feb 2022 09:53:23 +0530
-Message-ID: <20220209042326.15764-4-mkumard@nvidia.com>
+Subject: [PATCH v1 4/6] dt-bindings: Add HDA support for Tegra234
+Date:   Wed, 9 Feb 2022 09:53:24 +0530
+Message-ID: <20220209042326.15764-5-mkumard@nvidia.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220209042326.15764-1-mkumard@nvidia.com>
 References: <20220209042326.15764-1-mkumard@nvidia.com>
@@ -78,25 +78,25 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c53c494f-caee-4a55-64bf-08d9eb840109
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5240:EE_
-X-Microsoft-Antispam-PRVS: <BL1PR12MB5240B8DBCD7DA989E71DE19DC12E9@BL1PR12MB5240.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2276;
+X-MS-Office365-Filtering-Correlation-Id: 5d7570e2-0d5e-4ea0-ad6b-08d9eb840391
+X-MS-TrafficTypeDiagnostic: BN7PR12MB2673:EE_
+X-Microsoft-Antispam-PRVS: <BN7PR12MB2673F3A843C96F8E6AB8664EC12E9@BN7PR12MB2673.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1079;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: OfyR2YtuUfO9LOK25CxSnnuGshSmUG3BlzG4vKq2tk0F9EfWF0shGjZqfZqih2C+2iolXODP6nVfJ0VXUpI6PIK/E9r87lciTh5tS2/kzeonrR37ohmb4Hyp8k/G3rFTcGwGxQ3MKVve4NehEoJldrZ0RnlG60HAc47OU001223M+z0rMLHeeHNTSKlG3CxIA/ZEPI0WaE+yckISpZ6NtEXYv9tgUTSRsWjy/ZwlzghSKweNRGgbIKuTZsUynUliOZDiY7Yv9IqKSVR7sE3hAVHHFHsbXxkR7HoT6Z2r2CdZuBFSQOPgIlpAZ0qWEy3OIcIQQXOk4Utd1SnwU1BwtP4yy4JYWBMOhoEWXA3pcPV7/+9CZ9Ie1M1FiWeofReq3MXpUp06+c79utlkKxW3xR/YMfq+ZqsLbQm4kkipAARzlOc4J7zur5U3P/yiz31ttHFEQz5yZobvQzw695qB0Edv6UYMBsBngE6wE5PoeH2Ct8D/9ndAfbGbui0piDGemnzDss0NLHDrNC066MLM6Dc/973zZ9luaJCFSRFU+SJyQqkF2/duyT2DbzUoSiO9xlH7WgLF/yeaPPZwF+5tVGo4Ice2fHb8LJ+ULnMM6n9XOCuqaYepltup3h5nsrfXlAI7W2k6OKBh/Y1dXPmB9aw4j9FCcVL5PZyCtTFhQXbfSyx3BPCq5nBZgFz0lKx9NwedVTbkNWJe9uZAWaTV1+HKKqnvgS5SAlPuzrlvWVI=
-X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(8676002)(4326008)(356005)(8936002)(81166007)(36860700001)(2616005)(70586007)(7696005)(5660300002)(15650500001)(107886003)(1076003)(47076005)(26005)(186003)(70206006)(6666004)(508600001)(2906002)(36756003)(54906003)(110136005)(6636002)(316002)(40460700003)(336012)(426003)(83380400001)(86362001)(82310400004)(36900700001)(2101003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: UDVIwO8Kj/1eRpWOBkIzKhcL6XBaNrAMatsRdoHpy7kWLrFYyjdJqJhhVdTD0LtmB1QXeQJOkFOits6SMb69Y2ZmGEJx3VZQqrW7iyf+kvPBvUSYlmQZl8gVkIWrmr+TW4gph3TW58Ek4+N7cBk2zpARMPg3X8gfUQZOvlwa89ur73hIKQk6VGIEhOXJnFBr4kX2B6zGlLFv/Xo2sHTikE4Yq2189SZoN/j5GpgNs6ISS2Or0EYdasFpXRNmWvzcqi2230ocleqveMwSFAsxmcEKgR08c6khPVWsZnH1IyLxwvSX0Y4z9OYDdsA8+OdtdCClovVrI227a8AVQF+chDT6g6ARvQUma0S2Zh5obQFwqEyJdilz8tEtRDPOqLNKZs4EciXK9bUrrdOluSDuBnv4NsTSaDwzKmIL92LIhQkimpR2e7IURX5lumG71AcRrSgO61Gb9zpeNxlrAlHcAU3IVo1PnbO20tfFhVxtE4m3cLl08+67Mcvnjy49rf6il6UOcKifz0DGZAWnCUnK45dzJA37P9LfzKGWOs8INsv8vpuudhZcXbkXR4/RjRsadAV+B4H+8XtDIGzVARIejajxjDdceeAPp40O941IPyBBDT90rFx+0Ml7IFoPrWyg1iqkwtSBhZ4SqcOWHtf97ecWHO9V8nowGb7S7WYkembEHpQpv8gXQEIJu5e4cMEbDZnnL83tiwfSkm11kaLXr5CVHdDKyA2Yekd2/0jAghA=
+X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(4326008)(8676002)(70586007)(508600001)(356005)(7696005)(70206006)(6636002)(110136005)(316002)(54906003)(81166007)(36756003)(2616005)(1076003)(107886003)(426003)(336012)(83380400001)(2906002)(186003)(26005)(47076005)(82310400004)(40460700003)(86362001)(36860700001)(8936002)(6666004)(5660300002)(36900700001)(2101003);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2022 04:24:03.4145
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2022 04:24:07.6006
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c53c494f-caee-4a55-64bf-08d9eb840109
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5d7570e2-0d5e-4ea0-ad6b-08d9eb840391
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT029.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT036.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5240
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR12MB2673
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
@@ -107,159 +107,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tegra234 chip scratch register communication between audio
-and hdmi driver differs slightly in the way it triggers the
-interrupt compared to legacy chips. Interrupt is triggered
-by writing non-zero values to verb 0xF80 instead of 31st bit
-of scratch register.
-
-DP MST support changed the NID to be used for scratch register
-read/write from audio function group NID to Converter widget NID.
+Add hda clocks, memory ,power and reset binding entries
+for Tegra234.
 
 Signed-off-by: Mohan Kumar <mkumard@nvidia.com>
 ---
- include/sound/hda_codec.h  |  4 +++
- sound/pci/hda/patch_hdmi.c | 61 ++++++++++++++++++++++++++++----------
- 2 files changed, 49 insertions(+), 16 deletions(-)
+ include/dt-bindings/clock/tegra234-clock.h     | 4 ++++
+ include/dt-bindings/memory/tegra234-mc.h       | 6 ++++++
+ include/dt-bindings/power/tegra234-powergate.h | 9 +++++++++
+ include/dt-bindings/reset/tegra234-reset.h     | 2 ++
+ 4 files changed, 21 insertions(+)
+ create mode 100644 include/dt-bindings/power/tegra234-powergate.h
 
-diff --git a/include/sound/hda_codec.h b/include/sound/hda_codec.h
-index 82d9daa17851..c1c19dd4c423 100644
---- a/include/sound/hda_codec.h
-+++ b/include/sound/hda_codec.h
-@@ -240,6 +240,10 @@ struct hda_codec {
- 	unsigned int single_adc_amp:1; /* adc in-amp takes no index
- 					* (e.g. CX20549 codec)
- 					*/
-+	unsigned int hdmi_intr_trig_ctrl:1; /* hdmi interrupt trigger
-+					     * control flag
-+					     * (e.g. Nvidia codecs)
-+					     */
- 	unsigned int no_sticky_stream:1; /* no sticky-PCM stream assignment */
- 	unsigned int pins_shutup:1;	/* pins are shut up */
- 	unsigned int no_trigger_sense:1; /* don't trigger at pin-sensing */
-diff --git a/sound/pci/hda/patch_hdmi.c b/sound/pci/hda/patch_hdmi.c
-index 879f886d2406..f0e87e39c53e 100644
---- a/sound/pci/hda/patch_hdmi.c
-+++ b/sound/pci/hda/patch_hdmi.c
-@@ -3721,8 +3721,11 @@ static int patch_nvhdmi_legacy(struct hda_codec *codec)
-  * +-----------------------------------|
-  *
-  * Note that for the trigger bit to take effect it needs to change value
-- * (i.e. it needs to be toggled).
-+ * (i.e. it needs to be toggled). The trigger bit is not applicable from
-+ * TEGRA234 chip onwards, as new verb id 0xf80 will be used for interrupt
-+ * trigger to hdmi.
+diff --git a/include/dt-bindings/clock/tegra234-clock.h b/include/dt-bindings/clock/tegra234-clock.h
+index 8d7e66e1b6ef..c014269b7245 100644
+--- a/include/dt-bindings/clock/tegra234-clock.h
++++ b/include/dt-bindings/clock/tegra234-clock.h
+@@ -30,5 +30,9 @@
+ #define TEGRA234_CLK_PLLC4			237U
+ /** @brief 32K input clock provided by PMIC */
+ #define TEGRA234_CLK_CLK_32K			289U
++/** @brief CLK_RST_CONTROLLER_AZA2XBITCLK_OUT_SWITCH_DIVIDER switch divider output (aza_2xbitclk) */
++#define TEGRA234_CLK_AZA_2XBIT			457U
++/** @brief aza_2xbitclk / 2 (aza_bitclk) */
++#define TEGRA234_CLK_AZA_BIT			458U
+ 
+ #endif
+diff --git a/include/dt-bindings/memory/tegra234-mc.h b/include/dt-bindings/memory/tegra234-mc.h
+index 2662f70c15c6..f538fc442cee 100644
+--- a/include/dt-bindings/memory/tegra234-mc.h
++++ b/include/dt-bindings/memory/tegra234-mc.h
+@@ -7,6 +7,8 @@
+ #define TEGRA234_SID_INVALID		0x00
+ #define TEGRA234_SID_PASSTHROUGH	0x7f
+ 
++/* NISO0 SMMU STREAM IDs */
++#define TEGRA234_SID_NISO0_HDA		0x03
+ 
+ /* NISO1 stream IDs */
+ #define TEGRA234_SID_SDMMC4	0x02
+@@ -16,6 +18,10 @@
+  * memory client IDs
   */
-+#define NVIDIA_SET_HOST_INTR		0xf80
- #define NVIDIA_GET_SCRATCH0		0xfa6
- #define NVIDIA_SET_SCRATCH0_BYTE0	0xfa7
- #define NVIDIA_SET_SCRATCH0_BYTE1	0xfa8
-@@ -3741,25 +3744,37 @@ static int patch_nvhdmi_legacy(struct hda_codec *codec)
-  * The format parameter is the HDA audio format (see AC_FMT_*). If set to 0,
-  * the format is invalidated so that the HDMI codec can be disabled.
-  */
--static void tegra_hdmi_set_format(struct hda_codec *codec, unsigned int format)
-+static void tegra_hdmi_set_format(struct hda_codec *codec,
-+				  hda_nid_t cvt_nid,
-+				  unsigned int format)
- {
- 	unsigned int value;
-+	unsigned int nid = NVIDIA_AFG_NID;
+ 
++/* High-definition audio (HDA) read clients */
++#define TEGRA234_MEMORY_CLIENT_HDAR 0x15
++/* High-definition audio (HDA) write clients */
++#define TEGRA234_MEMORY_CLIENT_HDAW 0x35
+ /* sdmmcd memory read client */
+ #define TEGRA234_MEMORY_CLIENT_SDMMCRAB 0x63
+ /* sdmmcd memory write client */
+diff --git a/include/dt-bindings/power/tegra234-powergate.h b/include/dt-bindings/power/tegra234-powergate.h
+new file mode 100644
+index 000000000000..3c5575a51296
+--- /dev/null
++++ b/include/dt-bindings/power/tegra234-powergate.h
+@@ -0,0 +1,9 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/* Copyright (c) 2022, NVIDIA CORPORATION. All rights reserved. */
 +
-+	/*
-+	 * Tegra HDA codec design from TEGRA234 chip onwards support DP MST.
-+	 * This resulted in moving scratch registers from audio function
-+	 * group to converter widget context. So CVT NID should be used for
-+	 * scratch register read/write for DP MST supported Tegra HDA codec.
-+	 */
-+	if (codec->dp_mst)
-+		nid = cvt_nid;
++#ifndef __ABI_MACH_T234_POWERGATE_T234_H_
++#define __ABI_MACH_T234_POWERGATE_T234_H_
++
++#define TEGRA234_POWER_DOMAIN_DISP	3U
++
++#endif
+diff --git a/include/dt-bindings/reset/tegra234-reset.h b/include/dt-bindings/reset/tegra234-reset.h
+index 50e13bced642..2ab61c69a3d9 100644
+--- a/include/dt-bindings/reset/tegra234-reset.h
++++ b/include/dt-bindings/reset/tegra234-reset.h
+@@ -10,6 +10,8 @@
+  * @brief Identifiers for Resets controllable by firmware
+  * @{
+  */
++#define TEGRA234_RESET_HDA			20U
++#define TEGRA234_RESET_HDACODEC			21U
+ #define TEGRA234_RESET_SDMMC4			85U
+ #define TEGRA234_RESET_UARTA			100U
  
- 	/* bits [31:30] contain the trigger and valid bits */
--	value = snd_hda_codec_read(codec, NVIDIA_AFG_NID, 0,
-+	value = snd_hda_codec_read(codec, nid, 0,
- 				   NVIDIA_GET_SCRATCH0, 0);
- 	value = (value >> 24) & 0xff;
- 
- 	/* bits [15:0] are used to store the HDA format */
--	snd_hda_codec_write(codec, NVIDIA_AFG_NID, 0,
-+	snd_hda_codec_write(codec, nid, 0,
- 			    NVIDIA_SET_SCRATCH0_BYTE0,
- 			    (format >> 0) & 0xff);
--	snd_hda_codec_write(codec, NVIDIA_AFG_NID, 0,
-+	snd_hda_codec_write(codec, nid, 0,
- 			    NVIDIA_SET_SCRATCH0_BYTE1,
- 			    (format >> 8) & 0xff);
- 
- 	/* bits [16:24] are unused */
--	snd_hda_codec_write(codec, NVIDIA_AFG_NID, 0,
-+	snd_hda_codec_write(codec, nid, 0,
- 			    NVIDIA_SET_SCRATCH0_BYTE2, 0);
- 
- 	/*
-@@ -3771,15 +3786,28 @@ static void tegra_hdmi_set_format(struct hda_codec *codec, unsigned int format)
- 	else
- 		value |= NVIDIA_SCRATCH_VALID;
- 
--	/*
--	 * Whenever the trigger bit is toggled, an interrupt is raised in the
--	 * HDMI codec. The HDMI driver will use that as trigger to update its
--	 * configuration.
--	 */
--	value ^= NVIDIA_SCRATCH_TRIGGER;
-+	if (codec->hdmi_intr_trig_ctrl) {
-+		/*
-+		 * For Tegra HDA Codec design from TEGRA234 onwards, the
-+		 * Interrupt to hdmi driver is triggered by writing
-+		 * non-zero values to verb 0xF80 instead of 31st bit of
-+		 * scratch register.
-+		 */
-+		snd_hda_codec_write(codec, nid, 0,
-+				NVIDIA_SET_SCRATCH0_BYTE3, value);
-+		snd_hda_codec_write(codec, nid, 0,
-+				NVIDIA_SET_HOST_INTR, 0x1);
-+	} else {
-+		/*
-+		 * Whenever the 31st trigger bit is toggled, an interrupt is raised
-+		 * in the HDMI codec. The HDMI driver will use that as trigger
-+		 * to update its configuration.
-+		 */
-+		value ^= NVIDIA_SCRATCH_TRIGGER;
- 
--	snd_hda_codec_write(codec, NVIDIA_AFG_NID, 0,
--			    NVIDIA_SET_SCRATCH0_BYTE3, value);
-+		snd_hda_codec_write(codec, nid, 0,
-+				NVIDIA_SET_SCRATCH0_BYTE3, value);
-+	}
- }
- 
- static int tegra_hdmi_pcm_prepare(struct hda_pcm_stream *hinfo,
-@@ -3796,7 +3824,7 @@ static int tegra_hdmi_pcm_prepare(struct hda_pcm_stream *hinfo,
- 		return err;
- 
- 	/* notify the HDMI codec of the format change */
--	tegra_hdmi_set_format(codec, format);
-+	tegra_hdmi_set_format(codec, hinfo->nid, format);
- 
- 	return 0;
- }
-@@ -3806,7 +3834,7 @@ static int tegra_hdmi_pcm_cleanup(struct hda_pcm_stream *hinfo,
- 				  struct snd_pcm_substream *substream)
- {
- 	/* invalidate the format in the HDMI codec */
--	tegra_hdmi_set_format(codec, 0);
-+	tegra_hdmi_set_format(codec, hinfo->nid, 0);
- 
- 	return generic_hdmi_playback_pcm_cleanup(hinfo, codec, substream);
- }
-@@ -3903,6 +3931,7 @@ static int patch_tegra234_hdmi(struct hda_codec *codec)
- 
- 	codec->dp_mst = true;
- 	codec->mst_no_extra_pcms = true;
-+	codec->hdmi_intr_trig_ctrl = true;
- 	spec = codec->spec;
- 	spec->dyn_pin_out = true;
- 	spec->dyn_pcm_assign = true;
 -- 
 2.17.1
 

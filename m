@@ -2,123 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EF224AFCC5
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 20:02:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FFF04AFCCD
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 20:03:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232303AbiBITCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 14:02:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33992 "EHLO
+        id S241834AbiBITDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 14:03:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236330AbiBITAi (ORCPT
+        with ESMTP id S241982AbiBITAp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 14:00:38 -0500
-Received: from smtp.smtpout.orange.fr (smtp10.smtpout.orange.fr [80.12.242.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A827C00366D
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 10:59:07 -0800 (PST)
-Received: from pop-os.home ([90.126.236.122])
-        by smtp.orange.fr with ESMTPA
-        id HsAznZHevbnFGHsAzncVqP; Wed, 09 Feb 2022 19:58:51 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Wed, 09 Feb 2022 19:58:51 +0100
-X-ME-IP: 90.126.236.122
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Simon Horman <simon.horman@corigine.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        Wed, 9 Feb 2022 14:00:45 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 411E5C03C19D;
+        Wed,  9 Feb 2022 11:00:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644433236; x=1675969236;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=3TFoJ8hml7DfFEwN1MeCftGLxN9fAc0FL9jRFOXIT44=;
+  b=iY3BbgsG9rBd08M2OkWr5HiRdpN7sRL89OQ1Ycj1kYMbTokO//Hg/bi8
+   djm+x+5+OjUKdZRfKLbFvBc0kh5JgcEy7tRBREWCZtuwkR+vBQiRaNGVX
+   mGZ4RX7egvS6AXw4tBwFz60XQDz2BHubi3dTsG3MmfpIXlE9MT8N7UtEI
+   gNYgdAToX77bcTcogrdS2SUuXFMGPx0GOcoStgqujJr69rG1+hE3AMlqi
+   Peg6lPrGmthtRR0ajHb8je/7QkUtIxNfVbbEcSriSTHB5kAaCkZxH4YuA
+   dS1Yu/mClY9RB4E2gPPi6OTk1dCWcutj6bGsMiFxHqiNfLcdjQ+uO5z0G
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="232869378"
+X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
+   d="scan'208";a="232869378"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 10:59:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
+   d="scan'208";a="541248491"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by orsmga008.jf.intel.com with ESMTP; 09 Feb 2022 10:58:52 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 219IwjQP031082;
+        Wed, 9 Feb 2022 18:58:50 GMT
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     linux-hardening@vger.kernel.org, x86@kernel.org
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         "David S. Miller" <davem@davemloft.net>,
-        John Hurley <john.hurley@netronome.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        oss-drivers@corigine.com, netdev@vger.kernel.org
-Subject: [PATCH] nfp: flower: Fix a potential theorical leak in nfp_tunnel_add_shared_mac()
-Date:   Wed,  9 Feb 2022 19:58:47 +0100
-Message-Id: <49e30a009f6fc56cfb76eb2c922740ac64c7767d.1644433109.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.32.0
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: [PATCH v10 02/15] livepatch: avoid position-based search if `-z unique-symbol` is available
+Date:   Wed,  9 Feb 2022 19:57:39 +0100
+Message-Id: <20220209185752.1226407-3-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220209185752.1226407-1-alexandr.lobakin@intel.com>
+References: <20220209185752.1226407-1-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ida_simple_get() returns an id between min (0) and max (NFP_MAX_MAC_INDEX)
-inclusive.
-So NFP_MAX_MAC_INDEX (0xff) is a valid id
+Position-based search, which means that if there are several symbols
+with the same name, the user needs to additionally provide the
+"index" of a desired symbol, is fragile. For example, it breaks
+when two symbols with the same name are located in different
+sections.
 
-In order for the error handling path to work correctly, the 'invalid'
-value for 'ida_idx' should not be in the 0..NFP_MAX_MAC_INDEX range,
-inclusive.
+Since a while, LD has a flag `-z unique-symbol` which appends
+numeric suffixes to the functions with the same name (in symtab
+and strtab). It can be used to effectively prevent from having
+any ambiguity when referring to a symbol by its name.
+Check for its availability and always prefer when the livepatching
+is on. It can be used unconditionally later on after broader testing
+on a wide variety of machines, but for now let's stick to the actual
+CONFIG_LIVEPATCH=y case, which is true for most of distro configs
+anyways.
+This needs a little adjustment to the modpost to make it strip
+suffixes before adding exports. depmod needs some treatment as well,
+tho its false-positive warnings about unknown symbols are harmless
+and don't alter the return code.
 
-So set it to -1.
+There is probably a bunch more livepatch code to optimize-out after
+introducing this, leave it for later as well.
 
-While at it, use ida_alloc_xxx()/ida_free() instead to
-ida_simple_get()/ida_simple_remove().
-The latter is deprecated and more verbose.
-
-Fixes: 20cce8865098 ("nfp: flower: enable MAC address sharing for offloadable devs")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Suggested-by: H.J. Lu <hjl.tools@gmail.com>
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
+Suggested-by: Josh Poimboeuf <jpoimboe@redhat.com>
+Suggested-by: Miroslav Benes <mbenes@suse.cz>
+Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 ---
- .../ethernet/netronome/nfp/flower/tunnel_conf.c    | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ Makefile                |  6 ++++++
+ init/Kconfig            |  3 +++
+ kernel/livepatch/core.c | 17 +++++++++++++----
+ scripts/mod/modpost.c   | 42 ++++++++++++++++++++++-------------------
+ 4 files changed, 45 insertions(+), 23 deletions(-)
 
-diff --git a/drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c b/drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c
-index ce865e619568..b60c2b78ba04 100644
---- a/drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c
-+++ b/drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c
-@@ -922,8 +922,8 @@ nfp_tunnel_add_shared_mac(struct nfp_app *app, struct net_device *netdev,
- 			  int port, bool mod)
- {
- 	struct nfp_flower_priv *priv = app->priv;
--	int ida_idx = NFP_MAX_MAC_INDEX, err;
- 	struct nfp_tun_offloaded_mac *entry;
-+	int ida_idx = -1, err;
- 	u16 nfp_mac_idx = 0;
+diff --git a/Makefile b/Makefile
+index ceb987e5c87b..fa9f947c9839 100644
+--- a/Makefile
++++ b/Makefile
+@@ -871,6 +871,12 @@ ifdef CONFIG_DEBUG_SECTION_MISMATCH
+ KBUILD_CFLAGS += -fno-inline-functions-called-once
+ endif
  
- 	entry = nfp_tunnel_lookup_offloaded_macs(app, netdev->dev_addr);
-@@ -942,8 +942,8 @@ nfp_tunnel_add_shared_mac(struct nfp_app *app, struct net_device *netdev,
- 	if (!nfp_mac_idx) {
- 		/* Assign a global index if non-repr or MAC is now shared. */
- 		if (entry || !port) {
--			ida_idx = ida_simple_get(&priv->tun.mac_off_ids, 0,
--						 NFP_MAX_MAC_INDEX, GFP_KERNEL);
-+			ida_idx = ida_alloc_max(&priv->tun.mac_off_ids,
-+						NFP_MAX_MAC_INDEX, GFP_KERNEL);
- 			if (ida_idx < 0)
- 				return ida_idx;
++# Prefer linking with the `-z unique-symbol` if available, this eliminates
++# position-based search
++ifeq ($(CONFIG_LD_HAS_Z_UNIQUE_SYMBOL)$(CONFIG_LIVEPATCH),yy)
++KBUILD_LDFLAGS += -z unique-symbol
++endif
++
+ ifdef CONFIG_LD_DEAD_CODE_DATA_ELIMINATION
+ KBUILD_CFLAGS_KERNEL += -ffunction-sections -fdata-sections
+ LDFLAGS_vmlinux += --gc-sections
+diff --git a/init/Kconfig b/init/Kconfig
+index e9119bf54b1f..8e900d17d42b 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -86,6 +86,9 @@ config CC_HAS_ASM_INLINE
+ config CC_HAS_NO_PROFILE_FN_ATTR
+ 	def_bool $(success,echo '__attribute__((no_profile_instrument_function)) int x();' | $(CC) -x c - -c -o /dev/null -Werror)
  
-@@ -997,8 +997,8 @@ nfp_tunnel_add_shared_mac(struct nfp_app *app, struct net_device *netdev,
- err_free_entry:
- 	kfree(entry);
- err_free_ida:
--	if (ida_idx != NFP_MAX_MAC_INDEX)
--		ida_simple_remove(&priv->tun.mac_off_ids, ida_idx);
-+	if (ida_idx != -1)
-+		ida_free(&priv->tun.mac_off_ids, ida_idx);
++config LD_HAS_Z_UNIQUE_SYMBOL
++	def_bool $(ld-option,-z unique-symbol)
++
+ config CONSTRUCTORS
+ 	bool
  
- 	return err;
+diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
+index 585494ec464f..7a330465a8c7 100644
+--- a/kernel/livepatch/core.c
++++ b/kernel/livepatch/core.c
+@@ -143,11 +143,13 @@ static int klp_find_callback(void *data, const char *name,
+ 	args->count++;
+ 
+ 	/*
+-	 * Finish the search when the symbol is found for the desired position
+-	 * or the position is not defined for a non-unique symbol.
++	 * Finish the search when unique symbol names are enabled
++	 * or the symbol is found for the desired position or the
++	 * position is not defined for a non-unique symbol.
+ 	 */
+-	if ((args->pos && (args->count == args->pos)) ||
+-	    (!args->pos && (args->count > 1)))
++	if (IS_ENABLED(CONFIG_LD_HAS_Z_UNIQUE_SYMBOL) ||
++	    (args->pos && args->count == args->pos) ||
++	    (!args->pos && args->count > 1))
+ 		return 1;
+ 
+ 	return 0;
+@@ -169,6 +171,13 @@ static int klp_find_object_symbol(const char *objname, const char *name,
+ 	else
+ 		kallsyms_on_each_symbol(klp_find_callback, &args);
+ 
++	/*
++	 * If the LD's `-z unique-symbol` flag is available and enabled,
++	 * sympos checks are not relevant.
++	 */
++	if (IS_ENABLED(CONFIG_LD_HAS_Z_UNIQUE_SYMBOL))
++		sympos = 0;
++
+ 	/*
+ 	 * Ensure an address was found. If sympos is 0, ensure symbol is unique;
+ 	 * otherwise ensure the symbol position count matches sympos.
+diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+index 4648b7afe5cc..ec521ccebea6 100644
+--- a/scripts/mod/modpost.c
++++ b/scripts/mod/modpost.c
+@@ -689,11 +689,28 @@ static void handle_modversion(const struct module *mod,
+ 	sym_set_crc(symname, crc);
  }
-@@ -1063,7 +1063,7 @@ nfp_tunnel_del_shared_mac(struct nfp_app *app, struct net_device *netdev,
+ 
++static char *remove_dot(char *s)
++{
++	size_t n = strcspn(s, ".");
++
++	if (n && s[n]) {
++		size_t m = strspn(s + n + 1, "0123456789");
++
++		if (m && (s[n + m + 1] == '.' || s[n + m + 1] == 0))
++			s[n] = 0;
++
++		/* strip trailing .lto */
++		if (strends(s, ".lto"))
++			s[strlen(s) - 4] = '\0';
++	}
++
++	return s;
++}
++
+ static void handle_symbol(struct module *mod, struct elf_info *info,
+ 			  const Elf_Sym *sym, const char *symname)
+ {
+ 	enum export export;
+-	const char *name;
+ 
+ 	if (strstarts(symname, "__ksymtab"))
+ 		export = export_from_secname(info, get_secindex(info, sym));
+@@ -734,8 +751,11 @@ static void handle_symbol(struct module *mod, struct elf_info *info,
+ 	default:
+ 		/* All exported symbols */
+ 		if (strstarts(symname, "__ksymtab_")) {
+-			name = symname + strlen("__ksymtab_");
+-			sym_add_exported(name, mod, export);
++			char *name;
++
++			name = NOFAIL(strdup(symname + strlen("__ksymtab_")));
++			sym_add_exported(remove_dot(name), mod, export);
++			free(name);
  		}
- 
- 		ida_idx = nfp_tunnel_get_ida_from_global_mac_idx(entry->index);
--		ida_simple_remove(&priv->tun.mac_off_ids, ida_idx);
-+		ida_free(&priv->tun.mac_off_ids, ida_idx);
- 		entry->index = nfp_mac_idx;
- 		return 0;
+ 		if (strcmp(symname, "init_module") == 0)
+ 			mod->has_init = 1;
+@@ -1980,22 +2000,6 @@ static void check_sec_ref(struct module *mod, const char *modname,
  	}
-@@ -1077,7 +1077,7 @@ nfp_tunnel_del_shared_mac(struct nfp_app *app, struct net_device *netdev,
- 	/* If MAC has global ID then extract and free the ida entry. */
- 	if (nfp_tunnel_is_mac_idx_global(entry->index)) {
- 		ida_idx = nfp_tunnel_get_ida_from_global_mac_idx(entry->index);
--		ida_simple_remove(&priv->tun.mac_off_ids, ida_idx);
-+		ida_free(&priv->tun.mac_off_ids, ida_idx);
- 	}
+ }
  
- 	kfree(entry);
+-static char *remove_dot(char *s)
+-{
+-	size_t n = strcspn(s, ".");
+-
+-	if (n && s[n]) {
+-		size_t m = strspn(s + n + 1, "0123456789");
+-		if (m && (s[n + m + 1] == '.' || s[n + m + 1] == 0))
+-			s[n] = 0;
+-
+-		/* strip trailing .lto */
+-		if (strends(s, ".lto"))
+-			s[strlen(s) - 4] = '\0';
+-	}
+-	return s;
+-}
+-
+ static void read_symbols(const char *modname)
+ {
+ 	const char *symname;
 -- 
-2.32.0
+2.34.1
 

@@ -2,86 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12C444AFC45
+	by mail.lfdr.de (Postfix) with ESMTP id 803AA4AFC46
 	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 19:58:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241324AbiBIS5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 13:57:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58020 "EHLO
+        id S241217AbiBIS5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 13:57:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242106AbiBIS4e (ORCPT
+        with ESMTP id S241294AbiBIS4s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 13:56:34 -0500
-Received: from mx2.smtp.larsendata.com (mx2.smtp.larsendata.com [91.221.196.228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D82DC02B66F
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 10:54:36 -0800 (PST)
-Received: from mail01.mxhotel.dk (mail01.mxhotel.dk [91.221.196.236])
-        by mx2.smtp.larsendata.com (Halon) with ESMTPS
-        id decf265d-89d9-11ec-ac19-0050568cd888;
-        Wed, 09 Feb 2022 18:55:38 +0000 (UTC)
-Received: from ravnborg.org (80-162-45-141-cable.dk.customer.tdc.net [80.162.45.141])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: sam@ravnborg.org)
-        by mail01.mxhotel.dk (Postfix) with ESMTPSA id 962EC194B52;
-        Wed,  9 Feb 2022 19:54:28 +0100 (CET)
-Date:   Wed, 9 Feb 2022 19:54:25 +0100
-X-Report-Abuse-To: abuse@mxhotel.dk
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     cgel.zte@gmail.com
-Cc:     deller@gmx.de, linux-fbdev@vger.kernel.org, ducheng2@gmail.com,
-        penguin-kernel@i-love.sakura.ne.jp, daniel.vetter@ffwll.ch,
-        Zeal Robot <zealci@zte.com.cn>, deng.changcheng@zte.com.cn,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        cssk@net-c.es, geert@linux-m68k.org, svens@stackframe.org
-Subject: Re: [PATCH] fbcon: use min() to make code cleaner
-Message-ID: <YgQN4WXXjSHVDiBK@ravnborg.org>
-References: <20220209084810.1561184-1-deng.changcheng@zte.com.cn>
+        Wed, 9 Feb 2022 13:56:48 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7742DC050CEE;
+        Wed,  9 Feb 2022 10:55:51 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id i21so4385987pfd.13;
+        Wed, 09 Feb 2022 10:55:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=H03g3i6GXgjxVbCGTOuoISvy5cVtGUQ/BV218pz6cW0=;
+        b=Fqr6pbmQTvsoINaecveOiWLRmDJbIKdkGCN9s/+MsQZmK9DUvPh5fMTH3FJxfiGIsw
+         YEcjfXI5seO0643HI4fG0PKFvtHmrQPkM+eiQXY9lzXrsQRwDjJnc9d8cfmZEe8hg5B2
+         RuTs8XOny+9J1bm8Lr0vZtoZFKuW9eg9xBg4gzaP1q9dzZRoXvoOqylwF7z055BZSdJm
+         ea1qTMl6Xsd2qm4a7C2D95fneNSR1SKXPdjMl7wGAXpIWsUY83MOt1Q9ijyQwJdU2L95
+         wc1xAyLsSbdExATzCL1MB+h+LXaQnhRN0/egv7TvdeSMRj/pipaQQ9e4LoAVWwPhP4ix
+         HPPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=H03g3i6GXgjxVbCGTOuoISvy5cVtGUQ/BV218pz6cW0=;
+        b=zkz3w7WNQDBdVYv7d4RZYN/7m/9eo3mZSs/KKo8cGxnxrsDcSAkHioBCqaeQWNyU2C
+         nOsVHmeV4MejvdlBcJo8o4nJFBB1k4ZhzC7wDYBaN6sPkgwxbkrkhZ/4DMdx4g6FnqAw
+         gWmOkpkzzo+714fJZivwApsm3MUKbL4GTULzz4y5hVLthA3G24OaQhMPlJ9D+styn0so
+         /OMFSfQ1uDqSuqUZyrc+6pfTXKwDsAEzXddxs1eTsTXoFQ4HgB6zhNRwTSDNGwWm5K6U
+         3OsraTfNX4Gl7bJGSFsxPtWhh1NKfLVhNsUy+Szzraao5CCz5USbMijt4VzYDFYBCeU2
+         j0MQ==
+X-Gm-Message-State: AOAM530kIU6RDHpr1suyrSVtUfKSNVIvlC7Wzf6a6uOX4ea6VASyhd2e
+        Z8KGj3q11IH2JzY/CbiKvfh/L7rNpyA=
+X-Google-Smtp-Source: ABdhPJwGSuJpXr2zMm4fXPFriRejO4ChziFxvPVliCkZlXQKNz7V0HOU/iuGtiJ/STDmm8ZVVgAuLA==
+X-Received: by 2002:a63:86c8:: with SMTP id x191mr2931827pgd.362.1644432950500;
+        Wed, 09 Feb 2022 10:55:50 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id p1sm22045633pfh.98.2022.02.09.10.55.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Feb 2022 10:55:49 -0800 (PST)
+Subject: Re: [PATCH] dt-bindings: net: dsa: realtek-smi: convert to YAML
+ schema
+To:     Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>
+Cc:     =?UTF-8?Q?Alvin_=c5=a0ipraga?= <ALSI@bang-olufsen.dk>,
+        Rob Herring <robh@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20211228072645.32341-1-luizluca@gmail.com>
+ <Ydx4+o5TsWZkZd45@robh.at.kernel.org>
+ <CAJq09z4G40ttsTHXtOywjyusNLSjt_BQ9D78PhwSodJr=4p6OA@mail.gmail.com>
+ <CAL_JsqJ4SsEzZz=JfFMDDUMXEDfybMZw4BVDcj1MoapM+8jQwg@mail.gmail.com>
+ <87zgn0gf3k.fsf@bang-olufsen.dk> <YgP7jgswRQ+GR4P2@lunn.ch>
+ <CAJq09z49EEMxtBTs9q0sg3nn0VrSi0M=DkQTJ_n=QmgTr1aonw@mail.gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <d5bdb281-6968-b80f-bfc0-ae35a12ebfff@gmail.com>
+Date:   Wed, 9 Feb 2022 10:55:43 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220209084810.1561184-1-deng.changcheng@zte.com.cn>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAJq09z49EEMxtBTs9q0sg3nn0VrSi0M=DkQTJ_n=QmgTr1aonw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 09, 2022 at 08:48:10AM +0000, cgel.zte@gmail.com wrote:
-> From: Changcheng Deng <deng.changcheng@zte.com.cn>
+On 2/9/22 10:43 AM, Luiz Angelo Daros de Luca wrote:
+>>> However, the linux driver today does not care about any of these
+>>> interruptions but INT_TYPE_LINK_STATUS. So it simply multiplex only
+>>> this the interruption to each port, in a n-cell map (n being number of
+>>> ports).
+>>> I don't know what to describe here as device-tree should be something
+>>> independent of a particular OS or driver.
+>>
+>> You shouldn't need to know what Linux does to figure this out.
 > 
-> Use min() in order to make code cleaner.
+> The Linux driver is masquerading all those interruptions into a single
+> "link status changed". If interrupts property is about what the HW
+> sends to us, it is a single pin.
 > 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
-Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
+>   interrupt-controller:
+>    type: object
+>    description: |
+>      This defines an interrupt controller with an IRQ line (typically
+>      a GPIO) that will demultiplex and handle the interrupt from the single
+>      interrupt line coming out of one of the Realtek switch chips. It most
+>      importantly provides link up/down interrupts to the PHY blocks inside
+>      the ASIC.
 
-I had preferred in minmax.h was included, but it has an indirect include
-so shrug.
+The de-multiplexing is a software construct/operation, in fact, what the
+GPIO line does is multiplex since the line is used as an output to the
+next level interrupt controller it connects to.
 
-I assume Daniel or Helge will pick it up.
-
-	Sam
-
-> ---
->  drivers/video/fbdev/core/fbcon.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/video/fbdev/core/fbcon.c b/drivers/video/fbdev/core/fbcon.c
-> index f36829eeb5a9..61171159fee2 100644
-> --- a/drivers/video/fbdev/core/fbcon.c
-> +++ b/drivers/video/fbdev/core/fbcon.c
-> @@ -602,7 +602,7 @@ static void fbcon_prepare_logo(struct vc_data *vc, struct fb_info *info,
->  		save = kmalloc(array3_size(logo_lines, new_cols, 2),
->  			       GFP_KERNEL);
->  		if (save) {
-> -			int i = cols < new_cols ? cols : new_cols;
-> +			int i = min(cols, new_cols);
->  			scr_memsetw(save, erase, array3_size(logo_lines, new_cols, 2));
->  			r = q - step;
->  			for (cnt = 0; cnt < logo_lines; cnt++, r += i)
-> -- 
-> 2.25.1
+>    properties:
+> 
+>      interrupt-controller: true
+> 
+>      interrupts:
+>        maxItems: 1
+>        description:
+>          A single IRQ line from the switch, either active LOW or HIGH
+> 
+>      '#address-cells':
+>        const: 0
+> 
+>      '#interrupt-cells':
+>        const: 1
+> 
+>    required:
+>      - interrupt-controller
+>      - '#address-cells'
+>      - '#interrupt-cells'
+> 
+> Now as it is also an interrupt-controller, shouldn't I document what it emits?
+
+The interrupt controller emits a single output towards the next level,
+and you documented that already with these properties. If you want to go
+ahead and define what the various interrupt bits map to within the
+switch's interrupt controller, you can do that in an
+include/dt-bindings/ header file, or you can just open code the numbers.
+Up to you.
+
+> I've just sent the new version and we can discuss it there.
+> 
+>>>  - one interrupt for the switch
+>>>  - the switch is an interrupt-controller
+>>>  - ... and is the interrupt-parent for the phy nodes.
+>>
+>> This pattern is pretty common for DSA switches, which have internal
+>> PHYs. You can see this in the mv88e6xxx binding for example.
+> 
+> The issue is that those similar devices are still not in yaml format.
+
+That does not mean we could not update dsa.yaml to list the
+'interrupts', 'interrupt-controller' and '#interrupt-cells' properties
+and just leave it to the individual YAML bindings to specify the shape
+and size of those properties so they don't have to repeat them.
+-- 
+Florian

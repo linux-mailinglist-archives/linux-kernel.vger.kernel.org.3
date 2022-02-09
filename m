@@ -2,99 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8014A4AF0B2
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 13:05:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9563A4AEFF4
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 12:29:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232234AbiBIMEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 07:04:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39522 "EHLO
+        id S230399AbiBIL3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 06:29:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232076AbiBIMDQ (ORCPT
+        with ESMTP id S229502AbiBIL3W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 07:03:16 -0500
-X-Greylist: delayed 3611 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Feb 2022 03:42:44 PST
-Received: from mail1.wrs.com (unknown-3-146.windriver.com [147.11.3.146])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BFE4C0364A2;
-        Wed,  9 Feb 2022 03:42:44 -0800 (PST)
-Received: from ala-exchng01.corp.ad.wrs.com (ala-exchng01.corp.ad.wrs.com [147.11.82.252])
-        by mail1.wrs.com (8.15.2/8.15.2) with ESMTPS id 219A0iO4024427
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 9 Feb 2022 02:00:44 -0800
-Received: from ala-exchng01.corp.ad.wrs.com (147.11.82.252) by
- ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.12; Wed, 9 Feb 2022 02:00:44 -0800
-Received: from pek-lpd-ccm3.wrs.com (128.224.156.163) by
- ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server id
- 15.1.2242.12 via Frontend Transport; Wed, 9 Feb 2022 02:00:42 -0800
-From:   Yun Zhou <yun.zhou@windriver.com>
-To:     <broonie@kernel.org>, <yun.zhou@windriver.com>
-CC:     <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <ying.xue@windriver.com>
-Subject: [PATCH] spi: disable chipselect after complete transfer
-Date:   Wed, 9 Feb 2022 18:00:42 +0800
-Message-ID: <20220209100042.22941-1-yun.zhou@windriver.com>
-X-Mailer: git-send-email 2.26.1
+        Wed, 9 Feb 2022 06:29:22 -0500
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD5D7E0987D4
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 02:22:47 -0800 (PST)
+Received: from localhost.localdomain ([81.221.85.15]) by mrelay.perfora.net
+ (mreueus004 [74.208.5.2]) with ESMTPSA (Nemesis) id 1MZkUt-1nmu571sm7-00WnbF;
+ Wed, 09 Feb 2022 11:01:30 +0100
+From:   Marcel Ziswiler <marcel@ziswiler.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Marek Vasut <marek.vasut@gmail.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Adam Ford <aford173@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Olof Johansson <olof@lixom.net>,
+        Shawn Guo <shawnguo@kernel.org>, Will Deacon <will@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v5 03/12] arm64: defconfig: enable pcieaer configuration
+Date:   Wed,  9 Feb 2022 11:00:46 +0100
+Message-Id: <20220209100055.181389-4-marcel@ziswiler.com>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <20220209100055.181389-1-marcel@ziswiler.com>
+References: <20220209100055.181389-1-marcel@ziswiler.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_FAIL,SPF_HELO_NONE,TO_EQ_FM_DOM_SPF_FAIL,TO_EQ_FM_SPF_FAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:ImXBglx5IJOFnqXkkH0uWKtrW4VUbDcr2vn403khVMa1OrPD/FZ
+ AXJrnJHGms3H1QlJAK8imEw9mcltPgWEMpk9b/fJtytCREbH+CjyX/0NI8knjfiMvcGmFTU
+ Pu1kP6VncsgvzSTway6j9pzvf5KCBaroWrpKGAjFXDjRc4BiROTbfrcHxS54Di18Kv7Z/23
+ kAOnAmeYkrDX858rRlNVQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:3K+ObxKopuw=:47XH1pwFP2sRRj4TyJlQ0u
+ mz4O22uas/EkSVMqUWXJC9cBYI7dJAG5QDXmvqQ2tygAXMQSXi1yhrsUspt9CSifBsD2mGru1
+ T2wjxGe4yaNym91tqBSFQJSNm/i1lOWFKPnF6SFuX4VFe7MeYtLalFI73tdEWxdaPL260xFzj
+ 4Zui/xt84kSH1ubxkuHa5XViYxJ2v/KXtVMKzu9v/1QbCf8OQ5ZA+ek+2dbQBOfIj967cXnUE
+ Mv6V39ICeC/1zBbcKy2USP2g6a4NyOs8M6zBNYwnFCguocwFvhBd4GtNkE4Dnl1t8iX3PnG+T
+ JhupkhYIJ66ukdgoCI+7L1nK5TN9zQI5+KO21clwlqvDQ01bjJLpQA4vfOcH4l0ZiPtj/6m0O
+ WkQaAwmZk9pOd6VZ35+ZOc5YHnl9Nz17ZQe6PalV9BzUfnV0V1kTiM5RuU7l/+75Tr70Ed5hA
+ bzNJkZkg1Xf87DpUusnaVf1wQU5uzwHjOYnjKf43d0gmAEB/iVKgrAklRn6sUQNiaMQNaMhKm
+ 3MRfvAlatgt1xCfxH5cy9vzj+u2wctYYmXGKtBaO3vHvLPjDjC3EWgkqnAat6YnwgBM9KJior
+ PQBmR7kTr6zKGYpXyo+ov3VxTAUKjkDrGQFtam4qThQyAsME19qXTb+qsp1P46cRbA0DfXzzU
+ QN6MX0H2d9OxApTo/hq+KIeAdxhCMsNREvCqxCOnFnRMxEQkYlybdtpcqWBF2BfaFKo21LVcU
+ mUmc91Wo8cdXUJuQ1F8SvlOHdInywXwIW+HITvcQYl8+LSYoj2I+LiylUW0=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If there are 2 slaves or more on a spi bus, e.g. A and B, we processed a
-transfer to A, the CS will be selected for A whose 'last_cs_enable' will
-be recorded to true at the same time. Then we processed a transfer to B,
-the CS will be switched to B. And then if we transmit data to A again, it
-will not enable CS back to A because 'last_cs_enable' is true.
-In addition, if CS is not disabled, Some controllers in automatic
-transmission state will receive unpredictable data, such as Cadence SPI
-controller.
+From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-Signed-off-by: Yun Zhou <yun.zhou@windriver.com>
+Enable CONFIG_PCIEAER which is required for CONFIG_ACPI_APEI_PCIEAER.
+Commit 8c8ff55b4da7 ("PCI/AER: Don't select CONFIG_PCIEAER by default")
+changed it to no longer being enabled by default.
+
+Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+
 ---
- drivers/spi/spi.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index fdd530b150a7..ebbba0b08186 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -1417,7 +1417,6 @@ static int spi_transfer_one_message(struct spi_controller *ctlr,
- 				    struct spi_message *msg)
- {
- 	struct spi_transfer *xfer;
--	bool keep_cs = false;
- 	int ret = 0;
- 	struct spi_statistics *statm = &ctlr->statistics;
- 	struct spi_statistics *stats = &msg->spi->statistics;
-@@ -1486,10 +1485,8 @@ static int spi_transfer_one_message(struct spi_controller *ctlr,
- 		spi_transfer_delay_exec(xfer);
- 
- 		if (xfer->cs_change) {
--			if (list_is_last(&xfer->transfer_list,
-+			if (!list_is_last(&xfer->transfer_list,
- 					 &msg->transfers)) {
--				keep_cs = true;
--			} else {
- 				spi_set_cs(msg->spi, false, false);
- 				_spi_transfer_cs_change_delay(msg, xfer);
- 				spi_set_cs(msg->spi, true, false);
-@@ -1500,8 +1497,7 @@ static int spi_transfer_one_message(struct spi_controller *ctlr,
- 	}
- 
- out:
--	if (ret != 0 || !keep_cs)
--		spi_set_cs(msg->spi, false, false);
-+	spi_set_cs(msg->spi, false, false);
- 
- 	if (msg->status == -EINPROGRESS)
- 		msg->status = ret;
+(no changes since v3)
+
+Changes in v3:
+- Add Krzysztof's reviewed-by tag.
+
+Changes in v2:
+- New patch following full defconfig analysis as requested by Krzysztof.
+
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index b057b08c0fc2..c37dace3e89d 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -211,6 +211,7 @@ CONFIG_NFC_NCI=m
+ CONFIG_NFC_S3FWRN5_I2C=m
+ CONFIG_PCI=y
+ CONFIG_PCIEPORTBUS=y
++CONFIG_PCIEAER=y
+ CONFIG_PCI_IOV=y
+ CONFIG_PCI_PASID=y
+ CONFIG_HOTPLUG_PCI=y
 -- 
-2.26.1
+2.33.1
 

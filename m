@@ -2,88 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCB384AF71E
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:45:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8845E4AF704
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:42:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237403AbiBIQpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 11:45:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52850 "EHLO
+        id S237402AbiBIQl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 11:41:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237436AbiBIQpV (ORCPT
+        with ESMTP id S237397AbiBIQlY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 11:45:21 -0500
-X-Greylist: delayed 330 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Feb 2022 08:45:24 PST
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CC9FC0613C9;
-        Wed,  9 Feb 2022 08:45:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1644425112;
-        bh=23VcDO1UBkUQfDfSRRv997yJv60exeA4uC8n5A+TDxE=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=E6VWgl1hdzxhGU9Zr8EJ7+LuqCMotcq2Z9BYIn3nfVviWUMi1gnOlgVomLss/m602
-         g+RQFKHsEVQyxBINLERnum8B4kBaqoS2B/JOdefP73OF/nX0AHyEF7wrQnNfO8VxTZ
-         9YTQZyBWf25YeHW+dvNWuYTCeP59D5ypX5bXnfwY=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [80.245.77.2] ([80.245.77.2]) by web-mail.gmx.net
- (3c-app-gmx-bs62.server.lan [172.19.170.146]) (via HTTP); Wed, 9 Feb 2022
- 17:39:21 +0100
+        Wed, 9 Feb 2022 11:41:24 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D285C05CB8E;
+        Wed,  9 Feb 2022 08:41:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644424884; x=1675960884;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=r9L2ApNXksnGqO8AjDsuLj/L+RaApKpFYz722Z9aqx4=;
+  b=n0X+kD9aFzQkzbxN1rb8OKL3uK5VoIejB1X9LewuF9jCRbUE1mX9ltoS
+   FzLVkfY93xVH0he898WHFEKIE33KgZnXp0xV4z17CXoam7ao+SL/Blzlv
+   c3RpMEIDn5sL9MmuTXwR6LYZw7OvGplCtCbLY8zajjE6WuZ3iez495fTl
+   yuCaNxrN0xsZU1/lOik5wnZQNe86gG4jfmEol0CRRx1Xl00Lh2TJLUt+k
+   EEDyilYXPUyQl3ZBgUucf3XOljyb9W2QA0p49CxUPVqjv2tqq1irvKguB
+   /xW/YpF+Wbd14YY6mGHT4N6MaG9v/dvdWikLpjvmDllhb4Ado5ryt4RNg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="312539880"
+X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
+   d="scan'208";a="312539880"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 08:41:23 -0800
+X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
+   d="scan'208";a="482386274"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 08:41:21 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nHq11-002g3O-CS;
+        Wed, 09 Feb 2022 18:40:23 +0200
+Date:   Wed, 9 Feb 2022 18:40:23 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>
+Subject: Re: [PATCH v3 5/7] (WIP) drm/solomon: Add SSD130X OLED displays SPI
+ support
+Message-ID: <YgPudz6YTweyx8pg@smile.fi.intel.com>
+References: <20220209090314.2511959-1-javierm@redhat.com>
+ <20220209091204.2513437-1-javierm@redhat.com>
+ <CAMuHMdWSDBjpYJv6JtgvyaKiFKh_eqbvH78TR6VBtpDeFJvqFQ@mail.gmail.com>
+ <YgPbAL0I8Wn7nnNb@smile.fi.intel.com>
+ <d32c731b-c06f-2dcb-5a6d-1a84351719b2@redhat.com>
 MIME-Version: 1.0
-Message-ID: <trinity-15c80db0-29c1-4cea-be14-794d9a02debf-1644424761490@3c-app-gmx-bs62>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Yifeng Zhao <yifeng.zhao@rock-chips.com>
-Cc:     heiko@sntech.de, robh+dt@kernel.org, jbx6244@gmail.com,
-        devicetree@vger.kernel.org, vkoul@kernel.org,
-        michael.riesch@wolfvision.net, linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, kishon@ti.com,
-        p.zabel@pengutronix.de, cl@rock-chips.com,
-        kever.yang@rock-chips.com, lee.jones@linaro.org,
-        wulf@rock-chips.com, david.wu@rock-chips.com,
-        Yifeng Zhao <yifeng.zhao@rock-chips.com>
-Subject: Aw: [PATCH v8 0/4] Add Naneng combo PHY support for RK3568
-Content-Type: text/plain; charset=UTF-8
-Date:   Wed, 9 Feb 2022 17:39:21 +0100
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <20220208091326.12495-1-yifeng.zhao@rock-chips.com>
-References: <20220208091326.12495-1-yifeng.zhao@rock-chips.com>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:MM7Nx0+88CSi+CDhES/hxhcnP//1RXCCnodnqkxCyHMOIysSJnTzv+d82Mt13iCGAncX8
- DgZq7W20vZbLm3xrY7uJN7LjQMf7VkEYdBuxa068oT0hSc7uaWya6GHwx0FG0exoqY9wfgQIvdtz
- z/33dMmbL+E7IUjtCgMmZa1XUE7DeO1od88KOma67UbRir4X3wo24XXsrZ8wLyWJnt3cQlWVEEaT
- sp0T2QHcIVYTwUfv5qMBAaQky7saSPMPuCJfKHnqB/DtCt3D5DgGhBR4tU3I4IbQIfi/3CGRJZTN
- h8=
-X-UI-Out-Filterresults: notjunk:1;V03:K0:yO48XHWlAEg=:w/S5bj4TX2IHTk3QFbdfMl
- 8UonBQztscoOoXdeO7Imuot6orUUq0viFsTTOfzJEOHhIoACPgID6EfU9Epoq+PqWxXV84fhv
- N1qc3QfY26wFnvXje1EgRvaYsv7r+sECRIBQkS2+Su3SCVPhOJm6kEBShyAUjMDv5bKv3kle7
- 01rgMNuYrDSPc1iC2lVQLY4duuWNIY41QTLppt6WSERfl98gwLoeObBU/erl9A9Iufzl9+uOc
- ecv6I4dGmjGQWxh0Vh03g0tk8Cmf8Q/9XQUGLs04wNq0CdgZNaHNw1y2/7FKfSYx3va5oPe88
- P5v85N3n2d1XxUd0OOx6hPzN9ZQLiQOMAL8dwYXd8fgWKYQN5oZ8sZT/JhbWBok6IZ3ao2psP
- OgJZSsyebyKWcuR44TUJckyzFpwc3MYv64Bjze7rwxMNMWISnJd7Gn7VENFlf7ob5+V64D1dk
- SczpxwQAiwV+H773x6X5tX2urZLQ4+co3ErfCkrmoIlXs7j0diZ3GdJXlt42rlCe+lbcIe4gl
- DCSjHIfYGhzXY/fivYfAH00/z8ilSzN+tFGIUhgdDwZaFhh5ke14k3I9mXQKR4a7ZMKfsdGRA
- ami+lD4knYeptm4IoSkyga5bwjBSkb41TSVUbFVEDciV6j5dMKrg/vI/YQ7g6McBtVATPjbI7
- c36UYPhlmh8fOPRzymZpCS8JuUCgd6cKx2sydzP95vRZUQrgr28Z/EtwqjqS8AX0CS2r8IJ04
- cpdAVOR4+nyUFYmk7JSY9vaXYEU2wPaIw6s83irMAQqc2MXO+dsBsjnG7Eu5qnmVzHt1cBNhm
- vsykxOy
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d32c731b-c06f-2dcb-5a6d-1a84351719b2@redhat.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+On Wed, Feb 09, 2022 at 05:07:03PM +0100, Javier Martinez Canillas wrote:
+> On 2/9/22 16:17, Andy Shevchenko wrote:
+> > On Wed, Feb 09, 2022 at 01:25:46PM +0100, Geert Uytterhoeven wrote:
+> >> On Wed, Feb 9, 2022 at 10:12 AM Javier Martinez Canillas
+> >> <javierm@redhat.com> wrote:
+> > 
+> > ...
+> > 
+> >>> +               .compatible = "solomon,ssd1305fb-spi",
+> >>
+> >> This needs an update to the DT bindings.
+> >> Hence this may be a good time to deprecate the existing
+> >> "solomon,ssd130*fb-i2c" compatible values, and switch to
+> >> "solomon,ssd130*fb" instead, for both I2C and SPI.
+> > 
+> > Agree!
+> > 
+> 
+> Did you see my comment about automatic module loading ? I think
+> that would be an issue if we use the same compatible for both
+> I2C and SPI drivers.
 
-Tested complete series on rk3568 based Bananapi R2 Pro
+Bug in OF code? This is not a problem in ACPI AFAICT.
 
-combphy0: usb3 (usbdrd3_0)
-combphy1: usb3 (usbdrd3_1)
-combphy2: sata (sata2)
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Tested-by: Frank Wunderlich <frank-w@public-files.de>
 
-regards Frank

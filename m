@@ -2,88 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 722484AE722
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 03:45:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ED944AE6E6
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 03:41:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245651AbiBICnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 21:43:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33850 "EHLO
+        id S1344076AbiBICk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 21:40:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244139AbiBICBs (ORCPT
+        with ESMTP id S237043AbiBICEJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 21:01:48 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13150C06157B;
-        Tue,  8 Feb 2022 18:01:48 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id cf2so2103191edb.9;
-        Tue, 08 Feb 2022 18:01:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cWnnC6X/3LfUNvFejjOf/o+BhqQPL36rKux7esaUqwU=;
-        b=k3O5GQanRHIEkNhPqjnOuYe6aHao9DnrKOReuSxBQnvFZ+7kJ4ld9HSkvPcFdLwXVo
-         yqyNAC6PYUb5K1s9oF/yXHBqJWt5s8dAv4PwGG7HwiQ3+yU/5z7ctjiKMb+YfWclAgOk
-         wU8hOcidH7oOlj8TmXjkOAkyEVb/QvNxx/Jw4B7hQUhRLGE+Zdm/P04KUdc2WX9GqjAo
-         Qd0fT4gwCm9V3gMCL5qpAJ1+ctAa9xhVf4cIgk2S+6JXY9WgxlVOYPiKbpK8IUfAqJxq
-         JSfnQH9dls1YYKs/Z4yMwuA/NcdqMWfa/RpzfkILKLIjXM1U7nglBYZqBSmNb0XG47bJ
-         YhpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cWnnC6X/3LfUNvFejjOf/o+BhqQPL36rKux7esaUqwU=;
-        b=p7aBBjOrrzAFPKHDDtSbHGAbb4gmBD43BPx/twURg24jDZsllQA359XLBZk68RkBKv
-         YV24kzNfX2Tu3peia4DZ50gV9q4NGoxisWSBM2sLJb/ahImRkB+rktG89LDzSoO7fE2d
-         7nn288CGfOFuJGTAjygLmSGdxIhUB7okhSgsBAUO2Ft83yUTo5q/Rxe3kD8p5zrf0yqQ
-         IZLTKaU6rjZw071WdNzxxOzqzh7vX1O91yxKx40wbhoD9ilxsJ1lh3rdWhHkPhEYMtFa
-         HhxS0x1dEAjpl4HMa2JUUUXoYkiFz1QzRB1BGPUkcDmA4+kz2EH2soWo0ajGLKFfBYzN
-         T0zw==
-X-Gm-Message-State: AOAM530Aoi5HctSKIvi5PK7+w6JBjXEFYCx6zFXrS+2cCsNGe07X6Pc8
-        UUsNQgpV37liodgF2vg8hdF9y776V7nNd9S5zbk=
-X-Google-Smtp-Source: ABdhPJwuNUoPvXQy2DbyC89NZT6PfpXs+807StThbTX6vEtShDzyDKiD5rl4tnx5cTsfI98LYMsM7moX2a/KWHAlsZM=
-X-Received: by 2002:a05:6402:440a:: with SMTP id y10mr199806eda.215.1644372106542;
- Tue, 08 Feb 2022 18:01:46 -0800 (PST)
+        Tue, 8 Feb 2022 21:04:09 -0500
+Received: from relay.hostedemail.com (relay.hostedemail.com [64.99.140.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 007EEC06157B
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 18:04:07 -0800 (PST)
+Received: from omf18.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay11.hostedemail.com (Postfix) with ESMTP id 166AA80DE7;
+        Wed,  9 Feb 2022 02:04:06 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf18.hostedemail.com (Postfix) with ESMTPA id 5104430;
+        Wed,  9 Feb 2022 02:03:43 +0000 (UTC)
+Message-ID: <d7d764a70d154030fc5e00d6238c8a65b489e456.camel@perches.com>
+Subject: Re: [PATCH] HID: lenovo: replace snprintf with sysfs_emit
+From:   Joe Perches <joe@perches.com>
+To:     davidcomponentone@gmail.com, jikos@kernel.org
+Cc:     benjamin.tissoires@redhat.com, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yang Guang <yang.guang5@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Date:   Tue, 08 Feb 2022 18:03:58 -0800
+In-Reply-To: <124b72fd0751d7f37c64dd517d386db38cf8c189.1644287860.git.yang.guang5@zte.com.cn>
+References: <124b72fd0751d7f37c64dd517d386db38cf8c189.1644287860.git.yang.guang5@zte.com.cn>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-References: <1644290735-3797-1-git-send-email-hongxing.zhu@nxp.com>
- <1644290735-3797-8-git-send-email-hongxing.zhu@nxp.com> <CAOMZO5ALthc7zZEYZX2YHam2f3C1RmOr4CHLRjHSip7-44tL6Q@mail.gmail.com>
- <AS8PR04MB86768828ED6B984C674CE2298C2E9@AS8PR04MB8676.eurprd04.prod.outlook.com>
-In-Reply-To: <AS8PR04MB86768828ED6B984C674CE2298C2E9@AS8PR04MB8676.eurprd04.prod.outlook.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Tue, 8 Feb 2022 23:01:36 -0300
-Message-ID: <CAOMZO5CUbY_SyjDpnFd-EPy+K+MYA6nn=hk_XpZnAFdJP53CFQ@mail.gmail.com>
-Subject: Re: [PATCH v6 7/8] PCI: imx6: Disable enabled clocks and regulators
- after link is down
-To:     Hongxing Zhu <hongxing.zhu@nxp.com>
-Cc:     Lucas Stach <l.stach@pengutronix.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Mark Brown <broonie@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Sascha Hauer <kernel@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 7bit
+X-Stat-Signature: iqs1qxbfo9mznhfqx76ia7kbcdqcigeo
+X-Rspamd-Server: rspamout01
+X-Rspamd-Queue-Id: 5104430
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
         autolearn=ham autolearn_force=no version=3.4.6
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX18ty/e3+hs8eD8Zb+lkmqGKEYhRakpImEY=
+X-HE-Tag: 1644372223-671604
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Richard,
+On Wed, 2022-02-09 at 08:39 +0800, davidcomponentone@gmail.com wrote:
+> From: Yang Guang <yang.guang5@zte.com.cn>
+[]
+> Use sysfs_emit instead of scnprintf or sprintf makes more sense.
+[]
+> diff --git a/drivers/hid/hid-lenovo.c b/drivers/hid/hid-lenovo.c
+[]
+> @@ -442,7 +442,7 @@ static ssize_t attr_sensitivity_show_cptkbd(struct device *dev,
+>  	struct hid_device *hdev = to_hid_device(dev);
+>  	struct lenovo_drvdata *cptkbd_data = hid_get_drvdata(hdev);
+>  
+> -	return snprintf(buf, PAGE_SIZE, "%u\n",
+> +	return sysfs_emit(buf, "%u\n",
+>  		cptkbd_data->sensitivity);
 
-On Tue, Feb 8, 2022 at 10:56 PM Hongxing Zhu <hongxing.zhu@nxp.com> wrote:
+Please rewrap lines to 80 columns where reasonable.
 
-> Do you mean that we should ignore the return of dw_pcie_host_init() and
-> finish the _probe without an error return?
+	return sysfs_emit(buf, "%u\n", cptkbd_data->sensitivity);
 
-Yes, we should not return an error on probe if the link is down.
+[]
+> @@ -723,7 +723,7 @@ static ssize_t attr_sensitivity_show_tpkbd(struct device *dev,
+>  	struct hid_device *hdev = to_hid_device(dev);
+>  	struct lenovo_drvdata *data_pointer = hid_get_drvdata(hdev);
+>  
+> -	return snprintf(buf, PAGE_SIZE, "%u\n",
+> +	return sysfs_emit(buf, "%u\n",
+>  		data_pointer->sensitivity);
+>  }
+>  
+> @@ -752,7 +752,7 @@ static ssize_t attr_press_speed_show_tpkbd(struct device *dev,
+>  	struct hid_device *hdev = to_hid_device(dev);
+>  	struct lenovo_drvdata *data_pointer = hid_get_drvdata(hdev);
+>  
+> -	return snprintf(buf, PAGE_SIZE, "%u\n",
+> +	return sysfs_emit(buf, "%u\n",
+>  		data_pointer->press_speed);
 
-Thanks
+etc...
+
+

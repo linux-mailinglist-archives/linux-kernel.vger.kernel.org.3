@@ -2,125 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6608C4AF0A4
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 13:04:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E49DA4AF0A2
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 13:04:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232249AbiBIMEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 07:04:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39518 "EHLO
+        id S230523AbiBIMDu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 07:03:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232023AbiBIMDP (ORCPT
+        with ESMTP id S232036AbiBIMDP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 9 Feb 2022 07:03:15 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D765C03C18E;
-        Wed,  9 Feb 2022 03:41:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644406882; x=1675942882;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UAVflgTtkMa7VNcbZK8/nl2b5LKf0MxHQx8zZ0cgHss=;
-  b=F2fHKD6BsnjBtqsNOg+Gy92E2xeXgftMg6xogc0nFgmwWUh/68sXpA2B
-   9xAhKZHMoqwancYsoJmuhuInja2mFBKs+atLzaXgMAbxWTg2c+ZquXHKW
-   ucC6qR1ko++j13Um1/hXgB0iGsPH/oo8ck/sdJLPh9d74Ij5pRRnjNP8t
-   kVPbC7oEoHAu0ZlT4n9hXizoYwf+gjfGyEHbKMvMzYA43yKFD6QRoNY2b
-   +Qky91tncPl29gPaRtiohsrKTRL8NZusw9y5GbYOgaXooSHkAJ5jy+k8i
-   jLy8jB3jWcjcgtLMxNvF8giosNNuo/HUDSo9Yb9GmKXE6/4TWI4x+gzAk
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="232751969"
-X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
-   d="scan'208";a="232751969"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 03:41:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
-   d="scan'208";a="678544416"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 09 Feb 2022 03:41:18 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 09 Feb 2022 13:41:18 +0200
-Date:   Wed, 9 Feb 2022 13:41:18 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/4] usb: typec: Factor out non-PD fwnode properties
-Message-ID: <YgOoXgFKaLsdYYKZ@kuha.fi.intel.com>
-References: <20220202221948.5690-1-samuel@sholland.org>
- <20220202221948.5690-4-samuel@sholland.org>
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 886AAC03E965
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 03:41:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Cg3BreKapOWrcjA/myDb7wb6nkioNEwwwkcLOSzaG3k=; b=CYwBPHV/nGZpvtuFaGg+bEeYQG
+        hjGXpURWA6SOjdPDsNmd3ETz4Q9TgGovkE3yWIinrS2M/PEhx26FrnFQTJOQPXUK1+MP5VFXe+znC
+        jgPhycUFHU1/W1tRYvtz/Ee/kRs1h5lfzEqcOC1KCO+NbbF4DspBCO79AI1qw+8tf5unUqJOxAm3q
+        oRWQGCm7TjvZbDa/udWLZMCVCMnDo6tGGUbbMgr13bH5/THtCYk6ZO6YaR956cLlKjoVjGsE/7Ys3
+        GwVCnItq1oAaciY6vIRr2J0damNtPvNrW74CdGY9yiSO6dmGilidP8KgRDLvCCTs2uYLud7sGw9kK
+        eTMyKSlQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nHlLy-008Pay-Ka; Wed, 09 Feb 2022 11:41:42 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 3DB0A9853C7; Wed,  9 Feb 2022 12:41:41 +0100 (CET)
+Date:   Wed, 9 Feb 2022 12:41:41 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org,
+        joao@overdrivepizza.com, hjl.tools@gmail.com,
+        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
+        ndesaulniers@google.com, samitolvanen@google.com
+Subject: Re: [RFC][PATCH 6/6] objtool: Add IBT validation / fixups
+Message-ID: <20220209114141.GN23216@worktop.programming.kicks-ass.net>
+References: <20211122170301.764232470@infradead.org>
+ <20211122170805.338489412@infradead.org>
+ <20211124193037.nu7q4pa3sianzqtc@treble>
+ <202202081542.F685EC23@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220202221948.5690-4-samuel@sholland.org>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <202202081542.F685EC23@keescook>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 02, 2022 at 04:19:46PM -0600, Samuel Holland wrote:
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 5fce795b69c7..8b58aa6e3509 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -5935,32 +5935,10 @@ static int tcpm_fw_get_caps(struct tcpm_port *port,
->  	if (!fwnode)
->  		return -EINVAL;
->  
-> -	/*
-> -	 * This fwnode has a "compatible" property, but is never populated as a
-> -	 * struct device. Instead we simply parse it to read the properties.
-> -	 * This it breaks fw_devlink=on. To maintain backward compatibility
-> -	 * with existing DT files, we work around this by deleting any
-> -	 * fwnode_links to/from this fwnode.
-> -	 */
-> -	fw_devlink_purge_absent_suppliers(fwnode);
-> -
-> -	/* USB data support is optional */
-> -	ret = fwnode_property_read_string(fwnode, "data-role", &cap_str);
-> -	if (ret == 0) {
-> -		ret = typec_find_port_data_role(cap_str);
-> -		if (ret < 0)
-> -			return ret;
-> -		port->typec_caps.data = ret;
-> -	}
-> -
-> -	ret = fwnode_property_read_string(fwnode, "power-role", &cap_str);
-> +	ret = typec_get_fw_cap(&port->typec_caps, fwnode);
->  	if (ret < 0)
->  		return ret;
->  
-> -	ret = typec_find_port_power_role(cap_str);
-> -	if (ret < 0)
-> -		return ret;
-> -	port->typec_caps.type = ret;
->  	port->port_type = port->typec_caps.type;
->  	port->pd_supported = !fwnode_property_read_bool(fwnode, "pd-disable");
->  
-> @@ -5997,14 +5975,6 @@ static int tcpm_fw_get_caps(struct tcpm_port *port,
->  	if (port->port_type == TYPEC_PORT_SRC)
->  		return 0;
->  
-> -	/* Get the preferred power role for DRP */
-> -	ret = fwnode_property_read_string(fwnode, "try-power-role", &cap_str);
-> -	if (ret < 0)
-> -		return ret;
-> -
-> -	port->typec_caps.prefer_role = typec_find_power_role(cap_str);
-> -	if (port->typec_caps.prefer_role < 0)
-> -		return -EINVAL;
->  sink:
->  	port->self_powered = fwnode_property_read_bool(fwnode, "self-powered");
+On Tue, Feb 08, 2022 at 03:43:27PM -0800, Kees Cook wrote:
+> On Wed, Nov 24, 2021 at 11:30:37AM -0800, Josh Poimboeuf wrote:
+> > On Mon, Nov 22, 2021 at 06:03:07PM +0100, Peter Zijlstra wrote:
+> > > +static int validate_ibt_reloc(struct objtool_file *file, struct reloc *reloc, char **name)
+> > > +{
+> > > +	struct instruction *dest;
+> > > +	struct section *sec;
+> > > +	unsigned long off;
+> > > +
+> > > +	sec = reloc->sym->sec;
+> > > +	off = reloc->sym->offset + reloc->addend;
+> > > +
+> > > +	dest = find_insn(file, sec, off);
+> > > +	if (!dest)
+> > > +		return 0;
+> > > +
+> > > +	if (name && dest->func)
+> > > +		*name = dest->func->name;
+> > 
+> > I think these checks can be further narrowed down by only looking for
+> > X86_64_64 relocs.
+> > 
+> > > +	list_for_each_entry(insn, &file->endbr_list, call_node) {
+> > > +		if (ibt_seal) {
+> > > +			elf_write_insn(file->elf, insn->sec,
+> > > +				       insn->offset, insn->len,
+> > > +				       arch_nop_insn(insn->len));
+> > > +		}
+> > 
+> > Like the retpoline rewriting, I'd much rather have objtool create
+> > annotations which the kernel can then read and patch itself.
+> > 
+> > e.g. have '.ibt.direct_call_sites' and '.ibt.unused_endbr_insns'
+> > sections.
+> 
+> Why have the kernel do that work at every boot when it can be known at
+> link time?
 
-It looks like after this there are no more users for that cap_str
-variable. You need to remove that too.
+I have patches that write a 4 byte #UD there instead of a nop. That
+would make !IBT hardware splat as well when it hits a sealed function
+(and in that case actually having those extra ENDBR generated is a
+bonus).
 
-thanks,
+Anyway, I have some newer patches and some hardware, except it's a NUC
+and working with those things is a royal pain in the arse since they
+don't have serial. I finally did get XHCI debug port working, but
+there's no XDBC grub support, so now I managed to boot a dead kernel and
+the thing is a brick until I can be arsed to connect a keybaord and
+screen to it again :-(
 
--- 
-heikki
+KVM/qemu has no IBT support merged yet, so I can't use that either.

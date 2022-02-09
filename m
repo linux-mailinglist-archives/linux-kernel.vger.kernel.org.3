@@ -2,79 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFD684AF584
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 16:39:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF63D4AF589
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 16:39:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236078AbiBIPjL convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 9 Feb 2022 10:39:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53826 "EHLO
+        id S236111AbiBIPjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 10:39:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236077AbiBIPjF (ORCPT
+        with ESMTP id S236113AbiBIPjl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 10:39:05 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EF794C0612BE
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 07:39:07 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-266-CLFZHHFuMYWxCblHNniABg-1; Wed, 09 Feb 2022 15:39:04 +0000
-X-MC-Unique: CLFZHHFuMYWxCblHNniABg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Wed, 9 Feb 2022 15:39:02 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Wed, 9 Feb 2022 15:39:02 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Aditya Garg' <gargaditya08@live.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Jeremy Kerr <jk@ozlabs.org>,
-        "joeyli.kernel@gmail.com" <joeyli.kernel@gmail.com>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "eric.snowberg@oracle.com" <eric.snowberg@oracle.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "jlee@suse.com" <jlee@suse.com>,
-        "James.Bottomley@hansenpartnership.com" 
-        <James.Bottomley@HansenPartnership.com>,
-        "jarkko@kernel.org" <jarkko@kernel.org>,
-        "mic@digikod.net" <mic@digikod.net>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>
-CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        Orlando Chamberlain <redecorating@protonmail.com>,
-        Aun-Ali Zaidi <admin@kodeit.net>
-Subject: RE: [PATCH] efi: Do not import certificates from UEFI Secure Boot for
- T2 Macs
-Thread-Topic: [PATCH] efi: Do not import certificates from UEFI Secure Boot
- for T2 Macs
-Thread-Index: AQHYHcE4Urimp9LpDkeI7ezkgv1YDayLWeDg
-Date:   Wed, 9 Feb 2022 15:39:02 +0000
-Message-ID: <755cffe1dfaf43ea87cfeea124160fe0@AcuMS.aculab.com>
-References: <9D0C961D-9999-4C41-A44B-22FEAF0DAB7F@live.com>
-In-Reply-To: <9D0C961D-9999-4C41-A44B-22FEAF0DAB7F@live.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 9 Feb 2022 10:39:41 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB5BC05CB82;
+        Wed,  9 Feb 2022 07:39:42 -0800 (PST)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 219Ekbp6013360;
+        Wed, 9 Feb 2022 15:39:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type :
+ content-transfer-encoding; s=corp-2021-07-09;
+ bh=863BwFAgoaC2JnBu4gSCW8/vsPzH4hffHnxl4KQnG5E=;
+ b=ulW27q099SdFZlEV6lHLwhyiNq9smYnMasmA3+z9M9H9KcbO0s4lc6Z7HS2DCD51scfm
+ FqiAzIXQksxvvgw4GhAYCW65NS3wL+RLlAU3NsYHRrdofP1ojcq5kaaBmLH6fK9vWrQz
+ iMRHOhqjy46WsWFi9zkDJrjf2PWZu9JyzNYJh10rPSIYn9116cs+yN6eMN1JFOWmDcjT
+ AcmXM9/Y5Sni6ckpPg8/d3GGcC6yl34imk1Z5XqmpLnsX7TdmLAIaDFpu9JLfOovHcYd
+ B190j+kcngWpbuSmUGY++CxKAeRafjGWuRFYUDs34fDv//cq2f+mcigtMA3enGgeUCV9 zQ== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3e368tx6an-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 09 Feb 2022 15:39:38 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 219FHdmB175021;
+        Wed, 9 Feb 2022 15:39:37 GMT
+Received: from lab02.no.oracle.com (lab02.no.oracle.com [10.172.144.56])
+        by aserp3020.oracle.com with ESMTP id 3e1h28dqgf-1;
+        Wed, 09 Feb 2022 15:39:37 +0000
+From:   =?UTF-8?q?H=C3=A5kon=20Bugge?= <haakon.bugge@oracle.com>
+To:     Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>
+Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH for-rc v2] IB/cma: Allow XRG INI QPs to set their local ACK timeout
+Date:   Wed,  9 Feb 2022 16:39:35 +0100
+Message-Id: <1644421175-31943-1-git-send-email-haakon.bugge@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10252 signatures=673431
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxscore=0 bulkscore=0
+ phishscore=0 malwarescore=0 mlxlogscore=999 adultscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2202090087
+X-Proofpoint-ORIG-GUID: ASi-MLhSNGP42rhxbelcYXs2Zm2jYl3u
+X-Proofpoint-GUID: ASi-MLhSNGP42rhxbelcYXs2Zm2jYl3u
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,35 +64,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aditya Garg
-> Sent: 09 February 2022 14:28
-> 
-> On T2 Macs, the secure boot is handled by the T2 Chip. If enabled, only
-> macOS and Windows are allowed to boot on these machines. Thus we need to
-> disable secure boot for Linux. If we boot into Linux after disabling
-> secure boot, if CONFIG_LOAD_UEFI_KEYS is enabled, EFI Runtime services
-> fail to start, with the following logs in dmesg
-> 
-..
-> +static const struct dmi_system_id uefi_apple_ignore[] = {
-> +	{
-> +		 .matches = {
-> +			DMI_MATCH(DMI_BOARD_VENDOR, "Apple Inc."),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "MacBookPro15,1"),
-> +		},
+XRC INI QPs should be able to adjust their local ACK timeout.
 
-I think I'd use:
-#define xxx(vendor, product) \
-		 .matches = {
-			DMI_MATCH(DMI_BOARD_VENDOR, vendor), \
-			DMI_MATCH(DMI_PRODUCT_NAME, product), \
-		}
-somewhere with a suitable name (bikeshed blue) to reduce
-the code size of this table.
+Fixes: 2c1619edef61 ("IB/cma: Define option to set ack timeout and pack tos_set")
+Signed-off-by: Håkon Bugge <haakon.bugge@oracle.com>
+Suggested-by: Avneesh Pant <avneesh.pant@oracle.com>
 
-	David
+---
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+v1 -> v2:
+   * Removed WARN_ON as suggested by Leon
+---
+ drivers/infiniband/core/cma.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/infiniband/core/cma.c b/drivers/infiniband/core/cma.c
+index 0f5f0d7..7adacd1 100644
+--- a/drivers/infiniband/core/cma.c
++++ b/drivers/infiniband/core/cma.c
+@@ -2811,7 +2811,7 @@ int rdma_set_ack_timeout(struct rdma_cm_id *id, u8 timeout)
+ {
+ 	struct rdma_id_private *id_priv;
+ 
+-	if (id->qp_type != IB_QPT_RC)
++	if (id->qp_type != IB_QPT_RC && id->qp_type != IB_QPT_XRC_INI)
+ 		return -EINVAL;
+ 
+ 	id_priv = container_of(id, struct rdma_id_private, id);
+-- 
+1.8.3.1
 

@@ -2,94 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7E664AFE24
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 21:21:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4246A4AFE25
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 21:21:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231223AbiBIUUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 15:20:31 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:43718 "EHLO
+        id S231210AbiBIUUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 15:20:54 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:45304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231176AbiBIUU3 (ORCPT
+        with ESMTP id S230449AbiBIUUx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 15:20:29 -0500
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F6C4E0385D3
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 12:20:29 -0800 (PST)
-Received: by mail-oi1-x22d.google.com with SMTP id ay7so3702039oib.8
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 12:20:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MLbUj1+WmHsBpRePIsYDuUfH8mf0cZbbbnuejmwzm9M=;
-        b=qYk3kQgpb35yf4/lPoDS2vVGGv5guIlpIz/GvFpVTdQFiUDDzSnIOVGIacsyDWIV05
-         MGMTDDH+KrGWFyzekXoO0Vx8m6cN2Q/rzm0smw9EY+5hFQJ6kgvt/RQMyDiWru8XhK/R
-         nQ80LHUozomMdgUi0V8RbLsKASJl530bP6YZgsTmVu/e31/NWpdAV7XJlY94uYr18QQm
-         avbzxDx3yaL3v/6L+1qcCku4cCckaxJ6I5UnohgxhUn5+CgVdEAV7/LvAf9ieSi/+Vsi
-         E04P5eekYUG6RPzsDRyNDOMb3Ex+BPkTaQ8erl8jCVwqd2S507T5VsDCAU3GysTkvV2D
-         mM/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MLbUj1+WmHsBpRePIsYDuUfH8mf0cZbbbnuejmwzm9M=;
-        b=NHH8tCK32KiXW5jf/CfVi8kdnmkz3i5+ghBKJ0iBma8lgnfc3bpvSUWCpILdefPnIO
-         qgZM3toDqN3ZelwcJt9pvglJu5dk8ZACWaFwHHP8RpeNQAtLtRph6jStKG9SNjtbxG40
-         EOYR1q50cF2YHWd4pr3yN+vrr1GE7tWpXwkUBry3w9mc9aXJGXNm4uQEXr1KgJqTyCYE
-         W1bIGp2AvArZQ9DC24REzrzeYgBdgRf3z+uthxnM/osQUsMqFt4bQsjryJi/nDfpODXq
-         veBF7pOaaTeYkNdYdwNZpcK0tGLlSPRFXXjWeqODvwB9NKpAlFwd37WORA0XCNYYAEXX
-         MuOw==
-X-Gm-Message-State: AOAM531wsUF2FAQxdUDpYnEcXPhUxO1+ZyenoqlbB7qVaU1u+/NJwIQu
-        PQQ6L+SlxYTQwy2zMKpX2TQ=
-X-Google-Smtp-Source: ABdhPJx4gwWxXgyRsdL7daKlnXfpkyBdayhaoW6BvIlwKsm00olzFU6iKZ/jXm3RnzNCDkjuzyVJRw==
-X-Received: by 2002:a05:6808:1890:: with SMTP id bi16mr1701247oib.1.1644438027901;
-        Wed, 09 Feb 2022 12:20:27 -0800 (PST)
-Received: from localhost.localdomain ([2804:14d:4cd8:12bf:758b:9a0d:6e95:934f])
-        by smtp.gmail.com with ESMTPSA id l22sm7104120otj.44.2022.02.09.12.20.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 12:20:27 -0800 (PST)
-From:   Leonardo Araujo <leonardo.aa88@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        Leonardo Araujo <leonardo.aa88@gmail.com>
-Subject: [PATCH] Staging: r8188eu: core: Comparisons should place the constant on the right side of the test
-Date:   Wed,  9 Feb 2022 17:20:15 -0300
-Message-Id: <20220209202015.29156-1-leonardo.aa88@gmail.com>
-X-Mailer: git-send-email 2.29.0
+        Wed, 9 Feb 2022 15:20:53 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA26BE00E5A6
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 12:20:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644438055;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NifY2jezbBUetwsmzUwyvhafuJf4MPduuqMq0ll2twA=;
+        b=JZe4DtoKVOUYQkqvj92r9EEnuXxe//SCbX+d6w1mEUXFKqM1o1Oj21ZvPh2+sG3UYTPbsQ
+        Nd32E5BQyV3qFsjWSgcJs08nVBOUnkz1kuTSqhDIxMhROwC/h/8jeXIOG+oPyw+/FBNftw
+        onb4FHZDStmKT4KtHv6LaYW+eG4Lras=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-463-dG41el83N5qH0Lg7DIHjtQ-1; Wed, 09 Feb 2022 15:20:49 -0500
+X-MC-Unique: dG41el83N5qH0Lg7DIHjtQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 36769824F96;
+        Wed,  9 Feb 2022 20:20:46 +0000 (UTC)
+Received: from [10.22.9.207] (unknown [10.22.9.207])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 46E7D49A7;
+        Wed,  9 Feb 2022 20:20:43 +0000 (UTC)
+Message-ID: <4b58c74d-6ad6-3658-30fb-1957a7b212dc@redhat.com>
+Date:   Wed, 9 Feb 2022 15:20:42 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH 02/12] cgroup: rstat: Make cgroup_rstat_cpu_lock name
+ readable
+Content-Language: en-US
+To:     Namhyung Kim <namhyung@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Byungchul Park <byungchul.park@lge.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Radoslaw Burny <rburny@google.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
+        Tejun Heo <tj@kernel.org>
+References: <20220208194324.85333-1-namhyung@kernel.org>
+ <20220208194324.85333-3-namhyung@kernel.org>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20220208194324.85333-3-namhyung@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch fixes the following checkpatch.pl warning:
+On 2/8/22 14:43, Namhyung Kim wrote:
+> The raw_spin_lock_init() uses the argument to name its lockdep map.
+> But passing per_cpu_ptr() macro directly makes it a very very long
+> name as it expanded like below:
+>
+>    ({ do { const void *__vpp_verify = (typeof((&cgroup_rstat_cpu_lock) ...
+>
+> Let's fix it by passing a local variable instead.  With this change,
+> the name now looks like:
+>
+>    cgrp_rstat_cpu_lock
+>
+> Cc: Zefan Li <lizefan.x@bytedance.com>
+> Cc: Johannes Weiner <hannes@cmpxchg.org>
+> Cc: cgroups@vger.kernel.org
+> Acked-by: Tejun Heo <tj@kernel.org>
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> ---
+>   kernel/cgroup/rstat.c | 12 ++++++++++--
+>   1 file changed, 10 insertions(+), 2 deletions(-)
+>
+> diff --git a/kernel/cgroup/rstat.c b/kernel/cgroup/rstat.c
+> index 9d331ba44870..371f54a59c38 100644
+> --- a/kernel/cgroup/rstat.c
+> +++ b/kernel/cgroup/rstat.c
+> @@ -286,9 +286,17 @@ void cgroup_rstat_exit(struct cgroup *cgrp)
+>   void __init cgroup_rstat_boot(void)
+>   {
+>   	int cpu;
+> +	raw_spinlock_t *cgrp_rstat_cpu_lock;
+>   
+> -	for_each_possible_cpu(cpu)
+> -		raw_spin_lock_init(per_cpu_ptr(&cgroup_rstat_cpu_lock, cpu));
+> +	for_each_possible_cpu(cpu) {
+> +		/*
+> +		 * raw_spin_lock_init() uses the argument to name the lock in
+> +		 * lockdep results.  Passing per_cpu_ptr() directly created a
+> +		 * cryptic name as the macro was expanded before stringified.
+> +		 */
+> +		cgrp_rstat_cpu_lock = per_cpu_ptr(&cgroup_rstat_cpu_lock, cpu);
+> +		raw_spin_lock_init(cgrp_rstat_cpu_lock);
+> +	}
+>   }
+>   
+>   /*
 
-WARNING: Comparisons should place the constant on the right side of the test
+That is a standalone fix. Maybe Tejun can take it directly into the 
+cgroup tree.
 
-Signed-off-by: Leonardo Araujo <leonardo.aa88@gmail.com>
----
- drivers/staging/r8188eu/core/rtw_cmd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/staging/r8188eu/core/rtw_cmd.c b/drivers/staging/r8188eu/core/rtw_cmd.c
-index c7e8602d2097..a9a5453aa1cc 100644
---- a/drivers/staging/r8188eu/core/rtw_cmd.c
-+++ b/drivers/staging/r8188eu/core/rtw_cmd.c
-@@ -188,7 +188,7 @@ u32 rtw_enqueue_cmd(struct cmd_priv *pcmdpriv, struct cmd_obj *cmd_obj)
- 	cmd_obj->padapter = padapter;
- 
- 	res = rtw_cmd_filter(pcmdpriv, cmd_obj);
--	if (_FAIL == res) {
-+	if (res == _FAIL) {
- 		rtw_free_cmd_obj(cmd_obj);
- 		goto exit;
- 	}
--- 
-2.29.0
+Acked-by: Waiman Long <longman@redhat.com>
 

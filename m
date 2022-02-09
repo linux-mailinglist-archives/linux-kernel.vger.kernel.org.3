@@ -2,89 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0C8B4AEE29
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 10:41:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53FA44AEE6B
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 10:50:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235616AbiBIJlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 04:41:09 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:40558 "EHLO
+        id S233502AbiBIJt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 04:49:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234846AbiBIJiv (ORCPT
+        with ESMTP id S231858AbiBIJt4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 04:38:51 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CCFCC003641
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 01:38:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=AtUNZ4s01M6g6RdXvEjIliRhqQEYsPwz6AWii/ZtLpg=; b=dNpieonr1BtMyKj8yCUtfbkPtJ
-        3kLQTSK4DVNughTfQzVLdIcHgdh+CAFZC06vZaMlhQmDu2SeTL5icfhy/Q9sJxWj/2umgUBPQA2hR
-        UdHF8vSVgnqEEK74YWOpJ7VKEHUT7dP6EY4DrM5poXhmtiHpFd9uFHDh7kkWWMkEynKScNxn/Ivb3
-        KCV0x2lTs1/QfOZ6nXxE9+LW4ORVEMoItBIyOh+sEy6SX86PRzZ/tWLQU4iQd219iqdZl0q12dhoS
-        0kECkfWzx+LEQ58oQpctjG5QjlvcHXLYRMLs4LzAu/uUiY0lMVa8vNUJHDK7ril4mqTU7cqHUc4ZI
-        dfG1KdTA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nHjQj-008NfZ-Sd; Wed, 09 Feb 2022 09:38:30 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id B82F89853C7; Wed,  9 Feb 2022 10:38:28 +0100 (CET)
-Date:   Wed, 9 Feb 2022 10:38:28 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Aubrey Li <aubrey.li@linux.intel.com>,
-        Barry Song <song.bao.hua@hisilicon.com>,
-        Mike Galbraith <efault@gmx.de>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        Gautham Shenoy <gautham.shenoy@amd.com>,
-        K Prateek Nayak <kprateek.nayak@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v6 0/2] Adjust NUMA imbalance for multiple LLCs
-Message-ID: <20220209093828.GL23216@worktop.programming.kicks-ass.net>
-References: <20220208094334.16379-1-mgorman@techsingularity.net>
+        Wed, 9 Feb 2022 04:49:56 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E656FE0CD5D5;
+        Wed,  9 Feb 2022 01:49:48 -0800 (PST)
+Received: from mail-wr1-f52.google.com ([209.85.221.52]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MUGqT-1nhPAW2hRz-00RKGp; Wed, 09 Feb 2022 10:39:55 +0100
+Received: by mail-wr1-f52.google.com with SMTP id s10so2979127wra.5;
+        Wed, 09 Feb 2022 01:39:55 -0800 (PST)
+X-Gm-Message-State: AOAM532Wr5KJwgBx8HT5EiBbGvnyB0FGpzru6qwmYev0Hvot8e2v/Yxk
+        7HGBDorwFvs+/gZO2zznfAizcxPmVd2aIY/sr0A=
+X-Google-Smtp-Source: ABdhPJz3KHEWzLUGUXQRVUVhG7tdvGJxnqkmHAQWCi8BoxyHdHPDE5k/78Mr9En5Xk713UBFNQeWBwjQLBOzv8A4Rqg=
+X-Received: by 2002:a5d:500c:: with SMTP id e12mr1335451wrt.219.1644399595263;
+ Wed, 09 Feb 2022 01:39:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220208094334.16379-1-mgorman@techsingularity.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220113080017.30155-1-kavyasree.kotagiri@microchip.com>
+ <f8b83cf0-7ebf-1ecd-b544-f0d0079d9dde@microchip.com> <CAK8P3a2kRhCOoXnvcMyqS-zK2WDZjtUq4aqOzE5VV=VMg=pVOA@mail.gmail.com>
+ <CO1PR11MB48651C0D73189AF010407F9B922E9@CO1PR11MB4865.namprd11.prod.outlook.com>
+In-Reply-To: <CO1PR11MB48651C0D73189AF010407F9B922E9@CO1PR11MB4865.namprd11.prod.outlook.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 9 Feb 2022 10:39:39 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1swyDBvSTg9a6tUnd2V2Zi=ANpJWhJpWwfvp7ArZpwVg@mail.gmail.com>
+Message-ID: <CAK8P3a1swyDBvSTg9a6tUnd2V2Zi=ANpJWhJpWwfvp7ArZpwVg@mail.gmail.com>
+Subject: Re: [PATCH v3] ARM: dts: add DT for lan966x SoC and 2-port board pcb8291
+To:     Kavyasree.Kotagiri@microchip.com
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Nicolas Ferre <Nicolas.Ferre@microchip.com>,
+        Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:jTCo3beyZTovebwApM1BZXCSjJx3bvezVv35gCf/vhCDsdz41Fm
+ xxWDAmsE/dBT2kkDxXcx3aqqgIUyTJFhBjWZXcRYpF08Gujn5S4Y0Y61zOpq/3HWi9HntWk
+ ymNAss107ppOZRBg74VA2Dv+3AJ/+FcLqk2FaclKuHLkP+V01WRdNiZhMiY4fNOqoYfVfo5
+ axoHCJ/ktX4EkBAVIahWQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:s6sfh7BBii0=:htF3Eju/VJMOYgJPPzo4/i
+ BKcOVDkyvVTYdufBuE6c99Hv87gqq5JMQdA8rasIVFzcugEJPYbqFfPWC9tl3lZp8ROWLZWmi
+ DJomJDGfo13k1fJSq0yHmz0hqAjarBps1F3kaDu/7jk7g03YT7eQex4FEjcy2ugkI0G7xJgND
+ sCOJjEnBlVIx1xT9aMTUuj+WlC10KwOseYwSWQQIR2ZMATdu0C5uXDRDsLoze8mKBjvhrpwLz
+ bQ3pzF0QMdEzR02zSutvWpPSzFbxka+JkFIoNdkVzwUGIybllbXNuz2UZR8CJVMmp5W2/pN9l
+ 2eUde44iGu9F4R0/axTUc1xY8sfkv5adaMGaJO0SXc02j8i8nsrZiXj/8p/NpNUCKSuFRBcqr
+ hUEpFvCPwKN52yREwFMPi8Z9ROuwK7Vp/Kmpm8//RkVJNn9agvbokgIL2pFo9hlUloj90NTdF
+ IVJiluRvzOVI+tDE12juFUTwpj8lRYj1YvCO6DyWZyT5hh4VQMj15ETuOHioJ8ZXvdDvL2PGI
+ 5EFiS7+t3vTDYhTrzGzKfNPM7JzItYKNQLxHawrzURUJgVmsgnM58Clu49b3TvOXCUdeHA/4q
+ x9JGE5s1KkfU6LtH8NWRBZ43a/QZoACXZt6nmHDsodo2Pz1orxdgImBFnQio7ymwZptTVQrzM
+ rRYVbav/Jh3j/VU6/z0nUgpFMEHaiRLLR3hvbRWBPQxFbGqZHIGbwmhwMzABIuNrICMM=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 08, 2022 at 09:43:32AM +0000, Mel Gorman wrote:
-> Changelog sinve v5
-> o Fix off-by-one error
-> 
-> Changelog since V4
-> o Scale imbalance based on the top domain that prefers siblings
-> o Keep allowed imbalance as 2 up to the point where LLCs can be overloaded
-> 
-> Changelog since V3
-> o Calculate imb_numa_nr for multiple SD_NUMA domains
-> o Restore behaviour where communicating pairs remain on the same node
-> 
-> Commit 7d2b5dd0bcc4 ("sched/numa: Allow a floating imbalance between NUMA
-> nodes") allowed an imbalance between NUMA nodes such that communicating
-> tasks would not be pulled apart by the load balancer. This works fine when
-> there is a 1:1 relationship between LLC and node but can be suboptimal
-> for multiple LLCs if independent tasks prematurely use CPUs sharing cache.
-> 
-> The series addresses two problems -- inconsistent logic when allowing a
-> NUMA imbalance and sub-optimal performance when there are many LLCs per
-> NUMA node.
-> 
->  include/linux/sched/topology.h |  1 +
->  kernel/sched/fair.c            | 30 ++++++++++---------
->  kernel/sched/topology.c        | 53 ++++++++++++++++++++++++++++++++++
->  3 files changed, 71 insertions(+), 13 deletions(-)
+On Wed, Feb 9, 2022 at 10:02 AM <Kavyasree.Kotagiri@microchip.com> wrote:
+> > > On 13/01/2022 at 09:00, Kavyasree Kotagiri wrote:
 
-Thanks!
+> > > > +&gpio {
+> > > > +     fc_shrd7_pins: fc_shrd7-pins {
+> > > > +             pins = "GPIO_49";
+> > > > +             function = "fc_shrd7";
+> > > > +     };
+> >
+> > These properties don't look like most pinctrl nodes, has the binding
+> > been reviewed?
+> > I don't see it in Documentation/devicetree/bindings/pinctrl/
+> >
+> This is similar to the ones used in Microchip Ocelot and Sparx5 pinctrl.
+> For example, see usart_pins of gpio nodes in below links:
+> https://sbexr.rabexc.org/latest/sources//84/d39b543790ff25.jhtml
+> https://searchcode.com/file/333750634/arch/mips/boot/dts/mscc/ocelot.dtsi/
+
+Ok, I see, so this was reviewed by both Rob and LinusW, I assume it's fine
+then, though the use of strings with capital letters, with all pins
+named "GPIO_*"
+still looks odd.
+
+For my understanding, would you describe the lan966x family as
+a follow-up to Ocelot, with the CPU cores replaced and flexcom added,
+or should I think of it as a SAMA7 based SoC design that incorporates
+the Vitesse switch IP?
+
+        Arnd

@@ -2,236 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B81254AFD47
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 20:26:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A08444AFD72
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 20:29:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234321AbiBITZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 14:25:40 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:43894 "EHLO
+        id S234219AbiBIT3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 14:29:11 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:46708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233865AbiBITZW (ORCPT
+        with ESMTP id S236113AbiBIT2F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 14:25:22 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 952F9E01526C;
-        Wed,  9 Feb 2022 11:25:19 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: detlev)
-        with ESMTPSA id B8A881F45830
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644434718;
-        bh=7+kNVuhRDRn8ZWd50WG2gPmkpwkCawcOM90JKeUKmKU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MV0BmwPzZNSBUeCHXgm842NsKPpUaxWQIj0kCG8a0hLp3xOW3k9kykpnwJnsQ+2PT
-         c0Su8GZH9uR8fzUnohebLBH5zeUPbglzcuRFuNDzaWA2iepkfUQZek/TzO7wb4ypK8
-         tPKOJjTj0VLKQOZU7/rvgZBrShffbP67x5MsyelHPP6mPMpC7ULshIFE8Jqb3wULt8
-         BLoZ7ix1bLLF7yXKCp3cWOqEg5FDQWHZLLAUUdOfQTd5QnagV0EbPmZdRL1Y3XSX01
-         ok0ZfmkncihMlW3BRjnTC+BpGPXDTcfCXVYmsCgLPs1dxc4pXjDgOzLl2FSFlSMYl9
-         JQgnnk5aZZ1Nw==
-From:   Detlev Casanova <detlev.casanova@collabora.com>
-To:     linux-kernel@vger.kernel.org,
-        Stefan Wahren <stefan.wahren@i2se.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        "maintainer:ARM AND ARM64 SoC SUB-ARCHITECTURES (COMMON PARTS)" 
-        <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        "maintainer:BROADCOM BCM281XX/BCM11XXX/BCM216XX ARM ARCHITE..." 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "moderated list:ARM AND ARM64 SoC SUB-ARCHITECTURES (COMMON PARTS)" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        Uwe =?ISO-8859-1?Q?Kleine=2DK=F6nig?= <uwe@kleine-koenig.org>
-Subject: Re: [PATCH 1/2] ARM: dts: bcm2*: Demux i2c0 with a pinctrl
-Date:   Wed, 09 Feb 2022 14:25:12 -0500
-Message-ID: <11962907.O9o76ZdvQC@falcon9>
-In-Reply-To: <1335ae03-705a-7a4a-a9ce-c6c55a2dcf34@i2se.com>
-References: <20220209162515.706729-1-detlev.casanova@collabora.com> <20220209162515.706729-2-detlev.casanova@collabora.com> <1335ae03-705a-7a4a-a9ce-c6c55a2dcf34@i2se.com>
+        Wed, 9 Feb 2022 14:28:05 -0500
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F01AE00ED68
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 11:26:42 -0800 (PST)
+Received: by mail-io1-xd2b.google.com with SMTP id r144so4520709iod.9
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 11:26:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=uJdZ7oqw+QQlIzr17qqdwzwfregbqFYC9sj7YzP1HYY=;
+        b=fYz8PGQMd29UOajQhZT2X83HUOpYoErPoGjRcNCM4yVnITAfRZgeDe7UMSvRLFe4oS
+         1k0WRleLPHEuUfcf6Ia64xTw2nV6RRaWj+2NboS6Cc4j+5N0sOvshg1GvERuJ5jICtiI
+         eslZtJUanhs7SqaFUnbPEbDHd79D+9p9fHxms=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=uJdZ7oqw+QQlIzr17qqdwzwfregbqFYC9sj7YzP1HYY=;
+        b=Y7qS7KoOPt1G2hQlNd+39+uSDQgo2ViwCkGU+EySQVDiqo4LGZ8V3s4UfhkjspsXHf
+         pVpYVIqXeX8EX7yB9ngu3OQO6yy/Pqeyv419HPjnpthXn5jkVhxcC2FgVHbaTen84DzR
+         Ri/TigtqS47cI0y01xyyLSGRYXu9PrSgbAcvIezFGyk3NoKc67WV2h0UQMjrlRljFrcr
+         dp1V8Tn2IXWxXZme+4FkzHiBpwaUcLwNnv2eUnZKlBl12draIJANAUXU9QQLpwlXrG7e
+         egzCDd3v5KC7WCJtaAzbCbKZlpfCDlrMTAkKbn3Hq8VG3/S7UrqD7eYGK6+LpVS4u5aU
+         u9ww==
+X-Gm-Message-State: AOAM532VNzp/HGn4eenv6arJgma6UaiC6B9XvbfYEaPIqOw2EftiZl5k
+        L+Z+17z5TfYjwvMr3SpNlhAJsQ==
+X-Google-Smtp-Source: ABdhPJw5MU53uJwqzrLtiF140G+vIQQ1qVQ9YiU1UrUUC9dzqLmlqHS4jlfDiPOVYXjgDYKvgAj0iA==
+X-Received: by 2002:a6b:6f09:: with SMTP id k9mr1864423ioc.61.1644434801604;
+        Wed, 09 Feb 2022 11:26:41 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id o22sm9992022iow.37.2022.02.09.11.26.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Feb 2022 11:26:41 -0800 (PST)
+Subject: Re: [PATCH] selftests/ftrace: Do not trace do_softirq because of
+ PREEMPT_RT
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rt-users@vger.kernel.org, joseph.salisbury@canonical.com,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220209162430.286578-1-krzysztof.kozlowski@canonical.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <aa0833ac-154e-9a66-c3f5-7c3b98f15f19@linuxfoundation.org>
+Date:   Wed, 9 Feb 2022 12:26:40 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220209162430.286578-1-krzysztof.kozlowski@canonical.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wednesday, February 9, 2022 12:26:15 P.M. EST Stefan Wahren wrote:
-> Hi Detlev,
+On 2/9/22 9:24 AM, Krzysztof Kozlowski wrote:
+> The PREEMPT_RT patchset does not use soft IRQs thus trying to filter for
+> do_softirq fails for such kernel:
 > 
-> Am 09.02.22 um 17:25 schrieb Detlev Casanova:
-> > The i2c0 device has 2 different busses controlled by a pinctrl.
-> > 
-> > This commit separates the device node into 2 i2c devices:
-> >  * pin 0: Base i2c bus
-> >  * pin 44: DSI i2c bus
-> > 
-> > i2c0 is renamed to i2c0if so that device-trees referencing i2c0 don't
-> > break and use the i2c0 node defined in i2c0mux node.
-> > 
-> > i2c_csi_dsi can be used to control devices via the DSI i2c bus, used for
-> > DSI displays.
-> > 
-> > Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
+>    echo do_softirq
+>    ftracetest: 81: echo: echo: I/O error
 > 
-> just a note: Uwe sends a similiar approach for the RTC on CM4 [1] which
-> hasn't applied yet.
+> Choose some other externally visible function for the test.
 > 
-> [1] - https://www.spinics.net/lists/arm-kernel/msg944330.html
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> 
+> ---
+> 
+> I understand that the failure does not exist on mainline kernel (only
+> with PREEMPT_RT patchset) but the change does not harm it.
+> 
+> If it is not suitable alone, please consider it for RT patchset.
+> ---
+>   .../selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc      | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc
+> index e96e279e0533..1d0c7601865f 100644
+> --- a/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc
+> @@ -19,7 +19,7 @@ fail() { # mesg
+>   
+>   FILTER=set_ftrace_filter
+>   FUNC1="schedule"
+> -FUNC2="do_softirq"
+> +FUNC2="_printk"
+>   
+>   ALL_FUNCS="#### all functions enabled ####"
+>   
+> 
 
+Change looks good to me.
 
-Oh, I missed that, I'll just hav to wait for it to be merged and base the next 
-commit on that (Mainly name change)
- 
-> > ---
-> > 
-> >  arch/arm/boot/dts/bcm2711-rpi-4-b.dts         |  1 +
-> >  arch/arm/boot/dts/bcm2711.dtsi                |  2 +-
-> >  arch/arm/boot/dts/bcm2835-rpi.dtsi            |  9 ++++---
-> >  .../boot/dts/bcm283x-rpi-i2c0mux_0_44.dtsi    |  4 +++
-> >  arch/arm/boot/dts/bcm283x.dtsi                | 26 ++++++++++++++++++-
-> >  5 files changed, 37 insertions(+), 5 deletions(-)
-> >  create mode 100644 arch/arm/boot/dts/bcm283x-rpi-i2c0mux_0_44.dtsi
-> > 
-> > diff --git a/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
-> > b/arch/arm/boot/dts/bcm2711-rpi-4-b.dts index 4432412044de..5dcce58817e6
-> > 100644
-> > --- a/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
-> > +++ b/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
-> > @@ -4,6 +4,7 @@
-> > 
-> >  #include "bcm2711-rpi.dtsi"
-> >  #include "bcm283x-rpi-usb-peripheral.dtsi"
-> >  #include "bcm283x-rpi-wifi-bt.dtsi"
-> > 
-> > +#include "bcm283x-rpi-i2c0mux_0_44.dtsi"
-> > 
-> >  / {
-> >  
-> >  	compatible = "raspberrypi,4-model-b", "brcm,bcm2711";
-> > 
-> > diff --git a/arch/arm/boot/dts/bcm2711.dtsi
-> > b/arch/arm/boot/dts/bcm2711.dtsi index 3b60297af7f6..bf6e8251c2c7 100644
-> > --- a/arch/arm/boot/dts/bcm2711.dtsi
-> > +++ b/arch/arm/boot/dts/bcm2711.dtsi
-> > @@ -1037,7 +1037,7 @@ &cma {
-> > 
-> >  	alloc-ranges = <0x0 0x00000000 0x40000000>;
-> >  
-> >  };
-> > 
-> > -&i2c0 {
-> > +&i2c0if {
-> > 
-> >  	compatible = "brcm,bcm2711-i2c", "brcm,bcm2835-i2c";
-> >  	interrupts = <GIC_SPI 117 IRQ_TYPE_LEVEL_HIGH>;
-> >  
-> >  };
-> > 
-> > diff --git a/arch/arm/boot/dts/bcm2835-rpi.dtsi
-> > b/arch/arm/boot/dts/bcm2835-rpi.dtsi index 87ddcad76083..1e38f9f0e80e
-> > 100644
-> > --- a/arch/arm/boot/dts/bcm2835-rpi.dtsi
-> > +++ b/arch/arm/boot/dts/bcm2835-rpi.dtsi
-> > @@ -49,13 +49,16 @@ alt0: alt0 {
-> > 
-> >  	};
-> >  
-> >  };
-> > 
-> > -&i2c0 {
-> > -	pinctrl-names = "default";
-> > -	pinctrl-0 = <&i2c0_gpio0>;
-> > +&i2c0if {
-> > 
-> >  	status = "okay";
-> >  	clock-frequency = <100000>;
-> >  
-> >  };
-> > 
-> > +&i2c0mux {
-> > +	pinctrl-0 = <&i2c0_gpio0>;
-> > +	status = "okay";
-> > +};
-> > +
-> > 
-> >  &i2c1 {
-> >  
-> >  	pinctrl-names = "default";
-> >  	pinctrl-0 = <&i2c1_gpio2>;
-> > 
-> > diff --git a/arch/arm/boot/dts/bcm283x-rpi-i2c0mux_0_44.dtsi
-> > b/arch/arm/boot/dts/bcm283x-rpi-i2c0mux_0_44.dtsi new file mode 100644
-> > index 000000000000..119946d878db
-> > --- /dev/null
-> > +++ b/arch/arm/boot/dts/bcm283x-rpi-i2c0mux_0_44.dtsi
-> > @@ -0,0 +1,4 @@
-> > +&i2c0mux {
-> > +	pinctrl-0 = <&i2c0_gpio0>;
-> > +	pinctrl-1 = <&i2c0_gpio44>;
-> > +};
-> > diff --git a/arch/arm/boot/dts/bcm283x.dtsi
-> > b/arch/arm/boot/dts/bcm283x.dtsi index a3e06b680947..06d04cde52b9 100644
-> > --- a/arch/arm/boot/dts/bcm283x.dtsi
-> > +++ b/arch/arm/boot/dts/bcm283x.dtsi
-> > @@ -334,7 +334,7 @@ spi: spi@7e204000 {
-> > 
-> >  			status = "disabled";
-> >  		
-> >  		};
-> > 
-> > -		i2c0: i2c@7e205000 {
-> > +		i2c0if: i2c@7e205000 {
-> > 
-> >  			compatible = "brcm,bcm2835-i2c";
-> >  			reg = <0x7e205000 0x200>;
-> >  			interrupts = <2 21>;
-> > 
-> > @@ -344,6 +344,30 @@ i2c0: i2c@7e205000 {
-> > 
-> >  			status = "disabled";
-> >  		
-> >  		};
-> > 
-> > +		i2c0mux: i2c0mux {
-> > +			compatible = "i2c-mux-pinctrl";
-> > +			#address-cells = <1>;
-> > +			#size-cells = <0>;
-> > +
-> > +			i2c-parent = <&i2c0if>;
-> > +
-> > +			pinctrl-names = "i2c0", "i2c_csi_dsi";
-> > +
-> > +			status = "disabled";
-> > +
-> > +			i2c0: i2c@0 {
-> > +				reg = <0>;
-> > +				#address-cells = <1>;
-> > +				#size-cells = <0>;
-> > +			};
-> > +
-> > +			i2c_csi_dsi: i2c@1 {
-> > +				reg = <1>;
-> > +				#address-cells = <1>;
-> > +				#size-cells = <0>;
-> > +			};
-> > +		};
-> > +
-> > 
-> >  		dpi: dpi@7e208000 {
-> >  		
-> >  			compatible = "brcm,bcm2835-dpi";
-> >  			reg = <0x7e208000 0x8c>;
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 
-
-
+thanks,
+-- Shuah
 

@@ -2,562 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F3A64AEADF
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 08:16:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABBB44AEAE2
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 08:16:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237370AbiBIHPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 02:15:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44794 "EHLO
+        id S237754AbiBIHQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 02:16:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236642AbiBIHPk (ORCPT
+        with ESMTP id S236693AbiBIHPx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 02:15:40 -0500
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 632C2C0612C3;
-        Tue,  8 Feb 2022 23:15:43 -0800 (PST)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2196PfVU019548;
-        Tue, 8 Feb 2022 23:15:39 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0220; bh=2+usUML3asRaxQD1yrVWBptBzb+mqVrfMIXpGWd18ys=;
- b=Lm6/qI8z93hgzcoHjdlmUjDnqdd08AnY7WA0nKJtEItOKjlwMgx3d0QCZbRlXFd371i5
- +cp2KatvxNBECO6dwI7J0oIUq8MB62OtnLBl7ssGE62yNpWP/FlmQilR8+UA9NAYfhty
- Ubkdw3U6a8Lt+4u07auI4sj021GbM51Qe2/XpwLpaC/+40sOOvNghZpENzGcjOGUvF8I
- yrWhWnFj+APtPmUE56p8DO5n+Jxxfuu3ZjxrlVqLu2OwE1JH0dWLN40FxLnVva6gIeea
- rxEKK1KnD+bmZAhlX7BCcTBoswB1m7U4h6kX8r5peUn+l9gV6MgyImHgxMMUfwRSM8AI Vw== 
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3e3nuy4wa9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Tue, 08 Feb 2022 23:15:39 -0800
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 8 Feb
- 2022 23:15:37 -0800
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
- Transport; Tue, 8 Feb 2022 23:15:37 -0800
-Received: from hyd1soter3.marvell.com (unknown [10.29.37.12])
-        by maili.marvell.com (Postfix) with ESMTP id 75B253F7053;
-        Tue,  8 Feb 2022 23:15:34 -0800 (PST)
-From:   Hariprasad Kelam <hkelam@marvell.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <kuba@kernel.org>, <davem@davemloft.net>, <sgoutham@marvell.com>,
-        <lcherian@marvell.com>, <gakula@marvell.com>, <jerinj@marvell.com>,
-        <sbhatta@marvell.com>, <hkelam@marvell.com>
-Subject: [net-next PATCH V2 4/4] octeontx2-pf: PFC config support with DCBx
-Date:   Wed, 9 Feb 2022 12:45:19 +0530
-Message-ID: <20220209071519.10403-5-hkelam@marvell.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220209071519.10403-1-hkelam@marvell.com>
-References: <20220209071519.10403-1-hkelam@marvell.com>
+        Wed, 9 Feb 2022 02:15:53 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9039C05CB80
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 23:15:54 -0800 (PST)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2196ZEqp011044;
+        Wed, 9 Feb 2022 07:15:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : content-type : mime-version; s=corp-2021-07-09;
+ bh=UdBq2s6qMDcvXEKVleD1sbDcH7B4+gB4oq3v6N+ryTs=;
+ b=Ynaqt+wB48vCKd9t9YzT88Z9YcDinTzaPUaX7QZOdv1nLIQ1a0Wqc4F7DFAXzsHjHPv4
+ GvvgWaXcLxmX5GA/+lchxcOUvMJsb5jfspDA8RoHyHcbNNaNkXkBT8kYHIdBlGQAc6pv
+ U2Wl3pq/mJq4hc8v6VBgZ/nyOfsaSCuscP4bD6dLL9ek7BG57V+8jnMr3V0G84kuXgx2
+ V6z8aQBAnd3KFqb4kjbOoMLLrZdNyRhGKEk9bYejRO48aPnaaZlDbNw0iCMlYC6LcB4Q
+ IqjXxISL6wtAXBdIDpw5Am0LVfYPc+LQcDhh+VFd2IYd5x5rYeUuUpFonBSRSNlIE8n/ tQ== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3e3hdsus5p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 09 Feb 2022 07:15:46 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 21976hQK177730;
+        Wed, 9 Feb 2022 07:15:45 GMT
+Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam08lp2049.outbound.protection.outlook.com [104.47.73.49])
+        by userp3020.oracle.com with ESMTP id 3e1jps9du0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 09 Feb 2022 07:15:45 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MWSlpkOSGCysw0YmSrcG6m1AAISTW/+wXxeES5V+my1h3ea0if08o2lR+UsHR82GuC13DlU2C/RkS8b9L+OZDoJt4Ttx+dZLe47fbGaQeHqSj3Fd23Q90d2QPzPu6iFrclMP2wm5L9y8Vp2TbSlIiileGeDh7zVN8F6kZcCf1IV8GaMGcllpzBlrbggqazjcQK9GWcmQpuWt0WYBhxoOJlxQapRVoo7gzNFTvfedzTMbMsao+SluNsuEgxi0Sa5h7QHiBcGORecdOQkP1ikPe5dYxBK8xTrD9i3QXrlRRmrx4HSgabKEOkCpiccvn6vyUhgOVMHnRqPVPSIs82N0CQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UdBq2s6qMDcvXEKVleD1sbDcH7B4+gB4oq3v6N+ryTs=;
+ b=nM6bGNeDw1MPv2475nbNfRlF9f0KhxQjXaWzNhw3MFtTcQEojFk0ri0As8A98j4pMrskWUtPnGUurOsjJo9R+vda3R6KLoYpkeU/vJXvHN1nthVYoSRbpLcxjzGsXVARfiw2IizZcrLlpLa4WWunwlwt8+rEz1TYYTV2pQ66XESkwCf4Qxkf2LOWQi8EabCmipDjUyeZXL/Vp0faF1my+HbjoKM/xlQZmqI7aKenlNW8Hg1DWIdgIreN2eyfFfaIXWvqu2ok+7QjI2gZ2dxs5iWu4s3jtdw7t6jqUW6y+sn+FuLrKIiL04elVaVwhGbQYsIOeGtWjipYfexB34amMw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UdBq2s6qMDcvXEKVleD1sbDcH7B4+gB4oq3v6N+ryTs=;
+ b=ncu4Dvfi/18tHH6vhqyTlgY2ZbkspenXbTmPYmcRl4RQdH/oS54g7W9KuF4XIQ0rGkHa1iqrzcie+ufTumaBNU/hCIDq9e9bb21hf/Dff2wA4nu8YaxXCwlrHXhWHvkZyqgWjkdgNo658nK0BN8fbK5QalJdj3hGfn0IA2v9dw8=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by MWHPR10MB1920.namprd10.prod.outlook.com
+ (2603:10b6:300:10d::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Wed, 9 Feb
+ 2022 07:15:43 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::e5a5:8f49:7ec4:b7b8]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::e5a5:8f49:7ec4:b7b8%5]) with mapi id 15.20.4951.018; Wed, 9 Feb 2022
+ 07:15:43 +0000
+Date:   Wed, 9 Feb 2022 10:15:23 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     kbuild@lists.01.org, Thierry Reding <treding@nvidia.com>
+Cc:     lkp@intel.com, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: drivers/gpu/drm/tegra/gem.c:153 tegra_bo_pin() error: 'map->sgt'
+ dereferencing possible ERR_PTR()
+Message-ID: <202202090230.00iA3ozE-lkp@intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: JNXP275CA0017.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:19::29)
+ To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-GUID: -4W2Ds6TxmtKaST5DO_U5A3BmsD9q0td
-X-Proofpoint-ORIG-GUID: -4W2Ds6TxmtKaST5DO_U5A3BmsD9q0td
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-09_03,2022-02-07_02,2021-12-02_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: e2f6c88f-43b2-4ddf-68c3-08d9eb9bfbd6
+X-MS-TrafficTypeDiagnostic: MWHPR10MB1920:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR10MB1920B002B0262C55057239C98E2E9@MWHPR10MB1920.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:913;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: yptE4Qeuf0772KV6ezfDz6bC6GH/8b5hdpJGefopDlXDeqMvN4/tadcwK8sNZRBXby+umR5OlfneON09AglvjWjPxaLeVb2ZZkH7kGl9/wn0qAUAeTL6vDHuvIQbfQsB0v9uInicNZDbSCvgBbwbsGkG0g1ZYoD5pNervnpVSmbTm7g3cREun3UBC4q0QDL0N/YpAudth7smmxMOD8ylaEZ1lSiDEsMGJ8PesEZj08o/jOvMJjRE/aSHlxZRNaIyPg5FEipehQyBFBVlenSY1RruV05ZvUIoStivFweNjdXZI4xNE6gCtBOwVZ9ONjZGanuOWAMYnBP7sVLzouiaqM/IPEj4GP52UZ8FZHCMgONzGsYXTpI7BSWDoYmGsR30uTi2Sd374EEam2fctW3UZRxgPOL5xKg8epBTt8fzxMpjp5c01YSTYGpZwIC5VhzNkGR8uGDT1LJxUBWGuyfVtf8YzkXsxR7+QZKlwAdr1AvOt+lSf/6CkB3eIR6+FAe8TkD5PF2Kp7+/eAGU6SorF0WpQZR9BXA/sYmqxKtArgBSvsEUp/pOFe2QTf1Zw0tj4+Ig0M8eT0W4MmWsvPXCrdpFMcP5GHQuzr+K2zOjiRxDsmkuvrEugoLALpw4toZn3CZNLyWcTi95Bxx+lxg7QxB+OwQJbmd8RmutKj3QrIq+EBgqZY+kh2iGx4IO4zVRAYVAi+y8s9A1jNE8KKYyD9LvXP7Qj45H1oIDdq+YB4ARMc2HPHK/w15SO2v+wfJrl3SObh3vSWrT1ilCqqmaS4Vu/FCNfH5X8ZKGzEwQe2L6RkMPvzMecsU/gvlgVJm8bzJJgfDXnTVIyGlDEkcwxbO/vCcetaTbzmwpkgr/g6k=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(186003)(5660300002)(26005)(30864003)(1076003)(4001150100001)(2906002)(6666004)(508600001)(36756003)(38350700002)(38100700002)(6486002)(4326008)(52116002)(44832011)(316002)(6512007)(66946007)(86362001)(9686003)(8676002)(966005)(8936002)(66476007)(66556008)(6916009)(6506007)(83380400001)(357404004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?84hk5gLZXLHzdaTFsWwrDmDQfCKKbR8kKQzN1ImI06tfYQHzpFLWzOQnWzmZ?=
+ =?us-ascii?Q?VJT9TTrO79kjbzceBaAFbOsLe+8ijWCDCO4NOEfR8SJNZ/X29zzv+n4jdqgP?=
+ =?us-ascii?Q?drw6yXFV4XSqgV/PJ5ZepSIlb4oRHUFkX7DWkob76MwCOEfww5OyjY7sal8G?=
+ =?us-ascii?Q?YwBqA8BLMZ15NDiyRaSePm1Ltk8kk69DBU0+WLp9Eu3HjhqyJLs4tCH75t9G?=
+ =?us-ascii?Q?YankxSrmlGLbnZpGY5oH6tXOMx3ZL4+2kJ6FlNQE+K70pSPElO4GOPnhY94K?=
+ =?us-ascii?Q?NRzyhp+jeYerT39VJoaoj1EQ9s/ZjP8r5w8axk5X77r9vGE7Rg/TeklKNgDX?=
+ =?us-ascii?Q?CPYfTLOzF3mJqCAJTtsUYJs9K3kOZwiQu6qEn7z8OWHoYv/FeudGBV053tMl?=
+ =?us-ascii?Q?XBnvBNDrKu6T0FQ4Xs3gx+SrTVgrnaiUF9xHkfZgsCykQ8iDHTW5x677WwxA?=
+ =?us-ascii?Q?G/UFgbIi/qRsM1P0gIO+XYgZN8k+p7j7EBKpjKTicTEWDTq3s90dkNzlzV1N?=
+ =?us-ascii?Q?GQA0ao0QP8r3JbEuhG87xgGOC0t7oSjbQbD4rJP/Kk7c7U1tUMcJLYXeg9Te?=
+ =?us-ascii?Q?lb3NY6Zx90LAFno/Vrg84G7/d30IwzanbvpUH6jAZ3KpfME3Uf5ze13WhKPu?=
+ =?us-ascii?Q?JT31rRy/+m50rOeIwwpy/63uCr0f9kM1FDbIB8A8a0MZTE+nGjrp3BkMvLhv?=
+ =?us-ascii?Q?gheDMY6FfTbwMfIDtGqnAdekMVr4RdZzCf7odZtDcvoi7LPpJsvwgG08ndpi?=
+ =?us-ascii?Q?qrZqnTadc6p2RQlcMYjSAYErUYk6cGJKQjevmMNvW0PHHrkSdRcAwBHUjZC0?=
+ =?us-ascii?Q?DLvCu0gKcj6UyHbDbXpynAI+ZPnJQvt0ZMAL+PSclign4TuEOKUkokQDGjh6?=
+ =?us-ascii?Q?kUnG0CS67zzbE0On68Q9WsdeUyn3g/gx9vDmd7y/ndvEwlrJS3ERv7RAiAkK?=
+ =?us-ascii?Q?/7xsWe7thedcvG/iO0bUN5RCF3cCgItyy8bUynh1q2JLiQlRJnWRIONsMqc8?=
+ =?us-ascii?Q?LTkEfdQyt0aN3pFZ1635OMWhTKkqScvjAlg5aiQUu8K9OzWmotIAHnz5jHsH?=
+ =?us-ascii?Q?11LfQ7Ym/DQn3+hv+3ojAawfde7TtAIU8BsUVQFruF5Bcu6zg3RDshJpefj9?=
+ =?us-ascii?Q?BnjET8SEUVgU2i6gscnRKtOxKbsPkeNjXe9zgNwFA6DFCDrRE1uUWPHIYd/s?=
+ =?us-ascii?Q?/5GAh1aHl+mN8VfUI9C85lPb++KwHzQgJwdzBqciCS/cv+VhMiGMh/UBHtZa?=
+ =?us-ascii?Q?uSZyrBnE1/Jpt02uwCaDZ6BjUkrZIyoGJ+/UaX3IaKEzDIWUxWY+yPHSpi5p?=
+ =?us-ascii?Q?L7cuRbQwv57NvFLB6VyZbXO3dg9xjcruXdRg8J9+Kqn8UkQH5qgNOn8c/128?=
+ =?us-ascii?Q?8Dl/wM5hphxgAEAwsK9vBKdqd+Np1zkUFlVZ1044X0akNVnfSLe6Mh7TV9Jd?=
+ =?us-ascii?Q?yaC5dLC8U5DMn8IW2vTQeDPu+hb/hF7+UIIg3NUS5k42L9GqWpOKascwvtJz?=
+ =?us-ascii?Q?N7Mel9BMzXyg18l0mFaiGEVu9nHUhRtyKU1ok+LbQM2raX3zn3A1rV0787kT?=
+ =?us-ascii?Q?Aq3II2mgC2GcpLVQ6dIK/o+21LHODLR51VoZ7ka3FqPiZCTE5xfSrizjwSFa?=
+ =?us-ascii?Q?JTtp5lSLGQMALfWepf49JeYS78QwnWmUf7el8JQGmP/M5zVLiRanCJBlg/ux?=
+ =?us-ascii?Q?eDDTRA=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e2f6c88f-43b2-4ddf-68c3-08d9eb9bfbd6
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2022 07:15:43.0664
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ItN3k9ixS26MdCSfWfb+hPHC/WTtnPRgEBg+G3WhMJ0Chrgp7avo9/AAWHqU9jC4WAynnlyagF2G9GGvTV5Cn8zJTimXiU7EdWEm+AuHNuY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR10MB1920
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10252 signatures=673431
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 mlxscore=0 bulkscore=0
+ malwarescore=0 suspectscore=0 phishscore=0 adultscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2202090049
+X-Proofpoint-GUID: QLcgTqJJwZsnACmiK-zy2wlD33xSE2F-
+X-Proofpoint-ORIG-GUID: QLcgTqJJwZsnACmiK-zy2wlD33xSE2F-
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Data centric bridging designed to eliminate packet loss due to
-queue overflow by adding enhancements to ethernet network such as
-proprity flow control etc. This patch adds support for management
-of Priority flow control(PFC) on Octeontx2 and CN10K interfaces.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   555f3d7be91a873114c9656069f1a9fa476ec41a
+commit: c6aeaf56f468a565f6d2f27325fc07d35cdcd3cb drm/tegra: Implement correct DMA-BUF semantics
+config: arm-randconfig-m031-20220208 (https://download.01.org/0day-ci/archive/20220209/202202090230.00iA3ozE-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
 
-To enable PFC for all priorities
-	dcb pfc set dev eth0 prio-pfc all:on/off
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
 
-To enable PFC on selected priorites
-	dcb pfc set dev eth0 prio-pfc 0:on/off 1:on/off ..7:on/off
+smatch warnings:
+drivers/gpu/drm/tegra/gem.c:153 tegra_bo_pin() error: 'map->sgt' dereferencing possible ERR_PTR()
 
-With the ntuple commands user can map Priority to receive queues.
-On queue overflow NIX will assert backpressure such that PFC pause frames
-are genarated with mapped priority.
+vim +153 drivers/gpu/drm/tegra/gem.c
 
-To map priority 7 to Queue 1
-ethtool -U eth0 flow-type ether dst xx:xx:xx:xx:xx:xx vlan 0xe00a
-m 0x1fff  queue 1
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   58  static struct host1x_bo_mapping *tegra_bo_pin(struct device *dev, struct host1x_bo *bo,
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   59  					      enum dma_data_direction direction)
+1f16deac766926f drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-12-03   60  {
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   61  	struct tegra_bo *obj = host1x_to_tegra_bo(bo);
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   62  	struct drm_gem_object *gem = &obj->gem;
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   63  	struct host1x_bo_mapping *map;
+1f16deac766926f drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-12-03   64  	int err;
+1f16deac766926f drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-12-03   65  
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   66  	map = kzalloc(sizeof(*map), GFP_KERNEL);
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   67  	if (!map)
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   68  		return ERR_PTR(-ENOMEM);
+1f16deac766926f drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-12-03   69  
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   70  	map->bo = host1x_bo_get(bo);
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   71  	map->direction = direction;
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   72  	map->dev = dev;
+1f16deac766926f drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-12-03   73  
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   74  	/*
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   75  	 * Imported buffers need special treatment to satisfy the semantics of DMA-BUF.
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   76  	 */
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   77  	if (gem->import_attach) {
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   78  		struct dma_buf *buf = gem->import_attach->dmabuf;
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   79  
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   80  		map->attach = dma_buf_attach(buf, dev);
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   81  		if (IS_ERR(map->attach)) {
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   82  			err = PTR_ERR(map->attach);
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   83  			goto free;
+1f16deac766926f drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-12-03   84  		}
+1f16deac766926f drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-12-03   85  
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   86  		map->sgt = dma_buf_map_attachment(map->attach, direction);
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   87  		if (IS_ERR(map->sgt)) {
+                                                                                                   ^^^^^^^^
 
-Signed-off-by: Hariprasad Kelam <hkelam@marvell.com>
-Signed-off-by: Sunil Kovvuri Goutham <sgoutham@marvell.com>
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   88  			dma_buf_detach(buf, map->attach);
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   89  			err = PTR_ERR(map->sgt);
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   90  			goto free;
+1f16deac766926f drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-12-03   91  		}
+1f16deac766926f drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-12-03   92  
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   93  		err = sgt_dma_count_chunks(map->sgt);
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   94  		map->size = gem->size;
+de2ba664c30fcdb drivers/gpu/host1x/drm/gem.c Arto Merilainen 2013-03-22   95  
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   96  		goto out;
+af1cbfb9bf0fe07 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-10-28   97  	}
+585ee0f27ef7b8d drivers/gpu/drm/tegra/gem.c  Mikko Perttunen 2016-11-08   98  
+af1cbfb9bf0fe07 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-10-28   99  	/*
+af1cbfb9bf0fe07 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-10-28  100  	 * If we don't have a mapping for this buffer yet, return an SG table
+af1cbfb9bf0fe07 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-10-28  101  	 * so that host1x can do the mapping for us via the DMA API.
+af1cbfb9bf0fe07 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-10-28  102  	 */
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  103  	map->sgt = kzalloc(sizeof(*map->sgt), GFP_KERNEL);
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  104  	if (!map->sgt) {
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  105  		err = -ENOMEM;
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  106  		goto free;
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  107  	}
+80327ce3d4edaa9 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-10-28  108  
+80327ce3d4edaa9 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-10-28  109  	if (obj->pages) {
+1f16deac766926f drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-12-03  110  		/*
+1f16deac766926f drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-12-03  111  		 * If the buffer object was allocated from the explicit IOMMU
+1f16deac766926f drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-12-03  112  		 * API code paths, construct an SG table from the pages.
+1f16deac766926f drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-12-03  113  		 */
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  114  		err = sg_alloc_table_from_pages(map->sgt, obj->pages, obj->num_pages, 0, gem->size,
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  115  						GFP_KERNEL);
+1f16deac766926f drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-12-03  116  		if (err < 0)
+1f16deac766926f drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-12-03  117  			goto free;
+80327ce3d4edaa9 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-10-28  118  	} else {
+1f16deac766926f drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-12-03  119  		/*
+1f16deac766926f drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-12-03  120  		 * If the buffer object had no pages allocated and if it was
+1f16deac766926f drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-12-03  121  		 * not imported, it had to be allocated with the DMA API, so
+1f16deac766926f drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-12-03  122  		 * the DMA API helper can be used.
+1f16deac766926f drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-12-03  123  		 */
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  124  		err = dma_get_sgtable(dev, map->sgt, obj->vaddr, obj->iova, gem->size);
+80327ce3d4edaa9 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-10-28  125  		if (err < 0)
+80327ce3d4edaa9 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-10-28  126  			goto free;
+80327ce3d4edaa9 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-10-28  127  	}
+80327ce3d4edaa9 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-10-28  128  
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  129  	err = dma_map_sgtable(dev, map->sgt, direction, 0);
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  130  	if (err)
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  131  		goto free_sgt;
+80327ce3d4edaa9 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-10-28  132  
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  133  out:
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  134  	/*
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  135  	 * If we've manually mapped the buffer object through the IOMMU, make sure to return the
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  136  	 * existing IOVA address of our mapping.
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  137  	 */
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  138  	if (!obj->mm) {
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  139  		map->phys = sg_dma_address(map->sgt->sgl);
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  140  		map->chunks = err;
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  141  	} else {
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  142  		map->phys = obj->iova;
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  143  		map->chunks = 1;
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  144  	}
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  145  
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  146  	map->size = gem->size;
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  147  
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  148  	return map;
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  149  
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  150  free_sgt:
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  151  	sg_free_table(map->sgt);
+80327ce3d4edaa9 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-10-28  152  free:
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09 @153  	kfree(map->sgt);
+
+Error pointer dereference.
+
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  154  	kfree(map);
+80327ce3d4edaa9 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-10-28  155  	return ERR_PTR(err);
+de2ba664c30fcdb drivers/gpu/host1x/drm/gem.c Arto Merilainen 2013-03-22  156  }
+
 ---
- .../ethernet/marvell/octeontx2/nic/Makefile   |   3 +
- .../marvell/octeontx2/nic/otx2_common.c       |  17 +-
- .../marvell/octeontx2/nic/otx2_common.h       |  12 ++
- .../marvell/octeontx2/nic/otx2_dcbnl.c        | 170 ++++++++++++++++++
- .../marvell/octeontx2/nic/otx2_flows.c        |  50 +++++-
- .../ethernet/marvell/octeontx2/nic/otx2_pf.c  |  13 ++
- .../ethernet/marvell/octeontx2/nic/otx2_vf.c  |  14 ++
- 7 files changed, 271 insertions(+), 8 deletions(-)
- create mode 100644 drivers/net/ethernet/marvell/octeontx2/nic/otx2_dcbnl.c
-
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/Makefile b/drivers/net/ethernet/marvell/octeontx2/nic/Makefile
-index 0048b5946712..d463dc72d80a 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/Makefile
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/Makefile
-@@ -11,4 +11,7 @@ rvu_nicpf-y := otx2_pf.o otx2_common.o otx2_txrx.o otx2_ethtool.o \
-                otx2_devlink.o
- rvu_nicvf-y := otx2_vf.o otx2_devlink.o
- 
-+rvu_nicpf-$(CONFIG_DCB) += otx2_dcbnl.o
-+rvu_nicvf-$(CONFIG_DCB) += otx2_dcbnl.o
-+
- ccflags-y += -I$(srctree)/drivers/net/ethernet/marvell/octeontx2/af
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-index 52615bd9b9bf..358e5b216698 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-@@ -939,7 +939,11 @@ static int otx2_cq_init(struct otx2_nic *pfvf, u16 qidx)
- 		if (!is_otx2_lbkvf(pfvf->pdev)) {
- 			/* Enable receive CQ backpressure */
- 			aq->cq.bp_ena = 1;
-+#ifdef CONFIG_DCB
-+			aq->cq.bpid = pfvf->bpid[pfvf->queue_to_pfc_map[qidx]];
-+#else
- 			aq->cq.bpid = pfvf->bpid[0];
-+#endif
- 
- 			/* Set backpressure level is same as cq pass level */
- 			aq->cq.bp = RQ_PASS_LVL_CQ(pfvf->hw.rq_skid, qset->rqe_cnt);
-@@ -1219,7 +1223,11 @@ static int otx2_aura_init(struct otx2_nic *pfvf, int aura_id,
- 		 */
- 		if (pfvf->nix_blkaddr == BLKADDR_NIX1)
- 			aq->aura.bp_ena = 1;
-+#ifdef CONFIG_DCB
-+		aq->aura.nix0_bpid = pfvf->bpid[pfvf->queue_to_pfc_map[aura_id]];
-+#else
- 		aq->aura.nix0_bpid = pfvf->bpid[0];
-+#endif
- 
- 		/* Set backpressure level for RQ's Aura */
- 		aq->aura.bp = RQ_BP_LVL_AURA;
-@@ -1546,11 +1554,18 @@ int otx2_nix_config_bp(struct otx2_nic *pfvf, bool enable)
- 		return -ENOMEM;
- 
- 	req->chan_base = 0;
--	req->chan_cnt = 1;
-+#ifdef CONFIG_DCB
-+	req->chan_cnt = pfvf->pfc_en ? IEEE_8021QAZ_MAX_TCS : 1;
-+	req->bpid_per_chan = pfvf->pfc_en ? 1 : 0;
-+#else
-+	req->chan_cnt =  1;
- 	req->bpid_per_chan = 0;
-+#endif
-+
- 
- 	return otx2_sync_mbox_msg(&pfvf->mbox);
- }
-+EXPORT_SYMBOL(otx2_nix_config_bp);
- 
- /* Mbox message handlers */
- void mbox_handler_cgx_stats(struct otx2_nic *pfvf,
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
-index 56be20053931..b6be9784ea36 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
-@@ -399,6 +399,11 @@ struct otx2_nic {
- 
- 	/* Devlink */
- 	struct otx2_devlink	*dl;
-+#ifdef CONFIG_DCB
-+	/* PFC */
-+	u8			pfc_en;
-+	u8			*queue_to_pfc_map;
-+#endif
- };
- 
- static inline bool is_otx2_lbkvf(struct pci_dev *pdev)
-@@ -879,4 +884,11 @@ int otx2_dmacflt_remove(struct otx2_nic *pf, const u8 *mac, u8 bit_pos);
- int otx2_dmacflt_update(struct otx2_nic *pf, u8 *mac, u8 bit_pos);
- void otx2_dmacflt_reinstall_flows(struct otx2_nic *pf);
- void otx2_dmacflt_update_pfmac_flow(struct otx2_nic *pfvf);
-+
-+#ifdef CONFIG_DCB
-+/* DCB support*/
-+void otx2_update_bpid_in_rqctx(struct otx2_nic *pfvf, int vlan_prio, int qidx, bool pfc_enable);
-+int otx2_config_priority_flow_ctrl(struct otx2_nic *pfvf);
-+int otx2_dcbnl_set_ops(struct net_device *dev);
-+#endif
- #endif /* OTX2_COMMON_H */
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_dcbnl.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_dcbnl.c
-new file mode 100644
-index 000000000000..723d2506d309
---- /dev/null
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_dcbnl.c
-@@ -0,0 +1,170 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Marvell RVU Ethernet driver
-+ *
-+ * Copyright (C) 2021 Marvell.
-+ *
-+ */
-+
-+#include "otx2_common.h"
-+
-+int otx2_config_priority_flow_ctrl(struct otx2_nic *pfvf)
-+{
-+	struct cgx_pfc_cfg *req;
-+	struct cgx_pfc_rsp *rsp;
-+	int err = 0;
-+
-+	if (is_otx2_lbkvf(pfvf->pdev))
-+		return 0;
-+
-+	mutex_lock(&pfvf->mbox.lock);
-+	req = otx2_mbox_alloc_msg_cgx_prio_flow_ctrl_cfg(&pfvf->mbox);
-+	if (!req) {
-+		err = -ENOMEM;
-+		goto unlock;
-+	}
-+
-+	if (pfvf->pfc_en) {
-+		req->rx_pause = true;
-+		req->tx_pause = true;
-+	} else {
-+		req->rx_pause = false;
-+		req->tx_pause = false;
-+	}
-+	req->pfc_en = pfvf->pfc_en;
-+
-+	if (!otx2_sync_mbox_msg(&pfvf->mbox)) {
-+		rsp = (struct cgx_pfc_rsp *)
-+		       otx2_mbox_get_rsp(&pfvf->mbox.mbox, 0, &req->hdr);
-+		if (req->rx_pause != rsp->rx_pause || req->tx_pause != rsp->tx_pause) {
-+			dev_warn(pfvf->dev,
-+				 "Failed to config PFC\n");
-+			err = -EPERM;
-+		}
-+	}
-+unlock:
-+	mutex_unlock(&pfvf->mbox.lock);
-+	return err;
-+}
-+
-+void otx2_update_bpid_in_rqctx(struct otx2_nic *pfvf, int vlan_prio, int qidx,
-+			       bool pfc_enable)
-+{
-+	bool if_up = netif_running(pfvf->netdev);
-+	struct npa_aq_enq_req *npa_aq;
-+	struct nix_aq_enq_req *aq;
-+	int err = 0;
-+
-+	if (pfvf->queue_to_pfc_map[qidx] && pfc_enable) {
-+		dev_warn(pfvf->dev,
-+			 "PFC enable not permitted as Priority %d already mapped to Queue %d\n",
-+			 pfvf->queue_to_pfc_map[qidx], qidx);
-+		return;
-+	}
-+
-+	if (if_up) {
-+		netif_tx_stop_all_queues(pfvf->netdev);
-+		netif_carrier_off(pfvf->netdev);
-+	}
-+
-+	pfvf->queue_to_pfc_map[qidx] = vlan_prio;
-+
-+	aq = otx2_mbox_alloc_msg_nix_aq_enq(&pfvf->mbox);
-+	if (!aq) {
-+		err = -ENOMEM;
-+		goto out;
-+	}
-+
-+	aq->cq.bpid = pfvf->bpid[vlan_prio];
-+	aq->cq_mask.bpid = GENMASK(8, 0);
-+
-+	/* Fill AQ info */
-+	aq->qidx = qidx;
-+	aq->ctype = NIX_AQ_CTYPE_CQ;
-+	aq->op = NIX_AQ_INSTOP_WRITE;
-+
-+	otx2_sync_mbox_msg(&pfvf->mbox);
-+
-+	npa_aq = otx2_mbox_alloc_msg_npa_aq_enq(&pfvf->mbox);
-+	if (!npa_aq) {
-+		err = -ENOMEM;
-+		goto out;
-+	}
-+	npa_aq->aura.nix0_bpid = pfvf->bpid[vlan_prio];
-+	npa_aq->aura_mask.nix0_bpid = GENMASK(8, 0);
-+
-+	/* Fill NPA AQ info */
-+	npa_aq->aura_id = qidx;
-+	npa_aq->ctype = NPA_AQ_CTYPE_AURA;
-+	npa_aq->op = NPA_AQ_INSTOP_WRITE;
-+	otx2_sync_mbox_msg(&pfvf->mbox);
-+
-+out:
-+	if (if_up) {
-+		netif_carrier_on(pfvf->netdev);
-+		netif_tx_start_all_queues(pfvf->netdev);
-+	}
-+
-+	if (err)
-+		dev_warn(pfvf->dev,
-+			 "Updating BPIDs in CQ and Aura contexts of RQ%d failed with err %d\n",
-+			 qidx, err);
-+}
-+
-+static int otx2_dcbnl_ieee_getpfc(struct net_device *dev, struct ieee_pfc *pfc)
-+{
-+	struct otx2_nic *pfvf = netdev_priv(dev);
-+
-+	pfc->pfc_cap = IEEE_8021QAZ_MAX_TCS;
-+	pfc->pfc_en = pfvf->pfc_en;
-+
-+	return 0;
-+}
-+
-+static int otx2_dcbnl_ieee_setpfc(struct net_device *dev, struct ieee_pfc *pfc)
-+{
-+	struct otx2_nic *pfvf = netdev_priv(dev);
-+	int err;
-+
-+	/* Save PFC configuration to interface */
-+	pfvf->pfc_en = pfc->pfc_en;
-+
-+	err = otx2_config_priority_flow_ctrl(pfvf);
-+	if (err)
-+		return err;
-+
-+	/* Request Per channel Bpids */
-+	if (pfc->pfc_en)
-+		otx2_nix_config_bp(pfvf, true);
-+
-+	return 0;
-+}
-+
-+static u8 otx2_dcbnl_getdcbx(struct net_device __always_unused *dev)
-+{
-+	return DCB_CAP_DCBX_HOST | DCB_CAP_DCBX_VER_IEEE;
-+}
-+
-+static u8 otx2_dcbnl_setdcbx(struct net_device __always_unused *dev, u8 mode)
-+{
-+	return (mode != (DCB_CAP_DCBX_HOST | DCB_CAP_DCBX_VER_IEEE)) ? 1 : 0;
-+}
-+
-+static const struct dcbnl_rtnl_ops otx2_dcbnl_ops = {
-+	.ieee_getpfc	= otx2_dcbnl_ieee_getpfc,
-+	.ieee_setpfc	= otx2_dcbnl_ieee_setpfc,
-+	.getdcbx	= otx2_dcbnl_getdcbx,
-+	.setdcbx	= otx2_dcbnl_setdcbx,
-+};
-+
-+int otx2_dcbnl_set_ops(struct net_device *dev)
-+{
-+	struct otx2_nic *pfvf = netdev_priv(dev);
-+
-+	pfvf->queue_to_pfc_map = devm_kzalloc(pfvf->dev, pfvf->hw.rx_queues,
-+					      GFP_KERNEL);
-+	if (!pfvf->queue_to_pfc_map)
-+		return -ENOMEM;
-+	dev->dcbnl_ops = &otx2_dcbnl_ops;
-+
-+	return 0;
-+}
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c
-index 77a13fb555fb..54f235c216a9 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c
-@@ -21,8 +21,10 @@ struct otx2_flow {
- 	u16 entry;
- 	bool is_vf;
- 	u8 rss_ctx_id;
-+#define DMAC_FILTER_RULE		BIT(0)
-+#define PFC_FLOWCTRL_RULE		BIT(1)
-+	u16 rule_type;
- 	int vf;
--	bool dmac_filter;
- };
- 
- enum dmac_req {
-@@ -899,6 +901,9 @@ static int otx2_is_flow_rule_dmacfilter(struct otx2_nic *pfvf,
- static int otx2_add_flow_msg(struct otx2_nic *pfvf, struct otx2_flow *flow)
- {
- 	u64 ring_cookie = flow->flow_spec.ring_cookie;
-+#ifdef CONFIG_DCB
-+	int vlan_prio, qidx, pfc_rule = 0;
-+#endif
- 	struct npc_install_flow_req *req;
- 	int err, vf = 0;
- 
-@@ -940,6 +945,24 @@ static int otx2_add_flow_msg(struct otx2_nic *pfvf, struct otx2_flow *flow)
- 			mutex_unlock(&pfvf->mbox.lock);
- 			return -EINVAL;
- 		}
-+
-+#ifdef CONFIG_DCB
-+		/* Identify PFC rule if PFC enabled and ntuple rule is vlan */
-+		if (!vf && (req->features & BIT_ULL(NPC_OUTER_VID)) &&
-+		    pfvf->pfc_en && req->op != NIX_RX_ACTIONOP_RSS) {
-+			vlan_prio = ntohs(req->packet.vlan_tci) &
-+				    ntohs(req->mask.vlan_tci);
-+
-+			/* Get the priority */
-+			vlan_prio >>= 13;
-+			flow->rule_type |= PFC_FLOWCTRL_RULE;
-+			/* Check if PFC enabled for this priority */
-+			if (pfvf->pfc_en & BIT(vlan_prio)) {
-+				pfc_rule = true;
-+				qidx = req->index;
-+			}
-+		}
-+#endif
- 	}
- 
- 	/* ethtool ring_cookie has (VF + 1) for VF */
-@@ -951,6 +974,12 @@ static int otx2_add_flow_msg(struct otx2_nic *pfvf, struct otx2_flow *flow)
- 
- 	/* Send message to AF */
- 	err = otx2_sync_mbox_msg(&pfvf->mbox);
-+
-+#ifdef CONFIG_DCB
-+	if (!err && pfc_rule)
-+		otx2_update_bpid_in_rqctx(pfvf, vlan_prio, qidx, true);
-+#endif
-+
- 	mutex_unlock(&pfvf->mbox.lock);
- 	return err;
- }
-@@ -966,7 +995,7 @@ static int otx2_add_flow_with_pfmac(struct otx2_nic *pfvf,
- 		return -ENOMEM;
- 
- 	pf_mac->entry = 0;
--	pf_mac->dmac_filter = true;
-+	pf_mac->rule_type |= DMAC_FILTER_RULE;
- 	pf_mac->location = pfvf->flow_cfg->max_flows;
- 	memcpy(&pf_mac->flow_spec, &flow->flow_spec,
- 	       sizeof(struct ethtool_rx_flow_spec));
-@@ -1031,7 +1060,7 @@ int otx2_add_flow(struct otx2_nic *pfvf, struct ethtool_rxnfc *nfc)
- 		eth_hdr = &flow->flow_spec.h_u.ether_spec;
- 
- 		/* Sync dmac filter table with updated fields */
--		if (flow->dmac_filter)
-+		if (flow->rule_type & DMAC_FILTER_RULE)
- 			return otx2_dmacflt_update(pfvf, eth_hdr->h_dest,
- 						   flow->entry);
- 
-@@ -1052,7 +1081,7 @@ int otx2_add_flow(struct otx2_nic *pfvf, struct ethtool_rxnfc *nfc)
- 		if (!test_bit(0, &flow_cfg->dmacflt_bmap))
- 			otx2_add_flow_with_pfmac(pfvf, flow);
- 
--		flow->dmac_filter = true;
-+		flow->rule_type |= DMAC_FILTER_RULE;
- 		flow->entry = find_first_zero_bit(&flow_cfg->dmacflt_bmap,
- 						  flow_cfg->dmacflt_max_flows);
- 		fsp->location = flow_cfg->max_flows + flow->entry;
-@@ -1120,7 +1149,7 @@ static void otx2_update_rem_pfmac(struct otx2_nic *pfvf, int req)
- 	bool found = false;
- 
- 	list_for_each_entry(iter, &pfvf->flow_cfg->flow_list, list) {
--		if (iter->dmac_filter && iter->entry == 0) {
-+		if ((iter->rule_type & DMAC_FILTER_RULE) && iter->entry == 0) {
- 			eth_hdr = &iter->flow_spec.h_u.ether_spec;
- 			if (req == DMAC_ADDR_DEL) {
- 				otx2_dmacflt_remove(pfvf, eth_hdr->h_dest,
-@@ -1156,7 +1185,7 @@ int otx2_remove_flow(struct otx2_nic *pfvf, u32 location)
- 	if (!flow)
- 		return -ENOENT;
- 
--	if (flow->dmac_filter) {
-+	if (flow->rule_type & DMAC_FILTER_RULE) {
- 		struct ethhdr *eth_hdr = &flow->flow_spec.h_u.ether_spec;
- 
- 		/* user not allowed to remove dmac filter with interface mac */
-@@ -1174,6 +1203,13 @@ int otx2_remove_flow(struct otx2_nic *pfvf, u32 location)
- 				  flow_cfg->dmacflt_max_flows) == 1)
- 			otx2_update_rem_pfmac(pfvf, DMAC_ADDR_DEL);
- 	} else {
-+#ifdef CONFIG_DCB
-+		if (flow->rule_type & PFC_FLOWCTRL_RULE)
-+			otx2_update_bpid_in_rqctx(pfvf, 0,
-+						  flow->flow_spec.ring_cookie,
-+						  false);
-+#endif
-+
- 		err = otx2_remove_flow_msg(pfvf, flow->entry, false);
- 	}
- 
-@@ -1383,7 +1419,7 @@ void otx2_dmacflt_reinstall_flows(struct otx2_nic *pf)
- 	struct ethhdr *eth_hdr;
- 
- 	list_for_each_entry(iter, &pf->flow_cfg->flow_list, list) {
--		if (iter->dmac_filter) {
-+		if (iter->rule_type & DMAC_FILTER_RULE) {
- 			eth_hdr = &iter->flow_spec.h_u.ether_spec;
- 			otx2_dmacflt_add(pf, eth_hdr->h_dest,
- 					 iter->entry);
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
-index 67fbe6ec0030..ede4df51648b 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
-@@ -2779,6 +2779,12 @@ static int otx2_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 	/* Enable link notifications */
- 	otx2_cgx_config_linkevents(pf, true);
- 
-+#ifdef CONFIG_DCB
-+	err = otx2_dcbnl_set_ops(netdev);
-+	if (err)
-+		goto err_pf_sriov_init;
-+#endif
-+
- 	return 0;
- 
- err_pf_sriov_init:
-@@ -2930,6 +2936,13 @@ static void otx2_remove(struct pci_dev *pdev)
- 		otx2_config_pause_frm(pf);
- 	}
- 
-+#ifdef CONFIG_DCB
-+	/* Disable PFC config */
-+	if (pf->pfc_en) {
-+		pf->pfc_en = 0;
-+		otx2_config_priority_flow_ctrl(pf);
-+	}
-+#endif
- 	cancel_work_sync(&pf->reset_task);
- 	/* Disable link notifications */
- 	otx2_cgx_config_linkevents(pf, false);
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c
-index c154b09ec12f..78142498d046 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c
-@@ -702,6 +702,12 @@ static int otx2vf_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 	if (err)
- 		goto err_unreg_netdev;
- 
-+#ifdef CONFIG_DCB
-+	err = otx2_dcbnl_set_ops(netdev);
-+	if (err)
-+		goto err_unreg_netdev;
-+#endif
-+
- 	return 0;
- 
- err_unreg_netdev:
-@@ -744,6 +750,14 @@ static void otx2vf_remove(struct pci_dev *pdev)
- 		otx2_config_pause_frm(vf);
- 	}
- 
-+#ifdef CONFIG_DCB
-+	/* Disable PFC config */
-+	if (vf->pfc_en) {
-+		vf->pfc_en = 0;
-+		otx2_config_priority_flow_ctrl(vf);
-+	}
-+#endif
-+
- 	cancel_work_sync(&vf->reset_task);
- 	otx2_unregister_dl(vf);
- 	unregister_netdev(netdev);
--- 
-2.17.1
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 

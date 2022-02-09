@@ -2,69 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E0AD4AF403
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 15:27:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 351E94AF409
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 15:27:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230249AbiBIO1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 09:27:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57994 "EHLO
+        id S234979AbiBIO1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 09:27:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232334AbiBIO1D (ORCPT
+        with ESMTP id S230077AbiBIO1T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 09:27:03 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 735D8C06157B;
-        Wed,  9 Feb 2022 06:27:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1644416826; x=1675952826;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=epGqPg8z8P+UPOQgQalxESfWXq7yaTif/iFh1nkz2mE=;
-  b=qbaHPlnpcwUf8zu+vGsg2rXZCnGnmBYnqmfarQgNYFpdaPO3ORG2ToKc
-   wuND/0gZpDadf92hxILVxlFae57KuVR4HYU9Zhcs19EoOD6w6gX3nFci3
-   33A26ifDC1KFPyQ6WOrK1sBxoWO1Mx4s1/dj1kzDeXmTh8MopKAlx3CoA
-   k=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 09 Feb 2022 06:27:06 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 06:27:05 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Wed, 9 Feb 2022 06:27:05 -0800
-Received: from [10.216.41.35] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Wed, 9 Feb 2022
- 06:27:01 -0800
-Subject: Re: [PATCH v2 3/3] arm64: dts: qcom: sc7280: Add wcd9380 pinmux
-To:     Stephen Boyd <swboyd@chromium.org>, <agross@kernel.org>,
-        <bjorn.andersson@linaro.org>, <devicetree@vger.kernel.org>,
-        <dianders@chromium.org>, <judyhsiao@chromium.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <robh+dt@kernel.org>, <rohitkr@codeaurora.org>,
-        <srinivas.kandagatla@linaro.org>
-CC:     Venkata Prasad Potturu <quic_potturu@quicinc.com>
-References: <1644334454-16719-1-git-send-email-quic_srivasam@quicinc.com>
- <1644334454-16719-4-git-send-email-quic_srivasam@quicinc.com>
- <CAE-0n50jBeOnkpogPFm+zqTf8bqQs-Bo0Gma658uFE6aA=Edxg@mail.gmail.com>
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Organization: Qualcomm
-Message-ID: <a1c2a7e6-8d76-6ee6-4bc4-e7ea8013af02@quicinc.com>
-Date:   Wed, 9 Feb 2022 19:56:58 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 9 Feb 2022 09:27:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC7A6C0613CA;
+        Wed,  9 Feb 2022 06:27:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 676F5B821B8;
+        Wed,  9 Feb 2022 14:27:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 256FCC340E7;
+        Wed,  9 Feb 2022 14:27:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644416840;
+        bh=Vt0kDCJ7W3GqI9yfxaVBf6yVn5/OTpKCqAm7HSVGpfY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rAjXtgAGOFJpUDLYNwJ608xaYKFOIX6vyidjx5noGP15WnlNEaio23Efw6jDxMck/
+         qJM7Jo55r6j+Dt5mpTM5Hjd4XZmyS7W+yEgaGzX9FavyvAFQHm3kHXJmxI97/5GT4V
+         8RTNy6TKwj/AYcPmPtgqasdLOjSq4/Y4yGds22jL04sm8Ulf6sFzc9qhGFC8IqRv/f
+         zh8AZFfp37RF2y0l95F+KWX0re3Ysrjzy9xO67z5z5uaHmWXNxiwFiaK61a2QgMUgJ
+         TvdKGk6E8t+VRLYq8Q6v7ELbk9xb5tmh8wexGzba3Omwrlz99xHy6u4pum1AKTL5rg
+         clW5YeQxn9Zvw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1nHnvx-0002LS-LT; Wed, 09 Feb 2022 15:27:01 +0100
+Date:   Wed, 9 Feb 2022 15:27:01 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Slark Xiao <slark_xiao@163.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: option: add support for DW5829e
+Message-ID: <YgPPNVzyg7Gypzv9@hovoldconsulting.com>
+References: <20220209031535.9668-1-slark_xiao@163.com>
 MIME-Version: 1.0
-In-Reply-To: <CAE-0n50jBeOnkpogPFm+zqTf8bqQs-Bo0Gma658uFE6aA=Edxg@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220209031535.9668-1-slark_xiao@163.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,47 +57,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Feb 09, 2022 at 11:15:35AM +0800, Slark Xiao wrote:
+> Dell DW5829e same as DW5821e except CAT level.
+> DW5821e supports CAT16 but DW5829e supports CAT9.
+> There are 2 types product of DW5829e: normal and eSIM.
+> So we will add 2 PID for DW5829e.
+> And for each PID, it support MBIM or RMNET.
+> Let's see test evidence as below:
+> 
+> DW5829e MBIM mode:
+> T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  4 Spd=5000 MxCh= 0
+> D:  Ver= 3.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  2
+> P:  Vendor=413c ProdID=81e6 Rev=03.18
+> S:  Manufacturer=Dell Inc.
+> S:  Product=DW5829e Snapdragon X20 LTE
+> S:  SerialNumber=0123456789ABCDEF
+> C:  #Ifs= 7 Cfg#= 2 Atr=a0 MxPwr=896mA
+> I:  If#=0x0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
+> I:  If#=0x1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+> I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+> I:  If#=0x6 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
+> 
+> DW5829e RMNET mode:
+> T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  5 Spd=5000 MxCh= 0
+> D:  Ver= 3.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
+> P:  Vendor=413c ProdID=81e6 Rev=03.18
+> S:  Manufacturer=Dell Inc.
+> S:  Product=DW5829e Snapdragon X20 LTE
+> S:  SerialNumber=0123456789ABCDEF
+> C:  #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=896mA
+> I:  If#=0x0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
+> I:  If#=0x1 Alt= 0 #EPs= 1 Cls=03(HID  ) Sub=00 Prot=00 Driver=usbhid
+> I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+> 
+> DW5829e-eSIM MBIM mode:
+> T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  6 Spd=5000 MxCh= 0
+> D:  Ver= 3.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  2
+> P:  Vendor=413c ProdID=81e4 Rev=03.18
+> S:  Manufacturer=Dell Inc.
+> S:  Product=DW5829e-eSIM Snapdragon X20 LTE
+> S:  SerialNumber=0123456789ABCDEF
+> C:  #Ifs= 7 Cfg#= 2 Atr=a0 MxPwr=896mA
+> I:  If#=0x0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
+> I:  If#=0x1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+> I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+> I:  If#=0x6 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
+> 
+> DW5829e-eSIM RMNET mode:
+> T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  7 Spd=5000 MxCh= 0
+> D:  Ver= 3.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
+> P:  Vendor=413c ProdID=81e4 Rev=03.18
+> S:  Manufacturer=Dell Inc.
+> S:  Product=DW5829e-eSIM Snapdragon X20 LTE
+> S:  SerialNumber=0123456789ABCDEF
+> C:  #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=896mA
+> I:  If#=0x0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
+> I:  If#=0x1 Alt= 0 #EPs= 1 Cls=03(HID  ) Sub=00 Prot=00 Driver=usbhid
+> I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+> 
+> BTW, the interface 0x6 of MBIM mode is GNSS port, which not same as NMEA
+> port. So it's banned from serial option driver.
+> The remaining interfaces 0x2-0x5 are: MODEM, MODEM, NMEA, DIAG.
+> 
+> Signed-off-by: Slark Xiao <slark_xiao@163.com>
 
-On 2/9/2022 2:42 AM, Stephen Boyd wrote:
-Thanks for your time Stephen!!!
-> Quoting Srinivasa Rao Mandadapu (2022-02-08 07:34:14)
->> Add pinmux to reset wcd codec, conneceted on SC7280 based platforms.
->>
->> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
->> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
->> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
->> ---
->>   arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 15 +++++++++++++++
->>   1 file changed, 15 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
->> index 4704a93..6b38fa1 100644
->> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
->> @@ -594,6 +594,21 @@
->>                   */
->>                  bias-pull-up;
->>          };
->> +
->> +       wcd938x_reset_active: wcd938x_reset_active {
-> No underscore in node names.
-Okay. will remove it.
->
->> +                       pins = "gpio83";
->> +                       function = "gpio";
->> +                       drive-strength = <16>;
->> +                       output-high;
->> +       };
->> +
->> +       wcd938x_reset_sleep: wcd938x_reset_sleep {
->> +                       pins = "gpio83";
->> +                       function = "gpio";
->> +                       drive-strength = <16>;
->> +                       bias-disable;
->> +                       output-low;
-> Why doesn't the device drive the reset gpio by requesting the gpio and
-> asserting and deasserting it? We shouldn't need to use pinctrl settings
-> to toggle reset gpios.
-Okay. Verified without these nodes and didn't see any impact. But 
-similar way it's mentioned in sm8250-mtp.dts. Could You please suggest 
-on it how to go ahead on this?.
+Thanks for providing all the necessary details.
+
+> ---
+>  drivers/usb/serial/option.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+> index 962e9943fc20..b47bad810eec 100644
+> --- a/drivers/usb/serial/option.c
+> +++ b/drivers/usb/serial/option.c
+> @@ -198,6 +198,8 @@ static void option_instat_callback(struct urb *urb);
+>  
+>  #define DELL_PRODUCT_5821E			0x81d7
+>  #define DELL_PRODUCT_5821E_ESIM			0x81e0
+> +#define DELL_PRODUCT_5829E			0x81e6
+> +#define DELL_PRODUCT_5829E_ESIM			0x81e4
+
+Please keep the defines sorted by PID.
+
+>  #define KYOCERA_VENDOR_ID			0x0c88
+>  #define KYOCERA_PRODUCT_KPC650			0x17da
+> @@ -1063,6 +1065,10 @@ static const struct usb_device_id option_ids[] = {
+>  	  .driver_info = RSVD(0) | RSVD(1) | RSVD(6) },
+>  	{ USB_DEVICE(DELL_VENDOR_ID, DELL_PRODUCT_5821E_ESIM),
+>  	  .driver_info = RSVD(0) | RSVD(1) | RSVD(6) },
+> +	{ USB_DEVICE_INTERFACE_CLASS(DELL_VENDOR_ID, DELL_PRODUCT_5829E, 0xff),
+> +	  .driver_info = RSVD(6) },
+> +	{ USB_DEVICE_INTERFACE_CLASS(DELL_VENDOR_ID, DELL_PRODUCT_5829E_ESIM, 0xff),
+> +	  .driver_info = RSVD(6) },
+
+It looks like these entries will cause the driver to bind also to the
+QMI port however.
+
+>  	{ USB_DEVICE(ANYDATA_VENDOR_ID, ANYDATA_PRODUCT_ADU_E100A) },	/* ADU-E100, ADU-310 */
+>  	{ USB_DEVICE(ANYDATA_VENDOR_ID, ANYDATA_PRODUCT_ADU_500A) },
+>  	{ USB_DEVICE(ANYDATA_VENDOR_ID, ANYDATA_PRODUCT_ADU_620UW) },
+
+Johan

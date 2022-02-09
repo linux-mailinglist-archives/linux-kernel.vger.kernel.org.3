@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00B674AEF2D
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 11:22:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32BAA4AEF21
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 11:18:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233978AbiBIKU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 05:20:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44366 "EHLO
+        id S234359AbiBIKRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 05:17:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234372AbiBIKUw (ORCPT
+        with ESMTP id S233809AbiBIKRq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 05:20:52 -0500
+        Wed, 9 Feb 2022 05:17:46 -0500
 Received: from mout.perfora.net (mout.perfora.net [74.208.4.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74BAFE08E7A5
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 02:15:52 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0966FE0497A0
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 02:13:32 -0800 (PST)
 Received: from localhost.localdomain ([81.221.85.15]) by mrelay.perfora.net
- (mreueus004 [74.208.5.2]) with ESMTPSA (Nemesis) id 1Mo7aJ-1o5OpV4Ayh-00pZP3;
- Wed, 09 Feb 2022 11:01:47 +0100
+ (mreueus004 [74.208.5.2]) with ESMTPSA (Nemesis) id 1MIxeQ-1nb4A344ks-00KTo4;
+ Wed, 09 Feb 2022 11:01:50 +0100
 From:   Marcel Ziswiler <marcel@ziswiler.com>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     Marek Vasut <marek.vasut@gmail.com>,
         Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Arnd Bergmann <arnd@arndb.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Adam Ford <aford173@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
         Biju Das <biju.das.jz@bp.renesas.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Enric Balletbo i Serra <enric.balletbo@collabora.com>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         Krzysztof Kozlowski <krzk@kernel.org>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
         Olof Johansson <olof@lixom.net>,
         Shawn Guo <shawnguo@kernel.org>, Will Deacon <will@kernel.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v5 08/12] arm64: defconfig: build imx-sdma as a module
-Date:   Wed,  9 Feb 2022 11:00:51 +0100
-Message-Id: <20220209100055.181389-9-marcel@ziswiler.com>
+Subject: [PATCH v5 09/12] arm64: defconfig: build r8169 as a module
+Date:   Wed,  9 Feb 2022 11:00:52 +0100
+Message-Id: <20220209100055.181389-10-marcel@ziswiler.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20220209100055.181389-1-marcel@ziswiler.com>
 References: <20220209100055.181389-1-marcel@ziswiler.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:9ic7kC5N62T8D1ZciNvAZsix7jrQDa/+Ubin8FoE6e6lzPJTQYi
- xHFFIHaf8K3ror8peOpJ0pATgs1ykurnFftdKY7MMgJIV/Wy5er+f4eVcIP53eT1dUgYN2J
- hQPx5VxpBzVPic2hV/FTwVnriWbaeU3mRVNgG2yXzqUVKBrY8YUNBFDeYDUj/58L6WOGCCM
- X/7JF2YMuQXIWQoXgRfQQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:hBlAXPDCYFw=:1rnBOLGEQgLf4UnMS4KU8f
- 7i3Hng/0qk4pwVXhQBcEa+Ghf8HJs3OoybxEYmvBNRZ4mUBseIk+NZMGcSdA1vUQBKj9cqEhI
- 8cjzWChMzr5vFItx9tZwrQXODmZdHck/XpYH/IOZzYQ1y2BrMqed5dOsyuRFHAbbI9WgVmkVx
- 4N5z6xolj4grQVH5/bQafnnpq9IUnHQYKVNGCy9af2FUN7rNbZb+IgeLfmj3pdazUP3Iblbej
- ZkY7bxqkYOrLrSU5XKcL/maAczO2LodkOQYUeOT3xzs7ftETG9JYszmM8UdQDbUqUZpWqYIQ7
- /JcieSSY5lj+Wc8QAqqN0de8BimYjDg2eZ3jhN6DCVRRYl213A/BN0pSdgDRV9YkYxys8z7KP
- n/9Pa0NrwF7jk1FvMrYmlW/ve4Aua2yNKFHUJ/uh2Njjg7RmuNFoanjS5NXvMCfyrwRJF79U9
- 0lx7oLm61/V6mn4GKZAO3GoXE4vyIvd+n+O2oNFmL3bpraDrLytGvL2Qpc4snDHZFGgdq8UA9
- Xz4HV0Wk+ZOVjh2q28Vo2gP7WW0fhiMdHrobouhXd4Ap3C685ixzj3Eu/VRhNtomX4gD9vg0e
- D7aC+D4BHJRONVUvIRrrtIXV+XSJuRSYo+I/66py0ewGciCmUkFfQy94XmK2Xs1PFeJPkR6Ku
- dSE0fCvQtr2v+kiIry6lnkWI4g1Yq5izaRtU+F3gjADHsSTcoLuuMdCc0V4F+fVeeAmeHtVoG
- +YJYz5xfEK5ftIzbsoe7p1W6KWfsbeG1CYndfM15w8CWTsoQ6ZVkUORL8yvTp4PQ3k8gZDbcW
- gFu9JfEtNXgJM7yufoAbQP7oS4eDg==
+X-Provags-ID: V03:K1:zca5Ikn+zSTc0G04hEpk0h1B3qaKVnnooqQMUOAa1KckuGcu7lO
+ 3bKM0SlaI3YHnkvHVkj1iX8PoJKewteaHVRde4AVVkfjZPj9JwFon+T4jNIUO9A/CHAsSWK
+ 3GBSaYF4DWT7DGClM71AD2CQspSGaGyfdAIZUBeuQOKztX6rEtAOLcc4e7qSA/sy8LsFZAx
+ 3f3FuIys0px05z0i2qtTg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:m91hP4wkmAA=:0DIAMEQwN88GFQTxoZOe/2
+ D/Z2J1ellX3CPspjtKIOlviyYShtSNY8kzDsZ1+v8uX3HdfSXfjuAJt2GXKpMBA3hexKCMLWL
+ mZhDVeQDqGg0WAVlp9yitEigweMoa16DRLUpZ1BaGBjOPv+N9R+EkmYcbTE/jsHH61fy4Y/13
+ 5UDodxm5dEwJwBQn5zJEGGDzhoODhLZquiKmEIxQr7kecZM7/5Ux8alqF6Oxjv/pml0oIc+Ya
+ jMnDny+iKfFMGnt0Lj9HNhyLgu2Kn7wFY8km1He/9v64JacfFfP/NKmWDZPmTX2d7FXNaY0k8
+ dB2snYGgW0FQh3ThTOBrPK4cqiABNoZN4ZKJ3WR/jYXEnJjVVrZSu+5+BXZXikh04WNHv48iI
+ fN5Tku76t3R171GCDJ2ag+N+SSJkvVKV6F9E8//l+NsDFo5n9w2Zf76LdJHziybqJCubXonlr
+ 3oKEgXe+YcIAzX2Dmvua/LF16gvaZvWfjFfq28VNfhlvpoQo7tuZE+ptd2+NXYl3EaSeXdlRg
+ W+eN64/vMxEUjxKAE/TA4AWp6ikeADbSy/P7H6nIaX+7amaelevvlQCkc4+M4l5GO9JOmcMDM
+ W/wRrVmrl/vcFjX+BBt7eX4xekV5GOK3yvG06yr9vOfkUXvAGe0+k1wfenJ2BRsdOUXUGqM9T
+ fKiuOOEx/3nSWCWO4gWnAzpj8KZzgQjRUVW4jzn0ecZq2i4H2q04iz/9QdFbFcp8LtZDqeCbZ
+ 4x64jnU3YgW1ez4I5nxRKDdcAD4nHPUoZOXkHv2/E5Nqb93eQO3Z2GmEgug5ycTp2HWucSlCx
+ ceFPCqv+Y8i3YocqkJr17YQD7YSNQ==
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
@@ -69,40 +69,42 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-This avoids firmware load error and sysfs fallback reported as follows:
+Build Realtek Gigabit Ethernet driver as a module.
 
-[    0.199448] imx-sdma 302c0000.dma-controller: Direct firmware load
- for imx/sdma/sdma-imx7d.bin failed with error -2
-[    0.199487] imx-sdma 302c0000.dma-controller: Falling back to sysfs
- fallback for: imx/sdma/sdma-imx7d.bin
+Network cards based on chipsets this driver supports are ubiquitous both
+in regular PCIe as well as mini-PCIe and nowadays even various M.2
+formats. It is therefore a suitable card to be used for any kind of PCIe
+and/or Gigabit Ethernet testing. As it is not designed in, just enabling
+it as a module seems most suitable.
 
 Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
 ---
 
-(no changes since v2)
+(no changes since v3)
+
+Changes in v3:
+- Add Krzysztof's reviewed-by tag.
 
 Changes in v2:
-- A similar change got accepted for imx_v6_v7_defconfig. Further
-  discussion may be found in [1].
-[1] https://lore.kernel.org/lkml/20210920144938.314588-6-marcel@ziswiler.com/
+- Explain why enabling it may be a good idea as requested by Krzysztof.
 
- arch/arm64/configs/defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 0fed8477e72e..27afe24a025a 100644
+index 27afe24a025a..76334cb698af 100644
 --- a/arch/arm64/configs/defconfig
 +++ b/arch/arm64/configs/defconfig
-@@ -928,7 +928,7 @@ CONFIG_DMADEVICES=y
- CONFIG_DMA_BCM2835=y
- CONFIG_DMA_SUN6I=m
- CONFIG_FSL_EDMA=y
--CONFIG_IMX_SDMA=y
-+CONFIG_IMX_SDMA=m
- CONFIG_K3_DMA=y
- CONFIG_MV_XOR=y
- CONFIG_MV_XOR_V2=y
+@@ -339,6 +339,7 @@ CONFIG_MLX5_CORE=m
+ CONFIG_MLX5_CORE_EN=y
+ CONFIG_QCOM_EMAC=m
+ CONFIG_RMNET=m
++CONFIG_R8169=m
+ CONFIG_SH_ETH=y
+ CONFIG_RAVB=y
+ CONFIG_SMC91X=y
 -- 
 2.33.1
 

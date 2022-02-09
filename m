@@ -2,212 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D38484AF5B9
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 16:48:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28ADD4AF5BA
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 16:48:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236263AbiBIPsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 10:48:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59606 "EHLO
+        id S236280AbiBIPsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 10:48:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232272AbiBIPsQ (ORCPT
+        with ESMTP id S236279AbiBIPsZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 10:48:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59B9FC0613C9
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 07:48:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EF385616A6
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 15:48:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC0BBC340E7;
-        Wed,  9 Feb 2022 15:48:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644421698;
-        bh=ydI6wA0BIuYvOXrXY9CUl5qi1UHpv72mNeIvpa+eqPA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rZQaSpMx0kjFhT/ei7BdBsGVR/rjZfx9rELeh35bisczGkBsk3LRFiQq+RtJCqfiY
-         MLbz3G7gzKvQvVNmd1OBQK90IMqohtICWL3jAj3Y8lj0TQaBD2/fDH2JBnVx7e8FRc
-         q3tu2XPcunDEAzGFYLst7zwVjTi4lgeMyr1XSwsuE80CH7dWXnIXr1yusLdJXvm3iM
-         RYzlWkv0cdWGxNuqWHEEwh23T0kVKLVFTtzwMoEqaTbPwZfysfmRD9J34kTNhJ4GsO
-         h3gBr0vQaaGiDpsyuIfOE2bVocjeXGJ6SX+aXFjlH5NT5ElunLhMn2yYKhgmkphFLX
-         E5OIXxs7VnWbA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 17222400FE; Wed,  9 Feb 2022 12:47:46 -0300 (-03)
-Date:   Wed, 9 Feb 2022 12:47:46 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Stephane Eranian <eranian@google.com>
-Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
-        kim.phillips@amd.com, acme@redhat.com, jolsa@redhat.com,
-        songliubraving@fb.com
-Subject: Re: [PATCH v6 10/12] perf tools: Improve IBS error handling
-Message-ID: <YgPiItRLaEJ75dUU@kernel.org>
-References: <20220208211637.2221872-1-eranian@google.com>
- <20220208211637.2221872-11-eranian@google.com>
+        Wed, 9 Feb 2022 10:48:25 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E28B1C05CB82;
+        Wed,  9 Feb 2022 07:48:28 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id i34so5057964lfv.2;
+        Wed, 09 Feb 2022 07:48:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:subject:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=82DwdajpDNDBqVPVvon+Lp7fZFYchqTwnP7OnaqMXhA=;
+        b=ZOkWhnlTBnzqrCpWvyLu4YD7jOCU7hGFKGq6WCfRVdhxmTbBTYIQG8rMNK93Kuf10u
+         1ZzuxSt8qLrH/DHbop68m20FsgNUQBBJZQet7nDoNej3g7GDVjLaXArFIRy3Xp3dZ8PI
+         oGVVrR1548ktVnF4a8IZK+6mgLS+8KpaGogK3XwYJoReaZ9N4gWaDOIz4aGP91gGUeaC
+         rGeO3HC/i3L0oV6fDRw0dKedzCghrlk5X6d/cqD8ncs4Munz7zBKtlQtSEGVgdBkfg5r
+         mjYm4Yr95o6wCrb8+Vf4nqQO8QkOOcI1viia+oVy6pXgCSEusij2UzqN4/CUFUpXA7YT
+         E6iA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=82DwdajpDNDBqVPVvon+Lp7fZFYchqTwnP7OnaqMXhA=;
+        b=HVCvqzSENLWpifCYGS47JwZNpEyQ4wZaRZ8D8MP2Pf8AlaBWWcTMtuZP8sZLuZP5Oq
+         qbZD5vDsGqw3fUUx9qrAfKf/oJVljxDPHcNZsCuRvB0qEIY6KFZuJuQH0P7m+Kq0NSFy
+         p/HCDB6nmSgY1Deo3mNJ4W7/z8RwXZ9aUZcHU7FkStqsfyhL6IR3K0dqNYFBBTo/x9t1
+         Y083afP9KUTsH5cyjFUH9jzTdEskCpGB3g7fWnu9CilDwHWHH1TJoTtfO5hIUZw0RSHC
+         hNMe+2lDSsHE9/497y4sYHHCxfcbzqHXdhr9yGMTbpYlaFn3HP34xAnASLWjj4PgDsRe
+         cT7Q==
+X-Gm-Message-State: AOAM531+LND9D78pfPQzipNeFGsOMjw+dNM5o0VAcGIxaUB0z8cOupPB
+        hcqo7mPWqpY8A8hxm4HHmCguwzK+CWJaqg==
+X-Google-Smtp-Source: ABdhPJzOm978Gkpt9GdyeIqflw6RUzXCclEoSV+vfQH7V5jKfnEkSPwqXRFfDJFIqi8RsajP0cS8Ug==
+X-Received: by 2002:a05:6512:33ce:: with SMTP id d14mr2058147lfg.264.1644421706987;
+        Wed, 09 Feb 2022 07:48:26 -0800 (PST)
+Received: from [192.168.1.103] ([178.176.73.27])
+        by smtp.gmail.com with ESMTPSA id d20sm2521958ljl.25.2022.02.09.07.48.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Feb 2022 07:48:26 -0800 (PST)
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Subject: Re: [PATCH 2/3] i2c: sh_mobile: Use platform_get_irq_optional() to
+ get the interrupt
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Chris Brandt <chris.brandt@renesas.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        linux-rpi-kernel <linux-rpi-kernel@lists.infradead.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Linux-sh list <linux-sh@vger.kernel.org>
+References: <20211218165258.16716-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20211218165258.16716-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CAMuHMdUg3=q7gyaVHP0XcYUOo3PQUUv8Hc8wp5faVQ+bTBpg4A@mail.gmail.com>
+ <042a2183-3f04-088c-1861-656de870337d@gmail.com>
+ <CAK8P3a3owi7YWmq-tckD-C7NK5HaX+swGNW-QBkWQuQgVsVWrA@mail.gmail.com>
+ <d74ab454-9337-d168-9b21-842569431b4a@gmail.com>
+ <CAK8P3a20mwJXN4Mb063zQG+HAevj_Odpj58EzPHkX-p6pbtnGA@mail.gmail.com>
+Message-ID: <7c47ce67-88ee-9cba-3356-a530b0d3e657@gmail.com>
+Date:   Wed, 9 Feb 2022 18:48:24 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220208211637.2221872-11-eranian@google.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAK8P3a20mwJXN4Mb063zQG+HAevj_Odpj58EzPHkX-p6pbtnGA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Feb 08, 2022 at 01:16:35PM -0800, Stephane Eranian escreveu:
-> From: Kim Phillips <kim.phillips@amd.com>
+On 2/9/22 6:18 PM, Arnd Bergmann wrote:
+> On Wed, Feb 9, 2022 at 4:11 PM Sergei Shtylyov
+> <sergei.shtylyov@gmail.com> wrote:
+>>
+>> On 2/8/22 3:31 PM, Arnd Bergmann wrote:
+>>
+>> [...]
+>>>>> I might have missed something, but it seems the only user of IRQ 0 on
+>>>>> SuperH is smsc911x Ethernet in arch/sh/boards/board-apsh4a3a.c and
+>>>>> arch/sh/boards/board-apsh4ad0a.c, which use evt2irq(0x200).
+>>>>> These should have been seeing the "0 is an invalid IRQ number"
+>>>>> warning splat since it was introduced in commit a85a6c86c25be2d2
+>>>>> ("driver core: platform: Clarify that IRQ 0 is invalid"). Or not:
+>>>>
+>>>>     Warning or no warning, 0 is still returned. :-/
+>>>>     My attempt to put an end to this has stuck waiting a review from the IRQ
+>>>> people...
+>>>
+>>> I had another look at this after you asked about it on IRC. I don't
+>>> know much SH assembly, but I suspect IRQ 0 has not been delivered
+
+   Neither do I, sigh...
+   I do know the instuctions are 16-bit and so there are no immediate
+opperands... :-)
+
+>>> since 2009 after 1e1030dccb10 ("sh: nmi_debug support."). On a
+>>
+>>    Mhm... this commit changes the SH3 code while SH778x are SH4A, no?
 > 
-> improve the error message returned on failed perf_event_open() on AMD when
-> using IBS.
+> This code is shared between both:
 > 
-> Output of executing 'perf record -e ibs_op// true' BEFORE this patch:
-> 
-> The sys_perf_event_open() syscall returned with 22 (Invalid argument)for event (ibs_op//u).
-> /bin/dmesg | grep -i perf may provide additional information.
+> arch/sh/kernel/cpu/sh4/Makefile:common-y        += $(addprefix
+> ../sh3/, entry.o ex.o)
 
-Humm, here on a
+   Ah, quite convoluted! :-)
+   So you mean thet broke the delivery of EVT 0x200 when mucking with NMI?
 
-  $ grep -m1 'model name' /proc/cpuinfo
-  model name	: AMD Ryzen 9 5950X 16-Core Processor
-  $ ls -la /sys/devices/ibs_op
-  total 0
-  drwxr-xr-x.  4 root root    0 Feb  9 07:12 .
-  drwxr-xr-x. 21 root root    0 Feb  9 07:12 ..
-  drwxr-xr-x.  2 root root    0 Feb  9 12:17 format
-  -rw-r--r--.  1 root root 4096 Feb  9 12:21 perf_event_mux_interval_ms
-  drwxr-xr-x.  2 root root    0 Feb  9 12:21 power
-  lrwxrwxrwx.  1 root root    0 Feb  9 07:12 subsystem -> ../../bus/event_source
-  -r--r--r--.  1 root root 4096 Feb  9 12:17 type
-  -rw-r--r--.  1 root root 4096 Feb  9 07:12 uevent
-  $ cat /sys/devices/ibs_op/type
-  9
-  $
+>        Arnd
 
-Running without this patch:
-
-  $ uname -a
-  Linux five 5.15.14-100.fc34.x86_64 #1 SMP Tue Jan 11 16:53:51 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
-  $
-
-  $ cat /etc/redhat-release
-  Fedora release 34 (Thirty Four)
-  $
-
-  $ perf record -e ibs_op// true
-  Error:
-  Invalid event (ibs_op//u) in per-thread mode, enable system wide with '-a'.
-  $
-
-Trying with system wide:
-
-  $ perf record -a -e ibs_op// true
-  Error:
-  The sys_perf_event_open() syscall returned with 22 (Invalid argument) for event (ibs_op//u).
-  /bin/dmesg | grep -i perf may provide additional information.
-  
-  $
-
-So you're missing -a in all examples? Am I missing something?
-
-> Output after:
-> 
-> AMD IBS cannot exclude kernel events.  Try running at a higher privilege level.
-> 
-> Output of executing 'sudo perf record -e ibs_op// true' BEFORE this patch:
-> 
-> Error:
-> The sys_perf_event_open() syscall returned with 22 (Invalid argument) for event (ibs_op//).
-> /bin/dmesg | grep -i perf may provide additional information.
-
-Here, as root:
-
-[root@five ~]# perf record -e ibs_op// true
-Error:
-Invalid event (ibs_op//) in per-thread mode, enable system wide with '-a'.
-[root@five ~]# perf record -a -e ibs_op// true
-[ perf record: Woken up 1 times to write data ]
-[ perf record: Captured and wrote 1.482 MB perf.data (175 samples) ]
-[root@five ~]#
-
-- Arnaldo
- 
-> Output after:
-> 
-> Error:
-> AMD IBS may only be available in system-wide/per-cpu mode.  Try using -a, or -C and workload affinity
-> 
-> Signed-off-by: Kim Phillips <kim.phillips@amd.com>
-> Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
-> Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-> Cc: Boris Ostrovsky <boris.ostrovsky@oracle.com>
-> Cc: Ian Rogers <irogers@google.com>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Jiri Olsa <jolsa@redhat.com>
-> Cc: Joao Martins <joao.m.martins@oracle.com>
-> Cc: Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: Michael Petlan <mpetlan@redhat.com>
-> Cc: Namhyung Kim <namhyung@kernel.org>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Robert Richter <robert.richter@amd.com>
-> Cc: Stephane Eranian <eranian@google.com>
-> ---
->  tools/perf/util/evsel.c | 24 ++++++++++++++++++++++++
->  1 file changed, 24 insertions(+)
-> 
-> diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-> index 22d3267ce294..d42f63a484df 100644
-> --- a/tools/perf/util/evsel.c
-> +++ b/tools/perf/util/evsel.c
-> @@ -2847,9 +2847,22 @@ static bool find_process(const char *name)
->  	return ret ? false : true;
->  }
->  
-> +static bool is_amd(const char *arch, const char *cpuid)
-> +{
-> +	return arch && !strcmp("x86", arch) && cpuid && strstarts(cpuid, "AuthenticAMD");
-> +}
-> +
-> +static bool is_amd_ibs(struct evsel *evsel)
-> +{
-> +	return evsel->core.attr.precise_ip || !strncmp(evsel->pmu_name, "ibs", 3);
-> +}
-> +
->  int evsel__open_strerror(struct evsel *evsel, struct target *target,
->  			 int err, char *msg, size_t size)
->  {
-> +	struct perf_env *env = evsel__env(evsel);
-> +	const char *arch = perf_env__arch(env);
-> +	const char *cpuid = perf_env__cpuid(env);
->  	char sbuf[STRERR_BUFSIZE];
->  	int printed = 0, enforced = 0;
->  
-> @@ -2949,6 +2962,17 @@ int evsel__open_strerror(struct evsel *evsel, struct target *target,
->  			return scnprintf(msg, size,
->  	"Invalid event (%s) in per-thread mode, enable system wide with '-a'.",
->  					evsel__name(evsel));
-> +		if (is_amd(arch, cpuid)) {
-> +			if (is_amd_ibs(evsel)) {
-> +				if (evsel->core.attr.exclude_kernel)
-> +					return scnprintf(msg, size,
-> +	"AMD IBS can't exclude kernel events.  Try running at a higher privilege level.");
-> +				if (!evsel->core.system_wide)
-> +					return scnprintf(msg, size,
-> +	"AMD IBS may only be available in system-wide/per-cpu mode.  Try using -a, or -C and workload affinity");
-> +			}
-> +		}
-> +
->  		break;
->  	case ENODATA:
->  		return scnprintf(msg, size, "Cannot collect data source with the load latency event alone. "
-> -- 
-> 2.35.0.263.gb82422642f-goog
-
--- 
-
-- Arnaldo
+MBR, Sergey

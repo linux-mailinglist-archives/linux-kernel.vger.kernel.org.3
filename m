@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACD154AE62A
+	by mail.lfdr.de (Postfix) with ESMTP id 5EB994AE629
 	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 01:41:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240371AbiBIAkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 19:40:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41890 "EHLO
+        id S240486AbiBIAlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 19:41:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235164AbiBIAkD (ORCPT
+        with ESMTP id S235164AbiBIAlJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 19:40:03 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60D84C06157B;
-        Tue,  8 Feb 2022 16:40:02 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id w1so783982plb.6;
-        Tue, 08 Feb 2022 16:40:02 -0800 (PST)
+        Tue, 8 Feb 2022 19:41:09 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68FC0C061576;
+        Tue,  8 Feb 2022 16:41:08 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id h14-20020a17090a130e00b001b88991a305so3523057pja.3;
+        Tue, 08 Feb 2022 16:41:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=pw/t13XajTTjXLiskyNzHqhJgEjynQBnyaS9U4Kn/zw=;
-        b=iiyQ296Z91oAqLC+EqEc2Sijxui2KK9qgLZLSVl3n3MaDXv2fZe2x1Tn6LDf/HhK/T
-         +360JYu6yyj7MRZbJTFBjRMNrdx9hBv+GWaRtf/rW5gvIAYWcTrh9iW/PA8xCq/QFqPY
-         H7cdj6tnj4XuT7F2nU/yzFbbgkQfnWH1ptzaTPT5EK/V8nPqnPIvFOgUliUELQ7Kn6Ew
-         oK9fT29DnLcRej9IVpxCb2cIaKKLk3C1QdSidx++olK+uACk+PqVvwrcuQhPc+HxgG0j
-         zsbldfO0eNDurDUZsOmhH2dCdczPEmPSmLz9grQmj8MEoV7fjI7w1BeVSaWHQxEM5I0t
-         8s7Q==
+        bh=Pa8AxlM1CGVhFlxgAPHks9xGR/UVYqCAV8jsE4HR0c8=;
+        b=WmnBH4aP+hiS3tsbOUMuXayYC75e2ckQtGjf/TAL/S9mLMOX9xmoz1CAXo0FpXgAJ/
+         /0zKypXvDa4QhR9pF4nGbWjdTtf/fQFwy4JG9hZBDnRkKQ1s4DKqmVhJy7q8WYRasX4D
+         7o9Xi05deTz1Xk8rEPE02UuEqT4vimLaQy9U/FViYqEjBlttQDv81oNdn7S9LQ57NQ/l
+         plWT8ndFQFK8uhX9Oc48G7U5boZcJgOQJPPYkTtpjQj4ZFQ/ktshmmAJic8nrkoJZ4i4
+         L3OiDmEoQQ/5GcSQyxa5dyZZpdCnqdfDZlQw2Yyi8MnfL4/rTnBKdFt30zoXyCW1XRtH
+         A77A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=pw/t13XajTTjXLiskyNzHqhJgEjynQBnyaS9U4Kn/zw=;
-        b=fQI9/ftcrQwLrLt7qCCIqAGcN4jdj0gIeiK/hXwYoFLDyY5uoyqQiKQibjRpYX7DMv
-         WEnh2z7XN0TIskOmuO6o9AAA466oaw1u3X7OW5cm7Ybm6DZPhR/n/goRvHZtIc7zGWIJ
-         lCgxIDeLomYKbDtrH8riK7HjggFM97BmpJGQ6kwfI/mg2qkOOY0ahLH8YKZnWp0vpPa5
-         mviKuVOeNekgTfOLmhHUOSq/r3KjQpqa0GOfin/3/kyoAJlbg+CLf6InIFZquY+khZMw
-         9q6LTQcSnQBdJUwq35WqSPFn195zRnQ8XmH/fesHmCiSGcmb751QnFlBjvL1QJAO0WzG
-         /74w==
-X-Gm-Message-State: AOAM530OKo4V4YFc2kQfmQ3IsEFA8JGSVly+QiHOO9nlSSzBKwV76Ya7
-        FctUWac4sAiZIu6IjkbGBa0=
-X-Google-Smtp-Source: ABdhPJw32H1cicCjiYxuExqABk0q04kGpiiS5u5nDIyLnzeSO997/8WlFVcEraNN1er2KGUIara9Pg==
-X-Received: by 2002:a17:902:7c02:: with SMTP id x2mr7041282pll.47.1644367201831;
-        Tue, 08 Feb 2022 16:40:01 -0800 (PST)
+        bh=Pa8AxlM1CGVhFlxgAPHks9xGR/UVYqCAV8jsE4HR0c8=;
+        b=eZOKmnqZkNcAwpe0xT8oFrgw0nNC1NiRhm+n8zFsgFEdpEU5LrDxNE5sdGM/y/SgJf
+         Yw0kCmw04je7wQUL7bIAI+FSMg94x3u4cvqf67EU21lzqvhshxe5+zYF2pj/l0momPus
+         QKtFkjZvT6N5s8c1qWerq8ytTqB3IwoD2INha/1VRxUqe7EW4nKgr25ZUxnrOQaoUbZI
+         g8tcFxUc3s+o7qvcZXWHgb9Wzfd81jAiWZNaWfnQKAQazEtWEjWBTaNSyekYrZdMqHO1
+         ahSWuYJCeDvw/mp5QhuW81DIngdUXke3E9DUp2Vk66XYJpymB0KYtygP40ImB9ZSkjDx
+         7mKw==
+X-Gm-Message-State: AOAM531QEbMAltRsrNRGXKi3VnlHU6Laz71c/4tR8jNugJuk7G/tW5/k
+        qJrk38H6grOxXHEKPq9sJEc=
+X-Google-Smtp-Source: ABdhPJxJlqqg+xMiTZxH/hFHRvCC3tTmddvN/YF4aXV2IcnfmzlGEvnqlAzb8nncV/EaB/nXYFrFSg==
+X-Received: by 2002:a17:90a:1987:: with SMTP id 7mr470500pji.215.1644367267990;
+        Tue, 08 Feb 2022 16:41:07 -0800 (PST)
 Received: from localhost.localdomain (192.243.120.166.16clouds.com. [192.243.120.166])
-        by smtp.gmail.com with ESMTPSA id s32sm10969019pfw.80.2022.02.08.16.39.58
+        by smtp.gmail.com with ESMTPSA id nu7sm4357184pjb.30.2022.02.08.16.41.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 16:40:01 -0800 (PST)
+        Tue, 08 Feb 2022 16:41:07 -0800 (PST)
 From:   davidcomponentone@gmail.com
-To:     jikos@kernel.org
-Cc:     davidcomponentone@gmail.com, benjamin.tissoires@redhat.com,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yang Guang <yang.guang5@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] HID: lenovo: replace snprintf with sysfs_emit
-Date:   Wed,  9 Feb 2022 08:39:48 +0800
-Message-Id: <124b72fd0751d7f37c64dd517d386db38cf8c189.1644287860.git.yang.guang5@zte.com.cn>
+To:     jejb@linux.ibm.com
+Cc:     davidcomponentone@gmail.com, martin.petersen@oracle.com,
+        bvanassche@acm.org, yang.guang5@zte.com.cn,
+        jiapeng.chong@linux.alibaba.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] scsi: csiostor: replace snprintf with sysfs_emit
+Date:   Wed,  9 Feb 2022 08:40:55 +0800
+Message-Id: <d711ec5a5f416204079155666d2de49d43070897.1644287527.git.yang.guang5@zte.com.cn>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -73,21 +73,11 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 From: Yang Guang <yang.guang5@zte.com.cn>
 
 coccinelle report:
-./drivers/hid/hid-lenovo.c:636:8-16:
+./drivers/scsi/csiostor/csio_scsi.c:1433:8-16:
 WARNING: use scnprintf or sprintf
-./drivers/hid/hid-lenovo.c:403:8-16:
+./drivers/scsi/csiostor/csio_scsi.c:1369:9-17:
 WARNING: use scnprintf or sprintf
-./drivers/hid/hid-lenovo.c:755:8-16:
-WARNING: use scnprintf or sprintf
-./drivers/hid/hid-lenovo.c:606:8-16:
-WARNING: use scnprintf or sprintf
-./drivers/hid/hid-lenovo.c:666:8-16:
-WARNING: use scnprintf or sprintf
-./drivers/hid/hid-lenovo.c:696:8-16:
-WARNING: use scnprintf or sprintf
-./drivers/hid/hid-lenovo.c:445:8-16:
-WARNING: use scnprintf or sprintf
-./drivers/hid/hid-lenovo.c:726:8-16:
+./drivers/scsi/csiostor/csio_scsi.c:1479:8-16:
 WARNING: use scnprintf or sprintf
 
 Use sysfs_emit instead of scnprintf or sprintf makes more sense.
@@ -96,85 +86,43 @@ Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: Yang Guang <yang.guang5@zte.com.cn>
 Signed-off-by: David Yang <davidcomponentone@gmail.com>
 ---
- drivers/hid/hid-lenovo.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ drivers/scsi/csiostor/csio_scsi.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/hid/hid-lenovo.c b/drivers/hid/hid-lenovo.c
-index 93b1f935e526..086a7aec7c1e 100644
---- a/drivers/hid/hid-lenovo.c
-+++ b/drivers/hid/hid-lenovo.c
-@@ -400,7 +400,7 @@ static ssize_t attr_fn_lock_show(struct device *dev,
- 	struct hid_device *hdev = to_hid_device(dev);
- 	struct lenovo_drvdata *data = hid_get_drvdata(hdev);
+diff --git a/drivers/scsi/csiostor/csio_scsi.c b/drivers/scsi/csiostor/csio_scsi.c
+index 55db02521221..f9b87ae2aa25 100644
+--- a/drivers/scsi/csiostor/csio_scsi.c
++++ b/drivers/scsi/csiostor/csio_scsi.c
+@@ -1366,9 +1366,9 @@ csio_show_hw_state(struct device *dev,
+ 	struct csio_hw *hw = csio_lnode_to_hw(ln);
  
--	return snprintf(buf, PAGE_SIZE, "%u\n", data->fn_lock);
-+	return sysfs_emit(buf, "%u\n", data->fn_lock);
+ 	if (csio_is_hw_ready(hw))
+-		return snprintf(buf, PAGE_SIZE, "ready\n");
++		return sysfs_emit(buf, "ready\n");
+ 	else
+-		return snprintf(buf, PAGE_SIZE, "not ready\n");
++		return sysfs_emit(buf, "not ready\n");
  }
  
- static ssize_t attr_fn_lock_store(struct device *dev,
-@@ -442,7 +442,7 @@ static ssize_t attr_sensitivity_show_cptkbd(struct device *dev,
- 	struct hid_device *hdev = to_hid_device(dev);
- 	struct lenovo_drvdata *cptkbd_data = hid_get_drvdata(hdev);
+ /* Device reset */
+@@ -1430,7 +1430,7 @@ csio_show_dbg_level(struct device *dev,
+ {
+ 	struct csio_lnode *ln = shost_priv(class_to_shost(dev));
  
--	return snprintf(buf, PAGE_SIZE, "%u\n",
-+	return sysfs_emit(buf, "%u\n",
- 		cptkbd_data->sensitivity);
+-	return snprintf(buf, PAGE_SIZE, "%x\n", ln->params.log_level);
++	return sysfs_emit(buf, "%x\n", ln->params.log_level);
  }
  
-@@ -603,7 +603,7 @@ static ssize_t attr_press_to_select_show_tpkbd(struct device *dev,
- 	struct hid_device *hdev = to_hid_device(dev);
- 	struct lenovo_drvdata *data_pointer = hid_get_drvdata(hdev);
+ /* Store debug level */
+@@ -1476,7 +1476,7 @@ csio_show_num_reg_rnodes(struct device *dev,
+ {
+ 	struct csio_lnode *ln = shost_priv(class_to_shost(dev));
  
--	return snprintf(buf, PAGE_SIZE, "%u\n", data_pointer->press_to_select);
-+	return sysfs_emit(buf, "%u\n", data_pointer->press_to_select);
+-	return snprintf(buf, PAGE_SIZE, "%d\n", ln->num_reg_rnodes);
++	return sysfs_emit(buf, "%d\n", ln->num_reg_rnodes);
  }
  
- static ssize_t attr_press_to_select_store_tpkbd(struct device *dev,
-@@ -633,7 +633,7 @@ static ssize_t attr_dragging_show_tpkbd(struct device *dev,
- 	struct hid_device *hdev = to_hid_device(dev);
- 	struct lenovo_drvdata *data_pointer = hid_get_drvdata(hdev);
- 
--	return snprintf(buf, PAGE_SIZE, "%u\n", data_pointer->dragging);
-+	return sysfs_emit(buf, "%u\n", data_pointer->dragging);
- }
- 
- static ssize_t attr_dragging_store_tpkbd(struct device *dev,
-@@ -663,7 +663,7 @@ static ssize_t attr_release_to_select_show_tpkbd(struct device *dev,
- 	struct hid_device *hdev = to_hid_device(dev);
- 	struct lenovo_drvdata *data_pointer = hid_get_drvdata(hdev);
- 
--	return snprintf(buf, PAGE_SIZE, "%u\n", data_pointer->release_to_select);
-+	return sysfs_emit(buf, "%u\n", data_pointer->release_to_select);
- }
- 
- static ssize_t attr_release_to_select_store_tpkbd(struct device *dev,
-@@ -693,7 +693,7 @@ static ssize_t attr_select_right_show_tpkbd(struct device *dev,
- 	struct hid_device *hdev = to_hid_device(dev);
- 	struct lenovo_drvdata *data_pointer = hid_get_drvdata(hdev);
- 
--	return snprintf(buf, PAGE_SIZE, "%u\n", data_pointer->select_right);
-+	return sysfs_emit(buf, "%u\n", data_pointer->select_right);
- }
- 
- static ssize_t attr_select_right_store_tpkbd(struct device *dev,
-@@ -723,7 +723,7 @@ static ssize_t attr_sensitivity_show_tpkbd(struct device *dev,
- 	struct hid_device *hdev = to_hid_device(dev);
- 	struct lenovo_drvdata *data_pointer = hid_get_drvdata(hdev);
- 
--	return snprintf(buf, PAGE_SIZE, "%u\n",
-+	return sysfs_emit(buf, "%u\n",
- 		data_pointer->sensitivity);
- }
- 
-@@ -752,7 +752,7 @@ static ssize_t attr_press_speed_show_tpkbd(struct device *dev,
- 	struct hid_device *hdev = to_hid_device(dev);
- 	struct lenovo_drvdata *data_pointer = hid_get_drvdata(hdev);
- 
--	return snprintf(buf, PAGE_SIZE, "%u\n",
-+	return sysfs_emit(buf, "%u\n",
- 		data_pointer->press_speed);
- }
- 
+ static DEVICE_ATTR(num_reg_rnodes, S_IRUGO, csio_show_num_reg_rnodes, NULL);
 -- 
 2.30.2
 

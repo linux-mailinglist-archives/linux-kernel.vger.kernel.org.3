@@ -2,88 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7E1D4AF569
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 16:35:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74E114AF571
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 16:36:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235966AbiBIPf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 10:35:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49304 "EHLO
+        id S235862AbiBIPgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 10:36:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235990AbiBIPfS (ORCPT
+        with ESMTP id S235964AbiBIPfl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 10:35:18 -0500
-Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 843FAC05CB89;
-        Wed,  9 Feb 2022 07:35:18 -0800 (PST)
-Received: by mail-oo1-f51.google.com with SMTP id u25-20020a4ad0d9000000b002e8d4370689so2800313oor.12;
-        Wed, 09 Feb 2022 07:35:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=1mkLFSmd4i+BBIXy7fKCIcUEt8oNd8K14KXOxmE5hKQ=;
-        b=t3wnmTjM6DKx7hTDpqSrr0G9Q7jjWEIvPaqCfxBGlBUHsu9wr0OnCwXED06QdmnxWT
-         oEkvojcyg1+rvXrhHtn2vSGUunWv6w5iiOyD6RnCe5NK6orPOGSb7El/8s3U5xr6imMj
-         8dUOj4ncICZmRLgtffPLFqcmjS/Wobp+9onV6meorIyAz+oFswm+nQr+8tDnH7V8vnby
-         edN84gvOXfqbnWsQ+rOwaiwWq7DJuHkR1NQsSzziH44ey7Pwa+mpo4NMfoqtlvAXFxmC
-         stN7LVIxeNuYn5oYxVSl1hqgHDXdh3hZROHrKBkzEuLsUL71ih97vmFBH8KK24o7k0Ym
-         /0LQ==
-X-Gm-Message-State: AOAM532fq/RxVtqT5nNybqOdTTrXvPDr18NllLOBBg/bmjMjvaMJYIoI
-        E91ZQGSW+Xhm+1d6Y1Gf8HdJQ1X+sg==
-X-Google-Smtp-Source: ABdhPJze37RkXIeQyKNHdeY2KcUB29vKQ0Nr6pdDba5eg6DiwMkdQWBAnS8RHq6FbjaLmlrLCDY1sw==
-X-Received: by 2002:a05:6870:f78c:: with SMTP id fs12mr892266oab.297.1644420917756;
-        Wed, 09 Feb 2022 07:35:17 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id v10sm6624360oto.53.2022.02.09.07.35.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 07:35:17 -0800 (PST)
-Received: (nullmailer pid 391819 invoked by uid 1000);
-        Wed, 09 Feb 2022 15:35:08 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, kernel@pengutronix.de,
-        netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>
-In-Reply-To: <20220209081025.2178435-2-o.rempel@pengutronix.de>
-References: <20220209081025.2178435-1-o.rempel@pengutronix.de> <20220209081025.2178435-2-o.rempel@pengutronix.de>
-Subject: Re: [PATCH net-next v2 1/2] dt-bindings: net: add schema for ASIX USB Ethernet controllers
-Date:   Wed, 09 Feb 2022 09:35:08 -0600
-Message-Id: <1644420908.420720.391818.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Wed, 9 Feb 2022 10:35:41 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 001BDC05CB9F
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 07:35:43 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 38F1E1FB;
+        Wed,  9 Feb 2022 07:35:43 -0800 (PST)
+Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A71F43F73B;
+        Wed,  9 Feb 2022 07:35:40 -0800 (PST)
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     ardb@kernel.org, bp@alien8.de, catalin.marinas@arm.com,
+        dave.hansen@linux.intel.com, frederic@kernel.org,
+        james.morse@arm.com, joey.gouly@arm.com, juri.lelli@redhat.com,
+        linux-kernel@vger.kernel.org, luto@kernel.org,
+        mark.rutland@arm.com, mingo@redhat.com, peterz@infradead.org,
+        tglx@linutronix.de, valentin.schneider@arm.com, will@kernel.org
+Subject: [PATCH v3 0/7] arm64 / sched/preempt: support PREEMPT_DYNAMIC with static keys
+Date:   Wed,  9 Feb 2022 15:35:28 +0000
+Message-Id: <20220209153535.818830-1-mark.rutland@arm.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 09 Feb 2022 09:10:24 +0100, Oleksij Rempel wrote:
-> Create initial schema for ASIX USB Ethernet controllers and import all
-> currently supported USB IDs form drivers/net/usb/asix_devices.c
-> 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> ---
->  .../devicetree/bindings/net/asix,ax88178.yaml | 68 +++++++++++++++++++
->  1 file changed, 68 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/net/asix,ax88178.yaml
-> 
+This series enables PREEMPT_DYNAMIC on arm64. To do so, it adds a new
+mechanism allowing the preemption functions to be enabled/disabled using
+static keys rather than static calls, with architectures selecting
+whether they use static calls or static keys.
 
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
+With non-inline static calls, each function call results in a call to
+the (out-of-line) trampoline which either tail-calls its associated
+callee or performs an early return.
 
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
+The key idea is that where we're only enabling/disabling a single
+callee, we can inline this trampoline into the start of the callee,
+using a static key to decide whether to return early, and leaving the
+remaining codegen to the compiler. The overhead should be similar to
+(and likely lower than) using a static call trampoline. Since most
+codegen is up to the compiler, we sidestep a number of implementation
+pain-points (e.g. things like CFI should "just work" as well as they do
+for any other functions).
 
-Full log is available here: https://patchwork.ozlabs.org/patch/1590224
+The bulk of the diffstat for kernel/sched/core.c is shuffling the
+PREEMPT_DYNAMIC code later in the file, and the actual additions are
+fairly trivial.
 
+I've given this very light build+boot testing so far.
 
-asix@1: $nodename:0: 'asix@1' does not match '^ethernet(@.*)?$'
-	arch/arm/boot/dts/tegra20-colibri-eval-v3.dt.yaml
-	arch/arm/boot/dts/tegra20-colibri-iris.dt.yaml
-	arch/arm/boot/dts/tegra30-colibri-eval-v3.dt.yaml
+Since v1 [1]:
+* Rework Kconfig text to be clearer
+* Rework arm64 entry code
+* Clarify commit messages.
+
+Since v2 [2]:
+* Add missing includes
+* Always provide prototype for preempt_schedule()
+* Always provide prototype for preempt_schedule_notrace()
+* Fix __cond_resched() to default to disabled
+* Fix might_resched() to default to disabled
+* Clarify example in commit message
+
+[1] https://lore.kernel.org/r/20211109172408.49641-1-mark.rutland@arm.com/
+[2] https://lore.kernel.org/r/20220204150557.434610-1-mark.rutland@arm.com/
+
+Mark Rutland (7):
+  sched/preempt: move PREEMPT_DYNAMIC logic later
+  sched/preempt: refactor sched_dynamic_update()
+  sched/preempt: simplify irqentry_exit_cond_resched() callers
+  sched/preempt: decouple HAVE_PREEMPT_DYNAMIC from GENERIC_ENTRY
+  sched/preempt: add PREEMPT_DYNAMIC using static keys
+  arm64: entry: centralize premeption decision
+  arm64: support PREEMPT_DYNAMIC
+
+ arch/Kconfig                     |  37 +++-
+ arch/arm64/Kconfig               |   1 +
+ arch/arm64/include/asm/preempt.h |  19 +-
+ arch/arm64/kernel/entry-common.c |  28 ++-
+ arch/x86/Kconfig                 |   2 +-
+ arch/x86/include/asm/preempt.h   |  10 +-
+ include/linux/entry-common.h     |  15 +-
+ include/linux/kernel.h           |   7 +-
+ include/linux/sched.h            |  10 +-
+ kernel/entry/common.c            |  23 +-
+ kernel/sched/core.c              | 347 ++++++++++++++++++-------------
+ 11 files changed, 327 insertions(+), 172 deletions(-)
+
+-- 
+2.30.2
 

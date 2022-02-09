@@ -2,52 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A0D44AE684
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 03:39:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 004E74AE68F
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 03:39:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234249AbiBICjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 21:39:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32944 "EHLO
+        id S241323AbiBICj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 21:39:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234611AbiBHXE7 (ORCPT
+        with ESMTP id S241352AbiBIAxk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 18:04:59 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41695C061578
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 15:04:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A4F856177A
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 23:04:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76A5AC004E1;
-        Tue,  8 Feb 2022 23:04:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644361498;
-        bh=EWe+0R/ZVsm3W7XmSmNv2KN70VcPiLPtwrmHpmDlzu0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LTnv+2dK+6rYrMI0nFMsYl3iOw/V23R9x1TPnCSsewDe0UKYledTtwmnIFcsw6iTh
-         AYc6XJ7tK2ZwKO6vz7aEvlhxkxWTzrW4q2BubAqrU3n8Jo/2+RwrlnUpWilhbU4r1B
-         7FPmI1ya7W2VmtxkeBQO+c8qNdO4phap3WwX6MjJmsPUBtanuitQkAiLJf6jQtB+ly
-         f8bxt2SWTZ/AnQaB/vYZ8yZms1ACQDGLE87P5qduIN3tVbITkNxNRbvjYHLetvF6XS
-         uM2BJwR1WTbGH4ngZcVANvrij8Jg8HxS2G160oR9Z3U+7lD9CfleE6tJkILgvrPkpR
-         DuJD86MOgXhfg==
-Date:   Wed, 9 Feb 2022 00:04:55 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Mukesh Ojha <quic_mojha@quicinc.com>
-Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
-        tglx@linutronix.de, paulmck@kernel.org, will@kernel.org,
-        dave@stgolabs.net
-Subject: Re: [PATCH] softirq: Remove raise_softirq from
- tasklet_action_common()
-Message-ID: <20220208230455.GA539926@lothringen>
-References: <1644066805-17212-1-git-send-email-quic_mojha@quicinc.com>
+        Tue, 8 Feb 2022 19:53:40 -0500
+X-Greylist: delayed 1097 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Feb 2022 16:53:39 PST
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ED9BC061576;
+        Tue,  8 Feb 2022 16:53:39 -0800 (PST)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2190ZJv1007030;
+        Tue, 8 Feb 2022 18:35:19 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1644366919;
+        bh=5EyyxMNHjefrxCy8IJH40Emcq2IkwFCHgOrxbd6LIHE=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=FhUjrGWYeBwvuzWGaN1S41g+P6leu+LOxvWnb5NiRcblwhffNceyhWeijbHboZsaZ
+         2EsiHpM5hhBXhSpYd/mejaCf+9jNwLQOu7GVs4ubndbrIYQ5kHMiEPcG5ByRXLHI7v
+         vkqkropLC4NhQ0KEYtlPIdWXczUHcPX94QML7tY0=
+Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2190ZJVQ017346
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 8 Feb 2022 18:35:19 -0600
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 8
+ Feb 2022 18:35:19 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Tue, 8 Feb 2022 18:35:19 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2190ZJUm040029;
+        Tue, 8 Feb 2022 18:35:19 -0600
+Date:   Tue, 8 Feb 2022 18:35:19 -0600
+From:   Nishanth Menon <nm@ti.com>
+To:     Hari Nagalla <hnagalla@ti.com>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <vigneshr@ti.com>, <robh+dt@kernel.org>
+Subject: Re: [PATCH] arm64: dts: ti: k3-am64: Add ESM0 to device memory map
+Message-ID: <20220209003519.clokfvln7m2deewi@buddhism>
+References: <20220208182119.24707-1-hnagalla@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <1644066805-17212-1-git-send-email-quic_mojha@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20220208182119.24707-1-hnagalla@ti.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,77 +65,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 05, 2022 at 06:43:25PM +0530, Mukesh Ojha wrote:
-> Think about a scenario when all other cores are in suspend
-> and one core is only running ksoftirqd and it is because
-> some client has invoked tasklet_hi_schedule() only once
-> during that phase.
+Please loop in LAKML as stated in MAINTAINERS file.
+
+On 12:21-20220208, Hari Nagalla wrote:
+> AM64x SoCs have two ESM modules, with one in MAIN voltage domain and the
+> other in MCU voltage domain. The error output from Main ESM module can
+> be routed to the MCU ESM module. The error output of MCU ESM can be
+> configured to reset the device.
+
+So what happens to the window for MCU ESM - Is that already open?
+
 > 
-> tasklet_action_common() handles that softirq and marks the
-> same softirq as pending again. And due to that core keeps
-> running the softirq handler [1] forever and it is not able to
-> go to suspend.
+> For ESM details please refer technical reference manual at
+> https://www.ti.com/lit/pdf/spruim2
 > 
-> We can get rid of raising softirq from tasklet handler.
-> 
-> [1]
-> <idle>-0    [003]   13058.769081:  softirq_entry   vec=0  action=HI_SOFTIRQ
-> <idle>-0     [003]  13058.769085: softirq_raise:        vec=0 [action=HI_SOFTIRQ]
-> <idle>-0    [003]   13058.769087:  softirq_exit   vec=0  action=HI_SOFTIRQ
-> <idle>-0    [003]   13058.769091:  softirq_entry   vec=0  action=HI_SOFTIRQ
-> <idle>-0     [003]  13058.769094: softirq_raise:        vec=0 [action=HI_SOFTIRQ]
-> <idle>-0    [003]   13058.769097:  softirq_exit   vec=0  action=HI_SOFTIRQ
-> <idle>-0    [003]   13058.769100:  softirq_entry   vec=0  action=HI_SOFTIRQ
-> <idle>-0     [003]  13058.769103: softirq_raise:        vec=0 [action=HI_SOFTIRQ]
-> <idle>-0    [003]   13058.769106:  softirq_exit   vec=0  action=HI_SOFTIRQ
-> <idle>-0    [003]   13058.769109:  softirq_entry   vec=0  action=HI_SOFTIRQ
-> <idle>-0    [003]   13059.058923:  softirq_entry   vec=0  action=HI_SOFTIRQ
-> ...
-> ..
-> ..
-> ..
-> 
-> <idle>-0    [003]   13059.058951:  softirq_entry   vec=0  action=HI_SOFTIRQ
-> <idle>-0     [003]  13059.058954: softirq_raise:        vec=0 [action=HI_SOFTIRQ]
-> <idle>-0    [003]   13059.058957:  softirq_exit   vec=0  action=HI_SOFTIRQ
-> <idle>-0    [003]   13059.058960:  softirq_entry   vec=0  action=HI_SOFTIRQ
-> <idle>-0     [003]  13059.058963: softirq_raise:        vec=0 [action=HI_SOFTIRQ]
-> <idle>-0    [003]   13059.058966:  softirq_exit   vec=0  action=HI_SOFTIRQ
-> <idle>-0    [003]   13059.058969:  softirq_entry   vec=0  action=HI_SOFTIRQ
-> <idle>-0     [003]  13059.058972: softirq_raise:        vec=0 [action=HI_SOFTIRQ]
-> <idle>-0    [003]   13059.058975:  softirq_exit   vec=0  action=HI_SOFTIRQ
-> <idle>-0    [003]   13059.058978:  softirq_entry   vec=0  action=HI_SOFTIRQ
-> <idle>-0     [003]  13059.058981: softirq_raise:        vec=0 [action=HI_SOFTIRQ]
-> <idle>-0    [003]   13059.058984:  softirq_exit   vec=0  action=HI_SOFTIRQ
-> <idle>-0    [003]   13059.058987:  softirq_entry   vec=0  action=HI_SOFTIRQ
-> <idle>-0     [003]  13059.058990: softirq_raise:        vec=0 [action=HI_SOFTIRQ]
-> <idle>-0    [003]   13059.058993:  softirq_exit   vec=0  action=HI_SOFTIRQ
-> <idle>-0    [003]   13059.058996:  softirq_entry   vec=0  action=HI_SOFTIRQ
-> <idle>-0     [003]  13059.059000: softirq_raise:        vec=0 [action=HI_SOFTIRQ]
-> <idle>-0    [003]   13059.059002:  softirq_exit   vec=0  action=HI_SOFTIRQ
-> 
-> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+> Signed-off-by: Hari Nagalla <hnagalla@ti.com>
 > ---
->  kernel/softirq.c | 1 -
->  1 file changed, 1 deletion(-)
+>  arch/arm64/boot/dts/ti/k3-am64.dtsi | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/kernel/softirq.c b/kernel/softirq.c
-> index 41f4709..d3e6fb9 100644
-> --- a/kernel/softirq.c
-> +++ b/kernel/softirq.c
-> @@ -795,7 +795,6 @@ static void tasklet_action_common(struct softirq_action *a,
->  		t->next = NULL;
->  		*tl_head->tail = t;
->  		tl_head->tail = &t->next;
-> -		__raise_softirq_irqoff(softirq_nr);
->  		local_irq_enable();
+> diff --git a/arch/arm64/boot/dts/ti/k3-am64.dtsi b/arch/arm64/boot/dts/ti/k3-am64.dtsi
+> index 120974726be8..0622a93ec136 100644
+> --- a/arch/arm64/boot/dts/ti/k3-am64.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-am64.dtsi
+> @@ -66,6 +66,7 @@
+>  		#address-cells = <2>;
+>  		#size-cells = <2>;
+>  		ranges = <0x00 0x000f4000 0x00 0x000f4000 0x00 0x000002d0>, /* PINCTRL */
+> +			 <0x00 0x00420000 0x00 0x00420000 0x00 0x00001000>, /* ESM0 */
+>  			 <0x00 0x00600000 0x00 0x00600000 0x00 0x00001100>, /* GPIO */
+>  			 <0x00 0x00a40000 0x00 0x00a40000 0x00 0x00000800>, /* Timesync router */
+>  			 <0x00 0x01000000 0x00 0x01000000 0x00 0x02330400>, /* First peripheral window */
+> -- 
+> 2.17.1
+> 
 
-That requeue happens when the tasklet is already executing on some other CPU
-or when it has been disabled through tasklet_disable().
-
-So you can't just remove that line or you'll break everything.
-
-It would be nice to identify which tasklet keeps being requeued. Is it because
-something called tasklet_disable() to it and never called back tasklet_enable() ?
-
-Thanks.
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D

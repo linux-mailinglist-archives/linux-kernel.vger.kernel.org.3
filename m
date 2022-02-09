@@ -2,101 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5A544B00EC
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 00:05:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1E784B00F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 00:08:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236980AbiBIXFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 18:05:02 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:58766 "EHLO
+        id S236998AbiBIXIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 18:08:39 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:35734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236886AbiBIXFB (ORCPT
+        with ESMTP id S236886AbiBIXIh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 18:05:01 -0500
-Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26DFCE01976B;
-        Wed,  9 Feb 2022 15:05:03 -0800 (PST)
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174]) (authenticated)
-        by conssluserg-05.nifty.com with ESMTP id 219N4i1Z004353;
-        Thu, 10 Feb 2022 08:04:44 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 219N4i1Z004353
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1644447884;
-        bh=a4CPTySbfz6tATOd3oisyCSdvLEgbXZVMlYkkDX676Q=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=J+HdsNYfFFKEgIiacdUdp4ULvPnM/LbolxFvFZHp/DGpD5/6wl2As7pPXuzjGPpA9
-         6SEM5s9qN8Iv9fdmusZA4JPcYVT6rqqI/FLXM+3j5Jeme32pQ8NKs7C3kkv73mlfbX
-         lk2G149zFVXv24WacOyzDKiceLjR9QIRj/98h1f6uZ+k0tiUlHrIGblZ67kzS5nOzm
-         rCaCIwpKOjzge2xE6IsoVf76HEHc8YpqyNDBhlK96AnWovLTY+thfNoOlruzJZzmb0
-         N98XM3lWwTogUP060YeBUdsPH7aMpKU1h33a11Tn/prmS90FNfZHBiUa4h5ZceJ/Fg
-         jKZgvJp6urIYw==
-X-Nifty-SrcIP: [209.85.214.174]
-Received: by mail-pl1-f174.google.com with SMTP id y17so252776plg.7;
-        Wed, 09 Feb 2022 15:04:44 -0800 (PST)
-X-Gm-Message-State: AOAM531KSWnQDkOfQZwBq3iyptZAtN85Dlx//5AhIUEDlIWYKxAvTIpB
-        I4iIw74lA9KRhXXQOetlCCjGRXsZVqBeJ5xjOg0=
-X-Google-Smtp-Source: ABdhPJwWB8ZNnsMSrugJLAaUoxmVXtYfCekIy7V3ZzXWPCjfVCdzOirMrkT+yVSMb4QpnAJTnSLfCYIdBvKSRlsafrw=
-X-Received: by 2002:a17:903:22c5:: with SMTP id y5mr2455424plg.99.1644447883812;
- Wed, 09 Feb 2022 15:04:43 -0800 (PST)
+        Wed, 9 Feb 2022 18:08:37 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44835C1038D3;
+        Wed,  9 Feb 2022 15:08:39 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id u20so6857704ejx.3;
+        Wed, 09 Feb 2022 15:08:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=n4p8pNRxlbLuMm4Zivi3qzSEX1/XkIY61NA/5+SHRUE=;
+        b=GDYxvemGi17tsPt1GHWDoNRw66clseUB/uO4JIWKzcCvACwk7HeYNGUjzr9gF/r+34
+         eokR8lDNNgUFUow8mSzalfpAwEEKYT5s+6cJkAgS0WPHkXrLCayerlj9gqGZyRhbyJ9c
+         Kkh1Nn0F9k3ZSNs6JclkgcfF9VoezFI94Cbd47KKdbNc7x8LNwgLNUduDGO7MXYdPRNj
+         mgQaWn2dp5tfZiAMJ/4xDkI5OBEkHvWf76tsHA1n0JC98vRlE2ApQpW4XqQ9IWnxbYD7
+         Xfz8I4qO84SPDv3k6Ca8/xSEHdkVHG+oxupGQNyYW69y7h0swqc4vFeNQ1koDdkhkuIa
+         425A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=n4p8pNRxlbLuMm4Zivi3qzSEX1/XkIY61NA/5+SHRUE=;
+        b=m8iJxXa3IfkYRYt8fTBHPY1gHbwDH4Ydp9ct0mqY30Ohbnv5RQzw2WFa4vcjwDk1EU
+         eQ/PP3InvFFJ0h6RlvTqypJ/WZjau2Uc1eImAmn8OJ0RBh+WYno+QRKN21R/cgZNeMBa
+         6+FVCjZnKy18QxkN0xYg4mmXLw0bFDNn+GskfSKUdlXw9pnLyGRVNbsIz88gzHWjqsXt
+         7W1WUbgsuluLV1CGC6CxpQ5Yo0iXFRTBS5LseNjVpeLXSW1szwCuv+c46SSlpsGd1Vwk
+         BCNNwCwnlO0O1MMnbL2WG8DbhJytnZvJFkLRTtzMH3HTCrMvRXFaGrOZ3C6JMvB8cT13
+         bhdA==
+X-Gm-Message-State: AOAM530s8okMCZTMPm1yNsCuAUEFsra4eliLooooLyJkQgHVIXKivnz/
+        FF2OGhZCA0mrgxPxi7Ro6Ms=
+X-Google-Smtp-Source: ABdhPJwIG5feFVw1N3Qa7gtwNXlORasD8MGuGnqIF/J4wiv9+LUWW4IWxnx659skrjQsuDPh5l3Lbg==
+X-Received: by 2002:a17:906:7812:: with SMTP id u18mr4078755ejm.335.1644448117785;
+        Wed, 09 Feb 2022 15:08:37 -0800 (PST)
+Received: from localhost (92.40.202.147.threembb.co.uk. [92.40.202.147])
+        by smtp.gmail.com with ESMTPSA id p1sm6136112edy.69.2022.02.09.15.08.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Feb 2022 15:08:37 -0800 (PST)
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     paul@crapouillou.net, linus.walleij@linaro.org
+Cc:     linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] pinctrl: ingenic: Fix regmap on X series SoCs
+Date:   Wed,  9 Feb 2022 23:04:54 +0000
+Message-Id: <20220209230452.19535-1-aidanmacdonald.0x0@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20211218031122.4117631-1-willy@infradead.org> <CAK7LNAQUChvX3NoukBnjBfJJGu+a96pfbM--xHEHOygWPgE9eA@mail.gmail.com>
- <YdSOV7LL0vWCMcWl@casper.infradead.org> <CAK7LNAQgixJSnDUMfjc+tg90oMdVoh+i5faEn-rqgmHR3Bk6dQ@mail.gmail.com>
- <20220208110122.2z4cmbqexmnxuxld@jak-t480s> <YgJrypdQium7AcWV@casper.infradead.org>
- <3d76ff7aab8cdc134aebf16af66582849bd53156.camel@HansenPartnership.com>
-In-Reply-To: <3d76ff7aab8cdc134aebf16af66582849bd53156.camel@HansenPartnership.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 10 Feb 2022 08:04:06 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASNFnARmhJ0ik3uCiasuTDGgi9PtEgi7m+EPgHtK0-t5Q@mail.gmail.com>
-Message-ID: <CAK7LNASNFnARmhJ0ik3uCiasuTDGgi9PtEgi7m+EPgHtK0-t5Q@mail.gmail.com>
-Subject: Re: [PATCH v2] builddeb: Support signing kernels with the module
- signing key
-To:     James Bottomley <James.Bottomley@hansenpartnership.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Julian Andres Klode <julian.klode@canonical.com>,
-        Ben Hutchings <ben@decadent.org.uk>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        efi@lists.einval.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>, keyrings@vger.kernel.org,
-        David Woodhouse <dwmw2@infradead.org>,
-        debian-kernel <debian-kernel@lists.debian.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 9, 2022 at 10:21 PM James Bottomley
-<James.Bottomley@hansenpartnership.com> wrote:
->
-> On Tue, 2022-02-08 at 13:10 +0000, Matthew Wilcox wrote:
-> > On Tue, Feb 08, 2022 at 12:01:22PM +0100, Julian Andres Klode wrote:
-> > > It's worth pointing out that in Ubuntu, the generated MOK key
-> > > is for module signing only (extended key usage
-> > > 1.3.6.1.4.1.2312.16.1.2), kernels signed with it will NOT be
-> > > bootable.
-> >
-> > Why should these be separate keys?  There's no meaningful security
-> > boundary between a kernel module and the ernel itself; a kernel
-> > modulecan, for example, write to CR3, and that's game over for
-> > any pretence at separation.
->
-> It's standard practice for any automated build private key to be
-> destroyed immediately to preserve security.  Thus the modules get
-> signed with a per kernel ephemeral build key but the MoK key is a long
-> term key with a special signing infrastructure, usually burned into the
-> distro version of shim.  The kernel signing key usually has to be long
-> term because you want shim to boot multiple kernels otherwise upgrading
-> becomes a nightmare.
+The X series Ingenic SoCs have a shadow GPIO group which
+is at a higher offset than the other groups, and is used
+for all GPIO configuration. The regmap did not take this
+offset into account and set max_register too low. Writes
+to the shadow group registers were blocked, which made it
+impossible to change any pin configuration.
 
-Fully agreed.
+Fix this by pretending there are at least 8 chips on any
+'X' SoC for the purposes of calculating max_register. This
+ensures the shadow group is accessible.
 
+Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+---
+ drivers/pinctrl/pinctrl-ingenic.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-
+diff --git a/drivers/pinctrl/pinctrl-ingenic.c b/drivers/pinctrl/pinctrl-ingenic.c
+index 2712f51eb238..9d2bccda50f1 100644
+--- a/drivers/pinctrl/pinctrl-ingenic.c
++++ b/drivers/pinctrl/pinctrl-ingenic.c
+@@ -4168,7 +4168,10 @@ static int __init ingenic_pinctrl_probe(struct platform_device *pdev)
+ 		return PTR_ERR(base);
+ 
+ 	regmap_config = ingenic_pinctrl_regmap_config;
+-	regmap_config.max_register = chip_info->num_chips * chip_info->reg_offset;
++	if (chip_info->version >= ID_X1000)
++		regmap_config.max_register = MIN(8, chip_info->num_chips) * chip_info->reg_offset;
++	else
++		regmap_config.max_register = chip_info->num_chips * chip_info->reg_offset;
+ 
+ 	jzpc->map = devm_regmap_init_mmio(dev, base, &regmap_config);
+ 	if (IS_ERR(jzpc->map)) {
 -- 
-Best Regards
-Masahiro Yamada
+2.34.1
+

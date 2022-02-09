@@ -2,37 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8EC74AE888
+	by mail.lfdr.de (Postfix) with ESMTP id 6F8BE4AE887
 	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 05:14:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348032AbiBIEOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 23:14:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42542 "EHLO
+        id S243575AbiBIEOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 23:14:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243116AbiBIDWy (ORCPT
+        with ESMTP id S1346273AbiBIDXX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 22:22:54 -0500
+        Tue, 8 Feb 2022 22:23:23 -0500
 Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE49EC061576;
-        Tue,  8 Feb 2022 19:22:53 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0257DC061576;
+        Tue,  8 Feb 2022 19:23:23 -0800 (PST)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1644376968;
+        t=1644376998;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding;
-        bh=hLaxf6+mwc2bWStgicWOQJDXt1cFA12+VvmMUCrykgo=;
-        b=L0ceTlel3Z0OmlSwarXSFM4seNY/em3QuxmSPL7wV5djK8cAV1YvelNQyqgMzAeuuNvroB
-        BluClShiGljeqh5B1BpH7UntjII+666CauVzpFX7OXiU3qhaiCJVuCJym7SPrU/OIJNhMz
-        A++8xvXXqOqZoOenVXSkS1e9IhuQAvI=
+        bh=Y8t74zSXdVdVEqvsmjbyK1jndX1+u445HuQ3KsiGyrE=;
+        b=wK3CEApaLy3nGlQriQlv3vZpjrLb/IInbkvLnEqImOLPlX/zjErxQ0/vOW2nT2Ggv43Ray
+        WwwgLOng4itLCuvHqrjq2h+FcuBigxX9xw0Pf2Ev49FOxFJoX1Sh4HnEihYBA31m/B1319
+        DO9Gs92N/WudhHOaNiyiNblIMnQJC5E=
 From:   Cai Huoqing <cai.huoqing@linux.dev>
 To:     cai.huoqing@linux.dev
-Cc:     Vinod Koul <vkoul@kernel.org>, Salah Triki <salah.triki@gmail.com>,
-        Jason Wang <wangborong@cdjrlc.com>, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] dmaengine: ppc4xx: Make use of the helper macro LIST_HEAD()
-Date:   Wed,  9 Feb 2022 11:22:19 +0800
-Message-Id: <20220209032221.37211-1-cai.huoqing@linux.dev>
+Cc:     "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] Drivers: hv: utils: Make use of the helper macro LIST_HEAD()
+Date:   Wed,  9 Feb 2022 11:22:51 +0800
+Message-Id: <20220209032251.37362-1-cai.huoqing@linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
@@ -52,23 +54,22 @@ Replace "struct list_head head = LIST_HEAD_INIT(head)" with
 
 Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
 ---
- drivers/dma/ppc4xx/adma.c | 2 +-
+ drivers/hv/hv_utils_transport.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/dma/ppc4xx/adma.c b/drivers/dma/ppc4xx/adma.c
-index 5e46e347e28b..6b5e91f26afc 100644
---- a/drivers/dma/ppc4xx/adma.c
-+++ b/drivers/dma/ppc4xx/adma.c
-@@ -1686,8 +1686,8 @@ static struct ppc440spe_adma_desc_slot *ppc440spe_adma_alloc_slots(
+diff --git a/drivers/hv/hv_utils_transport.c b/drivers/hv/hv_utils_transport.c
+index eb2833d2b5d0..832885198643 100644
+--- a/drivers/hv/hv_utils_transport.c
++++ b/drivers/hv/hv_utils_transport.c
+@@ -13,7 +13,7 @@
+ #include "hv_utils_transport.h"
+ 
+ static DEFINE_SPINLOCK(hvt_list_lock);
+-static struct list_head hvt_list = LIST_HEAD_INIT(hvt_list);
++static LIST_HEAD(hvt_list);
+ 
+ static void hvt_reset(struct hvutil_transport *hvt)
  {
- 	struct ppc440spe_adma_desc_slot *iter = NULL, *_iter;
- 	struct ppc440spe_adma_desc_slot *alloc_start = NULL;
--	struct list_head chain = LIST_HEAD_INIT(chain);
- 	int slots_found, retry = 0;
-+	LIST_HEAD(chain);
- 
- 
- 	BUG_ON(!num_slots || !slots_per_op);
 -- 
 2.25.1
 

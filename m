@@ -2,86 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFDBF4AE737
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 03:45:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4D6F4AE6CF
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 03:41:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234615AbiBICnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 21:43:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59392 "EHLO
+        id S241499AbiBICkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 21:40:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243768AbiBIBt6 (ORCPT
+        with ESMTP id S243903AbiBIBzA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 20:49:58 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25976C0613CA
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 17:49:57 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id z20so1361785ljo.6
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 17:49:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ccvf/lE8CFEFcKmjCKKQmAS5+2lkQ1u4zosOVr9I0b8=;
-        b=zj+L+nlzpZ/ar3DgWQcRAu1Rsinfnq86FOdf+22duu+UtJlmeoz1bqatFORy/8J8sb
-         ZPwtLThHJJ4r93aH+8geX09s5A0oub9yckPa4N8Q/NfuL/G7L2J57on8ecZSd+Ac3IDq
-         9BvpXTADNk6RXsn0H60y+c9D7EdYKFj4HOKy3fQNFUooCuF8kMDCpLnQM9dM5Qets9S0
-         4Mv7DpTOnbQi/XBT9HSq1JZaTzDBC+qJ6t5ioNng3TyWl06vjCqvh8PFKh1Xj1pJwMMg
-         R8LLNUvm6+h/ZOAvxR/Akc1hBVWl63wFS8LKPNr9pkM973buxB7xwOHP7Oy1djXfL5Qs
-         AVxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ccvf/lE8CFEFcKmjCKKQmAS5+2lkQ1u4zosOVr9I0b8=;
-        b=SJuhz8SLBSK20Dlt0w2kNk4+hBg1EGsKIHzoNaSMO8qYgTAmwb2ANbFKc+OLX0k1ik
-         z5EQQhJYnYmGDsz13f0i9H5hfNoVhlBoL80lt2CAH7G2GcAFTu9UVIV7qZHt3D8aan1c
-         ui3LvPLSIXZ9ULs32jvudF6uwA8JU6XQ+dCOjQkVg/levp3jTkiB+9iFm/U90Cm4xaZH
-         3lBrJ0T6ZYIDQwVzZF6SiivU9KDaqm6UYuS6cgctgNCOJ/lo2SVy6btX4FvkAfEObKxU
-         /14+C3l0da/6nc41R+RqHmOyzpdPNGnYlLYsVXmS7YD1zV9v2RqoJTc1/vyklwBbmtbP
-         xlYA==
-X-Gm-Message-State: AOAM530dVEQrqsgGBunoUaprHyvgPlW+UQRXQRWMwycAkZefCKFWT1k6
-        +FSUi4xFgA5/YQSm6Ue0GdWLhQ==
-X-Google-Smtp-Source: ABdhPJwZM2W4CYOeo7xJdXSzCmCWqxb2jc1HMIyxXf4e2nGnJWVmM/oUsl91KCHs4+mIOJYfbYmm3Q==
-X-Received: by 2002:a05:651c:2108:: with SMTP id a8mr84082ljq.22.1644371395192;
-        Tue, 08 Feb 2022 17:49:55 -0800 (PST)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id w22sm2265955ljh.44.2022.02.08.17.49.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Feb 2022 17:49:54 -0800 (PST)
-Message-ID: <8d710de8-f340-f15a-30c0-3358536bb4f5@linaro.org>
-Date:   Wed, 9 Feb 2022 04:49:53 +0300
+        Tue, 8 Feb 2022 20:55:00 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CA60C06157B;
+        Tue,  8 Feb 2022 17:54:58 -0800 (PST)
+X-UUID: 327fe49623704569b14410ec47a335d1-20220209
+X-UUID: 327fe49623704569b14410ec47a335d1-20220209
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <chun-jie.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 530702992; Wed, 09 Feb 2022 09:54:55 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Wed, 9 Feb 2022 09:54:53 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 9 Feb 2022 09:54:53 +0800
+Message-ID: <caebc48b7704f5e90a7513e9857644fea29b39a6.camel@mediatek.com>
+Subject: Re: [v2 3/3] clk: mediatek: Integrate vppsys with mtk-mmsys in
+ MT8195
+From:   Chun-Jie Chen <chun-jie.chen@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        srv_heupstream <srv_heupstream@mediatek.com>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Wed, 9 Feb 2022 09:54:53 +0800
+In-Reply-To: <e5ca60a0-4fee-0d6b-0714-77dc51f5a7cf@collabora.com>
+References: <20220110005902.27148-1-chun-jie.chen@mediatek.com>
+         <20220110005902.27148-4-chun-jie.chen@mediatek.com>
+         <e5ca60a0-4fee-0d6b-0714-77dc51f5a7cf@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH 1/3] drm/msm/dpu1: Add DMA2, DMA3 clock control to enum
-Content-Language: en-GB
-To:     Jami Kettunen <jami.kettunen@somainline.org>,
-        linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Jeffrey Hugo <jeffrey.l.hugo@gmail.com>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        Kalyan Thota <quic_kalyant@quicinc.com>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20220113145111.29984-1-jami.kettunen@somainline.org>
- <20220113145111.29984-2-jami.kettunen@somainline.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220113145111.29984-2-jami.kettunen@somainline.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,37 +67,180 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/01/2022 17:51, Jami Kettunen wrote:
-> From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+On Mon, 2022-01-10 at 22:36 +0800, AngeloGioacchino Del Regno wrote:
+> Il 10/01/22 01:59, Chun-Jie Chen ha scritto:
+> > Integrate vpp0 and vpp1 with mtk-mmsys driver which
+> > will populate device by platform_device_register_data
+> > to start vppsys clock driver.
+> > 
+> > Signed-off-by: Chun-Jie Chen <chun-jie.chen@mediatek.com>
 > 
-> The enum dpu_clk_ctrl_type misses DPU_CLK_CTRL_DMA{2,3} even though
-> this driver does actually handle both, if present: add the two in
-> preparation for adding support for SoCs having them.
+> Hello Chun-Jie,
 > 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-> Signed-off-by: Jami Kettunen <jami.kettunen@somainline.org>
-
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
-> ---
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h | 2 ++
->   1 file changed, 2 insertions(+)
+> I agree with this series and I would be happy to give you my R-b, but
+> this patch will make these clocks to *never* probe in in the targeted
+> kernel version.
 > 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-> index 31af04afda7d..736f52c742fb 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-> @@ -435,6 +435,8 @@ enum dpu_clk_ctrl_type {
->   	DPU_CLK_CTRL_RGB3,
->   	DPU_CLK_CTRL_DMA0,
->   	DPU_CLK_CTRL_DMA1,
-> +	DPU_CLK_CTRL_DMA2,
-> +	DPU_CLK_CTRL_DMA3,
->   	DPU_CLK_CTRL_CURSOR0,
->   	DPU_CLK_CTRL_CURSOR1,
->   	DPU_CLK_CTRL_INLINE_ROT0_SSPP,
+> You forgot to mention that this patch will break vpp0/vpp1 clocks
+> entirely
+> unless applied on top of patch series [1].
+> 
+> Please, either mention that said series is *required* for this one to
+> work
+> as expected, or move series [1], patches 6 and 7 to this series
+> instead;
+> since the MDP3 driver will need quite a while to get merged, I would
+> suggest
+> to move the patches here, as to get something "complete" to merge.
+> 
+> [1]: 
+> https://urldefense.com/v3/__https://patchwork.kernel.org/project/linux-mediatek/list/?series=568283__;!!CTRNKA9wMg0ARbw!wmrogRswnz6kpeUHCcHn5KDCMwLDf-hiX-e2cPQgx_5-V6YnB_dAbRZRayxp0K_Jbu00$
+>  
+> 
+
+Thanks for your reminder, I only mention the dependence patch in v1,
+but forgot it in v2.
 
 
--- 
-With best wishes
-Dmitry
+> > ---
+> >   drivers/clk/mediatek/clk-mt8195-vpp0.c | 42 +++++++++++++++++--
+> > -------
+> >   drivers/clk/mediatek/clk-mt8195-vpp1.c | 42 +++++++++++++++++--
+> > -------
+> >   2 files changed, 56 insertions(+), 28 deletions(-)
+> > 
+> > diff --git a/drivers/clk/mediatek/clk-mt8195-vpp0.c
+> > b/drivers/clk/mediatek/clk-mt8195-vpp0.c
+> > index c3241466a8d0..68c375bfce8b 100644
+> > --- a/drivers/clk/mediatek/clk-mt8195-vpp0.c
+> > +++ b/drivers/clk/mediatek/clk-mt8195-vpp0.c
+> > @@ -86,25 +86,39 @@ static const struct mtk_gate vpp0_clks[] = {
+> >   	GATE_VPP0_2(CLK_VPP0_WARP1_MDP_DL_ASYNC,
+> > "vpp0_warp1_mdp_dl_async", "top_wpe_vpp", 3),
+> >   };
+> >   
+> > -static const struct mtk_clk_desc vpp0_desc = {
+> > -	.clks = vpp0_clks,
+> > -	.num_clks = ARRAY_SIZE(vpp0_clks),
+> > -};
+> > +static int clk_mt8195_vpp0_probe(struct platform_device *pdev)
+> > +{
+> > +	struct device *dev = &pdev->dev;
+> > +	struct device_node *node = dev->parent->of_node;
+> > +	struct clk_onecell_data *clk_data;
+> > +	int r;
+> >   
+> > -static const struct of_device_id of_match_clk_mt8195_vpp0[] = {
+> > -	{
+> > -		.compatible = "mediatek,mt8195-vppsys0",
+> > -		.data = &vpp0_desc,
+> > -	}, {
+> > -		/* sentinel */
+> > -	}
+> > -};
+> > +	clk_data = mtk_alloc_clk_data(CLK_VPP0_NR_CLK);
+> > +	if (!clk_data)
+> > +		return -ENOMEM;
+> > +
+> > +	r = mtk_clk_register_gates(node, vpp0_clks,
+> > ARRAY_SIZE(vpp0_clks), clk_data);
+> > +	if (r)
+> > +		goto free_vpp0_data;
+> > +
+> > +	r = of_clk_add_provider(node, of_clk_src_onecell_get,
+> > clk_data);
+> > +	if (r)
+> > +		goto unregister_clk;
+> > +
+> > +	return r;
+> > +
+> > +unregister_clk:
+> > +	mtk_clk_unregister(clk_data);
+> > +
+> > +free_vpp0_data:
+> > +	mtk_free_clk_data(clk_data);
+> > +	return r;
+> > +}
+> >   
+> >   static struct platform_driver clk_mt8195_vpp0_drv = {
+> > -	.probe = mtk_clk_simple_probe,
+> > +	.probe = clk_mt8195_vpp0_probe,
+> >   	.driver = {
+> >   		.name = "clk-mt8195-vpp0",
+> > -		.of_match_table = of_match_clk_mt8195_vpp0,
+> >   	},
+> >   };
+> >   builtin_platform_driver(clk_mt8195_vpp0_drv);
+> > diff --git a/drivers/clk/mediatek/clk-mt8195-vpp1.c
+> > b/drivers/clk/mediatek/clk-mt8195-vpp1.c
+> > index ce0b9a40a179..237077c60f54 100644
+> > --- a/drivers/clk/mediatek/clk-mt8195-vpp1.c
+> > +++ b/drivers/clk/mediatek/clk-mt8195-vpp1.c
+> > @@ -84,25 +84,39 @@ static const struct mtk_gate vpp1_clks[] = {
+> >   	GATE_VPP1_1(CLK_VPP1_VPP_SPLIT_26M, "vpp1_vpp_split_26m",
+> > "clk26m", 26),
+> >   };
+> >   
+> > -static const struct mtk_clk_desc vpp1_desc = {
+> > -	.clks = vpp1_clks,
+> > -	.num_clks = ARRAY_SIZE(vpp1_clks),
+> > -};
+> > +static int clk_mt8195_vpp1_probe(struct platform_device *pdev)
+> > +{
+> > +	struct device *dev = &pdev->dev;
+> > +	struct device_node *node = dev->parent->of_node;
+> > +	struct clk_onecell_data *clk_data;
+> > +	int r;
+> >   
+> > -static const struct of_device_id of_match_clk_mt8195_vpp1[] = {
+> > -	{
+> > -		.compatible = "mediatek,mt8195-vppsys1",
+> > -		.data = &vpp1_desc,
+> > -	}, {
+> > -		/* sentinel */
+> > -	}
+> > -};
+> > +	clk_data = mtk_alloc_clk_data(CLK_VPP1_NR_CLK);
+> > +	if (!clk_data)
+> > +		return -ENOMEM;
+> > +
+> > +	r = mtk_clk_register_gates(node, vpp1_clks,
+> > ARRAY_SIZE(vpp1_clks), clk_data);
+> > +	if (r)
+> > +		goto free_vpp1_data;
+> > +
+> > +	r = of_clk_add_provider(node, of_clk_src_onecell_get,
+> > clk_data);
+> > +	if (r)
+> > +		goto unregister_clk;
+> > +
+> > +	return r;
+> > +
+> > +unregister_clk:
+> > +	mtk_clk_unregister(clk_data);
+> > +
+> > +free_vpp1_data:
+> > +	mtk_free_clk_data(clk_data);
+> > +	return r;
+> > +}
+> >   
+> >   static struct platform_driver clk_mt8195_vpp1_drv = {
+> > -	.probe = mtk_clk_simple_probe,
+> > +	.probe = clk_mt8195_vpp1_probe,
+> >   	.driver = {
+> >   		.name = "clk-mt8195-vpp1",
+> > -		.of_match_table = of_match_clk_mt8195_vpp1,
+> >   	},
+> >   };
+> >   builtin_platform_driver(clk_mt8195_vpp1_drv);
+> > 
+> 
+> 
+> -- 
+> AngeloGioacchino Del Regno
+> Software Engineer
+> 
+> Collabora Ltd.
+> Platinum Building, St John's Innovation Park, Cambridge CB4 0DS, UK
+> Registered in England & Wales, no. 5513718
+

@@ -2,57 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D73A4AFEE9
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 22:04:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B32E4AFEF5
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 22:06:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232815AbiBIVEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 16:04:39 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:54956 "EHLO
+        id S232828AbiBIVFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 16:05:12 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:56540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232762AbiBIVEe (ORCPT
+        with ESMTP id S232762AbiBIVFK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 16:04:34 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA92C033255
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 13:04:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644440677; x=1675976677;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9WFgncTQailPw0fCuxpKTUIeFrcwnCEtfpmUPBiT+Zg=;
-  b=dpLoguLEY9t2TFtVeHbzyThtW2oSsiYEQbzS4XZaq/7QNJhAur4dn+2+
-   cj/hs8haeyfGETEl1l+CMgZYlfPkiIrwDKPF9muJISmFYKXsUx3N0Xr+m
-   rzid2pycZil+1sq/nO6+AdI4lH5qUfia1iNSx7KQRMDEQdPTgHToDBENP
-   6NCCCiaqvVmX0DvyyahjSuE8ScB/lo7kSsUho8TufyoCgYv3hyQ+4cbZi
-   R1hb7cah84krsnMZhEYgvelTsq9SoOlL0fKbOrLaHTdEI8Gvrq+DFBZ2F
-   7wvW4Hzeot7JpGN+ZY5xK6KBL0W8DwqRSJQ5hmGKS+smJ2kQgNp4TDcIG
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="246914846"
-X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
-   d="scan'208";a="246914846"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 13:04:36 -0800
-X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
-   d="scan'208";a="701411368"
-Received: from guptapa-mobl1.amr.corp.intel.com ([10.251.3.164])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 13:04:36 -0800
-Date:   Wed, 9 Feb 2022 13:04:36 -0800
-From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Andi Kleen <ak@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>, linux-kernel@vger.kernel.org,
-        antonio.gomez.iglesias@linux.intel.com, neelima.krishnan@intel.com
-Subject: [PATCH] x86/tsx: Use MSR_TSX_CTRL to clear CPUID bits
-Message-ID: <5bd785a1d6ea0b572250add0c6617b4504bc24d1.1644440311.git.pawan.kumar.gupta@linux.intel.com>
+        Wed, 9 Feb 2022 16:05:10 -0500
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540FEC0DE7F8;
+        Wed,  9 Feb 2022 13:05:13 -0800 (PST)
+Received: by mail-qv1-xf2c.google.com with SMTP id o5so2896277qvm.3;
+        Wed, 09 Feb 2022 13:05:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:from:subject:message-id:date:user-agent:mime-version
+         :content-transfer-encoding;
+        bh=ac1mMycr6TtXOk3H7uuzPcsuDtpgesWeY4zn/Orjm6k=;
+        b=AjKI75/R1jH5ydz2pCB/liWUcVbLcrO0FSCITzpud+/+zRW4g3zJhXXXyutPeVN9Sh
+         +3ZZjPCe1jTB2iELArMj0vsWlPP60zqNpNU+9oRG4A/X0FsK+hFqiHcZlFYwHOt5eYyk
+         ZT8zlgWt6BZ64v3ua/1Cb60Q91Qp4BpYPUxAeVdcvSW6yaJ0N/iOSQNm4JRqsmPuk7bu
+         g2cbcx8MhvZsSExbkVnA0RZD5VyoW1QYrdp0uPzPJEqww3rYr5u3obNF5fr96t81a/gu
+         exJelT0boFFhL1IHOMAPHaFLVyCCkS1QNMyLy2WNKnyODQblH5l3yK6GBn7Djq5fVfas
+         thEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:to:from:subject:message-id:date:user-agent
+         :mime-version:content-transfer-encoding;
+        bh=ac1mMycr6TtXOk3H7uuzPcsuDtpgesWeY4zn/Orjm6k=;
+        b=cmwAkQOO2X5m3gh1vxpNxrk4PT0JA+Xne5KmK3gyozOJVrjKXglXSpWaRjKtMEpjdO
+         RsRs3aBZjmc5AdNWO3ttUoFInDbFTGeKmMk0rDQecB/UFQYoQlBmq82YhnJB55JgkcjY
+         2I29gyh0KKWm4AQagSDw/zGq34i4KGj1qQLTXdf/irhoRwLq5m2CZd4WuPfb83OCj7Ak
+         pkjkQY24bS0t7ew2+dASCELeQbHVAkcyErGVDfPb3T4B1vxf8YiKEExPzVpm1uTIrlBB
+         TpMNkHBXQvlosEPfm/oAEWMkBNl+MDCiU3GUBPS+hXhLjS4W4NrBsGOZRdFRPSVXH6PY
+         dQ/w==
+X-Gm-Message-State: AOAM5301cQ0dzjdPkvb7iqnH3tavbensd5Emntw2CtozyzS4+K+9zU3X
+        APwJT3t286vzxpHlF3qWlg4=
+X-Google-Smtp-Source: ABdhPJyn0A+6yUuYEqSwzNY19jd10m0+ChZ9Yxs+ZBCojfgDiSXvo6Nm285EbLGMmt7G7blrhpS8MQ==
+X-Received: by 2002:ad4:5c6d:: with SMTP id i13mr1651202qvh.120.1644440712507;
+        Wed, 09 Feb 2022 13:05:12 -0800 (PST)
+Received: from [120.7.1.38] (198-84-206-107.cpe.teksavvy.com. [198.84.206.107])
+        by smtp.gmail.com with ESMTPSA id b184sm9198490qkf.87.2022.02.09.13.05.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Feb 2022 13:05:11 -0800 (PST)
+To:     linux-pm@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+From:   Woody Suwalski <wsuwalski@gmail.com>
+Subject: [PATCH] fix linux 5.16 freeze regression on 32-bit ThinkPad T40
+Message-ID: <80742062-8629-3978-e78d-92ffc9bb2e0b@gmail.com>
+Date:   Wed, 9 Feb 2022 16:05:09 -0500
+User-Agent: Mozilla/5.0 (X11; Linux i686; rv:68.0) Gecko/20100101 Firefox/68.0
+ SeaMonkey/2.53.10.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.0 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,60 +70,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tsx_clear_cpuid() uses MSR_TSX_FORCE_ABORT to clear CPUID.RTM and
-CPUID.HLE. Not all CPUs support MSR_TSX_FORCE_ABORT, alternatively use
-MSR_IA32_TSX_CTRL when supported.
+From: Woody Suwalski <wsuwalski@gmail.com>
 
-Fixes: 293649307ef9 ("x86/tsx: Clear CPUID bits when TSX always force aborts")
-Reported-by: kernel test robot <lkp@intel.com>
-Tested-by: Neelima Krishnan <neelima.krishnan@intel.com>
-Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Add and ACPI idle power level limit for 32-bit ThinkPad T40.
+
+There is a regression on T40 introduced by commit d6b88ce2, starting 
+with kernel 5.16:
+
+commit d6b88ce2eb9d2698eb24451eb92c0a1649b17bb1
+Author: Richard Gong <richard.gong@amd.com>
+Date:   Wed Sep 22 08:31:16 2021 -0500
+
+     ACPI: processor idle: Allow playing dead in C3 state
+
+The above patch is trying to enter C3 state during init, what is causing 
+a T40 system freeze. I have not found a similar issue on any other of my 
+32-bit machines.
+
+The fix is to add another exception to the processor_power_dmi_table[] list.
+As a result the dmesg shows as expected:
+
+     2.155398] ACPI: IBM ThinkPad T40 detected - limiting to C2 
+max_cstate. Override with "processor.max_cstate=9"
+[    2.155404] ACPI: processor limited to max C-state 2
+
+The fix is trivial and affects only vintage T40 systems.
+
+Signed-off-by: Woody Suwalski <wsuwalski@gmail.com>
 ---
- arch/x86/kernel/cpu/tsx.c | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
+--- a/drivers/acpi/processor_idle.c    2022-02-04 09:09:54.515906362 -0500
++++ b/drivers/acpi/processor_idle.c    2022-02-04 14:21:08.264911271 -0500
+@@ -96,6 +96,11 @@ static const struct dmi_system_id proces
+        DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK Computer Inc."),
+        DMI_MATCH(DMI_PRODUCT_NAME,"L8400B series Notebook PC")},
+       (void *)1},
++    /* T40 can not handle C3 idle state */
++    { set_max_cstate, "IBM ThinkPad T40", {
++      DMI_MATCH(DMI_SYS_VENDOR, "IBM"),
++      DMI_MATCH(DMI_PRODUCT_NAME, "23737CU")},
++     (void *)2},
+      {},
+  };
 
-diff --git a/arch/x86/kernel/cpu/tsx.c b/arch/x86/kernel/cpu/tsx.c
-index 9c7a5f049292..c2343ea911e8 100644
---- a/arch/x86/kernel/cpu/tsx.c
-+++ b/arch/x86/kernel/cpu/tsx.c
-@@ -58,7 +58,7 @@ void tsx_enable(void)
- 	wrmsrl(MSR_IA32_TSX_CTRL, tsx);
- }
- 
--static bool __init tsx_ctrl_is_supported(void)
-+static bool tsx_ctrl_is_supported(void)
- {
- 	u64 ia32_cap = x86_read_arch_cap_msr();
- 
-@@ -97,6 +97,10 @@ void tsx_clear_cpuid(void)
- 		rdmsrl(MSR_TSX_FORCE_ABORT, msr);
- 		msr |= MSR_TFA_TSX_CPUID_CLEAR;
- 		wrmsrl(MSR_TSX_FORCE_ABORT, msr);
-+	} else if (tsx_ctrl_is_supported()) {
-+		rdmsrl(MSR_IA32_TSX_CTRL, msr);
-+		msr |= TSX_CTRL_CPUID_CLEAR;
-+		wrmsrl(MSR_IA32_TSX_CTRL, msr);
- 	}
- }
- 
-@@ -106,13 +110,11 @@ void __init tsx_init(void)
- 	int ret;
- 
- 	/*
--	 * Hardware will always abort a TSX transaction if both CPUID bits
--	 * RTM_ALWAYS_ABORT and TSX_FORCE_ABORT are set. In this case, it is
--	 * better not to enumerate CPUID.RTM and CPUID.HLE bits. Clear them
--	 * here.
-+	 * Hardware will always abort a TSX transaction when CPUID
-+	 * RTM_ALWAYS_ABORT is set. In this case, it is better not to enumerate
-+	 * CPUID.RTM and CPUID.HLE bits. Clear them here.
- 	 */
--	if (boot_cpu_has(X86_FEATURE_RTM_ALWAYS_ABORT) &&
--	    boot_cpu_has(X86_FEATURE_TSX_FORCE_ABORT)) {
-+	if (boot_cpu_has(X86_FEATURE_RTM_ALWAYS_ABORT)) {
- 		tsx_ctrl_state = TSX_CTRL_RTM_ALWAYS_ABORT;
- 		tsx_clear_cpuid();
- 		setup_clear_cpu_cap(X86_FEATURE_RTM);
--- 
-2.31.1
 

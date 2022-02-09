@@ -2,141 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28F894AEBA7
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 09:00:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B4D94AEB8E
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 08:56:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240146AbiBIIAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 03:00:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49928 "EHLO
+        id S239941AbiBIHzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 02:55:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235466AbiBIIAS (ORCPT
+        with ESMTP id S233423AbiBIHzM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 03:00:18 -0500
-X-Greylist: delayed 363 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Feb 2022 00:00:21 PST
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.166])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1700C0613CA
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 00:00:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1644393256;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=sCy+BFzraB5UPCDrJqayTu4U5x2Azckr0KW+I3kfiQc=;
-    b=K9GgT2Gsq67ZGqFQdUZ6Ak/QSOAJogD90+bxmZUKtXDc9vR3k2qp07VDoEatKT9IwE
-    9/3OfmHeRCFkXwD0dr8TGh3G/GbG9EkmsQ0H2JlqmCOwGN2Q7SFWomKasV8ZSlL0X82k
-    CLciobQThGH4e9ehGnck7C/6iTqsAJZj+yWvQdr0eovdOcxLVQcstoqhqhZPmOuWbF/i
-    FRVZAT3wb/hdmYXLFVDCLteMTDMs3HJUzOpfUmaB5AdSNs4tTqOTGqmf4v2G+JrX56pa
-    gNmi2iDu1bP8M2Uecv4k/Xvb4iHhKNwVgyk8dykOaz+kcb0pstH1l88gmjStXW7ndRyF
-    /bCQ==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdd0DIgVuBOfXW6v7w=="
-X-RZG-CLASS-ID: mo00
-Received: from [IPV6:2a00:6020:1cfa:f900::b82]
-    by smtp.strato.de (RZmta 47.39.0 AUTH)
-    with ESMTPSA id L7379cy197sFNsZ
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Wed, 9 Feb 2022 08:54:15 +0100 (CET)
-Message-ID: <b4be7878-e461-e2c3-2aaf-89598ac8a64f@hartkopp.net>
-Date:   Wed, 9 Feb 2022 08:54:09 +0100
+        Wed, 9 Feb 2022 02:55:12 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DC28C05CB84;
+        Tue,  8 Feb 2022 23:55:16 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id v186so3685685ybg.1;
+        Tue, 08 Feb 2022 23:55:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eV794YHbVHS12HmSAomi+0BDrCTJ09pCtyoRkv+rxS4=;
+        b=IaqQH2L1wqV8U/xN3pp1SpF/OBUrJpDXSlrwH7ehrNLbySHv9Wu27FnQCLrzuLW/9H
+         0aEUMxpKbcOuYT3UfYeXlElDk4AtxnL1fiDwxlR9fidIi+pymWn+be3W4iP+LrhR1HIZ
+         t3k30fqsdNDFaaxi8YXi/rO7TvALjKbenZuYkWpXm1YywZngNy7K1Hma2dRZV8dzNooF
+         VVo+ma88TWMFfxjPhMjY4hJ5xBAc0GFFL6u5Rhn0e5HBKHTWYwQagu8p1JQ8+QopwgIM
+         lyYnjdMQIW2Jyo/BUaUtMNebOs0Rb8aHZrdgvCb+UB1WLg2FOSn+lytIsJNPg367umDb
+         IgRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eV794YHbVHS12HmSAomi+0BDrCTJ09pCtyoRkv+rxS4=;
+        b=m7Ho9O37bRCUp22bbuaf2X3E4fK28GO5wOzsoy5tQLRvJ0rh4Da+Uyme+HwYmg5U7m
+         tDJ+JmpNu78dUIiITnuLxhItMdVq7q3gqHThxdf2GkcaNinN2n5TYxSIo2P0WyewhEEE
+         uKVhcLeD5g7qHVSyc8zcdFO1mdR5mbhz+erCWsF427ztYEISwMMkcLxwLZ9MoCVoJBa7
+         xxrgNr7cAcIma6ipin+BSmbwhyU70LGQAMSYOVAG4Wi+YY6DUvKLpVQLWkPFW8sBfcqF
+         9HcwMBEzwdmVUe//33KAcRrCJVRnfvM4BsD10ypA65ouMTSHPpWffhRC2FcLD0vT6A1+
+         6bJg==
+X-Gm-Message-State: AOAM531b2Cksk1IFpB3i6FJqiR3w4iZjcJpxu95zIP0sqV119XCPAo/n
+        ETDDO+VvWvJRKe1MEFqIMV9UjRR3+PLFj24Xshg=
+X-Google-Smtp-Source: ABdhPJyYT4RXELVDsNxwkCYFgUOkQSg0SKPK6EQFP3US4fA/3rH2ApxDKrTuSpdjytjxSGybeJS7lxyFXdGT7d71NZg=
+X-Received: by 2002:a05:6902:4c2:: with SMTP id v2mr1053884ybs.429.1644393315563;
+ Tue, 08 Feb 2022 23:55:15 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH net] can: isotp: isotp_rcv_cf(): fix so->rx race problem
-Content-Language: en-US
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>,
-        davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1fb4407a-1269-ec50-0ad5-074e49f91144@hartkopp.net>
- <2aba02d4-0597-1d55-8b3e-2c67386f68cf@huawei.com>
- <64695483-ff75-4872-db81-ca55763f95cf@hartkopp.net>
- <d7e69278-d741-c706-65e1-e87623d9a8e8@huawei.com>
- <97339463-b357-3e0e-1cbf-c66415c08129@hartkopp.net>
- <24e6da96-a3e5-7b4e-102b-b5676770b80e@hartkopp.net>
- <20220128080704.ns5fzbyn72wfoqmx@pengutronix.de>
- <72419ca8-b0cb-1e9d-3fcc-655defb662df@hartkopp.net>
- <20220128084603.jvrvapqf5dt57yiq@pengutronix.de>
- <07c69ccd-dbc0-5c74-c68e-8636ec9179ef@hartkopp.net>
- <20220207081123.sdmczptqffwr64al@pengutronix.de>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <20220207081123.sdmczptqffwr64al@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220121221021.60533b009c357d660791476e@linux-foundation.org>
+ <20220122061228.nmuo75sDn%akpm@linux-foundation.org> <YgEeQNdgBuHRyEWl@dumbo>
+ <YgGTSR628xhRvCjB@bombadil.infradead.org> <CAA5qM4BGmrkwatyO_h3F=ErDZ9t5swuttbt6NkQU-1KDGDiD4g@mail.gmail.com>
+ <YgKmaggsipzzCGCg@bombadil.infradead.org> <YgNyAC8VMeuOD/uQ@dumbo>
+In-Reply-To: <YgNyAC8VMeuOD/uQ@dumbo>
+From:   Tong Zhang <ztong0001@gmail.com>
+Date:   Tue, 8 Feb 2022 23:55:04 -0800
+Message-ID: <CAA5qM4AkaYLxesaiy_X+ceEx0R9cXHdiLJE38v08bCjKXhxcMA@mail.gmail.com>
+Subject: Re: [PATCH v2] Fix regression due to "fs: move binfmt_misc sysctl to
+ its own file"
+To:     Domenico Andreoli <domenico.andreoli@linux.com>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        David Airlie <airlied@linux.ie>,
+        Andrew Morton <akpm@linux-foundation.org>, amir73il@gmail.com,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>, bcrl@kvack.org,
+        benh@kernel.crashing.org, clemens@ladisch.de, crope@iki.fi,
+        dgilbert@interlog.com, Greg KH <gregkh@linuxfoundation.org>,
+        jack@suse.cz, jani.nikula@intel.com, jani.nikula@linux.intel.com,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>, jlbec@evilplan.org,
+        john.ogness@linutronix.de, joonas.lahtinen@linux.intel.com,
+        Joseph Qi <joseph.qi@linux.alibaba.com>, julia.lawall@inria.fr,
+        Kees Cook <keescook@chromium.org>, kernel@tuxforce.de,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Mark Fasheh <mark@fasheh.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        mm-commits@vger.kernel.org, nixiaoming@huawei.com,
+        penguin-kernel@i-love.sakura.ne.jp, peterz@infradead.org,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Paul Turner <pjt@google.com>, pmladek@suse.com,
+        rafael@kernel.org, rodrigo.vivi@intel.com, rostedt@goodmis.org,
+        senozhatsky@chromium.org, sre@kernel.org, steve@sk2.org,
+        Suren Baghdasaryan <surenb@google.com>,
+        torvalds@linux-foundation.org, tytso@mit.edu,
+        Al Viro <viro@zeniv.linux.org.uk>, wangqing@vivo.com,
+        Iurii Zaikin <yzaikin@google.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        regressions@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marc,
+On Tue, Feb 8, 2022 at 11:49 PM Domenico Andreoli
+<domenico.andreoli@linux.com> wrote:
+>
+> Commit 3ba442d5331f did not go unnoticed, binfmt-support stopped to
+> work on my Debian system since v5.17-rc2 (did not check with -rc1).
+>
+> The existance of the /proc/sys/fs/binfmt_misc is a precondition for
+> attempting to mount the binfmt_misc fs, which in turn triggers the
+> autoload of the binfmt_misc module. Without it, no module is loaded
+> and no binfmt is available at boot.
+>
+> Building as built-in or manually loading the module and mounting the fs
+> works fine, it's therefore only a matter of interaction with user-space.
+> I could try to improve the Debian systemd configuration but I can't
+> say anything about the other distributions.
+>
+> This patch restores a working system right after boot.
+>
+> v2:
+> - move creation of fs/binfmt_misc to fs/file_table.c
+> - use IS_ENABLED() to conditionally create it
+>
+> Fixes: 3ba442d5331f ("fs: move binfmt_misc sysctl to its own file")
+> Signed-off-by: Domenico Andreoli <domenico.andreoli@linux.com>
+> Cc: Al Viro <viro@zeniv.linux.org.uk>
+> Cc: Amir Goldstein <amir73il@gmail.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Cc: Antti Palosaari <crope@iki.fi>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+> Cc: Benjamin LaHaise <bcrl@kvack.org>
+> Cc: Clemens Ladisch <clemens@ladisch.de>
+> Cc: David Airlie <airlied@linux.ie>
+> Cc: Douglas Gilbert <dgilbert@interlog.com>
+> Cc: Eric Biederman <ebiederm@xmission.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Iurii Zaikin <yzaikin@google.com>
+> Cc: James E.J. Bottomley <jejb@linux.ibm.com>
+> Cc: Jan Kara <jack@suse.cz>
+> Cc: Jani Nikula <jani.nikula@intel.com>
+> Cc: Jani Nikula <jani.nikula@linux.intel.com>
+> Cc: Joel Becker <jlbec@evilplan.org>
+> Cc: John Ogness <john.ogness@linutronix.de>
+> Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+> Cc: Joseph Qi <joseph.qi@linux.alibaba.com>
+> Cc: Julia Lawall <julia.lawall@inria.fr>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Lukas Middendorf <kernel@tuxforce.de>
+> Cc: Mark Fasheh <mark@fasheh.com>
+> Cc: Martin K. Petersen <martin.petersen@oracle.com>
+> Cc: Paul Turner <pjt@google.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Petr Mladek <pmladek@suse.com>
+> Cc: Phillip Potter <phil@philpotter.co.uk>
+> Cc: Qing Wang <wangqing@vivo.com>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
+> Cc: Sebastian Reichel <sre@kernel.org>
+> Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
+> Cc: Stephen Kitt <steve@sk2.org>
+> Cc: Steven Rostedt (VMware) <rostedt@goodmis.org>
+> Cc: Suren Baghdasaryan <surenb@google.com>
+> Cc: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+> Cc: "Theodore Ts'o" <tytso@mit.edu>
+> Cc: Xiaoming Ni <nixiaoming@huawei.com>
+>
+> ---
+>  fs/binfmt_misc.c |    6 +-----
+>  fs/file_table.c  |    2 ++
+>  2 files changed, 3 insertions(+), 5 deletions(-)
+>
+> Index: b/fs/binfmt_misc.c
+> ===================================================================
+> --- a/fs/binfmt_misc.c
+> +++ b/fs/binfmt_misc.c
+> @@ -817,20 +817,16 @@ static struct file_system_type bm_fs_typ
+>  };
+>  MODULE_ALIAS_FS("binfmt_misc");
+>
+> -static struct ctl_table_header *binfmt_misc_header;
+> -
+>  static int __init init_misc_binfmt(void)
+>  {
+>         int err = register_filesystem(&bm_fs_type);
+>         if (!err)
+>                 insert_binfmt(&misc_format);
+> -       binfmt_misc_header = register_sysctl_mount_point("fs/binfmt_misc");
+> -       return 0;
+> +       return err;
+>  }
+>
+>  static void __exit exit_misc_binfmt(void)
+>  {
+> -       unregister_sysctl_table(binfmt_misc_header);
+>         unregister_binfmt(&misc_format);
+>         unregister_filesystem(&bm_fs_type);
+>  }
+> Index: b/fs/file_table.c
+> ===================================================================
+> --- a/fs/file_table.c
+> +++ b/fs/file_table.c
+> @@ -119,6 +119,8 @@ static struct ctl_table fs_stat_sysctls[
+>  static int __init init_fs_stat_sysctls(void)
+>  {
+>         register_sysctl_init("fs", fs_stat_sysctls);
+> +       if (IS_ENABLED(CONFIG_BINFMT_MISC))
+> +               register_sysctl_mount_point("fs/binfmt_misc");
+>         return 0;
+>  }
+>  fs_initcall(init_fs_stat_sysctls);
 
-On 07.02.22 09:11, Marc Kleine-Budde wrote:
-> On 28.01.2022 15:48:05, Oliver Hartkopp wrote:
->> Hello Marc, hello William,
->>
->> On 28.01.22 09:46, Marc Kleine-Budde wrote:
->>> On 28.01.2022 09:32:40, Oliver Hartkopp wrote:
->>>>
->>>>
->>>> On 28.01.22 09:07, Marc Kleine-Budde wrote:
->>>>> On 28.01.2022 08:56:19, Oliver Hartkopp wrote:
->>>>>> I've seen the frame processing sometimes freezes for one second when
->>>>>> stressing the isotp_rcv() from multiple sources. This finally freezes
->>>>>> the entire softirq which is either not good and not needed as we only
->>>>>> need to fix this race for stress tests - and not for real world usage
->>>>>> that does not create this case.
->>>>>
->>>>> Hmmm, this doesn't sound good. Can you test with LOCKDEP enabled?
->>
->>
->>>> #
->>>> # Lock Debugging (spinlocks, mutexes, etc...)
->>>> #
->>>> CONFIG_LOCK_DEBUGGING_SUPPORT=y
->>>> # CONFIG_PROVE_LOCKING is not set
->>> CONFIG_PROVE_LOCKING=y
->>
->> Now enabled even more locking (seen relevant kernel config at the end).
->>
->> It turns out that there is no visible difference when using spin_lock() or
->> spin_trylock().
->>
->> I only got some of these kernel log entries
->>
->> Jan 28 11:13:14 silver kernel: [ 2396.323211] perf: interrupt took too long
->> (2549 > 2500), lowering kernel.perf_event_max_sample_rate to 78250
->> Jan 28 11:25:49 silver kernel: [ 3151.172773] perf: interrupt took too long
->> (3188 > 3186), lowering kernel.perf_event_max_sample_rate to 62500
->> Jan 28 11:45:24 silver kernel: [ 4325.583328] perf: interrupt took too long
->> (4009 > 3985), lowering kernel.perf_event_max_sample_rate to 49750
->> Jan 28 12:15:46 silver kernel: [ 6148.238246] perf: interrupt took too long
->> (5021 > 5011), lowering kernel.perf_event_max_sample_rate to 39750
->> Jan 28 13:01:45 silver kernel: [ 8907.303715] perf: interrupt took too long
->> (6285 > 6276), lowering kernel.perf_event_max_sample_rate to 31750
->>
->> But I get these sporadically anyway. No other LOCKDEP splat.
->>
->> At least the issue reported by William should be fixed now - but I'm still
->> unclear whether spin_lock() or spin_trylock() is the best approach here in
->> the NET_RX softirq?!?
-> 
-> With the !spin_trylock() -> return you are saying if something
-> concurrent happens, drop it. This doesn't sound correct.
+Looks good
+Thanks!
 
-Yes, I had the same feeling and did some extensive load tests using both 
-variants.
-
-It turned out the standard spin_lock() works excellent to fix the issue.
-
-Thanks for taking it for upstream here:
-https://lore.kernel.org/linux-can/20220209074818.3ylfz4zmuhit7orc@pengutronix.de/T/#t
-
-Best regards,
-Oliver
-
+Reviewed-by: Tong Zhang <ztong0001@gmail.com>

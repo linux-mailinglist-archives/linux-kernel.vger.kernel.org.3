@@ -2,130 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 908594AE88A
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 05:14:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8202C4AE87B
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 05:12:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348101AbiBIEOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 23:14:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47626 "EHLO
+        id S241252AbiBIEML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 23:12:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347362AbiBIDnz (ORCPT
+        with ESMTP id S1347379AbiBIDn6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 22:43:55 -0500
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2111.outbound.protection.outlook.com [40.107.255.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 672D2C0401C2;
+        Tue, 8 Feb 2022 22:43:58 -0500
+Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC9BC0401C4
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 19:34:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1644377670; x=1675913670;
+  h=message-id:date:mime-version:subject:from:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=ECyKNZsrCiAEyEZui/Gdj3P39GeKJgI9x3cOLnB6b1I=;
+  b=NtABWkB8uJKJwVIX3GXFHrh6qqu052xkVEjmxKz653hq3V97kFQHcrp/
+   5z+W8lGu6XgLwQpukmSpr+9DDcLs9cQAQvREbZlnd8NGjlbFN5lQDg7lB
+   qwx2LRj2/c8wiCfDbWFw+cSaZucfcR/EkKwwyUPHUPrN9THv5mTIKE+g3
+   6WwseJfk0xorfjgJVRMpTmM11eJgB8frA6EiM7lcYyeeuk6rotW/NF9EG
+   TrftntaAe7+do03F8sF+fiQF5eQVpoqparHqnSq68ACfz9//f0a8+WL/j
+   XSvnKL+MiPieiW76ftYuSAV+vhu07Z/IsQntm5hlcWS8XbRCTKV9eJFGp
+   g==;
+X-IronPort-AV: E=Sophos;i="5.88,354,1635177600"; 
+   d="scan'208";a="191411787"
+Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 09 Feb 2022 11:34:28 +0800
+IronPort-SDR: xaQrfv+ia8wzXo+suWcHIC3HwlVLcmM00Di+W8pFSYp/K3B4BIDI3Yf+EVz4yTxaMr5Nl97g22
+ 6BWeGbWMJoz+NgbuGd4JJTTBikg+9D6SgXDU6MDJpoGjvcw5wFBWTiYGw3bkIGibdo0vjiK3N6
+ e2QBdR5tiYtp1GA+IbGrQzps837in/UHSImcMXpRT09tKARFNmdnQJFEoiy4jvXCqAioJe/fcT
+ BkLiB7y9d14CaoQMBafEsb0Kkm5X63Tr329nxlKQANZnDLvXyQWOWUPiIBeFB/MgJvFSK228eI
+ 1KS1ewyvDOoZfm5n4MvscS4o
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 19:07:28 -0800
+IronPort-SDR: cApmr9vNjwkwMgD2J0tso2EY7822opmtZN8GZA16BH0lJy6x7AIg0IVHnMiRBGk83fPktd9k/L
+ HZSXm4WpM0VUqadc3NEbWvuWCT2MooALnjWaN6tCNYgTnATN1C3mwmPvZ1+wAZPN9NXGfTBEht
+ 5zuEM06zn5SCMNRJUdjKZ+ZEXaJhldni6vBAfNghGGE6HisHNgnFnMcxr/aMHA1AS835IVVdGi
+ Bjz0N4WckmM6t/e2mGkYDk+AE4rR4M6uEhbxvsk2j+F0eCoE/GAzv5zovDYM/MSMU/VNhsCxBD
+ LlA=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 19:34:29 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JtlqS4VPPz1SVp5
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 19:34:28 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:references:to:from:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1644377667; x=1646969668; bh=ECyKNZsrCiAEyEZui/Gdj3P39GeKJgI9x3c
+        OLnB6b1I=; b=YXp/9r3fixxNDIKmKPOYx3RrHjtLqJJIN+Ni5/IZLSK3Pd7t1ym
+        ef3ynXSz0cM16OUsbc1TxHb2H1K6L9CxECfRDIzbP5sA2OHf9tmQK0IPe4yRjcXq
+        NRYeKtiGZWhxTxvtO8nAG/MSiC1a4rWgTFETD7aE2RpbskOzdAuqAhYDlgK/iw9r
+        0TcETHhaJLHuuFKvV8HMhH0pphtbLrm3uD0qWmp4HN2J8JFNOIX13JNv6Q86QIh5
+        MlHdDqm/rYDm/YLOEllVzPwT9aShMxXl/W4iS+0EKRCNPRsXh/nG0O+c4PG8EiLW
+        j3JtpHxQsXHPdBpFad8FYbtPJ/rBKSOP6Dg==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 6XwcasC8GnU9 for <linux-kernel@vger.kernel.org>;
         Tue,  8 Feb 2022 19:34:27 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GhqVR3Nak7kkIeMJwDlKkDaD8sALShvo8+p5ZpwEVK7cGp8cgpM51A9IiCLqqvh6eQnE5OyyL/qAeqIykbOZeAvSUco4fxGAJAnJ4WMLx4XzKDocZs727ohHUlW2Y2UQpkQULCjOd5leoXpPhAyVROJFTx6X0Naf4j4gdWF1TF8dkOFBwRE4+0ojVxLhS16HJqq/hR7mBjUXYXd/CNFdM9h1XoTI7k1QwVzZVK1Ozsl+LjWh9Rid0psbZOlnyuDSyoX5eG2NrKvDDbKHrLc1/Kaxh6S809AS6i5Ctfi0CTEv/4vozN1l4j3WXa/9j2E6Z0tVcYVBbHjFSRYnhgH/2w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Kt8Fp/Y/pmQcZnD69FCQva2VMtd4VeCEv+SvtIlJAyw=;
- b=UvYvReRV7/wKC8qWc0gI0x17cPMS9OvvXs2atZX7WrUI83fSJgJ14wq9mm2NKrS7ZarvJtK1KIgF3Qb+mwjioHzwWv0lZelffEp7yxbceDxuDIR4b0nvf4nq7IkB8seLPJsBdOujyxa1plbzZyyqLdxnyPJtVhz6fahZQF/AykMovDeSj73VTl9HkfzkJnhA9tX0lU1wQ+lNJI7AuJwVfGUYEBCKXMcK74Iv10ylQqGQ9Db4oZp+7XfdCLqpCCvzWT7C7E0X+yY+rayPxmlQ6kaIymJECsZD3pE2JpcrEa3gxDIT6i2MOKN9gVox/3lsPxw1aIDmnqm8Ve1qiS2lew==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=quantacorp.onmicrosoft.com; s=selector2-quantacorp-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Kt8Fp/Y/pmQcZnD69FCQva2VMtd4VeCEv+SvtIlJAyw=;
- b=CpQMWbU3JICDipVabzZX9XCdHn25PN97GGlzkOOA+LUms1P5QjvHuKmY4EG1j8aN82OXmNWvT0RtE9rAMvUWfs55Mal/USCPiQI+5qlzKcfwgzCXrgs5sU1hjR6k+raJUHwl8Kse8fsBpom0Y6LnfK3sjjEAQygUFNgycTyf0n4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=quantatw.com;
-Received: from HK0PR04MB3282.apcprd04.prod.outlook.com (2603:1096:203:89::17)
- by HK0PR04MB3025.apcprd04.prod.outlook.com (2603:1096:203:3f::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.18; Wed, 9 Feb
- 2022 03:34:24 +0000
-Received: from HK0PR04MB3282.apcprd04.prod.outlook.com
- ([fe80::8160:1a0:97e1:9e53]) by HK0PR04MB3282.apcprd04.prod.outlook.com
- ([fe80::8160:1a0:97e1:9e53%3]) with mapi id 15.20.4951.019; Wed, 9 Feb 2022
- 03:34:24 +0000
-Message-ID: <fed6bad9-bf9b-90b5-57fd-083401f6c990@quantatw.com>
-Date:   Wed, 9 Feb 2022 11:34:23 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v2 2/2] usb: typec: fusb302: add support of
- supported_pd_rev
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Patrick Williams <patrick@stwcx.xyz>
-References: <20220208082026.4855-1-potin.lai@quantatw.com>
- <20220208112226.9108-1-potin.lai@quantatw.com>
- <20220208112226.9108-3-potin.lai@quantatw.com>
- <1acc1733-da53-6255-5cad-15f79850f44f@roeck-us.net>
-From:   Potin Lai <potin.lai@quantatw.com>
-In-Reply-To: <1acc1733-da53-6255-5cad-15f79850f44f@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: HK2PR04CA0073.apcprd04.prod.outlook.com
- (2603:1096:202:15::17) To HK0PR04MB3282.apcprd04.prod.outlook.com
- (2603:1096:203:89::17)
+Received: from [10.225.54.48] (unknown [10.225.54.48])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JtlqQ1rVMz1Rwrw;
+        Tue,  8 Feb 2022 19:34:26 -0800 (PST)
+Message-ID: <8d7d36e6-66ac-a318-dfce-6d5b01b51f3c@opensource.wdc.com>
+Date:   Wed, 9 Feb 2022 12:34:24 +0900
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1d4cdf85-9be4-4bd2-7d78-08d9eb7d117b
-X-MS-TrafficTypeDiagnostic: HK0PR04MB3025:EE_
-X-Microsoft-Antispam-PRVS: <HK0PR04MB30258860AAEE705BDCE252808E2E9@HK0PR04MB3025.apcprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fUiQ5FimRcgF+YH1E4sy/s//jrP2sb2OPhgxLj3TomQGXtuPSPly2KDfIBsZu3SwRUt1uIF7JC0QlfMypYxG+BXMiRzO8qu/P9XOM/PaFjjCfzuLFJ26SJtM2ZkV66VJiHafcDlZvI83r6DbDH78v8fkgAvLrAKBOBHu/GXR4pKgCXj4Bpv3qb1QkqOFqKQuZ0Px8djJFgS24DAQO5sZ5UREly/tHAcCxx/OYPkinSbvTFIN1VteYI6jf4GhgInLUU5W/x2S6qpFFLmqKiG81g0Dysxdt/BIF2ESmCj+IogjfC4W8uyt75FovghHnKyTZQR0OGe3v35b5jeCWE2s7OiV1f+bT2NLNUkDsfeMkdKF4d66vTscL8hpy6DBpe63xa1Qz3zepWYzrAY8xZS2EEj4SNFygILTONMli+2svndrnYbiS0egQBBwOxqHR3CqAEQz80dP2Vn2WAqDvf3B6mAhwGvT0COCZswRidEwJFmVladBs3sWsE90YtbWHzo3IfkjAuM27O+m8Gef/xcNugyvzxNlgySvjubWQwyElBVrTJsAZU1YUfxvJ8bojrBeXrwYIDtPcp5wQY8GwQwu8vDjqowI0PyNTGemULdi0VbLvn+Oy1wVJ1gnIX8buJ5ToUQh90Wsp5D7o9IxJM2D23jnKm01suOq/Hxl1WsJM3Pz6qqLkJ2KR7Dk+PPkobTiLXpJAC4lPj4l07uX/Lgf75BjuiYZBrmCIpPJwjN2AN1553DJmoyXJlUTIQktMcRc/Y58MMyG9hDxUk5PzxJ2fQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR04MB3282.apcprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(316002)(53546011)(83380400001)(2906002)(38100700002)(110136005)(86362001)(31696002)(508600001)(38350700002)(6486002)(52116002)(36756003)(2616005)(186003)(26005)(5660300002)(31686004)(44832011)(6512007)(6506007)(8936002)(4326008)(8676002)(66556008)(66476007)(66946007)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZHN3L0JDa0pwZUZaY2V3a3BoWE8wYW5GOUdmM3NGRGxBZ1Q3M3ZEZmlENUtJ?=
- =?utf-8?B?OS9nT20zVmxzUXJVaG4yb2RrZG9jSkpzdlY1RGxLanZMb1dyalhDSVA5T3hx?=
- =?utf-8?B?ci9YRzRGV001QVU2WEN0VVl6TVpzcmNaaVJERjRaUktlZVFkZXlhTTI5ZU5P?=
- =?utf-8?B?aTNBbk5kQWJSSHIxVUVpai96YU9ET0VobHhNQk1sbGp5b3krRGh3ajZTa2V0?=
- =?utf-8?B?ZFRWcGwxUEJFNytPM3lqUGJEbkpTOVlSMURUTXcrRFE1c3FYUTVha3NBSHhJ?=
- =?utf-8?B?YnRvaDF6YSt2T2RhUEVIYnJDK2NKMVJHaVcybHIrTGFwbzVna2JpWE1EKzNX?=
- =?utf-8?B?SVgwa0l6LzljTEtZL05QS0ZHbWZKUGpwamZTZ2tUMUFoMERTTFJUUzZvbTFk?=
- =?utf-8?B?eHFUNjNpNG9RV0VFU2ZLalpxUzQrVXVFVDUrcW9TLzM1Ym0weitxTEg3Z2Vs?=
- =?utf-8?B?YjNlZllIQnlXcm9VTmhiMVJJWGp0OStFMFVSQWFYQnJiZ3ZHemQ5TGF6SWtH?=
- =?utf-8?B?WlE2aUxSemMwb096VDVIaE8yZjlreUpkNm5lRTFON0puYzR1SUZJSzlMUHlD?=
- =?utf-8?B?MDQzRUZMc1JuRzVUQWQwdGV2UWgxcDdwWVNEbkxzME9tb0c0a0Z6SnJxc1Nz?=
- =?utf-8?B?K0pTaFd4cjA1ejNraGhFMGR4Z0VQUy9OWUJxbzhpbDIraFIxYytlSVAxRnVo?=
- =?utf-8?B?Vm5VZFR0M0xUcGlYNHVNejFkV05sb3BodkRUcGV6VTRwY3kyVk43TEpnT0FU?=
- =?utf-8?B?RXY2RSs1a0EzTGp5aGROb3FOWExaWEgwbkwwSGZrQnlubjVYVCtzQnZPakpr?=
- =?utf-8?B?QmcwUit6QSsyRTd1bURvV2pVQWFqTGxEVmVITHRvWTV0alc1dUpkVTU5amhk?=
- =?utf-8?B?MGxWcmU4QTd0cG5PKzgyZU02dFg5eThITXFCVS9rUmd1S09sSHlwRWlNcWNH?=
- =?utf-8?B?TXRnOUhKLzM0bi9rQ0d1cmpNZXRlYkwrV3REajd4elZmZDV4TjBpNytDVldG?=
- =?utf-8?B?SUl3Vm5palBDUEJWZVpMd3BwWTJvek5BY0JtTlFEa25TbHlqUHlYY2RLVFcv?=
- =?utf-8?B?YkduYkMrMTRHRE9DRlJLaStZTVQ4TzUySHZDUTJUNWFmT3J6OXAwM05JZHI3?=
- =?utf-8?B?TXpWR3dZdXpxNTFodlQrVlg5L3NOTlVxNnN5ZVRjT1g1a3pJQk5uYXBlQmRD?=
- =?utf-8?B?SXViQ1d6SERSWXB2eWFlbDBobG1PNENiaUtJM2lCdXVEQWRLYWtUbVVzVHV6?=
- =?utf-8?B?emlwc0h3Q3ZVSDdpUzFWeGs2LzUvUGJJTHRXTjFyY1RtYmtqUElablFLN3dv?=
- =?utf-8?B?NEY0WlJHN0xzcVFsL1JIclVWRGd0REh6UjV3alF5bHkyYmlEeE1uMFcyYXpw?=
- =?utf-8?B?WjY2WXhleTBBL09xM2dnS24vRUZNM20xV0tDSkdoc3RNaXlOWmRPVlAxMjhJ?=
- =?utf-8?B?MEtDSkFIUVVXcGd5Yi9XQ29UL1E2R2Vkc0xCcmkwU3Y5dnBCdFV0YlhPZ1Fa?=
- =?utf-8?B?WW0yNS9BbVdXUFFxeTdJUFFWWFVhZmlqTFBaYVg4dnVFWEprRFNFRGZVS2Zt?=
- =?utf-8?B?MzBldUNGSmVJMFhyWm44UjNBSkdLL0swem83R2R3SDJTTFhrRGdqaGNnL015?=
- =?utf-8?B?d3BLdVQ4Y2hNeEhUNmNJN3M5UjVEaDhLVm5RVnRyRGp5SjdEZzNJRFNxY2cy?=
- =?utf-8?B?WUkxZHBjU3pyQWprZTcveTIvemVEc1JTa1A0TDR0b1VCQ05WOERvanJBOFFv?=
- =?utf-8?B?M0d4aUtvWXE0bFdtWkhPZWRvWFZXb2lYYTRiTUlIbllHN1paRVBiRSs3bEVI?=
- =?utf-8?B?MWZLNzFlRmhwQytQR1U2d0MydnRjVnVtbW50VDhMV0hrWXY3NEtBY0FYaG9G?=
- =?utf-8?B?ekpxZzhqbzlvUmlYcDVzbUtSUXh6YVJXd3Q3NjBsaUpIWGwxcFMzQ29sM1Y3?=
- =?utf-8?B?bkVkeG5HUjJ5MGRISmUzd28wbU5NRE96WG5yWXU5VEF3THBMVmN3Tktma0x4?=
- =?utf-8?B?aFlkTDFsOFJrZEhhcUdsNXJqd2hBQ25yYmU3RDZoR09xUm1ZdXBLSEViaXRj?=
- =?utf-8?B?QlN2dFpkUzJ6U3k0MnN0QXV3MkE1Q2FrYjVNSkFseGhwdElCNUdpMDU4clJP?=
- =?utf-8?B?NHJNd2t4dTBCdmN1YlRqSTR5SFZYSzBzZkNrMVVsYUl0MHVYUW1qM1p1eUVY?=
- =?utf-8?Q?Ut1nZSgE9RH5FS5wkTHEeoY=3D?=
-X-OriginatorOrg: quantatw.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1d4cdf85-9be4-4bd2-7d78-08d9eb7d117b
-X-MS-Exchange-CrossTenant-AuthSource: HK0PR04MB3282.apcprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2022 03:34:24.8099
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 179b0327-07fc-4973-ac73-8de7313561b2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: XMEg2uwb96jrQbLnk51Rja8BCLoeYIgaTHcJMput0z5LX8hz0Kpoqz9LrjUn0/P1dseBaukTaIa7KKEG6Unupg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK0PR04MB3025
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.1
+Subject: Re: [PATCH] scsi: csiostor: replace snprintf with sysfs_emit
+Content-Language: en-US
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+To:     Joe Perches <joe@perches.com>, davidcomponentone@gmail.com,
+        jejb@linux.ibm.com
+Cc:     martin.petersen@oracle.com, bvanassche@acm.org,
+        yang.guang5@zte.com.cn, jiapeng.chong@linux.alibaba.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zeal Robot <zealci@zte.com.cn>
+References: <d711ec5a5f416204079155666d2de49d43070897.1644287527.git.yang.guang5@zte.com.cn>
+ <148a5448-71f1-4f39-834b-eb9283de0bfb@opensource.wdc.com>
+ <f4b63b5a4177e38dd80f102f87bbec3ea77d9fe8.camel@perches.com>
+ <0093948e-a408-61dd-3b51-524b6d112e35@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <0093948e-a408-61dd-3b51-524b6d112e35@opensource.wdc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -133,115 +104,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Guenter Roeck 於 2022/2/8 下午 11:22 寫道:
-> On 2/8/22 03:22, Potin Lai wrote:
->> Add support for passing supported PD rev to TCPM.
->> If "supported-pd-rev" property exist, then return supported_pd_rev as
->> defined value in DTS, otherwise return PD_MAX_REV
+On 2022/02/09 12:16, Damien Le Moal wrote:
+> On 2022/02/09 12:12, Joe Perches wrote:
+>> On Wed, 2022-02-09 at 11:36 +0900, Damien Le Moal wrote:
+>>> On 2/9/22 09:40, davidcomponentone@gmail.com wrote:
+>>>> From: Yang Guang <yang.guang5@zte.com.cn>
+>>>>
+>>>> coccinelle report:
+>>>> ./drivers/scsi/csiostor/csio_scsi.c:1433:8-16:
+>>>> WARNING: use scnprintf or sprintf
+>>>> ./drivers/scsi/csiostor/csio_scsi.c:1369:9-17:
+>>>> WARNING: use scnprintf or sprintf
+>>>> ./drivers/scsi/csiostor/csio_scsi.c:1479:8-16:
+>>>> WARNING: use scnprintf or sprintf
+>>>>
+>>>> Use sysfs_emit instead of scnprintf or sprintf makes more sense.
+>> []
+>>>> diff --git a/drivers/scsi/csiostor/csio_scsi.c b/drivers/scsi/csiostor/csio_scsi.c
+>> []
+>>>> @@ -1366,9 +1366,9 @@ csio_show_hw_state(struct device *dev,
+>>>>  	struct csio_hw *hw = csio_lnode_to_hw(ln);
+>>>>  
+>>>>  	if (csio_is_hw_ready(hw))
+>>>> -		return snprintf(buf, PAGE_SIZE, "ready\n");
+>>>> +		return sysfs_emit(buf, "ready\n");
+>>>>  	else
+>>>> -		return snprintf(buf, PAGE_SIZE, "not ready\n");
+>>>> +		return sysfs_emit(buf, "not ready\n");
+>>>
+>>> While at it, you could remove the useless "else" above.
 >>
->> Example of DTS:
+>> Or not.  It's fine as is.  It's just a style preference.
+> 
+> It is. I dislike the useless line of code in this case :)
+> 
 >>
->> fusb302: typec-portc@22 {
->>      compatible = "fcs,fusb302";
->>      reg = <0x22>;
->>      ...
->>      supported-pd-rev=<1>; // PD_REV20
->>      ...
->> };
+>> Another style option would be to use a ?: like any of
 >>
->
-> The new property needs to be documented. However, I am not entirely sure
-> I understand why it is needed. Wouldn't the supported PD revision
-> be a chip (fusb302) specific constant ? If so, why does it need a
-> devicetree property ? I think that needs some additional explanation.
->
-> Thanks,
-> Guenter
->
+>> 	return sysfs_emit(buf, "%sready\n", csio_is_hw_ready(hw) ? "" : "not ");
+>> or
+>> 	return sysfs_emit(buf, "%s\n", csio_is_hw_ready(hw) ? "ready" : "not ready");
+>> or
+>> 	return sysfs_emit(buf, csio_is_hw_ready(hw) ? "ready\n" : "not ready\n");
+> 
+> That is nice and can make that
+> 	
+> 	return sysfs_emit(buf, "%sready\n", csio_is_hw_ready(hw) ? "" : "not ");
 
-My initially intend was adding flexibility for developer to decided 
-which PD revision
-they want to use for negotiation.
+Oops. You did have that one listed... Read too quickly...
 
-I saw your reply in another patch,  I agree with you, it will be simple 
-and consistent if
-move "supported-pd-rev" to tcpm fwnode as other capabilities.
+> 
+> too :)
+> 
 
-Just want to double confirm, is "usb-connector.yaml" right place to put 
-documentation
-if adding "supported-pd-rev" in fwnode?
 
-Thanks,
-Potin
-
->> Signed-off-by: Potin Lai <potin.lai@quantatw.com>
->> ---
->>   drivers/usb/typec/tcpm/fusb302.c | 20 ++++++++++++++++++++
->>   1 file changed, 20 insertions(+)
->>
->> diff --git a/drivers/usb/typec/tcpm/fusb302.c 
->> b/drivers/usb/typec/tcpm/fusb302.c
->> index 72f9001b0792..8cff92d58b96 100644
->> --- a/drivers/usb/typec/tcpm/fusb302.c
->> +++ b/drivers/usb/typec/tcpm/fusb302.c
->> @@ -109,6 +109,9 @@ struct fusb302_chip {
->>       enum typec_cc_status cc2;
->>       u32 snk_pdo[PDO_MAX_OBJECTS];
->>   +    /* supported pd rev */
->> +    u32 supported_pd_rev;
->> +
->>   #ifdef CONFIG_DEBUG_FS
->>       struct dentry *dentry;
->>       /* lock for log buffer access */
->> @@ -1056,6 +1059,13 @@ static int tcpm_pd_transmit(struct tcpc_dev 
->> *dev, enum tcpm_transmit_type type,
->>       return ret;
->>   }
->>   +static u32 tcpm_supported_pd_rev(struct tcpc_dev *dev)
->> +{
->> +    struct fusb302_chip *chip = container_of(dev, struct fusb302_chip,
->> +                         tcpc_dev);
->> +    return chip->supported_pd_rev;
->> +}
->> +
->>   static enum typec_cc_status fusb302_bc_lvl_to_cc(u8 bc_lvl)
->>   {
->>       if (bc_lvl == FUSB_REG_STATUS0_BC_LVL_1230_MAX)
->> @@ -1129,6 +1139,7 @@ static void init_tcpc_dev(struct tcpc_dev 
->> *fusb302_tcpc_dev)
->>       fusb302_tcpc_dev->set_roles = tcpm_set_roles;
->>       fusb302_tcpc_dev->start_toggling = tcpm_start_toggling;
->>       fusb302_tcpc_dev->pd_transmit = tcpm_pd_transmit;
->> +    fusb302_tcpc_dev->supported_pd_rev = tcpm_supported_pd_rev;
->>   }
->>     static const char * const cc_polarity_name[] = {
->> @@ -1683,6 +1694,7 @@ static int fusb302_probe(struct i2c_client 
->> *client,
->>       struct fusb302_chip *chip;
->>       struct i2c_adapter *adapter = client->adapter;
->>       struct device *dev = &client->dev;
->> +    struct device_node *np = dev->of_node;
->>       const char *name;
->>       int ret = 0;
->>   @@ -1756,6 +1768,14 @@ static int fusb302_probe(struct i2c_client 
->> *client,
->>           dev_err(dev, "cannot request IRQ for GPIO Int_N, ret=%d", 
->> ret);
->>           goto tcpm_unregister_port;
->>       }
->> +
->> +    if (of_property_read_u32(np, "supported-pd-rev",
->> +                &chip->supported_pd_rev) < 0) {
->> +        chip->supported_pd_rev = PD_MAX_REV;
->> +    } else if (chip->supported_pd_rev > PD_MAX_REV) {
->> +        chip->supported_pd_rev = PD_MAX_REV;
->> +    }
->
-> The else part is also checked in the tcpm code and thus seems
-> to be redundant.
->
->> +
->>       enable_irq_wake(chip->gpio_int_n_irq);
->>       i2c_set_clientdata(client, chip);
->
+-- 
+Damien Le Moal
+Western Digital Research

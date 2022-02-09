@@ -2,131 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC9354B0153
+	by mail.lfdr.de (Postfix) with ESMTP id 2FE644B0151
 	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 00:32:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230458AbiBIXcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 18:32:02 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:56192 "EHLO
+        id S230453AbiBIXby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 18:31:54 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:52674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230475AbiBIXbL (ORCPT
+        with ESMTP id S230468AbiBIXbL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 9 Feb 2022 18:31:11 -0500
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D586E05ADC2;
-        Wed,  9 Feb 2022 15:31:07 -0800 (PST)
-Received: by mail-pf1-f175.google.com with SMTP id x15so4671634pfr.5;
-        Wed, 09 Feb 2022 15:31:07 -0800 (PST)
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0D37E0513B7;
+        Wed,  9 Feb 2022 15:31:08 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id qe15so3594670pjb.3;
+        Wed, 09 Feb 2022 15:31:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=dWppND9NpqLN1Tp3iTkqAOomYZbs0nhNFIMKosCdxW0=;
+        b=X94PRxzNF33Qcxf5R7s1lyX/ieIFiROBat+v/E4ngT3Odpkh9IKlR4fxWP1VYIrCzy
+         ozOqXf6GSFDXHUe7rvn4IBGuOCM6xR+FzvUrkdE96nd7yVwND98TGu+9mJbK6d1y88kJ
+         PIYbe3CGPu6/vsRQasrjLRhHwrvEP0GIIJJxll8Nd51FSVCFHXVraqzlENB/40ezxQxy
+         aodM+l0wzOVJgjX6G7Agh6rlvLnpOHloK6oEunEM9sbQ/GI7zhweq5VLWV7Z00A0PGPH
+         6kgbBqGb1YssY/LM/ixONLNSoIOL98zJGStFaJWdOykRb41oJOtDPGyV+5OkP7GOuWRv
+         Dt/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=E6xycm4hmRCeCF2fAz0KCw4zeWL4PHOyrTUozMcCahg=;
-        b=daUDlzRSzeRmDEwY9mkz98eKlgDZcHKh1oa/CP8NP0GkjL7NNmO6ATklbHr0etgDEy
-         jAkD8zVdqEhaFN+mqgWtpKoedZAnI+nilNIG/gtknw0FSDgO/lwrBN4RQMLBuilHBLD3
-         iTeTlrHY+JmD468WivMV49jjsYRkwthVwi0w13nU01kYngsx8P8oMVY3l4WGxZJ4cqLg
-         4y0XQZbuNHts84vNXlXwabt7tcaBUh41Q/NfXxLuDyWxD5LvvA53eTFO0KqofnWwV4kq
-         /TGBTE+lnG/Q9LwHodVJHfEu6hH6MPdkK/KQbfIPWQB58fFBdRq4hoK34zCoFOWqj8QR
-         c2HA==
-X-Gm-Message-State: AOAM532cZf0LCTu83xcDssgMMCdilAYr0mvhR1QyfT34gQMy+rzOQ2uf
-        EF+XUoj+VagGF14cU8EYK2hhw65eCzOburdf+zD/1l2e
-X-Google-Smtp-Source: ABdhPJxZqhpWC2lwtdeFkToCcerNanbm+NA01wfUW90jqS8wOVU85ldbDkA3kOg6hERpzClJNyhZzpHahX3cMAC0zcE=
-X-Received: by 2002:a63:2a02:: with SMTP id q2mr3781413pgq.519.1644449466554;
- Wed, 09 Feb 2022 15:31:06 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=dWppND9NpqLN1Tp3iTkqAOomYZbs0nhNFIMKosCdxW0=;
+        b=lLmIcFhmbznSP5SnbfG3hDe0e0HesmiTSmtf6x0AInHCB1a5Cpud7Gs4DBvbwOE0Zg
+         TauS353ubxlR7h2jOFB99Ui3ml2EzR4g3mwSBl18iexV3rNzpt8w4sNOljCel0i/wM41
+         95RV/Gny2xjIpredij8u0KLsH8gApzj0ddyVhioCgE1G+qsHlJ8eJKjXcExaojGA3LK9
+         H2Xj9LFD5IhJiLaM5e8cHWunnUHQA6y4KhlzoYzyY9d8z7kOwAv3pMR4MUStx4lHefS7
+         +X8LBHP8huA1MnF48VVb46jv9aQ67ec3gG7/JX4S6H+Gwe9Rk9bETChvpHKSpIZ8+qfW
+         CNaQ==
+X-Gm-Message-State: AOAM532ORWQgl0IeTKZQVTVDUUcwGfspvNWhUC77lEZwwDXbXPF7thtW
+        LlB43JcRuwIWMvPbSC3HytY=
+X-Google-Smtp-Source: ABdhPJymWHfD5zV4TBaM54z3IyhOOM+m+Ywq+QOSHiGqiXBoSdS+KUj7KSZelEFmMHnzP0xNqzFH+Q==
+X-Received: by 2002:a17:902:7603:: with SMTP id k3mr4816228pll.160.1644449467530;
+        Wed, 09 Feb 2022 15:31:07 -0800 (PST)
+Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
+        by smtp.gmail.com with ESMTPSA id mn7sm6974530pjb.8.2022.02.09.15.31.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Feb 2022 15:31:06 -0800 (PST)
+Date:   Thu, 10 Feb 2022 08:31:05 +0900
+From:   Stafford Horne <shorne@gmail.com>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Michal Simek <michal.simek@xilinx.com>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>
+Subject: Re: [PATCH] microblaze: remove CONFIG_SET_FS
+Message-ID: <YgROuYDWfWYlTUKD@antec>
+References: <CAK8P3a22ntk5fTuk6xjh1pyS-eVbGo7zDQSVkn2VG1xgp01D9g@mail.gmail.com>
+ <20220117132757.1881981-1-arnd@kernel.org>
+ <CAHTX3dKyAha8_nu=7e413pKr+SAaPBLp9=FTdQ=GZNdjQHW+zA@mail.gmail.com>
+ <CAK8P3a2Om2SYchx8q=ddkNeJ4o=1MVXD2MFSV2SGJ_vuTUcp0Q@mail.gmail.com>
+ <126ae5ee-342c-334c-9c07-c00213dd7b7e@xilinx.com>
+ <CAK8P3a2zZfFa55nNeMicWHhia7fkT0cJBzYvUi0O+v0B13BOMA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220209162607.1118325-1-maz@kernel.org> <20220209162607.1118325-11-maz@kernel.org>
-In-Reply-To: <20220209162607.1118325-11-maz@kernel.org>
-From:   Emil Renner Berthing <kernel@esmil.dk>
-Date:   Thu, 10 Feb 2022 00:30:55 +0100
-Message-ID: <CANBLGcwKeLn7Q1Ra8pCw=cXy=kJeEFRmBjOxjds10+k70LvzXA@mail.gmail.com>
-Subject: Re: [PATCH 10/10] pinctrl: starfive: Switch to dynamic chip name output
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAK8P3a2zZfFa55nNeMicWHhia7fkT0cJBzYvUi0O+v0B13BOMA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 9 Feb 2022 at 17:49, Marc Zyngier <maz@kernel.org> wrote:
->
-> Instead of overloading the name field, use the relevant callback to
-> output the device name.
->
-> Signed-off-by: Marc Zyngier <maz@kernel.org>
-> ---
->  drivers/pinctrl/pinctrl-starfive.c | 11 +++++++++--
->  1 file changed, 9 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/pinctrl/pinctrl-starfive.c b/drivers/pinctrl/pinctrl-starfive.c
-> index 5be9866c2b3c..f29d9ccf858b 100644
-> --- a/drivers/pinctrl/pinctrl-starfive.c
-> +++ b/drivers/pinctrl/pinctrl-starfive.c
-> @@ -15,6 +15,7 @@
->  #include <linux/of.h>
->  #include <linux/platform_device.h>
->  #include <linux/reset.h>
-> +#include <linux/seq_file.h>
->  #include <linux/spinlock.h>
->
->  #include <linux/pinctrl/pinctrl.h>
-> @@ -1163,12 +1164,20 @@ static int starfive_irq_set_type(struct irq_data *d, unsigned int trigger)
->         return 0;
->  }
->
-> +static void starfive_irq_print_chip(struct irq_data *d, struct seq_file *p)
-> +{
-> +       struct starfive_pinctrl *sfp = starfive_from_irq_data(d);
-> +
-> +       seq_printf(p, sfp->gc.label);
-> +}
-> +
->  static struct irq_chip starfive_irq_chip = {
->         .irq_ack = starfive_irq_ack,
->         .irq_mask = starfive_irq_mask,
->         .irq_mask_ack = starfive_irq_mask_ack,
->         .irq_unmask = starfive_irq_unmask,
->         .irq_set_type = starfive_irq_set_type,
-> +       .irq_print_chip = starfive_irq_print_chip,
->         .flags = IRQCHIP_SET_TYPE_MASKED,
->  };
+On Wed, Feb 09, 2022 at 03:54:54PM +0100, Arnd Bergmann wrote:
+> On Wed, Feb 9, 2022 at 3:44 PM Michal Simek <michal.simek@xilinx.com> wrote:
+> > On 2/9/22 15:40, Arnd Bergmann wrote:
+> > > On Wed, Feb 9, 2022 at 2:50 PM Michal Simek <monstr@monstr.eu> wrote:
+> > >>
+> > >> Hi Arnd,
+> > >>
+> > >> po 17. 1. 2022 v 14:28 odesílatel Arnd Bergmann <arnd@kernel.org> napsal:
+> > >>>
+> > >>> From: Arnd Bergmann <arnd@arndb.de>
+> > >>>
+> > >>> I picked microblaze as one of the architectures that still
+> > >>> use set_fs() and converted it not to.
+> > >>
+> > >> Can you please update the commit message because what is above is not
+> > >> the right one?
+> > >
+> > > Ah, sorry about that. I think you can copy from the openrisc patch,
+> > > see https://lore.kernel.org/lkml/20220208064905.199632-1-shorne@gmail.com/
+> >
+> > Please do it. You are the author of this patch and we should follow the process.
+> 
+> Done.
+> 
+> Looking at it again, I wonder if it would help to use the __get_kernel_nofault()
+> and __get_kernel_nofault() helpers as the default in
+> include/asm-generic/uaccess.h.
 
-The parent interrupt doesn't show up in /proc/interrupts anyway, so if
-setting the name is considered abuse we can just drop the addition
-above and just delete the two lines below.
+That would make sense.  Perhaps also the __range_ok() function from OpenRISC
+could move there as I think other architectures would also want to use that.
 
-The gpio framework seems to fill in default handlers in the struct
-above, so unfortunately it can't yet be made const. Is this something
-you intend to fix in the future?
+> I see it's identical to the openrisc version and would probably be the same
+> for some of the other architectures that have no other use for
+> set_fs(). That may
+> help to do a bulk remove of set_fs for alpha, arc, csky, h8300, hexagon, nds32,
+> nios2, um and extensa, leaving only ia64, sparc and sh.
 
-> @@ -1307,8 +1316,6 @@ static int starfive_probe(struct platform_device *pdev)
->         sfp->gc.base = -1;
->         sfp->gc.ngpio = NR_GPIOS;
->
-> -       starfive_irq_chip.name = sfp->gc.label;
-> -
->         sfp->gc.irq.chip = &starfive_irq_chip;
->         sfp->gc.irq.parent_handler = starfive_gpio_irq_handler;
->         sfp->gc.irq.num_parents = 1;
-> --
-> 2.30.2
->
+If you could add it into include/asm-generic/uaccess.h I can test changing my
+patch to use it.
+
+-Stafford

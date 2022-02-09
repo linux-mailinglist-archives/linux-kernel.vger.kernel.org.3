@@ -2,82 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AA884AF393
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 15:03:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 879ED4AF39A
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 15:04:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234696AbiBIODV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 09:03:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33206 "EHLO
+        id S234726AbiBIOEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 09:04:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234695AbiBIODR (ORCPT
+        with ESMTP id S231210AbiBIOEj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 09:03:17 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75BF3C05CB8F
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 06:03:20 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id a8so7599132ejc.8
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 06:03:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=monstr-eu.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=BowBxy6mujSqc6uDobbJd7gE25OPxJU1WR17zdO/EU8=;
-        b=BXnsEfJhH0VLxc5l2+6yzTne2H+dAodEaOC7t90ck3dpcoApPfZeQw7ERDf+TMvabO
-         AUyVjsh3w42IINu4lpfyKxBDJj3jGQvXewZmm44/nrdDsSeTfbPuHkyjuA8aQeIXRWbk
-         YK+eKcMdcjqMdMa6tkUG1S8Qc5dyd/HPpdN9FCiXCyW57o+tCruGQP9LRNbyPgifd7xn
-         Ovggwhv3jOMErW0rCok/7mdoeeLcz6Al/7fi2fKl5pBbuXO9VJU1qTvelWvzrjNQ9ZWx
-         8dD9LOJXOmqYJjPbjK/VtTNpdPiq/ITP6K5IY2YaSXSiZOU2ZmlvYyr2WgV5Bt60uxvI
-         vyoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=BowBxy6mujSqc6uDobbJd7gE25OPxJU1WR17zdO/EU8=;
-        b=t1GrLDQhY/AMHBPBQ1QLteUqPlgH+k/yfSeyjRFxjXBT14bXNYxOPp1DTAwdb6EPFW
-         wR11qod1yS34M6XXdhTbbdNq5/7pAFiLyPetG5aWOr8JAqJ74iWBDmS0YNim1cnRiKYs
-         UY6vhcYXAhHCW3ZUuT7zRGpLrrMu/1kwNEGmLHW/4AaNbrPSEji7AIaI8WakMzxvYX6N
-         C98Q01fnxNZdQwpyQ12Gb8cjrjhz2/KqAdmpZJxoMHjappuyPV6c79J7R+ZVTTto6tOm
-         8yg3CziW+wxv9ZXuBulf5ANgHGiCkMpielhgwnnImZ4WDYwfKUTCeXc7VbtQUpHr8yKF
-         HjUw==
-X-Gm-Message-State: AOAM530M9ZX4mjEUox5LXL2gyaA/kBA2oPQpeRDy9f2dMuUqFKdoh92a
-        I0plTaA5wwrBTSx2v7z+QWdfmg==
-X-Google-Smtp-Source: ABdhPJx8GIenK2WVSAEcQAHLIXwXIN1cxrvW0M5u13kIK1XJWen2Q0kfxVwPnlgU4k0e5go3yIU2CA==
-X-Received: by 2002:a17:907:c0d:: with SMTP id ga13mr2122813ejc.576.1644415398689;
-        Wed, 09 Feb 2022 06:03:18 -0800 (PST)
-Received: from ?IPV6:2a02:768:2307:40d6::f9e? ([2a02:768:2307:40d6::f9e])
-        by smtp.gmail.com with ESMTPSA id d10sm3488487ejb.22.2022.02.09.06.03.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Feb 2022 06:03:18 -0800 (PST)
-Message-ID: <97825798-4071-6fef-ae87-e448e823d737@monstr.eu>
-Date:   Wed, 9 Feb 2022 15:03:17 +0100
+        Wed, 9 Feb 2022 09:04:39 -0500
+Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A7ACC0613C9;
+        Wed,  9 Feb 2022 06:04:39 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 0A9AD5801A9;
+        Wed,  9 Feb 2022 09:04:37 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Wed, 09 Feb 2022 09:04:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; bh=6C3Zbv7qcftcJPNdinXDELfCRJAPbtGEO9aofq
+        ELC1c=; b=RbTJLLPSHVAvRbZaSx+PE/OOh6dwrdKo5fF8ddis1mPVVlOd+rbbOw
+        WNgNng9NOAg2tC7ME61PAATrqcEL2Iq1EhU+dNttV2/alXDEY+TRmrxgSI4qQ6Q2
+        gxdOFwVQgGTzVPWATM+X56Yfwqf/G/QqaTq5zIVe0XGUQaXIhYmh9RhVa+4gR9wR
+        cJMYUz0oxESU6HCz0r3DP7Q0h01iiI2FqG9xPc+CPwpN54Wajx7WXuQWFGAjozhZ
+        ItVHbeQ1H7j61Ph7OLb8cTuWMxdQDOyKAwRTHLNd+4MA7xfpA0zEl6cibfdfo2o1
+        g8FvQ8oaj8urf9tG307CeqSKVDoQsFng==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=6C3Zbv7qcftcJPNdi
+        nXDELfCRJAPbtGEO9aofqELC1c=; b=juG876JtEkhqls5pvMUbR4O2Cp+hpvAIr
+        qOrSZGofNApNDWdrr5kYUh/qFGSkFKWu6BCPnJ+gVk77IRw1hdFYl7WiNrIRZJja
+        cSrh7/Mj5EKxnb77Sg3nTOLeuRnztE4B6US5twBLQ4NvBrUC9ciMgBpfDc80XBLJ
+        pfBBmerR8Snh3eJVYst3S6GwUXxipNILBDktURLw1C7bCnA8G5tO2rVlzcLdCTSH
+        WncaYfPCHddxoQVG+01hWghQ0shscaRIQQDPM6DtlBE2APyBAvD4kh1BjdzxIGWs
+        YHK1yCF4HL9s5oqB/z4j0IMPlxxoCOWs2RmxX4DxkYpXwTf5gpFUg==
+X-ME-Sender: <xms:88kDYrTKYO8ov1PvHt0MleH7wilA9FoIlPoq0BwliyH0lvGYQfp5TQ>
+    <xme:88kDYswiOiC-Yrv9inepzR2830IQlOtLTUmaH6ucbennMlyTrvNKW12fzrD83st18
+    XBRqEd0MLehA_tmjuc>
+X-ME-Received: <xmr:88kDYg1xdOfDPeeTE6ibwkWTym6h9cuWHGrN7zmIWWx1C5xofp0BpVAO355Xa54_ex7L6-6JEK7AwpdiyR_vGdKhrHG9xzJ_yPRn5ZA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrheelgdehkecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesghdtreertddtjeenucfhrhhomhepofgrgihimhgv
+    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
+    gvrhhnpeeutdfgjeeuudehvefgvedvtedtudelfffgffekledtffekgedukeejueevieeg
+    udenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrg
+    igihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:88kDYrA8Be05SyEG96uriDnvHQlCLxPXh5nTzO1T5HVsiQcoK83WMQ>
+    <xmx:88kDYki7RG4p27sdKSq9Gp2JD2Fj5MNRd26p_slr_pJFoFA3GAkoFg>
+    <xmx:88kDYvoJzUrLElH-l28YJDxD3tBKV1W_8MeALkc5wNUvd3dN9f3Evg>
+    <xmx:9MkDYta9hxxFCyROgf7oo6Q76Xof1_w0KIUC1bSOzptwSnCvgJVVvg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 9 Feb 2022 09:04:34 -0500 (EST)
+Date:   Wed, 9 Feb 2022 15:04:32 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     Sui Jingfeng <15330273260@189.cn>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Zack Rusin <zackr@vmware.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        suijingfeng <suijingfeng@loongson.cn>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: [PATCH v6 1/3] drm/lsdc: add drm driver for loongson display
+ controller
+Message-ID: <20220209140432.ekqszxbtitmacpk5@houat>
+References: <20220203082546.3099-1-15330273260@189.cn>
+ <20220203082546.3099-2-15330273260@189.cn>
+ <20220203085851.yqstkfgt4dz7rcnw@houat>
+ <57805e19-285a-76d3-16e3-09a3eb7a9540@189.cn>
+ <20220209085215.65qbdsgwtnvujdng@houat>
+ <8e7f7946-b9e5-7c4d-f5c9-e091bf5f814b@flygoat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH] microblaze: remove CONFIG_SET_FS
-Content-Language: en-US
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, ebiederm@xmission.com,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>
-References: <CAK8P3a22ntk5fTuk6xjh1pyS-eVbGo7zDQSVkn2VG1xgp01D9g@mail.gmail.com>
- <20220117132757.1881981-1-arnd@kernel.org>
- <CAHTX3dKyAha8_nu=7e413pKr+SAaPBLp9=FTdQ=GZNdjQHW+zA@mail.gmail.com>
- <YgPHJy9NDVFr5s6w@infradead.org>
-From:   Michal Simek <monstr@monstr.eu>
-In-Reply-To: <YgPHJy9NDVFr5s6w@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="vl5too7ki5enoddb"
+Content-Disposition: inline
+In-Reply-To: <8e7f7946-b9e5-7c4d-f5c9-e091bf5f814b@flygoat.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -85,29 +105,45 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--vl5too7ki5enoddb
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 2/9/22 14:52, Christoph Hellwig wrote:
-> On Wed, Feb 09, 2022 at 02:50:32PM +0100, Michal Simek wrote:
->> I can't see any issue with the patch when I run it on real HW.
->> Tested-by: Michal Simek <michal.simek@xilinx.com>
->>
->> Christoph: Is there any recommended test suite which I should run?
-> 
-> No.  For architectures that already didn't use set_fs internally
-> there is nothing specific to test.  Running some perf or backtrace
-> tests might be useful to check if the non-faulting kernel helpers
-> work properly.
+On Wed, Feb 09, 2022 at 11:56:48AM +0000, Jiaxun Yang wrote:
+>=20
+>=20
+> =E5=9C=A8 2022/2/9 8:52, Maxime Ripard =E5=86=99=E9=81=93:
+> > On Thu, Feb 03, 2022 at 11:47:16PM +0800, Sui Jingfeng wrote:
+> [...]
+> > DT isn't really a solution either. Let's take the distribution
+> > perspective there. Suppose you're a Fedora or Debian developer, and want
+> > to make a single kernel image, and ship a DT to the user for their board
+> > without any modification. How is either the Kconfig solution or DT flags
+> > solution any good there? It doesn't help them at all.
+>
+> We are working in another way. As we can tell model of the board by strin=
+gs
+> passed from the firmware, we just built-in all poosible DTs into the kern=
+el
+> and then tell which DT to load at boot time. So we can ensure users has
+> smmoth experience.
 
-Thanks for confirmation. Once Arnd sent v2 with updated commit message I will 
-queue it to next release.
+It's not really for you to say though. Once your driver is in a release,
+distros are going to use it. That's the whole point of you asking us to
+merge it.
 
-Thanks,
-Michal
+Maxime
 
--- 
-Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
-w: www.monstr.eu p: +42-0-721842854
-Maintainer of Linux kernel - Xilinx Microblaze
-Maintainer of Linux kernel - Xilinx Zynq ARM and ZynqMP ARM64 SoCs
-U-Boot custodian - Xilinx Microblaze/Zynq/ZynqMP/Versal SoCs
+--vl5too7ki5enoddb
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYgPJ8AAKCRDj7w1vZxhR
+xQ7jAP9etfpiFR/7BaYwCwRPhBjfmYKdaCacf+X7uAN8xqcKDwD9FtD6v8xZ4gAL
+l00pbTcOa2efVrqJ8frFZMlTOvz47QI=
+=gzq+
+-----END PGP SIGNATURE-----
+
+--vl5too7ki5enoddb--

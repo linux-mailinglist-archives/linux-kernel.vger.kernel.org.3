@@ -2,105 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D10D74AE87E
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 05:12:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEB6D4AE87D
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 05:12:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346643AbiBIEMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 23:12:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49322 "EHLO
+        id S1346091AbiBIEMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 23:12:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347515AbiBIDvD (ORCPT
+        with ESMTP id S1347554AbiBIDvd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 22:51:03 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A910C061578;
-        Tue,  8 Feb 2022 19:51:00 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id n32so1991213pfv.11;
-        Tue, 08 Feb 2022 19:51:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:subject:to:cc:message-id:date:user-agent:mime-version
-         :content-transfer-encoding:content-language;
-        bh=HRdPwXuWMTu44Hbd31o0zplR0BavrSo2F1orInPcfp8=;
-        b=cW5KWjK/tnZxVtckN0ujtQlJnhull6OIFZNKosetMnPdwE3H1iHp35lk8pXmEtdHEV
-         byHtfb+A8nHQgRGmpr9C5QwBE9eSRLSNK/To89h9+2xa9GU3cCWOwhWOXxgPjzdfEio/
-         V/WaMj8/bN97MTF7j8qqtR0b1SBdJV/acCBcSu42VfIMtqqf3EZGZmnDw+fs36NLdQ2O
-         pH09il0jwei6t2ONP3qNwmZODxET3tkPE753IrZxdnJdFqUhuusWZyl40Dz2LLV1cqzL
-         42iei88+m0MEnaDOgLqP7erD8jxup0bFVLWS5+Fyv0OyGSTgCJKLAxOTyPldsxOMPlzv
-         Pj9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:subject:to:cc:message-id:date:user-agent
-         :mime-version:content-transfer-encoding:content-language;
-        bh=HRdPwXuWMTu44Hbd31o0zplR0BavrSo2F1orInPcfp8=;
-        b=W1ntQnitLKzXp1YglWH0S7k49Dz5nHeLkjuocS3RN5hJ2MLlYm78TnxBnDy08REkBS
-         oWipfeJIkD+y623aQuLlXR/E0WWPt0qbn4tfpclWzav65b07oHgsx4wjzZsU+ovukO+z
-         fSXb8QolqCrqWQJbyccUYfjuerdg5af8k10/BvmGh+OKCZ4pqAKk1Ywr4NhRf0gHuFry
-         W4gBzCtdWtserL08wZG3lV/4A2xLOJRKCL7HzidpLXSilY4XrVofIwp95RsZ0YSkQOhT
-         g/oyDsFZkXVvZaDuzuhna6w5ZWBU69iNj6x9X0IZKNIIZBSZsMQj+fkokA7iEs77kdRM
-         RZ7g==
-X-Gm-Message-State: AOAM531EknoYgk+qEVSHEXSTkA9TA1dnvVM37+c31J03IurShDiRUygg
-        1U27BYA6WoMj8q3+Pr0/ikcecxvaBJY=
-X-Google-Smtp-Source: ABdhPJymSo30+5Ud2M4FxOnfKpR4Yr9Ce08b2ReafFmvyQjEDUryhQkWvhHck/SXLVaOE/vnQBaFVQ==
-X-Received: by 2002:a63:2c05:: with SMTP id s5mr430675pgs.106.1644378660080;
-        Tue, 08 Feb 2022 19:51:00 -0800 (PST)
-Received: from [10.73.0.6] ([45.128.198.44])
-        by smtp.gmail.com with ESMTPSA id l2sm4216426pju.52.2022.02.08.19.50.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Feb 2022 19:50:59 -0800 (PST)
-From:   Jia-Ju Bai <baijiaju1990@gmail.com>
-Subject: [BUG] usb: typec: ucsi: possible deadlock in ucsi_pr_swap() and
- ucsi_handle_connector_change()
-To:     heikki.krogerus@linux.intel.com,
-        Greg KH <gregkh@linuxfoundation.org>, kyletso@google.com,
-        jackp@codeaurora.org, andy.shevchenko@gmail.com,
-        unixbhaskar@gmail.com, subbaram@codeaurora.org,
-        mrana@codeaurora.org
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Message-ID: <037de7ac-e210-bdf5-ec7a-8c0c88a0be20@gmail.com>
-Date:   Wed, 9 Feb 2022 11:50:57 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        Tue, 8 Feb 2022 22:51:33 -0500
+Received: from m12-17.163.com (m12-17.163.com [220.181.12.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2469EC061578
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 19:51:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=YvOhP
+        o6ymYclh5k4417PVKOkRi78cNnblip3oZXJi9w=; b=EvB8v6eIZiPZcMFLgJBC8
+        XZjomhJCJKc3MCB1/xa+vMyA8743IkmYQBRoQcNoXDc50AkOrOpY7OqgZFrV5f9r
+        VHmYy318ywQKCDkQguf0+ZMTF/kg9nylPSI29uBXYUn5Dc+eKsOXIHBMwtFuGJbu
+        ylu9mg+AN1i1R9B2p86yRI=
+Received: from sysgbj8.hosso.cc (unknown [42.62.85.2])
+        by smtp13 (Coremail) with SMTP id EcCowACnPAovOgNin9hKCA--.39192S2;
+        Wed, 09 Feb 2022 11:51:11 +0800 (CST)
+From:   chengchaohang@163.com
+To:     leon@kernel.org, maorg@nvidia.com, jgg@ziepe.ca,
+        logang@deltatee.com, thunder.leizhen@huawei.com
+Cc:     linux-kernel@vger.kernel.org,
+        "chaohang . cheng" <chaohang.cheng@horizon.ai>
+Subject: [PATCH] lib/scatterlist: Provide scatterlist hexdump.
+Date:   Wed,  9 Feb 2022 11:51:11 +0800
+Message-Id: <20220209035111.28365-1-chengchaohang@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: EcCowACnPAovOgNin9hKCA--.39192S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWruF18ZF4xJF48AF48WFWkXrb_yoWkCrb_Ca
+        47Jw45Gr4fGF4IqFW3WFWftFy8WFZ8ZF1I9F1Igr93W3s8urs8X34vqr9rAF45Way8Ca1D
+        Gasaqas7XF1UXjkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU57UUUUUUUU==
+X-Originating-IP: [42.62.85.2]
+X-CM-SenderInfo: xfkh0wpfkd0xxdqjqiywtou0bp/xtbBEw+ivF3l-1bNiwAAsV
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+From: "chaohang.cheng" <chaohang.cheng@horizon.ai>
 
-My static analysis tool reports a possible deadlock in the ucsi driver 
-in Linux 5.16:
+A scatterlist hexdump is essential during debug, sometimes.
 
-ucsi_pr_swap()
-   mutex_lock(&con->lock); --> Line 962 (Lock A)
-   wait_for_completion_timeout(&con->complete, ...) --> Line 981 (Wait X)
+Signed-off-by: chaohang.cheng <chaohang.cheng@horizon.ai>
+---
+ include/linux/scatterlist.h | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-ucsi_handle_connector_change()
-   mutex_lock(&con->lock); --> Line 763 (Lock A)
-   complete(&con->complete); --> Line 782 (Wake X)
-   complete(&con->complete); --> Line 807 (Wake X)
+diff --git a/include/linux/scatterlist.h b/include/linux/scatterlist.h
+index 7ff9d6386c12..ef8ecaac0016 100644
+--- a/include/linux/scatterlist.h
++++ b/include/linux/scatterlist.h
+@@ -563,4 +563,21 @@ bool sg_miter_skip(struct sg_mapping_iter *miter, off_t offset);
+ bool sg_miter_next(struct sg_mapping_iter *miter);
+ void sg_miter_stop(struct sg_mapping_iter *miter);
+ 
++/*
++ * Hexdump scatterlist
++ *
++ * @sg: struct scatterlist* .
++ * it stands for the head of a scatterlist .
++ *
++ * note: print_hex_dump_debug is a dynamic debug .
++ *
++ */
++#define SG_HEXDUMP(sg)							\
++do {									\
++	struct scatterlist *sg_tmp = NULL;				\
++	for (sg_tmp = sg; sg_tmp; sg_tmp = sg_next(sg_tmp))		\
++		print_hex_dump_debug("", DUMP_PREFIX_OFFSET,		\
++			16, 1, sg_virt(sg_tmp), sg_tmp->length, true);	\
++} while (0)
++
+ #endif /* _LINUX_SCATTERLIST_H */
+-- 
+2.25.1
 
-When ucsi_pr_swap() is executed, "Wait X" is performed by holding "Lock 
-A". If ucsi_handle_connector_change() is executed at this time, "Wake X" 
-cannot be performed to wake up "Wait X" in 
-ucsi_handle_connector_change(), because "Lock A" has been already held 
-by ucsi_handle_connector_change(), causing a possible deadlock.
-I find that "Wait X" is performed with a timeout, to relieve the 
-possible deadlock; but I think this timeout can cause inefficient execution.
-
-I am not quite sure whether this possible problem is real.
-Any feedback would be appreciated, thanks :)
-
-
-Best wishes,
-Jia-Ju Bai

@@ -2,57 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 239104AF07D
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 13:00:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4B624AF07A
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 12:59:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbiBIMAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 07:00:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56968 "EHLO
+        id S231772AbiBIL7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 06:59:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231695AbiBIL5l (ORCPT
+        with ESMTP id S231688AbiBIL5l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 9 Feb 2022 06:57:41 -0500
-Received: from polaris.svanheule.net (polaris.svanheule.net [IPv6:2a00:c98:2060:a004:1::200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ADA0E0407B8
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 02:58:10 -0800 (PST)
-Received: from vanadium.ugent.be (vanadium.ugent.be [157.193.99.61])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sander@svanheule.net)
-        by polaris.svanheule.net (Postfix) with ESMTPSA id 6E34B29F375;
-        Wed,  9 Feb 2022 11:58:08 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
-        s=mail1707; t=1644404288;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UOLtgfJTjpy0/bSG7vguavNiQOyb4CA7NGaPWqjr8EM=;
-        b=pgZXiLP2dYfgMUiQhIceGbLCPtrqqNKvWNjHUJUoaRBzrbRCIiYYIjAr0REx8oscknW3YE
-        XcNNWYaMST6DJqh0ysOz5BKO7j/Lxs2sT7GlFhUhCNknmI7BBDA+bl4EXhlICulgYF01eJ
-        OOhhpuo4RjNDBXkSO6DBwebdme+s0yoG2lYjRrdFxGNS1BES5dqkdlRZHDf28RK1SnDleo
-        A/ZQG0r0aUY8LlU/a9ML0ugAKwZTQGk3VCCuoXPwjjnCpgM4Apxud9YTJUaAX4UGXo9FlK
-        ZM80Cb/+9H0kDecwz1lm2keH5f6yTRLsspNd3+F/hrXfZHLMXyO2oY/fEaqvbQ==
-Message-ID: <71783087474514dc71db9acdc06f460dfdaa1333.camel@svanheule.net>
-Subject: Re: [PATCH 1/2] dt-bindings: timer: Add realtek,otto-tc binding
-From:   Sander Vanheule <sander@svanheule.net>
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Date:   Wed, 09 Feb 2022 11:58:06 +0100
-In-Reply-To: <YgMrwEXraoiJxSXe@robh.at.kernel.org>
-References: <cover.1642369117.git.sander@svanheule.net>
-         <7c53821386b8f4c1c0ac440f1cd186e09f4a0456.1642369117.git.sander@svanheule.net>
-         <YgMrwEXraoiJxSXe@robh.at.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29828C0068AD;
+        Wed,  9 Feb 2022 02:59:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644404343; x=1675940343;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Nzol2qAJ2pcwfsSlTz2txXFSTnV1hNw5G1nXpEt7930=;
+  b=iCZIZYBmq870bjyaIZewxEfZggcM8iOkwREt+PT9d45U1YXd5KFhnyI7
+   XFuhLE4z5kz5RKpSymQfiQM3BKrbZ67bv/k8c7WJJ1hWVrPo9V2jwtTbC
+   skRibFj7AAGxJ4zLNn1BLUlobSTf9gddtLnOmbO4rR5T5isg6SllELiSf
+   QD02wNiKt4t640XxPr5m5lok04p5OUAWG5e+PASK9NJC2hPFAB7WEgAJn
+   BGqiJlVTX7eitRf9WzTOxXMg6tQgwtwTUWGVblJKmniy6qdial2EyQ5ds
+   sw1bV8L3o/lST9Wd6Vk1GlZeXOXqJ6zuFICL/3cSxXUgIn0JGbw95G9ng
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="229148803"
+X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
+   d="scan'208";a="229148803"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 02:59:03 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
+   d="scan'208";a="678505057"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 09 Feb 2022 02:59:00 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 09 Feb 2022 12:58:59 +0200
+Date:   Wed, 9 Feb 2022 12:58:59 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/4] usb: typec: Factor out non-PD fwnode properties
+Message-ID: <YgOecxgyaMN+/3sN@kuha.fi.intel.com>
+References: <20220202221948.5690-1-samuel@sholland.org>
+ <20220202221948.5690-4-samuel@sholland.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220202221948.5690-4-samuel@sholland.org>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,124 +64,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+Hi,
 
-On Tue, 2022-02-08 at 20:49 -0600, Rob Herring wrote:
-> On Sun, Jan 16, 2022 at 10:39:24PM +0100, Sander Vanheule wrote:
-> > New binding for the timer/counter blocks found on the Realtek Otto MIPS
-> > platform.
-> > 
-> > Signed-off-by: Sander Vanheule <sander@svanheule.net>
-> > ---
-> >  .../bindings/timer/realtek,otto-tc.yaml       | 64 +++++++++++++++++++
-> >  1 file changed, 64 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/timer/realtek,otto-
-> > tc.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/timer/realtek,otto-tc.yaml
-> > b/Documentation/devicetree/bindings/timer/realtek,otto-tc.yaml
-> > new file mode 100644
-> > index 000000000000..12971b9ecdf5
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/timer/realtek,otto-tc.yaml
-> > @@ -0,0 +1,64 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/timer/realtek,otto-tc.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Realtek Otto platform timer/counter bindings
-> > +
-> > +description:
+On Wed, Feb 02, 2022 at 04:19:46PM -0600, Samuel Holland wrote:
+> Basic programmable non-PD Type-C port controllers do not need the full
+> TCPM library, but they share the same devicetree binding and the same
+> typec_capability structure. Factor out a helper for parsing those
+> properties which map to fields in struct typec_capability, so the code
+> can be shared between TCPM and basic non-TCPM drivers.
 > 
-> '|' at the end if you want to keep formatting.
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> ---
 > 
-> > +  "Up-counting 28-bit timer that can operate in oneshot or repeating mode,
+> Changes in v2:
+>  - Always put the return values from typec_find_* in a signed variable
+>    for error checking.
 > 
-> And drop the quotes.
+>  drivers/usb/typec/class.c     | 52 +++++++++++++++++++++++++++++++++++
+>  drivers/usb/typec/tcpm/tcpm.c | 32 +--------------------
+>  include/linux/usb/typec.h     |  3 ++
+>  3 files changed, 56 insertions(+), 31 deletions(-)
 > 
-> > +  providing an interrupt at roll-over.
-> > +
-> > +  The timer is driven by a divided clock, derived from the bus clock. The
-> > clock
-> > +  divisor is configurable from 2 to 65535. Divisor values of 0 and 1
-> > disable
-> > +  the timer clock. The timer can also be enabled or disabled independently
-> > from
-> > +  the clock (divisor) selection.
-> > +
-> > +  The number of timers supported by the different SoC families is:
-> > +  - RTL8380: 5 timers
-> > +  - RTL8390: 5 timers
-> > +  - RTL9300: 6 timers
-> > +  - RTL9310: 7 timers"
-> > +
-> > +maintainers:
-> > +  - Sander Vanheule <sander@svanheule.net>
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: realtek,otto-tc
-> 
-> 4 SoCs with differences in the block, you need 4 SoC specific 
-> compatibles. With a fallback if appropriate.
-> 
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +
-> > +  clocks:
-> > +    items:
-> > +      - description: Parent clock from peripheral bus
-> > +
-> > +  clock-names:
-> > +    items:
-> > +      - const: bus
-> > +
-> > +additionalProperties: false
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - interrupts
-> > +  - clocks
-> > +  - clock-names
-> > +
-> > +examples:
-> > +  - |
-> > +    timer0: timer@3100 {
-> 
-> Drop unused labels.
+> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+> index 45a6f0c807cb..b67ba9478c82 100644
+> --- a/drivers/usb/typec/class.c
+> +++ b/drivers/usb/typec/class.c
+> @@ -1894,6 +1894,58 @@ void *typec_get_drvdata(struct typec_port *port)
+>  }
+>  EXPORT_SYMBOL_GPL(typec_get_drvdata);
+>  
+> +int typec_get_fw_cap(struct typec_capability *cap,
+> +		     struct fwnode_handle *fwnode)
+> +{
+> +	const char *cap_str;
+> +	int ret;
+> +
+> +	/*
+> +	 * This fwnode has a "compatible" property, but is never populated as a
+> +	 * struct device. Instead we simply parse it to read the properties.
+> +	 * This it breaks fw_devlink=on. To maintain backward compatibility
+> +	 * with existing DT files, we work around this by deleting any
+> +	 * fwnode_links to/from this fwnode.
+> +	 */
+> +	fw_devlink_purge_absent_suppliers(fwnode);
 
-I forgot to remove this, as originally I had...
+Let's not put that call here. That function is broken. I think it in
+practice assumes that there can only be one device linked to fwnode,
+but that's not true. The fwnodes can be, and are, shared. So by using
+it we may end up doing things to some completely wrong devices.
 
-> 
-> > +      compatible = "realtek,otto-tc";
-> > +      reg = <0x3100 0x10>;
-> > +
-> > +      interrupts = <29 4>;
-> > +
-> > +      clocks = <&lx_clk>;
-> > +      clock-names = "bus";
+So let's keep that call in the drivers that really have to have it for
+now. I think that function - fw_devlink_purge_absent_suppliers() -
+needs some serious rethinking.
 
-clocks = <&lx_clk>, <&timer0>;
-clock-names = "bus", "timer";
+There is some deeper problem. I have a feeling that all the functions
+that rely on the fwnode->dev member are broken. We need a proper
+reverce search mechanism that can be used to find the devices linked
+to fwnodes. But I have no idea how to that could be done.
 
-to have a self-reference for the (private) derived clock. Not sure if it makes
-sense to do it like this though, or if only the bus clock would be sufficient.
+> +	cap->fwnode = fwnode;
+> +
+> +	ret = fwnode_property_read_string(fwnode, "power-role", &cap_str);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret = typec_find_port_power_role(cap_str);
+> +	if (ret < 0)
+> +		return ret;
+> +	cap->type = ret;
+> +
+> +	/* USB data support is optional */
+> +	ret = fwnode_property_read_string(fwnode, "data-role", &cap_str);
+> +	if (ret == 0) {
+> +		ret = typec_find_port_data_role(cap_str);
+> +		if (ret < 0)
+> +			return ret;
+> +		cap->data = ret;
+> +	}
+> +
+> +	/* Get the preferred power role for a DRP */
+> +	if (cap->type == TYPEC_PORT_DRP) {
+> +		cap->prefer_role = TYPEC_NO_PREFERRED_ROLE;
+> +
+> +		ret = fwnode_property_read_string(fwnode, "try-power-role", &cap_str);
+> +		if (ret == 0) {
+> +			ret = typec_find_power_role(cap_str);
+> +			if (ret < 0)
+> +				return ret;
+> +			cap->prefer_role = ret;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(typec_get_fw_cap);
 
-I'll also fix your other remarks in v2.
+thanks,
 
-Best,
-Sander
-
-
-> > +    };
-> > -- 
-> > 2.34.1
-> > 
-> > 
+-- 
+heikki

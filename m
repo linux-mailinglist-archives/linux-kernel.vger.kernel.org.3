@@ -2,113 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3626C4B00D2
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 23:58:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D9DF4B00D0
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 23:58:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236740AbiBIW5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 17:57:22 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:38772 "EHLO
+        id S236829AbiBIW6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 17:58:05 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:41320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236730AbiBIW5U (ORCPT
+        with ESMTP id S236862AbiBIW6B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 17:57:20 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0791E04FF0E;
-        Wed,  9 Feb 2022 14:57:17 -0800 (PST)
-Received: from mail-wr1-f50.google.com ([209.85.221.50]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MJFpj-1ncUka4Bwp-00Kg3E; Wed, 09 Feb 2022 23:57:16 +0100
-Received: by mail-wr1-f50.google.com with SMTP id k1so6462532wrd.8;
-        Wed, 09 Feb 2022 14:57:15 -0800 (PST)
-X-Gm-Message-State: AOAM531OxbqUDbiD8ccEUA6VLQ5DtT2saq1TFCuWx+hNsGSz0C0UgMO8
-        9Rpy7XZpSVSNUwmaSi46bjAW7lkKdUPxKguXHvM=
-X-Google-Smtp-Source: ABdhPJx6k5SzHUiKxbi22X3ArFfHWnfD1uhdVPHGLwKUVBYNri0Ph5zCMFRBWOFFi/ShRb6G6dCKxmJXRqnm6B99V9s=
-X-Received: by 2002:a05:6000:178d:: with SMTP id e13mr3797888wrg.317.1644447435616;
- Wed, 09 Feb 2022 14:57:15 -0800 (PST)
+        Wed, 9 Feb 2022 17:58:01 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F5FE051102
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 14:57:54 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id x4so247764plb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 14:57:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9hlT9vQoLsVUjhpXGLlm7SvL3xA/YnfAS42BSAPz/pE=;
+        b=r734V9jLiaYfgXN0U+a0+2HFTV0eBCXCPquFaY/jlvnSdXeYv8CNvRDh/k7nddphJt
+         i8MOmjleXPePA6uvYMQC2S8sulBSJ8DjBef7De+Qt/G30bc1Ij6Wau47EIQHjyvzr767
+         zEDwNvkCqLOmt1Jt+Z63JDDnSrNnXQyyR5s0gNfZKAqOn47bYilzIbNHWdbXFsYJhZkk
+         dz01b+CjCMs7TzyfXo9oORg+cwjc4++HwDCXGps1KqbJMfg7ozkyCtGABKVvSC3lFm1n
+         fC5HzenqA0xBzwiHiaG6eMG6VvXtSS42e9ELMj9likPB63B2zJzx7PaOerJbkPVJpUqw
+         I2kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9hlT9vQoLsVUjhpXGLlm7SvL3xA/YnfAS42BSAPz/pE=;
+        b=F64c23DNXho93/KMlHIo1QRpRim+VnN8P7IrwIgI0zdlLQjBty4V38fqCUxIsh8mFt
+         ci9HYLmzkq+964FhspGJQY31MYbV+9i/D4u5If3Ume7k0gpcrWAw5MjQVyfhmiSrqFA7
+         94Bk+iPzvggiW7vNvBfa8eIxcMEnlthdD3+xCbmke/ti/yFq3QiG0lQ4OJv5WkZjig9t
+         q+Qak7fPEZcKsY0200ACZwHj0N5fPuzEhyAN2D5tcKrMNL3NGBRwTyL5C/oodN1ePFP2
+         guU6db65N0UEmqAdMndF4hhgdn2VvcLZLNn2oHtMltr2nSKTzI6lYnYYOvzUZdyqT54O
+         9oag==
+X-Gm-Message-State: AOAM532Q6I7Rh/d2PdzACSRlxocCmESJ+U8/dKMwQRgqhEnDbQKZGjci
+        SpbC6XWR6wI6bhLW3egbrAmEjkCZNorStg==
+X-Google-Smtp-Source: ABdhPJzxCieXiOFBmRxLOPkMpJ+lVohhiFAWUBH7GcomfK6r/tS+mSnDhcBvuqYoUy/9VfU1Cv+eLg==
+X-Received: by 2002:a17:90b:3a82:: with SMTP id om2mr4731200pjb.167.1644447468162;
+        Wed, 09 Feb 2022 14:57:48 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id gk15sm269582pjb.3.2022.02.09.14.57.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Feb 2022 14:57:47 -0800 (PST)
+Date:   Wed, 9 Feb 2022 22:57:44 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        dmatlack@google.com, vkuznets@redhat.com
+Subject: Re: [PATCH 04/23] KVM: MMU: constify uses of struct kvm_mmu_role_regs
+Message-ID: <YgRG6GPX906Yy51b@google.com>
+References: <20220204115718.14934-1-pbonzini@redhat.com>
+ <20220204115718.14934-5-pbonzini@redhat.com>
 MIME-Version: 1.0
-References: <20211218165258.16716-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20211218165258.16716-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAMuHMdUg3=q7gyaVHP0XcYUOo3PQUUv8Hc8wp5faVQ+bTBpg4A@mail.gmail.com>
- <042a2183-3f04-088c-1861-656de870337d@gmail.com> <CAK8P3a3owi7YWmq-tckD-C7NK5HaX+swGNW-QBkWQuQgVsVWrA@mail.gmail.com>
- <d74ab454-9337-d168-9b21-842569431b4a@gmail.com> <CAK8P3a20mwJXN4Mb063zQG+HAevj_Odpj58EzPHkX-p6pbtnGA@mail.gmail.com>
- <7c47ce67-88ee-9cba-3356-a530b0d3e657@gmail.com> <CAK8P3a0gf6TeK2vZ+u3NZ2VrrvrGUohAPz5WiZ4Mbk5QQg9FFg@mail.gmail.com>
- <9a07be5a-914b-cec9-f6bc-8c1b0ecef766@gmail.com>
-In-Reply-To: <9a07be5a-914b-cec9-f6bc-8c1b0ecef766@gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 9 Feb 2022 23:56:59 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3wOxRdGJfDx86WiNwFvbK=wXYCtPoS-DQKqyYfHZiMjw@mail.gmail.com>
-Message-ID: <CAK8P3a3wOxRdGJfDx86WiNwFvbK=wXYCtPoS-DQKqyYfHZiMjw@mail.gmail.com>
-Subject: Re: [PATCH 2/3] i2c: sh_mobile: Use platform_get_irq_optional() to
- get the interrupt
-To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        Chris Brandt <chris.brandt@renesas.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        linux-rpi-kernel <linux-rpi-kernel@lists.infradead.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Linux-sh list <linux-sh@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:iz4osL0LS/CVwD/e5yrQnoMN5iG7QTanvYybME2u+hzIbUJrl8k
- SXJurOPxymVZf+kuK3k8lwyHGylgPOYeAGSXatMOAxPCIn96aBYoB4Qgh2cQIHjghA7uNsp
- UlcLVhcoGpZBirw9Yo12SkJK453F/fRkQ3tcAtNgRBleprYmqdtKHE+f4xjX36ThU14tpGz
- /Kk+J+w4EtklWFEXlJajQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:fsFsCFBlECc=:RkXJd5cyMagMVbYd1HFAmX
- VPWo5iFnBW6yuIUnu0wlIx01Lur2D9szeda7iwfPXy7gavOpIk7L2jPgXaUG3Y8B9JzWlsODo
- cwXN/TavqXTZH7rwWN93xxWnpiBEW44Ybf+z4Eo48byU9A6wu2YyfZTiTC94pI6JzNgT2xziL
- vMXnntK6A8Ux1xd4x3aEWGJZa3giFHe0Aso5TgtNUuPs66YmVFuXTGtGV91SEmmYpe4+hH8bA
- sboyRG8ztwE++qAnoK1BMmWTcuwf3bOQfJHUkwReJzcJeRlkePAmEq6dK29wwGXGk82RsFj2Z
- lEeWhOSgWm3YyhdKJinVBOhBbsaimilPafvScJ0Pgb5LapmR4LgWOTykyWMOpGipsUueI7mkO
- 9N5Uu6xG8jcpysphDIBupP/z74J0K2k19ZpBjO+6PeWMvXisR1RswYs4EM30khVjjKFAdW3+1
- q7pczo1+T6NFnREnTdo/80fnIhgMZsCWxSy3L9GVosl6SSebQQOoarSeKxrmmgG8QKA6okuCL
- gAfYEGDLoUfJZZzo/73cbZ3t0oLoxZF31aGYD7J2+1hTg9jWm/cxc5LXYwgZQZLJS3QFHOA9l
- ediB0FUmDK3BlRtuxtkfAXHbO02+kBaESaYTCxbXQRo7blTcinhhuxnXWi3kFbEKIA9yrpbgX
- bKOewf6sDaEaKBxOc8+EWDZJk/9hj5r8kVGMAxHkkn8Lr9Sxv3T5/kWfP7JdrSW7IdPY=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220204115718.14934-5-pbonzini@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 9, 2022 at 5:08 PM Sergei Shtylyov
-<sergei.shtylyov@gmail.com> wrote:
-> On 2/9/22 7:02 PM, Arnd Bergmann wrote:
-> >
-> > +       shlr2   r4
-> > +       shlr    r4
-> > +       mov     r4, r0          ! save vector->jmp table offset for later
-> > +
-> > +       shlr2   r4              ! vector to IRQ# conversion
-> > +       add     #-0x10, r4
-> > +
-> > +       cmp/pz  r4              ! is it a valid IRQ?
-> > +       bt      10f
-> >
-> > gets the vector (0x200 for this device), shifts it five bits to 0x10,
-> > and subtracts 0x10,
-> > then branches to do_IRQ if the interrupt number is non-zero, otherwise it goes
-> > through the exception_handling_table.
->
->    The SH4 manual I found on my disk (have it from MontaVista times) tells me cmp/pz
-> sets T if Rn is >= 0, then bt branches if T = 1. So I do think the code is correct.
->    One more thing: the board code for those boards was added in 2011, we can assume
-> it was working back then, right? :-_
+On Fri, Feb 04, 2022, Paolo Bonzini wrote:
+> struct kvm_mmu_role_regs is computed just once and then accessed.  Use
+> const to enforce this.
 
-Indeed, this does make more sense, I had not realized that the numbers could get
-negative here.
+It's not new enforcement, just syntatic sugar (though it's tasty sugar).  All fields
+in struct kvm_mmu_role_regs are const specifically to prevent such a struct from
+being changed regardless of how a pointer was obtained.
 
-         Arnd
+struct kvm_mmu_role_regs {
+	const unsigned long cr0;
+	const unsigned long cr4;
+	const u64 efer;
+};

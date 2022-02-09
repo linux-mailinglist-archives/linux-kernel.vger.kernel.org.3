@@ -2,82 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 376AA4AF30A
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 14:40:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C25734AF312
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 14:40:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234325AbiBINkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 08:40:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59370 "EHLO
+        id S234332AbiBINkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 08:40:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234313AbiBINkN (ORCPT
+        with ESMTP id S232649AbiBINke (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 08:40:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D80C0613CA;
-        Wed,  9 Feb 2022 05:40:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E46B619FF;
-        Wed,  9 Feb 2022 13:40:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1144C340E7;
-        Wed,  9 Feb 2022 13:40:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644414015;
-        bh=+8aJBPSULxP5Zax04rq5roBRVH/mUwGTvhQVeya08Aw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Zyx1Un9dpCjcJBBA9WTpIjqyj+P3afDSBYWrucqMYJdMpL+Op9P6lDfxs/IjQ2OXq
-         g2bkeD1/F4Ajy7Sdb5KDvRx9A0/dIA0lZiIjI1uy+umxSZyCEfCvBqYoRaCid69Bnx
-         8sPjqvn83M5qO9esVwBrate6RVoJBvKqpyYR1Oq7NaHwceS4MpfXK9flTllVh+OZ98
-         DOcrXvV9iFowho2pd4JLqN64zb5vGakCxZNVSZkfSPplWGU7n+poOFQHN6b0jFR5F5
-         QwqYpoHPWzpcD3CTFwR79T0g0sBg1XYbjmu0xh5Fd/LCqKRLVFWNIr9O9LVgw1Zmx7
-         uItQCnP8CHBAg==
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1nHnCf-006dDe-M2; Wed, 09 Feb 2022 13:40:13 +0000
+        Wed, 9 Feb 2022 08:40:34 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C93DC061355
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 05:40:35 -0800 (PST)
+Received: from kwepemi100010.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Jv19w2MpbzZfFs;
+        Wed,  9 Feb 2022 21:36:20 +0800 (CST)
+Received: from kwepemm600012.china.huawei.com (7.193.23.74) by
+ kwepemi100010.china.huawei.com (7.221.188.54) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 9 Feb 2022 21:40:33 +0800
+Received: from huawei.com (10.174.177.28) by kwepemm600012.china.huawei.com
+ (7.193.23.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Wed, 9 Feb
+ 2022 21:40:32 +0800
+From:   liuyuntao <liuyuntao10@huawei.com>
+To:     <mike.kravetz@oracle.com>, <akpm@linux-foundation.org>,
+        <yaozhenguo1@gmail.com>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <wuxu.wu@huawei.com>, <fangchuangchuang@huawei.com>,
+        <windspectator@gmail.com>
+Subject: [PATCH] hugetlbfs: fix a truncation issue in hugepages parameter
+Date:   Wed, 9 Feb 2022 21:40:18 +0800
+Message-ID: <20220209134018.8242-1-liuyuntao10@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Date:   Wed, 09 Feb 2022 13:40:13 +0000
-From:   Marc Zyngier <maz@kernel.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-mediatek@lists.infradead.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:TI ETHERNET SWITCH DRIVER (CPSW)" 
-        <linux-omap@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Emil Renner Berthing <kernel@esmil.dk>
-Subject: Re: [PATCH 03/12] irqchip/renesas-intc-gpio: Move PM device over to
- irq domain
-In-Reply-To: <CAMuHMdXbM8kvmv0XKP8=rYj-8k5cFt50VP69LeDNX5oHx2e9dw@mail.gmail.com>
-References: <20220201120310.878267-1-maz@kernel.org>
- <20220201120310.878267-4-maz@kernel.org>
- <CAMuHMdXbM8kvmv0XKP8=rYj-8k5cFt50VP69LeDNX5oHx2e9dw@mail.gmail.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <83f67bec65e4f3cf661e0b6a6bbe9641@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: geert@linux-m68k.org, linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, matthias.bgg@gmail.com, grygorii.strashko@ti.com, ssantosh@kernel.org, khilman@kernel.org, tglx@linutronix.de, shawnguo@kernel.org, s.hauer@pengutronix.de, avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com, kernel@esmil.dk
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.177.28]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600012.china.huawei.com (7.193.23.74)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,22 +52,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-02 14:27, Geert Uytterhoeven wrote:
-> Hi Marc,
-> 
-> On Tue, Feb 1, 2022 at 1:12 PM Marc Zyngier <maz@kernel.org> wrote:
->> Move the reference to the device over to the irq domain.
->> 
->> Signed-off-by: Marc Zyngier <maz@kernel.org>
-> 
-> Thanks for your patch!
-> 
-> s/gpio/irqpin/ in the one-line summary?
+From: Liu Yuntao <liuyuntao10@huawei.com>
 
-Indeed, now fixed.
+When we specify a large number for node in hugepages parameter,
+it may be parsed to another number due to truncation in this statement:
+	node = tmp;
 
-Thanks,
+For example, add following parameter in command line:
+	hugepagesz=1G hugepages=4294967297:5
+and kernel will allocate 5 hugepages for node 1 instead of ignoring it.
 
-         M.
+I move the validation check earlier to fix this issue, and slightly
+simplifies the condition here.
+
+Fixes: b5389086ad7be0 ("hugetlbfs: extend the definition of hugepages parameter to support node allocation")
+Signed-off-by: Liu Yuntao <liuyuntao10@huawei.com>
+---
+ mm/hugetlb.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 61895cc01d09..0929547f6ad6 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -4159,10 +4159,10 @@ static int __init hugepages_setup(char *s)
+ 				pr_warn("HugeTLB: architecture can't support node specific alloc, ignoring!\n");
+ 				return 0;
+ 			}
++			if (tmp >= nr_online_nodes)
++				goto invalid;
+ 			node = tmp;
+ 			p += count + 1;
+-			if (node < 0 || node >= nr_online_nodes)
+-				goto invalid;
+ 			/* Parse hugepages */
+ 			if (sscanf(p, "%lu%n", &tmp, &count) != 1)
+ 				goto invalid;
 -- 
-Jazz is not dead. It just smells funny...
+2.33.0
+

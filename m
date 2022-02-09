@@ -2,66 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59CBD4AF6E7
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:38:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3700E4AF6EA
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:38:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237331AbiBIQiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 11:38:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46170 "EHLO
+        id S237298AbiBIQiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 11:38:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237259AbiBIQh5 (ORCPT
+        with ESMTP id S237225AbiBIQiU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 11:37:57 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF076C05CBA7
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 08:37:58 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id m7so2656970pjk.0
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 08:37:58 -0800 (PST)
+        Wed, 9 Feb 2022 11:38:20 -0500
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72223C05CB86;
+        Wed,  9 Feb 2022 08:38:23 -0800 (PST)
+Received: by mail-qv1-xf2d.google.com with SMTP id o5so2252614qvm.3;
+        Wed, 09 Feb 2022 08:38:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=MsEXiVlyQb6Rm4U4ImPG8xi1NQSKn3tPJmrja66493o=;
-        b=Xym9iKiOnlUqKPHInpa8dBWlr8LoDSRrsYo66erdAECO2T2FbcwrAEcUxbWYq9ERjh
-         DNKaBNuXdWjvV/LW4unjf4bBwved8dN77s8seRo6nC6tYjDZnzq8EIWjA+npHUDH23f3
-         GhEyla7E6z/KhqLQUpIB0hdIH6mVu7bOXGo4MvSdhD54ou4M9b2LULFIgVxG7F8UKy7u
-         +K+rSGSyif5CuxOEBGn/OaElsGDBOllEN8NZTArAKNma9AdWn7Rco0+prwTyfxliy65F
-         uPfaGcWU8adUVmCjP56hRULk2ThGW2dlmXPFaT0r4GJGy9lXYxn50fPgDPmKm/uj8VRk
-         oqJw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=UiDGjAXge98sndCi//gMspGlqK9CQ0rnW1ogp58x2ps=;
+        b=L1pMsspBH0+fY9TcP+mb/z6ZEcA+7PIKwqG39N0YxdzIsvrcZseths0aZYOKQFkr1j
+         jRB3Q0GUDIUV8DiSZQNeqJG4ddEkddGBW8z/0McwrDwhIqDgih8Gv7pOH5QWVQkI/Jjm
+         CowY5ksaFVghP+u2nt2CtBZJRmGjIpfJaUXGIBIl0UAuQUq0yfP6mzGu1TiTelKE3bzq
+         bH3XZPxUWq4eCF05CCdPKgykTteAsqWlJRmgHAnTCtqRGVUQNdYrzOn+6Wrv5QTZaelt
+         Vc2eucNmiowalOng2Ixxh7MXuCBAj7aMOa1sVTzcZSQepMxxKrwjKCACrqLsnYj0jrGT
+         evrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=MsEXiVlyQb6Rm4U4ImPG8xi1NQSKn3tPJmrja66493o=;
-        b=xZEV+d1uDAEkKrFUU+LwhuaHFTDKoozRsogfaKtKmiyQtuPiXg/51QBAYJY3SI5K0F
-         lmrBb6V4PUYzYhiJH8gqkYVcFrfG//YsMBiFrTt7i8c2tFVm4zKCFpl2cDm3aGH4s0d6
-         j6zn19BZ9Bx+q0gorf9diizOWaD9JVB7++OIeKAjeAR4M933zA0uQrtGUIsdq1cAVyWN
-         bb2OdNLliqipDLtYLjao6AvQsETNSarv4545i8AzhEoICptHb9HQci1k9HrIVA3Pl6nz
-         NcevvIO5qa7B9w27C+s8T8dqxcnLSEes9oNFSOEGILeuPea5oxAYBOSnm07+iVDTvDmO
-         H3/w==
-X-Gm-Message-State: AOAM532PF1ODu5GZOnCZKlZbVyoQhHkehmoiGnN+/qA4FvbsLibLViqf
-        88JSz9U/7ACZ5AE/Zd5P3bc=
-X-Google-Smtp-Source: ABdhPJx6Vmie0LmAh8ASZ7G3tayhzdbM2ZCtfC7iiNPLS9M6lm3sFbvVWDEyfepwGoLdE4ddcoEVFA==
-X-Received: by 2002:a17:902:b789:: with SMTP id e9mr2943646pls.31.1644424678416;
-        Wed, 09 Feb 2022 08:37:58 -0800 (PST)
-Received: from localhost.localdomain ([122.164.186.156])
-        by smtp.googlemail.com with ESMTPSA id kb18sm7840199pjb.30.2022.02.09.08.37.54
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=UiDGjAXge98sndCi//gMspGlqK9CQ0rnW1ogp58x2ps=;
+        b=d1Jis4MmOux1y50DfYLB42PPoAN2LFEmxZG6RsG15sniOMk13Arbt6rRwWDHiPpOkk
+         RO1MuIPZxCxum6IoQ+47GkIX6gI6bBt1NNgUHlpjkZakClhJg41jfV/WvELf+zSmZmdm
+         wQIKr7t/6UAAQZO4PuuXmTWheLmNDay7vrumg6WBuiiqkBACUMtnn1r6RtjykkBG1sTb
+         nPcRPFBTccbP/wF1oyxa6Bj8JOpukoZbcKEjkMkAATyctB4vfwMiPR8paGYDN4Rkiztk
+         gnLo0ioq2Tr5o7Q1xmJwOj4dpoc/FIspc4APNZ1M95XELaqIXCSrmfTazcy3OB0K+ApR
+         9lwg==
+X-Gm-Message-State: AOAM533fWDAh9PBwu4/Z24Fw7ZWxv7pjItFrQiUCqS1VtAMdH+8/kxLR
+        dj+SmM2imgxiVKJkFv1hyh8=
+X-Google-Smtp-Source: ABdhPJwsX0Xi32lBOFhWLJxQrAM1pKPkOdKAQbS+/Ckq/iDNb9C1DsvDa69Nkuq5BlJyRv4A6h3azA==
+X-Received: by 2002:a05:6214:5298:: with SMTP id kj24mr2126321qvb.67.1644424702660;
+        Wed, 09 Feb 2022 08:38:22 -0800 (PST)
+Received: from shaak (modemcable055.92-163-184.mc.videotron.ca. [184.163.92.55])
+        by smtp.gmail.com with ESMTPSA id w5sm8623401qko.34.2022.02.09.08.38.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 08:37:57 -0800 (PST)
-From:   Abdun Nihaal <abdun.nihaal@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        straube.linux@gmail.com, martin@kaiser.cx,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        Abdun Nihaal <abdun.nihaal@gmail.com>
-Subject: [PATCH 9/9] staging: r8188eu: remove unused macros in sta_info.h
-Date:   Wed,  9 Feb 2022 22:06:07 +0530
-Message-Id: <c2453078b2d46119d167f2d0e4690cc87fc4b77e.1644422181.git.abdun.nihaal@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1644422181.git.abdun.nihaal@gmail.com>
-References: <cover.1644422181.git.abdun.nihaal@gmail.com>
+        Wed, 09 Feb 2022 08:38:21 -0800 (PST)
+Date:   Wed, 9 Feb 2022 11:38:20 -0500
+From:   Liam Beguin <liambeguin@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Peter Rosin <peda@axentia.se>, Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v14 09/11] iio: afe: rescale: add temperature transducers
+Message-ID: <YgPt/Hut4T4C86fX@shaak>
+References: <20220208020441.3081162-1-liambeguin@gmail.com>
+ <20220208020441.3081162-10-liambeguin@gmail.com>
+ <CAHp75Vf+FkofvC3_jvNadGed+eH7mQvVYXTOiWKCzwinJ3-2-w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHp75Vf+FkofvC3_jvNadGed+eH7mQvVYXTOiWKCzwinJ3-2-w@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -72,96 +76,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some of the sta_* and STA_* macros are not used.
-Remove those unused macros.
+Hi Andy,
 
-Signed-off-by: Abdun Nihaal <abdun.nihaal@gmail.com>
----
- drivers/staging/r8188eu/include/sta_info.h | 46 ----------------------
- 1 file changed, 46 deletions(-)
+On Tue, Feb 08, 2022 at 03:46:27PM +0200, Andy Shevchenko wrote:
+> On Tue, Feb 8, 2022 at 4:04 AM Liam Beguin <liambeguin@gmail.com> wrote:
+> >
+> > A temperature transducer is a device that converts a thermal quantity
+> > into any other physical quantity. This patch adds support for
+> > temperature to voltage (like the LTC2997) and temperature to current
+> > (like the AD590) linear transducers.
+> > In both cases these are assumed to be connected to a voltage ADC.
+> 
+> ...
+> 
+> > +       rescale->offset = div_s64((s64)offset * rescale->denominator,
+> > +                                 rescale->numerator);
+> 
+> Wonder if we can use mult_frac() here. Would it require 64-bit division?
 
-diff --git a/drivers/staging/r8188eu/include/sta_info.h b/drivers/staging/r8188eu/include/sta_info.h
-index 24b1254310b2..874db17df8bd 100644
---- a/drivers/staging/r8188eu/include/sta_info.h
-+++ b/drivers/staging/r8188eu/include/sta_info.h
-@@ -210,53 +210,24 @@ struct sta_info {
- 	+ sta->sta_stats.rx_ctrl_pkts \
- 	+ sta->sta_stats.rx_data_pkts)
- 
--#define sta_last_rx_pkts(sta) \
--	(sta->sta_stats.last_rx_mgnt_pkts \
--	+ sta->sta_stats.last_rx_ctrl_pkts \
--	+ sta->sta_stats.last_rx_data_pkts)
--
- #define sta_rx_data_pkts(sta) \
- 	(sta->sta_stats.rx_data_pkts)
- 
- #define sta_last_rx_data_pkts(sta) \
- 	(sta->sta_stats.last_rx_data_pkts)
- 
--#define sta_rx_mgnt_pkts(sta) \
--	(sta->sta_stats.rx_mgnt_pkts)
--
--#define sta_last_rx_mgnt_pkts(sta) \
--	(sta->sta_stats.last_rx_mgnt_pkts)
--
- #define sta_rx_beacon_pkts(sta) \
- 	(sta->sta_stats.rx_beacon_pkts)
- 
- #define sta_last_rx_beacon_pkts(sta) \
- 	(sta->sta_stats.last_rx_beacon_pkts)
- 
--#define sta_rx_probereq_pkts(sta) \
--	(sta->sta_stats.rx_probereq_pkts)
--
--#define sta_last_rx_probereq_pkts(sta) \
--	(sta->sta_stats.last_rx_probereq_pkts)
--
- #define sta_rx_probersp_pkts(sta) \
- 	(sta->sta_stats.rx_probersp_pkts)
- 
- #define sta_last_rx_probersp_pkts(sta) \
- 	(sta->sta_stats.last_rx_probersp_pkts)
- 
--#define sta_rx_probersp_bm_pkts(sta) \
--	(sta->sta_stats.rx_probersp_bm_pkts)
--
--#define sta_last_rx_probersp_bm_pkts(sta) \
--	(sta->sta_stats.last_rx_probersp_bm_pkts)
--
--#define sta_rx_probersp_uo_pkts(sta) \
--	(sta->sta_stats.rx_probersp_uo_pkts)
--
--#define sta_last_rx_probersp_uo_pkts(sta) \
--	(sta->sta_stats.last_rx_probersp_uo_pkts)
--
- #define sta_update_last_rx_pkts(sta) \
- do { \
- 	sta->sta_stats.last_rx_mgnt_pkts = sta->sta_stats.rx_mgnt_pkts; \
-@@ -269,23 +240,6 @@ do { \
- 	sta->sta_stats.last_rx_data_pkts = sta->sta_stats.rx_data_pkts; \
- } while (0)
- 
--#define STA_RX_PKTS_ARG(sta) \
--	sta->sta_stats.rx_mgnt_pkts \
--	, sta->sta_stats.rx_ctrl_pkts \
--	, sta->sta_stats.rx_data_pkts
--
--#define STA_LAST_RX_PKTS_ARG(sta) \
--	sta->sta_stats.last_rx_mgnt_pkts \
--	, sta->sta_stats.last_rx_ctrl_pkts \
--	, sta->sta_stats.last_rx_data_pkts
--
--#define STA_RX_PKTS_DIFF_ARG(sta) \
--	sta->sta_stats.rx_mgnt_pkts - sta->sta_stats.last_rx_mgnt_pkts \
--	, sta->sta_stats.rx_ctrl_pkts - sta->sta_stats.last_rx_ctrl_pkts \
--	, sta->sta_stats.rx_data_pkts - sta->sta_stats.last_rx_data_pkts
--
--#define STA_PKTS_FMT "(m:%llu, c:%llu, d:%llu)"
--
- struct	sta_priv {
- 	u8 *pallocated_stainfo_buf;
- 	u8 *pstainfo_buf;
--- 
-2.34.1
+Same here, I'd rather keep it as is, especially if you plan on adding
+helpers later on for struct u32_fract.
 
+Cheers,
+Liam
+
+> -- 
+> With Best Regards,
+> Andy Shevchenko

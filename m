@@ -2,150 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DA264AEBE6
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 09:11:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9730A4AEBEC
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 09:12:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240840AbiBIIKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 03:10:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54744 "EHLO
+        id S240970AbiBIIL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 03:11:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238794AbiBIIK3 (ORCPT
+        with ESMTP id S241565AbiBIILC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 03:10:29 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11325C05CB82
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 00:10:33 -0800 (PST)
-Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nHi3Y-0004o2-8w; Wed, 09 Feb 2022 09:10:28 +0100
-Received: from ore by dude.hi.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nHi3X-0098jF-LK; Wed, 09 Feb 2022 09:10:27 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: [PATCH net-next v2 2/2] dt-bindings: net: add schema for Microchip/SMSC LAN95xx USB Ethernet controllers
-Date:   Wed,  9 Feb 2022 09:10:25 +0100
-Message-Id: <20220209081025.2178435-3-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220209081025.2178435-1-o.rempel@pengutronix.de>
-References: <20220209081025.2178435-1-o.rempel@pengutronix.de>
+        Wed, 9 Feb 2022 03:11:02 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E896C05CB84;
+        Wed,  9 Feb 2022 00:10:59 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id y5so2957394pfe.4;
+        Wed, 09 Feb 2022 00:10:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=cfZp3UJZbXHdktLhCYrLYq4K/+PuFUiThbNb3DhKy/c=;
+        b=obLXTKbKWU4xqyNei8uNwCxDAd5mbv1UTJweu7OIQGC/9PN1bW0txIJXdpsZVO+XnH
+         zYE7hC4tCGiHQLQCjgKpq1i4PSA8gd0xfhKTYC9bzZ6EIr6s/o/1r9CnnaVsqHcuNhmC
+         9pPwhD7qcjw8bxY2HKzimJWpxNUWJiIflv+S9U4kXbMK/JYAEl1nouxU1LgK0+07ehDw
+         TpsRh80bI13KZPy1BAUOhWOGeu0koepuq2cXL+Nx+dAAnK4r3+dgK/Qd88NdXV08+AzP
+         urHBpGpENvXuiIOgdUFUwgCFYszZ+sRSBuGRV+tlhsTY9Qagsm74nTG/qE3rfzgxlpgX
+         pkLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=cfZp3UJZbXHdktLhCYrLYq4K/+PuFUiThbNb3DhKy/c=;
+        b=E1y+hMR2d/Ogex+rs7ikjUz6X0Ez984ATWYUrJ4tYch2AlsY9d8ArldME28qpbcIAX
+         F4Epo7ID6/rAhQpSjcLUjPS8EuqMt9PZafLnoxDvw+czZkKRB49Pc1sRFBtveiN+JQcn
+         uv/b3VkeQYdCn3jQQRNqZB+ruA/trKztq8mstiuZwePrN10eitgNKtsYYsl+4r03xCJj
+         0AHKiUxm9Liq7E31yC0GIabsHZ01PzJDNRgmOA72axsvpDH8aEofv37vQBG2H2ajbthx
+         46sSV5ozTH+snEY4voXzDZN8LA5FKcm6z0SHYf4ougZ7gDv+EpAQj+SM7OR/58WZ8VAa
+         zLQw==
+X-Gm-Message-State: AOAM5334nGKiqSJ4XqqifU2gP/4PG+oI6pMFgf7i6lc4MAMPENPsA7q2
+        tcOf9nGUglX1OuT6Nj9qkVc=
+X-Google-Smtp-Source: ABdhPJyUtsQKzh9+Gm+FAvsNcaGJiuwNcqH8T3oXvrxVddih+gd6SWMeJ4qmGnCf0vHDDrN+EMsszA==
+X-Received: by 2002:a63:3804:: with SMTP id f4mr977278pga.454.1644394258845;
+        Wed, 09 Feb 2022 00:10:58 -0800 (PST)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id 123sm998800pgd.19.2022.02.09.00.10.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Feb 2022 00:10:58 -0800 (PST)
+Message-ID: <2db2ebbe-e552-b974-fc77-870d958465ba@gmail.com>
+Date:   Wed, 9 Feb 2022 16:10:48 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.0
+Subject: KVM: x86: Reconsider the current approach of vPMU
+Content-Language: en-US
+To:     Jim Mattson <jmattson@google.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>,
+        David Dunn <daviddunn@google.com>
+References: <20220117085307.93030-1-likexu@tencent.com>
+ <20220117085307.93030-3-likexu@tencent.com>
+ <20220202144308.GB20638@worktop.programming.kicks-ass.net>
+ <CALMp9eRBOmwz=mspp0m5Q093K3rMUeAsF3vEL39MGV5Br9wEQQ@mail.gmail.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+Organization: Tencent
+In-Reply-To: <CALMp9eRBOmwz=mspp0m5Q093K3rMUeAsF3vEL39MGV5Br9wEQQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Create initial schema for Microchip/SMSC LAN95xx USB Ethernet controllers and
-import all currently supported USB IDs form drivers/net/usb/smsc95xx.c
+Changed the subject to attract more attention.
 
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
- .../bindings/net/microchip,lan95xx.yaml       | 80 +++++++++++++++++++
- 1 file changed, 80 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/net/microchip,lan95xx.yaml
+On 3/2/2022 6:35 am, Jim Mattson wrote:
+> On Wed, Feb 2, 2022 at 6:43 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> 
+>> Urgh... hate on kvm being a module again. We really need something like
+>> EXPORT_SYMBOL_KVM() or something.
+> 
+> Perhaps we should reconsider the current approach of treating the
+> guest as a client of the host perf subsystem via kvm as a proxy. There
 
-diff --git a/Documentation/devicetree/bindings/net/microchip,lan95xx.yaml b/Documentation/devicetree/bindings/net/microchip,lan95xx.yaml
-new file mode 100644
-index 000000000000..8521c65366b4
---- /dev/null
-+++ b/Documentation/devicetree/bindings/net/microchip,lan95xx.yaml
-@@ -0,0 +1,80 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/net/microchip,lan95xx.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: The device tree bindings for the USB Ethernet controllers
-+
-+maintainers:
-+  - Oleksij Rempel <o.rempel@pengutronix.de>
-+
-+description: |
-+  Device tree properties for hard wired SMSC95xx compatible USB Ethernet
-+  controller.
-+
-+allOf:
-+  - $ref: ethernet-controller.yaml#
-+
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+          - usb424,9500   # SMSC9500 USB Ethernet Device
-+          - usb424,9505   # SMSC9505 USB Ethernet Device
-+          - usb424,9530   # SMSC LAN9530 USB Ethernet Device
-+          - usb424,9730   # SMSC LAN9730 USB Ethernet Device
-+          - usb424,9900   # SMSC9500 USB Ethernet Device (SAL10)
-+          - usb424,9901   # SMSC9505 USB Ethernet Device (SAL10)
-+          - usb424,9902   # SMSC9500A USB Ethernet Device (SAL10)
-+          - usb424,9903   # SMSC9505A USB Ethernet Device (SAL10)
-+          - usb424,9904   # SMSC9512/9514 USB Hub & Ethernet Device (SAL10)
-+          - usb424,9905   # SMSC9500A USB Ethernet Device (HAL)
-+          - usb424,9906   # SMSC9505A USB Ethernet Device (HAL)
-+          - usb424,9907   # SMSC9500 USB Ethernet Device (Alternate ID)
-+          - usb424,9908   # SMSC9500A USB Ethernet Device (Alternate ID)
-+          - usb424,9909   # SMSC9512/9514 USB Hub & Ethernet Devic.  ID)
-+          - usb424,9e00   # SMSC9500A USB Ethernet Device
-+          - usb424,9e01   # SMSC9505A USB Ethernet Device
-+          - usb424,9e08   # SMSC LAN89530 USB Ethernet Device
-+          - usb424,ec00   # SMSC9512/9514 USB Hub & Ethernet Device
-+
-+  reg: true
-+  local-mac-address: true
-+  mac-address: true
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    usb {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        ethernet@1 {
-+            compatible = "usb424,ec00";
-+            reg = <1>;
-+            local-mac-address = [00 00 00 00 00 00];
-+        };
-+    };
-+  - |
-+    usb {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        usb1@1 {
-+            compatible = "usb424,9514";
-+            reg = <1>;
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            ethernet@1 {
-+               compatible = "usb424,ec00";
-+               reg = <1>;
-+            };
-+        };
-+    };
--- 
-2.30.2
+The story of vPMU begins with the perf_event_create_kernel_counter()
+interface which is a generic API in the kernel mode.
 
+> are several drawbacks to the current approach:
+> 1) If the guest actually sets the counter mask (and invert counter
+> mask) or edge detect in the event selector, we ignore it, because we
+> have no way of requesting that from perf.
+
+We need more guest user cases and voices when it comes to vPMU
+capabilities on a case-by-case basis (invert counter mask or edge detect).
+
+KVM may set these bits before vm-entry if it does not affect the host.
+
+> 2) If a system-wide pinned counter preempts one of kvm's thread-pinned
+> counters, we have no way of letting the guest know, because the
+> architectural specification doesn't allow counters to be suspended.
+
+One such case is NMI watchdog. The truth is that KVM can check the status
+of the event before vm-entry to know that the back-end counter has been
+rescheduled to another perf user, but can't do anything about it.
+
+I had drafted a vPMU notification patch set to synchronize the status of the
+back-end counters to the guest, using the PV method with the help of vPMI.
+
+I'm sceptical about this direction and the efficiency of the notification mechanism
+I have designed but I do hope that others have better ideas and quality code.
+
+The number of counters is relatively plenty, but it's a pain in the arse for LBR,
+and I may post out a slow path with a high performance cost if you're interested in.
+
+> 3) TDX is going to pull the rug out from under us anyway. When the TDX
+> module usurps control of the PMU, any active host counters are going
+> to stop counting. We are going to need a way of telling the host perf
+
+I presume that performance counters data of TDX guest is isolated for host,
+and host counters (from host perf agent) will not stop and keep counting
+only for TDX guests in debug mode.
+
+Off-topic, not all of the capabilities of the core-PMU can or should be
+used by TDX guests (given that the behavior of firmware for PMU resource
+is constantly changing and not even defined).
+
+> subsystem what's happening, or other host perf clients are going to
+> get bogus data.
+
+I predict perf core will be patched to sense (via callback, KVM notifies perf,
+smart perf_event running time or host stable TSC diff) and report this kind
+of data holes from TDX, SGX, AMD-SEV in the report.
+
+> 
+> Given what's coming with TDX, I wonder if we should just bite the
+> bullet and cede the PMU to the guest while it's running, even for
+> non-TDX guests. That would solve (1) and (2) as well.
+
+The idea of "cede the PMU to the guest" or "vPMU pass-through" is not really
+new to us, there are two main obstacles: one is the isolation of NMI paths
+(including GLOBAL_* MSRs, like STATUS); the other is avoiding guest sniffing
+host data which is a perfect method for guest escape attackers.
+
+At one time, we proposed to statically reserve counters from the host
+perf view at guest startup, but this option was NAK-ed from PeterZ.
+
+We may have a chance to reserve counters at the host startup
+until we have a guest PMU more friendly hardware design. :D
+
+I'd like to add one more vPMU discussion point: support for
+heterogeneous VMX cores (run vPMU on the ADL or later).
+
+The current capability of vPMU depends on which physical CPU
+the KVM module is initialized on, and the current upstream
+solution brings concerns in terms of vCPU compatibility and migration.
+
+Thanks,
+Like Xu

@@ -2,91 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFE964AF0B6
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 13:05:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01B564AF0B1
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 13:05:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232251AbiBIMEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 07:04:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39544 "EHLO
+        id S230122AbiBIMEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 07:04:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231982AbiBIMDO (ORCPT
+        with ESMTP id S232009AbiBIMDP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 07:03:14 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D913AC033249
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 03:40:27 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
+        Wed, 9 Feb 2022 07:03:15 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34E4BC050CCC
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 03:40:41 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id B95021F390;
+        Wed,  9 Feb 2022 11:40:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1644406839; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lSWEBqCK6bEh7Ah6m9U0uBjMeOxKtyjx0Sz5afwDSAI=;
+        b=vVR1kESID+CTfbU4i754xpLichQMNvB9CmRzfUBSevRAY8bDmuIU1yd8pIXLukeqhjHirV
+        THI+KKSzDQHQsk1Hs4wHl/HBn6IvYm0V2G9BiwRAXsWRya3Mi1i6uYXvaFQoX8c3WlP3dv
+        +A6HKj7UoQ87oHcu0KaP02Rk5HTXDvY=
+Received: from suse.cz (pathway.suse.cz [10.100.12.24])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4F2D71EC054C;
-        Wed,  9 Feb 2022 12:40:22 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1644406822;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=YW2m9uiYmForoP7mys5vbamX9CSY0dr8MG2u1gRwbQU=;
-        b=It8Diogeg1sUuDhyQoluVuNV7ePec4LRfJpuM0wYVw7nmTBLn+0WfOw6HSCeZjhsL5igSc
-        +F8BjOwdhuAatqqH/8UIY8+38kmJWKt8pBwOaB5BXeh89yhXclGRtRLN6Hd+Ta+rabMoVt
-        NYyYox4KN1y9RXyQpNQjej5o9oH8FoI=
-Date:   Wed, 9 Feb 2022 12:40:17 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@intel.com,
-        luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv2 00/29] TDX Guest: TDX core support
-Message-ID: <YgOoId+vyd1VhIqQ@zn.tnic>
-References: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
- <20220209235613.652f5720cd196331d7a220ec@intel.com>
- <YgOgog9Pb886lfsv@zn.tnic>
- <20220210003033.e57c2925b69bab5cfabf7292@intel.com>
+        by relay2.suse.de (Postfix) with ESMTPS id 09608A3B83;
+        Wed,  9 Feb 2022 11:40:38 +0000 (UTC)
+Date:   Wed, 9 Feb 2022 12:40:38 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Maninder Singh <maninder1.s@samsung.com>
+Cc:     rostedt@goodmis.org, senozhatsky@chromium.org,
+        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
+        akpm@linux-foundation.org, wangkefeng.wang@huawei.com,
+        mbenes@suse.cz, swboyd@chromium.org, ojeda@kernel.org,
+        linux-kernel@vger.kernel.org, will@kernel.org,
+        catalin.marinas@arm.com, Vaneet Narang <v.narang@samsung.com>,
+        Aaron Tomlin <atomlin@redhat.com>,
+        Luis Chamberlain <mcgrof@kernel.org>
+Subject: Re: [PATCH 1/1] kallsyms: print module name in %ps/S case when
+ KALLSYMS is disabled
+Message-ID: <20220209114038.GA8279@pathway.suse.cz>
+References: <CGME20220201040100epcas5p180ef094058fc9c76b4b94d9d673fc5fc@epcas5p1.samsung.com>
+ <20220201040044.1528568-1-maninder1.s@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220210003033.e57c2925b69bab5cfabf7292@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220201040044.1528568-1-maninder1.s@samsung.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 12:30:33AM +1300, Kai Huang wrote:
-> Because SEAM, P-SEAMLDR can logically be independent, so I feel it's better to
-> have separate C files for them.
+On Tue 2022-02-01 09:30:44, Maninder Singh wrote:
+> original:
+> With KALLSYMS
+>                    %pS                               %ps
+> [16.4200]  hello_init+0x0/0x24 [crash]        hello_init [crash]
+> 
+> Without KALLSYMS:
+> [16.2200]      0xbe200040                         0xbe200040
+> 
+> With Patch (Without KALLSYMS:) load address + current offset [Module Name]
+> 
+> [13.5993]  0xbe200000+0x40 [crash]           0xbe200000+0x40 [crash]
+> 
+> It will help in better debugging and checking when KALLSYMS is disabled,
+> user will get information about module name and load address of module.
+> 
+> verified for arm64:
+> / # insmod /crash.ko
+> 
+> [   19.263556] 0xffff800000ec0000+0x38 [crash]
+> 
+> ..
+> 
+> [   19.276023] Call trace:
+> [   19.276277]  0xffff800000ec0000+0x28 [crash]
+> [   19.276567]  0xffff800000ec0000+0x58 [crash]
+> [   19.276727]  0xffff800000ec0000+0x74 [crash]
+> [   19.276866]  0xffff8000080127d0
+> [   19.276978]  0xffff80000812d95c
+> [   19.277085]  0xffff80000812f554
 
-Most of those look like small files. I don't see the point of having it
-all in separate files - you can just as well put them in tdx.c and carve
-out only then when the file becomes too unwieldy to handle.
+The idea is great. But the patch will need some changes, see below.
 
-> Thanks for the information.  However, for now does it make sense to also put
-> TDX host files under arch/x86/kernel/, or maybe arch/x86/kernel/tdx_host/?
+> --- a/include/linux/kallsyms.h
+> +++ b/include/linux/kallsyms.h
+> @@ -163,6 +163,33 @@ static inline bool kallsyms_show_value(const struct cred *cred)
+>  	return false;
+>  }
+>  
+> +#ifdef CONFIG_MODULES
+> +static inline int fill_minimal_module_info(char *sym, int size, unsigned long value)
+> +{
+> +	struct module *mod;
+> +	unsigned long offset;
+> +	int ret = 0;
+> +
+> +	preempt_disable();
+> +	mod = __module_address(value);
+> +	if (mod) {
+> +		offset = value - (unsigned long)mod->core_layout.base;
+> +		snprintf(sym, size - 1, "0x%lx+0x%lx [%s]",
+> +				(unsigned long)mod->core_layout.base, offset, mod->name);
+> +
+> +		sym[size - 1] = '\0';
+> +		ret = 1;
+> +	}
+> +
+> +	preempt_enable();
+> +	return ret;
+> +}
 
-Didn't you just read what I wrote about "kernel"?
+It looks too big for an inlined function. Anyway, we will need
+something even more complex, see below.
 
-> As suggested by Thomas, host SEAMCALL can share TDX guest's __tdx_module_call()
-> implementation.  Kirill will have a arch/x86/kernel/tdxcall.S which implements
-> the core body of __tdx_module_call() and is supposed to be included by the new
-> assembly file to implement the host SEAMCALL function.  From this perspective,
-> it seems more reasonable to just put all TDX host files under arch/x86/kernel/?
+> diff --git a/lib/vsprintf.c b/lib/vsprintf.c
+> index 61528094ec87..41c74abb1726 100644
+> --- a/lib/vsprintf.c
+> +++ b/lib/vsprintf.c
+> @@ -1007,6 +1005,9 @@ char *symbol_string(char *buf, char *end, void *ptr,
+>  
+>  	return string_nocheck(buf, end, sym, spec);
+>  #else
+> +	if (fill_minimal_module_info(sym, KSYM_SYMBOL_LEN, value))
+> +		return string_nocheck(buf, end, sym, spec);
 
-It would be a lot harder to move them to a different location later,
-when they're upstream already. I'm talking from past experience here.
+The behavior should be different for different modifiers. Namely:
 
-But let's see what the others think first.
+    + the offset is not printed for %ps   // lower-case 's'
 
--- 
-Regards/Gruss,
-    Boris.
+    + the address must be searched with offset -1 for %pB  // on stack
 
-https://people.kernel.org/tglx/notes-about-netiquette
+    + build ID should be appended when 'b' modifier is appeanded
+
+IMHO, we should implement a generic __sprint_symbol() that will
+find the information using kallsyms_lookup_buildid() when available
+and fallback to the mininalized approach when kallsyms are not available.
+
+It might require moving the code out of kallsyms.c. It should be
+co-ordinated with the other patchset that is moving these sources
+into kernel/module/*, see
+https://lore.kernel.org/r/20220130213214.1042497-1-atomlin@redhat.com
+
+Adding Aaron and Luis into Cc.
+
+Best Regards,
+Petr

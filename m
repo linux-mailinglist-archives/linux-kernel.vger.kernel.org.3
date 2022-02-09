@@ -2,87 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC3DF4AEC90
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 09:36:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DE844AEC97
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 09:36:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241802AbiBIIeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 03:34:17 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:49616 "EHLO
+        id S241817AbiBIIeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 03:34:25 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:49612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241529AbiBIIeM (ORCPT
+        with ESMTP id S241729AbiBIIeO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 03:34:12 -0500
-Received: from mail-vs1-f49.google.com (mail-vs1-f49.google.com [209.85.217.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB7EC03C1A3;
-        Wed,  9 Feb 2022 00:34:05 -0800 (PST)
-Received: by mail-vs1-f49.google.com with SMTP id r20so1810724vsn.0;
-        Wed, 09 Feb 2022 00:34:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=E8GmvvUEovjq8L63GgeisXiih83gj7UpFOrlWJvTagg=;
-        b=8QXO2GdQY+5+8sABduiRr8lSZIWXpC4yi2IQmWML6cwHzcGyAgcSc37yCd0vGJymfi
-         2h3dpSpxkqiXfpMzVailLyMzYGjmdWuiqWs1BljcftkgYe8Ud7ms/u4aNL3rdfazce2K
-         R3hT5neHVjXJXNgMaY5L9uImZTN3KCbB8ivNsIM1gWEU4ETsEoIkq0SSftuHvlRc3Wzo
-         dE5R1eGS/G0pr5Xwh3Kl5gZf6M0kbJSbkLiR38RGBHvU0bAiYakbWGJvgYeT5aGgLQrB
-         cJ0gQQAhpNc052g0wWzE+4p5sW1yFWm71HVLUmltiUt+H6lGfkutUpfGVCni7jSx1RHl
-         cibg==
-X-Gm-Message-State: AOAM530xYWVT36AQ7Zcw2ER+8x5N75xAL0jUcm6VJH7H4FdlRYLFcf+x
-        7WBE8To3mbwT6q7scBgK5iLRKRnKz7vSaA==
-X-Google-Smtp-Source: ABdhPJxhDvEtzlzpKOrwHaZqylqIzxdgvsguoeb8soB1a5GSy/wwKO3ijT+hW4TjHRZgfkEg4s6nlA==
-X-Received: by 2002:a67:d811:: with SMTP id e17mr353325vsj.7.1644395640415;
-        Wed, 09 Feb 2022 00:34:00 -0800 (PST)
-Received: from mail-vs1-f53.google.com (mail-vs1-f53.google.com. [209.85.217.53])
-        by smtp.gmail.com with ESMTPSA id d5sm643227vsd.19.2022.02.09.00.33.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Feb 2022 00:34:00 -0800 (PST)
-Received: by mail-vs1-f53.google.com with SMTP id f6so1744080vsa.5;
-        Wed, 09 Feb 2022 00:33:59 -0800 (PST)
-X-Received: by 2002:a67:a401:: with SMTP id n1mr327572vse.38.1644395639705;
- Wed, 09 Feb 2022 00:33:59 -0800 (PST)
+        Wed, 9 Feb 2022 03:34:14 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA316C05CBB9;
+        Wed,  9 Feb 2022 00:34:06 -0800 (PST)
+Date:   Wed, 9 Feb 2022 09:33:55 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1644395637;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cEegwyHh3AOCLz3cTCj8v6K1zDxKD4yBWV+8sL6bFrc=;
+        b=u/Mob7w/VimevoQAad7DDk4SKgNX8XCDpPf69TQ2lWT3az8CLyezqtq4ny/TGXZbqanHGI
+        VSEC0Jylcd1DFjKAdrhsAtpxuL73f6zCyMioxlYTkQKCBjfoaHZMZUQ251GatAZcK84MJi
+        gwIsFGHot8iYqtULewHoa3+ljzeaZMp7Ljc5FJTWH26EYcb/b3f0ZJDVTYIKifgw6q8Vfb
+        FQrjdsTmmtHMT3fWNnbuMuWfB4CTh6SB+55DwAaqXDYsPJ7WR6DzozP21kZShNZW2IUkkx
+        XqGXK93zv4S9IZiQ9NvbTRZB7LGTnDGfEUMCEuAptS8ZgXpPYXtY+rExB6RCOQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1644395637;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cEegwyHh3AOCLz3cTCj8v6K1zDxKD4yBWV+8sL6bFrc=;
+        b=Qh++AmLLRNISAd6f1OEam+WBPL+y4VbfbjTC/YRzjJnVL0kOm0B+pA4QgdRkow7WJ+1bMq
+        pOIppG4y96osryDw==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Wolfram Sang <wsa@kernel.org>, greybus-dev@lists.linaro.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Alex Elder <elder@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        UNGLinuxDriver@microchip.com,
+        Woojung Huh <woojung.huh@microchip.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>
+Subject: [PATCH v3 1/7] genirq: Provide generic_handle_irq_safe().
+Message-ID: <YgN8cx/t1JvATvxh@linutronix.de>
+References: <20220131123404.175438-1-bigeasy@linutronix.de>
+ <20220131123404.175438-2-bigeasy@linutronix.de>
+ <YgArWgyvy9xF3V5Q@kunai>
 MIME-Version: 1.0
-References: <20220208183511.2925304-1-jjhiblot@traphandler.com> <20220208183511.2925304-5-jjhiblot@traphandler.com>
-In-Reply-To: <20220208183511.2925304-5-jjhiblot@traphandler.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 9 Feb 2022 09:33:48 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXye8+z9rm25R96nHJz_BSNRHHjizXRTey9OYstdqYBuw@mail.gmail.com>
-Message-ID: <CAMuHMdXye8+z9rm25R96nHJz_BSNRHHjizXRTey9OYstdqYBuw@mail.gmail.com>
-Subject: Re: [PATCH v2 4/6] ARM: dts: r9a06g032-rzn1d400-db: Enable watchdog0
- with a 60s timeout
-To:     Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <YgArWgyvy9xF3V5Q@kunai>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 8, 2022 at 7:35 PM Jean-Jacques Hiblot
-<jjhiblot@traphandler.com> wrote:
-> 60s is a sensible default value.
->
-> Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+Provide generic_handle_irq_safe() which can used from any context.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Reviewed-by: Oleksandr Natalenko <oleksandr@natalenko.name>
+Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
 
-Gr{oetje,eeting}s,
+v2=E2=80=A6v3: Correct kernel doc for generic_handle_irq_safe() as per Wolf=
+ram
+       Sang.
 
-                        Geert
+ include/linux/irqdesc.h |  1 +
+ kernel/irq/irqdesc.c    | 23 +++++++++++++++++++++++
+ 2 files changed, 24 insertions(+)
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+diff --git a/include/linux/irqdesc.h b/include/linux/irqdesc.h
+index 93d270ca0c567..a77584593f7d1 100644
+--- a/include/linux/irqdesc.h
++++ b/include/linux/irqdesc.h
+@@ -160,6 +160,7 @@ static inline void generic_handle_irq_desc(struct irq_d=
+esc *desc)
+=20
+ int handle_irq_desc(struct irq_desc *desc);
+ int generic_handle_irq(unsigned int irq);
++int generic_handle_irq_safe(unsigned int irq);
+=20
+ #ifdef CONFIG_IRQ_DOMAIN
+ /*
+diff --git a/kernel/irq/irqdesc.c b/kernel/irq/irqdesc.c
+index 2267e6527db3c..346d283d2da14 100644
+--- a/kernel/irq/irqdesc.c
++++ b/kernel/irq/irqdesc.c
+@@ -662,6 +662,29 @@ int generic_handle_irq(unsigned int irq)
+ }
+ EXPORT_SYMBOL_GPL(generic_handle_irq);
+=20
++/**
++ * generic_handle_irq_safe - Invoke the handler for a particular irq from =
+any
++ *			     context.
++ * @irq:	The irq number to handle
++ *
++ * Returns:	0 on success, a negative value on error.
++ *
++ * This function can be called from any context (IRQ or process context). =
+It
++ * will report an error if not invoked from IRQ context and the irq has be=
+en
++ * marked to enforce IRQ-context only.
++ */
++int generic_handle_irq_safe(unsigned int irq)
++{
++	unsigned long flags;
++	int ret;
++
++	local_irq_save(flags);
++	ret =3D handle_irq_desc(irq_to_desc(irq));
++	local_irq_restore(flags);
++	return ret;
++}
++EXPORT_SYMBOL_GPL(generic_handle_irq_safe);
++
+ #ifdef CONFIG_IRQ_DOMAIN
+ /**
+  * generic_handle_domain_irq - Invoke the handler for a HW irq belonging
+--=20
+2.34.1
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

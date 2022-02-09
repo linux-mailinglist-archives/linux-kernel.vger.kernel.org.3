@@ -2,145 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B3AF4AFD4C
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 20:26:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BADA4AFD46
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 20:26:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232766AbiBITYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 14:24:30 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:40478 "EHLO
+        id S234543AbiBITZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 14:25:32 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:44504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233839AbiBITYZ (ORCPT
+        with ESMTP id S234387AbiBITZU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 14:24:25 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2539CE00D0E3
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 11:24:25 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id v12so5840600wrv.2
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 11:24:25 -0800 (PST)
+        Wed, 9 Feb 2022 14:25:20 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B81DE015250
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 11:25:13 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id k6-20020a05600c1c8600b003524656034cso2380665wms.2
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 11:25:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6ruVJG7HncR2N0k4CIyXD71cI4+MqIoBGL55+c9rkl0=;
-        b=GpwsqEJGmeJNlJDm+BtsMicSlQhMnINXJWUKxAHh/wcRlEe/gCxWSLkUQXj0IKQOP1
-         pARJjQJnmjjYATq0E86iV722i7CmTzZgMxL281ND+XIinpdaNSIRERuFaorO1aVrLRBU
-         Udm+lv+WZ/cAKqV1rEJ9sVhJhypZ5rn2/DB8Afuwsubcj97UMPJXrr+gukNVAXAMblV9
-         XjVlieT2Wqt9TPcOmmR1WXvcPoWfoHUK7mCUUWDYslCAvkokP1oMKKnr4wQJ5qE7qRf9
-         zDMMhKC1pLQzw6RiXNl1+89KMO6DwZ06rGOkPSAzIEDI6kBSkFUN0I9ukaPiGly7TRVJ
-         Xl3g==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=9X6kiHxpGEazzvkQHp8JnSwgUsJv8D0X/1igB1bJ0oM=;
+        b=F+1sc9LG9Zusg8VEVpmo/a8vGlBpqMWse1p/RFAUMyYeq8iwZj3MRa7hjavr8KL9Wl
+         jEdeEg8CSnXfgTg6u+0HhVo3iieUx/mqE2aRvLDuwyghlMBvJ6dj+riFgrqwt1R3411+
+         LH/975H10YT9+feSLn8PkRoZMV8B0S/ORAWIQrR6t38RKCx/mNROV0o+pk/oLaF+ivxr
+         shuEKu8D27Sd0379yjauUYuSJbvnPQZDc5rpwQapN1ScgY21I+TSz91lMvAXDtJlvOe4
+         rxvKuPYZb4eivldj0ZoVreDkYl6QuJsstf7YlKapOeJ+mhh/P5E/lW1qfNaCgDAlQEBE
+         +ybg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6ruVJG7HncR2N0k4CIyXD71cI4+MqIoBGL55+c9rkl0=;
-        b=bJI80elgIbbh5Z6hVeQlZIwxu6SRLlRUip+8CHuQjSdMnr2+uDtjtVmiTHr1uRcNDD
-         gKjEA2gjl5UsvPFLWbf8UodvtbvR3MR/0ydXFJSS4NcTXetPVXuaW2aJ+z20cLKvhAw8
-         eblKW1sT2fnvNmvMHiAbe+6yQ2xfklW/PRPQFjrBgPpicmCCqEiZiOg0Lg8MYiCDhyZW
-         T2jEgS28SlUS5lxNwOTWuo1fga2jKI3ig2ztUQPOKy+iUVFjMYIRyZlEoHUKaOfJjeoD
-         wbjbEnb7jTDsVUzs/lnMy5rUaw5DecxYz3n+dugwOsUdHo49uagJKB51b/b50sHqtkr4
-         HjyA==
-X-Gm-Message-State: AOAM531YnPElQx1/NnZM6ZvQdWrbZJA4x40/cV2zbNZZm+Hqn86l+Q5o
-        vaWx/tJrKQgskaaVLcuS2IvArDqVVFGcH0tb+TeRBA==
-X-Google-Smtp-Source: ABdhPJy2gu0tDC5WhYjHtQF6czHGKSOazQIK8LghHcIk5r+jBxkKau7i12HuAvABjkDaXo4YADzfuQ3fil8BbswFE98=
-X-Received: by 2002:adf:f50a:: with SMTP id q10mr3373731wro.252.1644434663498;
- Wed, 09 Feb 2022 11:24:23 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=9X6kiHxpGEazzvkQHp8JnSwgUsJv8D0X/1igB1bJ0oM=;
+        b=mK063ZqQr5LFJpTzD99WHuOqxy8e16j8AVqH2BG6qVN55h8hTIRSRlR0Fh3CTDTZc+
+         ShHxKmovetAvdBETbrJfUZ58B8kKrEk067HGvWwprMIjflU6xAivNKQ90ciUp8HhrBtX
+         vIIRrkNdpDUzsMLR/Zo8YLhIlGE1i5KvAl7AyFHv+Q1qRboPLD8SesMcYlHLKLp157LB
+         dtqVfoDTrFy3CHtVwmnVh6N50ZfHyTC4Xl3DaDRyMBDM9eqKqgQ+bmvSctLEFk3fxI1c
+         MJz+B6FlOZwSEFvdfg8b6+RhfRHfC17uudCZncA74ivTuyB8W5h5o73QPHIH0wOMP041
+         Ny8Q==
+X-Gm-Message-State: AOAM533GxY298eUF7l5iOx2+gh4X0PFvl5LBNRUL7LYpW4o7HKdOsujc
+        vsRfEtI405Tdz2bVf60ub482mg==
+X-Google-Smtp-Source: ABdhPJxCUh4sor/h3+HFTKlhR6E08fCeHYcKOJMGBMEAnXI+4nuwI1jwNHyvV7w8k63ICgSJT0jJAg==
+X-Received: by 2002:a7b:c38b:: with SMTP id s11mr3995713wmj.8.1644434709820;
+        Wed, 09 Feb 2022 11:25:09 -0800 (PST)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id z5sm6993811wmp.10.2022.02.09.11.25.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Feb 2022 11:25:09 -0800 (PST)
+Date:   Wed, 9 Feb 2022 19:25:05 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Christoph Hellwig <hch@lst.de>, linux-kernel@vger.kernel.org,
+        Stable <stable@vger.kernel.org>,
+        Dave Chinner <dchinner@redhat.com>,
+        Goldwyn Rodrigues <rgoldwyn@suse.com>,
+        "Darrick J . Wong" <darrick.wong@oracle.com>,
+        Bob Peterson <rpeterso@redhat.com>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Andreas Gruenbacher <agruenba@redhat.com>,
+        Ritesh Harjani <riteshh@linux.ibm.com>,
+        Johannes Thumshirn <jth@kernel.org>, linux-xfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        cluster-devel@redhat.com,
+        syzbot+0ed9f769264276638893@syzkaller.appspotmail.com
+Subject: Re: [PATCH 1/1] Revert "iomap: fall back to buffered writes for
+ invalidation failures"
+Message-ID: <YgQVEVVOfPH/f2jQ@google.com>
+References: <20220209085243.3136536-1-lee.jones@linaro.org>
+ <20220209150904.GA22025@lst.de>
+ <YgPk9HhIeFM43b/a@google.com>
+ <YgQSCoD5j9KbpHsA@casper.infradead.org>
 MIME-Version: 1.0
-References: <20220117085307.93030-1-likexu@tencent.com> <20220117085307.93030-3-likexu@tencent.com>
- <20220202144308.GB20638@worktop.programming.kicks-ass.net>
- <CALMp9eRBOmwz=mspp0m5Q093K3rMUeAsF3vEL39MGV5Br9wEQQ@mail.gmail.com>
- <YgO/3usazae9rCEh@hirez.programming.kicks-ass.net> <69c0fc41-a5bd-fea9-43f6-4724368baf66@intel.com>
- <CALMp9eS=1U7T39L-vL_cTXTNN2Li8epjtAPoP_+Hwefe9d+teQ@mail.gmail.com> <67a731dd-53ba-0eb8-377f-9707e5c9be1b@intel.com>
-In-Reply-To: <67a731dd-53ba-0eb8-377f-9707e5c9be1b@intel.com>
-From:   David Dunn <daviddunn@google.com>
-Date:   Wed, 9 Feb 2022 11:24:11 -0800
-Message-ID: <CABOYuvbPL0DeEgV4gsC+v786xfBAo3T6+7XQr7cVVzbaoFoEAg@mail.gmail.com>
-Subject: Re: [PATCH kvm/queue v2 2/3] perf: x86/core: Add interface to query
- perfmon_event_map[] directly
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Jim Mattson <jmattson@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Like Xu <like.xu.linux@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Like Xu <likexu@tencent.com>,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YgQSCoD5j9KbpHsA@casper.infradead.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dave,
+On Wed, 09 Feb 2022, Matthew Wilcox wrote:
 
-In my opinion, the right policy depends on what the host owner and
-guest owner are trying to achieve.
+> On Wed, Feb 09, 2022 at 03:59:48PM +0000, Lee Jones wrote:
+> > On Wed, 09 Feb 2022, Christoph Hellwig wrote:
+> > 
+> > > On Wed, Feb 09, 2022 at 08:52:43AM +0000, Lee Jones wrote:
+> > > > This reverts commit 60263d5889e6dc5987dc51b801be4955ff2e4aa7.
+> > > > 
+> > > > Reverting since this commit opens a potential avenue for abuse.
+> > > > 
+> > > > The C-reproducer and more information can be found at the link below.
+> > > > 
+> > > > With this patch applied, I can no longer get the repro to trigger.
+> > > 
+> > > Well, maybe you should actually debug and try to understand what is
+> > > going on before blindly reverting random commits.
+> > 
+> > That is not a reasonable suggestion.
+> > 
+> > Requesting that someone becomes an area expert on a huge and complex
+> > subject such as file systems (various) in order to fix your broken
+> > code is not rational.
+> 
+> Sending a patch to revert a change you don't understand is also
+> not rational.  If you've bisected it to a single change -- great!
+> If reverting the patch still fixes the bug -- also great!  But
+> don't send a patch when you clearly don't understand what the
+> patch did.
 
-If the PMU is being used to locate places where performance could be
-improved in the system, there are two sub scenarios:
-   - The host and guest are owned by same entity that is optimizing
-overall system.  In this case, the guest doesn't need PMU access and
-better information is provided by profiling the entire system from the
-host.
-   - The host and guest are owned by different entities.  In this
-case, profiling from the host can identify perf issues in the guest.
-But what action can be taken?  The host entity must communicate issues
-back to the guest owner through some sort of out-of-band information
-channel.  On the other hand, preempting the host PMU to give the guest
-a fully functional PMU serves this use case well.
+If reverting isn't the correct thing to do here, please consider this
+as a bug report.
 
-TDX and SGX (outside of debug mode) strongly assume different
-entities.  And Intel is doing this to reduce insight of the host into
-guest operations.  So in my opinion, preemption makes sense.
-
-There are also scenarios where the host owner is trying to identify
-systemwide impacts of guest actions.  For example, detecting memory
-bandwidth consumption or split locks.  In this case, host control
-without preemption is necessary.
-
-To address these various scenarios, it seems like the host needs to be
-able to have policy control on whether it is willing to have the PMU
-preempted by the guest.
-
-But I don't see what scenario is well served by the current situation
-in KVM.  Currently the guest will either be told it has no PMU (which
-is fine) or that it has full control of a PMU.  If the guest is told
-it has full control of the PMU, it actually doesn't.  But instead of
-losing counters on well defined events (from the guest perspective),
-they simply stop counting depending on what the host is doing with the
-PMU.
-
-On the other hand, if we flip it around the semantics are more clear.
-A guest will be told it has no PMU (which is fine) or that it has full
-control of the PMU.  If the guest is told that it has full control of
-the PMU, it does.  And the host (which is the thing that granted the
-full PMU to the guest) knows that events inside the guest are not
-being measured.  This results in all entities seeing something that
-can be reasoned about from their perspective.
-
-Thanks,
-
-Dave Dunn
-
-On Wed, Feb 9, 2022 at 10:57 AM Dave Hansen <dave.hansen@intel.com> wrote:
-
-> > I was referring to gaps in the collection of data that the host perf
-> > subsystem doesn't know about if ATTRIBUTES.PERFMON is set for a TDX
-> > guest. This can potentially be a problem if someone is trying to
-> > measure events per unit of time.
->
-> Ahh, that makes sense.
->
-> Does SGX cause problem for these people?  It can create some of the same
-> collection gaps:
->
->         performance monitoring activities are suppressed when entering
->         an opt-out (of performance monitoring) enclave.
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7A2E4AF695
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:26:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D693B4AF6A2
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:27:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236923AbiBIQ0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 11:26:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56866 "EHLO
+        id S236932AbiBIQ1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 11:27:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236889AbiBIQ0Z (ORCPT
+        with ESMTP id S236893AbiBIQ00 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 11:26:25 -0500
+        Wed, 9 Feb 2022 11:26:26 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B35A3C05CB89;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 008E8C05CB8C;
         Wed,  9 Feb 2022 08:26:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 44CC261646;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 91F0261889;
         Wed,  9 Feb 2022 16:26:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1274DC36AE7;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6562BC340ED;
         Wed,  9 Feb 2022 16:26:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1644423980;
-        bh=FoVj5SOWBkaHxyXSi6ANHebxE4k7dg/LG8CNlIMPZJ0=;
+        bh=R5RKBeMN5KKCqXI9HwUlSz5oDemu9rYE1YTGCQmRlLI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=T0xscCS0ZQ7qEg1b6ceRQ16EU1jdqbIVwXjjlJpESnBsF89HKgF5MJKnw0Qt9ZMgX
-         L+8J0TRZ7Qjtq5v3oe2QSlWzdzCh6h7YkX2mdwPXwBDqZG68qc3NkqJ76mKa8/OkpY
-         WaD/DjNp6jj0DLPVIviCSK7qQocktwIhW1nXE8KlqA7hJtLCvYFafNyqTEQEepNxqN
-         1tzY9qtYxYz+YaZJg7OaTDyHVtpI24+e7cdXtAxssEN8lmCrj8+ahd+I68+VmQuUvP
-         Q8InZYN+AA67NODG6j5P9UHJ7PZ9Yj9tLZID/fSjWTbf5bT2wo/JdUxXn2C+ltQrzb
-         hVpGyciwBxaAw==
+        b=YeLxs1boOIdSnIZiGzvsfZytXHmwEctfigvUn65ZyqORJiFWm+4SOFvBsX9YHvmo+
+         OvlspHO6yi6wBPJ8d8FUIf/Ve8cg8cYEptACXXeiP+46Pq/7XsHg3n1X/pnoWzW4vh
+         jS3aoCNrFpgC6boSI9sCXJlMLvDtL22k8UQwnejfJ/EwDC9ttzd8ehQJelA39ZsuEw
+         i5BazKwwJ/vyYedyQ4kNsdD32+j+ogSXBI01WUD5gHImatGdfkZLClXqU2Vndjbd9d
+         hXzsK6tBftOfIilmCsmaoDdbQRi1ljgV0Ux98RYlyjeBQfj37QirOdFA+siAf3cBvi
+         C1FZt1Lr/zFhw==
 Received: from sofa.misterjones.org ([185.219.108.64] helo=why.lan)
         by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <maz@kernel.org>)
-        id 1nHpnO-006fgT-6R; Wed, 09 Feb 2022 16:26:18 +0000
+        id 1nHpnO-006fgT-Fp; Wed, 09 Feb 2022 16:26:18 +0000
 From:   Marc Zyngier <maz@kernel.org>
 To:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
@@ -53,9 +53,9 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
         Emil Renner Berthing <kernel@esmil.dk>,
         kernel-team@android.com
-Subject: [PATCH 08/10] gpio: mt7621: Switch to dynamic chip name output
-Date:   Wed,  9 Feb 2022 16:26:05 +0000
-Message-Id: <20220209162607.1118325-9-maz@kernel.org>
+Subject: [PATCH 09/10] gpio: omap: Switch to dynamic chip name output
+Date:   Wed,  9 Feb 2022 16:26:06 +0000
+Message-Id: <20220209162607.1118325-10-maz@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220209162607.1118325-1-maz@kernel.org>
 References: <20220209162607.1118325-1-maz@kernel.org>
@@ -76,54 +76,67 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Instead of overloading the name field, use the relevant callback to
-output the device name.
+output the device name. Take this opportunity to fix the trailing
+commas that really should be semi-colons.
 
 Signed-off-by: Marc Zyngier <maz@kernel.org>
 ---
- drivers/gpio/gpio-mt7621.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ drivers/gpio/gpio-omap.c | 28 ++++++++++++++++++----------
+ 1 file changed, 18 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/gpio/gpio-mt7621.c b/drivers/gpio/gpio-mt7621.c
-index d8a26e503ca5..14ba4bc141c9 100644
---- a/drivers/gpio/gpio-mt7621.c
-+++ b/drivers/gpio/gpio-mt7621.c
-@@ -11,6 +11,7 @@
- #include <linux/module.h>
- #include <linux/of_irq.h>
- #include <linux/platform_device.h>
+diff --git a/drivers/gpio/gpio-omap.c b/drivers/gpio/gpio-omap.c
+index 80ddc43fd875..f2f874f0bf95 100644
+--- a/drivers/gpio/gpio-omap.c
++++ b/drivers/gpio/gpio-omap.c
+@@ -22,6 +22,7 @@
+ #include <linux/pm.h>
+ #include <linux/of.h>
+ #include <linux/of_device.h>
 +#include <linux/seq_file.h>
- #include <linux/spinlock.h>
- 
- #define MTK_BANK_CNT	3
-@@ -188,6 +189,15 @@ mediatek_gpio_irq_type(struct irq_data *d, unsigned int type)
- 	return 0;
+ #include <linux/gpio/driver.h>
+ #include <linux/bitops.h>
+ #include <linux/platform_data/gpio-omap.h>
+@@ -708,6 +709,13 @@ static void omap_gpio_unmask_irq(struct irq_data *d)
+ 	raw_spin_unlock_irqrestore(&bank->lock, flags);
  }
  
-+static void mediatek_irq_print_chip(struct irq_data *d, struct seq_file *p)
++static void omap_gpio_irq_print_chip(struct irq_data *d, struct seq_file *p)
 +{
-+	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
-+	struct mtk_gc *rg = to_mediatek_gpio(gc);
-+	struct mtk *mtk = container_of(rg - rg->bank, struct mtk, gc_map[0]);
++	struct gpio_bank *bank = omap_irq_data_get_bank(d);
 +
-+	seq_printf(p, dev_name(mtk->dev));
++	seq_printf(p, dev_name(bank->chip.parent));
 +}
 +
- static int
- mediatek_gpio_xlate(struct gpio_chip *chip,
- 		    const struct of_phandle_args *spec, u32 *flags)
-@@ -238,11 +248,11 @@ mediatek_gpio_bank_probe(struct device *dev, int bank)
+ /*---------------------------------------------------------------------*/
+ 
+ static int omap_mpuio_suspend_noirq(struct device *dev)
+@@ -1393,16 +1401,16 @@ static int omap_gpio_probe(struct platform_device *pdev)
+ 	if (!irqc)
  		return -ENOMEM;
  
- 	rg->chip.offset = bank * MTK_BANK_WIDTH;
--	rg->irq_chip.name = dev_name(dev);
- 	rg->irq_chip.irq_unmask = mediatek_gpio_irq_unmask;
- 	rg->irq_chip.irq_mask = mediatek_gpio_irq_mask;
- 	rg->irq_chip.irq_mask_ack = mediatek_gpio_irq_mask;
- 	rg->irq_chip.irq_set_type = mediatek_gpio_irq_type;
-+	rg->irq_chip.irq_print_chip = mediatek_gpio_irq_print_chip;
+-	irqc->irq_startup = omap_gpio_irq_startup,
+-	irqc->irq_shutdown = omap_gpio_irq_shutdown,
+-	irqc->irq_ack = dummy_irq_chip.irq_ack,
+-	irqc->irq_mask = omap_gpio_mask_irq,
+-	irqc->irq_unmask = omap_gpio_unmask_irq,
+-	irqc->irq_set_type = omap_gpio_irq_type,
+-	irqc->irq_set_wake = omap_gpio_wake_enable,
+-	irqc->irq_bus_lock = omap_gpio_irq_bus_lock,
+-	irqc->irq_bus_sync_unlock = gpio_irq_bus_sync_unlock,
+-	irqc->name = dev_name(&pdev->dev);
++	irqc->irq_startup = omap_gpio_irq_startup;
++	irqc->irq_shutdown = omap_gpio_irq_shutdown;
++	irqc->irq_ack = dummy_irq_chip.irq_ack;
++	irqc->irq_mask = omap_gpio_mask_irq;
++	irqc->irq_unmask = omap_gpio_unmask_irq;
++	irqc->irq_set_type = omap_gpio_irq_type;
++	irqc->irq_set_wake = omap_gpio_wake_enable;
++	irqc->irq_bus_lock = omap_gpio_irq_bus_lock;
++	irqc->irq_bus_sync_unlock = gpio_irq_bus_sync_unlock;
++	irqc->irq_print_chip = omap_gpio_irq_print_chip;
+ 	irqc->flags = IRQCHIP_MASK_ON_SUSPEND;
  
- 	if (mtk->gpio_irq) {
- 		struct gpio_irq_chip *girq;
+ 	bank->irq = platform_get_irq(pdev, 0);
 -- 
 2.30.2
 

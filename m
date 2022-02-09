@@ -2,144 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 385C54B0129
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 00:25:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74AB94B0131
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 00:27:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbiBIXZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 18:25:40 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:34626 "EHLO
+        id S229940AbiBIX1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 18:27:18 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:40960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbiBIXZi (ORCPT
+        with ESMTP id S229768AbiBIX1O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 18:25:38 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F4D3E056596
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 15:25:33 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id y7so304078plp.2
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 15:25:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cuDyqJtQkOZWq7GCqSKtM5Nekpy0WS9Wr09B0b+ZHEk=;
-        b=mJUGs196QE4e+93P3XrLjGhPpdg6y+RWphSnf3Fr4PTAuc+HnrZgbhtvd06SXDn+gS
-         GCqMgHjSLUhtpWCMI8WWXfqRS5edno6KEmX84YaoGfeDhvuzbjw7RdE7vhZFdoNXuEmA
-         NEk2vKgifQiIGBMIiEdCXmVq6VOHYD3mph42Q=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cuDyqJtQkOZWq7GCqSKtM5Nekpy0WS9Wr09B0b+ZHEk=;
-        b=4Hc1er0UGYY4sV/KDpAX7EHbHqY6c6wAm0iSYX9QEerzeatQniccTTl8gG1As0kdFk
-         numiE4iMUJzMQC+s3pzcVyrU9eO/x8gfa8UK9O7l58+nomokVhLcKx/MLeJTHWf/m3oz
-         uM4yuUAT8A831trcty0qWKyMOyAJU2jtSNt7HKnptm8xPK62VSM7CEZAHiMsMDYFlNRd
-         8I2lfAuPgw9XjeH7RusO2/GBgWQicNHOPXe2XoAvVw9N4f5UgHBxh7Rq7+0CLb6dh6YC
-         jlltlMHinxQ0+57uZHeeH9jd3UGbfnO0O82TQ3FYSerdBLllqdqFVikovSjV2SV3dsvL
-         6V8g==
-X-Gm-Message-State: AOAM530L+V1G1u6H+TLDaHbBuUQ7vqu8RmCuIWiq1lRmQwYpUDRYfpzB
-        hAdc9AydM2F7F6dFsukOEmpDvw==
-X-Google-Smtp-Source: ABdhPJyFlluWkTGxIDD8DAe+Rrtl/A4H7tmBZt3vNUZHOenuccFvdMBHj1zHh72rB0o4uWqYwAMcTw==
-X-Received: by 2002:a17:90a:7083:: with SMTP id g3mr5220486pjk.209.1644449122551;
-        Wed, 09 Feb 2022 15:25:22 -0800 (PST)
-Received: from smtp.gmail.com ([2620:15c:202:201:5193:6865:e38e:3a5b])
-        by smtp.gmail.com with ESMTPSA id u12sm22067162pfk.220.2022.02.09.15.25.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 15:25:22 -0800 (PST)
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     Mark Brown <broonie@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org,
-        Srinivasa Rao Mandadapu <srivasam@codeaurora.org>
-Subject: [PATCH] ASoC: qcom: Actually clear DMA interrupt register for HDMI
-Date:   Wed,  9 Feb 2022 15:25:20 -0800
-Message-Id: <20220209232520.4017634-1-swboyd@chromium.org>
-X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
+        Wed, 9 Feb 2022 18:27:14 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B3DFE06C41A;
+        Wed,  9 Feb 2022 15:27:10 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JvGGm6Mm6z4xcq;
+        Thu, 10 Feb 2022 10:26:24 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1644449186;
+        bh=B3OOE+3clEH8ZbTR1cvV2XvU/8PhpUu3S16wIF9m4Ho=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=WtApO4zjM6W9Rmha9gS+coobGCR2F02AHJwCzOH1SNwPdLUS84TvTJ1Cn1lp3GzbE
+         2y8mPQ3H05DpaSRV8T5QYsCYJ45Y5LNyW3gy+VhhnIBv89n1YMv1AjfchgirE4zKKX
+         Fi8skESVaNyGcD7FjHnj1kr09AnLoLkt2tyoD6QoODc8qs6x/FshuwYu74TejwsOaD
+         z/aE56tnCJ+Ys8uDW0IMF0Ff0EZPXLVBQHsGx3QXM6Y1DunqCkKO9FOkb7cxw4tvux
+         sRjIjd5M2cQQYv7V95lRAFQlthQbfrPV4IewI5fjDPyokZ6jxCltYjHDEQ0FHL+knz
+         g6vw7L0aKUrzQ==
+Date:   Thu, 10 Feb 2022 10:26:21 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     akpm@linux-foundation.org, Petr Mladek <pmladek@suse.com>,
+        Dave Young <dyoung@redhat.com>, Baoquan He <bhe@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-doc@vger.kernel.org, mcgrof@kernel.org,
+        keescook@chromium.org, yzaikin@google.com, feng.tang@intel.com,
+        siglesias@igalia.com, kernel@gpiccoli.net
+Subject: Re: [PATCH 3/3] panic: Allow printing extra panic information on
+ kdump
+Message-ID: <20220210102621.250d6741@canb.auug.org.au>
+In-Reply-To: <c4f0c53e-cfe4-b693-6af2-df827bc94fa8@igalia.com>
+References: <20211109202848.610874-1-gpiccoli@igalia.com>
+        <20211109202848.610874-4-gpiccoli@igalia.com>
+        <Yd/qmyz+qSuoUwbs@alley>
+        <7c516696-be5b-c280-7f4e-554834f5e472@igalia.com>
+        <c10fc4fc-58c9-0b3f-5f1e-6f44b0c190d2@igalia.com>
+        <20220209083951.50060e15@canb.auug.org.au>
+        <c4f0c53e-cfe4-b693-6af2-df827bc94fa8@igalia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/g0P093p_nq_KNn68dYnAKHn";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In commit da0363f7bfd3 ("ASoC: qcom: Fix for DMA interrupt clear reg
-overwriting") we changed regmap_write() to regmap_update_bits() so that
-we can avoid overwriting bits that we didn't intend to modify.
-Unfortunately this change breaks the case where a register is writable
-but not readable, which is exactly how the HDMI irq clear register is
-designed (grep around LPASS_HDMITX_APP_IRQCLEAR_REG to see how it's
-write only). That's because regmap_update_bits() tries to read the
-register from the hardware and if it isn't readable it looks in the
-regmap cache to see what was written there last time to compare against
-what we want to write there. Eventually, we're unable to modify this
-register at all because the bits that we're trying to set are already
-set in the cache.
+--Sig_/g0P093p_nq_KNn68dYnAKHn
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-This is doubly bad for the irq clear register because you have to write
-the bit to clear an interrupt. Given the irq is level triggered, we see
-an interrupt storm upon plugging in an HDMI cable and starting audio
-playback. The irq storm is so great that performance degrades
-significantly, leading to CPU soft lockups.
+Hi Guilherme,
 
-Fix it by using regmap_write_bits() so that we really do write the bits
-in the clear register that we want to. This brings the number of irqs
-handled by lpass_dma_interrupt_handler() down from ~150k/sec to ~10/sec.
+On Wed, 9 Feb 2022 12:06:03 -0300 "Guilherme G. Piccoli" <gpiccoli@igalia.c=
+om> wrote:
+>
+> On 08/02/2022 18:39, Stephen Rothwell wrote:
+> > Hi Guilherme,
+> > [...]=20
+> > Dropped from linux-next today.
+> >  =20
+>=20
+> Hi Stephen, thanks! I'm still seeing this patch over there, though - I'm
+> not sure if takes a while to show up in the tree...
 
-Fixes: da0363f7bfd3 ("ASoC: qcom: Fix for DMA interrupt clear reg overwriting")
-Cc: Srinivasa Rao Mandadapu <srivasam@codeaurora.org>
-Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
----
- sound/soc/qcom/lpass-platform.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Andrew did another mmotm release which put it back in.  I have removed
+it again for today.
 
-diff --git a/sound/soc/qcom/lpass-platform.c b/sound/soc/qcom/lpass-platform.c
-index a59e9d20cb46..4b1773c1fb95 100644
---- a/sound/soc/qcom/lpass-platform.c
-+++ b/sound/soc/qcom/lpass-platform.c
-@@ -524,7 +524,7 @@ static int lpass_platform_pcmops_trigger(struct snd_soc_component *component,
- 			return -EINVAL;
- 		}
- 
--		ret = regmap_update_bits(map, reg_irqclr, val_irqclr, val_irqclr);
-+		ret = regmap_write_bits(map, reg_irqclr, val_irqclr, val_irqclr);
- 		if (ret) {
- 			dev_err(soc_runtime->dev, "error writing to irqclear reg: %d\n", ret);
- 			return ret;
-@@ -665,7 +665,7 @@ static irqreturn_t lpass_dma_interrupt_handler(
- 	return -EINVAL;
- 	}
- 	if (interrupts & LPAIF_IRQ_PER(chan)) {
--		rv = regmap_update_bits(map, reg, mask, (LPAIF_IRQ_PER(chan) | val));
-+		rv = regmap_write_bits(map, reg, mask, (LPAIF_IRQ_PER(chan) | val));
- 		if (rv) {
- 			dev_err(soc_runtime->dev,
- 				"error writing to irqclear reg: %d\n", rv);
-@@ -676,7 +676,7 @@ static irqreturn_t lpass_dma_interrupt_handler(
- 	}
- 
- 	if (interrupts & LPAIF_IRQ_XRUN(chan)) {
--		rv = regmap_update_bits(map, reg, mask, (LPAIF_IRQ_XRUN(chan) | val));
-+		rv = regmap_write_bits(map, reg, mask, (LPAIF_IRQ_XRUN(chan) | val));
- 		if (rv) {
- 			dev_err(soc_runtime->dev,
- 				"error writing to irqclear reg: %d\n", rv);
-@@ -688,7 +688,7 @@ static irqreturn_t lpass_dma_interrupt_handler(
- 	}
- 
- 	if (interrupts & LPAIF_IRQ_ERR(chan)) {
--		rv = regmap_update_bits(map, reg, mask, (LPAIF_IRQ_ERR(chan) | val));
-+		rv = regmap_write_bits(map, reg, mask, (LPAIF_IRQ_ERR(chan) | val));
- 		if (rv) {
- 			dev_err(soc_runtime->dev,
- 				"error writing to irqclear reg: %d\n", rv);
+> Notice this request is only for patch 3/3 in this series - patches 1 and
+> 2 are fine, were reviewed and accepted =3D)
 
-base-commit: dfd42facf1e4ada021b939b4e19c935dcdd55566
--- 
-https://chromeos.dev
+Understood.
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/g0P093p_nq_KNn68dYnAKHn
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIETZ0ACgkQAVBC80lX
+0GwR2Af/ULU1MyVDLgxV13ILryhuxlTd7bfH6hvQNAjleryvZvq8KFQVaMmv4SeF
+GXIOX0LlCJ82SC5mDCJfJ0GXr9efTZjOlJxyUJeWxMAAPNtYliB7qhHKXPWy+tAu
+Hp+H9OfDV8bGvGm5V9Nim0pN7jTG5JS64OKvgikGMG6M6snZ74QUSNtCIB66QMv4
+UVN31B2D8CKU4paPhU7Kez0TTN4wLmnGJDq014gg9B4Y08jMh1xvix8w7r3MhguI
+txFlYuTxn15vYTZt9k+WFisNKFKj5H240q2bXjdxliE3smc4KNHw0+Jk9+nvnLj5
+SKP/axBSRkxDCEuhcMFhNcUR1483zA==
+=maXw
+-----END PGP SIGNATURE-----
+
+--Sig_/g0P093p_nq_KNn68dYnAKHn--

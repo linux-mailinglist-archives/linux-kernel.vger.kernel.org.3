@@ -2,104 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8EF34AF339
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 14:48:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B52C24AF33C
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 14:48:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234427AbiBINsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 08:48:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41628 "EHLO
+        id S234429AbiBINsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 08:48:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234384AbiBINsE (ORCPT
+        with ESMTP id S234384AbiBINsT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 08:48:04 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D519C0613C9;
-        Wed,  9 Feb 2022 05:48:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644414487; x=1675950487;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mCLMTF/Kdx89pdQlhSi2Q8AM8SGXYokPeOlF4018GTY=;
-  b=igg+PSnoXDn1wjMhWhwcu7P489uBVRdRo1qLxMmFrgJqxs0ncqZIB7Tj
-   b6prnd/ycl7nSvhsxUEUt/rP94tbgh1PKEwPLCACr+sloZ0nB8u3FNSKw
-   f42JxeUWQeSfo55dSSpTmMF8FHiUaiXrR4gYUYw2g+wcRzvb65/Q0ETQK
-   OLFlV755m/X0WyPQVNWwv5ZeihAcM2et+9rxZdEcB/KivVjAEIMgw7GVH
-   I5Pkz2OmDSDEiazLK2hsumHE8gklgx2eiXK2s5H48BIkihvvIbFDTIIQf
-   78hQ0GuYg5i6kTpOUfCwOs5Ya1xJiT3aXBvcKkD4EqYbnPZb6cgS5lUyh
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="232771017"
-X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
-   d="scan'208";a="232771017"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 05:48:05 -0800
-X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
-   d="scan'208";a="601625256"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 05:48:00 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nHnJG-002d2W-2F;
-        Wed, 09 Feb 2022 15:47:02 +0200
-Date:   Wed, 9 Feb 2022 15:47:01 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Mark Brown <broonie@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>
-Subject: Re: [PATCH v2 0/4] drm/tiny: Add driver for Solomon SSD1307 OLED
- displays
-Message-ID: <YgPF1cBMsd9973Dx@smile.fi.intel.com>
-References: <20220204134347.1187749-1-javierm@redhat.com>
- <CAMuHMdVTVX7LFay-rfv=oW96dMA24duMUVGRE62jQSNkrKtyMg@mail.gmail.com>
- <f178de92-7cb1-dcc5-1f60-9ccfc56bc0a4@redhat.com>
+        Wed, 9 Feb 2022 08:48:19 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1312C0613CA
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 05:48:22 -0800 (PST)
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 63F853F19C
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 13:48:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644414501;
+        bh=Mu0uUPwtfbOpUWUMXTkPYrv76xELhcCbylOZUsI3OCI=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=ED8qzN5wQJe8CW1zwjnYc70jHmpFlOcj4eBgoqs8fbTwOUBntsjfNurTu57QVW4y2
+         G9U76HX+cP8AEqctHbBEkWwNdN1575wAkwK0Pkc6sN23gAEPaPkAET8nYgSmX1DngG
+         pOaSa2ogIGVFjRfY5tNs+Yp7f7ImzBaj0lcQ6xQTbKfVcKCNsa0+zSII8u6uTjE1mm
+         vNFX1IKeoIP3nnqNoh5x7l0rbbxALhIA6uh5bTtq3WSB8z9s3wdOHJrC1BVbgl4P+m
+         pC2mNVOgWMP6AJ6XexI4QdOvaYMwMoNbbaJWO1HQFRiaejVOSC0jY2YFQxHMTgPXFT
+         MJWziB60ly6xQ==
+Received: by mail-ej1-f72.google.com with SMTP id l18-20020a1709063d3200b006a93f7d4941so1225264ejf.1
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 05:48:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Mu0uUPwtfbOpUWUMXTkPYrv76xELhcCbylOZUsI3OCI=;
+        b=aJAoUH73CbrIRGPwdO41z1YJuWlKr4bzXJglc4bZ4/FTC+Phc0zNphydHsUjF+8cy4
+         Sh2nK2xQVh8/n3XGPuV5F7CcnN0/pvDGwGJn6A+2zO31Dip22s4EgEn5rfUObEO3Z01t
+         dRP8FkYrRwb2GHxVQ7DsDeG8fM4+4yWwojAJWqWYh5+R5EzQAl6uhwUYp41//WoCLsYP
+         xBp7loKvwBuMxeNSem7jRLSqaB/dn6pnURKehuNRXsiCszSwXweGGiL6U5KNjKccB04h
+         Vuo/tvzTPO+n/L5aohQdJOpJ6qfuJvww3QhhG+CRk0NZMxO0Cfg424f5qHECETiFy971
+         E4rQ==
+X-Gm-Message-State: AOAM531UPR4yuijPwiBhCMJPtC3TNQ/8zetbjXz42Pw70hq5mx9nRDC7
+        9L5QEpGLH+oHRhbX55eYTyQoF8P8JpIsW00j0AgcK5r64aXSnUkVDd5goEg3fQH8htvnSzk7kO9
+        NKWIgwx+ao2bvCaCPuQjVsrfipZW+4owVNf48bLmwQQ==
+X-Received: by 2002:a50:eb46:: with SMTP id z6mr2567133edp.229.1644414499419;
+        Wed, 09 Feb 2022 05:48:19 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxPJOczPsAbt78jg/uzyq90VVRYehbGtYxsyn5ZriTBP42R4TMVIvVzbcHG+m7PNorhEN3EBQ==
+X-Received: by 2002:a50:eb46:: with SMTP id z6mr2567116edp.229.1644414499248;
+        Wed, 09 Feb 2022 05:48:19 -0800 (PST)
+Received: from [192.168.0.94] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id j1sm2650879ejx.123.2022.02.09.05.48.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Feb 2022 05:48:18 -0800 (PST)
+Message-ID: <081b64b0-3cf7-c318-20b4-07e65951fd32@canonical.com>
+Date:   Wed, 9 Feb 2022 14:48:17 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f178de92-7cb1-dcc5-1f60-9ccfc56bc0a4@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH V2 4/4] mailbox: imx: support i.MX93 S401 MU
+Content-Language: en-US
+To:     Daniel Baluta <daniel.baluta@gmail.com>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     Jassi Brar <jassisinghbrar@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Peng Fan <peng.fan@nxp.com>
+References: <20220208063046.2265537-1-peng.fan@oss.nxp.com>
+ <20220208063046.2265537-5-peng.fan@oss.nxp.com>
+ <CAEnQRZA15UabGMSd_GjAdLXhidbVupz68Jh8CqVSYw-n+_4+=Q@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <CAEnQRZA15UabGMSd_GjAdLXhidbVupz68Jh8CqVSYw-n+_4+=Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 08, 2022 at 04:10:49PM +0100, Javier Martinez Canillas wrote:
-> On 2/8/22 15:19, Geert Uytterhoeven wrote:
-> > On Fri, Feb 4, 2022 at 2:43 PM Javier Martinez Canillas
-> > <javierm@redhat.com> wrote:
+On 09/02/2022 13:46, Daniel Baluta wrote:
+> Peng,
+> 
+> This patch is doing 3 things in one patch.
+> 
+> Please split this with one patch per functional change.
 
-> >   - Kernel size increased by 349 KiB,
-> >   - The "Memory:" line reports 412 KiB less memory,
-> >   - On top of that, "free" shows ca. 92 KiB more memory in use after
-> >     bootup.
+The third task - updating author - I just asked to squash with previous
+patch because it really does not have sense on its own. Authorship and
+copyright update are direct effect of new code. Therefore they are
+usually squashed with the actual change.
 
-The memory consumption should really be taken seriously, because these kind of
-displays are for embedded platforms with limited amount of resources.
+> 
+> On Wed, Feb 9, 2022 at 1:20 PM Peng Fan (OSS) <peng.fan@oss.nxp.com> wrote:
+>>
+>> From: Peng Fan <peng.fan@nxp.com>
+>>
+>> i.MX93 S401 MU support two interrupts: tx empty and rx full.
+>>
+>>  - Introduce a new flag IMX_MU_V2_IRQ for the dual interrupt case
+>>  - Add i.MX93 S401 MU cfg
+>>  - Update author and Copyright
 
-Thanks, Geert, for testing and reporting this issue in particular.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Best regards,
+Krzysztof

@@ -2,110 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 598E64AE769
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 04:03:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61C194AE780
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 04:11:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244948AbiBIDDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 22:03:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55336 "EHLO
+        id S234227AbiBIDD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 22:03:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359758AbiBICvZ (ORCPT
+        with ESMTP id S1359736AbiBICvY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 21:51:25 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A7CC043180;
-        Tue,  8 Feb 2022 18:49:01 -0800 (PST)
-Received: from kwepemi100016.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Jtkk72V1hzZcD0;
-        Wed,  9 Feb 2022 10:44:47 +0800 (CST)
-Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
- kwepemi100016.china.huawei.com (7.221.188.123) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 9 Feb 2022 10:48:59 +0800
-Received: from [10.174.178.208] (10.174.178.208) by
- kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 9 Feb 2022 10:48:58 +0800
-Subject: Re: [PATCH 5.4 00/44] 5.4.178-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <stable@vger.kernel.org>, <torvalds@linux-foundation.org>,
-        <akpm@linux-foundation.org>, <linux@roeck-us.net>,
-        <shuah@kernel.org>, <patches@kernelci.org>,
-        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
-        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
-        <sudipm.mukherjee@gmail.com>, <slade@sladewatkins.com>
-References: <20220207103753.155627314@linuxfoundation.org>
-From:   Samuel Zou <zou_wei@huawei.com>
-Message-ID: <4816924c-70c8-e266-2cca-5a18b1d1c279@huawei.com>
-Date:   Wed, 9 Feb 2022 10:48:57 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Tue, 8 Feb 2022 21:51:24 -0500
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175FBC061A73;
+        Tue,  8 Feb 2022 18:49:39 -0800 (PST)
+Received: by mail-ot1-f53.google.com with SMTP id b17-20020a9d4791000000b005a17fc2dfc1so627338otf.1;
+        Tue, 08 Feb 2022 18:49:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=jclCyrtXWfZiL4Vm3TsnMlAc9202oTga5v9E2y8S6Fc=;
+        b=3AyHLw1ErTyomYMTus5YVq68jAL4EzLC1RJkoiK5uS+OkODEF729XiXL1Zt1g3hg+R
+         StX/YC83HaSiYBbmFj2F3fAZK0xc2G73uILEoYFjt/bzbEaZNkoPEXBJY8V1WNSTK5Da
+         jY5r07ejKl4PfNurWVm7eUyjDT21ynC5i+/2xTBRwdi411JvtOv3pvNn2qZmc2KQATTW
+         sFpPZT1/OyAqjA3t14xRgxrAOgAYn5sNyb3DmpEvYNwIms7tYRuUwNmMc4nymEmBF49M
+         Zm93kyCDUyDCW4Oy/3rboLDoEOCezNRsWqbzPeIG4XbKPb5EPoPiWl2tWAsclhCkwjE2
+         IeZg==
+X-Gm-Message-State: AOAM5330jsFxxHL+xuNVcrcMLJGnm9RUQZrIBm9Zggu4lyHdQ3s7/RlG
+        3aGYJBLzFbKiDNs3yhSt5YJY/R6nzA==
+X-Google-Smtp-Source: ABdhPJx5OHmjfCcXuOIwzjlCPm0lRM3HjNwQdZsy/ZJnSzxKqEg7e/efy9c9zqoKuHfIFT/b35La8w==
+X-Received: by 2002:a05:6830:348f:: with SMTP id c15mr133492otu.224.1644374978393;
+        Tue, 08 Feb 2022 18:49:38 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id t13sm945095oai.37.2022.02.08.18.49.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 18:49:37 -0800 (PST)
+Received: (nullmailer pid 3519040 invoked by uid 1000);
+        Wed, 09 Feb 2022 02:49:36 -0000
+Date:   Tue, 8 Feb 2022 20:49:36 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Sander Vanheule <sander@svanheule.net>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH 1/2] dt-bindings: timer: Add realtek,otto-tc binding
+Message-ID: <YgMrwEXraoiJxSXe@robh.at.kernel.org>
+References: <cover.1642369117.git.sander@svanheule.net>
+ <7c53821386b8f4c1c0ac440f1cd186e09f4a0456.1642369117.git.sander@svanheule.net>
 MIME-Version: 1.0
-In-Reply-To: <20220207103753.155627314@linuxfoundation.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.208]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7c53821386b8f4c1c0ac440f1cd186e09f4a0456.1642369117.git.sander@svanheule.net>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/2/7 19:06, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.178 release.
-> There are 44 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Sun, Jan 16, 2022 at 10:39:24PM +0100, Sander Vanheule wrote:
+> New binding for the timer/counter blocks found on the Realtek Otto MIPS
+> platform.
 > 
-> Responses should be made by Wed, 09 Feb 2022 10:37:42 +0000.
-> Anything received after that time might be too late.
+> Signed-off-by: Sander Vanheule <sander@svanheule.net>
+> ---
+>  .../bindings/timer/realtek,otto-tc.yaml       | 64 +++++++++++++++++++
+>  1 file changed, 64 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/timer/realtek,otto-tc.yaml
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.178-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
+> diff --git a/Documentation/devicetree/bindings/timer/realtek,otto-tc.yaml b/Documentation/devicetree/bindings/timer/realtek,otto-tc.yaml
+> new file mode 100644
+> index 000000000000..12971b9ecdf5
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/timer/realtek,otto-tc.yaml
+> @@ -0,0 +1,64 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/timer/realtek,otto-tc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Realtek Otto platform timer/counter bindings
+> +
+> +description:
+
+'|' at the end if you want to keep formatting.
+
+> +  "Up-counting 28-bit timer that can operate in oneshot or repeating mode,
+
+And drop the quotes.
+
+> +  providing an interrupt at roll-over.
+> +
+> +  The timer is driven by a divided clock, derived from the bus clock. The clock
+> +  divisor is configurable from 2 to 65535. Divisor values of 0 and 1 disable
+> +  the timer clock. The timer can also be enabled or disabled independently from
+> +  the clock (divisor) selection.
+> +
+> +  The number of timers supported by the different SoC families is:
+> +  - RTL8380: 5 timers
+> +  - RTL8390: 5 timers
+> +  - RTL9300: 6 timers
+> +  - RTL9310: 7 timers"
+> +
+> +maintainers:
+> +  - Sander Vanheule <sander@svanheule.net>
+> +
+> +properties:
+> +  compatible:
+> +    const: realtek,otto-tc
+
+4 SoCs with differences in the block, you need 4 SoC specific 
+compatibles. With a fallback if appropriate.
+
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: Parent clock from peripheral bus
+> +
+> +  clock-names:
+> +    items:
+> +      - const: bus
+> +
+> +additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - clock-names
+> +
+> +examples:
+> +  - |
+> +    timer0: timer@3100 {
+
+Drop unused labels.
+
+> +      compatible = "realtek,otto-tc";
+> +      reg = <0x3100 0x10>;
+> +
+> +      interrupts = <29 4>;
+> +
+> +      clocks = <&lx_clk>;
+> +      clock-names = "bus";
+> +    };
+> -- 
+> 2.34.1
 > 
-> thanks,
 > 
-> greg k-h
-> 
-
-Tested on arm64 and x86 for 5.4.178-rc1,
-
-Kernel repo:
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-Branch: linux-5.4.y
-Version: 5.4.178-rc1
-Commit: 3836147e31ee95815758c97dc5c319423774464d
-Compiler: gcc version 7.3.0 (GCC)
-
-arm64:
---------------------------------------------------------------------
-Testcase Result Summary:
-total: 9009
-passed: 9009
-failed: 0
-timeout: 0
---------------------------------------------------------------------
-
-x86:
---------------------------------------------------------------------
-Testcase Result Summary:
-total: 9009
-passed: 9009
-failed: 0
-timeout: 0
---------------------------------------------------------------------
-
-Tested-by: Hulk Robot <hulkrobot@huawei.com>

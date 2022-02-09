@@ -2,113 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7073A4AF66C
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:21:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A31AD4AF677
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:23:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236767AbiBIQVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 11:21:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53468 "EHLO
+        id S236683AbiBIQWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 11:22:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234050AbiBIQV2 (ORCPT
+        with ESMTP id S233355AbiBIQWP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 11:21:28 -0500
-Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B47CC0613C9
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 08:21:31 -0800 (PST)
-Received: by mail-oo1-xc35.google.com with SMTP id p190-20020a4a2fc7000000b0031820de484aso2988197oop.9
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 08:21:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=eWTUS3VqmsjwF4c8OTdfF5F0odt3UsQcGtmj9YbWaEk=;
-        b=EIBIj1i0RF6eGofIPoMkdMlxqqoTb5r4muwHZujQjmjolPsYNoxgUKu/jT8Fu3jKkB
-         /qytsaekGzVAdDUOk9HLhTVb5vW1puLgQSvn/tRDl2t1ebbB7Vue9+rxQEeIiYcc8KAO
-         oSp8/xPz4a5wHhxGGDkWnXqrbZX0WI29dV4cSPUjoKv486QCfHtYEiBjzC5Em3E7KIVd
-         c9o0+uldteFR96I3dhMGpuEfgcGB4LTR4wSzfkl0tqz3xWkFUlkEsL9Bws0D19G6SHsj
-         qi02gEjgAm5UvcWjIkqPqFpGRuP/+8TMwuUvKw6hSsxPmc4VxhJS4XjMtIc9hQq8+lMZ
-         7eYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=eWTUS3VqmsjwF4c8OTdfF5F0odt3UsQcGtmj9YbWaEk=;
-        b=J5Pv+KvFbo0Upz3uNPCmW/oXBgZwHQ139+AhhfJnyh9x+0VjU+5lRtypZR4rNrV5Er
-         IhEvw2FKN+gbwonZLhHu5WsA/Ui41ZWhqBAWU8jz+ORpGat75H+vHR7wjAHZckG2LFaR
-         1MkpJ8FjkJkhMNSyH7ZAvuBo8C8l3lYuG+J4D+si1kamO3rnz8TrW0t+vP3KW15PjskH
-         9UDjJEl4Qptv7NR6ApbkMcqif3Z0U4pAQvAXV/6s4t3FAsXbuvXsG2nXg0BRxOVwYHLZ
-         0HMH3Ywsd8kUDYUfXHPWm2FuZnQqC4oZVFwXrldh+E9cstB3kGuztL5ZXnkIlMVHCVVA
-         zLmw==
-X-Gm-Message-State: AOAM531/Y4m2+NCJODRlpfm3Zk9rzCeQgtPnYkeTM7d15EHI4mpzu6xJ
-        B7/JXdE0388Xh3ibyh0ix+Ai+A==
-X-Google-Smtp-Source: ABdhPJy0j7eWBmlJVk4eLI22dh3gUmeOg6uBbExzigwzZo5sR81MUFVc0DE25/D1z6UEH3jHHDWPPw==
-X-Received: by 2002:a4a:1d42:: with SMTP id 63mr326326oog.80.1644423690443;
-        Wed, 09 Feb 2022 08:21:30 -0800 (PST)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id el40sm7504405oab.22.2022.02.09.08.21.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 08:21:29 -0800 (PST)
-Date:   Wed, 9 Feb 2022 08:21:17 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.anvils
-To:     Michal Hocko <mhocko@suse.com>
-cc:     Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Rik van Riel <riel@surriel.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Yu Zhao <yuzhao@google.com>, Greg Thelen <gthelen@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH 00/13] mm/munlock: rework of mlock+munlock page
- handling
-In-Reply-To: <YgPfX+/f0ksBpx6G@dhcp22.suse.cz>
-Message-ID: <147388c6-eb7-5c58-79a-7a8279c27fd@google.com>
-References: <8e4356d-9622-a7f0-b2c-f116b5f2efea@google.com> <YgPfX+/f0ksBpx6G@dhcp22.suse.cz>
+        Wed, 9 Feb 2022 11:22:15 -0500
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F616C0613C9;
+        Wed,  9 Feb 2022 08:22:18 -0800 (PST)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 0F3E23201ECF;
+        Wed,  9 Feb 2022 11:22:16 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Wed, 09 Feb 2022 11:22:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=AyPVdM+Px9t0COZXk
+        bffbEcG7jUs+g3bmwqXA+leG10=; b=RSpuffbPXoR40AZ9ceUtgeB07rV769Ft8
+        eHwplwAELAmGPI15+xH8oXg872HcUkZdopoCy2IQ8baGRf69RivslgmlNforS3L6
+        B3n2jpYNmpHgrxK/4eZ9wBObzLS8h8o+6V2+00WAv/lmKEXoX/5w/NQwgA2tYdn8
+        M4kIn4FSiH7iEYnq0RkW7Von6lrqxTOjbpS/I4t9UE4hG/Zh8K9Qaq6FUept3goZ
+        jAJ14d7C8VFOJl4vQ9oNvogbGJ8lcE31SXR8y9Za/TFvu5CJb3wt7GtSFRdSk4Ex
+        iJlIBkdfs3NLgNcaEXynXA5cVgMu1eO0WCWadlCjuTrfHg5w6Ms5g==
+X-ME-Sender: <xms:OOoDYqzZM_z5xmPGTflqWjqlekVYHSwJMdTqkO3tXfEuKIylbV1W4g>
+    <xme:OOoDYmRSKhJC4L8of_iHkgrIfMOJj4FRGqYvrb6-ySblUI1t2zlMrcQL5BJ_-SgSe
+    rtEHFYBt0Aq0tw>
+X-ME-Received: <xmr:OOoDYsVEm2W8jivujWQChCTM6AbYvRQ2j8hgaoe2-Vq6_vMta_LdLeDtbAyljbDJVqe4rlaOUx6jtoRXUBVnOSM6vEgclw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrheelgdekiecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepkfguohcuufgt
+    hhhimhhmvghluceoihguohhstghhsehiughoshgthhdrohhrgheqnecuggftrfgrthhtvg
+    hrnheptdffkeekfeduffevgeeujeffjefhtefgueeugfevtdeiheduueeukefhudehleet
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepihguoh
+    hstghhsehiughoshgthhdrohhrgh
+X-ME-Proxy: <xmx:OOoDYgiyZEP5DXZAvv6IctTCf1j8vnyPZXzEYN3P2iYjEj4H57POQg>
+    <xmx:OOoDYsDBdnXgFUvc7bHk_u-1PBl2vGjDBGMKRLL8WKNy1B2B_xbhzg>
+    <xmx:OOoDYhKbiVPgxqc4mZH7LgdLb560mxDdeh7zkkaiq8aEyWJTptYrsQ>
+    <xmx:OOoDYu0BOz6YJnd58Pgxahnk9QrOMzQkW-RhrYTBfzmdZ-Wsa36p-w>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 9 Feb 2022 11:22:15 -0500 (EST)
+Date:   Wed, 9 Feb 2022 18:22:11 +0200
+From:   Ido Schimmel <idosch@idosch.org>
+To:     menglong8.dong@gmail.com
+Cc:     nhorman@tuxdriver.com, davem@davemloft.net, kuba@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rostedt@goodmis.org, dsahern@kernel.org,
+        Menglong Dong <imagedong@tencent.com>
+Subject: Re: [PATCH v8 net-next] net: drop_monitor: support drop reason
+Message-ID: <YgPqM3PgIThH7iZy@shredder>
+References: <20220209060838.55513-1-imagedong@tencent.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220209060838.55513-1-imagedong@tencent.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 9 Feb 2022, Michal Hocko wrote:
+On Wed, Feb 09, 2022 at 02:08:38PM +0800, menglong8.dong@gmail.com wrote:
+> From: Menglong Dong <imagedong@tencent.com>
 > 
-> So far I have only managed to read through the series and trying to put
-> all the pieces together (so far I have given up on the THP part) and my
-> undestanding is far from complete. But I have to say I like the general
-> approach and overall simplification.
-
-Many thanks for looking, Michal, and for all the positivity!
-
+> In the commit c504e5c2f964 ("net: skb: introduce kfree_skb_reason()")
+> drop reason is introduced to the tracepoint of kfree_skb. Therefore,
+> drop_monitor is able to report the drop reason to users by netlink.
 > 
-> The only thing that is not entirely clear to me at the moment is why you
-> have chosen to ignore already mapped LOCKONFAULT pages. They will
-> eventually get sorted out during the reclaim/migration but this can
-> backfire if too many pages have been pre-faulted before LOCKONFAULT
-> call. Maybe not an interesting case in the first place but I am still
-> wondering why you have chosen that way.
-
-I'm puzzled: what makes you think I'm ignoring already mapped LOCKONFAULT
-pages?  I'd consider that a bug.
-
-It is the case, isn't it, that a VM_LOCKONFAULT area always has VM_LOCKED
-set too?  If I've got that wrong, yes, I'll need to revisit conditions.
-
+> The drop reasons are reported as string to users, which is exactly
+> the same as what we do when reporting it to ftrace.
 > 
-> I will be off next couple of days and plan to revisit this afterwards
-> (should time allow). Anyway thanks a lot Hugh!
-> -- 
-> Michal Hocko
-> SUSE Labs
+> Signed-off-by: Menglong Dong <imagedong@tencent.com>
+
+Reviewed-by: Ido Schimmel <idosch@nvidia.com>

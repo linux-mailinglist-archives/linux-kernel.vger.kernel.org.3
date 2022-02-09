@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 423E54AF6DF
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:37:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FFC24AF6DD
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:37:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237220AbiBIQhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 11:37:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45242 "EHLO
+        id S237242AbiBIQhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 11:37:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235811AbiBIQh1 (ORCPT
+        with ESMTP id S237205AbiBIQhb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 11:37:27 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AA9FC05CB8A
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 08:37:30 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id qe15so2605483pjb.3
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 08:37:30 -0800 (PST)
+        Wed, 9 Feb 2022 11:37:31 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A653FC061355
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 08:37:34 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id n23so5272267pfo.1
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 08:37:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=M2QkYn3tS9YYn/jL8dJZWX1Fky3rroLkJnwOHTcUHaY=;
-        b=f5pDTcIQdMzUEvSNgxCenI2gIq9xhGYg0sBWtjg/RY7ArchFqKtD1sdNQGa8iMdBQF
-         Wy49+eJYPpNrKwkFI7HUXTXx8i7yP2XR2K/1IeWGmZO253L6icPfqsYCP/xjsRipKn3A
-         mKnOtVHDJZ9lKVg/77Es25y5RUfBLjguaNxA0ZIiq4IqfcWNJ/1PBjf9HKEfmUmATFVo
-         Mnu199ptCD2qtwJQfbHzvTi8RgBOgT3B9sTMJZ5fe0MAhUTSja6kM3B7qYFIFEKEEr/k
-         PfRCdCW1QMD/wTOuq9dXXdzOpzAI3F+X9/06qTINwQrnTHCM0XYTuCz8w6siu8063ZSO
-         +5BA==
+        bh=hs9DY75/VY6KIjzo1a64wWbEFVmS6NW//YA6Jf9CUb4=;
+        b=L7NbQPE0syDYGE1ddofCCp1z+t90MeErgcI/4BbheKn89HzKUitNQ5QSSSJO4DHe51
+         piFRwUAm4OH3rcmCpE8Zg665LX1GuxSqbhEQVp5vKXC+ijsK4nSHWLCI/71xSUzWT6p1
+         DBUzn7sBfmaZLL75vKUt4p5gXd9+ixDfLBSs1Id88GVQKCMMioMxr8eQQrSZuwJNywcg
+         K7mUfTaHL2tSXLDNoTpsTjSTxMW7B7yZYeONmjWKnW3oZDNDFN+hcW4zxrebck/O5Hqb
+         CmaXPo0vt9mXGaQaCdTthcmg8GcT56QqWfP/fTf5StZ31TDQ9C8y2iNxz6oSOweFM6Fs
+         pGjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=M2QkYn3tS9YYn/jL8dJZWX1Fky3rroLkJnwOHTcUHaY=;
-        b=eyExvKFFzYy1TyrqbTPNWwBz3c+Ym574Tlt5MCxnsjNHjkdPjJaVLwkHZ9ThA1rCRb
-         y24Jzpzma56FZCg+qfY9o476YDZMWJPrlF4WPmEfSz0iBKADf4eh+Y3ZaFDXUCbb19WV
-         xur7WOTUWqN8Hh9pSWjhp2sz2Ur/wxTTdzBHSp9wj3i6OnLtZGSAid1VDjHaz0++nK3K
-         +HDDiJBmzFO8zhS2rkuGPModvQsPN3tExqLFba0urAcwPiCS7cnyquftd489wM5vwu+h
-         txsZWipN8mQfnuaaOfexrDG67iu9zN3Iooj5zV3p20E2IPSYiIa8RRHaSVwTyUWBKSKo
-         maLw==
-X-Gm-Message-State: AOAM533Rswxc167kVjJpeECZBRG4FK/coiR7h1IK/i/7a5RivZxnvMjj
-        0EZtY3obUxWaIcGG8gA/fPc=
-X-Google-Smtp-Source: ABdhPJydEnNGbrkPgmd+XKv2WxFOj6agK/nbiYf61Loy5AcF0Htpgjq6Y1eGWq88gKOeqnjKyyWR6Q==
-X-Received: by 2002:a17:90a:d991:: with SMTP id d17mr4315457pjv.150.1644424649914;
-        Wed, 09 Feb 2022 08:37:29 -0800 (PST)
+        bh=hs9DY75/VY6KIjzo1a64wWbEFVmS6NW//YA6Jf9CUb4=;
+        b=uwAiR379D1bDAot0c/I5zmP1e3FX8XmJR8WyS9tnunYK0QhrV2hNMbknQ3YsvQUhXl
+         qv/WcQSVSyFuN76ID4DSMkM357eJh09R8Pzic6Ro1gE8sf1LNIisXOKMbxfJEIKpr433
+         k4pYMQ7PvRkcwihOa2/dFEDdrcz/PMx65eTTUGxUueLHKydymTRtHlk/Uh/SSlv/7WsS
+         UGa04vsFuwDmjLNIEOzVxRpqkbXgScnJYwmY3kMFlyEYLAfyYor2mJ+A9rWOMg/+mwCv
+         rHMAbPf6wSdBx5COkUBzp3+wVqJ/cyhu3o+4/dyfdlVN4okGzlQEjc+pswTXX5cuBiBu
+         DcDg==
+X-Gm-Message-State: AOAM533JZAVvf6KmV28ezy1BG8WCXPqjjQoKqUBFpHNEZIMYnDR+3d7j
+        ZoaNbCZbI75y20DtptCNziQ=
+X-Google-Smtp-Source: ABdhPJxbcKappCAHTfHoKEJ/GFWu323ixU8DxvXUynUmEGcR/PzlHcfMhmJ6pzCtPMf088I7eMxfSQ==
+X-Received: by 2002:a05:6a00:1382:: with SMTP id t2mr3211098pfg.31.1644424654196;
+        Wed, 09 Feb 2022 08:37:34 -0800 (PST)
 Received: from localhost.localdomain ([122.164.186.156])
-        by smtp.googlemail.com with ESMTPSA id kb18sm7840199pjb.30.2022.02.09.08.37.25
+        by smtp.googlemail.com with ESMTPSA id kb18sm7840199pjb.30.2022.02.09.08.37.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 08:37:29 -0800 (PST)
+        Wed, 09 Feb 2022 08:37:33 -0800 (PST)
 From:   Abdun Nihaal <abdun.nihaal@gmail.com>
 To:     gregkh@linuxfoundation.org
 Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
         straube.linux@gmail.com, martin@kaiser.cx,
         linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
         Abdun Nihaal <abdun.nihaal@gmail.com>
-Subject: [PATCH 2/9] staging: r8188eu: remove empty function rtw_get_encrypt_decrypt_from_registrypriv
-Date:   Wed,  9 Feb 2022 22:06:00 +0530
-Message-Id: <3d84df54e73b49464d2a0732b44acdb71687b3b1.1644422181.git.abdun.nihaal@gmail.com>
+Subject: [PATCH 3/9] staging: r8188eu: remove empty function rtw_mfree_mlme_priv_lock
+Date:   Wed,  9 Feb 2022 22:06:01 +0530
+Message-Id: <8b6d750b049f875370996258aedaf89cf0f198d4.1644422181.git.abdun.nihaal@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1644422181.git.abdun.nihaal@gmail.com>
 References: <cover.1644422181.git.abdun.nihaal@gmail.com>
@@ -72,52 +72,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The definition of function rtw_get_encrypt_decrypt_from_registrypriv is
-empty. Remove it.
+The definition of function rtw_mfree_mlme_priv_lock is empty. Remove it.
 
 Signed-off-by: Abdun Nihaal <abdun.nihaal@gmail.com>
 ---
- drivers/staging/r8188eu/core/rtw_mlme.c    | 7 -------
- drivers/staging/r8188eu/include/rtw_mlme.h | 2 --
- 2 files changed, 9 deletions(-)
+ drivers/staging/r8188eu/core/rtw_mlme.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
 diff --git a/drivers/staging/r8188eu/core/rtw_mlme.c b/drivers/staging/r8188eu/core/rtw_mlme.c
-index 038bddc361c3..e1e358c94ea4 100644
+index e1e358c94ea4..0abad3c78f82 100644
 --- a/drivers/staging/r8188eu/core/rtw_mlme.c
 +++ b/drivers/staging/r8188eu/core/rtw_mlme.c
-@@ -1020,8 +1020,6 @@ void rtw_joinbss_event_prehandle(struct adapter *adapter, u8 *pbuf)
- 	struct wlan_network	*pcur_wlan = NULL, *ptarget_wlan = NULL;
- 	unsigned int		the_same_macaddr = false;
- 
--	rtw_get_encrypt_decrypt_from_registrypriv(adapter);
--
- 	the_same_macaddr = !memcmp(pnetwork->network.MacAddress, cur_network->network.MacAddress, ETH_ALEN);
- 
- 	pnetwork->network.Length = get_wlan_bssid_ex_sz(&pnetwork->network);
-@@ -1857,11 +1855,6 @@ void rtw_update_registrypriv_dev_network(struct adapter *adapter)
- 
+@@ -85,10 +85,6 @@ int _rtw_init_mlme_priv(struct adapter *padapter)
+ 	return res;
  }
  
--void rtw_get_encrypt_decrypt_from_registrypriv(struct adapter *adapter)
+-static void rtw_mfree_mlme_priv_lock(struct mlme_priv *pmlmepriv)
 -{
--
 -}
 -
- /* the function is at passive_level */
- void rtw_joinbss_reset(struct adapter *padapter)
+ static void rtw_free_mlme_ie_data(u8 **ppie, u32 *plen)
  {
-diff --git a/drivers/staging/r8188eu/include/rtw_mlme.h b/drivers/staging/r8188eu/include/rtw_mlme.h
-index ed2a50bad66e..1e16fa615b94 100644
---- a/drivers/staging/r8188eu/include/rtw_mlme.h
-+++ b/drivers/staging/r8188eu/include/rtw_mlme.h
-@@ -549,8 +549,6 @@ void rtw_init_registrypriv_dev_network(struct adapter *adapter);
+ 	kfree(*ppie);
+@@ -118,8 +114,6 @@ void _rtw_free_mlme_priv(struct mlme_priv *pmlmepriv)
+ 	rtw_free_mlme_priv_ie_data(pmlmepriv);
  
- void rtw_update_registrypriv_dev_network(struct adapter *adapter);
- 
--void rtw_get_encrypt_decrypt_from_registrypriv(struct adapter *adapter);
+ 	if (pmlmepriv) {
+-		rtw_mfree_mlme_priv_lock(pmlmepriv);
 -
- void _rtw_join_timeout_handler(struct adapter *adapter);
- void rtw_scan_timeout_handler(struct adapter *adapter);
+ 		vfree(pmlmepriv->free_bss_buf);
+ 	}
  
 -- 
 2.34.1

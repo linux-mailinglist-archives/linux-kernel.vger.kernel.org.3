@@ -2,111 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B61894AE935
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 06:28:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F80A4AE95D
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 06:38:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233092AbiBIFY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 00:24:28 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:51238 "EHLO
+        id S233393AbiBIFfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 00:35:11 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:56766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230208AbiBIFVZ (ORCPT
+        with ESMTP id S235805AbiBIFZI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 00:21:25 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A820EC03C1A6
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 21:21:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644384087; x=1675920087;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9ZPG7Vx7bw7Ff3rJaRHL7dpWZ5aygBRkVKwB+8cablY=;
-  b=NmXlm1wKupTVKCivCzn86WtVlqFYPp6LHZrfy/79I1NvtrIb//EbNoKN
-   Isp2cZVWeHrLM/nlRB8PNn3vj/WkNipiA1J7EyCkZljqc4qI9EK8IghZH
-   9wCG3ajxSjSE45rzRS4SFGSAtvB2/4/9oWkrR5VX/KI6eiTsol+CFyAFc
-   Mp2SgMxf2dRDXBYudtqafiqbtIOyIuOzzg0Q2wq2xxKPxGXFmXiuXqwRB
-   WqpW4PSXEj6NU85sXontOQEcQrjofyMqg1Adivcqae0zFzJd4kro4hGVL
-   cYBsIy7YjlBE9PIrZ/9JKI6mgHvvV1BUrTWuzMTdYXmOJz25z4crwR8Mu
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="273656557"
-X-IronPort-AV: E=Sophos;i="5.88,354,1635231600"; 
-   d="scan'208";a="273656557"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 21:21:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,354,1635231600"; 
-   d="scan'208";a="485092656"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 08 Feb 2022 21:21:26 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nHfPx-0001Fj-IV; Wed, 09 Feb 2022 05:21:25 +0000
-Date:   Wed, 9 Feb 2022 13:20:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [jgunthorpe:iommufd 31/31] drivers/iommu/iommufd/device.c:122:40:
- warning: variable 'ioaspt' set but not used
-Message-ID: <202202091306.YxErokC5-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 9 Feb 2022 00:25:08 -0500
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79DECC03544E
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 21:25:12 -0800 (PST)
+Received: by mail-pf1-x44a.google.com with SMTP id f24-20020aa782d8000000b004bc00caa4c0so1036596pfn.3
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 21:25:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=1uteCcqOHI/0uzMt0En4ebHH5gvzXxzw9MhZz5KXgD4=;
+        b=IQmADCKRqBcDLWqGxwMOAV/ntlFvKBjJk8wBMDf2/VG5DCJCbge4vXYImJfFccc++A
+         FCOIryAiTwqcPt2Ose0mF9PMjL9KBQ7/6PWrKYyj6UkAsqtHb+NZNf1XdL0X0NoThMpL
+         ieO6Akmo3Mh60DeJ+NoUTjGFteZD8CATPm/I+5d/ydBFZGHCxfjMjHMtzHTk4VZEIy6h
+         9n/ShJpAMFNJHtDIHkK/MEzbkec+aNII1ATfCq90CtiW6zk3EjxREHjJWmGlRo4zZuYb
+         JilPpQ0FQpnOXEW+VQFDwIW5vWSALo2j8mWBZjnavFR74JID6XTPkkTdqoiHU6irUrtm
+         gsaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=1uteCcqOHI/0uzMt0En4ebHH5gvzXxzw9MhZz5KXgD4=;
+        b=uoKnBQLTo2Jog23YCzVAWGPQ2IuwQFHjN/mOpPyHwVJhfhVVmL2+DCB/ZRHOqB3clc
+         dfxEWgC0jbL1OY72gg3j1PudMgeRyOTgp0tcFDpORAwTQaY7pXgQ4sX/xlodBEjIXgsK
+         Dmb/QGTlCnY7JJaVNivVTKa8iJirL8I9hZ3mc0KfrWRJAipHfBn2H4u2xSRhksVslyeH
+         7y39M4B+/wX7BDUXUKsinHcI/CVungF20i8f4eIPDKN5xXE7JHR3pbetWLqvJf2B5LXi
+         psFcsJ9UAuVtUGwc2omMYNZVbB9c25V9BNIGRHJOKI9ObLkVDqvijXJu5sLx0Qt/4Uua
+         BRNQ==
+X-Gm-Message-State: AOAM530Jebxa5ZYP+Dkr4WMNtQn4CnxIMVoSjEye4NV243tRDe/raqR0
+        AVviQvF+9IX0p2H7yiMcPAzB9S+7u+uT
+X-Google-Smtp-Source: ABdhPJzglferL7rdNcij5KHw2MyxXfeQS6wr03V//WCG/OaB8ZKXVTKSopF3i4fEW93Gs1qNs/mGYQwMkeNJ
+X-Received: from connoro.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:a99])
+ (user=connoro job=sendgmr) by 2002:a05:6a00:1a8d:: with SMTP id
+ e13mr600902pfv.82.1644384311846; Tue, 08 Feb 2022 21:25:11 -0800 (PST)
+Date:   Wed,  9 Feb 2022 05:21:40 +0000
+Message-Id: <20220209052141.140063-1-connoro@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.0.263.gb82422642f-goog
+Subject: [PATCH bpf-next] lib/Kconfig.debug: add prompt for kernel module BTF
+From:   "Connor O'Brien" <connoro@google.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Connor O'Brien" <connoro@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/jgunthorpe/linux iommufd
-head:   6b5b3f20ed6b64824c2d447b4f4555fcb390bf3b
-commit: 6b5b3f20ed6b64824c2d447b4f4555fcb390bf3b [31/31] mad musings
-config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220209/202202091306.YxErokC5-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/jgunthorpe/linux/commit/6b5b3f20ed6b64824c2d447b4f4555fcb390bf3b
-        git remote add jgunthorpe https://github.com/jgunthorpe/linux
-        git fetch --no-tags jgunthorpe iommufd
-        git checkout 6b5b3f20ed6b64824c2d447b4f4555fcb390bf3b
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash drivers/iommu/iommufd/
+With DEBUG_INFO_BTF_MODULES enabled, a BTF mismatch between vmlinux
+and a separately-built module prevents the module from loading, even
+if the ABI is otherwise compatible and the module would otherwise load
+without issues. Currently this can be avoided only by disabling BTF
+entirely; disabling just module BTF would be sufficient but is not
+possible with the current Kconfig.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Add a prompt for DEBUG_INFO_BTF_MODULES to allow it to be disabled
+independently.
 
-All warnings (new ones prefixed by >>):
-
-   drivers/iommu/iommufd/device.c: In function 'iommufd_device_attach_sw':
->> drivers/iommu/iommufd/device.c:122:40: warning: variable 'ioaspt' set but not used [-Wunused-but-set-variable]
-     122 |         struct iommufd_ioas_pagetable *ioaspt;
-         |                                        ^~~~~~
-
-
-vim +/ioaspt +122 drivers/iommu/iommufd/device.c
-
-   119	
-   120	static int iommufd_device_attach_sw(struct iommufd_device *idev, u32 *pt_id)
-   121	{
- > 122		struct iommufd_ioas_pagetable *ioaspt;
-   123		struct iommufd_object *obj;
-   124	
-   125		obj = iommufd_get_object(idev->ictx, *pt_id,
-   126					 IOMMUFD_OBJ_IOAS_PAGETABLE);
-   127		if (IS_ERR(obj))
-   128			return PTR_ERR(obj);
-   129		ioaspt = container_of(obj, struct iommufd_ioas_pagetable, obj);
-   130		iommufd_put_object_keep_user(obj);
-   131		//idev->ioaspt = ioaspt;
-   132		return 0;
-   133	}
-   134	
-
+Signed-off-by: Connor O'Brien <connoro@google.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ lib/Kconfig.debug | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 1555da672275..a6bbd4bb2bde 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -334,7 +334,7 @@ config PAHOLE_HAS_BTF_TAG
+ 	  these attributes, so make the config depend on CC_IS_CLANG.
+ 
+ config DEBUG_INFO_BTF_MODULES
+-	def_bool y
++	bool "Generate BTF typeinfo for modules"
+ 	depends on DEBUG_INFO_BTF && MODULES && PAHOLE_HAS_SPLIT_BTF
+ 	help
+ 	  Generate compact split BTF type information for kernel modules.
+-- 
+2.35.0.263.gb82422642f-goog
+

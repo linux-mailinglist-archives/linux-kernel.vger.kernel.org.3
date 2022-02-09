@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFF184AF1FD
+	by mail.lfdr.de (Postfix) with ESMTP id 7915E4AF1FC
 	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 13:41:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233510AbiBIMk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 07:40:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42262 "EHLO
+        id S233494AbiBIMkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 07:40:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233604AbiBIMkz (ORCPT
+        with ESMTP id S230351AbiBIMkO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 07:40:55 -0500
+        Wed, 9 Feb 2022 07:40:14 -0500
 Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55BCBC05CB9A;
-        Wed,  9 Feb 2022 04:40:57 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A86C0613CA;
+        Wed,  9 Feb 2022 04:40:15 -0800 (PST)
 Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.lan)
         by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <heiko@sntech.de>)
-        id 1nHmEs-0001Mv-36; Wed, 09 Feb 2022 13:38:26 +0100
+        id 1nHmEt-0001Mv-4C; Wed, 09 Feb 2022 13:38:27 +0100
 From:   Heiko Stuebner <heiko@sntech.de>
 To:     palmer@dabbelt.com, paul.walmsley@sifive.com, aou@eecs.berkeley.edu
 Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
@@ -33,9 +33,9 @@ Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
         jscheid@ventanamicro.com, rtrauben@gmail.com, samuel@sholland.org,
         cmuellner@linux.com, philipp.tomsich@vrull.eu,
         Heiko Stuebner <heiko@sntech.de>
-Subject: [PATCH v6 10/14] riscv: add cpufeature handling via alternatives
-Date:   Wed,  9 Feb 2022 13:37:56 +0100
-Message-Id: <20220209123800.269774-11-heiko@sntech.de>
+Subject: [PATCH v6 11/14] dt-bindings: riscv: add MMU Standard Extensions support for Svpbmt
+Date:   Wed,  9 Feb 2022 13:37:57 +0100
+Message-Id: <20220209123800.269774-12-heiko@sntech.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220209123800.269774-1-heiko@sntech.de>
 References: <20220209123800.269774-1-heiko@sntech.de>
@@ -50,129 +50,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some cpufeatures should be handled via the alternatives mechanism
-to not incur penalties on unsupporting variants.
+From: Wei Fu <wefu@redhat.com>
 
-So add a mechanism to handle these similar to cpu erratas.
+Previous patch has added svpbmt in arch/riscv and add "riscv,svpmbt"
+in the DT mmu node. Update dt-bindings related property here.
 
+Signed-off-by: Wei Fu <wefu@redhat.com>
+Co-developed-by: Guo Ren <guoren@kernel.org>
+Signed-off-by: Guo Ren <guoren@kernel.org>
 Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+Cc: Anup Patel <anup@brainfault.org>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Rob Herring <robh+dt@kernel.org>
 ---
- arch/riscv/include/asm/alternative.h |  3 ++
- arch/riscv/include/asm/errata_list.h |  2 +
- arch/riscv/kernel/alternative.c      |  2 +
- arch/riscv/kernel/cpufeature.c       | 55 +++++++++++++++++++++++++++-
- 4 files changed, 61 insertions(+), 1 deletion(-)
+ Documentation/devicetree/bindings/riscv/cpus.yaml | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/arch/riscv/include/asm/alternative.h b/arch/riscv/include/asm/alternative.h
-index f0657b1b3174..cf3b22173834 100644
---- a/arch/riscv/include/asm/alternative.h
-+++ b/arch/riscv/include/asm/alternative.h
-@@ -39,5 +39,8 @@ struct errata_checkfunc_id {
- void sifive_errata_patch_func(struct alt_entry *begin, struct alt_entry *end,
- 			      unsigned long archid, unsigned long impid,
- 			      unsigned int stage);
-+
-+void riscv_cpufeature_patch_func(struct alt_entry *begin, struct alt_entry *end,
-+				 unsigned int stage);
- #endif
- #endif
-diff --git a/arch/riscv/include/asm/errata_list.h b/arch/riscv/include/asm/errata_list.h
-index 5f1046e82d9f..6b95bd9aee82 100644
---- a/arch/riscv/include/asm/errata_list.h
-+++ b/arch/riscv/include/asm/errata_list.h
-@@ -14,6 +14,8 @@
- #define	ERRATA_SIFIVE_NUMBER 2
- #endif
+diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml b/Documentation/devicetree/bindings/riscv/cpus.yaml
+index aa5fb64d57eb..6b5fc5d7a901 100644
+--- a/Documentation/devicetree/bindings/riscv/cpus.yaml
++++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
+@@ -63,6 +63,16 @@ properties:
+       - riscv,sv48
+       - riscv,none
  
-+#define	CPUFEATURE_NUMBER 0
++  riscv,mmu:
++    description:
++      Describes the CPU's MMU Standard Extensions support.
++      These values originate from the RISC-V Privileged
++      Specification document, available from
++      https://riscv.org/specifications/
++    $ref: '/schemas/types.yaml#/definitions/string'
++    enum:
++      - riscv,svpbmt
 +
- #ifdef __ASSEMBLY__
- 
- #define ALT_INSN_FAULT(x)						\
-diff --git a/arch/riscv/kernel/alternative.c b/arch/riscv/kernel/alternative.c
-index 223770b3945c..e6c9de9f9ba6 100644
---- a/arch/riscv/kernel/alternative.c
-+++ b/arch/riscv/kernel/alternative.c
-@@ -63,6 +63,8 @@ static void __init_or_module _apply_alternatives(struct alt_entry *begin,
- 						 struct alt_entry *end,
- 						 unsigned int stage)
- {
-+	riscv_cpufeature_patch_func(begin, end, stage);
-+
- 	if (!vendor_patch_func)
- 		return;
- 
-diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-index d959d207a40d..fef804346d75 100644
---- a/arch/riscv/kernel/cpufeature.c
-+++ b/arch/riscv/kernel/cpufeature.c
-@@ -8,8 +8,12 @@
- 
- #include <linux/bitmap.h>
- #include <linux/of.h>
--#include <asm/processor.h>
-+#include <asm/alternative.h>
-+#include <asm/errata_list.h>
- #include <asm/hwcap.h>
-+#include <asm/patch.h>
-+#include <asm/pgtable.h>
-+#include <asm/processor.h>
- #include <asm/smp.h>
- #include <asm/switch_to.h>
- 
-@@ -149,3 +153,52 @@ void __init riscv_fill_hwcap(void)
- 		static_branch_enable(&cpu_hwcap_fpu);
- #endif
- }
-+
-+struct cpufeature_info {
-+	char name[ERRATA_STRING_LENGTH_MAX];
-+	bool (*check_func)(unsigned int stage);
-+};
-+
-+static const struct cpufeature_info cpufeature_list[CPUFEATURE_NUMBER] = {
-+};
-+
-+static u32 __init cpufeature_probe(unsigned int stage)
-+{
-+	const struct cpufeature_info *info;
-+	u32 cpu_req_feature = 0;
-+	int idx;
-+
-+	for (idx = 0; idx < CPUFEATURE_NUMBER; idx++) {
-+		info = &cpufeature_list[idx];
-+
-+		if (info->check_func(stage))
-+			cpu_req_feature |= (1U << idx);
-+	}
-+
-+	return cpu_req_feature;
-+}
-+
-+void riscv_cpufeature_patch_func(struct alt_entry *begin, struct alt_entry *end,
-+				 unsigned int stage)
-+{
-+	u32 cpu_req_feature = cpufeature_probe(stage);
-+	u32 cpu_apply_feature = 0;
-+	struct alt_entry *alt;
-+	u32 tmp;
-+
-+	for (alt = begin; alt < end; alt++) {
-+		if (alt->vendor_id != 0)
-+			continue;
-+		if (alt->errata_id >= CPUFEATURE_NUMBER) {
-+			WARN(1, "This feature id:%d is not in kernel cpufeature list",
-+				alt->errata_id);
-+			continue;
-+		}
-+
-+		tmp = (1U << alt->errata_id);
-+		if (cpu_req_feature & tmp) {
-+			patch_text_nosync(alt->old_ptr, alt->alt_ptr, alt->alt_len);
-+			cpu_apply_feature |= tmp;
-+		}
-+	}
-+}
+   riscv,isa:
+     description:
+       Identifies the specific RISC-V instruction set architecture
 -- 
 2.30.2
 

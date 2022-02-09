@@ -2,97 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 986224B00B8
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 23:54:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E77484B00B9
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 23:55:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236539AbiBIWyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 17:54:20 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:60108 "EHLO
+        id S236571AbiBIWzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 17:55:16 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:33580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231361AbiBIWyT (ORCPT
+        with ESMTP id S236557AbiBIWzB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 17:54:19 -0500
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6147BC0219EC;
-        Wed,  9 Feb 2022 14:54:21 -0800 (PST)
-Received: by mail-oi1-f174.google.com with SMTP id u3so4085026oiv.12;
-        Wed, 09 Feb 2022 14:54:21 -0800 (PST)
+        Wed, 9 Feb 2022 17:55:01 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 249E4E04FF0E
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 14:55:04 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id w20so220783plq.12
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 14:55:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=5OgBvBtD/pqZyY1Wyl2wDigiqIzipvE7VvYdDX53RaU=;
+        b=lr8JBDfah6TBBfm+fcfoKKyOkr4qRbOpNZKNSz0jmz/yX6P+3I80Gf127D2r/XjQUA
+         3Ks3cAXBSu53tT9w1ibvn5Il5wp07oxQoNqoZM1zcxtyyxZQIfHHyMuH9Wu320T/VBSm
+         k21jxvs3Wk0sFwnWQ/apaH2I3G85S6jN0k4LlkwrlkW2AKh84OQTIFYY2tRdMAOHMMV/
+         dfkRftgcaKD3gXqcUskLTUJDhSvmru45c+ZrJg5RDsasia1xMO8axDk51mSdiBvv5IkB
+         8wNBRxeXfiFuT4lbyXRgU8v4Qw+Z4RiFePK00zyExo7XeCKjmjW2zkmocLU63lo4OBBP
+         x8lQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=6GbViqjX2s1KVg61FHQ0TVRuw5O1ks6inA3ssFWIfJ8=;
-        b=VoHNza52R5PIdfeWJCoa4m3/M62C/gz/2J+sIyYKfDFuQ3st/40vj1TM/T/CmSdprP
-         mjstMmvLoSWb5H2UbC5i3ntKrezNebBGKmgcewnK2d9ggA49xdRS/FksfVBDRhuv5FeH
-         /Ge2GEBenq21cO/3wmDtsG2MQ/c2HpPaihIjMhNHr4CDGZSHdfLwpM1wxNsY5kAIoYQW
-         BDx/HiyG2S9QNVhv0+kbjbiD5tzBn781MiwMDz5KdLtVTHJDUiRfa1lgrCXHsNQCaAtb
-         Et6IU1lcLHfgQs5yEdGd8mE0w2jm4l8lyoNtLRE9JByUP5K2kKRAi8o5jtu93E1qmCYP
-         3Zhw==
-X-Gm-Message-State: AOAM530hB4op1fXnDcpFE/EQfzGUSNXhN9WYEy9rDcQo3cchTJhZBFsU
-        +3S9RN74gkeskpOrAXDLng==
-X-Google-Smtp-Source: ABdhPJxTGXgRssJw2GYnmEEUbCzvymNHxtSMoA4l0QobCAsPiTRJLeonWFEGnxjf3OjpdEJjkbBNHw==
-X-Received: by 2002:a05:6808:1302:: with SMTP id y2mr2365158oiv.308.1644447260712;
-        Wed, 09 Feb 2022 14:54:20 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id p11sm7699220oiv.17.2022.02.09.14.54.19
+        bh=5OgBvBtD/pqZyY1Wyl2wDigiqIzipvE7VvYdDX53RaU=;
+        b=CfamMLebIXwYxIlxlXKfUMNrHOjBUFhv9eGR6WFdVejSx/U78Ged2Tn7TDWd/vLPr+
+         UhH+Q6BwEsXWr0wWxE7jP9uWJfpW8Ch84yeP5TyogB3+3bB+68WesMNtMGF0qaTqwBBB
+         dNxa4eUlhVQXLt/U9m3b6kzzhzF/utPGIqsb8VuoC0OblfESFSLSTKnxlqTEbgwCwqBN
+         BZkeKYmSq8X+ldrbjp5dN1eFtI4nRUetwsGj0MUMR1V+stGol+j/YApLVGh8qIbDMOxj
+         H2z2n3htbRG9zEnIitryJ28Sveqt6eIhXTMf4u8UaBB0bJbXcsza02DX7YsCw6jkJr+Q
+         OI9A==
+X-Gm-Message-State: AOAM533Wn1ChfKA+BE5RJYx7eUBo2Hbx8euJGZoZOgJRm15iJ0qgO61h
+        KC2hklkVWIIfelYnfc0RJivNTQ==
+X-Google-Smtp-Source: ABdhPJx3fRoFf3m1YrhBm9bwMf/KNqL/k72G8kAET9jEP4tr4GMXepaIFbIEk883VTIOOZ9EPhHXZg==
+X-Received: by 2002:a17:90b:4f8f:: with SMTP id qe15mr5110563pjb.94.1644447303388;
+        Wed, 09 Feb 2022 14:55:03 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id nl7sm7362138pjb.5.2022.02.09.14.55.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 14:54:20 -0800 (PST)
-Received: (nullmailer pid 1099593 invoked by uid 1000);
-        Wed, 09 Feb 2022 22:54:19 -0000
-Date:   Wed, 9 Feb 2022 16:54:18 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        dri-devel@lists.freedesktop.org, Inki Dae <inki.dae@samsung.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sylwester Nawrocki <snawrocki@kernel.org>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org,
-        Joonyoung Shim <jy0922.shim@samsung.com>,
-        linux-kernel@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        devicetree@vger.kernel.org, David Airlie <airlied@linux.ie>
-Subject: Re: [PATCH 08/10] dt-bindings: display: samsung,exynos-hdmi: convert
- to dtschema
-Message-ID: <YgRGGh6MZaTM3S9B@robh.at.kernel.org>
-References: <20220208171823.226211-1-krzysztof.kozlowski@canonical.com>
- <20220208171823.226211-9-krzysztof.kozlowski@canonical.com>
+        Wed, 09 Feb 2022 14:55:02 -0800 (PST)
+Date:   Wed, 9 Feb 2022 22:54:59 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        dmatlack@google.com, vkuznets@redhat.com
+Subject: Re: [PATCH 03/23] KVM: MMU: remove valid from extended role
+Message-ID: <YgRGQ1HiB2jSTr5M@google.com>
+References: <20220204115718.14934-1-pbonzini@redhat.com>
+ <20220204115718.14934-4-pbonzini@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220208171823.226211-9-krzysztof.kozlowski@canonical.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220204115718.14934-4-pbonzini@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 08 Feb 2022 18:18:21 +0100, Krzysztof Kozlowski wrote:
-> Convert the Exynos HDMI bindings to DT schema format.
-> 
-> The conversion includes also updates to the bindings, matching the
-> current DTS and Linux driver:
-> 1. Add required properties: VDD supplies, power-domains.
-> 2. Add optional properties: HDMI-EN supply, ports.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> ---
->  .../bindings/display/exynos/exynos_hdmi.txt   |  64 -----
->  .../display/samsung/samsung,exynos-hdmi.yaml  | 227 ++++++++++++++++++
->  2 files changed, 227 insertions(+), 64 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/display/exynos/exynos_hdmi.txt
->  create mode 100644 Documentation/devicetree/bindings/display/samsung/samsung,exynos-hdmi.yaml
-> 
+On Fri, Feb 04, 2022, Paolo Bonzini wrote:
+> The level field of the MMU role can act as a marker for validity
+> instead: it is guaranteed to be nonzero so a zero value means the role
+> is invalid and the MMU properties will be computed again.
 
-Applied, thanks!
+Nope, it's not guaranteed to be non-zero:
+
+static int role_regs_to_root_level(struct kvm_mmu_role_regs *regs)
+{
+	if (!____is_cr0_pg(regs))
+		return 0; <=============================================
+	else if (____is_efer_lma(regs))
+		return ____is_cr4_la57(regs) ? PT64_ROOT_5LEVEL :
+					       PT64_ROOT_4LEVEL;
+	else if (____is_cr4_pae(regs))
+		return PT32E_ROOT_LEVEL;
+	else
+		return PT32_ROOT_LEVEL;
+}
+
+
+static union kvm_mmu_role
+kvm_calc_nested_mmu_role(struct kvm_vcpu *vcpu, struct kvm_mmu_role_regs *regs)
+{
+	union kvm_mmu_role role;
+
+	role = kvm_calc_shadow_root_page_role_common(vcpu, regs, false);
+
+	/*
+	 * Nested MMUs are used only for walking L2's gva->gpa, they never have
+	 * shadow pages of their own and so "direct" has no meaning.   Set it
+	 * to "true" to try to detect bogus usage of the nested MMU.
+	 */
+	role.base.direct = true;
+	role.base.level = role_regs_to_root_level(regs);
+	return role;
+}
+
+
+static void init_kvm_nested_mmu(struct kvm_vcpu *vcpu)
+{
+	struct kvm_mmu_role_regs regs = vcpu_to_role_regs(vcpu);
+	union kvm_mmu_role new_role = kvm_calc_nested_mmu_role(vcpu, &regs);
+	struct kvm_mmu *g_context = &vcpu->arch.nested_mmu;
+
+	if (new_role.as_u64 == g_context->mmu_role.as_u64) <== theoretically can get a false positive
+		return;

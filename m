@@ -2,83 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06D714AF5AD
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 16:46:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D70334AF5B2
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 16:46:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236231AbiBIPpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 10:45:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58246 "EHLO
+        id S236255AbiBIPqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 10:46:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232680AbiBIPpS (ORCPT
+        with ESMTP id S232680AbiBIPqc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 10:45:18 -0500
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECAF6C0613CA
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 07:45:20 -0800 (PST)
-Received: by mail-qt1-x835.google.com with SMTP id t1so2082093qtq.13
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 07:45:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=3shrmB0H/pTmuf5G/5yvegYTbR9AsKh3PxNaIWIn02w=;
-        b=EHKiLFCoaGny39YZO5//42CchKuutldtOI0Aa5XAsYwIjfkgAHdpW6t9yqA5RxStk6
-         CLg+cwRvAXGb3kwQXp9D5ASK0ef5xOysJxqdtxRZjS8ye11zRD7oh6iu8xHe7rIpLn8P
-         YqPsmwxbOajeIzqLUh9yvnMjxrCLwy7x099u1f1jrkluuxXZcNnHK2352KQxlAXW6hsl
-         9oh6dKFc4iz1F/+wzT91rbZ3GZB7+irg+P47EaMGZCGWsKU1SwamvAQLx5Ep6JOinRvd
-         xe7YozFGz7c/y0ZD/SUGI7nHZchjIps307xqW/ptQYdeXf26nRVQDGviQvpFMx2ArjLs
-         EECg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=3shrmB0H/pTmuf5G/5yvegYTbR9AsKh3PxNaIWIn02w=;
-        b=C4keTi4S2ahGUfMZ1Q1/G21R1AHSr8m6wz4gao+0EpDg+Bug8GGaEZtQNIncC0kUaW
-         juSIYTq3Jy35hqZBMM+w7FaMCsjSRp6rUiORVE/kvXRNMdr9bAz1GuSQ1Lp2LFuAgA6N
-         e+b4DVqtYEvordfsMGRnCQRTTVHFl7eGIG1tH63v28LQZdQC6bjCjOHU+wcc1qweneDL
-         C+V15kGQX25MqWhjVWCa7YIblB3fo4GMHeAsQDufvjxo6mOwhFYxauJV8GQVYJV352N0
-         BPlCW9c4cSHr73s8btkCqDlKiQXYKmnQd9MSJFNZtjbkzZ2LFZG8V8VvXpsJ72y4QEm7
-         ixNQ==
-X-Gm-Message-State: AOAM532l84aJC8bG4pGEQ9q4HvzhlkI9VhdCBbSyxLlfm6ryNPT6jQpp
-        ZVyrMlhz1rcpab7+H3jCJd6TyA==
-X-Google-Smtp-Source: ABdhPJx6JfoHHNsav36cW9YJ1pnn6SfZ0KNlilDme2t/kXl3V92r+dLYqvXtT5zUA/I1UT6bWFVvnw==
-X-Received: by 2002:a05:622a:34f:: with SMTP id r15mr1733163qtw.614.1644421519793;
-        Wed, 09 Feb 2022 07:45:19 -0800 (PST)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id bl1sm8465658qkb.16.2022.02.09.07.45.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 07:45:17 -0800 (PST)
-Date:   Wed, 9 Feb 2022 07:45:14 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.anvils
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-cc:     Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Rik van Riel <riel@surriel.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Yu Zhao <yuzhao@google.com>, Greg Thelen <gthelen@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        SeongJae Park <sj@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>
-Subject: Re: [PATCH 10/13] mm/munlock: mlock_page() munlock_page() batch by
- pagevec
-In-Reply-To: <CAMuHMdVxrYioQX1H8CPpYcSADN=22Se-pW14fPu9R0G+6iDtYw@mail.gmail.com>
-Message-ID: <d6a391-212f-af1-d762-6231ed904135@google.com>
-References: <8e4356d-9622-a7f0-b2c-f116b5f2efea@google.com> <eadba522-cfe1-b0d6-56fc-7bc9f649b89d@google.com> <CAMuHMdVxrYioQX1H8CPpYcSADN=22Se-pW14fPu9R0G+6iDtYw@mail.gmail.com>
+        Wed, 9 Feb 2022 10:46:32 -0500
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60086.outbound.protection.outlook.com [40.107.6.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF6E5C0613C9;
+        Wed,  9 Feb 2022 07:46:35 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AW1OBEbLbWIPLxa4Q9C1fs3r9ob9XTe+RQ+F4Vek34YmfPVX5wUGqZCWp1TJkwSShT28qukFeIcndRD7+SxefxVhuFgp5ljXK6uz7dfmyZh2a9yYBUNipJdVnXe+HLRqFb9g7oeoV60fcjdmvS5KvSDGiQXH7Z6xD2GtuNBzamnURI2aY4wSrUn3HFznKgAJ/8kKm57HnImFKSQztcOv8q2l2/OxZbzbIBaahiB47vi+Joz4SNYDBBzJR96c/1HmMSTNmlNdGsdHl2+bxtFrn+eXCdYFDyFTa9+/l/CZsgBmlu75HzX8sRsaEpdlIT0vDTu1l4FGqMU/ADVUb1El2Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jtlXlYYQjxc4Fso6Exv7WJdMfYM6dIaovu4dInEN6wI=;
+ b=bXp+X277i/aFlzKKKoDBy3B8tBwTtu2h+azZQHjAaaoJs3hfy9UGnk/aQillhta76Lv9TVOTVQFnFWfxmB5zZl8OW9I1D+6ASJQmpJr9ViMcs3xX2qQE5MUBihliWDN1sOYYR4Fv6gz7+nSivmpkI9qUm3gWhDPSPUd9uWDLvUGYnhSuqSmM6124XBVFjG3kiNvmcnGkNC8WtXZztkJcrvxrBxa2VwfRiDKVtFyZyDPOHzlp4i7YwYZQCdS7zYb30q38QI9K9KueXZF6ci2PR356Fu4p0uil/geyD80aGgRl7M9CpnsU/8NDxd3qQ7u3qGTVS/TkRx8FuFXbJ46/zA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jtlXlYYQjxc4Fso6Exv7WJdMfYM6dIaovu4dInEN6wI=;
+ b=arZYbsSsS7XO0Fi6QCCnXRvRDmVDZ7zzi6PlvrZWS4v7LRMvP0OUDkyAzciI4KZcKhK44Tk7dy9ymM7mzFJ6tsfgJSAIfDsvHubU9AVf18l4v65UGujz+L+5wi6XXUkLJsjO6sT6c68XeAMHETpEYXH6rr9UVt132KsZ84tH3NA=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wolfvision.net;
+Received: from HE1PR0802MB2426.eurprd08.prod.outlook.com (2603:10a6:3:e1::23)
+ by VI1PR0802MB2160.eurprd08.prod.outlook.com (2603:10a6:800:9b::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Wed, 9 Feb
+ 2022 15:46:31 +0000
+Received: from HE1PR0802MB2426.eurprd08.prod.outlook.com
+ ([fe80::e14f:197:5001:4c56]) by HE1PR0802MB2426.eurprd08.prod.outlook.com
+ ([fe80::e14f:197:5001:4c56%3]) with mapi id 15.20.4951.019; Wed, 9 Feb 2022
+ 15:46:30 +0000
+Message-ID: <01b78d95-fdf3-060a-831d-dae2abbc7109@wolfvision.net>
+Date:   Wed, 9 Feb 2022 16:46:28 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v5 1/5] dt-bindings: gpu: mali-bifrost: describe clocks
+ for the rk356x gpu
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        linux-kernel@vger.kernel.org, Liang Chen <cl@rock-chips.com>,
+        devicetree@vger.kernel.org, David Airlie <airlied@linux.ie>,
+        Alex Bee <knaerzche@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Rob Herring <robh+dt@kernel.org>
+References: <20220209085110.3588035-1-michael.riesch@wolfvision.net>
+ <20220209085110.3588035-2-michael.riesch@wolfvision.net>
+ <1644420908.380944.391811.nullmailer@robh.at.kernel.org>
+From:   Michael Riesch <michael.riesch@wolfvision.net>
+In-Reply-To: <1644420908.380944.391811.nullmailer@robh.at.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: ZR0P278CA0045.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:1d::14) To HE1PR0802MB2426.eurprd08.prod.outlook.com
+ (2603:10a6:3:e1::23)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="0-1892591577-1644421517=:6994"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d80a2475-0211-45e1-3070-08d9ebe35754
+X-MS-TrafficTypeDiagnostic: VI1PR0802MB2160:EE_
+X-Microsoft-Antispam-PRVS: <VI1PR0802MB216074FA670C666B9775D9E1F22E9@VI1PR0802MB2160.eurprd08.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:5516;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: EJyLcg/KC9QFwL64O8qjSdnuoZeoKmBPTsHiU0VKAvgmqQWwpKKK9NfnsCqpOFKBLHwh39bWoUjUGmSRA7nu3slo01OMbQMqY0nIGroQ1C6r5QhRdsX8LPIkIsth+6SUIAYcj58PlJUiQpKTLXgKRkZgOjn5111lpjJNXtyp3zH0v7LqUnqyH7DJispaUztyPvaamvksqmC9GTQZ41bOIPzaQ49iYUE8Ef3H+BdqTlvvrBaTHxLPuBIuy0MZ9OMtHOONDBNgmu7z1idTmHqSnBiGnz0/BABs0ozNK5NsMFA/rZweyx8+2Ezh9A6QlKN/j13xAw8EPvBb2+xygEpJmdiZX8pbGLc9lYFdGVJoY1XEE2ctdHaNn1PpB+yXB3JMgHMMwoV6C+r1jbcmXIzPBgiCcQM4GU0hWXcaUYrKgMhdWPu8CIWEh5Xg/+Ue0P/OR1KZlc/L5xAq8/AturfNTViHqs+rXEi8mjIWG7mgJDiMys7SKmlfISJNYnh4CTjB47lBYjMibOWgJ75QOb/bYM/5ETMqf4Y1Kp2i36v7DwaUUZEak/K39bTYZ8FRbxR+drJeAf6ijPitZHQqpO5Ty2IBfKCnTvl66IimLr0LGutCzTsbZTw1iXHD6aahwwiMvu2bFpLGbIuQoCJsOAE8aFEhgnZnqqiaXRAH1q6Bdbp6bNftiDAZwhxgvWP2YIFj6hbhja3A3V7qqARxTCkI0433Q9VCd7nl17eGebV6botC2YLwzj5JfC+QIrCJPuYj/bHO67pc8RV+xVo4F/41ybM6rBGCmFKpBqfrKCmFsYa1m7voMRwV2vNIwbkbN5nh
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0802MB2426.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6506007)(38100700002)(66476007)(4326008)(8936002)(53546011)(508600001)(966005)(66946007)(6486002)(66556008)(8676002)(2906002)(54906003)(86362001)(36756003)(52116002)(83380400001)(2616005)(6916009)(44832011)(186003)(7416002)(6512007)(31696002)(5660300002)(316002)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aXZyWW40RmV0bEtWanRPOG1wWXVmTmt3S05tSjZsMDNwMTZlTFFTdzJuWlJx?=
+ =?utf-8?B?ZE1zNXdxYmU1SmhiZWpGYXhqeXZCZnZTbTN4SkF1Tlo0TnZlYXgzV1JRc0FB?=
+ =?utf-8?B?YVVYamhrU0JSa2ZOYklBdjlTSGNFL2JEbnhBaW5xTHE4ZlI4bnVWZFphdVlS?=
+ =?utf-8?B?UDhZbkFCcW1CUXU1SFV1SkZmT3FNLzhSbDd1L2tmSk5yZDZtTU05enlpM1dS?=
+ =?utf-8?B?akFtWWhoeGZKOUt6d2FITURtNnh0a0VYWmZhQ1k5OWsrNHEvaHFHQ1E5RjRI?=
+ =?utf-8?B?WVQ4Y2hka3htUWptR1ZCdGFVNTRQMXVHdFhuT1VLckNFUHhqUElMU3VMRER4?=
+ =?utf-8?B?Z2lLK0cyenhQMVY2UjY3ZFRrVHZlUVdnZUFTbHB3cEZDUTQrUEExVnJYa2VO?=
+ =?utf-8?B?T2VseUdrUVZXSHJZdVlzU1BqNmw5SGdWc0JONXllRmN0ZlZmTm1LdWEzbU1I?=
+ =?utf-8?B?Sm5hK3FTT2R1aVZTcjRIREtDa0dRRnZpK3h5eEpkaDFkWmJESSsySmlyaDRB?=
+ =?utf-8?B?QzB1eDNqb3J2RXpQdWxzVXJDTmFLdEp3MThBRkxQUE9aQnhuL3JvbUNtL1Fi?=
+ =?utf-8?B?TkcvYkRwLzd1eUJVRjBmbjZDeGtTZ1ZCazRtUHlEMktvVW1tVHpyTkM1VnhN?=
+ =?utf-8?B?cGVMNlpFTW5MZTBXUFdwa1hGaGlVcGZHYjYrUFJYRXhwdGxjLzFhSkhpUXpp?=
+ =?utf-8?B?R2FZZm9IbmNuNG1yZDBJemNobytpU0hnNHdMcTkwQnI3NXRleWRVS2d1TTNv?=
+ =?utf-8?B?U0huTE1Talc1N3drMDQ1dzhQSzQwRzB5bjYrSmszQUo0ZEpMUmNGcFQxM2tX?=
+ =?utf-8?B?WktXU2ZERGw1dWtPa01LRkZnU0ZxM2hJTzNEb09SYXdjUTRTZWtKYk9MSmNV?=
+ =?utf-8?B?WHpWUFVPR0kyWkhPRFVBdXBOb0FPSXJiQ21ucitTV1Faa1BVdExleGdQVVBO?=
+ =?utf-8?B?YjJnVkhsaXg2L1kzbGxoRHQ0b0w3a0dXUTlGYnBqSDNRSzhFZjl1bGxpbldV?=
+ =?utf-8?B?QkFNTXlyOTU1L2d5V2NkWW45U1lqbU9Jbk0zRG9uaVBPSVFnTVRsMExQY2hM?=
+ =?utf-8?B?SU44bi9STkJGL3F3SjBLbG9VL3hVSWdzUlhWM2QrcllXOFFra1Z5dXA0b1Zw?=
+ =?utf-8?B?RUd2UWswRmliSGkrQ1NIek1OazY0emNwNGJXVFF6UjhQVXZwenpsV1UrL29D?=
+ =?utf-8?B?VHFtQzV5TkdPRnZlcm5hQy8wRWZ0b3I1WVdBZ1pVQXNnT0gwdGJIYllYUE0z?=
+ =?utf-8?B?KzhrRUR6MFFUOTZpRVVZVHdmUmNBYXZTOWgva1BDd2R5dmhuQVBYWFZJbFdF?=
+ =?utf-8?B?RGg3RUcwMjhIaEtHOVVyd25WZzZBZXVXdlc1eFlaUWRXckRBbW05K0ZxWi9V?=
+ =?utf-8?B?V2c5NVQ0RkVpNWpoT2JLS1h6U0pjY1hXdHloNFZYWjcxN0RBSlZPQUZlMkFp?=
+ =?utf-8?B?ajk4eGQ3bWgyclhlZmVsNHgxYk9BSXE2aS9JcmpFMVZFTjlxT01wSENrWUMw?=
+ =?utf-8?B?WEMxQ1pUdm9EeGhRcDJ2UXpsMGtYVVlVVm1VTnVrQXlpTit1SXhJQit4SkYr?=
+ =?utf-8?B?Ung5UVNEdm1MbFowazF4V2tmNEhEN1lHenhwTzlHRW5pYU05V045cE4yc0VV?=
+ =?utf-8?B?OHdzTUxvUTRUL1puMDFNWGhIMXRHRDlySE4yRHpMcFVzMVRQUHJxODRCNE9x?=
+ =?utf-8?B?aU5oNmVNR2FXMTNQdnpMaUIrWjRYQkdvZ1h2MEJvRy90Slc4OS9LQW9CeG1j?=
+ =?utf-8?B?SHFPSEc1RzRBRjFFWlhQbWhwNjVKdzE5N0JSdVlzVzBFbUxUaFkxRXUzSWVE?=
+ =?utf-8?B?enNPV2pMTi96S0s2MkFpSlhnbmdBamtjRHlybU01dmZrcjlvalkyWjJud2RK?=
+ =?utf-8?B?eHVma1F3aFhxVXZlbGFxVmNsanJvU2oyK0xkcHI4ZEVZTWxRR05xbVYyZHVy?=
+ =?utf-8?B?NXdvMTZwc2VqOVBtTGVJU3dQanY5UDdVbGdKcHpGUVdxVFYwVzFKWXo1bC9V?=
+ =?utf-8?B?YjVCVnErbjE1VkR1QjJRZm1mNjd2TWR5V3M2S1RRYmd3NWplMmFsbGR1SGhh?=
+ =?utf-8?B?YUN6WUJGQ2psNC9kL1ZBeTRFMDRzTGNyUlFTRXhkenRUa2NjTzZEZFAwSEhI?=
+ =?utf-8?B?SGRTeEhla1hwU0xGZHRGTlcvcUFxa2Z2WlJUT3VMaEJUUmNpT3NxU3R4aTZp?=
+ =?utf-8?B?aVJNNldXN3hubDlIOEpDZDZlK1RxT3hpSzlZZjJUM3NreDJFUStMTkZIdmJV?=
+ =?utf-8?B?WWhlOEJLbzRSYlVTRU01b2pLZWFIRytFNDU4dzBka1VxS1JwMW5WdG1DTFhp?=
+ =?utf-8?B?NGdjaTFleUkyR3RlNWMvNGY0QVVmLzFLSXBBNVRoT1FGdnBNZnZpVHppWHJY?=
+ =?utf-8?Q?kU9iVq59UgLi8+98=3D?=
+X-OriginatorOrg: wolfvision.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: d80a2475-0211-45e1-3070-08d9ebe35754
+X-MS-Exchange-CrossTenant-AuthSource: HE1PR0802MB2426.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2022 15:46:30.7530
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: iD5Isqs7TgXEZOEialdEPdobBBF1YP4NfbfUqfFg23B+YN2J8r+41QjvGd6X/moBiU5ImMEysG4DHKWM+e7DL4WUSbT6T4EXSBFrZ8Uu5TM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0802MB2160
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,65 +143,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Hi Rob,
 
---0-1892591577-1644421517=:6994
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+On 2/9/22 16:35, Rob Herring wrote:
+> On Wed, 09 Feb 2022 09:51:06 +0100, Michael Riesch wrote:
+>> From: Alex Bee <knaerzche@gmail.com>
+>>
+>> The Bifrost GPU in Rockchip RK356x SoCs has a core and a bus clock.
+>> Reflect this in the SoC specific part of the binding.
+>>
+>> Signed-off-by: Alex Bee <knaerzche@gmail.com>
+>> [move the changes to the SoC section]
+>> Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
+>> ---
+>>  .../devicetree/bindings/gpu/arm,mali-bifrost.yaml | 15 +++++++++++++++
+>>  1 file changed, 15 insertions(+)
+>>
+> 
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> 
+> yamllint warnings/errors:
+> ./Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml:173:12: [warning] wrong indentation: expected 12 but found 11 (indentation)
 
-On Wed, 9 Feb 2022, Geert Uytterhoeven wrote:
->=20
-> Thanks for your patch, which is now commit cbaf47432c909044
-> ("mm/munlock: mlock_page() munlock_page() batch by pagevec") in
-> next-20220209.
->=20
-> > --- a/mm/internal.h
-> > +++ b/mm/internal.h
-> > @@ -402,7 +402,8 @@ extern int mlock_future_check(struct mm_struct *mm,=
- unsigned long flags,
-> >   *
-> >   * mlock is usually called at the end of page_add_*_rmap(),
-> >   * munlock at the end of page_remove_rmap(); but new anon
-> > - * pages are managed in lru_cache_add_inactive_or_unevictable().
-> > + * pages are managed by lru_cache_add_inactive_or_unevictable()
-> > + * calling mlock_new_page().
-> >   *
-> >   * @compound is used to include pmd mappings of THPs, but filter out
-> >   * pte mappings of THPs, which cannot be consistently counted: a pte
-> > @@ -425,6 +426,9 @@ static inline void munlock_vma_page(struct page *pa=
-ge,
-> >             (compound || !PageTransCompound(page)))
-> >                 munlock_page(page);
-> >  }
-> > +void mlock_new_page(struct page *page);
-> > +bool need_mlock_page_drain(int cpu);
-> > +void mlock_page_drain(int cpu);
->=20
-> This is inside an #ifdef CONFIG_MMU section.
->=20
-> > --- a/mm/swap.c
-> > +++ b/mm/swap.c
->=20
-> > @@ -640,6 +634,7 @@ void lru_add_drain_cpu(int cpu)
-> >                 pagevec_lru_move_fn(pvec, lru_lazyfree_fn);
-> >
-> >         activate_page_drain(cpu);
-> > +       mlock_page_drain(cpu);
->=20
-> noreply@ellerman.id.au reported for m5272c3_defconfig:
->=20
->     mm/swap.c:637:2: error: implicit declaration of function
-> =E2=80=98mlock_page_drain=E2=80=99 [-Werror=3Dimplicit-function-declarati=
-on]
->=20
-> http://kisskb.ellerman.id.au/kisskb/buildresult/14694567/
+D'oh! Sorry for the stupid mistake, I found that yamllint was indeed
+missing.
 
-Hi Geert, thanks for your report: SeongJae has posted a fix
+Lines 173 and 174 need an extra space. In the case that a v6 is required
+I'll fix this. But of course I wouldn't say no if this could be fixed
+when the patch is applied :-)
 
-https://lore.kernel.org/lkml/20220209094158.21941-2-sj@kernel.org/
+Best regards,
+Michael
 
-but there I'm wondering if it's complete: I'll settle it later today.
-
-Hugh
---0-1892591577-1644421517=:6994--
+> 
+> dtschema/dtc warnings/errors:
+> 
+> doc reference errors (make refcheckdocs):
+> 
+> See https://patchwork.ozlabs.org/patch/1590238
+> 
+> This check can fail if there are any dependencies. The base for a patch
+> series is generally the most recent rc1.
+> 
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> date:
+> 
+> pip3 install dtschema --upgrade
+> 
+> Please check and re-submit.
+> 

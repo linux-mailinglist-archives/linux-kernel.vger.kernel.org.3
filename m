@@ -2,101 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B63154AED72
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 10:02:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 191234AED63
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 09:57:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239162AbiBIJCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 04:02:06 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:48698 "EHLO
+        id S236094AbiBII4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 03:56:42 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:58296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236752AbiBIJBy (ORCPT
+        with ESMTP id S233089AbiBII4h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 04:01:54 -0500
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39387E063CA8;
-        Wed,  9 Feb 2022 01:01:52 -0800 (PST)
+        Wed, 9 Feb 2022 03:56:37 -0500
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EE4BC10369B
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 00:56:34 -0800 (PST)
+Received: by mail-qk1-x731.google.com with SMTP id o12so1064628qke.5
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 00:56:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1644397312; x=1675933312;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=W1vbGig1ggXixsjNE2mO6qoA8DXkKDyDegvqnRj1LrY=;
-  b=IljA1k1l6vqrivtRLoJOFz89KqLxdccSbW/3fKD8Drm1CsSovw8JarO7
-   BjJbc+u8odH83vGhQaizY+mjrUjmIsDdZZkHzxvOEU/5K9/66+bfYdiNW
-   LHwTTH+nqCLRpAzqI9tfEg0BaMLpsZBUpzs/2EHqBn3NSC+okB+Tx62a1
-   0=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 09 Feb 2022 00:55:59 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 00:55:58 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Wed, 9 Feb 2022 00:55:58 -0800
-Received: from sbillaka-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Wed, 9 Feb 2022 00:55:51 -0800
-From:   Sankeerth Billakanti <quic_sbillaka@quicinc.com>
-To:     <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <agross@kernel.org>,
-        <bjorn.andersson@linaro.org>, <robh+dt@kernel.org>,
-        <robdclark@gmail.com>, <seanpaul@chromium.org>,
-        <swboyd@chromium.org>, <dianders@chromium.org>,
-        <krzysztof.kozlowski@canonical.com>, <thierry.reding@gmail.com>,
-        <sam@ravnborg.org>, <airlied@linux.ie>, <daniel@ffwll.ch>
-CC:     Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        <quic_kalyant@quicinc.com>, <quic_abhinavk@quicinc.com>,
-        <quic_khsieh@quicinc.com>, <quic_mkrishn@quicinc.com>,
-        <quic_vproddut@quicinc.com>
-Subject: [PATCH v3 1/4] dt-bindings: display: simple: Add sharp LQ140M1JW46 panel
-Date:   Wed, 9 Feb 2022 14:25:29 +0530
-Message-ID: <1644396932-17932-2-git-send-email-quic_sbillaka@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1644396932-17932-1-git-send-email-quic_sbillaka@quicinc.com>
-References: <1644396932-17932-1-git-send-email-quic_sbillaka@quicinc.com>
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZXandK+emcY9j+lknNJmYnpgD6ghtFPnYBrNZbHY5Mk=;
+        b=pIAfjdpVAhfLDWMrG4eyoRHalCKigC93SJzURinIMyuKtXebHbo7CQ5M/uqpuv1J2V
+         QMd85G/uFjj48hBFlU6EGtDybguIz8IafdQ1KfyR/IPR0u5rQEuh1BCY6yJrS3USlGDe
+         dxJcqhVN1HxJtQZJpDDSjrNOOFUPZ6OAS4NV2gR8U8Q/Dg+gJ03ORViNPjfE+Z+xIRqQ
+         siXr2oq+ciC9vl6wnFH5pWQ+ePwHS0TUw/BSXULl7L+SUY44qdWamtwEp62swhiI3zHj
+         iwcsu7OTnxx/cEY35qriy/isQjN+gFruCE68vX5NKBFddRfwnLur0qyomobmrLEhsKum
+         SqsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZXandK+emcY9j+lknNJmYnpgD6ghtFPnYBrNZbHY5Mk=;
+        b=UjQDO6Y8AGYwDZzUqf7/PPDk4WNXp0oprsZn5Tf57cZbSPZIRw9K5Mpg2dwo/MUbWs
+         xpStaAZA0yNxxzO2RZyv8WBH7UvT9My+TThd8Me+e2fMFoZZXyZJX3NAD4MCjldPCqPN
+         hl0bV9vTF6N2rAviVi+RT70Iq6HRz6xcmf38we/9skNMr0BnAZOEVYFjUh0W1O5EvBXS
+         +dCOYOaoJoa9F/exCQiThlpZbVxckUm534eBiGOMMAiQgytJd0e4I7WHXvahi49rjQDv
+         3wQlA0IIJeuEPZKTgNM0vwTNGYiXaCBQr1+etzgI6VAkNV51YDuE8cWXrMYCg1V7x6w0
+         kcdg==
+X-Gm-Message-State: AOAM5334+Swv/53oUhd5H/jWiYp/ggBqkaymWmNuPyG3AF/gD4rapOcO
+        Xbta5NL+BcuBlHfW8zr2XbM=
+X-Google-Smtp-Source: ABdhPJyqcybfIkYqyHz+e3zwbI+JWbs8XjkGw/GjKf5GoLAsKQqh1ZSUguwnesxj8TLFIR9i7InrEg==
+X-Received: by 2002:a05:620a:16d3:: with SMTP id a19mr516513qkn.107.1644396971097;
+        Wed, 09 Feb 2022 00:56:11 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id k6sm8763048qko.68.2022.02.09.00.56.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Feb 2022 00:56:10 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: deng.changcheng@zte.com.cn
+To:     fweisbec@gmail.com
+Cc:     tglx@linutronix.de, mingo@kernel.org, linux-kernel@vger.kernel.org,
+        Changcheng Deng <deng.changcheng@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] tick/sched: use min() to make code cleaner
+Date:   Wed,  9 Feb 2022 08:56:04 +0000
+Message-Id: <20220209085604.1561628-1-deng.changcheng@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for sharp LQ140M1JW46 display panel. It is a 14" eDP panel
-with 1920x1080 display resolution.
+From: Changcheng Deng <deng.changcheng@zte.com.cn>
 
-Signed-off-by: Sankeerth Billakanti <quic_sbillaka@quicinc.com>
+Use min() in order to make code cleaner.
+
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
 ---
+ kernel/time/tick-sched.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Changes in v3:
-  None
-
- Documentation/devicetree/bindings/display/panel/panel-simple.yaml | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/display/panel/panel-simple.yaml b/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
-index 9cf5588..1eb9dd4 100644
---- a/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
-+++ b/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
-@@ -284,6 +284,8 @@ properties:
-       - sharp,lq101k1ly04
-         # Sharp 12.3" (2400x1600 pixels) TFT LCD panel
-       - sharp,lq123p1jx31
-+        # Sharp 14" (1920x1080 pixels) TFT LCD panel
-+      - sharp,lq140m1jw46
-         # Sharp LS020B1DD01D 2.0" HQVGA TFT LCD panel
-       - sharp,ls020b1dd01d
-         # Shelly SCA07010-BFN-LNN 7.0" WVGA TFT LCD panel
+diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
+index c89f50a7e690..31064f85a9fd 100644
+--- a/kernel/time/tick-sched.c
++++ b/kernel/time/tick-sched.c
+@@ -822,7 +822,7 @@ static ktime_t tick_nohz_next_event(struct tick_sched *ts, int cpu)
+ 		next_tmr = get_next_timer_interrupt(basejiff, basemono);
+ 		ts->next_timer = next_tmr;
+ 		/* Take the next rcu event into account */
+-		next_tick = next_rcu < next_tmr ? next_rcu : next_tmr;
++		next_tick = min(next_rcu, next_tmr);
+ 	}
+ 
+ 	/*
 -- 
-2.7.4
+2.25.1
 

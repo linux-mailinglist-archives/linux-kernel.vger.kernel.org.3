@@ -2,92 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04E784AF42F
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 15:36:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B66954AF433
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 15:37:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235079AbiBIOgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 09:36:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34692 "EHLO
+        id S235096AbiBIOhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 09:37:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231747AbiBIOgP (ORCPT
+        with ESMTP id S235088AbiBIOhU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 09:36:15 -0500
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD20FC06157B;
-        Wed,  9 Feb 2022 06:36:17 -0800 (PST)
-Received: by mail-wr1-f50.google.com with SMTP id h6so4382849wrb.9;
-        Wed, 09 Feb 2022 06:36:17 -0800 (PST)
+        Wed, 9 Feb 2022 09:37:20 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A41C0613C9
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 06:37:23 -0800 (PST)
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 8A16A3F22B
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 14:37:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644417442;
+        bh=SlwgImOcNTsESNfIirUrDaCeHIHfLp+o6BSrCLR6Xb4=;
+        h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
+         MIME-Version:Content-Type;
+        b=oNmPi4dslqueQtIrpvuG05hA1TV1Tu+3yBOPkBz+v5JiJX2VKxLdWa39gt+flHVFC
+         JW6w4XUSUoZWIdttex/pbeneVeL3qI+zR/iPZAVIeBC+BS8cOgeLkxyCjvcK5jfZwu
+         HS4qgRsMQa00iY7pNSYYh9fVxrfGNnQrmpr1onoPqKgZ/FvM25c1No76VM3Jy3/iJk
+         fP2NczYvOVloV2F7yfIQ5CCsh3dnE6scLUlOZaWUWlAPFSFPQ/MrsFcdH2zux5vzvG
+         VsCU7ETPhIPBuH++7jpIGSDJf6jd9qvd20G2oAkdgdaOdoi5LfANyPGNYx7+NW3fvu
+         mEqI0eXoAl2+A==
+Received: by mail-ed1-f70.google.com with SMTP id x6-20020a05640226c600b0040fe1993eebso756670edd.6
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 06:37:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=sDy4Lk2MySKM/19GlYVgEh5OHE3c2OCP46qjCmjP6RM=;
-        b=S2iqiM+kvuLs365jLzt3ttOYo2IbRoE7q1ooEm9Ysik8WfCJZ222utkTJpk0B6155X
-         gQZkweH2m7YAmn4+rV/gyEEjGkCS7/yg8CO3XSlnf3RvF61QP1o/rqlcJIkEha0Nblg2
-         SxQL7NwJIVLbnF+0ROXqw5a1jGxBXM8Fm78/PSOdrJMesPWHbhHMkCv7ClCvMxNKds2u
-         0siMrKF3tuWKr1wm8UsbYNLdVYaVIhixFu/2UC55zLmjLd34zLnyBEuru1cRqPDM7R+p
-         Vb/61V5RygaodUa0GzFHNMIbGNgBD8s4XD2hcH8Wt4ZJYCC2KDl08kyOeHVvc9r9Onby
-         Z+SQ==
-X-Gm-Message-State: AOAM531WQEEM55+OeXyHlCio/yq4Lm5S5vLS2y3CZJnZvR01rBFzTsCG
-        VsrbLL4bnMgfZ/M/YWaryiM=
-X-Google-Smtp-Source: ABdhPJyzXomL2e2GnxknTm6AymQm5QOKRSELuhMabDu8wCrFDn8JV93QitSUNCXlwRdtzWzY+Y/19w==
-X-Received: by 2002:a5d:47a1:: with SMTP id 1mr2329619wrb.87.1644417376099;
-        Wed, 09 Feb 2022 06:36:16 -0800 (PST)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id o16sm3610042wmc.25.2022.02.09.06.36.15
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=SlwgImOcNTsESNfIirUrDaCeHIHfLp+o6BSrCLR6Xb4=;
+        b=XVYIbc5smxdTiE0nZo5V4iEvEo3YmF/aY9u+ur2smyo0ZOzIB3ytTlWT+wDhGQC8z4
+         H4b2WCHDv20xn9o7U34NuY/Uhki1ifgUWri7Ni0OgWRVOMarzH4AHW9FiMgcoBaHveh3
+         vo96IJfD92TVbgaAdp3Ck2J6m8r0vw7wwtsizKWvjHfTqAo2R7x4l2oXI8IHWFp+HvPI
+         fB7TiLWsgUbnXlOEeItVUHisD4dLWfngNg8qw45cZJ/k41vljgbSzaC4EM818ERzHjwa
+         T2MHflGBYiwnDudHVPjH78ZR/JUBxajn0iwUhRAs+a7vMGHK7fDBitKhf12cCyh6Tfmu
+         EmVg==
+X-Gm-Message-State: AOAM530ocZFdRdSFboZhY+8GmLqC+GzaDYv3L+3Ye/SOrqPwY2ok4Inc
+        rDx20ZhIBxwn/avaGgsHKRB4TvcEwe1jKJu7mIYSVHKvN7HlKDmW/fBV7rqI2rt0RfXahjUApjD
+        D0hX7i1R6B1fVVzvHpDy+0AO2Q6J1yH8CDkXei0SciA==
+X-Received: by 2002:a17:906:240d:: with SMTP id z13mr2248963eja.210.1644417440965;
+        Wed, 09 Feb 2022 06:37:20 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw36sjymzMaJhJa6q6wUBDPfAQePXwC/8alKtggTfvJQrQ42VevrxvY9v64oZZdAuv2SAoLgQ==
+X-Received: by 2002:a17:906:240d:: with SMTP id z13mr2248941eja.210.1644417440823;
+        Wed, 09 Feb 2022 06:37:20 -0800 (PST)
+Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id ss14sm3871136ejb.199.2022.02.09.06.37.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 06:36:15 -0800 (PST)
-Date:   Wed, 9 Feb 2022 14:36:13 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Cai Huoqing <cai.huoqing@linux.dev>
-Cc:     "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Drivers: hv: utils: Make use of the helper macro
- LIST_HEAD()
-Message-ID: <20220209143613.forbf5chbexnfad5@liuwe-devbox-debian-v2>
-References: <20220209032251.37362-1-cai.huoqing@linux.dev>
+        Wed, 09 Feb 2022 06:37:20 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-pm@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
+        devicetree@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v3 0/8] dt-bindings: memory: convert to dtschema
+Date:   Wed,  9 Feb 2022 15:36:44 +0100
+Message-Id: <164441736490.181274.3751600144129167050.b4-ty@canonical.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220206135807.211767-1-krzysztof.kozlowski@canonical.com>
+References: <20220206135807.211767-1-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220209032251.37362-1-cai.huoqing@linux.dev>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 09, 2022 at 11:22:51AM +0800, Cai Huoqing wrote:
-> Replace "struct list_head head = LIST_HEAD_INIT(head)" with
-> "LIST_HEAD(head)" to simplify the code.
+On Sun, 6 Feb 2022 14:57:59 +0100, Krzysztof Kozlowski wrote:
+> Changes since v2:
+> 1. Re-order patches so timings get converted earlier. This fixes dt-checker
+> robot report.
+> 2. Add Dmitry's review tag.
+> 3. Three new patches:
+>    #6: dt-bindings: memory: lpddr3: deprecate passing timings frequency as unit address
+>    #7: memory: of: parse max-freq property
+>    #8: ARM: dts: exynos: remove deprecated unit address for LPDDR3 timings on Odroid
 > 
-> Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
+> [...]
 
-Applied to hyperv-fixes. Thanks.
+Applied, thanks!
 
-> ---
->  drivers/hv/hv_utils_transport.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hv/hv_utils_transport.c b/drivers/hv/hv_utils_transport.c
-> index eb2833d2b5d0..832885198643 100644
-> --- a/drivers/hv/hv_utils_transport.c
-> +++ b/drivers/hv/hv_utils_transport.c
-> @@ -13,7 +13,7 @@
->  #include "hv_utils_transport.h"
->  
->  static DEFINE_SPINLOCK(hvt_list_lock);
-> -static struct list_head hvt_list = LIST_HEAD_INIT(hvt_list);
-> +static LIST_HEAD(hvt_list);
->  
->  static void hvt_reset(struct hvutil_transport *hvt)
->  {
-> -- 
-> 2.25.1
-> 
+[1/8] dt-bindings: memory: lpddr2-timings: convert to dtschema
+      commit: 425fd283e4a2b929a88483525fda3f90dde8a2d0
+[2/8] dt-bindings: memory: lpddr3-timings: convert to dtschema
+      commit: 180a276c99bb861742c5c423d679b0277d4b1c26
+[3/8] dt-bindings: memory: lpddr3: convert to dtschema
+      commit: 28f818580e49a97876de5c33231fc0e4c3cde2d9
+[4/8] dt-bindings: memory: lpddr3: adjust IO width to spec
+      commit: d98e72b6f9b078c57f9d46dc64a669d02ff2ffcc
+[5/8] dt-bindings: memory: lpddr3: deprecate manufacturer ID
+      commit: e531932c7185b86eccb3688002730950d49eba1a
+[6/8] dt-bindings: memory: lpddr3: deprecate passing timings frequency as unit address
+      commit: 42f94bb962cd1b15dc57c90aca7e48848ca6c6c3
+[7/8] memory: of: parse max-freq property
+      commit: 4e890b2228fd14fa6269175e9816bf27ff989e84
+
+Best regards,
+-- 
+Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>

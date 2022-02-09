@@ -2,70 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A3644AE766
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 04:03:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F223C4AE768
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 04:03:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244220AbiBIDCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 22:02:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56230 "EHLO
+        id S242178AbiBIDDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 22:03:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349898AbiBICxp (ORCPT
+        with ESMTP id S1359805AbiBICyA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 21:53:45 -0500
-Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67184C0613CC;
-        Tue,  8 Feb 2022 18:53:44 -0800 (PST)
-Received: by mail-oi1-f173.google.com with SMTP id s185so1169390oie.3;
-        Tue, 08 Feb 2022 18:53:44 -0800 (PST)
+        Tue, 8 Feb 2022 21:54:00 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC41BC0613CC
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 18:53:59 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id c3so1017579pls.5
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 18:53:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=3uOgLe/RVQ0Vs20wfvHEbpezYoxPnv0Gf+KP4+9Watg=;
+        b=HCh/v6d1iQTxKf/TmU0YnImgzK9mb60Zao0AqsI53+ExsYAnUw0cOdNCowVxQvP38A
+         xXq9TonHkNwdZJSC8OGZJtrn5SQ/04GBMcX79l4H6r57jaYSUO/rXOk5vIzz1WnanOcE
+         YoxVQKXTUa9Eulq85GwqXOoTo1mDpuULbp5EU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=fNZGPXUROmHp4KkqnE4bBZ82gCwkY+Gd8mQE5E/HzyA=;
-        b=ntoQ7p2k/V3RDrDImlNg2et31bpQjw1r6C3ZBcsGMgt7e30WYCqL+egYx27pokydER
-         PzJtCE5oFvXLNDAGsh7X5udcXPQeLkdAD4gspS+SFc2aaBuerAQ5wP902oMLAp24H4dJ
-         5FG/bCmqSZBTf7jqpLcutAIuFoH+KyEwcyHO0bF/HeOD1EZIwhON85DyI+RnXXW7s2Po
-         QpkKsGTsf12a0td0peEPHDOgWSnbcmAyaS1LCbIogmnRq3c4kSpTzyo5hrORfRkWb2Wn
-         Cv2rfLK/LFfVNthPBZxXtgd6QyRmSJw5KJAFvs2aA981nggFP7d78ubYpH2r4yRx4Onx
-         UKvw==
-X-Gm-Message-State: AOAM5332HOVuPeIwmDeamQapiZJ8fBP2FUmXcCGhba+NtV9ay8Fg9b0s
-        2lC3m04HklMvLB3gnLqvlw==
-X-Google-Smtp-Source: ABdhPJwklX3+feeACa2Kp9/ndGvpPiCo+Q+Utu1UgIfNFSyTdtDznL0XFZ3V63+D63H5b3nML99SJA==
-X-Received: by 2002:a05:6808:198d:: with SMTP id bj13mr78932oib.146.1644375223674;
-        Tue, 08 Feb 2022 18:53:43 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id q41sm6054935ooh.38.2022.02.08.18.53.42
+        bh=3uOgLe/RVQ0Vs20wfvHEbpezYoxPnv0Gf+KP4+9Watg=;
+        b=mjgypOXvMBA0c36+2/wOf0bX7+MNNHpNKUN/qFtV4dP16n7urv8D8v4FOi/5oh+3ky
+         Lvi1G0CH57hiQFhF9MCCYSqk7O2Dr+3wuZ7jRxcDSOJkuvgAu8LskYyTMdggPfoEIX0r
+         XzwVhUK6TcfG+U5R8FOULVLQ/NKAw1HDmI+azYbvqdthAVP5CGCPy4uQp9aFNqacbygp
+         memQVe+Louwgy5DYYpdkTp0kR9OEmlNS5KibUxFrBlKQ9f1RvGXChSbsfAzkCFQ7jrse
+         Q+Xm/28AT4a9Jg4HoH/8QfngdJcRttwgJPqaJ6OIt1d0XVKXvtgewID7M08V4Kxh4S7e
+         4sTQ==
+X-Gm-Message-State: AOAM533ZFlwoeYvC5LioR1P3Lep9W813FptJsZvlrWDS3H8n9A2257qS
+        GDJbEIOkIBlxFuFi1WoNSolwE+FQy+Dx9A==
+X-Google-Smtp-Source: ABdhPJy5PzatkkErIC2tiNV2a6nOTPpNdrpLG5LJn92XJLQonky4qxwZ0slr4Qo5CdpmtWQElk+MsA==
+X-Received: by 2002:a17:903:24f:: with SMTP id j15mr126492plh.16.1644375239308;
+        Tue, 08 Feb 2022 18:53:59 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id s10sm17930181pfu.186.2022.02.08.18.53.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 18:53:42 -0800 (PST)
-Received: (nullmailer pid 3525989 invoked by uid 1000);
-        Wed, 09 Feb 2022 02:53:41 -0000
-Date:   Tue, 8 Feb 2022 20:53:41 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Abel Vesa <abel.vesa@nxp.com>
-Cc:     Fabio Estevam <festevam@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-serial@vger.kernel.org,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Peng Fan <peng.fan@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Subject: Re: [PATCH 1/2] dt-bindings: serial: fsl-lpuart: Drop i.MX8QXP
- backwards compatibility
-Message-ID: <YgMstcQHIB0dWzuT@robh.at.kernel.org>
-References: <20220118135918.2126010-1-abel.vesa@nxp.com>
+        Tue, 08 Feb 2022 18:53:58 -0800 (PST)
+Date:   Tue, 8 Feb 2022 18:53:58 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: [PATCH] MIPS: Malta: Enable BLK_DEV_INITRD
+Message-ID: <202202081853.B4C45735@keescook>
+References: <20220208191726.1304731-1-nathan@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220118135918.2126010-1-abel.vesa@nxp.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <20220208191726.1304731-1-nathan@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,14 +68,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 18 Jan 2022 15:59:17 +0200, Abel Vesa wrote:
-> Drop the i.MX8QXP backwards compatibility with i.MX7ULP since they
-> differ from clocks handling point of view.
+On Tue, Feb 08, 2022 at 12:17:26PM -0700, Nathan Chancellor wrote:
+> This configuration is useful for boot testing malta_defconfig in QEMU
+> with just a simple cpio initrd, instead of a full ext4 rootfs.
 > 
-> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+> This results in an increase of ~164KB of vmlinux (with GCC 11.2.0):
+> 
+> $ diskus vmlinux.before
+> 11.19 MB (11,194,368 bytes)
+> 
+> $ diskus vmlinux.after
+> 11.36 MB (11,358,208 bytes)
+> 
+> This size increase comes from the fact that usr/Kconfig is sourced when
+> CONFIG_BLK_DEV_INITRD is enabled, which defaults to supporting several
+> decompression algorithms for compressed initrds. This seems like a
+> reasonable tradeoff but these configurations could be disabled in the
+> future if there are complaints about the size increase.
+> 
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+
+I'm all for having a regular way to test all defconfigs. So, FWIW:
+
+Reviewed-by: Kees Cook <keescook@chromium.org>
+
+-Kees
+
 > ---
->  Documentation/devicetree/bindings/serial/fsl-lpuart.yaml | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
+>  arch/mips/configs/malta_defconfig | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/mips/configs/malta_defconfig b/arch/mips/configs/malta_defconfig
+> index 3321bb576944..3456ac8ded6c 100644
+> --- a/arch/mips/configs/malta_defconfig
+> +++ b/arch/mips/configs/malta_defconfig
+> @@ -4,6 +4,7 @@ CONFIG_HIGH_RES_TIMERS=y
+>  CONFIG_LOG_BUF_SHIFT=15
+>  CONFIG_NAMESPACES=y
+>  CONFIG_RELAY=y
+> +CONFIG_BLK_DEV_INITRD=y
+>  CONFIG_EXPERT=y
+>  # CONFIG_COMPAT_BRK is not set
+>  CONFIG_SLAB=y
+> 
+> base-commit: dfd42facf1e4ada021b939b4e19c935dcdd55566
+> -- 
+> 2.35.1
 > 
 
-Acked-by: Rob Herring <robh@kernel.org>
+-- 
+Kees Cook

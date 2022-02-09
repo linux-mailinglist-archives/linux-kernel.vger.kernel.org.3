@@ -2,136 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 203844AFBA0
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 19:48:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C15814AFBAA
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 19:48:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240866AbiBISrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 13:47:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33672 "EHLO
+        id S240603AbiBISsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 13:48:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240825AbiBISpy (ORCPT
+        with ESMTP id S241681AbiBISqz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 13:45:54 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B368C03F938;
-        Wed,  9 Feb 2022 10:43:27 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id i21so4332857pfd.13;
-        Wed, 09 Feb 2022 10:43:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=++8mApk7RkWt9IYMQQmWE9VHiPI6DBwLCpnWFPssygI=;
-        b=qGy++wR4TC8B3MD+skcOoU0Rz0NlIDn//t1PfiTRzziEWiC1QzxRUkyF3jiknY45eG
-         MVQ1DwUkKDi3GRrni4fQawxf3YkxOlRs64seslgvIUD3L0SeJOyAGvrCse0s5u6wfwL6
-         oG5fIm+bBQ4JYQC80X97WqYBXewbVESuOD3ySzW1MD9KHJQ71miaauYI01NuBqL8sX0w
-         AOM9pD6xeYX5HlmeErEWysd++M+ebcvTQJnfVFrBc13ZBRbCGljmQth2gKDJaW9rOyLd
-         jN8qOtjLjM/3TQ2yST8qk0H34cgEevysDmnCEi2YjnKnvn9lQWK/Uq/Zd9lConzXy+oo
-         /cSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=++8mApk7RkWt9IYMQQmWE9VHiPI6DBwLCpnWFPssygI=;
-        b=NahHbVmPIsJL4R7rcRWaf2Mce3piCOgOs/P6uNW088XRkYc4uvhccdQXpSsNajrtRy
-         5ROjxyfuQcx8Ww7iHOWFEtvyfeTbLtdt10bTG9SW7ErwDSOSTkvameW7V9UtzWyOth4x
-         FXcy29OI2naOiSCmxmouh4XuOgQoaHH7M8GywnPBO+pRYUI5Q0wbSV37wDECEYd/sPc4
-         xh3BBqhcX3e8CdmOZPmAfHTe1hnPzI5nAstXmUoUjyTUglF4XEFAVqYeILFjsULe9QE/
-         zoqAYjUrtsU34KaY7etvj7A2oFi/Q7kEj25ADxbz8Ex7G5/lKToJC4TgCKk/4I0Y/OJl
-         cv6w==
-X-Gm-Message-State: AOAM533nkqijhXfn4m3cKwN5GDOOfGrYZDqnyRSIfJKUckaVU2Gl8boO
-        99PrysjkJxpVeFpB8liA4VicweWJV5gWMC4IGZ0nJ2r0K7GgOR4s
-X-Google-Smtp-Source: ABdhPJzoiadJc5PSqYDMUBE96R7/2wNLf+6aj2O+i3AwgRvSjPRvqapEiu8YingYuFXFOgzq0w+N7jlBAFrrthRVY2A=
-X-Received: by 2002:a63:6c01:: with SMTP id h1mr2996139pgc.118.1644432206694;
- Wed, 09 Feb 2022 10:43:26 -0800 (PST)
+        Wed, 9 Feb 2022 13:46:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204BAC0F86BE;
+        Wed,  9 Feb 2022 10:44:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 38D6B612D5;
+        Wed,  9 Feb 2022 18:44:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FDBAC340EF;
+        Wed,  9 Feb 2022 18:44:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644432253;
+        bh=K3QGi21JyiylmC9O+Ts03GWV8vWnzVXFL9nRfTBRNLk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=gXB3XKq0FKZvp5ZfXg207pyTChVNXT2Bx+SA8ZTEXUSMh6kLwdLT5zRRrXi/it08V
+         4GVxP51X5/ozzcp3SYqDJ6t0yq66sJvY/O/OFigRqZssTlNU8Vd3kUTiqzl8R+SpOG
+         3movFTtC3XqjEvlcKIZ/OfY7x9WYAbKzvLV86A9Du/DQd4zGlNdtTrNuRkyPnfM/sq
+         T9qpoCSYGmqIQG3ZUdRabEZdFnXJ7U8oa26QJ8E+xHJel17F8VSXTfKqH9D64PsAFV
+         n4MCu/hpSncmqjKtigE7P/3ufMN4T2NhNQVGCLdf4JLVMxzf4Ts9gkGPS64F8EPA+V
+         xveNtz1iTqiZg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Alexander Aring <alex.aring@gmail.com>,
+        Alexander Aring <aahringo@redhat.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
+        Sasha Levin <sashal@kernel.org>, davem@davemloft.net,
+        kuba@kernel.org, linux-wpan@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 01/10] net: ieee802154: at86rf230: Stop leaking skb's
+Date:   Wed,  9 Feb 2022 13:44:00 -0500
+Message-Id: <20220209184410.48223-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20211228072645.32341-1-luizluca@gmail.com> <Ydx4+o5TsWZkZd45@robh.at.kernel.org>
- <CAJq09z4G40ttsTHXtOywjyusNLSjt_BQ9D78PhwSodJr=4p6OA@mail.gmail.com>
- <CAL_JsqJ4SsEzZz=JfFMDDUMXEDfybMZw4BVDcj1MoapM+8jQwg@mail.gmail.com>
- <87zgn0gf3k.fsf@bang-olufsen.dk> <YgP7jgswRQ+GR4P2@lunn.ch>
-In-Reply-To: <YgP7jgswRQ+GR4P2@lunn.ch>
-From:   Luiz Angelo Daros de Luca <luizluca@gmail.com>
-Date:   Wed, 9 Feb 2022 15:43:15 -0300
-Message-ID: <CAJq09z49EEMxtBTs9q0sg3nn0VrSi0M=DkQTJ_n=QmgTr1aonw@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: net: dsa: realtek-smi: convert to YAML schema
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     =?UTF-8?Q?Alvin_=C5=A0ipraga?= <ALSI@bang-olufsen.dk>,
-        Rob Herring <robh@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > However, the linux driver today does not care about any of these
-> > interruptions but INT_TYPE_LINK_STATUS. So it simply multiplex only
-> > this the interruption to each port, in a n-cell map (n being number of
-> > ports).
-> > I don't know what to describe here as device-tree should be something
-> > independent of a particular OS or driver.
->
-> You shouldn't need to know what Linux does to figure this out.
+From: Miquel Raynal <miquel.raynal@bootlin.com>
 
-The Linux driver is masquerading all those interruptions into a single
-"link status changed". If interrupts property is about what the HW
-sends to us, it is a single pin.
+[ Upstream commit e5ce576d45bf72fd0e3dc37eff897bfcc488f6a9 ]
 
-  interrupt-controller:
-   type: object
-   description: |
-     This defines an interrupt controller with an IRQ line (typically
-     a GPIO) that will demultiplex and handle the interrupt from the single
-     interrupt line coming out of one of the Realtek switch chips. It most
-     importantly provides link up/down interrupts to the PHY blocks inside
-     the ASIC.
+Upon error the ieee802154_xmit_complete() helper is not called. Only
+ieee802154_wake_queue() is called manually. In the Tx case we then leak
+the skb structure.
 
-   properties:
+Free the skb structure upon error before returning when appropriate.
 
-     interrupt-controller: true
+As the 'is_tx = 0' cannot be moved in the complete handler because of a
+possible race between the delay in switching to STATE_RX_AACK_ON and a
+new interrupt, we introduce an intermediate 'was_tx' boolean just for
+this purpose.
 
-     interrupts:
-       maxItems: 1
-       description:
-         A single IRQ line from the switch, either active LOW or HIGH
+There is no Fixes tag applying here, many changes have been made on this
+area and the issue kind of always existed.
 
-     '#address-cells':
-       const: 0
+Suggested-by: Alexander Aring <alex.aring@gmail.com>
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Acked-by: Alexander Aring <aahringo@redhat.com>
+Link: https://lore.kernel.org/r/20220125121426.848337-4-miquel.raynal@bootlin.com
+Signed-off-by: Stefan Schmidt <stefan@datenfreihafen.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/net/ieee802154/at86rf230.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
-     '#interrupt-cells':
-       const: 1
+diff --git a/drivers/net/ieee802154/at86rf230.c b/drivers/net/ieee802154/at86rf230.c
+index 3d9e915798668..1bc09b6c308f8 100644
+--- a/drivers/net/ieee802154/at86rf230.c
++++ b/drivers/net/ieee802154/at86rf230.c
+@@ -108,6 +108,7 @@ struct at86rf230_local {
+ 	unsigned long cal_timeout;
+ 	bool is_tx;
+ 	bool is_tx_from_off;
++	bool was_tx;
+ 	u8 tx_retry;
+ 	struct sk_buff *tx_skb;
+ 	struct at86rf230_state_change tx;
+@@ -351,7 +352,11 @@ at86rf230_async_error_recover_complete(void *context)
+ 	if (ctx->free)
+ 		kfree(ctx);
+ 
+-	ieee802154_wake_queue(lp->hw);
++	if (lp->was_tx) {
++		lp->was_tx = 0;
++		dev_kfree_skb_any(lp->tx_skb);
++		ieee802154_wake_queue(lp->hw);
++	}
+ }
+ 
+ static void
+@@ -360,7 +365,11 @@ at86rf230_async_error_recover(void *context)
+ 	struct at86rf230_state_change *ctx = context;
+ 	struct at86rf230_local *lp = ctx->lp;
+ 
+-	lp->is_tx = 0;
++	if (lp->is_tx) {
++		lp->was_tx = 1;
++		lp->is_tx = 0;
++	}
++
+ 	at86rf230_async_state_change(lp, ctx, STATE_RX_AACK_ON,
+ 				     at86rf230_async_error_recover_complete);
+ }
+-- 
+2.34.1
 
-   required:
-     - interrupt-controller
-     - '#address-cells'
-     - '#interrupt-cells'
-
-Now as it is also an interrupt-controller, shouldn't I document what it emits?
-I've just sent the new version and we can discuss it there.
-
-> >  - one interrupt for the switch
-> >  - the switch is an interrupt-controller
-> >  - ... and is the interrupt-parent for the phy nodes.
->
-> This pattern is pretty common for DSA switches, which have internal
-> PHYs. You can see this in the mv88e6xxx binding for example.
-
-The issue is that those similar devices are still not in yaml format.
-
->       Andrew

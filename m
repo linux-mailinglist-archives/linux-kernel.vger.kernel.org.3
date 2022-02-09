@@ -2,105 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AA944AFE9F
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 21:38:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DB314AFEAA
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 21:45:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232129AbiBIUih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 15:38:37 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:49660 "EHLO
+        id S232154AbiBIUpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 15:45:09 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:38284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232022AbiBIUig (ORCPT
+        with ESMTP id S232090AbiBIUpI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 15:38:36 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 876B5E00FA58
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 12:38:38 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id 9so3536270pfx.12
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 12:38:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3CCwZDVWnTz0k1KLIvecC5nUo5ERwSy7pI4Pplg9Wl8=;
-        b=euriZtsupOGjw8a7umqT2cBDmUzLH4VaDyzNGSo3vCdzBeVAEQwlwdsjpyhTvCDcnf
-         JyhDahslFehlYA6KhhswwXeyV06XZ1Z8AvIonnkIK4H89xRvmsGGZiV1RknHadkxAAFH
-         Lo23ARtbPshgAgbZ5Q1oDW9X0gpXcf/+JtqBpbJzJDh7xsrzE7Rl0UC3UZ0WH3z5Q/rk
-         GiDZZt1HKmY1lDcSkVAj1sQxF1wd2env4RoJJ5jTxGBZgj1Y0vxX8w/VdAOUPY+wEXB6
-         J2A21hXcM7EQu/d2RTLnOSzRpHUpRIA6NGtm2pJzx+J9VwH6n9hZgi2Ku8P6GVrgdLb5
-         Xxqg==
+        Wed, 9 Feb 2022 15:45:08 -0500
+Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A6AC03FEEE;
+        Wed,  9 Feb 2022 12:45:11 -0800 (PST)
+Received: by mail-oo1-f41.google.com with SMTP id 189-20020a4a03c6000000b003179d7b30d8so3908884ooi.2;
+        Wed, 09 Feb 2022 12:45:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3CCwZDVWnTz0k1KLIvecC5nUo5ERwSy7pI4Pplg9Wl8=;
-        b=y6AXEDyMHve2Db1cIEEpcQayrZoH0peYiYEBWRjQvAFl50Iu5kd2h9Yk4rOeMdc2GF
-         SZujbnxj1+p62yrv1cHvIQXgZ3InIEwX2ABRjtkFvVJtZV+uzZKHavCWhea9BII80bq8
-         gavrCe1TBPfniucHaGcZfW9yNRFMM6e+kOkpSVF8PkSF7eJEnHVJphBUQnn6Hw0bGHiw
-         Faf8BXwxRccXFwdBMjRp5Ez6YRCNpv47p1l853/9g7XDuWJDtS+zgwZG95BSjnXL+izK
-         ei6iWbumwx8zDR8S+x2lBD/8AxQjfW1O5mJvmQN0vFhl9LHiS6CSVMDE8FjtD6fqN+Bh
-         Bkaw==
-X-Gm-Message-State: AOAM531Jhpi+ZRwAh61gM8Tjeh8QvRFJ9MYjU+fPfZm0OKqWyEk1OgEw
-        qRvDjCsbaAY/Xi73dnVd4Ukf8w==
-X-Google-Smtp-Source: ABdhPJyZl9J2c7WQrcgVt2vZAMPqb1B2hJwEtuDLTLIv0TWjgnD8a+scZYKTNFnmpQ1YT7P8fEtFnA==
-X-Received: by 2002:a63:89:: with SMTP id 131mr3348551pga.253.1644439117946;
-        Wed, 09 Feb 2022 12:38:37 -0800 (PST)
-Received: from kalash.aristanetworks.com (d64-180-125-150.bchsia.telus.net. [64.180.125.150])
-        by smtp.googlemail.com with ESMTPSA id v123sm3722386pfb.12.2022.02.09.12.38.36
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=E6SXQI7BZ89wLWfBrUoQLVzH2X91u9h16GeWEE3Mi8M=;
+        b=n+lRk1DOO+dZ/rkjsXsj4DrwmC8xxehuDLcSnBvViXChpDnVLxYiMPBpOFinmpHn+6
+         AXKzQKJlEg/8JzuXnl17k5ZvZLB0+TGues0wPFSGbHbZNUo6V6V/yg6SaPS9iBiFfdBh
+         R/KNU/pJnrmgqdCmm7qNtSAZ/oycg6DP0pbjXSw6ym+5CxmUCmnb/gFLhO3v2aiQFv7y
+         A+Njwjnu0Gw+NP/PekT6Fv+i+xoWdglvfws9Um9XM5v4rJ0SrK7wAJYfZkW/D1JC9Nko
+         ocUzxT2/J1+xYupW0yy8z4X/iUUSxpTD+G5OXbI2sSJOcF7hVLXAaI/l8f5FMgRWls0R
+         sBig==
+X-Gm-Message-State: AOAM531/0IXPl+KgEVEb2SMjadYsGvWi9PSB+iejsmCb8nCHob5LS2sS
+        GmvcXtAifkjp/gpdF9OKww==
+X-Google-Smtp-Source: ABdhPJy4AH9g61BJTuGzr3+4csdYvHWDckGJ/vzpMmnXYpOaTzvQOyhxZiJysr/kfvlf541SyS4xjA==
+X-Received: by 2002:a05:6870:a583:: with SMTP id c3mr1477653oam.197.1644439510352;
+        Wed, 09 Feb 2022 12:45:10 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id n47sm6957783ota.74.2022.02.09.12.45.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 12:38:36 -0800 (PST)
-From:   Kalash Nainwal <kalash@arista.com>
-To:     netdev@vger.kernel.org
-Cc:     fruggeri@arista.com, kalash@arista.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH] Generate netlink notification when default IPv6 route preference changes
-Date:   Wed,  9 Feb 2022 12:38:18 -0800
-Message-Id: <20220209203818.11351-1-kalash@arista.com>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
+        Wed, 09 Feb 2022 12:45:09 -0800 (PST)
+Received: (nullmailer pid 875372 invoked by uid 1000);
+        Wed, 09 Feb 2022 20:45:08 -0000
+Date:   Wed, 9 Feb 2022 14:45:08 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Tianping Fang <tianping.fang@mediatek.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        linux-usb@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v2 1/4] dt-bindings: usb: mtk-xhci: add support ip-sleep
+ for mt8195
+Message-ID: <YgQn1IXiHdTw0r19@robh.at.kernel.org>
+References: <20220128062902.26273-1-chunfeng.yun@mediatek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220128062902.26273-1-chunfeng.yun@mediatek.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- Generate RTM_NEWROUTE netlink notification when the route preference
- changes on an existing kernel generated default route in response to
- RA messages. Currently netlink notifications are generated only when
- this route is added or deleted but not when the route preference
- changes, which can cause userspace routing application state to go
- out of sync with kernel.
+On Fri, 28 Jan 2022 14:28:59 +0800, Chunfeng Yun wrote:
+> There are 4 USB controllers on MT8195, each controller's wakeup control is
+> different, add some specific versions for them.
+> 
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> Acked-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+> v2:
+>   1. fix typo 'specific' suggested by Rob
+>   2. add acked-by AngeloGioacchino
+> ---
+>  .../devicetree/bindings/usb/mediatek,mtk-xhci.yaml          | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
 
-Signed-off-by: Kalash Nainwal <kalash@arista.com>
----
- net/ipv6/ndisc.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/net/ipv6/ndisc.c b/net/ipv6/ndisc.c
-index f03b597e4121..fd14f5b1c767 100644
---- a/net/ipv6/ndisc.c
-+++ b/net/ipv6/ndisc.c
-@@ -1337,8 +1337,12 @@ static void ndisc_router_discovery(struct sk_buff *skb)
- 			return;
- 		}
- 		neigh->flags |= NTF_ROUTER;
--	} else if (rt) {
-+	} else if (rt && IPV6_EXTRACT_PREF(rt->fib6_flags) != pref) {
-+		struct nl_info nlinfo = {
-+			.nl_net = net,
-+		};
- 		rt->fib6_flags = (rt->fib6_flags & ~RTF_PREF_MASK) | RTF_PREF(pref);
-+		inet6_rt_notify(RTM_NEWROUTE, rt, &nlinfo, NLM_F_CREATE);
- 	}
- 
- 	if (rt)
--- 
-2.30.1 (Apple Git-130)
-
+Acked-by: Rob Herring <robh@kernel.org>

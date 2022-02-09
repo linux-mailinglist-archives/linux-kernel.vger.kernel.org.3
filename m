@@ -2,84 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 719D74AEDB1
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 10:10:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9EFA4AEDA4
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 10:09:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235037AbiBIJKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 04:10:16 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:49264 "EHLO
+        id S233858AbiBIJJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 04:09:31 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:47220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233465AbiBIJKA (ORCPT
+        with ESMTP id S233465AbiBIJJY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 04:10:00 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA8C7E078229;
-        Wed,  9 Feb 2022 01:09:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=kNBxEECZ8nYVRQBlRi4s4bPsYk+6wGvc+UHQLe+LfQY=; b=FuT01ILcnQE1hlwV0N6QoRzje7
-        8leIgTUsGHbhfy7cNPjN8ZrjHcSG0wypOKtgyb8t04GcdHB5bH2yXofjaCs8wpl1CIqqOkec3R9OV
-        nApYAVlzrV8ZfypyHa4mIELkzUQhBcEibVe6rjqueMf/NegoUT6rvZNNsoc4Uw2YqsFP9t1UTNqIf
-        jNC72U1XwX8JGYxfA0nQlHqSjCcVfzkGjPBeAtSDlLt6otVC5r0jjKiMiAMeC9xmjVZ1sMuKSSBys
-        rCFVdCTkXxb8dN7UTtpmiYJWVdWQaduq6Qanmd7JpqkCzBgIpJKnbvw5fQS2u7k6VjPF4p+ScGV/Y
-        cDMFRHqA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nHiyL-007ELN-4I; Wed, 09 Feb 2022 09:09:09 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id B7873986226; Wed,  9 Feb 2022 10:09:08 +0100 (CET)
-Date:   Wed, 9 Feb 2022 10:09:08 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Byungchul Park <byungchul.park@lge.com>,
-        "Paul E. McKenney" <paul.mckenney@linaro.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Radoslaw Burny <rburny@google.com>, Tejun Heo <tj@kernel.org>,
-        rcu@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, intel-gfx@lists.freedesktop.org
-Subject: Re: [RFC 00/12] locking: Separate lock tracepoints from
- lockdep/lock_stat (v1)
-Message-ID: <20220209090908.GK23216@worktop.programming.kicks-ass.net>
-References: <20220208184208.79303-1-namhyung@kernel.org>
+        Wed, 9 Feb 2022 04:09:24 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFC42DF28AD3
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 01:09:15 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id d27so2836102wrc.6
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 01:09:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=DUmHVshkvWp2RY/UyFIfNWg44HUvXNupx5/iL+mP6EE=;
+        b=cxBl8c4P1cvv7Tv6Dxk+62SeRqlxp783g9ffvZPcvj5SJRfu8Y6LIcGLX1P+PQUir1
+         JevDJ2yBQILmIxQKvle+oy2/AgeJcMxr7cQ5OnZlimYcAHwtKeDdZYZHMPb0EHmRwAnQ
+         bkY/luTPPSGkTJfJtM0KYEGCCZ0935BbQORU49iVDHsMazLlLZxx4ws6k7VsWiGbcHdO
+         2n9Kd73b/O9ADWc9TVL+e/6moIiwEvkDYLij9NO/G/zFrjdEosbXDFuCG0jL7w9PBWGq
+         PJTwvsglhwoyrTPIly6PKGuD8YvmdkxDU6mCB7U16I8Zo5FS7shj0XUiIBw1SA48GY9H
+         2tqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=DUmHVshkvWp2RY/UyFIfNWg44HUvXNupx5/iL+mP6EE=;
+        b=2JQeJTprDQyublaOJKleL5ypsvdXzmNYtthLTwP9XUkT5YVUSqbK+d4qVNskCBoULP
+         GgePzmEYSYKxzEnT4cp8avBGwQgwb5qYy36/Pwn0ZoLcEgTwop2fC8LF2QpmG3PTAgUk
+         /fRKxUxKpEdMnMqgLaFrR3wWl07Lz84AOOURHHkczvD4pbnhvYdfsAAVdd3OGllW/YUA
+         Vnz0S0r88bVY4jyxJahBb56T70yFNTL9lxym/ZK/IIt4Z6l+qKAit+8aSkbqqnerUe2e
+         B358TOQVYdGmTQxYtAv4nyGFnqeyYn3GQLnKNflSlvgp5nRxnmTnBcSsrRKo3btUrvLo
+         jWcg==
+X-Gm-Message-State: AOAM532g5IzdcCf1EWiCWlTml3bkgoE3Hyra9yWY+8ZpuuEF4dQZzSHZ
+        /wpCEsNbk452ujbzHuO7qLyxKLm0icmG0zWvhFI=
+X-Google-Smtp-Source: ABdhPJz1eS/722hgBMJEKEmRQ3BeLd0T99TaFj3I8lpWO5ISQ3AZczjYElqtFC5T7e46PUbwMK5c/brZBkn+v75JiXM=
+X-Received: by 2002:a05:6000:1e15:: with SMTP id bj21mr1250622wrb.222.1644397749318;
+ Wed, 09 Feb 2022 01:09:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220208184208.79303-1-namhyung@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Received: by 2002:a05:600c:3acd:0:0:0:0 with HTTP; Wed, 9 Feb 2022 01:09:08
+ -0800 (PST)
+Reply-To: howardnewell923@gmail.com
+From:   Howard Newell <muhammed.gaba113@gmail.com>
+Date:   Wed, 9 Feb 2022 09:09:08 +0000
+Message-ID: <CAMz__ZafWt0s3=ymLud7o1xDCgoEomNd-D18xr=hh=hGJ1maCA@mail.gmail.com>
+Subject: re
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,HK_SCAM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:431 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4936]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [muhammed.gaba113[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [muhammed.gaba113[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [howardnewell923[at]gmail.com]
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.1 HK_SCAM No description available.
+        *  3.4 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 08, 2022 at 10:41:56AM -0800, Namhyung Kim wrote:
+-- 
+Hi
+I want to know from you if you received my message concerning your
+compensation file with United Nations Compensation Program. Please
+confirm
 
-> Eventually I'm mostly interested in the contended locks only and I
-> want to reduce the overhead in the fast path.  By moving that, it'd be
-> easy to track contended locks with timing by using two tracepoints.
-
-So why not put in two new tracepoints and call it a day?
-
-Why muck about with all that lockdep stuff just to preserve the name
-(and in the process continue to blow up data structures etc..). This
-leaves distros in a bind, will they enable this config and provide
-tracepoints while bloating the data structures and destroying things
-like lockref (which relies on sizeof(spinlock_t)), or not provide this
-at all.
-
-Yes, the name is convenient, but it's just not worth it IMO. It makes
-the whole proposition too much of a trade-off.
-
-Would it not be possible to reconstruct enough useful information from
-the lock callsite?
+Kind regards!
+Howard Newell
+London WC2N 4JS, UK

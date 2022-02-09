@@ -2,251 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 085A04AED73
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 10:02:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 192F44AEE57
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 10:43:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239095AbiBIJCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 04:02:12 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:48722 "EHLO
+        id S235516AbiBIJmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 04:42:23 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:53038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238865AbiBIJBz (ORCPT
+        with ESMTP id S235484AbiBIJmJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 04:01:55 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C2EE0650B1
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 01:01:52 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id e3so2884950wra.0
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 01:01:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qL3NqM+YbQIYfajnWqdAMTOFk/R3y/d271/TpavWvJs=;
-        b=cWcmdSqZzBHhEeK/HhJdL1oQ/0xwa+nihw3HfzxOyvcP6w5QtEW9ab/xcpuJtcUTd5
-         rFMsOWkh+LdgqqInOEompniBZ4liL3UyMBYyGS9ZDig9TFUpM8XBJOFXb1vMCWbCiRce
-         3AvCd9kjluiScLlAawmgWtMsvtxoEiOhDVq87jMPWh7uKorzqSEtTeRxYLvhwhT1FfiB
-         yGXcaGEtoudD+FTgMJ0hEFWtHEKI2gWm9/+cG84MUVypjz1jCZ8XW3qEjBLUydEO/PjH
-         NlbxqDKA2ZPthnn3ItiYWpV8TOXxeCa2H056epDYRe/G/xURl0O++5l604TLdq+l5/wf
-         hezA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qL3NqM+YbQIYfajnWqdAMTOFk/R3y/d271/TpavWvJs=;
-        b=6cRgIEyUbcEl27KKQWcrhxm1tdWgh6CHB8RHTEegTSftutgZabNSo0YYKBotE0nPAB
-         TZuB1gIE9Rt2oQCMJ6uRDgWnIXLXprtplJv19xI0Z+C2OFJ9WpEt8E03JYLrAcTGYA+Q
-         Cy9iHEFeJ0GvEi1n3JUfrN27QKX87IpAWCrwC53Q5WouThsfQMCu9PIPF2ANQT5Elomn
-         b9SOcGfCpPG38k7IpV4nGZBs4kUGasscZS27sAMolBikGkGT4yUxOll56VId2NVKwKZ2
-         JaBYAVt/MNAZkyGtlOqM87/eaPH4fAvOVdhoQfrZgM5rI+Jh7CCp7+GrwfpZulBXffaO
-         xVIg==
-X-Gm-Message-State: AOAM531OFn9Pb8/3EBSYK6Y7PH0agQYL6OKEIMB6CqyxmbpyqYpX2fZ6
-        SI7PVJfK0SAbKexVxATbz8KcU8cbvv4Ipg==
-X-Google-Smtp-Source: ABdhPJzPXo/QUZdbpnMhE2wnY2Teo9XJ3k3osIirVhe7Y7kznHhqEiGqH63phDsN/wePYOe0xiaG5w==
-X-Received: by 2002:a5d:588d:: with SMTP id n13mr1229823wrf.690.1644397263979;
-        Wed, 09 Feb 2022 01:01:03 -0800 (PST)
-Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id g4sm17436641wrd.111.2022.02.09.01.01.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 01:01:03 -0800 (PST)
-From:   Corentin Labbe <clabbe@baylibre.com>
-To:     daniel.lezcano@linaro.org, krzysztof.kozlowski@canonical.com,
-        robh+dt@kernel.org, tglx@linutronix.de
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH v3] dt-bindings: timer: Convert faraday,fttmr010 to yaml
-Date:   Wed,  9 Feb 2022 09:00:58 +0000
-Message-Id: <20220209090058.1472964-1-clabbe@baylibre.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 9 Feb 2022 04:42:09 -0500
+Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB129C03C1B5;
+        Wed,  9 Feb 2022 01:42:01 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 801BF580143;
+        Wed,  9 Feb 2022 03:36:37 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Wed, 09 Feb 2022 03:36:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; bh=MbTZeUMy+/3/3bs2adM+ZVlFkQtC01OoGyTtWh
+        YFSeU=; b=S49DnfIpi/7YTPKlQTockOxwAtMUVs8XaPAiJ/NSqOVR6Rh6IGRO1n
+        LAG3hJwbtOyPDF+4iwmmQELd8g79xb/533eMFRRhANW7kCEgkumr2MCgiR3Kek1J
+        5pXruIVIhuyAIGPg78OC5j948i59TzyaGc90LHBqXgon1QgeQ46H4KCJkiTSd/fB
+        ZL/Argyab9EWa5Li/lR5xFQm6mKeP3iJOCWhgjIevI5jN4oeyXqLOynHPBPvZCvx
+        dWcBR3GPy4jNeAfNSFLFCwFzcn8XUHidL73XIFmoqOjXTOnnX86kuoRe6g/F/Lyp
+        WBMPJQJ6kCnPZLoxA5cqb+i9jIX/j2tg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=MbTZeUMy+/3/3bs2a
+        dM+ZVlFkQtC01OoGyTtWhYFSeU=; b=PHVf772ii7K+5t4pXf37WYaSK48OU8J4r
+        F+DKwkyz9d+QYI9SQX3wLUFxmF2UTznVXNBdkCR50Oa21bJCxj5q2j997o/wLzl5
+        Z4D9FwOjCAW+rDedAs3Fewk+J9Gh17uklYOAy6bUewetfe8lFG+E/EQIIncst+00
+        FaqM9VVipi+w54ltzEemoWr46YPMgukeGZv0OQTzaC8OwFPdyBPinl8xnEzBEqfF
+        e3ZSjuyMFM+1iLX4IjzX89C9WWqTC5peFWQptliq44yCbyC9dE9E4TYihleT7412
+        Zm2bA2zOkZ0y7Agf/y0mKDjexYRyR8IBDmhdMsTjLd+Zuq9hQeUOg==
+X-ME-Sender: <xms:FH0DYuD7vrCmr4tMEF_NxPW3A9DweTL3IOjrV8ES1WX63MXEzpz9sQ>
+    <xme:FH0DYoiaEpKLrLMV6OXitHt3egZGd8A4KuE7t8UayDGq2zzW9EHpFlg8Muqx-nJLt
+    ywNDtsq6UFiJzy9gqQ>
+X-ME-Received: <xmr:FH0DYhlUgkWNzGTBoJocTIQzbxTZNraYErghFy_trYjxjBMT9ZOate6gFGMrSUcYlPkohkC3FsPRxbOKWAm5ZNIfqgwJvdQvcrjnLao>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrheekgdduudekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddunecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepuddvudfhkeekhefgffetffelgffftdehffduffegveetffehueeivddvjedv
+    gfevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
+    grgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:FH0DYsyw-yk1XHoupQcO4q2J5SZheBUyppnBctvdriEY8YhqYEa7QA>
+    <xmx:FH0DYjRTVSFqpKx3UWXxA2BpCfeY_tu-pD3u59J4UU8S9etKQFNBvg>
+    <xmx:FH0DYnbB6yYXd8s63NJzV7zEYe0bUm66K0rd6YgYO0BmIfOg9HoFRA>
+    <xmx:FX0DYhFbnHQxulT0ewqsMPradtaihtmkguPJli-9w7d2PSDJWujO_g>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 9 Feb 2022 03:36:35 -0500 (EST)
+Date:   Wed, 9 Feb 2022 09:36:33 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Sui Jingfeng <15330273260@189.cn>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Zack Rusin <zackr@vmware.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        suijingfeng <suijingfeng@loongson.cn>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: [PATCH v6 1/3] drm/lsdc: add drm driver for loongson display
+ controller
+Message-ID: <20220209083633.mlfbiydi7cbpgexa@houat>
+References: <20220203082546.3099-1-15330273260@189.cn>
+ <20220203082546.3099-2-15330273260@189.cn>
+ <20220203085851.yqstkfgt4dz7rcnw@houat>
+ <4dd6d32a-9818-1adf-cb3f-20c183ae2020@189.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="kqetfhrtfefgtoun"
+Content-Disposition: inline
+In-Reply-To: <4dd6d32a-9818-1adf-cb3f-20c183ae2020@189.cn>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Converts timer/faraday,fttmr010.txt to yaml.
 
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
----
-Changes since v1:
-- added moxart example
-- relaxed some contraints as driver only support one clock and one
-  interrupt (as used by moxa,moxart-timer)
-Changes since v2:
-- increased max size of interrupts
-- fixed all issues reported by Rob https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20220126160021.3537591-1-clabbe@baylibre.com
+--kqetfhrtfefgtoun
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-All aspeed-bmc-vegman*dts are expected to fail and will be fixed via:
-https://patchwork.ozlabs.org/project/linux-aspeed/patch/20220127141604.1163-1-a.kartashev@yadro.com/
+On Fri, Feb 04, 2022 at 12:41:37AM +0800, Sui Jingfeng wrote:
+> > > +static int lsdc_primary_plane_atomic_check(struct drm_plane *plane,
+> > > +					   struct drm_atomic_state *state)
+> > > +{
+> > > +	struct drm_device *ddev =3D plane->dev;
+> > > +	struct lsdc_device *ldev =3D to_lsdc(ddev);
+> > > +	struct drm_plane_state *old_plane_state =3D drm_atomic_get_old_plan=
+e_state(state, plane);
+> > > +	struct drm_plane_state *new_plane_state =3D drm_atomic_get_new_plan=
+e_state(state, plane);
+> > > +	struct drm_framebuffer *new_fb =3D new_plane_state->fb;
+> > > +	struct drm_framebuffer *old_fb =3D old_plane_state->fb;
+> > > +	struct drm_crtc *crtc =3D new_plane_state->crtc;
+> > > +	u32 new_format =3D new_fb->format->format;
+> > > +	struct drm_crtc_state *new_crtc_state;
+> > > +	struct lsdc_crtc_state *priv_crtc_state;
+> > > +	int ret;
+> > > +
+> > > +	if (!crtc)
+> > > +		return 0;
+> > > +
+> > > +	new_crtc_state =3D drm_atomic_get_new_crtc_state(state, crtc);
+> > > +	if (WARN_ON(!new_crtc_state))
+> > > +		return -EINVAL;
+> > > +
+> > > +	priv_crtc_state =3D to_lsdc_crtc_state(new_crtc_state);
+> > > +
+> > > +	ret =3D drm_atomic_helper_check_plane_state(new_plane_state,
+> > > +						  new_crtc_state,
+> > > +						  DRM_PLANE_HELPER_NO_SCALING,
+> > > +						  DRM_PLANE_HELPER_NO_SCALING,
+> > > +						  false,
+> > > +						  true);
+> > > +	if (ret)
+> > > +		return ret;
+> > > +
+> > > +	/*
+> > > +	 * Require full modeset if enabling or disabling a plane,
+> > > +	 * or changing its position, size, depth or format.
+> > > +	 */
+> > > +	if ((!new_fb || !old_fb ||
+> > > +	     old_plane_state->crtc_x !=3D new_plane_state->crtc_x ||
+> > > +	     old_plane_state->crtc_y !=3D new_plane_state->crtc_y ||
+> > > +	     old_plane_state->crtc_w !=3D new_plane_state->crtc_w ||
+> > > +	     old_plane_state->crtc_h !=3D new_plane_state->crtc_h ||
+> > > +	     old_fb->format->format !=3D new_format))
+> > > +		new_crtc_state->mode_changed =3D true;
+> > > +
+> > > +
+> > > +	priv_crtc_state->pix_fmt =3D lsdc_primary_get_default_format(crtc);
+> > Storing the pixel format in the CRTC state is weird? What would happen
+> > if you have a primary plane and a cursor in different formats?
+> >=20
+> > Also, reading the default format from a register doesn't look right.
+> > atomic_check can occur at any time, including before a previous commit,
+> > or while the hardware is disabled. You should rely on either a constant
+> > or the previous state here.
+> >=20
+> Currently, private CRTC state(priv_crtc_state) is not get used by the cur=
+sor's
+> atomic_check() and atomic_update(). I means this is only for the primary =
+plane.
+> And both and the primary and the cursor using=A0 XRGB8888 format, what I =
+really
+> want=A0here is let the atomic_update to update the framebuffer's format, =
+because
+> the firmware (pmon) of some board set the framebuffer's format as RGB565.
 
- .../bindings/timer/faraday,fttmr010.txt       |  38 ------
- .../bindings/timer/faraday,fttmr010.yaml      | 108 ++++++++++++++++++
- 2 files changed, 108 insertions(+), 38 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/timer/faraday,fttmr010.txt
- create mode 100644 Documentation/devicetree/bindings/timer/faraday,fttmr010.yaml
+atomic_update will be called each time the plane state is changed, so it
+won't be an issue: when the first state will be committed, your
+atomic_update function will be called and thus you'll overwrite what was
+left of the firmware setup.
 
-diff --git a/Documentation/devicetree/bindings/timer/faraday,fttmr010.txt b/Documentation/devicetree/bindings/timer/faraday,fttmr010.txt
-deleted file mode 100644
-index 3cb2f4c98d64..000000000000
---- a/Documentation/devicetree/bindings/timer/faraday,fttmr010.txt
-+++ /dev/null
-@@ -1,38 +0,0 @@
--Faraday Technology timer
--
--This timer is a generic IP block from Faraday Technology, embedded in the
--Cortina Systems Gemini SoCs and other designs.
--
--Required properties:
--
--- compatible : Must be one of
--  "faraday,fttmr010"
--  "cortina,gemini-timer", "faraday,fttmr010"
--  "moxa,moxart-timer", "faraday,fttmr010"
--  "aspeed,ast2400-timer"
--  "aspeed,ast2500-timer"
--  "aspeed,ast2600-timer"
--
--- reg : Should contain registers location and length
--- interrupts : Should contain the three timer interrupts usually with
--  flags for falling edge
--
--Optionally required properties:
--
--- clocks : a clock to provide the tick rate for "faraday,fttmr010"
--- clock-names : should be "EXTCLK" and "PCLK" for the external tick timer
--  and peripheral clock respectively, for "faraday,fttmr010"
--- syscon : a phandle to the global Gemini system controller if the compatible
--  type is "cortina,gemini-timer"
--
--Example:
--
--timer@43000000 {
--	compatible = "faraday,fttmr010";
--	reg = <0x43000000 0x1000>;
--	interrupts = <14 IRQ_TYPE_EDGE_FALLING>, /* Timer 1 */
--		   <15 IRQ_TYPE_EDGE_FALLING>, /* Timer 2 */
--		   <16 IRQ_TYPE_EDGE_FALLING>; /* Timer 3 */
--	clocks = <&extclk>, <&pclk>;
--	clock-names = "EXTCLK", "PCLK";
--};
-diff --git a/Documentation/devicetree/bindings/timer/faraday,fttmr010.yaml b/Documentation/devicetree/bindings/timer/faraday,fttmr010.yaml
-new file mode 100644
-index 000000000000..02d842b827ce
---- /dev/null
-+++ b/Documentation/devicetree/bindings/timer/faraday,fttmr010.yaml
-@@ -0,0 +1,108 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/timer/faraday,fttmr010.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Faraday Technology timer
-+
-+maintainers:
-+  - Linus Walleij <linus.walleij@linaro.org>
-+
-+description:
-+  This timer is a generic IP block from Faraday Technology, embedded in the
-+  Cortina Systems Gemini SoCs and other designs.
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - const: faraday,fttmr010
-+      - items:
-+          - const: cortina,gemini-timer
-+          - const: faraday,fttmr010
-+      - items:
-+          - const: moxa,moxart-timer
-+          - const: faraday,fttmr010
-+      - const: aspeed,ast2400-timer
-+      - const: aspeed,ast2500-timer
-+      - const: aspeed,ast2600-timer
-+
-+  reg:
-+    maxItems: 1
-+
-+  resets:
-+    maxItems: 1
-+
-+  interrupts:
-+    minItems: 1
-+    maxItems: 10
-+    description: Should contain the three timer interrupts usually with flags for falling edge
-+
-+  clocks:
-+    minItems: 1
-+    maxItems: 2
-+
-+  clock-names:
-+    minItems: 1
-+    items:
-+      - const: PCLK
-+      - const: EXTCLK
-+
-+  syscon:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - clock-names
-+
-+additionalProperties: true
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    timer@43000000 {
-+      compatible = "faraday,fttmr010";
-+      reg = <0x43000000 0x1000>;
-+      interrupts = <14 IRQ_TYPE_EDGE_FALLING>, /* Timer 1 */
-+                   <15 IRQ_TYPE_EDGE_FALLING>, /* Timer 2 */
-+                   <16 IRQ_TYPE_EDGE_FALLING>; /* Timer 3 */
-+      clocks = <&extclk>, <&pclk>;
-+      clock-names = "PCLK", "EXTCLK";
-+      syscon = <&syscon>;
-+    };
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    timer@98400000 {
-+      compatible = "moxa,moxart-timer", "faraday,fttmr010";
-+      reg = <0x98400000 0x42>;
-+      interrupts = <19 IRQ_TYPE_EDGE_FALLING>;
-+      clocks = <&clk_apb>;
-+      clock-names = "PCLK";
-+    };
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/clock/ast2600-clock.h>
-+    /* taken from arch/arm/boot/dts/aspeed-bmc-vegman.dtsi */
-+    timer@1e782000 {
-+      compatible = "aspeed,ast2600-timer";
-+      reg = <0x1e782000 0x90>;
-+      interrupts-extended = <&gic  GIC_SPI 16 IRQ_TYPE_LEVEL_HIGH>,
-+                            <&gic  GIC_SPI 17 IRQ_TYPE_LEVEL_HIGH>,
-+                            <&gic  GIC_SPI 18 IRQ_TYPE_LEVEL_HIGH>,
-+                            <&gic  GIC_SPI 19 IRQ_TYPE_LEVEL_HIGH>,
-+                            <&gic  GIC_SPI 20 IRQ_TYPE_LEVEL_HIGH>,
-+                            <&gic  GIC_SPI 21 IRQ_TYPE_LEVEL_HIGH>,
-+                            <&gic  GIC_SPI 22 IRQ_TYPE_LEVEL_HIGH>,
-+                            <&gic  GIC_SPI 23 IRQ_TYPE_LEVEL_HIGH>;
-+      clocks = <&syscon ASPEED_CLK_APB1>;
-+      clock-names = "PCLK";
-+      /* fttmr010,pwm-outputs = <5>; */
-+      pinctrl-names = "default";
-+      pinctrl-0 = <&pinctrl_timer5_default>;
-+      #pwm-cells = <3>;
-+    };
-+...
--- 
-2.34.1
+> If the hardware's format is same with the plane state, then there is no n=
+eed to
+> update the FB's format register, save a function call, right?
 
+My point was more about the fact that you're using the wrong abstraction
+there. The format is a property of the plane, not from the CRTC. In KMS
+(and in most drivers), you can have multiple planes with different
+formats all attached to the same CRTC just fine.
+
+Maxime
+
+--kqetfhrtfefgtoun
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYgN9EQAKCRDj7w1vZxhR
+xZ6BAP9j8kJHoG5YQyu1To5wFlm7TFa/y9uSGX81KcAkqlYkZwD/W3iUA4ZG9tdL
+VNf2zBWWGP2cOgzaLtyzWTOxYsxcvAs=
+=ByIy
+-----END PGP SIGNATURE-----
+
+--kqetfhrtfefgtoun--

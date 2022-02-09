@@ -2,99 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01FAC4AEB00
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 08:27:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A35CD4AEB04
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 08:28:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237539AbiBIH1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 02:27:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58716 "EHLO
+        id S237555AbiBIH2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 02:28:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237504AbiBIH1p (ORCPT
+        with ESMTP id S233163AbiBIH2F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 02:27:45 -0500
-Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B8DC0613CB;
-        Tue,  8 Feb 2022 23:27:48 -0800 (PST)
+        Wed, 9 Feb 2022 02:28:05 -0500
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B647FC0612C3
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 23:28:09 -0800 (PST)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 10BB668AFE; Wed,  9 Feb 2022 08:28:06 +0100 (CET)
+Date:   Wed, 9 Feb 2022 08:28:05 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Jani Nikula <jani.nikula@linux.intel.com>
+Cc:     Zhi Wang <zhi.wang.linux@gmail.com>, hch@lst.de, jgg@nvidia.com,
+        intel-gfx@lists.freedesktop.org,
+        intel-gvt-dev@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Vivi Rodrigo <rodrigo.vivi@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Terrence Xu <terrence.xu@intel.com>
+Subject: Re: [PATCH v6 1/3] i915/gvt: Introduce the mmio table to support
+ VFIO new mdev API
+Message-ID: <20220209072805.GA9050@lst.de>
+References: <20220208111151.13115-1-zhi.a.wang@intel.com> <871r0dqtjf.fsf@intel.com>
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1644391664;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BNdeWlWyJwoe/Qown8c9HOfU3XoCi4raioSLrTWzgSM=;
-        b=Wnd4EZdeuWWYLHzuzCdr851hSbcsCfGjQttMK68AorQxXwqfe1jgF7pzrn7tX7iKpiPM3C
-        LlbDTd4ILn5cA8cRMv3uKb6rBWHdLnErfAn8uHy9CFW3pRMGeIzF9QQrWvaJbXyWto1mG9
-        phSNVfbeeiltzcI/sgpgr4TttTkeHdA=
-Date:   Wed, 09 Feb 2022 07:27:44 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   yajun.deng@linux.dev
-Message-ID: <e95e51e3cdf771650ae64d5295e1178a@linux.dev>
-Subject: Re: [PATCH net-next] net: dev: introduce netdev_drop_inc()
-To:     "Jakub Kicinski" <kuba@kernel.org>
-Cc:     davem@davemloft.net, rostedt@goodmis.org, mingo@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220208195306.05a1760f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-References: <20220208195306.05a1760f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <20220208162729.41b62ae7@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <20220208064318.1075849-1-yajun.deng@linux.dev>
- <753bb02bfa8c2cf5c08c63c31f193f90@linux.dev>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <871r0dqtjf.fsf@intel.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-February 9, 2022 11:53 AM, "Jakub Kicinski" <kuba@kernel.org> wrote:=0A=
-=0A> On Wed, 09 Feb 2022 02:20:07 +0000 yajun.deng@linux.dev wrote:=0A> =
-=0A>> February 9, 2022 8:27 AM, "Jakub Kicinski" <kuba@kernel.org> wrote:=
-=0A>> =0A>> On Tue, 8 Feb 2022 14:43:18 +0800 Yajun Deng wrote:=0A>> =0A>=
-> We will use 'sudo perf record -g -a -e skb:kfree_skb' command to trace=
-=0A>> the dropped packets when dropped increase in the output of ifconfig=
-.=0A>> But there are two cases, one is only called kfree_skb(), another i=
-s=0A>> increasing the dropped and called kfree_skb(). The latter is what=
-=0A>> we need. So we need to separate these two cases.=0A>> =0A>> From th=
-e other side, the dropped packet came from the core network and=0A>> the =
-driver, we also need to separate these two cases.=0A>> =0A>> Add netdev_d=
-rop_inc() and add a tracepoint for the core network dropped=0A>> packets.=
- use 'sudo perf record -g -a -e net:netdev_drop' and 'sudo perf=0A>> scri=
-pt' will recored the dropped packets by the core network.=0A>> =0A>> Sign=
-ed-off-by: Yajun Deng <yajun.deng@linux.dev>=0A>> =0A>> Have you seen the=
- work that's being done around kfree_skb_reason()?=0A>> =0A>> Yes, I saw =
-it. The focus of kfree_skb_reason() is trace kfree_skb() and the reason,=
-=0A>> but the focus of this patch only traces this case of the dropped pa=
-cket.=0A>> =0A>> I don't want to trace all kfree_skb(), but I just want t=
-o trace the dropped packet.=0A>> =0A>> This command 'sudo perf record -g =
--a -e skb:kfree_skb' would trace all kfree_skb(),=0A>> kfree_skb() would =
-drowned out the case of dropped packets when the samples were too large.=
-=0A> =0A> IIRC perf support filters, I think with -f? We can't add a trac=
-epoint=0A> for every combination of attributes.=0A=0AYes, we can use a co=
-mmand like this: " sudo perf record -g -a -e skb:kfree_skb --filter 'prot=
-ocol =3D=3D 0x0800' ",=0AHowever, only the filter is defined in kfree_skb=
- tracepoint are available.=0A=0AThe purpose of this patch is record {rx_d=
-ropped, tx_dropped, rx_nohandler} in struct net_device, to distinguish =
-=0Awith struct net_device_stats. =0A=0AWe don't have any tracepoint recor=
-ds {rx_dropped, tx_dropped, rx_nohandler} in struct net_device now. =0ACa=
-n we add {rx_dropped, tx_dropped, rx_nohandler} in kfree_skb tracepoint? =
- like this:=0A=0A        TP_STRUCT__entry(=0A                __field(void=
- *,         skbaddr)=0A                __field(void *,         location)=
-=0A                __field(unsigned short, protocol)=0A                __=
-field(enum skb_drop_reason,   reason)=0A                __field(unsigned =
-long,  rx_dropped)=0A                __field(unsigned long,  tx_dropped)=
-=0A                __field(unsigned long,  rx_nohandler)=0A=0A        ),=
-=0A=0A        TP_fast_assign(=0A                __entry->skbaddr =3D skb;=
-=0A                __entry->location =3D location;=0A                __en=
-try->protocol =3D ntohs(skb->protocol);=0A                __entry->reason=
- =3D reason;=0A                __entry->rx_dropped   =3D (unsigned long)a=
-tomic_long_read(&skb->dev->rx_dropped);=0A                __entry->tx_dro=
-pped   =3D (unsigned long)atomic_long_read(&skb->dev->tx_dropped);=0A    =
-            __entry->rx_nohandler =3D (unsigned long)atomic_long_read(&sk=
-b->dev->rx_nohandler);=0A        ),=0A=0AIf so, we can record this but no=
-t add a tracepoint.
+On Tue, Feb 08, 2022 at 05:15:00PM +0200, Jani Nikula wrote:
+> >  #ifdef CONFIG_DRM_I915_GVT
+> > +
+> > +#define D_BDW   (1 << 0)
+> > +#define D_SKL	(1 << 1)
+> > +#define D_KBL	(1 << 2)
+> > +#define D_BXT	(1 << 3)
+> > +#define D_CFL	(1 << 4)
+> > +
+> > +#define D_GEN9PLUS	(D_SKL | D_KBL | D_BXT | D_CFL)
+> > +#define D_GEN8PLUS	(D_BDW | D_SKL | D_KBL | D_BXT | D_CFL)
+> > +
+> > +#define D_SKL_PLUS	(D_SKL | D_KBL | D_BXT | D_CFL)
+> > +#define D_BDW_PLUS	(D_BDW | D_SKL | D_KBL | D_BXT | D_CFL)
+> > +
+> > +#define D_PRE_SKL	(D_BDW)
+> > +#define D_ALL		(D_BDW | D_SKL | D_KBL | D_BXT | D_CFL)
+> 
+> If these really need to be in a header in i915/, I think they need to be
+> longer with some namespacing or something. I do wish these could be
+> hidden though.
+
+I think we could actually kill them off entirely.  They are used as
+arguments to the macros that setup the mmio table.
+
+Thefunctions to build these tabls are already organized by families,
+so we'd need relatively few conditions to just build them the right
+way.  There also are some runtime checks in the callbacks, but they
+seem entirely superflous as far as I can tell.
+
+Only the cmd parser is a bit messy.  So maybe we could keep these
+constants just for the cmd parser inside of gvt for now (and clean
+that up later) and remove them entirely from the mmio table.

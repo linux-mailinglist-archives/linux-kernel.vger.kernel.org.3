@@ -2,86 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C3D94B0043
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 23:30:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 709F74B004C
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 23:31:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235934AbiBIWaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 17:30:04 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:35566 "EHLO
+        id S235805AbiBIWaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 17:30:13 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:35866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235873AbiBIW35 (ORCPT
+        with ESMTP id S236064AbiBIWaB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 17:29:57 -0500
-Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E756E0186FD;
-        Wed,  9 Feb 2022 14:29:12 -0800 (PST)
-Received: by mail-oi1-f173.google.com with SMTP id v67so4041690oie.9;
-        Wed, 09 Feb 2022 14:29:12 -0800 (PST)
+        Wed, 9 Feb 2022 17:30:01 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B7A1E01C8B5
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 14:29:34 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id e7so6935098ejn.13
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 14:29:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QwxGeIICnqHoY2j7nGhsMaxduU8evuxeVgZai3IhacA=;
+        b=xZ/h7zej5j3WDnJltPH+HHCzgcCr9JfH+MMu9lY0KjxOVQ/+RU/qqu9tBwzalHdJAd
+         T3C2RWDm7kbMtC81ogUlrbeAiGBC5f+z330S6lMDqnXvCPCzu4XmbM6/pRxQOk8ky/9c
+         F2/RBMCoEsh4Ubuug8Hhy6u2sJi1OO7R+NMpKSoyhLEaHAQHZcUrTcFVy9konIUAbFQW
+         W+LWGHaDVPKsTAy0t2um82593RIIu6JHxgPZopY9b3pOi63KKA7nu2GhDc8XJANg8VTE
+         Bv4UvrtulBkXVJ4kriNO/O8EfJyCRZiSHFA1e9eSQA0uwewREbIu3Z1nHo/YNc1NnxnS
+         6K/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Y1j55Hi253ENIjk9c8eQJUDKu/kw6HxF3YDkUmKAaFA=;
-        b=G0vAC57Dgwk9uvKHGVEozxcUGVggynzVliFXgbipR5s4TMOKL36l4WIGMOfs8IXVQa
-         rxv+YTj5KT7Dp8WvOjbp5QxNL1Haa48ONnymSfOfHz/3hKdKQ0VGy5P9iVHnUqO6LZcN
-         tZdm+vBpUOTDiqtW8G1XiljFbbJUy8Qow5v3MKqtSbm22pa27SLxkPNLDncKjzb3uqDN
-         DrMOYbTbcZQNCatFuxMYsqWWRhRyu9hFd3a1PD76Br+hD5ulncZ9YO2BG/hmg8pB+DF0
-         H80gO8qRe9Y6cSNgU3JfGnodpl8otmF61y6CB17/bCw1uyyIt0BHCVlAsMbVuQJwGAZB
-         +nOw==
-X-Gm-Message-State: AOAM531FXRQyOqN2r1c0SYe+LRuFS8u2vRkTcfuX87PcseF3dH6/GFWc
-        QmMXJ5AMnaEfrUeoafboew==
-X-Google-Smtp-Source: ABdhPJyWHZDh7iGpE68bYX52cJf57I+WPA/yoHKidBDIJKLnhHEM6X7QjjesMGIyqJ36cy6LVjG3dA==
-X-Received: by 2002:aca:aa54:: with SMTP id t81mr1901323oie.126.1644445751859;
-        Wed, 09 Feb 2022 14:29:11 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id ep17sm7660740oab.21.2022.02.09.14.29.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 14:29:11 -0800 (PST)
-Received: (nullmailer pid 1055586 invoked by uid 1000);
-        Wed, 09 Feb 2022 22:29:10 -0000
-Date:   Wed, 9 Feb 2022 16:29:10 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Vinod Koul <vkoul@kernel.org>,
-        linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH 4/8] dt-bindings: phy: samsung,dp-video-phy: convert to
- dtschema
-Message-ID: <YgRANt0hByXkupTj@robh.at.kernel.org>
-References: <20220129193646.372481-1-krzysztof.kozlowski@canonical.com>
- <20220129193646.372481-4-krzysztof.kozlowski@canonical.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QwxGeIICnqHoY2j7nGhsMaxduU8evuxeVgZai3IhacA=;
+        b=YPkDzB0iMVJmozkRrpZH9IbCOeQYZUcwW93Gi8AnIPeW3ODbOsPZiXZAf1Ys4nIfWk
+         hkll9odp4pd/MNxbebowRJqTkF8B+GZkOYwTF92H5+Sxj+9lFczo2qP3rWzMehh+CkZK
+         3rW7xhsgEiFbguroy3M23OVGiTABdUTcgSykhHTYadRojJrYSHziV2TFAPDV58HIsSSm
+         I6auF/q0/pQJkrIF5AXfOmFdNitN/ij8G5hkTyUg61WfRcRcggZSalFOW9VeCaqY4RVj
+         XR3F6o2cJf9aE9TPk86/+Crl3Ax/lfh1oRO1841lXWgJah2ZIj0xKRrkHs6TGdg6f/+q
+         /NkA==
+X-Gm-Message-State: AOAM530XLYIpE5Y7DUjMzx5IGomS+B+qvi4VqWbZrJDj4XtILk/HsGpv
+        BfKCkO70NUC1JkEtStw7f+PKqfNSWVenf9IN5Qa8
+X-Google-Smtp-Source: ABdhPJykZ3LPsq7/hz6HEeBOojoOK25gxY3dC3/fv7G6jhEj4Gog2tbmYXALr4PTsGzHEkdet8hpmJdSNw1E/6ycDqg=
+X-Received: by 2002:a17:907:d15:: with SMTP id gn21mr3552212ejc.701.1644445772885;
+ Wed, 09 Feb 2022 14:29:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220129193646.372481-4-krzysztof.kozlowski@canonical.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <cover.1621363275.git.rgb@redhat.com> <f5f1a4d8699613f8c02ce762807228c841c2e26f.1621363275.git.rgb@redhat.com>
+ <c96031b4-b76d-d82c-e232-1cccbbf71946@suse.com> <CAHC9VhSHJwwG_3yy4bqNUuFAz87wFU8W-dGYfsoGBG786heTNg@mail.gmail.com>
+ <20220209214048.GF1708086@madcap2.tricolour.ca>
+In-Reply-To: <20220209214048.GF1708086@madcap2.tricolour.ca>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 9 Feb 2022 17:29:21 -0500
+Message-ID: <CAHC9VhRaenJq65nUKjU6U+wFJ5HJU6Qq0Yf4ejwfNyrKEP30Lw@mail.gmail.com>
+Subject: Re: [PATCH v4 2/3] audit: add support for the openat2 syscall
+To:     Richard Guy Briggs <rgb@redhat.com>
+Cc:     Jeff Mahoney <jeffm@suse.com>,
+        Linux-Audit Mailing List <linux-audit@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, Eric Paris <eparis@parisplace.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Eric Paris <eparis@redhat.com>, Tony Jones <tonyj@suse.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 29 Jan 2022 20:36:42 +0100, Krzysztof Kozlowski wrote:
-> Convert the Samsung SoC DisplayPort PHY bindings to DT schema format.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> ---
->  .../bindings/phy/samsung,dp-video-phy.yaml    | 41 +++++++++++++++++++
->  .../devicetree/bindings/phy/samsung-phy.txt   | 11 -----
->  2 files changed, 41 insertions(+), 11 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/phy/samsung,dp-video-phy.yaml
-> 
+On Wed, Feb 9, 2022 at 4:41 PM Richard Guy Briggs <rgb@redhat.com> wrote:
+> On 2022-02-09 10:57, Paul Moore wrote:
+> > On Tue, Feb 8, 2022 at 10:44 PM Jeff Mahoney <jeffm@suse.com> wrote:
+> > >
+> > > Hi Richard -
+> > >
+> > > On 5/19/21 16:00, Richard Guy Briggs wrote:
+> > > > The openat2(2) syscall was added in kernel v5.6 with commit fddb5d430ad9
+> > > > ("open: introduce openat2(2) syscall")
+> > > >
+> > > > Add the openat2(2) syscall to the audit syscall classifier.
+> > > >
+> > > > Link: https://github.com/linux-audit/audit-kernel/issues/67
+> > > > Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
+> > > > Link: https://lore.kernel.org/r/f5f1a4d8699613f8c02ce762807228c841c2e26f.1621363275.git.rgb@redhat.com
+> > > > ---
+> > >
+> > > [...]
+> > >
+> > > > diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+> > > > index d775ea16505b..3f59ab209dfd 100644
+> > > > --- a/kernel/auditsc.c
+> > > > +++ b/kernel/auditsc.c
+> > > > @@ -76,6 +76,7 @@
+> > > >  #include <linux/fsnotify_backend.h>
+> > > >  #include <uapi/linux/limits.h>
+> > > >  #include <uapi/linux/netfilter/nf_tables.h>
+> > > > +#include <uapi/linux/openat2.h>
+> > > >
+> > > >  #include "audit.h"
+> > > >
+> > > > @@ -196,6 +197,8 @@ static int audit_match_perm(struct audit_context *ctx, int mask)
+> > > >               return ((mask & AUDIT_PERM_WRITE) && ctx->argv[0] == SYS_BIND);
+> > > >       case AUDITSC_EXECVE:
+> > > >               return mask & AUDIT_PERM_EXEC;
+> > > > +     case AUDITSC_OPENAT2:
+> > > > +             return mask & ACC_MODE((u32)((struct open_how *)ctx->argv[2])->flags);
+> > > >       default:
+> > > >               return 0;
+> > > >       }
+> > >
+> > > ctx->argv[2] holds a userspace pointer and can't be dereferenced like this.
+> > >
+> > > I'm getting oopses, like so:
+> > > BUG: unable to handle page fault for address: 00007fff961bbe70
+> >
+> > Thanks Jeff.
+> >
+> > Yes, this is obviously the wrong thing to being doing; I remember
+> > checking to make sure we placed the audit_openat2_how() hook after the
+> > open_how was copied from userspace, but I missed the argv dereference
+> > in the syscall exit path when reviewing the code.
+> >
+> > Richard, as we are already copying the open_how info into
+> > audit_context::openat2 safely, the obvious fix is to convert
+> > audit_match_perm() to use the previously copied value instead of argv.
+> > If you can't submit a patch for this today please let me know.
+>
+> Agreed.  It would have been more awkward with the original order of the
+> patches.
+>
+> The syscalls_file test in the audit-testsuite should have caught this.
+> https://github.com/rgbriggs/audit-testsuite/commit/1c99021ae27ea23eccce2bb1861df4c9c665cd5b
+> The test provided does essentially the same thing.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+I would have thought so, but I've now run this multiple times on both
+affected and patched kernels but I don't see the page fault on my test
+system.
+
+Anyway, that test has now been merged with the audit-testsuite as well
+as some cleanup on top to test for the new OPENAT2 record when
+applicable.
+
+-- 
+paul-moore.com

@@ -2,82 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB7784AFEB4
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 21:48:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DB9C4AFEB7
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 21:48:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232304AbiBIUrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 15:47:51 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:45988 "EHLO
+        id S232360AbiBIUsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 15:48:14 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:47230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232243AbiBIUrq (ORCPT
+        with ESMTP id S232243AbiBIUsN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 15:47:46 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 725CBC03E953;
-        Wed,  9 Feb 2022 12:47:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644439669; x=1675975669;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xILz1dK9rB40StPz2WiguItjJtnKtaNQWzhC2fRZekg=;
-  b=HOAIcuzftPTd47+kZb5NxBrsEE7hrtlWGUJefrge4qee59jIygKZCV0k
-   xdZXtQmEmFucTjRuo0a0NkOEHVZMprBZz0h5sNiW/UN/5hfaxLE5YB5Pi
-   Qu9yB9G2KJ2uBrnlftiBqkTLzluUO9vrdNoGXNssnexiftD4++KKfN4Pi
-   RPJ+a/8vGaB9A77f0HuF+vjUWamUONDMpcwBHAMSMRTuXyAxFpmiw+TdD
-   BIIxnnUo4M8RfgUolmN2BcHhzoXn5K30GwOICo0KUy4Bcd6JFXaWSXy/N
-   +4W0n2+L2ASU1BrNsMjWmlAPqC+b696rGzVE8C8J4mZwKGhfiqe/r9YyV
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="236733919"
-X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
-   d="scan'208";a="236733919"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 12:47:49 -0800
-X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
-   d="scan'208";a="485408727"
-Received: from silpixa00400314.ir.intel.com (HELO silpixa00400314) ([10.237.222.76])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 12:47:47 -0800
-Date:   Wed, 9 Feb 2022 20:47:39 +0000
-From:   Giovanni Cabiddu <giovanni.cabiddu@intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Jack Xu <jack.xu@intel.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Zhehui Xiang <zhehui.xiang@intel.com>, qat-linux@intel.com,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH v1 1/1] crypto: qat - don't cast parameter in bit
- operations
-Message-ID: <YgQoa/8OXXFl4qUo@silpixa00400314>
-References: <20220209180047.54829-1-andriy.shevchenko@linux.intel.com>
+        Wed, 9 Feb 2022 15:48:13 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7564C05CB96;
+        Wed,  9 Feb 2022 12:48:15 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 270F7210FA;
+        Wed,  9 Feb 2022 20:48:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1644439694; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UwgkA68ySmUW5/i3EYiZiiSs6H2oCiJiHMFUbdE9/kA=;
+        b=CPF3aVkrSzk+DBrQI/8fTVHvPc/tYv/I2kzg7FwUpfmyHrZOeX9O21As8lz0HrmzyKsL2y
+        hxIOBDJPcrtAzqP9BQXbIgVxYAz5OqulJGI3tMWsNuHDAddzw4XYnZIVxj5Hp7uwEwZtM3
+        Ugc52ItjjFh1AVsL3SLir3b71BSC/lc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1644439694;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UwgkA68ySmUW5/i3EYiZiiSs6H2oCiJiHMFUbdE9/kA=;
+        b=9mPNk4VVo0bx3x9okO/NLh0S98fPaNi7/M5VzvTXgQhxCf/psAEuD5j5Bi/7SHm5a/79Qc
+        rJ/GpXhB8PXyQLAA==
+Received: from kunlun.suse.cz (unknown [10.100.128.76])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id B5E91A3B85;
+        Wed,  9 Feb 2022 20:48:13 +0000 (UTC)
+Date:   Wed, 9 Feb 2022 21:48:12 +0100
+From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+To:     20220209170358.3266629-1-atomlin@redhat.com
+Cc:     mcgrof@kernel.org, cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
+        akpm@linux-foundation.org, jeyu@kernel.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        live-patching@vger.kernel.org, atomlin@atomlin.com,
+        ghalat@redhat.com, allen.lkml@gmail.com, void@manifault.com,
+        joe@perches.com, christophe.leroy@csgroup.eu,
+        oleksandr@natalenko.name
+Subject: Re: [PATCH v5 07/13] module: Move extra signature support out of
+ core code
+Message-ID: <20220209204812.GD3113@kunlun.suse.cz>
+References: <20220209170814.3268487-1-atomlin@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220209180047.54829-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Research and Development Ireland Ltd - Co. Reg. #308263 -
- Collinstown Industrial Park, Leixlip, County Kildare - Ireland
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220209170814.3268487-1-atomlin@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Andy.
+Hello,
 
-On Wed, Feb 09, 2022 at 08:00:47PM +0200, Andy Shevchenko wrote:
-> While in this particular case it would not be a (critical) issue,
-> the pattern itself is bad and error prone in case the location
-> of the parameter is changed.
-> 
-> Don't cast parameter to unsigned long pointer in the bit operations.
-> Instead copy to a local variable on stack of a proper type and use.
-> 
-> Fixes: b4b7e67c917f ("crypto: qat - Intel(R) QAT ucode part of fw loader")
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Reviewed-by: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
+On Wed, Feb 09, 2022 at 05:08:08PM +0000, Aaron Tomlin wrote:
+> No functional change.
 
--- 
-Giovanni
+There is functional change.
+
+
+> @@ -2565,70 +2542,6 @@ static inline void kmemleak_load_module(const struct module *mod,
+>  }
+>  #endif
+>  
+> -#ifdef CONFIG_MODULE_SIG
+> -static int module_sig_check(struct load_info *info, int flags)
+> -{
+> -	int err = -ENODATA;
+> -	const unsigned long markerlen = sizeof(MODULE_SIG_STRING) - 1;
+> -	const char *reason;
+> -	const void *mod = info->hdr;
+> -	bool mangled_module = flags & (MODULE_INIT_IGNORE_MODVERSIONS |
+> -				       MODULE_INIT_IGNORE_VERMAGIC);
+> -	/*
+> -	 * Do not allow mangled modules as a module with version information
+> -	 * removed is no longer the module that was signed.
+> -	 */
+> -	if (!mangled_module &&
+             ^^^^^^^^^^^^^
+> -	    info->len > markerlen &&
+> -	    memcmp(mod + info->len - markerlen, MODULE_SIG_STRING, markerlen) == 0) {
+> -		/* We truncate the module to discard the signature */
+> -		info->len -= markerlen;
+> -		err = mod_verify_sig(mod, info);
+> -		if (!err) {
+> -			info->sig_ok = true;
+> -			return 0;
+> -		}
+> -	}
+
+> diff --git a/kernel/module/signing.c b/kernel/module/signing.c
+> index 8aeb6d2ee94b..ff41541e982a 100644
+> --- a/kernel/module/signing.c
+> +++ b/kernel/module/signing.c
+
+> @@ -43,3 +62,59 @@ int mod_verify_sig(const void *mod, struct load_info *info)
+>  				      VERIFYING_MODULE_SIGNATURE,
+>  				      NULL, NULL);
+>  }
+> +
+> +int module_sig_check(struct load_info *info, int flags)
+> +{
+> +	int err = -ENODATA;
+> +	const unsigned long markerlen = sizeof(MODULE_SIG_STRING) - 1;
+> +	const char *reason;
+> +	const void *mod = info->hdr;
+> +
+> +	/*
+> +	 * Require flags == 0, as a module with version information
+> +	 * removed is no longer the module that was signed
+> +	 */
+> +	if (flags == 0 &&
+            ^^^^^^
+
+This reverts a97ac8cb24a3c3ad74794adb83717ef1605d1b47
+
+Please re-apply.
+
+Thanks
+
+Michal
+> +	    info->len > markerlen &&
+> +	    memcmp(mod + info->len - markerlen, MODULE_SIG_STRING, markerlen) == 0) {
+> +		/* We truncate the module to discard the signature */
+> +		info->len -= markerlen;
+> +		err = mod_verify_sig(mod, info);
+> +		if (!err) {
+> +			info->sig_ok = true;
+> +			return 0;
+> +		}
+> +	}

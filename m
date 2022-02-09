@@ -2,121 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CFB84B000A
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 23:21:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 156C04B000C
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 23:21:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235332AbiBIWVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 17:21:36 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:49622 "EHLO
+        id S235348AbiBIWVp convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 9 Feb 2022 17:21:45 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:49660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233287AbiBIWVe (ORCPT
+        with ESMTP id S235335AbiBIWVi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 17:21:34 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 920A1C1DC2F0
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 14:21:36 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id k13so6871325lfg.9
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 14:21:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=LayMCSz5Gx7VceGFXhPhnBsyoYh4zMiCbc/qJQSg/Jg=;
-        b=Ue2ZrcbJXB2MNgRzyNVYEWDCsluYxh4tIthDcubvTxc/NbTOozFDUNwCv8WrmXN0H7
-         2I4TmxU5x58/ut/Ey3o0DIyFqXnjKrmdy4e8zmJdBMN1iMzRFpJov5VWwLVgRM/lD80V
-         RTiwQ9sAPJlb0gf6e4VoUUMBgZu8vuy4KugCr2o0ly+DfIsgzt7KICt7YVq+X3PhLcXE
-         R2w12W3BTgnpe1DP7cHDbHJZhCYb+fJ+JUT75fzvzOPWWN+trvk8ui3077dXz4kxYkuz
-         Lr8eUFxo5W33BTC7vpyAH0jFwTu7GBTvjd7hp0OH5ue1Kz5TDuHLhFhyTkh55YxRb2tO
-         mXhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=LayMCSz5Gx7VceGFXhPhnBsyoYh4zMiCbc/qJQSg/Jg=;
-        b=HrsoXFvA/4pj2j+4Pw1FDjonUTGv8g4+T0SfSbm+7AIHZQATBgZk3eansDBWyvB/SV
-         OZCmYynix35NkmnDLP6wS6JS6wKdVNkDoViCYSVRCjVPLJWzll3mH4QcFfvDn+nsGVkD
-         w7YhUdiscRjtaMISq0SPv15P6v5l4U/u5kXXEot4AbQWbfi2Lr2O4NS5/YNerNiRGGJa
-         qURgtlVu1E0kPRYc7JFo9v0NOcWghwDlfEOVZqBU5NR5fR+0XftAJrZklbGs7AG2yn5z
-         BFfBDb7t+fxcf9a9UEc2gTcWIm+GEWIvoGKyg9ZG33QeYVehFD6gSGXC5c7rUobG6c+c
-         BGGA==
-X-Gm-Message-State: AOAM530GZsy2ex5viUPr5uw5arxlQOGPbcBSGufYytVnVbufOb2VGFHu
-        DynFzuAz7/k/eHhsS3k1o2Bb0g==
-X-Google-Smtp-Source: ABdhPJxM3HjEYcFzlVLmHZsaTG5gkw9OHHv/cXGfTe/KlLrIjF/PfMPJkFWHe4epOwb7VREgqFyGIA==
-X-Received: by 2002:a05:6512:3d02:: with SMTP id d2mr3248630lfv.138.1644445294959;
-        Wed, 09 Feb 2022 14:21:34 -0800 (PST)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id r4sm2540443lfi.115.2022.02.09.14.21.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Feb 2022 14:21:34 -0800 (PST)
-Message-ID: <cb8dd875-5690-7f8a-c55b-04a5c250feb0@linaro.org>
-Date:   Thu, 10 Feb 2022 01:21:33 +0300
+        Wed, 9 Feb 2022 17:21:38 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8BCF1C0F8699
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 14:21:40 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-66-G1dgHlBaNBupzuHAnSEDBA-1; Wed, 09 Feb 2022 22:21:37 +0000
+X-MC-Unique: G1dgHlBaNBupzuHAnSEDBA-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Wed, 9 Feb 2022 22:21:36 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Wed, 9 Feb 2022 22:21:35 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Qing Wang' <wangqing@vivo.com>, Abel Vesa <abel.vesa@nxp.com>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Shawn Guo" <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] clk: imx: use div64_u64() instead of do_div()
+Thread-Topic: [PATCH] clk: imx: use div64_u64() instead of do_div()
+Thread-Index: AQHYHZBjXPxrJKPUzEuGCK2WjoSvgayLy2mg
+Date:   Wed, 9 Feb 2022 22:21:35 +0000
+Message-ID: <4f0336b0217f4e7fa9a1a7aa044ee4fe@AcuMS.aculab.com>
+References: <1644395819-3791-1-git-send-email-wangqing@vivo.com>
+In-Reply-To: <1644395819-3791-1-git-send-email-wangqing@vivo.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH] drm/msm: replace DEFINE_SIMPLE_ATTRIBUTE with
- DEFINE_DEBUGFS_ATTRIBUTE
-Content-Language: en-GB
-To:     cgel.zte@gmail.com, robdclark@gmail.com
-Cc:     sean@poorly.run, quic_abhinavk@quicinc.com, airlied@linux.ie,
-        daniel@ffwll.ch, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Changcheng Deng <deng.changcheng@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-References: <20211221144234.480618-1-deng.changcheng@zte.com.cn>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20211221144234.480618-1-deng.changcheng@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/12/2021 17:42, cgel.zte@gmail.com wrote:
-> From: Changcheng Deng <deng.changcheng@zte.com.cn>
+From: Qing Wang <wangqing@vivo.com>
+> Sent: 09 February 2022 08:37
 > 
-> Fix the following coccicheck warning:
-> ./drivers/gpu/drm/msm/msm_debugfs.c: 132: 0-23: WARNING: shrink_fops
-> should be defined with DEFINE_DEBUGFS_ATTRIBUTE
+> From: Wang Qing <wangqing@vivo.com>
 > 
-> Use DEFINE_DEBUGFS_ATTRIBUTE rather than DEFINE_SIMPLE_ATTRIBUTE for
-> debugfs files.
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
+> do_div() does a 64-by-32 division.
+> When the divisor is u64, do_div() truncates it to 32 bits, this means it
+> can test non-zero and be truncated to zero for division.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+What is the domain of parent_rate?
 
+Unless it can exceed 2^32 do_div() is correct.
+Ignore checkpatch.
+
+> 
+> fix do_div.cocci warning:
+> WARNING: do_div() does a 64-by-32 division, please consider using div64_u64 instead.
+> 
+> Signed-off-by: Wang Qing <wangqing@vivo.com>
 > ---
->   drivers/gpu/drm/msm/msm_debugfs.c | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
+>  drivers/clk/imx/clk-frac-pll.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/gpu/drm/msm/msm_debugfs.c b/drivers/gpu/drm/msm/msm_debugfs.c
-> index 956b1efc3721..91fb0c83b600 100644
-> --- a/drivers/gpu/drm/msm/msm_debugfs.c
-> +++ b/drivers/gpu/drm/msm/msm_debugfs.c
-> @@ -129,9 +129,9 @@ shrink_set(void *data, u64 val)
->   	return 0;
->   }
->   
-> -DEFINE_SIMPLE_ATTRIBUTE(shrink_fops,
-> -			shrink_get, shrink_set,
-> -			"0x%08llx\n");
-> +DEFINE_DEBUGFS_ATTRIBUTE(shrink_fops,
-> +			 shrink_get, shrink_set,
-> +			 "0x%08llx\n");
->   
->   
->   static int msm_gem_show(struct seq_file *m, void *arg)
+> diff --git a/drivers/clk/imx/clk-frac-pll.c b/drivers/clk/imx/clk-frac-pll.c
+> index c703056..90b25e3
+> --- a/drivers/clk/imx/clk-frac-pll.c
+> +++ b/drivers/clk/imx/clk-frac-pll.c
+> @@ -129,11 +129,11 @@ static long clk_pll_round_rate(struct clk_hw *hw, unsigned long rate,
+>  	parent_rate *= 8;
+>  	rate *= 2;
+>  	temp64 = rate;
+> -	do_div(temp64, parent_rate);
+> +	div64_u64(temp64, parent_rate);
+>  	divfi = temp64;
+>  	temp64 = rate - divfi * parent_rate;
+>  	temp64 *= PLL_FRAC_DENOM;
+> -	do_div(temp64, parent_rate);
+> +	div64_u64(temp64, parent_rate);
+>  	divff = temp64;
+> 
+>  	temp64 = parent_rate;
+> --
+> 2.7.4
 
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
--- 
-With best wishes
-Dmitry

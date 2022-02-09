@@ -2,76 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A9384AF1D1
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 13:34:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 246D74AF1EF
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 13:38:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233379AbiBIMeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 07:34:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33014 "EHLO
+        id S233427AbiBIMig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 07:38:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233289AbiBIMeY (ORCPT
+        with ESMTP id S233349AbiBIMi1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 07:34:24 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A532C05CBBA;
-        Wed,  9 Feb 2022 04:34:25 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id u20so2585501ejx.3;
-        Wed, 09 Feb 2022 04:34:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=oISxEhOVgdnKSet2UYGwe5pMid4GVc9Hvmnmg5R1/KI=;
-        b=qQ+RDDDIHUw+vfOm5GQTBG35EX5r2QB7AP6hmDBKYQq72pTVVXL9WW/2fyL4eJH8Iy
-         ayRliOssrwotSZkA/Q+shKBPfnU/LlKSKcVs8h4wTeYfjJQ3HjziQToGD+1k5J5RR+lt
-         nnKttKD/J56IjUGZcAuk8Ha+pZKT98GIk9dbDJBZSZWbSgHlHGZ0sJaBJHr3LF0DGFsr
-         SFGo7xf/MlcSN/F86VJUy/JAkOSIV01r9ucCfdgQETjyb50wf0qu2rZGN87P0/AEhAXT
-         bOWeoNL1q1feg+afSolzEWHWXs58eMJ3OYeVSwLo1DYdG6ls7n6odH/OUMaR+wCr+LAW
-         DGqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=oISxEhOVgdnKSet2UYGwe5pMid4GVc9Hvmnmg5R1/KI=;
-        b=LssvIeox2P35aeq9J7iWJsDE1fC3MlBFjqbtZMVhLyxRWNv/L9cNN7myGQZct2ZmjN
-         eK+MEqOi9YA8JsZd6u68MDeeSx3E7Li+8Mp9qyCeHlGxi+ZLWncDYJ0Tj48/yagwdsbf
-         ti2PHUgnW4jK9BItq+YCt1ssAI3cYf2apfyO2dpSmFhzINA54FzS3HT1ctWm3YiKkfRy
-         tjoj8+3nmVwp8YLaXks+CKUHyeJ+jtfDOldLmg3mLPmIubqrAvaOssJlKd8nHprmFrGC
-         eslzW2GKxvZVHm2QzLI49bzyl6RV9YLIMAx7rrrGLYQ20SXhISlT2HGeMyCLlP3/W+Uy
-         EDSg==
-X-Gm-Message-State: AOAM530c4aa3i4S71zD1XT7QboD/9VfnFaFfTxTgyRyXrXFZ32y7I5a7
-        Bmp2KI5H9EAJ/HSSuFBTi5TUkT3bFMM=
-X-Google-Smtp-Source: ABdhPJxSq0xVoxQOLW4szVsnhbifY7wFqtfgaQ0laxPK5EHPDbaIEeeI+IlB1JR0bJ23U424XIyF0g==
-X-Received: by 2002:a17:906:d62:: with SMTP id s2mr1807668ejh.176.1644410063741;
-        Wed, 09 Feb 2022 04:34:23 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
-        by smtp.googlemail.com with ESMTPSA id gi15sm3353843ejc.139.2022.02.09.04.34.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Feb 2022 04:34:23 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <d4c5d59f-5526-2c4f-236e-ca1536e762f6@redhat.com>
-Date:   Wed, 9 Feb 2022 13:34:20 +0100
+        Wed, 9 Feb 2022 07:38:27 -0500
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CFDFC05CB86;
+        Wed,  9 Feb 2022 04:38:27 -0800 (PST)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.lan)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1nHmEi-0001Mv-Cm; Wed, 09 Feb 2022 13:38:16 +0100
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     palmer@dabbelt.com, paul.walmsley@sifive.com, aou@eecs.berkeley.edu
+Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org, wefu@redhat.com,
+        liush@allwinnertech.com, guoren@kernel.org, atishp@atishpatra.org,
+        anup@brainfault.org, drew@beagleboard.org, hch@lst.de,
+        arnd@arndb.de, wens@csie.org, maxime@cerno.tech,
+        gfavor@ventanamicro.com, andrea.mondelli@huawei.com,
+        behrensj@mit.edu, xinhaoqu@huawei.com, huffman@cadence.com,
+        mick@ics.forth.gr, allen.baum@esperantotech.com,
+        jscheid@ventanamicro.com, rtrauben@gmail.com, samuel@sholland.org,
+        cmuellner@linux.com, philipp.tomsich@vrull.eu,
+        Heiko Stuebner <heiko@sntech.de>
+Subject: [PATCH v6 00/14] riscv: support for Svpbmt and D1 memory types
+Date:   Wed,  9 Feb 2022 13:37:46 +0100
+Message-Id: <20220209123800.269774-1-heiko@sntech.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 06/23] KVM: MMU: load new PGD once nested two-dimensional
- paging is initialized
-Content-Language: en-US
-To:     David Matlack <dmatlack@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        seanjc@google.com, vkuznets@redhat.com
-References: <20220204115718.14934-1-pbonzini@redhat.com>
- <20220204115718.14934-7-pbonzini@redhat.com> <Yf178LYEY4pFJcLc@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <Yf178LYEY4pFJcLc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,51 +48,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/4/22 20:18, David Matlack wrote:
-> On Fri, Feb 04, 2022 at 06:57:01AM -0500, Paolo Bonzini wrote:
->> __kvm_mmu_new_pgd looks at the MMU's root_level and shadow_root_level
->> via fast_pgd_switch.
-> 
-> Those checks are just for performance correct (to skip iterating through
-> the list of roots)?
-> 
-> Either way, it's probably worth including a Fixes tag below.
+Svpbmt is an extension defining "Supervisor-mode: page-based memory types"
+for things like non-cacheable pages or I/O memory pages.
 
-It's actually a much bigger mess---though it's working as intended, 
-except that in some cases the caching is suboptimal.
 
-Basically, you have to call __kvm_mmu_new_pgd *before* kvm_init_mmu 
-because of how fast_pgd_switch takes care of stashing the current root 
-in the cache.   A PAE root is never placed in the cache exactly because 
-mmu->root_level and mmu->shadow_root_level hold the value for the 
-_current_ root.  In that case, fast_pgd_switch does not look for a 
-cached PGD (even if according to the role it could be there).
+So this is my 2nd try at implementing Svpbmt (and the diverging D1 memory
+types) using the alternatives framework.
 
-__kvm_mmu_new_pgd then frees the current root using kvm_mmu_free_roots. 
-  kvm_mmu_free_roots *also* uses mmu->root_level and 
-mmu->shadow_root_level to distinguish whether the page table uses a 
-single root or 4 PAE roots.  Because kvm_init_mmu can overwrite 
-muu->root_level, kvm_mmu_free_roots must also be called before kvm_init_mmu.
+This includes a number of changes to the alternatives mechanism itself.
+The biggest one being the move to a more central location, as I expect
+in the future, nearly every chip needing some sort of patching, be it
+either for erratas or for optional features (svpbmt or others).
 
-I do wonder if the use of mmu->shadow_root_level was intentional (it 
-certainly escaped me when first reviewing fast PGD switching), but 
-fortunately none of this is necessary.  PAE roots can be identified from 
-!to_shadow_page(root_hpa), so the better fix is to do that:
+The dt-binding for svpbmt itself is of course not finished and is still
+using the binding introduced in previous versions, as where to put
+a svpbmt-property in the devicetree is still under dicussion.
+Atish seems to be working on a framework for extensions [0],
 
-- in fast_pgd_switch/cached_root_available, you need to account for two 
-possible transformations of the cache: either the old entry becomes the 
-MRU of the prev_roots as in the current code, or the old entry cannot be 
-cached.  This is 20-30 more lines of code.
+The series also introduces support for the memory types of the D1
+which are implemented differently to svpbmt. But when patching anyway
+it's pretty clean to add the D1 variant via ALTERNATIVE_2 to the same
+location.
 
-- in kvm_mmu_free_roots, just use to_shadow_page instead of 
-mmu->root_level and mmu->shadow_root_level.
+The only slightly bigger difference is that the "normal" type is not 0
+as with svpbmt, so kernel patches for this PMA type need to be applied
+even before the MMU is brought up, so the series introduces a separate
+stage for that.
 
-Once this is in place, the original bug is fixed simply by calling 
-kvm_mmu_new_pgd after kvm_init_mmu.  kvm_mmu_reset_context is not doing 
-now to avoid having to figure out the new role, but it can do that 
-easily after the above change.
 
-I'll keep this cpu_role refactoring around, but strictly speaking it 
-becomes a separate change than the optimization.
+In theory this series is 3 parts:
+- sbi cache-flush / null-ptr
+- alternatives improvements
+- svpbmt+d1
 
-Paolo
+So expecially patches from the first 2 areas could be applied when
+deemed ready, I just thought to keep it together to show-case where
+the end-goal is and not requiring jumping between different series.
+
+
+The sbi cache-flush patch is based on Atish's sparse-hartid patch [1],
+as it touches a similar area in mm/cacheflush.c
+
+
+I picked the recipient list from the previous version, hopefully
+I didn't forget anybody.
+
+changes in v6:
+- rebase onto 5.17-rc1
+- handle sbi null-ptr differently
+- improve commit messages
+- use riscv,mmu as property name
+
+changes in v5:
+- move to use alternatives for runtime-patching
+- add D1 variant
+
+
+[0] https://lore.kernel.org/r/20211224211632.1698523-1-atishp@rivosinc.com
+[1] https://lore.kernel.org/r/20220120090918.2646626-1-atishp@rivosinc.com
+
+
+Heiko Stuebner (12):
+  riscv: prevent null-pointer dereference with sbi_remote_fence_i
+  riscv: integrate alternatives better into the main architecture
+  riscv: allow different stages with alternatives
+  riscv: implement module alternatives
+  riscv: implement ALTERNATIVE_2 macro
+  riscv: extend concatenated alternatives-lines to the same length
+  riscv: prevent compressed instructions in alternatives
+  riscv: move boot alternatives to a slightly earlier position
+  riscv: Fix accessing pfn bits in PTEs for non-32bit variants
+  riscv: add cpufeature handling via alternatives
+  riscv: remove FIXMAP_PAGE_IO and fall back to its default value
+  riscv: add memory-type errata for T-Head
+
+Wei Fu (2):
+  dt-bindings: riscv: add MMU Standard Extensions support for Svpbmt
+  riscv: add RISC-V Svpbmt extension support
+
+ .../devicetree/bindings/riscv/cpus.yaml       |  10 ++
+ arch/riscv/Kconfig.erratas                    |  29 ++--
+ arch/riscv/Kconfig.socs                       |   1 -
+ arch/riscv/Makefile                           |   2 +-
+ arch/riscv/errata/Makefile                    |   2 +-
+ arch/riscv/errata/sifive/errata.c             |  10 +-
+ arch/riscv/errata/thead/Makefile              |   1 +
+ arch/riscv/errata/thead/errata.c              |  85 +++++++++++
+ arch/riscv/include/asm/alternative-macros.h   | 114 ++++++++-------
+ arch/riscv/include/asm/alternative.h          |  16 ++-
+ arch/riscv/include/asm/errata_list.h          |  52 +++++++
+ arch/riscv/include/asm/fixmap.h               |   2 -
+ arch/riscv/include/asm/pgtable-32.h           |  17 +++
+ arch/riscv/include/asm/pgtable-64.h           |  79 +++++++++-
+ arch/riscv/include/asm/pgtable-bits.h         |  10 --
+ arch/riscv/include/asm/pgtable.h              |  53 +++++--
+ arch/riscv/include/asm/vendorid_list.h        |   1 +
+ arch/riscv/kernel/Makefile                    |   1 +
+ arch/riscv/{errata => kernel}/alternative.c   |  48 ++++++-
+ arch/riscv/kernel/cpufeature.c                | 136 +++++++++++++++++-
+ arch/riscv/kernel/head.S                      |   2 +
+ arch/riscv/kernel/module.c                    |  29 ++++
+ arch/riscv/kernel/sbi.c                       |  10 +-
+ arch/riscv/kernel/smpboot.c                   |   4 -
+ arch/riscv/kernel/traps.c                     |   2 +-
+ arch/riscv/mm/init.c                          |   1 +
+ 26 files changed, 606 insertions(+), 111 deletions(-)
+ create mode 100644 arch/riscv/errata/thead/Makefile
+ create mode 100644 arch/riscv/errata/thead/errata.c
+ rename arch/riscv/{errata => kernel}/alternative.c (59%)
+
+-- 
+2.30.2
+

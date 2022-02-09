@@ -2,96 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1710C4AF0AC
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 13:05:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEB7B4AF05B
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 12:58:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232296AbiBIMDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 07:03:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38894 "EHLO
+        id S231621AbiBIL5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 06:57:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231490AbiBIMDK (ORCPT
+        with ESMTP id S231808AbiBIL4G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 07:03:10 -0500
-X-Greylist: delayed 2546 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Feb 2022 03:34:53 PST
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E188CDF28AC9;
-        Wed,  9 Feb 2022 03:34:52 -0800 (PST)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21996EFf090046;
-        Wed, 9 Feb 2022 03:06:14 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1644397574;
-        bh=vZWnswFoW5qNOblJvZoycCjjkCTkGBkJNS2nZCj+Hwg=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=KbuttjlqOH5cn0/jKQqyDGySCCS6DrAfpKA8kK1fXDwwP+bNeE1gIxAmR36OcYoXE
-         SzCJsCtWKrfqFSBSQjZjGokRcH/braWtJJlC264buHZUFv0b9pKqWcwd4eio7bawK5
-         7saZ2Fe0sZkmLR0P8F7mlpVLMDakXX44FQD3Sb4M=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21996EVk117791
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 9 Feb 2022 03:06:14 -0600
-Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 9
- Feb 2022 03:06:14 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 9 Feb 2022 03:06:14 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21996DSi118771;
-        Wed, 9 Feb 2022 03:06:13 -0600
-From:   Puranjay Mohan <p-mohan@ti.com>
-To:     <puranjay12@gmail.com>, <kishon@ti.com>, <vigneshr@ti.com>,
-        <s-anna@ti.com>, <bjorn.andersson@linaro.org>,
-        <mathieu.poirier@linaro.org>, <linux-remoteproc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     Puranjay Mohan <p-mohan@ti.com>
-Subject: [PATCH v4 2/2] remoteproc: wkup_m3: Set deny_sysfs_ops flag
-Date:   Wed, 9 Feb 2022 14:33:42 +0530
-Message-ID: <20220209090342.13220-3-p-mohan@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220209090342.13220-1-p-mohan@ti.com>
-References: <20220209090342.13220-1-p-mohan@ti.com>
+        Wed, 9 Feb 2022 06:56:06 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 943DAE03E230
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 02:56:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644404201; x=1675940201;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=k4hLpxCP5zG4YqnamMN0O5VXPbh5iT9Em3+ShBxtEzQ=;
+  b=axZpmKuSrrplNlJ/dmgF2+Ed7DUL2WxIMfNRpIj4Mb0Lv4WXX6fg8XaT
+   J2HB91VWbxpL3TD0lhTIgvscPYTcqDGg1A4EGytYiJrFJSOqBO49XGLi+
+   WfAgJovWFTFf1YT08I4bPwbP81bMItt8kZJ0C69nXRSQVPqzAE7ZRCGnu
+   OWmnP+0LlfUI90Fi/5GbUmdNTOGWLW5jyV9gitJ4J43OkPPl3vZZN8hQm
+   itByyFOQjMC2ztiR33rnNHQGfmz21DSyLqqopFM/YrKkPDn5GoDKxhW4x
+   I+pbhmJbndvd7glG2/+yuLAGJNpB2B9lWMHNm7ciYcDxW5U6VRz1VbfK/
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="229131597"
+X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
+   d="scan'208";a="229131597"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 01:05:03 -0800
+X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
+   d="scan'208";a="485168645"
+Received: from rcallina-mobl3.ger.corp.intel.com (HELO localhost) ([10.252.18.41])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 01:04:59 -0800
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Zhi Wang <zhi.wang.linux@gmail.com>, hch@lst.de, jgg@nvidia.com,
+        intel-gfx@lists.freedesktop.org,
+        intel-gvt-dev@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Vivi Rodrigo <rodrigo.vivi@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Terrence Xu <terrence.xu@intel.com>
+Subject: Re: [PATCH v6 1/3] i915/gvt: Introduce the mmio table to support
+ VFIO new mdev API
+In-Reply-To: <20220209072805.GA9050@lst.de>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20220208111151.13115-1-zhi.a.wang@intel.com>
+ <871r0dqtjf.fsf@intel.com> <20220209072805.GA9050@lst.de>
+Date:   Wed, 09 Feb 2022 11:04:57 +0200
+Message-ID: <87v8xopg06.fsf@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Suman Anna <s-anna@ti.com>
+On Wed, 09 Feb 2022, Christoph Hellwig <hch@lst.de> wrote:
+> On Tue, Feb 08, 2022 at 05:15:00PM +0200, Jani Nikula wrote:
+>> >  #ifdef CONFIG_DRM_I915_GVT
+>> > +
+>> > +#define D_BDW   (1 << 0)
+>> > +#define D_SKL	(1 << 1)
+>> > +#define D_KBL	(1 << 2)
+>> > +#define D_BXT	(1 << 3)
+>> > +#define D_CFL	(1 << 4)
+>> > +
+>> > +#define D_GEN9PLUS	(D_SKL | D_KBL | D_BXT | D_CFL)
+>> > +#define D_GEN8PLUS	(D_BDW | D_SKL | D_KBL | D_BXT | D_CFL)
+>> > +
+>> > +#define D_SKL_PLUS	(D_SKL | D_KBL | D_BXT | D_CFL)
+>> > +#define D_BDW_PLUS	(D_BDW | D_SKL | D_KBL | D_BXT | D_CFL)
+>> > +
+>> > +#define D_PRE_SKL	(D_BDW)
+>> > +#define D_ALL		(D_BDW | D_SKL | D_KBL | D_BXT | D_CFL)
+>> 
+>> If these really need to be in a header in i915/, I think they need to be
+>> longer with some namespacing or something. I do wish these could be
+>> hidden though.
+>
+> I think we could actually kill them off entirely.  They are used as
+> arguments to the macros that setup the mmio table.
+>
+> Thefunctions to build these tabls are already organized by families,
+> so we'd need relatively few conditions to just build them the right
+> way.  There also are some runtime checks in the callbacks, but they
+> seem entirely superflous as far as I can tell.
+>
+> Only the cmd parser is a bit messy.  So maybe we could keep these
+> constants just for the cmd parser inside of gvt for now (and clean
+> that up later) and remove them entirely from the mmio table.
 
-The Wakeup M3 remote processor is controlled by the wkup_m3_ipc
-client driver, so set the newly introduced 'deny_sysfs_ops' flag
-to not allow any overriding of the remoteproc firmware or state
-from userspace.
+I'm fine with cleaning this up in follow-up, provided the follow-up
+actually happens! ;)
 
-Signed-off-by: Suman Anna <s-anna@ti.com>
-Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
----
- drivers/remoteproc/wkup_m3_rproc.c | 1 +
- 1 file changed, 1 insertion(+)
+BR,
+Jani.
 
-diff --git a/drivers/remoteproc/wkup_m3_rproc.c b/drivers/remoteproc/wkup_m3_rproc.c
-index 484f7605823e..bbb84bb28af8 100644
---- a/drivers/remoteproc/wkup_m3_rproc.c
-+++ b/drivers/remoteproc/wkup_m3_rproc.c
-@@ -163,6 +163,7 @@ static int wkup_m3_rproc_probe(struct platform_device *pdev)
- 	}
- 
- 	rproc->auto_boot = false;
-+	rproc->deny_sysfs_ops = true;
- 
- 	wkupm3 = rproc->priv;
- 	wkupm3->rproc = rproc;
+
 -- 
-2.17.1
-
+Jani Nikula, Intel Open Source Graphics Center

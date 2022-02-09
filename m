@@ -2,131 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15FA34B0069
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 23:36:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E19D4B0067
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 23:36:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236036AbiBIWfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 17:35:16 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:49832 "EHLO
+        id S236047AbiBIWfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 17:35:48 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:50832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236025AbiBIWfK (ORCPT
+        with ESMTP id S236029AbiBIWfm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 17:35:10 -0500
-Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com [IPv6:2607:f8b0:4864:20::c2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFBA4E019269
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 14:35:11 -0800 (PST)
-Received: by mail-oo1-xc2f.google.com with SMTP id 189-20020a4a03c6000000b003179d7b30d8so4220721ooi.2
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 14:35:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=7sNMbEN2ZWSKBSAKG7biB3FxMf95az/sXODaHaCSWMs=;
-        b=xdcjIPjBdfsq47myDzGlv/zDnSvqcldTrssyKMmoNbBcmUw17fDaGp0J/7YeM0yqmg
-         s8qWJDlGouztaI3L3dssm+Cpw12Gr8ov9SLFvidB+1pfLT8ol8I+JprQAoRBrzqqrboZ
-         nbXLMNrQFM1FxTGR9rCmePKWeLdWhoR/y5dfoPvdJz9aFLZ+TN2pxPw6d9x/VIJuj36Z
-         eNTwsOF1QO3RaM49fcz4iuxlbP58AFsMFNuprEf3paG49jotMgGznnttTKdpyvTJtONz
-         AxIlSS+bv2EvMq+7ollItzv1rZG4cyXWmZORmzxdjX9tjb1Dc0LvVir9lQHsGl0NbMxu
-         dDAg==
+        Wed, 9 Feb 2022 17:35:42 -0500
+Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3146FE01644C;
+        Wed,  9 Feb 2022 14:35:44 -0800 (PST)
+Received: by mail-oo1-f44.google.com with SMTP id p190-20020a4a2fc7000000b0031820de484aso4179741oop.9;
+        Wed, 09 Feb 2022 14:35:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=7sNMbEN2ZWSKBSAKG7biB3FxMf95az/sXODaHaCSWMs=;
-        b=om84PQsyukY8g4jXBv+Y1rFzKxUomdAMPJsUww0bobZTLk5HGFApFe4azQwSOuuxOl
-         jlVdo3sVhy732m5JbDQVjAoXDSvsr1zyrPgx9T5kcBB5i1/7WvOCpRsa38+1ac9rWBNn
-         ASta+ahX8NB6QGFocT1yXVaHV7nBmwR7KUNU8j5XIOQMJcF7oqTl/q4hkEuFMOYhQyAl
-         fYFlOkEMDVmKVEAGVirxoIJ7h9NuijYDG0XASWiXvuj4fbIqLt2t8/3aU3vk12PnyKk3
-         ao6jyYntv93SzXVuvLtuIJ7tRG9Gs3x5F8uaiuiPmRtswupJDpXiTiRQ6PHrEYjUINLS
-         931w==
-X-Gm-Message-State: AOAM5330QrUwlSRVNv2IWnSt+LKTmjScN3pO5eSXStlTGpEnzBEQCyFQ
-        3CwN5kD4ttK/QG6fASh95DJotA==
-X-Google-Smtp-Source: ABdhPJw6ZCPvGXCBpXm4rynDmp58kloRm/T18gaJuFBSN0X6h1u23KWWxaJ+mFJOT3PwydMvdL4l/A==
-X-Received: by 2002:a4a:e1cb:: with SMTP id n11mr1840337oot.46.1644446111200;
-        Wed, 09 Feb 2022 14:35:11 -0800 (PST)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id s64sm7233725oos.0.2022.02.09.14.35.10
+        bh=Z5fTrwS5rMcO9/kl6ojaw4OQF9uM5X4OfMj/GMQCbWk=;
+        b=OLXn7e7WQt8GAUqgikyTBd5IlKKWRZ+eFOaz6XT3iBvR10Zb9nD6AtOW+GQJMcS1qi
+         dLtoN6mT/dXo6uN/DD3+0b5vzWSkVmsRwHPv1eTXWNVgQyYj+5pfjdK1ZjSNV0QMfFsZ
+         Z22TS7BXTOpI4pwAi6d55WPmcdRxEUxeI1/LZ5W+pwo4SVvJjruxt5wcpvNlEtLfhlAv
+         GObOVDaBZNWznt/Ry8mwD89dp7dLgm1P1euoXVjuI3c2gcR1ohW/DUzQx7n5pT0yEVra
+         eQgwrvyk5Q7s8c40+LnBqIhRmIr3AWZCsd9gagYzgRDH4qSPfGXDU9uFG4Xtwmxchp7r
+         ohOA==
+X-Gm-Message-State: AOAM530Zf0MlUWJrUaIXsq9V3fdkSFZIk7T2u97feU1ZaXRNay0O5IdG
+        PsPfuqzamWhPyyQTO0PNXA==
+X-Google-Smtp-Source: ABdhPJxqfDJ9yCEcYw3PdO97m7IdVwwhJ4cf2NE0mwgb5Nm481pxklEis7a3JldAdbzsJSVROGs1RA==
+X-Received: by 2002:a05:6870:e505:: with SMTP id y5mr1804779oag.109.1644446143483;
+        Wed, 09 Feb 2022 14:35:43 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id l38sm7447772otl.45.2022.02.09.14.35.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 14:35:10 -0800 (PST)
-Date:   Wed, 9 Feb 2022 16:35:08 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Taniya Das <tdas@codeaurora.org>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette ? <mturquette@baylibre.com>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [v1 1/2] clk: qcom: gdsc: Use the default transition delay for
- GDSCs
-Message-ID: <YgRBnExwlzI+lPlR@builder.lan>
-References: <20220209172513.17873-1-tdas@codeaurora.org>
+        Wed, 09 Feb 2022 14:35:42 -0800 (PST)
+Received: (nullmailer pid 1067145 invoked by uid 1000);
+        Wed, 09 Feb 2022 22:35:41 -0000
+Date:   Wed, 9 Feb 2022 16:35:41 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     linux-samsung-soc@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        linux-phy@lists.infradead.org
+Subject: Re: [PATCH 7/8] dt-bindings: phy: samsung: move SATA phy I2C to
+ trivial devices
+Message-ID: <YgRBvd6Dzn57e2i1@robh.at.kernel.org>
+References: <20220129193646.372481-1-krzysztof.kozlowski@canonical.com>
+ <20220129193646.372481-7-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220209172513.17873-1-tdas@codeaurora.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220129193646.372481-7-krzysztof.kozlowski@canonical.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 09 Feb 11:25 CST 2022, Taniya Das wrote:
-
-> Do not update the transition delay and use the default reset values.
+On Sat, 29 Jan 2022 20:36:45 +0100, Krzysztof Kozlowski wrote:
+> The I2C interface for Samsung Exynos SoC SATA phy is a very simple and
+> limited, so move it to trivial devices.
 > 
-> Fixes: 45dd0e55317cc ("clk: qcom: Add support for GDSCs)
-> Signed-off-by: Taniya Das <tdas@codeaurora.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 > ---
->  drivers/clk/qcom/gdsc.c | 6 +++++-
->  drivers/clk/qcom/gdsc.h | 1 +
->  2 files changed, 6 insertions(+), 1 deletion(-)
+>  .../devicetree/bindings/phy/samsung-phy.txt        | 14 --------------
+>  .../devicetree/bindings/trivial-devices.yaml       |  2 ++
+>  2 files changed, 2 insertions(+), 14 deletions(-)
 > 
-> diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
-> index 7e1dd8ccfa38..e7b213450640 100644
-> --- a/drivers/clk/qcom/gdsc.c
-> +++ b/drivers/clk/qcom/gdsc.c
-> @@ -380,7 +380,11 @@ static int gdsc_init(struct gdsc *sc)
->  	 */
->  	mask = HW_CONTROL_MASK | SW_OVERRIDE_MASK |
->  	       EN_REST_WAIT_MASK | EN_FEW_WAIT_MASK | CLK_DIS_WAIT_MASK;
-> -	val = EN_REST_WAIT_VAL | EN_FEW_WAIT_VAL | CLK_DIS_WAIT_VAL;
-> +
-> +	regmap_read(sc->regmap, sc->gdscr, &val);
-> +
-> +	if (!(sc->flags & DEFAULT_TRANSITION_DELAY))
 
-I dug a little bit more into this and noticed that on various platforms
-CLK_DIS_WAIT_VAL for the GPU_CX GDSC is supposed to be 8 (whereas both
-hw default and CLK_DIS_WAIT_VAL is 2).
-
-I'm not able to find anything helpful in the git log describing what the
-value does, but it seems that a "just use hw default" flag won't cut it
-for this scenario.
-
-Regards,
-Bjorn
-
-> +		val |= EN_REST_WAIT_VAL | EN_FEW_WAIT_VAL | CLK_DIS_WAIT_VAL;
->  	ret = regmap_update_bits(sc->regmap, sc->gdscr, mask, val);
->  	if (ret)
->  		return ret;
-> diff --git a/drivers/clk/qcom/gdsc.h b/drivers/clk/qcom/gdsc.h
-> index d7cc4c21a9d4..1bd3ecdd0b0a 100644
-> --- a/drivers/clk/qcom/gdsc.h
-> +++ b/drivers/clk/qcom/gdsc.h
-> @@ -53,6 +53,7 @@ struct gdsc {
->  #define ALWAYS_ON	BIT(6)
->  #define RETAIN_FF_ENABLE	BIT(7)
->  #define NO_RET_PERIPH	BIT(8)
-> +#define DEFAULT_TRANSITION_DELAY	BIT(9)
->  	struct reset_controller_dev	*rcdev;
->  	unsigned int			*resets;
->  	unsigned int			reset_count;
-> --
-> Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc.is a member
-> of the Code Aurora Forum, hosted by the  Linux Foundation.
-> 
+Reviewed-by: Rob Herring <robh@kernel.org>

@@ -2,146 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 774154AFCEF
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 20:09:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EB554AFD3B
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 20:18:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231708AbiBITJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 14:09:12 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:45388 "EHLO
+        id S233725AbiBITSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 14:18:08 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:52720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbiBITJK (ORCPT
+        with ESMTP id S230121AbiBITSH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 14:09:10 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D3ECC050CF9
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 11:09:01 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id i186so6039224pfe.0
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 11:09:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3pYUWbzfJmeVU+yHBTh4k3q7SKXv3vTcqq0waIAiryU=;
-        b=EJgjFP4oGMq+CvHuGi7utFhaFknN1sr+n3dB62JsNImWWb8PfivoTyky60buWnmgMY
-         KvoaTyr5T3sztr6GwkAwLoM8knyG2SKqyQ/0EoOSsGMY6qGFHBj69U0qkfg0fF81P7JN
-         hSte0UmATttEoqCTSHD/3fNkDv8bsewC7MdJLsClsc0wP0PifxGuBFI9sWYS1ILdcN8L
-         HkbRvimKp5GlfAF5+uQTWDltmedyxHpnI+1gcwhTFFawIlczdExTN4A9jv2iTVwMWqzr
-         R4Qhn8Co6KsFc//zQKZiRw7r9Dfdm7W2yb3+hNJ8jhKMEv2l2iz56/5UB4IIehfS7aug
-         3bgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3pYUWbzfJmeVU+yHBTh4k3q7SKXv3vTcqq0waIAiryU=;
-        b=k3NC4WN+UnnTefWnZg94i6/fsbquX4kx1zRcu/stbdrvYzvO4jc+GKup9US8vpVnzk
-         2SHa3N3JrP0QpvIbOTrV5piquPKk5kmz0zOFwPBsy1y/xHvsvdoAYlMYAGbWFcNUXgPl
-         9iS/EO/Svjfs0yMBtZVEIZzn8oGlc7LvtnxElJhUsQJdaMCm7HxJ+JHxDEPRoerebTaA
-         liNCoLpzF4pb9rdjYRdrLzL3w+j3Tw7hEft/7F70VUufP4SHlQl0CINvNXoAU0r9R5BI
-         ChFkvOeJxcWLESG+k4eJrg7Y70rhZmLS5VVatSJoQcLFGx8X6WeD2w5qnZ6Nvi21lxuY
-         csPA==
-X-Gm-Message-State: AOAM533pozlvcKTSMjiDuz+/mKVqnJ9xFbJdvZAo5ordlvgPpZkUuqu2
-        6PIBBLLoN/zRnYP8paxj7gc=
-X-Google-Smtp-Source: ABdhPJwJE0afsJJf6gzTybqCyPkR8isNWbhTReCpgDbp96mFX25X55DS7++D8ydX46QiE95J6DDQhQ==
-X-Received: by 2002:a63:c007:: with SMTP id h7mr3103630pgg.422.1644433725854;
-        Wed, 09 Feb 2022 11:08:45 -0800 (PST)
-Received: from localhost.localdomain ([103.81.93.149])
-        by smtp.gmail.com with ESMTPSA id x12sm14255973pgp.25.2022.02.09.11.08.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 11:08:45 -0800 (PST)
-From:   Vihas Makwana <makvihas@gmail.com>
-To:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Straube <straube.linux@gmail.com>,
-        Martin Kaiser <martin@kaiser.cx>
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        Vihas Makwana <makvihas@gmail.com>
-Subject: [PATCH v2] staging: r8188eu: keep the success path and error path separate
-Date:   Thu, 10 Feb 2022 00:37:53 +0530
-Message-Id: <20220209190752.7232-1-makvihas@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        Wed, 9 Feb 2022 14:18:07 -0500
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [IPv6:2a00:da80:fff0:2::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4C3BC1DC076;
+        Wed,  9 Feb 2022 11:18:00 -0800 (PST)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 7A0EE1C0B9D; Wed,  9 Feb 2022 20:08:47 +0100 (CET)
+Date:   Wed, 9 Feb 2022 20:08:46 +0100
+From:   Pavel Machek <pavel@denx.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: Re: [PATCH 5.10 72/74] net: dsa: mt7530: make NET_DSA_MT7530 select
+ MEDIATEK_GE_PHY
+Message-ID: <20220209190846.GB10459@duo.ucw.cz>
+References: <20220207103757.232676988@linuxfoundation.org>
+ <20220207103759.591363633@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="nVMJ2NtxeReIH9PS"
+Content-Disposition: inline
+In-Reply-To: <20220207103759.591363633@linuxfoundation.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Keep the success path and error path separate in rtw_usb_if1_init() and
-drop the "status" variable.
-Also, remove do-nothing gotos.
 
-Signed-off-by: Vihas Makwana <makvihas@gmail.com>
----
-v1->v2:
-    Just `return NULL` instead of `padapter=NULL/return padapter`
- drivers/staging/r8188eu/os_dep/usb_intf.c | 30 +++++++++--------------
- 1 file changed, 12 insertions(+), 18 deletions(-)
+--nVMJ2NtxeReIH9PS
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/staging/r8188eu/os_dep/usb_intf.c b/drivers/staging/r8188eu/os_dep/usb_intf.c
-index 10c33e2ae..668e79a3c 100644
---- a/drivers/staging/r8188eu/os_dep/usb_intf.c
-+++ b/drivers/staging/r8188eu/os_dep/usb_intf.c
-@@ -336,13 +336,13 @@ static struct adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
- {
- 	struct adapter *padapter = NULL;
- 	struct net_device *pnetdev = NULL;
--	int status = _FAIL;
- 	struct io_priv *piopriv;
- 	struct intf_hdl *pintf;
- 
- 	padapter = vzalloc(sizeof(*padapter));
- 	if (!padapter)
--		goto exit;
-+		return NULL;
-+
- 	padapter->dvobj = dvobj;
- 	dvobj->if1 = padapter;
- 
-@@ -421,26 +421,20 @@ static struct adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
- 		, padapter->hw_init_completed
- 	);
- 
--	status = _SUCCESS;
-+	return padapter;
- 
- free_drv_sw:
--	if (status != _SUCCESS) {
--		rtw_cancel_all_timer(padapter);
--		rtw_free_drv_sw(padapter);
--	}
-+	rtw_cancel_all_timer(padapter);
-+	rtw_free_drv_sw(padapter);
- handle_dualmac:
--	if (status != _SUCCESS)
--		rtw_handle_dualmac(padapter, 0);
-+	rtw_handle_dualmac(padapter, 0);
- free_adapter:
--	if (status != _SUCCESS) {
--		if (pnetdev)
--			rtw_free_netdev(pnetdev);
--		else if (padapter)
--			vfree(padapter);
--		padapter = NULL;
--	}
--exit:
--	return padapter;
-+	if (pnetdev)
-+		rtw_free_netdev(pnetdev);
-+	else if (padapter)
-+		vfree(padapter);
-+
-+	return NULL;
- }
- 
- static void rtw_usb_if1_deinit(struct adapter *if1)
--- 
-2.30.2
+Hi!
 
+> From: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
+>=20
+> commit 4223f86512877b04c932e7203648b37eec931731 upstream.
+>=20
+> Make MediaTek MT753x DSA driver enable MediaTek Gigabit PHYs driver to
+> properly control MT7530 and MT7531 switch PHYs.
+>=20
+> A noticeable change is that the behaviour of switchport interfaces going
+> up-down-up-down is no longer there.
+
+This is unsuitable for 5.10 at least:
+
+> +++ b/drivers/net/dsa/Kconfig
+> @@ -36,6 +36,7 @@ config NET_DSA_MT7530
+>  	tristate "MediaTek MT753x and MT7621 Ethernet switch support"
+>  	depends on NET_DSA
+>  	select NET_DSA_TAG_MTK
+> +	select MEDIATEK_GE_PHY
+
+This symbol does not exist in 5.10.
+
+Best regards,
+								Pavel
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+
+--nVMJ2NtxeReIH9PS
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYgQRPgAKCRAw5/Bqldv6
+8jNBAKCLi7o81Oh3+eEX68xMQ6bbp6QmOwCfTdPN8978QiP05Lak6LMh5P/o7Uw=
+=Y7q2
+-----END PGP SIGNATURE-----
+
+--nVMJ2NtxeReIH9PS--

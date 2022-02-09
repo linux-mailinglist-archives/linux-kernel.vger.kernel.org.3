@@ -2,150 +2,710 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 444324AF8F0
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 19:02:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C4D64AF8F5
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 19:05:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238600AbiBISCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 13:02:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54520 "EHLO
+        id S238612AbiBISFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 13:05:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235368AbiBISCk (ORCPT
+        with ESMTP id S238519AbiBISFS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 13:02:40 -0500
-Received: from IND01-BMX-obe.outbound.protection.outlook.com (mail-bmxind01olkn2057.outbound.protection.outlook.com [40.92.103.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A7F0C0613C9;
-        Wed,  9 Feb 2022 10:02:43 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NDPAteXmHvYzzp1rTPQKEnYegOjg8LrnAfXG449itB7c/9cVJLldnEiTRTAdESKYTo7u1zldu9IIJE5W9KXdq8h4RwDH3d7IELko+hXRhDrT8ozNAQSkRQscM9rtlTDgKPEPq+lGRYUdvKCFUzV52thOXQd7Rss4Md5Rzdrm6NfUC9xI+h6O92INigB+e5snx0jiTkFfGMHnornOFwi7nv67WPkR6ApwJ9YvSOtqFg0mgoCtu9ykYjXadcPZNVL7C2una0GPD7YUkUbCp2Pbd4Nqu/ci5uKJJh96IvLuP9W24vVR5yCh0em/Iy4D6//fEmLTC0qjh4CwVns9ChPBiw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5NxdijGaKuoG2D0QfjjJ11BbQKxxJapN9Qo+UhpUofI=;
- b=Qu8WUNx4/Qt3xfY4PhyrHN+3KNFZjHLezHJQqyL2HPveeF2Y4ZOBymmLu/h/u1AQrX86LBUDV1oHhsBw4InYQyiTjZU6WU3qqGr2wddSLQXUu363suaQgE0ttEMlrfaKGpH2Tg6dTwz4puLqkQE0f3x6B5wXMpOyMG6kV0PXIfFP29uambi1sJd/MTuDtr5Yeozt6RdhqvFTZru/6AtxFCrgAcgkfr1sDSCaQAO805dQKyb4JEVfgQ5yoX9SvEB8hPlRBYDJNNELROjUw2ets9ZMgFDKDxKRldYC6k9qZKENt39LVzUMYmuMzgyPJ0x6VE8AT9AXmDn4s8+WK2aO8A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5NxdijGaKuoG2D0QfjjJ11BbQKxxJapN9Qo+UhpUofI=;
- b=ojII6gT8XU11f3txRCqMsI2jsU6bZ3cWxg6VaQECsT+4WHAWkaSIhE7iHcZFXauZggyXI1GKc4TIMleog2yUquBOFMFRUcAIoIsV92jJYvOV2XPHdOeJhlWlJc5X+VUBO47DQ9sqKImjkr1W/JryqBrKjPy1eBGaCCcMYypj5TQ/iWWAeh3wbypx50HcMcGzQAjfKcY7zLioVGtMT4OnpykNUWE3mXGH9NNPgdJSj2qUYv5Y3zc9zRkmg0X4iAMrNIGGs+8ytcjbxnvYxQGCliWUO6XjOL/3F+Kj30TtVR31poT7zH+AwiDkpyBBycMQB9T/lOEfhVupskQaCtTJ5Q==
-Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:1b::13)
- by MA1PR01MB0938.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a00:2::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.17; Wed, 9 Feb
- 2022 18:02:35 +0000
-Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::d19b:7cd1:3760:b055]) by PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::d19b:7cd1:3760:b055%9]) with mapi id 15.20.4975.011; Wed, 9 Feb 2022
- 18:02:35 +0000
-From:   Aditya Garg <gargaditya08@live.com>
-To:     Matthew Garrett <mjg59@srcf.ucam.org>
-CC:     Ard Biesheuvel <ardb@kernel.org>, Jeremy Kerr <jk@ozlabs.org>,
-        "joeyli.kernel@gmail.com" <joeyli.kernel@gmail.com>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "eric.snowberg@oracle.com" <eric.snowberg@oracle.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "jlee@suse.com" <jlee@suse.com>,
-        "James.Bottomley@hansenpartnership.com" 
-        <James.Bottomley@HansenPartnership.com>,
-        "jarkko@kernel.org" <jarkko@kernel.org>,
-        "mic@digikod.net" <mic@digikod.net>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        Orlando Chamberlain <redecorating@protonmail.com>,
-        Aun-Ali Zaidi <admin@kodeit.net>
-Subject: Re: [PATCH] efi: Do not import certificates from UEFI Secure Boot for
- T2 Macs
-Thread-Topic: [PATCH] efi: Do not import certificates from UEFI Secure Boot
- for T2 Macs
-Thread-Index: AQHYHcE4ht34Z1CESEaNjR8+yzmieayLbqGAgAAURwA=
-Date:   Wed, 9 Feb 2022 18:02:34 +0000
-Message-ID: <5A3C2EBF-13FF-4C37-B2A0-1533A818109F@live.com>
-References: <9D0C961D-9999-4C41-A44B-22FEAF0DAB7F@live.com>
- <20220209164957.GB12763@srcf.ucam.org>
-In-Reply-To: <20220209164957.GB12763@srcf.ucam.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tmn:  [OScqbh1LnW6HxDEfsuzQ5P+wdrWvksSthJ6UAgNvEeJ8dNAiCf7nnmtv8a0KstNA]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: fa1ac157-e9fc-4e60-ad9a-08d9ebf659d8
-x-ms-traffictypediagnostic: MA1PR01MB0938:EE_
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: l8F6teMvroAvfV4BqyBujYZyAscEK+BtqoO9k/OPCYru0cRFZMWvqQ5EPZ8S/1rdKkWnMSUvPrueXPJvKob/jlT1+YSaj5aL3amGXmWzqpNYNnEuI8WrOwOifVCj2hYzdojn50CDsqKEDZH0WiKTMJaeuxhDijX8jputKoA9jeQatoQSc1lFoJaaYFj0v75TDH7rsCFPte8zbvmf02FAoq1mMBEYpjkF6GY9csAy19OBIZWKHx2dDKymuqB6QCEghZb28pyVaPjeFLqgtavh/Qtu+LlAQ03M9W5gXDezuozbOG1hQpVJ5N5vy88L+V1Wp9vtLu+im2ZFeIKdwOHD12HL6+1dw4GXCV1svplgYoGis27RkRxvQ7jOsNj2j3Ppr0d0FQ+URWliBMEXAoRjVToZeGh+UEgkkWWAL93bN4sOnOh1Yj1yVlExDdsDg5OIBuqXqyMucONh2rabdwx7mjeufMRQ2TSZfqxERYka/p3IFr6Fy8LaJigb5aV/aogxCzwDgpjc5MoIPSHboEwIZAtfH35gc9EZ36F+yKwMfiH8HGp06hYzj0W0PD0GKTCueSPiIqX0Dk0B/iX6+hWepg==
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dGUwWXZLKzRZbml4ZGNKRFU4ZDhuNDBoRStNRWhZZEpWd0VsOC9PajRBUmRk?=
- =?utf-8?B?VmxDV25VaWNzblVKS3kyWjBkRzV1eWFDR1NueXRuc2ZrcVhKM0U4N0lwZEdC?=
- =?utf-8?B?dE56Tit6TXJnL2dhL0R6bndoT1Rqc3VRVzc1TFVobGZqdyt6dVJITTYxZUJV?=
- =?utf-8?B?dnlKMVd1ZWtycCt3SEluZEhHVTQ5YVNRRVpBZytoRHZoSUQ3WXQ0aGZBcGE3?=
- =?utf-8?B?MlJWY0VaNk1GanpDTXpNaWNVYUw5UzZTSHBtd05JVFJ0K0FiNHpPVEFGSTVx?=
- =?utf-8?B?WklqdFlxcWxTdEpTa01oTEJ0UnBHQyttc2Zza1dZSFZsWDcwcWFJV1dQRkRN?=
- =?utf-8?B?TU5odnN0VmtGMnNYZml4NWVMbDdDbVM5R3g1VlRvR1BSRW9NRzRuOG1tZ0Uy?=
- =?utf-8?B?Tkg2V3ZiUGtMMzBzT2FmSHpXWWFMOWN3emdMUWp3T3ZDNHl1UngwT1RKdzFQ?=
- =?utf-8?B?UUcxR014RzJIQ3g3dVFITkNob1Vkb200dE5xTzZNN0h3dzZsZ3BONDR4bU84?=
- =?utf-8?B?T2J4RVpGeXQ0VXJsOVY5K0JJaWZ4ZG1zWUQwdDBLdjZmeFRmNmJMS2lVQy9v?=
- =?utf-8?B?MW1ZK1JaNmd4Yk1jV1Q3M1ZDN3Bua05sQlJQaUhseWZ0MlRmZ21JbzFrc3Ur?=
- =?utf-8?B?bnVRcEdEbDJKRGJqUlhTbDFUNGJpYVpFa2xGZ3gzYzJUTnlZRnNSL0NJRENi?=
- =?utf-8?B?OThhNmdyYzJqYVRleUZOWlA2UjM3QmpNUytTTmhUcFVkZVR0aHFpMWdpWFpL?=
- =?utf-8?B?UldwUVdtRFB3dVNxWkJzcFkyTnFxMjNYZHB3MkJhMml6dlN0cTRVcFlHbXI3?=
- =?utf-8?B?a0tVS2g4bk5GNFNQTHpHUTdYNWtiVXZpSkdNRjZORFIxdk4yNkIvQnJrVVJa?=
- =?utf-8?B?L1JFRzNZSlNGeVlBdjFIOElTTkpENFFMcUF4TlNnR0N4NWIwVHJCc3RESktl?=
- =?utf-8?B?NFlHNm9rVUQyR3pOUVV0cVM3bUhkNmpqZjBERlJZMFIwSHFZREI5clhKa3Zs?=
- =?utf-8?B?M1ZNTTRkWkF3cEpPS2lqVWUxOHhUOFVTNGVxVkZvRFRVRGF6U015eXRRR1h0?=
- =?utf-8?B?K2tiS2JXc2RJakpQWU9NcmJSMnNtWW9pcHh2RjNSdnU2VGxtajF0aFNzTUJk?=
- =?utf-8?B?Yk1tWThkelZVVUJab1VyeGs3SUFGcU16WEVhYkwzOGFNZit0bEFGaEhPaGxB?=
- =?utf-8?B?YUVSaml5eDdqOXFmU2pCMHZXU3hWWjFxSGFKeEs5ZlFlWnc1RHBEQzllYXp5?=
- =?utf-8?B?THRyb2xQdmpUWVJ0VDY4V1pvaWRjTDdwemJscWRDbSsrTm5BN0N6cnAyRzFk?=
- =?utf-8?B?Y0ZOT3pWbVZkRmVIaUVxYzVqdUdpZTNZdE0zVVdwYnZkRUZSZkNkcFRSNU13?=
- =?utf-8?B?UjVrY2MrUmY2dEE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <EDB63009120527439A45D62FE3572368@INDPRD01.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Wed, 9 Feb 2022 13:05:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFDF8C05CB86
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 10:05:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 76F7AB8203D
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 18:05:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD0CFC340E7;
+        Wed,  9 Feb 2022 18:05:17 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ER9Zqv4p"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1644429916;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UHrhB2wGwD/0XTAcmADyeHvqutARTCHN4Kjp0SMnfZA=;
+        b=ER9Zqv4pqmfDhKBZBkp3IGbYkp2y0XgAxJ85ryvsCYBQd3QrvDE4Q8xawuEaQsYLOKxBVv
+        mlHPiUxu3LDvWSHcpHFyf6cSab3PqOln4KChyHcysJtHu1uyzEH3VLO+GS8q8tQF3gi+ll
+        bisPD6Ev+hdVVM8l0Bz0xyGcnqphNEw=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id c9b1db18 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Wed, 9 Feb 2022 18:05:15 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Jann Horn <jannh@google.com>
+Subject: [PATCH v2] random: make more consistent use of integer types
+Date:   Wed,  9 Feb 2022 19:05:07 +0100
+Message-Id: <20220209180507.646941-1-Jason@zx2c4.com>
+In-Reply-To: <20220209135211.557032-1-Jason@zx2c4.com>
+References: <20220209135211.557032-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: fa1ac157-e9fc-4e60-ad9a-08d9ebf659d8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Feb 2022 18:02:34.8522
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MA1PR01MB0938
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gT24gMDktRmViLTIwMjIsIGF0IDEwOjE5IFBNLCBNYXR0aGV3IEdhcnJldHQgPG1qZzU5
-QHNyY2YudWNhbS5vcmc+IHdyb3RlOg0KPiANCj4gT24gV2VkLCBGZWIgMDksIDIwMjIgYXQgMDI6
-Mjc6NTFQTSArMDAwMCwgQWRpdHlhIEdhcmcgd3JvdGU6DQo+PiBGcm9tOiBBZGl0eWEgR2FyZyA8
-Z2FyZ2FkaXR5YTA4QGxpdmUuY29tPg0KPj4gDQo+PiBPbiBUMiBNYWNzLCB0aGUgc2VjdXJlIGJv
-b3QgaXMgaGFuZGxlZCBieSB0aGUgVDIgQ2hpcC4gSWYgZW5hYmxlZCwgb25seQ0KPj4gbWFjT1Mg
-YW5kIFdpbmRvd3MgYXJlIGFsbG93ZWQgdG8gYm9vdCBvbiB0aGVzZSBtYWNoaW5lcy4gVGh1cyB3
-ZSBuZWVkIHRvDQo+PiBkaXNhYmxlIHNlY3VyZSBib290IGZvciBMaW51eC4gSWYgd2UgYm9vdCBp
-bnRvIExpbnV4IGFmdGVyIGRpc2FibGluZw0KPj4gc2VjdXJlIGJvb3QsIGlmIENPTkZJR19MT0FE
-X1VFRklfS0VZUyBpcyBlbmFibGVkLCBFRkkgUnVudGltZSBzZXJ2aWNlcw0KPj4gZmFpbCB0byBz
-dGFydCwgd2l0aCB0aGUgZm9sbG93aW5nIGxvZ3MgaW4gZG1lc2cNCj4gDQo+IFdoaWNoIHNwZWNp
-ZmljIHZhcmlhYmxlIHJlcXVlc3QgaXMgdHJpZ2dlcmluZyB0aGUgZmFpbHVyZT8gRG8gYW55IA0K
-PiBydW50aW1lIHZhcmlhYmxlIGFjY2Vzc2VzIHdvcmsgb24gdGhlc2UgbWFjaGluZXM/DQpDb21t
-aXQgZjUzOTBjZDBiNDNjMmU1NGM3Y2Y1NTA2YzdkYTRhMzdjNWNlZjc0NiBpbiBMaW51c+KAmSB0
-cmVlIHdhcyBhbHNvIGFkZGVkIHRvIGZvcmNlIEVGSSB2MS4xIG9uIHRoZXNlIG1hY2hpbmVzLCBz
-aW5jZSB2Mi40LCByZXBvcnRlZCBieSB0aGVtIHdhcyBjYXVzaW5nIGtlcm5lbCBwYW5pY3MuDQoN
-ClNvLCBFRkkgMS4xIHdpdGhvdXQgaW1wb3J0IGNlcnRpZmljYXRlcyBzZWVtcyB0byB3b3JrIGFu
-ZCBoYXZlIGJlZW4gYWJsZSB0byBtb2RpZnkgdGhlIHZhcmlhYmxlcywgdGh1cyB0aGUgcmVtYWlu
-aW5nIEVGSSB2YXJpYWJsZSBhY2Nlc3NlcyBzZWVtIHRvIHdvcmsu
+We've been using a flurry of int, unsigned int, size_t, and ssize_t.
+Let's unify all of this into size_t where it makes sense, as it does in
+most places, and leave ssize_t for return values with possible errors.
+
+In addition, keeping with the convention of other functions in this
+file, functions that are dealing with raw bytes now take void *
+consistently instead of a mix of that and u8 *, because much of the time
+we're actually passing some other structure that is then interpreted as
+bytes by the function.
+
+We also take the opportunity to fix the outdated and incorrect comment
+in get_random_bytes_arch().
+
+Cc: Theodore Ts'o <tytso@mit.edu>
+Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+Reviewed-by: Jann Horn <jannh@google.com>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ drivers/char/random.c         | 113 ++++++++++++++++------------------
+ include/linux/hw_random.h     |   2 +-
+ include/linux/random.h        |  10 +--
+ include/trace/events/random.h |  79 ++++++++++++------------
+ 4 files changed, 97 insertions(+), 107 deletions(-)
+
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index 559827eeb0ac..66dedcf56913 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -69,7 +69,7 @@
+  *
+  * The primary kernel interfaces are:
+  *
+- *	void get_random_bytes(void *buf, int nbytes);
++ *	void get_random_bytes(void *buf, size_t nbytes);
+  *	u32 get_random_u32()
+  *	u64 get_random_u64()
+  *	unsigned int get_random_int()
+@@ -97,14 +97,14 @@
+  * The current exported interfaces for gathering environmental noise
+  * from the devices are:
+  *
+- *	void add_device_randomness(const void *buf, unsigned int size);
++ *	void add_device_randomness(const void *buf, size_t size);
+  *	void add_input_randomness(unsigned int type, unsigned int code,
+  *                                unsigned int value);
+  *	void add_interrupt_randomness(int irq);
+  *	void add_disk_randomness(struct gendisk *disk);
+- *	void add_hwgenerator_randomness(const char *buffer, size_t count,
++ *	void add_hwgenerator_randomness(const void *buffer, size_t count,
+  *					size_t entropy);
+- *	void add_bootloader_randomness(const void *buf, unsigned int size);
++ *	void add_bootloader_randomness(const void *buf, size_t size);
+  *
+  * add_device_randomness() is for adding data to the random pool that
+  * is likely to differ between two devices (or possibly even per boot).
+@@ -268,7 +268,7 @@ static int crng_init = 0;
+ #define crng_ready() (likely(crng_init > 1))
+ static int crng_init_cnt = 0;
+ static void process_random_ready_list(void);
+-static void _get_random_bytes(void *buf, int nbytes);
++static void _get_random_bytes(void *buf, size_t nbytes);
+ 
+ static struct ratelimit_state unseeded_warning =
+ 	RATELIMIT_STATE_INIT("warn_unseeded_randomness", HZ, 3);
+@@ -290,7 +290,7 @@ MODULE_PARM_DESC(ratelimit_disable, "Disable random ratelimit suppression");
+ static struct {
+ 	struct blake2s_state hash;
+ 	spinlock_t lock;
+-	int entropy_count;
++	unsigned int entropy_count;
+ } input_pool = {
+ 	.hash.h = { BLAKE2S_IV0 ^ (0x01010000 | BLAKE2S_HASH_SIZE),
+ 		    BLAKE2S_IV1, BLAKE2S_IV2, BLAKE2S_IV3, BLAKE2S_IV4,
+@@ -308,12 +308,12 @@ static void crng_reseed(void);
+  * update the entropy estimate.  The caller should call
+  * credit_entropy_bits if this is appropriate.
+  */
+-static void _mix_pool_bytes(const void *in, int nbytes)
++static void _mix_pool_bytes(const void *in, size_t nbytes)
+ {
+ 	blake2s_update(&input_pool.hash, in, nbytes);
+ }
+ 
+-static void mix_pool_bytes(const void *in, int nbytes)
++static void mix_pool_bytes(const void *in, size_t nbytes)
+ {
+ 	unsigned long flags;
+ 
+@@ -378,18 +378,18 @@ static void process_random_ready_list(void)
+ 	spin_unlock_irqrestore(&random_ready_list_lock, flags);
+ }
+ 
+-static void credit_entropy_bits(int nbits)
++static void credit_entropy_bits(size_t nbits)
+ {
+-	int entropy_count, orig;
++	unsigned int entropy_count, orig, add;
+ 
+-	if (nbits <= 0)
++	if (!nbits)
+ 		return;
+ 
+-	nbits = min(nbits, POOL_BITS);
++	add = min_t(size_t, nbits, POOL_BITS);
+ 
+ 	do {
+ 		orig = READ_ONCE(input_pool.entropy_count);
+-		entropy_count = min(POOL_BITS, orig + nbits);
++		entropy_count = min_t(unsigned int, POOL_BITS, orig + add);
+ 	} while (cmpxchg(&input_pool.entropy_count, orig, entropy_count) != orig);
+ 
+ 	trace_credit_entropy_bits(nbits, entropy_count, _RET_IP_);
+@@ -438,10 +438,10 @@ static void invalidate_batched_entropy(void);
+  * path.  So we can't afford to dilly-dally. Returns the number of
+  * bytes processed from cp.
+  */
+-static size_t crng_fast_load(const u8 *cp, size_t len)
++static size_t crng_fast_load(const void *cp, size_t len)
+ {
+ 	unsigned long flags;
+-	u8 *p;
++	u8 *src = (u8 *)cp;
+ 	size_t ret = 0;
+ 
+ 	if (!spin_trylock_irqsave(&base_crng.lock, flags))
+@@ -450,10 +450,9 @@ static size_t crng_fast_load(const u8 *cp, size_t len)
+ 		spin_unlock_irqrestore(&base_crng.lock, flags);
+ 		return 0;
+ 	}
+-	p = base_crng.key;
+ 	while (len > 0 && crng_init_cnt < CRNG_INIT_CNT_THRESH) {
+-		p[crng_init_cnt % sizeof(base_crng.key)] ^= *cp;
+-		cp++; crng_init_cnt++; len--; ret++;
++		base_crng.key[crng_init_cnt % sizeof(base_crng.key)] ^= *src;
++		src++; crng_init_cnt++; len--; ret++;
+ 	}
+ 	if (crng_init_cnt >= CRNG_INIT_CNT_THRESH) {
+ 		invalidate_batched_entropy();
+@@ -477,7 +476,7 @@ static size_t crng_fast_load(const u8 *cp, size_t len)
+  * something like a fixed DMI table (for example), which might very
+  * well be unique to the machine, but is otherwise unvarying.
+  */
+-static void crng_slow_load(const u8 *cp, size_t len)
++static void crng_slow_load(const void *cp, size_t len)
+ {
+ 	unsigned long flags;
+ 	struct blake2s_state hash;
+@@ -645,14 +644,15 @@ static void crng_make_state(u32 chacha_state[CHACHA_STATE_WORDS],
+ static ssize_t get_random_bytes_user(void __user *buf, size_t nbytes)
+ {
+ 	bool large_request = (nbytes > 256);
+-	ssize_t ret = 0, len;
++	ssize_t ret = 0;
++	size_t len;
+ 	u32 chacha_state[CHACHA_STATE_WORDS];
+ 	u8 output[CHACHA_BLOCK_SIZE];
+ 
+ 	if (!nbytes)
+ 		return 0;
+ 
+-	len = min_t(ssize_t, 32, nbytes);
++	len = min_t(size_t, 32, nbytes);
+ 	crng_make_state(chacha_state, output, len);
+ 
+ 	if (copy_to_user(buf, output, len))
+@@ -675,7 +675,7 @@ static ssize_t get_random_bytes_user(void __user *buf, size_t nbytes)
+ 		if (unlikely(chacha_state[12] == 0))
+ 			++chacha_state[13];
+ 
+-		len = min_t(ssize_t, nbytes, CHACHA_BLOCK_SIZE);
++		len = min_t(size_t, nbytes, CHACHA_BLOCK_SIZE);
+ 		if (copy_to_user(buf, output, len)) {
+ 			ret = -EFAULT;
+ 			break;
+@@ -713,7 +713,7 @@ struct timer_rand_state {
+  * the entropy pool having similar initial state across largely
+  * identical devices.
+  */
+-void add_device_randomness(const void *buf, unsigned int size)
++void add_device_randomness(const void *buf, size_t size)
+ {
+ 	unsigned long time = random_get_entropy() ^ jiffies;
+ 	unsigned long flags;
+@@ -741,7 +741,7 @@ static struct timer_rand_state input_timer_state = INIT_TIMER_RAND_STATE;
+  * keyboard scan codes, and 256 upwards for interrupts.
+  *
+  */
+-static void add_timer_randomness(struct timer_rand_state *state, unsigned num)
++static void add_timer_randomness(struct timer_rand_state *state, unsigned int num)
+ {
+ 	struct {
+ 		long jiffies;
+@@ -785,7 +785,7 @@ static void add_timer_randomness(struct timer_rand_state *state, unsigned num)
+ 	 * Round down by 1 bit on general principles,
+ 	 * and limit entropy estimate to 12 bits.
+ 	 */
+-	credit_entropy_bits(min_t(int, fls(delta >> 1), 11));
++	credit_entropy_bits(min_t(unsigned int, fls(delta >> 1), 11));
+ }
+ 
+ void add_input_randomness(unsigned int type, unsigned int code,
+@@ -890,7 +890,7 @@ void add_interrupt_randomness(int irq)
+ 
+ 	if (unlikely(crng_init == 0)) {
+ 		if (new_count >= 64 &&
+-		    crng_fast_load((u8 *)fast_pool->pool, sizeof(fast_pool->pool)) > 0) {
++		    crng_fast_load(fast_pool->pool, sizeof(fast_pool->pool)) > 0) {
+ 			fast_pool->count = 0;
+ 			fast_pool->last = now;
+ 
+@@ -1016,18 +1016,18 @@ static void _warn_unseeded_randomness(const char *func_name, void *caller, void
+  * wait_for_random_bytes() should be called and return 0 at least once
+  * at any point prior.
+  */
+-static void _get_random_bytes(void *buf, int nbytes)
++static void _get_random_bytes(void *buf, size_t nbytes)
+ {
+ 	u32 chacha_state[CHACHA_STATE_WORDS];
+ 	u8 tmp[CHACHA_BLOCK_SIZE];
+-	ssize_t len;
++	size_t len;
+ 
+ 	trace_get_random_bytes(nbytes, _RET_IP_);
+ 
+ 	if (!nbytes)
+ 		return;
+ 
+-	len = min_t(ssize_t, 32, nbytes);
++	len = min_t(size_t, 32, nbytes);
+ 	crng_make_state(chacha_state, buf, len);
+ 	nbytes -= len;
+ 	buf += len;
+@@ -1040,7 +1040,7 @@ static void _get_random_bytes(void *buf, int nbytes)
+ 			break;
+ 		}
+ 
+-		len = min_t(ssize_t, nbytes, CHACHA_BLOCK_SIZE);
++		len = min_t(size_t, nbytes, CHACHA_BLOCK_SIZE);
+ 		chacha20_block(chacha_state, buf);
+ 		if (unlikely(chacha_state[12] == 0))
+ 			++chacha_state[13];
+@@ -1051,7 +1051,7 @@ static void _get_random_bytes(void *buf, int nbytes)
+ 	memzero_explicit(chacha_state, sizeof(chacha_state));
+ }
+ 
+-void get_random_bytes(void *buf, int nbytes)
++void get_random_bytes(void *buf, size_t nbytes)
+ {
+ 	static void *previous;
+ 
+@@ -1212,25 +1212,19 @@ EXPORT_SYMBOL(del_random_ready_callback);
+ 
+ /*
+  * This function will use the architecture-specific hardware random
+- * number generator if it is available.  The arch-specific hw RNG will
+- * almost certainly be faster than what we can do in software, but it
+- * is impossible to verify that it is implemented securely (as
+- * opposed, to, say, the AES encryption of a sequence number using a
+- * key known by the NSA).  So it's useful if we need the speed, but
+- * only if we're willing to trust the hardware manufacturer not to
+- * have put in a back door.
+- *
+- * Return number of bytes filled in.
++ * number generator if it is available. It is not recommended for
++ * use. Use get_random_bytes() instead. It returns the number of
++ * bytes filled in.
+  */
+-int __must_check get_random_bytes_arch(void *buf, int nbytes)
++size_t __must_check get_random_bytes_arch(void *buf, size_t nbytes)
+ {
+-	int left = nbytes;
++	size_t left = nbytes;
+ 	u8 *p = buf;
+ 
+ 	trace_get_random_bytes_arch(left, _RET_IP_);
+ 	while (left) {
+ 		unsigned long v;
+-		int chunk = min_t(int, left, sizeof(unsigned long));
++		size_t chunk = min_t(size_t, left, sizeof(unsigned long));
+ 
+ 		if (!arch_get_random_long(&v))
+ 			break;
+@@ -1263,7 +1257,7 @@ early_param("random.trust_cpu", parse_trust_cpu);
+  */
+ int __init rand_initialize(void)
+ {
+-	int i;
++	size_t i;
+ 	ktime_t now = ktime_get_real();
+ 	bool arch_init = true;
+ 	unsigned long rv;
+@@ -1317,7 +1311,7 @@ static ssize_t urandom_read_nowarn(struct file *file, char __user *buf,
+ 
+ 	nbytes = min_t(size_t, nbytes, INT_MAX >> 6);
+ 	ret = get_random_bytes_user(buf, nbytes);
+-	trace_urandom_read(8 * nbytes, 0, input_pool.entropy_count);
++	trace_urandom_read(nbytes, input_pool.entropy_count);
+ 	return ret;
+ }
+ 
+@@ -1361,19 +1355,18 @@ static __poll_t random_poll(struct file *file, poll_table *wait)
+ 	return mask;
+ }
+ 
+-static int write_pool(const char __user *buffer, size_t count)
++static int write_pool(const char __user *ubuf, size_t count)
+ {
+-	size_t bytes;
+-	u8 buf[BLAKE2S_BLOCK_SIZE];
+-	const char __user *p = buffer;
++	size_t len;
++	u8 block[BLAKE2S_BLOCK_SIZE];
+ 
+-	while (count > 0) {
+-		bytes = min(count, sizeof(buf));
+-		if (copy_from_user(buf, p, bytes))
++	while (count) {
++		len = min(count, sizeof(block));
++		if (copy_from_user(block, ubuf, len))
+ 			return -EFAULT;
+-		count -= bytes;
+-		p += bytes;
+-		mix_pool_bytes(buf, bytes);
++		count -= len;
++		ubuf += len;
++		mix_pool_bytes(block, len);
+ 		cond_resched();
+ 	}
+ 
+@@ -1383,7 +1376,7 @@ static int write_pool(const char __user *buffer, size_t count)
+ static ssize_t random_write(struct file *file, const char __user *buffer,
+ 			    size_t count, loff_t *ppos)
+ {
+-	size_t ret;
++	int ret;
+ 
+ 	ret = write_pool(buffer, count);
+ 	if (ret)
+@@ -1479,8 +1472,6 @@ const struct file_operations urandom_fops = {
+ SYSCALL_DEFINE3(getrandom, char __user *, buf, size_t, count, unsigned int,
+ 		flags)
+ {
+-	int ret;
+-
+ 	if (flags & ~(GRND_NONBLOCK | GRND_RANDOM | GRND_INSECURE))
+ 		return -EINVAL;
+ 
+@@ -1495,6 +1486,8 @@ SYSCALL_DEFINE3(getrandom, char __user *, buf, size_t, count, unsigned int,
+ 		count = INT_MAX;
+ 
+ 	if (!(flags & GRND_INSECURE) && !crng_ready()) {
++		int ret;
++
+ 		if (flags & GRND_NONBLOCK)
+ 			return -EAGAIN;
+ 		ret = wait_for_random_bytes();
+@@ -1763,7 +1756,7 @@ unsigned long randomize_page(unsigned long start, unsigned long range)
+  * Those devices may produce endless random bits and will be throttled
+  * when our pool is full.
+  */
+-void add_hwgenerator_randomness(const char *buffer, size_t count,
++void add_hwgenerator_randomness(const void *buffer, size_t count,
+ 				size_t entropy)
+ {
+ 	if (unlikely(crng_init == 0)) {
+@@ -1794,7 +1787,7 @@ EXPORT_SYMBOL_GPL(add_hwgenerator_randomness);
+  * it would be regarded as device data.
+  * The decision is controlled by CONFIG_RANDOM_TRUST_BOOTLOADER.
+  */
+-void add_bootloader_randomness(const void *buf, unsigned int size)
++void add_bootloader_randomness(const void *buf, size_t size)
+ {
+ 	if (IS_ENABLED(CONFIG_RANDOM_TRUST_BOOTLOADER))
+ 		add_hwgenerator_randomness(buf, size, size * 8);
+diff --git a/include/linux/hw_random.h b/include/linux/hw_random.h
+index 8e6dd908da21..1a9fc38f8938 100644
+--- a/include/linux/hw_random.h
++++ b/include/linux/hw_random.h
+@@ -61,6 +61,6 @@ extern int devm_hwrng_register(struct device *dev, struct hwrng *rng);
+ extern void hwrng_unregister(struct hwrng *rng);
+ extern void devm_hwrng_unregister(struct device *dve, struct hwrng *rng);
+ /** Feed random bits into the pool. */
+-extern void add_hwgenerator_randomness(const char *buffer, size_t count, size_t entropy);
++extern void add_hwgenerator_randomness(const void *buffer, size_t count, size_t entropy);
+ 
+ #endif /* LINUX_HWRANDOM_H_ */
+diff --git a/include/linux/random.h b/include/linux/random.h
+index c45b2693e51f..e92efb39779c 100644
+--- a/include/linux/random.h
++++ b/include/linux/random.h
+@@ -20,8 +20,8 @@ struct random_ready_callback {
+ 	struct module *owner;
+ };
+ 
+-extern void add_device_randomness(const void *, unsigned int);
+-extern void add_bootloader_randomness(const void *, unsigned int);
++extern void add_device_randomness(const void *, size_t);
++extern void add_bootloader_randomness(const void *, size_t);
+ 
+ #if defined(LATENT_ENTROPY_PLUGIN) && !defined(__CHECKER__)
+ static inline void add_latent_entropy(void)
+@@ -37,13 +37,13 @@ extern void add_input_randomness(unsigned int type, unsigned int code,
+ 				 unsigned int value) __latent_entropy;
+ extern void add_interrupt_randomness(int irq) __latent_entropy;
+ 
+-extern void get_random_bytes(void *buf, int nbytes);
++extern void get_random_bytes(void *buf, size_t nbytes);
+ extern int wait_for_random_bytes(void);
+ extern int __init rand_initialize(void);
+ extern bool rng_is_initialized(void);
+ extern int add_random_ready_callback(struct random_ready_callback *rdy);
+ extern void del_random_ready_callback(struct random_ready_callback *rdy);
+-extern int __must_check get_random_bytes_arch(void *buf, int nbytes);
++extern size_t __must_check get_random_bytes_arch(void *buf, size_t nbytes);
+ 
+ #ifndef MODULE
+ extern const struct file_operations random_fops, urandom_fops;
+@@ -87,7 +87,7 @@ static inline unsigned long get_random_canary(void)
+ 
+ /* Calls wait_for_random_bytes() and then calls get_random_bytes(buf, nbytes).
+  * Returns the result of the call to wait_for_random_bytes. */
+-static inline int get_random_bytes_wait(void *buf, int nbytes)
++static inline int get_random_bytes_wait(void *buf, size_t nbytes)
+ {
+ 	int ret = wait_for_random_bytes();
+ 	get_random_bytes(buf, nbytes);
+diff --git a/include/trace/events/random.h b/include/trace/events/random.h
+index 833f42afc70f..dd6e154f9f75 100644
+--- a/include/trace/events/random.h
++++ b/include/trace/events/random.h
+@@ -9,13 +9,13 @@
+ #include <linux/tracepoint.h>
+ 
+ TRACE_EVENT(add_device_randomness,
+-	TP_PROTO(int bytes, unsigned long IP),
++	TP_PROTO(size_t bytes, unsigned long IP),
+ 
+ 	TP_ARGS(bytes, IP),
+ 
+ 	TP_STRUCT__entry(
+-		__field(	  int,	bytes			)
+-		__field(unsigned long,	IP			)
++		__field(size_t,		bytes	)
++		__field(unsigned long,	IP	)
+ 	),
+ 
+ 	TP_fast_assign(
+@@ -23,18 +23,18 @@ TRACE_EVENT(add_device_randomness,
+ 		__entry->IP		= IP;
+ 	),
+ 
+-	TP_printk("bytes %d caller %pS",
++	TP_printk("bytes %zu caller %pS",
+ 		__entry->bytes, (void *)__entry->IP)
+ );
+ 
+ DECLARE_EVENT_CLASS(random__mix_pool_bytes,
+-	TP_PROTO(int bytes, unsigned long IP),
++	TP_PROTO(size_t bytes, unsigned long IP),
+ 
+ 	TP_ARGS(bytes, IP),
+ 
+ 	TP_STRUCT__entry(
+-		__field(	  int,	bytes			)
+-		__field(unsigned long,	IP			)
++		__field(size_t,		bytes	)
++		__field(unsigned long,	IP	)
+ 	),
+ 
+ 	TP_fast_assign(
+@@ -42,24 +42,24 @@ DECLARE_EVENT_CLASS(random__mix_pool_bytes,
+ 		__entry->IP		= IP;
+ 	),
+ 
+-	TP_printk("input pool: bytes %d caller %pS",
++	TP_printk("input pool: bytes %zu caller %pS",
+ 		  __entry->bytes, (void *)__entry->IP)
+ );
+ 
+ DEFINE_EVENT(random__mix_pool_bytes, mix_pool_bytes,
+-	TP_PROTO(int bytes, unsigned long IP),
++	TP_PROTO(size_t bytes, unsigned long IP),
+ 
+ 	TP_ARGS(bytes, IP)
+ );
+ 
+ TRACE_EVENT(credit_entropy_bits,
+-	TP_PROTO(int bits, int entropy_count, unsigned long IP),
++	TP_PROTO(size_t bits, size_t entropy_count, unsigned long IP),
+ 
+ 	TP_ARGS(bits, entropy_count, IP),
+ 
+ 	TP_STRUCT__entry(
+-		__field(	  int,	bits			)
+-		__field(	  int,	entropy_count		)
++		__field(size_t,		bits			)
++		__field(size_t,		entropy_count		)
+ 		__field(unsigned long,	IP			)
+ 	),
+ 
+@@ -69,34 +69,34 @@ TRACE_EVENT(credit_entropy_bits,
+ 		__entry->IP		= IP;
+ 	),
+ 
+-	TP_printk("input pool: bits %d entropy_count %d caller %pS",
++	TP_printk("input pool: bits %zu entropy_count %zu caller %pS",
+ 		  __entry->bits, __entry->entropy_count, (void *)__entry->IP)
+ );
+ 
+ TRACE_EVENT(add_input_randomness,
+-	TP_PROTO(int input_bits),
++	TP_PROTO(size_t input_bits),
+ 
+ 	TP_ARGS(input_bits),
+ 
+ 	TP_STRUCT__entry(
+-		__field(	  int,	input_bits		)
++		__field(size_t,	input_bits		)
+ 	),
+ 
+ 	TP_fast_assign(
+ 		__entry->input_bits	= input_bits;
+ 	),
+ 
+-	TP_printk("input_pool_bits %d", __entry->input_bits)
++	TP_printk("input_pool_bits %zu", __entry->input_bits)
+ );
+ 
+ TRACE_EVENT(add_disk_randomness,
+-	TP_PROTO(dev_t dev, int input_bits),
++	TP_PROTO(dev_t dev, size_t input_bits),
+ 
+ 	TP_ARGS(dev, input_bits),
+ 
+ 	TP_STRUCT__entry(
+-		__field(	dev_t,	dev			)
+-		__field(	  int,	input_bits		)
++		__field(dev_t,		dev			)
++		__field(size_t,		input_bits		)
+ 	),
+ 
+ 	TP_fast_assign(
+@@ -104,17 +104,17 @@ TRACE_EVENT(add_disk_randomness,
+ 		__entry->input_bits	= input_bits;
+ 	),
+ 
+-	TP_printk("dev %d,%d input_pool_bits %d", MAJOR(__entry->dev),
++	TP_printk("dev %d,%d input_pool_bits %zu", MAJOR(__entry->dev),
+ 		  MINOR(__entry->dev), __entry->input_bits)
+ );
+ 
+ DECLARE_EVENT_CLASS(random__get_random_bytes,
+-	TP_PROTO(int nbytes, unsigned long IP),
++	TP_PROTO(size_t nbytes, unsigned long IP),
+ 
+ 	TP_ARGS(nbytes, IP),
+ 
+ 	TP_STRUCT__entry(
+-		__field(	  int,	nbytes			)
++		__field(size_t,		nbytes			)
+ 		__field(unsigned long,	IP			)
+ 	),
+ 
+@@ -123,29 +123,29 @@ DECLARE_EVENT_CLASS(random__get_random_bytes,
+ 		__entry->IP		= IP;
+ 	),
+ 
+-	TP_printk("nbytes %d caller %pS", __entry->nbytes, (void *)__entry->IP)
++	TP_printk("nbytes %zu caller %pS", __entry->nbytes, (void *)__entry->IP)
+ );
+ 
+ DEFINE_EVENT(random__get_random_bytes, get_random_bytes,
+-	TP_PROTO(int nbytes, unsigned long IP),
++	TP_PROTO(size_t nbytes, unsigned long IP),
+ 
+ 	TP_ARGS(nbytes, IP)
+ );
+ 
+ DEFINE_EVENT(random__get_random_bytes, get_random_bytes_arch,
+-	TP_PROTO(int nbytes, unsigned long IP),
++	TP_PROTO(size_t nbytes, unsigned long IP),
+ 
+ 	TP_ARGS(nbytes, IP)
+ );
+ 
+ DECLARE_EVENT_CLASS(random__extract_entropy,
+-	TP_PROTO(int nbytes, int entropy_count),
++	TP_PROTO(size_t nbytes, size_t entropy_count),
+ 
+ 	TP_ARGS(nbytes, entropy_count),
+ 
+ 	TP_STRUCT__entry(
+-		__field(	  int,	nbytes			)
+-		__field(	  int,	entropy_count		)
++		__field(  size_t,	nbytes			)
++		__field(  size_t,	entropy_count		)
+ 	),
+ 
+ 	TP_fast_assign(
+@@ -153,37 +153,34 @@ DECLARE_EVENT_CLASS(random__extract_entropy,
+ 		__entry->entropy_count	= entropy_count;
+ 	),
+ 
+-	TP_printk("input pool: nbytes %d entropy_count %d",
++	TP_printk("input pool: nbytes %zu entropy_count %zu",
+ 		  __entry->nbytes, __entry->entropy_count)
+ );
+ 
+ 
+ DEFINE_EVENT(random__extract_entropy, extract_entropy,
+-	TP_PROTO(int nbytes, int entropy_count),
++	TP_PROTO(size_t nbytes, size_t entropy_count),
+ 
+ 	TP_ARGS(nbytes, entropy_count)
+ );
+ 
+ TRACE_EVENT(urandom_read,
+-	TP_PROTO(int got_bits, int pool_left, int input_left),
++	TP_PROTO(size_t nbytes, size_t entropy_count),
+ 
+-	TP_ARGS(got_bits, pool_left, input_left),
++	TP_ARGS(nbytes, entropy_count),
+ 
+ 	TP_STRUCT__entry(
+-		__field(	  int,	got_bits		)
+-		__field(	  int,	pool_left		)
+-		__field(	  int,	input_left		)
++		__field( size_t,	nbytes		)
++		__field( size_t,	entropy_count	)
+ 	),
+ 
+ 	TP_fast_assign(
+-		__entry->got_bits	= got_bits;
+-		__entry->pool_left	= pool_left;
+-		__entry->input_left	= input_left;
++		__entry->nbytes		= nbytes;
++		__entry->entropy_count	= entropy_count;
+ 	),
+ 
+-	TP_printk("got_bits %d nonblocking_pool_entropy_left %d "
+-		  "input_entropy_left %d", __entry->got_bits,
+-		  __entry->pool_left, __entry->input_left)
++	TP_printk("reading: nbytes %zu entropy_count %zu",
++		  __entry->nbytes, __entry->entropy_count)
+ );
+ 
+ TRACE_EVENT(prandom_u32,
+-- 
+2.35.0
+

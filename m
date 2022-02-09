@@ -2,108 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A7104AF53E
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 16:30:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71D104AF542
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 16:31:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235832AbiBIPaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 10:30:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45196 "EHLO
+        id S235845AbiBIPbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 10:31:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235824AbiBIPaK (ORCPT
+        with ESMTP id S235830AbiBIPbA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 10:30:10 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02140C0613CA
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 07:30:14 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nHov5-0003JE-JH; Wed, 09 Feb 2022 16:30:11 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nHov5-00FX3x-4S; Wed, 09 Feb 2022 16:30:10 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nHov3-00DMcu-Px; Wed, 09 Feb 2022 16:30:09 +0100
-Date:   Wed, 9 Feb 2022 16:30:08 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Fabio Estevam <festevam@gmail.com>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        linux-serial@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-kernel@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Harald Seiler <hws@denx.de>, Jiri Slaby <jirislaby@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] tty: serial: imx: Add fast path when rs485 delays are 0
-Message-ID: <20220209153008.6qmt2t33ru7lhi6x@pengutronix.de>
-References: <20220119145204.238767-1-hws@denx.de>
- <20220119151145.zft47rzebnabiej2@pengutronix.de>
- <0df5d9ea2081f5d798f80297efb973f542dae183.camel@denx.de>
- <20220119162122.jmnz2hxid76p4hli@pengutronix.de>
- <5cab27cab5a39ef5e19992bc54e57c3f6106dafe.camel@denx.de>
- <YgJADKxWfOZroS35@kroah.com>
- <20220208111203.qi6fpo2l6um6znkz@pengutronix.de>
+        Wed, 9 Feb 2022 10:31:00 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3D66EC061355
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 07:31:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644420662;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WPpvyB7McdG+sCGO6qQRcD8vYFMWX9f+Cg4663yTg2s=;
+        b=a8KbDlb4GGIEg9Cjf8Zl80Fpvi0/d8HvroNARdOX76rbAFY9QAEHiwUeqrFpfOJ5OoqQil
+        Hg/mKf1+rXxw7qo3j3C06HtwoW7mg1FRgfwGIJGvADgOnQYJIIeyr02QIAkWW7SjNF21zD
+        K1TqjYHfKaUlYx3uyAMfL1e28iHiOk4=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-296-rfBKSsnbM2iAJtxzjSRhpQ-1; Wed, 09 Feb 2022 10:31:01 -0500
+X-MC-Unique: rfBKSsnbM2iAJtxzjSRhpQ-1
+Received: by mail-wr1-f70.google.com with SMTP id r2-20020adfa142000000b001e176ac1ec3so1253866wrr.3
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 07:31:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=WPpvyB7McdG+sCGO6qQRcD8vYFMWX9f+Cg4663yTg2s=;
+        b=Xq/Z16Fhcg3ImTX72hlyMbJW6sojcYG9orFJNhU42lsj3w2BpejuIZaPQpr8wPIoXR
+         UeuyfJwNE3jZocB8S1l5O9ym22VMWdKi2PfTQOftt8mmMtkrEOh40Lxz5ty7dtxcxFrI
+         oA3JpZ6a1C0d9Sob60drLzRzxxMO3XjmsRMOi1JM9ioo1EZN+hFV+e77ns426RYTPRkW
+         ta5XQfn+zBDRblhputzf+sWceqXbsW6r4XCLVroNcvOmPhVZxCQs/Ihk7F8H5enKOcBC
+         sKXaxzjsXtqzpBWosao5xdiEnEcU7pnIk9B8wCp5jLlnfAiyHT0qWNZlFdLgz8xCidvQ
+         x8+g==
+X-Gm-Message-State: AOAM532T8RB8fo5viv/aSuwgdPOrZTBbaZSZsGaTlX2PnQy8RUTBmMOl
+        /b/D6edHcj/sZHGEeWo2Z5KJgnQbRuEvrQDDokRwfVQIk9bV1sUPBETZpnEubPdq/MGYQ9OsZWP
+        07fLDI7ekQ7tmeyxIrrT9grsW
+X-Received: by 2002:a5d:40ca:: with SMTP id b10mr2557998wrq.6.1644420659910;
+        Wed, 09 Feb 2022 07:30:59 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyUJ460salQYs6rWREOZPwbsIL73KBkIAP9a0luO40gtQzhT1NgjwQDGKwNSlhfORRzFqslOg==
+X-Received: by 2002:a5d:40ca:: with SMTP id b10mr2557983wrq.6.1644420659724;
+        Wed, 09 Feb 2022 07:30:59 -0800 (PST)
+Received: from [192.168.1.102] ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id c8sm6408714wmq.39.2022.02.09.07.30.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Feb 2022 07:30:59 -0800 (PST)
+Message-ID: <3b6fe640-47e5-8765-3a09-8f9f2f0a6329@redhat.com>
+Date:   Wed, 9 Feb 2022 16:30:58 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zhegztmaioghtjqo"
-Content-Disposition: inline
-In-Reply-To: <20220208111203.qi6fpo2l6um6znkz@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 2/7] drm/format-helper: Add drm_fb_{xrgb8888,
+ gray8}_to_mono_reversed()
+Content-Language: en-US
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org
+Cc:     linux-fbdev@vger.kernel.org, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        dri-devel@lists.freedesktop.org,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sam Ravnborg <sam@ravnborg.org>
+References: <20220209090314.2511959-1-javierm@redhat.com>
+ <20220209090314.2511959-3-javierm@redhat.com>
+ <6df9c28d-968d-ff16-988e-8e88e4734e49@suse.de>
+ <f75a1544-5a3e-e49f-7eab-5dd5c72584b9@redhat.com>
+ <d5fc654c-643a-7b20-85f1-54169a3aa889@suse.de>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <d5fc654c-643a-7b20-85f1-54169a3aa889@suse.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2/9/22 16:21, Thomas Zimmermann wrote:
 
---zhegztmaioghtjqo
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+[snip]
 
-Hello Greg,
+>>
+>> It could be taken from this patch-set anyways if someone wants to wire the
+>> needed support for R8.
+> 
+> I think, policy is to not keep unused code around.
+>
 
-On Tue, Feb 08, 2022 at 12:12:03PM +0100, Uwe Kleine-K=F6nig wrote:
-> On Tue, Feb 08, 2022 at 11:03:56AM +0100, Greg Kroah-Hartman wrote:
-> > Uwe, any thoughts about if this patch should be taken or not?
->=20
-> I will take a deeper look later today and tell you my thoughts.
+Ok, I'll drop it then. We can include it again when adding R8 formats.
+ 
+[snip]
 
-It took a bit longer, but after looking again with the driver open in my
-editor I agree that patch is fine.
+>>> If might be faster to allocate both buffers in one step and set the
+>>> pointers into the allocated buffer.
+>>>
+>>
+>> Not sure I got this. Do you mean to have a single buffer with length
+>> linepixels + len_src32 and point src32 and gray8 to the same buffer ?
+> 
+> That's the idea. I don't know the exact overhead for kalloc(), but at 
+> least the in userspace, malloc() in hot code paths is not a good idea. 
+> There's usually some searching for free space involved.
+>
 
-Reviewed-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+Sure, let's do it in one allocation then and I'll add some comments to
+make easier for people to follow the code.
+ 
+> In the long term, we could add a field in struct drm_framebuffer to keep 
+> such buffers around for reuse.
+> 
+>>
+>>>> +
+>>>> +	/*
+>>>> +	 * For damage handling, it is possible that only parts of the source
+>>>> +	 * buffer is copied and this could lead to start and end pixels that
+>>>> +	 * are not aligned to multiple of 8.
+>>>> +	 *
+>>>> +	 * Calculate if the start and end pixels are not aligned and set the
+>>>> +	 * offsets for the reversed mono line conversion function to adjust.
+>>>> +	 */
+>>>> +	start_offset = clip->x1 % 8;
+>>>> +	end_offset = clip->x2 % 8;
+>>>
+>>> end_len, again. If you have 1 single bit set in the final byte, the
+>>> offset is 0, but the length is 1.
+>>>
+>>
+>> Agreed, will change it too.
+> 
+> Feel free to add my
+> 
+> Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
+>
 
-Thanks
-Uwe
+Thanks!
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+Best regards, -- 
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 
---zhegztmaioghtjqo
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmID3f0ACgkQwfwUeK3K
-7AnwFAf/ak9YeP1DkOhL48uqmiyD6N1JIZCpjcPhBVlJEoUgkxH/Qb5ThAb13R4r
-tng7DlvdRKS6WHWiaILv6BmEw1rgOh4oyNaYdAI/8L9n8gC/YGDA03S6WI5MYQBj
-Q5kKUH34OGSvZGLPkKZ4EkSgjFZkkcwo+Ozr+Cr1knn1nJByTlYRTuzigua1Qu+X
-8h6hAeqM0RgBUbynzkmbRFtTU95hADWqDuARQuwHf5sLE6MrewZ0YKRjq0ynS8Ty
-TU0dvraeEI+COPFuP0pxCx3TVcCMIKhKA+zXlZf4IHwjQCi25sa6dMfmalAgnxWP
-OOdSBC8XMiDMdz5gQ7Xxn6Vz+/P8DQ==
-=RMjQ
------END PGP SIGNATURE-----
-
---zhegztmaioghtjqo--

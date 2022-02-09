@@ -2,136 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BFF74AE770
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 04:11:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11E6A4AE88C
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 05:16:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242733AbiBIDES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 22:04:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58474 "EHLO
+        id S236513AbiBIEPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 23:15:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243525AbiBIDC1 (ORCPT
+        with ESMTP id S1346828AbiBIDiy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 22:02:27 -0500
-X-Greylist: delayed 306 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Feb 2022 19:02:22 PST
-Received: from nksmu.kylinos.cn (mailgw.kylinos.cn [123.150.8.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30527C0612B8;
-        Tue,  8 Feb 2022 19:02:19 -0800 (PST)
-X-UUID: 1c6fefd360b84325acd0c6a5b21f4fbf-20220209
-X-CPASD-INFO: a079444d41a24f238cb4d3f7f296489f@qoBxWWFmYpRgUaN-g6l9bViUkmSUX4a
-        GqGxZZmJoZYaVhH5xTWJsXVKBfG5QZWNdYVN_eGpQYl9gZFB5i3-XblBgXoZgUZB3sHJxWWRiZA==
-X-CPASD-FEATURE: 0.0
-X-CLOUD-ID: a079444d41a24f238cb4d3f7f296489f
-X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,EXT:0.0,OB:0.0,URL:-5,T
-        VAL:143.0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:189.0,IP:-2.0,MAL:0.0,ATTNUM:0
-        .0,PHF:-5.0,PHC:-5.0,SPF:4.0,EDMS:-3,IPLABEL:-2.0,FROMTO:0,AD:0,FFOB:0.0,CFOB
-        :0.0,SPC:0.0,SIG:-5,AUF:14,DUF:32487,ACD:189,DCD:291,SL:0,AG:0,CFC:0.22,CFSR:
-        0.104,UAT:0,RAF:2,VERSION:2.3.4
-X-CPASD-ID: 1c6fefd360b84325acd0c6a5b21f4fbf-20220209
-X-CPASD-BLOCK: 1000
-X-CPASD-STAGE: 1, 1
-X-UUID: 1c6fefd360b84325acd0c6a5b21f4fbf-20220209
-X-User: xiehongyu1@kylinos.cn
-Received: from [192.168.123.123] [(111.48.58.12)] by nksmu.kylinos.cn
-        (envelope-from <xiehongyu1@kylinos.cn>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES128-GCM-SHA256 128/128)
-        with ESMTP id 1336843540; Wed, 09 Feb 2022 10:59:31 +0800
-Message-ID: <4f1bd7fb-050b-ddb3-da69-1e6d32a5a7a1@kylinos.cn>
-Date:   Wed, 9 Feb 2022 10:47:04 +0800
+        Tue, 8 Feb 2022 22:38:54 -0500
+Received: from mail-m974.mail.163.com (mail-m974.mail.163.com [123.126.97.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA077C043188;
+        Tue,  8 Feb 2022 19:33:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=P6YRM
+        vZrszN+VySkNSrGHtGd3i/66fEQ9oe+G3JBq3c=; b=PtMAVONpTzf0raGf7V42m
+        jcs9M/IbShvr0zwBAUMYYK5BFl5XvgU3EBZyiNAZVZfYGcwjsZdXrxmCGbY4eLb0
+        n2sMQS2g/zwh+GLHhMVoImLK1LNp/YjFbfxa76WiDiAYYiz6ltr5UTimd6FIuxTS
+        R/Kt+39kz9Gg9KbY/YiCpI=
+Received: from localhost.localdomain (unknown [112.97.82.107])
+        by smtp4 (Coremail) with SMTP id HNxpCgC3pRo4KwNiKHlaBg--.26133S2;
+        Wed, 09 Feb 2022 10:47:24 +0800 (CST)
+From:   Slark Xiao <slark_xiao@163.com>
+To:     bjorn@mork.no, davem@davemloft.net, kuba@kernel.org
+Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Slark Xiao <slark_xiao@163.com>
+Subject: [PATCH net] net: usb: qmi_wwan: Add support for Dell DW5829e
+Date:   Wed,  9 Feb 2022 10:47:17 +0800
+Message-Id: <20220209024717.8564-1-slark_xiao@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH -next] xhci: fix two places when dealing with return value
- of function xhci_check_args
-Content-Language: en-US
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Cc:     Hongyu Xie <xy521521@gmail.com>, mathias.nyman@intel.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        125707942@qq.com, stable@vger.kernel.org
-References: <20220126094126.923798-1-xy521521@gmail.com>
- <YfEZFtf9K8pFC8Mw@kroah.com>
- <c7f6a8bb-76b6-cd2d-7551-b599a8276f5c@kylinos.cn>
- <YfEnbRW3oU0ouGqH@kroah.com>
- <e86972d3-e4a0-ad81-45ea-21137e3bfcb6@kylinos.cn>
- <7af5b318-b1ac-0c74-1782-04ba50a3b5fa@linux.intel.com>
- <ce40f4cd-a110-80b1-f766-e94dd8cedc7e@kylinos.cn>
- <6da59964-ce0e-c202-8a9c-a753a1908f3e@linux.intel.com>
-From:   =?UTF-8?B?6LCi5rOT5a6H?= <xiehongyu1@kylinos.cn>
-In-Reply-To: <6da59964-ce0e-c202-8a9c-a753a1908f3e@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        NICE_REPLY_A,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR
-        autolearn=no autolearn_force=no version=3.4.6
+X-CM-TRANSID: HNxpCgC3pRo4KwNiKHlaBg--.26133S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxur4UJrW5XrykCr47JF4DXFb_yoW5Xryfpr
+        1UAr17AFyUJF12vFykAF1xZryF9an7Wr9rtasF9an7WFWIvrs7t3yDtF9rZF1Iga1fK3WD
+        tFs8Kr47Kwn5GFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRpHqsUUUUU=
+X-Originating-IP: [112.97.82.107]
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiRwGhZFc7VzxTYQABs3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mathias,
+Dell DW5829e same as DW5821e except the CAT level.
+DW5821e supports CAT16 but DW5829e supports CAT9.
+Also, DW5829e includes normal and eSIM type.
+Please see below test evidence:
 
-On 2022/1/28 17:48, Mathias Nyman wrote:
-> Hi
->
-> On 28.1.2022 5.48, 谢泓宇 wrote:
->> Hi Mathias,
->>
->>> xhci_urb_enqueue() shouldn't be called for roothub urbs, but if it is then we
->>> should continue to return -EINVAL
->> xhci_urb_enqueue() won't be called for roothub urbs, only for none roothub urbs(see usb_hcd_submit_urb()).>
->> So xhci_urb_enqueue() will not get 0 from xhci_check_args().
->>
->> Still return -EINVAL if xhci_check_args() returns 0 in xhci_urb_enqueue()?
->>
-> Yes. That is what it used to return.
-> This is more about code maintaining practice than this specific patch.
->
-> Only make the necessary change to fix a bug, especially if the patch is going
-> to stable kernels.
-> The change to return success ("0") instead of -EINVAL in xhci_urb_enqueue() for
-> roothub URBs is irrelevant in fixing your issue.
->
-> Debugging future issues is a lot harder when there are small undocumented
-> unrelated functional changes scattered around bugfixing patches.
->
-> Other reason is that even if you can be almost certain xhci_urb_enqueue() won't
-> be called for roothub urbs for this kernel version, it's possible some old stable
-> kernel code looks very different, and this change can break that stable version.
->
-> Seemingly odd checks in code can indicate the old original code was flawed, and
-> quickly worked around by adding the odd check.
-> That kernel version might still depend on this odd check even if newer versions
-> are fixed properly.
->
->>> xhci_check_args() should be rewritten later, but first we want a targeted fix
->>> that can go to stable.
->>>
->>> Your original patch would be ok after following modification:
->>> if (ret <= 0)
->>>      return ret ? ret : -EINVAL;
->> I have two questions:
->>
->>      1) Why return -EINVAL for roothub urbs?
-> - For all reasons stated above
-> - Because it used to, and changing it doesn't fix anything
-> - Because urbs sent to xhci_urb_enqueue() should have a valid urb->dev->parent,
->    if they don't have it then they are INVALID
->
->>      2) Should I change all the return statements about xhci_check_args() in drivers/usb/host/xhci.c?
->>
->>      There are 6 of them.
-> Only make sure your patch doesn't change the functionality unnecessarily.
-> There are two places where we return -EINVAL if xhci_check_args() returns 0:
-> xhci_urb_enqueue() and xhci_check_streams_endpoint()
-> Keep that functionality.
->
-> Thanks
-> Mathias
+T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  5 Spd=5000 MxCh= 0
+D:  Ver= 3.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
+P:  Vendor=413c ProdID=81e6 Rev=03.18
+S:  Manufacturer=Dell Inc.
+S:  Product=DW5829e Snapdragon X20 LTE
+S:  SerialNumber=0123456789ABCDEF
+C:  #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=896mA
+I:  If#=0x0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
+I:  If#=0x1 Alt= 0 #EPs= 1 Cls=03(HID  ) Sub=00 Prot=00 Driver=usbhid
+I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
 
-I'll fix these in v2.
+T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  7 Spd=5000 MxCh= 0
+D:  Ver= 3.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
+P:  Vendor=413c ProdID=81e4 Rev=03.18
+S:  Manufacturer=Dell Inc.
+S:  Product=DW5829e-eSIM Snapdragon X20 LTE
+S:  SerialNumber=0123456789ABCDEF
+C:  #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=896mA
+I:  If#=0x0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
+I:  If#=0x1 Alt= 0 #EPs= 1 Cls=03(HID  ) Sub=00 Prot=00 Driver=usbhid
+I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
 
-Thanks
+Signed-off-by: Slark Xiao <slark_xiao@163.com>
+---
+ drivers/net/usb/qmi_wwan.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Hongyu Xie
+diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+index 37e5f3495362..3353e761016d 100644
+--- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -1400,6 +1400,8 @@ static const struct usb_device_id products[] = {
+ 	{QMI_FIXED_INTF(0x413c, 0x81d7, 0)},	/* Dell Wireless 5821e */
+ 	{QMI_FIXED_INTF(0x413c, 0x81d7, 1)},	/* Dell Wireless 5821e preproduction config */
+ 	{QMI_FIXED_INTF(0x413c, 0x81e0, 0)},	/* Dell Wireless 5821e with eSIM support*/
++	{QMI_FIXED_INTF(0x413c, 0x81e4, 0)},	/* Dell Wireless 5829e with eSIM support*/
++	{QMI_FIXED_INTF(0x413c, 0x81e6, 0)},	/* Dell Wireless 5829e */
+ 	{QMI_FIXED_INTF(0x03f0, 0x4e1d, 8)},	/* HP lt4111 LTE/EV-DO/HSPA+ Gobi 4G Module */
+ 	{QMI_FIXED_INTF(0x03f0, 0x9d1d, 1)},	/* HP lt4120 Snapdragon X5 LTE */
+ 	{QMI_QUIRK_SET_DTR(0x22de, 0x9051, 2)}, /* Hucom Wireless HM-211S/K */
+-- 
+2.25.1
 

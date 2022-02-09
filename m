@@ -2,183 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C598F4B0007
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 23:20:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CFB84B000A
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 23:21:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235304AbiBIWTQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 17:19:16 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:45016 "EHLO
+        id S235332AbiBIWVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 17:21:36 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:49622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235265AbiBIWTM (ORCPT
+        with ESMTP id S233287AbiBIWVe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 17:19:12 -0500
-Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D64C102FD8
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 14:19:15 -0800 (PST)
-Received: from in02.mta.xmission.com ([166.70.13.52]:43354)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nHvIu-000X1v-Ps; Wed, 09 Feb 2022 15:19:12 -0700
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:38336 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nHvIt-00176x-He; Wed, 09 Feb 2022 15:19:12 -0700
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Alexey Gladkov <legion@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jann Horn <jannh@google.com>,
-        Al Viro <viro@zeniv.linux.org.uk>, linux-kernel@vger.kernel.org
-References: <20220208163912.1084752-1-longman@redhat.com>
-Date:   Wed, 09 Feb 2022 16:18:46 -0600
-In-Reply-To: <20220208163912.1084752-1-longman@redhat.com> (Waiman Long's
-        message of "Tue, 8 Feb 2022 11:39:12 -0500")
-Message-ID: <87h797adkp.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Wed, 9 Feb 2022 17:21:34 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 920A1C1DC2F0
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 14:21:36 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id k13so6871325lfg.9
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 14:21:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=LayMCSz5Gx7VceGFXhPhnBsyoYh4zMiCbc/qJQSg/Jg=;
+        b=Ue2ZrcbJXB2MNgRzyNVYEWDCsluYxh4tIthDcubvTxc/NbTOozFDUNwCv8WrmXN0H7
+         2I4TmxU5x58/ut/Ey3o0DIyFqXnjKrmdy4e8zmJdBMN1iMzRFpJov5VWwLVgRM/lD80V
+         RTiwQ9sAPJlb0gf6e4VoUUMBgZu8vuy4KugCr2o0ly+DfIsgzt7KICt7YVq+X3PhLcXE
+         R2w12W3BTgnpe1DP7cHDbHJZhCYb+fJ+JUT75fzvzOPWWN+trvk8ui3077dXz4kxYkuz
+         Lr8eUFxo5W33BTC7vpyAH0jFwTu7GBTvjd7hp0OH5ue1Kz5TDuHLhFhyTkh55YxRb2tO
+         mXhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=LayMCSz5Gx7VceGFXhPhnBsyoYh4zMiCbc/qJQSg/Jg=;
+        b=HrsoXFvA/4pj2j+4Pw1FDjonUTGv8g4+T0SfSbm+7AIHZQATBgZk3eansDBWyvB/SV
+         OZCmYynix35NkmnDLP6wS6JS6wKdVNkDoViCYSVRCjVPLJWzll3mH4QcFfvDn+nsGVkD
+         w7YhUdiscRjtaMISq0SPv15P6v5l4U/u5kXXEot4AbQWbfi2Lr2O4NS5/YNerNiRGGJa
+         qURgtlVu1E0kPRYc7JFo9v0NOcWghwDlfEOVZqBU5NR5fR+0XftAJrZklbGs7AG2yn5z
+         BFfBDb7t+fxcf9a9UEc2gTcWIm+GEWIvoGKyg9ZG33QeYVehFD6gSGXC5c7rUobG6c+c
+         BGGA==
+X-Gm-Message-State: AOAM530GZsy2ex5viUPr5uw5arxlQOGPbcBSGufYytVnVbufOb2VGFHu
+        DynFzuAz7/k/eHhsS3k1o2Bb0g==
+X-Google-Smtp-Source: ABdhPJxM3HjEYcFzlVLmHZsaTG5gkw9OHHv/cXGfTe/KlLrIjF/PfMPJkFWHe4epOwb7VREgqFyGIA==
+X-Received: by 2002:a05:6512:3d02:: with SMTP id d2mr3248630lfv.138.1644445294959;
+        Wed, 09 Feb 2022 14:21:34 -0800 (PST)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id r4sm2540443lfi.115.2022.02.09.14.21.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Feb 2022 14:21:34 -0800 (PST)
+Message-ID: <cb8dd875-5690-7f8a-c55b-04a5c250feb0@linaro.org>
+Date:   Thu, 10 Feb 2022 01:21:33 +0300
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1nHvIt-00176x-He;;;mid=<87h797adkp.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX18LSrxsvSPswVlXbrhxSryV2nXTnOmUDHk=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH] drm/msm: replace DEFINE_SIMPLE_ATTRIBUTE with
+ DEFINE_DEBUGFS_ATTRIBUTE
+Content-Language: en-GB
+To:     cgel.zte@gmail.com, robdclark@gmail.com
+Cc:     sean@poorly.run, quic_abhinavk@quicinc.com, airlied@linux.ie,
+        daniel@ffwll.ch, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Changcheng Deng <deng.changcheng@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+References: <20211221144234.480618-1-deng.changcheng@zte.com.cn>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20211221144234.480618-1-deng.changcheng@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa05 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: *;Waiman Long <longman@redhat.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 639 ms - load_scoreonly_sql: 0.40 (0.1%),
-        signal_user_changed: 17 (2.6%), b_tie_ro: 13 (2.0%), parse: 2.0 (0.3%),
-         extract_message_metadata: 27 (4.2%), get_uri_detail_list: 5 (0.8%),
-        tests_pri_-1000: 28 (4.4%), tests_pri_-950: 2.2 (0.3%),
-        tests_pri_-900: 1.78 (0.3%), tests_pri_-90: 111 (17.4%), check_bayes:
-        108 (16.9%), b_tokenize: 18 (2.8%), b_tok_get_all: 14 (2.2%),
-        b_comp_prob: 6 (0.9%), b_tok_touch_all: 64 (10.0%), b_finish: 1.37
-        (0.2%), tests_pri_0: 427 (66.8%), check_dkim_signature: 1.08 (0.2%),
-        check_dkim_adsp: 4.2 (0.7%), poll_dns_idle: 1.11 (0.2%), tests_pri_10:
-        2.3 (0.4%), tests_pri_500: 14 (2.2%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH] copy_process(): Move fd_install() out of
- sighand->siglock critical section
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Waiman Long <longman@redhat.com> writes:
+On 21/12/2021 17:42, cgel.zte@gmail.com wrote:
+> From: Changcheng Deng <deng.changcheng@zte.com.cn>
+> 
+> Fix the following coccicheck warning:
+> ./drivers/gpu/drm/msm/msm_debugfs.c: 132: 0-23: WARNING: shrink_fops
+> should be defined with DEFINE_DEBUGFS_ATTRIBUTE
+> 
+> Use DEFINE_DEBUGFS_ATTRIBUTE rather than DEFINE_SIMPLE_ATTRIBUTE for
+> debugfs files.
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
 
-> I was made aware of the following lockdep splat:
->
-> [ 2516.308763] =====================================================
-> [ 2516.309085] WARNING: HARDIRQ-safe -> HARDIRQ-unsafe lock order detected
-> [ 2516.309433] 5.14.0-51.el9.aarch64+debug #1 Not tainted
-> [ 2516.309703] -----------------------------------------------------
-> [ 2516.310149] stress-ng/153663 [HC0[0]:SC0[0]:HE0:SE1] is trying to acquire:
-> [ 2516.310512] ffff0000e422b198 (&newf->file_lock){+.+.}-{2:2}, at: fd_install+0x368/0x4f0
-> [ 2516.310944]
->                and this task is already holding:
-> [ 2516.311248] ffff0000c08140d8 (&sighand->siglock){-.-.}-{2:2}, at: copy_process+0x1e2c/0x3e80
-> [ 2516.311804] which would create a new lock dependency:
-> [ 2516.312066]  (&sighand->siglock){-.-.}-{2:2} -> (&newf->file_lock){+.+.}-{2:2}
-> [ 2516.312446]
->                but this new dependency connects a HARDIRQ-irq-safe lock:
-> [ 2516.312983]  (&sighand->siglock){-.-.}-{2:2}
->    :
-> [ 2516.330700]  Possible interrupt unsafe locking scenario:
->
-> [ 2516.331075]        CPU0                    CPU1
-> [ 2516.331328]        ----                    ----
-> [ 2516.331580]   lock(&newf->file_lock);
-> [ 2516.331790]                                local_irq_disable();
-> [ 2516.332231]                                lock(&sighand->siglock);
-> [ 2516.332579]                                lock(&newf->file_lock);
-> [ 2516.332922]   <Interrupt>
-> [ 2516.333069]     lock(&sighand->siglock);
-> [ 2516.333291]
->                 *** DEADLOCK ***
-> [ 2516.389845]
->                stack backtrace:
-> [ 2516.390101] CPU: 3 PID: 153663 Comm: stress-ng Kdump: loaded Not tainted 5.14.0-51.el9.aarch64+debug #1
-> [ 2516.390756] Hardware name: QEMU KVM Virtual Machine, BIOS 0.0.0 02/06/2015
-> [ 2516.391155] Call trace:
-> [ 2516.391302]  dump_backtrace+0x0/0x3e0
-> [ 2516.391518]  show_stack+0x24/0x30
-> [ 2516.391717]  dump_stack_lvl+0x9c/0xd8
-> [ 2516.391938]  dump_stack+0x1c/0x38
-> [ 2516.392247]  print_bad_irq_dependency+0x620/0x710
-> [ 2516.392525]  check_irq_usage+0x4fc/0x86c
-> [ 2516.392756]  check_prev_add+0x180/0x1d90
-> [ 2516.392988]  validate_chain+0x8e0/0xee0
-> [ 2516.393215]  __lock_acquire+0x97c/0x1e40
-> [ 2516.393449]  lock_acquire.part.0+0x240/0x570
-> [ 2516.393814]  lock_acquire+0x90/0xb4
-> [ 2516.394021]  _raw_spin_lock+0xe8/0x154
-> [ 2516.394244]  fd_install+0x368/0x4f0
-> [ 2516.394451]  copy_process+0x1f5c/0x3e80
-> [ 2516.394678]  kernel_clone+0x134/0x660
-> [ 2516.394895]  __do_sys_clone3+0x130/0x1f4
-> [ 2516.395128]  __arm64_sys_clone3+0x5c/0x7c
-> [ 2516.395478]  invoke_syscall.constprop.0+0x78/0x1f0
-> [ 2516.395762]  el0_svc_common.constprop.0+0x22c/0x2c4
-> [ 2516.396050]  do_el0_svc+0xb0/0x10c
-> [ 2516.396252]  el0_svc+0x24/0x34
-> [ 2516.396436]  el0t_64_sync_handler+0xa4/0x12c
-> [ 2516.396688]  el0t_64_sync+0x198/0x19c
-> [ 2517.491197] NET: Registered PF_ATMPVC protocol family
-> [ 2517.491524] NET: Registered PF_ATMSVC protocol family
-> [ 2591.991877] sched: RT throttling activated
->
-> One way to solve this problem is to move the fd_install() call out of
-> the sighand->siglock critical section.
->
-> Before commit 6fd2fe494b17 ("copy_process(): don't use ksys_close()
-> on cleanups"), the pidfd installation was done without holding both
-> the task_list lock and the sighand->siglock. Obviously, holding these
-> two locks are not really needed to protect the fd_install() call.
-> So move the fd_install() call down to after the releases of both
-> locks.
->
-> Fixes: 6fd2fe494b17 ("copy_process(): don't use ksys_close() on cleanups")
-> Signed-off-by: Waiman Long <longman@redhat.com>
-
-The fd_install can not be moved earlier and it does need to be moved
-outside the locks.
-
-Reviewed-by: "Eric W. Biederman" <ebiederm@xmission.com>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
 > ---
->  kernel/fork.c | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
->
-> diff --git a/kernel/fork.c b/kernel/fork.c
-> index d75a528f7b21..007af7fb47c7 100644
-> --- a/kernel/fork.c
-> +++ b/kernel/fork.c
-> @@ -2323,10 +2323,6 @@ static __latent_entropy struct task_struct *copy_process(
->  		goto bad_fork_cancel_cgroup;
->  	}
->  
-> -	/* past the last point of failure */
-> -	if (pidfile)
-> -		fd_install(pidfd, pidfile);
-> -
->  	init_task_pid_links(p);
->  	if (likely(p->pid)) {
->  		ptrace_init_task(p, (clone_flags & CLONE_PTRACE) || trace);
-> @@ -2375,6 +2371,9 @@ static __latent_entropy struct task_struct *copy_process(
->  	syscall_tracepoint_update(p);
->  	write_unlock_irq(&tasklist_lock);
->  
-> +	if (pidfile)
-> +		fd_install(pidfd, pidfile);
-> +
->  	proc_fork_connector(p);
->  	sched_post_fork(p, args);
->  	cgroup_post_fork(p, args);
+>   drivers/gpu/drm/msm/msm_debugfs.c | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/msm_debugfs.c b/drivers/gpu/drm/msm/msm_debugfs.c
+> index 956b1efc3721..91fb0c83b600 100644
+> --- a/drivers/gpu/drm/msm/msm_debugfs.c
+> +++ b/drivers/gpu/drm/msm/msm_debugfs.c
+> @@ -129,9 +129,9 @@ shrink_set(void *data, u64 val)
+>   	return 0;
+>   }
+>   
+> -DEFINE_SIMPLE_ATTRIBUTE(shrink_fops,
+> -			shrink_get, shrink_set,
+> -			"0x%08llx\n");
+> +DEFINE_DEBUGFS_ATTRIBUTE(shrink_fops,
+> +			 shrink_get, shrink_set,
+> +			 "0x%08llx\n");
+>   
+>   
+>   static int msm_gem_show(struct seq_file *m, void *arg)
+
+
+-- 
+With best wishes
+Dmitry

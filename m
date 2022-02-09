@@ -2,213 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4753A4AEB72
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 08:50:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09CE44AEB6F
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 08:50:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239451AbiBIHtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 02:49:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44060 "EHLO
+        id S239520AbiBIHtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 02:49:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230479AbiBIHtV (ORCPT
+        with ESMTP id S239670AbiBIHtm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 02:49:21 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B92C05CB82;
-        Tue,  8 Feb 2022 23:49:24 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id s7so3391123edd.3;
-        Tue, 08 Feb 2022 23:49:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=LUzGldKtZC3jOl6Fq1nfXnQKprYL3pMs6oURDAZ0EmE=;
-        b=KOvrX9K5oGQAb0XaO6VlNj0WKjC9bavJrqO6YBN2wMeYSLTNMMq4OUNbxxQtCKhHDd
-         iu25luITlcqZYE2ZMl8jsIxUQcGUjf1t8MvTEu7cO0V8NYRhxcGzsEpD1e6wWB6KCcEH
-         0rpvH33A61Wk0zcJSRuAlliDXLG6zwTrSJx00FL4JwfzkkJ/qHVrYtTj2wAsdgoV7TMB
-         hwCCfDzPd1GoWbg0oaynvhMWtw4g/aAxwnqQBwBsnpb/TEI5Xq9aU0rd7fKr1uiirDCK
-         jCmdSG28ZM5umxg0NiSDA5adQqe+DSKSQyEyk5V5cf7WFwgJa3VnWxM/pbluedefgbiC
-         W5bA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=LUzGldKtZC3jOl6Fq1nfXnQKprYL3pMs6oURDAZ0EmE=;
-        b=J0bGm3fy/VYmJmJkGCQkJw7L0RWdN1ILbL+ckl8ITbxNQzHYD7V026yhSyuE2pMyhx
-         YaJE+lXoiWgCGE80rohhOVnYlD5yqJ9htRJsOhqzk3S147IsU6Gubps6fMprY4w9C1X3
-         kAOuuHy3NEifsdK9xj/N/COA7JIBez/Yn/BIVSUn0A46EkoNfDjOTwJ80l2HqGUCwmTF
-         dUr5poTBICneOCtVIyTqpnh5RLDQpBZpw2pQ7Bc+no8VzsfkAak/oQPyGNqP/D3pMgIX
-         bsRol9mMN1afjFYSxEF22C+MTKyLmQPQTjQHWcoA3zTvtmWZRpTui1W6k8Tz4zFJIerD
-         gbdA==
-X-Gm-Message-State: AOAM533ZhWdb+M6NmHMLjgi2v70qkkr91M45GcqAfNcAt95eRdtTxXZ8
-        XkOaCrVb23w59BLzw73LAx4=
-X-Google-Smtp-Source: ABdhPJy7j/jOKxsaAV2/AtzcWda7tM3HPoh6bV/FquZcserdfo9YfUiMeSpCU161wWXwVjfQXLLUEA==
-X-Received: by 2002:a05:6402:51cd:: with SMTP id r13mr1079014edd.381.1644392962839;
-        Tue, 08 Feb 2022 23:49:22 -0800 (PST)
-Received: from dumbo ([185.220.101.84])
-        by smtp.gmail.com with ESMTPSA id l1sm5690964ejb.81.2022.02.08.23.49.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 23:49:22 -0800 (PST)
-Sender: Domenico Andreoli <domenico.andreoli.it@gmail.com>
-Received: from cavok by dumbo with local (Exim 4.94.2)
-        (envelope-from <cavok@dumbo>)
-        id 1nHhj6-0002av-MX; Wed, 09 Feb 2022 08:49:20 +0100
-Date:   Wed, 9 Feb 2022 08:49:20 +0100
-From:   Domenico Andreoli <domenico.andreoli@linux.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Tong Zhang <ztong0001@gmail.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        David Airlie <airlied@linux.ie>,
-        Andrew Morton <akpm@linux-foundation.org>, amir73il@gmail.com,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>, bcrl@kvack.org,
-        benh@kernel.crashing.org, clemens@ladisch.de, crope@iki.fi,
-        dgilbert@interlog.com, Greg KH <gregkh@linuxfoundation.org>,
-        jack@suse.cz, jani.nikula@intel.com, jani.nikula@linux.intel.com,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>, jlbec@evilplan.org,
-        john.ogness@linutronix.de, joonas.lahtinen@linux.intel.com,
-        Joseph Qi <joseph.qi@linux.alibaba.com>, julia.lawall@inria.fr,
-        Kees Cook <keescook@chromium.org>, kernel@tuxforce.de,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        mark@fasheh.com, "Martin K. Petersen" <martin.petersen@oracle.com>,
-        mm-commits@vger.kernel.org, nixiaoming@huawei.com,
-        penguin-kernel@i-love.sakura.ne.jp, peterz@infradead.org,
-        phil@philpotter.co.uk, pjt@google.com, pmladek@suse.com,
-        rafael@kernel.org, rodrigo.vivi@intel.com, rostedt@goodmis.org,
-        senozhatsky@chromium.org, sre@kernel.org, steve@sk2.org,
-        surenb@google.com, torvalds@linux-foundation.org, tytso@mit.edu,
-        Al Viro <viro@zeniv.linux.org.uk>, wangqing@vivo.com,
-        Iurii Zaikin <yzaikin@google.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        regressions@lists.linux.dev
-Subject: [PATCH v2] Fix regression due to "fs: move binfmt_misc sysctl to its
- own file"
-Message-ID: <YgNyAC8VMeuOD/uQ@dumbo>
-References: <20220121221021.60533b009c357d660791476e@linux-foundation.org>
- <20220122061228.nmuo75sDn%akpm@linux-foundation.org>
- <YgEeQNdgBuHRyEWl@dumbo>
- <YgGTSR628xhRvCjB@bombadil.infradead.org>
- <CAA5qM4BGmrkwatyO_h3F=ErDZ9t5swuttbt6NkQU-1KDGDiD4g@mail.gmail.com>
- <YgKmaggsipzzCGCg@bombadil.infradead.org>
+        Wed, 9 Feb 2022 02:49:42 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33988C05CBA4
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 23:49:42 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nHhjK-0002UW-MQ; Wed, 09 Feb 2022 08:49:34 +0100
+Received: from pengutronix.de (unknown [195.138.59.174])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id A64A62EEE4;
+        Wed,  9 Feb 2022 07:49:33 +0000 (UTC)
+Date:   Wed, 9 Feb 2022 08:49:30 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Srinivas Neeli <srinivas.neeli@xilinx.com>
+Cc:     wg@grandegger.com, davem@davemloft.net, kuba@kernel.org,
+        michal.simek@xilinx.com, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, appana.durga.rao@xilinx.com,
+        sgoud@xilinx.com, git@xilinx.com
+Subject: Re: [PATCH] can: xilinx_can: Add check for NAPI Poll function
+Message-ID: <20220209074930.azbn26glrxukg4sr@pengutronix.de>
+References: <20220208162053.39896-1-srinivas.neeli@xilinx.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zar6w3gq6ud5tbfx"
 Content-Disposition: inline
-In-Reply-To: <YgKmaggsipzzCGCg@bombadil.infradead.org>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_BL_SPAMCOP_NET,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220208162053.39896-1-srinivas.neeli@xilinx.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 3ba442d5331f did not go unnoticed, binfmt-support stopped to
-work on my Debian system since v5.17-rc2 (did not check with -rc1).
 
-The existance of the /proc/sys/fs/binfmt_misc is a precondition for
-attempting to mount the binfmt_misc fs, which in turn triggers the
-autoload of the binfmt_misc module. Without it, no module is loaded
-and no binfmt is available at boot.
+--zar6w3gq6ud5tbfx
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Building as built-in or manually loading the module and mounting the fs
-works fine, it's therefore only a matter of interaction with user-space.
-I could try to improve the Debian systemd configuration but I can't
-say anything about the other distributions.
+On 08.02.2022 21:50:53, Srinivas Neeli wrote:
+> Add check for NAPI poll function to avoid enabling interrupts
+> with out completing the NAPI call.
 
-This patch restores a working system right after boot.
+Thanks for the patch. Does this fix a bug? If so, please add a Fixes:
+tag that lists the patch that introduced that bug.
 
-v2:
-- move creation of fs/binfmt_misc to fs/file_table.c
-- use IS_ENABLED() to conditionally create it
+regards,
+Marc
 
-Fixes: 3ba442d5331f ("fs: move binfmt_misc sysctl to its own file")
-Signed-off-by: Domenico Andreoli <domenico.andreoli@linux.com>
-Cc: Al Viro <viro@zeniv.linux.org.uk>
-Cc: Amir Goldstein <amir73il@gmail.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Antti Palosaari <crope@iki.fi>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc: Benjamin LaHaise <bcrl@kvack.org>
-Cc: Clemens Ladisch <clemens@ladisch.de>
-Cc: David Airlie <airlied@linux.ie>
-Cc: Douglas Gilbert <dgilbert@interlog.com>
-Cc: Eric Biederman <ebiederm@xmission.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Iurii Zaikin <yzaikin@google.com>
-Cc: James E.J. Bottomley <jejb@linux.ibm.com>
-Cc: Jan Kara <jack@suse.cz>
-Cc: Jani Nikula <jani.nikula@intel.com>
-Cc: Jani Nikula <jani.nikula@linux.intel.com>
-Cc: Joel Becker <jlbec@evilplan.org>
-Cc: John Ogness <john.ogness@linutronix.de>
-Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-Cc: Joseph Qi <joseph.qi@linux.alibaba.com>
-Cc: Julia Lawall <julia.lawall@inria.fr>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Lukas Middendorf <kernel@tuxforce.de>
-Cc: Mark Fasheh <mark@fasheh.com>
-Cc: Martin K. Petersen <martin.petersen@oracle.com>
-Cc: Paul Turner <pjt@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Petr Mladek <pmladek@suse.com>
-Cc: Phillip Potter <phil@philpotter.co.uk>
-Cc: Qing Wang <wangqing@vivo.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
-Cc: Sebastian Reichel <sre@kernel.org>
-Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc: Stephen Kitt <steve@sk2.org>
-Cc: Steven Rostedt (VMware) <rostedt@goodmis.org>
-Cc: Suren Baghdasaryan <surenb@google.com>
-Cc: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Cc: "Theodore Ts'o" <tytso@mit.edu>
-Cc: Xiaoming Ni <nixiaoming@huawei.com>
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
----
- fs/binfmt_misc.c |    6 +-----
- fs/file_table.c  |    2 ++
- 2 files changed, 3 insertions(+), 5 deletions(-)
+--zar6w3gq6ud5tbfx
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Index: b/fs/binfmt_misc.c
-===================================================================
---- a/fs/binfmt_misc.c
-+++ b/fs/binfmt_misc.c
-@@ -817,20 +817,16 @@ static struct file_system_type bm_fs_typ
- };
- MODULE_ALIAS_FS("binfmt_misc");
- 
--static struct ctl_table_header *binfmt_misc_header;
--
- static int __init init_misc_binfmt(void)
- {
- 	int err = register_filesystem(&bm_fs_type);
- 	if (!err)
- 		insert_binfmt(&misc_format);
--	binfmt_misc_header = register_sysctl_mount_point("fs/binfmt_misc");
--	return 0;
-+	return err;
- }
- 
- static void __exit exit_misc_binfmt(void)
- {
--	unregister_sysctl_table(binfmt_misc_header);
- 	unregister_binfmt(&misc_format);
- 	unregister_filesystem(&bm_fs_type);
- }
-Index: b/fs/file_table.c
-===================================================================
---- a/fs/file_table.c
-+++ b/fs/file_table.c
-@@ -119,6 +119,8 @@ static struct ctl_table fs_stat_sysctls[
- static int __init init_fs_stat_sysctls(void)
- {
- 	register_sysctl_init("fs", fs_stat_sysctls);
-+	if (IS_ENABLED(CONFIG_BINFMT_MISC))
-+		register_sysctl_mount_point("fs/binfmt_misc");
- 	return 0;
- }
- fs_initcall(init_fs_stat_sysctls);
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmIDcgcACgkQrX5LkNig
+0108nAf/ZasdLkXg7nYB6kH36IDS7QN92H98Mg4W97Tg3x0zfa1RZRKcd8frSZ5t
+LXH59Nu5k675LeQp4jWyzignYO54QGcoz0AJ3UcaKInKN2wKUwvV3zlbILdjLb0O
+nfPujAL5ubH6cTgc/uqZGYORumW2am4vfW9BqJL4zRM20ka0OCkx1Q3o92j7FoZz
+bUBzEXBN6FV0evl+exdqszpOOdPenCE5i9TFCOMxYmJZoTBO7+NBCn/RZ79KCFfw
+ewk77ZyUdf/hLUSEDV8/38KsvxEC0GQnnD4mk0JaIox6ZznSEGzvFdmwmkPo/5N7
+2fopzMxuZHtjSqRl+6bgvjvXa5qaZw==
+=6imx
+-----END PGP SIGNATURE-----
+
+--zar6w3gq6ud5tbfx--

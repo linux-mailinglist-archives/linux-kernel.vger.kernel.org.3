@@ -2,99 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73C004AEFBF
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 12:11:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 978E04AEFE5
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 12:22:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230188AbiBILK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 06:10:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35214 "EHLO
+        id S229991AbiBILWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 06:22:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbiBILKV (ORCPT
+        with ESMTP id S229552AbiBILWA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 06:10:21 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C628E08289D;
-        Wed,  9 Feb 2022 02:05:52 -0800 (PST)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2196Rwg9037918;
-        Wed, 9 Feb 2022 09:08:15 GMT
+        Wed, 9 Feb 2022 06:22:00 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E36E08E457
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 02:16:23 -0800 (PST)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21975wJM007609;
+        Wed, 9 Feb 2022 09:13:23 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
  mime-version : subject : to : cc : references : from : in-reply-to :
  content-type : content-transfer-encoding; s=pp1;
- bh=85BTCYJ8b9wszDml7GMxnTAH4jTYLNfYsR9Ox7jzAdo=;
- b=ZAaq/b+PpU6TXD/xA/7yRI5axFrpZEUUBYFqzXfoGD4vE1cySoxhieyWnLPStO3826qi
- da6cKEPnM/Yi3+RwMSEl9TYu9BxsoZz6nUAJkygadAMP85HbF6X01N9jizzWpTVmCkNC
- 6HKTgFem8auLO9eLH8OIr6M3rHDvhiD9bJpdSItYBb5S/HVxCQIQwwujBIZM1+Tj2r5S
- x2fVoYG7iRkh4bOkNGissf8pYuzm70Cxd++fMr52ltqe0sxsmdbxxMm2gkLZz0cNGUNc
- C1qkBt+2CzLKPcC9OXa8/qwWdSG2RjBUp9kBCXZZvjXfWE/RUEpXsjorJc5d+WPxOTaU oA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e3wmk8q4f-1
+ bh=Wvm5YIaS7ro2Fs/QQiFJb+9ymuruMtS8dhHGq+seETY=;
+ b=qRVuC7b9aJ3jd3dcXaKg30zoW/AbmzqvLvvqMudTwSdx/G2iMqvqA8uB7i2Jja90DXWg
+ DvAwC96urYT4buuE7pq8hdva6KkgIkIZi0YK7A7TK3l8k7f1pBkOR0FsDXBpEQ9AunUf
+ 7daYqTkoA0PWa/SzNrz4Dlnaqu2n9x79aojvg2jt4yoVsCldrQuHguETCanxDvI8pmWR
+ 2oPkVpENF0DNe4Y9uEz2g3j/iVaw5w82185VeTZ/OEuO2REOA38B4hJJLeJb3OpEwj3J
+ 6e0lMdMRtu00kga4FA0Q6YHJchApotYyvrRWaNfS0J89q6q96Id0NS6d7fBoAUhx+4EV oA== 
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e3ny977gf-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Feb 2022 09:08:14 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 2198f80c038886;
-        Wed, 9 Feb 2022 09:08:14 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e3wmk8q3x-1
+        Wed, 09 Feb 2022 09:13:22 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21994u8E025375;
+        Wed, 9 Feb 2022 09:13:22 GMT
+Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
+        by ppma02dal.us.ibm.com with ESMTP id 3e3gq00pq4-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Feb 2022 09:08:14 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21996UWl008785;
-        Wed, 9 Feb 2022 09:08:12 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma04ams.nl.ibm.com with ESMTP id 3e1gv9d1e6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Feb 2022 09:08:12 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2198w0ts33030464
+        Wed, 09 Feb 2022 09:13:22 +0000
+Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
+        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2199DJYx26280242
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 9 Feb 2022 08:58:00 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9AF784C04E;
-        Wed,  9 Feb 2022 09:08:07 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E4F914C050;
-        Wed,  9 Feb 2022 09:08:06 +0000 (GMT)
-Received: from [9.171.87.52] (unknown [9.171.87.52])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  9 Feb 2022 09:08:06 +0000 (GMT)
-Message-ID: <6ea27647-fbbe-3962-03a0-8ca5340fc7fd@linux.ibm.com>
-Date:   Wed, 9 Feb 2022 10:08:06 +0100
+        Wed, 9 Feb 2022 09:13:19 GMT
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 325C2112067;
+        Wed,  9 Feb 2022 09:13:19 +0000 (GMT)
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3E5CC112061;
+        Wed,  9 Feb 2022 09:13:17 +0000 (GMT)
+Received: from [9.65.240.79] (unknown [9.65.240.79])
+        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed,  9 Feb 2022 09:13:17 +0000 (GMT)
+Message-ID: <0d33cac6-99a7-e756-e0e3-37124784e3bb@linux.ibm.com>
+Date:   Wed, 9 Feb 2022 11:13:15 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 05/11] KVM: s390: Add optional storage key checking to
- MEMOP IOCTL
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [RFC PATCH 2/2] pseries: define sysfs interface to expose PKS
+ variables
 Content-Language: en-US
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>
-Cc:     Alexander Gordeev <agordeev@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>
-References: <20220207165930.1608621-1-scgl@linux.ibm.com>
- <20220207165930.1608621-6-scgl@linux.ibm.com>
- <48d1678f-746c-dab6-5ec3-56397277f752@linux.ibm.com>
- <71f07914-d0b2-e98b-22b2-bc05f04df2da@linux.ibm.com>
-From:   Christian Borntraeger <borntraeger@linux.ibm.com>
-In-Reply-To: <71f07914-d0b2-e98b-22b2-bc05f04df2da@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+To:     Nayna Jain <nayna@linux.ibm.com>, linuxppc-dev@lists.ozlabs.org
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Daniel Axtens <dja@axtens.net>,
+        George Wilson <gcwilson@linux.ibm.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Douglas Miller <dougmill@linux.vnet.ibm.com>, gjoyce@ibm.com,
+        linux-kernel@vger.kernel.org, Dov Murik <dovmurik@linux.ibm.com>
+References: <20220122005637.28199-1-nayna@linux.ibm.com>
+ <20220122005637.28199-3-nayna@linux.ibm.com>
+From:   Dov Murik <dovmurik@linux.ibm.com>
+In-Reply-To: <20220122005637.28199-3-nayna@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Uw-uIbq5PPdoLNW5R3hzV1UaOdp6uQw_
-X-Proofpoint-ORIG-GUID: kVS-vx5uYUYvBhv00PO4UAaPlK59RC8q
+X-Proofpoint-GUID: Ryuf2rR1vgn2ZkvPJiIheYi1GKSMlzaC
+X-Proofpoint-ORIG-GUID: Ryuf2rR1vgn2ZkvPJiIheYi1GKSMlzaC
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2022-02-09_04,2022-02-09_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 adultscore=0
- impostorscore=0 malwarescore=0 bulkscore=0 clxscore=1015 mlxscore=0
- priorityscore=1501 phishscore=0 suspectscore=0 lowpriorityscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
+ mlxlogscore=999 phishscore=0 suspectscore=0 malwarescore=0 adultscore=0
+ impostorscore=0 clxscore=1015 priorityscore=1501 spamscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2201110000 definitions=main-2202090060
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
@@ -106,109 +93,160 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Nayna,
 
 
-Am 09.02.22 um 09:49 schrieb Janis Schoetterl-Glausch:
-> On 2/9/22 08:34, Christian Borntraeger wrote:
->> Am 07.02.22 um 17:59 schrieb Janis Schoetterl-Glausch:
->>> User space needs a mechanism to perform key checked accesses when
->>> emulating instructions.
->>>
->>> The key can be passed as an additional argument.
->>> Having an additional argument is flexible, as user space can
->>> pass the guest PSW's key, in order to make an access the same way the
->>> CPU would, or pass another key if necessary.
->>>
->>> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
->>> Acked-by: Janosch Frank <frankja@linux.ibm.com>
->>> Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
->>> ---
->>>    arch/s390/kvm/kvm-s390.c | 49 +++++++++++++++++++++++++++++++---------
->>>    include/uapi/linux/kvm.h |  8 +++++--
->>>    2 files changed, 44 insertions(+), 13 deletions(-)
->>>
->>> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
->>> index cf347e1a4f17..71e61fb3f0d9 100644
->>> --- a/arch/s390/kvm/kvm-s390.c
->>> +++ b/arch/s390/kvm/kvm-s390.c
->>> @@ -32,6 +32,7 @@
->>>    #include <linux/sched/signal.h>
->>>    #include <linux/string.h>
->>>    #include <linux/pgtable.h>
->>> +#include <linux/bitfield.h>
->>>      #include <asm/asm-offsets.h>
->>>    #include <asm/lowcore.h>
->>> @@ -2359,6 +2360,11 @@ static int kvm_s390_handle_pv(struct kvm *kvm, struct kvm_pv_cmd *cmd)
->>>        return r;
->>>    }
->>>    +static bool access_key_invalid(u8 access_key)
->>> +{
->>> +    return access_key > 0xf;
->>> +}
->>> +
->>>    long kvm_arch_vm_ioctl(struct file *filp,
->>>                   unsigned int ioctl, unsigned long arg)
->>>    {
->>> @@ -4687,34 +4693,54 @@ static long kvm_s390_guest_mem_op(struct kvm_vcpu *vcpu,
->>>                      struct kvm_s390_mem_op *mop)
->>>    {
->>>        void __user *uaddr = (void __user *)mop->buf;
->>> +    u8 access_key = 0, ar = 0;
->>>        void *tmpbuf = NULL;
->>> +    bool check_reserved;
->>>        int r = 0;
->>>        const u64 supported_flags = KVM_S390_MEMOP_F_INJECT_EXCEPTION
->>> -                    | KVM_S390_MEMOP_F_CHECK_ONLY;
->>> +                    | KVM_S390_MEMOP_F_CHECK_ONLY
->>> +                    | KVM_S390_MEMOP_F_SKEY_PROTECTION;
->>>    -    if (mop->flags & ~supported_flags || mop->ar >= NUM_ACRS || !mop->size)
->>> +    if (mop->flags & ~supported_flags || !mop->size)
->>>            return -EINVAL;
->>> -
->>>        if (mop->size > MEM_OP_MAX_SIZE)
->>>            return -E2BIG;
->>> -
->>>        if (kvm_s390_pv_cpu_is_protected(vcpu))
->>>            return -EINVAL;
->>> -
->>>        if (!(mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY)) {
->>>            tmpbuf = vmalloc(mop->size);
->>>            if (!tmpbuf)
->>>                return -ENOMEM;
->>>        }
->>> +    ar = mop->ar;
->>> +    mop->ar = 0;
->>
->> Why this assignment to 0?
+On 22/01/2022 2:56, Nayna Jain wrote:
+> PowerVM guest secure boot intend to use Platform Keystore(PKS) for the
+> purpose of storing public keys to verify digital signature.
 > 
-> It's so the check of reserved below works like that, they're all part of the anonymous union.
-
-Ah, I see. This is ugly :-)
-
->>
->>> +    if (ar >= NUM_ACRS)
->>> +        return -EINVAL;
->>> +    if (mop->flags & KVM_S390_MEMOP_F_SKEY_PROTECTION) {
->>> +        access_key = mop->key;
->>> +        mop->key = 0;
->>
->> and this? I think we can leave mop unchanged.
->>
->> In fact, why do we add the ar and access_key variable?
->> This breaks the check from above (if (mop->flags & ~supported_flags || mop->ar >= NUM_ACRS || !mop->size))  into two checks
->> and it will create a memleak for tmpbuf.
+> Define sysfs interface to expose PKS variables to userspace to allow
+> read/write/add/delete operations. Each variable is shown as a read/write
+> attribute file. The size of the file represents the size of the current
+> content of the variable.
 > 
-> I can move the allocation down, goto out or get rid of the reserved check and keep everything as before.
-> First is simpler, but second makes handling that case more explicit and might help in the future.
-
-Maybe add a reserved_02 field in the anon struct and check this for being zero and get rid of the local variables?
-
-> Patch 6 has the same issue in the vm ioctl handler.
->>
->> Simply use mop->key and mop->ar below and get rid of the local variables.
->> The structure has no concurrency and gcc will handle that just as the local variable.
->>
->> Other than that this looks good.
+> create_var and delete_var attribute files are always present which allow
+> users to create/delete variables. These are write only attributes.The
+> design has tried to be compliant with sysfs semantic to represent single
+> value per attribute. Thus, rather than mapping a complete data structure
+> representation to create_var, it only accepts a single formatted string
+> to create an empty variable.
 > 
-> [...]
+> The sysfs interface is designed such as to expose PKS configuration
+> properties, operating system variables and firmware variables.
+> Current version exposes configuration and operating system variables.
+> The support for exposing firmware variables will be added in the future
+> version.
 > 
+> Example of pksvar sysfs interface:
+> 
+> # cd /sys/firmware/pksvar/
+> # ls
+> config  os
+> 
+> # cd config
+> 
+> # ls -ltrh
+> total 0
+> -r--r--r-- 1 root root 64K Jan 21 17:55 version
+> -r--r--r-- 1 root root 64K Jan 21 17:55 used_space
+> -r--r--r-- 1 root root 64K Jan 21 17:55 total_size
+> -r--r--r-- 1 root root 64K Jan 21 17:55 supported_policies
+> -r--r--r-- 1 root root 64K Jan 21 17:55 max_object_size
+> -r--r--r-- 1 root root 64K Jan 21 17:55 max_object_label_size
+> -r--r--r-- 1 root root 64K Jan 21 17:55 flags
+> 
+> # cd os
+> 
+> # ls -ltrh
+> total 0
+> -rw------- 1 root root 104 Jan 21 17:56 var4
+> -rw------- 1 root root 104 Jan 21 17:56 var3
+> -rw------- 1 root root 831 Jan 21 17:56 GLOBAL_PK
+> -rw------- 1 root root 831 Jan 21 17:56 GLOBAL_KEK
+> -rw------- 1 root root  76 Jan 21 17:56 GLOBAL_dbx
+> -rw------- 1 root root 831 Jan 21 17:56 GLOBAL_db
+> --w------- 1 root root 64K Jan 21 17:56 delete_var
+> --w------- 1 root root 64K Jan 21 17:56 create_var
+> 
+> 1. Read variable
+> 
+> # hexdump -C GLOBAL_db
+> 00000000  00 00 00 00 a1 59 c0 a5  e4 94 a7 4a 87 b5 ab 15  |.....Y.....J....|
+> 00000010  5c 2b f0 72 3f 03 00 00  00 00 00 00 23 03 00 00  |\+.r?.......#...|
+> ....
+> 00000330  02 a8 e8 ed 0f 20 60 3f  40 04 7c a8 91 21 37 eb  |..... `?@.|..!7.|
+> 00000340  f3 f1 4e                                          |..N|
+> 00000343
+> 
+> 2. Write variable
+> 
+> cat /tmp/data.bin > <variable_name>
+> 
+> 3. Create variable
+> 
+> # echo "var1" > create_var
+
+It would be easier to understand if the user could create a new variable
+like a regular new file, something like:
+
+# cat /tmp/data.bin > var1
+
+but I understand there are also comma-seperated-policy-strings which
+should go somewhere; not sure how this fits (or if there are other
+examples for similar interfaces in other sysfs parts).
+
+
+
+> # ls -ltrh
+> total 0
+> -rw------- 1 root root 104 Jan 21 17:56 var4
+> -rw------- 1 root root 104 Jan 21 17:56 var3
+> -rw------- 1 root root 831 Jan 21 17:56 GLOBAL_PK
+> -rw------- 1 root root 831 Jan 21 17:56 GLOBAL_KEK
+> -rw------- 1 root root  76 Jan 21 17:56 GLOBAL_dbx
+> -rw------- 1 root root 831 Jan 21 17:56 GLOBAL_db
+> --w------- 1 root root 64K Jan 21 17:56 delete_var
+> --w------- 1 root root 64K Jan 21 17:57 create_var
+> -rw------- 1 root root   0 Jan 21 17:57 var1.tmp
+> 
+> Current design creates a zero size temporary variable. This implies
+> it is not yet persisted to PKS. Only once data is written to newly
+> created temporary variable and if it is successfully stored in the
+> PKS, that the variable is permanent. The temporary variable will get
+> removed on reboot. The code currently doesn't remove .tmp suffix
+> immediately when persisted. The future version will fix this.
+> 
+> To avoid the additional .tmp semantic, alternative option is to consider
+> any zero size variable as temporary variable. This option is under
+> evaluation. This would avoid any runtime sysfs magic to replace .tmp
+> variable with real variable.
+> 
+> Also, the formatted string to pass to create_var will have following
+> format in the future version:
+> <variable_name>:<comma-separated-policy strings>
+> 
+> 4. Delete variable
+> # echo "var3" > delete_var
+
+If it's possible here, I think it would be easier to understand (and
+use) if you implement unlink(), so deleting var3 would be:
+
+# rm var3
+
+(and then there's no need for the special 'delete_var' entry.)
+
+
+-Dov
+
+> # ls -ltrh
+> total 0
+> -rw------- 1 root root 104 Jan 21 17:56 var4
+> -rw------- 1 root root 831 Jan 21 17:56 GLOBAL_PK
+> -rw------- 1 root root 831 Jan 21 17:56 GLOBAL_KEK
+> -rw------- 1 root root  76 Jan 21 17:56 GLOBAL_dbx
+> -rw------- 1 root root 831 Jan 21 17:56 GLOBAL_db
+> --w------- 1 root root 64K Jan 21 17:57 create_var
+> -rw------- 1 root root   0 Jan 21 17:57 var1.tmp
+> --w------- 1 root root 64K Jan 21 17:58 delete_var
+> 
+> The var3 file is removed at runtime, if variable is successfully
+> removed from the PKS storage.
+> 
+> NOTE: We are evaluating two design for userspace interface: using the
+> sysfs or defining a new filesystem based. Any feedback on this sysfs based
+> approach would be highly appreciated. We have tried to follow one value
+> per attribute semantic. If that or any other semantics aren't followed
+> properly, please let us know.
+> 
+> Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
+> ---
+>  Documentation/ABI/testing/sysfs-pksvar        |  77 ++++
+>  arch/powerpc/platforms/pseries/Kconfig        |   7 +
+>  arch/powerpc/platforms/pseries/Makefile       |   1 +
+>  arch/powerpc/platforms/pseries/pksvar-sysfs.c | 356 ++++++++++++++++++
+>  4 files changed, 441 insertions(+)
+>  create mode 100644 Documentation/ABI/testing/sysfs-pksvar
+>  create mode 100644 arch/powerpc/platforms/pseries/pksvar-sysfs.c
+> 
+

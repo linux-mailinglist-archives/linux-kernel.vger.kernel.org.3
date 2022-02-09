@@ -2,230 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7502E4AF22E
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 13:57:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 858054AF235
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 14:00:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233729AbiBIM5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 07:57:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33832 "EHLO
+        id S233756AbiBIM7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 07:59:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233735AbiBIM5H (ORCPT
+        with ESMTP id S230475AbiBIM7x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 07:57:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76C14C05CB96;
-        Wed,  9 Feb 2022 04:57:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 12169618FA;
-        Wed,  9 Feb 2022 12:57:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A48A0C340EB;
-        Wed,  9 Feb 2022 12:57:08 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ZsG31w1g"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1644411427;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gujxwMsa4YSa5XkRw69b7T0tO+PvPc0yRsA3jiYmKoU=;
-        b=ZsG31w1gxZqAo7kinZvJFbAmZON8/gT2uHeEGws+P3FtCuyZi2/vXFHt6wJWR3uXt6Bh+w
-        43z4gPhTDzwxhWblu7cOoppEPeFbKxtUVVisCm1othcUTh7wqX3qj4kGv/lrGs+UcoIG3T
-        pQs4btm1CHxSjqT6BCCJ3e5kR9DDPc8=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 5cf45d49 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Wed, 9 Feb 2022 12:57:07 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Sultan Alsawaf <sultan@kerneltoast.com>,
-        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Eric Biggers <ebiggers@kernel.org>
-Subject: [PATCH v4 2/2] random: defer fast pool mixing to worker
-Date:   Wed,  9 Feb 2022 13:56:44 +0100
-Message-Id: <20220209125644.533876-3-Jason@zx2c4.com>
-In-Reply-To: <20220209125644.533876-1-Jason@zx2c4.com>
-References: <20220209125644.533876-1-Jason@zx2c4.com>
+        Wed, 9 Feb 2022 07:59:53 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C83F8C05CB96
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 04:59:56 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id w1so2127254plb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 04:59:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=w3Ln6Ucnpi92OfXLrf4hwooYop/MioxN2/8qo7NAJ0Y=;
+        b=HwyVuYtnz3dS0pvXs6lcx6WUzK8pL3MCFQYbm3W04SVFtMV3smXsCp3+F627iDxYoA
+         xTDBnIvNpSmFVz0GGGdpGFM3WJxOLtddnSkZ2NCj+Mb8+LZ/mJDDtYC8hMyxlh/83L/L
+         UjZkkrfKk15gXzC8Fkv4Npu0MUNg1xIr4Nhsds5idqxFGZE01x87sgMv+JBFocsOoj83
+         OJNre6CI8ka4QFBGsqYzMuvoXd+CM+SQkLhjpDMFKgzLADbHMRurZWCOH4PTAOu17CSM
+         bdn4544FAi6Wavq4gCsFHYpCKIXfIN1rylXgj+a8JI+LvRzdIF++0qI8jZVKWqFH+YH7
+         Fl3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=w3Ln6Ucnpi92OfXLrf4hwooYop/MioxN2/8qo7NAJ0Y=;
+        b=4cZlWjICtHtsEPjcZhTx+QQnpTIXEcrrVtuyOf0aCGqSbn6Adn+uzOSXqL7ZnWNlUj
+         dAkrSVblZRBRSvazHM+jTzupFEHOEUsA+r+ZvVca3H3QiqKZBgn6hLb9tK52rAOMuHg0
+         6l40QYDm07fkDWcyVsndOhy+BSgI/oRTk4XliRtnDqDVCZtXXMq63PSPm6V+2yRFwKoO
+         F3RT6do8hIG/MszLquAeBDEb7MuL4v1sYSt/StyF2Yddtb4sR0pfBpeWaacZCttz1MuO
+         76NivIMljNa6KbnQgEaXZEJS/o1sXDvfCFAAXd7QJ62VszkNbO6YgPHKyAF1q2r3DvVk
+         lpIA==
+X-Gm-Message-State: AOAM533vq4/lTUdYua0Ad2QnAIFOqCrWE38Y7C6byl8beJdVTzVKW9uN
+        /yUhlsVRozCR/OuX/ZZktiZo93g4gWjh79g=
+X-Google-Smtp-Source: ABdhPJw9Dn4Pq9tPyNXXG/X3Hw4PfWtyX7Ozck5q9fVIrx8mBtrx68UtJwn9Os+8qsVObhkW1+A2Fg==
+X-Received: by 2002:a17:902:ef49:: with SMTP id e9mr1985988plx.56.1644411595891;
+        Wed, 09 Feb 2022 04:59:55 -0800 (PST)
+Received: from workstation ([117.202.188.219])
+        by smtp.gmail.com with ESMTPSA id 16sm20314839pfl.99.2022.02.09.04.59.51
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 09 Feb 2022 04:59:55 -0800 (PST)
+Date:   Wed, 9 Feb 2022 18:29:50 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     mhi@lists.linux.dev
+Cc:     quic_hemantk@quicinc.com, quic_bbhatt@quicinc.com,
+        quic_jhugo@quicinc.com, vinod.koul@linaro.org,
+        bjorn.andersson@linaro.org, dmitry.baryshkov@linaro.org,
+        quic_vbadigan@quicinc.com, quic_cang@quicinc.com,
+        quic_skananth@quicinc.com, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, elder@linaro.org
+Subject: Re: [PATCH 00/23] Add initial support for MHI endpoint stack
+Message-ID: <20220209125950.GB10700@workstation>
+References: <20220209094601.26131-1-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220209094601.26131-1-manivannan.sadhasivam@linaro.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On PREEMPT_RT, it's problematic to take spinlocks from hard irq
-handlers. We can fix this by deferring to a work queue the dumping of
-the fast pool into the input pool.
+On Wed, Feb 09, 2022 at 03:15:38PM +0530, Manivannan Sadhasivam wrote:
+> Hello,
+> 
+> This series adds initial support for the Qualcomm specific Modem Host Interface
+> (MHI) bus in endpoint devices like SDX55 modems. The MHI bus in endpoint devices
+> communicates with the MHI bus in host machines like x86 over any physical bus
+> like PCIe. The MHI host support is already in mainline [1] and been used by PCIe
+> based modems and WLAN devices running vendor code (downstream).
+> 
+> Overview
+> ========
+> 
+> This series aims at adding the MHI support in the endpoint devices with the goal
+> of getting data connectivity using the mainline kernel running on the modems.
+> Modems here refer to the combination of an APPS processor (Cortex A grade) and
+> a baseband processor (DSP). The MHI bus is located in the APPS processor and it
+> transfers data packets from the baseband processor to the host machine.
+> 
+> The MHI Endpoint (MHI EP) stack proposed here is inspired by the downstream
+> code written by Qualcomm. But the complete stack is mostly re-written to adapt
+> to the "bus" framework and made it modular so that it can work with the upstream
+> subsystems like "PCI Endpoint". The code structure of the MHI endpoint stack
+> follows the MHI host stack to maintain uniformity.
+> 
+> With this initial MHI EP stack (along with few other drivers), we can establish
+> the network interface between host and endpoint over the MHI software channels
+> (IP_SW0) and can do things like IP forwarding, SSH, etc...
+> 
+> Stack Organization
+> ==================
+> 
+> The MHI EP stack has the concept of controller and device drivers as like the
+> MHI host stack. The MHI EP controller driver can be a PCI Endpoint Function
+> driver and the MHI device driver can be a MHI EP Networking driver or QRTR
+> driver. The MHI EP controller driver is tied to the PCI Endpoint subsystem and
+> handles all bus related activities like mapping the host memory, raising IRQ,
+> passing link specific events etc... The MHI EP networking driver is tied to the
+> Networking stack and handles all networking related activities like
+> sending/receiving the SKBs from netdev, statistics collection etc...
+> 
+> This series only contains the MHI EP code, whereas the PCIe EPF driver and MHI
+> EP Networking drivers are not yet submitted and can be found here [2]. Though
+> the MHI EP stack doesn't have the build time dependency, it cannot function
+> without them.
+> 
+> Test setup
+> ==========
+> 
+> This series has been tested on Telit FN980 TLB board powered by Qualcomm SDX55
+> (a.k.a X55 modem) and Qualcomm SM8450 based dev board.
+> 
+> For testing the stability and performance, networking tools such as iperf, ssh
+> and ping are used.
+> 
+> Limitations
+> ===========
+> 
+> We are not _yet_ there to get the data packets from the modem as that involves
+> the Qualcomm IP Accelerator (IPA) integration with MHI endpoint stack. But we
+> are planning to add support for it in the coming days.
+> 
+> References
+> ==========
+> 
+> MHI bus: https://www.kernel.org/doc/html/latest/mhi/mhi.html
+> Linaro connect presentation around this topic: https://connect.linaro.org/resources/lvc21f/lvc21f-222/
+> 
+> Thanks,
+> Mani
+> 
 
-We accomplish this with some careful rules on fast_pool->count:
+Please ignore this patch. It is missing the v2 prefix.
 
-  - When it's incremented to >= 64, we schedule the work.
-  - If the top bit is set, we never schedule the work, even if >= 64.
-  - The worker is responsible for setting it back to 0 when it's done.
+Thanks,
+Mani
 
-In the worst case, an irq handler is mixing a new irq into the pool at
-the same time as the worker is dumping it into the input pool. In this
-case, we only ever set the count back to 0 _after_ we're done, so that
-subsequent cycles will require a full 64 to dump it in again. In other
-words, the result of this race is only ever adding a little bit more
-information than normal, but never less, and never crediting any more
-for this partial additional information.
-
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Theodore Ts'o <tytso@mit.edu>
-Cc: Sultan Alsawaf <sultan@kerneltoast.com>
-Cc: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- drivers/char/random.c         | 54 ++++++++++++++++++++++-------------
- include/trace/events/random.h |  6 ----
- 2 files changed, 34 insertions(+), 26 deletions(-)
-
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index ceded1c4f73b..f985d84872de 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -377,12 +377,6 @@ static void _mix_pool_bytes(const void *in, int nbytes)
- 	blake2s_update(&input_pool.hash, in, nbytes);
- }
- 
--static void __mix_pool_bytes(const void *in, int nbytes)
--{
--	trace_mix_pool_bytes_nolock(nbytes, _RET_IP_);
--	_mix_pool_bytes(in, nbytes);
--}
--
- static void mix_pool_bytes(const void *in, int nbytes)
- {
- 	unsigned long flags;
-@@ -394,11 +388,13 @@ static void mix_pool_bytes(const void *in, int nbytes)
- }
- 
- struct fast_pool {
--	u32 pool[4];
-+	struct work_struct mix;
- 	unsigned long last;
-+	u32 pool[4];
-+	unsigned int count;
- 	u16 reg_idx;
--	u8 count;
- };
-+#define FAST_POOL_MIX_INFLIGHT (1U << 31)
- 
- /*
-  * This is a fast mixing routine used by the interrupt randomness
-@@ -428,7 +424,6 @@ static void fast_mix(struct fast_pool *f)
- 
- 	f->pool[0] = a;  f->pool[1] = b;
- 	f->pool[2] = c;  f->pool[3] = d;
--	f->count++;
- }
- 
- static void process_random_ready_list(void)
-@@ -977,12 +972,34 @@ static u32 get_reg(struct fast_pool *f, struct pt_regs *regs)
- 	return *ptr;
- }
- 
-+static void mix_interrupt_randomness(struct work_struct *work)
-+{
-+	struct fast_pool *fast_pool = container_of(work, struct fast_pool, mix);
-+	u8 pool[sizeof(fast_pool->pool)];
-+
-+	/*
-+	 * Since this is the result of a trip through the scheduler, xor in
-+	 * a cycle counter. It can't hurt, and might help.
-+	 */
-+	fast_pool->pool[3] ^= random_get_entropy();
-+	/* Copy the pool to the stack so that the mixer always has a consistent view. */
-+	memcpy(pool, fast_pool->pool, sizeof(pool));
-+	/* We take care to zero out the count only after we're done reading the pool. */
-+	WRITE_ONCE(fast_pool->count, 0);
-+	fast_pool->last = jiffies;
-+
-+	mix_pool_bytes(pool, sizeof(pool));
-+	credit_entropy_bits(1);
-+	memzero_explicit(pool, sizeof(pool));
-+}
-+
- void add_interrupt_randomness(int irq)
- {
- 	struct fast_pool *fast_pool = this_cpu_ptr(&irq_randomness);
- 	struct pt_regs *regs = get_irq_regs();
- 	unsigned long now = jiffies;
- 	cycles_t cycles = random_get_entropy();
-+	unsigned int new_count;
- 	u32 c_high, j_high;
- 	u64 ip;
- 
-@@ -999,9 +1016,10 @@ void add_interrupt_randomness(int irq)
- 
- 	fast_mix(fast_pool);
- 	add_interrupt_bench(cycles);
-+	new_count = ++fast_pool->count;
- 
- 	if (unlikely(crng_init == 0)) {
--		if ((fast_pool->count >= 64) &&
-+		if (new_count >= 64 &&
- 		    crng_fast_load((u8 *)fast_pool->pool, sizeof(fast_pool->pool)) > 0) {
- 			fast_pool->count = 0;
- 			fast_pool->last = now;
-@@ -1009,20 +1027,16 @@ void add_interrupt_randomness(int irq)
- 		return;
- 	}
- 
--	if ((fast_pool->count < 64) && !time_after(now, fast_pool->last + HZ))
-+	if (new_count & FAST_POOL_MIX_INFLIGHT)
- 		return;
- 
--	if (!spin_trylock(&input_pool.lock))
-+	if (new_count < 64 && !time_after(now, fast_pool->last + HZ))
- 		return;
- 
--	fast_pool->last = now;
--	__mix_pool_bytes(&fast_pool->pool, sizeof(fast_pool->pool));
--	spin_unlock(&input_pool.lock);
--
--	fast_pool->count = 0;
--
--	/* award one bit for the contents of the fast pool */
--	credit_entropy_bits(1);
-+	if (unlikely(!fast_pool->mix.func))
-+		INIT_WORK(&fast_pool->mix, mix_interrupt_randomness);
-+	fast_pool->count |= FAST_POOL_MIX_INFLIGHT;
-+	queue_work_on(raw_smp_processor_id(), system_highpri_wq, &fast_pool->mix);
- }
- EXPORT_SYMBOL_GPL(add_interrupt_randomness);
- 
-diff --git a/include/trace/events/random.h b/include/trace/events/random.h
-index ad149aeaf42c..833f42afc70f 100644
---- a/include/trace/events/random.h
-+++ b/include/trace/events/random.h
-@@ -52,12 +52,6 @@ DEFINE_EVENT(random__mix_pool_bytes, mix_pool_bytes,
- 	TP_ARGS(bytes, IP)
- );
- 
--DEFINE_EVENT(random__mix_pool_bytes, mix_pool_bytes_nolock,
--	TP_PROTO(int bytes, unsigned long IP),
--
--	TP_ARGS(bytes, IP)
--);
--
- TRACE_EVENT(credit_entropy_bits,
- 	TP_PROTO(int bits, int entropy_count, unsigned long IP),
- 
--- 
-2.35.0
-
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/bus/mhi
+> [2] https://git.linaro.org/landing-teams/working/qualcomm/kernel.git/log/?h=tracking-qcomlt-sdx55-drivers
+> 
+> Changes in v2:
+> 
+> v2 mostly addresses the issues seen while testing the stack on SM8450 that is a
+> SMP platform and also incorporates the review comments from Alex.
+> 
+> Major changes are:
+> 
+> * Added a cleanup patch for getting rid of SHIFT macros and used the bitfield
+>   operations.
+> * Added the endianess patches that were submitted to MHI list and used the
+>   endianess conversion in EP patches also.
+> * Added support for multiple event rings.
+> * Fixed the MSI generation based on the event ring index.
+> * Fixed the doorbell list handling by making use of list splice and not locking
+>   the entire list manipulation.
+> * Added new APIs for wrapping the reading and writing to host memory (Dmitry).
+> * Optimized the read_channel and queue_skb function logics.
+> * Added Hemant's R-o-b tag.
+> 
+> Manivannan Sadhasivam (21):
+>   bus: mhi: Move host MHI code to "host" directory
+>   bus: mhi: Move common MHI definitions out of host directory
+>   bus: mhi: Make mhi_state_str[] array static inline and move to
+>     common.h
+>   bus: mhi: Cleanup the register definitions used in headers
+>   bus: mhi: Get rid of SHIFT macros and use bitfield operations
+>   bus: mhi: ep: Add support for registering MHI endpoint controllers
+>   bus: mhi: ep: Add support for registering MHI endpoint client drivers
+>   bus: mhi: ep: Add support for creating and destroying MHI EP devices
+>   bus: mhi: ep: Add support for managing MMIO registers
+>   bus: mhi: ep: Add support for ring management
+>   bus: mhi: ep: Add support for sending events to the host
+>   bus: mhi: ep: Add support for managing MHI state machine
+>   bus: mhi: ep: Add support for processing MHI endpoint interrupts
+>   bus: mhi: ep: Add support for powering up the MHI endpoint stack
+>   bus: mhi: ep: Add support for powering down the MHI endpoint stack
+>   bus: mhi: ep: Add support for handling MHI_RESET
+>   bus: mhi: ep: Add support for handling SYS_ERR condition
+>   bus: mhi: ep: Add support for processing command and TRE rings
+>   bus: mhi: ep: Add support for queueing SKBs over MHI bus
+>   bus: mhi: ep: Add support for suspending and resuming channels
+>   bus: mhi: ep: Add uevent support for module autoloading
+> 
+> Paul Davey (2):
+>   bus: mhi: Fix pm_state conversion to string
+>   bus: mhi: Fix MHI DMA structure endianness
+> 
+>  drivers/bus/Makefile                      |    2 +-
+>  drivers/bus/mhi/Kconfig                   |   28 +-
+>  drivers/bus/mhi/Makefile                  |    9 +-
+>  drivers/bus/mhi/common.h                  |  319 ++++
+>  drivers/bus/mhi/ep/Kconfig                |   10 +
+>  drivers/bus/mhi/ep/Makefile               |    2 +
+>  drivers/bus/mhi/ep/internal.h             |  254 ++++
+>  drivers/bus/mhi/ep/main.c                 | 1602 +++++++++++++++++++++
+>  drivers/bus/mhi/ep/mmio.c                 |  274 ++++
+>  drivers/bus/mhi/ep/ring.c                 |  267 ++++
+>  drivers/bus/mhi/ep/sm.c                   |  174 +++
+>  drivers/bus/mhi/host/Kconfig              |   31 +
+>  drivers/bus/mhi/{core => host}/Makefile   |    4 +-
+>  drivers/bus/mhi/{core => host}/boot.c     |   17 +-
+>  drivers/bus/mhi/{core => host}/debugfs.c  |   40 +-
+>  drivers/bus/mhi/{core => host}/init.c     |  124 +-
+>  drivers/bus/mhi/{core => host}/internal.h |  427 +-----
+>  drivers/bus/mhi/{core => host}/main.c     |   46 +-
+>  drivers/bus/mhi/{ => host}/pci_generic.c  |    0
+>  drivers/bus/mhi/{core => host}/pm.c       |   36 +-
+>  include/linux/mhi_ep.h                    |  293 ++++
+>  include/linux/mod_devicetable.h           |    2 +
+>  scripts/mod/file2alias.c                  |   10 +
+>  23 files changed, 3443 insertions(+), 528 deletions(-)
+>  create mode 100644 drivers/bus/mhi/common.h
+>  create mode 100644 drivers/bus/mhi/ep/Kconfig
+>  create mode 100644 drivers/bus/mhi/ep/Makefile
+>  create mode 100644 drivers/bus/mhi/ep/internal.h
+>  create mode 100644 drivers/bus/mhi/ep/main.c
+>  create mode 100644 drivers/bus/mhi/ep/mmio.c
+>  create mode 100644 drivers/bus/mhi/ep/ring.c
+>  create mode 100644 drivers/bus/mhi/ep/sm.c
+>  create mode 100644 drivers/bus/mhi/host/Kconfig
+>  rename drivers/bus/mhi/{core => host}/Makefile (54%)
+>  rename drivers/bus/mhi/{core => host}/boot.c (96%)
+>  rename drivers/bus/mhi/{core => host}/debugfs.c (90%)
+>  rename drivers/bus/mhi/{core => host}/init.c (93%)
+>  rename drivers/bus/mhi/{core => host}/internal.h (50%)
+>  rename drivers/bus/mhi/{core => host}/main.c (98%)
+>  rename drivers/bus/mhi/{ => host}/pci_generic.c (100%)
+>  rename drivers/bus/mhi/{core => host}/pm.c (97%)
+>  create mode 100644 include/linux/mhi_ep.h
+> 
+> -- 
+> 2.25.1
+> 

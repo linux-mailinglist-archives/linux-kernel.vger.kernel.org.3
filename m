@@ -2,137 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D5784AF762
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:58:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A540A4AF766
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 18:00:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237663AbiBIQ6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 11:58:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60500 "EHLO
+        id S234493AbiBIRAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 12:00:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237736AbiBIQ6c (ORCPT
+        with ESMTP id S229673AbiBIRAc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 11:58:32 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A53DC043180;
-        Wed,  9 Feb 2022 08:58:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644425908; x=1675961908;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=qBIG1Z9WmAaojnbocDOnq2HfqKAkZyB1quN1UVQeNOM=;
-  b=DOtdJjJEkLKxTwXQlBYsPsD/uzUUaW0tXJO2khWuMqmnR7Zi2AFwnVkh
-   Yr0OpOesqMJfTl7iUkiqwaRR4ZcHxpsB3pf5SaodZQRBnisGytFI8yPCl
-   oIwVhXIOSOes9cUVaFfR4awP5g+hgp3yXhecNmVs1WNJQck6bfuuLKdKH
-   XKZnDBMXAbLu0BTGwFryrReth+4dHO/iQ2Ik8KgLlHgbVd5ioz/LrtYIc
-   RjWHWVXY0G/6YB9SyX6EYhH446UdQPZQNJVrYU3Z2hRuVjXCU4v31HSsK
-   u/4eM/Z8HC2dgUz36syhCO99plSJ6istVqu1MKHIlBSOzSIvCC7KXohja
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="236657725"
-X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
-   d="scan'208";a="236657725"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 08:58:20 -0800
-X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
-   d="scan'208";a="485309693"
-Received: from sanvery-mobl.amr.corp.intel.com (HELO [10.212.232.139]) ([10.212.232.139])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 08:58:19 -0800
-Message-ID: <a5bb32b8-8bd7-ac98-5c4c-5af604ac8256@intel.com>
-Date:   Wed, 9 Feb 2022 08:58:16 -0800
+        Wed, 9 Feb 2022 12:00:32 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 67FA0C0613C9
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 09:00:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644426034;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=5pN9Ao8qux5sDas/M+PXtuDF/FNADkM/NosE28cGRmQ=;
+        b=bGEZkUgOSnx7bsfT5tcVELXtczbt5B2oIRtoHfuqiCNR/18pwQ8dlH2/5dlozYzdEh06cG
+        pp/EeSWFL7lGbgx+GXFaLDrMnGPfN7srpP/BcNEEkPVBoUOuCi6tp/B4GUJF6XIvBAcgRz
+        O8yRzWnq/hBiF5qJe3qZBFpP/mjIc+Y=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-125-1lHF9GKiPH--L8ThemyFVA-1; Wed, 09 Feb 2022 12:00:30 -0500
+X-MC-Unique: 1lHF9GKiPH--L8ThemyFVA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 74C0F1091DA1;
+        Wed,  9 Feb 2022 17:00:29 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1BAA27CD66;
+        Wed,  9 Feb 2022 17:00:21 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     vkuznets@redhat.com, mlevitsk@redhat.com, dmatlack@google.com,
+        seanjc@google.com
+Subject: [PATCH 00/12] KVM: MMU: do not unload MMU roots on all role changes
+Date:   Wed,  9 Feb 2022 12:00:08 -0500
+Message-Id: <20220209170020.1775368-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com
-Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>
-References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
- <20220130211838.8382-11-rick.p.edgecombe@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH 10/35] drm/i915/gvt: Change _PAGE_DIRTY to
- _PAGE_DIRTY_BITS
-In-Reply-To: <20220130211838.8382-11-rick.p.edgecombe@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/30/22 13:18, Rick Edgecombe wrote:
-> 
-> diff --git a/drivers/gpu/drm/i915/gvt/gtt.c b/drivers/gpu/drm/i915/gvt/gtt.c
-> index 99d1781fa5f0..75ce4e823902 100644
-> --- a/drivers/gpu/drm/i915/gvt/gtt.c
-> +++ b/drivers/gpu/drm/i915/gvt/gtt.c
-> @@ -1210,7 +1210,7 @@ static int split_2MB_gtt_entry(struct intel_vgpu *vgpu,
->  	}
->  
->  	/* Clear dirty field. */
-> -	se->val64 &= ~_PAGE_DIRTY;
-> +	se->val64 &= ~_PAGE_DIRTY_BITS;
->  
->  	ops->clear_pse(se);
->  	ops->clear_ips(se);
+The TDP MMU has a performance regression compared to the legacy MMU
+when CR0 changes often.  This was reported for the grsecurity kernel,
+which uses CR0.WP to implement kernel W^X.  In that case, each change to
+CR0.WP unloads the MMU and causes a lot of unnecessary work.  When running
+nested, this can even cause the L1 to hardly make progress, as the L0
+hypervisor it is overwhelmed by the amount of MMU work that is needed.
 
-Are these x86 CPU page table values?  I see ->val64 being used like this:
+Initially, my plan for this was to pull kvm_mmu_unload from
+kvm_mmu_reset_context into kvm_init_mmu.  Therefore I started by separating
+the CPU setup (CR0/CR4/EFER, SMM, guest mode, etc.) from the shadow
+page table format.  Right now the "MMU role" is a messy mix of the two
+and, whenever something is different between the MMU and the CPU, it is
+stored as an extra field in struct kvm_mmu; for extra bonus complication,
+sometimes the same thing is stored in both the role and an extra field.
+The aim was to keep kvm_mmu_unload only if the MMU role changed, and
+drop it if the CPU role changed.
 
-        e->val64 &= ~GEN8_PAGE_PRESENT;
-and
-	se.val64 |= GEN8_PAGE_PRESENT | GEN8_PAGE_RW;
+I even posted that cleanup, but it occurred to me later that even
+a conditional kvm_mmu_unload in kvm_init_mmu would be overkill.
+kvm_mmu_unload is only needed in the rare cases where a TLB flush is
+needed (e.g. CR0.PG changing from 1 to 0) or where the guest page table
+interpretation changes in way not captured by the role (that is, CPUID
+changes).  But the implementation of fast PGD switching is subtle
+and requires a call to kvm_mmu_new_pgd (and therefore knowing the
+new MMU role) before kvm_init_mmu, therefore kvm_mmu_reset_context
+chickens and drops all the roots.
 
-where we also have:
+Therefore, the meat of this series is a reorganization of fast PGD
+switching; it makes it possible to call kvm_mmu_new_pgd *after*
+the MMU has been set up, just using the MMU role instead of
+kvm_mmu_calc_root_page_role.
 
-#define GEN8_PAGE_PRESENT               BIT_ULL(0)
-#define GEN8_PAGE_RW                    BIT_ULL(1)
+Patches 1 to 3 are bugfixes found while working on the series.
 
-Which tells me that these are probably *close* to the CPU's page tables.
- But, I honestly don't know which format they are.  I don't know if
-_PAGE_COW is still a software bit in that format or not.
+Patches 4 to 5 add more sanity checks that triggered a lot during
+development.
 
-Either way, I don't think we should be messing with i915 device page tables.
+Patches 6 and 7 are related cleanups.  In particular patch 7 makes
+the cache lookup code a bit more pleasant.
 
-Or, are these somehow magically shared with the CPU in some way I don't
-know about?
+Patches 8 to 9 rework the fast PGD switching.  Patches 10 and
+11 are cleanups enabled by the rework, and the only survivors
+of the CPU role patchset.
 
-[ If these are device-only page tables, it would probably be nice to
-  stop using _PAGE_FOO for them.  It would avoid confusion like this. ]
+Finally, patch 12 optimizes kvm_mmu_reset_context.
+
+Paolo
+
+
+Paolo Bonzini (12):
+  KVM: x86: host-initiated EFER.LME write affects the MMU
+  KVM: MMU: move MMU role accessors to header
+  KVM: x86: do not deliver asynchronous page faults if CR0.PG=0
+  KVM: MMU: WARN if PAE roots linger after kvm_mmu_unload
+  KVM: MMU: avoid NULL-pointer dereference on page freeing bugs
+  KVM: MMU: rename kvm_mmu_reload
+  KVM: x86: use struct kvm_mmu_root_info for mmu->root
+  KVM: MMU: do not consult levels when freeing roots
+  KVM: MMU: look for a cached PGD when going from 32-bit to 64-bit
+  KVM: MMU: load new PGD after the shadow MMU is initialized
+  KVM: MMU: remove kvm_mmu_calc_root_page_role
+  KVM: x86: do not unload MMU roots on all role changes
+
+ arch/x86/include/asm/kvm_host.h |   3 +-
+ arch/x86/kvm/mmu.h              |  28 +++-
+ arch/x86/kvm/mmu/mmu.c          | 253 ++++++++++++++++----------------
+ arch/x86/kvm/mmu/mmu_audit.c    |   4 +-
+ arch/x86/kvm/mmu/paging_tmpl.h  |   2 +-
+ arch/x86/kvm/mmu/tdp_mmu.c      |   2 +-
+ arch/x86/kvm/mmu/tdp_mmu.h      |   2 +-
+ arch/x86/kvm/svm/nested.c       |   6 +-
+ arch/x86/kvm/vmx/nested.c       |   8 +-
+ arch/x86/kvm/vmx/vmx.c          |   2 +-
+ arch/x86/kvm/x86.c              |  39 +++--
+ 11 files changed, 190 insertions(+), 159 deletions(-)
+
+-- 
+2.31.1
+

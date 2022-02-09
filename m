@@ -1,125 +1,97 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A1D04AE6EC
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 03:41:52 +0100 (CET)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.lfdr.de (Postfix) with ESMTP id 9850B4AE753
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 04:03:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245090AbiBIClI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 21:41:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60486 "EHLO
+        id S1345607AbiBICpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 21:45:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231611AbiBIByv (ORCPT
+        with ESMTP id S242735AbiBIBUR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 20:54:51 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2C02C06157B;
-        Tue,  8 Feb 2022 17:54:49 -0800 (PST)
-Received: from dggeme754-chm.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JtjWb2qZczZfNF;
-        Wed,  9 Feb 2022 09:50:35 +0800 (CST)
-Received: from huawei.com (10.175.104.170) by dggeme754-chm.china.huawei.com
- (10.3.19.100) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.21; Wed, 9
- Feb 2022 09:54:46 +0800
-From:   Zhipeng Xie <xiezhipeng1@huawei.com>
-To:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-        <jolsa@redhat.com>, <namhyung@kernel.org>
-CC:     <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <xiezhipeng1@huawei.com>, <xiexiuqi@huawei.com>,
-        <fanwentao@huawei.com>
-Subject: [PATCH v2] perf/core: Fix perf_mmap fail when CONFIG_PERF_USE_VMALLOC enabled
-Date:   Wed, 9 Feb 2022 09:54:17 -0500
-Message-ID: <20220209145417.6495-1-xiezhipeng1@huawei.com>
-X-Mailer: git-send-email 2.18.1
+        Tue, 8 Feb 2022 20:20:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91C79C061576;
+        Tue,  8 Feb 2022 17:20:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 144E0617E7;
+        Wed,  9 Feb 2022 01:20:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02137C004E1;
+        Wed,  9 Feb 2022 01:20:15 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="f3g58zfE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1644369615;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Epo8j6f82VaiElGEK+cLsKCLLv1wK/ngSXClGzK93nI=;
+        b=f3g58zfEZIQTrFf4x5mRH7JVgKrccFTPWeYFBA2Oo8yebDy+QRlHo3Z3cFQ4scSdGamyhL
+        wHR6p5y9eYFELn9MDC7NHtM8SePk1HrqavpcAZ/ZCNbNJIAKzYDZ6o9zYBU2d5WGyQzNKG
+        wsqMinQevWdxzvwP0PoKuvhVg6baThk=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id a4f5ce73 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Wed, 9 Feb 2022 01:20:14 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     tytso@mit.edu, linux@dominikbrodowski.net, ebiggers@kernel.org,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH v2 9/9] random: remove outdated INT_MAX >> 6 check in urandom_read()
+Date:   Wed,  9 Feb 2022 02:19:19 +0100
+Message-Id: <20220209011919.493762-10-Jason@zx2c4.com>
+In-Reply-To: <20220209011919.493762-1-Jason@zx2c4.com>
+References: <20220209011919.493762-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.104.170]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggeme754-chm.china.huawei.com (10.3.19.100)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This problem can be reproduced with CONFIG_PERF_USE_VMALLOC enabled on both
-x86_64 and aarch64 arch when using sysdig -B(using ebpf)[1].
-sysdig -B works fine after rebuilding the kernel with CONFIG_PERF_USE_VMALLOC
-disabled.
+In 79a8468747c5 ("random: check for increase of entropy_count because of
+signed conversion"), a number of checks were added around what values
+were passed to account(), because account() was doing fancy fixed point
+fractional arithmetic, and a user had some ability to pass large values
+directly into it. One of things in that commit was limiting those values
+to INT_MAX >> 6.
 
-I tracked it down to the if condition event->rb->nr_pages != nr_pages in
-perf_mmap is true when CONFIG_PERF_USE_VMALLOC is enabled where
-event->rb->nr_pages = 1 and nr_pages = 2048 resulting perf_mmap to return
--EINVAL.This is because when CONFIG_PERF_USE_VMALLOC is enabled, rb->nr_pages
-is always equal to 1.
+However, for several years now, urandom reads no longer touch entropy
+accounting, and so this check serves no purpose. The current flow is:
 
-Arch with CONFIG_PERF_USE_VMALLOC enabled by default:
-	arc/arm/csky/mips/sh/sparc/xtensa
-Arch with CONFIG_PERF_USE_VMALLOC disabled by default:
-	x86_64/aarch64/...
+urandom_read_nowarn()-->get_random_bytes_user()-->chacha20_block()
 
-Fix this problem by using data_page_nr.
+We arrive at urandom_read_nowarn() in the first place either via
+ordinary fops, which limits reads to MAX_RW_COUNT, or via getrandom()
+which limits reads to INT_MAX.
 
-[1] https://github.com/draios/sysdig
-
-Signed-off-by: Zhipeng Xie <xiezhipeng1@huawei.com>
+Cc: Theodore Ts'o <tytso@mit.edu>
+Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 ---
- kernel/events/core.c        | 2 +-
- kernel/events/internal.h    | 5 +++++
- kernel/events/ring_buffer.c | 5 -----
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ drivers/char/random.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 57c7197838db..370292effd32 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -6352,7 +6352,7 @@ static int perf_mmap(struct file *file, struct vm_area_struct *vma)
- again:
- 	mutex_lock(&event->mmap_mutex);
- 	if (event->rb) {
--		if (event->rb->nr_pages != nr_pages) {
-+		if (data_page_nr(event->rb) != nr_pages) {
- 			ret = -EINVAL;
- 			goto unlock;
- 		}
-diff --git a/kernel/events/internal.h b/kernel/events/internal.h
-index 082832738c8f..5816c0719dbf 100644
---- a/kernel/events/internal.h
-+++ b/kernel/events/internal.h
-@@ -116,6 +116,11 @@ static inline int page_order(struct perf_buffer *rb)
- }
- #endif
- 
-+static int data_page_nr(struct perf_buffer *rb)
-+{
-+	return rb->nr_pages << page_order(rb);
-+}
-+
- static inline unsigned long perf_data_size(struct perf_buffer *rb)
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index f7f9cbfe13f7..e09874c511d0 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -1305,7 +1305,6 @@ static ssize_t urandom_read_nowarn(struct file *file, char __user *buf,
  {
- 	return rb->nr_pages << (PAGE_SHIFT + page_order(rb));
-diff --git a/kernel/events/ring_buffer.c b/kernel/events/ring_buffer.c
-index 52868716ec35..fb35b926024c 100644
---- a/kernel/events/ring_buffer.c
-+++ b/kernel/events/ring_buffer.c
-@@ -859,11 +859,6 @@ void rb_free(struct perf_buffer *rb)
- }
+ 	int ret;
  
- #else
--static int data_page_nr(struct perf_buffer *rb)
--{
--	return rb->nr_pages << page_order(rb);
--}
--
- static struct page *
- __perf_mmap_to_page(struct perf_buffer *rb, unsigned long pgoff)
- {
+-	nbytes = min_t(size_t, nbytes, INT_MAX >> 6);
+ 	ret = get_random_bytes_user(buf, nbytes);
+ 	trace_urandom_read(8 * nbytes, 0, input_pool.entropy_count);
+ 	return ret;
 -- 
-2.18.1
+2.35.0
 

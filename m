@@ -2,217 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8C3B4AF75E
+	by mail.lfdr.de (Postfix) with ESMTP id 548AA4AF75D
 	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:58:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237613AbiBIQ6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 11:58:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59870 "EHLO
+        id S237614AbiBIQ6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 11:58:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237586AbiBIQ57 (ORCPT
+        with ESMTP id S237572AbiBIQ5y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 11:57:59 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA252C05CB87;
-        Wed,  9 Feb 2022 08:58:01 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: tonyk)
-        with ESMTPSA id EA6FE1F45167
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644425879;
-        bh=rtln7R9NFet9KUNdtB4HI4S2cgm11zhgu+CXJo6WH+Q=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=krhM7Onk7fIQbn4rIbZGh3vUnFH9lTsffXtDginYg9PT9NsgmLW/FLjE2paGd1njb
-         mF1CTpmG8e0cNLYldM/44KQ5XHEQok3x/FBuaTWpaIlsj4xa3fnpeWZbjel3GXOXxR
-         PRZAoDEuWBMJTdgVEpUDnX8o4N4KEcn5Y5Ktm6Etnb9fTpXabIlvdAWly1bYO+2ZEb
-         KspWfDaZNogdB4Ih7GZAxehTAAADjAYRBGRe8g9nMGAucuYOXxgLlCCfuLqJiZwXWz
-         o2dpuMyzHw7vc75D1aCwUoiZxMsC/5+oO3RlIi5ZVAQNhkIIQHhGCxJXw53WEXQF72
-         tYTMbWxmCoY5Q==
-From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
-To:     Sanjay R Mehta <sanju.mehta@amd.com>,
-        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc:     =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
-Subject: [PATCH 3/3] spi: amd: Add support for version AMDI0062
-Date:   Wed,  9 Feb 2022 13:57:33 -0300
-Message-Id: <20220209165733.43134-4-andrealmeid@collabora.com>
-X-Mailer: git-send-email 2.35.0
-In-Reply-To: <20220209165733.43134-1-andrealmeid@collabora.com>
-References: <20220209165733.43134-1-andrealmeid@collabora.com>
+        Wed, 9 Feb 2022 11:57:54 -0500
+Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E6F6C05CB86;
+        Wed,  9 Feb 2022 08:57:57 -0800 (PST)
+Received: by mail-qt1-x843.google.com with SMTP id s1so2317798qtw.9;
+        Wed, 09 Feb 2022 08:57:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=c8ITlZ0TIJQYeuae8LzwclVS/gPvsuuD8tI1DH//ZB0=;
+        b=Alj2+fWNY3w/xeBfw85sJE1/xxD0ShOPbSBvLdKBwssQQsn0birtT5YpUpPp62/q+l
+         PTUpJ0ZQ1uHP87p3d9T/d9M5Q5vwW7sarhGKiaREvbGURzo4mZaWUx7BNsSDumcLfqKv
+         WzzSzvl7PymNUz6YlyRWx1uOQ2Oz6mecincQhr/0uocFitMryIEtHsrSwCUBNx3dFBk9
+         vh5Rn1ZV0Sy1LNax+QkgzRY2v5vHE+TXczdfIfiwxNJkSi2OTgEvuBn6KnnTCbjn7Anf
+         MhCCHghukYiJxUMI/0aIMbGGN0nA89YZiXQuS1fEEKoW+9/qj9d7mwh2/ThmJaR6rUMb
+         tPng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=c8ITlZ0TIJQYeuae8LzwclVS/gPvsuuD8tI1DH//ZB0=;
+        b=NFwU0xHifaPENHCIQdjQr87rH4pstEEoRV6LBLLFOh1mU3+KYSivb3rwAuzU6oC6Pr
+         e8wSqCLYPJzhaYUCJBDMPZIoO+SgKs4MBb5zitxUhUGZmPZf5XPBeC4OUBQdPTfhQPHI
+         x22JEZXO1mlZFSALCmgSQsLKSMRAtmE/T0LsxFRBtev3rlUbS51PvoNRvmxNWJLJa6qI
+         OnRAg/ovwcFDpbK6YYXwU/x0MOA3JhMtNFR1ylDTEBHEnJzJOaFE+lFcn6P3xdbXNVOP
+         EXh2d7QD2Aw3h6i5TqZRmIaz3ipGaJHG43wbSy8A3p3ZvjoJ6EBpktu3nT52gEV+zBfZ
+         ENzw==
+X-Gm-Message-State: AOAM530wIi3I3LhVV3nDo7ELqD69fNv2KaeiilraT87+z5Zh0nMhThNe
+        SGxTryg0UKo9n0I6Frkuz9o=
+X-Google-Smtp-Source: ABdhPJwB5PRL11twhgVtT0TwmaAdjTIgn1YAjllT+KDbjpY+nLqyxDe2O1PYeY4gdan0ISECuelYdw==
+X-Received: by 2002:ac8:7cab:: with SMTP id z11mr2004416qtv.384.1644425876371;
+        Wed, 09 Feb 2022 08:57:56 -0800 (PST)
+Received: from lumia-dev.localdomain. (pool-96-225-98-253.nwrknj.fios.verizon.net. [96.225.98.253])
+        by smtp.googlemail.com with ESMTPSA id z19sm9629019qtj.77.2022.02.09.08.57.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Feb 2022 08:57:55 -0800 (PST)
+From:   Jack Matthews <jm5112356@gmail.com>
+Cc:     jm5112356@gmail.com, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] ARM: dts: qcom: pm8226: add node for RTC
+Date:   Wed,  9 Feb 2022 16:57:41 +0000
+Message-Id: <20220209165742.652890-1-jm5112356@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220209052929.651881-1-jm5112356@gmail.com>
+References: <20220209052929.651881-1-jm5112356@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the AMD SPI controller version AMDI0062. Do this in a
-modular way where's easy to add new versions.
+Add a node for PM8226's real time clock.
 
-Signed-off-by: André Almeida <andrealmeid@collabora.com>
+Signed-off-by: Jack Matthews <jm5112356@gmail.com>
 ---
- drivers/spi/spi-amd.c | 73 +++++++++++++++++++++++++++++++++++++------
- 1 file changed, 63 insertions(+), 10 deletions(-)
+ arch/arm/boot/dts/qcom-pm8226.dtsi | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/spi/spi-amd.c b/drivers/spi/spi-amd.c
-index 417ce14a21c6..a2f948f41c88 100644
---- a/drivers/spi/spi-amd.c
-+++ b/drivers/spi/spi-amd.c
-@@ -19,6 +19,10 @@
- #define AMD_SPI_FIFO_CLEAR	BIT(20)
- #define AMD_SPI_BUSY		BIT(31)
+diff --git a/arch/arm/boot/dts/qcom-pm8226.dtsi b/arch/arm/boot/dts/qcom-pm8226.dtsi
+index 872724490a5d..8ee628ce88a9 100644
+--- a/arch/arm/boot/dts/qcom-pm8226.dtsi
++++ b/arch/arm/boot/dts/qcom-pm8226.dtsi
+@@ -73,6 +73,13 @@ adc-chan@f {
+ 			};
+ 		};
  
-+#define AMD_SPI_OPCODE_REG	0x45
-+#define AMD_SPI_CMD_TRIGGER_REG	0x47
-+#define AMD_SPI_TRIGGER_CMD	BIT(7)
++		rtc@6000 {
++			compatible = "qcom,pm8941-rtc";
++			reg = <0x6000>, <0x6100>;
++			reg-names = "rtc", "alarm";
++			interrupts = <0x0 0x61 0x1 IRQ_TYPE_EDGE_RISING>;
++		};
 +
- #define AMD_SPI_OPCODE_MASK	0xFF
- 
- #define AMD_SPI_ALT_CS_REG	0x1D
-@@ -35,9 +39,15 @@
- #define AMD_SPI_XFER_TX		1
- #define AMD_SPI_XFER_RX		2
- 
-+enum amd_spi_versions {
-+	AMD_SPI_V1 = 1,	/* AMDI0061 */
-+	AMD_SPI_V2,	/* AMDI0062 */
-+};
-+
- struct amd_spi {
- 	void __iomem *io_remap_addr;
- 	unsigned long io_base_addr;
-+	enum amd_spi_versions version;
- };
- 
- static inline u8 amd_spi_readreg8(struct amd_spi *amd_spi, int idx)
-@@ -81,14 +91,29 @@ static void amd_spi_select_chip(struct amd_spi *amd_spi, u8 cs)
- 	amd_spi_setclear_reg8(amd_spi, AMD_SPI_ALT_CS_REG, cs, AMD_SPI_ALT_CS_MASK);
- }
- 
-+static inline void amd_spi_clear_chip(struct amd_spi *amd_spi, u8 chip_select)
-+{
-+	amd_spi_writereg8(amd_spi, AMD_SPI_ALT_CS_REG, chip_select & ~AMD_SPI_ALT_CS_MASK);
-+}
-+
- static void amd_spi_clear_fifo_ptr(struct amd_spi *amd_spi)
- {
- 	amd_spi_setclear_reg32(amd_spi, AMD_SPI_CTRL0_REG, AMD_SPI_FIFO_CLEAR, AMD_SPI_FIFO_CLEAR);
- }
- 
--static void amd_spi_set_opcode(struct amd_spi *amd_spi, u8 cmd_opcode)
-+static int amd_spi_set_opcode(struct amd_spi *amd_spi, u8 cmd_opcode)
- {
--	amd_spi_setclear_reg32(amd_spi, AMD_SPI_CTRL0_REG, cmd_opcode, AMD_SPI_OPCODE_MASK);
-+	switch (amd_spi->version) {
-+	case AMD_SPI_V1:
-+		amd_spi_setclear_reg32(amd_spi, AMD_SPI_CTRL0_REG, cmd_opcode,
-+				       AMD_SPI_OPCODE_MASK);
-+		return 0;
-+	case AMD_SPI_V2:
-+		amd_spi_writereg8(amd_spi, AMD_SPI_OPCODE_REG, cmd_opcode);
-+		return 0;
-+	default:
-+		return -ENODEV;
-+	}
- }
- 
- static inline void amd_spi_set_rx_count(struct amd_spi *amd_spi, u8 rx_count)
-@@ -104,9 +129,21 @@ static inline void amd_spi_set_tx_count(struct amd_spi *amd_spi, u8 tx_count)
- static int amd_spi_busy_wait(struct amd_spi *amd_spi)
- {
- 	u32 val;
-+	int reg;
-+
-+	switch (amd_spi->version) {
-+	case AMD_SPI_V1:
-+		reg = AMD_SPI_CTRL0_REG;
-+		break;
-+	case AMD_SPI_V2:
-+		reg = AMD_SPI_STATUS_REG;
-+		break;
-+	default:
-+		return -ENODEV;
-+	}
- 
--	return readl_poll_timeout(amd_spi->io_remap_addr + AMD_SPI_CTRL0_REG,
--				  val, !(val & AMD_SPI_BUSY), 20, 2000000);
-+	return readl_poll_timeout(amd_spi->io_remap_addr + reg, val,
-+				  !(val & AMD_SPI_BUSY), 20, 2000000);
- }
- 
- static int amd_spi_execute_opcode(struct amd_spi *amd_spi)
-@@ -117,10 +154,20 @@ static int amd_spi_execute_opcode(struct amd_spi *amd_spi)
- 	if (ret)
- 		return ret;
- 
--	/* Set ExecuteOpCode bit in the CTRL0 register */
--	amd_spi_setclear_reg32(amd_spi, AMD_SPI_CTRL0_REG, AMD_SPI_EXEC_CMD, AMD_SPI_EXEC_CMD);
--
--	return 0;
-+	switch (amd_spi->version) {
-+	case AMD_SPI_V1:
-+		/* Set ExecuteOpCode bit in the CTRL0 register */
-+		amd_spi_setclear_reg32(amd_spi, AMD_SPI_CTRL0_REG, AMD_SPI_EXEC_CMD,
-+				       AMD_SPI_EXEC_CMD);
-+		return 0;
-+	case AMD_SPI_V2:
-+		/* Trigger the command execution */
-+		amd_spi_setclear_reg8(amd_spi, AMD_SPI_CMD_TRIGGER_REG,
-+				      AMD_SPI_TRIGGER_CMD, AMD_SPI_TRIGGER_CMD);
-+		return 0;
-+	default:
-+		return -ENODEV;
-+	}
- }
- 
- static int amd_spi_master_setup(struct spi_device *spi)
-@@ -190,6 +237,9 @@ static inline int amd_spi_fifo_xfer(struct amd_spi *amd_spi,
- 	message->actual_length = tx_len + rx_len + 1;
- 	/* complete the transaction */
- 	message->status = 0;
-+
-+	if (amd_spi->version == AMD_SPI_V2)
-+		amd_spi_clear_chip(amd_spi, message->spi->chip_select);
- 	spi_finalize_current_message(master);
- 
- 	return 0;
-@@ -235,6 +285,8 @@ static int amd_spi_probe(struct platform_device *pdev)
- 	}
- 	dev_dbg(dev, "io_remap_address: %p\n", amd_spi->io_remap_addr);
- 
-+	amd_spi->version = (enum amd_spi_versions) device_get_match_data(dev);
-+
- 	/* Initialize the spi_master fields */
- 	master->bus_num = 0;
- 	master->num_chipselect = 4;
-@@ -260,7 +312,8 @@ static int amd_spi_probe(struct platform_device *pdev)
- 
- #ifdef CONFIG_ACPI
- static const struct acpi_device_id spi_acpi_match[] = {
--	{ "AMDI0061", 0 },
-+	{ "AMDI0061", AMD_SPI_V1 },
-+	{ "AMDI0062", AMD_SPI_V2 },
- 	{},
- };
- MODULE_DEVICE_TABLE(acpi, spi_acpi_match);
-@@ -269,7 +322,7 @@ MODULE_DEVICE_TABLE(acpi, spi_acpi_match);
- static struct platform_driver amd_spi_driver = {
- 	.driver = {
- 		.name = "amd_spi",
--		.acpi_match_table = ACPI_PTR(spi_acpi_match),
-+		.acpi_match_table = spi_acpi_match,
- 	},
- 	.probe = amd_spi_probe,
- };
+ 		pm8226_mpps: mpps@a000 {
+ 			compatible = "qcom,pm8226-mpp", "qcom,spmi-mpp";
+ 			reg = <0xa000>;
 -- 
-2.35.0
+2.25.1
 

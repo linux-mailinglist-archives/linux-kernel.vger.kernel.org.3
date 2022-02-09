@@ -2,54 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E42C44AEA65
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 07:31:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A58CF4AEA4C
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 07:28:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233655AbiBIGbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 01:31:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60422 "EHLO
+        id S234995AbiBIG2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 01:28:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235882AbiBIG3R (ORCPT
+        with ESMTP id S235882AbiBIG1K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 01:29:17 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D23E02DFCD;
-        Tue,  8 Feb 2022 22:29:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644388161; x=1675924161;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=IbT91/fqiVPksbSJc2NP8Q4PbHBMZvsgMb4CiiQxRiA=;
-  b=DJdHFjWBtGJ/YqwGur1PuMotboSXOX+CNlStHTy6u5LJ/A5+4+wVtMs5
-   ewMrup5CSeewEFRuDz15HjHoo22uTKuvFLmGzR6neh33ghivBB5AeQ4sW
-   odrCoAbYE0EaGDMEg3gfPgL+gNTRvfoSf1Qo7Tcmf9vgYFRjDxvhcgDFh
-   gA7TsO9StQK/ViRLxLdlaoG6TUbrsqedeoW0+e2nMIyKdlp44e+ERFxGl
-   gcht7GE+yu8ohOa7Jz7hFDzTqd2uu2OwRpXXUD1pI+C7rNZATFJi6T1d2
-   zxdh7vrFiy2qHKg0Tw1wSzTGeaPUJOSWGbeNOV0hs3qPzUnBRxy9/cSEs
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="312428037"
-X-IronPort-AV: E=Sophos;i="5.88,354,1635231600"; 
-   d="scan'208";a="312428037"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 22:29:14 -0800
-X-IronPort-AV: E=Sophos;i="5.88,354,1635231600"; 
-   d="scan'208";a="540958500"
-Received: from duan-server-s2600bt.bj.intel.com ([10.240.192.123])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 22:29:12 -0800
-From:   Zhenzhong Duan <zhenzhong.duan@intel.com>
-To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com,
-        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org
-Subject: [PATCH] KVM: x86: Fix emulation in writing cr8
-Date:   Wed,  9 Feb 2022 14:24:28 +0800
-Message-Id: <20220209062428.332295-1-zhenzhong.duan@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 9 Feb 2022 01:27:10 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C3BC0610C5
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 22:27:13 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id v13-20020a17090ac90d00b001b87bc106bdso4169083pjt.4
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 22:27:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=oZptq99McEmSTWKDkacQuJxWYVLFif45IaPqyzpBkjk=;
+        b=ZYxOJU1r53Sj8pg5AZsbPSGhkjg65dtEt1RJxdfnMMiKHKUSYkSld3E8PHY94rLMI0
+         fsv2eFO8TFjNH00vk1vlHcQIpT5R7n9+eWE2+KexOeiGjc3tLt/yYfxW+4l4gpm2jKIO
+         G7rHKbofp1DvplhR4iUO3ti5njWGnVzsDQ1Ziet+vixWy+lW7VKrR3LG2OcWNzSU4Z11
+         stynxqFXBQj8a+sC3/Fg5+lGdTYUj3FlWvqNAjIYRFksQUqJZ6IUrF0Vu+noMn6L5Ny9
+         3J369+2GtHNcseI4qk2HeWyGd07eHutnjoqLM1iENmOaBrJEQJr+l0YjG5cC+Y2wz+CS
+         WvGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=oZptq99McEmSTWKDkacQuJxWYVLFif45IaPqyzpBkjk=;
+        b=dlRKmuM9Dc1rYqDq3X98WVQG3/uDBXETzWLlSYi7w5l9gWLf8FhE6KGipJYbee+CQo
+         uCNTzbaxQ8wsk3cqSl49LNG0LKt9NNs7tfgC7xEJ7lLmTdC305NWx41GBOchwVNHcSQI
+         HiJbNmjQrESjYILhqccxmhqpXHrPpd9RCdzLWu0TiOIFMx1Ehvd0YsNco1VsiQxICLDB
+         Nt+PG/d4j3YCVIjPplWTWaTW90cKMxSHN4sJK+w3bPVngQ7Gg9paE8P0aptH0hdYtTv+
+         xPfY89jMsKjZKMaWtWdO2QGlydW44aiVrfSTtZN8jPaHOFA8/MZmMAJjHUU9AoPRLpus
+         053Q==
+X-Gm-Message-State: AOAM5315sf4yJgRQqRe4vJPW2ErpMnCyusySdiWlBAEoHen+rX1pYvSg
+        CjyFxHrTtcXRatPyesvQ2VRB7w==
+X-Google-Smtp-Source: ABdhPJy8WOCryenGRsq0jVJwJojuWywhhTwy7/5rrmGD0U9AQtw2NK+Q2eas+0f64dbEjH9qRfCTkQ==
+X-Received: by 2002:a17:90b:1d88:: with SMTP id pf8mr899349pjb.162.1644388032609;
+        Tue, 08 Feb 2022 22:27:12 -0800 (PST)
+Received: from localhost ([136.185.132.167])
+        by smtp.gmail.com with ESMTPSA id g12sm1029213pfj.148.2022.02.08.22.27.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 22:27:11 -0800 (PST)
+Date:   Wed, 9 Feb 2022 11:57:10 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>
+Subject: Re: [PATCH] cpufreq: longhaul: Replace acpi_bus_get_device()
+Message-ID: <20220209062710.5fwg52fjb2jkerzr@vireshk-i7>
+References: <4700827.GXAFRqVoOG@kreacher>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4700827.GXAFRqVoOG@kreacher>
+User-Agent: NeoMutt/20180716-391-311a52
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,45 +72,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In emulation of writing to cr8, one of the lowest four bits in TPR[3:0]
-is kept.
+On 26-01-22, 20:43, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Replace acpi_bus_get_device() that is going to be dropped with
+> acpi_fetch_acpi_dev().
+> 
+> No intentional functional impact.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  drivers/cpufreq/longhaul.c |    4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> Index: linux-pm/drivers/cpufreq/longhaul.c
+> ===================================================================
+> --- linux-pm.orig/drivers/cpufreq/longhaul.c
+> +++ linux-pm/drivers/cpufreq/longhaul.c
+> @@ -668,9 +668,9 @@ static acpi_status longhaul_walk_callbac
+>  					  u32 nesting_level,
+>  					  void *context, void **return_value)
+>  {
+> -	struct acpi_device *d;
+> +	struct acpi_device *d = acpi_fetch_acpi_dev(obj_handle);
+>  
+> -	if (acpi_bus_get_device(obj_handle, &d))
+> +	if (!d)
+>  		return 0;
+>  
+>  	*return_value = acpi_driver_data(d);
 
-According to Intel SDM 10.8.6.1(baremetal scenario):
-"APIC.TPR[bits 7:4] = CR8[bits 3:0], APIC.TPR[bits 3:0] = 0";
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-and SDM 28.3(use TPR shadow):
-"MOV to CR8. The instruction stores bits 3:0 of its source operand into
-bits 7:4 of VTPR; the remainder of VTPR (bits 3:0 and bits 31:8) are
-cleared.";
-
-so in KVM emulated scenario, clear TPR[3:0] to make a consistent behavior
-as in other scenarios.
-
-This doesn't impact evaluation and delivery of pending virtual interrupts
-because processor does not use the processor-priority sub-class to
-determine which interrupts to delivery and which to inhibit.
-
-Signed-off-by: Zhenzhong Duan <zhenzhong.duan@intel.com>
----
- arch/x86/kvm/lapic.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
-
-diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-index d7e6fde82d25..306025db9959 100644
---- a/arch/x86/kvm/lapic.c
-+++ b/arch/x86/kvm/lapic.c
-@@ -2242,10 +2242,7 @@ void kvm_set_lapic_tscdeadline_msr(struct kvm_vcpu *vcpu, u64 data)
- 
- void kvm_lapic_set_tpr(struct kvm_vcpu *vcpu, unsigned long cr8)
- {
--	struct kvm_lapic *apic = vcpu->arch.apic;
--
--	apic_set_tpr(apic, ((cr8 & 0x0f) << 4)
--		     | (kvm_lapic_get_reg(apic, APIC_TASKPRI) & 4));
-+	apic_set_tpr(vcpu->arch.apic, (cr8 & 0x0f) << 4);
- }
- 
- u64 kvm_lapic_get_cr8(struct kvm_vcpu *vcpu)
 -- 
-2.25.1
-
+viresh

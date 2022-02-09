@@ -2,52 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27CBE4AF2BC
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 14:30:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 119D74AF2C0
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 14:30:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233614AbiBINaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 08:30:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45182 "EHLO
+        id S233789AbiBINaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 08:30:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232913AbiBINaJ (ORCPT
+        with ESMTP id S232967AbiBINaK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 08:30:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5B10C05CB8E;
+        Wed, 9 Feb 2022 08:30:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C82A6C05CB97;
         Wed,  9 Feb 2022 05:30:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D2B1619E3;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 630E9619EB;
         Wed,  9 Feb 2022 13:30:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B50C5C340EF;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BC4A0C340F0;
         Wed,  9 Feb 2022 13:30:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1644413411;
-        bh=9lPNQncCynWQmeWQFAEDCcB4YeBytw/5ZAbh6NQ2tu8=;
+        bh=0f0mIIp2PVoZ2iZ9BvnhTIYKPtq6j8Y1JLIMf1udPnc=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=bzhtS21QahzPQy5Swd5ocJ6+bwrsHlZw7rZrdXil0LS2DM3tsvWbkx0f4n54jbeJe
-         i2Ayz+RPYd+UzS6aiPKBxBMf4/gJJH1T+D1WuYQ4t5yVFGXub9gXaSGqsasNbVw/vr
-         lb3MhFVpExHzepxyUPr34NJV9fhZbDqU5guWD82b65RXgE6ro9Yp3PvAE5D8tOdZpM
-         AJLvSGlNWTxTf/pcUTnVxuDF19UbD9DLO9p2dzP2Zg6E4VY0Gd/nxPk37Vl6q0wohO
-         tFeZJsJu7cCpa/4dLPE/nFvviwUrBDbSoHWSe8m37x6MkkHwVihcmLCdfkMa1PkMlk
-         NDvFujQxGkVoA==
+        b=l/+pwIJsjgyjtarNTWkAEtRnpo1C83yo7XdcwOp9iO4HPyHFUmjif3HgLhvDYGFGV
+         0teUVYWxYibc2vgPXkUVFckd4v89RoKmooWk45aP9bWQbnoF1JkoHIu+iL+CKNscYP
+         t7TkAz52HQTiSdw6qmBpDsMtVfIykbf3VU7YY0lVyt+TkndpaaoaPn/czPwizPMgYU
+         8f7CEb0MFRtmaiQPtmfkql4z/2dwlD6MteFGqBmeBDS+3c05iWWq9YdCojWt4u2ToS
+         Lgb6He2nf3wjjjg/sCs8ZBYyRSzIIcP7RhbnN2i8oP+WJk/y1VQlCjuAaVsEGYeAqZ
+         6DC5vdZ48v3Ww==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9C2D4E6D45A;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A6022E6D458;
         Wed,  9 Feb 2022 13:30:11 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: ethernet: cavium: use div64_u64() instead of do_div()
+Subject: Re: [v2,net-next 1/3] net:enetc: allocate CBD ring data memory using DMA
+ coherent methods
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164441341163.22778.9220881439999777663.git-patchwork-notify@kernel.org>
+Message-Id: <164441341167.22778.2861856904847036230.git-patchwork-notify@kernel.org>
 Date:   Wed, 09 Feb 2022 13:30:11 +0000
-References: <1644395960-4232-1-git-send-email-wangqing@vivo.com>
-In-Reply-To: <1644395960-4232-1-git-send-email-wangqing@vivo.com>
-To:     Qing Wang <wangqing@vivo.com>
-Cc:     dchickles@marvell.com, sburla@marvell.com, fmanlunas@marvell.com,
-        davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20220209123303.22799-1-po.liu@nxp.com>
+In-Reply-To: <20220209123303.22799-1-po.liu@nxp.com>
+To:     Po Liu <po.liu@nxp.com>
+Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, tim.gardner@canonical.com, kuba@kernel.org,
+        claudiu.manoil@nxp.com, vladimir.oltean@nxp.com,
+        xiaoliang.yang_1@nxp.com
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -60,24 +62,27 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hello:
 
-This patch was applied to netdev/net-next.git (master)
+This series was applied to netdev/net-next.git (master)
 by David S. Miller <davem@davemloft.net>:
 
-On Wed,  9 Feb 2022 00:39:19 -0800 you wrote:
-> From: Wang Qing <wangqing@vivo.com>
+On Wed,  9 Feb 2022 20:33:01 +0800 you wrote:
+> To replace the dma_map_single() stream DMA mapping with DMA coherent
+> method dma_alloc_coherent() which is more simple.
 > 
-> do_div() does a 64-by-32 division.
-> When the divisor is u64, do_div() truncates it to 32 bits, this means it
-> can test non-zero and be truncated to zero for division.
+> dma_map_single() found by Tim Gardner not proper. Suggested by Claudiu
+> Manoil and Jakub Kicinski to use dma_alloc_coherent(). Discussion at:
 > 
-> fix do_div.cocci warning:
-> do_div() does a 64-by-32 division, please consider using div64_u64 instead.
+> https://lore.kernel.org/netdev/AM9PR04MB8397F300DECD3C44D2EBD07796BD9@AM9PR04MB8397.eurprd04.prod.outlook.com/t/
 > 
 > [...]
 
 Here is the summary with links:
-  - net: ethernet: cavium: use div64_u64() instead of do_div()
-    https://git.kernel.org/netdev/net-next/c/038fcdaf0470
+  - [v2,net-next,1/3] net:enetc: allocate CBD ring data memory using DMA coherent methods
+    https://git.kernel.org/netdev/net-next/c/b3a723dbc94a
+  - [v2,net-next,2/3] net:enetc: command BD ring data memory alloc as one function alone
+    https://git.kernel.org/netdev/net-next/c/0cc11cdbcb39
+  - [v2,net-next,3/3] net:enetc: enetc qos using the CBDR dma alloc function
+    https://git.kernel.org/netdev/net-next/c/237d20c208db
 
 You are awesome, thank you!
 -- 

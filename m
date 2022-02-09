@@ -2,127 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E88D4AFF0D
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 22:15:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51A6F4AFF1B
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 22:17:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233028AbiBIVOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 16:14:54 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:39622 "EHLO
+        id S233141AbiBIVQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 16:16:58 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:43552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232999AbiBIVOu (ORCPT
+        with ESMTP id S233085AbiBIVQz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 16:14:50 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2042.outbound.protection.outlook.com [40.107.94.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F5FC033255
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 13:14:53 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jQL5r3J1frd3BWbtaYAhH+z2jhAuRP5hIA85NN9lf+MYwiuQLA9HvYnz2sOxG/0YpIz9DicD9rvRBRUkZHfdfb9RvPUilIpIrl++gYmj/2boA9ap5FUpSf8A1QK22d2BxzUV5JGJecmM1sT3cMzAl+rouHojRezsWkVeqkJVASYGIl0eYlFEuOop/OFePUL/YC/ghGcH9wX0Og2YFgK4f227CmLdIW5ufGp9iEY4pQ1onqEpSTFzh7r6ymgTHh3KbNvffSRujpZ823DyWl3tsUscTnRWE3nDYa98eZFDjAXUoWG8I3g68C/mpFxbTtyOW6Kdn949M0CHUIPyXDV2vg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=c43PZfsRv9v0IjTb4KXwlk1RJymvTfJmgA5mWNJ3Y8Q=;
- b=gcx2z2RpVl/3dSD0Nm6UldjG0r9n8X26+qLkeuyc3DqP8kKnMysinZy6+2ZgRQU8rvJ7YstpOSUrgwU+HgF131lHXDA9iarq5/ojcpIAor5aK1XVxzadP3d98E6XX2VaMB2qoTvkIQAxYr+Lw7brBqX4MxIvxcnlw9MQbTmbWzcKzWRlzOxILEiLJyPjvN1j/fks6jffCUa2XP+OgJSFT4v+JWZcXwqjDGo8Qu21zJHh4V0P0i9nGzb9NYaLZScRM3JPNBP54OIBuXuZIfSD95cGVNspsBXMltDsJ/oD/uFYFGT5jN+yIzZ5CiQNxwlMwZfAr+23vaB1N3j/N7W6ww==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=c43PZfsRv9v0IjTb4KXwlk1RJymvTfJmgA5mWNJ3Y8Q=;
- b=N97eyhOrirVtCQ2Ls3maxbSuo45iGkYOdCyx2ctONZFyEkh6Pr5ulwUlsniX8zj4gfjfdOVWAIyX6QQ+TpbtVF6xypoZijTPziaoLNjzqyfy3zLk00YKhTgkrSE2bvNCGVTNHDWJWd54XAsp8m3ndj2Rg0YNJE1DsemtFNsYBNs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BL1PR12MB5112.namprd12.prod.outlook.com (2603:10b6:208:316::16)
- by BL0PR12MB5556.namprd12.prod.outlook.com (2603:10b6:208:1cf::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Wed, 9 Feb
- 2022 21:14:51 +0000
-Received: from BL1PR12MB5112.namprd12.prod.outlook.com
- ([fe80::f071:728c:3813:3376]) by BL1PR12MB5112.namprd12.prod.outlook.com
- ([fe80::f071:728c:3813:3376%9]) with mapi id 15.20.4975.011; Wed, 9 Feb 2022
- 21:14:51 +0000
-Message-ID: <8622afaf-6448-8932-9971-6bfaaa8c311a@amd.com>
-Date:   Wed, 9 Feb 2022 16:14:49 -0500
+        Wed, 9 Feb 2022 16:16:55 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7FBC0DE7F8;
+        Wed,  9 Feb 2022 13:16:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644441418; x=1675977418;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=aXGhdB7/S/Sfe6z0D5nuv8iSXKIxW6oQrnd4HjbGcpI=;
+  b=MkV2o6ffagkn8+j7qQfTAcU1RIrMB6PMn6ZLsgM5zCEOEDlIgk8LmE/M
+   xyP4bpHsdYx+o/7aKS8DvdV1vckhScr4FvZzueqmKPyyJX6hGyb6ZJMeh
+   AP0ZfxSzP6b8h+VElyb++GaF4EbGpRV3KJRGUShRTMtPvUkgc/W3A/L8B
+   R3VWD61HDGqbBzEC3NXptjHbMYcDRrld2WBJeQqsqnAyS5A1r43W4BO1f
+   xy5t5tPqgJmcRrutbNqpreoghiMYO5VfxjKdtSBazcbxga5QfhW0KKsmj
+   aarb5lKmjbZQi7gGjIs8hqiJCb1vc+n3G2gmgbLgIgCkpQZl8r5CygfIg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="249284114"
+X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
+   d="scan'208";a="249284114"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 13:16:53 -0800
+X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
+   d="scan'208";a="585721023"
+Received: from sanvery-mobl.amr.corp.intel.com (HELO [10.212.232.139]) ([10.212.232.139])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 13:16:52 -0800
+Message-ID: <c6b03c7d-14ee-9ffa-19e6-ee78cf186e38@intel.com>
+Date:   Wed, 9 Feb 2022 13:16:49 -0800
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH -next] drm/amdkfd: Fix NULL but dereferenced coccicheck
- error
 Content-Language: en-US
-To:     Yang Li <yang.lee@linux.alibaba.com>, daniel@ffwll.ch
-Cc:     airlied@linux.ie, alexander.deucher@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-References: <20220209013940.71348-1-yang.lee@linux.alibaba.com>
-From:   Felix Kuehling <felix.kuehling@amd.com>
-Organization: AMD Inc.
-In-Reply-To: <20220209013940.71348-1-yang.lee@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: MN2PR10CA0013.namprd10.prod.outlook.com
- (2603:10b6:208:120::26) To BL1PR12MB5112.namprd12.prod.outlook.com
- (2603:10b6:208:316::16)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 85f00187-eecf-4ac2-c5df-08d9ec113602
-X-MS-TrafficTypeDiagnostic: BL0PR12MB5556:EE_
-X-Microsoft-Antispam-PRVS: <BL0PR12MB5556EAA5822E521767DDF01E922E9@BL0PR12MB5556.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7Ms3eVlcjpVuSFRLinBygWXbczu6vyGBYeCidoL2m7dsW2WuLw8gbKxJKaYjMvo3atjRUwsC6wYoyBS28p+Sx9THq4i+GjEbThzjOFLrv1DRH0Pdo4jLLSxoCjurYWlEyW4tIPa7ABcHmA0GBeteFTFECwUqqA50I+QxlI+khwJEmLr2zzxlJR8NygJSUKrKMlYcfVG2zkq+JR81hsFYPdo9g5MEl8ygtVY+WmHnP5WwvN6GGOYgysDsd/TsqlcvJkPP7NgDtThuUk+29S7TeGubS9njoXY9h2udtPjpSl0xYXwfLChKBK1bSYdsnoRe8BH8Z61c52rL7Thdl3ugT7em/WNeEXlsmPs4vC5WBCPaCM14jHJoTR6SLEi/rbrJcHX28mYoWnnFhL6vvHp2KRm4HDDCOq6Zq/5kSYx0c7G3FtJB1c/aMuVTbUbXmOS+V34WL2Lqc5XmDsEb1gYLN4gsrARIl+aem1ybWw3y6C5WOAMOiFmeKLv51Fb4kPqgRW9a+XGr62Z1sc8gZgtlRcRe9ZQDbnDQeVwS+7ZntXGl6rJW7IB0IphQhcTzxrvmw83RVwTtgTFNohbchGMh5e6WtNHTWBQhRI7smsoQty8eA4ds6MJnfp6VvG4hJrdexMPde21tpmSLNyeZ9IPDiyEqRSseKSNxcxnxGQtL4sUszWSpFmP1R3lCfLszm87HbB8HkiIOzUXnJfBVe5fVLKG6NWXdFsMjI/z+Ac5AnZ6c+yIr+jRdgjo3DxBPk0i2
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5112.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(316002)(38100700002)(6506007)(83380400001)(36756003)(2616005)(186003)(86362001)(6512007)(44832011)(508600001)(31696002)(8676002)(4326008)(5660300002)(66476007)(6486002)(8936002)(66556008)(2906002)(36916002)(31686004)(53546011)(66946007)(26005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Ri92MUZ0MGFHTXZET3dRSU1hNDEybUgyL3VUQmhyRGhwR3VoNGEwSU5WbEQ2?=
- =?utf-8?B?aW4zL3hTRFF2YjZDbDgxUVpKNmlyVms4bUFMcTdkMGVURVN4eThZaklTVTZN?=
- =?utf-8?B?di9tL25mRWZEVkZORmZqUXZTWkJNd3lVNzBDQVBDNkZ1allYRC9nTEZUSEtj?=
- =?utf-8?B?NElBcFI3d0phbnhRTEpOMktUR0NDcWU1NE02YjUyaldKWC9MRmlNQ3dwU1JL?=
- =?utf-8?B?TWorYmtWcmE3aVFmbXJRcE5wOU83dlNDTm9McWVFdG52OS9ETG1GYzhDYzBw?=
- =?utf-8?B?WTdyOU5jRDZGMU4vTWw0M3hlSS9SUjY2dWRRTDRsaGwvTWhlODBUZG5SZjRV?=
- =?utf-8?B?QVkweitDUnFWdHZONUxLQmxXTGl3UXlLK3NqZlYwNUJ2dGVDTlkzVFJGUk5t?=
- =?utf-8?B?Wk5nRnUwZmlzODJ1RFk1M0dERWY1eFJ6cU9IN0ZhVzRla0tZWDNDbUI0VmFi?=
- =?utf-8?B?OUdKVFpUemhodGtjL0JqR1cyclVDdkcvNDcwQWFUUWVNWTEwVDlUaGZTQzJp?=
- =?utf-8?B?NmJCb0kwazdKTHd1MnA4bnR5c2l4bmdLVzRWL0d0WXdRTm5xUDBPTlBnNk15?=
- =?utf-8?B?ZHREUEU2ekFaUUxWbUFtalNLZmRHMUlSc2VJUUNhOUxScjVmUnRJZTJBUkVH?=
- =?utf-8?B?UkhMd0xERXgyYTRmd2duYUNoZk1Ndko5T0E1emMwckdPN1hyQjR3N1R3dGtn?=
- =?utf-8?B?Y1I4NCttL3lHdXNEZDFFUDBjQjVKMTIxYXl3anljdllsVDZLaHV4Q1dlQWpF?=
- =?utf-8?B?NHA5aW41UFZtanFlM0NXbE4vbHFkK2FSZmpuQ1MzOEdaS2pmdGFybnBZa1hp?=
- =?utf-8?B?RUpRZi91cFNTOU5PQTdvQXh5RjVpYUk2bHQyamZoYVEwQWRvSDR0bFZZZHpm?=
- =?utf-8?B?NW8yRWVyb29GNFVsbDVBdDdTNXIwWlNjaTNDQXZEZkowbW00dUw3YVU1Wkda?=
- =?utf-8?B?TVF2WHFyazl2ejhXVzM5dlFuNGtMOXdkN05UV2pDUlA4UXJOWDVKSnlTbnl1?=
- =?utf-8?B?d3FIVWU1elhpNGozNU1hTG1IRXFoUDBiKzExYmdFYzRHdWFiS3pJL3YzUlh5?=
- =?utf-8?B?SVVyNHQxVVdmWUEwVC9MSVRxZDBMRDNNUnJ4aS9DSG1OMnRidWlQTWZOZUJ2?=
- =?utf-8?B?Z1paV0NTVUZmUHJZM3dJVk0rVzNVR2NBZWlSR3o3UHZ5b2V6Y0tkZTJySGdi?=
- =?utf-8?B?VCtScDhJQ1NHSlRyc0FoT2FEczUybmlLdzVFU2R3N1VZSzdxR0grc2h5NFho?=
- =?utf-8?B?emEyZ1NEZjNVYllhSkVhQnZYSFdYK2ErVTJlYjMzWmtCWWkwZ2Y0bFgxRG12?=
- =?utf-8?B?ei9iRFJKWmlSNXNseUZxclB3elB4ckVTR2hPdXc5aHBqSXRIQkJGNDkrLzFL?=
- =?utf-8?B?RS8xTzJQcjNCV09aMFVjTW5lcmt5MEFWMlpmOGkxZDRabWF6UmwxUVZsRjIw?=
- =?utf-8?B?Q0gzU3BtS28xNEFjMnE2eXRVTEd3MFJBQ2lmYU9TNzRTRG5TaUk4U0RpdHpt?=
- =?utf-8?B?RC9OdGhGWmdoWGpoQU1SNnppcVQ4MC9YYkF4Ymt6Y0FaNU5lZnhCMkhGTDQ1?=
- =?utf-8?B?UXlMcDFoUW02WnJkRjAzZ3Z1cXd0QWh0ZnFLTmtRNWJtd0xjZzBhQ2piSVpl?=
- =?utf-8?B?ZHN1Qmk5TGxQNHlsdWQ4c01kNDhMS01iTW0vOXlTVDdSUGFhTEhGNnFzVjZG?=
- =?utf-8?B?WDJ2VjVEeWhuTXUvQ1k0bDJML1YxRFU1UGd2K2lRNnYvSEpKODBpWlkxVFda?=
- =?utf-8?B?VW0zczBqenRmdG1pd0Nrb003S1BjWlFoVDY3ZnNLTk9zZGpwUHloVmNTSEhW?=
- =?utf-8?B?Wkx0OUtQMTdjNWZ5VzVNQS9JeGVydzRJT1hEUXZOWlVxbGt6VjkxcTRsamM3?=
- =?utf-8?B?MlZ3d0IweG9QK2ZtTkdoeWpkcitCVFhBZE1QdVY4aXRuVldiWDlBdDdpRWVG?=
- =?utf-8?B?aU9UeHkyOHVjdkJuSzRPSkE4cUpqckR5dUtyOEFYQU5remtTanpSOXN0S0FK?=
- =?utf-8?B?T1JkWEdUQld2YmJJSnNXTDJtUkU2NnBIK3VuZlU4bG96ZDFINTlGL21jdFZn?=
- =?utf-8?B?L3dnYWJIanR4Z29PcUpDZVB2UXlNUG1BejRscjJVanNLL1hZVUtORHVTK0Fj?=
- =?utf-8?B?R2QvcmM5V1VGdHZZempCU1UrS2lkZzVHZW91dUNmUml0OFlhK29IOGFRRDhj?=
- =?utf-8?Q?+HKdNBm4JjsOuM2tYHEECEw=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 85f00187-eecf-4ac2-c5df-08d9ec113602
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5112.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2022 21:14:51.6104
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: PN3+RtGmspX+/fx4zvG/tl4AXmA4cmSImq0QfQA+iTnkNAeaCec0RCLvN7XSFJsxZeztUQNkUeK21/IkpRn86A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB5556
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
+        kcc@google.com, eranian@google.com
+Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
+ <20220130211838.8382-17-rick.p.edgecombe@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCH 16/35] x86/mm: Update maybe_mkwrite() for shadow stack
+In-Reply-To: <20220130211838.8382-17-rick.p.edgecombe@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -130,39 +89,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+First of all, that changelog doesn't really explain the problem.  It's
+all background and no "why".
 
-On 2022-02-08 20:39, Yang Li wrote:
-> Eliminate the following coccicheck warning:
-> ./drivers/gpu/drm/amd/amdkfd/kfd_chardev.c:2087:27-38: ERROR: bo_buckets
-> is NULL but dereferenced.
->
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-
-Thank you. I already picket up Tom Rix's patch for the same issue.
-
-Regards,
-   Felix
+*Why* does maybe_mkwrite() take a VMA?  What's the point?
 
 
-> ---
->   drivers/gpu/drm/amd/amdkfd/kfd_chardev.c | 6 ++----
->   1 file changed, 2 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_chardev.c b/drivers/gpu/drm/amd/amdkfd/kfd_chardev.c
-> index 64e3b4e3a712..636391c61caf 100644
-> --- a/drivers/gpu/drm/amd/amdkfd/kfd_chardev.c
-> +++ b/drivers/gpu/drm/amd/amdkfd/kfd_chardev.c
-> @@ -1982,10 +1982,8 @@ static int criu_checkpoint_bos(struct kfd_process *p,
->   	void *mem;
->   
->   	bo_buckets = kvzalloc(num_bos * sizeof(*bo_buckets), GFP_KERNEL);
-> -	if (!bo_buckets) {
-> -		ret = -ENOMEM;
-> -		goto exit;
-> -	}
-> +	if (!bo_buckets)
-> +		return -ENOMEM;
->   
->   	bo_privs = kvzalloc(num_bos * sizeof(*bo_privs), GFP_KERNEL);
->   	if (!bo_privs) {
+>  #endif /* _ASM_X86_PGTABLE_H */
+> diff --git a/arch/x86/mm/pgtable.c b/arch/x86/mm/pgtable.c
+> index 3481b35cb4ec..c22c8e9c37e8 100644
+> --- a/arch/x86/mm/pgtable.c
+> +++ b/arch/x86/mm/pgtable.c
+> @@ -610,6 +610,26 @@ int pmdp_clear_flush_young(struct vm_area_struct *vma,
+>  }
+>  #endif
+>  
+> +pte_t maybe_mkwrite(pte_t pte, struct vm_area_struct *vma)
+> +{
+> +	if (vma->vm_flags & VM_WRITE)
+> +		pte = pte_mkwrite(pte);
+> +	else if (vma->vm_flags & VM_SHADOW_STACK)
+> +		pte = pte_mkwrite_shstk(pte);
+> +	return pte;
+> +}
+
+First, this makes me wonder why we need pte_mkwrite() *AND*
+pte_mkwrite_shstk().  Is there a difference in their behavior that matters?
+
+Second, I don't like the copy-and-paste to make an arch-specific "hook"
+for a function.  This is a very good way to ensure that arch code and
+generic code fork and accumulate separate bugs.
+
+I'd much rather have this do (in generic code):
+
+ pte_t maybe_mkwrite(pte_t pte, struct vm_area_struct *vma)
+ {
+	if (vma->vm_flags & VM_WRITE)
+		pte = pte_mkwrite(pte);
+
+	pte = arch_maybe_mkwrite(pte, vma);
+
+	return pte;
++}
+
+Actually, is there a reason the generic code could not even just add:
+
+	if (vma->vm_flags & VM_ARCH_MAYBE_MKWRITE_MASK)
+		pte = arch_maybe_mkwrite(pte, vma);
+
+or heck even just the x86-specific code itself:
+
+	if (vma->vm_flags & VM_SHADOW_STACK)
+		pte = pte_mkwrite_shstk(pte);
+
+with a stub defined for pte_mkwrite_shstk()?
+
+In the end, it's just a question of whether the generic code wants
+something to say "arch" or "shstk".  But, I don't think we need a forked
+x86 copy of these functions.
+
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index 311c6018d503..b3cb3a17037b 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -955,12 +955,14 @@ void free_compound_page(struct page *page);
+>   * pte_mkwrite.  But get_user_pages can cause write faults for mappings
+>   * that do not have writing enabled, when used by access_process_vm.
+>   */
+> +#ifndef maybe_mkwrite
+
+maybe_mkwrite is defined in asm/pgtable.h.  Where is the #include?
+
+>  static inline pte_t maybe_mkwrite(pte_t pte, struct vm_area_struct *vma)
+>  {
+>  	if (likely(vma->vm_flags & VM_WRITE))
+>  		pte = pte_mkwrite(pte);
+>  	return pte;
+>  }
+> +#endif
+>  
+>  vm_fault_t do_set_pmd(struct vm_fault *vmf, struct page *page);
+>  void do_set_pte(struct vm_fault *vmf, struct page *page, unsigned long addr);
+> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+> index 406a3c28c026..2adedcfca00b 100644
+> --- a/mm/huge_memory.c
+> +++ b/mm/huge_memory.c
+> @@ -491,12 +491,14 @@ static int __init setup_transparent_hugepage(char *str)
+>  }
+>  __setup("transparent_hugepage=", setup_transparent_hugepage);
+>  
+> +#ifndef maybe_pmd_mkwrite
+>  pmd_t maybe_pmd_mkwrite(pmd_t pmd, struct vm_area_struct *vma)
+>  {
+>  	if (likely(vma->vm_flags & VM_WRITE))
+>  		pmd = pmd_mkwrite(pmd);
+>  	return pmd;
+>  }
+> +#endif
+>  
+>  #ifdef CONFIG_MEMCG
+>  static inline struct deferred_split *get_deferred_split_queue(struct page *page)
+

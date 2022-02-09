@@ -2,212 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C27554AE609
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 01:30:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78F254AE60B
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 01:32:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239976AbiBIAaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 19:30:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38186 "EHLO
+        id S240027AbiBIAcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 19:32:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231912AbiBIAaH (ORCPT
+        with ESMTP id S231912AbiBIAcU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 19:30:07 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E98CC06157B
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 16:30:06 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id z13so1375780pfa.3
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 16:30:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=0/g46XYpdY+83L4Nhq5fUK5DmKHZmZsCeq+A2IUv7aw=;
-        b=E/jx1S3/PFTXHZRylu69yTSRn8YTQ0PkaCRbn39F3+KAS1DSAX3C2O/WQjfRGj1HPh
-         arlyqsg2NtmZcg859X1cSmIUbKBBsZR7362pjWhOXloDdle7pw/GtPoxGXI75yVpOkcO
-         KG8I7vklsmfDzC+KKeOx4l2MntOna5PUwizngsWFX3+82Ozjviu5BQhLaLDgWiLwsTrF
-         GMZmvS5lqb6021b9DprdPMWYgAVuXNQ2KVlKh/bBWkkikau8KjB8nMX8K6Iqe6W65Au8
-         29FAamrwrU3AjkDpyZrS4xxliNErLptk+7ekvauMGR45F0wrYJmnnY15Ye+QVku9DzPp
-         ZbIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=0/g46XYpdY+83L4Nhq5fUK5DmKHZmZsCeq+A2IUv7aw=;
-        b=NhTW16wD95MPI7rp401nnuVE6iM/TuSsgLdKJ9mJFw/UY7TR19l3S8GJVeT38ZSYch
-         q/YWZADMgvCnMRJdoOuPr+F1GtIHTh94yiDeCDVD4XN9WIIqq8XSu5nV/cAep4ApaXbj
-         ca806VY0Y4n0jf68FlwTlPy3oyqU4sn09JD4LOqUJ9S5uqKWUjttZ+JlFHAKI5GWXEwQ
-         LtNxU7QUiU9Mb/rFNj8S9Z0bbNJ2mY0A809efrdlc3xuESdXaGIBhGgd1vF+js73XTlM
-         d9zHCqbWXsy90TmfBmazPgvcBm4CVjIxRPpSDq14NekmSnG/Dlsoi4Xx7ojX2mDWY3A3
-         zj1g==
-X-Gm-Message-State: AOAM530iuVTv4nDKOyIr3oW2eV5vbrT2URJnY4OBkt5x2kgIkheh1HhD
-        C6IyknK4MTOv5mfpEmSF5f6tbA==
-X-Google-Smtp-Source: ABdhPJyyHkWQ9J1fF0gJ63uF+8ojHUZgEEO0HMj5VMdg1+GS49MI/QdjLdYIdi3X9v/mLKNy9Qce4w==
-X-Received: by 2002:a63:8041:: with SMTP id j62mr5488060pgd.605.1644366604726;
-        Tue, 08 Feb 2022 16:30:04 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id l12sm3841830pjq.57.2022.02.08.16.30.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 16:30:04 -0800 (PST)
-Date:   Wed, 9 Feb 2022 00:29:57 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Gao <chao.gao@intel.com>
-Cc:     kvm@vger.kernel.org, pbonzini@redhat.com, kevin.tian@intel.com,
-        tglx@linutronix.de, John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Tony Lindgren <tony@atomide.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/4] KVM: Rename and move CPUHP_AP_KVM_STARTING to
- ONLINE section
-Message-ID: <YgMLBYl7P1jFA2xe@google.com>
-References: <20220118064430.3882337-1-chao.gao@intel.com>
- <20220118064430.3882337-4-chao.gao@intel.com>
+        Tue, 8 Feb 2022 19:32:20 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 64DA2C061576
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 16:32:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644366738;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=sB5IseLJBNqjNOsMz7OQ46XvJJFOFs9bsWn3jXjDKHA=;
+        b=KLZVHtEKXfeDtRPr27USTZeKUJ7jbnn7hzkdeku1xmYvF1pIHoFGTW9oPGp0m0yXb+KxMK
+        CSVPW6EAtqk367NJHnuYwQRFhN6zwpGoIvWpuD/H4WJ5UXVckxSrc0dTcqy2NWcd7AH42Y
+        Y8p+I9Cx4TBv4E/1P8gkrtTpSOw7ops=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-613-SjNaxTdpPPeoX9hYgKnVJg-1; Tue, 08 Feb 2022 19:32:14 -0500
+X-MC-Unique: SjNaxTdpPPeoX9hYgKnVJg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 6CC7E1006AA4;
+        Wed,  9 Feb 2022 00:32:11 +0000 (UTC)
+Received: from localhost (ovpn-12-114.pek2.redhat.com [10.72.12.114])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 229E162D48;
+        Wed,  9 Feb 2022 00:31:53 +0000 (UTC)
+Date:   Wed, 9 Feb 2022 08:31:51 +0800
+From:   "bhe@redhat.com" <bhe@redhat.com>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        "dyoung@redhat.com" <dyoung@redhat.com>,
+        "vgoyal@redhat.com" <vgoyal@redhat.com>,
+        "d.hatayama@fujitsu.com" <d.hatayama@fujitsu.com>,
+        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "halves@canonical.com" <halves@canonical.com>,
+        "kernel@gpiccoli.net" <kernel@gpiccoli.net>, mhiramat@kernel.org,
+        d.hatayama@jp.fujitsu.com
+Subject: Re: [PATCH V4] notifier/panic: Introduce panic_notifier_filter
+Message-ID: <YgMLd+avxyBplfk2@MiWiFi-R3L-srv>
+References: <20220108153451.195121-1-gpiccoli@igalia.com>
+ <TYAPR01MB6507D06BA6D32218F6E88198955F9@TYAPR01MB6507.jpnprd01.prod.outlook.com>
+ <fda509a5-ea0d-4d1d-a1c1-ca5e80010fc0@igalia.com>
+ <TYAPR01MB6507D9747647685B554B8F8F955F9@TYAPR01MB6507.jpnprd01.prod.outlook.com>
+ <fb5e66b6-049a-22ab-5913-a04cc302b629@igalia.com>
+ <YfPxvzSzDLjO5ldp@alley>
+ <e2d39675-5df6-73fb-fa24-df906a97ee50@igalia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220118064430.3882337-4-chao.gao@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <e2d39675-5df6-73fb-fa24-df906a97ee50@igalia.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022, Chao Gao wrote:
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index 148f7169b431..528741601122 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -4856,13 +4856,25 @@ static void hardware_enable_nolock(void *junk)
->  	}
->  }
->  
-> -static int kvm_starting_cpu(unsigned int cpu)
-> +static int kvm_online_cpu(unsigned int cpu)
->  {
-> +	int ret = 0;
-> +
->  	raw_spin_lock(&kvm_count_lock);
-> -	if (kvm_usage_count)
-> +	/*
-> +	 * Abort the CPU online process if hardware virtualization cannot
-> +	 * be enabled. Otherwise running VMs would encounter unrecoverable
-> +	 * errors when scheduled to this CPU.
-> +	 */
-> +	if (kvm_usage_count) {
+On 02/08/22 at 03:51pm, Guilherme G. Piccoli wrote:
+> On 28/01/2022 10:38, Petr Mladek wrote:
+> > [...] On Thu 2022-01-27 14:16:20, Guilherme G. Piccoli wrote:
+> > First, I am sorry for the very long mail. But the problem is really
+> > complicated. I did my best to describe it a clean way.
+> > 
+> > I have discussed these problems with a colleague and he had some good
+> > points. And my view evolved even further.
+> 
+> Thanks Petr for the very comprehensive and detailed email - this helps a
+> lot in shaping the future of panic notifier(s)!
+> 
+> 
+> > [...] 
+> > I think about the following solution:
+> > 
+> >     + split the notifiers into three lists:
+> > 
+> > 	+ info: stop watchdogs, provide extra info
+> > 	+ hypervisor: poke hypervisor
+> > 	+ reboot: actions needed only when crash dump did not happen
+> > 
+> >     + allow to call hypervisor notifiers before or after kdump
+> > 
+> >     + stop CPUs before kdump when either hypervisor notifiers or
+> >       kmsg_dump is enabled
+> > 
+> > Note that it still allows to call kdump as the first action when
+> > hypervisor notifiers are called after kdump and no kmsg dumper
+> > is registered.
+> > 
+> > 
+> > void panic(void)
+> > {
+> > 	[...]
+> > 
+> > 	if (crash_kexec_post_hypervisor || panic_print || enabled_kmsg_dump()) {
+> > 		/*
+> > 		 * Stop CPUs when some extra action is required before
+> > 		 * crash dump. We will need architecture dependent extra
+> > 		 * works in addition to stopping other CPUs.
+> > 		 */
+> > 		 crash_smp_send_stop();
+> > 		 cpus_stopped = true;
+> > 	}
+> > 
+> > 	if (crash_kexec_post_hypervisor) {
+> > 		  /* Tell hypervisor about the panic */
+> > 		  atomic_notifier_call_chain(&panic_hypervisor_notifier_list, 0, buf);
+> > 	}
+> > 
+> > 	if (enabled_kmsg_dump) {
+> > 		  /*
+> > 		   * Print extra info by notifiers.
+> > 		   * Prevent rumors, for example, by stopping watchdogs.
+> > 		   */
+> > 		  atomic_notifier_call_chain(&panic_info_notifier_list, 0, buf);
+> > 	}
+> > 
+> > 	/* Optional extra info */
+> > 	panic_printk_sys_info();
+> > 
+> > 	/* No dumper by default */
+> > 	kmsg_dump();
+> > 
+> > 	/* Used only when crash kernel loaded */
+> > 	__crash_kexec(NULL);
+> > 
+> > 	if (!cpus_stopped) {
+> > 		/*
+> > 		 * Note smp_send_stop is the usual smp shutdown function, which
+> > 		 * unfortunately means it may not be hardened to work in a
+> > 		 * panic situation.
+> > 		 */
+> > 		smp_send_stop();
+> > 	}
+> > 
+> > 	if (!crash_kexec_post_hypervisor) {
+> > 		  /* Tell hypervisor about the panic */
+> > 		  atomic_notifier_call_chain(&panic_hypervisor_notifier_list, 0, buf);
+> > 	}
+> > 
+> > 	if (!enabled_kmsg_dump) {
+> > 		  /*
+> > 		   * Print extra info by notifiers.
+> > 		   * Prevent rumors, for example, by stopping watchdogs.
+> > 		   */
+> > 		  atomic_notifier_call_chain(&panic_info_notifier_list, 0, buf);
+> > 	}
+> > 
+> > 	/*
+> > 	 * Help to reboot a safe way.
+> > 	 */
+> > 	atomic_notifier_call_chain(&panic_reboot_notifier_list, 0, buf);
+> > 
+> > 	[...]
+> > }
+> > 
+> > Any opinion?
+> > Do the notifier list names make sense?
+> > 
+> 
+> This was exposed very clearly, thanks. I agree with you, it's a good
+> approach, and we can evolve that during the implementation phase, like
+> "function A is not good in the hypervisor list because of this and
+> that", so we move it to the reboot list. Also, name of the lists is not
+> so relevant, might evolve in the implementation phase - I personally
+> liked them, specially the "info" and "hypervisor" ones (reboot seems
+> good but not great heh).
+> 
+> So, what are the opinions from kdump maintainers about this idea?
+> Baoquan / Vivek / Dave, does it make sense to you? Do you have any
+> suggestions/concerns to add on top of Petr draft?
 
+Yeah, it's reasonable. As I replied to Michael in another thread, I
+think splitting the current notifier list is a good idea. At least the
+code to archieve hyper-V's goal with panic_notifier is a little odd and
+should be taken out and execute w/o conditional before kdump, and maybe
+some others Petr has combed out.
 
->  		hardware_enable_nolock(NULL);
-> +		if (atomic_read(&hardware_enable_failed)) {
+For those which will be switched on with the need of adding panic_notifier
+or panic_print into cmdline, the heavy users like HATAYAMA and Masa can
+help check.
 
-This needs:
+For Petr's draft code, does it mean hyper-V need another knob to trigger
+the needed notifiers? Will you go with the draft direclty? Hyper-V now
+runs panic notifiers by default, just a reminder.
 
-		atomic_set(&hardware_enable_failed, 0);
-
-otherwise failure to online one CPU will prevent onlining other non-broken CPUs.
-It's probably worth adding a WARN_ON_ONCE above this too, e.g.
-
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 70e034cbe813..b25a00c76b3a 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -4863,8 +4863,11 @@ static int kvm_online_cpu(unsigned int cpu)
-         * errors when scheduled to this CPU.
-         */
-        if (kvm_usage_count) {
-+               WARN_ON_ONCE(atomic_read(&hardware_enable_failed));
-+
-                hardware_enable_nolock(NULL);
-                if (atomic_read(&hardware_enable_failed)) {
-+                       atomic_set(&hardware_enable_failed, 0);
-                        ret = -EIO;
-                        pr_warn("kvm: abort onlining CPU%d", cpu);
-                }
-
-
-> +			ret = -EIO;
-> +			pr_warn("kvm: abort onlining CPU%d", cpu);
-
-This is somewhat redundant with the pr_info() message in hardware_enable_nolock().
-What about adding the below as a prep patch?  I think/hope it would be obvious to
-the user/admin that onlining the CPU failed?  E.g. this for the output
-
-  kvm: enabling virtualization on CPU2 failed during hardware_enable_all()
-
-From: Sean Christopherson <seanjc@google.com>
-Date: Tue, 8 Feb 2022 13:26:19 -0800
-Subject: [PATCH] KVM: Provide more information in kernel log if hardware
- enabling fails
-
-Provide the name of the calling function to hardware_enable_nolock() and
-include it in the error message to provide additional information on
-exactly what path failed.
-
-Opportunistically bump the pr_info() to pr_warn(), failure to enable
-virtualization support is warn-worthy as _something_ is wrong with the
-system.
-
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- virt/kvm/kvm_main.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
-
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index be614a6325e4..23481fd746aa 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -4833,7 +4833,7 @@ static struct miscdevice kvm_dev = {
- 	&kvm_chardev_ops,
- };
-
--static void hardware_enable_nolock(void *junk)
-+static void hardware_enable_nolock(void *caller_name)
- {
- 	int cpu = raw_smp_processor_id();
- 	int r;
-@@ -4848,7 +4848,8 @@ static void hardware_enable_nolock(void *junk)
- 	if (r) {
- 		cpumask_clear_cpu(cpu, cpus_hardware_enabled);
- 		atomic_inc(&hardware_enable_failed);
--		pr_info("kvm: enabling virtualization on CPU%d failed\n", cpu);
-+		pr_warn("kvm: enabling virtualization on CPU%d failed during %s()\n",
-+			cpu, (const char *)caller_name);
- 	}
- }
-
-@@ -4856,7 +4857,7 @@ static int kvm_starting_cpu(unsigned int cpu)
- {
- 	raw_spin_lock(&kvm_count_lock);
- 	if (kvm_usage_count)
--		hardware_enable_nolock(NULL);
-+		hardware_enable_nolock((void *)__func__);
- 	raw_spin_unlock(&kvm_count_lock);
- 	return 0;
- }
-@@ -4905,7 +4906,7 @@ static int hardware_enable_all(void)
- 	kvm_usage_count++;
- 	if (kvm_usage_count == 1) {
- 		atomic_set(&hardware_enable_failed, 0);
--		on_each_cpu(hardware_enable_nolock, NULL, 1);
-+		on_each_cpu(hardware_enable_nolock, (void *)__func__, 1);
-
- 		if (atomic_read(&hardware_enable_failed)) {
- 			hardware_disable_all_nolock();
-@@ -5530,7 +5531,7 @@ static void kvm_resume(void)
- #ifdef CONFIG_LOCKDEP
- 		WARN_ON(lockdep_is_held(&kvm_count_lock));
- #endif
--		hardware_enable_nolock(NULL);
-+		hardware_enable_nolock((void *)__func__);
- 	}
- }
-
-
-base-commit: 357ef9d9c0728bc2bbb9810c662263bba6b8dbc7
---
+> 
+> I prefer this refactor than the filter, certainly. If nobody else
+> working on that, I can try implementing that - it's very interesting.
+> The only thing I'd like to have first is an ACK from the kdump
+> maintainers about the general idea.
+> 
+> Cheers,
+> 
+> 
+> Guilherme
+> 
 

@@ -2,203 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 202FA4AEEF4
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 11:08:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DE564AEEC8
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 11:00:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233867AbiBIKIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 05:08:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58552 "EHLO
+        id S230217AbiBIJ6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 04:58:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233140AbiBIKID (ORCPT
+        with ESMTP id S234017AbiBIJ6V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 05:08:03 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2A5CC014A95;
-        Wed,  9 Feb 2022 02:07:11 -0800 (PST)
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2198d1Kx014683;
-        Wed, 9 Feb 2022 08:49:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=cJD+Hr0UhnxLjBiyoVnf2N+zOF8DSd40RDY7Fo305Zs=;
- b=chZEeXBxyKk/HWnuSGCv6Q0MhHWXn755yxasV7J4XemPWlfKF3FmK1CC1G0Z5bmNXwoe
- vEgk9vApDSAnZUFIUVqHi6N3ppdGnHguVv5z75JLqDXc52W0Oyt1k3l5hqHcvgGtPL8x
- 4jmF9GpnF8oJtSqO5c1y6o5UsUcA0SSXpvJ+VAfxoiy3KjOw9Th0eQtEdsQ1QFAjl4SK
- Ne4HMF46ovlZz9N7EgYZp70GJupHRBLqGPu1ApqVfAdloqv19vMV3t5o/QROV+6GEZBE
- CW4VV29XPMUSPYvX+7x1nSl6SopDwLqYL59TcKINRQEXk5i7M4g5aS9LOHAIDNUdLD88 iw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3e3fm5jywt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Feb 2022 08:49:28 +0000
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 2198nS7B020171;
-        Wed, 9 Feb 2022 08:49:28 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3e3fm5jyw1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Feb 2022 08:49:28 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2198n9ZW017773;
-        Wed, 9 Feb 2022 08:49:26 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma04ams.nl.ibm.com with ESMTP id 3e1gv9cv45-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Feb 2022 08:49:26 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2198nNtA38142310
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 9 Feb 2022 08:49:23 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DBA534C04A;
-        Wed,  9 Feb 2022 08:49:22 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 486854C050;
-        Wed,  9 Feb 2022 08:49:22 +0000 (GMT)
-Received: from [9.171.75.42] (unknown [9.171.75.42])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  9 Feb 2022 08:49:22 +0000 (GMT)
-Message-ID: <71f07914-d0b2-e98b-22b2-bc05f04df2da@linux.ibm.com>
-Date:   Wed, 9 Feb 2022 09:49:21 +0100
+        Wed, 9 Feb 2022 04:58:21 -0500
+Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B41EE022ADA;
+        Wed,  9 Feb 2022 01:58:15 -0800 (PST)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 7EA74580152;
+        Wed,  9 Feb 2022 03:52:19 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Wed, 09 Feb 2022 03:52:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; bh=5AsuKlg9T3wRs6EodVp0NmABKRFh6ykn6emryp
+        MFqcE=; b=tJSbjzcafZKt16I56xV6jV5vxF1WGT5F2+4G9QjLLNk423jTTeO2Rc
+        zHnaWdr4mAAI6soRoHBZs56pjt7JAyvUzDI6GRCzQyj1a1gmZ7g+T2wmruVOYhGj
+        U/i8/jIg/iMTj3m7IC0/YXArfNPbCRIVDNcaXxkb7ake0Bexf2mKo3K2mth34ue9
+        WLD/Ki/AzraJGy50OZolC5AQjIFIQIrBZDPoNZ06+D6S+73CfEI/dq20rVCx1pd1
+        cC9msnw+U26YI4SnONvNadAzIHz1jx1T6tAsQ4IVX3uKRycsWBDPf5gB3N4FcDig
+        1icVgoCuAhNoi87sqBua/4Aubd977JjA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=5AsuKlg9T3wRs6Eod
+        Vp0NmABKRFh6ykn6emrypMFqcE=; b=VbtCkvnpzlBFH8WTmpIt6LRDreCQoQJub
+        Fzshu4pCLO2vq7pubT2yKFTwOh33ovalCRzkgYSFDs630Mn0JznhTazTWLuminSU
+        TGtgVwpIdKX9mF95t51To8n6ZHd2o22kRHvqvXqKgBWHMNGJUOywiLKq1/nrTHzA
+        U+AoPm1h6GAcJhtILdf7WEt3n+5sUIfpqQ7oIWwoKb4ZqArlIMDXa/dbBCufPPHJ
+        guqKP+1Dln9I5NvE17l0JStDxAOyQH3xDRTjmz/wyw2lfz5w47HGc+HJo6QGJJjv
+        o7gpY1rPw7VatRLSZWGQwb8KttgfDtgCmtoUqcT3wc/KqRDUb84Ig==
+X-ME-Sender: <xms:woADYq-0eSssQcGmiFliY3197FJPDabzDoC5c-S9rmwOLV775OJ_1Q>
+    <xme:woADYqtEcXYvnyvCziOKFwlhuM7_YdaFtgdOJ9NbhwXNdDn_Zt9COsgBJll-AVbkD
+    SvRVm4Tt4AhVHFectY>
+X-ME-Received: <xmr:woADYgA38MA3W3u_26f06nr8SC5tbUkS9nWe-Fu400YyD4TsPT9NfVPv1JlUkACVYB5DVpbsR_OoORf2kChjlYi5mTc_XN8zhy4PTyE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrheekgdduvdduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepleekgeehhfdutdeljefgleejffehfffgieejhffgueefhfdtveetgeehieeh
+    gedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
+    grgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:woADYifXlPCUf4Pfw4h2SaQnZtk1p0MS281dIBhl632sONAVXFFHfQ>
+    <xmx:woADYvNp5I5KNjAOyPv_QIUqQYGc9vVFIxWKktj5IhiM1bXk7_mYZw>
+    <xmx:woADYskKXPWxqIOgq3sOBSXwGBjJfH41bx-0ka5XOLVCipe0HYtfNA>
+    <xmx:w4ADYoz22sbKeC_hoJ5t4JY_gwAnhHwWZLPgo9_GLLuWGA3EgMUojg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 9 Feb 2022 03:52:17 -0500 (EST)
+Date:   Wed, 9 Feb 2022 09:52:15 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Sui Jingfeng <15330273260@189.cn>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Zack Rusin <zackr@vmware.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        suijingfeng <suijingfeng@loongson.cn>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: [PATCH v6 1/3] drm/lsdc: add drm driver for loongson display
+ controller
+Message-ID: <20220209085215.65qbdsgwtnvujdng@houat>
+References: <20220203082546.3099-1-15330273260@189.cn>
+ <20220203082546.3099-2-15330273260@189.cn>
+ <20220203085851.yqstkfgt4dz7rcnw@houat>
+ <57805e19-285a-76d3-16e3-09a3eb7a9540@189.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 05/11] KVM: s390: Add optional storage key checking to
- MEMOP IOCTL
-Content-Language: en-US
-To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>
-Cc:     Alexander Gordeev <agordeev@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>
-References: <20220207165930.1608621-1-scgl@linux.ibm.com>
- <20220207165930.1608621-6-scgl@linux.ibm.com>
- <48d1678f-746c-dab6-5ec3-56397277f752@linux.ibm.com>
-From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-In-Reply-To: <48d1678f-746c-dab6-5ec3-56397277f752@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 6H5ZBHzlShoJEgbn7yy_9fjsH2ZbRuer
-X-Proofpoint-GUID: lzPYz20MP0oCm-I0g6c1DlwDDIZ4H5Nu
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-09_04,2022-02-09_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
- spamscore=0 bulkscore=0 impostorscore=0 priorityscore=1501 phishscore=0
- mlxlogscore=999 clxscore=1015 adultscore=0 lowpriorityscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202090056
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ya7qckwy2foywkx2"
+Content-Disposition: inline
+In-Reply-To: <57805e19-285a-76d3-16e3-09a3eb7a9540@189.cn>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/9/22 08:34, Christian Borntraeger wrote:
-> Am 07.02.22 um 17:59 schrieb Janis Schoetterl-Glausch:
->> User space needs a mechanism to perform key checked accesses when
->> emulating instructions.
->>
->> The key can be passed as an additional argument.
->> Having an additional argument is flexible, as user space can
->> pass the guest PSW's key, in order to make an access the same way the
->> CPU would, or pass another key if necessary.
->>
->> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
->> Acked-by: Janosch Frank <frankja@linux.ibm.com>
->> Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
->> ---
->>   arch/s390/kvm/kvm-s390.c | 49 +++++++++++++++++++++++++++++++---------
->>   include/uapi/linux/kvm.h |  8 +++++--
->>   2 files changed, 44 insertions(+), 13 deletions(-)
->>
->> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
->> index cf347e1a4f17..71e61fb3f0d9 100644
->> --- a/arch/s390/kvm/kvm-s390.c
->> +++ b/arch/s390/kvm/kvm-s390.c
->> @@ -32,6 +32,7 @@
->>   #include <linux/sched/signal.h>
->>   #include <linux/string.h>
->>   #include <linux/pgtable.h>
->> +#include <linux/bitfield.h>
->>     #include <asm/asm-offsets.h>
->>   #include <asm/lowcore.h>
->> @@ -2359,6 +2360,11 @@ static int kvm_s390_handle_pv(struct kvm *kvm, struct kvm_pv_cmd *cmd)
->>       return r;
->>   }
->>   +static bool access_key_invalid(u8 access_key)
->> +{
->> +    return access_key > 0xf;
->> +}
->> +
->>   long kvm_arch_vm_ioctl(struct file *filp,
->>                  unsigned int ioctl, unsigned long arg)
->>   {
->> @@ -4687,34 +4693,54 @@ static long kvm_s390_guest_mem_op(struct kvm_vcpu *vcpu,
->>                     struct kvm_s390_mem_op *mop)
->>   {
->>       void __user *uaddr = (void __user *)mop->buf;
->> +    u8 access_key = 0, ar = 0;
->>       void *tmpbuf = NULL;
->> +    bool check_reserved;
->>       int r = 0;
->>       const u64 supported_flags = KVM_S390_MEMOP_F_INJECT_EXCEPTION
->> -                    | KVM_S390_MEMOP_F_CHECK_ONLY;
->> +                    | KVM_S390_MEMOP_F_CHECK_ONLY
->> +                    | KVM_S390_MEMOP_F_SKEY_PROTECTION;
->>   -    if (mop->flags & ~supported_flags || mop->ar >= NUM_ACRS || !mop->size)
->> +    if (mop->flags & ~supported_flags || !mop->size)
->>           return -EINVAL;
->> -
->>       if (mop->size > MEM_OP_MAX_SIZE)
->>           return -E2BIG;
->> -
->>       if (kvm_s390_pv_cpu_is_protected(vcpu))
->>           return -EINVAL;
->> -
->>       if (!(mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY)) {
->>           tmpbuf = vmalloc(mop->size);
->>           if (!tmpbuf)
->>               return -ENOMEM;
->>       }
->> +    ar = mop->ar;
->> +    mop->ar = 0;
-> 
-> Why this assignment to 0?
 
-It's so the check of reserved below works like that, they're all part of the anonymous union.
-> 
->> +    if (ar >= NUM_ACRS)
->> +        return -EINVAL;
->> +    if (mop->flags & KVM_S390_MEMOP_F_SKEY_PROTECTION) {
->> +        access_key = mop->key;
->> +        mop->key = 0;
-> 
-> and this? I think we can leave mop unchanged.
-> 
-> In fact, why do we add the ar and access_key variable?
-> This breaks the check from above (if (mop->flags & ~supported_flags || mop->ar >= NUM_ACRS || !mop->size))  into two checks
-> and it will create a memleak for tmpbuf.
+--ya7qckwy2foywkx2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I can move the allocation down, goto out or get rid of the reserved check and keep everything as before.
-First is simpler, but second makes handling that case more explicit and might help in the future.
-Patch 6 has the same issue in the vm ioctl handler.
-> 
-> Simply use mop->key and mop->ar below and get rid of the local variables.
-> The structure has no concurrency and gcc will handle that just as the local variable.
-> 
-> Other than that this looks good.
+On Thu, Feb 03, 2022 at 11:47:16PM +0800, Sui Jingfeng wrote:
+> On 2022/2/3 16:58, Maxime Ripard wrote:
+> > > diff --git a/drivers/gpu/drm/lsdc/Kconfig b/drivers/gpu/drm/lsdc/Kcon=
+fig
+> > > new file mode 100644
+> > > index 000000000000..7ed1b0fdbe1b
+> > > --- /dev/null
+> > > +++ b/drivers/gpu/drm/lsdc/Kconfig
+> > > @@ -0,0 +1,38 @@
+> > > +config DRM_LSDC
+> > > +	tristate "DRM Support for loongson's display controller"
+> > > +	depends on DRM && PCI
+> > > +	depends on MACH_LOONGSON64 || LOONGARCH || MIPS || COMPILE_TEST
+> > > +	select OF
+> > > +	select CMA if HAVE_DMA_CONTIGUOUS
+> > > +	select DMA_CMA if HAVE_DMA_CONTIGUOUS
+> > > +	select DRM_KMS_HELPER
+> > > +	select DRM_KMS_FB_HELPER
+> > > +	select DRM_GEM_CMA_HELPER
+> > > +	select VIDEOMODE_HELPERS
+> > > +	select BACKLIGHT_PWM if CPU_LOONGSON2K
+> > > +	select I2C_GPIO if CPU_LOONGSON2K
+> > > +	select I2C_LS2X if CPU_LOONGSON2K
+> > > +	default m
+> > > +	help
+> > > +	  This is a KMS driver for the display controller in the LS7A1000
+> > > +	  bridge chip and LS2K1000 SoC. The display controller has two
+> > > +	  display pipes and it is a PCI device.
+> > > +	  When using this driver on LS2K1000/LS2K0500 SoC, its framebuffer
+> > > +	  is located at system memory.
+> > > +	  If "M" is selected, the module will be called lsdc.
+> > > +
+> > > +	  If in doubt, say "Y".
+> > > +
+> > > +config DRM_LSDC_VRAM_DRIVER
+> > > +	bool "vram helper based device driver support"
+> > > +	depends on DRM_LSDC
+> > > +	select DRM_VRAM_HELPER
+> > > +	default y
+> > > +	help
+> > > +	  When using this driver on LS7A1000 + LS3A3000/LS3A4000/LS3A5000
+> > > +	  platform, the LS7A1000 bridge chip has dedicated video RAM. Using
+> > > +	  "lsdc.use_vram_helper=3D1" in the kernel command line will enable
+> > > +	  this driver mode and then the framebuffer will be located at the
+> > > +	  VRAM at the price of losing PRIME support.
+> > > +
+> > > +	  If in doubt, say "Y".
+> > This doesn't sound right. The driver should make the proper decision
+> > depending on the platform, not the user or the distribution.
+>=20
+> The LS7A1000 north bridge chip has dedicated video RAM, but the DC in LS7=
+A1000
+> can also scanout from the system memory directly like a display controlle=
+r in a
+> SoC does. In fact, this display controller is envolved from early product=
+ of
+> Loongson 2H SoC. This driver still works even if the downstream PC board
+> manufacturer doesn't solder a video RAM on the mother board.
+>=20
+> The lsdc_should_vram_helper_based() function in lsdc_drv.c will examine
+> if the DC device node contain a use_vram_helper property at driver loadin=
+g time.
+> If there is no use_vram_helper property, CMA helper based DRM driver will=
+ be used.
+> Doing this way allow the user using "lsdc.use_vram_helper=3D0" override t=
+he default
+> behavior even through there is a "use_vram_helper;" property in the DTS.
+>=20
+> In short, It is intend to let the command line passed from kernel has hig=
+her
+> priority than the device tree. Otherwise the end user can not switch diff=
+erent
+> driver mode through the kernel command line once the DC device node conta=
+in
+> "use_vram_helper;" property.
+>=20
+> This driver's author already made the decision by the time when the patch=
+ is
+> sent out, even through this**may not proper.
+>=20
+> The CMA helper based driver will be used by default, if the DC device nod=
+e contain
+> "use_vram_helper;" then VRAM based driver will be used. This is my initia=
+l intention.
 
-[...]
+DT isn't really a solution either. Let's take the distribution
+perspective there. Suppose you're a Fedora or Debian developer, and want
+to make a single kernel image, and ship a DT to the user for their board
+without any modification. How is either the Kconfig solution or DT flags
+solution any good there? It doesn't help them at all.
 
+Maxime
+
+--ya7qckwy2foywkx2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYgOAvwAKCRDj7w1vZxhR
+xfmlAP9jrc/0alF0HbOEKem/PYILuIQZksQjvUqUpnADGQgZ2AD/YY/Mdq2iiu3Z
+W6nZNr9i/aZ4agM5MHGTU59+JVzfAwA=
+=9aeP
+-----END PGP SIGNATURE-----
+
+--ya7qckwy2foywkx2--

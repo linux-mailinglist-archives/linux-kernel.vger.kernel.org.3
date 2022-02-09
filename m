@@ -2,137 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20E8B4AE687
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 03:39:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBC904AE708
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 03:42:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238598AbiBICjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 21:39:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52518 "EHLO
+        id S1344680AbiBICl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 21:41:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242728AbiBIBUR (ORCPT
+        with ESMTP id S242751AbiBIBU6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 20:20:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52844C06157B;
-        Tue,  8 Feb 2022 17:20:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 14FF9B81E2E;
-        Wed,  9 Feb 2022 01:20:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38821C004E1;
-        Wed,  9 Feb 2022 01:20:13 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="TjGdN/d1"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1644369612;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6+BvSffpxoiCV4pJMnMVT9UMKRkfrW0iMmasZO/6IK4=;
-        b=TjGdN/d1NrTmRtPAHIDSrh2UIFpYoDBE9olAx1F4ZdPPbnEx6XIzMNCH5/ezgvl+mdSwbl
-        WtQodnFebLyBO7+we1KpoH44j3zeI/fdjVuG2D0oLMrDaJQaN7Vo8PX4WnJiKh5Rs/gt6K
-        7s6Q7Z1fjMiCmNWmQ1NUiif6B3iQqxo=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d63d5d5a (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Wed, 9 Feb 2022 01:20:12 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     tytso@mit.edu, linux@dominikbrodowski.net, ebiggers@kernel.org,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH v2 8/9] random: use hash function for crng_slow_load()
-Date:   Wed,  9 Feb 2022 02:19:18 +0100
-Message-Id: <20220209011919.493762-9-Jason@zx2c4.com>
-In-Reply-To: <20220209011919.493762-1-Jason@zx2c4.com>
-References: <20220209011919.493762-1-Jason@zx2c4.com>
+        Tue, 8 Feb 2022 20:20:58 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C141C061576;
+        Tue,  8 Feb 2022 17:20:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644369657; x=1675905657;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=KEaPwJmUGWbZRDEqJhcubq0qBwr8UxG9hzcFEba0iRM=;
+  b=I4EEqEQAMCT0BzvvnFi4eBuwwwt/w124h4gOHp8i0IG8jhxDUFmJtlwk
+   AXwEuAP+2u4l6jNmTtlOiyGVCvsgIp4YQBvYS0RlgLds09Rdq6gChLvjX
+   st0KY8wIoyzDfvyn7m0L7Bqm7WlstgcH7ynvFHVcLCSXOF3irdI7WQxkj
+   SN4ot0mcuMoOb5iYIK0pqjlxvNVGT+Kt7ZNtNBw1wn1NTTa5fJCQzLI79
+   LfKjzeLy7qIY5RtTwSs5ZnvaQPd+EJJv8brV4yZNf/5KWcdpn4vF7BKHF
+   EhyPieAicglCUKVTAwead86Nvx4r+0jCYnlKSz5GNAk0q7htrnwIoPLOg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="236500715"
+X-IronPort-AV: E=Sophos;i="5.88,354,1635231600"; 
+   d="scan'208";a="236500715"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 17:20:56 -0800
+X-IronPort-AV: E=Sophos;i="5.88,354,1635231600"; 
+   d="scan'208";a="585390233"
+Received: from rmkeeler-mobl1.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.209.125.131])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 17:20:56 -0800
+Message-ID: <2f8915fd15862a70ed5c4b92632bbe6035b8ea57.camel@linux.intel.com>
+Subject: Re: [PATCH -next] thermal: intel: INTEL_HFI_THERMAL depends on NET
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     Aubrey Li <aubrey.li@linux.intel.com>,
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Date:   Tue, 08 Feb 2022 17:20:55 -0800
+In-Reply-To: <20220209001546.18189-1-rdunlap@infradead.org>
+References: <20220209001546.18189-1-rdunlap@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since we have a hash function that's really fast, and the goal of
-crng_slow_load() is reportedly to "touch all of the crng's state", we
-can just hash the old state together with the new state and call it a
-day. This way we dont need to reason about another LFSR or worry about
-various attacks there. This code is only ever used at early boot and
-then never again.
+On Tue, 2022-02-08 at 16:15 -0800, Randy Dunlap wrote:
+> THERMAL_NETLINK depends on NET and since 'select' does not follow
+> any dependency chain, INTEL_HFI_THERMAL also should depend on NET.
+> 
+> Fix one Kconfig warning and 48 subsequent build errors:
+> 
+> WARNING: unmet direct dependencies detected for THERMAL_NETLINK
+>   Depends on [n]: THERMAL [=y] && NET [=n]
+>   Selected by [y]:
+>   - INTEL_HFI_THERMAL [=y] && THERMAL [=y] && (X86 [=y] ||
+> X86_INTEL_QUARK [=n] || COMPILE_TEST [=y]) && CPU_SUP_INTEL [=y] &&
+> X86_THERMAL_VECTOR [=y]
+> 
+Thanks for the fix.
 
-Cc: Theodore Ts'o <tytso@mit.edu>
-Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- drivers/char/random.c | 42 +++++++++++++++---------------------------
- 1 file changed, 15 insertions(+), 27 deletions(-)
+> Fixes: bd30cdfd9bd7 ("thermal: intel: hfi: Notify user space for HFI
+> events")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Cc: Aubrey Li <aubrey.li@linux.intel.com>
+> Cc: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+> Cc: Rafael J. Wysocki <rafael@kernel.org>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Amit Kucheria <amitk@kernel.org>
+> Cc: Zhang Rui <rui.zhang@intel.com>
+> Cc: linux-pm@vger.kernel.org
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+Reviewed-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 359fd2501c45..f7f9cbfe13f7 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -470,42 +470,30 @@ static size_t crng_fast_load(const u8 *cp, size_t len)
-  * all), and (2) it doesn't have the performance constraints of
-  * crng_fast_load().
-  *
-- * So we do something more comprehensive which is guaranteed to touch
-- * all of the primary_crng's state, and which uses a LFSR with a
-- * period of 255 as part of the mixing algorithm.  Finally, we do
-- * *not* advance crng_init_cnt since buffer we may get may be something
-- * like a fixed DMI table (for example), which might very well be
-- * unique to the machine, but is otherwise unvarying.
-+ * So, we simply hash the contents in with the current key. Finally,
-+ * we do *not* advance crng_init_cnt since buffer we may get may be
-+ * something like a fixed DMI table (for example), which might very
-+ * well be unique to the machine, but is otherwise unvarying.
-  */
--static int crng_slow_load(const u8 *cp, size_t len)
-+static void crng_slow_load(const u8 *cp, size_t len)
- {
- 	unsigned long flags;
--	static u8 lfsr = 1;
--	u8 tmp;
--	unsigned int i, max = sizeof(base_crng.key);
--	const u8 *src_buf = cp;
--	u8 *dest_buf = base_crng.key;
-+	struct blake2s_state hash;
-+
-+	blake2s_init(&hash, sizeof(base_crng.key));
- 
- 	if (!spin_trylock_irqsave(&base_crng.lock, flags))
--		return 0;
-+		return;
- 	if (crng_init != 0) {
- 		spin_unlock_irqrestore(&base_crng.lock, flags);
--		return 0;
--	}
--	if (len > max)
--		max = len;
--
--	for (i = 0; i < max; i++) {
--		tmp = lfsr;
--		lfsr >>= 1;
--		if (tmp & 1)
--			lfsr ^= 0xE1;
--		tmp = dest_buf[i % sizeof(base_crng.key)];
--		dest_buf[i % sizeof(base_crng.key)] ^= src_buf[i % len] ^ lfsr;
--		lfsr += (tmp << 3) | (tmp >> 5);
-+		return;
- 	}
-+
-+	blake2s_update(&hash, base_crng.key, sizeof(base_crng.key));
-+	blake2s_update(&hash, cp, len);
-+	blake2s_final(&hash, base_crng.key);
-+
- 	spin_unlock_irqrestore(&base_crng.lock, flags);
--	return 1;
- }
- 
- static void crng_reseed(void)
--- 
-2.35.0
+> ---
+> Found in mmotm, linux-next.patch.
+> 
+>  drivers/thermal/intel/Kconfig |    1 +
+>  1 file changed, 1 insertion(+)
+> 
+> --- mmotm-2022-0208-1531.orig/drivers/thermal/intel/Kconfig
+> +++ mmotm-2022-0208-1531/drivers/thermal/intel/Kconfig
+> @@ -102,6 +102,7 @@ config INTEL_MENLOW
+>  
+>  config INTEL_HFI_THERMAL
+>         bool "Intel Hardware Feedback Interface"
+> +       depends on NET
+>         depends on CPU_SUP_INTEL
+>         depends on X86_THERMAL_VECTOR
+>         select THERMAL_NETLINK
 

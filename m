@@ -2,122 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E95844AF531
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 16:27:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E59E44AF537
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 16:28:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235785AbiBIP0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 10:26:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43364 "EHLO
+        id S235812AbiBIP2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 10:28:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235778AbiBIP0R (ORCPT
+        with ESMTP id S235504AbiBIP2b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 10:26:17 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7ED5C061355
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 07:26:19 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nHorH-0002pa-8O; Wed, 09 Feb 2022 16:26:15 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nHorF-00FX3B-A2; Wed, 09 Feb 2022 16:26:12 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nHorD-00DMQZ-N3; Wed, 09 Feb 2022 16:26:11 +0100
-Date:   Wed, 9 Feb 2022 16:26:09 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Qing Wang <wangqing@vivo.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>, linux-pwm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] pwm: use div64_u64() instead of do_div()
-Message-ID: <20220209152609.gqeivcehkuzgz3sk@pengutronix.de>
-References: <1644395998-4397-1-git-send-email-wangqing@vivo.com>
+        Wed, 9 Feb 2022 10:28:31 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD20C0613C9;
+        Wed,  9 Feb 2022 07:28:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644420515; x=1675956515;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BfdMQRhUm+aalOSFCbFowijlAV6V+19pLIrURpEARr4=;
+  b=gMLJ0lK4mMV2vdxQiaptbA5CzWsEHQEsV4Rj0+cifmEmTDb9f3GWp9JN
+   GjQu13prkOndy3ae8tvAWRGMm2TK6ykkTxWuO4SnotQ8bjFSiuDyW+0IA
+   WBpM9RlcXBI4zqxi92t/De+b/vUkVjcxkhESBu5eOeevtiDULAtvvATHT
+   xzVJAbJ8ZGBEbwqKUXhBRJHTPG8MTNMzzfYBdnvH2bK6NuVtd8VwqAEO3
+   kCpImw/GrpTqWcLe1CQMDArAXylXqIn2uFFqGZiLmG4zkDakL0zBVXH6I
+   sw/SXwlZ3hrXiA2fVpNcu8MkM3Q46jtArFlPmCinJqNzor1HkNNhGwsNh
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="335629245"
+X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
+   d="scan'208";a="335629245"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 07:28:34 -0800
+X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
+   d="scan'208";a="633251571"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 07:28:30 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nHosW-002ehw-0y;
+        Wed, 09 Feb 2022 17:27:32 +0200
+Date:   Wed, 9 Feb 2022 17:27:31 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Jan Dabros <jsd@semihalf.com>
+Cc:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        jarkko.nikula@linux.intel.com, mika.westerberg@linux.intel.com,
+        hdegoede@redhat.com, wsa@kernel.org, rrangel@chromium.org,
+        mw@semihalf.com, jaz@semihalf.com, upstream@semihalf.com,
+        thomas.lendacky@amd.com, alexander.deucher@amd.com,
+        Nimesh.Easow@amd.com, mario.limonciello@amd.com
+Subject: Re: [PATCH v4 2/2] i2c: designware: Add AMD PSP I2C bus support
+Message-ID: <YgPdYw6hDoN198Hf@smile.fi.intel.com>
+References: <20220208141218.2049591-1-jsd@semihalf.com>
+ <20220208141218.2049591-3-jsd@semihalf.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="hakboj7n3cnu24o3"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1644395998-4397-1-git-send-email-wangqing@vivo.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220208141218.2049591-3-jsd@semihalf.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Feb 08, 2022 at 03:12:18PM +0100, Jan Dabros wrote:
 
---hakboj7n3cnu24o3
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+...
 
-Hello,
+I have noticed code duplication.
 
-On Wed, Feb 09, 2022 at 12:39:58AM -0800, Qing Wang wrote:
-> From: Wang Qing <wangqing@vivo.com>
->=20
-> do_div() does a 64-by-32 division.
-> When the divisor is u64, do_div() truncates it to 32 bits, this means it
-> can test non-zero and be truncated to zero for division.
->=20
-> fix do_div.cocci warning:
-> do_div() does a 64-by-32 division, please consider using div64_u64 instea=
-d.
->=20
-> Signed-off-by: Wang Qing <wangqing@vivo.com>
-> ---
->  drivers/pwm/pwm-berlin.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/pwm/pwm-berlin.c b/drivers/pwm/pwm-berlin.c
-> index e157273..15b10cb3
-> --- a/drivers/pwm/pwm-berlin.c
-> +++ b/drivers/pwm/pwm-berlin.c
-> @@ -109,7 +109,7 @@ static int berlin_pwm_config(struct pwm_chip *chip, s=
-truct pwm_device *pwm,
-> =20
->  	period =3D cycles;
->  	cycles *=3D duty_ns;
-> -	do_div(cycles, period_ns);
-> +	div64_u64(cycles, period_ns);
+> +	status = psp_send_i2c_req(PSP_I2C_REQ_ACQUIRE);
+> +	if (status) {
+> +		if (status == -ETIMEDOUT)
+> +			dev_err(psp_i2c_dev, "Timed out waiting for PSP to release I2C bus\n");
+> +		else
+> +			dev_err(psp_i2c_dev, "PSP communication error\n");
+> +
+> +		dev_err(psp_i2c_dev, "Assume i2c bus is for exclusive host usage\n");
+> +		psp_i2c_mbox_fail = true;
+> +		goto cleanup;
+> +	}
 
-This is wrong, div64_u64() has a different calling convention than do_div().
+> +	/* Send a release command to PSP */
+> +	status = psp_send_i2c_req(PSP_I2C_REQ_RELEASE);
+> +	if (status) {
+> +		if (status == -ETIMEDOUT)
+> +			dev_err(psp_i2c_dev, "Timed out waiting for PSP to acquire I2C bus\n");
+> +		else
+> +			dev_err(psp_i2c_dev, "PSP communication error\n");
+> +
+> +		dev_err(psp_i2c_dev, "Assume i2c bus is for exclusive host usage\n");
+> +		psp_i2c_mbox_fail = true;
+> +		goto cleanup;
+> +	}
 
-The issue however is real. Please add=20
+If you are going to update the series, consider to introduce a common helper.
+Otherwise, consider a follow up.
 
-Fixes: 30dffb42fcd4 ("pwm: berlin: Implement .apply() callback")
+-- 
+With Best Regards,
+Andy Shevchenko
 
-to your v2.
 
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---hakboj7n3cnu24o3
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmID3Q4ACgkQwfwUeK3K
-7AllnAf+O+1frxj5epv4nRAEt/Fq5cqM1lXqY1SLK9WFn7QzGqaDSdxFZX8HQJJB
-1Ab3fUkZ3DCm9Wy4gEz7Hf5k43iiv+ZG5MvPKQgsoB2R40ru6RcOxftrdh2vYh5U
-yhG8sklLkgM0U1Q2X65IMPXi8Vz4tB6FRK2pR+vrPl/Ae+loTkU337pN7ccCk5ur
-IuIzZ4lkynjhX/1eU/ORevpZSvSp3HxyqBxFPx9oRSJ2J30gl2ElEWNYgnh+E8Vq
-92RITLFwDGoZ1VYiZaGgFxI6vLSjGt1WxyCCMZv1vn+e4c4fw94328Vc2K/kzY5E
-+S+u966W1vF4Z4ZTnt97oQUFJ01wPQ==
-=Wd2L
------END PGP SIGNATURE-----
-
---hakboj7n3cnu24o3--

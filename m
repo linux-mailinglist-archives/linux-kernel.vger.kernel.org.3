@@ -2,88 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 656CD4AE6DB
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 03:41:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 809384AE747
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 03:47:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343764AbiBICk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 21:40:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46054 "EHLO
+        id S239655AbiBICrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 21:47:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241295AbiBIAwe (ORCPT
+        with ESMTP id S234851AbiBIAzs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 19:52:34 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 200D4C061576
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 16:52:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 8 Feb 2022 19:55:48 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D5E5C061576;
+        Tue,  8 Feb 2022 16:55:46 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 867916184D
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 00:52:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7537C004E1;
-        Wed,  9 Feb 2022 00:52:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644367951;
-        bh=86D5WV13YhdEOmavdvFHUeROq/zSqXd3iNHx2jJQIv0=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=fFcHtG3wP7lWwBBeHEaU2Q8dnzUtCE9vXaTQI9Dq7zxKutCCe+H6gIVO6FZkJyE8R
-         wn4qlaScfksnWwl2YJ3XFsMAbEI7o0U2I//Rn8h/1dT9AOHp3Wzt04cy2oLPTJTYB6
-         o3OcS7LlglcV+XzwCmxFh1HCivOBYG9cInmriK1BQ7KOnP2f+/ENkAeDb1ovpaWyga
-         oUIv3aCZL4aVZl+oyjeYzQdB9x0nPpekxu7iSXAmcV3tGRct7cGwksL1veBaCcjNPw
-         a2+is164UpkMNMvz0Vg6LjqtA9qhjIFxTTYWHFLdnzuVAiv1YSd57GQr18k/j+TMex
-         vvFPBAxFuhhvg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 9C20E5C0825; Tue,  8 Feb 2022 16:52:31 -0800 (PST)
-Date:   Tue, 8 Feb 2022 16:52:31 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Paul Menzel <pmenzel@molgen.mpg.de>
-Subject: Re: [PATCH 0/3] tick: Fix softirq related warnings
-Message-ID: <20220209005231.GW4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220208161635.544701-1-frederic@kernel.org>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JthJG6Fn7z4xNq;
+        Wed,  9 Feb 2022 11:55:42 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1644368145;
+        bh=83yD2kLC+w3eptGbL7E6G+Sn1mmHkgmN/qSn0gBm/oI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=DT09vSnITqs0AWDzsqGJi1CsytuJ9vXF/qqrStkKuqMxgsQNcskbdw/clELXubWVn
+         XArHWJuJDBoHmBU1wFgSIxfH9YmoKmjAAzKr1pnj3noFCzLNW7Lo1MiIJaEKbSBlfP
+         oOAwZcNve9+FSOkslo7XhIt8yyxXVqvLpoVxQ8S6UPAizCjMBpHgf5oajhyuDXYYUi
+         +c04xps2xP9AOGWdkoJhLW9ZoQxVVGv76oSMMocOeyYPXWytQ1d5ok1ybx5hgaixAE
+         DW02zVOYiRn2/G8CApo4qlj1zpbCgdKqxIO2nh387W0oUj/NKbcnHy21jMsBUZ6PXi
+         B63Ck6itKOd6A==
+Date:   Wed, 9 Feb 2022 11:55:41 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Dave Airlie <airlied@linux.ie>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: linux-next: manual merge of the drm-intel tree with the drm tree
+Message-ID: <20220209115541.59188f6c@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220208161635.544701-1-frederic@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/bf+rm/HNHrPxt.eFmh_lE3A";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 08, 2022 at 05:16:32PM +0100, Frederic Weisbecker wrote:
-> Some cleanups and debug rework.
-> 
-> git://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
-> 	timers/core
-> 
-> HEAD: 18b00369d58da4c73946d5f8ebed8e8c7ade89e2
-> 
-> Thanks,
-> 	Frederic
-> ---
-> 
-> Frederic Weisbecker (3):
->       tick/rcu: Remove obsolete rcu_needs_cpu() parameters
->       tick/rcu: Stop allowing RCU_SOFTIRQ in idle
->       lib/irq_poll: Declare IRQ_POLL softirq vector as ksoftirqd-parking safe
+--Sig_/bf+rm/HNHrPxt.eFmh_lE3A
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I have queued these for local testing, but I am guessing that you would
-like them to go up some other path.
+Hi all,
 
-							Thanx, Paul
+Today's linux-next merge of the drm-intel tree got a conflict in:
 
->  include/linux/interrupt.h | 11 ++++++++-
->  include/linux/rcutiny.h   |  3 +--
->  include/linux/rcutree.h   |  2 +-
->  kernel/rcu/tree.c         |  3 +--
->  kernel/time/tick-sched.c  | 60 ++++++++++++++++++++++++++++++++++-------------
->  5 files changed, 57 insertions(+), 22 deletions(-)
+  include/linux/dma-buf-map.h
+
+between commit:
+
+  e8c1f36157ce ("dma-buf-map: Fix dot vs comma in example")
+
+from the drm tree and commit:
+
+  7938f4218168 ("dma-buf-map: Rename to iosys-map")
+
+from the drm-intel tree.
+
+I fixed it up (I just removed the file - the changes from the former
+commit are only on comments) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/bf+rm/HNHrPxt.eFmh_lE3A
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIDEQ0ACgkQAVBC80lX
+0Gwjywf7BbS081ztWnj1nzLHN/Tb5Kh1mMDCpgqcxtzJeyRjN9lv+ADnUTDaXZxS
+ZqJYDO+hGBzEKex70kUq42aTcqIRzkE1KD+13yaIv/O9WIkhyS1pmuRVEyfd/Nu/
+/Elp1jGML3wJR752pGdfF1bEV56vb6Z4vaVJpwjjfZ3CPKu0ns9h5x/Qhr3hs+g7
+csn7Gd941ij6ZPDqYj+4/mtYnHf+ST3IzhEIm7r7/+8c9PD1JsBB+hcQTqdNWEcv
+I126J8DQ1tNRngSrPStTf6GQ+ujKLweNr01jnHuh6CoX0/EyTHOkKwkwccJRzZH5
+JpmzC2vwaj5NcPT/fkD4rISDtuvvhQ==
+=7k3s
+-----END PGP SIGNATURE-----
+
+--Sig_/bf+rm/HNHrPxt.eFmh_lE3A--

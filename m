@@ -2,204 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 192F44AEE57
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 10:43:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D18AF4AEE76
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 10:51:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235516AbiBIJmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 04:42:23 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:53038 "EHLO
+        id S232362AbiBIJvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 04:51:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235484AbiBIJmJ (ORCPT
+        with ESMTP id S229454AbiBIJv3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 04:42:09 -0500
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB129C03C1B5;
-        Wed,  9 Feb 2022 01:42:01 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 801BF580143;
-        Wed,  9 Feb 2022 03:36:37 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Wed, 09 Feb 2022 03:36:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; bh=MbTZeUMy+/3/3bs2adM+ZVlFkQtC01OoGyTtWh
-        YFSeU=; b=S49DnfIpi/7YTPKlQTockOxwAtMUVs8XaPAiJ/NSqOVR6Rh6IGRO1n
-        LAG3hJwbtOyPDF+4iwmmQELd8g79xb/533eMFRRhANW7kCEgkumr2MCgiR3Kek1J
-        5pXruIVIhuyAIGPg78OC5j948i59TzyaGc90LHBqXgon1QgeQ46H4KCJkiTSd/fB
-        ZL/Argyab9EWa5Li/lR5xFQm6mKeP3iJOCWhgjIevI5jN4oeyXqLOynHPBPvZCvx
-        dWcBR3GPy4jNeAfNSFLFCwFzcn8XUHidL73XIFmoqOjXTOnnX86kuoRe6g/F/Lyp
-        WBMPJQJ6kCnPZLoxA5cqb+i9jIX/j2tg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=MbTZeUMy+/3/3bs2a
-        dM+ZVlFkQtC01OoGyTtWhYFSeU=; b=PHVf772ii7K+5t4pXf37WYaSK48OU8J4r
-        F+DKwkyz9d+QYI9SQX3wLUFxmF2UTznVXNBdkCR50Oa21bJCxj5q2j997o/wLzl5
-        Z4D9FwOjCAW+rDedAs3Fewk+J9Gh17uklYOAy6bUewetfe8lFG+E/EQIIncst+00
-        FaqM9VVipi+w54ltzEemoWr46YPMgukeGZv0OQTzaC8OwFPdyBPinl8xnEzBEqfF
-        e3ZSjuyMFM+1iLX4IjzX89C9WWqTC5peFWQptliq44yCbyC9dE9E4TYihleT7412
-        Zm2bA2zOkZ0y7Agf/y0mKDjexYRyR8IBDmhdMsTjLd+Zuq9hQeUOg==
-X-ME-Sender: <xms:FH0DYuD7vrCmr4tMEF_NxPW3A9DweTL3IOjrV8ES1WX63MXEzpz9sQ>
-    <xme:FH0DYoiaEpKLrLMV6OXitHt3egZGd8A4KuE7t8UayDGq2zzW9EHpFlg8Muqx-nJLt
-    ywNDtsq6UFiJzy9gqQ>
-X-ME-Received: <xmr:FH0DYhlUgkWNzGTBoJocTIQzbxTZNraYErghFy_trYjxjBMT9ZOate6gFGMrSUcYlPkohkC3FsPRxbOKWAm5ZNIfqgwJvdQvcrjnLao>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrheekgdduudekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddunecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepuddvudfhkeekhefgffetffelgffftdehffduffegveetffehueeivddvjedv
-    gfevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:FH0DYsyw-yk1XHoupQcO4q2J5SZheBUyppnBctvdriEY8YhqYEa7QA>
-    <xmx:FH0DYjRTVSFqpKx3UWXxA2BpCfeY_tu-pD3u59J4UU8S9etKQFNBvg>
-    <xmx:FH0DYnbB6yYXd8s63NJzV7zEYe0bUm66K0rd6YgYO0BmIfOg9HoFRA>
-    <xmx:FX0DYhFbnHQxulT0ewqsMPradtaihtmkguPJli-9w7d2PSDJWujO_g>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 9 Feb 2022 03:36:35 -0500 (EST)
-Date:   Wed, 9 Feb 2022 09:36:33 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Sui Jingfeng <15330273260@189.cn>
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Zack Rusin <zackr@vmware.com>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        suijingfeng <suijingfeng@loongson.cn>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH v6 1/3] drm/lsdc: add drm driver for loongson display
- controller
-Message-ID: <20220209083633.mlfbiydi7cbpgexa@houat>
-References: <20220203082546.3099-1-15330273260@189.cn>
- <20220203082546.3099-2-15330273260@189.cn>
- <20220203085851.yqstkfgt4dz7rcnw@houat>
- <4dd6d32a-9818-1adf-cb3f-20c183ae2020@189.cn>
+        Wed, 9 Feb 2022 04:51:29 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12DC0E0CEDEA
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 01:51:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1644400280; x=1675936280;
+  h=from:to:subject:date:message-id:mime-version;
+  bh=EKL23ZICjemdPDx3xCc3sIo7S0uH2JuId0XLQZ6xIUo=;
+  b=Ly6GFsGmhL4/+MBG+SXgAz/vOf74ASmgzrAzV4YC8Jar9JQVNXDgH397
+   1ckKsMevEz35JgebPls8leS/US4Q+BTKAPupvXNi+lCXISt7SKJgBBLDr
+   aMHNkLJhRM8BOr6QejMSh0SjiRQ6B/WdeubnbYEYmJwiAV882PGErU2Gf
+   qzsk1m8yf2rr9SZly4htMyWnOTLeypxU//hvkC9E6Gdo8BYd7siHqaat+
+   2+ZATBdI6ki4zNUcIlD2sbe7oPaI0LRC5RdaxM5xXzqE/p390lzE48azB
+   8++moL57jMKT0OCRhwwiXVAkWVKzUgQoPnxO6t978Q8cbww/NxCfGOD3Q
+   A==;
+IronPort-SDR: azLCwhdvQiyqxIZ0TViWvN/GvCS0HpmG3i6RWiniDEaua1CCKuxvh2Q5FXNAZksWLAwgT98Fow
+ TjFdvygpSxkA9EO3ZlznUuRAZYz0iL4EeCg+Dd8Q4mnYI3B0dAcL2us2zlq1IDHpj4oFgbv/cQ
+ obUPMCZ2ALQ628i7H7K8F/ECR8Bnx8/7U7llN+u+CQ1EINJJYzXHXe4xopxQK/OZc/4ERihm8T
+ xU9ORNdNH2n1+UmTPogNeRfaFzAR+KsKeRjE2NhDrdaMthdmaT7lvXeirqoP/f8Wjqi6Hbl8c3
+ kficdpvVGJFQxz25IeyYDTMP
+X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
+   d="scan'208";a="152430783"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Feb 2022 01:41:45 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 9 Feb 2022 01:41:43 -0700
+Received: from kavya-HP-Compaq-6000-Pro-SFF-PC.microchip.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Wed, 9 Feb 2022 01:41:41 -0700
+From:   Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+To:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <alexandre.belloni@bootlin.com>,
+        <linus.walleij@linaro.org>, <linux@armlinux.org.uk>
+Subject: [PATCH] ARM: at91: debug: add lan966 support
+Date:   Wed, 9 Feb 2022 14:11:39 +0530
+Message-ID: <20220209084139.29901-1-kavyasree.kotagiri@microchip.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kqetfhrtfefgtoun"
-Content-Disposition: inline
-In-Reply-To: <4dd6d32a-9818-1adf-cb3f-20c183ae2020@189.cn>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,SUSPICIOUS_RECIPS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add support for low-level debugging on FLEXCOM3 USART of
+LAN966 SoC.
 
---kqetfhrtfefgtoun
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+---
+ arch/arm/Kconfig.debug | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-On Fri, Feb 04, 2022 at 12:41:37AM +0800, Sui Jingfeng wrote:
-> > > +static int lsdc_primary_plane_atomic_check(struct drm_plane *plane,
-> > > +					   struct drm_atomic_state *state)
-> > > +{
-> > > +	struct drm_device *ddev =3D plane->dev;
-> > > +	struct lsdc_device *ldev =3D to_lsdc(ddev);
-> > > +	struct drm_plane_state *old_plane_state =3D drm_atomic_get_old_plan=
-e_state(state, plane);
-> > > +	struct drm_plane_state *new_plane_state =3D drm_atomic_get_new_plan=
-e_state(state, plane);
-> > > +	struct drm_framebuffer *new_fb =3D new_plane_state->fb;
-> > > +	struct drm_framebuffer *old_fb =3D old_plane_state->fb;
-> > > +	struct drm_crtc *crtc =3D new_plane_state->crtc;
-> > > +	u32 new_format =3D new_fb->format->format;
-> > > +	struct drm_crtc_state *new_crtc_state;
-> > > +	struct lsdc_crtc_state *priv_crtc_state;
-> > > +	int ret;
-> > > +
-> > > +	if (!crtc)
-> > > +		return 0;
-> > > +
-> > > +	new_crtc_state =3D drm_atomic_get_new_crtc_state(state, crtc);
-> > > +	if (WARN_ON(!new_crtc_state))
-> > > +		return -EINVAL;
-> > > +
-> > > +	priv_crtc_state =3D to_lsdc_crtc_state(new_crtc_state);
-> > > +
-> > > +	ret =3D drm_atomic_helper_check_plane_state(new_plane_state,
-> > > +						  new_crtc_state,
-> > > +						  DRM_PLANE_HELPER_NO_SCALING,
-> > > +						  DRM_PLANE_HELPER_NO_SCALING,
-> > > +						  false,
-> > > +						  true);
-> > > +	if (ret)
-> > > +		return ret;
-> > > +
-> > > +	/*
-> > > +	 * Require full modeset if enabling or disabling a plane,
-> > > +	 * or changing its position, size, depth or format.
-> > > +	 */
-> > > +	if ((!new_fb || !old_fb ||
-> > > +	     old_plane_state->crtc_x !=3D new_plane_state->crtc_x ||
-> > > +	     old_plane_state->crtc_y !=3D new_plane_state->crtc_y ||
-> > > +	     old_plane_state->crtc_w !=3D new_plane_state->crtc_w ||
-> > > +	     old_plane_state->crtc_h !=3D new_plane_state->crtc_h ||
-> > > +	     old_fb->format->format !=3D new_format))
-> > > +		new_crtc_state->mode_changed =3D true;
-> > > +
-> > > +
-> > > +	priv_crtc_state->pix_fmt =3D lsdc_primary_get_default_format(crtc);
-> > Storing the pixel format in the CRTC state is weird? What would happen
-> > if you have a primary plane and a cursor in different formats?
-> >=20
-> > Also, reading the default format from a register doesn't look right.
-> > atomic_check can occur at any time, including before a previous commit,
-> > or while the hardware is disabled. You should rely on either a constant
-> > or the previous state here.
-> >=20
-> Currently, private CRTC state(priv_crtc_state) is not get used by the cur=
-sor's
-> atomic_check() and atomic_update(). I means this is only for the primary =
-plane.
-> And both and the primary and the cursor using=A0 XRGB8888 format, what I =
-really
-> want=A0here is let the atomic_update to update the framebuffer's format, =
-because
-> the firmware (pmon) of some board set the framebuffer's format as RGB565.
+diff --git a/arch/arm/Kconfig.debug b/arch/arm/Kconfig.debug
+index 976315dea958..7989d0633188 100644
+--- a/arch/arm/Kconfig.debug
++++ b/arch/arm/Kconfig.debug
+@@ -210,6 +210,14 @@ choice
+ 		  Say Y here if you want kernel low-level debugging support
+ 		  on the FLEXCOM3 port of SAMA7G5.
+ 
++        config DEBUG_AT91_LAN966_FLEXCOM3
++                bool "Kernel low-level debugging on LAN966 FLEXCOM3 USART"
++                select DEBUG_AT91_UART
++                depends on SOC_LAN966
++                help
++                  Say Y here if you want kernel low-level debugging support
++                  on the FLEXCOM3 port of LAN966.
++
+ 	config DEBUG_BCM2835
+ 		bool "Kernel low-level debugging on BCM2835 PL011 UART"
+ 		depends on ARCH_BCM2835 && ARCH_MULTI_V6
+@@ -1685,6 +1693,7 @@ config DEBUG_UART_PHYS
+ 	default 0xd4017000 if DEBUG_MMP_UART2
+ 	default 0xd4018000 if DEBUG_MMP_UART3
+ 	default 0xe0000000 if DEBUG_SPEAR13XX
++	default 0xe0040200 if DEBUG_AT91_LAN966_FLEXCOM3
+ 	default 0xe1824200 if DEBUG_AT91_SAMA7G5_FLEXCOM3
+ 	default 0xe4007000 if DEBUG_HIP04_UART
+ 	default 0xe6c40000 if DEBUG_RMOBILE_SCIFA0
+@@ -1805,6 +1814,7 @@ config DEBUG_UART_VIRT
+ 	default 0xfb10c000 if DEBUG_REALVIEW_PB1176_PORT
+ 	default 0xfcfe8600 if DEBUG_BCM63XX_UART
+ 	default 0xfd000000 if DEBUG_SPEAR3XX || DEBUG_SPEAR13XX
++	default 0xfd040200 if DEBUG_AT91_LAN966_FLEXCOM3
+ 	default 0xfd531000 if DEBUG_STIH41X_SBC_ASC1
+ 	default 0xfd883000 if DEBUG_ALPINE_UART0
+ 	default 0xfdd32000 if DEBUG_STIH41X_ASC2
+-- 
+2.17.1
 
-atomic_update will be called each time the plane state is changed, so it
-won't be an issue: when the first state will be committed, your
-atomic_update function will be called and thus you'll overwrite what was
-left of the firmware setup.
-
-> If the hardware's format is same with the plane state, then there is no n=
-eed to
-> update the FB's format register, save a function call, right?
-
-My point was more about the fact that you're using the wrong abstraction
-there. The format is a property of the plane, not from the CRTC. In KMS
-(and in most drivers), you can have multiple planes with different
-formats all attached to the same CRTC just fine.
-
-Maxime
-
---kqetfhrtfefgtoun
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYgN9EQAKCRDj7w1vZxhR
-xZ6BAP9j8kJHoG5YQyu1To5wFlm7TFa/y9uSGX81KcAkqlYkZwD/W3iUA4ZG9tdL
-VNf2zBWWGP2cOgzaLtyzWTOxYsxcvAs=
-=ByIy
------END PGP SIGNATURE-----
-
---kqetfhrtfefgtoun--

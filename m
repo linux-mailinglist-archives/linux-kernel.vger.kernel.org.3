@@ -2,243 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 489364AF157
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 13:21:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EBC94AF158
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 13:21:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232317AbiBIMUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 07:20:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39668 "EHLO
+        id S232457AbiBIMVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 07:21:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232846AbiBIMUU (ORCPT
+        with ESMTP id S233283AbiBIMVD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 07:20:20 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C35FC022581;
-        Wed,  9 Feb 2022 04:11:42 -0800 (PST)
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2199t02R004033;
-        Wed, 9 Feb 2022 12:11:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=qKIb/+xuoOxcV7SNQMvld2F2je0cwea6FDVZFqbCw9c=;
- b=hEr8DxBJj8u3lNDMDpuO2BNzJcl6dEfS+n26CY3yLOUdvPJpOiYGgcBdeJn/pBVbpv8T
- ArqebTX1hcq0v8ZSKbRtqjLfDmCJNSCkrq+NOXSjYMl1vTCLvmzi1fDwU0Ji5yUx4f9w
- Um/zAJ0YVsV2xB2uXVjniUJazC7v2qrJ3JjrDmpzQ1wmQ+yXUT3O3DiDCur3Wr6sSwPc
- cV+t3OQEkAvla3u1pSHXTQkqKO73GRX1mAMk3GZYeF2IdEA/NXFsNoKX+5i4GkQlYduq
- cMWLSJNH6kn5meraqCPer7S1nzki/9EVISHlpbs0HWGMRQAWf5lnaDy6z/pAVpHbcEET Xg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e44v6u9eu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Feb 2022 12:11:41 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 219BvC1r025822;
-        Wed, 9 Feb 2022 12:11:41 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e44v6u9e6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Feb 2022 12:11:41 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 219BhOUw018109;
-        Wed, 9 Feb 2022 12:11:38 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma02fra.de.ibm.com with ESMTP id 3e1gv9n3mc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Feb 2022 12:11:38 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 219CBX1K42926436
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 9 Feb 2022 12:11:33 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 07B03A4065;
-        Wed,  9 Feb 2022 12:11:33 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6C5BEA406B;
-        Wed,  9 Feb 2022 12:11:32 +0000 (GMT)
-Received: from [9.171.87.52] (unknown [9.171.87.52])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  9 Feb 2022 12:11:32 +0000 (GMT)
-Message-ID: <61d9aa7b-4474-fce9-4884-275d1f6dee99@linux.ibm.com>
-Date:   Wed, 9 Feb 2022 13:11:32 +0100
+        Wed, 9 Feb 2022 07:21:03 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90653C1038D1;
+        Wed,  9 Feb 2022 04:13:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644408832; x=1675944832;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=A1nFX9ixfBK5ywl/htqB+PmF4Zj1kCQgA/ekV8GHAh0=;
+  b=YLf1PxG7d4rVQe8B/m/4R4gTLn01lePHI+ia8SkJjWOu+2Hjp4Z27bWu
+   l2Kco0RnzVmVTLBdSlkcwxbQwUDAPOaAHOehm6QbHC+o7LnWW7JKT7t2H
+   FUgA4+qCMjSSABT89ZQRvX2q1+6PxP3ERr1h1Us1rHqxuyZQHpVP/hfq5
+   mg/M9CBxQtX7RgNaj16CZXVLBqpR2v1Rj9oiPdrtIyp0z1x+9PdvSEwXn
+   qrx2two+3+X4Nq4zLOsqtP5DxIDnToazIwan5j1xA3E5fQCcelF4oVub2
+   P2j+dx5ZMNliqESiwbtIExmb4ywmuFJmNDdnyNdnVSqQ51boonuVoXPAO
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="273726044"
+X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
+   d="scan'208";a="273726044"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 04:13:52 -0800
+X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
+   d="scan'208";a="633198612"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 04:13:48 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nHlq6-002baF-Cw;
+        Wed, 09 Feb 2022 14:12:50 +0200
+Date:   Wed, 9 Feb 2022 14:12:50 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Yicong Yang <yangyicong@huawei.com>
+Cc:     Yicong Yang <yangyicong@hisilicon.com>,
+        jarkko.nikula@linux.intel.com, mika.westerberg@linux.intel.com,
+        wsa@kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, prime.zeng@hisilicon.com,
+        linuxarm@huawei.com, irina.tirdea@intel.com,
+        linus.walleij@linaro.org, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH 1/2] i2c: hisi: Add generic GPIO bus recovery support
+Message-ID: <YgOvwg4pEiVF99fu@smile.fi.intel.com>
+References: <20220125124930.50369-1-yangyicong@hisilicon.com>
+ <20220125124930.50369-2-yangyicong@hisilicon.com>
+ <YgD/3Xi0yLPHCu+L@smile.fi.intel.com>
+ <YgEAeOmobDhqRMGx@smile.fi.intel.com>
+ <5de8e304-05b7-48ec-6b8f-e1f856e86697@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 05/11] KVM: s390: Add optional storage key checking to
- MEMOP IOCTL
-Content-Language: en-US
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>
-Cc:     Alexander Gordeev <agordeev@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>
-References: <20220207165930.1608621-1-scgl@linux.ibm.com>
- <20220207165930.1608621-6-scgl@linux.ibm.com>
- <48d1678f-746c-dab6-5ec3-56397277f752@linux.ibm.com>
- <71f07914-d0b2-e98b-22b2-bc05f04df2da@linux.ibm.com>
- <6ea27647-fbbe-3962-03a0-8ca5340fc7fd@linux.ibm.com>
- <8d502356c3a624847c0dd2fe5d5f60e72923a141.camel@linux.ibm.com>
- <3ec91f7a-10ca-b984-d852-1327f965b1e8@linux.ibm.com>
- <83408abf-86fe-20b0-564c-8cf840757e76@linux.ibm.com>
- <ef35d70a-c0dc-e5ae-8182-79847085d593@linux.ibm.com>
- <1eb6ae828fd02340ff30bfab6a949fff90e85d3b.camel@linux.ibm.com>
-From:   Christian Borntraeger <borntraeger@linux.ibm.com>
-In-Reply-To: <1eb6ae828fd02340ff30bfab6a949fff90e85d3b.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: px9m-7OUSLTcuVstCH__cyu2AomgokHS
-X-Proofpoint-ORIG-GUID: 3pPkRYwkE_DT2IoDinPWPpjCx6y0Cezc
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-09_06,2022-02-09_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- lowpriorityscore=0 bulkscore=0 suspectscore=0 malwarescore=0 phishscore=0
- mlxlogscore=999 clxscore=1015 priorityscore=1501 mlxscore=0 adultscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202090072
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5de8e304-05b7-48ec-6b8f-e1f856e86697@huawei.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-Am 09.02.22 um 12:04 schrieb Janis Schoetterl-Glausch:
-> On Wed, 2022-02-09 at 11:48 +0100, Christian Borntraeger wrote:
->>
->> Am 09.02.22 um 11:39 schrieb Janis Schoetterl-Glausch:
->>> On 2/9/22 11:08, Christian Borntraeger wrote:
->>>>
->>>> Am 09.02.22 um 11:01 schrieb Janis Schoetterl-Glausch:
->>>>> On Wed, 2022-02-09 at 10:08 +0100, Christian Borntraeger wrote:
->>>>>> Am 09.02.22 um 09:49 schrieb Janis Schoetterl-Glausch:
->>>>>>> On 2/9/22 08:34, Christian Borntraeger wrote:
->>>>>>>> Am 07.02.22 um 17:59 schrieb Janis Schoetterl-Glausch:
->>>>>>>>> User space needs a mechanism to perform key checked accesses when
->>>>>>>>> emulating instructions.
->>>>>>>>>
->>>>>>>>> The key can be passed as an additional argument.
->>>>>>>>> Having an additional argument is flexible, as user space can
->>>>>>>>> pass the guest PSW's key, in order to make an access the same way the
->>>>>>>>> CPU would, or pass another key if necessary.
->>>>>>>>>
->>>>>>>>> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
->>>>>>>>> Acked-by: Janosch Frank <frankja@linux.ibm.com>
->>>>>>>>> Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
->>>>>>>>> ---
->>>>>>>>>       arch/s390/kvm/kvm-s390.c | 49 +++++++++++++++++++++++++++++++---------
->>>>>>>>>       include/uapi/linux/kvm.h |  8 +++++--
->>>>>>>>>       2 files changed, 44 insertions(+), 13 deletions(-)
->>>>>>>>>
->>>>>>>>> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
->>>>>>>>> index cf347e1a4f17..71e61fb3f0d9 100644
->>>>>>>>> --- a/arch/s390/kvm/kvm-s390.c
->>>>>>>>> +++ b/arch/s390/kvm/kvm-s390.c
->>>>>>>>> @@ -32,6 +32,7 @@
->>>>>>>>>       #include <linux/sched/signal.h>
->>>>>>>>>       #include <linux/string.h>
->>>>>>>>>       #include <linux/pgtable.h>
->>>>>>>>> +#include <linux/bitfield.h>
->>>>>>>>>         #include <asm/asm-offsets.h>
->>>>>>>>>       #include <asm/lowcore.h>
->>>>>>>>> @@ -2359,6 +2360,11 @@ static int kvm_s390_handle_pv(struct kvm *kvm, struct kvm_pv_cmd *cmd)
->>>>>>>>>           return r;
->>>>>>>>>       }
->>>>>>>>>       +static bool access_key_invalid(u8 access_key)
->>>>>>>>> +{
->>>>>>>>> +    return access_key > 0xf;
->>>>>>>>> +}
->>>>>>>>> +
->>>>>>>>>       long kvm_arch_vm_ioctl(struct file *filp,
->>>>>>>>>                      unsigned int ioctl, unsigned long arg)
->>>>>>>>>       {
->>>>>>>>> @@ -4687,34 +4693,54 @@ static long kvm_s390_guest_mem_op(struct kvm_vcpu *vcpu,
->>>>>>>>>                         struct kvm_s390_mem_op *mop)
->>>>>>>>>       {
->>>>>>>>>           void __user *uaddr = (void __user *)mop->buf;
->>>>>>>>> +    u8 access_key = 0, ar = 0;
->>>>>>>>>           void *tmpbuf = NULL;
->>>>>>>>> +    bool check_reserved;
->>>>>>>>>           int r = 0;
->>>>>>>>>           const u64 supported_flags = KVM_S390_MEMOP_F_INJECT_EXCEPTION
->>>>>>>>> -                    | KVM_S390_MEMOP_F_CHECK_ONLY;
->>>>>>>>> +                    | KVM_S390_MEMOP_F_CHECK_ONLY
->>>>>>>>> +                    | KVM_S390_MEMOP_F_SKEY_PROTECTION;
->>>>>>>>>       -    if (mop->flags & ~supported_flags || mop->ar >= NUM_ACRS || !mop->size)
->>>>>>>>> +    if (mop->flags & ~supported_flags || !mop->size)
->>>>>>>>>               return -EINVAL;
->>>>>>>>> -
->>>>>>>>>           if (mop->size > MEM_OP_MAX_SIZE)
->>>>>>>>>               return -E2BIG;
->>>>>>>>> -
->>>>>>>>>           if (kvm_s390_pv_cpu_is_protected(vcpu))
->>>>>>>>>               return -EINVAL;
->>>>>>>>> -
->>>>>>>>>           if (!(mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY)) {
->>>>>>>>>               tmpbuf = vmalloc(mop->size);
->>>>>>>>>               if (!tmpbuf)
->>>>>>>>>                   return -ENOMEM;
->>>>>>>>>           }
->>>>>>>>> +    ar = mop->ar;
->>>>>>>>> +    mop->ar = 0;
->>>>>>>>
->>>>>>>> Why this assignment to 0?
->>>>>>>
->>>>>>> It's so the check of reserved below works like that, they're all part of the anonymous union.
->>>>>>
->>>>>> Ah, I see. This is ugly :-)
->>>>>
->>>>> Yes :)
->>>>>>>>> +    if (ar >= NUM_ACRS)
->>>>>>>>> +        return -EINVAL;
->>>>>>>>> +    if (mop->flags & KVM_S390_MEMOP_F_SKEY_PROTECTION) {
->>>>>>>>> +        access_key = mop->key;
->>>>>>>>> +        mop->key = 0;
->>>>>>>>
->>>>>>>> and this? I think we can leave mop unchanged.
->>>>>>>>
->>>>>>>> In fact, why do we add the ar and access_key variable?
->>>>>>>> This breaks the check from above (if (mop->flags & ~supported_flags || mop->ar >= NUM_ACRS || !mop->size))  into two checks
->>>>>>>> and it will create a memleak for tmpbuf.
->>>>>>>
->>>>>>> I can move the allocation down, goto out or get rid of the reserved check and keep everything as before.
->>>>>>> First is simpler, but second makes handling that case more explicit and might help in the future.
->>>>>>
->>>>>> Maybe add a reserved_02 field in the anon struct and check this for being zero and get rid of the local variables?
->>>>>
->>>>> I think that would require us adding new fields in the struct by putting them in a union with reserved_02 and so on,
->>>>> which could get rather messy.
->>>>
->>>> I think it is fine to rename reserved_02. Maybe rename that to dont_use_02 ?
->>>
->>> I don't know what kind of stability guarantees we give here, since it can only happen when recompiling with
->>> a new header. dont_use is a lot better than reserved here, after all we tell user space to set
->>> reserved bytes to 0, using reserved_02 to do that would be quite handy and therefore likely.
->>>
->>> The question is also what semantic we want for the check.
->>> The way it works right now, user space also needs to set unused fields to 0, e.g. key if the flag is not set.
->>> At least this is the case for the vm memop, the vcpu memop cannot do that because of backward compatibility.
->>
->> As an alternative just remove the check for reserved == 0 and do that later on as an add-on patch?
+On Tue, Feb 08, 2022 at 10:15:44AM +0800, Yicong Yang wrote:
+> On 2022/2/7 19:20, Andy Shevchenko wrote:
+> > On Mon, Feb 07, 2022 at 01:17:49PM +0200, Andy Shevchenko wrote:
+> >> On Tue, Jan 25, 2022 at 08:49:29PM +0800, Yicong Yang wrote:
+> >>> Add generic GPIO bus recovery support for i2c-hisi driver
+> >>> by registering the recovery information with core provided
+> >>> i2c_generic_scl_recovery() method.
+> >>>
+> >>> As the SCL/SDA pins are multiplexed with GPIO, we need to
+> >>> switch the pins mux to GPIO before recovery and switch back
+> >>> after recovery. It's implemented by the ACPI method in
+> >>> the i2c_bus_recovery_info->{prepare,unprepare}_recovery()
+> >>> method.
+> >>
+> >> NAK.
+> >>
+> >> ACPI has its own resources for that. What is missed is the layer between ACPI
+> >> and pin control.
 > 
-> That would kinda defeat the purpose of the check, since misbehaving user space programs would
-> get an error then but not now.
+> I think that's where the problem is and why we use this approach. When I looked into
+> devm_pinctrl_get(), it stops when fails to retrieve the pin info from device tree.
+> So I cannot use it on our ACPI server for the pinmux.
+> 
+> I looked into the history that Irina raised an RFC for adding the ACPI support in pinctrl[1],
+> but at that time seems it lacks some standard support. But maybe now we can support it?
+
+Not that way. ACPI has its own resources as I pointed out. Irina tried to
+mimic DT, which has been refused by maintainers. Since that ACPI gained
+the native resources.
+
+> But based on the current situation maybe the implementation of this patch suits best.
+> And currently we don't have a pinctrl driver for doing the multiplexing (though I think it's
+> easy to add one but maybe only configures 2 pins for now).
+
+This patch (i2c hisi) is a hack on all levels, starting with ACPI DSDT.
+Please, fix tables to use PinConfig() / PinFunction() (or corresponding
+*Group() variants) in the DSDT for the starter.
+
+> [1] https://lore.kernel.org/all/CACRpkdbj==q5wp2Z5-ZXkbfeXa4y+beLF_3YN-vS3CtyAKGwkg@mail.gmail.com/
+> 
+> Thanks,
+> Yicong
+> 
+> > To be more precise,
+> > 
+> > https://uefi.org/specs/ACPI/6.4/19_ASL_Reference/ACPI_Source_Language_Reference.html?highlight=pinfunction#pinconfig-pin-configuration-descriptor-macro
+> > 
+> > https://uefi.org/specs/ACPI/6.4/19_ASL_Reference/ACPI_Source_Language_Reference.html?highlight=pinfunction#pinfunction-pin-function-descriptor-macro
+> > 
+> > https://uefi.org/specs/ACPI/6.4/19_ASL_Reference/ACPI_Source_Language_Reference.html?highlight=pinfunction#pingroup-pin-group-descriptor-macro
+> > 
+> > https://uefi.org/specs/ACPI/6.4/19_ASL_Reference/ACPI_Source_Language_Reference.html?highlight=pinfunction#pingroupconfig-pin-group-configuration-descriptor-macro
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-As a matter of fact, we do not check today. What about the following.
-1. remove the checkreserved logic. its too complicated
-2. do not check for reserved to be zero
-4. state that the reserved fields are ignored without the appropriate flag
-5. add the necessary flag as comment to the fields
-6. check for unkmown flags and bail out

@@ -2,63 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23BE84AFF52
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 22:41:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8D714AFF57
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 22:42:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233610AbiBIVlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 16:41:13 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:51452 "EHLO
+        id S233625AbiBIVlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 16:41:45 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:52030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233598AbiBIVlM (ORCPT
+        with ESMTP id S233627AbiBIVll (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 16:41:12 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3A7CAC050CF8
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 13:41:13 -0800 (PST)
+        Wed, 9 Feb 2022 16:41:41 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9F7D1DD94E68
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 13:41:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644442872;
+        s=mimecast20190719; t=1644442902;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=smkfZoDYqP3/eJTnNRlO1L7Zl22cCTCgCp929irEWv8=;
-        b=A50gUUVLoVDIAnIX0m8UpBCFGWQcqmXOp23eJ+iQDVZUAsywmDqubQ9PjMhSS3htbnA6lo
-        tDVioYD0iS6cwL4EHjRyvvKwDoFxr1nOsczouDskiPqbdtlNK3Qp5+7ekxTflkRiLMmqVX
-        6MzhELNdvmx8/Zerhj9YdZPx3yoJAng=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=vnKaJ3fYeFxAypTgfkLzFAKETIOGKeliSE47QqKxh2M=;
+        b=I7zcBZ11yet4j91X0OvgspsezIIZ7u5UNpnIjyJntp266UY3QD78LAlbn2fkevgDEoEqyo
+        IG2ldO0C9OmVnm3bjuwTxHg0tMv7joY/GiKvM5xrCSbqVDAz4GznPaYOEbobA41DuDlGHQ
+        4v6M5bmaMF5CbR1MO4gue+2maXECCgI=
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
+ [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-584-lP7ou0rHMXKiF0AW0Nkh5g-1; Wed, 09 Feb 2022 16:41:07 -0500
-X-MC-Unique: lP7ou0rHMXKiF0AW0Nkh5g-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E29018143EF;
-        Wed,  9 Feb 2022 21:41:05 +0000 (UTC)
-Received: from madcap2.tricolour.ca (unknown [10.22.48.17])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id C859D5DB90;
-        Wed,  9 Feb 2022 21:40:50 +0000 (UTC)
-Date:   Wed, 9 Feb 2022 16:40:48 -0500
-From:   Richard Guy Briggs <rgb@redhat.com>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     Jeff Mahoney <jeffm@suse.com>,
-        Linux-Audit Mailing List <linux-audit@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, Eric Paris <eparis@parisplace.org>,
-        Steve Grubb <sgrubb@redhat.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Eric Paris <eparis@redhat.com>, Tony Jones <tonyj@suse.de>
-Subject: Re: [PATCH v4 2/3] audit: add support for the openat2 syscall
-Message-ID: <20220209214048.GF1708086@madcap2.tricolour.ca>
-References: <cover.1621363275.git.rgb@redhat.com>
- <f5f1a4d8699613f8c02ce762807228c841c2e26f.1621363275.git.rgb@redhat.com>
- <c96031b4-b76d-d82c-e232-1cccbbf71946@suse.com>
- <CAHC9VhSHJwwG_3yy4bqNUuFAz87wFU8W-dGYfsoGBG786heTNg@mail.gmail.com>
+ us-mta-283-vibPio9HOsmuHmCiOVXAmg-1; Wed, 09 Feb 2022 16:41:41 -0500
+X-MC-Unique: vibPio9HOsmuHmCiOVXAmg-1
+Received: by mail-io1-f69.google.com with SMTP id h1-20020a056602008100b0061152382337so2662003iob.18
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 13:41:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=vnKaJ3fYeFxAypTgfkLzFAKETIOGKeliSE47QqKxh2M=;
+        b=pQPVJvjQkjjFE1gi+MS7H0+h63ZS7Gva+1hHvsgULa1rVQ+gTxYqTY3NIYDKYzqBwI
+         fzRaI4PNNk+2cp6UMT1Lu4uTyFGbP3XbwOevdkU/8JLQP3xSlCkIosJklode4suF/p03
+         oqsENECnxQgTnPbDX1ZAHKiGZImcoQW4CAAH5lbV17b7XbwgACLieYgNXUxW4tR96C4A
+         6Xgqa6AEj5k9HFnU3FJwZ9cL+KjbwQT0kNFTdlwEu/htMS7jCiH3EkYB6tBEtb6pLqnu
+         C9SsjZMw9keRkNP9DLXKKzU2UoueHO9wi1npFU9PUtY8vZDlCqLn1QE5T0DapFck7GMp
+         Ns8w==
+X-Gm-Message-State: AOAM533z8XytEFGg+WchASYik1tjDFw5uVKTfv+hi6mXaKfqg7a2y45O
+        GgPjm3PeLpSufe186b6PRxQYqDry9tArcwLyWi9hOGuGMffXu4tN4VdFGOMZ/4cX5aDFWbwgVJ0
+        5YWgXlz7lLGJ9OnSSoiaFVzyc
+X-Received: by 2002:a5d:9151:: with SMTP id y17mr2084031ioq.38.1644442901150;
+        Wed, 09 Feb 2022 13:41:41 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzvob5cspw1EkMKIhhQ6npdyq3pXbPN3p0dVlPXKwvxH2DJtktWfnTq/mijkoSW585QW8ijsQ==
+X-Received: by 2002:a5d:9151:: with SMTP id y17mr2084013ioq.38.1644442900953;
+        Wed, 09 Feb 2022 13:41:40 -0800 (PST)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id a6sm10552396iow.22.2022.02.09.13.41.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Feb 2022 13:41:40 -0800 (PST)
+Date:   Wed, 9 Feb 2022 14:41:37 -0700
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
+Cc:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-crypto@vger.kernel.org>, <jgg@nvidia.com>,
+        <cohuck@redhat.com>, <mgurtovoy@nvidia.com>, <yishaih@nvidia.com>,
+        <linuxarm@huawei.com>, <liulongfang@huawei.com>,
+        <prime.zeng@hisilicon.com>, <jonathan.cameron@huawei.com>,
+        <wangzhou1@hisilicon.com>
+Subject: Re: [RFC v4 5/8] hisi_acc_vfio_pci: Restrict access to VF dev BAR2
+ migration region
+Message-ID: <20220209144137.3770d914.alex.williamson@redhat.com>
+In-Reply-To: <20220208133425.1096-6-shameerali.kolothum.thodi@huawei.com>
+References: <20220208133425.1096-1-shameerali.kolothum.thodi@huawei.com>
+        <20220208133425.1096-6-shameerali.kolothum.thodi@huawei.com>
+Organization: Red Hat
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHC9VhSHJwwG_3yy4bqNUuFAz87wFU8W-dGYfsoGBG786heTNg@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -69,80 +84,173 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-09 10:57, Paul Moore wrote:
-> On Tue, Feb 8, 2022 at 10:44 PM Jeff Mahoney <jeffm@suse.com> wrote:
-> >
-> > Hi Richard -
-> >
-> > On 5/19/21 16:00, Richard Guy Briggs wrote:
-> > > The openat2(2) syscall was added in kernel v5.6 with commit fddb5d430ad9
-> > > ("open: introduce openat2(2) syscall")
-> > >
-> > > Add the openat2(2) syscall to the audit syscall classifier.
-> > >
-> > > Link: https://github.com/linux-audit/audit-kernel/issues/67
-> > > Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
-> > > Link: https://lore.kernel.org/r/f5f1a4d8699613f8c02ce762807228c841c2e26f.1621363275.git.rgb@redhat.com
-> > > ---
-> >
-> > [...]
-> >
-> > > diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-> > > index d775ea16505b..3f59ab209dfd 100644
-> > > --- a/kernel/auditsc.c
-> > > +++ b/kernel/auditsc.c
-> > > @@ -76,6 +76,7 @@
-> > >  #include <linux/fsnotify_backend.h>
-> > >  #include <uapi/linux/limits.h>
-> > >  #include <uapi/linux/netfilter/nf_tables.h>
-> > > +#include <uapi/linux/openat2.h>
-> > >
-> > >  #include "audit.h"
-> > >
-> > > @@ -196,6 +197,8 @@ static int audit_match_perm(struct audit_context *ctx, int mask)
-> > >               return ((mask & AUDIT_PERM_WRITE) && ctx->argv[0] == SYS_BIND);
-> > >       case AUDITSC_EXECVE:
-> > >               return mask & AUDIT_PERM_EXEC;
-> > > +     case AUDITSC_OPENAT2:
-> > > +             return mask & ACC_MODE((u32)((struct open_how *)ctx->argv[2])->flags);
-> > >       default:
-> > >               return 0;
-> > >       }
-> >
-> > ctx->argv[2] holds a userspace pointer and can't be dereferenced like this.
-> >
-> > I'm getting oopses, like so:
-> > BUG: unable to handle page fault for address: 00007fff961bbe70
+On Tue, 8 Feb 2022 13:34:22 +0000
+Shameer Kolothum <shameerali.kolothum.thodi@huawei.com> wrote:
+
+> HiSilicon ACC VF device BAR2 region consists of both functional
+> register space and migration control register space. From a
+> security point of view, it's not advisable to export the migration
+> control region to Guest.
 > 
-> Thanks Jeff.
+> Hence, override the ioctl/read/write/mmap methods to hide the
+> migration region and limit the access only to the functional register
+> space.
 > 
-> Yes, this is obviously the wrong thing to being doing; I remember
-> checking to make sure we placed the audit_openat2_how() hook after the
-> open_how was copied from userspace, but I missed the argv dereference
-> in the syscall exit path when reviewing the code.
+> Signed-off-by: Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
+> ---
+>  drivers/vfio/pci/hisi_acc_vfio_pci.c | 122 ++++++++++++++++++++++++++-
+>  1 file changed, 118 insertions(+), 4 deletions(-)
 > 
-> Richard, as we are already copying the open_how info into
-> audit_context::openat2 safely, the obvious fix is to convert
-> audit_match_perm() to use the previously copied value instead of argv.
-> If you can't submit a patch for this today please let me know.
+> diff --git a/drivers/vfio/pci/hisi_acc_vfio_pci.c b/drivers/vfio/pci/hisi_acc_vfio_pci.c
+> index 8b59e628110e..563ed2cc861f 100644
+> --- a/drivers/vfio/pci/hisi_acc_vfio_pci.c
+> +++ b/drivers/vfio/pci/hisi_acc_vfio_pci.c
+> @@ -13,6 +13,120 @@
+>  #include <linux/vfio.h>
+>  #include <linux/vfio_pci_core.h>
+>  
+> +static int hisi_acc_pci_rw_access_check(struct vfio_device *core_vdev,
+> +					size_t count, loff_t *ppos,
+> +					size_t *new_count)
+> +{
+> +	unsigned int index = VFIO_PCI_OFFSET_TO_INDEX(*ppos);
+> +	struct vfio_pci_core_device *vdev =
+> +		container_of(core_vdev, struct vfio_pci_core_device, vdev);
+> +
+> +	if (index == VFIO_PCI_BAR2_REGION_INDEX) {
+> +		loff_t pos = *ppos & VFIO_PCI_OFFSET_MASK;
+> +		resource_size_t end = pci_resource_len(vdev->pdev, index) / 2;
 
-Agreed.  It would have been more awkward with the original order of the
-patches.
+Be careful here, there are nested assignment use cases.  This can only
+survive one level of assignment before we've restricted more than we
+intended.  If migration support is dependent on PF access, can we use
+that to determine when to when to expose only half the BAR and when to
+expose the full BAR?
 
-The syscalls_file test in the audit-testsuite should have caught this.
-https://github.com/rgbriggs/audit-testsuite/commit/1c99021ae27ea23eccce2bb1861df4c9c665cd5b
-The test provided does essentially the same thing.
+We should also follow the mlx5 lead to use a vendor sub-directory below
+drivers/vfio/pci/  Thanks,
 
-I should have a tested patch posted today.
+Alex
 
-> paul-moore.com
-
-- RGB
-
---
-Richard Guy Briggs <rgb@redhat.com>
-Sr. S/W Engineer, Kernel Security, Base Operating Systems
-Remote, Ottawa, Red Hat Canada
-IRC: rgb, SunRaycer
-Voice: +1.647.777.2635, Internal: (81) 32635
+> +
+> +		/* Check if access is for migration control region */
+> +		if (pos >= end)
+> +			return -EINVAL;
+> +
+> +		*new_count = min(count, (size_t)(end - pos));
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int hisi_acc_vfio_pci_mmap(struct vfio_device *core_vdev,
+> +				  struct vm_area_struct *vma)
+> +{
+> +	struct vfio_pci_core_device *vdev =
+> +		container_of(core_vdev, struct vfio_pci_core_device, vdev);
+> +	unsigned int index;
+> +
+> +	index = vma->vm_pgoff >> (VFIO_PCI_OFFSET_SHIFT - PAGE_SHIFT);
+> +	if (index == VFIO_PCI_BAR2_REGION_INDEX) {
+> +		u64 req_len, pgoff, req_start;
+> +		resource_size_t end = pci_resource_len(vdev->pdev, index) / 2;
+> +
+> +		req_len = vma->vm_end - vma->vm_start;
+> +		pgoff = vma->vm_pgoff &
+> +			((1U << (VFIO_PCI_OFFSET_SHIFT - PAGE_SHIFT)) - 1);
+> +		req_start = pgoff << PAGE_SHIFT;
+> +
+> +		if (req_start + req_len > end)
+> +			return -EINVAL;
+> +	}
+> +
+> +	return vfio_pci_core_mmap(core_vdev, vma);
+> +}
+> +
+> +static ssize_t hisi_acc_vfio_pci_write(struct vfio_device *core_vdev,
+> +				       const char __user *buf, size_t count,
+> +				       loff_t *ppos)
+> +{
+> +	size_t new_count = count;
+> +	int ret;
+> +
+> +	ret = hisi_acc_pci_rw_access_check(core_vdev, count, ppos, &new_count);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return vfio_pci_core_write(core_vdev, buf, new_count, ppos);
+> +}
+> +
+> +static ssize_t hisi_acc_vfio_pci_read(struct vfio_device *core_vdev,
+> +				      char __user *buf, size_t count,
+> +				      loff_t *ppos)
+> +{
+> +	size_t new_count = count;
+> +	int ret;
+> +
+> +	ret = hisi_acc_pci_rw_access_check(core_vdev, count, ppos, &new_count);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return vfio_pci_core_read(core_vdev, buf, new_count, ppos);
+> +}
+> +
+> +static long hisi_acc_vfio_pci_ioctl(struct vfio_device *core_vdev, unsigned int cmd,
+> +				    unsigned long arg)
+> +{
+> +	struct vfio_pci_core_device *vdev =
+> +		container_of(core_vdev, struct vfio_pci_core_device, vdev);
+> +
+> +	if (cmd == VFIO_DEVICE_GET_REGION_INFO) {
+> +		struct pci_dev *pdev = vdev->pdev;
+> +		struct vfio_region_info info;
+> +		unsigned long minsz;
+> +
+> +		minsz = offsetofend(struct vfio_region_info, offset);
+> +
+> +		if (copy_from_user(&info, (void __user *)arg, minsz))
+> +			return -EFAULT;
+> +
+> +		if (info.argsz < minsz)
+> +			return -EINVAL;
+> +
+> +		if (info.index == VFIO_PCI_BAR2_REGION_INDEX) {
+> +			info.offset = VFIO_PCI_INDEX_TO_OFFSET(info.index);
+> +
+> +			/*
+> +			 * ACC VF dev BAR2 region consists of both functional
+> +			 * register space and migration control register space.
+> +			 * Report only the functional region to Guest.
+> +			 */
+> +			info.size = pci_resource_len(pdev, info.index) / 2;
+> +
+> +			info.flags = VFIO_REGION_INFO_FLAG_READ |
+> +					VFIO_REGION_INFO_FLAG_WRITE |
+> +					VFIO_REGION_INFO_FLAG_MMAP;
+> +
+> +			return copy_to_user((void __user *)arg, &info, minsz) ?
+> +					    -EFAULT : 0;
+> +		}
+> +	}
+> +	return vfio_pci_core_ioctl(core_vdev, cmd, arg);
+> +}
+> +
+>  static int hisi_acc_vfio_pci_open_device(struct vfio_device *core_vdev)
+>  {
+>  	struct vfio_pci_core_device *vdev =
+> @@ -32,10 +146,10 @@ static const struct vfio_device_ops hisi_acc_vfio_pci_ops = {
+>  	.name = "hisi-acc-vfio-pci",
+>  	.open_device = hisi_acc_vfio_pci_open_device,
+>  	.close_device = vfio_pci_core_close_device,
+> -	.ioctl = vfio_pci_core_ioctl,
+> -	.read = vfio_pci_core_read,
+> -	.write = vfio_pci_core_write,
+> -	.mmap = vfio_pci_core_mmap,
+> +	.ioctl = hisi_acc_vfio_pci_ioctl,
+> +	.read = hisi_acc_vfio_pci_read,
+> +	.write = hisi_acc_vfio_pci_write,
+> +	.mmap = hisi_acc_vfio_pci_mmap,
+>  	.request = vfio_pci_core_request,
+>  	.match = vfio_pci_core_match,
+>  };
 

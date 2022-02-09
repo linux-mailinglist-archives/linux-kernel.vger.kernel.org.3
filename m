@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9817B4AEF49
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 11:30:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC7DE4AEF6B
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 11:38:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229582AbiBIK3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 05:29:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43586 "EHLO
+        id S230214AbiBIKif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 05:38:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiBIK3G (ORCPT
+        with ESMTP id S229617AbiBIKi1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 05:29:06 -0500
+        Wed, 9 Feb 2022 05:38:27 -0500
 Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90BADE04CE2E;
-        Wed,  9 Feb 2022 02:20:56 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.west.internal (Postfix) with ESMTP id A5BBD2B00092;
-        Wed,  9 Feb 2022 04:24:21 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Wed, 09 Feb 2022 04:24:23 -0500
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D9D9E14863A;
+        Wed,  9 Feb 2022 02:25:56 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.west.internal (Postfix) with ESMTP id 38A962B00247;
+        Wed,  9 Feb 2022 04:25:18 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Wed, 09 Feb 2022 04:25:19 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
         :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; bh=r+WHi0R36h9MJU2BZA08FzSXL4WE61GwNPzCwG
-        RlIiU=; b=jdkynVt8Z4dVXBoxPsF91bObzh15W0I1gL/kqrI9rX/sI/hFfRX8Dk
-        cptu+4xbmlSddxAb4emtuRR4o2OGeWxGp9PEs80HoyZ8rTeaQ0h3BoLnLi9R5tHY
-        NyXXR3ecJhZtJP7uLot1t/xqbJ7XwaMwicVAoWboUo2rf9mDbpHNab2y680+0+mb
-        DSb9SvneSMV1yWrXSzqbh3Y2O5goPBX22jv+4LjUNtCZs1Z3Dp5CQ98PBIQHgcn3
-        KHYHBq8tTztMpcsJwRf8mGuhpn4f12wIfgb6i71Jx1q6+MoKjeUuPM5Po/VoK9x/
-        piN+8tdZ2RjDhl/oYN2le6QQzqUHQQsQ==
+        :subject:to:to; s=fm2; bh=x4Xau9jrPr3sDVwybOpIK/b9w4fMNltmY/7C4T
+        ItDic=; b=J4B8JsReMPvjhSXfJVGjFz1AaL/WkJPBJnXV+IttUCvxfZEXOsLIcR
+        jbU49jDoqI5qC85ZyeMsi/RQEQNuUOZkyOTvi7CCEJzUvMpPSu+oT12/xdch0j+a
+        0aDepsdqsrCJUMAXHUyMQ5UoecX5dD93CrMdUlmCplh3JBLMmrwSqjBVFG5nhJsu
+        sQkZEJ2XfG8UgOzF99+bN0VNjWksVUp5f4dbEm3raaRRKudNsHcCgxc+ix7vhWpD
+        qGjTwlbcqu2Mpdx9Eb5KbhDbM2oTh/s9MUV6dqcpMnrq5AGkQMADkbpWak2CmsKB
+        oUdbTOibrIh7X0k4DlRWCHkL3YCRLqBQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
         :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=r+WHi0R36h9MJU2BZ
-        A08FzSXL4WE61GwNPzCwGRlIiU=; b=TQaGFXa5pQ0MGpWqmy3qzElf5g8TvOFJY
-        mSdmJA6zMrvgCd63lm9lj3kwQdR3ldPl/in309SqXs/y5yGkVKUoQheJ4t5WfUwf
-        /WVWaYjvTgyQvE6a18n43tVikbDHPE2Vd0K0Sy1MT2D4A7mmxlaO8gHRNVVRGV99
-        Th5gROo4Nl7igPdbqWQ8mhBDGqTHvQu1Kv5nvdBWF2d7dIu3o8XYB/e9uA7sNjKi
-        YxTO8mf3oZ9XwfuTxrh8L0GEjdxYqTqBeoYWMRY/tqK9ADE+QqttnZUSFrBKHtyj
-        oijNJRa3YVpZmQvO2PSfe59ooq4QMKH8VmXepBSO1SiNFojPXheEA==
-X-ME-Sender: <xms:RIgDYiH8OaEGKA048FXosMiSvf0HFOA6rDhfUxcewWCFao5e5TDArQ>
-    <xme:RIgDYjUcmBJNVH_kVtYhKUphQhrFjjKAUlzSrmJGVIKcXm9vqtzXQTavBIIrugKAZ
-    9bbAlPtjy0SfJCBX2Q>
-X-ME-Received: <xmr:RIgDYsL4V4IeE7bcxpEyK6D-OrTSA6RCFEESSSWOORhCAnEyG4Z8IP5OLFYJUW-vJ2zg1PqBEw3y6BVfdDT_votGP4MKx8V0NzdzuUQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrheelgddtvdcutefuodetggdotefrodftvf
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=x4Xau9jrPr3sDVwyb
+        OpIK/b9w4fMNltmY/7C4TItDic=; b=YBcYshvng8UgNDtkcDFi0gpR67pJXdhD3
+        le2+tW7W6J3jDXB/GjgRPoqFAw80xZzA9+YgnKg0Hw7jxm7aI4atOXcyV1bmF3eJ
+        VMv0M1Fkr+ygHvAy4elQ70dwhHVfuoQy5AsMsGxR8RANab+EEPPcXMricE4bW4lC
+        VXzGULhdWA96v4R5tep28Do34IPooDWBJ2J3L7DocsvcT9XOFryPQ06IaUSh+uah
+        U/Ww9w/WwH5Xrc41K5/48gSnBQKNyHlx5UeRGVsftEctPPV+ybccHk9YKeyAz+4B
+        A+lUhSOo2tVqfj/cDlwvey8/3qS80l3aPilI2bsnsvDoNtOuI9ehg==
+X-ME-Sender: <xms:fYgDYuSG2RqsldPgJ8LAjOrkhoQxqXzx06MQLRu8sgovF10__slpXw>
+    <xme:fYgDYjxj9TdYQhpZeCNzJhSntJmG9dzGx2VYUCjUHMl7AzlCss-ytS4jYlKhmCxvR
+    -STOyMZa1lKlYUhNpU>
+X-ME-Received: <xmr:fYgDYr2AU8Ufb6MESoMg1Lt6KB9wI4zbi_01BjSwMPojsGGwpdFi7v9BnkkALSLJbNHv9S3aT5-p4rE931PZTp6wtCikXL40Qswwu0w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrheelgddtfecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
     fjughrpeffhffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihimhgv
     ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
     gvrhhnpeelkeeghefhuddtleejgfeljeffheffgfeijefhgfeufefhtdevteegheeiheeg
-    udenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrg
+    udenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrg
     igihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:RYgDYsGirlyUeHCQINzAZh1zb5RV3T9En_BRcFH3w-ymcZYU5xaVtA>
-    <xmx:RYgDYoV2xAD6VVKYIv-i-3_DDg7xbhND6c_T1M230gqtGDrIWctKIg>
-    <xmx:RYgDYvOQpO_DW-kkwMefZRIAQyZ3iW6NsIKdYFtlV6iHL7o7b_W2AA>
-    <xmx:RYgDYvP0C5oZwFBS5GbgomnuUxHv3IES5_J7f4_WSoHXAUVp1vLrwZiTKb8>
+X-ME-Proxy: <xmx:fYgDYqAKV-PJdzNcm1mBn9QCSBqB4ztAGmpuX1LBDxETJVyqtP303g>
+    <xmx:fYgDYngKX8f1JKy5qX_NEPQMTKkatiFk-1oD9mg_yra1eQsFvSFHsw>
+    <xmx:fYgDYmrhZX7QMu8idRpw_Ybfymhf4uejz3yT8gv7EaH19Wcwqv9PtQ>
+    <xmx:fYgDYgZvlvKSi7np5DClAmFgvYoXiKxz8lxmzIT0ivVVPtFWrw77I3TCbPs>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 9 Feb 2022 04:24:20 -0500 (EST)
-Date:   Wed, 9 Feb 2022 10:24:19 +0100
+ 9 Feb 2022 04:25:16 -0500 (EST)
+Date:   Wed, 9 Feb 2022 10:25:15 +0100
 From:   Maxime Ripard <maxime@cerno.tech>
 To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
@@ -77,16 +77,16 @@ Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         Helen Koike <helen.koike@collabora.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v2 30/66] media: sun6i-csi: Add bridge v4l2 subdev with
- port management
-Message-ID: <20220209092419.i3kver4f2am7mnow@houat>
+Subject: Re: [PATCH v2 31/66] media: sun6i-csi: Rename sun6i_video to
+ sun6i_csi_capture
+Message-ID: <20220209092515.nyalysvt2v5ult5k@houat>
 References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
- <20220205185429.2278860-31-paul.kocialkowski@bootlin.com>
+ <20220205185429.2278860-32-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="g7zgo7b3vyccwkg3"
+        protocol="application/pgp-signature"; boundary="7cbfwnza7b5aieih"
 Content-Disposition: inline
-In-Reply-To: <20220205185429.2278860-31-paul.kocialkowski@bootlin.com>
+In-Reply-To: <20220205185429.2278860-32-paul.kocialkowski@bootlin.com>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -98,39 +98,31 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---g7zgo7b3vyccwkg3
+--7cbfwnza7b5aieih
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Feb 05, 2022 at 07:53:53PM +0100, Paul Kocialkowski wrote:
-> Introduce a bridge v4l2 subdev to prepare for separation between the
-> processing part (bridge) and the dma engine, which is required to
-> properly support ths isp workflow later on.
->=20
-> Currently the bridge just manages fwnode mapping to media pads,
-> using an async notifier (which was previously in the main code).
-> The s_stream video op just forwards to the connected v4l2 subdev
-> (sensor or MIPI CSI-2 bridge).
->=20
-> The video capture device is now registered after the bridge and
-> attaches to it with a media link.
+On Sat, Feb 05, 2022 at 07:53:54PM +0100, Paul Kocialkowski wrote:
+> In an effort to distinguish between the core csi engine (to be
+> represented as the bridge) and the dma engine (the capture video
+> device), rename the video component to capture, with the appropriate
+> prefix. No functional change intended.
 >=20
 > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-
-There's a bunch of checkpatch --strict warnings that need to be fixed
+Reviewed-by: Maxime Ripard <maxime@cerno.tech>
 
 Maxime
 
---g7zgo7b3vyccwkg3
+--7cbfwnza7b5aieih
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYgOIQwAKCRDj7w1vZxhR
-xUGrAP9MfsAjtas6E+7vA9TK2tBtzcbdwELvIFIyyBZWy0dc4QD+IswKSRQieQXt
-DCSL3vcIVMqHg/e27Rl4TkrPKnfZmQc=
-=Lx4Q
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYgOIewAKCRDj7w1vZxhR
+xftKAP4miEyof8oD/yvVrwqUj4Zww2YXKzBE0vFPaaycjTBX0QD/QIF3PwzdOeVr
+DGLkjg4EMpcEbPj9fHzxVuaaXf0xugo=
+=5ZtM
 -----END PGP SIGNATURE-----
 
---g7zgo7b3vyccwkg3--
+--7cbfwnza7b5aieih--

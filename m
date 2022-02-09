@@ -2,157 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F9674AEE78
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 10:51:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 697BB4AEEB7
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 10:56:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236335AbiBIJvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 04:51:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58122 "EHLO
+        id S235309AbiBIJ4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 04:56:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237568AbiBIJvA (ORCPT
+        with ESMTP id S232745AbiBIJz4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 04:51:00 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2079.outbound.protection.outlook.com [40.107.243.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B541EE0CF94A;
-        Wed,  9 Feb 2022 01:50:52 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=I7ifGWeBb2UJzuzFaPO4psZBU9Dc8im1sU4XCCBvU4WjDMMhJR4erMNtQ79FOvd9N8126v53vxmJ3gSYYKO1nPTYEBzl4rSVOoZx55JyY0BVw2MKWX195Ojb54Gf8kaV8RBObbt/ajXc72nwQZVFx49zTedNtVkwwgZmbzVL0w/FUJeUoKxug7cxEPZAbHGCulmsd5svGzVUIH9NWdOkBDJBn0KSajz3cZGkG/OEwKvoE2JnaHMQkGkXKn+Wbm4Z5DN3iHHZ/Qw4xdTgk6HJzeGKq6GPKzjxYxNldWo8xTnPuRtCGQxrq1bF+5orXAbboeTahajLgRVn7XZ1MZXpgg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ExGhn9ejubFmqZrjmlQCjA7WGkEk8pQtW7NR/pHEG8Q=;
- b=gxwnPvYbFWwfyCR5Pwdw+XHqCkJOOLB5E9uuu3jqbPGVAjkcW2y50GUiCWbNrKF+jNVaOTZUWeZ2GTOFY10kPd716Zea51et2uxGuagv10QefPswC7UsIhdlUujaWnmLJAhb5mdpxSQ4CF29fCbXfGttqVZOsksMN7+HYfB9AfqX7ukOoU3VwSCAwlV5ckg6IEsj8FQdD/WoeokfW+czZLhKdh5M86R7136I9QNbPr+pNoJzIjsVU2NjYzFN0bXJqwSaoxcihmDOop+XDWcCyOCf5bSXkvp4Cs2Cj0A4aIOM0O92yrgsbdeWHcZHwaSsjcfSRuW0sfE14dP0OM3LrA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=microchip.com smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ExGhn9ejubFmqZrjmlQCjA7WGkEk8pQtW7NR/pHEG8Q=;
- b=jufPbmX5IBsdrVrAag0FkAl3b9NMkgpcZZjWX2quM5+o5CadcBXbZYOem4hodBZ/hlvuI3FxNCThyLJuSFPQwzXItvl7cn29ypXQihzD1fAzllTtIYfP2yAWNOSEMOR5ocF04c6SOmre2/V2LuT0uqrXJ+3V9nNcCZl5oBy5SnA=
-Received: from SN7PR04CA0212.namprd04.prod.outlook.com (2603:10b6:806:127::7)
- by MW4PR02MB7218.namprd02.prod.outlook.com (2603:10b6:303:65::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.11; Wed, 9 Feb
- 2022 09:43:30 +0000
-Received: from SN1NAM02FT0054.eop-nam02.prod.protection.outlook.com
- (2603:10b6:806:127:cafe::64) by SN7PR04CA0212.outlook.office365.com
- (2603:10b6:806:127::7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12 via Frontend
- Transport; Wed, 9 Feb 2022 09:43:30 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
-Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- SN1NAM02FT0054.mail.protection.outlook.com (10.97.4.242) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4975.11 via Frontend Transport; Wed, 9 Feb 2022 09:43:29 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Wed, 9 Feb 2022 01:43:29 -0800
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Wed, 9 Feb 2022 01:43:29 -0800
-Envelope-to: nicolas.ferre@microchip.com,
- davem@davemloft.net,
- claudiu.beznea@microchip.com,
- andrei.pistirica@microchip.com,
- kuba@kernel.org,
- Conor.Dooley@microchip.com,
- netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- harinikatakamlinux@gmail.com,
- mstamand@ciena.com
-Received: from [10.140.6.13] (port=39646 helo=xhdharinik40.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <harini.katakam@xilinx.com>)
-        id 1nHjVY-0006bl-OZ; Wed, 09 Feb 2022 01:43:29 -0800
-From:   Harini Katakam <harini.katakam@xilinx.com>
-To:     <nicolas.ferre@microchip.com>, <davem@davemloft.net>,
-        <claudiu.beznea@microchip.com>, <andrei.pistirica@microchip.com>,
-        <kuba@kernel.org>, <Conor.Dooley@microchip.com>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <michal.simek@xilinx.com>, <harinikatakamlinux@gmail.com>,
-        <harini.katakam@xilinx.com>, <mstamand@ciena.com>
-Subject: [PATCH] net: macb: Align the dma and coherent dma masks
-Date:   Wed, 9 Feb 2022 15:13:25 +0530
-Message-ID: <20220209094325.8525-1-harini.katakam@xilinx.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 9 Feb 2022 04:55:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C4C75E046F1F
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 01:55:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644400266;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bOGT40PA5LmAnBRQIBrjCAxhYJpsutSMC+lcUcCHisA=;
+        b=WaD9JxkXykV92Ys4a5XHnxtSNcNkiP8bh6uq5uGgHl2gd4tZ8J02Mi6rNpYW3bNXWCQgd5
+        5oH4XdQDAUjSWhTemPStqNtaRAe5BLXAqJND5+INxip5smLOkcsCSalhGJhGc5qRA/diOt
+        bmjO+p8CqT0B4cvIBmNEIt7y9s64PJg=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-599-zLksJTvLPNmflJynIoqBdg-1; Wed, 09 Feb 2022 04:45:02 -0500
+X-MC-Unique: zLksJTvLPNmflJynIoqBdg-1
+Received: by mail-wr1-f71.google.com with SMTP id d13-20020adfa34d000000b001e33a1c56f3so868794wrb.20
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 01:45:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=bOGT40PA5LmAnBRQIBrjCAxhYJpsutSMC+lcUcCHisA=;
+        b=a6N1eSsiko2OGxhVCM2ROPoZDraj/9Mt9UyjZ25jYnUvGvOdQVweetT4KFHPHi1C9+
+         P1UQ8mf0yQI6l4KEpd04orDriZF/y/TdnFD7b3UTDFd7tmTONgNvsa2AUMAHMGoxQ81b
+         lY7PDj6W0+4Z4xrcI31vlFN5pXMnntGp/5UJPoEa8rsfslO/0CLpykGa/1TNH/28YjqK
+         MX1h0jplRL8kx+Ct7or44YB4LLj8EKB26dwJZEjS5/bYGjAYZqOOvi5nLYIuj2dV4d+y
+         6DMsD8lxBqPiuINcRquR18BS7Vp4tjKpoIA+YzljB2kh6e31OdJQctfpw9lmFWxUm12E
+         W36w==
+X-Gm-Message-State: AOAM531zY67yr7rNtJmPC1tYSiZgiXPeaOo+XT/TTrIHxahXtHxCHDiQ
+        au2qg5pB5t7r60cBZTktI/w57VogDGwGX9TrOKFxFeVVcd3Td5DqFGYQXlCVxrBgWnhpOCxPjFf
+        dA57JVMjVk3vkkX5D+ICwfeAN
+X-Received: by 2002:a1c:7418:: with SMTP id p24mr1246561wmc.21.1644399901426;
+        Wed, 09 Feb 2022 01:45:01 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzvFdeFjkesIm97KwdAHOETISeFDFk5mT6+L7zC0mhqZYGBbdP+JGwExuY5pOJJ7UuI+EuXSg==
+X-Received: by 2002:a1c:7418:: with SMTP id p24mr1246546wmc.21.1644399901192;
+        Wed, 09 Feb 2022 01:45:01 -0800 (PST)
+Received: from ?IPv6:2a0c:5a80:1204:1500:37e7:8150:d9df:36f? ([2a0c:5a80:1204:1500:37e7:8150:d9df:36f])
+        by smtp.gmail.com with ESMTPSA id h6sm4428856wmq.26.2022.02.09.01.45.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Feb 2022 01:45:00 -0800 (PST)
+Message-ID: <b5363ced8e17d07d41554da8fde06c410e6688e0.camel@redhat.com>
+Subject: Re: [PATCH 0/2] mm/page_alloc: Remote per-cpu lists drain support
+From:   Nicolas Saenz Julienne <nsaenzju@redhat.com>
+To:     Xiongfeng Wang <wangxiongfeng2@huawei.com>,
+        akpm@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        frederic@kernel.org, tglx@linutronix.de, mtosatti@redhat.com,
+        mgorman@suse.de, linux-rt-users@vger.kernel.org, vbabka@suse.cz,
+        cl@linux.com, paulmck@kernel.org, willy@infradead.org
+Date:   Wed, 09 Feb 2022 10:45:00 +0100
+In-Reply-To: <7c87f388-cc50-e9a1-17a7-802bb42656e4@huawei.com>
+References: <20220208100750.1189808-1-nsaenzju@redhat.com>
+         <7c87f388-cc50-e9a1-17a7-802bb42656e4@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0a0b8ad5-b985-4f85-3529-08d9ebb0a108
-X-MS-TrafficTypeDiagnostic: MW4PR02MB7218:EE_
-X-Microsoft-Antispam-PRVS: <MW4PR02MB7218EBE8585016DE1CC00103C92E9@MW4PR02MB7218.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:813;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gzjUkbqUqFXM1DFeDyvWwyt8b1inuzyoQFwp48LlvfyYU72OR3wEpQ1iSQtXRhG68/Z2FxCoKt2MA4QLl2i/PdOwW+AIag6GqPbcnib4lXVrKmLAB+Xd9RJbflPGBgBkyJt7KIcyjRp927ruCAGf9g4JuZFbGe1VrXelBOJvN98jJpa00YmegTXDAL8zXehdo2uUjUpx8mL0gQbAYiUEUGrWh8/Uq9ZKYd/zUNRHoD9Ca+Wr0Ihfz7l+bRvBHvYk/FLVDBuF5v4jwONmXUje6yfuCY+vpGMcgaxIDOeCrYM2hleLZJQlRRKxLev5IILeiNT8DIZ0yDXMEHCw+BylbPsbZxjArXyk5C7PTM1xHuIy6naVrXzdq2faDdWvMvCzmenaz4VqGkFaH+jn2RPuOSvcdbqcKwDar7x7MCVX1EtUcR7lxfuqTDwdOwzGhjkpjzFpMMqpEM3I/5eo+grKkhpdAkjDFUr/1xWZgFFeW3msX++VFFewlrA54/tAgLplWUXMpYk14W5BcIiLthYzLgogX0YiSyicFp2DpnZSL8YfWX6CvkElAJhLUPlRRkWxZe0zlAN1TTM16wx1WEiSG4mPxwuv33CWvDd0uef5kMDgj+vZKDN2TBh7peCXbia5hQFe+4Xw/ET8jddt03GEUaFrDvU31ke5orxvl3BAD11wx9kjxjm/feCNUfu5KIO/wRrMTVHz86O3aqjKPk0mtw==
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(70206006)(8676002)(4326008)(70586007)(47076005)(7636003)(5660300002)(9786002)(8936002)(54906003)(110136005)(316002)(36756003)(44832011)(2906002)(7416002)(82310400004)(336012)(7696005)(508600001)(26005)(186003)(2616005)(1076003)(356005)(83380400001)(40460700003)(36860700001)(6666004)(426003)(102446001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2022 09:43:29.7295
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0a0b8ad5-b985-4f85-3529-08d9ebb0a108
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0054.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR02MB7218
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marc St-Amand <mstamand@ciena.com>
+Hi Xiongfeng, thanks for taking the time to look at this.
 
-Single page and coherent memory blocks can use different DMA masks
-when the macb accesses physical memory directly. The kernel is clever
-enough to allocate pages that fit into the requested address width.
+On Wed, 2022-02-09 at 16:55 +0800, Xiongfeng Wang wrote:
+> Hi Nicolas，
+> 
+> When I applied the patchset on the following commit and tested on QEMU, I came
+> accross the following CallTrace.
+>   commit dd81e1c7d5fb126e5fbc5c9e334d7b3ec29a16a0
+> 
+> I wrote a userspace application to consume the memory. When the memory is used
+> out, the OOM killer is triggered and the following Calltrace is printed. I am
+> not sure if it is related to this patchset. But when I reverted this patchset,
+> the 'NULL pointer' Calltrace didn't show.
 
-When using the ARM SMMU, the DMA mask must be the same for single
-pages and big coherent memory blocks. Otherwise the translation
-tables turn into one big mess.
+It's a silly mistake on my part, while cleaning up the code I messed up one of
+the 'struct per_cpu_pages' accessors. This should fix it:
 
-  [   74.959909] macb ff0e0000.ethernet eth0: DMA bus error: HRESP not OK
-  [   74.959989] arm-smmu fd800000.smmu: Unhandled context fault: fsr=0x402, iova=0x3165687460, fsynr=0x20001, cbfrsynra=0x877, cb=1
-  [   75.173939] macb ff0e0000.ethernet eth0: DMA bus error: HRESP not OK
-  [   75.173955] arm-smmu fd800000.smmu: Unhandled context fault: fsr=0x402, iova=0x3165687460, fsynr=0x20001, cbfrsynra=0x877, cb=1
+------------------------->8-------------------------
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 0caa7155ca34..e65b991c3dc8 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -3279,7 +3279,7 @@ static void __drain_all_pages(struct zone *zone, bool force_all_cpus)
+                                has_pcps = true;
+                } else {
+                        for_each_populated_zone(z) {
+-                               pcp = per_cpu_ptr(zone->per_cpu_pageset, cpu);
++                               pcp = per_cpu_ptr(z->per_cpu_pageset, cpu);
+                                lp = rcu_dereference_protected(pcp->lp,
+                                                mutex_is_locked(&pcpu_drain_mutex));
+                                if (lp->count) {
+------------------------->8-------------------------
 
-Since using the same DMA mask does not hurt direct 1:1 physical
-memory mappings, this commit always aligns DMA and coherent masks.
+Thanks!
 
-Signed-off-by: Marc St-Amand <mstamand@ciena.com>
-Signed-off-by: Harini Katakam <harini.katakam@xilinx.com>
----
- drivers/net/ethernet/cadence/macb_main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
-index 1ce20bf52f72..4c231159b562 100644
---- a/drivers/net/ethernet/cadence/macb_main.c
-+++ b/drivers/net/ethernet/cadence/macb_main.c
-@@ -4765,7 +4765,7 @@ static int macb_probe(struct platform_device *pdev)
- 
- #ifdef CONFIG_ARCH_DMA_ADDR_T_64BIT
- 	if (GEM_BFEXT(DAW64, gem_readl(bp, DCFG6))) {
--		dma_set_mask(&pdev->dev, DMA_BIT_MASK(44));
-+		dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(44));
- 		bp->hw_dma_cap |= HW_DMA_CAP_64B;
- 	}
- #endif
 -- 
-2.17.1
+Nicolás Sáenz
 

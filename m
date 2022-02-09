@@ -2,70 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87CA04B0085
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 23:44:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33AA64B0098
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 23:48:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236257AbiBIWng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 17:43:36 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:40422 "EHLO
+        id S236296AbiBIWsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 17:48:04 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:49714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236200AbiBIWnV (ORCPT
+        with ESMTP id S236164AbiBIWr7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 17:43:21 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80FF8E04FF1C
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 14:43:11 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id k17so261769plk.0
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 14:43:11 -0800 (PST)
+        Wed, 9 Feb 2022 17:47:59 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D8DE01644C;
+        Wed,  9 Feb 2022 14:48:02 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id v13-20020a17090ac90d00b001b87bc106bdso6656528pjt.4;
+        Wed, 09 Feb 2022 14:48:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=noMkqdTonhMUp9fT8zd3GJsejZVy8dW1w0VkTntk/8Y=;
-        b=bHNRLw+OXy+JodwNMwa69BC1zFb8359yF6+/aSWs/bwszNylIZ0siC6/EmVOeJglKh
-         H3o/LrFlf8t3pk9303gznetfLGDEFh2lz/MgmHk5/NIi8AckRL2EYEWWCFzWMeJTSMCz
-         +eyK9gIuqwgyMjhkDNYgP66k4dyvVwD2ruIOxsnTD/nCrkhLvekAFoTm5k2tMVf8N++w
-         jGCZqjJMsAmdtP1RTj71TkUx78nyb3BcpfVLkTOTfNOwOhEVAI29JWyRtPqix7+LEzMz
-         Wo+ntyiWbg9YA84BAysTyhZJCXWYjm8vHq8WSpYY7j08PR0iK9ixJiw85MO7ZXIG+J9C
-         aRDA==
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=KXc1sqyU2Qd7WQy9J1rum8wM80ISZeqcdXY4bjyOVmg=;
+        b=RJoS/D+pCheo/4MzOz0AdAlQsEred3Y17syMeJcS2OQxl049MoB7xQ3sDmUuZKI0no
+         BPjQSUwQLhUbyfNZ0Oi1B8W7Xlgg/9WHHmffv6TKffiwVLA8qQyyDHo/iXLnNvDTUGZq
+         khNLvzT1As7jOtP4kKZl6uVGbK0/lLrmaXtX/iSHgwrlH8TugatOaeoBcjV01baSnLfF
+         7B0gk2/Q0THvxfCUfcARX9gIEgc7bMX0LWbXPR3iIGv073uL5+R2kReHpXxaHmF7Qep9
+         xeNlmnWHPs44BLnKJ4sIHEG1ziqoJHW+RWmqEiXwn/urRdTKSDuA8444lNKt9HXnePy0
+         jMIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=noMkqdTonhMUp9fT8zd3GJsejZVy8dW1w0VkTntk/8Y=;
-        b=eFtz4fbbFq6SeOxv6auVEV+yJ6XRXIEPMtQfRDaDXT95mL74YFVL3WhKWyI13QPyP9
-         nVyzVj8AjIXv9aAcnAm/f2rRKTF7HpxzFAuRArcF29oFTaWR4AvwFwPkSr3n++w8MmZ3
-         /P4eKrK5Z9W7SZjhjSj4C7gpeJ4lZeM5OZLQD/09b3LOxtROpuTTe8ujRVXJEXvjMzi/
-         hmv+U8yfitwmhr2LpmAySNTniUTC/OSs4gkGp6hV1OEMit9mxdP/qOMjP0N+UK+bB6ZZ
-         RDRm5ajpFhmV/FWX1hZucVDsZOqLnchBHwA1h+1LsUeGtjciADjhieMusiGTOMrPqmCu
-         byww==
-X-Gm-Message-State: AOAM530/Vx2DxfAlhpiGTwlgsMPU4s3fIaGD52bTnnH6fZH0WqxQfj+r
-        lAhiLCYMNrB5UAUrHHyq/Jey5Q==
-X-Google-Smtp-Source: ABdhPJw7V1tbuSaIRjHHEsNYjQudgK7dt21qZMZDxlNK9KY1aeYFg0uYMJ7CI4qoGq0jmiaHVuJ0Ww==
-X-Received: by 2002:a17:902:7ecf:: with SMTP id p15mr4523948plb.112.1644446590881;
-        Wed, 09 Feb 2022 14:43:10 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id p16sm14695437pgj.79.2022.02.09.14.43.09
+        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=KXc1sqyU2Qd7WQy9J1rum8wM80ISZeqcdXY4bjyOVmg=;
+        b=YF7/tWGIn4zhxJ7QRZI7G6crPoW+pwyIYa87tVU3esG7csB2i9LI21bEfrdKkZFLZ8
+         BDI9+oSNSDss/sRzXziwH708ckql3jDKcFVEnZ65yqr6u/dmxfoXtsDpilw+1PDKzVxD
+         qAEDhSBqORiooF2wDH5TWFgKAcn5b1XhjY7NIU19tFnQH7gCRDuXw48H9RXjV22+pteK
+         AhhJwbOL3fD75xesTLJmy7CIMHdcXXwe+AOOClTCuttfbB8i0rwo9xDv2U6uEPElbaLR
+         IRVofTluipaiLqZht+O6ZqdztWQMSu6phIUwM3kjmDdfH+IQ/gkKLTEIfCP4Gr9m7sRG
+         fTCw==
+X-Gm-Message-State: AOAM5339qpfeLqHf7yZuirCfE3sem9eSKLVvqtwm/wbQ75K/knpbkV4I
+        BSUtpZi/30nn+Hi1sME/oQaDEGmmo1ritZyhU1KALg==
+X-Google-Smtp-Source: ABdhPJyThSBmBM2LV3bKOXvGwHD6J/HGztn5/d/UZGnKv84QhsHzmiJczkjkm3O/iWjI1mEM0S70FQ==
+X-Received: by 2002:a17:903:228c:: with SMTP id b12mr4714648plh.39.1644446881046;
+        Wed, 09 Feb 2022 14:48:01 -0800 (PST)
+Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [71.19.144.195])
+        by smtp.gmail.com with ESMTPSA id k21sm20985332pff.33.2022.02.09.14.47.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 14:43:10 -0800 (PST)
-Date:   Wed, 9 Feb 2022 22:43:06 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     David Matlack <dmatlack@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, vkuznets@redhat.com
-Subject: Re: [PATCH 02/23] KVM: MMU: nested EPT cannot be used in SMM
-Message-ID: <YgRDenzMI49hcss1@google.com>
-References: <20220204115718.14934-1-pbonzini@redhat.com>
- <20220204115718.14934-3-pbonzini@redhat.com>
- <Yf1tY8kNzZDRtH3e@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yf1tY8kNzZDRtH3e@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        Wed, 09 Feb 2022 14:48:00 -0800 (PST)
+Message-ID: <620444a0.1c69fb81.12f9e.457f@mx.google.com>
+Date:   Wed, 09 Feb 2022 14:48:00 -0800 (PST)
+X-Google-Original-Date: Wed, 09 Feb 2022 22:47:53 GMT
+From:   Fox Chen <foxhlchen@gmail.com>
+In-Reply-To: <20220209191249.887150036@linuxfoundation.org>
+Subject: RE: [PATCH 5.16 0/5] 5.16.9-rc1 review
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Fox Chen <foxhlchen@gmail.com>
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,53 +73,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 04, 2022, David Matlack wrote:
-> On Fri, Feb 04, 2022 at 06:56:57AM -0500, Paolo Bonzini wrote:
-> > The role.base.smm flag is always zero, do not bother copying it over
-> > from vcpu->arch.root_mmu.
-> > 
-> > Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+On Wed,  9 Feb 2022 20:14:32 +0100, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> This is the start of the stable review cycle for the 5.16.9 release.
+> There are 5 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Reviewed-by: David Matlack <dmatlack@google.com>
+> Responses should be made by Fri, 11 Feb 2022 19:12:41 +0000.
+> Anything received after that time might be too late.
 > 
-> > ---
-> >  arch/x86/kvm/mmu/mmu.c | 3 ---
-> >  1 file changed, 3 deletions(-)
-> > 
-> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > index 9424ae90f1ef..b0065ae3cea8 100644
-> > --- a/arch/x86/kvm/mmu/mmu.c
-> > +++ b/arch/x86/kvm/mmu/mmu.c
-> > @@ -4881,9 +4881,6 @@ kvm_calc_shadow_ept_root_page_role(struct kvm_vcpu *vcpu, bool accessed_dirty,
-> >  {
-> >  	union kvm_mmu_role role = {0};
-> >  
-> > -	/* SMM flag is inherited from root_mmu */
-> > -	role.base.smm = vcpu->arch.root_mmu.mmu_role.base.smm;
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.9-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+> and the diffstat can be found below.
 > 
-> nit: Retaining a comment here and/or warning here would be useful.
+> thanks,
 > 
-> 	/* EPT is not allowed in SMM */
+> greg k-h
+> 
 
-EPT _is_ allowed in SMM, KVM just doesn't support it.  Specifically, KVM doesn't
-emulate Parallel SMM, a.k.a. Dual-Monitor Treatment of SMIs.  Probably worth
-calling that out in the changelog.  If there's a WARN, then we don't really need
-a comment as blame will get someone to the "why" if they're really curious, and
-most people probably would only be confused about parallel SMM comments.
+5.16.9-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
+                
+Tested-by: Fox Chen <foxhlchen@gmail.com>
 
-> 	WARN_ONCE_ONCE(vcpu->arch.root_mmu.mmu_role.base.smm);
-
-+1 to a WARN, if only to provide a paper trail for git blame.  Finding when
-something is purely deleted is painful.
-
-> 
-> (Although I imagine it would just get removed later in the series.)
-> 
-> > -
-> >  	role.base.level = level;
-> >  	role.base.has_4_byte_gpte = false;
-> >  	role.base.direct = false;
-> > -- 
-> > 2.31.1
-> > 
-> > 

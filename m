@@ -2,93 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78C4A4AFC06
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 19:52:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 307614AFC02
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 19:52:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241122AbiBISwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 13:52:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43844 "EHLO
+        id S235840AbiBISwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 13:52:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241272AbiBISu5 (ORCPT
+        with ESMTP id S241275AbiBISu5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 9 Feb 2022 13:50:57 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7218C03E96E;
-        Wed,  9 Feb 2022 10:46:39 -0800 (PST)
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D813C0613C9
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 10:47:03 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id w11so5658235wra.4
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 10:47:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1644432399; x=1675968399;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/sf9RDeSLDsXwLAbDoDvwa7faj+vGk0nfM38INq+8DM=;
-  b=dtU8cg14oWvUSx+8UWSnB8HX/0n/b6+ZF5C/XDpQrxspjo87W5zHBy+G
-   0jhTkF8G27aHQ7Hqn+uskLBOJ9K/6eT/TkbROuFXd32XAr5gB0di5K1vz
-   NXsEK0t659z7WnDTIxlq0GIy7pr1yongczUlGODt18TTlcyAv7qc7j4d0
-   Q=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 09 Feb 2022 10:46:39 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 10:46:38 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Wed, 9 Feb 2022 10:46:38 -0800
-Received: from qian (10.80.80.8) by nalasex01a.na.qualcomm.com (10.47.209.196)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Wed, 9 Feb 2022
- 10:46:36 -0800
-Date:   Wed, 9 Feb 2022 13:46:34 -0500
-From:   Qian Cai <quic_qiancai@quicinc.com>
-To:     Jan Kara <jack@suse.cz>
-CC:     Theodore Ts'o <tytso@mit.edu>, Jan Kara <jack@suse.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        <linux-ext4@vger.kernel.org>, <rcu@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH] jbd2: avoid __GFP_ZERO with SLAB_TYPESAFE_BY_RCU
-Message-ID: <YgQMCoEM5/fSZpdo@qian>
-References: <20220209165742.5659-1-quic_qiancai@quicinc.com>
- <20220209181010.gfn66rvip56i54df@quack3.lan>
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=WwV9i83hTOoSW63e4AGIE+PjEYBZlZU9PGy3pEkJj6E=;
+        b=B1az+FnfjJOpMBpX5Il3jM5MRY7Xiqh91CiUeSeCfk5TdHo54SPgHOfbPqBau2TbON
+         u/wHnGx2vmR2xJu5iIpY981SaE2nC0lTetSWk33od3X0WWDDNICqQAFtdKCHSec4N1K9
+         5gzxers77piVNiI5rzJ4L+o1AuKyP4B8BfSPSzW+3MU/9JA094NaM12zHH6q7FlywlBp
+         X3VDn6QBqBF/s2MPW/ElW5VEBzAKzRFhSJ8h8XsW+6ftEwVz2ck73I5yTT8H2oZQbYb/
+         Kcx2xIJvoxaD7BwT+07d08WuOlqi1NcZ97Ne7CNEzcHeXwEZA14elHczsGxoHk0myqjs
+         /E5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=WwV9i83hTOoSW63e4AGIE+PjEYBZlZU9PGy3pEkJj6E=;
+        b=GwCFh9sljvHyffAV+8aNMiJ9giRdbT38FQhtLWo+7nkJg+YOib8pnWCGQ/7aZaaZgG
+         Mi2ktbTsi0j27uq8S9os8LU6/26D2Xsah93tzDnp5zYhQmaJf8w5b29jnSDsNxcoN0i1
+         xdA9voae2ZOKcPSzrddaA33F84paCryiZ/XjPlY286wN/Vr+Nyt9uvWqvFiU98Ddty3W
+         fbIgfv/bjXjWwc2hAQARu7VuwE6KYxDKLFH8DD3jnkXA0nbCyUEi6L5ydi5SkJSnR8V6
+         JHb4cOKYdqzCbNlDsdT3B0NXmKkTGJ4QxlJBpKZigEKQD4BAEM0j/YTRv6YbSnhK2QlM
+         Hhpw==
+X-Gm-Message-State: AOAM530ZDzqFc3CT/oIoiwgNixKMQxJt3H1rJHkL+uBZuIX7mG82H/2R
+        HpSTxfrI2EAcgkYebDzn7JDisxVa70jVtvp71oQ=
+X-Google-Smtp-Source: ABdhPJzS33K/TPTsZLbk4xoMVhpc24DPQ+X8dtHboedOUiT4thvh5ySgBZ6KhouyUDxALeNrE70V6zFReQ0CWdqItR0=
+X-Received: by 2002:adf:e344:: with SMTP id n4mr3248388wrj.630.1644432421940;
+ Wed, 09 Feb 2022 10:47:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220209181010.gfn66rvip56i54df@quack3.lan>
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Received: by 2002:a5d:59ae:0:0:0:0:0 with HTTP; Wed, 9 Feb 2022 10:47:01 -0800 (PST)
+Reply-To: borowskishirley@gmail.com
+From:   Borowski Shirley <ibitoyebami@gmail.com>
+Date:   Wed, 9 Feb 2022 19:47:01 +0100
+Message-ID: <CAOk47ije9BYNjJJN+koTciEkV-Eg_k2t+mYtP8P3bzvXmV8aag@mail.gmail.com>
+Subject: reply
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 09, 2022 at 07:10:10PM +0100, Jan Kara wrote:
-> On Wed 09-02-22 11:57:42, Qian Cai wrote:
-> > Since the linux-next commit 120aa5e57479 (mm: Check for
-> > SLAB_TYPESAFE_BY_RCU and __GFP_ZERO slab allocation), we will get a
-> > boot warning. Avoid it by calling synchronize_rcu() before the zeroing.
-> > 
-> > Signed-off-by: Qian Cai <quic_qiancai@quicinc.com>
-> 
-> No, the performance impact of this would be just horrible. Can you
-> ellaborate a bit why SLAB_TYPESAFE_BY_RCU + __GFP_ZERO is a problem and why
-> synchronize_rcu() would be needed here before the memset() please? I mean
-> how is zeroing here any different from the memory just being used?
+Hi,
+Please get back to me urgently ,
 
-I'll defer to Paul and other RCU developers for more indepth explanations of
-the issue with the combo. The above mentioned commit has a bit information:
-
-    Code using a SLAB_TYPESAFE_BY_RCU kmem_cache can have readers accessing
-    blocks of memory passed to kmem_cache_free(), and those readers might
-    still be accessing those blocks after kmem_cache_alloc() reallocates
-    those blocks.  These readers are not going to take kindly to that memory
-    being zeroed along the way.  Therefore, add a WARN_ON_ONCE() complaining
-    about __GFP_ZERO being passed to an allocation from a SLAB_TYPESAFE_BY_RCU
-    kmem_cache.
+Mr.Borowski Shirley.
+borowskishirley@gmail.com

@@ -2,149 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 765F84B0115
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 00:17:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3677A4B0124
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 00:22:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229539AbiBIXPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 18:15:51 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:50420 "EHLO
+        id S229747AbiBIXVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 18:21:37 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:46494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231983AbiBIXPf (ORCPT
+        with ESMTP id S229591AbiBIXV0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 18:15:35 -0500
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18FB4E0542B1
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 15:15:23 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id s185so4198747oie.3
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 15:15:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ktkjxd3U0JmlaFnaNcBberOjA7QvY7xZY4GMDZF6GTs=;
-        b=rT3vggge4MvLAYz8ehb1gDHsIZQ2jYCjwcS7hvkQ4ulgYOQ+OvFiB4kq2Xz/bnyGIq
-         hQ65+ocP8xocxt8jz9ZixNlEAgKq/sdXbO64IZ9j5DovrQIPVczcuJyb/l7BwWEP5t52
-         G50Kdx96U8b442xnWvePHyAahkttBkSzzlk7CYZWbvZa0pyU9Wz8NcNhe5CajSA4wYTr
-         YRg2E5b3ANb1+cLPrYfySKkeaDYhrrx/ex/zQxYrwWv3s+rVbynh9+II2kuWkyg+/B+5
-         ueJRH9wrgNv7liccRp58MR6VN7yvOm+4AfMpc+jDoXQBZ597Kq2GxP9XVugN3eUtN8KB
-         6klw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ktkjxd3U0JmlaFnaNcBberOjA7QvY7xZY4GMDZF6GTs=;
-        b=ppqw2V11hRDYmpzKoNJyRS9CHom5lkd5tF4qtyodPAzKfB47sii63/o8iJI/U+YD6a
-         goMrCBY2PzatPL1/6PBjR7OiZvbX0/x0x2uYvK2lIrUQ+UDIl53lBDt4rJ6HYgWDEo3q
-         dvR03lqCnn+rphUHn/BYv9+DcRG7SXSgnpMvkQsIVZr5kTrIC/O+qI2wR6gT0sEN+0l8
-         ofr8ZwIZ1HR/9eJ9EScO1XgkUvfGYlGbaShnPhIgnJ35zeh3fLv9jdbvYmdaaXSxTXHQ
-         ksqqSrdHoSY6WDEgxVSWg2qZgadaW3t4m6ZelnCU82ivvpcJcYur9BIW24oJTcdU5MAW
-         2Dqg==
-X-Gm-Message-State: AOAM530R8x8ZYqBeNPjJESjPDwQvbE11XA6U6dU70MktYv+SaWJAENn4
-        gf/+i3YC5sSMb1oL2tj4egb/1g==
-X-Google-Smtp-Source: ABdhPJwSwIG6P4P9VqVnQt3T5UfuEZz7hxUA4IZtMOLvLySVMm87BKO4mFMFZWwtpNO+Ms2lI8o/kw==
-X-Received: by 2002:a05:6808:1897:: with SMTP id bi23mr2151901oib.217.1644448522445;
-        Wed, 09 Feb 2022 15:15:22 -0800 (PST)
-Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id c29sm7147074otk.16.2022.02.09.15.15.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 15:15:21 -0800 (PST)
-Date:   Wed, 9 Feb 2022 15:17:38 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: soc: qcom: add qcom,tcsr bindings
-Message-ID: <YgRLkrowk56YtjtY@ripper>
-References: <20220122001609.15904-1-ansuelsmth@gmail.com>
- <20220122001609.15904-2-ansuelsmth@gmail.com>
- <Yfhzqvrj6bIPmV2S@builder.lan>
- <Yfmq3IpjHZXdtEQR@Ansuel-xps.localdomain>
+        Wed, 9 Feb 2022 18:21:26 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3DACE05ADCE
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 15:21:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644448883; x=1675984883;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Purxvy8vA6GA+gDSQ2rJk+wzjHjdsMrMrTSJsxNEzAM=;
+  b=eHlIYscvj+OWo2SxystnMc337bB6rczYBlmvj2ODA3GeCftE0fWJ50zo
+   7ccwB7ohNkYpOYRLAFvWN9V99+mjdCBvXm3wDpmElQKTXoLFELfk7R789
+   EKDh/l9jDTXsFEnsspo8J+oDjKA/IT2nVEp53/DZk9JImxFc0Jfy6Oqsp
+   8X4VmEpw2oAka8/Vnkv6QrXaMUajeVipfCLL1eB9jtBzcqhqjjOTX6MlY
+   ah4QvMKuTOqG8/wpV51gl2x+iNVGRg6HJPXo1vnoEQAPKG+4Cgo3geWJf
+   Jjn/dkBXVrSjG5j6LJKqhletcz96eJJJE22UxKEQ+kxDrIkp6bO08IfzV
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="232929601"
+X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
+   d="scan'208";a="232929601"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 15:21:23 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
+   d="scan'208";a="773679447"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga005.fm.intel.com with ESMTP; 09 Feb 2022 15:21:15 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id 1A7CC107; Thu, 10 Feb 2022 01:21:30 +0200 (EET)
+Date:   Thu, 10 Feb 2022 02:21:29 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@intel.com,
+        luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv2 23/29] x86/tdx: Add helper to convert memory between
+ shared and private
+Message-ID: <20220209232129.puktrgtvpovunexc@black.fi.intel.com>
+References: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
+ <20220124150215.36893-24-kirill.shutemov@linux.intel.com>
+ <YgJePUqMEzHNqrsR@zn.tnic>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yfmq3IpjHZXdtEQR@Ansuel-xps.localdomain>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YgJePUqMEzHNqrsR@zn.tnic>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 01 Feb 13:49 PST 2022, Ansuel Smith wrote:
-
-> On Mon, Jan 31, 2022 at 05:41:30PM -0600, Bjorn Andersson wrote:
-> > On Fri 21 Jan 18:16 CST 2022, Ansuel Smith wrote:
-> > 
-> > > Add qcom,tcsr-ipq8064 and qcom,tcsr-ipq4019 Documentation for the
-> > > tcsr present in ipq8064 and ipa4019 required to configure and
-> > > set various peripherals present in the SoC.
-> > > 
-> > > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> > > ---
-> > >  .../bindings/soc/qcom/qcom,tcsr-ipq4019.yaml  | 93 +++++++++++++++++++
-> > >  .../bindings/soc/qcom/qcom,tcsr-ipq8064.yaml  | 47 ++++++++++
-> > >  2 files changed, 140 insertions(+)
-> > >  create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,tcsr-ipq4019.yaml
-> > >  create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,tcsr-ipq8064.yaml
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,tcsr-ipq4019.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,tcsr-ipq4019.yaml
-> > > new file mode 100644
-> > > index 000000000000..3a82ccbb6588
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,tcsr-ipq4019.yaml
-> > > @@ -0,0 +1,93 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: "http://devicetree.org/schemas/soc/qcom/qcom,tcsr-ipq4019.yaml#"
-> > > +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> > > +
-> > > +title: Qualcomm Top Control and Status Registers binding for IPQ4019
-> > > +
-> > > +maintainers:
-> > > +  - Ansuel Smith <ansuelsmth@gmail.com>
-> > > +
-> > > +description: |
-> > > +  This binding describes the Qualcomm Top Control and Status Registers, used
-> > > +  for accessing configuration and mux settings for a variety of peripherals
-> > > +  for ipq4019.
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    items:
-> > > +      - const: qcom,tcsr-ipq4019
-> > > +      - const: syscon
-> > > +
-> > > +  reg:
-> > > +    maxItems: 1
-> > > +
-> > > +  qcom,usb-hsphy-mode-select:
-> > > +    description: Select usb hsphy mode for ipq4019
-> > 
-> > Why isn't this driven by the USB node, where I presume you otherwise
-> > need to duplicate this decision?
-> > 
+On Tue, Feb 08, 2022 at 01:12:45PM +0100, Borislav Petkov wrote:
+> On Mon, Jan 24, 2022 at 06:02:09PM +0300, Kirill A. Shutemov wrote:
+> > +	if (ret)
+> > +		ret = -EIO;
+> > +
+> > +	if (ret || !enc)
 > 
-> From what I understand this is global, setting this will apply on any
-> usb present.
-> 
-> > Is this platform not capable of OTG?
-> > 
-> 
-> I assume it's capable by selecting the correct mode using tcsr.
-> 
+> Is the second case here after the "||" the conversion-to-shared where it
+> only needs to notify with MapGPA and return?
 
-I expect that the USB controller will receive extcon (or
-usb_role_switch) requests to flip between the modes based on something.
+Right. Memory accepting is required on the way to private.
 
-When this happens it sounds like the USB controller would have to
-propagate that change to the TCSR bits as well, and if the USB
-controller driver is able to flip the bits then this shouldn't be needed
-here?
+I will rewrite and comment this code to make it more readable.
 
-Regards,
-Bjorn
+> > +		return ret;
+> > +
+> > +	/*
+> > +	 * For shared->private conversion, accept the page using
+> > +	 * TDX_ACCEPT_PAGE TDX module call.
+> > +	 */
+> > +	while (start < end) {
+> > +		/* Try 2M page accept first if possible */
+> > +		if (!(start & ~PMD_MASK) && end - start >= PMD_SIZE &&
+> > +		    !tdx_accept_page(start, PG_LEVEL_2M)) {
+> 
+> What happens here if the module doesn't accept the page? No error
+> reporting, no error handling, no warning, nada?
+
+If it fails we fallback to 4k accept below.
+
+We only report error if 4k accept fails.
+
+-- 
+ Kirill A. Shutemov

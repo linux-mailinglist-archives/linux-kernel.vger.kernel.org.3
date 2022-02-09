@@ -2,137 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1B1C4AF668
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:21:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DACF44AF66B
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:21:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236697AbiBIQTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 11:19:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50932 "EHLO
+        id S236764AbiBIQTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 11:19:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236856AbiBIQT3 (ORCPT
+        with ESMTP id S236927AbiBIQTb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 11:19:29 -0500
-Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D9BC035444;
-        Wed,  9 Feb 2022 08:19:15 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 8395F580206;
-        Wed,  9 Feb 2022 11:19:14 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Wed, 09 Feb 2022 11:19:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; bh=55OcdTedgkHCnbbZ2TtGyVZyNIMSUAAyr5X9c0
-        GKBAo=; b=v4uF0DiPVnte+ne88sk9qzpOAVX01TfYo6w65K0GaERxBknbIBSpOj
-        xvkQ4x4ZF7Ib5pRqxvDw8S6edUrRP9YEXydxX8H1KPGe2KRTsVGyJiwR6g53YOFs
-        14ZZgZChtil8NH3pBopcVOS2rS1Oo6+UXNG1aCfxdVraU1uK86weFB7MjrQQOgWm
-        zy9vI3MJ7dIP4LGHgNadh5bzArL7G1tVj5tOiDyyshfPvmHsYC/HV4FTbnTQslDP
-        N/SuEdE0b3JsgtfLUEOQeTZTIOyZNLZvaS/44VtfE7gn8j2V2BP9GqLpm3oZuI7D
-        vv3XUiY2KwMfPdBHzocgIC+lvn1Cz7pQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=55OcdTedgkHCnbbZ2
-        TtGyVZyNIMSUAAyr5X9c0GKBAo=; b=QKx7tcdhSvKwrYqcqgNqoDzaNSr7aatII
-        r/AZAo45FibgSdw54iu7sHS8XbJzcAe/cElcNy95RG9Fd2DgL/exIF+Qp1gSpNzb
-        yLlaRnmaEHQp6969YQgV90nR48DPBBNJJHq1lhmO/ezw3ry8GBJ4Jf1Enm+bwIKS
-        zRTDF/hWS4OoQfO5twepq9lI8Qri+NPoBhyfxALjvYGvTN4snJJFi6lThDUdaFH4
-        BJ3oE5Y7QEjWsbdq+itBmJqNbNCmPIMEzYyZ3H2qKyRGkQ2CL3IEmrcFJJe+PEBg
-        UlZXxa+C209sMipZKe9BAPYDqcWUhvxkKFZmNVCL2MZCDzV04Hwtg==
-X-ME-Sender: <xms:gekDYkeuA58gXxQ0wyORseyxSG8qm4NKR8QqXs4RBCSCbzzc7qgB6w>
-    <xme:gekDYmMaj4bt8CYNBC3mmXNYRFB5dtqucfqSg-pYKguhQo1C612oTiSIGST9aR8mD
-    Dcc_-ulJBRs4CU5mLU>
-X-ME-Received: <xmr:gekDYliGRwG8Kx3PxCpDc2PpXi3ba9mMWYnhR4NLJ-bRWw-hx-prNSaDfmMmTm_1f6pgtH0hOv3EbGPRveIuPjZqLYM1W95fLlLdFVM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrheelgdekhecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihimhgv
-    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
-    gvrhhnpeelkeeghefhuddtleejgfeljeffheffgfeijefhgfeufefhtdevteegheeiheeg
-    udenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrg
-    igihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:gekDYp-vKjx7qfo0DnVHWJw3zjqPaQ-nwNJ3_72oh8v28CWeA_DbXw>
-    <xmx:gekDYgtlzfycRTJFU0cyWdcdAXshxgYOoR9kAB-oRuneEAFSjhUHYg>
-    <xmx:gekDYgGERl31H7ez-Xu_vcirfybh7cv_tPpHqYjGU77bKVycMX6d9A>
-    <xmx:gukDYgQ0EWj40OfKWnf76vkG2LbPdongTb72ops65mEaW_tMIhd5Fw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 9 Feb 2022 11:19:13 -0500 (EST)
-Date:   Wed, 9 Feb 2022 17:19:11 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Sui Jingfeng <15330273260@189.cn>
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Zack Rusin <zackr@vmware.com>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        suijingfeng <suijingfeng@loongson.cn>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH v6 1/3] drm/lsdc: add drm driver for loongson display
- controller
-Message-ID: <20220209161911.eififnhc2csg4y46@houat>
-References: <20220203082546.3099-1-15330273260@189.cn>
- <20220203082546.3099-2-15330273260@189.cn>
- <20220203085851.yqstkfgt4dz7rcnw@houat>
- <f5381561-25da-61e3-5025-fa6dd61dd730@189.cn>
- <20220209084331.fpq5ng3yuqxmby4q@houat>
- <def50622-fe08-01f7-83bd-e6e0bc39fe1b@189.cn>
+        Wed, 9 Feb 2022 11:19:31 -0500
+Received: from mail-vk1-f169.google.com (mail-vk1-f169.google.com [209.85.221.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3952DC050CC5
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 08:19:24 -0800 (PST)
+Received: by mail-vk1-f169.google.com with SMTP id d27so1463613vkn.5
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 08:19:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Bnya6VmSL6leRIRse/uCEksReFzWugbjTC+ac8YkiUs=;
+        b=6U3OmFhKPy0DV7IA0CXx6dmQrv7Pdg1eAfqTXYPZD3matBPQdxcSAB9/XNMDRxviEM
+         vWUR+ErcY8/pAKZPgEbqbXp5VzmswIhsn5z1911BJjtGyUPOxWNuwh6e/Nb0XzCocmbV
+         F/aPZyf1nKWxuc3RtNnYeaPVRt/qSj+aEfZVWTFlgNe6zNfXKPB365vepcpTlRzC7ts4
+         J+Bh6zkFjDYxaOwhBbkazu2c0YwXk97Ks8UrYVy6Rk7BhmlttWqyPMP0lavBaAxxMcbY
+         AjYEO8rPT5K1u5/Ue5AEWydqLORXfJjM1XOY/CvCSmZesRO4ewh8782DUg4ng863BIvw
+         dI5w==
+X-Gm-Message-State: AOAM530Nj1oaHlsWdM+CeqIJIJ8aPeEhaX13OsTWPkRpuNiQw5sgDbU6
+        EWaBTyxq5FavvMVD3sybm0/NMcuDsHgspA==
+X-Google-Smtp-Source: ABdhPJyQk0Kpuiu4XFzYmOCTq+75cpoNxTJyKWBIyydQO1QGLelWpXaWwqcC8UQ8Vz+lOxWC99iSFg==
+X-Received: by 2002:a1f:2ac3:: with SMTP id q186mr247809vkq.33.1644423563248;
+        Wed, 09 Feb 2022 08:19:23 -0800 (PST)
+Received: from mail-vs1-f50.google.com (mail-vs1-f50.google.com. [209.85.217.50])
+        by smtp.gmail.com with ESMTPSA id d202sm3389710vkd.38.2022.02.09.08.19.22
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Feb 2022 08:19:22 -0800 (PST)
+Received: by mail-vs1-f50.google.com with SMTP id t184so3136169vst.13
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 08:19:22 -0800 (PST)
+X-Received: by 2002:a67:a401:: with SMTP id n1mr910748vse.38.1644423562636;
+ Wed, 09 Feb 2022 08:19:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ss2ssq6u6ix5jfma"
-Content-Disposition: inline
-In-Reply-To: <def50622-fe08-01f7-83bd-e6e0bc39fe1b@189.cn>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220209094158.21941-1-sj@kernel.org> <20220209094158.21941-2-sj@kernel.org>
+ <715a8b2e-1048-c098-8b89-bcf3c13cbd75@google.com>
+In-Reply-To: <715a8b2e-1048-c098-8b89-bcf3c13cbd75@google.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 9 Feb 2022 17:19:11 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdV7EaHK5zJAbLU9eKwMYxFdAQ0TiS+Ydg56mGkBv09dHA@mail.gmail.com>
+Message-ID: <CAMuHMdV7EaHK5zJAbLU9eKwMYxFdAQ0TiS+Ydg56mGkBv09dHA@mail.gmail.com>
+Subject: Re: [PATCH for-mm 1/2] mm/internal: Implement no-op
+ mlock_page_drain() for !CONFIG_MMU
+To:     Hugh Dickins <hughd@google.com>
+Cc:     SeongJae Park <sj@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Hugh,
 
---ss2ssq6u6ix5jfma
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Wed, Feb 9, 2022 at 4:38 PM Hugh Dickins <hughd@google.com> wrote:
+> The thing is, SeongJae's patch makes me wonder, why did it not need a
+> !CONFIG_MMU definition for need_mlock_page_drain() too?  That's because
+> mm/swap.c's call to it is under an #ifdef CONFIG_SMP, and I imagine that
+> CONFIG_MMU=n usually goes along with (but does not necessarily imply?)
+> CONFIG_SMP=n.  It'll be safer to add a need_mlock_page_drain() stub too.
 
-On Wed, Feb 09, 2022 at 11:41:06PM +0800, Sui Jingfeng wrote:
-> > Then, you have "modeset", and I'm not sure why it's supposed to be
-> > there, at all. This is a modesetting driver, why would I want to disable
-> > modesetting entirely?
->=20
-> Something you want fbdev driver, for example simple-framebuffer driver wh=
-ich
-> using the firmware passed fb (screeninfo).
->=20
-> besides, text mode support.
+RISC-V K210 is SMP without MMU.
 
-Then you want to use the generic nomodeset argument.
+Gr{oetje,eeting}s,
 
-Maxime
+                        Geert
 
---ss2ssq6u6ix5jfma
-Content-Type: application/pgp-signature; name="signature.asc"
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYgPpfwAKCRDj7w1vZxhR
-xRuMAP9hV9LEuGnyc5HgLOl062hnV9Xm6caWfQUzcStzgYP4/QD+OgIBr59jS/HJ
-IZmuqee4UGRHzgaXB+crDV4SBZIVFQA=
-=hzlD
------END PGP SIGNATURE-----
-
---ss2ssq6u6ix5jfma--
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

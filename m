@@ -2,52 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D682F4AE961
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 06:38:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E92784AE95B
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 06:38:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232850AbiBIFfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 00:35:01 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:33536 "EHLO
+        id S234527AbiBIFfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 00:35:34 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:32836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240029AbiBIF2R (ORCPT
+        with ESMTP id S240118AbiBIF2V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 00:28:17 -0500
+        Wed, 9 Feb 2022 00:28:21 -0500
 Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9E1C034022
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 21:28:21 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id f2-20020a17090a4a8200b001b7dac53bd6so1008393pjh.4
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 21:28:21 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB3B1C03324A
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 21:28:25 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id md16-20020a17090b23d000b001b8bd5e35e2so1052403pjb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 21:28:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=rZmcqq9wo8YnIT5ye21K0NZ6qO5uZQZ73lL6JC7iEz8=;
-        b=V7pZi17UGh4z8xKEPrH1tHrUFmHaRAzvYAScVj9FqCzqJOPH1qxNvmVXTqmdmhDDja
-         fSevxqTLIKSXGes2Bc2yGMwmn7vJl0vbrogVI02WbymmV4+O5pyInoUXAt1zZDRNXNhD
-         z6epdNN7gu63acsXSIVLG/J0gBfUtBORK47KpxZN4ke2d9mQz/PmlvDccsPtR38X39Oq
-         6y1+YimogJQnshvrmsxFNBfNa0FWZbz4Fd+udxylcO1TK9rUtlqZbPfVTmUqk2FT8fE7
-         cC6zbqItrZi9fJeEySh/9QX8B+0DK8T/atnxM8CIqEO0AOqaa7lheUgGtPCgA2g42FVt
-         AYyA==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=36z3XIrw+2wjLy8oTFViegQpDWukcoi9C46U/6NGCkg=;
+        b=q8HJ+Nks3S0Qn0OnlSvLpHmRkTK4vcod4NMS/us3rncsxEupbJ2LDkaLJ04V4sKgsx
+         4Gs3NNNAd88WMVaGtUvfR24FoGsThPIfkxJV4fO9lwlfRyl8OcycT5kcfZ9DBk4RtMJ4
+         fqKkRybLiBmsuV/zGjhmUxrIkNYIdRnB/RTZdZaitzKCrDRPVZntRU9pvD8Kr0HA2AfE
+         mD1GfNB1xaugiHhyJiHYlWDjgCQH8j+Bla89yvKfQy0+UXeqDy5lw/2Z0An3iBESC04m
+         dpmzpbx6WYykORa7+6HF9N78+sjrdszJ385TqeKY7t+u4HPzi/8FPkWJiV4UEiu6vkLm
+         SM/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=rZmcqq9wo8YnIT5ye21K0NZ6qO5uZQZ73lL6JC7iEz8=;
-        b=dqquowZpt4TiZeowBJSEbpaY3Eg2+zCfAEAEki9XqVjracLHQAmtDanyYYhBDUvdKH
-         GJYVPGMbr/8N8ER94+wj3a0n8mCb95poL+oDErO6PNjdETa8F1BoeeK8YNd3DMvuP9uE
-         DSdW7rwzhzCrCeHaDG8hsWy0dg3ZYSq6laJ7xZYUqLKMuWUKHl/nnR4DpyTM8bdvi28S
-         oHzY6V57L5odoK3vdE5U5cZxoUF2DnefywExuc5EDYSL2bP1+ZiVaRnRWgDnbbZTQWRy
-         ACXRB9mXRtuOGTIQwcqaWyjCBVQXH/KAQ4te42Hw6J75WnYb06QRgTnx2D3aWJ4Jh3AY
-         a0wg==
-X-Gm-Message-State: AOAM530qOwGEoT/SrjHu4GZkxobPcTvyCzbQ1i0Hryyk+D9+6bAFvVSW
-        6OgLmG+oFPFZZPPjiFEJtOZQtIoHEPbuLg==
-X-Google-Smtp-Source: ABdhPJwyIfZyzDHRcKT+rTPIrUjaIig807SEciA4VZqtAc+0hggnYq8ijl+rHM47O4N+sK6xME3dZVt5hj3+aA==
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=36z3XIrw+2wjLy8oTFViegQpDWukcoi9C46U/6NGCkg=;
+        b=ukd1g0v0He7OYw8kTsO/1ycuY0ryZS24ejA5TfnSK+wzaFqLPtdkPR6N10TtfT1mGg
+         VGjkIi2RWF/zD5GqgWhNPeaqpN7qiEWt9MYrxYbrpkUO81fbOQlSbutmXMBo3gfYjoZC
+         5jZeiuP8M7Akli0UKQ0JVc/xqNHO4h/DtjzHmrTA+jJVeklLzkLT9GN2bydNqUmzfwdx
+         4HrJjUfFk/k+esDoPdHK4G+Evixjmkt3cqbn1SYKAOtb2aul3Y15acImru77WCK+oy4j
+         fydaAfE6NhtBCu60+Lv7NfNZ9oDf3+/BoIfZUvRD77oGdzMXir8WYHXnC1aoENPpTYgS
+         feLA==
+X-Gm-Message-State: AOAM5300XAj6udAFHVq4PmFs00HTDh6PiYplLwVk9xVve3iwWcZkZaQV
+        e8BH1XU6ZlXJncgxrmsm0QwLrJv/VI0/mw==
+X-Google-Smtp-Source: ABdhPJwEgPgaGJ6lZHG3y/lAPWiYglNFr0d4i21HEm2YLa/giqpI4sGooKqWKwbxwW8/GpORGagMe5afVCXDVg==
 X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a17:903:24d:: with SMTP id
- j13mr545456plh.54.1644384500567; Tue, 08 Feb 2022 21:28:20 -0800 (PST)
-Date:   Wed,  9 Feb 2022 13:28:11 +0800
-Message-Id: <20220209052813.854014-1-davidgow@google.com>
+ (user=davidgow job=sendgmr) by 2002:a17:90a:985:: with SMTP id
+ 5mr702735pjo.217.1644384505266; Tue, 08 Feb 2022 21:28:25 -0800 (PST)
+Date:   Wed,  9 Feb 2022 13:28:12 +0800
+In-Reply-To: <20220209052813.854014-1-davidgow@google.com>
+Message-Id: <20220209052813.854014-2-davidgow@google.com>
 Mime-Version: 1.0
+References: <20220209052813.854014-1-davidgow@google.com>
 X-Mailer: git-send-email 2.35.0.263.gb82422642f-goog
-Subject: [PATCH v3 1/3] list: test: Add test for list_del_init_careful()
+Subject: [PATCH v3 2/3] list: test: Add a test for list_is_head()
 From:   David Gow <davidgow@google.com>
 To:     Shuah Khan <skhan@linuxfoundation.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -61,76 +65,74 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The list_del_init_careful() function was added[1] after the list KUnit
-test. Add a very basic test to cover it.
+list_is_head() was added recently[1], and didn't have a KUnit test. The
+implementation is trivial, so it's not a particularly exciting test, but
+it'd be nice to get back to full coverage of the list functions.
 
-Note that this test only covers the single-threaded behaviour (which
-matches list_del_init()), as is already the case with the test for
-list_empty_careful().
-
-[1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c6fe44d96fc1536af5b11cd859686453d1b7bfd1
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/include/linux/list.h?id=0425473037db40d9e322631f2d4dc6ef51f97e88
 
 Signed-off-by: David Gow <davidgow@google.com>
+Acked-by: Daniel Latypov <dlatypov@google.com>
+Acked-by: Brendan Higgins <brendanhiggins@google.com>
 ---
 
 Changes since v2:
-https://lore.kernel.org/linux-kselftest/20220208040122.695258-1-davidgow@google.com/
-- Fix the test calling list_del_init() instead of
-  list_del_init_careful()
-- Improve the comment noting we only test single-threaded behaviour.
-
+https://lore.kernel.org/linux-kselftest/20220208040122.695258-2-davidgow@google.com/
+- Use the _MSG variants of the assert macros, as suggested by Daniel
+  Latypov.
 Changes since v1:
-https://lore.kernel.org/linux-kselftest/20220205061539.273330-1-davidgow@google.com/
-- Patch 1/3 unchanged
+https://lore.kernel.org/linux-kselftest/20220205061539.273330-2-davidgow@google.com/
+- Test both non-head elements of the same list and head elements of
+  different lists.
+
 ---
- lib/list-test.c | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ lib/list-test.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
 diff --git a/lib/list-test.c b/lib/list-test.c
-index ee09505df16f..f82a3c7788b8 100644
+index f82a3c7788b8..19f13059439b 100644
 --- a/lib/list-test.c
 +++ b/lib/list-test.c
-@@ -161,6 +161,25 @@ static void list_test_list_del_init(struct kunit *test)
- 	KUNIT_EXPECT_TRUE(test, list_empty_careful(&a));
+@@ -253,6 +253,24 @@ static void list_test_list_bulk_move_tail(struct kunit *test)
+ 	KUNIT_EXPECT_EQ(test, i, 2);
  }
  
-+static void list_test_list_del_init_careful(struct kunit *test)
++static void list_test_list_is_head(struct kunit *test)
 +{
-+	/* NOTE: This test only checks the behaviour of this function in
-+	 * isolation. It does not verify memory model guarantees. */
-+	struct list_head a, b;
-+	LIST_HEAD(list);
++	struct list_head a, b, c;
 +
-+	list_add_tail(&a, &list);
-+	list_add_tail(&b, &list);
++	/* Two lists: [a] -> b, [c] */
++	INIT_LIST_HEAD(&a);
++	INIT_LIST_HEAD(&c);
++	list_add_tail(&b, &a);
 +
-+	/* before: [list] -> a -> b */
-+	list_del_init_careful(&a);
-+	/* after: [list] -> b, a initialised */
-+
-+	KUNIT_EXPECT_PTR_EQ(test, list.next, &b);
-+	KUNIT_EXPECT_PTR_EQ(test, b.prev, &list);
-+	KUNIT_EXPECT_TRUE(test, list_empty_careful(&a));
++	KUNIT_EXPECT_TRUE_MSG(test, list_is_head(&a, &a),
++		"Head element of same list");
++	KUNIT_EXPECT_FALSE_MSG(test, list_is_head(&a, &b),
++		"Non-head element of same list");
++	KUNIT_EXPECT_FALSE_MSG(test, list_is_head(&a, &c),
++		"Head element of different list");
 +}
 +
- static void list_test_list_move(struct kunit *test)
++
+ static void list_test_list_is_first(struct kunit *test)
  {
  	struct list_head a, b;
-@@ -707,6 +726,7 @@ static struct kunit_case list_test_cases[] = {
- 	KUNIT_CASE(list_test_list_replace_init),
- 	KUNIT_CASE(list_test_list_swap),
- 	KUNIT_CASE(list_test_list_del_init),
-+	KUNIT_CASE(list_test_list_del_init_careful),
+@@ -730,6 +748,7 @@ static struct kunit_case list_test_cases[] = {
  	KUNIT_CASE(list_test_list_move),
  	KUNIT_CASE(list_test_list_move_tail),
  	KUNIT_CASE(list_test_list_bulk_move_tail),
++	KUNIT_CASE(list_test_list_is_head),
+ 	KUNIT_CASE(list_test_list_is_first),
+ 	KUNIT_CASE(list_test_list_is_last),
+ 	KUNIT_CASE(list_test_list_empty),
 -- 
 2.35.0.263.gb82422642f-goog
 

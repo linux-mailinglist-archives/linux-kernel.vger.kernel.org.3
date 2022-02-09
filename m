@@ -2,78 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FCFB4AF4E1
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 16:14:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A29664AF4DC
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 16:13:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235609AbiBIPNj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 10:13:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56742 "EHLO
+        id S235598AbiBIPMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 10:12:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235604AbiBIPNg (ORCPT
+        with ESMTP id S235588AbiBIPMg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 10:13:36 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74F3EC0613CA;
-        Wed,  9 Feb 2022 07:13:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644419617; x=1675955617;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WnHoOKI6ZskCpbFPWhjafUby+06+1OCHKz8FEZmNV68=;
-  b=cidU9pyTkaqA05u3/bLd/QGWh0dDM9E7CqECfwSFRbzTO49TsjS0kmjZ
-   VG4BAJnR7kbqlwBHa/r5hv1Ed07smgDezXmaAsFlPJMsvZ2HwqMPfXuNv
-   QYwOfK/N7fw4/qAM7GpL+TX5DPs27ivR2oYHAa35AwYjKn5agrVqRYMlk
-   2oIinjjzvx82764lpRRnW+FIEqBrzM8Umegp+4Rp3gGO+7XVM9wVxBAYa
-   lUTn+DKMS7YChk6KKdIxvAUCuG3ZfE+lD4xbR2dBhOZAfJcYwWu87ViqT
-   gt6mT5p/Xy7MP9y2RulEE+LD0NtX2DfGRwkh/LZ7OBNj7Lyh8/4d1CgkK
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="246807110"
-X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
-   d="scan'208";a="246807110"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 07:13:36 -0800
-X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
-   d="scan'208";a="568264164"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 07:13:29 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nHodx-002eU1-Ox;
-        Wed, 09 Feb 2022 17:12:29 +0200
-Date:   Wed, 9 Feb 2022 17:12:29 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-fbdev@vger.kernel.org,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-pwm@vger.kernel.org
-Subject: Re: [PATCH v3 3/7] drm: Add driver for Solomon SSD130X OLED displays
-Message-ID: <YgPZ3W0e7N7JQ1dT@smile.fi.intel.com>
-References: <20220209090314.2511959-1-javierm@redhat.com>
- <20220209090314.2511959-4-javierm@redhat.com>
+        Wed, 9 Feb 2022 10:12:36 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A9200C06157B
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 07:12:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644419557;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hG7985cd66f/yBsbfoQRS2y5UfKEpYOnUAXcCcaLUn4=;
+        b=jWn7DuzUeGDqy4x5rPnVSZXBH5MOgxqZyf1+p9wug+8YbcK5KR7rgfJlOwmaR0Hfxev8OR
+        pe6bEbbjzWosNn5FlZNq24ZXh52UZBG3zI0fRyAS2z1IB1AnxfEasK6woD/s4VL4YsKo+M
+        QKr9JL6QL791Sn/bYKw3v9m2lnWV5L0=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-133-SsN8gNhIMgyMgJQ5gTErhQ-1; Wed, 09 Feb 2022 10:12:36 -0500
+X-MC-Unique: SsN8gNhIMgyMgJQ5gTErhQ-1
+Received: by mail-ed1-f69.google.com with SMTP id k5-20020a508ac5000000b00408dec8390aso1505292edk.13
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 07:12:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=hG7985cd66f/yBsbfoQRS2y5UfKEpYOnUAXcCcaLUn4=;
+        b=VHwjd/9w7TQVOpwmFSPp9wF4PhqdGg/smXfLxtlh17nrZPdRgjDuCOT+dvYjDO7oTl
+         b95P4HLqiftftJVNmAx82H1ISo+AkaFXFzd0LSApRiAhVRRz+RPi9+SSdDpV5S7xlc4Q
+         pBbYeAIwgKJIzMCjhMICopdlR1wVT5m+FO8xqdrmjKmbW8e7Up5KFL5U/0MS60aEYKYb
+         212EZ2JQneUk+mUsQUGssxoiy8IBLwa+GdplE2enWAz5lKb9ADkP1EvkVAnt7qlqoP1g
+         Kq+Eqlatf5RbfEDahBUSdZY9DZYFyDE43x0xgpakyh4v3pUJ18LoFUy0Vdot/tqoaUKN
+         74Vg==
+X-Gm-Message-State: AOAM533fSTkPHrhNN2kaHe4epjruQpG/mI3qSf/+iSVt5FQ11tFyN+kx
+        t8edPgPQqlE/XVjcXaAKwdBadd73ifRaLUjg6rxGyJ/uVT7DFPWTCXIn5DoZZ8iAB64kqbQ9ZMx
+        VFYLbZYhbMCBdE18gl5ttxtKH
+X-Received: by 2002:a05:6402:b6a:: with SMTP id cb10mr3029909edb.140.1644419555467;
+        Wed, 09 Feb 2022 07:12:35 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw5GY5E0/UNox4aYt6kHhDgIEYgX5ir3OEZNYDEQ0U7seJ0Ir10ZxezCb6JSTay7lpCkPe31A==
+X-Received: by 2002:a05:6402:b6a:: with SMTP id cb10mr3029861edb.140.1644419555207;
+        Wed, 09 Feb 2022 07:12:35 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id j29sm1033161ejo.202.2022.02.09.07.12.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Feb 2022 07:12:34 -0800 (PST)
+Message-ID: <02994528-aaad-5259-1774-19aeacdd18fc@redhat.com>
+Date:   Wed, 9 Feb 2022 16:12:32 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220209090314.2511959-4-javierm@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [5.17 regression] "x86/PCI: Ignore E820 reservations for bridge
+ windows on newer systems" breaks suspend/resume
+Content-Language: en-US
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Myron Stowe <myron.stowe@redhat.com>,
+        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        linux-acpi <linux-acpi@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>, x86@kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        =?UTF-8?Q?Benoit_Gr=c3=a9goire?= <benoitg@coeus.ca>,
+        Hui Wang <hui.wang@canonical.com>
+References: <a7ad05fe-c2ab-a6d9-b66e-68e8c5688420@redhat.com>
+ <697aaf96-ec60-4e11-b011-0e4151e714d7@redhat.com> <YgKcl9YX4HfjqZxS@lahna>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <YgKcl9YX4HfjqZxS@lahna>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,266 +92,165 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 09, 2022 at 10:03:10AM +0100, Javier Martinez Canillas wrote:
-> This adds a DRM driver for SSD1305, SSD1306, SSD1307 and SSD1309 Solomon
-> OLED display controllers.
+Hi,
+
+On 2/8/22 17:38, Mika Westerberg wrote:
+> Hi Hans,
 > 
-> It's only the core part of the driver and a bus specific driver is needed
-> for each transport interface supported by the display controllers.
-
-Thank you for the update, my comments below.
-
-...
-
->  source "drivers/gpu/drm/sprd/Kconfig"
->  
-> +source "drivers/gpu/drm/solomon/Kconfig"
+> On Tue, Feb 08, 2022 at 04:59:13PM +0100, Hans de Goede wrote:
+>> Hi,
+>>
+>> On 2/8/22 16:25, Hans de Goede wrote:
+>>> Hi All,
+>>>
+>>> Unfortunately I've just learned that commit 7f7b4236f204 ("x86/PCI:
+>>> Ignore E820 reservations for bridge windows on newer systems"):
+>>>
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7f7b4236f2040d19df1ddaf30047128b41e78de7
+>>>
+>>> breaks suspend/resume on at least one laptop model, the Lenovo ThinkPad
+>>> X1 gen 2, see:
+>>> https://bugzilla.redhat.com/show_bug.cgi?id=2029207
+> 
+> :-(
+> 
+>>> This regression was actually caught be Fedora already carrying this
+>>> patch for a while now and as such it has been reproduced with 5.15
+>>> with an older version of the patch which still allowed turning the
+>>> new behavior of by adding "pci=use_e820". Dmesg output with and
+>>> without the option has just been attached to the bug, I've not
+>>> analyzed this any further yet.
+>>>
+>>> I guess that for now this means that we need to revert commit
+>>> 7f7b4236f204. Rafael, I'll send you a revert with a commit msg
+>>> explaining why this needs to be reverted tomorrow.
+>>>
+>>> More interesting IMHO is finding out another solution. Both the touchpad
+>>> problem which got me looking into this:
+>>> https://bugzilla.redhat.com/show_bug.cgi?id=1868899
+>>>
+>>> As well as the thunderbolt hotplug issue Mika was looking at:
+>>> https://bugzilla.kernel.org/show_bug.cgi?id=206459
+>>>
+>>> both are cases where we fail to find a memory-window for a
+>>> BAR which has not been setup yet.
+>>>
+>>> So I see a couple of options here:
+>>>
+>>> 1. Detect that the e820 reservations fully cover (one of)
+>>> the PCI bridge main 32 bit memory windows and if that happens
+>>> ignore them. This actually was my first plan when I started
+>>> working on this. In the end I choose the other option
+>>> because Bjorn indicated that in hindsight honoring the e820
+>>> reservations might have been a mistake and maybe we should
+>>> get rid of honoring them all together.
+>>>
+>>> 2. Have a flag which, when we fail to alloc a 32 bit
+>>> (or 64 bit) memory PCI BAR, is set if not already set
+>>> and then retry the alloc. And make the e820 reservation
+>>> carve-out get skipped in this case.
+>>>
+>>> 3. When booting with pci=nocrs as a workaround for
+>>> the touchpad case a 64 but memory window ends up getting
+>>> used. There already is some special handling for some
+>>> AMD bridges where if there are no 64 bit memory Windows
+>>> in the _CRS for the bridge, one gets added. Maybe we need
+>>> to do the same for Intel bridges ?
+>>
+>> 4. It seems that all devices which have issues with allocating
+>> a PCI bar are Ice Lake based; and the model where the ignoring
+>> of e820 reservations has been reported to cause issues is somewhat
+>> old. It is a Haswell, but still getting BIOS updates causing
+>> the BIOS date check to enable the new behavior. So another
+>> solution might be to only ignore e820 reservations on machines
+>> with Intel Ice Lake (and presumably also Tiger Lake) CPUs.
+>>
+>>
+>> 5. It also seems that the troublesome e820 entry on all devices
+>> ends at 0xcfffffff and starts well below 0x8000000 :
+>>
+>> Yoga C940:
+>> [    0.000000] BIOS-e820: [mem 0x000000004bc50000-0x00000000cfffffff] reserved
+>>
+>> IdeaPad 3 15IIL05:
+>> [    0.000000] BIOS-e820: [mem 0x000000004bc50000-0x00000000cfffffff] reserved
+>>
+>> Lenovo IdeaPad 5 14IIL05:
+>> [    0.000000] BIOS-e820: [mem 0x000000005bc50000-0x00000000cfffffff] reserved
+> 
+> I don't remember the details anymore but looking at the commit log of my
+> "fix" attempt here:
+> 
+> https://bugzilla.kernel.org/attachment.cgi?id=287661
+> 
+> The EFI memory map actually seems to consists of several entries that somehow
+> are merged by something (I think this is the EFI stub but not sure). Booting
+> with "efi=debug" may help us to understand this further (or not).
+> 
+> On that Yoga system, this:
+> 
+>   [Reserved           |   |  |  |  |  |  |  | |   |WB|WT|WC|UC] range=[0x000000002bc50000-0x000000003fffffff] (323MB)
+>   [Reserved           |   |  |  |  |  |  |  | |   |WB|  |  |UC] range=[0x0000000040000000-0x0000000040ffffff] (16MB)
+>   [Reserved           |   |  |  |  |  |  |  | |   |  |  |  |  ] range=[0x0000000041000000-0x00000000453fffff] (68MB)
+>   [Memory Mapped I/O  |RUN|  |  |  |  |  |  | |   |  |  |  |UC] range=[0x0000000045400000-0x00000000cfffffff] (2220MB)
+> 
+> became this:
+> 
+>   BIOS-e820: [mem 0x000000002bc50000-0x00000000cfffffff] reserved
+> 
+> Since the area (0x45400000-0xcfffffff) is marked as MMIO I think maybe we can
+> simply skip those areas in arch_remove_reservations() or so?
+> 
+> I may be missing a lots of details, though. ;-)
 
-'o' before 'p' ?
+So I've been looking at this for a couple of hours now and I've
+basically re-invented your original fix from:
 
-...
+https://lkml.org/lkml/2020/6/17/751
 
->  obj-$(CONFIG_DRM_SPRD) += sprd/
-> +obj-y			+= solomon/
+So here we are 2 years later and that still looks like the best
+fix, so IMHO we should just go with that fix.
 
-Ditto ?
+An alternative, much more elaborate fix would be to:
 
-...
+1. Add E820_TYPE_MMIO and E820_TYPE_MMIO_PCI_BRIDGE_WINDOW types to
+   enum e820_type and modify the 2 places which check for type == reserved
+   to treat these both as reserved too, so as to not have any functional
+   changes there
 
-> +/*
-> + * DRM driver for Solomon SSD130X OLED displays
+2. Modify the code building e820 tables from the EFI memmap to use
+   E820_TYPE_MMIO for MMIO EFI memmap entries and make e820_nomerge()
+   treat E820_TYPE_MMIO as non mergable to retain these as is
 
-Solomon SSD130x (with lower letter it's easy to read and realize that it's
-not a model name).
+3. Modify pci_acpi_root_prepare_resources() to compare ACPI provided
+   bridge mmio windows against E820_TYPE_MMIO e820_Table entries and
+   if there is an exact match (as is the case on the Yoga C940)
+   then change the e820 type to E820_TYPE_MMIO_PCI_BRIDGE_WINDOW
 
-> + * Copyright 2022 Red Hat Inc.
-> + * Authors: Javier Martinez Canillas <javierm@redhat.com>
-> + *
-> + * Based on drivers/video/fbdev/ssd1307fb.c
-> + * Copyright 2012 Free Electrons
-> + */
+   This means that we are now very narrowly treating EFI MMIO marked
+   regions special, in the special case where they are a 1:1 map
+   to an ACPI PCI bridge window resource.
 
-> +#include <linux/backlight.h>
-> +#include <linux/delay.h>
-> +#include <linux/gpio/consumer.h>
-> +#include <linux/property.h>
-> +#include <linux/pwm.h>
-> +#include <linux/regulator/consumer.h>
+   Note since we treat both E820_TYPE_MMIO and E820_TYPE_MMIO_PCI_BRIDGE_WINDOW
+   identical to the old RESERVED everywhere there is no functional change
+   here.
 
-...
+4. Modify arch/x86/kernel/resource.c: remove_e820_regions() to skip
+   e820 table entries with a type of E820_TYPE_MMIO_PCI_BRIDGE_WINDOW,
+   this would actually be a functional change and should fix the
+   issues we are trying to fix.
 
-> +#define DRIVER_NAME	"ssd130x"
-> +#define DRIVER_DESC	"DRM driver for Solomon SSD130X OLED displays"
-> +#define DRIVER_DATE	"20220131"
-> +#define DRIVER_MAJOR	1
-> +#define DRIVER_MINOR	0
+Note an alternative would be to skip having the extra E820_TYPE_MMIO_PCI_BRIDGE_WINDOW
+type and to skip step 3. above. That would boil down to doing the same
+as your original patch in a somewhat cleaner manner.
 
-Not sure it has a value when being defined. Only one string is reused and even
-if hard coded twice linker will optimize it.
+Regards,
 
-...
+Hans
 
-> +/*
-> + * Helper to write command (SSD130X_COMMAND). The fist variadic argument
-> + * is the command to write and the following are the command options.
-> + */
-> +static int ssd130x_write_cmd(struct ssd130x_device *ssd130x, int count,
-> +				    /* u8 cmd, u8 option, ... */...)
-> +{
-> +	va_list ap;
-> +	u8 value;
-> +	int ret;
-> +
-> +	va_start(ap, count);
-> +
-> +	do {
-> +		value = va_arg(ap, int);
-> +		ret = regmap_write(ssd130x->regmap, SSD130X_COMMAND, (u8)value);
-> +		if (ret)
-> +			goto out_end;
-> +	} while (--count);
-> +
-> +out_end:
-> +	va_end(ap);
-> +
-> +	return ret;
 
-Can bulk operation be used in the callers instead?
 
-I have noticed that all of the callers are using
-- 1 -- makes no sense at all, can be replaced with regmap_write()
-- 2
-- 3
 
-Can be helpers for two and three arguments, with use of bulk call.
 
-What do you think?
-
-> +}
-
-...
-
-> +static void ssd130x_reset(struct ssd130x_device *ssd130x)
-> +{
-> +	/* Reset the screen */
-> +	gpiod_set_value_cansleep(ssd130x->reset, 1);
-> +	udelay(4);
-> +	gpiod_set_value_cansleep(ssd130x->reset, 0);
-> +	udelay(4);
-
-I don't remember if reset pin is mandatory. fbtft does
-
-	if (!gpiod->reset)
-		return;
-
-	...do reset...
-
-> +}
-
-...
-
-> +	if (ssd130x->reset)
-
-A-ha, why not in the callee?
-
-> +		ssd130x_reset(ssd130x);
-
-...
-
-> +	/* Set COM direction */
-> +	com_invdir = 0xc0 | ssd130x->com_invdir << 3;
-
-Can 0xc0 and 3 be GENMASK()'ed and defined?
-
-...
-
-> +	/* Set clock frequency */
-> +	dclk = ((ssd130x->dclk_div - 1) & 0xf) | (ssd130x->dclk_frq & 0xf) << 4;
-
-GENMASK() ?
-
-...
-
-> +		u32 mode = ((ssd130x->area_color_enable ? 0x30 : 0) |
-> +			    (ssd130x->low_power ? 5 : 0));
-
-With if's it will look better.
-
-		u32 mode = 0;
-
-		if (ssd130x->area_color_enable)
-			mode |= 0x30;
-		if (ssd130x->low_power)
-			mode |= 5;
-
-...
-
-> +	/* Turn on the DC-DC Charge Pump */
-> +	chargepump = BIT(4) | (ssd130x->device_info->need_chargepump ? BIT(2) : 0);
-
-Ditto.
-
-...
-
-> +		for (i = 0; i < ARRAY_SIZE(ssd130x->lookup_table); ++i) {
-
-i++ should work as well.
-
-> +			u8 val = ssd130x->lookup_table[i];
-> +
-> +			if (val < 31 || val > 63)
-> +				dev_warn(ssd130x->dev,
-> +					 "lookup table index %d value out of range 31 <= %d <= 63\n",
-> +					 i, val);
-> +			ret = ssd130x_write_cmd(ssd130x, 1, val);
-> +			if (ret < 0)
-> +				return ret;
-> +		}
-
-...
-
-> +	u8 *buf = NULL;
-
-> +
-
-Redundant blank line, not sure if checkpatch catches this.
-
-> +	struct drm_rect fullscreen = {
-> +		.x1 = 0,
-> +		.x2 = ssd130x->width,
-> +		.y1 = 0,
-> +		.y2 = ssd130x->height,
-> +	};
-
-...
-
-> +power_off:
-
-out_power_off: ?
-
-...
-
-> +		ret = PTR_ERR(ssd130x->vbat_reg);
-> +		if (ret == -ENODEV)
-> +			ssd130x->vbat_reg = NULL;
-> +		else
-> +			return dev_err_probe(dev, ret, "Failed to get VBAT regulator\n");
-
-Can it be
-
-		ret = PTR_ERR(ssd130x->vbat_reg);
-		if (ret != -ENODEV)
-			return dev_err_probe(dev, ret, "Failed to get VBAT regulator\n");
-
-		ssd130x->vbat_reg = NULL;
-
-?
-
-...
-
-> +	ssd130x = devm_drm_dev_alloc(dev, &ssd130x_drm_driver,
-> +				     struct ssd130x_device, drm);
-> +	if (IS_ERR(ssd130x)) {
-
-> +		dev_err(dev, "Failed to allocate DRM device: %d\n", ret);
-> +		return ssd130x;
-
-return dev_err_probe() ?
-
-> +	}
-
-...
-
-> +	bl = devm_backlight_device_register(dev, dev_name(dev), dev, ssd130x,
-> +					    &ssd130xfb_bl_ops, NULL);
-> +	if (IS_ERR(bl)) {
-> +		ret = PTR_ERR(bl);
-> +		dev_err(dev, "Unable to register backlight device: %d\n", ret);
-> +		return ERR_PTR(ret);
-
-Ditto.
-
-> +	}
-
-...
-
-> +	ret = drm_dev_register(drm, 0);
-> +	if (ret) {
-> +		dev_err(dev, "DRM device register failed: %d\n", ret);
-> +		return ERR_PTR(ret);
-
-Ditto.
-
-> +	}
-
-...
-
-I have feelings that half of my comments were ignored...
-Maybe I missed the discussion(s).
-
-
--- 
-With Best Regards,
-Andy Shevchenko
 
 

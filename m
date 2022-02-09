@@ -2,109 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6925E4AEB40
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 08:40:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD6BE4AEB47
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 08:41:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238741AbiBIHkE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 02:40:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38502 "EHLO
+        id S238771AbiBIHkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 02:40:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230042AbiBIHj7 (ORCPT
+        with ESMTP id S230042AbiBIHkf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 02:39:59 -0500
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2055.outbound.protection.outlook.com [40.107.220.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA842C0613CA;
-        Tue,  8 Feb 2022 23:40:03 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MZDjW1MO4BkqzvmwvjeY7uVrHlkP7c92vjaVPkpOAXofMNwPLeqwMzQOkdVJfPGKJumv9Hp1gWjt8SCMMRIuJeRjBTpyYl11EwP3Z8c5tMwtOJF/mkyT+ziqp2kXsw7iW4wW88BVwgD9KptotHr72buVIzYAkxExxdcd53U/2sEfZwhS+GH5poaoRvpCUpmjXGRLPZLk14/cZtS1e9qLIQZ3PgauZajjABk06+0zNMLfUJMLnp8pPKefJ3Xo8dhAHQ2JGLcRC2bG7xOT89HA4qqGnnwcu3BUNy50lFlbiB3Qbj8IFqg3Rm7GiBScMVqlQhhQtbEhtd3UConX0fog6g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SUZGQzUn32O/iqXk9lB1WrZgCwGT+AAtH9dxBXA3flw=;
- b=OHtscqy80lGHkBS8rQDJQG0H4qfq/is0IzLyE5NPlUs2yf5bNxizCl5GEC9rImJcpPCPXNcFPDRBH7+ivouDHaMc8/wFzv+LSN+TWwl0hhuUKsddJKgGpksHjgUfBDK5RGD8PSF4xb7ey345tk3zHava250zj29GoOMq1MqixvRfl21uYu5jYVvRH9qOe708ZVmtrYt2DfqL6OfIWwBIb35B+qHkobn9akl4mB7FdIBvosESvfbuctJF5a2XFH5nnyk3n81ypek8VKvWYgu0rjUMFP5MtclGon9orQ0+hqre2DM0EII0wuAKhu3FcOlGNZ8zht5gNTT/nuZgY5nChQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.234) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SUZGQzUn32O/iqXk9lB1WrZgCwGT+AAtH9dxBXA3flw=;
- b=hbb6x+30r0QvpJ6suUeFQVNnwllvdtEIwizakRBVf/tZ3sHp3PBAf3OVNfphlhiMF0kH9cA/JCSuvGzO3STPmdAhmu/ZivKVuSPenH4e6xHhRtqFEwF86nE5Dw05yMgCxXCN6K7xvZuWkMd8NUYCZHHoCzAqKEhsVZdLlXUSmouk5CzNb0Imp5YnwYcKrVisma2UwuOqW3/1jRCLBR2XBYH6LlpVxP3+rBWaOqkZ0+pjXV8OZItCY/gwk6z1W6u98RjNNrz9QwwB2Fo2TjyP+oBsv17fQL4qKl8JqF7BHWnF7KHc8NmjYBvisPOv/qKe1On6HsojMkDyQRTjuunAwA==
-Received: from BN6PR12CA0040.namprd12.prod.outlook.com (2603:10b6:405:70::26)
- by DM6PR12MB3931.namprd12.prod.outlook.com (2603:10b6:5:1cb::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.17; Wed, 9 Feb
- 2022 07:40:02 +0000
-Received: from BN8NAM11FT034.eop-nam11.prod.protection.outlook.com
- (2603:10b6:405:70:cafe::1f) by BN6PR12CA0040.outlook.office365.com
- (2603:10b6:405:70::26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12 via Frontend
- Transport; Wed, 9 Feb 2022 07:40:01 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.234)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.234 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.234; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.234) by
- BN8NAM11FT034.mail.protection.outlook.com (10.13.176.139) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4975.11 via Frontend Transport; Wed, 9 Feb 2022 07:40:01 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL101.nvidia.com
- (10.27.9.10) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 9 Feb
- 2022 07:40:00 +0000
-Received: from [172.27.0.134] (10.126.231.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.9; Tue, 8 Feb 2022
- 23:39:58 -0800
-Message-ID: <77077fd1-a5a2-09be-5985-1276c509f187@nvidia.com>
-Date:   Wed, 9 Feb 2022 09:39:54 +0200
+        Wed, 9 Feb 2022 02:40:35 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C7A8C0613CA
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 23:40:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=6RONH3LdqiA5rh6tHpfYqqdeEDgKxGpKDEYVT3NN7P0=; b=uy0PujsPaGobeE/V9c5+LeSnAr
+        A0wY/KEEosshS9nP5n3lsRCPXvGxJN07Hu7v54LOCtEYbL6Jhu5pP/PbBNrY4WlcP/1cLEgysqHWG
+        1xr5GNsOkZ7nh8/FchXJTT2ftaUzovTN1/eZUUlUXolOqsqS3fDohQVwSwLnxZmlNpKL10FflFpen
+        7InDgEWt/MdZiFK43ViZf+Zo/N0qscvk8BDe8WZxD4jGiR5o+jWodVJmzJckG/5EDCB7A8uYULVxr
+        1FwJ66li1W4SG7FW8eJfEfmF5HLRAJwea7Q8PaiUqrHRin4ckbC35Boih0WnHG+MZxFyhvHf+hoj0
+        3KDSvGwQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nHhaf-00GW8R-Bc; Wed, 09 Feb 2022 07:40:37 +0000
+Date:   Tue, 8 Feb 2022 23:40:37 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Guixin Liu <kanie@linux.alibaba.com>
+Cc:     gregkh@linuxfoundation.org, xiaoguang.wang@linux.alibaba.com,
+        xlpang@linux.alibaba.com, linux-kernel@vger.kernel.org,
+        iommu@lists.linux-foundation.org
+Subject: Re: [PATCH] uio: Replace mutex info_lock with percpu_ref to improve
+ performance
+Message-ID: <YgNv9folAsgtGl5Z@infradead.org>
+References: <1644304760-11862-1-git-send-email-kanie@linux.alibaba.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH net-next 0/4] net/mlx5: Introduce devlink param to disable
- SF aux dev probe
-Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>
-CC:     "David S. Miller" <davem@davemloft.net>,
-        Jiri Pirko <jiri@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1644340446-125084-1-git-send-email-moshe@nvidia.com>
- <20220208212341.513e04bf@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-From:   Moshe Shemesh <moshe@nvidia.com>
-In-Reply-To: <20220208212341.513e04bf@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.231.35]
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 226e5ba7-4763-4066-3fcd-08d9eb9f617a
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3931:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR12MB393160173F5FD8AF59B69922D42E9@DM6PR12MB3931.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:5236;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 1t847b2BojTKD94oTjR3NP7DKLlKFCxejVkcyPhKpmY4+U0WukxuUOwGe6JvT1mU37PT/PZmxBXShYkuZukSxT5Fso4OCZW6jEEjXtXQqPEMjCEuZw1DVbihby1YtW98n0ow/AYmnAkNiPbQEH+jNaYtv/81l3eITQHN0Cuevsj5LSNlvvGXqK7+v9aAo9uo2vNuD0TIkcs1ZBfFh0IaQnTNfAAA1q9tFb7QPjhKrCEeIDVTNrekKzt0bAjk6xFnUlvdHaJ+9bl7N1MI7GqviHMK9LjJ6XXbJTGmqw0y+lfSN2yT9ZMmk9fTASuduZCcGSeMjajqEh7lvgsdU1mVY8bYgr3jhOqVIcAgVWSn2UyLxH9clUqbfn5QmqtOpOsDIB5anrkyFEGVxCSlgGjOGKlIvhE/pJeiAN4Er241wpdAP3Jpcwk6yu7zO1qYJxNWaV31G9B0AqFMCH5xeAayuJDVFzs75IcrsU7yhi1hwO91zh8mJoOfmfKKQQzAH9HS0UYYfzOe0C6Zr7Q+eCs24hskNQTZ1yspi3sDaXhMQO1iZ4O+zwgAlfLo0tsAm6qhFQMpNRRccDT6sXOWsWJVC4BclRwBzzQJo8Wa/CJt6oprduImfL9/PAG1Ha2MStMk6G9mX1CVdeGGOqRhkqknTky2+PA4dwRMxGx+aKAyP/JukT4A22FZmRzzpkTum3VPC9yqP9fL5os8f2pqM4BDKzG0vIyzrB/JOGv9asJRZ8rZ5hYVe+vPQWerLm7kzh7L
-X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(46966006)(40470700004)(36840700001)(83380400001)(47076005)(6916009)(356005)(2906002)(81166007)(70586007)(336012)(70206006)(26005)(2616005)(36860700001)(426003)(86362001)(186003)(16526019)(31696002)(36756003)(8676002)(8936002)(31686004)(5660300002)(508600001)(16576012)(54906003)(4326008)(316002)(82310400004)(40460700003)(6666004)(53546011)(43740500002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2022 07:40:01.5490
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 226e5ba7-4763-4066-3fcd-08d9eb9f617a
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT034.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3931
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1644304760-11862-1-git-send-email-kanie@linux.alibaba.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -112,31 +52,304 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Feb 08, 2022 at 03:19:20PM +0800, Guixin Liu wrote:
+> This patch includes a modification to repace mutex info_lock with
+> percpu_ref, in order to improve uio performance.
 
-On 2/9/2022 7:23 AM, Jakub Kicinski wrote:
-> On Tue, 8 Feb 2022 19:14:02 +0200 Moshe Shemesh wrote:
->> $ devlink dev param set pci/0000:08:00.0 name enable_sfs_aux_devs \
->>                value false cmode runtime
->>
->> Create SF:
->> $ devlink port add pci/0000:08:00.0 flavour pcisf pfnum 0 sfnum 11
->> $ devlink port function set pci/0000:08:00.0/32768 \
->>                 hw_addr 00:00:00:00:00:11 state active
->>
->> Now depending on the use case, the user can enable specific auxiliary
->> device(s). For example:
->>
->> $ devlink dev param set auxiliary/mlx5_core.sf.1 \
->>                name enable_vnet value true cmde driverinit
->>
->> Afterwards, user needs to reload the SF in order for the SF to come up
->> with the specific configuration:
->>
->> $ devlink dev reload auxiliary/mlx5_core.sf.1
-> If the user just wants vnet why not add an API which tells the driver
-> which functionality the user wants when the "port" is "spawned"?
+What performance critical use case do you have for uio?  Everyone really
+should be using vfio these days due to the large amount of shortcomings
+in the uio interface.
 
-
-Well we don't have the SFs at that stage, how can we tell which SF will 
-use vnet and which SF will use eth ?
-
+> 
+> Reviewed-by: Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
+> Signed-off-by: Guixin Liu <kanie@linux.alibaba.com>
+> ---
+>  drivers/uio/uio.c          | 95 ++++++++++++++++++++++++++++++++++------------
+>  include/linux/uio_driver.h |  5 ++-
+>  2 files changed, 75 insertions(+), 25 deletions(-)
+> 
+> diff --git a/drivers/uio/uio.c b/drivers/uio/uio.c
+> index 43afbb7..0cc0655 100644
+> --- a/drivers/uio/uio.c
+> +++ b/drivers/uio/uio.c
+> @@ -24,6 +24,8 @@
+>  #include <linux/kobject.h>
+>  #include <linux/cdev.h>
+>  #include <linux/uio_driver.h>
+> +#include <linux/completion.h>
+> +#include <linux/percpu-refcount.h>
+>  
+>  #define UIO_MAX_DEVICES		(1U << MINORBITS)
+>  
+> @@ -218,7 +220,9 @@ static ssize_t name_show(struct device *dev,
+>  	struct uio_device *idev = dev_get_drvdata(dev);
+>  	int ret;
+>  
+> -	mutex_lock(&idev->info_lock);
+> +	if (!percpu_ref_tryget_live(&idev->info_ref))
+> +		return -EINVAL;
+> +
+>  	if (!idev->info) {
+>  		ret = -EINVAL;
+>  		dev_err(dev, "the device has been unregistered\n");
+> @@ -228,7 +232,7 @@ static ssize_t name_show(struct device *dev,
+>  	ret = sprintf(buf, "%s\n", idev->info->name);
+>  
+>  out:
+> -	mutex_unlock(&idev->info_lock);
+> +	percpu_ref_put(&idev->info_ref);
+>  	return ret;
+>  }
+>  static DEVICE_ATTR_RO(name);
+> @@ -239,7 +243,9 @@ static ssize_t version_show(struct device *dev,
+>  	struct uio_device *idev = dev_get_drvdata(dev);
+>  	int ret;
+>  
+> -	mutex_lock(&idev->info_lock);
+> +	if (!percpu_ref_tryget_live(&idev->info_ref))
+> +		return -EINVAL;
+> +
+>  	if (!idev->info) {
+>  		ret = -EINVAL;
+>  		dev_err(dev, "the device has been unregistered\n");
+> @@ -249,7 +255,7 @@ static ssize_t version_show(struct device *dev,
+>  	ret = sprintf(buf, "%s\n", idev->info->version);
+>  
+>  out:
+> -	mutex_unlock(&idev->info_lock);
+> +	percpu_ref_put(&idev->info_ref);
+>  	return ret;
+>  }
+>  static DEVICE_ATTR_RO(version);
+> @@ -489,16 +495,20 @@ static int uio_open(struct inode *inode, struct file *filep)
+>  	listener->event_count = atomic_read(&idev->event);
+>  	filep->private_data = listener;
+>  
+> -	mutex_lock(&idev->info_lock);
+> +	if (!percpu_ref_tryget_live(&idev->info_ref)) {
+> +		ret = -EINVAL;
+> +		goto err_infoopen;
+> +	}
+> +
+>  	if (!idev->info) {
+> -		mutex_unlock(&idev->info_lock);
+> +		percpu_ref_put(&idev->info_ref);
+>  		ret = -EINVAL;
+>  		goto err_infoopen;
+>  	}
+>  
+>  	if (idev->info->open)
+>  		ret = idev->info->open(idev->info, inode);
+> -	mutex_unlock(&idev->info_lock);
+> +	percpu_ref_put(&idev->info_ref);
+>  	if (ret)
+>  		goto err_infoopen;
+>  
+> @@ -531,10 +541,12 @@ static int uio_release(struct inode *inode, struct file *filep)
+>  	struct uio_listener *listener = filep->private_data;
+>  	struct uio_device *idev = listener->dev;
+>  
+> -	mutex_lock(&idev->info_lock);
+> +	if (!percpu_ref_tryget_live(&idev->info_ref))
+> +		return -EINVAL;
+> +
+>  	if (idev->info && idev->info->release)
+>  		ret = idev->info->release(idev->info, inode);
+> -	mutex_unlock(&idev->info_lock);
+> +	percpu_ref_put(&idev->info_ref);
+>  
+>  	module_put(idev->owner);
+>  	kfree(listener);
+> @@ -548,10 +560,12 @@ static __poll_t uio_poll(struct file *filep, poll_table *wait)
+>  	struct uio_device *idev = listener->dev;
+>  	__poll_t ret = 0;
+>  
+> -	mutex_lock(&idev->info_lock);
+> +	if (!percpu_ref_tryget_live(&idev->info_ref))
+> +		return -EINVAL;
+> +
+>  	if (!idev->info || !idev->info->irq)
+>  		ret = -EIO;
+> -	mutex_unlock(&idev->info_lock);
+> +	percpu_ref_put(&idev->info_ref);
+>  
+>  	if (ret)
+>  		return ret;
+> @@ -577,13 +591,17 @@ static ssize_t uio_read(struct file *filep, char __user *buf,
+>  	add_wait_queue(&idev->wait, &wait);
+>  
+>  	do {
+> -		mutex_lock(&idev->info_lock);
+> +		if (!percpu_ref_tryget_live(&idev->info_ref)) {
+> +			retval = -EINVAL;
+> +			break;
+> +		}
+> +
+>  		if (!idev->info || !idev->info->irq) {
+>  			retval = -EIO;
+> -			mutex_unlock(&idev->info_lock);
+> +			percpu_ref_put(&idev->info_ref);
+>  			break;
+>  		}
+> -		mutex_unlock(&idev->info_lock);
+> +		percpu_ref_put(&idev->info_ref);
+>  
+>  		set_current_state(TASK_INTERRUPTIBLE);
+>  
+> @@ -631,7 +649,9 @@ static ssize_t uio_write(struct file *filep, const char __user *buf,
+>  	if (copy_from_user(&irq_on, buf, count))
+>  		return -EFAULT;
+>  
+> -	mutex_lock(&idev->info_lock);
+> +	if (!percpu_ref_tryget_live(&idev->info_ref))
+> +		return -EINVAL;
+> +
+>  	if (!idev->info) {
+>  		retval = -EINVAL;
+>  		goto out;
+> @@ -650,7 +670,7 @@ static ssize_t uio_write(struct file *filep, const char __user *buf,
+>  	retval = idev->info->irqcontrol(idev->info, irq_on);
+>  
+>  out:
+> -	mutex_unlock(&idev->info_lock);
+> +	percpu_ref_put(&idev->info_ref);
+>  	return retval ? retval : sizeof(s32);
+>  }
+>  
+> @@ -675,7 +695,9 @@ static vm_fault_t uio_vma_fault(struct vm_fault *vmf)
+>  	vm_fault_t ret = 0;
+>  	int mi;
+>  
+> -	mutex_lock(&idev->info_lock);
+> +	if (!percpu_ref_tryget_live(&idev->info_ref))
+> +		return -EINVAL;
+> +
+>  	if (!idev->info) {
+>  		ret = VM_FAULT_SIGBUS;
+>  		goto out;
+> @@ -702,8 +724,7 @@ static vm_fault_t uio_vma_fault(struct vm_fault *vmf)
+>  	vmf->page = page;
+>  
+>  out:
+> -	mutex_unlock(&idev->info_lock);
+> -
+> +	percpu_ref_put(&idev->info_ref);
+>  	return ret;
+>  }
+>  
+> @@ -772,7 +793,9 @@ static int uio_mmap(struct file *filep, struct vm_area_struct *vma)
+>  
+>  	vma->vm_private_data = idev;
+>  
+> -	mutex_lock(&idev->info_lock);
+> +	if (!percpu_ref_tryget_live(&idev->info_ref))
+> +		return -EINVAL;
+> +
+>  	if (!idev->info) {
+>  		ret = -EINVAL;
+>  		goto out;
+> @@ -811,7 +834,7 @@ static int uio_mmap(struct file *filep, struct vm_area_struct *vma)
+>  	}
+>  
+>   out:
+> -	mutex_unlock(&idev->info_lock);
+> +	percpu_ref_put(&idev->info_ref);
+>  	return ret;
+>  }
+>  
+> @@ -907,6 +930,13 @@ static void uio_device_release(struct device *dev)
+>  	kfree(idev);
+>  }
+>  
+> +static void uio_info_free(struct percpu_ref *ref)
+> +{
+> +	struct uio_device *idev = container_of(ref, struct uio_device, info_ref);
+> +
+> +	complete(&idev->free_done);
+> +}
+> +
+>  /**
+>   * __uio_register_device - register a new userspace IO device
+>   * @owner:	module that creates the new device
+> @@ -937,10 +967,17 @@ int __uio_register_device(struct module *owner,
+>  
+>  	idev->owner = owner;
+>  	idev->info = info;
+> -	mutex_init(&idev->info_lock);
+>  	init_waitqueue_head(&idev->wait);
+>  	atomic_set(&idev->event, 0);
+>  
+> +	ret = percpu_ref_init(&idev->info_ref, uio_info_free, 0, GFP_KERNEL);
+> +	if (ret) {
+> +		 pr_err("percpu_ref init failed!\n");
+> +		 return ret;
+> +	}
+> +	init_completion(&idev->confirm_done);
+> +	init_completion(&idev->free_done);
+> +
+>  	ret = uio_get_minor(idev);
+>  	if (ret) {
+>  		kfree(idev);
+> @@ -1036,6 +1073,13 @@ int __devm_uio_register_device(struct module *owner,
+>  }
+>  EXPORT_SYMBOL_GPL(__devm_uio_register_device);
+>  
+> +static void uio_confirm_info(struct percpu_ref *ref)
+> +{
+> +	struct uio_device *idev = container_of(ref, struct uio_device, info_ref);
+> +
+> +	complete(&idev->confirm_done);
+> +}
+> +
+>  /**
+>   * uio_unregister_device - unregister a industrial IO device
+>   * @info:	UIO device capabilities
+> @@ -1052,14 +1096,17 @@ void uio_unregister_device(struct uio_info *info)
+>  	idev = info->uio_dev;
+>  	minor = idev->minor;
+>  
+> -	mutex_lock(&idev->info_lock);
+> +	percpu_ref_kill_and_confirm(&idev->info_ref, uio_confirm_info);
+> +	wait_for_completion(&idev->confirm_done);
+> +	wait_for_completion(&idev->free_done);
+> +
+> +	/* now, we can set info to NULL */
+>  	uio_dev_del_attributes(idev);
+>  
+>  	if (info->irq && info->irq != UIO_IRQ_CUSTOM)
+>  		free_irq(info->irq, idev);
+>  
+>  	idev->info = NULL;
+> -	mutex_unlock(&idev->info_lock);
+>  
+>  	wake_up_interruptible(&idev->wait);
+>  	kill_fasync(&idev->async_queue, SIGIO, POLL_HUP);
+> diff --git a/include/linux/uio_driver.h b/include/linux/uio_driver.h
+> index 47c5962..6d3d87f 100644
+> --- a/include/linux/uio_driver.h
+> +++ b/include/linux/uio_driver.h
+> @@ -16,6 +16,7 @@
+>  #include <linux/device.h>
+>  #include <linux/fs.h>
+>  #include <linux/interrupt.h>
+> +#include <linux/percpu-refcount.h>
+>  
+>  struct module;
+>  struct uio_map;
+> @@ -74,9 +75,11 @@ struct uio_device {
+>  	struct fasync_struct    *async_queue;
+>  	wait_queue_head_t       wait;
+>  	struct uio_info         *info;
+> -	struct mutex		info_lock;
+>  	struct kobject          *map_dir;
+>  	struct kobject          *portio_dir;
+> +	struct percpu_ref       info_ref;
+> +	struct completion       confirm_done;
+> +	struct completion       free_done;
+>  };
+>  
+>  /**
+> -- 
+> 1.8.3.1
+> 
+---end quoted text---

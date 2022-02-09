@@ -2,55 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8951C4AEEC1
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 10:56:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 843654AEEE3
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 11:06:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236184AbiBIJ4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 04:56:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47972 "EHLO
+        id S231691AbiBIKF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 05:05:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235348AbiBIJ4O (ORCPT
+        with ESMTP id S232593AbiBIKFu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 04:56:14 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED508DF28ACF;
-        Wed,  9 Feb 2022 01:56:08 -0800 (PST)
-X-UUID: f47de4b025de4216ae53e6b7a645d804-20220209
-X-UUID: f47de4b025de4216ae53e6b7a645d804-20220209
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <kewei.xu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1907449128; Wed, 09 Feb 2022 17:54:14 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Wed, 9 Feb 2022 17:54:13 +0800
-Received: from localhost.localdomain (10.17.3.14) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 9 Feb 2022 17:54:12 +0800
-From:   Kewei Xu <kewei.xu@mediatek.com>
-To:     <wsa@the-dreams.de>
-CC:     <matthias.bgg@gmail.com>, <robh+dt@kernel.org>,
-        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>, <leilk.liu@mediatek.com>,
-        <qii.wang@mediatek.com>, <liguo.zhang@mediatek.com>,
-        <caiyu.chen@mediatek.com>, <housong.zhang@mediatek.com>,
-        <yuhan.wei@mediatek.com>, <kewei.xu@mediatek.com>,
-        <ryan-jh.yu@mediatek.com>, <david-yh.chiu@mediatek.com>
-Subject: [PATCH v9 1/1] i2c: mediatek: modify bus speed calculation formula
-Date:   Wed, 9 Feb 2022 17:54:07 +0800
-Message-ID: <1644400447-6215-2-git-send-email-kewei.xu@mediatek.com>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <1644400447-6215-1-git-send-email-kewei.xu@mediatek.com>
-References: <1644400447-6215-1-git-send-email-kewei.xu@mediatek.com>
+        Wed, 9 Feb 2022 05:05:50 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9849CDF498BD
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 02:05:23 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id d9-20020a17090a498900b001b8bb1d00e7so1741536pjh.3
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 02:05:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sq37MaYZovWHPQWKVIdOZC1Re8Lf/1V40i2xFH2uM5w=;
+        b=L06DCW/1L1RTvIloDsyXiioyZvOnwFkLRWfC/WzeWwSIgc/RjJPcnraGbS/OJqt1wY
+         qbeytg9m9kUqkZWjfbJccoc3f/Mg/QsEGzX0JrSC67AhU5ClSEgiBib/8D3h4bVUmcCz
+         Eg7i4v/DAH7Vtu0y/PfvelK4kgk/JoGNudaNkCsLB8mPfwJzYFRCr/k9pkXliUOIA8Ct
+         RbHGnAAVn4L8BazWS3Q7WzkMflz9KL42PWlHlJQ97X6n+Qidmkq/remFmG+axqPYJBHr
+         jp00eL3qGKrfHqpCf1ZmaVg3Wn/jJEZvgiAjetj2aWcNjhkl7KdpTtrmywQETn0M2VHL
+         jFyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sq37MaYZovWHPQWKVIdOZC1Re8Lf/1V40i2xFH2uM5w=;
+        b=MC/cvEQMA14P7q4V4RBGinJRBR1vqM8GJm09AMxsx2eb5RWtZMXaSUXMkc/eUKS4Fe
+         F7TDZzr95yE18IFXzSAl51Qs31aoJoqVGk7Ue201XRsS9VJiaAkoSjGT1jsw3rhDlzkM
+         2BgPMZO7rOMzpFFavz7rNLlnyU3WhUKsUEJ6EySPATptfdcQj7I6TGZPH/EfDcuSj9/h
+         PIlHC+4i4Ga00AsJ2CYrEQiQWIID2pB3ojDixhTLqE/18zz+RSyp0tpLXBwRHgJMUbx2
+         I/nE3HOoTm90bc5UxQlY4L+IJqRGEaSygq+aAnSoP1LxMAzquv7L7z0vrmO3GAfr1no/
+         hRew==
+X-Gm-Message-State: AOAM530YZhc9effTogUHqHsPRr4KBRvROyX5toOERlQ/FTVhgpTwy85i
+        IuiS+ysJt9t+gSHavv+xeCcA
+X-Google-Smtp-Source: ABdhPJwQSCYyz/Zdd1DwVYmbf9xfpx0/LXjSkKmDWuVrn3LDVwDmDRehJV7Sf8wTkZLhyKtwCCjVmg==
+X-Received: by 2002:a17:90b:351:: with SMTP id fh17mr2610719pjb.28.1644401106499;
+        Wed, 09 Feb 2022 02:05:06 -0800 (PST)
+Received: from localhost.localdomain ([117.217.179.178])
+        by smtp.gmail.com with ESMTPSA id p2sm6722024pfo.125.2022.02.09.02.05.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Feb 2022 02:05:06 -0800 (PST)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     mhi@lists.linux.dev
+Cc:     quic_hemantk@quicinc.com, quic_bbhatt@quicinc.com,
+        quic_jhugo@quicinc.com, vinod.koul@linaro.org,
+        bjorn.andersson@linaro.org, dmitry.baryshkov@linaro.org,
+        vbadigan@codeaurora.org, quic_cang@quicinc.com,
+        quic_skananth@quicinc.com, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, elder@linaro.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v2 00/23] Add initial support for MHI endpoint stack
+Date:   Wed,  9 Feb 2022 15:26:01 +0530
+Message-Id: <20220209095624.26389-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,133 +73,168 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When clock-div is 0 or greater than 1, the bus speed
-calculated by the old speed calculation formula will be
-larger than the target speed. So we update the formula.
+Hello,
 
-Signed-off-by: Kewei Xu <kewei.xu@mediatek.com>
-Change-Id: Ic0d9b8ab036bcf215d3a5066f2b91c7b8b128ba6
----
- drivers/i2c/busses/i2c-mt65xx.c | 51 +++++++++++++++++++++++++++++++++--------
- 1 file changed, 41 insertions(+), 10 deletions(-)
+This series adds initial support for the Qualcomm specific Modem Host Interface
+(MHI) bus in endpoint devices like SDX55 modems. The MHI bus in endpoint devices
+communicates with the MHI bus in host machines like x86 over any physical bus
+like PCIe. The MHI host support is already in mainline [1] and been used by PCIe
+based modems and WLAN devices running vendor code (downstream).
 
-diff --git a/drivers/i2c/busses/i2c-mt65xx.c b/drivers/i2c/busses/i2c-mt65xx.c
-index aa4d218..682293e 100644
---- a/drivers/i2c/busses/i2c-mt65xx.c
-+++ b/drivers/i2c/busses/i2c-mt65xx.c
-@@ -67,11 +67,12 @@
- 
- #define MAX_SAMPLE_CNT_DIV		8
- #define MAX_STEP_CNT_DIV		64
--#define MAX_CLOCK_DIV			256
-+#define MAX_CLOCK_DIV_8BITS		256
-+#define MAX_CLOCK_DIV_5BITS		32
- #define MAX_HS_STEP_CNT_DIV		8
--#define I2C_STANDARD_MODE_BUFFER	(1000 / 2)
--#define I2C_FAST_MODE_BUFFER		(300 / 2)
--#define I2C_FAST_MODE_PLUS_BUFFER	(20 / 2)
-+#define I2C_STANDARD_MODE_BUFFER	(1000 / 3)
-+#define I2C_FAST_MODE_BUFFER		(300 / 3)
-+#define I2C_FAST_MODE_PLUS_BUFFER	(20 / 3)
- 
- #define I2C_CONTROL_RS                  (0x1 << 1)
- #define I2C_CONTROL_DMA_EN              (0x1 << 2)
-@@ -604,6 +605,31 @@ static int mtk_i2c_max_step_cnt(unsigned int target_speed)
- 		return MAX_STEP_CNT_DIV;
- }
- 
-+static int mtk_i2c_get_clk_div_restri(struct mtk_i2c *i2c,
-+				      unsigned int sample_cnt)
-+{
-+	int clk_div_restri = 0;
-+
-+	if (i2c->dev_comp->ltiming_adjust == 0)
-+		return 0;
-+
-+	if (sample_cnt == 1) {
-+		if (i2c->ac_timing.inter_clk_div == 0)
-+			clk_div_restri = 0;
-+		else
-+			clk_div_restri = 1;
-+	} else {
-+		if (i2c->ac_timing.inter_clk_div == 0)
-+			clk_div_restri = -1;
-+		else if (i2c->ac_timing.inter_clk_div == 1)
-+			clk_div_restri = 0;
-+		else
-+			clk_div_restri = 1;
-+	}
-+
-+	return clk_div_restri;
-+}
-+
- /*
-  * Check and Calculate i2c ac-timing
-  *
-@@ -732,6 +758,7 @@ static int mtk_i2c_calculate_speed(struct mtk_i2c *i2c, unsigned int clk_src,
- 	unsigned int best_mul;
- 	unsigned int cnt_mul;
- 	int ret = -EINVAL;
-+	int clk_div_restri = 0;
- 
- 	if (target_speed > I2C_MAX_HIGH_SPEED_MODE_FREQ)
- 		target_speed = I2C_MAX_HIGH_SPEED_MODE_FREQ;
-@@ -749,7 +776,8 @@ static int mtk_i2c_calculate_speed(struct mtk_i2c *i2c, unsigned int clk_src,
- 	 * optimizing for sample_cnt * step_cnt being minimal
- 	 */
- 	for (sample_cnt = 1; sample_cnt <= MAX_SAMPLE_CNT_DIV; sample_cnt++) {
--		step_cnt = DIV_ROUND_UP(opt_div, sample_cnt);
-+		clk_div_restri = mtk_i2c_get_clk_div_restri(i2c, sample_cnt);
-+		step_cnt = DIV_ROUND_UP(opt_div + clk_div_restri, sample_cnt);
- 		cnt_mul = step_cnt * sample_cnt;
- 		if (step_cnt > max_step_cnt)
- 			continue;
-@@ -763,7 +791,7 @@ static int mtk_i2c_calculate_speed(struct mtk_i2c *i2c, unsigned int clk_src,
- 			best_mul = cnt_mul;
- 			base_sample_cnt = sample_cnt;
- 			base_step_cnt = step_cnt;
--			if (best_mul == opt_div)
-+			if (best_mul == (opt_div + clk_div_restri))
- 				break;
- 		}
- 	}
-@@ -774,7 +802,8 @@ static int mtk_i2c_calculate_speed(struct mtk_i2c *i2c, unsigned int clk_src,
- 	sample_cnt = base_sample_cnt;
- 	step_cnt = base_step_cnt;
- 
--	if ((clk_src / (2 * sample_cnt * step_cnt)) > target_speed) {
-+	if ((clk_src / (2 * (sample_cnt * step_cnt - clk_div_restri))) >
-+		target_speed) {
- 		/* In this case, hardware can't support such
- 		 * low i2c_bus_freq
- 		 */
-@@ -803,13 +832,16 @@ static int mtk_i2c_set_speed(struct mtk_i2c *i2c, unsigned int parent_clk)
- 	target_speed = i2c->speed_hz;
- 	parent_clk /= i2c->clk_src_div;
- 
--	if (i2c->dev_comp->timing_adjust)
--		max_clk_div = MAX_CLOCK_DIV;
-+	if (i2c->dev_comp->timing_adjust && i2c->dev_comp->ltiming_adjust)
-+		max_clk_div = MAX_CLOCK_DIV_5BITS;
-+	else if (i2c->dev_comp->timing_adjust)
-+		max_clk_div = MAX_CLOCK_DIV_8BITS;
- 	else
- 		max_clk_div = 1;
- 
- 	for (clk_div = 1; clk_div <= max_clk_div; clk_div++) {
- 		clk_src = parent_clk / clk_div;
-+		i2c->ac_timing.inter_clk_div = clk_div - 1;
- 
- 		if (target_speed > I2C_MAX_FAST_MODE_PLUS_FREQ) {
- 			/* Set master code speed register */
-@@ -856,7 +888,6 @@ static int mtk_i2c_set_speed(struct mtk_i2c *i2c, unsigned int parent_clk)
- 		break;
- 	}
- 
--	i2c->ac_timing.inter_clk_div = clk_div - 1;
- 
- 	return 0;
- }
+Overview
+========
+
+This series aims at adding the MHI support in the endpoint devices with the goal
+of getting data connectivity using the mainline kernel running on the modems.
+Modems here refer to the combination of an APPS processor (Cortex A grade) and
+a baseband processor (DSP). The MHI bus is located in the APPS processor and it
+transfers data packets from the baseband processor to the host machine.
+
+The MHI Endpoint (MHI EP) stack proposed here is inspired by the downstream
+code written by Qualcomm. But the complete stack is mostly re-written to adapt
+to the "bus" framework and made it modular so that it can work with the upstream
+subsystems like "PCI Endpoint". The code structure of the MHI endpoint stack
+follows the MHI host stack to maintain uniformity.
+
+With this initial MHI EP stack (along with few other drivers), we can establish
+the network interface between host and endpoint over the MHI software channels
+(IP_SW0) and can do things like IP forwarding, SSH, etc...
+
+Stack Organization
+==================
+
+The MHI EP stack has the concept of controller and device drivers as like the
+MHI host stack. The MHI EP controller driver can be a PCI Endpoint Function
+driver and the MHI device driver can be a MHI EP Networking driver or QRTR
+driver. The MHI EP controller driver is tied to the PCI Endpoint subsystem and
+handles all bus related activities like mapping the host memory, raising IRQ,
+passing link specific events etc... The MHI EP networking driver is tied to the
+Networking stack and handles all networking related activities like
+sending/receiving the SKBs from netdev, statistics collection etc...
+
+This series only contains the MHI EP code, whereas the PCIe EPF driver and MHI
+EP Networking drivers are not yet submitted and can be found here [2]. Though
+the MHI EP stack doesn't have the build time dependency, it cannot function
+without them.
+
+Test setup
+==========
+
+This series has been tested on Telit FN980 TLB board powered by Qualcomm SDX55
+(a.k.a X55 modem) and Qualcomm SM8450 based dev board.
+
+For testing the stability and performance, networking tools such as iperf, ssh
+and ping are used.
+
+Limitations
+===========
+
+We are not _yet_ there to get the data packets from the modem as that involves
+the Qualcomm IP Accelerator (IPA) integration with MHI endpoint stack. But we
+are planning to add support for it in the coming days.
+
+References
+==========
+
+MHI bus: https://www.kernel.org/doc/html/latest/mhi/mhi.html
+Linaro connect presentation around this topic: https://connect.linaro.org/resources/lvc21f/lvc21f-222/
+
+Thanks,
+Mani
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/bus/mhi
+[2] https://git.linaro.org/landing-teams/working/qualcomm/kernel.git/log/?h=tracking-qcomlt-sdx55-drivers
+
+Changes in v2:
+
+v2 mostly addresses the issues seen while testing the stack on SM8450 that is a
+SMP platform and also incorporates the review comments from Alex.
+
+Major changes are:
+
+* Added a cleanup patch for getting rid of SHIFT macros and used the bitfield
+  operations.
+* Added the endianess patches that were submitted to MHI list and used the
+  endianess conversion in EP patches also.
+* Added support for multiple event rings.
+* Fixed the MSI generation based on the event ring index.
+* Fixed the doorbell list handling by making use of list splice and not locking
+  the entire list manipulation.
+* Added new APIs for wrapping the reading and writing to host memory (Dmitry).
+* Optimized the read_channel and queue_skb function logics.
+* Added Hemant's R-o-b tag.
+
+Manivannan Sadhasivam (21):
+  bus: mhi: Move host MHI code to "host" directory
+  bus: mhi: Move common MHI definitions out of host directory
+  bus: mhi: Make mhi_state_str[] array static inline and move to
+    common.h
+  bus: mhi: Cleanup the register definitions used in headers
+  bus: mhi: Get rid of SHIFT macros and use bitfield operations
+  bus: mhi: ep: Add support for registering MHI endpoint controllers
+  bus: mhi: ep: Add support for registering MHI endpoint client drivers
+  bus: mhi: ep: Add support for creating and destroying MHI EP devices
+  bus: mhi: ep: Add support for managing MMIO registers
+  bus: mhi: ep: Add support for ring management
+  bus: mhi: ep: Add support for sending events to the host
+  bus: mhi: ep: Add support for managing MHI state machine
+  bus: mhi: ep: Add support for processing MHI endpoint interrupts
+  bus: mhi: ep: Add support for powering up the MHI endpoint stack
+  bus: mhi: ep: Add support for powering down the MHI endpoint stack
+  bus: mhi: ep: Add support for handling MHI_RESET
+  bus: mhi: ep: Add support for handling SYS_ERR condition
+  bus: mhi: ep: Add support for processing command and TRE rings
+  bus: mhi: ep: Add support for queueing SKBs over MHI bus
+  bus: mhi: ep: Add support for suspending and resuming channels
+  bus: mhi: ep: Add uevent support for module autoloading
+
+Paul Davey (2):
+  bus: mhi: Fix pm_state conversion to string
+  bus: mhi: Fix MHI DMA structure endianness
+
+ drivers/bus/Makefile                      |    2 +-
+ drivers/bus/mhi/Kconfig                   |   28 +-
+ drivers/bus/mhi/Makefile                  |    9 +-
+ drivers/bus/mhi/common.h                  |  319 ++++
+ drivers/bus/mhi/ep/Kconfig                |   10 +
+ drivers/bus/mhi/ep/Makefile               |    2 +
+ drivers/bus/mhi/ep/internal.h             |  254 ++++
+ drivers/bus/mhi/ep/main.c                 | 1602 +++++++++++++++++++++
+ drivers/bus/mhi/ep/mmio.c                 |  274 ++++
+ drivers/bus/mhi/ep/ring.c                 |  267 ++++
+ drivers/bus/mhi/ep/sm.c                   |  174 +++
+ drivers/bus/mhi/host/Kconfig              |   31 +
+ drivers/bus/mhi/{core => host}/Makefile   |    4 +-
+ drivers/bus/mhi/{core => host}/boot.c     |   17 +-
+ drivers/bus/mhi/{core => host}/debugfs.c  |   40 +-
+ drivers/bus/mhi/{core => host}/init.c     |  124 +-
+ drivers/bus/mhi/{core => host}/internal.h |  427 +-----
+ drivers/bus/mhi/{core => host}/main.c     |   46 +-
+ drivers/bus/mhi/{ => host}/pci_generic.c  |    0
+ drivers/bus/mhi/{core => host}/pm.c       |   36 +-
+ include/linux/mhi_ep.h                    |  293 ++++
+ include/linux/mod_devicetable.h           |    2 +
+ scripts/mod/file2alias.c                  |   10 +
+ 23 files changed, 3443 insertions(+), 528 deletions(-)
+ create mode 100644 drivers/bus/mhi/common.h
+ create mode 100644 drivers/bus/mhi/ep/Kconfig
+ create mode 100644 drivers/bus/mhi/ep/Makefile
+ create mode 100644 drivers/bus/mhi/ep/internal.h
+ create mode 100644 drivers/bus/mhi/ep/main.c
+ create mode 100644 drivers/bus/mhi/ep/mmio.c
+ create mode 100644 drivers/bus/mhi/ep/ring.c
+ create mode 100644 drivers/bus/mhi/ep/sm.c
+ create mode 100644 drivers/bus/mhi/host/Kconfig
+ rename drivers/bus/mhi/{core => host}/Makefile (54%)
+ rename drivers/bus/mhi/{core => host}/boot.c (96%)
+ rename drivers/bus/mhi/{core => host}/debugfs.c (90%)
+ rename drivers/bus/mhi/{core => host}/init.c (93%)
+ rename drivers/bus/mhi/{core => host}/internal.h (50%)
+ rename drivers/bus/mhi/{core => host}/main.c (98%)
+ rename drivers/bus/mhi/{ => host}/pci_generic.c (100%)
+ rename drivers/bus/mhi/{core => host}/pm.c (97%)
+ create mode 100644 include/linux/mhi_ep.h
+
 -- 
-1.9.1
+2.25.1
 

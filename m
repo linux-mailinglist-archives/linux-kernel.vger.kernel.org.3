@@ -2,112 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF93D4B00E2
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 00:02:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1880D4B00E3
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 00:02:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236893AbiBIXCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 18:02:24 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:53700 "EHLO
+        id S236921AbiBIXCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 18:02:33 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:53740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236811AbiBIXCW (ORCPT
+        with ESMTP id S236886AbiBIXCX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 18:02:22 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51210E01976B;
-        Wed,  9 Feb 2022 15:02:21 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id co28so8046059edb.1;
-        Wed, 09 Feb 2022 15:02:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=WGIEHx+L4uAdTf1VzXQaUpLJlWUcIhu07EIIF1wAFus=;
-        b=maSInnkknThRDgxyUU26cPJ/GRDE224IYjl3dSi18eCKyBLTJ97jIO6112ZO2In8QI
-         x/0TAq3dIe01KVRgLgH5Ah5VOIkLIZdhfS7F3DZVxJBChqQcrScKSEDDnkP6zh+YTMWt
-         n0ReI2QRmnzhetKFakFCSoOLxgjCx0du7xWhy+TWpRC0YJitAneSbEVoKGBOosEWo/ev
-         pGm55G2vxJd6CUpIHFES9oZKgQYbtulzTLYxBeNkMyaAjzUaOHa5uxdk38iFmIUUECtR
-         AZZUOfML8t/FnZnGziM6atPBwFuHuiFJGlbhK2yh0sERjVll1SNPt1sIrPmKxjaNVWWR
-         u+og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=WGIEHx+L4uAdTf1VzXQaUpLJlWUcIhu07EIIF1wAFus=;
-        b=6B2wSik8IrG6D4jD9U7IYKRRYdp0IkyZNudsW1CE9uorZL+GFNKnuHsKw8JbXFEZsO
-         pnjAebh8aP9YtBBleXKUZmcU51Au7zh4NDyrAWB4fLrnmBWsRqZx2Yy2kdD5f9FkJL1E
-         i/j+i506sPp5A6mD0//7xS9fRzTuHQXnLw1vn7hu2skPeobRd0rez64hxxsJNGe9DGb2
-         UpQPLX4Lk5Inl8VEBF71cFZS9lx9MDj4PrIWXmT6hhqjh0oNQ2ENuKRQsPH8Dcu7h8Gn
-         7jc79HKphrJkvsqUQoe8vAG2IgEyx647uzuVTNEZdJCQUABBxkGl+Uo+1qTPyII1/G8h
-         K9xw==
-X-Gm-Message-State: AOAM533iBDKoqMAzIutgSUW91Rx7dEc8ZdeK4fWohUv1QbHY/2mBc4AW
-        ZYdTZkBM6jmRiG8f6c8tahI=
-X-Google-Smtp-Source: ABdhPJzlM0o29Q+3zByPxKJEGxnYYWb7oyrYi3rp56w8xk/KHhpxnLk1OPFtL2bTTKxUmi0lbIujIw==
-X-Received: by 2002:aa7:cfcd:: with SMTP id r13mr5265548edy.55.1644447739764;
-        Wed, 09 Feb 2022 15:02:19 -0800 (PST)
-Received: from localhost (92.40.202.147.threembb.co.uk. [92.40.202.147])
-        by smtp.gmail.com with ESMTPSA id z22sm7843198edq.9.2022.02.09.15.02.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 15:02:19 -0800 (PST)
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     paul@crapouillou.net, robh+dt@kernel.org, mturquette@baylibre.com,
-        sboyd@kernel.org
-Cc:     linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] clk: ingenic-tcu: Fix missing TCU clock for X1000 SoC
-Date:   Wed,  9 Feb 2022 23:01:47 +0000
-Message-Id: <20220209230145.18943-1-aidanmacdonald.0x0@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 9 Feb 2022 18:02:23 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71982C0302D7
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 15:02:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=EhkMnswuaL4sL/SMOM6zzAjgMyXYRzGf0cCGaPp86to=; b=ZP4VvJJyFFRdDuI4A20xKjwyK9
+        oNK2RILfVvVTJJFPVmsMlGxKVz5Npyns1O1VqFKTyZQb5SiBufHOKWKlMK0dN+mthGrjQqtt+rsde
+        Eg7RruNFjq3flRI7HSrDkBkO942InE8BitV91uoNATJYS2mJv9QOaJsiwzA0Nbess1hdiSZzxAGsv
+        PWolH3gONGAtKMhYngHOtTGQ+a07WMT+9EJQGQ0FpR/hVlhm/WYAYaDQliIL4bxwcxijA2XbhS4r/
+        BU9RsrNTeFw8MbjkSgI5HejXoWClKAVlRyjvWBZzTWEkgZKeEUYBCcURbyx2G9c6Bs6zNm5Dg+J/r
+        f4/rZ1oA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nHvyQ-00212U-Ny; Wed, 09 Feb 2022 23:02:06 +0000
+Date:   Wed, 9 Feb 2022 15:02:06 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Petr Mladek <pmladek@suse.com>, Vimal Agrawal <avimalin@gmail.com>
+Cc:     Maninder Singh <maninder1.s@samsung.com>, rostedt@goodmis.org,
+        senozhatsky@chromium.org, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, akpm@linux-foundation.org,
+        wangkefeng.wang@huawei.com, mbenes@suse.cz, swboyd@chromium.org,
+        ojeda@kernel.org, linux-kernel@vger.kernel.org, will@kernel.org,
+        catalin.marinas@arm.com, Vaneet Narang <v.narang@samsung.com>,
+        Aaron Tomlin <atomlin@redhat.com>
+Subject: Re: [PATCH 1/1] kallsyms: print module name in %ps/S case when
+ KALLSYMS is disabled
+Message-ID: <YgRH7hwFC2AGISdP@bombadil.infradead.org>
+References: <CGME20220201040100epcas5p180ef094058fc9c76b4b94d9d673fc5fc@epcas5p1.samsung.com>
+ <20220201040044.1528568-1-maninder1.s@samsung.com>
+ <20220209114038.GA8279@pathway.suse.cz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220209114038.GA8279@pathway.suse.cz>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The X1000 does have a TCU clock gate, so pass it to the driver.
-Without this the TCU can be gated automatically, which prevents
-timers from running and stops register writes from taking effect.
+On Wed, Feb 09, 2022 at 12:40:38PM +0100, Petr Mladek wrote:
+> > --- a/include/linux/kallsyms.h
+> > +++ b/include/linux/kallsyms.h
+> > @@ -163,6 +163,33 @@ static inline bool kallsyms_show_value(const struct cred *cred)
+> >  	return false;
+> >  }
+> >  
+> > +#ifdef CONFIG_MODULES
+> > +static inline int fill_minimal_module_info(char *sym, int size, unsigned long value)
+> > +{
+> > +	struct module *mod;
+> > +	unsigned long offset;
+> > +	int ret = 0;
+> > +
+> > +	preempt_disable();
+> > +	mod = __module_address(value);
+> > +	if (mod) {
+> > +		offset = value - (unsigned long)mod->core_layout.base;
+> > +		snprintf(sym, size - 1, "0x%lx+0x%lx [%s]",
+> > +				(unsigned long)mod->core_layout.base, offset, mod->name);
+> > +
+> > +		sym[size - 1] = '\0';
+> > +		ret = 1;
+> > +	}
+> > +
+> > +	preempt_enable();
+> > +	return ret;
+> > +}
+> 
+> It looks too big for an inlined function. Anyway, we will need
+> something even more complex, see below.
 
-Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
----
- arch/mips/boot/dts/ingenic/x1000.dtsi | 5 +++--
- drivers/clk/ingenic/tcu.c             | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+Interesting, these observations might apply to Vimal's work as well [0].
 
-diff --git a/arch/mips/boot/dts/ingenic/x1000.dtsi b/arch/mips/boot/dts/ingenic/x1000.dtsi
-index 8bd27edef216..c69df8eb158e 100644
---- a/arch/mips/boot/dts/ingenic/x1000.dtsi
-+++ b/arch/mips/boot/dts/ingenic/x1000.dtsi
-@@ -111,8 +111,9 @@ tcu: timer@10002000 {
- 
- 		clocks = <&cgu X1000_CLK_RTCLK>,
- 			 <&cgu X1000_CLK_EXCLK>,
--			 <&cgu X1000_CLK_PCLK>;
--		clock-names = "rtc", "ext", "pclk";
-+			 <&cgu X1000_CLK_PCLK>,
-+			 <&cgu X1000_CLK_TCU>;
-+		clock-names = "rtc", "ext", "pclk", "tcu";
- 
- 		interrupt-controller;
- 		#interrupt-cells = <1>;
-diff --git a/drivers/clk/ingenic/tcu.c b/drivers/clk/ingenic/tcu.c
-index 77acfbeb4830..9c86043f673a 100644
---- a/drivers/clk/ingenic/tcu.c
-+++ b/drivers/clk/ingenic/tcu.c
-@@ -320,7 +320,7 @@ static const struct ingenic_soc_info jz4770_soc_info = {
- static const struct ingenic_soc_info x1000_soc_info = {
- 	.num_channels = 8,
- 	.has_ost = false, /* X1000 has OST, but it not belong TCU */
--	.has_tcu_clk = false,
-+	.has_tcu_clk = true,
- };
- 
- static const struct of_device_id __maybe_unused ingenic_tcu_of_match[] __initconst = {
--- 
-2.34.1
+[0] https://lkml.kernel.org/r/YgKyC4ZRud0JW1PF@bombadil.infradead.org
 
+  Luis

@@ -2,410 +2,1070 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9805F4AF7FE
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 18:23:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FA614AF7E1
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 18:11:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238109AbiBIRXc convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 9 Feb 2022 12:23:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51890 "EHLO
+        id S234458AbiBIRL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 12:11:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231791AbiBIRXa (ORCPT
+        with ESMTP id S231994AbiBIRLW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 12:23:30 -0500
-X-Greylist: delayed 467 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Feb 2022 09:23:33 PST
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD134C0613C9;
-        Wed,  9 Feb 2022 09:23:32 -0800 (PST)
-Received: from [192.168.1.107] ([37.4.249.169]) by mrelayeu.kundenserver.de
- (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1N1u2b-1oJ8L10A37-012E0O; Wed, 09 Feb 2022 18:10:14 +0100
-Subject: Re: [PATCH 2/2] ARM: dts: Add bcm2711-rpi-4-b-7inch-ts-dsi.dts
-To:     Detlev Casanova <detlev.casanova@collabora.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        "maintainer:ARM AND ARM64 SoC SUB-ARCHITECTURES (COMMON PARTS)" 
-        <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        "maintainer:BROADCOM BCM281XX/BCM11XXX/BCM216XX ARM ARCHITE..." 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "moderated list:ARM AND ARM64 SoC SUB-ARCHITECTURES (COMMON PARTS)" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>
-References: <20220209162515.706729-1-detlev.casanova@collabora.com>
- <20220209162515.706729-3-detlev.casanova@collabora.com>
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-Autocrypt: addr=stefan.wahren@i2se.com; keydata=
- LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tClZlcnNpb246IEdudVBHIHYy
- CgptUUlOQkZ0NmdCTUJFQUN1Yi9wQmV2SHhidkplZnlaRzMySklObW4yYnNFUFgyNVY2ZmVq
- bXlZd21DR0tqRnRMCi9Eb1VNRVZIRHhDSjQ3Qk1YbzM0NGZIVjFDM0FudWRnTjFCZWhMb0J0
- TEh4bW5lQ3pnSDNLY1B0V1c3cHRqNEcKdEp2OUNRRFp5MjdTS29FUHh5YUk4Q0YweWdSeEpj
- NzJNOUk5d21zUFo1YlVIc0x1WVdNcVE3SmNSbVBzNkQ4ZwpCa2srOC95bmdFeU5FeHd4SnBS
- MXlsajVianhXREh5WVF2dUo1THpaS3VPOUxCM2xYVnNjNGJxWEVqYzZWRnVaCkZDQ2svc3lp
- by9ZaHNlOE4rUXN4N01RYWd6NHdLVWtRUWJmWGcxVnFrVG5BaXZYczQyVm5Ja211NWd6SXcv
- MHQKUkp2NTBGUmhIaHhweUtBSThCOG5oTjhRdng3TVZrUGM1dkRmZDN1R1lXNDdKUGhWUUJj
- VXdKd05rLzQ5RjllQQp2ZzJtdE1QRm5GT1JrV1VSdlArRzZGSmZtNitDdk92N1lmUDF1ZXdB
- aTRsbitKTzFnK2dqVklXbC9XSnB5MG5UCmlwZGZlSDlkSGtnU2lmUXVuWWN1Y2lzTXlvUmJG
- OTU1dENna0VZOUVNRWRZMXQ4aUdEaUNnWDZzNTBMSGJpM2sKNDUzdWFjcHhmUVhTYUF3UGtz
- bDhNa0NPc3YyZUVyNElOQ0hZUUR5WmljbEJ1dUNnOEVOYlI2QUdWdFpTUGNRYgplbnpTektS
- Wm9POUNhcUlEK2ZhdkxpQi9kaHptSEErOWJnSWhtWGZ2WFJMRFp6ZThwbzFkeXQzRTFzaFhp
- ZGRaClBBOE51SlZ6RUl0MmxtSTZWOHBaRHBuMjIxcmZLaml2UlFpYW9zNTRUZ1pqak1ZSTdu
- bko3ZTZ4endBUkFRQUIKdENCVGRHVm1ZVzRnVjJGb2NtVnVJRHgzWVdoeVpXNXpkRUJuYlhn
- dWJtVjBQb2tDTndRVEFRZ0FJUVVDWElkYwo0Z0liQXdVTENRZ0hBZ1lWQ0FrS0N3SUVGZ0lE
- QVFJZUFRSVhnQUFLQ1JDVWdld1BFWkR5MjFPVEQvOUdpWkxkCnRSWWNteVJKZ2x0aVFRekFp
- UWRjSUQ3OGxHb1dwL3grci92Y1U2YjZqdVl1ZVR3Z1Iwclc3djdsMklSQnlEN24KSEp4YSt0
- SVNvUVpCZ2hvbE1JZmI5TXRoR09KTENZNzdrL1FoQWhuMzJOR1prZWp3OXR6a3MvNDBtclpT
- VVQ4NApaeWJzUVhyTE0vSFI2VElJL0RlUEIwbktEM0ppcHBzMlVIUUQ5cUQySWpFd1NRUGxI
- akNPckVaaDQ1UFo3bTkrClo5M0x6aVRlc1dabFlRdUxpSndzNHJLcHRIVzFkL3dSZWxzaG1t
- NlFxY0wybDRDL2U0MGVEQjlncTRkU1poOVgKUEVZbGxpeU5RaDdhMkxTZHVtRTFyK2NTd0lq
- RS91ZHRSdmRPOWFLb0psT2JVSzVkTmpTUEg3d0tUYndkWGRZRApHUHdEaFhkNThOQXdyK1BY
- QmxQajB0STFMQ3ErTEJ4ZUt6aFdYK0dWcTlEb2pWanlVREV4Rk5Ga1h1b0M3ZzhtClY5VDB0
- ZUJpdVpSbm91WEt3VjJGcHRaT0hIN0JVRVd0a0t0aGgxZXRmT1dwaWdCemtVN2JQc2ZJWVQr
- cnk5dGIKMW9KK3Y0MVBOYXFaRW1QVXBKeHZmek5UN3Ayd01lRDdaajlmMHJ1YlJQdExBSjJR
- R2pyRkhzdVh3QU9xcHl6ZQoxOEVidHNZazBOMHp1SEVoY2orUEJJQmZoMFlJWWQ1MW9mNkdJ
- aU95UjlxMFhYdHBsVUo3VDIvSDF1UXFrWGxwCitnVzRWa2lmc2NJckl1eWZueFpXMTJlSXZq
- NnlicVdMN2FZS0dZbVQ2aUxDUGJIWXlZY2F5bDRFa0ZjckNGN0UKZTBXVC9zY1ZNaE8vNVgv
- SGFOQTVIQngvcjUycGdMY3Y0aTlNeExRbVUzUmxabUZ1SUZkaGFISmxiaUE4YzNSbApabUZ1
- TG5kaGFISmxia0JwTW5ObExtTnZiVDZKQWpnRUV3RUNBQ0lGQWx0NmdCTUNHd01HQ3drSUJ3
- TUNCaFVJCkFna0tDd1FXQWdNQkFoNEJBaGVBQUFvSkVKU0I3QThSa1BMYmpic1AvamdqYVNz
- NUh0bGtBSXZXUytGcm15N2MKaG5jT0F4TFRWL0Q2UkV3SU95R0poRkt3d29pck55UTJnOXZV
- YTNZQ1lDZjFmSjh3RWhhS09COWQwTHBNUm5MNApkRVQ4ZDgyMzhFL3BLK0hxTktpSXNKaHM2
- SnNLOFpnalZRR3JtbWZua0dyWisxdjBIQnV4ZGljZ0duUC9XdHVBClVsOGw2Mi9BTGJheXlq
- KzYxQ2xyc0V0UklhcU82N0xJWXdQaVBEUkkrWGlNek5pR3pIRi8xUTZHUjAyUkg2YTMKRjg5
- ejhhUHhjSGkxWnZDdDJ5a3o2VUVjaHpQMHI1Z3FGSisvTC9VcHU4ME1YaVk0djVlSWFCNTJn
- VlBnaXlNQQpsTDJkRHMxbUladm5yUkxSWTJ0YjNtQVlOa1Y1QjVJRFQzcGtXeTZrS281T0Nn
- SytZZFlPUjhGTloyb04ydDhPCnJLK1ZudGFLN01NU0tIbG1ZL3NPd3RSbEVoMU9CbXJjQ3dH
- d21wLzA1R2tSNDZmL0lzaFJWZUZPUmF3K0dBcXQKUDIrQ0ZhMkNOQS9JSG5aTm95aWtsRHpQ
- UUhVVUdzck5wcERyaFg5Sm1oQm1nMXYyeXdIMU5YdTFpRGZQMUJBdwpLZ29rdDVmNVVhUkY5
- c0FBNTN2V0V2YlVVTjllZXNGR0x6UFdkSkdRNWhwZC9WSDVJUXk5U0JyaC93SWNla3E1Cm4w
- a042cGJUSHhHRTUyU2kvTVZJa05UdURaM2FwbjJqbERaNHBPdHBCWEkydlAzYlBPK05pcUJa
- anNVM3R4TGkKV2R2MkZqeXp6NlhMUndlV1JZVkw1SGE2TER0eG9yMnZ1NlVQMDdwOXh6MXhS
- WmFPRFczb1lsSEZ6WXBhNFc1ZwpMSGIybEVrSXVVZlNjaWNHYmpqQXRDbFRkR1ZtWVc0Z1Yy
- Rm9jbVZ1SUR4emRHVm1ZVzR1ZDJGb2NtVnVRR2x1CkxYUmxZMmd1WTI5dFBva0NOd1FUQVFn
- QUlRVUNYSWRlaHdJYkF3VUxDUWdIQWdZVkNBa0tDd0lFRmdJREFRSWUKQVFJWGdBQUtDUkNV
- Z2V3UEVaRHkyeUhURC85VUY3UWxEa0d4elE3QWFDSTZOOTVpUWY4LzFvU1VhRE51Mlk2SQpL
- K0R6UXBiMVRiVE9yM1ZKd3dZOGEzT1d6NU5MU09MTVdlVnh0K29zTW1sUUlHdWJEM09EWko4
- aXpQbEcvSnJOCnQ1elNkbU41SUE1ZjNlc1dXUVZLdmdoWkFnVERxZHB2K1pIVzJFbXhuQUox
- dUxGWFhlUWQzVVpjQzVyMy9nL3YKU2FNbzl4ZWszSjVtTnVEbTcxbEVXc0FzL0JBY0ZjK3lu
- TGh4d0JXQld3c3Z3UjhiSHRKNURPTVd2YUt1RHNrcApJR0ZVZS9LYjJCK2pyYXZRM1RuNnMv
- SHFKTTBjZXhTSHo1cGUrMHNHdlArdDlKNzIzNEJGUXdlRkV4cmlleThVCkl4T3I0WEFiYWFi
- U3J5WW5VL3pWSDlVMWkyQUlRWk1XSkFldkN2VmdRL1UrTmVSaFh1ZGU5WVVtRE1EbzJzQjIK
- VkFGRUFxaUYyUVVIUEEybThhN0VPM3lmTDRyTWswaUh6TElLdmg2L3JIOFFDWThpM1h4VE5M
- OWlDTHpCV3UvTgpPbkNBYlMremx2TFphaVNNaDVFZnV4VHR2NFBsVmRFamY2MlArWkhJRDE2
- Z1VEd0VtYXpMQU1yeDY2NmpINWt1ClVDVFZ5bWJMMFR2Qis2TDZBUmw4QU55TTRBRG1rV2tw
- eU0yMmtDdUlTWUFFZlFSM3VXWFo5WWd4YVBNcWJWK3cKQnJoSmc0SGFONkM2eFRxR3YzcjRC
- MmFxYjc3L0NWb1JKMVo5Y3BIQ3dpT3pJYUFtdnl6UFU2TXhDRFhaOEZnWQpsVDR2MjNHNWlt
- SlAyemdYNXMrRjZBQ1VKOVVRUEQwdVRmK0o5RGEycitza2gvc1dPbloreWNvSE5CUXZvY1pF
- Ck5BSFFmN2tDRFFSYmVvQVRBUkFBMkhkMGZzRFZLNzJSTFNESGJ5ME9oZ0RjRGxWQk0yTSto
- WVlwTzNmWDFyKysKc2hpcVBLQ0hWQXNRNWJ4ZTdIbUppbUhhNEtLWXMya3YvbWx0L0NhdUNK
- Ly9wbWN5Y0JNN0d2d25Lem11WHp1QQpHbVZUWkM2V1I1TGtha0ZydEhPelZtc0VHcE52NVJj
- OWw2SFlGcExrYlNrVmk1U1BRWkp5K0VNZ01DRmdqclpmClZGNnlvdHdFMWFmN0hOdE1oTlBh
- TEROMW9VS0Y1aitSeVJnNWl3SnVDRGtuSGp3QlFWNHBndzIvNXZTOEE3WlEKdjJNYlcvVExF
- eXBLWGlmNzhJaGdBelh0RTJYck0xbi9vNlpINzFvUkZGS096NDJsRmR6ZHJTWDBZc3FYZ0hD
- WAo1Z0l0TGZxemoxcHNNYTlvMWVpTlRFbTFkVlFyVHFueXMwbDE4b2FsUk5zd1lsUW1uWUJ3
- cHdDa2FUSExNSHdLCmZHQmJvNWRMUEVzaHRWb3dJNm5zZ3FMVHlRSG1xSFlxVVpZSXBpZ21t
- QzNTd0JXWTFWNmZmVUVta3FwQUFDRW4KTDQvZ1Vnbjd5US81ZDBzZXFuQXEycFNCSE1VVW9D
- Y1R6RVFVV1ZraUR2M1JrN2hURm1oVHNNcTc4eHYyWFJzWApNUjZ5UWhTVFBGWkNZRFVFeEVs
- RXNTbzlGV0hXcjZ6SHlZY2M4cURMRnZHOUZQaG1RdVQyczlCbHg2Z0kzMjNHCm5FcTFsd1dQ
- SlZ6UDRqUWtKS0lBWHdGcHYrVzhDV0xxekRXT3ZkbHJEYVRhVk1zY0ZUZUg1VzZVcHJsNjVq
- cUYKUUdNcGNSR0NzOEdDVVcxM0gwSXlPdFF0d1dYQTRueStTTDgxcHZpQW1hU1hVOGxhS2FS
- dTkxVk9WYUY5ZjRzQQpFUUVBQVlrQ0h3UVlBUUlBQ1FVQ1czcUFFd0liREFBS0NSQ1VnZXdQ
- RVpEeTIrb1hELzljSEhSa0JaT2ZrbVNxCjE0U3Z4MDYyUHRVMEtWNDcwVFNucC9qV29ZSm5L
- SXczRzBtWElSZ3J0SDJkUHdwSWdWanNZeVJTVk1LbVNwdDUKWnJEZjlOdFRiTldnazhWb0xl
- WnpZRW8rSjNvUHFGclRNczNhWVl2N2U0K0pLNjk1WW5tUSttT0Q5bmlhOTE1dApyNUFaajk1
- VWZTVGx5VW15aWMxZDhvdnNmMWZQN1hDVVZSRmNSamZOZkRGMW9ML3BEZ01QNUdaMk93YVRl
- am15CkN1SGpNOElSMUNpYXZCcFlEbUJuVFlrN1B0aHk2YXRXdllsMGZ5L0NxYWpUS3N4Nytw
- OXh6aXU4WmZWWCtpS0IKQ2MrSGUrRURFZEdJRGh2TlovSVFIZk9CMlBVWFdHUytzOUZOVHhy
- L0E2bkxHWG5BOVk2dzkzaVBkWUl3eFM3SwpYTG9LSmVlMTBEamx6c1lzUmZsRk9XMFpPaVNp
- aElDWGlRVjF1cU02dHpGRzlndFJjaXVzNVVBdGhXYU8xT3dVClNDUW1mQ09tNGZ2TUlKSUE5
- cnh0b1M2T3FSUWNpRjNjcm1vMHJKQ3ROMmF3WmZnaThYRWlmN2Q2aGp2MEVLTTkKWFpvaUFa
- WVpEKy9pTG01VGFLV042b0dJdGkwVmpKdjhaWk9aT2ZDYjZ2cUZJa0pXK2FPdTRvclRMRk16
- MjhhbwpVM1F5V3BOQzhGRm1kWXNWdWE4czZnTjFOSWE2eTNxYS9aQjhiQS9pa3k1OUFFejRp
- RElScmdVek1FZzhBazdUCmZtMUtpWWVpVHRCRENvMjVCdlhqYnFzeXhrUUQxbmtSbTZGQVZ6
- RXVPUEllOEp1cVcyeEQ5aXhHWXZqVTVoa1IKZ0pwM2dQNWIrY25HM0xQcXF1UTJFNmdvS1VN
- TEFia0NEUVJiZmw5REFSQUFzRExjYStMbFAydm5mdEVHaHBjQQpCR1ZOUUVGbkdQckNhdVU2
- SGhOODA1V3RQVHRtc1JPdUp6cWdVVDBtcHFXSWZacTZzTXd5dkhLOVRzL0tIM0paClVWYlJD
- M3oyaDNLZmhIL0RhZjk1cGQ2bVBjL2g5dkYvT3kzK2VUV2hnR25QNmNBNWtsUitmTzFXaEc4
- VnJpWHYKck5lUkcyMHN6emplSG9jblNJY1Q1WHVaUjB1REhPaUd4T2l6MXNNUkZUR3h6R095
- MTlSOXJ2dTYzdGlJM2Q3dgpnYzc1T0NBZGtlQi9TZUNFbGFSdzBUZjdMWmJQampzRjI2M0JZ
- bk1mNGtrTkVLdnFXY1UyaWNNcCtxZXpqeW5CCnB2ZXVlMHJDVFFCWUFRbG9GQ1ZUR0hyV1dB
- NkQ0VzVPMkFmSWRJYzF1MUpDWnAyZjVMV1ZvVUZUVklyUW5RUVUKU0hDaWZyOU1aeExUdFBK
- ZFU1Mm9TUHczZGs0aExQOGlKSUx1dnYvYXZhakNzUVlIRXR3WXNiZUZaeGl1TGdscApBN1lj
- Sk5ObXBnQ3BNRDR3VWh2bEN0QUtOQlFXeXIyOTc2OThFUVRuNDZlQmVVNkttMkNpaFhrZ3dD
- eWY4ZXlLCkxFM3NYZXdhcTVrZ1pXdk5xNml1NXFZSVJCOXl3K2NYYzYwZE9aRE9scTkzWDVT
- QVJZemFvZXBrSHo0cmtMa1AKUG8rdENIeUhRUHNHblBYYzlXVDgwREM5Tm5KR2R2VWx5NXJk
- TUk0eHBaeWdlb2tqd293VlFsUFV1Y1M2TXluNwpmOHc4Y2dmQjdDMklBSWNEeDJwUC9IendY
- dmtDT1FOQTdtVjFsTTA4bitnVmtUcnpweGlwNURicTRDSW9ZeDJNCkpaVDhiR1JINlhqY1VE
- S2EwOVFoeVpzQUVRRUFBWWtFUkFRWUFRZ0FEd1VDVzM1ZlF3SWJBZ1VKQThKbkFBSXAKQ1JD
- VWdld1BFWkR5MjhGZElBUVpBUWdBQmdVQ1czNWZRd0FLQ1JCVnhETFBjVk1NamNkc0QvMFJo
- QXN1UVlPeQpyMTNCbDNOaFhrWUFaR3AyWkZER3VrZTdPU2tWOG9qT09UZFR5ei9jT1JHQ2J5
- ZEQrRGd2cUZ5VmRuT1hLZ08wCmxKbUd3ckdlTGRnZ0F2aDBpaHJwNU8wWVVKOWJCU1htR01t
- UVRZSC9BbUxUR2FkYnVqQ1dqNWZGVWtDeXd4aW0KSHV5MFBiMjRwelR2UzUwR1k1WStxSDBG
- SE5haWdka2tpV04zcnVnN0haRXUvQ3lsUFpqT1h6K0QxUVBNckV4dwo3ZC9NS2FiVis5YU5i
- UVlabGRJajk4UXd2VUYxS1N6YThqbFVJdnBoUnEyN0FUOGZER1lHUGZERU1nMmNCT2FlCkty
- N29uUXM0YjdhV082aWZEbHhRVHB6c3pvK0FuODA3Tk1TdFZFRmYrczNBaFZEM2U3bmY4SkJh
- dmJWckFlMGsKb20yNm96elBubnh6K2xxVlZ0dzZVazRYTUl6dGl4L0h3SFl3dUNuY1VYWndL
- MEkzeUFKd2pZd29vck9DaEozUwpFVWJKUVB0R3NneFJERXhWQkZlNk5MUC82MnhQOU82dGFj
- d09kYjBNbVAxYjM5cFJBVEM3YmdkMWxkVUxpNzVaCmxKckowL1NpVkVyb3FOWXk3OXRmbWdB
- WjJVeFptczlTckV5Nm85UVNmc24xYVh2K01QTDlKYUNHbWtQNnpiTFEKTm5kajBKY2FRbmtD
- MHZneWRPMUJtNk11OTZQOXVmbEtaY0FTNndtTE01SWRIT3lqTDg4d0h3anVjakFPQnRjdwpw
- MG9HVG5WT25Sc05ZU084VzhZWi9LZGJ1Nzg1ZGF6TXFKMmlOakFEdUJiZG02TjRqNUVkTW5r
- TG4wQklmUEpwCmRnbTR2bDJVcExqd1JHci9NM3dtbTVwdnMrNnVCN2hrL0ZKaUQvNGxsRU5Q
- NGVNMWg3U200aitWcTZOMSt6VEIKSVhKQWViSXFhc0RwNXlaUzdYcnk0STM2bjg1WEVZZkcw
- MWx0QXlob05WMkRPOFNJUlFwdWkydHErOVJQM1JLMQpKREJ4eEVKWTJFTzVKWjhNeGFQSFEw
- RFQwNWxSRmpLMkFsaGRFSXRqTGpwSjNmVW05c3FMeE1XeHpQNlV6M2lpCjJ1YTR1bnJ0Nk9D
- VHFRd2lqRi8zYlRXaXd2VkFBSG5NRlVpb1hzaEhhb2hWRGNWZm5lSU1mVjBiUUNYWWkzTnAK
- WTB2MFp3Y2lGSCtnU0M3cUQ2WE51aHBWR1NMNElpbGlGeS9TemNhSkV6QUhlTERTaFpQMkNX
- ZG5DNHZnbDM3dApocHg4aDU1WWhKbjZIU3VVelBnaGFLdFZCMmsrajdaZXlaK1NGeHA3SXVi
- SEN3TEhsUWhUNzVSd1EzaUF4S242CjBxajUxY1lUbnF4ZFpYVzZmSDNQa3VNellVNUdwcVIv
- MU9sNWMvd2ZJNmc2QW04eUtXLzBFVUx0K0tuNExGc1MKbTdZM201SDV2MTJVNkpCWXZWK3Ix
- M2paaW9zNEVFREU5M0Q1c05IMk1JeVJ6Q0RxMXpkZHQ0WHV5S0ZqUEtXMQo5aWJaRGZGVjdL
- dUNzdnVMMjNzQmMxc0NNb3ArRTFtVC9ReE9JQTZvRFQxTVFzdHdPVnVReURDdi9PdktTZ2Z6
- CjhGWEdMNkFQY2xqQ3FqOEFKaHhReXN4ZG9pUVA4bS92dStialdHR3Z4dzVzMWxncGlSRFRS
- VVBnY0pKTmFHWTIKVklEclpRaTROU2lOUTBOSWkrZGp1NGZOTW1DcFFxZzh0YkMzY0FhNnl3
- bTZvUUIxU0JobURYMmUxMWdSbGx1SQpPblRHUEUwSFRvM2w3MmxoYmc9PQo9cVpNVgotLS0t
- LUVORCBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCg==
-Message-ID: <d00a934e-a2e0-fd3a-6452-fa88f07e13d4@i2se.com>
-Date:   Wed, 9 Feb 2022 18:10:12 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Wed, 9 Feb 2022 12:11:22 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B8B61C05CB82
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 09:11:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644426682;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Xb1oJxYz8G3IbgBu+Lcv5aR495IO2JEN18H44rIhqmU=;
+        b=Ai54a8r14DxfbH0YPp2ojyi+eBUCjl6yv8h6HipQiuqs9m+ZxOgWZrJF/tRYNOn2rKYeiU
+        xdnA/QXIxz7BqBXoHjBNDKcbPz49XeOlxGcECvqR1rieXoUnxGvMpKfMfdby7+AlaWwsAm
+        vtuuV5LbyDfEKJQC2Of6ZDgVIG5nQZ0=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-121-0lGl83xOOOCFopOxaQ5msQ-1; Wed, 09 Feb 2022 12:11:21 -0500
+X-MC-Unique: 0lGl83xOOOCFopOxaQ5msQ-1
+Received: by mail-wr1-f72.google.com with SMTP id v17-20020adf8b51000000b001e336bf3be7so1367193wra.1
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 09:11:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :mime-version:content-transfer-encoding;
+        bh=Xb1oJxYz8G3IbgBu+Lcv5aR495IO2JEN18H44rIhqmU=;
+        b=5PZ6VoI/3+uh0PwMMrRjvYdMPCHigjX0VCVuf3EA7dhAwvnTWQkXQKgk0YfkE2IJSL
+         T53mw/5k7C+SIAdIaIMBk1/MZo/f/nt/CBODK2y4N6Dvaulz9k9z3gcj+ocvPwa2DNtS
+         rn0EdtoUePeYe34mLVszo5J6Ykv6fkyPY8A4dfyo0xv8dx3ByXTIs7gUBrXJ3Ca60bw0
+         WWZ00/uvrtZ53eY1+EsTCHd53wFRSGm/XMAEDKyNoNQ/Y30GyLpXzs/8XVKbpeKZ2LmC
+         s2EUQzed/lfczvR45tvXjZwCSLkG9jg2hg7icpEbD1SbKKxMrEKzXTqKGt9dDGfFdh3T
+         Ju0A==
+X-Gm-Message-State: AOAM531d9ke1cMsIb7DfpVml2YABqjKBOl7lCj6nsvD1+hdKn+d3dYUA
+        BvR7lsDr2FmF1fQFPmv9g5RQ9nrbrp4wwbLPkYoj2vW/2MLKFXBF67k8Evdz95ol6W7fiOgw0yE
+        1y+Ag7GLlDl1DEVSb8NMoFgA=
+X-Received: by 2002:a7b:ce9a:: with SMTP id q26mr3473169wmj.141.1644426680127;
+        Wed, 09 Feb 2022 09:11:20 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx3QFiE3jMe2nZd9NtUFVFROGARU9NetC1tArv/xF9TcWcV/V5vjkEy25wDswcAr06Uj0hAWA==
+X-Received: by 2002:a7b:ce9a:: with SMTP id q26mr3473126wmj.141.1644426679751;
+        Wed, 09 Feb 2022 09:11:19 -0800 (PST)
+Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
+        by smtp.gmail.com with ESMTPSA id e13sm18961107wrq.35.2022.02.09.09.11.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Feb 2022 09:11:19 -0800 (PST)
+From:   Aaron Tomlin <atomlin@redhat.com>
+To:     mcgrof@kernel.org
+Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
+        akpm@linux-foundation.org, jeyu@kernel.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        live-patching@vger.kernel.org, atomlin@atomlin.com,
+        ghalat@redhat.com, allen.lkml@gmail.com, void@manifault.com,
+        joe@perches.com, christophe.leroy@csgroup.eu, msuchanek@suse.de,
+        oleksandr@natalenko.name
+Subject: [PATCH v5 11/13] module: Move sysfs support into a separate file
+Date:   Wed,  9 Feb 2022 17:11:16 +0000
+Message-Id: <20220209171118.3269581-1-atomlin@redhat.com>
+X-Mailer: git-send-email 2.34.1
+Reply-To: 20220209170358.3266629-1-atomlin@redhat.com
 MIME-Version: 1.0
-In-Reply-To: <20220209162515.706729-3-detlev.casanova@collabora.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-Content-Language: en-US
-X-Provags-ID: V03:K1:13VMoQWBV5nTOnZ1C8Cb9JRUGJoKHabcWRxWMHAd/6zIn85aI17
- coeKEizePoA7bX4jSOmt5Tk1msNiMTnijxj7S2A65fKZZ7R7V9fg8XASrQqDzcmC5IFuf4H
- zhmLRQYzOFcB59KgeXEmmPCkRmQKVwYPo5AvESUmwJsWcM45Z6Kdx7EkLZEvApb0pt7y0Qd
- J8j2WPyHWR+pO0d/j2tdw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:JRjq7Sek7CA=:S3SCl4U+qCEbelOogoNKo1
- AfEv2RNDJTVorcfOW9YUD5KowHDG6+od6vUQprwWJIljLABpc8rxRI8ga1D78utbkS+eXuLT6
- 4+2RLOPQwi8On7bVM5dgC5/qmf47dAsOujPZN2zR50BEqLiKU84oSY+Yrq/XG3JqqiZMALvxZ
- 0MGiSPamjQtiEA0w+93z4bhBiJKy4ovQjAph2R/kqwCNGA+7VVScIyURoABFFxsAkTS48rGNY
- DYj3fjs6vPRH5uc+iMO9f+JDIK5t9iiJ6uJCypmwdKHPgxEeblEZAUNrll0M0I6AGMgKSKFCx
- q+ZBOHY7u2NzblkvpTDJ7K0OwZTG5yM3C7usXZ0NZVn2jODnrVIh+X6fRh8O22s6kimfxQWk+
- Etb0jAoNOy9zpojQisZvaB08pjovyYnOBS9/e45nqD4f4L7VKWEowRQVfDO/vka9+/nEg3D5w
- 5WN4Ss64abWiKkMfs7QY5TlwpfPu8LKsHgxo4ZbQfof7JYaGBOYwBSNfodjKG4/hCfE2vZ8ga
- SopqbU2CvIbDfdMgXUvUmXteItMkSVyKKNVGegfosGgrXx6TXbST2CGXr4Z5GfLf/6567cY/M
- ySUCkeNiGjB5P+rNF9bwg62qAIC29FxzJ00aP7AoK5tiQT6XKO9RDCZwKeukTbMVMTys04+pD
- JJa23hdB5wnPPyrJ9btzsMIO1Fr7npMBibNOorzdDVNtS5QS/5FTVB3brfcxViw7s6qDBynB7
- Vf5FpzUqUZEzSXJh
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Detlev,
+No functional change.
 
-Am 09.02.22 um 17:25 schrieb Detlev Casanova:
-> Add a device tree to support the official Raspberrypi 7" touchscreen for
-> the Raspberry Pi 4 B
->
-> The panel is connected on the DSI 1 port and uses the simple-panel
-> driver.
->
-> The device tree also makes sure to activate:
->  * dvp: bcm2711 clock driver
->  * hvs: Hardware Video Scaler
->  * pixelvalve[0-4]: CRTC modules
->  * txp: CRTC Writeback
->
-> Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
-> ---
->  arch/arm/boot/dts/Makefile                    |   1 +
->  .../boot/dts/bcm2711-rpi-4-b-7inch-ts-dsi.dts | 129 ++++++++++++++++++
->  arch/arm64/boot/dts/broadcom/Makefile         |   1 +
->  .../broadcom/bcm2711-rpi-4-b-7inch-ts-dsi.dts |   2 +
->  4 files changed, 133 insertions(+)
->  create mode 100644 arch/arm/boot/dts/bcm2711-rpi-4-b-7inch-ts-dsi.dts
->  create mode 100644 arch/arm64/boot/dts/broadcom/bcm2711-rpi-4-b-7inch-ts-dsi.dts
->
-> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> index 0de64f237cd8..b46daf2df4ce 100644
-> --- a/arch/arm/boot/dts/Makefile
-> +++ b/arch/arm/boot/dts/Makefile
-> @@ -94,6 +94,7 @@ dtb-$(CONFIG_ARCH_BCM2835) += \
->  	bcm2837-rpi-cm3-io3.dtb \
->  	bcm2711-rpi-400.dtb \
->  	bcm2711-rpi-4-b.dtb \
-> +	bcm2711-rpi-4-b-7inch-ts-dsi.dtb \
->  	bcm2711-rpi-cm4-io.dtb \
->  	bcm2835-rpi-zero.dtb \
->  	bcm2835-rpi-zero-w.dtb
-> diff --git a/arch/arm/boot/dts/bcm2711-rpi-4-b-7inch-ts-dsi.dts b/arch/arm/boot/dts/bcm2711-rpi-4-b-7inch-ts-dsi.dts
-> new file mode 100644
-> index 000000000000..62e986358c2a
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/bcm2711-rpi-4-b-7inch-ts-dsi.dts
-i think this should be an overlay because this board can be connected to
-different boards and we want to avoid copy & paste. Unfortunately i
-don't know where this should be stored in the kernel tree.
-> @@ -0,0 +1,129 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include "bcm2711-rpi-4-b.dts"
-> +
-> +/ {
-> +	model = "Raspberry Pi 4 Model B + Rpi 7inch touchscreen";
-> +
-> +	panel_disp1: panel_disp1@0 {
-> +		reg = <0 0 0>;
-> +		compatible = "raspberrypi,7inch-dsi", "simple-panel";
-> +		backlight = <&reg_display>;
-> +		power-supply = <&reg_display>;
-> +		status = "okay";
-> +
-> +		port {
-> +			panel_in: endpoint {
-> +				remote-endpoint = <&bridge_out>;
-> +			};
-> +		};
-> +	};
-> +
-> +	reg_bridge: reg_bridge@0 {
-> +		reg = <0 0 0>;
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "bridge_reg";
-> +		gpio = <&reg_display 0 0>;
-> +		vin-supply = <&reg_display>;
-> +		enable-active-high;
-> +		status = "okay";
-> +	};
-> +};
-> +
-> +&i2c_csi_dsi {
-> +	ft5406: ts@38 {
-s/ts/touchscreen/
-> +		compatible = "edt,edt-ft5506";
-> +		reg = <0x38>;
-> +		status = "okay";
-> +
-> +		vcc-supply = <&reg_display>;
-> +		reset-gpio = <&reg_display 1 1>;
-> +
-> +		touchscreen-size-x = < 800 >;
-> +		touchscreen-size-y = < 480 >;
-> +
-> +		touchscreen-inverted-x;
-> +		touchscreen-inverted-y;
-> +	};
-> +
-> +	reg_display: reg_display@45 {
-node name should be regulator
-> +		compatible = "raspberrypi,7inch-touchscreen-panel-regulator";
-> +		reg = <0x45>;
-> +		gpio-controller;
-> +		#gpio-cells = <2>;
-> +		status = "okay";
-> +	};
-> +
-> +};
-> +
-> +&dsi1 {
-> +	#address-cells = <1>;
-> +	#size-cells = <0>;
-> +	status = "okay";
-> +
-> +	port {
-> +		dsi_out: endpoint {
-> +			remote-endpoint = <&bridge_in>;
-> +		};
-> +	};
-> +
-> +	bridge@0 {
-> +		reg = <0>;
-> +		compatible = "toshiba,tc358762";
-> +		vddc-supply = <&reg_bridge>;
-> +		ports {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +
-> +			port@0 {
-> +				reg = <0>;
-> +				bridge_in: endpoint {
-> +					remote-endpoint = <&dsi_out>;
-> +				};
-> +			};
-> +
-> +			port@1 {
-> +				reg = <1>;
-> +				bridge_out: endpoint {
-> +					remote-endpoint = <&panel_in>;
-> +				};
-> +			};
-> +		};
-> +	};
-> +};
-> +
-> +&aon_intr {
-> +	status = "okay";
-> +};
-> +
-> +&dvp {
-> +	status = "okay";
-> +};
-> +
-> +&hvs {
-> +	status = "okay";
-> +};
-From my understanding these three are not necessary
-> +
-> +&pixelvalve0 {
-> +	status = "okay";
-> +};
-> +
-> +&pixelvalve1 {
-> +	status = "okay";
-> +};
-> +
-> +&pixelvalve2 {
-> +	status = "okay";
-> +};
-> +
-> +&pixelvalve3 {
-> +	status = "okay";
-> +};
-> +
-> +&pixelvalve4 {
-> +	status = "okay";
-> +};
-> +
-> +&txp {
-> +	status = "okay";
-> +};
+This patch migrates module sysfs support out of core code into
+kernel/module/sysfs.c. In addition simple code refactoring to
+make this possible.
 
-Also txp doesn't need to be enabled explicit.
+Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
+---
+ kernel/module/Makefile   |   1 +
+ kernel/module/internal.h |  24 ++
+ kernel/module/main.c     | 458 +--------------------------------------
+ kernel/module/sysfs.c    | 425 ++++++++++++++++++++++++++++++++++++
+ 4 files changed, 453 insertions(+), 455 deletions(-)
+ create mode 100644 kernel/module/sysfs.c
 
-Best regards
-
-> diff --git a/arch/arm64/boot/dts/broadcom/Makefile b/arch/arm64/boot/dts/broadcom/Makefile
-> index c6882032a428..965361bff829 100644
-> --- a/arch/arm64/boot/dts/broadcom/Makefile
-> +++ b/arch/arm64/boot/dts/broadcom/Makefile
-> @@ -1,6 +1,7 @@
->  # SPDX-License-Identifier: GPL-2.0
->  dtb-$(CONFIG_ARCH_BCM2835) += bcm2711-rpi-400.dtb \
->  			      bcm2711-rpi-4-b.dtb \
-> +			      bcm2711-rpi-4-b-7inch-ts-dsi.dtb \
->  			      bcm2711-rpi-cm4-io.dtb \
->  			      bcm2837-rpi-3-a-plus.dtb \
->  			      bcm2837-rpi-3-b.dtb \
-> diff --git a/arch/arm64/boot/dts/broadcom/bcm2711-rpi-4-b-7inch-ts-dsi.dts b/arch/arm64/boot/dts/broadcom/bcm2711-rpi-4-b-7inch-ts-dsi.dts
-> new file mode 100644
-> index 000000000000..c325adc4f874
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/broadcom/bcm2711-rpi-4-b-7inch-ts-dsi.dts
-> @@ -0,0 +1,2 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include "arm/bcm2711-rpi-4-b-7inch-ts-dsi.dts"
+diff --git a/kernel/module/Makefile b/kernel/module/Makefile
+index c6be08060252..c30141c37eb3 100644
+--- a/kernel/module/Makefile
++++ b/kernel/module/Makefile
+@@ -14,4 +14,5 @@ obj-$(CONFIG_STRICT_MODULE_RWX) += strict_rwx.o
+ obj-$(CONFIG_DEBUG_KMEMLEAK) += debug_kmemleak.o
+ obj-$(CONFIG_KALLSYMS) += kallsyms.o
+ obj-$(CONFIG_PROC_FS) += procfs.o
++obj-$(CONFIG_SYSFS) += sysfs.o
+ endif
+diff --git a/kernel/module/internal.h b/kernel/module/internal.h
+index b67ce836746a..52d30bf6d6b0 100644
+--- a/kernel/module/internal.h
++++ b/kernel/module/internal.h
+@@ -35,6 +35,9 @@
+ extern struct mutex module_mutex;
+ extern struct list_head modules;
+ 
++extern struct module_attribute *modinfo_attrs[];
++extern size_t modinfo_attrs_count;
++
+ /* Provided by the linker */
+ extern const struct kernel_symbol __start___ksymtab[];
+ extern const struct kernel_symbol __stop___ksymtab[];
+@@ -206,3 +209,24 @@ static inline char *find_kallsyms_symbol(struct module *mod, unsigned long addr,
+ 	return NULL;
+ }
+ #endif /* CONFIG_KALLSYMS */
++
++#ifdef CONFIG_SYSFS
++int mod_sysfs_setup(struct module *mod, const struct load_info *info,
++			   struct kernel_param *kparam, unsigned int num_params);
++void mod_sysfs_fini(struct module *mod);
++void module_remove_modinfo_attrs(struct module *mod, int end);
++void del_usage_links(struct module *mod);
++void init_param_lock(struct module *mod);
++#else /* !CONFIG_SYSFS */
++static int mod_sysfs_setup(struct module *mod,
++			   const struct load_info *info,
++			   struct kernel_param *kparam,
++			   unsigned int num_params)
++{
++	return 0;
++}
++static inline void mod_sysfs_fini(struct module *mod) { }
++static inline void module_remove_modinfo_attrs(struct module *mod, int end) { }
++static inline void del_usage_links(struct module *mod) { }
++static inline void init_param_lock(struct module *mod) { }
++#endif /* CONFIG_SYSFS */
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index ff39c556bdf8..c2255954b7df 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -14,9 +14,7 @@
+ #include <linux/init.h>
+ #include <linux/kallsyms.h>
+ #include <linux/buildid.h>
+-#include <linux/file.h>
+ #include <linux/fs.h>
+-#include <linux/sysfs.h>
+ #include <linux/kernel.h>
+ #include <linux/kernel_read_file.h>
+ #include <linux/slab.h>
+@@ -995,7 +993,7 @@ static ssize_t show_taint(struct module_attribute *mattr,
+ static struct module_attribute modinfo_taint =
+ 	__ATTR(taint, 0444, show_taint, NULL);
+ 
+-static struct module_attribute *modinfo_attrs[] = {
++struct module_attribute *modinfo_attrs[] = {
+ 	&module_uevent,
+ 	&modinfo_version,
+ 	&modinfo_srcversion,
+@@ -1009,6 +1007,8 @@ static struct module_attribute *modinfo_attrs[] = {
+ 	NULL,
+ };
+ 
++size_t modinfo_attrs_count = ARRAY_SIZE(modinfo_attrs);
++
+ static const char vermagic[] = VERMAGIC_STRING;
+ 
+ static int try_to_force_load(struct module *mod, const char *reason)
+@@ -1259,458 +1259,6 @@ resolve_symbol_wait(struct module *mod,
+ 	return ksym;
+ }
+ 
+-/*
+- * /sys/module/foo/sections stuff
+- * J. Corbet <corbet@lwn.net>
+- */
+-#ifdef CONFIG_SYSFS
+-
+-#ifdef CONFIG_KALLSYMS
+-struct module_sect_attr {
+-	struct bin_attribute battr;
+-	unsigned long address;
+-};
+-
+-struct module_sect_attrs {
+-	struct attribute_group grp;
+-	unsigned int nsections;
+-	struct module_sect_attr attrs[];
+-};
+-
+-static ssize_t module_sect_read(struct file *file, struct kobject *kobj,
+-				struct bin_attribute *battr,
+-				char *buf, loff_t pos, size_t count)
+-{
+-	struct module_sect_attr *sattr =
+-		container_of(battr, struct module_sect_attr, battr);
+-	char bounce[MODULE_SECT_READ_SIZE + 1];
+-	size_t wrote;
+-
+-	if (pos != 0)
+-		return -EINVAL;
+-
+-	/*
+-	 * Since we're a binary read handler, we must account for the
+-	 * trailing NUL byte that sprintf will write: if "buf" is
+-	 * too small to hold the NUL, or the NUL is exactly the last
+-	 * byte, the read will look like it got truncated by one byte.
+-	 * Since there is no way to ask sprintf nicely to not write
+-	 * the NUL, we have to use a bounce buffer.
+-	 */
+-	wrote = scnprintf(bounce, sizeof(bounce), "0x%px\n",
+-			 kallsyms_show_value(file->f_cred)
+-				? (void *)sattr->address : NULL);
+-	count = min(count, wrote);
+-	memcpy(buf, bounce, count);
+-
+-	return count;
+-}
+-
+-static void free_sect_attrs(struct module_sect_attrs *sect_attrs)
+-{
+-	unsigned int section;
+-
+-	for (section = 0; section < sect_attrs->nsections; section++)
+-		kfree(sect_attrs->attrs[section].battr.attr.name);
+-	kfree(sect_attrs);
+-}
+-
+-static void add_sect_attrs(struct module *mod, const struct load_info *info)
+-{
+-	unsigned int nloaded = 0, i, size[2];
+-	struct module_sect_attrs *sect_attrs;
+-	struct module_sect_attr *sattr;
+-	struct bin_attribute **gattr;
+-
+-	/* Count loaded sections and allocate structures */
+-	for (i = 0; i < info->hdr->e_shnum; i++)
+-		if (!sect_empty(&info->sechdrs[i]))
+-			nloaded++;
+-	size[0] = ALIGN(struct_size(sect_attrs, attrs, nloaded),
+-			sizeof(sect_attrs->grp.bin_attrs[0]));
+-	size[1] = (nloaded + 1) * sizeof(sect_attrs->grp.bin_attrs[0]);
+-	sect_attrs = kzalloc(size[0] + size[1], GFP_KERNEL);
+-	if (sect_attrs == NULL)
+-		return;
+-
+-	/* Setup section attributes. */
+-	sect_attrs->grp.name = "sections";
+-	sect_attrs->grp.bin_attrs = (void *)sect_attrs + size[0];
+-
+-	sect_attrs->nsections = 0;
+-	sattr = &sect_attrs->attrs[0];
+-	gattr = &sect_attrs->grp.bin_attrs[0];
+-	for (i = 0; i < info->hdr->e_shnum; i++) {
+-		Elf_Shdr *sec = &info->sechdrs[i];
+-		if (sect_empty(sec))
+-			continue;
+-		sysfs_bin_attr_init(&sattr->battr);
+-		sattr->address = sec->sh_addr;
+-		sattr->battr.attr.name =
+-			kstrdup(info->secstrings + sec->sh_name, GFP_KERNEL);
+-		if (sattr->battr.attr.name == NULL)
+-			goto out;
+-		sect_attrs->nsections++;
+-		sattr->battr.read = module_sect_read;
+-		sattr->battr.size = MODULE_SECT_READ_SIZE;
+-		sattr->battr.attr.mode = 0400;
+-		*(gattr++) = &(sattr++)->battr;
+-	}
+-	*gattr = NULL;
+-
+-	if (sysfs_create_group(&mod->mkobj.kobj, &sect_attrs->grp))
+-		goto out;
+-
+-	mod->sect_attrs = sect_attrs;
+-	return;
+-  out:
+-	free_sect_attrs(sect_attrs);
+-}
+-
+-static void remove_sect_attrs(struct module *mod)
+-{
+-	if (mod->sect_attrs) {
+-		sysfs_remove_group(&mod->mkobj.kobj,
+-				   &mod->sect_attrs->grp);
+-		/*
+-		 * We are positive that no one is using any sect attrs
+-		 * at this point.  Deallocate immediately.
+-		 */
+-		free_sect_attrs(mod->sect_attrs);
+-		mod->sect_attrs = NULL;
+-	}
+-}
+-
+-/*
+- * /sys/module/foo/notes/.section.name gives contents of SHT_NOTE sections.
+- */
+-
+-struct module_notes_attrs {
+-	struct kobject *dir;
+-	unsigned int notes;
+-	struct bin_attribute attrs[];
+-};
+-
+-static ssize_t module_notes_read(struct file *filp, struct kobject *kobj,
+-				 struct bin_attribute *bin_attr,
+-				 char *buf, loff_t pos, size_t count)
+-{
+-	/*
+-	 * The caller checked the pos and count against our size.
+-	 */
+-	memcpy(buf, bin_attr->private + pos, count);
+-	return count;
+-}
+-
+-static void free_notes_attrs(struct module_notes_attrs *notes_attrs,
+-			     unsigned int i)
+-{
+-	if (notes_attrs->dir) {
+-		while (i-- > 0)
+-			sysfs_remove_bin_file(notes_attrs->dir,
+-					      &notes_attrs->attrs[i]);
+-		kobject_put(notes_attrs->dir);
+-	}
+-	kfree(notes_attrs);
+-}
+-
+-static void add_notes_attrs(struct module *mod, const struct load_info *info)
+-{
+-	unsigned int notes, loaded, i;
+-	struct module_notes_attrs *notes_attrs;
+-	struct bin_attribute *nattr;
+-
+-	/* failed to create section attributes, so can't create notes */
+-	if (!mod->sect_attrs)
+-		return;
+-
+-	/* Count notes sections and allocate structures.  */
+-	notes = 0;
+-	for (i = 0; i < info->hdr->e_shnum; i++)
+-		if (!sect_empty(&info->sechdrs[i]) &&
+-		    (info->sechdrs[i].sh_type == SHT_NOTE))
+-			++notes;
+-
+-	if (notes == 0)
+-		return;
+-
+-	notes_attrs = kzalloc(struct_size(notes_attrs, attrs, notes),
+-			      GFP_KERNEL);
+-	if (notes_attrs == NULL)
+-		return;
+-
+-	notes_attrs->notes = notes;
+-	nattr = &notes_attrs->attrs[0];
+-	for (loaded = i = 0; i < info->hdr->e_shnum; ++i) {
+-		if (sect_empty(&info->sechdrs[i]))
+-			continue;
+-		if (info->sechdrs[i].sh_type == SHT_NOTE) {
+-			sysfs_bin_attr_init(nattr);
+-			nattr->attr.name = mod->sect_attrs->attrs[loaded].battr.attr.name;
+-			nattr->attr.mode = S_IRUGO;
+-			nattr->size = info->sechdrs[i].sh_size;
+-			nattr->private = (void *) info->sechdrs[i].sh_addr;
+-			nattr->read = module_notes_read;
+-			++nattr;
+-		}
+-		++loaded;
+-	}
+-
+-	notes_attrs->dir = kobject_create_and_add("notes", &mod->mkobj.kobj);
+-	if (!notes_attrs->dir)
+-		goto out;
+-
+-	for (i = 0; i < notes; ++i)
+-		if (sysfs_create_bin_file(notes_attrs->dir,
+-					  &notes_attrs->attrs[i]))
+-			goto out;
+-
+-	mod->notes_attrs = notes_attrs;
+-	return;
+-
+-  out:
+-	free_notes_attrs(notes_attrs, i);
+-}
+-
+-static void remove_notes_attrs(struct module *mod)
+-{
+-	if (mod->notes_attrs)
+-		free_notes_attrs(mod->notes_attrs, mod->notes_attrs->notes);
+-}
+-
+-#else
+-
+-static inline void add_sect_attrs(struct module *mod,
+-				  const struct load_info *info)
+-{
+-}
+-
+-static inline void remove_sect_attrs(struct module *mod)
+-{
+-}
+-
+-static inline void add_notes_attrs(struct module *mod,
+-				   const struct load_info *info)
+-{
+-}
+-
+-static inline void remove_notes_attrs(struct module *mod)
+-{
+-}
+-#endif /* CONFIG_KALLSYMS */
+-
+-static void del_usage_links(struct module *mod)
+-{
+-#ifdef CONFIG_MODULE_UNLOAD
+-	struct module_use *use;
+-
+-	mutex_lock(&module_mutex);
+-	list_for_each_entry(use, &mod->target_list, target_list)
+-		sysfs_remove_link(use->target->holders_dir, mod->name);
+-	mutex_unlock(&module_mutex);
+-#endif
+-}
+-
+-static int add_usage_links(struct module *mod)
+-{
+-	int ret = 0;
+-#ifdef CONFIG_MODULE_UNLOAD
+-	struct module_use *use;
+-
+-	mutex_lock(&module_mutex);
+-	list_for_each_entry(use, &mod->target_list, target_list) {
+-		ret = sysfs_create_link(use->target->holders_dir,
+-					&mod->mkobj.kobj, mod->name);
+-		if (ret)
+-			break;
+-	}
+-	mutex_unlock(&module_mutex);
+-	if (ret)
+-		del_usage_links(mod);
+-#endif
+-	return ret;
+-}
+-
+-static void module_remove_modinfo_attrs(struct module *mod, int end);
+-
+-static int module_add_modinfo_attrs(struct module *mod)
+-{
+-	struct module_attribute *attr;
+-	struct module_attribute *temp_attr;
+-	int error = 0;
+-	int i;
+-
+-	mod->modinfo_attrs = kzalloc((sizeof(struct module_attribute) *
+-					(ARRAY_SIZE(modinfo_attrs) + 1)),
+-					GFP_KERNEL);
+-	if (!mod->modinfo_attrs)
+-		return -ENOMEM;
+-
+-	temp_attr = mod->modinfo_attrs;
+-	for (i = 0; (attr = modinfo_attrs[i]); i++) {
+-		if (!attr->test || attr->test(mod)) {
+-			memcpy(temp_attr, attr, sizeof(*temp_attr));
+-			sysfs_attr_init(&temp_attr->attr);
+-			error = sysfs_create_file(&mod->mkobj.kobj,
+-					&temp_attr->attr);
+-			if (error)
+-				goto error_out;
+-			++temp_attr;
+-		}
+-	}
+-
+-	return 0;
+-
+-error_out:
+-	if (i > 0)
+-		module_remove_modinfo_attrs(mod, --i);
+-	else
+-		kfree(mod->modinfo_attrs);
+-	return error;
+-}
+-
+-static void module_remove_modinfo_attrs(struct module *mod, int end)
+-{
+-	struct module_attribute *attr;
+-	int i;
+-
+-	for (i = 0; (attr = &mod->modinfo_attrs[i]); i++) {
+-		if (end >= 0 && i > end)
+-			break;
+-		/* pick a field to test for end of list */
+-		if (!attr->attr.name)
+-			break;
+-		sysfs_remove_file(&mod->mkobj.kobj, &attr->attr);
+-		if (attr->free)
+-			attr->free(mod);
+-	}
+-	kfree(mod->modinfo_attrs);
+-}
+-
+-static void mod_kobject_put(struct module *mod)
+-{
+-	DECLARE_COMPLETION_ONSTACK(c);
+-	mod->mkobj.kobj_completion = &c;
+-	kobject_put(&mod->mkobj.kobj);
+-	wait_for_completion(&c);
+-}
+-
+-static int mod_sysfs_init(struct module *mod)
+-{
+-	int err;
+-	struct kobject *kobj;
+-
+-	if (!module_sysfs_initialized) {
+-		pr_err("%s: module sysfs not initialized\n", mod->name);
+-		err = -EINVAL;
+-		goto out;
+-	}
+-
+-	kobj = kset_find_obj(module_kset, mod->name);
+-	if (kobj) {
+-		pr_err("%s: module is already loaded\n", mod->name);
+-		kobject_put(kobj);
+-		err = -EINVAL;
+-		goto out;
+-	}
+-
+-	mod->mkobj.mod = mod;
+-
+-	memset(&mod->mkobj.kobj, 0, sizeof(mod->mkobj.kobj));
+-	mod->mkobj.kobj.kset = module_kset;
+-	err = kobject_init_and_add(&mod->mkobj.kobj, &module_ktype, NULL,
+-				   "%s", mod->name);
+-	if (err)
+-		mod_kobject_put(mod);
+-
+-out:
+-	return err;
+-}
+-
+-static int mod_sysfs_setup(struct module *mod,
+-			   const struct load_info *info,
+-			   struct kernel_param *kparam,
+-			   unsigned int num_params)
+-{
+-	int err;
+-
+-	err = mod_sysfs_init(mod);
+-	if (err)
+-		goto out;
+-
+-	mod->holders_dir = kobject_create_and_add("holders", &mod->mkobj.kobj);
+-	if (!mod->holders_dir) {
+-		err = -ENOMEM;
+-		goto out_unreg;
+-	}
+-
+-	err = module_param_sysfs_setup(mod, kparam, num_params);
+-	if (err)
+-		goto out_unreg_holders;
+-
+-	err = module_add_modinfo_attrs(mod);
+-	if (err)
+-		goto out_unreg_param;
+-
+-	err = add_usage_links(mod);
+-	if (err)
+-		goto out_unreg_modinfo_attrs;
+-
+-	add_sect_attrs(mod, info);
+-	add_notes_attrs(mod, info);
+-
+-	return 0;
+-
+-out_unreg_modinfo_attrs:
+-	module_remove_modinfo_attrs(mod, -1);
+-out_unreg_param:
+-	module_param_sysfs_remove(mod);
+-out_unreg_holders:
+-	kobject_put(mod->holders_dir);
+-out_unreg:
+-	mod_kobject_put(mod);
+-out:
+-	return err;
+-}
+-
+-static void mod_sysfs_fini(struct module *mod)
+-{
+-	remove_notes_attrs(mod);
+-	remove_sect_attrs(mod);
+-	mod_kobject_put(mod);
+-}
+-
+-static void init_param_lock(struct module *mod)
+-{
+-	mutex_init(&mod->param_lock);
+-}
+-#else /* !CONFIG_SYSFS */
+-
+-static int mod_sysfs_setup(struct module *mod,
+-			   const struct load_info *info,
+-			   struct kernel_param *kparam,
+-			   unsigned int num_params)
+-{
+-	return 0;
+-}
+-
+-static void mod_sysfs_fini(struct module *mod)
+-{
+-}
+-
+-static void module_remove_modinfo_attrs(struct module *mod, int end)
+-{
+-}
+-
+-static void del_usage_links(struct module *mod)
+-{
+-}
+-
+-static void init_param_lock(struct module *mod)
+-{
+-}
+-#endif /* CONFIG_SYSFS */
+-
+ static void mod_sysfs_teardown(struct module *mod)
+ {
+ 	del_usage_links(mod);
+diff --git a/kernel/module/sysfs.c b/kernel/module/sysfs.c
+new file mode 100644
+index 000000000000..f5c72c567e71
+--- /dev/null
++++ b/kernel/module/sysfs.c
+@@ -0,0 +1,425 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Module sysfs support
++ *
++ * Copyright (C) 2008 Rusty Russell
++ */
++
++#include <linux/module.h>
++#include <linux/kernel.h>
++#include <linux/fs.h>
++#include <linux/sysfs.h>
++#include <linux/slab.h>
++#include <linux/kallsyms.h>
++#include <linux/mutex.h>
++#include "internal.h"
++
++/*
++ * /sys/module/foo/sections stuff
++ * J. Corbet <corbet@lwn.net>
++ */
++#ifdef CONFIG_KALLSYMS
++struct module_sect_attr {
++	struct bin_attribute battr;
++	unsigned long address;
++};
++
++struct module_sect_attrs {
++	struct attribute_group grp;
++	unsigned int nsections;
++	struct module_sect_attr attrs[];
++};
++
++static ssize_t module_sect_read(struct file *file, struct kobject *kobj,
++				struct bin_attribute *battr,
++				char *buf, loff_t pos, size_t count)
++{
++	struct module_sect_attr *sattr =
++		container_of(battr, struct module_sect_attr, battr);
++	char bounce[MODULE_SECT_READ_SIZE + 1];
++	size_t wrote;
++
++	if (pos != 0)
++		return -EINVAL;
++
++	/*
++	 * Since we're a binary read handler, we must account for the
++	 * trailing NUL byte that sprintf will write: if "buf" is
++	 * too small to hold the NUL, or the NUL is exactly the last
++	 * byte, the read will look like it got truncated by one byte.
++	 * Since there is no way to ask sprintf nicely to not write
++	 * the NUL, we have to use a bounce buffer.
++	 */
++	wrote = scnprintf(bounce, sizeof(bounce), "0x%px\n",
++			 kallsyms_show_value(file->f_cred)
++				? (void *)sattr->address : NULL);
++	count = min(count, wrote);
++	memcpy(buf, bounce, count);
++
++	return count;
++}
++
++static void free_sect_attrs(struct module_sect_attrs *sect_attrs)
++{
++	unsigned int section;
++
++	for (section = 0; section < sect_attrs->nsections; section++)
++		kfree(sect_attrs->attrs[section].battr.attr.name);
++	kfree(sect_attrs);
++}
++
++static void add_sect_attrs(struct module *mod, const struct load_info *info)
++{
++	unsigned int nloaded = 0, i, size[2];
++	struct module_sect_attrs *sect_attrs;
++	struct module_sect_attr *sattr;
++	struct bin_attribute **gattr;
++
++	/* Count loaded sections and allocate structures */
++	for (i = 0; i < info->hdr->e_shnum; i++)
++		if (!sect_empty(&info->sechdrs[i]))
++			nloaded++;
++	size[0] = ALIGN(struct_size(sect_attrs, attrs, nloaded),
++			sizeof(sect_attrs->grp.bin_attrs[0]));
++	size[1] = (nloaded + 1) * sizeof(sect_attrs->grp.bin_attrs[0]);
++	sect_attrs = kzalloc(size[0] + size[1], GFP_KERNEL);
++	if (sect_attrs == NULL)
++		return;
++
++	/* Setup section attributes. */
++	sect_attrs->grp.name = "sections";
++	sect_attrs->grp.bin_attrs = (void *)sect_attrs + size[0];
++
++	sect_attrs->nsections = 0;
++	sattr = &sect_attrs->attrs[0];
++	gattr = &sect_attrs->grp.bin_attrs[0];
++	for (i = 0; i < info->hdr->e_shnum; i++) {
++		Elf_Shdr *sec = &info->sechdrs[i];
++
++		if (sect_empty(sec))
++			continue;
++		sysfs_bin_attr_init(&sattr->battr);
++		sattr->address = sec->sh_addr;
++		sattr->battr.attr.name =
++			kstrdup(info->secstrings + sec->sh_name, GFP_KERNEL);
++		if (sattr->battr.attr.name == NULL)
++			goto out;
++		sect_attrs->nsections++;
++		sattr->battr.read = module_sect_read;
++		sattr->battr.size = MODULE_SECT_READ_SIZE;
++		sattr->battr.attr.mode = 0400;
++		*(gattr++) = &(sattr++)->battr;
++	}
++	*gattr = NULL;
++
++	if (sysfs_create_group(&mod->mkobj.kobj, &sect_attrs->grp))
++		goto out;
++
++	mod->sect_attrs = sect_attrs;
++	return;
++out:
++	free_sect_attrs(sect_attrs);
++}
++
++static void remove_sect_attrs(struct module *mod)
++{
++	if (mod->sect_attrs) {
++		sysfs_remove_group(&mod->mkobj.kobj,
++				   &mod->sect_attrs->grp);
++		/*
++		 * We are positive that no one is using any sect attrs
++		 * at this point.  Deallocate immediately.
++		 */
++		free_sect_attrs(mod->sect_attrs);
++		mod->sect_attrs = NULL;
++	}
++}
++
++/*
++ * /sys/module/foo/notes/.section.name gives contents of SHT_NOTE sections.
++ */
++
++struct module_notes_attrs {
++	struct kobject *dir;
++	unsigned int notes;
++	struct bin_attribute attrs[];
++};
++
++static ssize_t module_notes_read(struct file *filp, struct kobject *kobj,
++				 struct bin_attribute *bin_attr,
++				 char *buf, loff_t pos, size_t count)
++{
++	/*
++	 * The caller checked the pos and count against our size.
++	 */
++	memcpy(buf, bin_attr->private + pos, count);
++	return count;
++}
++
++static void free_notes_attrs(struct module_notes_attrs *notes_attrs,
++			     unsigned int i)
++{
++	if (notes_attrs->dir) {
++		while (i-- > 0)
++			sysfs_remove_bin_file(notes_attrs->dir,
++					      &notes_attrs->attrs[i]);
++		kobject_put(notes_attrs->dir);
++	}
++	kfree(notes_attrs);
++}
++
++static void add_notes_attrs(struct module *mod, const struct load_info *info)
++{
++	unsigned int notes, loaded, i;
++	struct module_notes_attrs *notes_attrs;
++	struct bin_attribute *nattr;
++
++	/* failed to create section attributes, so can't create notes */
++	if (!mod->sect_attrs)
++		return;
++
++	/* Count notes sections and allocate structures.  */
++	notes = 0;
++	for (i = 0; i < info->hdr->e_shnum; i++)
++		if (!sect_empty(&info->sechdrs[i]) &&
++		    (info->sechdrs[i].sh_type == SHT_NOTE))
++			++notes;
++
++	if (notes == 0)
++		return;
++
++	notes_attrs = kzalloc(struct_size(notes_attrs, attrs, notes),
++			      GFP_KERNEL);
++	if (notes_attrs == NULL)
++		return;
++
++	notes_attrs->notes = notes;
++	nattr = &notes_attrs->attrs[0];
++	for (loaded = i = 0; i < info->hdr->e_shnum; ++i) {
++		if (sect_empty(&info->sechdrs[i]))
++			continue;
++		if (info->sechdrs[i].sh_type == SHT_NOTE) {
++			sysfs_bin_attr_init(nattr);
++			nattr->attr.name = mod->sect_attrs->attrs[loaded].battr.attr.name;
++			nattr->attr.mode = 0444;
++			nattr->size = info->sechdrs[i].sh_size;
++			nattr->private = (void *) info->sechdrs[i].sh_addr;
++			nattr->read = module_notes_read;
++			++nattr;
++		}
++		++loaded;
++	}
++
++	notes_attrs->dir = kobject_create_and_add("notes", &mod->mkobj.kobj);
++	if (!notes_attrs->dir)
++		goto out;
++
++	for (i = 0; i < notes; ++i)
++		if (sysfs_create_bin_file(notes_attrs->dir,
++					  &notes_attrs->attrs[i]))
++			goto out;
++
++	mod->notes_attrs = notes_attrs;
++	return;
++
++out:
++	free_notes_attrs(notes_attrs, i);
++}
++
++static void remove_notes_attrs(struct module *mod)
++{
++	if (mod->notes_attrs)
++		free_notes_attrs(mod->notes_attrs, mod->notes_attrs->notes);
++}
++
++#else /* !CONFIG_KALLSYMS */
++static inline void add_sect_attrs(struct module *mod, const struct load_info *info) { }
++static inline void remove_sect_attrs(struct module *mod) { }
++static inline void add_notes_attrs(struct module *mod, const struct load_info *info) { }
++static inline void remove_notes_attrs(struct module *mod) { }
++#endif /* CONFIG_KALLSYMS */
++
++void del_usage_links(struct module *mod)
++{
++#ifdef CONFIG_MODULE_UNLOAD
++	struct module_use *use;
++
++	mutex_lock(&module_mutex);
++	list_for_each_entry(use, &mod->target_list, target_list)
++		sysfs_remove_link(use->target->holders_dir, mod->name);
++	mutex_unlock(&module_mutex);
++#endif
++}
++
++static int add_usage_links(struct module *mod)
++{
++	int ret = 0;
++#ifdef CONFIG_MODULE_UNLOAD
++	struct module_use *use;
++
++	mutex_lock(&module_mutex);
++	list_for_each_entry(use, &mod->target_list, target_list) {
++		ret = sysfs_create_link(use->target->holders_dir,
++					&mod->mkobj.kobj, mod->name);
++		if (ret)
++			break;
++	}
++	mutex_unlock(&module_mutex);
++	if (ret)
++		del_usage_links(mod);
++#endif
++	return ret;
++}
++
++static int module_add_modinfo_attrs(struct module *mod)
++{
++	struct module_attribute *attr;
++	struct module_attribute *temp_attr;
++	int error = 0;
++	int i;
++
++	mod->modinfo_attrs = kzalloc((sizeof(struct module_attribute) *
++					(modinfo_attrs_count + 1)),
++					GFP_KERNEL);
++	if (!mod->modinfo_attrs)
++		return -ENOMEM;
++
++	temp_attr = mod->modinfo_attrs;
++	for (i = 0; (attr = modinfo_attrs[i]); i++) {
++		if (!attr->test || attr->test(mod)) {
++			memcpy(temp_attr, attr, sizeof(*temp_attr));
++			sysfs_attr_init(&temp_attr->attr);
++			error = sysfs_create_file(&mod->mkobj.kobj,
++					&temp_attr->attr);
++			if (error)
++				goto error_out;
++			++temp_attr;
++		}
++	}
++
++	return 0;
++
++error_out:
++	if (i > 0)
++		module_remove_modinfo_attrs(mod, --i);
++	else
++		kfree(mod->modinfo_attrs);
++	return error;
++}
++
++void module_remove_modinfo_attrs(struct module *mod, int end)
++{
++	struct module_attribute *attr;
++	int i;
++
++	for (i = 0; (attr = &mod->modinfo_attrs[i]); i++) {
++		if (end >= 0 && i > end)
++			break;
++		/* pick a field to test for end of list */
++		if (!attr->attr.name)
++			break;
++		sysfs_remove_file(&mod->mkobj.kobj, &attr->attr);
++		if (attr->free)
++			attr->free(mod);
++	}
++	kfree(mod->modinfo_attrs);
++}
++
++static void mod_kobject_put(struct module *mod)
++{
++	DECLARE_COMPLETION_ONSTACK(c);
++
++	mod->mkobj.kobj_completion = &c;
++	kobject_put(&mod->mkobj.kobj);
++	wait_for_completion(&c);
++}
++
++static int mod_sysfs_init(struct module *mod)
++{
++	int err;
++	struct kobject *kobj;
++
++	if (!module_sysfs_initialized) {
++		pr_err("%s: module sysfs not initialized\n", mod->name);
++		err = -EINVAL;
++		goto out;
++	}
++
++	kobj = kset_find_obj(module_kset, mod->name);
++	if (kobj) {
++		pr_err("%s: module is already loaded\n", mod->name);
++		kobject_put(kobj);
++		err = -EINVAL;
++		goto out;
++	}
++
++	mod->mkobj.mod = mod;
++
++	memset(&mod->mkobj.kobj, 0, sizeof(mod->mkobj.kobj));
++	mod->mkobj.kobj.kset = module_kset;
++	err = kobject_init_and_add(&mod->mkobj.kobj, &module_ktype, NULL,
++				   "%s", mod->name);
++	if (err)
++		mod_kobject_put(mod);
++
++out:
++	return err;
++}
++
++int mod_sysfs_setup(struct module *mod,
++			   const struct load_info *info,
++			   struct kernel_param *kparam,
++			   unsigned int num_params)
++{
++	int err;
++
++	err = mod_sysfs_init(mod);
++	if (err)
++		goto out;
++
++	mod->holders_dir = kobject_create_and_add("holders", &mod->mkobj.kobj);
++	if (!mod->holders_dir) {
++		err = -ENOMEM;
++		goto out_unreg;
++	}
++
++	err = module_param_sysfs_setup(mod, kparam, num_params);
++	if (err)
++		goto out_unreg_holders;
++
++	err = module_add_modinfo_attrs(mod);
++	if (err)
++		goto out_unreg_param;
++
++	err = add_usage_links(mod);
++	if (err)
++		goto out_unreg_modinfo_attrs;
++
++	add_sect_attrs(mod, info);
++	add_notes_attrs(mod, info);
++
++	return 0;
++
++out_unreg_modinfo_attrs:
++	module_remove_modinfo_attrs(mod, -1);
++out_unreg_param:
++	module_param_sysfs_remove(mod);
++out_unreg_holders:
++	kobject_put(mod->holders_dir);
++out_unreg:
++	mod_kobject_put(mod);
++out:
++	return err;
++}
++
++void mod_sysfs_fini(struct module *mod)
++{
++	remove_notes_attrs(mod);
++	remove_sect_attrs(mod);
++	mod_kobject_put(mod);
++}
++
++void init_param_lock(struct module *mod)
++{
++	mutex_init(&mod->param_lock);
++}
+-- 
+2.34.1
 

@@ -2,109 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DC474AEC7A
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 09:33:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 260924AEC76
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 09:33:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241530AbiBIIcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 03:32:16 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:39946 "EHLO
+        id S239501AbiBIIce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 03:32:34 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:41974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241439AbiBIIcI (ORCPT
+        with ESMTP id S241563AbiBIIc3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 03:32:08 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA34CC05CBBE
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 00:32:11 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nHiON-0007nf-Pu; Wed, 09 Feb 2022 09:31:59 +0100
-Received: from pengutronix.de (unknown [195.138.59.174])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id D988B2EF8B;
-        Wed,  9 Feb 2022 08:31:58 +0000 (UTC)
-Date:   Wed, 9 Feb 2022 09:31:55 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Srinivas Neeli <sneeli@xilinx.com>
-Cc:     "wg@grandegger.com" <wg@grandegger.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        Michal Simek <michals@xilinx.com>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Appana Durga Kedareswara Rao <appanad@xilinx.com>,
-        Srinivas Goud <sgoud@xilinx.com>, git <git@xilinx.com>
-Subject: Re: [PATCH] can: xilinx_can: Add check for NAPI Poll function
-Message-ID: <20220209083155.xma5m7tayy2atyoo@pengutronix.de>
-References: <20220208162053.39896-1-srinivas.neeli@xilinx.com>
- <20220209074930.azbn26glrxukg4sr@pengutronix.de>
- <DM6PR02MB53861A46A48B4689F668BEE9AF2E9@DM6PR02MB5386.namprd02.prod.outlook.com>
+        Wed, 9 Feb 2022 03:32:29 -0500
+Received: from mail-vk1-f181.google.com (mail-vk1-f181.google.com [209.85.221.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66833C050CF0;
+        Wed,  9 Feb 2022 00:32:24 -0800 (PST)
+Received: by mail-vk1-f181.google.com with SMTP id m131so729900vkm.7;
+        Wed, 09 Feb 2022 00:32:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+oWGIhr7j5T0wmli3m35is4QqbH67LJ+yM8vH/Tq854=;
+        b=jLMKhf4nqdRGLisWIQaJHX9LnNkfluKHor9kp8/y5O+WT2xV/6XsPbOwNi0W+MCC4A
+         bp0TRegbynItzyTqj+OqUHHAUslQtGmeWCFL97bsaZRarM3blTN2HtWay3JuxpJ3r6WU
+         q7rSWLtGxHxExhvNRKk18+D61UQFl6Y+HwBY6MvyZnKvjRCmrFok373DBKbgE1iJDgj6
+         JsIC5v7a5kykIWQdLcHNeSxAzQM4hwzYBhORS16rFIF0C0p1QJ8+oqXrzUN+DAF1nMmH
+         ESL1PX4b8+EQNv0S3hUwxveT0cLFyuAb1nF/UsRBvHubmso+Dxjh5H+jopwU2P2LcvSh
+         tVbg==
+X-Gm-Message-State: AOAM5330yd7hRx95t3scXXump5VkRt2J4kCp3KdIW51MH1EjEyp2vdLE
+        tBicM2905S+Tzrtwm9L3542dugYC4kFZ+Q==
+X-Google-Smtp-Source: ABdhPJxI6ztoHaKCr6at9s7gMeLfVX7pVAf7ed0ssxLruqp7IAJauLk/Rflssgd3TsR5PQHaErKqIA==
+X-Received: by 2002:a05:6122:20a0:: with SMTP id i32mr397487vkd.36.1644395537029;
+        Wed, 09 Feb 2022 00:32:17 -0800 (PST)
+Received: from mail-vs1-f54.google.com (mail-vs1-f54.google.com. [209.85.217.54])
+        by smtp.gmail.com with ESMTPSA id q22sm3048215vsj.23.2022.02.09.00.32.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Feb 2022 00:32:16 -0800 (PST)
+Received: by mail-vs1-f54.google.com with SMTP id r20so1806643vsn.0;
+        Wed, 09 Feb 2022 00:32:16 -0800 (PST)
+X-Received: by 2002:a67:ec0c:: with SMTP id d12mr296321vso.77.1644395536427;
+ Wed, 09 Feb 2022 00:32:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ghoqq6pqwpgc7xyw"
-Content-Disposition: inline
-In-Reply-To: <DM6PR02MB53861A46A48B4689F668BEE9AF2E9@DM6PR02MB5386.namprd02.prod.outlook.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220208183511.2925304-1-jjhiblot@traphandler.com> <20220208183511.2925304-3-jjhiblot@traphandler.com>
+In-Reply-To: <20220208183511.2925304-3-jjhiblot@traphandler.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 9 Feb 2022 09:32:05 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdU80BbODE9CV2r2TuDTbpT9FGNg_ZXENoFsAHQDJ1OozQ@mail.gmail.com>
+Message-ID: <CAMuHMdU80BbODE9CV2r2TuDTbpT9FGNg_ZXENoFsAHQDJ1OozQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/6] dt-bindings: watchdog: renesas,wdt: Add support
+ for RZ/N1
+To:     Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Feb 8, 2022 at 7:35 PM Jean-Jacques Hiblot
+<jjhiblot@traphandler.com> wrote:
+> Describe the WDT hardware in the RZ/N1 series.
+>
+> Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
 
---ghoqq6pqwpgc7xyw
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-On 09.02.2022 08:29:55, Srinivas Neeli wrote:
-> > On 08.02.2022 21:50:53, Srinivas Neeli wrote:
-> > > Add check for NAPI poll function to avoid enabling interrupts with out
-> > > completing the NAPI call.
-> >=20
-> > Thanks for the patch. Does this fix a bug? If so, please add a Fixes:
-> > tag that lists the patch that introduced that bug.
->=20
-> It is not a bug. I am adding additional safety check( Validating the
-> return value of "napi_complete_done" call).
+Gr{oetje,eeting}s,
 
-Thanks for your feedback. Should this go into can or can-next?
+                        Geert
 
-regards,
-Marc
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---ghoqq6pqwpgc7xyw
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmIDe/gACgkQrX5LkNig
-011/twf9GGBR2QEXqjnEmw/xzHM60lmxr6bpT4M7YV7fCn4qqpSmKiNJvO8CbePC
-Zyv7vyArUWuFtHsCOn4tEQeUr++ssJ82IPKWYBoO/AnNuU/XBid0J7n5cQP/B/ke
-AQiGc9kPruEo5hI/yHXQEcWuehl40v9Xu7rEf7Mik/LaWc34ELzbTavxKEgVzyeY
-BYKWU0J/yzgBPRzMAU49gS1Eb9+QYfT2KxjlVEcplbnhrAg6qHxGPGDKZNpxO6q+
-JQIZXzTUnDAjkDGC0D7/rP4Z0l5yxhs2wedwMyEEZ9HPIUnJRbMIT0xe9WFdAxpw
-3UUl4Jk056IshF5rZ6mRfqSSTm+jxg==
-=1RHL
------END PGP SIGNATURE-----
-
---ghoqq6pqwpgc7xyw--
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
